@@ -1,0 +1,37 @@
+spring:
+  application.name: @project.artifactId@
+  banner.location: banner.txt
+
+server:
+  shutdown: "graceful"
+  port: 8080
+  error:
+    include-exception: false
+    include-stacktrace: never
+    whitelabel:
+      enabled: false
+
+# Config for spring actuator endpoints
+management:
+  server.port: ${server.port}
+  endpoints:
+    enabled-by-default: false
+    web:
+      exposure:
+        include: health, info, prometheus, livenessstate, readinessstate
+      path-mapping:
+        prometheus: metrics
+  endpoint:
+    health.enabled: true
+    info.enabled: true
+    prometheus.enabled: true
+  info:
+    env:
+info.application.name: @project.artifactId@
+info.application.version: @project.version@
+
+file:
+  number.max: 20
+  size.max: 31457280 # bytes
+  extensions.allowed: .sav,.dbf,.shp,.gdb,.msg,.cpg,.prj,.sbn,.sbx,.shp.xml,.shx # Dateiendungen welche nicht über den MIME-Type ermittelt werden können. Werden benötigt für die backendseitige Validierung der Dateiendung.
+  mimetypes.allowed: application/octet-stream,application/x-dbf,text/plain,application/pdf,application/vnd.ms-outlook,application/vnd.oasis.opendocument.spreadsheet,application/vnd.oasis.opendocument.text,application/vnd.oasis.opendocument.presentation,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.openxmlformats-officedocument.presentationml.presentation,text/csv,message/rfc822,image/jpeg,image/png,image/svg+xml
