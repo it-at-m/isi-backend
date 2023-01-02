@@ -6,7 +6,7 @@ import lombok.Getter;
 
 @AllArgsConstructor
 public enum InfrastruktureinrichtungTyp implements ILookup {
-
+    UNSPECIFIED(ILookup.UNSPECIFIED),
     KINDERKRIPPE("Kinderkrippe"),
     KINDERGARTEN("Kindergarten"),
     GS_NACHMITTAG_BETREUUNG("Nachmittagsbetreuung für Grundschulkinder"),

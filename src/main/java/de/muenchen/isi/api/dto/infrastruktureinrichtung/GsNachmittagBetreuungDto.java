@@ -5,7 +5,7 @@
 package de.muenchen.isi.api.dto.infrastruktureinrichtung;
 
 import de.muenchen.isi.api.dto.BaseEntityDto;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtGsNachmittagsBetreuung;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtGsNachmittagBetreuung;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -22,7 +22,6 @@ public class GsNachmittagBetreuungDto extends BaseEntityDto {
     @NotNull
     private InfrastruktureinrichtungDto infrastruktureinrichtung;
 
-    @NotNull
-    private ArtGsNachmittagsBetreuung artGsNachmittagsBetreuung;
+    private ArtGsNachmittagBetreuung artGsNachmittagBetreuung;
 
 }
