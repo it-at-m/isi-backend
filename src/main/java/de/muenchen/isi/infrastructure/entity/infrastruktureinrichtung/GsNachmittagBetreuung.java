@@ -5,7 +5,7 @@
 package de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung;
 
 import de.muenchen.isi.infrastructure.entity.BaseEntity;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtGsNachmittagsBetreuung;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtGsNachmittagBetreuung;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -31,7 +31,7 @@ public class GsNachmittagBetreuung extends BaseEntity {
     // TBD: Grundschulsprengel
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private ArtGsNachmittagsBetreuung artGsNachmittagsBetreuung;
+    @Column(nullable = true)
+    private ArtGsNachmittagBetreuung artGsNachmittagBetreuung;
 
 }

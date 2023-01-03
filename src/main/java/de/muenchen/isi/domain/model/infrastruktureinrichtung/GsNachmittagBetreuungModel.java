@@ -5,7 +5,7 @@
 package de.muenchen.isi.domain.model.infrastruktureinrichtung;
 
 import de.muenchen.isi.domain.model.BaseEntityModel;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtGsNachmittagsBetreuung;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtGsNachmittagBetreuung;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -17,6 +17,6 @@ public class GsNachmittagBetreuungModel extends BaseEntityModel {
 
     private InfrastruktureinrichtungModel infrastruktureinrichtung;
 
-    private ArtGsNachmittagsBetreuung artGsNachmittagsBetreuung;
+    private ArtGsNachmittagBetreuung artGsNachmittagBetreuung;
 
 }

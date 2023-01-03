@@ -29,4 +29,5 @@ public class LookupListsModel {
 
     private LookupListModel infrastruktureinrichtungTyp;
 
+    private LookupListModel artGsNachmittagBetreuung;
 }
