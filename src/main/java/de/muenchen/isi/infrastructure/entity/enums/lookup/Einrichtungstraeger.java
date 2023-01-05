@@ -15,7 +15,7 @@ public enum Einrichtungstraeger implements ILookup {
     KITA_EINRICHTUNG_BETRIEBSTRAEGERSCHAFT("Kita: Einrichtung in Betriebsträgerschaft"),
     KITA_FREIE_GEMEINNUETZIGE_SONSTIGE("Kita: Freie / gemeinnützige / sonstige Einrichtungen"),
     KITA_EINRICHTUNG_GESAMTSTAEDTISCH("Kita: Einrichtung, deren Plätze nur gesamtstädtisch zur Verfügung stehen"),
-    GS_BETREUUNG_STÄDTISCHE_EINRICHTUNG("GS-Betreuung: Städtische Einrichtung"),
+    GS_BETREUUNG_STAEDTISCHE_EINRICHTUNG("GS-Betreuung: Städtische Einrichtung"),
     GS_BETREUUNG_ELTERN_KIND_INITIATIVE("GS-Betreuung: Eltern-Kind-Initiative"),
     GS_BETREUUNG_STAATLICHE_EINRICHTUNG("GS-Betreuung: Staatliche Einrichtung"),
     GS_BETREUUNG_PRIVATE_TRAEGERSCHAFT("GS-Betreuung: Private Trägerschaft"),
