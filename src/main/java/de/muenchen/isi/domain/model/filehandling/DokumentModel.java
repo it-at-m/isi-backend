@@ -13,6 +13,8 @@ public class DokumentModel extends BaseEntityModel {
 
     private FilepathModel filePath;
 
+    private String titel;
+
     private ArtDokument artDokument;
 
 }
