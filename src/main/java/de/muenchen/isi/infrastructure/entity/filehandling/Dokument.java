@@ -24,6 +24,9 @@ public class Dokument extends BaseEntity {
     @Embedded
     private Filepath filePath;
 
+    @Column(length = 50)
+    private String titel;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private ArtDokument artDokument;

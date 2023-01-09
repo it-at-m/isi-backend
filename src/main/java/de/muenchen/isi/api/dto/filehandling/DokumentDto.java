@@ -9,6 +9,7 @@ import lombok.ToString;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Data
 @ToString(callSuper = true)
@@ -18,6 +19,9 @@ public class DokumentDto extends BaseEntityDto {
     @Valid
     @NotNull
     private FilepathDto filePath;
+
+    @Size(max = 50)
+    private String titel;
 
     @NotNull
     @NotUnspecified
