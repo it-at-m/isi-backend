@@ -18,8 +18,7 @@ public class DokumentService {
     private final DokumentDomainMapper dokumentDomainMapper;
 
     public DokumenteModel getDokumente(final Integer pageNumber, final Integer pageSize) {
-        final var pageable = PageRequest.of(pageNumber, pageSize);
-        final var foundPage = this.dokumentRepository.findAll(pageable);
+        final var foundPage = this.dokumentRepository.findAll(PageRequest.of(pageNumber, pageSize));
         final var dokumentEntities = foundPage.getContent();
         final var dokumentModels = this.dokumentDomainMapper.entity2Model(dokumentEntities);
         final var dokumenteModel = new DokumenteModel();
