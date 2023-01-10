@@ -21,7 +21,7 @@
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <maven.compiler.release>${java.version}</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <spring.boot.version>2.7.6</spring.boot.version>
+        <spring.boot.version>2.7.7</spring.boot.version>
         <spring.cloud.version>2021.0.5</spring.cloud.version>
         <logstash.encoder>7.0.1</logstash.encoder>
         <apache.commons.collections4>4.4</apache.commons.collections4>
@@ -46,7 +46,7 @@
         <org.projectlombok.lombok.version>1.18.24</org.projectlombok.lombok.version>
         <org.projectlombok.mapstructbinding.version>0.2.0</org.projectlombok.mapstructbinding.version>
         <mapstruct.version>1.5.3.Final</mapstruct.version>
-        <s3.integration>0.0.7</s3.integration>
+        <s3.integration>0.15.0</s3.integration>
         <geotools.version>27.2</geotools.version>
     </properties>
 
