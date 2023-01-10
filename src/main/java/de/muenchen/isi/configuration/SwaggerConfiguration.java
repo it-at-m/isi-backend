@@ -42,20 +42,7 @@ public class SwaggerConfiguration {
         final var authUrl = String.format("%s/realms/%s/protocol/openid-connect", this.authServer, this.realm);
 
         return new OpenAPI()
-                .components(new Components()
-                        .addSecuritySchemes("spring_oauth", new SecurityScheme()
-                                .type(SecurityScheme.Type.OAUTH2)
-                                .description("Oauth2 flow")
-                                .scheme("bearer")
-                                .bearerFormat("JWT")
-                                .flows(new OAuthFlows()
-                                        .password(new OAuthFlow()
-                                                .authorizationUrl(authUrl + "/auth")
-                                                .refreshUrl(authUrl + "/token")
-                                                .tokenUrl(authUrl + "/token")
-                                                .scopes(new Scopes()
-                                                        .addString("lhm_extended", "lhm_extended")))))
-                )
+                .components(new Components())
                 .security(Arrays.asList(
                         new SecurityRequirement().addList("spring_oauth")))
                 .info(new Info()
