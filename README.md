@@ -24,6 +24,7 @@
 </div>
 
 <!-- ABOUT THE PROJECT -->
+
 ## Über das Projekt
 
 Das **Informationssystem für soziale Infrastrukturplanung (ISI)** ist eine integrierte Lösung
@@ -34,18 +35,18 @@ kommunale Pflichtaufgabe zur Planung einer bedarfs- und zeitgerechten Versorgung
 Dieses Projekt implementiert die API der ISI-Anwendung.
 <p align="right">(<a href="#top">nach oben</a>)</p>
 
-
-
 ### Verwendete Technologien
 
 Dieses Projekt verwendet die folgenden Technologien:
 
 * Spring Boot
-* Apache SIS
+* Spring Cloud
+* geotools.org
 
 <p align="right">(<a href="#top">nach oben</a>)</p>
 
 <!-- ROADMAP -->
+
 ## Roadmap
 
 <br />
@@ -59,29 +60,34 @@ Dieses Projekt verwendet die folgenden Technologien:
 </div>
 
 
-Siehe auch unter [open issues](https://github.com/it-at-m/isi-backend/issues) die Liste der vorgeschlagenen Verbesserungen (und bekannten Fehler)
+Siehe auch unter [open issues](https://github.com/it-at-m/isi-backend/issues) die Liste der vorgeschlagenen
+Verbesserungen (und bekannten Fehler)
 
 <p align="right">(<a href="#top">nach oben</a>)</p>
 
 ## Set up
+
 <!--*how can i start and fly this project*-->
 *tbd*
 
 <p align="right">(<a href="#top">nach oben</a>)</p>
 
 ## Dokumentation
+
 <!--*what insights do you have to tell*-->
 *tbd*
 
 <p align="right">(<a href="#top">nach oben</a>)</p>
 
 <!-- CONTRIBUTING -->
+
 ## Beiträge
 
 Beiträge sind es, die die Open Source Community so wertvoll machen - zum Lernen und Erstellen sowie zur Inspiration.
 Beiträge sind **sehr willkommen**:
 
-Um Verbesserungsvorschläge einzureichen, öffne bitte ein _Issue_ mit dem _Tag_ "enhancement", erstelle einen _Fork_ des Repos und
+Um Verbesserungsvorschläge einzureichen, öffne bitte ein _Issue_ mit dem _Tag_ "enhancement", erstelle einen _Fork_ des
+Repos und
 erzeuge einen _Pull Request_. Es ist natürlich auch möglich, nur ein Issue mit dem _Tag_ "enhancement" zu öffnen.
 
 Vielen Dank, dass du diesem Projekt einen _Star_ vergibst!
@@ -99,6 +105,7 @@ Mehr dazu in der Datei [CODE_OF_CONDUCT](/CODE_OF_CONDUCT.md) .
 
 
 <!-- LICENSE -->
+
 ## Lizensierung
 
 Die Distribution erfolgt unter der MIT License. Mehr dazu in der Datei [LICENSE](/LICENSE).
@@ -108,6 +115,7 @@ Die Distribution erfolgt unter der MIT License. Mehr dazu in der Datei [LICENSE]
 
 
 <!-- CONTACT -->
+
 ## Kontakt
 
 it@m - opensource@muenchen.de
