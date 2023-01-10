@@ -2,11 +2,21 @@ package de.muenchen.isi.domain.model.filehandling;
 
 import lombok.Data;
 
-import java.util.Set;
+import java.util.List;
 
 @Data
 public class DokumenteModel {
 
-    Set<DokumentModel> dokumente;
+    List<DokumentModel> dokumente;
+
+    private Integer pageNumber;
+
+    private Integer pageSize;
+
+    private Long totalElements;
+
+    private Integer totalPages;
+
+    private Boolean last;
 
 }
