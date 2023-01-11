@@ -5,6 +5,7 @@ import de.muenchen.isi.api.dto.error.InformationResponseDto;
 import de.muenchen.isi.api.mapper.BauvorhabenApiMapper;
 import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
+import de.muenchen.isi.domain.exception.UniqueViolationException;
 import de.muenchen.isi.domain.service.BauvorhabenService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -81,7 +82,7 @@ public class BauvorhabenController {
             @ApiResponse(responseCode = "400", description = "BAD_REQUEST -> Bauvorhaben konnte nicht erstellt werden, überprüfen sie die Eingabe.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class)))
     })
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_WRITE_BAUVORHABEN.name())")
-    public ResponseEntity<BauvorhabenDto> createBauvorhaben(@RequestBody @Valid @NotNull final BauvorhabenDto bauvorhabenDto) {
+    public ResponseEntity<BauvorhabenDto> createBauvorhaben(@RequestBody @Valid @NotNull final BauvorhabenDto bauvorhabenDto) throws UniqueViolationException {
         var model = this.bauvorhabenApiMapper.dto2Model(bauvorhabenDto);
         model = this.bauvorhabenService.saveBauvorhaben(model);
         final var saved = this.bauvorhabenApiMapper.model2Dto(model);
@@ -96,7 +97,7 @@ public class BauvorhabenController {
             @ApiResponse(responseCode = "404", description = "NOT_FOUND -> Bauvorhaben mit dieser ID nicht vorhanden.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class)))
     })
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_WRITE_BAUVORHABEN.name())")
-    public ResponseEntity<BauvorhabenDto> updateBauvorhaben(@RequestBody @Valid @NotNull final BauvorhabenDto bauvorhabenDto) throws EntityNotFoundException {
+    public ResponseEntity<BauvorhabenDto> updateBauvorhaben(@RequestBody @Valid @NotNull final BauvorhabenDto bauvorhabenDto) throws EntityNotFoundException, UniqueViolationException {
         var model = this.bauvorhabenApiMapper.dto2Model(bauvorhabenDto);
         model = this.bauvorhabenService.updateBauvorhaben(model);
         final var saved = this.bauvorhabenApiMapper.model2Dto(model);

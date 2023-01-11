@@ -10,6 +10,7 @@ import de.muenchen.isi.domain.exception.FileHandlingFailedException;
 import de.muenchen.isi.domain.exception.FileHandlingWithS3FailedException;
 import de.muenchen.isi.domain.exception.FileImportFailedException;
 import de.muenchen.isi.domain.exception.KoordinatenException;
+import de.muenchen.isi.domain.exception.UniqueViolationException;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -158,6 +159,19 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<Object> handleEntityNotFoundException(final EntityNotFoundException ex) {
         final var httpStatus = HttpStatus.NOT_FOUND;
+        final var errorResponseDto = this.createInformationResponseDtoWithTraceInformationAndTimestampAndOriginalExceptionNameAndStatusAndMessage(
+                ex,
+                httpStatus.value(),
+                List.of(ex.getMessage())
+        );
+        return ResponseEntity
+                .status(httpStatus)
+                .body(errorResponseDto);
+    }
+
+    @ExceptionHandler(UniqueViolationException.class)
+    public ResponseEntity<Object> handleUniqueViolationException(final UniqueViolationException ex) {
+        final var httpStatus = HttpStatus.CONFLICT;
         final var errorResponseDto = this.createInformationResponseDtoWithTraceInformationAndTimestampAndOriginalExceptionNameAndStatusAndMessage(
                 ex,
                 httpStatus.value(),

@@ -3,6 +3,7 @@ package de.muenchen.isi.domain.service;
 import de.muenchen.isi.api.dto.AbfrageDto;
 import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
+import de.muenchen.isi.domain.exception.UniqueViolationException;
 import de.muenchen.isi.domain.mapper.BauvorhabenDomainMapper;
 import de.muenchen.isi.domain.model.AbfrageModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.InfrastruktureinrichtungModel;
@@ -75,10 +76,15 @@ public class BauvorhabenService {
      * @param bauvorhaben zum Speichern.
      * @return das gespeicherte {@link BauvorhabenModel}.
      */
-    public BauvorhabenModel saveBauvorhaben(final BauvorhabenModel bauvorhaben) {
+    public BauvorhabenModel saveBauvorhaben(final BauvorhabenModel bauvorhaben) throws UniqueViolationException {
         var entity = this.bauvorhabenDomainMapper.model2Entity(bauvorhaben);
-        entity = this.bauvorhabenRepository.save(entity);
-        return this.bauvorhabenDomainMapper.entity2Model(entity);
+        var saved = this.bauvorhabenRepository.findByNameVorhabenIgnoreCase(entity.getNameVorhaben());
+        if(saved.isPresent()) {
+            throw new UniqueViolationException("Der angegebene Name des Bauvorhabens ist schon vorhanden, bitte wählen Sie daher einen anderen Namen und speichern Sie die Abfrage erneut.");
+        } else {
+            entity = this.bauvorhabenRepository.save(entity);
+            return this.bauvorhabenDomainMapper.entity2Model(entity);
+        }
     }
 
     /**
@@ -88,7 +94,7 @@ public class BauvorhabenService {
      * @return das geupdatete {@link BauvorhabenModel}.
      * @throws EntityNotFoundException falls das Bauvorhaben identifiziert durch die {@link BauvorhabenModel#getId()} nicht gefunden wird.
      */
-    public BauvorhabenModel updateBauvorhaben(final BauvorhabenModel bauvorhaben) throws EntityNotFoundException {
+    public BauvorhabenModel updateBauvorhaben(final BauvorhabenModel bauvorhaben) throws EntityNotFoundException, UniqueViolationException {
         this.getBauvorhabenById(bauvorhaben.getId());
         return this.saveBauvorhaben(bauvorhaben);
     }

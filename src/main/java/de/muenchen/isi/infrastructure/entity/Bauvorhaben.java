@@ -28,7 +28,7 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 public class Bauvorhaben extends BaseEntity {
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String nameVorhaben;
 
     @Column(nullable = false)
