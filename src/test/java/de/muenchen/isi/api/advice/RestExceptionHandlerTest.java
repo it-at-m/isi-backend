@@ -1,5 +1,6 @@
 package de.muenchen.isi.api.advice;
 
+import de.muenchen.isi.api.dto.enums.InformationResponseType;
 import de.muenchen.isi.api.dto.error.InformationResponseDto;
 import de.muenchen.isi.domain.exception.AbfrageStatusNotAllowedException;
 import de.muenchen.isi.domain.exception.CsvAttributeErrorException;
@@ -392,22 +393,8 @@ class RestExceptionHandlerTest {
 
         final InformationResponseDto responseDto = (InformationResponseDto) response.getBody();
 
-        assertThat(
-                responseDto.getTraceId(),
-                is("1111111111111111")
-        );
-        assertThat(
-                responseDto.getSpanId(),
-                is("ffffffffffffffff")
-        );
-        assertThat(
-                responseDto.getMessages(),
-                is(List.of("test"))
-        );
-        assertThat(
-                responseDto.getOriginalException(),
-                is("UniqueViolationException")
-        );
+        assertThat(responseDto.getMessages(), is(List.of("test")));
+        assertThat(responseDto.getType(), is(InformationResponseType.ERROR));
     }
 
     @Test
