@@ -6,6 +6,7 @@ import de.muenchen.isi.domain.mapper.AbfrageDomainMapper;
 import de.muenchen.isi.domain.mapper.AbfrageDomainMapperImpl;
 import de.muenchen.isi.domain.mapper.AbfragevarianteDomainMapperImpl;
 import de.muenchen.isi.domain.mapper.BauabschnittDomainMapperImpl;
+import de.muenchen.isi.domain.mapper.DokumentDomainMapperImpl;
 import de.muenchen.isi.domain.model.AbfrageModel;
 import de.muenchen.isi.domain.model.BauvorhabenModel;
 import de.muenchen.isi.domain.model.InfrastrukturabfrageModel;
@@ -38,7 +39,8 @@ class AbfrageServiceTest {
     private final AbfrageDomainMapper abfrageDomainMapper = new AbfrageDomainMapperImpl(
             new AbfragevarianteDomainMapperImpl(
                     new BauabschnittDomainMapperImpl()
-            )
+            ),
+            new DokumentDomainMapperImpl()
     );
 
     @Mock

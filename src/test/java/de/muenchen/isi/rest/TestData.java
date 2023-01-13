@@ -12,12 +12,17 @@ import de.muenchen.isi.domain.model.BaurateModel;
 import de.muenchen.isi.domain.model.FoerdermixModel;
 import de.muenchen.isi.domain.model.InfrastrukturabfrageModel;
 import de.muenchen.isi.domain.model.common.AdresseModel;
+import de.muenchen.isi.domain.model.filehandling.DokumentModel;
+import de.muenchen.isi.domain.model.filehandling.FilepathModel;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtDokument;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.BaugebietTyp;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Planungsrecht;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonVerfahrensgrundsaetzeJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVorhaben;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
+import de.muenchen.isi.infrastructure.entity.filehandling.Dokument;
+import de.muenchen.isi.infrastructure.entity.filehandling.Filepath;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -96,6 +101,24 @@ public class TestData {
         foerdermix.setAnteilBaugemeinschaften(BigDecimal.valueOf(0));
         foerdermix.setAnteilEinUndZweifamilienhaeuser(BigDecimal.valueOf(0));
         return foerdermix;
+    }
+
+    public static Dokument createDokument(final String pathToFile, final ArtDokument artDokument) {
+        final var dokument = new Dokument();
+        final var filePath = new Filepath();
+        filePath.setPathToFile(pathToFile);
+        dokument.setFilePath(filePath);
+        dokument.setArtDokument(artDokument);
+        return dokument;
+    }
+
+    public static DokumentModel createDokumentModel(final String pathToFile, final ArtDokument artDokument) {
+        final var dokument = new DokumentModel();
+        final var filePath = new FilepathModel();
+        filePath.setPathToFile(pathToFile);
+        dokument.setFilePath(filePath);
+        dokument.setArtDokument(artDokument);
+        return dokument;
     }
 
 }

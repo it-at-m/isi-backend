@@ -47,7 +47,7 @@ public class PresignedUrlCreationService {
             log.debug("Presigned-URL get file: {}", presignedUrl);
             return new PresignedUrlModel(
                     HttpMethod.GET.name(),
-                    presignedUrl
+                    presignedUrl.block()
             );
         } catch (final DocumentStorageClientErrorException | DocumentStorageServerErrorException |
                        DocumentStorageException | PropertyNotSetException exception) {

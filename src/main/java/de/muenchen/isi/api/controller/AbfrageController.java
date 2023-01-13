@@ -124,7 +124,7 @@ public class AbfrageController {
     @DeleteMapping("infrastruktur-abfrage/{id}")
     @Operation(summary = "Löschen einer Infrastrukturabfrage")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(responseCode = "204", description = "NO CONTENT"),
             @ApiResponse(responseCode = "404", description = "NOT FOUND -> Abfrage mit dieser ID nicht vorhanden.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class))),
             @ApiResponse(responseCode = "409", description = "CONFLICT -> Die Abfrage referenziert ein Bauvorhaben.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class)))
     })
@@ -132,7 +132,7 @@ public class AbfrageController {
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_DELETE_ABFRAGE.name())")
     public ResponseEntity<Void> deleteInfrastrukturabfrageById(@PathVariable @NotNull final UUID id) throws EntityNotFoundException, EntityIsReferencedException {
         this.abfrageService.deleteInfrasturkturabfrageById(id);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
 }
