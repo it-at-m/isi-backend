@@ -9,6 +9,7 @@ import de.muenchen.isi.domain.exception.FileHandlingFailedException;
 import de.muenchen.isi.domain.exception.FileHandlingWithS3FailedException;
 import de.muenchen.isi.domain.exception.FileImportFailedException;
 import de.muenchen.isi.domain.exception.KoordinatenException;
+import de.muenchen.isi.domain.exception.UniqueViolationException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -377,6 +378,35 @@ class RestExceptionHandlerTest {
         assertThat(
                 responseDto.getOriginalException(),
                 is("EntityNotFoundException")
+        );
+    }
+
+    @Test
+    void handleUniqueViolationExceptionTest() {
+
+        final UniqueViolationException uniqueViolationException = new UniqueViolationException("test");
+
+        final ResponseEntity<Object> response = this.restExceptionHandler.handleUniqueViolationException(uniqueViolationException);
+
+        assertThat(response.getStatusCode(), is(HttpStatus.CONFLICT));
+
+        final InformationResponseDto responseDto = (InformationResponseDto) response.getBody();
+
+        assertThat(
+                responseDto.getTraceId(),
+                is("1111111111111111")
+        );
+        assertThat(
+                responseDto.getSpanId(),
+                is("ffffffffffffffff")
+        );
+        assertThat(
+                responseDto.getMessages(),
+                is(List.of("test"))
+        );
+        assertThat(
+                responseDto.getOriginalException(),
+                is("UniqueViolationException")
         );
     }
 
