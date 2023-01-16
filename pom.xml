@@ -128,7 +128,12 @@
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-oauth2-client</artifactId>
         </dependency>
-
+        <!-- Spring Statemachine -->
+        <dependency>
+            <groupId>org.springframework.statemachine</groupId>
+            <artifactId>spring-statemachine-core</artifactId>
+            <version>3.2.0</version>
+        </dependency>
         <!-- json etc. -->
         <dependency>
             <groupId>org.springframework.hateoas</groupId>

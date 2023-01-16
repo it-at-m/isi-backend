@@ -12,9 +12,10 @@ public enum StatusAbfrage implements ILookup {
 
     ANGELEGT("angelegt"),
     OFFEN("offen"),
-    IN_ARBEIT("in Arbeit"),
     IN_ERFASSUNG("in Erfassung"),
-    IN_BEARBEITUNG("in Bearbeitung"),
+    IN_BEARBEITUNG_PLAN("in Bearbeitung bei PlAN-HA I/2"),
+    IN_BEARBEITUNG_FACHREFERATE("in Bearbeitung bei den Fachreferaten"),
+    BEDARFSMELDUNG_ERFOLGT("Bedarfsmeldung der Fachreferate ist erfolgt"),
     ERLEDIGT("erledigt"),
     ABBRUCH("Abbruch");
 
