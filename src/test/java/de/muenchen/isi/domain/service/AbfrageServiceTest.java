@@ -2,6 +2,7 @@ package de.muenchen.isi.domain.service;
 
 import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
+import de.muenchen.isi.domain.exception.IllegalChangeException;
 import de.muenchen.isi.domain.mapper.AbfrageDomainMapper;
 import de.muenchen.isi.domain.mapper.AbfrageDomainMapperImpl;
 import de.muenchen.isi.domain.mapper.AbfragevarianteDomainMapperImpl;
@@ -9,6 +10,7 @@ import de.muenchen.isi.domain.mapper.BauabschnittDomainMapperImpl;
 import de.muenchen.isi.domain.model.AbfrageModel;
 import de.muenchen.isi.domain.model.BauvorhabenModel;
 import de.muenchen.isi.domain.model.InfrastrukturabfrageModel;
+import de.muenchen.isi.domain.model.filehandling.DokumentModel;
 import de.muenchen.isi.infrastructure.entity.Abfrage;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
 import de.muenchen.isi.infrastructure.entity.Infrastrukturabfrage;
@@ -23,6 +25,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -185,6 +188,39 @@ class AbfrageServiceTest {
         final AbfrageModel abfrage = new AbfrageModel();
         abfrage.setBauvorhaben(new BauvorhabenModel());
         Assertions.assertThrows(EntityIsReferencedException.class, () -> this.abfrageService.throwEntityIsReferencedExceptionWhenAbfrageIsReferencingBauvorhaben(abfrage));
+    }
+
+    @Test
+    void checkChangeLegality() {
+        final var updated = new InfrastrukturabfrageModel();
+        final var updatedAbfrage = new AbfrageModel();
+        final var updatedDokumente = new ArrayList<DokumentModel>();
+        updated.setAbfrage(updatedAbfrage);
+        updatedAbfrage.setDokumente(updatedDokumente);
+
+        final var current = new InfrastrukturabfrageModel();
+        final var currentAbfrage = new AbfrageModel();
+        final var currentDokumente = new ArrayList<DokumentModel>();
+        current.setAbfrage(currentAbfrage);
+        currentAbfrage.setDokumente(currentDokumente);
+
+        Assertions.assertDoesNotThrow(() -> this.abfrageService.checkChangeLegality(updated, current));
+
+        final var updatedDokument = new DokumentModel();
+        updatedDokument.setTitel("Dokument 1");
+        updatedDokumente.add(updatedDokument);
+
+        Assertions.assertThrows(IllegalChangeException.class, () -> this.abfrageService.checkChangeLegality(updated, current));
+
+        final var currentDokument = new DokumentModel();
+        currentDokument.setTitel("Dokument 1");
+        currentDokumente.add(currentDokument);
+
+        Assertions.assertDoesNotThrow(() -> this.abfrageService.checkChangeLegality(updated, current));
+
+        updatedDokument.setTitel("Dokument 2");
+
+        Assertions.assertDoesNotThrow(() -> this.abfrageService.checkChangeLegality(updated, current));
     }
 
 }

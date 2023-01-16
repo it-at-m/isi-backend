@@ -9,8 +9,10 @@ import de.muenchen.isi.api.dto.error.InformationResponseDto;
 import de.muenchen.isi.api.mapper.AbfrageApiMapper;
 import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
+import de.muenchen.isi.domain.exception.IllegalChangeException;
 import de.muenchen.isi.domain.service.AbfrageService;
 import de.muenchen.isi.domain.service.BauvorhabenService;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -109,8 +111,14 @@ public class AbfrageController {
             @ApiResponse(responseCode = "404", description = "NOT_FOUND -> Es gibt keine Abfrage mit der ID.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class)))
     })
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_WRITE_ABFRAGE.name())")
-    public ResponseEntity<InfrastrukturabfrageDto> updateInfrastrukturabfrage(@RequestBody @Valid @NotNull final InfrastrukturabfrageDto abfrageDto) throws EntityNotFoundException {
+    public ResponseEntity<InfrastrukturabfrageDto> updateInfrastrukturabfrage(@RequestBody @Valid @NotNull final InfrastrukturabfrageDto abfrageDto) throws EntityNotFoundException, IllegalChangeException {
         var model = this.abfrageApiMapper.dto2Model(abfrageDto);
+        final var savedModel = this.abfrageService.getInfrastrukturabfrageById(abfrageDto.getId());
+
+        if (savedModel.getAbfrage().getStatusAbfrage() == StatusAbfrage.OFFEN) {
+            abfrageService.checkChangeLegality(model, savedModel);
+        }
+
         final var abfrage = this.bauvorhabenService.assignBauvorhabenToAbfrage(
                 abfrageDto.getAbfrage().getBauvorhaben(),
                 model.getAbfrage()
