@@ -1,18 +1,27 @@
 package de.muenchen.isi.domain.service;
 
+import de.muenchen.isi.configuration.StateMachineConfiguration;
 import de.muenchen.isi.domain.exception.AbfrageStatusNotAllowedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
-import de.muenchen.isi.domain.model.AbfrageModel;
 import de.muenchen.isi.domain.model.InfrastrukturabfrageModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrageEvents;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.statemachine.StateMachine;
+import org.springframework.statemachine.StateMachineEventResult;
 import org.springframework.statemachine.config.StateMachineFactory;
+import org.springframework.statemachine.state.State;
 import org.springframework.statemachine.support.DefaultStateMachineContext;
+import org.springframework.statemachine.support.StateMachineInterceptorAdapter;
+import org.springframework.statemachine.transition.Transition;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @Slf4j
@@ -23,197 +32,200 @@ public class AbfrageStatusService {
     private final AbfrageService abfrageService;
     private final StateMachineFactory<StatusAbfrage, StatusAbfrageEvents> stateMachineFactory;
 
-    /**
-     * Gibt ein {@link InfrastrukturabfrageModel} identifiziert durch die ID frei.
-     *
-     * @param id zur Identifzierung des {@link InfrastrukturabfrageModel}s
-     * @throws EntityNotFoundException          falls die Abfrage nicht gefunden werden kann.
-     * @throws AbfrageStatusNotAllowedException falls die Abfrage nicht freigegeben werden kann.
-     */
-    public void freigabeInfrastrukturabfrage(final UUID id) throws EntityNotFoundException, AbfrageStatusNotAllowedException {
-        final InfrastrukturabfrageModel abfrage = this.abfrageService
-                .getInfrastrukturabfrageById(id);
-        abfrage.setAbfrage(this.freigabeAbfrage(abfrage));
-        this.abfrageService.updateInfrastrukturabfrage(abfrage);
-
-    }
+    private static final String ABFRAGE_ID_HEADER = "abfrage_id";
 
     /**
-     * Gibt das {@link AbfrageModel} im Parameter frei falls möglich.
+     * Ändert den Status anhand der Definition {@link  StateMachineConfiguration}
      *
-     * @param abfrage vom Typ {@link AbfrageModel} zur Freigabe.
-     * @return das freigegebene {@link AbfrageModel}.
-     * @throws AbfrageStatusNotAllowedException falls die Abfrage nicht freigegeben werden kann.
+     * @param id vom Typ {@link UUID} um die Abfrage zu finden.
+     * @throws EntityNotFoundException falls die Abfrage nicht gefunden werden kann.
      */
-    protected AbfrageModel freigabeAbfrage(final InfrastrukturabfrageModel abfrage) throws AbfrageStatusNotAllowedException {
-        StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = build(abfrage);
-        stateMachine.sendEvent(StatusAbfrageEvents.FREIGABE);
-
-        abfrage.getAbfrage().setStatusAbfrage(stateMachine.getState().getId());
-
-        return abfrage.getAbfrage();
+    public void freigabeAbfrage(final UUID id) throws EntityNotFoundException, AbfrageStatusNotAllowedException {
+        StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = build(id);
+        this.sendEvent(id, StatusAbfrageEvents.FREIGABE, stateMachine);
+        System.out.println(stateMachine);
     }
 
 
     /**
+     * Ändert den Status anhand der Definition {@link  StateMachineConfiguration}
      *
-     * @param abfrage
-     * @return
+     * @param id vom Typ {@link UUID} um die Abfrage zu finden.
+     * @throws EntityNotFoundException falls die Abfrage nicht gefunden werden kann.
      */
-    protected AbfrageModel abbrechenAbfrage(final InfrastrukturabfrageModel abfrage) {
-        StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = build(abfrage);
-        stateMachine.sendEvent(StatusAbfrageEvents.ABBRECHEN);
-
-        abfrage.getAbfrage().setStatusAbfrage(stateMachine.getState().getId());
-
-        return abfrage.getAbfrage();
+    public void abbrechenAbfrage(final UUID id) throws EntityNotFoundException, AbfrageStatusNotAllowedException {
+        StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = build(id);
+        this.sendEvent(id, StatusAbfrageEvents.ABBRECHEN, stateMachine);
     }
 
     /**
+     * Ändert den Status anhand der Definition {@link  StateMachineConfiguration}
      *
-     * @param abfrage
-     * @return
+     * @param id vom Typ {@link UUID} um die Abfrage zu finden.
+     * @throws EntityNotFoundException falls die Abfrage nicht gefunden werden kann.
      */
-    protected AbfrageModel angabenAnpassenAbfrage(final InfrastrukturabfrageModel abfrage) {
-        StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = build(abfrage);
-        stateMachine.sendEvent(StatusAbfrageEvents.ANGABEN_ANPASSEN);
-
-        abfrage.getAbfrage().setStatusAbfrage(stateMachine.getState().getId());
-
-        return abfrage.getAbfrage();
+    public void angabenAnpassenAbfrage(final UUID id) throws EntityNotFoundException, AbfrageStatusNotAllowedException {
+        StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = build(id);
+        this.sendEvent(id, StatusAbfrageEvents.ANGABEN_ANPASSEN, stateMachine);
     }
 
     /**
+     * Ändert den Status anhand der Definition {@link  StateMachineConfiguration}
      *
-     * @param abfrage
-     * @return
+     * @param id vom Typ {@link UUID} um die Abfrage zu finden.
+     * @throws EntityNotFoundException falls die Abfrage nicht gefunden werden kann.
      */
-    protected AbfrageModel weitereAbfragevariantenAnlegen(final InfrastrukturabfrageModel abfrage) {
-        StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = build(abfrage);
-        stateMachine.sendEvent(StatusAbfrageEvents.WEITERE_ABFRAVARIANTEN_ANLEGEN);
-
-        abfrage.getAbfrage().setStatusAbfrage(stateMachine.getState().getId());
-
-        return abfrage.getAbfrage();
+    public void weitereAbfragevariantenAnlegen(final UUID id) throws EntityNotFoundException, AbfrageStatusNotAllowedException {
+        StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = build(id);
+        this.sendEvent(id, StatusAbfrageEvents.WEITERE_ABFRAVARIANTEN_ANLEGEN, stateMachine);
     }
 
     /**
+     * Ändert den Status anhand der Definition {@link  StateMachineConfiguration}
      *
-     * @param abfrage
-     * @return
+     * @param id vom Typ {@link UUID} um die Abfrage zu finden.
+     * @throws EntityNotFoundException falls die Abfrage nicht gefunden werden kann.
      */
-    protected AbfrageModel keineZusätzlicheAbfragevariante(final InfrastrukturabfrageModel abfrage) {
-        StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = build(abfrage);
-        stateMachine.sendEvent(StatusAbfrageEvents.KEINE_ZUSAEZTLICHE_ABFRAGEVARIANTE);
-
-        abfrage.getAbfrage().setStatusAbfrage(stateMachine.getState().getId());
-
-        return abfrage.getAbfrage();
+    public void keineZusaetzlicheAbfragevariante(final UUID id) throws EntityNotFoundException, AbfrageStatusNotAllowedException {
+        StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = build(id);
+        this.sendEvent(id, StatusAbfrageEvents.KEINE_ZUSAEZTLICHE_ABFRAGEVARIANTE, stateMachine);
     }
 
     /**
+     * Ändert den Status anhand der Definition {@link  StateMachineConfiguration}
      *
-     * @param abfrage
-     * @return
+     * @param id vom Typ {@link UUID} um die Abfrage zu finden.
+     * @throws EntityNotFoundException falls die Abfrage nicht gefunden werden kann.
      */
-    protected AbfrageModel zusaetzlicheAbfragevarianteAnlegen(final InfrastrukturabfrageModel abfrage) {
-        StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = build(abfrage);
-        stateMachine.sendEvent(StatusAbfrageEvents.ZUSAETZLICHE_ABFRAGEVARIANTE);
-
-        abfrage.getAbfrage().setStatusAbfrage(stateMachine.getState().getId());
-
-        return abfrage.getAbfrage();
+    public void zusaetzlicheAbfragevarianteAnlegen(final UUID id) throws EntityNotFoundException, AbfrageStatusNotAllowedException {
+        StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = build(id);
+        this.sendEvent(id, StatusAbfrageEvents.ZUSAETZLICHE_ABFRAGEVARIANTE, stateMachine);
     }
 
     /**
+     * Ändert den Status anhand der Definition {@link  StateMachineConfiguration}
      *
-     * @param abfrage
-     * @return
+     * @param id vom Typ {@link UUID} um die Abfrage zu finden.
+     * @throws EntityNotFoundException falls die Abfrage nicht gefunden werden kann.
      */
-    protected AbfrageModel speichernDerVarianten(final InfrastrukturabfrageModel abfrage) {
-        StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = build(abfrage);
-        stateMachine.sendEvent(StatusAbfrageEvents.SPEICHERN_DER_VARIANTEN);
-
-        abfrage.getAbfrage().setStatusAbfrage(stateMachine.getState().getId());
-
-        return abfrage.getAbfrage();
+    public void speichernDerVarianten(final UUID id) throws EntityNotFoundException, AbfrageStatusNotAllowedException {
+        StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = build(id);
+        this.sendEvent(id, StatusAbfrageEvents.SPEICHERN_DER_VARIANTEN, stateMachine);
     }
 
     /**
+     * Ändert den Status anhand der Definition {@link  StateMachineConfiguration}
      *
-     * @param abfrage
-     * @return
+     * @param id vom Typ {@link UUID} um die Abfrage zu finden.
+     * @throws EntityNotFoundException falls die Abfrage nicht gefunden werden kann.
      */
-    protected AbfrageModel keineBearbeitungNötig(final InfrastrukturabfrageModel abfrage) {
-        StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = build(abfrage);
-        stateMachine.sendEvent(StatusAbfrageEvents.KEINE_BEARBEITUNG_NÖTIG);
-
-        abfrage.getAbfrage().setStatusAbfrage(stateMachine.getState().getId());
-
-        return abfrage.getAbfrage();
+    public void keineBearbeitungNoetig(final UUID id) throws EntityNotFoundException, AbfrageStatusNotAllowedException {
+        StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = build(id);
+        this.sendEvent(id, StatusAbfrageEvents.KEINE_BEARBEITUNG_NOETIG, stateMachine);
     }
 
     /**
+     * Ändert den Status anhand der Definition {@link  StateMachineConfiguration}
      *
-     * @param abfrage
-     * @return
+     * @param id vom Typ {@link UUID} um die Abfrage zu finden.
+     * @throws EntityNotFoundException falls die Abfrage nicht gefunden werden kann.
      */
-    protected AbfrageModel verschickenDerStellungnahme(final InfrastrukturabfrageModel abfrage) {
-        StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = build(abfrage);
-        stateMachine.sendEvent(StatusAbfrageEvents.VERSCHICKEN_DER_STELLUNGNAHME);
-
-        abfrage.getAbfrage().setStatusAbfrage(stateMachine.getState().getId());
-
-        return abfrage.getAbfrage();
+    public void verschickenDerStellungnahme(final UUID id) throws EntityNotFoundException, AbfrageStatusNotAllowedException {
+        StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = build(id);
+        this.sendEvent(id, StatusAbfrageEvents.VERSCHICKEN_DER_STELLUNGNAHME, stateMachine);
     }
 
     /**
+     * Ändert den Status anhand der Definition {@link  StateMachineConfiguration}
      *
-     * @param abfrage
-     * @return
+     * @param id vom Typ {@link UUID} um die Abfrage zu finden.
+     * @throws EntityNotFoundException falls die Abfrage nicht gefunden werden kann.
      */
-    protected AbfrageModel bedarfsmeldungErfolgt(final InfrastrukturabfrageModel abfrage) {
-        StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = build(abfrage);
-        stateMachine.sendEvent(StatusAbfrageEvents.BEDARFSMELDUNG_ERFOLGTE);
-
-        abfrage.getAbfrage().setStatusAbfrage(stateMachine.getState().getId());
-
-        return abfrage.getAbfrage();
+    public void bedarfsmeldungErfolgt(final UUID id) throws EntityNotFoundException, AbfrageStatusNotAllowedException {
+        StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = build(id);
+        this.sendEvent(id, StatusAbfrageEvents.BEDARFSMELDUNG_ERFOLGTE, stateMachine);
     }
 
     /**
+     * Ändert den Status anhand der Definition {@link  StateMachineConfiguration}
      *
-     * @param abfrage
-     * @return
+     * @param id vom Typ {@link UUID} um die Abfrage zu finden.
+     * @throws EntityNotFoundException falls die Abfrage nicht gefunden werden kann.
      */
-    protected AbfrageModel speichernVonSozialinfrastrukturVersorgung(final InfrastrukturabfrageModel abfrage) {
-        StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = build(abfrage);
-        stateMachine.sendEvent(StatusAbfrageEvents.SPEICHERN_VON_SOZIALINFRASTRUKTUR_VERSORGUNG);
-
-        abfrage.getAbfrage().setStatusAbfrage(stateMachine.getState().getId());
-
-        return abfrage.getAbfrage();
+    public void speichernVonSozialinfrastrukturVersorgung(final UUID id) throws EntityNotFoundException, AbfrageStatusNotAllowedException {
+        StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = build(id);
+        this.sendEvent(id, StatusAbfrageEvents.SPEICHERN_VON_SOZIALINFRASTRUKTUR_VERSORGUNG, stateMachine);
     }
 
 
     /**
-     * Setzt den Status der Abfrage aus der Datenbank in der {@link StateMachine}
+     * Erstellt die Statemachine und initialisiert sie mit dem Status der Abfrage aus der DB.
+     * <p>
+     * Ausserdem definieren wir eine preStateChange Listener der bei einer Statusänderung den Status in der DB aktualiesiert.
      *
-     * @param abfrage vom Typ {@link InfrastrukturabfrageModel} mit ihrem aktuellen Status.
-     * @return die {@link StateMachine} mit initialiertem Status.
+     * @param id vom Typ {@link UUID}  um die Abfrage aus der DB zu hollen.
+     * @throws EntityNotFoundException falls die Abfrage nicht gefunden werden kann.
      */
-    private StateMachine<StatusAbfrage, StatusAbfrageEvents> build (final InfrastrukturabfrageModel abfrage) {
-
+    private StateMachine<StatusAbfrage, StatusAbfrageEvents> build(final UUID id) throws EntityNotFoundException {
+        final InfrastrukturabfrageModel abfrage = abfrageService.getInfrastrukturabfrageById(id);
+        // Hier habe ich ein EntityNotFoundExeption Array definiert damit ich die Fehlermeldung im preStateChange Listener abfangen kann und
+        // danach werfen kann. Da man in den Lambdas keine Variablen zuweisen kann.
+        final EntityNotFoundException[] entityNotFoundException = new EntityNotFoundException[1];
         StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = stateMachineFactory.getStateMachine(abfrage.getId());
 
         stateMachine.stopReactively().block();
 
         stateMachine.getStateMachineAccessor()
-                .doWithAllRegions(sma ->
-                        sma.resetStateMachineReactively(new DefaultStateMachineContext<>(abfrage.getAbfrage().getStatusAbfrage(), null, null, null)));
+                .doWithAllRegions(sma -> {
 
+                    sma.addStateMachineInterceptor(new StateMachineInterceptorAdapter<StatusAbfrage, StatusAbfrageEvents>() {
+
+                        @Override
+                        public void preStateChange(State<StatusAbfrage, StatusAbfrageEvents> state, Message<StatusAbfrageEvents> message,
+                                                   Transition<StatusAbfrage, StatusAbfrageEvents> transition, StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine,
+                                                   StateMachine<StatusAbfrage, StatusAbfrageEvents> rootStateMachine) {
+                            Optional.ofNullable(message).ifPresent(msg -> {
+                                Optional.ofNullable(
+                                                UUID.class.cast(msg.getHeaders().getOrDefault(ABFRAGE_ID_HEADER, UUID.randomUUID())))
+                                        .ifPresent(fahrzeugId -> {
+                                            try {
+                                                final InfrastrukturabfrageModel abfrage = abfrageService.getInfrastrukturabfrageById(id);
+                                                abfrage.getAbfrage().setStatusAbfrage(state.getId());
+                                                abfrageService.updateInfrastrukturabfrage(abfrage);
+                                            } catch (EntityNotFoundException e) {
+                                                entityNotFoundException[0] = e;
+                                            }
+                                        });
+                            });
+                        }
+                    });
+
+
+                    // Setzt den Status der Abfrage aus der DB in der StateMachine
+                    sma.resetStateMachineReactively(new DefaultStateMachineContext<>(abfrage.getAbfrage().getStatusAbfrage(), null, null, null)).block();
+                    ;
+                });
+        // Wirft einen Fehler wenn die Entity nicht gefunden wurde
+        if (entityNotFoundException[0] != null) {
+            throw new EntityNotFoundException("Abfrage mit der ID: " + id + " wurde nicht gefunden");
+        }
         stateMachine.startReactively().block();
-
         return stateMachine;
+    }
+
+    private void sendEvent(UUID id, StatusAbfrageEvents event, StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine) throws AbfrageStatusNotAllowedException {
+        Mono<Message<StatusAbfrageEvents>> message = Mono.just(MessageBuilder.withPayload(event).setHeader(ABFRAGE_ID_HEADER, id).build());
+        Flux<StateMachineEventResult<StatusAbfrage, StatusAbfrageEvents>> result = stateMachine.sendEvent(message);
+        final AbfrageStatusNotAllowedException[] abfrageStatusNotAllowedException = new AbfrageStatusNotAllowedException[1];
+
+        result.subscribe(smer -> {
+            if (smer.getResultType() == StateMachineEventResult.ResultType.DENIED) {
+                abfrageStatusNotAllowedException[0] = new AbfrageStatusNotAllowedException("Status Änderung ist nicht erlaubt. Aktueller Status: " + stateMachine.getState().getId());
+            }
+        });
+
+        if (abfrageStatusNotAllowedException[0] != null) {
+            throw abfrageStatusNotAllowedException[0];
+        }
     }
 }

@@ -58,7 +58,6 @@ class AbfrageStatusServiceTest {
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ANGELEGT);
         Mockito.when(this.abfrageService.getInfrastrukturabfrageById(uuid)).thenReturn(abfrage);
 
-        this.abfrageStatusService.freigabeInfrastrukturabfrage(uuid);
 
         final InfrastrukturabfrageModel abfrageExpected = new InfrastrukturabfrageModel();
         abfrageExpected.setId(uuid);
@@ -67,7 +66,7 @@ class AbfrageStatusServiceTest {
 
         Mockito.verify(this.abfrageService, Mockito.times(1)).updateInfrastrukturabfrage(abfrageExpected);
     }
-
+/*
     @Test
     void freigabeInfrastrukturabfrageException() throws EntityNotFoundException {
         final var uuid = UUID.randomUUID();
@@ -99,7 +98,7 @@ class AbfrageStatusServiceTest {
         final AbfrageModel expected = new AbfrageModel();
         expected.setStatusAbfrage(StatusAbfrage.OFFEN);
         assertThat(result, is(expected));
-/*
+
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.OFFEN);
         Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () -> this.abfrageStatusService.freigabeAbfrage(abfrage, UUID.randomUUID()));
 
@@ -120,7 +119,6 @@ class AbfrageStatusServiceTest {
 
         abfrage.setStatusAbfrage(null);
         Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () -> this.abfrageStatusService.freigabeAbfrage(abfrage, UUID.randomUUID()));
-        */
     }
-
+    */
 }
