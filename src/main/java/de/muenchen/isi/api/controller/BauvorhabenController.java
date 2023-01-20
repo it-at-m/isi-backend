@@ -81,7 +81,6 @@ public class BauvorhabenController {
             @ApiResponse(responseCode = "201", description = "CREATED -> Bauvorhaben wurde erfolgreich erstellt."),
             @ApiResponse(responseCode = "400", description = "BAD_REQUEST -> Bauvorhaben konnte nicht erstellt werden, überprüfen sie die Eingabe.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class))),
             @ApiResponse(responseCode = "409", description = "CONFLICT -> Bauvorhaben konnte nicht erstellt werden, da bereits der Name des Vorhabens existiert.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class)))
-
     })
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_WRITE_BAUVORHABEN.name())")
     public ResponseEntity<BauvorhabenDto> createBauvorhaben(@RequestBody @Valid @NotNull final BauvorhabenDto bauvorhabenDto) throws UniqueViolationException {
