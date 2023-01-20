@@ -113,7 +113,7 @@ public class AbfrageService {
      * Hier wird überprüft, ob der/die Nutzer*in eine entsprechende Rolle dafür hat.
      * Falls nicht, wird eine Security-Exception geworfen.
      */
-    @PreAuthorize("hasRole('ROLE_lhm-isi-sachbearbeiter_kita_schule_PLAN') or hasRole('ROLE_lhm-isi-admin')")
+    @PreAuthorize("hasRole('lhm-isi-sachbearbeiter_kita_schule_PLAN') or hasRole('lhm-isi-admin')")
     public void checkChangeLegality() {}
 
 }
