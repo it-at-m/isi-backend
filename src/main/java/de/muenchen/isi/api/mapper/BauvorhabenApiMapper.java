@@ -7,9 +7,7 @@ import org.mapstruct.Mapper;
 
 @Mapper(
         config = MapstructConfiguration.class,
-        uses = {
-                DokumentApiMapper.class
-        }
+        uses = {DokumentApiMapper.class}
 )
 public interface BauvorhabenApiMapper {
 
