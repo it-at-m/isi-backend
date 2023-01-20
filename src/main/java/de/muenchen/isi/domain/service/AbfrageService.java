@@ -2,7 +2,6 @@ package de.muenchen.isi.domain.service;
 
 import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
-import de.muenchen.isi.domain.exception.IllegalChangeException;
 import de.muenchen.isi.domain.mapper.AbfrageDomainMapper;
 import de.muenchen.isi.domain.model.AbfrageModel;
 import de.muenchen.isi.domain.model.BauvorhabenModel;
@@ -111,36 +110,10 @@ public class AbfrageService {
 
     /**
      * Der Aufruf dieser Methode setzt voraus, dass eine freigegebene Abfrage vorliegt, die womöglich geändert wurde.
-     * Hier wird überprüft, ob
-     * 1) der/die Nutzer*in eine entsprechende Rolle dafür hat und
-     * 2) sich die Änderungen auf Dokumententitel beschränken (einzige erlaubte Änderung).
-     *
-     * @param updated Das {@link InfrastrukturabfrageModel} mit den neuen Änderungen.
-     * @param current Das {@link InfrastrukturabfrageModel} im aktuell persistierten Zustand.
-     * @throws IllegalChangeException Wenn etwas geändert wurde, was kein Dokumententitel ist.
+     * Hier wird überprüft, ob der/die Nutzer*in eine entsprechende Rolle dafür hat.
+     * Falls nicht, wird eine Security-Exception geworfen.
      */
     @PreAuthorize("hasRole('ROLE_lhm-isi-sachbearbeiter_kita_schule_PLAN') or hasRole('ROLE_lhm-isi-admin')")
-    public void checkChangeLegality(InfrastrukturabfrageModel updated, InfrastrukturabfrageModel current) throws IllegalChangeException {
-        if (!current.equals(updated)) {
-            if (current.getAbfrage().getDokumente().size() == updated.getAbfrage().getDokumente().size()) {
-                // Alle Dokumententitel im alten und neuen Model werden gleichgesetzt
-                for (int i = 0; i < current.getAbfrage().getDokumente().size(); i++) {
-                    current.getAbfrage().getDokumente().get(i).setTitel(updated.getAbfrage().getDokumente().get(i).getTitel());
-                }
-
-                // Wenn nach der Gleichsetzung beide Models gleich sind, wurden nur Dokumententitel geändert
-                if (current.equals(updated)) {
-                    return;
-                }
-            }
-
-            log.error(String.format(
-                    "Bei der freigegebenen Abfrage %s wurde versucht, etwas anderes als Dokumententitel zu ändern.",
-                    current.getAbfrage().getNameAbfrage()
-            ));
-
-            throw new IllegalChangeException("Bei einer freigegebenen Abfrage dürfen nur Dokumententitel geändert werden.");
-        }
-    }
+    public void checkChangeLegality() {}
 
 }

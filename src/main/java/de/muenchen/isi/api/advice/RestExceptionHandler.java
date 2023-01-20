@@ -9,7 +9,6 @@ import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.FileHandlingFailedException;
 import de.muenchen.isi.domain.exception.FileHandlingWithS3FailedException;
 import de.muenchen.isi.domain.exception.FileImportFailedException;
-import de.muenchen.isi.domain.exception.IllegalChangeException;
 import de.muenchen.isi.domain.exception.KoordinatenException;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.ObjectUtils;
@@ -59,19 +58,6 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     private static final int CUSTOM_INTERNAL_SERVER_ERROR = 555;
 
     private final Tracer tracer;
-
-    @ExceptionHandler(IllegalChangeException.class)
-    public ResponseEntity<Object> handleIllegalChangeException(final IllegalChangeException ex) {
-        final var httpStatus = HttpStatus.BAD_REQUEST;
-        final var errorResponseDto = this.createInformationResponseDtoWithTraceInformationAndTimestampAndOriginalExceptionNameAndStatusAndMessage(
-                ex,
-                httpStatus.value(),
-                List.of(ex.getMessage())
-        );
-        return ResponseEntity
-                .status(httpStatus)
-                .body(errorResponseDto);
-    }
 
     @ExceptionHandler(EntityIsReferencedException.class)
     public ResponseEntity<Object> handleEntityIsReferencedException(final EntityIsReferencedException ex) {
