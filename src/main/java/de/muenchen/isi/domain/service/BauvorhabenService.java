@@ -75,6 +75,7 @@ public class BauvorhabenService {
      *
      * @param bauvorhaben zum Speichern.
      * @return das gespeicherte {@link BauvorhabenModel}.
+     * @throws UniqueViolationException falls der Name des Bauvorhabens {@link BauvorhabenModel#getNameVorhaben()} bereits vorhanden ist.
      */
     public BauvorhabenModel saveBauvorhaben(final BauvorhabenModel bauvorhaben) throws UniqueViolationException {
         var entity = this.bauvorhabenDomainMapper.model2Entity(bauvorhaben);
@@ -93,6 +94,7 @@ public class BauvorhabenService {
      * @param bauvorhaben zum Updaten.
      * @return das geupdatete {@link BauvorhabenModel}.
      * @throws EntityNotFoundException falls das Bauvorhaben identifiziert durch die {@link BauvorhabenModel#getId()} nicht gefunden wird.
+     * @throws UniqueViolationException falls der Name des Bauvorhabens {@link BauvorhabenModel#getNameVorhaben()} bereits vorhanden ist.
      */
     public BauvorhabenModel updateBauvorhaben(final BauvorhabenModel bauvorhaben) throws EntityNotFoundException, UniqueViolationException {
         this.getBauvorhabenById(bauvorhaben.getId());
