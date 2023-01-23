@@ -2,6 +2,7 @@ package de.muenchen.isi.domain.service;
 
 import de.muenchen.isi.domain.exception.AbfrageStatusNotAllowedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
+import de.muenchen.isi.domain.exception.UniqueViolationException;
 import de.muenchen.isi.domain.model.AbfrageModel;
 import de.muenchen.isi.domain.model.InfrastrukturabfrageModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
@@ -38,7 +39,7 @@ class AbfrageStatusServiceTest {
     }
 
     @Test
-    void freigabeInfrasturkturabfrage() throws EntityNotFoundException, AbfrageStatusNotAllowedException {
+    void freigabeInfrasturkturabfrage() throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException {
         final var uuid = UUID.randomUUID();
 
         final InfrastrukturabfrageModel abfrage = new InfrastrukturabfrageModel();
