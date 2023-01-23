@@ -2,6 +2,7 @@ package de.muenchen.isi.domain.service;
 
 import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
+import de.muenchen.isi.domain.exception.UniqueViolationException;
 import de.muenchen.isi.domain.mapper.AbfrageDomainMapper;
 import de.muenchen.isi.domain.mapper.AbfrageDomainMapperImpl;
 import de.muenchen.isi.domain.mapper.AbfragevarianteDomainMapperImpl;
@@ -93,54 +94,58 @@ class AbfrageServiceTest {
     }
 
     @Test
-    void saveInfrastrukturabfrage() {
-        final InfrastrukturabfrageModel abfrage = new InfrastrukturabfrageModel();
-        abfrage.setId(null);
+    void saveInfrastrukturabfrage() throws UniqueViolationException {
+        final InfrastrukturabfrageModel infrastrukturabfrageModel = new InfrastrukturabfrageModel();
+        infrastrukturabfrageModel.setId(null);
+        AbfrageModel abfrageModel = new AbfrageModel();
+        abfrageModel.setNameAbfrage("hallo");
+        infrastrukturabfrageModel.setAbfrage(abfrageModel);
 
-        final Infrastrukturabfrage abfrageEntity = new Infrastrukturabfrage();
-        abfrageEntity.setId(abfrage.getId());
+        final Infrastrukturabfrage abfrageEntity = this.abfrageDomainMapper.model2entity(infrastrukturabfrageModel);
 
         final Infrastrukturabfrage saveResult = new Infrastrukturabfrage();
         saveResult.setId(UUID.randomUUID());
 
         Mockito.when(this.infrastrukturabfrageRepository.save(abfrageEntity)).thenReturn(saveResult);
+        Mockito.when(this.infrastrukturabfrageRepository.findByAbfrage_NameAbfrageIgnoreCase("hallo")).thenReturn(Optional.empty());
 
-        final InfrastrukturabfrageModel result = this.abfrageService.saveInfrastrukturabfrage(abfrage);
+        final InfrastrukturabfrageModel result = this.abfrageService.saveInfrastrukturabfrage(infrastrukturabfrageModel);
 
         final InfrastrukturabfrageModel expected = new InfrastrukturabfrageModel();
         expected.setId(saveResult.getId());
 
-        assertThat(
-                result,
-                is(expected)
-        );
-
+        assertThat(result, is(expected));
         Mockito.verify(this.infrastrukturabfrageRepository, Mockito.times(1)).save(abfrageEntity);
+        Mockito.verify(this.infrastrukturabfrageRepository, Mockito.times(1)).findByAbfrage_NameAbfrageIgnoreCase("hallo");
     }
 
     @Test
-    void updateInfrastrukturabfrage() throws EntityNotFoundException {
-        final InfrastrukturabfrageModel abfrage = new InfrastrukturabfrageModel();
-        abfrage.setId(UUID.randomUUID());
+    void updateInfrastrukturabfrage() throws EntityNotFoundException, UniqueViolationException {
+        final InfrastrukturabfrageModel infrastrukturabfrageModel = new InfrastrukturabfrageModel();
+        infrastrukturabfrageModel.setId(UUID.randomUUID());
+        AbfrageModel abfrageModel = new AbfrageModel();
+        abfrageModel.setNameAbfrage("hallo");
+        infrastrukturabfrageModel.setAbfrage(abfrageModel);
 
-        final Infrastrukturabfrage entity = new Infrastrukturabfrage();
-        entity.setId(abfrage.getId());
+        final Infrastrukturabfrage entity = this.abfrageDomainMapper.model2entity(infrastrukturabfrageModel);
 
         Mockito.when(this.infrastrukturabfrageRepository.findById(entity.getId())).thenReturn(Optional.of(entity));
         Mockito.when(this.infrastrukturabfrageRepository.save(entity)).thenReturn(entity);
+        Mockito.when(this.infrastrukturabfrageRepository.findByAbfrage_NameAbfrageIgnoreCase("hallo")).thenReturn(Optional.empty());
 
-        final InfrastrukturabfrageModel result = this.abfrageService.updateInfrastrukturabfrage(abfrage);
+        final InfrastrukturabfrageModel result = this.abfrageService.updateInfrastrukturabfrage(infrastrukturabfrageModel);
 
         final InfrastrukturabfrageModel expected = new InfrastrukturabfrageModel();
-        expected.setId(abfrage.getId());
+        expected.setId(infrastrukturabfrageModel.getId());
 
         assertThat(
                 result,
-                is(abfrage)
+                is(infrastrukturabfrageModel)
         );
 
         Mockito.verify(this.infrastrukturabfrageRepository, Mockito.times(1)).findById(entity.getId());
         Mockito.verify(this.infrastrukturabfrageRepository, Mockito.times(1)).save(entity);
+        Mockito.verify(this.infrastrukturabfrageRepository, Mockito.times(1)).findByAbfrage_NameAbfrageIgnoreCase("hallo");
     }
 
     @Test
