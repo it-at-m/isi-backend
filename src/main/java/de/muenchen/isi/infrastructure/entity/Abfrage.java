@@ -48,7 +48,7 @@ public class Abfrage {
     @Column(nullable = true)
     private String bebauungsplannummer;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String nameAbfrage;
 
     @Enumerated(EnumType.STRING)
