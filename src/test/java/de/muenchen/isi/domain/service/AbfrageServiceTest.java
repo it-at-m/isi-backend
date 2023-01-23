@@ -120,6 +120,28 @@ class AbfrageServiceTest {
     }
 
     @Test
+    void saveInfrastrukturabfrageUniqueViolationTest() throws UniqueViolationException {
+        final InfrastrukturabfrageModel infrastrukturabfrageModel = new InfrastrukturabfrageModel();
+        infrastrukturabfrageModel.setId(null);
+        AbfrageModel abfrageModel = new AbfrageModel();
+        abfrageModel.setNameAbfrage("hallo");
+        infrastrukturabfrageModel.setAbfrage(abfrageModel);
+
+        final Infrastrukturabfrage abfrageEntity = this.abfrageDomainMapper.model2entity(infrastrukturabfrageModel);
+
+        final Infrastrukturabfrage saveResult = new Infrastrukturabfrage();
+        saveResult.setId(UUID.randomUUID());
+
+        Mockito.when(this.infrastrukturabfrageRepository.save(abfrageEntity)).thenReturn(saveResult);
+        Mockito.when(this.infrastrukturabfrageRepository.findByAbfrage_NameAbfrageIgnoreCase("hallo")).thenReturn(Optional.of(abfrageEntity));
+
+        Assertions.assertThrows(UniqueViolationException.class, () ->this.abfrageService.saveInfrastrukturabfrage(infrastrukturabfrageModel));
+
+        Mockito.verify(this.infrastrukturabfrageRepository, Mockito.times(0)).save(abfrageEntity);
+        Mockito.verify(this.infrastrukturabfrageRepository, Mockito.times(1)).findByAbfrage_NameAbfrageIgnoreCase("hallo");
+    }
+
+    @Test
     void updateInfrastrukturabfrage() throws EntityNotFoundException, UniqueViolationException {
         final InfrastrukturabfrageModel infrastrukturabfrageModel = new InfrastrukturabfrageModel();
         infrastrukturabfrageModel.setId(UUID.randomUUID());
