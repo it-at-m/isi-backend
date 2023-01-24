@@ -19,7 +19,7 @@ import javax.persistence.UniqueConstraint;
 @Entity
 @Table(
         uniqueConstraints = {
-                @UniqueConstraint(columnNames = {"bezeichnung"})
+                @UniqueConstraint(columnNames = {"bezeichnung", "bezeichnungJahr"})
         }
 )
 @Data
