@@ -43,7 +43,6 @@ public class AbfrageStatusService {
     public void freigabeAbfrage(final UUID id) throws EntityNotFoundException, AbfrageStatusNotAllowedException {
         StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = build(id);
         this.sendEvent(id, StatusAbfrageEvents.FREIGABE, stateMachine);
-        System.out.println(stateMachine);
     }
 
 
@@ -212,7 +211,15 @@ public class AbfrageStatusService {
         stateMachine.startReactively().block();
         return stateMachine;
     }
-
+    /**
+     * Leitet eine Statusänderung ein mit dem übergebenem Event
+     * <p>
+     *
+     * @param id vom Typ {@link UUID} um die Abfrage aus der DB zu hollen.
+     * @param event vom Typ {@link StatusAbfrageEvents} um eine Statusänderung durchzuführen
+     * @param stateMachine vom Typ {@link StateMachine} welches den aktuellen Status plus alle Statis enthält
+     * @throws AbfrageStatusNotAllowedException falls die Statusänderung nicht erlaubt nicht
+     */
     private void sendEvent(UUID id, StatusAbfrageEvents event, StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine) throws AbfrageStatusNotAllowedException {
         Mono<Message<StatusAbfrageEvents>> message = Mono.just(MessageBuilder.withPayload(event).setHeader(ABFRAGE_ID_HEADER, id).build());
         Flux<StateMachineEventResult<StatusAbfrage, StatusAbfrageEvents>> result = stateMachine.sendEvent(message);
