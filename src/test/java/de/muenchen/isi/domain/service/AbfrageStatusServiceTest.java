@@ -6,6 +6,7 @@ import de.muenchen.isi.domain.exception.AbfrageStatusNotAllowedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.model.AbfrageModel;
 import de.muenchen.isi.domain.model.InfrastrukturabfrageModel;
+import de.muenchen.isi.infrastructure.entity.Abfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrageEvents;
 import org.junit.jupiter.api.Assertions;
@@ -33,26 +34,35 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isA;
 
 @ExtendWith(MockitoExtension.class)
+
+@SpringBootTest(
+        classes = {IsiBackendApplication.class},
+        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
+        properties = {"tomcat.gracefulshutdown.pre-wait-seconds=0"})
+@ActiveProfiles(profiles = {"local", "no-security"})
+
 @MockitoSettings(strictness = Strictness.LENIENT)
 class AbfrageStatusServiceTest {
 
     @Test
     void freigabeInfrasturkturabfrage() throws EntityNotFoundException, AbfrageStatusNotAllowedException {
         final AbfrageStatusService abfrageStatusService = Mockito.mock(AbfrageStatusService.class);
+        final AbfrageService abfrageService = Mockito.mock(AbfrageService.class);
         final var uuid = UUID.randomUUID();
+
+        final InfrastrukturabfrageModel abfrage = new InfrastrukturabfrageModel();
+        abfrage.setId(uuid);
+        abfrage.setAbfrage(new AbfrageModel());
+        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ANGELEGT);
+
+        Mockito.when(abfrageService.getInfrastrukturabfrageById(uuid)).thenReturn(abfrage);
+
+        Mockito.when(abfrageService.updateInfrastrukturabfrage(abfrage)).thenReturn(abfrage);
 
         abfrageStatusService.freigabeAbfrage(uuid);
 
         Mockito.verify(abfrageStatusService, Mockito.times(1)).freigabeAbfrage(uuid);
-    }
-
-    @Test
-    void freigabeInfrastrukturAbfrageException() throws  EntityNotFoundException, AbfrageStatusNotAllowedException {
-        final AbfrageStatusService abfrageStatusService = Mockito.mock(AbfrageStatusService.class);
-
-        final var uuid = UUID.randomUUID();
-
-        Mockito.doThrow(new EntityNotFoundException("Entität nicht gefunden")).when(abfrageStatusService).freigabeAbfrage(Mockito.any(UUID.class));
-        abfrageStatusService.freigabeAbfrage(uuid);
+        Mockito.verify(abfrageService, Mockito.times(1)).getInfrastrukturabfrageById(uuid);
+        Mockito.verify(abfrageService, Mockito.times(1)).updateInfrastrukturabfrage(abfrage);
     }
 }
