@@ -19,13 +19,18 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
+import javax.persistence.Index;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import java.util.List;
 
 @Entity
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
+@Table(indexes = {
+        @Index(name = "name_vorhaben_index", columnList = "nameVorhaben")
+})
 public class Bauvorhaben extends BaseEntity {
 
     @Column(nullable = false, unique = true)
