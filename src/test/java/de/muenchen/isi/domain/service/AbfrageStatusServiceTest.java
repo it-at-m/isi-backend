@@ -11,6 +11,7 @@ import de.muenchen.isi.domain.mapper.BauabschnittDomainMapperImpl;
 import de.muenchen.isi.domain.model.AbfrageModel;
 import de.muenchen.isi.domain.model.InfrastrukturabfrageModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrageEvents;
 import de.muenchen.isi.infrastructure.repository.InfrastrukturabfrageRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
@@ -26,7 +27,10 @@ import org.mockito.quality.Strictness;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.test.context.ActiveProfiles;
+
 import java.util.UUID;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -42,18 +46,15 @@ import static org.hamcrest.Matchers.is;
 @MockitoSettings(strictness = Strictness.LENIENT)
 class AbfrageStatusServiceTest {
 
-    @MockBean
-    private AbfrageService abfrageService;
-
-    @Autowired
-    private AbfrageStatusService abfrageStatusService;
-
     private final AbfrageDomainMapper abfrageDomainMapper = new AbfrageDomainMapperImpl(
             new AbfragevarianteDomainMapperImpl(
                     new BauabschnittDomainMapperImpl()
             )
     );
-
+    @MockBean
+    private AbfrageService abfrageService;
+    @Autowired
+    private AbfrageStatusService abfrageStatusService;
     @Mock
     private InfrastrukturabfrageRepository infrastrukturabfrageRepository;
 
@@ -64,6 +65,24 @@ class AbfrageStatusServiceTest {
                 this.infrastrukturabfrageRepository
         );
         Mockito.reset(this.infrastrukturabfrageRepository);
+    }
+
+
+    @Test
+    void getAbfrageIdHeaderSuccessfull() throws EntityNotFoundException {
+        final var uuid = UUID.randomUUID();
+        final Message<StatusAbfrageEvents> message = MessageBuilder.withPayload(StatusAbfrageEvents.FREIGABE).setHeader("abfrage_id", uuid).build();
+
+        final var uuuidExpected = abfrageStatusService.getAbfrageId(message);
+
+        assertThat(uuid, is(uuuidExpected));
+    }
+
+    @Test
+    void getAbfrageIdHeaderEntityNotFoundException() {
+        final var uuid = UUID.randomUUID();
+        final Message<StatusAbfrageEvents> message = MessageBuilder.withPayload(StatusAbfrageEvents.FREIGABE).setHeader("abfrageid", uuid).build();
+        Assertions.assertThrows(EntityNotFoundException.class, () -> abfrageStatusService.getAbfrageId(message));
     }
 
     @Test
@@ -593,6 +612,7 @@ class AbfrageStatusServiceTest {
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ABBRUCH);
         Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () -> abfrageStatusService.zusaetzlicheAbfragevarianteAnlegen(uuid));
     }
+
     @Test
     void speichernDerVariantenVonInErfassung() throws EntityNotFoundException, AbfrageStatusNotAllowedException {
         final var uuid = UUID.randomUUID();
