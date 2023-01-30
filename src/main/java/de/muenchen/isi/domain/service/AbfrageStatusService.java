@@ -202,7 +202,7 @@ public class AbfrageStatusService {
                                 abfrage.getAbfrage().setStatusAbfrage(state.getId());
                                 AbfrageStatusService.this.abfrageService.updateInfrastrukturabfrage(abfrage);
                             } catch (final EntityNotFoundException exception) {
-                                final var errorMessage = "blabla";
+                                final var errorMessage = "Infrastrukturabfrage wurde nicht gefunden";
                                 log.error(errorMessage);
                                 throw new StateMachineTransitionFailedException(exception, errorMessage);
                             }
@@ -214,7 +214,6 @@ public class AbfrageStatusService {
                 stateMachineAccess.resetStateMachineReactively(new DefaultStateMachineContext<>(abfrage.getAbfrage().getStatusAbfrage(), null, null, null)).block();
             });
         } catch (final StateMachineTransitionFailedException exception) {
-
             throw (EntityNotFoundException) exception.getCause();
         }
 
@@ -232,18 +231,20 @@ public class AbfrageStatusService {
      * @throws AbfrageStatusNotAllowedException falls die Statusänderung nicht erlaubt nicht
      */
     private void sendEvent(final UUID id, final StatusAbfrageEvents event, final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine) throws AbfrageStatusNotAllowedException {
-        final Mono<Message<StatusAbfrageEvents>> message = Mono.just(MessageBuilder.withPayload(event).setHeader(ABFRAGE_ID_HEADER, id).build());
-        final Flux<StateMachineEventResult<StatusAbfrage, StatusAbfrageEvents>> result = stateMachine.sendEvent(message);
-        final AbfrageStatusNotAllowedException[] abfrageStatusNotAllowedException = new AbfrageStatusNotAllowedException[1];
-
-        result.subscribe(consumer -> {
-            if (consumer.getResultType() == StateMachineEventResult.ResultType.DENIED) {
-                abfrageStatusNotAllowedException[0] = new AbfrageStatusNotAllowedException("Status Änderung ist nicht erlaubt. Aktueller Status: " + stateMachine.getState().getId());
-            }
-        });
-
-        if (abfrageStatusNotAllowedException[0] != null) {
-            throw abfrageStatusNotAllowedException[0];
+        try {
+            final Mono<Message<StatusAbfrageEvents>> message = Mono.just(MessageBuilder.withPayload(event).setHeader(ABFRAGE_ID_HEADER, id).build());
+            final Flux<StateMachineEventResult<StatusAbfrage, StatusAbfrageEvents>> result = stateMachine.sendEvent(message);
+            result.subscribe(consumer -> {
+                try {
+                    checkIfTransitionWasDenied(consumer);
+                } catch (AbfrageStatusNotAllowedException exception) {
+                    final var errorMessage = "Status Änderung ist nicht erlaubt. Aktueller Status: " + stateMachine.getState().getId() + ".";
+                    log.error(errorMessage);
+                    throw new StateMachineTransitionFailedException(exception, errorMessage);
+                }
+            });
+        } catch (final StateMachineTransitionFailedException exception) {
+            throw (AbfrageStatusNotAllowedException) exception.getCause();
         }
     }
 
@@ -263,5 +264,11 @@ public class AbfrageStatusService {
             throw new EntityNotFoundException("Abfrage ID Header wurde nicht gefunden");
         }
         return abfrageId;
+    }
+
+    private void checkIfTransitionWasDenied(StateMachineEventResult stateMachineEventResult) throws AbfrageStatusNotAllowedException {
+        if (stateMachineEventResult.getResultType() == StateMachineEventResult.ResultType.DENIED) {
+            throw new AbfrageStatusNotAllowedException("Statusänderung nicht erlaubt");
+        }
     }
 }
