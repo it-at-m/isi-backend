@@ -177,7 +177,7 @@ public class AbfrageStatusService {
     /**
      * Erstellt die Statemachine und initialisiert diese mit dem Status der Abfrage aus der DB.
      * <p>
-     * Ausserdem wird ein preStateChange-Listener definiert, der bei einer Statusänderung den Status in der DB aktualisiert.
+     * Ausserdem wird ein preTransition-Listener definiert, der bei einer Statusänderung den Status in der DB aktualisiert.
      *
      * @param id vom Typ {@link UUID}  um die Abfrage aus der DB zu holen.
      * @throws EntityNotFoundException falls die Abfrage nicht gefunden werden kann.
