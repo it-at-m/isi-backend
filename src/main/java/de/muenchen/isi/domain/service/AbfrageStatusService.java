@@ -253,7 +253,7 @@ public class AbfrageStatusService {
     }
 
     /**
-     * Entimmt der Message die ID der Abfrage.
+     * Entnimmt den MessageHeaders die ID der Abfrage.
      *
      * @param messageHeaders mit dem Event und der AbfrageId
      * @return Gibt die UUID aus der Message zurück
