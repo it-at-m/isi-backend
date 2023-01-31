@@ -192,8 +192,10 @@ public class AbfrageStatusService {
                 stateMachineAccess.addStateMachineInterceptor(new StateMachineInterceptorAdapter<>() {
 
                     @Override
-                    public void preStateChange(final State<StatusAbfrage, StatusAbfrageEvents> state, final Message<StatusAbfrageEvents> message,
-                                               final Transition<StatusAbfrage, StatusAbfrageEvents> transition, final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine,
+                    public void preStateChange(final State<StatusAbfrage, StatusAbfrageEvents> state,
+                                               final Message<StatusAbfrageEvents> message,
+                                               final Transition<StatusAbfrage, StatusAbfrageEvents> transition,
+                                               final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine,
                                                final StateMachine<StatusAbfrage, StatusAbfrageEvents> rootStateMachine) {
                         Optional.ofNullable(message).ifPresent(msg -> {
                             try {
