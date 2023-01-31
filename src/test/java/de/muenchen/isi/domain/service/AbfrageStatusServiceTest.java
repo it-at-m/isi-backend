@@ -59,7 +59,7 @@ class AbfrageStatusServiceTest {
         final var uuid = UUID.randomUUID();
         final Message<StatusAbfrageEvents> message = MessageBuilder.withPayload(StatusAbfrageEvents.FREIGABE).setHeader("abfrage_id", uuid).build();
 
-        final var uuuidExpected = this.abfrageStatusService.getAbfrageId(message);
+        final var uuuidExpected = this.abfrageStatusService.getAbfrageId(message.getHeaders());
 
         assertThat(uuid, is(uuuidExpected));
     }
@@ -68,7 +68,7 @@ class AbfrageStatusServiceTest {
     void getAbfrageIdHeaderEntityNotFoundException() {
         final var uuid = UUID.randomUUID();
         final Message<StatusAbfrageEvents> message = MessageBuilder.withPayload(StatusAbfrageEvents.FREIGABE).setHeader("abfrageid", uuid).build();
-        Assertions.assertThrows(EntityNotFoundException.class, () -> this.abfrageStatusService.getAbfrageId(message));
+        Assertions.assertThrows(EntityNotFoundException.class, () -> this.abfrageStatusService.getAbfrageId(message.getHeaders()));
     }
 
     @Test
