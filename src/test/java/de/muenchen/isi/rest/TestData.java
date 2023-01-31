@@ -46,6 +46,7 @@ public class TestData {
         infrastrukturabfrage.setSobonRelevant(UncertainBoolean.TRUE);
         infrastrukturabfrage.setSobonJahr(SobonVerfahrensgrundsaetzeJahr.JAHR_2021);
         infrastrukturabfrage.setAktenzeichenProLbk("PRO12345");
+        infrastrukturabfrage.setOffiziellerVerfahrensschritt(UncertainBoolean.FALSE);
 
         final AbfragevarianteModel abfragevariante = createAbfragevarianteModel();
         infrastrukturabfrage.setAbfragevarianten(List.of(abfragevariante));
@@ -61,7 +62,7 @@ public class TestData {
         original.setGesamtanzahlWe(31);
         original.setRealisierungVon(2023);
         original.setRealisierungBis(2024);
-
+        original.setSonderwohnformen(false);
         original.setBauabschnitte(List.of(createBauabschnittModel()));
 
         return original;

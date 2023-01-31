@@ -4,33 +4,25 @@ import de.muenchen.isi.IsiBackendApplication;
 import de.muenchen.isi.TestConstants;
 import de.muenchen.isi.domain.exception.AbfrageStatusNotAllowedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
-import de.muenchen.isi.domain.mapper.AbfrageDomainMapper;
-import de.muenchen.isi.domain.mapper.AbfrageDomainMapperImpl;
-import de.muenchen.isi.domain.mapper.AbfragevarianteDomainMapperImpl;
-import de.muenchen.isi.domain.mapper.BauabschnittDomainMapperImpl;
-import de.muenchen.isi.domain.mapper.DokumentDomainMapperImpl;
-import de.muenchen.isi.domain.model.AbfrageModel;
 import de.muenchen.isi.domain.model.InfrastrukturabfrageModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrageEvents;
 import de.muenchen.isi.infrastructure.repository.InfrastrukturabfrageRepository;
+import de.muenchen.isi.rest.TestData;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
@@ -47,26 +39,18 @@ import static org.hamcrest.Matchers.is;
 @MockitoSettings(strictness = Strictness.LENIENT)
 class AbfrageStatusServiceTest {
 
-    private final AbfrageDomainMapper abfrageDomainMapper = new AbfrageDomainMapperImpl(
-            new AbfragevarianteDomainMapperImpl(
-                    new BauabschnittDomainMapperImpl()
-            ),
-            new DokumentDomainMapperImpl()
-    );
-    @MockBean
+    @Autowired
     private AbfrageService abfrageService;
+
     @Autowired
     private AbfrageStatusService abfrageStatusService;
-    @Mock
+
+    @Autowired
     private InfrastrukturabfrageRepository infrastrukturabfrageRepository;
 
-    @AfterEach
-    public void afterEach() {
-        this.abfrageService = new AbfrageService(
-                this.abfrageDomainMapper,
-                this.infrastrukturabfrageRepository
-        );
-        Mockito.reset(this.infrastrukturabfrageRepository);
+    @BeforeEach
+    public void beforeEach() {
+        this.infrastrukturabfrageRepository.deleteAll();
     }
 
 
@@ -88,14 +72,8 @@ class AbfrageStatusServiceTest {
     }
 
     @Test
-    void statusAenderungEntityNotFoundExcpetion() throws EntityNotFoundException {
+    void statusAenderungEntityNotFoundExcpetion() {
         final var uuid = UUID.randomUUID();
-        final InfrastrukturabfrageModel abfrage = new InfrastrukturabfrageModel();
-        abfrage.setId(uuid);
-        abfrage.setAbfrage(new AbfrageModel());
-        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ANGELEGT);
-
-        Mockito.when(this.abfrageService.getInfrastrukturabfrageById(uuid)).thenThrow(new EntityNotFoundException("test"));
 
         Assertions.assertThrows(EntityNotFoundException.class, () -> this.abfrageStatusService.freigabeAbfrage(uuid));
         Assertions.assertThrows(EntityNotFoundException.class, () -> this.abfrageStatusService.abbrechenAbfrage(uuid));
@@ -111,737 +89,644 @@ class AbfrageStatusServiceTest {
     }
 
     @Test
+    @Transactional
     void freigabeInfrasturkturabfrageVonAngelegt() throws EntityNotFoundException, AbfrageStatusNotAllowedException {
-        final var uuid = UUID.randomUUID();
-
-        final InfrastrukturabfrageModel abfrage = new InfrastrukturabfrageModel();
-        abfrage.setId(uuid);
-        abfrage.setAbfrage(new AbfrageModel());
+        InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ANGELEGT);
-
-        Mockito.when(this.abfrageService.getInfrastrukturabfrageById(uuid)).thenReturn(abfrage);
-
-        final ArgumentCaptor<InfrastrukturabfrageModel> captor = ArgumentCaptor.forClass(InfrastrukturabfrageModel.class);
+        abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
+        final var uuid = abfrage.getId();
 
         this.abfrageStatusService.freigabeAbfrage(uuid);
 
-        Mockito.verify(this.abfrageService).updateInfrastrukturabfrage(captor.capture());
+        final InfrastrukturabfrageModel saved = this.abfrageService.getInfrastrukturabfrageById(uuid);
 
-        final InfrastrukturabfrageModel saved = captor.getValue();
-
-        Mockito.verify(this.abfrageService, Mockito.times(2)).getInfrastrukturabfrageById(uuid);
-        Mockito.verify(this.abfrageService, Mockito.times(1)).updateInfrastrukturabfrage(abfrage);
         assertThat(saved.getAbfrage().getStatusAbfrage(), is(StatusAbfrage.OFFEN));
 
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.OFFEN);
+        this.abfrageService.updateInfrastrukturabfrage(abfrage);
         Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () -> this.abfrageStatusService.freigabeAbfrage(uuid));
 
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_ERFASSUNG);
+        this.abfrageService.updateInfrastrukturabfrage(abfrage);
         Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () -> this.abfrageStatusService.freigabeAbfrage(uuid));
 
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_PLAN);
+        this.abfrageService.updateInfrastrukturabfrage(abfrage);
         Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () -> this.abfrageStatusService.freigabeAbfrage(uuid));
 
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
+        this.abfrageService.updateInfrastrukturabfrage(abfrage);
         Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () -> this.abfrageStatusService.freigabeAbfrage(uuid));
 
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT);
+        this.abfrageService.updateInfrastrukturabfrage(abfrage);
         Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () -> this.abfrageStatusService.freigabeAbfrage(uuid));
 
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ERLEDIGT);
+        this.abfrageService.updateInfrastrukturabfrage(abfrage);
         Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () -> this.abfrageStatusService.freigabeAbfrage(uuid));
 
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ABBRUCH);
+        this.abfrageService.updateInfrastrukturabfrage(abfrage);
         Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () -> this.abfrageStatusService.freigabeAbfrage(uuid));
     }
 
     @Test
+    @Transactional
     void abbrechenAbfrageVonOffen() throws EntityNotFoundException, AbfrageStatusNotAllowedException {
-        final var uuid = UUID.randomUUID();
-
-        final InfrastrukturabfrageModel abfrage = new InfrastrukturabfrageModel();
-        abfrage.setId(uuid);
-        abfrage.setAbfrage(new AbfrageModel());
+        InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.OFFEN);
-
-        Mockito.when(this.abfrageService.getInfrastrukturabfrageById(uuid)).thenReturn(abfrage);
-
-        final ArgumentCaptor<InfrastrukturabfrageModel> captor = ArgumentCaptor.forClass(InfrastrukturabfrageModel.class);
+        abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
+        final var uuid = abfrage.getId();
 
         this.abfrageStatusService.abbrechenAbfrage(uuid);
 
-        Mockito.verify(this.abfrageService).updateInfrastrukturabfrage(captor.capture());
-
-        final InfrastrukturabfrageModel saved = captor.getValue();
-
-        Mockito.verify(this.abfrageService, Mockito.times(2)).getInfrastrukturabfrageById(uuid);
-        Mockito.verify(this.abfrageService, Mockito.times(1)).updateInfrastrukturabfrage(abfrage);
+        final InfrastrukturabfrageModel saved = this.abfrageService.getInfrastrukturabfrageById(uuid);
 
         assertThat(saved.getAbfrage().getStatusAbfrage(), is(StatusAbfrage.ABBRUCH));
 
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ANGELEGT);
+        this.abfrageService.updateInfrastrukturabfrage(abfrage);
         Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () -> this.abfrageStatusService.abbrechenAbfrage(uuid));
 
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ERLEDIGT);
+        this.abfrageService.updateInfrastrukturabfrage(abfrage);
         Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () -> this.abfrageStatusService.abbrechenAbfrage(uuid));
     }
 
     @Test
+    @Transactional
     void abbrechenAbfrageVonInErfassung() throws EntityNotFoundException, AbfrageStatusNotAllowedException {
-        final var uuid = UUID.randomUUID();
-
-        final InfrastrukturabfrageModel abfrage = new InfrastrukturabfrageModel();
-        abfrage.setId(uuid);
-        abfrage.setAbfrage(new AbfrageModel());
+        InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_ERFASSUNG);
-
-        Mockito.when(this.abfrageService.getInfrastrukturabfrageById(uuid)).thenReturn(abfrage);
-
-        final ArgumentCaptor<InfrastrukturabfrageModel> captor = ArgumentCaptor.forClass(InfrastrukturabfrageModel.class);
+        abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
+        final var uuid = abfrage.getId();
 
         this.abfrageStatusService.abbrechenAbfrage(uuid);
 
-        Mockito.verify(this.abfrageService).updateInfrastrukturabfrage(captor.capture());
-
-        final InfrastrukturabfrageModel saved = captor.getValue();
-
-        Mockito.verify(this.abfrageService, Mockito.times(2)).getInfrastrukturabfrageById(uuid);
-        Mockito.verify(this.abfrageService, Mockito.times(1)).updateInfrastrukturabfrage(abfrage);
+        final InfrastrukturabfrageModel saved = this.abfrageService.getInfrastrukturabfrageById(uuid);
 
         assertThat(saved.getAbfrage().getStatusAbfrage(), is(StatusAbfrage.ABBRUCH));
 
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ANGELEGT);
+        this.abfrageService.updateInfrastrukturabfrage(abfrage);
         Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () -> this.abfrageStatusService.abbrechenAbfrage(uuid));
 
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ERLEDIGT);
+        this.abfrageService.updateInfrastrukturabfrage(abfrage);
         Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () -> this.abfrageStatusService.abbrechenAbfrage(uuid));
     }
 
     @Test
+    @Transactional
     void abbrechenAbfrageVonInBearbeitungPlan() throws EntityNotFoundException, AbfrageStatusNotAllowedException {
-        final var uuid = UUID.randomUUID();
-
-        final InfrastrukturabfrageModel abfrage = new InfrastrukturabfrageModel();
-        abfrage.setId(uuid);
-        abfrage.setAbfrage(new AbfrageModel());
+        InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_PLAN);
-
-        Mockito.when(this.abfrageService.getInfrastrukturabfrageById(uuid)).thenReturn(abfrage);
-
-        final ArgumentCaptor<InfrastrukturabfrageModel> captor = ArgumentCaptor.forClass(InfrastrukturabfrageModel.class);
+        abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
+        final var uuid = abfrage.getId();
 
         this.abfrageStatusService.abbrechenAbfrage(uuid);
 
-        Mockito.verify(this.abfrageService).updateInfrastrukturabfrage(captor.capture());
+        final InfrastrukturabfrageModel saved = this.abfrageService.getInfrastrukturabfrageById(uuid);
 
-        final InfrastrukturabfrageModel saved = captor.getValue();
-
-        Mockito.verify(this.abfrageService, Mockito.times(2)).getInfrastrukturabfrageById(uuid);
-        Mockito.verify(this.abfrageService, Mockito.times(1)).updateInfrastrukturabfrage(abfrage);
         assertThat(saved.getAbfrage().getStatusAbfrage(), is(StatusAbfrage.ABBRUCH));
 
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ANGELEGT);
+        this.abfrageService.updateInfrastrukturabfrage(abfrage);
         Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () -> this.abfrageStatusService.abbrechenAbfrage(uuid));
 
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ERLEDIGT);
+        this.abfrageService.updateInfrastrukturabfrage(abfrage);
         Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () -> this.abfrageStatusService.abbrechenAbfrage(uuid));
     }
 
     @Test
+    @Transactional
     void abbrechenAbfrageVonInBearbeitungFachreferate() throws EntityNotFoundException, AbfrageStatusNotAllowedException {
-        final var uuid = UUID.randomUUID();
-
-        final InfrastrukturabfrageModel abfrage = new InfrastrukturabfrageModel();
-        abfrage.setId(uuid);
-        abfrage.setAbfrage(new AbfrageModel());
+        InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
-
-        Mockito.when(this.abfrageService.getInfrastrukturabfrageById(uuid)).thenReturn(abfrage);
-
-        final ArgumentCaptor<InfrastrukturabfrageModel> captor = ArgumentCaptor.forClass(InfrastrukturabfrageModel.class);
+        abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
+        final var uuid = abfrage.getId();
 
         this.abfrageStatusService.abbrechenAbfrage(uuid);
 
-        Mockito.verify(this.abfrageService).updateInfrastrukturabfrage(captor.capture());
+        final InfrastrukturabfrageModel saved = this.abfrageService.getInfrastrukturabfrageById(uuid);
 
-        final InfrastrukturabfrageModel saved = captor.getValue();
-
-        Mockito.verify(this.abfrageService, Mockito.times(2)).getInfrastrukturabfrageById(uuid);
-        Mockito.verify(this.abfrageService, Mockito.times(1)).updateInfrastrukturabfrage(abfrage);
         assertThat(saved.getAbfrage().getStatusAbfrage(), is(StatusAbfrage.ABBRUCH));
 
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ANGELEGT);
+        this.abfrageService.updateInfrastrukturabfrage(abfrage);
         Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () -> this.abfrageStatusService.abbrechenAbfrage(uuid));
 
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ERLEDIGT);
+        this.abfrageService.updateInfrastrukturabfrage(abfrage);
         Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () -> this.abfrageStatusService.abbrechenAbfrage(uuid));
     }
 
     @Test
+    @Transactional
     void abbrechenAbfrageVonBedarfsmeldungErfolgt() throws EntityNotFoundException, AbfrageStatusNotAllowedException {
-        final var uuid = UUID.randomUUID();
-
-        final InfrastrukturabfrageModel abfrage = new InfrastrukturabfrageModel();
-        abfrage.setId(uuid);
-        abfrage.setAbfrage(new AbfrageModel());
+        InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT);
-
-        Mockito.when(this.abfrageService.getInfrastrukturabfrageById(uuid)).thenReturn(abfrage);
-
-        final ArgumentCaptor<InfrastrukturabfrageModel> captor = ArgumentCaptor.forClass(InfrastrukturabfrageModel.class);
+        abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
+        final var uuid = abfrage.getId();
 
         this.abfrageStatusService.abbrechenAbfrage(uuid);
 
-        Mockito.verify(this.abfrageService).updateInfrastrukturabfrage(captor.capture());
+        final InfrastrukturabfrageModel saved = this.abfrageService.getInfrastrukturabfrageById(uuid);
 
-        final InfrastrukturabfrageModel saved = captor.getValue();
-
-        Mockito.verify(this.abfrageService, Mockito.times(2)).getInfrastrukturabfrageById(uuid);
-        Mockito.verify(this.abfrageService, Mockito.times(1)).updateInfrastrukturabfrage(abfrage);
         assertThat(saved.getAbfrage().getStatusAbfrage(), is(StatusAbfrage.ABBRUCH));
 
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ANGELEGT);
+        this.abfrageService.updateInfrastrukturabfrage(abfrage);
         Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () -> this.abfrageStatusService.abbrechenAbfrage(uuid));
 
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ERLEDIGT);
+        this.abfrageService.updateInfrastrukturabfrage(abfrage);
         Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () -> this.abfrageStatusService.abbrechenAbfrage(uuid));
     }
 
     @Test
+    @Transactional
     void angabenAnpassenAbfrageVonInErfassung() throws EntityNotFoundException, AbfrageStatusNotAllowedException {
-        final var uuid = UUID.randomUUID();
-
-        final InfrastrukturabfrageModel abfrage = new InfrastrukturabfrageModel();
-        abfrage.setId(uuid);
-        abfrage.setAbfrage(new AbfrageModel());
+        InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_ERFASSUNG);
-
-        Mockito.when(this.abfrageService.getInfrastrukturabfrageById(uuid)).thenReturn(abfrage);
-
-        final ArgumentCaptor<InfrastrukturabfrageModel> captor = ArgumentCaptor.forClass(InfrastrukturabfrageModel.class);
+        abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
+        final var uuid = abfrage.getId();
 
         this.abfrageStatusService.angabenAnpassenAbfrage(uuid);
 
-        Mockito.verify(this.abfrageService).updateInfrastrukturabfrage(captor.capture());
+        final InfrastrukturabfrageModel saved = this.abfrageService.getInfrastrukturabfrageById(uuid);
 
-        final InfrastrukturabfrageModel saved = captor.getValue();
-
-        Mockito.verify(this.abfrageService, Mockito.times(2)).getInfrastrukturabfrageById(uuid);
-        Mockito.verify(this.abfrageService, Mockito.times(1)).updateInfrastrukturabfrage(abfrage);
         assertThat(saved.getAbfrage().getStatusAbfrage(), is(StatusAbfrage.ANGELEGT));
 
-
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_PLAN);
+        this.abfrageService.updateInfrastrukturabfrage(abfrage);
         Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () -> this.abfrageStatusService.angabenAnpassenAbfrage(uuid));
 
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
+        this.abfrageService.updateInfrastrukturabfrage(abfrage);
         Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () -> this.abfrageStatusService.angabenAnpassenAbfrage(uuid));
 
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT);
+        this.abfrageService.updateInfrastrukturabfrage(abfrage);
         Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () -> this.abfrageStatusService.angabenAnpassenAbfrage(uuid));
 
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ERLEDIGT);
+        this.abfrageService.updateInfrastrukturabfrage(abfrage);
         Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () -> this.abfrageStatusService.angabenAnpassenAbfrage(uuid));
 
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ABBRUCH);
+        this.abfrageService.updateInfrastrukturabfrage(abfrage);
         Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () -> this.abfrageStatusService.angabenAnpassenAbfrage(uuid));
     }
 
     @Test
+    @Transactional
     void angabenAnpassenAbfrageVonOffen() throws EntityNotFoundException, AbfrageStatusNotAllowedException {
-        final var uuid = UUID.randomUUID();
-
-        final InfrastrukturabfrageModel abfrage = new InfrastrukturabfrageModel();
-        abfrage.setId(uuid);
-        abfrage.setAbfrage(new AbfrageModel());
+        InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.OFFEN);
-
-        Mockito.when(this.abfrageService.getInfrastrukturabfrageById(uuid)).thenReturn(abfrage);
-
-        final ArgumentCaptor<InfrastrukturabfrageModel> captor = ArgumentCaptor.forClass(InfrastrukturabfrageModel.class);
+        abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
+        final var uuid = abfrage.getId();
 
         this.abfrageStatusService.angabenAnpassenAbfrage(uuid);
 
-        Mockito.verify(this.abfrageService).updateInfrastrukturabfrage(captor.capture());
+        final InfrastrukturabfrageModel saved = this.abfrageService.getInfrastrukturabfrageById(uuid);
 
-        final InfrastrukturabfrageModel saved = captor.getValue();
-
-        Mockito.verify(this.abfrageService, Mockito.times(2)).getInfrastrukturabfrageById(uuid);
-        Mockito.verify(this.abfrageService, Mockito.times(1)).updateInfrastrukturabfrage(abfrage);
         assertThat(saved.getAbfrage().getStatusAbfrage(), is(StatusAbfrage.ANGELEGT));
 
-
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_PLAN);
+        this.abfrageService.updateInfrastrukturabfrage(abfrage);
         Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () -> this.abfrageStatusService.angabenAnpassenAbfrage(uuid));
 
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
+        this.abfrageService.updateInfrastrukturabfrage(abfrage);
         Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () -> this.abfrageStatusService.angabenAnpassenAbfrage(uuid));
 
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT);
+        this.abfrageService.updateInfrastrukturabfrage(abfrage);
         Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () -> this.abfrageStatusService.angabenAnpassenAbfrage(uuid));
 
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ERLEDIGT);
+        this.abfrageService.updateInfrastrukturabfrage(abfrage);
         Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () -> this.abfrageStatusService.angabenAnpassenAbfrage(uuid));
 
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ABBRUCH);
+        this.abfrageService.updateInfrastrukturabfrage(abfrage);
         Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () -> this.abfrageStatusService.angabenAnpassenAbfrage(uuid));
     }
 
     @Test
+    @Transactional
     void weitereAbfragevariantenAnlegenVonInBearbeitungPlan() throws EntityNotFoundException, AbfrageStatusNotAllowedException {
-        final var uuid = UUID.randomUUID();
-
-        final InfrastrukturabfrageModel abfrage = new InfrastrukturabfrageModel();
-        abfrage.setId(uuid);
-        abfrage.setAbfrage(new AbfrageModel());
+        InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_PLAN);
-
-        Mockito.when(this.abfrageService.getInfrastrukturabfrageById(uuid)).thenReturn(abfrage);
-
-        final ArgumentCaptor<InfrastrukturabfrageModel> captor = ArgumentCaptor.forClass(InfrastrukturabfrageModel.class);
+        abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
+        final var uuid = abfrage.getId();
 
         this.abfrageStatusService.weitereAbfragevariantenAnlegen(uuid);
 
-        Mockito.verify(this.abfrageService).updateInfrastrukturabfrage(captor.capture());
+        final InfrastrukturabfrageModel saved = this.abfrageService.getInfrastrukturabfrageById(uuid);
 
-        final InfrastrukturabfrageModel saved = captor.getValue();
-
-        Mockito.verify(this.abfrageService, Mockito.times(2)).getInfrastrukturabfrageById(uuid);
-        Mockito.verify(this.abfrageService, Mockito.times(1)).updateInfrastrukturabfrage(abfrage);
         assertThat(saved.getAbfrage().getStatusAbfrage(), is(StatusAbfrage.IN_ERFASSUNG));
 
-
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.OFFEN);
+        this.abfrageService.updateInfrastrukturabfrage(abfrage);
         Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () -> this.abfrageStatusService.weitereAbfragevariantenAnlegen(uuid));
 
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ANGELEGT);
+        this.abfrageService.updateInfrastrukturabfrage(abfrage);
         Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () -> this.abfrageStatusService.weitereAbfragevariantenAnlegen(uuid));
 
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ABBRUCH);
+        this.abfrageService.updateInfrastrukturabfrage(abfrage);
         Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () -> this.abfrageStatusService.weitereAbfragevariantenAnlegen(uuid));
     }
 
     @Test
+    @Transactional
     void weitereAbfragevariantenAnlegenVonInBearbeitungFachreferate() throws EntityNotFoundException, AbfrageStatusNotAllowedException {
-        final var uuid = UUID.randomUUID();
-
-        final InfrastrukturabfrageModel abfrage = new InfrastrukturabfrageModel();
-        abfrage.setId(uuid);
-        abfrage.setAbfrage(new AbfrageModel());
+        InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
-
-        Mockito.when(this.abfrageService.getInfrastrukturabfrageById(uuid)).thenReturn(abfrage);
-
-        final ArgumentCaptor<InfrastrukturabfrageModel> captor = ArgumentCaptor.forClass(InfrastrukturabfrageModel.class);
+        abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
+        final var uuid = abfrage.getId();
 
         this.abfrageStatusService.weitereAbfragevariantenAnlegen(uuid);
 
-        Mockito.verify(this.abfrageService).updateInfrastrukturabfrage(captor.capture());
+        final InfrastrukturabfrageModel saved = this.abfrageService.getInfrastrukturabfrageById(uuid);
 
-        final InfrastrukturabfrageModel saved = captor.getValue();
-
-        Mockito.verify(this.abfrageService, Mockito.times(2)).getInfrastrukturabfrageById(uuid);
-        Mockito.verify(this.abfrageService, Mockito.times(1)).updateInfrastrukturabfrage(abfrage);
         assertThat(saved.getAbfrage().getStatusAbfrage(), is(StatusAbfrage.IN_ERFASSUNG));
 
-
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.OFFEN);
+        this.abfrageService.updateInfrastrukturabfrage(abfrage);
         Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () -> this.abfrageStatusService.weitereAbfragevariantenAnlegen(uuid));
 
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ANGELEGT);
+        this.abfrageService.updateInfrastrukturabfrage(abfrage);
         Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () -> this.abfrageStatusService.weitereAbfragevariantenAnlegen(uuid));
 
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ABBRUCH);
+        this.abfrageService.updateInfrastrukturabfrage(abfrage);
         Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () -> this.abfrageStatusService.weitereAbfragevariantenAnlegen(uuid));
     }
 
     @Test
+    @Transactional
     void weitereAbfragevariantenAnlegenVonBedarfsmeldungErfolgt() throws EntityNotFoundException, AbfrageStatusNotAllowedException {
-        final var uuid = UUID.randomUUID();
-
-        final InfrastrukturabfrageModel abfrage = new InfrastrukturabfrageModel();
-        abfrage.setId(uuid);
-        abfrage.setAbfrage(new AbfrageModel());
+        InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT);
-
-        Mockito.when(this.abfrageService.getInfrastrukturabfrageById(uuid)).thenReturn(abfrage);
-
-        final ArgumentCaptor<InfrastrukturabfrageModel> captor = ArgumentCaptor.forClass(InfrastrukturabfrageModel.class);
+        abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
+        final var uuid = abfrage.getId();
 
         this.abfrageStatusService.weitereAbfragevariantenAnlegen(uuid);
 
-        Mockito.verify(this.abfrageService).updateInfrastrukturabfrage(captor.capture());
+        final InfrastrukturabfrageModel saved = this.abfrageService.getInfrastrukturabfrageById(uuid);
 
-        final InfrastrukturabfrageModel saved = captor.getValue();
-
-        Mockito.verify(this.abfrageService, Mockito.times(2)).getInfrastrukturabfrageById(uuid);
-        Mockito.verify(this.abfrageService, Mockito.times(1)).updateInfrastrukturabfrage(abfrage);
         assertThat(saved.getAbfrage().getStatusAbfrage(), is(StatusAbfrage.IN_ERFASSUNG));
 
-
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.OFFEN);
+        this.abfrageService.updateInfrastrukturabfrage(abfrage);
         Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () -> this.abfrageStatusService.weitereAbfragevariantenAnlegen(uuid));
 
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ANGELEGT);
+        this.abfrageService.updateInfrastrukturabfrage(abfrage);
         Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () -> this.abfrageStatusService.weitereAbfragevariantenAnlegen(uuid));
 
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ABBRUCH);
+        this.abfrageService.updateInfrastrukturabfrage(abfrage);
         Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () -> this.abfrageStatusService.weitereAbfragevariantenAnlegen(uuid));
     }
 
     @Test
+    @Transactional
     void weitereAbfragevariantenAnlegenErledigtVonErledigt() throws EntityNotFoundException, AbfrageStatusNotAllowedException {
-        final var uuid = UUID.randomUUID();
-
-        final InfrastrukturabfrageModel abfrage = new InfrastrukturabfrageModel();
-        abfrage.setId(uuid);
-        abfrage.setAbfrage(new AbfrageModel());
+        InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ERLEDIGT);
-
-        Mockito.when(this.abfrageService.getInfrastrukturabfrageById(uuid)).thenReturn(abfrage);
-
-        final ArgumentCaptor<InfrastrukturabfrageModel> captor = ArgumentCaptor.forClass(InfrastrukturabfrageModel.class);
+        abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
+        final var uuid = abfrage.getId();
 
         this.abfrageStatusService.weitereAbfragevariantenAnlegen(uuid);
 
-        Mockito.verify(this.abfrageService).updateInfrastrukturabfrage(captor.capture());
+        final InfrastrukturabfrageModel saved = this.abfrageService.getInfrastrukturabfrageById(uuid);
 
-        final InfrastrukturabfrageModel saved = captor.getValue();
-
-        Mockito.verify(this.abfrageService, Mockito.times(2)).getInfrastrukturabfrageById(uuid);
-        Mockito.verify(this.abfrageService, Mockito.times(1)).updateInfrastrukturabfrage(abfrage);
         assertThat(saved.getAbfrage().getStatusAbfrage(), is(StatusAbfrage.IN_ERFASSUNG));
 
 
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.OFFEN);
+        this.abfrageService.updateInfrastrukturabfrage(abfrage);
         Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () -> this.abfrageStatusService.weitereAbfragevariantenAnlegen(uuid));
 
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ANGELEGT);
+        this.abfrageService.updateInfrastrukturabfrage(abfrage);
         Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () -> this.abfrageStatusService.weitereAbfragevariantenAnlegen(uuid));
 
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ABBRUCH);
+        this.abfrageService.updateInfrastrukturabfrage(abfrage);
         Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () -> this.abfrageStatusService.weitereAbfragevariantenAnlegen(uuid));
     }
 
     @Test
+    @Transactional
     void keineZusaetzlicheAbfragevarianteVonOffen() throws EntityNotFoundException, AbfrageStatusNotAllowedException {
-        final var uuid = UUID.randomUUID();
-
-        final InfrastrukturabfrageModel abfrage = new InfrastrukturabfrageModel();
-        abfrage.setId(uuid);
-        abfrage.setAbfrage(new AbfrageModel());
+        InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.OFFEN);
-
-        Mockito.when(this.abfrageService.getInfrastrukturabfrageById(uuid)).thenReturn(abfrage);
-
-        final ArgumentCaptor<InfrastrukturabfrageModel> captor = ArgumentCaptor.forClass(InfrastrukturabfrageModel.class);
+        abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
+        final var uuid = abfrage.getId();
 
         this.abfrageStatusService.keineZusaetzlicheAbfragevariante(uuid);
 
-        Mockito.verify(this.abfrageService).updateInfrastrukturabfrage(captor.capture());
+        final InfrastrukturabfrageModel saved = this.abfrageService.getInfrastrukturabfrageById(uuid);
 
-        final InfrastrukturabfrageModel saved = captor.getValue();
-
-        Mockito.verify(this.abfrageService, Mockito.times(2)).getInfrastrukturabfrageById(uuid);
-        Mockito.verify(this.abfrageService, Mockito.times(1)).updateInfrastrukturabfrage(abfrage);
         assertThat(saved.getAbfrage().getStatusAbfrage(), is(StatusAbfrage.IN_BEARBEITUNG_PLAN));
 
-
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ANGELEGT);
+        this.abfrageService.updateInfrastrukturabfrage(abfrage);
         Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () -> this.abfrageStatusService.keineZusaetzlicheAbfragevariante(uuid));
 
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_ERFASSUNG);
+        this.abfrageService.updateInfrastrukturabfrage(abfrage);
         Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () -> this.abfrageStatusService.keineZusaetzlicheAbfragevariante(uuid));
 
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_PLAN);
+        this.abfrageService.updateInfrastrukturabfrage(abfrage);
         Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () -> this.abfrageStatusService.keineZusaetzlicheAbfragevariante(uuid));
 
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
+        this.abfrageService.updateInfrastrukturabfrage(abfrage);
         Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () -> this.abfrageStatusService.keineZusaetzlicheAbfragevariante(uuid));
 
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT);
+        this.abfrageService.updateInfrastrukturabfrage(abfrage);
         Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () -> this.abfrageStatusService.keineZusaetzlicheAbfragevariante(uuid));
 
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ERLEDIGT);
+        this.abfrageService.updateInfrastrukturabfrage(abfrage);
         Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () -> this.abfrageStatusService.keineZusaetzlicheAbfragevariante(uuid));
 
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ABBRUCH);
+        this.abfrageService.updateInfrastrukturabfrage(abfrage);
         Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () -> this.abfrageStatusService.keineZusaetzlicheAbfragevariante(uuid));
     }
 
     @Test
+    @Transactional
     void zusaetzlicheAbfragevarianteAnlegenVonOffen() throws EntityNotFoundException, AbfrageStatusNotAllowedException {
-        final var uuid = UUID.randomUUID();
-
-        final InfrastrukturabfrageModel abfrage = new InfrastrukturabfrageModel();
-        abfrage.setId(uuid);
-        abfrage.setAbfrage(new AbfrageModel());
+        InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.OFFEN);
-
-        Mockito.when(this.abfrageService.getInfrastrukturabfrageById(uuid)).thenReturn(abfrage);
-
-        final ArgumentCaptor<InfrastrukturabfrageModel> captor = ArgumentCaptor.forClass(InfrastrukturabfrageModel.class);
+        abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
+        final var uuid = abfrage.getId();
 
         this.abfrageStatusService.zusaetzlicheAbfragevarianteAnlegen(uuid);
 
-        Mockito.verify(this.abfrageService).updateInfrastrukturabfrage(captor.capture());
+        final InfrastrukturabfrageModel saved = this.abfrageService.getInfrastrukturabfrageById(uuid);
 
-        final InfrastrukturabfrageModel saved = captor.getValue();
-
-        Mockito.verify(this.abfrageService, Mockito.times(2)).getInfrastrukturabfrageById(uuid);
-        Mockito.verify(this.abfrageService, Mockito.times(1)).updateInfrastrukturabfrage(abfrage);
         assertThat(saved.getAbfrage().getStatusAbfrage(), is(StatusAbfrage.IN_ERFASSUNG));
 
-
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ANGELEGT);
+        this.abfrageService.updateInfrastrukturabfrage(abfrage);
         Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () -> this.abfrageStatusService.zusaetzlicheAbfragevarianteAnlegen(uuid));
 
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_ERFASSUNG);
+        this.abfrageService.updateInfrastrukturabfrage(abfrage);
         Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () -> this.abfrageStatusService.zusaetzlicheAbfragevarianteAnlegen(uuid));
 
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_PLAN);
+        this.abfrageService.updateInfrastrukturabfrage(abfrage);
         Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () -> this.abfrageStatusService.zusaetzlicheAbfragevarianteAnlegen(uuid));
 
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
+        this.abfrageService.updateInfrastrukturabfrage(abfrage);
         Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () -> this.abfrageStatusService.zusaetzlicheAbfragevarianteAnlegen(uuid));
 
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT);
+        this.abfrageService.updateInfrastrukturabfrage(abfrage);
         Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () -> this.abfrageStatusService.zusaetzlicheAbfragevarianteAnlegen(uuid));
 
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ERLEDIGT);
+        this.abfrageService.updateInfrastrukturabfrage(abfrage);
         Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () -> this.abfrageStatusService.zusaetzlicheAbfragevarianteAnlegen(uuid));
 
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ABBRUCH);
+        this.abfrageService.updateInfrastrukturabfrage(abfrage);
         Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () -> this.abfrageStatusService.zusaetzlicheAbfragevarianteAnlegen(uuid));
     }
 
     @Test
+    @Transactional
     void speichernDerVariantenVonInErfassung() throws EntityNotFoundException, AbfrageStatusNotAllowedException {
-        final var uuid = UUID.randomUUID();
-
-        final InfrastrukturabfrageModel abfrage = new InfrastrukturabfrageModel();
-        abfrage.setId(uuid);
-        abfrage.setAbfrage(new AbfrageModel());
+        InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_ERFASSUNG);
-
-        Mockito.when(this.abfrageService.getInfrastrukturabfrageById(uuid)).thenReturn(abfrage);
-
-        final ArgumentCaptor<InfrastrukturabfrageModel> captor = ArgumentCaptor.forClass(InfrastrukturabfrageModel.class);
+        abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
+        final var uuid = abfrage.getId();
 
         this.abfrageStatusService.speichernDerVarianten(uuid);
 
-        Mockito.verify(this.abfrageService).updateInfrastrukturabfrage(captor.capture());
+        final InfrastrukturabfrageModel saved = this.abfrageService.getInfrastrukturabfrageById(uuid);
 
-        final InfrastrukturabfrageModel saved = captor.getValue();
-
-        Mockito.verify(this.abfrageService, Mockito.times(2)).getInfrastrukturabfrageById(uuid);
-        Mockito.verify(this.abfrageService, Mockito.times(1)).updateInfrastrukturabfrage(abfrage);
         assertThat(saved.getAbfrage().getStatusAbfrage(), is(StatusAbfrage.IN_BEARBEITUNG_PLAN));
 
-
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ANGELEGT);
+        this.abfrageService.updateInfrastrukturabfrage(abfrage);
         Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () -> this.abfrageStatusService.speichernDerVarianten(uuid));
 
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.OFFEN);
+        this.abfrageService.updateInfrastrukturabfrage(abfrage);
         Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () -> this.abfrageStatusService.speichernDerVarianten(uuid));
 
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_PLAN);
+        this.abfrageService.updateInfrastrukturabfrage(abfrage);
         Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () -> this.abfrageStatusService.speichernDerVarianten(uuid));
 
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
+        this.abfrageService.updateInfrastrukturabfrage(abfrage);
         Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () -> this.abfrageStatusService.speichernDerVarianten(uuid));
 
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT);
+        this.abfrageService.updateInfrastrukturabfrage(abfrage);
         Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () -> this.abfrageStatusService.speichernDerVarianten(uuid));
 
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ERLEDIGT);
+        this.abfrageService.updateInfrastrukturabfrage(abfrage);
         Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () -> this.abfrageStatusService.speichernDerVarianten(uuid));
 
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ABBRUCH);
+        this.abfrageService.updateInfrastrukturabfrage(abfrage);
         Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () -> this.abfrageStatusService.speichernDerVarianten(uuid));
     }
 
     @Test
+    @Transactional
     void keineBearbeitungNoetigVonInBearbeitungPlan() throws EntityNotFoundException, AbfrageStatusNotAllowedException {
-        final var uuid = UUID.randomUUID();
-
-        final InfrastrukturabfrageModel abfrage = new InfrastrukturabfrageModel();
-        abfrage.setId(uuid);
-        abfrage.setAbfrage(new AbfrageModel());
+        InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_PLAN);
-
-        Mockito.when(this.abfrageService.getInfrastrukturabfrageById(uuid)).thenReturn(abfrage);
-
-        final ArgumentCaptor<InfrastrukturabfrageModel> captor = ArgumentCaptor.forClass(InfrastrukturabfrageModel.class);
+        abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
+        final var uuid = abfrage.getId();
 
         this.abfrageStatusService.keineBearbeitungNoetig(uuid);
 
-        Mockito.verify(this.abfrageService).updateInfrastrukturabfrage(captor.capture());
+        final InfrastrukturabfrageModel saved = this.abfrageService.getInfrastrukturabfrageById(uuid);
 
-        final InfrastrukturabfrageModel saved = captor.getValue();
-
-        Mockito.verify(this.abfrageService, Mockito.times(2)).getInfrastrukturabfrageById(uuid);
-        Mockito.verify(this.abfrageService, Mockito.times(1)).updateInfrastrukturabfrage(abfrage);
         assertThat(saved.getAbfrage().getStatusAbfrage(), is(StatusAbfrage.ERLEDIGT));
 
 
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ANGELEGT);
+        this.abfrageService.updateInfrastrukturabfrage(abfrage);
         Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () -> this.abfrageStatusService.keineBearbeitungNoetig(uuid));
 
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.OFFEN);
+        this.abfrageService.updateInfrastrukturabfrage(abfrage);
         Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () -> this.abfrageStatusService.keineBearbeitungNoetig(uuid));
 
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_ERFASSUNG);
+        this.abfrageService.updateInfrastrukturabfrage(abfrage);
         Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () -> this.abfrageStatusService.keineBearbeitungNoetig(uuid));
 
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
+        this.abfrageService.updateInfrastrukturabfrage(abfrage);
         Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () -> this.abfrageStatusService.keineBearbeitungNoetig(uuid));
 
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT);
+        this.abfrageService.updateInfrastrukturabfrage(abfrage);
         Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () -> this.abfrageStatusService.keineBearbeitungNoetig(uuid));
 
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ERLEDIGT);
+        this.abfrageService.updateInfrastrukturabfrage(abfrage);
         Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () -> this.abfrageStatusService.keineBearbeitungNoetig(uuid));
 
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ABBRUCH);
+        this.abfrageService.updateInfrastrukturabfrage(abfrage);
         Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () -> this.abfrageStatusService.keineBearbeitungNoetig(uuid));
     }
 
     @Test
+    @Transactional
     void verschickenDerStellungnahmeVonInBearbeitungPlan() throws EntityNotFoundException, AbfrageStatusNotAllowedException {
-        final var uuid = UUID.randomUUID();
-
-        final InfrastrukturabfrageModel abfrage = new InfrastrukturabfrageModel();
-        abfrage.setId(uuid);
-        abfrage.setAbfrage(new AbfrageModel());
+        InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_PLAN);
-
-        Mockito.when(this.abfrageService.getInfrastrukturabfrageById(uuid)).thenReturn(abfrage);
-
-        final ArgumentCaptor<InfrastrukturabfrageModel> captor = ArgumentCaptor.forClass(InfrastrukturabfrageModel.class);
+        abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
+        final var uuid = abfrage.getId();
 
         this.abfrageStatusService.verschickenDerStellungnahme(uuid);
 
-        Mockito.verify(this.abfrageService).updateInfrastrukturabfrage(captor.capture());
+        final InfrastrukturabfrageModel saved = this.abfrageService.getInfrastrukturabfrageById(uuid);
 
-        final InfrastrukturabfrageModel saved = captor.getValue();
-
-        Mockito.verify(this.abfrageService, Mockito.times(2)).getInfrastrukturabfrageById(uuid);
-        Mockito.verify(this.abfrageService, Mockito.times(1)).updateInfrastrukturabfrage(abfrage);
         assertThat(saved.getAbfrage().getStatusAbfrage(), is(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE));
 
-
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ANGELEGT);
+        this.abfrageService.updateInfrastrukturabfrage(abfrage);
         Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () -> this.abfrageStatusService.verschickenDerStellungnahme(uuid));
 
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.OFFEN);
+        this.abfrageService.updateInfrastrukturabfrage(abfrage);
         Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () -> this.abfrageStatusService.verschickenDerStellungnahme(uuid));
 
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_ERFASSUNG);
+        this.abfrageService.updateInfrastrukturabfrage(abfrage);
         Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () -> this.abfrageStatusService.verschickenDerStellungnahme(uuid));
 
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
+        this.abfrageService.updateInfrastrukturabfrage(abfrage);
         Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () -> this.abfrageStatusService.verschickenDerStellungnahme(uuid));
 
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT);
+        this.abfrageService.updateInfrastrukturabfrage(abfrage);
         Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () -> this.abfrageStatusService.verschickenDerStellungnahme(uuid));
 
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ERLEDIGT);
+        this.abfrageService.updateInfrastrukturabfrage(abfrage);
         Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () -> this.abfrageStatusService.verschickenDerStellungnahme(uuid));
 
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ABBRUCH);
+        this.abfrageService.updateInfrastrukturabfrage(abfrage);
         Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () -> this.abfrageStatusService.verschickenDerStellungnahme(uuid));
     }
 
     @Test
+    @Transactional
     void bedarfsmeldungErfolgtVonInBearbeitungFachreferate() throws EntityNotFoundException, AbfrageStatusNotAllowedException {
-        final var uuid = UUID.randomUUID();
-
-        final InfrastrukturabfrageModel abfrage = new InfrastrukturabfrageModel();
-        abfrage.setId(uuid);
-        abfrage.setAbfrage(new AbfrageModel());
+        InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
-
-        Mockito.when(this.abfrageService.getInfrastrukturabfrageById(uuid)).thenReturn(abfrage);
-
-        final ArgumentCaptor<InfrastrukturabfrageModel> captor = ArgumentCaptor.forClass(InfrastrukturabfrageModel.class);
+        abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
+        final var uuid = abfrage.getId();
 
         this.abfrageStatusService.bedarfsmeldungErfolgt(uuid);
 
-        Mockito.verify(this.abfrageService).updateInfrastrukturabfrage(captor.capture());
+        final InfrastrukturabfrageModel saved = this.abfrageService.getInfrastrukturabfrageById(uuid);
 
-        final InfrastrukturabfrageModel saved = captor.getValue();
-
-        Mockito.verify(this.abfrageService, Mockito.times(2)).getInfrastrukturabfrageById(uuid);
-        Mockito.verify(this.abfrageService, Mockito.times(1)).updateInfrastrukturabfrage(abfrage);
         assertThat(saved.getAbfrage().getStatusAbfrage(), is(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT));
 
 
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ANGELEGT);
+        this.abfrageService.updateInfrastrukturabfrage(abfrage);
         Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () -> this.abfrageStatusService.bedarfsmeldungErfolgt(uuid));
 
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.OFFEN);
+        this.abfrageService.updateInfrastrukturabfrage(abfrage);
         Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () -> this.abfrageStatusService.bedarfsmeldungErfolgt(uuid));
 
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_ERFASSUNG);
+        this.abfrageService.updateInfrastrukturabfrage(abfrage);
         Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () -> this.abfrageStatusService.bedarfsmeldungErfolgt(uuid));
 
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_PLAN);
+        this.abfrageService.updateInfrastrukturabfrage(abfrage);
         Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () -> this.abfrageStatusService.bedarfsmeldungErfolgt(uuid));
 
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT);
+        this.abfrageService.updateInfrastrukturabfrage(abfrage);
         Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () -> this.abfrageStatusService.bedarfsmeldungErfolgt(uuid));
 
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ERLEDIGT);
+        this.abfrageService.updateInfrastrukturabfrage(abfrage);
         Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () -> this.abfrageStatusService.bedarfsmeldungErfolgt(uuid));
 
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ABBRUCH);
+        this.abfrageService.updateInfrastrukturabfrage(abfrage);
         Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () -> this.abfrageStatusService.bedarfsmeldungErfolgt(uuid));
     }
 
     @Test
+    @Transactional
     void speichernVonSozialinfrastrukturVersorgungVonBedarfsmeldungErfolgt() throws EntityNotFoundException, AbfrageStatusNotAllowedException {
-        final var uuid = UUID.randomUUID();
-
-        final InfrastrukturabfrageModel abfrage = new InfrastrukturabfrageModel();
-        abfrage.setId(uuid);
-        abfrage.setAbfrage(new AbfrageModel());
+        InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT);
-
-        Mockito.when(this.abfrageService.getInfrastrukturabfrageById(uuid)).thenReturn(abfrage);
-
-        final ArgumentCaptor<InfrastrukturabfrageModel> captor = ArgumentCaptor.forClass(InfrastrukturabfrageModel.class);
+        abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
+        final var uuid = abfrage.getId();
 
         this.abfrageStatusService.speichernVonSozialinfrastrukturVersorgung(uuid);
 
-        Mockito.verify(this.abfrageService).updateInfrastrukturabfrage(captor.capture());
+        final InfrastrukturabfrageModel saved = this.abfrageService.getInfrastrukturabfrageById(uuid);
 
-        final InfrastrukturabfrageModel saved = captor.getValue();
-
-        Mockito.verify(this.abfrageService, Mockito.times(2)).getInfrastrukturabfrageById(uuid);
-        Mockito.verify(this.abfrageService, Mockito.times(1)).updateInfrastrukturabfrage(abfrage);
         assertThat(saved.getAbfrage().getStatusAbfrage(), is(StatusAbfrage.ERLEDIGT));
 
 
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ANGELEGT);
+        this.abfrageService.updateInfrastrukturabfrage(abfrage);
         Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () -> this.abfrageStatusService.speichernVonSozialinfrastrukturVersorgung(uuid));
 
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.OFFEN);
+        this.abfrageService.updateInfrastrukturabfrage(abfrage);
         Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () -> this.abfrageStatusService.speichernVonSozialinfrastrukturVersorgung(uuid));
 
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_ERFASSUNG);
+        this.abfrageService.updateInfrastrukturabfrage(abfrage);
         Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () -> this.abfrageStatusService.speichernVonSozialinfrastrukturVersorgung(uuid));
 
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_PLAN);
+        this.abfrageService.updateInfrastrukturabfrage(abfrage);
         Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () -> this.abfrageStatusService.speichernVonSozialinfrastrukturVersorgung(uuid));
 
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
+        this.abfrageService.updateInfrastrukturabfrage(abfrage);
         Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () -> this.abfrageStatusService.speichernVonSozialinfrastrukturVersorgung(uuid));
 
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ERLEDIGT);
+        this.abfrageService.updateInfrastrukturabfrage(abfrage);
         Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () -> this.abfrageStatusService.speichernVonSozialinfrastrukturVersorgung(uuid));
 
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ABBRUCH);
+        this.abfrageService.updateInfrastrukturabfrage(abfrage);
         Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () -> this.abfrageStatusService.speichernVonSozialinfrastrukturVersorgung(uuid));
     }
+
 }
