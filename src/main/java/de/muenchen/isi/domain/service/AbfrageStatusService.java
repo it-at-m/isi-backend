@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageHeaders;
 import org.springframework.messaging.support.MessageBuilder;
+import org.springframework.statemachine.StateContext;
 import org.springframework.statemachine.StateMachine;
 import org.springframework.statemachine.StateMachineEventResult;
 import org.springframework.statemachine.config.StateMachineFactory;
@@ -19,12 +20,10 @@ import org.springframework.statemachine.state.State;
 import org.springframework.statemachine.support.DefaultStateMachineContext;
 import org.springframework.statemachine.support.StateMachineInterceptor;
 import org.springframework.statemachine.support.StateMachineInterceptorAdapter;
-import org.springframework.statemachine.transition.Transition;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -36,7 +35,9 @@ import java.util.UUID;
 public class AbfrageStatusService {
 
     private static final String ABFRAGE_ID_HEADER = "abfrage_id";
+
     private final AbfrageService abfrageService;
+
     private final StateMachineFactory<StatusAbfrage, StatusAbfrageEvents> stateMachineFactory;
 
     /**
@@ -196,27 +197,26 @@ public class AbfrageStatusService {
             stateMachineAccess.addStateMachineInterceptor(new StateMachineInterceptorAdapter<>() {
 
                 /**
-                 * Verhalten siehe {@link StateMachineInterceptor#preStateChange(State, Message, Transition, StateMachine, StateMachine)}.
+                 * Verhalten siehe {@link StateMachineInterceptor#preTransition(StateContext)}
+                 *
+                 * Die Rückgabe des Wertes null führt in der StateMachine zum Ergebnis {@link StateMachineEventResult.ResultType#DENIED}
                  */
                 @Override
-                public void preStateChange(final State<StatusAbfrage, StatusAbfrageEvents> state,
-                                           final Message<StatusAbfrageEvents> message,
-                                           final Transition<StatusAbfrage, StatusAbfrageEvents> transition,
-                                           final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine,
-                                           final StateMachine<StatusAbfrage, StatusAbfrageEvents> rootStateMachine) {
-                    Optional.ofNullable(message).ifPresent(msg -> {
-                        try {
-                            final UUID abfrageId = AbfrageStatusService.this.getAbfrageId(msg);
-                            final InfrastrukturabfrageModel abfrage = AbfrageStatusService.this.abfrageService.getInfrastrukturabfrageById(abfrageId);
-                            abfrage.getAbfrage().setStatusAbfrage(state.getId());
-                            AbfrageStatusService.this.abfrageService.updateInfrastrukturabfrage(abfrage);
-                        } catch (final EntityNotFoundException exception) {
-                            final var errorMessage = "Die vom Statuswechsel betroffene Infrastrukturabfrage wurde nicht gefunden.";
-                            log.error(errorMessage);
-                            throw new StateMachineTransitionFailedException(errorMessage, exception);
-                        }
-                    });
+                public StateContext<StatusAbfrage, StatusAbfrageEvents> preTransition(final StateContext<StatusAbfrage, StatusAbfrageEvents> stateContext) {
+                    final State<StatusAbfrage, StatusAbfrageEvents> state = stateContext.getTransition().getTarget();
+                    final MessageHeaders messageHeaders = stateContext.getMessageHeaders();
+                    try {
+                        final UUID abfrageId = AbfrageStatusService.this.getAbfrageId(messageHeaders);
+                        final InfrastrukturabfrageModel abfrage = AbfrageStatusService.this.abfrageService.getInfrastrukturabfrageById(abfrageId);
+                        abfrage.getAbfrage().setStatusAbfrage(state.getId());
+                        AbfrageStatusService.this.abfrageService.updateInfrastrukturabfrage(abfrage);
+                    } catch (final Exception exception) {
+                        log.error("Die vom Statuswechsel betroffene Infrastrukturabfrage wurde nicht gefunden.", exception);
+                        return null;
+                    }
+                    return stateContext;
                 }
+
             });
 
         });
@@ -242,7 +242,7 @@ public class AbfrageStatusService {
         try {
             result.toStream().forEach(stateMachineEventResult -> {
                 if (stateMachineEventResult.getResultType() == StateMachineEventResult.ResultType.DENIED) {
-                    final var errorMessage = String.format("Status Änderung ist nicht erlaubt. Aktueller Status: %s.", stateMachine.getState().getId());
+                    final var errorMessage = String.format("Status Änderung ist nicht möglich. Aktueller Status: %s.", stateMachine.getState().getId());
                     log.error(errorMessage);
                     throw new StateMachineTransitionFailedException(errorMessage);
                 }
@@ -255,17 +255,16 @@ public class AbfrageStatusService {
     /**
      * Entimmt der Message die ID der Abfrage.
      *
-     * @param msg die Message mit dem Event und der AbfrageId
+     * @param messageHeaders mit dem Event und der AbfrageId
      * @return Gibt die UUID aus der Message zurück
      * @throws EntityNotFoundException falls kein AbfrageId Header gefunden wurde
      */
-    public UUID getAbfrageId(final Message<StatusAbfrageEvents> msg) throws EntityNotFoundException {
+    public UUID getAbfrageId(final MessageHeaders messageHeaders) throws EntityNotFoundException {
         final UUID abfrageId;
-        final MessageHeaders headers = msg.getHeaders();
-        if (headers.containsKey(ABFRAGE_ID_HEADER)) {
-            abfrageId = (UUID) headers.get(ABFRAGE_ID_HEADER);
+        if (messageHeaders.containsKey(ABFRAGE_ID_HEADER)) {
+            abfrageId = (UUID) messageHeaders.get(ABFRAGE_ID_HEADER);
         } else {
-            throw new EntityNotFoundException("Abfrage ID Header wurde nicht gefunden");
+            throw new EntityNotFoundException("Header der Abfrage-ID wurde nicht gefunden");
         }
         return abfrageId;
     }
