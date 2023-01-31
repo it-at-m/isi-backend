@@ -204,7 +204,7 @@ public class AbfrageStatusService {
                             } catch (final EntityNotFoundException exception) {
                                 final var errorMessage = "Infrastrukturabfrage wurde nicht gefunden";
                                 log.error(errorMessage);
-                                throw new StateMachineTransitionFailedException(exception, errorMessage);
+                                throw new StateMachineTransitionFailedException(errorMessage, exception);
                             }
                         });
                     }
@@ -231,20 +231,18 @@ public class AbfrageStatusService {
      * @throws AbfrageStatusNotAllowedException falls die Statusänderung nicht erlaubt nicht
      */
     private void sendEvent(final UUID id, final StatusAbfrageEvents event, final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine) throws AbfrageStatusNotAllowedException {
+        final Mono<Message<StatusAbfrageEvents>> message = Mono.just(MessageBuilder.withPayload(event).setHeader(ABFRAGE_ID_HEADER, id).build());
+        final Flux<StateMachineEventResult<StatusAbfrage, StatusAbfrageEvents>> result = stateMachine.sendEvent(message);
         try {
-            final Mono<Message<StatusAbfrageEvents>> message = Mono.just(MessageBuilder.withPayload(event).setHeader(ABFRAGE_ID_HEADER, id).build());
-            final Flux<StateMachineEventResult<StatusAbfrage, StatusAbfrageEvents>> result = stateMachine.sendEvent(message);
-            result.subscribe(consumer -> {
-                try {
-                    checkIfTransitionWasDenied(consumer);
-                } catch (AbfrageStatusNotAllowedException exception) {
-                    final var errorMessage = "Status Änderung ist nicht erlaubt. Aktueller Status: " + stateMachine.getState().getId() + ".";
+            result.subscribe(stateMachineEventResultConsumer -> {
+                if (stateMachineEventResultConsumer.getResultType() == StateMachineEventResult.ResultType.DENIED) {
+                    final var errorMessage = String.format("Status Änderung ist nicht erlaubt. Aktueller Status: %s.", stateMachine.getState().getId());
                     log.error(errorMessage);
-                    throw new StateMachineTransitionFailedException(exception, errorMessage);
+                    throw new StateMachineTransitionFailedException(errorMessage);
                 }
             });
         } catch (final StateMachineTransitionFailedException exception) {
-            throw (AbfrageStatusNotAllowedException) exception.getCause();
+            throw new AbfrageStatusNotAllowedException(exception.getMessage(), exception);
         }
     }
 
@@ -266,9 +264,4 @@ public class AbfrageStatusService {
         return abfrageId;
     }
 
-    private void checkIfTransitionWasDenied(StateMachineEventResult stateMachineEventResult) throws AbfrageStatusNotAllowedException {
-        if (stateMachineEventResult.getResultType() == StateMachineEventResult.ResultType.DENIED) {
-            throw new AbfrageStatusNotAllowedException("Statusänderung nicht erlaubt");
-        }
-    }
 }
