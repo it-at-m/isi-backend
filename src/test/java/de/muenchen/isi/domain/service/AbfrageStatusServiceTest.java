@@ -8,6 +8,7 @@ import de.muenchen.isi.domain.mapper.AbfrageDomainMapper;
 import de.muenchen.isi.domain.mapper.AbfrageDomainMapperImpl;
 import de.muenchen.isi.domain.mapper.AbfragevarianteDomainMapperImpl;
 import de.muenchen.isi.domain.mapper.BauabschnittDomainMapperImpl;
+import de.muenchen.isi.domain.mapper.DokumentDomainMapperImpl;
 import de.muenchen.isi.domain.model.AbfrageModel;
 import de.muenchen.isi.domain.model.InfrastrukturabfrageModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
@@ -49,7 +50,8 @@ class AbfrageStatusServiceTest {
     private final AbfrageDomainMapper abfrageDomainMapper = new AbfrageDomainMapperImpl(
             new AbfragevarianteDomainMapperImpl(
                     new BauabschnittDomainMapperImpl()
-            )
+            ),
+            new DokumentDomainMapperImpl()
     );
     @MockBean
     private AbfrageService abfrageService;
