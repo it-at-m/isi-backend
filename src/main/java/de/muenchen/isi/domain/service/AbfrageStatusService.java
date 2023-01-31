@@ -17,6 +17,7 @@ import org.springframework.statemachine.StateMachineEventResult;
 import org.springframework.statemachine.config.StateMachineFactory;
 import org.springframework.statemachine.state.State;
 import org.springframework.statemachine.support.DefaultStateMachineContext;
+import org.springframework.statemachine.support.StateMachineInterceptor;
 import org.springframework.statemachine.support.StateMachineInterceptorAdapter;
 import org.springframework.statemachine.transition.Transition;
 import org.springframework.stereotype.Service;
@@ -194,6 +195,9 @@ public class AbfrageStatusService {
             // Der Interceptor aktualisiert bei einer Statusänderung den Status der in der DB gespeicherten Entität.
             stateMachineAccess.addStateMachineInterceptor(new StateMachineInterceptorAdapter<>() {
 
+                /**
+                 * Verhalten siehe {@link StateMachineInterceptor#preStateChange(State, Message, Transition, StateMachine, StateMachine)}.
+                 */
                 @Override
                 public void preStateChange(final State<StatusAbfrage, StatusAbfrageEvents> state,
                                            final Message<StatusAbfrageEvents> message,
