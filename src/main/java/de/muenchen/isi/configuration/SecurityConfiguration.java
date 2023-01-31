@@ -4,14 +4,11 @@
  */
 package de.muenchen.isi.configuration;
 
-import de.muenchen.isi.security.ClientCredentialsRestTemplateInterceptor;
 import de.muenchen.isi.security.CustomJwtAuthenticationConverter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
-import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -21,7 +18,6 @@ import org.springframework.security.oauth2.client.OAuth2AuthorizedClientProvider
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.web.client.RestTemplate;
 
 
 /**
@@ -78,18 +74,6 @@ public class SecurityConfiguration {
         authorizedClientManager.setAuthorizedClientProvider(authorizedClientProvider);
 
         return authorizedClientManager;
-    }
-
-    @Bean
-    public RestTemplate restTemplate(final ClientCredentialsRestTemplateInterceptor clientCredentialsRestTemplateInterceptor) {
-        return new RestTemplateBuilder()
-                .additionalInterceptors(clientCredentialsRestTemplateInterceptor)
-                /**
-                 * Add {@link HttpComponentsClientHttpRequestFactory} to rest template to allow
-                 * {@link org.springframework.http.HttpMethod.PATCH} requests.
-                 */
-                .requestFactory(HttpComponentsClientHttpRequestFactory.class)
-                .build();
     }
 
 }

@@ -21,6 +21,7 @@ import org.mockito.quality.Strictness;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
+import reactor.core.publisher.Mono;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -47,9 +48,9 @@ class PresignedUrlCreationServiceTest {
     void getFile() throws DocumentStorageException, PropertyNotSetException, DocumentStorageClientErrorException, DocumentStorageServerErrorException, FileHandlingWithS3FailedException, FileHandlingFailedException {
         final var pathToFile = "outerFolder/innerFolder/thefile.pdf";
 
-        final var presigneUrl = "https://storage.de/The-Bucket/outerFolder/innerFolder/thefile.pdf?abc=abcdf4sfskhsdfsfddsghjve884545klnfgv";
+        final var presignedUrl = "https://storage.de/The-Bucket/outerFolder/innerFolder/thefile.pdf?abc=abcdf4sfskhsdfsfddsghjve884545klnfgv";
 
-        Mockito.when(this.presignedUrlRepository.getPresignedUrlGetFile(pathToFile, 10)).thenReturn(presigneUrl);
+        Mockito.when(this.presignedUrlRepository.getPresignedUrlGetFile(pathToFile, 10)).thenReturn(Mono.just(presignedUrl));
 
         final var expected = new PresignedUrlModel();
         expected.setHttpMethodToUse("GET");
