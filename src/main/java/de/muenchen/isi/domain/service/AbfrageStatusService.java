@@ -186,40 +186,36 @@ public class AbfrageStatusService {
 
         stateMachine.stopReactively().block();
 
-        try {
-            stateMachine.getStateMachineAccessor().doWithAllRegions(stateMachineAccess -> {
+        stateMachine.getStateMachineAccessor().doWithAllRegions(stateMachineAccess -> {
 
-                // Setzt den Status der Abfrage aus der DB in der StateMachine.
-                stateMachineAccess.resetStateMachineReactively(new DefaultStateMachineContext<>(abfrage.getAbfrage().getStatusAbfrage(), null, null, null)).block();
+            // Setzt den Status der Abfrage aus der DB in der StateMachine.
+            stateMachineAccess.resetStateMachineReactively(new DefaultStateMachineContext<>(abfrage.getAbfrage().getStatusAbfrage(), null, null, null)).block();
 
-                // Der Interceptor aktualisiert bei einer Statusänderung den Status der in der DB gespeicherten Entität.
-                stateMachineAccess.addStateMachineInterceptor(new StateMachineInterceptorAdapter<>() {
+            // Der Interceptor aktualisiert bei einer Statusänderung den Status der in der DB gespeicherten Entität.
+            stateMachineAccess.addStateMachineInterceptor(new StateMachineInterceptorAdapter<>() {
 
-                    @Override
-                    public void preStateChange(final State<StatusAbfrage, StatusAbfrageEvents> state,
-                                               final Message<StatusAbfrageEvents> message,
-                                               final Transition<StatusAbfrage, StatusAbfrageEvents> transition,
-                                               final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine,
-                                               final StateMachine<StatusAbfrage, StatusAbfrageEvents> rootStateMachine) {
-                        Optional.ofNullable(message).ifPresent(msg -> {
-                            try {
-                                final UUID abfrageId = AbfrageStatusService.this.getAbfrageId(msg);
-                                final InfrastrukturabfrageModel abfrage = AbfrageStatusService.this.abfrageService.getInfrastrukturabfrageById(abfrageId);
-                                abfrage.getAbfrage().setStatusAbfrage(state.getId());
-                                AbfrageStatusService.this.abfrageService.updateInfrastrukturabfrage(abfrage);
-                            } catch (final EntityNotFoundException exception) {
-                                final var errorMessage = "Die vom Statuswechsel betroffene Infrastrukturabfrage wurde nicht gefunden.";
-                                log.error(errorMessage);
-                                throw new StateMachineTransitionFailedException(errorMessage, exception);
-                            }
-                        });
-                    }
-                });
-
+                @Override
+                public void preStateChange(final State<StatusAbfrage, StatusAbfrageEvents> state,
+                                           final Message<StatusAbfrageEvents> message,
+                                           final Transition<StatusAbfrage, StatusAbfrageEvents> transition,
+                                           final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine,
+                                           final StateMachine<StatusAbfrage, StatusAbfrageEvents> rootStateMachine) {
+                    Optional.ofNullable(message).ifPresent(msg -> {
+                        try {
+                            final UUID abfrageId = AbfrageStatusService.this.getAbfrageId(msg);
+                            final InfrastrukturabfrageModel abfrage = AbfrageStatusService.this.abfrageService.getInfrastrukturabfrageById(abfrageId);
+                            abfrage.getAbfrage().setStatusAbfrage(state.getId());
+                            AbfrageStatusService.this.abfrageService.updateInfrastrukturabfrage(abfrage);
+                        } catch (final EntityNotFoundException exception) {
+                            final var errorMessage = "Die vom Statuswechsel betroffene Infrastrukturabfrage wurde nicht gefunden.";
+                            log.error(errorMessage);
+                            throw new StateMachineTransitionFailedException(errorMessage, exception);
+                        }
+                    });
+                }
             });
-        } catch (final StateMachineTransitionFailedException exception) {
-            throw new EntityNotFoundException(exception.getMessage(), exception);
-        }
+
+        });
 
         stateMachine.startReactively().block();
         return stateMachine;
@@ -240,8 +236,8 @@ public class AbfrageStatusService {
         final Mono<Message<StatusAbfrageEvents>> message = Mono.just(MessageBuilder.withPayload(event).setHeader(ABFRAGE_ID_HEADER, id).build());
         final Flux<StateMachineEventResult<StatusAbfrage, StatusAbfrageEvents>> result = stateMachine.sendEvent(message);
         try {
-            result.subscribe(stateMachineEventResultConsumer -> {
-                if (stateMachineEventResultConsumer.getResultType() == StateMachineEventResult.ResultType.DENIED) {
+            result.toStream().forEach(stateMachineEventResult -> {
+                if (stateMachineEventResult.getResultType() == StateMachineEventResult.ResultType.DENIED) {
                     final var errorMessage = String.format("Status Änderung ist nicht erlaubt. Aktueller Status: %s.", stateMachine.getState().getId());
                     log.error(errorMessage);
                     throw new StateMachineTransitionFailedException(errorMessage);
