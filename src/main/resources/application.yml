@@ -36,3 +36,10 @@ file:
   size.max: 31457280 # bytes
   extensions.allowed: .sav,.dbf,.shp,.gdb,.msg,.cpg,.prj,.sbn,.sbx,.shp.xml,.shx # Dateiendungen welche nicht über den MIME-Type ermittelt werden können. Werden benötigt für die backendseitige Validierung der Dateiendung.
   mimetypes.allowed: application/octet-stream,application/x-dbf,text/plain,application/pdf,application/vnd.ms-outlook,application/vnd.oasis.opendocument.spreadsheet,application/vnd.oasis.opendocument.text,application/vnd.oasis.opendocument.presentation,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.openxmlformats-officedocument.presentationml.presentation,text/csv,message/rfc822,image/jpeg,image/png,image/svg+xml
+
+io:
+  muenchendigital:
+    digiwf:
+      s3:
+        client:
+          securityEnabled: true

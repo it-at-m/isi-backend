@@ -15,7 +15,10 @@ import org.mapstruct.MappingTarget;
 
 @Mapper(
         config = MapstructConfiguration.class,
-        uses = {AbfragevarianteApiMapper.class}
+        uses = {
+                AbfragevarianteApiMapper.class,
+                DokumentApiMapper.class
+        }
 )
 public interface AbfrageApiMapper {
 
