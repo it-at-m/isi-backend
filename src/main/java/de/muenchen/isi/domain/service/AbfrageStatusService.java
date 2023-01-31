@@ -229,7 +229,7 @@ public class AbfrageStatusService {
      * Leitet eine Statusänderung ein mit dem übergebenem Event
      * <p>
      *
-     * @param id           vom Typ {@link UUID} um die Abfrage aus der DB zu hollen.
+     * @param id           vom Typ {@link UUID} um die Abfrage aus der DB zu holen.
      * @param event        vom Typ {@link StatusAbfrageEvents} um eine Statusänderung durchzuführen
      * @param stateMachine vom Typ {@link StateMachine} welches den aktuellen Status plus alle Statis enthält
      * @throws AbfrageStatusNotAllowedException falls die Statusänderung nicht erlaubt nicht
