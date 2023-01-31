@@ -204,7 +204,7 @@ public class AbfrageStatusService {
                                 abfrage.getAbfrage().setStatusAbfrage(state.getId());
                                 AbfrageStatusService.this.abfrageService.updateInfrastrukturabfrage(abfrage);
                             } catch (final EntityNotFoundException exception) {
-                                final var errorMessage = "Die vom Statuswechsel betroffenen Infrastrukturabfrage wurde nicht gefunden.";
+                                final var errorMessage = "Die vom Statuswechsel betroffene Infrastrukturabfrage wurde nicht gefunden.";
                                 log.error(errorMessage);
                                 throw new StateMachineTransitionFailedException(errorMessage, exception);
                             }
