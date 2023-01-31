@@ -40,7 +40,7 @@ public class AbfrageStatusService {
     private final StateMachineFactory<StatusAbfrage, StatusAbfrageEvents> stateMachineFactory;
 
     /**
-     * Ändert den Status auf OFFEN
+     * Ändert den Status auf {@link StatusAbfrage#OFFEN}.
      *
      * @param id vom Typ {@link UUID} um die Abfrage zu finden.
      * @throws EntityNotFoundException          falls die Abfrage nicht gefunden werden kann.
@@ -53,7 +53,7 @@ public class AbfrageStatusService {
 
 
     /**
-     * Ändert den Status auf ABBRUCH
+     * Ändert den Status auf {@link StatusAbfrage#ABBRUCH}.
      *
      * @param id vom Typ {@link UUID} um die Abfrage zu finden.
      * @throws EntityNotFoundException          falls die Abfrage nicht gefunden werden kann.
@@ -65,7 +65,7 @@ public class AbfrageStatusService {
     }
 
     /**
-     * Ändert den Status auf ANGELEGT
+     * Ändert den Status auf {@link StatusAbfrage#ANGELEGT}.
      *
      * @param id vom Typ {@link UUID} um die Abfrage zu finden.
      * @throws EntityNotFoundException          falls die Abfrage nicht gefunden werden kann.
@@ -77,7 +77,7 @@ public class AbfrageStatusService {
     }
 
     /**
-     * Ändert den Status auf IN_ERFASSUNG
+     * Ändert den Status auf {@link StatusAbfrage#IN_ERFASSUNG}.
      *
      * @param id vom Typ {@link UUID} um die Abfrage zu finden.
      * @throws EntityNotFoundException          falls die Abfrage nicht gefunden werden kann.
@@ -89,7 +89,7 @@ public class AbfrageStatusService {
     }
 
     /**
-     * Ändert den Status auf IN_BEARBEITUNG_PLAN
+     * Ändert den Status auf {@link StatusAbfrage#IN_BEARBEITUNG_PLAN}.
      *
      * @param id vom Typ {@link UUID} um die Abfrage zu finden.
      * @throws EntityNotFoundException          falls die Abfrage nicht gefunden werden kann.
@@ -101,7 +101,7 @@ public class AbfrageStatusService {
     }
 
     /**
-     * Ändert den Status auf IN_ERFASSUNG
+     * Ändert den Status auf {@link StatusAbfrage#IN_ERFASSUNG}.
      *
      * @param id vom Typ {@link UUID} um die Abfrage zu finden.
      * @throws EntityNotFoundException          falls die Abfrage nicht gefunden werden kann.
@@ -113,7 +113,7 @@ public class AbfrageStatusService {
     }
 
     /**
-     * Ändert den Status auf IN_BEARBEITUNG_PLAN
+     * Ändert den Status auf {@link StatusAbfrage#IN_BEARBEITUNG_PLAN}.
      *
      * @param id vom Typ {@link UUID} um die Abfrage zu finden.
      * @throws EntityNotFoundException          falls die Abfrage nicht gefunden werden kann.
@@ -125,7 +125,7 @@ public class AbfrageStatusService {
     }
 
     /**
-     * Ändert den Status auf ERLEDIGT
+     * Ändert den Status auf {@link StatusAbfrage#ERLEDIGT}.
      *
      * @param id vom Typ {@link UUID} um die Abfrage zu finden.
      * @throws EntityNotFoundException          falls die Abfrage nicht gefunden werden kann.
@@ -137,7 +137,7 @@ public class AbfrageStatusService {
     }
 
     /**
-     * Ändert den Status auf IN_BEARBEITUNG_FACHREFERATE
+     * Ändert den Status auf {@link StatusAbfrage#IN_BEARBEITUNG_FACHREFERATE}.
      *
      * @param id vom Typ {@link UUID} um die Abfrage zu finden.
      * @throws EntityNotFoundException          falls die Abfrage nicht gefunden werden kann.
@@ -149,7 +149,7 @@ public class AbfrageStatusService {
     }
 
     /**
-     * Ändert den Status auf BEDARFSMELDUNG_ERFOLGT
+     * Ändert den Status auf {@link StatusAbfrage#BEDARFSMELDUNG_ERFOLGT}.
      *
      * @param id vom Typ {@link UUID} um die Abfrage zu finden.
      * @throws EntityNotFoundException          falls die Abfrage nicht gefunden werden kann.
@@ -161,7 +161,7 @@ public class AbfrageStatusService {
     }
 
     /**
-     * Ändert den Status auf ERLEDIGT
+     * Ändert den Status auf {@link StatusAbfrage#ERLEDIGT}.
      *
      * @param id vom Typ {@link UUID} um die Abfrage zu finden.
      * @throws EntityNotFoundException          falls die Abfrage nicht gefunden werden kann.
@@ -256,7 +256,7 @@ public class AbfrageStatusService {
      * Entimmt der Message die ID der Abfrage.
      *
      * @param msg die Message mit dem Event und der AbfrageId
-     * @return Gibt die UUID aus der Message zurürck
+     * @return Gibt die UUID aus der Message zurück
      * @throws EntityNotFoundException falls kein AbfrageId Header gefunden wurde
      */
     public UUID getAbfrageId(final Message<StatusAbfrageEvents> msg) throws EntityNotFoundException {
