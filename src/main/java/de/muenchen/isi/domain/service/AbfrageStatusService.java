@@ -28,7 +28,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 /**
- * Genaue Statusänderungdefinition in {@link  StateMachineConfiguration} nachzusehen
+ * Der Zustandsautomat ist in {@link  StateMachineConfiguration} konfiguriert.
  */
 @Slf4j
 @Service
