@@ -197,6 +197,8 @@ public class AbfrageStatusService {
 
                 /**
                  * Verhalten siehe {@link StateMachineInterceptor#preStateChange(State, Message, Transition, StateMachine, StateMachine)}.
+                 *
+                 * Die Methode aktualisiert bei einer Statusänderung den Status der in der DB gespeicherten Entität.
                  */
                 @Override
                 public void preStateChange(final State<StatusAbfrage, StatusAbfrageEvents> state,
