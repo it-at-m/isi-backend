@@ -173,9 +173,9 @@ public class AbfrageStatusService {
 
 
     /**
-     * Erstellt die Statemachine und initialisiert sie mit dem Status der Abfrage aus der DB.
+     * Erstellt die Statemachine und initialisiert diese mit dem Status der Abfrage aus der DB.
      * <p>
-     * Ausserdem definieren wir eine preStateChange Listener der bei einer Statusänderung den Status in der DB aktualisiert.
+     * Ausserdem wird ein preStateChange-Listener definiert, der bei einer Statusänderung den Status in der DB aktualisiert.
      *
      * @param id vom Typ {@link UUID}  um die Abfrage aus der DB zu holen.
      * @throws EntityNotFoundException falls die Abfrage nicht gefunden werden kann.
@@ -189,6 +189,10 @@ public class AbfrageStatusService {
         try {
             stateMachine.getStateMachineAccessor().doWithAllRegions(stateMachineAccess -> {
 
+                // Setzt den Status der Abfrage aus der DB in der StateMachine.
+                stateMachineAccess.resetStateMachineReactively(new DefaultStateMachineContext<>(abfrage.getAbfrage().getStatusAbfrage(), null, null, null)).block();
+
+                // Der Interceptor aktualisiert bei einer Statusänderung den Status der in der DB gespeicherten Entität.
                 stateMachineAccess.addStateMachineInterceptor(new StateMachineInterceptorAdapter<>() {
 
                     @Override
@@ -212,8 +216,6 @@ public class AbfrageStatusService {
                     }
                 });
 
-                // Setzt den Status der Abfrage aus der DB in der StateMachine
-                stateMachineAccess.resetStateMachineReactively(new DefaultStateMachineContext<>(abfrage.getAbfrage().getStatusAbfrage(), null, null, null)).block();
             });
         } catch (final StateMachineTransitionFailedException exception) {
             throw new EntityNotFoundException(exception.getMessage(), exception);
