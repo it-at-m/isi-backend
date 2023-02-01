@@ -264,7 +264,9 @@ public class AbfrageStatusService {
         if (messageHeaders.containsKey(ABFRAGE_ID_HEADER)) {
             abfrageId = (UUID) messageHeaders.get(ABFRAGE_ID_HEADER);
         } else {
-            throw new EntityNotFoundException("Header der Abfrage-ID wurde nicht gefunden");
+            final var errorMessage = "Header der Abfrage-ID wurde nicht gefunden";
+            log.error(errorMessage);
+            throw new EntityNotFoundException(errorMessage);
         }
         return abfrageId;
     }
