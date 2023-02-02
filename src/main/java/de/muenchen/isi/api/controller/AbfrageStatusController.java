@@ -33,7 +33,7 @@ public class AbfrageStatusController {
 
     private final AbfrageStatusService abfrageStatusService;
 
-    @PutMapping("infrastruktur-abfrage/{id}/freigabe")
+    @PutMapping("{id}/freigabe")
     @Transactional
     @Operation(summary = "Setzt eine Infrastrukturabfrage auf den Status OFFEN")
     @ApiResponses(value = {
@@ -75,7 +75,7 @@ public class AbfrageStatusController {
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping("/{id}/weitere-abfragevarianten-anlegen")
+    @PutMapping("{id}/weitere-abfragevarianten-anlegen")
     @Transactional
     @Operation(summary = "Setzt eine Infrastrukturabfrage auf den Status IN_ERFASSUNG")
     @ApiResponses(value = {
