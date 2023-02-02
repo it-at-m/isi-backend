@@ -15,10 +15,10 @@ import java.util.EnumSet;
 public class StateMachineConfiguration extends StateMachineConfigurerAdapter<StatusAbfrage, StatusAbfrageEvents> {
 
     /**
-     * Legt fest welche Events es alle geben soll. ANGELEGT ist der Anfangstatus und ABBRUCH ist der Endstatus
+     * Legt alle verfuegbaren Events fest. ANGELEGT ist der Anfangstatus und ABBRUCH ist der Endstatus.
      *
-     * @param states konfiguriert alle Statis der State Machine
-     * @throws Exception falls ein Fehler passiert
+     * @param states konfiguriert alle Status der State Machine
+     * @throws Exception wenn ein Fehler in der Configuration auftritt
      */
     @Override
     public void configure(StateMachineStateConfigurer<StatusAbfrage, StatusAbfrageEvents> states) throws Exception {
@@ -30,10 +30,10 @@ public class StateMachineConfiguration extends StateMachineConfigurerAdapter<Sta
 
     /**
      * Beschreibt alle Statusänderungen mit ihren dazugehörgen Events.
-     * Für mehr Informationen zu den Statusänderungen bitte auf Confluence nachschauen
+     * Für mehr Informationen zu den Statusänderungen bitte auf Confluence nachschauen.
      *
      * @param transitions konfiguriert die Statusübergange bei der State Machine
-     * @throws Exception falls ein Fehler passiert
+     * @throws Exception wenn ein Fehler in der Configuration auftritt
      */
     @Override
     public void configure(StateMachineTransitionConfigurer<StatusAbfrage, StatusAbfrageEvents> transitions) throws Exception {
@@ -120,6 +120,7 @@ public class StateMachineConfiguration extends StateMachineConfigurerAdapter<Sta
                 .source(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT).target(StatusAbfrage.IN_ERFASSUNG)
                 .event(StatusAbfrageEvents.WEITERE_ABFRAVARIANTEN_ANLEGEN)
                 .and()
+
                 // Alle Events von ERLDEDIGT
                 .withExternal()
                 .source(StatusAbfrage.ERLEDIGT).target(StatusAbfrage.IN_ERFASSUNG)

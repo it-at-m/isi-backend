@@ -17,18 +17,24 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.constraints.NotNull;
 import java.util.UUID;
 
+import static de.muenchen.isi.api.controller.AbfrageStatusController.CONTROLLER_PATH;
+
 @RequiredArgsConstructor
 @RestController
 @Tag(name = "AbfrageStatus", description = "API to set the status for a Abfrage")
 @Validated
+@RequestMapping(value = CONTROLLER_PATH)
 public class AbfrageStatusController {
 
     private final AbfrageStatusService abfrageStatusService;
+
+    public static final String CONTROLLER_PATH = "infrastruktur-abfrage";
 
     @PutMapping("infrastruktur-abfrage/{id}/freigabe")
     @Transactional
@@ -44,7 +50,7 @@ public class AbfrageStatusController {
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping("infrastruktur-abfrage/{id}/abbrechen")
+    @PutMapping("{id}/abbrechen")
     @Transactional
     @Operation(summary = "Setzt eine Infrastrukturabfrage auf den Status ABBRUCH")
     @ApiResponses(value = {
@@ -58,7 +64,7 @@ public class AbfrageStatusController {
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping("infrastruktur-abfrage/{id}/angabe-anpassen")
+    @PutMapping("{id}/angabe-anpassen")
     @Transactional
     @Operation(summary = "Setzt eine Infrastrukturabfrage auf den Status ANGELEGT")
     @ApiResponses(value = {
@@ -72,7 +78,7 @@ public class AbfrageStatusController {
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping("infrastruktur-abfrage/{id}/weitere-abfragevarianten-anlegen")
+    @PutMapping("/{id}/weitere-abfragevarianten-anlegen")
     @Transactional
     @Operation(summary = "Setzt eine Infrastrukturabfrage auf den Status IN_ERFASSUNG")
     @ApiResponses(value = {
@@ -86,7 +92,7 @@ public class AbfrageStatusController {
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping("infrastruktur-abfrage/{id}/keine-zusaetzliche-abfragevariante")
+    @PutMapping("{id}/keine-zusaetzliche-abfragevariante")
     @Transactional
     @Operation(summary = "Setzt eine Infrastrukturabfrage auf den Status IN_BEARBEITUNG_PLAN")
     @ApiResponses(value = {
@@ -100,7 +106,7 @@ public class AbfrageStatusController {
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping("infrastruktur-abfrage/{id}/zusaetzliche-abfragevariante-anlegen")
+    @PutMapping("{id}/zusaetzliche-abfragevariante-anlegen")
     @Transactional
     @Operation(summary = "Setzt eine Infrastrukturabfrage auf den Status IN_ERFASSUNG")
     @ApiResponses(value = {
@@ -114,7 +120,7 @@ public class AbfrageStatusController {
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping("infrastruktur-abfrage/{id}/speicher-der-varianten")
+    @PutMapping("{id}/speicher-der-varianten")
     @Transactional
     @Operation(summary = "Setzt eine Infrastrukturabfrage auf den Status IN_BEARBEITUBG_PLAN")
     @ApiResponses(value = {
@@ -128,7 +134,7 @@ public class AbfrageStatusController {
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping("infrastruktur-abfrage/{id}/keine-bearbeitung-noetig")
+    @PutMapping("{id}/keine-bearbeitung-noetig")
     @Transactional
     @Operation(summary = "Setzt eine Infrastrukturabfrage auf den Status ERLEDIGT")
     @ApiResponses(value = {
@@ -142,7 +148,7 @@ public class AbfrageStatusController {
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping("infrastruktur-abfrage/{id}/verschicken-der-stellungnahme")
+    @PutMapping("{id}/verschicken-der-stellungnahme")
     @Transactional
     @Operation(summary = "Setzt eine Infrastrukturabfrage auf den Status IN_BEARBEITUNG_FACHREFERATE")
     @ApiResponses(value = {
@@ -156,7 +162,7 @@ public class AbfrageStatusController {
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping("infrastruktur-abfrage/{id}/bedarfsmeldung-erfolgt")
+    @PutMapping("{id}/bedarfsmeldung-erfolgt")
     @Transactional
     @Operation(summary = "Setzt eine Infrastrukturabfrage auf den Status BEDARFSMELDUNG_ERFOLGT")
     @ApiResponses(value = {
@@ -170,7 +176,7 @@ public class AbfrageStatusController {
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping("infrastruktur-abfrage/{id}/speicher-von-soz-infrastruktur-versorgung")
+    @PutMapping("{id}/speicher-von-soz-infrastruktur-versorgung")
     @Transactional
     @Operation(summary = "Setzt eine Infrastrukturabfrage auf den Status ERLEDIGT")
     @ApiResponses(value = {
