@@ -23,18 +23,15 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.constraints.NotNull;
 import java.util.UUID;
 
-import static de.muenchen.isi.api.controller.AbfrageStatusController.CONTROLLER_PATH;
 
 @RequiredArgsConstructor
 @RestController
 @Tag(name = "AbfrageStatus", description = "API to set the status for a Abfrage")
 @Validated
-@RequestMapping(value = CONTROLLER_PATH)
+@RequestMapping(value = "infrastruktur-abfrage")
 public class AbfrageStatusController {
 
     private final AbfrageStatusService abfrageStatusService;
-
-    public static final String CONTROLLER_PATH = "infrastruktur-abfrage";
 
     @PutMapping("infrastruktur-abfrage/{id}/freigabe")
     @Transactional
