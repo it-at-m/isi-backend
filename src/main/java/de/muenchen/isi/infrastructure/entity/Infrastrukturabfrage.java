@@ -19,7 +19,9 @@ import javax.persistence.EntityListeners;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
+import javax.persistence.Index;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import java.util.List;
 
 @Entity
@@ -27,6 +29,9 @@ import java.util.List;
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @EntityListeners(AuditingEntityListener.class)
+@Table(indexes = {
+        @Index(name = "name_abfrage_index", columnList = "nameAbfrage")
+})
 public class Infrastrukturabfrage extends BaseEntity {
 
     @Embedded

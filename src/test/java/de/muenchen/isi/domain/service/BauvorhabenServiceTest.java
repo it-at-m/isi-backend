@@ -2,6 +2,7 @@ package de.muenchen.isi.domain.service;
 
 import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
+import de.muenchen.isi.domain.exception.UniqueViolationException;
 import de.muenchen.isi.domain.mapper.BauvorhabenDomainMapper;
 import de.muenchen.isi.domain.mapper.BauvorhabenDomainMapperImpl;
 import de.muenchen.isi.domain.mapper.DokumentDomainMapperImpl;
@@ -142,7 +143,7 @@ public class BauvorhabenServiceTest {
     }
 
     @Test
-    void saveBauvorhabenTest() {
+    void saveBauvorhabenTest() throws UniqueViolationException {
         final BauvorhabenModel bauvorhaben = new BauvorhabenModel();
         bauvorhaben.setId(null);
 
@@ -165,7 +166,27 @@ public class BauvorhabenServiceTest {
     }
 
     @Test
-    void updateBauvorhabenTest() throws EntityNotFoundException {
+    void saveBauvorhabenUniqueViolationTest() throws UniqueViolationException {
+        final String nameVorhaben = "Test Bauvorhaben";
+        final BauvorhabenModel bauvorhabenModel = new BauvorhabenModel();
+        bauvorhabenModel.setId(UUID.randomUUID());
+        bauvorhabenModel.setNameVorhaben(nameVorhaben);
+
+        final Bauvorhaben entity = new Bauvorhaben();
+        entity.setId(bauvorhabenModel.getId());
+        entity.setNameVorhaben(bauvorhabenModel.getNameVorhaben());
+
+        Mockito.when(this.bauvorhabenRepository.findByNameVorhabenIgnoreCase(entity.getNameVorhaben())).thenReturn(Optional.of(entity));
+        Mockito.when(this.bauvorhabenRepository.save(entity)).thenReturn(entity);
+
+        Assertions.assertThrows(UniqueViolationException.class, () -> this.bauvorhabenService.saveBauvorhaben(bauvorhabenModel));
+
+        Mockito.verify(this.bauvorhabenRepository, Mockito.times(1)).findByNameVorhabenIgnoreCase(entity.getNameVorhaben());
+        Mockito.verify(this.bauvorhabenRepository, Mockito.times(0)).save(entity);
+    }
+
+    @Test
+    void updateBauvorhabenTest() throws EntityNotFoundException, UniqueViolationException {
         final BauvorhabenModel bauvorhabenModel = new BauvorhabenModel();
         bauvorhabenModel.setId(UUID.randomUUID());
 
