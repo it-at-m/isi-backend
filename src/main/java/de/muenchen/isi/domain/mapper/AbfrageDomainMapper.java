@@ -13,7 +13,10 @@ import org.mapstruct.Mapper;
 
 @Mapper(
         config = MapstructConfiguration.class,
-        uses = {AbfragevarianteDomainMapper.class}
+        uses = {
+                AbfragevarianteDomainMapper.class,
+                DokumentDomainMapper.class
+        }
 )
 public interface AbfrageDomainMapper {
 

@@ -4,8 +4,8 @@
  */
 package de.muenchen.isi.api.controller.infrastruktureinrichtung;
 
-import de.muenchen.isi.api.dto.infrastruktureinrichtung.KindergartenDto;
 import de.muenchen.isi.api.dto.error.InformationResponseDto;
+import de.muenchen.isi.api.dto.infrastruktureinrichtung.KindergartenDto;
 import de.muenchen.isi.api.mapper.InfrastruktureinrichtungApiMapper;
 import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
@@ -24,7 +24,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -118,7 +124,7 @@ public class KindergartenController {
     @DeleteMapping("kindergarten/{id}")
     @Operation(summary = "Löschen eines Kindergartens")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(responseCode = "204", description = "NO CONTENT"),
             @ApiResponse(responseCode = "404", description = "NOT FOUND -> Kindergarten mit dieser ID nicht vorhanden.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class))),
             @ApiResponse(responseCode = "409", description = "CONFLICT -> Die Kindergarten referenziert ein Bauvorhaben.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class)))
     })
@@ -126,7 +132,7 @@ public class KindergartenController {
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_DELETE_KINDERGARTEN.name())")
     public ResponseEntity<Void> deleteKindergartenById(@PathVariable @NotNull final UUID id) throws EntityNotFoundException, EntityIsReferencedException {
         this.kindergartenService.deleteKindergartenById(id);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
 }
