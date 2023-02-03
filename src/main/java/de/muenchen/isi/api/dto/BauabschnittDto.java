@@ -8,6 +8,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.List;
 
 @Data
@@ -16,6 +17,7 @@ import java.util.List;
 public class BauabschnittDto extends BaseEntityDto {
 
     @NotBlank
+    @Size(max = 255, message = "Es sind maximal {max} Zeichen erlaubt")
     private String bezeichnung;
 
     @NotEmpty

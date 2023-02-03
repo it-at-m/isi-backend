@@ -15,6 +15,7 @@ import lombok.Data;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
@@ -25,6 +26,7 @@ public class AbfrageDto {
     @HasAllowedNumberOfDocuments
     private List<@Valid DokumentDto> dokumente;
 
+    @Size(max = 255, message = "Es sind maximal {max} Zeichen erlaubt")
     private String allgemeineOrtsangabe;
 
     @Valid
@@ -33,11 +35,13 @@ public class AbfrageDto {
     @NotNull
     private LocalDate fristStellungnahme;
 
+    @Size(max = 255, message = "Es sind maximal {max} Zeichen erlaubt")
     private String anmerkung;
 
     @NotNull
     private StatusAbfrage statusAbfrage;
 
+    @Size(max = 255, message = "Es sind maximal {max} Zeichen erlaubt")
     private String bebauungsplannummer;
 
     @NotBlank

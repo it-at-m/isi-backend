@@ -13,6 +13,7 @@ import lombok.Data;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.util.UUID;
 
@@ -23,12 +24,14 @@ public class InfrastruktureinrichtungDto {
 
     private UUID bauvorhaben;
 
+    @Size(max = 255, message = "Es sind maximal {max} Zeichen erlaubt")
     private String allgemeineOrtsangabe;
 
     @Valid
     private AdresseDto adresse;
 
     @NotBlank
+    @Size(max = 255, message = "Es sind maximal {max} Zeichen erlaubt")
     private String nameEinrichtung;
 
     @NotNull

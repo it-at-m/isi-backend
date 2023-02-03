@@ -5,6 +5,7 @@ import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVorhaben;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import lombok.Data;
 
+import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.util.UUID;
 
@@ -13,6 +14,7 @@ public class AbfrageListElementDto {
 
     private UUID id;
 
+    @Size(max = 70, message = "Es sind maximal {max} Zeichen erlaubt")
     private String nameAbfrage;
 
     private StandVorhaben standVorhaben;
