@@ -11,6 +11,8 @@ import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusInfrastrukturein
 import lombok.Data;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -35,6 +37,8 @@ public class InfrastruktureinrichtungDto {
     private String nameEinrichtung;
 
     @NotNull
+    @Min(1900)
+    @Max(2100)
     private Integer fertigstellungsjahr; // JJJJ
 
     @NotNull
