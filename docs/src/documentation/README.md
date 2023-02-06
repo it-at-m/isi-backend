@@ -13,8 +13,9 @@ Das [ISI Backend](https://github.com/it-at-m/isi-backend) ist der zentrale Micro
 der ISI Anwendung. Er benötigt eine Datenbank zur Speicherung der Daten.
 
 ## S3 Storage
-Die ISI Anwendung verwendet den Service [TBD], welcher vom digiWF Projekt Open Source zur Verfügung gestellt wird, 
-um Dokumente in einem S3 Storage zu speichern.
+Die ISI Anwendung verwendet den
+[S3 Storage Service](https://github.com/it-at-m/digiwf-core/tree/dev/digiwf-integrations/digiwf-s3-integration) 
+des digiWF Projekts, um Dokumente in einem S3 Storage zu speichern.
 
 <!--
 [Kontaktieren Sie uns einfach per E-Mail](/contact).

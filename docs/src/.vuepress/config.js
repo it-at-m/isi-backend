@@ -56,9 +56,13 @@ module.exports = {
                 ariaLabel: 'Sprachen',
                 nav: [
                     {
-                        text: 'Zur Dokumentation',
+                        text: 'Technische Dokumentation',
                         link: '/documentation/',
-                    }
+                    },
+                    {
+                        text: 'Konfiguration',
+                        link: '/configuration/'
+                    },
                 ],
                 sidebar: {
                     '/documentation/': [
@@ -74,12 +78,20 @@ module.exports = {
                             title: 'Guides',
                             collapsable: false,
                             children: [
-                                'guides/conventions',
                                 'guides/technical-setup/',
-
+                                'guides/conventions',
                             ]
                         }
                     ],
+                   '/configuration/': [
+                       {
+                           title: 'Umgebung',
+                           collapsable: false,
+                           children: [
+                               'env/',
+                           ]
+                       }
+                   ],
                 }
             },
             '/en/': {

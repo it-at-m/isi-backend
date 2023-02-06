@@ -27,7 +27,7 @@ Der Backend Service startet standardmäßig mit dem Port `8080` und sollte in de
 Zusätzlich wird die Datenbank, der S3 Storage mit zulässigen MIME-Types für die Dokumente und 
 optional eine Anbindung an einen Identity Provider über OpenId Connect in der Konfigurationsdatei konfiguriert.
 
-Ein Beispiel für eine Konfigurationsdatei befindet sich unter TBD.
+Ein Beispiel für eine Konfigurationsdatei befindet sich unter [Konfiguration lokaler Umgebung](/configuration/env/#lokale-umgebung).
 
 Diese konfiguriert den Server Port, eine HSQL Datenbank, einen lokalen Service zur Anbindung eines S3 Storages und 
 die für den Dateiupload zulässigen MIME-Types pdf und png.
