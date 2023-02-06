@@ -73,7 +73,7 @@ bld/
 [Ll]og/
 
 .DS_Store
-digiwf-docs/node_modules
+docs/node_modules
 /dist
 
 # local env files

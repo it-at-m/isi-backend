@@ -4,13 +4,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <parent>
-    <groupId>io.muenchendigital.digiwf</groupId>
-    <artifactId>digiwf-core</artifactId>
-    <version>0.17.2-SNAPSHOT</version>
-  </parent>
-
-  <artifactId>digiwf-apps</artifactId>
+  <groupId>de.muenchen.isi</groupId>
+  <artifactId>isi-backend-docs</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
 
   <properties>
     <node.version>v16.19.0</node.version>

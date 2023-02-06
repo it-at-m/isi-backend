@@ -1,5 +1,11 @@
 # ISI Dokumentation
 
+## Source Code holen
+Sourcen auf den lokalen Rechner holen und ins docs-Verzeichnis wechseln
+
+    git clone https://github.com/it-at-m/isi-backend.git
+    cd isi-backend/docs
+
 ## Mit lokaler node Installation
 
 ```bash
@@ -11,12 +17,12 @@ npm run dev
 
 Um Node / NPM und die notwendigen Module auf dem lokalen Rechner zu installieren, führt man diesen Befehl einmalig aus:
 ```bash
-mvn -f docs install -Pdocs
+mvn install -Pdocs
 ```
 
 Für die lokale Entwicklung der Dokumentation nutzt man diesen Befehl:
 ```bash
-mvn -f docs -Pdocs -Pdev package
+mvn -Pdocs -Pdev package
 ```
 
 Die Vorschau der Dokumentation ist über http://localhost:8080/ erreichbar.

@@ -1,8 +1,8 @@
 {
-  "name": "digiwf-docs",
-  "description": "Documentation of the DigiWF automation platform",
+  "name": "isi-backend-docs",
+  "description": "Dokumentation des ISI Backends",
   "main": "index.js",
-  "repository": "https://github.com/it-at-m/digiwf-core.git/digiwf",
+  "repository": "https://github.com/it-at-m/isi-backend.git",
   "scripts": {
     "dev": "vuepress dev src",
     "build": "vuepress build src"
