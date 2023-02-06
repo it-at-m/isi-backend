@@ -7,7 +7,7 @@ package de.muenchen.isi.api.controller;
 import de.muenchen.isi.api.dto.InfrastrukturabfrageDto;
 import de.muenchen.isi.api.dto.error.InformationResponseDto;
 import de.muenchen.isi.api.mapper.AbfrageApiMapper;
-import de.muenchen.isi.api.validation.IsGeschossflaecheWohnenSobonUrsaechlichRequired;
+import de.muenchen.isi.api.validation.GeschossflaecheWohnenSobonUrsaechlichRequired;
 import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
@@ -91,9 +91,9 @@ public class AbfrageController {
             @ApiResponse(responseCode = "409", description = "CONFLICT -> Abfrage konnte nicht erstellt werden, da der Abfragename bereits existiert.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class)))
     })
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_WRITE_ABFRAGE.name())")
-    public ResponseEntity<InfrastrukturabfrageDto> createInfrastrukturabfrage(@RequestBody @Valid @NotNull @IsGeschossflaecheWohnenSobonUrsaechlichRequired final InfrastrukturabfrageDto abfrageDto) throws EntityNotFoundException, UniqueViolationException {
+    public ResponseEntity<InfrastrukturabfrageDto> createInfrastrukturabfrage(@RequestBody @Valid @NotNull @GeschossflaecheWohnenSobonUrsaechlichRequired final InfrastrukturabfrageDto abfrageDto) throws EntityNotFoundException, UniqueViolationException {
         var model = this.abfrageApiMapper.dto2Model(abfrageDto);
-        final var abfrage = this.bauvorhabenService.assignBauvorhabenToAbfrage( abfrageDto.getAbfrage().getBauvorhaben(), model.getAbfrage());
+        final var abfrage = this.bauvorhabenService.assignBauvorhabenToAbfrage(abfrageDto.getAbfrage().getBauvorhaben(), model.getAbfrage());
         model.setAbfrage(abfrage);
         model = this.abfrageService.saveInfrastrukturabfrage(model);
         final var saved = this.abfrageApiMapper.model2Dto(model);
@@ -110,7 +110,7 @@ public class AbfrageController {
             @ApiResponse(responseCode = "409", description = "CONFLICT -> Abfrage konnte nicht erstellt werden, da der Abfragename bereits existiert.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class)))
     })
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_WRITE_ABFRAGE.name())")
-    public ResponseEntity<InfrastrukturabfrageDto> updateInfrastrukturabfrage(@RequestBody @Valid @NotNull @IsGeschossflaecheWohnenSobonUrsaechlichRequired final InfrastrukturabfrageDto abfrageDto) throws EntityNotFoundException, UniqueViolationException {
+    public ResponseEntity<InfrastrukturabfrageDto> updateInfrastrukturabfrage(@RequestBody @Valid @NotNull @GeschossflaecheWohnenSobonUrsaechlichRequired final InfrastrukturabfrageDto abfrageDto) throws EntityNotFoundException, UniqueViolationException {
         var model = this.abfrageApiMapper.dto2Model(abfrageDto);
         final var abfrage = this.bauvorhabenService.assignBauvorhabenToAbfrage(abfrageDto.getAbfrage().getBauvorhaben(), model.getAbfrage());
         model.setAbfrage(abfrage);

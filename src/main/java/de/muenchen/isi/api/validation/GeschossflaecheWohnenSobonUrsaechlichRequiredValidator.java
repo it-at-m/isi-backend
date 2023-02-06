@@ -11,11 +11,11 @@ import javax.validation.ConstraintValidatorContext;
 
 @Component
 @NoArgsConstructor
-public class GeschossflaecheWohnenSobonUrsaechlichRequiredValidator implements ConstraintValidator<IsGeschossflaecheWohnenSobonUrsaechlichRequired, InfrastrukturabfrageDto> {
+public class GeschossflaecheWohnenSobonUrsaechlichRequiredValidator implements ConstraintValidator<GeschossflaecheWohnenSobonUrsaechlichRequired, InfrastrukturabfrageDto> {
 
     /**
-     * Prüft ob die Geschossfläche Wohnen SoBoN-ursächlich {@Link AbfragevarianteDto#geschossflaecheWohnenSoBoNursaechlich} einen Wert hat.
-     * Das Feld muss bei folgenden Vorbedingunen gefüllt sein:
+     * Prüft ob das Feld Geschossfläche Wohnen SoBoN-ursächlich {@Link AbfragevarianteDto#geschossflaecheWohnenSoBoNursaechlich} einen numerischem Wert hat.
+     * Das Feld ist bei folgenden Vorbedingunen ein Mussfeld und wird auf numerischen Inhalt geprüft:
      * - die Abfrage ist SoBoN-relevant {@Link InfrastrukturabfrageDto#sobonRelevant.}
      * - und {@Link AbfragevarianteDto#planungsrecht} ist {@Link Planungsrecht#BPLAN_PARAG_12} oder {{@Link Planungsrecht#BPLAN_PARAG_11}}
      *
@@ -32,9 +32,10 @@ public class GeschossflaecheWohnenSobonUrsaechlichRequiredValidator implements C
         }
         return !value.getAbfragevarianten().stream()
                 .anyMatch(abfragevariante ->
-                        (abfragevariante.getPlanungsrecht() == Planungsrecht.BPLAN_PARAG_11 ||
-                                abfragevariante.getPlanungsrecht() == Planungsrecht.BPLAN_PARAG_12) &&
-                                abfragevariante.getGeschossflaecheWohnenSoBoNursaechlich() == null);
+                        (abfragevariante.getPlanungsrecht() == Planungsrecht.BPLAN_PARAG_11
+                                || abfragevariante.getPlanungsrecht() == Planungsrecht.BPLAN_PARAG_12)
+                                && abfragevariante.getGeschossflaecheWohnenSoBoNursaechlich() == null
+                );
     }
 
 }

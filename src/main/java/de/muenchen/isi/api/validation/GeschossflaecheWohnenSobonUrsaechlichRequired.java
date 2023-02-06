@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = GeschossflaecheWohnenSobonUrsaechlichRequiredValidator.class)
 @Documented
-public @interface IsGeschossflaecheWohnenSobonUrsaechlichRequired {
+public @interface GeschossflaecheWohnenSobonUrsaechlichRequired {
 
     String message() default "Die Geschossfläche SoBoN-ursächlich muss angegeben werden.";
 
