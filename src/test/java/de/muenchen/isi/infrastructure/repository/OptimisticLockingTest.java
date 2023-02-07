@@ -52,9 +52,9 @@ public class OptimisticLockingTest {
 
         Assertions.assertThrows(ObjectOptimisticLockingFailureException.class, () -> this.dokumentRepository.saveAndFlush(dokument2));
 
-        final var newDokument2 = this.dokumentRepository.findById(id).get();
-        newDokument2.setArtDokument(ArtDokument.EMAIL);
-        this.dokumentRepository.saveAndFlush(newDokument2);
+        final var newLoadedDokument2 = this.dokumentRepository.findById(id).get();
+        newLoadedDokument2.setArtDokument(ArtDokument.EMAIL);
+        this.dokumentRepository.saveAndFlush(newLoadedDokument2);
 
         this.dokumentRepository.deleteAll();
     }
