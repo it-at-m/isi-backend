@@ -6,17 +6,16 @@ import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
 import de.muenchen.isi.domain.mapper.BauvorhabenDomainMapper;
 import de.muenchen.isi.domain.model.AbfrageModel;
-import de.muenchen.isi.domain.model.infrastruktureinrichtung.InfrastruktureinrichtungModel;
 import de.muenchen.isi.domain.model.BauvorhabenModel;
+import de.muenchen.isi.domain.model.infrastruktureinrichtung.InfrastruktureinrichtungModel;
 import de.muenchen.isi.infrastructure.repository.BauvorhabenRepository;
-import de.muenchen.isi.infrastructure.repository.infrastruktureinrichtung.GsNachmittagBetreuungRepository;
 import de.muenchen.isi.infrastructure.repository.InfrastrukturabfrageRepository;
-import de.muenchen.isi.infrastructure.repository.infrastruktureinrichtung.KinderkrippeRepository;
-import de.muenchen.isi.infrastructure.repository.infrastruktureinrichtung.KindergartenRepository;
-import de.muenchen.isi.infrastructure.repository.infrastruktureinrichtung.HausFuerKinderRepository;
 import de.muenchen.isi.infrastructure.repository.infrastruktureinrichtung.GrundschuleRepository;
+import de.muenchen.isi.infrastructure.repository.infrastruktureinrichtung.GsNachmittagBetreuungRepository;
+import de.muenchen.isi.infrastructure.repository.infrastruktureinrichtung.HausFuerKinderRepository;
+import de.muenchen.isi.infrastructure.repository.infrastruktureinrichtung.KindergartenRepository;
+import de.muenchen.isi.infrastructure.repository.infrastruktureinrichtung.KinderkrippeRepository;
 import de.muenchen.isi.infrastructure.repository.infrastruktureinrichtung.MittelschuleRepository;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.Nullable;
@@ -79,11 +78,11 @@ public class BauvorhabenService {
      */
     public BauvorhabenModel saveBauvorhaben(final BauvorhabenModel bauvorhaben) throws UniqueViolationException {
         var entity = this.bauvorhabenDomainMapper.model2Entity(bauvorhaben);
-        var saved = this.bauvorhabenRepository.findByNameVorhabenIgnoreCase(entity.getNameVorhaben());
-        if(saved.isPresent()) {
+        final var saved = this.bauvorhabenRepository.findByNameVorhabenIgnoreCase(entity.getNameVorhaben());
+        if (saved.isPresent()) {
             throw new UniqueViolationException("Der angegebene Name des Bauvorhabens ist schon vorhanden, bitte wählen Sie daher einen anderen Namen und speichern Sie die Abfrage erneut.");
         } else {
-            entity = this.bauvorhabenRepository.save(entity);
+            entity = this.bauvorhabenRepository.saveAndFlush(entity);
             return this.bauvorhabenDomainMapper.entity2Model(entity);
         }
     }
@@ -93,7 +92,7 @@ public class BauvorhabenService {
      *
      * @param bauvorhaben zum Updaten.
      * @return das geupdatete {@link BauvorhabenModel}.
-     * @throws EntityNotFoundException falls das Bauvorhaben identifiziert durch die {@link BauvorhabenModel#getId()} nicht gefunden wird.
+     * @throws EntityNotFoundException  falls das Bauvorhaben identifiziert durch die {@link BauvorhabenModel#getId()} nicht gefunden wird.
      * @throws UniqueViolationException falls der Name des Bauvorhabens {@link BauvorhabenModel#getNameVorhaben()} bereits vorhanden ist.
      */
     public BauvorhabenModel updateBauvorhaben(final BauvorhabenModel bauvorhaben) throws EntityNotFoundException, UniqueViolationException {
@@ -140,7 +139,7 @@ public class BauvorhabenService {
      * Diese Methode soll dann verwendet werden, um die beim Mapping verloren gegangene Information zum Bauvorhaben wieder in der Infrastruktureinrichung einzusetzen.
      * Der Parameter 'bauvorhabenId' darf null sein. In diesem Fall passiert nichts.
      *
-     * @param bauvorhabenId id des {@link BauvorhabenModel}s. Darf null sein.
+     * @param bauvorhabenId            id des {@link BauvorhabenModel}s. Darf null sein.
      * @param infrastruktureinrichtung zum Speichern.
      * @return Die (möglicherweise) geänderte Infrastruktureinrichtung.
      * @throws EntityNotFoundException falls das Bauvorhaben mit der gegebenen ID nicht gefunden wurde.

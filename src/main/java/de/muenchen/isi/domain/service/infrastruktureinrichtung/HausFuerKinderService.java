@@ -4,8 +4,8 @@ import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.mapper.InfrastruktureinrichtungDomainMapper;
 import de.muenchen.isi.domain.model.BauvorhabenModel;
-import de.muenchen.isi.domain.model.infrastruktureinrichtung.InfrastruktureinrichtungModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.HausFuerKinderModel;
+import de.muenchen.isi.domain.model.infrastruktureinrichtung.InfrastruktureinrichtungModel;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.HausFuerKinder;
 import de.muenchen.isi.infrastructure.repository.infrastruktureinrichtung.HausFuerKinderRepository;
 import lombok.RequiredArgsConstructor;
@@ -62,7 +62,7 @@ public class HausFuerKinderService {
      */
     public HausFuerKinderModel saveHausFuerKinder(final HausFuerKinderModel hausFuerKinder) {
         HausFuerKinder hausFuerKinderEntity = this.infrastruktureinrichtungDomainMapper.model2Entity(hausFuerKinder);
-        hausFuerKinderEntity = this.hausFuerKinderRepository.save(hausFuerKinderEntity);
+        hausFuerKinderEntity = this.hausFuerKinderRepository.saveAndFlush(hausFuerKinderEntity);
         return this.infrastruktureinrichtungDomainMapper.entity2Model(hausFuerKinderEntity);
     }
 

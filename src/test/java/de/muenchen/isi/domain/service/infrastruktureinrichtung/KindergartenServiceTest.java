@@ -97,7 +97,7 @@ class KindergartenServiceTest {
         final Kindergarten saveResult = new Kindergarten();
         saveResult.setId(UUID.randomUUID());
 
-        Mockito.when(this.kindergartenRepository.save(kindergartenEntity)).thenReturn(saveResult);
+        Mockito.when(this.kindergartenRepository.saveAndFlush(kindergartenEntity)).thenReturn(saveResult);
 
         final KindergartenModel result = this.kindergartenService.saveKindergarten(kindergartenModel);
 
@@ -109,7 +109,7 @@ class KindergartenServiceTest {
                 is(expected)
         );
 
-        Mockito.verify(this.kindergartenRepository, Mockito.times(1)).save(kindergartenEntity);
+        Mockito.verify(this.kindergartenRepository, Mockito.times(1)).saveAndFlush(kindergartenEntity);
     }
 
     @Test
@@ -121,7 +121,7 @@ class KindergartenServiceTest {
         entity.setId(kindergartenModel.getId());
 
         Mockito.when(this.kindergartenRepository.findById(entity.getId())).thenReturn(Optional.of(entity));
-        Mockito.when(this.kindergartenRepository.save(entity)).thenReturn(entity);
+        Mockito.when(this.kindergartenRepository.saveAndFlush(entity)).thenReturn(entity);
 
         final KindergartenModel result = this.kindergartenService.updateKindergarten(kindergartenModel);
 
@@ -134,7 +134,7 @@ class KindergartenServiceTest {
         );
 
         Mockito.verify(this.kindergartenRepository, Mockito.times(1)).findById(entity.getId());
-        Mockito.verify(this.kindergartenRepository, Mockito.times(1)).save(entity);
+        Mockito.verify(this.kindergartenRepository, Mockito.times(1)).saveAndFlush(entity);
     }
 
     @Test

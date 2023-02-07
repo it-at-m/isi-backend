@@ -51,7 +51,7 @@ public class BaurateService {
      */
     public BaurateModel saveBaurate(final BaurateModel baurate) {
         var entity = this.baurateDomainMapper.model2entity(baurate);
-        entity = this.baurateRepository.save(entity);
+        entity = this.baurateRepository.saveAndFlush(entity);
         return this.baurateDomainMapper.entity2Model(entity);
     }
 

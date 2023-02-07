@@ -4,9 +4,9 @@ import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.mapper.InfrastruktureinrichtungDomainMapper;
 import de.muenchen.isi.domain.mapper.InfrastruktureinrichtungDomainMapperImpl;
+import de.muenchen.isi.domain.model.BauvorhabenModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.InfrastruktureinrichtungModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.KinderkrippeModel;
-import de.muenchen.isi.domain.model.BauvorhabenModel;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Infrastruktureinrichtung;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Kinderkrippe;
@@ -97,7 +97,7 @@ class KinderkrippeServiceTest {
         final Kinderkrippe saveResult = new Kinderkrippe();
         saveResult.setId(UUID.randomUUID());
 
-        Mockito.when(this.kinderkrippeRepository.save(kinderkrippeEntity)).thenReturn(saveResult);
+        Mockito.when(this.kinderkrippeRepository.saveAndFlush(kinderkrippeEntity)).thenReturn(saveResult);
 
         final KinderkrippeModel result = this.kinderkrippeService.saveKinderkrippe(kinderkrippeModel);
 
@@ -109,7 +109,7 @@ class KinderkrippeServiceTest {
                 is(expected)
         );
 
-        Mockito.verify(this.kinderkrippeRepository, Mockito.times(1)).save(kinderkrippeEntity);
+        Mockito.verify(this.kinderkrippeRepository, Mockito.times(1)).saveAndFlush(kinderkrippeEntity);
     }
 
     @Test
@@ -121,7 +121,7 @@ class KinderkrippeServiceTest {
         entity.setId(kinderkrippeModel.getId());
 
         Mockito.when(this.kinderkrippeRepository.findById(entity.getId())).thenReturn(Optional.of(entity));
-        Mockito.when(this.kinderkrippeRepository.save(entity)).thenReturn(entity);
+        Mockito.when(this.kinderkrippeRepository.saveAndFlush(entity)).thenReturn(entity);
 
         final KinderkrippeModel result = this.kinderkrippeService.updateKinderkrippe(kinderkrippeModel);
 
@@ -134,7 +134,7 @@ class KinderkrippeServiceTest {
         );
 
         Mockito.verify(this.kinderkrippeRepository, Mockito.times(1)).findById(entity.getId());
-        Mockito.verify(this.kinderkrippeRepository, Mockito.times(1)).save(entity);
+        Mockito.verify(this.kinderkrippeRepository, Mockito.times(1)).saveAndFlush(entity);
     }
 
     @Test

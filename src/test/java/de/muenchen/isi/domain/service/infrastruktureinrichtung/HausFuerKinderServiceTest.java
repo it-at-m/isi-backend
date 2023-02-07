@@ -5,11 +5,11 @@ import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.mapper.InfrastruktureinrichtungDomainMapper;
 import de.muenchen.isi.domain.mapper.InfrastruktureinrichtungDomainMapperImpl;
 import de.muenchen.isi.domain.model.BauvorhabenModel;
-import de.muenchen.isi.domain.model.infrastruktureinrichtung.InfrastruktureinrichtungModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.HausFuerKinderModel;
+import de.muenchen.isi.domain.model.infrastruktureinrichtung.InfrastruktureinrichtungModel;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
-import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Infrastruktureinrichtung;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.HausFuerKinder;
+import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Infrastruktureinrichtung;
 import de.muenchen.isi.infrastructure.repository.infrastruktureinrichtung.HausFuerKinderRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -97,7 +97,7 @@ class HausFuerKinderServiceTest {
         final HausFuerKinder saveResult = new HausFuerKinder();
         saveResult.setId(UUID.randomUUID());
 
-        Mockito.when(this.hausFuerKinderRepository.save(hausFuerKinderEntity)).thenReturn(saveResult);
+        Mockito.when(this.hausFuerKinderRepository.saveAndFlush(hausFuerKinderEntity)).thenReturn(saveResult);
 
         final HausFuerKinderModel result = this.hausFuerKinderService.saveHausFuerKinder(hausFuerKinderModel);
 
@@ -109,7 +109,7 @@ class HausFuerKinderServiceTest {
                 is(expected)
         );
 
-        Mockito.verify(this.hausFuerKinderRepository, Mockito.times(1)).save(hausFuerKinderEntity);
+        Mockito.verify(this.hausFuerKinderRepository, Mockito.times(1)).saveAndFlush(hausFuerKinderEntity);
     }
 
     @Test
@@ -121,7 +121,7 @@ class HausFuerKinderServiceTest {
         entity.setId(hausFuerKinderModel.getId());
 
         Mockito.when(this.hausFuerKinderRepository.findById(entity.getId())).thenReturn(Optional.of(entity));
-        Mockito.when(this.hausFuerKinderRepository.save(entity)).thenReturn(entity);
+        Mockito.when(this.hausFuerKinderRepository.saveAndFlush(entity)).thenReturn(entity);
 
         final HausFuerKinderModel result = this.hausFuerKinderService.updateHausFuerKinder(hausFuerKinderModel);
 
@@ -134,7 +134,7 @@ class HausFuerKinderServiceTest {
         );
 
         Mockito.verify(this.hausFuerKinderRepository, Mockito.times(1)).findById(entity.getId());
-        Mockito.verify(this.hausFuerKinderRepository, Mockito.times(1)).save(entity);
+        Mockito.verify(this.hausFuerKinderRepository, Mockito.times(1)).saveAndFlush(entity);
     }
 
     @Test

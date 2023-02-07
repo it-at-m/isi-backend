@@ -62,7 +62,7 @@ public class KindergartenService {
      */
     public KindergartenModel saveKindergarten(final KindergartenModel kindergarten) {
         Kindergarten kindergartenEntity = this.infrastruktureinrichtungDomainMapper.model2Entity(kindergarten);
-        kindergartenEntity = this.kindergartenRepository.save(kindergartenEntity);
+        kindergartenEntity = this.kindergartenRepository.saveAndFlush(kindergartenEntity);
         return this.infrastruktureinrichtungDomainMapper.entity2Model(kindergartenEntity);
     }
 

@@ -4,8 +4,8 @@ import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.mapper.InfrastruktureinrichtungDomainMapper;
 import de.muenchen.isi.domain.model.BauvorhabenModel;
-import de.muenchen.isi.domain.model.infrastruktureinrichtung.InfrastruktureinrichtungModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.GsNachmittagBetreuungModel;
+import de.muenchen.isi.domain.model.infrastruktureinrichtung.InfrastruktureinrichtungModel;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.GsNachmittagBetreuung;
 import de.muenchen.isi.infrastructure.repository.infrastruktureinrichtung.GsNachmittagBetreuungRepository;
 import lombok.RequiredArgsConstructor;
@@ -62,7 +62,7 @@ public class GsNachmittagBetreuungService {
      */
     public GsNachmittagBetreuungModel saveGsNachmittagBetreuung(final GsNachmittagBetreuungModel gsNachmittagBetreuung) {
         GsNachmittagBetreuung gsNachmittagBetreuungEntity = this.infrastruktureinrichtungDomainMapper.model2Entity(gsNachmittagBetreuung);
-        gsNachmittagBetreuungEntity = this.gsNachmittagBetreuungRepository.save(gsNachmittagBetreuungEntity);
+        gsNachmittagBetreuungEntity = this.gsNachmittagBetreuungRepository.saveAndFlush(gsNachmittagBetreuungEntity);
         return this.infrastruktureinrichtungDomainMapper.entity2Model(gsNachmittagBetreuungEntity);
     }
 

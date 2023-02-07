@@ -153,7 +153,7 @@ public class BauvorhabenServiceTest {
         final Bauvorhaben saveResult = new Bauvorhaben();
         saveResult.setId(UUID.randomUUID());
 
-        Mockito.when(this.bauvorhabenRepository.save(bauvorhabenEntity)).thenReturn(saveResult);
+        Mockito.when(this.bauvorhabenRepository.saveAndFlush(bauvorhabenEntity)).thenReturn(saveResult);
 
         final BauvorhabenModel result = this.bauvorhabenService.saveBauvorhaben(bauvorhaben);
 
@@ -162,7 +162,7 @@ public class BauvorhabenServiceTest {
 
         assertThat(result, is(expected));
 
-        Mockito.verify(this.bauvorhabenRepository, Mockito.times(1)).save(bauvorhabenEntity);
+        Mockito.verify(this.bauvorhabenRepository, Mockito.times(1)).saveAndFlush(bauvorhabenEntity);
     }
 
     @Test
@@ -177,7 +177,7 @@ public class BauvorhabenServiceTest {
         entity.setNameVorhaben(bauvorhabenModel.getNameVorhaben());
 
         Mockito.when(this.bauvorhabenRepository.findByNameVorhabenIgnoreCase(entity.getNameVorhaben())).thenReturn(Optional.of(entity));
-        Mockito.when(this.bauvorhabenRepository.save(entity)).thenReturn(entity);
+        Mockito.when(this.bauvorhabenRepository.saveAndFlush(entity)).thenReturn(entity);
 
         Assertions.assertThrows(UniqueViolationException.class, () -> this.bauvorhabenService.saveBauvorhaben(bauvorhabenModel));
 
@@ -194,7 +194,7 @@ public class BauvorhabenServiceTest {
         entity.setId(bauvorhabenModel.getId());
 
         Mockito.when(this.bauvorhabenRepository.findById(entity.getId())).thenReturn(Optional.of(entity));
-        Mockito.when(this.bauvorhabenRepository.save(entity)).thenReturn(entity);
+        Mockito.when(this.bauvorhabenRepository.saveAndFlush(entity)).thenReturn(entity);
 
         final BauvorhabenModel result = this.bauvorhabenService.updateBauvorhaben(bauvorhabenModel);
 
@@ -207,7 +207,7 @@ public class BauvorhabenServiceTest {
         );
 
         Mockito.verify(this.bauvorhabenRepository, Mockito.times(1)).findById(entity.getId());
-        Mockito.verify(this.bauvorhabenRepository, Mockito.times(1)).save(entity);
+        Mockito.verify(this.bauvorhabenRepository, Mockito.times(1)).saveAndFlush(entity);
     }
 
     @Test

@@ -99,7 +99,7 @@ class AbfrageServiceTest {
     void saveInfrastrukturabfrage() throws UniqueViolationException {
         final InfrastrukturabfrageModel infrastrukturabfrageModel = new InfrastrukturabfrageModel();
         infrastrukturabfrageModel.setId(null);
-        AbfrageModel abfrageModel = new AbfrageModel();
+        final AbfrageModel abfrageModel = new AbfrageModel();
         abfrageModel.setNameAbfrage("hallo");
         infrastrukturabfrageModel.setAbfrage(abfrageModel);
 
@@ -108,7 +108,7 @@ class AbfrageServiceTest {
         final Infrastrukturabfrage saveResult = new Infrastrukturabfrage();
         saveResult.setId(UUID.randomUUID());
 
-        Mockito.when(this.infrastrukturabfrageRepository.save(abfrageEntity)).thenReturn(saveResult);
+        Mockito.when(this.infrastrukturabfrageRepository.saveAndFlush(abfrageEntity)).thenReturn(saveResult);
         Mockito.when(this.infrastrukturabfrageRepository.findByAbfrage_NameAbfrageIgnoreCase("hallo")).thenReturn(Optional.empty());
 
         final InfrastrukturabfrageModel result = this.abfrageService.saveInfrastrukturabfrage(infrastrukturabfrageModel);
@@ -117,7 +117,7 @@ class AbfrageServiceTest {
         expected.setId(saveResult.getId());
 
         assertThat(result, is(expected));
-        Mockito.verify(this.infrastrukturabfrageRepository, Mockito.times(1)).save(abfrageEntity);
+        Mockito.verify(this.infrastrukturabfrageRepository, Mockito.times(1)).saveAndFlush(abfrageEntity);
         Mockito.verify(this.infrastrukturabfrageRepository, Mockito.times(1)).findByAbfrage_NameAbfrageIgnoreCase("hallo");
     }
 
@@ -125,7 +125,7 @@ class AbfrageServiceTest {
     void saveInfrastrukturabfrageUniqueViolationTest() throws UniqueViolationException {
         final InfrastrukturabfrageModel infrastrukturabfrageModel = new InfrastrukturabfrageModel();
         infrastrukturabfrageModel.setId(null);
-        AbfrageModel abfrageModel = new AbfrageModel();
+        final AbfrageModel abfrageModel = new AbfrageModel();
         abfrageModel.setNameAbfrage("hallo");
         infrastrukturabfrageModel.setAbfrage(abfrageModel);
 
@@ -134,10 +134,10 @@ class AbfrageServiceTest {
         final Infrastrukturabfrage saveResult = new Infrastrukturabfrage();
         saveResult.setId(UUID.randomUUID());
 
-        Mockito.when(this.infrastrukturabfrageRepository.save(abfrageEntity)).thenReturn(saveResult);
+        Mockito.when(this.infrastrukturabfrageRepository.saveAndFlush(abfrageEntity)).thenReturn(saveResult);
         Mockito.when(this.infrastrukturabfrageRepository.findByAbfrage_NameAbfrageIgnoreCase("hallo")).thenReturn(Optional.of(abfrageEntity));
 
-        Assertions.assertThrows(UniqueViolationException.class, () ->this.abfrageService.saveInfrastrukturabfrage(infrastrukturabfrageModel));
+        Assertions.assertThrows(UniqueViolationException.class, () -> this.abfrageService.saveInfrastrukturabfrage(infrastrukturabfrageModel));
 
         Mockito.verify(this.infrastrukturabfrageRepository, Mockito.times(0)).save(abfrageEntity);
         Mockito.verify(this.infrastrukturabfrageRepository, Mockito.times(1)).findByAbfrage_NameAbfrageIgnoreCase("hallo");
@@ -147,14 +147,14 @@ class AbfrageServiceTest {
     void updateInfrastrukturabfrage() throws EntityNotFoundException, UniqueViolationException {
         final InfrastrukturabfrageModel infrastrukturabfrageModel = new InfrastrukturabfrageModel();
         infrastrukturabfrageModel.setId(UUID.randomUUID());
-        AbfrageModel abfrageModel = new AbfrageModel();
+        final AbfrageModel abfrageModel = new AbfrageModel();
         abfrageModel.setNameAbfrage("hallo");
         infrastrukturabfrageModel.setAbfrage(abfrageModel);
 
         final Infrastrukturabfrage entity = this.abfrageDomainMapper.model2entity(infrastrukturabfrageModel);
 
         Mockito.when(this.infrastrukturabfrageRepository.findById(entity.getId())).thenReturn(Optional.of(entity));
-        Mockito.when(this.infrastrukturabfrageRepository.save(entity)).thenReturn(entity);
+        Mockito.when(this.infrastrukturabfrageRepository.saveAndFlush(entity)).thenReturn(entity);
         Mockito.when(this.infrastrukturabfrageRepository.findByAbfrage_NameAbfrageIgnoreCase("hallo")).thenReturn(Optional.empty());
 
         final InfrastrukturabfrageModel result = this.abfrageService.updateInfrastrukturabfrage(infrastrukturabfrageModel);
@@ -168,7 +168,7 @@ class AbfrageServiceTest {
         );
 
         Mockito.verify(this.infrastrukturabfrageRepository, Mockito.times(1)).findById(entity.getId());
-        Mockito.verify(this.infrastrukturabfrageRepository, Mockito.times(1)).save(entity);
+        Mockito.verify(this.infrastrukturabfrageRepository, Mockito.times(1)).saveAndFlush(entity);
         Mockito.verify(this.infrastrukturabfrageRepository, Mockito.times(1)).findByAbfrage_NameAbfrageIgnoreCase("hallo");
     }
 

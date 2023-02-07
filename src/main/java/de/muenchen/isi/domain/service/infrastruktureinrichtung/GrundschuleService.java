@@ -4,8 +4,8 @@ import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.mapper.InfrastruktureinrichtungDomainMapper;
 import de.muenchen.isi.domain.model.BauvorhabenModel;
-import de.muenchen.isi.domain.model.infrastruktureinrichtung.InfrastruktureinrichtungModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.GrundschuleModel;
+import de.muenchen.isi.domain.model.infrastruktureinrichtung.InfrastruktureinrichtungModel;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Grundschule;
 import de.muenchen.isi.infrastructure.repository.infrastruktureinrichtung.GrundschuleRepository;
 import lombok.RequiredArgsConstructor;
@@ -62,7 +62,7 @@ public class GrundschuleService {
      */
     public GrundschuleModel saveGrundschule(final GrundschuleModel grundschule) {
         Grundschule grundschuleEntity = this.infrastruktureinrichtungDomainMapper.model2Entity(grundschule);
-        grundschuleEntity = this.grundschuleRepository.save(grundschuleEntity);
+        grundschuleEntity = this.grundschuleRepository.saveAndFlush(grundschuleEntity);
         return this.infrastruktureinrichtungDomainMapper.entity2Model(grundschuleEntity);
     }
 

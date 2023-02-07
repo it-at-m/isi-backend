@@ -63,11 +63,11 @@ public class AbfrageService {
      */
     public InfrastrukturabfrageModel saveInfrastrukturabfrage(final InfrastrukturabfrageModel abfrage) throws UniqueViolationException {
         var abfrageEntity = this.abfrageDomainMapper.model2entity(abfrage);
-        var saved = this.infrastrukturabfrageRepository.findByAbfrage_NameAbfrageIgnoreCase(abfrageEntity.getAbfrage().getNameAbfrage());
-        if(saved.isPresent()) {
+        final var saved = this.infrastrukturabfrageRepository.findByAbfrage_NameAbfrageIgnoreCase(abfrageEntity.getAbfrage().getNameAbfrage());
+        if (saved.isPresent()) {
             throw new UniqueViolationException("Der angegebene Name der Abfrage ist schon vorhanden, bitte wählen Sie daher einen anderen Namen und speichern Sie die Abfrage erneut.");
         } else {
-            abfrageEntity = this.infrastrukturabfrageRepository.save(abfrageEntity);
+            abfrageEntity = this.infrastrukturabfrageRepository.saveAndFlush(abfrageEntity);
             return this.abfrageDomainMapper.entity2Model(abfrageEntity);
         }
     }
@@ -77,7 +77,7 @@ public class AbfrageService {
      *
      * @param abfrage zum Updaten.
      * @return das geupdatete {@link InfrastrukturabfrageModel}.
-     * @throws EntityNotFoundException falls die Abfrage identifiziert durch die {@link InfrastrukturabfrageModel#getId()} nicht gefunden wird.
+     * @throws EntityNotFoundException  falls die Abfrage identifiziert durch die {@link InfrastrukturabfrageModel#getId()} nicht gefunden wird.
      * @throws UniqueViolationException falls der Name der Abfrage {@link InfrastrukturabfrageModel#getAbfrage().getNameAbfrage} ()} bereits vorhanden ist.
      */
     public InfrastrukturabfrageModel updateInfrastrukturabfrage(final InfrastrukturabfrageModel abfrage) throws EntityNotFoundException, UniqueViolationException {

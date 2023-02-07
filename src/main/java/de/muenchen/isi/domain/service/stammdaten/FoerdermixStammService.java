@@ -56,7 +56,7 @@ public class FoerdermixStammService {
      */
     public FoerdermixStammModel saveFoerdermixStamm(final FoerdermixStammModel foerdermix) {
         var entity = this.stammdatenDomainMapper.model2Entity(foerdermix);
-        entity = this.foerdermixStammRepository.save(entity);
+        entity = this.foerdermixStammRepository.saveAndFlush(entity);
         return this.stammdatenDomainMapper.entity2Model(entity);
     }
 

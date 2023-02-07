@@ -3,9 +3,9 @@ package de.muenchen.isi.domain.service.infrastruktureinrichtung;
 import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.mapper.InfrastruktureinrichtungDomainMapper;
+import de.muenchen.isi.domain.model.BauvorhabenModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.InfrastruktureinrichtungModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.KinderkrippeModel;
-import de.muenchen.isi.domain.model.BauvorhabenModel;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Kinderkrippe;
 import de.muenchen.isi.infrastructure.repository.infrastruktureinrichtung.KinderkrippeRepository;
 import lombok.RequiredArgsConstructor;
@@ -62,7 +62,7 @@ public class KinderkrippeService {
      */
     public KinderkrippeModel saveKinderkrippe(final KinderkrippeModel kinderkrippe) {
         Kinderkrippe kinderkrippeEntity = this.infrastruktureinrichtungDomainMapper.model2Entity(kinderkrippe);
-        kinderkrippeEntity = this.kinderkrippeRepository.save(kinderkrippeEntity);
+        kinderkrippeEntity = this.kinderkrippeRepository.saveAndFlush(kinderkrippeEntity);
         return this.infrastruktureinrichtungDomainMapper.entity2Model(kinderkrippeEntity);
     }
 

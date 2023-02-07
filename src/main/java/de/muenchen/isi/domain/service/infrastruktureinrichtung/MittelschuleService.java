@@ -4,8 +4,8 @@ import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.mapper.InfrastruktureinrichtungDomainMapper;
 import de.muenchen.isi.domain.model.BauvorhabenModel;
-import de.muenchen.isi.domain.model.infrastruktureinrichtung.MittelschuleModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.InfrastruktureinrichtungModel;
+import de.muenchen.isi.domain.model.infrastruktureinrichtung.MittelschuleModel;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Mittelschule;
 import de.muenchen.isi.infrastructure.repository.infrastruktureinrichtung.MittelschuleRepository;
 import lombok.RequiredArgsConstructor;
@@ -62,7 +62,7 @@ public class MittelschuleService {
      */
     public MittelschuleModel saveMittelschule(final MittelschuleModel mittelschule) {
         Mittelschule mittelschuleEntity = this.infrastruktureinrichtungDomainMapper.model2Entity(mittelschule);
-        mittelschuleEntity = this.mittelschuleRepository.save(mittelschuleEntity);
+        mittelschuleEntity = this.mittelschuleRepository.saveAndFlush(mittelschuleEntity);
         return this.infrastruktureinrichtungDomainMapper.entity2Model(mittelschuleEntity);
     }
 

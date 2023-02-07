@@ -5,11 +5,11 @@ import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.mapper.InfrastruktureinrichtungDomainMapper;
 import de.muenchen.isi.domain.mapper.InfrastruktureinrichtungDomainMapperImpl;
 import de.muenchen.isi.domain.model.BauvorhabenModel;
-import de.muenchen.isi.domain.model.infrastruktureinrichtung.InfrastruktureinrichtungModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.GrundschuleModel;
+import de.muenchen.isi.domain.model.infrastruktureinrichtung.InfrastruktureinrichtungModel;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
-import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Infrastruktureinrichtung;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Grundschule;
+import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Infrastruktureinrichtung;
 import de.muenchen.isi.infrastructure.repository.infrastruktureinrichtung.GrundschuleRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -97,7 +97,7 @@ class GrundschuleServiceTest {
         final Grundschule saveResult = new Grundschule();
         saveResult.setId(UUID.randomUUID());
 
-        Mockito.when(this.grundschuleRepository.save(grundschuleEntity)).thenReturn(saveResult);
+        Mockito.when(this.grundschuleRepository.saveAndFlush(grundschuleEntity)).thenReturn(saveResult);
 
         final GrundschuleModel result = this.grundschuleService.saveGrundschule(grundschuleModel);
 
@@ -109,7 +109,7 @@ class GrundschuleServiceTest {
                 is(expected)
         );
 
-        Mockito.verify(this.grundschuleRepository, Mockito.times(1)).save(grundschuleEntity);
+        Mockito.verify(this.grundschuleRepository, Mockito.times(1)).saveAndFlush(grundschuleEntity);
     }
 
     @Test
@@ -121,7 +121,7 @@ class GrundschuleServiceTest {
         entity.setId(grundschuleModel.getId());
 
         Mockito.when(this.grundschuleRepository.findById(entity.getId())).thenReturn(Optional.of(entity));
-        Mockito.when(this.grundschuleRepository.save(entity)).thenReturn(entity);
+        Mockito.when(this.grundschuleRepository.saveAndFlush(entity)).thenReturn(entity);
 
         final GrundschuleModel result = this.grundschuleService.updateGrundschule(grundschuleModel);
 
@@ -134,7 +134,7 @@ class GrundschuleServiceTest {
         );
 
         Mockito.verify(this.grundschuleRepository, Mockito.times(1)).findById(entity.getId());
-        Mockito.verify(this.grundschuleRepository, Mockito.times(1)).save(entity);
+        Mockito.verify(this.grundschuleRepository, Mockito.times(1)).saveAndFlush(entity);
     }
 
     @Test

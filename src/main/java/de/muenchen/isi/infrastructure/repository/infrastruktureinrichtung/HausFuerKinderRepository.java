@@ -5,12 +5,12 @@
 package de.muenchen.isi.infrastructure.repository.infrastruktureinrichtung;
 
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.HausFuerKinder;
-import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.UUID;
 import java.util.stream.Stream;
 
-public interface HausFuerKinderRepository extends PagingAndSortingRepository<HausFuerKinder, UUID> {
+public interface HausFuerKinderRepository extends JpaRepository<HausFuerKinder, UUID> {
 
     Stream<HausFuerKinder> findAllByOrderByInfrastruktureinrichtungNameEinrichtungAsc();
 
