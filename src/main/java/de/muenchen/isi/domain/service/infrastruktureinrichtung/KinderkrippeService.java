@@ -2,6 +2,7 @@ package de.muenchen.isi.domain.service.infrastruktureinrichtung;
 
 import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
+import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.mapper.InfrastruktureinrichtungDomainMapper;
 import de.muenchen.isi.domain.model.BauvorhabenModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.InfrastruktureinrichtungModel;
@@ -11,6 +12,7 @@ import de.muenchen.isi.infrastructure.repository.infrastruktureinrichtung.Kinder
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -59,10 +61,16 @@ public class KinderkrippeService {
      *
      * @param kinderkrippe zum Speichern.
      * @return das gespeicherte {@link KinderkrippeModel}.
+     * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist.
      */
-    public KinderkrippeModel saveKinderkrippe(final KinderkrippeModel kinderkrippe) {
+    public KinderkrippeModel saveKinderkrippe(final KinderkrippeModel kinderkrippe) throws OptimisticLockingException {
         Kinderkrippe kinderkrippeEntity = this.infrastruktureinrichtungDomainMapper.model2Entity(kinderkrippe);
-        kinderkrippeEntity = this.kinderkrippeRepository.saveAndFlush(kinderkrippeEntity);
+        try {
+            kinderkrippeEntity = this.kinderkrippeRepository.saveAndFlush(kinderkrippeEntity);
+        } catch (final ObjectOptimisticLockingFailureException exception) {
+            final var message = "Die Daten sind nicht mehr aktuell. Es wurden bereits aktuellere Daten gespeichert.";
+            throw new OptimisticLockingException(message, exception);
+        }
         return this.infrastruktureinrichtungDomainMapper.entity2Model(kinderkrippeEntity);
     }
 
@@ -71,9 +79,10 @@ public class KinderkrippeService {
      *
      * @param kinderkrippe zum Updaten.
      * @return das geupdatete {@link KinderkrippeModel}.
-     * @throws EntityNotFoundException falls die Kinderkrippe identifiziert durch die {@link KinderkrippeModel#getId()} nicht gefunden wird.
+     * @throws EntityNotFoundException    falls die Kinderkrippe identifiziert durch die {@link KinderkrippeModel#getId()} nicht gefunden wird.
+     * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist.
      */
-    public KinderkrippeModel updateKinderkrippe(final KinderkrippeModel kinderkrippe) throws EntityNotFoundException {
+    public KinderkrippeModel updateKinderkrippe(final KinderkrippeModel kinderkrippe) throws EntityNotFoundException, OptimisticLockingException {
         this.getKinderkrippeById(kinderkrippe.getId());
         return this.saveKinderkrippe(kinderkrippe);
     }

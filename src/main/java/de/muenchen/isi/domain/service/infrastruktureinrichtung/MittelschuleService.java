@@ -2,6 +2,7 @@ package de.muenchen.isi.domain.service.infrastruktureinrichtung;
 
 import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
+import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.mapper.InfrastruktureinrichtungDomainMapper;
 import de.muenchen.isi.domain.model.BauvorhabenModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.InfrastruktureinrichtungModel;
@@ -11,6 +12,7 @@ import de.muenchen.isi.infrastructure.repository.infrastruktureinrichtung.Mittel
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -59,10 +61,16 @@ public class MittelschuleService {
      *
      * @param mittelschule zum Speichern.
      * @return das gespeicherte {@link MittelschuleModel}.
+     * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist.
      */
-    public MittelschuleModel saveMittelschule(final MittelschuleModel mittelschule) {
+    public MittelschuleModel saveMittelschule(final MittelschuleModel mittelschule) throws OptimisticLockingException {
         Mittelschule mittelschuleEntity = this.infrastruktureinrichtungDomainMapper.model2Entity(mittelschule);
-        mittelschuleEntity = this.mittelschuleRepository.saveAndFlush(mittelschuleEntity);
+        try {
+            mittelschuleEntity = this.mittelschuleRepository.saveAndFlush(mittelschuleEntity);
+        } catch (final ObjectOptimisticLockingFailureException exception) {
+            final var message = "Die Daten sind nicht mehr aktuell. Es wurden bereits aktuellere Daten gespeichert.";
+            throw new OptimisticLockingException(message, exception);
+        }
         return this.infrastruktureinrichtungDomainMapper.entity2Model(mittelschuleEntity);
     }
 
@@ -71,9 +79,10 @@ public class MittelschuleService {
      *
      * @param mittelschule zum Updaten.
      * @return das geupdatete {@link MittelschuleModel}.
-     * @throws EntityNotFoundException falls die Mittelschule identifiziert durch die {@link MittelschuleModel#getId()} nicht gefunden wird.
+     * @throws EntityNotFoundException    falls die Mittelschule identifiziert durch die {@link MittelschuleModel#getId()} nicht gefunden wird.
+     * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist.
      */
-    public MittelschuleModel updateMittelschule(final MittelschuleModel mittelschule) throws EntityNotFoundException {
+    public MittelschuleModel updateMittelschule(final MittelschuleModel mittelschule) throws EntityNotFoundException, OptimisticLockingException {
         this.getMittelschuleById(mittelschule.getId());
         return this.saveMittelschule(mittelschule);
     }

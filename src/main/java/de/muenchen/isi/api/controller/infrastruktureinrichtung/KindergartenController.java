@@ -9,6 +9,7 @@ import de.muenchen.isi.api.dto.infrastruktureinrichtung.KindergartenDto;
 import de.muenchen.isi.api.mapper.InfrastruktureinrichtungApiMapper;
 import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
+import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.service.BauvorhabenService;
 import de.muenchen.isi.domain.service.infrastruktureinrichtung.KindergartenService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -85,10 +86,11 @@ public class KindergartenController {
     @Operation(summary = "Anlegen eines neuen Kindergartens")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "CREATED -> Kindergarten wurde erfolgreich erstellt."),
-            @ApiResponse(responseCode = "400", description = "BAD_REQUEST -> Kindergarten konnte nicht erstellt werden, überprüfen sie die Eingabe.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class)))
+            @ApiResponse(responseCode = "400", description = "BAD_REQUEST -> Kindergarten konnte nicht erstellt werden, überprüfen sie die Eingabe.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class))),
+            @ApiResponse(responseCode = "412", description = "PRECONDITION_FAILED -> In der Anwendung ist bereits eine neuere Version der Entität gespeichert.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class)))
     })
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_WRITE_KINDERGARTEN.name())")
-    public ResponseEntity<KindergartenDto> createKindergarten(@RequestBody @Valid @NotNull final KindergartenDto kindergartenDto) throws EntityNotFoundException {
+    public ResponseEntity<KindergartenDto> createKindergarten(@RequestBody @Valid @NotNull final KindergartenDto kindergartenDto) throws EntityNotFoundException, OptimisticLockingException {
         var model = this.infrastruktureinrichtungApiMapper.dto2Model(kindergartenDto);
         final var infrastruktureinrichtung = this.bauvorhabenService.assignBauvorhabenToInfrastruktureinrichtung(
                 kindergartenDto.getInfrastruktureinrichtung().getBauvorhaben(),
@@ -106,10 +108,11 @@ public class KindergartenController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK -> Kindergarten wurde erfolgreich aktualisiert."),
             @ApiResponse(responseCode = "400", description = "BAD_REQUEST -> Kindergarten konnte nicht aktualisiert werden, überprüfen sie die Eingabe.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class))),
-            @ApiResponse(responseCode = "404", description = "NOT_FOUND -> Es gibt keinen Kindergarten mit der ID.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class)))
+            @ApiResponse(responseCode = "404", description = "NOT_FOUND -> Es gibt keinen Kindergarten mit der ID.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class))),
+            @ApiResponse(responseCode = "412", description = "PRECONDITION_FAILED -> In der Anwendung ist bereits eine neuere Version der Entität gespeichert.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class)))
     })
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_WRITE_KINDERGARTEN.name())")
-    public ResponseEntity<KindergartenDto> updateKindergarten(@RequestBody @Valid @NotNull final KindergartenDto kindergartenDto) throws EntityNotFoundException {
+    public ResponseEntity<KindergartenDto> updateKindergarten(@RequestBody @Valid @NotNull final KindergartenDto kindergartenDto) throws EntityNotFoundException, OptimisticLockingException {
         var model = this.infrastruktureinrichtungApiMapper.dto2Model(kindergartenDto);
         final var infrastruktureinrichtung = this.bauvorhabenService.assignBauvorhabenToInfrastruktureinrichtung(
                 kindergartenDto.getInfrastruktureinrichtung().getBauvorhaben(),

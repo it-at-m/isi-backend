@@ -9,6 +9,7 @@ import de.muenchen.isi.api.dto.infrastruktureinrichtung.GrundschuleDto;
 import de.muenchen.isi.api.mapper.InfrastruktureinrichtungApiMapper;
 import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
+import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.service.BauvorhabenService;
 import de.muenchen.isi.domain.service.infrastruktureinrichtung.GrundschuleService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -85,10 +86,11 @@ public class GrundschuleController {
     @Operation(summary = "Anlegen einer neuen Grundschule")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "CREATED -> Grundschule wurde erfolgreich erstellt."),
-            @ApiResponse(responseCode = "400", description = "BAD_REQUEST -> Grundschule konnte nicht erstellt werden, überprüfen sie die Eingabe.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class)))
+            @ApiResponse(responseCode = "400", description = "BAD_REQUEST -> Grundschule konnte nicht erstellt werden, überprüfen sie die Eingabe.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class))),
+            @ApiResponse(responseCode = "412", description = "PRECONDITION_FAILED -> In der Anwendung ist bereits eine neuere Version der Entität gespeichert.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class)))
     })
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_WRITE_GRUNDSCHULE.name())")
-    public ResponseEntity<GrundschuleDto> createGrundschule(@RequestBody @Valid @NotNull final GrundschuleDto grundschuleDto) throws EntityNotFoundException {
+    public ResponseEntity<GrundschuleDto> createGrundschule(@RequestBody @Valid @NotNull final GrundschuleDto grundschuleDto) throws EntityNotFoundException, OptimisticLockingException {
         var model = this.infrastruktureinrichtungApiMapper.dto2Model(grundschuleDto);
         final var infrastruktureinrichtung = this.bauvorhabenService.assignBauvorhabenToInfrastruktureinrichtung(
                 grundschuleDto.getInfrastruktureinrichtung().getBauvorhaben(),
@@ -106,10 +108,11 @@ public class GrundschuleController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK -> Grundschule wurde erfolgreich aktualisiert."),
             @ApiResponse(responseCode = "400", description = "BAD_REQUEST -> Grundschule konnte nicht aktualisiert werden, überprüfen sie die Eingabe.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class))),
-            @ApiResponse(responseCode = "404", description = "NOT_FOUND -> Es gibt keine Grundschule mit der ID.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class)))
+            @ApiResponse(responseCode = "404", description = "NOT_FOUND -> Es gibt keine Grundschule mit der ID.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class))),
+            @ApiResponse(responseCode = "412", description = "PRECONDITION_FAILED -> In der Anwendung ist bereits eine neuere Version der Entität gespeichert.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class)))
     })
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_WRITE_GRUNDSCHULE.name())")
-    public ResponseEntity<GrundschuleDto> updateGrundschule(@RequestBody @Valid @NotNull final GrundschuleDto grundschuleDto) throws EntityNotFoundException {
+    public ResponseEntity<GrundschuleDto> updateGrundschule(@RequestBody @Valid @NotNull final GrundschuleDto grundschuleDto) throws EntityNotFoundException, OptimisticLockingException {
         var model = this.infrastruktureinrichtungApiMapper.dto2Model(grundschuleDto);
         final var infrastruktureinrichtung = this.bauvorhabenService.assignBauvorhabenToInfrastruktureinrichtung(
                 grundschuleDto.getInfrastruktureinrichtung().getBauvorhaben(),

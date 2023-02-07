@@ -9,6 +9,7 @@ import de.muenchen.isi.api.dto.infrastruktureinrichtung.MittelschuleDto;
 import de.muenchen.isi.api.mapper.InfrastruktureinrichtungApiMapper;
 import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
+import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.service.BauvorhabenService;
 import de.muenchen.isi.domain.service.infrastruktureinrichtung.MittelschuleService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -85,10 +86,11 @@ public class MittelschuleController {
     @Operation(summary = "Anlegen einer neuen Mittelschule")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "CREATED -> Mittelschule wurde erfolgreich erstellt."),
-            @ApiResponse(responseCode = "400", description = "BAD_REQUEST -> Mittelschule konnte nicht erstellt werden, überprüfen sie die Eingabe.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class)))
+            @ApiResponse(responseCode = "400", description = "BAD_REQUEST -> Mittelschule konnte nicht erstellt werden, überprüfen sie die Eingabe.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class))),
+            @ApiResponse(responseCode = "412", description = "PRECONDITION_FAILED -> In der Anwendung ist bereits eine neuere Version der Entität gespeichert.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class)))
     })
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_WRITE_MITTELSCHULE.name())")
-    public ResponseEntity<MittelschuleDto> createMittelschule(@RequestBody @Valid @NotNull final MittelschuleDto mittelschuleDto) throws EntityNotFoundException {
+    public ResponseEntity<MittelschuleDto> createMittelschule(@RequestBody @Valid @NotNull final MittelschuleDto mittelschuleDto) throws EntityNotFoundException, OptimisticLockingException {
         var model = this.infrastruktureinrichtungApiMapper.dto2Model(mittelschuleDto);
         final var infrastruktureinrichtung = this.bauvorhabenService.assignBauvorhabenToInfrastruktureinrichtung(
                 mittelschuleDto.getInfrastruktureinrichtung().getBauvorhaben(),
@@ -106,10 +108,11 @@ public class MittelschuleController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK -> Mittelschule wurde erfolgreich aktualisiert."),
             @ApiResponse(responseCode = "400", description = "BAD_REQUEST -> Mittelschule konnte nicht aktualisiert werden, überprüfen sie die Eingabe.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class))),
-            @ApiResponse(responseCode = "404", description = "NOT_FOUND -> Es gibt keine Mittelschule mit der ID.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class)))
+            @ApiResponse(responseCode = "404", description = "NOT_FOUND -> Es gibt keine Mittelschule mit der ID.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class))),
+            @ApiResponse(responseCode = "412", description = "PRECONDITION_FAILED -> In der Anwendung ist bereits eine neuere Version der Entität gespeichert.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class)))
     })
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_WRITE_MITTELSCHULE.name())")
-    public ResponseEntity<MittelschuleDto> updateMittelschule(@RequestBody @Valid @NotNull final MittelschuleDto mittelschuleDto) throws EntityNotFoundException {
+    public ResponseEntity<MittelschuleDto> updateMittelschule(@RequestBody @Valid @NotNull final MittelschuleDto mittelschuleDto) throws EntityNotFoundException, OptimisticLockingException {
         var model = this.infrastruktureinrichtungApiMapper.dto2Model(mittelschuleDto);
         final var infrastruktureinrichtung = this.bauvorhabenService.assignBauvorhabenToInfrastruktureinrichtung(
                 mittelschuleDto.getInfrastruktureinrichtung().getBauvorhaben(),

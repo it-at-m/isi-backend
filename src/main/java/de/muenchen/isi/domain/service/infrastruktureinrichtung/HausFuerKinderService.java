@@ -2,6 +2,7 @@ package de.muenchen.isi.domain.service.infrastruktureinrichtung;
 
 import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
+import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.mapper.InfrastruktureinrichtungDomainMapper;
 import de.muenchen.isi.domain.model.BauvorhabenModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.HausFuerKinderModel;
@@ -11,6 +12,7 @@ import de.muenchen.isi.infrastructure.repository.infrastruktureinrichtung.HausFu
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -59,10 +61,16 @@ public class HausFuerKinderService {
      *
      * @param hausFuerKinder zum Speichern.
      * @return das gespeicherte {@link HausFuerKinderModel}.
+     * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist.
      */
-    public HausFuerKinderModel saveHausFuerKinder(final HausFuerKinderModel hausFuerKinder) {
+    public HausFuerKinderModel saveHausFuerKinder(final HausFuerKinderModel hausFuerKinder) throws OptimisticLockingException {
         HausFuerKinder hausFuerKinderEntity = this.infrastruktureinrichtungDomainMapper.model2Entity(hausFuerKinder);
-        hausFuerKinderEntity = this.hausFuerKinderRepository.saveAndFlush(hausFuerKinderEntity);
+        try {
+            hausFuerKinderEntity = this.hausFuerKinderRepository.saveAndFlush(hausFuerKinderEntity);
+        } catch (final ObjectOptimisticLockingFailureException exception) {
+            final var message = "Die Daten sind nicht mehr aktuell. Es wurden bereits aktuellere Daten gespeichert.";
+            throw new OptimisticLockingException(message, exception);
+        }
         return this.infrastruktureinrichtungDomainMapper.entity2Model(hausFuerKinderEntity);
     }
 
@@ -71,9 +79,10 @@ public class HausFuerKinderService {
      *
      * @param hausFuerKinder zum Updaten.
      * @return das geupdatete {@link HausFuerKinderModel}.
-     * @throws EntityNotFoundException falls das Haus für Kinder identifiziert durch die {@link HausFuerKinderModel#getId()} nicht gefunden wird.
+     * @throws EntityNotFoundException    falls das Haus für Kinder identifiziert durch die {@link HausFuerKinderModel#getId()} nicht gefunden wird.
+     * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist.
      */
-    public HausFuerKinderModel updateHausFuerKinder(final HausFuerKinderModel hausFuerKinder) throws EntityNotFoundException {
+    public HausFuerKinderModel updateHausFuerKinder(final HausFuerKinderModel hausFuerKinder) throws EntityNotFoundException, OptimisticLockingException {
         this.getHausFuerKinderById(hausFuerKinder.getId());
         return this.saveHausFuerKinder(hausFuerKinder);
     }

@@ -3,6 +3,7 @@ package de.muenchen.isi.domain.service;
 import de.muenchen.isi.api.dto.AbfrageDto;
 import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
+import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
 import de.muenchen.isi.domain.mapper.BauvorhabenDomainMapper;
 import de.muenchen.isi.domain.model.AbfrageModel;
@@ -19,6 +20,7 @@ import de.muenchen.isi.infrastructure.repository.infrastruktureinrichtung.Mittel
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.Nullable;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -74,15 +76,21 @@ public class BauvorhabenService {
      *
      * @param bauvorhaben zum Speichern.
      * @return das gespeicherte {@link BauvorhabenModel}.
-     * @throws UniqueViolationException falls der Name des Bauvorhabens {@link BauvorhabenModel#getNameVorhaben()} bereits vorhanden ist.
+     * @throws UniqueViolationException   falls der Name des Bauvorhabens {@link BauvorhabenModel#getNameVorhaben()} bereits vorhanden ist.
+     * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist.
      */
-    public BauvorhabenModel saveBauvorhaben(final BauvorhabenModel bauvorhaben) throws UniqueViolationException {
+    public BauvorhabenModel saveBauvorhaben(final BauvorhabenModel bauvorhaben) throws UniqueViolationException, OptimisticLockingException {
         var entity = this.bauvorhabenDomainMapper.model2Entity(bauvorhaben);
         final var saved = this.bauvorhabenRepository.findByNameVorhabenIgnoreCase(entity.getNameVorhaben());
         if (saved.isPresent()) {
             throw new UniqueViolationException("Der angegebene Name des Bauvorhabens ist schon vorhanden, bitte wählen Sie daher einen anderen Namen und speichern Sie die Abfrage erneut.");
         } else {
-            entity = this.bauvorhabenRepository.saveAndFlush(entity);
+            try {
+                entity = this.bauvorhabenRepository.saveAndFlush(entity);
+            } catch (final ObjectOptimisticLockingFailureException exception) {
+                final var message = "Die Daten sind nicht mehr aktuell. Es wurden bereits aktuellere Daten gespeichert.";
+                throw new OptimisticLockingException(message, exception);
+            }
             return this.bauvorhabenDomainMapper.entity2Model(entity);
         }
     }
@@ -92,10 +100,11 @@ public class BauvorhabenService {
      *
      * @param bauvorhaben zum Updaten.
      * @return das geupdatete {@link BauvorhabenModel}.
-     * @throws EntityNotFoundException  falls das Bauvorhaben identifiziert durch die {@link BauvorhabenModel#getId()} nicht gefunden wird.
-     * @throws UniqueViolationException falls der Name des Bauvorhabens {@link BauvorhabenModel#getNameVorhaben()} bereits vorhanden ist.
+     * @throws EntityNotFoundException    falls das Bauvorhaben identifiziert durch die {@link BauvorhabenModel#getId()} nicht gefunden wird.
+     * @throws UniqueViolationException   falls der Name des Bauvorhabens {@link BauvorhabenModel#getNameVorhaben()} bereits vorhanden ist.
+     * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist.
      */
-    public BauvorhabenModel updateBauvorhaben(final BauvorhabenModel bauvorhaben) throws EntityNotFoundException, UniqueViolationException {
+    public BauvorhabenModel updateBauvorhaben(final BauvorhabenModel bauvorhaben) throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException {
         this.getBauvorhabenById(bauvorhaben.getId());
         return this.saveBauvorhaben(bauvorhaben);
     }

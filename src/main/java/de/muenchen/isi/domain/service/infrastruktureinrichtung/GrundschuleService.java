@@ -2,6 +2,7 @@ package de.muenchen.isi.domain.service.infrastruktureinrichtung;
 
 import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
+import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.mapper.InfrastruktureinrichtungDomainMapper;
 import de.muenchen.isi.domain.model.BauvorhabenModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.GrundschuleModel;
@@ -11,6 +12,7 @@ import de.muenchen.isi.infrastructure.repository.infrastruktureinrichtung.Grunds
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -59,10 +61,16 @@ public class GrundschuleService {
      *
      * @param grundschule zum Speichern.
      * @return das gespeicherte {@link GrundschuleModel}.
+     * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist.
      */
-    public GrundschuleModel saveGrundschule(final GrundschuleModel grundschule) {
+    public GrundschuleModel saveGrundschule(final GrundschuleModel grundschule) throws OptimisticLockingException {
         Grundschule grundschuleEntity = this.infrastruktureinrichtungDomainMapper.model2Entity(grundschule);
-        grundschuleEntity = this.grundschuleRepository.saveAndFlush(grundschuleEntity);
+        try {
+            grundschuleEntity = this.grundschuleRepository.saveAndFlush(grundschuleEntity);
+        } catch (final ObjectOptimisticLockingFailureException exception) {
+            final var message = "Die Daten sind nicht mehr aktuell. Es wurden bereits aktuellere Daten gespeichert.";
+            throw new OptimisticLockingException(message, exception);
+        }
         return this.infrastruktureinrichtungDomainMapper.entity2Model(grundschuleEntity);
     }
 
@@ -71,9 +79,10 @@ public class GrundschuleService {
      *
      * @param grundschule zum Updaten.
      * @return das geupdatete {@link GrundschuleModel}.
-     * @throws EntityNotFoundException falls die Grundschule identifiziert durch die {@link GrundschuleModel#getId()} nicht gefunden wird.
+     * @throws EntityNotFoundException    falls die Grundschule identifiziert durch die {@link GrundschuleModel#getId()} nicht gefunden wird.
+     * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist.
      */
-    public GrundschuleModel updateGrundschule(final GrundschuleModel grundschule) throws EntityNotFoundException {
+    public GrundschuleModel updateGrundschule(final GrundschuleModel grundschule) throws EntityNotFoundException, OptimisticLockingException {
         this.getGrundschuleById(grundschule.getId());
         return this.saveGrundschule(grundschule);
     }
