@@ -1,6 +1,7 @@
 package de.muenchen.isi.domain.service.stammdaten;
 
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
+import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.mapper.StammdatenDomainMapper;
 import de.muenchen.isi.domain.mapper.StammdatenDomainMapperImpl;
 import de.muenchen.isi.domain.model.stammdaten.FoerdermixStammModel;
@@ -79,7 +80,7 @@ class FoerdermixStammServiceTest {
     }
 
     @Test
-    void saveFoerdermixStamm() {
+    void saveFoerdermixStamm() throws OptimisticLockingException {
         final FoerdermixStammModel model = new FoerdermixStammModel();
         model.setId(null);
 
@@ -105,7 +106,7 @@ class FoerdermixStammServiceTest {
     }
 
     @Test
-    void updateFoerdermixStamm() throws EntityNotFoundException {
+    void updateFoerdermixStamm() throws EntityNotFoundException, OptimisticLockingException {
         final FoerdermixStammModel model = new FoerdermixStammModel();
         model.setId(UUID.randomUUID());
 

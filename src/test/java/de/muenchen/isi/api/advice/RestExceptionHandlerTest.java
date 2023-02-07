@@ -10,6 +10,7 @@ import de.muenchen.isi.domain.exception.FileHandlingFailedException;
 import de.muenchen.isi.domain.exception.FileHandlingWithS3FailedException;
 import de.muenchen.isi.domain.exception.FileImportFailedException;
 import de.muenchen.isi.domain.exception.KoordinatenException;
+import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -75,6 +76,39 @@ class RestExceptionHandlerTest {
         Mockito.when(this.span.context()).thenReturn(this.traceContext);
         Mockito.when(this.traceContext.spanId()).thenReturn("ffffffffffffffff");
         Mockito.when(this.traceContext.traceId()).thenReturn("1111111111111111");
+    }
+
+    @Test
+    void handleOptimisticLockingException() {
+
+        final OptimisticLockingException optimisticLockingException = new OptimisticLockingException("test");
+
+        final ResponseEntity<Object> response = this.restExceptionHandler.handleOptimisticLockingException(optimisticLockingException);
+
+        assertThat(
+                response.getStatusCode(),
+                is(HttpStatus.PRECONDITION_FAILED)
+        );
+
+        final InformationResponseDto responseDto = (InformationResponseDto) response.getBody();
+
+        assertThat(
+                responseDto.getTraceId(),
+                is("1111111111111111")
+        );
+        assertThat(
+                responseDto.getSpanId(),
+                is("ffffffffffffffff")
+        );
+        assertThat(
+                responseDto.getMessages(),
+                is(List.of("test"))
+        );
+        assertThat(
+                responseDto.getOriginalException(),
+                is("OptimisticLockingException")
+        );
+
     }
 
     @Test

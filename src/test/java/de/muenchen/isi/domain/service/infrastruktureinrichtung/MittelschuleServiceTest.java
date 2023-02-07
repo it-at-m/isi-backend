@@ -2,6 +2,7 @@ package de.muenchen.isi.domain.service.infrastruktureinrichtung;
 
 import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
+import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.mapper.InfrastruktureinrichtungDomainMapper;
 import de.muenchen.isi.domain.mapper.InfrastruktureinrichtungDomainMapperImpl;
 import de.muenchen.isi.domain.model.BauvorhabenModel;
@@ -87,7 +88,7 @@ class MittelschuleServiceTest {
     }
 
     @Test
-    void saveMittelschule() {
+    void saveMittelschule() throws OptimisticLockingException {
         final MittelschuleModel mittelschuleModel = new MittelschuleModel();
         mittelschuleModel.setId(null);
 
@@ -113,7 +114,7 @@ class MittelschuleServiceTest {
     }
 
     @Test
-    void updateMittelschule() throws EntityNotFoundException {
+    void updateMittelschule() throws EntityNotFoundException, OptimisticLockingException {
         final MittelschuleModel mittelschuleModel = new MittelschuleModel();
         mittelschuleModel.setId(UUID.randomUUID());
 

@@ -1,6 +1,7 @@
 package de.muenchen.isi.domain.service;
 
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
+import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.mapper.BaurateDomainMapper;
 import de.muenchen.isi.domain.mapper.BaurateDomainMapperImpl;
 import de.muenchen.isi.domain.model.BaurateModel;
@@ -80,7 +81,7 @@ class BaurateServiceTest {
     }
 
     @Test
-    void saveBaurate() {
+    void saveBaurate() throws OptimisticLockingException {
         final BaurateModel model = new BaurateModel();
         model.setId(null);
 
@@ -106,7 +107,7 @@ class BaurateServiceTest {
     }
 
     @Test
-    void updateBaurate() throws EntityNotFoundException {
+    void updateBaurate() throws EntityNotFoundException, OptimisticLockingException {
         final BaurateModel model = new BaurateModel();
         model.setId(UUID.randomUUID());
 

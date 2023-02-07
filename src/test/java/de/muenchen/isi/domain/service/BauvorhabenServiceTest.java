@@ -2,6 +2,7 @@ package de.muenchen.isi.domain.service;
 
 import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
+import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
 import de.muenchen.isi.domain.mapper.BauvorhabenDomainMapper;
 import de.muenchen.isi.domain.mapper.BauvorhabenDomainMapperImpl;
@@ -143,7 +144,7 @@ public class BauvorhabenServiceTest {
     }
 
     @Test
-    void saveBauvorhabenTest() throws UniqueViolationException {
+    void saveBauvorhabenTest() throws UniqueViolationException, OptimisticLockingException {
         final BauvorhabenModel bauvorhaben = new BauvorhabenModel();
         bauvorhaben.setId(null);
 
@@ -186,7 +187,7 @@ public class BauvorhabenServiceTest {
     }
 
     @Test
-    void updateBauvorhabenTest() throws EntityNotFoundException, UniqueViolationException {
+    void updateBauvorhabenTest() throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException {
         final BauvorhabenModel bauvorhabenModel = new BauvorhabenModel();
         bauvorhabenModel.setId(UUID.randomUUID());
 

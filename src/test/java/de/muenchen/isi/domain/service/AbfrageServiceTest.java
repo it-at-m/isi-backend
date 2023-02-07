@@ -2,6 +2,7 @@ package de.muenchen.isi.domain.service;
 
 import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
+import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
 import de.muenchen.isi.domain.mapper.AbfrageDomainMapper;
 import de.muenchen.isi.domain.mapper.AbfrageDomainMapperImpl;
@@ -96,7 +97,7 @@ class AbfrageServiceTest {
     }
 
     @Test
-    void saveInfrastrukturabfrage() throws UniqueViolationException {
+    void saveInfrastrukturabfrage() throws UniqueViolationException, OptimisticLockingException {
         final InfrastrukturabfrageModel infrastrukturabfrageModel = new InfrastrukturabfrageModel();
         infrastrukturabfrageModel.setId(null);
         final AbfrageModel abfrageModel = new AbfrageModel();
@@ -144,7 +145,7 @@ class AbfrageServiceTest {
     }
 
     @Test
-    void updateInfrastrukturabfrage() throws EntityNotFoundException, UniqueViolationException {
+    void updateInfrastrukturabfrage() throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException {
         final InfrastrukturabfrageModel infrastrukturabfrageModel = new InfrastrukturabfrageModel();
         infrastrukturabfrageModel.setId(UUID.randomUUID());
         final AbfrageModel abfrageModel = new AbfrageModel();
