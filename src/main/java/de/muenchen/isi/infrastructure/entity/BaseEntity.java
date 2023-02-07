@@ -18,6 +18,7 @@ import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.Version;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -44,6 +45,9 @@ public abstract class BaseEntity {
             type = "uuid-char"
     )
     private UUID id;
+
+    @Version
+    private Long version;
 
     @EqualsAndHashCode.Exclude
     @CreatedDate
