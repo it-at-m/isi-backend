@@ -68,7 +68,7 @@ public class KinderkrippeService {
         try {
             kinderkrippeEntity = this.kinderkrippeRepository.saveAndFlush(kinderkrippeEntity);
         } catch (final ObjectOptimisticLockingFailureException exception) {
-            final var message = "Die Daten sind nicht mehr aktuell. Es wurden bereits aktuellere Daten gespeichert.";
+            final var message = "Die Daten wurden in der Zwischenzeit geändert. Bitte laden Sie die Daten neu";
             throw new OptimisticLockingException(message, exception);
         }
         return this.infrastruktureinrichtungDomainMapper.entity2Model(kinderkrippeEntity);
