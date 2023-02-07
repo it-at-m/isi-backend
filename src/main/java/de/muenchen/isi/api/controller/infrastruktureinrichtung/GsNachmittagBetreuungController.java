@@ -82,7 +82,7 @@ public class GsNachmittagBetreuungController {
     }
 
     @PostMapping("gs-nachmittag-betreuung")
-    @Transactional
+    @Transactional(rollbackFor = OptimisticLockingException.class)
     @Operation(summary = "Anlegen einer neuen Nachmittagsbetreuung für Grundschulkinder")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "CREATED -> Nachmittagsbetreuung für Grundschulkinder wurde erfolgreich erstellt."),
@@ -103,7 +103,7 @@ public class GsNachmittagBetreuungController {
     }
 
     @PutMapping("gs-nachmittag-betreuung")
-    @Transactional
+    @Transactional(rollbackFor = OptimisticLockingException.class)
     @Operation(summary = "Aktualisierung einer Nachmittagsbetreuung für Grundschulkinder")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK -> Nachmittagsbetreuung für Grundschulkinder wurde erfolgreich aktualisiert."),

@@ -75,7 +75,7 @@ public class BaurateController {
     }
 
     @PostMapping("baurate")
-    @Transactional
+    @Transactional(rollbackFor = OptimisticLockingException.class)
     @Operation(summary = "Anlegen einer neuen Baurate")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "CREATED -> Baurate wurde erfolgreich erstellt."),
@@ -91,7 +91,7 @@ public class BaurateController {
     }
 
     @PutMapping("baurate")
-    @Transactional
+    @Transactional(rollbackFor = OptimisticLockingException.class)
     @Operation(summary = "Aktualisierung einer Baurate")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK -> Baurate wurde erfolgreich aktualisiert."),

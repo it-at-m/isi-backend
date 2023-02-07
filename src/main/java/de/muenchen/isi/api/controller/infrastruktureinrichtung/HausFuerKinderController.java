@@ -82,7 +82,7 @@ public class HausFuerKinderController {
     }
 
     @PostMapping("haus-fuer-kinder")
-    @Transactional
+    @Transactional(rollbackFor = OptimisticLockingException.class)
     @Operation(summary = "Anlegen eines neuen Hauses für Kinder")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "CREATED -> Haus für Kinder wurde erfolgreich erstellt."),
@@ -103,7 +103,7 @@ public class HausFuerKinderController {
     }
 
     @PutMapping("haus-fuer-kinder")
-    @Transactional
+    @Transactional(rollbackFor = OptimisticLockingException.class)
     @Operation(summary = "Aktualisierung einer Hauses für Kinder")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK -> Haus für Kinder wurde erfolgreich aktualisiert."),

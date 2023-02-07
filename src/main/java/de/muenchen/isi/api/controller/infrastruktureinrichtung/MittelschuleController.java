@@ -82,7 +82,7 @@ public class MittelschuleController {
     }
 
     @PostMapping("mittelschule")
-    @Transactional
+    @Transactional(rollbackFor = OptimisticLockingException.class)
     @Operation(summary = "Anlegen einer neuen Mittelschule")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "CREATED -> Mittelschule wurde erfolgreich erstellt."),
@@ -103,7 +103,7 @@ public class MittelschuleController {
     }
 
     @PutMapping("mittelschule")
-    @Transactional
+    @Transactional(rollbackFor = OptimisticLockingException.class)
     @Operation(summary = "Aktualisierung einer Mittelschule")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK -> Mittelschule wurde erfolgreich aktualisiert."),

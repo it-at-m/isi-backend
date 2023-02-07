@@ -76,7 +76,7 @@ public class BauvorhabenController {
     }
 
     @PostMapping("bauvorhaben")
-    @Transactional
+    @Transactional(rollbackFor = OptimisticLockingException.class)
     @Operation(summary = "Anlegen eines neuen Bauvorhabens")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "CREATED -> Bauvorhaben wurde erfolgreich erstellt."),
@@ -93,7 +93,7 @@ public class BauvorhabenController {
     }
 
     @PutMapping("bauvorhaben")
-    @Transactional
+    @Transactional(rollbackFor = OptimisticLockingException.class)
     @Operation(summary = "Aktualisierung eines Bauvorhabens")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK -> Bauvorhaben wurde erfolgreich aktualisiert."),

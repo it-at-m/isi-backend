@@ -33,7 +33,7 @@ public class AbfrageStatusController {
     private final AbfrageStatusService abfrageStatusService;
 
     @PutMapping("infrastruktur-abfrage/{id}/freigabe")
-    @Transactional
+    @Transactional(rollbackFor = OptimisticLockingException.class)
     @Operation(summary = "Gibt eine Infrastrukturabfrage frei")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK -> Abfrage wurde erfolgreich freigegeben."),

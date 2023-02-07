@@ -82,7 +82,7 @@ public class KindergartenController {
     }
 
     @PostMapping("kindergarten")
-    @Transactional
+    @Transactional(rollbackFor = OptimisticLockingException.class)
     @Operation(summary = "Anlegen eines neuen Kindergartens")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "CREATED -> Kindergarten wurde erfolgreich erstellt."),
@@ -103,7 +103,7 @@ public class KindergartenController {
     }
 
     @PutMapping("kindergarten")
-    @Transactional
+    @Transactional(rollbackFor = OptimisticLockingException.class)
     @Operation(summary = "Aktualisierung einer Kindergartens")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK -> Kindergarten wurde erfolgreich aktualisiert."),

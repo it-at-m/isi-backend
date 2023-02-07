@@ -83,7 +83,7 @@ public class AbfrageController {
     }
 
     @PostMapping("infrastruktur-abfrage")
-    @Transactional
+    @Transactional(rollbackFor = OptimisticLockingException.class)
     @Operation(summary = "Anlegen einer neuen Infrastrukturabfrage")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "CREATED -> Abfrage wurde erfolgreich erstellt."),
@@ -102,7 +102,7 @@ public class AbfrageController {
     }
 
     @PutMapping("infrastruktur-abfrage")
-    @Transactional
+    @Transactional(rollbackFor = OptimisticLockingException.class)
     @Operation(summary = "Aktualisierung einer Infrastrukturabfrage")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK -> Abfrage wurde erfolgreich aktualisiert."),
