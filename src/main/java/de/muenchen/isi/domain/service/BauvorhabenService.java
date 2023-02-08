@@ -80,7 +80,7 @@ public class BauvorhabenService {
     public BauvorhabenModel saveBauvorhaben(final BauvorhabenModel bauvorhaben) throws UniqueViolationException {
         var bauvorhabenEntity = this.bauvorhabenDomainMapper.model2Entity(bauvorhaben);
         var saved = this.bauvorhabenRepository.findByNameVorhabenIgnoreCase(bauvorhabenEntity.getNameVorhaben());
-        if ((saved.isPresent() && bauvorhabenEntity.getId().equals(saved.get().getId())) || saved.isEmpty()) {
+        if ((saved.isPresent() && saved.get().getId().equals(bauvorhabenEntity.getId())) || saved.isEmpty()) {
             bauvorhabenEntity = this.bauvorhabenRepository.save(bauvorhabenEntity);
             return this.bauvorhabenDomainMapper.entity2Model(bauvorhabenEntity);
         } else {
