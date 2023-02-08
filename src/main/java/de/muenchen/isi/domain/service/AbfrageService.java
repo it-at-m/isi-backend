@@ -65,7 +65,12 @@ public class AbfrageService {
         var abfrageEntity = this.abfrageDomainMapper.model2entity(abfrage);
         var saved = this.infrastrukturabfrageRepository.findByAbfrage_NameAbfrageIgnoreCase(abfrageEntity.getAbfrage().getNameAbfrage());
         if(saved.isPresent()) {
-            throw new UniqueViolationException("Der angegebene Name der Abfrage ist schon vorhanden, bitte wählen Sie daher einen anderen Namen und speichern Sie die Abfrage erneut.");
+            if (abfrageEntity.getId().equals(saved.get().getId())) {
+                abfrageEntity = this.infrastrukturabfrageRepository.save(abfrageEntity);
+                return this.abfrageDomainMapper.entity2Model(abfrageEntity);
+            } else {
+                throw new UniqueViolationException("Der angegebene Name der Abfrage ist schon vorhanden, bitte wählen Sie daher einen anderen Namen und speichern Sie die Abfrage erneut.");
+            }
         } else {
             abfrageEntity = this.infrastrukturabfrageRepository.save(abfrageEntity);
             return this.abfrageDomainMapper.entity2Model(abfrageEntity);
@@ -82,17 +87,7 @@ public class AbfrageService {
      */
     public InfrastrukturabfrageModel updateInfrastrukturabfrage(final InfrastrukturabfrageModel abfrage) throws EntityNotFoundException, UniqueViolationException {
         this.getInfrastrukturabfrageById(abfrage.getId());
-        var abfrage4update = this.abfrageDomainMapper.model2entity(abfrage);
-        var saved = this.infrastrukturabfrageRepository.findByAbfrage_NameAbfrageIgnoreCase(abfrage4update.getAbfrage().getNameAbfrage());
-
-        if (saved.isEmpty()) {
-            return this.saveInfrastrukturabfrage(abfrage);
-        } else if (abfrage4update.getId().equals(saved.get().getId())) {
-            abfrage4update = this.infrastrukturabfrageRepository.save(abfrage4update);
-            return this.abfrageDomainMapper.entity2Model(abfrage4update);
-        } else {
-            throw new UniqueViolationException("Der angegebene Name der Abfrage ist schon vorhanden, bitte wählen Sie daher einen anderen Namen und speichern Sie die Abfrage erneut.");
-        }
+        return this.saveInfrastrukturabfrage(abfrage);
     }
 
     /**
