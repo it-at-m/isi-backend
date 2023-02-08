@@ -169,7 +169,7 @@ class AbfrageServiceTest {
 
         Mockito.verify(this.infrastrukturabfrageRepository, Mockito.times(1)).findById(entity.getId());
         Mockito.verify(this.infrastrukturabfrageRepository, Mockito.times(1)).save(entity);
-        Mockito.verify(this.infrastrukturabfrageRepository, Mockito.times(1)).findByAbfrage_NameAbfrageIgnoreCase("hallo");
+        Mockito.verify(this.infrastrukturabfrageRepository, Mockito.times(2)).findByAbfrage_NameAbfrageIgnoreCase("hallo");
     }
 
     @Test
