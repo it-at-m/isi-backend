@@ -189,12 +189,13 @@ public class BauvorhabenServiceTest {
     void updateBauvorhabenTest() throws EntityNotFoundException, UniqueViolationException {
         final BauvorhabenModel bauvorhabenModel = new BauvorhabenModel();
         bauvorhabenModel.setId(UUID.randomUUID());
+        bauvorhabenModel.setNameVorhaben("BauvorhabenTest");
 
-        final Bauvorhaben entity = new Bauvorhaben();
-        entity.setId(bauvorhabenModel.getId());
+        final Bauvorhaben entity = this.bauvorhabenDomainMapper.model2Entity(bauvorhabenModel);
 
         Mockito.when(this.bauvorhabenRepository.findById(entity.getId())).thenReturn(Optional.of(entity));
         Mockito.when(this.bauvorhabenRepository.save(entity)).thenReturn(entity);
+        Mockito.when(this.bauvorhabenRepository.findByNameVorhabenIgnoreCase("BauvorhabenTest")).thenReturn(Optional.empty());
 
         final BauvorhabenModel result = this.bauvorhabenService.updateBauvorhaben(bauvorhabenModel);
 
@@ -208,6 +209,7 @@ public class BauvorhabenServiceTest {
 
         Mockito.verify(this.bauvorhabenRepository, Mockito.times(1)).findById(entity.getId());
         Mockito.verify(this.bauvorhabenRepository, Mockito.times(1)).save(entity);
+        Mockito.verify(this.bauvorhabenRepository, Mockito.times(2)).findByNameVorhabenIgnoreCase("BauvorhabenTest");
     }
 
     @Test
