@@ -64,16 +64,11 @@ public class AbfrageService {
     public InfrastrukturabfrageModel saveInfrastrukturabfrage(final InfrastrukturabfrageModel abfrage) throws UniqueViolationException {
         var abfrageEntity = this.abfrageDomainMapper.model2entity(abfrage);
         var saved = this.infrastrukturabfrageRepository.findByAbfrage_NameAbfrageIgnoreCase(abfrageEntity.getAbfrage().getNameAbfrage());
-        if(saved.isPresent()) {
-            if (abfrageEntity.getId().equals(saved.get().getId())) {
-                abfrageEntity = this.infrastrukturabfrageRepository.save(abfrageEntity);
-                return this.abfrageDomainMapper.entity2Model(abfrageEntity);
-            } else {
-                throw new UniqueViolationException("Der angegebene Name der Abfrage ist schon vorhanden, bitte wählen Sie daher einen anderen Namen und speichern Sie die Abfrage erneut.");
-            }
-        } else {
+        if ((saved.isPresent() && abfrageEntity.getId().equals(saved.get().getId())) || saved.isEmpty()) {
             abfrageEntity = this.infrastrukturabfrageRepository.save(abfrageEntity);
             return this.abfrageDomainMapper.entity2Model(abfrageEntity);
+        } else {
+            throw new UniqueViolationException("Der angegebene Name der Abfrage ist schon vorhanden, bitte wählen Sie daher einen anderen Namen und speichern Sie die Abfrage erneut.");
         }
     }
 

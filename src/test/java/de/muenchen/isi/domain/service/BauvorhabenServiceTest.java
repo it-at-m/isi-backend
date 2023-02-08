@@ -172,6 +172,10 @@ public class BauvorhabenServiceTest {
         bauvorhabenModel.setId(UUID.randomUUID());
         bauvorhabenModel.setNameVorhaben(nameVorhaben);
 
+        final BauvorhabenModel bauvorhabenModel2 = new BauvorhabenModel();
+        bauvorhabenModel2.setId(UUID.randomUUID());
+        bauvorhabenModel2.setNameVorhaben(nameVorhaben);
+
         final Bauvorhaben entity = new Bauvorhaben();
         entity.setId(bauvorhabenModel.getId());
         entity.setNameVorhaben(bauvorhabenModel.getNameVorhaben());
@@ -179,10 +183,12 @@ public class BauvorhabenServiceTest {
         Mockito.when(this.bauvorhabenRepository.findByNameVorhabenIgnoreCase(entity.getNameVorhaben())).thenReturn(Optional.of(entity));
         Mockito.when(this.bauvorhabenRepository.save(entity)).thenReturn(entity);
 
-        Assertions.assertThrows(UniqueViolationException.class, () -> this.bauvorhabenService.saveBauvorhaben(bauvorhabenModel));
+        Assertions.assertThrows(UniqueViolationException.class, () -> this.bauvorhabenService.saveBauvorhaben(bauvorhabenModel2));
 
         Mockito.verify(this.bauvorhabenRepository, Mockito.times(1)).findByNameVorhabenIgnoreCase(entity.getNameVorhaben());
         Mockito.verify(this.bauvorhabenRepository, Mockito.times(0)).save(entity);
+
+
     }
 
     @Test
