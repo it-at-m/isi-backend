@@ -82,7 +82,17 @@ public class AbfrageService {
      */
     public InfrastrukturabfrageModel updateInfrastrukturabfrage(final InfrastrukturabfrageModel abfrage) throws EntityNotFoundException, UniqueViolationException {
         this.getInfrastrukturabfrageById(abfrage.getId());
-        return this.saveInfrastrukturabfrage(abfrage);
+        var abfrage4update = this.abfrageDomainMapper.model2entity(abfrage);
+        var saved = this.infrastrukturabfrageRepository.findByAbfrage_NameAbfrageIgnoreCase(abfrage4update.getAbfrage().getNameAbfrage());
+
+        if (saved.isEmpty()) {
+            return this.saveInfrastrukturabfrage(abfrage);
+        } else if (abfrage4update.getId().equals(saved.get().getId())) {
+            abfrage4update = this.infrastrukturabfrageRepository.save(abfrage4update);
+            return this.abfrageDomainMapper.entity2Model(abfrage4update);
+        } else {
+            throw new UniqueViolationException("Der angegebene Name der Abfrage ist schon vorhanden, bitte wählen Sie daher einen anderen Namen und speichern Sie die Abfrage erneut.");
+        }
     }
 
     /**

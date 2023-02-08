@@ -80,7 +80,7 @@ public class BauvorhabenService {
     public BauvorhabenModel saveBauvorhaben(final BauvorhabenModel bauvorhaben) throws UniqueViolationException {
         var entity = this.bauvorhabenDomainMapper.model2Entity(bauvorhaben);
         var saved = this.bauvorhabenRepository.findByNameVorhabenIgnoreCase(entity.getNameVorhaben());
-        if(saved.isPresent()) {
+        if (saved.isPresent()) {
             throw new UniqueViolationException("Der angegebene Name des Bauvorhabens ist schon vorhanden, bitte wählen Sie daher einen anderen Namen und speichern Sie die Abfrage erneut.");
         } else {
             entity = this.bauvorhabenRepository.save(entity);
@@ -101,15 +101,14 @@ public class BauvorhabenService {
         var bauvorhaben4update = this.bauvorhabenDomainMapper.model2Entity(bauvorhaben);
         var saved = this.bauvorhabenRepository.findByNameVorhabenIgnoreCase(bauvorhaben4update.getNameVorhaben());
 
-        if(saved.isEmpty()) {
+        if (saved.isEmpty()) {
            return this.saveBauvorhaben(bauvorhaben);
         } else if (bauvorhaben4update.getId().equals(saved.get().getId())) {
-            this.bauvorhabenRepository.save(bauvorhaben4update);
+            bauvorhaben4update = this.bauvorhabenRepository.save(bauvorhaben4update);
             return this.bauvorhabenDomainMapper.entity2Model(bauvorhaben4update);
         } else {
             throw new UniqueViolationException("Der angegebene Name des Bauvorhabens ist schon vorhanden, bitte wählen Sie daher einen anderen Namen und speichern Sie die Abfrage erneut.");
         }
-
     }
 
     /**
