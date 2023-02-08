@@ -98,7 +98,18 @@ public class BauvorhabenService {
      */
     public BauvorhabenModel updateBauvorhaben(final BauvorhabenModel bauvorhaben) throws EntityNotFoundException, UniqueViolationException {
         this.getBauvorhabenById(bauvorhaben.getId());
-        return this.saveBauvorhaben(bauvorhaben);
+        var bauvorhaben4update = this.bauvorhabenDomainMapper.model2Entity(bauvorhaben);
+        var saved = this.bauvorhabenRepository.findByNameVorhabenIgnoreCase(bauvorhaben4update.getNameVorhaben());
+
+        if(saved.isEmpty()) {
+           return this.saveBauvorhaben(bauvorhaben);
+        } else if (bauvorhaben4update.getId().equals(saved.get().getId())) {
+            this.bauvorhabenRepository.save(bauvorhaben4update);
+            return this.bauvorhabenDomainMapper.entity2Model(bauvorhaben4update);
+        } else {
+            throw new UniqueViolationException("Der angegebene Name des Bauvorhabens ist schon vorhanden, bitte wählen Sie daher einen anderen Namen und speichern Sie die Abfrage erneut.");
+        }
+
     }
 
     /**
