@@ -98,8 +98,8 @@ public class BauvorhabenService {
     /**
      * Diese Methode updated ein {@link BauvorhabenModel}.
      *
-     * @param bauvorhaben zum Updaten.
-     * @return das geupdatete {@link BauvorhabenModel}.
+     * @param bauvorhaben zum Updaten
+     * @return das geupdatete {@link BauvorhabenModel}
      * @throws EntityNotFoundException    falls das Bauvorhaben identifiziert durch die {@link BauvorhabenModel#getId()} nicht gefunden wird.
      * @throws UniqueViolationException   falls der Name des Bauvorhabens {@link BauvorhabenModel#getNameVorhaben()} bereits vorhanden ist.
      * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist.
