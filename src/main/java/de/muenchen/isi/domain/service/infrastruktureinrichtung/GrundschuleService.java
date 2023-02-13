@@ -77,8 +77,8 @@ public class GrundschuleService {
     /**
      * Diese Methode updated ein {@link GrundschuleModel}.
      *
-     * @param grundschule zum Updaten.
-     * @return das geupdatete {@link GrundschuleModel}.
+     * @param grundschule zum Updaten
+     * @return das geupdatete {@link GrundschuleModel}
      * @throws EntityNotFoundException    falls die Grundschule identifiziert durch die {@link GrundschuleModel#getId()} nicht gefunden wird.
      * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist.
      */
