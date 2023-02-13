@@ -79,8 +79,8 @@ public class KinderkrippeService {
      *
      * @param kinderkrippe zum Updaten
      * @return das geupdatete {@link KinderkrippeModel}
-     * @throws EntityNotFoundException    falls die Kinderkrippe identifiziert durch die {@link KinderkrippeModel#getId()} nicht gefunden wird.
-     * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist.
+     * @throws EntityNotFoundException falls die Kinderkrippe identifiziert durch die {@link KinderkrippeModel#getId()} nicht gefunden wird
+     * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
      */
     public KinderkrippeModel updateKinderkrippe(final KinderkrippeModel kinderkrippe) throws EntityNotFoundException, OptimisticLockingException {
         this.getKinderkrippeById(kinderkrippe.getId());
