@@ -73,8 +73,8 @@ public class FoerdermixStammService {
      *
      * @param foerdermix zum Updaten.
      * @return das geupdatete {@link FoerdermixStammModel}.
-     * @throws EntityNotFoundException    falls die Abfrage identifiziert durch die {@link FoerdermixStammModel#getId()} nicht gefunden wird.
-     * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist.
+     * @throws EntityNotFoundException falls die Abfrage identifiziert durch die {@link FoerdermixStammModel#getId()} nicht gefunden wird
+     * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
      */
     public FoerdermixStammModel updateFoerdermixStamm(final FoerdermixStammModel foerdermix) throws EntityNotFoundException, OptimisticLockingException {
         this.getFoerdermixStammById(foerdermix.getId());
