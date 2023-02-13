@@ -59,9 +59,9 @@ public class KinderkrippeService {
     /**
      * Diese Methode speichert ein {@link KinderkrippeModel}.
      *
-     * @param kinderkrippe zum Speichern.
-     * @return das gespeicherte {@link KinderkrippeModel}.
-     * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist.
+     * @param kinderkrippe zum Speichern
+     * @return das gespeicherte {@link KinderkrippeModel}
+     * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
      */
     public KinderkrippeModel saveKinderkrippe(final KinderkrippeModel kinderkrippe) throws OptimisticLockingException {
         Kinderkrippe kinderkrippeEntity = this.infrastruktureinrichtungDomainMapper.model2Entity(kinderkrippe);
