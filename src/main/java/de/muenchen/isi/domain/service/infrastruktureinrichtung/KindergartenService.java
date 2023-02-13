@@ -77,8 +77,8 @@ public class KindergartenService {
     /**
      * Diese Methode updated ein {@link KindergartenModel}.
      *
-     * @param kindergarten zum Updaten.
-     * @return das geupdatete {@link KindergartenModel}.
+     * @param kindergarten zum Updaten
+     * @return das geupdatete {@link KindergartenModel}
      * @throws EntityNotFoundException    falls der Kindergarten identifiziert durch die {@link KindergartenModel#getId()} nicht gefunden wird.
      * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist.
      */
