@@ -73,7 +73,7 @@ public class AbfrageService {
             try {
                 abfrageEntity = this.infrastrukturabfrageRepository.saveAndFlush(abfrageEntity);
             } catch (final ObjectOptimisticLockingFailureException exception) {
-                final var message = "Die Daten wurden in der Zwischenzeit geändert. Bitte laden Sie die Daten neu";
+                final var message = "Die Daten wurden in der Zwischenzeit geändert. Bitte laden Sie die Seite neu!";
                 throw new OptimisticLockingException(message, exception);
             }
             return this.abfrageDomainMapper.entity2Model(abfrageEntity);
