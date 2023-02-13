@@ -59,9 +59,9 @@ public class MittelschuleService {
     /**
      * Diese Methode speichert ein {@link MittelschuleModel}.
      *
-     * @param mittelschule zum Speichern.
-     * @return das gespeicherte {@link MittelschuleModel}.
-     * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist.
+     * @param mittelschule zum Speichern
+     * @return das gespeicherte {@link MittelschuleModel}
+     * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
      */
     public MittelschuleModel saveMittelschule(final MittelschuleModel mittelschule) throws OptimisticLockingException {
         Mittelschule mittelschuleEntity = this.infrastruktureinrichtungDomainMapper.model2Entity(mittelschule);
