@@ -59,9 +59,9 @@ public class GrundschuleService {
     /**
      * Diese Methode speichert ein {@link GrundschuleModel}.
      *
-     * @param grundschule zum Speichern.
-     * @return das gespeicherte {@link GrundschuleModel}.
-     * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist.
+     * @param grundschule zum Speichern
+     * @return das gespeicherte {@link GrundschuleModel}
+     * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
      */
     public GrundschuleModel saveGrundschule(final GrundschuleModel grundschule) throws OptimisticLockingException {
         Grundschule grundschuleEntity = this.infrastruktureinrichtungDomainMapper.model2Entity(grundschule);
