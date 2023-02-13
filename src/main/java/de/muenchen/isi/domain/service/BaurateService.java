@@ -48,9 +48,9 @@ public class BaurateService {
     /**
      * Diese Methode speichert ein {@link BaurateModel}.
      *
-     * @param baurate zum Speichern.
-     * @return das gespeicherte {@link BaurateModel}.
-     * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist.
+     * @param baurate zum Speichern
+     * @return das gespeicherte {@link BaurateModel}
+     * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
      */
     public BaurateModel saveBaurate(final BaurateModel baurate) throws OptimisticLockingException {
         var entity = this.baurateDomainMapper.model2entity(baurate);
