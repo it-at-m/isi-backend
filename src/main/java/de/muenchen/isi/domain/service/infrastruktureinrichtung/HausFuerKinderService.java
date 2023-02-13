@@ -59,9 +59,9 @@ public class HausFuerKinderService {
     /**
      * Diese Methode speichert ein {@link HausFuerKinderModel}.
      *
-     * @param hausFuerKinder zum Speichern.
-     * @return das gespeicherte {@link HausFuerKinderModel}.
-     * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist.
+     * @param hausFuerKinder zum Speichern
+     * @return das gespeicherte {@link HausFuerKinderModel}
+     * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
      */
     public HausFuerKinderModel saveHausFuerKinder(final HausFuerKinderModel hausFuerKinder) throws OptimisticLockingException {
         HausFuerKinder hausFuerKinderEntity = this.infrastruktureinrichtungDomainMapper.model2Entity(hausFuerKinder);
