@@ -76,22 +76,22 @@ public class BauvorhabenService {
      *
      * @param bauvorhaben zum Speichern
      * @return das gespeicherte {@link BauvorhabenModel}
-     * @throws UniqueViolationException falls der Name des Bauvorhabens {@link BauvorhabenModel#getNameVorhaben()} bereits vorhanden ist
+     * @throws UniqueViolationException   falls der Name des Bauvorhabens {@link BauvorhabenModel#getNameVorhaben()} bereits vorhanden ist
      * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
      */
     public BauvorhabenModel saveBauvorhaben(final BauvorhabenModel bauvorhaben) throws UniqueViolationException, OptimisticLockingException {
-        var entity = this.bauvorhabenDomainMapper.model2Entity(bauvorhaben);
-        final var saved = this.bauvorhabenRepository.findByNameVorhabenIgnoreCase(entity.getNameVorhaben());
-        if (saved.isPresent()) {
-            throw new UniqueViolationException("Der angegebene Name des Bauvorhabens ist schon vorhanden, bitte wählen Sie daher einen anderen Namen und speichern Sie die Abfrage erneut.");
-        } else {
+        var bauvorhabenEntity = this.bauvorhabenDomainMapper.model2Entity(bauvorhaben);
+        final var saved = this.bauvorhabenRepository.findByNameVorhabenIgnoreCase(bauvorhabenEntity.getNameVorhaben());
+        if ((saved.isPresent() && saved.get().getId().equals(bauvorhabenEntity.getId())) || saved.isEmpty()) {
             try {
-                entity = this.bauvorhabenRepository.saveAndFlush(entity);
+                bauvorhabenEntity = this.bauvorhabenRepository.saveAndFlush(bauvorhabenEntity);
             } catch (final ObjectOptimisticLockingFailureException exception) {
                 final var message = "Die Daten wurden in der Zwischenzeit geändert. Bitte laden Sie die Seite neu!";
                 throw new OptimisticLockingException(message, exception);
             }
-            return this.bauvorhabenDomainMapper.entity2Model(entity);
+            return this.bauvorhabenDomainMapper.entity2Model(bauvorhabenEntity);
+        } else {
+            throw new UniqueViolationException("Der angegebene Name des Bauvorhabens ist schon vorhanden, bitte wählen Sie daher einen anderen Namen und speichern Sie die Abfrage erneut.");
         }
     }
 
@@ -100,8 +100,8 @@ public class BauvorhabenService {
      *
      * @param bauvorhaben zum Updaten
      * @return das geupdatete {@link BauvorhabenModel}
-     * @throws EntityNotFoundException falls das Bauvorhaben identifiziert durch die {@link BauvorhabenModel#getId()} nicht gefunden wird
-     * @throws UniqueViolationException falls der Name des Bauvorhabens {@link BauvorhabenModel#getNameVorhaben()} bereits vorhanden ist
+     * @throws EntityNotFoundException    falls das Bauvorhaben identifiziert durch die {@link BauvorhabenModel#getId()} nicht gefunden wird
+     * @throws UniqueViolationException   falls der Name des Bauvorhabens {@link BauvorhabenModel#getNameVorhaben()} bereits vorhanden ist
      * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
      */
     public BauvorhabenModel updateBauvorhaben(final BauvorhabenModel bauvorhaben) throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException {
@@ -148,7 +148,7 @@ public class BauvorhabenService {
      * Diese Methode soll dann verwendet werden, um die beim Mapping verloren gegangene Information zum Bauvorhaben wieder in der Infrastruktureinrichung einzusetzen.
      * Der Parameter 'bauvorhabenId' darf null sein. In diesem Fall passiert nichts.
      *
-     * @param bauvorhabenId id des {@link BauvorhabenModel}s
+     * @param bauvorhabenId            id des {@link BauvorhabenModel}s
      * @param infrastruktureinrichtung zum Speichern
      * @return Die (möglicherweise) geänderte Infrastruktureinrichtung
      * @throws EntityNotFoundException falls das Bauvorhaben mit der gegebenen ID nicht gefunden wurde

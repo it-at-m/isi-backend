@@ -67,9 +67,7 @@ public class AbfrageService {
     public InfrastrukturabfrageModel saveInfrastrukturabfrage(final InfrastrukturabfrageModel abfrage) throws UniqueViolationException, OptimisticLockingException {
         var abfrageEntity = this.abfrageDomainMapper.model2entity(abfrage);
         final var saved = this.infrastrukturabfrageRepository.findByAbfrage_NameAbfrageIgnoreCase(abfrageEntity.getAbfrage().getNameAbfrage());
-        if (saved.isPresent()) {
-            throw new UniqueViolationException("Der angegebene Name der Abfrage ist schon vorhanden, bitte wählen Sie daher einen anderen Namen und speichern Sie die Abfrage erneut.");
-        } else {
+        if ((saved.isPresent() && saved.get().getId().equals(abfrageEntity.getId())) || saved.isEmpty()) {
             try {
                 abfrageEntity = this.infrastrukturabfrageRepository.saveAndFlush(abfrageEntity);
             } catch (final ObjectOptimisticLockingFailureException exception) {
@@ -77,6 +75,8 @@ public class AbfrageService {
                 throw new OptimisticLockingException(message, exception);
             }
             return this.abfrageDomainMapper.entity2Model(abfrageEntity);
+        } else {
+            throw new UniqueViolationException("Der angegebene Name der Abfrage ist schon vorhanden, bitte wählen Sie daher einen anderen Namen und speichern Sie die Abfrage erneut.");
         }
     }
 

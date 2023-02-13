@@ -173,6 +173,10 @@ public class BauvorhabenServiceTest {
         bauvorhabenModel.setId(UUID.randomUUID());
         bauvorhabenModel.setNameVorhaben(nameVorhaben);
 
+        final BauvorhabenModel bauvorhabenModel2 = new BauvorhabenModel();
+        bauvorhabenModel2.setId(UUID.randomUUID());
+        bauvorhabenModel2.setNameVorhaben(nameVorhaben);
+
         final Bauvorhaben entity = new Bauvorhaben();
         entity.setId(bauvorhabenModel.getId());
         entity.setNameVorhaben(bauvorhabenModel.getNameVorhaben());
@@ -180,22 +184,25 @@ public class BauvorhabenServiceTest {
         Mockito.when(this.bauvorhabenRepository.findByNameVorhabenIgnoreCase(entity.getNameVorhaben())).thenReturn(Optional.of(entity));
         Mockito.when(this.bauvorhabenRepository.saveAndFlush(entity)).thenReturn(entity);
 
-        Assertions.assertThrows(UniqueViolationException.class, () -> this.bauvorhabenService.saveBauvorhaben(bauvorhabenModel));
+        Assertions.assertThrows(UniqueViolationException.class, () -> this.bauvorhabenService.saveBauvorhaben(bauvorhabenModel2));
 
         Mockito.verify(this.bauvorhabenRepository, Mockito.times(1)).findByNameVorhabenIgnoreCase(entity.getNameVorhaben());
         Mockito.verify(this.bauvorhabenRepository, Mockito.times(0)).save(entity);
+
+
     }
 
     @Test
     void updateBauvorhabenTest() throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException {
         final BauvorhabenModel bauvorhabenModel = new BauvorhabenModel();
         bauvorhabenModel.setId(UUID.randomUUID());
+        bauvorhabenModel.setNameVorhaben("BauvorhabenTest");
 
-        final Bauvorhaben entity = new Bauvorhaben();
-        entity.setId(bauvorhabenModel.getId());
+        final Bauvorhaben entity = this.bauvorhabenDomainMapper.model2Entity(bauvorhabenModel);
 
         Mockito.when(this.bauvorhabenRepository.findById(entity.getId())).thenReturn(Optional.of(entity));
         Mockito.when(this.bauvorhabenRepository.saveAndFlush(entity)).thenReturn(entity);
+        Mockito.when(this.bauvorhabenRepository.findByNameVorhabenIgnoreCase("BauvorhabenTest")).thenReturn(Optional.empty());
 
         final BauvorhabenModel result = this.bauvorhabenService.updateBauvorhaben(bauvorhabenModel);
 
@@ -209,6 +216,7 @@ public class BauvorhabenServiceTest {
 
         Mockito.verify(this.bauvorhabenRepository, Mockito.times(1)).findById(entity.getId());
         Mockito.verify(this.bauvorhabenRepository, Mockito.times(1)).saveAndFlush(entity);
+        Mockito.verify(this.bauvorhabenRepository, Mockito.times(1)).findByNameVorhabenIgnoreCase("BauvorhabenTest");
     }
 
     @Test
