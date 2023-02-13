@@ -54,7 +54,7 @@ public class AbfrageStatusController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK -> Abfrage wurde erfolgreich abbgebrochen."),
             @ApiResponse(responseCode = "404", description = "NOT_FOUND -> Es gibt keine Abfrage mit der ID.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class))),
-            @ApiResponse(responseCode = "409", description = "CONFLICT -> Die Abfrage konnte aufgrund des aktuellen Status nicht abbgebrochen werden.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class)))
+            @ApiResponse(responseCode = "409", description = "CONFLICT -> Die Abfrage konnte aufgrund des aktuellen Status oder des bereits existierenden Abfragenamen nicht abgebrochen werden.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class)))
     })
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_ABBRECHEN_ABFRAGE.name())")
     public ResponseEntity<Void> abbrechenInfrastrukturabfrage(@PathVariable @NotNull final UUID id) throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException {
@@ -68,7 +68,7 @@ public class AbfrageStatusController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK -> Abfrage wurde erfolgreich zurückgegeben an den Abfrage Ersteller."),
             @ApiResponse(responseCode = "404", description = "NOT_FOUND -> Es gibt keine Abfrage mit der ID.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class))),
-            @ApiResponse(responseCode = "409", description = "CONFLICT -> Die Abfrage konnte aufgrund des aktuellen Status nicht zur Bearbeitung zurückgegeben werden.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class)))
+            @ApiResponse(responseCode = "409", description = "CONFLICT ->  Die Abfrage konnte aufgrund des aktuellen Status oder des bereits existierenden Abfragenamen nicht zur Bearbeitung zurückgegeben werden.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class)))
     })
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_ANGABEN_ANPASSEN_ABFRAGE.name())")
     public ResponseEntity<Void> angabenAnpassenInfrastrukturabfrage(@PathVariable @NotNull final UUID id) throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException {
@@ -82,7 +82,7 @@ public class AbfrageStatusController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK -> Abfrage wurde erfolgreich an Sachbearbeitung Kita/Schule zurückgegeben."),
             @ApiResponse(responseCode = "404", description = "NOT_FOUND -> Es gibt keine Abfrage mit der ID.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class))),
-            @ApiResponse(responseCode = "409", description = "CONFLICT -> Die Abfrage konnte aufgrund des aktuellen Status nicht zur Bearbeitung zurückgegeben werden.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class)))
+            @ApiResponse(responseCode = "409", description = "CONFLICT -> Die Abfrage konnte aufgrund des aktuellen Status oder des bereits existierenden Abfragenamen nicht zur Bearbeitung zurückgegeben werden.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class)))
     })
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_WEITERE_ABFRAGEVARIANTEN_ANLEGEN_ABFRAGE.name())")
     public ResponseEntity<Void> weitereAbfragevariantenAnlegen(@PathVariable @NotNull final UUID id) throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException {
@@ -96,7 +96,7 @@ public class AbfrageStatusController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK -> Abfrage wurde erfolgreich an PLAN-HA I/2 zur Bearbeitung weitergegeben."),
             @ApiResponse(responseCode = "404", description = "NOT_FOUND -> Es gibt keine Abfrage mit der ID.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class))),
-            @ApiResponse(responseCode = "409", description = "CONFLICT -> Die Abfrage konnte aufgrund des aktuellen Status nicht weitergegeben werden.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class)))
+            @ApiResponse(responseCode = "409", description = "CONFLICT -> Die Abfrage konnte aufgrund des aktuellen Status oder des bereits existierenden Abfragenamen nicht weitergegeben werden.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class)))
     })
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_KEINE_ZUSAETZLICHE_ABFRAGEVARIANTE_ABFRAGE.name())")
     public ResponseEntity<Void> keineZusaetzlicheAbfragevariante(@PathVariable @NotNull final UUID id) throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException {
@@ -110,7 +110,7 @@ public class AbfrageStatusController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK -> Abfrage wurde erfolgreich an Sachbearbeitung Kita/Schule zur Bearbeitung weitergegeben."),
             @ApiResponse(responseCode = "404", description = "NOT_FOUND -> Es gibt keine Abfrage mit der ID.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class))),
-            @ApiResponse(responseCode = "409", description = "CONFLICT -> Die Abfrage konnte aufgrund des aktuellen Status nicht weitergegeben werden.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class)))
+            @ApiResponse(responseCode = "409", description = "CONFLICT -> Die Abfrage konnte aufgrund des aktuellen Status oder des bereits existierenden Abfragenamen nicht weitergegeben werden.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class)))
     })
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_ZUSAETZLICHE_ABFRAGEVARIANTE_ANLEGEN_ABFRAGE.name())")
     public ResponseEntity<Void> zusaetzlicheAbfragevarianteAnlegen(@PathVariable @NotNull final UUID id) throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException {
@@ -124,7 +124,7 @@ public class AbfrageStatusController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK -> Abfrage wurde erfolgreich an PLAN-HA I/2 zur Bearbeitung weitergegeben."),
             @ApiResponse(responseCode = "404", description = "NOT_FOUND -> Es gibt keine Abfrage mit der ID.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class))),
-            @ApiResponse(responseCode = "409", description = "CONFLICT -> Die Abfrage konnte aufgrund des aktuellen Status nicht weitergegeben werden.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class)))
+            @ApiResponse(responseCode = "409", description = "CONFLICT -> Die Abfrage konnte aufgrund des aktuellen Status oder des bereits existierenden Abfragenamen nicht weitergegeben werden.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class)))
     })
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_SPEICHER_DER_VARIANTEN_ABFRAGE.name())")
     public ResponseEntity<Void> speicherDerVarianten(@PathVariable @NotNull final UUID id) throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException {
@@ -138,7 +138,7 @@ public class AbfrageStatusController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK -> Abfrage wurde erfolgreich erledigt."),
             @ApiResponse(responseCode = "404", description = "NOT_FOUND -> Es gibt keine Abfrage mit der ID.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class))),
-            @ApiResponse(responseCode = "409", description = "CONFLICT -> Die Abfrage konnte aufgrund des aktuellen Status nicht erledgit werden.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class)))
+            @ApiResponse(responseCode = "409", description = "CONFLICT -> Die Abfrage konnte aufgrund des aktuellen Status oder des bereits existierenden Abfragenamen nicht erledgit werden.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class)))
     })
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_KEINE_BEARBEITUNG_NOETIG_ABFRAGE.name())")
     public ResponseEntity<Void> keineBearbeitungNoetig(@PathVariable @NotNull final UUID id) throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException {
@@ -152,7 +152,7 @@ public class AbfrageStatusController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK -> Abfrage wurde erfolgreich an RBS oder SOZ zur Bearbeitung weitergegeben."),
             @ApiResponse(responseCode = "404", description = "NOT_FOUND -> Es gibt keine Abfrage mit der ID.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class))),
-            @ApiResponse(responseCode = "409", description = "CONFLICT -> Die Abfrage konnte aufgrund des aktuellen Status nicht weitergegeben werden.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class)))
+            @ApiResponse(responseCode = "409", description = "CONFLICT -> Die Abfrage konnte aufgrund des aktuellen Status oder des bereits existierenden Abfragenamen nicht weitergegeben werden.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class)))
     })
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_VERSCHICKEN_DER_STELLUNGNAHME_ABFRAGE.name())")
     public ResponseEntity<Void> verschickenDerStellungnahme(@PathVariable @NotNull final UUID id) throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException {
@@ -166,7 +166,7 @@ public class AbfrageStatusController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK -> Die Bedarfsmeldung der Fachreferate ist erfolgt"),
             @ApiResponse(responseCode = "404", description = "NOT_FOUND -> Es gibt keine Abfrage mit der ID.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class))),
-            @ApiResponse(responseCode = "409", description = "CONFLICT -> Die Bedarfsmeldung konnte aufgrund des aktuellen Status nicht erfolgen", content = @Content(schema = @Schema(implementation = InformationResponseDto.class)))
+            @ApiResponse(responseCode = "409", description = "CONFLICT -> Die Bedarfsmeldung konnte aufgrund des aktuellen Status oder des bereits existierenden Abfragenamen nicht erfolgen", content = @Content(schema = @Schema(implementation = InformationResponseDto.class)))
     })
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_BEDARFSMELDUNG_ERFOLGT_ABFRAGE.name())")
     public ResponseEntity<Void> bedarfsmeldungErfolgt(@PathVariable @NotNull final UUID id) throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException {
@@ -180,7 +180,7 @@ public class AbfrageStatusController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK -> Abfrage wurde erfolgreich erledigt."),
             @ApiResponse(responseCode = "404", description = "NOT_FOUND -> Es gibt keine Abfrage mit der ID.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class))),
-            @ApiResponse(responseCode = "409", description = "CONFLICT -> Die Abfrage konnte aufgrund des aktuellen Status nicht erledigt werden.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class)))
+            @ApiResponse(responseCode = "409", description = "CONFLICT -> Die Abfrage konnte aufgrund des aktuellen Status oder des bereits existierenden Abfragenamen nicht erledigt werden.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class)))
     })
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_SPEICHERN_VON_SOZIALINFRASTRUKTUR_VERSORGUNG_ABFRAGE.name())")
     public ResponseEntity<Void> speichernVonSozialinfrastrukturVersorgung(@PathVariable @NotNull final UUID id) throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException {

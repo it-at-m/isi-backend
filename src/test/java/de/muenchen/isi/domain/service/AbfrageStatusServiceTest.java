@@ -363,7 +363,7 @@ class AbfrageStatusServiceTest {
 
         InfrastrukturabfrageModel saved = this.abfrageService.getInfrastrukturabfrageById(uuid);
         assertThat(saved.getAbfrage().getStatusAbfrage(), is(StatusAbfrage.ANGELEGT));
-        
+
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
         this.abfrageService.updateInfrastrukturabfrage(abfrage);
         Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () -> this.abfrageStatusService.angabenAnpassenAbfrage(uuid));
