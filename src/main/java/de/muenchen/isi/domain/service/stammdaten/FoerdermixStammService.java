@@ -1,6 +1,7 @@
 package de.muenchen.isi.domain.service.stammdaten;
 
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
+import de.muenchen.isi.domain.exception.UniqueViolationException;
 import de.muenchen.isi.domain.mapper.StammdatenDomainMapper;
 import de.muenchen.isi.domain.model.stammdaten.FoerdermixStammModel;
 import de.muenchen.isi.infrastructure.repository.stammdaten.FoerdermixStammRepository;
@@ -53,11 +54,17 @@ public class FoerdermixStammService {
      *
      * @param foerdermix zum Speichern.
      * @return das gespeicherte {@link FoerdermixStammModel}.
+     * @throws UniqueViolationException falls die Bezeichnung {@link FoerdermixStammModel#getBezeichnung()} des Fördermixes bereits im gleichen Jahr {@link FoerdermixStammModel#getBezeichnungJahr()} vorhanden ist.
      */
-    public FoerdermixStammModel saveFoerdermixStamm(final FoerdermixStammModel foerdermix) {
+    public FoerdermixStammModel saveFoerdermixStamm(final FoerdermixStammModel foerdermix) throws UniqueViolationException {
         var entity = this.stammdatenDomainMapper.model2Entity(foerdermix);
-        entity = this.foerdermixStammRepository.save(entity);
-        return this.stammdatenDomainMapper.entity2Model(entity);
+        final var saved = this.foerdermixStammRepository.findByBezeichnungJahrIgnoreCaseAndBezeichnungIgnoreCase(foerdermix.getBezeichnungJahr(), foerdermix.getBezeichnung());
+        if (saved.isPresent()) {
+            throw new UniqueViolationException("Die Bezeichnung exisitiert bereits unter dem angegebenen Jahr. Bitte wählen Sie daher eine andere Bezeichnung und speichern Sie den Fördermix erneut.");
+        } else {
+            entity = this.foerdermixStammRepository.save(entity);
+            return this.stammdatenDomainMapper.entity2Model(entity);
+        }
     }
 
     /**
@@ -67,7 +74,7 @@ public class FoerdermixStammService {
      * @return das geupdatete {@link FoerdermixStammModel}.
      * @throws EntityNotFoundException falls die Abfrage identifiziert durch die {@link FoerdermixStammModel#getId()} nicht gefunden wird.
      */
-    public FoerdermixStammModel updateFoerdermixStamm(final FoerdermixStammModel foerdermix) throws EntityNotFoundException {
+    public FoerdermixStammModel updateFoerdermixStamm(final FoerdermixStammModel foerdermix) throws EntityNotFoundException, UniqueViolationException {
         this.getFoerdermixStammById(foerdermix.getId());
         return this.saveFoerdermixStamm(foerdermix);
     }

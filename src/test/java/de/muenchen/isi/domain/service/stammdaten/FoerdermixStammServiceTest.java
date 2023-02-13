@@ -1,6 +1,7 @@
 package de.muenchen.isi.domain.service.stammdaten;
 
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
+import de.muenchen.isi.domain.exception.UniqueViolationException;
 import de.muenchen.isi.domain.mapper.StammdatenDomainMapper;
 import de.muenchen.isi.domain.mapper.StammdatenDomainMapperImpl;
 import de.muenchen.isi.domain.model.stammdaten.FoerdermixStammModel;
@@ -79,7 +80,7 @@ class FoerdermixStammServiceTest {
     }
 
     @Test
-    void saveFoerdermixStamm() {
+    void saveFoerdermixStamm() throws UniqueViolationException {
         final FoerdermixStammModel model = new FoerdermixStammModel();
         model.setId(null);
 
@@ -105,7 +106,29 @@ class FoerdermixStammServiceTest {
     }
 
     @Test
-    void updateFoerdermixStamm() throws EntityNotFoundException {
+    void saveFoerdermixStammUniqueViolationTest() throws UniqueViolationException {
+        final FoerdermixStammModel model = new FoerdermixStammModel();
+        model.setId(null);
+        model.setBezeichnungJahr("Test 2022");
+        model.setBezeichnung("Testfall 1");
+
+        final FoerdermixStamm entity = this.stammdatenDomainMapper.model2Entity(model);
+
+        final FoerdermixStamm saveResult = new FoerdermixStamm();
+        saveResult.setId(UUID.randomUUID());
+
+        Mockito.when(this.foerdermixStammRepository.save(entity)).thenReturn(saveResult);
+        Mockito.when(this.foerdermixStammRepository.findByBezeichnungJahrIgnoreCaseAndBezeichnungIgnoreCase("Test 2022", "Testfall 1")).thenReturn(Optional.of(entity));
+
+        Assertions.assertThrows(UniqueViolationException.class, () -> this.foerdermixStammService.saveFoerdermixStamm(model));
+
+        Mockito.verify(this.foerdermixStammRepository, Mockito.times(0)).save(entity);
+        Mockito.verify(this.foerdermixStammRepository, Mockito.times(1)).findByBezeichnungJahrIgnoreCaseAndBezeichnungIgnoreCase("Test 2022", "Testfall 1");
+    }
+
+
+    @Test
+    void updateFoerdermixStamm() throws EntityNotFoundException, UniqueViolationException {
         final FoerdermixStammModel model = new FoerdermixStammModel();
         model.setId(UUID.randomUUID());
 
