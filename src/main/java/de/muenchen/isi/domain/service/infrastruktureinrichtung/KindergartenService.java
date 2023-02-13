@@ -79,8 +79,8 @@ public class KindergartenService {
      *
      * @param kindergarten zum Updaten
      * @return das geupdatete {@link KindergartenModel}
-     * @throws EntityNotFoundException    falls der Kindergarten identifiziert durch die {@link KindergartenModel#getId()} nicht gefunden wird.
-     * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist.
+     * @throws EntityNotFoundException falls der Kindergarten identifiziert durch die {@link KindergartenModel#getId()} nicht gefunden wird
+     * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
      */
     public KindergartenModel updateKindergarten(final KindergartenModel kindergarten) throws EntityNotFoundException, OptimisticLockingException {
         this.getKindergartenById(kindergarten.getId());
