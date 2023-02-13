@@ -79,8 +79,8 @@ public class GsNachmittagBetreuungService {
      *
      * @param gsNachmittagBetreuung zum Updaten
      * @return das geupdatete {@link GsNachmittagBetreuungModel}
-     * @throws EntityNotFoundException    falls die Nachmittagsbetreuung für Grundschulkinder identifiziert durch die {@link GsNachmittagBetreuungModel#getId()} nicht gefunden wird.
-     * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist.
+     * @throws EntityNotFoundException falls die Nachmittagsbetreuung für Grundschulkinder identifiziert durch die {@link GsNachmittagBetreuungModel#getId()} nicht gefunden wird
+     * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
      */
     public GsNachmittagBetreuungModel updateGsNachmittagBetreuung(final GsNachmittagBetreuungModel gsNachmittagBetreuung) throws EntityNotFoundException, OptimisticLockingException {
         this.getGsNachmittagBetreuungById(gsNachmittagBetreuung.getId());
