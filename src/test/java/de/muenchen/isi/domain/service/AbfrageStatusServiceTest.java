@@ -4,6 +4,7 @@ import de.muenchen.isi.IsiBackendApplication;
 import de.muenchen.isi.TestConstants;
 import de.muenchen.isi.domain.exception.AbfrageStatusNotAllowedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
+import de.muenchen.isi.domain.exception.UniqueViolationException;
 import de.muenchen.isi.domain.model.InfrastrukturabfrageModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrageEvents;
@@ -90,7 +91,7 @@ class AbfrageStatusServiceTest {
 
     @Test
     @Transactional
-    void freigabeInfrasturkturabfrageVonAngelegt() throws EntityNotFoundException, AbfrageStatusNotAllowedException {
+    void freigabeInfrasturkturabfrageVonAngelegt() throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ANGELEGT);
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
@@ -146,7 +147,7 @@ class AbfrageStatusServiceTest {
 
     @Test
     @Transactional
-    void abbrechenAbfrageVonOffen() throws EntityNotFoundException, AbfrageStatusNotAllowedException {
+    void abbrechenAbfrageVonOffen() throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.OFFEN);
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
@@ -172,7 +173,7 @@ class AbfrageStatusServiceTest {
 
     @Test
     @Transactional
-    void abbrechenAbfrageVonInErfassung() throws EntityNotFoundException, AbfrageStatusNotAllowedException {
+    void abbrechenAbfrageVonInErfassung() throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_ERFASSUNG);
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
@@ -198,7 +199,7 @@ class AbfrageStatusServiceTest {
 
     @Test
     @Transactional
-    void abbrechenAbfrageVonInBearbeitungPlan() throws EntityNotFoundException, AbfrageStatusNotAllowedException {
+    void abbrechenAbfrageVonInBearbeitungPlan() throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_PLAN);
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
@@ -224,7 +225,7 @@ class AbfrageStatusServiceTest {
 
     @Test
     @Transactional
-    void abbrechenAbfrageVonInBearbeitungFachreferate() throws EntityNotFoundException, AbfrageStatusNotAllowedException {
+    void abbrechenAbfrageVonInBearbeitungFachreferate() throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
@@ -250,7 +251,7 @@ class AbfrageStatusServiceTest {
 
     @Test
     @Transactional
-    void abbrechenAbfrageVonBedarfsmeldungErfolgt() throws EntityNotFoundException, AbfrageStatusNotAllowedException {
+    void abbrechenAbfrageVonBedarfsmeldungErfolgt() throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT);
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
@@ -276,7 +277,7 @@ class AbfrageStatusServiceTest {
 
     @Test
     @Transactional
-    void angabenAnpassenAbfrageVonInBearbeitungPlan() throws EntityNotFoundException, AbfrageStatusNotAllowedException {
+    void angabenAnpassenAbfrageVonInBearbeitungPlan() throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_PLAN);
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
@@ -314,7 +315,7 @@ class AbfrageStatusServiceTest {
 
     @Test
     @Transactional
-    void angabenAnpassenAbfrageVonInErfassung() throws EntityNotFoundException, AbfrageStatusNotAllowedException {
+    void angabenAnpassenAbfrageVonInErfassung() throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_ERFASSUNG);
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
@@ -325,12 +326,6 @@ class AbfrageStatusServiceTest {
         InfrastrukturabfrageModel saved = this.abfrageService.getInfrastrukturabfrageById(uuid);
         assertThat(saved.getAbfrage().getStatusAbfrage(), is(StatusAbfrage.ANGELEGT));
 
-        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_PLAN);
-        this.abfrageService.updateInfrastrukturabfrage(abfrage);
-        Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () -> this.abfrageStatusService.angabenAnpassenAbfrage(uuid));
-        saved = this.abfrageService.getInfrastrukturabfrageById(uuid);
-        assertThat(saved.getAbfrage().getStatusAbfrage(), is(StatusAbfrage.IN_BEARBEITUNG_PLAN));
-
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
         this.abfrageService.updateInfrastrukturabfrage(abfrage);
         Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () -> this.abfrageStatusService.angabenAnpassenAbfrage(uuid));
@@ -358,7 +353,7 @@ class AbfrageStatusServiceTest {
 
     @Test
     @Transactional
-    void angabenAnpassenAbfrageVonOffen() throws EntityNotFoundException, AbfrageStatusNotAllowedException {
+    void angabenAnpassenAbfrageVonOffen() throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.OFFEN);
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
@@ -368,13 +363,7 @@ class AbfrageStatusServiceTest {
 
         InfrastrukturabfrageModel saved = this.abfrageService.getInfrastrukturabfrageById(uuid);
         assertThat(saved.getAbfrage().getStatusAbfrage(), is(StatusAbfrage.ANGELEGT));
-
-        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_PLAN);
-        this.abfrageService.updateInfrastrukturabfrage(abfrage);
-        Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () -> this.abfrageStatusService.angabenAnpassenAbfrage(uuid));
-        saved = this.abfrageService.getInfrastrukturabfrageById(uuid);
-        assertThat(saved.getAbfrage().getStatusAbfrage(), is(StatusAbfrage.IN_BEARBEITUNG_PLAN));
-
+        
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
         this.abfrageService.updateInfrastrukturabfrage(abfrage);
         Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () -> this.abfrageStatusService.angabenAnpassenAbfrage(uuid));
@@ -402,7 +391,7 @@ class AbfrageStatusServiceTest {
 
     @Test
     @Transactional
-    void weitereAbfragevariantenAnlegenVonInBearbeitungPlan() throws EntityNotFoundException, AbfrageStatusNotAllowedException {
+    void weitereAbfragevariantenAnlegenVonInBearbeitungPlan() throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_PLAN);
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
@@ -434,7 +423,7 @@ class AbfrageStatusServiceTest {
 
     @Test
     @Transactional
-    void weitereAbfragevariantenAnlegenVonInBearbeitungFachreferate() throws EntityNotFoundException, AbfrageStatusNotAllowedException {
+    void weitereAbfragevariantenAnlegenVonInBearbeitungFachreferate() throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
@@ -466,7 +455,7 @@ class AbfrageStatusServiceTest {
 
     @Test
     @Transactional
-    void weitereAbfragevariantenAnlegenVonBedarfsmeldungErfolgt() throws EntityNotFoundException, AbfrageStatusNotAllowedException {
+    void weitereAbfragevariantenAnlegenVonBedarfsmeldungErfolgt() throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT);
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
@@ -498,7 +487,7 @@ class AbfrageStatusServiceTest {
 
     @Test
     @Transactional
-    void weitereAbfragevariantenAnlegenErledigtVonErledigt() throws EntityNotFoundException, AbfrageStatusNotAllowedException {
+    void weitereAbfragevariantenAnlegenErledigtVonErledigt() throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ERLEDIGT);
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
@@ -531,7 +520,7 @@ class AbfrageStatusServiceTest {
 
     @Test
     @Transactional
-    void keineZusaetzlicheAbfragevarianteVonOffen() throws EntityNotFoundException, AbfrageStatusNotAllowedException {
+    void keineZusaetzlicheAbfragevarianteVonOffen() throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.OFFEN);
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
@@ -587,7 +576,7 @@ class AbfrageStatusServiceTest {
 
     @Test
     @Transactional
-    void zusaetzlicheAbfragevarianteAnlegenVonOffen() throws EntityNotFoundException, AbfrageStatusNotAllowedException {
+    void zusaetzlicheAbfragevarianteAnlegenVonOffen() throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.OFFEN);
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
@@ -643,7 +632,7 @@ class AbfrageStatusServiceTest {
 
     @Test
     @Transactional
-    void speichernDerVariantenVonInErfassung() throws EntityNotFoundException, AbfrageStatusNotAllowedException {
+    void speichernDerVariantenVonInErfassung() throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_ERFASSUNG);
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
@@ -699,7 +688,7 @@ class AbfrageStatusServiceTest {
 
     @Test
     @Transactional
-    void keineBearbeitungNoetigVonInBearbeitungPlan() throws EntityNotFoundException, AbfrageStatusNotAllowedException {
+    void keineBearbeitungNoetigVonInBearbeitungPlan() throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_PLAN);
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
@@ -756,7 +745,7 @@ class AbfrageStatusServiceTest {
 
     @Test
     @Transactional
-    void verschickenDerStellungnahmeVonInBearbeitungPlan() throws EntityNotFoundException, AbfrageStatusNotAllowedException {
+    void verschickenDerStellungnahmeVonInBearbeitungPlan() throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_PLAN);
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
@@ -812,7 +801,7 @@ class AbfrageStatusServiceTest {
 
     @Test
     @Transactional
-    void bedarfsmeldungErfolgtVonInBearbeitungFachreferate() throws EntityNotFoundException, AbfrageStatusNotAllowedException {
+    void bedarfsmeldungErfolgtVonInBearbeitungFachreferate() throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
@@ -869,7 +858,7 @@ class AbfrageStatusServiceTest {
 
     @Test
     @Transactional
-    void speichernVonSozialinfrastrukturVersorgungVonBedarfsmeldungErfolgt() throws EntityNotFoundException, AbfrageStatusNotAllowedException {
+    void speichernVonSozialinfrastrukturVersorgungVonBedarfsmeldungErfolgt() throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT);
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);

@@ -2,11 +2,11 @@ package de.muenchen.isi.domain.service;
 
 import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
+import de.muenchen.isi.domain.exception.UniqueViolationException;
 import de.muenchen.isi.domain.mapper.AbfrageDomainMapper;
 import de.muenchen.isi.domain.model.AbfrageModel;
 import de.muenchen.isi.domain.model.BauvorhabenModel;
 import de.muenchen.isi.domain.model.InfrastrukturabfrageModel;
-import de.muenchen.isi.infrastructure.entity.Infrastrukturabfrage;
 import de.muenchen.isi.infrastructure.repository.InfrastrukturabfrageRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -59,11 +59,17 @@ public class AbfrageService {
      *
      * @param abfrage zum Speichern.
      * @return das gespeicherte {@link InfrastrukturabfrageModel}.
+     * @throws UniqueViolationException falls der Name der Abfrage {@link InfrastrukturabfrageModel#getAbfrage().getNameAbfrage} ()} bereits vorhanden ist.
      */
-    public InfrastrukturabfrageModel saveInfrastrukturabfrage(final InfrastrukturabfrageModel abfrage) {
-        Infrastrukturabfrage abfrageEntity = this.abfrageDomainMapper.model2entity(abfrage);
-        abfrageEntity = this.infrastrukturabfrageRepository.save(abfrageEntity);
-        return this.abfrageDomainMapper.entity2Model(abfrageEntity);
+    public InfrastrukturabfrageModel saveInfrastrukturabfrage(final InfrastrukturabfrageModel abfrage) throws UniqueViolationException {
+        var abfrageEntity = this.abfrageDomainMapper.model2entity(abfrage);
+        var saved = this.infrastrukturabfrageRepository.findByAbfrage_NameAbfrageIgnoreCase(abfrageEntity.getAbfrage().getNameAbfrage());
+        if ((saved.isPresent() && saved.get().getId().equals(abfrageEntity.getId())) || saved.isEmpty()) {
+            abfrageEntity = this.infrastrukturabfrageRepository.save(abfrageEntity);
+            return this.abfrageDomainMapper.entity2Model(abfrageEntity);
+        } else {
+            throw new UniqueViolationException("Der angegebene Name der Abfrage ist schon vorhanden, bitte wählen Sie daher einen anderen Namen und speichern Sie die Abfrage erneut.");
+        }
     }
 
     /**
@@ -72,8 +78,9 @@ public class AbfrageService {
      * @param abfrage zum Updaten.
      * @return das geupdatete {@link InfrastrukturabfrageModel}.
      * @throws EntityNotFoundException falls die Abfrage identifiziert durch die {@link InfrastrukturabfrageModel#getId()} nicht gefunden wird.
+     * @throws UniqueViolationException falls der Name der Abfrage {@link InfrastrukturabfrageModel#getAbfrage().getNameAbfrage} ()} bereits vorhanden ist.
      */
-    public InfrastrukturabfrageModel updateInfrastrukturabfrage(final InfrastrukturabfrageModel abfrage) throws EntityNotFoundException {
+    public InfrastrukturabfrageModel updateInfrastrukturabfrage(final InfrastrukturabfrageModel abfrage) throws EntityNotFoundException, UniqueViolationException {
         this.getInfrastrukturabfrageById(abfrage.getId());
         return this.saveInfrastrukturabfrage(abfrage);
     }

@@ -1,5 +1,6 @@
 package de.muenchen.isi.api.advice;
 
+import de.muenchen.isi.api.dto.enums.InformationResponseType;
 import de.muenchen.isi.api.dto.error.InformationResponseDto;
 import de.muenchen.isi.domain.exception.AbfrageStatusNotAllowedException;
 import de.muenchen.isi.domain.exception.CsvAttributeErrorException;
@@ -9,6 +10,7 @@ import de.muenchen.isi.domain.exception.FileHandlingFailedException;
 import de.muenchen.isi.domain.exception.FileHandlingWithS3FailedException;
 import de.muenchen.isi.domain.exception.FileImportFailedException;
 import de.muenchen.isi.domain.exception.KoordinatenException;
+import de.muenchen.isi.domain.exception.UniqueViolationException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -378,6 +380,21 @@ class RestExceptionHandlerTest {
                 responseDto.getOriginalException(),
                 is("EntityNotFoundException")
         );
+    }
+
+    @Test
+    void handleUniqueViolationExceptionTest() {
+
+        final UniqueViolationException uniqueViolationException = new UniqueViolationException("test");
+
+        final ResponseEntity<Object> response = this.restExceptionHandler.handleUniqueViolationException(uniqueViolationException);
+
+        assertThat(response.getStatusCode(), is(HttpStatus.CONFLICT));
+
+        final InformationResponseDto responseDto = (InformationResponseDto) response.getBody();
+
+        assertThat(responseDto.getMessages(), is(List.of("test")));
+        assertThat(responseDto.getType(), is(InformationResponseType.ERROR));
     }
 
     @Test
