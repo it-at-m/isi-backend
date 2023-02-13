@@ -66,8 +66,8 @@ public class BaurateService {
     /**
      * Diese Methode updated ein {@link BaurateModel}.
      *
-     * @param baurate zum Updaten.
-     * @return das geupdatete {@link BaurateModel}.
+     * @param baurate zum Updaten
+     * @return das geupdatete {@link BaurateModel}
      * @throws EntityNotFoundException    falls die Abfrage identifiziert durch die {@link BaurateModel#getId()} nicht gefunden wird.
      * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist.
      */
