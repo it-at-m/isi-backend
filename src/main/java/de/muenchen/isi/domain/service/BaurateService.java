@@ -68,8 +68,8 @@ public class BaurateService {
      *
      * @param baurate zum Updaten
      * @return das geupdatete {@link BaurateModel}
-     * @throws EntityNotFoundException    falls die Abfrage identifiziert durch die {@link BaurateModel#getId()} nicht gefunden wird.
-     * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist.
+     * @throws EntityNotFoundException falls die Abfrage identifiziert durch die {@link BaurateModel#getId()} nicht gefunden wird
+     * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
      */
     public BaurateModel updateBaurate(final BaurateModel baurate) throws EntityNotFoundException, OptimisticLockingException {
         this.getBaurateById(baurate.getId());
