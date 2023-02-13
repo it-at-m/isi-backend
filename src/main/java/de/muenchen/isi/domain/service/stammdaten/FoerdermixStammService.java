@@ -53,9 +53,9 @@ public class FoerdermixStammService {
     /**
      * Diese Methode speichert ein {@link FoerdermixStammModel}.
      *
-     * @param foerdermix zum Speichern.
-     * @return das gespeicherte {@link FoerdermixStammModel}.
-     * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist.
+     * @param foerdermix zum Speichern
+     * @return das gespeicherte {@link FoerdermixStammModel}
+     * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
      */
     public FoerdermixStammModel saveFoerdermixStamm(final FoerdermixStammModel foerdermix) throws OptimisticLockingException {
         var entity = this.stammdatenDomainMapper.model2Entity(foerdermix);
