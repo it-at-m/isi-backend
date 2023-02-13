@@ -71,8 +71,8 @@ public class FoerdermixStammService {
     /**
      * Diese Methode updated ein {@link FoerdermixStammModel}.
      *
-     * @param foerdermix zum Updaten.
-     * @return das geupdatete {@link FoerdermixStammModel}.
+     * @param foerdermix zum Updaten
+     * @return das geupdatete {@link FoerdermixStammModel}
      * @throws EntityNotFoundException falls die Abfrage identifiziert durch die {@link FoerdermixStammModel#getId()} nicht gefunden wird
      * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
      */
