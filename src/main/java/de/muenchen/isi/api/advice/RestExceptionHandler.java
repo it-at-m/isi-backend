@@ -64,11 +64,10 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(OptimisticLockingException.class)
     public ResponseEntity<Object> handleOptimisticLockingException(final OptimisticLockingException ex) {
         final var httpStatus = HttpStatus.PRECONDITION_FAILED;
-        final var errorResponseDto = this.createInformationResponseDtoWithTraceInformationAndTimestampAndOriginalExceptionNameAndStatusAndMessage(
-                ex,
-                httpStatus.value(),
-                List.of(ex.getMessage())
-        );
+        final InformationResponseDto errorResponseDto = new InformationResponseDto();
+        errorResponseDto.setMessages(List.of(ex.getMessage()));
+        errorResponseDto.setHttpStatus(httpStatus.value());
+        errorResponseDto.setType(InformationResponseType.ERROR);
         return ResponseEntity
                 .status(httpStatus)
                 .body(errorResponseDto);

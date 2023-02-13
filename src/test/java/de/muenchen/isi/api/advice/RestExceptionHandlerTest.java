@@ -49,6 +49,7 @@ import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
@@ -94,11 +95,11 @@ class RestExceptionHandlerTest {
 
         assertThat(
                 responseDto.getTraceId(),
-                is("1111111111111111")
+                is(nullValue())
         );
         assertThat(
                 responseDto.getSpanId(),
-                is("ffffffffffffffff")
+                is(nullValue())
         );
         assertThat(
                 responseDto.getMessages(),
@@ -106,7 +107,11 @@ class RestExceptionHandlerTest {
         );
         assertThat(
                 responseDto.getOriginalException(),
-                is("OptimisticLockingException")
+                is(nullValue())
+        );
+        assertThat(
+                responseDto.getType(),
+                is(InformationResponseType.ERROR)
         );
 
     }
@@ -427,8 +432,26 @@ class RestExceptionHandlerTest {
 
         final InformationResponseDto responseDto = (InformationResponseDto) response.getBody();
 
-        assertThat(responseDto.getMessages(), is(List.of("test")));
-        assertThat(responseDto.getType(), is(InformationResponseType.ERROR));
+        assertThat(
+                responseDto.getTraceId(),
+                is(nullValue())
+        );
+        assertThat(
+                responseDto.getSpanId(),
+                is(nullValue())
+        );
+        assertThat(
+                responseDto.getMessages(),
+                is(List.of("test"))
+        );
+        assertThat(
+                responseDto.getOriginalException(),
+                is(nullValue())
+        );
+        assertThat(
+                responseDto.getType(),
+                is(InformationResponseType.ERROR)
+        );
     }
 
     @Test
