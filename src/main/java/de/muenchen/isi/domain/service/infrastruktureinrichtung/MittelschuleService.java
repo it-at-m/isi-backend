@@ -77,8 +77,8 @@ public class MittelschuleService {
     /**
      * Diese Methode updated ein {@link MittelschuleModel}.
      *
-     * @param mittelschule zum Updaten.
-     * @return das geupdatete {@link MittelschuleModel}.
+     * @param mittelschule zum Updaten
+     * @return das geupdatete {@link MittelschuleModel}
      * @throws EntityNotFoundException    falls die Mittelschule identifiziert durch die {@link MittelschuleModel#getId()} nicht gefunden wird.
      * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist.
      */
