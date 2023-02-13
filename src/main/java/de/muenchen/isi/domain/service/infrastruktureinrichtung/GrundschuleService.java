@@ -68,7 +68,7 @@ public class GrundschuleService {
         try {
             grundschuleEntity = this.grundschuleRepository.saveAndFlush(grundschuleEntity);
         } catch (final ObjectOptimisticLockingFailureException exception) {
-            final var message = "Die Daten wurden in der Zwischenzeit geändert. Bitte laden Sie die Daten neu";
+            final var message = "Die Daten wurden in der Zwischenzeit geändert. Bitte laden Sie die Seite neu!";
             throw new OptimisticLockingException(message, exception);
         }
         return this.infrastruktureinrichtungDomainMapper.entity2Model(grundschuleEntity);
