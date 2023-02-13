@@ -59,9 +59,9 @@ public class KindergartenService {
     /**
      * Diese Methode speichert ein {@link KindergartenModel}.
      *
-     * @param kindergarten zum Speichern.
-     * @return das gespeicherte {@link KindergartenModel}.
-     * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist.
+     * @param kindergarten zum Speichern
+     * @return das gespeicherte {@link KindergartenModel}
+     * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
      */
     public KindergartenModel saveKindergarten(final KindergartenModel kindergarten) throws OptimisticLockingException {
         Kindergarten kindergartenEntity = this.infrastruktureinrichtungDomainMapper.model2Entity(kindergarten);
