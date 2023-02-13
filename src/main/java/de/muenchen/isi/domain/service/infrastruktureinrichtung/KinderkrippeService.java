@@ -77,8 +77,8 @@ public class KinderkrippeService {
     /**
      * Diese Methode updated ein {@link KinderkrippeModel}.
      *
-     * @param kinderkrippe zum Updaten.
-     * @return das geupdatete {@link KinderkrippeModel}.
+     * @param kinderkrippe zum Updaten
+     * @return das geupdatete {@link KinderkrippeModel}
      * @throws EntityNotFoundException    falls die Kinderkrippe identifiziert durch die {@link KinderkrippeModel#getId()} nicht gefunden wird.
      * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist.
      */
