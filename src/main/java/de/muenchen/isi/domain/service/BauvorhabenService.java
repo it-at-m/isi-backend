@@ -148,7 +148,7 @@ public class BauvorhabenService {
      * Diese Methode soll dann verwendet werden, um die beim Mapping verloren gegangene Information zum Bauvorhaben wieder in der Infrastruktureinrichung einzusetzen.
      * Der Parameter 'bauvorhabenId' darf null sein. In diesem Fall passiert nichts.
      *
-     * @param bauvorhabenId            id des {@link BauvorhabenModel}s. Darf null sein.
+     * @param bauvorhabenId id des {@link BauvorhabenModel}s
      * @param infrastruktureinrichtung zum Speichern.
      * @return Die (möglicherweise) geänderte Infrastruktureinrichtung.
      * @throws EntityNotFoundException falls das Bauvorhaben mit der gegebenen ID nicht gefunden wurde.
