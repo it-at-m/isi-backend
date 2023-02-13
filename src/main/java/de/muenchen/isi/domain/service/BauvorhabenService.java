@@ -74,8 +74,8 @@ public class BauvorhabenService {
     /**
      * Diese Methode speichert ein {@link BauvorhabenModel}.
      *
-     * @param bauvorhaben zum Speichern.
-     * @return das gespeicherte {@link BauvorhabenModel}.
+     * @param bauvorhaben zum Speichern
+     * @return das gespeicherte {@link BauvorhabenModel}
      * @throws UniqueViolationException   falls der Name des Bauvorhabens {@link BauvorhabenModel#getNameVorhaben()} bereits vorhanden ist.
      * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist.
      */
