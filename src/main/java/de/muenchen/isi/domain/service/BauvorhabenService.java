@@ -149,9 +149,9 @@ public class BauvorhabenService {
      * Der Parameter 'bauvorhabenId' darf null sein. In diesem Fall passiert nichts.
      *
      * @param bauvorhabenId id des {@link BauvorhabenModel}s
-     * @param infrastruktureinrichtung zum Speichern.
-     * @return Die (möglicherweise) geänderte Infrastruktureinrichtung.
-     * @throws EntityNotFoundException falls das Bauvorhaben mit der gegebenen ID nicht gefunden wurde.
+     * @param infrastruktureinrichtung zum Speichern
+     * @return Die (möglicherweise) geänderte Infrastruktureinrichtung
+     * @throws EntityNotFoundException falls das Bauvorhaben mit der gegebenen ID nicht gefunden wurde
      */
     public InfrastruktureinrichtungModel assignBauvorhabenToInfrastruktureinrichtung(@Nullable final UUID bauvorhabenId, final InfrastruktureinrichtungModel infrastruktureinrichtung) throws EntityNotFoundException {
         if (bauvorhabenId != null) {
