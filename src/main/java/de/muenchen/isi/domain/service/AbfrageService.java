@@ -83,8 +83,8 @@ public class AbfrageService {
     /**
      * Diese Methode updated ein {@link InfrastrukturabfrageModel}.
      *
-     * @param abfrage zum Updaten.
-     * @return das geupdatete {@link InfrastrukturabfrageModel}.
+     * @param abfrage zum Updaten
+     * @return das geupdatete {@link InfrastrukturabfrageModel}
      * @throws EntityNotFoundException    falls die Abfrage identifiziert durch die {@link InfrastrukturabfrageModel#getId()} nicht gefunden wird.
      * @throws UniqueViolationException   falls der Name der Abfrage {@link InfrastrukturabfrageModel#getAbfrage().getNameAbfrage} ()} bereits vorhanden ist.
      * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist.
