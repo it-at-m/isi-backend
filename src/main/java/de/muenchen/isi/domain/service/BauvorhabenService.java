@@ -78,13 +78,13 @@ public class BauvorhabenService {
      * @throws UniqueViolationException falls der Name des Bauvorhabens {@link BauvorhabenModel#getNameVorhaben()} bereits vorhanden ist.
      */
     public BauvorhabenModel saveBauvorhaben(final BauvorhabenModel bauvorhaben) throws UniqueViolationException {
-        var entity = this.bauvorhabenDomainMapper.model2Entity(bauvorhaben);
-        var saved = this.bauvorhabenRepository.findByNameVorhabenIgnoreCase(entity.getNameVorhaben());
-        if(saved.isPresent()) {
-            throw new UniqueViolationException("Der angegebene Name des Bauvorhabens ist schon vorhanden, bitte wählen Sie daher einen anderen Namen und speichern Sie die Abfrage erneut.");
+        var bauvorhabenEntity = this.bauvorhabenDomainMapper.model2Entity(bauvorhaben);
+        var saved = this.bauvorhabenRepository.findByNameVorhabenIgnoreCase(bauvorhabenEntity.getNameVorhaben());
+        if ((saved.isPresent() && saved.get().getId().equals(bauvorhabenEntity.getId())) || saved.isEmpty()) {
+            bauvorhabenEntity = this.bauvorhabenRepository.save(bauvorhabenEntity);
+            return this.bauvorhabenDomainMapper.entity2Model(bauvorhabenEntity);
         } else {
-            entity = this.bauvorhabenRepository.save(entity);
-            return this.bauvorhabenDomainMapper.entity2Model(entity);
+            throw new UniqueViolationException("Der angegebene Name des Bauvorhabens ist schon vorhanden, bitte wählen Sie daher einen anderen Namen und speichern Sie die Abfrage erneut.");
         }
     }
 
