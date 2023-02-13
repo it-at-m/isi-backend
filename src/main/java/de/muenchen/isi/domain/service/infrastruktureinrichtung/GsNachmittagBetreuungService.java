@@ -59,9 +59,9 @@ public class GsNachmittagBetreuungService {
     /**
      * Diese Methode speichert ein {@link GsNachmittagBetreuungModel}.
      *
-     * @param gsNachmittagBetreuung zum Speichern.
-     * @return das gespeicherte {@link GsNachmittagBetreuungModel}.
-     * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist.
+     * @param gsNachmittagBetreuung zum Speichern
+     * @return das gespeicherte {@link GsNachmittagBetreuungModel}
+     * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
      */
     public GsNachmittagBetreuungModel saveGsNachmittagBetreuung(final GsNachmittagBetreuungModel gsNachmittagBetreuung) throws OptimisticLockingException {
         GsNachmittagBetreuung gsNachmittagBetreuungEntity = this.infrastruktureinrichtungDomainMapper.model2Entity(gsNachmittagBetreuung);
