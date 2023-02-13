@@ -77,8 +77,8 @@ public class HausFuerKinderService {
     /**
      * Diese Methode updated ein {@link HausFuerKinderModel}.
      *
-     * @param hausFuerKinder zum Updaten.
-     * @return das geupdatete {@link HausFuerKinderModel}.
+     * @param hausFuerKinder zum Updaten
+     * @return das geupdatete {@link HausFuerKinderModel}
      * @throws EntityNotFoundException    falls das Haus für Kinder identifiziert durch die {@link HausFuerKinderModel#getId()} nicht gefunden wird.
      * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist.
      */
