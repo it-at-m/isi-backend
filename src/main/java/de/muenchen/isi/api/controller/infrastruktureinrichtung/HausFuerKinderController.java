@@ -9,6 +9,7 @@ import de.muenchen.isi.api.dto.infrastruktureinrichtung.HausFuerKinderDto;
 import de.muenchen.isi.api.mapper.InfrastruktureinrichtungApiMapper;
 import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
+import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.service.BauvorhabenService;
 import de.muenchen.isi.domain.service.infrastruktureinrichtung.HausFuerKinderService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -81,14 +82,15 @@ public class HausFuerKinderController {
     }
 
     @PostMapping("haus-fuer-kinder")
-    @Transactional
+    @Transactional(rollbackFor = OptimisticLockingException.class)
     @Operation(summary = "Anlegen eines neuen Hauses für Kinder")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "CREATED -> Haus für Kinder wurde erfolgreich erstellt."),
-            @ApiResponse(responseCode = "400", description = "BAD_REQUEST -> Haus für Kinder konnte nicht erstellt werden, überprüfen sie die Eingabe.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class)))
+            @ApiResponse(responseCode = "400", description = "BAD_REQUEST -> Haus für Kinder konnte nicht erstellt werden, überprüfen sie die Eingabe.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class))),
+            @ApiResponse(responseCode = "412", description = "PRECONDITION_FAILED -> In der Anwendung ist bereits eine neuere Version der Entität gespeichert.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class)))
     })
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_WRITE_HAUS_FUER_KINDER.name())")
-    public ResponseEntity<HausFuerKinderDto> createHausFuerKinder(@RequestBody @Valid @NotNull final HausFuerKinderDto hausFuerKinderDto) throws EntityNotFoundException {
+    public ResponseEntity<HausFuerKinderDto> createHausFuerKinder(@RequestBody @Valid @NotNull final HausFuerKinderDto hausFuerKinderDto) throws EntityNotFoundException, OptimisticLockingException {
         var model = this.infrastruktureinrichtungApiMapper.dto2Model(hausFuerKinderDto);
         final var infrastruktureinrichtung = this.bauvorhabenService.assignBauvorhabenToInfrastruktureinrichtung(
                 hausFuerKinderDto.getInfrastruktureinrichtung().getBauvorhaben(),
@@ -101,15 +103,16 @@ public class HausFuerKinderController {
     }
 
     @PutMapping("haus-fuer-kinder")
-    @Transactional
+    @Transactional(rollbackFor = OptimisticLockingException.class)
     @Operation(summary = "Aktualisierung einer Hauses für Kinder")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK -> Haus für Kinder wurde erfolgreich aktualisiert."),
             @ApiResponse(responseCode = "400", description = "BAD_REQUEST -> Haus für Kinder konnte nicht aktualisiert werden, überprüfen sie die Eingabe.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class))),
-            @ApiResponse(responseCode = "404", description = "NOT_FOUND -> Es gibt kein Haus für Kinder mit der ID.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class)))
+            @ApiResponse(responseCode = "404", description = "NOT_FOUND -> Es gibt kein Haus für Kinder mit der ID.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class))),
+            @ApiResponse(responseCode = "412", description = "PRECONDITION_FAILED -> In der Anwendung ist bereits eine neuere Version der Entität gespeichert.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class)))
     })
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_WRITE_HAUS_FUER_KINDER.name())")
-    public ResponseEntity<HausFuerKinderDto> updateHausFuerKinder(@RequestBody @Valid @NotNull final HausFuerKinderDto hausFuerKinderDto) throws EntityNotFoundException {
+    public ResponseEntity<HausFuerKinderDto> updateHausFuerKinder(@RequestBody @Valid @NotNull final HausFuerKinderDto hausFuerKinderDto) throws EntityNotFoundException, OptimisticLockingException {
         var model = this.infrastruktureinrichtungApiMapper.dto2Model(hausFuerKinderDto);
         final var infrastruktureinrichtung = this.bauvorhabenService.assignBauvorhabenToInfrastruktureinrichtung(
                 hausFuerKinderDto.getInfrastruktureinrichtung().getBauvorhaben(),

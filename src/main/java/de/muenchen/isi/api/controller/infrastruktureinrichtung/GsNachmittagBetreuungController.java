@@ -9,6 +9,7 @@ import de.muenchen.isi.api.dto.infrastruktureinrichtung.GsNachmittagBetreuungDto
 import de.muenchen.isi.api.mapper.InfrastruktureinrichtungApiMapper;
 import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
+import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.service.BauvorhabenService;
 import de.muenchen.isi.domain.service.infrastruktureinrichtung.GsNachmittagBetreuungService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -81,14 +82,15 @@ public class GsNachmittagBetreuungController {
     }
 
     @PostMapping("gs-nachmittag-betreuung")
-    @Transactional
+    @Transactional(rollbackFor = OptimisticLockingException.class)
     @Operation(summary = "Anlegen einer neuen Nachmittagsbetreuung für Grundschulkinder")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "CREATED -> Nachmittagsbetreuung für Grundschulkinder wurde erfolgreich erstellt."),
-            @ApiResponse(responseCode = "400", description = "BAD_REQUEST -> Nachmittagsbetreuung für Grundschulkinder konnte nicht erstellt werden, überprüfen sie die Eingabe.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class)))
+            @ApiResponse(responseCode = "400", description = "BAD_REQUEST -> Nachmittagsbetreuung für Grundschulkinder konnte nicht erstellt werden, überprüfen sie die Eingabe.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class))),
+            @ApiResponse(responseCode = "412", description = "PRECONDITION_FAILED -> In der Anwendung ist bereits eine neuere Version der Entität gespeichert.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class)))
     })
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_WRITE_GS_NACHMITTAG_BETREUUNG.name())")
-    public ResponseEntity<GsNachmittagBetreuungDto> createGsNachmittagBetreuung(@RequestBody @Valid @NotNull final GsNachmittagBetreuungDto gsNachmittagBetreuungDto) throws EntityNotFoundException {
+    public ResponseEntity<GsNachmittagBetreuungDto> createGsNachmittagBetreuung(@RequestBody @Valid @NotNull final GsNachmittagBetreuungDto gsNachmittagBetreuungDto) throws EntityNotFoundException, OptimisticLockingException {
         var model = this.infrastruktureinrichtungApiMapper.dto2Model(gsNachmittagBetreuungDto);
         final var infrastruktureinrichtung = this.bauvorhabenService.assignBauvorhabenToInfrastruktureinrichtung(
                 gsNachmittagBetreuungDto.getInfrastruktureinrichtung().getBauvorhaben(),
@@ -101,15 +103,16 @@ public class GsNachmittagBetreuungController {
     }
 
     @PutMapping("gs-nachmittag-betreuung")
-    @Transactional
+    @Transactional(rollbackFor = OptimisticLockingException.class)
     @Operation(summary = "Aktualisierung einer Nachmittagsbetreuung für Grundschulkinder")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK -> Nachmittagsbetreuung für Grundschulkinder wurde erfolgreich aktualisiert."),
             @ApiResponse(responseCode = "400", description = "BAD_REQUEST -> Nachmittagsbetreuung für Grundschulkinder konnte nicht aktualisiert werden, überprüfen sie die Eingabe.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class))),
-            @ApiResponse(responseCode = "404", description = "NOT_FOUND -> Es gibt keine Nachmittagsbetreuung für Grundschulkinder mit der ID.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class)))
+            @ApiResponse(responseCode = "404", description = "NOT_FOUND -> Es gibt keine Nachmittagsbetreuung für Grundschulkinder mit der ID.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class))),
+            @ApiResponse(responseCode = "412", description = "PRECONDITION_FAILED -> In der Anwendung ist bereits eine neuere Version der Entität gespeichert.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class)))
     })
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_WRITE_GS_NACHMITTAG_BETREUUNG.name())")
-    public ResponseEntity<GsNachmittagBetreuungDto> updateGsNachmittagBetreuung(@RequestBody @Valid @NotNull final GsNachmittagBetreuungDto gsNachmittagBetreuungDto) throws EntityNotFoundException {
+    public ResponseEntity<GsNachmittagBetreuungDto> updateGsNachmittagBetreuung(@RequestBody @Valid @NotNull final GsNachmittagBetreuungDto gsNachmittagBetreuungDto) throws EntityNotFoundException, OptimisticLockingException {
         var model = this.infrastruktureinrichtungApiMapper.dto2Model(gsNachmittagBetreuungDto);
         final var infrastruktureinrichtung = this.bauvorhabenService.assignBauvorhabenToInfrastruktureinrichtung(
                 gsNachmittagBetreuungDto.getInfrastruktureinrichtung().getBauvorhaben(),

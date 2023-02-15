@@ -2,14 +2,15 @@ package de.muenchen.isi.domain.service.infrastruktureinrichtung;
 
 import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
+import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.mapper.InfrastruktureinrichtungDomainMapper;
 import de.muenchen.isi.domain.mapper.InfrastruktureinrichtungDomainMapperImpl;
 import de.muenchen.isi.domain.model.BauvorhabenModel;
-import de.muenchen.isi.domain.model.infrastruktureinrichtung.MittelschuleModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.InfrastruktureinrichtungModel;
+import de.muenchen.isi.domain.model.infrastruktureinrichtung.MittelschuleModel;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
-import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Mittelschule;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Infrastruktureinrichtung;
+import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Mittelschule;
 import de.muenchen.isi.infrastructure.repository.infrastruktureinrichtung.MittelschuleRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -87,7 +88,7 @@ class MittelschuleServiceTest {
     }
 
     @Test
-    void saveMittelschule() {
+    void saveMittelschule() throws OptimisticLockingException {
         final MittelschuleModel mittelschuleModel = new MittelschuleModel();
         mittelschuleModel.setId(null);
 
@@ -97,7 +98,7 @@ class MittelschuleServiceTest {
         final Mittelschule saveResult = new Mittelschule();
         saveResult.setId(UUID.randomUUID());
 
-        Mockito.when(this.mittelschuleRepository.save(mittelschuleEntity)).thenReturn(saveResult);
+        Mockito.when(this.mittelschuleRepository.saveAndFlush(mittelschuleEntity)).thenReturn(saveResult);
 
         final MittelschuleModel result = this.mittelschuleService.saveMittelschule(mittelschuleModel);
 
@@ -109,11 +110,11 @@ class MittelschuleServiceTest {
                 is(expected)
         );
 
-        Mockito.verify(this.mittelschuleRepository, Mockito.times(1)).save(mittelschuleEntity);
+        Mockito.verify(this.mittelschuleRepository, Mockito.times(1)).saveAndFlush(mittelschuleEntity);
     }
 
     @Test
-    void updateMittelschule() throws EntityNotFoundException {
+    void updateMittelschule() throws EntityNotFoundException, OptimisticLockingException {
         final MittelschuleModel mittelschuleModel = new MittelschuleModel();
         mittelschuleModel.setId(UUID.randomUUID());
 
@@ -121,7 +122,7 @@ class MittelschuleServiceTest {
         entity.setId(mittelschuleModel.getId());
 
         Mockito.when(this.mittelschuleRepository.findById(entity.getId())).thenReturn(Optional.of(entity));
-        Mockito.when(this.mittelschuleRepository.save(entity)).thenReturn(entity);
+        Mockito.when(this.mittelschuleRepository.saveAndFlush(entity)).thenReturn(entity);
 
         final MittelschuleModel result = this.mittelschuleService.updateMittelschule(mittelschuleModel);
 
@@ -134,7 +135,7 @@ class MittelschuleServiceTest {
         );
 
         Mockito.verify(this.mittelschuleRepository, Mockito.times(1)).findById(entity.getId());
-        Mockito.verify(this.mittelschuleRepository, Mockito.times(1)).save(entity);
+        Mockito.verify(this.mittelschuleRepository, Mockito.times(1)).saveAndFlush(entity);
     }
 
     @Test

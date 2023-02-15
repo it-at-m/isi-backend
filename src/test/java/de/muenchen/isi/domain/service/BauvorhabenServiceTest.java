@@ -2,6 +2,7 @@ package de.muenchen.isi.domain.service;
 
 import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
+import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
 import de.muenchen.isi.domain.mapper.BauvorhabenDomainMapper;
 import de.muenchen.isi.domain.mapper.BauvorhabenDomainMapperImpl;
@@ -143,7 +144,7 @@ public class BauvorhabenServiceTest {
     }
 
     @Test
-    void saveBauvorhabenTest() throws UniqueViolationException {
+    void saveBauvorhabenTest() throws UniqueViolationException, OptimisticLockingException {
         final BauvorhabenModel bauvorhaben = new BauvorhabenModel();
         bauvorhaben.setId(null);
 
@@ -153,7 +154,7 @@ public class BauvorhabenServiceTest {
         final Bauvorhaben saveResult = new Bauvorhaben();
         saveResult.setId(UUID.randomUUID());
 
-        Mockito.when(this.bauvorhabenRepository.save(bauvorhabenEntity)).thenReturn(saveResult);
+        Mockito.when(this.bauvorhabenRepository.saveAndFlush(bauvorhabenEntity)).thenReturn(saveResult);
 
         final BauvorhabenModel result = this.bauvorhabenService.saveBauvorhaben(bauvorhaben);
 
@@ -162,7 +163,7 @@ public class BauvorhabenServiceTest {
 
         assertThat(result, is(expected));
 
-        Mockito.verify(this.bauvorhabenRepository, Mockito.times(1)).save(bauvorhabenEntity);
+        Mockito.verify(this.bauvorhabenRepository, Mockito.times(1)).saveAndFlush(bauvorhabenEntity);
     }
 
     @Test
@@ -181,7 +182,7 @@ public class BauvorhabenServiceTest {
         entity.setNameVorhaben(bauvorhabenModel.getNameVorhaben());
 
         Mockito.when(this.bauvorhabenRepository.findByNameVorhabenIgnoreCase(entity.getNameVorhaben())).thenReturn(Optional.of(entity));
-        Mockito.when(this.bauvorhabenRepository.save(entity)).thenReturn(entity);
+        Mockito.when(this.bauvorhabenRepository.saveAndFlush(entity)).thenReturn(entity);
 
         Assertions.assertThrows(UniqueViolationException.class, () -> this.bauvorhabenService.saveBauvorhaben(bauvorhabenModel2));
 
@@ -192,7 +193,7 @@ public class BauvorhabenServiceTest {
     }
 
     @Test
-    void updateBauvorhabenTest() throws EntityNotFoundException, UniqueViolationException {
+    void updateBauvorhabenTest() throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException {
         final BauvorhabenModel bauvorhabenModel = new BauvorhabenModel();
         bauvorhabenModel.setId(UUID.randomUUID());
         bauvorhabenModel.setNameVorhaben("BauvorhabenTest");
@@ -200,7 +201,7 @@ public class BauvorhabenServiceTest {
         final Bauvorhaben entity = this.bauvorhabenDomainMapper.model2Entity(bauvorhabenModel);
 
         Mockito.when(this.bauvorhabenRepository.findById(entity.getId())).thenReturn(Optional.of(entity));
-        Mockito.when(this.bauvorhabenRepository.save(entity)).thenReturn(entity);
+        Mockito.when(this.bauvorhabenRepository.saveAndFlush(entity)).thenReturn(entity);
         Mockito.when(this.bauvorhabenRepository.findByNameVorhabenIgnoreCase("BauvorhabenTest")).thenReturn(Optional.empty());
 
         final BauvorhabenModel result = this.bauvorhabenService.updateBauvorhaben(bauvorhabenModel);
@@ -214,7 +215,7 @@ public class BauvorhabenServiceTest {
         );
 
         Mockito.verify(this.bauvorhabenRepository, Mockito.times(1)).findById(entity.getId());
-        Mockito.verify(this.bauvorhabenRepository, Mockito.times(1)).save(entity);
+        Mockito.verify(this.bauvorhabenRepository, Mockito.times(1)).saveAndFlush(entity);
         Mockito.verify(this.bauvorhabenRepository, Mockito.times(1)).findByNameVorhabenIgnoreCase("BauvorhabenTest");
     }
 

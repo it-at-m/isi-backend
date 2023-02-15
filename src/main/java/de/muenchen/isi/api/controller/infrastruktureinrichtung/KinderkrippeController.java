@@ -9,6 +9,7 @@ import de.muenchen.isi.api.dto.infrastruktureinrichtung.KinderkrippeDto;
 import de.muenchen.isi.api.mapper.InfrastruktureinrichtungApiMapper;
 import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
+import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.service.BauvorhabenService;
 import de.muenchen.isi.domain.service.infrastruktureinrichtung.KinderkrippeService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -81,14 +82,15 @@ public class KinderkrippeController {
     }
 
     @PostMapping("kinderkrippe")
-    @Transactional
+    @Transactional(rollbackFor = OptimisticLockingException.class)
     @Operation(summary = "Anlegen einer neuen Kinderkrippe")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "CREATED -> Kinderkrippe wurde erfolgreich erstellt."),
-            @ApiResponse(responseCode = "400", description = "BAD_REQUEST -> Kinderkrippe konnte nicht erstellt werden, überprüfen sie die Eingabe.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class)))
+            @ApiResponse(responseCode = "400", description = "BAD_REQUEST -> Kinderkrippe konnte nicht erstellt werden, überprüfen sie die Eingabe.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class))),
+            @ApiResponse(responseCode = "412", description = "PRECONDITION_FAILED -> In der Anwendung ist bereits eine neuere Version der Entität gespeichert.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class)))
     })
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_WRITE_KINDERKRIPPE.name())")
-    public ResponseEntity<KinderkrippeDto> createKinderkrippe(@RequestBody @Valid @NotNull final KinderkrippeDto kinderkrippeDto) throws EntityNotFoundException {
+    public ResponseEntity<KinderkrippeDto> createKinderkrippe(@RequestBody @Valid @NotNull final KinderkrippeDto kinderkrippeDto) throws EntityNotFoundException, OptimisticLockingException {
         var model = this.infrastruktureinrichtungApiMapper.dto2Model(kinderkrippeDto);
         final var infrastruktureinrichtung = this.bauvorhabenService.assignBauvorhabenToInfrastruktureinrichtung(
                 kinderkrippeDto.getInfrastruktureinrichtung().getBauvorhaben(),
@@ -101,15 +103,16 @@ public class KinderkrippeController {
     }
 
     @PutMapping("kinderkrippe")
-    @Transactional
+    @Transactional(rollbackFor = OptimisticLockingException.class)
     @Operation(summary = "Aktualisierung einer Kinderkrippe")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK -> Kinderkrippe wurde erfolgreich aktualisiert."),
             @ApiResponse(responseCode = "400", description = "BAD_REQUEST -> Kinderkrippe konnte nicht aktualisiert werden, überprüfen sie die Eingabe.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class))),
-            @ApiResponse(responseCode = "404", description = "NOT_FOUND -> Es gibt keine Kinderkrippe mit der ID.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class)))
+            @ApiResponse(responseCode = "404", description = "NOT_FOUND -> Es gibt keine Kinderkrippe mit der ID.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class))),
+            @ApiResponse(responseCode = "412", description = "PRECONDITION_FAILED -> In der Anwendung ist bereits eine neuere Version der Entität gespeichert.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class)))
     })
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_WRITE_KINDERKRIPPE.name())")
-    public ResponseEntity<KinderkrippeDto> updateKinderkrippe(@RequestBody @Valid @NotNull final KinderkrippeDto kinderkrippeDto) throws EntityNotFoundException {
+    public ResponseEntity<KinderkrippeDto> updateKinderkrippe(@RequestBody @Valid @NotNull final KinderkrippeDto kinderkrippeDto) throws EntityNotFoundException, OptimisticLockingException {
         var model = this.infrastruktureinrichtungApiMapper.dto2Model(kinderkrippeDto);
         final var infrastruktureinrichtung = this.bauvorhabenService.assignBauvorhabenToInfrastruktureinrichtung(
                 kinderkrippeDto.getInfrastruktureinrichtung().getBauvorhaben(),

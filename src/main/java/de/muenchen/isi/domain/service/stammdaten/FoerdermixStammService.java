@@ -1,11 +1,13 @@
 package de.muenchen.isi.domain.service.stammdaten;
 
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
+import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.mapper.StammdatenDomainMapper;
 import de.muenchen.isi.domain.model.stammdaten.FoerdermixStammModel;
 import de.muenchen.isi.infrastructure.repository.stammdaten.FoerdermixStammRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -51,23 +53,30 @@ public class FoerdermixStammService {
     /**
      * Diese Methode speichert ein {@link FoerdermixStammModel}.
      *
-     * @param foerdermix zum Speichern.
-     * @return das gespeicherte {@link FoerdermixStammModel}.
+     * @param foerdermix zum Speichern
+     * @return das gespeicherte {@link FoerdermixStammModel}
+     * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
      */
-    public FoerdermixStammModel saveFoerdermixStamm(final FoerdermixStammModel foerdermix) {
+    public FoerdermixStammModel saveFoerdermixStamm(final FoerdermixStammModel foerdermix) throws OptimisticLockingException {
         var entity = this.stammdatenDomainMapper.model2Entity(foerdermix);
-        entity = this.foerdermixStammRepository.save(entity);
+        try {
+            entity = this.foerdermixStammRepository.saveAndFlush(entity);
+        } catch (final ObjectOptimisticLockingFailureException exception) {
+            final var message = "Die Daten wurden in der Zwischenzeit geändert. Bitte laden Sie die Seite neu!";
+            throw new OptimisticLockingException(message, exception);
+        }
         return this.stammdatenDomainMapper.entity2Model(entity);
     }
 
     /**
      * Diese Methode updated ein {@link FoerdermixStammModel}.
      *
-     * @param foerdermix zum Updaten.
-     * @return das geupdatete {@link FoerdermixStammModel}.
-     * @throws EntityNotFoundException falls die Abfrage identifiziert durch die {@link FoerdermixStammModel#getId()} nicht gefunden wird.
+     * @param foerdermix zum Updaten
+     * @return das geupdatete {@link FoerdermixStammModel}
+     * @throws EntityNotFoundException falls die Abfrage identifiziert durch die {@link FoerdermixStammModel#getId()} nicht gefunden wird
+     * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
      */
-    public FoerdermixStammModel updateFoerdermixStamm(final FoerdermixStammModel foerdermix) throws EntityNotFoundException {
+    public FoerdermixStammModel updateFoerdermixStamm(final FoerdermixStammModel foerdermix) throws EntityNotFoundException, OptimisticLockingException {
         this.getFoerdermixStammById(foerdermix.getId());
         return this.saveFoerdermixStamm(foerdermix);
     }

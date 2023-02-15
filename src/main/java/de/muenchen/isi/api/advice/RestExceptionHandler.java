@@ -10,6 +10,7 @@ import de.muenchen.isi.domain.exception.FileHandlingFailedException;
 import de.muenchen.isi.domain.exception.FileHandlingWithS3FailedException;
 import de.muenchen.isi.domain.exception.FileImportFailedException;
 import de.muenchen.isi.domain.exception.KoordinatenException;
+import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.ObjectUtils;
@@ -60,6 +61,18 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     private static final int CUSTOM_INTERNAL_SERVER_ERROR = 555;
 
     private final Tracer tracer;
+
+    @ExceptionHandler(OptimisticLockingException.class)
+    public ResponseEntity<Object> handleOptimisticLockingException(final OptimisticLockingException ex) {
+        final var httpStatus = HttpStatus.PRECONDITION_FAILED;
+        final InformationResponseDto errorResponseDto = new InformationResponseDto();
+        errorResponseDto.setMessages(List.of(ex.getMessage()));
+        errorResponseDto.setHttpStatus(httpStatus.value());
+        errorResponseDto.setType(InformationResponseType.ERROR);
+        return ResponseEntity
+                .status(httpStatus)
+                .body(errorResponseDto);
+    }
 
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<Object> handleConstraintViolationException(final ConstraintViolationException ex) {

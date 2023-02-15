@@ -5,12 +5,12 @@
 package de.muenchen.isi.infrastructure.repository.infrastruktureinrichtung;
 
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Grundschule;
-import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.UUID;
 import java.util.stream.Stream;
 
-public interface GrundschuleRepository extends PagingAndSortingRepository<Grundschule, UUID> {
+public interface GrundschuleRepository extends JpaRepository<Grundschule, UUID> {
 
     Stream<Grundschule> findAllByOrderByInfrastruktureinrichtungNameEinrichtungAsc();
 
