@@ -22,10 +22,11 @@ import javax.validation.constraints.Size;
 public class FoerdermixStammDto extends BaseEntityDto {
 
     @NotEmpty
+    @Size(max = 255, message = "Es sind maximal {max} Zeichen erlaubt")
     private String bezeichnungJahr;
 
     @NotEmpty
-    @Size(max = 80)
+    @Size(max = 80, message = "Es sind maximal {max} Zeichen erlaubt")
     private String bezeichnung;
 
     @NotNull
