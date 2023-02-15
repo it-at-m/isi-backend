@@ -45,6 +45,7 @@ import org.springframework.web.context.request.async.AsyncRequestTimeoutExceptio
 import org.springframework.web.multipart.support.MissingServletRequestPartException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
+import javax.validation.ConstraintViolationException;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -999,6 +1000,33 @@ class RestExceptionHandlerTest {
         assertThat(
                 responseDto.getOriginalException(),
                 is("AsyncRequestTimeoutException")
+        );
+    }
+
+    @Test
+    void handleConstraintViolationException() {
+        final ConstraintViolationException constraintViolationException = new ConstraintViolationException("test", null);
+        final ResponseEntity<Object> response = this.restExceptionHandler.handleConstraintViolationException(constraintViolationException);
+        assertThat(
+                response.getStatusCode(),
+                is(HttpStatus.BAD_REQUEST)
+        );
+        final InformationResponseDto responseDto = (InformationResponseDto) response.getBody();
+        assertThat(
+                responseDto.getTraceId(),
+                is("1111111111111111")
+        );
+        assertThat(
+                responseDto.getSpanId(),
+                is("ffffffffffffffff")
+        );
+        assertThat(
+                responseDto.getMessages(),
+                is(List.of("test"))
+        );
+        assertThat(
+                responseDto.getOriginalException(),
+                is("ConstraintViolationException")
         );
     }
 }

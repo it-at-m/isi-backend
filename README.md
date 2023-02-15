@@ -64,18 +64,19 @@ Siehe auch unter [open issues](https://github.com/it-at-m/isi-backend/issues) di
 Verbesserungen (und bekannten Fehler)
 
 <p align="right">(<a href="#top">nach oben</a>)</p>
-
+<!--
 ## Set up
 
-<!--*how can i start and fly this project*-->
+*how can i start and fly this project*
 *tbd*
 
 <p align="right">(<a href="#top">nach oben</a>)</p>
+-->
 
 ## Dokumentation
 
 <!--*what insights do you have to tell*-->
-*tbd*
+Die Dokumentation befindet sich unter <a href="https://github.com/it-at-m/isi-backend/tree/dev/docs">docs</a>
 
 <p align="right">(<a href="#top">nach oben</a>)</p>
 

@@ -30,6 +30,7 @@ management:
       enabled: true
 info.application.name: @project.artifactId@
 info.application.version: @project.version@
+info.application.commitHash: ${buildNumber}
 
 file:
   number.max: 20
