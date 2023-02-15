@@ -14,15 +14,18 @@ import lombok.Data;
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.List;
 
 @Data
 public class BauvorhabenDto extends BaseEntityDto {
 
     @NotEmpty
+    @Size(max = 255, message = "Es sind maximal {max} Zeichen erlaubt")
     private String nameVorhaben;
 
     @NotEmpty
+    @Size(max = 255, message = "Es sind maximal {max} Zeichen erlaubt")
     private String eigentuemer;
 
     @NotNull
@@ -33,17 +36,22 @@ public class BauvorhabenDto extends BaseEntityDto {
     private StandVorhaben standVorhaben;
 
     @NotEmpty
+    @Size(max = 255, message = "Es sind maximal {max} Zeichen erlaubt")
     private String bauvorhabenNummer;
 
     @Valid
     private AdresseDto adresse;
 
+    @Size(max = 255, message = "Es sind maximal {max} Zeichen erlaubt")
     private String allgemeineOrtsangabe;
 
+    @Size(max = 255, message = "Es sind maximal {max} Zeichen erlaubt")
     private String bebauungsplannummer;
 
+    @Size(max = 255, message = "Es sind maximal {max} Zeichen erlaubt")
     private String fisNummer;
 
+    @Size(max = 255, message = "Es sind maximal {max} Zeichen erlaubt")
     private String anmerkung;
 
     @NotNull

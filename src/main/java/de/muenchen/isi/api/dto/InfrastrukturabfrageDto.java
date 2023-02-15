@@ -36,11 +36,13 @@ public class InfrastrukturabfrageDto extends BaseEntityDto {
     @Size(min = 1, max = 5)
     private List<@Valid @NotNull AbfragevarianteDto> abfragevarianten;
 
+    @Size(max = 255, message = "Es sind maximal {max} Zeichen erlaubt")
     private String aktenzeichenProLbk;
 
     @NotNull
     @NotUnspecified
     private UncertainBoolean offiziellerVerfahrensschritt;
 
+    @Size(max = 255, message = "Es sind maximal {max} Zeichen erlaubt")
     private String displayName;
 }

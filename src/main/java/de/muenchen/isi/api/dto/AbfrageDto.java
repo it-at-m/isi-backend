@@ -26,6 +26,7 @@ public class AbfrageDto {
     @HasAllowedNumberOfDocuments
     private List<@Valid DokumentDto> dokumente;
 
+    @Size(max = 255, message = "Es sind maximal {max} Zeichen erlaubt")
     private String allgemeineOrtsangabe;
 
     @Valid
@@ -34,11 +35,13 @@ public class AbfrageDto {
     @NotNull
     private LocalDate fristStellungnahme;
 
+    @Size(max = 255, message = "Es sind maximal {max} Zeichen erlaubt")
     private String anmerkung;
 
     @NotNull
     private StatusAbfrage statusAbfrage;
 
+    @Size(max = 255, message = "Es sind maximal {max} Zeichen erlaubt")
     private String bebauungsplannummer;
 
     @NotBlank

@@ -11,8 +11,11 @@ import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusInfrastrukturein
 import lombok.Data;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.util.UUID;
 
@@ -23,15 +26,19 @@ public class InfrastruktureinrichtungDto {
 
     private UUID bauvorhaben;
 
+    @Size(max = 255, message = "Es sind maximal {max} Zeichen erlaubt")
     private String allgemeineOrtsangabe;
 
     @Valid
     private AdresseDto adresse;
 
     @NotBlank
+    @Size(max = 255, message = "Es sind maximal {max} Zeichen erlaubt")
     private String nameEinrichtung;
 
     @NotNull
+    @Min(1900)
+    @Max(2100)
     private Integer fertigstellungsjahr; // JJJJ
 
     @NotNull
