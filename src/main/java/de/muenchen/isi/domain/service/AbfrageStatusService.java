@@ -183,7 +183,7 @@ public class AbfrageStatusService {
      * @param id vom Typ {@link UUID}  um die Abfrage aus der DB zu holen
      * @throws EntityNotFoundException falls die Abfrage nicht gefunden wird
      */
-    private StateMachine<StatusAbfrage, StatusAbfrageEvents> build(final UUID id) throws EntityNotFoundException, UniqueViolationException {
+    private StateMachine<StatusAbfrage, StatusAbfrageEvents> build(final UUID id) throws EntityNotFoundException {
         final InfrastrukturabfrageModel abfrage = this.abfrageService.getInfrastrukturabfrageById(id);
         final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.stateMachineFactory.getStateMachine(abfrage.getId());
 
