@@ -3,7 +3,9 @@ package de.muenchen.isi.domain.service;
 import de.muenchen.isi.configuration.StateMachineConfiguration;
 import de.muenchen.isi.domain.exception.AbfrageStatusNotAllowedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
+import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.StateMachineTransitionFailedException;
+import de.muenchen.isi.domain.exception.UniqueViolationException;
 import de.muenchen.isi.domain.model.InfrastrukturabfrageModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrageEvents;
@@ -210,8 +212,13 @@ public class AbfrageStatusService {
                         final InfrastrukturabfrageModel abfrage = AbfrageStatusService.this.abfrageService.getInfrastrukturabfrageById(abfrageId);
                         abfrage.getAbfrage().setStatusAbfrage(state.getId());
                         AbfrageStatusService.this.abfrageService.updateInfrastrukturabfrage(abfrage);
-                    } catch (final Exception exception) {
+                    } catch (final EntityNotFoundException
+                                   | OptimisticLockingException
+                                   | UniqueViolationException exception) {
                         log.error(exception.getMessage(), exception);
+                        return null;
+                    } catch (final Exception exception) {
+                        log.error("Bei der Statusänderung ist ein Fehler aufgetreten.", exception);
                         return null;
                     }
                     return stateContext;
