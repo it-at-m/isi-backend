@@ -1,6 +1,7 @@
 package de.muenchen.isi.domain.service;
 
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
+import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.mapper.BaurateDomainMapper;
 import de.muenchen.isi.domain.mapper.BaurateDomainMapperImpl;
 import de.muenchen.isi.domain.model.BaurateModel;
@@ -80,7 +81,7 @@ class BaurateServiceTest {
     }
 
     @Test
-    void saveBaurate() {
+    void saveBaurate() throws OptimisticLockingException {
         final BaurateModel model = new BaurateModel();
         model.setId(null);
 
@@ -90,7 +91,7 @@ class BaurateServiceTest {
         final Baurate saveResult = new Baurate();
         saveResult.setId(UUID.randomUUID());
 
-        Mockito.when(this.baurateRepository.save(entity)).thenReturn(saveResult);
+        Mockito.when(this.baurateRepository.saveAndFlush(entity)).thenReturn(saveResult);
 
         final BaurateModel result = this.baurateService.saveBaurate(model);
 
@@ -102,11 +103,11 @@ class BaurateServiceTest {
                 is(expected)
         );
 
-        Mockito.verify(this.baurateRepository, Mockito.times(1)).save(entity);
+        Mockito.verify(this.baurateRepository, Mockito.times(1)).saveAndFlush(entity);
     }
 
     @Test
-    void updateBaurate() throws EntityNotFoundException {
+    void updateBaurate() throws EntityNotFoundException, OptimisticLockingException {
         final BaurateModel model = new BaurateModel();
         model.setId(UUID.randomUUID());
 
@@ -114,7 +115,7 @@ class BaurateServiceTest {
         entity.setId(model.getId());
 
         Mockito.when(this.baurateRepository.findById(entity.getId())).thenReturn(Optional.of(entity));
-        Mockito.when(this.baurateRepository.save(entity)).thenReturn(entity);
+        Mockito.when(this.baurateRepository.saveAndFlush(entity)).thenReturn(entity);
 
         final BaurateModel result = this.baurateService.updateBaurate(model);
 
@@ -127,7 +128,7 @@ class BaurateServiceTest {
         );
 
         Mockito.verify(this.baurateRepository, Mockito.times(1)).findById(entity.getId());
-        Mockito.verify(this.baurateRepository, Mockito.times(1)).save(entity);
+        Mockito.verify(this.baurateRepository, Mockito.times(1)).saveAndFlush(entity);
     }
 
     @Test

@@ -45,7 +45,7 @@ public class AbfrageStatusService {
      * Ändert den Status auf {@link StatusAbfrage#OFFEN}.
      *
      * @param id vom Typ {@link UUID} um die Abfrage zu finden
-     * @throws EntityNotFoundException falls die Abfrage nicht gefunden wird
+     * @throws EntityNotFoundException          falls die Abfrage nicht gefunden wird
      * @throws AbfrageStatusNotAllowedException wenn die Statusänderung nicht erlaubt ist
      */
     public void freigabeAbfrage(final UUID id) throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException {
@@ -58,7 +58,7 @@ public class AbfrageStatusService {
      * Ändert den Status auf {@link StatusAbfrage#ABBRUCH}.
      *
      * @param id vom Typ {@link UUID} um die Abfrage zu finden
-     * @throws EntityNotFoundException falls die Abfrage nicht gefunden wird
+     * @throws EntityNotFoundException          falls die Abfrage nicht gefunden wird
      * @throws AbfrageStatusNotAllowedException wenn die Statusänderung nicht erlaubt ist
      */
     public void abbrechenAbfrage(final UUID id) throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException {
@@ -70,7 +70,7 @@ public class AbfrageStatusService {
      * Ändert den Status auf {@link StatusAbfrage#ANGELEGT}.
      *
      * @param id vom Typ {@link UUID} um die Abfrage zu finden
-     * @throws EntityNotFoundException falls die Abfrage nicht gefunden wird
+     * @throws EntityNotFoundException          falls die Abfrage nicht gefunden wird
      * @throws AbfrageStatusNotAllowedException wenn die Statusänderung nicht erlaubt ist
      */
     public void angabenAnpassenAbfrage(final UUID id) throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException {
@@ -82,7 +82,7 @@ public class AbfrageStatusService {
      * Ändert den Status auf {@link StatusAbfrage#IN_ERFASSUNG}.
      *
      * @param id vom Typ {@link UUID} um die Abfrage zu finden
-     * @throws EntityNotFoundException falls die Abfrage nicht gefunden wird
+     * @throws EntityNotFoundException          falls die Abfrage nicht gefunden wird
      * @throws AbfrageStatusNotAllowedException wenn die Statusänderung nicht erlaubt ist
      */
     public void weitereAbfragevariantenAnlegen(final UUID id) throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException {
@@ -94,7 +94,7 @@ public class AbfrageStatusService {
      * Ändert den Status auf {@link StatusAbfrage#IN_BEARBEITUNG_PLAN}.
      *
      * @param id vom Typ {@link UUID} um die Abfrage zu finden
-     * @throws EntityNotFoundException falls die Abfrage nicht gefunden wird
+     * @throws EntityNotFoundException          falls die Abfrage nicht gefunden wird
      * @throws AbfrageStatusNotAllowedException wenn die Statusänderung nicht erlaubt ist
      */
     public void keineZusaetzlicheAbfragevariante(final UUID id) throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException {
@@ -106,7 +106,7 @@ public class AbfrageStatusService {
      * Ändert den Status auf {@link StatusAbfrage#IN_ERFASSUNG}.
      *
      * @param id vom Typ {@link UUID} um die Abfrage zu finden
-     * @throws EntityNotFoundException falls die Abfrage nicht gefunden wird
+     * @throws EntityNotFoundException          falls die Abfrage nicht gefunden wird
      * @throws AbfrageStatusNotAllowedException wenn die Statusänderung nicht erlaubt ist
      */
     public void zusaetzlicheAbfragevarianteAnlegen(final UUID id) throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException {
@@ -118,7 +118,7 @@ public class AbfrageStatusService {
      * Ändert den Status auf {@link StatusAbfrage#IN_BEARBEITUNG_PLAN}.
      *
      * @param id vom Typ {@link UUID} um die Abfrage zu finden
-     * @throws EntityNotFoundException falls die Abfrage nicht gefunden wird
+     * @throws EntityNotFoundException          falls die Abfrage nicht gefunden wird
      * @throws AbfrageStatusNotAllowedException wenn die Statusänderung nicht erlaubt ist
      */
     public void speichernDerVarianten(final UUID id) throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException {
@@ -130,7 +130,7 @@ public class AbfrageStatusService {
      * Ändert den Status auf {@link StatusAbfrage#ERLEDIGT}.
      *
      * @param id vom Typ {@link UUID} um die Abfrage zu finden
-     * @throws EntityNotFoundException falls die Abfrage nicht gefunden wird
+     * @throws EntityNotFoundException          falls die Abfrage nicht gefunden wird
      * @throws AbfrageStatusNotAllowedException wenn die Statusänderung nicht erlaubt ist
      */
     public void keineBearbeitungNoetig(final UUID id) throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException {
@@ -142,7 +142,7 @@ public class AbfrageStatusService {
      * Ändert den Status auf {@link StatusAbfrage#IN_BEARBEITUNG_FACHREFERATE}.
      *
      * @param id vom Typ {@link UUID} um die Abfrage zu finden
-     * @throws EntityNotFoundException falls die Abfrage nicht gefunden wird
+     * @throws EntityNotFoundException          falls die Abfrage nicht gefunden wird
      * @throws AbfrageStatusNotAllowedException wenn die Statusänderung nicht erlaubt ist
      */
     public void verschickenDerStellungnahme(final UUID id) throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException {
@@ -154,7 +154,7 @@ public class AbfrageStatusService {
      * Ändert den Status auf {@link StatusAbfrage#BEDARFSMELDUNG_ERFOLGT}.
      *
      * @param id vom Typ {@link UUID} um die Abfrage zu finden
-     * @throws EntityNotFoundException falls die Abfrage nicht gefunden wird
+     * @throws EntityNotFoundException          falls die Abfrage nicht gefunden wird
      * @throws AbfrageStatusNotAllowedException wenn die Statusänderung nicht erlaubt ist
      */
     public void bedarfsmeldungErfolgt(final UUID id) throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException {
@@ -166,7 +166,7 @@ public class AbfrageStatusService {
      * Ändert den Status auf {@link StatusAbfrage#ERLEDIGT}.
      *
      * @param id vom Typ {@link UUID} um die Abfrage zu finden
-     * @throws EntityNotFoundException falls die Abfrage nicht gefunden wird
+     * @throws EntityNotFoundException          falls die Abfrage nicht gefunden wird
      * @throws AbfrageStatusNotAllowedException wenn die Statusänderung nicht erlaubt ist
      */
     public void speichernVonSozialinfrastrukturVersorgung(final UUID id) throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException {
@@ -230,8 +230,8 @@ public class AbfrageStatusService {
      * Leitet mit dem übergebenem Event eine Statusänderung ein.
      * <p>
      *
-     * @param id vom Typ {@link UUID} um die Abfrage aus der DB zu holen.
-     * @param event vom Typ {@link StatusAbfrageEvents} um eine Statusänderung durchzuführen
+     * @param id           vom Typ {@link UUID} um die Abfrage aus der DB zu holen.
+     * @param event        vom Typ {@link StatusAbfrageEvents} um eine Statusänderung durchzuführen
      * @param stateMachine vom Typ {@link StateMachine} welche den aktuellen Status plus alle Status enthält
      * @throws AbfrageStatusNotAllowedException falls die Statusänderung nicht erlaubt nicht
      */

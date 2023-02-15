@@ -40,12 +40,12 @@ public class CsvRepository {
     }
 
     /**
-     * Erstellt je Zeile in der CSV-Datei ein {@link SoBoNOrientierungswertSozialeInfrastrukturCsv}.
+     * Erstellt je Zeile in der CSV-Datei ein {@link SobonOrientierungswertSozialeInfrastrukturCsv}.
      *
-     * @param csvImportFile zum Auslesen der {@link SoBoNOrientierungswertSozialeInfrastrukturCsv}s.
-     * @return das {@link SoBoNOrientierungswertSozialeInfrastrukturCsv} je Zeile.
-     * @throws CsvDataTypeMismatchException   falls nicht der passende Typ in Feld steht.
-     * @throws CsvRequiredFieldEmptyException falls ein Feld keinen Wert (null oder leerer String) beinhaltet.
+     * @param csvImportFile zum Auslesen der {@link SobonOrientierungswertSozialeInfrastrukturCsv}s
+     * @return das {@link SobonOrientierungswertSozialeInfrastrukturCsv} je Zeile
+     * @throws CsvDataTypeMismatchException falls nicht der passende Typ in Feld steht
+     * @throws CsvRequiredFieldEmptyException falls ein Feld keinen Wert (null oder leerer String) beinhaltet
      */
     public List<SobonOrientierungswertSozialeInfrastrukturCsv> readAllSobonOrientierungswertSozialeInfrastrukturCsv(final InputStreamReader csvImportFile) throws CsvDataTypeMismatchException, CsvRequiredFieldEmptyException {
         try {

@@ -1,11 +1,13 @@
 package de.muenchen.isi.domain.service;
 
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
+import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.mapper.BaurateDomainMapper;
 import de.muenchen.isi.domain.model.BaurateModel;
 import de.muenchen.isi.infrastructure.repository.BaurateRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -46,23 +48,30 @@ public class BaurateService {
     /**
      * Diese Methode speichert ein {@link BaurateModel}.
      *
-     * @param baurate zum Speichern.
-     * @return das gespeicherte {@link BaurateModel}.
+     * @param baurate zum Speichern
+     * @return das gespeicherte {@link BaurateModel}
+     * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
      */
-    public BaurateModel saveBaurate(final BaurateModel baurate) {
+    public BaurateModel saveBaurate(final BaurateModel baurate) throws OptimisticLockingException {
         var entity = this.baurateDomainMapper.model2entity(baurate);
-        entity = this.baurateRepository.save(entity);
+        try {
+            entity = this.baurateRepository.saveAndFlush(entity);
+        } catch (final ObjectOptimisticLockingFailureException exception) {
+            final var message = "Die Daten wurden in der Zwischenzeit geändert. Bitte laden Sie die Daten neu";
+            throw new OptimisticLockingException(message, exception);
+        }
         return this.baurateDomainMapper.entity2Model(entity);
     }
 
     /**
      * Diese Methode updated ein {@link BaurateModel}.
      *
-     * @param baurate zum Updaten.
-     * @return das geupdatete {@link BaurateModel}.
-     * @throws EntityNotFoundException falls die Abfrage identifiziert durch die {@link BaurateModel#getId()} nicht gefunden wird.
+     * @param baurate zum Updaten
+     * @return das geupdatete {@link BaurateModel}
+     * @throws EntityNotFoundException falls die Abfrage identifiziert durch die {@link BaurateModel#getId()} nicht gefunden wird
+     * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
      */
-    public BaurateModel updateBaurate(final BaurateModel baurate) throws EntityNotFoundException {
+    public BaurateModel updateBaurate(final BaurateModel baurate) throws EntityNotFoundException, OptimisticLockingException {
         this.getBaurateById(baurate.getId());
         return this.saveBaurate(baurate);
     }

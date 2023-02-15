@@ -2,15 +2,17 @@ package de.muenchen.isi.domain.service.infrastruktureinrichtung;
 
 import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
+import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.mapper.InfrastruktureinrichtungDomainMapper;
 import de.muenchen.isi.domain.model.BauvorhabenModel;
-import de.muenchen.isi.domain.model.infrastruktureinrichtung.InfrastruktureinrichtungModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.GsNachmittagBetreuungModel;
+import de.muenchen.isi.domain.model.infrastruktureinrichtung.InfrastruktureinrichtungModel;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.GsNachmittagBetreuung;
 import de.muenchen.isi.infrastructure.repository.infrastruktureinrichtung.GsNachmittagBetreuungRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -57,23 +59,30 @@ public class GsNachmittagBetreuungService {
     /**
      * Diese Methode speichert ein {@link GsNachmittagBetreuungModel}.
      *
-     * @param gsNachmittagBetreuung zum Speichern.
-     * @return das gespeicherte {@link GsNachmittagBetreuungModel}.
+     * @param gsNachmittagBetreuung zum Speichern
+     * @return das gespeicherte {@link GsNachmittagBetreuungModel}
+     * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
      */
-    public GsNachmittagBetreuungModel saveGsNachmittagBetreuung(final GsNachmittagBetreuungModel gsNachmittagBetreuung) {
+    public GsNachmittagBetreuungModel saveGsNachmittagBetreuung(final GsNachmittagBetreuungModel gsNachmittagBetreuung) throws OptimisticLockingException {
         GsNachmittagBetreuung gsNachmittagBetreuungEntity = this.infrastruktureinrichtungDomainMapper.model2Entity(gsNachmittagBetreuung);
-        gsNachmittagBetreuungEntity = this.gsNachmittagBetreuungRepository.save(gsNachmittagBetreuungEntity);
+        try {
+            gsNachmittagBetreuungEntity = this.gsNachmittagBetreuungRepository.saveAndFlush(gsNachmittagBetreuungEntity);
+        } catch (final ObjectOptimisticLockingFailureException exception) {
+            final var message = "Die Daten wurden in der Zwischenzeit geändert. Bitte laden Sie die Seite neu!";
+            throw new OptimisticLockingException(message, exception);
+        }
         return this.infrastruktureinrichtungDomainMapper.entity2Model(gsNachmittagBetreuungEntity);
     }
 
     /**
      * Diese Methode updated ein {@link GsNachmittagBetreuungModel}.
      *
-     * @param gsNachmittagBetreuung zum Updaten.
-     * @return das geupdatete {@link GsNachmittagBetreuungModel}.
-     * @throws EntityNotFoundException falls die Nachmittagsbetreuung für Grundschulkinder identifiziert durch die {@link GsNachmittagBetreuungModel#getId()} nicht gefunden wird.
+     * @param gsNachmittagBetreuung zum Updaten
+     * @return das geupdatete {@link GsNachmittagBetreuungModel}
+     * @throws EntityNotFoundException falls die Nachmittagsbetreuung für Grundschulkinder identifiziert durch die {@link GsNachmittagBetreuungModel#getId()} nicht gefunden wird
+     * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
      */
-    public GsNachmittagBetreuungModel updateGsNachmittagBetreuung(final GsNachmittagBetreuungModel gsNachmittagBetreuung) throws EntityNotFoundException {
+    public GsNachmittagBetreuungModel updateGsNachmittagBetreuung(final GsNachmittagBetreuungModel gsNachmittagBetreuung) throws EntityNotFoundException, OptimisticLockingException {
         this.getGsNachmittagBetreuungById(gsNachmittagBetreuung.getId());
         return this.saveGsNachmittagBetreuung(gsNachmittagBetreuung);
     }

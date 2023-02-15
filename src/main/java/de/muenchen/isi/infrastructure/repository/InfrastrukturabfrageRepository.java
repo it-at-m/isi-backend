@@ -5,13 +5,13 @@
 package de.muenchen.isi.infrastructure.repository;
 
 import de.muenchen.isi.infrastructure.entity.Infrastrukturabfrage;
-import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Stream;
 
-public interface InfrastrukturabfrageRepository extends PagingAndSortingRepository<Infrastrukturabfrage, UUID> {
+public interface InfrastrukturabfrageRepository extends JpaRepository<Infrastrukturabfrage, UUID> {
 
     Stream<Infrastrukturabfrage> findAllByOrderByAbfrageFristStellungnahmeDesc();
 

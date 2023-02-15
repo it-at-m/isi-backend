@@ -2,14 +2,15 @@ package de.muenchen.isi.domain.service.infrastruktureinrichtung;
 
 import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
+import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.mapper.InfrastruktureinrichtungDomainMapper;
 import de.muenchen.isi.domain.mapper.InfrastruktureinrichtungDomainMapperImpl;
 import de.muenchen.isi.domain.model.BauvorhabenModel;
-import de.muenchen.isi.domain.model.infrastruktureinrichtung.InfrastruktureinrichtungModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.GsNachmittagBetreuungModel;
+import de.muenchen.isi.domain.model.infrastruktureinrichtung.InfrastruktureinrichtungModel;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
-import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Infrastruktureinrichtung;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.GsNachmittagBetreuung;
+import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Infrastruktureinrichtung;
 import de.muenchen.isi.infrastructure.repository.infrastruktureinrichtung.GsNachmittagBetreuungRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -87,7 +88,7 @@ class GsNachmittagBetreuungServiceTest {
     }
 
     @Test
-    void saveGsNachmittagBetreuung() {
+    void saveGsNachmittagBetreuung() throws OptimisticLockingException {
         final GsNachmittagBetreuungModel gsNachmittagBetreuungModel = new GsNachmittagBetreuungModel();
         gsNachmittagBetreuungModel.setId(null);
 
@@ -97,7 +98,7 @@ class GsNachmittagBetreuungServiceTest {
         final GsNachmittagBetreuung saveResult = new GsNachmittagBetreuung();
         saveResult.setId(UUID.randomUUID());
 
-        Mockito.when(this.gsNachmittagBetreuungRepository.save(gsNachmittagBetreuungEntity)).thenReturn(saveResult);
+        Mockito.when(this.gsNachmittagBetreuungRepository.saveAndFlush(gsNachmittagBetreuungEntity)).thenReturn(saveResult);
 
         final GsNachmittagBetreuungModel result = this.gsNachmittagBetreuungService.saveGsNachmittagBetreuung(gsNachmittagBetreuungModel);
 
@@ -109,11 +110,11 @@ class GsNachmittagBetreuungServiceTest {
                 is(expected)
         );
 
-        Mockito.verify(this.gsNachmittagBetreuungRepository, Mockito.times(1)).save(gsNachmittagBetreuungEntity);
+        Mockito.verify(this.gsNachmittagBetreuungRepository, Mockito.times(1)).saveAndFlush(gsNachmittagBetreuungEntity);
     }
 
     @Test
-    void updateGsNachmittagBetreuung() throws EntityNotFoundException {
+    void updateGsNachmittagBetreuung() throws EntityNotFoundException, OptimisticLockingException {
         final GsNachmittagBetreuungModel gsNachmittagBetreuungModel = new GsNachmittagBetreuungModel();
         gsNachmittagBetreuungModel.setId(UUID.randomUUID());
 
@@ -121,7 +122,7 @@ class GsNachmittagBetreuungServiceTest {
         entity.setId(gsNachmittagBetreuungModel.getId());
 
         Mockito.when(this.gsNachmittagBetreuungRepository.findById(entity.getId())).thenReturn(Optional.of(entity));
-        Mockito.when(this.gsNachmittagBetreuungRepository.save(entity)).thenReturn(entity);
+        Mockito.when(this.gsNachmittagBetreuungRepository.saveAndFlush(entity)).thenReturn(entity);
 
         final GsNachmittagBetreuungModel result = this.gsNachmittagBetreuungService.updateGsNachmittagBetreuung(gsNachmittagBetreuungModel);
 
@@ -134,7 +135,7 @@ class GsNachmittagBetreuungServiceTest {
         );
 
         Mockito.verify(this.gsNachmittagBetreuungRepository, Mockito.times(1)).findById(entity.getId());
-        Mockito.verify(this.gsNachmittagBetreuungRepository, Mockito.times(1)).save(entity);
+        Mockito.verify(this.gsNachmittagBetreuungRepository, Mockito.times(1)).saveAndFlush(entity);
     }
 
     @Test
