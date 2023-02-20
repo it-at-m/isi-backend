@@ -48,6 +48,7 @@
         <mapstruct.version>1.5.3.Final</mapstruct.version>
         <s3.integration>0.15.0</s3.integration>
         <geotools.version>27.2</geotools.version>
+        <apache.tika.version>2.7.0</apache.tika.version>
     </properties>
 
 
@@ -178,6 +179,16 @@
             <groupId>com.opencsv</groupId>
             <artifactId>opencsv</artifactId>
             <version>${opencsv.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.tika</groupId>
+            <artifactId>tika-core</artifactId>
+            <version>${apache.tika.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.tika</groupId>
+            <artifactId>tika-parsers-standard-package</artifactId>
+            <version>${apache.tika.version}</version>
         </dependency>
 
         <!-- Validation -->
