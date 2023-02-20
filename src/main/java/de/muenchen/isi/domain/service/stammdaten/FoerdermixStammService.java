@@ -27,7 +27,7 @@ public class FoerdermixStammService {
     /**
      * Die Methode gibt alle {@link FoerdermixStammModel} als Liste zurück.
      *
-     * @return Liste an {@link FoerdermixStammModel}.
+     * @return Liste an {@link FoerdermixStammModel}
      */
     public List<FoerdermixStammModel> getFoerdermixStaemme() {
         return this.foerdermixStammRepository.findAllByOrderByBezeichnungAsc()
@@ -38,8 +38,8 @@ public class FoerdermixStammService {
     /**
      * Die Methode gibt ein {@link FoerdermixStammModel} identifiziert durch die ID zurück.
      *
-     * @param id zum Identifizieren des {@link FoerdermixStammModel}.
-     * @return {@link FoerdermixStammModel}.
+     * @param id zum Identifizieren des {@link FoerdermixStammModel}
+     * @return {@link FoerdermixStammModel}
      */
     public FoerdermixStammModel getFoerdermixStammById(final UUID id) throws EntityNotFoundException {
         final var optEntity = this.foerdermixStammRepository.findById(id);
@@ -54,9 +54,9 @@ public class FoerdermixStammService {
     /**
      * Diese Methode speichert ein {@link FoerdermixStammModel}.
      *
-     * @param foerdermix zum Speichern.
-     * @return das gespeicherte {@link FoerdermixStammModel}.
-     * @throws UniqueViolationException falls die Bezeichnung {@link FoerdermixStammModel#getBezeichnung()} des Fördermixes bereits im gleichen Jahr {@link FoerdermixStammModel#getBezeichnungJahr()} vorhanden ist.
+     * @param foerdermix zum Speichern
+     * @return das gespeicherte {@link FoerdermixStammModel}
+     * @throws UniqueViolationException falls die Bezeichnung {@link FoerdermixStammModel#getBezeichnung()} des Fördermixes bereits im gleichen Jahr {@link FoerdermixStammModel#getBezeichnungJahr()} vorhanden ist
      */
     public FoerdermixStammModel saveFoerdermixStamm(final FoerdermixStammModel foerdermix) throws UniqueViolationException, OptimisticLockingException {
         var entity = this.stammdatenDomainMapper.model2Entity(foerdermix);
@@ -90,8 +90,8 @@ public class FoerdermixStammService {
     /**
      * Diese Methode löscht ein {@link FoerdermixStammModel}.
      *
-     * @param id zum Identifizieren des {@link FoerdermixStammModel}.
-     * @throws EntityNotFoundException falls die Abfrage identifiziert durch die {@link FoerdermixStammModel#getId()} nicht gefunden wird.
+     * @param id zum Identifizieren des {@link FoerdermixStammModel}
+     * @throws EntityNotFoundException falls die Abfrage identifiziert durch die {@link FoerdermixStammModel#getId()} nicht gefunden wird
      */
     public void deleteFoerdermixStammById(final UUID id) throws EntityNotFoundException {
         this.getFoerdermixStammById(id);
