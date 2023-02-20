@@ -35,7 +35,8 @@ public class MimeTypeCheckService {
     public MediaTypeInformation getMediaTypeInformationOfFileAndCloseStream(final InputStream file) throws IOException, MimeTypeException {
         final TikaConfig config = TikaConfig.getDefaultConfig();
         final Detector detector = config.getDetector();
-        try (final TikaInputStream tikaInputStream = TikaInputStream.get(file)) {
+        try (final InputStream fileInputStream = file;
+             final TikaInputStream tikaInputStream = TikaInputStream.get(fileInputStream)) {
             final Metadata metadata = new Metadata();
             final MediaType mediaType = detector.detect(tikaInputStream, metadata);
             final MimeType mimeType = config.getMimeRepository().forName(mediaType.toString());
