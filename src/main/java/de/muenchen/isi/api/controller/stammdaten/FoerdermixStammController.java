@@ -8,6 +8,7 @@ import de.muenchen.isi.api.dto.error.InformationResponseDto;
 import de.muenchen.isi.api.dto.stammdaten.FoerdermixStammDto;
 import de.muenchen.isi.api.mapper.StammdatenApiMapper;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
+import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
 import de.muenchen.isi.domain.service.stammdaten.FoerdermixStammService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -81,10 +82,11 @@ public class FoerdermixStammController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "CREATED -> FoerdermixStamm wurde erfolgreich erstellt."),
             @ApiResponse(responseCode = "400", description = "BAD_REQUEST -> FoerdermixStamm konnte nicht erstellt werden, überprüfen sie die Eingabe.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class))),
-            @ApiResponse(responseCode = "409", description = "CONFLICT -> Fördermix konnte nicht erstellt werden, da die Bezeichnung im angegebenen Jahr bereits existiert.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class)))
+            @ApiResponse(responseCode = "409", description = "CONFLICT -> Fördermix konnte nicht erstellt werden, da die Bezeichnung im angegebenen Jahr bereits existiert.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class))),
+            @ApiResponse(responseCode = "412", description = "PRECONDITION_FAILED -> In der Anwendung ist bereits eine neuere Version der Entität gespeichert.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class)))
     })
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_WRITE_STAMMDATEN_FOERDERMIX.name())")
-    public ResponseEntity<FoerdermixStammDto> saveFoerdermixStamm(@RequestBody @Valid @NotNull final FoerdermixStammDto foerdermixStammDto) throws UniqueViolationException {
+    public ResponseEntity<FoerdermixStammDto> saveFoerdermixStamm(@RequestBody @Valid @NotNull final FoerdermixStammDto foerdermixStammDto) throws UniqueViolationException, OptimisticLockingException {
         var model = this.stammdatenApiMapper.dto2Model(foerdermixStammDto);
         model = this.foerdermixStammService.saveFoerdermixStamm(model);
         final var saved = this.stammdatenApiMapper.model2Dto(model);
@@ -97,10 +99,11 @@ public class FoerdermixStammController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK -> FoerdermixStamm wurde erfolgreich aktualisiert."),
             @ApiResponse(responseCode = "404", description = "NOT_FOUND -> Es gibt keine FoerdermixStamm mit der ID.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class))),
-            @ApiResponse(responseCode = "409", description = "CONFLICT -> Fördermix konnte nicht erstellt werden, da die Bezeichnung im angegebenen Jahr bereits existiert.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class)))
+            @ApiResponse(responseCode = "409", description = "CONFLICT -> Fördermix konnte nicht erstellt werden, da die Bezeichnung im angegebenen Jahr bereits existiert.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class))),
+            @ApiResponse(responseCode = "412", description = "PRECONDITION_FAILED -> In der Anwendung ist bereits eine neuere Version der Entität gespeichert.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class)))
     })
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_WRITE_STAMMDATEN_FOERDERMIX.name())")
-    public ResponseEntity<FoerdermixStammDto> updateFoerdermixStamm(@RequestBody @Valid @NotNull final FoerdermixStammDto foerdermixStammDto) throws EntityNotFoundException, UniqueViolationException {
+    public ResponseEntity<FoerdermixStammDto> updateFoerdermixStamm(@RequestBody @Valid @NotNull final FoerdermixStammDto foerdermixStammDto) throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException {
         var model = this.stammdatenApiMapper.dto2Model(foerdermixStammDto);
         model = this.foerdermixStammService.updateFoerdermixStamm(model);
         final var saved = this.stammdatenApiMapper.model2Dto(model);

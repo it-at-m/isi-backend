@@ -22,6 +22,8 @@ public abstract class BaseEntityDto {
 
     private UUID id;
 
+    private Long version;
+
     @EqualsAndHashCode.Exclude
     private LocalDateTime createdDateTime;
 

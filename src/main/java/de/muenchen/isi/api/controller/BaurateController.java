@@ -8,6 +8,7 @@ import de.muenchen.isi.api.dto.BaurateDto;
 import de.muenchen.isi.api.dto.error.InformationResponseDto;
 import de.muenchen.isi.api.mapper.BaurateApiMapper;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
+import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.service.BaurateService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -74,14 +75,15 @@ public class BaurateController {
     }
 
     @PostMapping("baurate")
-    @Transactional
+    @Transactional(rollbackFor = OptimisticLockingException.class)
     @Operation(summary = "Anlegen einer neuen Baurate")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "CREATED -> Baurate wurde erfolgreich erstellt."),
-            @ApiResponse(responseCode = "400", description = "BAD_REQUEST -> Baurate konnte nicht erstellt werden, überprüfen sie die Eingabe.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class)))
+            @ApiResponse(responseCode = "400", description = "BAD_REQUEST -> Baurate konnte nicht erstellt werden, überprüfen sie die Eingabe.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class))),
+            @ApiResponse(responseCode = "412", description = "PRECONDITION_FAILED -> In der Anwendung ist bereits eine neuere Version der Entität gespeichert.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class)))
     })
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_WRITE_BAURATE.name())")
-    public ResponseEntity<BaurateDto> createBaurate(@RequestBody @Valid @NotNull final BaurateDto baurateDto) {
+    public ResponseEntity<BaurateDto> createBaurate(@RequestBody @Valid @NotNull final BaurateDto baurateDto) throws OptimisticLockingException {
         var model = this.baurateApiMapper.dto2Model(baurateDto);
         model = this.baurateService.saveBaurate(model);
         final var saved = this.baurateApiMapper.model2Dto(model);
@@ -89,14 +91,15 @@ public class BaurateController {
     }
 
     @PutMapping("baurate")
-    @Transactional
+    @Transactional(rollbackFor = OptimisticLockingException.class)
     @Operation(summary = "Aktualisierung einer Baurate")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK -> Baurate wurde erfolgreich aktualisiert."),
-            @ApiResponse(responseCode = "404", description = "NOT_FOUND -> Es gibt keine Baurate mit der ID.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class)))
+            @ApiResponse(responseCode = "404", description = "NOT_FOUND -> Es gibt keine Baurate mit der ID.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class))),
+            @ApiResponse(responseCode = "412", description = "PRECONDITION_FAILED -> In der Anwendung ist bereits eine neuere Version der Entität gespeichert.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class)))
     })
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_WRITE_BAURATE.name())")
-    public ResponseEntity<BaurateDto> updateBaurate(@RequestBody @Valid @NotNull final BaurateDto baurateDto) throws EntityNotFoundException {
+    public ResponseEntity<BaurateDto> updateBaurate(@RequestBody @Valid @NotNull final BaurateDto baurateDto) throws EntityNotFoundException, OptimisticLockingException {
         var model = this.baurateApiMapper.dto2Model(baurateDto);
         model = this.baurateService.updateBaurate(model);
         final var saved = this.baurateApiMapper.model2Dto(model);

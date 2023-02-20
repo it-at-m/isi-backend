@@ -8,13 +8,23 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.Size;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class AdresseDto {
+
+    @Size(max = 255, message = "Es sind maximal {max} Zeichen erlaubt")
     private String plz;
+
+    @Size(max = 255, message = "Es sind maximal {max} Zeichen erlaubt")
     private String ort;
+
+    @Size(max = 255, message = "Es sind maximal {max} Zeichen erlaubt")
     private String strasse;
+
+    @Size(max = 255, message = "Es sind maximal {max} Zeichen erlaubt")
     private String hausnummer;
 
 }

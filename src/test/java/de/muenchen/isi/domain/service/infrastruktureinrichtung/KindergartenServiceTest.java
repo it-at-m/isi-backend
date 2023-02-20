@@ -2,6 +2,7 @@ package de.muenchen.isi.domain.service.infrastruktureinrichtung;
 
 import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
+import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.mapper.InfrastruktureinrichtungDomainMapper;
 import de.muenchen.isi.domain.mapper.InfrastruktureinrichtungDomainMapperImpl;
 import de.muenchen.isi.domain.model.BauvorhabenModel;
@@ -87,7 +88,7 @@ class KindergartenServiceTest {
     }
 
     @Test
-    void saveKindergarten() {
+    void saveKindergarten() throws OptimisticLockingException {
         final KindergartenModel kindergartenModel = new KindergartenModel();
         kindergartenModel.setId(null);
 
@@ -97,7 +98,7 @@ class KindergartenServiceTest {
         final Kindergarten saveResult = new Kindergarten();
         saveResult.setId(UUID.randomUUID());
 
-        Mockito.when(this.kindergartenRepository.save(kindergartenEntity)).thenReturn(saveResult);
+        Mockito.when(this.kindergartenRepository.saveAndFlush(kindergartenEntity)).thenReturn(saveResult);
 
         final KindergartenModel result = this.kindergartenService.saveKindergarten(kindergartenModel);
 
@@ -109,11 +110,11 @@ class KindergartenServiceTest {
                 is(expected)
         );
 
-        Mockito.verify(this.kindergartenRepository, Mockito.times(1)).save(kindergartenEntity);
+        Mockito.verify(this.kindergartenRepository, Mockito.times(1)).saveAndFlush(kindergartenEntity);
     }
 
     @Test
-    void updateKindergarten() throws EntityNotFoundException {
+    void updateKindergarten() throws EntityNotFoundException, OptimisticLockingException {
         final KindergartenModel kindergartenModel = new KindergartenModel();
         kindergartenModel.setId(UUID.randomUUID());
 
@@ -121,7 +122,7 @@ class KindergartenServiceTest {
         entity.setId(kindergartenModel.getId());
 
         Mockito.when(this.kindergartenRepository.findById(entity.getId())).thenReturn(Optional.of(entity));
-        Mockito.when(this.kindergartenRepository.save(entity)).thenReturn(entity);
+        Mockito.when(this.kindergartenRepository.saveAndFlush(entity)).thenReturn(entity);
 
         final KindergartenModel result = this.kindergartenService.updateKindergarten(kindergartenModel);
 
@@ -134,7 +135,7 @@ class KindergartenServiceTest {
         );
 
         Mockito.verify(this.kindergartenRepository, Mockito.times(1)).findById(entity.getId());
-        Mockito.verify(this.kindergartenRepository, Mockito.times(1)).save(entity);
+        Mockito.verify(this.kindergartenRepository, Mockito.times(1)).saveAndFlush(entity);
     }
 
     @Test

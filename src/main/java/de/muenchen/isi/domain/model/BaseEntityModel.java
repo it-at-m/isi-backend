@@ -22,6 +22,8 @@ public abstract class BaseEntityModel {
 
     private UUID id;
 
+    private Long version;
+
     @EqualsAndHashCode.Exclude
     private LocalDateTime createdDateTime;
 

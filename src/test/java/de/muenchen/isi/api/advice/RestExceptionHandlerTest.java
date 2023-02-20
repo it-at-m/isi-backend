@@ -10,6 +10,7 @@ import de.muenchen.isi.domain.exception.FileHandlingFailedException;
 import de.muenchen.isi.domain.exception.FileHandlingWithS3FailedException;
 import de.muenchen.isi.domain.exception.FileImportFailedException;
 import de.muenchen.isi.domain.exception.KoordinatenException;
+import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -44,10 +45,12 @@ import org.springframework.web.context.request.async.AsyncRequestTimeoutExceptio
 import org.springframework.web.multipart.support.MissingServletRequestPartException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
+import javax.validation.ConstraintViolationException;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
@@ -75,6 +78,43 @@ class RestExceptionHandlerTest {
         Mockito.when(this.span.context()).thenReturn(this.traceContext);
         Mockito.when(this.traceContext.spanId()).thenReturn("ffffffffffffffff");
         Mockito.when(this.traceContext.traceId()).thenReturn("1111111111111111");
+    }
+
+    @Test
+    void handleOptimisticLockingException() {
+
+        final OptimisticLockingException optimisticLockingException = new OptimisticLockingException("test");
+
+        final ResponseEntity<Object> response = this.restExceptionHandler.handleOptimisticLockingException(optimisticLockingException);
+
+        assertThat(
+                response.getStatusCode(),
+                is(HttpStatus.PRECONDITION_FAILED)
+        );
+
+        final InformationResponseDto responseDto = (InformationResponseDto) response.getBody();
+
+        assertThat(
+                responseDto.getTraceId(),
+                is(nullValue())
+        );
+        assertThat(
+                responseDto.getSpanId(),
+                is(nullValue())
+        );
+        assertThat(
+                responseDto.getMessages(),
+                is(List.of("test"))
+        );
+        assertThat(
+                responseDto.getOriginalException(),
+                is(nullValue())
+        );
+        assertThat(
+                responseDto.getType(),
+                is(InformationResponseType.ERROR)
+        );
+
     }
 
     @Test
@@ -393,8 +433,26 @@ class RestExceptionHandlerTest {
 
         final InformationResponseDto responseDto = (InformationResponseDto) response.getBody();
 
-        assertThat(responseDto.getMessages(), is(List.of("test")));
-        assertThat(responseDto.getType(), is(InformationResponseType.ERROR));
+        assertThat(
+                responseDto.getTraceId(),
+                is(nullValue())
+        );
+        assertThat(
+                responseDto.getSpanId(),
+                is(nullValue())
+        );
+        assertThat(
+                responseDto.getMessages(),
+                is(List.of("test"))
+        );
+        assertThat(
+                responseDto.getOriginalException(),
+                is(nullValue())
+        );
+        assertThat(
+                responseDto.getType(),
+                is(InformationResponseType.ERROR)
+        );
     }
 
     @Test
@@ -942,6 +1000,33 @@ class RestExceptionHandlerTest {
         assertThat(
                 responseDto.getOriginalException(),
                 is("AsyncRequestTimeoutException")
+        );
+    }
+
+    @Test
+    void handleConstraintViolationException() {
+        final ConstraintViolationException constraintViolationException = new ConstraintViolationException("test", null);
+        final ResponseEntity<Object> response = this.restExceptionHandler.handleConstraintViolationException(constraintViolationException);
+        assertThat(
+                response.getStatusCode(),
+                is(HttpStatus.BAD_REQUEST)
+        );
+        final InformationResponseDto responseDto = (InformationResponseDto) response.getBody();
+        assertThat(
+                responseDto.getTraceId(),
+                is("1111111111111111")
+        );
+        assertThat(
+                responseDto.getSpanId(),
+                is("ffffffffffffffff")
+        );
+        assertThat(
+                responseDto.getMessages(),
+                is(List.of("test"))
+        );
+        assertThat(
+                responseDto.getOriginalException(),
+                is("ConstraintViolationException")
         );
     }
 }

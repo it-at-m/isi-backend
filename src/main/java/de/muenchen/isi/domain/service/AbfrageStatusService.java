@@ -2,6 +2,7 @@ package de.muenchen.isi.domain.service;
 
 import de.muenchen.isi.domain.exception.AbfrageStatusNotAllowedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
+import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
 import de.muenchen.isi.domain.model.AbfrageModel;
 import de.muenchen.isi.domain.model.InfrastrukturabfrageModel;
@@ -24,11 +25,12 @@ public class AbfrageStatusService {
      * Gibt ein {@link InfrastrukturabfrageModel} identifiziert durch die ID frei.
      *
      * @param id zur Identifzierung des {@link InfrastrukturabfrageModel}s
-     * @throws EntityNotFoundException          falls die Abfrage nicht gefunden werden kann.
-     * @throws AbfrageStatusNotAllowedException falls die Abfrage nicht freigegeben werden kann.
-     * @throws UniqueViolationException falls der Name der Abfrage bereits vorhanden ist.
+     * @throws EntityNotFoundException falls die Abfrage nicht gefunden werden kann
+     * @throws AbfrageStatusNotAllowedException falls die Abfrage nicht freigegeben werden kann
+     * @throws UniqueViolationException falls der Name der Abfrage bereits vorhanden ist
+     * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
      */
-    public void freigabeInfrastrukturabfrage(final UUID id) throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException {
+    public void freigabeInfrastrukturabfrage(final UUID id) throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException {
         final InfrastrukturabfrageModel abfrage = this.abfrageService.getInfrastrukturabfrageById(id);
         abfrage.setAbfrage(this.freigabeAbfrage(abfrage.getAbfrage(), id));
         this.abfrageService.updateInfrastrukturabfrage(abfrage);

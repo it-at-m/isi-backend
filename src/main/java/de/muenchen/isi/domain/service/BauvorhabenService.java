@@ -3,23 +3,24 @@ package de.muenchen.isi.domain.service;
 import de.muenchen.isi.api.dto.AbfrageDto;
 import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
+import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
 import de.muenchen.isi.domain.mapper.BauvorhabenDomainMapper;
 import de.muenchen.isi.domain.model.AbfrageModel;
-import de.muenchen.isi.domain.model.infrastruktureinrichtung.InfrastruktureinrichtungModel;
 import de.muenchen.isi.domain.model.BauvorhabenModel;
+import de.muenchen.isi.domain.model.infrastruktureinrichtung.InfrastruktureinrichtungModel;
 import de.muenchen.isi.infrastructure.repository.BauvorhabenRepository;
-import de.muenchen.isi.infrastructure.repository.infrastruktureinrichtung.GsNachmittagBetreuungRepository;
 import de.muenchen.isi.infrastructure.repository.InfrastrukturabfrageRepository;
-import de.muenchen.isi.infrastructure.repository.infrastruktureinrichtung.KinderkrippeRepository;
-import de.muenchen.isi.infrastructure.repository.infrastruktureinrichtung.KindergartenRepository;
-import de.muenchen.isi.infrastructure.repository.infrastruktureinrichtung.HausFuerKinderRepository;
 import de.muenchen.isi.infrastructure.repository.infrastruktureinrichtung.GrundschuleRepository;
+import de.muenchen.isi.infrastructure.repository.infrastruktureinrichtung.GsNachmittagBetreuungRepository;
+import de.muenchen.isi.infrastructure.repository.infrastruktureinrichtung.HausFuerKinderRepository;
+import de.muenchen.isi.infrastructure.repository.infrastruktureinrichtung.KindergartenRepository;
+import de.muenchen.isi.infrastructure.repository.infrastruktureinrichtung.KinderkrippeRepository;
 import de.muenchen.isi.infrastructure.repository.infrastruktureinrichtung.MittelschuleRepository;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.Nullable;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -73,30 +74,37 @@ public class BauvorhabenService {
     /**
      * Diese Methode speichert ein {@link BauvorhabenModel}.
      *
-     * @param bauvorhaben zum Speichern.
-     * @return das gespeicherte {@link BauvorhabenModel}.
-     * @throws UniqueViolationException falls der Name des Bauvorhabens {@link BauvorhabenModel#getNameVorhaben()} bereits vorhanden ist.
+     * @param bauvorhaben zum Speichern
+     * @return das gespeicherte {@link BauvorhabenModel}
+     * @throws UniqueViolationException falls der Name des Bauvorhabens {@link BauvorhabenModel#getNameVorhaben()} bereits vorhanden ist
+     * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
      */
-    public BauvorhabenModel saveBauvorhaben(final BauvorhabenModel bauvorhaben) throws UniqueViolationException {
-        var entity = this.bauvorhabenDomainMapper.model2Entity(bauvorhaben);
-        var saved = this.bauvorhabenRepository.findByNameVorhabenIgnoreCase(entity.getNameVorhaben());
-        if(saved.isPresent()) {
-            throw new UniqueViolationException("Der angegebene Name des Bauvorhabens ist schon vorhanden, bitte wählen Sie daher einen anderen Namen und speichern Sie die Abfrage erneut.");
+    public BauvorhabenModel saveBauvorhaben(final BauvorhabenModel bauvorhaben) throws UniqueViolationException, OptimisticLockingException {
+        var bauvorhabenEntity = this.bauvorhabenDomainMapper.model2Entity(bauvorhaben);
+        final var saved = this.bauvorhabenRepository.findByNameVorhabenIgnoreCase(bauvorhabenEntity.getNameVorhaben());
+        if ((saved.isPresent() && saved.get().getId().equals(bauvorhabenEntity.getId())) || saved.isEmpty()) {
+            try {
+                bauvorhabenEntity = this.bauvorhabenRepository.saveAndFlush(bauvorhabenEntity);
+            } catch (final ObjectOptimisticLockingFailureException exception) {
+                final var message = "Die Daten wurden in der Zwischenzeit geändert. Bitte laden Sie die Seite neu!";
+                throw new OptimisticLockingException(message, exception);
+            }
+            return this.bauvorhabenDomainMapper.entity2Model(bauvorhabenEntity);
         } else {
-            entity = this.bauvorhabenRepository.save(entity);
-            return this.bauvorhabenDomainMapper.entity2Model(entity);
+            throw new UniqueViolationException("Der angegebene Name des Bauvorhabens ist schon vorhanden, bitte wählen Sie daher einen anderen Namen und speichern Sie die Abfrage erneut.");
         }
     }
 
     /**
      * Diese Methode updated ein {@link BauvorhabenModel}.
      *
-     * @param bauvorhaben zum Updaten.
-     * @return das geupdatete {@link BauvorhabenModel}.
-     * @throws EntityNotFoundException falls das Bauvorhaben identifiziert durch die {@link BauvorhabenModel#getId()} nicht gefunden wird.
-     * @throws UniqueViolationException falls der Name des Bauvorhabens {@link BauvorhabenModel#getNameVorhaben()} bereits vorhanden ist.
+     * @param bauvorhaben zum Updaten
+     * @return das geupdatete {@link BauvorhabenModel}
+     * @throws EntityNotFoundException falls das Bauvorhaben identifiziert durch die {@link BauvorhabenModel#getId()} nicht gefunden wird
+     * @throws UniqueViolationException falls der Name des Bauvorhabens {@link BauvorhabenModel#getNameVorhaben()} bereits vorhanden ist
+     * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
      */
-    public BauvorhabenModel updateBauvorhaben(final BauvorhabenModel bauvorhaben) throws EntityNotFoundException, UniqueViolationException {
+    public BauvorhabenModel updateBauvorhaben(final BauvorhabenModel bauvorhaben) throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException {
         this.getBauvorhabenById(bauvorhaben.getId());
         return this.saveBauvorhaben(bauvorhaben);
     }
@@ -140,10 +148,10 @@ public class BauvorhabenService {
      * Diese Methode soll dann verwendet werden, um die beim Mapping verloren gegangene Information zum Bauvorhaben wieder in der Infrastruktureinrichung einzusetzen.
      * Der Parameter 'bauvorhabenId' darf null sein. In diesem Fall passiert nichts.
      *
-     * @param bauvorhabenId id des {@link BauvorhabenModel}s. Darf null sein.
-     * @param infrastruktureinrichtung zum Speichern.
-     * @return Die (möglicherweise) geänderte Infrastruktureinrichtung.
-     * @throws EntityNotFoundException falls das Bauvorhaben mit der gegebenen ID nicht gefunden wurde.
+     * @param bauvorhabenId id des {@link BauvorhabenModel}s
+     * @param infrastruktureinrichtung zum Speichern
+     * @return Die (möglicherweise) geänderte Infrastruktureinrichtung
+     * @throws EntityNotFoundException falls das Bauvorhaben mit der gegebenen ID nicht gefunden wurde
      */
     public InfrastruktureinrichtungModel assignBauvorhabenToInfrastruktureinrichtung(@Nullable final UUID bauvorhabenId, final InfrastruktureinrichtungModel infrastruktureinrichtung) throws EntityNotFoundException {
         if (bauvorhabenId != null) {

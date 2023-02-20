@@ -5,12 +5,12 @@ import de.muenchen.isi.infrastructure.entity.enums.Einrichtungstyp;
 import de.muenchen.isi.infrastructure.entity.enums.Wohnungstyp;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonVerfahrensgrundsaetzeJahr;
 import de.muenchen.isi.infrastructure.entity.stammdaten.SobonOrientierungswertSozialeInfrastruktur;
-import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 import java.util.UUID;
 
-public interface SobonOrientierungswertSozialeInfrastrukturRepository extends PagingAndSortingRepository<SobonOrientierungswertSozialeInfrastruktur, UUID> {
+public interface SobonOrientierungswertSozialeInfrastrukturRepository extends JpaRepository<SobonOrientierungswertSozialeInfrastruktur, UUID> {
 
     Optional<SobonOrientierungswertSozialeInfrastruktur> findByJahrAndEinrichtungstypAndAltersklasseAndWohnungstyp(final SobonVerfahrensgrundsaetzeJahr jahr,
                                                                                                                    final Einrichtungstyp einrichtungstyp,

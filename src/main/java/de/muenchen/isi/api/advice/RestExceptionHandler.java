@@ -10,6 +10,7 @@ import de.muenchen.isi.domain.exception.FileHandlingFailedException;
 import de.muenchen.isi.domain.exception.FileHandlingWithS3FailedException;
 import de.muenchen.isi.domain.exception.FileImportFailedException;
 import de.muenchen.isi.domain.exception.KoordinatenException;
+import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.ObjectUtils;
@@ -39,6 +40,7 @@ import org.springframework.web.multipart.support.MissingServletRequestPartExcept
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import javax.validation.ConstraintViolationException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
@@ -59,6 +61,31 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     private static final int CUSTOM_INTERNAL_SERVER_ERROR = 555;
 
     private final Tracer tracer;
+
+    @ExceptionHandler(OptimisticLockingException.class)
+    public ResponseEntity<Object> handleOptimisticLockingException(final OptimisticLockingException ex) {
+        final var httpStatus = HttpStatus.PRECONDITION_FAILED;
+        final InformationResponseDto errorResponseDto = new InformationResponseDto();
+        errorResponseDto.setMessages(List.of(ex.getMessage()));
+        errorResponseDto.setHttpStatus(httpStatus.value());
+        errorResponseDto.setType(InformationResponseType.ERROR);
+        return ResponseEntity
+                .status(httpStatus)
+                .body(errorResponseDto);
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<Object> handleConstraintViolationException(final ConstraintViolationException ex) {
+        final var httpStatus = HttpStatus.BAD_REQUEST;
+        final var errorResponseDto = this.createInformationResponseDtoWithTraceInformationAndTimestampAndOriginalExceptionNameAndStatusAndMessage(
+                ex,
+                httpStatus.value(),
+                List.of(ex.getMessage())
+        );
+        return ResponseEntity
+                .status(httpStatus)
+                .body(errorResponseDto);
+    }
 
     @ExceptionHandler(EntityIsReferencedException.class)
     public ResponseEntity<Object> handleEntityIsReferencedException(final EntityIsReferencedException ex) {
