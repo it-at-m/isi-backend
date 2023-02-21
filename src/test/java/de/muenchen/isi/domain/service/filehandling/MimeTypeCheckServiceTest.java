@@ -45,6 +45,40 @@ class MimeTypeCheckServiceTest {
     }
 
     @Test
+    void extractMediaTypeInformation() throws DocumentStorageException, PropertyNotSetException, DocumentStorageClientErrorException, DocumentStorageServerErrorException, FileHandlingWithS3FailedException, FileHandlingFailedException, MimeTypeExtractionFailedException {
+        final InputStream file = this.getClass().getClassLoader().getResourceAsStream("pdf_for_test.pdf");
+        Mockito.when(this.documentStorageFileRepository.getFileInputStream("pathToFile/pdf_for_test.pdf", 5)).thenReturn(file);
+
+        final var filePathModel = new FilepathModel();
+        filePathModel.setPathToFile("pathToFile/pdf_for_test.pdf");
+
+        final var result = this.mimeTypeCheckService.extractMediaTypeInformation(filePathModel);
+
+        final var expected = new MediaTypeInformationModel();
+        expected.setType("application/pdf");
+        expected.setDescription("Portable Document Format");
+        expected.setAcronym("PDF");
+
+        assertThat(
+                result,
+                is(expected)
+        );
+
+        Mockito.verify(this.documentStorageFileRepository, Mockito.times(1)).getFileInputStream("pathToFile/pdf_for_test.pdf", 5);
+
+        // Prüfung ob InputStream geschlossen.
+        try {
+            file.readAllBytes();
+            Assertions.fail();
+        } catch (final IOException exception) {
+            assertThat(
+                    exception.getMessage(),
+                    is("Stream closed")
+            );
+        }
+    }
+
+    @Test
     void getInputStream() throws DocumentStorageException, PropertyNotSetException, DocumentStorageClientErrorException, DocumentStorageServerErrorException, FileHandlingWithS3FailedException, FileHandlingFailedException, IOException {
         final InputStream file = this.getClass().getClassLoader().getResourceAsStream("pdf_for_test.pdf");
         Mockito.when(this.documentStorageFileRepository.getFileInputStream("pathToFile/pdf_for_test.pdf", 5)).thenReturn(file);
