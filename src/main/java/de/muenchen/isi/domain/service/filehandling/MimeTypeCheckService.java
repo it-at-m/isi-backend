@@ -50,7 +50,7 @@ public class MimeTypeCheckService {
             return this.documentStorageFileRepository.getFileInputStream(filepath.getPathToFile(), this.fileExpirationTime);
         } catch (final DocumentStorageClientErrorException | DocumentStorageServerErrorException |
                        DocumentStorageException | PropertyNotSetException exception) {
-            final var message = "Beim Herunterladen der Datei vom ISI-Dokumentenverwaltungssystem ist ein Fehler aufgetreten.";
+            final var message = "Beim Herunterladen zur Dateiprüfung vom ISI-Dokumentenverwaltungssystem ist ein Fehler aufgetreten.";
             log.error(message);
             final var clazz = exception.getClass();
             if (clazz.equals(DocumentStorageClientErrorException.class) || clazz.equals(DocumentStorageServerErrorException.class)) {
