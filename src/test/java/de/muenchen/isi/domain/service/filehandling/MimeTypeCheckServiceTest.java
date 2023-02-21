@@ -90,7 +90,7 @@ class MimeTypeCheckServiceTest {
     }
 
     @Test
-    void extractMediaTypeInformationOfFileAndCloseStream() throws MimeTypeExtractionFailedException, IOException {
+    void extractMediaTypeInformationOfFileAndCloseStream() throws MimeTypeExtractionFailedException {
         InputStream file = this.getClass().getClassLoader().getResourceAsStream("pdf_for_test.pdf");
         var result = this.mimeTypeCheckService.extractMediaTypeInformationOfFileAndCloseStream(file);
 
@@ -127,8 +127,6 @@ class MimeTypeCheckServiceTest {
                     is("Stream closed")
             );
         }
-
     }
-
 
 }
