@@ -3,7 +3,7 @@ package de.muenchen.isi.api.controller;
 import de.muenchen.isi.api.dto.error.InformationResponseDto;
 import de.muenchen.isi.api.dto.filehandling.FilepathDto;
 import de.muenchen.isi.api.dto.filehandling.PresignedUrlDto;
-import de.muenchen.isi.api.mapper.PresignedUrlApiMapper;
+import de.muenchen.isi.api.mapper.FilehandlingApiMapper;
 import de.muenchen.isi.api.validation.HasAllowedFileExtension;
 import de.muenchen.isi.api.validation.IsFilepathWithoutLeadingPathdivider;
 import de.muenchen.isi.domain.exception.FileHandlingFailedException;
@@ -39,7 +39,7 @@ public class PresignedUrlCreationController {
 
     private final PresignedUrlCreationService presignedUrlCreationService;
 
-    private final PresignedUrlApiMapper presignedUrlApiMapper;
+    private final FilehandlingApiMapper filehandlingApiMapper;
 
     @GetMapping("presigned-url")
     @Operation(
@@ -61,7 +61,7 @@ public class PresignedUrlCreationController {
         final var filepathModel = new FilepathModel();
         filepathModel.setPathToFile(pathToFile);
         final var presignedUrlModel = this.presignedUrlCreationService.getFile(filepathModel);
-        final var presignedUrlDto = this.presignedUrlApiMapper.model2Dto(presignedUrlModel);
+        final var presignedUrlDto = this.filehandlingApiMapper.model2Dto(presignedUrlModel);
         return ResponseEntity.ok(presignedUrlDto);
     }
 
@@ -78,8 +78,8 @@ public class PresignedUrlCreationController {
     })
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_PRESIGNED_URL_SAVE_FILE.name())")
     public ResponseEntity<PresignedUrlDto> saveFile(@RequestBody @NotNull @Valid final FilepathDto filepathDto) throws FileHandlingWithS3FailedException, FileHandlingFailedException {
-        final var presignedUrlModel = this.presignedUrlCreationService.saveFile(this.presignedUrlApiMapper.dto2Model(filepathDto));
-        final var presignedUrlDto = this.presignedUrlApiMapper.model2Dto(presignedUrlModel);
+        final var presignedUrlModel = this.presignedUrlCreationService.saveFile(this.filehandlingApiMapper.dto2Model(filepathDto));
+        final var presignedUrlDto = this.filehandlingApiMapper.model2Dto(presignedUrlModel);
         return ResponseEntity.ok(presignedUrlDto);
     }
 
@@ -96,8 +96,8 @@ public class PresignedUrlCreationController {
     })
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_PRESIGNED_URL_DELETE_FILE.name())")
     public ResponseEntity<PresignedUrlDto> deleteFile(@RequestBody @NotNull @Valid final FilepathDto filepathDto) throws FileHandlingWithS3FailedException, FileHandlingFailedException {
-        final var presignedUrlModel = this.presignedUrlCreationService.deleteFile(this.presignedUrlApiMapper.dto2Model(filepathDto));
-        final var presignedUrlDto = this.presignedUrlApiMapper.model2Dto(presignedUrlModel);
+        final var presignedUrlModel = this.presignedUrlCreationService.deleteFile(this.filehandlingApiMapper.dto2Model(filepathDto));
+        final var presignedUrlDto = this.filehandlingApiMapper.model2Dto(presignedUrlModel);
         return ResponseEntity.ok(presignedUrlDto);
     }
 

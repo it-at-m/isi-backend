@@ -10,6 +10,7 @@ import de.muenchen.isi.domain.exception.FileHandlingFailedException;
 import de.muenchen.isi.domain.exception.FileHandlingWithS3FailedException;
 import de.muenchen.isi.domain.exception.FileImportFailedException;
 import de.muenchen.isi.domain.exception.KoordinatenException;
+import de.muenchen.isi.domain.exception.MimeTypeExtractionFailedException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
 import lombok.RequiredArgsConstructor;
@@ -115,6 +116,19 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(FileImportFailedException.class)
     public ResponseEntity<Object> handleFileImportFailedException(final FileImportFailedException ex) {
+        final var httpStatus = CUSTOM_INTERNAL_SERVER_ERROR;
+        final var errorResponseDto = this.createInformationResponseDtoWithTraceInformationAndTimestampAndOriginalExceptionNameAndStatusAndMessage(
+                ex,
+                httpStatus,
+                List.of(ex.getMessage())
+        );
+        return ResponseEntity
+                .status(httpStatus)
+                .body(errorResponseDto);
+    }
+
+    @ExceptionHandler(MimeTypeExtractionFailedException.class)
+    public ResponseEntity<Object> handleMimeTypeExtractionFailedException(final MimeTypeExtractionFailedException ex) {
         final var httpStatus = CUSTOM_INTERNAL_SERVER_ERROR;
         final var errorResponseDto = this.createInformationResponseDtoWithTraceInformationAndTimestampAndOriginalExceptionNameAndStatusAndMessage(
                 ex,
