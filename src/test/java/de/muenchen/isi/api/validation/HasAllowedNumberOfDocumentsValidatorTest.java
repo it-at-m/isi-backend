@@ -23,7 +23,7 @@ class HasAllowedNumberOfDocumentsValidatorTest {
 
     @BeforeEach
     public void beforeEach() {
-        final var fileInformationStammService = new FileInformationStammService(1024L, 30L);
+        final var fileInformationStammService = new FileInformationStammService(1024L, 30L, List.of());
         this.hasAllowedFileExtensionValidator = new HasAllowedNumberOfDocumentsValidator(fileInformationStammService);
     }
 

@@ -8,6 +8,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 
+import java.util.List;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
@@ -19,7 +21,7 @@ class FileInformationStammServiceTest {
 
     @BeforeEach
     public void beforeEach() {
-        this.fileInformationStammService = new FileInformationStammService(1024L, 30L);
+        this.fileInformationStammService = new FileInformationStammService(1024L, 30L, List.of("application/pdf"));
     }
 
     @Test
@@ -27,7 +29,7 @@ class FileInformationStammServiceTest {
         final var expected = new FileInformationModel();
         expected.setMaxFileSizeBytes(1024L);
         expected.setMaxNumberOfFiles(30L);
-
+        expected.setAllowedMimeTypes(List.of("application/pdf"));
         assertThat(
                 this.fileInformationStammService.getFileInformation(),
                 is(expected)
