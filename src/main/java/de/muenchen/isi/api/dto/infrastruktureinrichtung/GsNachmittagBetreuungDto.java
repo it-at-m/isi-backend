@@ -24,4 +24,12 @@ public class GsNachmittagBetreuungDto extends BaseEntityDto {
 
     private ArtGsNachmittagBetreuung artGsNachmittagBetreuung;
 
+    @NotNull
+    private Integer anzahlHortPlaetze;
+
+    @NotNull
+    private Integer anzahlHortGruppen;
+
+    private Integer wohnungsnaheHortPlaetze;
+
 }
