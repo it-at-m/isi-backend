@@ -33,16 +33,16 @@ import static org.hamcrest.Matchers.is;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-class MimeTypeCheckServiceTest {
+class MimeTypeServiceTest {
 
     @Mock
     private DocumentStorageFileRepository documentStorageFileRepository;
 
-    private MimeTypeCheckService mimeTypeCheckService;
+    private MimeTypeService mimeTypeService;
 
     @BeforeEach
     public void beforeEach() {
-        this.mimeTypeCheckService = new MimeTypeCheckService(
+        this.mimeTypeService = new MimeTypeService(
                 this.documentStorageFileRepository,
                 5,
                 List.of("application/pdf")
@@ -68,7 +68,7 @@ class MimeTypeCheckServiceTest {
         var filePathModel = new FilepathModel();
         filePathModel.setPathToFile("pathToFile/pdf_for_test.pdf");
 
-        final var result = this.mimeTypeCheckService.extractMediaTypeInformationForAllowedMediaType(filePathModel);
+        final var result = this.mimeTypeService.extractMediaTypeInformationForAllowedMediaType(filePathModel);
 
         final var expected = new MediaTypeInformationModel();
         expected.setType("application/pdf");
@@ -88,7 +88,7 @@ class MimeTypeCheckServiceTest {
         filePathModel.setPathToFile("pathToFile/svg_for_test.svg");
 
         try {
-            this.mimeTypeCheckService.extractMediaTypeInformationForAllowedMediaType(filePathModel);
+            this.mimeTypeService.extractMediaTypeInformationForAllowedMediaType(filePathModel);
             Assertions.fail();
         } catch (final MimeTypeNotAllowedException exception) {
             assertThat(
@@ -106,7 +106,7 @@ class MimeTypeCheckServiceTest {
         final var filePathModel = new FilepathModel();
         filePathModel.setPathToFile("pathToFile/pdf_for_test.pdf");
 
-        final var result = this.mimeTypeCheckService.extractMediaTypeInformation(filePathModel);
+        final var result = this.mimeTypeService.extractMediaTypeInformation(filePathModel);
 
         final var expected = new MediaTypeInformationModel();
         expected.setType("application/pdf");
@@ -138,22 +138,22 @@ class MimeTypeCheckServiceTest {
         filePathModel.setPathToFile("pathToFile/pdf_for_test.pdf");
 
         Mockito.when(this.documentStorageFileRepository.getFileInputStream("pathToFile/pdf_for_test.pdf", 5)).thenThrow(new DocumentStorageException("outermessage", new Exception("innermessage")));
-        Assertions.assertThrows(FileHandlingFailedException.class, () -> this.mimeTypeCheckService.extractMediaTypeInformation(filePathModel));
+        Assertions.assertThrows(FileHandlingFailedException.class, () -> this.mimeTypeService.extractMediaTypeInformation(filePathModel));
         Mockito.verify(this.documentStorageFileRepository, Mockito.times(1)).getFileInputStream("pathToFile/pdf_for_test.pdf", 5);
         Mockito.reset(this.documentStorageFileRepository);
 
         Mockito.when(this.documentStorageFileRepository.getFileInputStream("pathToFile/pdf_for_test.pdf", 5)).thenThrow(new PropertyNotSetException("outermessage"));
-        Assertions.assertThrows(FileHandlingFailedException.class, () -> this.mimeTypeCheckService.extractMediaTypeInformation(filePathModel));
+        Assertions.assertThrows(FileHandlingFailedException.class, () -> this.mimeTypeService.extractMediaTypeInformation(filePathModel));
         Mockito.verify(this.documentStorageFileRepository, Mockito.times(1)).getFileInputStream("pathToFile/pdf_for_test.pdf", 5);
         Mockito.reset(this.documentStorageFileRepository);
 
         Mockito.when(this.documentStorageFileRepository.getFileInputStream("pathToFile/pdf_for_test.pdf", 5)).thenThrow(new DocumentStorageClientErrorException("outermessage", new HttpClientErrorException(HttpStatus.BAD_REQUEST)));
-        Assertions.assertThrows(FileHandlingWithS3FailedException.class, () -> this.mimeTypeCheckService.extractMediaTypeInformation(filePathModel));
+        Assertions.assertThrows(FileHandlingWithS3FailedException.class, () -> this.mimeTypeService.extractMediaTypeInformation(filePathModel));
         Mockito.verify(this.documentStorageFileRepository, Mockito.times(1)).getFileInputStream("pathToFile/pdf_for_test.pdf", 5);
         Mockito.reset(this.documentStorageFileRepository);
 
         Mockito.when(this.documentStorageFileRepository.getFileInputStream("pathToFile/pdf_for_test.pdf", 5)).thenThrow(new DocumentStorageServerErrorException("outermessage", new HttpServerErrorException(HttpStatus.INTERNAL_SERVER_ERROR)));
-        Assertions.assertThrows(FileHandlingWithS3FailedException.class, () -> this.mimeTypeCheckService.extractMediaTypeInformation(filePathModel));
+        Assertions.assertThrows(FileHandlingWithS3FailedException.class, () -> this.mimeTypeService.extractMediaTypeInformation(filePathModel));
         Mockito.verify(this.documentStorageFileRepository, Mockito.times(1)).getFileInputStream("pathToFile/pdf_for_test.pdf", 5);
         Mockito.reset(this.documentStorageFileRepository);
     }
@@ -165,7 +165,7 @@ class MimeTypeCheckServiceTest {
 
         final var filePathModel = new FilepathModel();
         filePathModel.setPathToFile("pathToFile/pdf_for_test.pdf");
-        final var result = this.mimeTypeCheckService.getInputStream(filePathModel);
+        final var result = this.mimeTypeService.getInputStream(filePathModel);
 
         assertThat(
                 file,
@@ -183,22 +183,22 @@ class MimeTypeCheckServiceTest {
         filePathModel.setPathToFile("pathToFile/pdf_for_test.pdf");
 
         Mockito.when(this.documentStorageFileRepository.getFileInputStream("pathToFile/pdf_for_test.pdf", 5)).thenThrow(new DocumentStorageException("outermessage", new Exception("innermessage")));
-        Assertions.assertThrows(FileHandlingFailedException.class, () -> this.mimeTypeCheckService.getInputStream(filePathModel));
+        Assertions.assertThrows(FileHandlingFailedException.class, () -> this.mimeTypeService.getInputStream(filePathModel));
         Mockito.verify(this.documentStorageFileRepository, Mockito.times(1)).getFileInputStream("pathToFile/pdf_for_test.pdf", 5);
         Mockito.reset(this.documentStorageFileRepository);
 
         Mockito.when(this.documentStorageFileRepository.getFileInputStream("pathToFile/pdf_for_test.pdf", 5)).thenThrow(new PropertyNotSetException("outermessage"));
-        Assertions.assertThrows(FileHandlingFailedException.class, () -> this.mimeTypeCheckService.getInputStream(filePathModel));
+        Assertions.assertThrows(FileHandlingFailedException.class, () -> this.mimeTypeService.getInputStream(filePathModel));
         Mockito.verify(this.documentStorageFileRepository, Mockito.times(1)).getFileInputStream("pathToFile/pdf_for_test.pdf", 5);
         Mockito.reset(this.documentStorageFileRepository);
 
         Mockito.when(this.documentStorageFileRepository.getFileInputStream("pathToFile/pdf_for_test.pdf", 5)).thenThrow(new DocumentStorageClientErrorException("outermessage", new HttpClientErrorException(HttpStatus.BAD_REQUEST)));
-        Assertions.assertThrows(FileHandlingWithS3FailedException.class, () -> this.mimeTypeCheckService.getInputStream(filePathModel));
+        Assertions.assertThrows(FileHandlingWithS3FailedException.class, () -> this.mimeTypeService.getInputStream(filePathModel));
         Mockito.verify(this.documentStorageFileRepository, Mockito.times(1)).getFileInputStream("pathToFile/pdf_for_test.pdf", 5);
         Mockito.reset(this.documentStorageFileRepository);
 
         Mockito.when(this.documentStorageFileRepository.getFileInputStream("pathToFile/pdf_for_test.pdf", 5)).thenThrow(new DocumentStorageServerErrorException("outermessage", new HttpServerErrorException(HttpStatus.INTERNAL_SERVER_ERROR)));
-        Assertions.assertThrows(FileHandlingWithS3FailedException.class, () -> this.mimeTypeCheckService.getInputStream(filePathModel));
+        Assertions.assertThrows(FileHandlingWithS3FailedException.class, () -> this.mimeTypeService.getInputStream(filePathModel));
         Mockito.verify(this.documentStorageFileRepository, Mockito.times(1)).getFileInputStream("pathToFile/pdf_for_test.pdf", 5);
         Mockito.reset(this.documentStorageFileRepository);
     }
@@ -206,7 +206,7 @@ class MimeTypeCheckServiceTest {
     @Test
     void extractMediaTypeInformationOfFileAndCloseStream() throws MimeTypeExtractionFailedException {
         InputStream file = this.getClass().getClassLoader().getResourceAsStream("pdf_for_test.pdf");
-        var result = this.mimeTypeCheckService.extractMediaTypeInformationOfFileAndCloseStream(file);
+        var result = this.mimeTypeService.extractMediaTypeInformationOfFileAndCloseStream(file);
 
         var expected = new MediaTypeInformationModel();
         expected.setType("application/pdf");
@@ -219,7 +219,7 @@ class MimeTypeCheckServiceTest {
         );
 
         file = this.getClass().getClassLoader().getResourceAsStream("svg_for_test.svg");
-        result = this.mimeTypeCheckService.extractMediaTypeInformationOfFileAndCloseStream(file);
+        result = this.mimeTypeService.extractMediaTypeInformationOfFileAndCloseStream(file);
 
         expected = new MediaTypeInformationModel();
         expected.setType("image/svg+xml");

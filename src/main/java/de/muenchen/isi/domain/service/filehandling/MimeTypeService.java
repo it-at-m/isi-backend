@@ -34,7 +34,7 @@ import java.util.Set;
 
 @Slf4j
 @Service
-public class MimeTypeCheckService {
+public class MimeTypeService {
 
     private final DocumentStorageFileRepository documentStorageFileRepository;
 
@@ -42,9 +42,9 @@ public class MimeTypeCheckService {
 
     private final Set<String> allowedMimeTypes;
 
-    public MimeTypeCheckService(final DocumentStorageFileRepository documentStorageFileRepository,
-                                @Value("${io.muenchendigital.digiwf.s3.client.file-expiration-time}") final Integer fileExpirationTime,
-                                @Value("#{'${file.mimetypes.allowed}'.split(',')}") final List<String> allowedMimeTypes) {
+    public MimeTypeService(final DocumentStorageFileRepository documentStorageFileRepository,
+                           @Value("${io.muenchendigital.digiwf.s3.client.file-expiration-time}") final Integer fileExpirationTime,
+                           @Value("#{'${file.mimetypes.allowed}'.split(',')}") final List<String> allowedMimeTypes) {
         this.documentStorageFileRepository = documentStorageFileRepository;
         this.fileExpirationTime = fileExpirationTime;
         this.allowedMimeTypes = new HashSet<>(allowedMimeTypes);
