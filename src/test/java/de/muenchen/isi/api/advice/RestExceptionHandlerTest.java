@@ -11,6 +11,7 @@ import de.muenchen.isi.domain.exception.FileHandlingWithS3FailedException;
 import de.muenchen.isi.domain.exception.FileImportFailedException;
 import de.muenchen.isi.domain.exception.KoordinatenException;
 import de.muenchen.isi.domain.exception.MimeTypeExtractionFailedException;
+import de.muenchen.isi.domain.exception.MimeTypeNotAllowedException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
 import org.junit.jupiter.api.BeforeEach;
@@ -210,6 +211,37 @@ class RestExceptionHandlerTest {
         assertThat(
                 responseDto.getOriginalException(),
                 is("FileImportFailedException")
+        );
+    }
+
+    @Test
+    void handleMimeTypeNotAllowedException() {
+        final MimeTypeNotAllowedException mimeTypeNotAllowedException = new MimeTypeNotAllowedException("test");
+
+        final ResponseEntity<Object> response = this.restExceptionHandler.handleMimeTypeNotAllowedException(mimeTypeNotAllowedException);
+
+        assertThat(
+                response.getStatusCodeValue(),
+                is(406)
+        );
+
+        final InformationResponseDto responseDto = (InformationResponseDto) response.getBody();
+
+        assertThat(
+                responseDto.getTraceId(),
+                is("1111111111111111")
+        );
+        assertThat(
+                responseDto.getSpanId(),
+                is("ffffffffffffffff")
+        );
+        assertThat(
+                responseDto.getMessages(),
+                is(List.of("test"))
+        );
+        assertThat(
+                responseDto.getOriginalException(),
+                is("MimeTypeNotAllowedException")
         );
     }
 

@@ -1,4 +1,4 @@
-package de.muenchen.isi.api.controller;
+package de.muenchen.isi.api.controller.filehandling;
 
 import de.muenchen.isi.api.dto.error.InformationResponseDto;
 import de.muenchen.isi.api.dto.filehandling.FilepathDto;

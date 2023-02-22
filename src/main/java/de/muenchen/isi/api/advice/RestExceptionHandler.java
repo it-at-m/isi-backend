@@ -11,6 +11,7 @@ import de.muenchen.isi.domain.exception.FileHandlingWithS3FailedException;
 import de.muenchen.isi.domain.exception.FileImportFailedException;
 import de.muenchen.isi.domain.exception.KoordinatenException;
 import de.muenchen.isi.domain.exception.MimeTypeExtractionFailedException;
+import de.muenchen.isi.domain.exception.MimeTypeNotAllowedException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
 import lombok.RequiredArgsConstructor;
@@ -120,6 +121,19 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         final var errorResponseDto = this.createInformationResponseDtoWithTraceInformationAndTimestampAndOriginalExceptionNameAndStatusAndMessage(
                 ex,
                 httpStatus,
+                List.of(ex.getMessage())
+        );
+        return ResponseEntity
+                .status(httpStatus)
+                .body(errorResponseDto);
+    }
+    
+    @ExceptionHandler(MimeTypeNotAllowedException.class)
+    public ResponseEntity<Object> handleMimeTypeNotAllowedException(final MimeTypeNotAllowedException ex) {
+        final var httpStatus = HttpStatus.NOT_ACCEPTABLE;
+        final var errorResponseDto = this.createInformationResponseDtoWithTraceInformationAndTimestampAndOriginalExceptionNameAndStatusAndMessage(
+                ex,
+                httpStatus.value(),
                 List.of(ex.getMessage())
         );
         return ResponseEntity
