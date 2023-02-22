@@ -5,7 +5,7 @@ import de.muenchen.isi.domain.exception.FileHandlingWithS3FailedException;
 import de.muenchen.isi.domain.exception.MimeTypeExtractionFailedException;
 import de.muenchen.isi.domain.exception.MimeTypeNotAllowedException;
 import de.muenchen.isi.domain.model.filehandling.FilepathModel;
-import de.muenchen.isi.domain.model.filehandling.MediaTypeInformationModel;
+import de.muenchen.isi.domain.model.filehandling.MimeTypeInformationModel;
 import io.muenchendigital.digiwf.s3.integration.client.exception.DocumentStorageClientErrorException;
 import io.muenchendigital.digiwf.s3.integration.client.exception.DocumentStorageException;
 import io.muenchendigital.digiwf.s3.integration.client.exception.DocumentStorageServerErrorException;
@@ -70,7 +70,7 @@ class MimeTypeServiceTest {
 
         final var result = this.mimeTypeService.extractMediaTypeInformationForAllowedMediaType(filePathModel);
 
-        final var expected = new MediaTypeInformationModel();
+        final var expected = new MimeTypeInformationModel();
         expected.setType("application/pdf");
         expected.setDescription("Portable Document Format");
         expected.setAcronym("PDF");
@@ -108,7 +108,7 @@ class MimeTypeServiceTest {
 
         final var result = this.mimeTypeService.extractMediaTypeInformation(filePathModel);
 
-        final var expected = new MediaTypeInformationModel();
+        final var expected = new MimeTypeInformationModel();
         expected.setType("application/pdf");
         expected.setDescription("Portable Document Format");
         expected.setAcronym("PDF");
@@ -208,7 +208,7 @@ class MimeTypeServiceTest {
         InputStream file = this.getClass().getClassLoader().getResourceAsStream("pdf_for_test.pdf");
         var result = this.mimeTypeService.extractMediaTypeInformationOfFileAndCloseStream(file);
 
-        var expected = new MediaTypeInformationModel();
+        var expected = new MimeTypeInformationModel();
         expected.setType("application/pdf");
         expected.setDescription("Portable Document Format");
         expected.setAcronym("PDF");
@@ -221,7 +221,7 @@ class MimeTypeServiceTest {
         file = this.getClass().getClassLoader().getResourceAsStream("svg_for_test.svg");
         result = this.mimeTypeService.extractMediaTypeInformationOfFileAndCloseStream(file);
 
-        expected = new MediaTypeInformationModel();
+        expected = new MimeTypeInformationModel();
         expected.setType("image/svg+xml");
         expected.setDescription("Scalable Vector Graphics");
         expected.setAcronym("SVG");

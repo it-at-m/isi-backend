@@ -6,7 +6,7 @@ import de.muenchen.isi.domain.exception.FileHandlingWithS3FailedException;
 import de.muenchen.isi.domain.exception.MimeTypeExtractionFailedException;
 import de.muenchen.isi.domain.exception.MimeTypeNotAllowedException;
 import de.muenchen.isi.domain.model.filehandling.FilepathModel;
-import de.muenchen.isi.domain.model.filehandling.MediaTypeInformationModel;
+import de.muenchen.isi.domain.model.filehandling.MimeTypeInformationModel;
 import io.muenchendigital.digiwf.s3.integration.client.exception.DocumentStorageClientErrorException;
 import io.muenchendigital.digiwf.s3.integration.client.exception.DocumentStorageException;
 import io.muenchendigital.digiwf.s3.integration.client.exception.DocumentStorageServerErrorException;
@@ -50,20 +50,20 @@ public class MimeTypeService {
         this.allowedMimeTypes = new HashSet<>(allowedMimeTypes);
     }
 
-    public MediaTypeInformationModel extractMediaTypeInformationForAllowedMediaType(final FilepathModel filepath) throws FileHandlingWithS3FailedException, FileHandlingFailedException, MimeTypeExtractionFailedException, MimeTypeNotAllowedException {
-        final MediaTypeInformationModel mediaTypeInformationModel = this.extractMediaTypeInformation(filepath);
-        if (!this.allowedMimeTypes.contains(mediaTypeInformationModel.getType())) {
+    public MimeTypeInformationModel extractMediaTypeInformationForAllowedMediaType(final FilepathModel filepath) throws FileHandlingWithS3FailedException, FileHandlingFailedException, MimeTypeExtractionFailedException, MimeTypeNotAllowedException {
+        final MimeTypeInformationModel mimeTypeInformationModel = this.extractMediaTypeInformation(filepath);
+        if (!this.allowedMimeTypes.contains(mimeTypeInformationModel.getType())) {
             final var fileName = StringUtils.substringAfterLast(
                     filepath.getPathToFile(),
                     IsFilepathWithoutLeadingPathdividerValidator.PATH_SEPARATOR
             );
-            final var message = String.format("Das Hochladen der Datei %s des Typs %s ist nicht erlaubt.", fileName, mediaTypeInformationModel.getAcronym());
+            final var message = String.format("Das Hochladen der Datei %s des Typs %s ist nicht erlaubt.", fileName, mimeTypeInformationModel.getAcronym());
             throw new MimeTypeNotAllowedException(message);
         }
-        return mediaTypeInformationModel;
+        return mimeTypeInformationModel;
     }
 
-    protected MediaTypeInformationModel extractMediaTypeInformation(final FilepathModel filepath) throws FileHandlingWithS3FailedException, FileHandlingFailedException, MimeTypeExtractionFailedException {
+    protected MimeTypeInformationModel extractMediaTypeInformation(final FilepathModel filepath) throws FileHandlingWithS3FailedException, FileHandlingFailedException, MimeTypeExtractionFailedException {
         final var fileInputStream = this.getInputStream(filepath);
         return this.extractMediaTypeInformationOfFileAndCloseStream(fileInputStream);
     }
@@ -88,18 +88,18 @@ public class MimeTypeService {
         }
     }
 
-    protected MediaTypeInformationModel extractMediaTypeInformationOfFileAndCloseStream(final InputStream file) throws MimeTypeExtractionFailedException {
+    protected MimeTypeInformationModel extractMediaTypeInformationOfFileAndCloseStream(final InputStream file) throws MimeTypeExtractionFailedException {
         final TikaConfig config = TikaConfig.getDefaultConfig();
         final Detector detector = config.getDetector();
         try (final InputStream fileInputStream = file;
              final TikaInputStream tikaInputStream = TikaInputStream.get(fileInputStream)) {
             final MediaType mediaType = detector.detect(tikaInputStream, new Metadata());
             final MimeType mimeType = config.getMimeRepository().forName(mediaType.toString());
-            final var mediaTypeInformation = new MediaTypeInformationModel();
-            mediaTypeInformation.setType(mimeType.getType().toString());
-            mediaTypeInformation.setDescription(mimeType.getDescription());
-            mediaTypeInformation.setAcronym(mimeType.getAcronym());
-            return mediaTypeInformation;
+            final var mimeTypeInformation = new MimeTypeInformationModel();
+            mimeTypeInformation.setType(mimeType.getType().toString());
+            mimeTypeInformation.setDescription(mimeType.getDescription());
+            mimeTypeInformation.setAcronym(mimeType.getAcronym());
+            return mimeTypeInformation;
         } catch (final IOException | MimeTypeException exception) {
             final var message = "Bei der Ermittlung des Dateitypen ist ein Fehler aufgetreten.";
             log.error(message);
