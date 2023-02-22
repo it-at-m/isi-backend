@@ -50,6 +50,16 @@ class MimeTypeCheckServiceTest {
         Mockito.reset(this.documentStorageFileRepository);
     }
 
+    /**
+     * @throws DocumentStorageException
+     * @throws PropertyNotSetException
+     * @throws DocumentStorageClientErrorException
+     * @throws DocumentStorageServerErrorException
+     * @throws FileHandlingWithS3FailedException
+     * @throws FileHandlingFailedException
+     * @throws MimeTypeExtractionFailedException
+     * @throws MimeTypeNotAllowedException         Falls der Mime-Type der Datei nicht erlaubt ist.
+     */
     @Test
     void extractMediaTypeInformationForAllowedMediaType() throws DocumentStorageException, PropertyNotSetException, DocumentStorageClientErrorException, DocumentStorageServerErrorException, FileHandlingWithS3FailedException, FileHandlingFailedException, MimeTypeExtractionFailedException, MimeTypeNotAllowedException {
         InputStream file = this.getClass().getClassLoader().getResourceAsStream("pdf_for_test.pdf");
