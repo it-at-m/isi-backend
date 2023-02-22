@@ -1,8 +1,10 @@
 package de.muenchen.isi.domain.service.filehandling;
 
+import de.muenchen.isi.api.validation.IsFilepathWithoutLeadingPathdividerValidator;
 import de.muenchen.isi.domain.exception.FileHandlingFailedException;
 import de.muenchen.isi.domain.exception.FileHandlingWithS3FailedException;
 import de.muenchen.isi.domain.exception.MimeTypeExtractionFailedException;
+import de.muenchen.isi.domain.exception.MimeTypeNotAllowedException;
 import de.muenchen.isi.domain.model.filehandling.FilepathModel;
 import de.muenchen.isi.domain.model.filehandling.MediaTypeInformationModel;
 import io.muenchendigital.digiwf.s3.integration.client.exception.DocumentStorageClientErrorException;
@@ -11,6 +13,7 @@ import io.muenchendigital.digiwf.s3.integration.client.exception.DocumentStorage
 import io.muenchendigital.digiwf.s3.integration.client.exception.PropertyNotSetException;
 import io.muenchendigital.digiwf.s3.integration.client.repository.DocumentStorageFileRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.tika.config.TikaConfig;
 import org.apache.tika.detect.Detector;
 import org.apache.tika.io.TikaInputStream;
@@ -24,6 +27,9 @@ import org.springframework.web.client.HttpStatusCodeException;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 
 @Slf4j
@@ -34,13 +40,30 @@ public class MimeTypeCheckService {
 
     private final Integer fileExpirationTime;
 
+    private final Set<String> allowedMimeTypes;
+
     public MimeTypeCheckService(final DocumentStorageFileRepository documentStorageFileRepository,
-                                @Value("${io.muenchendigital.digiwf.s3.client.file-expiration-time}") final Integer fileExpirationTime) {
+                                @Value("${io.muenchendigital.digiwf.s3.client.file-expiration-time}") final Integer fileExpirationTime,
+                                @Value("#{'${file.mimetypes.allowed}'.split(',')}") final List<String> allowedMimeTypes) {
         this.documentStorageFileRepository = documentStorageFileRepository;
         this.fileExpirationTime = fileExpirationTime;
+        this.allowedMimeTypes = new HashSet<>(allowedMimeTypes);
     }
 
-    public MediaTypeInformationModel extractMediaTypeInformation(final FilepathModel filepath) throws FileHandlingWithS3FailedException, FileHandlingFailedException, MimeTypeExtractionFailedException {
+    public MediaTypeInformationModel extractMediaTypeInformationForAllowedMediaType(final FilepathModel filepath) throws FileHandlingWithS3FailedException, FileHandlingFailedException, MimeTypeExtractionFailedException, MimeTypeNotAllowedException {
+        final MediaTypeInformationModel mediaTypeInformationModel = this.extractMediaTypeInformation(filepath);
+        if (!this.allowedMimeTypes.contains(mediaTypeInformationModel.getType())) {
+            final var fileName = StringUtils.substringAfterLast(
+                    filepath.getPathToFile(),
+                    IsFilepathWithoutLeadingPathdividerValidator.PATH_SEPARATOR
+            );
+            final var message = String.format("Das Hochladen der Datei %s des Typs %s ist nicht erlaubt.", fileName, mediaTypeInformationModel.getAcronym());
+            throw new MimeTypeNotAllowedException(message);
+        }
+        return mediaTypeInformationModel;
+    }
+
+    protected MediaTypeInformationModel extractMediaTypeInformation(final FilepathModel filepath) throws FileHandlingWithS3FailedException, FileHandlingFailedException, MimeTypeExtractionFailedException {
         final var fileInputStream = this.getInputStream(filepath);
         return this.extractMediaTypeInformationOfFileAndCloseStream(fileInputStream);
     }

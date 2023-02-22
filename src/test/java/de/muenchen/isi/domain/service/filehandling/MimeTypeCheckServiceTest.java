@@ -3,6 +3,7 @@ package de.muenchen.isi.domain.service.filehandling;
 import de.muenchen.isi.domain.exception.FileHandlingFailedException;
 import de.muenchen.isi.domain.exception.FileHandlingWithS3FailedException;
 import de.muenchen.isi.domain.exception.MimeTypeExtractionFailedException;
+import de.muenchen.isi.domain.exception.MimeTypeNotAllowedException;
 import de.muenchen.isi.domain.model.filehandling.FilepathModel;
 import de.muenchen.isi.domain.model.filehandling.MediaTypeInformationModel;
 import io.muenchendigital.digiwf.s3.integration.client.exception.DocumentStorageClientErrorException;
@@ -25,6 +26,7 @@ import org.springframework.web.client.HttpServerErrorException;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -40,8 +42,50 @@ class MimeTypeCheckServiceTest {
 
     @BeforeEach
     public void beforeEach() {
-        this.mimeTypeCheckService = new MimeTypeCheckService(this.documentStorageFileRepository, 5);
+        this.mimeTypeCheckService = new MimeTypeCheckService(
+                this.documentStorageFileRepository,
+                5,
+                List.of("application/pdf")
+        );
         Mockito.reset(this.documentStorageFileRepository);
+    }
+
+    @Test
+    void extractMediaTypeInformationForAllowedMediaType() throws DocumentStorageException, PropertyNotSetException, DocumentStorageClientErrorException, DocumentStorageServerErrorException, FileHandlingWithS3FailedException, FileHandlingFailedException, MimeTypeExtractionFailedException, MimeTypeNotAllowedException {
+        InputStream file = this.getClass().getClassLoader().getResourceAsStream("pdf_for_test.pdf");
+        Mockito.when(this.documentStorageFileRepository.getFileInputStream("pathToFile/pdf_for_test.pdf", 5)).thenReturn(file);
+
+        var filePathModel = new FilepathModel();
+        filePathModel.setPathToFile("pathToFile/pdf_for_test.pdf");
+
+        final var result = this.mimeTypeCheckService.extractMediaTypeInformationForAllowedMediaType(filePathModel);
+
+        final var expected = new MediaTypeInformationModel();
+        expected.setType("application/pdf");
+        expected.setDescription("Portable Document Format");
+        expected.setAcronym("PDF");
+
+        assertThat(
+                result,
+                is(expected)
+        );
+        Mockito.reset(this.documentStorageFileRepository);
+
+        file = this.getClass().getClassLoader().getResourceAsStream("svg_for_test.svg");
+        Mockito.when(this.documentStorageFileRepository.getFileInputStream("pathToFile/svg_for_test.svg", 5)).thenReturn(file);
+
+        filePathModel = new FilepathModel();
+        filePathModel.setPathToFile("pathToFile/svg_for_test.svg");
+
+        try {
+            this.mimeTypeCheckService.extractMediaTypeInformationForAllowedMediaType(filePathModel);
+            Assertions.fail();
+        } catch (final MimeTypeNotAllowedException exception) {
+            assertThat(
+                    "Das Hochladen der Datei svg_for_test.svg des Typs SVG ist nicht erlaubt.",
+                    is(exception.getMessage())
+            );
+        }
     }
 
     @Test
