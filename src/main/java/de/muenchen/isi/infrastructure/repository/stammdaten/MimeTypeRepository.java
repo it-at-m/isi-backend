@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -41,12 +42,12 @@ public class MimeTypeRepository {
         return mimeTypeInformationResult;
     }
 
-    public List<MimeTypeInformation> findAllByMimeTypes(final List<String> mimeTypes) {
+    public Set<MimeTypeInformation> findAllByMimeTypes(final List<String> mimeTypes) {
         return mimeTypes.stream()
                 .map(this::findByMimeType)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
     }
 
 }

@@ -7,7 +7,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -85,23 +85,23 @@ class MimeTypeRepositoryTest {
                 )
         );
 
-        final var expectedList = new ArrayList<MimeTypeInformation>();
+        final var expectedSet = new HashSet<MimeTypeInformation>();
         var mimeTypeInformation = new MimeTypeInformation();
         mimeTypeInformation.setMimeType("application/andrew-inset");
         mimeTypeInformation.setFileExtensions(List.of(".ez"));
-        expectedList.add(mimeTypeInformation);
+        expectedSet.add(mimeTypeInformation);
         mimeTypeInformation = new MimeTypeInformation();
         mimeTypeInformation.setMimeType("application/atomcat+xml");
         mimeTypeInformation.setFileExtensions(List.of(".atomcat"));
-        expectedList.add(mimeTypeInformation);
+        expectedSet.add(mimeTypeInformation);
         mimeTypeInformation = new MimeTypeInformation();
         mimeTypeInformation.setMimeType("application/mathematica");
         mimeTypeInformation.setFileExtensions(List.of(".ma", ".nb", ".mb"));
-        expectedList.add(mimeTypeInformation);
+        expectedSet.add(mimeTypeInformation);
 
         assertThat(
                 result,
-                is(expectedList)
+                is(expectedSet)
         );
     }
 
