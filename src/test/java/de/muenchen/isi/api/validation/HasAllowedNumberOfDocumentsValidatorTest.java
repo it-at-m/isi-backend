@@ -2,11 +2,9 @@ package de.muenchen.isi.api.validation;
 
 import de.muenchen.isi.api.dto.filehandling.DokumentDto;
 import de.muenchen.isi.domain.service.stammdaten.FileInformationStammService;
-import de.muenchen.isi.infrastructure.repository.stammdaten.MimeTypeRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
@@ -23,14 +21,9 @@ class HasAllowedNumberOfDocumentsValidatorTest {
 
     private HasAllowedNumberOfDocumentsValidator hasAllowedFileExtensionValidator;
 
-    @Mock
-    private MimeTypeRepository mimeTypeRepository;
-
     @BeforeEach
     public void beforeEach() {
-        final var fileEndings = List.of(".jpg", ".pdf", " .tif");
-        final var mimeTypes = List.of("application/pdf");
-        final var fileInformationStammService = new FileInformationStammService(fileEndings, mimeTypes, 1024L, 30L, this.mimeTypeRepository);
+        final var fileInformationStammService = new FileInformationStammService(1024L, 30L);
         this.hasAllowedFileExtensionValidator = new HasAllowedNumberOfDocumentsValidator(fileInformationStammService);
     }
 

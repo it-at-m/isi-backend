@@ -4,7 +4,6 @@ import de.muenchen.isi.api.dto.error.InformationResponseDto;
 import de.muenchen.isi.api.dto.filehandling.FilepathDto;
 import de.muenchen.isi.api.dto.filehandling.PresignedUrlDto;
 import de.muenchen.isi.api.mapper.FilehandlingApiMapper;
-import de.muenchen.isi.api.validation.HasAllowedFileExtension;
 import de.muenchen.isi.api.validation.IsFilepathWithoutLeadingPathdivider;
 import de.muenchen.isi.domain.exception.FileHandlingFailedException;
 import de.muenchen.isi.domain.exception.FileHandlingWithS3FailedException;
@@ -56,8 +55,7 @@ public class PresignedUrlCreationController {
     public ResponseEntity<PresignedUrlDto> getFile(@RequestParam
                                                    @Schema(description = "Der Dateipfad muss absolut, ohne Angabe des Buckets und ohne führenden Pfadtrenner angegeben werden. Beispiel: outerFolder/innerFolder/thefile.pdf")
                                                    @NotBlank
-                                                   @IsFilepathWithoutLeadingPathdivider
-                                                   @HasAllowedFileExtension final String pathToFile) throws FileHandlingWithS3FailedException, FileHandlingFailedException {
+                                                   @IsFilepathWithoutLeadingPathdivider final String pathToFile) throws FileHandlingWithS3FailedException, FileHandlingFailedException {
         final var filepathModel = new FilepathModel();
         filepathModel.setPathToFile(pathToFile);
         final var presignedUrlModel = this.presignedUrlCreationService.getFile(filepathModel);
