@@ -53,6 +53,7 @@ public class MimeTypeService {
     public MimeTypeInformationModel extractMediaTypeInformationForAllowedMediaType(final FilepathModel filepath) throws FileHandlingWithS3FailedException, FileHandlingFailedException, MimeTypeExtractionFailedException, MimeTypeNotAllowedException {
         final MimeTypeInformationModel mimeTypeInformationModel = this.extractMediaTypeInformation(filepath);
         if (!this.allowedMimeTypes.contains(mimeTypeInformationModel.getType())) {
+            this.deleteFile(filepath);
             final var fileName = StringUtils.substringAfterLast(
                     filepath.getPathToFile(),
                     IsFilepathWithoutLeadingPathdividerValidator.PATH_SEPARATOR
@@ -71,6 +72,26 @@ public class MimeTypeService {
     protected InputStream getInputStream(final FilepathModel filepath) throws FileHandlingWithS3FailedException, FileHandlingFailedException {
         try {
             return this.documentStorageFileRepository.getFileInputStream(filepath.getPathToFile(), this.fileExpirationTime);
+        } catch (final DocumentStorageClientErrorException | DocumentStorageServerErrorException |
+                       DocumentStorageException | PropertyNotSetException exception) {
+            final var message = "Beim Herunterladen zur Dateiprüfung vom ISI-Dokumentenverwaltungssystem ist ein Fehler aufgetreten.";
+            log.error(message);
+            final var clazz = exception.getClass();
+            if (clazz.equals(DocumentStorageClientErrorException.class) || clazz.equals(DocumentStorageServerErrorException.class)) {
+                throw new FileHandlingWithS3FailedException(
+                        message,
+                        ((HttpStatusCodeException) exception.getCause()).getStatusCode(),
+                        exception
+                );
+            } else {
+                throw new FileHandlingFailedException(message, exception);
+            }
+        }
+    }
+
+    protected void deleteFile(final FilepathModel filepath) throws FileHandlingWithS3FailedException, FileHandlingFailedException {
+        try {
+            this.documentStorageFileRepository.deleteFile(filepath.getPathToFile(), this.fileExpirationTime);
         } catch (final DocumentStorageClientErrorException | DocumentStorageServerErrorException |
                        DocumentStorageException | PropertyNotSetException exception) {
             final var message = "Beim Herunterladen zur Dateiprüfung vom ISI-Dokumentenverwaltungssystem ist ein Fehler aufgetreten.";
