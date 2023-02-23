@@ -8,7 +8,6 @@ import de.muenchen.isi.domain.mapper.AbfrageDomainMapper;
 import de.muenchen.isi.domain.model.AbfrageModel;
 import de.muenchen.isi.domain.model.BauvorhabenModel;
 import de.muenchen.isi.domain.model.InfrastrukturabfrageModel;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.repository.InfrastrukturabfrageRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -82,7 +81,7 @@ public class AbfrageService {
     }
 
     /**
-     * Diese Methode updated ein {@link InfrastrukturabfrageModel}.
+     * Diese Methode updated ein {@link InfrastrukturabfrageModel} ausgenommen vom Abfrage Status.
      *
      * @param abfrage zum Updaten
      * @return das geupdatete {@link InfrastrukturabfrageModel}
@@ -97,7 +96,7 @@ public class AbfrageService {
     }
 
     /**
-     * Diese Methode updated ein {@link InfrastrukturabfrageModel}.
+     * Diese Methode updated ein {@link InfrastrukturabfrageModel} eingenommen mit dem Abfrage Status.
      *
      * @param abfrage zum Updaten
      * @return das geupdatete {@link InfrastrukturabfrageModel}
