@@ -58,7 +58,8 @@ public class MimeTypeService {
                     filepath.getPathToFile(),
                     IsFilepathWithoutLeadingPathdividerValidator.PATH_SEPARATOR
             );
-            final var message = String.format("Das Hochladen der Datei %s des Typs %s ist nicht erlaubt.", fileName, mimeTypeInformationModel.getAcronym());
+            final String type = this.getAcronymOrDescriptionWhenAcronymEmptyOrTypeWhenDescriptionEmpty(mimeTypeInformationModel);
+            final var message = String.format("Das Hochladen der Datei %s des Typs %s ist nicht erlaubt.", fileName, type);
             throw new MimeTypeNotAllowedException(message);
         }
         return mimeTypeInformationModel;
@@ -126,6 +127,20 @@ public class MimeTypeService {
             log.error(message);
             throw new MimeTypeExtractionFailedException(message, exception);
         }
+    }
+
+    protected String getAcronymOrDescriptionWhenAcronymEmptyOrTypeWhenDescriptionEmpty(final MimeTypeInformationModel mimeTypeInformation) {
+        final String type;
+        if (StringUtils.isEmpty(mimeTypeInformation.getAcronym())) {
+            if (StringUtils.isEmpty(mimeTypeInformation.getDescription())) {
+                type = mimeTypeInformation.getType();
+            } else {
+                type = mimeTypeInformation.getDescription();
+            }
+        } else {
+            type = mimeTypeInformation.getAcronym();
+        }
+        return type;
     }
 
 }
