@@ -4,6 +4,7 @@
  */
 package de.muenchen.isi.api.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import de.muenchen.isi.api.dto.common.AdresseDto;
 import de.muenchen.isi.api.dto.filehandling.DokumentDto;
 import de.muenchen.isi.api.validation.HasAllowedNumberOfDocuments;
@@ -38,7 +39,7 @@ public class AbfrageDto {
     @Size(max = 255, message = "Es sind maximal {max} Zeichen erlaubt")
     private String anmerkung;
 
-    @NotNull
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private StatusAbfrage statusAbfrage;
 
     @Size(max = 255, message = "Es sind maximal {max} Zeichen erlaubt")

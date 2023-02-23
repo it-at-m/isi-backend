@@ -33,7 +33,7 @@ public class AbfrageStatusService {
     public void freigabeInfrastrukturabfrage(final UUID id) throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException {
         final InfrastrukturabfrageModel abfrage = this.abfrageService.getInfrastrukturabfrageById(id);
         abfrage.setAbfrage(this.freigabeAbfrage(abfrage.getAbfrage(), id));
-        this.abfrageService.updateInfrastrukturabfrage(abfrage);
+        this.abfrageService.updateInfrastrukturabfrageWithStatus(abfrage);
 
     }
 

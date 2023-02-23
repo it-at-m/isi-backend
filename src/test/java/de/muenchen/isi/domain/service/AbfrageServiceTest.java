@@ -159,7 +159,7 @@ class AbfrageServiceTest {
         Mockito.when(this.infrastrukturabfrageRepository.saveAndFlush(entity)).thenReturn(entity);
         Mockito.when(this.infrastrukturabfrageRepository.findByAbfrage_NameAbfrageIgnoreCase("hallo")).thenReturn(Optional.empty());
 
-        final InfrastrukturabfrageModel result = this.abfrageService.updateInfrastrukturabfrage(infrastrukturabfrageModel);
+        final InfrastrukturabfrageModel result = this.abfrageService.updateInfrastrukturabfrageWithoutStatus(infrastrukturabfrageModel);
 
         final InfrastrukturabfrageModel expected = new InfrastrukturabfrageModel();
         expected.setId(infrastrukturabfrageModel.getId());

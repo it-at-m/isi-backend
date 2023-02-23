@@ -56,7 +56,7 @@ class AbfrageStatusServiceTest {
         abfrageExpected.setAbfrage(new AbfrageModel());
         abfrageExpected.getAbfrage().setStatusAbfrage(StatusAbfrage.OFFEN);
 
-        Mockito.verify(this.abfrageService, Mockito.times(1)).updateInfrastrukturabfrage(abfrageExpected);
+        Mockito.verify(this.abfrageService, Mockito.times(1)).updateInfrastrukturabfrageWithStatus(abfrageExpected);
     }
 
     @Test

@@ -117,7 +117,7 @@ public class AbfrageController {
         var model = this.abfrageApiMapper.dto2Model(abfrageDto);
         final var abfrage = this.bauvorhabenService.assignBauvorhabenToAbfrage(abfrageDto.getAbfrage().getBauvorhaben(), model.getAbfrage());
         model.setAbfrage(abfrage);
-        model = this.abfrageService.updateInfrastrukturabfrage(model);
+        model = this.abfrageService.updateInfrastrukturabfrageWithoutStatus(model);
         final var saved = this.abfrageApiMapper.model2Dto(model);
         return ResponseEntity.ok(saved);
     }
