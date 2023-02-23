@@ -35,6 +35,7 @@ public class OptimisticLockingTest {
     void optimisticLocking() {
         var dokument = new Dokument();
         dokument.setArtDokument(ArtDokument.ANLAGE);
+        dokument.setTypDokument("PDF");
         final var filePath = new Filepath();
         filePath.setPathToFile("/pathToFile/file.txt");
         dokument.setFilePath(filePath);
