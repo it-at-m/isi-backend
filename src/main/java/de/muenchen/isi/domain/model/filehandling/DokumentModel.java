@@ -15,4 +15,6 @@ public class DokumentModel extends BaseEntityModel {
 
     private ArtDokument artDokument;
 
+    private String typDokument;
+
 }
