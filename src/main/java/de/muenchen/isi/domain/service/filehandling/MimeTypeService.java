@@ -57,12 +57,12 @@ public class MimeTypeService {
      * <p>
      * !!!Eine NICHT zulässige Datei wird aus dem S3-Storage entfernt.!!!
      *
-     * @param filepath referenziert die im S3-Storage liegende Datei.
+     * @param filepath referenziert die im S3-Storage liegende Datei
      * @return {@link MimeTypeInformationModel}
      * @throws FileHandlingWithS3FailedException
      * @throws FileHandlingFailedException
-     * @throws MimeTypeExtractionFailedException falls die Mime-Type-Ermittlung fehlgeschlagen ist.
-     * @throws MimeTypeNotAllowedException       falls der Mime-Type der referenzierten Datei nicht zulässig ist.
+     * @throws MimeTypeExtractionFailedException falls die Mime-Type-Ermittlung fehlgeschlagen ist
+     * @throws MimeTypeNotAllowedException       falls der Mime-Type der referenzierten Datei nicht zulässig ist
      */
     public MimeTypeInformationModel extractMediaTypeInformationForAllowedMediaType(final FilepathModel filepath) throws FileHandlingWithS3FailedException, FileHandlingFailedException, MimeTypeExtractionFailedException, MimeTypeNotAllowedException {
         final MimeTypeInformationModel mimeTypeInformationModel = this.extractMediaTypeInformation(filepath);
