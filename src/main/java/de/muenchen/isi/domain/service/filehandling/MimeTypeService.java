@@ -50,6 +50,20 @@ public class MimeTypeService {
         this.allowedMimeTypes = new HashSet<>(allowedMimeTypes);
     }
 
+    /**
+     * Ermittelt das {@link MimeTypeInformationModel} für die im S3-Storage referenzierte Datei.
+     * Handelt es sich um einen zulässigen Dateitypen, so wird mit dem {@link MimeTypeInformationModel} geantwortet.
+     * Handelt es sich um einen NICHT zulässigen Dateitypen, so wird eine {@link MimeTypeNotAllowedException} geworfen.
+     * <p>
+     * !!!Eine NICHT zulässige Datei wird aus dem S3-Storage entfernt.!!!
+     *
+     * @param filepath referenziert die im S3-Storage liegende Datei.
+     * @return {@link MimeTypeInformationModel}
+     * @throws FileHandlingWithS3FailedException
+     * @throws FileHandlingFailedException
+     * @throws MimeTypeExtractionFailedException falls die Mime-Type-Ermittlung fehlgeschlagen ist.
+     * @throws MimeTypeNotAllowedException       falls der Mime-Type der referenzierten Datei nicht zulässig ist.
+     */
     public MimeTypeInformationModel extractMediaTypeInformationForAllowedMediaType(final FilepathModel filepath) throws FileHandlingWithS3FailedException, FileHandlingFailedException, MimeTypeExtractionFailedException, MimeTypeNotAllowedException {
         final MimeTypeInformationModel mimeTypeInformationModel = this.extractMediaTypeInformation(filepath);
         if (!this.allowedMimeTypes.contains(mimeTypeInformationModel.getType())) {
