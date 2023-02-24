@@ -127,15 +127,14 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
                 .status(httpStatus)
                 .body(errorResponseDto);
     }
-    
+
     @ExceptionHandler(MimeTypeNotAllowedException.class)
     public ResponseEntity<Object> handleMimeTypeNotAllowedException(final MimeTypeNotAllowedException ex) {
         final var httpStatus = HttpStatus.NOT_ACCEPTABLE;
-        final var errorResponseDto = this.createInformationResponseDtoWithTraceInformationAndTimestampAndOriginalExceptionNameAndStatusAndMessage(
-                ex,
-                httpStatus.value(),
-                List.of(ex.getMessage())
-        );
+        final InformationResponseDto errorResponseDto = new InformationResponseDto();
+        errorResponseDto.setMessages(List.of(ex.getMessage()));
+        errorResponseDto.setHttpStatus(httpStatus.value());
+        errorResponseDto.setType(InformationResponseType.ERROR);
         return ResponseEntity
                 .status(httpStatus)
                 .body(errorResponseDto);
