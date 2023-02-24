@@ -46,7 +46,7 @@ public class MimeTypeController {
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK"),
-            @ApiResponse(responseCode = "406", description = "NOT ACCEPTABLE -> Die referenzierte und im S3-Storage befindliche Datei besitzt keinen gültigen Mime-Type.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class))),
+            @ApiResponse(responseCode = "406", description = "NOT ACCEPTABLE -> Die referenzierte und im S3-Storage befindliche Datei besitzt keinen zulässigen Mime-Type.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class))),
             @ApiResponse(responseCode = "555", description = "CUSTOM INTERNAL SERVER ERROR -> Bei der Ermittlung des Mime-Types ist ein Fehler aufgetreten.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class)))
     })
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_PRESIGNED_URL_SAVE_FILE.name())")
