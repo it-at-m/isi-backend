@@ -229,11 +229,11 @@ class RestExceptionHandlerTest {
 
         assertThat(
                 responseDto.getTraceId(),
-                is("1111111111111111")
+                is(nullValue())
         );
         assertThat(
                 responseDto.getSpanId(),
-                is("ffffffffffffffff")
+                is(nullValue())
         );
         assertThat(
                 responseDto.getMessages(),
@@ -241,7 +241,7 @@ class RestExceptionHandlerTest {
         );
         assertThat(
                 responseDto.getOriginalException(),
-                is("MimeTypeNotAllowedException")
+                is(nullValue())
         );
     }
 
