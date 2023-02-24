@@ -270,4 +270,73 @@ class MimeTypeServiceTest {
         }
     }
 
+    @Test
+    void getAcronymOrDescriptionWhenAcronymEmptyOrTypeWhenDescriptionEmpty() {
+        var mimeTypeInformationModel = new MimeTypeInformationModel();
+        mimeTypeInformationModel.setAcronym("Acronym");
+        String result = this.mimeTypeService.getAcronymOrDescriptionWhenAcronymEmptyOrTypeWhenDescriptionEmpty(mimeTypeInformationModel);
+        assertThat(
+                result,
+                is("Acronym")
+        );
+
+        mimeTypeInformationModel = new MimeTypeInformationModel();
+        mimeTypeInformationModel.setAcronym("");
+        mimeTypeInformationModel.setDescription("Description");
+        result = this.mimeTypeService.getAcronymOrDescriptionWhenAcronymEmptyOrTypeWhenDescriptionEmpty(mimeTypeInformationModel);
+        assertThat(
+                result,
+                is("Description")
+        );
+
+        mimeTypeInformationModel = new MimeTypeInformationModel();
+        mimeTypeInformationModel.setAcronym(null);
+        mimeTypeInformationModel.setDescription("Description");
+        result = this.mimeTypeService.getAcronymOrDescriptionWhenAcronymEmptyOrTypeWhenDescriptionEmpty(mimeTypeInformationModel);
+        assertThat(
+                result,
+                is("Description")
+        );
+
+        mimeTypeInformationModel = new MimeTypeInformationModel();
+        mimeTypeInformationModel.setAcronym("");
+        mimeTypeInformationModel.setDescription("");
+        mimeTypeInformationModel.setType("Type");
+        result = this.mimeTypeService.getAcronymOrDescriptionWhenAcronymEmptyOrTypeWhenDescriptionEmpty(mimeTypeInformationModel);
+        assertThat(
+                result,
+                is("Type")
+        );
+
+        mimeTypeInformationModel = new MimeTypeInformationModel();
+        mimeTypeInformationModel.setAcronym("");
+        mimeTypeInformationModel.setDescription(null);
+        mimeTypeInformationModel.setType("Type");
+        result = this.mimeTypeService.getAcronymOrDescriptionWhenAcronymEmptyOrTypeWhenDescriptionEmpty(mimeTypeInformationModel);
+        assertThat(
+                result,
+                is("Type")
+        );
+
+        mimeTypeInformationModel = new MimeTypeInformationModel();
+        mimeTypeInformationModel.setAcronym(null);
+        mimeTypeInformationModel.setDescription("");
+        mimeTypeInformationModel.setType("Type");
+        result = this.mimeTypeService.getAcronymOrDescriptionWhenAcronymEmptyOrTypeWhenDescriptionEmpty(mimeTypeInformationModel);
+        assertThat(
+                result,
+                is("Type")
+        );
+
+        mimeTypeInformationModel = new MimeTypeInformationModel();
+        mimeTypeInformationModel.setAcronym(null);
+        mimeTypeInformationModel.setDescription(null);
+        mimeTypeInformationModel.setType("Type");
+        result = this.mimeTypeService.getAcronymOrDescriptionWhenAcronymEmptyOrTypeWhenDescriptionEmpty(mimeTypeInformationModel);
+        assertThat(
+                result,
+                is("Type")
+        );
+    }
+
 }
