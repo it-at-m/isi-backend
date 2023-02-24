@@ -55,7 +55,7 @@ public class MimeTypeService {
      * Handelt es sich um einen zulässigen Dateitypen, so wird mit dem {@link MimeTypeInformationModel} geantwortet.
      * Handelt es sich um einen NICHT zulässigen Dateitypen, so wird eine {@link MimeTypeNotAllowedException} geworfen.
      * <p>
-     * !!!Eine NICHT zulässige Datei wird aus dem S3-Storage entfernt.!!!
+     * !!!Eine NICHT zulässige Datei wird durch diese Methode aus dem S3-Storage GELÖSCHT.!!!
      *
      * @param filepath referenziert die im S3-Storage liegende Datei
      * @return {@link MimeTypeInformationModel}
