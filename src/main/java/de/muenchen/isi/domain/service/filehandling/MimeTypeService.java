@@ -79,6 +79,15 @@ public class MimeTypeService {
         return mimeTypeInformationModel;
     }
 
+    /**
+     * Ermittelt das {@link MimeTypeInformationModel} für die im S3-Storage referenzierte Datei.
+     *
+     * @param filepath referenziert die im S3-Storage liegende Datei
+     * @return {@link MimeTypeInformationModel}
+     * @throws FileHandlingWithS3FailedException
+     * @throws FileHandlingFailedException
+     * @throws MimeTypeExtractionFailedException falls die Mime-Type-Ermittlung fehlgeschlagen ist
+     */
     protected MimeTypeInformationModel extractMediaTypeInformation(final FilepathModel filepath) throws FileHandlingWithS3FailedException, FileHandlingFailedException, MimeTypeExtractionFailedException {
         final var fileInputStream = this.getInputStream(filepath);
         return this.extractMediaTypeInformationOfFileAndCloseStream(fileInputStream);
@@ -137,7 +146,7 @@ public class MimeTypeService {
             mimeTypeInformation.setAcronym(mimeType.getAcronym());
             return mimeTypeInformation;
         } catch (final IOException | MimeTypeException exception) {
-            final var message = "Bei der Ermittlung des Dateitypen ist ein Fehler aufgetreten.";
+            final var message = "Bei der Ermittlung des Media-Type-Informationen ist ein Fehler aufgetreten.";
             log.error(message);
             throw new MimeTypeExtractionFailedException(message, exception);
         }
