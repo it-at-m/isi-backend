@@ -6,7 +6,6 @@ import de.muenchen.isi.infrastructure.entity.enums.lookup.BaugebietTyp;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Planungsrecht;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVorhaben;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.ZustaendigeDienststelle;
 import lombok.Data;
 
 import java.util.List;
@@ -37,8 +36,6 @@ public class BauvorhabenModel extends BaseEntityModel {
     private UncertainBoolean sobonRelevant;
 
     private Planungsrecht planungsrecht;
-
-    private ZustaendigeDienststelle zustaendigkeit;
 
     private List<BaugebietTyp> artFnp;
 

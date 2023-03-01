@@ -21,8 +21,6 @@ public class LookupListsModel {
 
     private LookupListModel baugebietTyp;
 
-    private LookupListModel zustaendigeDienststelle;
-
     private LookupListModel statusInfrastruktureinrichtung;
 
     private LookupListModel einrichtungstraeger;
