@@ -15,6 +15,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpStatusCodeException;
+import org.springframework.web.reactive.function.client.WebClientException;
 
 @Service
 @Slf4j
@@ -50,7 +51,7 @@ public class PresignedUrlCreationService {
                     presignedUrl.block()
             );
         } catch (final DocumentStorageClientErrorException | DocumentStorageServerErrorException |
-                       DocumentStorageException | PropertyNotSetException exception) {
+                       DocumentStorageException | PropertyNotSetException | WebClientException exception) {
             final var message = "Beim Herunterladen der Datei vom ISI-Dokumentenverwaltungssystem ist ein Fehler aufgetreten.";
             this.exceptionLogging(exception, message);
             final var clazz = exception.getClass();
@@ -87,7 +88,7 @@ public class PresignedUrlCreationService {
                     presignedUrl
             );
         } catch (final DocumentStorageClientErrorException | DocumentStorageServerErrorException |
-                       DocumentStorageException | PropertyNotSetException exception) {
+                       DocumentStorageException | PropertyNotSetException | WebClientException exception) {
             final var message = "Beim Speichern der Datei im ISI-Dokumentenverwaltungssystem ist ein Fehler aufgetreten.";
             this.exceptionLogging(exception, message);
             final var clazz = exception.getClass();
@@ -123,7 +124,7 @@ public class PresignedUrlCreationService {
                     presignedUrl
             );
         } catch (final DocumentStorageClientErrorException | DocumentStorageServerErrorException |
-                       DocumentStorageException | PropertyNotSetException exception) {
+                       DocumentStorageException | PropertyNotSetException | WebClientException exception) {
             final var message = "Beim Löschen der Datei im ISI-Dokumentenverwaltungssystem ist ein Fehler aufgetreten.";
             this.exceptionLogging(exception, message);
             final var clazz = exception.getClass();

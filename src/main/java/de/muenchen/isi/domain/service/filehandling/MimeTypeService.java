@@ -24,6 +24,7 @@ import org.apache.tika.mime.MimeTypeException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpStatusCodeException;
+import org.springframework.web.reactive.function.client.WebClientException;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -97,7 +98,7 @@ public class MimeTypeService {
         try {
             return this.documentStorageFileRepository.getFileInputStream(filepath.getPathToFile(), this.fileExpirationTime);
         } catch (final DocumentStorageClientErrorException | DocumentStorageServerErrorException |
-                       DocumentStorageException | PropertyNotSetException exception) {
+                       DocumentStorageException | PropertyNotSetException | WebClientException exception) {
             final var message = "Beim Herunterladen zur Dateiprüfung vom ISI-Dokumentenverwaltungssystem ist ein Fehler aufgetreten.";
             log.error(message);
             final var clazz = exception.getClass();
