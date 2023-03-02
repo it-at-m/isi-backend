@@ -872,7 +872,7 @@ class RestExceptionHandlerTest {
         );
         assertThat(
                 responseDto.getMessages(),
-                is(List.of("Der Nutzlast des Antwort vom Backend konnte nicht verarbeitet werden."))
+                is(List.of("Die Nutzlast des Antwort vom Backend konnte nicht verarbeitet werden."))
         );
         assertThat(
                 responseDto.getOriginalException(),

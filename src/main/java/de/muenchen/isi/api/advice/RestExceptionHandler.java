@@ -471,7 +471,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
                                                                   final WebRequest request) {
         final var errorResponseDto = this.createInformationResponseDtoWithTraceInformationAndTimestampAndOriginalExceptionName(ex);
         errorResponseDto.setHttpStatus(status.value());
-        errorResponseDto.setMessages(List.of("Der Nutzlast des Antwort vom Backend konnte nicht verarbeitet werden."));
+        errorResponseDto.setMessages(List.of("Die Nutzlast des Antwort vom Backend konnte nicht verarbeitet werden."));
         return ResponseEntity
                 .status(errorResponseDto.getHttpStatus())
                 .headers(headers)
