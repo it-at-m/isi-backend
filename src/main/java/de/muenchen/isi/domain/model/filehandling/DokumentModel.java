@@ -15,6 +15,8 @@ public class DokumentModel extends BaseEntityModel {
 
     private ArtDokument artDokument;
 
+    private Long sizeInBytes;
+
     private String typDokument;
 
 }
