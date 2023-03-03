@@ -11,6 +11,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 @Data
@@ -25,11 +26,14 @@ public class GsNachmittagBetreuungDto extends BaseEntityDto {
     private ArtGsNachmittagBetreuung artGsNachmittagBetreuung;
 
     @NotNull
+    @Min(0)
     private Integer anzahlHortPlaetze;
 
     @NotNull
+    @Min(0)
     private Integer anzahlHortGruppen;
 
+    @Min(0)
     private Integer wohnungsnaheHortPlaetze;
 
 }

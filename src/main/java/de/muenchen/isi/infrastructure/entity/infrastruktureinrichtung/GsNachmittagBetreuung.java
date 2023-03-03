@@ -17,6 +17,7 @@ import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.validation.constraints.Min;
 
 @Entity
 @Data
@@ -35,11 +36,14 @@ public class GsNachmittagBetreuung extends BaseEntity {
     private ArtGsNachmittagBetreuung artGsNachmittagBetreuung;
 
     @Column(nullable = false)
+    @Min(0)
     private Integer anzahlHortPlaetze;
 
     @Column(nullable = false)
+    @Min(0)
     private Integer anzahlHortGruppen;
 
+    @Min(0)
     private Integer wohnungsnaheHortPlaetze;
 
 }
