@@ -10,6 +10,8 @@ import de.muenchen.isi.domain.exception.FileHandlingFailedException;
 import de.muenchen.isi.domain.exception.FileHandlingWithS3FailedException;
 import de.muenchen.isi.domain.exception.FileImportFailedException;
 import de.muenchen.isi.domain.exception.KoordinatenException;
+import de.muenchen.isi.domain.exception.MimeTypeExtractionFailedException;
+import de.muenchen.isi.domain.exception.MimeTypeNotAllowedException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
 import org.junit.jupiter.api.BeforeEach;
@@ -209,6 +211,68 @@ class RestExceptionHandlerTest {
         assertThat(
                 responseDto.getOriginalException(),
                 is("FileImportFailedException")
+        );
+    }
+
+    @Test
+    void handleMimeTypeNotAllowedException() {
+        final MimeTypeNotAllowedException mimeTypeNotAllowedException = new MimeTypeNotAllowedException("test");
+
+        final ResponseEntity<Object> response = this.restExceptionHandler.handleMimeTypeNotAllowedException(mimeTypeNotAllowedException);
+
+        assertThat(
+                response.getStatusCodeValue(),
+                is(406)
+        );
+
+        final InformationResponseDto responseDto = (InformationResponseDto) response.getBody();
+
+        assertThat(
+                responseDto.getTraceId(),
+                is(nullValue())
+        );
+        assertThat(
+                responseDto.getSpanId(),
+                is(nullValue())
+        );
+        assertThat(
+                responseDto.getMessages(),
+                is(List.of("test"))
+        );
+        assertThat(
+                responseDto.getOriginalException(),
+                is(nullValue())
+        );
+    }
+
+    @Test
+    void handleMimeTypeExtractionFailedException() {
+        final MimeTypeExtractionFailedException mimeTypeExtractionFailedException = new MimeTypeExtractionFailedException("test");
+
+        final ResponseEntity<Object> response = this.restExceptionHandler.handleMimeTypeExtractionFailedException(mimeTypeExtractionFailedException);
+
+        assertThat(
+                response.getStatusCodeValue(),
+                is(555)
+        );
+
+        final InformationResponseDto responseDto = (InformationResponseDto) response.getBody();
+
+        assertThat(
+                responseDto.getTraceId(),
+                is("1111111111111111")
+        );
+        assertThat(
+                responseDto.getSpanId(),
+                is("ffffffffffffffff")
+        );
+        assertThat(
+                responseDto.getMessages(),
+                is(List.of("test"))
+        );
+        assertThat(
+                responseDto.getOriginalException(),
+                is("MimeTypeExtractionFailedException")
         );
     }
 
@@ -808,7 +872,7 @@ class RestExceptionHandlerTest {
         );
         assertThat(
                 responseDto.getMessages(),
-                is(List.of("Der Nutzlast des Antwort vom Backend konnte nicht verarbeitet werden."))
+                is(List.of("Die Nutzlast des Antwort vom Backend konnte nicht verarbeitet werden."))
         );
         assertThat(
                 responseDto.getOriginalException(),

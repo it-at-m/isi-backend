@@ -11,8 +11,6 @@ public class FileInformationDto {
 
     private Long maxNumberOfFiles;
 
-    private List<String> allowedFileExtensions;
-
     private List<String> allowedMimeTypes;
 
 }
