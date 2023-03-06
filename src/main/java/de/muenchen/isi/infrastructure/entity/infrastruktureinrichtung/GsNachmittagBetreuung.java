@@ -34,4 +34,12 @@ public class GsNachmittagBetreuung extends BaseEntity {
     @Column(nullable = true)
     private ArtGsNachmittagBetreuung artGsNachmittagBetreuung;
 
+    @Column(nullable = false)
+    private Integer anzahlHortPlaetze;
+
+    @Column(nullable = false)
+    private Integer anzahlHortGruppen;
+    
+    private Integer wohnungsnaheHortPlaetze;
+
 }

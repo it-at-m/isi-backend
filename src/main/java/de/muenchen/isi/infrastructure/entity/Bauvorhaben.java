@@ -5,7 +5,6 @@ import de.muenchen.isi.infrastructure.entity.enums.lookup.BaugebietTyp;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Planungsrecht;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVorhaben;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.ZustaendigeDienststelle;
 import de.muenchen.isi.infrastructure.entity.filehandling.Dokument;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -71,10 +70,6 @@ public class Bauvorhaben extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Planungsrecht planungsrecht;
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private ZustaendigeDienststelle zustaendigkeit;
 
     @Enumerated(EnumType.STRING)
     @ElementCollection

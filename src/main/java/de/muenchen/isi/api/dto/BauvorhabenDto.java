@@ -8,7 +8,6 @@ import de.muenchen.isi.infrastructure.entity.enums.lookup.BaugebietTyp;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Planungsrecht;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVorhaben;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.ZustaendigeDienststelle;
 import lombok.Data;
 
 import javax.validation.Valid;
@@ -61,10 +60,6 @@ public class BauvorhabenDto extends BaseEntityDto {
     @NotNull
     @NotUnspecified
     private Planungsrecht planungsrecht;
-
-    @NotNull
-    @NotUnspecified
-    private ZustaendigeDienststelle zustaendigkeit;
 
     @NotEmpty
     private List<BaugebietTyp> artFnp;
