@@ -92,8 +92,8 @@ class AbfrageStatusServiceTest {
     @Transactional
     void freigabeInfrasturkturabfrageVonAngelegt() throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
-        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ANGELEGT);
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
+
         final var uuid = abfrage.getId();
 
         this.abfrageStatusService.freigabeAbfrage(uuid);
@@ -155,8 +155,10 @@ class AbfrageStatusServiceTest {
     @Transactional
     void abbrechenAbfrageVonOffen() throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
-        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.OFFEN);
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
+        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.OFFEN);
+        this.abfrageService.updateInfrastrukturabfrageWithStatus(abfrage);
+
         final var uuid = abfrage.getId();
 
         this.abfrageStatusService.abbrechenAbfrage(uuid);
@@ -183,8 +185,10 @@ class AbfrageStatusServiceTest {
     @Transactional
     void abbrechenAbfrageVonInErfassung() throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
-        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_ERFASSUNG);
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
+        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_ERFASSUNG);
+        this.abfrageService.updateInfrastrukturabfrageWithStatus(abfrage);
+
         final var uuid = abfrage.getId();
 
         this.abfrageStatusService.abbrechenAbfrage(uuid);
@@ -211,8 +215,10 @@ class AbfrageStatusServiceTest {
     @Transactional
     void abbrechenAbfrageVonInBearbeitungPlan() throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
-        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_PLAN);
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
+        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_PLAN);
+        this.abfrageService.updateInfrastrukturabfrageWithStatus(abfrage);
+
         final var uuid = abfrage.getId();
 
         this.abfrageStatusService.abbrechenAbfrage(uuid);
@@ -239,8 +245,10 @@ class AbfrageStatusServiceTest {
     @Transactional
     void abbrechenAbfrageVonInBearbeitungFachreferate() throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
-        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
+        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
+        this.abfrageService.updateInfrastrukturabfrageWithStatus(abfrage);
+
         final var uuid = abfrage.getId();
 
         this.abfrageStatusService.abbrechenAbfrage(uuid);
@@ -267,8 +275,10 @@ class AbfrageStatusServiceTest {
     @Transactional
     void abbrechenAbfrageVonBedarfsmeldungErfolgt() throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
-        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT);
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
+        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT);
+        this.abfrageService.updateInfrastrukturabfrageWithStatus(abfrage);
+
         final var uuid = abfrage.getId();
 
         this.abfrageStatusService.abbrechenAbfrage(uuid);
@@ -295,8 +305,10 @@ class AbfrageStatusServiceTest {
     @Transactional
     void angabenAnpassenAbfrageVonInBearbeitungPlan() throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
-        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_PLAN);
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
+        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_PLAN);
+        this.abfrageService.updateInfrastrukturabfrageWithStatus(abfrage);
+
         final var uuid = abfrage.getId();
 
         this.abfrageStatusService.angabenAnpassenAbfrage(uuid);
@@ -337,8 +349,10 @@ class AbfrageStatusServiceTest {
     @Transactional
     void angabenAnpassenAbfrageVonInErfassung() throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
-        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_ERFASSUNG);
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
+        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_ERFASSUNG);
+        this.abfrageService.updateInfrastrukturabfrageWithStatus(abfrage);
+
         final var uuid = abfrage.getId();
 
         this.abfrageStatusService.angabenAnpassenAbfrage(uuid);
@@ -379,8 +393,10 @@ class AbfrageStatusServiceTest {
     @Transactional
     void angabenAnpassenAbfrageVonOffen() throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
-        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.OFFEN);
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
+        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.OFFEN);
+        this.abfrageService.updateInfrastrukturabfrageWithStatus(abfrage);
+
         final var uuid = abfrage.getId();
 
         this.abfrageStatusService.angabenAnpassenAbfrage(uuid);
@@ -421,8 +437,10 @@ class AbfrageStatusServiceTest {
     @Transactional
     void weitereAbfragevariantenAnlegenVonInBearbeitungPlan() throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
-        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_PLAN);
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
+        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_PLAN);
+        this.abfrageService.updateInfrastrukturabfrageWithStatus(abfrage);
+
         final var uuid = abfrage.getId();
 
         this.abfrageStatusService.weitereAbfragevariantenAnlegen(uuid);
@@ -456,8 +474,10 @@ class AbfrageStatusServiceTest {
     @Transactional
     void weitereAbfragevariantenAnlegenVonInBearbeitungFachreferate() throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
-        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
+        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
+        this.abfrageService.updateInfrastrukturabfrageWithStatus(abfrage);
+
         final var uuid = abfrage.getId();
 
         this.abfrageStatusService.weitereAbfragevariantenAnlegen(uuid);
@@ -491,8 +511,10 @@ class AbfrageStatusServiceTest {
     @Transactional
     void weitereAbfragevariantenAnlegenVonBedarfsmeldungErfolgt() throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
-        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT);
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
+        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT);
+        this.abfrageService.updateInfrastrukturabfrageWithStatus(abfrage);
+
         final var uuid = abfrage.getId();
 
         this.abfrageStatusService.weitereAbfragevariantenAnlegen(uuid);
@@ -526,8 +548,10 @@ class AbfrageStatusServiceTest {
     @Transactional
     void weitereAbfragevariantenAnlegenErledigtVonErledigt() throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
-        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ERLEDIGT);
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
+        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ERLEDIGT);
+        this.abfrageService.updateInfrastrukturabfrageWithStatus(abfrage);
+
         final var uuid = abfrage.getId();
 
         this.abfrageStatusService.weitereAbfragevariantenAnlegen(uuid);
@@ -561,8 +585,10 @@ class AbfrageStatusServiceTest {
     @Transactional
     void keineZusaetzlicheAbfragevarianteVonOffen() throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
-        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.OFFEN);
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
+        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.OFFEN);
+        this.abfrageService.updateInfrastrukturabfrageWithStatus(abfrage);
+
         final var uuid = abfrage.getId();
 
         this.abfrageStatusService.keineZusaetzlicheAbfragevariante(uuid);
@@ -624,8 +650,10 @@ class AbfrageStatusServiceTest {
     @Transactional
     void zusaetzlicheAbfragevarianteAnlegenVonOffen() throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
-        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.OFFEN);
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
+        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.OFFEN);
+        this.abfrageService.updateInfrastrukturabfrageWithStatus(abfrage);
+
         final var uuid = abfrage.getId();
 
         this.abfrageStatusService.zusaetzlicheAbfragevarianteAnlegen(uuid);
@@ -687,8 +715,10 @@ class AbfrageStatusServiceTest {
     @Transactional
     void speichernDerVariantenVonInErfassung() throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
-        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_ERFASSUNG);
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
+        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_ERFASSUNG);
+        this.abfrageService.updateInfrastrukturabfrageWithStatus(abfrage);
+
         final var uuid = abfrage.getId();
 
         this.abfrageStatusService.speichernDerVarianten(uuid);
@@ -750,8 +780,10 @@ class AbfrageStatusServiceTest {
     @Transactional
     void keineBearbeitungNoetigVonInBearbeitungPlan() throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
-        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_PLAN);
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
+        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_PLAN);
+        this.abfrageService.updateInfrastrukturabfrageWithStatus(abfrage);
+
         final var uuid = abfrage.getId();
 
         this.abfrageStatusService.keineBearbeitungNoetig(uuid);
@@ -814,8 +846,10 @@ class AbfrageStatusServiceTest {
     @Transactional
     void verschickenDerStellungnahmeVonInBearbeitungPlan() throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
-        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_PLAN);
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
+        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_PLAN);
+        this.abfrageService.updateInfrastrukturabfrageWithStatus(abfrage);
+
         final var uuid = abfrage.getId();
 
         this.abfrageStatusService.verschickenDerStellungnahme(uuid);
@@ -877,8 +911,10 @@ class AbfrageStatusServiceTest {
     @Transactional
     void bedarfsmeldungErfolgtVonInBearbeitungFachreferate() throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
-        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
+        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
+        this.abfrageService.updateInfrastrukturabfrageWithStatus(abfrage);
+
         final var uuid = abfrage.getId();
 
         this.abfrageStatusService.bedarfsmeldungErfolgt(uuid);
@@ -941,8 +977,10 @@ class AbfrageStatusServiceTest {
     @Transactional
     void speichernVonSozialinfrastrukturVersorgungVonBedarfsmeldungErfolgt() throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
-        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT);
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
+        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT);
+        this.abfrageService.updateInfrastrukturabfrageWithStatus(abfrage);
+
         final var uuid = abfrage.getId();
 
         this.abfrageStatusService.speichernVonSozialinfrastrukturVersorgung(uuid);
