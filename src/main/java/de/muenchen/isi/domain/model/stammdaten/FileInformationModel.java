@@ -11,8 +11,6 @@ public class FileInformationModel {
 
     private Long maxNumberOfFiles;
 
-    private List<String> allowedFileExtensions;
-
     private List<String> allowedMimeTypes;
 
 }

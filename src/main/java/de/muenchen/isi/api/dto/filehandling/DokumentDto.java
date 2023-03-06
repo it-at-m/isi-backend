@@ -8,7 +8,9 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Data
 @ToString(callSuper = true)
@@ -22,5 +24,13 @@ public class DokumentDto extends BaseEntityDto {
     @NotNull
     @NotUnspecified
     private ArtDokument artDokument;
+
+    @NotNull
+    @Min(0)
+    private Long sizeInBytes;
+
+    @NotNull
+    @Size(max = 255, message = "Es sind maximal {max} Zeichen erlaubt")
+    private String typDokument;
 
 }

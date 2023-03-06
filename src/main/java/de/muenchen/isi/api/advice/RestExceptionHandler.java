@@ -10,6 +10,8 @@ import de.muenchen.isi.domain.exception.FileHandlingFailedException;
 import de.muenchen.isi.domain.exception.FileHandlingWithS3FailedException;
 import de.muenchen.isi.domain.exception.FileImportFailedException;
 import de.muenchen.isi.domain.exception.KoordinatenException;
+import de.muenchen.isi.domain.exception.MimeTypeExtractionFailedException;
+import de.muenchen.isi.domain.exception.MimeTypeNotAllowedException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
 import lombok.RequiredArgsConstructor;
@@ -115,6 +117,31 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(FileImportFailedException.class)
     public ResponseEntity<Object> handleFileImportFailedException(final FileImportFailedException ex) {
+        final var httpStatus = CUSTOM_INTERNAL_SERVER_ERROR;
+        final var errorResponseDto = this.createInformationResponseDtoWithTraceInformationAndTimestampAndOriginalExceptionNameAndStatusAndMessage(
+                ex,
+                httpStatus,
+                List.of(ex.getMessage())
+        );
+        return ResponseEntity
+                .status(httpStatus)
+                .body(errorResponseDto);
+    }
+
+    @ExceptionHandler(MimeTypeNotAllowedException.class)
+    public ResponseEntity<Object> handleMimeTypeNotAllowedException(final MimeTypeNotAllowedException ex) {
+        final var httpStatus = HttpStatus.NOT_ACCEPTABLE;
+        final InformationResponseDto errorResponseDto = new InformationResponseDto();
+        errorResponseDto.setMessages(List.of(ex.getMessage()));
+        errorResponseDto.setHttpStatus(httpStatus.value());
+        errorResponseDto.setType(InformationResponseType.ERROR);
+        return ResponseEntity
+                .status(httpStatus)
+                .body(errorResponseDto);
+    }
+
+    @ExceptionHandler(MimeTypeExtractionFailedException.class)
+    public ResponseEntity<Object> handleMimeTypeExtractionFailedException(final MimeTypeExtractionFailedException ex) {
         final var httpStatus = CUSTOM_INTERNAL_SERVER_ERROR;
         final var errorResponseDto = this.createInformationResponseDtoWithTraceInformationAndTimestampAndOriginalExceptionNameAndStatusAndMessage(
                 ex,
@@ -444,7 +471,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
                                                                   final WebRequest request) {
         final var errorResponseDto = this.createInformationResponseDtoWithTraceInformationAndTimestampAndOriginalExceptionName(ex);
         errorResponseDto.setHttpStatus(status.value());
-        errorResponseDto.setMessages(List.of("Der Nutzlast des Antwort vom Backend konnte nicht verarbeitet werden."));
+        errorResponseDto.setMessages(List.of("Die Nutzlast des Antwort vom Backend konnte nicht verarbeitet werden."));
         return ResponseEntity
                 .status(errorResponseDto.getHttpStatus())
                 .headers(headers)

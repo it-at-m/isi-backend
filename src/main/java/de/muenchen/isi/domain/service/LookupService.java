@@ -15,7 +15,6 @@ import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVorhaben;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusInfrastruktureinrichtung;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.ZustaendigeDienststelle;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.EnumUtils;
 import org.springframework.stereotype.Service;
@@ -42,7 +41,6 @@ public class LookupService {
         model.setStatusAbfrage(this.getStatusAbfrageList());
         model.setPlanungsrecht(this.getPlanungsrechtList());
         model.setBaugebietTyp(this.getBaugebietTypList());
-        model.setZustaendigeDienststelle(this.getZustaendigeDienststelleList());
         model.setStatusInfrastruktureinrichtung((this.getStatusInfrastruktureinrichtungList()));
         model.setEinrichtungstraeger((this.getEinrichtungstraegerList()));
         model.setInfrastruktureinrichtungTyp((this.getInfrastruktureinrichtungTypList()));
@@ -101,13 +99,6 @@ public class LookupService {
 
     private LookupListModel getBaugebietTypList() {
         final List<LookupEntryModel> list = EnumUtils.getEnumList(BaugebietTyp.class).stream()
-                .map(item -> new LookupEntryModel(item.toString(), item.getBezeichnung())).collect(Collectors.toList());
-
-        return new LookupListModel(list);
-    }
-
-    private LookupListModel getZustaendigeDienststelleList() {
-        final List<LookupEntryModel> list = EnumUtils.getEnumList(ZustaendigeDienststelle.class).stream()
                 .map(item -> new LookupEntryModel(item.toString(), item.getBezeichnung())).collect(Collectors.toList());
 
         return new LookupListModel(list);

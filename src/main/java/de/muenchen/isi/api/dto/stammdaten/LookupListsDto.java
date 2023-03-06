@@ -22,8 +22,6 @@ public class LookupListsDto {
 
     private LookupListDto baugebietTyp;
 
-    private LookupListDto zustaendigeDienststelle;
-
     private LookupListDto statusInfrastruktureinrichtung;
 
     private LookupListDto einrichtungstraeger;
