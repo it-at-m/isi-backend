@@ -48,6 +48,8 @@
         <mapstruct.version>1.5.3.Final</mapstruct.version>
         <s3.integration>0.15.0</s3.integration>
         <geotools.version>27.2</geotools.version>
+        <spring.statemachine>3.2.0</spring.statemachine>
+        <apache.tika.version>2.7.0</apache.tika.version>
     </properties>
 
 
@@ -124,7 +126,12 @@
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-oauth2-client</artifactId>
         </dependency>
-
+        <!-- Spring Statemachine -->
+        <dependency>
+            <groupId>org.springframework.statemachine</groupId>
+            <artifactId>spring-statemachine-core</artifactId>
+            <version>${spring.statemachine}</version>
+        </dependency>
         <!-- json etc. -->
         <dependency>
             <groupId>org.springframework.hateoas</groupId>
@@ -178,6 +185,16 @@
             <groupId>com.opencsv</groupId>
             <artifactId>opencsv</artifactId>
             <version>${opencsv.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.tika</groupId>
+            <artifactId>tika-core</artifactId>
+            <version>${apache.tika.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.tika</groupId>
+            <artifactId>tika-parsers-standard-package</artifactId>
+            <version>${apache.tika.version}</version>
         </dependency>
 
         <!-- Validation -->

@@ -8,6 +8,7 @@ import de.muenchen.isi.domain.mapper.AbfrageDomainMapper;
 import de.muenchen.isi.domain.model.AbfrageModel;
 import de.muenchen.isi.domain.model.BauvorhabenModel;
 import de.muenchen.isi.domain.model.InfrastrukturabfrageModel;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.repository.InfrastrukturabfrageRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -65,6 +66,9 @@ public class AbfrageService {
      * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
      */
     public InfrastrukturabfrageModel saveInfrastrukturabfrage(final InfrastrukturabfrageModel abfrage) throws UniqueViolationException, OptimisticLockingException {
+        if(abfrage.getId() == null) {
+            abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ANGELEGT);
+        }
         var abfrageEntity = this.abfrageDomainMapper.model2entity(abfrage);
         final var saved = this.infrastrukturabfrageRepository.findByAbfrage_NameAbfrageIgnoreCase(abfrageEntity.getAbfrage().getNameAbfrage());
         if ((saved.isPresent() && saved.get().getId().equals(abfrageEntity.getId())) || saved.isEmpty()) {
@@ -81,7 +85,7 @@ public class AbfrageService {
     }
 
     /**
-     * Diese Methode updated ein {@link InfrastrukturabfrageModel}.
+     * Diese Methode updated ein {@link InfrastrukturabfrageModel} ausgenommen vom Abfrage Status.
      *
      * @param abfrage zum Updaten
      * @return das geupdatete {@link InfrastrukturabfrageModel}
@@ -89,7 +93,22 @@ public class AbfrageService {
      * @throws UniqueViolationException falls der Name der Abfrage {@link InfrastrukturabfrageModel#getAbfrage().getNameAbfrage} ()} bereits vorhanden ist
      * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
      */
-    public InfrastrukturabfrageModel updateInfrastrukturabfrage(final InfrastrukturabfrageModel abfrage) throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException {
+    public InfrastrukturabfrageModel updateInfrastrukturabfrageWithoutStatus(final InfrastrukturabfrageModel abfrage) throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException {
+        final InfrastrukturabfrageModel abfrageDb = this.getInfrastrukturabfrageById(abfrage.getId());
+        abfrage.getAbfrage().setStatusAbfrage(abfrageDb.getAbfrage().getStatusAbfrage());
+        return this.saveInfrastrukturabfrage(abfrage);
+    }
+
+    /**
+     * Diese Methode updated ein {@link InfrastrukturabfrageModel} eingenommen mit dem Abfrage Status.
+     *
+     * @param abfrage zum Updaten
+     * @return das geupdatete {@link InfrastrukturabfrageModel}
+     * @throws EntityNotFoundException falls die Abfrage identifiziert durch die {@link InfrastrukturabfrageModel#getId()} nicht gefunden wird
+     * @throws UniqueViolationException falls der Name der Abfrage {@link InfrastrukturabfrageModel#getAbfrage().getNameAbfrage} ()} bereits vorhanden ist
+     * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
+     */
+    public InfrastrukturabfrageModel updateInfrastrukturabfrageWithStatus(final InfrastrukturabfrageModel abfrage) throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException {
         this.getInfrastrukturabfrageById(abfrage.getId());
         return this.saveInfrastrukturabfrage(abfrage);
     }

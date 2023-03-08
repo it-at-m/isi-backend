@@ -28,4 +28,10 @@ public class Dokument extends BaseEntity {
     @Column(nullable = false)
     private ArtDokument artDokument;
 
+    @Column(nullable = false)
+    private Long sizeInBytes;
+
+    @Column(nullable = false)
+    private String typDokument;
+
 }
