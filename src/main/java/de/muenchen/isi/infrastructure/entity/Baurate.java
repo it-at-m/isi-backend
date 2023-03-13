@@ -11,6 +11,7 @@ import lombok.ToString;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 import java.math.BigDecimal;
 
 @Entity
@@ -28,7 +29,7 @@ public class Baurate extends BaseEntity {
     @Column(precision = 10, scale = 2, nullable = true)
     private BigDecimal geschossflaecheWohnenGeplant;
 
-    @Embedded
-    private Foerdermix foerdermix;
+    @ManyToOne
+    private Foerderart foerderart;
 
 }
