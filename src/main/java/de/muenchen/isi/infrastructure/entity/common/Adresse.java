@@ -4,13 +4,12 @@
  */
 package de.muenchen.isi.infrastructure.entity.common;
 
+import java.io.Serializable;
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import java.io.Serializable;
 
 @Data
 @AllArgsConstructor
@@ -29,5 +28,4 @@ public class Adresse implements Cloneable, Serializable {
 
     @Column(nullable = true)
     private String ort;
-
 }

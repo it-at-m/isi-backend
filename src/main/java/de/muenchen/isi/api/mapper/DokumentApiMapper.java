@@ -11,15 +11,11 @@ import de.muenchen.isi.domain.model.filehandling.DokumentModel;
 import de.muenchen.isi.domain.model.filehandling.DokumenteModel;
 import org.mapstruct.Mapper;
 
-@Mapper(
-        config = MapstructConfiguration.class
-)
+@Mapper(config = MapstructConfiguration.class)
 public interface DokumentApiMapper {
-
     DokumenteDto model2Dto(DokumenteModel model);
 
     DokumentDto model2Dto(final DokumentModel model);
 
     DokumentModel dto2Model(final DokumentDto model);
-
 }

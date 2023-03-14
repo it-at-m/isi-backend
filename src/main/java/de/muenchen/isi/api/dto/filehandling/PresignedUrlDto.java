@@ -15,5 +15,4 @@ public class PresignedUrlDto {
 
     @Schema(description = "Die Presigned-Url")
     private String url;
-
 }

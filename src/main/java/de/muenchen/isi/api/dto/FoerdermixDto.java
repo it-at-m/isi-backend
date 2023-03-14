@@ -4,9 +4,8 @@
  */
 package de.muenchen.isi.api.dto;
 
-import lombok.Data;
-
 import java.math.BigDecimal;
+import lombok.Data;
 
 @Data
 public class FoerdermixDto {
@@ -24,5 +23,4 @@ public class FoerdermixDto {
     private BigDecimal anteilBaugemeinschaften;
 
     private BigDecimal anteilEinUndZweifamilienhaeuser;
-
 }

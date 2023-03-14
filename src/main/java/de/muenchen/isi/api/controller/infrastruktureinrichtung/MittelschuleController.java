@@ -18,6 +18,11 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -32,12 +37,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -54,13 +53,15 @@ public class MittelschuleController {
 
     @Transactional(readOnly = true)
     @GetMapping("mittelschulen")
-    @Operation(summary = "Lade alle Mittelschulen", description = "Das Ergebnis wird nach Name der Einrichtung aufsteigend sortiert")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "OK")
-    })
+    @Operation(
+        summary = "Lade alle Mittelschulen",
+        description = "Das Ergebnis wird nach Name der Einrichtung aufsteigend sortiert"
+    )
+    @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "OK") })
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_READ_MITTELSCHULE.name())")
     public ResponseEntity<List<MittelschuleDto>> getMittelschulen() {
-        final List<MittelschuleDto> mittelschuleList = this.mittelschuleService.getMittelschulen()
+        final List<MittelschuleDto> mittelschuleList =
+            this.mittelschuleService.getMittelschulen()
                 .stream()
                 .map(this.infrastruktureinrichtungApiMapper::model2Dto)
                 .collect(Collectors.toList());
@@ -70,12 +71,19 @@ public class MittelschuleController {
     @GetMapping("mittelschule/{id}")
     @Transactional(readOnly = true)
     @Operation(summary = "Lesen einer Mittelschule")
-    @ApiResponses(value = {
+    @ApiResponses(
+        value = {
             @ApiResponse(responseCode = "200", description = "OK"),
-            @ApiResponse(responseCode = "404", description = "NOT FOUND -> Mittelschule mit dieser ID nicht vorhanden.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class)))
-    })
+            @ApiResponse(
+                responseCode = "404",
+                description = "NOT FOUND -> Mittelschule mit dieser ID nicht vorhanden.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+        }
+    )
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_READ_MITTELSCHULE.name())")
-    public ResponseEntity<MittelschuleDto> getMittelschuleById(@PathVariable @NotNull final UUID id) throws EntityNotFoundException {
+    public ResponseEntity<MittelschuleDto> getMittelschuleById(@PathVariable @NotNull final UUID id)
+        throws EntityNotFoundException {
         final var model = this.mittelschuleService.getMittelschuleById(id);
         final var dto = this.infrastruktureinrichtungApiMapper.model2Dto(model);
         return ResponseEntity.ok(dto);
@@ -84,18 +92,31 @@ public class MittelschuleController {
     @PostMapping("mittelschule")
     @Transactional(rollbackFor = OptimisticLockingException.class)
     @Operation(summary = "Anlegen einer neuen Mittelschule")
-    @ApiResponses(value = {
+    @ApiResponses(
+        value = {
             @ApiResponse(responseCode = "201", description = "CREATED -> Mittelschule wurde erfolgreich erstellt."),
-            @ApiResponse(responseCode = "400", description = "BAD_REQUEST -> Mittelschule konnte nicht erstellt werden, überprüfen sie die Eingabe.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class))),
-            @ApiResponse(responseCode = "412", description = "PRECONDITION_FAILED -> In der Anwendung ist bereits eine neuere Version der Entität gespeichert.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class)))
-    })
+            @ApiResponse(
+                responseCode = "400",
+                description = "BAD_REQUEST -> Mittelschule konnte nicht erstellt werden, überprüfen sie die Eingabe.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+            @ApiResponse(
+                responseCode = "412",
+                description = "PRECONDITION_FAILED -> In der Anwendung ist bereits eine neuere Version der Entität gespeichert.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+        }
+    )
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_WRITE_MITTELSCHULE.name())")
-    public ResponseEntity<MittelschuleDto> createMittelschule(@RequestBody @Valid @NotNull final MittelschuleDto mittelschuleDto) throws EntityNotFoundException, OptimisticLockingException {
+    public ResponseEntity<MittelschuleDto> createMittelschule(
+        @RequestBody @Valid @NotNull final MittelschuleDto mittelschuleDto
+    ) throws EntityNotFoundException, OptimisticLockingException {
         var model = this.infrastruktureinrichtungApiMapper.dto2Model(mittelschuleDto);
-        final var infrastruktureinrichtung = this.bauvorhabenService.assignBauvorhabenToInfrastruktureinrichtung(
-                mittelschuleDto.getInfrastruktureinrichtung().getBauvorhaben(),
-                model.getInfrastruktureinrichtung()
-        );
+        final var infrastruktureinrichtung =
+            this.bauvorhabenService.assignBauvorhabenToInfrastruktureinrichtung(
+                    mittelschuleDto.getInfrastruktureinrichtung().getBauvorhaben(),
+                    model.getInfrastruktureinrichtung()
+                );
         model.setInfrastruktureinrichtung(infrastruktureinrichtung);
         model = this.mittelschuleService.saveMittelschule(model);
         final var saved = this.infrastruktureinrichtungApiMapper.model2Dto(model);
@@ -105,19 +126,36 @@ public class MittelschuleController {
     @PutMapping("mittelschule")
     @Transactional(rollbackFor = OptimisticLockingException.class)
     @Operation(summary = "Aktualisierung einer Mittelschule")
-    @ApiResponses(value = {
+    @ApiResponses(
+        value = {
             @ApiResponse(responseCode = "200", description = "OK -> Mittelschule wurde erfolgreich aktualisiert."),
-            @ApiResponse(responseCode = "400", description = "BAD_REQUEST -> Mittelschule konnte nicht aktualisiert werden, überprüfen sie die Eingabe.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class))),
-            @ApiResponse(responseCode = "404", description = "NOT_FOUND -> Es gibt keine Mittelschule mit der ID.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class))),
-            @ApiResponse(responseCode = "412", description = "PRECONDITION_FAILED -> In der Anwendung ist bereits eine neuere Version der Entität gespeichert.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class)))
-    })
+            @ApiResponse(
+                responseCode = "400",
+                description = "BAD_REQUEST -> Mittelschule konnte nicht aktualisiert werden, überprüfen sie die Eingabe.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+            @ApiResponse(
+                responseCode = "404",
+                description = "NOT_FOUND -> Es gibt keine Mittelschule mit der ID.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+            @ApiResponse(
+                responseCode = "412",
+                description = "PRECONDITION_FAILED -> In der Anwendung ist bereits eine neuere Version der Entität gespeichert.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+        }
+    )
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_WRITE_MITTELSCHULE.name())")
-    public ResponseEntity<MittelschuleDto> updateMittelschule(@RequestBody @Valid @NotNull final MittelschuleDto mittelschuleDto) throws EntityNotFoundException, OptimisticLockingException {
+    public ResponseEntity<MittelschuleDto> updateMittelschule(
+        @RequestBody @Valid @NotNull final MittelschuleDto mittelschuleDto
+    ) throws EntityNotFoundException, OptimisticLockingException {
         var model = this.infrastruktureinrichtungApiMapper.dto2Model(mittelschuleDto);
-        final var infrastruktureinrichtung = this.bauvorhabenService.assignBauvorhabenToInfrastruktureinrichtung(
-                mittelschuleDto.getInfrastruktureinrichtung().getBauvorhaben(),
-                model.getInfrastruktureinrichtung()
-        );
+        final var infrastruktureinrichtung =
+            this.bauvorhabenService.assignBauvorhabenToInfrastruktureinrichtung(
+                    mittelschuleDto.getInfrastruktureinrichtung().getBauvorhaben(),
+                    model.getInfrastruktureinrichtung()
+                );
         model.setInfrastruktureinrichtung(infrastruktureinrichtung);
         model = this.mittelschuleService.updateMittelschule(model);
         final var saved = this.infrastruktureinrichtungApiMapper.model2Dto(model);
@@ -126,16 +164,26 @@ public class MittelschuleController {
 
     @DeleteMapping("mittelschule/{id}")
     @Operation(summary = "Löschen einer Mittelschule")
-    @ApiResponses(value = {
+    @ApiResponses(
+        value = {
             @ApiResponse(responseCode = "204", description = "NO CONTENT"),
-            @ApiResponse(responseCode = "404", description = "NOT FOUND -> Mittelschule mit dieser ID nicht vorhanden.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class))),
-            @ApiResponse(responseCode = "409", description = "CONFLICT -> Die Mittelschule referenziert ein Bauvorhaben.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class)))
-    })
+            @ApiResponse(
+                responseCode = "404",
+                description = "NOT FOUND -> Mittelschule mit dieser ID nicht vorhanden.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+            @ApiResponse(
+                responseCode = "409",
+                description = "CONFLICT -> Die Mittelschule referenziert ein Bauvorhaben.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+        }
+    )
     @Transactional
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_DELETE_MITTELSCHULE.name())")
-    public ResponseEntity<Void> deleteMittelschuleById(@PathVariable @NotNull final UUID id) throws EntityNotFoundException, EntityIsReferencedException {
+    public ResponseEntity<Void> deleteMittelschuleById(@PathVariable @NotNull final UUID id)
+        throws EntityNotFoundException, EntityIsReferencedException {
         this.mittelschuleService.deleteMittelschuleById(id);
         return ResponseEntity.noContent().build();
     }
-
 }

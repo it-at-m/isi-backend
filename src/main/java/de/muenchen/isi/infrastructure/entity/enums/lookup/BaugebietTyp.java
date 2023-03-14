@@ -5,7 +5,6 @@ import lombok.Getter;
 
 @AllArgsConstructor
 public enum BaugebietTyp implements ILookup {
-    
     MI("Mischgebiet (MI)"),
     WA("Allgemeines Wohngebiet (WA)"),
     MU("Urbanes Gebiet (MU)"),
@@ -15,5 +14,4 @@ public enum BaugebietTyp implements ILookup {
 
     @Getter
     private final String bezeichnung;
-
 }

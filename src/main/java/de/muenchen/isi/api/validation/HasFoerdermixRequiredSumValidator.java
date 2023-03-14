@@ -1,13 +1,12 @@
 package de.muenchen.isi.api.validation;
 
 import de.muenchen.isi.api.dto.FoerdermixDto;
+import java.math.BigDecimal;
+import javax.validation.ConstraintValidator;
+import javax.validation.ConstraintValidatorContext;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.stereotype.Component;
-
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
-import java.math.BigDecimal;
 
 @Component
 @NoArgsConstructor
@@ -28,14 +27,14 @@ public class HasFoerdermixRequiredSumValidator implements ConstraintValidator<Ha
         if (value == null) {
             return true;
         }
-        final BigDecimal sumFoerdermix = ObjectUtils.defaultIfNull(value.getAnteilFreifinanzierterGeschosswohnungsbau(), BigDecimal.ZERO)
-                .add(ObjectUtils.defaultIfNull(value.getAnteilGefoerderterMietwohnungsbau(), BigDecimal.ZERO))
-                .add(ObjectUtils.defaultIfNull(value.getAnteilMuenchenModell(), BigDecimal.ZERO))
-                .add(ObjectUtils.defaultIfNull(value.getAnteilPreisgedaempfterMietwohnungsbau(), BigDecimal.ZERO))
-                .add(ObjectUtils.defaultIfNull(value.getAnteilKonzeptionellerMietwohnungsbau(), BigDecimal.ZERO))
-                .add(ObjectUtils.defaultIfNull(value.getAnteilBaugemeinschaften(), BigDecimal.ZERO))
-                .add(ObjectUtils.defaultIfNull(value.getAnteilEinUndZweifamilienhaeuser(), BigDecimal.ZERO));
+        final BigDecimal sumFoerdermix = ObjectUtils
+            .defaultIfNull(value.getAnteilFreifinanzierterGeschosswohnungsbau(), BigDecimal.ZERO)
+            .add(ObjectUtils.defaultIfNull(value.getAnteilGefoerderterMietwohnungsbau(), BigDecimal.ZERO))
+            .add(ObjectUtils.defaultIfNull(value.getAnteilMuenchenModell(), BigDecimal.ZERO))
+            .add(ObjectUtils.defaultIfNull(value.getAnteilPreisgedaempfterMietwohnungsbau(), BigDecimal.ZERO))
+            .add(ObjectUtils.defaultIfNull(value.getAnteilKonzeptionellerMietwohnungsbau(), BigDecimal.ZERO))
+            .add(ObjectUtils.defaultIfNull(value.getAnteilBaugemeinschaften(), BigDecimal.ZERO))
+            .add(ObjectUtils.defaultIfNull(value.getAnteilEinUndZweifamilienhaeuser(), BigDecimal.ZERO));
         return sumFoerdermix.compareTo(REQUIRED_SUM) == 0;
     }
-
 }

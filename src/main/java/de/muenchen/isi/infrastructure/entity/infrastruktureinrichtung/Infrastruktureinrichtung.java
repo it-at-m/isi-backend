@@ -9,12 +9,11 @@ import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
 import de.muenchen.isi.infrastructure.entity.common.Adresse;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Einrichtungstraeger;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusInfrastruktureinrichtung;
+import java.math.BigDecimal;
+import javax.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
-
-import javax.persistence.*;
-import java.math.BigDecimal;
 
 @Embeddable
 @Data
@@ -55,5 +54,4 @@ public class Infrastruktureinrichtung {
 
     @OneToOne
     private Baugebiet zugeordnetesBaugebiet;
-
 }

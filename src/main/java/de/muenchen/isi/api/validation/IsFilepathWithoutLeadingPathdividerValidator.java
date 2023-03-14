@@ -1,15 +1,15 @@
 package de.muenchen.isi.api.validation;
 
+import javax.validation.ConstraintValidator;
+import javax.validation.ConstraintValidatorContext;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
-
 @Component
 @NoArgsConstructor
-public class IsFilepathWithoutLeadingPathdividerValidator implements ConstraintValidator<IsFilepathWithoutLeadingPathdivider, String> {
+public class IsFilepathWithoutLeadingPathdividerValidator
+    implements ConstraintValidator<IsFilepathWithoutLeadingPathdivider, String> {
 
     public static final String PATH_SEPARATOR = "/";
 
@@ -28,5 +28,4 @@ public class IsFilepathWithoutLeadingPathdividerValidator implements ConstraintV
     public boolean isValid(final String value, final ConstraintValidatorContext context) {
         return !StringUtils.startsWith(value, PATH_SEPARATOR);
     }
-
 }

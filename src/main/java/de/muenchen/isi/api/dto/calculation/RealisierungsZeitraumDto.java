@@ -8,5 +8,4 @@ public class RealisierungsZeitraumDto {
     private Integer realisierungVon; // JJJJ
 
     private Integer realisierungBis; // JJJJ
-
 }

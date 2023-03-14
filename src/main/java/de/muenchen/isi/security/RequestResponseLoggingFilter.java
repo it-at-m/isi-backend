@@ -4,6 +4,18 @@
  */
 package de.muenchen.isi.security;
 
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -15,20 +27,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
-
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-
 
 /**
  * This filter logs the username for requests.
@@ -70,19 +68,18 @@ public class RequestResponseLoggingFilter implements Filter {
      * {@inheritDoc}
      */
     @Override
-    public void doFilter(final ServletRequest request,
-                         final ServletResponse response,
-                         final FilterChain chain)
-            throws IOException, ServletException {
+    public void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain chain)
+        throws IOException, ServletException {
         chain.doFilter(request, response);
         final HttpServletRequest httpRequest = (HttpServletRequest) request;
         final HttpServletResponse httpResponse = (HttpServletResponse) response;
         if (this.checkForLogging(httpRequest)) {
-            log.info("User {} executed {} on URI {} with http status {}",
-                    getUsername(),
-                    httpRequest.getMethod(),
-                    httpRequest.getRequestURI(),
-                    httpResponse.getStatus()
+            log.info(
+                "User {} executed {} on URI {} with http status {}",
+                getUsername(),
+                httpRequest.getMethod(),
+                httpRequest.getRequestURI(),
+                httpResponse.getStatus()
             );
         }
     }
@@ -102,9 +99,13 @@ public class RequestResponseLoggingFilter implements Filter {
      * @return True if logging should be done otherwise false.
      */
     private boolean checkForLogging(final HttpServletRequest httpServletRequest) {
-        return this.requestLoggingMode.equals(REQUEST_LOGGING_MODE_ALL)
-                || (this.requestLoggingMode.equals(REQUEST_LOGGING_MODE_CHANGING)
-                && CHANGING_METHODS.contains(httpServletRequest.getMethod()));
+        return (
+            this.requestLoggingMode.equals(REQUEST_LOGGING_MODE_ALL) ||
+            (
+                this.requestLoggingMode.equals(REQUEST_LOGGING_MODE_CHANGING) &&
+                CHANGING_METHODS.contains(httpServletRequest.getMethod())
+            )
+        );
     }
 
     /**
@@ -124,5 +125,4 @@ public class RequestResponseLoggingFilter implements Filter {
         }
         return StringUtils.isNotBlank(username) ? username : NAME_UNAUTHENTICATED_USER;
     }
-
 }

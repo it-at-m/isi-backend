@@ -4,16 +4,14 @@
  */
 package de.muenchen.isi.infrastructure.entity.enums.lookup;
 
+import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.apache.commons.lang3.EnumUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.Optional;
-
 @AllArgsConstructor
 public enum SobonVerfahrensgrundsaetzeJahr implements ILookup {
-
     DAVOR("vor 2014"),
     JAHR_2014("2014"),
     JAHR_2017("2017"),
@@ -24,9 +22,12 @@ public enum SobonVerfahrensgrundsaetzeJahr implements ILookup {
     private final String bezeichnung;
 
     public static Optional<SobonVerfahrensgrundsaetzeJahr> findByBezeichnung(final String bezeichnung) {
-        return EnumUtils.getEnumList(SobonVerfahrensgrundsaetzeJahr.class).stream()
-                .filter(sobonVerfahrensgrundsaetzeJahr -> StringUtils.equals(sobonVerfahrensgrundsaetzeJahr.getBezeichnung(), bezeichnung))
-                .findFirst();
+        return EnumUtils
+            .getEnumList(SobonVerfahrensgrundsaetzeJahr.class)
+            .stream()
+            .filter(sobonVerfahrensgrundsaetzeJahr ->
+                StringUtils.equals(sobonVerfahrensgrundsaetzeJahr.getBezeichnung(), bezeichnung)
+            )
+            .findFirst();
     }
-
 }

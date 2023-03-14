@@ -6,10 +6,7 @@ import de.muenchen.isi.infrastructure.entity.enums.lookup.Planungsrecht;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVorhaben;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
 import de.muenchen.isi.infrastructure.entity.filehandling.Dokument;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
-
+import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
@@ -21,15 +18,15 @@ import javax.persistence.FetchType;
 import javax.persistence.Index;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import java.util.List;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 @Entity
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-@Table(indexes = {
-        @Index(name = "name_vorhaben_index", columnList = "nameVorhaben")
-})
+@Table(indexes = { @Index(name = "name_vorhaben_index", columnList = "nameVorhaben") })
 public class Bauvorhaben extends BaseEntity {
 
     @Column(nullable = false, unique = true)
@@ -75,7 +72,6 @@ public class Bauvorhaben extends BaseEntity {
     @ElementCollection
     private List<BaugebietTyp> artFnp;
 
-    @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Dokument> dokumente;
-
 }

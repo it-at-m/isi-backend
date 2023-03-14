@@ -3,11 +3,10 @@ package de.muenchen.isi.api.dto.list;
 import de.muenchen.isi.domain.model.enums.AbfrageTyp;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVorhaben;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
-import lombok.Data;
-
-import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.util.UUID;
+import javax.validation.constraints.Size;
+import lombok.Data;
 
 @Data
 public class AbfrageListElementDto {
@@ -24,5 +23,4 @@ public class AbfrageListElementDto {
     private LocalDate fristStellungnahme;
 
     private AbfrageTyp type;
-
 }

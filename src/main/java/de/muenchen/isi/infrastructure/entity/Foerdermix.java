@@ -4,11 +4,10 @@
  */
 package de.muenchen.isi.infrastructure.entity;
 
-import lombok.Data;
-
+import java.math.BigDecimal;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import java.math.BigDecimal;
+import lombok.Data;
 
 @Data
 @Embeddable
@@ -34,5 +33,4 @@ public class Foerdermix {
 
     @Column(precision = 10, scale = 2, nullable = true)
     private BigDecimal anteilEinUndZweifamilienhaeuser;
-
 }

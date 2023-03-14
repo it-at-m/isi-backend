@@ -4,13 +4,11 @@
  */
 package de.muenchen.isi.configuration.nfcconverter;
 
-import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.IOUtils;
-
 import java.io.CharArrayReader;
 import java.io.IOException;
 import java.io.Reader;
-
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.IOUtils;
 
 /**
  * <p>Wrapper für Reader der eine NFC-Konvertierung durchführt.</p>
@@ -37,7 +35,6 @@ public class NfcReader extends Reader {
     }
 
     private void convert() {
-
         if (converted != null) {
             return;
         }
@@ -47,7 +44,6 @@ public class NfcReader extends Reader {
             final String nfdContent = IOUtils.toString(original);
             final String nfcConvertedContent = NfcHelper.nfcConverter(nfdContent);
             converted = new CharArrayReader(nfcConvertedContent.toCharArray());
-
         } catch (final IOException e) {
             throw new RuntimeException(e);
         }
@@ -99,5 +95,4 @@ public class NfcReader extends Reader {
         convert();
         converted.reset();
     }
-
 }

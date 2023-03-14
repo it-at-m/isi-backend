@@ -9,7 +9,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.filter.ForwardedHeaderFilter;
 
-
 /**
  * This class provides the {@link ForwardedHeaderFilter} to handle
  * the headers of type "Forwarded" and "X-Forwarded-*".
@@ -24,5 +23,4 @@ public class ForwardedHeaderConfiguration {
         registration.addUrlPatterns("/*");
         return registration;
     }
-
 }

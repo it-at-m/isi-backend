@@ -11,7 +11,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 
-
 @Configuration
 @Profile("no-security")
 @EnableWebSecurity
@@ -23,12 +22,17 @@ public class NoSecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(final HttpSecurity http) throws Exception {
         http
-                .headers().frameOptions().disable()
-                .and()
-                .antMatcher("/**").authorizeRequests()
-                .anyRequest().permitAll()
-                .and().csrf().disable();
+            .headers()
+            .frameOptions()
+            .disable()
+            .and()
+            .antMatcher("/**")
+            .authorizeRequests()
+            .anyRequest()
+            .permitAll()
+            .and()
+            .csrf()
+            .disable();
         return http.build();
     }
-
 }

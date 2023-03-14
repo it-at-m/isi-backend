@@ -4,11 +4,10 @@
  */
 package de.muenchen.isi.api.dto.common;
 
+import javax.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import javax.validation.constraints.Size;
 
 @Data
 @AllArgsConstructor
@@ -26,5 +25,4 @@ public class AdresseDto {
 
     @Size(max = 255, message = "Es sind maximal {max} Zeichen erlaubt")
     private String hausnummer;
-
 }

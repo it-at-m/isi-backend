@@ -17,6 +17,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import javax.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -24,8 +25,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.validation.constraints.NotNull;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -45,47 +44,55 @@ public class WohneinheitenInformationController {
 
     @PostMapping("calculate-wohneinheiten-information-for-abfragevariante")
     @Operation(
-            summary = "Berechne Informationen zu Wohneinheiten für eine Abfragevariante",
-            description = "Das Ergebnis summiert die Informationen der in der Abfragevariante beinhalteten Bauabschnitte"
+        summary = "Berechne Informationen zu Wohneinheiten für eine Abfragevariante",
+        description = "Das Ergebnis summiert die Informationen der in der Abfragevariante beinhalteten Bauabschnitte"
     )
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "OK")
-    })
-    @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_CALCULATE_WOHNEINHEITEN.name())")
-    public ResponseEntity<WohneinheitenInformationDto> calculateWohneinheitenInformation(@RequestBody @NotNull final AbfragevarianteDto abfragevariante) {
+    @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "OK") })
+    @PreAuthorize(
+        "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_CALCULATE_WOHNEINHEITEN.name())"
+    )
+    public ResponseEntity<WohneinheitenInformationDto> calculateWohneinheitenInformation(
+        @RequestBody @NotNull final AbfragevarianteDto abfragevariante
+    ) {
         final AbfragevarianteModel abfragevarianteModel = this.abfragevarianteApiMapper.dto2Model(abfragevariante);
-        final WohneinheitenInformationModel wohneinheitenInformationModel = this.wohneinheitenInformationService.calculateWohneinheitenInformation(abfragevarianteModel);
+        final WohneinheitenInformationModel wohneinheitenInformationModel =
+            this.wohneinheitenInformationService.calculateWohneinheitenInformation(abfragevarianteModel);
         return ResponseEntity.ok(this.wohneinheitenInformationApiMapper.model2Dto(wohneinheitenInformationModel));
     }
 
     @PostMapping("calculate-wohneinheiten-information-for-bauabschnitt")
     @Operation(
-            summary = "Berechne Informationen zu Wohneinheiten für einen Bauabschnitt",
-            description = "Das Ergebnis summiert die Informationen der im Bauabschnitt beinhalteten Baugebiete"
+        summary = "Berechne Informationen zu Wohneinheiten für einen Bauabschnitt",
+        description = "Das Ergebnis summiert die Informationen der im Bauabschnitt beinhalteten Baugebiete"
     )
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "OK")
-    })
-    @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_CALCULATE_WOHNEINHEITEN.name())")
-    public ResponseEntity<WohneinheitenInformationDto> calculateWohneinheitenInformation(@RequestBody @NotNull final BauabschnittDto bauabschnitt) {
+    @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "OK") })
+    @PreAuthorize(
+        "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_CALCULATE_WOHNEINHEITEN.name())"
+    )
+    public ResponseEntity<WohneinheitenInformationDto> calculateWohneinheitenInformation(
+        @RequestBody @NotNull final BauabschnittDto bauabschnitt
+    ) {
         final BauabschnittModel bauabschnittModel = this.bauabschnittApiMapper.dto2Model(bauabschnitt);
-        final WohneinheitenInformationModel wohneinheitenInformationModel = this.wohneinheitenInformationService.calculateWohneinheitenInformation(bauabschnittModel);
+        final WohneinheitenInformationModel wohneinheitenInformationModel =
+            this.wohneinheitenInformationService.calculateWohneinheitenInformation(bauabschnittModel);
         return ResponseEntity.ok(this.wohneinheitenInformationApiMapper.model2Dto(wohneinheitenInformationModel));
     }
 
     @PostMapping("calculate-wohneinheiten-information-for-baugebiet")
     @Operation(
-            summary = "Berechne Informationen zu Wohneinheiten für ein Baugebiet",
-            description = "Das Ergebnis summiert die Informationen der im Baugebiet beinhalteten Bauraten"
+        summary = "Berechne Informationen zu Wohneinheiten für ein Baugebiet",
+        description = "Das Ergebnis summiert die Informationen der im Baugebiet beinhalteten Bauraten"
     )
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "OK")
-    })
-    @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_CALCULATE_WOHNEINHEITEN.name())")
-    public ResponseEntity<WohneinheitenInformationDto> calculateWohneinheitenInformation(@RequestBody @NotNull final BaugebietDto baugebiet) {
+    @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "OK") })
+    @PreAuthorize(
+        "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_CALCULATE_WOHNEINHEITEN.name())"
+    )
+    public ResponseEntity<WohneinheitenInformationDto> calculateWohneinheitenInformation(
+        @RequestBody @NotNull final BaugebietDto baugebiet
+    ) {
         final BaugebietModel baugebietModel = this.baugebietApiMapper.dto2Model(baugebiet);
-        final WohneinheitenInformationModel wohneinheitenInformationModel = this.wohneinheitenInformationService.calculateWohneinheitenInformation(baugebietModel);
+        final WohneinheitenInformationModel wohneinheitenInformationModel =
+            this.wohneinheitenInformationService.calculateWohneinheitenInformation(baugebietModel);
         return ResponseEntity.ok(this.wohneinheitenInformationApiMapper.model2Dto(wohneinheitenInformationModel));
     }
-
 }

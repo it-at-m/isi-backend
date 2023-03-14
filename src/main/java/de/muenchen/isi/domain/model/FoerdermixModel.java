@@ -4,9 +4,8 @@
  */
 package de.muenchen.isi.domain.model;
 
-import lombok.Data;
-
 import java.math.BigDecimal;
+import lombok.Data;
 
 @Data
 public class FoerdermixModel {
@@ -24,5 +23,4 @@ public class FoerdermixModel {
     private BigDecimal anteilBaugemeinschaften;
 
     private BigDecimal anteilEinUndZweifamilienhaeuser;
-
 }

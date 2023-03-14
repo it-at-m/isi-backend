@@ -28,18 +28,20 @@ public class InfrastruktureinrichtungListController {
     @GetMapping("infrastruktureinrichtungen")
     @Transactional(readOnly = true)
     @Operation(summary = "Lade alle Infrastruktureinrichtungen für die Listendarstellung")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "OK")
-    })
-    @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_READ_KINDERKRIPPE.name())" +
-            " && hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_READ_KINDERGARTEN.name())" +
-            " && hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_READ_HAUS_FUER_KINDER.name())" +
-            " && hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_READ_GS_NACHMITTAG_BETREUUNG.name())" +
-            " && hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_READ_GRUNDSCHULE.name())" +
-            " && hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_READ_MITTELSCHULE.name())")
+    @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "OK") })
+    @PreAuthorize(
+        "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_READ_KINDERKRIPPE.name())" +
+        " && hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_READ_KINDERGARTEN.name())" +
+        " && hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_READ_HAUS_FUER_KINDER.name())" +
+        " && hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_READ_GS_NACHMITTAG_BETREUUNG.name())" +
+        " && hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_READ_GRUNDSCHULE.name())" +
+        " && hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_READ_MITTELSCHULE.name())"
+    )
     public ResponseEntity<InfrastruktureinrichtungListElementsDto> getInfrastruktureinrichtungListElements() {
-        final var dto = this.infrastruktureinrichtungListElementApiMapper.model2Dto(this.infrastruktureinrichtungListService.getInfrastruktureinrichtungListElements());
+        final var dto =
+            this.infrastruktureinrichtungListElementApiMapper.model2Dto(
+                    this.infrastruktureinrichtungListService.getInfrastruktureinrichtungListElements()
+                );
         return ResponseEntity.ok(dto);
     }
-
 }

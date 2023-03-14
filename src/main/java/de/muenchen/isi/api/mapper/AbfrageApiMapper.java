@@ -13,20 +13,16 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
-@Mapper(
-        config = MapstructConfiguration.class,
-        uses = {
-                AbfragevarianteApiMapper.class,
-                DokumentApiMapper.class
-        }
-)
+@Mapper(config = MapstructConfiguration.class, uses = { AbfragevarianteApiMapper.class, DokumentApiMapper.class })
 public interface AbfrageApiMapper {
-
     @Mapping(target = "abfrage.bauvorhaben", ignore = true)
     InfrastrukturabfrageDto model2Dto(final InfrastrukturabfrageModel model);
 
     @AfterMapping
-    default void setBauvorhabenIdOnInfrastrukturabfrageDto(final InfrastrukturabfrageModel model, @MappingTarget final InfrastrukturabfrageDto dto) {
+    default void setBauvorhabenIdOnInfrastrukturabfrageDto(
+        final InfrastrukturabfrageModel model,
+        @MappingTarget final InfrastrukturabfrageDto dto
+    ) {
         final BauvorhabenModel bauvorhabenModel = model.getAbfrage().getBauvorhaben();
         dto.getAbfrage().setBauvorhaben(bauvorhabenModel != null ? bauvorhabenModel.getId() : null);
     }
@@ -34,5 +30,4 @@ public interface AbfrageApiMapper {
     @Mapping(target = "abfrage.bauvorhaben", ignore = true)
     @Mapping(target = "displayName", ignore = true)
     InfrastrukturabfrageModel dto2Model(final InfrastrukturabfrageDto dto);
-
 }

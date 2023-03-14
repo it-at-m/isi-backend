@@ -1,5 +1,8 @@
 package de.muenchen.isi.domain.service;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+
 import de.muenchen.isi.domain.mapper.AbfrageListElementDomainMapper;
 import de.muenchen.isi.domain.mapper.AbfrageListElementDomainMapperImpl;
 import de.muenchen.isi.domain.model.AbfrageModel;
@@ -9,6 +12,10 @@ import de.muenchen.isi.domain.model.list.AbfrageListElementModel;
 import de.muenchen.isi.domain.model.list.AbfrageListElementsModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVorhaben;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,14 +25,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
 class AbfrageListServiceTest {
@@ -33,19 +32,15 @@ class AbfrageListServiceTest {
     @Mock
     private AbfrageService abfrageService;
 
-    private final AbfrageListElementDomainMapper abfrageListElementDomainMapper = new AbfrageListElementDomainMapperImpl();
+    private final AbfrageListElementDomainMapper abfrageListElementDomainMapper =
+        new AbfrageListElementDomainMapperImpl();
 
     private AbfrageListService abfrageListService;
 
     @BeforeEach
     public void beforeEach() {
-        this.abfrageListService = new AbfrageListService(
-                this.abfrageService,
-                this.abfrageListElementDomainMapper
-        );
-        Mockito.reset(
-                this.abfrageService
-        );
+        this.abfrageListService = new AbfrageListService(this.abfrageService, this.abfrageListElementDomainMapper);
+        Mockito.reset(this.abfrageService);
     }
 
     @Test
@@ -110,12 +105,8 @@ class AbfrageListServiceTest {
 
         Mockito.when(this.abfrageService.getInfrastrukturabfragen()).thenReturn(listInfrastrukturabfrage);
 
-        assertThat(
-                expected,
-                is(this.abfrageListService.getAbfrageListElements())
-        );
+        assertThat(expected, is(this.abfrageListService.getAbfrageListElements()));
 
         Mockito.verify(this.abfrageService, Mockito.times(1)).getInfrastrukturabfragen();
     }
-
 }

@@ -16,5 +16,4 @@ public enum InfrastruktureinrichtungTyp implements ILookup {
 
     @Getter
     private final String bezeichnung;
-
 }

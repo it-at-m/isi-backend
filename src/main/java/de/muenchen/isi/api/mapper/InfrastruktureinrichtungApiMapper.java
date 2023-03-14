@@ -26,7 +26,6 @@ import org.mapstruct.MappingTarget;
 
 @Mapper(config = MapstructConfiguration.class)
 public interface InfrastruktureinrichtungApiMapper {
-
     /*
      * Mapping für Kinderkrippe
      */
@@ -35,15 +34,23 @@ public interface InfrastruktureinrichtungApiMapper {
     KinderkrippeDto model2Dto(final KinderkrippeModel model);
 
     @AfterMapping
-    default void setBauvorhabenIdOnKinderkrippeDto(final KinderkrippeModel model, @MappingTarget final KinderkrippeDto dto) {
+    default void setBauvorhabenIdOnKinderkrippeDto(
+        final KinderkrippeModel model,
+        @MappingTarget final KinderkrippeDto dto
+    ) {
         final BauvorhabenModel bauvorhabenModel = model.getInfrastruktureinrichtung().getBauvorhaben();
         dto.getInfrastruktureinrichtung().setBauvorhaben(bauvorhabenModel != null ? bauvorhabenModel.getId() : null);
     }
 
     @AfterMapping
-    default void setBaugebietIdOnKinderkrippeDto(final KinderkrippeModel model, @MappingTarget final KinderkrippeDto dto) {
+    default void setBaugebietIdOnKinderkrippeDto(
+        final KinderkrippeModel model,
+        @MappingTarget final KinderkrippeDto dto
+    ) {
         final BaugebietModel baugebietModel = model.getInfrastruktureinrichtung().getZugeordnetesBaugebiet();
-        dto.getInfrastruktureinrichtung().setZugeordnetesBaugebiet(baugebietModel != null ? baugebietModel.getId() : null);
+        dto
+            .getInfrastruktureinrichtung()
+            .setZugeordnetesBaugebiet(baugebietModel != null ? baugebietModel.getId() : null);
     }
 
     @Mapping(target = "infrastruktureinrichtung.bauvorhaben", ignore = true)
@@ -58,15 +65,23 @@ public interface InfrastruktureinrichtungApiMapper {
     KindergartenDto model2Dto(final KindergartenModel model);
 
     @AfterMapping
-    default void setBauvorhabenIdOnKindergartenDto(final KindergartenModel model, @MappingTarget final KindergartenDto dto) {
+    default void setBauvorhabenIdOnKindergartenDto(
+        final KindergartenModel model,
+        @MappingTarget final KindergartenDto dto
+    ) {
         final BauvorhabenModel bauvorhabenModel = model.getInfrastruktureinrichtung().getBauvorhaben();
         dto.getInfrastruktureinrichtung().setBauvorhaben(bauvorhabenModel != null ? bauvorhabenModel.getId() : null);
     }
 
     @AfterMapping
-    default void setBaugebietIdOnKindergartenDto(final KindergartenModel model, @MappingTarget final KindergartenDto dto) {
+    default void setBaugebietIdOnKindergartenDto(
+        final KindergartenModel model,
+        @MappingTarget final KindergartenDto dto
+    ) {
         final BaugebietModel baugebietModel = model.getInfrastruktureinrichtung().getZugeordnetesBaugebiet();
-        dto.getInfrastruktureinrichtung().setZugeordnetesBaugebiet(baugebietModel != null ? baugebietModel.getId() : null);
+        dto
+            .getInfrastruktureinrichtung()
+            .setZugeordnetesBaugebiet(baugebietModel != null ? baugebietModel.getId() : null);
     }
 
     @Mapping(target = "infrastruktureinrichtung.bauvorhaben", ignore = true)
@@ -81,15 +96,23 @@ public interface InfrastruktureinrichtungApiMapper {
     HausFuerKinderDto model2Dto(final HausFuerKinderModel model);
 
     @AfterMapping
-    default void setBauvorhabenIdOnHausFuerKinderDto(final HausFuerKinderModel model, @MappingTarget final HausFuerKinderDto dto) {
+    default void setBauvorhabenIdOnHausFuerKinderDto(
+        final HausFuerKinderModel model,
+        @MappingTarget final HausFuerKinderDto dto
+    ) {
         final BauvorhabenModel bauvorhabenModel = model.getInfrastruktureinrichtung().getBauvorhaben();
         dto.getInfrastruktureinrichtung().setBauvorhaben(bauvorhabenModel != null ? bauvorhabenModel.getId() : null);
     }
 
     @AfterMapping
-    default void setBaugebietIdOnHausFuerKinderDto(final HausFuerKinderModel model, @MappingTarget final HausFuerKinderDto dto) {
+    default void setBaugebietIdOnHausFuerKinderDto(
+        final HausFuerKinderModel model,
+        @MappingTarget final HausFuerKinderDto dto
+    ) {
         final BaugebietModel baugebietModel = model.getInfrastruktureinrichtung().getZugeordnetesBaugebiet();
-        dto.getInfrastruktureinrichtung().setZugeordnetesBaugebiet(baugebietModel != null ? baugebietModel.getId() : null);
+        dto
+            .getInfrastruktureinrichtung()
+            .setZugeordnetesBaugebiet(baugebietModel != null ? baugebietModel.getId() : null);
     }
 
     @Mapping(target = "infrastruktureinrichtung.bauvorhaben", ignore = true)
@@ -104,15 +127,23 @@ public interface InfrastruktureinrichtungApiMapper {
     GsNachmittagBetreuungDto model2Dto(final GsNachmittagBetreuungModel model);
 
     @AfterMapping
-    default void setBauvorhabenIdOnGsNachmittagBetreuungDto(final GsNachmittagBetreuungModel model, @MappingTarget final GsNachmittagBetreuungDto dto) {
+    default void setBauvorhabenIdOnGsNachmittagBetreuungDto(
+        final GsNachmittagBetreuungModel model,
+        @MappingTarget final GsNachmittagBetreuungDto dto
+    ) {
         final BauvorhabenModel bauvorhabenModel = model.getInfrastruktureinrichtung().getBauvorhaben();
         dto.getInfrastruktureinrichtung().setBauvorhaben(bauvorhabenModel != null ? bauvorhabenModel.getId() : null);
     }
 
     @AfterMapping
-    default void setBaugebietIdOnGsNachmittagBetreuungDto(final GsNachmittagBetreuungModel model, @MappingTarget final GsNachmittagBetreuungDto dto) {
+    default void setBaugebietIdOnGsNachmittagBetreuungDto(
+        final GsNachmittagBetreuungModel model,
+        @MappingTarget final GsNachmittagBetreuungDto dto
+    ) {
         final BaugebietModel baugebietModel = model.getInfrastruktureinrichtung().getZugeordnetesBaugebiet();
-        dto.getInfrastruktureinrichtung().setZugeordnetesBaugebiet(baugebietModel != null ? baugebietModel.getId() : null);
+        dto
+            .getInfrastruktureinrichtung()
+            .setZugeordnetesBaugebiet(baugebietModel != null ? baugebietModel.getId() : null);
     }
 
     @Mapping(target = "infrastruktureinrichtung.bauvorhaben", ignore = true)
@@ -127,7 +158,10 @@ public interface InfrastruktureinrichtungApiMapper {
     GrundschuleDto model2Dto(final GrundschuleModel model);
 
     @AfterMapping
-    default void setBauvorhabenIdOnGrundschuleDto(final GrundschuleModel model, @MappingTarget final GrundschuleDto dto) {
+    default void setBauvorhabenIdOnGrundschuleDto(
+        final GrundschuleModel model,
+        @MappingTarget final GrundschuleDto dto
+    ) {
         final BauvorhabenModel bauvorhabenModel = model.getInfrastruktureinrichtung().getBauvorhaben();
         dto.getInfrastruktureinrichtung().setBauvorhaben(bauvorhabenModel != null ? bauvorhabenModel.getId() : null);
     }
@@ -135,7 +169,9 @@ public interface InfrastruktureinrichtungApiMapper {
     @AfterMapping
     default void setBaugebietIdOnGrundschuleDto(final GrundschuleModel model, @MappingTarget final GrundschuleDto dto) {
         final BaugebietModel baugebietModel = model.getInfrastruktureinrichtung().getZugeordnetesBaugebiet();
-        dto.getInfrastruktureinrichtung().setZugeordnetesBaugebiet(baugebietModel != null ? baugebietModel.getId() : null);
+        dto
+            .getInfrastruktureinrichtung()
+            .setZugeordnetesBaugebiet(baugebietModel != null ? baugebietModel.getId() : null);
     }
 
     @Mapping(target = "infrastruktureinrichtung.bauvorhaben", ignore = true)
@@ -150,19 +186,26 @@ public interface InfrastruktureinrichtungApiMapper {
     MittelschuleDto model2Dto(final MittelschuleModel model);
 
     @AfterMapping
-    default void setBauvorhabenIdOnMittelschuleDto(final MittelschuleModel model, @MappingTarget final MittelschuleDto dto) {
+    default void setBauvorhabenIdOnMittelschuleDto(
+        final MittelschuleModel model,
+        @MappingTarget final MittelschuleDto dto
+    ) {
         final BauvorhabenModel bauvorhabenModel = model.getInfrastruktureinrichtung().getBauvorhaben();
         dto.getInfrastruktureinrichtung().setBauvorhaben(bauvorhabenModel != null ? bauvorhabenModel.getId() : null);
     }
 
     @AfterMapping
-    default void setBaugebietIdOnMittelschuleDto(final MittelschuleModel model, @MappingTarget final MittelschuleDto dto) {
+    default void setBaugebietIdOnMittelschuleDto(
+        final MittelschuleModel model,
+        @MappingTarget final MittelschuleDto dto
+    ) {
         final BaugebietModel baugebietModel = model.getInfrastruktureinrichtung().getZugeordnetesBaugebiet();
-        dto.getInfrastruktureinrichtung().setZugeordnetesBaugebiet(baugebietModel != null ? baugebietModel.getId() : null);
+        dto
+            .getInfrastruktureinrichtung()
+            .setZugeordnetesBaugebiet(baugebietModel != null ? baugebietModel.getId() : null);
     }
 
     @Mapping(target = "infrastruktureinrichtung.bauvorhaben", ignore = true)
     @Mapping(target = "infrastruktureinrichtung.zugeordnetesBaugebiet", ignore = true)
     MittelschuleModel dto2Model(final MittelschuleDto dto);
-
 }

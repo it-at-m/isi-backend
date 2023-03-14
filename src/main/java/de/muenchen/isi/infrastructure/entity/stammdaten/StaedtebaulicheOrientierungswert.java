@@ -3,10 +3,7 @@ package de.muenchen.isi.infrastructure.entity.stammdaten;
 import de.muenchen.isi.infrastructure.entity.BaseEntity;
 import de.muenchen.isi.infrastructure.entity.enums.Wohnungstyp;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonVerfahrensgrundsaetzeJahr;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
-
+import java.math.BigDecimal;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -14,16 +11,14 @@ import javax.persistence.Enumerated;
 import javax.persistence.Index;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
-import java.math.BigDecimal;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 @Entity
 @Table(
-        uniqueConstraints = {
-                @UniqueConstraint(columnNames = {"jahr", "wohnungstyp"})
-        },
-        indexes = {
-                @Index(name = "jahr_wohnungstyp_index", columnList = "jahr, wohnungstyp")
-        }
+    uniqueConstraints = { @UniqueConstraint(columnNames = { "jahr", "wohnungstyp" }) },
+    indexes = { @Index(name = "jahr_wohnungstyp_index", columnList = "jahr, wohnungstyp") }
 )
 @Data
 @ToString(callSuper = true)
@@ -43,5 +38,4 @@ public class StaedtebaulicheOrientierungswert extends BaseEntity {
 
     @Column(precision = 10, scale = 2, nullable = false)
     private BigDecimal belegungsdichte;
-
 }

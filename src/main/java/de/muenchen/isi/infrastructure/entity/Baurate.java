@@ -4,14 +4,13 @@
  */
 package de.muenchen.isi.infrastructure.entity;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
-
+import java.math.BigDecimal;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
-import java.math.BigDecimal;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 @Entity
 @Data
@@ -30,5 +29,4 @@ public class Baurate extends BaseEntity {
 
     @Embedded
     private Foerdermix foerdermix;
-
 }

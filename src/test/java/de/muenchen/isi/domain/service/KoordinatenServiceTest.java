@@ -1,5 +1,7 @@
 package de.muenchen.isi.domain.service;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import de.muenchen.isi.api.dto.common.UtmDto;
 import de.muenchen.isi.api.dto.common.Wgs84Dto;
 import de.muenchen.isi.domain.exception.KoordinatenException;
@@ -9,8 +11,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
@@ -45,5 +45,4 @@ public class KoordinatenServiceTest {
         assertEquals(wgs84Dto.getLatitude(), 48.13567500095738);
         assertEquals(wgs84Dto.getLongitude(), 11.552230994968712);
     }
-
 }

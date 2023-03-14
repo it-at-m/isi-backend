@@ -1,5 +1,8 @@
 package de.muenchen.isi.domain.service.filehandling;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+
 import de.muenchen.isi.domain.mapper.DokumentDomainMapperImpl;
 import de.muenchen.isi.domain.model.filehandling.DokumentModel;
 import de.muenchen.isi.domain.model.filehandling.DokumenteModel;
@@ -7,6 +10,8 @@ import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtDokument;
 import de.muenchen.isi.infrastructure.entity.filehandling.Dokument;
 import de.muenchen.isi.infrastructure.repository.filehandling.DokumentRepository;
 import de.muenchen.isi.rest.TestData;
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,12 +22,6 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
@@ -35,10 +34,7 @@ class DokumentServiceTest {
 
     @BeforeEach
     public void beforeEach() {
-        this.dokumentService = new DokumentService(
-                this.dokumentRepository,
-                new DokumentDomainMapperImpl()
-        );
+        this.dokumentService = new DokumentService(this.dokumentRepository, new DokumentDomainMapperImpl());
         Mockito.reset(this.dokumentRepository);
     }
 
@@ -67,10 +63,6 @@ class DokumentServiceTest {
         expected.setTotalElements(15L);
         expected.setLast(true);
 
-        assertThat(
-                result,
-                is(expected)
-        );
+        assertThat(result, is(expected));
     }
-
 }

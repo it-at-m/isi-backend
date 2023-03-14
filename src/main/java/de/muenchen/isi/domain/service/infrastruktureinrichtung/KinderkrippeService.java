@@ -9,15 +9,14 @@ import de.muenchen.isi.domain.model.infrastruktureinrichtung.Infrastruktureinric
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.KinderkrippeModel;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Kinderkrippe;
 import de.muenchen.isi.infrastructure.repository.infrastruktureinrichtung.KinderkrippeRepository;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -35,8 +34,8 @@ public class KinderkrippeService {
      */
     public List<KinderkrippeModel> getKinderkrippen() {
         return this.kinderkrippeRepository.findAllByOrderByInfrastruktureinrichtungNameEinrichtungAsc()
-                .map(this.infrastruktureinrichtungDomainMapper::entity2Model)
-                .collect(Collectors.toList());
+            .map(this.infrastruktureinrichtungDomainMapper::entity2Model)
+            .collect(Collectors.toList());
     }
 
     /**
@@ -82,7 +81,8 @@ public class KinderkrippeService {
      * @throws EntityNotFoundException falls die Kinderkrippe identifiziert durch die {@link KinderkrippeModel#getId()} nicht gefunden wird
      * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
      */
-    public KinderkrippeModel updateKinderkrippe(final KinderkrippeModel kinderkrippe) throws EntityNotFoundException, OptimisticLockingException {
+    public KinderkrippeModel updateKinderkrippe(final KinderkrippeModel kinderkrippe)
+        throws EntityNotFoundException, OptimisticLockingException {
         this.getKinderkrippeById(kinderkrippe.getId());
         return this.saveKinderkrippe(kinderkrippe);
     }
@@ -96,7 +96,9 @@ public class KinderkrippeService {
      */
     public void deleteKinderkrippeById(final UUID id) throws EntityNotFoundException, EntityIsReferencedException {
         final var kinderkrippe = this.getKinderkrippeById(id);
-        this.throwEntityIsReferencedExceptionWhenInfrastruktureinrichtungIsReferencingBauvorhaben(kinderkrippe.getInfrastruktureinrichtung());
+        this.throwEntityIsReferencedExceptionWhenInfrastruktureinrichtungIsReferencingBauvorhaben(
+                kinderkrippe.getInfrastruktureinrichtung()
+            );
         this.kinderkrippeRepository.deleteById(id);
     }
 
@@ -107,13 +109,19 @@ public class KinderkrippeService {
      * @param infrastruktureinrichtung zum Prüfen.
      * @throws EntityIsReferencedException falls das {@link KinderkrippeModel} ein {@link BauvorhabenModel} referenziert.
      */
-    protected void throwEntityIsReferencedExceptionWhenInfrastruktureinrichtungIsReferencingBauvorhaben(final InfrastruktureinrichtungModel infrastruktureinrichtung) throws EntityIsReferencedException {
+    protected void throwEntityIsReferencedExceptionWhenInfrastruktureinrichtungIsReferencingBauvorhaben(
+        final InfrastruktureinrichtungModel infrastruktureinrichtung
+    ) throws EntityIsReferencedException {
         final var bauvorhaben = infrastruktureinrichtung.getBauvorhaben();
         if (ObjectUtils.isNotEmpty(bauvorhaben)) {
-            final var message = "Die Infrastruktureinrichtung " + infrastruktureinrichtung.getNameEinrichtung() + " referenziert das Bauvorhaben " + bauvorhaben.getNameVorhaben() + ".";
+            final var message =
+                "Die Infrastruktureinrichtung " +
+                infrastruktureinrichtung.getNameEinrichtung() +
+                " referenziert das Bauvorhaben " +
+                bauvorhaben.getNameVorhaben() +
+                ".";
             log.error(message);
             throw new EntityIsReferencedException(message);
         }
     }
-
 }

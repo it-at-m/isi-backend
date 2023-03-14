@@ -5,12 +5,11 @@
 package de.muenchen.isi.domain.model;
 
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Planungsrecht;
+import java.math.BigDecimal;
+import java.util.List;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-
-import java.math.BigDecimal;
-import java.util.List;
 
 @Data
 @ToString(callSuper = true)
@@ -52,5 +51,4 @@ public class AbfragevarianteModel extends BaseEntityModel {
     private BigDecimal geschossflaecheSonstiges;
 
     private List<BauabschnittModel> bauabschnitte;
-    
 }

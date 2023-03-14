@@ -9,5 +9,4 @@ public class EntityIsReferencedException extends Exception {
     public EntityIsReferencedException(final String message) {
         super(message);
     }
-
 }

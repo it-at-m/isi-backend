@@ -11,32 +11,17 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
-
 /**
  * Application class for starting the micro-service.
  */
 @Configuration
-@ComponentScan(basePackages = {
-        "org.springframework.data.jpa.convert.threeten",
-        "de.muenchen.isi"
-})
-@EntityScan(basePackages = {
-        "org.springframework.data.jpa.convert.threeten",
-        "de.muenchen.isi"
-})
-@EnableJpaRepositories(basePackages = {
-        "de.muenchen.isi"
-})
+@ComponentScan(basePackages = { "org.springframework.data.jpa.convert.threeten", "de.muenchen.isi" })
+@EntityScan(basePackages = { "org.springframework.data.jpa.convert.threeten", "de.muenchen.isi" })
+@EnableJpaRepositories(basePackages = { "de.muenchen.isi" })
 @EnableAutoConfiguration
 public class IsiBackendApplication {
-    
 
     public static void main(final String[] args) {
-
-
         SpringApplication.run(IsiBackendApplication.class, args);
-
     }
-
-
 }
