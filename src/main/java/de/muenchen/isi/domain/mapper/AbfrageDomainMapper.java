@@ -11,15 +11,8 @@ import de.muenchen.isi.infrastructure.entity.Abfrage;
 import de.muenchen.isi.infrastructure.entity.Infrastrukturabfrage;
 import org.mapstruct.Mapper;
 
-@Mapper(
-        config = MapstructConfiguration.class,
-        uses = {
-                AbfragevarianteDomainMapper.class,
-                DokumentDomainMapper.class
-        }
-)
+@Mapper(config = MapstructConfiguration.class, uses = { AbfragevarianteDomainMapper.class, DokumentDomainMapper.class })
 public interface AbfrageDomainMapper {
-
     AbfrageModel entity2Model(final Abfrage entity);
 
     Abfrage model2Entity(final AbfrageModel model);
@@ -27,5 +20,4 @@ public interface AbfrageDomainMapper {
     InfrastrukturabfrageModel entity2Model(final Infrastrukturabfrage entity);
 
     Infrastrukturabfrage model2entity(final InfrastrukturabfrageModel model);
-
 }

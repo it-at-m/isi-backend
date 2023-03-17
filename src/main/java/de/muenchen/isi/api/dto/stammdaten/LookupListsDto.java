@@ -29,5 +29,4 @@ public class LookupListsDto {
     private LookupListDto infrastruktureinrichtungTyp;
 
     private LookupListDto artGsNachmittagBetreuung;
-
 }

@@ -8,11 +8,10 @@ import de.muenchen.isi.domain.model.common.AdresseModel;
 import de.muenchen.isi.domain.model.filehandling.DokumentModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVorhaben;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
-import lombok.Data;
-import org.apache.commons.lang3.StringUtils;
-
 import java.time.LocalDate;
 import java.util.List;
+import lombok.Data;
+import org.apache.commons.lang3.StringUtils;
 
 @Data
 public class AbfrageModel {

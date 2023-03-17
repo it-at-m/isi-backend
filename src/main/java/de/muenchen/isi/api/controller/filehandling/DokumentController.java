@@ -30,14 +30,13 @@ public class DokumentController {
     @Transactional(readOnly = true)
     @GetMapping("dokumente")
     @Operation(summary = "Holen aller in der Anwendung vorhandenen Dokumente")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "OK")
-    })
-    public ResponseEntity<DokumenteDto> getDokumente(@RequestParam(value = "pageNumber", defaultValue = "0", required = false) final Integer pageNumber,
-                                                     @RequestParam(value = "pageSize", defaultValue = "100", required = false) final Integer pageSize) {
+    @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "OK") })
+    public ResponseEntity<DokumenteDto> getDokumente(
+        @RequestParam(value = "pageNumber", defaultValue = "0", required = false) final Integer pageNumber,
+        @RequestParam(value = "pageSize", defaultValue = "100", required = false) final Integer pageSize
+    ) {
         final var model = this.dokumentService.getDokumente(pageNumber, pageSize);
         final var dto = this.dokumentApiMapper.model2Dto(model);
         return ResponseEntity.ok(dto);
     }
-
 }

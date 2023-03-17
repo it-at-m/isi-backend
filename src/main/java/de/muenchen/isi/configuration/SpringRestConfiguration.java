@@ -14,7 +14,6 @@ import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 
-
 @Configuration
 public class SpringRestConfiguration implements RepositoryRestConfigurer {
 
@@ -32,7 +31,10 @@ public class SpringRestConfiguration implements RepositoryRestConfigurer {
      * See {@link RepositoryRestConfigurer#configureRepositoryRestConfiguration}
      */
     @Override
-    public void configureRepositoryRestConfiguration(final RepositoryRestConfiguration config, final CorsRegistry corsRegistry) {
+    public void configureRepositoryRestConfiguration(
+        final RepositoryRestConfiguration config,
+        final CorsRegistry corsRegistry
+    ) {
         config.setRepositoryDetectionStrategy(RepositoryDetectionStrategies.DEFAULT);
     }
 
@@ -48,5 +50,4 @@ public class SpringRestConfiguration implements RepositoryRestConfigurer {
         validatingListener.addValidator("beforeLinkSave", validator());
         validatingListener.addValidator("afterLinkSave", validator());
     }
-
 }

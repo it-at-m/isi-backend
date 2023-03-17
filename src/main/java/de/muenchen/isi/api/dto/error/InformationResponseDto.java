@@ -1,12 +1,11 @@
 package de.muenchen.isi.api.dto.error;
 
 import de.muenchen.isi.api.dto.enums.InformationResponseType;
+import java.time.LocalDateTime;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
-import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -26,5 +25,4 @@ public class InformationResponseDto {
     private String originalException;
 
     private List<String> messages;
-
 }

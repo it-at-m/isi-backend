@@ -25,7 +25,6 @@ import org.mapstruct.Mapper;
 
 @Mapper(config = MapstructConfiguration.class)
 public interface InfrastruktureinrichtungDomainMapper {
-
     InfrastruktureinrichtungModel entity2Model(final Infrastruktureinrichtung entity);
 
     Infrastruktureinrichtung model2Entity(final InfrastruktureinrichtungModel model);
@@ -57,7 +56,4 @@ public interface InfrastruktureinrichtungDomainMapper {
     MittelschuleModel entity2Model(final Mittelschule entity);
 
     Mittelschule model2Entity(final MittelschuleModel model);
-
 }
-
-

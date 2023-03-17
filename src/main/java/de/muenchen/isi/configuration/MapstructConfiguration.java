@@ -6,10 +6,9 @@ import org.mapstruct.MappingConstants;
 import org.mapstruct.ReportingPolicy;
 
 @MapperConfig(
-        unmappedTargetPolicy = ReportingPolicy.ERROR,
-        injectionStrategy = InjectionStrategy.CONSTRUCTOR,
-        // Für Generierung der Spring-relevanten Bestandteile in MapperImpl
-        componentModel = MappingConstants.ComponentModel.SPRING
+    unmappedTargetPolicy = ReportingPolicy.ERROR,
+    injectionStrategy = InjectionStrategy.CONSTRUCTOR,
+    // Für Generierung der Spring-relevanten Bestandteile in MapperImpl
+    componentModel = MappingConstants.ComponentModel.SPRING
 )
-public class MapstructConfiguration {
-}
+public class MapstructConfiguration {}

@@ -4,19 +4,17 @@
  */
 package de.muenchen.isi.configuration;
 
+import java.io.IOException;
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.filter.OncePerRequestFilter;
-
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-
 
 /**
  * The class adds a {@link HttpHeaders#CACHE_CONTROL} header to each http response, if
@@ -54,19 +52,17 @@ public class CacheControlConfiguration {
          * default ServletRequest and ServletResponse ones.
          */
         @Override
-        protected void doFilterInternal(final HttpServletRequest request,
-                                        final HttpServletResponse response,
-                                        final FilterChain filterChain) throws ServletException, IOException {
-
+        protected void doFilterInternal(
+            final HttpServletRequest request,
+            final HttpServletResponse response,
+            final FilterChain filterChain
+        ) throws ServletException, IOException {
             final String cacheControlHeaderValue = response.getHeader(HttpHeaders.CACHE_CONTROL);
             if (StringUtils.isBlank(cacheControlHeaderValue)) {
                 response.addHeader(HttpHeaders.CACHE_CONTROL, CACHE_CONTROL_HEADER_VALUES);
             }
 
             filterChain.doFilter(request, response);
-
         }
-
     }
-
 }

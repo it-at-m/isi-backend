@@ -9,7 +9,6 @@ import lombok.Getter;
 
 @AllArgsConstructor
 public enum StatusInfrastruktureinrichtung implements ILookup {
-
     UNSPECIFIED(ILookup.UNSPECIFIED),
     UNGESICHERTE_PLANUNG("ungesicherte Planung"),
     GESICHERTE_PLANUNG_NEUE_EINR("gesicherte Planung – neue Einrichtung"),
@@ -22,5 +21,4 @@ public enum StatusInfrastruktureinrichtung implements ILookup {
 
     @Getter
     private final String bezeichnung;
-
 }

@@ -7,11 +7,10 @@ package de.muenchen.isi.domain.model.infrastruktureinrichtung;
 import de.muenchen.isi.domain.model.BaugebietModel;
 import de.muenchen.isi.domain.model.BauvorhabenModel;
 import de.muenchen.isi.domain.model.common.AdresseModel;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusInfrastruktureinrichtung;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Einrichtungstraeger;
-import lombok.Data;
-
+import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusInfrastruktureinrichtung;
 import java.math.BigDecimal;
+import lombok.Data;
 
 @Data
 public class InfrastruktureinrichtungModel {
@@ -37,5 +36,4 @@ public class InfrastruktureinrichtungModel {
     private BigDecimal flaecheTeilgrundstueck;
 
     private BaugebietModel zugeordnetesBaugebiet;
-
 }

@@ -28,13 +28,10 @@ public class AbfrageListController {
     @GetMapping("abfragen")
     @Transactional(readOnly = true)
     @Operation(summary = "Lade alle Abfragen für die Listendarstellung")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "OK")
-    })
+    @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "OK") })
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_READ_ABFRAGE.name())")
     public ResponseEntity<AbfrageListElementsDto> getAbfrageListElements() {
         final var dto = this.abfrageListElementApiMapper.model2Dto(this.abfrageListService.getAbfrageListElements());
         return ResponseEntity.ok(dto);
     }
-
 }

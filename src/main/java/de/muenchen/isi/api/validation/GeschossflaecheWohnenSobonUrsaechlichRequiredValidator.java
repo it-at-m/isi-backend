@@ -3,15 +3,15 @@ package de.muenchen.isi.api.validation;
 import de.muenchen.isi.api.dto.InfrastrukturabfrageDto;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Planungsrecht;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
+import javax.validation.ConstraintValidator;
+import javax.validation.ConstraintValidatorContext;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
-
 @Component
 @NoArgsConstructor
-public class GeschossflaecheWohnenSobonUrsaechlichRequiredValidator implements ConstraintValidator<GeschossflaecheWohnenSobonUrsaechlichRequired, InfrastrukturabfrageDto> {
+public class GeschossflaecheWohnenSobonUrsaechlichRequiredValidator
+    implements ConstraintValidator<GeschossflaecheWohnenSobonUrsaechlichRequired, InfrastrukturabfrageDto> {
 
     /**
      * Prüft ob das Feld Geschossfläche Wohnen SoBoN-ursächlich {@Link AbfragevarianteDto#geschossflaecheWohnenSoBoNursaechlich} einen numerischem Wert hat.
@@ -25,17 +25,20 @@ public class GeschossflaecheWohnenSobonUrsaechlichRequiredValidator implements C
      */
     @Override
     public boolean isValid(final InfrastrukturabfrageDto value, final ConstraintValidatorContext context) {
-        if (value == null ||
-                value.getAbfragevarianten() == null ||
-                value.getSobonRelevant() == UncertainBoolean.FALSE) {
+        if (
+            value == null || value.getAbfragevarianten() == null || value.getSobonRelevant() == UncertainBoolean.FALSE
+        ) {
             return true;
         }
-        return !value.getAbfragevarianten().stream()
-                .anyMatch(abfragevariante ->
-                        (abfragevariante.getPlanungsrecht() == Planungsrecht.BPLAN_PARAG_11
-                                || abfragevariante.getPlanungsrecht() == Planungsrecht.BPLAN_PARAG_12)
-                                && abfragevariante.getGeschossflaecheWohnenSoBoNursaechlich() == null
-                );
+        return !value
+            .getAbfragevarianten()
+            .stream()
+            .anyMatch(abfragevariante ->
+                (
+                    abfragevariante.getPlanungsrecht() == Planungsrecht.BPLAN_PARAG_11 ||
+                    abfragevariante.getPlanungsrecht() == Planungsrecht.BPLAN_PARAG_12
+                ) &&
+                abfragevariante.getGeschossflaecheWohnenSoBoNursaechlich() == null
+            );
     }
-
 }

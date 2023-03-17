@@ -12,5 +12,4 @@ public class PresignedUrlModel {
     private String httpMethodToUse;
 
     private String url;
-
 }

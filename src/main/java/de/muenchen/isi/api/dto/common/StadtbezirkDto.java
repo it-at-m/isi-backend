@@ -1,8 +1,7 @@
 package de.muenchen.isi.api.dto.common;
 
-import lombok.Data;
-
 import javax.validation.constraints.Size;
+import lombok.Data;
 
 @Data
 public class StadtbezirkDto {

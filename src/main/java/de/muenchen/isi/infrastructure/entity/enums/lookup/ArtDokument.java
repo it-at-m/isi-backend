@@ -5,7 +5,6 @@ import lombok.Getter;
 
 @AllArgsConstructor
 public enum ArtDokument implements ILookup {
-
     UNSPECIFIED(ILookup.UNSPECIFIED),
     EMAIL("E-Mail"),
     BESCHLUSS("Beschluss(entwurf)"),
@@ -22,5 +21,4 @@ public enum ArtDokument implements ILookup {
 
     @Getter
     private final String bezeichnung;
-
 }

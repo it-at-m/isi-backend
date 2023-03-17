@@ -12,6 +12,11 @@ import io.muenchendigital.digiwf.s3.integration.client.exception.DocumentStorage
 import io.muenchendigital.digiwf.s3.integration.client.exception.DocumentStorageServerErrorException;
 import io.muenchendigital.digiwf.s3.integration.client.exception.PropertyNotSetException;
 import io.muenchendigital.digiwf.s3.integration.client.repository.DocumentStorageFileRepository;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.tika.config.TikaConfig;
@@ -26,13 +31,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.reactive.function.client.WebClientException;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-
 @Slf4j
 @Service
 public class MimeTypeService {
@@ -43,9 +41,11 @@ public class MimeTypeService {
 
     private final Set<String> allowedMimeTypes;
 
-    public MimeTypeService(final DocumentStorageFileRepository documentStorageFileRepository,
-                           @Value("${io.muenchendigital.digiwf.s3.client.file-expiration-time}") final Integer fileExpirationTime,
-                           @Value("#{'${file.mimetypes.allowed}'.split(',')}") final List<String> allowedMimeTypes) {
+    public MimeTypeService(
+        final DocumentStorageFileRepository documentStorageFileRepository,
+        @Value("${io.muenchendigital.digiwf.s3.client.file-expiration-time}") final Integer fileExpirationTime,
+        @Value("#{'${file.mimetypes.allowed}'.split(',')}") final List<String> allowedMimeTypes
+    ) {
         this.documentStorageFileRepository = documentStorageFileRepository;
         this.fileExpirationTime = fileExpirationTime;
         this.allowedMimeTypes = new HashSet<>(allowedMimeTypes);
@@ -65,16 +65,22 @@ public class MimeTypeService {
      * @throws MimeTypeExtractionFailedException falls die Mime-Type-Ermittlung fehlgeschlagen ist
      * @throws MimeTypeNotAllowedException       falls der Mime-Type der referenzierten Datei nicht zulässig ist
      */
-    public MimeTypeInformationModel extractMediaTypeInformationForAllowedMediaType(final FilepathModel filepath) throws FileHandlingWithS3FailedException, FileHandlingFailedException, MimeTypeExtractionFailedException, MimeTypeNotAllowedException {
+    public MimeTypeInformationModel extractMediaTypeInformationForAllowedMediaType(final FilepathModel filepath)
+        throws FileHandlingWithS3FailedException, FileHandlingFailedException, MimeTypeExtractionFailedException, MimeTypeNotAllowedException {
         final MimeTypeInformationModel mimeTypeInformationModel = this.extractMediaTypeInformation(filepath);
         if (!this.allowedMimeTypes.contains(mimeTypeInformationModel.getType())) {
             this.deleteFile(filepath);
             final var fileName = StringUtils.substringAfterLast(
-                    filepath.getPathToFile(),
-                    IsFilepathWithoutLeadingPathdividerValidator.PATH_SEPARATOR
+                filepath.getPathToFile(),
+                IsFilepathWithoutLeadingPathdividerValidator.PATH_SEPARATOR
             );
-            final String type = this.getAcronymOrDescriptionWhenAcronymEmptyOrTypeWhenDescriptionEmpty(mimeTypeInformationModel);
-            final var message = String.format("Das Hochladen der Datei %s des Typs %s ist nicht erlaubt.", fileName, type);
+            final String type =
+                this.getAcronymOrDescriptionWhenAcronymEmptyOrTypeWhenDescriptionEmpty(mimeTypeInformationModel);
+            final var message = String.format(
+                "Das Hochladen der Datei %s des Typs %s ist nicht erlaubt.",
+                fileName,
+                type
+            );
             throw new MimeTypeNotAllowedException(message);
         }
         return mimeTypeInformationModel;
@@ -89,24 +95,38 @@ public class MimeTypeService {
      * @throws FileHandlingFailedException
      * @throws MimeTypeExtractionFailedException falls die Mime-Type-Ermittlung fehlgeschlagen ist
      */
-    protected MimeTypeInformationModel extractMediaTypeInformation(final FilepathModel filepath) throws FileHandlingWithS3FailedException, FileHandlingFailedException, MimeTypeExtractionFailedException {
+    protected MimeTypeInformationModel extractMediaTypeInformation(final FilepathModel filepath)
+        throws FileHandlingWithS3FailedException, FileHandlingFailedException, MimeTypeExtractionFailedException {
         final var fileInputStream = this.getInputStream(filepath);
         return this.extractMediaTypeInformationOfFileAndCloseStream(fileInputStream);
     }
 
-    protected InputStream getInputStream(final FilepathModel filepath) throws FileHandlingWithS3FailedException, FileHandlingFailedException {
+    protected InputStream getInputStream(final FilepathModel filepath)
+        throws FileHandlingWithS3FailedException, FileHandlingFailedException {
         try {
-            return this.documentStorageFileRepository.getFileInputStream(filepath.getPathToFile(), this.fileExpirationTime);
-        } catch (final DocumentStorageClientErrorException | DocumentStorageServerErrorException |
-                       DocumentStorageException | PropertyNotSetException | WebClientException exception) {
-            final var message = "Beim Herunterladen zur Dateiprüfung vom ISI-Dokumentenverwaltungssystem ist ein Fehler aufgetreten.";
+            return this.documentStorageFileRepository.getFileInputStream(
+                    filepath.getPathToFile(),
+                    this.fileExpirationTime
+                );
+        } catch (
+            final DocumentStorageClientErrorException
+            | DocumentStorageServerErrorException
+            | DocumentStorageException
+            | PropertyNotSetException
+            | WebClientException exception
+        ) {
+            final var message =
+                "Beim Herunterladen zur Dateiprüfung vom ISI-Dokumentenverwaltungssystem ist ein Fehler aufgetreten.";
             log.error(message);
             final var clazz = exception.getClass();
-            if (clazz.equals(DocumentStorageClientErrorException.class) || clazz.equals(DocumentStorageServerErrorException.class)) {
+            if (
+                clazz.equals(DocumentStorageClientErrorException.class) ||
+                clazz.equals(DocumentStorageServerErrorException.class)
+            ) {
                 throw new FileHandlingWithS3FailedException(
-                        message,
-                        ((HttpStatusCodeException) exception.getCause()).getStatusCode(),
-                        exception
+                    message,
+                    ((HttpStatusCodeException) exception.getCause()).getStatusCode(),
+                    exception
                 );
             } else {
                 throw new FileHandlingFailedException(message, exception);
@@ -114,19 +134,28 @@ public class MimeTypeService {
         }
     }
 
-    protected void deleteFile(final FilepathModel filepath) throws FileHandlingWithS3FailedException, FileHandlingFailedException {
+    protected void deleteFile(final FilepathModel filepath)
+        throws FileHandlingWithS3FailedException, FileHandlingFailedException {
         try {
             this.documentStorageFileRepository.deleteFile(filepath.getPathToFile(), this.fileExpirationTime);
-        } catch (final DocumentStorageClientErrorException | DocumentStorageServerErrorException |
-                       DocumentStorageException | PropertyNotSetException exception) {
-            final var message = "Beim Herunterladen zur Dateiprüfung vom ISI-Dokumentenverwaltungssystem ist ein Fehler aufgetreten.";
+        } catch (
+            final DocumentStorageClientErrorException
+            | DocumentStorageServerErrorException
+            | DocumentStorageException
+            | PropertyNotSetException exception
+        ) {
+            final var message =
+                "Beim Herunterladen zur Dateiprüfung vom ISI-Dokumentenverwaltungssystem ist ein Fehler aufgetreten.";
             log.error(message);
             final var clazz = exception.getClass();
-            if (clazz.equals(DocumentStorageClientErrorException.class) || clazz.equals(DocumentStorageServerErrorException.class)) {
+            if (
+                clazz.equals(DocumentStorageClientErrorException.class) ||
+                clazz.equals(DocumentStorageServerErrorException.class)
+            ) {
                 throw new FileHandlingWithS3FailedException(
-                        message,
-                        ((HttpStatusCodeException) exception.getCause()).getStatusCode(),
-                        exception
+                    message,
+                    ((HttpStatusCodeException) exception.getCause()).getStatusCode(),
+                    exception
                 );
             } else {
                 throw new FileHandlingFailedException(message, exception);
@@ -134,11 +163,14 @@ public class MimeTypeService {
         }
     }
 
-    protected MimeTypeInformationModel extractMediaTypeInformationOfFileAndCloseStream(final InputStream file) throws MimeTypeExtractionFailedException {
+    protected MimeTypeInformationModel extractMediaTypeInformationOfFileAndCloseStream(final InputStream file)
+        throws MimeTypeExtractionFailedException {
         final TikaConfig config = TikaConfig.getDefaultConfig();
         final Detector detector = config.getDetector();
-        try (final InputStream fileInputStream = file;
-             final TikaInputStream tikaInputStream = TikaInputStream.get(fileInputStream)) {
+        try (
+            final InputStream fileInputStream = file;
+            final TikaInputStream tikaInputStream = TikaInputStream.get(fileInputStream)
+        ) {
             final MediaType mediaType = detector.detect(tikaInputStream, new Metadata());
             final MimeType mimeType = config.getMimeRepository().forName(mediaType.toString());
             final var mimeTypeInformation = new MimeTypeInformationModel();
@@ -153,7 +185,9 @@ public class MimeTypeService {
         }
     }
 
-    protected String getAcronymOrDescriptionWhenAcronymEmptyOrTypeWhenDescriptionEmpty(final MimeTypeInformationModel mimeTypeInformation) {
+    protected String getAcronymOrDescriptionWhenAcronymEmptyOrTypeWhenDescriptionEmpty(
+        final MimeTypeInformationModel mimeTypeInformation
+    ) {
         final String type;
         if (StringUtils.isEmpty(mimeTypeInformation.getAcronym())) {
             if (StringUtils.isEmpty(mimeTypeInformation.getDescription())) {
@@ -166,5 +200,4 @@ public class MimeTypeService {
         }
         return type;
     }
-
 }

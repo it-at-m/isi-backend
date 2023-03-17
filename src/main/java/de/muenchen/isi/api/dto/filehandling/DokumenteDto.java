@@ -1,8 +1,7 @@
 package de.muenchen.isi.api.dto.filehandling;
 
-import lombok.Data;
-
 import java.util.List;
+import lombok.Data;
 
 @Data
 public class DokumenteDto {
@@ -18,5 +17,4 @@ public class DokumenteDto {
     private Integer totalPages;
 
     private Boolean last;
-
 }

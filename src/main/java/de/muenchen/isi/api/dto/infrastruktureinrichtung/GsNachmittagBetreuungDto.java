@@ -6,13 +6,12 @@ package de.muenchen.isi.api.dto.infrastruktureinrichtung;
 
 import de.muenchen.isi.api.dto.BaseEntityDto;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtGsNachmittagBetreuung;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
-
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 @Data
 @ToString(callSuper = true)
@@ -35,5 +34,4 @@ public class GsNachmittagBetreuungDto extends BaseEntityDto {
 
     @Min(0)
     private Integer wohnungsnaheHortPlaetze;
-
 }

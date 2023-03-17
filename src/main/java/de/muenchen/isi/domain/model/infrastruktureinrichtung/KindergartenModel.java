@@ -21,5 +21,4 @@ public class KindergartenModel extends BaseEntityModel {
     private Integer anzahlKindergartenGruppen;
 
     private Integer wohnungsnaheKindergartenPlaetze;
-
 }

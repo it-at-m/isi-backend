@@ -17,7 +17,6 @@ public class GrundschuleModel extends BaseEntityModel {
     private InfrastruktureinrichtungModel infrastruktureinrichtung;
 
     private SchuleModel schule;
-
     // TBD: Grundschulsprengel
 
 }

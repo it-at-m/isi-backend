@@ -1,8 +1,7 @@
 package de.muenchen.isi.domain.model.filehandling;
 
-import lombok.Data;
-
 import java.util.List;
+import lombok.Data;
 
 @Data
 public class DokumenteModel {
@@ -18,5 +17,4 @@ public class DokumenteModel {
     private Integer totalPages;
 
     private Boolean last;
-
 }

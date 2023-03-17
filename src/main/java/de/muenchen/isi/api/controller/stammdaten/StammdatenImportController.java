@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import javax.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -21,8 +22,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.constraints.NotNull;
-
 @RequiredArgsConstructor
 @RestController
 @Tag(name = "Stammdaten", description = "API to import Stammdaten")
@@ -32,31 +31,64 @@ public class StammdatenImportController {
     private final StammdatenImportService stammdatenImportService;
 
     @Transactional
-    @PostMapping(path = "stammdaten/staedtebauliche-orientierungswerte/import", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    @PostMapping(
+        path = "stammdaten/staedtebauliche-orientierungswerte/import",
+        consumes = { MediaType.MULTIPART_FORM_DATA_VALUE }
+    )
     @Operation(summary = "Importiert die CSV-Datei und persistiert die Einträge in der Datenbank.")
-    @ApiResponses(value = {
+    @ApiResponses(
+        value = {
             @ApiResponse(responseCode = "200", description = "OK -> Import konnte erfolgreich durchgeführt werden."),
-            @ApiResponse(responseCode = "555", description = "CUSTOM INTERNAL SERVER ERROR -> Beim importieren der Datei ist ein serverseitiger Fehler aufgetreten.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class))),
-            @ApiResponse(responseCode = "422", description = "UNPROCESSABLE_ENTITY -> Die CSV-Datei konnte nicht korrekt verarbeitet werden.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class)))
-    })
-    @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_WRITE_STAMMDATEN_ORIENTIERUNGSWERTE.name())")
-    public ResponseEntity<Void> importStaedtebaulicheOrientierungswerte(@RequestParam("file") @NotNull final MultipartFile csvImportFile) throws CsvAttributeErrorException, FileImportFailedException {
+            @ApiResponse(
+                responseCode = "555",
+                description = "CUSTOM INTERNAL SERVER ERROR -> Beim importieren der Datei ist ein serverseitiger Fehler aufgetreten.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+            @ApiResponse(
+                responseCode = "422",
+                description = "UNPROCESSABLE_ENTITY -> Die CSV-Datei konnte nicht korrekt verarbeitet werden.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+        }
+    )
+    @PreAuthorize(
+        "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_WRITE_STAMMDATEN_ORIENTIERUNGSWERTE.name())"
+    )
+    public ResponseEntity<Void> importStaedtebaulicheOrientierungswerte(
+        @RequestParam("file") @NotNull final MultipartFile csvImportFile
+    ) throws CsvAttributeErrorException, FileImportFailedException {
         this.stammdatenImportService.importStaedtebaulicheOrientierungswerte(csvImportFile);
         return ResponseEntity.ok().build();
     }
 
     @Transactional
-    @PostMapping(path = "stammdaten/sobon-orientierungswerte-soziale-infrastruktur/import", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    @PostMapping(
+        path = "stammdaten/sobon-orientierungswerte-soziale-infrastruktur/import",
+        consumes = { MediaType.MULTIPART_FORM_DATA_VALUE }
+    )
     @Operation(summary = "Importiert die CSV-Datei und persistiert die Einträge in der Datenbank.")
-    @ApiResponses(value = {
+    @ApiResponses(
+        value = {
             @ApiResponse(responseCode = "200", description = "OK -> Import konnte erfolgreich durchgeführt werden."),
-            @ApiResponse(responseCode = "555", description = "CUSTOM INTERNAL SERVER ERROR -> Beim importieren der Datei ist ein serverseitiger Fehler aufgetreten.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class))),
-            @ApiResponse(responseCode = "422", description = "UNPROCESSABLE_ENTITY -> Die CSV-Datei konnte nicht korrekt verarbeitet werden.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class)))
-    })
-    @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_WRITE_STAMMDATEN_ORIENTIERUNGSWERTE.name())")
-    public ResponseEntity<Void> importSoBoNOrientierungswerteSozialeInfrastruktur(@RequestParam("file") @NotNull final MultipartFile csvImportFile) throws CsvAttributeErrorException, FileImportFailedException {
+            @ApiResponse(
+                responseCode = "555",
+                description = "CUSTOM INTERNAL SERVER ERROR -> Beim importieren der Datei ist ein serverseitiger Fehler aufgetreten.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+            @ApiResponse(
+                responseCode = "422",
+                description = "UNPROCESSABLE_ENTITY -> Die CSV-Datei konnte nicht korrekt verarbeitet werden.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+        }
+    )
+    @PreAuthorize(
+        "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_WRITE_STAMMDATEN_ORIENTIERUNGSWERTE.name())"
+    )
+    public ResponseEntity<Void> importSoBoNOrientierungswerteSozialeInfrastruktur(
+        @RequestParam("file") @NotNull final MultipartFile csvImportFile
+    ) throws CsvAttributeErrorException, FileImportFailedException {
         this.stammdatenImportService.importSobonOrientierungswerteSozialeInfrastruktur(csvImportFile);
         return ResponseEntity.ok().build();
     }
-
 }

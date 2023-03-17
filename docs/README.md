@@ -1,6 +1,7 @@
 # ISI Dokumentation
 
 ## Source Code holen
+
 Sourcen auf den lokalen Rechner holen und ins docs-Verzeichnis wechseln
 
     git clone https://github.com/it-at-m/isi-backend.git
@@ -12,6 +13,7 @@ Sourcen auf den lokalen Rechner holen und ins docs-Verzeichnis wechseln
 npm install
 npm run dev
 ```
+
 <!--
 ## Ohne lokale node Installation
 
@@ -25,9 +27,11 @@ Für die lokale Entwicklung der Dokumentation nutzt man diesen Befehl:
 mvn -Pdocs -Pdev package
 ```
 -->
+
 Die Vorschau der Dokumentation ist über http://localhost:8080/ erreichbar.
 
 ## Ändern der Dokumentation
+
 ### Hinzufügen neuer Seiten
 
 Neue Seiten im seitlichen Menü müssen in der Datei [src/.vuepress/config.js](src/.vuepress/config.js) hinzugefügt werden.
@@ -54,5 +58,5 @@ and list them in the according files under [src/modeling/templates](src/modeling
 ### Adding new pages
 
 If you want new pages to show up in the sidebar you have to add them in the [src/.vuepress/config.js](src/.vuepress/config.js).
-See the [vuepress docs](https://v1.vuepress.vuejs.org/theme/default-theme-config.html#sidebar) for additional information. 
+See the [vuepress docs](https://v1.vuepress.vuejs.org/theme/default-theme-config.html#sidebar) for additional information.
 -->

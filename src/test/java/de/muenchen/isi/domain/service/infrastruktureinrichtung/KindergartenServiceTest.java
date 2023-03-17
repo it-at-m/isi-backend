@@ -1,5 +1,8 @@
 package de.muenchen.isi.domain.service.infrastruktureinrichtung;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+
 import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
@@ -12,6 +15,10 @@ import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Infrastruktureinrichtung;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Kindergarten;
 import de.muenchen.isi.infrastructure.repository.infrastruktureinrichtung.KindergartenRepository;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+import java.util.stream.Stream;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,19 +29,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-import java.util.stream.Stream;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
 class KindergartenServiceTest {
 
-    private final InfrastruktureinrichtungDomainMapper infrastruktureinrichtungDomainMapper = new InfrastruktureinrichtungDomainMapperImpl();
+    private final InfrastruktureinrichtungDomainMapper infrastruktureinrichtungDomainMapper =
+        new InfrastruktureinrichtungDomainMapperImpl();
 
     @Mock
     private KindergartenRepository kindergartenRepository;
@@ -43,10 +43,8 @@ class KindergartenServiceTest {
 
     @BeforeEach
     public void beforeEach() {
-        this.kindergartenService = new KindergartenService(
-                this.infrastruktureinrichtungDomainMapper,
-                this.kindergartenRepository
-        );
+        this.kindergartenService =
+            new KindergartenService(this.infrastruktureinrichtungDomainMapper, this.kindergartenRepository);
         Mockito.reset(this.kindergartenRepository);
     }
 
@@ -57,7 +55,9 @@ class KindergartenServiceTest {
         final Kindergarten entity2 = new Kindergarten();
         entity2.setId(UUID.randomUUID());
 
-        Mockito.when(this.kindergartenRepository.findAllByOrderByInfrastruktureinrichtungNameEinrichtungAsc()).thenReturn(Stream.of(entity1, entity2));
+        Mockito
+            .when(this.kindergartenRepository.findAllByOrderByInfrastruktureinrichtungNameEinrichtungAsc())
+            .thenReturn(Stream.of(entity1, entity2));
 
         final List<KindergartenModel> result = this.kindergartenService.getKindergaerten();
 
@@ -66,10 +66,7 @@ class KindergartenServiceTest {
         final KindergartenModel model2 = new KindergartenModel();
         model2.setId(entity2.getId());
 
-        assertThat(
-                result,
-                is(List.of(model1, model2))
-        );
+        assertThat(result, is(List.of(model1, model2)));
     }
 
     @Test
@@ -105,10 +102,7 @@ class KindergartenServiceTest {
         final KindergartenModel expected = new KindergartenModel();
         expected.setId(saveResult.getId());
 
-        assertThat(
-                result,
-                is(expected)
-        );
+        assertThat(result, is(expected));
 
         Mockito.verify(this.kindergartenRepository, Mockito.times(1)).saveAndFlush(kindergartenEntity);
     }
@@ -129,10 +123,7 @@ class KindergartenServiceTest {
         final KindergartenModel expected = new KindergartenModel();
         expected.setId(kindergartenModel.getId());
 
-        assertThat(
-                result,
-                is(kindergartenModel)
-        );
+        assertThat(result, is(kindergartenModel));
 
         Mockito.verify(this.kindergartenRepository, Mockito.times(1)).findById(entity.getId());
         Mockito.verify(this.kindergartenRepository, Mockito.times(1)).saveAndFlush(entity);
@@ -167,19 +158,30 @@ class KindergartenServiceTest {
 
         Mockito.when(this.kindergartenRepository.findById(entity.getId())).thenReturn(Optional.of(entity));
 
-        Assertions.assertThrows(EntityIsReferencedException.class, () -> this.kindergartenService.deleteKindergartenById(id));
+        Assertions.assertThrows(
+            EntityIsReferencedException.class,
+            () -> this.kindergartenService.deleteKindergartenById(id)
+        );
 
         Mockito.verify(this.kindergartenRepository, Mockito.times(1)).findById(entity.getId());
         Mockito.verify(this.kindergartenRepository, Mockito.times(0)).deleteById(id);
     }
 
     @Test
-    void throwEntityIsReferencedExceptionWhenInfrastruktureinrichtungIsReferencingBauvorhaben() throws EntityIsReferencedException {
-        this.kindergartenService.throwEntityIsReferencedExceptionWhenInfrastruktureinrichtungIsReferencingBauvorhaben(new InfrastruktureinrichtungModel());
+    void throwEntityIsReferencedExceptionWhenInfrastruktureinrichtungIsReferencingBauvorhaben()
+        throws EntityIsReferencedException {
+        this.kindergartenService.throwEntityIsReferencedExceptionWhenInfrastruktureinrichtungIsReferencingBauvorhaben(
+                new InfrastruktureinrichtungModel()
+            );
 
         final InfrastruktureinrichtungModel infrastruktureinrichtung = new InfrastruktureinrichtungModel();
         infrastruktureinrichtung.setBauvorhaben(new BauvorhabenModel());
-        Assertions.assertThrows(EntityIsReferencedException.class, () -> this.kindergartenService.throwEntityIsReferencedExceptionWhenInfrastruktureinrichtungIsReferencingBauvorhaben(infrastruktureinrichtung));
+        Assertions.assertThrows(
+            EntityIsReferencedException.class,
+            () ->
+                this.kindergartenService.throwEntityIsReferencedExceptionWhenInfrastruktureinrichtungIsReferencingBauvorhaben(
+                        infrastruktureinrichtung
+                    )
+        );
     }
-
 }

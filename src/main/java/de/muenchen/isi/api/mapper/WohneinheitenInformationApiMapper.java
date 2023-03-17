@@ -11,9 +11,7 @@ import org.mapstruct.Mapper;
 
 @Mapper(config = MapstructConfiguration.class)
 public interface WohneinheitenInformationApiMapper {
-
     WohneinheitenInformationDto model2Dto(final WohneinheitenInformationModel model);
 
     WohneinheitenInformationModel dto2Model(final WohneinheitenInformationDto dto);
-
 }

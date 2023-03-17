@@ -12,9 +12,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AdresseModel {
+
     private String plz;
     private String ort;
     private String strasse;
     private String hausnummer;
-
 }

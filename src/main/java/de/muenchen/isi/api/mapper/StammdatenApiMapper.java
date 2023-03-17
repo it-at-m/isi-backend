@@ -13,10 +13,11 @@ import org.mapstruct.Mapper;
 
 @Mapper(config = MapstructConfiguration.class)
 public interface StammdatenApiMapper {
-
     SobonOrientierungswertSozialeInfrastrukturModel dto2Model(final SobonOrientierungswertSozialeInfrastrukturDto dto);
 
-    SobonOrientierungswertSozialeInfrastrukturDto model2Dto(final SobonOrientierungswertSozialeInfrastrukturModel model);
+    SobonOrientierungswertSozialeInfrastrukturDto model2Dto(
+        final SobonOrientierungswertSozialeInfrastrukturModel model
+    );
 
     StaedtebaulicheOrientierungswertModel dto2Model(final StaedtebaulicheOrientierungswertDto dto);
 
@@ -27,5 +28,4 @@ public interface StammdatenApiMapper {
     FoerdermixStammDto model2Dto(final FoerdermixStammModel model);
 
     FileInformationDto model2Dto(final FileInformationModel model);
-
 }

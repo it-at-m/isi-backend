@@ -5,11 +5,10 @@ import de.muenchen.isi.infrastructure.entity.enums.Altersklasse;
 import de.muenchen.isi.infrastructure.entity.enums.Einrichtungstyp;
 import de.muenchen.isi.infrastructure.entity.enums.Wohnungstyp;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonVerfahrensgrundsaetzeJahr;
+import java.math.BigDecimal;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-
-import java.math.BigDecimal;
 
 @Data
 @ToString(callSuper = true)
@@ -53,5 +52,4 @@ public class SobonOrientierungswertSozialeInfrastrukturModel extends BaseEntityM
     private BigDecimal perzentil75ProzentEinwohnerJeWohnung;
 
     private BigDecimal perzentil75ProzentGerundetEinwohnerJeWohnung;
-
 }

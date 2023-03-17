@@ -5,12 +5,11 @@
 package de.muenchen.isi.api.dto.infrastruktureinrichtung;
 
 import de.muenchen.isi.api.dto.BaseEntityDto;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 
 @Data
 @ToString(callSuper = true)
@@ -24,7 +23,6 @@ public class GrundschuleDto extends BaseEntityDto {
     @Valid
     @NotNull
     private SchuleDto schule;
-
     // TBD: Grundschulsprengel
 
 }

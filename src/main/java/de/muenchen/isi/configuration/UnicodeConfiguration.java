@@ -11,7 +11,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 
-
 /**
  * <p><em>Beispiel</em> für Konfiguration des NFC Request-Filters</p>
  * <ul>
@@ -30,8 +29,9 @@ public class UnicodeConfiguration {
     private static final String[] NFC_URLS = ArrayUtils.toArray("/*");
 
     @Bean
-    public FilterRegistrationBean<NfcRequestFilter> nfcRequestFilterRegistration(final NfcRequestFilter nfcRequestFilter) {
-
+    public FilterRegistrationBean<NfcRequestFilter> nfcRequestFilterRegistration(
+        final NfcRequestFilter nfcRequestFilter
+    ) {
         final FilterRegistrationBean<NfcRequestFilter> registration = new FilterRegistrationBean<>();
         registration.setFilter(nfcRequestFilter);
         registration.setName(NFC_FILTER_NAME);
@@ -49,7 +49,5 @@ public class UnicodeConfiguration {
         registration.addInitParameter(NfcRequestFilter.CONTENTTYPES_PROPERTY, NFC_WHITE_LIST);
 
         return registration;
-
     }
-
 }

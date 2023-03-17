@@ -11,7 +11,5 @@ import org.mapstruct.Mapper;
 
 @Mapper(config = MapstructConfiguration.class)
 public interface LookupApiMapper {
-
     LookupListsDto model2Dto(final LookupListsModel model);
-
 }

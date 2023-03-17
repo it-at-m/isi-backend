@@ -1,28 +1,28 @@
 package de.muenchen.isi.domain.service.calculation;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+
 import de.muenchen.isi.domain.model.AbfragevarianteModel;
 import de.muenchen.isi.domain.model.BauabschnittModel;
 import de.muenchen.isi.domain.model.BaugebietModel;
 import de.muenchen.isi.domain.model.BaurateModel;
 import de.muenchen.isi.domain.model.calculation.RealisierungsZeitraumModel;
 import de.muenchen.isi.domain.model.calculation.WohneinheitenInformationModel;
+import java.math.BigDecimal;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 
-import java.math.BigDecimal;
-import java.util.List;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
 class WohneinheitenInformationServiceTest {
 
-    private final WohneinheitenInformationService wohneinheitenInformationService = new WohneinheitenInformationService();
+    private final WohneinheitenInformationService wohneinheitenInformationService =
+        new WohneinheitenInformationService();
 
     @Test
     void calculateWohneinheitenInformationForAbfragevariante() {
@@ -32,10 +32,7 @@ class WohneinheitenInformationServiceTest {
 
         var expected = this.wohneinheitenInformationService.initEmptyWohneinheitenInformationModel();
 
-        assertThat(
-                result,
-                is(expected)
-        );
+        assertThat(result, is(expected));
 
         // --
 
@@ -94,11 +91,7 @@ class WohneinheitenInformationServiceTest {
         expected.setAnzahlWohneinheitenGeplant(14);
         expected.setGeschossflaecheWohnenGeplant(BigDecimal.valueOf(140));
 
-        assertThat(
-                result,
-                is(expected)
-        );
-
+        assertThat(result, is(expected));
     }
 
     @Test
@@ -109,10 +102,7 @@ class WohneinheitenInformationServiceTest {
 
         var expected = this.wohneinheitenInformationService.initEmptyWohneinheitenInformationModel();
 
-        assertThat(
-                result,
-                is(expected)
-        );
+        assertThat(result, is(expected));
 
         // --
 
@@ -162,10 +152,7 @@ class WohneinheitenInformationServiceTest {
         expected.setAnzahlWohneinheitenGeplant(14);
         expected.setGeschossflaecheWohnenGeplant(BigDecimal.valueOf(140));
 
-        assertThat(
-                result,
-                is(expected)
-        );
+        assertThat(result, is(expected));
     }
 
     @Test
@@ -176,10 +163,7 @@ class WohneinheitenInformationServiceTest {
 
         var expected = this.wohneinheitenInformationService.initEmptyWohneinheitenInformationModel();
 
-        assertThat(
-                result,
-                is(expected)
-        );
+        assertThat(result, is(expected));
 
         // --
 
@@ -219,10 +203,7 @@ class WohneinheitenInformationServiceTest {
         expected.setAnzahlWohneinheitenGeplant(14);
         expected.setGeschossflaecheWohnenGeplant(BigDecimal.valueOf(140));
 
-        assertThat(
-                result,
-                is(expected)
-        );
+        assertThat(result, is(expected));
     }
 
     @Test
@@ -241,10 +222,7 @@ class WohneinheitenInformationServiceTest {
         expected.setAnzahlWohneinheitenGeplant(5);
         expected.setGeschossflaecheWohnenGeplant(BigDecimal.TEN);
 
-        assertThat(
-                result,
-                is(expected)
-        );
+        assertThat(result, is(expected));
 
         // --
 
@@ -262,10 +240,7 @@ class WohneinheitenInformationServiceTest {
         expected.setAnzahlWohneinheitenGeplant(5);
         expected.setGeschossflaecheWohnenGeplant(null);
 
-        assertThat(
-                result,
-                is(expected)
-        );
+        assertThat(result, is(expected));
 
         // --
 
@@ -283,10 +258,7 @@ class WohneinheitenInformationServiceTest {
         expected.setAnzahlWohneinheitenGeplant(null);
         expected.setGeschossflaecheWohnenGeplant(BigDecimal.TEN);
 
-        assertThat(
-                result,
-                is(expected)
-        );
+        assertThat(result, is(expected));
     }
 
     @Test
@@ -294,19 +266,13 @@ class WohneinheitenInformationServiceTest {
         var wohneinheitenInformation1 = this.wohneinheitenInformationService.initEmptyWohneinheitenInformationModel();
         var wohneinheitenInformation2 = this.wohneinheitenInformationService.initEmptyWohneinheitenInformationModel();
 
-        var result = this.wohneinheitenInformationService.sum(
-                wohneinheitenInformation1,
-                wohneinheitenInformation2
-        );
+        var result = this.wohneinheitenInformationService.sum(wohneinheitenInformation1, wohneinheitenInformation2);
 
         var expected = this.wohneinheitenInformationService.initEmptyWohneinheitenInformationModel();
         expected.setAnzahlWohneinheitenGeplant(0);
         expected.setGeschossflaecheWohnenGeplant(BigDecimal.ZERO);
 
-        assertThat(
-                result,
-                is(expected)
-        );
+        assertThat(result, is(expected));
 
         // --
 
@@ -321,10 +287,7 @@ class WohneinheitenInformationServiceTest {
         wohneinheitenInformation2.setAnzahlWohneinheitenGeplant(null);
         wohneinheitenInformation2.setGeschossflaecheWohnenGeplant(null);
 
-        result = this.wohneinheitenInformationService.sum(
-                wohneinheitenInformation1,
-                wohneinheitenInformation2
-        );
+        result = this.wohneinheitenInformationService.sum(wohneinheitenInformation1, wohneinheitenInformation2);
 
         expected = this.wohneinheitenInformationService.initEmptyWohneinheitenInformationModel();
         expected.getRealisierungsZeitraum().setRealisierungVon(1998);
@@ -332,10 +295,7 @@ class WohneinheitenInformationServiceTest {
         expected.setAnzahlWohneinheitenGeplant(5);
         expected.setGeschossflaecheWohnenGeplant(BigDecimal.TEN);
 
-        assertThat(
-                result,
-                is(expected)
-        );
+        assertThat(result, is(expected));
 
         // --
 
@@ -350,10 +310,7 @@ class WohneinheitenInformationServiceTest {
         wohneinheitenInformation2.setAnzahlWohneinheitenGeplant(1);
         wohneinheitenInformation2.setGeschossflaecheWohnenGeplant(BigDecimal.ONE);
 
-        result = this.wohneinheitenInformationService.sum(
-                wohneinheitenInformation1,
-                wohneinheitenInformation2
-        );
+        result = this.wohneinheitenInformationService.sum(wohneinheitenInformation1, wohneinheitenInformation2);
 
         expected = this.wohneinheitenInformationService.initEmptyWohneinheitenInformationModel();
         expected.getRealisierungsZeitraum().setRealisierungVon(1988);
@@ -361,10 +318,7 @@ class WohneinheitenInformationServiceTest {
         expected.setAnzahlWohneinheitenGeplant(6);
         expected.setGeschossflaecheWohnenGeplant(BigDecimal.valueOf(11));
 
-        assertThat(
-                result,
-                is(expected)
-        );
+        assertThat(result, is(expected));
 
         // --
 
@@ -379,10 +333,7 @@ class WohneinheitenInformationServiceTest {
         wohneinheitenInformation2.setAnzahlWohneinheitenGeplant(7);
         wohneinheitenInformation2.setGeschossflaecheWohnenGeplant(BigDecimal.valueOf(23));
 
-        result = this.wohneinheitenInformationService.sum(
-                wohneinheitenInformation1,
-                wohneinheitenInformation2
-        );
+        result = this.wohneinheitenInformationService.sum(wohneinheitenInformation1, wohneinheitenInformation2);
 
         expected = this.wohneinheitenInformationService.initEmptyWohneinheitenInformationModel();
         expected.getRealisierungsZeitraum().setRealisierungVon(1998);
@@ -390,11 +341,7 @@ class WohneinheitenInformationServiceTest {
         expected.setAnzahlWohneinheitenGeplant(2);
         expected.setGeschossflaecheWohnenGeplant(BigDecimal.valueOf(12));
 
-        assertThat(
-                result,
-                is(expected)
-        );
-
+        assertThat(result, is(expected));
     }
 
     @Test
@@ -406,19 +353,13 @@ class WohneinheitenInformationServiceTest {
         realisierungsZeitraum2.setRealisierungVon(null);
         realisierungsZeitraum2.setRealisierungBis(null);
 
-        var result = this.wohneinheitenInformationService.aggregate(
-                realisierungsZeitraum1,
-                realisierungsZeitraum2
-        );
+        var result = this.wohneinheitenInformationService.aggregate(realisierungsZeitraum1, realisierungsZeitraum2);
 
         var expected = new RealisierungsZeitraumModel();
         expected.setRealisierungVon(null);
         expected.setRealisierungBis(null);
 
-        assertThat(
-                result,
-                is(expected)
-        );
+        assertThat(result, is(expected));
 
         // ---
 
@@ -429,19 +370,13 @@ class WohneinheitenInformationServiceTest {
         realisierungsZeitraum2.setRealisierungVon(null);
         realisierungsZeitraum2.setRealisierungBis(null);
 
-        result = this.wohneinheitenInformationService.aggregate(
-                realisierungsZeitraum1,
-                realisierungsZeitraum2
-        );
+        result = this.wohneinheitenInformationService.aggregate(realisierungsZeitraum1, realisierungsZeitraum2);
 
         expected = new RealisierungsZeitraumModel();
         expected.setRealisierungVon(2021);
         expected.setRealisierungBis(2031);
 
-        assertThat(
-                result,
-                is(expected)
-        );
+        assertThat(result, is(expected));
 
         // ---
 
@@ -452,19 +387,13 @@ class WohneinheitenInformationServiceTest {
         realisierungsZeitraum2.setRealisierungVon(1998);
         realisierungsZeitraum2.setRealisierungBis(1999);
 
-        result = this.wohneinheitenInformationService.aggregate(
-                realisierungsZeitraum1,
-                realisierungsZeitraum2
-        );
+        result = this.wohneinheitenInformationService.aggregate(realisierungsZeitraum1, realisierungsZeitraum2);
 
         expected = new RealisierungsZeitraumModel();
         expected.setRealisierungVon(1998);
         expected.setRealisierungBis(2031);
 
-        assertThat(
-                result,
-                is(expected)
-        );
+        assertThat(result, is(expected));
 
         // ---
 
@@ -475,19 +404,13 @@ class WohneinheitenInformationServiceTest {
         realisierungsZeitraum2.setRealisierungVon(2021);
         realisierungsZeitraum2.setRealisierungBis(2031);
 
-        result = this.wohneinheitenInformationService.aggregate(
-                realisierungsZeitraum1,
-                realisierungsZeitraum2
-        );
+        result = this.wohneinheitenInformationService.aggregate(realisierungsZeitraum1, realisierungsZeitraum2);
 
         expected = new RealisierungsZeitraumModel();
         expected.setRealisierungVon(1998);
         expected.setRealisierungBis(2031);
 
-        assertThat(
-                result,
-                is(expected)
-        );
+        assertThat(result, is(expected));
 
         // ---
 
@@ -498,20 +421,13 @@ class WohneinheitenInformationServiceTest {
         realisierungsZeitraum2.setRealisierungVon(2026);
         realisierungsZeitraum2.setRealisierungBis(2042);
 
-        result = this.wohneinheitenInformationService.aggregate(
-                realisierungsZeitraum1,
-                realisierungsZeitraum2
-        );
+        result = this.wohneinheitenInformationService.aggregate(realisierungsZeitraum1, realisierungsZeitraum2);
 
         expected = new RealisierungsZeitraumModel();
         expected.setRealisierungVon(2021);
         expected.setRealisierungBis(2042);
 
-        assertThat(
-                result,
-                is(expected)
-        );
-
+        assertThat(result, is(expected));
     }
 
     @Test
@@ -519,10 +435,6 @@ class WohneinheitenInformationServiceTest {
         final var expected = new WohneinheitenInformationModel();
         expected.setRealisierungsZeitraum(new RealisierungsZeitraumModel());
 
-        assertThat(
-                this.wohneinheitenInformationService.initEmptyWohneinheitenInformationModel(),
-                is(expected)
-        );
+        assertThat(this.wohneinheitenInformationService.initEmptyWohneinheitenInformationModel(), is(expected));
     }
-
 }

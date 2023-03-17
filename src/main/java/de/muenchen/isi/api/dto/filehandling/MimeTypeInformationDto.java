@@ -14,5 +14,4 @@ public class MimeTypeInformationDto {
     private String description;
 
     private String acronym;
-
 }

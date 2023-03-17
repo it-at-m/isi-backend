@@ -4,16 +4,6 @@
  */
 package de.muenchen.isi.configuration.nfcconverter;
 
-import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections4.IteratorUtils;
-import org.apache.commons.io.IOUtils;
-
-import javax.servlet.ServletException;
-import javax.servlet.ServletInputStream;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletRequestWrapper;
-import javax.servlet.http.Part;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -24,7 +14,15 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
+import javax.servlet.ServletException;
+import javax.servlet.ServletInputStream;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequestWrapper;
+import javax.servlet.http.Part;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.IteratorUtils;
+import org.apache.commons.io.IOUtils;
 
 /**
  * Wrapper für HttpServletRequest, der NFC-Konvertierung durchführt.
@@ -194,7 +192,6 @@ public class NfcRequest extends HttpServletRequestWrapper implements HttpServlet
 
     @Override
     public ServletInputStream getInputStream() throws IOException {
-
         final String encoding = getOriginalRequest().getCharacterEncoding();
 
         String content = null;
@@ -210,5 +207,4 @@ public class NfcRequest extends HttpServletRequestWrapper implements HttpServlet
     private HttpServletRequest getOriginalRequest() {
         return (HttpServletRequest) getRequest();
     }
-
 }

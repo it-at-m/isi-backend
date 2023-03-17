@@ -20,5 +20,4 @@ public class FoerdermixStammModel extends BaseEntityModel {
     private String bezeichnung;
 
     private FoerdermixModel foerdermix;
-
 }

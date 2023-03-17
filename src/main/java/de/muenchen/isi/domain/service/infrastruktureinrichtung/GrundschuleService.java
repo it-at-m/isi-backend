@@ -9,15 +9,14 @@ import de.muenchen.isi.domain.model.infrastruktureinrichtung.GrundschuleModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.InfrastruktureinrichtungModel;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Grundschule;
 import de.muenchen.isi.infrastructure.repository.infrastruktureinrichtung.GrundschuleRepository;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -35,8 +34,8 @@ public class GrundschuleService {
      */
     public List<GrundschuleModel> getGrundschulen() {
         return this.grundschuleRepository.findAllByOrderByInfrastruktureinrichtungNameEinrichtungAsc()
-                .map(this.infrastruktureinrichtungDomainMapper::entity2Model)
-                .collect(Collectors.toList());
+            .map(this.infrastruktureinrichtungDomainMapper::entity2Model)
+            .collect(Collectors.toList());
     }
 
     /**
@@ -82,7 +81,8 @@ public class GrundschuleService {
      * @throws EntityNotFoundException falls die Grundschule identifiziert durch die {@link GrundschuleModel#getId()} nicht gefunden wird
      * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
      */
-    public GrundschuleModel updateGrundschule(final GrundschuleModel grundschule) throws EntityNotFoundException, OptimisticLockingException {
+    public GrundschuleModel updateGrundschule(final GrundschuleModel grundschule)
+        throws EntityNotFoundException, OptimisticLockingException {
         this.getGrundschuleById(grundschule.getId());
         return this.saveGrundschule(grundschule);
     }
@@ -96,7 +96,9 @@ public class GrundschuleService {
      */
     public void deleteGrundschuleById(final UUID id) throws EntityNotFoundException, EntityIsReferencedException {
         final var grundschule = this.getGrundschuleById(id);
-        this.throwEntityIsReferencedExceptionWhenInfrastruktureinrichtungIsReferencingBauvorhaben(grundschule.getInfrastruktureinrichtung());
+        this.throwEntityIsReferencedExceptionWhenInfrastruktureinrichtungIsReferencingBauvorhaben(
+                grundschule.getInfrastruktureinrichtung()
+            );
         this.grundschuleRepository.deleteById(id);
     }
 
@@ -107,13 +109,19 @@ public class GrundschuleService {
      * @param infrastruktureinrichtung zum Prüfen.
      * @throws EntityIsReferencedException falls das {@link GrundschuleModel} ein {@link BauvorhabenModel} referenziert.
      */
-    protected void throwEntityIsReferencedExceptionWhenInfrastruktureinrichtungIsReferencingBauvorhaben(final InfrastruktureinrichtungModel infrastruktureinrichtung) throws EntityIsReferencedException {
+    protected void throwEntityIsReferencedExceptionWhenInfrastruktureinrichtungIsReferencingBauvorhaben(
+        final InfrastruktureinrichtungModel infrastruktureinrichtung
+    ) throws EntityIsReferencedException {
         final var bauvorhaben = infrastruktureinrichtung.getBauvorhaben();
         if (ObjectUtils.isNotEmpty(bauvorhaben)) {
-            final var message = "Die Infrastruktureinrichtung " + infrastruktureinrichtung.getNameEinrichtung() + " referenziert das Bauvorhaben " + bauvorhaben.getNameVorhaben() + ".";
+            final var message =
+                "Die Infrastruktureinrichtung " +
+                infrastruktureinrichtung.getNameEinrichtung() +
+                " referenziert das Bauvorhaben " +
+                bauvorhaben.getNameVorhaben() +
+                ".";
             log.error(message);
             throw new EntityIsReferencedException(message);
         }
     }
-
 }

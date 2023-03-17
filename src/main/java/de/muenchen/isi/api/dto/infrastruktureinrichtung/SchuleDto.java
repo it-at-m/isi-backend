@@ -4,9 +4,8 @@
  */
 package de.muenchen.isi.api.dto.infrastruktureinrichtung;
 
-import lombok.Data;
-
 import javax.validation.constraints.NotNull;
+import lombok.Data;
 
 @Data
 public class SchuleDto {
@@ -16,5 +15,4 @@ public class SchuleDto {
 
     @NotNull
     private Integer anzahlPlaetze;
-
 }

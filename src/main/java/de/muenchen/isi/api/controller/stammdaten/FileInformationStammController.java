@@ -23,15 +23,16 @@ public class FileInformationStammController {
     private final FileInformationStammService fileInformationStammService;
 
     @GetMapping("stammdaten/file-information")
-    @Operation(description = "Gibt die in der Anwendung erlaubten Dateiendungen, maximalen Dateigrößen, ... zurück (z.B. .pdf).")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "OK")
-    })
-    @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_READ_STAMMDATEN_FILEINFORMATION.name())")
+    @Operation(
+        description = "Gibt die in der Anwendung erlaubten Dateiendungen, maximalen Dateigrößen, ... zurück (z.B. .pdf)."
+    )
+    @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "OK") })
+    @PreAuthorize(
+        "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_READ_STAMMDATEN_FILEINFORMATION.name())"
+    )
     public ResponseEntity<FileInformationDto> getFileInformation() {
         final var model = this.fileInformationStammService.getFileInformation();
         final var dto = this.stammdatenApiMapper.model2Dto(model);
         return ResponseEntity.ok(dto);
     }
-
 }

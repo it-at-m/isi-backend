@@ -19,7 +19,6 @@ import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.web.SecurityFilterChain;
 
-
 /**
  * The central class for configuration of all security aspects.
  */
@@ -38,42 +37,50 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(final HttpSecurity http) throws Exception {
         http
-                .antMatcher("/**").authorizeRequests()
-                // allow access to /actuator/info
-                .antMatchers("/actuator/info").permitAll()
-                // allow access to /actuator/health for OpenShift Health Check
-                .antMatchers("/actuator/health").permitAll()
-                // allow access to /actuator/health/liveness for OpenShift Liveness Check
-                .antMatchers("/actuator/health/liveness").permitAll()
-                // allow access to /actuator/health/readiness for OpenShift Readiness Check
-                .antMatchers("/actuator/health/readiness").permitAll()
-                // allow access to /actuator/metrics for Prometheus monitoring in OpenShift
-                .antMatchers("/actuator/metrics").permitAll()
-                .antMatchers("/**").authenticated()
-                .and()
-                .oauth2ResourceServer()
-                .jwt()
-                // Verwenden eines CustomConverters um die Rechte vom UserInfoEndpunkt zu extrahieren.
-                .jwtAuthenticationConverter(this.customJwtAuthenticationConverter);
+            .antMatcher("/**")
+            .authorizeRequests()
+            // allow access to /actuator/info
+            .antMatchers("/actuator/info")
+            .permitAll()
+            // allow access to /actuator/health for OpenShift Health Check
+            .antMatchers("/actuator/health")
+            .permitAll()
+            // allow access to /actuator/health/liveness for OpenShift Liveness Check
+            .antMatchers("/actuator/health/liveness")
+            .permitAll()
+            // allow access to /actuator/health/readiness for OpenShift Readiness Check
+            .antMatchers("/actuator/health/readiness")
+            .permitAll()
+            // allow access to /actuator/metrics for Prometheus monitoring in OpenShift
+            .antMatchers("/actuator/metrics")
+            .permitAll()
+            .antMatchers("/**")
+            .authenticated()
+            .and()
+            .oauth2ResourceServer()
+            .jwt()
+            // Verwenden eines CustomConverters um die Rechte vom UserInfoEndpunkt zu extrahieren.
+            .jwtAuthenticationConverter(this.customJwtAuthenticationConverter);
         return http.build();
     }
 
     @Bean
-    public AuthorizedClientServiceOAuth2AuthorizedClientManager authorizedClientServiceAndManager(final ClientRegistrationRepository clientRegistrationRepository,
-                                                                                                  final OAuth2AuthorizedClientService authorizedClientService) {
-
+    public AuthorizedClientServiceOAuth2AuthorizedClientManager authorizedClientServiceAndManager(
+        final ClientRegistrationRepository clientRegistrationRepository,
+        final OAuth2AuthorizedClientService authorizedClientService
+    ) {
         final OAuth2AuthorizedClientProvider authorizedClientProvider = OAuth2AuthorizedClientProviderBuilder
-                .builder()
-                .clientCredentials()
-                .build();
+            .builder()
+            .clientCredentials()
+            .build();
 
-        final AuthorizedClientServiceOAuth2AuthorizedClientManager authorizedClientManager = new AuthorizedClientServiceOAuth2AuthorizedClientManager(
+        final AuthorizedClientServiceOAuth2AuthorizedClientManager authorizedClientManager =
+            new AuthorizedClientServiceOAuth2AuthorizedClientManager(
                 clientRegistrationRepository,
                 authorizedClientService
-        );
+            );
         authorizedClientManager.setAuthorizedClientProvider(authorizedClientProvider);
 
         return authorizedClientManager;
     }
-
 }

@@ -9,7 +9,6 @@ import lombok.Getter;
 
 @AllArgsConstructor
 public enum StandVorhaben implements ILookup {
-    
     UNSPECIFIED(ILookup.UNSPECIFIED),
     GRUNDSATZ_ECKDATENBESCHLUSS("Grundsatz- und Eckdatenbeschluss"),
     AUFSTELLUNGSBESCHLUSS("Aufstellungsbeschluss"),
@@ -28,5 +27,4 @@ public enum StandVorhaben implements ILookup {
 
     @Getter
     private final String bezeichnung;
-
 }

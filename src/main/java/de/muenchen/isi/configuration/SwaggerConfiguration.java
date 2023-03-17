@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 @Configuration
-@Profile({"local", "dev"})
+@Profile({ "local", "dev" })
 public class SwaggerConfiguration {
 
     private final String buildVersion;
@@ -23,34 +23,32 @@ public class SwaggerConfiguration {
 
     @Bean
     public OpenAPI openAPI() {
-
         return new OpenAPI()
-                .components(new Components())
-                .info(new Info()
-                        .title("ISI Backend API")
-                        .version(this.buildVersion)
-                        .description("ISI Backend - Serivce für das Informationssystem für soziale Infrastrukturplanung")
-                        .contact(new Contact()
-                                .name("ISI Management")
-                                .email("noreply@mail.de")));
+            .components(new Components())
+            .info(
+                new Info()
+                    .title("ISI Backend API")
+                    .version(this.buildVersion)
+                    .description("ISI Backend - Serivce für das Informationssystem für soziale Infrastrukturplanung")
+                    .contact(new Contact().name("ISI Management").email("noreply@mail.de"))
+            );
     }
 
     @Bean
     @Profile("!prod")
     public String[] whitelist() {
-        return new String[]{
-                // -- swagger ui
-                "/v3/api-docs/**",
-                "/swagger-resources/**",
-                "/swagger-ui/**",
-                "/swagger-ui.html",
+        return new String[] {
+            // -- swagger ui
+            "/v3/api-docs/**",
+            "/swagger-resources/**",
+            "/swagger-ui/**",
+            "/swagger-ui.html",
         };
     }
 
     @Bean
     @Profile("prod")
     public String[] whitelistProd() {
-        return new String[]{};
+        return new String[] {};
     }
-
 }

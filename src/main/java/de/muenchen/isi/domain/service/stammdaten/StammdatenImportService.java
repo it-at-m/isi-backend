@@ -12,16 +12,15 @@ import de.muenchen.isi.infrastructure.entity.stammdaten.StaedtebaulicheOrientier
 import de.muenchen.isi.infrastructure.repository.CsvRepository;
 import de.muenchen.isi.infrastructure.repository.stammdaten.SobonOrientierungswertSozialeInfrastrukturRepository;
 import de.muenchen.isi.infrastructure.repository.stammdaten.StaedtebaulicheOrientierungswertRepository;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -44,9 +43,11 @@ public class StammdatenImportService {
      * @throws FileImportFailedException  tritt auf, falls ein Fehler beim Import passiert.
      * @throws CsvAttributeErrorException tritt auf, falls ein Attribut in der CSV nicht gesetzt oder fehlerhaft ist.
      */
-    public void importStaedtebaulicheOrientierungswerte(final MultipartFile csvImportFile) throws FileImportFailedException, CsvAttributeErrorException {
+    public void importStaedtebaulicheOrientierungswerte(final MultipartFile csvImportFile)
+        throws FileImportFailedException, CsvAttributeErrorException {
         try (final InputStreamReader csvInputStreamReader = new InputStreamReader(csvImportFile.getInputStream())) {
-            final List<StaedtebaulicheOrientierungswert> entities = this.csvRepository.readAllStaedtebaulicheOrientierungswertCsv(csvInputStreamReader)
+            final List<StaedtebaulicheOrientierungswert> entities =
+                this.csvRepository.readAllStaedtebaulicheOrientierungswertCsv(csvInputStreamReader)
                     .stream()
                     .map(this.stammdatenDomainMapper::csv2Entity)
                     .collect(Collectors.toList());
@@ -70,9 +71,11 @@ public class StammdatenImportService {
      * @throws FileImportFailedException  tritt auf, falls ein Fehler beim Import passiert.
      * @throws CsvAttributeErrorException tritt auf, falls ein Attribut in der CSV nicht gesetzt oder fehlerhaft ist.
      */
-    public void importSobonOrientierungswerteSozialeInfrastruktur(final MultipartFile csvImportFile) throws FileImportFailedException, CsvAttributeErrorException {
+    public void importSobonOrientierungswerteSozialeInfrastruktur(final MultipartFile csvImportFile)
+        throws FileImportFailedException, CsvAttributeErrorException {
         try (final InputStreamReader csvInputStreamReader = new InputStreamReader(csvImportFile.getInputStream())) {
-            final List<SobonOrientierungswertSozialeInfrastruktur> entities = this.csvRepository.readAllSobonOrientierungswertSozialeInfrastrukturCsv(csvInputStreamReader)
+            final List<SobonOrientierungswertSozialeInfrastruktur> entities =
+                this.csvRepository.readAllSobonOrientierungswertSozialeInfrastrukturCsv(csvInputStreamReader)
                     .stream()
                     .map(this.stammdatenDomainMapper::csv2Entity)
                     .collect(Collectors.toList());
@@ -81,11 +84,11 @@ public class StammdatenImportService {
             log.error(exception.getMessage());
             throw new CsvAttributeErrorException(exception.getMessage(), exception);
         } catch (final IOException | DataAccessException exception) {
-            final var message = "Der Import einer CSV-Datei für SoBoNOrientierungswerteSozialeInfrastruktur ist fehlgeschlagen.";
+            final var message =
+                "Der Import einer CSV-Datei für SoBoNOrientierungswerteSozialeInfrastruktur ist fehlgeschlagen.";
             log.error(message);
             log.error(exception.getMessage());
             throw new FileImportFailedException(message, exception);
         }
     }
-
 }
