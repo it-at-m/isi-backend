@@ -1,6 +1,8 @@
 package de.muenchen.isi.api.controller;
 
+import de.muenchen.isi.api.dto.common.TransitionDto;
 import de.muenchen.isi.api.dto.error.InformationResponseDto;
+import de.muenchen.isi.api.mapper.TransitionApiMapper;
 import de.muenchen.isi.domain.exception.AbfrageStatusNotAllowedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
@@ -16,13 +18,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.constraints.NotNull;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 
 @RequiredArgsConstructor
@@ -34,6 +39,24 @@ public class AbfrageStatusController {
 
     private final AbfrageStatusService abfrageStatusService;
 
+    private final TransitionApiMapper transitionApiMapper;
+
+
+    @GetMapping("{id}/transitions")
+    @Transactional(rollbackFor = OptimisticLockingException.class)
+    @Operation(summary = "Hollt alle möglichen StatusAbfrage Transitions auf Basis der Rolle und des akutellen Status")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK -> Alle mögliche Transistions gefunden"),
+            @ApiResponse(responseCode = "404", description = "NOT_FOUND -> Es gibt keine Abfrage mit der ID.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class))),
+    })
+    @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_FREIGABE_ABFRAGE.name())")
+    public ResponseEntity<List<TransitionDto>> transitions(@PathVariable @NotNull final UUID id) throws EntityNotFoundException {
+        final List<TransitionDto> transistions = abfrageStatusService.getStatusAbfrageEventsBasedOnStateAndRole(id)
+                .stream()
+                .map(this.transitionApiMapper::model2Dto)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(transistions);
+    }
     @PutMapping("{id}/freigabe")
     @Transactional(rollbackFor = OptimisticLockingException.class)
     @Operation(summary = "Setzt eine Infrastrukturabfrage auf den Status OFFEN")
@@ -76,59 +99,31 @@ public class AbfrageStatusController {
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping("{id}/weitere-abfragevarianten-anlegen")
-    @Transactional
-    @Operation(summary = "Setzt eine Infrastrukturabfrage auf den Status IN_ERFASSUNG")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "OK -> Abfrage wurde erfolgreich an Sachbearbeitung Kita/Schule zurückgegeben."),
-            @ApiResponse(responseCode = "404", description = "NOT_FOUND -> Es gibt keine Abfrage mit der ID.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class))),
-            @ApiResponse(responseCode = "409", description = "CONFLICT -> Die Abfrage konnte aufgrund des aktuellen Status oder des bereits existierenden Abfragenamen nicht zur Bearbeitung zurückgegeben werden.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class)))
-    })
-    @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_WEITERE_ABFRAGEVARIANTEN_ANLEGEN_ABFRAGE.name())")
-    public ResponseEntity<Void> weitereAbfragevariantenAnlegen(@PathVariable @NotNull final UUID id) throws EntityNotFoundException, AbfrageStatusNotAllowedException {
-        this.abfrageStatusService.weitereAbfragevariantenAnlegen(id);
-        return ResponseEntity.ok().build();
-    }
-
-    @PutMapping("{id}/keine-zusaetzliche-abfragevariante")
+    @PutMapping("{id}/in-bearbeitung-setzten")
     @Transactional
     @Operation(summary = "Setzt eine Infrastrukturabfrage auf den Status IN_BEARBEITUNG_PLAN")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "OK -> Abfrage wurde erfolgreich an PLAN-HA I/2 zur Bearbeitung weitergegeben."),
+            @ApiResponse(responseCode = "200", description = "OK -> Abfrage wurde erfolgreich zurückgegeben an den Abfrage Ersteller."),
             @ApiResponse(responseCode = "404", description = "NOT_FOUND -> Es gibt keine Abfrage mit der ID.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class))),
-            @ApiResponse(responseCode = "409", description = "CONFLICT -> Die Abfrage konnte aufgrund des aktuellen Status oder des bereits existierenden Abfragenamen nicht weitergegeben werden.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class)))
+            @ApiResponse(responseCode = "409", description = "CONFLICT -> Die Abfrage konnte aufgrund des aktuellen Status oder des bereits existierenden Abfragenamen nicht zur Bearbeitung zurückgegeben werden.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class)))
     })
-    @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_KEINE_ZUSAETZLICHE_ABFRAGEVARIANTE_ABFRAGE.name())")
-    public ResponseEntity<Void> keineZusaetzlicheAbfragevariante(@PathVariable @NotNull final UUID id) throws EntityNotFoundException, AbfrageStatusNotAllowedException {
-        this.abfrageStatusService.keineZusaetzlicheAbfragevariante(id);
+    @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_IN_BEARBEITUNG_SETZTEN.name())")
+    public ResponseEntity<Void> inBearbeitungSetztungInfrastrukturabfrage(@PathVariable @NotNull final UUID id) throws EntityNotFoundException, AbfrageStatusNotAllowedException {
+        this.abfrageStatusService.inBearbeitungSetztungAbfrage(id);
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping("{id}/zusaetzliche-abfragevariante-anlegen")
+    @PutMapping("{id}/korrigieren")
     @Transactional
-    @Operation(summary = "Setzt eine Infrastrukturabfrage auf den Status IN_ERFASSUNG")
+    @Operation(summary = "Setzt eine Infrastrukturabfrage auf den Status IN_BEARBEITUNG_PLAN")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "OK -> Abfrage wurde erfolgreich an Sachbearbeitung Kita/Schule zur Bearbeitung weitergegeben."),
+            @ApiResponse(responseCode = "200", description = "OK -> Abfrage wurde erfolgreich zurückgegeben an den Abfrage Ersteller."),
             @ApiResponse(responseCode = "404", description = "NOT_FOUND -> Es gibt keine Abfrage mit der ID.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class))),
-            @ApiResponse(responseCode = "409", description = "CONFLICT -> Die Abfrage konnte aufgrund des aktuellen Status oder des bereits existierenden Abfragenamen nicht weitergegeben werden.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class)))
+            @ApiResponse(responseCode = "409", description = "CONFLICT -> Die Abfrage konnte aufgrund des aktuellen Status oder des bereits existierenden Abfragenamen nicht zur Bearbeitung zurückgegeben werden.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class)))
     })
-    @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_ZUSAETZLICHE_ABFRAGEVARIANTE_ANLEGEN_ABFRAGE.name())")
-    public ResponseEntity<Void> zusaetzlicheAbfragevarianteAnlegen(@PathVariable @NotNull final UUID id) throws EntityNotFoundException, AbfrageStatusNotAllowedException {
-        this.abfrageStatusService.zusaetzlicheAbfragevarianteAnlegen(id);
-        return ResponseEntity.ok().build();
-    }
-
-    @PutMapping("{id}/speicher-der-varianten")
-    @Transactional
-    @Operation(summary = "Setzt eine Infrastrukturabfrage auf den Status IN_BEARBEITUBG_PLAN")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "OK -> Abfrage wurde erfolgreich an PLAN-HA I/2 zur Bearbeitung weitergegeben."),
-            @ApiResponse(responseCode = "404", description = "NOT_FOUND -> Es gibt keine Abfrage mit der ID.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class))),
-            @ApiResponse(responseCode = "409", description = "CONFLICT -> Die Abfrage konnte aufgrund des aktuellen Status oder des bereits existierenden Abfragenamen nicht weitergegeben werden.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class)))
-    })
-    @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_SPEICHER_DER_VARIANTEN_ABFRAGE.name())")
-    public ResponseEntity<Void> speicherDerVarianten(@PathVariable @NotNull final UUID id) throws EntityNotFoundException, AbfrageStatusNotAllowedException {
-        this.abfrageStatusService.speichernDerVarianten(id);
+    @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_KORRIGIEREN.name())")
+    public ResponseEntity<Void> korrigierenInfrastrukturabfrage(@PathVariable @NotNull final UUID id) throws EntityNotFoundException, AbfrageStatusNotAllowedException {
+        this.abfrageStatusService.korrigierenAbfrage(id);
         return ResponseEntity.ok().build();
     }
 

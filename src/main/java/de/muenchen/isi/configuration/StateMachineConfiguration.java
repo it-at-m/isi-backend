@@ -45,8 +45,6 @@ public class StateMachineConfiguration extends StateMachineConfigurerAdapter<Sta
 
                 // Alle Events vom Status OFFEN
                 .withExternal()
-                .source(StatusAbfrage.OFFEN).target(StatusAbfrage.IN_ERFASSUNG)
-                .event(StatusAbfrageEvents.ZUSAETZLICHE_ABFRAGEVARIANTE)
                 .and()
                 .withExternal()
                 .source(StatusAbfrage.OFFEN).target(StatusAbfrage.ANGELEGT)
@@ -58,23 +56,8 @@ public class StateMachineConfiguration extends StateMachineConfigurerAdapter<Sta
                 .and()
                 .withExternal()
                 .source(StatusAbfrage.OFFEN).target(StatusAbfrage.IN_BEARBEITUNG_PLAN)
-                .event(StatusAbfrageEvents.KEINE_ZUSAEZTLICHE_ABFRAGEVARIANTE)
+                .event(StatusAbfrageEvents.IN_BEARBEITUNG_SETZEN)
                 .and()
-
-                // Alle Events vom Status IN_ERFASSUNG
-                .withExternal()
-                .source(StatusAbfrage.IN_ERFASSUNG).target(StatusAbfrage.IN_BEARBEITUNG_PLAN)
-                .event(StatusAbfrageEvents.SPEICHERN_DER_VARIANTEN)
-                .and()
-                .withExternal()
-                .source(StatusAbfrage.IN_ERFASSUNG).target(StatusAbfrage.ABBRUCH)
-                .event(StatusAbfrageEvents.ABBRECHEN)
-                .and()
-                .withExternal()
-                .source(StatusAbfrage.IN_ERFASSUNG).target(StatusAbfrage.ANGELEGT)
-                .event(StatusAbfrageEvents.ANGABEN_ANPASSEN)
-                .and()
-
                 // Alle Events vom Status IN_BEARBEITUNG_PLAN
                 .withExternal()
                 .source(StatusAbfrage.IN_BEARBEITUNG_PLAN).target(StatusAbfrage.ERLEDIGT)
@@ -92,10 +75,6 @@ public class StateMachineConfiguration extends StateMachineConfigurerAdapter<Sta
                 .source(StatusAbfrage.IN_BEARBEITUNG_PLAN).target(StatusAbfrage.ABBRUCH)
                 .event(StatusAbfrageEvents.ABBRECHEN)
                 .and()
-                .withExternal()
-                .source(StatusAbfrage.IN_BEARBEITUNG_PLAN).target(StatusAbfrage.IN_ERFASSUNG)
-                .event(StatusAbfrageEvents.WEITERE_ABFRAVARIANTEN_ANLEGEN)
-                .and()
 
                 //Alle Events vom Status IN_BEARBEITUNG_FACHREFERATE
                 .withExternal()
@@ -103,12 +82,12 @@ public class StateMachineConfiguration extends StateMachineConfigurerAdapter<Sta
                 .event(StatusAbfrageEvents.BEDARFSMELDUNG_ERFOLGTE)
                 .and()
                 .withExternal()
-                .source(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE).target(StatusAbfrage.ABBRUCH)
-                .event(StatusAbfrageEvents.ABBRECHEN)
+                .source(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE).target(StatusAbfrage.IN_BEARBEITUNG_PLAN)
+                .event(StatusAbfrageEvents.KORRIGIEREN)
                 .and()
                 .withExternal()
-                .source(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE).target(StatusAbfrage.IN_ERFASSUNG)
-                .event(StatusAbfrageEvents.WEITERE_ABFRAVARIANTEN_ANLEGEN)
+                .source(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE).target(StatusAbfrage.ABBRUCH)
+                .event(StatusAbfrageEvents.ABBRECHEN)
                 .and()
 
                 // Alle Events vom Status BEDARFSMELDUNG_ERFOLGT
@@ -119,15 +98,6 @@ public class StateMachineConfiguration extends StateMachineConfigurerAdapter<Sta
                 .withExternal()
                 .source(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT).target(StatusAbfrage.ABBRUCH)
                 .event(StatusAbfrageEvents.ABBRECHEN)
-                .and()
-                .withExternal()
-                .source(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT).target(StatusAbfrage.IN_ERFASSUNG)
-                .event(StatusAbfrageEvents.WEITERE_ABFRAVARIANTEN_ANLEGEN)
-                .and()
-
-                // Alle Events von ERLDEDIGT
-                .withExternal()
-                .source(StatusAbfrage.ERLEDIGT).target(StatusAbfrage.IN_ERFASSUNG)
-                .event(StatusAbfrageEvents.WEITERE_ABFRAVARIANTEN_ANLEGEN);
+                .and();
     }
 }

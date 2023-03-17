@@ -63,7 +63,7 @@ class AbfrageListServiceTest {
         model2.setAbfrage(new AbfrageModel());
         model2.getAbfrage().setNameAbfrage("NameAbfrage2");
         model2.getAbfrage().setStandVorhaben(StandVorhaben.BAUGENEHMIGUNG_ERTEILT);
-        model2.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_ERFASSUNG);
+        model2.getAbfrage().setStatusAbfrage(StatusAbfrage.ANGELEGT);
         model2.getAbfrage().setFristStellungnahme(LocalDate.of(2022, 9, 1));
 
         final InfrastrukturabfrageModel model3 = new InfrastrukturabfrageModel();
@@ -71,7 +71,7 @@ class AbfrageListServiceTest {
         model3.setAbfrage(new AbfrageModel());
         model3.getAbfrage().setNameAbfrage("NameAbfrage2");
         model3.getAbfrage().setStandVorhaben(StandVorhaben.BPLAN_IN_KRAFT);
-        model3.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_ERFASSUNG);
+        model3.getAbfrage().setStatusAbfrage(StatusAbfrage.OFFEN);
         model3.getAbfrage().setFristStellungnahme(LocalDate.of(2022, 12, 1));
 
         final List<InfrastrukturabfrageModel> listInfrastrukturabfrage = List.of(model1, model2, model3);
