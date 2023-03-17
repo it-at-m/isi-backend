@@ -29,7 +29,7 @@ public class Baurate extends BaseEntity {
     @Column(precision = 10, scale = 2, nullable = true)
     private BigDecimal geschossflaecheWohnenGeplant;
 
-    @ManyToOne
-    private Foerderart foerderart;
+    @Embedded
+    private Foerdermix foerdermix;
 
 }

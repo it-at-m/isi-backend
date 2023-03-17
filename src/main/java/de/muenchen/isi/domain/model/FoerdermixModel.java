@@ -4,25 +4,15 @@
  */
 package de.muenchen.isi.domain.model;
 
+import de.muenchen.isi.infrastructure.entity.Foerderart;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Data
 public class FoerdermixModel {
 
-    private BigDecimal anteilFreifinanzierterGeschosswohnungsbau;
-
-    private BigDecimal anteilGefoerderterMietwohnungsbau;
-
-    private BigDecimal anteilMuenchenModell;
-
-    private BigDecimal anteilPreisgedaempfterMietwohnungsbau;
-
-    private BigDecimal anteilKonzeptionellerMietwohnungsbau;
-
-    private BigDecimal anteilBaugemeinschaften;
-
-    private BigDecimal anteilEinUndZweifamilienhaeuser;
+    private List<FoerderartModel> foerderarten;
 
 }

@@ -5,39 +5,15 @@
 package de.muenchen.isi.infrastructure.entity;
 
 import lombok.Data;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
+import javax.persistence.Embeddable;
 import javax.persistence.OneToMany;
-import java.math.BigDecimal;
 import java.util.List;
 
 @Data
-@Entity
+@Embeddable
 public class Foerdermix extends BaseEntity{
 
-    @Column(precision = 10, scale = 2, nullable = true)
-    private BigDecimal anteilFreifinanzierterGeschosswohnungsbau;
-
-    @Column(precision = 10, scale = 2, nullable = true)
-    private BigDecimal anteilGefoerderterMietwohnungsbau;
-
-    @Column(precision = 10, scale = 2, nullable = true)
-    private BigDecimal anteilMuenchenModell;
-
-    @Column(precision = 10, scale = 2, nullable = true)
-    private BigDecimal anteilPreisgedaempfterMietwohnungsbau;
-
-    @Column(precision = 10, scale = 2, nullable = true)
-    private BigDecimal anteilKonzeptionellerMietwohnungsbau;
-
-    @Column(precision = 10, scale = 2, nullable = true)
-    private BigDecimal anteilBaugemeinschaften;
-
-    @Column(precision = 10, scale = 2, nullable = true)
-    private BigDecimal anteilEinUndZweifamilienhaeuser;
-
-    @OneToMany(mappedBy = "foerdermix")
+    @OneToMany
     private List<Foerderart> foerderarten;
 
 }

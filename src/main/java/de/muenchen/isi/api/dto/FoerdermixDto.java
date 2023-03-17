@@ -4,25 +4,13 @@
  */
 package de.muenchen.isi.api.dto;
 
-import lombok.Data;
 
-import java.math.BigDecimal;
+import lombok.Data;
+import java.util.List;
 
 @Data
 public class FoerdermixDto {
 
-    private BigDecimal anteilFreifinanzierterGeschosswohnungsbau;
-
-    private BigDecimal anteilGefoerderterMietwohnungsbau;
-
-    private BigDecimal anteilMuenchenModell;
-
-    private BigDecimal anteilPreisgedaempfterMietwohnungsbau;
-
-    private BigDecimal anteilKonzeptionellerMietwohnungsbau;
-
-    private BigDecimal anteilBaugemeinschaften;
-
-    private BigDecimal anteilEinUndZweifamilienhaeuser;
+    private List<FoerderartDto> foerderarten;
 
 }
