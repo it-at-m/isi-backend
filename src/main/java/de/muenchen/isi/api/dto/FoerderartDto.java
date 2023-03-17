@@ -5,7 +5,7 @@ import lombok.Data;
 import java.math.BigDecimal;
 
 @Data
-public class FoerderartDto {
+public class FoerderartDto extends BaseEntityDto {
 
     private String bezeichnung;
 

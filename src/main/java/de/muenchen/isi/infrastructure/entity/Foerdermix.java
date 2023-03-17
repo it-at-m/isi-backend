@@ -11,7 +11,7 @@ import java.util.List;
 
 @Data
 @Embeddable
-public class Foerdermix extends BaseEntity{
+public class Foerdermix {
 
     @OneToMany
     private List<Foerderart> foerderarten;
