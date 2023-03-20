@@ -35,15 +35,9 @@ public class HasFoerdermixRequiredSumValidator implements ConstraintValidator<Ha
         List<FoerderartDto> foerderarten = value.getFoerderarten();
         for (FoerderartDto foederart : foerderarten) {
             var tmp = ObjectUtils.defaultIfNull(foederart.getAnteilProzent(), BigDecimal.ZERO);
-            sumFoerdermix.add(tmp);
+            sumFoerdermix = sumFoerdermix.add(tmp);
         }
-       /* final BigDecimal sumFoerdermix = ObjectUtils.defaultIfNull(value.getAnteilFreifinanzierterGeschosswohnungsbau(), BigDecimal.ZERO)
-                .add(ObjectUtils.defaultIfNull(value.getAnteilGefoerderterMietwohnungsbau(), BigDecimal.ZERO))
-                .add(ObjectUtils.defaultIfNull(value.getAnteilMuenchenModell(), BigDecimal.ZERO))
-                .add(ObjectUtils.defaultIfNull(value.getAnteilPreisgedaempfterMietwohnungsbau(), BigDecimal.ZERO))
-                .add(ObjectUtils.defaultIfNull(value.getAnteilKonzeptionellerMietwohnungsbau(), BigDecimal.ZERO))
-                .add(ObjectUtils.defaultIfNull(value.getAnteilBaugemeinschaften(), BigDecimal.ZERO))
-                .add(ObjectUtils.defaultIfNull(value.getAnteilEinUndZweifamilienhaeuser(), BigDecimal.ZERO));*/
+        
         return sumFoerdermix.compareTo(REQUIRED_SUM) == 0;
     }
 

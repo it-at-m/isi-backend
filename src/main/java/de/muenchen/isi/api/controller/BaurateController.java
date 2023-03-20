@@ -47,6 +47,7 @@ public class BaurateController {
     private final BaurateApiMapper baurateApiMapper;
 
     @GetMapping("bauraten")
+    @Transactional
     @Operation(summary = "Lesen aller Bauraten")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK")
