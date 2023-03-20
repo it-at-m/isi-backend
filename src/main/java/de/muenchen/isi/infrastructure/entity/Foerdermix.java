@@ -5,7 +5,6 @@
 package de.muenchen.isi.infrastructure.entity;
 
 import lombok.Data;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Embeddable;
 import javax.persistence.FetchType;
