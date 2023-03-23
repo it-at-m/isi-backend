@@ -1,0 +1,4 @@
+# Build directories
+apigateway/target
+frontend/dist
+frontend/target
