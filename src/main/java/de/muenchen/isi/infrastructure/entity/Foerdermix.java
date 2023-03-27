@@ -15,7 +15,7 @@ import java.util.List;
 @Embeddable
 public class Foerdermix {
 
-    @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER, orphanRemoval = true)
+    @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Foerderart> foerderarten;
 
 }
