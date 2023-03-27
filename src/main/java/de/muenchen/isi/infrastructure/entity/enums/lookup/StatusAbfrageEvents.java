@@ -12,18 +12,18 @@ public enum StatusAbfrageEvents {
 
     ABBRECHEN("abbrechen", "STONIEREN", 3),
 
-    ANGABEN_ANPASSEN("angabe-anpassen", "", 4),
+    ANGABEN_ANPASSEN("angabe-anpassen", "ANPASSEN", 4),
 
-    KORRIGIEREN("korrigieren", "", 5),
+    KORRIGIEREN("korrigieren", "KORRIGIEREN", 5),
 
-    VERSCHICKEN_DER_STELLUNGNAHME("verschicken-der-stellungnahme", "", 6),
+    VERSCHICKEN_DER_STELLUNGNAHME("verschicken-der-stellungnahme", "VERSCHICKEN", 6),
 
 
-    BEDARFSMELDUNG_ERFOLGTE("bedarfsmeldung-erfolgt", "", 7),
+    BEDARFSMELDUNG_ERFOLGTE("bedarfsmeldung-erfolgt", "BEDARFSMELDUNG", 7),
 
-    SPEICHERN_VON_SOZIALINFRASTRUKTUR_VERSORGUNG("speicher-von-soz-infrastruktur-versorgung", "", 8),
+    SPEICHERN_VON_SOZIALINFRASTRUKTUR_VERSORGUNG("speicher-von-soz-infrastruktur-versorgung", "VERSORGUNG SPEICHERN", 8),
 
-    KEINE_BEARBEITUNG_NOETIG("keine-bearbeitung-noetig", "", 9);
+    KEINE_BEARBEITUNG_NOETIG("keine-bearbeitung-noetig", "KEINE BEARBEITUNG", 9);
     @Getter
     private final String url;
 
