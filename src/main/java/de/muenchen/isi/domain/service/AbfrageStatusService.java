@@ -11,10 +11,10 @@ import de.muenchen.isi.domain.model.common.TransitionModel;
 import de.muenchen.isi.domain.service.util.AuthenticationUtils;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrageEvents;
+import de.muenchen.isi.security.AuthoritiesEnum;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.MultiValuedMap;
-import org.apache.commons.collections4.multimap.ArrayListValuedHashMap;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageHeaders;
 import org.springframework.messaging.support.MessageBuilder;
@@ -32,7 +32,9 @@ import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -277,7 +279,7 @@ public class AbfrageStatusService {
 
     }
 
-   /**
+    /**
      * Entnimmt alle möglichen Statusänderungen aus dem aktuellen Status und der aktuellen Rolle des Nutzers.
      *
      * @param id vom Typ {@link UUID} um die Abfrage zu finden
@@ -285,16 +287,16 @@ public class AbfrageStatusService {
      * @throws EntityNotFoundException falls die Abfrage nicht gefunden wird
      */
     public List<TransitionModel> getStatusAbfrageEventsBasedOnStateAndRole(final UUID id) throws EntityNotFoundException {
-        List<String> userRoles = AuthenticationUtils.getUserRoles();
-        MultiValuedMap<String, StatusAbfrageEvents> rolesAndMatchingEvent = getRolesAndEventsMap();
+        List<AuthoritiesEnum> userRolesAuthorities = AuthenticationUtils.getUserAuthorities();
         List<StatusAbfrageEvents> possibleAbfrageEventsBasedOnRole = new ArrayList<>();
+        Map<AuthoritiesEnum, StatusAbfrageEvents> rolesAndMatchingEvent = getRolesAndEventsMap();
         List<TransitionModel> possibleTransitionsModel = new ArrayList<>();
-        for(String userRole : userRoles) {
-            possibleAbfrageEventsBasedOnRole.addAll(rolesAndMatchingEvent.get(userRole));
+        for (AuthoritiesEnum userRole : userRolesAuthorities) {
+            possibleAbfrageEventsBasedOnRole.add(rolesAndMatchingEvent.get(userRole));
         }
         List<StatusAbfrageEvents> matchingAbfrageEvents = new ArrayList<>(getStatusAbfrageEventsBasedOnState(id));
         matchingAbfrageEvents.retainAll(possibleAbfrageEventsBasedOnRole);
-        for(StatusAbfrageEvents event : matchingAbfrageEvents) {
+        for (StatusAbfrageEvents event : matchingAbfrageEvents) {
             TransitionModel transitionModel = new TransitionModel();
             transitionModel.setUrl(event.getUrl());
             transitionModel.setButtonName(event.getButtonName());
@@ -310,29 +312,17 @@ public class AbfrageStatusService {
      *
      * @return {@link MultiValuedMap}
      */
-    private MultiValuedMap<String, StatusAbfrageEvents> getRolesAndEventsMap() {
-        final MultiValuedMap<String, StatusAbfrageEvents> rolesAndEvents = new ArrayListValuedHashMap<>();
-        rolesAndEvents.put("lhm-isi-admin", StatusAbfrageEvents.FREIGABE);
-        rolesAndEvents.put("lhm-isi-admin", StatusAbfrageEvents.ABBRECHEN);
-        rolesAndEvents.put("lhm-isi-admin", StatusAbfrageEvents.BEDARFSMELDUNG_ERFOLGTE);
-        rolesAndEvents.put("lhm-isi-admin", StatusAbfrageEvents.KEINE_BEARBEITUNG_NOETIG);
-        rolesAndEvents.put("lhm-isi-admin", StatusAbfrageEvents.ANGABEN_ANPASSEN);
-        rolesAndEvents.put("lhm-isi-admin", StatusAbfrageEvents.KORRIGIEREN);
-        rolesAndEvents.put("lhm-isi-admin", StatusAbfrageEvents.SPEICHERN_VON_SOZIALINFRASTRUKTUR_VERSORGUNG);
-        rolesAndEvents.put("lhm-isi-admin", StatusAbfrageEvents.VERSCHICKEN_DER_STELLUNGNAHME);
-        rolesAndEvents.put("lhm-isi-admin", StatusAbfrageEvents.IN_BEARBEITUNG_SETZEN);
-
-        rolesAndEvents.put("lhm-isi-abfrageersteller", StatusAbfrageEvents.FREIGABE);
-        rolesAndEvents.put("lhm-isi-abfrageersteller", StatusAbfrageEvents.BEDARFSMELDUNG_ERFOLGTE);
-
-        rolesAndEvents.put("lhm-isi-sachbearbeiter_kita_schule_PLAN", StatusAbfrageEvents.ABBRECHEN);
-        rolesAndEvents.put("lhm-isi-sachbearbeiter_kita_schule_PLAN", StatusAbfrageEvents.ANGABEN_ANPASSEN);
-        rolesAndEvents.put("lhm-isi-sachbearbeiter_kita_schule_PLAN", StatusAbfrageEvents.IN_BEARBEITUNG_SETZEN);
-        rolesAndEvents.put("lhm-isi-sachbearbeiter_kita_schule_PLAN", StatusAbfrageEvents.KORRIGIEREN);
-        rolesAndEvents.put("lhm-isi-sachbearbeiter_kita_schule_PLAN", StatusAbfrageEvents.KEINE_BEARBEITUNG_NOETIG);
-        rolesAndEvents.put("lhm-isi-sachbearbeiter_kita_schule_PLAN", StatusAbfrageEvents.VERSCHICKEN_DER_STELLUNGNAHME);
-        rolesAndEvents.put("lhm-isi-sachbearbeiter_kita_schule_PLAN", StatusAbfrageEvents.BEDARFSMELDUNG_ERFOLGTE);
-        rolesAndEvents.put("lhm-isi-sachbearbeiter_kita_schule_PLAN", StatusAbfrageEvents.SPEICHERN_VON_SOZIALINFRASTRUKTUR_VERSORGUNG);
+    private Map<AuthoritiesEnum, StatusAbfrageEvents> getRolesAndEventsMap() {
+        final Map<AuthoritiesEnum, StatusAbfrageEvents> rolesAndEvents = new HashMap<>();
+        rolesAndEvents.put(AuthoritiesEnum.ISI_BACKEND_FREIGABE_ABFRAGE, StatusAbfrageEvents.FREIGABE);
+        rolesAndEvents.put(AuthoritiesEnum.ISI_BACKEND_ABBRECHEN_ABFRAGE, StatusAbfrageEvents.ABBRECHEN);
+        rolesAndEvents.put(AuthoritiesEnum.ISI_BACKEND_ANGABEN_ANPASSEN_ABFRAGE, StatusAbfrageEvents.ANGABEN_ANPASSEN);
+        rolesAndEvents.put(AuthoritiesEnum.ISI_BACKEND_IN_BEARBEITUNG_SETZTEN, StatusAbfrageEvents.IN_BEARBEITUNG_SETZEN);
+        rolesAndEvents.put(AuthoritiesEnum.ISI_BACKEND_KORRIGIEREN, StatusAbfrageEvents.KORRIGIEREN);
+        rolesAndEvents.put(AuthoritiesEnum.ISI_BACKEND_KEINE_BEARBEITUNG_NOETIG_ABFRAGE, StatusAbfrageEvents.KEINE_BEARBEITUNG_NOETIG);
+        rolesAndEvents.put(AuthoritiesEnum.ISI_BACKEND_VERSCHICKEN_DER_STELLUNGNAHME_ABFRAGE, StatusAbfrageEvents.VERSCHICKEN_DER_STELLUNGNAHME);
+        rolesAndEvents.put(AuthoritiesEnum.ISI_BACKEND_BEDARFSMELDUNG_ERFOLGT_ABFRAGE, StatusAbfrageEvents.BEDARFSMELDUNG_ERFOLGTE);
+        rolesAndEvents.put(AuthoritiesEnum.ISI_BACKEND_SPEICHERN_VON_SOZIALINFRASTRUKTUR_VERSORGUNG_ABFRAGE, StatusAbfrageEvents.SPEICHERN_VON_SOZIALINFRASTRUKTUR_VERSORGUNG);
 
         return rolesAndEvents;
     }

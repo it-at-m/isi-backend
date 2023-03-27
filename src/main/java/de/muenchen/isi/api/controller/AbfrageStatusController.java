@@ -57,6 +57,7 @@ public class AbfrageStatusController {
                 .collect(Collectors.toList());
         return ResponseEntity.ok(transistions);
     }
+
     @PutMapping("{id}/freigabe")
     @Transactional(rollbackFor = OptimisticLockingException.class)
     @Operation(summary = "Setzt eine Infrastrukturabfrage auf den Status OFFEN")
@@ -182,5 +183,5 @@ public class AbfrageStatusController {
         this.abfrageStatusService.speichernVonSozialinfrastrukturVersorgung(id);
         return ResponseEntity.ok().build();
     }
-    
+
 }
