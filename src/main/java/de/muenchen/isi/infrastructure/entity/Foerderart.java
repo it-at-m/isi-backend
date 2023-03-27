@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 
 @Entity
 @Data
-public class Foerderart extends  BaseEntity {
+public class Foerderart extends BaseEntity {
 
     private String bezeichnung;
 

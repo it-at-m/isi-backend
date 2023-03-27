@@ -259,7 +259,7 @@ public class DatabaseFiller implements CommandLineRunner {
 
         Foerderart foerderart2 = new Foerderart();
         foerderart2.setBezeichnung("AnteilBaugemeinschaft");
-        foerderart2.setAnteilProzent(BigDecimal.valueOf(40));
+        foerderart2.setAnteilProzent(BigDecimal.valueOf(60));
 
         List<Foerderart> foerderarten = new ArrayList<>(Arrays.asList(foerderart, foerderart2));
         foerdermix.setFoerderarten(foerderarten);
@@ -302,7 +302,7 @@ public class DatabaseFiller implements CommandLineRunner {
 
         Foerderart foerderart2 = new Foerderart();
         foerderart2.setBezeichnung("AnteilBaugemeinschaft");
-        foerderart2.setAnteilProzent(BigDecimal.valueOf(40));
+        foerderart2.setAnteilProzent(BigDecimal.valueOf(60));
 
         List<Foerderart> foerderarten = new ArrayList<>(Arrays.asList(foerderart, foerderart2));
         foerdermix.setFoerderarten(foerderarten);
@@ -317,7 +317,7 @@ public class DatabaseFiller implements CommandLineRunner {
         final Foerdermix foerdermix2 = new Foerdermix();
         Foerderart foerderart21 = new Foerderart();
         foerderart21.setBezeichnung("AnteilBaugemeinschaften");
-        foerderart21.setAnteilProzent(BigDecimal.valueOf(10.00));
+        foerderart21.setAnteilProzent(BigDecimal.valueOf(69.50));
 
         Foerderart foerderart22 = new Foerderart();
         foerderart22.setBezeichnung("AnteilFreifinanzierterGeschosswohnungsbau");
@@ -336,14 +336,34 @@ public class DatabaseFiller implements CommandLineRunner {
 
         final Foerdermix foerdermix3 = new Foerdermix();
         Foerderart foerderart31 = new Foerderart();
-        foerderart31.setBezeichnung("AnteilEinUndZweifamilienhaeuser");
-        foerderart31.setAnteilProzent(BigDecimal.valueOf(45));
+        foerderart31.setBezeichnung("FreifinanzierterGeschosswohnungsbau");
+        foerderart31.setAnteilProzent(BigDecimal.valueOf(10));
 
         Foerderart foerderart32 = new Foerderart();
-        foerderart32.setBezeichnung("AnteilGefoerderterMietwohnungsbau");
-        foerderart32.setAnteilProzent(BigDecimal.valueOf(34));
+        foerderart32.setBezeichnung("GefoerderterMietwohnungsbau");
+        foerderart32.setAnteilProzent(BigDecimal.valueOf(20));
 
-        List<Foerderart> foerderarten3 = new ArrayList<>(Arrays.asList(foerderart31, foerderart32));
+        Foerderart foerderart33 = new Foerderart();
+        foerderart33.setBezeichnung("MuenchenModell");
+        foerderart33.setAnteilProzent(BigDecimal.valueOf(10));
+
+        Foerderart foerderart34 = new Foerderart();
+        foerderart34.setBezeichnung("PreisgedaempfterMietwohnungsbau");
+        foerderart34.setAnteilProzent(BigDecimal.valueOf(10));
+
+        Foerderart foerderart35 = new Foerderart();
+        foerderart35.setBezeichnung("KonzeptionellerMietwohnungsbau");
+        foerderart35.setAnteilProzent(BigDecimal.valueOf(10));
+
+        Foerderart foerderart36 = new Foerderart();
+        foerderart36.setBezeichnung("Baugemeinschaften");
+        foerderart36.setAnteilProzent(BigDecimal.valueOf(10));
+
+        Foerderart foerderart37 = new Foerderart();
+        foerderart37.setBezeichnung("EinUndZweifamilienhaeuser");
+        foerderart37.setAnteilProzent(BigDecimal.valueOf(30));
+
+        List<Foerderart> foerderarten3 = new ArrayList<>(Arrays.asList(foerderart31, foerderart32,foerderart33, foerderart34,foerderart35,foerderart36,foerderart37));
         foerdermix3.setFoerderarten(foerderarten3);
 
         foerdermixStamm2017.setFoerdermix(foerdermix3);
@@ -357,11 +377,11 @@ public class DatabaseFiller implements CommandLineRunner {
         final Foerdermix foerdermix4 = new Foerdermix();
         Foerderart foerderart41 = new Foerderart();
         foerderart41.setBezeichnung("AnteilPreisgedaempfterMietwohnungsbau");
-        foerderart41.setAnteilProzent(BigDecimal.valueOf(31));
+        foerderart41.setAnteilProzent(BigDecimal.valueOf(42));
 
         Foerderart foerderart42 = new Foerderart();
         foerderart42.setBezeichnung("AnteilKonzeptionellerMietwohnungsbau");
-        foerderart42.setAnteilProzent(BigDecimal.valueOf(49));
+        foerderart42.setAnteilProzent(BigDecimal.valueOf(58));
 
         List<Foerderart> foerderarten4 = new ArrayList<>(Arrays.asList(foerderart41, foerderart42));
         foerdermix4.setFoerderarten(foerderarten4);
