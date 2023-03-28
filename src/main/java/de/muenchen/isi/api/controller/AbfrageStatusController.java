@@ -100,7 +100,7 @@ public class AbfrageStatusController {
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping("{id}/in-bearbeitung-setzten")
+    @PutMapping("{id}/in-bearbeitung-setzen")
     @Transactional
     @Operation(summary = "Setzt eine Infrastrukturabfrage auf den Status IN_BEARBEITUNG_PLAN")
     @ApiResponses(value = {
@@ -109,8 +109,8 @@ public class AbfrageStatusController {
             @ApiResponse(responseCode = "409", description = "CONFLICT -> Die Abfrage konnte aufgrund des aktuellen Status oder des bereits existierenden Abfragenamen nicht zur Bearbeitung zurückgegeben werden.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class)))
     })
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_IN_BEARBEITUNG_SETZTEN.name())")
-    public ResponseEntity<Void> inBearbeitungSetztungInfrastrukturabfrage(@PathVariable @NotNull final UUID id) throws EntityNotFoundException, AbfrageStatusNotAllowedException {
-        this.abfrageStatusService.inBearbeitungSetztungAbfrage(id);
+    public ResponseEntity<Void> inBearbeitungSetzenInfrastrukturabfrage(@PathVariable @NotNull final UUID id) throws EntityNotFoundException, AbfrageStatusNotAllowedException {
+        this.abfrageStatusService.inBearbeitungSetzenAbfrage(id);
         return ResponseEntity.ok().build();
     }
 

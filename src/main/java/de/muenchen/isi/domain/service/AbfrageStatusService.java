@@ -71,7 +71,7 @@ public class AbfrageStatusService {
      * @throws EntityNotFoundException          falls die Abfrage nicht gefunden wird
      * @throws AbfrageStatusNotAllowedException wenn die Statusänderung nicht erlaubt ist
      */
-    public void inBearbeitungSetztungAbfrage(final UUID id) throws EntityNotFoundException, AbfrageStatusNotAllowedException {
+    public void inBearbeitungSetzenAbfrage(final UUID id) throws EntityNotFoundException, AbfrageStatusNotAllowedException {
         final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id);
         this.sendEvent(id, StatusAbfrageEvents.IN_BEARBEITUNG_SETZEN, stateMachine);
     }
