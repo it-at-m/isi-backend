@@ -162,7 +162,7 @@ public class TransitionModelTest {
 
         TransitionModel firstPossibleTransition = new TransitionModel();
         firstPossibleTransition.setIndex(2);
-        firstPossibleTransition.setButtonName("BEARBEITEN");
+        firstPossibleTransition.setButtonName("IN BEARBEITUNG SETZEN");
         firstPossibleTransition.setUrl("in-bearbeitung-setzten");
 
         expected.add(firstPossibleTransition);
@@ -176,7 +176,7 @@ public class TransitionModelTest {
 
         TransitionModel thirdPossibleTransition = new TransitionModel();
         thirdPossibleTransition.setIndex(4);
-        thirdPossibleTransition.setButtonName("ANPASSEN");
+        thirdPossibleTransition.setButtonName("ANGABEN ANPASSEN");
         thirdPossibleTransition.setUrl("angabe-anpassen");
 
         expected.add(thirdPossibleTransition);
@@ -205,7 +205,7 @@ public class TransitionModelTest {
 
         TransitionModel firstPossibleTransition = new TransitionModel();
         firstPossibleTransition.setIndex(2);
-        firstPossibleTransition.setButtonName("BEARBEITEN");
+        firstPossibleTransition.setButtonName("IN BEARBEITUNG SETZEN");
         firstPossibleTransition.setUrl("in-bearbeitung-setzten");
 
         expected.add(firstPossibleTransition);
@@ -219,7 +219,7 @@ public class TransitionModelTest {
 
         TransitionModel thirdPossibleTransition = new TransitionModel();
         thirdPossibleTransition.setIndex(4);
-        thirdPossibleTransition.setButtonName("ANPASSEN");
+        thirdPossibleTransition.setButtonName("ANGABEN ANPASSEN");
         thirdPossibleTransition.setUrl("angabe-anpassen");
 
         expected.add(thirdPossibleTransition);
@@ -289,14 +289,14 @@ public class TransitionModelTest {
 
         TransitionModel secondPossibleTransition = new TransitionModel();
         secondPossibleTransition.setIndex(4);
-        secondPossibleTransition.setButtonName("ANPASSEN");
+        secondPossibleTransition.setButtonName("ANGABEN ANPASSEN");
         secondPossibleTransition.setUrl("angabe-anpassen");
 
         expected.add(secondPossibleTransition);
 
         TransitionModel thirdPossibleTransition = new TransitionModel();
         thirdPossibleTransition.setIndex(6);
-        thirdPossibleTransition.setButtonName("VERSCHICKEN");
+        thirdPossibleTransition.setButtonName("VERSCHICKEN STELLUNGNAHME");
         thirdPossibleTransition.setUrl("verschicken-der-stellungnahme");
 
         expected.add(thirdPossibleTransition);
@@ -340,14 +340,14 @@ public class TransitionModelTest {
 
         TransitionModel secondPossibleTransition = new TransitionModel();
         secondPossibleTransition.setIndex(4);
-        secondPossibleTransition.setButtonName("ANPASSEN");
+        secondPossibleTransition.setButtonName("ANGABEN ANPASSEN");
         secondPossibleTransition.setUrl("angabe-anpassen");
 
         expected.add(secondPossibleTransition);
 
         TransitionModel thirdPossibleTransition = new TransitionModel();
         thirdPossibleTransition.setIndex(6);
-        thirdPossibleTransition.setButtonName("VERSCHICKEN");
+        thirdPossibleTransition.setButtonName("VERSCHICKEN STELLUNGNAHME");
         thirdPossibleTransition.setUrl("verschicken-der-stellungnahme");
 
         expected.add(thirdPossibleTransition);
