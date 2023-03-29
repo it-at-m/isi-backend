@@ -52,9 +52,9 @@ public class SecurityContextFactory implements WithSecurityContextFactory<MockCu
         if (customUser.roles()[0].equals("lhm-isi-nutzer")) {
             authoritiesRoles[0] = "ISI_BACKEND_READ_ABFRAGE";
         }
-
-        System.out.println("--- LÄNGE --- :" + authoritiesRoles.length);
-
+        for (String item : authoritiesRoles) {
+            System.out.println("--- " + customUser.roles()[0] + " --- :" + item);
+        }
         SecurityContext context = SecurityContextHolder.createEmptyContext();
         JSONArray roles = new JSONArray();
 
