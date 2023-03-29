@@ -10,9 +10,11 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -33,7 +35,7 @@ public class FoerdermixStamm extends BaseEntity {
     @Column(length = 80, nullable = false)
     private String bezeichnung;
 
-    @Embedded
+    @OneToOne(cascade = CascadeType.ALL)
     private Foerdermix foerdermix;
 
 }

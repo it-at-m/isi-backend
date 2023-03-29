@@ -5,17 +5,17 @@
 package de.muenchen.isi.infrastructure.entity;
 
 import lombok.Data;
-import javax.persistence.CascadeType;
-import javax.persistence.Embeddable;
+
+import javax.persistence.ElementCollection;
+import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.OneToMany;
 import java.util.List;
 
 @Data
-@Embeddable
-public class Foerdermix {
+@Entity
+public class Foerdermix extends BaseEntity {
 
-    @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY, orphanRemoval = true)
+    @ElementCollection
     private List<Foerderart> foerderarten;
 
 }

@@ -8,10 +8,12 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import java.math.BigDecimal;
 
 @Entity
@@ -29,7 +31,7 @@ public class Baurate extends BaseEntity {
     @Column(precision = 10, scale = 2, nullable = true)
     private BigDecimal geschossflaecheWohnenGeplant;
 
-    @Embedded
+    @OneToOne(cascade = CascadeType.ALL)
     private Foerdermix foerdermix;
 
 }

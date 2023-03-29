@@ -1,12 +1,13 @@
 package de.muenchen.isi.infrastructure.entity;
 
 import lombok.Data;
-import javax.persistence.Entity;
+
+import javax.persistence.Embeddable;
 import java.math.BigDecimal;
 
-@Entity
+@Embeddable
 @Data
-public class Foerderart extends BaseEntity {
+public class Foerderart {
 
     private String bezeichnung;
 

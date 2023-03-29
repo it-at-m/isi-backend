@@ -11,7 +11,7 @@ import org.hibernate.validator.constraints.UniqueElements;
 import java.util.List;
 
 @Data
-public class FoerdermixDto {
+public class FoerdermixDto extends BaseEntityDto{
 
     @UniqueElements(message = "Die Förderart existiert bereits.")
     private List<FoerderartDto> foerderarten;

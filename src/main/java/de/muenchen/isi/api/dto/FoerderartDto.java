@@ -6,7 +6,7 @@ import lombok.EqualsAndHashCode;
 import java.math.BigDecimal;
 
 @Data
-public class FoerderartDto extends BaseEntityDto {
+public class FoerderartDto {
 
     private String bezeichnung;
 

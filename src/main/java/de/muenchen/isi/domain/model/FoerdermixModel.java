@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @Data
-public class FoerdermixModel {
+public class FoerdermixModel extends BaseEntityModel {
 
     private List<FoerderartModel> foerderarten;
 

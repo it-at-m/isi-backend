@@ -171,7 +171,7 @@ public class DatabaseFiller implements CommandLineRunner {
         this.mittelschuleRepository.deleteAll();
     }
 
-    public static Infrastrukturabfrage createNichtOffiziellerVerfahrensschrittInfrastrukturabfrage() {
+    public Infrastrukturabfrage createNichtOffiziellerVerfahrensschrittInfrastrukturabfrage() {
         final Infrastrukturabfrage infrastrukturabfrage = new Infrastrukturabfrage();
 
         final Abfrage abfrage = new Abfrage();
@@ -190,7 +190,7 @@ public class DatabaseFiller implements CommandLineRunner {
         return infrastrukturabfrage;
     }
 
-    public static Infrastrukturabfrage createOffiziellerVerfahrensschrittInfrastrukturabfrage() {
+    public Infrastrukturabfrage createOffiziellerVerfahrensschrittInfrastrukturabfrage() {
         final Infrastrukturabfrage infrastrukturabfrage = new Infrastrukturabfrage();
 
         final Abfrage abfrage = new Abfrage();
@@ -208,7 +208,7 @@ public class DatabaseFiller implements CommandLineRunner {
         return infrastrukturabfrage;
     }
 
-    private static Abfragevariante createAbfragevariante(final int variante) {
+    private Abfragevariante createAbfragevariante(final int variante) {
         final Abfragevariante original = new Abfragevariante();
         original.setAbfragevariantenNr(1);
         original.setPlanungsrecht(variante == 1 ? Planungsrecht.BPLAN_PARAG_30 : Planungsrecht.BPLAN_PARAG_12);
@@ -227,14 +227,14 @@ public class DatabaseFiller implements CommandLineRunner {
         return original;
     }
 
-    private static Bauabschnitt createBauabschnitt() {
+    private Bauabschnitt createBauabschnitt() {
         final Bauabschnitt bauabschnitt = new Bauabschnitt();
         bauabschnitt.setBezeichnung("Der einzigartige Bauabschnitt");
         bauabschnitt.setBaugebiete(List.of(createBaugebiet()));
         return bauabschnitt;
     }
 
-    private static Baugebiet createBaugebiet() {
+    private Baugebiet createBaugebiet() {
         final Baugebiet baugebiet = new Baugebiet();
         baugebiet.setBezeichnung("Das Baugebiet des einzigartigen Baubschnitts");
         baugebiet.setBaugebietTyp(BaugebietTyp.WA);
@@ -242,7 +242,7 @@ public class DatabaseFiller implements CommandLineRunner {
         return baugebiet;
     }
 
-    private static Baurate createBaurate() {
+    private  Baurate createBaurate() {
         final Baurate baurate = new Baurate();
         baurate.setJahr(2022);
         baurate.setAnzahlWeGeplant(10);
@@ -251,7 +251,7 @@ public class DatabaseFiller implements CommandLineRunner {
         return baurate;
     }
 
-    private static Foerdermix createFoerdermix() {
+    private Foerdermix createFoerdermix() {
         final Foerdermix foerdermix = new Foerdermix();
         Foerderart foerderart = new Foerderart();
         foerderart.setBezeichnung("AnteilMuenchenModell");
@@ -263,6 +263,9 @@ public class DatabaseFiller implements CommandLineRunner {
 
         List<Foerderart> foerderarten = new ArrayList<>(Arrays.asList(foerderart, foerderart2));
         foerdermix.setFoerderarten(foerderarten);
+
+        /*FoerdermixStamm foerdermixStamm = this.foerdermixStammRepository.findAll().stream().findFirst().get();
+        Foerdermix foerder = foerdermixStamm.getFoerdermix();*/
 
         return foerdermix;
     }
