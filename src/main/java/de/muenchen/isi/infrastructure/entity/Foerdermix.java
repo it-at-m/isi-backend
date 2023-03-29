@@ -5,10 +5,8 @@
 package de.muenchen.isi.infrastructure.entity;
 
 import lombok.Data;
-
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import java.util.List;
 
 @Data
