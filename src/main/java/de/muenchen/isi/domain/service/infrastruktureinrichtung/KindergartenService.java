@@ -9,15 +9,14 @@ import de.muenchen.isi.domain.model.infrastruktureinrichtung.Infrastruktureinric
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.KindergartenModel;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Kindergarten;
 import de.muenchen.isi.infrastructure.repository.infrastruktureinrichtung.KindergartenRepository;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -35,8 +34,8 @@ public class KindergartenService {
      */
     public List<KindergartenModel> getKindergaerten() {
         return this.kindergartenRepository.findAllByOrderByInfrastruktureinrichtungNameEinrichtungAsc()
-                .map(this.infrastruktureinrichtungDomainMapper::entity2Model)
-                .collect(Collectors.toList());
+            .map(this.infrastruktureinrichtungDomainMapper::entity2Model)
+            .collect(Collectors.toList());
     }
 
     /**
@@ -82,7 +81,8 @@ public class KindergartenService {
      * @throws EntityNotFoundException falls der Kindergarten identifiziert durch die {@link KindergartenModel#getId()} nicht gefunden wird
      * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
      */
-    public KindergartenModel updateKindergarten(final KindergartenModel kindergarten) throws EntityNotFoundException, OptimisticLockingException {
+    public KindergartenModel updateKindergarten(final KindergartenModel kindergarten)
+        throws EntityNotFoundException, OptimisticLockingException {
         this.getKindergartenById(kindergarten.getId());
         return this.saveKindergarten(kindergarten);
     }
@@ -96,7 +96,9 @@ public class KindergartenService {
      */
     public void deleteKindergartenById(final UUID id) throws EntityNotFoundException, EntityIsReferencedException {
         final var kindergarten = this.getKindergartenById(id);
-        this.throwEntityIsReferencedExceptionWhenInfrastruktureinrichtungIsReferencingBauvorhaben(kindergarten.getInfrastruktureinrichtung());
+        this.throwEntityIsReferencedExceptionWhenInfrastruktureinrichtungIsReferencingBauvorhaben(
+                kindergarten.getInfrastruktureinrichtung()
+            );
         this.kindergartenRepository.deleteById(id);
     }
 
@@ -107,13 +109,19 @@ public class KindergartenService {
      * @param infrastruktureinrichtung zum Prüfen.
      * @throws EntityIsReferencedException falls das {@link KindergartenModel} ein {@link BauvorhabenModel} referenziert.
      */
-    protected void throwEntityIsReferencedExceptionWhenInfrastruktureinrichtungIsReferencingBauvorhaben(final InfrastruktureinrichtungModel infrastruktureinrichtung) throws EntityIsReferencedException {
+    protected void throwEntityIsReferencedExceptionWhenInfrastruktureinrichtungIsReferencingBauvorhaben(
+        final InfrastruktureinrichtungModel infrastruktureinrichtung
+    ) throws EntityIsReferencedException {
         final var bauvorhaben = infrastruktureinrichtung.getBauvorhaben();
         if (ObjectUtils.isNotEmpty(bauvorhaben)) {
-            final var message = "Die Infrastruktureinrichtung " + infrastruktureinrichtung.getNameEinrichtung() + " referenziert das Bauvorhaben " + bauvorhaben.getNameVorhaben() + ".";
+            final var message =
+                "Die Infrastruktureinrichtung " +
+                infrastruktureinrichtung.getNameEinrichtung() +
+                " referenziert das Bauvorhaben " +
+                bauvorhaben.getNameVorhaben() +
+                ".";
             log.error(message);
             throw new EntityIsReferencedException(message);
         }
     }
-
 }

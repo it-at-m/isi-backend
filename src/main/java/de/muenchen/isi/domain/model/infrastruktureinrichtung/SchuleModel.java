@@ -12,5 +12,4 @@ public class SchuleModel {
     private Integer anzahlKlassen;
 
     private Integer anzahlPlaetze;
-
 }

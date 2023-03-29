@@ -5,15 +5,14 @@
 package de.muenchen.isi.api.dto;
 
 import de.muenchen.isi.api.validation.HasFoerdermixRequiredSum;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
-
+import java.math.BigDecimal;
 import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import java.math.BigDecimal;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 @Data
 @ToString(callSuper = true)
@@ -33,5 +32,4 @@ public class BaurateDto extends BaseEntityDto {
     @NotNull
     @HasFoerdermixRequiredSum
     private FoerdermixDto foerdermix;
-
 }

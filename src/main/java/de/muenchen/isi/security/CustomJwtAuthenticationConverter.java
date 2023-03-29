@@ -1,5 +1,8 @@
 package de.muenchen.isi.security;
 
+import java.util.Collection;
+import java.util.Map;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
@@ -13,10 +16,6 @@ import org.springframework.security.oauth2.server.resource.authentication.Bearer
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtBearerTokenAuthenticationConverter;
 import org.springframework.stereotype.Component;
-
-import java.util.Collection;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * Ersetzt den {@link JwtAuthenticationConverter} wegen Deprecation.
@@ -40,10 +39,10 @@ public class CustomJwtAuthenticationConverter implements Converter<Jwt, Abstract
     @Override
     public AbstractAuthenticationToken convert(final Jwt jwt) {
         final OAuth2AccessToken accessToken = new OAuth2AccessToken(
-                OAuth2AccessToken.TokenType.BEARER,
-                jwt.getTokenValue(),
-                jwt.getIssuedAt(),
-                jwt.getExpiresAt()
+            OAuth2AccessToken.TokenType.BEARER,
+            jwt.getTokenValue(),
+            jwt.getIssuedAt(),
+            jwt.getExpiresAt()
         );
         final Map<String, Object> attributes = jwt.getClaims();
         // Holen der Authorities vom UserInfoEndpunkt des SSO
@@ -52,11 +51,15 @@ public class CustomJwtAuthenticationConverter implements Converter<Jwt, Abstract
         return new BearerTokenAuthentication(principal, accessToken, authorities);
     }
 
-    protected Collection<GrantedAuthority> loadGrantedAuthoritiesFromUserInfoEndpoint(final OAuth2AccessToken accessToken) {
+    protected Collection<GrantedAuthority> loadGrantedAuthoritiesFromUserInfoEndpoint(
+        final OAuth2AccessToken accessToken
+    ) {
         final var authentication = this.userInfoTokenServices.loadAuthentication(accessToken.getTokenValue());
-        return authentication.getUserAuthentication().getAuthorities().stream()
-                .map(grantedAuthority -> new SimpleGrantedAuthority(grantedAuthority.getAuthority()))
-                .collect(Collectors.toSet());
+        return authentication
+            .getUserAuthentication()
+            .getAuthorities()
+            .stream()
+            .map(grantedAuthority -> new SimpleGrantedAuthority(grantedAuthority.getAuthority()))
+            .collect(Collectors.toSet());
     }
-
 }

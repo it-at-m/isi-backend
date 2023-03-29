@@ -2,13 +2,12 @@ package de.muenchen.isi.configuration;
 
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrageEvents;
+import java.util.EnumSet;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.statemachine.config.EnableStateMachineFactory;
 import org.springframework.statemachine.config.StateMachineConfigurerAdapter;
 import org.springframework.statemachine.config.builders.StateMachineStateConfigurer;
 import org.springframework.statemachine.config.builders.StateMachineTransitionConfigurer;
-
-import java.util.EnumSet;
 
 @Configuration
 @EnableStateMachineFactory
@@ -22,10 +21,11 @@ public class StateMachineConfiguration extends StateMachineConfigurerAdapter<Sta
      */
     @Override
     public void configure(StateMachineStateConfigurer<StatusAbfrage, StatusAbfrageEvents> states) throws Exception {
-        states.withStates()
-                .initial(StatusAbfrage.ANGELEGT)
-                .states(EnumSet.allOf(StatusAbfrage.class))
-                .end(StatusAbfrage.ABBRUCH);
+        states
+            .withStates()
+            .initial(StatusAbfrage.ANGELEGT)
+            .states(EnumSet.allOf(StatusAbfrage.class))
+            .end(StatusAbfrage.ABBRUCH);
     }
 
     /**
@@ -36,7 +36,8 @@ public class StateMachineConfiguration extends StateMachineConfigurerAdapter<Sta
      * @throws Exception wenn ein Fehler in der Configuration auftritt
      */
     @Override
-    public void configure(StateMachineTransitionConfigurer<StatusAbfrage, StatusAbfrageEvents> transitions) throws Exception {
+    public void configure(StateMachineTransitionConfigurer<StatusAbfrage, StatusAbfrageEvents> transitions)
+        throws Exception {
         transitions
                 .withExternal()
                 .source(StatusAbfrage.ANGELEGT).target(StatusAbfrage.OFFEN)
@@ -97,7 +98,6 @@ public class StateMachineConfiguration extends StateMachineConfigurerAdapter<Sta
                 .and()
                 .withExternal()
                 .source(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT).target(StatusAbfrage.ABBRUCH)
-                .event(StatusAbfrageEvents.ABBRECHEN)
-                .and();
+                .event(StatusAbfrageEvents.ABBRECHEN);
     }
 }

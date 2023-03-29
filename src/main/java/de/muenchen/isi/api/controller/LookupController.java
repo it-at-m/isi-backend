@@ -28,15 +28,14 @@ public class LookupController {
 
     @GetMapping("lookup-lists")
     @Operation(summary = "Gibt die Lookuplisten zurück.")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "OK -> Lookuplisten wurden erfolgreich zurückgegeben.")
-    })
+    @ApiResponses(
+        value = {
+            @ApiResponse(responseCode = "200", description = "OK -> Lookuplisten wurden erfolgreich zurückgegeben."),
+        }
+    )
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_LOOKUP_LIST.name())")
     public ResponseEntity<LookupListsDto> getLookupLists() {
-        final LookupListsDto dto = this.lookupApiMapper.model2Dto(
-                this.lookupService.getLookupLists()
-        );
+        final LookupListsDto dto = this.lookupApiMapper.model2Dto(this.lookupService.getLookupLists());
         return ResponseEntity.ok(dto);
     }
-
 }

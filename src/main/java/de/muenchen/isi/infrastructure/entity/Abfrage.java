@@ -8,8 +8,8 @@ import de.muenchen.isi.infrastructure.entity.common.Adresse;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVorhaben;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.entity.filehandling.Dokument;
-import lombok.Data;
-
+import java.time.LocalDate;
+import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -19,14 +19,13 @@ import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import java.time.LocalDate;
-import java.util.List;
+import lombok.Data;
 
 @Embeddable
 @Data
 public class Abfrage {
 
-    @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Dokument> dokumente;
 
     @Column(nullable = true)
@@ -57,5 +56,4 @@ public class Abfrage {
 
     @ManyToOne
     private Bauvorhaben bauvorhaben;
-
 }

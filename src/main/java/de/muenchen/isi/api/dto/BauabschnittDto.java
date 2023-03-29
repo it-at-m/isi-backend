@@ -1,15 +1,14 @@
 package de.muenchen.isi.api.dto;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
-
+import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.List;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 @Data
 @ToString(callSuper = true)
@@ -22,5 +21,4 @@ public class BauabschnittDto extends BaseEntityDto {
 
     @NotEmpty
     private List<@Valid @NotNull BaugebietDto> baugebiete;
-
 }

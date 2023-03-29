@@ -50,13 +50,21 @@ public class KoordinatenService {
             utmDto.setZone("32N");
             utmDto.setEast(result.getX());
             utmDto.setNorth(result.getY());
-
         } catch (FactoryException | TransformException exception) {
             log.error(exception.getMessage());
-            throw new KoordinatenException("Bei der Transformation der Koordinate ist ein Fehler aufgetreten.", exception);
+            throw new KoordinatenException(
+                "Bei der Transformation der Koordinate ist ein Fehler aufgetreten.",
+                exception
+            );
         }
 
-        log.debug("WGS84 {},{} nach UTM {},{} transformiert.", wgs84Dto.getLatitude(), wgs84Dto.getLongitude(), utmDto.getEast(), utmDto.getNorth());
+        log.debug(
+            "WGS84 {},{} nach UTM {},{} transformiert.",
+            wgs84Dto.getLatitude(),
+            wgs84Dto.getLongitude(),
+            utmDto.getEast(),
+            utmDto.getNorth()
+        );
         return utmDto;
     }
 
@@ -81,11 +89,19 @@ public class KoordinatenService {
             wgs84Dto.setLongitude(result.getY());
         } catch (FactoryException | TransformException exception) {
             log.error(exception.getMessage());
-            throw new KoordinatenException("Bei der Transformation der Koordinate ist ein Fehler aufgetreten.", exception);
+            throw new KoordinatenException(
+                "Bei der Transformation der Koordinate ist ein Fehler aufgetreten.",
+                exception
+            );
         }
 
-        log.debug("UTM {},{} nach WGS84 {},{} transformiert.", utmDto.getEast(), utmDto.getNorth(), wgs84Dto.getLatitude(), wgs84Dto.getLongitude());
+        log.debug(
+            "UTM {},{} nach WGS84 {},{} transformiert.",
+            utmDto.getEast(),
+            utmDto.getNorth(),
+            wgs84Dto.getLatitude(),
+            wgs84Dto.getLongitude()
+        );
         return wgs84Dto;
     }
-
 }

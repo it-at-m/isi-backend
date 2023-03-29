@@ -9,5 +9,4 @@ public class FileHandlingFailedException extends Exception {
     public FileHandlingFailedException(final String message) {
         super(message);
     }
-
 }

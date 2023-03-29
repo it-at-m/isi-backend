@@ -4,8 +4,6 @@ import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public enum AbfrageTyp {
-
     INFRASTRUKTURABFRAGE,
-    STANDORTABFRAGE;
-
+    STANDORTABFRAGE,
 }

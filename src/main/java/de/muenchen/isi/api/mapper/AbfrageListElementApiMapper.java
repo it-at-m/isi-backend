@@ -11,7 +11,5 @@ import org.mapstruct.Mapper;
 
 @Mapper(config = MapstructConfiguration.class)
 public interface AbfrageListElementApiMapper {
-
     AbfrageListElementsDto model2Dto(final AbfrageListElementsModel model);
-
 }

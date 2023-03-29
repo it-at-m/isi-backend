@@ -15,12 +15,11 @@ import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVorhaben;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusInfrastruktureinrichtung;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.EnumUtils;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -49,87 +48,122 @@ public class LookupService {
     }
 
     private LookupListModel getArtDokumentList() {
-        final List<LookupEntryModel> list = EnumUtils.getEnumList(ArtDokument.class).stream()
-                .map(item -> new LookupEntryModel(item.toString(), item.getBezeichnung())).collect(Collectors.toList());
+        final List<LookupEntryModel> list = EnumUtils
+            .getEnumList(ArtDokument.class)
+            .stream()
+            .map(item -> new LookupEntryModel(item.toString(), item.getBezeichnung()))
+            .collect(Collectors.toList());
 
         return new LookupListModel(list);
     }
 
     private LookupListModel getArtAbfrageList() {
-        final List<LookupEntryModel> list = EnumUtils.getEnumList(ArtAbfrage.class).stream()
-                .map(item -> new LookupEntryModel(item.toString(), item.getBezeichnung())).collect(Collectors.toList());
+        final List<LookupEntryModel> list = EnumUtils
+            .getEnumList(ArtAbfrage.class)
+            .stream()
+            .map(item -> new LookupEntryModel(item.toString(), item.getBezeichnung()))
+            .collect(Collectors.toList());
 
         return new LookupListModel(list);
     }
 
     private LookupListModel getUncertainBooleanList() {
-        final List<LookupEntryModel> list = EnumUtils.getEnumList(UncertainBoolean.class).stream()
-                .map(item -> new LookupEntryModel(item.toString(), item.getBezeichnung())).collect(Collectors.toList());
+        final List<LookupEntryModel> list = EnumUtils
+            .getEnumList(UncertainBoolean.class)
+            .stream()
+            .map(item -> new LookupEntryModel(item.toString(), item.getBezeichnung()))
+            .collect(Collectors.toList());
 
         return new LookupListModel(list);
     }
 
     private LookupListModel getSobonVerfahrensgrundsaetzeJahrList() {
-        final List<LookupEntryModel> list = EnumUtils.getEnumList(SobonVerfahrensgrundsaetzeJahr.class).stream()
-                .map(item -> new LookupEntryModel(item.toString(), item.getBezeichnung())).collect(Collectors.toList());
+        final List<LookupEntryModel> list = EnumUtils
+            .getEnumList(SobonVerfahrensgrundsaetzeJahr.class)
+            .stream()
+            .map(item -> new LookupEntryModel(item.toString(), item.getBezeichnung()))
+            .collect(Collectors.toList());
 
         return new LookupListModel(list);
     }
 
     private LookupListModel getStandVorhabenList() {
-        final List<LookupEntryModel> list = EnumUtils.getEnumList(StandVorhaben.class).stream()
-                .map(item -> new LookupEntryModel(item.toString(), item.getBezeichnung())).collect(Collectors.toList());
+        final List<LookupEntryModel> list = EnumUtils
+            .getEnumList(StandVorhaben.class)
+            .stream()
+            .map(item -> new LookupEntryModel(item.toString(), item.getBezeichnung()))
+            .collect(Collectors.toList());
 
         return new LookupListModel(list);
     }
 
     private LookupListModel getStatusAbfrageList() {
-        final List<LookupEntryModel> list = EnumUtils.getEnumList(StatusAbfrage.class).stream()
-                .map(item -> new LookupEntryModel(item.toString(), item.getBezeichnung())).collect(Collectors.toList());
+        final List<LookupEntryModel> list = EnumUtils
+            .getEnumList(StatusAbfrage.class)
+            .stream()
+            .map(item -> new LookupEntryModel(item.toString(), item.getBezeichnung()))
+            .collect(Collectors.toList());
 
         return new LookupListModel(list);
     }
 
     private LookupListModel getPlanungsrechtList() {
-        final List<LookupEntryModel> list = EnumUtils.getEnumList(Planungsrecht.class).stream()
-                .map(item -> new LookupEntryModel(item.toString(), item.getBezeichnung())).collect(Collectors.toList());
+        final List<LookupEntryModel> list = EnumUtils
+            .getEnumList(Planungsrecht.class)
+            .stream()
+            .map(item -> new LookupEntryModel(item.toString(), item.getBezeichnung()))
+            .collect(Collectors.toList());
 
         return new LookupListModel(list);
     }
 
     private LookupListModel getBaugebietTypList() {
-        final List<LookupEntryModel> list = EnumUtils.getEnumList(BaugebietTyp.class).stream()
-                .map(item -> new LookupEntryModel(item.toString(), item.getBezeichnung())).collect(Collectors.toList());
+        final List<LookupEntryModel> list = EnumUtils
+            .getEnumList(BaugebietTyp.class)
+            .stream()
+            .map(item -> new LookupEntryModel(item.toString(), item.getBezeichnung()))
+            .collect(Collectors.toList());
 
         return new LookupListModel(list);
     }
 
     private LookupListModel getStatusInfrastruktureinrichtungList() {
-        final List<LookupEntryModel> list = EnumUtils.getEnumList(StatusInfrastruktureinrichtung.class).stream()
-                .map(item -> new LookupEntryModel(item.toString(), item.getBezeichnung())).collect(Collectors.toList());
+        final List<LookupEntryModel> list = EnumUtils
+            .getEnumList(StatusInfrastruktureinrichtung.class)
+            .stream()
+            .map(item -> new LookupEntryModel(item.toString(), item.getBezeichnung()))
+            .collect(Collectors.toList());
 
         return new LookupListModel(list);
     }
 
     private LookupListModel getEinrichtungstraegerList() {
-        final List<LookupEntryModel> list = EnumUtils.getEnumList(Einrichtungstraeger.class).stream()
-                .map(item -> new LookupEntryModel(item.toString(), item.getBezeichnung())).collect(Collectors.toList());
+        final List<LookupEntryModel> list = EnumUtils
+            .getEnumList(Einrichtungstraeger.class)
+            .stream()
+            .map(item -> new LookupEntryModel(item.toString(), item.getBezeichnung()))
+            .collect(Collectors.toList());
 
         return new LookupListModel(list);
     }
 
     private LookupListModel getInfrastruktureinrichtungTypList() {
-        final List<LookupEntryModel> list = EnumUtils.getEnumList(InfrastruktureinrichtungTyp.class).stream()
-                .map(item -> new LookupEntryModel(item.toString(), item.getBezeichnung())).collect(Collectors.toList());
+        final List<LookupEntryModel> list = EnumUtils
+            .getEnumList(InfrastruktureinrichtungTyp.class)
+            .stream()
+            .map(item -> new LookupEntryModel(item.toString(), item.getBezeichnung()))
+            .collect(Collectors.toList());
 
         return new LookupListModel(list);
     }
 
     private LookupListModel getArtGsNachmittagBetreuungList() {
-        final List<LookupEntryModel> list = EnumUtils.getEnumList(ArtGsNachmittagBetreuung.class).stream()
-                .map(item -> new LookupEntryModel(item.toString(), item.getBezeichnung())).collect(Collectors.toList());
+        final List<LookupEntryModel> list = EnumUtils
+            .getEnumList(ArtGsNachmittagBetreuung.class)
+            .stream()
+            .map(item -> new LookupEntryModel(item.toString(), item.getBezeichnung()))
+            .collect(Collectors.toList());
 
         return new LookupListModel(list);
     }
-
 }

@@ -4,11 +4,8 @@
  */
 package de.muenchen.isi.infrastructure.entity.enums.lookup;
 
-
 public interface ILookup {
-
     String UNSPECIFIED = "- - - Keine Angabe - - -";
 
     String getBezeichnung();
-
 }

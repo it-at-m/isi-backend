@@ -1,7 +1,6 @@
 server:
   port: 39146
 spring:
-
   # Spring data rest
   data:
     rest:

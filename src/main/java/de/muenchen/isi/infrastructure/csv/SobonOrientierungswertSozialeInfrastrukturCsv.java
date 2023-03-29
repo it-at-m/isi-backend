@@ -10,9 +10,8 @@ import de.muenchen.isi.infrastructure.entity.enums.Altersklasse;
 import de.muenchen.isi.infrastructure.entity.enums.Einrichtungstyp;
 import de.muenchen.isi.infrastructure.entity.enums.Wohnungstyp;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonVerfahrensgrundsaetzeJahr;
-import lombok.Data;
-
 import java.math.BigDecimal;
+import lombok.Data;
 
 @Data
 public class SobonOrientierungswertSozialeInfrastrukturCsv {
@@ -73,5 +72,4 @@ public class SobonOrientierungswertSozialeInfrastrukturCsv {
 
     @CsvBindByName(column = "PERZENTIL_GERUNDET", required = true)
     private BigDecimal perzentil75ProzentGerundetEinwohnerJeWohnung;
-
 }

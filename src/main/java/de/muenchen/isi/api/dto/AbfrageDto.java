@@ -11,15 +11,14 @@ import de.muenchen.isi.api.validation.HasAllowedNumberOfDocuments;
 import de.muenchen.isi.api.validation.NotUnspecified;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVorhaben;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
-import lombok.Data;
-
+import java.time.LocalDate;
+import java.util.List;
+import java.util.UUID;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.time.LocalDate;
-import java.util.List;
-import java.util.UUID;
+import lombok.Data;
 
 @Data
 public class AbfrageDto {
@@ -54,5 +53,4 @@ public class AbfrageDto {
     private StandVorhaben standVorhaben;
 
     private UUID bauvorhaben;
-
 }

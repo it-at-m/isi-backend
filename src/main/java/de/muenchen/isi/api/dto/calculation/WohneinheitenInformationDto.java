@@ -1,8 +1,7 @@
 package de.muenchen.isi.api.dto.calculation;
 
-import lombok.Data;
-
 import java.math.BigDecimal;
+import lombok.Data;
 
 @Data
 public class WohneinheitenInformationDto {
@@ -12,5 +11,4 @@ public class WohneinheitenInformationDto {
     private Integer anzahlWohneinheitenGeplant;
 
     private BigDecimal geschossflaecheWohnenGeplant;
-
 }

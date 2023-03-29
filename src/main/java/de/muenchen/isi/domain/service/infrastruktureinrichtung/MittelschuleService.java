@@ -9,15 +9,14 @@ import de.muenchen.isi.domain.model.infrastruktureinrichtung.Infrastruktureinric
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.MittelschuleModel;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Mittelschule;
 import de.muenchen.isi.infrastructure.repository.infrastruktureinrichtung.MittelschuleRepository;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -35,8 +34,8 @@ public class MittelschuleService {
      */
     public List<MittelschuleModel> getMittelschulen() {
         return this.mittelschuleRepository.findAllByOrderByInfrastruktureinrichtungNameEinrichtungAsc()
-                .map(this.infrastruktureinrichtungDomainMapper::entity2Model)
-                .collect(Collectors.toList());
+            .map(this.infrastruktureinrichtungDomainMapper::entity2Model)
+            .collect(Collectors.toList());
     }
 
     /**
@@ -82,7 +81,8 @@ public class MittelschuleService {
      * @throws EntityNotFoundException falls die Mittelschule identifiziert durch die {@link MittelschuleModel#getId()} nicht gefunden wird
      * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
      */
-    public MittelschuleModel updateMittelschule(final MittelschuleModel mittelschule) throws EntityNotFoundException, OptimisticLockingException {
+    public MittelschuleModel updateMittelschule(final MittelschuleModel mittelschule)
+        throws EntityNotFoundException, OptimisticLockingException {
         this.getMittelschuleById(mittelschule.getId());
         return this.saveMittelschule(mittelschule);
     }
@@ -96,7 +96,9 @@ public class MittelschuleService {
      */
     public void deleteMittelschuleById(final UUID id) throws EntityNotFoundException, EntityIsReferencedException {
         final var mittelschule = this.getMittelschuleById(id);
-        this.throwEntityIsReferencedExceptionWhenInfrastruktureinrichtungIsReferencingBauvorhaben(mittelschule.getInfrastruktureinrichtung());
+        this.throwEntityIsReferencedExceptionWhenInfrastruktureinrichtungIsReferencingBauvorhaben(
+                mittelschule.getInfrastruktureinrichtung()
+            );
         this.mittelschuleRepository.deleteById(id);
     }
 
@@ -107,13 +109,19 @@ public class MittelschuleService {
      * @param infrastruktureinrichtung zum Prüfen.
      * @throws EntityIsReferencedException falls das {@link MittelschuleModel} ein {@link BauvorhabenModel} referenziert.
      */
-    protected void throwEntityIsReferencedExceptionWhenInfrastruktureinrichtungIsReferencingBauvorhaben(final InfrastruktureinrichtungModel infrastruktureinrichtung) throws EntityIsReferencedException {
+    protected void throwEntityIsReferencedExceptionWhenInfrastruktureinrichtungIsReferencingBauvorhaben(
+        final InfrastruktureinrichtungModel infrastruktureinrichtung
+    ) throws EntityIsReferencedException {
         final var bauvorhaben = infrastruktureinrichtung.getBauvorhaben();
         if (ObjectUtils.isNotEmpty(bauvorhaben)) {
-            final var message = "Die Infrastruktureinrichtung " + infrastruktureinrichtung.getNameEinrichtung() + " referenziert das Bauvorhaben " + bauvorhaben.getNameVorhaben() + ".";
+            final var message =
+                "Die Infrastruktureinrichtung " +
+                infrastruktureinrichtung.getNameEinrichtung() +
+                " referenziert das Bauvorhaben " +
+                bauvorhaben.getNameVorhaben() +
+                ".";
             log.error(message);
             throw new EntityIsReferencedException(message);
         }
     }
-
 }

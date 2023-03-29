@@ -1,10 +1,9 @@
 package de.muenchen.isi.api.dto.common;
 
+import java.util.UUID;
+import javax.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import javax.validation.constraints.NotNull;
-import java.util.UUID;
 
 @Data
 public class RelationConnectionDto {
@@ -14,5 +13,4 @@ public class RelationConnectionDto {
 
     @NotNull
     private UUID inverseSideId;
-
 }

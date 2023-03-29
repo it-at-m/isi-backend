@@ -1,0 +1,5 @@
+# Build-Ordner
+target
+
+# yml-Datieien könnnen evtl. zu Fehlern führen
+*.yml

@@ -9,7 +9,6 @@ import org.mapstruct.Mapper;
 
 @Mapper(config = MapstructConfiguration.class)
 public interface KoordinatenDomainMapper {
-
     WGS84Model entity2Model(Wgs84 entity);
 
     Wgs84 model2Entity(WGS84Model model);

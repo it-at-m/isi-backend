@@ -1,8 +1,7 @@
 package de.muenchen.isi.domain.model.calculation;
 
-import lombok.Data;
-
 import java.math.BigDecimal;
+import lombok.Data;
 
 @Data
 public class WohneinheitenInformationModel {
@@ -12,5 +11,4 @@ public class WohneinheitenInformationModel {
     private Integer anzahlWohneinheitenGeplant;
 
     private BigDecimal geschossflaecheWohnenGeplant;
-
 }

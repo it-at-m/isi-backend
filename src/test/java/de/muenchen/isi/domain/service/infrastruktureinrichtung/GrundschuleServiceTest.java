@@ -1,5 +1,8 @@
 package de.muenchen.isi.domain.service.infrastruktureinrichtung;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+
 import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
@@ -12,6 +15,10 @@ import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Grundschule;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Infrastruktureinrichtung;
 import de.muenchen.isi.infrastructure.repository.infrastruktureinrichtung.GrundschuleRepository;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+import java.util.stream.Stream;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,19 +29,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-import java.util.stream.Stream;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
 class GrundschuleServiceTest {
 
-    private final InfrastruktureinrichtungDomainMapper infrastruktureinrichtungDomainMapper = new InfrastruktureinrichtungDomainMapperImpl();
+    private final InfrastruktureinrichtungDomainMapper infrastruktureinrichtungDomainMapper =
+        new InfrastruktureinrichtungDomainMapperImpl();
 
     @Mock
     private GrundschuleRepository grundschuleRepository;
@@ -43,10 +43,8 @@ class GrundschuleServiceTest {
 
     @BeforeEach
     public void beforeEach() {
-        this.grundschuleService = new GrundschuleService(
-                this.infrastruktureinrichtungDomainMapper,
-                this.grundschuleRepository
-        );
+        this.grundschuleService =
+            new GrundschuleService(this.infrastruktureinrichtungDomainMapper, this.grundschuleRepository);
         Mockito.reset(this.grundschuleRepository);
     }
 
@@ -57,7 +55,9 @@ class GrundschuleServiceTest {
         final Grundschule entity2 = new Grundschule();
         entity2.setId(UUID.randomUUID());
 
-        Mockito.when(this.grundschuleRepository.findAllByOrderByInfrastruktureinrichtungNameEinrichtungAsc()).thenReturn(Stream.of(entity1, entity2));
+        Mockito
+            .when(this.grundschuleRepository.findAllByOrderByInfrastruktureinrichtungNameEinrichtungAsc())
+            .thenReturn(Stream.of(entity1, entity2));
 
         final List<GrundschuleModel> result = this.grundschuleService.getGrundschulen();
 
@@ -66,10 +66,7 @@ class GrundschuleServiceTest {
         final GrundschuleModel model2 = new GrundschuleModel();
         model2.setId(entity2.getId());
 
-        assertThat(
-                result,
-                is(List.of(model1, model2))
-        );
+        assertThat(result, is(List.of(model1, model2)));
     }
 
     @Test
@@ -105,10 +102,7 @@ class GrundschuleServiceTest {
         final GrundschuleModel expected = new GrundschuleModel();
         expected.setId(saveResult.getId());
 
-        assertThat(
-                result,
-                is(expected)
-        );
+        assertThat(result, is(expected));
 
         Mockito.verify(this.grundschuleRepository, Mockito.times(1)).saveAndFlush(grundschuleEntity);
     }
@@ -129,10 +123,7 @@ class GrundschuleServiceTest {
         final GrundschuleModel expected = new GrundschuleModel();
         expected.setId(grundschuleModel.getId());
 
-        assertThat(
-                result,
-                is(grundschuleModel)
-        );
+        assertThat(result, is(grundschuleModel));
 
         Mockito.verify(this.grundschuleRepository, Mockito.times(1)).findById(entity.getId());
         Mockito.verify(this.grundschuleRepository, Mockito.times(1)).saveAndFlush(entity);
@@ -167,19 +158,30 @@ class GrundschuleServiceTest {
 
         Mockito.when(this.grundschuleRepository.findById(entity.getId())).thenReturn(Optional.of(entity));
 
-        Assertions.assertThrows(EntityIsReferencedException.class, () -> this.grundschuleService.deleteGrundschuleById(id));
+        Assertions.assertThrows(
+            EntityIsReferencedException.class,
+            () -> this.grundschuleService.deleteGrundschuleById(id)
+        );
 
         Mockito.verify(this.grundschuleRepository, Mockito.times(1)).findById(entity.getId());
         Mockito.verify(this.grundschuleRepository, Mockito.times(0)).deleteById(id);
     }
 
     @Test
-    void throwEntityIsReferencedExceptionWhenInfrastruktureinrichtungIsReferencingBauvorhaben() throws EntityIsReferencedException {
-        this.grundschuleService.throwEntityIsReferencedExceptionWhenInfrastruktureinrichtungIsReferencingBauvorhaben(new InfrastruktureinrichtungModel());
+    void throwEntityIsReferencedExceptionWhenInfrastruktureinrichtungIsReferencingBauvorhaben()
+        throws EntityIsReferencedException {
+        this.grundschuleService.throwEntityIsReferencedExceptionWhenInfrastruktureinrichtungIsReferencingBauvorhaben(
+                new InfrastruktureinrichtungModel()
+            );
 
         final InfrastruktureinrichtungModel infrastruktureinrichtung = new InfrastruktureinrichtungModel();
         infrastruktureinrichtung.setBauvorhaben(new BauvorhabenModel());
-        Assertions.assertThrows(EntityIsReferencedException.class, () -> this.grundschuleService.throwEntityIsReferencedExceptionWhenInfrastruktureinrichtungIsReferencingBauvorhaben(infrastruktureinrichtung));
+        Assertions.assertThrows(
+            EntityIsReferencedException.class,
+            () ->
+                this.grundschuleService.throwEntityIsReferencedExceptionWhenInfrastruktureinrichtungIsReferencingBauvorhaben(
+                        infrastruktureinrichtung
+                    )
+        );
     }
-
 }

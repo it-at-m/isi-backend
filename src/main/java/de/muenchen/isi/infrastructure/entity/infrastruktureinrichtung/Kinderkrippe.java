@@ -5,12 +5,11 @@
 package de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung;
 
 import de.muenchen.isi.infrastructure.entity.BaseEntity;
+import javax.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
-import javax.persistence.*;
 
 @Entity
 @Data
@@ -30,5 +29,4 @@ public class Kinderkrippe extends BaseEntity {
 
     @Column(nullable = true)
     private Integer wohnungsnaheKinderkrippePlaetze;
-
 }

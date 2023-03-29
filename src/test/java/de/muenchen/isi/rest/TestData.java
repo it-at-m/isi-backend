@@ -23,7 +23,6 @@ import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
 import de.muenchen.isi.infrastructure.entity.filehandling.Dokument;
 import de.muenchen.isi.infrastructure.entity.filehandling.Filepath;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
@@ -121,5 +120,4 @@ public class TestData {
         dokument.setArtDokument(artDokument);
         return dokument;
     }
-
 }

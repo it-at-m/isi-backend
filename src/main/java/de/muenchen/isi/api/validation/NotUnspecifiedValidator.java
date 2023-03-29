@@ -1,11 +1,10 @@
 package de.muenchen.isi.api.validation;
 
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ILookup;
-import lombok.NoArgsConstructor;
-import org.springframework.stereotype.Component;
-
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
+import lombok.NoArgsConstructor;
+import org.springframework.stereotype.Component;
 
 @Component
 @NoArgsConstructor
@@ -23,5 +22,4 @@ public class NotUnspecifiedValidator implements ConstraintValidator<NotUnspecifi
     public boolean isValid(final ILookup value, final ConstraintValidatorContext context) {
         return value != null && value.getBezeichnung() != null && !value.getBezeichnung().equals(ILookup.UNSPECIFIED);
     }
-
 }

@@ -9,7 +9,6 @@ import lombok.Getter;
 
 @AllArgsConstructor
 public enum ArtAbfrage implements ILookup {
-    
     ERMITTLUNG_SOZINFRA_BEDARF("Ermittlung des durch das Wohnbauvorhaben ausgelösten Infrastrukturbedarfs"),
     ERMITTLUNG_FLAECHE_SOZINFRA_BEDARF("Flächen- / Standortsuche"),
     ABSCHAETZUNG_FLAECHE_FUER_SOZINFRA("Infrastrukturbedarfsermittlung für Flächen ohne Wohnbauvorhaben"),
@@ -17,5 +16,4 @@ public enum ArtAbfrage implements ILookup {
 
     @Getter
     private final String bezeichnung;
-
 }

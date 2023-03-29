@@ -17,5 +17,4 @@ public class FileHandlingWithS3FailedException extends Exception {
         super(message);
         this.statusCode = statusCode;
     }
-
 }

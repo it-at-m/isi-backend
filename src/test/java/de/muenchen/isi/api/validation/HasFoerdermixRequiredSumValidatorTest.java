@@ -1,16 +1,16 @@
 package de.muenchen.isi.api.validation;
 
-import de.muenchen.isi.api.dto.FoerdermixDto;
-import org.junit.jupiter.api.Test;
-
-import java.math.BigDecimal;
-
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
+import de.muenchen.isi.api.dto.FoerdermixDto;
+import java.math.BigDecimal;
+import org.junit.jupiter.api.Test;
+
 class HasFoerdermixRequiredSumValidatorTest {
 
-    private final HasFoerdermixRequiredSumValidator hasFoerdermixRequiredSumValidator = new HasFoerdermixRequiredSumValidator();
+    private final HasFoerdermixRequiredSumValidator hasFoerdermixRequiredSumValidator =
+        new HasFoerdermixRequiredSumValidator();
 
     @Test
     void isValid() {
@@ -22,10 +22,7 @@ class HasFoerdermixRequiredSumValidatorTest {
         foerdermix.setAnteilKonzeptionellerMietwohnungsbau(BigDecimal.valueOf(0));
         foerdermix.setAnteilBaugemeinschaften(BigDecimal.valueOf(0));
         foerdermix.setAnteilEinUndZweifamilienhaeuser(BigDecimal.valueOf(0));
-        assertThat(
-                this.hasFoerdermixRequiredSumValidator.isValid(foerdermix, null),
-                is(true)
-        );
+        assertThat(this.hasFoerdermixRequiredSumValidator.isValid(foerdermix, null), is(true));
 
         foerdermix = new FoerdermixDto();
         foerdermix.setAnteilFreifinanzierterGeschosswohnungsbau(null);
@@ -35,10 +32,7 @@ class HasFoerdermixRequiredSumValidatorTest {
         foerdermix.setAnteilKonzeptionellerMietwohnungsbau(null);
         foerdermix.setAnteilBaugemeinschaften(null);
         foerdermix.setAnteilEinUndZweifamilienhaeuser(BigDecimal.valueOf(0));
-        assertThat(
-                this.hasFoerdermixRequiredSumValidator.isValid(foerdermix, null),
-                is(true)
-        );
+        assertThat(this.hasFoerdermixRequiredSumValidator.isValid(foerdermix, null), is(true));
 
         foerdermix = new FoerdermixDto();
         foerdermix.setAnteilFreifinanzierterGeschosswohnungsbau(null);
@@ -48,10 +42,7 @@ class HasFoerdermixRequiredSumValidatorTest {
         foerdermix.setAnteilKonzeptionellerMietwohnungsbau(null);
         foerdermix.setAnteilBaugemeinschaften(null);
         foerdermix.setAnteilEinUndZweifamilienhaeuser(BigDecimal.valueOf(0));
-        assertThat(
-                this.hasFoerdermixRequiredSumValidator.isValid(foerdermix, null),
-                is(true)
-        );
+        assertThat(this.hasFoerdermixRequiredSumValidator.isValid(foerdermix, null), is(true));
 
         foerdermix = new FoerdermixDto();
         foerdermix.setAnteilFreifinanzierterGeschosswohnungsbau(null);
@@ -61,10 +52,7 @@ class HasFoerdermixRequiredSumValidatorTest {
         foerdermix.setAnteilKonzeptionellerMietwohnungsbau(null);
         foerdermix.setAnteilBaugemeinschaften(null);
         foerdermix.setAnteilEinUndZweifamilienhaeuser(BigDecimal.valueOf(0));
-        assertThat(
-                this.hasFoerdermixRequiredSumValidator.isValid(foerdermix, null),
-                is(false)
-        );
+        assertThat(this.hasFoerdermixRequiredSumValidator.isValid(foerdermix, null), is(false));
 
         foerdermix = new FoerdermixDto();
         foerdermix.setAnteilFreifinanzierterGeschosswohnungsbau(null);
@@ -74,10 +62,7 @@ class HasFoerdermixRequiredSumValidatorTest {
         foerdermix.setAnteilKonzeptionellerMietwohnungsbau(null);
         foerdermix.setAnteilBaugemeinschaften(null);
         foerdermix.setAnteilEinUndZweifamilienhaeuser(BigDecimal.valueOf(0));
-        assertThat(
-                this.hasFoerdermixRequiredSumValidator.isValid(foerdermix, null),
-                is(false)
-        );
+        assertThat(this.hasFoerdermixRequiredSumValidator.isValid(foerdermix, null), is(false));
 
         foerdermix = new FoerdermixDto();
         foerdermix.setAnteilFreifinanzierterGeschosswohnungsbau(null);
@@ -87,15 +72,8 @@ class HasFoerdermixRequiredSumValidatorTest {
         foerdermix.setAnteilKonzeptionellerMietwohnungsbau(null);
         foerdermix.setAnteilBaugemeinschaften(null);
         foerdermix.setAnteilEinUndZweifamilienhaeuser(null);
-        assertThat(
-                this.hasFoerdermixRequiredSumValidator.isValid(foerdermix, null),
-                is(false)
-        );
+        assertThat(this.hasFoerdermixRequiredSumValidator.isValid(foerdermix, null), is(false));
 
-        assertThat(
-                this.hasFoerdermixRequiredSumValidator.isValid(null, null),
-                is(true)
-        );
+        assertThat(this.hasFoerdermixRequiredSumValidator.isValid(null, null), is(true));
     }
-
 }

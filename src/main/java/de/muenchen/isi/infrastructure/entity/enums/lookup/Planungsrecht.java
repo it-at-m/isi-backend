@@ -24,5 +24,4 @@ public enum Planungsrecht implements ILookup {
 
     @Getter
     private final String bezeichnung;
-
 }

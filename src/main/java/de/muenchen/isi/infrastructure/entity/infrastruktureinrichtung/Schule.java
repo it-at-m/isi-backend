@@ -4,9 +4,8 @@
  */
 package de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung;
 
-import lombok.Data;
-
 import javax.persistence.*;
+import lombok.Data;
 
 @Embeddable
 @Data
@@ -17,5 +16,4 @@ public class Schule {
 
     @Column(nullable = false)
     private Integer anzahlPlaetze;
-
 }

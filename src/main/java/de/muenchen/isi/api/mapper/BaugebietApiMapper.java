@@ -11,9 +11,7 @@ import org.mapstruct.Mapper;
 
 @Mapper(config = MapstructConfiguration.class)
 public interface BaugebietApiMapper {
-
     BaugebietDto model2Dto(final BaugebietModel model);
 
     BaugebietModel dto2Model(final BaugebietDto dto);
-
 }

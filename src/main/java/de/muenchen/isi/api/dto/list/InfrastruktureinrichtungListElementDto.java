@@ -1,10 +1,9 @@
 package de.muenchen.isi.api.dto.list;
 
 import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
-import lombok.Data;
-
-import javax.validation.constraints.Size;
 import java.util.UUID;
+import javax.validation.constraints.Size;
+import lombok.Data;
 
 @Data
 public class InfrastruktureinrichtungListElementDto {
@@ -15,6 +14,5 @@ public class InfrastruktureinrichtungListElementDto {
     private String nameEinrichtung;
 
     private InfrastruktureinrichtungTyp infrastruktureinrichtungTyp;
-
     //TBD: Stadtbezirk
 }

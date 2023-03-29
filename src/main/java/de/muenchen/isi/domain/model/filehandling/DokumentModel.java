@@ -18,5 +18,4 @@ public class DokumentModel extends BaseEntityModel {
     private Long sizeInBytes;
 
     private String typDokument;
-
 }

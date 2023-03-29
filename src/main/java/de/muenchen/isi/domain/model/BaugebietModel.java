@@ -1,11 +1,10 @@
 package de.muenchen.isi.domain.model;
 
 import de.muenchen.isi.infrastructure.entity.enums.lookup.BaugebietTyp;
+import java.util.List;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-
-import java.util.List;
 
 @Data
 @ToString(callSuper = true)
@@ -25,5 +24,4 @@ public class BaugebietModel extends BaseEntityModel {
     private Long geschossflaecheWohnenFestgesetzt;
 
     private List<BaurateModel> bauraten;
-
 }

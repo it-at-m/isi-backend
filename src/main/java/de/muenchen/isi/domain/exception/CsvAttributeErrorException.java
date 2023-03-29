@@ -9,5 +9,4 @@ public class CsvAttributeErrorException extends Exception {
     public CsvAttributeErrorException(final String message) {
         super(message);
     }
-
 }
