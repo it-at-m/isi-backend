@@ -1,11 +1,10 @@
 package de.muenchen.isi.domain.service.transition;
 
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
-
-import java.util.List;
 
 @AllArgsConstructor
 @Getter
@@ -27,5 +26,4 @@ public class CustomUserDetails {
     private String username;
 
     private String[] resource_access;
-
 }

@@ -12,5 +12,4 @@ public class TransitionModel {
     private String buttonName;
 
     private int index;
-
 }

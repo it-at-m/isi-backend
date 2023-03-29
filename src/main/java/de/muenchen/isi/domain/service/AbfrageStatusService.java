@@ -12,6 +12,13 @@ import de.muenchen.isi.domain.service.util.AuthenticationUtils;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrageEvents;
 import de.muenchen.isi.security.AuthoritiesEnum;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.MultiValuedMap;
@@ -29,14 +36,6 @@ import org.springframework.statemachine.support.StateMachineInterceptorAdapter;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
 /**
  * Der Zustandsautomat ist in {@link  StateMachineConfiguration} konfiguriert.
@@ -71,7 +70,8 @@ public class AbfrageStatusService {
      * @throws EntityNotFoundException          falls die Abfrage nicht gefunden wird
      * @throws AbfrageStatusNotAllowedException wenn die Statusänderung nicht erlaubt ist
      */
-    public void inBearbeitungSetzenAbfrage(final UUID id) throws EntityNotFoundException, AbfrageStatusNotAllowedException {
+    public void inBearbeitungSetzenAbfrage(final UUID id)
+        throws EntityNotFoundException, AbfrageStatusNotAllowedException {
         final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id);
         this.sendEvent(id, StatusAbfrageEvents.IN_BEARBEITUNG_SETZEN, stateMachine);
     }
@@ -296,11 +296,12 @@ public class AbfrageStatusService {
      */
     public List<StatusAbfrageEvents> getStatusAbfrageEventsBasedOnState(final UUID id) throws EntityNotFoundException {
         final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id);
-        return stateMachine.getTransitions().stream()
-                .filter(transition -> transition.getSource().getId().equals(stateMachine.getState().getId()))
-                .map(transition -> transition.getTrigger().getEvent())
-                .collect(Collectors.toList());
-
+        return stateMachine
+            .getTransitions()
+            .stream()
+            .filter(transition -> transition.getSource().getId().equals(stateMachine.getState().getId()))
+            .map(transition -> transition.getTrigger().getEvent())
+            .collect(Collectors.toList());
     }
 
     /**
@@ -310,7 +311,8 @@ public class AbfrageStatusService {
      * @return Liste von {@link TransitionModel} welche möglich sind
      * @throws EntityNotFoundException falls die Abfrage nicht gefunden wird
      */
-    public List<TransitionModel> getStatusAbfrageEventsBasedOnStateAndRole(final UUID id) throws EntityNotFoundException {
+    public List<TransitionModel> getStatusAbfrageEventsBasedOnStateAndRole(final UUID id)
+        throws EntityNotFoundException {
         List<AuthoritiesEnum> userRolesAuthorities = AuthenticationUtils.getUserAuthorities();
         List<StatusAbfrageEvents> possibleAbfrageEventsBasedOnRole = new ArrayList<>();
         Map<AuthoritiesEnum, StatusAbfrageEvents> rolesAndMatchingEvent = getRolesAndEventsMap();
@@ -341,12 +343,27 @@ public class AbfrageStatusService {
         rolesAndEvents.put(AuthoritiesEnum.ISI_BACKEND_FREIGABE_ABFRAGE, StatusAbfrageEvents.FREIGABE);
         rolesAndEvents.put(AuthoritiesEnum.ISI_BACKEND_ABBRECHEN_ABFRAGE, StatusAbfrageEvents.ABBRECHEN);
         rolesAndEvents.put(AuthoritiesEnum.ISI_BACKEND_ANGABEN_ANPASSEN_ABFRAGE, StatusAbfrageEvents.ANGABEN_ANPASSEN);
-        rolesAndEvents.put(AuthoritiesEnum.ISI_BACKEND_IN_BEARBEITUNG_SETZTEN, StatusAbfrageEvents.IN_BEARBEITUNG_SETZEN);
+        rolesAndEvents.put(
+            AuthoritiesEnum.ISI_BACKEND_IN_BEARBEITUNG_SETZTEN,
+            StatusAbfrageEvents.IN_BEARBEITUNG_SETZEN
+        );
         rolesAndEvents.put(AuthoritiesEnum.ISI_BACKEND_KORRIGIEREN, StatusAbfrageEvents.KORRIGIEREN);
-        rolesAndEvents.put(AuthoritiesEnum.ISI_BACKEND_KEINE_BEARBEITUNG_NOETIG_ABFRAGE, StatusAbfrageEvents.KEINE_BEARBEITUNG_NOETIG);
-        rolesAndEvents.put(AuthoritiesEnum.ISI_BACKEND_VERSCHICKEN_DER_STELLUNGNAHME_ABFRAGE, StatusAbfrageEvents.VERSCHICKEN_DER_STELLUNGNAHME);
-        rolesAndEvents.put(AuthoritiesEnum.ISI_BACKEND_BEDARFSMELDUNG_ERFOLGT_ABFRAGE, StatusAbfrageEvents.BEDARFSMELDUNG_ERFOLGTE);
-        rolesAndEvents.put(AuthoritiesEnum.ISI_BACKEND_SPEICHERN_VON_SOZIALINFRASTRUKTUR_VERSORGUNG_ABFRAGE, StatusAbfrageEvents.SPEICHERN_VON_SOZIALINFRASTRUKTUR_VERSORGUNG);
+        rolesAndEvents.put(
+            AuthoritiesEnum.ISI_BACKEND_KEINE_BEARBEITUNG_NOETIG_ABFRAGE,
+            StatusAbfrageEvents.KEINE_BEARBEITUNG_NOETIG
+        );
+        rolesAndEvents.put(
+            AuthoritiesEnum.ISI_BACKEND_VERSCHICKEN_DER_STELLUNGNAHME_ABFRAGE,
+            StatusAbfrageEvents.VERSCHICKEN_DER_STELLUNGNAHME
+        );
+        rolesAndEvents.put(
+            AuthoritiesEnum.ISI_BACKEND_BEDARFSMELDUNG_ERFOLGT_ABFRAGE,
+            StatusAbfrageEvents.BEDARFSMELDUNG_ERFOLGTE
+        );
+        rolesAndEvents.put(
+            AuthoritiesEnum.ISI_BACKEND_SPEICHERN_VON_SOZIALINFRASTRUKTUR_VERSORGUNG_ABFRAGE,
+            StatusAbfrageEvents.SPEICHERN_VON_SOZIALINFRASTRUKTUR_VERSORGUNG
+        );
 
         return rolesAndEvents;
     }
