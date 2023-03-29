@@ -6,22 +6,17 @@ package de.muenchen.isi.infrastructure.entity.stammdaten;
 
 import de.muenchen.isi.infrastructure.entity.BaseEntity;
 import de.muenchen.isi.infrastructure.entity.Foerdermix;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
-
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 @Entity
-@Table(
-        uniqueConstraints = {
-                @UniqueConstraint(columnNames = {"bezeichnung"})
-        }
-)
+@Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "bezeichnung" }) })
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
@@ -35,5 +30,4 @@ public class FoerdermixStamm extends BaseEntity {
 
     @Embedded
     private Foerdermix foerdermix;
-
 }

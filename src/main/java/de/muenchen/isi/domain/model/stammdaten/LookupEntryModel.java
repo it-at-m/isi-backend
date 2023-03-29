@@ -10,5 +10,4 @@ public class LookupEntryModel {
     private String key;
 
     private String value;
-
 }

@@ -1,16 +1,15 @@
 package de.muenchen.isi.infrastructure.entity;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
-
+import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
-import java.util.List;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 @Entity
 @Data
@@ -21,8 +20,7 @@ public class Bauabschnitt extends BaseEntity {
     @Column(nullable = false)
     private String bezeichnung;
 
-    @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER, orphanRemoval = true)
+    @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval = true)
     @JoinColumn(name = "bauabschnitt_id")
     private List<Baugebiet> baugebiete;
-
 }

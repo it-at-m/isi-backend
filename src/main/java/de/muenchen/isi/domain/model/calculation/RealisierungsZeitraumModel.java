@@ -8,5 +8,4 @@ public class RealisierungsZeitraumModel {
     private Integer realisierungVon; // JJJJ
 
     private Integer realisierungBis; // JJJJ
-
 }

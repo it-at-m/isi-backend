@@ -11,12 +11,10 @@ import lombok.Getter;
 @Schema(enumAsRef = true)
 @AllArgsConstructor
 public enum UncertainBoolean implements ILookup {
-
     UNSPECIFIED(ILookup.UNSPECIFIED),
     TRUE("Ja"),
     FALSE("Nein");
 
     @Getter
     private final String bezeichnung;
-
 }

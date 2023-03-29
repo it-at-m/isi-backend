@@ -6,9 +6,8 @@ import de.muenchen.isi.infrastructure.entity.enums.lookup.BaugebietTyp;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Planungsrecht;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVorhaben;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
-import lombok.Data;
-
 import java.util.List;
+import lombok.Data;
 
 @Data
 public class BauvorhabenModel extends BaseEntityModel {
@@ -40,5 +39,4 @@ public class BauvorhabenModel extends BaseEntityModel {
     private List<BaugebietTyp> artFnp;
 
     private List<DokumentModel> dokumente;
-
 }

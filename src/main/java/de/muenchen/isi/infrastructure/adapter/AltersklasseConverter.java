@@ -3,9 +3,8 @@ package de.muenchen.isi.infrastructure.adapter;
 import com.opencsv.bean.AbstractBeanField;
 import com.opencsv.exceptions.CsvDataTypeMismatchException;
 import de.muenchen.isi.infrastructure.entity.enums.Altersklasse;
-import lombok.extern.slf4j.Slf4j;
-
 import java.util.Optional;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class AltersklasseConverter extends AbstractBeanField {
@@ -21,5 +20,4 @@ public class AltersklasseConverter extends AbstractBeanField {
             throw new CsvDataTypeMismatchException(message);
         }
     }
-
 }

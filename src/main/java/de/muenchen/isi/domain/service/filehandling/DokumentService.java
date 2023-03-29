@@ -30,5 +30,4 @@ public class DokumentService {
         dokumenteModel.setLast(foundPage.isLast());
         return dokumenteModel;
     }
-
 }

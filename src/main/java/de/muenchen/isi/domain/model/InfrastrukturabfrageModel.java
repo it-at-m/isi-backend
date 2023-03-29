@@ -6,12 +6,11 @@ package de.muenchen.isi.domain.model;
 
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonVerfahrensgrundsaetzeJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
+import java.util.List;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.apache.commons.lang3.StringUtils;
-
-import java.util.List;
 
 @Data
 @ToString(callSuper = true)
@@ -40,5 +39,4 @@ public class InfrastrukturabfrageModel extends BaseEntityModel {
         }
         return displayName.toString();
     }
-
 }

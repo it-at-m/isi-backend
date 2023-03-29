@@ -8,5 +8,4 @@ public class InfrastrukturplanungModel {
     private String infrastrukturplanung;
 
     private String beschlussvorlage;
-
 }

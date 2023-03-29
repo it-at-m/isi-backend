@@ -1,28 +1,28 @@
 package de.muenchen.isi.api.validation;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+
 import de.muenchen.isi.api.dto.AbfragevarianteDto;
 import de.muenchen.isi.api.dto.InfrastrukturabfrageDto;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Planungsrecht;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
-import org.junit.jupiter.api.Test;
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
+import org.junit.jupiter.api.Test;
 
 class GeschossflaecheWohnenSobonUrsaechlichRequiredValidatorTest {
 
-    private final GeschossflaecheWohnenSobonUrsaechlichRequiredValidator geschossflaecheWohnenSobonUrsaechlichRequiredValidator = new GeschossflaecheWohnenSobonUrsaechlichRequiredValidator();
+    private final GeschossflaecheWohnenSobonUrsaechlichRequiredValidator geschossflaecheWohnenSobonUrsaechlichRequiredValidator =
+        new GeschossflaecheWohnenSobonUrsaechlichRequiredValidator();
 
     @Test
     void isValidSobonRelevant() {
         final InfrastrukturabfrageDto infrastrukturabfrage = new InfrastrukturabfrageDto();
         infrastrukturabfrage.setSobonRelevant(UncertainBoolean.TRUE);
         assertThat(
-                this.geschossflaecheWohnenSobonUrsaechlichRequiredValidator.isValid(infrastrukturabfrage, null),
-                is(true)
+            this.geschossflaecheWohnenSobonUrsaechlichRequiredValidator.isValid(infrastrukturabfrage, null),
+            is(true)
         );
 
         infrastrukturabfrage.setAbfragevarianten(new ArrayList<AbfragevarianteDto>());
@@ -32,8 +32,8 @@ class GeschossflaecheWohnenSobonUrsaechlichRequiredValidatorTest {
         abfragevariantePlanungsrechtParag11.setGeschossflaecheWohnenSoBoNursaechlich(BigDecimal.TEN);
         infrastrukturabfrage.getAbfragevarianten().add(abfragevariantePlanungsrechtParag11);
         assertThat(
-                this.geschossflaecheWohnenSobonUrsaechlichRequiredValidator.isValid(infrastrukturabfrage, null),
-                is(true)
+            this.geschossflaecheWohnenSobonUrsaechlichRequiredValidator.isValid(infrastrukturabfrage, null),
+            is(true)
         );
 
         final AbfragevarianteDto abfragevariantePlanungsrechtParag12 = new AbfragevarianteDto();
@@ -41,16 +41,15 @@ class GeschossflaecheWohnenSobonUrsaechlichRequiredValidatorTest {
         abfragevariantePlanungsrechtParag12.setGeschossflaecheWohnenSoBoNursaechlich(BigDecimal.ZERO);
         infrastrukturabfrage.getAbfragevarianten().add(abfragevariantePlanungsrechtParag12);
         assertThat(
-                this.geschossflaecheWohnenSobonUrsaechlichRequiredValidator.isValid(infrastrukturabfrage, null),
-                is(true)
+            this.geschossflaecheWohnenSobonUrsaechlichRequiredValidator.isValid(infrastrukturabfrage, null),
+            is(true)
         );
 
         abfragevariantePlanungsrechtParag12.setGeschossflaecheWohnenSoBoNursaechlich(null);
         assertThat(
-                this.geschossflaecheWohnenSobonUrsaechlichRequiredValidator.isValid(infrastrukturabfrage, null),
-                is(false)
+            this.geschossflaecheWohnenSobonUrsaechlichRequiredValidator.isValid(infrastrukturabfrage, null),
+            is(false)
         );
-
     }
 
     @Test
@@ -58,8 +57,8 @@ class GeschossflaecheWohnenSobonUrsaechlichRequiredValidatorTest {
         final InfrastrukturabfrageDto infrastrukturabfrage = new InfrastrukturabfrageDto();
         infrastrukturabfrage.setSobonRelevant(UncertainBoolean.FALSE);
         assertThat(
-                this.geschossflaecheWohnenSobonUrsaechlichRequiredValidator.isValid(infrastrukturabfrage, null),
-                is(true)
+            this.geschossflaecheWohnenSobonUrsaechlichRequiredValidator.isValid(infrastrukturabfrage, null),
+            is(true)
         );
 
         infrastrukturabfrage.setAbfragevarianten(new ArrayList<AbfragevarianteDto>());
@@ -69,8 +68,8 @@ class GeschossflaecheWohnenSobonUrsaechlichRequiredValidatorTest {
         abfragevariantePlanungsrechtParag11.setGeschossflaecheWohnenSoBoNursaechlich(BigDecimal.TEN);
         infrastrukturabfrage.getAbfragevarianten().add(abfragevariantePlanungsrechtParag11);
         assertThat(
-                this.geschossflaecheWohnenSobonUrsaechlichRequiredValidator.isValid(infrastrukturabfrage, null),
-                is(true)
+            this.geschossflaecheWohnenSobonUrsaechlichRequiredValidator.isValid(infrastrukturabfrage, null),
+            is(true)
         );
 
         final AbfragevarianteDto abfragevariantePlanungsrechtParag12 = new AbfragevarianteDto();
@@ -78,8 +77,8 @@ class GeschossflaecheWohnenSobonUrsaechlichRequiredValidatorTest {
         abfragevariantePlanungsrechtParag12.setGeschossflaecheWohnenSoBoNursaechlich(null);
         infrastrukturabfrage.getAbfragevarianten().add(abfragevariantePlanungsrechtParag12);
         assertThat(
-                this.geschossflaecheWohnenSobonUrsaechlichRequiredValidator.isValid(infrastrukturabfrage, null),
-                is(true)
+            this.geschossflaecheWohnenSobonUrsaechlichRequiredValidator.isValid(infrastrukturabfrage, null),
+            is(true)
         );
     }
 
@@ -88,8 +87,8 @@ class GeschossflaecheWohnenSobonUrsaechlichRequiredValidatorTest {
         final InfrastrukturabfrageDto infrastrukturabfrage = new InfrastrukturabfrageDto();
         infrastrukturabfrage.setSobonRelevant(UncertainBoolean.TRUE);
         assertThat(
-                this.geschossflaecheWohnenSobonUrsaechlichRequiredValidator.isValid(infrastrukturabfrage, null),
-                is(true)
+            this.geschossflaecheWohnenSobonUrsaechlichRequiredValidator.isValid(infrastrukturabfrage, null),
+            is(true)
         );
 
         infrastrukturabfrage.setAbfragevarianten(new ArrayList<AbfragevarianteDto>());
@@ -104,9 +103,8 @@ class GeschossflaecheWohnenSobonUrsaechlichRequiredValidatorTest {
         infrastrukturabfrage.getAbfragevarianten().add(abfragevariantePlanungsrechtParag34);
 
         assertThat(
-                this.geschossflaecheWohnenSobonUrsaechlichRequiredValidator.isValid(infrastrukturabfrage, null),
-                is(true)
+            this.geschossflaecheWohnenSobonUrsaechlichRequiredValidator.isValid(infrastrukturabfrage, null),
+            is(true)
         );
     }
-
 }

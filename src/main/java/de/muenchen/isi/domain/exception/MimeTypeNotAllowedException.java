@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class MimeTypeNotAllowedException extends Exception {
+
     public MimeTypeNotAllowedException(final String message, final Throwable cause) {
         super(message, cause);
     }
@@ -11,5 +12,4 @@ public class MimeTypeNotAllowedException extends Exception {
     public MimeTypeNotAllowedException(final String message) {
         super(message);
     }
-
 }

@@ -9,5 +9,4 @@ public class AbfrageStatusNotAllowedException extends Exception {
     public AbfrageStatusNotAllowedException(final String message) {
         super(message);
     }
-
 }

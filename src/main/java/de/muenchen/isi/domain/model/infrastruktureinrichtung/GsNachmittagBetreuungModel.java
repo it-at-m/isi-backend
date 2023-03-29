@@ -24,5 +24,4 @@ public class GsNachmittagBetreuungModel extends BaseEntityModel {
     private Integer anzahlHortGruppen;
 
     private Integer wohnungsnaheHortPlaetze;
-
 }

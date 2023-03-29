@@ -11,11 +11,9 @@ import org.mapstruct.Mapper;
 
 @Mapper(config = MapstructConfiguration.class)
 public interface FilehandlingApiMapper {
-
     PresignedUrlDto model2Dto(final PresignedUrlModel model);
 
     MimeTypeInformationDto model2Dto(final MimeTypeInformationModel model);
 
     FilepathModel dto2Model(final FilepathDto dto);
-
 }

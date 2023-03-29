@@ -5,14 +5,13 @@ import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.mapper.StammdatenDomainMapper;
 import de.muenchen.isi.domain.model.stammdaten.FoerdermixStammModel;
 import de.muenchen.isi.infrastructure.repository.stammdaten.FoerdermixStammRepository;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -30,8 +29,8 @@ public class FoerdermixStammService {
      */
     public List<FoerdermixStammModel> getFoerdermixStaemme() {
         return this.foerdermixStammRepository.findAllByOrderByBezeichnungAsc()
-                .map(this.stammdatenDomainMapper::entity2Model)
-                .collect(Collectors.toList());
+            .map(this.stammdatenDomainMapper::entity2Model)
+            .collect(Collectors.toList());
     }
 
     /**
@@ -57,7 +56,8 @@ public class FoerdermixStammService {
      * @return das gespeicherte {@link FoerdermixStammModel}
      * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
      */
-    public FoerdermixStammModel saveFoerdermixStamm(final FoerdermixStammModel foerdermix) throws OptimisticLockingException {
+    public FoerdermixStammModel saveFoerdermixStamm(final FoerdermixStammModel foerdermix)
+        throws OptimisticLockingException {
         var entity = this.stammdatenDomainMapper.model2Entity(foerdermix);
         try {
             entity = this.foerdermixStammRepository.saveAndFlush(entity);
@@ -76,7 +76,8 @@ public class FoerdermixStammService {
      * @throws EntityNotFoundException falls die Abfrage identifiziert durch die {@link FoerdermixStammModel#getId()} nicht gefunden wird
      * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
      */
-    public FoerdermixStammModel updateFoerdermixStamm(final FoerdermixStammModel foerdermix) throws EntityNotFoundException, OptimisticLockingException {
+    public FoerdermixStammModel updateFoerdermixStamm(final FoerdermixStammModel foerdermix)
+        throws EntityNotFoundException, OptimisticLockingException {
         this.getFoerdermixStammById(foerdermix.getId());
         return this.saveFoerdermixStamm(foerdermix);
     }
@@ -91,5 +92,4 @@ public class FoerdermixStammService {
         this.getFoerdermixStammById(id);
         this.foerdermixStammRepository.deleteById(id);
     }
-
 }

@@ -1,14 +1,20 @@
 package de.muenchen.isi.infrastructure.repository;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+
 import com.opencsv.exceptions.CsvDataTypeMismatchException;
 import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
-
 import de.muenchen.isi.infrastructure.csv.SobonOrientierungswertSozialeInfrastrukturCsv;
 import de.muenchen.isi.infrastructure.csv.StaedtebaulicheOrientierungswertCsv;
 import de.muenchen.isi.infrastructure.entity.enums.Altersklasse;
 import de.muenchen.isi.infrastructure.entity.enums.Einrichtungstyp;
 import de.muenchen.isi.infrastructure.entity.enums.Wohnungstyp;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonVerfahrensgrundsaetzeJahr;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.math.BigDecimal;
+import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,27 +25,22 @@ import org.mockito.quality.Strictness;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.math.BigDecimal;
-import java.util.List;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
 class CsvRepositoryTest {
 
     private static final String NAME_CSV_TESTFILE_SOBON = "testfile_SoBoNOrientierungswerteSozialeInfrastruktur.csv";
 
-    private static final String NAME_CSV_TESTFILE_SOBON_NOT_VALID = "testfile_SoBoNOrientierungswerteSozialeInfrastrukturNotValid.csv";
+    private static final String NAME_CSV_TESTFILE_SOBON_NOT_VALID =
+        "testfile_SoBoNOrientierungswerteSozialeInfrastrukturNotValid.csv";
 
-    private static final String NAME_CSV_TESTFILE_SOBON_EMPTY = "testfile_SoBoNOrientierungswerteSozialeInfrastrukturEmpty.csv";
+    private static final String NAME_CSV_TESTFILE_SOBON_EMPTY =
+        "testfile_SoBoNOrientierungswerteSozialeInfrastrukturEmpty.csv";
 
     private static final String NAME_CSV_TESTFILE_SO = "testfile_StaedtebaulicheOrientierungswerte.csv";
 
-    private static final String NAME_CSV_TESTFILE_SO_NOT_VALID = "testfile_StaedtebaulicheOrientierungswerteNotValid.csv";
+    private static final String NAME_CSV_TESTFILE_SO_NOT_VALID =
+        "testfile_StaedtebaulicheOrientierungswerteNotValid.csv";
 
     private static final String NAME_CSV_TESTFILE_SO_EMPTY = "testfile_StaedtebaulicheOrientierungswerteEmpty.csv";
 
@@ -75,8 +76,10 @@ class CsvRepositoryTest {
     }
 
     @Test
-    void readAllStaedtebaulicheOrientierungswertCsv() throws CsvDataTypeMismatchException, CsvRequiredFieldEmptyException {
-        final List<StaedtebaulicheOrientierungswertCsv> resultList = this.csvRepository.readAllStaedtebaulicheOrientierungswertCsv(this.testfileSo);
+    void readAllStaedtebaulicheOrientierungswertCsv()
+        throws CsvDataTypeMismatchException, CsvRequiredFieldEmptyException {
+        final List<StaedtebaulicheOrientierungswertCsv> resultList =
+            this.csvRepository.readAllStaedtebaulicheOrientierungswertCsv(this.testfileSo);
 
         final var firstExpected = new StaedtebaulicheOrientierungswertCsv();
         firstExpected.setJahr(SobonVerfahrensgrundsaetzeJahr.JAHR_2014);
@@ -97,17 +100,25 @@ class CsvRepositoryTest {
 
     @Test
     void readAllStaedtebaulicheOrientierungswertCsvNotValid() {
-        Assertions.assertThrows(CsvDataTypeMismatchException.class, () -> this.csvRepository.readAllStaedtebaulicheOrientierungswertCsv(this.testfileSoNotValid));
+        Assertions.assertThrows(
+            CsvDataTypeMismatchException.class,
+            () -> this.csvRepository.readAllStaedtebaulicheOrientierungswertCsv(this.testfileSoNotValid)
+        );
     }
 
     @Test
     void readAllStaedtebaulicheOrientierungswertCsvEmpty() {
-        Assertions.assertThrows(CsvRequiredFieldEmptyException.class, () -> this.csvRepository.readAllStaedtebaulicheOrientierungswertCsv(this.testfileSoEmpty));
+        Assertions.assertThrows(
+            CsvRequiredFieldEmptyException.class,
+            () -> this.csvRepository.readAllStaedtebaulicheOrientierungswertCsv(this.testfileSoEmpty)
+        );
     }
 
     @Test
-    void readAllSobonOrientierungswertSozialeInfrastrukturCsv() throws CsvRequiredFieldEmptyException, CsvDataTypeMismatchException {
-        final List<SobonOrientierungswertSozialeInfrastrukturCsv> resultList = this.csvRepository.readAllSobonOrientierungswertSozialeInfrastrukturCsv(this.testfileSobon);
+    void readAllSobonOrientierungswertSozialeInfrastrukturCsv()
+        throws CsvRequiredFieldEmptyException, CsvDataTypeMismatchException {
+        final List<SobonOrientierungswertSozialeInfrastrukturCsv> resultList =
+            this.csvRepository.readAllSobonOrientierungswertSozialeInfrastrukturCsv(this.testfileSobon);
 
         final var firstExpected = new SobonOrientierungswertSozialeInfrastrukturCsv();
         firstExpected.setJahr(SobonVerfahrensgrundsaetzeJahr.JAHR_2014);
@@ -158,12 +169,17 @@ class CsvRepositoryTest {
 
     @Test
     void readAllSobonOrientierungswertSozialeInfrastrukturCsvEmpty() {
-        Assertions.assertThrows(CsvRequiredFieldEmptyException.class, () -> this.csvRepository.readAllSobonOrientierungswertSozialeInfrastrukturCsv(this.testfileSobonEmpty));
+        Assertions.assertThrows(
+            CsvRequiredFieldEmptyException.class,
+            () -> this.csvRepository.readAllSobonOrientierungswertSozialeInfrastrukturCsv(this.testfileSobonEmpty)
+        );
     }
 
     @Test
     void readAllSobonOrientierungswertSozialeInfrastrukturCsvNotValid() {
-        Assertions.assertThrows(CsvDataTypeMismatchException.class, () -> this.csvRepository.readAllSobonOrientierungswertSozialeInfrastrukturCsv(this.testfileSobonNotValid));
+        Assertions.assertThrows(
+            CsvDataTypeMismatchException.class,
+            () -> this.csvRepository.readAllSobonOrientierungswertSozialeInfrastrukturCsv(this.testfileSobonNotValid)
+        );
     }
-
 }

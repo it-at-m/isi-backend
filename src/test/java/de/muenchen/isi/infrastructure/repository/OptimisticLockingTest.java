@@ -21,10 +21,11 @@ import org.springframework.test.context.ActiveProfiles;
 @Slf4j
 @ExtendWith(MockitoExtension.class)
 @SpringBootTest(
-        classes = {IsiBackendApplication.class},
-        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
-        properties = {"tomcat.gracefulshutdown.pre-wait-seconds=0"})
-@ActiveProfiles(profiles = {TestConstants.SPRING_UNIT_TEST_PROFILE, TestConstants.SPRING_NO_SECURITY_PROFILE})
+    classes = { IsiBackendApplication.class },
+    webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
+    properties = { "tomcat.gracefulshutdown.pre-wait-seconds=0" }
+)
+@ActiveProfiles(profiles = { TestConstants.SPRING_UNIT_TEST_PROFILE, TestConstants.SPRING_NO_SECURITY_PROFILE })
 @MockitoSettings(strictness = Strictness.LENIENT)
 public class OptimisticLockingTest {
 
@@ -52,7 +53,10 @@ public class OptimisticLockingTest {
 
         this.dokumentRepository.saveAndFlush(dokument1);
 
-        Assertions.assertThrows(ObjectOptimisticLockingFailureException.class, () -> this.dokumentRepository.saveAndFlush(dokument2));
+        Assertions.assertThrows(
+            ObjectOptimisticLockingFailureException.class,
+            () -> this.dokumentRepository.saveAndFlush(dokument2)
+        );
 
         final var newLoadedDokument2 = this.dokumentRepository.findById(id).get();
         newLoadedDokument2.setArtDokument(ArtDokument.EMAIL);
@@ -60,5 +64,4 @@ public class OptimisticLockingTest {
 
         this.dokumentRepository.deleteAll();
     }
-
 }

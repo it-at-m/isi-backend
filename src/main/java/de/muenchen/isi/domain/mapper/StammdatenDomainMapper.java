@@ -15,33 +15,39 @@ import org.mapstruct.Mappings;
 
 @Mapper(config = MapstructConfiguration.class)
 public interface StammdatenDomainMapper {
+    SobonOrientierungswertSozialeInfrastrukturModel entity2Model(
+        final SobonOrientierungswertSozialeInfrastruktur entity
+    );
 
-    SobonOrientierungswertSozialeInfrastrukturModel entity2Model(final SobonOrientierungswertSozialeInfrastruktur entity);
+    SobonOrientierungswertSozialeInfrastruktur model2Entity(
+        final SobonOrientierungswertSozialeInfrastrukturModel model
+    );
 
-    SobonOrientierungswertSozialeInfrastruktur model2Entity(final SobonOrientierungswertSozialeInfrastrukturModel model);
-
-    @Mappings({
+    @Mappings(
+        {
             @Mapping(target = "id", ignore = true),
             @Mapping(target = "version", ignore = true),
             @Mapping(target = "createdDateTime", ignore = true),
             @Mapping(target = "lastModifiedDateTime", ignore = true),
-    })
+        }
+    )
     SobonOrientierungswertSozialeInfrastruktur csv2Entity(final SobonOrientierungswertSozialeInfrastrukturCsv csv);
 
     StaedtebaulicheOrientierungswertModel entity2Model(final StaedtebaulicheOrientierungswert entity);
 
     StaedtebaulicheOrientierungswert model2Entity(final StaedtebaulicheOrientierungswertModel model);
 
-    @Mappings({
+    @Mappings(
+        {
             @Mapping(target = "id", ignore = true),
             @Mapping(target = "version", ignore = true),
             @Mapping(target = "createdDateTime", ignore = true),
             @Mapping(target = "lastModifiedDateTime", ignore = true),
-    })
+        }
+    )
     StaedtebaulicheOrientierungswert csv2Entity(final StaedtebaulicheOrientierungswertCsv csv);
 
     FoerdermixStammModel entity2Model(final FoerdermixStamm entity);
 
     FoerdermixStamm model2Entity(final FoerdermixStammModel model);
-
 }

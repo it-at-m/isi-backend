@@ -9,15 +9,14 @@ import de.muenchen.isi.domain.model.infrastruktureinrichtung.GsNachmittagBetreuu
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.InfrastruktureinrichtungModel;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.GsNachmittagBetreuung;
 import de.muenchen.isi.infrastructure.repository.infrastruktureinrichtung.GsNachmittagBetreuungRepository;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -35,8 +34,8 @@ public class GsNachmittagBetreuungService {
      */
     public List<GsNachmittagBetreuungModel> getGsNachmittagBetreuungen() {
         return this.gsNachmittagBetreuungRepository.findAllByOrderByInfrastruktureinrichtungNameEinrichtungAsc()
-                .map(this.infrastruktureinrichtungDomainMapper::entity2Model)
-                .collect(Collectors.toList());
+            .map(this.infrastruktureinrichtungDomainMapper::entity2Model)
+            .collect(Collectors.toList());
     }
 
     /**
@@ -63,10 +62,13 @@ public class GsNachmittagBetreuungService {
      * @return das gespeicherte {@link GsNachmittagBetreuungModel}
      * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
      */
-    public GsNachmittagBetreuungModel saveGsNachmittagBetreuung(final GsNachmittagBetreuungModel gsNachmittagBetreuung) throws OptimisticLockingException {
-        GsNachmittagBetreuung gsNachmittagBetreuungEntity = this.infrastruktureinrichtungDomainMapper.model2Entity(gsNachmittagBetreuung);
+    public GsNachmittagBetreuungModel saveGsNachmittagBetreuung(final GsNachmittagBetreuungModel gsNachmittagBetreuung)
+        throws OptimisticLockingException {
+        GsNachmittagBetreuung gsNachmittagBetreuungEntity =
+            this.infrastruktureinrichtungDomainMapper.model2Entity(gsNachmittagBetreuung);
         try {
-            gsNachmittagBetreuungEntity = this.gsNachmittagBetreuungRepository.saveAndFlush(gsNachmittagBetreuungEntity);
+            gsNachmittagBetreuungEntity =
+                this.gsNachmittagBetreuungRepository.saveAndFlush(gsNachmittagBetreuungEntity);
         } catch (final ObjectOptimisticLockingFailureException exception) {
             final var message = "Die Daten wurden in der Zwischenzeit geändert. Bitte laden Sie die Seite neu!";
             throw new OptimisticLockingException(message, exception);
@@ -82,7 +84,9 @@ public class GsNachmittagBetreuungService {
      * @throws EntityNotFoundException falls die Nachmittagsbetreuung für Grundschulkinder identifiziert durch die {@link GsNachmittagBetreuungModel#getId()} nicht gefunden wird
      * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
      */
-    public GsNachmittagBetreuungModel updateGsNachmittagBetreuung(final GsNachmittagBetreuungModel gsNachmittagBetreuung) throws EntityNotFoundException, OptimisticLockingException {
+    public GsNachmittagBetreuungModel updateGsNachmittagBetreuung(
+        final GsNachmittagBetreuungModel gsNachmittagBetreuung
+    ) throws EntityNotFoundException, OptimisticLockingException {
         this.getGsNachmittagBetreuungById(gsNachmittagBetreuung.getId());
         return this.saveGsNachmittagBetreuung(gsNachmittagBetreuung);
     }
@@ -94,9 +98,12 @@ public class GsNachmittagBetreuungService {
      * @throws EntityNotFoundException     falls die Nachmittagsbetreuung für Grundschulkinder identifiziert durch die {@link GsNachmittagBetreuungModel#getId()} nicht gefunden wird.
      * @throws EntityIsReferencedException falls ein {@link BauvorhabenModel} in der ganztägigen Betreuung von Grundschulkinder referenziert wird.
      */
-    public void deleteGsNachmittagBetreuungById(final UUID id) throws EntityNotFoundException, EntityIsReferencedException {
+    public void deleteGsNachmittagBetreuungById(final UUID id)
+        throws EntityNotFoundException, EntityIsReferencedException {
         final var gsNachmittagBetreuung = this.getGsNachmittagBetreuungById(id);
-        this.throwEntityIsReferencedExceptionWhenInfrastruktureinrichtungIsReferencingBauvorhaben(gsNachmittagBetreuung.getInfrastruktureinrichtung());
+        this.throwEntityIsReferencedExceptionWhenInfrastruktureinrichtungIsReferencingBauvorhaben(
+                gsNachmittagBetreuung.getInfrastruktureinrichtung()
+            );
         this.gsNachmittagBetreuungRepository.deleteById(id);
     }
 
@@ -107,13 +114,19 @@ public class GsNachmittagBetreuungService {
      * @param infrastruktureinrichtung zum Prüfen.
      * @throws EntityIsReferencedException falls das {@link GsNachmittagBetreuungModel} ein {@link BauvorhabenModel} referenziert.
      */
-    protected void throwEntityIsReferencedExceptionWhenInfrastruktureinrichtungIsReferencingBauvorhaben(final InfrastruktureinrichtungModel infrastruktureinrichtung) throws EntityIsReferencedException {
+    protected void throwEntityIsReferencedExceptionWhenInfrastruktureinrichtungIsReferencingBauvorhaben(
+        final InfrastruktureinrichtungModel infrastruktureinrichtung
+    ) throws EntityIsReferencedException {
         final var bauvorhaben = infrastruktureinrichtung.getBauvorhaben();
         if (ObjectUtils.isNotEmpty(bauvorhaben)) {
-            final var message = "Die Infrastruktureinrichtung " + infrastruktureinrichtung.getNameEinrichtung() + " referenziert das Bauvorhaben " + bauvorhaben.getNameVorhaben() + ".";
+            final var message =
+                "Die Infrastruktureinrichtung " +
+                infrastruktureinrichtung.getNameEinrichtung() +
+                " referenziert das Bauvorhaben " +
+                bauvorhaben.getNameVorhaben() +
+                ".";
             log.error(message);
             throw new EntityIsReferencedException(message);
         }
     }
-
 }

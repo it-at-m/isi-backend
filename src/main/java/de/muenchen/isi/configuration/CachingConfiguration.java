@@ -7,15 +7,13 @@ package de.muenchen.isi.configuration;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.Ticker;
 import de.muenchen.isi.security.CustomUserInfoTokenServices;
+import java.util.concurrent.TimeUnit;
 import org.springframework.cache.Cache;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.caffeine.CaffeineCache;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
-
-import java.util.concurrent.TimeUnit;
-
 
 /**
  * This class provides the caches.
@@ -47,12 +45,13 @@ public class CachingConfiguration {
     @Bean
     @Profile("!no-security")
     public Cache authenticationCache(final Ticker ticker) {
-        return new CaffeineCache(CustomUserInfoTokenServices.NAME_AUTHENTICATION_CACHE,
-                Caffeine.newBuilder()
-                        .expireAfterWrite(AUTHENTICATION_CACHE_EXPIRATION_TIME_SECONDS, TimeUnit.SECONDS)
-                        .ticker(ticker)
-                        .build()
+        return new CaffeineCache(
+            CustomUserInfoTokenServices.NAME_AUTHENTICATION_CACHE,
+            Caffeine
+                .newBuilder()
+                .expireAfterWrite(AUTHENTICATION_CACHE_EXPIRATION_TIME_SECONDS, TimeUnit.SECONDS)
+                .ticker(ticker)
+                .build()
         );
     }
-
 }

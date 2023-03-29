@@ -1,5 +1,8 @@
 package de.muenchen.isi.domain.service;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.mapper.BaurateDomainMapper;
@@ -7,6 +10,10 @@ import de.muenchen.isi.domain.mapper.BaurateDomainMapperImpl;
 import de.muenchen.isi.domain.model.BaurateModel;
 import de.muenchen.isi.infrastructure.entity.Baurate;
 import de.muenchen.isi.infrastructure.repository.BaurateRepository;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+import java.util.stream.Stream;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,14 +23,6 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-import java.util.stream.Stream;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
@@ -42,7 +41,6 @@ class BaurateServiceTest {
         Mockito.reset(this.baurateRepository);
     }
 
-
     @Test
     void getBauraten() {
         final Baurate baurate1 = new Baurate();
@@ -59,10 +57,7 @@ class BaurateServiceTest {
         final BaurateModel model2 = new BaurateModel();
         model2.setId(baurate2.getId());
 
-        assertThat(
-                result,
-                is(List.of(model1, model2))
-        );
+        assertThat(result, is(List.of(model1, model2)));
     }
 
     @Test
@@ -98,10 +93,7 @@ class BaurateServiceTest {
         final BaurateModel expected = new BaurateModel();
         expected.setId(saveResult.getId());
 
-        assertThat(
-                result,
-                is(expected)
-        );
+        assertThat(result, is(expected));
 
         Mockito.verify(this.baurateRepository, Mockito.times(1)).saveAndFlush(entity);
     }
@@ -122,10 +114,7 @@ class BaurateServiceTest {
         final BaurateModel expected = new BaurateModel();
         expected.setId(model.getId());
 
-        assertThat(
-                result,
-                is(model)
-        );
+        assertThat(result, is(model));
 
         Mockito.verify(this.baurateRepository, Mockito.times(1)).findById(entity.getId());
         Mockito.verify(this.baurateRepository, Mockito.times(1)).saveAndFlush(entity);
@@ -145,5 +134,4 @@ class BaurateServiceTest {
         Mockito.verify(this.baurateRepository, Mockito.times(1)).findById(entity.getId());
         Mockito.verify(this.baurateRepository, Mockito.times(1)).deleteById(id);
     }
-
 }

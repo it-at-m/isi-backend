@@ -1,5 +1,8 @@
 package de.muenchen.isi.domain.service.infrastruktureinrichtung;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+
 import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
@@ -12,6 +15,10 @@ import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.GsNachmittagBetreuung;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Infrastruktureinrichtung;
 import de.muenchen.isi.infrastructure.repository.infrastruktureinrichtung.GsNachmittagBetreuungRepository;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+import java.util.stream.Stream;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,19 +29,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-import java.util.stream.Stream;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
 class GsNachmittagBetreuungServiceTest {
 
-    private final InfrastruktureinrichtungDomainMapper infrastruktureinrichtungDomainMapper = new InfrastruktureinrichtungDomainMapperImpl();
+    private final InfrastruktureinrichtungDomainMapper infrastruktureinrichtungDomainMapper =
+        new InfrastruktureinrichtungDomainMapperImpl();
 
     @Mock
     private GsNachmittagBetreuungRepository gsNachmittagBetreuungRepository;
@@ -43,10 +43,11 @@ class GsNachmittagBetreuungServiceTest {
 
     @BeforeEach
     public void beforeEach() {
-        this.gsNachmittagBetreuungService = new GsNachmittagBetreuungService(
+        this.gsNachmittagBetreuungService =
+            new GsNachmittagBetreuungService(
                 this.infrastruktureinrichtungDomainMapper,
                 this.gsNachmittagBetreuungRepository
-        );
+            );
         Mockito.reset(this.gsNachmittagBetreuungRepository);
     }
 
@@ -57,7 +58,9 @@ class GsNachmittagBetreuungServiceTest {
         final GsNachmittagBetreuung entity2 = new GsNachmittagBetreuung();
         entity2.setId(UUID.randomUUID());
 
-        Mockito.when(this.gsNachmittagBetreuungRepository.findAllByOrderByInfrastruktureinrichtungNameEinrichtungAsc()).thenReturn(Stream.of(entity1, entity2));
+        Mockito
+            .when(this.gsNachmittagBetreuungRepository.findAllByOrderByInfrastruktureinrichtungNameEinrichtungAsc())
+            .thenReturn(Stream.of(entity1, entity2));
 
         final List<GsNachmittagBetreuungModel> result = this.gsNachmittagBetreuungService.getGsNachmittagBetreuungen();
 
@@ -66,24 +69,26 @@ class GsNachmittagBetreuungServiceTest {
         final GsNachmittagBetreuungModel model2 = new GsNachmittagBetreuungModel();
         model2.setId(entity2.getId());
 
-        assertThat(
-                result,
-                is(List.of(model1, model2))
-        );
+        assertThat(result, is(List.of(model1, model2)));
     }
 
     @Test
     void getGsNachmittagBetreuungById() throws EntityNotFoundException {
         final UUID id = UUID.randomUUID();
 
-        Mockito.when(this.gsNachmittagBetreuungRepository.findById(id)).thenReturn(Optional.of(new GsNachmittagBetreuung()));
+        Mockito
+            .when(this.gsNachmittagBetreuungRepository.findById(id))
+            .thenReturn(Optional.of(new GsNachmittagBetreuung()));
         final GsNachmittagBetreuungModel result = this.gsNachmittagBetreuungService.getGsNachmittagBetreuungById(id);
         assertThat(result, is((new GsNachmittagBetreuungModel())));
         Mockito.verify(this.gsNachmittagBetreuungRepository, Mockito.times(1)).findById(id);
         Mockito.reset(this.gsNachmittagBetreuungRepository);
 
         Mockito.when(this.gsNachmittagBetreuungRepository.findById(id)).thenReturn(Optional.empty());
-        Assertions.assertThrows(EntityNotFoundException.class, () -> this.gsNachmittagBetreuungService.getGsNachmittagBetreuungById(id));
+        Assertions.assertThrows(
+            EntityNotFoundException.class,
+            () -> this.gsNachmittagBetreuungService.getGsNachmittagBetreuungById(id)
+        );
         Mockito.verify(this.gsNachmittagBetreuungRepository, Mockito.times(1)).findById(id);
     }
 
@@ -98,19 +103,21 @@ class GsNachmittagBetreuungServiceTest {
         final GsNachmittagBetreuung saveResult = new GsNachmittagBetreuung();
         saveResult.setId(UUID.randomUUID());
 
-        Mockito.when(this.gsNachmittagBetreuungRepository.saveAndFlush(gsNachmittagBetreuungEntity)).thenReturn(saveResult);
+        Mockito
+            .when(this.gsNachmittagBetreuungRepository.saveAndFlush(gsNachmittagBetreuungEntity))
+            .thenReturn(saveResult);
 
-        final GsNachmittagBetreuungModel result = this.gsNachmittagBetreuungService.saveGsNachmittagBetreuung(gsNachmittagBetreuungModel);
+        final GsNachmittagBetreuungModel result =
+            this.gsNachmittagBetreuungService.saveGsNachmittagBetreuung(gsNachmittagBetreuungModel);
 
         final GsNachmittagBetreuungModel expected = new GsNachmittagBetreuungModel();
         expected.setId(saveResult.getId());
 
-        assertThat(
-                result,
-                is(expected)
-        );
+        assertThat(result, is(expected));
 
-        Mockito.verify(this.gsNachmittagBetreuungRepository, Mockito.times(1)).saveAndFlush(gsNachmittagBetreuungEntity);
+        Mockito
+            .verify(this.gsNachmittagBetreuungRepository, Mockito.times(1))
+            .saveAndFlush(gsNachmittagBetreuungEntity);
     }
 
     @Test
@@ -124,15 +131,13 @@ class GsNachmittagBetreuungServiceTest {
         Mockito.when(this.gsNachmittagBetreuungRepository.findById(entity.getId())).thenReturn(Optional.of(entity));
         Mockito.when(this.gsNachmittagBetreuungRepository.saveAndFlush(entity)).thenReturn(entity);
 
-        final GsNachmittagBetreuungModel result = this.gsNachmittagBetreuungService.updateGsNachmittagBetreuung(gsNachmittagBetreuungModel);
+        final GsNachmittagBetreuungModel result =
+            this.gsNachmittagBetreuungService.updateGsNachmittagBetreuung(gsNachmittagBetreuungModel);
 
         final GsNachmittagBetreuungModel expected = new GsNachmittagBetreuungModel();
         expected.setId(gsNachmittagBetreuungModel.getId());
 
-        assertThat(
-                result,
-                is(gsNachmittagBetreuungModel)
-        );
+        assertThat(result, is(gsNachmittagBetreuungModel));
 
         Mockito.verify(this.gsNachmittagBetreuungRepository, Mockito.times(1)).findById(entity.getId());
         Mockito.verify(this.gsNachmittagBetreuungRepository, Mockito.times(1)).saveAndFlush(entity);
@@ -167,19 +172,30 @@ class GsNachmittagBetreuungServiceTest {
 
         Mockito.when(this.gsNachmittagBetreuungRepository.findById(entity.getId())).thenReturn(Optional.of(entity));
 
-        Assertions.assertThrows(EntityIsReferencedException.class, () -> this.gsNachmittagBetreuungService.deleteGsNachmittagBetreuungById(id));
+        Assertions.assertThrows(
+            EntityIsReferencedException.class,
+            () -> this.gsNachmittagBetreuungService.deleteGsNachmittagBetreuungById(id)
+        );
 
         Mockito.verify(this.gsNachmittagBetreuungRepository, Mockito.times(1)).findById(entity.getId());
         Mockito.verify(this.gsNachmittagBetreuungRepository, Mockito.times(0)).deleteById(id);
     }
 
     @Test
-    void throwEntityIsReferencedExceptionWhenInfrastruktureinrichtungIsReferencingBauvorhaben() throws EntityIsReferencedException {
-        this.gsNachmittagBetreuungService.throwEntityIsReferencedExceptionWhenInfrastruktureinrichtungIsReferencingBauvorhaben(new InfrastruktureinrichtungModel());
+    void throwEntityIsReferencedExceptionWhenInfrastruktureinrichtungIsReferencingBauvorhaben()
+        throws EntityIsReferencedException {
+        this.gsNachmittagBetreuungService.throwEntityIsReferencedExceptionWhenInfrastruktureinrichtungIsReferencingBauvorhaben(
+                new InfrastruktureinrichtungModel()
+            );
 
         final InfrastruktureinrichtungModel infrastruktureinrichtung = new InfrastruktureinrichtungModel();
         infrastruktureinrichtung.setBauvorhaben(new BauvorhabenModel());
-        Assertions.assertThrows(EntityIsReferencedException.class, () -> this.gsNachmittagBetreuungService.throwEntityIsReferencedExceptionWhenInfrastruktureinrichtungIsReferencingBauvorhaben(infrastruktureinrichtung));
+        Assertions.assertThrows(
+            EntityIsReferencedException.class,
+            () ->
+                this.gsNachmittagBetreuungService.throwEntityIsReferencedExceptionWhenInfrastruktureinrichtungIsReferencingBauvorhaben(
+                        infrastruktureinrichtung
+                    )
+        );
     }
-
 }

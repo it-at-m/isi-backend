@@ -5,14 +5,13 @@ import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.mapper.BaurateDomainMapper;
 import de.muenchen.isi.domain.model.BaurateModel;
 import de.muenchen.isi.infrastructure.repository.BaurateRepository;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -25,8 +24,8 @@ public class BaurateService {
 
     public List<BaurateModel> getBauraten() {
         return this.baurateRepository.findAllByOrderByJahrDesc()
-                .map(this.baurateDomainMapper::entity2Model)
-                .collect(Collectors.toList());
+            .map(this.baurateDomainMapper::entity2Model)
+            .collect(Collectors.toList());
     }
 
     /**
@@ -71,7 +70,8 @@ public class BaurateService {
      * @throws EntityNotFoundException falls die Abfrage identifiziert durch die {@link BaurateModel#getId()} nicht gefunden wird
      * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
      */
-    public BaurateModel updateBaurate(final BaurateModel baurate) throws EntityNotFoundException, OptimisticLockingException {
+    public BaurateModel updateBaurate(final BaurateModel baurate)
+        throws EntityNotFoundException, OptimisticLockingException {
         this.getBaurateById(baurate.getId());
         return this.saveBaurate(baurate);
     }
@@ -86,5 +86,4 @@ public class BaurateService {
         final var model = this.getBaurateById(id);
         this.baurateRepository.deleteById(model.getId());
     }
-
 }

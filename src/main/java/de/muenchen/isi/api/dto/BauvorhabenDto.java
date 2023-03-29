@@ -8,13 +8,12 @@ import de.muenchen.isi.infrastructure.entity.enums.lookup.BaugebietTyp;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Planungsrecht;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVorhaben;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
-import lombok.Data;
-
+import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.List;
+import lombok.Data;
 
 @Data
 public class BauvorhabenDto extends BaseEntityDto {
@@ -66,6 +65,4 @@ public class BauvorhabenDto extends BaseEntityDto {
 
     @HasAllowedNumberOfDocuments
     private List<@Valid DokumentDto> dokumente;
-
 }
-

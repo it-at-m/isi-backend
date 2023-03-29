@@ -4,6 +4,13 @@
  */
 package de.muenchen.isi.infrastructure.entity;
 
+import java.time.LocalDateTime;
+import java.util.UUID;
+import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.MappedSuperclass;
+import javax.persistence.Version;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,14 +21,6 @@ import org.hibernate.annotations.Type;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
-import javax.persistence.Version;
-import java.time.LocalDateTime;
-import java.util.UUID;
-
 @MappedSuperclass
 @NoArgsConstructor
 @Getter
@@ -30,20 +29,11 @@ import java.util.UUID;
 @EqualsAndHashCode
 public abstract class BaseEntity {
 
-    @Column(
-            length = 36
-    )
+    @Column(length = 36)
     @Id
-    @GeneratedValue(
-            generator = "uuid"
-    )
-    @GenericGenerator(
-            name = "uuid",
-            strategy = "uuid2"
-    )
-    @Type(
-            type = "uuid-char"
-    )
+    @GeneratedValue(generator = "uuid")
+    @GenericGenerator(name = "uuid", strategy = "uuid2")
+    @Type(type = "uuid-char")
     private UUID id;
 
     @Version
@@ -58,5 +48,4 @@ public abstract class BaseEntity {
     @LastModifiedDate
     @Column(columnDefinition = "TIMESTAMP")
     private LocalDateTime lastModifiedDateTime;
-
 }

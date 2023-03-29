@@ -5,10 +5,8 @@
 package de.muenchen.isi.infrastructure.entity;
 
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Planungsrecht;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
-
+import java.math.BigDecimal;
+import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,8 +15,9 @@ import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
-import java.math.BigDecimal;
-import java.util.List;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 @Entity
 @Data
@@ -78,8 +77,7 @@ public class Abfragevariante extends BaseEntity {
     @Column(precision = 10, scale = 2, nullable = true)
     private BigDecimal geschossflaecheSonstiges;
 
-    @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER, orphanRemoval = true)
+    @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval = true)
     @JoinColumn(name = "abfragevariante_id")
     private List<Bauabschnitt> bauabschnitte;
-
 }

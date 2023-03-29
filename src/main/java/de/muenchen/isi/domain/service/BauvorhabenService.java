@@ -17,16 +17,15 @@ import de.muenchen.isi.infrastructure.repository.infrastruktureinrichtung.HausFu
 import de.muenchen.isi.infrastructure.repository.infrastruktureinrichtung.KindergartenRepository;
 import de.muenchen.isi.infrastructure.repository.infrastruktureinrichtung.KinderkrippeRepository;
 import de.muenchen.isi.infrastructure.repository.infrastruktureinrichtung.MittelschuleRepository;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.Nullable;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -50,8 +49,8 @@ public class BauvorhabenService {
      */
     public List<BauvorhabenModel> getBauvorhaben() {
         return this.bauvorhabenRepository.findAllByOrderByGrundstuecksgroesseDesc()
-                .map(this.bauvorhabenDomainMapper::entity2Model)
-                .collect(Collectors.toList());
+            .map(this.bauvorhabenDomainMapper::entity2Model)
+            .collect(Collectors.toList());
     }
 
     /**
@@ -70,7 +69,6 @@ public class BauvorhabenService {
         return this.bauvorhabenDomainMapper.entity2Model(entity);
     }
 
-
     /**
      * Diese Methode speichert ein {@link BauvorhabenModel}.
      *
@@ -79,7 +77,8 @@ public class BauvorhabenService {
      * @throws UniqueViolationException falls der Name des Bauvorhabens {@link BauvorhabenModel#getNameVorhaben()} bereits vorhanden ist
      * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
      */
-    public BauvorhabenModel saveBauvorhaben(final BauvorhabenModel bauvorhaben) throws UniqueViolationException, OptimisticLockingException {
+    public BauvorhabenModel saveBauvorhaben(final BauvorhabenModel bauvorhaben)
+        throws UniqueViolationException, OptimisticLockingException {
         var bauvorhabenEntity = this.bauvorhabenDomainMapper.model2Entity(bauvorhaben);
         final var saved = this.bauvorhabenRepository.findByNameVorhabenIgnoreCase(bauvorhabenEntity.getNameVorhaben());
         if ((saved.isPresent() && saved.get().getId().equals(bauvorhabenEntity.getId())) || saved.isEmpty()) {
@@ -91,7 +90,9 @@ public class BauvorhabenService {
             }
             return this.bauvorhabenDomainMapper.entity2Model(bauvorhabenEntity);
         } else {
-            throw new UniqueViolationException("Der angegebene Name des Bauvorhabens ist schon vorhanden, bitte wählen Sie daher einen anderen Namen und speichern Sie die Abfrage erneut.");
+            throw new UniqueViolationException(
+                "Der angegebene Name des Bauvorhabens ist schon vorhanden, bitte wählen Sie daher einen anderen Namen und speichern Sie die Abfrage erneut."
+            );
         }
     }
 
@@ -104,7 +105,8 @@ public class BauvorhabenService {
      * @throws UniqueViolationException falls der Name des Bauvorhabens {@link BauvorhabenModel#getNameVorhaben()} bereits vorhanden ist
      * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
      */
-    public BauvorhabenModel updateBauvorhaben(final BauvorhabenModel bauvorhaben) throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException {
+    public BauvorhabenModel updateBauvorhaben(final BauvorhabenModel bauvorhaben)
+        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException {
         this.getBauvorhabenById(bauvorhaben.getId());
         return this.saveBauvorhaben(bauvorhaben);
     }
@@ -134,7 +136,8 @@ public class BauvorhabenService {
      * @return Die (möglicherweise) geänderte Abfrage.
      * @throws EntityNotFoundException falls das Bauvorhaben mit der gegebenen ID nicht gefunden wurde.
      */
-    public AbfrageModel assignBauvorhabenToAbfrage(@Nullable final UUID bauvorhabenId, final AbfrageModel abfrage) throws EntityNotFoundException {
+    public AbfrageModel assignBauvorhabenToAbfrage(@Nullable final UUID bauvorhabenId, final AbfrageModel abfrage)
+        throws EntityNotFoundException {
         if (bauvorhabenId != null) {
             final var model = this.getBauvorhabenById(bauvorhabenId);
             abfrage.setBauvorhaben(model);
@@ -153,7 +156,10 @@ public class BauvorhabenService {
      * @return Die (möglicherweise) geänderte Infrastruktureinrichtung
      * @throws EntityNotFoundException falls das Bauvorhaben mit der gegebenen ID nicht gefunden wurde
      */
-    public InfrastruktureinrichtungModel assignBauvorhabenToInfrastruktureinrichtung(@Nullable final UUID bauvorhabenId, final InfrastruktureinrichtungModel infrastruktureinrichtung) throws EntityNotFoundException {
+    public InfrastruktureinrichtungModel assignBauvorhabenToInfrastruktureinrichtung(
+        @Nullable final UUID bauvorhabenId,
+        final InfrastruktureinrichtungModel infrastruktureinrichtung
+    ) throws EntityNotFoundException {
         if (bauvorhabenId != null) {
             final var model = this.getBauvorhabenById(bauvorhabenId);
             infrastruktureinrichtung.setBauvorhaben(model);
@@ -168,12 +174,21 @@ public class BauvorhabenService {
      * @param bauvorhaben zum Prüfen.
      * @throws EntityIsReferencedException falls das {@link BauvorhabenModel} durch ein {@link AbfrageModel} referenziert wird.
      */
-    protected void throwEntityIsReferencedExceptionWhenAbfrageIsReferencingBauvorhaben(final BauvorhabenModel bauvorhaben) throws EntityIsReferencedException {
-        final List<String> nameAbfragen = this.infrastrukturabfrageRepository.findAllByAbfrageBauvorhabenId(bauvorhaben.getId())
-                .map(abfrage -> abfrage.getAbfrage().getNameAbfrage()).collect(Collectors.toList());
+    protected void throwEntityIsReferencedExceptionWhenAbfrageIsReferencingBauvorhaben(
+        final BauvorhabenModel bauvorhaben
+    ) throws EntityIsReferencedException {
+        final List<String> nameAbfragen =
+            this.infrastrukturabfrageRepository.findAllByAbfrageBauvorhabenId(bauvorhaben.getId())
+                .map(abfrage -> abfrage.getAbfrage().getNameAbfrage())
+                .collect(Collectors.toList());
         if (!nameAbfragen.isEmpty()) {
             final var commaSeparatedNames = String.join(", ", nameAbfragen);
-            final var message = "Das Bauvorhaben " + bauvorhaben.getNameVorhaben() + " wird durch die Abfragen " + commaSeparatedNames + " referenziert.";
+            final var message =
+                "Das Bauvorhaben " +
+                bauvorhaben.getNameVorhaben() +
+                " wird durch die Abfragen " +
+                commaSeparatedNames +
+                " referenziert.";
             log.error(message);
             throw new EntityIsReferencedException(message);
         }
@@ -186,27 +201,50 @@ public class BauvorhabenService {
      * @param bauvorhaben zum Prüfen.
      * @throws EntityIsReferencedException falls das {@link BauvorhabenModel} durch ein {@link InfrastruktureinrichtungModel} referenziert wird.
      */
-    protected void throwEntityIsReferencedExceptionWhenInfrastruktureinrichtungIsReferencingBauvorhaben(final BauvorhabenModel bauvorhaben) throws EntityIsReferencedException {
+    protected void throwEntityIsReferencedExceptionWhenInfrastruktureinrichtungIsReferencingBauvorhaben(
+        final BauvorhabenModel bauvorhaben
+    ) throws EntityIsReferencedException {
         final List<String> namenInfrastruktureinrichtung = new ArrayList<String>();
-        namenInfrastruktureinrichtung.addAll(this.kinderkrippeRepository.findAllByInfrastruktureinrichtungBauvorhabenId(bauvorhaben.getId())
-                .map(kinderkrippe -> kinderkrippe.getInfrastruktureinrichtung().getNameEinrichtung()).collect(Collectors.toList()));
-        namenInfrastruktureinrichtung.addAll(this.kindergartenRepositoryRepository.findAllByInfrastruktureinrichtungBauvorhabenId(bauvorhaben.getId())
-                .map(kindergarten -> kindergarten.getInfrastruktureinrichtung().getNameEinrichtung()).collect(Collectors.toList()));
-        namenInfrastruktureinrichtung.addAll(this.hausFuerKinderRepository.findAllByInfrastruktureinrichtungBauvorhabenId(bauvorhaben.getId())
-                .map(hausFuerKinder -> hausFuerKinder.getInfrastruktureinrichtung().getNameEinrichtung()).collect(Collectors.toList()));
-        namenInfrastruktureinrichtung.addAll(this.gsNachmittagBetreuungRepository.findAllByInfrastruktureinrichtungBauvorhabenId(bauvorhaben.getId())
-                .map(gsNachmittagBetreuung -> gsNachmittagBetreuung.getInfrastruktureinrichtung().getNameEinrichtung()).collect(Collectors.toList()));
-        namenInfrastruktureinrichtung.addAll(this.grundschuleRepository.findAllByInfrastruktureinrichtungBauvorhabenId(bauvorhaben.getId())
-                .map(grundschule -> grundschule.getInfrastruktureinrichtung().getNameEinrichtung()).collect(Collectors.toList()));
-        namenInfrastruktureinrichtung.addAll(this.mittelschuleRepository.findAllByInfrastruktureinrichtungBauvorhabenId(bauvorhaben.getId())
-                .map(mittelschule -> mittelschule.getInfrastruktureinrichtung().getNameEinrichtung()).collect(Collectors.toList()));
+        namenInfrastruktureinrichtung.addAll(
+            this.kinderkrippeRepository.findAllByInfrastruktureinrichtungBauvorhabenId(bauvorhaben.getId())
+                .map(kinderkrippe -> kinderkrippe.getInfrastruktureinrichtung().getNameEinrichtung())
+                .collect(Collectors.toList())
+        );
+        namenInfrastruktureinrichtung.addAll(
+            this.kindergartenRepositoryRepository.findAllByInfrastruktureinrichtungBauvorhabenId(bauvorhaben.getId())
+                .map(kindergarten -> kindergarten.getInfrastruktureinrichtung().getNameEinrichtung())
+                .collect(Collectors.toList())
+        );
+        namenInfrastruktureinrichtung.addAll(
+            this.hausFuerKinderRepository.findAllByInfrastruktureinrichtungBauvorhabenId(bauvorhaben.getId())
+                .map(hausFuerKinder -> hausFuerKinder.getInfrastruktureinrichtung().getNameEinrichtung())
+                .collect(Collectors.toList())
+        );
+        namenInfrastruktureinrichtung.addAll(
+            this.gsNachmittagBetreuungRepository.findAllByInfrastruktureinrichtungBauvorhabenId(bauvorhaben.getId())
+                .map(gsNachmittagBetreuung -> gsNachmittagBetreuung.getInfrastruktureinrichtung().getNameEinrichtung())
+                .collect(Collectors.toList())
+        );
+        namenInfrastruktureinrichtung.addAll(
+            this.grundschuleRepository.findAllByInfrastruktureinrichtungBauvorhabenId(bauvorhaben.getId())
+                .map(grundschule -> grundschule.getInfrastruktureinrichtung().getNameEinrichtung())
+                .collect(Collectors.toList())
+        );
+        namenInfrastruktureinrichtung.addAll(
+            this.mittelschuleRepository.findAllByInfrastruktureinrichtungBauvorhabenId(bauvorhaben.getId())
+                .map(mittelschule -> mittelschule.getInfrastruktureinrichtung().getNameEinrichtung())
+                .collect(Collectors.toList())
+        );
         if (!namenInfrastruktureinrichtung.isEmpty()) {
             final var commaSeparatedNames = String.join(", ", namenInfrastruktureinrichtung);
-            final var message = "Das Bauvorhaben " + bauvorhaben.getNameVorhaben() + " wird durch die Infrastruktureinrichtungen " + commaSeparatedNames + " referenziert.";
+            final var message =
+                "Das Bauvorhaben " +
+                bauvorhaben.getNameVorhaben() +
+                " wird durch die Infrastruktureinrichtungen " +
+                commaSeparatedNames +
+                " referenziert.";
             log.error(message);
             throw new EntityIsReferencedException(message);
         }
     }
-
-
 }
