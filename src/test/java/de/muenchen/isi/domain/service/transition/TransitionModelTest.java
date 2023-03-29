@@ -163,7 +163,7 @@ public class TransitionModelTest {
         TransitionModel firstPossibleTransition = new TransitionModel();
         firstPossibleTransition.setIndex(2);
         firstPossibleTransition.setButtonName("IN BEARBEITUNG SETZEN");
-        firstPossibleTransition.setUrl("in-bearbeitung-setzten");
+        firstPossibleTransition.setUrl("in-bearbeitung-setzen");
 
         expected.add(firstPossibleTransition);
 
