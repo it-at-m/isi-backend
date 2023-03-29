@@ -53,6 +53,8 @@ public class SecurityContextFactory implements WithSecurityContextFactory<MockCu
             authoritiesRoles[0] = "ISI_BACKEND_READ_ABFRAGE";
         }
 
+        System.out.println("--- LÄNGE --- :" + authoritiesRoles.length);
+
         SecurityContext context = SecurityContextHolder.createEmptyContext();
         JSONArray roles = new JSONArray();
 
