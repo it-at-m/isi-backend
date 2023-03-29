@@ -2,6 +2,7 @@ package de.muenchen.isi.domain.service.transition;
 
 import com.nimbusds.jose.shaded.json.JSONArray;
 import com.nimbusds.jose.shaded.json.JSONObject;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -20,37 +21,37 @@ public class SecurityContextFactory implements WithSecurityContextFactory<MockCu
 
     @Override
     public SecurityContext createSecurityContext(MockCustomUser customUser) {
-        String[] authoritiesRoles = new String[9];
+        List<String> authoritiesRoles = new ArrayList<>();
         if (customUser.roles()[0].equals("lhm-isi-admin")) {
-            authoritiesRoles[0] = "ISI_BACKEND_FREIGABE_ABFRAGE";
-            authoritiesRoles[1] = "ISI_BACKEND_ABBRECHEN_ABFRAGE";
-            authoritiesRoles[2] = "ISI_BACKEND_ANGABEN_ANPASSEN_ABFRAGE";
-            authoritiesRoles[3] = "ISI_BACKEND_IN_BEARBEITUNG_SETZTEN";
-            authoritiesRoles[4] = "ISI_BACKEND_KORRIGIEREN";
-            authoritiesRoles[5] = "ISI_BACKEND_KEINE_BEARBEITUNG_NOETIG_ABFRAGE";
-            authoritiesRoles[6] = "ISI_BACKEND_VERSCHICKEN_DER_STELLUNGNAHME_ABFRAGE";
-            authoritiesRoles[7] = "ISI_BACKEND_BEDARFSMELDUNG_ERFOLGT_ABFRAGE";
-            authoritiesRoles[8] = "ISI_BACKEND_SPEICHERN_VON_SOZIALINFRASTRUKTUR_VERSORGUNG_ABFRAGE";
+            authoritiesRoles.add("ISI_BACKEND_FREIGABE_ABFRAGE");
+            authoritiesRoles.add("ISI_BACKEND_ABBRECHEN_ABFRAGE");
+            authoritiesRoles.add("ISI_BACKEND_ANGABEN_ANPASSEN_ABFRAGE");
+            authoritiesRoles.add("ISI_BACKEND_IN_BEARBEITUNG_SETZTEN");
+            authoritiesRoles.add("ISI_BACKEND_KORRIGIEREN");
+            authoritiesRoles.add("ISI_BACKEND_KEINE_BEARBEITUNG_NOETIG_ABFRAGE");
+            authoritiesRoles.add("ISI_BACKEND_VERSCHICKEN_DER_STELLUNGNAHME_ABFRAGE");
+            authoritiesRoles.add("ISI_BACKEND_BEDARFSMELDUNG_ERFOLGT_ABFRAGE");
+            authoritiesRoles.add("ISI_BACKEND_SPEICHERN_VON_SOZIALINFRASTRUKTUR_VERSORGUNG_ABFRAGE");
         }
 
         if (customUser.roles()[0].equals("lhm-isi-sachbearbeiter_kita_schule_PLAN")) {
-            authoritiesRoles[0] = "ISI_BACKEND_ABBRECHEN_ABFRAGE";
-            authoritiesRoles[1] = "ISI_BACKEND_ANGABEN_ANPASSEN_ABFRAGE";
-            authoritiesRoles[2] = "ISI_BACKEND_IN_BEARBEITUNG_SETZTEN";
-            authoritiesRoles[3] = "ISI_BACKEND_KORRIGIEREN";
-            authoritiesRoles[4] = "ISI_BACKEND_KEINE_BEARBEITUNG_NOETIG_ABFRAGE";
-            authoritiesRoles[5] = "ISI_BACKEND_VERSCHICKEN_DER_STELLUNGNAHME_ABFRAGE";
-            authoritiesRoles[6] = "ISI_BACKEND_BEDARFSMELDUNG_ERFOLGT_ABFRAGE";
-            authoritiesRoles[7] = "ISI_BACKEND_SPEICHERN_VON_SOZIALINFRASTRUKTUR_VERSORGUNG_ABFRAGE";
+            authoritiesRoles.add("ISI_BACKEND_ABBRECHEN_ABFRAGE");
+            authoritiesRoles.add("ISI_BACKEND_ANGABEN_ANPASSEN_ABFRAGE");
+            authoritiesRoles.add("ISI_BACKEND_IN_BEARBEITUNG_SETZTEN");
+            authoritiesRoles.add("ISI_BACKEND_KORRIGIEREN");
+            authoritiesRoles.add("ISI_BACKEND_KEINE_BEARBEITUNG_NOETIG_ABFRAGE");
+            authoritiesRoles.add("ISI_BACKEND_VERSCHICKEN_DER_STELLUNGNAHME_ABFRAGE");
+            authoritiesRoles.add("ISI_BACKEND_BEDARFSMELDUNG_ERFOLGT_ABFRAGE");
+            authoritiesRoles.add("ISI_BACKEND_SPEICHERN_VON_SOZIALINFRASTRUKTUR_VERSORGUNG_ABFRAGE");
         }
 
         if (customUser.roles()[0].equals("lhm-isi-abfrageersteller")) {
-            authoritiesRoles[0] = "ISI_BACKEND_FREIGABE_ABFRAGE";
-            authoritiesRoles[1] = "ISI_BACKEND_BEDARFSMELDUNG_ERFOLGT_ABFRAGE";
+            authoritiesRoles.add("ISI_BACKEND_FREIGABE_ABFRAGE");
+            authoritiesRoles.add("ISI_BACKEND_BEDARFSMELDUNG_ERFOLGT_ABFRAGE");
         }
 
         if (customUser.roles()[0].equals("lhm-isi-nutzer")) {
-            authoritiesRoles[0] = "ISI_BACKEND_READ_ABFRAGE";
+            authoritiesRoles.add("ISI_BACKEND_READ_ABFRAGE");
         }
         for (String item : authoritiesRoles) {
             System.out.println("--- " + customUser.roles()[0] + " --- :" + item);
@@ -64,8 +65,9 @@ public class SecurityContextFactory implements WithSecurityContextFactory<MockCu
         isi.put("roles", roles);
         JSONObject resourceAccessObject = new JSONObject();
         resourceAccessObject.put("isi", isi);
-
-        List<GrantedAuthority> authorities = AuthorityUtils.createAuthorityList(authoritiesRoles);
+        List<GrantedAuthority> authorities = AuthorityUtils.createAuthorityList(
+            authoritiesRoles.toArray(String[]::new)
+        );
         DefaultOAuth2AuthenticatedPrincipal principal = new DefaultOAuth2AuthenticatedPrincipal(
             "Name",
             Map.of(
