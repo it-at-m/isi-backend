@@ -14,7 +14,6 @@ import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrageEvents;
 import de.muenchen.isi.security.AuthoritiesEnum;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections4.MultiValuedMap;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageHeaders;
 import org.springframework.messaging.support.MessageBuilder;
@@ -264,23 +263,7 @@ public class AbfrageStatusService {
     }
 
     /**
-     * Entnimmt alle möglichen Statusänderungen aus dem aktuellen Status.
-     *
-     * @param id vom Typ {@link UUID} um die Abfrage zu finden
-     * @return Liste von {@link StatusAbfrageEvents} welche möglich sind
-     * @throws EntityNotFoundException falls die Abfrage nicht gefunden wird
-     */
-    public List<StatusAbfrageEvents> getStatusAbfrageEventsBasedOnState(final UUID id) throws EntityNotFoundException {
-        final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id);
-        return stateMachine.getTransitions().stream()
-                .filter(transition -> transition.getSource().getId().equals(stateMachine.getState().getId()))
-                .map(transition -> transition.getTrigger().getEvent())
-                .collect(Collectors.toList());
-
-    }
-
-    /**
-     * Entnimmt alle möglichen Statusänderungen aus dem aktuellen Status und der aktuellen Rolle des Nutzers.
+     * Entnimmt alle möglichen Statusänderungen aus dem aktuellen Status und den Authorities des Nutzers.
      *
      * @param id vom Typ {@link UUID} um die Abfrage zu finden
      * @return Liste von {@link TransitionModel} welche möglich sind
@@ -308,9 +291,25 @@ public class AbfrageStatusService {
     }
 
     /**
-     * Definiert eine {@link MultiValuedMap} welche die Nutzerrolle mit den dazugehörigten {@link StatusAbfrageEvents} verknüpft.
+     * Entnimmt alle möglichen Statusänderungen aus dem aktuellen Status.
      *
-     * @return {@link MultiValuedMap}
+     * @param id vom Typ {@link UUID} um die Abfrage zu finden
+     * @return Liste von {@link StatusAbfrageEvents} welche möglich sind
+     * @throws EntityNotFoundException falls die Abfrage nicht gefunden wird
+     */
+    public List<StatusAbfrageEvents> getStatusAbfrageEventsBasedOnState(final UUID id) throws EntityNotFoundException {
+        final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id);
+        return stateMachine.getTransitions().stream()
+                .filter(transition -> transition.getSource().getId().equals(stateMachine.getState().getId()))
+                .map(transition -> transition.getTrigger().getEvent())
+                .collect(Collectors.toList());
+
+    }
+
+    /**
+     * Definiert eine {@link Map} welche die {@link AuthoritiesEnum} mit den dazugehörigten {@link StatusAbfrageEvents} verknüpft.
+     *
+     * @return {@link Map}
      */
     private Map<AuthoritiesEnum, StatusAbfrageEvents> getRolesAndEventsMap() {
         final Map<AuthoritiesEnum, StatusAbfrageEvents> rolesAndEvents = new HashMap<>();
