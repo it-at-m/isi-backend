@@ -31,7 +31,9 @@ public class SecurityContextFactory implements WithSecurityContextFactory<MockCu
             authoritiesRoles[6] = "ISI_BACKEND_VERSCHICKEN_DER_STELLUNGNAHME_ABFRAGE";
             authoritiesRoles[7] = "ISI_BACKEND_BEDARFSMELDUNG_ERFOLGT_ABFRAGE";
             authoritiesRoles[8] = "ISI_BACKEND_SPEICHERN_VON_SOZIALINFRASTRUKTUR_VERSORGUNG_ABFRAGE";
-        } else if (customUser.roles()[0].equals("lhm-isi-sachbearbeiter_kita_schule_PLAN")) {
+        }
+
+        if (customUser.roles()[0].equals("lhm-isi-sachbearbeiter_kita_schule_PLAN")) {
             authoritiesRoles[0] = "ISI_BACKEND_ABBRECHEN_ABFRAGE";
             authoritiesRoles[1] = "ISI_BACKEND_ANGABEN_ANPASSEN_ABFRAGE";
             authoritiesRoles[2] = "ISI_BACKEND_IN_BEARBEITUNG_SETZTEN";
@@ -40,10 +42,14 @@ public class SecurityContextFactory implements WithSecurityContextFactory<MockCu
             authoritiesRoles[5] = "ISI_BACKEND_VERSCHICKEN_DER_STELLUNGNAHME_ABFRAGE";
             authoritiesRoles[6] = "ISI_BACKEND_BEDARFSMELDUNG_ERFOLGT_ABFRAGE";
             authoritiesRoles[7] = "ISI_BACKEND_SPEICHERN_VON_SOZIALINFRASTRUKTUR_VERSORGUNG_ABFRAGE";
-        } else if (customUser.roles()[0].equals("lhm-isi-abfrageersteller")) {
+        }
+
+        if (customUser.roles()[0].equals("lhm-isi-abfrageersteller")) {
             authoritiesRoles[0] = "ISI_BACKEND_FREIGABE_ABFRAGE";
             authoritiesRoles[1] = "ISI_BACKEND_BEDARFSMELDUNG_ERFOLGT_ABFRAGE";
-        } else if (customUser.roles()[0].equals("lhm-isi-nutzer")) {
+        }
+
+        if (customUser.roles()[0].equals("lhm-isi-nutzer")) {
             authoritiesRoles[0] = "ISI_BACKEND_READ_ABFRAGE";
         }
 
