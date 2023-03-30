@@ -3,3 +3,6 @@ target
 
 # yml-Datieien könnnen evtl. zu Fehlern führen
 *.yml
+
+# Interne Dateien
+src/**/DatabaseFiller.java
