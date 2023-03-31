@@ -370,7 +370,7 @@ public class AbfrageStatusService {
             StatusAbfrageEvents.VERSCHICKEN_DER_STELLUNGNAHME
         );
         rolesAndEvents.put(
-            AuthoritiesEnum.ISI_BACKEND_BEDARFSMELDUNG_ERFOLGT_ABFRAGE,
+            AuthoritiesEnum.ISI_BACKEND_BEDARFSMELDUNG_ERFOLGTE_ABFRAGE,
             StatusAbfrageEvents.BEDARFSMELDUNG_ERFOLGTE
         );
         rolesAndEvents.put(

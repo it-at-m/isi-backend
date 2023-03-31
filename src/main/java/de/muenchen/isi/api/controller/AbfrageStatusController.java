@@ -277,7 +277,7 @@ public class AbfrageStatusController {
         }
     )
     @PreAuthorize(
-        "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_BEDARFSMELDUNG_ERFOLGT_ABFRAGE.name())"
+        "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_BEDARFSMELDUNG_ERFOLGTE_ABFRAGE.name())"
     )
     public ResponseEntity<Void> bedarfsmeldungErfolgtInfrastrukturAbfrage(@PathVariable @NotNull final UUID id)
         throws EntityNotFoundException, AbfrageStatusNotAllowedException {
