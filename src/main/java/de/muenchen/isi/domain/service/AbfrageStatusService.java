@@ -94,9 +94,10 @@ public class AbfrageStatusService {
      * @throws EntityNotFoundException          falls die Abfrage nicht gefunden wird
      * @throws AbfrageStatusNotAllowedException wenn die Statusänderung nicht erlaubt ist
      */
-    public void angabenAnpassenAbfrage(final UUID id) throws EntityNotFoundException, AbfrageStatusNotAllowedException {
+    public void zurueckAnAbfrageErstellerAbfrage(final UUID id)
+        throws EntityNotFoundException, AbfrageStatusNotAllowedException {
         final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id);
-        this.sendEvent(id, StatusAbfrageEvents.ANGABEN_ANPASSEN, stateMachine);
+        this.sendEvent(id, StatusAbfrageEvents.ZURUECK_AN_ABFRAGEERSTELLER, stateMachine);
     }
 
     /**
@@ -106,9 +107,9 @@ public class AbfrageStatusService {
      * @throws EntityNotFoundException          falls die Abfrage nicht gefunden wird
      * @throws AbfrageStatusNotAllowedException wenn die Statusänderung nicht erlaubt ist
      */
-    public void korrigierenAbfrage(final UUID id) throws EntityNotFoundException, AbfrageStatusNotAllowedException {
+    public void zurueckAnPlanAbfrage(final UUID id) throws EntityNotFoundException, AbfrageStatusNotAllowedException {
         final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id);
-        this.sendEvent(id, StatusAbfrageEvents.KORRIGIEREN, stateMachine);
+        this.sendEvent(id, StatusAbfrageEvents.ZURUECK_AN_PLAN, stateMachine);
     }
 
     /**
@@ -118,9 +119,9 @@ public class AbfrageStatusService {
      * @throws EntityNotFoundException          falls die Abfrage nicht gefunden wird
      * @throws AbfrageStatusNotAllowedException wenn die Statusänderung nicht erlaubt ist
      */
-    public void keineBearbeitungNoetig(final UUID id) throws EntityNotFoundException, AbfrageStatusNotAllowedException {
+    public void abfrageSchliessen(final UUID id) throws EntityNotFoundException, AbfrageStatusNotAllowedException {
         final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id);
-        this.sendEvent(id, StatusAbfrageEvents.KEINE_BEARBEITUNG_NOETIG, stateMachine);
+        this.sendEvent(id, StatusAbfrageEvents.ABFRAGE_SCHLIESSEN, stateMachine);
     }
 
     /**
@@ -159,6 +160,19 @@ public class AbfrageStatusService {
         throws EntityNotFoundException, AbfrageStatusNotAllowedException {
         final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id);
         this.sendEvent(id, StatusAbfrageEvents.SPEICHERN_VON_SOZIALINFRASTRUKTUR_VERSORGUNG, stateMachine);
+    }
+
+    /**
+     * Ändert den Status auf {@link StatusAbfrage#IN_BEARBEITUNG_PLAN}.
+     *
+     * @param id vom Typ {@link UUID} um die Abfrage zu finden
+     * @throws EntityNotFoundException          falls die Abfrage nicht gefunden wird
+     * @throws AbfrageStatusNotAllowedException wenn die Statusänderung nicht erlaubt ist
+     */
+    public void erneuteBearbeitenAbfrage(final UUID id)
+        throws EntityNotFoundException, AbfrageStatusNotAllowedException {
+        final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id);
+        this.sendEvent(id, StatusAbfrageEvents.ERNEUTE_BEARBEITUNG, stateMachine);
     }
 
     /**
@@ -341,16 +355,16 @@ public class AbfrageStatusService {
         final Map<AuthoritiesEnum, StatusAbfrageEvents> rolesAndEvents = new HashMap<>();
         rolesAndEvents.put(AuthoritiesEnum.ISI_BACKEND_FREIGABE_ABFRAGE, StatusAbfrageEvents.FREIGABE);
         rolesAndEvents.put(AuthoritiesEnum.ISI_BACKEND_ABBRECHEN_ABFRAGE, StatusAbfrageEvents.ABBRECHEN);
-        rolesAndEvents.put(AuthoritiesEnum.ISI_BACKEND_ANGABEN_ANPASSEN_ABFRAGE, StatusAbfrageEvents.ANGABEN_ANPASSEN);
         rolesAndEvents.put(
-            AuthoritiesEnum.ISI_BACKEND_IN_BEARBEITUNG_SETZTEN,
+            AuthoritiesEnum.ISI_BACKEND_ZURUECK_AN_ABFRAGEERSTELLER_ABFRAGE,
+            StatusAbfrageEvents.ZURUECK_AN_ABFRAGEERSTELLER
+        );
+        rolesAndEvents.put(
+            AuthoritiesEnum.ISI_BACKEND_IN_BEARBEITUNG_SETZTEN_ABFRAGE,
             StatusAbfrageEvents.IN_BEARBEITUNG_SETZEN
         );
-        rolesAndEvents.put(AuthoritiesEnum.ISI_BACKEND_KORRIGIEREN, StatusAbfrageEvents.KORRIGIEREN);
-        rolesAndEvents.put(
-            AuthoritiesEnum.ISI_BACKEND_KEINE_BEARBEITUNG_NOETIG_ABFRAGE,
-            StatusAbfrageEvents.KEINE_BEARBEITUNG_NOETIG
-        );
+        rolesAndEvents.put(AuthoritiesEnum.ISI_BACKEND_ZURUECK_AN_PLAN_ABFRAGE, StatusAbfrageEvents.ZURUECK_AN_PLAN);
+        rolesAndEvents.put(AuthoritiesEnum.ISI_BACKEND_SCHLIESSEN_ABFRAGE, StatusAbfrageEvents.ABFRAGE_SCHLIESSEN);
         rolesAndEvents.put(
             AuthoritiesEnum.ISI_BACKEND_VERSCHICKEN_DER_STELLUNGNAHME_ABFRAGE,
             StatusAbfrageEvents.VERSCHICKEN_DER_STELLUNGNAHME
@@ -362,6 +376,10 @@ public class AbfrageStatusService {
         rolesAndEvents.put(
             AuthoritiesEnum.ISI_BACKEND_SPEICHERN_VON_SOZIALINFRASTRUKTUR_VERSORGUNG_ABFRAGE,
             StatusAbfrageEvents.SPEICHERN_VON_SOZIALINFRASTRUKTUR_VERSORGUNG
+        );
+        rolesAndEvents.put(
+            AuthoritiesEnum.ISI_BACKEND_ERNEUTE_BEARBEITUNG_ABFRAGE,
+            StatusAbfrageEvents.ERNEUTE_BEARBEITUNG
         );
 
         return rolesAndEvents;

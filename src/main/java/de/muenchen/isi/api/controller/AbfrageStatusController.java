@@ -52,8 +52,8 @@ public class AbfrageStatusController {
             ),
         }
     )
-    @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_FREIGABE_ABFRAGE.name())")
-    public ResponseEntity<List<TransitionDto>> transitions(@PathVariable @NotNull final UUID id)
+    @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_READ_TRANSITIONS.name())")
+    public ResponseEntity<List<TransitionDto>> transitionsInfrastrukturabfrage(@PathVariable @NotNull final UUID id)
         throws EntityNotFoundException {
         final List<TransitionDto> transistions = abfrageStatusService
             .getStatusAbfrageEventsBasedOnStateAndRole(id)
@@ -113,7 +113,7 @@ public class AbfrageStatusController {
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping("{id}/angabe-anpassen")
+    @PutMapping("{id}/zurueck-an-abfrageersteller")
     @Transactional
     @Operation(summary = "Setzt eine Infrastrukturabfrage auf den Status ANGELEGT")
     @ApiResponses(
@@ -135,11 +135,11 @@ public class AbfrageStatusController {
         }
     )
     @PreAuthorize(
-        "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_ANGABEN_ANPASSEN_ABFRAGE.name())"
+        "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_ZURUECK_AN_ABFRAGEERSTELLER_ABFRAGE.name())"
     )
-    public ResponseEntity<Void> angabenAnpassenInfrastrukturabfrage(@PathVariable @NotNull final UUID id)
+    public ResponseEntity<Void> zurueckAnAbfrageerstellerInfrastrukturabfrage(@PathVariable @NotNull final UUID id)
         throws EntityNotFoundException, AbfrageStatusNotAllowedException {
-        this.abfrageStatusService.angabenAnpassenAbfrage(id);
+        this.abfrageStatusService.zurueckAnAbfrageErstellerAbfrage(id);
         return ResponseEntity.ok().build();
     }
 
@@ -164,14 +164,16 @@ public class AbfrageStatusController {
             ),
         }
     )
-    @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_IN_BEARBEITUNG_SETZTEN.name())")
+    @PreAuthorize(
+        "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_IN_BEARBEITUNG_SETZTEN_ABFRAGE.name())"
+    )
     public ResponseEntity<Void> inBearbeitungSetzenInfrastrukturabfrage(@PathVariable @NotNull final UUID id)
         throws EntityNotFoundException, AbfrageStatusNotAllowedException {
         this.abfrageStatusService.inBearbeitungSetzenAbfrage(id);
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping("{id}/korrigieren")
+    @PutMapping("{id}/zurueck-an-plan")
     @Transactional
     @Operation(summary = "Setzt eine Infrastrukturabfrage auf den Status IN_BEARBEITUNG_PLAN")
     @ApiResponses(
@@ -192,14 +194,16 @@ public class AbfrageStatusController {
             ),
         }
     )
-    @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_KORRIGIEREN.name())")
-    public ResponseEntity<Void> korrigierenInfrastrukturabfrage(@PathVariable @NotNull final UUID id)
+    @PreAuthorize(
+        "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_ZURUECK_AN_PLAN_ABFRAGE.name())"
+    )
+    public ResponseEntity<Void> zurueckAnPlanInfrastrukturabfrage(@PathVariable @NotNull final UUID id)
         throws EntityNotFoundException, AbfrageStatusNotAllowedException {
-        this.abfrageStatusService.korrigierenAbfrage(id);
+        this.abfrageStatusService.zurueckAnPlanAbfrage(id);
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping("{id}/keine-bearbeitung-noetig")
+    @PutMapping("{id}/abfrage-schliessen")
     @Transactional
     @Operation(summary = "Setzt eine Infrastrukturabfrage auf den Status ERLEDIGT")
     @ApiResponses(
@@ -217,12 +221,10 @@ public class AbfrageStatusController {
             ),
         }
     )
-    @PreAuthorize(
-        "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_KEINE_BEARBEITUNG_NOETIG_ABFRAGE.name())"
-    )
-    public ResponseEntity<Void> keineBearbeitungNoetig(@PathVariable @NotNull final UUID id)
+    @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_SCHLIESSEN_ABFRAGE.name())")
+    public ResponseEntity<Void> abfrageSchliessenInfrastrukturAbfrage(@PathVariable @NotNull final UUID id)
         throws EntityNotFoundException, AbfrageStatusNotAllowedException {
-        this.abfrageStatusService.keineBearbeitungNoetig(id);
+        this.abfrageStatusService.abfrageSchliessen(id);
         return ResponseEntity.ok().build();
     }
 
@@ -250,7 +252,7 @@ public class AbfrageStatusController {
     @PreAuthorize(
         "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_VERSCHICKEN_DER_STELLUNGNAHME_ABFRAGE.name())"
     )
-    public ResponseEntity<Void> verschickenDerStellungnahme(@PathVariable @NotNull final UUID id)
+    public ResponseEntity<Void> verschickenDerStellungnahmeInfrastrukturabfrage(@PathVariable @NotNull final UUID id)
         throws EntityNotFoundException, AbfrageStatusNotAllowedException {
         this.abfrageStatusService.verschickenDerStellungnahme(id);
         return ResponseEntity.ok().build();
@@ -277,7 +279,7 @@ public class AbfrageStatusController {
     @PreAuthorize(
         "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_BEDARFSMELDUNG_ERFOLGT_ABFRAGE.name())"
     )
-    public ResponseEntity<Void> bedarfsmeldungErfolgt(@PathVariable @NotNull final UUID id)
+    public ResponseEntity<Void> bedarfsmeldungErfolgtInfrastrukturAbfrage(@PathVariable @NotNull final UUID id)
         throws EntityNotFoundException, AbfrageStatusNotAllowedException {
         this.abfrageStatusService.bedarfsmeldungErfolgt(id);
         return ResponseEntity.ok().build();
@@ -304,9 +306,40 @@ public class AbfrageStatusController {
     @PreAuthorize(
         "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_SPEICHERN_VON_SOZIALINFRASTRUKTUR_VERSORGUNG_ABFRAGE.name())"
     )
-    public ResponseEntity<Void> speichernVonSozialinfrastrukturVersorgung(@PathVariable @NotNull final UUID id)
-        throws EntityNotFoundException, AbfrageStatusNotAllowedException {
+    public ResponseEntity<Void> speichernVonSozialinfrastrukturVersorgungInfrastrukturAbfrage(
+        @PathVariable @NotNull final UUID id
+    ) throws EntityNotFoundException, AbfrageStatusNotAllowedException {
         this.abfrageStatusService.speichernVonSozialinfrastrukturVersorgung(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("{id}/erneute-bearbeitung")
+    @Transactional
+    @Operation(summary = "Setzt eine Infrastrukturabfrage auf den Status IN_BEARBEITUNG_PLAN")
+    @ApiResponses(
+        value = {
+            @ApiResponse(
+                responseCode = "200",
+                description = "OK -> Abfrage wurde erfolgreich zur bearbeitung freigestellt."
+            ),
+            @ApiResponse(
+                responseCode = "404",
+                description = "NOT_FOUND -> Es gibt keine Abfrage mit der ID.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+            @ApiResponse(
+                responseCode = "409",
+                description = "CONFLICT -> Die Abfrage konnte aufgrund des aktuellen Status oder des bereits existierenden Abfragenamen nicht erledigt werden.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+        }
+    )
+    @PreAuthorize(
+        "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_ERNEUTE_BEARBEITUNG_ABFRAGE.name())"
+    )
+    public ResponseEntity<Void> erneuteBearbeitungInfrastrukturabfrage(@PathVariable @NotNull final UUID id)
+        throws EntityNotFoundException, AbfrageStatusNotAllowedException {
+        this.abfrageStatusService.erneuteBearbeitenAbfrage(id);
         return ResponseEntity.ok().build();
     }
 }

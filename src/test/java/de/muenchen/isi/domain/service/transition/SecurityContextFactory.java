@@ -25,29 +25,30 @@ public class SecurityContextFactory implements WithSecurityContextFactory<MockCu
         if (customUser.roles()[0].equals("lhm-isi-admin")) {
             authoritiesRoles.add("ISI_BACKEND_FREIGABE_ABFRAGE");
             authoritiesRoles.add("ISI_BACKEND_ABBRECHEN_ABFRAGE");
-            authoritiesRoles.add("ISI_BACKEND_ANGABEN_ANPASSEN_ABFRAGE");
-            authoritiesRoles.add("ISI_BACKEND_IN_BEARBEITUNG_SETZTEN");
-            authoritiesRoles.add("ISI_BACKEND_KORRIGIEREN");
-            authoritiesRoles.add("ISI_BACKEND_KEINE_BEARBEITUNG_NOETIG_ABFRAGE");
+            authoritiesRoles.add("ISI_BACKEND_ZURUECK_AN_ABFRAGEERSTELLER_ABFRAGE");
+            authoritiesRoles.add("ISI_BACKEND_IN_BEARBEITUNG_SETZTEN_ABFRAGE");
+            authoritiesRoles.add("ISI_BACKEND_ZURUECK_AN_PLAN_ABFRAGE");
+            authoritiesRoles.add("ISI_BACKEND_SCHLIESSEN_ABFRAGE");
             authoritiesRoles.add("ISI_BACKEND_VERSCHICKEN_DER_STELLUNGNAHME_ABFRAGE");
             authoritiesRoles.add("ISI_BACKEND_BEDARFSMELDUNG_ERFOLGT_ABFRAGE");
             authoritiesRoles.add("ISI_BACKEND_SPEICHERN_VON_SOZIALINFRASTRUKTUR_VERSORGUNG_ABFRAGE");
+            authoritiesRoles.add("ISI_BACKEND_ERNEUTE_BEARBEITUNG_ABFRAGE");
         }
 
         if (customUser.roles()[0].equals("lhm-isi-sachbearbeiter_kita_schule_PLAN")) {
             authoritiesRoles.add("ISI_BACKEND_ABBRECHEN_ABFRAGE");
-            authoritiesRoles.add("ISI_BACKEND_ANGABEN_ANPASSEN_ABFRAGE");
-            authoritiesRoles.add("ISI_BACKEND_IN_BEARBEITUNG_SETZTEN");
-            authoritiesRoles.add("ISI_BACKEND_KORRIGIEREN");
-            authoritiesRoles.add("ISI_BACKEND_KEINE_BEARBEITUNG_NOETIG_ABFRAGE");
+            authoritiesRoles.add("ISI_BACKEND_ZURUECK_AN_ABFRAGEERSTELLER_ABFRAGE");
+            authoritiesRoles.add("ISI_BACKEND_IN_BEARBEITUNG_SETZTEN_ABFRAGE");
+            authoritiesRoles.add("ISI_BACKEND_ZURUECK_AN_PLAN_ABFRAGE");
+            authoritiesRoles.add("ISI_BACKEND_SCHLIESSEN_ABFRAGE");
             authoritiesRoles.add("ISI_BACKEND_VERSCHICKEN_DER_STELLUNGNAHME_ABFRAGE");
             authoritiesRoles.add("ISI_BACKEND_BEDARFSMELDUNG_ERFOLGT_ABFRAGE");
-            authoritiesRoles.add("ISI_BACKEND_SPEICHERN_VON_SOZIALINFRASTRUKTUR_VERSORGUNG_ABFRAGE");
+            authoritiesRoles.add("ISI_BACKEND_ERNEUTE_BEARBEITUNG_ABFRAGE");
         }
 
         if (customUser.roles()[0].equals("lhm-isi-abfrageersteller")) {
             authoritiesRoles.add("ISI_BACKEND_FREIGABE_ABFRAGE");
-            authoritiesRoles.add("ISI_BACKEND_BEDARFSMELDUNG_ERFOLGT_ABFRAGE");
+            authoritiesRoles.add("ISI_BACKEND_SPEICHERN_VON_SOZIALINFRASTRUKTUR_VERSORGUNG_ABFRAGE");
         }
 
         if (customUser.roles()[0].equals("lhm-isi-nutzer")) {

@@ -169,15 +169,15 @@ public class TransitionModelTest {
 
         TransitionModel secondPossibleTransition = new TransitionModel();
         secondPossibleTransition.setIndex(3);
-        secondPossibleTransition.setButtonName("STONIEREN");
+        secondPossibleTransition.setButtonName("STORNIEREN");
         secondPossibleTransition.setUrl("abbrechen");
 
         expected.add(secondPossibleTransition);
 
         TransitionModel thirdPossibleTransition = new TransitionModel();
         thirdPossibleTransition.setIndex(4);
-        thirdPossibleTransition.setButtonName("ANGABEN ANPASSEN");
-        thirdPossibleTransition.setUrl("angabe-anpassen");
+        thirdPossibleTransition.setButtonName("ZURÜCK AN ABFRAGEERSTELLER");
+        thirdPossibleTransition.setUrl("zurueck-an-abfrageersteller");
 
         expected.add(thirdPossibleTransition);
 
@@ -212,15 +212,15 @@ public class TransitionModelTest {
 
         TransitionModel secondPossibleTransition = new TransitionModel();
         secondPossibleTransition.setIndex(3);
-        secondPossibleTransition.setButtonName("STONIEREN");
+        secondPossibleTransition.setButtonName("STORNIEREN");
         secondPossibleTransition.setUrl("abbrechen");
 
         expected.add(secondPossibleTransition);
 
         TransitionModel thirdPossibleTransition = new TransitionModel();
         thirdPossibleTransition.setIndex(4);
-        thirdPossibleTransition.setButtonName("ANGABEN ANPASSEN");
-        thirdPossibleTransition.setUrl("angabe-anpassen");
+        thirdPossibleTransition.setButtonName("ZURÜCK AN ABFRAGEERSTELLER");
+        thirdPossibleTransition.setUrl("zurueck-an-abfrageersteller");
 
         expected.add(thirdPossibleTransition);
 
@@ -282,29 +282,29 @@ public class TransitionModelTest {
 
         TransitionModel firstPossibleTransition = new TransitionModel();
         firstPossibleTransition.setIndex(3);
-        firstPossibleTransition.setButtonName("STONIEREN");
+        firstPossibleTransition.setButtonName("STORNIEREN");
         firstPossibleTransition.setUrl("abbrechen");
 
         expected.add(firstPossibleTransition);
 
         TransitionModel secondPossibleTransition = new TransitionModel();
         secondPossibleTransition.setIndex(4);
-        secondPossibleTransition.setButtonName("ANGABEN ANPASSEN");
-        secondPossibleTransition.setUrl("angabe-anpassen");
+        secondPossibleTransition.setButtonName("ZURÜCK AN ABFRAGEERSTELLER");
+        secondPossibleTransition.setUrl("zurueck-an-abfrageersteller");
 
         expected.add(secondPossibleTransition);
 
         TransitionModel thirdPossibleTransition = new TransitionModel();
-        thirdPossibleTransition.setIndex(6);
-        thirdPossibleTransition.setButtonName("VERSCHICKEN STELLUNGNAHME");
-        thirdPossibleTransition.setUrl("verschicken-der-stellungnahme");
+        thirdPossibleTransition.setIndex(5);
+        thirdPossibleTransition.setButtonName("ABFRAGE SCHLIEßEN");
+        thirdPossibleTransition.setUrl("abfrage-schliessen");
 
         expected.add(thirdPossibleTransition);
 
         TransitionModel fourthPossibleTransition = new TransitionModel();
-        fourthPossibleTransition.setIndex(9);
-        fourthPossibleTransition.setButtonName("KEINE BEARBEITUNG");
-        fourthPossibleTransition.setUrl("keine-bearbeitung-noetig");
+        fourthPossibleTransition.setIndex(6);
+        fourthPossibleTransition.setButtonName("AN FACHREFERATE");
+        fourthPossibleTransition.setUrl("verschicken-der-stellungnahme");
 
         expected.add(fourthPossibleTransition);
 
@@ -333,29 +333,31 @@ public class TransitionModelTest {
 
         TransitionModel firstPossibleTransition = new TransitionModel();
         firstPossibleTransition.setIndex(3);
-        firstPossibleTransition.setButtonName("STONIEREN");
+        firstPossibleTransition.setButtonName("STORNIEREN");
         firstPossibleTransition.setUrl("abbrechen");
 
         expected.add(firstPossibleTransition);
 
         TransitionModel secondPossibleTransition = new TransitionModel();
         secondPossibleTransition.setIndex(4);
-        secondPossibleTransition.setButtonName("ANGABEN ANPASSEN");
-        secondPossibleTransition.setUrl("angabe-anpassen");
+        secondPossibleTransition.setButtonName("ZURÜCK AN ABFRAGEERSTELLER");
+        secondPossibleTransition.setUrl("zurueck-an-abfrageersteller");
 
         expected.add(secondPossibleTransition);
 
         TransitionModel thirdPossibleTransition = new TransitionModel();
-        thirdPossibleTransition.setIndex(6);
-        thirdPossibleTransition.setButtonName("VERSCHICKEN STELLUNGNAHME");
-        thirdPossibleTransition.setUrl("verschicken-der-stellungnahme");
+        thirdPossibleTransition.setIndex(5);
+        thirdPossibleTransition.setButtonName("ABFRAGE SCHLIEßEN");
+        thirdPossibleTransition.setUrl("abfrage-schliessen");
 
         expected.add(thirdPossibleTransition);
 
         TransitionModel fourthPossibleTransition = new TransitionModel();
-        fourthPossibleTransition.setIndex(9);
-        fourthPossibleTransition.setButtonName("KEINE BEARBEITUNG");
-        fourthPossibleTransition.setUrl("keine-bearbeitung-noetig");
+        fourthPossibleTransition.setIndex(6);
+        fourthPossibleTransition.setButtonName("AN FACHREFERATE");
+        fourthPossibleTransition.setUrl("verschicken-der-stellungnahme");
+
+        expected.add(fourthPossibleTransition);
 
         expected.add(fourthPossibleTransition);
 
@@ -418,21 +420,21 @@ public class TransitionModelTest {
 
         TransitionModel firstPossibleTransition = new TransitionModel();
         firstPossibleTransition.setIndex(3);
-        firstPossibleTransition.setButtonName("STONIEREN");
+        firstPossibleTransition.setButtonName("STORNIEREN");
         firstPossibleTransition.setUrl("abbrechen");
 
         expected.add(firstPossibleTransition);
 
         TransitionModel secondPossibleTransition = new TransitionModel();
-        secondPossibleTransition.setIndex(5);
-        secondPossibleTransition.setButtonName("KORRIGIEREN");
-        secondPossibleTransition.setUrl("korrigieren");
+        secondPossibleTransition.setIndex(7);
+        secondPossibleTransition.setButtonName("ZURÜCK AN PLAN");
+        secondPossibleTransition.setUrl("zurueck-an-plan");
 
         expected.add(secondPossibleTransition);
 
         TransitionModel thirdPossibleTransition = new TransitionModel();
-        thirdPossibleTransition.setIndex(7);
-        thirdPossibleTransition.setButtonName("BEDARFSMELDUNG");
+        thirdPossibleTransition.setIndex(8);
+        thirdPossibleTransition.setButtonName("BEDARF MELDEN");
         thirdPossibleTransition.setUrl("bedarfsmeldung-erfolgt");
 
         expected.add(thirdPossibleTransition);
@@ -461,21 +463,21 @@ public class TransitionModelTest {
 
         TransitionModel firstPossibleTransition = new TransitionModel();
         firstPossibleTransition.setIndex(3);
-        firstPossibleTransition.setButtonName("STONIEREN");
+        firstPossibleTransition.setButtonName("STORNIEREN");
         firstPossibleTransition.setUrl("abbrechen");
 
         expected.add(firstPossibleTransition);
 
         TransitionModel secondPossibleTransition = new TransitionModel();
-        secondPossibleTransition.setIndex(5);
-        secondPossibleTransition.setButtonName("KORRIGIEREN");
-        secondPossibleTransition.setUrl("korrigieren");
+        secondPossibleTransition.setIndex(7);
+        secondPossibleTransition.setButtonName("ZURÜCK AN PLAN");
+        secondPossibleTransition.setUrl("zurueck-an-plan");
 
         expected.add(secondPossibleTransition);
 
         TransitionModel thirdPossibleTransition = new TransitionModel();
-        thirdPossibleTransition.setIndex(7);
-        thirdPossibleTransition.setButtonName("BEDARFSMELDUNG");
+        thirdPossibleTransition.setIndex(8);
+        thirdPossibleTransition.setButtonName("BEDARF MELDEN");
         thirdPossibleTransition.setUrl("bedarfsmeldung-erfolgt");
 
         expected.add(thirdPossibleTransition);
@@ -500,17 +502,7 @@ public class TransitionModelTest {
         List<TransitionModel> possibleTransitions =
             this.abfrageStatusService.getStatusAbfrageEventsBasedOnStateAndRole(uuid);
 
-        List<TransitionModel> expected = new ArrayList<>();
-
-        TransitionModel firstPossibleTransition = new TransitionModel();
-        firstPossibleTransition.setIndex(7);
-        firstPossibleTransition.setButtonName("BEDARFSMELDUNG");
-        firstPossibleTransition.setUrl("bedarfsmeldung-erfolgt");
-
-        expected.add(firstPossibleTransition);
-
-        assertThat(possibleTransitions.size(), is(1));
-        assertThat(possibleTransitions.get(0), is(firstPossibleTransition));
+        assertThat(possibleTransitions.size(), is(0));
     }
 
     @Test
@@ -548,14 +540,14 @@ public class TransitionModelTest {
 
         TransitionModel firstPossibleTransition = new TransitionModel();
         firstPossibleTransition.setIndex(3);
-        firstPossibleTransition.setButtonName("STONIEREN");
+        firstPossibleTransition.setButtonName("STORNIEREN");
         firstPossibleTransition.setUrl("abbrechen");
 
         expected.add(firstPossibleTransition);
 
         TransitionModel secondPossibleTransition = new TransitionModel();
-        secondPossibleTransition.setIndex(8);
-        secondPossibleTransition.setButtonName("VERSORGUNG SPEICHERN");
+        secondPossibleTransition.setIndex(9);
+        secondPossibleTransition.setButtonName("ABFRAGE ABSCHLIEßEN");
         secondPossibleTransition.setUrl("speicher-von-soz-infrastruktur-versorgung");
 
         expected.add(secondPossibleTransition);
@@ -583,21 +575,13 @@ public class TransitionModelTest {
 
         TransitionModel firstPossibleTransition = new TransitionModel();
         firstPossibleTransition.setIndex(3);
-        firstPossibleTransition.setButtonName("STONIEREN");
+        firstPossibleTransition.setButtonName("STORNIEREN");
         firstPossibleTransition.setUrl("abbrechen");
 
         expected.add(firstPossibleTransition);
 
-        TransitionModel secondPossibleTransition = new TransitionModel();
-        secondPossibleTransition.setIndex(8);
-        secondPossibleTransition.setButtonName("VERSORGUNG SPEICHERN");
-        secondPossibleTransition.setUrl("speicher-von-soz-infrastruktur-versorgung");
-
-        expected.add(secondPossibleTransition);
-
-        assertThat(possibleTransitions.size(), is(2));
+        assertThat(possibleTransitions.size(), is(1));
         assertThat(possibleTransitions.get(0), is(firstPossibleTransition));
-        assertThat(possibleTransitions.get(1), is(secondPossibleTransition));
     }
 
     @Test
@@ -614,7 +598,17 @@ public class TransitionModelTest {
         List<TransitionModel> possibleTransitions =
             this.abfrageStatusService.getStatusAbfrageEventsBasedOnStateAndRole(uuid);
 
-        assertThat(possibleTransitions.size(), is(0));
+        List<TransitionModel> expected = new ArrayList<>();
+
+        TransitionModel firstPossibleTransition = new TransitionModel();
+        firstPossibleTransition.setIndex(9);
+        firstPossibleTransition.setButtonName("ABFRAGE ABSCHLIEßEN");
+        firstPossibleTransition.setUrl("speicher-von-soz-infrastruktur-versorgung");
+
+        expected.add(firstPossibleTransition);
+
+        assertThat(possibleTransitions.size(), is(1));
+        assertThat(possibleTransitions.get(0), is(firstPossibleTransition));
     }
 
     @Test
@@ -637,7 +631,78 @@ public class TransitionModelTest {
     @Test
     @Transactional
     @MockCustomUser
-    void possbileTransitionsErledigt()
+    void possbileTransitionsErledigtRoleAdmin()
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException {
+        InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
+        abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
+        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ERLEDIGT);
+        this.abfrageService.updateInfrastrukturabfrageWithStatus(abfrage);
+
+        final var uuid = abfrage.getId();
+        List<TransitionModel> possibleTransitions =
+            this.abfrageStatusService.getStatusAbfrageEventsBasedOnStateAndRole(uuid);
+
+        List<TransitionModel> expected = new ArrayList<>();
+
+        TransitionModel firstPossibleTransition = new TransitionModel();
+        firstPossibleTransition.setIndex(10);
+        firstPossibleTransition.setButtonName("ERNEUTE BEARBEITUNG");
+        firstPossibleTransition.setUrl("erneute-bearbeitung");
+
+        expected.add(firstPossibleTransition);
+
+        assertThat(possibleTransitions.size(), is(1));
+        assertThat(possibleTransitions.get(0), is(firstPossibleTransition));
+    }
+
+    @Test
+    @Transactional
+    @MockCustomUser(roles = { "lhm-isi-sachbearbeiter_kita_schule_PLAN" })
+    void possbileTransitionsErledigtRoleSachbearbeiter()
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException {
+        InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
+        abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
+        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ERLEDIGT);
+        this.abfrageService.updateInfrastrukturabfrageWithStatus(abfrage);
+
+        final var uuid = abfrage.getId();
+        List<TransitionModel> possibleTransitions =
+            this.abfrageStatusService.getStatusAbfrageEventsBasedOnStateAndRole(uuid);
+
+        List<TransitionModel> expected = new ArrayList<>();
+
+        TransitionModel firstPossibleTransition = new TransitionModel();
+        firstPossibleTransition.setIndex(10);
+        firstPossibleTransition.setButtonName("ERNEUTE BEARBEITUNG");
+        firstPossibleTransition.setUrl("erneute-bearbeitung");
+
+        expected.add(firstPossibleTransition);
+
+        assertThat(possibleTransitions.size(), is(1));
+        assertThat(possibleTransitions.get(0), is(firstPossibleTransition));
+    }
+
+    @Test
+    @Transactional
+    @MockCustomUser(roles = { "lhm-isi-abfrageersteller" })
+    void possbileTransitionsErledigtRoleAbfrageersteller()
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException {
+        InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
+        abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
+        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ERLEDIGT);
+        this.abfrageService.updateInfrastrukturabfrageWithStatus(abfrage);
+
+        final var uuid = abfrage.getId();
+        List<TransitionModel> possibleTransitions =
+            this.abfrageStatusService.getStatusAbfrageEventsBasedOnStateAndRole(uuid);
+
+        assertThat(possibleTransitions.size(), is(0));
+    }
+
+    @Test
+    @Transactional
+    @MockCustomUser(roles = { "lhm-isi-nutzer" })
+    void possbileTransitionsErledigtRoleNutzer()
         throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);

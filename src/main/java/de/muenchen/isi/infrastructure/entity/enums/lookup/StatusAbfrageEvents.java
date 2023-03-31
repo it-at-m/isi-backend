@@ -9,23 +9,20 @@ public enum StatusAbfrageEvents {
 
     IN_BEARBEITUNG_SETZEN("in-bearbeitung-setzen", "IN BEARBEITUNG SETZEN", 2),
 
-    ABBRECHEN("abbrechen", "STONIEREN", 3),
+    ABBRECHEN("abbrechen", "STORNIEREN", 3),
 
-    ANGABEN_ANPASSEN("angabe-anpassen", "ANGABEN ANPASSEN", 4),
+    ZURUECK_AN_ABFRAGEERSTELLER("zurueck-an-abfrageersteller", "ZURÜCK AN ABFRAGEERSTELLER", 4),
 
-    KORRIGIEREN("korrigieren", "KORRIGIEREN", 5),
+    ABFRAGE_SCHLIESSEN("abfrage-schliessen", "ABFRAGE SCHLIEßEN", 5),
+    VERSCHICKEN_DER_STELLUNGNAHME("verschicken-der-stellungnahme", "AN FACHREFERATE", 6),
 
-    VERSCHICKEN_DER_STELLUNGNAHME("verschicken-der-stellungnahme", "VERSCHICKEN STELLUNGNAHME", 6),
+    ZURUECK_AN_PLAN("zurueck-an-plan", "ZURÜCK AN PLAN", 7),
 
-    BEDARFSMELDUNG_ERFOLGTE("bedarfsmeldung-erfolgt", "BEDARFSMELDUNG", 7),
+    BEDARFSMELDUNG_ERFOLGTE("bedarfsmeldung-erfolgt", "BEDARF MELDEN", 8),
 
-    SPEICHERN_VON_SOZIALINFRASTRUKTUR_VERSORGUNG(
-        "speicher-von-soz-infrastruktur-versorgung",
-        "VERSORGUNG SPEICHERN",
-        8
-    ),
+    SPEICHERN_VON_SOZIALINFRASTRUKTUR_VERSORGUNG("speicher-von-soz-infrastruktur-versorgung", "ABFRAGE ABSCHLIEßEN", 9),
 
-    KEINE_BEARBEITUNG_NOETIG("keine-bearbeitung-noetig", "KEINE BEARBEITUNG", 9);
+    ERNEUTE_BEARBEITUNG("erneute-bearbeitung", "ERNEUTE BEARBEITUNG", 10);
 
     @Getter
     private final String url;
