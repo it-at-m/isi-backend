@@ -27,6 +27,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -117,7 +118,8 @@ public class AbfrageController {
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_WRITE_ABFRAGE.name())")
     public ResponseEntity<InfrastrukturabfrageDto> createInfrastrukturabfrage(
         @RequestBody @Valid @NotNull @GeschossflaecheWohnenSobonUrsaechlichRequired final InfrastrukturabfrageDto abfrageDto
-    ) throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException {
+    )
+        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, DataIntegrityViolationException {
         var model = this.abfrageApiMapper.dto2Model(abfrageDto);
         final var abfrage =
             this.bauvorhabenService.assignBauvorhabenToAbfrage(
@@ -161,7 +163,8 @@ public class AbfrageController {
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_WRITE_ABFRAGE.name())")
     public ResponseEntity<InfrastrukturabfrageDto> updateInfrastrukturabfrage(
         @RequestBody @Valid @NotNull @GeschossflaecheWohnenSobonUrsaechlichRequired final InfrastrukturabfrageDto abfrageDto
-    ) throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException {
+    )
+        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, DataIntegrityViolationException {
         var model = this.abfrageApiMapper.dto2Model(abfrageDto);
         final var abfrage =
             this.bauvorhabenService.assignBauvorhabenToAbfrage(

@@ -26,6 +26,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.ConversionNotSupportedException;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.cloud.sleuth.Tracer;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -210,6 +211,16 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(UniqueViolationException.class)
     public ResponseEntity<Object> handleUniqueViolationException(final UniqueViolationException ex) {
+        final var httpStatus = HttpStatus.CONFLICT;
+        final InformationResponseDto errorResponseDto = new InformationResponseDto();
+        errorResponseDto.setMessages(List.of(ex.getMessage()));
+        errorResponseDto.setHttpStatus(httpStatus.value());
+        errorResponseDto.setType(InformationResponseType.ERROR);
+        return ResponseEntity.status(httpStatus).body(errorResponseDto);
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<Object> handleDataIntegrityViolationException(final DataIntegrityViolationException ex) {
         final var httpStatus = HttpStatus.CONFLICT;
         final InformationResponseDto errorResponseDto = new InformationResponseDto();
         errorResponseDto.setMessages(List.of(ex.getMessage()));
