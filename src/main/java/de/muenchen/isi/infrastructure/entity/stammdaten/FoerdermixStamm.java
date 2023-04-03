@@ -17,12 +17,12 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 @Entity
+@Data
 @Table(
         uniqueConstraints = {
-                @UniqueConstraint(columnNames = {"bezeichnung"})
+                @UniqueConstraint(columnNames = {"bezeichnung", "bezeichnungJahr"})
         }
 )
-@Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 public class FoerdermixStamm extends BaseEntity {

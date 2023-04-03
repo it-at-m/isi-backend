@@ -4,7 +4,6 @@
  */
 package de.muenchen.isi.api.dto;
 
-
 import lombok.Data;
 import org.hibernate.validator.constraints.UniqueElements;
 import java.util.List;
