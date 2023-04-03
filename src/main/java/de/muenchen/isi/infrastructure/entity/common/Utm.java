@@ -1,10 +1,9 @@
 package de.muenchen.isi.infrastructure.entity.common;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
@@ -18,5 +17,4 @@ public class Utm {
 
     @Column(nullable = false)
     private Double north;
-
 }

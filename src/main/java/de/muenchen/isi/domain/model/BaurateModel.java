@@ -4,11 +4,10 @@
  */
 package de.muenchen.isi.domain.model;
 
+import java.math.BigDecimal;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-
-import java.math.BigDecimal;
 
 @Data
 @ToString(callSuper = true)
@@ -22,5 +21,4 @@ public class BaurateModel extends BaseEntityModel {
     private BigDecimal geschossflaecheWohnenGeplant;
 
     private FoerdermixModel foerdermix;
-
 }

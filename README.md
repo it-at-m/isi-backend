@@ -33,15 +33,16 @@ kommunale Pflichtaufgabe zur Planung einer bedarfs- und zeitgerechten Versorgung
 **Kindertagesbetreuungs- und Grundschulplätzen** unterstützt und bestehende Planungsinstrumente ablöst.
 
 Dieses Projekt implementiert die API der ISI-Anwendung.
+
 <p align="right">(<a href="#top">nach oben</a>)</p>
 
 ### Verwendete Technologien
 
 Dieses Projekt verwendet die folgenden Technologien:
 
-* Spring Boot
-* Spring Cloud
-* geotools.org
+-   Spring Boot
+-   Spring Cloud
+-   geotools.org
 
 <p align="right">(<a href="#top">nach oben</a>)</p>
 
@@ -59,7 +60,6 @@ Dieses Projekt verwendet die folgenden Technologien:
   <br/>
 </div>
 
-
 Siehe auch unter [open issues](https://github.com/it-at-m/isi-backend/issues) die Liste der vorgeschlagenen
 Verbesserungen (und bekannten Fehler)
 
@@ -67,8 +67,8 @@ Verbesserungen (und bekannten Fehler)
 <!--
 ## Set up
 
-*how can i start and fly this project*
-*tbd*
+_how can i start and fly this project_
+_tbd_
 
 <p align="right">(<a href="#top">nach oben</a>)</p>
 -->
@@ -76,6 +76,7 @@ Verbesserungen (und bekannten Fehler)
 ## Dokumentation
 
 <!--*what insights do you have to tell*-->
+
 Die Dokumentation befindet sich unter <a href="https://github.com/it-at-m/isi-backend/tree/dev/docs">docs</a>
 
 <p align="right">(<a href="#top">nach oben</a>)</p>
@@ -104,7 +105,6 @@ Mehr dazu in der Datei [CODE_OF_CONDUCT](/CODE_OF_CONDUCT.md) .
 
 <p align="right">(<a href="#top">nach oben</a>)</p>
 
-
 <!-- LICENSE -->
 
 ## Lizensierung
@@ -113,17 +113,13 @@ Die Distribution erfolgt unter der MIT License. Mehr dazu in der Datei [LICENSE]
 
 <p align="right">(<a href="#top">nach oben</a>)</p>
 
-
-
 <!-- CONTACT -->
 
 ## Kontakt
 
 it@m - opensource@muenchen.de
 
-
 <p align="right">(<a href="#top">nach oben</a>)</p>
-
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->

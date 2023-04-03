@@ -5,7 +5,6 @@ import lombok.Getter;
 
 @AllArgsConstructor
 public enum ArtGsNachmittagsBetreuung implements ILookup {
-
     UNSPECIFIED(ILookup.UNSPECIFIED),
     HORT("Hort"),
     KOOPERATIVER_GANZTAG_FLEXIBLE_VARIANTE("Kooperativer Ganztag – flexibel"),
@@ -15,5 +14,4 @@ public enum ArtGsNachmittagsBetreuung implements ILookup {
 
     @Getter
     private final String bezeichnung;
-
 }

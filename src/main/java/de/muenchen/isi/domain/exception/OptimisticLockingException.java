@@ -9,5 +9,4 @@ public class OptimisticLockingException extends Exception {
     public OptimisticLockingException(final String message) {
         super(message);
     }
-
 }

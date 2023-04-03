@@ -6,16 +6,15 @@ package de.muenchen.isi.api.dto;
 
 import de.muenchen.isi.api.validation.NotUnspecified;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Planungsrecht;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
-
+import java.math.BigDecimal;
+import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import java.math.BigDecimal;
-import java.util.List;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 @Data
 @ToString(callSuper = true)
@@ -67,5 +66,4 @@ public class AbfragevarianteDto extends BaseEntityDto {
     private BigDecimal geschossflaecheSonstiges;
 
     private List<@Valid @NotNull BauabschnittDto> bauabschnitte;
-
 }

@@ -9,5 +9,4 @@ public class StateMachineTransitionFailedException extends RuntimeException {
     public StateMachineTransitionFailedException(final String message) {
         super(message);
     }
-
 }

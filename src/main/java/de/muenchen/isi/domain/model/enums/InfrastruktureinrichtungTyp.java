@@ -3,20 +3,18 @@ package de.muenchen.isi.domain.model.enums;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.GrundschuleModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.GsNachmittagBetreuungModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.HausFuerKinderModel;
-import de.muenchen.isi.domain.model.infrastruktureinrichtung.MittelschuleModel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import de.muenchen.isi.domain.model.infrastruktureinrichtung.KinderkrippeModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.KindergartenModel;
-
+import de.muenchen.isi.domain.model.infrastruktureinrichtung.KinderkrippeModel;
+import de.muenchen.isi.domain.model.infrastruktureinrichtung.MittelschuleModel;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 @AllArgsConstructor
 public enum InfrastruktureinrichtungTyp {
-
     KINDERKRIPPE(KinderkrippeModel.class),
 
     KINDERGARTEN(KindergartenModel.class),
@@ -37,9 +35,9 @@ public enum InfrastruktureinrichtungTyp {
     }
 
     public static Optional<InfrastruktureinrichtungTyp> findByClazz(final Class clazz) {
-        return getAsList().stream()
-                .filter(infrastruktureinrichtungTyp -> Objects.equals(infrastruktureinrichtungTyp.getClazz(), clazz))
-                .findFirst();
+        return getAsList()
+            .stream()
+            .filter(infrastruktureinrichtungTyp -> Objects.equals(infrastruktureinrichtungTyp.getClazz(), clazz))
+            .findFirst();
     }
-
 }

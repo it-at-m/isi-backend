@@ -7,7 +7,6 @@ package de.muenchen.isi.infrastructure.entity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -31,5 +30,4 @@ public class Baurate extends BaseEntity {
 
     @OneToOne(cascade = CascadeType.ALL)
     private Foerdermix foerdermix;
-
 }

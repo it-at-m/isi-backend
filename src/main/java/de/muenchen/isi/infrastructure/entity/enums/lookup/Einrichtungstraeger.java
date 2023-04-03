@@ -9,7 +9,6 @@ import lombok.Getter;
 
 @AllArgsConstructor
 public enum Einrichtungstraeger implements ILookup {
-
     UNSPECIFIED(ILookup.UNSPECIFIED),
     KITA_STAEDTISCHE_EINRICHTUNG("Kita: Städtische Einrichtung"),
     KITA_EINRICHTUNG_BETRIEBSTRAEGERSCHAFT("Kita: Einrichtung in Betriebsträgerschaft"),
@@ -27,5 +26,4 @@ public enum Einrichtungstraeger implements ILookup {
 
     @Getter
     private final String bezeichnung;
-
 }

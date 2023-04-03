@@ -7,14 +7,13 @@ package de.muenchen.isi.api.dto.stammdaten;
 import de.muenchen.isi.api.dto.BaseEntityDto;
 import de.muenchen.isi.api.dto.FoerdermixDto;
 import de.muenchen.isi.api.validation.HasFoerdermixRequiredSum;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
-
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 @Data
 @ToString(callSuper = true)
@@ -33,5 +32,4 @@ public class FoerdermixStammDto extends BaseEntityDto {
     @Valid
     @HasFoerdermixRequiredSum
     private FoerdermixDto foerdermix;
-
 }

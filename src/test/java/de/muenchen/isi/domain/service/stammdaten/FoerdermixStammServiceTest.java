@@ -1,5 +1,8 @@
 package de.muenchen.isi.domain.service.stammdaten;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
@@ -8,6 +11,10 @@ import de.muenchen.isi.domain.mapper.StammdatenDomainMapperImpl;
 import de.muenchen.isi.domain.model.stammdaten.FoerdermixStammModel;
 import de.muenchen.isi.infrastructure.entity.stammdaten.FoerdermixStamm;
 import de.muenchen.isi.infrastructure.repository.stammdaten.FoerdermixStammRepository;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+import java.util.stream.Stream;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,14 +24,6 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-import java.util.stream.Stream;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
@@ -39,7 +38,8 @@ class FoerdermixStammServiceTest {
 
     @BeforeEach
     public void beforeEach() {
-        this.foerdermixStammService = new FoerdermixStammService(this.stammdatenDomainMapper, this.foerdermixStammRepository);
+        this.foerdermixStammService =
+            new FoerdermixStammService(this.stammdatenDomainMapper, this.foerdermixStammRepository);
         Mockito.reset(this.foerdermixStammRepository);
     }
 
@@ -50,7 +50,9 @@ class FoerdermixStammServiceTest {
         final FoerdermixStamm entity2 = new FoerdermixStamm();
         entity2.setId(UUID.randomUUID());
 
-        Mockito.when(this.foerdermixStammRepository.findAllByOrderByBezeichnungAsc()).thenReturn(Stream.of(entity1, entity2));
+        Mockito
+            .when(this.foerdermixStammRepository.findAllByOrderByBezeichnungAsc())
+            .thenReturn(Stream.of(entity1, entity2));
 
         final List<FoerdermixStammModel> result = this.foerdermixStammService.getFoerdermixStaemme();
 
@@ -59,10 +61,7 @@ class FoerdermixStammServiceTest {
         final FoerdermixStammModel model2 = new FoerdermixStammModel();
         model2.setId(entity2.getId());
 
-        assertThat(
-                result,
-                is(List.of(model1, model2))
-        );
+        assertThat(result, is(List.of(model1, model2)));
     }
 
     @Test
@@ -76,7 +75,10 @@ class FoerdermixStammServiceTest {
         Mockito.reset(this.foerdermixStammRepository);
 
         Mockito.when(this.foerdermixStammRepository.findById(id)).thenReturn(Optional.empty());
-        Assertions.assertThrows(EntityNotFoundException.class, () -> this.foerdermixStammService.getFoerdermixStammById(id));
+        Assertions.assertThrows(
+            EntityNotFoundException.class,
+            () -> this.foerdermixStammService.getFoerdermixStammById(id)
+        );
         Mockito.verify(this.foerdermixStammRepository, Mockito.times(1)).findById(id);
     }
 
@@ -98,10 +100,7 @@ class FoerdermixStammServiceTest {
         final FoerdermixStammModel expected = new FoerdermixStammModel();
         expected.setId(saveResult.getId());
 
-        assertThat(
-                result,
-                is(expected)
-        );
+        assertThat(result, is(expected));
 
         Mockito.verify(this.foerdermixStammRepository, Mockito.times(1)).saveAndFlush(entity);
     }
@@ -145,10 +144,7 @@ class FoerdermixStammServiceTest {
         final FoerdermixStammModel expected = new FoerdermixStammModel();
         expected.setId(model.getId());
 
-        assertThat(
-                result,
-                is(model)
-        );
+        assertThat(result, is(model));
 
         Mockito.verify(this.foerdermixStammRepository, Mockito.times(1)).findById(entity.getId());
         Mockito.verify(this.foerdermixStammRepository, Mockito.times(1)).saveAndFlush(entity);
@@ -168,5 +164,9 @@ class FoerdermixStammServiceTest {
         Mockito.verify(this.foerdermixStammRepository, Mockito.times(1)).findById(entity.getId());
         Mockito.verify(this.foerdermixStammRepository, Mockito.times(1)).deleteById(id);
     }
+<<<<<<< HEAD
 
 }
+=======
+}
+>>>>>>> dev

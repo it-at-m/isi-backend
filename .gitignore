@@ -32,3 +32,6 @@ nbdist/
 # do not check in Database Filler and application profile yml
 src/**/application-*.yml
 src/**/logback-spring.xml
+
+node_modules/
+package-lock.json

@@ -16,6 +16,11 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,12 +35,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
-
 @RequiredArgsConstructor
 @RestController
 @Tag(name = "Baurate", description = "API zum Interagieren mit Bauraten")
@@ -49,27 +48,33 @@ public class BaurateController {
     @GetMapping("bauraten")
     @Transactional
     @Operation(summary = "Lesen aller Bauraten")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "OK")
-    })
+    @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "OK") })
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_READ_BAURATE.name())")
     public ResponseEntity<List<BaurateDto>> getBauraten() {
-        final List<BaurateDto> baurateDtoList = this.baurateService.getBauraten()
-                .stream().map(this.baurateApiMapper::model2Dto)
+        final List<BaurateDto> baurateDtoList =
+            this.baurateService.getBauraten()
+                .stream()
+                .map(this.baurateApiMapper::model2Dto)
                 .collect(Collectors.toList());
         return new ResponseEntity<>(baurateDtoList, HttpStatus.OK);
     }
 
-
     @GetMapping("baurate/{id}")
     @Transactional(readOnly = true)
     @Operation(summary = "Lesen einer Baurate")
-    @ApiResponses(value = {
+    @ApiResponses(
+        value = {
             @ApiResponse(responseCode = "200", description = "OK"),
-            @ApiResponse(responseCode = "404", description = "NOT FOUND -> Baurate mit dieser ID nicht vorhanden.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class)))
-    })
+            @ApiResponse(
+                responseCode = "404",
+                description = "NOT FOUND -> Baurate mit dieser ID nicht vorhanden.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+        }
+    )
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_READ_BAURATE.name())")
-    public ResponseEntity<BaurateDto> getBaurateById(@PathVariable @NotNull final UUID id) throws EntityNotFoundException {
+    public ResponseEntity<BaurateDto> getBaurateById(@PathVariable @NotNull final UUID id)
+        throws EntityNotFoundException {
         final var model = this.baurateService.getBaurateById(id);
         final var dto = this.baurateApiMapper.model2Dto(model);
         return ResponseEntity.ok(dto);
@@ -78,13 +83,24 @@ public class BaurateController {
     @PostMapping("baurate")
     @Transactional(rollbackFor = OptimisticLockingException.class)
     @Operation(summary = "Anlegen einer neuen Baurate")
-    @ApiResponses(value = {
+    @ApiResponses(
+        value = {
             @ApiResponse(responseCode = "201", description = "CREATED -> Baurate wurde erfolgreich erstellt."),
-            @ApiResponse(responseCode = "400", description = "BAD_REQUEST -> Baurate konnte nicht erstellt werden, überprüfen sie die Eingabe.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class))),
-            @ApiResponse(responseCode = "412", description = "PRECONDITION_FAILED -> In der Anwendung ist bereits eine neuere Version der Entität gespeichert.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class)))
-    })
+            @ApiResponse(
+                responseCode = "400",
+                description = "BAD_REQUEST -> Baurate konnte nicht erstellt werden, überprüfen sie die Eingabe.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+            @ApiResponse(
+                responseCode = "412",
+                description = "PRECONDITION_FAILED -> In der Anwendung ist bereits eine neuere Version der Entität gespeichert.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+        }
+    )
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_WRITE_BAURATE.name())")
-    public ResponseEntity<BaurateDto> createBaurate(@RequestBody @Valid @NotNull final BaurateDto baurateDto) throws OptimisticLockingException {
+    public ResponseEntity<BaurateDto> createBaurate(@RequestBody @Valid @NotNull final BaurateDto baurateDto)
+        throws OptimisticLockingException {
         var model = this.baurateApiMapper.dto2Model(baurateDto);
         model = this.baurateService.saveBaurate(model);
         final var saved = this.baurateApiMapper.model2Dto(model);
@@ -94,13 +110,24 @@ public class BaurateController {
     @PutMapping("baurate")
     @Transactional(rollbackFor = OptimisticLockingException.class)
     @Operation(summary = "Aktualisierung einer Baurate")
-    @ApiResponses(value = {
+    @ApiResponses(
+        value = {
             @ApiResponse(responseCode = "200", description = "OK -> Baurate wurde erfolgreich aktualisiert."),
-            @ApiResponse(responseCode = "404", description = "NOT_FOUND -> Es gibt keine Baurate mit der ID.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class))),
-            @ApiResponse(responseCode = "412", description = "PRECONDITION_FAILED -> In der Anwendung ist bereits eine neuere Version der Entität gespeichert.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class)))
-    })
+            @ApiResponse(
+                responseCode = "404",
+                description = "NOT_FOUND -> Es gibt keine Baurate mit der ID.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+            @ApiResponse(
+                responseCode = "412",
+                description = "PRECONDITION_FAILED -> In der Anwendung ist bereits eine neuere Version der Entität gespeichert.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+        }
+    )
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_WRITE_BAURATE.name())")
-    public ResponseEntity<BaurateDto> updateBaurate(@RequestBody @Valid @NotNull final BaurateDto baurateDto) throws EntityNotFoundException, OptimisticLockingException {
+    public ResponseEntity<BaurateDto> updateBaurate(@RequestBody @Valid @NotNull final BaurateDto baurateDto)
+        throws EntityNotFoundException, OptimisticLockingException {
         var model = this.baurateApiMapper.dto2Model(baurateDto);
         model = this.baurateService.updateBaurate(model);
         final var saved = this.baurateApiMapper.model2Dto(model);
@@ -109,15 +136,20 @@ public class BaurateController {
 
     @DeleteMapping("baurate/{id}")
     @Operation(summary = "Löschen einer Baurate")
-    @ApiResponses(value = {
+    @ApiResponses(
+        value = {
             @ApiResponse(responseCode = "204", description = "NO CONTENT"),
-            @ApiResponse(responseCode = "404", description = "NOT FOUND -> Baurate mit dieser ID nicht vorhanden.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class)))
-    })
+            @ApiResponse(
+                responseCode = "404",
+                description = "NOT FOUND -> Baurate mit dieser ID nicht vorhanden.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+        }
+    )
     @Transactional
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_DELETE_BAURATE.name())")
     public ResponseEntity<Void> deleteBaurateById(@PathVariable @NotNull final UUID id) throws EntityNotFoundException {
         this.baurateService.deleteBaurateById(id);
         return ResponseEntity.noContent().build();
     }
-
 }

@@ -9,7 +9,6 @@ import lombok.Getter;
 
 @AllArgsConstructor
 public enum StatusAbfrage implements ILookup {
-
     ANGELEGT("angelegt"),
     OFFEN("offen"),
     IN_ERFASSUNG("in Erfassung"),
@@ -21,5 +20,4 @@ public enum StatusAbfrage implements ILookup {
 
     @Getter
     private final String bezeichnung;
-
 }

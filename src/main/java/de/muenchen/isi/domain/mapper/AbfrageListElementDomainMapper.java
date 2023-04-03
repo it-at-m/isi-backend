@@ -16,19 +16,22 @@ import org.mapstruct.Mappings;
 
 @Mapper(config = MapstructConfiguration.class)
 public interface AbfrageListElementDomainMapper {
-
-    @Mappings({
+    @Mappings(
+        {
             @Mapping(target = "type", ignore = true),
             @Mapping(source = "abfrage.nameAbfrage", target = "nameAbfrage"),
             @Mapping(source = "abfrage.standVorhaben", target = "standVorhaben"),
             @Mapping(source = "abfrage.statusAbfrage", target = "statusAbfrage"),
-            @Mapping(source = "abfrage.fristStellungnahme", target = "fristStellungnahme")
-    })
+            @Mapping(source = "abfrage.fristStellungnahme", target = "fristStellungnahme"),
+        }
+    )
     AbfrageListElementModel infrastrukturabfrageModel2AbfrageListElementModel(final InfrastrukturabfrageModel model);
 
     @AfterMapping
-    default void infrastrukturabfrageModel2AbfrageListElementModelAfterMapping(@MappingTarget final AbfrageListElementModel abfrageListElementModel, final InfrastrukturabfrageModel model) {
+    default void infrastrukturabfrageModel2AbfrageListElementModelAfterMapping(
+        @MappingTarget final AbfrageListElementModel abfrageListElementModel,
+        final InfrastrukturabfrageModel model
+    ) {
         abfrageListElementModel.setType(AbfrageTyp.INFRASTRUKTURABFRAGE);
     }
-
 }

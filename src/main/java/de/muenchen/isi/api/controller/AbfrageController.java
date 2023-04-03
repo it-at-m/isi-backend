@@ -20,6 +20,11 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -34,12 +39,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -56,13 +55,15 @@ public class AbfrageController {
 
     @Transactional(readOnly = true)
     @GetMapping("infrastruktur-abfragen")
-    @Operation(summary = "Lade alle Infrastrukturabfragen", description = "Das Ergebnis wird nach Frist Stellungnahme absteigend sortiert")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "OK")
-    })
+    @Operation(
+        summary = "Lade alle Infrastrukturabfragen",
+        description = "Das Ergebnis wird nach Frist Stellungnahme absteigend sortiert"
+    )
+    @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "OK") })
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_READ_ABFRAGE.name())")
     public ResponseEntity<List<InfrastrukturabfrageDto>> getInfrastrukturabfragen() {
-        final List<InfrastrukturabfrageDto> abfrageList = this.abfrageService.getInfrastrukturabfragen()
+        final List<InfrastrukturabfrageDto> abfrageList =
+            this.abfrageService.getInfrastrukturabfragen()
                 .stream()
                 .map(this.abfrageApiMapper::model2Dto)
                 .collect(Collectors.toList());
@@ -72,12 +73,19 @@ public class AbfrageController {
     @GetMapping("infrastruktur-abfrage/{id}")
     @Transactional(readOnly = true)
     @Operation(summary = "Lesen einer Infrastrukturabfrage")
-    @ApiResponses(value = {
+    @ApiResponses(
+        value = {
             @ApiResponse(responseCode = "200", description = "OK"),
-            @ApiResponse(responseCode = "404", description = "NOT FOUND -> Abfrage mit dieser ID nicht vorhanden.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class)))
-    })
+            @ApiResponse(
+                responseCode = "404",
+                description = "NOT FOUND -> Abfrage mit dieser ID nicht vorhanden.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+        }
+    )
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_READ_ABFRAGE.name())")
-    public ResponseEntity<InfrastrukturabfrageDto> getInfrastrukturabfrageById(@PathVariable @NotNull final UUID id) throws EntityNotFoundException {
+    public ResponseEntity<InfrastrukturabfrageDto> getInfrastrukturabfrageById(@PathVariable @NotNull final UUID id)
+        throws EntityNotFoundException {
         final var model = this.abfrageService.getInfrastrukturabfrageById(id);
         final var dto = this.abfrageApiMapper.model2Dto(model);
         return ResponseEntity.ok(dto);
@@ -86,16 +94,36 @@ public class AbfrageController {
     @PostMapping("infrastruktur-abfrage")
     @Transactional(rollbackFor = OptimisticLockingException.class)
     @Operation(summary = "Anlegen einer neuen Infrastrukturabfrage")
-    @ApiResponses(value = {
+    @ApiResponses(
+        value = {
             @ApiResponse(responseCode = "201", description = "CREATED -> Abfrage wurde erfolgreich erstellt."),
-            @ApiResponse(responseCode = "400", description = "BAD_REQUEST -> Abfrage konnte nicht erstellt werden, überprüfen sie die Eingabe.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class))),
-            @ApiResponse(responseCode = "409", description = "CONFLICT -> Abfrage konnte nicht erstellt werden, da der Abfragename bereits existiert.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class))),
-            @ApiResponse(responseCode = "412", description = "PRECONDITION_FAILED -> In der Anwendung ist bereits eine neuere Version der Entität gespeichert.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class)))
-    })
+            @ApiResponse(
+                responseCode = "400",
+                description = "BAD_REQUEST -> Abfrage konnte nicht erstellt werden, überprüfen sie die Eingabe.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+            @ApiResponse(
+                responseCode = "409",
+                description = "CONFLICT -> Abfrage konnte nicht erstellt werden, da der Abfragename bereits existiert.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+            @ApiResponse(
+                responseCode = "412",
+                description = "PRECONDITION_FAILED -> In der Anwendung ist bereits eine neuere Version der Entität gespeichert.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+        }
+    )
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_WRITE_ABFRAGE.name())")
-    public ResponseEntity<InfrastrukturabfrageDto> createInfrastrukturabfrage(@RequestBody @Valid @NotNull @GeschossflaecheWohnenSobonUrsaechlichRequired final InfrastrukturabfrageDto abfrageDto) throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException {
+    public ResponseEntity<InfrastrukturabfrageDto> createInfrastrukturabfrage(
+        @RequestBody @Valid @NotNull @GeschossflaecheWohnenSobonUrsaechlichRequired final InfrastrukturabfrageDto abfrageDto
+    ) throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException {
         var model = this.abfrageApiMapper.dto2Model(abfrageDto);
-        final var abfrage = this.bauvorhabenService.assignBauvorhabenToAbfrage(abfrageDto.getAbfrage().getBauvorhaben(), model.getAbfrage());
+        final var abfrage =
+            this.bauvorhabenService.assignBauvorhabenToAbfrage(
+                    abfrageDto.getAbfrage().getBauvorhaben(),
+                    model.getAbfrage()
+                );
         model.setAbfrage(abfrage);
         model = this.abfrageService.saveInfrastrukturabfrage(model);
         final var saved = this.abfrageApiMapper.model2Dto(model);
@@ -105,17 +133,41 @@ public class AbfrageController {
     @PutMapping("infrastruktur-abfrage")
     @Transactional(rollbackFor = OptimisticLockingException.class)
     @Operation(summary = "Aktualisierung einer Infrastrukturabfrage")
-    @ApiResponses(value = {
+    @ApiResponses(
+        value = {
             @ApiResponse(responseCode = "200", description = "OK -> Abfrage wurde erfolgreich aktualisiert."),
-            @ApiResponse(responseCode = "400", description = "BAD_REQUEST -> Abfrage konnte nicht aktualisiert werden, überprüfen sie die Eingabe.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class))),
-            @ApiResponse(responseCode = "404", description = "NOT_FOUND -> Es gibt keine Abfrage mit der ID.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class))),
-            @ApiResponse(responseCode = "409", description = "CONFLICT -> Abfrage konnte nicht erstellt werden, da der Abfragename bereits existiert.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class))),
-            @ApiResponse(responseCode = "412", description = "PRECONDITION_FAILED -> In der Anwendung ist bereits eine neuere Version der Entität gespeichert.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class)))
-    })
+            @ApiResponse(
+                responseCode = "400",
+                description = "BAD_REQUEST -> Abfrage konnte nicht aktualisiert werden, überprüfen sie die Eingabe.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+            @ApiResponse(
+                responseCode = "404",
+                description = "NOT_FOUND -> Es gibt keine Abfrage mit der ID.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+            @ApiResponse(
+                responseCode = "409",
+                description = "CONFLICT -> Abfrage konnte nicht erstellt werden, da der Abfragename bereits existiert.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+            @ApiResponse(
+                responseCode = "412",
+                description = "PRECONDITION_FAILED -> In der Anwendung ist bereits eine neuere Version der Entität gespeichert.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+        }
+    )
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_WRITE_ABFRAGE.name())")
-    public ResponseEntity<InfrastrukturabfrageDto> updateInfrastrukturabfrage(@RequestBody @Valid @NotNull @GeschossflaecheWohnenSobonUrsaechlichRequired final InfrastrukturabfrageDto abfrageDto) throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException {
+    public ResponseEntity<InfrastrukturabfrageDto> updateInfrastrukturabfrage(
+        @RequestBody @Valid @NotNull @GeschossflaecheWohnenSobonUrsaechlichRequired final InfrastrukturabfrageDto abfrageDto
+    ) throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException {
         var model = this.abfrageApiMapper.dto2Model(abfrageDto);
-        final var abfrage = this.bauvorhabenService.assignBauvorhabenToAbfrage(abfrageDto.getAbfrage().getBauvorhaben(), model.getAbfrage());
+        final var abfrage =
+            this.bauvorhabenService.assignBauvorhabenToAbfrage(
+                    abfrageDto.getAbfrage().getBauvorhaben(),
+                    model.getAbfrage()
+                );
         model.setAbfrage(abfrage);
         model = this.abfrageService.updateInfrastrukturabfrageWithoutStatus(model);
         final var saved = this.abfrageApiMapper.model2Dto(model);
@@ -124,16 +176,26 @@ public class AbfrageController {
 
     @DeleteMapping("infrastruktur-abfrage/{id}")
     @Operation(summary = "Löschen einer Infrastrukturabfrage")
-    @ApiResponses(value = {
+    @ApiResponses(
+        value = {
             @ApiResponse(responseCode = "204", description = "NO CONTENT"),
-            @ApiResponse(responseCode = "404", description = "NOT FOUND -> Abfrage mit dieser ID nicht vorhanden.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class))),
-            @ApiResponse(responseCode = "409", description = "CONFLICT -> Die Abfrage referenziert ein Bauvorhaben.", content = @Content(schema = @Schema(implementation = InformationResponseDto.class)))
-    })
+            @ApiResponse(
+                responseCode = "404",
+                description = "NOT FOUND -> Abfrage mit dieser ID nicht vorhanden.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+            @ApiResponse(
+                responseCode = "409",
+                description = "CONFLICT -> Die Abfrage referenziert ein Bauvorhaben.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+        }
+    )
     @Transactional
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_DELETE_ABFRAGE.name())")
-    public ResponseEntity<Void> deleteInfrastrukturabfrageById(@PathVariable @NotNull final UUID id) throws EntityNotFoundException, EntityIsReferencedException {
+    public ResponseEntity<Void> deleteInfrastrukturabfrageById(@PathVariable @NotNull final UUID id)
+        throws EntityNotFoundException, EntityIsReferencedException {
         this.abfrageService.deleteInfrasturkturabfrageById(id);
         return ResponseEntity.noContent().build();
     }
-
 }

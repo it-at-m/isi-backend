@@ -18,11 +18,7 @@ import javax.persistence.UniqueConstraint;
 
 @Entity
 @Data
-@Table(
-        uniqueConstraints = {
-                @UniqueConstraint(columnNames = {"bezeichnung", "bezeichnungJahr"})
-        }
-)
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"bezeichnung", "bezeichnungJahr"})})
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 public class FoerdermixStamm extends BaseEntity {
@@ -35,5 +31,4 @@ public class FoerdermixStamm extends BaseEntity {
 
     @OneToOne(cascade = CascadeType.ALL)
     private Foerdermix foerdermix;
-
 }

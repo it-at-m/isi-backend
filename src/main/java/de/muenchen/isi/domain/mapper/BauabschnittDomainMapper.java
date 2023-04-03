@@ -11,9 +11,7 @@ import org.mapstruct.Mapper;
 
 @Mapper(config = MapstructConfiguration.class)
 public interface BauabschnittDomainMapper {
-
     BauabschnittModel entity2Model(final Bauabschnitt entity);
 
     Bauabschnitt model2Entity(final BauabschnittModel entity);
-
 }

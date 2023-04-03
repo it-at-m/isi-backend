@@ -3,11 +3,10 @@ package de.muenchen.isi.domain.model.stammdaten;
 import de.muenchen.isi.domain.model.BaseEntityModel;
 import de.muenchen.isi.infrastructure.entity.enums.Wohnungstyp;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonVerfahrensgrundsaetzeJahr;
+import java.math.BigDecimal;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-
-import java.math.BigDecimal;
 
 @Data
 @ToString(callSuper = true)
@@ -21,5 +20,4 @@ public class StaedtebaulicheOrientierungswertModel extends BaseEntityModel {
     private Long durchschnittlicheGrundflaeche;
 
     private BigDecimal belegungsdichte;
-
 }

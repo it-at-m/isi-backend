@@ -25,12 +25,11 @@ public class CustomUserInfoTokenServices extends UserInfoTokenServices {
 
     public static final String NAME_AUTHENTICATION_CACHE = "authentication_cache";
 
-    public CustomUserInfoTokenServices(@Value("${spring.security.oauth2.resourceserver.jwt.issuer-uri}") final String issuerUri,
-                                       @Value("${spring.security.oauth2.client.registration.server-to-server.client-id}") final String clientId) {
-        super(
-                issuerUri + "/protocol/openid-connect/userinfo",
-                clientId
-        );
+    public CustomUserInfoTokenServices(
+        @Value("${spring.security.oauth2.resourceserver.jwt.issuer-uri}") final String issuerUri,
+        @Value("${spring.security.oauth2.client.registration.server-to-server.client-id}") final String clientId
+    ) {
+        super(issuerUri + "/protocol/openid-connect/userinfo", clientId);
     }
 
     /**
@@ -45,6 +44,4 @@ public class CustomUserInfoTokenServices extends UserInfoTokenServices {
         log.debug("Loading and caching OAuth2Authentication");
         return super.loadAuthentication(accessToken);
     }
-
 }
-

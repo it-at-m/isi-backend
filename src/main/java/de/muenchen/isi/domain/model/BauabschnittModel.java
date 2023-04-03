@@ -1,10 +1,9 @@
 package de.muenchen.isi.domain.model;
 
+import java.util.List;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-
-import java.util.List;
 
 @Data
 @ToString(callSuper = true)
@@ -14,5 +13,4 @@ public class BauabschnittModel extends BaseEntityModel {
     private String bezeichnung;
 
     private List<BaugebietModel> baugebiete;
-
 }

@@ -1,7 +1,6 @@
 package de.muenchen.isi.infrastructure.entity.enums.lookup;
 
 public enum StatusAbfrageEvents {
-
     FREIGABE,
     ZUSAETZLICHE_ABFRAGEVARIANTE,
     KEINE_ZUSAEZTLICHE_ABFRAGEVARIANTE,
@@ -12,5 +11,5 @@ public enum StatusAbfrageEvents {
     KEINE_BEARBEITUNG_NOETIG,
     WEITERE_ABFRAVARIANTEN_ANLEGEN,
     ANGABEN_ANPASSEN,
-    ABBRECHEN
+    ABBRECHEN,
 }

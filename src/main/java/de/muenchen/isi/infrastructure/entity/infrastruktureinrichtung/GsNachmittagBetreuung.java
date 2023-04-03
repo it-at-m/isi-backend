@@ -6,17 +6,16 @@ package de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung;
 
 import de.muenchen.isi.infrastructure.entity.BaseEntity;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtGsNachmittagBetreuung;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
 @Data
@@ -39,7 +38,6 @@ public class GsNachmittagBetreuung extends BaseEntity {
 
     @Column(nullable = false)
     private Integer anzahlHortGruppen;
-    
-    private Integer wohnungsnaheHortPlaetze;
 
+    private Integer wohnungsnaheHortPlaetze;
 }

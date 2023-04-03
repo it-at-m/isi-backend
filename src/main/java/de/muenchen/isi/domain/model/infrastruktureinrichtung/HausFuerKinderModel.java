@@ -33,5 +33,4 @@ public class HausFuerKinderModel extends BaseEntityModel {
     private Integer wohnungsnaheKindergartenPlaetze;
 
     private Integer wohnungsnaheHortPlaetze;
-
 }

@@ -6,14 +6,13 @@ import de.muenchen.isi.domain.exception.UniqueViolationException;
 import de.muenchen.isi.domain.mapper.StammdatenDomainMapper;
 import de.muenchen.isi.domain.model.stammdaten.FoerdermixStammModel;
 import de.muenchen.isi.infrastructure.repository.stammdaten.FoerdermixStammRepository;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -31,8 +30,8 @@ public class FoerdermixStammService {
      */
     public List<FoerdermixStammModel> getFoerdermixStaemme() {
         return this.foerdermixStammRepository.findAllByOrderByBezeichnungAsc()
-                .map(this.stammdatenDomainMapper::entity2Model)
-                .collect(Collectors.toList());
+            .map(this.stammdatenDomainMapper::entity2Model)
+            .collect(Collectors.toList());
     }
 
     /**
@@ -97,5 +96,4 @@ public class FoerdermixStammService {
         this.getFoerdermixStammById(id);
         this.foerdermixStammRepository.deleteById(id);
     }
-
 }

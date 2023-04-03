@@ -1,11 +1,10 @@
 package de.muenchen.isi.domain.service.stammdaten;
 
 import de.muenchen.isi.domain.model.stammdaten.FileInformationModel;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Slf4j
 @Service
@@ -17,10 +16,11 @@ public class FileInformationStammService {
 
     private final List<String> allowedMimeTypes;
 
-
-    public FileInformationStammService(@Value("${file.size.max:31457280}") final Long maxFileSizeBytes,
-                                       @Value("${file.number.max:20}") final Long maxNumberOfFiles,
-                                       @Value("#{'${file.mimetypes.allowed}'.split(',')}") final List<String> allowedMimeTypes) {
+    public FileInformationStammService(
+        @Value("${file.size.max:31457280}") final Long maxFileSizeBytes,
+        @Value("${file.number.max:20}") final Long maxNumberOfFiles,
+        @Value("#{'${file.mimetypes.allowed}'.split(',')}") final List<String> allowedMimeTypes
+    ) {
         this.maxFileSizeBytes = maxFileSizeBytes;
         this.maxNumberOfFiles = maxNumberOfFiles;
         this.allowedMimeTypes = allowedMimeTypes;
@@ -36,5 +36,4 @@ public class FileInformationStammService {
         fileInformationModel.setAllowedMimeTypes(this.allowedMimeTypes);
         return fileInformationModel;
     }
-
 }

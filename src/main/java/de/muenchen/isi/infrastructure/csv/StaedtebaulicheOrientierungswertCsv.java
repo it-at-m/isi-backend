@@ -6,9 +6,8 @@ import de.muenchen.isi.infrastructure.adapter.SobonVerfahrensgrundsaetzeJahrConv
 import de.muenchen.isi.infrastructure.adapter.WohnungstypConverter;
 import de.muenchen.isi.infrastructure.entity.enums.Wohnungstyp;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonVerfahrensgrundsaetzeJahr;
-import lombok.Data;
-
 import java.math.BigDecimal;
+import lombok.Data;
 
 @Data
 public class StaedtebaulicheOrientierungswertCsv {
@@ -24,5 +23,4 @@ public class StaedtebaulicheOrientierungswertCsv {
 
     @CsvBindByName(column = "BELEGUNGSDICHTE", required = true)
     private BigDecimal belegungsdichte;
-
 }

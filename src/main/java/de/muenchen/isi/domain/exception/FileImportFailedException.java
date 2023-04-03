@@ -9,5 +9,4 @@ public class FileImportFailedException extends Exception {
     public FileImportFailedException(final String message) {
         super(message);
     }
-
 }

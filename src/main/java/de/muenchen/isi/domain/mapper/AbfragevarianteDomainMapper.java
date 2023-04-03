@@ -9,14 +9,9 @@ import de.muenchen.isi.domain.model.AbfragevarianteModel;
 import de.muenchen.isi.infrastructure.entity.Abfragevariante;
 import org.mapstruct.Mapper;
 
-@Mapper(
-        config = MapstructConfiguration.class,
-        uses = {BauabschnittDomainMapper.class}
-)
+@Mapper(config = MapstructConfiguration.class, uses = { BauabschnittDomainMapper.class })
 public interface AbfragevarianteDomainMapper {
-
     AbfragevarianteModel entity2Model(final Abfragevariante entity);
 
     Abfragevariante model2entity(final AbfragevarianteModel model);
-
 }

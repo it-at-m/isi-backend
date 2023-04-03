@@ -10,15 +10,14 @@ import de.muenchen.isi.domain.model.BauvorhabenModel;
 import de.muenchen.isi.domain.model.InfrastrukturabfrageModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.repository.InfrastrukturabfrageRepository;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -36,8 +35,8 @@ public class AbfrageService {
      */
     public List<InfrastrukturabfrageModel> getInfrastrukturabfragen() {
         return this.infrastrukturabfrageRepository.findAllByOrderByAbfrageFristStellungnahmeDesc()
-                .map(this.abfrageDomainMapper::entity2Model)
-                .collect(Collectors.toList());
+            .map(this.abfrageDomainMapper::entity2Model)
+            .collect(Collectors.toList());
     }
 
     /**
@@ -65,12 +64,16 @@ public class AbfrageService {
      * @throws UniqueViolationException falls der Name der Abfrage {@link InfrastrukturabfrageModel#getAbfrage().getNameAbfrage} ()} bereits vorhanden ist
      * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
      */
-    public InfrastrukturabfrageModel saveInfrastrukturabfrage(final InfrastrukturabfrageModel abfrage) throws UniqueViolationException, OptimisticLockingException {
-        if(abfrage.getId() == null) {
+    public InfrastrukturabfrageModel saveInfrastrukturabfrage(final InfrastrukturabfrageModel abfrage)
+        throws UniqueViolationException, OptimisticLockingException {
+        if (abfrage.getId() == null) {
             abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ANGELEGT);
         }
         var abfrageEntity = this.abfrageDomainMapper.model2entity(abfrage);
-        final var saved = this.infrastrukturabfrageRepository.findByAbfrage_NameAbfrageIgnoreCase(abfrageEntity.getAbfrage().getNameAbfrage());
+        final var saved =
+            this.infrastrukturabfrageRepository.findByAbfrage_NameAbfrageIgnoreCase(
+                    abfrageEntity.getAbfrage().getNameAbfrage()
+                );
         if ((saved.isPresent() && saved.get().getId().equals(abfrageEntity.getId())) || saved.isEmpty()) {
             try {
                 abfrageEntity = this.infrastrukturabfrageRepository.saveAndFlush(abfrageEntity);
@@ -80,7 +83,9 @@ public class AbfrageService {
             }
             return this.abfrageDomainMapper.entity2Model(abfrageEntity);
         } else {
-            throw new UniqueViolationException("Der angegebene Name der Abfrage ist schon vorhanden, bitte wählen Sie daher einen anderen Namen und speichern Sie die Abfrage erneut.");
+            throw new UniqueViolationException(
+                "Der angegebene Name der Abfrage ist schon vorhanden, bitte wählen Sie daher einen anderen Namen und speichern Sie die Abfrage erneut."
+            );
         }
     }
 
@@ -93,7 +98,8 @@ public class AbfrageService {
      * @throws UniqueViolationException falls der Name der Abfrage {@link InfrastrukturabfrageModel#getAbfrage().getNameAbfrage} ()} bereits vorhanden ist
      * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
      */
-    public InfrastrukturabfrageModel updateInfrastrukturabfrageWithoutStatus(final InfrastrukturabfrageModel abfrage) throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException {
+    public InfrastrukturabfrageModel updateInfrastrukturabfrageWithoutStatus(final InfrastrukturabfrageModel abfrage)
+        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException {
         final InfrastrukturabfrageModel abfrageDb = this.getInfrastrukturabfrageById(abfrage.getId());
         abfrage.getAbfrage().setStatusAbfrage(abfrageDb.getAbfrage().getStatusAbfrage());
         return this.saveInfrastrukturabfrage(abfrage);
@@ -108,7 +114,8 @@ public class AbfrageService {
      * @throws UniqueViolationException falls der Name der Abfrage {@link InfrastrukturabfrageModel#getAbfrage().getNameAbfrage} ()} bereits vorhanden ist
      * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
      */
-    public InfrastrukturabfrageModel updateInfrastrukturabfrageWithStatus(final InfrastrukturabfrageModel abfrage) throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException {
+    public InfrastrukturabfrageModel updateInfrastrukturabfrageWithStatus(final InfrastrukturabfrageModel abfrage)
+        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException {
         this.getInfrastrukturabfrageById(abfrage.getId());
         return this.saveInfrastrukturabfrage(abfrage);
     }
@@ -120,7 +127,8 @@ public class AbfrageService {
      * @throws EntityNotFoundException     falls die Abfrage identifiziert durch die {@link InfrastrukturabfrageModel#getId()} nicht gefunden wird.
      * @throws EntityIsReferencedException falls ein {@link BauvorhabenModel} in der Abfrage referenziert wird.
      */
-    public void deleteInfrasturkturabfrageById(final UUID id) throws EntityNotFoundException, EntityIsReferencedException {
+    public void deleteInfrasturkturabfrageById(final UUID id)
+        throws EntityNotFoundException, EntityIsReferencedException {
         final var abfrage = this.getInfrastrukturabfrageById(id);
         this.throwEntityIsReferencedExceptionWhenAbfrageIsReferencingBauvorhaben(abfrage.getAbfrage());
         this.infrastrukturabfrageRepository.deleteById(id);
@@ -133,13 +141,18 @@ public class AbfrageService {
      * @param abfrage zum Prüfen.
      * @throws EntityIsReferencedException falls das {@link AbfrageModel} ein {@link BauvorhabenModel} referenziert.
      */
-    protected void throwEntityIsReferencedExceptionWhenAbfrageIsReferencingBauvorhaben(final AbfrageModel abfrage) throws EntityIsReferencedException {
+    protected void throwEntityIsReferencedExceptionWhenAbfrageIsReferencingBauvorhaben(final AbfrageModel abfrage)
+        throws EntityIsReferencedException {
         final var bauvorhaben = abfrage.getBauvorhaben();
         if (ObjectUtils.isNotEmpty(bauvorhaben)) {
-            final var message = "Die Abfrage " + abfrage.getNameAbfrage() + " referenziert das Bauvorhaben " + bauvorhaben.getNameVorhaben() + ".";
+            final var message =
+                "Die Abfrage " +
+                abfrage.getNameAbfrage() +
+                " referenziert das Bauvorhaben " +
+                bauvorhaben.getNameVorhaben() +
+                ".";
             log.error(message);
             throw new EntityIsReferencedException(message);
         }
     }
-
 }

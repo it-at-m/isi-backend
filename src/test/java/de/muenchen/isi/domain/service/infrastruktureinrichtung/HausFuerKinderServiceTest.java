@@ -1,5 +1,8 @@
 package de.muenchen.isi.domain.service.infrastruktureinrichtung;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+
 import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
@@ -12,6 +15,10 @@ import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.HausFuerKinder;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Infrastruktureinrichtung;
 import de.muenchen.isi.infrastructure.repository.infrastruktureinrichtung.HausFuerKinderRepository;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+import java.util.stream.Stream;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,19 +29,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-import java.util.stream.Stream;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
 class HausFuerKinderServiceTest {
 
-    private final InfrastruktureinrichtungDomainMapper infrastruktureinrichtungDomainMapper = new InfrastruktureinrichtungDomainMapperImpl();
+    private final InfrastruktureinrichtungDomainMapper infrastruktureinrichtungDomainMapper =
+        new InfrastruktureinrichtungDomainMapperImpl();
 
     @Mock
     private HausFuerKinderRepository hausFuerKinderRepository;
@@ -43,10 +43,8 @@ class HausFuerKinderServiceTest {
 
     @BeforeEach
     public void beforeEach() {
-        this.hausFuerKinderService = new HausFuerKinderService(
-                this.infrastruktureinrichtungDomainMapper,
-                this.hausFuerKinderRepository
-        );
+        this.hausFuerKinderService =
+            new HausFuerKinderService(this.infrastruktureinrichtungDomainMapper, this.hausFuerKinderRepository);
         Mockito.reset(this.hausFuerKinderRepository);
     }
 
@@ -57,7 +55,9 @@ class HausFuerKinderServiceTest {
         final HausFuerKinder entity2 = new HausFuerKinder();
         entity2.setId(UUID.randomUUID());
 
-        Mockito.when(this.hausFuerKinderRepository.findAllByOrderByInfrastruktureinrichtungNameEinrichtungAsc()).thenReturn(Stream.of(entity1, entity2));
+        Mockito
+            .when(this.hausFuerKinderRepository.findAllByOrderByInfrastruktureinrichtungNameEinrichtungAsc())
+            .thenReturn(Stream.of(entity1, entity2));
 
         final List<HausFuerKinderModel> result = this.hausFuerKinderService.getHaeuserFuerKinder();
 
@@ -66,10 +66,7 @@ class HausFuerKinderServiceTest {
         final HausFuerKinderModel model2 = new HausFuerKinderModel();
         model2.setId(entity2.getId());
 
-        assertThat(
-                result,
-                is(List.of(model1, model2))
-        );
+        assertThat(result, is(List.of(model1, model2)));
     }
 
     @Test
@@ -83,7 +80,10 @@ class HausFuerKinderServiceTest {
         Mockito.reset(this.hausFuerKinderRepository);
 
         Mockito.when(this.hausFuerKinderRepository.findById(id)).thenReturn(Optional.empty());
-        Assertions.assertThrows(EntityNotFoundException.class, () -> this.hausFuerKinderService.getHausFuerKinderById(id));
+        Assertions.assertThrows(
+            EntityNotFoundException.class,
+            () -> this.hausFuerKinderService.getHausFuerKinderById(id)
+        );
         Mockito.verify(this.hausFuerKinderRepository, Mockito.times(1)).findById(id);
     }
 
@@ -105,10 +105,7 @@ class HausFuerKinderServiceTest {
         final HausFuerKinderModel expected = new HausFuerKinderModel();
         expected.setId(saveResult.getId());
 
-        assertThat(
-                result,
-                is(expected)
-        );
+        assertThat(result, is(expected));
 
         Mockito.verify(this.hausFuerKinderRepository, Mockito.times(1)).saveAndFlush(hausFuerKinderEntity);
     }
@@ -129,10 +126,7 @@ class HausFuerKinderServiceTest {
         final HausFuerKinderModel expected = new HausFuerKinderModel();
         expected.setId(hausFuerKinderModel.getId());
 
-        assertThat(
-                result,
-                is(hausFuerKinderModel)
-        );
+        assertThat(result, is(hausFuerKinderModel));
 
         Mockito.verify(this.hausFuerKinderRepository, Mockito.times(1)).findById(entity.getId());
         Mockito.verify(this.hausFuerKinderRepository, Mockito.times(1)).saveAndFlush(entity);
@@ -167,19 +161,30 @@ class HausFuerKinderServiceTest {
 
         Mockito.when(this.hausFuerKinderRepository.findById(entity.getId())).thenReturn(Optional.of(entity));
 
-        Assertions.assertThrows(EntityIsReferencedException.class, () -> this.hausFuerKinderService.deleteHausFuerKinderById(id));
+        Assertions.assertThrows(
+            EntityIsReferencedException.class,
+            () -> this.hausFuerKinderService.deleteHausFuerKinderById(id)
+        );
 
         Mockito.verify(this.hausFuerKinderRepository, Mockito.times(1)).findById(entity.getId());
         Mockito.verify(this.hausFuerKinderRepository, Mockito.times(0)).deleteById(id);
     }
 
     @Test
-    void throwEntityIsReferencedExceptionWhenInfrastruktureinrichtungIsReferencingBauvorhaben() throws EntityIsReferencedException {
-        this.hausFuerKinderService.throwEntityIsReferencedExceptionWhenInfrastruktureinrichtungIsReferencingBauvorhaben(new InfrastruktureinrichtungModel());
+    void throwEntityIsReferencedExceptionWhenInfrastruktureinrichtungIsReferencingBauvorhaben()
+        throws EntityIsReferencedException {
+        this.hausFuerKinderService.throwEntityIsReferencedExceptionWhenInfrastruktureinrichtungIsReferencingBauvorhaben(
+                new InfrastruktureinrichtungModel()
+            );
 
         final InfrastruktureinrichtungModel infrastruktureinrichtung = new InfrastruktureinrichtungModel();
         infrastruktureinrichtung.setBauvorhaben(new BauvorhabenModel());
-        Assertions.assertThrows(EntityIsReferencedException.class, () -> this.hausFuerKinderService.throwEntityIsReferencedExceptionWhenInfrastruktureinrichtungIsReferencingBauvorhaben(infrastruktureinrichtung));
+        Assertions.assertThrows(
+            EntityIsReferencedException.class,
+            () ->
+                this.hausFuerKinderService.throwEntityIsReferencedExceptionWhenInfrastruktureinrichtungIsReferencingBauvorhaben(
+                        infrastruktureinrichtung
+                    )
+        );
     }
-
 }

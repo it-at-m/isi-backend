@@ -25,8 +25,10 @@ public class PresignedUrlCreationService {
 
     private final Integer fileExpirationTime;
 
-    public PresignedUrlCreationService(final PresignedUrlRepository presignedUrlRepository,
-                                       @Value("${io.muenchendigital.digiwf.s3.client.file-expiration-time}") final Integer fileExpirationTime) {
+    public PresignedUrlCreationService(
+        final PresignedUrlRepository presignedUrlRepository,
+        @Value("${io.muenchendigital.digiwf.s3.client.file-expiration-time}") final Integer fileExpirationTime
+    ) {
         this.presignedUrlRepository = presignedUrlRepository;
         this.fileExpirationTime = fileExpirationTime;
     }
@@ -39,27 +41,32 @@ public class PresignedUrlCreationService {
      * @throws FileHandlingWithS3FailedException
      * @throws FileHandlingFailedException
      */
-    public PresignedUrlModel getFile(final FilepathModel filepath) throws FileHandlingWithS3FailedException, FileHandlingFailedException {
+    public PresignedUrlModel getFile(final FilepathModel filepath)
+        throws FileHandlingWithS3FailedException, FileHandlingFailedException {
         try {
-            final var presignedUrl = this.presignedUrlRepository.getPresignedUrlGetFile(
-                    filepath.getPathToFile(),
-                    this.fileExpirationTime
-            );
+            final var presignedUrl =
+                this.presignedUrlRepository.getPresignedUrlGetFile(filepath.getPathToFile(), this.fileExpirationTime);
             log.debug("Presigned-URL get file: {}", presignedUrl);
-            return new PresignedUrlModel(
-                    HttpMethod.GET.name(),
-                    presignedUrl.block()
-            );
-        } catch (final DocumentStorageClientErrorException | DocumentStorageServerErrorException |
-                       DocumentStorageException | PropertyNotSetException | WebClientException exception) {
-            final var message = "Beim Herunterladen der Datei vom ISI-Dokumentenverwaltungssystem ist ein Fehler aufgetreten.";
+            return new PresignedUrlModel(HttpMethod.GET.name(), presignedUrl.block());
+        } catch (
+            final DocumentStorageClientErrorException
+            | DocumentStorageServerErrorException
+            | DocumentStorageException
+            | PropertyNotSetException
+            | WebClientException exception
+        ) {
+            final var message =
+                "Beim Herunterladen der Datei vom ISI-Dokumentenverwaltungssystem ist ein Fehler aufgetreten.";
             this.exceptionLogging(exception, message);
             final var clazz = exception.getClass();
-            if (clazz.equals(DocumentStorageClientErrorException.class) || clazz.equals(DocumentStorageServerErrorException.class)) {
+            if (
+                clazz.equals(DocumentStorageClientErrorException.class) ||
+                clazz.equals(DocumentStorageServerErrorException.class)
+            ) {
                 throw new FileHandlingWithS3FailedException(
-                        message,
-                        this.getStatusCode((HttpStatusCodeException) exception.getCause()),
-                        exception
+                    message,
+                    this.getStatusCode((HttpStatusCodeException) exception.getCause()),
+                    exception
                 );
             } else {
                 throw new FileHandlingFailedException(message, exception);
@@ -75,28 +82,36 @@ public class PresignedUrlCreationService {
      * @throws FileHandlingWithS3FailedException
      * @throws FileHandlingFailedException
      */
-    public PresignedUrlModel saveFile(final FilepathModel filepath) throws FileHandlingWithS3FailedException, FileHandlingFailedException {
+    public PresignedUrlModel saveFile(final FilepathModel filepath)
+        throws FileHandlingWithS3FailedException, FileHandlingFailedException {
         try {
-            final var presignedUrl = this.presignedUrlRepository.getPresignedUrlSaveFile(
-                    filepath.getPathToFile(),
-                    this.fileExpirationTime,
-                    null
-            );
+            final var presignedUrl =
+                this.presignedUrlRepository.getPresignedUrlSaveFile(
+                        filepath.getPathToFile(),
+                        this.fileExpirationTime,
+                        null
+                    );
             log.debug("Presigned-URL save file: {}", presignedUrl);
-            return new PresignedUrlModel(
-                    HttpMethod.PUT.name(),
-                    presignedUrl
-            );
-        } catch (final DocumentStorageClientErrorException | DocumentStorageServerErrorException |
-                       DocumentStorageException | PropertyNotSetException | WebClientException exception) {
-            final var message = "Beim Speichern der Datei im ISI-Dokumentenverwaltungssystem ist ein Fehler aufgetreten.";
+            return new PresignedUrlModel(HttpMethod.PUT.name(), presignedUrl);
+        } catch (
+            final DocumentStorageClientErrorException
+            | DocumentStorageServerErrorException
+            | DocumentStorageException
+            | PropertyNotSetException
+            | WebClientException exception
+        ) {
+            final var message =
+                "Beim Speichern der Datei im ISI-Dokumentenverwaltungssystem ist ein Fehler aufgetreten.";
             this.exceptionLogging(exception, message);
             final var clazz = exception.getClass();
-            if (clazz.equals(DocumentStorageClientErrorException.class) || clazz.equals(DocumentStorageServerErrorException.class)) {
+            if (
+                clazz.equals(DocumentStorageClientErrorException.class) ||
+                clazz.equals(DocumentStorageServerErrorException.class)
+            ) {
                 throw new FileHandlingWithS3FailedException(
-                        message,
-                        this.getStatusCode((HttpStatusCodeException) exception.getCause()),
-                        exception
+                    message,
+                    this.getStatusCode((HttpStatusCodeException) exception.getCause()),
+                    exception
                 );
             } else {
                 throw new FileHandlingFailedException(message, exception);
@@ -112,27 +127,34 @@ public class PresignedUrlCreationService {
      * @throws FileHandlingWithS3FailedException
      * @throws FileHandlingFailedException
      */
-    public PresignedUrlModel deleteFile(final FilepathModel filepath) throws FileHandlingWithS3FailedException, FileHandlingFailedException {
+    public PresignedUrlModel deleteFile(final FilepathModel filepath)
+        throws FileHandlingWithS3FailedException, FileHandlingFailedException {
         try {
-            final var presignedUrl = this.presignedUrlRepository.getPresignedUrlDeleteFile(
-                    filepath.getPathToFile(),
-                    this.fileExpirationTime
-            );
+            final var presignedUrl =
+                this.presignedUrlRepository.getPresignedUrlDeleteFile(
+                        filepath.getPathToFile(),
+                        this.fileExpirationTime
+                    );
             log.debug("Presigned-URL delete file: {}", presignedUrl);
-            return new PresignedUrlModel(
-                    HttpMethod.DELETE.name(),
-                    presignedUrl
-            );
-        } catch (final DocumentStorageClientErrorException | DocumentStorageServerErrorException |
-                       DocumentStorageException | PropertyNotSetException | WebClientException exception) {
+            return new PresignedUrlModel(HttpMethod.DELETE.name(), presignedUrl);
+        } catch (
+            final DocumentStorageClientErrorException
+            | DocumentStorageServerErrorException
+            | DocumentStorageException
+            | PropertyNotSetException
+            | WebClientException exception
+        ) {
             final var message = "Beim Löschen der Datei im ISI-Dokumentenverwaltungssystem ist ein Fehler aufgetreten.";
             this.exceptionLogging(exception, message);
             final var clazz = exception.getClass();
-            if (clazz.equals(DocumentStorageClientErrorException.class) || clazz.equals(DocumentStorageServerErrorException.class)) {
+            if (
+                clazz.equals(DocumentStorageClientErrorException.class) ||
+                clazz.equals(DocumentStorageServerErrorException.class)
+            ) {
                 throw new FileHandlingWithS3FailedException(
-                        message,
-                        this.getStatusCode((HttpStatusCodeException) exception.getCause()),
-                        exception
+                    message,
+                    this.getStatusCode((HttpStatusCodeException) exception.getCause()),
+                    exception
                 );
             } else {
                 throw new FileHandlingFailedException(message, exception);
@@ -140,8 +162,7 @@ public class PresignedUrlCreationService {
         }
     }
 
-    private void exceptionLogging(final Exception exception,
-                                  final String errorMessage) {
+    private void exceptionLogging(final Exception exception, final String errorMessage) {
         log.error(exception.getMessage());
         if (exception.getCause() != null) {
             log.error(exception.getCause().getMessage());
@@ -152,5 +173,4 @@ public class PresignedUrlCreationService {
     private HttpStatus getStatusCode(final HttpStatusCodeException exception) {
         return exception.getStatusCode();
     }
-
 }

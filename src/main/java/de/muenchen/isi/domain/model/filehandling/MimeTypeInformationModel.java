@@ -10,5 +10,4 @@ public class MimeTypeInformationModel {
     private String description;
 
     private String acronym;
-
 }

@@ -3,14 +3,13 @@ package de.muenchen.isi.domain.service;
 import de.muenchen.isi.domain.mapper.AbfrageListElementDomainMapper;
 import de.muenchen.isi.domain.model.list.AbfrageListElementModel;
 import de.muenchen.isi.domain.model.list.AbfrageListElementsModel;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
@@ -31,9 +30,10 @@ public class AbfrageListService {
         final List<AbfrageListElementModel> listElements = new ArrayList<>();
 
         // Holen und Mappen
-        this.abfrageService.getInfrastrukturabfragen().stream()
-                .map(this.abfrageListElementDomainMapper::infrastrukturabfrageModel2AbfrageListElementModel)
-                .forEach(listElements::add);
+        this.abfrageService.getInfrastrukturabfragen()
+            .stream()
+            .map(this.abfrageListElementDomainMapper::infrastrukturabfrageModel2AbfrageListElementModel)
+            .forEach(listElements::add);
 
         // Sortieren
         listElements.sort(Comparator.comparing(AbfrageListElementModel::getFristStellungnahme));
@@ -42,5 +42,4 @@ public class AbfrageListService {
         abfrageListElementsModel.setListElements(listElements);
         return abfrageListElementsModel;
     }
-
 }
