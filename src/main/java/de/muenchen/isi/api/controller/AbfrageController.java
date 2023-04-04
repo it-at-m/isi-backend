@@ -27,7 +27,6 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -93,7 +92,7 @@ public class AbfrageController {
     }
 
     @PostMapping("infrastruktur-abfrage")
-    @Transactional(rollbackFor = OptimisticLockingException.class)
+    @Transactional(rollbackFor = { OptimisticLockingException.class, UniqueViolationException.class })
     @Operation(summary = "Anlegen einer neuen Infrastrukturabfrage")
     @ApiResponses(
         value = {
@@ -105,7 +104,7 @@ public class AbfrageController {
             ),
             @ApiResponse(
                 responseCode = "409",
-                description = "CONFLICT -> Abfrage konnte nicht erstellt werden, da der Abfragename bereits existiert.",
+                description = "CONFLICT -> Abfrage konnte nicht erstellt werden, da der Name bereits existiert.",
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
             ),
             @ApiResponse(
@@ -118,8 +117,7 @@ public class AbfrageController {
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_WRITE_ABFRAGE.name())")
     public ResponseEntity<InfrastrukturabfrageDto> createInfrastrukturabfrage(
         @RequestBody @Valid @NotNull @GeschossflaecheWohnenSobonUrsaechlichRequired final InfrastrukturabfrageDto abfrageDto
-    )
-        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, DataIntegrityViolationException {
+    ) throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException {
         var model = this.abfrageApiMapper.dto2Model(abfrageDto);
         final var abfrage =
             this.bauvorhabenService.assignBauvorhabenToAbfrage(
@@ -133,7 +131,7 @@ public class AbfrageController {
     }
 
     @PutMapping("infrastruktur-abfrage")
-    @Transactional(rollbackFor = OptimisticLockingException.class)
+    @Transactional(rollbackFor = { OptimisticLockingException.class, UniqueViolationException.class })
     @Operation(summary = "Aktualisierung einer Infrastrukturabfrage")
     @ApiResponses(
         value = {
@@ -150,7 +148,7 @@ public class AbfrageController {
             ),
             @ApiResponse(
                 responseCode = "409",
-                description = "CONFLICT -> Abfrage konnte nicht erstellt werden, da der Abfragename bereits existiert.",
+                description = "CONFLICT -> Abfrage konnte nicht erstellt werden, da der Name bereits existiert.",
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
             ),
             @ApiResponse(
@@ -163,8 +161,7 @@ public class AbfrageController {
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_WRITE_ABFRAGE.name())")
     public ResponseEntity<InfrastrukturabfrageDto> updateInfrastrukturabfrage(
         @RequestBody @Valid @NotNull @GeschossflaecheWohnenSobonUrsaechlichRequired final InfrastrukturabfrageDto abfrageDto
-    )
-        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, DataIntegrityViolationException {
+    ) throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException {
         var model = this.abfrageApiMapper.dto2Model(abfrageDto);
         final var abfrage =
             this.bauvorhabenService.assignBauvorhabenToAbfrage(

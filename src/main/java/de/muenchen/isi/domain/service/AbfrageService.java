@@ -62,11 +62,11 @@ public class AbfrageService {
      *
      * @param abfrage zum Speichern
      * @return das gespeicherte {@link InfrastrukturabfrageModel}
-     * @throws UniqueViolationException   falls der Name der Abfrage {@link InfrastrukturabfrageModel#getAbfrage().getNameAbfrage} ()} bereits vorhanden ist
+     * @throws UniqueViolationException   falls der Name der Abfrage oder der Abfragevariante bereits vorhanden ist
      * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
      */
     public InfrastrukturabfrageModel saveInfrastrukturabfrage(final InfrastrukturabfrageModel abfrage)
-        throws UniqueViolationException, OptimisticLockingException, DataIntegrityViolationException {
+        throws UniqueViolationException, OptimisticLockingException {
         if (abfrage.getId() == null) {
             abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ANGELEGT);
         }
@@ -84,7 +84,7 @@ public class AbfrageService {
             } catch (final DataIntegrityViolationException exception) {
                 final var message =
                     "Der angegebene Name der Abfragevariante ist schon vorhanden, bitte wählen Sie daher einen anderen Namen und speichern Sie die Abfrage erneut.";
-                throw new DataIntegrityViolationException(message);
+                throw new UniqueViolationException(message);
             }
             return this.abfrageDomainMapper.entity2Model(abfrageEntity);
         } else {
@@ -100,7 +100,7 @@ public class AbfrageService {
      * @param abfrage zum Updaten
      * @return das geupdatete {@link InfrastrukturabfrageModel}
      * @throws EntityNotFoundException    falls die Abfrage identifiziert durch die {@link InfrastrukturabfrageModel#getId()} nicht gefunden wird
-     * @throws UniqueViolationException   falls der Name der Abfrage {@link InfrastrukturabfrageModel#getAbfrage().getNameAbfrage} ()} bereits vorhanden ist
+     * @throws UniqueViolationException   falls der Name der Abfrage oder der Abfragevariante bereits vorhanden ist
      * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
      */
     public InfrastrukturabfrageModel updateInfrastrukturabfrageWithoutStatus(final InfrastrukturabfrageModel abfrage)
