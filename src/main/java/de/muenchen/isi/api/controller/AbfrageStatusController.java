@@ -58,7 +58,7 @@ public class AbfrageStatusController {
     public ResponseEntity<List<TransitionDto>> transitionsInfrastrukturabfrage(@PathVariable @NotNull final UUID id)
         throws EntityNotFoundException {
         final List<TransitionDto> transistions = abfrageStatusService
-            .getStatusAbfrageEventsBasedOnStateAndRole(id)
+            .getStatusAbfrageEventsBasedOnStateAndAuthorities(id)
             .stream()
             .map(this.transitionApiMapper::model2Dto)
             .collect(Collectors.toList());

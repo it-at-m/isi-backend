@@ -60,7 +60,7 @@ public class TransitionModelTest {
         final var uuid = UUID.randomUUID();
         Assertions.assertThrows(
             EntityNotFoundException.class,
-            () -> this.abfrageStatusService.getStatusAbfrageEventsBasedOnStateAndRole(uuid)
+            () -> this.abfrageStatusService.getStatusAbfrageEventsBasedOnStateAndAuthorities(uuid)
         );
     }
 
@@ -76,7 +76,7 @@ public class TransitionModelTest {
 
         final var uuid = abfrage.getId();
         List<TransitionModel> possibleTransitions =
-            this.abfrageStatusService.getStatusAbfrageEventsBasedOnStateAndRole(uuid);
+            this.abfrageStatusService.getStatusAbfrageEventsBasedOnStateAndAuthorities(uuid);
 
         TransitionModel expected = new TransitionModel();
         expected.setIndex(1);
@@ -99,7 +99,7 @@ public class TransitionModelTest {
 
         final var uuid = abfrage.getId();
         List<TransitionModel> possibleTransitions =
-            this.abfrageStatusService.getStatusAbfrageEventsBasedOnStateAndRole(uuid);
+            this.abfrageStatusService.getStatusAbfrageEventsBasedOnStateAndAuthorities(uuid);
 
         assertThat(possibleTransitions.size(), is(0));
     }
@@ -116,7 +116,7 @@ public class TransitionModelTest {
 
         final var uuid = abfrage.getId();
         List<TransitionModel> possibleTransitions =
-            this.abfrageStatusService.getStatusAbfrageEventsBasedOnStateAndRole(uuid);
+            this.abfrageStatusService.getStatusAbfrageEventsBasedOnStateAndAuthorities(uuid);
 
         TransitionModel expected = new TransitionModel();
         expected.setIndex(1);
@@ -139,7 +139,7 @@ public class TransitionModelTest {
 
         final var uuid = abfrage.getId();
         List<TransitionModel> possibleTransitions =
-            this.abfrageStatusService.getStatusAbfrageEventsBasedOnStateAndRole(uuid);
+            this.abfrageStatusService.getStatusAbfrageEventsBasedOnStateAndAuthorities(uuid);
 
         assertThat(possibleTransitions.size(), is(0));
     }
@@ -156,7 +156,7 @@ public class TransitionModelTest {
 
         final var uuid = abfrage.getId();
         List<TransitionModel> possibleTransitions =
-            this.abfrageStatusService.getStatusAbfrageEventsBasedOnStateAndRole(uuid);
+            this.abfrageStatusService.getStatusAbfrageEventsBasedOnStateAndAuthorities(uuid);
 
         List<TransitionModel> expected = new ArrayList<>();
 
@@ -199,7 +199,7 @@ public class TransitionModelTest {
 
         final var uuid = abfrage.getId();
         List<TransitionModel> possibleTransitions =
-            this.abfrageStatusService.getStatusAbfrageEventsBasedOnStateAndRole(uuid);
+            this.abfrageStatusService.getStatusAbfrageEventsBasedOnStateAndAuthorities(uuid);
 
         List<TransitionModel> expected = new ArrayList<>();
 
@@ -242,7 +242,7 @@ public class TransitionModelTest {
 
         final var uuid = abfrage.getId();
         List<TransitionModel> possibleTransitions =
-            this.abfrageStatusService.getStatusAbfrageEventsBasedOnStateAndRole(uuid);
+            this.abfrageStatusService.getStatusAbfrageEventsBasedOnStateAndAuthorities(uuid);
 
         assertThat(possibleTransitions.size(), is(0));
     }
@@ -259,7 +259,7 @@ public class TransitionModelTest {
 
         final var uuid = abfrage.getId();
         List<TransitionModel> possibleTransitions =
-            this.abfrageStatusService.getStatusAbfrageEventsBasedOnStateAndRole(uuid);
+            this.abfrageStatusService.getStatusAbfrageEventsBasedOnStateAndAuthorities(uuid);
 
         assertThat(possibleTransitions.size(), is(0));
     }
@@ -276,7 +276,7 @@ public class TransitionModelTest {
 
         final var uuid = abfrage.getId();
         List<TransitionModel> possibleTransitions =
-            this.abfrageStatusService.getStatusAbfrageEventsBasedOnStateAndRole(uuid);
+            this.abfrageStatusService.getStatusAbfrageEventsBasedOnStateAndAuthorities(uuid);
 
         List<TransitionModel> expected = new ArrayList<>();
 
@@ -327,7 +327,7 @@ public class TransitionModelTest {
 
         final var uuid = abfrage.getId();
         List<TransitionModel> possibleTransitions =
-            this.abfrageStatusService.getStatusAbfrageEventsBasedOnStateAndRole(uuid);
+            this.abfrageStatusService.getStatusAbfrageEventsBasedOnStateAndAuthorities(uuid);
 
         List<TransitionModel> expected = new ArrayList<>();
 
@@ -380,7 +380,7 @@ public class TransitionModelTest {
 
         final var uuid = abfrage.getId();
         List<TransitionModel> possibleTransitions =
-            this.abfrageStatusService.getStatusAbfrageEventsBasedOnStateAndRole(uuid);
+            this.abfrageStatusService.getStatusAbfrageEventsBasedOnStateAndAuthorities(uuid);
 
         assertThat(possibleTransitions.size(), is(0));
     }
@@ -397,7 +397,7 @@ public class TransitionModelTest {
 
         final var uuid = abfrage.getId();
         List<TransitionModel> possibleTransitions =
-            this.abfrageStatusService.getStatusAbfrageEventsBasedOnStateAndRole(uuid);
+            this.abfrageStatusService.getStatusAbfrageEventsBasedOnStateAndAuthorities(uuid);
 
         assertThat(possibleTransitions.size(), is(0));
     }
@@ -414,7 +414,7 @@ public class TransitionModelTest {
 
         final var uuid = abfrage.getId();
         List<TransitionModel> possibleTransitions =
-            this.abfrageStatusService.getStatusAbfrageEventsBasedOnStateAndRole(uuid);
+            this.abfrageStatusService.getStatusAbfrageEventsBasedOnStateAndAuthorities(uuid);
 
         List<TransitionModel> expected = new ArrayList<>();
 
@@ -457,7 +457,7 @@ public class TransitionModelTest {
 
         final var uuid = abfrage.getId();
         List<TransitionModel> possibleTransitions =
-            this.abfrageStatusService.getStatusAbfrageEventsBasedOnStateAndRole(uuid);
+            this.abfrageStatusService.getStatusAbfrageEventsBasedOnStateAndAuthorities(uuid);
 
         List<TransitionModel> expected = new ArrayList<>();
 
@@ -500,7 +500,7 @@ public class TransitionModelTest {
 
         final var uuid = abfrage.getId();
         List<TransitionModel> possibleTransitions =
-            this.abfrageStatusService.getStatusAbfrageEventsBasedOnStateAndRole(uuid);
+            this.abfrageStatusService.getStatusAbfrageEventsBasedOnStateAndAuthorities(uuid);
 
         assertThat(possibleTransitions.size(), is(0));
     }
@@ -517,7 +517,7 @@ public class TransitionModelTest {
 
         final var uuid = abfrage.getId();
         List<TransitionModel> possibleTransitions =
-            this.abfrageStatusService.getStatusAbfrageEventsBasedOnStateAndRole(uuid);
+            this.abfrageStatusService.getStatusAbfrageEventsBasedOnStateAndAuthorities(uuid);
 
         assertThat(possibleTransitions.size(), is(0));
     }
@@ -534,7 +534,7 @@ public class TransitionModelTest {
 
         final var uuid = abfrage.getId();
         List<TransitionModel> possibleTransitions =
-            this.abfrageStatusService.getStatusAbfrageEventsBasedOnStateAndRole(uuid);
+            this.abfrageStatusService.getStatusAbfrageEventsBasedOnStateAndAuthorities(uuid);
 
         List<TransitionModel> expected = new ArrayList<>();
 
@@ -569,7 +569,7 @@ public class TransitionModelTest {
 
         final var uuid = abfrage.getId();
         List<TransitionModel> possibleTransitions =
-            this.abfrageStatusService.getStatusAbfrageEventsBasedOnStateAndRole(uuid);
+            this.abfrageStatusService.getStatusAbfrageEventsBasedOnStateAndAuthorities(uuid);
 
         List<TransitionModel> expected = new ArrayList<>();
 
@@ -596,7 +596,7 @@ public class TransitionModelTest {
 
         final var uuid = abfrage.getId();
         List<TransitionModel> possibleTransitions =
-            this.abfrageStatusService.getStatusAbfrageEventsBasedOnStateAndRole(uuid);
+            this.abfrageStatusService.getStatusAbfrageEventsBasedOnStateAndAuthorities(uuid);
 
         List<TransitionModel> expected = new ArrayList<>();
 
@@ -623,7 +623,7 @@ public class TransitionModelTest {
 
         final var uuid = abfrage.getId();
         List<TransitionModel> possibleTransitions =
-            this.abfrageStatusService.getStatusAbfrageEventsBasedOnStateAndRole(uuid);
+            this.abfrageStatusService.getStatusAbfrageEventsBasedOnStateAndAuthorities(uuid);
 
         assertThat(possibleTransitions.size(), is(0));
     }
@@ -640,7 +640,7 @@ public class TransitionModelTest {
 
         final var uuid = abfrage.getId();
         List<TransitionModel> possibleTransitions =
-            this.abfrageStatusService.getStatusAbfrageEventsBasedOnStateAndRole(uuid);
+            this.abfrageStatusService.getStatusAbfrageEventsBasedOnStateAndAuthorities(uuid);
 
         List<TransitionModel> expected = new ArrayList<>();
 
@@ -667,7 +667,7 @@ public class TransitionModelTest {
 
         final var uuid = abfrage.getId();
         List<TransitionModel> possibleTransitions =
-            this.abfrageStatusService.getStatusAbfrageEventsBasedOnStateAndRole(uuid);
+            this.abfrageStatusService.getStatusAbfrageEventsBasedOnStateAndAuthorities(uuid);
 
         List<TransitionModel> expected = new ArrayList<>();
 
@@ -694,7 +694,7 @@ public class TransitionModelTest {
 
         final var uuid = abfrage.getId();
         List<TransitionModel> possibleTransitions =
-            this.abfrageStatusService.getStatusAbfrageEventsBasedOnStateAndRole(uuid);
+            this.abfrageStatusService.getStatusAbfrageEventsBasedOnStateAndAuthorities(uuid);
 
         assertThat(possibleTransitions.size(), is(0));
     }
@@ -711,7 +711,7 @@ public class TransitionModelTest {
 
         final var uuid = abfrage.getId();
         List<TransitionModel> possibleTransitions =
-            this.abfrageStatusService.getStatusAbfrageEventsBasedOnStateAndRole(uuid);
+            this.abfrageStatusService.getStatusAbfrageEventsBasedOnStateAndAuthorities(uuid);
 
         assertThat(possibleTransitions.size(), is(0));
     }
@@ -728,7 +728,7 @@ public class TransitionModelTest {
 
         final var uuid = abfrage.getId();
         List<TransitionModel> possibleTransitions =
-            this.abfrageStatusService.getStatusAbfrageEventsBasedOnStateAndRole(uuid);
+            this.abfrageStatusService.getStatusAbfrageEventsBasedOnStateAndAuthorities(uuid);
 
         assertThat(possibleTransitions.size(), is(0));
     }

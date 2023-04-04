@@ -307,15 +307,15 @@ public class AbfrageStatusService {
      * @return Liste von {@link TransitionModel} welche möglich sind
      * @throws EntityNotFoundException falls die Abfrage nicht gefunden wird
      */
-    public List<TransitionModel> getStatusAbfrageEventsBasedOnStateAndRole(final UUID id)
+    public List<TransitionModel> getStatusAbfrageEventsBasedOnStateAndAuthorities(final UUID id)
         throws EntityNotFoundException {
         List<AuthoritiesEnum> authorities = AuthenticationUtils.getUserAuthorities();
-        List<StatusAbfrageEvents> possibleAbfrageEventsBasedOnRole;
+        List<StatusAbfrageEvents> possibleAbfrageEventsBasedOnAuthorities;
         Map<AuthoritiesEnum, StatusAbfrageEvents> authoritiesAndMatchingEvent = getAuthoritiesAndEventsMap();
-        possibleAbfrageEventsBasedOnRole =
+        possibleAbfrageEventsBasedOnAuthorities =
             getStatusAbfrageEventsForAuthorities(authorities, authoritiesAndMatchingEvent);
         List<StatusAbfrageEvents> matchingAbfrageEvents = new ArrayList<>(getStatusAbfrageEventsBasedOnState(id));
-        matchingAbfrageEvents.retainAll(possibleAbfrageEventsBasedOnRole);
+        matchingAbfrageEvents.retainAll(possibleAbfrageEventsBasedOnAuthorities);
         return matchingAbfrageEvents
             .stream()
             .map(event -> {
