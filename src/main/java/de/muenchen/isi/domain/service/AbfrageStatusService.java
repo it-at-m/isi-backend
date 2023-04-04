@@ -301,7 +301,7 @@ public class AbfrageStatusService {
     }
 
     /**
-     * Entnimmt alle möglichen Statusänderungen aus dem aktuellen Status und den Authorities des Nutzers.
+     * Ermittelt mögliche Statusübergänge basierend auf Benutzer Authorities und aktuellen Status der Abfrage.
      *
      * @param id vom Typ {@link UUID} um die Abfrage zu finden
      * @return Liste von {@link TransitionModel} welche möglich sind
@@ -309,34 +309,52 @@ public class AbfrageStatusService {
      */
     public List<TransitionModel> getStatusAbfrageEventsBasedOnStateAndRole(final UUID id)
         throws EntityNotFoundException {
-        List<AuthoritiesEnum> userRolesAuthorities = AuthenticationUtils.getUserAuthorities();
-        List<StatusAbfrageEvents> possibleAbfrageEventsBasedOnRole = new ArrayList<>();
-        Map<AuthoritiesEnum, StatusAbfrageEvents> rolesAndMatchingEvent = getRolesAndEventsMap();
-        List<TransitionModel> possibleTransitionsModel = new ArrayList<>();
-        for (AuthoritiesEnum userRole : userRolesAuthorities) {
-            possibleAbfrageEventsBasedOnRole.add(rolesAndMatchingEvent.get(userRole));
-        }
+        List<AuthoritiesEnum> authorities = AuthenticationUtils.getUserAuthorities();
+        List<StatusAbfrageEvents> possibleAbfrageEventsBasedOnRole;
+        Map<AuthoritiesEnum, StatusAbfrageEvents> authoritiesAndMatchingEvent = getAuthoritiesAndEventsMap();
+        possibleAbfrageEventsBasedOnRole =
+            getStatusAbfrageEventsForAuthorities(authorities, authoritiesAndMatchingEvent);
         List<StatusAbfrageEvents> matchingAbfrageEvents = new ArrayList<>(getStatusAbfrageEventsBasedOnState(id));
         matchingAbfrageEvents.retainAll(possibleAbfrageEventsBasedOnRole);
-        for (StatusAbfrageEvents event : matchingAbfrageEvents) {
-            TransitionModel transitionModel = new TransitionModel();
-            transitionModel.setUrl(event.getUrl());
-            transitionModel.setButtonName(event.getButtonName());
-            transitionModel.setIndex(event.getIndex());
-            possibleTransitionsModel.add(transitionModel);
-        }
-        possibleTransitionsModel.sort((Comparator.comparingInt(TransitionModel::getIndex)));
-        return possibleTransitionsModel;
+        return matchingAbfrageEvents
+            .stream()
+            .map(event -> {
+                TransitionModel transitionModel = new TransitionModel();
+                transitionModel.setUrl(event.getUrl());
+                transitionModel.setButtonName(event.getButtonName());
+                transitionModel.setIndex(event.getIndex());
+                return transitionModel;
+            })
+            .sorted(Comparator.comparingInt(TransitionModel::getIndex))
+            .collect(Collectors.toList());
     }
 
     /**
-     * Entnimmt alle möglichen Statusänderungen aus dem aktuellen Status.
+     * Ermittelt anhand der vom Benutzer besessenen Authorities, welche {@link StatusAbfrageEvents} für den Benutzer erlaubt sind.
+     *
+     * @param authorities                 Die Liste der Authorities des Benutzers.
+     * @param authoritiesAndMatchingEvent Die {@link Map}, die die Zuordnung von Authorities zu den dazugehörigen {@link StatusAbfrageEvents} enthält.
+     * @return Eine Liste der erlaubten {@link StatusAbfrageEvents} basierend auf den Authorities des Benutzers.
+     */
+    private List<StatusAbfrageEvents> getStatusAbfrageEventsForAuthorities(
+        final List<AuthoritiesEnum> authorities,
+        Map<AuthoritiesEnum, StatusAbfrageEvents> authoritiesAndMatchingEvent
+    ) {
+        List<StatusAbfrageEvents> statusAbfrageEventsList = new ArrayList<>();
+        for (AuthoritiesEnum authority : authorities) {
+            statusAbfrageEventsList.add(authoritiesAndMatchingEvent.get(authority));
+        }
+        return statusAbfrageEventsList;
+    }
+
+    /**
+     * Ermittelt alle möglichen Statusänderungen aus dem aktuellen Status.
      *
      * @param id vom Typ {@link UUID} um die Abfrage zu finden
      * @return Liste von {@link StatusAbfrageEvents} welche möglich sind
      * @throws EntityNotFoundException falls die Abfrage nicht gefunden wird
      */
-    public List<StatusAbfrageEvents> getStatusAbfrageEventsBasedOnState(final UUID id) throws EntityNotFoundException {
+    private List<StatusAbfrageEvents> getStatusAbfrageEventsBasedOnState(final UUID id) throws EntityNotFoundException {
         final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id);
         return stateMachine
             .getTransitions()
@@ -347,41 +365,49 @@ public class AbfrageStatusService {
     }
 
     /**
-     * Definiert eine {@link Map} welche die {@link AuthoritiesEnum} mit den dazugehörigten {@link StatusAbfrageEvents} verknüpft.
+     * Definiert eine {@link Map}, die die {@link AuthoritiesEnum} mit den dazugehörigen {@link StatusAbfrageEvents} verknüpft.
+     * <p>
+     * Diese Map dient als zentrale Stelle zum Zuordnen der verschiedenen Autoritäten und Transitionsereignisse.
      *
-     * @return {@link Map}
+     * @return Die {@link Map}, die den Mapping von {@link AuthoritiesEnum} auf {@link StatusAbfrageEvents} enthält.
      */
-    private Map<AuthoritiesEnum, StatusAbfrageEvents> getRolesAndEventsMap() {
-        final Map<AuthoritiesEnum, StatusAbfrageEvents> rolesAndEvents = new HashMap<>();
-        rolesAndEvents.put(AuthoritiesEnum.ISI_BACKEND_FREIGABE_ABFRAGE, StatusAbfrageEvents.FREIGABE);
-        rolesAndEvents.put(AuthoritiesEnum.ISI_BACKEND_ABBRECHEN_ABFRAGE, StatusAbfrageEvents.ABBRECHEN);
-        rolesAndEvents.put(
+    private Map<AuthoritiesEnum, StatusAbfrageEvents> getAuthoritiesAndEventsMap() {
+        final Map<AuthoritiesEnum, StatusAbfrageEvents> authoritiesAndEventsMap = new HashMap<>();
+        authoritiesAndEventsMap.put(AuthoritiesEnum.ISI_BACKEND_FREIGABE_ABFRAGE, StatusAbfrageEvents.FREIGABE);
+        authoritiesAndEventsMap.put(AuthoritiesEnum.ISI_BACKEND_ABBRECHEN_ABFRAGE, StatusAbfrageEvents.ABBRECHEN);
+        authoritiesAndEventsMap.put(
             AuthoritiesEnum.ISI_BACKEND_ZURUECK_AN_ABFRAGEERSTELLER_ABFRAGE,
             StatusAbfrageEvents.ZURUECK_AN_ABFRAGEERSTELLER
         );
-        rolesAndEvents.put(
+        authoritiesAndEventsMap.put(
             AuthoritiesEnum.ISI_BACKEND_IN_BEARBEITUNG_SETZTEN_ABFRAGE,
             StatusAbfrageEvents.IN_BEARBEITUNG_SETZEN
         );
-        rolesAndEvents.put(AuthoritiesEnum.ISI_BACKEND_ZURUECK_AN_PLAN_ABFRAGE, StatusAbfrageEvents.ZURUECK_AN_PLAN);
-        rolesAndEvents.put(AuthoritiesEnum.ISI_BACKEND_SCHLIESSEN_ABFRAGE, StatusAbfrageEvents.ABFRAGE_SCHLIESSEN);
-        rolesAndEvents.put(
+        authoritiesAndEventsMap.put(
+            AuthoritiesEnum.ISI_BACKEND_ZURUECK_AN_PLAN_ABFRAGE,
+            StatusAbfrageEvents.ZURUECK_AN_PLAN
+        );
+        authoritiesAndEventsMap.put(
+            AuthoritiesEnum.ISI_BACKEND_SCHLIESSEN_ABFRAGE,
+            StatusAbfrageEvents.ABFRAGE_SCHLIESSEN
+        );
+        authoritiesAndEventsMap.put(
             AuthoritiesEnum.ISI_BACKEND_VERSCHICKEN_DER_STELLUNGNAHME_ABFRAGE,
             StatusAbfrageEvents.VERSCHICKEN_DER_STELLUNGNAHME
         );
-        rolesAndEvents.put(
+        authoritiesAndEventsMap.put(
             AuthoritiesEnum.ISI_BACKEND_BEDARFSMELDUNG_ERFOLGTE_ABFRAGE,
             StatusAbfrageEvents.BEDARFSMELDUNG_ERFOLGTE
         );
-        rolesAndEvents.put(
+        authoritiesAndEventsMap.put(
             AuthoritiesEnum.ISI_BACKEND_SPEICHERN_VON_SOZIALINFRASTRUKTUR_VERSORGUNG_ABFRAGE,
             StatusAbfrageEvents.SPEICHERN_VON_SOZIALINFRASTRUKTUR_VERSORGUNG
         );
-        rolesAndEvents.put(
+        authoritiesAndEventsMap.put(
             AuthoritiesEnum.ISI_BACKEND_ERNEUTE_BEARBEITUNG_ABFRAGE,
             StatusAbfrageEvents.ERNEUTE_BEARBEITUNG
         );
 
-        return rolesAndEvents;
+        return authoritiesAndEventsMap;
     }
 }

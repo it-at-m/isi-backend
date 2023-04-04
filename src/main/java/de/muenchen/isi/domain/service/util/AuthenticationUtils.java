@@ -14,9 +14,9 @@ import org.springframework.stereotype.Service;
 public class AuthenticationUtils {
 
     /**
-     * Die Methode extrahiert die Nutzer Rollen aus dem {@link DefaultOAuth2AuthenticatedPrincipal}
+     * Die Methode extrahiert die Nutzer Authorities aus dem {@link DefaultOAuth2AuthenticatedPrincipal}
      *
-     * @return die Rollen vom Nutzer
+     * @return Liste der Nutzer {@link AuthoritiesEnum}
      */
     public static List<AuthoritiesEnum> getUserAuthorities() {
         ArrayList<AuthoritiesEnum> userRoles = new ArrayList<>();
