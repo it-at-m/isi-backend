@@ -4,9 +4,11 @@
  */
 package de.muenchen.isi.infrastructure.entity.enums.lookup;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+@Schema(enumAsRef = true)
 @AllArgsConstructor
 public enum StatusAbfrage implements ILookup {
     ANGELEGT("angelegt"),
