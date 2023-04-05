@@ -33,8 +33,8 @@ public class HasFoerdermixRequiredSumValidator implements ConstraintValidator<Ha
 
         List<FoerderartDto> foerderarten = value.getFoerderarten();
         for (FoerderartDto foederart : foerderarten) {
-            var tmp = ObjectUtils.defaultIfNull(foederart.getAnteilProzent(), BigDecimal.ZERO);
-            sumFoerdermix = sumFoerdermix.add(tmp);
+            var summand = ObjectUtils.defaultIfNull(foederart.getAnteilProzent(), BigDecimal.ZERO);
+            sumFoerdermix = sumFoerdermix.add(summand);
         }
 
         return sumFoerdermix.compareTo(REQUIRED_SUM) == 0;

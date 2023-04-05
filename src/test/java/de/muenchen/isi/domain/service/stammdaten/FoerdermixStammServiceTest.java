@@ -164,9 +164,5 @@ class FoerdermixStammServiceTest {
         Mockito.verify(this.foerdermixStammRepository, Mockito.times(1)).findById(entity.getId());
         Mockito.verify(this.foerdermixStammRepository, Mockito.times(1)).deleteById(id);
     }
-<<<<<<< HEAD
 
 }
-=======
-}
->>>>>>> dev

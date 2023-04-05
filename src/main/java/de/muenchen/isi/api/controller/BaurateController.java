@@ -46,7 +46,7 @@ public class BaurateController {
     private final BaurateApiMapper baurateApiMapper;
 
     @GetMapping("bauraten")
-    @Transactional
+    @Transactional(readOnly = true)
     @Operation(summary = "Lesen aller Bauraten")
     @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "OK") })
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_READ_BAURATE.name())")
