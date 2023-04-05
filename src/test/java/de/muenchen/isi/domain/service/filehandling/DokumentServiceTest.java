@@ -6,12 +6,15 @@ import static org.hamcrest.Matchers.is;
 import de.muenchen.isi.domain.mapper.DokumentDomainMapperImpl;
 import de.muenchen.isi.domain.model.filehandling.DokumentModel;
 import de.muenchen.isi.domain.model.filehandling.DokumenteModel;
+import de.muenchen.isi.domain.model.filehandling.FilepathModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtDokument;
 import de.muenchen.isi.infrastructure.entity.filehandling.Dokument;
 import de.muenchen.isi.infrastructure.repository.filehandling.DokumentRepository;
 import de.muenchen.isi.rest.TestData;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -65,4 +68,40 @@ class DokumentServiceTest {
 
         assertThat(result, is(expected));
     }
+
+    @Test
+    void getDokumenteInOriginalDokumentenListWhichAreMissingInAdaptedDokumentenListe() {
+        var originalDokument1 = new DokumentModel();
+        originalDokument1.setFilePath(new FilepathModel("test/file1.txt"));
+        originalDokument1.setId(UUID.randomUUID());
+        var originalDokument2 = new DokumentModel();
+        originalDokument2.setFilePath(new FilepathModel("test/file2.txt"));
+        originalDokument2.setId(UUID.randomUUID());
+        var originalDokument3 = new DokumentModel();
+        originalDokument3.setFilePath(new FilepathModel("test/file3.txt"));
+        originalDokument3.setId(UUID.randomUUID());
+        var originalDokument4 = new DokumentModel();
+        originalDokument4.setFilePath(new FilepathModel("test/file4.txt"));
+        originalDokument4.setId(UUID.randomUUID());
+        List<DokumentModel> originalDokumentModels = List.of(originalDokument1, originalDokument2, originalDokument3, originalDokument4);
+
+
+        var adaptedDokument1 = new DokumentModel();
+        adaptedDokument1.setFilePath(new FilepathModel("test/file1.txt"));
+        adaptedDokument1.setId(originalDokument1.getId());
+        var adaptedDokument2 = new DokumentModel();
+        adaptedDokument2.setFilePath(new FilepathModel("test/file3.txt"));
+        adaptedDokument2.setId(originalDokument3.getId());
+        var adaptedDokument3 = new DokumentModel();
+        adaptedDokument3.setFilePath(new FilepathModel("test/fileNew.txt"));
+        adaptedDokument3.setId(null);
+        List<DokumentModel> adaptedDokumentModels = List.of(adaptedDokument1, adaptedDokument2, adaptedDokument3);
+
+        List<DokumentModel> result = dokumentService.getDokumenteInOriginalDokumentenListWhichAreMissingInAdaptedDokumentenListe(adaptedDokumentModels, originalDokumentModels);
+
+        List<DokumentModel> expected = List.of(originalDokument4, originalDokument2);
+
+        assertThat(result, is(expected));
+    }
+
 }
