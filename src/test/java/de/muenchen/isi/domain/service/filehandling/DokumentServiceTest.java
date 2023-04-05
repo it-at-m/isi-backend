@@ -11,10 +11,10 @@ import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtDokument;
 import de.muenchen.isi.infrastructure.entity.filehandling.Dokument;
 import de.muenchen.isi.infrastructure.repository.filehandling.DokumentRepository;
 import de.muenchen.isi.rest.TestData;
+import io.muenchendigital.digiwf.s3.integration.client.repository.DocumentStorageFileRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -35,10 +35,19 @@ class DokumentServiceTest {
     @Mock
     private DokumentRepository dokumentRepository;
 
+    @Mock
+    private DocumentStorageFileRepository documentStorageFileRepository;
+
     @BeforeEach
     public void beforeEach() {
-        this.dokumentService = new DokumentService(this.dokumentRepository, new DokumentDomainMapperImpl());
-        Mockito.reset(this.dokumentRepository);
+        this.dokumentService =
+            new DokumentService(
+                this.dokumentRepository,
+                new DokumentDomainMapperImpl(),
+                documentStorageFileRepository,
+                1
+            );
+        Mockito.reset(this.dokumentRepository, documentStorageFileRepository);
     }
 
     @Test
@@ -83,8 +92,12 @@ class DokumentServiceTest {
         var originalDokument4 = new DokumentModel();
         originalDokument4.setFilePath(new FilepathModel("test/file4.txt"));
         originalDokument4.setId(UUID.randomUUID());
-        List<DokumentModel> originalDokumentModels = List.of(originalDokument1, originalDokument2, originalDokument3, originalDokument4);
-
+        List<DokumentModel> originalDokumentModels = List.of(
+            originalDokument1,
+            originalDokument2,
+            originalDokument3,
+            originalDokument4
+        );
 
         var adaptedDokument1 = new DokumentModel();
         adaptedDokument1.setFilePath(new FilepathModel("test/file1.txt"));
@@ -97,11 +110,17 @@ class DokumentServiceTest {
         adaptedDokument3.setId(null);
         List<DokumentModel> adaptedDokumentModels = List.of(adaptedDokument1, adaptedDokument2, adaptedDokument3);
 
-        List<DokumentModel> result = dokumentService.getDokumenteInOriginalDokumentenListWhichAreMissingInAdaptedDokumentenListe(adaptedDokumentModels, originalDokumentModels);
+        List<DokumentModel> result =
+            dokumentService.getDokumenteInOriginalDokumentenListWhichAreMissingInAdaptedDokumentenListe(
+                adaptedDokumentModels,
+                originalDokumentModels
+            );
 
         List<DokumentModel> expected = List.of(originalDokument4, originalDokument2);
 
         assertThat(result, is(expected));
     }
 
+    @Test
+    void deleteDokumente() {}
 }

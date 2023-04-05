@@ -115,5 +115,4 @@ public class PresignedUrlCreationController {
         final var presignedUrlDto = this.filehandlingApiMapper.model2Dto(presignedUrlModel);
         return ResponseEntity.ok(presignedUrlDto);
     }
-
 }
