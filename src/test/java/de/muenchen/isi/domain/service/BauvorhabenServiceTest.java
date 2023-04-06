@@ -229,6 +229,12 @@ public class BauvorhabenServiceTest {
         Mockito.verify(this.bauvorhabenRepository, Mockito.times(1)).findById(entity.getId());
         Mockito.verify(this.bauvorhabenRepository, Mockito.times(1)).saveAndFlush(entity);
         Mockito.verify(this.bauvorhabenRepository, Mockito.times(1)).findByNameVorhabenIgnoreCase("BauvorhabenTest");
+        Mockito
+            .verify(this.dokumentService, Mockito.times(1))
+            .deleteDokumenteFromOriginalDokumentenListWhichAreMissingInParameterAdaptedDokumentenListe(
+                Mockito.isNull(),
+                Mockito.isNull()
+            );
     }
 
     @Test

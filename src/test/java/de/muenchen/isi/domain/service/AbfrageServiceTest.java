@@ -252,6 +252,12 @@ class AbfrageServiceTest {
         Mockito
             .verify(this.infrastrukturabfrageRepository, Mockito.times(1))
             .findByAbfrage_NameAbfrageIgnoreCase("hallo");
+        Mockito
+            .verify(this.dokumentService, Mockito.times(1))
+            .deleteDokumenteFromOriginalDokumentenListWhichAreMissingInParameterAdaptedDokumentenListe(
+                Mockito.isNull(),
+                Mockito.isNull()
+            );
     }
 
     @Test
