@@ -1,5 +1,6 @@
 package de.muenchen.isi.api.validation;
 
+import de.muenchen.isi.api.dto.AbfragevarianteDto;
 import de.muenchen.isi.api.dto.InfrastrukturabfrageDto;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Planungsrecht;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
@@ -10,18 +11,18 @@ import org.springframework.stereotype.Component;
 
 @Component
 @NoArgsConstructor
-public class GeschossflaecheWohnenSobonUrsaechlichRequiredValidator
-    implements ConstraintValidator<GeschossflaecheWohnenSobonUrsaechlichRequired, InfrastrukturabfrageDto> {
+public class GeschossflaecheWohnenSobonUrsaechlichValidator
+    implements ConstraintValidator<GeschossflaecheWohnenSobonUrsaechlichValid, InfrastrukturabfrageDto> {
 
     /**
-     * Prüft ob das Feld Geschossfläche Wohnen SoBoN-ursächlich {@Link AbfragevarianteDto#geschossflaecheWohnenSoBoNursaechlich} einen numerischem Wert hat.
+     * Prüft, ob das Feld Geschossfläche Wohnen SoBoN-ursächlich {@link AbfragevarianteDto#getGeschossflaecheWohnenSoBoNursaechlich()} einen numerischen Wert hat.
      * Das Feld ist bei folgenden Vorbedingunen ein Mussfeld und wird auf numerischen Inhalt geprüft:
-     * - die Abfrage ist SoBoN-relevant {@Link InfrastrukturabfrageDto#sobonRelevant.}
-     * - und {@Link AbfragevarianteDto#planungsrecht} ist {@Link Planungsrecht#BPLAN_PARAG_12} oder {{@Link Planungsrecht#BPLAN_PARAG_11}}
+     * - die Abfrage ist SoBoN-relevant {@link InfrastrukturabfrageDto#getSobonRelevant()}
+     * - und {@link AbfragevarianteDto#getPlanungsrecht()} ist {@link Planungsrecht#BPLAN_PARAG_12} oder {{@link Planungsrecht#BPLAN_PARAG_11}}
      *
      * @param value   {@link InfrastrukturabfrageDto} zum Validieren.
-     * @param context in welchem die Validierung statt findet.
-     * @return true falls das Attribut einen Wert hat, andernfalls false.
+     * @param context in welchem die Validierung stattfindet.
+     * @return true, falls das Attribut einen Wert hat, andernfalls false.
      */
     @Override
     public boolean isValid(final InfrastrukturabfrageDto value, final ConstraintValidatorContext context) {
