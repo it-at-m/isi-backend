@@ -80,16 +80,16 @@ class DokumentServiceTest {
 
     @Test
     void getDokumenteInOriginalDokumentenListWhichAreMissingInAdaptedDokumentenListe() {
-        var originalDokument1 = new DokumentModel();
+        final var originalDokument1 = new DokumentModel();
         originalDokument1.setFilePath(new FilepathModel("test/file1.txt"));
         originalDokument1.setId(UUID.randomUUID());
-        var originalDokument2 = new DokumentModel();
+        final var originalDokument2 = new DokumentModel();
         originalDokument2.setFilePath(new FilepathModel("test/file2.txt"));
         originalDokument2.setId(UUID.randomUUID());
-        var originalDokument3 = new DokumentModel();
+        final var originalDokument3 = new DokumentModel();
         originalDokument3.setFilePath(new FilepathModel("test/file3.txt"));
         originalDokument3.setId(UUID.randomUUID());
-        var originalDokument4 = new DokumentModel();
+        final var originalDokument4 = new DokumentModel();
         originalDokument4.setFilePath(new FilepathModel("test/file4.txt"));
         originalDokument4.setId(UUID.randomUUID());
         List<DokumentModel> originalDokumentModels = List.of(
@@ -99,13 +99,13 @@ class DokumentServiceTest {
             originalDokument4
         );
 
-        var adaptedDokument1 = new DokumentModel();
+        final var adaptedDokument1 = new DokumentModel();
         adaptedDokument1.setFilePath(new FilepathModel("test/file1.txt"));
         adaptedDokument1.setId(originalDokument1.getId());
-        var adaptedDokument2 = new DokumentModel();
+        final var adaptedDokument2 = new DokumentModel();
         adaptedDokument2.setFilePath(new FilepathModel("test/file3.txt"));
         adaptedDokument2.setId(originalDokument3.getId());
-        var adaptedDokument3 = new DokumentModel();
+        final var adaptedDokument3 = new DokumentModel();
         adaptedDokument3.setFilePath(new FilepathModel("test/fileNew.txt"));
         adaptedDokument3.setId(null);
         List<DokumentModel> adaptedDokumentModels = List.of(adaptedDokument1, adaptedDokument2, adaptedDokument3);
@@ -119,8 +119,35 @@ class DokumentServiceTest {
         List<DokumentModel> expected = List.of(originalDokument4, originalDokument2);
 
         assertThat(result, is(expected));
-    }
 
-    @Test
-    void deleteDokumente() {}
+        result =
+            dokumentService.getDokumenteInOriginalDokumentenListWhichAreMissingInAdaptedDokumentenListe(
+                new ArrayList<>(),
+                originalDokumentModels
+            );
+
+        expected = List.of(originalDokument4, originalDokument2, originalDokument1, originalDokument3);
+
+        assertThat(result, is(expected));
+
+        result =
+            dokumentService.getDokumenteInOriginalDokumentenListWhichAreMissingInAdaptedDokumentenListe(
+                adaptedDokumentModels,
+                new ArrayList<>()
+            );
+
+        expected = List.of();
+
+        assertThat(result, is(expected));
+
+        result =
+            dokumentService.getDokumenteInOriginalDokumentenListWhichAreMissingInAdaptedDokumentenListe(
+                new ArrayList<>(),
+                new ArrayList<>()
+            );
+
+        expected = List.of();
+
+        assertThat(result, is(expected));
+    }
 }
