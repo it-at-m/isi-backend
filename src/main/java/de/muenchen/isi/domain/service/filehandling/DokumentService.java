@@ -73,6 +73,8 @@ public class DokumentService {
 
     /**
      * Ermittelt die Dokumente in der originalen Dokumentenliste welche in der adaptierten Dokumentenliste nicht mehr vorhanden sind.
+     * <p>
+     * Bei der Ermittlung werden die nicht persistierten IDs vorhanden.
      *
      * @param adaptedDokumentenListe
      * @param originalDokumentenListe
@@ -90,6 +92,7 @@ public class DokumentService {
 
         final Map<FilepathModel, DokumentModel> originalDokumentenMap = originalDokumentenListe
             .stream()
+            // Entfernen aller nicht persistierten Dokumente
             .filter(dokumentModel -> ObjectUtils.isNotEmpty(dokumentModel.getId()))
             .collect(Collectors.toMap(DokumentModel::getFilePath, Function.identity()));
 
