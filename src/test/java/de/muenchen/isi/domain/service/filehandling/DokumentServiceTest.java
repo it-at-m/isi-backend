@@ -3,6 +3,8 @@ package de.muenchen.isi.domain.service.filehandling;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
+import de.muenchen.isi.domain.exception.FileHandlingFailedException;
+import de.muenchen.isi.domain.exception.FileHandlingWithS3FailedException;
 import de.muenchen.isi.domain.mapper.DokumentDomainMapperImpl;
 import de.muenchen.isi.domain.model.filehandling.DokumentModel;
 import de.muenchen.isi.domain.model.filehandling.DokumenteModel;
@@ -11,6 +13,10 @@ import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtDokument;
 import de.muenchen.isi.infrastructure.entity.filehandling.Dokument;
 import de.muenchen.isi.infrastructure.repository.filehandling.DokumentRepository;
 import de.muenchen.isi.rest.TestData;
+import io.muenchendigital.digiwf.s3.integration.client.exception.DocumentStorageClientErrorException;
+import io.muenchendigital.digiwf.s3.integration.client.exception.DocumentStorageException;
+import io.muenchendigital.digiwf.s3.integration.client.exception.DocumentStorageServerErrorException;
+import io.muenchendigital.digiwf.s3.integration.client.exception.PropertyNotSetException;
 import io.muenchendigital.digiwf.s3.integration.client.repository.DocumentStorageFileRepository;
 import java.util.ArrayList;
 import java.util.List;
@@ -79,7 +85,8 @@ class DokumentServiceTest {
     }
 
     @Test
-    void getDokumenteInOriginalDokumentenListWhichAreMissingInAdaptedDokumentenListe() {
+    void deleteDokumenteFromOriginalDokumentenListWhichAreMissingInParameterAdaptedDokumentenListe()
+        throws FileHandlingFailedException, FileHandlingWithS3FailedException, DocumentStorageException, PropertyNotSetException, DocumentStorageClientErrorException, DocumentStorageServerErrorException {
         final var originalDokument1 = new DokumentModel();
         originalDokument1.setFilePath(new FilepathModel("test/file1.txt"));
         originalDokument1.setId(UUID.randomUUID());
@@ -92,7 +99,7 @@ class DokumentServiceTest {
         final var originalDokument4 = new DokumentModel();
         originalDokument4.setFilePath(new FilepathModel("test/file4.txt"));
         originalDokument4.setId(UUID.randomUUID());
-        List<DokumentModel> originalDokumentModels = List.of(
+        final List<DokumentModel> originalDokumentModels = List.of(
             originalDokument1,
             originalDokument2,
             originalDokument3,
@@ -108,7 +115,65 @@ class DokumentServiceTest {
         final var adaptedDokument3 = new DokumentModel();
         adaptedDokument3.setFilePath(new FilepathModel("test/fileNew.txt"));
         adaptedDokument3.setId(null);
-        List<DokumentModel> adaptedDokumentModels = List.of(adaptedDokument1, adaptedDokument2, adaptedDokument3);
+        final List<DokumentModel> adaptedDokumentModels = List.of(adaptedDokument1, adaptedDokument2, adaptedDokument3);
+
+        dokumentService.deleteDokumenteFromOriginalDokumentenListWhichAreMissingInParameterAdaptedDokumentenListe(
+            adaptedDokumentModels,
+            originalDokumentModels
+        );
+
+        Mockito
+            .verify(this.documentStorageFileRepository, Mockito.times(1))
+            .deleteFile(originalDokument2.getFilePath().getPathToFile(), 1);
+        Mockito
+            .verify(this.documentStorageFileRepository, Mockito.times(1))
+            .deleteFile(originalDokument4.getFilePath().getPathToFile(), 1);
+        Mockito
+            .verify(this.documentStorageFileRepository, Mockito.times(2))
+            .deleteFile(Mockito.anyString(), Mockito.anyInt());
+
+        Mockito.reset(this.dokumentRepository, documentStorageFileRepository);
+
+        dokumentService.deleteDokumenteFromOriginalDokumentenListWhichAreMissingInParameterAdaptedDokumentenListe(
+            null,
+            null
+        );
+        Mockito
+            .verify(this.documentStorageFileRepository, Mockito.times(0))
+            .deleteFile(Mockito.anyString(), Mockito.anyInt());
+    }
+
+    @Test
+    void getDokumenteInOriginalDokumentenListWhichAreMissingInAdaptedDokumentenListe() {
+        final var originalDokument1 = new DokumentModel();
+        originalDokument1.setFilePath(new FilepathModel("test/file1.txt"));
+        originalDokument1.setId(UUID.randomUUID());
+        final var originalDokument2 = new DokumentModel();
+        originalDokument2.setFilePath(new FilepathModel("test/file2.txt"));
+        originalDokument2.setId(UUID.randomUUID());
+        final var originalDokument3 = new DokumentModel();
+        originalDokument3.setFilePath(new FilepathModel("test/file3.txt"));
+        originalDokument3.setId(UUID.randomUUID());
+        final var originalDokument4 = new DokumentModel();
+        originalDokument4.setFilePath(new FilepathModel("test/file4.txt"));
+        originalDokument4.setId(UUID.randomUUID());
+        final List<DokumentModel> originalDokumentModels = List.of(
+            originalDokument1,
+            originalDokument2,
+            originalDokument3,
+            originalDokument4
+        );
+
+        final var adaptedDokument1 = new DokumentModel();
+        adaptedDokument1.setFilePath(new FilepathModel("test/file1.txt"));
+        adaptedDokument1.setId(originalDokument1.getId());
+        final var adaptedDokument2 = new DokumentModel();
+        adaptedDokument2.setFilePath(new FilepathModel("test/file3.txt"));
+        adaptedDokument2.setId(originalDokument3.getId());
+        final var adaptedDokument3 = new DokumentModel();
+        adaptedDokument3.setFilePath(new FilepathModel("test/fileNew.txt"));
+        adaptedDokument3.setId(null);
+        final List<DokumentModel> adaptedDokumentModels = List.of(adaptedDokument1, adaptedDokument2, adaptedDokument3);
 
         List<DokumentModel> result =
             dokumentService.getDokumenteInOriginalDokumentenListWhichAreMissingInAdaptedDokumentenListe(
