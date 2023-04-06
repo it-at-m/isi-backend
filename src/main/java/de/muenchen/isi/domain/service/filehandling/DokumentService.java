@@ -76,8 +76,8 @@ public class DokumentService {
      * <p>
      * Bei der Ermittlung werden nicht persistierte Dokumente (id == null) ingoriert.
      *
-     * @param adaptedDokumentenListe
-     * @param originalDokumentenListe
+     * @param adaptedDokumentenListe  darf auch null sein.
+     * @param originalDokumentenListe darf auch null sein.
      * @throws FileHandlingFailedException
      * @throws FileHandlingWithS3FailedException
      */
