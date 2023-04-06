@@ -3,12 +3,15 @@ package de.muenchen.isi.domain.service;
 import de.muenchen.isi.api.dto.AbfrageDto;
 import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
+import de.muenchen.isi.domain.exception.FileHandlingFailedException;
+import de.muenchen.isi.domain.exception.FileHandlingWithS3FailedException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
 import de.muenchen.isi.domain.mapper.BauvorhabenDomainMapper;
 import de.muenchen.isi.domain.model.AbfrageModel;
 import de.muenchen.isi.domain.model.BauvorhabenModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.InfrastruktureinrichtungModel;
+import de.muenchen.isi.domain.service.filehandling.DokumentService;
 import de.muenchen.isi.infrastructure.repository.BauvorhabenRepository;
 import de.muenchen.isi.infrastructure.repository.InfrastrukturabfrageRepository;
 import de.muenchen.isi.infrastructure.repository.infrastruktureinrichtung.GrundschuleRepository;
@@ -33,14 +36,24 @@ import org.springframework.stereotype.Service;
 public class BauvorhabenService {
 
     private final BauvorhabenDomainMapper bauvorhabenDomainMapper;
+
     private final BauvorhabenRepository bauvorhabenRepository;
+
     private final InfrastrukturabfrageRepository infrastrukturabfrageRepository;
+
     private final KinderkrippeRepository kinderkrippeRepository;
+
     private final KindergartenRepository kindergartenRepositoryRepository;
+
     private final HausFuerKinderRepository hausFuerKinderRepository;
+
     private final GsNachmittagBetreuungRepository gsNachmittagBetreuungRepository;
+
     private final GrundschuleRepository grundschuleRepository;
+
     private final MittelschuleRepository mittelschuleRepository;
+
+    private final DokumentService dokumentService;
 
     /**
      * Die Methode gibt alle {@link BauvorhabenModel} als Liste zurück.
@@ -74,7 +87,7 @@ public class BauvorhabenService {
      *
      * @param bauvorhaben zum Speichern
      * @return das gespeicherte {@link BauvorhabenModel}
-     * @throws UniqueViolationException falls der Name des Bauvorhabens {@link BauvorhabenModel#getNameVorhaben()} bereits vorhanden ist
+     * @throws UniqueViolationException   falls der Name des Bauvorhabens {@link BauvorhabenModel#getNameVorhaben()} bereits vorhanden ist
      * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
      */
     public BauvorhabenModel saveBauvorhaben(final BauvorhabenModel bauvorhaben)
@@ -101,13 +114,19 @@ public class BauvorhabenService {
      *
      * @param bauvorhaben zum Updaten
      * @return das geupdatete {@link BauvorhabenModel}
-     * @throws EntityNotFoundException falls das Bauvorhaben identifiziert durch die {@link BauvorhabenModel#getId()} nicht gefunden wird
-     * @throws UniqueViolationException falls der Name des Bauvorhabens {@link BauvorhabenModel#getNameVorhaben()} bereits vorhanden ist
-     * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
+     * @throws EntityNotFoundException           falls das Bauvorhaben identifiziert durch die {@link BauvorhabenModel#getId()} nicht gefunden wird
+     * @throws UniqueViolationException          falls der Name des Bauvorhabens {@link BauvorhabenModel#getNameVorhaben()} bereits vorhanden ist
+     * @throws OptimisticLockingException        falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
+     * @throws FileHandlingFailedException
+     * @throws FileHandlingWithS3FailedException
      */
     public BauvorhabenModel updateBauvorhaben(final BauvorhabenModel bauvorhaben)
-        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException {
-        this.getBauvorhabenById(bauvorhaben.getId());
+        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, FileHandlingFailedException, FileHandlingWithS3FailedException {
+        final var originalBauvorhabenDb = this.getBauvorhabenById(bauvorhaben.getId());
+        dokumentService.deleteDokumenteFromOriginalDokumentenListWhichAreMissingInParameterAdaptedDokumentenListe(
+            bauvorhaben.getDokumente(),
+            originalBauvorhabenDb.getDokumente()
+        );
         return this.saveBauvorhaben(bauvorhaben);
     }
 
@@ -151,7 +170,7 @@ public class BauvorhabenService {
      * Diese Methode soll dann verwendet werden, um die beim Mapping verloren gegangene Information zum Bauvorhaben wieder in der Infrastruktureinrichung einzusetzen.
      * Der Parameter 'bauvorhabenId' darf null sein. In diesem Fall passiert nichts.
      *
-     * @param bauvorhabenId id des {@link BauvorhabenModel}s
+     * @param bauvorhabenId            id des {@link BauvorhabenModel}s
      * @param infrastruktureinrichtung zum Speichern
      * @return Die (möglicherweise) geänderte Infrastruktureinrichtung
      * @throws EntityNotFoundException falls das Bauvorhaben mit der gegebenen ID nicht gefunden wurde

@@ -6,6 +6,8 @@ import static org.hamcrest.Matchers.sameInstance;
 
 import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
+import de.muenchen.isi.domain.exception.FileHandlingFailedException;
+import de.muenchen.isi.domain.exception.FileHandlingWithS3FailedException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
 import de.muenchen.isi.domain.mapper.BauvorhabenDomainMapper;
@@ -14,6 +16,7 @@ import de.muenchen.isi.domain.mapper.DokumentDomainMapperImpl;
 import de.muenchen.isi.domain.model.AbfrageModel;
 import de.muenchen.isi.domain.model.BauvorhabenModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.InfrastruktureinrichtungModel;
+import de.muenchen.isi.domain.service.filehandling.DokumentService;
 import de.muenchen.isi.infrastructure.entity.Abfrage;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
 import de.muenchen.isi.infrastructure.entity.Infrastrukturabfrage;
@@ -80,6 +83,9 @@ public class BauvorhabenServiceTest {
     @Mock
     private MittelschuleRepository mittelschuleRepository;
 
+    @Mock
+    private DokumentService dokumentService;
+
     @BeforeEach
     public void beforeEach() {
         this.bauvorhabenService =
@@ -92,7 +98,8 @@ public class BauvorhabenServiceTest {
                 this.hausFuerKinderRepository,
                 this.gsNachmittagBetreuungRepository,
                 this.grundschuleRepository,
-                this.mittelschuleRepository
+                this.mittelschuleRepository,
+                this.dokumentService
             );
 
         Mockito.reset(
@@ -103,7 +110,8 @@ public class BauvorhabenServiceTest {
             this.hausFuerKinderRepository,
             this.gsNachmittagBetreuungRepository,
             this.grundschuleRepository,
-            this.mittelschuleRepository
+            this.mittelschuleRepository,
+            this.dokumentService
         );
     }
 
@@ -197,7 +205,8 @@ public class BauvorhabenServiceTest {
     }
 
     @Test
-    void updateBauvorhabenTest() throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException {
+    void updateBauvorhabenTest()
+        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, FileHandlingFailedException, FileHandlingWithS3FailedException {
         final BauvorhabenModel bauvorhabenModel = new BauvorhabenModel();
         bauvorhabenModel.setId(UUID.randomUUID());
         bauvorhabenModel.setNameVorhaben("BauvorhabenTest");

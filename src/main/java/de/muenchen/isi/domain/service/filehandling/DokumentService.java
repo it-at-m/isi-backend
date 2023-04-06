@@ -72,15 +72,37 @@ public class DokumentService {
     }
 
     /**
+     * Ermittelt und löscht die Dokumente in der originalen Dokumentenliste welche in der adaptierten Dokumentenliste nicht mehr vorhanden sind.
+     * <p>
+     * Bei der Ermittlung werden nicht persistierte Dokumente (id == null) ingoriert.
+     *
+     * @param adaptedDokumentenListe
+     * @param originalDokumentenListe
+     * @throws FileHandlingFailedException
+     * @throws FileHandlingWithS3FailedException
+     */
+    public void deleteDokumenteFromOriginalDokumentenListWhichAreMissingInParameterAdaptedDokumentenListe(
+        final List<DokumentModel> adaptedDokumentenListe,
+        final List<DokumentModel> originalDokumentenListe
+    ) throws FileHandlingFailedException, FileHandlingWithS3FailedException {
+        final List<DokumentModel> dokumenteToDelete =
+            this.getDokumenteInOriginalDokumentenListWhichAreMissingInAdaptedDokumentenListe(
+                    adaptedDokumentenListe,
+                    originalDokumentenListe
+                );
+        this.deleteDokumente(dokumenteToDelete);
+    }
+
+    /**
      * Ermittelt die Dokumente in der originalen Dokumentenliste welche in der adaptierten Dokumentenliste nicht mehr vorhanden sind.
      * <p>
-     * Bei der Ermittlung werden die nicht persistierten IDs vorhanden.
+     * Bei der Ermittlung werden nicht persistierte Dokumente (id == null) ingoriert.
      *
      * @param adaptedDokumentenListe
      * @param originalDokumentenListe
      * @return die Dokumente welche im Vergleich zur adaptierten Liste nicht mehr in der originalen Liste vorhanden sind.
      */
-    public List<DokumentModel> getDokumenteInOriginalDokumentenListWhichAreMissingInAdaptedDokumentenListe(
+    protected List<DokumentModel> getDokumenteInOriginalDokumentenListWhichAreMissingInAdaptedDokumentenListe(
         final List<DokumentModel> adaptedDokumentenListe,
         final List<DokumentModel> originalDokumentenListe
     ) {
@@ -111,7 +133,7 @@ public class DokumentService {
      * @throws FileHandlingFailedException
      * @throws FileHandlingWithS3FailedException
      */
-    public void deleteDokumente(final List<DokumentModel> dokumenteToDelete)
+    protected void deleteDokumente(final List<DokumentModel> dokumenteToDelete)
         throws FileHandlingFailedException, FileHandlingWithS3FailedException {
         for (final var dokument : dokumenteToDelete) {
             try {

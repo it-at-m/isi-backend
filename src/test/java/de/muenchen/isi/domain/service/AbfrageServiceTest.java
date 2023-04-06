@@ -5,6 +5,8 @@ import static org.hamcrest.Matchers.is;
 
 import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
+import de.muenchen.isi.domain.exception.FileHandlingFailedException;
+import de.muenchen.isi.domain.exception.FileHandlingWithS3FailedException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
 import de.muenchen.isi.domain.mapper.AbfrageDomainMapper;
@@ -15,6 +17,7 @@ import de.muenchen.isi.domain.mapper.DokumentDomainMapperImpl;
 import de.muenchen.isi.domain.model.AbfrageModel;
 import de.muenchen.isi.domain.model.BauvorhabenModel;
 import de.muenchen.isi.domain.model.InfrastrukturabfrageModel;
+import de.muenchen.isi.domain.service.filehandling.DokumentService;
 import de.muenchen.isi.infrastructure.entity.Abfrage;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
 import de.muenchen.isi.infrastructure.entity.Infrastrukturabfrage;
@@ -43,15 +46,19 @@ class AbfrageServiceTest {
         new DokumentDomainMapperImpl()
     );
 
+    private AbfrageService abfrageService;
+
     @Mock
     private InfrastrukturabfrageRepository infrastrukturabfrageRepository;
 
-    private AbfrageService abfrageService;
+    @Mock
+    private DokumentService dokumentService;
 
     @BeforeEach
     public void beforeEach() {
-        this.abfrageService = new AbfrageService(this.abfrageDomainMapper, this.infrastrukturabfrageRepository);
-        Mockito.reset(this.infrastrukturabfrageRepository);
+        this.abfrageService =
+            new AbfrageService(this.abfrageDomainMapper, this.infrastrukturabfrageRepository, this.dokumentService);
+        Mockito.reset(this.infrastrukturabfrageRepository, this.dokumentService);
     }
 
     @Test
@@ -217,7 +224,7 @@ class AbfrageServiceTest {
 
     @Test
     void updateInfrastrukturabfrage()
-        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException {
+        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, FileHandlingFailedException, FileHandlingWithS3FailedException {
         final InfrastrukturabfrageModel infrastrukturabfrageModel = new InfrastrukturabfrageModel();
         infrastrukturabfrageModel.setId(UUID.randomUUID());
         final AbfrageModel abfrageModel = new AbfrageModel();
