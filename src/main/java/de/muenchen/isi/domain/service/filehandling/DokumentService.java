@@ -87,8 +87,8 @@ public class DokumentService {
     ) throws FileHandlingFailedException, FileHandlingWithS3FailedException {
         final List<DokumentModel> dokumenteToDelete =
             this.getDokumenteInOriginalDokumentenListWhichAreMissingInAdaptedDokumentenListe(
-                    adaptedDokumentenListe,
-                    originalDokumentenListe
+                    adaptedDokumentenListe == null ? new ArrayList<>() : adaptedDokumentenListe,
+                    originalDokumentenListe == null ? new ArrayList<>() : originalDokumentenListe
                 );
         this.deleteDokumente(dokumenteToDelete);
     }
