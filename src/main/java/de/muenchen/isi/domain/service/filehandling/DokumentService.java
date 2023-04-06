@@ -50,6 +50,13 @@ public class DokumentService {
         this.fileExpirationTime = fileExpirationTime;
     }
 
+    /**
+     * Die Methode extrahiert seitenweise alle in der Datenbank persistierten Dokumente.
+     *
+     * @param pageNumber für die Seite die abgerufen werden soll
+     * @param pageSize   für die Anzahl der Dokumente je Seite.
+     * @return Die Dokumente der gewählten Seite.
+     */
     public DokumenteModel getDokumente(final Integer pageNumber, final Integer pageSize) {
         final var foundPage = this.dokumentRepository.findAll(PageRequest.of(pageNumber, pageSize));
         final var dokumentEntities = foundPage.getContent();
@@ -99,7 +106,7 @@ public class DokumentService {
      * @throws FileHandlingFailedException
      * @throws FileHandlingWithS3FailedException
      */
-    public void deleteDokumente(List<DokumentModel> dokumenteToDelete)
+    public void deleteDokumente(final List<DokumentModel> dokumenteToDelete)
         throws FileHandlingFailedException, FileHandlingWithS3FailedException {
         for (final var dokument : dokumenteToDelete) {
             try {
