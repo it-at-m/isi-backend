@@ -72,9 +72,11 @@ public class DokumentService {
     }
 
     /**
+     * Ermittelt die Dokumente in der originalen Dokumentenliste welche in der adaptierten Dokumentenliste nicht mehr vorhanden sind.
+     *
      * @param adaptedDokumentenListe
      * @param originalDokumentenListe
-     * @return
+     * @return die Dokumente welche im Vergleich zur adaptierten Liste nicht mehr in der originalen Liste vorhanden sind.
      */
     public List<DokumentModel> getDokumenteInOriginalDokumentenListWhichAreMissingInAdaptedDokumentenListe(
         final List<DokumentModel> adaptedDokumentenListe,
