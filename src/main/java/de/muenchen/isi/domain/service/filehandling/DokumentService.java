@@ -21,7 +21,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.reactive.function.client.WebClientException;
@@ -155,7 +154,7 @@ public class DokumentService {
                 ) {
                     throw new FileHandlingWithS3FailedException(
                         message,
-                        this.getStatusCode((HttpStatusCodeException) exception.getCause()),
+                        ((HttpStatusCodeException) exception.getCause()).getStatusCode(),
                         exception
                     );
                 } else {
@@ -171,9 +170,5 @@ public class DokumentService {
             log.error(exception.getCause().getMessage());
         }
         log.error(errorMessage);
-    }
-
-    private HttpStatus getStatusCode(final HttpStatusCodeException exception) {
-        return exception.getStatusCode();
     }
 }
