@@ -126,7 +126,7 @@ public class DokumentService {
     }
 
     /**
-     * Löscht die im Parameter gegebenen Dokumente mittels einer Presigned-URL vom S3-Storage.
+     * Löscht die im Parameter gegebenen Dokumente mittels einer Presigned-URL.
      *
      * @param dokumenteToDelete
      * @throws FileHandlingFailedException
