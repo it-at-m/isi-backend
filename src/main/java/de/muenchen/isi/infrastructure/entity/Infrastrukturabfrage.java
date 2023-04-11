@@ -16,6 +16,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.Index;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import lombok.Data;
@@ -43,6 +44,7 @@ public class Infrastrukturabfrage extends BaseEntity {
     private SobonVerfahrensgrundsaetzeJahr sobonJahr;
 
     @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval = true)
+    @JoinColumn(name = "abfrage_id")
     private List<Abfragevariante> abfragevarianten;
 
     @Column(nullable = true)
