@@ -73,7 +73,7 @@ public class DokumentService {
     /**
      * Ermittelt und löscht die Dokumente in der originalen Dokumentenliste welche in der adaptierten Dokumentenliste nicht mehr vorhanden sind.
      * <p>
-     * Bei der Ermittlung werden nicht persistierte Dokumente (id == null) ingoriert.
+     * Bei der Ermittlung werden nicht persistierte Dokumente (id == null) ignoriert.
      *
      * @param adaptedDokumentenListe  darf auch null sein.
      * @param originalDokumentenListe darf auch null sein.
