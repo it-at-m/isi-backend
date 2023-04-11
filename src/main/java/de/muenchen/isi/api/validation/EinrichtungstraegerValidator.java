@@ -22,15 +22,17 @@ public class EinrichtungstraegerValidator
      */
     @Override
     public boolean isValid(final InfrastruktureinrichtungDto value, final ConstraintValidatorContext context) {
+        return value != null && (einrichtungstraegerIsValid(value) || invalidEinrichtungstraegerAllowed(value));
+    }
+
+    private boolean einrichtungstraegerIsValid(final InfrastruktureinrichtungDto value) {
+        return value.getEinrichtungstraeger() != null && value.getEinrichtungstraeger().getBezeichnung() != null;
+    }
+
+    private boolean invalidEinrichtungstraegerAllowed(final InfrastruktureinrichtungDto value) {
         return (
-            value != null &&
-            (
-                (value.getEinrichtungstraeger() != null && value.getEinrichtungstraeger().getBezeichnung() != null) ||
-                (
-                    value.getStatus() != StatusInfrastruktureinrichtung.BESTAND &&
-                    value.getStatus() != StatusInfrastruktureinrichtung.GESICHERTE_PLANUNG_ERW_PLAETZE_BEST_EINR
-                )
-            )
+            value.getStatus() != StatusInfrastruktureinrichtung.BESTAND &&
+            value.getStatus() != StatusInfrastruktureinrichtung.GESICHERTE_PLANUNG_ERW_PLAETZE_BEST_EINR
         );
     }
 }
