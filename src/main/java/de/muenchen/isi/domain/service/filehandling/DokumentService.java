@@ -53,8 +53,8 @@ public class DokumentService {
      * Die Methode extrahiert seitenweise alle in der Datenbank persistierten Dokumente.
      *
      * @param pageNumber für die Seite die abgerufen werden soll
-     * @param pageSize   für die Anzahl der Dokumente je Seite.
-     * @return Die Dokumente der gewählten Seite.
+     * @param pageSize   für die Anzahl der Dokumente je Seite
+     * @return Die Dokumente der gewählten Seite
      */
     public DokumenteModel getDokumente(final Integer pageNumber, final Integer pageSize) {
         final var foundPage = this.dokumentRepository.findAll(PageRequest.of(pageNumber, pageSize));
@@ -75,8 +75,8 @@ public class DokumentService {
      * <p>
      * Bei der Ermittlung werden nicht persistierte Dokumente (id == null) ignoriert.
      *
-     * @param adaptedDokumentenListe  darf auch null sein.
-     * @param originalDokumentenListe darf auch null sein.
+     * @param adaptedDokumentenListe  darf auch null sein
+     * @param originalDokumentenListe darf auch null sein
      * @throws FileHandlingFailedException
      * @throws FileHandlingWithS3FailedException
      */
@@ -99,7 +99,7 @@ public class DokumentService {
      *
      * @param adaptedDokumentenListe
      * @param originalDokumentenListe
-     * @return die Dokumente welche im Vergleich zur adaptierten Liste nicht mehr in der originalen Liste vorhanden sind.
+     * @return die Dokumente welche im Vergleich zur adaptierten Liste nicht mehr in der originalen Liste vorhanden sind
      */
     protected List<DokumentModel> getDokumenteInOriginalDokumentenListWhichAreMissingInAdaptedDokumentenListe(
         final List<DokumentModel> adaptedDokumentenListe,
