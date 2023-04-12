@@ -44,7 +44,7 @@ public class Infrastrukturabfrage extends BaseEntity {
     private SobonVerfahrensgrundsaetzeJahr sobonJahr;
 
     @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval = true)
-    @JoinColumn(name = "abfrage_id")
+    @JoinColumn(name = "infrastrukturabfrage_id", referencedColumnName = "id")
     private List<Abfragevariante> abfragevarianten;
 
     @Column(nullable = true)
