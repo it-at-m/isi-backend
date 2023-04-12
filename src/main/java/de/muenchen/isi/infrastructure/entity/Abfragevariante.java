@@ -15,11 +15,21 @@ import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 @Entity
+@Table(
+    uniqueConstraints = {
+        @UniqueConstraint(
+            name = "UniqueNameAbfragevariantePerAbfrage",
+            columnNames = { "abfrage_id", "abfragevariantenName" }
+        ),
+    }
+)
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
@@ -27,6 +37,9 @@ public class Abfragevariante extends BaseEntity {
 
     @Column(nullable = false)
     private Integer abfragevariantenNr;
+
+    @Column(nullable = false, length = 30)
+    private String abfragevariantenName;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
