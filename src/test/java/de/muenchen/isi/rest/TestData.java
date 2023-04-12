@@ -56,6 +56,7 @@ public class TestData {
     public static AbfragevarianteModel createAbfragevarianteModel() {
         final AbfragevarianteModel original = new AbfragevarianteModel();
         original.setAbfragevariantenNr(1);
+        original.setAbfragevariantenName("Dorf");
         original.setPlanungsrecht(Planungsrecht.BPLAN_PARAG_30);
         original.setGeschossflaecheWohnen(new BigDecimal("1234.56"));
         original.setGesamtanzahlWe(31);
