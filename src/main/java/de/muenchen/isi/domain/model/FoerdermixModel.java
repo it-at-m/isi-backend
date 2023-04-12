@@ -4,12 +4,11 @@
  */
 package de.muenchen.isi.domain.model;
 
-import lombok.Data;
 import java.util.List;
+import lombok.Data;
 
 @Data
 public class FoerdermixModel extends BaseEntityModel {
 
     private List<FoerderartModel> foerderarten;
-
 }

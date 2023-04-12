@@ -1,14 +1,16 @@
 package de.muenchen.isi.api.validation;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+
 import de.muenchen.isi.api.dto.FoerderartDto;
 import de.muenchen.isi.api.dto.FoerdermixDto;
-import org.junit.jupiter.api.Test;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
+import org.junit.jupiter.api.Test;
+
 class HasFoerdermixRequiredSumValidatorTest {
 
     private final HasFoerdermixRequiredSumValidator hasFoerdermixRequiredSumValidator =
@@ -28,50 +30,31 @@ class HasFoerdermixRequiredSumValidatorTest {
         List<FoerderartDto> foerderarten = new ArrayList<>(Arrays.asList(foerderart, foerderart2));
         foerdermix.setFoerderarten(foerderarten);
 
-        assertThat(
-                this.hasFoerdermixRequiredSumValidator.isValid(foerdermix, null),
-                is(true)
-        );
-
+        assertThat(this.hasFoerdermixRequiredSumValidator.isValid(foerdermix, null), is(true));
 
         foerderart.setAnteilProzent(BigDecimal.valueOf(99.99));
         foerderart2.setAnteilProzent(BigDecimal.valueOf(0.01));
 
-        assertThat(
-                this.hasFoerdermixRequiredSumValidator.isValid(foerdermix, null),
-                is(true)
-        );
-
+        assertThat(this.hasFoerdermixRequiredSumValidator.isValid(foerdermix, null), is(true));
 
         FoerderartDto foerderart3 = new FoerderartDto();
         foerderart3.setBezeichnung("AnteilEinUndZweifamilienhaeuser");
         foerderart3.setAnteilProzent(BigDecimal.valueOf(0));
 
-        foerderarten = new ArrayList<>(Arrays.asList(foerderart, foerderart2,foerderart3));
+        foerderarten = new ArrayList<>(Arrays.asList(foerderart, foerderart2, foerderart3));
         foerdermix.setFoerderarten(foerderarten);
 
-        assertThat(
-                this.hasFoerdermixRequiredSumValidator.isValid(foerdermix, null),
-                is(true)
-        );
-
+        assertThat(this.hasFoerdermixRequiredSumValidator.isValid(foerdermix, null), is(true));
 
         foerderart2.setAnteilProzent(BigDecimal.valueOf(0.02));
 
-        assertThat(
-                this.hasFoerdermixRequiredSumValidator.isValid(foerdermix, null),
-                is(false)
-        );
-
+        assertThat(this.hasFoerdermixRequiredSumValidator.isValid(foerdermix, null), is(false));
 
         foerderart.setAnteilProzent(null);
         foerderart2.setAnteilProzent(BigDecimal.ZERO);
         foerderart3.setAnteilProzent(BigDecimal.valueOf(99.99));
 
-        assertThat(
-                this.hasFoerdermixRequiredSumValidator.isValid(foerdermix, null),
-                is(false)
-        );
+        assertThat(this.hasFoerdermixRequiredSumValidator.isValid(foerdermix, null), is(false));
 
         assertThat(this.hasFoerdermixRequiredSumValidator.isValid(null, null), is(true));
     }

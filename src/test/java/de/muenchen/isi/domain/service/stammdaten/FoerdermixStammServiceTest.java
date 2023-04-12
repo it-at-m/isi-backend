@@ -119,14 +119,25 @@ class FoerdermixStammServiceTest {
         saveResult.setId(UUID.randomUUID());
 
         Mockito.when(this.foerdermixStammRepository.saveAndFlush(entity)).thenReturn(saveResult);
-        Mockito.when(this.foerdermixStammRepository.findByBezeichnungJahrIgnoreCaseAndBezeichnungIgnoreCase("Test 2022", "Testfall 1")).thenReturn(Optional.of(entity));
+        Mockito
+            .when(
+                this.foerdermixStammRepository.findByBezeichnungJahrIgnoreCaseAndBezeichnungIgnoreCase(
+                        "Test 2022",
+                        "Testfall 1"
+                    )
+            )
+            .thenReturn(Optional.of(entity));
 
-        Assertions.assertThrows(UniqueViolationException.class, () -> this.foerdermixStammService.saveFoerdermixStamm(model));
+        Assertions.assertThrows(
+            UniqueViolationException.class,
+            () -> this.foerdermixStammService.saveFoerdermixStamm(model)
+        );
 
         Mockito.verify(this.foerdermixStammRepository, Mockito.times(0)).saveAndFlush(entity);
-        Mockito.verify(this.foerdermixStammRepository, Mockito.times(1)).findByBezeichnungJahrIgnoreCaseAndBezeichnungIgnoreCase("Test 2022", "Testfall 1");
+        Mockito
+            .verify(this.foerdermixStammRepository, Mockito.times(1))
+            .findByBezeichnungJahrIgnoreCaseAndBezeichnungIgnoreCase("Test 2022", "Testfall 1");
     }
-
 
     @Test
     void updateFoerdermixStamm() throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException {
@@ -164,5 +175,4 @@ class FoerdermixStammServiceTest {
         Mockito.verify(this.foerdermixStammRepository, Mockito.times(1)).findById(entity.getId());
         Mockito.verify(this.foerdermixStammRepository, Mockito.times(1)).deleteById(id);
     }
-
 }

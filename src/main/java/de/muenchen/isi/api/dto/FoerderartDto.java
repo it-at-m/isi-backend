@@ -1,8 +1,8 @@
 package de.muenchen.isi.api.dto;
 
+import java.math.BigDecimal;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import java.math.BigDecimal;
 
 @Data
 public class FoerderartDto {
@@ -11,5 +11,4 @@ public class FoerderartDto {
 
     @EqualsAndHashCode.Exclude
     private BigDecimal anteilProzent;
-
 }

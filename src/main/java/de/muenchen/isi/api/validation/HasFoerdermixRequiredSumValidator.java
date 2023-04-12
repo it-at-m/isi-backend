@@ -3,12 +3,12 @@ package de.muenchen.isi.api.validation;
 import de.muenchen.isi.api.dto.FoerderartDto;
 import de.muenchen.isi.api.dto.FoerdermixDto;
 import java.math.BigDecimal;
+import java.util.List;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.stereotype.Component;
-import java.util.List;
 
 @Component
 @NoArgsConstructor

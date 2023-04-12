@@ -1,7 +1,7 @@
 package de.muenchen.isi.domain.model;
 
-import lombok.Data;
 import java.math.BigDecimal;
+import lombok.Data;
 
 @Data
 public class FoerderartModel {
@@ -9,5 +9,4 @@ public class FoerderartModel {
     private String bezeichnung;
 
     private BigDecimal anteilProzent;
-
 }

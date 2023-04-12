@@ -4,10 +4,10 @@
  */
 package de.muenchen.isi.infrastructure.entity;
 
-import lombok.Data;
+import java.util.List;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import java.util.List;
+import lombok.Data;
 
 @Data
 @Entity
@@ -15,5 +15,4 @@ public class Foerdermix extends BaseEntity {
 
     @ElementCollection
     private List<Foerderart> foerderarten;
-
 }
