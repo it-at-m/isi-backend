@@ -9,7 +9,7 @@ import lombok.Data;
 import org.hibernate.validator.constraints.UniqueElements;
 
 @Data
-public class FoerdermixDto extends BaseEntityDto {
+public class FoerdermixDto {
 
     @UniqueElements(message = "Die Förderart existiert bereits.")
     private List<FoerderartDto> foerderarten;

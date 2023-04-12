@@ -5,10 +5,9 @@
 package de.muenchen.isi.infrastructure.entity;
 
 import java.math.BigDecimal;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
-import javax.persistence.OneToOne;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -28,6 +27,6 @@ public class Baurate extends BaseEntity {
     @Column(precision = 10, scale = 2, nullable = true)
     private BigDecimal geschossflaecheWohnenGeplant;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @Embedded
     private Foerdermix foerdermix;
 }

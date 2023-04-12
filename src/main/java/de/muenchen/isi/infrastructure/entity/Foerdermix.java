@@ -6,12 +6,12 @@ package de.muenchen.isi.infrastructure.entity;
 
 import java.util.List;
 import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
+import javax.persistence.Embeddable;
 import lombok.Data;
 
 @Data
-@Entity
-public class Foerdermix extends BaseEntity {
+@Embeddable
+public class Foerdermix {
 
     @ElementCollection
     private List<Foerderart> foerderarten;

@@ -8,7 +8,7 @@ import java.util.List;
 import lombok.Data;
 
 @Data
-public class FoerdermixModel extends BaseEntityModel {
+public class FoerdermixModel {
 
     private List<FoerderartModel> foerderarten;
 }

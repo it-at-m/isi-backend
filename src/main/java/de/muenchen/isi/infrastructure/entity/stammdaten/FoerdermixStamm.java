@@ -6,10 +6,9 @@ package de.muenchen.isi.infrastructure.entity.stammdaten;
 
 import de.muenchen.isi.infrastructure.entity.BaseEntity;
 import de.muenchen.isi.infrastructure.entity.Foerdermix;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import lombok.Data;
@@ -29,6 +28,6 @@ public class FoerdermixStamm extends BaseEntity {
     @Column(length = 80, nullable = false)
     private String bezeichnung;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @Embedded
     private Foerdermix foerdermix;
 }
