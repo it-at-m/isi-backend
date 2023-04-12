@@ -178,7 +178,7 @@ public class DatabaseFiller implements CommandLineRunner {
         abfrage.setAdresse(new Adresse("Lothstraße", "7", "80331", "München"));
         abfrage.setFristStellungnahme(LocalDate.of(2022, 12, 31));
         abfrage.setAnmerkung("Bitte die Abfrage zeitnah behandeln");
-        abfrage.setStatusAbfrage(StatusAbfrage.IN_ERFASSUNG);
+        abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_PLAN);
         abfrage.setNameAbfrage("Neubausiedlung in Musterort");
         abfrage.setStandVorhaben(StandVorhaben.BAUANTRAG_EINGEREICHT);
         infrastrukturabfrage.setAbfrage(abfrage);
@@ -197,7 +197,7 @@ public class DatabaseFiller implements CommandLineRunner {
         abfrage.setAdresse(new Adresse("Sendlinger Straße", "1A", "80331", "München"));
         abfrage.setFristStellungnahme(LocalDate.of(2022, 6, 1));
         abfrage.setAnmerkung("Die Baugenehmigung wird nachgereicht");
-        abfrage.setStatusAbfrage(StatusAbfrage.OFFEN);
+        abfrage.setStatusAbfrage(StatusAbfrage.ANGELEGT);
         abfrage.setNameAbfrage("Wohnraumverdichtung Stadmitte");
         abfrage.setStandVorhaben(StandVorhaben.BAUGENEHMIGUNG_ERTEILT);
         infrastrukturabfrage.setAbfrage(abfrage);
@@ -211,6 +211,7 @@ public class DatabaseFiller implements CommandLineRunner {
     private Abfragevariante createAbfragevariante(final int variante) {
         final Abfragevariante original = new Abfragevariante();
         original.setAbfragevariantenNr(1);
+        original.setAbfragevariantenName("Dorf");
         original.setPlanungsrecht(variante == 1 ? Planungsrecht.BPLAN_PARAG_30 : Planungsrecht.BPLAN_PARAG_12);
         original.setGeschossflaecheWohnen(new BigDecimal(variante == 1 ? "1234.56" : "70"));
         original.setGesamtanzahlWe(variante == 1 ? 31 : 90);
