@@ -141,7 +141,7 @@ public class BauvorhabenController {
             ),
             @ApiResponse(
                 responseCode = "555",
-                description = "CUSTOM INTERNAL SERVER ERROR -> Die Dateien konnte nicht gelöscht werden.",
+                description = "CUSTOM INTERNAL SERVER ERROR -> Die Dateien konnten nicht gelöscht werden.",
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
             ),
         }
