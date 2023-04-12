@@ -11,7 +11,9 @@ import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -23,6 +25,10 @@ public class AbfragevarianteDto extends BaseEntityDto {
 
     @NotNull
     private Integer abfragevariantenNr;
+
+    @NotBlank
+    @Size(max = 30, message = "Es sind maximal {max} Zeichen erlaubt")
+    private String abfragevariantenName;
 
     @NotNull
     @NotUnspecified
