@@ -35,7 +35,7 @@ public class Infrastruktureinrichtung {
     @Column(nullable = false)
     private String nameEinrichtung;
 
-    @Column(nullable = false)
+    @Column
     private Integer fertigstellungsjahr; // JJJJ
 
     @Enumerated(EnumType.STRING)
@@ -43,7 +43,7 @@ public class Infrastruktureinrichtung {
     private StatusInfrastruktureinrichtung status;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = true)
+    @Column
     private Einrichtungstraeger einrichtungstraeger;
 
     @Column(precision = 10, scale = 2, nullable = true)

@@ -7,7 +7,6 @@ package de.muenchen.isi.api.controller;
 import de.muenchen.isi.api.dto.InfrastrukturabfrageDto;
 import de.muenchen.isi.api.dto.error.InformationResponseDto;
 import de.muenchen.isi.api.mapper.AbfrageApiMapper;
-import de.muenchen.isi.api.validation.GeschossflaecheWohnenSobonUrsaechlichRequired;
 import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.FileHandlingFailedException;
@@ -118,7 +117,7 @@ public class AbfrageController {
     )
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_WRITE_ABFRAGE.name())")
     public ResponseEntity<InfrastrukturabfrageDto> createInfrastrukturabfrage(
-        @RequestBody @Valid @NotNull @GeschossflaecheWohnenSobonUrsaechlichRequired final InfrastrukturabfrageDto abfrageDto
+        @RequestBody @Valid @NotNull final InfrastrukturabfrageDto abfrageDto
     ) throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException {
         var model = this.abfrageApiMapper.dto2Model(abfrageDto);
         final var abfrage =
@@ -167,7 +166,7 @@ public class AbfrageController {
     )
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_WRITE_ABFRAGE.name())")
     public ResponseEntity<InfrastrukturabfrageDto> updateInfrastrukturabfrage(
-        @RequestBody @Valid @NotNull @GeschossflaecheWohnenSobonUrsaechlichRequired final InfrastrukturabfrageDto abfrageDto
+        @RequestBody @Valid @NotNull final InfrastrukturabfrageDto abfrageDto
     )
         throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, FileHandlingFailedException, FileHandlingWithS3FailedException {
         var model = this.abfrageApiMapper.dto2Model(abfrageDto);
