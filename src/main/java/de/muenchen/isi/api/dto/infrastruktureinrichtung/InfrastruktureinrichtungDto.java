@@ -5,6 +5,8 @@
 package de.muenchen.isi.api.dto.infrastruktureinrichtung;
 
 import de.muenchen.isi.api.dto.common.AdresseDto;
+import de.muenchen.isi.api.validation.EinrichtungstraegerValid;
+import de.muenchen.isi.api.validation.FertigstellungsjahrValid;
 import de.muenchen.isi.api.validation.NotUnspecified;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Einrichtungstraeger;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusInfrastruktureinrichtung;
@@ -19,6 +21,8 @@ import javax.validation.constraints.Size;
 import lombok.Data;
 
 @Data
+@FertigstellungsjahrValid
+@EinrichtungstraegerValid
 public class InfrastruktureinrichtungDto {
 
     private Long lfdNr;
@@ -35,7 +39,6 @@ public class InfrastruktureinrichtungDto {
     @Size(max = 255, message = "Es sind maximal {max} Zeichen erlaubt")
     private String nameEinrichtung;
 
-    @NotNull
     @Min(1900)
     @Max(2100)
     private Integer fertigstellungsjahr; // JJJJ
@@ -44,7 +47,6 @@ public class InfrastruktureinrichtungDto {
     @NotUnspecified
     private StatusInfrastruktureinrichtung status;
 
-    @NotNull
     private Einrichtungstraeger einrichtungstraeger;
 
     private BigDecimal flaecheGesamtgrundstueck;

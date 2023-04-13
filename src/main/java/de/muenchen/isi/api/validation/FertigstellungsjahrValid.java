@@ -8,12 +8,12 @@ import java.lang.annotation.Target;
 import javax.validation.Constraint;
 import javax.validation.Payload;
 
-@Target({ ElementType.PARAMETER })
+@Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = GeschossflaecheWohnenSobonUrsaechlichRequiredValidator.class)
+@Constraint(validatedBy = FertigstellungsjahrValidator.class)
 @Documented
-public @interface GeschossflaecheWohnenSobonUrsaechlichRequired {
-    String message() default "Die Geschossfläche SoBoN-ursächlich muss angegeben werden.";
+public @interface FertigstellungsjahrValid {
+    String message() default "Das Fertigstellungsjahr muss angegeben werden.";
 
     Class<?>[] groups() default {};
 
