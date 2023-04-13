@@ -91,7 +91,7 @@ public class AbfrageController {
     }
 
     @PostMapping("infrastruktur-abfrage")
-    @Transactional(rollbackFor = OptimisticLockingException.class)
+    @Transactional(rollbackFor = { OptimisticLockingException.class, UniqueViolationException.class })
     @Operation(summary = "Anlegen einer neuen Infrastrukturabfrage")
     @ApiResponses(
         value = {
@@ -103,7 +103,7 @@ public class AbfrageController {
             ),
             @ApiResponse(
                 responseCode = "409",
-                description = "CONFLICT -> Abfrage konnte nicht erstellt werden, da der Abfragename bereits existiert.",
+                description = "CONFLICT -> Abfrage konnte nicht erstellt werden, da der Name bereits existiert.",
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
             ),
             @ApiResponse(
@@ -130,7 +130,7 @@ public class AbfrageController {
     }
 
     @PutMapping("infrastruktur-abfrage")
-    @Transactional(rollbackFor = OptimisticLockingException.class)
+    @Transactional(rollbackFor = { OptimisticLockingException.class, UniqueViolationException.class })
     @Operation(summary = "Aktualisierung einer Infrastrukturabfrage")
     @ApiResponses(
         value = {
@@ -147,7 +147,7 @@ public class AbfrageController {
             ),
             @ApiResponse(
                 responseCode = "409",
-                description = "CONFLICT -> Abfrage konnte nicht erstellt werden, da der Abfragename bereits existiert.",
+                description = "CONFLICT -> Abfrage konnte nicht erstellt werden, da der Name bereits existiert.",
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
             ),
             @ApiResponse(
