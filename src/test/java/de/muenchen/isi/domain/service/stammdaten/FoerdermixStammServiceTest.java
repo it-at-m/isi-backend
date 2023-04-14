@@ -3,12 +3,14 @@ package de.muenchen.isi.domain.service.stammdaten;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
+import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.mapper.StammdatenDomainMapper;
 import de.muenchen.isi.domain.mapper.StammdatenDomainMapperImpl;
 import de.muenchen.isi.domain.model.stammdaten.FoerdermixStammModel;
 import de.muenchen.isi.infrastructure.entity.stammdaten.FoerdermixStamm;
+import de.muenchen.isi.infrastructure.repository.BaurateRepository;
 import de.muenchen.isi.infrastructure.repository.stammdaten.FoerdermixStammRepository;
 import java.util.List;
 import java.util.Optional;
@@ -33,12 +35,18 @@ class FoerdermixStammServiceTest {
     @Mock
     private FoerdermixStammRepository foerdermixStammRepository;
 
+    private BaurateRepository baurateRepository;
+
     private FoerdermixStammService foerdermixStammService;
 
     @BeforeEach
     public void beforeEach() {
         this.foerdermixStammService =
-            new FoerdermixStammService(this.stammdatenDomainMapper, this.foerdermixStammRepository);
+            new FoerdermixStammService(
+                this.stammdatenDomainMapper,
+                this.foerdermixStammRepository,
+                this.baurateRepository
+            );
         Mockito.reset(this.foerdermixStammRepository);
     }
 
@@ -127,7 +135,7 @@ class FoerdermixStammServiceTest {
     }
 
     @Test
-    void deleteFoerdermixStammById() throws EntityNotFoundException {
+    void deleteFoerdermixStammById() throws EntityNotFoundException, EntityIsReferencedException {
         final UUID id = UUID.randomUUID();
 
         final FoerdermixStamm entity = new FoerdermixStamm();

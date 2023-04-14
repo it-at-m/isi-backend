@@ -1,11 +1,17 @@
 package de.muenchen.isi.domain.service.stammdaten;
 
+import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.mapper.StammdatenDomainMapper;
+import de.muenchen.isi.domain.model.FoerdermixModel;
 import de.muenchen.isi.domain.model.stammdaten.FoerdermixStammModel;
+import de.muenchen.isi.infrastructure.entity.Baurate;
+import de.muenchen.isi.infrastructure.entity.Foerdermix;
+import de.muenchen.isi.infrastructure.repository.BaurateRepository;
 import de.muenchen.isi.infrastructure.repository.stammdaten.FoerdermixStammRepository;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +27,8 @@ public class FoerdermixStammService {
     private final StammdatenDomainMapper stammdatenDomainMapper;
 
     private final FoerdermixStammRepository foerdermixStammRepository;
+
+    private final BaurateRepository baurateRepository;
 
     /**
      * Die Methode gibt alle {@link FoerdermixStammModel} als Liste zurück.
@@ -88,8 +96,14 @@ public class FoerdermixStammService {
      * @param id zum Identifizieren des {@link FoerdermixStammModel}.
      * @throws EntityNotFoundException falls die Abfrage identifiziert durch die {@link FoerdermixStammModel#getId()} nicht gefunden wird.
      */
-    public void deleteFoerdermixStammById(final UUID id) throws EntityNotFoundException {
-        this.getFoerdermixStammById(id);
+    public void deleteFoerdermixStammById(final UUID id) throws EntityNotFoundException, EntityIsReferencedException {
+        FoerdermixStammModel foerdermixStammModel = this.getFoerdermixStammById(id);
+        Foerdermix foerdermix = this.stammdatenDomainMapper.model2Entity(foerdermixStammModel).getFoerdermix();
+        List<Baurate> baurateList = baurateRepository.findByFoerdermix(foerdermix);
+        if (!baurateList.isEmpty()) {
+            throw new EntityIsReferencedException("Der Fördermix wird bereits in einer Baurate verwendet.");
+        }
+
         this.foerdermixStammRepository.deleteById(id);
     }
 }

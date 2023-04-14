@@ -7,6 +7,7 @@ package de.muenchen.isi.api.controller.stammdaten;
 import de.muenchen.isi.api.dto.error.InformationResponseDto;
 import de.muenchen.isi.api.dto.stammdaten.FoerdermixStammDto;
 import de.muenchen.isi.api.mapper.StammdatenApiMapper;
+import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.service.stammdaten.FoerdermixStammService;
@@ -164,7 +165,7 @@ public class FoerdermixStammController {
     )
     @Transactional
     public ResponseEntity<Void> deleteFoerdermixStammById(@PathVariable @NotNull final UUID id)
-        throws EntityNotFoundException {
+        throws EntityNotFoundException, EntityIsReferencedException {
         this.foerdermixStammService.deleteFoerdermixStammById(id);
         return ResponseEntity.noContent().build();
     }
