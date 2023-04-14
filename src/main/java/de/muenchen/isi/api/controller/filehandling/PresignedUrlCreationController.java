@@ -115,40 +115,4 @@ public class PresignedUrlCreationController {
         final var presignedUrlDto = this.filehandlingApiMapper.model2Dto(presignedUrlModel);
         return ResponseEntity.ok(presignedUrlDto);
     }
-
-    @DeleteMapping("presigned-url")
-    @Operation(
-        summary = "Stellt die Presigned-Url zum Löschen einer Datei zur Verfügung.",
-        description = "Die Presigned-Url ist vom Aufrufer mit der Http-Methode DELETE zu verwenden."
-    )
-    @ApiResponses(
-        value = {
-            @ApiResponse(responseCode = "200", description = "OK"),
-            @ApiResponse(
-                responseCode = "400",
-                description = "BAD REQUEST -> Der Request ist fehlerhaft.",
-                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
-            ),
-            @ApiResponse(
-                responseCode = "404",
-                description = "NOT FOUND -> Die Datei ist im S3-Storage nicht verfügbar.",
-                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
-            ),
-            @ApiResponse(
-                responseCode = "555",
-                description = "CUSTOM INTERNAL SERVER ERROR -> Die Presigned-Url konnte nicht erzeugt werden.",
-                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
-            ),
-        }
-    )
-    @PreAuthorize(
-        "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_PRESIGNED_URL_DELETE_FILE.name())"
-    )
-    public ResponseEntity<PresignedUrlDto> deleteFile(@RequestBody @NotNull @Valid final FilepathDto filepathDto)
-        throws FileHandlingWithS3FailedException, FileHandlingFailedException {
-        final var presignedUrlModel =
-            this.presignedUrlCreationService.deleteFile(this.filehandlingApiMapper.dto2Model(filepathDto));
-        final var presignedUrlDto = this.filehandlingApiMapper.model2Dto(presignedUrlModel);
-        return ResponseEntity.ok(presignedUrlDto);
-    }
 }

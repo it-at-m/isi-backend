@@ -26,7 +26,7 @@ import lombok.ToString;
     uniqueConstraints = {
         @UniqueConstraint(
             name = "UniqueNameAbfragevariantePerAbfrage",
-            columnNames = { "infrastrukturabfrage_id", "abfragevariantenName" }
+            columnNames = { "abfrage_id", "abfragevariantenName" }
         ),
     }
 )
