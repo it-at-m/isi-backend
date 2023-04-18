@@ -124,7 +124,7 @@ public class FoerdermixStammController {
     }
 
     @PutMapping("stammdaten/foerdermix")
-    @Transactional
+    @Transactional(rollbackFor = OptimisticLockingException.class)
     @Operation(summary = "Aktualisierung eines FoerdermixStamm")
     @ApiResponses(
         value = {

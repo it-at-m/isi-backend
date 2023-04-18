@@ -36,7 +36,7 @@ public class Baugebiet extends BaseEntity {
     @Column(nullable = true)
     private Long geschossflaecheWohnenFestgesetzt;
 
-    @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval = true)
+    @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "baugebiet_id")
     private List<Baurate> bauraten;
 }

@@ -20,7 +20,7 @@ public class Bauabschnitt extends BaseEntity {
     @Column(nullable = false)
     private String bezeichnung;
 
-    @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval = true)
+    @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "bauabschnitt_id")
     private List<Baugebiet> baugebiete;
 }

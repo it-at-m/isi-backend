@@ -17,6 +17,7 @@ import javax.persistence.Embedded;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import lombok.Data;
@@ -26,6 +27,7 @@ import lombok.Data;
 public class Abfrage {
 
     @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY, orphanRemoval = true)
+    @JoinColumn(name = "abfrage_id")
     private List<Dokument> dokumente;
 
     @Column(nullable = true)

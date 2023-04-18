@@ -26,7 +26,7 @@ import lombok.ToString;
     uniqueConstraints = {
         @UniqueConstraint(
             name = "UniqueNameAbfragevariantePerAbfrage",
-            columnNames = { "infrastrukturabfrage_id", "abfragevariantenName" }
+            columnNames = { "abfrage_id", "abfragevariantenName" }
         ),
     }
 )
@@ -90,7 +90,7 @@ public class Abfragevariante extends BaseEntity {
     @Column(precision = 10, scale = 2, nullable = true)
     private BigDecimal geschossflaecheSonstiges;
 
-    @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval = true)
+    @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "abfragevariante_id")
     private List<Bauabschnitt> bauabschnitte;
 }
