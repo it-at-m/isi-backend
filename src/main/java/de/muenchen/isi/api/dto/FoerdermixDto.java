@@ -4,23 +4,13 @@
  */
 package de.muenchen.isi.api.dto;
 
-import java.math.BigDecimal;
+import java.util.List;
 import lombok.Data;
+import org.hibernate.validator.constraints.UniqueElements;
 
 @Data
 public class FoerdermixDto {
 
-    private BigDecimal anteilFreifinanzierterGeschosswohnungsbau;
-
-    private BigDecimal anteilGefoerderterMietwohnungsbau;
-
-    private BigDecimal anteilMuenchenModell;
-
-    private BigDecimal anteilPreisgedaempfterMietwohnungsbau;
-
-    private BigDecimal anteilKonzeptionellerMietwohnungsbau;
-
-    private BigDecimal anteilBaugemeinschaften;
-
-    private BigDecimal anteilEinUndZweifamilienhaeuser;
+    @UniqueElements(message = "Die Förderart existiert bereits.")
+    private List<FoerderartDto> foerderarten;
 }

@@ -4,11 +4,13 @@
  */
 package de.muenchen.isi.rest;
 
+import de.muenchen.isi.api.dto.FoerderartDto;
 import de.muenchen.isi.domain.model.AbfrageModel;
 import de.muenchen.isi.domain.model.AbfragevarianteModel;
 import de.muenchen.isi.domain.model.BauabschnittModel;
 import de.muenchen.isi.domain.model.BaugebietModel;
 import de.muenchen.isi.domain.model.BaurateModel;
+import de.muenchen.isi.domain.model.FoerderartModel;
 import de.muenchen.isi.domain.model.FoerdermixModel;
 import de.muenchen.isi.domain.model.InfrastrukturabfrageModel;
 import de.muenchen.isi.domain.model.common.AdresseModel;
@@ -25,6 +27,8 @@ import de.muenchen.isi.infrastructure.entity.filehandling.Dokument;
 import de.muenchen.isi.infrastructure.entity.filehandling.Filepath;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class TestData {
@@ -94,13 +98,16 @@ public class TestData {
 
     private static FoerdermixModel createFoerdermixModel() {
         final FoerdermixModel foerdermix = new FoerdermixModel();
-        foerdermix.setAnteilFreifinanzierterGeschosswohnungsbau(BigDecimal.valueOf(60));
-        foerdermix.setAnteilGefoerderterMietwohnungsbau(BigDecimal.valueOf(40));
-        foerdermix.setAnteilMuenchenModell(BigDecimal.valueOf(0));
-        foerdermix.setAnteilPreisgedaempfterMietwohnungsbau(BigDecimal.valueOf(0));
-        foerdermix.setAnteilKonzeptionellerMietwohnungsbau(BigDecimal.valueOf(0));
-        foerdermix.setAnteilBaugemeinschaften(BigDecimal.valueOf(0));
-        foerdermix.setAnteilEinUndZweifamilienhaeuser(BigDecimal.valueOf(0));
+        FoerderartModel foerderart = new FoerderartModel();
+        foerderart.setBezeichnung("AnteilFreifinanzierterGeschosswohnungsbau");
+        foerderart.setAnteilProzent(BigDecimal.valueOf(60));
+
+        FoerderartModel foerderart2 = new FoerderartModel();
+        foerderart2.setBezeichnung("AnteilGefoerderterMietwohnungsbau");
+        foerderart2.setAnteilProzent(BigDecimal.valueOf(40));
+
+        List<FoerderartModel> foerderarten = new ArrayList<>(Arrays.asList(foerderart, foerderart2));
+        foerdermix.setFoerderarten(foerderarten);
         return foerdermix;
     }
 
