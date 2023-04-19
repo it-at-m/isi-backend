@@ -93,8 +93,9 @@ public class FoerdermixStammService {
     /**
      * Diese Methode löscht ein {@link FoerdermixStammModel}.
      *
-     * @param id zum Identifizieren des {@link FoerdermixStammModel}.
-     * @throws EntityNotFoundException falls die Abfrage identifiziert durch die {@link FoerdermixStammModel#getId()} nicht gefunden wird.
+     * @param id zum Identifizieren des {@link FoerdermixStammModel}
+     * @throws EntityNotFoundException falls die Abfrage identifiziert durch die {@link FoerdermixStammModel#getId()} nicht gefunden wird
+     * @throws EntityIsReferencedException falls der Foerdermix bereits in einer Baurate verwendet wird
      */
     public void deleteFoerdermixStammById(final UUID id) throws EntityNotFoundException, EntityIsReferencedException {
         FoerdermixStammModel foerdermixStammModel = this.getFoerdermixStammById(id);

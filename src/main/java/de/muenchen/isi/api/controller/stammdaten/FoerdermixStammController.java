@@ -113,7 +113,9 @@ public class FoerdermixStammController {
         @RequestBody @Valid @NotNull final FoerdermixStammDto foerdermixStammDto
     ) throws OptimisticLockingException {
         var model = this.stammdatenApiMapper.dto2Model(foerdermixStammDto);
+
         model = this.foerdermixStammService.saveFoerdermixStamm(model);
+
         final var saved = this.stammdatenApiMapper.model2Dto(model);
         return new ResponseEntity<>(saved, HttpStatus.CREATED);
     }
