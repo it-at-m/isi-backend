@@ -18,6 +18,8 @@ public class AbfragevarianteModel extends BaseEntityModel {
 
     private Integer abfragevariantenNr;
 
+    private String abfragevariantenName;
+
     private Planungsrecht planungsrecht;
 
     private BigDecimal geschossflaecheWohnen;

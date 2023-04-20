@@ -6,6 +6,8 @@ import static org.hamcrest.Matchers.is;
 import de.muenchen.isi.IsiBackendApplication;
 import de.muenchen.isi.TestConstants;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
+import de.muenchen.isi.domain.exception.FileHandlingFailedException;
+import de.muenchen.isi.domain.exception.FileHandlingWithS3FailedException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
 import de.muenchen.isi.domain.model.InfrastrukturabfrageModel;
@@ -68,7 +70,7 @@ public class TransitionModelTest {
     @Transactional
     @MockCustomUser
     void possbileTransitionsAngelegtAndRoleAdmin()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, FileHandlingFailedException, FileHandlingWithS3FailedException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ANGELEGT);
@@ -91,7 +93,7 @@ public class TransitionModelTest {
     @Transactional
     @MockCustomUser(roles = { "lhm-isi-sachbearbeiter_kita_schule_PLAN" })
     void possbileTransitionsAngelegtAndRoleSachbearbeiter()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, FileHandlingFailedException, FileHandlingWithS3FailedException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ANGELEGT);
@@ -108,7 +110,7 @@ public class TransitionModelTest {
     @Transactional
     @MockCustomUser(roles = { "lhm-isi-abfrageersteller" })
     void possbileTransitionsAngelegtAndRoleAbfrageersteller()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, FileHandlingFailedException, FileHandlingWithS3FailedException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ANGELEGT);
@@ -131,7 +133,7 @@ public class TransitionModelTest {
     @Transactional
     @MockCustomUser(roles = { "lhm-isi-nutzer" })
     void possbileTransitionsAngelegtAndRoleNutzer()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, FileHandlingFailedException, FileHandlingWithS3FailedException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ANGELEGT);
@@ -148,7 +150,7 @@ public class TransitionModelTest {
     @Transactional
     @MockCustomUser
     void possbileTransitionsOffenAndRoleAdmin()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, FileHandlingFailedException, FileHandlingWithS3FailedException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.OFFEN);
@@ -191,7 +193,7 @@ public class TransitionModelTest {
     @Transactional
     @MockCustomUser(roles = { "lhm-isi-sachbearbeiter_kita_schule_PLAN" })
     void possbileTransitionsOffenAndRoleSachbearbeiter()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, FileHandlingFailedException, FileHandlingWithS3FailedException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.OFFEN);
@@ -234,7 +236,7 @@ public class TransitionModelTest {
     @Transactional
     @MockCustomUser(roles = { "lhm-isi-abfrageersteller" })
     void possbileTransitionsOffenAndRoleAbfrageersteller()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, FileHandlingFailedException, FileHandlingWithS3FailedException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.OFFEN);
@@ -251,7 +253,7 @@ public class TransitionModelTest {
     @Transactional
     @MockCustomUser(roles = { "lhm-isi-nutzer" })
     void possbileTransitionsOffenAndRoleNutzer()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, FileHandlingFailedException, FileHandlingWithS3FailedException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.OFFEN);
@@ -268,7 +270,7 @@ public class TransitionModelTest {
     @Transactional
     @MockCustomUser
     void possbileTransitionsBearbeitungPlanAndRoleAdmin()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, FileHandlingFailedException, FileHandlingWithS3FailedException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_PLAN);
@@ -319,7 +321,7 @@ public class TransitionModelTest {
     @Transactional
     @MockCustomUser(roles = { "lhm-isi-sachbearbeiter_kita_schule_PLAN" })
     void possbileTransitionsBearbeitungPlanAndRoleSachbearbeiter()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, FileHandlingFailedException, FileHandlingWithS3FailedException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_PLAN);
@@ -372,7 +374,7 @@ public class TransitionModelTest {
     @Transactional
     @MockCustomUser(roles = { "lhm-isi-abfrageersteller" })
     void possbileTransitionsBearbeitungPlanAndRoleAbfrageersteller()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, FileHandlingFailedException, FileHandlingWithS3FailedException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_PLAN);
@@ -389,7 +391,7 @@ public class TransitionModelTest {
     @Transactional
     @MockCustomUser(roles = { "lhm-isi-nutzer" })
     void possbileTransitionsBearbeitungPlanAndRoleNutzer()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, FileHandlingFailedException, FileHandlingWithS3FailedException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_PLAN);
@@ -406,7 +408,7 @@ public class TransitionModelTest {
     @Transactional
     @MockCustomUser
     void possbileTransitionsBearbeitungFachreferateAndRoleAdmin()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, FileHandlingFailedException, FileHandlingWithS3FailedException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
@@ -449,7 +451,7 @@ public class TransitionModelTest {
     @Transactional
     @MockCustomUser(roles = { "lhm-isi-sachbearbeiter_kita_schule_PLAN" })
     void possbileTransitionsBearbeitungFachreferateAndRoleSachbearbeiter()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, FileHandlingFailedException, FileHandlingWithS3FailedException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
@@ -492,7 +494,7 @@ public class TransitionModelTest {
     @Transactional
     @MockCustomUser(roles = { "lhm-isi-abfrageersteller" })
     void possbileTransitionsBearbeitungFachreferateAndRoleAbfrageersteller()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, FileHandlingFailedException, FileHandlingWithS3FailedException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
@@ -509,7 +511,7 @@ public class TransitionModelTest {
     @Transactional
     @MockCustomUser(roles = { "lhm-isi-nutzer" })
     void possbileTransitionsBearbeitungFachreferateAndRoleNutzer()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, FileHandlingFailedException, FileHandlingWithS3FailedException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
@@ -526,7 +528,7 @@ public class TransitionModelTest {
     @Transactional
     @MockCustomUser
     void possbileTransitionsBedarfsmeldungErfolgtAndRoleAdmin()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, FileHandlingFailedException, FileHandlingWithS3FailedException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT);
@@ -561,7 +563,7 @@ public class TransitionModelTest {
     @Transactional
     @MockCustomUser(roles = { "lhm-isi-sachbearbeiter_kita_schule_PLAN" })
     void possbileTransitionsBedarfsmeldungErfolgtAndRoleSachbearbeiter()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, FileHandlingFailedException, FileHandlingWithS3FailedException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT);
@@ -588,7 +590,7 @@ public class TransitionModelTest {
     @Transactional
     @MockCustomUser(roles = { "lhm-isi-abfrageersteller" })
     void possbileTransitionsBedarfsmeldungErfolgtAndRoleAbfrageersteller()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, FileHandlingFailedException, FileHandlingWithS3FailedException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT);
@@ -615,7 +617,7 @@ public class TransitionModelTest {
     @Transactional
     @MockCustomUser(roles = { "lhm-isi-nutzer" })
     void possbileTransitionsBedarfsmeldungErfolgtAndRoleNutzer()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, FileHandlingFailedException, FileHandlingWithS3FailedException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT);
@@ -632,7 +634,7 @@ public class TransitionModelTest {
     @Transactional
     @MockCustomUser
     void possbileTransitionsErledigtRoleAdmin()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, FileHandlingFailedException, FileHandlingWithS3FailedException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ERLEDIGT);
@@ -659,7 +661,7 @@ public class TransitionModelTest {
     @Transactional
     @MockCustomUser(roles = { "lhm-isi-sachbearbeiter_kita_schule_PLAN" })
     void possbileTransitionsErledigtRoleSachbearbeiter()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, FileHandlingFailedException, FileHandlingWithS3FailedException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ERLEDIGT);
@@ -686,7 +688,7 @@ public class TransitionModelTest {
     @Transactional
     @MockCustomUser(roles = { "lhm-isi-abfrageersteller" })
     void possbileTransitionsErledigtRoleAbfrageersteller()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, FileHandlingFailedException, FileHandlingWithS3FailedException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ERLEDIGT);
@@ -703,7 +705,7 @@ public class TransitionModelTest {
     @Transactional
     @MockCustomUser(roles = { "lhm-isi-nutzer" })
     void possbileTransitionsErledigtRoleNutzer()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, FileHandlingFailedException, FileHandlingWithS3FailedException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ERLEDIGT);
@@ -720,7 +722,7 @@ public class TransitionModelTest {
     @Transactional
     @MockCustomUser
     void possbileTransitionsAbbruch()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, FileHandlingFailedException, FileHandlingWithS3FailedException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
         abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ABBRUCH);

@@ -4,6 +4,7 @@
  */
 package de.muenchen.isi.api.dto;
 
+import de.muenchen.isi.api.validation.GeschossflaecheWohnenSobonUrsaechlichValid;
 import de.muenchen.isi.api.validation.NotUnspecified;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonVerfahrensgrundsaetzeJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
@@ -19,6 +20,7 @@ import lombok.ToString;
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
+@GeschossflaecheWohnenSobonUrsaechlichValid
 public class InfrastrukturabfrageDto extends BaseEntityDto {
 
     @Valid

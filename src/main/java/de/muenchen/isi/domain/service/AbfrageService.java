@@ -2,12 +2,15 @@ package de.muenchen.isi.domain.service;
 
 import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
+import de.muenchen.isi.domain.exception.FileHandlingFailedException;
+import de.muenchen.isi.domain.exception.FileHandlingWithS3FailedException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
 import de.muenchen.isi.domain.mapper.AbfrageDomainMapper;
 import de.muenchen.isi.domain.model.AbfrageModel;
 import de.muenchen.isi.domain.model.BauvorhabenModel;
 import de.muenchen.isi.domain.model.InfrastrukturabfrageModel;
+import de.muenchen.isi.domain.service.filehandling.DokumentService;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.repository.InfrastrukturabfrageRepository;
 import java.util.List;
@@ -16,6 +19,7 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +31,8 @@ public class AbfrageService {
     private final AbfrageDomainMapper abfrageDomainMapper;
 
     private final InfrastrukturabfrageRepository infrastrukturabfrageRepository;
+
+    private final DokumentService dokumentService;
 
     /**
      * Die Methode gibt alle {@link InfrastrukturabfrageModel} als Liste zurück.
@@ -61,7 +67,7 @@ public class AbfrageService {
      *
      * @param abfrage zum Speichern
      * @return das gespeicherte {@link InfrastrukturabfrageModel}
-     * @throws UniqueViolationException falls der Name der Abfrage {@link InfrastrukturabfrageModel#getAbfrage().getNameAbfrage} ()} bereits vorhanden ist
+     * @throws UniqueViolationException   falls der Name der Abfrage oder der Abfragevariante bereits vorhanden ist
      * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
      */
     public InfrastrukturabfrageModel saveInfrastrukturabfrage(final InfrastrukturabfrageModel abfrage)
@@ -80,6 +86,10 @@ public class AbfrageService {
             } catch (final ObjectOptimisticLockingFailureException exception) {
                 final var message = "Die Daten wurden in der Zwischenzeit geändert. Bitte laden Sie die Seite neu!";
                 throw new OptimisticLockingException(message, exception);
+            } catch (final DataIntegrityViolationException exception) {
+                final var message =
+                    "Der angegebene Name der Abfragevariante ist schon vorhanden, bitte wählen Sie daher einen anderen Namen und speichern Sie die Abfrage erneut.";
+                throw new UniqueViolationException(message);
             }
             return this.abfrageDomainMapper.entity2Model(abfrageEntity);
         } else {
@@ -94,14 +104,18 @@ public class AbfrageService {
      *
      * @param abfrage zum Updaten
      * @return das geupdatete {@link InfrastrukturabfrageModel}
-     * @throws EntityNotFoundException falls die Abfrage identifiziert durch die {@link InfrastrukturabfrageModel#getId()} nicht gefunden wird
-     * @throws UniqueViolationException falls der Name der Abfrage {@link InfrastrukturabfrageModel#getAbfrage().getNameAbfrage} ()} bereits vorhanden ist
+     * @throws EntityNotFoundException    falls die Abfrage identifiziert durch die {@link InfrastrukturabfrageModel#getId()} nicht gefunden wird
+     * @throws UniqueViolationException   falls der Name der Abfrage {@link InfrastrukturabfrageModel#getAbfrage().getNameAbfrage} ()} bereits vorhanden ist
      * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
      */
     public InfrastrukturabfrageModel updateInfrastrukturabfrageWithoutStatus(final InfrastrukturabfrageModel abfrage)
-        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException {
-        final InfrastrukturabfrageModel abfrageDb = this.getInfrastrukturabfrageById(abfrage.getId());
-        abfrage.getAbfrage().setStatusAbfrage(abfrageDb.getAbfrage().getStatusAbfrage());
+        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, FileHandlingFailedException, FileHandlingWithS3FailedException {
+        final var originalAbfrageDb = this.getInfrastrukturabfrageById(abfrage.getId());
+        dokumentService.deleteDokumenteFromOriginalDokumentenListWhichAreMissingInParameterAdaptedDokumentenListe(
+            abfrage.getAbfrage().getDokumente(),
+            originalAbfrageDb.getAbfrage().getDokumente()
+        );
+        abfrage.getAbfrage().setStatusAbfrage(originalAbfrageDb.getAbfrage().getStatusAbfrage());
         return this.saveInfrastrukturabfrage(abfrage);
     }
 
@@ -110,13 +124,19 @@ public class AbfrageService {
      *
      * @param abfrage zum Updaten
      * @return das geupdatete {@link InfrastrukturabfrageModel}
-     * @throws EntityNotFoundException falls die Abfrage identifiziert durch die {@link InfrastrukturabfrageModel#getId()} nicht gefunden wird
-     * @throws UniqueViolationException falls der Name der Abfrage {@link InfrastrukturabfrageModel#getAbfrage().getNameAbfrage} ()} bereits vorhanden ist
-     * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
+     * @throws EntityNotFoundException           falls die Abfrage identifiziert durch die {@link InfrastrukturabfrageModel#getId()} nicht gefunden wird
+     * @throws UniqueViolationException          falls der Name der Abfrage {@link InfrastrukturabfrageModel#getAbfrage().getNameAbfrage} ()} bereits vorhanden ist
+     * @throws OptimisticLockingException        falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
+     * @throws FileHandlingFailedException
+     * @throws FileHandlingWithS3FailedException
      */
     public InfrastrukturabfrageModel updateInfrastrukturabfrageWithStatus(final InfrastrukturabfrageModel abfrage)
-        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException {
-        this.getInfrastrukturabfrageById(abfrage.getId());
+        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, FileHandlingFailedException, FileHandlingWithS3FailedException {
+        final var originalAbfrageDb = this.getInfrastrukturabfrageById(abfrage.getId());
+        dokumentService.deleteDokumenteFromOriginalDokumentenListWhichAreMissingInParameterAdaptedDokumentenListe(
+            abfrage.getAbfrage().getDokumente(),
+            originalAbfrageDb.getAbfrage().getDokumente()
+        );
         return this.saveInfrastrukturabfrage(abfrage);
     }
 
