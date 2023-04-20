@@ -17,7 +17,6 @@ class LookupServiceTest {
     void getLookupLists() throws JsonProcessingException {
         final LookupListsModel resultModel = this.lookupService.getLookupLists();
         final String result = new ObjectMapper().writeValueAsString(resultModel);
-        String test = this.getExpectedJsonString();
         assertThat(result, is(this.getExpectedJsonString()));
     }
 

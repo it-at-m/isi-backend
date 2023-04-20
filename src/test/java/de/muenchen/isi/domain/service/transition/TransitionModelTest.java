@@ -39,7 +39,6 @@ import org.springframework.transaction.annotation.Transactional;
 )
 @ActiveProfiles(profiles = { TestConstants.SPRING_UNIT_TEST_PROFILE, TestConstants.SPRING_NO_SECURITY_PROFILE })
 @MockitoSettings(strictness = Strictness.LENIENT)
-@Slf4j
 @ContextConfiguration
 public class TransitionModelTest {
 
