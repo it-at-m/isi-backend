@@ -20,7 +20,6 @@ import de.muenchen.isi.rest.TestData;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -83,6 +82,7 @@ public class TransitionModelTest {
         expected.setIndex(1);
         expected.setButtonName("FREIGABE");
         expected.setUrl("freigabe");
+        expected.setDialogText("Die Abfrage wird zur Bearbeitung weitergeleitet und kann nicht mehr geändert werden.");
 
         assertThat(possibleTransitions.size(), is(1));
         assertThat(possibleTransitions.get(0), is(expected));
@@ -123,6 +123,7 @@ public class TransitionModelTest {
         expected.setIndex(1);
         expected.setButtonName("FREIGABE");
         expected.setUrl("freigabe");
+        expected.setDialogText("Die Abfrage wird zur Bearbeitung weitergeleitet und kann nicht mehr geändert werden.");
 
         assertThat(possibleTransitions.size(), is(1));
         assertThat(possibleTransitions.get(0), is(expected));
@@ -165,13 +166,14 @@ public class TransitionModelTest {
         firstPossibleTransition.setIndex(2);
         firstPossibleTransition.setButtonName("IN BEARBEITUNG SETZEN");
         firstPossibleTransition.setUrl("in-bearbeitung-setzen");
-
+        firstPossibleTransition.setDialogText("Die Abfrage wird nun in Bearbeitung gesetzt.");
         expected.add(firstPossibleTransition);
 
         TransitionModel secondPossibleTransition = new TransitionModel();
         secondPossibleTransition.setIndex(3);
         secondPossibleTransition.setButtonName("STORNIEREN");
         secondPossibleTransition.setUrl("abbrechen");
+        secondPossibleTransition.setDialogText("Die Abfrage wird abbgebrochen.");
 
         expected.add(secondPossibleTransition);
 
@@ -179,6 +181,7 @@ public class TransitionModelTest {
         thirdPossibleTransition.setIndex(4);
         thirdPossibleTransition.setButtonName("ZURÜCK AN ABFRAGEERSTELLER");
         thirdPossibleTransition.setUrl("zurueck-an-abfrageersteller");
+        thirdPossibleTransition.setDialogText("Die Abfrage wird an den Abfrageersteller zurückgegeben.");
 
         expected.add(thirdPossibleTransition);
 
@@ -208,6 +211,7 @@ public class TransitionModelTest {
         firstPossibleTransition.setIndex(2);
         firstPossibleTransition.setButtonName("IN BEARBEITUNG SETZEN");
         firstPossibleTransition.setUrl("in-bearbeitung-setzen");
+        firstPossibleTransition.setDialogText("Die Abfrage wird nun in Bearbeitung gesetzt.");
 
         expected.add(firstPossibleTransition);
 
@@ -215,6 +219,7 @@ public class TransitionModelTest {
         secondPossibleTransition.setIndex(3);
         secondPossibleTransition.setButtonName("STORNIEREN");
         secondPossibleTransition.setUrl("abbrechen");
+        secondPossibleTransition.setDialogText("Die Abfrage wird abbgebrochen.");
 
         expected.add(secondPossibleTransition);
 
@@ -222,6 +227,7 @@ public class TransitionModelTest {
         thirdPossibleTransition.setIndex(4);
         thirdPossibleTransition.setButtonName("ZURÜCK AN ABFRAGEERSTELLER");
         thirdPossibleTransition.setUrl("zurueck-an-abfrageersteller");
+        thirdPossibleTransition.setDialogText("Die Abfrage wird an den Abfrageersteller zurückgegeben.");
 
         expected.add(thirdPossibleTransition);
 
@@ -285,6 +291,7 @@ public class TransitionModelTest {
         firstPossibleTransition.setIndex(3);
         firstPossibleTransition.setButtonName("STORNIEREN");
         firstPossibleTransition.setUrl("abbrechen");
+        firstPossibleTransition.setDialogText("Die Abfrage wird abbgebrochen.");
 
         expected.add(firstPossibleTransition);
 
@@ -292,6 +299,7 @@ public class TransitionModelTest {
         secondPossibleTransition.setIndex(4);
         secondPossibleTransition.setButtonName("ZURÜCK AN ABFRAGEERSTELLER");
         secondPossibleTransition.setUrl("zurueck-an-abfrageersteller");
+        secondPossibleTransition.setDialogText("Die Abfrage wird an den Abfrageersteller zurückgegeben.");
 
         expected.add(secondPossibleTransition);
 
@@ -299,6 +307,7 @@ public class TransitionModelTest {
         thirdPossibleTransition.setIndex(5);
         thirdPossibleTransition.setButtonName("ABFRAGE SCHLIEßEN");
         thirdPossibleTransition.setUrl("abfrage-schliessen");
+        thirdPossibleTransition.setDialogText("Die Abfrage wird erfolgreich geschlossen.");
 
         expected.add(thirdPossibleTransition);
 
@@ -306,6 +315,7 @@ public class TransitionModelTest {
         fourthPossibleTransition.setIndex(6);
         fourthPossibleTransition.setButtonName("AN FACHREFERATE");
         fourthPossibleTransition.setUrl("verschicken-der-stellungnahme");
+        fourthPossibleTransition.setDialogText("Die Abfrage wird an die Fachreferate weitergeleitet.");
 
         expected.add(fourthPossibleTransition);
 
@@ -336,6 +346,7 @@ public class TransitionModelTest {
         firstPossibleTransition.setIndex(3);
         firstPossibleTransition.setButtonName("STORNIEREN");
         firstPossibleTransition.setUrl("abbrechen");
+        firstPossibleTransition.setDialogText("Die Abfrage wird abbgebrochen.");
 
         expected.add(firstPossibleTransition);
 
@@ -343,6 +354,7 @@ public class TransitionModelTest {
         secondPossibleTransition.setIndex(4);
         secondPossibleTransition.setButtonName("ZURÜCK AN ABFRAGEERSTELLER");
         secondPossibleTransition.setUrl("zurueck-an-abfrageersteller");
+        secondPossibleTransition.setDialogText("Die Abfrage wird an den Abfrageersteller zurückgegeben.");
 
         expected.add(secondPossibleTransition);
 
@@ -350,6 +362,7 @@ public class TransitionModelTest {
         thirdPossibleTransition.setIndex(5);
         thirdPossibleTransition.setButtonName("ABFRAGE SCHLIEßEN");
         thirdPossibleTransition.setUrl("abfrage-schliessen");
+        thirdPossibleTransition.setDialogText("Die Abfrage wird erfolgreich geschlossen.");
 
         expected.add(thirdPossibleTransition);
 
@@ -357,8 +370,7 @@ public class TransitionModelTest {
         fourthPossibleTransition.setIndex(6);
         fourthPossibleTransition.setButtonName("AN FACHREFERATE");
         fourthPossibleTransition.setUrl("verschicken-der-stellungnahme");
-
-        expected.add(fourthPossibleTransition);
+        fourthPossibleTransition.setDialogText("Die Abfrage wird an die Fachreferate weitergeleitet.");
 
         expected.add(fourthPossibleTransition);
 
@@ -423,6 +435,7 @@ public class TransitionModelTest {
         firstPossibleTransition.setIndex(3);
         firstPossibleTransition.setButtonName("STORNIEREN");
         firstPossibleTransition.setUrl("abbrechen");
+        firstPossibleTransition.setDialogText("Die Abfrage wird abbgebrochen.");
 
         expected.add(firstPossibleTransition);
 
@@ -430,6 +443,7 @@ public class TransitionModelTest {
         secondPossibleTransition.setIndex(7);
         secondPossibleTransition.setButtonName("ZURÜCK AN PLAN");
         secondPossibleTransition.setUrl("zurueck-an-plan");
+        secondPossibleTransition.setDialogText("Die Abfrage wird zu PLAN weitergeleitet.");
 
         expected.add(secondPossibleTransition);
 
@@ -437,6 +451,7 @@ public class TransitionModelTest {
         thirdPossibleTransition.setIndex(8);
         thirdPossibleTransition.setButtonName("BEDARF MELDEN");
         thirdPossibleTransition.setUrl("bedarfsmeldung-erfolgt");
+        thirdPossibleTransition.setDialogText("Die Bedarfsmeldung der Abfrage ist erfolgreich.");
 
         expected.add(thirdPossibleTransition);
 
@@ -466,6 +481,7 @@ public class TransitionModelTest {
         firstPossibleTransition.setIndex(3);
         firstPossibleTransition.setButtonName("STORNIEREN");
         firstPossibleTransition.setUrl("abbrechen");
+        firstPossibleTransition.setDialogText("Die Abfrage wird abbgebrochen.");
 
         expected.add(firstPossibleTransition);
 
@@ -473,13 +489,14 @@ public class TransitionModelTest {
         secondPossibleTransition.setIndex(7);
         secondPossibleTransition.setButtonName("ZURÜCK AN PLAN");
         secondPossibleTransition.setUrl("zurueck-an-plan");
-
+        secondPossibleTransition.setDialogText("Die Abfrage wird zu PLAN weitergeleitet.");
         expected.add(secondPossibleTransition);
 
         TransitionModel thirdPossibleTransition = new TransitionModel();
         thirdPossibleTransition.setIndex(8);
         thirdPossibleTransition.setButtonName("BEDARF MELDEN");
         thirdPossibleTransition.setUrl("bedarfsmeldung-erfolgt");
+        thirdPossibleTransition.setDialogText("Die Bedarfsmeldung der Abfrage ist erfolgreich.");
 
         expected.add(thirdPossibleTransition);
 
@@ -543,6 +560,7 @@ public class TransitionModelTest {
         firstPossibleTransition.setIndex(3);
         firstPossibleTransition.setButtonName("STORNIEREN");
         firstPossibleTransition.setUrl("abbrechen");
+        firstPossibleTransition.setDialogText("Die Abfrage wird abbgebrochen.");
 
         expected.add(firstPossibleTransition);
 
@@ -550,6 +568,7 @@ public class TransitionModelTest {
         secondPossibleTransition.setIndex(9);
         secondPossibleTransition.setButtonName("ABFRAGE ABSCHLIEßEN");
         secondPossibleTransition.setUrl("speicher-von-soz-infrastruktur-versorgung");
+        secondPossibleTransition.setDialogText("Die Abfrage wird erfolgreich geschlossen.");
 
         expected.add(secondPossibleTransition);
 
@@ -578,6 +597,7 @@ public class TransitionModelTest {
         firstPossibleTransition.setIndex(3);
         firstPossibleTransition.setButtonName("STORNIEREN");
         firstPossibleTransition.setUrl("abbrechen");
+        firstPossibleTransition.setDialogText("Die Abfrage wird abbgebrochen.");
 
         expected.add(firstPossibleTransition);
 
@@ -605,6 +625,7 @@ public class TransitionModelTest {
         firstPossibleTransition.setIndex(9);
         firstPossibleTransition.setButtonName("ABFRAGE ABSCHLIEßEN");
         firstPossibleTransition.setUrl("speicher-von-soz-infrastruktur-versorgung");
+        firstPossibleTransition.setDialogText("Die Abfrage wird erfolgreich geschlossen.");
 
         expected.add(firstPossibleTransition);
 
@@ -649,7 +670,7 @@ public class TransitionModelTest {
         firstPossibleTransition.setIndex(10);
         firstPossibleTransition.setButtonName("ERNEUTE BEARBEITUNG");
         firstPossibleTransition.setUrl("erneute-bearbeitung");
-
+        firstPossibleTransition.setDialogText("Die Abfrage wird wird an PLAN zur Bearbeitung zurückgesendet.");
         expected.add(firstPossibleTransition);
 
         assertThat(possibleTransitions.size(), is(1));
@@ -676,7 +697,7 @@ public class TransitionModelTest {
         firstPossibleTransition.setIndex(10);
         firstPossibleTransition.setButtonName("ERNEUTE BEARBEITUNG");
         firstPossibleTransition.setUrl("erneute-bearbeitung");
-
+        firstPossibleTransition.setDialogText("Die Abfrage wird wird an PLAN zur Bearbeitung zurückgesendet.");
         expected.add(firstPossibleTransition);
 
         assertThat(possibleTransitions.size(), is(1));

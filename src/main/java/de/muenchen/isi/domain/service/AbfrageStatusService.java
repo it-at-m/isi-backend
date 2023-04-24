@@ -323,6 +323,7 @@ public class AbfrageStatusService {
                 transitionModel.setUrl(event.getUrl());
                 transitionModel.setButtonName(event.getButtonName());
                 transitionModel.setIndex(event.getIndex());
+                transitionModel.setDialogText(event.getDialogText());
                 return transitionModel;
             })
             .sorted(Comparator.comparingInt(TransitionModel::getIndex))

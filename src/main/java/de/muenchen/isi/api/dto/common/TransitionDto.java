@@ -10,4 +10,6 @@ public class TransitionDto {
     private String buttonName;
 
     private int index;
+
+    private String dialogText;
 }

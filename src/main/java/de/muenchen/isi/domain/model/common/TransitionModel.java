@@ -12,4 +12,6 @@ public class TransitionModel {
     private String buttonName;
 
     private int index;
+
+    private String dialogText;
 }
