@@ -2,6 +2,7 @@ package de.muenchen.isi.domain.service.stammdaten;
 
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
+import de.muenchen.isi.domain.exception.UniqueViolationException;
 import de.muenchen.isi.domain.mapper.StammdatenDomainMapper;
 import de.muenchen.isi.domain.model.stammdaten.FoerdermixStammModel;
 import de.muenchen.isi.infrastructure.repository.stammdaten.FoerdermixStammRepository;
@@ -25,7 +26,7 @@ public class FoerdermixStammService {
     /**
      * Die Methode gibt alle {@link FoerdermixStammModel} als Liste zurück.
      *
-     * @return Liste an {@link FoerdermixStammModel}.
+     * @return Liste an {@link FoerdermixStammModel}
      */
     public List<FoerdermixStammModel> getFoerdermixStaemme() {
         return this.foerdermixStammRepository.findAllByOrderByBezeichnungAsc()
@@ -36,8 +37,8 @@ public class FoerdermixStammService {
     /**
      * Die Methode gibt ein {@link FoerdermixStammModel} identifiziert durch die ID zurück.
      *
-     * @param id zum Identifizieren des {@link FoerdermixStammModel}.
-     * @return {@link FoerdermixStammModel}.
+     * @param id zum Identifizieren des {@link FoerdermixStammModel}
+     * @return {@link FoerdermixStammModel}
      */
     public FoerdermixStammModel getFoerdermixStammById(final UUID id) throws EntityNotFoundException {
         final var optEntity = this.foerdermixStammRepository.findById(id);
@@ -54,18 +55,29 @@ public class FoerdermixStammService {
      *
      * @param foerdermix zum Speichern
      * @return das gespeicherte {@link FoerdermixStammModel}
-     * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
+     * @throws UniqueViolationException falls die Bezeichnung {@link FoerdermixStammModel#getBezeichnung()} des Fördermixes bereits im gleichen Jahr {@link FoerdermixStammModel#getBezeichnungJahr()} vorhanden ist
      */
     public FoerdermixStammModel saveFoerdermixStamm(final FoerdermixStammModel foerdermix)
-        throws OptimisticLockingException {
+        throws UniqueViolationException, OptimisticLockingException {
         var entity = this.stammdatenDomainMapper.model2Entity(foerdermix);
-        try {
-            entity = this.foerdermixStammRepository.saveAndFlush(entity);
-        } catch (final ObjectOptimisticLockingFailureException exception) {
-            final var message = "Die Daten wurden in der Zwischenzeit geändert. Bitte laden Sie die Seite neu!";
-            throw new OptimisticLockingException(message, exception);
+        final var saved =
+            this.foerdermixStammRepository.findByBezeichnungJahrIgnoreCaseAndBezeichnungIgnoreCase(
+                    foerdermix.getBezeichnungJahr(),
+                    foerdermix.getBezeichnung()
+                );
+        if ((saved.isPresent() && saved.get().getId().equals(entity.getId())) || saved.isEmpty()) {
+            try {
+                entity = this.foerdermixStammRepository.saveAndFlush(entity);
+            } catch (final ObjectOptimisticLockingFailureException exception) {
+                final var message = "Die Daten wurden in der Zwischenzeit geändert. Bitte laden Sie die Seite neu!";
+                throw new OptimisticLockingException(message, exception);
+            }
+            return this.stammdatenDomainMapper.entity2Model(entity);
+        } else {
+            throw new UniqueViolationException(
+                "Die Bezeichnung exisitiert bereits unter dem angegebenen Jahr. Bitte wählen Sie daher eine andere Bezeichnung und speichern Sie den Fördermix erneut."
+            );
         }
-        return this.stammdatenDomainMapper.entity2Model(entity);
     }
 
     /**
@@ -73,11 +85,11 @@ public class FoerdermixStammService {
      *
      * @param foerdermix zum Updaten
      * @return das geupdatete {@link FoerdermixStammModel}
-     * @throws EntityNotFoundException falls die Abfrage identifiziert durch die {@link FoerdermixStammModel#getId()} nicht gefunden wird
+     * @throws EntityNotFoundException    falls die Abfrage identifiziert durch die {@link FoerdermixStammModel#getId()} nicht gefunden wird
      * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
      */
     public FoerdermixStammModel updateFoerdermixStamm(final FoerdermixStammModel foerdermix)
-        throws EntityNotFoundException, OptimisticLockingException {
+        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException {
         this.getFoerdermixStammById(foerdermix.getId());
         return this.saveFoerdermixStamm(foerdermix);
     }
@@ -85,8 +97,8 @@ public class FoerdermixStammService {
     /**
      * Diese Methode löscht ein {@link FoerdermixStammModel}.
      *
-     * @param id zum Identifizieren des {@link FoerdermixStammModel}.
-     * @throws EntityNotFoundException falls die Abfrage identifiziert durch die {@link FoerdermixStammModel#getId()} nicht gefunden wird.
+     * @param id zum Identifizieren des {@link FoerdermixStammModel}
+     * @throws EntityNotFoundException falls die Abfrage identifiziert durch die {@link FoerdermixStammModel#getId()} nicht gefunden wird
      */
     public void deleteFoerdermixStammById(final UUID id) throws EntityNotFoundException {
         this.getFoerdermixStammById(id);

@@ -16,8 +16,8 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 @Entity
-@Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "bezeichnung" }) })
 @Data
+@Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "bezeichnung", "bezeichnungJahr" }) })
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 public class FoerdermixStamm extends BaseEntity {

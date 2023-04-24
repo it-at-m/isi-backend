@@ -5,6 +5,7 @@ import static org.hamcrest.Matchers.is;
 
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
+import de.muenchen.isi.domain.exception.UniqueViolationException;
 import de.muenchen.isi.domain.mapper.StammdatenDomainMapper;
 import de.muenchen.isi.domain.mapper.StammdatenDomainMapperImpl;
 import de.muenchen.isi.domain.model.stammdaten.FoerdermixStammModel;
@@ -82,7 +83,7 @@ class FoerdermixStammServiceTest {
     }
 
     @Test
-    void saveFoerdermixStamm() throws OptimisticLockingException {
+    void saveFoerdermixStamm() throws UniqueViolationException, OptimisticLockingException {
         final FoerdermixStammModel model = new FoerdermixStammModel();
         model.setId(null);
 
@@ -105,7 +106,41 @@ class FoerdermixStammServiceTest {
     }
 
     @Test
-    void updateFoerdermixStamm() throws EntityNotFoundException, OptimisticLockingException {
+    void saveFoerdermixStammUniqueViolationTest() throws UniqueViolationException, OptimisticLockingException {
+        final FoerdermixStammModel model = new FoerdermixStammModel();
+        model.setId(UUID.randomUUID());
+        model.setBezeichnungJahr("Test 2022");
+        model.setBezeichnung("Testfall 1");
+
+        final FoerdermixStamm entity = this.stammdatenDomainMapper.model2Entity(model);
+        entity.setId(UUID.randomUUID());
+
+        final FoerdermixStamm saveResult = new FoerdermixStamm();
+        saveResult.setId(UUID.randomUUID());
+
+        Mockito.when(this.foerdermixStammRepository.saveAndFlush(entity)).thenReturn(saveResult);
+        Mockito
+            .when(
+                this.foerdermixStammRepository.findByBezeichnungJahrIgnoreCaseAndBezeichnungIgnoreCase(
+                        "Test 2022",
+                        "Testfall 1"
+                    )
+            )
+            .thenReturn(Optional.of(entity));
+
+        Assertions.assertThrows(
+            UniqueViolationException.class,
+            () -> this.foerdermixStammService.saveFoerdermixStamm(model)
+        );
+
+        Mockito.verify(this.foerdermixStammRepository, Mockito.times(0)).saveAndFlush(entity);
+        Mockito
+            .verify(this.foerdermixStammRepository, Mockito.times(1))
+            .findByBezeichnungJahrIgnoreCaseAndBezeichnungIgnoreCase("Test 2022", "Testfall 1");
+    }
+
+    @Test
+    void updateFoerdermixStamm() throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException {
         final FoerdermixStammModel model = new FoerdermixStammModel();
         model.setId(UUID.randomUUID());
 
