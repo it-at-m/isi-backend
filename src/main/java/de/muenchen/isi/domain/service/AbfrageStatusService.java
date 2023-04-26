@@ -224,7 +224,10 @@ public class AbfrageStatusService {
                                 final InfrastrukturabfrageModel abfrage =
                                     AbfrageStatusService.this.abfrageService.getInfrastrukturabfrageById(abfrageId);
                                 abfrage.getAbfrage().setStatusAbfrage(state.getId());
-                                abfrageService.updateInfrastrukturabfrageWithStatus(abfrage);
+                                abfrageService.changeStatusAbfrage(
+                                    abfrage.getId(),
+                                    abfrage.getAbfrage().getStatusAbfrage()
+                                );
                             } catch (
                                 final EntityNotFoundException
                                 | OptimisticLockingException

@@ -4,6 +4,7 @@ import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.FileHandlingFailedException;
 import de.muenchen.isi.domain.exception.FileHandlingWithS3FailedException;
+import de.muenchen.isi.domain.exception.InvalidStatusException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
 import de.muenchen.isi.domain.mapper.AbfrageDomainMapper;
@@ -100,16 +101,20 @@ public class AbfrageService {
     }
 
     /**
-     * Diese Methode updated ein {@link InfrastrukturabfrageModel} ausgenommen vom Abfrage Status.
+     * Diese Methode updated ein {@link InfrastrukturabfrageModel}. Diese muss sich im Status {@link StatusAbfrage#ANGELEGT} befinden.
      *
      * @param abfrage zum Updaten
      * @return das geupdatete {@link InfrastrukturabfrageModel}
      * @throws EntityNotFoundException    falls die Abfrage identifiziert durch die {@link InfrastrukturabfrageModel#getId()} nicht gefunden wird
      * @throws UniqueViolationException   falls der Name der Abfrage {@link InfrastrukturabfrageModel#getAbfrage().getNameAbfrage} ()} bereits vorhanden ist
      * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
+     * @throws InvalidStatusException falls sich die Abfrage nicht in einem zulässigen Status befindet
+     * @throws FileHandlingFailedException
+     * @throws FileHandlingWithS3FailedException
      */
-    public InfrastrukturabfrageModel updateInfrastrukturabfrageWithoutStatus(final InfrastrukturabfrageModel abfrage)
-        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, FileHandlingFailedException, FileHandlingWithS3FailedException {
+    public InfrastrukturabfrageModel patchAbfrageAngelegt(final InfrastrukturabfrageModel abfrage)
+        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, InvalidStatusException, FileHandlingFailedException, FileHandlingWithS3FailedException {
+        this.throwInvalidStatusExceptionWhenStatusAbfrageIsInvalid(abfrage.getAbfrage(), StatusAbfrage.ANGELEGT);
         final var originalAbfrageDb = this.getInfrastrukturabfrageById(abfrage.getId());
         dokumentService.deleteDokumenteFromOriginalDokumentenListWhichAreMissingInParameterAdaptedDokumentenListe(
             abfrage.getAbfrage().getDokumente(),
@@ -120,24 +125,20 @@ public class AbfrageService {
     }
 
     /**
-     * Diese Methode updated ein {@link InfrastrukturabfrageModel} eingenommen mit dem Abfrage Status.
+     * Diese Methode führt für eine Abfrage, die durch die {@link InfrastrukturabfrageModel#getId()} identifiziert ist, eine Statusänderung durch.
      *
-     * @param abfrage zum Updaten
+     * @param id {@link InfrastrukturabfrageModel#getId()} der Abfrage zum Updaten
+     * @param statusAbfrage neuer {@link StatusAbfrage}
      * @return das geupdatete {@link InfrastrukturabfrageModel}
      * @throws EntityNotFoundException           falls die Abfrage identifiziert durch die {@link InfrastrukturabfrageModel#getId()} nicht gefunden wird
      * @throws UniqueViolationException          falls der Name der Abfrage {@link InfrastrukturabfrageModel#getAbfrage().getNameAbfrage} ()} bereits vorhanden ist
      * @throws OptimisticLockingException        falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
-     * @throws FileHandlingFailedException
-     * @throws FileHandlingWithS3FailedException
      */
-    public InfrastrukturabfrageModel updateInfrastrukturabfrageWithStatus(final InfrastrukturabfrageModel abfrage)
-        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, FileHandlingFailedException, FileHandlingWithS3FailedException {
-        final var originalAbfrageDb = this.getInfrastrukturabfrageById(abfrage.getId());
-        dokumentService.deleteDokumenteFromOriginalDokumentenListWhichAreMissingInParameterAdaptedDokumentenListe(
-            abfrage.getAbfrage().getDokumente(),
-            originalAbfrageDb.getAbfrage().getDokumente()
-        );
-        return this.saveInfrastrukturabfrage(abfrage);
+    public InfrastrukturabfrageModel changeStatusAbfrage(final UUID id, final StatusAbfrage statusAbfrage)
+        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException {
+        final var originalAbfrageDb = this.getInfrastrukturabfrageById(id);
+        originalAbfrageDb.getAbfrage().setStatusAbfrage(statusAbfrage);
+        return this.saveInfrastrukturabfrage(originalAbfrageDb);
     }
 
     /**
@@ -173,6 +174,32 @@ public class AbfrageService {
                 ".";
             log.error(message);
             throw new EntityIsReferencedException(message);
+        }
+    }
+
+    /**
+     * Enthält das im Parameter gegebene {@link AbfrageModel} einen ungültigen Status {@link StatusAbfrage},
+     *  wird eine {@link InvalidStatusException} geworfen.
+     *
+     * @param abfrage zum Prüfen.
+     * @param statusAbfrage gültiger Status.
+     * @throws InvalidStatusException falls das {@link AbfrageModel} einen unzulässigen Status hat
+     */
+    protected void throwInvalidStatusExceptionWhenStatusAbfrageIsInvalid(
+        final AbfrageModel abfrage,
+        final StatusAbfrage statusAbfrage
+    ) throws InvalidStatusException {
+        if (abfrage.getStatusAbfrage() != statusAbfrage) {
+            final var message =
+                "Die Abfrage " +
+                abfrage.getNameAbfrage() +
+                " ist im Status " +
+                abfrage.getStatusAbfrage().toString() +
+                ". Der gültige Status wäre " +
+                statusAbfrage.toString() +
+                ".";
+            log.error(message);
+            throw new InvalidStatusException(message);
         }
     }
 }
