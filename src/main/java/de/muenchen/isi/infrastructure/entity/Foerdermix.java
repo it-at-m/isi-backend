@@ -4,8 +4,8 @@
  */
 package de.muenchen.isi.infrastructure.entity;
 
-import java.math.BigDecimal;
-import javax.persistence.Column;
+import java.util.List;
+import javax.persistence.ElementCollection;
 import javax.persistence.Embeddable;
 import lombok.Data;
 
@@ -13,24 +13,6 @@ import lombok.Data;
 @Embeddable
 public class Foerdermix {
 
-    @Column(precision = 10, scale = 2, nullable = true)
-    private BigDecimal anteilFreifinanzierterGeschosswohnungsbau;
-
-    @Column(precision = 10, scale = 2, nullable = true)
-    private BigDecimal anteilGefoerderterMietwohnungsbau;
-
-    @Column(precision = 10, scale = 2, nullable = true)
-    private BigDecimal anteilMuenchenModell;
-
-    @Column(precision = 10, scale = 2, nullable = true)
-    private BigDecimal anteilPreisgedaempfterMietwohnungsbau;
-
-    @Column(precision = 10, scale = 2, nullable = true)
-    private BigDecimal anteilKonzeptionellerMietwohnungsbau;
-
-    @Column(precision = 10, scale = 2, nullable = true)
-    private BigDecimal anteilBaugemeinschaften;
-
-    @Column(precision = 10, scale = 2, nullable = true)
-    private BigDecimal anteilEinUndZweifamilienhaeuser;
+    @ElementCollection
+    private List<Foerderart> foerderarten;
 }

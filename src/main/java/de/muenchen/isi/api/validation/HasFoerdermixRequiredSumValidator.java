@@ -1,7 +1,9 @@
 package de.muenchen.isi.api.validation;
 
+import de.muenchen.isi.api.dto.FoerderartDto;
 import de.muenchen.isi.api.dto.FoerdermixDto;
 import java.math.BigDecimal;
+import java.util.List;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import lombok.NoArgsConstructor;
@@ -27,14 +29,14 @@ public class HasFoerdermixRequiredSumValidator implements ConstraintValidator<Ha
         if (value == null) {
             return true;
         }
-        final BigDecimal sumFoerdermix = ObjectUtils
-            .defaultIfNull(value.getAnteilFreifinanzierterGeschosswohnungsbau(), BigDecimal.ZERO)
-            .add(ObjectUtils.defaultIfNull(value.getAnteilGefoerderterMietwohnungsbau(), BigDecimal.ZERO))
-            .add(ObjectUtils.defaultIfNull(value.getAnteilMuenchenModell(), BigDecimal.ZERO))
-            .add(ObjectUtils.defaultIfNull(value.getAnteilPreisgedaempfterMietwohnungsbau(), BigDecimal.ZERO))
-            .add(ObjectUtils.defaultIfNull(value.getAnteilKonzeptionellerMietwohnungsbau(), BigDecimal.ZERO))
-            .add(ObjectUtils.defaultIfNull(value.getAnteilBaugemeinschaften(), BigDecimal.ZERO))
-            .add(ObjectUtils.defaultIfNull(value.getAnteilEinUndZweifamilienhaeuser(), BigDecimal.ZERO));
+        BigDecimal sumFoerdermix = BigDecimal.ZERO;
+
+        List<FoerderartDto> foerderarten = value.getFoerderarten();
+        for (FoerderartDto foederart : foerderarten) {
+            var summand = ObjectUtils.defaultIfNull(foederart.getAnteilProzent(), BigDecimal.ZERO);
+            sumFoerdermix = sumFoerdermix.add(summand);
+        }
+
         return sumFoerdermix.compareTo(REQUIRED_SUM) == 0;
     }
 }
