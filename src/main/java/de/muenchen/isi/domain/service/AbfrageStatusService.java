@@ -12,11 +12,11 @@ import de.muenchen.isi.domain.service.util.AuthenticationUtils;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrageEvents;
 import de.muenchen.isi.security.AuthoritiesEnum;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -63,7 +63,7 @@ public class AbfrageStatusService {
     }
 
     /**
-     * Ändert den Status auf {@link StatusAbfrage#IN_BEARBEITUNG_PLAN}.
+     * Ändert den Status auf {@link StatusAbfrage#IN_BEARBEITUNG_SACHBEARBEITUNG}.
      *
      * @param id vom Typ {@link UUID} um die Abfrage zu finden
      * @throws EntityNotFoundException          falls die Abfrage nicht gefunden wird
@@ -101,15 +101,16 @@ public class AbfrageStatusService {
     }
 
     /**
-     * Ändert den Status auf {@link StatusAbfrage#IN_BEARBEITUNG_PLAN}.
+     * Ändert den Status auf {@link StatusAbfrage#IN_BEARBEITUNG_SACHBEARBEITUNG}.
      *
      * @param id vom Typ {@link UUID} um die Abfrage zu finden
      * @throws EntityNotFoundException          falls die Abfrage nicht gefunden wird
      * @throws AbfrageStatusNotAllowedException wenn die Statusänderung nicht erlaubt ist
      */
-    public void zurueckAnPlanAbfrage(final UUID id) throws EntityNotFoundException, AbfrageStatusNotAllowedException {
+    public void zurueckAnSachbearbeitungAbfrage(final UUID id)
+        throws EntityNotFoundException, AbfrageStatusNotAllowedException {
         final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id);
-        this.sendEvent(id, StatusAbfrageEvents.ZURUECK_AN_PLAN, stateMachine);
+        this.sendEvent(id, StatusAbfrageEvents.ZURUECK_AN_SACHBEARBEITUNG, stateMachine);
     }
 
     /**
@@ -163,7 +164,7 @@ public class AbfrageStatusService {
     }
 
     /**
-     * Ändert den Status auf {@link StatusAbfrage#IN_BEARBEITUNG_PLAN}.
+     * Ändert den Status auf {@link StatusAbfrage#IN_BEARBEITUNG_SACHBEARBEITUNG}.
      *
      * @param id vom Typ {@link UUID} um die Abfrage zu finden
      * @throws EntityNotFoundException          falls die Abfrage nicht gefunden wird
@@ -310,11 +311,11 @@ public class AbfrageStatusService {
     public List<TransitionModel> getStatusAbfrageEventsBasedOnStateAndAuthorities(final UUID id)
         throws EntityNotFoundException {
         List<AuthoritiesEnum> authorities = AuthenticationUtils.getUserAuthorities();
-        List<StatusAbfrageEvents> possibleAbfrageEventsBasedOnAuthorities;
-        Map<AuthoritiesEnum, StatusAbfrageEvents> authoritiesAndMatchingEvent = getAuthoritiesAndEventsMap();
-        possibleAbfrageEventsBasedOnAuthorities =
-            getStatusAbfrageEventsForAuthorities(authorities, authoritiesAndMatchingEvent);
-        List<StatusAbfrageEvents> matchingAbfrageEvents = new ArrayList<>(getStatusAbfrageEventsBasedOnState(id));
+        List<StatusAbfrageEvents> possibleAbfrageEventsBasedOnAuthorities = getStatusAbfrageEventsForAuthorities(
+            authorities,
+            getAuthoritiesAndEventsMap()
+        );
+        List<StatusAbfrageEvents> matchingAbfrageEvents = getStatusAbfrageEventsBasedOnState(id);
         matchingAbfrageEvents.retainAll(possibleAbfrageEventsBasedOnAuthorities);
         return matchingAbfrageEvents
             .stream()
@@ -331,7 +332,7 @@ public class AbfrageStatusService {
     }
 
     /**
-     * Ermittelt anhand der vom Benutzer besessenen Authorities, welche {@link StatusAbfrageEvents} für den Benutzer erlaubt sind.
+     * Ermittelt anhand der im Security Context vorhandenen Authorities, welche {@link StatusAbfrageEvents} erlaubt sind.
      *
      * @param authorities                 Die Liste der Authorities des Benutzers.
      * @param authoritiesAndMatchingEvent Die {@link Map}, die die Zuordnung von Authorities zu den dazugehörigen {@link StatusAbfrageEvents} enthält.
@@ -341,11 +342,11 @@ public class AbfrageStatusService {
         final List<AuthoritiesEnum> authorities,
         Map<AuthoritiesEnum, StatusAbfrageEvents> authoritiesAndMatchingEvent
     ) {
-        List<StatusAbfrageEvents> statusAbfrageEventsList = new ArrayList<>();
-        for (AuthoritiesEnum authority : authorities) {
-            statusAbfrageEventsList.add(authoritiesAndMatchingEvent.get(authority));
-        }
-        return statusAbfrageEventsList;
+        return authorities
+            .stream()
+            .map(authoritiesAndMatchingEvent::get)
+            .filter(Objects::nonNull)
+            .collect(Collectors.toList());
     }
 
     /**
@@ -385,8 +386,8 @@ public class AbfrageStatusService {
             StatusAbfrageEvents.IN_BEARBEITUNG_SETZEN
         );
         authoritiesAndEventsMap.put(
-            AuthoritiesEnum.ISI_BACKEND_ZURUECK_AN_PLAN_ABFRAGE,
-            StatusAbfrageEvents.ZURUECK_AN_PLAN
+            AuthoritiesEnum.ISI_BACKEND_ZURUECK_AN_SACHBEARBEITUNG_ABFRAGE,
+            StatusAbfrageEvents.ZURUECK_AN_SACHBEARBEITUNG
         );
         authoritiesAndEventsMap.put(
             AuthoritiesEnum.ISI_BACKEND_SCHLIESSEN_ABFRAGE,

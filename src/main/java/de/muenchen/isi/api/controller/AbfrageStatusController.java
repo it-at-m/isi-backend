@@ -147,7 +147,7 @@ public class AbfrageStatusController {
 
     @PutMapping("{id}/in-bearbeitung-setzen")
     @Transactional
-    @Operation(summary = "Setzt eine Infrastrukturabfrage auf den Status IN_BEARBEITUNG_PLAN")
+    @Operation(summary = "Setzt eine Infrastrukturabfrage auf den Status IN_BEARBEITUNG_SACHBEARBEITUNG")
     @ApiResponses(
         value = {
             @ApiResponse(
@@ -175,9 +175,9 @@ public class AbfrageStatusController {
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping("{id}/zurueck-an-plan")
+    @PutMapping("{id}/zurueck-an-sachbearbeitung")
     @Transactional
-    @Operation(summary = "Setzt eine Infrastrukturabfrage auf den Status IN_BEARBEITUNG_PLAN")
+    @Operation(summary = "Setzt eine Infrastrukturabfrage auf den Status IN_BEARBEITUNG_SACHBEARBEITUNG")
     @ApiResponses(
         value = {
             @ApiResponse(
@@ -197,11 +197,11 @@ public class AbfrageStatusController {
         }
     )
     @PreAuthorize(
-        "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_ZURUECK_AN_PLAN_ABFRAGE.name())"
+        "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_ZURUECK_AN_SACHBEARBEITUNG_ABFRAGE_ABFRAGE.name())"
     )
-    public ResponseEntity<Void> zurueckAnPlanInfrastrukturabfrage(@PathVariable @NotNull final UUID id)
+    public ResponseEntity<Void> zurueckAnSachbearbeitungInfrastrukturabfrage(@PathVariable @NotNull final UUID id)
         throws EntityNotFoundException, AbfrageStatusNotAllowedException {
-        this.abfrageStatusService.zurueckAnPlanAbfrage(id);
+        this.abfrageStatusService.zurueckAnSachbearbeitungAbfrage(id);
         return ResponseEntity.ok().build();
     }
 
@@ -317,7 +317,7 @@ public class AbfrageStatusController {
 
     @PutMapping("{id}/erneute-bearbeitung")
     @Transactional
-    @Operation(summary = "Setzt eine Infrastrukturabfrage auf den Status IN_BEARBEITUNG_PLAN")
+    @Operation(summary = "Setzt eine Infrastrukturabfrage auf den Status IN_BEARBEITUNG_SACHBEARBEITUNG")
     @ApiResponses(
         value = {
             @ApiResponse(

@@ -13,7 +13,7 @@ import lombok.Getter;
 public enum StatusAbfrage implements ILookup {
     ANGELEGT("angelegt"),
     OFFEN("offen"),
-    IN_BEARBEITUNG_PLAN("in Bearbeitung bei PLAN-HA I/2"),
+    IN_BEARBEITUNG_SACHBEARBEITUNG("in Bearbeitung bei Sachbearbeitung"),
     IN_BEARBEITUNG_FACHREFERATE("in Bearbeitung bei den Fachreferaten"),
     BEDARFSMELDUNG_ERFOLGT("Bedarfsmeldung der Fachreferate ist erfolgt"),
     ERLEDIGT("erledigt"),

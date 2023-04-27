@@ -36,7 +36,12 @@ public enum StatusAbfrageEvents {
         "Die Abfrage wird an die Fachreferate weitergeleitet."
     ),
 
-    ZURUECK_AN_PLAN("zurueck-an-plan", "ZURÜCK AN PLAN", 7, "Die Abfrage wird zu PLAN weitergeleitet."),
+    ZURUECK_AN_SACHBEARBEITUNG(
+        "zurueck-an-sachbearbeitung",
+        "ZURÜCK AN SACHBEARBEITUNG",
+        7,
+        "Die Abfrage wird an die Sacharbeiter weitergeleitet."
+    ),
 
     BEDARFSMELDUNG_ERFOLGTE(
         "bedarfsmeldung-erfolgt",
@@ -56,7 +61,7 @@ public enum StatusAbfrageEvents {
         "erneute-bearbeitung",
         "ERNEUTE BEARBEITUNG",
         10,
-        "Die Abfrage wird wird an PLAN zur Bearbeitung zurückgesendet."
+        "Die Abfrage wird wird an die Sachbearbeiter zur Bearbeitung zurückgesendet."
     );
 
     @Getter
