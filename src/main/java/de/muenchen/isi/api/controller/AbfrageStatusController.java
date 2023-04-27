@@ -197,7 +197,7 @@ public class AbfrageStatusController {
         }
     )
     @PreAuthorize(
-        "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_ZURUECK_AN_SACHBEARBEITUNG_ABFRAGE_ABFRAGE.name())"
+        "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_ZURUECK_AN_SACHBEARBEITUNG_ABFRAGE.name())"
     )
     public ResponseEntity<Void> zurueckAnSachbearbeitungInfrastrukturabfrage(@PathVariable @NotNull final UUID id)
         throws EntityNotFoundException, AbfrageStatusNotAllowedException {
