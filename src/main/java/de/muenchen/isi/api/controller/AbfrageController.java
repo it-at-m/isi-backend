@@ -171,7 +171,7 @@ public class AbfrageController {
         }
     )
     @PreAuthorize(
-        "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_PATCH_ABFRAGE_OFFEN_IN_BEARBEITUNG_PLAN.name())"
+        "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_PATCH_ABFRAGE_OFFEN_IN_BEARBEITUNG_SACHBEARBEITUNG.name())"
     )
     public ResponseEntity<InfrastrukturabfrageDto> patchAbfrageAngelegt(
         @RequestBody @Valid @NotNull final InfrastrukturabfrageDto abfrageDto

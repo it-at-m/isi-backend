@@ -273,12 +273,14 @@ class AbfrageServiceTest {
 
         final Infrastrukturabfrage entity = this.abfrageDomainMapper.model2entity(infrastrukturabfrageModel);
 
+        Mockito.when(this.infrastrukturabfrageRepository.findById(entity.getId())).thenReturn(Optional.of(entity));
+
         Assertions.assertThrows(
             InvalidStatusException.class,
             () -> this.abfrageService.patchAbfrageAngelegt(infrastrukturabfrageModel)
         );
 
-        Mockito.verify(this.infrastrukturabfrageRepository, Mockito.times(0)).findById(entity.getId());
+        Mockito.verify(this.infrastrukturabfrageRepository, Mockito.times(1)).findById(entity.getId());
         Mockito.verify(this.infrastrukturabfrageRepository, Mockito.times(0)).saveAndFlush(entity);
         Mockito
             .verify(this.infrastrukturabfrageRepository, Mockito.times(0))

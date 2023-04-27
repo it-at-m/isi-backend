@@ -114,8 +114,11 @@ public class AbfrageService {
      */
     public InfrastrukturabfrageModel patchAbfrageAngelegt(final InfrastrukturabfrageModel abfrage)
         throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, InvalidStatusException, FileHandlingFailedException, FileHandlingWithS3FailedException {
-        this.throwInvalidStatusExceptionWhenStatusAbfrageIsInvalid(abfrage.getAbfrage(), StatusAbfrage.ANGELEGT);
         final var originalAbfrageDb = this.getInfrastrukturabfrageById(abfrage.getId());
+        this.throwInvalidStatusExceptionWhenStatusAbfrageIsInvalid(
+                originalAbfrageDb.getAbfrage(),
+                StatusAbfrage.ANGELEGT
+            );
         dokumentService.deleteDokumenteFromOriginalDokumentenListWhichAreMissingInParameterAdaptedDokumentenListe(
             abfrage.getAbfrage().getDokumente(),
             originalAbfrageDb.getAbfrage().getDokumente()
