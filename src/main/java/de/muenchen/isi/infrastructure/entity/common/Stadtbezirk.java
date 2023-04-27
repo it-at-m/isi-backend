@@ -2,6 +2,7 @@ package de.muenchen.isi.infrastructure.entity.common;
 
 import de.muenchen.isi.infrastructure.entity.BaseEntity;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import lombok.Data;
@@ -21,4 +22,7 @@ public class Stadtbezirk extends BaseEntity {
 
     @Column(nullable = false)
     private String name;
+
+    @Embedded
+    private MultiPolygonGeometry multiPolygon;
 }

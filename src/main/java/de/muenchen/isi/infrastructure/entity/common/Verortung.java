@@ -3,6 +3,7 @@ package de.muenchen.isi.infrastructure.entity.common;
 import de.muenchen.isi.infrastructure.entity.BaseEntity;
 import java.util.Set;
 import javax.persistence.CascadeType;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.FetchType;
@@ -27,4 +28,7 @@ public class Verortung extends BaseEntity {
     @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval = true)
     @JoinColumn(name = "verortung_id", referencedColumnName = "id")
     private Set<Gemarkung> gemarkungen;
+
+    @Embedded
+    private MultiPolygonGeometry multiPolygon;
 }
