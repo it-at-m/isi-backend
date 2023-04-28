@@ -1,8 +1,10 @@
 package de.muenchen.isi.infrastructure.entity.common;
 
 import de.muenchen.isi.infrastructure.entity.BaseEntity;
+import java.math.BigDecimal;
 import java.util.Set;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -20,6 +22,12 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @EqualsAndHashCode(callSuper = true)
 @EntityListeners(AuditingEntityListener.class)
 public class Gemarkung extends BaseEntity {
+
+    @Column(nullable = true)
+    private BigDecimal nummer;
+
+    @Column(nullable = true)
+    private String name;
 
     @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval = true)
     @JoinColumn(name = "gemarkung_id", referencedColumnName = "id")

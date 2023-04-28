@@ -11,13 +11,13 @@ import org.hibernate.annotations.TypeDef;
 
 @Embeddable
 @Data
-@TypeDef(name = "json", typeClass = JsonType.class)
+@TypeDef(name = "jsonb", typeClass = JsonType.class)
 public class MultiPolygonGeometry {
 
     @Column(nullable = false)
     private String type;
 
-    @Type(type = "json")
-    @Column(nullable = false, columnDefinition = "json")
+    @Type(type = "jsonb")
+    @Column(nullable = false, columnDefinition = "jsonb")
     private List<List<List<List<BigDecimal>>>> coordinates;
 }
