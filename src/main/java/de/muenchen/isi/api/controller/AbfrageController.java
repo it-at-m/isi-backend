@@ -119,9 +119,7 @@ public class AbfrageController {
             ),
         }
     )
-    @PreAuthorize(
-        "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_POST_ABFRAGE_ABFRAGEERSTELLER.name())"
-    )
+    @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_POST_ABFRAGE.name())")
     public ResponseEntity<InfrastrukturabfrageDto> createInfrastrukturabfrage(
         @RequestBody @Valid @NotNull final InfrastrukturabfrageDto abfrageDto
     ) throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException {
@@ -170,9 +168,7 @@ public class AbfrageController {
             ),
         }
     )
-    @PreAuthorize(
-        "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_PATCH_ABFRAGE_OFFEN_IN_BEARBEITUNG_SACHBEARBEITUNG.name())"
-    )
+    @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_PATCH_ABFRAGE_ANGELEGT.name())")
     public ResponseEntity<InfrastrukturabfrageDto> patchAbfrageAngelegt(
         @RequestBody @Valid @NotNull final InfrastrukturabfrageDto abfrageDto
     )
