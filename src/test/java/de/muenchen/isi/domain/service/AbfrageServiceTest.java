@@ -109,7 +109,7 @@ class AbfrageServiceTest {
         infrastrukturabfrageModel.setId(uuid);
         final AbfrageModel abfrageModel = new AbfrageModel();
         abfrageModel.setNameAbfrage("hallo");
-        abfrageModel.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_PLAN);
+        abfrageModel.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
         infrastrukturabfrageModel.setAbfrage(abfrageModel);
 
         final Infrastrukturabfrage abfrageEntity = this.abfrageDomainMapper.model2entity(infrastrukturabfrageModel);
@@ -118,7 +118,7 @@ class AbfrageServiceTest {
         saveResult.setId(uuid);
         final Abfrage abfrage = new Abfrage();
         abfrage.setNameAbfrage("hallo");
-        abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_PLAN);
+        abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
         saveResult.setAbfrage(abfrage);
 
         Mockito.when(this.infrastrukturabfrageRepository.saveAndFlush(abfrageEntity)).thenReturn(saveResult);
