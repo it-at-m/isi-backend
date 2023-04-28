@@ -12,10 +12,7 @@ import org.hibernate.annotations.TypeDef;
 @Embeddable
 @Data
 @TypeDef(name = "jsonb", typeClass = JsonType.class)
-public class MultiPolygonGeometry {
-
-    @Column(nullable = false)
-    private String type;
+public class MultiPolygonGeometry extends Geometry {
 
     @Type(type = "jsonb")
     @Column(nullable = false, columnDefinition = "jsonb")
