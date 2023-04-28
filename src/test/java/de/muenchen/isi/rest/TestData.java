@@ -41,7 +41,7 @@ public class TestData {
         abfrage.setAllgemeineOrtsangabe("12345 Musterort, Musterstraße 2");
         abfrage.setFristStellungnahme(LocalDate.of(2022, 12, 31));
         abfrage.setAnmerkung("Bitte die Abfrage zeitnah behandeln");
-        abfrage.setStatusAbfrage(StatusAbfrage.IN_ERFASSUNG);
+        abfrage.setStatusAbfrage(StatusAbfrage.ANGELEGT);
         abfrage.setNameAbfrage("Neubausiedlung in Musterort");
         abfrage.setStandVorhaben(StandVorhaben.BAUANTRAG_EINGEREICHT);
         infrastrukturabfrage.setAbfrage(abfrage);

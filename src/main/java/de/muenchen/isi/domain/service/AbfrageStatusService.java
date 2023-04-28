@@ -7,9 +7,18 @@ import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.StateMachineTransitionFailedException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
 import de.muenchen.isi.domain.model.InfrastrukturabfrageModel;
+import de.muenchen.isi.domain.model.common.TransitionModel;
+import de.muenchen.isi.domain.service.util.AuthenticationUtils;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrageEvents;
+import de.muenchen.isi.security.AuthoritiesEnum;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.Message;
@@ -54,6 +63,19 @@ public class AbfrageStatusService {
     }
 
     /**
+     * Ändert den Status auf {@link StatusAbfrage#IN_BEARBEITUNG_SACHBEARBEITUNG}.
+     *
+     * @param id vom Typ {@link UUID} um die Abfrage zu finden
+     * @throws EntityNotFoundException          falls die Abfrage nicht gefunden wird
+     * @throws AbfrageStatusNotAllowedException wenn die Statusänderung nicht erlaubt ist
+     */
+    public void inBearbeitungSetzenAbfrage(final UUID id)
+        throws EntityNotFoundException, AbfrageStatusNotAllowedException {
+        final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id);
+        this.sendEvent(id, StatusAbfrageEvents.IN_BEARBEITUNG_SETZEN, stateMachine);
+    }
+
+    /**
      * Ändert den Status auf {@link StatusAbfrage#ABBRUCH}.
      *
      * @param id vom Typ {@link UUID} um die Abfrage zu finden
@@ -72,60 +94,23 @@ public class AbfrageStatusService {
      * @throws EntityNotFoundException          falls die Abfrage nicht gefunden wird
      * @throws AbfrageStatusNotAllowedException wenn die Statusänderung nicht erlaubt ist
      */
-    public void angabenAnpassenAbfrage(final UUID id) throws EntityNotFoundException, AbfrageStatusNotAllowedException {
-        final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id);
-        this.sendEvent(id, StatusAbfrageEvents.ANGABEN_ANPASSEN, stateMachine);
-    }
-
-    /**
-     * Ändert den Status auf {@link StatusAbfrage#IN_ERFASSUNG}.
-     *
-     * @param id vom Typ {@link UUID} um die Abfrage zu finden
-     * @throws EntityNotFoundException          falls die Abfrage nicht gefunden wird
-     * @throws AbfrageStatusNotAllowedException wenn die Statusänderung nicht erlaubt ist
-     */
-    public void weitereAbfragevariantenAnlegen(final UUID id)
+    public void zurueckAnAbfrageErstellerAbfrage(final UUID id)
         throws EntityNotFoundException, AbfrageStatusNotAllowedException {
         final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id);
-        this.sendEvent(id, StatusAbfrageEvents.WEITERE_ABFRAVARIANTEN_ANLEGEN, stateMachine);
+        this.sendEvent(id, StatusAbfrageEvents.ZURUECK_AN_ABFRAGEERSTELLER, stateMachine);
     }
 
     /**
-     * Ändert den Status auf {@link StatusAbfrage#IN_BEARBEITUNG_PLAN}.
+     * Ändert den Status auf {@link StatusAbfrage#IN_BEARBEITUNG_SACHBEARBEITUNG}.
      *
      * @param id vom Typ {@link UUID} um die Abfrage zu finden
      * @throws EntityNotFoundException          falls die Abfrage nicht gefunden wird
      * @throws AbfrageStatusNotAllowedException wenn die Statusänderung nicht erlaubt ist
      */
-    public void keineZusaetzlicheAbfragevariante(final UUID id)
+    public void zurueckAnSachbearbeitungAbfrage(final UUID id)
         throws EntityNotFoundException, AbfrageStatusNotAllowedException {
         final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id);
-        this.sendEvent(id, StatusAbfrageEvents.KEINE_ZUSAEZTLICHE_ABFRAGEVARIANTE, stateMachine);
-    }
-
-    /**
-     * Ändert den Status auf {@link StatusAbfrage#IN_ERFASSUNG}.
-     *
-     * @param id vom Typ {@link UUID} um die Abfrage zu finden
-     * @throws EntityNotFoundException          falls die Abfrage nicht gefunden wird
-     * @throws AbfrageStatusNotAllowedException wenn die Statusänderung nicht erlaubt ist
-     */
-    public void zusaetzlicheAbfragevarianteAnlegen(final UUID id)
-        throws EntityNotFoundException, AbfrageStatusNotAllowedException {
-        final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id);
-        this.sendEvent(id, StatusAbfrageEvents.ZUSAETZLICHE_ABFRAGEVARIANTE, stateMachine);
-    }
-
-    /**
-     * Ändert den Status auf {@link StatusAbfrage#IN_BEARBEITUNG_PLAN}.
-     *
-     * @param id vom Typ {@link UUID} um die Abfrage zu finden
-     * @throws EntityNotFoundException          falls die Abfrage nicht gefunden wird
-     * @throws AbfrageStatusNotAllowedException wenn die Statusänderung nicht erlaubt ist
-     */
-    public void speichernDerVarianten(final UUID id) throws EntityNotFoundException, AbfrageStatusNotAllowedException {
-        final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id);
-        this.sendEvent(id, StatusAbfrageEvents.SPEICHERN_DER_VARIANTEN, stateMachine);
+        this.sendEvent(id, StatusAbfrageEvents.ZURUECK_AN_SACHBEARBEITUNG, stateMachine);
     }
 
     /**
@@ -135,9 +120,9 @@ public class AbfrageStatusService {
      * @throws EntityNotFoundException          falls die Abfrage nicht gefunden wird
      * @throws AbfrageStatusNotAllowedException wenn die Statusänderung nicht erlaubt ist
      */
-    public void keineBearbeitungNoetig(final UUID id) throws EntityNotFoundException, AbfrageStatusNotAllowedException {
+    public void abfrageSchliessen(final UUID id) throws EntityNotFoundException, AbfrageStatusNotAllowedException {
         final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id);
-        this.sendEvent(id, StatusAbfrageEvents.KEINE_BEARBEITUNG_NOETIG, stateMachine);
+        this.sendEvent(id, StatusAbfrageEvents.ABFRAGE_SCHLIESSEN, stateMachine);
     }
 
     /**
@@ -176,6 +161,19 @@ public class AbfrageStatusService {
         throws EntityNotFoundException, AbfrageStatusNotAllowedException {
         final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id);
         this.sendEvent(id, StatusAbfrageEvents.SPEICHERN_VON_SOZIALINFRASTRUKTUR_VERSORGUNG, stateMachine);
+    }
+
+    /**
+     * Ändert den Status auf {@link StatusAbfrage#IN_BEARBEITUNG_SACHBEARBEITUNG}.
+     *
+     * @param id vom Typ {@link UUID} um die Abfrage zu finden
+     * @throws EntityNotFoundException          falls die Abfrage nicht gefunden wird
+     * @throws AbfrageStatusNotAllowedException wenn die Statusänderung nicht erlaubt ist
+     */
+    public void erneuteBearbeitenAbfrage(final UUID id)
+        throws EntityNotFoundException, AbfrageStatusNotAllowedException {
+        final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id);
+        this.sendEvent(id, StatusAbfrageEvents.ERNEUTE_BEARBEITUNG, stateMachine);
     }
 
     /**
@@ -301,5 +299,117 @@ public class AbfrageStatusService {
             throw new EntityNotFoundException(errorMessage);
         }
         return abfrageId;
+    }
+
+    /**
+     * Ermittelt mögliche Statusübergänge basierend auf Benutzer Authorities und aktuellen Status der Abfrage.
+     *
+     * @param id vom Typ {@link UUID} um die Abfrage zu finden
+     * @return Liste von {@link TransitionModel} welche möglich sind
+     * @throws EntityNotFoundException falls die Abfrage nicht gefunden wird
+     */
+    public List<TransitionModel> getStatusAbfrageEventsBasedOnStateAndAuthorities(final UUID id)
+        throws EntityNotFoundException {
+        List<AuthoritiesEnum> authorities = AuthenticationUtils.getUserAuthorities();
+        List<StatusAbfrageEvents> possibleAbfrageEventsBasedOnAuthorities = getStatusAbfrageEventsForAuthorities(
+            authorities,
+            getAuthoritiesAndEventsMap()
+        );
+        List<StatusAbfrageEvents> matchingAbfrageEvents = getStatusAbfrageEventsBasedOnState(id);
+        matchingAbfrageEvents.retainAll(possibleAbfrageEventsBasedOnAuthorities);
+        return matchingAbfrageEvents
+            .stream()
+            .map(event -> {
+                TransitionModel transitionModel = new TransitionModel();
+                transitionModel.setUrl(event.getUrl());
+                transitionModel.setButtonName(event.getButtonName());
+                transitionModel.setIndex(event.getIndex());
+                transitionModel.setDialogText(event.getDialogText());
+                return transitionModel;
+            })
+            .sorted(Comparator.comparingInt(TransitionModel::getIndex))
+            .collect(Collectors.toList());
+    }
+
+    /**
+     * Ermittelt anhand der im Security Context vorhandenen Authorities, welche {@link StatusAbfrageEvents} erlaubt sind.
+     *
+     * @param authorities                 Die Liste der Authorities des Benutzers.
+     * @param authoritiesAndMatchingEvent Die {@link Map}, die die Zuordnung von Authorities zu den dazugehörigen {@link StatusAbfrageEvents} enthält.
+     * @return Eine Liste der erlaubten {@link StatusAbfrageEvents} basierend auf den Authorities des Benutzers.
+     */
+    private List<StatusAbfrageEvents> getStatusAbfrageEventsForAuthorities(
+        final List<AuthoritiesEnum> authorities,
+        Map<AuthoritiesEnum, StatusAbfrageEvents> authoritiesAndMatchingEvent
+    ) {
+        return authorities
+            .stream()
+            .map(authoritiesAndMatchingEvent::get)
+            .filter(Objects::nonNull)
+            .collect(Collectors.toList());
+    }
+
+    /**
+     * Ermittelt alle möglichen Statusänderungen aus dem aktuellen Status.
+     *
+     * @param id vom Typ {@link UUID} um die Abfrage zu finden
+     * @return Liste von {@link StatusAbfrageEvents} welche möglich sind
+     * @throws EntityNotFoundException falls die Abfrage nicht gefunden wird
+     */
+    private List<StatusAbfrageEvents> getStatusAbfrageEventsBasedOnState(final UUID id) throws EntityNotFoundException {
+        final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id);
+        return stateMachine
+            .getTransitions()
+            .stream()
+            .filter(transition -> transition.getSource().getId().equals(stateMachine.getState().getId()))
+            .map(transition -> transition.getTrigger().getEvent())
+            .collect(Collectors.toList());
+    }
+
+    /**
+     * Definiert eine {@link Map}, die die {@link AuthoritiesEnum} mit den dazugehörigen {@link StatusAbfrageEvents} verknüpft.
+     * <p>
+     * Diese Map dient als zentrale Stelle zum Zuordnen der verschiedenen Autoritäten und Transitionsereignisse.
+     *
+     * @return Die {@link Map}, die den Mapping von {@link AuthoritiesEnum} auf {@link StatusAbfrageEvents} enthält.
+     */
+    private Map<AuthoritiesEnum, StatusAbfrageEvents> getAuthoritiesAndEventsMap() {
+        final Map<AuthoritiesEnum, StatusAbfrageEvents> authoritiesAndEventsMap = new HashMap<>();
+        authoritiesAndEventsMap.put(AuthoritiesEnum.ISI_BACKEND_FREIGABE_ABFRAGE, StatusAbfrageEvents.FREIGABE);
+        authoritiesAndEventsMap.put(AuthoritiesEnum.ISI_BACKEND_ABBRECHEN_ABFRAGE, StatusAbfrageEvents.ABBRECHEN);
+        authoritiesAndEventsMap.put(
+            AuthoritiesEnum.ISI_BACKEND_ZURUECK_AN_ABFRAGEERSTELLER_ABFRAGE,
+            StatusAbfrageEvents.ZURUECK_AN_ABFRAGEERSTELLER
+        );
+        authoritiesAndEventsMap.put(
+            AuthoritiesEnum.ISI_BACKEND_IN_BEARBEITUNG_SETZTEN_ABFRAGE,
+            StatusAbfrageEvents.IN_BEARBEITUNG_SETZEN
+        );
+        authoritiesAndEventsMap.put(
+            AuthoritiesEnum.ISI_BACKEND_ZURUECK_AN_SACHBEARBEITUNG_ABFRAGE,
+            StatusAbfrageEvents.ZURUECK_AN_SACHBEARBEITUNG
+        );
+        authoritiesAndEventsMap.put(
+            AuthoritiesEnum.ISI_BACKEND_SCHLIESSEN_ABFRAGE,
+            StatusAbfrageEvents.ABFRAGE_SCHLIESSEN
+        );
+        authoritiesAndEventsMap.put(
+            AuthoritiesEnum.ISI_BACKEND_VERSCHICKEN_DER_STELLUNGNAHME_ABFRAGE,
+            StatusAbfrageEvents.VERSCHICKEN_DER_STELLUNGNAHME
+        );
+        authoritiesAndEventsMap.put(
+            AuthoritiesEnum.ISI_BACKEND_BEDARFSMELDUNG_ERFOLGTE_ABFRAGE,
+            StatusAbfrageEvents.BEDARFSMELDUNG_ERFOLGTE
+        );
+        authoritiesAndEventsMap.put(
+            AuthoritiesEnum.ISI_BACKEND_SPEICHERN_VON_SOZIALINFRASTRUKTUR_VERSORGUNG_ABFRAGE,
+            StatusAbfrageEvents.SPEICHERN_VON_SOZIALINFRASTRUKTUR_VERSORGUNG
+        );
+        authoritiesAndEventsMap.put(
+            AuthoritiesEnum.ISI_BACKEND_ERNEUTE_BEARBEITUNG_ABFRAGE,
+            StatusAbfrageEvents.ERNEUTE_BEARBEITUNG
+        );
+
+        return authoritiesAndEventsMap;
     }
 }
