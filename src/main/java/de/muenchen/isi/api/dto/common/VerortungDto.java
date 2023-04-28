@@ -1,7 +1,9 @@
 package de.muenchen.isi.api.dto.common;
 
 import de.muenchen.isi.api.dto.BaseEntityDto;
+import java.util.Set;
 import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -10,11 +12,13 @@ import lombok.ToString;
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class StadtbezirkDto extends BaseEntityDto {
+public class VerortungDto extends BaseEntityDto {
 
-    private String nummer;
+    @NotEmpty
+    private Set<@Valid StadtbezirkDto> stadtbezirke;
 
-    private String name;
+    @NotEmpty
+    private Set<@Valid GemarkungDto> gemarkungen;
 
     @Valid
     @NotNull

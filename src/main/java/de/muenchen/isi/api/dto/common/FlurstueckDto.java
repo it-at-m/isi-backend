@@ -1,8 +1,7 @@
 package de.muenchen.isi.api.dto.common;
 
 import de.muenchen.isi.api.dto.BaseEntityDto;
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -10,13 +9,19 @@ import lombok.ToString;
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class StadtbezirkDto extends BaseEntityDto {
+public class FlurstueckDto extends BaseEntityDto {
 
-    private String nummer;
+    private Long nummer;
 
-    private String name;
+    private BigDecimal flaecheQm;
 
-    @Valid
-    @NotNull
+    private Long zaehler;
+
+    private Long nenner;
+
+    private Long eigentumsart;
+
+    private String eigentumsartBedeutung;
+
     private MultiPolygonGeometryDto multiPolygon;
 }
