@@ -475,7 +475,7 @@ public class TransitionModelTest {
         secondPossibleTransition.setIndex(7);
         secondPossibleTransition.setButtonName("ZURÜCK AN SACHBEARBEITUNG");
         secondPossibleTransition.setUrl("zurueck-an-sachbearbeitung");
-        secondPossibleTransition.setDialogText("Die Abfrage wird an die Sacharbeiter weitergeleitet.");
+        secondPossibleTransition.setDialogText("Die Abfrage wird an die Sacharbeitung weitergeleitet.");
         expected.add(secondPossibleTransition);
 
         TransitionModel thirdPossibleTransition = new TransitionModel();
@@ -678,7 +678,7 @@ public class TransitionModelTest {
         firstPossibleTransition.setButtonName("ERNEUTE BEARBEITUNG");
         firstPossibleTransition.setUrl("erneute-bearbeitung");
         firstPossibleTransition.setDialogText(
-            "Die Abfrage wird wird an die Sachbearbeiter zur Bearbeitung zurückgesendet."
+            "Die Abfrage wird wird an die Sachbearbeitung zur Bearbeitung zurückgesendet."
         );
         expected.add(firstPossibleTransition);
 
