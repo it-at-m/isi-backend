@@ -21,9 +21,9 @@ public enum StatusAbfrageEvents {
 
     ABBRECHEN("abbrechen", "STORNIEREN", 3, "Die Abfrage wird abbgebrochen."),
 
-    ZURUECK_AN_ABFRAGEERSTELLER(
-        "zurueck-an-abfrageersteller",
-        "ZURÜCK AN ABFRAGEERSTELLER",
+    ZURUECK_AN_ABFRAGEERSTELLUNG(
+        "zurueck-an-abfrageerstellung",
+        "ZURÜCK AN ABFRAGEERSTELLUNG",
         4,
         "Die Abfrage wird an den Abfrageersteller zurückgegeben."
     ),

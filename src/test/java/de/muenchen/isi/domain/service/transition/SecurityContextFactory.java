@@ -25,7 +25,7 @@ public class SecurityContextFactory implements WithSecurityContextFactory<MockCu
         if (customUser.roles()[0].equals("lhm-isi-admin")) {
             authoritiesRoles.add("ISI_BACKEND_FREIGABE_ABFRAGE");
             authoritiesRoles.add("ISI_BACKEND_ABBRECHEN_ABFRAGE");
-            authoritiesRoles.add("ISI_BACKEND_ZURUECK_AN_ABFRAGEERSTELLER_ABFRAGE");
+            authoritiesRoles.add("ISI_BACKEND_ZURUECK_AN_ABFRAGEERSTELLUNG_ABFRAGE");
             authoritiesRoles.add("ISI_BACKEND_IN_BEARBEITUNG_SETZTEN_ABFRAGE");
             authoritiesRoles.add("ISI_BACKEND_ZURUECK_AN_SACHBEARBEITUNG_ABFRAGE");
             authoritiesRoles.add("ISI_BACKEND_SCHLIESSEN_ABFRAGE");
@@ -37,7 +37,7 @@ public class SecurityContextFactory implements WithSecurityContextFactory<MockCu
 
         if (customUser.roles()[0].equals("lhm-isi-sachbearbeitung")) {
             authoritiesRoles.add("ISI_BACKEND_ABBRECHEN_ABFRAGE");
-            authoritiesRoles.add("ISI_BACKEND_ZURUECK_AN_ABFRAGEERSTELLER_ABFRAGE");
+            authoritiesRoles.add("ISI_BACKEND_ZURUECK_AN_ABFRAGEERSTELLUNG_ABFRAGE");
             authoritiesRoles.add("ISI_BACKEND_IN_BEARBEITUNG_SETZTEN_ABFRAGE");
             authoritiesRoles.add("ISI_BACKEND_ZURUECK_AN_SACHBEARBEITUNG_ABFRAGE");
             authoritiesRoles.add("ISI_BACKEND_SCHLIESSEN_ABFRAGE");

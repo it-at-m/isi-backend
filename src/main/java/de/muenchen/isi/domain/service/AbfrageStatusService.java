@@ -94,10 +94,10 @@ public class AbfrageStatusService {
      * @throws EntityNotFoundException          falls die Abfrage nicht gefunden wird
      * @throws AbfrageStatusNotAllowedException wenn die Statusänderung nicht erlaubt ist
      */
-    public void zurueckAnAbfrageErstellerAbfrage(final UUID id)
+    public void zurueckAnAbfrageerstellungAbfrage(final UUID id)
         throws EntityNotFoundException, AbfrageStatusNotAllowedException {
         final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id);
-        this.sendEvent(id, StatusAbfrageEvents.ZURUECK_AN_ABFRAGEERSTELLER, stateMachine);
+        this.sendEvent(id, StatusAbfrageEvents.ZURUECK_AN_ABFRAGEERSTELLUNG, stateMachine);
     }
 
     /**
@@ -381,8 +381,8 @@ public class AbfrageStatusService {
         authoritiesAndEventsMap.put(AuthoritiesEnum.ISI_BACKEND_FREIGABE_ABFRAGE, StatusAbfrageEvents.FREIGABE);
         authoritiesAndEventsMap.put(AuthoritiesEnum.ISI_BACKEND_ABBRECHEN_ABFRAGE, StatusAbfrageEvents.ABBRECHEN);
         authoritiesAndEventsMap.put(
-            AuthoritiesEnum.ISI_BACKEND_ZURUECK_AN_ABFRAGEERSTELLER_ABFRAGE,
-            StatusAbfrageEvents.ZURUECK_AN_ABFRAGEERSTELLER
+            AuthoritiesEnum.ISI_BACKEND_ZURUECK_AN_ABFRAGEERSTELLUNG_ABFRAGE,
+            StatusAbfrageEvents.ZURUECK_AN_ABFRAGEERSTELLUNG
         );
         authoritiesAndEventsMap.put(
             AuthoritiesEnum.ISI_BACKEND_IN_BEARBEITUNG_SETZTEN_ABFRAGE,
