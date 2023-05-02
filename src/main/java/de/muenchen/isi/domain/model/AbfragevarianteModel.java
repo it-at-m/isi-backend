@@ -18,6 +18,8 @@ public class AbfragevarianteModel extends BaseEntityModel {
 
     private Integer abfragevariantenNr;
 
+    private boolean isRelevant;
+
     private String abfragevariantenName;
 
     private Planungsrecht planungsrecht;

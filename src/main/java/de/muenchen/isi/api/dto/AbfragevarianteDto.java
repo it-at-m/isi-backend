@@ -26,6 +26,8 @@ public class AbfragevarianteDto extends BaseEntityDto {
     @NotNull
     private Integer abfragevariantenNr;
 
+    private boolean isRelevant;
+
     @NotBlank
     @Size(max = 30, message = "Es sind maximal {max} Zeichen erlaubt")
     private String abfragevariantenName;
