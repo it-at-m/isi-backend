@@ -67,7 +67,7 @@ public class TransitionModelTest {
     @Test
     @Transactional
     @MockCustomUser
-    void possbileTransitionsAngelegtAndRoleAdmin()
+    void possibleTransitionsAngelegtAndRoleAdmin()
         throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, FileHandlingFailedException, FileHandlingWithS3FailedException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
@@ -90,7 +90,7 @@ public class TransitionModelTest {
     @Test
     @Transactional
     @MockCustomUser(roles = { "lhm-isi-sachbearbeitung" })
-    void possbileTransitionsAngelegtAndRoleSachbearbeiter()
+    void possibleTransitionsAngelegtAndRoleSachbearbeitung()
         throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, FileHandlingFailedException, FileHandlingWithS3FailedException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
@@ -189,7 +189,7 @@ public class TransitionModelTest {
     @Test
     @Transactional
     @MockCustomUser(roles = { "lhm-isi-sachbearbeitung" })
-    void possibleTransitionsOffenAndRoleSachbearbeiter()
+    void possibleTransitionsOffenAndRoleSachbearbeitung()
         throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, FileHandlingFailedException, FileHandlingWithS3FailedException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
@@ -320,7 +320,7 @@ public class TransitionModelTest {
     @Test
     @Transactional
     @MockCustomUser(roles = { "lhm-isi-sachbearbeitung" })
-    void possibleTransitionsBearbeitungSachbearbeitungAndRoleSachbearbeiter()
+    void possibleTransitionsBearbeitungSachbearbeitungAndRoleSachbearbeitung()
         throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, FileHandlingFailedException, FileHandlingWithS3FailedException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
@@ -430,7 +430,7 @@ public class TransitionModelTest {
         secondPossibleTransition.setIndex(7);
         secondPossibleTransition.setButtonName("ZURÜCK AN SACHBEARBEITUNG");
         secondPossibleTransition.setUrl("zurueck-an-sachbearbeitung");
-        secondPossibleTransition.setDialogText("Die Abfrage wird an die Sacharbeiter weitergeleitet.");
+        secondPossibleTransition.setDialogText("Die Abfrage wird an die Sacharbeitung weitergeleitet.");
 
         expected.add(secondPossibleTransition);
 
@@ -451,7 +451,7 @@ public class TransitionModelTest {
     @Test
     @Transactional
     @MockCustomUser(roles = { "lhm-isi-sachbearbeitung" })
-    void possibleTransitionsBearbeitungFachreferateAndRoleSachbearbeiter()
+    void possibleTransitionsBearbeitungFachreferateAndRoleSachbearbeitung()
         throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, FileHandlingFailedException, FileHandlingWithS3FailedException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
@@ -563,7 +563,7 @@ public class TransitionModelTest {
     @Test
     @Transactional
     @MockCustomUser(roles = { "lhm-isi-sachbearbeitung" })
-    void possibleTransitionsBedarfsmeldungErfolgtAndRoleSachbearbeiter()
+    void possibleTransitionsBedarfsmeldungErfolgtAndRoleSachbearbeitung()
         throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, FileHandlingFailedException, FileHandlingWithS3FailedException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
@@ -650,7 +650,7 @@ public class TransitionModelTest {
         firstPossibleTransition.setButtonName("ERNEUTE BEARBEITUNG");
         firstPossibleTransition.setUrl("erneute-bearbeitung");
         firstPossibleTransition.setDialogText(
-            "Die Abfrage wird wird an die Sachbearbeiter zur Bearbeitung zurückgesendet."
+            "Die Abfrage wird wird an die Sachbearbeitung zur Bearbeitung zurückgesendet."
         );
         expected.add(firstPossibleTransition);
 
@@ -661,7 +661,7 @@ public class TransitionModelTest {
     @Test
     @Transactional
     @MockCustomUser(roles = { "lhm-isi-sachbearbeitung" })
-    void possibleTransitionsErledigtRoleSachbearbeiter()
+    void possibleTransitionsErledigtRoleSachbearbeitung()
         throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, FileHandlingFailedException, FileHandlingWithS3FailedException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);

@@ -40,7 +40,7 @@ public enum StatusAbfrageEvents {
         "zurueck-an-sachbearbeitung",
         "ZURÜCK AN SACHBEARBEITUNG",
         7,
-        "Die Abfrage wird an die Sacharbeiter weitergeleitet."
+        "Die Abfrage wird an die Sacharbeitung weitergeleitet."
     ),
 
     BEDARFSMELDUNG_ERFOLGTE(
