@@ -17,4 +17,5 @@ public class AdresseModel {
     private String ort;
     private String strasse;
     private String hausnummer;
+    private WGS84Model coordinate;
 }

@@ -7,6 +7,7 @@ package de.muenchen.isi.infrastructure.entity.common;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.persistence.Embedded;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -28,4 +29,7 @@ public class Adresse implements Cloneable, Serializable {
 
     @Column(nullable = true)
     private String ort;
+
+    @Embedded
+    private Wgs84 coordinate;
 }
