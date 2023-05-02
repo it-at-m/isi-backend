@@ -19,7 +19,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 public class Flurstueck extends BaseEntity {
 
     @Column(nullable = true)
-    private Long nummer;
+    private String nummer;
 
     @Column(nullable = true)
     private BigDecimal flaecheQm;

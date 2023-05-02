@@ -11,7 +11,7 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 public class FlurstueckModel extends BaseEntityModel {
 
-    private Long nummer;
+    private String nummer;
 
     private BigDecimal flaecheQm;
 
