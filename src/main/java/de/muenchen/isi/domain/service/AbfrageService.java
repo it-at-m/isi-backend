@@ -5,9 +5,11 @@ import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.FileHandlingFailedException;
 import de.muenchen.isi.domain.exception.FileHandlingWithS3FailedException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
+import de.muenchen.isi.domain.exception.RelevantAbfragevariantenNotAllowedException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
 import de.muenchen.isi.domain.mapper.AbfrageDomainMapper;
 import de.muenchen.isi.domain.model.AbfrageModel;
+import de.muenchen.isi.domain.model.AbfragevarianteModel;
 import de.muenchen.isi.domain.model.BauvorhabenModel;
 import de.muenchen.isi.domain.model.InfrastrukturabfrageModel;
 import de.muenchen.isi.domain.service.filehandling.DokumentService;
@@ -71,7 +73,7 @@ public class AbfrageService {
      * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
      */
     public InfrastrukturabfrageModel saveInfrastrukturabfrage(final InfrastrukturabfrageModel abfrage)
-        throws UniqueViolationException, OptimisticLockingException {
+        throws UniqueViolationException, OptimisticLockingException, RelevantAbfragevariantenNotAllowedException {
         if (abfrage.getId() == null) {
             abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ANGELEGT);
         }
@@ -81,17 +83,23 @@ public class AbfrageService {
                     abfrageEntity.getAbfrage().getNameAbfrage()
                 );
         if ((saved.isPresent() && saved.get().getId().equals(abfrageEntity.getId())) || saved.isEmpty()) {
-            try {
-                abfrageEntity = this.infrastrukturabfrageRepository.saveAndFlush(abfrageEntity);
-            } catch (final ObjectOptimisticLockingFailureException exception) {
-                final var message = "Die Daten wurden in der Zwischenzeit geändert. Bitte laden Sie die Seite neu!";
-                throw new OptimisticLockingException(message, exception);
-            } catch (final DataIntegrityViolationException exception) {
-                final var message =
-                    "Der angegebene Name der Abfragevariante ist schon vorhanden, bitte wählen Sie daher einen anderen Namen und speichern Sie die Abfrage erneut.";
-                throw new UniqueViolationException(message);
+            if (this.hasOnlyOneRelevantAbfragevariante(abfrage)) {
+                try {
+                    abfrageEntity = this.infrastrukturabfrageRepository.saveAndFlush(abfrageEntity);
+                } catch (final ObjectOptimisticLockingFailureException exception) {
+                    final var message = "Die Daten wurden in der Zwischenzeit geändert. Bitte laden Sie die Seite neu!";
+                    throw new OptimisticLockingException(message, exception);
+                } catch (final DataIntegrityViolationException exception) {
+                    final var message =
+                        "Der angegebene Name der Abfragevariante ist schon vorhanden, bitte wählen Sie daher einen anderen Namen und speichern Sie die Abfrage erneut.";
+                    throw new UniqueViolationException(message);
+                }
+                return this.abfrageDomainMapper.entity2Model(abfrageEntity);
+            } else {
+                throw new RelevantAbfragevariantenNotAllowedException(
+                    "Es sind mehr als eine Relevante Abfragevariante markiert."
+                );
             }
-            return this.abfrageDomainMapper.entity2Model(abfrageEntity);
         } else {
             throw new UniqueViolationException(
                 "Der angegebene Name der Abfrage ist schon vorhanden, bitte wählen Sie daher einen anderen Namen und speichern Sie die Abfrage erneut."
@@ -174,5 +182,16 @@ public class AbfrageService {
             log.error(message);
             throw new EntityIsReferencedException(message);
         }
+    }
+
+    private boolean hasOnlyOneRelevantAbfragevariante(final InfrastrukturabfrageModel infrastrukturabfrageModel) {
+        int anzahlRelevanteAbfragevarianten = 0;
+        for (AbfragevarianteModel abfragevariante : infrastrukturabfrageModel.getAbfragevarianten()) {
+            if (abfragevariante.isRelevant()) {
+                anzahlRelevanteAbfragevarianten++;
+            }
+        }
+        boolean onlyOneOrNoneRelevantAbfragevarianten = (anzahlRelevanteAbfragevarianten <= 1) ? true : false;
+        return onlyOneOrNoneRelevantAbfragevarianten;
     }
 }
