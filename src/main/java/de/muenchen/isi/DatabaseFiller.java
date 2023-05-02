@@ -14,6 +14,7 @@ import de.muenchen.isi.infrastructure.entity.Foerderart;
 import de.muenchen.isi.infrastructure.entity.Foerdermix;
 import de.muenchen.isi.infrastructure.entity.Infrastrukturabfrage;
 import de.muenchen.isi.infrastructure.entity.common.Adresse;
+import de.muenchen.isi.infrastructure.entity.common.Wgs84;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtGsNachmittagBetreuung;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.BaugebietTyp;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Einrichtungstraeger;
@@ -175,7 +176,10 @@ public class DatabaseFiller implements CommandLineRunner {
         final Infrastrukturabfrage infrastrukturabfrage = new Infrastrukturabfrage();
 
         final Abfrage abfrage = new Abfrage();
-        abfrage.setAdresse(new Adresse("Lothstraße", "7", "80331", "München"));
+        final Wgs84 coordinate = new Wgs84();
+        coordinate.setLatitude(48.1556795465256);
+        coordinate.setLongitude(11.5568456350688);
+        abfrage.setAdresse(new Adresse("Lothstraße", "7", "80331", "München", coordinate));
         abfrage.setFristStellungnahme(LocalDate.of(2022, 12, 31));
         abfrage.setAnmerkung("Bitte die Abfrage zeitnah behandeln");
         abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
@@ -194,7 +198,10 @@ public class DatabaseFiller implements CommandLineRunner {
         final Infrastrukturabfrage infrastrukturabfrage = new Infrastrukturabfrage();
 
         final Abfrage abfrage = new Abfrage();
-        abfrage.setAdresse(new Adresse("Sendlinger Straße", "1A", "80331", "München"));
+        final Wgs84 coordinate = new Wgs84();
+        coordinate.setLatitude(48.136129050253);
+        coordinate.setLongitude(11.5711182197544);
+        abfrage.setAdresse(new Adresse("Sendlinger Straße", "1A", "80331", "München", coordinate));
         abfrage.setFristStellungnahme(LocalDate.of(2022, 6, 1));
         abfrage.setAnmerkung("Die Baugenehmigung wird nachgereicht");
         abfrage.setStatusAbfrage(StatusAbfrage.ANGELEGT);
@@ -278,8 +285,10 @@ public class DatabaseFiller implements CommandLineRunner {
         bauvorhaben.setGrundstuecksgroesse(1234L);
         bauvorhaben.setStandVorhaben(StandVorhaben.BAUGENEHMIGUNG_ERTEILT);
         bauvorhaben.setBauvorhabenNummer("12345");
-        bauvorhaben.setAdresse(new Adresse("Agnes-Pockels-Bogen", "21", "80992", "München"));
-
+        final Wgs84 coordinate = new Wgs84();
+        coordinate.setLatitude(48.1741495213055);
+        coordinate.setLongitude(11.5352020030272);
+        bauvorhaben.setAdresse(new Adresse("Agnes-Pockels-Bogen", "21", "80992", "München", coordinate));
         bauvorhaben.setBebauungsplannummer("13579");
         bauvorhaben.setFisNummer("1A3D5H");
 
@@ -563,6 +572,10 @@ public class DatabaseFiller implements CommandLineRunner {
         infrastruktureinrichtung.getAdresse().setHausnummer("4");
         infrastruktureinrichtung.getAdresse().setPlz("80469");
         infrastruktureinrichtung.getAdresse().setOrt("München");
+        final Wgs84 coordinate = new Wgs84();
+        coordinate.setLatitude(48.1337919447642);
+        coordinate.setLongitude(11.5766207727739);
+        infrastruktureinrichtung.getAdresse().setCoordinate(coordinate);
         infrastruktureinrichtung.setStatus(StatusInfrastruktureinrichtung.BESTAND);
         infrastruktureinrichtung.setEinrichtungstraeger(Einrichtungstraeger.SCHULE_STAEDTISCHE_EINRICHTUNG);
 
