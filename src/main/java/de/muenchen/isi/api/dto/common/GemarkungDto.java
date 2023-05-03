@@ -4,7 +4,6 @@ import de.muenchen.isi.api.dto.BaseEntityDto;
 import java.math.BigDecimal;
 import java.util.Set;
 import javax.validation.Valid;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -19,7 +18,7 @@ public class GemarkungDto extends BaseEntityDto {
 
     private String name;
 
-    @NotEmpty
+    @NotNull
     private Set<@Valid FlurstueckDto> flurstuecke;
 
     @Valid
