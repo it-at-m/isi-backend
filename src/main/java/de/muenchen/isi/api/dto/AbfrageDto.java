@@ -6,6 +6,7 @@ package de.muenchen.isi.api.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import de.muenchen.isi.api.dto.common.AdresseDto;
+import de.muenchen.isi.api.dto.common.VerortungDto;
 import de.muenchen.isi.api.dto.filehandling.DokumentDto;
 import de.muenchen.isi.api.validation.HasAllowedNumberOfDocuments;
 import de.muenchen.isi.api.validation.NotUnspecified;
@@ -31,6 +32,9 @@ public class AbfrageDto {
 
     @Valid
     private AdresseDto adresse;
+
+    @Valid
+    private VerortungDto verortung;
 
     @NotNull
     private LocalDate fristStellungnahme;

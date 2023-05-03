@@ -4,7 +4,6 @@
  */
 package de.muenchen.isi.domain.model;
 
-import de.muenchen.isi.domain.model.common.VerortungModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonVerfahrensgrundsaetzeJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
 import java.util.List;
@@ -29,8 +28,6 @@ public class InfrastrukturabfrageModel extends BaseEntityModel {
     private String aktenzeichenProLbk;
 
     private UncertainBoolean offiziellerVerfahrensschritt;
-
-    private VerortungModel verortung;
 
     /**
      * @return der zusammengesetzte Name der Abfrage

@@ -4,7 +4,6 @@
  */
 package de.muenchen.isi.infrastructure.entity;
 
-import de.muenchen.isi.infrastructure.entity.common.Verortung;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonVerfahrensgrundsaetzeJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
 import java.util.List;
@@ -19,7 +18,6 @@ import javax.persistence.FetchType;
 import javax.persistence.Index;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -55,7 +53,4 @@ public class Infrastrukturabfrage extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "varchar(255) not null check (offizieller_Verfahrensschritt != 'UNSPECIFIED')")
     private UncertainBoolean offiziellerVerfahrensschritt;
-
-    @OneToOne(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval = true)
-    private Verortung verortung;
 }

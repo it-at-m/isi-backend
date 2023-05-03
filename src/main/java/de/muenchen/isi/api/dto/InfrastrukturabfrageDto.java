@@ -4,7 +4,6 @@
  */
 package de.muenchen.isi.api.dto;
 
-import de.muenchen.isi.api.dto.common.VerortungDto;
 import de.muenchen.isi.api.validation.GeschossflaecheWohnenSobonUrsaechlichValid;
 import de.muenchen.isi.api.validation.NotUnspecified;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonVerfahrensgrundsaetzeJahr;
@@ -47,7 +46,4 @@ public class InfrastrukturabfrageDto extends BaseEntityDto {
 
     @Size(max = 255, message = "Es sind maximal {max} Zeichen erlaubt")
     private String displayName;
-
-    @Valid
-    private VerortungDto verortung;
 }
