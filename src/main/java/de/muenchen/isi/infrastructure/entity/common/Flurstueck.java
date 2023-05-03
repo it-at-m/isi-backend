@@ -36,6 +36,9 @@ public class Flurstueck extends BaseEntity {
     @Column(nullable = true)
     private String eigentumsartBedeutung;
 
+    @Column(nullable = false)
+    private BigDecimal gemarkungNummer;
+
     @Embedded
     private MultiPolygonGeometry multiPolygon;
 }

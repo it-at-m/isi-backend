@@ -23,5 +23,7 @@ public class FlurstueckDto extends BaseEntityDto {
 
     private String eigentumsartBedeutung;
 
+    private BigDecimal gemarkungNummer;
+
     private MultiPolygonGeometryDto multiPolygon;
 }

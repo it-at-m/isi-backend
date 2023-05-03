@@ -23,5 +23,7 @@ public class FlurstueckModel extends BaseEntityModel {
 
     private String eigentumsartBedeutung;
 
+    private BigDecimal gemarkungNummer;
+
     private MultiPolygonGeometryModel multiPolygon;
 }

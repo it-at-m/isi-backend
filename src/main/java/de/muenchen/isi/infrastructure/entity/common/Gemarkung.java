@@ -23,10 +23,10 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @EntityListeners(AuditingEntityListener.class)
 public class Gemarkung extends BaseEntity {
 
-    @Column(nullable = true)
+    @Column(nullable = false)
     private BigDecimal nummer;
 
-    @Column(nullable = true)
+    @Column(nullable = false)
     private String name;
 
     @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval = true)
