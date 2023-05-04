@@ -9,7 +9,6 @@ import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.FileHandlingFailedException;
 import de.muenchen.isi.domain.exception.FileHandlingWithS3FailedException;
 import de.muenchen.isi.domain.exception.FileImportFailedException;
-import de.muenchen.isi.domain.exception.InvalidStatusException;
 import de.muenchen.isi.domain.exception.KoordinatenException;
 import de.muenchen.isi.domain.exception.MimeTypeExtractionFailedException;
 import de.muenchen.isi.domain.exception.MimeTypeNotAllowedException;
@@ -212,16 +211,6 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(UniqueViolationException.class)
     public ResponseEntity<Object> handleUniqueViolationException(final UniqueViolationException ex) {
         final var httpStatus = HttpStatus.CONFLICT;
-        final InformationResponseDto errorResponseDto = new InformationResponseDto();
-        errorResponseDto.setMessages(List.of(ex.getMessage()));
-        errorResponseDto.setHttpStatus(httpStatus.value());
-        errorResponseDto.setType(InformationResponseType.ERROR);
-        return ResponseEntity.status(httpStatus).body(errorResponseDto);
-    }
-
-    @ExceptionHandler(InvalidStatusException.class)
-    public ResponseEntity<Object> handleInvalidStatusException(final InvalidStatusException ex) {
-        final var httpStatus = HttpStatus.BAD_REQUEST;
         final InformationResponseDto errorResponseDto = new InformationResponseDto();
         errorResponseDto.setMessages(List.of(ex.getMessage()));
         errorResponseDto.setHttpStatus(httpStatus.value());

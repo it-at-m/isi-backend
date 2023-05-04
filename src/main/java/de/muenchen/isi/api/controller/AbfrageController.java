@@ -7,11 +7,11 @@ package de.muenchen.isi.api.controller;
 import de.muenchen.isi.api.dto.InfrastrukturabfrageDto;
 import de.muenchen.isi.api.dto.error.InformationResponseDto;
 import de.muenchen.isi.api.mapper.AbfrageApiMapper;
+import de.muenchen.isi.domain.exception.AbfrageStatusNotAllowedException;
 import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.FileHandlingFailedException;
 import de.muenchen.isi.domain.exception.FileHandlingWithS3FailedException;
-import de.muenchen.isi.domain.exception.InvalidStatusException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
 import de.muenchen.isi.domain.service.AbfrageService;
@@ -39,7 +39,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -59,7 +58,7 @@ public class AbfrageController {
     private final AbfrageApiMapper abfrageApiMapper;
 
     @Transactional(readOnly = true)
-    @GetMapping("")
+    @GetMapping
     @Operation(
         summary = "Lade alle Infrastrukturabfragen",
         description = "Das Ergebnis wird nach Frist Stellungnahme absteigend sortiert"
@@ -96,7 +95,7 @@ public class AbfrageController {
         return ResponseEntity.ok(dto);
     }
 
-    @PostMapping("")
+    @PostMapping
     @Transactional(rollbackFor = { OptimisticLockingException.class, UniqueViolationException.class })
     @Operation(summary = "Anlegen einer neuen Infrastrukturabfrage")
     @ApiResponses(
@@ -172,7 +171,7 @@ public class AbfrageController {
     public ResponseEntity<InfrastrukturabfrageDto> patchAbfrageAngelegt(
         @RequestBody @Valid @NotNull final InfrastrukturabfrageDto abfrageDto
     )
-        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, InvalidStatusException, FileHandlingFailedException, FileHandlingWithS3FailedException {
+        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, FileHandlingFailedException, FileHandlingWithS3FailedException {
         var model = this.abfrageApiMapper.dto2Model(abfrageDto);
         final var abfrage =
             this.bauvorhabenService.assignBauvorhabenToAbfrage(

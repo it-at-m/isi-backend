@@ -3,11 +3,11 @@ package de.muenchen.isi.domain.service;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
+import de.muenchen.isi.domain.exception.AbfrageStatusNotAllowedException;
 import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.FileHandlingFailedException;
 import de.muenchen.isi.domain.exception.FileHandlingWithS3FailedException;
-import de.muenchen.isi.domain.exception.InvalidStatusException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
 import de.muenchen.isi.domain.mapper.AbfrageDomainMapper;
@@ -225,7 +225,7 @@ class AbfrageServiceTest {
 
     @Test
     void patchAbfrageAngelegt()
-        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, InvalidStatusException, FileHandlingFailedException, FileHandlingWithS3FailedException {
+        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, FileHandlingFailedException, FileHandlingWithS3FailedException {
         final InfrastrukturabfrageModel infrastrukturabfrageModel = new InfrastrukturabfrageModel();
         infrastrukturabfrageModel.setId(UUID.randomUUID());
         final AbfrageModel abfrageModel = new AbfrageModel();
@@ -262,8 +262,8 @@ class AbfrageServiceTest {
     }
 
     @Test
-    void throwInvalidStatusExceptionWhenStatusAbfrageIsInvalid()
-        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, InvalidStatusException, FileHandlingFailedException, FileHandlingWithS3FailedException {
+    void throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid()
+        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, FileHandlingFailedException, FileHandlingWithS3FailedException {
         final InfrastrukturabfrageModel infrastrukturabfrageModel = new InfrastrukturabfrageModel();
         infrastrukturabfrageModel.setId(UUID.randomUUID());
         final AbfrageModel abfrageModel = new AbfrageModel();
@@ -276,7 +276,7 @@ class AbfrageServiceTest {
         Mockito.when(this.infrastrukturabfrageRepository.findById(entity.getId())).thenReturn(Optional.of(entity));
 
         Assertions.assertThrows(
-            InvalidStatusException.class,
+            AbfrageStatusNotAllowedException.class,
             () -> this.abfrageService.patchAbfrageAngelegt(infrastrukturabfrageModel)
         );
 

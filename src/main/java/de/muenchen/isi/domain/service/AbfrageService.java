@@ -1,10 +1,10 @@
 package de.muenchen.isi.domain.service;
 
+import de.muenchen.isi.domain.exception.AbfrageStatusNotAllowedException;
 import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.FileHandlingFailedException;
 import de.muenchen.isi.domain.exception.FileHandlingWithS3FailedException;
-import de.muenchen.isi.domain.exception.InvalidStatusException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
 import de.muenchen.isi.domain.mapper.AbfrageDomainMapper;
@@ -108,14 +108,14 @@ public class AbfrageService {
      * @throws EntityNotFoundException    falls die Abfrage identifiziert durch die {@link InfrastrukturabfrageModel#getId()} nicht gefunden wird
      * @throws UniqueViolationException   falls der Name der Abfrage {@link InfrastrukturabfrageModel#getAbfrage().getNameAbfrage} ()} bereits vorhanden ist
      * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
-     * @throws InvalidStatusException falls sich die Abfrage nicht in einem zulässigen Status befindet
+     * @throws AbfrageStatusNotAllowedException falls sich die Abfrage nicht in einem zulässigen Status befindet
      * @throws FileHandlingFailedException
      * @throws FileHandlingWithS3FailedException
      */
     public InfrastrukturabfrageModel patchAbfrageAngelegt(final InfrastrukturabfrageModel abfrage)
-        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, InvalidStatusException, FileHandlingFailedException, FileHandlingWithS3FailedException {
+        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, FileHandlingFailedException, FileHandlingWithS3FailedException {
         final var originalAbfrageDb = this.getInfrastrukturabfrageById(abfrage.getId());
-        this.throwInvalidStatusExceptionWhenStatusAbfrageIsInvalid(
+        this.throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(
                 originalAbfrageDb.getAbfrage(),
                 StatusAbfrage.ANGELEGT
             );
@@ -182,16 +182,16 @@ public class AbfrageService {
 
     /**
      * Enthält das im Parameter gegebene {@link AbfrageModel} einen ungültigen Status {@link StatusAbfrage},
-     *  wird eine {@link InvalidStatusException} geworfen.
+     *  wird eine {@link AbfrageStatusNotAllowedException} geworfen.
      *
      * @param abfrage zum Prüfen.
      * @param statusAbfrage gültiger Status.
-     * @throws InvalidStatusException falls das {@link AbfrageModel} einen unzulässigen Status hat
+     * @throws AbfrageStatusNotAllowedException falls das {@link AbfrageModel} einen unzulässigen Status hat
      */
-    protected void throwInvalidStatusExceptionWhenStatusAbfrageIsInvalid(
+    protected void throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(
         final AbfrageModel abfrage,
         final StatusAbfrage statusAbfrage
-    ) throws InvalidStatusException {
+    ) throws AbfrageStatusNotAllowedException {
         if (abfrage.getStatusAbfrage() != statusAbfrage) {
             final var message =
                 "Die Abfrage " +
@@ -202,7 +202,7 @@ public class AbfrageService {
                 statusAbfrage.toString() +
                 ".";
             log.error(message);
-            throw new InvalidStatusException(message);
+            throw new AbfrageStatusNotAllowedException(message);
         }
     }
 }

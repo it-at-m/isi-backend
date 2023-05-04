@@ -34,6 +34,8 @@ public class AuthenticationUtils {
                 }
             } catch (final ClassCastException exception) {
                 log.error(exception.getMessage(), exception);
+            } catch (final IllegalArgumentException exception) {
+                log.error(exception.getMessage(), exception);
             }
         }
         return userRoles;
