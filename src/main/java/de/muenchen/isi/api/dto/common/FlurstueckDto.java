@@ -2,6 +2,8 @@ package de.muenchen.isi.api.dto.common;
 
 import de.muenchen.isi.api.dto.BaseEntityDto;
 import java.math.BigDecimal;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -25,5 +27,7 @@ public class FlurstueckDto extends BaseEntityDto {
 
     private BigDecimal gemarkungNummer;
 
+    @Valid
+    @NotNull
     private MultiPolygonGeometryDto multiPolygon;
 }
