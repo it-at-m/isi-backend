@@ -3,6 +3,8 @@ package de.muenchen.isi.domain.service;
 import de.muenchen.isi.configuration.StateMachineConfiguration;
 import de.muenchen.isi.domain.exception.AbfrageStatusNotAllowedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
+import de.muenchen.isi.domain.exception.FileHandlingFailedException;
+import de.muenchen.isi.domain.exception.FileHandlingWithS3FailedException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.StateMachineTransitionFailedException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
@@ -228,7 +230,9 @@ public class AbfrageStatusService {
                             } catch (
                                 final EntityNotFoundException
                                 | OptimisticLockingException
-                                | UniqueViolationException exception
+                                | UniqueViolationException
+                                | FileHandlingFailedException
+                                | FileHandlingWithS3FailedException exception
                             ) {
                                 log.error(exception.getMessage(), exception);
                                 return null;

@@ -81,196 +81,6 @@ public class DatabaseFiller implements CommandLineRunner {
 
     private final MittelschuleRepository mittelschuleRepository;
 
-    /**
-     * Zu Implementierende Methode des CommandLineRunners
-     *
-     * @param strings siehe Interface, wird nicht benutzt
-     */
-    @Override
-    public void run(final String... strings) throws Exception {
-
-        System.err.println("***********************************************************************************");
-        log.info("{} was called after startup of the spring context.", this.getClass().getSimpleName());
-
-        /*
-         * Enter here the code to persist some data via the repositories given in the
-         * variables.
-         */
-        this.clearDatabase();
-
-        final var bauvorhaben = this.addBauvorhaben1();
-        this.addBauvorhaben2();
-
-        this.addNichtOffiziellerVerfahrensschrittInfrastrukturabfrage(bauvorhaben);
-        this.addOffiziellerVerfahrensschrittInfrastrukturabfrage(bauvorhaben);
-
-        this.addFoerdermixStaemme();
-
-        this.addInfrastruktureinrichtungen();
-
-        log.info("{} has finished.", this.getClass().getSimpleName());
-        System.err.println("***********************************************************************************");
-    }
-
-    private void addNichtOffiziellerVerfahrensschrittInfrastrukturabfrage(final Bauvorhaben bauvorhaben) {
-        Infrastrukturabfrage abfrage = createNichtOffiziellerVerfahrensschrittInfrastrukturabfrage();
-        abfrage.getAbfrage().setBauvorhaben(bauvorhaben);
-        final var abfragevariante = createAbfragevariante(1);
-        abfrage.setAbfragevarianten(List.of(abfragevariante));
-        this.infrastrukturabfrageRepository.save(abfrage);
-    }
-
-    private void addOffiziellerVerfahrensschrittInfrastrukturabfrage(final Bauvorhaben bauvorhaben) {
-        Infrastrukturabfrage abfrage = createOffiziellerVerfahrensschrittInfrastrukturabfrage();
-        abfrage.getAbfrage().setBauvorhaben(bauvorhaben);
-        final var abfragevariante = createAbfragevariante(2);
-        abfrage.setAbfragevarianten(List.of(abfragevariante));
-        this.infrastrukturabfrageRepository.save(abfrage);
-    }
-
-    private Bauvorhaben addBauvorhaben1() {
-        final var bauvorhaben = createBauvorhaben();
-        bauvorhaben.setNameVorhaben("Bauvorhaben 1");
-        return this.bauvorhabenRepository.save(bauvorhaben);
-    }
-
-    private Bauvorhaben addBauvorhaben2() {
-        final var bauvorhaben = createBauvorhaben();
-        bauvorhaben.setNameVorhaben("Bauvorhaben 2");
-        return this.bauvorhabenRepository.save(bauvorhaben);
-    }
-
-    private Bauvorhaben addBauvorhaben3() {
-        final var bauvorhaben = createBauvorhaben();
-        bauvorhaben.setNameVorhaben("Bauvorhaben 3");
-        return this.bauvorhabenRepository.save(bauvorhaben);
-    }
-
-    private Bauvorhaben addBauvorhaben4() {
-        final var bauvorhaben = createBauvorhaben();
-        bauvorhaben.setNameVorhaben("Bauvorhaben 4");
-        return this.bauvorhabenRepository.save(bauvorhaben);
-    }
-
-
-    private void addFoerdermixStaemme() {
-        for (final FoerdermixStamm foerdermixStamm : createFoerdermixStaemme()) {
-            this.foerdermixStammRepository.save(foerdermixStamm);
-        }
-    }
-
-    private void clearDatabase() {
-        this.infrastrukturabfrageRepository.deleteAll();
-        this.bauvorhabenRepository.deleteAll();
-        this.foerdermixStammRepository.deleteAll();
-        this.kinderkrippeRepository.deleteAll();
-        this.kindergartenRepository.deleteAll();
-        this.hausFuerKinderRepository.deleteAll();
-        this.gsNachmittagBetreuungRepository.deleteAll();
-        this.grundschuleRepository.deleteAll();
-        this.mittelschuleRepository.deleteAll();
-    }
-
-    public Infrastrukturabfrage createNichtOffiziellerVerfahrensschrittInfrastrukturabfrage() {
-        final Infrastrukturabfrage infrastrukturabfrage = new Infrastrukturabfrage();
-
-        final Abfrage abfrage = new Abfrage();
-        abfrage.setAdresse(new Adresse("Lothstraße", "7", "80331", "München"));
-        abfrage.setFristStellungnahme(LocalDate.of(2022, 12, 31));
-        abfrage.setAnmerkung("Bitte die Abfrage zeitnah behandeln");
-        abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_PLAN);
-        abfrage.setNameAbfrage("Neubausiedlung in Musterort");
-        abfrage.setStandVorhaben(StandVorhaben.BAUANTRAG_EINGEREICHT);
-        infrastrukturabfrage.setAbfrage(abfrage);
-        infrastrukturabfrage.setSobonRelevant(UncertainBoolean.TRUE);
-        infrastrukturabfrage.setSobonJahr(SobonVerfahrensgrundsaetzeJahr.JAHR_2021);
-        infrastrukturabfrage.setAktenzeichenProLbk("PRO12345");
-        infrastrukturabfrage.setOffiziellerVerfahrensschritt(UncertainBoolean.FALSE);
-
-        return infrastrukturabfrage;
-    }
-
-    public Infrastrukturabfrage createOffiziellerVerfahrensschrittInfrastrukturabfrage() {
-        final Infrastrukturabfrage infrastrukturabfrage = new Infrastrukturabfrage();
-
-        final Abfrage abfrage = new Abfrage();
-        abfrage.setAdresse(new Adresse("Sendlinger Straße", "1A", "80331", "München"));
-        abfrage.setFristStellungnahme(LocalDate.of(2022, 6, 1));
-        abfrage.setAnmerkung("Die Baugenehmigung wird nachgereicht");
-        abfrage.setStatusAbfrage(StatusAbfrage.ANGELEGT);
-        abfrage.setNameAbfrage("Wohnraumverdichtung Stadmitte");
-        abfrage.setStandVorhaben(StandVorhaben.BAUGENEHMIGUNG_ERTEILT);
-        infrastrukturabfrage.setAbfrage(abfrage);
-        infrastrukturabfrage.setSobonRelevant(UncertainBoolean.TRUE);
-        infrastrukturabfrage.setSobonJahr(SobonVerfahrensgrundsaetzeJahr.JAHR_2017_PLUS);
-        infrastrukturabfrage.setOffiziellerVerfahrensschritt(UncertainBoolean.TRUE);
-
-        return infrastrukturabfrage;
-    }
-
-    private Abfragevariante createAbfragevariante(final int variante) {
-        final Abfragevariante original = new Abfragevariante();
-        original.setAbfragevariantenNr(1);
-        original.setAbfragevariantenName("Dorf");
-        original.setPlanungsrecht(variante == 1 ? Planungsrecht.BPLAN_PARAG_30 : Planungsrecht.BPLAN_PARAG_12);
-        original.setGeschossflaecheWohnen(new BigDecimal(variante == 1 ? "1234.56" : "70"));
-        original.setGesamtanzahlWe(variante == 1 ? 31 : 90);
-        if (variante == 2) {
-            original.setGeschossflaecheStudentenwohnungen(new BigDecimal(25));
-        }
-        original.setRealisierungVon(variante == 1 ? 2023 : 2024);
-        original.setRealisierungBis(variante == 1 ? 2024 : 2026);
-
-        original.setBauabschnitte(List.of(createBauabschnitt()));
-
-        original.setSonderwohnformen(false);
-
-        return original;
-    }
-
-    private Bauabschnitt createBauabschnitt() {
-        final Bauabschnitt bauabschnitt = new Bauabschnitt();
-        bauabschnitt.setBezeichnung("Der einzigartige Bauabschnitt");
-        bauabschnitt.setBaugebiete(List.of(createBaugebiet()));
-        return bauabschnitt;
-    }
-
-    private Baugebiet createBaugebiet() {
-        final Baugebiet baugebiet = new Baugebiet();
-        baugebiet.setBezeichnung("Das Baugebiet des einzigartigen Baubschnitts");
-        baugebiet.setBaugebietTyp(BaugebietTyp.WA);
-        baugebiet.setBauraten(List.of(createBaurate()));
-        return baugebiet;
-    }
-
-    private  Baurate createBaurate() {
-        final Baurate baurate = new Baurate();
-        baurate.setJahr(2022);
-        baurate.setAnzahlWeGeplant(10);
-        baurate.setGeschossflaecheWohnenGeplant(BigDecimal.valueOf(15.55));
-        baurate.setFoerdermix(createFoerdermix());
-        return baurate;
-    }
-
-    private Foerdermix createFoerdermix() {
-        final Foerdermix foerdermix = new Foerdermix();
-        Foerderart foerderart = new Foerderart();
-        foerderart.setBezeichnung("AnteilMuenchenModell");
-        foerderart.setAnteilProzent(BigDecimal.valueOf(40));
-
-        Foerderart foerderart2 = new Foerderart();
-        foerderart2.setBezeichnung("AnteilBaugemeinschaft");
-        foerderart2.setAnteilProzent(BigDecimal.valueOf(60));
-
-        List<Foerderart> foerderarten = new ArrayList<>(Arrays.asList(foerderart, foerderart2));
-        foerdermix.setFoerderarten(foerderarten);
-
-        /*FoerdermixStamm foerdermixStamm = this.foerdermixStammRepository.findAll().stream().findFirst().get();
-        Foerdermix foerder = foerdermixStamm.getFoerdermix();*/
-
-        return foerdermix;
-    }
-
     private static Bauvorhaben createBauvorhaben() {
         final Bauvorhaben bauvorhaben = new Bauvorhaben();
         bauvorhaben.setNameVorhaben("Bauvorhaben");
@@ -290,7 +100,6 @@ public class DatabaseFiller implements CommandLineRunner {
 
         return bauvorhaben;
     }
-
 
     private static List<FoerdermixStamm> createFoerdermixStaemme() {
         final List<FoerdermixStamm> returnListe = new ArrayList<>();
@@ -367,7 +176,7 @@ public class DatabaseFiller implements CommandLineRunner {
         foerderart37.setBezeichnung("EinUndZweifamilienhaeuser");
         foerderart37.setAnteilProzent(BigDecimal.valueOf(30));
 
-        List<Foerderart> foerderarten3 = new ArrayList<>(Arrays.asList(foerderart31, foerderart32,foerderart33, foerderart34,foerderart35,foerderart36,foerderart37));
+        List<Foerderart> foerderarten3 = new ArrayList<>(Arrays.asList(foerderart31, foerderart32, foerderart33, foerderart34, foerderart35, foerderart36, foerderart37));
         foerdermix3.setFoerderarten(foerderarten3);
 
         foerdermixStamm2017.setFoerdermix(foerdermix3);
@@ -394,6 +203,196 @@ public class DatabaseFiller implements CommandLineRunner {
         returnListe.add(foerdermixStammWeitere);
 
         return returnListe;
+    }
+
+    /**
+     * Zu Implementierende Methode des CommandLineRunners
+     *
+     * @param strings siehe Interface, wird nicht benutzt
+     */
+    @Override
+    public void run(final String... strings) throws Exception {
+
+        System.err.println("***********************************************************************************");
+        log.info("{} was called after startup of the spring context.", this.getClass().getSimpleName());
+
+        /*
+         * Enter here the code to persist some data via the repositories given in the
+         * variables.
+         */
+        this.clearDatabase();
+
+        final var bauvorhaben = this.addBauvorhaben1();
+        this.addBauvorhaben2();
+
+        this.addNichtOffiziellerVerfahrensschrittInfrastrukturabfrage(bauvorhaben);
+        this.addOffiziellerVerfahrensschrittInfrastrukturabfrage(bauvorhaben);
+
+        this.addFoerdermixStaemme();
+
+        this.addInfrastruktureinrichtungen();
+
+        log.info("{} has finished.", this.getClass().getSimpleName());
+        System.err.println("***********************************************************************************");
+    }
+
+    private void addNichtOffiziellerVerfahrensschrittInfrastrukturabfrage(final Bauvorhaben bauvorhaben) {
+        Infrastrukturabfrage abfrage = createNichtOffiziellerVerfahrensschrittInfrastrukturabfrage();
+        abfrage.getAbfrage().setBauvorhaben(bauvorhaben);
+        final var abfragevariante = createAbfragevariante(1);
+        abfrage.setAbfragevarianten(List.of(abfragevariante));
+        this.infrastrukturabfrageRepository.save(abfrage);
+    }
+
+    private void addOffiziellerVerfahrensschrittInfrastrukturabfrage(final Bauvorhaben bauvorhaben) {
+        Infrastrukturabfrage abfrage = createOffiziellerVerfahrensschrittInfrastrukturabfrage();
+        abfrage.getAbfrage().setBauvorhaben(bauvorhaben);
+        final var abfragevariante = createAbfragevariante(2);
+        abfrage.setAbfragevarianten(List.of(abfragevariante));
+        this.infrastrukturabfrageRepository.save(abfrage);
+    }
+
+    private Bauvorhaben addBauvorhaben1() {
+        final var bauvorhaben = createBauvorhaben();
+        bauvorhaben.setNameVorhaben("Bauvorhaben 1");
+        return this.bauvorhabenRepository.save(bauvorhaben);
+    }
+
+    private Bauvorhaben addBauvorhaben2() {
+        final var bauvorhaben = createBauvorhaben();
+        bauvorhaben.setNameVorhaben("Bauvorhaben 2");
+        return this.bauvorhabenRepository.save(bauvorhaben);
+    }
+
+    private Bauvorhaben addBauvorhaben3() {
+        final var bauvorhaben = createBauvorhaben();
+        bauvorhaben.setNameVorhaben("Bauvorhaben 3");
+        return this.bauvorhabenRepository.save(bauvorhaben);
+    }
+
+    private Bauvorhaben addBauvorhaben4() {
+        final var bauvorhaben = createBauvorhaben();
+        bauvorhaben.setNameVorhaben("Bauvorhaben 4");
+        return this.bauvorhabenRepository.save(bauvorhaben);
+    }
+
+    private void addFoerdermixStaemme() {
+        for (final FoerdermixStamm foerdermixStamm : createFoerdermixStaemme()) {
+            this.foerdermixStammRepository.save(foerdermixStamm);
+        }
+    }
+
+    private void clearDatabase() {
+        this.infrastrukturabfrageRepository.deleteAll();
+        this.bauvorhabenRepository.deleteAll();
+        this.foerdermixStammRepository.deleteAll();
+        this.kinderkrippeRepository.deleteAll();
+        this.kindergartenRepository.deleteAll();
+        this.hausFuerKinderRepository.deleteAll();
+        this.gsNachmittagBetreuungRepository.deleteAll();
+        this.grundschuleRepository.deleteAll();
+        this.mittelschuleRepository.deleteAll();
+    }
+
+    public Infrastrukturabfrage createNichtOffiziellerVerfahrensschrittInfrastrukturabfrage() {
+        final Infrastrukturabfrage infrastrukturabfrage = new Infrastrukturabfrage();
+
+        final Abfrage abfrage = new Abfrage();
+        abfrage.setAdresse(new Adresse("Lothstraße", "7", "80331", "München"));
+        abfrage.setFristStellungnahme(LocalDate.of(2022, 12, 31));
+        abfrage.setAnmerkung("Bitte die Abfrage zeitnah behandeln");
+        abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_PLAN);
+        abfrage.setNameAbfrage("Neubausiedlung in Musterort");
+        abfrage.setStandVorhaben(StandVorhaben.BAUANTRAG_EINGEREICHT);
+        infrastrukturabfrage.setAbfrage(abfrage);
+        infrastrukturabfrage.setSobonRelevant(UncertainBoolean.TRUE);
+        infrastrukturabfrage.setSobonJahr(SobonVerfahrensgrundsaetzeJahr.JAHR_2021);
+        infrastrukturabfrage.setAktenzeichenProLbk("PRO12345");
+        infrastrukturabfrage.setOffiziellerVerfahrensschritt(UncertainBoolean.FALSE);
+
+        return infrastrukturabfrage;
+    }
+
+    public Infrastrukturabfrage createOffiziellerVerfahrensschrittInfrastrukturabfrage() {
+        final Infrastrukturabfrage infrastrukturabfrage = new Infrastrukturabfrage();
+
+        final Abfrage abfrage = new Abfrage();
+        abfrage.setAdresse(new Adresse("Sendlinger Straße", "1A", "80331", "München"));
+        abfrage.setFristStellungnahme(LocalDate.of(2022, 6, 1));
+        abfrage.setAnmerkung("Die Baugenehmigung wird nachgereicht");
+        abfrage.setStatusAbfrage(StatusAbfrage.ANGELEGT);
+        abfrage.setNameAbfrage("Wohnraumverdichtung Stadmitte");
+        abfrage.setStandVorhaben(StandVorhaben.BAUGENEHMIGUNG_ERTEILT);
+        infrastrukturabfrage.setAbfrage(abfrage);
+        infrastrukturabfrage.setSobonRelevant(UncertainBoolean.TRUE);
+        infrastrukturabfrage.setSobonJahr(SobonVerfahrensgrundsaetzeJahr.JAHR_2017_PLUS);
+        infrastrukturabfrage.setOffiziellerVerfahrensschritt(UncertainBoolean.TRUE);
+
+        return infrastrukturabfrage;
+    }
+
+    private Abfragevariante createAbfragevariante(final int variante) {
+        final Abfragevariante original = new Abfragevariante();
+        original.setAbfragevariantenNr(1);
+        original.setRelevant(true);
+        original.setAbfragevariantenName("Dorf");
+        original.setPlanungsrecht(variante == 1 ? Planungsrecht.BPLAN_PARAG_30 : Planungsrecht.BPLAN_PARAG_12);
+        original.setGeschossflaecheWohnen(new BigDecimal(variante == 1 ? "1234.56" : "70"));
+        original.setGesamtanzahlWe(variante == 1 ? 31 : 90);
+        if (variante == 2) {
+            original.setGeschossflaecheStudentenwohnungen(new BigDecimal(25));
+        }
+        original.setRealisierungVon(variante == 1 ? 2023 : 2024);
+        original.setRealisierungBis(variante == 1 ? 2024 : 2026);
+
+        original.setBauabschnitte(List.of(createBauabschnitt()));
+
+        original.setSonderwohnformen(false);
+
+        return original;
+    }
+
+    private Bauabschnitt createBauabschnitt() {
+        final Bauabschnitt bauabschnitt = new Bauabschnitt();
+        bauabschnitt.setBezeichnung("Der einzigartige Bauabschnitt");
+        bauabschnitt.setBaugebiete(List.of(createBaugebiet()));
+        return bauabschnitt;
+    }
+
+    private Baugebiet createBaugebiet() {
+        final Baugebiet baugebiet = new Baugebiet();
+        baugebiet.setBezeichnung("Das Baugebiet des einzigartigen Baubschnitts");
+        baugebiet.setBaugebietTyp(BaugebietTyp.WA);
+        baugebiet.setBauraten(List.of(createBaurate()));
+        return baugebiet;
+    }
+
+    private Baurate createBaurate() {
+        final Baurate baurate = new Baurate();
+        baurate.setJahr(2022);
+        baurate.setAnzahlWeGeplant(10);
+        baurate.setGeschossflaecheWohnenGeplant(BigDecimal.valueOf(15.55));
+        baurate.setFoerdermix(createFoerdermix());
+        return baurate;
+    }
+
+    private Foerdermix createFoerdermix() {
+        final Foerdermix foerdermix = new Foerdermix();
+        Foerderart foerderart = new Foerderart();
+        foerderart.setBezeichnung("AnteilMuenchenModell");
+        foerderart.setAnteilProzent(BigDecimal.valueOf(40));
+
+        Foerderart foerderart2 = new Foerderart();
+        foerderart2.setBezeichnung("AnteilBaugemeinschaft");
+        foerderart2.setAnteilProzent(BigDecimal.valueOf(60));
+
+        List<Foerderart> foerderarten = new ArrayList<>(Arrays.asList(foerderart, foerderart2));
+        foerdermix.setFoerderarten(foerderarten);
+
+        /*FoerdermixStamm foerdermixStamm = this.foerdermixStammRepository.findAll().stream().findFirst().get();
+        Foerdermix foerder = foerdermixStamm.getFoerdermix();*/
+
+        return foerdermix;
     }
 
     private void addInfrastruktureinrichtungen() {

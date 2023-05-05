@@ -6,6 +6,7 @@ package de.muenchen.isi.api.dto;
 
 import de.muenchen.isi.api.validation.GeschossflaecheWohnenSobonUrsaechlichValid;
 import de.muenchen.isi.api.validation.NotUnspecified;
+import de.muenchen.isi.api.validation.UniqueRelevantAbfragevarianteValid;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonVerfahrensgrundsaetzeJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
 import java.util.List;
@@ -35,6 +36,7 @@ public class InfrastrukturabfrageDto extends BaseEntityDto {
 
     @NotEmpty
     @Size(min = 1, max = 5)
+    @UniqueRelevantAbfragevarianteValid
     private List<@Valid @NotNull AbfragevarianteDto> abfragevarianten;
 
     @Size(max = 255, message = "Es sind maximal {max} Zeichen erlaubt")

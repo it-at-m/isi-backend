@@ -13,7 +13,6 @@ import de.muenchen.isi.domain.exception.KoordinatenException;
 import de.muenchen.isi.domain.exception.MimeTypeExtractionFailedException;
 import de.muenchen.isi.domain.exception.MimeTypeNotAllowedException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
-import de.muenchen.isi.domain.exception.RelevantAbfragevariantenNotAllowedException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -193,20 +192,6 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
                     ex,
                     httpStatus.value(),
                     List.of(ex.getMessage())
-                );
-        return ResponseEntity.status(httpStatus).body(errorResponseDto);
-    }
-
-    @ExceptionHandler(RelevantAbfragevariantenNotAllowedException.class)
-    public ResponseEntity<Object> handleRelevantAbfragevariantenNotAllowedException(
-        final RelevantAbfragevariantenNotAllowedException exception
-    ) {
-        final var httpStatus = HttpStatus.CONFLICT;
-        final var errorResponseDto =
-            this.createInformationResponseDtoWithTraceInformationAndTimestampAndOriginalExceptionNameAndStatusAndMessage(
-                    exception,
-                    httpStatus.value(),
-                    List.of(exception.getMessage())
                 );
         return ResponseEntity.status(httpStatus).body(errorResponseDto);
     }
