@@ -115,7 +115,7 @@ public class AbfrageStatusController {
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping("{id}/zurueck-an-abfrageersteller")
+    @PutMapping("{id}/zurueck-an-abfrageerstellung")
     @Transactional
     @Operation(summary = "Setzt eine Infrastrukturabfrage auf den Status ANGELEGT")
     @ApiResponses(
@@ -137,11 +137,11 @@ public class AbfrageStatusController {
         }
     )
     @PreAuthorize(
-        "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_ZURUECK_AN_ABFRAGEERSTELLER_ABFRAGE.name())"
+        "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_ZURUECK_AN_ABFRAGEERSTELLUNG_ABFRAGE.name())"
     )
-    public ResponseEntity<Void> zurueckAnAbfrageerstellerInfrastrukturabfrage(@PathVariable @NotNull final UUID id)
+    public ResponseEntity<Void> zurueckAbfrageerstellungInfrastrukturabfrage(@PathVariable @NotNull final UUID id)
         throws EntityNotFoundException, AbfrageStatusNotAllowedException {
-        this.abfrageStatusService.zurueckAnAbfrageErstellerAbfrage(id);
+        this.abfrageStatusService.zurueckAnAbfrageerstellungAbfrage(id);
         return ResponseEntity.ok().build();
     }
 
