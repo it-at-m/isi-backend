@@ -14,6 +14,7 @@ import de.muenchen.isi.domain.model.FoerderartModel;
 import de.muenchen.isi.domain.model.FoerdermixModel;
 import de.muenchen.isi.domain.model.InfrastrukturabfrageModel;
 import de.muenchen.isi.domain.model.common.AdresseModel;
+import de.muenchen.isi.domain.model.common.WGS84Model;
 import de.muenchen.isi.domain.model.filehandling.DokumentModel;
 import de.muenchen.isi.domain.model.filehandling.FilepathModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtDokument;
@@ -37,11 +38,14 @@ public class TestData {
         final InfrastrukturabfrageModel infrastrukturabfrage = new InfrastrukturabfrageModel();
 
         final AbfrageModel abfrage = new AbfrageModel();
-        abfrage.setAdresse(new AdresseModel("80331", "München", "Lothstraße", "7"));
+        final WGS84Model coordinate = new WGS84Model();
+        coordinate.setLatitude(48.1556795465256);
+        coordinate.setLongitude(11.5568456350688);
+        abfrage.setAdresse(new AdresseModel("80331", "München", "Lothstraße", "7", coordinate));
         abfrage.setAllgemeineOrtsangabe("12345 Musterort, Musterstraße 2");
         abfrage.setFristStellungnahme(LocalDate.of(2022, 12, 31));
         abfrage.setAnmerkung("Bitte die Abfrage zeitnah behandeln");
-        abfrage.setStatusAbfrage(StatusAbfrage.IN_ERFASSUNG);
+        abfrage.setStatusAbfrage(StatusAbfrage.ANGELEGT);
         abfrage.setNameAbfrage("Neubausiedlung in Musterort");
         abfrage.setStandVorhaben(StandVorhaben.BAUANTRAG_EINGEREICHT);
         infrastrukturabfrage.setAbfrage(abfrage);

@@ -7,6 +7,7 @@ package de.muenchen.isi.api.controller;
 import de.muenchen.isi.api.dto.InfrastrukturabfrageDto;
 import de.muenchen.isi.api.dto.error.InformationResponseDto;
 import de.muenchen.isi.api.mapper.AbfrageApiMapper;
+import de.muenchen.isi.domain.exception.AbfrageStatusNotAllowedException;
 import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.FileHandlingFailedException;
@@ -35,15 +36,17 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RequiredArgsConstructor
 @RestController
+@RequestMapping("/infrastruktur-abfragen")
 @Tag(name = "Abfrage", description = "API to interact with the Abfragen")
 @Validated
 public class AbfrageController {
@@ -55,7 +58,7 @@ public class AbfrageController {
     private final AbfrageApiMapper abfrageApiMapper;
 
     @Transactional(readOnly = true)
-    @GetMapping("infrastruktur-abfragen")
+    @GetMapping
     @Operation(
         summary = "Lade alle Infrastrukturabfragen",
         description = "Das Ergebnis wird nach Frist Stellungnahme absteigend sortiert"
@@ -71,7 +74,7 @@ public class AbfrageController {
         return new ResponseEntity<>(abfrageList, HttpStatus.OK);
     }
 
-    @GetMapping("infrastruktur-abfrage/{id}")
+    @GetMapping("/{id}")
     @Transactional(readOnly = true)
     @Operation(summary = "Lesen einer Infrastrukturabfrage")
     @ApiResponses(
@@ -92,7 +95,7 @@ public class AbfrageController {
         return ResponseEntity.ok(dto);
     }
 
-    @PostMapping("infrastruktur-abfrage")
+    @PostMapping
     @Transactional(rollbackFor = { OptimisticLockingException.class, UniqueViolationException.class })
     @Operation(summary = "Anlegen einer neuen Infrastrukturabfrage")
     @ApiResponses(
@@ -115,7 +118,7 @@ public class AbfrageController {
             ),
         }
     )
-    @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_WRITE_ABFRAGE.name())")
+    @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_POST_ABFRAGE.name())")
     public ResponseEntity<InfrastrukturabfrageDto> createInfrastrukturabfrage(
         @RequestBody @Valid @NotNull final InfrastrukturabfrageDto abfrageDto
     ) throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException {
@@ -131,15 +134,15 @@ public class AbfrageController {
         return new ResponseEntity<>(saved, HttpStatus.CREATED);
     }
 
-    @PutMapping("infrastruktur-abfrage")
+    @PatchMapping("/angelegt")
     @Transactional(rollbackFor = { OptimisticLockingException.class, UniqueViolationException.class })
-    @Operation(summary = "Aktualisierung einer Infrastrukturabfrage")
+    @Operation(summary = "Aktualisierung einer Infrastrukturabfrage.")
     @ApiResponses(
         value = {
             @ApiResponse(responseCode = "200", description = "OK -> Abfrage wurde erfolgreich aktualisiert."),
             @ApiResponse(
                 responseCode = "400",
-                description = "BAD_REQUEST -> Abfrage konnte nicht aktualisiert werden, überprüfen sie die Eingabe.",
+                description = "BAD_REQUEST -> Abfrage konnte nicht aktualisiert werden, überprüfen sie die Eingabe oder die Abfrage befindet sich in einem unzulässigen Status",
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
             ),
             @ApiResponse(
@@ -164,11 +167,11 @@ public class AbfrageController {
             ),
         }
     )
-    @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_WRITE_ABFRAGE.name())")
-    public ResponseEntity<InfrastrukturabfrageDto> updateInfrastrukturabfrage(
+    @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_PATCH_ABFRAGE_ANGELEGT.name())")
+    public ResponseEntity<InfrastrukturabfrageDto> patchAbfrageAngelegt(
         @RequestBody @Valid @NotNull final InfrastrukturabfrageDto abfrageDto
     )
-        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, FileHandlingFailedException, FileHandlingWithS3FailedException {
+        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, FileHandlingFailedException, FileHandlingWithS3FailedException {
         var model = this.abfrageApiMapper.dto2Model(abfrageDto);
         final var abfrage =
             this.bauvorhabenService.assignBauvorhabenToAbfrage(
@@ -176,12 +179,12 @@ public class AbfrageController {
                     model.getAbfrage()
                 );
         model.setAbfrage(abfrage);
-        model = this.abfrageService.updateInfrastrukturabfrageWithoutStatus(model);
+        model = this.abfrageService.patchAbfrageAngelegt(model);
         final var saved = this.abfrageApiMapper.model2Dto(model);
         return ResponseEntity.ok(saved);
     }
 
-    @DeleteMapping("infrastruktur-abfrage/{id}")
+    @DeleteMapping("/{id}")
     @Operation(summary = "Löschen einer Infrastrukturabfrage")
     @ApiResponses(
         value = {

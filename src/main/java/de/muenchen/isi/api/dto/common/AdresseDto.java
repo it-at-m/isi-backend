@@ -25,4 +25,6 @@ public class AdresseDto {
 
     @Size(max = 255, message = "Es sind maximal {max} Zeichen erlaubt")
     private String hausnummer;
+
+    private Wgs84Dto coordinate;
 }

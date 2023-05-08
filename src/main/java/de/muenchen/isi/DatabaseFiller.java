@@ -14,6 +14,7 @@ import de.muenchen.isi.infrastructure.entity.Foerderart;
 import de.muenchen.isi.infrastructure.entity.Foerdermix;
 import de.muenchen.isi.infrastructure.entity.Infrastrukturabfrage;
 import de.muenchen.isi.infrastructure.entity.common.Adresse;
+import de.muenchen.isi.infrastructure.entity.common.Wgs84;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtGsNachmittagBetreuung;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.BaugebietTyp;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Einrichtungstraeger;
@@ -80,130 +81,6 @@ public class DatabaseFiller implements CommandLineRunner {
     private final GrundschuleRepository grundschuleRepository;
 
     private final MittelschuleRepository mittelschuleRepository;
-
-    private static Bauvorhaben createBauvorhaben() {
-        final Bauvorhaben bauvorhaben = new Bauvorhaben();
-        bauvorhaben.setNameVorhaben("Bauvorhaben");
-        bauvorhaben.setEigentuemer("Eigentümer Name");
-        bauvorhaben.setGrundstuecksgroesse(1234L);
-        bauvorhaben.setStandVorhaben(StandVorhaben.BAUGENEHMIGUNG_ERTEILT);
-        bauvorhaben.setBauvorhabenNummer("12345");
-        bauvorhaben.setAdresse(new Adresse("Agnes-Pockels-Bogen", "21", "80992", "München"));
-
-        bauvorhaben.setBebauungsplannummer("13579");
-        bauvorhaben.setFisNummer("1A3D5H");
-
-        bauvorhaben.setAnmerkung("Bitte überprüft den Eigentümer und die Ortsangabe");
-        bauvorhaben.setSobonRelevant(UncertainBoolean.TRUE);
-        bauvorhaben.setPlanungsrecht(Planungsrecht.SONSTIGES_PARAG_165);
-        bauvorhaben.setArtFnp(List.of(BaugebietTyp.WA, BaugebietTyp.MK));
-
-        return bauvorhaben;
-    }
-
-    private static List<FoerdermixStamm> createFoerdermixStaemme() {
-        final List<FoerdermixStamm> returnListe = new ArrayList<>();
-
-        final FoerdermixStamm foerdermixStamm2021 = new FoerdermixStamm();
-        foerdermixStamm2021.setBezeichnungJahr("SoBoN 2021");
-        foerdermixStamm2021.setBezeichnung("Bebauungsplan - SoBoN-Ursächlichkeit: Grundmodell (20% PMB;SoBoN 2021)");
-
-        final Foerdermix foerdermix = new Foerdermix();
-        Foerderart foerderart = new Foerderart();
-        foerderart.setBezeichnung("AnteilMuenchenModell");
-        foerderart.setAnteilProzent(BigDecimal.valueOf(40));
-
-        Foerderart foerderart2 = new Foerderart();
-        foerderart2.setBezeichnung("AnteilBaugemeinschaft");
-        foerderart2.setAnteilProzent(BigDecimal.valueOf(60));
-
-        List<Foerderart> foerderarten = new ArrayList<>(Arrays.asList(foerderart, foerderart2));
-        foerdermix.setFoerderarten(foerderarten);
-
-        foerdermixStamm2021.setFoerdermix(foerdermix);
-        returnListe.add(foerdermixStamm2021);
-
-        final FoerdermixStamm secondFoerdermixStamm2021 = new FoerdermixStamm();
-        secondFoerdermixStamm2021.setBezeichnungJahr("SoBoN 2021");
-        secondFoerdermixStamm2021.setBezeichnung("Bebauungsplan - SoBoN-Ursächlichkeit: 0 % PMB (SoBoN 2021)");
-
-        final Foerdermix foerdermix2 = new Foerdermix();
-        Foerderart foerderart21 = new Foerderart();
-        foerderart21.setBezeichnung("AnteilBaugemeinschaften");
-        foerderart21.setAnteilProzent(BigDecimal.valueOf(69.50));
-
-        Foerderart foerderart22 = new Foerderart();
-        foerderart22.setBezeichnung("AnteilFreifinanzierterGeschosswohnungsbau");
-        foerderart22.setAnteilProzent(BigDecimal.valueOf(30.50));
-
-        List<Foerderart> foerderarten2 = new ArrayList<>(Arrays.asList(foerderart21, foerderart22));
-        foerdermix2.setFoerderarten(foerderarten2);
-
-        secondFoerdermixStamm2021.setFoerdermix(foerdermix2);
-        returnListe.add(secondFoerdermixStamm2021);
-
-
-        final FoerdermixStamm foerdermixStamm2017 = new FoerdermixStamm();
-        foerdermixStamm2017.setBezeichnungJahr("SoBoN 2017");
-        foerdermixStamm2017.setBezeichnung("Bebauungsplan - SoBoN-Ursächlichkeit: SoBoN 2017");
-
-        final Foerdermix foerdermix3 = new Foerdermix();
-        Foerderart foerderart31 = new Foerderart();
-        foerderart31.setBezeichnung("FreifinanzierterGeschosswohnungsbau");
-        foerderart31.setAnteilProzent(BigDecimal.valueOf(10));
-
-        Foerderart foerderart32 = new Foerderart();
-        foerderart32.setBezeichnung("GefoerderterMietwohnungsbau");
-        foerderart32.setAnteilProzent(BigDecimal.valueOf(20));
-
-        Foerderart foerderart33 = new Foerderart();
-        foerderart33.setBezeichnung("MuenchenModell");
-        foerderart33.setAnteilProzent(BigDecimal.valueOf(10));
-
-        Foerderart foerderart34 = new Foerderart();
-        foerderart34.setBezeichnung("PreisgedaempfterMietwohnungsbau");
-        foerderart34.setAnteilProzent(BigDecimal.valueOf(10));
-
-        Foerderart foerderart35 = new Foerderart();
-        foerderart35.setBezeichnung("KonzeptionellerMietwohnungsbau");
-        foerderart35.setAnteilProzent(BigDecimal.valueOf(10));
-
-        Foerderart foerderart36 = new Foerderart();
-        foerderart36.setBezeichnung("Baugemeinschaften");
-        foerderart36.setAnteilProzent(BigDecimal.valueOf(10));
-
-        Foerderart foerderart37 = new Foerderart();
-        foerderart37.setBezeichnung("EinUndZweifamilienhaeuser");
-        foerderart37.setAnteilProzent(BigDecimal.valueOf(30));
-
-        List<Foerderart> foerderarten3 = new ArrayList<>(Arrays.asList(foerderart31, foerderart32, foerderart33, foerderart34, foerderart35, foerderart36, foerderart37));
-        foerdermix3.setFoerderarten(foerderarten3);
-
-        foerdermixStamm2017.setFoerdermix(foerdermix3);
-        returnListe.add(foerdermixStamm2017);
-
-
-        final FoerdermixStamm foerdermixStammWeitere = new FoerdermixStamm();
-        foerdermixStammWeitere.setBezeichnungJahr("Weitere");
-        foerdermixStammWeitere.setBezeichnung("Nachverdichtung (§34 und §35 BauGB)");
-
-        final Foerdermix foerdermix4 = new Foerdermix();
-        Foerderart foerderart41 = new Foerderart();
-        foerderart41.setBezeichnung("AnteilPreisgedaempfterMietwohnungsbau");
-        foerderart41.setAnteilProzent(BigDecimal.valueOf(42));
-
-        Foerderart foerderart42 = new Foerderart();
-        foerderart42.setBezeichnung("AnteilKonzeptionellerMietwohnungsbau");
-        foerderart42.setAnteilProzent(BigDecimal.valueOf(58));
-
-        List<Foerderart> foerderarten4 = new ArrayList<>(Arrays.asList(foerderart41, foerderart42));
-        foerdermix4.setFoerderarten(foerderarten4);
-
-        foerdermixStammWeitere.setFoerdermix(foerdermix4);
-        returnListe.add(foerdermixStammWeitere);
-
-        return returnListe;
-    }
 
     /**
      * Zu Implementierende Methode des CommandLineRunners
@@ -298,10 +175,13 @@ public class DatabaseFiller implements CommandLineRunner {
         final Infrastrukturabfrage infrastrukturabfrage = new Infrastrukturabfrage();
 
         final Abfrage abfrage = new Abfrage();
-        abfrage.setAdresse(new Adresse("Lothstraße", "7", "80331", "München"));
+        final Wgs84 coordinate = new Wgs84();
+        coordinate.setLatitude(48.1556795465256);
+        coordinate.setLongitude(11.5568456350688);
+        abfrage.setAdresse(new Adresse("Lothstraße", "7", "80331", "München", coordinate));
         abfrage.setFristStellungnahme(LocalDate.of(2022, 12, 31));
         abfrage.setAnmerkung("Bitte die Abfrage zeitnah behandeln");
-        abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_PLAN);
+        abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
         abfrage.setNameAbfrage("Neubausiedlung in Musterort");
         abfrage.setStandVorhaben(StandVorhaben.BAUANTRAG_EINGEREICHT);
         infrastrukturabfrage.setAbfrage(abfrage);
@@ -317,7 +197,10 @@ public class DatabaseFiller implements CommandLineRunner {
         final Infrastrukturabfrage infrastrukturabfrage = new Infrastrukturabfrage();
 
         final Abfrage abfrage = new Abfrage();
-        abfrage.setAdresse(new Adresse("Sendlinger Straße", "1A", "80331", "München"));
+        final Wgs84 coordinate = new Wgs84();
+        coordinate.setLatitude(48.136129050253);
+        coordinate.setLongitude(11.5711182197544);
+        abfrage.setAdresse(new Adresse("Sendlinger Straße", "1A", "80331", "München", coordinate));
         abfrage.setFristStellungnahme(LocalDate.of(2022, 6, 1));
         abfrage.setAnmerkung("Die Baugenehmigung wird nachgereicht");
         abfrage.setStatusAbfrage(StatusAbfrage.ANGELEGT);
@@ -393,6 +276,133 @@ public class DatabaseFiller implements CommandLineRunner {
         Foerdermix foerder = foerdermixStamm.getFoerdermix();*/
 
         return foerdermix;
+    }
+
+    private static Bauvorhaben createBauvorhaben() {
+        final Bauvorhaben bauvorhaben = new Bauvorhaben();
+        bauvorhaben.setNameVorhaben("Bauvorhaben");
+        bauvorhaben.setEigentuemer("Eigentümer Name");
+        bauvorhaben.setGrundstuecksgroesse(1234L);
+        bauvorhaben.setStandVorhaben(StandVorhaben.BAUGENEHMIGUNG_ERTEILT);
+        bauvorhaben.setBauvorhabenNummer("12345");
+        final Wgs84 coordinate = new Wgs84();
+        coordinate.setLatitude(48.1741495213055);
+        coordinate.setLongitude(11.5352020030272);
+        bauvorhaben.setAdresse(new Adresse("Agnes-Pockels-Bogen", "21", "80992", "München", coordinate));
+        bauvorhaben.setBebauungsplannummer("13579");
+        bauvorhaben.setFisNummer("1A3D5H");
+
+        bauvorhaben.setAnmerkung("Bitte überprüft den Eigentümer und die Ortsangabe");
+        bauvorhaben.setSobonRelevant(UncertainBoolean.TRUE);
+        bauvorhaben.setPlanungsrecht(Planungsrecht.SONSTIGES_PARAG_165);
+        bauvorhaben.setArtFnp(List.of(BaugebietTyp.WA, BaugebietTyp.MK));
+
+        return bauvorhaben;
+    }
+
+
+    private static List<FoerdermixStamm> createFoerdermixStaemme() {
+        final List<FoerdermixStamm> returnListe = new ArrayList<>();
+
+        final FoerdermixStamm foerdermixStamm2021 = new FoerdermixStamm();
+        foerdermixStamm2021.setBezeichnungJahr("SoBoN 2021");
+        foerdermixStamm2021.setBezeichnung("Bebauungsplan - SoBoN-Ursächlichkeit: Grundmodell (20% PMB;SoBoN 2021)");
+
+        final Foerdermix foerdermix = new Foerdermix();
+        Foerderart foerderart = new Foerderart();
+        foerderart.setBezeichnung("AnteilMuenchenModell");
+        foerderart.setAnteilProzent(BigDecimal.valueOf(40));
+
+        Foerderart foerderart2 = new Foerderart();
+        foerderart2.setBezeichnung("AnteilBaugemeinschaft");
+        foerderart2.setAnteilProzent(BigDecimal.valueOf(60));
+
+        List<Foerderart> foerderarten = new ArrayList<>(Arrays.asList(foerderart, foerderart2));
+        foerdermix.setFoerderarten(foerderarten);
+
+        foerdermixStamm2021.setFoerdermix(foerdermix);
+        returnListe.add(foerdermixStamm2021);
+
+        final FoerdermixStamm secondFoerdermixStamm2021 = new FoerdermixStamm();
+        secondFoerdermixStamm2021.setBezeichnungJahr("SoBoN 2021");
+        secondFoerdermixStamm2021.setBezeichnung("Bebauungsplan - SoBoN-Ursächlichkeit: 0 % PMB (SoBoN 2021)");
+
+        final Foerdermix foerdermix2 = new Foerdermix();
+        Foerderart foerderart21 = new Foerderart();
+        foerderart21.setBezeichnung("AnteilBaugemeinschaften");
+        foerderart21.setAnteilProzent(BigDecimal.valueOf(69.50));
+
+        Foerderart foerderart22 = new Foerderart();
+        foerderart22.setBezeichnung("AnteilFreifinanzierterGeschosswohnungsbau");
+        foerderart22.setAnteilProzent(BigDecimal.valueOf(30.50));
+
+        List<Foerderart> foerderarten2 = new ArrayList<>(Arrays.asList(foerderart21, foerderart22));
+        foerdermix2.setFoerderarten(foerderarten2);
+
+        secondFoerdermixStamm2021.setFoerdermix(foerdermix2);
+        returnListe.add(secondFoerdermixStamm2021);
+
+
+        final FoerdermixStamm foerdermixStamm2017 = new FoerdermixStamm();
+        foerdermixStamm2017.setBezeichnungJahr("SoBoN 2017");
+        foerdermixStamm2017.setBezeichnung("Bebauungsplan - SoBoN-Ursächlichkeit: SoBoN 2017");
+
+        final Foerdermix foerdermix3 = new Foerdermix();
+        Foerderart foerderart31 = new Foerderart();
+        foerderart31.setBezeichnung("FreifinanzierterGeschosswohnungsbau");
+        foerderart31.setAnteilProzent(BigDecimal.valueOf(10));
+
+        Foerderart foerderart32 = new Foerderart();
+        foerderart32.setBezeichnung("GefoerderterMietwohnungsbau");
+        foerderart32.setAnteilProzent(BigDecimal.valueOf(20));
+
+        Foerderart foerderart33 = new Foerderart();
+        foerderart33.setBezeichnung("MuenchenModell");
+        foerderart33.setAnteilProzent(BigDecimal.valueOf(10));
+
+        Foerderart foerderart34 = new Foerderart();
+        foerderart34.setBezeichnung("PreisgedaempfterMietwohnungsbau");
+        foerderart34.setAnteilProzent(BigDecimal.valueOf(10));
+
+        Foerderart foerderart35 = new Foerderart();
+        foerderart35.setBezeichnung("KonzeptionellerMietwohnungsbau");
+        foerderart35.setAnteilProzent(BigDecimal.valueOf(10));
+
+        Foerderart foerderart36 = new Foerderart();
+        foerderart36.setBezeichnung("Baugemeinschaften");
+        foerderart36.setAnteilProzent(BigDecimal.valueOf(10));
+
+        Foerderart foerderart37 = new Foerderart();
+        foerderart37.setBezeichnung("EinUndZweifamilienhaeuser");
+        foerderart37.setAnteilProzent(BigDecimal.valueOf(30));
+
+        List<Foerderart> foerderarten3 = new ArrayList<>(Arrays.asList(foerderart31, foerderart32,foerderart33, foerderart34,foerderart35,foerderart36,foerderart37));
+        foerdermix3.setFoerderarten(foerderarten3);
+
+        foerdermixStamm2017.setFoerdermix(foerdermix3);
+        returnListe.add(foerdermixStamm2017);
+
+
+        final FoerdermixStamm foerdermixStammWeitere = new FoerdermixStamm();
+        foerdermixStammWeitere.setBezeichnungJahr("Weitere");
+        foerdermixStammWeitere.setBezeichnung("Nachverdichtung (§34 und §35 BauGB)");
+
+        final Foerdermix foerdermix4 = new Foerdermix();
+        Foerderart foerderart41 = new Foerderart();
+        foerderart41.setBezeichnung("AnteilPreisgedaempfterMietwohnungsbau");
+        foerderart41.setAnteilProzent(BigDecimal.valueOf(42));
+
+        Foerderart foerderart42 = new Foerderart();
+        foerderart42.setBezeichnung("AnteilKonzeptionellerMietwohnungsbau");
+        foerderart42.setAnteilProzent(BigDecimal.valueOf(58));
+
+        List<Foerderart> foerderarten4 = new ArrayList<>(Arrays.asList(foerderart41, foerderart42));
+        foerdermix4.setFoerderarten(foerderarten4);
+
+        foerdermixStammWeitere.setFoerdermix(foerdermix4);
+        returnListe.add(foerdermixStammWeitere);
+
+        return returnListe;
     }
 
     private void addInfrastruktureinrichtungen() {
@@ -562,6 +572,10 @@ public class DatabaseFiller implements CommandLineRunner {
         infrastruktureinrichtung.getAdresse().setHausnummer("4");
         infrastruktureinrichtung.getAdresse().setPlz("80469");
         infrastruktureinrichtung.getAdresse().setOrt("München");
+        final Wgs84 coordinate = new Wgs84();
+        coordinate.setLatitude(48.1337919447642);
+        coordinate.setLongitude(11.5766207727739);
+        infrastruktureinrichtung.getAdresse().setCoordinate(coordinate);
         infrastruktureinrichtung.setStatus(StatusInfrastruktureinrichtung.BESTAND);
         infrastruktureinrichtung.setEinrichtungstraeger(Einrichtungstraeger.SCHULE_STAEDTISCHE_EINRICHTUNG);
 
