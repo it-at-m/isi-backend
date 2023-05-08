@@ -4,6 +4,7 @@ import de.muenchen.isi.domain.model.common.AdresseModel;
 import de.muenchen.isi.domain.model.filehandling.DokumentModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.BaugebietTyp;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Planungsrecht;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonVerfahrensgrundsaetzeJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVorhaben;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
 import java.util.List;
@@ -33,6 +34,8 @@ public class BauvorhabenModel extends BaseEntityModel {
     private String anmerkung;
 
     private UncertainBoolean sobonRelevant;
+
+    private SobonVerfahrensgrundsaetzeJahr sobonJahr;
 
     private Planungsrecht planungsrecht;
 
