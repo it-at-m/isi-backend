@@ -89,7 +89,7 @@ class AbfrageStatusServiceTest {
         Assertions.assertThrows(EntityNotFoundException.class, () -> this.abfrageStatusService.abbrechenAbfrage(uuid));
         Assertions.assertThrows(
             EntityNotFoundException.class,
-            () -> this.abfrageStatusService.zurueckAnAbfrageErstellerAbfrage(uuid)
+            () -> this.abfrageStatusService.zurueckAnAbfrageerstellungAbfrage(uuid)
         );
         Assertions.assertThrows(EntityNotFoundException.class, () -> this.abfrageStatusService.abfrageSchliessen(uuid));
         Assertions.assertThrows(
@@ -121,8 +121,7 @@ class AbfrageStatusServiceTest {
         assertThat(saved.getAbfrage().getStatusAbfrage(), is(StatusAbfrage.OFFEN));
 
         abfrage = this.abfrageService.getInfrastrukturabfrageById(uuid);
-        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.OFFEN);
-        this.abfrageService.updateInfrastrukturabfrageWithStatus(abfrage);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.OFFEN);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
             () -> this.abfrageStatusService.freigabeAbfrage(uuid)
@@ -131,8 +130,7 @@ class AbfrageStatusServiceTest {
         assertThat(saved.getAbfrage().getStatusAbfrage(), is(StatusAbfrage.OFFEN));
 
         abfrage = this.abfrageService.getInfrastrukturabfrageById(uuid);
-        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
-        this.abfrageService.updateInfrastrukturabfrageWithStatus(abfrage);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
             () -> this.abfrageStatusService.freigabeAbfrage(uuid)
@@ -141,8 +139,7 @@ class AbfrageStatusServiceTest {
         assertThat(saved.getAbfrage().getStatusAbfrage(), is(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG));
 
         abfrage = this.abfrageService.getInfrastrukturabfrageById(uuid);
-        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
-        this.abfrageService.updateInfrastrukturabfrageWithStatus(abfrage);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
             () -> this.abfrageStatusService.freigabeAbfrage(uuid)
@@ -151,8 +148,7 @@ class AbfrageStatusServiceTest {
         assertThat(saved.getAbfrage().getStatusAbfrage(), is(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE));
 
         abfrage = this.abfrageService.getInfrastrukturabfrageById(uuid);
-        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT);
-        this.abfrageService.updateInfrastrukturabfrageWithStatus(abfrage);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.BEDARFSMELDUNG_ERFOLGT);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
             () -> this.abfrageStatusService.freigabeAbfrage(uuid)
@@ -161,8 +157,7 @@ class AbfrageStatusServiceTest {
         assertThat(saved.getAbfrage().getStatusAbfrage(), is(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT));
 
         abfrage = this.abfrageService.getInfrastrukturabfrageById(uuid);
-        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ERLEDIGT);
-        this.abfrageService.updateInfrastrukturabfrageWithStatus(abfrage);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.ERLEDIGT);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
             () -> this.abfrageStatusService.freigabeAbfrage(uuid)
@@ -171,8 +166,7 @@ class AbfrageStatusServiceTest {
         assertThat(saved.getAbfrage().getStatusAbfrage(), is(StatusAbfrage.ERLEDIGT));
 
         abfrage = this.abfrageService.getInfrastrukturabfrageById(uuid);
-        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ABBRUCH);
-        this.abfrageService.updateInfrastrukturabfrageWithStatus(abfrage);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.ABBRUCH);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
             () -> this.abfrageStatusService.freigabeAbfrage(uuid)
@@ -187,8 +181,7 @@ class AbfrageStatusServiceTest {
         throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException, FileHandlingFailedException, FileHandlingWithS3FailedException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
-        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.OFFEN);
-        this.abfrageService.updateInfrastrukturabfrageWithStatus(abfrage);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.OFFEN);
 
         final var uuid = abfrage.getId();
 
@@ -198,8 +191,7 @@ class AbfrageStatusServiceTest {
         assertThat(saved.getAbfrage().getStatusAbfrage(), is(StatusAbfrage.ABBRUCH));
 
         abfrage = this.abfrageService.getInfrastrukturabfrageById(uuid);
-        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ANGELEGT);
-        this.abfrageService.updateInfrastrukturabfrageWithStatus(abfrage);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.ANGELEGT);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
             () -> this.abfrageStatusService.abbrechenAbfrage(uuid)
@@ -208,8 +200,7 @@ class AbfrageStatusServiceTest {
         assertThat(saved.getAbfrage().getStatusAbfrage(), is(StatusAbfrage.ANGELEGT));
 
         abfrage = this.abfrageService.getInfrastrukturabfrageById(uuid);
-        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ERLEDIGT);
-        this.abfrageService.updateInfrastrukturabfrageWithStatus(abfrage);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.ERLEDIGT);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
             () -> this.abfrageStatusService.abbrechenAbfrage(uuid)
@@ -224,8 +215,7 @@ class AbfrageStatusServiceTest {
         throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException, FileHandlingFailedException, FileHandlingWithS3FailedException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
-        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.OFFEN);
-        this.abfrageService.updateInfrastrukturabfrageWithStatus(abfrage);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.OFFEN);
 
         final var uuid = abfrage.getId();
 
@@ -235,8 +225,7 @@ class AbfrageStatusServiceTest {
         assertThat(saved.getAbfrage().getStatusAbfrage(), is(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG));
 
         abfrage = this.abfrageService.getInfrastrukturabfrageById(uuid);
-        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ANGELEGT);
-        this.abfrageService.updateInfrastrukturabfrageWithStatus(abfrage);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.ANGELEGT);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
             () -> this.abfrageStatusService.inBearbeitungSetzenAbfrage(uuid)
@@ -245,8 +234,7 @@ class AbfrageStatusServiceTest {
         assertThat(saved.getAbfrage().getStatusAbfrage(), is(StatusAbfrage.ANGELEGT));
 
         abfrage = this.abfrageService.getInfrastrukturabfrageById(uuid);
-        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ERLEDIGT);
-        this.abfrageService.updateInfrastrukturabfrageWithStatus(abfrage);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.ERLEDIGT);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
             () -> this.abfrageStatusService.inBearbeitungSetzenAbfrage(uuid)
@@ -261,8 +249,7 @@ class AbfrageStatusServiceTest {
         throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException, FileHandlingFailedException, FileHandlingWithS3FailedException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
-        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
-        this.abfrageService.updateInfrastrukturabfrageWithStatus(abfrage);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
 
         final var uuid = abfrage.getId();
 
@@ -272,8 +259,7 @@ class AbfrageStatusServiceTest {
         assertThat(saved.getAbfrage().getStatusAbfrage(), is(StatusAbfrage.ABBRUCH));
 
         abfrage = this.abfrageService.getInfrastrukturabfrageById(uuid);
-        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ANGELEGT);
-        this.abfrageService.updateInfrastrukturabfrageWithStatus(abfrage);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.ANGELEGT);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
             () -> this.abfrageStatusService.abbrechenAbfrage(uuid)
@@ -282,8 +268,7 @@ class AbfrageStatusServiceTest {
         assertThat(saved.getAbfrage().getStatusAbfrage(), is(StatusAbfrage.ANGELEGT));
 
         abfrage = this.abfrageService.getInfrastrukturabfrageById(uuid);
-        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ERLEDIGT);
-        this.abfrageService.updateInfrastrukturabfrageWithStatus(abfrage);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.ERLEDIGT);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
             () -> this.abfrageStatusService.abbrechenAbfrage(uuid)
@@ -298,8 +283,7 @@ class AbfrageStatusServiceTest {
         throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException, FileHandlingFailedException, FileHandlingWithS3FailedException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
-        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
-        this.abfrageService.updateInfrastrukturabfrageWithStatus(abfrage);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
 
         final var uuid = abfrage.getId();
 
@@ -309,8 +293,7 @@ class AbfrageStatusServiceTest {
         assertThat(saved.getAbfrage().getStatusAbfrage(), is(StatusAbfrage.ABBRUCH));
 
         abfrage = this.abfrageService.getInfrastrukturabfrageById(uuid);
-        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ANGELEGT);
-        this.abfrageService.updateInfrastrukturabfrageWithStatus(abfrage);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.ANGELEGT);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
             () -> this.abfrageStatusService.abbrechenAbfrage(uuid)
@@ -319,8 +302,7 @@ class AbfrageStatusServiceTest {
         assertThat(saved.getAbfrage().getStatusAbfrage(), is(StatusAbfrage.ANGELEGT));
 
         abfrage = this.abfrageService.getInfrastrukturabfrageById(uuid);
-        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ERLEDIGT);
-        this.abfrageService.updateInfrastrukturabfrageWithStatus(abfrage);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.ERLEDIGT);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
             () -> this.abfrageStatusService.abbrechenAbfrage(uuid)
@@ -335,8 +317,7 @@ class AbfrageStatusServiceTest {
         throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException, FileHandlingFailedException, FileHandlingWithS3FailedException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
-        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT);
-        this.abfrageService.updateInfrastrukturabfrageWithStatus(abfrage);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.BEDARFSMELDUNG_ERFOLGT);
 
         final var uuid = abfrage.getId();
 
@@ -346,8 +327,7 @@ class AbfrageStatusServiceTest {
         assertThat(saved.getAbfrage().getStatusAbfrage(), is(StatusAbfrage.ABBRUCH));
 
         abfrage = this.abfrageService.getInfrastrukturabfrageById(uuid);
-        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ANGELEGT);
-        this.abfrageService.updateInfrastrukturabfrageWithStatus(abfrage);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.ANGELEGT);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
             () -> this.abfrageStatusService.abbrechenAbfrage(uuid)
@@ -356,8 +336,7 @@ class AbfrageStatusServiceTest {
         assertThat(saved.getAbfrage().getStatusAbfrage(), is(StatusAbfrage.ANGELEGT));
 
         abfrage = this.abfrageService.getInfrastrukturabfrageById(uuid);
-        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ERLEDIGT);
-        this.abfrageService.updateInfrastrukturabfrageWithStatus(abfrage);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.ERLEDIGT);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
             () -> this.abfrageStatusService.abbrechenAbfrage(uuid)
@@ -368,56 +347,51 @@ class AbfrageStatusServiceTest {
 
     @Test
     @Transactional
-    void zurueckAnAbfrageerstellerVonInBearbeitungSachbearbeitung()
+    void zurueckAnAbfrageerstellungVonInBearbeitungSachbearbeitung()
         throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException, FileHandlingFailedException, FileHandlingWithS3FailedException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
-        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
-        this.abfrageService.updateInfrastrukturabfrageWithStatus(abfrage);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
 
         final var uuid = abfrage.getId();
 
-        this.abfrageStatusService.zurueckAnAbfrageErstellerAbfrage(uuid);
+        this.abfrageStatusService.zurueckAnAbfrageerstellungAbfrage(uuid);
 
         InfrastrukturabfrageModel saved = this.abfrageService.getInfrastrukturabfrageById(uuid);
         assertThat(saved.getAbfrage().getStatusAbfrage(), is(StatusAbfrage.ANGELEGT));
 
         abfrage = this.abfrageService.getInfrastrukturabfrageById(uuid);
-        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
-        this.abfrageService.updateInfrastrukturabfrageWithStatus(abfrage);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.zurueckAnAbfrageErstellerAbfrage(uuid)
+            () -> this.abfrageStatusService.zurueckAnAbfrageerstellungAbfrage(uuid)
         );
         saved = this.abfrageService.getInfrastrukturabfrageById(uuid);
         assertThat(saved.getAbfrage().getStatusAbfrage(), is(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE));
 
         abfrage = this.abfrageService.getInfrastrukturabfrageById(uuid);
-        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT);
-        this.abfrageService.updateInfrastrukturabfrageWithStatus(abfrage);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.BEDARFSMELDUNG_ERFOLGT);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.zurueckAnAbfrageErstellerAbfrage(uuid)
+            () -> this.abfrageStatusService.zurueckAnAbfrageerstellungAbfrage(uuid)
         );
         saved = this.abfrageService.getInfrastrukturabfrageById(uuid);
         assertThat(saved.getAbfrage().getStatusAbfrage(), is(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT));
 
         abfrage = this.abfrageService.getInfrastrukturabfrageById(uuid);
-        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ERLEDIGT);
-        this.abfrageService.updateInfrastrukturabfrageWithStatus(abfrage);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.ERLEDIGT);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.zurueckAnAbfrageErstellerAbfrage(uuid)
+            () -> this.abfrageStatusService.zurueckAnAbfrageerstellungAbfrage(uuid)
         );
         saved = this.abfrageService.getInfrastrukturabfrageById(uuid);
         assertThat(saved.getAbfrage().getStatusAbfrage(), is(StatusAbfrage.ERLEDIGT));
 
         abfrage = this.abfrageService.getInfrastrukturabfrageById(uuid);
-        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ABBRUCH);
-        this.abfrageService.updateInfrastrukturabfrageWithStatus(abfrage);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.ABBRUCH);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.zurueckAnAbfrageErstellerAbfrage(uuid)
+            () -> this.abfrageStatusService.zurueckAnAbfrageerstellungAbfrage(uuid)
         );
         saved = this.abfrageService.getInfrastrukturabfrageById(uuid);
         assertThat(saved.getAbfrage().getStatusAbfrage(), is(StatusAbfrage.ABBRUCH));
@@ -425,56 +399,51 @@ class AbfrageStatusServiceTest {
 
     @Test
     @Transactional
-    void zurueckAnAbfrageerstellerVonOffen()
+    void zurueckAnAbfrageerstellungVonOffen()
         throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException, FileHandlingFailedException, FileHandlingWithS3FailedException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
-        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.OFFEN);
-        this.abfrageService.updateInfrastrukturabfrageWithStatus(abfrage);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.OFFEN);
 
         final var uuid = abfrage.getId();
 
-        this.abfrageStatusService.zurueckAnAbfrageErstellerAbfrage(uuid);
+        this.abfrageStatusService.zurueckAnAbfrageerstellungAbfrage(uuid);
 
         InfrastrukturabfrageModel saved = this.abfrageService.getInfrastrukturabfrageById(uuid);
         assertThat(saved.getAbfrage().getStatusAbfrage(), is(StatusAbfrage.ANGELEGT));
 
         abfrage = this.abfrageService.getInfrastrukturabfrageById(uuid);
-        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
-        this.abfrageService.updateInfrastrukturabfrageWithStatus(abfrage);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.zurueckAnAbfrageErstellerAbfrage(uuid)
+            () -> this.abfrageStatusService.zurueckAnAbfrageerstellungAbfrage(uuid)
         );
         saved = this.abfrageService.getInfrastrukturabfrageById(uuid);
         assertThat(saved.getAbfrage().getStatusAbfrage(), is(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE));
 
         abfrage = this.abfrageService.getInfrastrukturabfrageById(uuid);
-        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT);
-        this.abfrageService.updateInfrastrukturabfrageWithStatus(abfrage);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.BEDARFSMELDUNG_ERFOLGT);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.zurueckAnAbfrageErstellerAbfrage(uuid)
+            () -> this.abfrageStatusService.zurueckAnAbfrageerstellungAbfrage(uuid)
         );
         saved = this.abfrageService.getInfrastrukturabfrageById(uuid);
         assertThat(saved.getAbfrage().getStatusAbfrage(), is(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT));
 
         abfrage = this.abfrageService.getInfrastrukturabfrageById(uuid);
-        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ERLEDIGT);
-        this.abfrageService.updateInfrastrukturabfrageWithStatus(abfrage);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.ERLEDIGT);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.zurueckAnAbfrageErstellerAbfrage(uuid)
+            () -> this.abfrageStatusService.zurueckAnAbfrageerstellungAbfrage(uuid)
         );
         saved = this.abfrageService.getInfrastrukturabfrageById(uuid);
         assertThat(saved.getAbfrage().getStatusAbfrage(), is(StatusAbfrage.ERLEDIGT));
 
         abfrage = this.abfrageService.getInfrastrukturabfrageById(uuid);
-        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ABBRUCH);
-        this.abfrageService.updateInfrastrukturabfrageWithStatus(abfrage);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.ABBRUCH);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.zurueckAnAbfrageErstellerAbfrage(uuid)
+            () -> this.abfrageStatusService.zurueckAnAbfrageerstellungAbfrage(uuid)
         );
         saved = this.abfrageService.getInfrastrukturabfrageById(uuid);
         assertThat(saved.getAbfrage().getStatusAbfrage(), is(StatusAbfrage.ABBRUCH));
@@ -486,8 +455,7 @@ class AbfrageStatusServiceTest {
         throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException, FileHandlingFailedException, FileHandlingWithS3FailedException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
-        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
-        this.abfrageService.updateInfrastrukturabfrageWithStatus(abfrage);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
 
         final var uuid = abfrage.getId();
 
@@ -496,8 +464,7 @@ class AbfrageStatusServiceTest {
         assertThat(saved.getAbfrage().getStatusAbfrage(), is(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG));
 
         abfrage = this.abfrageService.getInfrastrukturabfrageById(uuid);
-        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ERLEDIGT);
-        this.abfrageService.updateInfrastrukturabfrageWithStatus(abfrage);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.ERLEDIGT);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
             () -> this.abfrageStatusService.zurueckAnSachbearbeitungAbfrage(uuid)
@@ -506,8 +473,7 @@ class AbfrageStatusServiceTest {
         assertThat(saved.getAbfrage().getStatusAbfrage(), is(StatusAbfrage.ERLEDIGT));
 
         abfrage = this.abfrageService.getInfrastrukturabfrageById(uuid);
-        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ABBRUCH);
-        this.abfrageService.updateInfrastrukturabfrageWithStatus(abfrage);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.ABBRUCH);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
             () -> this.abfrageStatusService.zurueckAnSachbearbeitungAbfrage(uuid)
@@ -522,8 +488,7 @@ class AbfrageStatusServiceTest {
         throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException, FileHandlingFailedException, FileHandlingWithS3FailedException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
-        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
-        this.abfrageService.updateInfrastrukturabfrageWithStatus(abfrage);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
 
         final var uuid = abfrage.getId();
 
@@ -533,8 +498,7 @@ class AbfrageStatusServiceTest {
         assertThat(saved.getAbfrage().getStatusAbfrage(), is(StatusAbfrage.ERLEDIGT));
 
         abfrage = this.abfrageService.getInfrastrukturabfrageById(uuid);
-        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ANGELEGT);
-        this.abfrageService.updateInfrastrukturabfrageWithStatus(abfrage);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.ANGELEGT);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
             () -> this.abfrageStatusService.abfrageSchliessen(uuid)
@@ -543,8 +507,7 @@ class AbfrageStatusServiceTest {
         assertThat(saved.getAbfrage().getStatusAbfrage(), is(StatusAbfrage.ANGELEGT));
 
         abfrage = this.abfrageService.getInfrastrukturabfrageById(uuid);
-        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.OFFEN);
-        this.abfrageService.updateInfrastrukturabfrageWithStatus(abfrage);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.OFFEN);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
             () -> this.abfrageStatusService.abfrageSchliessen(uuid)
@@ -553,8 +516,7 @@ class AbfrageStatusServiceTest {
         assertThat(saved.getAbfrage().getStatusAbfrage(), is(StatusAbfrage.OFFEN));
 
         abfrage = this.abfrageService.getInfrastrukturabfrageById(uuid);
-        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
-        this.abfrageService.updateInfrastrukturabfrageWithStatus(abfrage);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
             () -> this.abfrageStatusService.abfrageSchliessen(uuid)
@@ -563,8 +525,7 @@ class AbfrageStatusServiceTest {
         assertThat(saved.getAbfrage().getStatusAbfrage(), is(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE));
 
         abfrage = this.abfrageService.getInfrastrukturabfrageById(uuid);
-        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT);
-        this.abfrageService.updateInfrastrukturabfrageWithStatus(abfrage);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.BEDARFSMELDUNG_ERFOLGT);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
             () -> this.abfrageStatusService.abfrageSchliessen(uuid)
@@ -573,8 +534,7 @@ class AbfrageStatusServiceTest {
         assertThat(saved.getAbfrage().getStatusAbfrage(), is(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT));
 
         abfrage = this.abfrageService.getInfrastrukturabfrageById(uuid);
-        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ERLEDIGT);
-        this.abfrageService.updateInfrastrukturabfrageWithStatus(abfrage);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.ERLEDIGT);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
             () -> this.abfrageStatusService.abfrageSchliessen(uuid)
@@ -583,8 +543,7 @@ class AbfrageStatusServiceTest {
         assertThat(saved.getAbfrage().getStatusAbfrage(), is(StatusAbfrage.ERLEDIGT));
 
         abfrage = this.abfrageService.getInfrastrukturabfrageById(uuid);
-        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ABBRUCH);
-        this.abfrageService.updateInfrastrukturabfrageWithStatus(abfrage);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.ABBRUCH);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
             () -> this.abfrageStatusService.abfrageSchliessen(uuid)
@@ -599,8 +558,7 @@ class AbfrageStatusServiceTest {
         throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException, FileHandlingFailedException, FileHandlingWithS3FailedException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
-        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
-        this.abfrageService.updateInfrastrukturabfrageWithStatus(abfrage);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
 
         final var uuid = abfrage.getId();
 
@@ -610,8 +568,7 @@ class AbfrageStatusServiceTest {
         assertThat(saved.getAbfrage().getStatusAbfrage(), is(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE));
 
         abfrage = this.abfrageService.getInfrastrukturabfrageById(uuid);
-        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ANGELEGT);
-        this.abfrageService.updateInfrastrukturabfrageWithStatus(abfrage);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.ANGELEGT);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
             () -> this.abfrageStatusService.verschickenDerStellungnahme(uuid)
@@ -620,8 +577,7 @@ class AbfrageStatusServiceTest {
         assertThat(saved.getAbfrage().getStatusAbfrage(), is(StatusAbfrage.ANGELEGT));
 
         abfrage = this.abfrageService.getInfrastrukturabfrageById(uuid);
-        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.OFFEN);
-        this.abfrageService.updateInfrastrukturabfrageWithStatus(abfrage);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.OFFEN);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
             () -> this.abfrageStatusService.verschickenDerStellungnahme(uuid)
@@ -630,8 +586,7 @@ class AbfrageStatusServiceTest {
         assertThat(saved.getAbfrage().getStatusAbfrage(), is(StatusAbfrage.OFFEN));
 
         abfrage = this.abfrageService.getInfrastrukturabfrageById(uuid);
-        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
-        this.abfrageService.updateInfrastrukturabfrageWithStatus(abfrage);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
             () -> this.abfrageStatusService.verschickenDerStellungnahme(uuid)
@@ -640,8 +595,7 @@ class AbfrageStatusServiceTest {
         assertThat(saved.getAbfrage().getStatusAbfrage(), is(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE));
 
         abfrage = this.abfrageService.getInfrastrukturabfrageById(uuid);
-        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT);
-        this.abfrageService.updateInfrastrukturabfrageWithStatus(abfrage);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.BEDARFSMELDUNG_ERFOLGT);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
             () -> this.abfrageStatusService.verschickenDerStellungnahme(uuid)
@@ -650,8 +604,7 @@ class AbfrageStatusServiceTest {
         assertThat(saved.getAbfrage().getStatusAbfrage(), is(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT));
 
         abfrage = this.abfrageService.getInfrastrukturabfrageById(uuid);
-        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ERLEDIGT);
-        this.abfrageService.updateInfrastrukturabfrageWithStatus(abfrage);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.ERLEDIGT);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
             () -> this.abfrageStatusService.verschickenDerStellungnahme(uuid)
@@ -660,8 +613,7 @@ class AbfrageStatusServiceTest {
         assertThat(saved.getAbfrage().getStatusAbfrage(), is(StatusAbfrage.ERLEDIGT));
 
         abfrage = this.abfrageService.getInfrastrukturabfrageById(uuid);
-        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ABBRUCH);
-        this.abfrageService.updateInfrastrukturabfrageWithStatus(abfrage);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.ABBRUCH);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
             () -> this.abfrageStatusService.verschickenDerStellungnahme(uuid)
@@ -676,8 +628,7 @@ class AbfrageStatusServiceTest {
         throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException, FileHandlingFailedException, FileHandlingWithS3FailedException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
-        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
-        this.abfrageService.updateInfrastrukturabfrageWithStatus(abfrage);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
 
         final var uuid = abfrage.getId();
 
@@ -687,8 +638,7 @@ class AbfrageStatusServiceTest {
         assertThat(saved.getAbfrage().getStatusAbfrage(), is(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT));
 
         abfrage = this.abfrageService.getInfrastrukturabfrageById(uuid);
-        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ANGELEGT);
-        this.abfrageService.updateInfrastrukturabfrageWithStatus(abfrage);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.ANGELEGT);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
             () -> this.abfrageStatusService.bedarfsmeldungErfolgt(uuid)
@@ -697,8 +647,7 @@ class AbfrageStatusServiceTest {
         assertThat(saved.getAbfrage().getStatusAbfrage(), is(StatusAbfrage.ANGELEGT));
 
         abfrage = this.abfrageService.getInfrastrukturabfrageById(uuid);
-        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.OFFEN);
-        this.abfrageService.updateInfrastrukturabfrageWithStatus(abfrage);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.OFFEN);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
             () -> this.abfrageStatusService.bedarfsmeldungErfolgt(uuid)
@@ -707,8 +656,7 @@ class AbfrageStatusServiceTest {
         assertThat(saved.getAbfrage().getStatusAbfrage(), is(StatusAbfrage.OFFEN));
 
         abfrage = this.abfrageService.getInfrastrukturabfrageById(uuid);
-        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
-        this.abfrageService.updateInfrastrukturabfrageWithStatus(abfrage);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
             () -> this.abfrageStatusService.bedarfsmeldungErfolgt(uuid)
@@ -717,8 +665,7 @@ class AbfrageStatusServiceTest {
         assertThat(saved.getAbfrage().getStatusAbfrage(), is(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG));
 
         abfrage = this.abfrageService.getInfrastrukturabfrageById(uuid);
-        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT);
-        this.abfrageService.updateInfrastrukturabfrageWithStatus(abfrage);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.BEDARFSMELDUNG_ERFOLGT);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
             () -> this.abfrageStatusService.bedarfsmeldungErfolgt(uuid)
@@ -727,8 +674,7 @@ class AbfrageStatusServiceTest {
         assertThat(saved.getAbfrage().getStatusAbfrage(), is(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT));
 
         abfrage = this.abfrageService.getInfrastrukturabfrageById(uuid);
-        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ERLEDIGT);
-        this.abfrageService.updateInfrastrukturabfrageWithStatus(abfrage);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.ERLEDIGT);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
             () -> this.abfrageStatusService.bedarfsmeldungErfolgt(uuid)
@@ -737,8 +683,7 @@ class AbfrageStatusServiceTest {
         assertThat(saved.getAbfrage().getStatusAbfrage(), is(StatusAbfrage.ERLEDIGT));
 
         abfrage = this.abfrageService.getInfrastrukturabfrageById(uuid);
-        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ABBRUCH);
-        this.abfrageService.updateInfrastrukturabfrageWithStatus(abfrage);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.ABBRUCH);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
             () -> this.abfrageStatusService.bedarfsmeldungErfolgt(uuid)
@@ -753,8 +698,7 @@ class AbfrageStatusServiceTest {
         throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException, FileHandlingFailedException, FileHandlingWithS3FailedException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
-        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT);
-        this.abfrageService.updateInfrastrukturabfrageWithStatus(abfrage);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.BEDARFSMELDUNG_ERFOLGT);
 
         final var uuid = abfrage.getId();
 
@@ -764,8 +708,7 @@ class AbfrageStatusServiceTest {
         assertThat(saved.getAbfrage().getStatusAbfrage(), is(StatusAbfrage.ERLEDIGT));
 
         abfrage = this.abfrageService.getInfrastrukturabfrageById(uuid);
-        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ANGELEGT);
-        this.abfrageService.updateInfrastrukturabfrageWithStatus(abfrage);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.ANGELEGT);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
             () -> this.abfrageStatusService.speichernVonSozialinfrastrukturVersorgung(uuid)
@@ -774,8 +717,7 @@ class AbfrageStatusServiceTest {
         assertThat(saved.getAbfrage().getStatusAbfrage(), is(StatusAbfrage.ANGELEGT));
 
         abfrage = this.abfrageService.getInfrastrukturabfrageById(uuid);
-        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.OFFEN);
-        this.abfrageService.updateInfrastrukturabfrageWithStatus(abfrage);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.OFFEN);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
             () -> this.abfrageStatusService.speichernVonSozialinfrastrukturVersorgung(uuid)
@@ -784,8 +726,7 @@ class AbfrageStatusServiceTest {
         assertThat(saved.getAbfrage().getStatusAbfrage(), is(StatusAbfrage.OFFEN));
 
         abfrage = this.abfrageService.getInfrastrukturabfrageById(uuid);
-        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
-        this.abfrageService.updateInfrastrukturabfrageWithStatus(abfrage);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
             () -> this.abfrageStatusService.speichernVonSozialinfrastrukturVersorgung(uuid)
@@ -794,8 +735,7 @@ class AbfrageStatusServiceTest {
         assertThat(saved.getAbfrage().getStatusAbfrage(), is(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG));
 
         abfrage = this.abfrageService.getInfrastrukturabfrageById(uuid);
-        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
-        this.abfrageService.updateInfrastrukturabfrageWithStatus(abfrage);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
             () -> this.abfrageStatusService.speichernVonSozialinfrastrukturVersorgung(uuid)
@@ -804,8 +744,7 @@ class AbfrageStatusServiceTest {
         assertThat(saved.getAbfrage().getStatusAbfrage(), is(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE));
 
         abfrage = this.abfrageService.getInfrastrukturabfrageById(uuid);
-        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ERLEDIGT);
-        this.abfrageService.updateInfrastrukturabfrageWithStatus(abfrage);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.ERLEDIGT);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
             () -> this.abfrageStatusService.speichernVonSozialinfrastrukturVersorgung(uuid)
@@ -814,8 +753,7 @@ class AbfrageStatusServiceTest {
         assertThat(saved.getAbfrage().getStatusAbfrage(), is(StatusAbfrage.ERLEDIGT));
 
         abfrage = this.abfrageService.getInfrastrukturabfrageById(uuid);
-        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ABBRUCH);
-        this.abfrageService.updateInfrastrukturabfrageWithStatus(abfrage);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.ABBRUCH);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
             () -> this.abfrageStatusService.speichernVonSozialinfrastrukturVersorgung(uuid)
@@ -830,8 +768,7 @@ class AbfrageStatusServiceTest {
         throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException, FileHandlingFailedException, FileHandlingWithS3FailedException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
-        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ERLEDIGT);
-        this.abfrageService.updateInfrastrukturabfrageWithStatus(abfrage);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.ERLEDIGT);
 
         final var uuid = abfrage.getId();
 
@@ -841,8 +778,7 @@ class AbfrageStatusServiceTest {
         assertThat(saved.getAbfrage().getStatusAbfrage(), is(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG));
 
         abfrage = this.abfrageService.getInfrastrukturabfrageById(uuid);
-        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ANGELEGT);
-        this.abfrageService.updateInfrastrukturabfrageWithStatus(abfrage);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.ANGELEGT);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
             () -> this.abfrageStatusService.erneuteBearbeitenAbfrage(uuid)
@@ -851,8 +787,7 @@ class AbfrageStatusServiceTest {
         assertThat(saved.getAbfrage().getStatusAbfrage(), is(StatusAbfrage.ANGELEGT));
 
         abfrage = this.abfrageService.getInfrastrukturabfrageById(uuid);
-        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.OFFEN);
-        this.abfrageService.updateInfrastrukturabfrageWithStatus(abfrage);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.OFFEN);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
             () -> this.abfrageStatusService.erneuteBearbeitenAbfrage(uuid)
@@ -861,8 +796,7 @@ class AbfrageStatusServiceTest {
         assertThat(saved.getAbfrage().getStatusAbfrage(), is(StatusAbfrage.OFFEN));
 
         abfrage = this.abfrageService.getInfrastrukturabfrageById(uuid);
-        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
-        this.abfrageService.updateInfrastrukturabfrageWithStatus(abfrage);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
             () -> this.abfrageStatusService.speichernVonSozialinfrastrukturVersorgung(uuid)
@@ -871,8 +805,7 @@ class AbfrageStatusServiceTest {
         assertThat(saved.getAbfrage().getStatusAbfrage(), is(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG));
 
         abfrage = this.abfrageService.getInfrastrukturabfrageById(uuid);
-        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
-        this.abfrageService.updateInfrastrukturabfrageWithStatus(abfrage);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
             () -> this.abfrageStatusService.erneuteBearbeitenAbfrage(uuid)
@@ -881,8 +814,7 @@ class AbfrageStatusServiceTest {
         assertThat(saved.getAbfrage().getStatusAbfrage(), is(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE));
 
         abfrage = this.abfrageService.getInfrastrukturabfrageById(uuid);
-        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT);
-        this.abfrageService.updateInfrastrukturabfrageWithStatus(abfrage);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.BEDARFSMELDUNG_ERFOLGT);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
             () -> this.abfrageStatusService.erneuteBearbeitenAbfrage(uuid)
@@ -891,8 +823,7 @@ class AbfrageStatusServiceTest {
         assertThat(saved.getAbfrage().getStatusAbfrage(), is(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT));
 
         abfrage = this.abfrageService.getInfrastrukturabfrageById(uuid);
-        abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ABBRUCH);
-        this.abfrageService.updateInfrastrukturabfrageWithStatus(abfrage);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.ABBRUCH);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
             () -> this.abfrageStatusService.erneuteBearbeitenAbfrage(uuid)

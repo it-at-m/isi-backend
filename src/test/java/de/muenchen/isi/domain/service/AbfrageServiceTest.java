@@ -3,6 +3,7 @@ package de.muenchen.isi.domain.service;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
+import de.muenchen.isi.domain.exception.AbfrageStatusNotAllowedException;
 import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.FileHandlingFailedException;
@@ -223,12 +224,13 @@ class AbfrageServiceTest {
     }
 
     @Test
-    void updateInfrastrukturabfrage()
-        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, FileHandlingFailedException, FileHandlingWithS3FailedException {
+    void patchAbfrageAngelegt()
+        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, FileHandlingFailedException, FileHandlingWithS3FailedException {
         final InfrastrukturabfrageModel infrastrukturabfrageModel = new InfrastrukturabfrageModel();
         infrastrukturabfrageModel.setId(UUID.randomUUID());
         final AbfrageModel abfrageModel = new AbfrageModel();
         abfrageModel.setNameAbfrage("hallo");
+        abfrageModel.setStatusAbfrage(StatusAbfrage.ANGELEGT);
         infrastrukturabfrageModel.setAbfrage(abfrageModel);
 
         final Infrastrukturabfrage entity = this.abfrageDomainMapper.model2entity(infrastrukturabfrageModel);
@@ -239,8 +241,7 @@ class AbfrageServiceTest {
             .when(this.infrastrukturabfrageRepository.findByAbfrage_NameAbfrageIgnoreCase("hallo"))
             .thenReturn(Optional.empty());
 
-        final InfrastrukturabfrageModel result =
-            this.abfrageService.updateInfrastrukturabfrageWithoutStatus(infrastrukturabfrageModel);
+        final InfrastrukturabfrageModel result = this.abfrageService.patchAbfrageAngelegt(infrastrukturabfrageModel);
 
         final InfrastrukturabfrageModel expected = new InfrastrukturabfrageModel();
         expected.setId(infrastrukturabfrageModel.getId());
@@ -254,6 +255,38 @@ class AbfrageServiceTest {
             .findByAbfrage_NameAbfrageIgnoreCase("hallo");
         Mockito
             .verify(this.dokumentService, Mockito.times(1))
+            .deleteDokumenteFromOriginalDokumentenListWhichAreMissingInParameterAdaptedDokumentenListe(
+                Mockito.isNull(),
+                Mockito.isNull()
+            );
+    }
+
+    @Test
+    void throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid()
+        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, FileHandlingFailedException, FileHandlingWithS3FailedException {
+        final InfrastrukturabfrageModel infrastrukturabfrageModel = new InfrastrukturabfrageModel();
+        infrastrukturabfrageModel.setId(UUID.randomUUID());
+        final AbfrageModel abfrageModel = new AbfrageModel();
+        abfrageModel.setNameAbfrage("test");
+        abfrageModel.setStatusAbfrage(StatusAbfrage.ABBRUCH);
+        infrastrukturabfrageModel.setAbfrage(abfrageModel);
+
+        final Infrastrukturabfrage entity = this.abfrageDomainMapper.model2entity(infrastrukturabfrageModel);
+
+        Mockito.when(this.infrastrukturabfrageRepository.findById(entity.getId())).thenReturn(Optional.of(entity));
+
+        Assertions.assertThrows(
+            AbfrageStatusNotAllowedException.class,
+            () -> this.abfrageService.patchAbfrageAngelegt(infrastrukturabfrageModel)
+        );
+
+        Mockito.verify(this.infrastrukturabfrageRepository, Mockito.times(1)).findById(entity.getId());
+        Mockito.verify(this.infrastrukturabfrageRepository, Mockito.times(0)).saveAndFlush(entity);
+        Mockito
+            .verify(this.infrastrukturabfrageRepository, Mockito.times(0))
+            .findByAbfrage_NameAbfrageIgnoreCase("test");
+        Mockito
+            .verify(this.dokumentService, Mockito.times(0))
             .deleteDokumenteFromOriginalDokumentenListWhichAreMissingInParameterAdaptedDokumentenListe(
                 Mockito.isNull(),
                 Mockito.isNull()
