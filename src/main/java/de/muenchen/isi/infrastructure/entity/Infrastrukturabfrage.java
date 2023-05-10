@@ -31,7 +31,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @EqualsAndHashCode(callSuper = true)
 @EntityListeners(AuditingEntityListener.class)
 @Table(indexes = { @Index(name = "name_abfrage_index", columnList = "nameAbfrage") })
-@Indexed(index = "index_Infrastrukturabfrage")
+@Indexed
 public class Infrastrukturabfrage extends BaseEntity {
 
     @Embedded
