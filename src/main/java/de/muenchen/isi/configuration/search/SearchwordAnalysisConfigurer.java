@@ -18,7 +18,7 @@ public class SearchwordAnalysisConfigurer implements ElasticsearchAnalysisConfig
             .analyzer("searchwordSuggestionAnalyzer")
             .custom()
             .tokenizer("whitespace")
-            .tokenFilters("lowercase_searchword_suggestion", "ngram_searchword_suggestion");
+            .tokenFilters("lowercase_searchword_suggestion", "edge_ngram_searchword_suggestion");
 
         // https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-lowercase-tokenizer.html
         context.tokenFilter("lowercase_searchword_suggestion").type("lowercase");
