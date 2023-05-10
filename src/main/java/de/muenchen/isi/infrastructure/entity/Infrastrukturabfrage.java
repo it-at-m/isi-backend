@@ -22,6 +22,7 @@ import javax.persistence.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
@@ -30,6 +31,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @EqualsAndHashCode(callSuper = true)
 @EntityListeners(AuditingEntityListener.class)
 @Table(indexes = { @Index(name = "name_abfrage_index", columnList = "nameAbfrage") })
+@Indexed(index = "index_Infrastrukturabfrage")
 public class Infrastrukturabfrage extends BaseEntity {
 
     @Embedded

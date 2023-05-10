@@ -175,6 +175,18 @@
             <version>3.3.2</version>
         </dependency>
 
+        <!-- Search -->
+        <dependency>
+            <groupId>org.hibernate.search</groupId>
+            <artifactId>hibernate-search-mapper-orm</artifactId>
+            <version>6.1.8.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate.search</groupId>
+            <artifactId>hibernate-search-backend-elasticsearch</artifactId>
+            <version>6.1.8.Final</version>
+        </dependency>
+
         <!-- Other -->
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
