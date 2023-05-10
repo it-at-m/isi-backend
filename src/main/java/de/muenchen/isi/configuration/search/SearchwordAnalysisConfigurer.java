@@ -13,7 +13,7 @@ import org.hibernate.search.backend.elasticsearch.analysis.ElasticsearchAnalysis
 public class SearchwordAnalysisConfigurer implements ElasticsearchAnalysisConfigurer {
 
     @Override
-    public void configure(ElasticsearchAnalysisConfigurationContext context) {
+    public void configure(final ElasticsearchAnalysisConfigurationContext context) {
         context
             .analyzer("searchwordSuggestionAnalyzer")
             .custom()
