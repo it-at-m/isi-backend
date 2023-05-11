@@ -16,6 +16,7 @@ import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
 import de.muenchen.isi.domain.service.AbfrageService;
 import de.muenchen.isi.domain.service.BauvorhabenService;
+import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -25,10 +26,14 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import javax.persistence.EntityManager;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.search.engine.search.query.SearchResult;
+import org.hibernate.search.mapper.orm.Search;
+import org.hibernate.search.mapper.orm.session.SearchSession;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -56,6 +61,24 @@ public class AbfrageController {
     private final BauvorhabenService bauvorhabenService;
 
     private final AbfrageApiMapper abfrageApiMapper;
+
+    private final EntityManager entityManager;
+
+    @Transactional(readOnly = true)
+    @GetMapping("/test/{query}")
+    public void test(@PathVariable final String query) {
+        //String lowerCasedSearchTerm = "bau";
+
+        SearchSession searchSession = Search.session(entityManager.getEntityManagerFactory().createEntityManager());
+
+        SearchResult<Bauvorhaben> result = searchSession
+            .search(Bauvorhaben.class)
+            .where(function -> function.wildcard().field("nameVorhaben").matching(query))
+            .fetch(20);
+
+        System.err.println(result.total().hitCount());
+        System.err.println(result.hits());
+    }
 
     @Transactional(readOnly = true)
     @GetMapping

@@ -24,14 +24,18 @@ import javax.persistence.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
 
 @Entity
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @Table(indexes = { @Index(name = "name_vorhaben_index", columnList = "nameVorhaben") })
+@Indexed
 public class Bauvorhaben extends BaseEntity {
 
+    @FullTextField(analyzer = "searchword_suggestion_analyzer")
     @Column(nullable = false, unique = true)
     private String nameVorhaben;
 

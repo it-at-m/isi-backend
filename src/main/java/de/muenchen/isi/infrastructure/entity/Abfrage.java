@@ -23,6 +23,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import lombok.Data;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
 
 @Embeddable
 @Data
@@ -54,6 +55,7 @@ public class Abfrage {
     @Column(nullable = true)
     private String bebauungsplannummer;
 
+    @FullTextField(analyzer = "searchword_suggestion_analyzer")
     @Column(nullable = false, unique = true, length = 70)
     private String nameAbfrage;
 

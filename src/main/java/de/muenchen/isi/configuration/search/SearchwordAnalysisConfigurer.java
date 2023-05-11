@@ -15,7 +15,7 @@ public class SearchwordAnalysisConfigurer implements ElasticsearchAnalysisConfig
     @Override
     public void configure(final ElasticsearchAnalysisConfigurationContext context) {
         context
-            .analyzer("searchwordSuggestionAnalyzer")
+            .analyzer("searchword_suggestion_analyzer")
             .custom()
             .tokenizer("whitespace")
             .tokenFilters("lowercase_searchword_suggestion", "edge_ngram_searchword_suggestion");
