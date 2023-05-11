@@ -1,39 +1,40 @@
 package de.muenchen.isi.api.validation;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-
-import de.muenchen.isi.api.dto.AbfragevarianteDto;
-import java.util.ArrayList;
-import java.util.List;
+import de.muenchen.isi.api.dto.AbfragevarianteResponseDto;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
 public class UniqueRelevantAbfragevarianteValidatorTest {
 
     private final UniqueRelevantAbfragevarianteValidator uniqueRelevantAbfragevarianteValidator =
-        new UniqueRelevantAbfragevarianteValidator();
+            new UniqueRelevantAbfragevarianteValidator();
 
     @Test
     void isValid() {
-        AbfragevarianteDto abfragevarianteDto = new AbfragevarianteDto();
+        AbfragevarianteResponseDto abfragevarianteDto = new AbfragevarianteResponseDto();
         abfragevarianteDto.setRelevant(false);
         abfragevarianteDto.setAbfragevariantenName("Variante 1");
 
-        AbfragevarianteDto abfragevarianteDto1 = new AbfragevarianteDto();
+        AbfragevarianteResponseDto abfragevarianteDto1 = new AbfragevarianteResponseDto();
         abfragevarianteDto1.setRelevant(true);
         abfragevarianteDto1.setAbfragevariantenName("Variante 2");
 
-        AbfragevarianteDto abfragevarianteDto2 = new AbfragevarianteDto();
+        AbfragevarianteResponseDto abfragevarianteDto2 = new AbfragevarianteResponseDto();
         abfragevarianteDto2.setRelevant(false);
         abfragevarianteDto.setAbfragevariantenName("Variante 3");
 
-        List<AbfragevarianteDto> abfragevarianteDtoList = new ArrayList<>();
+        List<AbfragevarianteResponseDto> abfragevarianteDtoList = new ArrayList<>();
 
         abfragevarianteDtoList.add(abfragevarianteDto);
         abfragevarianteDtoList.add(abfragevarianteDto1);
@@ -44,19 +45,19 @@ public class UniqueRelevantAbfragevarianteValidatorTest {
 
     @Test
     void isNotValid() {
-        AbfragevarianteDto abfragevarianteDto = new AbfragevarianteDto();
+        AbfragevarianteResponseDto abfragevarianteDto = new AbfragevarianteResponseDto();
         abfragevarianteDto.setRelevant(false);
         abfragevarianteDto.setAbfragevariantenName("Variante 1");
 
-        AbfragevarianteDto abfragevarianteDto1 = new AbfragevarianteDto();
+        AbfragevarianteResponseDto abfragevarianteDto1 = new AbfragevarianteResponseDto();
         abfragevarianteDto1.setRelevant(true);
         abfragevarianteDto1.setAbfragevariantenName("Variante 2");
 
-        AbfragevarianteDto abfragevarianteDto2 = new AbfragevarianteDto();
+        AbfragevarianteResponseDto abfragevarianteDto2 = new AbfragevarianteResponseDto();
         abfragevarianteDto2.setRelevant(true);
         abfragevarianteDto.setAbfragevariantenName("Variante 3");
 
-        List<AbfragevarianteDto> abfragevarianteDtoList = new ArrayList<>();
+        List<AbfragevarianteResponseDto> abfragevarianteDtoList = new ArrayList<>();
 
         abfragevarianteDtoList.add(abfragevarianteDto);
         abfragevarianteDtoList.add(abfragevarianteDto1);

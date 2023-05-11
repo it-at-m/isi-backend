@@ -1,32 +1,27 @@
-/*
- * Copyright (c): it@M - Dienstleister für Informations- und Telekommunikationstechnik
- * der Landeshauptstadt München, 2022
- */
-package de.muenchen.isi.api.dto;
+package de.muenchen.isi.api.dto.abfrageAngelegt;
 
-import de.muenchen.isi.api.validation.GeschossflaecheWohnenSobonUrsaechlichValid;
+import de.muenchen.isi.api.dto.BaseEntityDto;
 import de.muenchen.isi.api.validation.NotUnspecified;
-import de.muenchen.isi.api.validation.UniqueRelevantAbfragevarianteValid;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonVerfahrensgrundsaetzeJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
-import java.util.List;
-import javax.validation.Valid;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import java.util.List;
+
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-@GeschossflaecheWohnenSobonUrsaechlichValid
-public class InfrastrukturabfrageDto extends BaseEntityDto {
+public class InfrastrukturabfrageRequestDto extends BaseEntityDto {
 
     @Valid
     @NotNull
-    private AbfrageDto abfrage;
+    private AbfrageRequestDto abfrage;
 
     @NotNull
     @NotUnspecified
@@ -36,8 +31,7 @@ public class InfrastrukturabfrageDto extends BaseEntityDto {
 
     @NotEmpty
     @Size(min = 1, max = 5)
-    @UniqueRelevantAbfragevarianteValid
-    private List<@Valid @NotNull AbfragevarianteDto> abfragevarianten;
+    private List<@Valid @NotNull AbfragevarianteRequestDto> abfragevarianten;
 
     @Size(max = 255, message = "Es sind maximal {max} Zeichen erlaubt")
     private String aktenzeichenProLbk;

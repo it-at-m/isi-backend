@@ -4,15 +4,14 @@
  */
 package de.muenchen.isi.rest;
 
-import de.muenchen.isi.api.dto.FoerderartDto;
-import de.muenchen.isi.domain.model.AbfrageModel;
-import de.muenchen.isi.domain.model.AbfragevarianteModel;
+import de.muenchen.isi.domain.model.AbfrageResponseModel;
+import de.muenchen.isi.domain.model.AbfragevarianteResponseModel;
 import de.muenchen.isi.domain.model.BauabschnittModel;
 import de.muenchen.isi.domain.model.BaugebietModel;
 import de.muenchen.isi.domain.model.BaurateModel;
 import de.muenchen.isi.domain.model.FoerderartModel;
 import de.muenchen.isi.domain.model.FoerdermixModel;
-import de.muenchen.isi.domain.model.InfrastrukturabfrageModel;
+import de.muenchen.isi.domain.model.InfrastrukturabfrageResponseModel;
 import de.muenchen.isi.domain.model.common.AdresseModel;
 import de.muenchen.isi.domain.model.common.WGS84Model;
 import de.muenchen.isi.domain.model.filehandling.DokumentModel;
@@ -26,6 +25,7 @@ import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
 import de.muenchen.isi.infrastructure.entity.filehandling.Dokument;
 import de.muenchen.isi.infrastructure.entity.filehandling.Filepath;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -34,10 +34,10 @@ import java.util.List;
 
 public class TestData {
 
-    public static InfrastrukturabfrageModel createInfrastrukturabfrageModel() {
-        final InfrastrukturabfrageModel infrastrukturabfrage = new InfrastrukturabfrageModel();
+    public static InfrastrukturabfrageResponseModel createInfrastrukturabfrageModel() {
+        final InfrastrukturabfrageResponseModel infrastrukturabfrage = new InfrastrukturabfrageResponseModel();
 
-        final AbfrageModel abfrage = new AbfrageModel();
+        final AbfrageResponseModel abfrage = new AbfrageResponseModel();
         final WGS84Model coordinate = new WGS84Model();
         coordinate.setLatitude(48.1556795465256);
         coordinate.setLongitude(11.5568456350688);
@@ -55,14 +55,14 @@ public class TestData {
         infrastrukturabfrage.setAktenzeichenProLbk("PRO12345");
         infrastrukturabfrage.setOffiziellerVerfahrensschritt(UncertainBoolean.FALSE);
 
-        final AbfragevarianteModel abfragevariante = createAbfragevarianteModel();
+        final AbfragevarianteResponseModel abfragevariante = createAbfragevarianteModel();
         infrastrukturabfrage.setAbfragevarianten(List.of(abfragevariante));
 
         return infrastrukturabfrage;
     }
 
-    public static AbfragevarianteModel createAbfragevarianteModel() {
-        final AbfragevarianteModel original = new AbfragevarianteModel();
+    public static AbfragevarianteResponseModel createAbfragevarianteModel() {
+        final AbfragevarianteResponseModel original = new AbfragevarianteResponseModel();
         original.setAbfragevariantenNr(1);
         original.setAbfragevariantenName("Dorf");
         original.setPlanungsrecht(Planungsrecht.BPLAN_PARAG_30);

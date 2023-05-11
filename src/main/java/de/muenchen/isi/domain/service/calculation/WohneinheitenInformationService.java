@@ -1,16 +1,17 @@
 package de.muenchen.isi.domain.service.calculation;
 
-import de.muenchen.isi.domain.model.AbfragevarianteModel;
+import de.muenchen.isi.domain.model.AbfragevarianteResponseModel;
 import de.muenchen.isi.domain.model.BauabschnittModel;
 import de.muenchen.isi.domain.model.BaugebietModel;
 import de.muenchen.isi.domain.model.BaurateModel;
 import de.muenchen.isi.domain.model.calculation.RealisierungsZeitraumModel;
 import de.muenchen.isi.domain.model.calculation.WohneinheitenInformationModel;
-import java.math.BigDecimal;
-import java.util.ArrayList;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
 
 @Service
 @RequiredArgsConstructor
@@ -19,14 +20,14 @@ public class WohneinheitenInformationService {
     /**
      * @param abfragevariante zum Summieren.
      * @return das summierte {@link WohneinheitenInformationModel} aus den {@link BauabschnittModel}s
-     * des im Parameter übergebenen {@link AbfragevarianteModel}.
+     * des im Parameter übergebenen {@link AbfragevarianteResponseModel}.
      */
-    public WohneinheitenInformationModel calculateWohneinheitenInformation(final AbfragevarianteModel abfragevariante) {
+    public WohneinheitenInformationModel calculateWohneinheitenInformation(final AbfragevarianteResponseModel abfragevariante) {
         return ObjectUtils
-            .defaultIfNull(abfragevariante.getBauabschnitte(), new ArrayList<BauabschnittModel>())
-            .stream()
-            .map(this::calculateWohneinheitenInformation)
-            .reduce(this.initEmptyWohneinheitenInformationModel(), this::sum);
+                .defaultIfNull(abfragevariante.getBauabschnitte(), new ArrayList<BauabschnittModel>())
+                .stream()
+                .map(this::calculateWohneinheitenInformation)
+                .reduce(this.initEmptyWohneinheitenInformationModel(), this::sum);
     }
 
     /**
@@ -36,10 +37,10 @@ public class WohneinheitenInformationService {
      */
     public WohneinheitenInformationModel calculateWohneinheitenInformation(final BauabschnittModel bauabschnitt) {
         return ObjectUtils
-            .defaultIfNull(bauabschnitt.getBaugebiete(), new ArrayList<BaugebietModel>())
-            .stream()
-            .map(this::calculateWohneinheitenInformation)
-            .reduce(this.initEmptyWohneinheitenInformationModel(), this::sum);
+                .defaultIfNull(bauabschnitt.getBaugebiete(), new ArrayList<BaugebietModel>())
+                .stream()
+                .map(this::calculateWohneinheitenInformation)
+                .reduce(this.initEmptyWohneinheitenInformationModel(), this::sum);
     }
 
     /**
@@ -49,10 +50,10 @@ public class WohneinheitenInformationService {
      */
     public WohneinheitenInformationModel calculateWohneinheitenInformation(final BaugebietModel baugebiet) {
         return ObjectUtils
-            .defaultIfNull(baugebiet.getBauraten(), new ArrayList<BaurateModel>())
-            .stream()
-            .map(this::calculateWohneinheitenInformation)
-            .reduce(this.initEmptyWohneinheitenInformationModel(), this::sum);
+                .defaultIfNull(baugebiet.getBauraten(), new ArrayList<BaurateModel>())
+                .stream()
+                .map(this::calculateWohneinheitenInformation)
+                .reduce(this.initEmptyWohneinheitenInformationModel(), this::sum);
     }
 
     /**
@@ -81,8 +82,8 @@ public class WohneinheitenInformationService {
      * @return neues Objekt vom Typ {@link WohneinheitenInformationModel} mit summierten Werten der beiden Parameterobjekte.
      */
     public WohneinheitenInformationModel sum(
-        final WohneinheitenInformationModel o1,
-        final WohneinheitenInformationModel o2
+            final WohneinheitenInformationModel o1,
+            final WohneinheitenInformationModel o2
     ) {
         final var sumWohneinheitenInformation = this.initEmptyWohneinheitenInformationModel();
 
@@ -90,14 +91,14 @@ public class WohneinheitenInformationService {
         sumWohneinheitenInformation.setRealisierungsZeitraum(realisierungsZeitraum);
 
         sumWohneinheitenInformation.setAnzahlWohneinheitenGeplant(
-            ObjectUtils.defaultIfNull(o1.getAnzahlWohneinheitenGeplant(), 0) +
-            ObjectUtils.defaultIfNull(o2.getAnzahlWohneinheitenGeplant(), 0)
+                ObjectUtils.defaultIfNull(o1.getAnzahlWohneinheitenGeplant(), 0) +
+                        ObjectUtils.defaultIfNull(o2.getAnzahlWohneinheitenGeplant(), 0)
         );
 
         sumWohneinheitenInformation.setGeschossflaecheWohnenGeplant(
-            ObjectUtils
-                .defaultIfNull(o1.getGeschossflaecheWohnenGeplant(), BigDecimal.ZERO)
-                .add(ObjectUtils.defaultIfNull(o2.getGeschossflaecheWohnenGeplant(), BigDecimal.ZERO))
+                ObjectUtils
+                        .defaultIfNull(o1.getGeschossflaecheWohnenGeplant(), BigDecimal.ZERO)
+                        .add(ObjectUtils.defaultIfNull(o2.getGeschossflaecheWohnenGeplant(), BigDecimal.ZERO))
         );
 
         return sumWohneinheitenInformation;
@@ -111,8 +112,8 @@ public class WohneinheitenInformationService {
      * @return das neue aggregierte Objekt.
      */
     public RealisierungsZeitraumModel aggregate(
-        final RealisierungsZeitraumModel o1,
-        final RealisierungsZeitraumModel o2
+            final RealisierungsZeitraumModel o1,
+            final RealisierungsZeitraumModel o2
     ) {
         final var realisierungsZeitraum = new RealisierungsZeitraumModel();
 

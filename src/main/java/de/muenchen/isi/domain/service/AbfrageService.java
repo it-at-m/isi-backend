@@ -8,21 +8,23 @@ import de.muenchen.isi.domain.exception.FileHandlingWithS3FailedException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
 import de.muenchen.isi.domain.mapper.AbfrageDomainMapper;
-import de.muenchen.isi.domain.model.AbfrageModel;
+import de.muenchen.isi.domain.model.AbfrageResponseModel;
 import de.muenchen.isi.domain.model.BauvorhabenModel;
-import de.muenchen.isi.domain.model.InfrastrukturabfrageModel;
+import de.muenchen.isi.domain.model.InfrastrukturabfrageResponseModel;
+import de.muenchen.isi.domain.model.abfrageAngelegt.InfrastrukturabfrageRequestModel;
 import de.muenchen.isi.domain.service.filehandling.DokumentService;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.repository.InfrastrukturabfrageRepository;
-import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -36,24 +38,24 @@ public class AbfrageService {
     private final DokumentService dokumentService;
 
     /**
-     * Die Methode gibt alle {@link InfrastrukturabfrageModel} als Liste zurück.
+     * Die Methode gibt alle {@link InfrastrukturabfrageResponseModel} als Liste zurück.
      *
-     * @return Liste an {@link InfrastrukturabfrageModel}.
+     * @return Liste an {@link InfrastrukturabfrageResponseModel}.
      */
-    public List<InfrastrukturabfrageModel> getInfrastrukturabfragen() {
+    public List<InfrastrukturabfrageResponseModel> getInfrastrukturabfragen() {
         return this.infrastrukturabfrageRepository.findAllByOrderByAbfrageFristStellungnahmeDesc()
-            .map(this.abfrageDomainMapper::entity2Model)
-            .collect(Collectors.toList());
+                .map(this.abfrageDomainMapper::entity2Model)
+                .collect(Collectors.toList());
     }
 
     /**
-     * Die Methode gibt ein {@link InfrastrukturabfrageModel} identifiziert durch die ID zurück.
+     * Die Methode gibt ein {@link InfrastrukturabfrageResponseModel} identifiziert durch die ID zurück.
      *
-     * @param id zum Identifizieren des {@link InfrastrukturabfrageModel}.
-     * @return {@link InfrastrukturabfrageModel}.
-     * @throws EntityNotFoundException falls die Abfrage identifiziert durch die {@link InfrastrukturabfrageModel#getId()} nicht gefunden wird.
+     * @param id zum Identifizieren des {@link InfrastrukturabfrageResponseModel}.
+     * @return {@link InfrastrukturabfrageResponseModel}.
+     * @throws EntityNotFoundException falls die Abfrage identifiziert durch die {@link InfrastrukturabfrageResponseModel#getId()} nicht gefunden wird.
      */
-    public InfrastrukturabfrageModel getInfrastrukturabfrageById(final UUID id) throws EntityNotFoundException {
+    public InfrastrukturabfrageResponseModel getInfrastrukturabfrageById(final UUID id) throws EntityNotFoundException {
         final var optEntity = this.infrastrukturabfrageRepository.findById(id);
         final var entity = optEntity.orElseThrow(() -> {
             final var message = "Infrastrukturabfrage nicht gefunden.";
@@ -64,22 +66,22 @@ public class AbfrageService {
     }
 
     /**
-     * Diese Methode speichert ein {@link InfrastrukturabfrageModel}.
+     * Diese Methode speichert ein {@link InfrastrukturabfrageResponseModel}.
      *
      * @param abfrage zum Speichern
-     * @return das gespeicherte {@link InfrastrukturabfrageModel}
+     * @return das gespeicherte {@link InfrastrukturabfrageResponseModel}
      * @throws UniqueViolationException   falls der Name der Abfrage oder der Abfragevariante bereits vorhanden ist
      * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
      */
-    public InfrastrukturabfrageModel saveInfrastrukturabfrage(final InfrastrukturabfrageModel abfrage)
-        throws UniqueViolationException, OptimisticLockingException {
+    public InfrastrukturabfrageResponseModel saveInfrastrukturabfrage(final InfrastrukturabfrageResponseModel abfrage)
+            throws UniqueViolationException, OptimisticLockingException {
         if (abfrage.getId() == null) {
             abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ANGELEGT);
         }
         var abfrageEntity = this.abfrageDomainMapper.model2entity(abfrage);
         final var saved =
-            this.infrastrukturabfrageRepository.findByAbfrage_NameAbfrageIgnoreCase(
-                    abfrageEntity.getAbfrage().getNameAbfrage()
+                this.infrastrukturabfrageRepository.findByAbfrage_NameAbfrageIgnoreCase(
+                        abfrageEntity.getAbfrage().getNameAbfrage()
                 );
         if ((saved.isPresent() && saved.get().getId().equals(abfrageEntity.getId())) || saved.isEmpty()) {
             try {
@@ -89,118 +91,195 @@ public class AbfrageService {
                 throw new OptimisticLockingException(message, exception);
             } catch (final DataIntegrityViolationException exception) {
                 final var message =
-                    "Der angegebene Name der Abfragevariante ist schon vorhanden, bitte wählen Sie daher einen anderen Namen und speichern Sie die Abfrage erneut.";
+                        "Der angegebene Name der Abfragevariante ist schon vorhanden, bitte wählen Sie daher einen anderen Namen und speichern Sie die Abfrage erneut.";
                 throw new UniqueViolationException(message);
             }
             return this.abfrageDomainMapper.entity2Model(abfrageEntity);
         } else {
             throw new UniqueViolationException(
-                "Der angegebene Name der Abfrage ist schon vorhanden, bitte wählen Sie daher einen anderen Namen und speichern Sie die Abfrage erneut."
+                    "Der angegebene Name der Abfrage ist schon vorhanden, bitte wählen Sie daher einen anderen Namen und speichern Sie die Abfrage erneut."
             );
         }
     }
 
     /**
-     * Diese Methode updated ein {@link InfrastrukturabfrageModel}. Diese muss sich im Status {@link StatusAbfrage#ANGELEGT} befinden.
+     * Diese Methode updated ein {@link InfrastrukturabfrageResponseModel}. Diese muss sich im Status {@link StatusAbfrage#ANGELEGT} befinden.
      *
      * @param abfrage zum Updaten
-     * @return das geupdatete {@link InfrastrukturabfrageModel}
-     * @throws EntityNotFoundException    falls die Abfrage identifiziert durch die {@link InfrastrukturabfrageModel#getId()} nicht gefunden wird
-     * @throws UniqueViolationException   falls der Name der Abfrage {@link InfrastrukturabfrageModel#getAbfrage().getNameAbfrage} ()} bereits vorhanden ist
-     * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
-     * @throws AbfrageStatusNotAllowedException falls sich die Abfrage nicht in einem zulässigen Status befindet
+     * @return das geupdatete {@link InfrastrukturabfrageResponseModel}
+     * @throws EntityNotFoundException           falls die Abfrage identifiziert durch die {@link InfrastrukturabfrageResponseModel#getId()} nicht gefunden wird
+     * @throws UniqueViolationException          falls der Name der Abfrage {@link InfrastrukturabfrageResponseModel#getAbfrage().getNameAbfrage} ()} bereits vorhanden ist
+     * @throws OptimisticLockingException        falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
+     * @throws AbfrageStatusNotAllowedException  falls sich die Abfrage nicht in einem zulässigen Status befindet
      * @throws FileHandlingFailedException
      * @throws FileHandlingWithS3FailedException
      */
-    public InfrastrukturabfrageModel patchAbfrageAngelegt(final InfrastrukturabfrageModel abfrage)
-        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, FileHandlingFailedException, FileHandlingWithS3FailedException {
+    public InfrastrukturabfrageResponseModel patchAbfrageAngelegt(final InfrastrukturabfrageRequestModel abfrage)
+            throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, FileHandlingFailedException, FileHandlingWithS3FailedException {
         final var originalAbfrageDb = this.getInfrastrukturabfrageById(abfrage.getId());
         this.throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(
                 originalAbfrageDb.getAbfrage(),
                 StatusAbfrage.ANGELEGT
-            );
+        );
         dokumentService.deleteDokumenteFromOriginalDokumentenListWhichAreMissingInParameterAdaptedDokumentenListe(
-            abfrage.getAbfrage().getDokumente(),
-            originalAbfrageDb.getAbfrage().getDokumente()
+                abfrage.getAbfrage().getDokumente(),
+                originalAbfrageDb.getAbfrage().getDokumente()
         );
         abfrage.getAbfrage().setStatusAbfrage(originalAbfrageDb.getAbfrage().getStatusAbfrage());
+        final var abfrageToSave = this.abfrageDomainMapper.request2Reponse(abfrage, originalAbfrageDb);
+        return this.saveInfrastrukturabfrage(abfrageToSave);
+    }
+
+    /**
+     * Diese Methode updated ein {@link InfrastrukturabfrageResponseModel}. Diese muss sich im Status {@link StatusAbfrage#ANGELEGT} befinden.
+     *
+     * @param abfrage zum Updaten
+     * @return das geupdatete {@link InfrastrukturabfrageResponseModel}
+     * @throws EntityNotFoundException           falls die Abfrage identifiziert durch die {@link InfrastrukturabfrageResponseModel#getId()} nicht gefunden wird
+     * @throws UniqueViolationException          falls der Name der Abfrage {@link InfrastrukturabfrageResponseModel#getAbfrage().getNameAbfrage} ()} bereits vorhanden ist
+     * @throws OptimisticLockingException        falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
+     * @throws AbfrageStatusNotAllowedException  falls sich die Abfrage nicht in einem zulässigen Status befindet
+     * @throws FileHandlingFailedException
+     * @throws FileHandlingWithS3FailedException
+     */
+    public InfrastrukturabfrageResponseModel patchAbfragevarianteSetRelevant(final UUID abfrageId, final UUID abfragevarianteId)
+            throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, FileHandlingFailedException, FileHandlingWithS3FailedException {
+        final var abfrage = this.getInfrastrukturabfrageById(abfrageId);
+        this.throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(
+                abfrage.getAbfrage(),
+                StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG
+        );
+        dokumentService.deleteDokumenteFromOriginalDokumentenListWhichAreMissingInParameterAdaptedDokumentenListe(
+                abfrage.getAbfrage().getDokumente(),
+                abfrage.getAbfrage().getDokumente()
+        );
+
+        final var abfragevariante = abfrage.getAbfragevarianten()
+                .stream()
+                .filter(abfragevarianteModel -> abfragevarianteModel.getId().equals(abfragevarianteId))
+                .findFirst()
+                .orElseThrow(() -> {
+                    final var message = "Abfragevariante wurde nicht gefunden";
+                    log.error(message);
+                    return new EntityNotFoundException(message);
+                });
+        abfragevariante.setRelevant(true);
+        abfrage.getAbfrage().setStatusAbfrage(abfrage.getAbfrage().getStatusAbfrage());
         return this.saveInfrastrukturabfrage(abfrage);
     }
 
     /**
-     * Diese Methode führt für eine Abfrage, die durch die {@link InfrastrukturabfrageModel#getId()} identifiziert ist, eine Statusänderung durch.
+     * Diese Methode updated ein {@link InfrastrukturabfrageResponseModel}. Diese muss sich im Status {@link StatusAbfrage#ANGELEGT} befinden.
      *
-     * @param id {@link InfrastrukturabfrageModel#getId()} der Abfrage zum Updaten
-     * @param statusAbfrage neuer {@link StatusAbfrage}
-     * @return das geupdatete {@link InfrastrukturabfrageModel}
-     * @throws EntityNotFoundException           falls die Abfrage identifiziert durch die {@link InfrastrukturabfrageModel#getId()} nicht gefunden wird
-     * @throws UniqueViolationException          falls der Name der Abfrage {@link InfrastrukturabfrageModel#getAbfrage().getNameAbfrage} ()} bereits vorhanden ist
+     * @param abfrage zum Updaten
+     * @return das geupdatete {@link InfrastrukturabfrageResponseModel}
+     * @throws EntityNotFoundException           falls die Abfrage identifiziert durch die {@link InfrastrukturabfrageResponseModel#getId()} nicht gefunden wird
+     * @throws UniqueViolationException          falls der Name der Abfrage {@link InfrastrukturabfrageResponseModel#getAbfrage().getNameAbfrage} ()} bereits vorhanden ist
      * @throws OptimisticLockingException        falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
+     * @throws AbfrageStatusNotAllowedException  falls sich die Abfrage nicht in einem zulässigen Status befindet
+     * @throws FileHandlingFailedException
+     * @throws FileHandlingWithS3FailedException
      */
-    public InfrastrukturabfrageModel changeStatusAbfrage(final UUID id, final StatusAbfrage statusAbfrage)
-        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException {
+    public InfrastrukturabfrageResponseModel patchAbfragevarianteUnsetRelevant(final UUID abfrageId, final UUID abfragevarianteId)
+            throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, FileHandlingFailedException, FileHandlingWithS3FailedException {
+        final var abfrage = this.getInfrastrukturabfrageById(abfrageId);
+        this.throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(
+                abfrage.getAbfrage(),
+                StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG
+        );
+        dokumentService.deleteDokumenteFromOriginalDokumentenListWhichAreMissingInParameterAdaptedDokumentenListe(
+                abfrage.getAbfrage().getDokumente(),
+                abfrage.getAbfrage().getDokumente()
+        );
+
+        final var abfragevariante = abfrage.getAbfragevarianten()
+                .stream()
+                .filter(abfragevarianteModel -> abfragevarianteModel.getId().equals(abfragevarianteId))
+                .findFirst()
+                .orElseThrow(() -> {
+                    final var message = "Abfragevariante wurde nicht gefunden";
+                    log.error(message);
+                    return new EntityNotFoundException(message);
+                });
+        abfragevariante.setRelevant(false);
+        abfrage.getAbfrage().setStatusAbfrage(abfrage.getAbfrage().getStatusAbfrage());
+        return this.saveInfrastrukturabfrage(abfrage);
+    }
+
+    /**
+     * Diese Methode führt für eine Abfrage, die durch die {@link InfrastrukturabfrageResponseModel#getId()} identifiziert ist, eine Statusänderung durch.
+     *
+     * @param id            {@link InfrastrukturabfrageResponseModel#getId()} der Abfrage zum Updaten
+     * @param statusAbfrage neuer {@link StatusAbfrage}
+     * @return das geupdatete {@link InfrastrukturabfrageResponseModel}
+     * @throws EntityNotFoundException    falls die Abfrage identifiziert durch die {@link InfrastrukturabfrageResponseModel#getId()} nicht gefunden wird
+     * @throws UniqueViolationException   falls der Name der Abfrage {@link InfrastrukturabfrageResponseModel#getAbfrage().getNameAbfrage} ()} bereits vorhanden ist
+     * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
+     */
+    public InfrastrukturabfrageResponseModel changeStatusAbfrage(final UUID id, final StatusAbfrage statusAbfrage)
+            throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException {
         final var originalAbfrageDb = this.getInfrastrukturabfrageById(id);
         originalAbfrageDb.getAbfrage().setStatusAbfrage(statusAbfrage);
         return this.saveInfrastrukturabfrage(originalAbfrageDb);
     }
 
     /**
-     * Diese Methode löscht ein {@link InfrastrukturabfrageModel}.
+     * Diese Methode löscht ein {@link InfrastrukturabfrageResponseModel}.
      *
-     * @param id zum Identifizieren des {@link InfrastrukturabfrageModel}.
-     * @throws EntityNotFoundException     falls die Abfrage identifiziert durch die {@link InfrastrukturabfrageModel#getId()} nicht gefunden wird.
+     * @param id zum Identifizieren des {@link InfrastrukturabfrageResponseModel}.
+     * @throws EntityNotFoundException     falls die Abfrage identifiziert durch die {@link InfrastrukturabfrageResponseModel#getId()} nicht gefunden wird.
      * @throws EntityIsReferencedException falls ein {@link BauvorhabenModel} in der Abfrage referenziert wird.
      */
     public void deleteInfrasturkturabfrageById(final UUID id)
-        throws EntityNotFoundException, EntityIsReferencedException {
+            throws EntityNotFoundException, EntityIsReferencedException {
         final var abfrage = this.getInfrastrukturabfrageById(id);
         this.throwEntityIsReferencedExceptionWhenAbfrageIsReferencingBauvorhaben(abfrage.getAbfrage());
         this.infrastrukturabfrageRepository.deleteById(id);
     }
 
     /**
-     * Enthält das im Parameter gegebene {@link AbfrageModel} ein {@link BauvorhabenModel},
+     * Enthält das im Parameter gegebene {@link AbfrageResponseModel} ein {@link BauvorhabenModel},
      * wird eine {@link EntityIsReferencedException} geworfen.
      *
      * @param abfrage zum Prüfen.
-     * @throws EntityIsReferencedException falls das {@link AbfrageModel} ein {@link BauvorhabenModel} referenziert.
+     * @throws EntityIsReferencedException falls das {@link AbfrageResponseModel} ein {@link BauvorhabenModel} referenziert.
      */
-    protected void throwEntityIsReferencedExceptionWhenAbfrageIsReferencingBauvorhaben(final AbfrageModel abfrage)
-        throws EntityIsReferencedException {
+    protected void throwEntityIsReferencedExceptionWhenAbfrageIsReferencingBauvorhaben(final AbfrageResponseModel abfrage)
+            throws EntityIsReferencedException {
         final var bauvorhaben = abfrage.getBauvorhaben();
         if (ObjectUtils.isNotEmpty(bauvorhaben)) {
             final var message =
-                "Die Abfrage " +
-                abfrage.getNameAbfrage() +
-                " referenziert das Bauvorhaben " +
-                bauvorhaben.getNameVorhaben() +
-                ".";
+                    "Die Abfrage " +
+                            abfrage.getNameAbfrage() +
+                            " referenziert das Bauvorhaben " +
+                            bauvorhaben.getNameVorhaben() +
+                            ".";
             log.error(message);
             throw new EntityIsReferencedException(message);
         }
     }
 
     /**
-     * Enthält das im Parameter gegebene {@link AbfrageModel} einen ungültigen Status {@link StatusAbfrage},
-     *  wird eine {@link AbfrageStatusNotAllowedException} geworfen.
+     * Enthält das im Parameter gegebene {@link AbfrageResponseModel} einen ungültigen Status {@link StatusAbfrage},
+     * wird eine {@link AbfrageStatusNotAllowedException} geworfen.
      *
-     * @param abfrage zum Prüfen.
+     * @param abfrage       zum Prüfen.
      * @param statusAbfrage gültiger Status.
-     * @throws AbfrageStatusNotAllowedException falls das {@link AbfrageModel} einen unzulässigen Status hat
+     * @throws AbfrageStatusNotAllowedException falls das {@link AbfrageResponseModel} einen unzulässigen Status hat
      */
     protected void throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(
-        final AbfrageModel abfrage,
-        final StatusAbfrage statusAbfrage
+            final AbfrageResponseModel abfrage,
+            final StatusAbfrage statusAbfrage
     ) throws AbfrageStatusNotAllowedException {
         if (abfrage.getStatusAbfrage() != statusAbfrage) {
             final var message =
-                "Die Abfrage " +
-                abfrage.getNameAbfrage() +
-                " ist im Status " +
-                abfrage.getStatusAbfrage().toString() +
-                ". Der gültige Status wäre " +
-                statusAbfrage.toString() +
-                ".";
+                    "Die Abfrage " +
+                            abfrage.getNameAbfrage() +
+                            " ist im Status " +
+                            abfrage.getStatusAbfrage().toString() +
+                            ". Der gültige Status wäre " +
+                            statusAbfrage.toString() +
+                            ".";
             log.error(message);
             throw new AbfrageStatusNotAllowedException(message);
         }

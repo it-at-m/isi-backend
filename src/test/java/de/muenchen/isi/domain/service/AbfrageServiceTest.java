@@ -1,8 +1,5 @@
 package de.muenchen.isi.domain.service;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-
 import de.muenchen.isi.domain.exception.AbfrageStatusNotAllowedException;
 import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
@@ -15,19 +12,15 @@ import de.muenchen.isi.domain.mapper.AbfrageDomainMapperImpl;
 import de.muenchen.isi.domain.mapper.AbfragevarianteDomainMapperImpl;
 import de.muenchen.isi.domain.mapper.BauabschnittDomainMapperImpl;
 import de.muenchen.isi.domain.mapper.DokumentDomainMapperImpl;
-import de.muenchen.isi.domain.model.AbfrageModel;
+import de.muenchen.isi.domain.model.AbfrageResponseModel;
 import de.muenchen.isi.domain.model.BauvorhabenModel;
-import de.muenchen.isi.domain.model.InfrastrukturabfrageModel;
+import de.muenchen.isi.domain.model.InfrastrukturabfrageResponseModel;
 import de.muenchen.isi.domain.service.filehandling.DokumentService;
 import de.muenchen.isi.infrastructure.entity.Abfrage;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
 import de.muenchen.isi.infrastructure.entity.Infrastrukturabfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.repository.InfrastrukturabfrageRepository;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-import java.util.stream.Stream;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,13 +31,21 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+import java.util.stream.Stream;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
 class AbfrageServiceTest {
 
     private final AbfrageDomainMapper abfrageDomainMapper = new AbfrageDomainMapperImpl(
-        new AbfragevarianteDomainMapperImpl(new BauabschnittDomainMapperImpl()),
-        new DokumentDomainMapperImpl()
+            new AbfragevarianteDomainMapperImpl(new BauabschnittDomainMapperImpl()),
+            new DokumentDomainMapperImpl()
     );
 
     private AbfrageService abfrageService;
@@ -58,7 +59,7 @@ class AbfrageServiceTest {
     @BeforeEach
     public void beforeEach() {
         this.abfrageService =
-            new AbfrageService(this.abfrageDomainMapper, this.infrastrukturabfrageRepository, this.dokumentService);
+                new AbfrageService(this.abfrageDomainMapper, this.infrastrukturabfrageRepository, this.dokumentService);
         Mockito.reset(this.infrastrukturabfrageRepository, this.dokumentService);
     }
 
@@ -70,14 +71,14 @@ class AbfrageServiceTest {
         entity2.setId(UUID.randomUUID());
 
         Mockito
-            .when(this.infrastrukturabfrageRepository.findAllByOrderByAbfrageFristStellungnahmeDesc())
-            .thenReturn(Stream.of(entity1, entity2));
+                .when(this.infrastrukturabfrageRepository.findAllByOrderByAbfrageFristStellungnahmeDesc())
+                .thenReturn(Stream.of(entity1, entity2));
 
-        final List<InfrastrukturabfrageModel> result = this.abfrageService.getInfrastrukturabfragen();
+        final List<InfrastrukturabfrageResponseModel> result = this.abfrageService.getInfrastrukturabfragen();
 
-        final InfrastrukturabfrageModel model1 = new InfrastrukturabfrageModel();
+        final InfrastrukturabfrageResponseModel model1 = new InfrastrukturabfrageResponseModel();
         model1.setId(entity1.getId());
-        final InfrastrukturabfrageModel model2 = new InfrastrukturabfrageModel();
+        final InfrastrukturabfrageResponseModel model2 = new InfrastrukturabfrageResponseModel();
         model2.setId(entity2.getId());
 
         assertThat(result, is(List.of(model1, model2)));
@@ -88,17 +89,17 @@ class AbfrageServiceTest {
         final UUID id = UUID.randomUUID();
 
         Mockito
-            .when(this.infrastrukturabfrageRepository.findById(id))
-            .thenReturn(Optional.of(new Infrastrukturabfrage()));
-        final InfrastrukturabfrageModel result = this.abfrageService.getInfrastrukturabfrageById(id);
-        assertThat(result, is((new InfrastrukturabfrageModel())));
+                .when(this.infrastrukturabfrageRepository.findById(id))
+                .thenReturn(Optional.of(new Infrastrukturabfrage()));
+        final InfrastrukturabfrageResponseModel result = this.abfrageService.getInfrastrukturabfrageById(id);
+        assertThat(result, is((new InfrastrukturabfrageResponseModel())));
         Mockito.verify(this.infrastrukturabfrageRepository, Mockito.times(1)).findById(id);
         Mockito.reset(this.infrastrukturabfrageRepository);
 
         Mockito.when(this.infrastrukturabfrageRepository.findById(id)).thenReturn(Optional.empty());
         Assertions.assertThrows(
-            EntityNotFoundException.class,
-            () -> this.abfrageService.getInfrastrukturabfrageById(id)
+                EntityNotFoundException.class,
+                () -> this.abfrageService.getInfrastrukturabfrageById(id)
         );
         Mockito.verify(this.infrastrukturabfrageRepository, Mockito.times(1)).findById(id);
     }
@@ -106,9 +107,9 @@ class AbfrageServiceTest {
     @Test
     void saveInfrastrukturabfrage() throws UniqueViolationException, OptimisticLockingException {
         final UUID uuid = UUID.randomUUID();
-        final InfrastrukturabfrageModel infrastrukturabfrageModel = new InfrastrukturabfrageModel();
+        final InfrastrukturabfrageResponseModel infrastrukturabfrageModel = new InfrastrukturabfrageResponseModel();
         infrastrukturabfrageModel.setId(uuid);
-        final AbfrageModel abfrageModel = new AbfrageModel();
+        final AbfrageResponseModel abfrageModel = new AbfrageResponseModel();
         abfrageModel.setNameAbfrage("hallo");
         abfrageModel.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
         infrastrukturabfrageModel.setAbfrage(abfrageModel);
@@ -124,15 +125,15 @@ class AbfrageServiceTest {
 
         Mockito.when(this.infrastrukturabfrageRepository.saveAndFlush(abfrageEntity)).thenReturn(saveResult);
         Mockito
-            .when(this.infrastrukturabfrageRepository.findByAbfrage_NameAbfrageIgnoreCase("hallo"))
-            .thenReturn(Optional.empty());
+                .when(this.infrastrukturabfrageRepository.findByAbfrage_NameAbfrageIgnoreCase("hallo"))
+                .thenReturn(Optional.empty());
 
-        final InfrastrukturabfrageModel result =
-            this.abfrageService.saveInfrastrukturabfrage(infrastrukturabfrageModel);
+        final InfrastrukturabfrageResponseModel result =
+                this.abfrageService.saveInfrastrukturabfrage(infrastrukturabfrageModel);
 
-        final InfrastrukturabfrageModel expected = new InfrastrukturabfrageModel();
+        final InfrastrukturabfrageResponseModel expected = new InfrastrukturabfrageResponseModel();
         expected.setId(saveResult.getId());
-        final AbfrageModel expectedAbfrage = new AbfrageModel();
+        final AbfrageResponseModel expectedAbfrage = new AbfrageResponseModel();
         expectedAbfrage.setStatusAbfrage(abfrage.getStatusAbfrage());
         expectedAbfrage.setNameAbfrage(abfrage.getNameAbfrage());
         expected.setAbfrage(expectedAbfrage);
@@ -140,16 +141,16 @@ class AbfrageServiceTest {
         assertThat(result, is(expected));
         Mockito.verify(this.infrastrukturabfrageRepository, Mockito.times(1)).saveAndFlush(abfrageEntity);
         Mockito
-            .verify(this.infrastrukturabfrageRepository, Mockito.times(1))
-            .findByAbfrage_NameAbfrageIgnoreCase("hallo");
+                .verify(this.infrastrukturabfrageRepository, Mockito.times(1))
+                .findByAbfrage_NameAbfrageIgnoreCase("hallo");
     }
 
     @Test
     void saveInfrastrukturabfrageWithAngelegtStatus() throws UniqueViolationException, OptimisticLockingException {
         final UUID uuid = UUID.randomUUID();
-        final InfrastrukturabfrageModel infrastrukturabfrageModel = new InfrastrukturabfrageModel();
+        final InfrastrukturabfrageResponseModel infrastrukturabfrageModel = new InfrastrukturabfrageResponseModel();
         infrastrukturabfrageModel.setId(null);
-        final AbfrageModel abfrageModel = new AbfrageModel();
+        final AbfrageResponseModel abfrageModel = new AbfrageResponseModel();
         abfrageModel.setNameAbfrage("hallo");
         abfrageModel.setStatusAbfrage(StatusAbfrage.OFFEN);
         infrastrukturabfrageModel.setAbfrage(abfrageModel);
@@ -170,18 +171,18 @@ class AbfrageServiceTest {
         saveResult.setAbfrage(abfrage);
 
         Mockito
-            .when(this.infrastrukturabfrageRepository.saveAndFlush(infrastrukturabfrageEntity))
-            .thenReturn(saveResult);
+                .when(this.infrastrukturabfrageRepository.saveAndFlush(infrastrukturabfrageEntity))
+                .thenReturn(saveResult);
         Mockito
-            .when(this.infrastrukturabfrageRepository.findByAbfrage_NameAbfrageIgnoreCase("hallo"))
-            .thenReturn(Optional.empty());
+                .when(this.infrastrukturabfrageRepository.findByAbfrage_NameAbfrageIgnoreCase("hallo"))
+                .thenReturn(Optional.empty());
 
-        final InfrastrukturabfrageModel result =
-            this.abfrageService.saveInfrastrukturabfrage(infrastrukturabfrageModel);
+        final InfrastrukturabfrageResponseModel result =
+                this.abfrageService.saveInfrastrukturabfrage(infrastrukturabfrageModel);
 
-        final InfrastrukturabfrageModel expected = new InfrastrukturabfrageModel();
+        final InfrastrukturabfrageResponseModel expected = new InfrastrukturabfrageResponseModel();
         expected.setId(saveResult.getId());
-        final AbfrageModel expectedAbfrage = new AbfrageModel();
+        final AbfrageResponseModel expectedAbfrage = new AbfrageResponseModel();
         expectedAbfrage.setStatusAbfrage(abfrage.getStatusAbfrage());
         expectedAbfrage.setNameAbfrage(abfrage.getNameAbfrage());
         expected.setAbfrage(expectedAbfrage);
@@ -189,19 +190,19 @@ class AbfrageServiceTest {
         assertThat(result, is(expected));
         Mockito.verify(this.infrastrukturabfrageRepository, Mockito.times(1)).saveAndFlush(infrastrukturabfrageEntity);
         Mockito
-            .verify(this.infrastrukturabfrageRepository, Mockito.times(1))
-            .findByAbfrage_NameAbfrageIgnoreCase("hallo");
+                .verify(this.infrastrukturabfrageRepository, Mockito.times(1))
+                .findByAbfrage_NameAbfrageIgnoreCase("hallo");
     }
 
     @Test
     void saveInfrastrukturabfrageUniqueViolationTest() throws UniqueViolationException {
-        final InfrastrukturabfrageModel infrastrukturabfrageModel = new InfrastrukturabfrageModel();
+        final InfrastrukturabfrageResponseModel infrastrukturabfrageModel = new InfrastrukturabfrageResponseModel();
         infrastrukturabfrageModel.setId(UUID.randomUUID());
-        final AbfrageModel abfrageModel = new AbfrageModel();
+        final AbfrageResponseModel abfrageModel = new AbfrageResponseModel();
         abfrageModel.setNameAbfrage("hallo");
         infrastrukturabfrageModel.setAbfrage(abfrageModel);
 
-        final InfrastrukturabfrageModel infrastrukturabfrageModel2 = new InfrastrukturabfrageModel();
+        final InfrastrukturabfrageResponseModel infrastrukturabfrageModel2 = new InfrastrukturabfrageResponseModel();
         infrastrukturabfrageModel2.setId(UUID.randomUUID());
         infrastrukturabfrageModel2.setAbfrage(abfrageModel);
 
@@ -209,26 +210,26 @@ class AbfrageServiceTest {
 
         Mockito.when(this.infrastrukturabfrageRepository.saveAndFlush(abfrageEntity)).thenReturn(abfrageEntity);
         Mockito
-            .when(this.infrastrukturabfrageRepository.findByAbfrage_NameAbfrageIgnoreCase("hallo"))
-            .thenReturn(Optional.of(abfrageEntity));
+                .when(this.infrastrukturabfrageRepository.findByAbfrage_NameAbfrageIgnoreCase("hallo"))
+                .thenReturn(Optional.of(abfrageEntity));
 
         Assertions.assertThrows(
-            UniqueViolationException.class,
-            () -> this.abfrageService.saveInfrastrukturabfrage(infrastrukturabfrageModel2)
+                UniqueViolationException.class,
+                () -> this.abfrageService.saveInfrastrukturabfrage(infrastrukturabfrageModel2)
         );
 
         Mockito.verify(this.infrastrukturabfrageRepository, Mockito.times(0)).saveAndFlush(abfrageEntity);
         Mockito
-            .verify(this.infrastrukturabfrageRepository, Mockito.times(1))
-            .findByAbfrage_NameAbfrageIgnoreCase("hallo");
+                .verify(this.infrastrukturabfrageRepository, Mockito.times(1))
+                .findByAbfrage_NameAbfrageIgnoreCase("hallo");
     }
 
     @Test
     void patchAbfrageAngelegt()
-        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, FileHandlingFailedException, FileHandlingWithS3FailedException {
-        final InfrastrukturabfrageModel infrastrukturabfrageModel = new InfrastrukturabfrageModel();
+            throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, FileHandlingFailedException, FileHandlingWithS3FailedException {
+        final InfrastrukturabfrageResponseModel infrastrukturabfrageModel = new InfrastrukturabfrageResponseModel();
         infrastrukturabfrageModel.setId(UUID.randomUUID());
-        final AbfrageModel abfrageModel = new AbfrageModel();
+        final AbfrageResponseModel abfrageModel = new AbfrageResponseModel();
         abfrageModel.setNameAbfrage("hallo");
         abfrageModel.setStatusAbfrage(StatusAbfrage.ANGELEGT);
         infrastrukturabfrageModel.setAbfrage(abfrageModel);
@@ -238,12 +239,12 @@ class AbfrageServiceTest {
         Mockito.when(this.infrastrukturabfrageRepository.findById(entity.getId())).thenReturn(Optional.of(entity));
         Mockito.when(this.infrastrukturabfrageRepository.saveAndFlush(entity)).thenReturn(entity);
         Mockito
-            .when(this.infrastrukturabfrageRepository.findByAbfrage_NameAbfrageIgnoreCase("hallo"))
-            .thenReturn(Optional.empty());
+                .when(this.infrastrukturabfrageRepository.findByAbfrage_NameAbfrageIgnoreCase("hallo"))
+                .thenReturn(Optional.empty());
 
-        final InfrastrukturabfrageModel result = this.abfrageService.patchAbfrageAngelegt(infrastrukturabfrageModel);
+        final InfrastrukturabfrageResponseModel result = this.abfrageService.patchAbfrageAngelegt(infrastrukturabfrageModel);
 
-        final InfrastrukturabfrageModel expected = new InfrastrukturabfrageModel();
+        final InfrastrukturabfrageResponseModel expected = new InfrastrukturabfrageResponseModel();
         expected.setId(infrastrukturabfrageModel.getId());
 
         assertThat(result, is(infrastrukturabfrageModel));
@@ -251,22 +252,22 @@ class AbfrageServiceTest {
         Mockito.verify(this.infrastrukturabfrageRepository, Mockito.times(1)).findById(entity.getId());
         Mockito.verify(this.infrastrukturabfrageRepository, Mockito.times(1)).saveAndFlush(entity);
         Mockito
-            .verify(this.infrastrukturabfrageRepository, Mockito.times(1))
-            .findByAbfrage_NameAbfrageIgnoreCase("hallo");
+                .verify(this.infrastrukturabfrageRepository, Mockito.times(1))
+                .findByAbfrage_NameAbfrageIgnoreCase("hallo");
         Mockito
-            .verify(this.dokumentService, Mockito.times(1))
-            .deleteDokumenteFromOriginalDokumentenListWhichAreMissingInParameterAdaptedDokumentenListe(
-                Mockito.isNull(),
-                Mockito.isNull()
-            );
+                .verify(this.dokumentService, Mockito.times(1))
+                .deleteDokumenteFromOriginalDokumentenListWhichAreMissingInParameterAdaptedDokumentenListe(
+                        Mockito.isNull(),
+                        Mockito.isNull()
+                );
     }
 
     @Test
     void throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid()
-        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, FileHandlingFailedException, FileHandlingWithS3FailedException {
-        final InfrastrukturabfrageModel infrastrukturabfrageModel = new InfrastrukturabfrageModel();
+            throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, FileHandlingFailedException, FileHandlingWithS3FailedException {
+        final InfrastrukturabfrageResponseModel infrastrukturabfrageModel = new InfrastrukturabfrageResponseModel();
         infrastrukturabfrageModel.setId(UUID.randomUUID());
-        final AbfrageModel abfrageModel = new AbfrageModel();
+        final AbfrageResponseModel abfrageModel = new AbfrageResponseModel();
         abfrageModel.setNameAbfrage("test");
         abfrageModel.setStatusAbfrage(StatusAbfrage.ABBRUCH);
         infrastrukturabfrageModel.setAbfrage(abfrageModel);
@@ -276,21 +277,21 @@ class AbfrageServiceTest {
         Mockito.when(this.infrastrukturabfrageRepository.findById(entity.getId())).thenReturn(Optional.of(entity));
 
         Assertions.assertThrows(
-            AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageService.patchAbfrageAngelegt(infrastrukturabfrageModel)
+                AbfrageStatusNotAllowedException.class,
+                () -> this.abfrageService.patchAbfrageAngelegt(infrastrukturabfrageModel)
         );
 
         Mockito.verify(this.infrastrukturabfrageRepository, Mockito.times(1)).findById(entity.getId());
         Mockito.verify(this.infrastrukturabfrageRepository, Mockito.times(0)).saveAndFlush(entity);
         Mockito
-            .verify(this.infrastrukturabfrageRepository, Mockito.times(0))
-            .findByAbfrage_NameAbfrageIgnoreCase("test");
+                .verify(this.infrastrukturabfrageRepository, Mockito.times(0))
+                .findByAbfrage_NameAbfrageIgnoreCase("test");
         Mockito
-            .verify(this.dokumentService, Mockito.times(0))
-            .deleteDokumenteFromOriginalDokumentenListWhichAreMissingInParameterAdaptedDokumentenListe(
-                Mockito.isNull(),
-                Mockito.isNull()
-            );
+                .verify(this.dokumentService, Mockito.times(0))
+                .deleteDokumenteFromOriginalDokumentenListWhichAreMissingInParameterAdaptedDokumentenListe(
+                        Mockito.isNull(),
+                        Mockito.isNull()
+                );
     }
 
     @Test
@@ -323,8 +324,8 @@ class AbfrageServiceTest {
         Mockito.when(this.infrastrukturabfrageRepository.findById(entity.getId())).thenReturn(Optional.of(entity));
 
         Assertions.assertThrows(
-            EntityIsReferencedException.class,
-            () -> this.abfrageService.deleteInfrasturkturabfrageById(id)
+                EntityIsReferencedException.class,
+                () -> this.abfrageService.deleteInfrasturkturabfrageById(id)
         );
 
         Mockito.verify(this.infrastrukturabfrageRepository, Mockito.times(1)).findById(entity.getId());
@@ -333,13 +334,13 @@ class AbfrageServiceTest {
 
     @Test
     void throwEntityIsReferencedExceptionWhenAbfrageIsReferencingBauvorhaben() throws EntityIsReferencedException {
-        this.abfrageService.throwEntityIsReferencedExceptionWhenAbfrageIsReferencingBauvorhaben(new AbfrageModel());
+        this.abfrageService.throwEntityIsReferencedExceptionWhenAbfrageIsReferencingBauvorhaben(new AbfrageResponseModel());
 
-        final AbfrageModel abfrage = new AbfrageModel();
+        final AbfrageResponseModel abfrage = new AbfrageResponseModel();
         abfrage.setBauvorhaben(new BauvorhabenModel());
         Assertions.assertThrows(
-            EntityIsReferencedException.class,
-            () -> this.abfrageService.throwEntityIsReferencedExceptionWhenAbfrageIsReferencingBauvorhaben(abfrage)
+                EntityIsReferencedException.class,
+                () -> this.abfrageService.throwEntityIsReferencedExceptionWhenAbfrageIsReferencingBauvorhaben(abfrage)
         );
     }
 }

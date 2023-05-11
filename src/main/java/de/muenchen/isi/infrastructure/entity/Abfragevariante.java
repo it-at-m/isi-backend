@@ -5,8 +5,10 @@
 package de.muenchen.isi.infrastructure.entity;
 
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Planungsrecht;
-import java.math.BigDecimal;
-import java.util.List;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,18 +19,17 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import java.math.BigDecimal;
+import java.util.List;
 
 @Entity
 @Table(
-    uniqueConstraints = {
-        @UniqueConstraint(
-            name = "UniqueNameAbfragevariantePerAbfrage",
-            columnNames = { "abfrage_id", "abfragevariantenName" }
-        ),
-    }
+        uniqueConstraints = {
+                @UniqueConstraint(
+                        name = "UniqueNameAbfragevariantePerAbfrage",
+                        columnNames = {"abfrage_id", "abfragevariantenName"}
+                ),
+        }
 )
 @Data
 @ToString(callSuper = true)
@@ -93,7 +94,7 @@ public class Abfragevariante extends BaseEntity {
     @Column(precision = 10, scale = 2, nullable = true)
     private BigDecimal geschossflaecheSonstiges;
 
-    @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "abfragevariante_id")
     private List<Bauabschnitt> bauabschnitte;
 }

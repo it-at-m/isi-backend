@@ -1,36 +1,37 @@
 package de.muenchen.isi.api.validation;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-
-import de.muenchen.isi.api.dto.AbfragevarianteDto;
-import de.muenchen.isi.api.dto.InfrastrukturabfrageDto;
+import de.muenchen.isi.api.dto.AbfragevarianteResponseDto;
+import de.muenchen.isi.api.dto.InfrastrukturabfrageResponseDto;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Planungsrecht;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
+import org.junit.jupiter.api.Test;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import org.junit.jupiter.api.Test;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 
 class GeschossflaecheWohnenSobonUrsaechlichValidatorTest {
 
     private final GeschossflaecheWohnenSobonUrsaechlichValidator geschossflaecheWohnenSobonUrsaechlichValidator =
-        new GeschossflaecheWohnenSobonUrsaechlichValidator();
+            new GeschossflaecheWohnenSobonUrsaechlichValidator();
 
     @Test
     void isValidSobonRelevant() {
-        final InfrastrukturabfrageDto infrastrukturabfrage = new InfrastrukturabfrageDto();
+        final InfrastrukturabfrageResponseDto infrastrukturabfrage = new InfrastrukturabfrageResponseDto();
         infrastrukturabfrage.setSobonRelevant(UncertainBoolean.TRUE);
         assertThat(this.geschossflaecheWohnenSobonUrsaechlichValidator.isValid(infrastrukturabfrage, null), is(true));
 
-        infrastrukturabfrage.setAbfragevarianten(new ArrayList<AbfragevarianteDto>());
+        infrastrukturabfrage.setAbfragevarianten(new ArrayList<AbfragevarianteResponseDto>());
 
-        final AbfragevarianteDto abfragevariantePlanungsrechtParag11 = new AbfragevarianteDto();
+        final AbfragevarianteResponseDto abfragevariantePlanungsrechtParag11 = new AbfragevarianteResponseDto();
         abfragevariantePlanungsrechtParag11.setPlanungsrecht(Planungsrecht.BPLAN_PARAG_11);
         abfragevariantePlanungsrechtParag11.setGeschossflaecheWohnenSoBoNursaechlich(BigDecimal.TEN);
         infrastrukturabfrage.getAbfragevarianten().add(abfragevariantePlanungsrechtParag11);
         assertThat(this.geschossflaecheWohnenSobonUrsaechlichValidator.isValid(infrastrukturabfrage, null), is(true));
 
-        final AbfragevarianteDto abfragevariantePlanungsrechtParag12 = new AbfragevarianteDto();
+        final AbfragevarianteResponseDto abfragevariantePlanungsrechtParag12 = new AbfragevarianteResponseDto();
         abfragevariantePlanungsrechtParag12.setPlanungsrecht(Planungsrecht.BPLAN_PARAG_12);
         abfragevariantePlanungsrechtParag12.setGeschossflaecheWohnenSoBoNursaechlich(BigDecimal.ZERO);
         infrastrukturabfrage.getAbfragevarianten().add(abfragevariantePlanungsrechtParag12);
@@ -42,19 +43,19 @@ class GeschossflaecheWohnenSobonUrsaechlichValidatorTest {
 
     @Test
     void isValidAbfrageNotSobonRelevant() {
-        final InfrastrukturabfrageDto infrastrukturabfrage = new InfrastrukturabfrageDto();
+        final InfrastrukturabfrageResponseDto infrastrukturabfrage = new InfrastrukturabfrageResponseDto();
         infrastrukturabfrage.setSobonRelevant(UncertainBoolean.FALSE);
         assertThat(this.geschossflaecheWohnenSobonUrsaechlichValidator.isValid(infrastrukturabfrage, null), is(true));
 
-        infrastrukturabfrage.setAbfragevarianten(new ArrayList<AbfragevarianteDto>());
+        infrastrukturabfrage.setAbfragevarianten(new ArrayList<AbfragevarianteResponseDto>());
 
-        final AbfragevarianteDto abfragevariantePlanungsrechtParag11 = new AbfragevarianteDto();
+        final AbfragevarianteResponseDto abfragevariantePlanungsrechtParag11 = new AbfragevarianteResponseDto();
         abfragevariantePlanungsrechtParag11.setPlanungsrecht(Planungsrecht.BPLAN_PARAG_11);
         abfragevariantePlanungsrechtParag11.setGeschossflaecheWohnenSoBoNursaechlich(BigDecimal.TEN);
         infrastrukturabfrage.getAbfragevarianten().add(abfragevariantePlanungsrechtParag11);
         assertThat(this.geschossflaecheWohnenSobonUrsaechlichValidator.isValid(infrastrukturabfrage, null), is(true));
 
-        final AbfragevarianteDto abfragevariantePlanungsrechtParag12 = new AbfragevarianteDto();
+        final AbfragevarianteResponseDto abfragevariantePlanungsrechtParag12 = new AbfragevarianteResponseDto();
         abfragevariantePlanungsrechtParag12.setPlanungsrecht(Planungsrecht.BPLAN_PARAG_12);
         abfragevariantePlanungsrechtParag12.setGeschossflaecheWohnenSoBoNursaechlich(null);
         infrastrukturabfrage.getAbfragevarianten().add(abfragevariantePlanungsrechtParag12);
@@ -63,18 +64,18 @@ class GeschossflaecheWohnenSobonUrsaechlichValidatorTest {
 
     @Test
     void isValidAbfragevarianteNotSobonRelevant() {
-        final InfrastrukturabfrageDto infrastrukturabfrage = new InfrastrukturabfrageDto();
+        final InfrastrukturabfrageResponseDto infrastrukturabfrage = new InfrastrukturabfrageResponseDto();
         infrastrukturabfrage.setSobonRelevant(UncertainBoolean.TRUE);
         assertThat(this.geschossflaecheWohnenSobonUrsaechlichValidator.isValid(infrastrukturabfrage, null), is(true));
 
-        infrastrukturabfrage.setAbfragevarianten(new ArrayList<AbfragevarianteDto>());
+        infrastrukturabfrage.setAbfragevarianten(new ArrayList<AbfragevarianteResponseDto>());
 
-        final AbfragevarianteDto abfragevariantePlanungsrechtParag30 = new AbfragevarianteDto();
+        final AbfragevarianteResponseDto abfragevariantePlanungsrechtParag30 = new AbfragevarianteResponseDto();
         abfragevariantePlanungsrechtParag30.setPlanungsrecht(Planungsrecht.BPLAN_PARAG_30);
         abfragevariantePlanungsrechtParag30.setGeschossflaecheWohnenSoBoNursaechlich(BigDecimal.TEN);
         infrastrukturabfrage.getAbfragevarianten().add(abfragevariantePlanungsrechtParag30);
 
-        final AbfragevarianteDto abfragevariantePlanungsrechtParag34 = new AbfragevarianteDto();
+        final AbfragevarianteResponseDto abfragevariantePlanungsrechtParag34 = new AbfragevarianteResponseDto();
         abfragevariantePlanungsrechtParag34.setPlanungsrecht(Planungsrecht.NACHVERD_PARAG_34);
         infrastrukturabfrage.getAbfragevarianten().add(abfragevariantePlanungsrechtParag34);
 
