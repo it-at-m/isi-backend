@@ -1,6 +1,9 @@
 spring:
   application.name: @project.artifactId@
   banner.location: banner.txt
+  datasource:
+    hikari:
+      maximum-pool-size: 256
 
 server:
   shutdown: "graceful"
