@@ -66,7 +66,7 @@ public class AbfrageController {
 
     private final EntityManager entityManager;
 
-    @Transactional(readOnly = true)
+    @Transactional
     @GetMapping("/test/{query}")
     public ResponseEntity<Set<String>> test(@PathVariable final String query) {
         final var adaptedQuery = StringUtils.lowerCase(StringUtils.trimToEmpty(query));
