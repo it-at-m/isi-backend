@@ -35,7 +35,7 @@ import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
 @Indexed
 public class Bauvorhaben extends BaseEntity {
 
-    @FullTextField(analyzer = "searchword_suggestion_analyzer")
+    @FullTextField(analyzer = "entity_analyzer")
     @Column(nullable = false, unique = true)
     private String nameVorhaben;
 

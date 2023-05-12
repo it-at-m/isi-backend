@@ -14,20 +14,32 @@ public class SearchwordAnalysisConfigurer implements ElasticsearchAnalysisConfig
 
     @Override
     public void configure(final ElasticsearchAnalysisConfigurationContext context) {
+        // Analyzer für Suchwortermittlung
         context
-            .analyzer("searchword_suggestion_analyzer")
+            .analyzer("searchword_analyzer")
             .custom()
+            // https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-whitespace-tokenizer.html
             .tokenizer("whitespace")
-            .tokenFilters("lowercase_searchword_suggestion", "edge_ngram_searchword_suggestion");
+            .tokenFilters("lowercase_tokenfilter", "edge_ngram_tokenfilter");
 
-        // https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-lowercase-tokenizer.html
-        context.tokenFilter("lowercase_searchword_suggestion").type("lowercase");
-
-        // https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-edgengram-tokenizer.html
+        // Analyzer für Entitätsermittlung auf Basis von gefundenen Suchwörter
         context
-            .tokenFilter("edge_ngram_searchword_suggestion")
+            .analyzer("entity_analyzer")
+            .custom()
+            // https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-whitespace-tokenizer.html
+            .tokenizer("whitespace")
+            .tokenFilters("lowercase_tokenfilter");
+
+        context
+            // https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-lowercase-tokenfilter.html
+            .tokenFilter("lowercase_tokenfilter")
+            .type("lowercase");
+
+        context
+            // https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-edgengram-tokenfilter.html
+            .tokenFilter("edge_ngram_tokenfilter")
             .type("edge_ngram")
             .param("min_gram", "1")
-            .param("max_gram", "512");
+            .param("max_gram", "255");
     }
 }

@@ -55,7 +55,7 @@ public class Abfrage {
     @Column(nullable = true)
     private String bebauungsplannummer;
 
-    @FullTextField(analyzer = "searchword_suggestion_analyzer")
+    @FullTextField(analyzer = "entity_analyzer")
     @Column(nullable = false, unique = true, length = 70)
     private String nameAbfrage;
 

@@ -30,7 +30,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Indexed
 public class BauvorhabenSuchwort extends BaseEntity {
 
-    @FullTextField(analyzer = "searchword_suggestion_analyzer")
+    @FullTextField(analyzer = "searchword_analyzer")
     @Column(nullable = false)
     private String suchwort;
 
