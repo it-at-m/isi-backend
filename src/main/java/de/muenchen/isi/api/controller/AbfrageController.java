@@ -16,7 +16,7 @@ import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
 import de.muenchen.isi.domain.service.AbfrageService;
 import de.muenchen.isi.domain.service.BauvorhabenService;
-import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
+import de.muenchen.isi.infrastructure.entity.BauvorhabenSuchwort;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -24,6 +24,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import javax.persistence.EntityManager;
@@ -31,6 +32,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.search.engine.search.query.SearchResult;
 import org.hibernate.search.mapper.orm.Search;
 import org.hibernate.search.mapper.orm.session.SearchSession;
@@ -66,18 +68,24 @@ public class AbfrageController {
 
     @Transactional(readOnly = true)
     @GetMapping("/test/{query}")
-    public void test(@PathVariable final String query) {
-        //String lowerCasedSearchTerm = "bau";
+    public ResponseEntity<Set<String>> test(@PathVariable final String query) {
+        final var adaptedQuery = StringUtils.lowerCase(StringUtils.trimToEmpty(query));
 
         SearchSession searchSession = Search.session(entityManager.getEntityManagerFactory().createEntityManager());
 
-        SearchResult<Bauvorhaben> result = searchSession
-            .search(Bauvorhaben.class)
-            .where(function -> function.wildcard().field("nameVorhaben").matching(query))
+        SearchResult<BauvorhabenSuchwort> result = searchSession
+            .search(BauvorhabenSuchwort.class)
+            .where(function -> function.wildcard().field("suchwort").matching(adaptedQuery))
             .fetch(20);
 
         System.err.println(result.total().hitCount());
         System.err.println(result.hits());
+        final var searchResult = result
+            .hits()
+            .stream()
+            .map(BauvorhabenSuchwort::getSuchwort)
+            .collect(Collectors.toSet());
+        return ResponseEntity.ok(searchResult);
     }
 
     @Transactional(readOnly = true)

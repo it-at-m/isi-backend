@@ -12,7 +12,10 @@ import de.muenchen.isi.domain.model.AbfrageModel;
 import de.muenchen.isi.domain.model.BauvorhabenModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.InfrastruktureinrichtungModel;
 import de.muenchen.isi.domain.service.filehandling.DokumentService;
+import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
+import de.muenchen.isi.infrastructure.entity.BauvorhabenSuchwort;
 import de.muenchen.isi.infrastructure.repository.BauvorhabenRepository;
+import de.muenchen.isi.infrastructure.repository.BauvorhabenSuchwortRepository;
 import de.muenchen.isi.infrastructure.repository.InfrastrukturabfrageRepository;
 import de.muenchen.isi.infrastructure.repository.infrastruktureinrichtung.GrundschuleRepository;
 import de.muenchen.isi.infrastructure.repository.infrastruktureinrichtung.GsNachmittagBetreuungRepository;
@@ -21,7 +24,9 @@ import de.muenchen.isi.infrastructure.repository.infrastruktureinrichtung.Kinder
 import de.muenchen.isi.infrastructure.repository.infrastruktureinrichtung.KinderkrippeRepository;
 import de.muenchen.isi.infrastructure.repository.infrastruktureinrichtung.MittelschuleRepository;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -54,6 +59,8 @@ public class BauvorhabenService {
     private final MittelschuleRepository mittelschuleRepository;
 
     private final DokumentService dokumentService;
+
+    private final BauvorhabenSuchwortRepository bauvorhabenSuchwortRepository;
 
     /**
      * Die Methode gibt alle {@link BauvorhabenModel} als Liste zurück.
@@ -97,6 +104,7 @@ public class BauvorhabenService {
         if ((saved.isPresent() && saved.get().getId().equals(bauvorhabenEntity.getId())) || saved.isEmpty()) {
             try {
                 bauvorhabenEntity = this.bauvorhabenRepository.saveAndFlush(bauvorhabenEntity);
+                this.deleteOldSearchwordsAndAddNewSearchwords(bauvorhabenEntity);
             } catch (final ObjectOptimisticLockingFailureException exception) {
                 final var message = "Die Daten wurden in der Zwischenzeit geändert. Bitte laden Sie die Seite neu!";
                 throw new OptimisticLockingException(message, exception);
@@ -162,6 +170,22 @@ public class BauvorhabenService {
             abfrage.setBauvorhaben(model);
         }
         return abfrage;
+    }
+
+    /**
+     *
+     * @param entity
+     */
+    public void deleteOldSearchwordsAndAddNewSearchwords(final Bauvorhaben entity) {
+        bauvorhabenSuchwortRepository.deleteAllByReferenceId(entity.getId());
+        final Set<String> suchwoerter = new HashSet<>();
+        suchwoerter.add(entity.getNameVorhaben());
+        suchwoerter.add(entity.getEigentuemer());
+        final Set<BauvorhabenSuchwort> bauvorhabenSuchwoerter = suchwoerter
+            .stream()
+            .map(suchwort -> new BauvorhabenSuchwort(suchwort, entity.getId()))
+            .collect(Collectors.toSet());
+        bauvorhabenSuchwortRepository.saveAllAndFlush(bauvorhabenSuchwoerter);
     }
 
     /**

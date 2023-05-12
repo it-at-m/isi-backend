@@ -4,6 +4,10 @@
  */
 package de.muenchen.isi;
 
+import de.muenchen.isi.domain.exception.OptimisticLockingException;
+import de.muenchen.isi.domain.exception.UniqueViolationException;
+import de.muenchen.isi.domain.mapper.BauvorhabenDomainMapper;
+import de.muenchen.isi.domain.service.BauvorhabenService;
 import de.muenchen.isi.infrastructure.entity.Abfrage;
 import de.muenchen.isi.infrastructure.entity.Abfragevariante;
 import de.muenchen.isi.infrastructure.entity.Bauabschnitt;
@@ -82,6 +86,10 @@ public class DatabaseFiller implements CommandLineRunner {
 
     private final MittelschuleRepository mittelschuleRepository;
 
+    private final BauvorhabenDomainMapper bauvorhabenDomainMapper;
+
+    private final BauvorhabenService bauvorhabenService;
+
     /**
      * Zu Implementierende Methode des CommandLineRunners
      *
@@ -129,28 +137,40 @@ public class DatabaseFiller implements CommandLineRunner {
         this.infrastrukturabfrageRepository.save(abfrage);
     }
 
-    private Bauvorhaben addBauvorhaben1() {
+    private Bauvorhaben addBauvorhaben1() throws UniqueViolationException, OptimisticLockingException {
         final var bauvorhaben = createBauvorhaben();
         bauvorhaben.setNameVorhaben("Bauvorhaben 1");
-        return this.bauvorhabenRepository.save(bauvorhaben);
+        var model = bauvorhabenDomainMapper.entity2Model(bauvorhaben);
+
+        model = this.bauvorhabenService.saveBauvorhaben(model);
+        return bauvorhabenDomainMapper.model2Entity(model);
     }
 
-    private Bauvorhaben addBauvorhaben2() {
+    private Bauvorhaben addBauvorhaben2() throws UniqueViolationException, OptimisticLockingException {
         final var bauvorhaben = createBauvorhaben();
         bauvorhaben.setNameVorhaben("Bauvorhaben 2");
-        return this.bauvorhabenRepository.save(bauvorhaben);
+        var model = bauvorhabenDomainMapper.entity2Model(bauvorhaben);
+
+        model = this.bauvorhabenService.saveBauvorhaben(model);
+        return bauvorhabenDomainMapper.model2Entity(model);
     }
 
-    private Bauvorhaben addBauvorhaben3() {
+    private Bauvorhaben addBauvorhaben3() throws UniqueViolationException, OptimisticLockingException {
         final var bauvorhaben = createBauvorhaben();
         bauvorhaben.setNameVorhaben("Bauvorhaben 3");
-        return this.bauvorhabenRepository.save(bauvorhaben);
+        var model = bauvorhabenDomainMapper.entity2Model(bauvorhaben);
+
+        model = this.bauvorhabenService.saveBauvorhaben(model);
+        return bauvorhabenDomainMapper.model2Entity(model);
     }
 
-    private Bauvorhaben addBauvorhaben4() {
+    private Bauvorhaben addBauvorhaben4() throws UniqueViolationException, OptimisticLockingException {
         final var bauvorhaben = createBauvorhaben();
         bauvorhaben.setNameVorhaben("Bauvorhaben 4");
-        return this.bauvorhabenRepository.save(bauvorhaben);
+        var model = bauvorhabenDomainMapper.entity2Model(bauvorhaben);
+
+        model = this.bauvorhabenService.saveBauvorhaben(model);
+        return bauvorhabenDomainMapper.model2Entity(model);
     }
 
 
@@ -405,7 +425,7 @@ public class DatabaseFiller implements CommandLineRunner {
         return returnListe;
     }
 
-    private void addInfrastruktureinrichtungen() {
+    private void addInfrastruktureinrichtungen() throws UniqueViolationException, OptimisticLockingException {
         this.addKinderkrippe();
         this.addKindergarten();
         this.addHausFuerKinder();
@@ -415,7 +435,7 @@ public class DatabaseFiller implements CommandLineRunner {
         this.addMittelschule();
     }
 
-    private void addKinderkrippe() {
+    private void addKinderkrippe() throws UniqueViolationException, OptimisticLockingException {
         final Infrastruktureinrichtung infrastruktureinrichtung = new Infrastruktureinrichtung();
         final Kinderkrippe kinderkrippe = new Kinderkrippe();
 
@@ -480,7 +500,7 @@ public class DatabaseFiller implements CommandLineRunner {
         this.kindergartenRepository.save(kindergarten);
     }
 
-    private void addHausFuerKinder() {
+    private void addHausFuerKinder() throws UniqueViolationException, OptimisticLockingException {
         final Infrastruktureinrichtung infrastruktureinrichtung = new Infrastruktureinrichtung();
         final HausFuerKinder hausFuerKinder = new HausFuerKinder();
 
