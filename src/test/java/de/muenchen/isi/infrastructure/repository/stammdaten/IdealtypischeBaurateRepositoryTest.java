@@ -8,7 +8,6 @@ import de.muenchen.isi.TestConstants;
 import de.muenchen.isi.infrastructure.entity.stammdaten.baurate.IdealtypischeBaurate;
 import de.muenchen.isi.infrastructure.entity.stammdaten.baurate.Jahresrate;
 import de.muenchen.isi.infrastructure.entity.stammdaten.baurate.SelectionRange;
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
@@ -39,7 +38,7 @@ class IdealtypischeBaurateRepositoryTest {
 
     @BeforeEach
     @Transactional
-    void beforeEach() throws IOException {
+    void beforeEach() {
         idealtypischeBaurateRepository.deleteAll();
         var idealtypeischeBaurate = createIdealtypischeBaurate(0L, 100L, 0L, 150L);
         idealtypischeBaurateRepository.saveAndFlush(idealtypeischeBaurate);
@@ -52,9 +51,22 @@ class IdealtypischeBaurateRepositoryTest {
     @Test
     @Transactional
     void findByRangeWohneinheitenVonLessThanEqualAndRangeWohneinheitenBisEinschliesslichGreaterThanEqual() {
-        System.err.println(idealtypischeBaurateRepository.findAll().size());
-
         var result =
+            idealtypischeBaurateRepository.findByRangeWohneinheitenVonLessThanEqualAndRangeWohneinheitenBisEinschliesslichGreaterThanEqual(
+                -1L
+            );
+        assertThat(result.isPresent(), is(false));
+
+        result =
+            idealtypischeBaurateRepository.findByRangeWohneinheitenVonLessThanEqualAndRangeWohneinheitenBisEinschliesslichGreaterThanEqual(
+                0L
+            );
+        assertThat(result.get().getRangeWohneinheiten().getVon(), is(0L));
+        assertThat(result.get().getRangeWohneinheiten().getBisEinschliesslich(), is(100L));
+        assertThat(result.get().getRangeGeschossflaecheWohnen().getVon(), is(0L));
+        assertThat(result.get().getRangeGeschossflaecheWohnen().getBisEinschliesslich(), is(150L));
+
+        result =
             idealtypischeBaurateRepository.findByRangeWohneinheitenVonLessThanEqualAndRangeWohneinheitenBisEinschliesslichGreaterThanEqual(
                 50L
             );
@@ -62,6 +74,75 @@ class IdealtypischeBaurateRepositoryTest {
         assertThat(result.get().getRangeWohneinheiten().getBisEinschliesslich(), is(100L));
         assertThat(result.get().getRangeGeschossflaecheWohnen().getVon(), is(0L));
         assertThat(result.get().getRangeGeschossflaecheWohnen().getBisEinschliesslich(), is(150L));
+
+        result =
+            idealtypischeBaurateRepository.findByRangeWohneinheitenVonLessThanEqualAndRangeWohneinheitenBisEinschliesslichGreaterThanEqual(
+                100L
+            );
+        assertThat(result.get().getRangeWohneinheiten().getVon(), is(0L));
+        assertThat(result.get().getRangeWohneinheiten().getBisEinschliesslich(), is(100L));
+        assertThat(result.get().getRangeGeschossflaecheWohnen().getVon(), is(0L));
+        assertThat(result.get().getRangeGeschossflaecheWohnen().getBisEinschliesslich(), is(150L));
+
+        result =
+            idealtypischeBaurateRepository.findByRangeWohneinheitenVonLessThanEqualAndRangeWohneinheitenBisEinschliesslichGreaterThanEqual(
+                101L
+            );
+        assertThat(result.get().getRangeWohneinheiten().getVon(), is(101L));
+        assertThat(result.get().getRangeWohneinheiten().getBisEinschliesslich(), is(200L));
+        assertThat(result.get().getRangeGeschossflaecheWohnen().getVon(), is(151L));
+        assertThat(result.get().getRangeGeschossflaecheWohnen().getBisEinschliesslich(), is(250L));
+
+        result =
+            idealtypischeBaurateRepository.findByRangeWohneinheitenVonLessThanEqualAndRangeWohneinheitenBisEinschliesslichGreaterThanEqual(
+                151L
+            );
+        assertThat(result.get().getRangeWohneinheiten().getVon(), is(101L));
+        assertThat(result.get().getRangeWohneinheiten().getBisEinschliesslich(), is(200L));
+        assertThat(result.get().getRangeGeschossflaecheWohnen().getVon(), is(151L));
+        assertThat(result.get().getRangeGeschossflaecheWohnen().getBisEinschliesslich(), is(250L));
+
+        result =
+            idealtypischeBaurateRepository.findByRangeWohneinheitenVonLessThanEqualAndRangeWohneinheitenBisEinschliesslichGreaterThanEqual(
+                200L
+            );
+        assertThat(result.get().getRangeWohneinheiten().getVon(), is(101L));
+        assertThat(result.get().getRangeWohneinheiten().getBisEinschliesslich(), is(200L));
+        assertThat(result.get().getRangeGeschossflaecheWohnen().getVon(), is(151L));
+        assertThat(result.get().getRangeGeschossflaecheWohnen().getBisEinschliesslich(), is(250L));
+
+        result =
+            idealtypischeBaurateRepository.findByRangeWohneinheitenVonLessThanEqualAndRangeWohneinheitenBisEinschliesslichGreaterThanEqual(
+                201L
+            );
+        assertThat(result.get().getRangeWohneinheiten().getVon(), is(201L));
+        assertThat(result.get().getRangeWohneinheiten().getBisEinschliesslich(), is(300L));
+        assertThat(result.get().getRangeGeschossflaecheWohnen().getVon(), is(251L));
+        assertThat(result.get().getRangeGeschossflaecheWohnen().getBisEinschliesslich(), is(350L));
+
+        result =
+            idealtypischeBaurateRepository.findByRangeWohneinheitenVonLessThanEqualAndRangeWohneinheitenBisEinschliesslichGreaterThanEqual(
+                250L
+            );
+        assertThat(result.get().getRangeWohneinheiten().getVon(), is(201L));
+        assertThat(result.get().getRangeWohneinheiten().getBisEinschliesslich(), is(300L));
+        assertThat(result.get().getRangeGeschossflaecheWohnen().getVon(), is(251L));
+        assertThat(result.get().getRangeGeschossflaecheWohnen().getBisEinschliesslich(), is(350L));
+
+        result =
+            idealtypischeBaurateRepository.findByRangeWohneinheitenVonLessThanEqualAndRangeWohneinheitenBisEinschliesslichGreaterThanEqual(
+                300L
+            );
+        assertThat(result.get().getRangeWohneinheiten().getVon(), is(201L));
+        assertThat(result.get().getRangeWohneinheiten().getBisEinschliesslich(), is(300L));
+        assertThat(result.get().getRangeGeschossflaecheWohnen().getVon(), is(251L));
+        assertThat(result.get().getRangeGeschossflaecheWohnen().getBisEinschliesslich(), is(350L));
+
+        result =
+            idealtypischeBaurateRepository.findByRangeWohneinheitenVonLessThanEqualAndRangeWohneinheitenBisEinschliesslichGreaterThanEqual(
+                351L
+            );
+        assertThat(result.isPresent(), is(false));
     }
 
     @Test
