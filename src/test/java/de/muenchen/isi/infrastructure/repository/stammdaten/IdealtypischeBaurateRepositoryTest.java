@@ -143,6 +143,12 @@ class IdealtypischeBaurateRepositoryTest {
                 351L
             );
         assertThat(result.isPresent(), is(false));
+
+        result =
+            idealtypischeBaurateRepository.findByRangeWohneinheitenVonLessThanEqualAndRangeWohneinheitenBisEinschliesslichGreaterThanEqual(
+                null
+            );
+        assertThat(result.isPresent(), is(false));
     }
 
     @Test
