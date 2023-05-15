@@ -1,6 +1,7 @@
 package de.muenchen.isi.api.dto;
 
 import de.muenchen.isi.api.dto.common.AdresseDto;
+import de.muenchen.isi.api.dto.common.VerortungDto;
 import de.muenchen.isi.api.dto.filehandling.DokumentDto;
 import de.muenchen.isi.api.validation.HasAllowedNumberOfDocuments;
 import de.muenchen.isi.api.validation.NotUnspecified;
@@ -39,6 +40,9 @@ public class BauvorhabenDto extends BaseEntityDto {
 
     @Valid
     private AdresseDto adresse;
+
+    @Valid
+    private VerortungDto verortung;
 
     @Size(max = 255, message = "Es sind maximal {max} Zeichen erlaubt")
     private String allgemeineOrtsangabe;

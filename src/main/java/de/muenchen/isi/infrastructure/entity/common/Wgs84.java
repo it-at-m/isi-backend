@@ -10,9 +10,9 @@ import lombok.NoArgsConstructor;
 @Embeddable
 public class Wgs84 {
 
-    @Column(nullable = false)
+    @Column
     private Double latitude;
 
-    @Column(nullable = false)
+    @Column
     private Double longitude;
 }

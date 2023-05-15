@@ -168,6 +168,12 @@
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-jpamodelgen</artifactId>
         </dependency>
+        <!-- Version muss zur Hibernateversion passen: https://github.com/vladmihalcea/hypersistence-utils -->
+        <dependency>
+            <groupId>io.hypersistence</groupId>
+            <artifactId>hypersistence-utils-hibernate-55</artifactId>
+            <version>3.3.2</version>
+        </dependency>
 
         <!-- Other -->
         <dependency>
