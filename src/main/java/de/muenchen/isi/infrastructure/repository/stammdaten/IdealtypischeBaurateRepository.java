@@ -20,16 +20,16 @@ public interface IdealtypischeBaurateRepository extends JpaRepository<Idealtypis
         final Long wohneinheitenBisEinschliesslich
     );
 
-    default Optional<IdealtypischeBaurate> findByRangeGeschossflaecheWohnenVonLessThanEqualAndRangeWohneinheitenBisEinschliesslichGreaterThanEqual(
+    default Optional<IdealtypischeBaurate> findByRangeGeschossflaecheWohnenVonLessThanEqualAndRangeGeschossflaecheWohnenBisEinschliesslichGreaterThanEqual(
         final Long geschossflaecheWohnen
     ) {
-        return findByRangeGeschossflaecheWohnenVonLessThanEqualAndRangeWohneinheitenBisEinschliesslichGreaterThanEqual(
+        return findByRangeGeschossflaecheWohnenVonLessThanEqualAndRangeGeschossflaecheWohnenBisEinschliesslichGreaterThanEqual(
             geschossflaecheWohnen,
             geschossflaecheWohnen
         );
     }
 
-    Optional<IdealtypischeBaurate> findByRangeGeschossflaecheWohnenVonLessThanEqualAndRangeWohneinheitenBisEinschliesslichGreaterThanEqual(
+    Optional<IdealtypischeBaurate> findByRangeGeschossflaecheWohnenVonLessThanEqualAndRangeGeschossflaecheWohnenBisEinschliesslichGreaterThanEqual(
         final Long geschossflaecheWohnenVon,
         final Long geschossflaecheWohnenBisEinschliesslich
     );
