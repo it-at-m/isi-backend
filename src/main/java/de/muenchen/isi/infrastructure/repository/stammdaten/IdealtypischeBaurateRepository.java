@@ -6,11 +6,31 @@ import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface IdealtypischeBaurateRepository extends JpaRepository<IdealtypischeBaurate, UUID> {
-    Optional<IdealtypischeBaurate> findByRangeWohneinheitenVonGreaterThanEqualAndRangeWohneinheitenBisEinschliesslichLessThanEqual(
+    default Optional<IdealtypischeBaurate> findByRangeWohneinheitenVonLessThanEqualAndRangeWohneinheitenBisEinschliesslichGreaterThanEqual(
         final Long wohneinheiten
+    ) {
+        return findByRangeWohneinheitenVonLessThanEqualAndRangeWohneinheitenBisEinschliesslichGreaterThanEqual(
+            wohneinheiten,
+            wohneinheiten
+        );
+    }
+
+    Optional<IdealtypischeBaurate> findByRangeWohneinheitenVonLessThanEqualAndRangeWohneinheitenBisEinschliesslichGreaterThanEqual(
+        final Long wohneinheitenVon,
+        final Long wohneinheitenBisEinschliesslich
     );
 
-    Optional<IdealtypischeBaurate> findByRangeGeschossflaecheWohnenVonGreaterThanEqualAndRangeWohneinheitenBisEinschliesslichLessThanEqual(
+    default Optional<IdealtypischeBaurate> findByRangeGeschossflaecheWohnenVonLessThanEqualAndRangeWohneinheitenBisEinschliesslichGreaterThanEqual(
         final Long geschossflaecheWohnen
+    ) {
+        return findByRangeGeschossflaecheWohnenVonLessThanEqualAndRangeWohneinheitenBisEinschliesslichGreaterThanEqual(
+            geschossflaecheWohnen,
+            geschossflaecheWohnen
+        );
+    }
+
+    Optional<IdealtypischeBaurate> findByRangeGeschossflaecheWohnenVonLessThanEqualAndRangeWohneinheitenBisEinschliesslichGreaterThanEqual(
+        final Long geschossflaecheWohnenVon,
+        final Long geschossflaecheWohnenBisEinschliesslich
     );
 }
