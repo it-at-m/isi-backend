@@ -21,4 +21,7 @@ public class BauabschnittDto extends BaseEntityDto {
 
     @NotEmpty
     private List<@Valid @NotNull BaugebietDto> baugebiete;
+
+    @NotNull
+    private Boolean technical;
 }
