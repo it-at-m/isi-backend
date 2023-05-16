@@ -11,6 +11,7 @@ import de.muenchen.isi.infrastructure.repository.stammdaten.IdealtypischeBaurate
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -80,5 +81,81 @@ class BaurateServiceTest {
         final var expected = List.of(baurate1, baurate2, baurate3);
 
         assertThat(result, is(expected));
+    }
+
+    @Test
+    void determineIdealtypischeBaurate() throws EntityNotFoundException {
+        final var idealtypischeBaurate = new IdealtypischeBaurate();
+
+        Mockito
+            .when(
+                this.idealtypischeBaurateRepository.findByWohneinheitenVonLessThanEqualAndWohneinheitenBisEinschliesslichGreaterThanEqual(
+                        132L
+                    )
+            )
+            .thenReturn(Optional.of(idealtypischeBaurate));
+
+        var result = this.baurateService.determineIdealtypischeBaurate(132L, BigDecimal.valueOf(1320.53));
+        assertThat(result, is(idealtypischeBaurate));
+        Mockito
+            .verify(this.idealtypischeBaurateRepository, Mockito.times(1))
+            .findByWohneinheitenVonLessThanEqualAndWohneinheitenBisEinschliesslichGreaterThanEqual(132L);
+        Mockito.reset(this.idealtypischeBaurateRepository);
+
+        Mockito
+            .when(
+                this.idealtypischeBaurateRepository.findByGeschossflaecheWohnenVonLessThanEqualAndGeschossflaecheWohnenBisEinschliesslichGreaterThanEqual(
+                        BigDecimal.valueOf(1320.53)
+                    )
+            )
+            .thenReturn(Optional.of(idealtypischeBaurate));
+
+        result = this.baurateService.determineIdealtypischeBaurate(null, BigDecimal.valueOf(1320.53));
+        assertThat(result, is(idealtypischeBaurate));
+        Mockito
+            .verify(this.idealtypischeBaurateRepository, Mockito.times(1))
+            .findByGeschossflaecheWohnenVonLessThanEqualAndGeschossflaecheWohnenBisEinschliesslichGreaterThanEqual(
+                BigDecimal.valueOf(1320.53)
+            );
+        Mockito.reset(this.idealtypischeBaurateRepository);
+
+        Mockito
+            .when(
+                this.idealtypischeBaurateRepository.findByGeschossflaecheWohnenVonLessThanEqualAndGeschossflaecheWohnenBisEinschliesslichGreaterThanEqual(
+                        null
+                    )
+            )
+            .thenReturn(Optional.empty());
+        Assertions.assertThrows(
+            EntityNotFoundException.class,
+            () -> this.baurateService.determineIdealtypischeBaurate(null, null)
+        );
+    }
+
+    @Test
+    void calculateRoundedDownRatenwertForGesamtwertAndRate() {
+        var result = baurateService.calculateRoundedDownRatenwertForGesamtwertAndRate(
+            BigDecimal.TEN,
+            BigDecimal.valueOf(0.053)
+        );
+        assertThat(result, is(BigDecimal.valueOf(0)));
+        result =
+            baurateService.calculateRoundedDownRatenwertForGesamtwertAndRate(BigDecimal.TEN, BigDecimal.valueOf(0.153));
+        assertThat(result, is(BigDecimal.valueOf(1)));
+        result =
+            baurateService.calculateRoundedDownRatenwertForGesamtwertAndRate(BigDecimal.TEN, BigDecimal.valueOf(0.353));
+        assertThat(result, is(BigDecimal.valueOf(3)));
+        result =
+            baurateService.calculateRoundedDownRatenwertForGesamtwertAndRate(BigDecimal.TEN, BigDecimal.valueOf(0.453));
+        assertThat(result, is(BigDecimal.valueOf(4)));
+        result =
+            baurateService.calculateRoundedDownRatenwertForGesamtwertAndRate(BigDecimal.TEN, BigDecimal.valueOf(0.553));
+        assertThat(result, is(BigDecimal.valueOf(5)));
+        result =
+            baurateService.calculateRoundedDownRatenwertForGesamtwertAndRate(BigDecimal.TEN, BigDecimal.valueOf(0.953));
+        assertThat(result, is(BigDecimal.valueOf(9)));
+        result =
+            baurateService.calculateRoundedDownRatenwertForGesamtwertAndRate(BigDecimal.TEN, BigDecimal.valueOf(1));
+        assertThat(result, is(BigDecimal.TEN));
     }
 }
