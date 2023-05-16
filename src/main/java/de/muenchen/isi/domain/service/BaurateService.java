@@ -67,10 +67,10 @@ public class BaurateService {
                 baurate.setGeschossflaecheWohnenGeplant(rateGeschossflaecheWohnen);
             } else {
                 // Ermitteln der letzten Rate auf Basis der partiellen Summe.
-                rateWohneinheiten = BigDecimal.valueOf(wohneinheiten).min(partialSumWohneinheiten);
+                rateWohneinheiten = BigDecimal.valueOf(wohneinheiten).subtract(partialSumWohneinheiten);
                 baurate.setAnzahlWeGeplant(rateWohneinheiten.intValue());
 
-                rateGeschossflaecheWohnen = geschossflaecheWohnen.min(partialSumGeschossflaecheWohnen);
+                rateGeschossflaecheWohnen = geschossflaecheWohnen.subtract(partialSumGeschossflaecheWohnen);
                 baurate.setGeschossflaecheWohnenGeplant(rateGeschossflaecheWohnen);
             }
             bauraten.add(baurate);
@@ -114,7 +114,7 @@ public class BaurateService {
             if (idealtypischeBaurateOpt.isEmpty()) {
                 errorMessage.append(
                     "Für die Geschossfläche Wohnen von " +
-                    wohneinheiten +
+                    geschossflaecheWohnen +
                     " qm konnte keine idealtypische Baurate ermittelt werden."
                 );
             }
