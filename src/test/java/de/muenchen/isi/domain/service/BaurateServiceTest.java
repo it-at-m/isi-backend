@@ -63,7 +63,7 @@ class BaurateServiceTest {
             )
             .thenReturn(Optional.of(idealtypischeBaurate));
 
-        final var result = baurateService.determineBauraten(2000, 132L, BigDecimal.valueOf(1320.53));
+        final var result = this.baurateService.determineBauraten(2000, 132L, BigDecimal.valueOf(1320.53));
 
         final var baurate1 = new BaurateModel();
         baurate1.setJahr(2000);
