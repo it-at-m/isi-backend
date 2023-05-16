@@ -22,12 +22,13 @@ public class BaurateService {
     private final IdealtypischeBaurateRepository idealtypischeBaurateRepository;
 
     /**
+     * Bauratenermittlung auf Basis der idealtypische Bauraten.
      *
      * @param realisierungsbeginn
      * @param wohneinheiten
      * @param geschossflaecheWohnen
-     * @return
-     * @throws EntityNotFoundException
+     * @return die Bauraten auf Basis der idealtypische Bauraten ermitelt durch die in den Parameter gegebenen Informationen.
+     * @throws EntityNotFoundException falls für die gegebenen Parameter keine idealtypische Bauraten ermittelt werden kann.
      */
     public List<BaurateModel> determineBauraten(
         final Integer realisierungsbeginn,
@@ -86,7 +87,7 @@ public class BaurateService {
      * @param geschossflaecheWohnen
      * @return die idealtypische Baurate für Wohneinheiten falls ein Wert gesetzt, andernfalls wird die idealtypische Baurate
      * auf Basis der geschossfläche Wohnen ermittelt.
-     * @throws EntityNotFoundException falls für die gegebenen Parameter keine Baurate ermittelt werden kann.
+     * @throws EntityNotFoundException falls für die gegebenen Parameter keine idealtypische Baurate ermittelt werden kann.
      */
     protected IdealtypischeBaurate determineIdealtypischeBaurate(
         final Long wohneinheiten,
