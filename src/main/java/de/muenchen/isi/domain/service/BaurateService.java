@@ -5,6 +5,7 @@ import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.mapper.BaurateDomainMapper;
 import de.muenchen.isi.domain.model.BaurateModel;
 import de.muenchen.isi.infrastructure.repository.BaurateRepository;
+import de.muenchen.isi.infrastructure.repository.stammdaten.IdealtypischeBaurateRepository;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -21,6 +22,8 @@ public class BaurateService {
     private final BaurateDomainMapper baurateDomainMapper;
 
     private final BaurateRepository baurateRepository;
+
+    private final IdealtypischeBaurateRepository idealtypischeBaurateRepository;
 
     public List<BaurateModel> getBauraten() {
         return this.baurateRepository.findAllByOrderByJahrDesc()

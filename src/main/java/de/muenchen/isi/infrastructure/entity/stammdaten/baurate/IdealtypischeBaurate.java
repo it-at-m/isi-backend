@@ -2,9 +2,8 @@ package de.muenchen.isi.infrastructure.entity.stammdaten.baurate;
 
 import de.muenchen.isi.infrastructure.entity.BaseEntity;
 import io.hypersistence.utils.hibernate.type.json.JsonType;
+import java.math.BigDecimal;
 import java.util.List;
-import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Index;
@@ -20,11 +19,11 @@ import org.hibernate.annotations.TypeDef;
     indexes = {
         @Index(
             name = "range_wohneinheiten_index",
-            columnList = "range_wohneinheiten_von DESC, range_wohneinheiten_bis_einschliesslich DESC"
+            columnList = "wohneinheitenVon ASC, wohneinheitenBisEinschliesslich ASC"
         ),
         @Index(
             name = "range_geschossflaeche_wohnen_index",
-            columnList = "range_geschossflaeche_wohnen_von DESC, range_geschossflaeche_wohnen_bis_einschliesslich DESC"
+            columnList = "geschossflaecheWohnenVon ASC, geschossflaecheWohnenBisEinschliesslich ASC"
         ),
     }
 )
@@ -34,30 +33,17 @@ import org.hibernate.annotations.TypeDef;
 @TypeDef(name = "json", typeClass = JsonType.class)
 public class IdealtypischeBaurate extends BaseEntity {
 
-    @AttributeOverrides(
-        {
-            @AttributeOverride(name = "von", column = @Column(name = "range_wohneinheiten_von", nullable = false)),
-            @AttributeOverride(
-                name = "bisEinschliesslich",
-                column = @Column(name = "range_wohneinheiten_bis_einschliesslich", nullable = false)
-            ),
-        }
-    )
-    private SelectionRange rangeWohneinheiten;
+    @Column(nullable = false)
+    private Long wohneinheitenVon;
 
-    @AttributeOverrides(
-        {
-            @AttributeOverride(
-                name = "von",
-                column = @Column(name = "range_geschossflaeche_wohnen_von", nullable = false)
-            ),
-            @AttributeOverride(
-                name = "bisEinschliesslich",
-                column = @Column(name = "range_geschossflaeche_wohnen_bis_einschliesslich", nullable = false)
-            ),
-        }
-    )
-    private SelectionRange rangeGeschossflaecheWohnen;
+    @Column(nullable = false)
+    private Long wohneinheitenBisEinschliesslich;
+
+    @Column(nullable = false)
+    private BigDecimal geschossflaecheWohnenVon;
+
+    @Column(nullable = false)
+    private BigDecimal geschossflaecheWohnenBisEinschliesslich;
 
     @Type(type = "json")
     @Column(nullable = false, columnDefinition = "json")

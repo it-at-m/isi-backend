@@ -10,6 +10,7 @@ import de.muenchen.isi.domain.mapper.BaurateDomainMapperImpl;
 import de.muenchen.isi.domain.model.BaurateModel;
 import de.muenchen.isi.infrastructure.entity.Baurate;
 import de.muenchen.isi.infrastructure.repository.BaurateRepository;
+import de.muenchen.isi.infrastructure.repository.stammdaten.IdealtypischeBaurateRepository;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -33,11 +34,15 @@ class BaurateServiceTest {
     @Mock
     private BaurateRepository baurateRepository;
 
+    @Mock
+    private IdealtypischeBaurateRepository idealtypischeBaurateRepository;
+
     private BaurateService baurateService;
 
     @BeforeEach
     public void beforeEach() {
-        this.baurateService = new BaurateService(this.baurateDomainMapper, this.baurateRepository);
+        this.baurateService =
+            new BaurateService(this.baurateDomainMapper, this.baurateRepository, this.idealtypischeBaurateRepository);
         Mockito.reset(this.baurateRepository);
     }
 
