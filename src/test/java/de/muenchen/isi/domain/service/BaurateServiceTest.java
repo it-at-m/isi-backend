@@ -62,7 +62,7 @@ class BaurateServiceTest {
             )
             .thenReturn(Optional.of(idealtypischeBaurate));
 
-        final var result = baurateService.determineBauraten(2000, 132L, BigDecimal.valueOf(1320L));
+        final var result = baurateService.determineBauraten(2000, 132L, BigDecimal.valueOf(1320.53));
 
         final var baurate1 = new BaurateModel();
         baurate1.setJahr(2000);
@@ -75,7 +75,7 @@ class BaurateServiceTest {
         final var baurate3 = new BaurateModel();
         baurate3.setJahr(2002);
         baurate3.setAnzahlWeGeplant(79);
-        baurate3.setGeschossflaecheWohnenGeplant(BigDecimal.valueOf(780));
+        baurate3.setGeschossflaecheWohnenGeplant(BigDecimal.valueOf(780.53));
 
         final var expected = List.of(baurate1, baurate2, baurate3);
 
