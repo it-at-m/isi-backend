@@ -5,10 +5,13 @@
 package de.muenchen.isi.api.controller;
 
 import de.muenchen.isi.api.dto.BaurateDto;
+import de.muenchen.isi.api.dto.error.InformationResponseDto;
 import de.muenchen.isi.api.mapper.BaurateApiMapper;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.service.BaurateService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -41,7 +44,16 @@ public class BaurateController {
     @GetMapping("/determine")
     @Transactional(readOnly = true)
     @Operation(summary = "Ermittelt die Bauraten auf Basis der idealtypischen Bauraten")
-    @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "OK") })
+    @ApiResponses(
+        value = {
+            @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(
+                responseCode = "404",
+                description = "NOT FOUND -> Es konnten keine Bauraten ermittelt werden, da keine idealtypischen Bauraten für die gegebenen Parameter existieren.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+        }
+    )
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_DETERMINE_BAURATE.name())")
     public ResponseEntity<List<BaurateDto>> determineBauraten(
         @RequestParam @NotNull @Min(0L) final Integer realisierungsbeginn,
