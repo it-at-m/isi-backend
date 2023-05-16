@@ -52,13 +52,15 @@ public class BaurateService {
 
             if (index < jahresraten.size() - 1) {
                 // Abrunden der Raten.
-                rateWohneinheiten =
-                    calculateRoundedDownRatenwertForGesamtwertAndRate(
-                        BigDecimal.valueOf(wohneinheiten),
-                        jahresrate.getRate()
-                    );
-                partialSumWohneinheiten = partialSumWohneinheiten.add(rateWohneinheiten);
-                baurate.setAnzahlWeGeplant(rateWohneinheiten.intValue());
+                if (ObjectUtils.isNotEmpty(wohneinheiten)) {
+                    rateWohneinheiten =
+                        calculateRoundedDownRatenwertForGesamtwertAndRate(
+                            BigDecimal.valueOf(wohneinheiten),
+                            jahresrate.getRate()
+                        );
+                    partialSumWohneinheiten = partialSumWohneinheiten.add(rateWohneinheiten);
+                    baurate.setAnzahlWeGeplant(rateWohneinheiten.intValue());
+                }
 
                 rateGeschossflaecheWohnen =
                     calculateRoundedDownRatenwertForGesamtwertAndRate(geschossflaecheWohnen, jahresrate.getRate());
@@ -66,8 +68,10 @@ public class BaurateService {
                 baurate.setGeschossflaecheWohnenGeplant(rateGeschossflaecheWohnen);
             } else {
                 // Ermitteln der letzten Rate auf Basis der partiellen Summe.
-                rateWohneinheiten = BigDecimal.valueOf(wohneinheiten).subtract(partialSumWohneinheiten);
-                baurate.setAnzahlWeGeplant(rateWohneinheiten.intValue());
+                if (ObjectUtils.isNotEmpty(wohneinheiten)) {
+                    rateWohneinheiten = BigDecimal.valueOf(wohneinheiten).subtract(partialSumWohneinheiten);
+                    baurate.setAnzahlWeGeplant(rateWohneinheiten.intValue());
+                }
 
                 rateGeschossflaecheWohnen = geschossflaecheWohnen.subtract(partialSumGeschossflaecheWohnen);
                 baurate.setGeschossflaecheWohnenGeplant(rateGeschossflaecheWohnen);

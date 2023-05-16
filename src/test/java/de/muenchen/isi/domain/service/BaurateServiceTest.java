@@ -55,6 +55,7 @@ class BaurateServiceTest {
         jahresrate3.setRate(BigDecimal.valueOf(0.5901));
         idealtypischeBaurate.setJahresraten(List.of(jahresrate1, jahresrate2, jahresrate3));
 
+        // Mit Wohneinheiten
         Mockito
             .when(
                 this.idealtypischeBaurateRepository.findByWohneinheitenVonLessThanEqualAndWohneinheitenBisEinschliesslichGreaterThanEqual(
@@ -63,24 +64,67 @@ class BaurateServiceTest {
             )
             .thenReturn(Optional.of(idealtypischeBaurate));
 
-        final var result = this.baurateService.determineBauraten(2000, 132L, BigDecimal.valueOf(1320.53));
+        var result = this.baurateService.determineBauraten(2000, 132L, BigDecimal.valueOf(1320.53));
 
-        final var baurate1 = new BaurateModel();
+        var baurate1 = new BaurateModel();
         baurate1.setJahr(2000);
         baurate1.setAnzahlWeGeplant(13);
         baurate1.setGeschossflaecheWohnenGeplant(BigDecimal.valueOf(138L));
-        final var baurate2 = new BaurateModel();
+        var baurate2 = new BaurateModel();
         baurate2.setJahr(2001);
         baurate2.setAnzahlWeGeplant(40);
         baurate2.setGeschossflaecheWohnenGeplant(BigDecimal.valueOf(402L));
-        final var baurate3 = new BaurateModel();
+        var baurate3 = new BaurateModel();
         baurate3.setJahr(2002);
         baurate3.setAnzahlWeGeplant(79);
         baurate3.setGeschossflaecheWohnenGeplant(BigDecimal.valueOf(780.53));
 
-        final var expected = List.of(baurate1, baurate2, baurate3);
+        var expected = List.of(baurate1, baurate2, baurate3);
 
         assertThat(result, is(expected));
+        Mockito.reset(this.idealtypischeBaurateRepository);
+
+        // Ohne Wohneinheiten
+        Mockito
+            .when(
+                this.idealtypischeBaurateRepository.findByGeschossflaecheWohnenVonLessThanEqualAndGeschossflaecheWohnenBisEinschliesslichGreaterThanEqual(
+                        BigDecimal.valueOf(1320.53)
+                    )
+            )
+            .thenReturn(Optional.of(idealtypischeBaurate));
+
+        result = this.baurateService.determineBauraten(2000, null, BigDecimal.valueOf(1320.53));
+
+        baurate1 = new BaurateModel();
+        baurate1.setJahr(2000);
+        baurate1.setAnzahlWeGeplant(null);
+        baurate1.setGeschossflaecheWohnenGeplant(BigDecimal.valueOf(138L));
+        baurate2 = new BaurateModel();
+        baurate2.setJahr(2001);
+        baurate2.setAnzahlWeGeplant(null);
+        baurate2.setGeschossflaecheWohnenGeplant(BigDecimal.valueOf(402L));
+        baurate3 = new BaurateModel();
+        baurate3.setJahr(2002);
+        baurate3.setAnzahlWeGeplant(null);
+        baurate3.setGeschossflaecheWohnenGeplant(BigDecimal.valueOf(780.53));
+
+        expected = List.of(baurate1, baurate2, baurate3);
+
+        assertThat(result, is(expected));
+        Mockito.reset(this.idealtypischeBaurateRepository);
+
+        // Ohne Wohneinheiten und ohne Geschossfläche Wohnen
+        Mockito
+            .when(
+                this.idealtypischeBaurateRepository.findByGeschossflaecheWohnenVonLessThanEqualAndGeschossflaecheWohnenBisEinschliesslichGreaterThanEqual(
+                        null
+                    )
+            )
+            .thenReturn(Optional.empty());
+        Assertions.assertThrows(
+            EntityNotFoundException.class,
+            () -> this.baurateService.determineBauraten(2000, null, null)
+        );
     }
 
     @Test
