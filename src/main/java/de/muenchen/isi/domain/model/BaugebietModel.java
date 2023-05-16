@@ -24,4 +24,6 @@ public class BaugebietModel extends BaseEntityModel {
     private Long geschossflaecheWohnenFestgesetzt;
 
     private List<BaurateModel> bauraten;
+
+    private Boolean technical;
 }

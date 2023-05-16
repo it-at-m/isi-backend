@@ -23,4 +23,7 @@ public class Bauabschnitt extends BaseEntity {
     @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "bauabschnitt_id")
     private List<Baugebiet> baugebiete;
+
+    @Column(nullable = false)
+    private Boolean technical;
 }
