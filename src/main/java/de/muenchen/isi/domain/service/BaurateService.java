@@ -36,17 +36,15 @@ public class BaurateService {
         final BigDecimal geschossflaecheWohnen
     ) throws EntityNotFoundException {
         final var idealtypischeBaurate = determineIdealtypischeBaurate(wohneinheiten, geschossflaecheWohnen);
-
-        final var jahresraten = idealtypischeBaurate.getJahresraten();
         final var bauraten = new ArrayList<BaurateModel>();
 
         var partialSumWohneinheiten = BigDecimal.ZERO;
         var partialSumGeschossflaecheWohnen = BigDecimal.ZERO;
-
         BigDecimal rateWohneinheiten;
         BigDecimal rateGeschossflaecheWohnen;
 
         // Ermittlung der Bauraten
+        final var jahresraten = idealtypischeBaurate.getJahresraten();
         for (var index = 0; index < jahresraten.size(); index++) {
             final var jahresrate = jahresraten.get(index);
             final var baurate = new BaurateModel();
