@@ -87,6 +87,7 @@ public class TestData {
     private static BauabschnittModel createBauabschnittModel() {
         final BauabschnittModel bauabschnitt = new BauabschnittModel();
         bauabschnitt.setBezeichnung("Der einzigartige Bauabschnitt");
+        bauabschnitt.setTechnical(false);
         bauabschnitt.setBaugebiete(List.of(createBaugebietModel()));
         return bauabschnitt;
     }
@@ -95,6 +96,7 @@ public class TestData {
         final BaugebietModel baugebiet = new BaugebietModel();
         baugebiet.setBezeichnung("Das Baugebiet des einzigartigen Baubschnitts");
         baugebiet.setBaugebietTyp(BaugebietTyp.WA);
+        baugebiet.setTechnical(false);
         baugebiet.setBauraten(List.of(createBaurateModel()));
         return baugebiet;
     }

@@ -33,4 +33,7 @@ public class BaugebietDto extends BaseEntityDto {
 
     @NotEmpty
     private List<@Valid @NotNull BaurateDto> bauraten;
+
+    @NotNull
+    private Boolean technical;
 }

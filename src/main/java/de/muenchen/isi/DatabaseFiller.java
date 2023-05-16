@@ -238,6 +238,7 @@ public class DatabaseFiller implements CommandLineRunner {
     private Bauabschnitt createBauabschnitt() {
         final Bauabschnitt bauabschnitt = new Bauabschnitt();
         bauabschnitt.setBezeichnung("Der einzigartige Bauabschnitt");
+        bauabschnitt.setTechnical(false);
         bauabschnitt.setBaugebiete(List.of(createBaugebiet()));
         return bauabschnitt;
     }
@@ -246,6 +247,7 @@ public class DatabaseFiller implements CommandLineRunner {
         final Baugebiet baugebiet = new Baugebiet();
         baugebiet.setBezeichnung("Das Baugebiet des einzigartigen Baubschnitts");
         baugebiet.setBaugebietTyp(BaugebietTyp.WA);
+        baugebiet.setTechnical(false);
         baugebiet.setBauraten(List.of(createBaurate()));
         return baugebiet;
     }
