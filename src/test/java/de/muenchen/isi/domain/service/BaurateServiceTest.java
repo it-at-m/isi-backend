@@ -5,6 +5,7 @@ import static org.hamcrest.Matchers.is;
 
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.model.BaurateModel;
+import de.muenchen.isi.infrastructure.entity.enums.IdealtypischeBaurateTyp;
 import de.muenchen.isi.infrastructure.entity.stammdaten.baurate.IdealtypischeBaurate;
 import de.muenchen.isi.infrastructure.entity.stammdaten.baurate.Jahresrate;
 import de.muenchen.isi.infrastructure.repository.stammdaten.IdealtypischeBaurateRepository;
@@ -39,10 +40,9 @@ class BaurateServiceTest {
     @Test
     void determineBauraten() throws EntityNotFoundException {
         final var idealtypischeBaurate = new IdealtypischeBaurate();
-        idealtypischeBaurate.setWohneinheitenVon(100L);
-        idealtypischeBaurate.setWohneinheitenBisEinschliesslich(200L);
-        idealtypischeBaurate.setGeschossflaecheWohnenVon(BigDecimal.valueOf(100));
-        idealtypischeBaurate.setGeschossflaecheWohnenBisEinschliesslich(BigDecimal.valueOf(100));
+        idealtypischeBaurate.setTyp(IdealtypischeBaurateTyp.WOHNEINHEITEN);
+        idealtypischeBaurate.setVon(BigDecimal.valueOf(100L));
+        idealtypischeBaurate.setBisEinschliesslich(BigDecimal.valueOf(200L));
 
         final var jahresrate1 = new Jahresrate();
         jahresrate1.setJahr(1);
@@ -58,8 +58,9 @@ class BaurateServiceTest {
         // Mit Wohneinheiten
         Mockito
             .when(
-                this.idealtypischeBaurateRepository.findByWohneinheitenVonLessThanEqualAndWohneinheitenBisEinschliesslichGreaterThanEqual(
-                        132L
+                this.idealtypischeBaurateRepository.findByTypAndVonLessThanEqualAndBisEinschliesslichGreaterThanEqual(
+                        IdealtypischeBaurateTyp.WOHNEINHEITEN,
+                        BigDecimal.valueOf(132L)
                     )
             )
             .thenReturn(Optional.of(idealtypischeBaurate));
@@ -87,7 +88,8 @@ class BaurateServiceTest {
         // Ohne Wohneinheiten
         Mockito
             .when(
-                this.idealtypischeBaurateRepository.findByGeschossflaecheWohnenVonLessThanEqualAndGeschossflaecheWohnenBisEinschliesslichGreaterThanEqual(
+                this.idealtypischeBaurateRepository.findByTypAndVonLessThanEqualAndBisEinschliesslichGreaterThanEqual(
+                        IdealtypischeBaurateTyp.GESCHOSSFLAECHE_WOHNEN,
                         BigDecimal.valueOf(1320.53)
                     )
             )
@@ -116,7 +118,8 @@ class BaurateServiceTest {
         // Ohne Wohneinheiten und ohne Geschossfläche Wohnen
         Mockito
             .when(
-                this.idealtypischeBaurateRepository.findByGeschossflaecheWohnenVonLessThanEqualAndGeschossflaecheWohnenBisEinschliesslichGreaterThanEqual(
+                this.idealtypischeBaurateRepository.findByTypAndVonLessThanEqualAndBisEinschliesslichGreaterThanEqual(
+                        IdealtypischeBaurateTyp.GESCHOSSFLAECHE_WOHNEN,
                         null
                     )
             )
@@ -133,8 +136,9 @@ class BaurateServiceTest {
 
         Mockito
             .when(
-                this.idealtypischeBaurateRepository.findByWohneinheitenVonLessThanEqualAndWohneinheitenBisEinschliesslichGreaterThanEqual(
-                        132L
+                this.idealtypischeBaurateRepository.findByTypAndVonLessThanEqualAndBisEinschliesslichGreaterThanEqual(
+                        IdealtypischeBaurateTyp.WOHNEINHEITEN,
+                        BigDecimal.valueOf(132L)
                     )
             )
             .thenReturn(Optional.of(idealtypischeBaurate));
@@ -143,12 +147,16 @@ class BaurateServiceTest {
         assertThat(result, is(idealtypischeBaurate));
         Mockito
             .verify(this.idealtypischeBaurateRepository, Mockito.times(1))
-            .findByWohneinheitenVonLessThanEqualAndWohneinheitenBisEinschliesslichGreaterThanEqual(132L);
+            .findByTypAndVonLessThanEqualAndBisEinschliesslichGreaterThanEqual(
+                IdealtypischeBaurateTyp.WOHNEINHEITEN,
+                BigDecimal.valueOf(132L)
+            );
         Mockito.reset(this.idealtypischeBaurateRepository);
 
         Mockito
             .when(
-                this.idealtypischeBaurateRepository.findByGeschossflaecheWohnenVonLessThanEqualAndGeschossflaecheWohnenBisEinschliesslichGreaterThanEqual(
+                this.idealtypischeBaurateRepository.findByTypAndVonLessThanEqualAndBisEinschliesslichGreaterThanEqual(
+                        IdealtypischeBaurateTyp.GESCHOSSFLAECHE_WOHNEN,
                         BigDecimal.valueOf(1320.53)
                     )
             )
@@ -158,14 +166,16 @@ class BaurateServiceTest {
         assertThat(result, is(idealtypischeBaurate));
         Mockito
             .verify(this.idealtypischeBaurateRepository, Mockito.times(1))
-            .findByGeschossflaecheWohnenVonLessThanEqualAndGeschossflaecheWohnenBisEinschliesslichGreaterThanEqual(
+            .findByTypAndVonLessThanEqualAndBisEinschliesslichGreaterThanEqual(
+                IdealtypischeBaurateTyp.GESCHOSSFLAECHE_WOHNEN,
                 BigDecimal.valueOf(1320.53)
             );
         Mockito.reset(this.idealtypischeBaurateRepository);
 
         Mockito
             .when(
-                this.idealtypischeBaurateRepository.findByGeschossflaecheWohnenVonLessThanEqualAndGeschossflaecheWohnenBisEinschliesslichGreaterThanEqual(
+                this.idealtypischeBaurateRepository.findByTypAndVonLessThanEqualAndBisEinschliesslichGreaterThanEqual(
+                        IdealtypischeBaurateTyp.GESCHOSSFLAECHE_WOHNEN,
                         null
                     )
             )

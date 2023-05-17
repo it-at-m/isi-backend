@@ -1,6 +1,7 @@
 package de.muenchen.isi.domain.model.stammdaten.baurate;
 
 import de.muenchen.isi.domain.model.BaseEntityModel;
+import de.muenchen.isi.infrastructure.entity.enums.IdealtypischeBaurateTyp;
 import java.math.BigDecimal;
 import java.util.List;
 import lombok.Data;
@@ -12,13 +13,11 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 public class IdealtypischeBaurateModel extends BaseEntityModel {
 
-    private Long wohneinheitenVon;
+    private BigDecimal von;
 
-    private Long wohneinheitenBisEinschliesslich;
+    private BigDecimal bisEinschliesslich;
 
-    private BigDecimal geschossflaecheWohnenVon;
-
-    private BigDecimal geschossflaecheWohnenBisEinschliesslich;
+    private IdealtypischeBaurateTyp typ;
 
     private List<JahresrateModel> jahresraten;
 }

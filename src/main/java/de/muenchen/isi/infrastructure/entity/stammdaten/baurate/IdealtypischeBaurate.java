@@ -1,11 +1,14 @@
 package de.muenchen.isi.infrastructure.entity.stammdaten.baurate;
 
 import de.muenchen.isi.infrastructure.entity.BaseEntity;
+import de.muenchen.isi.infrastructure.entity.enums.IdealtypischeBaurateTyp;
 import io.hypersistence.utils.hibernate.type.json.JsonType;
 import java.math.BigDecimal;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Index;
 import javax.persistence.Table;
 import lombok.Data;
@@ -15,18 +18,7 @@ import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 
 @Entity
-@Table(
-    indexes = {
-        @Index(
-            name = "range_wohneinheiten_index",
-            columnList = "wohneinheitenVon ASC, wohneinheitenBisEinschliesslich ASC"
-        ),
-        @Index(
-            name = "range_geschossflaeche_wohnen_index",
-            columnList = "geschossflaecheWohnenVon ASC, geschossflaecheWohnenBisEinschliesslich ASC"
-        ),
-    }
-)
+@Table(indexes = { @Index(name = "range_index", columnList = "typ ASC, von ASC, bisEinschliesslich ASC") })
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
@@ -34,16 +26,14 @@ import org.hibernate.annotations.TypeDef;
 public class IdealtypischeBaurate extends BaseEntity {
 
     @Column(nullable = false)
-    private Long wohneinheitenVon;
+    private BigDecimal von;
 
     @Column(nullable = false)
-    private Long wohneinheitenBisEinschliesslich;
+    private BigDecimal bisEinschliesslich;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private BigDecimal geschossflaecheWohnenVon;
-
-    @Column(nullable = false)
-    private BigDecimal geschossflaecheWohnenBisEinschliesslich;
+    private IdealtypischeBaurateTyp typ;
 
     @Type(type = "json")
     @Column(nullable = false, columnDefinition = "json")

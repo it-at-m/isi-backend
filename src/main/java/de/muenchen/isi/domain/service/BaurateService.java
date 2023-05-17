@@ -2,6 +2,7 @@ package de.muenchen.isi.domain.service;
 
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.model.BaurateModel;
+import de.muenchen.isi.infrastructure.entity.enums.IdealtypischeBaurateTyp;
 import de.muenchen.isi.infrastructure.entity.stammdaten.baurate.IdealtypischeBaurate;
 import de.muenchen.isi.infrastructure.repository.stammdaten.IdealtypischeBaurateRepository;
 import java.math.BigDecimal;
@@ -99,8 +100,9 @@ public class BaurateService {
         final StringBuilder errorMessage = new StringBuilder();
         if (ObjectUtils.isNotEmpty(wohneinheiten)) {
             idealtypischeBaurateOpt =
-                idealtypischeBaurateRepository.findByWohneinheitenVonLessThanEqualAndWohneinheitenBisEinschliesslichGreaterThanEqual(
-                    wohneinheiten
+                idealtypischeBaurateRepository.findByTypAndVonLessThanEqualAndBisEinschliesslichGreaterThanEqual(
+                    IdealtypischeBaurateTyp.WOHNEINHEITEN,
+                    BigDecimal.valueOf(wohneinheiten)
                 );
             if (idealtypischeBaurateOpt.isEmpty()) {
                 errorMessage.append(
@@ -111,13 +113,14 @@ public class BaurateService {
             }
         } else {
             idealtypischeBaurateOpt =
-                idealtypischeBaurateRepository.findByGeschossflaecheWohnenVonLessThanEqualAndGeschossflaecheWohnenBisEinschliesslichGreaterThanEqual(
+                idealtypischeBaurateRepository.findByTypAndVonLessThanEqualAndBisEinschliesslichGreaterThanEqual(
+                    IdealtypischeBaurateTyp.GESCHOSSFLAECHE_WOHNEN,
                     geschossflaecheWohnen
                 );
             if (idealtypischeBaurateOpt.isEmpty()) {
                 errorMessage.append(
                     "Für die Geschossfläche Wohnen von " +
-                    geschossflaecheWohnen +
+                    (ObjectUtils.isNotEmpty(geschossflaecheWohnen) ? geschossflaecheWohnen.doubleValue() : null) +
                     " qm konnte keine idealtypische Baurate ermittelt werden."
                 );
             }
