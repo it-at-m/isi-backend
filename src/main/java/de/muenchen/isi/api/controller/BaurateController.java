@@ -43,7 +43,7 @@ public class BaurateController {
 
     @GetMapping("/determine")
     @Transactional(readOnly = true)
-    @Operation(summary = "Ermittelt die Bauraten auf Basis der idealtypischen Bauraten")
+    @Operation(summary = "Ermittelt die Bauraten auf Basis der Stammdaten für idealtypische Bauraten")
     @ApiResponses(
         value = {
             @ApiResponse(responseCode = "200", description = "OK"),
