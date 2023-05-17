@@ -42,7 +42,7 @@ class BaurateServiceTest {
         final var idealtypischeBaurate = new IdealtypischeBaurate();
         idealtypischeBaurate.setTyp(IdealtypischeBaurateTyp.WOHNEINHEITEN);
         idealtypischeBaurate.setVon(BigDecimal.valueOf(100L));
-        idealtypischeBaurate.setBisEinschliesslich(BigDecimal.valueOf(200L));
+        idealtypischeBaurate.setBisExklusiv(BigDecimal.valueOf(200L));
 
         final var jahresrate1 = new Jahresrate();
         jahresrate1.setJahr(1);
@@ -58,7 +58,7 @@ class BaurateServiceTest {
         // Mit Wohneinheiten
         Mockito
             .when(
-                this.idealtypischeBaurateRepository.findByTypAndVonLessThanEqualAndBisEinschliesslichGreaterThanEqual(
+                this.idealtypischeBaurateRepository.findByTypAndVonLessThanEqualAndBisExklusivGreaterThan(
                         IdealtypischeBaurateTyp.WOHNEINHEITEN,
                         BigDecimal.valueOf(132L)
                     )
@@ -88,7 +88,7 @@ class BaurateServiceTest {
         // Ohne Wohneinheiten
         Mockito
             .when(
-                this.idealtypischeBaurateRepository.findByTypAndVonLessThanEqualAndBisEinschliesslichGreaterThanEqual(
+                this.idealtypischeBaurateRepository.findByTypAndVonLessThanEqualAndBisExklusivGreaterThan(
                         IdealtypischeBaurateTyp.GESCHOSSFLAECHE_WOHNEN,
                         BigDecimal.valueOf(1320.53)
                     )
@@ -118,7 +118,7 @@ class BaurateServiceTest {
         // Ohne Wohneinheiten und ohne Geschossfläche Wohnen
         Mockito
             .when(
-                this.idealtypischeBaurateRepository.findByTypAndVonLessThanEqualAndBisEinschliesslichGreaterThanEqual(
+                this.idealtypischeBaurateRepository.findByTypAndVonLessThanEqualAndBisExklusivGreaterThan(
                         IdealtypischeBaurateTyp.GESCHOSSFLAECHE_WOHNEN,
                         null
                     )
@@ -136,7 +136,7 @@ class BaurateServiceTest {
 
         Mockito
             .when(
-                this.idealtypischeBaurateRepository.findByTypAndVonLessThanEqualAndBisEinschliesslichGreaterThanEqual(
+                this.idealtypischeBaurateRepository.findByTypAndVonLessThanEqualAndBisExklusivGreaterThan(
                         IdealtypischeBaurateTyp.WOHNEINHEITEN,
                         BigDecimal.valueOf(132L)
                     )
@@ -147,7 +147,7 @@ class BaurateServiceTest {
         assertThat(result, is(idealtypischeBaurate));
         Mockito
             .verify(this.idealtypischeBaurateRepository, Mockito.times(1))
-            .findByTypAndVonLessThanEqualAndBisEinschliesslichGreaterThanEqual(
+            .findByTypAndVonLessThanEqualAndBisExklusivGreaterThan(
                 IdealtypischeBaurateTyp.WOHNEINHEITEN,
                 BigDecimal.valueOf(132L)
             );
@@ -155,7 +155,7 @@ class BaurateServiceTest {
 
         Mockito
             .when(
-                this.idealtypischeBaurateRepository.findByTypAndVonLessThanEqualAndBisEinschliesslichGreaterThanEqual(
+                this.idealtypischeBaurateRepository.findByTypAndVonLessThanEqualAndBisExklusivGreaterThan(
                         IdealtypischeBaurateTyp.GESCHOSSFLAECHE_WOHNEN,
                         BigDecimal.valueOf(1320.53)
                     )
@@ -166,7 +166,7 @@ class BaurateServiceTest {
         assertThat(result, is(idealtypischeBaurate));
         Mockito
             .verify(this.idealtypischeBaurateRepository, Mockito.times(1))
-            .findByTypAndVonLessThanEqualAndBisEinschliesslichGreaterThanEqual(
+            .findByTypAndVonLessThanEqualAndBisExklusivGreaterThan(
                 IdealtypischeBaurateTyp.GESCHOSSFLAECHE_WOHNEN,
                 BigDecimal.valueOf(1320.53)
             );
@@ -174,7 +174,7 @@ class BaurateServiceTest {
 
         Mockito
             .when(
-                this.idealtypischeBaurateRepository.findByTypAndVonLessThanEqualAndBisEinschliesslichGreaterThanEqual(
+                this.idealtypischeBaurateRepository.findByTypAndVonLessThanEqualAndBisExklusivGreaterThan(
                         IdealtypischeBaurateTyp.GESCHOSSFLAECHE_WOHNEN,
                         null
                     )

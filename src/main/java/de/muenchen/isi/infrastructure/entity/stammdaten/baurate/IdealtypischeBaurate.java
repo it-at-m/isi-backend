@@ -18,7 +18,7 @@ import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 
 @Entity
-@Table(indexes = { @Index(name = "range_index", columnList = "typ ASC, von ASC, bisEinschliesslich ASC") })
+@Table(indexes = { @Index(name = "range_index", columnList = "typ ASC, von ASC, bisExklusiv ASC") })
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
@@ -29,7 +29,7 @@ public class IdealtypischeBaurate extends BaseEntity {
     private BigDecimal von;
 
     @Column(nullable = false)
-    private BigDecimal bisEinschliesslich;
+    private BigDecimal bisExklusiv;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

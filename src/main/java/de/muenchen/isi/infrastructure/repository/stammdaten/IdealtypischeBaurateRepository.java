@@ -8,14 +8,14 @@ import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface IdealtypischeBaurateRepository extends JpaRepository<IdealtypischeBaurate, UUID> {
-    default Optional<IdealtypischeBaurate> findByTypAndVonLessThanEqualAndBisEinschliesslichGreaterThanEqual(
+    default Optional<IdealtypischeBaurate> findByTypAndVonLessThanEqualAndBisExklusivGreaterThan(
         final IdealtypischeBaurateTyp typ,
         final BigDecimal wohneinheiten
     ) {
-        return findByTypAndVonLessThanEqualAndBisEinschliesslichGreaterThanEqual(typ, wohneinheiten, wohneinheiten);
+        return findByTypAndVonLessThanEqualAndBisExklusivGreaterThan(typ, wohneinheiten, wohneinheiten);
     }
 
-    Optional<IdealtypischeBaurate> findByTypAndVonLessThanEqualAndBisEinschliesslichGreaterThanEqual(
+    Optional<IdealtypischeBaurate> findByTypAndVonLessThanEqualAndBisExklusivGreaterThan(
         final IdealtypischeBaurateTyp typ,
         final BigDecimal wohneinheitenVon,
         final BigDecimal wohneinheitenBisEinschliesslich

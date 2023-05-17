@@ -15,7 +15,7 @@ public class IdealtypischeBaurateDto extends BaseEntityDto {
 
     private BigDecimal von;
 
-    private BigDecimal bisEinschliesslich;
+    private BigDecimal bisExklusiv;
 
     private IdealtypischeBaurateTyp typ;
 

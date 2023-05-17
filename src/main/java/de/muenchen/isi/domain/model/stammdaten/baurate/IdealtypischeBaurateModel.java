@@ -15,7 +15,7 @@ public class IdealtypischeBaurateModel extends BaseEntityModel {
 
     private BigDecimal von;
 
-    private BigDecimal bisEinschliesslich;
+    private BigDecimal bisExklusiv;
 
     private IdealtypischeBaurateTyp typ;
 

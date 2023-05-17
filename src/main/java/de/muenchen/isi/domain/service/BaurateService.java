@@ -100,7 +100,7 @@ public class BaurateService {
         final StringBuilder errorMessage = new StringBuilder();
         if (ObjectUtils.isNotEmpty(wohneinheiten)) {
             idealtypischeBaurateOpt =
-                idealtypischeBaurateRepository.findByTypAndVonLessThanEqualAndBisEinschliesslichGreaterThanEqual(
+                idealtypischeBaurateRepository.findByTypAndVonLessThanEqualAndBisExklusivGreaterThan(
                     IdealtypischeBaurateTyp.WOHNEINHEITEN,
                     BigDecimal.valueOf(wohneinheiten)
                 );
@@ -113,7 +113,7 @@ public class BaurateService {
             }
         } else {
             idealtypischeBaurateOpt =
-                idealtypischeBaurateRepository.findByTypAndVonLessThanEqualAndBisEinschliesslichGreaterThanEqual(
+                idealtypischeBaurateRepository.findByTypAndVonLessThanEqualAndBisExklusivGreaterThan(
                     IdealtypischeBaurateTyp.GESCHOSSFLAECHE_WOHNEN,
                     geschossflaecheWohnen
                 );
