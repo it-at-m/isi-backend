@@ -105,11 +105,10 @@ public class BaurateService {
                     BigDecimal.valueOf(wohneinheiten)
                 );
             if (idealtypischeBaurateOpt.isEmpty()) {
-                errorMessage.append(
-                    "Für die Anzahl von " +
-                    wohneinheiten +
-                    " Wohneinheiten konnte keine idealtypische Baurate ermittelt werden."
-                );
+                errorMessage
+                    .append("Für die Anzahl von ")
+                    .append(wohneinheiten)
+                    .append(" Wohneinheiten konnte keine idealtypische Baurate ermittelt werden.");
             }
         } else {
             idealtypischeBaurateOpt =
@@ -118,11 +117,10 @@ public class BaurateService {
                     geschossflaecheWohnen
                 );
             if (idealtypischeBaurateOpt.isEmpty()) {
-                errorMessage.append(
-                    "Für die Geschossfläche Wohnen von " +
-                    (ObjectUtils.isNotEmpty(geschossflaecheWohnen) ? geschossflaecheWohnen.doubleValue() : null) +
-                    " qm konnte keine idealtypische Baurate ermittelt werden."
-                );
+                errorMessage
+                    .append("Für die Geschossfläche Wohnen von ")
+                    .append(ObjectUtils.isNotEmpty(geschossflaecheWohnen) ? geschossflaecheWohnen.doubleValue() : null)
+                    .append(" qm konnte keine idealtypische Baurate ermittelt werden.");
             }
         }
 
