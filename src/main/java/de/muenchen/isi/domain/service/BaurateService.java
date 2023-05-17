@@ -63,10 +63,12 @@ public class BaurateService {
                     baurate.setAnzahlWeGeplant(rateWohneinheiten.intValue());
                 }
 
-                rateGeschossflaecheWohnen =
-                    calculateRoundedDownRatenwertForGesamtwertAndRate(geschossflaecheWohnen, jahresrate.getRate());
-                partialSumGeschossflaecheWohnen = partialSumGeschossflaecheWohnen.add(rateGeschossflaecheWohnen);
-                baurate.setGeschossflaecheWohnenGeplant(rateGeschossflaecheWohnen);
+                if (ObjectUtils.isNotEmpty(geschossflaecheWohnen)) {
+                    rateGeschossflaecheWohnen =
+                        calculateRoundedDownRatenwertForGesamtwertAndRate(geschossflaecheWohnen, jahresrate.getRate());
+                    partialSumGeschossflaecheWohnen = partialSumGeschossflaecheWohnen.add(rateGeschossflaecheWohnen);
+                    baurate.setGeschossflaecheWohnenGeplant(rateGeschossflaecheWohnen);
+                }
             } else {
                 // Ermitteln der letzten Rate auf Basis der partiellen Summe.
                 if (ObjectUtils.isNotEmpty(wohneinheiten)) {
@@ -74,8 +76,10 @@ public class BaurateService {
                     baurate.setAnzahlWeGeplant(rateWohneinheiten.intValue());
                 }
 
-                rateGeschossflaecheWohnen = geschossflaecheWohnen.subtract(partialSumGeschossflaecheWohnen);
-                baurate.setGeschossflaecheWohnenGeplant(rateGeschossflaecheWohnen);
+                if (ObjectUtils.isNotEmpty(geschossflaecheWohnen)) {
+                    rateGeschossflaecheWohnen = geschossflaecheWohnen.subtract(partialSumGeschossflaecheWohnen);
+                    baurate.setGeschossflaecheWohnenGeplant(rateGeschossflaecheWohnen);
+                }
             }
             bauraten.add(baurate);
         }

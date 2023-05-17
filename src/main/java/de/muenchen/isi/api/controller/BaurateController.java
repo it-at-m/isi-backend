@@ -58,7 +58,7 @@ public class BaurateController {
     public ResponseEntity<List<BaurateDto>> determineBauraten(
         @RequestParam @NotNull @Min(0L) final Integer realisierungsbeginn,
         @RequestParam(required = false) @Min(0L) final Long wohneinheiten,
-        @RequestParam @NotNull @Min(0L) final BigDecimal geschossflaecheWohnen
+        @RequestParam(required = false) @Min(0L) final BigDecimal geschossflaecheWohnen
     ) throws EntityNotFoundException {
         final List<BaurateDto> baurateDtoList =
             this.baurateService.determineBauraten(realisierungsbeginn, wohneinheiten, geschossflaecheWohnen)
