@@ -54,7 +54,7 @@ public class BaurateController {
             ),
         }
     )
-    @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_DETERMINE_BAURATE.name())")
+    @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_DETERMINE_BAURATEN.name())")
     public ResponseEntity<List<BaurateDto>> determineBauraten(
         @RequestParam @NotNull @Min(0L) final Integer realisierungsbeginn,
         @RequestParam(required = false) @Min(0L) final Long wohneinheiten,
