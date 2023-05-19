@@ -4,7 +4,7 @@
  */
 package de.muenchen.isi.rest;
 
-import de.muenchen.isi.api.dto.FoerderartDto;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import de.muenchen.isi.domain.model.AbfrageModel;
 import de.muenchen.isi.domain.model.AbfragevarianteModel;
 import de.muenchen.isi.domain.model.BauabschnittModel;
@@ -14,6 +14,11 @@ import de.muenchen.isi.domain.model.FoerderartModel;
 import de.muenchen.isi.domain.model.FoerdermixModel;
 import de.muenchen.isi.domain.model.InfrastrukturabfrageModel;
 import de.muenchen.isi.domain.model.common.AdresseModel;
+import de.muenchen.isi.domain.model.common.FlurstueckModel;
+import de.muenchen.isi.domain.model.common.GemarkungModel;
+import de.muenchen.isi.domain.model.common.MultiPolygonGeometryModel;
+import de.muenchen.isi.domain.model.common.StadtbezirkModel;
+import de.muenchen.isi.domain.model.common.VerortungModel;
 import de.muenchen.isi.domain.model.common.WGS84Model;
 import de.muenchen.isi.domain.model.filehandling.DokumentModel;
 import de.muenchen.isi.domain.model.filehandling.FilepathModel;
@@ -31,6 +36,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
+import lombok.SneakyThrows;
 
 public class TestData {
 
@@ -48,6 +55,7 @@ public class TestData {
         abfrage.setStatusAbfrage(StatusAbfrage.ANGELEGT);
         abfrage.setNameAbfrage("Neubausiedlung in Musterort");
         abfrage.setStandVorhaben(StandVorhaben.BAUANTRAG_EINGEREICHT);
+        abfrage.setVerortung(createVerortung());
         infrastrukturabfrage.setAbfrage(abfrage);
 
         infrastrukturabfrage.setSobonRelevant(UncertainBoolean.TRUE);
@@ -79,6 +87,7 @@ public class TestData {
     private static BauabschnittModel createBauabschnittModel() {
         final BauabschnittModel bauabschnitt = new BauabschnittModel();
         bauabschnitt.setBezeichnung("Der einzigartige Bauabschnitt");
+        bauabschnitt.setTechnical(false);
         bauabschnitt.setBaugebiete(List.of(createBaugebietModel()));
         return bauabschnitt;
     }
@@ -87,6 +96,7 @@ public class TestData {
         final BaugebietModel baugebiet = new BaugebietModel();
         baugebiet.setBezeichnung("Das Baugebiet des einzigartigen Baubschnitts");
         baugebiet.setBaugebietTyp(BaugebietTyp.WA);
+        baugebiet.setTechnical(false);
         baugebiet.setBauraten(List.of(createBaurateModel()));
         return baugebiet;
     }
@@ -131,5 +141,53 @@ public class TestData {
         dokument.setFilePath(filePath);
         dokument.setArtDokument(artDokument);
         return dokument;
+    }
+
+    public static VerortungModel createVerortung() {
+        final var verortung = new VerortungModel();
+        verortung.setMultiPolygon(createMultipolygon());
+
+        final var stadtbezirk1 = new StadtbezirkModel();
+        stadtbezirk1.setMultiPolygon(createMultipolygon());
+        stadtbezirk1.setName("Der Name1");
+        stadtbezirk1.setNummer("01");
+        final var stadtbezirk2 = new StadtbezirkModel();
+        stadtbezirk2.setMultiPolygon(createMultipolygon());
+        stadtbezirk2.setName("Der Name2");
+        stadtbezirk2.setNummer("02");
+        verortung.setStadtbezirke(Set.of(stadtbezirk1, stadtbezirk2));
+
+        final var gemarkung = new GemarkungModel();
+        gemarkung.setNummer(BigDecimal.TEN);
+        gemarkung.setName("Der Gemarkungsname");
+        gemarkung.setMultiPolygon(createMultipolygon());
+
+        final var flurstueck = new FlurstueckModel();
+        flurstueck.setGemarkungNummer(BigDecimal.ONE);
+        flurstueck.setZaehler(1L);
+        flurstueck.setNenner(2L);
+        flurstueck.setMultiPolygon(createMultipolygon());
+        gemarkung.setFlurstuecke(Set.of(flurstueck));
+
+        verortung.setGemarkungen(Set.of(gemarkung));
+
+        return verortung;
+    }
+
+    @SneakyThrows
+    public static MultiPolygonGeometryModel createMultipolygon() {
+        final var multipolygon =
+            "{ \"type\": \"MultiPolygon\",\n" +
+            "    \"coordinates\": [\n" +
+            "        [\n" +
+            "            [[40, 40], [20, 45], [45, 30], [40, 40]]\n" +
+            "        ],\n" +
+            "        [\n" +
+            "            [[20, 35], [10, 30], [10, 10], [30, 5], [45, 20], [20, 35]],\n" +
+            "            [[30, 20], [20, 15], [20, 25], [30, 20]]\n" +
+            "        ]\n" +
+            "    ]\n" +
+            "}";
+        return new ObjectMapper().readValue(multipolygon, MultiPolygonGeometryModel.class);
     }
 }

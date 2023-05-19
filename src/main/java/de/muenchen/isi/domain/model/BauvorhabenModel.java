@@ -1,6 +1,7 @@
 package de.muenchen.isi.domain.model;
 
 import de.muenchen.isi.domain.model.common.AdresseModel;
+import de.muenchen.isi.domain.model.common.VerortungModel;
 import de.muenchen.isi.domain.model.filehandling.DokumentModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.BaugebietTyp;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Planungsrecht;
@@ -24,6 +25,8 @@ public class BauvorhabenModel extends BaseEntityModel {
     private String bauvorhabenNummer;
 
     private AdresseModel adresse;
+
+    private VerortungModel verortung;
 
     private String allgemeineOrtsangabe;
 

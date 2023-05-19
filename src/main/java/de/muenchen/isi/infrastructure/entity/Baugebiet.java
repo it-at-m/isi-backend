@@ -39,4 +39,7 @@ public class Baugebiet extends BaseEntity {
     @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "baugebiet_id")
     private List<Baurate> bauraten;
+
+    @Column(nullable = false)
+    private Boolean technical;
 }

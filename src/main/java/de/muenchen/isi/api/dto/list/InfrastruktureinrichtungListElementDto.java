@@ -14,5 +14,5 @@ public class InfrastruktureinrichtungListElementDto {
     private String nameEinrichtung;
 
     private InfrastruktureinrichtungTyp infrastruktureinrichtungTyp;
-    //TBD: Stadtbezirk
+    //TBD: StadtbezirkDto
 }
