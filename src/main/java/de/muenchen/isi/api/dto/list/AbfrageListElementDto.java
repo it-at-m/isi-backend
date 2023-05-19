@@ -1,6 +1,7 @@
 package de.muenchen.isi.api.dto.list;
 
 import de.muenchen.isi.domain.model.enums.AbfrageTyp;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonVerfahrensgrundsaetzeJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVorhaben;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import java.time.LocalDate;
@@ -23,4 +24,6 @@ public class AbfrageListElementDto {
     private LocalDate fristStellungnahme;
 
     private AbfrageTyp type;
+
+    private SobonVerfahrensgrundsaetzeJahr sobonJahr;
 }
