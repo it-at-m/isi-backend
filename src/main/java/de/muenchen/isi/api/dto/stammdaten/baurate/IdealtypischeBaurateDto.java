@@ -2,6 +2,7 @@ package de.muenchen.isi.api.dto.stammdaten.baurate;
 
 import de.muenchen.isi.api.dto.BaseEntityDto;
 import de.muenchen.isi.api.validation.JahresratenValid;
+import de.muenchen.isi.api.validation.RangeIdealtypischeBaurateValid;
 import de.muenchen.isi.infrastructure.entity.enums.IdealtypischeBaurateTyp;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.math.BigDecimal;
@@ -16,6 +17,7 @@ import lombok.ToString;
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
+@RangeIdealtypischeBaurateValid
 public class IdealtypischeBaurateDto extends BaseEntityDto {
 
     @NotNull
