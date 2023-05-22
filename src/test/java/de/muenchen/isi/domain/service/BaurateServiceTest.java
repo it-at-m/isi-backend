@@ -125,12 +125,12 @@ class BaurateServiceTest {
                     )
             )
             .thenReturn(Optional.empty());
-        EntityNotFoundException resultingExcpetion = Assertions.assertThrows(
+        EntityNotFoundException resultingException = Assertions.assertThrows(
             EntityNotFoundException.class,
             () -> this.baurateService.determineBauraten(2000, 100L, null)
         );
         assertThat(
-            resultingExcpetion.getMessage(),
+            resultingException.getMessage(),
             is("Für den Wert von 100 des Typs Wohneinheiten konnte keine idealtypische Baurate ermittelt werden.")
         );
         Mockito
@@ -149,13 +149,13 @@ class BaurateServiceTest {
                     )
             )
             .thenReturn(Optional.empty());
-        resultingExcpetion =
+        resultingException =
             Assertions.assertThrows(
                 EntityNotFoundException.class,
                 () -> this.baurateService.determineBauraten(2000, null, BigDecimal.TEN)
             );
         assertThat(
-            resultingExcpetion.getMessage(),
+            resultingException.getMessage(),
             is("Für den Wert von 10 des Typs Geschoßfläche Wohnen konnte keine idealtypische Baurate ermittelt werden.")
         );
         Mockito
@@ -166,21 +166,13 @@ class BaurateServiceTest {
             );
 
         // Ohne Wohneinheiten und ohne Geschossfläche Wohnen
-        Mockito
-            .when(
-                this.idealtypischeBaurateRepository.findByTypAndVonLessThanEqualAndBisExklusivGreaterThan(
-                        IdealtypischeBaurateTyp.GESCHOSSFLAECHE_WOHNEN,
-                        null
-                    )
-            )
-            .thenReturn(Optional.empty());
-        resultingExcpetion =
+        resultingException =
             Assertions.assertThrows(
                 EntityNotFoundException.class,
                 () -> this.baurateService.determineBauraten(2000, null, null)
             );
         assertThat(
-            resultingExcpetion.getMessage(),
+            resultingException.getMessage(),
             is(
                 "Es konnten keine idealtypischen Bauraten für Wohneinheiten oder für Geschoßfläche Wohnen ermittelt werden."
             )
@@ -237,10 +229,38 @@ class BaurateServiceTest {
                     )
             )
             .thenReturn(Optional.empty());
-        Assertions.assertThrows(
+        final EntityNotFoundException resultingException = Assertions.assertThrows(
             EntityNotFoundException.class,
             () -> this.baurateService.determineIdealtypischeBaurate(null, null)
         );
+        assertThat(
+            resultingException.getMessage(),
+            is(
+                "Es konnten keine idealtypischen Bauraten für Wohneinheiten oder für Geschoßfläche Wohnen ermittelt werden."
+            )
+        );
+    }
+
+    @Test
+    void determineIdealtypischeBaurateForWertAndTyp() {
+        EntityNotFoundException resultingException = Assertions.assertThrows(
+            EntityNotFoundException.class,
+            () ->
+                this.baurateService.determineIdealtypischeBaurateForWertAndTyp(
+                        BigDecimal.valueOf(100),
+                        IdealtypischeBaurateTyp.WOHNEINHEITEN
+                    )
+        );
+        assertThat(
+            resultingException.getMessage(),
+            is("Für den Wert von 100 des Typs Wohneinheiten konnte keine idealtypische Baurate ermittelt werden.")
+        );
+        Mockito
+            .verify(this.idealtypischeBaurateRepository, Mockito.times(1))
+            .findByTypAndVonLessThanEqualAndBisExklusivGreaterThan(
+                IdealtypischeBaurateTyp.WOHNEINHEITEN,
+                BigDecimal.valueOf(100L)
+            );
     }
 
     @Test
