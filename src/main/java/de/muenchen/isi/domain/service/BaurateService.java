@@ -82,10 +82,12 @@ public class BaurateService {
     }
 
     /**
+     * Ist im Parameter der Wert für die Wohneinheiten gegeben, so wird die Baurate auschließlich für die Wohneinheiten ermittelt.
+     * Sind keine Wohneinheiten gegeben, so bezieht sich die Bauratenermittlung auf den Wert gegeben in Geschoßfläche Wohnen.
      *
      * @param wohneinheiten
      * @param geschossflaecheWohnen
-     * @return
+     * @return die idealtypischen Bauraten für die in den Parameter gegebenen Werte.
      * @throws EntityNotFoundException falls für die gegebenen Parameter keine idealtypische Baurate ermittelt werden kann.
      */
     protected IdealtypischeBaurate determineIdealtypischeBaurate(
@@ -120,7 +122,7 @@ public class BaurateService {
      *
      * @param wert
      * @param typ
-     * @return die idealtypische Baurate für Wohneinheiten für den gegebenen Wert und den Typ.
+     * @return die idealtypische Baurate für den gegebenen Wert und den Typ.
      * @throws EntityNotFoundException falls für die gegebenen Parameter keine idealtypische Baurate ermittelt werden kann.
      */
     protected IdealtypischeBaurate determineIdealtypischeBaurateForWertAndTyp(
@@ -143,8 +145,8 @@ public class BaurateService {
     }
 
     /**
-     * @param gesamtwert
-     * @param rate
+     * @param gesamtwert von dem der Ratenwert ermittelt werden soll.
+     * @param rate die Rate zur Ermittlung des Ratenwerts vom Gesamtwert.
      * @return den auf die nächste ganze Zahl gerundeten Wert der Rate
      */
     protected BigDecimal calculateRoundedDownRatenwertForGesamtwertAndRate(
