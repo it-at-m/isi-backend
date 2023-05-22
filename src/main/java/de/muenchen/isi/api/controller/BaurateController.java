@@ -18,8 +18,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -56,9 +56,9 @@ public class BaurateController {
     )
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_DETERMINE_BAURATEN.name())")
     public ResponseEntity<List<BaurateDto>> determineBauraten(
-        @RequestParam @NotNull @Min(0L) final Integer realisierungsbeginn,
-        @RequestParam(required = false) @Min(0L) final Long wohneinheiten,
-        @RequestParam(required = false) @Min(0L) final BigDecimal geschossflaecheWohnen
+        @RequestParam @NotNull @Positive final Integer realisierungsbeginn,
+        @RequestParam(required = false) @Positive final Long wohneinheiten,
+        @RequestParam(required = false) @Positive final BigDecimal geschossflaecheWohnen
     ) throws EntityNotFoundException {
         final List<BaurateDto> baurateDtoList =
             this.baurateService.determineBauraten(realisierungsbeginn, wohneinheiten, geschossflaecheWohnen)
