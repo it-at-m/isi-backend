@@ -25,7 +25,7 @@ public class BaurateService {
      * Bauratenermittlung auf Basis der idealtypischen Bauraten.
      *
      * Ist im Parameter der Wert für die Wohneinheiten gegeben, so wird die Baurate auschließlich für die Wohneinheiten ermittelt.
-     * Sind keine Wohneinheiten gegeben, so bezieht sich die Bauratenermittlung auf den Wert gegeben in geschoßfläche Wohnen.
+     * Sind keine Wohneinheiten gegeben, so bezieht sich die Bauratenermittlung auf den Wert gegeben in Geschoßfläche Wohnen.
      *
      * @param realisierungsbeginn
      * @param wohneinheiten
