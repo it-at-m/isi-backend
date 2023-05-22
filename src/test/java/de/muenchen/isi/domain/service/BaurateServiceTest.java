@@ -70,15 +70,15 @@ class BaurateServiceTest {
         var baurate1 = new BaurateModel();
         baurate1.setJahr(2000);
         baurate1.setAnzahlWeGeplant(13);
-        baurate1.setGeschossflaecheWohnenGeplant(BigDecimal.valueOf(138L));
+        baurate1.setGeschossflaecheWohnenGeplant(null);
         var baurate2 = new BaurateModel();
         baurate2.setJahr(2001);
         baurate2.setAnzahlWeGeplant(40);
-        baurate2.setGeschossflaecheWohnenGeplant(BigDecimal.valueOf(402L));
+        baurate2.setGeschossflaecheWohnenGeplant(null);
         var baurate3 = new BaurateModel();
         baurate3.setJahr(2002);
         baurate3.setAnzahlWeGeplant(79);
-        baurate3.setGeschossflaecheWohnenGeplant(BigDecimal.valueOf(780.53));
+        baurate3.setGeschossflaecheWohnenGeplant(null);
 
         var expected = List.of(baurate1, baurate2, baurate3);
 

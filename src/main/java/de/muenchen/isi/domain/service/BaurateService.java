@@ -9,7 +9,6 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
@@ -23,13 +22,16 @@ public class BaurateService {
     private final IdealtypischeBaurateRepository idealtypischeBaurateRepository;
 
     /**
-     * Bauratenermittlung auf Basis der idealtypische Bauraten.
+     * Bauratenermittlung auf Basis der idealtypischen Bauraten.
+     *
+     * Ist im Parameter der Wert für die Wohneinheiten gegeben, so wird die Baurate auschließlich für die Wohneinheiten ermittelt.
+     * Sind keine Wohneinheiten gegeben, so bezieht sich die Bauratenermittlung auf den Wert gegeben in geschoßfläche Wohnen.
      *
      * @param realisierungsbeginn
      * @param wohneinheiten
      * @param geschossflaecheWohnen
-     * @return die Bauraten auf Basis der idealtypische Bauraten ermitelt durch die in den Parameter gegebenen Informationen.
-     * @throws EntityNotFoundException falls für die gegebenen Parameter keine idealtypische Bauraten ermittelt werden kann.
+     * @return die Bauraten auf Basis der idealtypische Bauraten ermittelt durch die in den Parameter gegebenen Informationen.
+     * @throws EntityNotFoundException falls für die gegebenen Parameter keine idealtypische Bauraten ermittelt werden können.
      */
     public List<BaurateModel> determineBauraten(
         final Integer realisierungsbeginn,
@@ -38,11 +40,8 @@ public class BaurateService {
     ) throws EntityNotFoundException {
         final var idealtypischeBaurate = determineIdealtypischeBaurate(wohneinheiten, geschossflaecheWohnen);
         final var bauraten = new ArrayList<BaurateModel>();
-
-        var partialSumWohneinheiten = BigDecimal.ZERO;
-        var partialSumGeschossflaecheWohnen = BigDecimal.ZERO;
-        BigDecimal rateWohneinheiten;
-        BigDecimal rateGeschossflaecheWohnen;
+        var partialSum = BigDecimal.ZERO;
+        var rate = BigDecimal.ZERO;
 
         // Ermittlung der Bauraten
         final var jahresraten = idealtypischeBaurate.getJahresraten();
@@ -54,31 +53,27 @@ public class BaurateService {
             if (index < jahresraten.size() - 1) {
                 // Abrunden der Raten.
                 if (ObjectUtils.isNotEmpty(wohneinheiten)) {
-                    rateWohneinheiten =
+                    rate =
                         calculateRoundedDownRatenwertForGesamtwertAndRate(
                             BigDecimal.valueOf(wohneinheiten),
                             jahresrate.getRate()
                         );
-                    partialSumWohneinheiten = partialSumWohneinheiten.add(rateWohneinheiten);
-                    baurate.setAnzahlWeGeplant(rateWohneinheiten.intValue());
-                }
-
-                if (ObjectUtils.isNotEmpty(geschossflaecheWohnen)) {
-                    rateGeschossflaecheWohnen =
+                    partialSum = partialSum.add(rate);
+                    baurate.setAnzahlWeGeplant(rate.intValue());
+                } else {
+                    rate =
                         calculateRoundedDownRatenwertForGesamtwertAndRate(geschossflaecheWohnen, jahresrate.getRate());
-                    partialSumGeschossflaecheWohnen = partialSumGeschossflaecheWohnen.add(rateGeschossflaecheWohnen);
-                    baurate.setGeschossflaecheWohnenGeplant(rateGeschossflaecheWohnen);
+                    partialSum = partialSum.add(rate);
+                    baurate.setGeschossflaecheWohnenGeplant(rate);
                 }
             } else {
                 // Ermitteln der letzten Rate auf Basis der partiellen Summe.
                 if (ObjectUtils.isNotEmpty(wohneinheiten)) {
-                    rateWohneinheiten = BigDecimal.valueOf(wohneinheiten).subtract(partialSumWohneinheiten);
-                    baurate.setAnzahlWeGeplant(rateWohneinheiten.intValue());
-                }
-
-                if (ObjectUtils.isNotEmpty(geschossflaecheWohnen)) {
-                    rateGeschossflaecheWohnen = geschossflaecheWohnen.subtract(partialSumGeschossflaecheWohnen);
-                    baurate.setGeschossflaecheWohnenGeplant(rateGeschossflaecheWohnen);
+                    rate = BigDecimal.valueOf(wohneinheiten).subtract(partialSum);
+                    baurate.setAnzahlWeGeplant(rate.intValue());
+                } else {
+                    rate = geschossflaecheWohnen.subtract(partialSum);
+                    baurate.setGeschossflaecheWohnenGeplant(rate);
                 }
             }
             bauraten.add(baurate);
@@ -88,51 +83,64 @@ public class BaurateService {
     }
 
     /**
-     * Ermittelt die idealtypische Baurate mit den gegebenen Parameter.
      *
      * @param wohneinheiten
      * @param geschossflaecheWohnen
-     * @return die idealtypische Baurate für Wohneinheiten falls ein Wert gesetzt, andernfalls wird die idealtypische Baurate
-     * auf Basis der geschossfläche Wohnen ermittelt.
+     * @return
      * @throws EntityNotFoundException falls für die gegebenen Parameter keine idealtypische Baurate ermittelt werden kann.
      */
     protected IdealtypischeBaurate determineIdealtypischeBaurate(
         final Long wohneinheiten,
         final BigDecimal geschossflaecheWohnen
     ) throws EntityNotFoundException {
-        final Optional<IdealtypischeBaurate> idealtypischeBaurateOpt;
-        final StringBuilder errorMessage = new StringBuilder();
+        final IdealtypischeBaurate idealtypischeBaurate;
         if (ObjectUtils.isNotEmpty(wohneinheiten)) {
-            idealtypischeBaurateOpt =
-                idealtypischeBaurateRepository.findByTypAndVonLessThanEqualAndBisExklusivGreaterThan(
-                    IdealtypischeBaurateTyp.WOHNEINHEITEN,
-                    BigDecimal.valueOf(wohneinheiten)
+            idealtypischeBaurate =
+                determineIdealtypischeBaurateForWertAndTyp(
+                    BigDecimal.valueOf(wohneinheiten),
+                    IdealtypischeBaurateTyp.WOHNEINHEITEN
                 );
-            if (idealtypischeBaurateOpt.isEmpty()) {
-                errorMessage
-                    .append("Für die Anzahl von ")
-                    .append(wohneinheiten)
-                    .append(" Wohneinheiten konnte keine idealtypische Baurate ermittelt werden.");
-            }
+        } else if (ObjectUtils.isNotEmpty(geschossflaecheWohnen)) {
+            idealtypischeBaurate =
+                determineIdealtypischeBaurateForWertAndTyp(
+                    geschossflaecheWohnen,
+                    IdealtypischeBaurateTyp.GESCHOSSFLAECHE_WOHNEN
+                );
         } else {
-            idealtypischeBaurateOpt =
-                idealtypischeBaurateRepository.findByTypAndVonLessThanEqualAndBisExklusivGreaterThan(
-                    IdealtypischeBaurateTyp.GESCHOSSFLAECHE_WOHNEN,
-                    geschossflaecheWohnen
-                );
-            if (idealtypischeBaurateOpt.isEmpty()) {
-                errorMessage
-                    .append("Für die Geschossfläche Wohnen von ")
-                    .append(ObjectUtils.isNotEmpty(geschossflaecheWohnen) ? geschossflaecheWohnen.doubleValue() : null)
-                    .append(" qm konnte keine idealtypische Baurate ermittelt werden.");
-            }
+            final String errorMessage =
+                "Es konnten keine idealtypischen Bauraten für Wohneinheiten oder für geschoßfläche Wohnen ermittelt werden.";
+            final var exception = new EntityNotFoundException(errorMessage);
+            log.error(errorMessage, exception);
+            throw exception;
         }
+        return idealtypischeBaurate;
+    }
 
-        return idealtypischeBaurateOpt.orElseThrow(() -> {
-            final var exception = new EntityNotFoundException(errorMessage.toString());
-            log.error(errorMessage.toString(), exception);
-            return exception;
-        });
+    /**
+     * Ermittelt die idealtypische Baurate mit den gegebenen Parameter.
+     *
+     * @param wert
+     * @param typ
+     * @return die idealtypische Baurate für Wohneinheiten für den gegebenen Wert und den Typ.
+     * @throws EntityNotFoundException falls für die gegebenen Parameter keine idealtypische Baurate ermittelt werden kann.
+     */
+    protected IdealtypischeBaurate determineIdealtypischeBaurateForWertAndTyp(
+        final BigDecimal wert,
+        final IdealtypischeBaurateTyp typ
+    ) throws EntityNotFoundException {
+        return idealtypischeBaurateRepository
+            .findByTypAndVonLessThanEqualAndBisExklusivGreaterThan(typ, wert)
+            .orElseThrow(() -> {
+                final StringBuilder errorMessage = new StringBuilder()
+                    .append("Für den Wert von ")
+                    .append(wert)
+                    .append(" des Typs ")
+                    .append(typ.getBezeichnung())
+                    .append("  konnte keine idealtypische Baurate ermittelt werden.");
+                final var exception = new EntityNotFoundException(errorMessage.toString());
+                log.error(errorMessage.toString(), exception);
+                return exception;
+            });
     }
 
     /**
