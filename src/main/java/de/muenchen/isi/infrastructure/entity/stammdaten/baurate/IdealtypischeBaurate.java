@@ -11,6 +11,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Index;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -18,7 +19,10 @@ import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 
 @Entity
-@Table(indexes = { @Index(name = "range_index", columnList = "typ ASC, von ASC, bisExklusiv ASC") })
+@Table(
+    indexes = { @Index(name = "range_index", columnList = "typ ASC, von ASC, bisExklusiv ASC") },
+    uniqueConstraints = { @UniqueConstraint(columnNames = { "von", "bisExklusiv", "typ" }) }
+)
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
