@@ -108,7 +108,7 @@ public class BaurateService {
                 );
         } else {
             final String errorMessage =
-                "Es konnten keine idealtypischen Bauraten für Wohneinheiten oder für geschoßfläche Wohnen ermittelt werden.";
+                "Es konnten keine idealtypischen Bauraten für Wohneinheiten oder für Geschoßfläche Wohnen ermittelt werden.";
             final var exception = new EntityNotFoundException(errorMessage);
             log.error(errorMessage, exception);
             throw exception;
@@ -136,7 +136,7 @@ public class BaurateService {
                     .append(wert)
                     .append(" des Typs ")
                     .append(typ.getBezeichnung())
-                    .append("  konnte keine idealtypische Baurate ermittelt werden.");
+                    .append(" konnte keine idealtypische Baurate ermittelt werden.");
                 final var exception = new EntityNotFoundException(errorMessage.toString());
                 log.error(errorMessage.toString(), exception);
                 return exception;

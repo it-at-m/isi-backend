@@ -6,7 +6,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum IdealtypischeBaurateTyp {
     WOHNEINHEITEN("Wohneinheiten"),
-    GESCHOSSFLAECHE_WOHNEN("geschoßfläche Wohnen");
+    GESCHOSSFLAECHE_WOHNEN("Geschoßfläche Wohnen");
 
     @Getter
     private final String bezeichnung;
