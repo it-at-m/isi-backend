@@ -58,14 +58,13 @@ public class BaurateService {
                             BigDecimal.valueOf(wohneinheiten),
                             jahresrate.getRate()
                         );
-                    partialSum = partialSum.add(rate);
                     baurate.setAnzahlWeGeplant(rate.intValue());
                 } else {
                     rate =
                         calculateRoundedDownRatenwertForGesamtwertAndRate(geschossflaecheWohnen, jahresrate.getRate());
-                    partialSum = partialSum.add(rate);
                     baurate.setGeschossflaecheWohnenGeplant(rate);
                 }
+                partialSum = partialSum.add(rate);
             } else {
                 // Ermitteln der letzten Rate auf Basis der partiellen Summe.
                 if (ObjectUtils.isNotEmpty(wohneinheiten)) {
