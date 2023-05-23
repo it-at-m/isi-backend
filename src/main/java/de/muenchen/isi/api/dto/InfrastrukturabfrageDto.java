@@ -7,27 +7,26 @@ package de.muenchen.isi.api.dto;
 import de.muenchen.isi.api.validation.GeschossflaecheWohnenSobonUrsaechlichValid;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonVerfahrensgrundsaetzeJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
+import java.util.List;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-import java.util.List;
 
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @GeschossflaecheWohnenSobonUrsaechlichValid
-public class InfrastrukturabfrageResponseDto extends BaseEntityDto {
+public class InfrastrukturabfrageDto extends BaseEntityDto {
 
-    private AbfrageResponseDto abfrage;
+    private AbfrageDto abfrage;
 
     private UncertainBoolean sobonRelevant;
 
     private SobonVerfahrensgrundsaetzeJahr sobonJahr;
 
-    private List<@Valid @NotNull AbfragevarianteResponseDto> abfragevarianten;
+    private List<@Valid @NotNull AbfragevarianteDto> abfragevarianten;
 
     private String aktenzeichenProLbk;
 

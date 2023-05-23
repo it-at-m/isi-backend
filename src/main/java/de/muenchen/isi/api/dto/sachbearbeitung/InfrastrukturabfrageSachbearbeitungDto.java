@@ -1,21 +1,20 @@
 package de.muenchen.isi.api.dto.sachbearbeitung;
 
-import de.muenchen.isi.api.dto.AbfrageResponseDto;
+import de.muenchen.isi.api.dto.AbfrageDto;
 import de.muenchen.isi.api.dto.BaseEntityDto;
 import de.muenchen.isi.api.validation.GeschossflaecheWohnenSobonUrsaechlichValid;
 import de.muenchen.isi.api.validation.NotUnspecified;
 import de.muenchen.isi.api.validation.UniqueRelevantAbfragevarianteValid;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonVerfahrensgrundsaetzeJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
-
+import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.List;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 @Data
 @ToString(callSuper = true)
@@ -25,7 +24,7 @@ public class InfrastrukturabfrageSachbearbeitungDto extends BaseEntityDto {
 
     @Valid
     @NotNull
-    private AbfrageResponseDto abfrage;
+    private AbfrageDto abfrage;
 
     @NotNull
     @NotUnspecified

@@ -1,18 +1,17 @@
-package de.muenchen.isi.domain.model.abfrageAngelegt;
+package de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt;
 
 import de.muenchen.isi.domain.model.BauvorhabenModel;
 import de.muenchen.isi.domain.model.common.AdresseModel;
 import de.muenchen.isi.domain.model.filehandling.DokumentModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVorhaben;
+import java.time.LocalDate;
+import java.util.List;
 import lombok.Data;
 import lombok.ToString;
 
-import java.time.LocalDate;
-import java.util.List;
-
 @Data
 @ToString(callSuper = true)
-public class AbfrageRequestModel {
+public class AbfrageerstellungAbfrageAngelegtModel {
 
     private List<DokumentModel> dokumente;
 
@@ -20,15 +19,15 @@ public class AbfrageRequestModel {
 
     private AdresseModel adresse;
 
-
     private LocalDate fristStellungnahme;
 
     private String anmerkung;
 
     private String bebauungsplannummer;
-    
+
     private String nameAbfrage;
 
     private StandVorhaben standVorhaben;
+
     private BauvorhabenModel bauvorhaben;
 }

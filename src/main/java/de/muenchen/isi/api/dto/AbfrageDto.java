@@ -8,14 +8,13 @@ import de.muenchen.isi.api.dto.common.AdresseDto;
 import de.muenchen.isi.api.dto.filehandling.DokumentDto;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVorhaben;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
-import lombok.Data;
-
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
+import lombok.Data;
 
 @Data
-public class AbfrageResponseDto {
+public class AbfrageDto {
 
     private List<DokumentDto> dokumente;
 

@@ -1,14 +1,21 @@
 package de.muenchen.isi.domain.service;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+
 import de.muenchen.isi.domain.mapper.AbfrageListElementDomainMapper;
 import de.muenchen.isi.domain.mapper.AbfrageListElementDomainMapperImpl;
-import de.muenchen.isi.domain.model.AbfrageResponseModel;
-import de.muenchen.isi.domain.model.InfrastrukturabfrageResponseModel;
+import de.muenchen.isi.domain.model.AbfrageModel;
+import de.muenchen.isi.domain.model.InfrastrukturabfrageModel;
 import de.muenchen.isi.domain.model.enums.AbfrageTyp;
 import de.muenchen.isi.domain.model.list.AbfrageListElementModel;
 import de.muenchen.isi.domain.model.list.AbfrageListElementsModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVorhaben;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,22 +25,16 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
 class AbfrageListServiceTest {
 
     private final AbfrageListElementDomainMapper abfrageListElementDomainMapper =
-            new AbfrageListElementDomainMapperImpl();
+        new AbfrageListElementDomainMapperImpl();
+
     @Mock
     private AbfrageService abfrageService;
+
     private AbfrageListService abfrageListService;
 
     @BeforeEach
@@ -44,31 +45,31 @@ class AbfrageListServiceTest {
 
     @Test
     void getAbfrageListElements() {
-        final InfrastrukturabfrageResponseModel model1 = new InfrastrukturabfrageResponseModel();
+        final InfrastrukturabfrageModel model1 = new InfrastrukturabfrageModel();
         model1.setId(UUID.randomUUID());
-        model1.setAbfrage(new AbfrageResponseModel());
+        model1.setAbfrage(new AbfrageModel());
         model1.getAbfrage().setNameAbfrage("NameAbfrage1");
         model1.getAbfrage().setStandVorhaben(StandVorhaben.AUFSTELLUNGSBESCHLUSS);
         model1.getAbfrage().setStatusAbfrage(StatusAbfrage.OFFEN);
         model1.getAbfrage().setFristStellungnahme(LocalDate.of(2022, 11, 1));
 
-        final InfrastrukturabfrageResponseModel model2 = new InfrastrukturabfrageResponseModel();
+        final InfrastrukturabfrageModel model2 = new InfrastrukturabfrageModel();
         model2.setId(UUID.randomUUID());
-        model2.setAbfrage(new AbfrageResponseModel());
+        model2.setAbfrage(new AbfrageModel());
         model2.getAbfrage().setNameAbfrage("NameAbfrage2");
         model2.getAbfrage().setStandVorhaben(StandVorhaben.BAUGENEHMIGUNG_ERTEILT);
         model2.getAbfrage().setStatusAbfrage(StatusAbfrage.ANGELEGT);
         model2.getAbfrage().setFristStellungnahme(LocalDate.of(2022, 9, 1));
 
-        final InfrastrukturabfrageResponseModel model3 = new InfrastrukturabfrageResponseModel();
+        final InfrastrukturabfrageModel model3 = new InfrastrukturabfrageModel();
         model3.setId(UUID.randomUUID());
-        model3.setAbfrage(new AbfrageResponseModel());
+        model3.setAbfrage(new AbfrageModel());
         model3.getAbfrage().setNameAbfrage("NameAbfrage2");
         model3.getAbfrage().setStandVorhaben(StandVorhaben.BPLAN_IN_KRAFT);
         model3.getAbfrage().setStatusAbfrage(StatusAbfrage.OFFEN);
         model3.getAbfrage().setFristStellungnahme(LocalDate.of(2022, 12, 1));
 
-        final List<InfrastrukturabfrageResponseModel> listInfrastrukturabfrage = List.of(model1, model2, model3);
+        final List<InfrastrukturabfrageModel> listInfrastrukturabfrage = List.of(model1, model2, model3);
 
         final List<AbfrageListElementModel> expectedFristStellungnahmeDesc = new ArrayList<>();
 

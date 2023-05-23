@@ -4,38 +4,47 @@
  */
 package de.muenchen.isi.api.mapper;
 
-import de.muenchen.isi.api.dto.InfrastrukturabfrageResponseDto;
-import de.muenchen.isi.api.dto.abfrageAngelegt.AbfrageRequestDto;
-import de.muenchen.isi.api.dto.abfrageAngelegt.InfrastrukturabfrageRequestDto;
+import de.muenchen.isi.api.dto.InfrastrukturabfrageDto;
+import de.muenchen.isi.api.dto.abfrageAbfrageerstellungAngelegt.AbfrageerstellungAbfrageAngelegtDto;
+import de.muenchen.isi.api.dto.abfrageAbfrageerstellungAngelegt.AbfrageerstellungInfrastrukturabfrageAngelegtDto;
+import de.muenchen.isi.api.dto.abfrageSachbearbeitungOffenInBearbeitung.SachbearbeitungAbfrageOffenInBearbeitungDto;
+import de.muenchen.isi.api.dto.abfrageSachbearbeitungOffenInBearbeitung.SachbearbeitungInfrastrukturabfrageOffenInBearbeitungDto;
 import de.muenchen.isi.configuration.MapstructConfiguration;
 import de.muenchen.isi.domain.model.BauvorhabenModel;
-import de.muenchen.isi.domain.model.InfrastrukturabfrageResponseModel;
-import de.muenchen.isi.domain.model.abfrageAngelegt.AbfrageRequestModel;
+import de.muenchen.isi.domain.model.InfrastrukturabfrageModel;
+import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.AbfrageerstellungAbfrageAngelegtModel;
+import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.AbfrageerstellungInfrastrukturabfrageAngelegtModel;
+import de.muenchen.isi.domain.model.abfrageSachbearbeitungOffenInBearbeitung.SachbearbeitungAbfrageOffenInBearbeitungModel;
+import de.muenchen.isi.domain.model.abfrageSachbearbeitungOffenInBearbeitung.SachbearbeitungInfrastrukturabfrageOffenInBearbeitungModel;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
-@Mapper(config = MapstructConfiguration.class, uses = {AbfragevarianteApiMapper.class, DokumentApiMapper.class})
+@Mapper(config = MapstructConfiguration.class, uses = { AbfragevarianteApiMapper.class, DokumentApiMapper.class })
 public interface AbfrageApiMapper {
     @Mapping(target = "abfrage.bauvorhaben", ignore = true)
-    InfrastrukturabfrageResponseDto model2Dto(final InfrastrukturabfrageResponseModel model);
+    InfrastrukturabfrageDto model2Dto(final InfrastrukturabfrageModel model);
 
     @AfterMapping
     default void setBauvorhabenIdOnInfrastrukturabfrageDto(
-            final InfrastrukturabfrageResponseModel model,
-            @MappingTarget final InfrastrukturabfrageResponseDto dto
+        final InfrastrukturabfrageModel model,
+        @MappingTarget final InfrastrukturabfrageDto dto
     ) {
         final BauvorhabenModel bauvorhabenModel = model.getAbfrage().getBauvorhaben();
         dto.getAbfrage().setBauvorhaben(bauvorhabenModel != null ? bauvorhabenModel.getId() : null);
     }
 
-    @Mapping(target = "abfrage.bauvorhaben", ignore = true)
-    @Mapping(target = "displayName", ignore = true)
-    InfrastrukturabfrageResponseModel dto2Model(final InfrastrukturabfrageResponseDto dto);
+    @Mapping(target = "bauvorhaben", ignore = true)
+    AbfrageerstellungAbfrageAngelegtModel dto2Model(final AbfrageerstellungAbfrageAngelegtDto dto);
 
-    de.muenchen.isi.domain.model.abfrageAngelegt.InfrastrukturabfrageRequestModel dto2Model(final InfrastrukturabfrageRequestDto dto);
+    SachbearbeitungAbfrageOffenInBearbeitungModel dto2Model(final SachbearbeitungAbfrageOffenInBearbeitungDto dto);
 
-    AbfrageRequestModel dto2Model(final AbfrageRequestDto dto);
+    AbfrageerstellungInfrastrukturabfrageAngelegtModel dto2Model(
+        final AbfrageerstellungInfrastrukturabfrageAngelegtDto dto
+    );
 
+    SachbearbeitungInfrastrukturabfrageOffenInBearbeitungModel dto2Model(
+        final SachbearbeitungInfrastrukturabfrageOffenInBearbeitungDto dto
+    );
 }

@@ -1,33 +1,32 @@
 package de.muenchen.isi.domain.service.calculation;
 
-import de.muenchen.isi.domain.model.AbfragevarianteResponseModel;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+
+import de.muenchen.isi.domain.model.AbfragevarianteModel;
 import de.muenchen.isi.domain.model.BauabschnittModel;
 import de.muenchen.isi.domain.model.BaugebietModel;
 import de.muenchen.isi.domain.model.BaurateModel;
 import de.muenchen.isi.domain.model.calculation.RealisierungsZeitraumModel;
 import de.muenchen.isi.domain.model.calculation.WohneinheitenInformationModel;
+import java.math.BigDecimal;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 
-import java.math.BigDecimal;
-import java.util.List;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
 class WohneinheitenInformationServiceTest {
 
     private final WohneinheitenInformationService wohneinheitenInformationService =
-            new WohneinheitenInformationService();
+        new WohneinheitenInformationService();
 
     @Test
     void calculateWohneinheitenInformationForAbfragevariante() {
-        var abfragevariante = new AbfragevarianteResponseModel();
+        var abfragevariante = new AbfragevarianteModel();
 
         var result = this.wohneinheitenInformationService.calculateWohneinheitenInformation(abfragevariante);
 
@@ -37,7 +36,7 @@ class WohneinheitenInformationServiceTest {
 
         // --
 
-        abfragevariante = new AbfragevarianteResponseModel();
+        abfragevariante = new AbfragevarianteModel();
 
         final var bauabschnitt1 = new BauabschnittModel();
 

@@ -1,27 +1,26 @@
-package de.muenchen.isi.api.dto.abfrageAngelegt;
+package de.muenchen.isi.api.dto.abfrageAbfrageerstellungAngelegt;
 
 import de.muenchen.isi.api.dto.BaseEntityDto;
 import de.muenchen.isi.api.validation.NotUnspecified;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonVerfahrensgrundsaetzeJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
-
+import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.List;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class InfrastrukturabfrageRequestDto extends BaseEntityDto {
+public class AbfrageerstellungInfrastrukturabfrageAngelegtDto extends BaseEntityDto {
 
     @Valid
     @NotNull
-    private AbfrageRequestDto abfrage;
+    private AbfrageerstellungAbfrageAngelegtDto abfrage;
 
     @NotNull
     @NotUnspecified
@@ -31,7 +30,7 @@ public class InfrastrukturabfrageRequestDto extends BaseEntityDto {
 
     @NotEmpty
     @Size(min = 1, max = 5)
-    private List<@Valid @NotNull AbfragevarianteRequestDto> abfragevarianten;
+    private List<@Valid @NotNull AbfrageerstellungAbfragevarianteAngelegtDto> abfragevarianten;
 
     @Size(max = 255, message = "Es sind maximal {max} Zeichen erlaubt")
     private String aktenzeichenProLbk;

@@ -1,5 +1,9 @@
 package de.muenchen.isi.domain.service;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.sameInstance;
+
 import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.FileHandlingFailedException;
@@ -9,8 +13,8 @@ import de.muenchen.isi.domain.exception.UniqueViolationException;
 import de.muenchen.isi.domain.mapper.BauvorhabenDomainMapper;
 import de.muenchen.isi.domain.mapper.BauvorhabenDomainMapperImpl;
 import de.muenchen.isi.domain.mapper.DokumentDomainMapperImpl;
-import de.muenchen.isi.domain.model.AbfrageResponseModel;
 import de.muenchen.isi.domain.model.BauvorhabenModel;
+import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.AbfrageerstellungAbfrageAngelegtModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.InfrastruktureinrichtungModel;
 import de.muenchen.isi.domain.service.filehandling.DokumentService;
 import de.muenchen.isi.infrastructure.entity.Abfrage;
@@ -31,6 +35,10 @@ import de.muenchen.isi.infrastructure.repository.infrastruktureinrichtung.HausFu
 import de.muenchen.isi.infrastructure.repository.infrastruktureinrichtung.KindergartenRepository;
 import de.muenchen.isi.infrastructure.repository.infrastruktureinrichtung.KinderkrippeRepository;
 import de.muenchen.isi.infrastructure.repository.infrastruktureinrichtung.MittelschuleRepository;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+import java.util.stream.Stream;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -41,21 +49,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-import java.util.stream.Stream;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.sameInstance;
-
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
 public class BauvorhabenServiceTest {
 
     private final BauvorhabenDomainMapper bauvorhabenDomainMapper = new BauvorhabenDomainMapperImpl(
-            new DokumentDomainMapperImpl()
+        new DokumentDomainMapperImpl()
     );
 
     private BauvorhabenService bauvorhabenService;
@@ -90,20 +89,8 @@ public class BauvorhabenServiceTest {
     @BeforeEach
     public void beforeEach() {
         this.bauvorhabenService =
-                new BauvorhabenService(
-                        this.bauvorhabenDomainMapper,
-                        this.bauvorhabenRepository,
-                        this.infrastrukturabfrageRepository,
-                        this.kinderkrippeRepository,
-                        this.kindergartenRepository,
-                        this.hausFuerKinderRepository,
-                        this.gsNachmittagBetreuungRepository,
-                        this.grundschuleRepository,
-                        this.mittelschuleRepository,
-                        this.dokumentService
-                );
-
-        Mockito.reset(
+            new BauvorhabenService(
+                this.bauvorhabenDomainMapper,
                 this.bauvorhabenRepository,
                 this.infrastrukturabfrageRepository,
                 this.kinderkrippeRepository,
@@ -113,6 +100,18 @@ public class BauvorhabenServiceTest {
                 this.grundschuleRepository,
                 this.mittelschuleRepository,
                 this.dokumentService
+            );
+
+        Mockito.reset(
+            this.bauvorhabenRepository,
+            this.infrastrukturabfrageRepository,
+            this.kinderkrippeRepository,
+            this.kindergartenRepository,
+            this.hausFuerKinderRepository,
+            this.gsNachmittagBetreuungRepository,
+            this.grundschuleRepository,
+            this.mittelschuleRepository,
+            this.dokumentService
         );
     }
 
@@ -124,8 +123,8 @@ public class BauvorhabenServiceTest {
         entity2.setId(UUID.randomUUID());
 
         Mockito
-                .when(this.bauvorhabenRepository.findAllByOrderByGrundstuecksgroesseDesc())
-                .thenReturn(Stream.of(entity1, entity2));
+            .when(this.bauvorhabenRepository.findAllByOrderByGrundstuecksgroesseDesc())
+            .thenReturn(Stream.of(entity1, entity2));
 
         final List<BauvorhabenModel> result = this.bauvorhabenService.getBauvorhaben();
 
@@ -190,24 +189,24 @@ public class BauvorhabenServiceTest {
         entity.setNameVorhaben(bauvorhabenModel.getNameVorhaben());
 
         Mockito
-                .when(this.bauvorhabenRepository.findByNameVorhabenIgnoreCase(entity.getNameVorhaben()))
-                .thenReturn(Optional.of(entity));
+            .when(this.bauvorhabenRepository.findByNameVorhabenIgnoreCase(entity.getNameVorhaben()))
+            .thenReturn(Optional.of(entity));
         Mockito.when(this.bauvorhabenRepository.saveAndFlush(entity)).thenReturn(entity);
 
         Assertions.assertThrows(
-                UniqueViolationException.class,
-                () -> this.bauvorhabenService.saveBauvorhaben(bauvorhabenModel2)
+            UniqueViolationException.class,
+            () -> this.bauvorhabenService.saveBauvorhaben(bauvorhabenModel2)
         );
 
         Mockito
-                .verify(this.bauvorhabenRepository, Mockito.times(1))
-                .findByNameVorhabenIgnoreCase(entity.getNameVorhaben());
+            .verify(this.bauvorhabenRepository, Mockito.times(1))
+            .findByNameVorhabenIgnoreCase(entity.getNameVorhaben());
         Mockito.verify(this.bauvorhabenRepository, Mockito.times(0)).save(entity);
     }
 
     @Test
     void updateBauvorhabenTest()
-            throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, FileHandlingFailedException, FileHandlingWithS3FailedException {
+        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, FileHandlingFailedException, FileHandlingWithS3FailedException {
         final BauvorhabenModel bauvorhabenModel = new BauvorhabenModel();
         bauvorhabenModel.setId(UUID.randomUUID());
         bauvorhabenModel.setNameVorhaben("BauvorhabenTest");
@@ -217,8 +216,8 @@ public class BauvorhabenServiceTest {
         Mockito.when(this.bauvorhabenRepository.findById(entity.getId())).thenReturn(Optional.of(entity));
         Mockito.when(this.bauvorhabenRepository.saveAndFlush(entity)).thenReturn(entity);
         Mockito
-                .when(this.bauvorhabenRepository.findByNameVorhabenIgnoreCase("BauvorhabenTest"))
-                .thenReturn(Optional.empty());
+            .when(this.bauvorhabenRepository.findByNameVorhabenIgnoreCase("BauvorhabenTest"))
+            .thenReturn(Optional.empty());
 
         final BauvorhabenModel result = this.bauvorhabenService.updateBauvorhaben(bauvorhabenModel);
 
@@ -231,11 +230,11 @@ public class BauvorhabenServiceTest {
         Mockito.verify(this.bauvorhabenRepository, Mockito.times(1)).saveAndFlush(entity);
         Mockito.verify(this.bauvorhabenRepository, Mockito.times(1)).findByNameVorhabenIgnoreCase("BauvorhabenTest");
         Mockito
-                .verify(this.dokumentService, Mockito.times(1))
-                .deleteDokumenteFromOriginalDokumentenListWhichAreMissingInParameterAdaptedDokumentenListe(
-                        Mockito.isNull(),
-                        Mockito.isNull()
-                );
+            .verify(this.dokumentService, Mockito.times(1))
+            .deleteDokumenteFromOriginalDokumentenListWhichAreMissingInParameterAdaptedDokumentenListe(
+                Mockito.isNull(),
+                Mockito.isNull()
+            );
     }
 
     @Test
@@ -247,8 +246,8 @@ public class BauvorhabenServiceTest {
 
         Mockito.when(this.bauvorhabenRepository.findById(entity.getId())).thenReturn(Optional.of(entity));
         Mockito
-                .when(this.infrastrukturabfrageRepository.findAllByAbfrageBauvorhabenId(entity.getId()))
-                .thenReturn(Stream.empty());
+            .when(this.infrastrukturabfrageRepository.findAllByAbfrageBauvorhabenId(entity.getId()))
+            .thenReturn(Stream.empty());
 
         this.bauvorhabenService.deleteBauvorhaben(id);
 
@@ -270,8 +269,8 @@ public class BauvorhabenServiceTest {
 
         Mockito.when(this.bauvorhabenRepository.findById(entity.getId())).thenReturn(Optional.of(entity));
         Mockito
-                .when(this.infrastrukturabfrageRepository.findAllByAbfrageBauvorhabenId(entity.getId()))
-                .thenReturn(Stream.of(infrastrukturabfrage));
+            .when(this.infrastrukturabfrageRepository.findAllByAbfrageBauvorhabenId(entity.getId()))
+            .thenReturn(Stream.of(infrastrukturabfrage));
 
         Assertions.assertThrows(EntityIsReferencedException.class, () -> this.bauvorhabenService.deleteBauvorhaben(id));
 
@@ -318,23 +317,23 @@ public class BauvorhabenServiceTest {
 
         Mockito.when(this.bauvorhabenRepository.findById(entity.getId())).thenReturn(Optional.of(entity));
         Mockito
-                .when(this.kinderkrippeRepository.findAllByInfrastruktureinrichtungBauvorhabenId(entity.getId()))
-                .thenReturn(Stream.of(kinderkrippe));
+            .when(this.kinderkrippeRepository.findAllByInfrastruktureinrichtungBauvorhabenId(entity.getId()))
+            .thenReturn(Stream.of(kinderkrippe));
         Mockito
-                .when(this.kindergartenRepository.findAllByInfrastruktureinrichtungBauvorhabenId(entity.getId()))
-                .thenReturn(Stream.of(kindergarten));
+            .when(this.kindergartenRepository.findAllByInfrastruktureinrichtungBauvorhabenId(entity.getId()))
+            .thenReturn(Stream.of(kindergarten));
         Mockito
-                .when(this.hausFuerKinderRepository.findAllByInfrastruktureinrichtungBauvorhabenId(entity.getId()))
-                .thenReturn(Stream.of(hausFuerKinder));
+            .when(this.hausFuerKinderRepository.findAllByInfrastruktureinrichtungBauvorhabenId(entity.getId()))
+            .thenReturn(Stream.of(hausFuerKinder));
         Mockito
-                .when(this.gsNachmittagBetreuungRepository.findAllByInfrastruktureinrichtungBauvorhabenId(entity.getId()))
-                .thenReturn(Stream.of(gsNachmittagBetreuung));
+            .when(this.gsNachmittagBetreuungRepository.findAllByInfrastruktureinrichtungBauvorhabenId(entity.getId()))
+            .thenReturn(Stream.of(gsNachmittagBetreuung));
         Mockito
-                .when(this.grundschuleRepository.findAllByInfrastruktureinrichtungBauvorhabenId(entity.getId()))
-                .thenReturn(Stream.of(grundschule));
+            .when(this.grundschuleRepository.findAllByInfrastruktureinrichtungBauvorhabenId(entity.getId()))
+            .thenReturn(Stream.of(grundschule));
         Mockito
-                .when(this.mittelschuleRepository.findAllByInfrastruktureinrichtungBauvorhabenId(entity.getId()))
-                .thenReturn(Stream.of(mittelschule));
+            .when(this.mittelschuleRepository.findAllByInfrastruktureinrichtungBauvorhabenId(entity.getId()))
+            .thenReturn(Stream.of(mittelschule));
 
         Assertions.assertThrows(EntityIsReferencedException.class, () -> this.bauvorhabenService.deleteBauvorhaben(id));
 
@@ -349,8 +348,8 @@ public class BauvorhabenServiceTest {
         final var bauvorhaben = new Bauvorhaben();
         bauvorhaben.setId(id);
 
-        final var abfrage = new AbfrageResponseModel();
-        AbfrageResponseModel returnedAbfrage;
+        final var abfrage = new AbfrageerstellungAbfrageAngelegtModel();
+        AbfrageerstellungAbfrageAngelegtModel returnedAbfrage;
 
         // Wenn 'bauvorhabenId' null ist, soll nichts passieren.
 
@@ -361,8 +360,8 @@ public class BauvorhabenServiceTest {
         // Wenn kein Bauvorhaben mit der ID 'bauvorhabenId' existiert, soll eine 'BauvorhabenNotFoundException' geworfen werden.
 
         Assertions.assertThrows(
-                EntityNotFoundException.class,
-                () -> this.bauvorhabenService.assignBauvorhabenToAbfrage(id, abfrage)
+            EntityNotFoundException.class,
+            () -> this.bauvorhabenService.assignBauvorhabenToAbfrage(id, abfrage)
         );
         Mockito.verify(this.bauvorhabenRepository, Mockito.times(1)).findById(bauvorhaben.getId());
 
@@ -388,15 +387,15 @@ public class BauvorhabenServiceTest {
         // Wenn 'bauvorhabenId' null ist, soll nichts passieren.
 
         returnedInfrastruktureinrichtung =
-                this.bauvorhabenService.assignBauvorhabenToInfrastruktureinrichtung(null, infrastruktureinrichtung);
+            this.bauvorhabenService.assignBauvorhabenToInfrastruktureinrichtung(null, infrastruktureinrichtung);
         assertThat(returnedInfrastruktureinrichtung, sameInstance(infrastruktureinrichtung));
         Mockito.verify(this.bauvorhabenRepository, Mockito.times(0)).findById(bauvorhaben.getId());
 
         // Wenn kein Bauvorhaben mit der ID 'bauvorhabenId' existiert, soll eine 'BauvorhabenNotFoundException' geworfen werden.
 
         Assertions.assertThrows(
-                EntityNotFoundException.class,
-                () -> this.bauvorhabenService.assignBauvorhabenToInfrastruktureinrichtung(id, infrastruktureinrichtung)
+            EntityNotFoundException.class,
+            () -> this.bauvorhabenService.assignBauvorhabenToInfrastruktureinrichtung(id, infrastruktureinrichtung)
         );
         Mockito.verify(this.bauvorhabenRepository, Mockito.times(1)).findById(bauvorhaben.getId());
 
@@ -404,12 +403,12 @@ public class BauvorhabenServiceTest {
 
         Mockito.when(this.bauvorhabenRepository.findById(bauvorhaben.getId())).thenReturn(Optional.of(bauvorhaben));
         returnedInfrastruktureinrichtung =
-                this.bauvorhabenService.assignBauvorhabenToInfrastruktureinrichtung(id, infrastruktureinrichtung);
+            this.bauvorhabenService.assignBauvorhabenToInfrastruktureinrichtung(id, infrastruktureinrichtung);
         assertThat(returnedInfrastruktureinrichtung, sameInstance(infrastruktureinrichtung));
         Mockito.verify(this.bauvorhabenRepository, Mockito.times(2)).findById(bauvorhaben.getId());
         assertThat(
-                returnedInfrastruktureinrichtung.getBauvorhaben(),
-                is(this.bauvorhabenService.getBauvorhabenById(id))
+            returnedInfrastruktureinrichtung.getBauvorhaben(),
+            is(this.bauvorhabenService.getBauvorhabenById(id))
         );
     }
 
@@ -424,25 +423,25 @@ public class BauvorhabenServiceTest {
         bauvorhaben.setId(UUID.randomUUID());
 
         Mockito
-                .when(this.infrastrukturabfrageRepository.findAllByAbfrageBauvorhabenId(bauvorhaben.getId()))
-                .thenReturn(Stream.of());
+            .when(this.infrastrukturabfrageRepository.findAllByAbfrageBauvorhabenId(bauvorhaben.getId()))
+            .thenReturn(Stream.of());
         this.bauvorhabenService.throwEntityIsReferencedExceptionWhenAbfrageIsReferencingBauvorhaben(bauvorhaben);
         Mockito.reset(this.infrastrukturabfrageRepository);
 
         Mockito
-                .when(this.infrastrukturabfrageRepository.findAllByAbfrageBauvorhabenId(bauvorhaben.getId()))
-                .thenReturn(Stream.of(infrastrukturabfrage));
+            .when(this.infrastrukturabfrageRepository.findAllByAbfrageBauvorhabenId(bauvorhaben.getId()))
+            .thenReturn(Stream.of(infrastrukturabfrage));
         Assertions.assertThrows(
-                EntityIsReferencedException.class,
-                () ->
-                        this.bauvorhabenService.throwEntityIsReferencedExceptionWhenAbfrageIsReferencingBauvorhaben(bauvorhaben)
+            EntityIsReferencedException.class,
+            () ->
+                this.bauvorhabenService.throwEntityIsReferencedExceptionWhenAbfrageIsReferencingBauvorhaben(bauvorhaben)
         );
         Mockito.reset(this.infrastrukturabfrageRepository);
     }
 
     @Test
     void throwEntityIsReferencedExceptionWhenInfrastruktureinrichtungIsReferencingBauvorhaben()
-            throws EntityIsReferencedException {
+        throws EntityIsReferencedException {
         final Kinderkrippe kinderkrippe = new Kinderkrippe();
         final Infrastruktureinrichtung infrastruktureinrichtungKinderkrippe = new Infrastruktureinrichtung();
         infrastruktureinrichtungKinderkrippe.setNameEinrichtung("Kinderkrippe");
@@ -477,39 +476,39 @@ public class BauvorhabenServiceTest {
         bauvorhaben.setId(UUID.randomUUID());
 
         Mockito
-                .when(this.kinderkrippeRepository.findAllByInfrastruktureinrichtungBauvorhabenId(bauvorhaben.getId()))
-                .thenReturn(Stream.of(kinderkrippe));
+            .when(this.kinderkrippeRepository.findAllByInfrastruktureinrichtungBauvorhabenId(bauvorhaben.getId()))
+            .thenReturn(Stream.of(kinderkrippe));
         Mockito
-                .when(this.kindergartenRepository.findAllByInfrastruktureinrichtungBauvorhabenId(bauvorhaben.getId()))
-                .thenReturn(Stream.of(kindergarten));
+            .when(this.kindergartenRepository.findAllByInfrastruktureinrichtungBauvorhabenId(bauvorhaben.getId()))
+            .thenReturn(Stream.of(kindergarten));
         Mockito
-                .when(this.hausFuerKinderRepository.findAllByInfrastruktureinrichtungBauvorhabenId(bauvorhaben.getId()))
-                .thenReturn(Stream.of(hausFuerKinder));
+            .when(this.hausFuerKinderRepository.findAllByInfrastruktureinrichtungBauvorhabenId(bauvorhaben.getId()))
+            .thenReturn(Stream.of(hausFuerKinder));
         Mockito
-                .when(
-                        this.gsNachmittagBetreuungRepository.findAllByInfrastruktureinrichtungBauvorhabenId(bauvorhaben.getId())
-                )
-                .thenReturn(Stream.of(gsNachmittagBetreuung));
+            .when(
+                this.gsNachmittagBetreuungRepository.findAllByInfrastruktureinrichtungBauvorhabenId(bauvorhaben.getId())
+            )
+            .thenReturn(Stream.of(gsNachmittagBetreuung));
         Mockito
-                .when(this.grundschuleRepository.findAllByInfrastruktureinrichtungBauvorhabenId(bauvorhaben.getId()))
-                .thenReturn(Stream.of(grundschule));
+            .when(this.grundschuleRepository.findAllByInfrastruktureinrichtungBauvorhabenId(bauvorhaben.getId()))
+            .thenReturn(Stream.of(grundschule));
         Mockito
-                .when(this.mittelschuleRepository.findAllByInfrastruktureinrichtungBauvorhabenId(bauvorhaben.getId()))
-                .thenReturn(Stream.of(mittelschule));
+            .when(this.mittelschuleRepository.findAllByInfrastruktureinrichtungBauvorhabenId(bauvorhaben.getId()))
+            .thenReturn(Stream.of(mittelschule));
         Assertions.assertThrows(
-                EntityIsReferencedException.class,
-                () ->
-                        this.bauvorhabenService.throwEntityIsReferencedExceptionWhenInfrastruktureinrichtungIsReferencingBauvorhaben(
-                                bauvorhaben
-                        )
+            EntityIsReferencedException.class,
+            () ->
+                this.bauvorhabenService.throwEntityIsReferencedExceptionWhenInfrastruktureinrichtungIsReferencingBauvorhaben(
+                        bauvorhaben
+                    )
         );
         Mockito.reset(
-                this.kinderkrippeRepository,
-                this.kindergartenRepository,
-                this.hausFuerKinderRepository,
-                this.gsNachmittagBetreuungRepository,
-                this.grundschuleRepository,
-                this.mittelschuleRepository
+            this.kinderkrippeRepository,
+            this.kindergartenRepository,
+            this.hausFuerKinderRepository,
+            this.gsNachmittagBetreuungRepository,
+            this.grundschuleRepository,
+            this.mittelschuleRepository
         );
     }
 }

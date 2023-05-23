@@ -1,26 +1,25 @@
-package de.muenchen.isi.domain.model.abfrageAngelegt;
+package de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt;
 
 import de.muenchen.isi.domain.model.BaseEntityModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonVerfahrensgrundsaetzeJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
+import java.util.List;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
-import java.util.List;
-
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class InfrastrukturabfrageRequestModel extends BaseEntityModel {
+public class AbfrageerstellungInfrastrukturabfrageAngelegtModel extends BaseEntityModel {
 
-    private AbfrageRequestModel abfrage;
+    private AbfrageerstellungAbfrageAngelegtModel abfrage;
 
     private UncertainBoolean sobonRelevant;
 
     private SobonVerfahrensgrundsaetzeJahr sobonJahr;
 
-    private List<AbfragevarianteRequestModel> abfragevarianten;
+    private List<AbfrageerstellungAbfragevarianteAngelegtModel> abfragevarianten;
 
     private String aktenzeichenProLbk;
 
