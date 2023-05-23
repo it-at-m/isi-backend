@@ -40,6 +40,6 @@ public class IdealtypischeBaurate extends BaseEntity {
     private IdealtypischeBaurateTyp typ;
 
     @Type(type = "json")
-    @Column(nullable = false, columnDefinition = "json")
+    @Column(nullable = false, columnDefinition = "jsonb")
     private List<Jahresrate> jahresraten;
 }
