@@ -42,7 +42,7 @@ public class Abfrage {
     private Adresse adresse;
 
     @Type(type = "json")
-    @Column(columnDefinition = "json")
+    @Column(columnDefinition = "jsonb")
     private Verortung verortung;
 
     @Column(nullable = false)
