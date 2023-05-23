@@ -5,6 +5,7 @@
 package de.muenchen.isi.api.dto;
 
 import de.muenchen.isi.api.dto.common.AdresseDto;
+import de.muenchen.isi.api.dto.common.VerortungDto;
 import de.muenchen.isi.api.dto.filehandling.DokumentDto;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVorhaben;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
@@ -22,6 +23,10 @@ public class AbfrageDto {
 
     private AdresseDto adresse;
 
+    @Valid
+    private VerortungDto verortung;
+
+    @NotNull
     private LocalDate fristStellungnahme;
 
     private String anmerkung;

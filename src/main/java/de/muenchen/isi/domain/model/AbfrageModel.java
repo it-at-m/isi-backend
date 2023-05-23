@@ -5,6 +5,7 @@
 package de.muenchen.isi.domain.model;
 
 import de.muenchen.isi.domain.model.common.AdresseModel;
+import de.muenchen.isi.domain.model.common.VerortungModel;
 import de.muenchen.isi.domain.model.filehandling.DokumentModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVorhaben;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
@@ -21,6 +22,8 @@ public class AbfrageModel {
     private String allgemeineOrtsangabe;
 
     private AdresseModel adresse;
+
+    private VerortungModel verortung;
 
     private LocalDate fristStellungnahme;
 

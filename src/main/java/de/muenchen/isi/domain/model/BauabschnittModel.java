@@ -13,4 +13,6 @@ public class BauabschnittModel extends BaseEntityModel {
     private String bezeichnung;
 
     private List<BaugebietModel> baugebiete;
+
+    private Boolean technical;
 }

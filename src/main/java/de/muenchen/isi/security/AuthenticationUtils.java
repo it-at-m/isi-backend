@@ -1,4 +1,4 @@
-package de.muenchen.isi.domain.service.util;
+package de.muenchen.isi.security;
 
 import de.muenchen.isi.security.AuthoritiesEnum;
 import java.util.ArrayList;
