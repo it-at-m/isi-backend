@@ -7,6 +7,7 @@ import de.muenchen.isi.infrastructure.entity.enums.lookup.Planungsrecht;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVorhaben;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
 import de.muenchen.isi.infrastructure.entity.filehandling.Dokument;
+import io.hypersistence.utils.hibernate.type.json.JsonType;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -19,17 +20,19 @@ import javax.persistence.FetchType;
 import javax.persistence.Index;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
 
 @Entity
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @Table(indexes = { @Index(name = "name_vorhaben_index", columnList = "nameVorhaben") })
+@TypeDef(name = "json", typeClass = JsonType.class)
 public class Bauvorhaben extends BaseEntity {
 
     @Column(nullable = false, unique = true)
@@ -51,7 +54,8 @@ public class Bauvorhaben extends BaseEntity {
     @Embedded
     private Adresse adresse;
 
-    @OneToOne(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval = true)
+    @Type(type = "json")
+    @Column(nullable = false, columnDefinition = "json")
     private Verortung verortung;
 
     @Column(nullable = true)
