@@ -55,7 +55,7 @@ public class Bauvorhaben extends BaseEntity {
     private Adresse adresse;
 
     @Type(type = "json")
-    @Column(nullable = false, columnDefinition = "json")
+    @Column(columnDefinition = "json")
     private Verortung verortung;
 
     @Column(nullable = true)
