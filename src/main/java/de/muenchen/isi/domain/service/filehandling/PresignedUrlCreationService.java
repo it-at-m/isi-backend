@@ -9,6 +9,7 @@ import io.muenchendigital.digiwf.s3.integration.client.exception.DocumentStorage
 import io.muenchendigital.digiwf.s3.integration.client.exception.DocumentStorageServerErrorException;
 import io.muenchendigital.digiwf.s3.integration.client.exception.PropertyNotSetException;
 import io.muenchendigital.digiwf.s3.integration.client.repository.presignedurl.PresignedUrlRepository;
+import java.time.LocalDate;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
@@ -89,7 +90,7 @@ public class PresignedUrlCreationService {
                 this.presignedUrlRepository.getPresignedUrlSaveFile(
                         filepath.getPathToFile(),
                         this.fileExpirationTime,
-                        null
+                        LocalDate.now().plusYears(999)
                     );
             log.debug("Presigned-URL save file: {}", presignedUrl);
             return new PresignedUrlModel(HttpMethod.PUT.name(), presignedUrl);
