@@ -23,6 +23,7 @@ public interface AbfrageListElementDomainMapper {
             @Mapping(source = "abfrage.standVorhaben", target = "standVorhaben"),
             @Mapping(source = "abfrage.statusAbfrage", target = "statusAbfrage"),
             @Mapping(source = "abfrage.fristStellungnahme", target = "fristStellungnahme"),
+            @Mapping(source = "sobonJahr", target = "sobonJahr"),
         }
     )
     AbfrageListElementModel infrastrukturabfrageModel2AbfrageListElementModel(final InfrastrukturabfrageModel model);

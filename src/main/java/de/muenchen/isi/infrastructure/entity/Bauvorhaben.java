@@ -4,6 +4,7 @@ import de.muenchen.isi.infrastructure.entity.common.Adresse;
 import de.muenchen.isi.infrastructure.entity.common.Verortung;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.BaugebietTyp;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Planungsrecht;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonVerfahrensgrundsaetzeJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVorhaben;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
 import de.muenchen.isi.infrastructure.entity.filehandling.Dokument;
@@ -69,6 +70,10 @@ public class Bauvorhaben extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "varchar(255) not null check (sobon_relevant != 'UNSPECIFIED')")
     private UncertainBoolean sobonRelevant;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = true)
+    private SobonVerfahrensgrundsaetzeJahr sobonJahr;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
