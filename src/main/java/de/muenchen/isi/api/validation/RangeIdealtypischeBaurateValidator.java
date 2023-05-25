@@ -1,6 +1,6 @@
 package de.muenchen.isi.api.validation;
 
-import de.muenchen.isi.infrastructure.entity.stammdaten.baurate.IdealtypischeBaurate;
+import de.muenchen.isi.api.dto.stammdaten.baurate.IdealtypischeBaurateDto;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import lombok.NoArgsConstructor;
@@ -10,10 +10,22 @@ import org.springframework.util.ObjectUtils;
 @Component
 @NoArgsConstructor
 public class RangeIdealtypischeBaurateValidator
-    implements ConstraintValidator<RangeIdealtypischeBaurateValid, IdealtypischeBaurate> {
+    implements ConstraintValidator<RangeIdealtypischeBaurateValid, IdealtypischeBaurateDto> {
 
+    /**
+     * Prüft ob die Attribute {@link IdealtypischeBaurateDto#von} und {@link IdealtypischeBaurateDto#bisExklusiv}
+     * definiert sind und ob der Attributwert für {@link IdealtypischeBaurateDto#von}
+     * kleiner als der Attributwert für {@link IdealtypischeBaurateDto#bisExklusiv} ist.
+     *
+     * @param value der idealtypischen Baurate
+     * @param context in welchem die Validierung stattfindet
+     *
+     * @return true falls der Attributwert für {@link IdealtypischeBaurateDto#von}
+     * kleiner als der Attributwert für {@link IdealtypischeBaurateDto#bisExklusiv} ist.
+     * Andernfalls wird false zurückgegeben.
+     */
     @Override
-    public boolean isValid(final IdealtypischeBaurate value, final ConstraintValidatorContext context) {
+    public boolean isValid(final IdealtypischeBaurateDto value, final ConstraintValidatorContext context) {
         if (ObjectUtils.isEmpty(value.getVon()) || ObjectUtils.isEmpty(value.getBisExklusiv())) {
             return false;
         } else {

@@ -15,7 +15,7 @@ public class JahresrateDto {
     @Min(1)
     private Integer jahr;
 
-    @Schema(description = "Die Rate repräsentiert eine Prozentzahl großer den Wert 0 und kleiner gleich 1.")
+    @Schema(description = "Die Rate repräsentiert eine Prozentzahl größer den Wert 0 und kleiner gleich 1.")
     @NotNull
     @Positive
     @Max(1)

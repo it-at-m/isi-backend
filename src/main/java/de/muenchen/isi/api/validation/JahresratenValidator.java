@@ -13,6 +13,14 @@ import org.springframework.util.ObjectUtils;
 @NoArgsConstructor
 public class JahresratenValidator implements ConstraintValidator<JahresratenValid, List<JahresrateDto>> {
 
+    /**
+     * Prüft, ob die Summe der Jahresraten den Wert 1 ergibt.
+     *
+     * @param value als Liste der Jahresraten
+     * @param context in welchem die Validierung stattfindet
+     *
+     * @return true falls die Summe der Jahresraten den Wert 1 ergibt, ansonsten false
+     */
     @Override
     public boolean isValid(final List<JahresrateDto> value, final ConstraintValidatorContext context) {
         final var sum = value
