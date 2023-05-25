@@ -616,7 +616,7 @@ public class DatabaseFiller implements CommandLineRunner {
 
 
         var idealtypischeBaurate = new IdealtypischeBaurate();
-        idealtypischeBaurate.setTyp(IdealtypischeBaurateTyp.WOHNEINHEITEN);
+        idealtypischeBaurate.setTyp(IdealtypischeBaurateTyp.ANZAHL_WOHNEINHEITEN_GESAMT);
         idealtypischeBaurate.setVon(BigDecimal.ZERO);
         idealtypischeBaurate.setBisExklusiv(BigDecimal.valueOf(1500));
         idealtypischeBaurate.setJahresraten(List.of(
@@ -629,7 +629,7 @@ public class DatabaseFiller implements CommandLineRunner {
         idealtypischeBaurateRepository.saveAndFlush(idealtypischeBaurate);
 
         idealtypischeBaurate = new IdealtypischeBaurate();
-        idealtypischeBaurate.setTyp(IdealtypischeBaurateTyp.GESCHOSSFLAECHE_WOHNEN);
+        idealtypischeBaurate.setTyp(IdealtypischeBaurateTyp.GESCHOSSFLAECHE_WOHNEN_GESAMT);
         idealtypischeBaurate.setVon(BigDecimal.ZERO);
         idealtypischeBaurate.setBisExklusiv(BigDecimal.valueOf(1500));
         idealtypischeBaurate.setJahresraten(List.of(

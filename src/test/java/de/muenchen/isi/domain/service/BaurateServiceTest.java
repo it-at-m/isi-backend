@@ -40,7 +40,7 @@ class BaurateServiceTest {
     @Test
     void determineBauraten() throws EntityNotFoundException {
         final var idealtypischeBaurate = new IdealtypischeBaurate();
-        idealtypischeBaurate.setTyp(IdealtypischeBaurateTyp.WOHNEINHEITEN);
+        idealtypischeBaurate.setTyp(IdealtypischeBaurateTyp.ANZAHL_WOHNEINHEITEN_GESAMT);
         idealtypischeBaurate.setVon(BigDecimal.valueOf(100L));
         idealtypischeBaurate.setBisExklusiv(BigDecimal.valueOf(200L));
 
@@ -59,7 +59,7 @@ class BaurateServiceTest {
         Mockito
             .when(
                 this.idealtypischeBaurateRepository.findByTypAndVonLessThanEqualAndBisExklusivGreaterThan(
-                        IdealtypischeBaurateTyp.WOHNEINHEITEN,
+                        IdealtypischeBaurateTyp.ANZAHL_WOHNEINHEITEN_GESAMT,
                         BigDecimal.valueOf(132L)
                     )
             )
@@ -86,11 +86,11 @@ class BaurateServiceTest {
         Mockito.reset(this.idealtypischeBaurateRepository);
 
         // Ohne Wohneinheiten
-        idealtypischeBaurate.setTyp(IdealtypischeBaurateTyp.GESCHOSSFLAECHE_WOHNEN);
+        idealtypischeBaurate.setTyp(IdealtypischeBaurateTyp.GESCHOSSFLAECHE_WOHNEN_GESAMT);
         Mockito
             .when(
                 this.idealtypischeBaurateRepository.findByTypAndVonLessThanEqualAndBisExklusivGreaterThan(
-                        IdealtypischeBaurateTyp.GESCHOSSFLAECHE_WOHNEN,
+                        IdealtypischeBaurateTyp.GESCHOSSFLAECHE_WOHNEN_GESAMT,
                         BigDecimal.valueOf(1320.53)
                     )
             )
@@ -120,7 +120,7 @@ class BaurateServiceTest {
         Mockito
             .when(
                 this.idealtypischeBaurateRepository.findByTypAndVonLessThanEqualAndBisExklusivGreaterThan(
-                        IdealtypischeBaurateTyp.WOHNEINHEITEN,
+                        IdealtypischeBaurateTyp.ANZAHL_WOHNEINHEITEN_GESAMT,
                         BigDecimal.valueOf(100L)
                     )
             )
@@ -136,7 +136,7 @@ class BaurateServiceTest {
         Mockito
             .verify(this.idealtypischeBaurateRepository, Mockito.times(1))
             .findByTypAndVonLessThanEqualAndBisExklusivGreaterThan(
-                IdealtypischeBaurateTyp.WOHNEINHEITEN,
+                IdealtypischeBaurateTyp.ANZAHL_WOHNEINHEITEN_GESAMT,
                 BigDecimal.valueOf(100L)
             );
 
@@ -144,7 +144,7 @@ class BaurateServiceTest {
         Mockito
             .when(
                 this.idealtypischeBaurateRepository.findByTypAndVonLessThanEqualAndBisExklusivGreaterThan(
-                        IdealtypischeBaurateTyp.GESCHOSSFLAECHE_WOHNEN,
+                        IdealtypischeBaurateTyp.GESCHOSSFLAECHE_WOHNEN_GESAMT,
                         BigDecimal.TEN
                     )
             )
@@ -161,7 +161,7 @@ class BaurateServiceTest {
         Mockito
             .verify(this.idealtypischeBaurateRepository, Mockito.times(1))
             .findByTypAndVonLessThanEqualAndBisExklusivGreaterThan(
-                IdealtypischeBaurateTyp.GESCHOSSFLAECHE_WOHNEN,
+                IdealtypischeBaurateTyp.GESCHOSSFLAECHE_WOHNEN_GESAMT,
                 BigDecimal.TEN
             );
 
@@ -186,7 +186,7 @@ class BaurateServiceTest {
         Mockito
             .when(
                 this.idealtypischeBaurateRepository.findByTypAndVonLessThanEqualAndBisExklusivGreaterThan(
-                        IdealtypischeBaurateTyp.WOHNEINHEITEN,
+                        IdealtypischeBaurateTyp.ANZAHL_WOHNEINHEITEN_GESAMT,
                         BigDecimal.valueOf(132L)
                     )
             )
@@ -197,7 +197,7 @@ class BaurateServiceTest {
         Mockito
             .verify(this.idealtypischeBaurateRepository, Mockito.times(1))
             .findByTypAndVonLessThanEqualAndBisExklusivGreaterThan(
-                IdealtypischeBaurateTyp.WOHNEINHEITEN,
+                IdealtypischeBaurateTyp.ANZAHL_WOHNEINHEITEN_GESAMT,
                 BigDecimal.valueOf(132L)
             );
         Mockito.reset(this.idealtypischeBaurateRepository);
@@ -205,7 +205,7 @@ class BaurateServiceTest {
         Mockito
             .when(
                 this.idealtypischeBaurateRepository.findByTypAndVonLessThanEqualAndBisExklusivGreaterThan(
-                        IdealtypischeBaurateTyp.GESCHOSSFLAECHE_WOHNEN,
+                        IdealtypischeBaurateTyp.GESCHOSSFLAECHE_WOHNEN_GESAMT,
                         BigDecimal.valueOf(1320.53)
                     )
             )
@@ -216,7 +216,7 @@ class BaurateServiceTest {
         Mockito
             .verify(this.idealtypischeBaurateRepository, Mockito.times(1))
             .findByTypAndVonLessThanEqualAndBisExklusivGreaterThan(
-                IdealtypischeBaurateTyp.GESCHOSSFLAECHE_WOHNEN,
+                IdealtypischeBaurateTyp.GESCHOSSFLAECHE_WOHNEN_GESAMT,
                 BigDecimal.valueOf(1320.53)
             );
         Mockito.reset(this.idealtypischeBaurateRepository);
@@ -224,7 +224,7 @@ class BaurateServiceTest {
         Mockito
             .when(
                 this.idealtypischeBaurateRepository.findByTypAndVonLessThanEqualAndBisExklusivGreaterThan(
-                        IdealtypischeBaurateTyp.GESCHOSSFLAECHE_WOHNEN,
+                        IdealtypischeBaurateTyp.GESCHOSSFLAECHE_WOHNEN_GESAMT,
                         null
                     )
             )
@@ -248,7 +248,7 @@ class BaurateServiceTest {
             () ->
                 this.baurateService.determineIdealtypischeBaurateForWertAndTyp(
                         BigDecimal.valueOf(100),
-                        IdealtypischeBaurateTyp.WOHNEINHEITEN
+                        IdealtypischeBaurateTyp.ANZAHL_WOHNEINHEITEN_GESAMT
                     )
         );
         assertThat(
@@ -258,7 +258,7 @@ class BaurateServiceTest {
         Mockito
             .verify(this.idealtypischeBaurateRepository, Mockito.times(1))
             .findByTypAndVonLessThanEqualAndBisExklusivGreaterThan(
-                IdealtypischeBaurateTyp.WOHNEINHEITEN,
+                IdealtypischeBaurateTyp.ANZAHL_WOHNEINHEITEN_GESAMT,
                 BigDecimal.valueOf(100L)
             );
     }

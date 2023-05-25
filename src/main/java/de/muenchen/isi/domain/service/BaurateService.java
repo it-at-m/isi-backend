@@ -99,13 +99,13 @@ public class BaurateService {
             idealtypischeBaurate =
                 determineIdealtypischeBaurateForWertAndTyp(
                     BigDecimal.valueOf(wohneinheiten),
-                    IdealtypischeBaurateTyp.WOHNEINHEITEN
+                    IdealtypischeBaurateTyp.ANZAHL_WOHNEINHEITEN_GESAMT
                 );
         } else if (ObjectUtils.isNotEmpty(geschossflaecheWohnen)) {
             idealtypischeBaurate =
                 determineIdealtypischeBaurateForWertAndTyp(
                     geschossflaecheWohnen,
-                    IdealtypischeBaurateTyp.GESCHOSSFLAECHE_WOHNEN
+                    IdealtypischeBaurateTyp.GESCHOSSFLAECHE_WOHNEN_GESAMT
                 );
         } else {
             final String errorMessage =
