@@ -7,6 +7,7 @@ import de.muenchen.isi.api.validation.HasAllowedNumberOfDocuments;
 import de.muenchen.isi.api.validation.NotUnspecified;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.BaugebietTyp;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Planungsrecht;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonVerfahrensgrundsaetzeJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVorhaben;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
 import java.util.List;
@@ -59,6 +60,8 @@ public class BauvorhabenDto extends BaseEntityDto {
     @NotNull
     @NotUnspecified
     private UncertainBoolean sobonRelevant;
+
+    private SobonVerfahrensgrundsaetzeJahr sobonJahr;
 
     @NotNull
     @NotUnspecified
