@@ -1,18 +1,17 @@
 package de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt;
 
-import de.muenchen.isi.domain.model.BaseEntityModel;
 import de.muenchen.isi.domain.model.BauabschnittModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Planungsrecht;
 import java.math.BigDecimal;
 import java.util.List;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 @Data
 @ToString(callSuper = true)
-@EqualsAndHashCode(callSuper = true)
-public class AbfrageerstellungAbfragevarianteAngelegtModel extends BaseEntityModel {
+public class AbfrageerstellungAbfragevarianteAngelegtModel {
+
+    private Long version;
 
     private Integer abfragevariantenNr;
 

@@ -9,10 +9,10 @@ import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
 import de.muenchen.isi.domain.mapper.AbfrageDomainMapper;
 import de.muenchen.isi.domain.model.AbfrageModel;
+import de.muenchen.isi.domain.model.AbfragevarianteModel;
 import de.muenchen.isi.domain.model.BauvorhabenModel;
 import de.muenchen.isi.domain.model.InfrastrukturabfrageModel;
 import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.AbfrageerstellungInfrastrukturabfrageAngelegtModel;
-import de.muenchen.isi.domain.model.abfrageSachbearbeitungOffenInBearbeitung.SachbearbeitungInfrastrukturabfrageOffenInBearbeitungModel;
 import de.muenchen.isi.domain.service.filehandling.DokumentService;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.repository.InfrastrukturabfrageRepository;
@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
@@ -115,10 +116,11 @@ public class AbfrageService {
      * @throws FileHandlingWithS3FailedException
      */
     public InfrastrukturabfrageModel patchAbfrageAngelegt(
-        final AbfrageerstellungInfrastrukturabfrageAngelegtModel abfrage
+        @NotNull final AbfrageerstellungInfrastrukturabfrageAngelegtModel abfrage,
+        final UUID id
     )
         throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, FileHandlingFailedException, FileHandlingWithS3FailedException {
-        final var originalAbfrageDb = this.getInfrastrukturabfrageById(abfrage.getId());
+        final var originalAbfrageDb = this.getInfrastrukturabfrageById(id);
         this.throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(
                 originalAbfrageDb.getAbfrage(),
                 StatusAbfrage.ANGELEGT
@@ -131,29 +133,7 @@ public class AbfrageService {
         return this.saveInfrastrukturabfrage(abfrageToSave);
     }
 
-    public InfrastrukturabfrageModel patchAbfrageInBearbeitungSachbearbeitung(
-        final SachbearbeitungInfrastrukturabfrageOffenInBearbeitungModel abfrage
-    )
-        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, FileHandlingFailedException, FileHandlingWithS3FailedException {
-        final var originalAbfrageDb = this.getInfrastrukturabfrageById(abfrage.getId());
-        this.throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(
-                originalAbfrageDb.getAbfrage(),
-                StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG
-            );
-        this.throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(
-                originalAbfrageDb.getAbfrage(),
-                StatusAbfrage.OFFEN
-            );
-        dokumentService.deleteDokumenteFromOriginalDokumentenListWhichAreMissingInParameterAdaptedDokumentenListe(
-            abfrage.getAbfrage().getDokumente(),
-            originalAbfrageDb.getAbfrage().getDokumente()
-        );
-        final var abfrageToSave = this.abfrageDomainMapper.request2Model(abfrage, originalAbfrageDb);
-        return this.saveInfrastrukturabfrage(abfrageToSave);
-    }
-
-    /*
-     *//**
+    /**
      * Diese Methode updated ein {@link InfrastrukturabfrageModel}. Diese muss sich im Status {@link StatusAbfrage#ANGELEGT} befinden.
      *
      * @return das geupdatete {@link InfrastrukturabfrageModel}
@@ -163,34 +143,34 @@ public class AbfrageService {
      * @throws AbfrageStatusNotAllowedException  falls sich die Abfrage nicht in einem zulässigen Status befindet
      * @throws FileHandlingFailedException
      * @throws FileHandlingWithS3FailedException
-     *//*
-    public InfrastrukturabfrageModel patchAbfragevarianteSetRelevant(final UUID abfrageId, final UUID abfragevarianteId)
-            throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, FileHandlingFailedException, FileHandlingWithS3FailedException {
+     */
+    public InfrastrukturabfrageModel setAbfragevarianteRelevant(final UUID abfrageId, final UUID abfragevarianteId)
+        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, FileHandlingFailedException, FileHandlingWithS3FailedException {
         final var abfrage = this.getInfrastrukturabfrageById(abfrageId);
         this.throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(
                 abfrage.getAbfrage(),
                 StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG
-        );
+            );
         dokumentService.deleteDokumenteFromOriginalDokumentenListWhichAreMissingInParameterAdaptedDokumentenListe(
-                abfrage.getAbfrage().getDokumente(),
-                abfrage.getAbfrage().getDokumente()
+            abfrage.getAbfrage().getDokumente(),
+            abfrage.getAbfrage().getDokumente()
         );
 
-        final var abfragevariante = abfrage.getAbfragevarianten()
-                .stream()
-                .filter(abfragevarianteModel -> abfragevarianteModel.getId().equals(abfragevarianteId))
-                .findFirst()
-                .orElseThrow(() -> {
-                    final var message = "Abfragevariante wurde nicht gefunden";
-                    log.error(message);
-                    return new EntityNotFoundException(message);
-                });
-        abfragevariante.setRelevant(true);
+        final var abfragevariante = abfrage
+            .getAbfragevarianten()
+            .stream()
+            .filter(abfragevarianteModel -> abfragevarianteModel.getId().equals(abfragevarianteId))
+            .findFirst()
+            .orElseThrow(() -> {
+                final var message = "Abfragevariante wurde nicht gefunden";
+                log.error(message);
+                return new EntityNotFoundException(message);
+            });
+        abfragevariante.setRelevant(!abfragevariante.isRelevant());
+        this.checkForUniqueRelevantAbfragevariante(abfrage.getAbfragevarianten());
         abfrage.getAbfrage().setStatusAbfrage(abfrage.getAbfrage().getStatusAbfrage());
         return this.saveInfrastrukturabfrage(abfrage);
     }
-
-    */
 
     /**
      * Diese Methode führt für eine Abfrage, die durch die {@link InfrastrukturabfrageModel#getId()} identifiziert ist, eine Statusänderung durch.
@@ -268,6 +248,15 @@ public class AbfrageService {
                 ".";
             log.error(message);
             throw new AbfrageStatusNotAllowedException(message);
+        }
+    }
+
+    private void checkForUniqueRelevantAbfragevariante(final List<AbfragevarianteModel> abfragevarianten)
+        throws UniqueViolationException {
+        var count = abfragevarianten.stream().filter(abfragevarianteModel -> abfragevarianteModel.isRelevant()).count();
+        if (count > 1) {
+            var errorMessage = "Es sind nicht mehr als eine Relevante Abfragevariante erlaubt";
+            throw new UniqueViolationException(errorMessage);
         }
     }
 }

@@ -1,6 +1,5 @@
 package de.muenchen.isi.api.dto.abfrageAbfrageerstellungAngelegt;
 
-import de.muenchen.isi.api.dto.BaseEntityDto;
 import de.muenchen.isi.api.dto.BauabschnittDto;
 import de.muenchen.isi.api.validation.NotUnspecified;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Planungsrecht;
@@ -13,13 +12,13 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 @Data
 @ToString(callSuper = true)
-@EqualsAndHashCode(callSuper = true)
-public class AbfrageerstellungAbfragevarianteAngelegtDto extends BaseEntityDto {
+public class AbfrageerstellungAbfragevarianteAngelegtDto {
+
+    private Long version;
 
     @NotNull
     private Integer abfragevariantenNr;

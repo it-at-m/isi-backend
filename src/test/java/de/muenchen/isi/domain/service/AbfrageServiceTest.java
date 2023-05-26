@@ -230,7 +230,6 @@ class AbfrageServiceTest {
         throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, FileHandlingFailedException, FileHandlingWithS3FailedException {
         final AbfrageerstellungInfrastrukturabfrageAngelegtModel infrastrukturabfrageRequestModel =
             new AbfrageerstellungInfrastrukturabfrageAngelegtModel();
-        infrastrukturabfrageRequestModel.setId(UUID.randomUUID());
         final AbfrageerstellungAbfrageAngelegtModel abfrageRequestModel = new AbfrageerstellungAbfrageAngelegtModel();
         abfrageRequestModel.setNameAbfrage("hallo");
         infrastrukturabfrageRequestModel.setAbfrage(abfrageRequestModel);
@@ -241,6 +240,7 @@ class AbfrageServiceTest {
         final InfrastrukturabfrageModel infrastrukturabfrageModelMapped =
             this.abfrageDomainMapper.request2Model(infrastrukturabfrageRequestModel, infrastrukturabfrageModel);
         final Infrastrukturabfrage entity = this.abfrageDomainMapper.model2entity(infrastrukturabfrageModelMapped);
+        entity.setId(UUID.randomUUID());
 
         Mockito.when(this.infrastrukturabfrageRepository.findById(entity.getId())).thenReturn(Optional.of(entity));
         Mockito.when(this.infrastrukturabfrageRepository.saveAndFlush(entity)).thenReturn(entity);
@@ -249,7 +249,7 @@ class AbfrageServiceTest {
             .thenReturn(Optional.empty());
 
         final InfrastrukturabfrageModel result =
-            this.abfrageService.patchAbfrageAngelegt(infrastrukturabfrageRequestModel);
+            this.abfrageService.patchAbfrageAngelegt(infrastrukturabfrageRequestModel, entity.getId());
 
         final InfrastrukturabfrageModel expected = new InfrastrukturabfrageModel();
         expected.setId(infrastrukturabfrageModel.getId());
@@ -274,7 +274,6 @@ class AbfrageServiceTest {
         throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, FileHandlingFailedException, FileHandlingWithS3FailedException {
         final AbfrageerstellungInfrastrukturabfrageAngelegtModel infrastrukturabfrageRequestModel =
             new AbfrageerstellungInfrastrukturabfrageAngelegtModel();
-        infrastrukturabfrageRequestModel.setId(UUID.randomUUID());
         final AbfrageerstellungAbfrageAngelegtModel abfrageModel = new AbfrageerstellungAbfrageAngelegtModel();
         abfrageModel.setNameAbfrage("test");
         infrastrukturabfrageRequestModel.setAbfrage(abfrageModel);
@@ -284,12 +283,12 @@ class AbfrageServiceTest {
             this.abfrageDomainMapper.request2Model(infrastrukturabfrageRequestModel, infrastrukturabfrageModel);
 
         final Infrastrukturabfrage entity = this.abfrageDomainMapper.model2entity(infrastrukturabfrageModel);
-
+        entity.setId(UUID.randomUUID());
         Mockito.when(this.infrastrukturabfrageRepository.findById(entity.getId())).thenReturn(Optional.of(entity));
 
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageService.patchAbfrageAngelegt(infrastrukturabfrageRequestModel)
+            () -> this.abfrageService.patchAbfrageAngelegt(infrastrukturabfrageRequestModel, entity.getId())
         );
 
         Mockito.verify(this.infrastrukturabfrageRepository, Mockito.times(1)).findById(entity.getId());

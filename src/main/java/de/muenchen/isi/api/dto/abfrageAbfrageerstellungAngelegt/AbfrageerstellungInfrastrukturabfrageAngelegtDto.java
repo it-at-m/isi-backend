@@ -1,6 +1,5 @@
 package de.muenchen.isi.api.dto.abfrageAbfrageerstellungAngelegt;
 
-import de.muenchen.isi.api.dto.BaseEntityDto;
 import de.muenchen.isi.api.validation.NotUnspecified;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonVerfahrensgrundsaetzeJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
@@ -10,13 +9,13 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 @Data
 @ToString(callSuper = true)
-@EqualsAndHashCode(callSuper = true)
-public class AbfrageerstellungInfrastrukturabfrageAngelegtDto extends BaseEntityDto {
+public class AbfrageerstellungInfrastrukturabfrageAngelegtDto {
+
+    private Long version;
 
     @Valid
     @NotNull

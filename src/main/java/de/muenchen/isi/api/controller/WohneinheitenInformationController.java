@@ -55,8 +55,7 @@ public class WohneinheitenInformationController {
     public ResponseEntity<WohneinheitenInformationDto> calculateWohneinheitenInformation(
         @RequestBody @NotNull final AbfrageerstellungAbfragevarianteAngelegtDto abfragevariante
     ) {
-        AbfragevarianteDto abfragevarianteDto = new AbfragevarianteDto();
-        abfragevarianteDto = this.abfragevarianteApiMapper.request2Response(abfragevariante, abfragevarianteDto);
+        AbfragevarianteDto abfragevarianteDto = this.abfragevarianteApiMapper.request2Response(abfragevariante);
         final AbfragevarianteModel abfragevarianteModel = this.abfragevarianteApiMapper.dto2Model(abfragevarianteDto);
         final WohneinheitenInformationModel wohneinheitenInformationModel =
             this.wohneinheitenInformationService.calculateWohneinheitenInformation(abfragevarianteModel);
