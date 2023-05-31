@@ -4,7 +4,9 @@
  */
 package de.muenchen.isi.api.dto;
 
+import de.muenchen.isi.api.validation.GeschossflaecheWohnenDistributionValid;
 import de.muenchen.isi.api.validation.NotUnspecified;
+import de.muenchen.isi.api.validation.WohneinheitenDistributionValid;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Planungsrecht;
 import java.math.BigDecimal;
 import java.util.List;
@@ -21,6 +23,8 @@ import lombok.ToString;
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
+@GeschossflaecheWohnenDistributionValid
+@WohneinheitenDistributionValid
 public class AbfragevarianteDto extends BaseEntityDto {
 
     @NotNull
