@@ -19,7 +19,7 @@ public enum StatusAbfrageEvents {
         "Die Abfrage wird nun in Bearbeitung gesetzt."
     ),
 
-    ABBRECHEN("abbrechen", "STORNIEREN", 3, "Die Abfrage wird abbgebrochen."),
+    ABBRECHEN("abbrechen", "STORNIEREN", 3, "Die Abfrage wird abgebrochen."),
 
     ZURUECK_AN_ABFRAGEERSTELLUNG(
         "zurueck-an-abfrageerstellung",
