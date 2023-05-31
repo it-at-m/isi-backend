@@ -1,6 +1,7 @@
 package de.muenchen.isi.infrastructure.entity;
 
 import de.muenchen.isi.infrastructure.entity.enums.lookup.BaugebietTyp;
+import java.math.BigDecimal;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -25,16 +26,22 @@ public class Baugebiet extends BaseEntity {
     private BaugebietTyp baugebietTyp;
 
     @Column(nullable = true)
-    private Long anzahlWohneinheitenBaurechtlichGenehmigt;
+    private Integer gesamtanzahlWe;
 
     @Column(nullable = true)
-    private Long anzahlWohneinheitenBaurechtlichFestgesetzt;
+    private Integer anzahlWohneinheitenBaurechtlichGenehmigt;
 
     @Column(nullable = true)
-    private Long geschossflaecheWohnenGenehmigt;
+    private Integer anzahlWohneinheitenBaurechtlichFestgesetzt;
+
+    @Column(precision = 10, scale = 2, nullable = true)
+    private BigDecimal geschossflaecheWohnen;
 
     @Column(nullable = true)
-    private Long geschossflaecheWohnenFestgesetzt;
+    private BigDecimal geschossflaecheWohnenGenehmigt;
+
+    @Column(nullable = true)
+    private BigDecimal geschossflaecheWohnenFestgesetzt;
 
     @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "baugebiet_id")
