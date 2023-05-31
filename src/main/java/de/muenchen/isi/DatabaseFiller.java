@@ -15,6 +15,7 @@ import de.muenchen.isi.infrastructure.entity.Foerdermix;
 import de.muenchen.isi.infrastructure.entity.Infrastrukturabfrage;
 import de.muenchen.isi.infrastructure.entity.common.Adresse;
 import de.muenchen.isi.infrastructure.entity.common.Wgs84;
+import de.muenchen.isi.infrastructure.entity.enums.IdealtypischeBaurateTyp;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtGsNachmittagBetreuung;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.BaugebietTyp;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Einrichtungstraeger;
@@ -33,6 +34,8 @@ import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Kinderkrip
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Mittelschule;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Schule;
 import de.muenchen.isi.infrastructure.entity.stammdaten.FoerdermixStamm;
+import de.muenchen.isi.infrastructure.entity.stammdaten.baurate.IdealtypischeBaurate;
+import de.muenchen.isi.infrastructure.entity.stammdaten.baurate.Jahresrate;
 import de.muenchen.isi.infrastructure.repository.BauvorhabenRepository;
 import de.muenchen.isi.infrastructure.repository.InfrastrukturabfrageRepository;
 import de.muenchen.isi.infrastructure.repository.infrastruktureinrichtung.GrundschuleRepository;
@@ -42,6 +45,7 @@ import de.muenchen.isi.infrastructure.repository.infrastruktureinrichtung.Kinder
 import de.muenchen.isi.infrastructure.repository.infrastruktureinrichtung.KinderkrippeRepository;
 import de.muenchen.isi.infrastructure.repository.infrastruktureinrichtung.MittelschuleRepository;
 import de.muenchen.isi.infrastructure.repository.stammdaten.FoerdermixStammRepository;
+import de.muenchen.isi.infrastructure.repository.stammdaten.IdealtypischeBaurateRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
@@ -82,6 +86,8 @@ public class DatabaseFiller implements CommandLineRunner {
 
     private final MittelschuleRepository mittelschuleRepository;
 
+    private final IdealtypischeBaurateRepository idealtypischeBaurateRepository;
+
     /**
      * Zu Implementierende Methode des CommandLineRunners
      *
@@ -98,6 +104,8 @@ public class DatabaseFiller implements CommandLineRunner {
          * variables.
          */
         this.clearDatabase();
+
+        this.createIdealtypischeBauraten();
 
         final var bauvorhaben = this.addBauvorhaben1();
         this.addBauvorhaben2();
@@ -169,6 +177,7 @@ public class DatabaseFiller implements CommandLineRunner {
         this.gsNachmittagBetreuungRepository.deleteAll();
         this.grundschuleRepository.deleteAll();
         this.mittelschuleRepository.deleteAll();
+        this.idealtypischeBaurateRepository.deleteAll();
     }
 
     public Infrastrukturabfrage createNichtOffiziellerVerfahrensschrittInfrastrukturabfrage() {
@@ -586,6 +595,51 @@ public class DatabaseFiller implements CommandLineRunner {
         mittelschule.getSchule().setAnzahlPlaetze(85);
 
         this.mittelschuleRepository.save(mittelschule);
+    }
+
+    public void createIdealtypischeBauraten() {
+        var jahresrate1 = new Jahresrate();
+        jahresrate1.setJahr(1);
+        jahresrate1.setRate(BigDecimal.valueOf(0.105));
+        var jahresrate2 = new Jahresrate();
+        jahresrate2.setJahr(2);
+        jahresrate2.setRate(BigDecimal.valueOf(0.105));
+        var jahresrate3 = new Jahresrate();
+        jahresrate3.setJahr(3);
+        jahresrate3.setRate(BigDecimal.valueOf(0.25));
+        var jahresrate4 = new Jahresrate();
+        jahresrate4.setJahr(4);
+        jahresrate4.setRate(BigDecimal.valueOf(0.25));
+        var jahresrate5 = new Jahresrate();
+        jahresrate5.setJahr(5);
+        jahresrate5.setRate(BigDecimal.valueOf(0.29));
+
+
+        var idealtypischeBaurate = new IdealtypischeBaurate();
+        idealtypischeBaurate.setTyp(IdealtypischeBaurateTyp.ANZAHL_WOHNEINHEITEN_GESAMT);
+        idealtypischeBaurate.setVon(BigDecimal.ZERO);
+        idealtypischeBaurate.setBisExklusiv(BigDecimal.valueOf(1500));
+        idealtypischeBaurate.setJahresraten(List.of(
+                jahresrate1,
+                jahresrate2,
+                jahresrate3,
+                jahresrate4,
+                jahresrate5
+        ));
+        idealtypischeBaurateRepository.saveAndFlush(idealtypischeBaurate);
+
+        idealtypischeBaurate = new IdealtypischeBaurate();
+        idealtypischeBaurate.setTyp(IdealtypischeBaurateTyp.GESCHOSSFLAECHE_WOHNEN_GESAMT);
+        idealtypischeBaurate.setVon(BigDecimal.ZERO);
+        idealtypischeBaurate.setBisExklusiv(BigDecimal.valueOf(1500));
+        idealtypischeBaurate.setJahresraten(List.of(
+                jahresrate1,
+                jahresrate2,
+                jahresrate3,
+                jahresrate4,
+                jahresrate5
+        ));
+        idealtypischeBaurateRepository.saveAndFlush(idealtypischeBaurate);
     }
 
 }
