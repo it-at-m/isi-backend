@@ -168,7 +168,7 @@ public class TransitionModelTest {
         secondPossibleTransition.setIndex(3);
         secondPossibleTransition.setButtonName("STORNIEREN");
         secondPossibleTransition.setUrl("abbrechen");
-        secondPossibleTransition.setDialogText("Die Abfrage wird abbgebrochen.");
+        secondPossibleTransition.setDialogText("Die Abfrage wird abgebrochen.");
 
         expected.add(secondPossibleTransition);
 
@@ -213,7 +213,7 @@ public class TransitionModelTest {
         secondPossibleTransition.setIndex(3);
         secondPossibleTransition.setButtonName("STORNIEREN");
         secondPossibleTransition.setUrl("abbrechen");
-        secondPossibleTransition.setDialogText("Die Abfrage wird abbgebrochen.");
+        secondPossibleTransition.setDialogText("Die Abfrage wird abgebrochen.");
 
         expected.add(secondPossibleTransition);
 
@@ -282,7 +282,7 @@ public class TransitionModelTest {
         firstPossibleTransition.setIndex(3);
         firstPossibleTransition.setButtonName("STORNIEREN");
         firstPossibleTransition.setUrl("abbrechen");
-        firstPossibleTransition.setDialogText("Die Abfrage wird abbgebrochen.");
+        firstPossibleTransition.setDialogText("Die Abfrage wird abgebrochen.");
 
         expected.add(firstPossibleTransition);
 
@@ -336,7 +336,7 @@ public class TransitionModelTest {
         firstPossibleTransition.setIndex(3);
         firstPossibleTransition.setButtonName("STORNIEREN");
         firstPossibleTransition.setUrl("abbrechen");
-        firstPossibleTransition.setDialogText("Die Abfrage wird abbgebrochen.");
+        firstPossibleTransition.setDialogText("Die Abfrage wird abgebrochen.");
 
         expected.add(firstPossibleTransition);
 
@@ -422,7 +422,7 @@ public class TransitionModelTest {
         firstPossibleTransition.setIndex(3);
         firstPossibleTransition.setButtonName("STORNIEREN");
         firstPossibleTransition.setUrl("abbrechen");
-        firstPossibleTransition.setDialogText("Die Abfrage wird abbgebrochen.");
+        firstPossibleTransition.setDialogText("Die Abfrage wird abgebrochen.");
 
         expected.add(firstPossibleTransition);
 
@@ -467,7 +467,7 @@ public class TransitionModelTest {
         firstPossibleTransition.setIndex(3);
         firstPossibleTransition.setButtonName("STORNIEREN");
         firstPossibleTransition.setUrl("abbrechen");
-        firstPossibleTransition.setDialogText("Die Abfrage wird abbgebrochen.");
+        firstPossibleTransition.setDialogText("Die Abfrage wird abgebrochen.");
 
         expected.add(firstPossibleTransition);
 
@@ -543,7 +543,7 @@ public class TransitionModelTest {
         firstPossibleTransition.setIndex(3);
         firstPossibleTransition.setButtonName("STORNIEREN");
         firstPossibleTransition.setUrl("abbrechen");
-        firstPossibleTransition.setDialogText("Die Abfrage wird abbgebrochen.");
+        firstPossibleTransition.setDialogText("Die Abfrage wird abgebrochen.");
 
         expected.add(firstPossibleTransition);
 
@@ -579,7 +579,7 @@ public class TransitionModelTest {
         firstPossibleTransition.setIndex(3);
         firstPossibleTransition.setButtonName("STORNIEREN");
         firstPossibleTransition.setUrl("abbrechen");
-        firstPossibleTransition.setDialogText("Die Abfrage wird abbgebrochen.");
+        firstPossibleTransition.setDialogText("Die Abfrage wird abgebrochen.");
 
         expected.add(firstPossibleTransition);
 
