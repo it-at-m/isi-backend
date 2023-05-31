@@ -1,7 +1,10 @@
 package de.muenchen.isi.api.validation;
 
 import de.muenchen.isi.api.dto.AbfragevarianteDto;
+import de.muenchen.isi.api.dto.BaugebietDto;
 import java.math.BigDecimal;
+import java.util.Collection;
+import java.util.stream.Collectors;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import lombok.NoArgsConstructor;
@@ -23,19 +26,30 @@ public class GeschossflaecheWohnenDistributionValidator
      */
     @Override
     public boolean isValid(final AbfragevarianteDto value, final ConstraintValidatorContext context) {
-        final BigDecimal geschossflaecheWohnenAbfragevariante = ObjectUtils.isEmpty(value.getGeschossflaecheWohnen())
-            ? BigDecimal.ZERO
-            : value.getGeschossflaecheWohnen();
-        final BigDecimal sumGeschossflaecheWohnenBaugebiete = CollectionUtils
+        final boolean isValid;
+        final Collection<BaugebietDto> baugebiete = CollectionUtils
             .emptyIfNull(value.getBauabschnitte())
             .stream()
             .flatMap(bauabschnittDto -> CollectionUtils.emptyIfNull(bauabschnittDto.getBaugebiete()).stream())
-            .map(baugebietDto ->
-                ObjectUtils.isEmpty(baugebietDto.getGeschossflaecheWohnen())
-                    ? BigDecimal.ZERO
-                    : baugebietDto.getGeschossflaecheWohnen()
-            )
-            .reduce(BigDecimal.ZERO, BigDecimal::add);
-        return geschossflaecheWohnenAbfragevariante.compareTo(sumGeschossflaecheWohnenBaugebiete) == 0;
+            .collect(Collectors.toList());
+        if (baugebiete.isEmpty()) {
+            isValid = true;
+        } else {
+            final BigDecimal geschossflaecheWohnenAbfragevariante = ObjectUtils.isEmpty(
+                    value.getGeschossflaecheWohnen()
+                )
+                ? BigDecimal.ZERO
+                : value.getGeschossflaecheWohnen();
+            final BigDecimal sumGeschossflaecheWohnenBaugebiete = baugebiete
+                .stream()
+                .map(baugebietDto ->
+                    ObjectUtils.isEmpty(baugebietDto.getGeschossflaecheWohnen())
+                        ? BigDecimal.ZERO
+                        : baugebietDto.getGeschossflaecheWohnen()
+                )
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+            isValid = geschossflaecheWohnenAbfragevariante.compareTo(sumGeschossflaecheWohnenBaugebiete) == 0;
+        }
+        return isValid;
     }
 }

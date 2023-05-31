@@ -1,6 +1,9 @@
 package de.muenchen.isi.api.validation;
 
 import de.muenchen.isi.api.dto.AbfragevarianteDto;
+import de.muenchen.isi.api.dto.BaugebietDto;
+import java.util.Collection;
+import java.util.stream.Collectors;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import lombok.NoArgsConstructor;
@@ -22,17 +25,26 @@ public class WohneinheitenDistributionValidator
      */
     @Override
     public boolean isValid(final AbfragevarianteDto value, final ConstraintValidatorContext context) {
-        final Integer wohneinheitenAbfragevariante = ObjectUtils.isEmpty(value.getGesamtanzahlWe())
-            ? 0
-            : value.getGesamtanzahlWe();
-        final Integer sumWohneinheitenBaugebiete = CollectionUtils
+        final boolean isValid;
+        final Collection<BaugebietDto> baugebiete = CollectionUtils
             .emptyIfNull(value.getBauabschnitte())
             .stream()
             .flatMap(bauabschnittDto -> CollectionUtils.emptyIfNull(bauabschnittDto.getBaugebiete()).stream())
-            .map(baugebietDto ->
-                ObjectUtils.isEmpty(baugebietDto.getGesamtanzahlWe()) ? 0 : baugebietDto.getGesamtanzahlWe()
-            )
-            .reduce(0, Integer::sum);
-        return wohneinheitenAbfragevariante.equals(sumWohneinheitenBaugebiete);
+            .collect(Collectors.toList());
+        if (baugebiete.isEmpty()) {
+            isValid = true;
+        } else {
+            final Integer wohneinheitenAbfragevariante = ObjectUtils.isEmpty(value.getGesamtanzahlWe())
+                ? 0
+                : value.getGesamtanzahlWe();
+            final Integer sumWohneinheitenBaugebiete = baugebiete
+                .stream()
+                .map(baugebietDto ->
+                    ObjectUtils.isEmpty(baugebietDto.getGesamtanzahlWe()) ? 0 : baugebietDto.getGesamtanzahlWe()
+                )
+                .reduce(0, Integer::sum);
+            isValid = wohneinheitenAbfragevariante.equals(sumWohneinheitenBaugebiete);
+        }
+        return isValid;
     }
 }
