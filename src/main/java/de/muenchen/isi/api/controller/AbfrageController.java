@@ -227,7 +227,7 @@ public class AbfrageController {
         }
     )
     @PreAuthorize(
-        "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_PATCH_ABFRAGE_IN_BEARBEITUNG_SACHBEARBEITUNG.name())"
+        "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_PUT_ABFRAGEVARIANTE_RELEVANT.name())"
     )
     public ResponseEntity<InfrastrukturabfrageDto> putAbfragevarianteRelevant(
         @PathVariable @NotNull final UUID abfrageId,

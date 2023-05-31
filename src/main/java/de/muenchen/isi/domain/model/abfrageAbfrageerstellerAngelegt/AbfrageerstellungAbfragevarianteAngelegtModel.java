@@ -4,12 +4,15 @@ import de.muenchen.isi.domain.model.BauabschnittModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Planungsrecht;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.UUID;
 import lombok.Data;
 import lombok.ToString;
 
 @Data
 @ToString(callSuper = true)
 public class AbfrageerstellungAbfragevarianteAngelegtModel {
+
+    private UUID id;
 
     private Long version;
 

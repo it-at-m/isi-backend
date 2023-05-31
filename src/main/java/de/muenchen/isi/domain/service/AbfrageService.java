@@ -26,6 +26,7 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
@@ -115,6 +116,7 @@ public class AbfrageService {
      * @throws FileHandlingFailedException
      * @throws FileHandlingWithS3FailedException
      */
+    @Transactional
     public InfrastrukturabfrageModel patchAbfrageAngelegt(
         @NotNull final AbfrageerstellungInfrastrukturabfrageAngelegtModel abfrage,
         final UUID id

@@ -5,6 +5,7 @@ import de.muenchen.isi.api.validation.NotUnspecified;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Planungsrecht;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.UUID;
 import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -17,6 +18,8 @@ import lombok.ToString;
 @Data
 @ToString(callSuper = true)
 public class AbfrageerstellungAbfragevarianteAngelegtDto {
+
+    private UUID id;
 
     private Long version;
 

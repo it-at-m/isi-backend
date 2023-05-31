@@ -10,19 +10,24 @@ import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.Abfrageerste
 import de.muenchen.isi.infrastructure.entity.Abfragevariante;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 import org.mapstruct.Mappings;
-import org.mapstruct.ReportingPolicy;
 
-@Mapper(
-    config = MapstructConfiguration.class,
-    uses = { BauabschnittDomainMapper.class },
-    unmappedTargetPolicy = ReportingPolicy.IGNORE
-)
+@Mapper(config = MapstructConfiguration.class, uses = { BauabschnittDomainMapper.class })
 public interface AbfragevarianteDomainMapper {
     AbfragevarianteModel entity2Model(final Abfragevariante entity);
 
     Abfragevariante model2entity(final AbfragevarianteModel model);
 
-    @Mappings({ @Mapping(target = "relevant", ignore = true) })
-    AbfragevarianteModel request2Model(final AbfrageerstellungAbfragevarianteAngelegtModel request);
+    @Mappings(
+        {
+            @Mapping(target = "lastModifiedDateTime", ignore = true),
+            @Mapping(target = "createdDateTime", ignore = true),
+            @Mapping(target = "relevant", ignore = true),
+        }
+    )
+    AbfragevarianteModel request2Model(
+        final AbfrageerstellungAbfragevarianteAngelegtModel request,
+        @MappingTarget AbfragevarianteModel model
+    );
 }

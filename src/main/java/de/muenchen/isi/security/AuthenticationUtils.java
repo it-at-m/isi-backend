@@ -1,9 +1,9 @@
 package de.muenchen.isi.security;
 
-import de.muenchen.isi.security.AuthoritiesEnum;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.EnumUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -29,7 +29,11 @@ public class AuthenticationUtils {
                     (DefaultOAuth2AuthenticatedPrincipal) authentication.getPrincipal();
                 if (!ObjectUtils.isEmpty(principal)) {
                     for (GrantedAuthority authority : principal.getAuthorities()) {
-                        userRoles.add(AuthoritiesEnum.valueOf(authority.getAuthority()));
+                        if (EnumUtils.isValidEnum(AuthoritiesEnum.class, authority.getAuthority())) {
+                            userRoles.add(AuthoritiesEnum.valueOf(authority.getAuthority()));
+                        } else {
+                            log.error("Authority {} nicht in AuthoritiesEnum gefunden", authority.getAuthority());
+                        }
                     }
                 }
             } catch (final ClassCastException exception) {

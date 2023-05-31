@@ -12,16 +12,22 @@ import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
 import de.muenchen.isi.domain.mapper.AbfrageDomainMapper;
 import de.muenchen.isi.domain.mapper.AbfrageDomainMapperImpl;
+import de.muenchen.isi.domain.mapper.AbfragevarianteDomainMapper;
 import de.muenchen.isi.domain.mapper.AbfragevarianteDomainMapperImpl;
+import de.muenchen.isi.domain.mapper.BauabschnittDomainMapper;
 import de.muenchen.isi.domain.mapper.BauabschnittDomainMapperImpl;
+import de.muenchen.isi.domain.mapper.DokumentDomainMapper;
 import de.muenchen.isi.domain.mapper.DokumentDomainMapperImpl;
 import de.muenchen.isi.domain.model.AbfrageModel;
+import de.muenchen.isi.domain.model.AbfragevarianteModel;
 import de.muenchen.isi.domain.model.BauvorhabenModel;
 import de.muenchen.isi.domain.model.InfrastrukturabfrageModel;
 import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.AbfrageerstellungAbfrageAngelegtModel;
+import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.AbfrageerstellungAbfragevarianteAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.AbfrageerstellungInfrastrukturabfrageAngelegtModel;
 import de.muenchen.isi.domain.service.filehandling.DokumentService;
 import de.muenchen.isi.infrastructure.entity.Abfrage;
+import de.muenchen.isi.infrastructure.entity.Abfragevariante;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
 import de.muenchen.isi.infrastructure.entity.Infrastrukturabfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
@@ -36,18 +42,35 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@ExtendWith(MockitoExtension.class)
+@ExtendWith(SpringExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
+@ContextConfiguration(
+    classes = {
+        AbfrageDomainMapperImpl.class,
+        AbfragevarianteDomainMapperImpl.class,
+        BauabschnittDomainMapperImpl.class,
+        DokumentDomainMapperImpl.class,
+    }
+)
 class AbfrageServiceTest {
 
-    private final AbfrageDomainMapper abfrageDomainMapper = new AbfrageDomainMapperImpl(
-        new AbfragevarianteDomainMapperImpl(new BauabschnittDomainMapperImpl()),
-        new DokumentDomainMapperImpl()
-    );
+    @Autowired
+    AbfrageDomainMapper abfrageDomainMapper;
+
+    @Autowired
+    AbfragevarianteDomainMapper abfragevarianteDomainMapper;
+
+    @Autowired
+    BauabschnittDomainMapper bauabschnittDomainMapper;
+
+    @Autowired
+    DokumentDomainMapper dokumentDomainMapper;
 
     private AbfrageService abfrageService;
 
@@ -228,19 +251,30 @@ class AbfrageServiceTest {
     @Test
     void patchAbfrageAngelegt()
         throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, FileHandlingFailedException, FileHandlingWithS3FailedException {
+        final UUID abfrageId = UUID.randomUUID();
+
         final AbfrageerstellungInfrastrukturabfrageAngelegtModel infrastrukturabfrageRequestModel =
             new AbfrageerstellungInfrastrukturabfrageAngelegtModel();
+
         final AbfrageerstellungAbfrageAngelegtModel abfrageRequestModel = new AbfrageerstellungAbfrageAngelegtModel();
         abfrageRequestModel.setNameAbfrage("hallo");
         infrastrukturabfrageRequestModel.setAbfrage(abfrageRequestModel);
 
+        final AbfrageerstellungAbfragevarianteAngelegtModel abfragevarianteAngelegtModel =
+            new AbfrageerstellungAbfragevarianteAngelegtModel();
+        abfragevarianteAngelegtModel.setAbfragevariantenName("Abfragevariante");
+        infrastrukturabfrageRequestModel.setAbfragevarianten(List.of(abfragevarianteAngelegtModel));
+
         final InfrastrukturabfrageModel infrastrukturabfrageModel = new InfrastrukturabfrageModel();
+        infrastrukturabfrageModel.setId(abfrageId);
+
         final AbfrageModel abfrageModel = new AbfrageModel();
         abfrageModel.setStatusAbfrage(StatusAbfrage.ANGELEGT);
+        infrastrukturabfrageModel.setAbfrage(abfrageModel);
+
         final InfrastrukturabfrageModel infrastrukturabfrageModelMapped =
             this.abfrageDomainMapper.request2Model(infrastrukturabfrageRequestModel, infrastrukturabfrageModel);
         final Infrastrukturabfrage entity = this.abfrageDomainMapper.model2entity(infrastrukturabfrageModelMapped);
-        entity.setId(UUID.randomUUID());
 
         Mockito.when(this.infrastrukturabfrageRepository.findById(entity.getId())).thenReturn(Optional.of(entity));
         Mockito.when(this.infrastrukturabfrageRepository.saveAndFlush(entity)).thenReturn(entity);
@@ -250,9 +284,6 @@ class AbfrageServiceTest {
 
         final InfrastrukturabfrageModel result =
             this.abfrageService.patchAbfrageAngelegt(infrastrukturabfrageRequestModel, entity.getId());
-
-        final InfrastrukturabfrageModel expected = new InfrastrukturabfrageModel();
-        expected.setId(infrastrukturabfrageModel.getId());
 
         assertThat(result, is(infrastrukturabfrageModel));
 
@@ -270,15 +301,119 @@ class AbfrageServiceTest {
     }
 
     @Test
+    void setAbfragevarianteRelevant()
+        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, FileHandlingFailedException, FileHandlingWithS3FailedException {
+        final UUID abfrageId = UUID.randomUUID();
+        final UUID abfragevarianteId = UUID.randomUUID();
+
+        final InfrastrukturabfrageModel infrastrukturabfrage = new InfrastrukturabfrageModel();
+        infrastrukturabfrage.setId(abfrageId);
+        final AbfrageModel abfrage = new AbfrageModel();
+        abfrage.setNameAbfrage("hallo");
+        abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+        infrastrukturabfrage.setAbfrage(abfrage);
+
+        final AbfragevarianteModel abfragevariante = new AbfragevarianteModel();
+        abfragevariante.setRelevant(false);
+        abfragevariante.setId(abfragevarianteId);
+        infrastrukturabfrage.setAbfragevarianten(List.of(abfragevariante));
+
+        final Infrastrukturabfrage infrastrukturabfrageEntity = new Infrastrukturabfrage();
+        infrastrukturabfrageEntity.setId(abfrageId);
+
+        final Abfrage abfrageEntity = new Abfrage();
+        abfrageEntity.setNameAbfrage("hallo");
+        abfrageEntity.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+        infrastrukturabfrageEntity.setAbfrage(abfrageEntity);
+
+        final Abfragevariante abfragevarianteEntity = new Abfragevariante();
+        abfragevarianteEntity.setRelevant(true);
+        abfragevarianteEntity.setId(abfragevarianteId);
+        infrastrukturabfrageEntity.setAbfragevarianten(List.of(abfragevarianteEntity));
+
+        Infrastrukturabfrage entity = this.abfrageDomainMapper.model2entity(infrastrukturabfrage);
+
+        Mockito.when(this.infrastrukturabfrageRepository.findById(entity.getId())).thenReturn(Optional.of(entity));
+        Mockito
+            .when(this.infrastrukturabfrageRepository.saveAndFlush(infrastrukturabfrageEntity))
+            .thenReturn(infrastrukturabfrageEntity);
+        Mockito
+            .when(this.infrastrukturabfrageRepository.findByAbfrage_NameAbfrageIgnoreCase("hallo"))
+            .thenReturn(Optional.empty());
+
+        final InfrastrukturabfrageModel result =
+            this.abfrageService.setAbfragevarianteRelevant(abfrageId, abfragevarianteId);
+
+        assertThat(result.getAbfragevarianten().get(0).isRelevant(), is(true));
+
+        Mockito
+            .verify(this.infrastrukturabfrageRepository, Mockito.times(1))
+            .findById(infrastrukturabfrageEntity.getId());
+        Mockito.verify(this.infrastrukturabfrageRepository, Mockito.times(1)).saveAndFlush(infrastrukturabfrageEntity);
+        Mockito
+            .verify(this.infrastrukturabfrageRepository, Mockito.times(1))
+            .findByAbfrage_NameAbfrageIgnoreCase("hallo");
+        Mockito
+            .verify(this.dokumentService, Mockito.times(1))
+            .deleteDokumenteFromOriginalDokumentenListWhichAreMissingInParameterAdaptedDokumentenListe(
+                Mockito.isNull(),
+                Mockito.isNull()
+            );
+    }
+
+    @Test
+    void setAbfragevarianteRelevantUniqueViolationTest()
+        throws UniqueViolationException, FileHandlingFailedException, FileHandlingWithS3FailedException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException {
+        final UUID abfrageId = UUID.randomUUID();
+
+        final InfrastrukturabfrageModel infrastrukturabfrage = new InfrastrukturabfrageModel();
+        infrastrukturabfrage.setId(abfrageId);
+        final AbfrageModel abfrage = new AbfrageModel();
+        abfrage.setNameAbfrage("hallo");
+        abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+        infrastrukturabfrage.setAbfrage(abfrage);
+
+        final AbfragevarianteModel abfragevariante = new AbfragevarianteModel();
+        abfragevariante.setRelevant(true);
+        abfragevariante.setId(UUID.randomUUID());
+
+        final AbfragevarianteModel abfragevariante1 = new AbfragevarianteModel();
+        abfragevariante1.setRelevant(false);
+        abfragevariante1.setId(UUID.randomUUID());
+        infrastrukturabfrage.setAbfragevarianten(List.of(abfragevariante, abfragevariante1));
+
+        Infrastrukturabfrage entity = this.abfrageDomainMapper.model2entity(infrastrukturabfrage);
+
+        Mockito.when(this.infrastrukturabfrageRepository.findById(entity.getId())).thenReturn(Optional.of(entity));
+
+        Assertions.assertThrows(
+            UniqueViolationException.class,
+            () -> this.abfrageService.setAbfragevarianteRelevant(abfrageId, abfragevariante1.getId())
+        );
+
+        Mockito.verify(this.infrastrukturabfrageRepository, Mockito.times(1)).findById(entity.getId());
+    }
+
+    @Test
     void throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid()
         throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, FileHandlingFailedException, FileHandlingWithS3FailedException {
+        final UUID abfrageId = UUID.randomUUID();
         final AbfrageerstellungInfrastrukturabfrageAngelegtModel infrastrukturabfrageRequestModel =
             new AbfrageerstellungInfrastrukturabfrageAngelegtModel();
-        final AbfrageerstellungAbfrageAngelegtModel abfrageModel = new AbfrageerstellungAbfrageAngelegtModel();
-        abfrageModel.setNameAbfrage("test");
-        infrastrukturabfrageRequestModel.setAbfrage(abfrageModel);
+        final AbfrageerstellungAbfrageAngelegtModel abfrageRequestModel = new AbfrageerstellungAbfrageAngelegtModel();
+        abfrageRequestModel.setNameAbfrage("test");
+        infrastrukturabfrageRequestModel.setAbfrage(abfrageRequestModel);
+
+        final AbfrageerstellungAbfragevarianteAngelegtModel abfragevarianteAngelegtModel =
+            new AbfrageerstellungAbfragevarianteAngelegtModel();
+        abfragevarianteAngelegtModel.setAbfragevariantenName("Abfragevariante");
+        infrastrukturabfrageRequestModel.setAbfragevarianten(List.of(abfragevarianteAngelegtModel));
 
         InfrastrukturabfrageModel infrastrukturabfrageModel = new InfrastrukturabfrageModel();
+        infrastrukturabfrageModel.setId(abfrageId);
+        AbfrageModel abfrageModel = new AbfrageModel();
+        abfrageModel.setStatusAbfrage(StatusAbfrage.OFFEN);
+        infrastrukturabfrageModel.setAbfrage(abfrageModel);
         infrastrukturabfrageModel =
             this.abfrageDomainMapper.request2Model(infrastrukturabfrageRequestModel, infrastrukturabfrageModel);
 
