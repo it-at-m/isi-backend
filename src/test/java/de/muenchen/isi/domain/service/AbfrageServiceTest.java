@@ -4,6 +4,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
 import de.muenchen.isi.domain.exception.AbfrageStatusNotAllowedException;
+import de.muenchen.isi.domain.exception.BauvorhabenNotReferencedException;
 import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.FileHandlingFailedException;
@@ -219,7 +220,7 @@ class AbfrageServiceTest {
     }
 
     @Test
-    void saveInfrastrukturabfrageUniqueViolationTest() throws UniqueViolationException {
+    void saveInfrastrukturabfrageUniqueViolationTest() {
         final InfrastrukturabfrageModel infrastrukturabfrageModel = new InfrastrukturabfrageModel();
         infrastrukturabfrageModel.setId(UUID.randomUUID());
         final AbfrageModel abfrageModel = new AbfrageModel();
@@ -302,15 +303,20 @@ class AbfrageServiceTest {
 
     @Test
     void setAbfragevarianteRelevant()
-        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, FileHandlingFailedException, FileHandlingWithS3FailedException {
+        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, FileHandlingFailedException, FileHandlingWithS3FailedException, BauvorhabenNotReferencedException {
         final UUID abfrageId = UUID.randomUUID();
         final UUID abfragevarianteId = UUID.randomUUID();
+        final UUID bauvorhabenId = UUID.randomUUID();
+
+        BauvorhabenModel bauvorhabenModel = new BauvorhabenModel();
+        bauvorhabenModel.setId(bauvorhabenId);
 
         final InfrastrukturabfrageModel infrastrukturabfrage = new InfrastrukturabfrageModel();
         infrastrukturabfrage.setId(abfrageId);
         final AbfrageModel abfrage = new AbfrageModel();
         abfrage.setNameAbfrage("hallo");
         abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+        abfrage.setBauvorhaben(bauvorhabenModel);
         infrastrukturabfrage.setAbfrage(abfrage);
 
         final AbfragevarianteModel abfragevariante = new AbfragevarianteModel();
@@ -318,12 +324,16 @@ class AbfrageServiceTest {
         abfragevariante.setId(abfragevarianteId);
         infrastrukturabfrage.setAbfragevarianten(List.of(abfragevariante));
 
+        Bauvorhaben bauvorhabenEntity = new Bauvorhaben();
+        bauvorhabenEntity.setId(bauvorhabenId);
+
         final Infrastrukturabfrage infrastrukturabfrageEntity = new Infrastrukturabfrage();
         infrastrukturabfrageEntity.setId(abfrageId);
 
         final Abfrage abfrageEntity = new Abfrage();
         abfrageEntity.setNameAbfrage("hallo");
         abfrageEntity.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+        abfrageEntity.setBauvorhaben(bauvorhabenEntity);
         infrastrukturabfrageEntity.setAbfrage(abfrageEntity);
 
         final Abfragevariante abfragevarianteEntity = new Abfragevariante();
@@ -362,8 +372,67 @@ class AbfrageServiceTest {
     }
 
     @Test
-    void setAbfragevarianteRelevantUniqueViolationTest()
-        throws UniqueViolationException, FileHandlingFailedException, FileHandlingWithS3FailedException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException {
+    void setAbfragevarianteRelevantUniqueViolationTest() throws UniqueViolationException, OptimisticLockingException {
+        final UUID abfrageId_1 = UUID.randomUUID();
+        final UUID abfrageId_2 = UUID.randomUUID();
+
+        BauvorhabenModel bauvorhabenModel = new BauvorhabenModel();
+        bauvorhabenModel.setId(UUID.randomUUID());
+
+        final InfrastrukturabfrageModel infrastrukturabfrage_1 = new InfrastrukturabfrageModel();
+        infrastrukturabfrage_1.setId(abfrageId_1);
+        final AbfrageModel abfrage_1 = new AbfrageModel();
+        abfrage_1.setNameAbfrage("hallo");
+        abfrage_1.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+        abfrage_1.setBauvorhaben(bauvorhabenModel);
+        infrastrukturabfrage_1.setAbfrage(abfrage_1);
+
+        final AbfragevarianteModel abfragevariante_1 = new AbfragevarianteModel();
+        abfragevariante_1.setRelevant(true);
+        abfragevariante_1.setId(UUID.randomUUID());
+
+        infrastrukturabfrage_1.setAbfragevarianten(List.of(abfragevariante_1));
+
+        final InfrastrukturabfrageModel infrastrukturabfrage_2 = new InfrastrukturabfrageModel();
+        infrastrukturabfrage_2.setId(abfrageId_2);
+        final AbfrageModel abfrage_2 = new AbfrageModel();
+        abfrage_2.setNameAbfrage("hallo");
+        abfrage_2.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+        abfrage_2.setBauvorhaben(bauvorhabenModel);
+        infrastrukturabfrage_2.setAbfrage(abfrage_2);
+
+        final AbfragevarianteModel abfragevariante_2 = new AbfragevarianteModel();
+        abfragevariante_2.setRelevant(false);
+        abfragevariante_2.setId(UUID.randomUUID());
+
+        infrastrukturabfrage_2.setAbfragevarianten(List.of(abfragevariante_2));
+
+        Infrastrukturabfrage entity_1 = this.abfrageDomainMapper.model2entity(infrastrukturabfrage_1);
+
+        Infrastrukturabfrage entity_2 = this.abfrageDomainMapper.model2entity(infrastrukturabfrage_2);
+
+        Mockito.when(this.infrastrukturabfrageRepository.findById(entity_1.getId())).thenReturn(Optional.of(entity_1));
+        Mockito.when(this.infrastrukturabfrageRepository.saveAndFlush(entity_1)).thenReturn(entity_1);
+
+        Mockito.when(this.infrastrukturabfrageRepository.findById(entity_2.getId())).thenReturn(Optional.of(entity_2));
+
+        Mockito
+            .when(this.infrastrukturabfrageRepository.findAllByAbfrageBauvorhabenId(bauvorhabenModel.getId()))
+            .thenReturn(Stream.of(entity_1, entity_2));
+
+        this.abfrageService.saveInfrastrukturabfrage(infrastrukturabfrage_1);
+
+        Assertions.assertThrows(
+            UniqueViolationException.class,
+            () -> this.abfrageService.setAbfragevarianteRelevant(abfrageId_2, abfragevariante_2.getId())
+        );
+
+        Mockito.verify(this.infrastrukturabfrageRepository, Mockito.times(1)).saveAndFlush(entity_1);
+    }
+
+    @Test
+    void setAbfragevarianteRelevantBauvorhabenNotReferenced()
+        throws BauvorhabenNotReferencedException, UniqueViolationException {
         final UUID abfrageId = UUID.randomUUID();
 
         final InfrastrukturabfrageModel infrastrukturabfrage = new InfrastrukturabfrageModel();
@@ -377,20 +446,16 @@ class AbfrageServiceTest {
         abfragevariante.setRelevant(true);
         abfragevariante.setId(UUID.randomUUID());
 
-        final AbfragevarianteModel abfragevariante1 = new AbfragevarianteModel();
-        abfragevariante1.setRelevant(false);
-        abfragevariante1.setId(UUID.randomUUID());
-        infrastrukturabfrage.setAbfragevarianten(List.of(abfragevariante, abfragevariante1));
+        infrastrukturabfrage.setAbfragevarianten(List.of(abfragevariante));
 
         Infrastrukturabfrage entity = this.abfrageDomainMapper.model2entity(infrastrukturabfrage);
 
         Mockito.when(this.infrastrukturabfrageRepository.findById(entity.getId())).thenReturn(Optional.of(entity));
 
         Assertions.assertThrows(
-            UniqueViolationException.class,
-            () -> this.abfrageService.setAbfragevarianteRelevant(abfrageId, abfragevariante1.getId())
+            BauvorhabenNotReferencedException.class,
+            () -> this.abfrageService.setAbfragevarianteRelevant(abfrageId, abfragevariante.getId())
         );
-
         Mockito.verify(this.infrastrukturabfrageRepository, Mockito.times(1)).findById(entity.getId());
     }
 

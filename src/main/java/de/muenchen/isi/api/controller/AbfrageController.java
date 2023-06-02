@@ -9,6 +9,7 @@ import de.muenchen.isi.api.dto.abfrageAbfrageerstellungAngelegt.Abfrageerstellun
 import de.muenchen.isi.api.dto.error.InformationResponseDto;
 import de.muenchen.isi.api.mapper.AbfrageApiMapper;
 import de.muenchen.isi.domain.exception.AbfrageStatusNotAllowedException;
+import de.muenchen.isi.domain.exception.BauvorhabenNotReferencedException;
 import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.FileHandlingFailedException;
@@ -233,7 +234,7 @@ public class AbfrageController {
         @PathVariable @NotNull final UUID abfrageId,
         @PathVariable @NotNull final UUID abfragevarianteId
     )
-        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, FileHandlingFailedException, FileHandlingWithS3FailedException {
+        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, FileHandlingFailedException, FileHandlingWithS3FailedException, BauvorhabenNotReferencedException {
         final var abfrage = this.abfrageService.setAbfragevarianteRelevant(abfrageId, abfragevarianteId);
         final var saved = this.abfrageApiMapper.model2Dto(abfrage);
         return ResponseEntity.ok(saved);

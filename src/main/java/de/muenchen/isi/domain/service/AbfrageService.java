@@ -1,6 +1,7 @@
 package de.muenchen.isi.domain.service;
 
 import de.muenchen.isi.domain.exception.AbfrageStatusNotAllowedException;
+import de.muenchen.isi.domain.exception.BauvorhabenNotReferencedException;
 import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.FileHandlingFailedException;
@@ -136,18 +137,21 @@ public class AbfrageService {
     }
 
     /**
-     * Diese Methode updated ein {@link InfrastrukturabfrageModel}. Diese muss sich im Status {@link StatusAbfrage#ANGELEGT} befinden.
+     * Diese Methode setzt eine {@link AbfragevarianteModel} auf Relevant. Diese muss sich im Status {@link StatusAbfrage#IN_BEARBEITUNG_SACHBEARBEITUNG} befinden.
      *
+     * @param abfrageId         die Abfrage zum updaten
+     * @param abfragevarianteId die Abfragevariante welche man Relevant setzten möchte
      * @return das geupdatete {@link InfrastrukturabfrageModel}
-     * @throws EntityNotFoundException           falls die Abfrage identifiziert durch die {@link InfrastrukturabfrageModel#getId()} nicht gefunden wird
-     * @throws UniqueViolationException          falls der Name der Abfrage {@link InfrastrukturabfrageModel#getAbfrage().getNameAbfrage} ()} bereits vorhanden ist
+     * @throws EntityNotFoundException           falls die Abfrage oder Abfragevariante nicht gefunden wurde
+     * @throws UniqueViolationException          falls es schon eine Abfragevariante Relevant ist
      * @throws OptimisticLockingException        falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
-     * @throws AbfrageStatusNotAllowedException  falls sich die Abfrage nicht in einem zulässigen Status befindet
+     * @throws AbfrageStatusNotAllowedException  fall die Abfrage den falschen Status hat
      * @throws FileHandlingFailedException
      * @throws FileHandlingWithS3FailedException
+     * @throws BauvorhabenNotReferencedException falls die Abfrage keinem Bauvorhaben dazugehört
      */
     public InfrastrukturabfrageModel setAbfragevarianteRelevant(final UUID abfrageId, final UUID abfragevarianteId)
-        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, FileHandlingFailedException, FileHandlingWithS3FailedException {
+        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, FileHandlingFailedException, FileHandlingWithS3FailedException, BauvorhabenNotReferencedException {
         final var abfrage = this.getInfrastrukturabfrageById(abfrageId);
         this.throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(
                 abfrage.getAbfrage(),
@@ -169,7 +173,7 @@ public class AbfrageService {
                 return new EntityNotFoundException(message);
             });
         abfragevariante.setRelevant(!abfragevariante.isRelevant());
-        this.checkForUniqueRelevantAbfragevariante(abfrage.getAbfragevarianten());
+        this.checkForUniqueRelevantAbfragevariante(abfrage);
         abfrage.getAbfrage().setStatusAbfrage(abfrage.getAbfrage().getStatusAbfrage());
         return this.saveInfrastrukturabfrage(abfrage);
     }
@@ -253,11 +257,42 @@ public class AbfrageService {
         }
     }
 
-    private void checkForUniqueRelevantAbfragevariante(final List<AbfragevarianteModel> abfragevarianten)
-        throws UniqueViolationException {
-        var count = abfragevarianten.stream().filter(abfragevarianteModel -> abfragevarianteModel.isRelevant()).count();
-        if (count > 1) {
-            var errorMessage = "Es sind nicht mehr als eine Relevante Abfragevariante erlaubt";
+    /**
+     * Überprüft ob das Bauvorhaben wo die Abfrage zugeordnet ist keine andere Abfrage hat welche eine Relevante Abfragevariante hat.
+     *
+     * @param abfrage wo man eine Relevante Abfragevariante setzten möchte
+     * @throws UniqueViolationException          falls schon eine Relevante Abfragevariante exisitiert
+     * @throws BauvorhabenNotReferencedException falls die Abfrage keinem Bauvorhaben zugeordnet ist
+     */
+
+    private void checkForUniqueRelevantAbfragevariante(final InfrastrukturabfrageModel abfrage)
+        throws UniqueViolationException, BauvorhabenNotReferencedException {
+        if (abfrage.getAbfrage().getBauvorhaben() == null) {
+            throw new BauvorhabenNotReferencedException(
+                "Die Abfrage ist keinem Bauvorhaben zugeordnet deswegen können Sie keine Abfragevariante als Relevant markieren."
+            );
+        }
+        String[] relevanteAbfrage = new String[3];
+        relevanteAbfrage[0] = "false";
+        this.infrastrukturabfrageRepository.findAllByAbfrageBauvorhabenId(abfrage.getAbfrage().getBauvorhaben().getId())
+            .forEach(infrastrukturabfrage -> {
+                infrastrukturabfrage
+                    .getAbfragevarianten()
+                    .forEach(abfragevariante -> {
+                        if (abfragevariante.isRelevant()) {
+                            relevanteAbfrage[0] = "true";
+                            relevanteAbfrage[1] = infrastrukturabfrage.getAbfrage().getNameAbfrage();
+                            relevanteAbfrage[2] = abfragevariante.getAbfragevariantenName();
+                        }
+                    });
+            });
+
+        if (relevanteAbfrage[0].equals("true")) {
+            var errorMessage =
+                "Es gibt schon eine Relevante Abfragevariante bei der Abfrage: " +
+                relevanteAbfrage[1] +
+                " - Abfragevariante: " +
+                relevanteAbfrage[2];
             throw new UniqueViolationException(errorMessage);
         }
     }
