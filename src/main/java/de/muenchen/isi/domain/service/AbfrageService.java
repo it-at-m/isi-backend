@@ -19,6 +19,8 @@ import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.repository.InfrastrukturabfrageRepository;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -146,22 +148,16 @@ public class AbfrageService {
      * @throws UniqueViolationException          falls es schon eine Abfragevariante Relevant ist
      * @throws OptimisticLockingException        falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
      * @throws AbfrageStatusNotAllowedException  fall die Abfrage den falschen Status hat
-     * @throws FileHandlingFailedException
-     * @throws FileHandlingWithS3FailedException
      * @throws BauvorhabenNotReferencedException falls die Abfrage keinem Bauvorhaben dazugehört
      */
     public InfrastrukturabfrageModel setAbfragevarianteRelevant(final UUID abfrageId, final UUID abfragevarianteId)
-        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, FileHandlingFailedException, FileHandlingWithS3FailedException, BauvorhabenNotReferencedException {
+        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, BauvorhabenNotReferencedException {
         final var abfrage = this.getInfrastrukturabfrageById(abfrageId);
         this.throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(
                 abfrage.getAbfrage(),
                 StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG
             );
-        dokumentService.deleteDokumenteFromOriginalDokumentenListWhichAreMissingInParameterAdaptedDokumentenListe(
-            abfrage.getAbfrage().getDokumente(),
-            abfrage.getAbfrage().getDokumente()
-        );
-
+        this.throwsBauvorhabenNotReferencedExceptionOrUniqueViolationExceptionIfRelevant(abfrage);
         final var abfragevariante = abfrage
             .getAbfragevarianten()
             .stream()
@@ -173,8 +169,6 @@ public class AbfrageService {
                 return new EntityNotFoundException(message);
             });
         abfragevariante.setRelevant(!abfragevariante.isRelevant());
-        this.checkForUniqueRelevantAbfragevariante(abfrage);
-        abfrage.getAbfrage().setStatusAbfrage(abfrage.getAbfrage().getStatusAbfrage());
         return this.saveInfrastrukturabfrage(abfrage);
     }
 
@@ -265,34 +259,38 @@ public class AbfrageService {
      * @throws BauvorhabenNotReferencedException falls die Abfrage keinem Bauvorhaben zugeordnet ist
      */
 
-    private void checkForUniqueRelevantAbfragevariante(final InfrastrukturabfrageModel abfrage)
-        throws UniqueViolationException, BauvorhabenNotReferencedException {
+    private void throwsBauvorhabenNotReferencedExceptionOrUniqueViolationExceptionIfRelevant(
+        final InfrastrukturabfrageModel abfrage
+    ) throws UniqueViolationException, BauvorhabenNotReferencedException {
         if (abfrage.getAbfrage().getBauvorhaben() == null) {
-            throw new BauvorhabenNotReferencedException(
-                "Die Abfrage ist keinem Bauvorhaben zugeordnet deswegen können Sie keine Abfragevariante als Relevant markieren."
-            );
+            String message =
+                "Die Abfrage ist keinem Bauvorhaben zugeordnet. Somit kann keine Abfragevariante als Relevant markiert werden.";
+            log.error(message);
+            throw new BauvorhabenNotReferencedException(message);
         }
-        String[] relevanteAbfrage = new String[3];
-        relevanteAbfrage[0] = "false";
+        AtomicBoolean relevanteAbfrage = new AtomicBoolean(false);
+        AtomicReference<String> abfrageName = new AtomicReference<>("");
+        AtomicReference<String> abfragevarianteName = new AtomicReference<>("");
         this.infrastrukturabfrageRepository.findAllByAbfrageBauvorhabenId(abfrage.getAbfrage().getBauvorhaben().getId())
             .forEach(infrastrukturabfrage -> {
                 infrastrukturabfrage
                     .getAbfragevarianten()
                     .forEach(abfragevariante -> {
                         if (abfragevariante.isRelevant()) {
-                            relevanteAbfrage[0] = "true";
-                            relevanteAbfrage[1] = infrastrukturabfrage.getAbfrage().getNameAbfrage();
-                            relevanteAbfrage[2] = abfragevariante.getAbfragevariantenName();
+                            relevanteAbfrage.set(true);
+                            abfrageName.set(infrastrukturabfrage.getAbfrage().getNameAbfrage());
+                            abfragevarianteName.set(abfragevariante.getAbfragevariantenName());
                         }
                     });
             });
 
-        if (relevanteAbfrage[0].equals("true")) {
+        if (relevanteAbfrage.get()) {
             var errorMessage =
                 "Es gibt schon eine Relevante Abfragevariante bei der Abfrage: " +
-                relevanteAbfrage[1] +
+                abfrageName +
                 " - Abfragevariante: " +
-                relevanteAbfrage[2];
+                abfragevarianteName;
+            log.error(errorMessage);
             throw new UniqueViolationException(errorMessage);
         }
     }

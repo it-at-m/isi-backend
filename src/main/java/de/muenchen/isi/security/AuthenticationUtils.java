@@ -32,7 +32,7 @@ public class AuthenticationUtils {
                         if (EnumUtils.isValidEnum(AuthoritiesEnum.class, authority.getAuthority())) {
                             userRoles.add(AuthoritiesEnum.valueOf(authority.getAuthority()));
                         } else {
-                            log.error("Authority {} nicht in AuthoritiesEnum gefunden", authority.getAuthority());
+                            log.error("Authority {} nicht in AuthoritiesEnum vorhanden.\n", authority.getAuthority());
                         }
                     }
                 }

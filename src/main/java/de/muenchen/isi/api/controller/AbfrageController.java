@@ -207,22 +207,12 @@ public class AbfrageController {
             ),
             @ApiResponse(
                 responseCode = "404",
-                description = "NOT_FOUND -> Es gibt keine Abfrage mit der ID.",
-                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
-            ),
-            @ApiResponse(
-                responseCode = "409",
-                description = "CONFLICT -> Abfrage konnte nicht erstellt werden, da der Name der Abfrage oder Abfragevariante bereits existiert.",
+                description = "NOT_FOUND -> Es gibt keine Abfrage oder Abfragevariante mit der ID.",
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
             ),
             @ApiResponse(
                 responseCode = "412",
                 description = "PRECONDITION_FAILED -> In der Anwendung ist bereits eine neuere Version der Entität gespeichert.",
-                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
-            ),
-            @ApiResponse(
-                responseCode = "555",
-                description = "CUSTOM INTERNAL SERVER ERROR -> Die Dateien konnten nicht gelöscht werden.",
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
             ),
         }
