@@ -16,11 +16,11 @@ import org.springframework.stereotype.Service;
 public class AuthenticationUtils {
 
     /**
-     * Die Methode extrahiert die Nutzer Authorities aus dem {@link DefaultOAuth2AuthenticatedPrincipal}
+     * Die Methode extrahiert die Authorities des Nutzers aus dem {@link DefaultOAuth2AuthenticatedPrincipal}
      *
-     * @return Liste der Nutzer {@link AuthoritiesEnum}
+     * @return Liste der Authorities aus {@link AuthoritiesEnum} des Nutzers
      */
-    public static List<AuthoritiesEnum> getUserAuthorities() {
+    public List<AuthoritiesEnum> getUserAuthorities() {
         ArrayList<AuthoritiesEnum> userRoles = new ArrayList<>();
         final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (!ObjectUtils.isEmpty(authentication)) {
@@ -36,9 +36,7 @@ public class AuthenticationUtils {
                         }
                     }
                 }
-            } catch (final ClassCastException exception) {
-                log.error(exception.getMessage(), exception);
-            } catch (final IllegalArgumentException exception) {
+            } catch (final ClassCastException | IllegalArgumentException exception) {
                 log.error(exception.getMessage(), exception);
             }
         }
