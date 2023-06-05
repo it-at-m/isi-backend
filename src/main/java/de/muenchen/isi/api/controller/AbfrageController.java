@@ -196,18 +196,27 @@ public class AbfrageController {
 
     @PutMapping("/abfrage/{abfrageId}/abfragevariante/relevant/{abfragevarianteId}")
     @Transactional(rollbackFor = { OptimisticLockingException.class, UniqueViolationException.class })
-    @Operation(summary = "Aktualisierung einer Infrastrukturabfrage im Status IN_BEARBEITUNG_SACHBEARBEITUNG.")
+    @Operation(
+        summary = "Markiert für Abfragen im Status IN_BEARBEITUNG_SACHBEARBEITUNG eine Abfragevariante als relevant." +
+        "Eine Relevantsetzung kann nur vorgenommen werden, wenn die Abfrage ein Bauvorhaben referenziert" +
+        "und noch keine andere Abfrage als relevant markiert wurde."
+    )
     @ApiResponses(
         value = {
-            @ApiResponse(responseCode = "200", description = "OK -> Abfrage wurde erfolgreich aktualisiert."),
+            @ApiResponse(responseCode = "200", description = "OK -> Abfrage wurde erfolgreich als relevant markiert."),
             @ApiResponse(
                 responseCode = "400",
-                description = "BAD_REQUEST -> Abfrage konnte nicht aktualisiert werden, überprüfen sie die Eingabe oder die Abfrage befindet sich in einem unzulässigen Status",
+                description = "BAD_REQUEST -> Abfrage konnte als relevant markiert werden.",
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
             ),
             @ApiResponse(
                 responseCode = "404",
                 description = "NOT_FOUND -> Es gibt keine Abfrage oder Abfragevariante mit der ID.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+            @ApiResponse(
+                responseCode = "409",
+                description = "CONFLICT -> Es wurde bereits eine Abfragevariante als relevant markiert oder die Abfrage referenziert kein Bauvorhaben.",
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
             ),
             @ApiResponse(
@@ -224,7 +233,7 @@ public class AbfrageController {
         @PathVariable @NotNull final UUID abfrageId,
         @PathVariable @NotNull final UUID abfragevarianteId
     )
-        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, FileHandlingFailedException, FileHandlingWithS3FailedException, BauvorhabenNotReferencedException {
+        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, BauvorhabenNotReferencedException {
         final var abfrage = this.abfrageService.setAbfragevarianteRelevant(abfrageId, abfragevarianteId);
         final var saved = this.abfrageApiMapper.model2Dto(abfrage);
         return ResponseEntity.ok(saved);
