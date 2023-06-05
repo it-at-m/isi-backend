@@ -25,6 +25,9 @@ public class Baugebiet extends BaseEntity {
     @Column(nullable = false)
     private BaugebietTyp baugebietTyp;
 
+    @Column(nullable = false)
+    private Integer realisierungVon; // JJJJ
+
     @Column(nullable = true)
     private Integer gesamtanzahlWe;
 

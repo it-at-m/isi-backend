@@ -4,6 +4,8 @@ import de.muenchen.isi.infrastructure.entity.enums.lookup.BaugebietTyp;
 import java.math.BigDecimal;
 import java.util.List;
 import javax.validation.Valid;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -23,6 +25,11 @@ public class BaugebietDto extends BaseEntityDto {
 
     @NotNull
     private BaugebietTyp baugebietTyp;
+
+    @NotNull
+    @Min(1900)
+    @Max(2100)
+    private Integer realisierungVon;
 
     private Integer gesamtanzahlWe;
 

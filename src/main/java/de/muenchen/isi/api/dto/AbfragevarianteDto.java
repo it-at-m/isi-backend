@@ -59,11 +59,6 @@ public class AbfragevarianteDto extends BaseEntityDto {
     @Max(2100)
     private Integer realisierungVon;
 
-    @NotNull
-    @Min(1900)
-    @Max(2100)
-    private Integer realisierungBis;
-
     private BigDecimal geschossflaecheGenossenschaftlicheWohnungen;
 
     @NotNull

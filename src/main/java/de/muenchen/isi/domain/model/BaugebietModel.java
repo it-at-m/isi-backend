@@ -16,6 +16,8 @@ public class BaugebietModel extends BaseEntityModel {
 
     private BaugebietTyp baugebietTyp;
 
+    private Integer realisierungVon;
+
     private Integer gesamtanzahlWe;
 
     private Integer anzahlWohneinheitenBaurechtlichGenehmigt;
