@@ -3,6 +3,7 @@ package de.muenchen.isi.api.validation;
 import de.muenchen.isi.api.dto.AbfragevarianteDto;
 import de.muenchen.isi.api.dto.BaugebietDto;
 import java.util.Optional;
+import java.util.function.Predicate;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import lombok.NoArgsConstructor;
@@ -25,6 +26,7 @@ public class RealisierungVonDistributionValidator
             .emptyIfNull(value.getBauabschnitte())
             .stream()
             .flatMap(bauabschnitt -> CollectionUtils.emptyIfNull(bauabschnitt.getBaugebiete()).stream())
+            .filter(Predicate.not(BaugebietDto::getTechnical))
             .map(BaugebietDto::getRealisierungVon)
             .min(Integer::compareTo);
         return minJahrBaugebiet.isEmpty() || value.getRealisierungVon() <= minJahrBaugebiet.get();
