@@ -2,6 +2,7 @@ package de.muenchen.isi.api.validation;
 
 import de.muenchen.isi.api.dto.AbfragevarianteDto;
 import de.muenchen.isi.api.dto.BaurateDto;
+import java.util.Optional;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import lombok.NoArgsConstructor;
@@ -15,14 +16,13 @@ public class RealisierungVonDistributionValidator
 
     @Override
     public boolean isValid(final AbfragevarianteDto value, final ConstraintValidatorContext context) {
-        final int minJahr = CollectionUtils
+        final Optional<Integer> minJahr = CollectionUtils
             .emptyIfNull(value.getBauabschnitte())
             .stream()
             .flatMap(bauabschnitt -> CollectionUtils.emptyIfNull(bauabschnitt.getBaugebiete()).stream())
             .flatMap(baugebiet -> CollectionUtils.emptyIfNull(baugebiet.getBauraten()).stream())
             .map(BaurateDto::getJahr)
-            .min(Integer::compareTo)
-            .orElseThrow();
-        return value.getRealisierungVon() <= minJahr;
+            .min(Integer::compareTo);
+        return minJahr.isEmpty() || value.getRealisierungVon() <= minJahr.get();
     }
 }
