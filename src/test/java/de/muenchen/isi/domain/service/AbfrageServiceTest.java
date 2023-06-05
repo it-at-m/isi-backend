@@ -302,7 +302,7 @@ class AbfrageServiceTest {
     }
 
     @Test
-    void setAbfragevarianteRelevant()
+    void changeAbfragevarianteRelevant()
         throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, FileHandlingFailedException, FileHandlingWithS3FailedException, BauvorhabenNotReferencedException {
         final UUID abfrageId = UUID.randomUUID();
         final UUID abfragevarianteId = UUID.randomUUID();
@@ -366,7 +366,8 @@ class AbfrageServiceTest {
     }
 
     @Test
-    void setAbfragevarianteRelevantUniqueViolationTest() throws UniqueViolationException, OptimisticLockingException {
+    void changeAbfragevarianteRelevantUniqueViolationTest()
+        throws UniqueViolationException, OptimisticLockingException {
         final UUID abfrageId_1 = UUID.randomUUID();
         final UUID abfrageId_2 = UUID.randomUUID();
 
@@ -425,7 +426,7 @@ class AbfrageServiceTest {
     }
 
     @Test
-    void setAbfragevarianteRelevantBauvorhabenNotReferenced() {
+    void changeAbfragevarianteRelevantBauvorhabenNotReferenced() {
         final UUID abfrageId = UUID.randomUUID();
 
         final InfrastrukturabfrageModel infrastrukturabfrage = new InfrastrukturabfrageModel();
@@ -436,7 +437,7 @@ class AbfrageServiceTest {
         infrastrukturabfrage.setAbfrage(abfrage);
 
         final AbfragevarianteModel abfragevariante = new AbfragevarianteModel();
-        abfragevariante.setRelevant(true);
+        abfragevariante.setRelevant(false);
         abfragevariante.setId(UUID.randomUUID());
 
         infrastrukturabfrage.setAbfragevarianten(List.of(abfragevariante));
