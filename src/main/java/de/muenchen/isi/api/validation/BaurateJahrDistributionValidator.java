@@ -14,6 +14,12 @@ import org.springframework.stereotype.Component;
 public class BaurateJahrDistributionValidator
     implements ConstraintValidator<BaurateJahrDistributionValid, BaugebietDto> {
 
+    /**
+     *
+     * @param value object to validate
+     * @param context context in which the constraint is evaluated
+     * @return true falls das Realisierungsjahr des Baugebiets vor oder gleich der Realisierungsjahre der Bauraten ist.
+     */
     @Override
     public boolean isValid(final BaugebietDto value, final ConstraintValidatorContext context) {
         final Optional<Integer> minJahrBaurate = CollectionUtils
