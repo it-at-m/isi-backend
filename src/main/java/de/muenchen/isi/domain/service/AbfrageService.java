@@ -140,14 +140,14 @@ public class AbfrageService {
     /**
      * Diese Methode setzt eine {@link AbfragevarianteModel} auf Relevant. Diese muss sich im Status {@link StatusAbfrage#IN_BEARBEITUNG_SACHBEARBEITUNG} befinden.
      *
-     * @param abfrageId         die Abfrage zum updaten
+     * @param abfrageId         die Abfrage zum relevantsetzen
      * @param abfragevarianteId die Abfragevariante welche man Relevant setzten möchte
      * @return das geupdatete {@link InfrastrukturabfrageModel}
      * @throws EntityNotFoundException           falls die Abfrage oder Abfragevariante nicht gefunden wurde
-     * @throws UniqueViolationException          falls es schon eine Abfragevariante Relevant ist
+     * @throws UniqueViolationException          falls es schon eine Abfragevariante relevant ist
      * @throws OptimisticLockingException        falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
      * @throws AbfrageStatusNotAllowedException  fall die Abfrage den falschen Status hat
-     * @throws BauvorhabenNotReferencedException falls die Abfrage keinem Bauvorhaben dazugehört
+     * @throws BauvorhabenNotReferencedException falls die Abfrage zu keinem Bauvorhaben dazugehört
      */
     public InfrastrukturabfrageModel setAbfragevarianteRelevant(final UUID abfrageId, final UUID abfragevarianteId)
         throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, BauvorhabenNotReferencedException {
