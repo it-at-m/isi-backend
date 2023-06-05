@@ -194,10 +194,11 @@ public class AbfrageController {
         return ResponseEntity.ok(saved);
     }
 
-    @PutMapping("/abfrage/{abfrageId}/abfragevariante/relevant/{abfragevarianteId}")
+    @PutMapping("/abfrage/{abfrageId}/abfragevariante/change-relevant/{abfragevarianteId}")
     @Transactional(rollbackFor = { OptimisticLockingException.class, UniqueViolationException.class })
     @Operation(
-        summary = "Markiert für Abfragen im Status IN_BEARBEITUNG_SACHBEARBEITUNG eine Abfragevariante als relevant." +
+        summary = "Markiert für Abfragen im Status IN_BEARBEITUNG_SACHBEARBEITUNG eine Abfragevariante als relevant, fall diese noch nicht relevant ist." +
+        "Ist die Abfragevariante bereits als relevant markiert, wird der Status auf nicht relevant gesetzt." +
         "Eine Relevantsetzung kann nur vorgenommen werden, wenn die Abfrage ein Bauvorhaben referenziert" +
         "und noch keine andere Abfrage als relevant markiert wurde."
     )
@@ -229,12 +230,12 @@ public class AbfrageController {
     @PreAuthorize(
         "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_PUT_ABFRAGEVARIANTE_RELEVANT.name())"
     )
-    public ResponseEntity<InfrastrukturabfrageDto> putAbfragevarianteRelevant(
+    public ResponseEntity<InfrastrukturabfrageDto> putChangeAbfragevarianteRelevant(
         @PathVariable @NotNull final UUID abfrageId,
         @PathVariable @NotNull final UUID abfragevarianteId
     )
         throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, BauvorhabenNotReferencedException {
-        final var abfrage = this.abfrageService.setAbfragevarianteRelevant(abfrageId, abfragevarianteId);
+        final var abfrage = this.abfrageService.changeAbfragevarianteRelevant(abfrageId, abfragevarianteId);
         final var saved = this.abfrageApiMapper.model2Dto(abfrage);
         return ResponseEntity.ok(saved);
     }

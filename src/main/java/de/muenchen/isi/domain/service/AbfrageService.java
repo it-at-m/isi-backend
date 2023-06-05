@@ -138,11 +138,12 @@ public class AbfrageService {
     }
 
     /**
-     * Diese Methode setzt eine {@link AbfragevarianteModel} auf Relevant.
-     * Diese muss sich im Status {@link StatusAbfrage#IN_BEARBEITUNG_SACHBEARBEITUNG} befinden.
+     * Diese Methode markiert ein {@link AbfragevarianteModel} als relevant, falls diese noch nicht relevant ist.
+     * Ist die Abfragevariante bereits als relevant markiert, wird der Status auf nicht relevant gesetzt.
+     * Die Abfragevariante muss sich im Status {@link StatusAbfrage#IN_BEARBEITUNG_SACHBEARBEITUNG} befinden.
      *
-     * @param abfrageId         die Abfrage zum relevantsetzen
-     * @param abfragevarianteId die Abfragevariante welche man Relevant setzten möchte
+     * @param abfrageId         die Abfrage zum Ändern der Relevanz.
+     * @param abfragevarianteId die Abfragevariante welche man relevant oder nicht relevant setzten möchte
      * @return das geupdatete {@link InfrastrukturabfrageModel}
      * @throws EntityNotFoundException           falls die Abfrage oder Abfragevariante nicht gefunden wurde
      * @throws UniqueViolationException          falls es schon eine Abfragevariante relevant ist
@@ -150,14 +151,13 @@ public class AbfrageService {
      * @throws AbfrageStatusNotAllowedException  fall die Abfrage den falschen Status hat
      * @throws BauvorhabenNotReferencedException falls die Abfrage zu keinem Bauvorhaben dazugehört
      */
-    public InfrastrukturabfrageModel setAbfragevarianteRelevant(final UUID abfrageId, final UUID abfragevarianteId)
+    public InfrastrukturabfrageModel changeAbfragevarianteRelevant(final UUID abfrageId, final UUID abfragevarianteId)
         throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, BauvorhabenNotReferencedException {
         final var abfrage = this.getInfrastrukturabfrageById(abfrageId);
         this.throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(
                 abfrage.getAbfrage(),
                 StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG
             );
-        this.throwsBauvorhabenNotReferencedExceptionOrUniqueViolationExceptionIfRelevant(abfrage);
         final var abfragevariante = abfrage
             .getAbfragevarianten()
             .stream()
@@ -168,7 +168,12 @@ public class AbfrageService {
                 log.error(message);
                 return new EntityNotFoundException(message);
             });
-        abfragevariante.setRelevant(!abfragevariante.isRelevant());
+        if (abfragevariante.isRelevant()) {
+            abfragevariante.setRelevant(false);
+        } else {
+            this.throwsBauvorhabenNotReferencedExceptionOrUniqueViolationExceptionIfRelevant(abfrage);
+            abfragevariante.setRelevant(true);
+        }
         return this.saveInfrastrukturabfrage(abfrage);
     }
 

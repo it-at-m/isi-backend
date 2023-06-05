@@ -352,7 +352,7 @@ class AbfrageServiceTest {
             .thenReturn(Optional.empty());
 
         final InfrastrukturabfrageModel result =
-            this.abfrageService.setAbfragevarianteRelevant(abfrageId, abfragevarianteId);
+            this.abfrageService.changeAbfragevarianteRelevant(abfrageId, abfragevarianteId);
 
         assertThat(result.getAbfragevarianten().get(0).isRelevant(), is(true));
 
@@ -418,7 +418,7 @@ class AbfrageServiceTest {
 
         Assertions.assertThrows(
             UniqueViolationException.class,
-            () -> this.abfrageService.setAbfragevarianteRelevant(abfrageId_2, abfragevariante_2.getId())
+            () -> this.abfrageService.changeAbfragevarianteRelevant(abfrageId_2, abfragevariante_2.getId())
         );
 
         Mockito.verify(this.infrastrukturabfrageRepository, Mockito.times(1)).saveAndFlush(entity_1);
@@ -447,7 +447,7 @@ class AbfrageServiceTest {
 
         Assertions.assertThrows(
             BauvorhabenNotReferencedException.class,
-            () -> this.abfrageService.setAbfragevarianteRelevant(abfrageId, abfragevariante.getId())
+            () -> this.abfrageService.changeAbfragevarianteRelevant(abfrageId, abfragevariante.getId())
         );
         Mockito.verify(this.infrastrukturabfrageRepository, Mockito.times(1)).findById(entity.getId());
     }
