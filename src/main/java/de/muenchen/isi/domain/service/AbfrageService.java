@@ -268,9 +268,9 @@ public class AbfrageService {
             log.error(message);
             throw new BauvorhabenNotReferencedException(message);
         }
-        final AtomicBoolean relevanteAbfrage = new AtomicBoolean(false);
-        final StringBuilder abfrageName = new StringBuilder();
-        final StringBuilder abfragevarianteName = new StringBuilder();
+        final var relevanteAbfrage = new AtomicBoolean(false);
+        final var nameRelevantAbfrage = new StringBuilder();
+        final var nameRelevantAbfragevariante = new StringBuilder();
         this.infrastrukturabfrageRepository.findAllByAbfrageBauvorhabenId(abfrage.getAbfrage().getBauvorhaben().getId())
             .forEach(infrastrukturabfrage -> {
                 infrastrukturabfrage
@@ -278,8 +278,8 @@ public class AbfrageService {
                     .forEach(abfragevariante -> {
                         if (abfragevariante.isRelevant()) {
                             relevanteAbfrage.set(true);
-                            abfrageName.append(infrastrukturabfrage.getAbfrage().getNameAbfrage());
-                            abfragevarianteName.append(abfragevariante.getAbfragevariantenName());
+                            nameRelevantAbfrage.append(infrastrukturabfrage.getAbfrage().getNameAbfrage());
+                            nameRelevantAbfragevariante.append(abfragevariante.getAbfragevariantenName());
                         }
                     });
             });
@@ -287,9 +287,9 @@ public class AbfrageService {
         if (relevanteAbfrage.get()) {
             var errorMessage =
                 "Die Abfragevariante " +
-                abfragevarianteName +
+                nameRelevantAbfragevariante +
                 " in Abfrage " +
-                abfrageName +
+                nameRelevantAbfrage +
                 " ist bereits als relevant markiert.";
             log.error(errorMessage);
             throw new UniqueViolationException(errorMessage);
