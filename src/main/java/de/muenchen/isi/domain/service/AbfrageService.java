@@ -20,7 +20,6 @@ import de.muenchen.isi.infrastructure.repository.InfrastrukturabfrageRepository;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -264,13 +263,13 @@ public class AbfrageService {
     ) throws UniqueViolationException, BauvorhabenNotReferencedException {
         if (abfrage.getAbfrage().getBauvorhaben() == null) {
             String message =
-                "Die Abfrage ist keinem Bauvorhaben zugeordnet. Somit kann keine Abfragevariante als Relevant markiert werden.";
+                "Die Abfrage ist keinem Bauvorhaben zugeordnet. Somit kann keine Abfragevariante als relevant markiert werden.";
             log.error(message);
             throw new BauvorhabenNotReferencedException(message);
         }
-        AtomicBoolean relevanteAbfrage = new AtomicBoolean(false);
-        AtomicReference<String> abfrageName = new AtomicReference<>("");
-        AtomicReference<String> abfragevarianteName = new AtomicReference<>("");
+        final AtomicBoolean relevanteAbfrage = new AtomicBoolean(false);
+        final StringBuilder abfrageName = new StringBuilder();
+        final StringBuilder abfragevarianteName = new StringBuilder();
         this.infrastrukturabfrageRepository.findAllByAbfrageBauvorhabenId(abfrage.getAbfrage().getBauvorhaben().getId())
             .forEach(infrastrukturabfrage -> {
                 infrastrukturabfrage
@@ -278,18 +277,19 @@ public class AbfrageService {
                     .forEach(abfragevariante -> {
                         if (abfragevariante.isRelevant()) {
                             relevanteAbfrage.set(true);
-                            abfrageName.set(infrastrukturabfrage.getAbfrage().getNameAbfrage());
-                            abfragevarianteName.set(abfragevariante.getAbfragevariantenName());
+                            abfrageName.append(infrastrukturabfrage.getAbfrage().getNameAbfrage());
+                            abfragevarianteName.append(abfragevariante.getAbfragevariantenName());
                         }
                     });
             });
 
         if (relevanteAbfrage.get()) {
             var errorMessage =
-                "Es gibt schon eine Relevante Abfragevariante bei der Abfrage: " +
+                "Die Abfragevariante " +
+                abfragevarianteName +
+                " in Abfrage " +
                 abfrageName +
-                " - Abfragevariante: " +
-                abfragevarianteName;
+                " ist bereits als relevant markiert.";
             log.error(errorMessage);
             throw new UniqueViolationException(errorMessage);
         }

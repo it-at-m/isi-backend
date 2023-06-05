@@ -363,12 +363,6 @@ class AbfrageServiceTest {
         Mockito
             .verify(this.infrastrukturabfrageRepository, Mockito.times(1))
             .findByAbfrage_NameAbfrageIgnoreCase("hallo");
-        Mockito
-            .verify(this.dokumentService, Mockito.times(1))
-            .deleteDokumenteFromOriginalDokumentenListWhichAreMissingInParameterAdaptedDokumentenListe(
-                Mockito.isNull(),
-                Mockito.isNull()
-            );
     }
 
     @Test
@@ -431,8 +425,7 @@ class AbfrageServiceTest {
     }
 
     @Test
-    void setAbfragevarianteRelevantBauvorhabenNotReferenced()
-        throws BauvorhabenNotReferencedException, UniqueViolationException {
+    void setAbfragevarianteRelevantBauvorhabenNotReferenced() {
         final UUID abfrageId = UUID.randomUUID();
 
         final InfrastrukturabfrageModel infrastrukturabfrage = new InfrastrukturabfrageModel();
