@@ -138,7 +138,8 @@ public class AbfrageService {
     }
 
     /**
-     * Diese Methode setzt eine {@link AbfragevarianteModel} auf Relevant. Diese muss sich im Status {@link StatusAbfrage#IN_BEARBEITUNG_SACHBEARBEITUNG} befinden.
+     * Diese Methode setzt eine {@link AbfragevarianteModel} auf Relevant.
+     * Diese muss sich im Status {@link StatusAbfrage#IN_BEARBEITUNG_SACHBEARBEITUNG} befinden.
      *
      * @param abfrageId         die Abfrage zum relevantsetzen
      * @param abfragevarianteId die Abfragevariante welche man Relevant setzten möchte
