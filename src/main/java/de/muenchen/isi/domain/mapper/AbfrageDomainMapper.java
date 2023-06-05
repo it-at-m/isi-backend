@@ -35,11 +35,13 @@ public abstract class AbfrageDomainMapper {
     public abstract Infrastrukturabfrage model2entity(final InfrastrukturabfrageModel model);
 
     /**
-     * Mapping Methode welche aus einem {@link InfrastrukturabfrageModel} ein {@link InfrastrukturabfrageModel} macht.
+     * Mapping Methode welche die Attribute des im Parameter gegebenen {@link AbfrageerstellungInfrastrukturabfrageAngelegtModel}
+     * auf das ebenfalls im Parameter gegebene {@link InfrastrukturabfrageModel} mapped.
      * <p>
-     * Die Abfragevarianten werden ignoriert da diese im AfterMapping angehängt werden.
+     * Die Abfragevarianten werden ignoriert da diese in der AfterMapping-Methode
+     * {@link AbfrageDomainMapper#setAbfragevarianteOnInfrastrukturabfrage} verarbeitet werden.
      *
-     * @param request  das Objekt welches gemapped werden soll
+     * @param request  das Request-Model welches gemapped werden soll
      * @param response das {@link InfrastrukturabfrageModel} zu dem es gemapped wird
      * @return gemappte {@link InfrastrukturabfrageModel}
      */
@@ -58,13 +60,9 @@ public abstract class AbfrageDomainMapper {
     );
 
     /**
-     * Abfragevarianten werde in mit der AfterMapping Methode angehängt da Mapstruct
-     * keine Methoden mit dem Paramter @MappingTarget intern beim Mappen verwendet.
-     * <p>
-     * Dadurch wird in dieser Methode die Abfragevarianten zu AbfragevariantenModel gemapped
-     * und dann dem InfrastrukturabfrageModel angehängt
+     * Führt das Mapping der Abfragevarianten für die im Parameter gegebenen Klassen durch.
      *
-     * @param request  das Objekt welches gemapped werden soll
+     * @param request  das Request-Objekt welches gemapped werden soll
      * @param response das {@link InfrastrukturabfrageModel} zu dem es gemapped wird
      */
     @AfterMapping
