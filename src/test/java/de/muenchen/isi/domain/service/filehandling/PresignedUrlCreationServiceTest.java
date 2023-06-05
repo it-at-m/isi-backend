@@ -12,6 +12,7 @@ import io.muenchendigital.digiwf.s3.integration.client.exception.DocumentStorage
 import io.muenchendigital.digiwf.s3.integration.client.exception.DocumentStorageServerErrorException;
 import io.muenchendigital.digiwf.s3.integration.client.exception.PropertyNotSetException;
 import io.muenchendigital.digiwf.s3.integration.client.repository.presignedurl.PresignedUrlRepository;
+import java.time.LocalDate;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -163,7 +164,9 @@ class PresignedUrlCreationServiceTest {
         final var presigneUrl =
             "https://storage.de/The-Bucket/outerFolder/innerFolder/thefile.pdf?abc=abcdf4sfskhsdfsfddsghjve884545klnfgv";
 
-        Mockito.when(this.presignedUrlRepository.getPresignedUrlSaveFile(pathToFile, 10, null)).thenReturn(presigneUrl);
+        Mockito
+            .when(this.presignedUrlRepository.getPresignedUrlSaveFile(pathToFile, 10, LocalDate.now().plusYears(999)))
+            .thenReturn(presigneUrl);
 
         final var expected = new PresignedUrlModel();
         expected.setHttpMethodToUse("PUT");
@@ -183,7 +186,7 @@ class PresignedUrlCreationServiceTest {
         final var pathToFile = "outerFolder/innerFolder/thefile.pdf";
 
         Mockito
-            .when(this.presignedUrlRepository.getPresignedUrlSaveFile(pathToFile, 10, null))
+            .when(this.presignedUrlRepository.getPresignedUrlSaveFile(pathToFile, 10, LocalDate.now().plusYears(999)))
             .thenThrow(
                 new DocumentStorageClientErrorException(
                     "outermessage",
@@ -214,7 +217,7 @@ class PresignedUrlCreationServiceTest {
         Mockito.reset(this.presignedUrlRepository);
 
         Mockito
-            .when(this.presignedUrlRepository.getPresignedUrlSaveFile(pathToFile, 10, null))
+            .when(this.presignedUrlRepository.getPresignedUrlSaveFile(pathToFile, 10, LocalDate.now().plusYears(999)))
             .thenThrow(
                 new DocumentStorageServerErrorException(
                     "outermessage",
@@ -245,7 +248,7 @@ class PresignedUrlCreationServiceTest {
         Mockito.reset(this.presignedUrlRepository);
 
         Mockito
-            .when(this.presignedUrlRepository.getPresignedUrlSaveFile(pathToFile, 10, null))
+            .when(this.presignedUrlRepository.getPresignedUrlSaveFile(pathToFile, 10, LocalDate.now().plusYears(999)))
             .thenThrow(new DocumentStorageException("outermessage", new Exception("innermessage")));
         final var filePathModel3 = new FilepathModel();
         filePathModel3.setPathToFile(pathToFile);
@@ -256,7 +259,7 @@ class PresignedUrlCreationServiceTest {
         Mockito.reset(this.presignedUrlRepository);
 
         Mockito
-            .when(this.presignedUrlRepository.getPresignedUrlSaveFile(pathToFile, 10, null))
+            .when(this.presignedUrlRepository.getPresignedUrlSaveFile(pathToFile, 10, LocalDate.now().plusYears(999)))
             .thenThrow(new PropertyNotSetException("outermessage"));
         final var filePathModel4 = new FilepathModel();
         filePathModel4.setPathToFile(pathToFile);
