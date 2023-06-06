@@ -22,11 +22,11 @@ public class BaurateJahrDistributionValidator
      */
     @Override
     public boolean isValid(final BaugebietDto value, final ConstraintValidatorContext context) {
-        final Optional<Integer> minJahrBaurate = CollectionUtils
+        final Optional<Integer> minJahrBauraten = CollectionUtils
             .emptyIfNull(value.getBauraten())
             .stream()
             .map(BaurateDto::getJahr)
             .min(Integer::compareTo);
-        return minJahrBaurate.isEmpty() || value.getRealisierungVon() <= minJahrBaurate.get();
+        return minJahrBauraten.isEmpty() || value.getRealisierungVon() <= minJahrBauraten.get();
     }
 }
