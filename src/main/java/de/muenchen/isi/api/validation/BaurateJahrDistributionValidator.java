@@ -2,6 +2,7 @@ package de.muenchen.isi.api.validation;
 
 import de.muenchen.isi.api.dto.BaugebietDto;
 import de.muenchen.isi.api.dto.BaurateDto;
+import java.util.Objects;
 import java.util.Optional;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
@@ -26,6 +27,7 @@ public class BaurateJahrDistributionValidator
             .emptyIfNull(value.getBauraten())
             .stream()
             .map(BaurateDto::getJahr)
+            .filter(Objects::nonNull)
             .min(Integer::compareTo);
         return minJahrBauraten.isEmpty() || value.getRealisierungVon() <= minJahrBauraten.get();
     }
