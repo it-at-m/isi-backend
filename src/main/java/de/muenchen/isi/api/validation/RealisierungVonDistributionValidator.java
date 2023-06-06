@@ -21,7 +21,7 @@ public class RealisierungVonDistributionValidator
     /**
      * @param value object to validate
      * @param context context in which the constraint is evaluate
-     * @return true falls das Realisierungsjahr der Abfragevariante vor oder gleich der Realisierungsjahre der Baugebiete.
+     * @return true falls das Realisierungsjahr der Abfragevariante vor oder gleich der Realisierungsjahre der Baugebiete oder einer Baurate.
      */
     @Override
     public boolean isValid(final AbfragevarianteDto value, final ConstraintValidatorContext context) {

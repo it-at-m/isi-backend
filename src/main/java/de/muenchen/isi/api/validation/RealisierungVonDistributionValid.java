@@ -13,7 +13,7 @@ import javax.validation.Payload;
 @Constraint(validatedBy = RealisierungVonDistributionValidator.class)
 @Documented
 public @interface RealisierungVonDistributionValid {
-    String message() default "Das Realisierungsjahr eines Baugebiets ist vor dem Realisierungsjahr der Abfragevariante";
+    String message() default "Das Realisierungsjahr eines Baugebiets bzw. einer Baurate ist vor dem Realisierungsjahr der Abfragevariante";
 
     Class<?>[] groups() default {};
 
