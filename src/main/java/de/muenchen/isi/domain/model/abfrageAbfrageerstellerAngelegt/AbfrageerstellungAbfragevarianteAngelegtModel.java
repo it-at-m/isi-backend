@@ -1,24 +1,22 @@
-/*
- * Copyright (c): it@M - Dienstleister für Informations- und Telekommunikationstechnik
- * der Landeshauptstadt München, 2022
- */
-package de.muenchen.isi.domain.model;
+package de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt;
 
+import de.muenchen.isi.domain.model.BauabschnittModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Planungsrecht;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.UUID;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 @Data
 @ToString(callSuper = true)
-@EqualsAndHashCode(callSuper = true)
-public class AbfragevarianteModel extends BaseEntityModel {
+public class AbfrageerstellungAbfragevarianteAngelegtModel {
+
+    private UUID id;
+
+    private Long version;
 
     private Integer abfragevariantenNr;
-
-    private boolean isRelevant;
 
     private String abfragevariantenName;
 

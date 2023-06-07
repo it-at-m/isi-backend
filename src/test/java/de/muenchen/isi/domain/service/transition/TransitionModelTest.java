@@ -31,11 +31,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
-@SpringBootTest(
-    classes = { IsiBackendApplication.class },
-    webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
-    properties = { "tomcat.gracefulshutdown.pre-wait-seconds=0" }
-)
+@SpringBootTest(classes = { IsiBackendApplication.class }, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles(profiles = { TestConstants.SPRING_UNIT_TEST_PROFILE, TestConstants.SPRING_NO_SECURITY_PROFILE })
 @MockitoSettings(strictness = Strictness.LENIENT)
 @ContextConfiguration
@@ -168,7 +164,7 @@ public class TransitionModelTest {
         secondPossibleTransition.setIndex(3);
         secondPossibleTransition.setButtonName("STORNIEREN");
         secondPossibleTransition.setUrl("abbrechen");
-        secondPossibleTransition.setDialogText("Die Abfrage wird abbgebrochen.");
+        secondPossibleTransition.setDialogText("Die Abfrage wird abgebrochen.");
 
         expected.add(secondPossibleTransition);
 
@@ -213,7 +209,7 @@ public class TransitionModelTest {
         secondPossibleTransition.setIndex(3);
         secondPossibleTransition.setButtonName("STORNIEREN");
         secondPossibleTransition.setUrl("abbrechen");
-        secondPossibleTransition.setDialogText("Die Abfrage wird abbgebrochen.");
+        secondPossibleTransition.setDialogText("Die Abfrage wird abgebrochen.");
 
         expected.add(secondPossibleTransition);
 
@@ -282,7 +278,7 @@ public class TransitionModelTest {
         firstPossibleTransition.setIndex(3);
         firstPossibleTransition.setButtonName("STORNIEREN");
         firstPossibleTransition.setUrl("abbrechen");
-        firstPossibleTransition.setDialogText("Die Abfrage wird abbgebrochen.");
+        firstPossibleTransition.setDialogText("Die Abfrage wird abgebrochen.");
 
         expected.add(firstPossibleTransition);
 
@@ -336,7 +332,7 @@ public class TransitionModelTest {
         firstPossibleTransition.setIndex(3);
         firstPossibleTransition.setButtonName("STORNIEREN");
         firstPossibleTransition.setUrl("abbrechen");
-        firstPossibleTransition.setDialogText("Die Abfrage wird abbgebrochen.");
+        firstPossibleTransition.setDialogText("Die Abfrage wird abgebrochen.");
 
         expected.add(firstPossibleTransition);
 
@@ -422,7 +418,7 @@ public class TransitionModelTest {
         firstPossibleTransition.setIndex(3);
         firstPossibleTransition.setButtonName("STORNIEREN");
         firstPossibleTransition.setUrl("abbrechen");
-        firstPossibleTransition.setDialogText("Die Abfrage wird abbgebrochen.");
+        firstPossibleTransition.setDialogText("Die Abfrage wird abgebrochen.");
 
         expected.add(firstPossibleTransition);
 
@@ -467,7 +463,7 @@ public class TransitionModelTest {
         firstPossibleTransition.setIndex(3);
         firstPossibleTransition.setButtonName("STORNIEREN");
         firstPossibleTransition.setUrl("abbrechen");
-        firstPossibleTransition.setDialogText("Die Abfrage wird abbgebrochen.");
+        firstPossibleTransition.setDialogText("Die Abfrage wird abgebrochen.");
 
         expected.add(firstPossibleTransition);
 
@@ -543,7 +539,7 @@ public class TransitionModelTest {
         firstPossibleTransition.setIndex(3);
         firstPossibleTransition.setButtonName("STORNIEREN");
         firstPossibleTransition.setUrl("abbrechen");
-        firstPossibleTransition.setDialogText("Die Abfrage wird abbgebrochen.");
+        firstPossibleTransition.setDialogText("Die Abfrage wird abgebrochen.");
 
         expected.add(firstPossibleTransition);
 
@@ -579,7 +575,7 @@ public class TransitionModelTest {
         firstPossibleTransition.setIndex(3);
         firstPossibleTransition.setButtonName("STORNIEREN");
         firstPossibleTransition.setUrl("abbrechen");
-        firstPossibleTransition.setDialogText("Die Abfrage wird abbgebrochen.");
+        firstPossibleTransition.setDialogText("Die Abfrage wird abgebrochen.");
 
         expected.add(firstPossibleTransition);
 

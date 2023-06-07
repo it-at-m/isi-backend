@@ -7,7 +7,6 @@ package de.muenchen.isi.security;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -16,17 +15,12 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.annotation.Order;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Component;
-import org.springframework.util.ObjectUtils;
 
 /**
  * This filter logs the username for requests.
@@ -34,18 +28,16 @@ import org.springframework.util.ObjectUtils;
 @Component
 @Order(1)
 @Slf4j
+@RequiredArgsConstructor
 public class RequestResponseLoggingFilter implements Filter {
-
-    @Getter
-    private static final String NAME_UNAUTHENTICATED_USER = "unauthenticated";
-
-    private static final String TOKEN_USER_NAME = "username";
 
     private static final String REQUEST_LOGGING_MODE_ALL = "all";
 
     private static final String REQUEST_LOGGING_MODE_CHANGING = "changing";
 
     private static final List<String> CHANGING_METHODS = Arrays.asList("POST", "PUT", "PATCH", "DELETE");
+
+    private final AuthenticationUtils authenticationUtils;
 
     /**
      * The property or a zero length string if no property is available.
@@ -76,7 +68,7 @@ public class RequestResponseLoggingFilter implements Filter {
         if (this.checkForLogging(httpRequest)) {
             log.info(
                 "User {} executed {} on URI {} with http status {}",
-                getUsername(),
+                authenticationUtils.getUsername(),
                 httpRequest.getMethod(),
                 httpRequest.getRequestURI(),
                 httpResponse.getStatus()
@@ -106,23 +98,5 @@ public class RequestResponseLoggingFilter implements Filter {
                 CHANGING_METHODS.contains(httpServletRequest.getMethod())
             )
         );
-    }
-
-    /**
-     * The method extracts the username out of the {@link Jwt}.
-     *
-     * @return The username or a placeholder if there is no {@link Jwt} available.
-     */
-    public static String getUsername() {
-        String username = null;
-        final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (!ObjectUtils.isEmpty(authentication)) {
-            final var principal = authentication.getPrincipal();
-            if (Objects.equals(Jwt.class, principal.getClass())) {
-                final var jwt = (Jwt) principal;
-                username = jwt.getClaimAsString(TOKEN_USER_NAME);
-            }
-        }
-        return StringUtils.isNotBlank(username) ? username : NAME_UNAUTHENTICATED_USER;
     }
 }

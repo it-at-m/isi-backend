@@ -32,11 +32,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 @ExtendWith(MockitoExtension.class)
-@SpringBootTest(
-    classes = { IsiBackendApplication.class },
-    webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
-    properties = { "tomcat.gracefulshutdown.pre-wait-seconds=0" }
-)
+@SpringBootTest(classes = { IsiBackendApplication.class }, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles(profiles = { TestConstants.SPRING_UNIT_TEST_PROFILE, TestConstants.SPRING_NO_SECURITY_PROFILE })
 @MockitoSettings(strictness = Strictness.LENIENT)
 class AbfrageStatusServiceTest {

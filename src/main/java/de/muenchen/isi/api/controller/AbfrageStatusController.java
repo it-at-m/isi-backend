@@ -42,7 +42,7 @@ public class AbfrageStatusController {
     @GetMapping("{id}/transitions")
     @Transactional(rollbackFor = OptimisticLockingException.class)
     @Operation(
-        summary = "Holt alle möglichen StatusAbfrage Transitions auf Basis der Authorities und des akutellen Status"
+        summary = "Holt alle möglichen StatusAbfrage Transitions auf Basis der Authorities und des aktuellen Status"
     )
     @ApiResponses(
         value = {

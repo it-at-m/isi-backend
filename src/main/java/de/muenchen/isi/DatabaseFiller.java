@@ -161,7 +161,6 @@ public class DatabaseFiller implements CommandLineRunner {
         return this.bauvorhabenRepository.save(bauvorhaben);
     }
 
-
     private void addFoerdermixStaemme() {
         for (final FoerdermixStamm foerdermixStamm : createFoerdermixStaemme()) {
             this.foerdermixStammRepository.save(foerdermixStamm);
@@ -227,6 +226,7 @@ public class DatabaseFiller implements CommandLineRunner {
     private Abfragevariante createAbfragevariante(final int variante) {
         final Abfragevariante original = new Abfragevariante();
         original.setAbfragevariantenNr(1);
+        original.setRelevant(true);
         original.setAbfragevariantenName("Dorf");
         original.setPlanungsrecht(variante == 1 ? Planungsrecht.BPLAN_PARAG_30 : Planungsrecht.BPLAN_PARAG_12);
         original.setGeschossflaecheWohnen(new BigDecimal(variante == 1 ? "1234.56" : "70"));
@@ -261,7 +261,7 @@ public class DatabaseFiller implements CommandLineRunner {
         return baugebiet;
     }
 
-    private  Baurate createBaurate() {
+    private Baurate createBaurate() {
         final Baurate baurate = new Baurate();
         baurate.setJahr(2022);
         baurate.setAnzahlWeGeplant(10);

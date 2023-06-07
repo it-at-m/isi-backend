@@ -50,6 +50,8 @@ public class AbfrageStatusService {
 
     private final StateMachineFactory<StatusAbfrage, StatusAbfrageEvents> stateMachineFactory;
 
+    private final AuthenticationUtils authenticationUtils;
+
     /**
      * Ändert den Status auf {@link StatusAbfrage#OFFEN}.
      *
@@ -313,7 +315,7 @@ public class AbfrageStatusService {
      */
     public List<TransitionModel> getStatusAbfrageEventsBasedOnStateAndAuthorities(final UUID id)
         throws EntityNotFoundException {
-        List<AuthoritiesEnum> authorities = AuthenticationUtils.getUserAuthorities();
+        List<AuthoritiesEnum> authorities = authenticationUtils.getUserAuthorities();
         List<StatusAbfrageEvents> possibleAbfrageEventsBasedOnAuthorities = getStatusAbfrageEventsForAuthorities(
             authorities,
             getAuthoritiesAndEventsMap()
