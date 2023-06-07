@@ -8,6 +8,7 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import lombok.NoArgsConstructor;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.BooleanUtils;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -29,6 +30,10 @@ public class BaurateJahrDistributionValidator
             .map(BaurateDto::getJahr)
             .filter(Objects::nonNull)
             .min(Integer::compareTo);
-        return minJahrBauraten.isEmpty() || value.getRealisierungVon() <= minJahrBauraten.get();
+        return (
+            BooleanUtils.isFalse(value.getTechnical()) ||
+            minJahrBauraten.isEmpty() ||
+            value.getRealisierungVon() <= minJahrBauraten.get()
+        );
     }
 }
