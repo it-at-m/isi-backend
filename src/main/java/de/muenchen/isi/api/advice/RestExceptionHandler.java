@@ -3,6 +3,7 @@ package de.muenchen.isi.api.advice;
 import de.muenchen.isi.api.dto.enums.InformationResponseType;
 import de.muenchen.isi.api.dto.error.InformationResponseDto;
 import de.muenchen.isi.domain.exception.AbfrageStatusNotAllowedException;
+import de.muenchen.isi.domain.exception.BauvorhabenNotReferencedException;
 import de.muenchen.isi.domain.exception.CsvAttributeErrorException;
 import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
@@ -87,6 +88,18 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(EntityIsReferencedException.class)
     public ResponseEntity<Object> handleEntityIsReferencedException(final EntityIsReferencedException ex) {
+        final var httpStatus = HttpStatus.CONFLICT;
+        final var errorResponseDto =
+            this.createInformationResponseDtoWithTraceInformationAndTimestampAndOriginalExceptionNameAndStatusAndMessage(
+                    ex,
+                    httpStatus.value(),
+                    List.of(ex.getMessage())
+                );
+        return ResponseEntity.status(httpStatus).body(errorResponseDto);
+    }
+
+    @ExceptionHandler(BauvorhabenNotReferencedException.class)
+    public ResponseEntity<Object> handleEntityIsReferencedException(final BauvorhabenNotReferencedException ex) {
         final var httpStatus = HttpStatus.CONFLICT;
         final var errorResponseDto =
             this.createInformationResponseDtoWithTraceInformationAndTimestampAndOriginalExceptionNameAndStatusAndMessage(

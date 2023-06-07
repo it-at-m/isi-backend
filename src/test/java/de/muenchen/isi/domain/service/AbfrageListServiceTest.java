@@ -29,11 +29,11 @@ import org.mockito.quality.Strictness;
 @MockitoSettings(strictness = Strictness.LENIENT)
 class AbfrageListServiceTest {
 
-    @Mock
-    private AbfrageService abfrageService;
-
     private final AbfrageListElementDomainMapper abfrageListElementDomainMapper =
         new AbfrageListElementDomainMapperImpl();
+
+    @Mock
+    private AbfrageService abfrageService;
 
     private AbfrageListService abfrageListService;
 

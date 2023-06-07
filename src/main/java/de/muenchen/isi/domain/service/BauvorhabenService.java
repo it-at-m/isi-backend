@@ -10,6 +10,7 @@ import de.muenchen.isi.domain.exception.UniqueViolationException;
 import de.muenchen.isi.domain.mapper.BauvorhabenDomainMapper;
 import de.muenchen.isi.domain.model.AbfrageModel;
 import de.muenchen.isi.domain.model.BauvorhabenModel;
+import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.AbfrageerstellungAbfrageAngelegtModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.InfrastruktureinrichtungModel;
 import de.muenchen.isi.domain.service.filehandling.DokumentService;
 import de.muenchen.isi.infrastructure.repository.BauvorhabenRepository;
@@ -155,8 +156,10 @@ public class BauvorhabenService {
      * @return Die (möglicherweise) geänderte Abfrage.
      * @throws EntityNotFoundException falls das Bauvorhaben mit der gegebenen ID nicht gefunden wurde.
      */
-    public AbfrageModel assignBauvorhabenToAbfrage(@Nullable final UUID bauvorhabenId, final AbfrageModel abfrage)
-        throws EntityNotFoundException {
+    public AbfrageerstellungAbfrageAngelegtModel assignBauvorhabenToAbfrage(
+        @Nullable final UUID bauvorhabenId,
+        final AbfrageerstellungAbfrageAngelegtModel abfrage
+    ) throws EntityNotFoundException {
         if (bauvorhabenId != null) {
             final var model = this.getBauvorhabenById(bauvorhabenId);
             abfrage.setBauvorhaben(model);
