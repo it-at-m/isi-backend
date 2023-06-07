@@ -1,7 +1,7 @@
 package de.muenchen.isi.api.validation;
 
-import de.muenchen.isi.api.dto.AbfragevarianteDto;
 import de.muenchen.isi.api.dto.BaugebietDto;
+import de.muenchen.isi.api.dto.abfrageAbfrageerstellungAngelegt.AbfrageerstellungAbfragevarianteAngelegtDto;
 import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -15,7 +15,8 @@ import org.springframework.stereotype.Component;
 @Component
 @NoArgsConstructor
 public class GeschossflaecheWohnenDistributionValidator
-    implements ConstraintValidator<GeschossflaecheWohnenDistributionValid, AbfragevarianteDto> {
+    implements
+        ConstraintValidator<GeschossflaecheWohnenDistributionValid, AbfrageerstellungAbfragevarianteAngelegtDto> {
 
     /**
      * Prüft, ob die Summe der über die Baugebiete verteilten Geschossfläche Wohnen der Geschossfläche Wohnen in der Abfragevariante entspricht.
@@ -25,7 +26,10 @@ public class GeschossflaecheWohnenDistributionValidator
      * @return true falls die Geschossfläche Wohnen in der Abfragevariante der Summe der Geschossfläche Wohnen in den Baugebieten entspricht oder falls keine Baugebiete vorhanden sind. Andernfalls false.
      */
     @Override
-    public boolean isValid(final AbfragevarianteDto value, final ConstraintValidatorContext context) {
+    public boolean isValid(
+        final AbfrageerstellungAbfragevarianteAngelegtDto value,
+        final ConstraintValidatorContext context
+    ) {
         final boolean isValid;
         final Collection<BaugebietDto> baugebiete = CollectionUtils
             .emptyIfNull(value.getBauabschnitte())

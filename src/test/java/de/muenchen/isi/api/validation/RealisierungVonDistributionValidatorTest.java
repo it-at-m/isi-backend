@@ -3,10 +3,10 @@ package de.muenchen.isi.api.validation;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
-import de.muenchen.isi.api.dto.AbfragevarianteDto;
 import de.muenchen.isi.api.dto.BauabschnittDto;
 import de.muenchen.isi.api.dto.BaugebietDto;
 import de.muenchen.isi.api.dto.BaurateDto;
+import de.muenchen.isi.api.dto.abfrageAbfrageerstellungAngelegt.AbfrageerstellungAbfragevarianteAngelegtDto;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 
@@ -17,7 +17,7 @@ class RealisierungVonDistributionValidatorTest {
 
     @Test
     void isValidForBaugebiete() {
-        var abfragevariante = new AbfragevarianteDto();
+        var abfragevariante = new AbfrageerstellungAbfragevarianteAngelegtDto();
         abfragevariante.setRealisierungVon(2018);
 
         var baugebiet1 = new BaugebietDto();
@@ -42,7 +42,7 @@ class RealisierungVonDistributionValidatorTest {
 
         // --
 
-        abfragevariante = new AbfragevarianteDto();
+        abfragevariante = new AbfrageerstellungAbfragevarianteAngelegtDto();
         abfragevariante.setRealisierungVon(2017);
 
         baugebiet1 = new BaugebietDto();
@@ -67,7 +67,7 @@ class RealisierungVonDistributionValidatorTest {
 
         // --
 
-        abfragevariante = new AbfragevarianteDto();
+        abfragevariante = new AbfrageerstellungAbfragevarianteAngelegtDto();
         abfragevariante.setRealisierungVon(2019);
 
         baugebiet1 = new BaugebietDto();
@@ -92,7 +92,7 @@ class RealisierungVonDistributionValidatorTest {
 
         // --
 
-        abfragevariante = new AbfragevarianteDto();
+        abfragevariante = new AbfrageerstellungAbfragevarianteAngelegtDto();
         abfragevariante.setRealisierungVon(2018);
 
         baugebiet1 = new BaugebietDto();
@@ -117,7 +117,7 @@ class RealisierungVonDistributionValidatorTest {
 
         // --
 
-        abfragevariante = new AbfragevarianteDto();
+        abfragevariante = new AbfrageerstellungAbfragevarianteAngelegtDto();
         abfragevariante.setRealisierungVon(null);
 
         baugebiet1 = new BaugebietDto();
@@ -142,7 +142,7 @@ class RealisierungVonDistributionValidatorTest {
 
         // --
 
-        abfragevariante = new AbfragevarianteDto();
+        abfragevariante = new AbfrageerstellungAbfragevarianteAngelegtDto();
         abfragevariante.setRealisierungVon(null);
 
         assertThat(this.realisierungVonDistributionValidator.isValid(abfragevariante, null), is(true));
@@ -150,7 +150,7 @@ class RealisierungVonDistributionValidatorTest {
 
     @Test
     void isValidForBauraten() {
-        var abfragevariante = new AbfragevarianteDto();
+        var abfragevariante = new AbfrageerstellungAbfragevarianteAngelegtDto();
         abfragevariante.setRealisierungVon(2018);
 
         var baurate1 = new BaurateDto();
@@ -181,7 +181,7 @@ class RealisierungVonDistributionValidatorTest {
 
         // --
 
-        abfragevariante = new AbfragevarianteDto();
+        abfragevariante = new AbfrageerstellungAbfragevarianteAngelegtDto();
         abfragevariante.setRealisierungVon(2017);
 
         baurate1 = new BaurateDto();
@@ -212,7 +212,7 @@ class RealisierungVonDistributionValidatorTest {
 
         // --
 
-        abfragevariante = new AbfragevarianteDto();
+        abfragevariante = new AbfrageerstellungAbfragevarianteAngelegtDto();
         abfragevariante.setRealisierungVon(2019);
 
         baurate1 = new BaurateDto();
@@ -243,7 +243,7 @@ class RealisierungVonDistributionValidatorTest {
 
         // --
 
-        abfragevariante = new AbfragevarianteDto();
+        abfragevariante = new AbfrageerstellungAbfragevarianteAngelegtDto();
         abfragevariante.setRealisierungVon(2018);
 
         baurate1 = new BaurateDto();
@@ -274,7 +274,7 @@ class RealisierungVonDistributionValidatorTest {
 
         // --
 
-        abfragevariante = new AbfragevarianteDto();
+        abfragevariante = new AbfrageerstellungAbfragevarianteAngelegtDto();
         abfragevariante.setRealisierungVon(null);
 
         baurate1 = new BaurateDto();
@@ -306,7 +306,7 @@ class RealisierungVonDistributionValidatorTest {
 
     @Test
     void isValidForBaugebietAndBauraten() {
-        var abfragevariante = new AbfragevarianteDto();
+        var abfragevariante = new AbfrageerstellungAbfragevarianteAngelegtDto();
         abfragevariante.setRealisierungVon(2018);
 
         var baurate1 = new BaurateDto();
@@ -338,7 +338,7 @@ class RealisierungVonDistributionValidatorTest {
 
         // --
 
-        abfragevariante = new AbfragevarianteDto();
+        abfragevariante = new AbfrageerstellungAbfragevarianteAngelegtDto();
         abfragevariante.setRealisierungVon(2017);
 
         baurate1 = new BaurateDto();
@@ -370,7 +370,7 @@ class RealisierungVonDistributionValidatorTest {
 
         // --
 
-        abfragevariante = new AbfragevarianteDto();
+        abfragevariante = new AbfrageerstellungAbfragevarianteAngelegtDto();
         abfragevariante.setRealisierungVon(2019);
 
         baurate1 = new BaurateDto();

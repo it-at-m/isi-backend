@@ -1,8 +1,8 @@
 package de.muenchen.isi.api.validation;
 
-import de.muenchen.isi.api.dto.AbfragevarianteDto;
 import de.muenchen.isi.api.dto.BaugebietDto;
 import de.muenchen.isi.api.dto.BaurateDto;
+import de.muenchen.isi.api.dto.abfrageAbfrageerstellungAngelegt.AbfrageerstellungAbfragevarianteAngelegtDto;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 @Component
 @NoArgsConstructor
 public class RealisierungVonDistributionValidator
-    implements ConstraintValidator<RealisierungVonDistributionValid, AbfragevarianteDto> {
+    implements ConstraintValidator<RealisierungVonDistributionValid, AbfrageerstellungAbfragevarianteAngelegtDto> {
 
     /**
      * @param value object to validate
@@ -24,7 +24,10 @@ public class RealisierungVonDistributionValidator
      * @return true falls das Realisierungsjahr der Abfragevariante vor oder gleich der Realisierungsjahre der Baugebiete oder einer Baurate.
      */
     @Override
-    public boolean isValid(final AbfragevarianteDto value, final ConstraintValidatorContext context) {
+    public boolean isValid(
+        final AbfrageerstellungAbfragevarianteAngelegtDto value,
+        final ConstraintValidatorContext context
+    ) {
         final Optional<Integer> minJahrBaugebiete = CollectionUtils
             .emptyIfNull(value.getBauabschnitte())
             .stream()

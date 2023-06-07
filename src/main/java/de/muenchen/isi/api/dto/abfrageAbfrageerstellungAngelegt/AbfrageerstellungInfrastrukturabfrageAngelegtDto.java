@@ -1,5 +1,6 @@
 package de.muenchen.isi.api.dto.abfrageAbfrageerstellungAngelegt;
 
+import de.muenchen.isi.api.validation.GeschossflaecheWohnenSobonUrsaechlichValid;
 import de.muenchen.isi.api.validation.NotUnspecified;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonVerfahrensgrundsaetzeJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
@@ -13,6 +14,7 @@ import lombok.ToString;
 
 @Data
 @ToString(callSuper = true)
+@GeschossflaecheWohnenSobonUrsaechlichValid
 public class AbfrageerstellungInfrastrukturabfrageAngelegtDto {
 
     private Long version;
