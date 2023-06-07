@@ -132,6 +132,28 @@ class GeschossflaecheWohnenDistributionValidatorTest {
         // --
 
         abfragevariante = new AbfrageerstellungAbfragevarianteAngelegtDto();
+        abfragevariante.setGesamtanzahlWe(150);
+        abfragevariante.setGeschossflaecheWohnen(BigDecimal.valueOf(150));
+
+        baugebiet1 = new BaugebietDto();
+        baugebiet1.setGeschossflaecheWohnen(BigDecimal.valueOf(49));
+        baugebiet2 = new BaugebietDto();
+        baugebiet2.setGeschossflaecheWohnen(BigDecimal.valueOf(40));
+        baugebiet3 = new BaugebietDto();
+        baugebiet3.setGeschossflaecheWohnen(BigDecimal.valueOf(60));
+
+        bauabschnitt1 = new BauabschnittDto();
+        bauabschnitt1.setBaugebiete(List.of(baugebiet1, baugebiet2));
+        bauabschnitt2 = new BauabschnittDto();
+        bauabschnitt2.setBaugebiete(List.of(baugebiet3));
+
+        abfragevariante.setBauabschnitte(List.of(bauabschnitt1, bauabschnitt2));
+
+        assertThat(this.geschossflaecheWohnenDistributionValidator.isValid(abfragevariante, null), is(true));
+
+        // --
+
+        abfragevariante = new AbfrageerstellungAbfragevarianteAngelegtDto();
         abfragevariante.setGeschossflaecheWohnen(BigDecimal.valueOf(149));
 
         baugebiet1 = new BaugebietDto();

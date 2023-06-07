@@ -36,7 +36,7 @@ public class GeschossflaecheWohnenDistributionValidator
             .stream()
             .flatMap(bauabschnittDto -> CollectionUtils.emptyIfNull(bauabschnittDto.getBaugebiete()).stream())
             .collect(Collectors.toList());
-        if (baugebiete.isEmpty()) {
+        if (baugebiete.isEmpty() || ObjectUtils.isNotEmpty(value.getGesamtanzahlWe())) {
             isValid = true;
         } else {
             final BigDecimal geschossflaecheWohnenAbfragevariante = ObjectUtils.isEmpty(
