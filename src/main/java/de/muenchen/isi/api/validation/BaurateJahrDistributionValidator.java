@@ -20,7 +20,7 @@ public class BaurateJahrDistributionValidator
      *
      * @param value object to validate
      * @param context context in which the constraint is evaluated
-     * @return true falls das Realisierungsjahr des Baugebiets vor oder gleich der Realisierungsjahre der Bauraten ist.
+     * @return true falls das Realisierungsjahr des  nicht-technischen Baugebiets vor oder gleich der Realisierungsjahre der Bauraten ist.
      */
     @Override
     public boolean isValid(final BaugebietDto value, final ConstraintValidatorContext context) {
@@ -31,7 +31,7 @@ public class BaurateJahrDistributionValidator
             .filter(Objects::nonNull)
             .min(Integer::compareTo);
         return (
-            BooleanUtils.isFalse(value.getTechnical()) ||
+            BooleanUtils.isNotFalse(value.getTechnical()) ||
             minJahrBauraten.isEmpty() ||
             value.getRealisierungVon() <= minJahrBauraten.get()
         );
