@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;
 
-public abstract class DistributionValidator {
+public class DistributionValidator {
 
     public List<BaugebietDto> getNonTechnicalBaugebiete(
         final AbfrageerstellungAbfragevarianteAngelegtDto abfragevariante
