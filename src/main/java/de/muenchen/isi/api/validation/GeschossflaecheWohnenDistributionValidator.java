@@ -20,11 +20,14 @@ public class GeschossflaecheWohnenDistributionValidator
         ConstraintValidator<GeschossflaecheWohnenDistributionValid, AbfrageerstellungAbfragevarianteAngelegtDto> {
 
     /**
-     * Prüft, ob die Summe der über die Baugebiete verteilten Geschossfläche Wohnen der Geschossfläche Wohnen in der Abfragevariante entspricht.
+     * Validiert für die im Parameter gegebene Abfragevariante die über Baugebiete bzw. Bauraten verteilte Geschossfläche Wohnen.
      *
      * @param value als AbfragevarianteDto
      * @param context in welchem die Validierung stattfindet
-     * @return true falls die Geschossfläche Wohnen in der Abfragevariante der Summe der Geschossfläche Wohnen in den Baugebieten entspricht oder falls keine Baugebiete vorhanden sind. Andernfalls false.
+     * @return true, falls die Geschossfläche Wohnen in der Abfragevariante der Summe der Geschossfläche Wohnen in den nicht technischen Baugebieten entspricht.
+     * True, falls die Geschossfläche Wohnen in der Abfragevariante der Summe der Geschossfläche Wohnen in den Bauraten für technische Baugebiete entspricht.
+     * True, falls keine Baugebiete vorhanden sind.
+     * Andernfalls false.
      */
     @Override
     public boolean isValid(

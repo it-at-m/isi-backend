@@ -18,11 +18,14 @@ public class WohneinheitenDistributionValidator
     implements ConstraintValidator<WohneinheitenDistributionValid, AbfrageerstellungAbfragevarianteAngelegtDto> {
 
     /**
-     * Prüft, ob die Summe der über die Baugebiete verteilten Wohneinheiten der Anzahl der Wohneinheiten in der Abfragevariante entspricht.
+     * Validiert für die im Parameter gegebene Abfragevariante die über Baugebiete bzw. Bauraten verteilten Wohneinheiten.
      *
      * @param value als AbfragevarianteDto
      * @param context in welchem die Validierung stattfindet
-     * @return true falls die Anzahl der Wohneinheiten in der Abfragevariante der Summe der Wohneinheiten in den Baugebieten entspricht oder falls keine Baugebiete vorhanden sind. Andernfalls false.
+     * @return true, falls die Anzahl der Wohneinheiten in der Abfragevariante der Summe der Wohneinheiten in den nicht technischen Baugebieten entspricht.
+     * True, falls die Anzahl der Wohneinheiten in der Abfragevariante der Summe der Wohneinheiten in den Bauraten für technische Baugebiete entspricht.
+     * True, falls keine Baugebiete vorhanden sind.
+     * Andernfalls false.
      */
     @Override
     public boolean isValid(
