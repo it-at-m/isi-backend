@@ -314,7 +314,7 @@ class WohneinheitenDistributionValidatorTest {
         // --
 
         abfragevariante = new AbfrageerstellungAbfragevarianteAngelegtDto();
-        abfragevariante.setGesamtanzahlWe(151);
+        abfragevariante.setGesamtanzahlWe(150);
 
         baugebiet1 = new BaugebietDto();
         baugebiet1.setTechnical(true);
