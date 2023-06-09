@@ -3,19 +3,19 @@ package de.muenchen.isi.api.validation;
 import de.muenchen.isi.api.dto.BaugebietDto;
 import de.muenchen.isi.api.dto.BaurateDto;
 import de.muenchen.isi.api.dto.abfrageAbfrageerstellungAngelegt.AbfrageerstellungAbfragevarianteAngelegtDto;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.function.Predicate;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import lombok.NoArgsConstructor;
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.stereotype.Component;
 
 @Component
 @NoArgsConstructor
 public class RealisierungVonDistributionValidator
+    extends DistributionValidator
     implements ConstraintValidator<RealisierungVonDistributionValid, AbfrageerstellungAbfragevarianteAngelegtDto> {
 
     /**
@@ -28,34 +28,32 @@ public class RealisierungVonDistributionValidator
         final AbfrageerstellungAbfragevarianteAngelegtDto value,
         final ConstraintValidatorContext context
     ) {
-        final Optional<Integer> minJahrBaugebiete = CollectionUtils
-            .emptyIfNull(value.getBauabschnitte())
-            .stream()
-            .flatMap(bauabschnitt -> CollectionUtils.emptyIfNull(bauabschnitt.getBaugebiete()).stream())
-            .filter(Predicate.not(BaugebietDto::getTechnical))
-            .map(BaugebietDto::getRealisierungVon)
-            .filter(Objects::nonNull)
-            .min(Integer::compareTo);
+        boolean isValid = true;
 
-        final Optional<Integer> minJahrBauraten = CollectionUtils
-            .emptyIfNull(value.getBauabschnitte())
-            .stream()
-            .flatMap(bauabschnitt -> CollectionUtils.emptyIfNull(bauabschnitt.getBaugebiete()).stream())
-            .filter(BaugebietDto::getTechnical)
-            .flatMap(baugebiet -> CollectionUtils.emptyIfNull(baugebiet.getBauraten()).stream())
-            .map(BaurateDto::getJahr)
-            .filter(Objects::nonNull)
-            .min(Integer::compareTo);
+        final List<BaugebietDto> nonTechnicalBaugebiete = getNonTechnicalBaugebiete(value);
+        final List<BaurateDto> bauratenFromAllTechnicalBaugebiete = getBauratenFromAllTechnicalBaugebiete(value);
 
-        final boolean isValid;
-        if (minJahrBaugebiete.isEmpty() && minJahrBauraten.isEmpty()) {
-            isValid = true;
-        } else if (minJahrBaugebiete.isPresent() && minJahrBauraten.isEmpty()) {
-            isValid = value.getRealisierungVon() <= minJahrBaugebiete.get();
-        } else if (minJahrBaugebiete.isEmpty() && minJahrBauraten.isPresent()) {
-            isValid = value.getRealisierungVon() <= minJahrBauraten.get();
-        } else {
-            isValid = value.getRealisierungVon() <= NumberUtils.min(minJahrBaugebiete.get(), minJahrBauraten.get());
+        final boolean containsNonTechnicalBaugebiet = CollectionUtils.isNotEmpty(nonTechnicalBaugebiete);
+        final boolean containsBauratenInTechnicalBaugebiet = CollectionUtils.isNotEmpty(
+            bauratenFromAllTechnicalBaugebiete
+        );
+
+        if (containsNonTechnicalBaugebiet) {
+            final Optional<Integer> minJahrBaugebiete = nonTechnicalBaugebiete
+                .stream()
+                .map(BaugebietDto::getRealisierungVon)
+                .filter(Objects::nonNull)
+                .min(Integer::compareTo);
+
+            isValid = minJahrBaugebiete.isEmpty() || value.getRealisierungVon().compareTo(minJahrBaugebiete.get()) <= 0;
+        } else if (containsBauratenInTechnicalBaugebiet) {
+            final Optional<Integer> minJahrBauraten = bauratenFromAllTechnicalBaugebiete
+                .stream()
+                .map(BaurateDto::getJahr)
+                .filter(Objects::nonNull)
+                .min(Integer::compareTo);
+
+            isValid = minJahrBauraten.isEmpty() || value.getRealisierungVon().compareTo(minJahrBauraten.get()) <= 0;
         }
         return isValid;
     }

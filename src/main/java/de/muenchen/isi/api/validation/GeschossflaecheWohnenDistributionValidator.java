@@ -1,18 +1,21 @@
 package de.muenchen.isi.api.validation;
 
+import de.muenchen.isi.api.dto.BaugebietDto;
+import de.muenchen.isi.api.dto.BaurateDto;
 import de.muenchen.isi.api.dto.abfrageAbfrageerstellungAngelegt.AbfrageerstellungAbfragevarianteAngelegtDto;
 import java.math.BigDecimal;
+import java.util.List;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import lombok.NoArgsConstructor;
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.stereotype.Component;
 
 @Component
 @NoArgsConstructor
 public class GeschossflaecheWohnenDistributionValidator
+    extends DistributionValidator
     implements
         ConstraintValidator<GeschossflaecheWohnenDistributionValid, AbfrageerstellungAbfragevarianteAngelegtDto> {
 
@@ -30,31 +33,21 @@ public class GeschossflaecheWohnenDistributionValidator
     ) {
         boolean isValid = true;
 
-        final boolean containsNonTechnicalBaugebiet = CollectionUtils
-            .emptyIfNull(value.getBauabschnitte())
-            .stream()
-            .flatMap(bauabschnitt -> CollectionUtils.emptyIfNull(bauabschnitt.getBaugebiete()).stream())
-            .anyMatch(baugebiet -> BooleanUtils.isFalse(baugebiet.getTechnical()));
+        final List<BaugebietDto> nonTechnicalBaugebiete = getNonTechnicalBaugebiete(value);
+        final List<BaurateDto> bauratenFromAllTechnicalBaugebiete = getBauratenFromAllTechnicalBaugebiete(value);
 
-        final boolean containsBauratenInTechnicalBaugebiet = CollectionUtils
-            .emptyIfNull(value.getBauabschnitte())
-            .stream()
-            .flatMap(bauabschnitt -> CollectionUtils.emptyIfNull(bauabschnitt.getBaugebiete()).stream())
-            .filter(baugebiet -> BooleanUtils.isTrue(baugebiet.getTechnical()))
-            .flatMap(baugebiet -> CollectionUtils.emptyIfNull(baugebiet.getBauraten()).stream())
-            .findFirst()
-            .isPresent();
+        final boolean containsNonTechnicalBaugebiet = CollectionUtils.isNotEmpty(nonTechnicalBaugebiete);
+        final boolean containsBauratenInTechnicalBaugebiet = CollectionUtils.isNotEmpty(
+            bauratenFromAllTechnicalBaugebiete
+        );
 
-        if (containsNonTechnicalBaugebiet || containsBauratenInTechnicalBaugebiet) {
-            final var geschossflaecheWohnenAbfragevariante = ObjectUtils.isEmpty(value.getGeschossflaecheWohnen())
-                ? BigDecimal.ZERO
-                : value.getGeschossflaecheWohnen();
+        final var geschossflaecheWohnenAbfragevariante = ObjectUtils.isEmpty(value.getGeschossflaecheWohnen())
+            ? BigDecimal.ZERO
+            : value.getGeschossflaecheWohnen();
 
-            final var sumVerteilteGeschossflaecheWohnenBaugebiete = CollectionUtils
-                .emptyIfNull(value.getBauabschnitte())
+        if (containsNonTechnicalBaugebiet) {
+            final var sumVerteilteGeschossflaecheWohnenBaugebiete = nonTechnicalBaugebiete
                 .stream()
-                .flatMap(bauabschnitt -> CollectionUtils.emptyIfNull(bauabschnitt.getBaugebiete()).stream())
-                .filter(baugebiet -> BooleanUtils.isFalse(baugebiet.getTechnical()))
                 .map(baugebiet ->
                     ObjectUtils.isEmpty(baugebiet.getGeschossflaecheWohnen())
                         ? BigDecimal.ZERO
@@ -62,12 +55,10 @@ public class GeschossflaecheWohnenDistributionValidator
                 )
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-            final var sumVerteilteGeschossflaecheWohnenBauraten = CollectionUtils
-                .emptyIfNull(value.getBauabschnitte())
+            isValid = sumVerteilteGeschossflaecheWohnenBaugebiete.compareTo(geschossflaecheWohnenAbfragevariante) == 0;
+        } else if (containsBauratenInTechnicalBaugebiet) {
+            final var sumVerteilteGeschossflaecheWohnenBauraten = bauratenFromAllTechnicalBaugebiete
                 .stream()
-                .flatMap(bauabschnitt -> CollectionUtils.emptyIfNull(bauabschnitt.getBaugebiete()).stream())
-                .filter(baugebiet -> BooleanUtils.isTrue(baugebiet.getTechnical()))
-                .flatMap(baugebiet -> CollectionUtils.emptyIfNull(baugebiet.getBauraten()).stream())
                 .map(baurate ->
                     ObjectUtils.isEmpty(baurate.getGeschossflaecheWohnenGeplant())
                         ? BigDecimal.ZERO
@@ -75,11 +66,7 @@ public class GeschossflaecheWohnenDistributionValidator
                 )
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-            final var sumVerteilteGeschossflaecheWohnen = sumVerteilteGeschossflaecheWohnenBaugebiete.max(
-                sumVerteilteGeschossflaecheWohnenBauraten
-            );
-
-            isValid = sumVerteilteGeschossflaecheWohnen.compareTo(geschossflaecheWohnenAbfragevariante) == 0;
+            isValid = sumVerteilteGeschossflaecheWohnenBauraten.compareTo(geschossflaecheWohnenAbfragevariante) == 0;
         }
         return isValid;
     }

@@ -1,17 +1,20 @@
 package de.muenchen.isi.api.validation;
 
+import de.muenchen.isi.api.dto.BaugebietDto;
+import de.muenchen.isi.api.dto.BaurateDto;
 import de.muenchen.isi.api.dto.abfrageAbfrageerstellungAngelegt.AbfrageerstellungAbfragevarianteAngelegtDto;
+import java.util.List;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import lombok.NoArgsConstructor;
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.stereotype.Component;
 
 @Component
 @NoArgsConstructor
 public class WohneinheitenDistributionValidator
+    extends DistributionValidator
     implements ConstraintValidator<WohneinheitenDistributionValid, AbfrageerstellungAbfragevarianteAngelegtDto> {
 
     /**
@@ -28,50 +31,33 @@ public class WohneinheitenDistributionValidator
     ) {
         boolean isValid = true;
 
-        final boolean containsNonTechnicalBaugebiet = CollectionUtils
-            .emptyIfNull(value.getBauabschnitte())
-            .stream()
-            .flatMap(bauabschnitt -> CollectionUtils.emptyIfNull(bauabschnitt.getBaugebiete()).stream())
-            .anyMatch(baugebiet -> BooleanUtils.isFalse(baugebiet.getTechnical()));
+        final List<BaugebietDto> nonTechnicalBaugebiete = getNonTechnicalBaugebiete(value);
+        final List<BaurateDto> bauratenFromAllTechnicalBaugebiete = getBauratenFromAllTechnicalBaugebiete(value);
 
-        final boolean containsBauratenInTechnicalBaugebiet = CollectionUtils
-            .emptyIfNull(value.getBauabschnitte())
-            .stream()
-            .flatMap(bauabschnitt -> CollectionUtils.emptyIfNull(bauabschnitt.getBaugebiete()).stream())
-            .filter(baugebiet -> BooleanUtils.isTrue(baugebiet.getTechnical()))
-            .flatMap(baugebiet -> CollectionUtils.emptyIfNull(baugebiet.getBauraten()).stream())
-            .findFirst()
-            .isPresent();
+        final boolean containsNonTechnicalBaugebiet = CollectionUtils.isNotEmpty(nonTechnicalBaugebiete);
+        final boolean containsBauratenInTechnicalBaugebiet = CollectionUtils.isNotEmpty(
+            bauratenFromAllTechnicalBaugebiete
+        );
 
-        if (containsNonTechnicalBaugebiet || containsBauratenInTechnicalBaugebiet) {
-            final var wohneinheitenAbfragevariante = ObjectUtils.isEmpty(value.getGesamtanzahlWe())
-                ? 0
-                : value.getGesamtanzahlWe();
+        final var wohneinheitenAbfragevariante = ObjectUtils.isEmpty(value.getGesamtanzahlWe())
+            ? 0
+            : value.getGesamtanzahlWe();
 
-            final var sumVerteilteWohneinheitenBaugebiete = CollectionUtils
-                .emptyIfNull(value.getBauabschnitte())
+        if (containsNonTechnicalBaugebiet) {
+            final var sumVerteilteWohneinheitenBaugebiete = nonTechnicalBaugebiete
                 .stream()
-                .flatMap(bauabschnitt -> CollectionUtils.emptyIfNull(bauabschnitt.getBaugebiete()).stream())
-                .filter(baugebiet -> BooleanUtils.isFalse(baugebiet.getTechnical()))
                 .map(baugebiet -> ObjectUtils.isEmpty(baugebiet.getGesamtanzahlWe()) ? 0 : baugebiet.getGesamtanzahlWe()
                 )
                 .reduce(0, Integer::sum);
 
-            final var sumVerteilteWohneinheitenBauraten = CollectionUtils
-                .emptyIfNull(value.getBauabschnitte())
+            isValid = wohneinheitenAbfragevariante == sumVerteilteWohneinheitenBaugebiete;
+        } else if (containsBauratenInTechnicalBaugebiet) {
+            final var sumVerteilteWohneinheitenBauraten = bauratenFromAllTechnicalBaugebiete
                 .stream()
-                .flatMap(bauabschnitt -> CollectionUtils.emptyIfNull(bauabschnitt.getBaugebiete()).stream())
-                .filter(baugebiet -> BooleanUtils.isTrue(baugebiet.getTechnical()))
-                .flatMap(baugebiet -> CollectionUtils.emptyIfNull(baugebiet.getBauraten()).stream())
                 .map(baurate -> ObjectUtils.isEmpty(baurate.getAnzahlWeGeplant()) ? 0 : baurate.getAnzahlWeGeplant())
                 .reduce(0, Integer::sum);
 
-            final var sumVerteilteWohneinheiten = Integer.max(
-                sumVerteilteWohneinheitenBaugebiete,
-                sumVerteilteWohneinheitenBauraten
-            );
-
-            isValid = wohneinheitenAbfragevariante == sumVerteilteWohneinheiten;
+            isValid = wohneinheitenAbfragevariante == sumVerteilteWohneinheitenBauraten;
         }
         return isValid;
     }

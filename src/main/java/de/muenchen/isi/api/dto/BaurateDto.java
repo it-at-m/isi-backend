@@ -5,6 +5,7 @@
 package de.muenchen.isi.api.dto;
 
 import de.muenchen.isi.api.validation.HasFoerdermixRequiredSum;
+import de.muenchen.isi.api.validation.JahrDistributionValid;
 import java.math.BigDecimal;
 import javax.validation.Valid;
 import javax.validation.constraints.Max;
@@ -17,6 +18,7 @@ import lombok.ToString;
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
+@JahrDistributionValid
 public class BaurateDto extends BaseEntityDto {
 
     @NotNull
