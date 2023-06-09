@@ -31,6 +31,10 @@ public class GeschossflaecheWohnenDistributionValidator
         final AbfrageerstellungAbfragevarianteAngelegtDto value,
         final ConstraintValidatorContext context
     ) {
+        if (ObjectUtils.isNotEmpty(value.getGesamtanzahlWe())) {
+            return true;
+        }
+
         boolean isValid = true;
 
         final List<BaugebietDto> nonTechnicalBaugebiete = getNonTechnicalBaugebiete(value);
