@@ -1,5 +1,6 @@
 package de.muenchen.isi.api.dto;
 
+import de.muenchen.isi.api.validation.JahrDistributionValid;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.BaugebietTyp;
 import java.math.BigDecimal;
 import java.util.List;
@@ -17,6 +18,7 @@ import lombok.ToString;
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
+@JahrDistributionValid
 public class BaugebietDto extends BaseEntityDto {
 
     @NotBlank
