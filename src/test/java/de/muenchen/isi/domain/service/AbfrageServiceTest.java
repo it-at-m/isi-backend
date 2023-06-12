@@ -333,7 +333,7 @@ class AbfrageServiceTest {
 
         final var entityToSave = new Infrastrukturabfrage();
         entityToSave.setId(uuid);
-        entityInDb.setVersion(0L);
+        entityToSave.setVersion(0L);
         final var abfrageToSave = new Abfrage();
         abfrageToSave.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
         abfrageToSave.setNameAbfrage("hallo");
@@ -364,15 +364,15 @@ class AbfrageServiceTest {
         final var result =
             this.abfrageService.patchAbfrageInBearbeitungSachbearbeitung(infrastrukturabfrageRequestModel, uuid);
 
-        final var entityExpected = new Infrastrukturabfrage();
+        final var entityExpected = new InfrastrukturabfrageModel();
         entityExpected.setId(uuid);
         entityExpected.setVersion(1L);
-        final var abfrageExpected = new Abfrage();
+        final var abfrageExpected = new AbfrageModel();
         abfrageExpected.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
         abfrageExpected.setNameAbfrage("hallo");
         entityExpected.setAbfrage(abfrageExpected);
-        final var abfragevariante1Expected = new Abfragevariante();
-        abfragevariante1Expected.setId(UUID.randomUUID());
+        final var abfragevariante1Expected = new AbfragevarianteModel();
+        abfragevariante1Expected.setId(abfragevariante1Saved.getId());
         abfragevariante1Expected.setAbfragevariantenNr(1);
         abfragevariante1Expected.setAbfragevariantenName("Abfragevariante 1");
         entityExpected.setAbfragevariantenSachbearbeitung(List.of(abfragevariante1Expected));
