@@ -26,6 +26,8 @@ import de.muenchen.isi.domain.model.InfrastrukturabfrageModel;
 import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.AbfrageerstellungAbfrageAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.AbfrageerstellungAbfragevarianteAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.AbfrageerstellungInfrastrukturabfrageAngelegtModel;
+import de.muenchen.isi.domain.model.abfrageSachbearbeitungInBearbeitungSachbearbeitung.SachbearbeitungAbfragevarianteInBearbeitungSachbearbeitungModel;
+import de.muenchen.isi.domain.model.abfrageSachbearbeitungInBearbeitungSachbearbeitung.SachbearbeitungInfrastrukturabfrageInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.domain.service.filehandling.DokumentService;
 import de.muenchen.isi.infrastructure.entity.Abfrage;
 import de.muenchen.isi.infrastructure.entity.Abfragevariante;
@@ -299,6 +301,83 @@ class AbfrageServiceTest {
                 Mockito.isNull(),
                 Mockito.isNull()
             );
+    }
+
+    @Test
+    void patchAbfrageInBearbeitungSachbearbeitung()
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException {
+        final var uuid = UUID.randomUUID();
+
+        final var infrastrukturabfrageRequestModel =
+            new SachbearbeitungInfrastrukturabfrageInBearbeitungSachbearbeitungModel();
+        infrastrukturabfrageRequestModel.setVersion(0L);
+
+        final var abfragevarianteSachbearbeitung =
+            new SachbearbeitungAbfragevarianteInBearbeitungSachbearbeitungModel();
+        abfragevarianteSachbearbeitung.setAbfragevariantenNr(1);
+        abfragevarianteSachbearbeitung.setAbfragevariantenName("Abfragevariante 1");
+
+        infrastrukturabfrageRequestModel.setAbfragevariantenSachbearbeitung(List.of(abfragevarianteSachbearbeitung));
+
+        final var entityInDb = new Infrastrukturabfrage();
+        entityInDb.setId(uuid);
+        entityInDb.setVersion(0L);
+        final var abfrage = new Abfrage();
+        abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+        abfrage.setNameAbfrage("hallo");
+        entityInDb.setAbfrage(abfrage);
+
+        Mockito
+            .when(this.infrastrukturabfrageRepository.findById(entityInDb.getId()))
+            .thenReturn(Optional.of(entityInDb));
+
+        final var entityToSave = new Infrastrukturabfrage();
+        entityToSave.setId(uuid);
+        entityInDb.setVersion(0L);
+        final var abfrageToSave = new Abfrage();
+        abfrageToSave.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+        abfrageToSave.setNameAbfrage("hallo");
+        entityToSave.setAbfrage(abfrageToSave);
+        final var abfragevariante1ToSave = new Abfragevariante();
+        abfragevariante1ToSave.setAbfragevariantenNr(1);
+        abfragevariante1ToSave.setAbfragevariantenName("Abfragevariante 1");
+        entityToSave.setAbfragevariantenSachbearbeitung(List.of(abfragevariante1ToSave));
+
+        final var entitySaved = new Infrastrukturabfrage();
+        entitySaved.setId(uuid);
+        entitySaved.setVersion(1L);
+        final var abfrageSaved = new Abfrage();
+        abfrageSaved.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+        abfrageSaved.setNameAbfrage("hallo");
+        entitySaved.setAbfrage(abfrageSaved);
+        final var abfragevariante1Saved = new Abfragevariante();
+        abfragevariante1Saved.setId(UUID.randomUUID());
+        abfragevariante1Saved.setAbfragevariantenNr(1);
+        abfragevariante1Saved.setAbfragevariantenName("Abfragevariante 1");
+        entitySaved.setAbfragevariantenSachbearbeitung(List.of(abfragevariante1Saved));
+
+        Mockito.when(this.infrastrukturabfrageRepository.saveAndFlush(entityToSave)).thenReturn(entitySaved);
+        Mockito
+            .when(this.infrastrukturabfrageRepository.findByAbfrage_NameAbfrageIgnoreCase("hallo"))
+            .thenReturn(Optional.empty());
+
+        final var result =
+            this.abfrageService.patchAbfrageInBearbeitungSachbearbeitung(infrastrukturabfrageRequestModel, uuid);
+
+        final var entityExpected = new Infrastrukturabfrage();
+        entityExpected.setId(uuid);
+        entityExpected.setVersion(1L);
+        final var abfrageExpected = new Abfrage();
+        abfrageExpected.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+        abfrageExpected.setNameAbfrage("hallo");
+        entityExpected.setAbfrage(abfrageExpected);
+        final var abfragevariante1Expected = new Abfragevariante();
+        abfragevariante1Expected.setId(UUID.randomUUID());
+        abfragevariante1Expected.setAbfragevariantenNr(1);
+        abfragevariante1Expected.setAbfragevariantenName("Abfragevariante 1");
+        entityExpected.setAbfragevariantenSachbearbeitung(List.of(abfragevariante1Expected));
+
+        assertThat(result, is(entityExpected));
     }
 
     @Test
