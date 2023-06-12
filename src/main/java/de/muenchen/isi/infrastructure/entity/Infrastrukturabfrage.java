@@ -47,6 +47,10 @@ public class Infrastrukturabfrage extends BaseEntity {
     @JoinColumn(name = "abfrage_id", referencedColumnName = "id")
     private List<Abfragevariante> abfragevarianten;
 
+    @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval = true)
+    @JoinColumn(name = "abfrage_id", referencedColumnName = "id")
+    private List<Abfragevariante> abfragevariantenSachbearbeitung;
+
     @Column(nullable = true)
     private String aktenzeichenProLbk;
 

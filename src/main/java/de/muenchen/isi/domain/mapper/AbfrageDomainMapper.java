@@ -52,6 +52,7 @@ public abstract class AbfrageDomainMapper {
             @Mapping(target = "createdDateTime", ignore = true),
             @Mapping(target = "lastModifiedDateTime", ignore = true),
             @Mapping(target = "abfragevarianten", ignore = true),
+            @Mapping(target = "abfragevariantenSachbearbeitung", ignore = true),
         }
     )
     public abstract InfrastrukturabfrageModel request2Model(
