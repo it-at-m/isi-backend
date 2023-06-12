@@ -9,11 +9,13 @@ import de.muenchen.isi.domain.model.AbfrageModel;
 import de.muenchen.isi.domain.model.AbfragevarianteModel;
 import de.muenchen.isi.domain.model.InfrastrukturabfrageModel;
 import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.AbfrageerstellungInfrastrukturabfrageAngelegtModel;
+import de.muenchen.isi.domain.model.abfrageSachbearbeitungInBearbeitungSachbearbeitung.SachbearbeitungInfrastrukturabfrageInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.infrastructure.entity.Abfrage;
 import de.muenchen.isi.infrastructure.entity.Infrastrukturabfrage;
 import java.util.ArrayList;
 import java.util.List;
 import org.mapstruct.AfterMapping;
+import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
@@ -91,5 +93,39 @@ public abstract class AbfrageDomainMapper {
                 }
             });
         response.setAbfragevarianten(abfragevarianten);
+    }
+
+    @BeanMapping(ignoreByDefault = true)
+    @Mappings({ @Mapping(target = "version", ignore = false) })
+    public abstract InfrastrukturabfrageModel request2Model(
+        final SachbearbeitungInfrastrukturabfrageInBearbeitungSachbearbeitungModel request,
+        @MappingTarget InfrastrukturabfrageModel response
+    );
+
+    @AfterMapping
+    void setAbfragevarianteSachbearbeitungOnInfrastrukturabfrage(
+        final SachbearbeitungInfrastrukturabfrageInBearbeitungSachbearbeitungModel request,
+        @MappingTarget InfrastrukturabfrageModel response
+    ) {
+        final List<AbfragevarianteModel> abfragevarianten = new ArrayList<>();
+        request
+            .getAbfragevariantenSachbearbeitung()
+            .forEach(abfragevariante -> {
+                if (abfragevariante.getId() == null) {
+                    abfragevarianten.add(
+                        abfragevarianteDomainMapper.request2Model(abfragevariante, new AbfragevarianteModel())
+                    );
+                } else {
+                    response
+                        .getAbfragevariantenSachbearbeitung()
+                        .stream()
+                        .filter(abfragevarianteModel -> abfragevarianteModel.getId().equals(abfragevariante.getId()))
+                        .findFirst()
+                        .ifPresent(model ->
+                            abfragevarianten.add(abfragevarianteDomainMapper.request2Model(abfragevariante, model))
+                        );
+                }
+            });
+        response.setAbfragevariantenSachbearbeitung(abfragevarianten);
     }
 }

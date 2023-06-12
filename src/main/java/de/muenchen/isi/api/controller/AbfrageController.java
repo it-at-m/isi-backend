@@ -224,10 +224,12 @@ public class AbfrageController {
     public ResponseEntity<InfrastrukturabfrageDto> patchAbfrageInBearbeitungSachbearbeitung(
         @RequestBody @Valid @NotNull final SachbearbeitungInfrastrukturabfrageInBearbeitungSachbearbeitungDto abfrageDto,
         @PathVariable @NotNull final UUID id
-    ) {
+    )
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException {
         var model = this.abfrageApiMapper.dto2Model(abfrageDto);
-
-        return ResponseEntity.ok(new InfrastrukturabfrageDto());
+        final var responseModel = this.abfrageService.patchAbfrageInBearbeitungSachbearbeitung(model, id);
+        final var saved = this.abfrageApiMapper.model2Dto(responseModel);
+        return ResponseEntity.ok(saved);
     }
 
     @PutMapping("/abfrage/{abfrageId}/abfragevariante/change-relevant/{abfragevarianteId}")
