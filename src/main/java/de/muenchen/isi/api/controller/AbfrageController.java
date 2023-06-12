@@ -197,7 +197,7 @@ public class AbfrageController {
 
     @PatchMapping("/abfrage-in-bearbeitung-sachbearbeitung/{id}")
     @Transactional(rollbackFor = { OptimisticLockingException.class, UniqueViolationException.class })
-    @Operation(summary = "Aktualisierung einer Infrastrukturabfrage im Status ANGELEGT.")
+    @Operation(summary = "Aktualisierung einer Infrastrukturabfrage im Status IN_BEARBEITUNG_SACHBEARBEITUNG.")
     @ApiResponses(
         value = {
             @ApiResponse(responseCode = "200", description = "OK -> Abfrage wurde erfolgreich aktualisiert."),
