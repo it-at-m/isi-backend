@@ -8,6 +8,8 @@ import de.muenchen.isi.domain.model.InfrastrukturabfrageModel;
 import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.AbfrageerstellungAbfrageAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.AbfrageerstellungAbfragevarianteAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.AbfrageerstellungInfrastrukturabfrageAngelegtModel;
+import de.muenchen.isi.domain.model.abfrageSachbearbeitungInBearbeitungSachbearbeitung.SachbearbeitungAbfragevarianteInBearbeitungSachbearbeitungModel;
+import de.muenchen.isi.domain.model.abfrageSachbearbeitungInBearbeitungSachbearbeitung.SachbearbeitungInfrastrukturabfrageInBearbeitungSachbearbeitungModel;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -141,5 +143,96 @@ public class AbfrageDomainMapperTest {
             result.getAbfragevarianten().get(1).getAbfragevariantenName(),
             is(infrastrukturabfrageAngelegtModel.getAbfragevarianten().get(1).getAbfragevariantenName())
         );
+    }
+
+    @Test
+    void sachbearbeitungPlanInfrastrukturabfrageToInfrastrukturabfrageNonExistingAbfragevariante() {
+        var infrastrukturabfrage = new SachbearbeitungInfrastrukturabfrageInBearbeitungSachbearbeitungModel();
+        infrastrukturabfrage.setVersion(99L);
+
+        var abfragevarianteSachbearbeitung1 = new SachbearbeitungAbfragevarianteInBearbeitungSachbearbeitungModel();
+        abfragevarianteSachbearbeitung1.setAbfragevariantenNr(1);
+        abfragevarianteSachbearbeitung1.setAbfragevariantenName("Abfragevariante 1");
+
+        var abfragevarianteSachbearbeitung2 = new SachbearbeitungAbfragevarianteInBearbeitungSachbearbeitungModel();
+        abfragevarianteSachbearbeitung2.setAbfragevariantenNr(2);
+        abfragevarianteSachbearbeitung2.setAbfragevariantenName("Abfragevariante 2");
+
+        infrastrukturabfrage.setAbfragevariantenSachbearbeitung(
+            List.of(abfragevarianteSachbearbeitung1, abfragevarianteSachbearbeitung2)
+        );
+
+        final var result = abfrageDomainMapper.request2Model(infrastrukturabfrage, new InfrastrukturabfrageModel());
+
+        final var expected = new InfrastrukturabfrageModel();
+        expected.setVersion(99L);
+
+        final var abfragevariante1 = new AbfragevarianteModel();
+        abfragevariante1.setAbfragevariantenNr(1);
+        abfragevariante1.setAbfragevariantenName("Abfragevariante 1");
+
+        final var abfragevariante2 = new AbfragevarianteModel();
+        abfragevariante2.setAbfragevariantenNr(2);
+        abfragevariante2.setAbfragevariantenName("Abfragevariante 2");
+
+        expected.setAbfragevariantenSachbearbeitung(List.of(abfragevariante1, abfragevariante2));
+
+        assertThat(result, is(expected));
+    }
+
+    @Test
+    void sachbearbeitungPlanInfrastrukturabfrageToInfrastrukturabfrageExistingAbfragevariante() {
+        var infrastrukturabfrage = new SachbearbeitungInfrastrukturabfrageInBearbeitungSachbearbeitungModel();
+        infrastrukturabfrage.setVersion(99L);
+
+        var abfragevarianteSachbearbeitung1 = new SachbearbeitungAbfragevarianteInBearbeitungSachbearbeitungModel();
+        abfragevarianteSachbearbeitung1.setId(UUID.randomUUID());
+        abfragevarianteSachbearbeitung1.setAbfragevariantenNr(1);
+        abfragevarianteSachbearbeitung1.setAbfragevariantenName("New Name Abfragevariante 1");
+
+        var abfragevarianteSachbearbeitung2 = new SachbearbeitungAbfragevarianteInBearbeitungSachbearbeitungModel();
+        abfragevarianteSachbearbeitung2.setId(UUID.randomUUID());
+        abfragevarianteSachbearbeitung2.setAbfragevariantenNr(2);
+        abfragevarianteSachbearbeitung2.setAbfragevariantenName("New Name Abfragevariante 2");
+
+        infrastrukturabfrage.setAbfragevariantenSachbearbeitung(
+            List.of(abfragevarianteSachbearbeitung1, abfragevarianteSachbearbeitung2)
+        );
+
+        final var savedInfrastrukturabfrage = new InfrastrukturabfrageModel();
+        savedInfrastrukturabfrage.setVersion(98L);
+
+        final var savedAbfragevariante1 = new AbfragevarianteModel();
+        savedAbfragevariante1.setId(abfragevarianteSachbearbeitung1.getId());
+        savedAbfragevariante1.setAbfragevariantenNr(99);
+        savedAbfragevariante1.setAbfragevariantenName("Old Name Abfragevariante 1");
+
+        final var savedAbfragevariante2 = new AbfragevarianteModel();
+        savedAbfragevariante2.setId(abfragevarianteSachbearbeitung2.getId());
+        savedAbfragevariante2.setAbfragevariantenNr(97);
+        savedAbfragevariante2.setAbfragevariantenName("Old Name Abfragevariante 2");
+
+        savedInfrastrukturabfrage.setAbfragevariantenSachbearbeitung(
+            List.of(savedAbfragevariante1, savedAbfragevariante2)
+        );
+
+        final var result = abfrageDomainMapper.request2Model(infrastrukturabfrage, savedInfrastrukturabfrage);
+
+        final var expected = new InfrastrukturabfrageModel();
+        expected.setVersion(99L);
+
+        final var abfragevariante1 = new AbfragevarianteModel();
+        abfragevariante1.setId(abfragevarianteSachbearbeitung1.getId());
+        abfragevariante1.setAbfragevariantenNr(1);
+        abfragevariante1.setAbfragevariantenName("New Name Abfragevariante 1");
+
+        final var abfragevariante2 = new AbfragevarianteModel();
+        abfragevariante2.setId(abfragevarianteSachbearbeitung2.getId());
+        abfragevariante2.setAbfragevariantenNr(2);
+        abfragevariante2.setAbfragevariantenName("New Name Abfragevariante 2");
+
+        expected.setAbfragevariantenSachbearbeitung(List.of(abfragevariante1, abfragevariante2));
+
+        assertThat(result, is(expected));
     }
 }
