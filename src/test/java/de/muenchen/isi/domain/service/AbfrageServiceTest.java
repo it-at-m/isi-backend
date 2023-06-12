@@ -26,8 +26,8 @@ import de.muenchen.isi.domain.model.InfrastrukturabfrageModel;
 import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.AbfrageerstellungAbfrageAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.AbfrageerstellungAbfragevarianteAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.AbfrageerstellungInfrastrukturabfrageAngelegtModel;
-import de.muenchen.isi.domain.model.abfrageSachbearbeitungInBearbeitungSachbearbeitung.SachbearbeitungAbfragevarianteInBearbeitungSachbearbeitungModel;
-import de.muenchen.isi.domain.model.abfrageSachbearbeitungInBearbeitungSachbearbeitung.SachbearbeitungInfrastrukturabfrageInBearbeitungSachbearbeitungModel;
+import de.muenchen.isi.domain.model.abfrageSachbearbeitungInBearbeitungSachbearbeitung.AbfragevarianteInBearbeitungSachbearbeitungModel;
+import de.muenchen.isi.domain.model.abfrageSachbearbeitungInBearbeitungSachbearbeitung.InfrastrukturabfrageInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.domain.service.filehandling.DokumentService;
 import de.muenchen.isi.infrastructure.entity.Abfrage;
 import de.muenchen.isi.infrastructure.entity.Abfragevariante;
@@ -308,12 +308,10 @@ class AbfrageServiceTest {
         throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException {
         final var uuid = UUID.randomUUID();
 
-        final var infrastrukturabfrageRequestModel =
-            new SachbearbeitungInfrastrukturabfrageInBearbeitungSachbearbeitungModel();
+        final var infrastrukturabfrageRequestModel = new InfrastrukturabfrageInBearbeitungSachbearbeitungModel();
         infrastrukturabfrageRequestModel.setVersion(0L);
 
-        final var abfragevarianteSachbearbeitung =
-            new SachbearbeitungAbfragevarianteInBearbeitungSachbearbeitungModel();
+        final var abfragevarianteSachbearbeitung = new AbfragevarianteInBearbeitungSachbearbeitungModel();
         abfragevarianteSachbearbeitung.setAbfragevariantenNr(1);
         abfragevarianteSachbearbeitung.setAbfragevariantenName("Abfragevariante 1");
 

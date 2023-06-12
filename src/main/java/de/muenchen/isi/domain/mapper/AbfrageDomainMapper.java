@@ -9,7 +9,7 @@ import de.muenchen.isi.domain.model.AbfrageModel;
 import de.muenchen.isi.domain.model.AbfragevarianteModel;
 import de.muenchen.isi.domain.model.InfrastrukturabfrageModel;
 import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.AbfrageerstellungInfrastrukturabfrageAngelegtModel;
-import de.muenchen.isi.domain.model.abfrageSachbearbeitungInBearbeitungSachbearbeitung.SachbearbeitungInfrastrukturabfrageInBearbeitungSachbearbeitungModel;
+import de.muenchen.isi.domain.model.abfrageSachbearbeitungInBearbeitungSachbearbeitung.InfrastrukturabfrageInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.infrastructure.entity.Abfrage;
 import de.muenchen.isi.infrastructure.entity.Infrastrukturabfrage;
 import java.util.ArrayList;
@@ -98,13 +98,13 @@ public abstract class AbfrageDomainMapper {
     @BeanMapping(ignoreByDefault = true)
     @Mappings({ @Mapping(target = "version", ignore = false) })
     public abstract InfrastrukturabfrageModel request2Model(
-        final SachbearbeitungInfrastrukturabfrageInBearbeitungSachbearbeitungModel request,
+        final InfrastrukturabfrageInBearbeitungSachbearbeitungModel request,
         @MappingTarget InfrastrukturabfrageModel response
     );
 
     @AfterMapping
     void setAbfragevarianteSachbearbeitungOnInfrastrukturabfrage(
-        final SachbearbeitungInfrastrukturabfrageInBearbeitungSachbearbeitungModel request,
+        final InfrastrukturabfrageInBearbeitungSachbearbeitungModel request,
         final @MappingTarget InfrastrukturabfrageModel response
     ) {
         final List<AbfragevarianteModel> abfragevarianten = new ArrayList<>();

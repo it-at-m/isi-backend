@@ -7,7 +7,7 @@ package de.muenchen.isi.domain.mapper;
 import de.muenchen.isi.configuration.MapstructConfiguration;
 import de.muenchen.isi.domain.model.AbfragevarianteModel;
 import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.AbfrageerstellungAbfragevarianteAngelegtModel;
-import de.muenchen.isi.domain.model.abfrageSachbearbeitungInBearbeitungSachbearbeitung.SachbearbeitungAbfragevarianteInBearbeitungSachbearbeitungModel;
+import de.muenchen.isi.domain.model.abfrageSachbearbeitungInBearbeitungSachbearbeitung.AbfragevarianteInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.infrastructure.entity.Abfragevariante;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -41,7 +41,7 @@ public interface AbfragevarianteDomainMapper {
         }
     )
     AbfragevarianteModel request2Model(
-        final SachbearbeitungAbfragevarianteInBearbeitungSachbearbeitungModel request,
+        final AbfragevarianteInBearbeitungSachbearbeitungModel request,
         @MappingTarget AbfragevarianteModel model
     );
 }

@@ -9,8 +9,7 @@ import lombok.ToString;
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class SachbearbeitungAbfragevarianteInBearbeitungSachbearbeitungModel
-    extends AbfrageerstellungAbfragevarianteAngelegtModel {
+public class AbfragevarianteInBearbeitungSachbearbeitungModel extends AbfrageerstellungAbfragevarianteAngelegtModel {
 
     private AbfragevarianteSachbearbeitungModel abfragevarianteSachbearbeitung;
 }

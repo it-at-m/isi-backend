@@ -8,8 +8,8 @@ import de.muenchen.isi.domain.model.InfrastrukturabfrageModel;
 import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.AbfrageerstellungAbfrageAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.AbfrageerstellungAbfragevarianteAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.AbfrageerstellungInfrastrukturabfrageAngelegtModel;
-import de.muenchen.isi.domain.model.abfrageSachbearbeitungInBearbeitungSachbearbeitung.SachbearbeitungAbfragevarianteInBearbeitungSachbearbeitungModel;
-import de.muenchen.isi.domain.model.abfrageSachbearbeitungInBearbeitungSachbearbeitung.SachbearbeitungInfrastrukturabfrageInBearbeitungSachbearbeitungModel;
+import de.muenchen.isi.domain.model.abfrageSachbearbeitungInBearbeitungSachbearbeitung.AbfragevarianteInBearbeitungSachbearbeitungModel;
+import de.muenchen.isi.domain.model.abfrageSachbearbeitungInBearbeitungSachbearbeitung.InfrastrukturabfrageInBearbeitungSachbearbeitungModel;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -147,14 +147,14 @@ public class AbfrageDomainMapperTest {
 
     @Test
     void sachbearbeitungPlanInfrastrukturabfrageToInfrastrukturabfrageNonExistingAbfragevariante() {
-        var infrastrukturabfrage = new SachbearbeitungInfrastrukturabfrageInBearbeitungSachbearbeitungModel();
+        var infrastrukturabfrage = new InfrastrukturabfrageInBearbeitungSachbearbeitungModel();
         infrastrukturabfrage.setVersion(99L);
 
-        var abfragevarianteSachbearbeitung1 = new SachbearbeitungAbfragevarianteInBearbeitungSachbearbeitungModel();
+        var abfragevarianteSachbearbeitung1 = new AbfragevarianteInBearbeitungSachbearbeitungModel();
         abfragevarianteSachbearbeitung1.setAbfragevariantenNr(1);
         abfragevarianteSachbearbeitung1.setAbfragevariantenName("Abfragevariante 1");
 
-        var abfragevarianteSachbearbeitung2 = new SachbearbeitungAbfragevarianteInBearbeitungSachbearbeitungModel();
+        var abfragevarianteSachbearbeitung2 = new AbfragevarianteInBearbeitungSachbearbeitungModel();
         abfragevarianteSachbearbeitung2.setAbfragevariantenNr(2);
         abfragevarianteSachbearbeitung2.setAbfragevariantenName("Abfragevariante 2");
 
@@ -182,15 +182,15 @@ public class AbfrageDomainMapperTest {
 
     @Test
     void sachbearbeitungPlanInfrastrukturabfrageToInfrastrukturabfrageExistingAbfragevariante() {
-        var infrastrukturabfrage = new SachbearbeitungInfrastrukturabfrageInBearbeitungSachbearbeitungModel();
+        var infrastrukturabfrage = new InfrastrukturabfrageInBearbeitungSachbearbeitungModel();
         infrastrukturabfrage.setVersion(99L);
 
-        var abfragevarianteSachbearbeitung1 = new SachbearbeitungAbfragevarianteInBearbeitungSachbearbeitungModel();
+        var abfragevarianteSachbearbeitung1 = new AbfragevarianteInBearbeitungSachbearbeitungModel();
         abfragevarianteSachbearbeitung1.setId(UUID.randomUUID());
         abfragevarianteSachbearbeitung1.setAbfragevariantenNr(1);
         abfragevarianteSachbearbeitung1.setAbfragevariantenName("New Name Abfragevariante 1");
 
-        var abfragevarianteSachbearbeitung2 = new SachbearbeitungAbfragevarianteInBearbeitungSachbearbeitungModel();
+        var abfragevarianteSachbearbeitung2 = new AbfragevarianteInBearbeitungSachbearbeitungModel();
         abfragevarianteSachbearbeitung2.setId(UUID.randomUUID());
         abfragevarianteSachbearbeitung2.setAbfragevariantenNr(2);
         abfragevarianteSachbearbeitung2.setAbfragevariantenName("New Name Abfragevariante 2");
