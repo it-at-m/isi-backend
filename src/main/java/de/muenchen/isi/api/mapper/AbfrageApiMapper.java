@@ -5,9 +5,9 @@
 package de.muenchen.isi.api.mapper;
 
 import de.muenchen.isi.api.dto.InfrastrukturabfrageDto;
-import de.muenchen.isi.api.dto.abfrageAbfrageerstellungAngelegt.AbfrageerstellungAbfrageAngelegtDto;
-import de.muenchen.isi.api.dto.abfrageAbfrageerstellungAngelegt.AbfrageerstellungInfrastrukturabfrageAngelegtDto;
-import de.muenchen.isi.api.dto.abfrageSachbearbeitungInBearbeitungSachbearbeitung.SachbearbeitungInfrastrukturabfrageInBearbeitungSachbearbeitungDto;
+import de.muenchen.isi.api.dto.abfrageAbfrageerstellungAngelegt.AbfrageAngelegtDto;
+import de.muenchen.isi.api.dto.abfrageAbfrageerstellungAngelegt.InfrastrukturabfrageAngelegtDto;
+import de.muenchen.isi.api.dto.abfrageSachbearbeitungInBearbeitungSachbearbeitung.InfrastrukturabfrageInBearbeitungSachbearbeitungDto;
 import de.muenchen.isi.configuration.MapstructConfiguration;
 import de.muenchen.isi.domain.model.BauvorhabenModel;
 import de.muenchen.isi.domain.model.InfrastrukturabfrageModel;
@@ -34,13 +34,11 @@ public interface AbfrageApiMapper {
     }
 
     @Mapping(target = "bauvorhaben", ignore = true)
-    AbfrageerstellungAbfrageAngelegtModel dto2Model(final AbfrageerstellungAbfrageAngelegtDto dto);
+    AbfrageerstellungAbfrageAngelegtModel dto2Model(final AbfrageAngelegtDto dto);
 
-    AbfrageerstellungInfrastrukturabfrageAngelegtModel dto2Model(
-        final AbfrageerstellungInfrastrukturabfrageAngelegtDto dto
-    );
+    AbfrageerstellungInfrastrukturabfrageAngelegtModel dto2Model(final InfrastrukturabfrageAngelegtDto dto);
 
     SachbearbeitungInfrastrukturabfrageInBearbeitungSachbearbeitungModel dto2Model(
-        final SachbearbeitungInfrastrukturabfrageInBearbeitungSachbearbeitungDto dto
+        final InfrastrukturabfrageInBearbeitungSachbearbeitungDto dto
     );
 }

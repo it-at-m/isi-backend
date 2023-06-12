@@ -5,7 +5,7 @@
 package de.muenchen.isi.api.mapper;
 
 import de.muenchen.isi.api.dto.AbfragevarianteDto;
-import de.muenchen.isi.api.dto.abfrageAbfrageerstellungAngelegt.AbfrageerstellungAbfragevarianteAngelegtDto;
+import de.muenchen.isi.api.dto.abfrageAbfrageerstellungAngelegt.AbfragevarianteAngelegtDto;
 import de.muenchen.isi.configuration.MapstructConfiguration;
 import de.muenchen.isi.domain.model.AbfragevarianteModel;
 import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.AbfrageerstellungAbfragevarianteAngelegtModel;
@@ -17,5 +17,5 @@ public interface AbfragevarianteApiMapper {
 
     AbfragevarianteModel dto2Model(final AbfragevarianteDto dto);
 
-    AbfrageerstellungAbfragevarianteAngelegtModel dto2Model(final AbfrageerstellungAbfragevarianteAngelegtDto dto);
+    AbfrageerstellungAbfragevarianteAngelegtModel dto2Model(final AbfragevarianteAngelegtDto dto);
 }

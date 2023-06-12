@@ -17,7 +17,7 @@ import lombok.ToString;
 
 @Data
 @ToString(callSuper = true)
-public class AbfrageerstellungAbfragevarianteAngelegtDto {
+public class AbfragevarianteAngelegtDto {
 
     private UUID id;
 

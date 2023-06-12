@@ -1,5 +1,6 @@
 package de.muenchen.isi.domain.model.abfrageSachbearbeitungInBearbeitungSachbearbeitung;
 
+import de.muenchen.isi.domain.model.AbfragevarianteSachbearbeitungModel;
 import java.util.List;
 import lombok.Data;
 import lombok.ToString;
@@ -9,6 +10,8 @@ import lombok.ToString;
 public class SachbearbeitungInfrastrukturabfrageInBearbeitungSachbearbeitungModel {
 
     private Long version;
+
+    private List<AbfragevarianteSachbearbeitungModel> abfragevarianten;
 
     private List<SachbearbeitungAbfragevarianteInBearbeitungSachbearbeitungModel> abfragevariantenSachbearbeitung;
 }

@@ -13,13 +13,13 @@ import lombok.ToString;
 
 @Data
 @ToString(callSuper = true)
-public class AbfrageerstellungInfrastrukturabfrageAngelegtDto {
+public class InfrastrukturabfrageAngelegtDto {
 
     private Long version;
 
     @Valid
     @NotNull
-    private AbfrageerstellungAbfrageAngelegtDto abfrage;
+    private AbfrageAngelegtDto abfrage;
 
     @NotNull
     @NotUnspecified
@@ -29,7 +29,7 @@ public class AbfrageerstellungInfrastrukturabfrageAngelegtDto {
 
     @NotEmpty
     @Size(min = 1, max = 5)
-    private List<@Valid @NotNull AbfrageerstellungAbfragevarianteAngelegtDto> abfragevarianten;
+    private List<@Valid @NotNull AbfragevarianteAngelegtDto> abfragevarianten;
 
     @Size(max = 255, message = "Es sind maximal {max} Zeichen erlaubt")
     private String aktenzeichenProLbk;

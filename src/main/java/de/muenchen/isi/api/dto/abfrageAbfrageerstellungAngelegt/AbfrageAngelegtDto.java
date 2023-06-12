@@ -16,7 +16,7 @@ import javax.validation.constraints.Size;
 import lombok.Data;
 
 @Data
-public class AbfrageerstellungAbfrageAngelegtDto {
+public class AbfrageAngelegtDto {
 
     @HasAllowedNumberOfDocuments
     private List<@Valid DokumentDto> dokumente;
