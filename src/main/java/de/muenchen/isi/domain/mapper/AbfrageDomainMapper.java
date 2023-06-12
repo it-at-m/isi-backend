@@ -71,7 +71,7 @@ public abstract class AbfrageDomainMapper {
     @AfterMapping
     void setAbfragevarianteOnInfrastrukturabfrage(
         final AbfrageerstellungInfrastrukturabfrageAngelegtModel request,
-        @MappingTarget InfrastrukturabfrageModel response
+        final @MappingTarget InfrastrukturabfrageModel response
     ) {
         final List<AbfragevarianteModel> abfragevarianten = new ArrayList<>();
         request
@@ -105,7 +105,7 @@ public abstract class AbfrageDomainMapper {
     @AfterMapping
     void setAbfragevarianteSachbearbeitungOnInfrastrukturabfrage(
         final SachbearbeitungInfrastrukturabfrageInBearbeitungSachbearbeitungModel request,
-        @MappingTarget InfrastrukturabfrageModel response
+        final @MappingTarget InfrastrukturabfrageModel response
     ) {
         final List<AbfragevarianteModel> abfragevarianten = new ArrayList<>();
         request
