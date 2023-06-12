@@ -125,12 +125,12 @@ public abstract class AbfrageDomainMapper {
             });
         response.setAbfragevarianten(mappedAbfragevarianten);
         // Mapping der Abfragevarianten welche ausschlielich durch die Sachbearbeitung gemappt werden.
-        mappedAbfragevarianten.clear();
+        final List<AbfragevarianteModel> mappedAbfragevariantenSachbearbeitung = new ArrayList<>();
         request
             .getAbfragevariantenSachbearbeitung()
             .forEach(abfragevariante -> {
                 if (abfragevariante.getId() == null) {
-                    mappedAbfragevarianten.add(
+                    mappedAbfragevariantenSachbearbeitung.add(
                         abfragevarianteDomainMapper.request2Model(abfragevariante, new AbfragevarianteModel())
                     );
                 } else {
@@ -140,12 +140,12 @@ public abstract class AbfrageDomainMapper {
                         .filter(abfragevarianteModel -> abfragevarianteModel.getId().equals(abfragevariante.getId()))
                         .findFirst()
                         .ifPresent(model ->
-                            mappedAbfragevarianten.add(
+                            mappedAbfragevariantenSachbearbeitung.add(
                                 abfragevarianteDomainMapper.request2Model(abfragevariante, model)
                             )
                         );
                 }
             });
-        response.setAbfragevariantenSachbearbeitung(mappedAbfragevarianten);
+        response.setAbfragevariantenSachbearbeitung(mappedAbfragevariantenSachbearbeitung);
     }
 }

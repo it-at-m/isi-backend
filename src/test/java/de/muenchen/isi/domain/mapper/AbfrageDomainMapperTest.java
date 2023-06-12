@@ -46,7 +46,7 @@ public class AbfrageDomainMapperTest {
     DokumentDomainMapper dokumentDomainMapper;
 
     @Test
-    public void abfrageErstellunInfrastrukturabfrageToInfrastrukturabfrageNoExistingAbfragevariante() {
+    public void abfrageErstellungInfrastrukturabfrageToInfrastrukturabfrageNoExistingAbfragevariante() {
         AbfrageerstellungInfrastrukturabfrageAngelegtModel infrastrukturabfrageAngelegtModel =
             new AbfrageerstellungInfrastrukturabfrageAngelegtModel();
         infrastrukturabfrageAngelegtModel.setVersion(1L);
@@ -90,7 +90,7 @@ public class AbfrageDomainMapperTest {
     }
 
     @Test
-    public void abfrageErstellunInfrastrukturabfrageToInfrastrukturabfrageExistingAbfragevariante() {
+    public void abfrageErstellungInfrastrukturabfrageToInfrastrukturabfrageExistingAbfragevariante() {
         var abfragevarianteId = UUID.randomUUID();
         AbfrageerstellungInfrastrukturabfrageAngelegtModel infrastrukturabfrageAngelegtModel =
             new AbfrageerstellungInfrastrukturabfrageAngelegtModel();
@@ -149,6 +149,7 @@ public class AbfrageDomainMapperTest {
     void sachbearbeitungPlanInfrastrukturabfrageToInfrastrukturabfrageNonExistingAbfragevariante() {
         var infrastrukturabfrage = new InfrastrukturabfrageInBearbeitungSachbearbeitungModel();
         infrastrukturabfrage.setVersion(99L);
+        infrastrukturabfrage.setAbfragevarianten(List.of());
 
         var abfragevarianteSachbearbeitung1 = new AbfragevarianteInBearbeitungSachbearbeitungModel();
         abfragevarianteSachbearbeitung1.setAbfragevariantenNr(1);
@@ -166,6 +167,7 @@ public class AbfrageDomainMapperTest {
 
         final var expected = new InfrastrukturabfrageModel();
         expected.setVersion(99L);
+        expected.setAbfragevarianten(List.of());
 
         final var abfragevariante1 = new AbfragevarianteModel();
         abfragevariante1.setAbfragevariantenNr(1);
@@ -184,6 +186,7 @@ public class AbfrageDomainMapperTest {
     void sachbearbeitungPlanInfrastrukturabfrageToInfrastrukturabfrageExistingAbfragevariante() {
         var infrastrukturabfrage = new InfrastrukturabfrageInBearbeitungSachbearbeitungModel();
         infrastrukturabfrage.setVersion(99L);
+        infrastrukturabfrage.setAbfragevarianten(List.of());
 
         var abfragevarianteSachbearbeitung1 = new AbfragevarianteInBearbeitungSachbearbeitungModel();
         abfragevarianteSachbearbeitung1.setId(UUID.randomUUID());
@@ -200,6 +203,7 @@ public class AbfrageDomainMapperTest {
         );
 
         final var savedInfrastrukturabfrage = new InfrastrukturabfrageModel();
+        savedInfrastrukturabfrage.setAbfragevarianten(List.of());
         savedInfrastrukturabfrage.setVersion(98L);
 
         final var savedAbfragevariante1 = new AbfragevarianteModel();
@@ -220,6 +224,7 @@ public class AbfrageDomainMapperTest {
 
         final var expected = new InfrastrukturabfrageModel();
         expected.setVersion(99L);
+        expected.setAbfragevarianten(List.of());
 
         final var abfragevariante1 = new AbfragevarianteModel();
         abfragevariante1.setId(abfragevarianteSachbearbeitung1.getId());
