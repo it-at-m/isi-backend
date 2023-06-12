@@ -4,6 +4,7 @@
  */
 package de.muenchen.isi.domain.model;
 
+import de.muenchen.isi.infrastructure.entity.AbfragevarianteSachbearbeitung;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Planungsrecht;
 import java.math.BigDecimal;
 import java.util.List;
@@ -55,4 +56,6 @@ public class AbfragevarianteModel extends BaseEntityModel {
     private BigDecimal geschossflaecheSonstiges;
 
     private List<BauabschnittModel> bauabschnitte;
+
+    private AbfragevarianteSachbearbeitungModel abfragevarianteSachbearbeitung;
 }
