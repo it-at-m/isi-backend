@@ -8,7 +8,9 @@ import de.muenchen.isi.configuration.MapstructConfiguration;
 import de.muenchen.isi.domain.model.AbfragevarianteModel;
 import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.AbfrageerstellungAbfragevarianteAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageSachbearbeitungInBearbeitungSachbearbeitung.AbfragevarianteInBearbeitungSachbearbeitungModel;
+import de.muenchen.isi.domain.model.abfrageSachbearbeitungInBearbeitungSachbearbeitung.AbfragevarianteSachbearbeitungInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.infrastructure.entity.Abfragevariante;
+import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
@@ -30,11 +32,24 @@ public interface AbfragevarianteDomainMapper {
     )
     AbfragevarianteModel request2Model(
         final AbfrageerstellungAbfragevarianteAngelegtModel request,
-        @MappingTarget AbfragevarianteModel model
+        final @MappingTarget AbfragevarianteModel model
+    );
+
+    @BeanMapping(ignoreByDefault = true)
+    @Mappings(
+        {
+            @Mapping(target = "version", ignore = false),
+            @Mapping(target = "abfragevarianteSachbearbeitung", ignore = false),
+        }
+    )
+    AbfragevarianteModel request2Model(
+        final AbfragevarianteSachbearbeitungInBearbeitungSachbearbeitungModel request,
+        final @MappingTarget AbfragevarianteModel model
     );
 
     @Mappings(
         {
+            @Mapping(target = "id", ignore = true),
             @Mapping(target = "lastModifiedDateTime", ignore = true),
             @Mapping(target = "createdDateTime", ignore = true),
             @Mapping(target = "relevant", ignore = true),
@@ -42,6 +57,6 @@ public interface AbfragevarianteDomainMapper {
     )
     AbfragevarianteModel request2Model(
         final AbfragevarianteInBearbeitungSachbearbeitungModel request,
-        @MappingTarget AbfragevarianteModel model
+        final @MappingTarget AbfragevarianteModel model
     );
 }

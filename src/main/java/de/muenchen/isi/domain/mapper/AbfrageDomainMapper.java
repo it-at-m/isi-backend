@@ -107,12 +107,30 @@ public abstract class AbfrageDomainMapper {
         final InfrastrukturabfrageInBearbeitungSachbearbeitungModel request,
         final @MappingTarget InfrastrukturabfrageModel response
     ) {
-        final List<AbfragevarianteModel> abfragevarianten = new ArrayList<>();
+        // Mapping der zusätzlichen durch die Sachbearbeitung pflegbaren Attribute der Abfragevarianten
+        final List<AbfragevarianteModel> mappedAbfragevarianten = new ArrayList<>();
+        request
+            .getAbfragevarianten()
+            .forEach(abfragevariante -> {
+                response
+                    .getAbfragevarianten()
+                    .stream()
+                    .filter(abfragevarianteModel -> abfragevarianteModel.getId().equals(abfragevariante.getId()))
+                    .findFirst()
+                    .ifPresent(abfragevarianteModel ->
+                        mappedAbfragevarianten.add(
+                            abfragevarianteDomainMapper.request2Model(abfragevariante, abfragevarianteModel)
+                        )
+                    );
+            });
+        response.setAbfragevarianten(mappedAbfragevarianten);
+        // Mapping der Abfragevarianten welche ausschlielich durch die Sachbearbeitung gemappt werden.
+        mappedAbfragevarianten.clear();
         request
             .getAbfragevariantenSachbearbeitung()
             .forEach(abfragevariante -> {
                 if (abfragevariante.getId() == null) {
-                    abfragevarianten.add(
+                    mappedAbfragevarianten.add(
                         abfragevarianteDomainMapper.request2Model(abfragevariante, new AbfragevarianteModel())
                     );
                 } else {
@@ -122,10 +140,12 @@ public abstract class AbfrageDomainMapper {
                         .filter(abfragevarianteModel -> abfragevarianteModel.getId().equals(abfragevariante.getId()))
                         .findFirst()
                         .ifPresent(model ->
-                            abfragevarianten.add(abfragevarianteDomainMapper.request2Model(abfragevariante, model))
+                            mappedAbfragevarianten.add(
+                                abfragevarianteDomainMapper.request2Model(abfragevariante, model)
+                            )
                         );
                 }
             });
-        response.setAbfragevariantenSachbearbeitung(abfragevarianten);
+        response.setAbfragevariantenSachbearbeitung(mappedAbfragevarianten);
     }
 }
