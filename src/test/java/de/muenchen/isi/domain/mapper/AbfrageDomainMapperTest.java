@@ -146,7 +146,7 @@ public class AbfrageDomainMapperTest {
     }
 
     @Test
-    void sachbearbeitungPlanInfrastrukturabfrageToInfrastrukturabfrageNonExistingAbfragevariante() {
+    void sachbearbeitungInfrastrukturabfrageToInfrastrukturabfrageNonExistingAbfragevariante() {
         var infrastrukturabfrage = new InfrastrukturabfrageInBearbeitungSachbearbeitungModel();
         infrastrukturabfrage.setVersion(99L);
         infrastrukturabfrage.setAbfragevarianten(List.of());
@@ -183,7 +183,7 @@ public class AbfrageDomainMapperTest {
     }
 
     @Test
-    void sachbearbeitungPlanInfrastrukturabfrageToInfrastrukturabfrageExistingAbfragevariante() {
+    void sachbearbeitungInfrastrukturabfrageToInfrastrukturabfrageExistingAbfragevariante() {
         var infrastrukturabfrage = new InfrastrukturabfrageInBearbeitungSachbearbeitungModel();
         infrastrukturabfrage.setVersion(99L);
         infrastrukturabfrage.setAbfragevarianten(List.of());

@@ -41,7 +41,7 @@ public abstract class AbfrageDomainMapper {
      * auf das ebenfalls im Parameter gegebene {@link InfrastrukturabfrageModel} mapped.
      * <p>
      * Die Abfragevarianten werden ignoriert da diese in der AfterMapping-Methode
-     * {@link AbfrageDomainMapper#setAbfragevarianteOnInfrastrukturabfrage} verarbeitet werden.
+     * {@link AbfrageDomainMapper#afterMappingRequest2Model} verarbeitet werden.
      *
      * @param request  das Request-Model welches gemapped werden soll
      * @param response das {@link InfrastrukturabfrageModel} zu dem es gemapped wird
@@ -69,7 +69,7 @@ public abstract class AbfrageDomainMapper {
      * @param response das {@link InfrastrukturabfrageModel} zu dem es gemapped wird
      */
     @AfterMapping
-    void setAbfragevarianteOnInfrastrukturabfrage(
+    void afterMappingRequest2Model(
         final AbfrageerstellungInfrastrukturabfrageAngelegtModel request,
         final @MappingTarget InfrastrukturabfrageModel response
     ) {
@@ -102,8 +102,14 @@ public abstract class AbfrageDomainMapper {
         @MappingTarget InfrastrukturabfrageModel response
     );
 
+    /**
+     * Führt das Mapping der Abfragevarianten für die im Parameter gegebenen Klassen durch.
+     *
+     * @param request  das Request-Objekt welches gemapped werden soll
+     * @param response das {@link InfrastrukturabfrageModel} zu dem es gemapped wird
+     */
     @AfterMapping
-    void setAbfragevarianteSachbearbeitungOnInfrastrukturabfrage(
+    void afterMappingRequest2Model(
         final InfrastrukturabfrageInBearbeitungSachbearbeitungModel request,
         final @MappingTarget InfrastrukturabfrageModel response
     ) {
