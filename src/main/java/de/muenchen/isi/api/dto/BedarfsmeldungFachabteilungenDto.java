@@ -1,9 +1,6 @@
 package de.muenchen.isi.api.dto;
 
-import de.muenchen.isi.domain.model.BedarfsmeldungFachabteilungenModel;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
-import java.math.BigDecimal;
-import java.util.List;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -14,6 +11,8 @@ import lombok.ToString;
 public class BedarfsmeldungFachabteilungenDto extends BaseEntityDto {
 
     private Long anzahlEinrichtungen;
+
+    private InfrastruktureinrichtungTyp infrastruktureinrichtungTyp;
 
     private Long anzahlKinderkrippengruppen;
 

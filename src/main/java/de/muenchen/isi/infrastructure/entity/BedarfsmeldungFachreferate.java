@@ -1,5 +1,6 @@
 package de.muenchen.isi.infrastructure.entity;
 
+import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
 import javax.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -15,14 +16,17 @@ public class BedarfsmeldungFachreferate extends BaseEntity {
     private Long anzahlEinrichtungen;
 
     @Column(nullable = false)
+    private InfrastruktureinrichtungTyp infrastruktureinrichtungTyp;
+
+    @Column(nullable = true)
     private Long anzahlKinderkrippengruppen;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Long anzahlKindergartengruppen;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Long anzahlHortgruppen;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Long anzahlGrundschulzuege;
 }

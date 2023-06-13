@@ -9,7 +9,6 @@ import java.math.BigDecimal;
 import java.util.List;
 import javax.persistence.*;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 @Embeddable

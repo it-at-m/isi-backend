@@ -4,6 +4,7 @@
  */
 package de.muenchen.isi.domain.model;
 
+import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -14,6 +15,8 @@ import lombok.ToString;
 public class BedarfsmeldungFachabteilungenModel extends BaseEntityModel {
 
     private Long anzahlEinrichtungen;
+
+    private InfrastruktureinrichtungTyp infrastruktureinrichtungTyp;
 
     private Long anzahlKinderkrippengruppen;
 
