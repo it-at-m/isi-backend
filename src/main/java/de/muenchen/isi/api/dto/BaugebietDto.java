@@ -48,6 +48,11 @@ public class BaugebietDto extends BaseEntityDto {
     @NotEmpty
     private List<@Valid @NotNull BaurateDto> bauraten;
 
+    /**
+     * Eine Baugebiet wird als technisch markiert, sobald die Abfragevariante fachlich keinen Bauabschnitt und kein Baugebiet besitzt.
+     * Die Bauraten gruppieren sich fachlich somit direkt unter der Abfragevariante.
+     * Ein technisches Baugebiet fungiert somit als Dummy, um die im Datenmodell modellierte Hierarchie "Abfragevariante -> Bauabschnitt -> Baugebiet -> Baurate" sicherzustellen.
+     **/
     @NotNull
     private Boolean technical;
 }
