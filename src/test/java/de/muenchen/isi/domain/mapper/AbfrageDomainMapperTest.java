@@ -4,11 +4,13 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
 import de.muenchen.isi.domain.model.AbfragevarianteModel;
+import de.muenchen.isi.domain.model.AbfragevarianteSachbearbeitungModel;
 import de.muenchen.isi.domain.model.InfrastrukturabfrageModel;
 import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.AbfrageerstellungAbfrageAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.AbfrageerstellungAbfragevarianteAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.AbfrageerstellungInfrastrukturabfrageAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageSachbearbeitungInBearbeitungSachbearbeitung.AbfragevarianteInBearbeitungSachbearbeitungModel;
+import de.muenchen.isi.domain.model.abfrageSachbearbeitungInBearbeitungSachbearbeitung.AbfragevarianteSachbearbeitungInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.domain.model.abfrageSachbearbeitungInBearbeitungSachbearbeitung.InfrastrukturabfrageInBearbeitungSachbearbeitungModel;
 import java.util.ArrayList;
 import java.util.List;
@@ -237,6 +239,69 @@ public class AbfrageDomainMapperTest {
         abfragevariante2.setAbfragevariantenName("New Name Abfragevariante 2");
 
         expected.setAbfragevariantenSachbearbeitung(List.of(abfragevariante1, abfragevariante2));
+
+        assertThat(result, is(expected));
+    }
+
+    @Test
+    void sachbearbeitungInfrastrukturabfrageToInfrastrukturabfrageNonExistingAbfragevarianteForAbfragevarianteSachbearbeitung() {
+        var infrastrukturabfrage = new InfrastrukturabfrageInBearbeitungSachbearbeitungModel();
+        infrastrukturabfrage.setVersion(99L);
+        infrastrukturabfrage.setAbfragevariantenSachbearbeitung(List.of());
+
+        var abfragevarianteSachbearbeitung1 = new AbfragevarianteSachbearbeitungInBearbeitungSachbearbeitungModel();
+        abfragevarianteSachbearbeitung1.setId(UUID.randomUUID());
+        abfragevarianteSachbearbeitung1.setVersion(1L);
+        var abfragevarianteSachbearbeitungEmbedded1 = new AbfragevarianteSachbearbeitungModel();
+        abfragevarianteSachbearbeitungEmbedded1.setAnmerkung("Test1");
+        abfragevarianteSachbearbeitung1.setAbfragevarianteSachbearbeitung(abfragevarianteSachbearbeitungEmbedded1);
+
+        var abfragevarianteSachbearbeitung2 = new AbfragevarianteSachbearbeitungInBearbeitungSachbearbeitungModel();
+        abfragevarianteSachbearbeitung2.setId(UUID.randomUUID());
+        abfragevarianteSachbearbeitung2.setVersion(2L);
+        var abfragevarianteSachbearbeitungEmbedded2 = new AbfragevarianteSachbearbeitungModel();
+        abfragevarianteSachbearbeitungEmbedded2.setAnmerkung("Test2");
+        abfragevarianteSachbearbeitung2.setAbfragevarianteSachbearbeitung(abfragevarianteSachbearbeitungEmbedded2);
+
+        infrastrukturabfrage.setAbfragevarianten(
+            List.of(abfragevarianteSachbearbeitung1, abfragevarianteSachbearbeitung2)
+        );
+
+        final var modelFromDb = new InfrastrukturabfrageModel();
+        modelFromDb.setVersion(99L);
+        modelFromDb.setAbfragevariantenSachbearbeitung(List.of());
+
+        final var abfragevarianteModelFromDb1 = new AbfragevarianteModel();
+        abfragevarianteModelFromDb1.setId(abfragevarianteSachbearbeitung1.getId());
+        abfragevarianteModelFromDb1.setVersion(1L);
+
+        final var abfragevarianteModelFromDb2 = new AbfragevarianteModel();
+        abfragevarianteModelFromDb2.setId(abfragevarianteSachbearbeitung2.getId());
+        abfragevarianteModelFromDb2.setVersion(2L);
+
+        modelFromDb.setAbfragevarianten(List.of(abfragevarianteModelFromDb1, abfragevarianteModelFromDb2));
+
+        final var result = abfrageDomainMapper.request2Model(infrastrukturabfrage, modelFromDb);
+
+        final var expected = new InfrastrukturabfrageModel();
+        expected.setVersion(99L);
+        expected.setAbfragevariantenSachbearbeitung(List.of());
+
+        final var abfragevarianteExpected1 = new AbfragevarianteModel();
+        abfragevarianteExpected1.setId(abfragevarianteSachbearbeitung1.getId());
+        abfragevarianteExpected1.setVersion(1L);
+        var abfragevarianteEmbeddedExpected1 = new AbfragevarianteSachbearbeitungModel();
+        abfragevarianteEmbeddedExpected1.setAnmerkung("Test1");
+        abfragevarianteExpected1.setAbfragevarianteSachbearbeitung(abfragevarianteEmbeddedExpected1);
+
+        final var abfragevarianteExpected2 = new AbfragevarianteModel();
+        abfragevarianteExpected2.setId(abfragevarianteSachbearbeitung2.getId());
+        abfragevarianteExpected2.setVersion(2L);
+        var abfragevarianteEmbeddedExpected2 = new AbfragevarianteSachbearbeitungModel();
+        abfragevarianteEmbeddedExpected2.setAnmerkung("Test2");
+        abfragevarianteExpected2.setAbfragevarianteSachbearbeitung(abfragevarianteEmbeddedExpected2);
+
+        expected.setAbfragevarianten(List.of(abfragevarianteExpected1, abfragevarianteExpected2));
 
         assertThat(result, is(expected));
     }
