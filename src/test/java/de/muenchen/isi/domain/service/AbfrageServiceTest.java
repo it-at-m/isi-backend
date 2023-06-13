@@ -330,6 +330,7 @@ class AbfrageServiceTest {
             .thenReturn(Optional.of(entityInDb));
 
         final var entityToSave = new Infrastrukturabfrage();
+        entityToSave.setAbfragevarianten(List.of());
         entityToSave.setId(uuid);
         entityToSave.setVersion(0L);
         final var abfrageToSave = new Abfrage();

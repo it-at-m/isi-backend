@@ -14,6 +14,7 @@ import de.muenchen.isi.infrastructure.entity.Abfrage;
 import de.muenchen.isi.infrastructure.entity.Infrastrukturabfrage;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.commons.collections4.CollectionUtils;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
@@ -74,16 +75,16 @@ public abstract class AbfrageDomainMapper {
         final @MappingTarget InfrastrukturabfrageModel response
     ) {
         final List<AbfragevarianteModel> abfragevarianten = new ArrayList<>();
-        request
-            .getAbfragevarianten()
+        CollectionUtils
+            .emptyIfNull(request.getAbfragevarianten())
             .forEach(abfragevariante -> {
                 if (abfragevariante.getId() == null) {
                     abfragevarianten.add(
                         abfragevarianteDomainMapper.request2Model(abfragevariante, new AbfragevarianteModel())
                     );
                 } else {
-                    response
-                        .getAbfragevarianten()
+                    CollectionUtils
+                        .emptyIfNull(response.getAbfragevarianten())
                         .stream()
                         .filter(abfragevarianteModel -> abfragevarianteModel.getId().equals(abfragevariante.getId()))
                         .findFirst()
@@ -115,11 +116,11 @@ public abstract class AbfrageDomainMapper {
     ) {
         // Mapping der zusätzlichen durch die Sachbearbeitung pflegbaren Attribute der Abfragevarianten
         final List<AbfragevarianteModel> mappedAbfragevarianten = new ArrayList<>();
-        request
-            .getAbfragevarianten()
+        CollectionUtils
+            .emptyIfNull(request.getAbfragevarianten())
             .forEach(abfragevariante -> {
-                response
-                    .getAbfragevarianten()
+                CollectionUtils
+                    .emptyIfNull(response.getAbfragevarianten())
                     .stream()
                     .filter(abfragevarianteModel -> abfragevarianteModel.getId().equals(abfragevariante.getId()))
                     .findFirst()
@@ -132,16 +133,16 @@ public abstract class AbfrageDomainMapper {
         response.setAbfragevarianten(mappedAbfragevarianten);
         // Mapping der Abfragevarianten welche ausschlielich durch die Sachbearbeitung gemappt werden.
         final List<AbfragevarianteModel> mappedAbfragevariantenSachbearbeitung = new ArrayList<>();
-        request
-            .getAbfragevariantenSachbearbeitung()
+        CollectionUtils
+            .emptyIfNull(request.getAbfragevariantenSachbearbeitung())
             .forEach(abfragevariante -> {
                 if (abfragevariante.getId() == null) {
                     mappedAbfragevariantenSachbearbeitung.add(
                         abfragevarianteDomainMapper.request2Model(abfragevariante, new AbfragevarianteModel())
                     );
                 } else {
-                    response
-                        .getAbfragevariantenSachbearbeitung()
+                    CollectionUtils
+                        .emptyIfNull(response.getAbfragevariantenSachbearbeitung())
                         .stream()
                         .filter(abfragevarianteModel -> abfragevarianteModel.getId().equals(abfragevariante.getId()))
                         .findFirst()
