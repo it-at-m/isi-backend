@@ -10,6 +10,10 @@ import org.apache.commons.lang3.BooleanUtils;
 
 public class DistributionValidator {
 
+    /**
+     * @param abfragevariante zur Extraktion der nichttechnischen Baugebiete.
+     * @return die Liste an nichttechnscieh Baugebieten der Abfragevariante identifiziert über {@link BaugebietDto#getTechnical()}.
+     */
     public List<BaugebietDto> getNonTechnicalBaugebiete(
         final AbfrageerstellungAbfragevarianteAngelegtDto abfragevariante
     ) {
@@ -21,6 +25,10 @@ public class DistributionValidator {
             .collect(Collectors.toList());
     }
 
+    /**
+     * @param abfragevariante zur Extraktion der Baurante von technischen Baugebieten.
+     * @return die Liste an Bauraten aller technischen Baugebiete der Abfragevariante identifiziert über {@link BaugebietDto#getTechnical()}.
+     */
     public List<BaurateDto> getBauratenFromAllTechnicalBaugebiete(
         final AbfrageerstellungAbfragevarianteAngelegtDto abfragevariante
     ) {
