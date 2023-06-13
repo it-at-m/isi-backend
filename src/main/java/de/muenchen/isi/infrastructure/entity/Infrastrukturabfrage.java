@@ -14,7 +14,6 @@ import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.Index;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
@@ -43,12 +42,12 @@ public class Infrastrukturabfrage extends BaseEntity {
     @Column(nullable = true)
     private SobonVerfahrensgrundsaetzeJahr sobonJahr;
 
-    @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval = true)
-    @JoinColumn(name = "abfrage_id", referencedColumnName = "id")
+    @OneToMany(cascade = { CascadeType.ALL }, orphanRemoval = true)
+    @JoinColumn(name = "abfrage_abfragevarianten_id", referencedColumnName = "id")
     private List<Abfragevariante> abfragevarianten;
 
-    @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval = true)
-    @JoinColumn(name = "abfrage_id", referencedColumnName = "id")
+    @OneToMany(cascade = { CascadeType.ALL }, orphanRemoval = true)
+    @JoinColumn(name = "abfrage_abfragevarianten_sachbearbeitung_id", referencedColumnName = "id")
     private List<Abfragevariante> abfragevariantenSachbearbeitung;
 
     @Column(nullable = true)
