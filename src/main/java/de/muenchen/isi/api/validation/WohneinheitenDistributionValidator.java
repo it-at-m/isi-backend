@@ -9,6 +9,7 @@ import javax.validation.ConstraintValidatorContext;
 import lombok.NoArgsConstructor;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -60,7 +61,7 @@ public class WohneinheitenDistributionValidator
                 .map(baurate -> ObjectUtils.isEmpty(baurate.getAnzahlWeGeplant()) ? 0 : baurate.getAnzahlWeGeplant())
                 .reduce(0, Integer::sum);
 
-            isValid = wohneinheitenAbfragevariante == sumVerteilteWohneinheitenBauraten;
+            isValid = NumberUtils.compare(wohneinheitenAbfragevariante, sumVerteilteWohneinheitenBauraten) == 0;
         }
         return isValid;
     }
