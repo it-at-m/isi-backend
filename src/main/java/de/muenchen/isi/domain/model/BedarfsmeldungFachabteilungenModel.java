@@ -14,15 +14,15 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 public class BedarfsmeldungFachabteilungenModel extends BaseEntityModel {
 
-    private Long anzahlEinrichtungen;
+    private Integer anzahlEinrichtungen;
 
     private InfrastruktureinrichtungTyp infrastruktureinrichtungTyp;
 
-    private Long anzahlKinderkrippengruppen;
+    private Integer anzahlKinderkrippengruppen;
 
-    private Long anzahlKindergartengruppen;
+    private Integer anzahlKindergartengruppen;
 
-    private Long anzahlHortgruppen;
+    private Integer anzahlHortgruppen;
 
-    private Long anzahlGrundschulzuege;
+    private Integer anzahlGrundschulzuege;
 }
