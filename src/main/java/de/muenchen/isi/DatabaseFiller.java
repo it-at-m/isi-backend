@@ -250,6 +250,7 @@ public class DatabaseFiller implements CommandLineRunner {
         abragevarianteSachbearbeitung.setGeschossflaecheWohnenPlanungsursaechlich(new BigDecimal(30));
         abragevarianteSachbearbeitung.setSoBoNOrientierungswertJahr(SobonOrientierungswertJahr.JAHR_2014);
         abragevarianteSachbearbeitung.setAnmerkung("Vorgang offen");
+        original.setAbfragevarianteSachbearbeitung(abragevarianteSachbearbeitung);
 
         final BedarfsmeldungFachreferate bedarfsmeldung = new BedarfsmeldungFachreferate();
         bedarfsmeldung.setAnzahlEinrichtungen(3);
