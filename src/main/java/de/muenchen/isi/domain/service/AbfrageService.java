@@ -22,8 +22,10 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
@@ -183,9 +185,11 @@ public class AbfrageService {
                 abfrage.getAbfrage(),
                 StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG
             );
-        final var abfragevariante = abfrage
-            .getAbfragevarianten()
-            .stream()
+        final var abfragevariante = Stream
+            .concat(
+                CollectionUtils.emptyIfNull(abfrage.getAbfragevarianten()).stream(),
+                CollectionUtils.emptyIfNull(abfrage.getAbfragevariantenSachbearbeitung()).stream()
+            )
             .filter(abfragevarianteModel -> abfragevarianteModel.getId().equals(abfragevarianteId))
             .findFirst()
             .orElseThrow(() -> {
@@ -282,9 +286,9 @@ public class AbfrageService {
     }
 
     /**
-     * Überprüft ob das Bauvorhaben wo die Abfrage zugeordnet ist keine andere Abfrage hat welche eine Relevante Abfragevariante hat.
+     * Überprüft für das der Abfrage zugeordnete Bauvorhaben, dass in keiner anderen Abfrage eine Abfragevariante als relevant markiert ist.
      *
-     * @param abfrage wo man eine Relevante Abfragevariante setzten möchte
+     * @param abfrage Abfrage in welcher die Relevantsetzung geschieht.
      * @throws UniqueViolationException          falls schon eine Relevante Abfragevariante exisitiert
      * @throws BauvorhabenNotReferencedException falls die Abfrage keinem Bauvorhaben zugeordnet ist
      */
@@ -303,8 +307,11 @@ public class AbfrageService {
         final var nameRelevantAbfragevariante = new StringBuilder();
         this.infrastrukturabfrageRepository.findAllByAbfrageBauvorhabenId(abfrage.getAbfrage().getBauvorhaben().getId())
             .forEach(infrastrukturabfrage -> {
-                infrastrukturabfrage
-                    .getAbfragevarianten()
+                Stream
+                    .concat(
+                        CollectionUtils.emptyIfNull(infrastrukturabfrage.getAbfragevarianten()).stream(),
+                        CollectionUtils.emptyIfNull(infrastrukturabfrage.getAbfragevariantenSachbearbeitung()).stream()
+                    )
                     .forEach(abfragevariante -> {
                         if (abfragevariante.isRelevant()) {
                             relevanteAbfrage.set(true);
