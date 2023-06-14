@@ -16,9 +16,9 @@ public class InfrastrukturabfrageInBearbeitungSachbearbeitungDto {
 
     @NotEmpty
     @Size(min = 1, max = 5)
-    private List<@Valid @NotNull AbfragevarianteSachbearbeitungInBearbeitungSachbearbeitungDto> abfragevarianten;
+    private List<@NotNull @Valid AbfragevarianteSachbearbeitungInBearbeitungSachbearbeitungDto> abfragevarianten;
 
-    @NotEmpty
-    @Size(min = 1, max = 5)
+    @NotNull
+    @Size(min = 0, max = 5)
     private List<@NotNull @Valid AbfragevarianteInBearbeitungSachbearbeitungDto> abfragevariantenSachbearbeitung;
 }
