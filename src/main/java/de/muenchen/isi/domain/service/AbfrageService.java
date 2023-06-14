@@ -107,9 +107,10 @@ public class AbfrageService {
     }
 
     /**
-     * Diese Methode updated ein {@link InfrastrukturabfrageModel}. Diese muss sich im Status {@link StatusAbfrage#ANGELEGT} befinden.
+     * Die Methode führt ein Update das in der Datenbank befindlichen {@link InfrastrukturabfrageModel} identifiziert durch den Parameter id durch.
+     * Dieses muss sich im Status {@link StatusAbfrage#ANGELEGT} befinden.
      *
-     * @param abfrage zum Updaten
+     * @param abfrage zum zum Updaten
      * @return das geupdatete {@link InfrastrukturabfrageModel}
      * @throws EntityNotFoundException           falls die Abfrage identifiziert durch die {@link InfrastrukturabfrageModel#getId()} nicht gefunden wird
      * @throws UniqueViolationException          falls der Name der Abfrage {@link InfrastrukturabfrageModel#getAbfrage().getNameAbfrage} ()} bereits vorhanden ist
@@ -137,6 +138,16 @@ public class AbfrageService {
         return this.saveInfrastrukturabfrage(abfrageToSave);
     }
 
+    /**
+     * Die Methode führt ein Update das in der Datenbank befindlichen {@link InfrastrukturabfrageModel} identifiziert durch den Parameter id durch.
+     * Dieses muss sich im Status {@link StatusAbfrage#IN_BEARBEITUNG_SACHBEARBEITUNG} befinden.
+     *
+     * @param abfrage zum zum Updaten
+     * @return das geupdatete {@link InfrastrukturabfrageModel}
+     * @throws EntityNotFoundException           falls die Abfrage identifiziert durch die {@link InfrastrukturabfrageModel#getId()} nicht gefunden wird
+     * @throws UniqueViolationException          falls der Name der Abfrage {@link InfrastrukturabfrageModel#getAbfrage().getNameAbfrage} ()} bereits vorhanden ist
+     * @throws OptimisticLockingException        falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
+     */
     public InfrastrukturabfrageModel patchAbfrageInBearbeitungSachbearbeitung(
         final InfrastrukturabfrageInBearbeitungSachbearbeitungModel abfrage,
         final UUID id
