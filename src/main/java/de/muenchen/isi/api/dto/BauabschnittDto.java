@@ -22,6 +22,10 @@ public class BauabschnittDto extends BaseEntityDto {
     @NotEmpty
     private List<@Valid @NotNull BaugebietDto> baugebiete;
 
+    /**
+     * Ein Bauabschnitt wird als technisch markiert, sobald die Abfragevariante fachlich keinen Bauabschnitt besitzt.
+     * Ein technischer Bauabschnitt fungiert somit als Dummy, um die im Datenmodell modellierte Hierarchie "Abfragevariante -> Bauabschnitt -> Baugebiet -> Baurate" sicherzustellen.
+     */
     @NotNull
     private Boolean technical;
 }

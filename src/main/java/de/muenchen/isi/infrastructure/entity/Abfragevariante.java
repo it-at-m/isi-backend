@@ -75,9 +75,6 @@ public class Abfragevariante extends BaseEntity {
     @Column(nullable = false)
     private Integer realisierungVon; // JJJJ
 
-    @Column(nullable = false)
-    private Integer realisierungBis; // JJJJ
-
     @Column(precision = 10, scale = 2, nullable = true)
     private BigDecimal geschossflaecheGenossenschaftlicheWohnungen;
 

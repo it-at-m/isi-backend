@@ -235,7 +235,6 @@ public class DatabaseFiller implements CommandLineRunner {
             original.setGeschossflaecheStudentenwohnungen(new BigDecimal(25));
         }
         original.setRealisierungVon(variante == 1 ? 2023 : 2024);
-        original.setRealisierungBis(variante == 1 ? 2024 : 2026);
 
         original.setBauabschnitte(List.of(createBauabschnitt()));
 
@@ -255,6 +254,7 @@ public class DatabaseFiller implements CommandLineRunner {
     private Baugebiet createBaugebiet() {
         final Baugebiet baugebiet = new Baugebiet();
         baugebiet.setBezeichnung("Das Baugebiet des einzigartigen Baubschnitts");
+        baugebiet.setRealisierungVon(2025);
         baugebiet.setBaugebietTyp(BaugebietTyp.WA);
         baugebiet.setTechnical(false);
         baugebiet.setBauraten(List.of(createBaurate()));
