@@ -134,6 +134,7 @@ public class DatabaseFiller implements CommandLineRunner {
         abfrage.getAbfrage().setBauvorhaben(bauvorhaben);
         final var abfragevariante = createAbfragevariante(2);
         abfrage.setAbfragevarianten(List.of(abfragevariante));
+        abfrage.setAbfragevariantenSachbearbeitung(List.of(createAbfragevariante(2)));
         this.infrastrukturabfrageRepository.save(abfrage);
     }
 
