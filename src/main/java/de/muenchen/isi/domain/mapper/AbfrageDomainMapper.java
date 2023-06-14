@@ -10,6 +10,8 @@ import de.muenchen.isi.domain.model.AbfragevarianteModel;
 import de.muenchen.isi.domain.model.InfrastrukturabfrageModel;
 import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.InfrastrukturabfrageAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageSachbearbeitungInBearbeitungSachbearbeitung.InfrastrukturabfrageInBearbeitungSachbearbeitungModel;
+import de.muenchen.isi.domain.model.enums.AbfrageTyp;
+import de.muenchen.isi.domain.model.list.AbfrageListElementModel;
 import de.muenchen.isi.infrastructure.entity.Abfrage;
 import de.muenchen.isi.infrastructure.entity.Infrastrukturabfrage;
 import java.util.ArrayList;
@@ -154,5 +156,25 @@ public abstract class AbfrageDomainMapper {
                 }
             });
         response.setAbfragevariantenSachbearbeitung(mappedAbfragevariantenSachbearbeitung);
+    }
+
+    @Mappings(
+        {
+            @Mapping(target = "type", ignore = true),
+            @Mapping(source = "abfrage.nameAbfrage", target = "nameAbfrage"),
+            @Mapping(source = "abfrage.standVorhaben", target = "standVorhaben"),
+            @Mapping(source = "abfrage.statusAbfrage", target = "statusAbfrage"),
+            @Mapping(source = "abfrage.fristStellungnahme", target = "fristStellungnahme"),
+            @Mapping(source = "sobonJahr", target = "sobonJahr"),
+        }
+    )
+    public abstract AbfrageListElementModel model2ListElementModel(final InfrastrukturabfrageModel model);
+
+    @AfterMapping
+    void afterMappingModel2ListElementModel(
+        @MappingTarget final AbfrageListElementModel abfrageListElementModel,
+        final InfrastrukturabfrageModel model
+    ) {
+        abfrageListElementModel.setType(AbfrageTyp.INFRASTRUKTURABFRAGE);
     }
 }

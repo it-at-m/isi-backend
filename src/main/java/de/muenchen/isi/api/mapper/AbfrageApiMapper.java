@@ -8,12 +8,14 @@ import de.muenchen.isi.api.dto.InfrastrukturabfrageDto;
 import de.muenchen.isi.api.dto.abfrageAbfrageerstellungAngelegt.AbfrageAngelegtDto;
 import de.muenchen.isi.api.dto.abfrageAbfrageerstellungAngelegt.InfrastrukturabfrageAngelegtDto;
 import de.muenchen.isi.api.dto.abfrageSachbearbeitungInBearbeitungSachbearbeitung.InfrastrukturabfrageInBearbeitungSachbearbeitungDto;
+import de.muenchen.isi.api.dto.list.AbfrageListElementsDto;
 import de.muenchen.isi.configuration.MapstructConfiguration;
 import de.muenchen.isi.domain.model.BauvorhabenModel;
 import de.muenchen.isi.domain.model.InfrastrukturabfrageModel;
 import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.AbfrageAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.InfrastrukturabfrageAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageSachbearbeitungInBearbeitungSachbearbeitung.InfrastrukturabfrageInBearbeitungSachbearbeitungModel;
+import de.muenchen.isi.domain.model.list.AbfrageListElementsModel;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -41,4 +43,6 @@ public interface AbfrageApiMapper {
     InfrastrukturabfrageInBearbeitungSachbearbeitungModel dto2Model(
         final InfrastrukturabfrageInBearbeitungSachbearbeitungDto dto
     );
+
+    AbfrageListElementsDto model2Dto(final AbfrageListElementsModel model);
 }

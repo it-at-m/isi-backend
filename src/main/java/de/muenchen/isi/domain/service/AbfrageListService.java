@@ -1,6 +1,6 @@
 package de.muenchen.isi.domain.service;
 
-import de.muenchen.isi.domain.mapper.AbfrageListElementDomainMapper;
+import de.muenchen.isi.domain.mapper.AbfrageDomainMapper;
 import de.muenchen.isi.domain.model.list.AbfrageListElementModel;
 import de.muenchen.isi.domain.model.list.AbfrageListElementsModel;
 import java.util.ArrayList;
@@ -18,7 +18,7 @@ public class AbfrageListService {
 
     private final AbfrageService abfrageService;
 
-    private final AbfrageListElementDomainMapper abfrageListElementDomainMapper;
+    private final AbfrageDomainMapper abfrageDomainMapper;
 
     /**
      * Die Methode gibt {@link AbfrageListElementModel}e sortiert in absteigender Reihenfolge zurück.
@@ -32,7 +32,7 @@ public class AbfrageListService {
         // Holen und Mappen
         this.abfrageService.getInfrastrukturabfragen()
             .stream()
-            .map(this.abfrageListElementDomainMapper::infrastrukturabfrageModel2AbfrageListElementModel)
+            .map(this.abfrageDomainMapper::model2ListElementModel)
             .forEach(listElements::add);
 
         // Sortieren
