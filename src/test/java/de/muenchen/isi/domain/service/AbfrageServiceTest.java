@@ -23,9 +23,9 @@ import de.muenchen.isi.domain.model.AbfrageModel;
 import de.muenchen.isi.domain.model.AbfragevarianteModel;
 import de.muenchen.isi.domain.model.BauvorhabenModel;
 import de.muenchen.isi.domain.model.InfrastrukturabfrageModel;
-import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.AbfrageerstellungAbfrageAngelegtModel;
-import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.AbfrageerstellungAbfragevarianteAngelegtModel;
-import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.AbfrageerstellungInfrastrukturabfrageAngelegtModel;
+import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.AbfrageAngelegtModel;
+import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.AbfragevarianteAngelegtModel;
+import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.InfrastrukturabfrageAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageSachbearbeitungInBearbeitungSachbearbeitung.AbfragevarianteInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.domain.model.abfrageSachbearbeitungInBearbeitungSachbearbeitung.InfrastrukturabfrageInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.domain.service.filehandling.DokumentService;
@@ -256,15 +256,14 @@ class AbfrageServiceTest {
         throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, FileHandlingFailedException, FileHandlingWithS3FailedException {
         final UUID abfrageId = UUID.randomUUID();
 
-        final AbfrageerstellungInfrastrukturabfrageAngelegtModel infrastrukturabfrageRequestModel =
-            new AbfrageerstellungInfrastrukturabfrageAngelegtModel();
+        final InfrastrukturabfrageAngelegtModel infrastrukturabfrageRequestModel =
+            new InfrastrukturabfrageAngelegtModel();
 
-        final AbfrageerstellungAbfrageAngelegtModel abfrageRequestModel = new AbfrageerstellungAbfrageAngelegtModel();
+        final AbfrageAngelegtModel abfrageRequestModel = new AbfrageAngelegtModel();
         abfrageRequestModel.setNameAbfrage("hallo");
         infrastrukturabfrageRequestModel.setAbfrage(abfrageRequestModel);
 
-        final AbfrageerstellungAbfragevarianteAngelegtModel abfragevarianteAngelegtModel =
-            new AbfrageerstellungAbfragevarianteAngelegtModel();
+        final AbfragevarianteAngelegtModel abfragevarianteAngelegtModel = new AbfragevarianteAngelegtModel();
         abfragevarianteAngelegtModel.setAbfragevariantenName("Abfragevariante");
         infrastrukturabfrageRequestModel.setAbfragevarianten(List.of(abfragevarianteAngelegtModel));
 
@@ -535,14 +534,13 @@ class AbfrageServiceTest {
     void throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid()
         throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, FileHandlingFailedException, FileHandlingWithS3FailedException {
         final UUID abfrageId = UUID.randomUUID();
-        final AbfrageerstellungInfrastrukturabfrageAngelegtModel infrastrukturabfrageRequestModel =
-            new AbfrageerstellungInfrastrukturabfrageAngelegtModel();
-        final AbfrageerstellungAbfrageAngelegtModel abfrageRequestModel = new AbfrageerstellungAbfrageAngelegtModel();
+        final InfrastrukturabfrageAngelegtModel infrastrukturabfrageRequestModel =
+            new InfrastrukturabfrageAngelegtModel();
+        final AbfrageAngelegtModel abfrageRequestModel = new AbfrageAngelegtModel();
         abfrageRequestModel.setNameAbfrage("test");
         infrastrukturabfrageRequestModel.setAbfrage(abfrageRequestModel);
 
-        final AbfrageerstellungAbfragevarianteAngelegtModel abfragevarianteAngelegtModel =
-            new AbfrageerstellungAbfragevarianteAngelegtModel();
+        final AbfragevarianteAngelegtModel abfragevarianteAngelegtModel = new AbfragevarianteAngelegtModel();
         abfragevarianteAngelegtModel.setAbfragevariantenName("Abfragevariante");
         infrastrukturabfrageRequestModel.setAbfragevarianten(List.of(abfragevarianteAngelegtModel));
 

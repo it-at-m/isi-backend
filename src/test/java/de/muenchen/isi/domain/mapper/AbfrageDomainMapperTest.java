@@ -6,9 +6,9 @@ import static org.hamcrest.Matchers.is;
 import de.muenchen.isi.domain.model.AbfragevarianteModel;
 import de.muenchen.isi.domain.model.AbfragevarianteSachbearbeitungModel;
 import de.muenchen.isi.domain.model.InfrastrukturabfrageModel;
-import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.AbfrageerstellungAbfrageAngelegtModel;
-import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.AbfrageerstellungAbfragevarianteAngelegtModel;
-import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.AbfrageerstellungInfrastrukturabfrageAngelegtModel;
+import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.AbfrageAngelegtModel;
+import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.AbfragevarianteAngelegtModel;
+import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.InfrastrukturabfrageAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageSachbearbeitungInBearbeitungSachbearbeitung.AbfragevarianteInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.domain.model.abfrageSachbearbeitungInBearbeitungSachbearbeitung.AbfragevarianteSachbearbeitungInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.domain.model.abfrageSachbearbeitungInBearbeitungSachbearbeitung.InfrastrukturabfrageInBearbeitungSachbearbeitungModel;
@@ -49,23 +49,19 @@ public class AbfrageDomainMapperTest {
 
     @Test
     public void abfrageErstellungInfrastrukturabfrageToInfrastrukturabfrageNoExistingAbfragevariante() {
-        AbfrageerstellungInfrastrukturabfrageAngelegtModel infrastrukturabfrageAngelegtModel =
-            new AbfrageerstellungInfrastrukturabfrageAngelegtModel();
+        InfrastrukturabfrageAngelegtModel infrastrukturabfrageAngelegtModel = new InfrastrukturabfrageAngelegtModel();
         infrastrukturabfrageAngelegtModel.setVersion(1L);
-        AbfrageerstellungAbfrageAngelegtModel abfrageerstellungAbfrageAngelegtModel =
-            new AbfrageerstellungAbfrageAngelegtModel();
-        abfrageerstellungAbfrageAngelegtModel.setNameAbfrage("Abfrage");
-        infrastrukturabfrageAngelegtModel.setAbfrage(abfrageerstellungAbfrageAngelegtModel);
+        AbfrageAngelegtModel abfrageAngelegtModel = new AbfrageAngelegtModel();
+        abfrageAngelegtModel.setNameAbfrage("Abfrage");
+        infrastrukturabfrageAngelegtModel.setAbfrage(abfrageAngelegtModel);
 
-        AbfrageerstellungAbfragevarianteAngelegtModel abfragevarianteAngelegtModel =
-            new AbfrageerstellungAbfragevarianteAngelegtModel();
+        AbfragevarianteAngelegtModel abfragevarianteAngelegtModel = new AbfragevarianteAngelegtModel();
         abfragevarianteAngelegtModel.setAbfragevariantenName("Abfragevariante 1");
 
-        AbfrageerstellungAbfragevarianteAngelegtModel abfragevarianteAngelegtModel2 =
-            new AbfrageerstellungAbfragevarianteAngelegtModel();
+        AbfragevarianteAngelegtModel abfragevarianteAngelegtModel2 = new AbfragevarianteAngelegtModel();
         abfragevarianteAngelegtModel2.setAbfragevariantenName("Abfragevariante 2");
 
-        List<AbfrageerstellungAbfragevarianteAngelegtModel> abfragevarianten = new ArrayList<>();
+        List<AbfragevarianteAngelegtModel> abfragevarianten = new ArrayList<>();
 
         abfragevarianten.add(abfragevarianteAngelegtModel);
         abfragevarianten.add(abfragevarianteAngelegtModel2);
@@ -94,25 +90,21 @@ public class AbfrageDomainMapperTest {
     @Test
     public void abfrageErstellungInfrastrukturabfrageToInfrastrukturabfrageExistingAbfragevariante() {
         var abfragevarianteId = UUID.randomUUID();
-        AbfrageerstellungInfrastrukturabfrageAngelegtModel infrastrukturabfrageAngelegtModel =
-            new AbfrageerstellungInfrastrukturabfrageAngelegtModel();
+        InfrastrukturabfrageAngelegtModel infrastrukturabfrageAngelegtModel = new InfrastrukturabfrageAngelegtModel();
         infrastrukturabfrageAngelegtModel.setVersion(1L);
 
-        AbfrageerstellungAbfrageAngelegtModel abfrageerstellungAbfrageAngelegtModel =
-            new AbfrageerstellungAbfrageAngelegtModel();
-        abfrageerstellungAbfrageAngelegtModel.setNameAbfrage("Abfrage");
-        infrastrukturabfrageAngelegtModel.setAbfrage(abfrageerstellungAbfrageAngelegtModel);
+        AbfrageAngelegtModel abfrageAngelegtModel = new AbfrageAngelegtModel();
+        abfrageAngelegtModel.setNameAbfrage("Abfrage");
+        infrastrukturabfrageAngelegtModel.setAbfrage(abfrageAngelegtModel);
 
-        AbfrageerstellungAbfragevarianteAngelegtModel abfragevarianteAngelegtModel =
-            new AbfrageerstellungAbfragevarianteAngelegtModel();
+        AbfragevarianteAngelegtModel abfragevarianteAngelegtModel = new AbfragevarianteAngelegtModel();
         abfragevarianteAngelegtModel.setAbfragevariantenName("Abfragevariante 1");
 
-        AbfrageerstellungAbfragevarianteAngelegtModel abfragevarianteAngelegtModel2 =
-            new AbfrageerstellungAbfragevarianteAngelegtModel();
+        AbfragevarianteAngelegtModel abfragevarianteAngelegtModel2 = new AbfragevarianteAngelegtModel();
         abfragevarianteAngelegtModel2.setAbfragevariantenName("Abfragevariante 2");
         abfragevarianteAngelegtModel2.setId(abfragevarianteId);
 
-        List<AbfrageerstellungAbfragevarianteAngelegtModel> abfragevarianteAngelegtModels = new ArrayList<>();
+        List<AbfragevarianteAngelegtModel> abfragevarianteAngelegtModels = new ArrayList<>();
 
         abfragevarianteAngelegtModels.add(abfragevarianteAngelegtModel);
         abfragevarianteAngelegtModels.add(abfragevarianteAngelegtModel2);

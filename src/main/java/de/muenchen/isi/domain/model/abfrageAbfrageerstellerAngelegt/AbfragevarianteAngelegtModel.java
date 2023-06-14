@@ -10,7 +10,7 @@ import lombok.ToString;
 
 @Data
 @ToString(callSuper = true)
-public class AbfrageerstellungAbfragevarianteAngelegtModel {
+public class AbfragevarianteAngelegtModel {
 
     private UUID id;
 

@@ -8,7 +8,7 @@ import de.muenchen.isi.configuration.MapstructConfiguration;
 import de.muenchen.isi.domain.model.AbfrageModel;
 import de.muenchen.isi.domain.model.AbfragevarianteModel;
 import de.muenchen.isi.domain.model.InfrastrukturabfrageModel;
-import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.AbfrageerstellungInfrastrukturabfrageAngelegtModel;
+import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.InfrastrukturabfrageAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageSachbearbeitungInBearbeitungSachbearbeitung.InfrastrukturabfrageInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.infrastructure.entity.Abfrage;
 import de.muenchen.isi.infrastructure.entity.Infrastrukturabfrage;
@@ -38,7 +38,7 @@ public abstract class AbfrageDomainMapper {
     public abstract Infrastrukturabfrage model2entity(final InfrastrukturabfrageModel model);
 
     /**
-     * Mapping Methode welche die Attribute des im Parameter gegebenen {@link AbfrageerstellungInfrastrukturabfrageAngelegtModel}
+     * Mapping Methode welche die Attribute des im Parameter gegebenen {@link InfrastrukturabfrageAngelegtModel}
      * auf das ebenfalls im Parameter gegebene {@link InfrastrukturabfrageModel} mapped.
      * <p>
      * Die Abfragevarianten werden ignoriert da diese in der AfterMapping-Methode
@@ -59,7 +59,7 @@ public abstract class AbfrageDomainMapper {
         }
     )
     public abstract InfrastrukturabfrageModel request2Model(
-        final AbfrageerstellungInfrastrukturabfrageAngelegtModel request,
+        final InfrastrukturabfrageAngelegtModel request,
         @MappingTarget InfrastrukturabfrageModel response
     );
 
@@ -71,7 +71,7 @@ public abstract class AbfrageDomainMapper {
      */
     @AfterMapping
     void afterMappingRequest2Model(
-        final AbfrageerstellungInfrastrukturabfrageAngelegtModel request,
+        final InfrastrukturabfrageAngelegtModel request,
         final @MappingTarget InfrastrukturabfrageModel response
     ) {
         final List<AbfragevarianteModel> abfragevarianten = new ArrayList<>();
