@@ -13,20 +13,20 @@ import lombok.ToString;
 public class BedarfsmeldungFachreferate extends BaseEntity {
 
     @Column(nullable = false)
-    private Long anzahlEinrichtungen;
+    private Integer anzahlEinrichtungen;
 
     @Column(nullable = false)
     private InfrastruktureinrichtungTyp infrastruktureinrichtungTyp;
 
     @Column(nullable = true)
-    private Long anzahlKinderkrippengruppen;
+    private Integer anzahlKinderkrippengruppen;
 
     @Column(nullable = true)
-    private Long anzahlKindergartengruppen;
+    private Integer anzahlKindergartengruppen;
 
     @Column(nullable = true)
-    private Long anzahlHortgruppen;
+    private Integer anzahlHortgruppen;
 
     @Column(nullable = true)
-    private Long anzahlGrundschulzuege;
+    private Integer anzahlGrundschulzuege;
 }

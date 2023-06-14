@@ -6,10 +6,12 @@ package de.muenchen.isi;
 
 import de.muenchen.isi.infrastructure.entity.Abfrage;
 import de.muenchen.isi.infrastructure.entity.Abfragevariante;
+import de.muenchen.isi.infrastructure.entity.AbfragevarianteSachbearbeitung;
 import de.muenchen.isi.infrastructure.entity.Bauabschnitt;
 import de.muenchen.isi.infrastructure.entity.Baugebiet;
 import de.muenchen.isi.infrastructure.entity.Baurate;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
+import de.muenchen.isi.infrastructure.entity.BedarfsmeldungFachreferate;
 import de.muenchen.isi.infrastructure.entity.Foerderart;
 import de.muenchen.isi.infrastructure.entity.Foerdermix;
 import de.muenchen.isi.infrastructure.entity.Infrastrukturabfrage;
@@ -19,7 +21,9 @@ import de.muenchen.isi.infrastructure.entity.enums.IdealtypischeBaurateTyp;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtGsNachmittagBetreuung;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.BaugebietTyp;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Einrichtungstraeger;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Planungsrecht;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonVerfahrensgrundsaetzeJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVorhaben;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
@@ -240,6 +244,18 @@ public class DatabaseFiller implements CommandLineRunner {
         original.setBauabschnitte(List.of(createBauabschnitt()));
 
         original.setSonderwohnformen(false);
+
+        final AbfragevarianteSachbearbeitung abragevarianteSachbearbeitung = new AbfragevarianteSachbearbeitung();
+        abragevarianteSachbearbeitung.setGeschossflaecheWohnenPlanungsursaechlich(new BigDecimal(30));
+        abragevarianteSachbearbeitung.setSoBoNOrientierungswertJahr(SobonOrientierungswertJahr.JAHR_2014);
+        abragevarianteSachbearbeitung.setAnmerkung("Vorgang offen");
+
+        final BedarfsmeldungFachreferate bedarfsmeldung = new BedarfsmeldungFachreferate();
+        bedarfsmeldung.setAnzahlEinrichtungen(3);
+        bedarfsmeldung.setInfrastruktureinrichtungTyp(InfrastruktureinrichtungTyp.KINDERKRIPPE);
+        bedarfsmeldung.setAnzahlHortgruppen(5);
+        bedarfsmeldung.setAnzahlKinderkrippengruppen(5);
+        abragevarianteSachbearbeitung.setBedarfsmeldungFachreferate(new ArrayList<>(Arrays.asList(bedarfsmeldung)));
 
         return original;
     }
