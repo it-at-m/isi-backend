@@ -77,7 +77,6 @@ public class TestData {
         original.setGeschossflaecheWohnen(new BigDecimal("1234.56"));
         original.setGesamtanzahlWe(31);
         original.setRealisierungVon(2023);
-        original.setRealisierungBis(2024);
         original.setSonderwohnformen(false);
         original.setBauabschnitte(List.of(createBauabschnittModel()));
 
@@ -97,6 +96,7 @@ public class TestData {
         baugebiet.setBezeichnung("Das Baugebiet des einzigartigen Baubschnitts");
         baugebiet.setBaugebietTyp(BaugebietTyp.WA);
         baugebiet.setTechnical(false);
+        baugebiet.setRealisierungVon(2023);
         baugebiet.setBauraten(List.of(createBaurateModel()));
         return baugebiet;
     }

@@ -40,8 +40,6 @@ public class AbfragevarianteAngelegtModel {
 
     private Integer realisierungVon;
 
-    private Integer realisierungBis;
-
     private BigDecimal geschossflaecheGenossenschaftlicheWohnungen;
 
     private Boolean sonderwohnformen;
