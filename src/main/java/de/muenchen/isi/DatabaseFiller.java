@@ -272,8 +272,9 @@ public class DatabaseFiller implements CommandLineRunner {
     private Baugebiet createBaugebiet() {
         final Baugebiet baugebiet = new Baugebiet();
         baugebiet.setBezeichnung("Das Baugebiet des einzigartigen Baubschnitts");
-        baugebiet.setRealisierungVon(2025);
+        baugebiet.setRealisierungVon(2022);
         baugebiet.setBaugebietTyp(BaugebietTyp.WA);
+        baugebiet.setGesamtanzahlWe(31);
         baugebiet.setTechnical(false);
         baugebiet.setBauraten(List.of(createBaurate()));
         return baugebiet;
@@ -282,7 +283,7 @@ public class DatabaseFiller implements CommandLineRunner {
     private Baurate createBaurate() {
         final Baurate baurate = new Baurate();
         baurate.setJahr(2022);
-        baurate.setAnzahlWeGeplant(10);
+        baurate.setAnzahlWeGeplant(31);
         baurate.setGeschossflaecheWohnenGeplant(BigDecimal.valueOf(15.55));
         baurate.setFoerdermix(createFoerdermix());
         return baurate;

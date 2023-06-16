@@ -12,6 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 
 @AllArgsConstructor
 public enum SobonOrientierungswertJahr implements ILookup {
+    UNSPECIFIED(ILookup.UNSPECIFIED),
     JAHR_2014("2014"),
     JAHR_2017("2017"),
     JAHR_2022("2022");
