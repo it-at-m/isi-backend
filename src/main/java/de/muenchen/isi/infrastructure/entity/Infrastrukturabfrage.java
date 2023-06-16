@@ -16,6 +16,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.Index;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -41,10 +42,12 @@ public class Infrastrukturabfrage extends BaseEntity {
 
     @OneToMany(cascade = { CascadeType.ALL }, orphanRemoval = true)
     @JoinColumn(name = "abfrage_abfragevarianten_id", referencedColumnName = "id")
+    @OrderBy("abfragevariantenNr asc")
     private List<Abfragevariante> abfragevarianten;
 
     @OneToMany(cascade = { CascadeType.ALL }, orphanRemoval = true)
     @JoinColumn(name = "abfrage_abfragevarianten_sachbearbeitung_id", referencedColumnName = "id")
+    @OrderBy("abfragevariantenNr asc")
     private List<Abfragevariante> abfragevariantenSachbearbeitung;
 
     @Column(nullable = true)

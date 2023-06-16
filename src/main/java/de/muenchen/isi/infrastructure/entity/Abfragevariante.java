@@ -15,6 +15,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import lombok.Data;
@@ -94,6 +95,7 @@ public class Abfragevariante extends BaseEntity {
 
     @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "abfragevariante_id")
+    @OrderBy("createdDateTime asc")
     private List<Bauabschnitt> bauabschnitte;
 
     private AbfragevarianteSachbearbeitung abfragevarianteSachbearbeitung;
