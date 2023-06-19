@@ -112,7 +112,7 @@ public class AbfrageService {
      * Die Methode führt ein Update das in der Datenbank befindlichen {@link InfrastrukturabfrageModel} identifiziert durch den Parameter id durch.
      * Dieses muss sich im Status {@link StatusAbfrage#ANGELEGT} befinden.
      *
-     * @param abfrage zum zum Updaten
+     * @param abfrage zum Updaten
      * @return das geupdatete {@link InfrastrukturabfrageModel}
      * @throws EntityNotFoundException           falls die Abfrage identifiziert durch die {@link InfrastrukturabfrageModel#getId()} nicht gefunden wird
      * @throws UniqueViolationException          falls der Name der Abfrage {@link InfrastrukturabfrageModel#getAbfrage().getNameAbfrage} ()} bereits vorhanden ist

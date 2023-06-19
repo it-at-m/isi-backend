@@ -133,7 +133,7 @@ public abstract class AbfrageDomainMapper {
                     );
             });
         response.setAbfragevarianten(mappedAbfragevarianten);
-        // Mapping der Abfragevarianten welche ausschlielich durch die Sachbearbeitung gemappt werden.
+        // Mapping der Abfragevarianten welche ausschließlich durch die Sachbearbeitung gemappt werden.
         final List<AbfragevarianteModel> mappedAbfragevariantenSachbearbeitung = new ArrayList<>();
         CollectionUtils
             .emptyIfNull(request.getAbfragevariantenSachbearbeitung())
