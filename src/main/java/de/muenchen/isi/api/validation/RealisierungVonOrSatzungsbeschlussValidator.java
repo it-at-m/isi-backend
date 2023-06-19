@@ -9,7 +9,8 @@ import org.springframework.stereotype.Component;
 @Component
 @NoArgsConstructor
 public class RealisierungVonOrSatzungsbeschlussValidator
-    implements ConstraintValidator<FertigstellungsjahrValid, AbfrageerstellungAbfragevarianteAngelegtDto> {
+    implements
+        ConstraintValidator<RealisierungVonOrSatzungsbeschlussValid, AbfrageerstellungAbfragevarianteAngelegtDto> {
 
     /**
      * Prüft, ob die Felder {@link AbfrageerstellungAbfragevarianteAngelegtDto#getRealisierungVon()}
