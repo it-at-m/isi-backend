@@ -4,10 +4,8 @@ import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswert
 import java.math.BigDecimal;
 import java.util.List;
 import lombok.Data;
-import lombok.ToString;
 
 @Data
-@ToString(callSuper = true)
 public class AbfragevarianteSachbearbeitungDto {
 
     private BigDecimal geschossflaecheWohnenPlanungsursaechlich;
