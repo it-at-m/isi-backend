@@ -73,7 +73,7 @@ public class Abfragevariante extends BaseEntity {
     @Column(nullable = true)
     private Integer anzahlWeBaurechtlichFestgesetzt;
 
-    @Column(nullable = true)
+    @Column(nullable = false)
     private Integer realisierungVon; // JJJJ
 
     @Column(nullable = true)
