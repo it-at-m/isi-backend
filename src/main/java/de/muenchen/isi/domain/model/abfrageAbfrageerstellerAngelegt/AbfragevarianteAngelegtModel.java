@@ -3,6 +3,7 @@ package de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt;
 import de.muenchen.isi.domain.model.BauabschnittModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Planungsrecht;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 import lombok.Data;
@@ -39,6 +40,8 @@ public class AbfragevarianteAngelegtModel {
     private Integer anzahlWeBaurechtlichFestgesetzt;
 
     private Integer realisierungVon;
+
+    private LocalDate satzungsbeschluss;
 
     private BigDecimal geschossflaecheGenossenschaftlicheWohnungen;
 

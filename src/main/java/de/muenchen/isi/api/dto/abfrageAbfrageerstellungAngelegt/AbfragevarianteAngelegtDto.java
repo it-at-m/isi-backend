@@ -7,6 +7,7 @@ import de.muenchen.isi.api.validation.RealisierungVonDistributionValid;
 import de.muenchen.isi.api.validation.WohneinheitenDistributionValid;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Planungsrecht;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 import javax.validation.Valid;
@@ -60,6 +61,8 @@ public class AbfragevarianteAngelegtDto {
     @Min(1900)
     @Max(2100)
     private Integer realisierungVon;
+
+    private LocalDate satzungsbeschluss;
 
     private BigDecimal geschossflaecheGenossenschaftlicheWohnungen;
 
