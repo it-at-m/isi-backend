@@ -6,6 +6,7 @@ package de.muenchen.isi.infrastructure.entity;
 
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Planungsrecht;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -74,6 +75,9 @@ public class Abfragevariante extends BaseEntity {
 
     @Column(nullable = false)
     private Integer realisierungVon; // JJJJ
+
+    @Column(nullable = true)
+    private LocalDate satzungsbeschluss;
 
     @Column(precision = 10, scale = 2, nullable = true)
     private BigDecimal geschossflaecheGenossenschaftlicheWohnungen;
