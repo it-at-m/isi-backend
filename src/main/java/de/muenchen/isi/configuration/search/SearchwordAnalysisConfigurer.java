@@ -14,17 +14,22 @@ public class SearchwordAnalysisConfigurer implements ElasticsearchAnalysisConfig
 
     @Override
     public void configure(final ElasticsearchAnalysisConfigurationContext context) {
-        // Analyzer für Suchwortermittlung
+        /**
+         * Analyzer für Suchwortermittlung
+         */
         context
-            .analyzer("searchword_analyzer")
+            .analyzer("searchword_analyzer_string_field")
             .custom()
-            // https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-whitespace-tokenizer.html
-            .tokenizer("whitespace")
+            // https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-keyword-tokenizer.html
+            // Verwendung Keyword-Tokenzier um Suchwörter im ganzen zu erhalten.
+            .tokenizer("keyword")
             .tokenFilters("lowercase_tokenfilter", "edge_ngram_tokenfilter");
 
-        // Analyzer für Entitätsermittlung auf Basis von gefundenen Suchwörter
+        /**
+         * Analyzer für Entitätsermittlung auf Basis von gefundenen Suchwörter
+         */
         context
-            .analyzer("entity_analyzer")
+            .analyzer("entity_analyzer_string_field")
             .custom()
             // https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-whitespace-tokenizer.html
             .tokenizer("whitespace")
