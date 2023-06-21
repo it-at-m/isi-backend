@@ -36,13 +36,13 @@ public class SearchwordAnalysisConfigurer implements ElasticsearchAnalysisConfig
             .tokenFilters("lowercase_tokenfilter");
 
         context
-            // https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-lowercase-tokenfilter.html
             .tokenFilter("lowercase_tokenfilter")
+            // https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-lowercase-tokenfilter.html
             .type("lowercase");
 
         context
-            // https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-edgengram-tokenfilter.html
             .tokenFilter("edge_ngram_tokenfilter")
+            // https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-edgengram-tokenfilter.html
             .type("edge_ngram")
             .param("min_gram", "1")
             .param("max_gram", "255");
