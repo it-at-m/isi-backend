@@ -21,7 +21,7 @@ public class SearchwordAnalysisConfigurer implements ElasticsearchAnalysisConfig
             .analyzer("searchword_analyzer_string_field")
             .custom()
             // https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-keyword-tokenizer.html
-            // Verwendung Keyword-Tokenzier um Suchwörter im ganzen zu erhalten.
+            // Verwendung Keyword-Tokenizer um Suchwörter im ganzen zu erhalten.
             .tokenizer("keyword")
             .tokenFilters("lowercase_tokenfilter", "edge_ngram_tokenfilter");
 
