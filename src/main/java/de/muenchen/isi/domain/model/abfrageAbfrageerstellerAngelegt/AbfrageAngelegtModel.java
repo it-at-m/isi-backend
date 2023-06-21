@@ -12,7 +12,7 @@ import lombok.ToString;
 
 @Data
 @ToString(callSuper = true)
-public class AbfrageerstellungAbfrageAngelegtModel {
+public class AbfrageAngelegtModel {
 
     private List<DokumentModel> dokumente;
 

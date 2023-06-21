@@ -3,8 +3,11 @@ package de.muenchen.isi.domain.service;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
-import de.muenchen.isi.domain.mapper.AbfrageListElementDomainMapper;
-import de.muenchen.isi.domain.mapper.AbfrageListElementDomainMapperImpl;
+import de.muenchen.isi.domain.mapper.AbfrageDomainMapper;
+import de.muenchen.isi.domain.mapper.AbfrageDomainMapperImpl;
+import de.muenchen.isi.domain.mapper.AbfragevarianteDomainMapperImpl;
+import de.muenchen.isi.domain.mapper.BauabschnittDomainMapperImpl;
+import de.muenchen.isi.domain.mapper.DokumentDomainMapperImpl;
 import de.muenchen.isi.domain.model.AbfrageModel;
 import de.muenchen.isi.domain.model.InfrastrukturabfrageModel;
 import de.muenchen.isi.domain.model.enums.AbfrageTyp;
@@ -29,8 +32,10 @@ import org.mockito.quality.Strictness;
 @MockitoSettings(strictness = Strictness.LENIENT)
 class AbfrageListServiceTest {
 
-    private final AbfrageListElementDomainMapper abfrageListElementDomainMapper =
-        new AbfrageListElementDomainMapperImpl();
+    private final AbfrageDomainMapper abfrageDomainMapper = new AbfrageDomainMapperImpl(
+        new AbfragevarianteDomainMapperImpl(new BauabschnittDomainMapperImpl()),
+        new DokumentDomainMapperImpl()
+    );
 
     @Mock
     private AbfrageService abfrageService;
@@ -39,7 +44,7 @@ class AbfrageListServiceTest {
 
     @BeforeEach
     public void beforeEach() {
-        this.abfrageListService = new AbfrageListService(this.abfrageService, this.abfrageListElementDomainMapper);
+        this.abfrageListService = new AbfrageListService(this.abfrageService, this.abfrageDomainMapper);
         Mockito.reset(this.abfrageService);
     }
 

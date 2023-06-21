@@ -2,7 +2,7 @@ package de.muenchen.isi.api.validation;
 
 import de.muenchen.isi.api.dto.BaugebietDto;
 import de.muenchen.isi.api.dto.BaurateDto;
-import de.muenchen.isi.api.dto.abfrageAbfrageerstellungAngelegt.AbfrageerstellungAbfragevarianteAngelegtDto;
+import de.muenchen.isi.api.dto.abfrageAbfrageerstellungAngelegt.AbfragevarianteAngelegtDto;
 import java.math.BigDecimal;
 import java.util.List;
 import javax.validation.ConstraintValidator;
@@ -16,8 +16,7 @@ import org.springframework.stereotype.Component;
 @NoArgsConstructor
 public class GeschossflaecheWohnenDistributionValidator
     extends DistributionValidator
-    implements
-        ConstraintValidator<GeschossflaecheWohnenDistributionValid, AbfrageerstellungAbfragevarianteAngelegtDto> {
+    implements ConstraintValidator<GeschossflaecheWohnenDistributionValid, AbfragevarianteAngelegtDto> {
 
     /**
      * Validiert für die im Parameter gegebene Abfragevariante die über Baugebiete bzw. Bauraten verteilte Geschossfläche Wohnen.
@@ -30,10 +29,7 @@ public class GeschossflaecheWohnenDistributionValidator
      * Andernfalls false.
      */
     @Override
-    public boolean isValid(
-        final AbfrageerstellungAbfragevarianteAngelegtDto value,
-        final ConstraintValidatorContext context
-    ) {
+    public boolean isValid(final AbfragevarianteAngelegtDto value, final ConstraintValidatorContext context) {
         if (ObjectUtils.isNotEmpty(value.getGesamtanzahlWe())) {
             return true;
         }

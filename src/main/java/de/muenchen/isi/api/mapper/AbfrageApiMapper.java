@@ -5,13 +5,17 @@
 package de.muenchen.isi.api.mapper;
 
 import de.muenchen.isi.api.dto.InfrastrukturabfrageDto;
-import de.muenchen.isi.api.dto.abfrageAbfrageerstellungAngelegt.AbfrageerstellungAbfrageAngelegtDto;
-import de.muenchen.isi.api.dto.abfrageAbfrageerstellungAngelegt.AbfrageerstellungInfrastrukturabfrageAngelegtDto;
+import de.muenchen.isi.api.dto.abfrageAbfrageerstellungAngelegt.AbfrageAngelegtDto;
+import de.muenchen.isi.api.dto.abfrageAbfrageerstellungAngelegt.InfrastrukturabfrageAngelegtDto;
+import de.muenchen.isi.api.dto.abfrageSachbearbeitungInBearbeitungSachbearbeitung.InfrastrukturabfrageInBearbeitungSachbearbeitungDto;
+import de.muenchen.isi.api.dto.list.AbfrageListElementsDto;
 import de.muenchen.isi.configuration.MapstructConfiguration;
 import de.muenchen.isi.domain.model.BauvorhabenModel;
 import de.muenchen.isi.domain.model.InfrastrukturabfrageModel;
-import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.AbfrageerstellungAbfrageAngelegtModel;
-import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.AbfrageerstellungInfrastrukturabfrageAngelegtModel;
+import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.AbfrageAngelegtModel;
+import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.InfrastrukturabfrageAngelegtModel;
+import de.muenchen.isi.domain.model.abfrageSachbearbeitungInBearbeitungSachbearbeitung.InfrastrukturabfrageInBearbeitungSachbearbeitungModel;
+import de.muenchen.isi.domain.model.list.AbfrageListElementsModel;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -32,9 +36,13 @@ public interface AbfrageApiMapper {
     }
 
     @Mapping(target = "bauvorhaben", ignore = true)
-    AbfrageerstellungAbfrageAngelegtModel dto2Model(final AbfrageerstellungAbfrageAngelegtDto dto);
+    AbfrageAngelegtModel dto2Model(final AbfrageAngelegtDto dto);
 
-    AbfrageerstellungInfrastrukturabfrageAngelegtModel dto2Model(
-        final AbfrageerstellungInfrastrukturabfrageAngelegtDto dto
+    InfrastrukturabfrageAngelegtModel dto2Model(final InfrastrukturabfrageAngelegtDto dto);
+
+    InfrastrukturabfrageInBearbeitungSachbearbeitungModel dto2Model(
+        final InfrastrukturabfrageInBearbeitungSachbearbeitungDto dto
     );
+
+    AbfrageListElementsDto model2Dto(final AbfrageListElementsModel model);
 }

@@ -29,4 +29,6 @@ public class LookupListsDto {
     private LookupListDto infrastruktureinrichtungTyp;
 
     private LookupListDto artGsNachmittagBetreuung;
+
+    private LookupListDto sobonOrientierungswertJahr;
 }

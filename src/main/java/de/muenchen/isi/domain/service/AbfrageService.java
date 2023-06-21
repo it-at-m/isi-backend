@@ -13,7 +13,8 @@ import de.muenchen.isi.domain.model.AbfrageModel;
 import de.muenchen.isi.domain.model.AbfragevarianteModel;
 import de.muenchen.isi.domain.model.BauvorhabenModel;
 import de.muenchen.isi.domain.model.InfrastrukturabfrageModel;
-import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.AbfrageerstellungInfrastrukturabfrageAngelegtModel;
+import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.InfrastrukturabfrageAngelegtModel;
+import de.muenchen.isi.domain.model.abfrageSachbearbeitungInBearbeitungSachbearbeitung.InfrastrukturabfrageInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.domain.service.filehandling.DokumentService;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.repository.InfrastrukturabfrageRepository;
@@ -21,10 +22,11 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
@@ -107,7 +109,8 @@ public class AbfrageService {
     }
 
     /**
-     * Diese Methode updated ein {@link InfrastrukturabfrageModel}. Diese muss sich im Status {@link StatusAbfrage#ANGELEGT} befinden.
+     * Die Methode führt ein Update das in der Datenbank befindlichen {@link InfrastrukturabfrageModel} identifiziert durch den Parameter id durch.
+     * Dieses muss sich im Status {@link StatusAbfrage#ANGELEGT} befinden.
      *
      * @param abfrage zum Updaten
      * @return das geupdatete {@link InfrastrukturabfrageModel}
@@ -120,7 +123,7 @@ public class AbfrageService {
      */
     @Transactional
     public InfrastrukturabfrageModel patchAbfrageAngelegt(
-        @NotNull final AbfrageerstellungInfrastrukturabfrageAngelegtModel abfrage,
+        final InfrastrukturabfrageAngelegtModel abfrage,
         final UUID id
     )
         throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, FileHandlingFailedException, FileHandlingWithS3FailedException {
@@ -133,6 +136,30 @@ public class AbfrageService {
             abfrage.getAbfrage().getDokumente(),
             originalAbfrageDb.getAbfrage().getDokumente()
         );
+        final var abfrageToSave = this.abfrageDomainMapper.request2Model(abfrage, originalAbfrageDb);
+        return this.saveInfrastrukturabfrage(abfrageToSave);
+    }
+
+    /**
+     * Die Methode führt ein Update das in der Datenbank befindlichen {@link InfrastrukturabfrageModel} identifiziert durch den Parameter id durch.
+     * Dieses muss sich im Status {@link StatusAbfrage#IN_BEARBEITUNG_SACHBEARBEITUNG} befinden.
+     *
+     * @param abfrage zum zum Updaten
+     * @return das geupdatete {@link InfrastrukturabfrageModel}
+     * @throws EntityNotFoundException           falls die Abfrage identifiziert durch die {@link InfrastrukturabfrageModel#getId()} nicht gefunden wird
+     * @throws UniqueViolationException          falls der Name der Abfrage {@link InfrastrukturabfrageModel#getAbfrage().getNameAbfrage} ()} bereits vorhanden ist
+     * @throws OptimisticLockingException        falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
+     */
+    public InfrastrukturabfrageModel patchAbfrageInBearbeitungSachbearbeitung(
+        final InfrastrukturabfrageInBearbeitungSachbearbeitungModel abfrage,
+        final UUID id
+    )
+        throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException {
+        final var originalAbfrageDb = this.getInfrastrukturabfrageById(id);
+        this.throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(
+                originalAbfrageDb.getAbfrage(),
+                StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG
+            );
         final var abfrageToSave = this.abfrageDomainMapper.request2Model(abfrage, originalAbfrageDb);
         return this.saveInfrastrukturabfrage(abfrageToSave);
     }
@@ -158,9 +185,11 @@ public class AbfrageService {
                 abfrage.getAbfrage(),
                 StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG
             );
-        final var abfragevariante = abfrage
-            .getAbfragevarianten()
-            .stream()
+        final var abfragevariante = Stream
+            .concat(
+                CollectionUtils.emptyIfNull(abfrage.getAbfragevarianten()).stream(),
+                CollectionUtils.emptyIfNull(abfrage.getAbfragevariantenSachbearbeitung()).stream()
+            )
             .filter(abfragevarianteModel -> abfragevarianteModel.getId().equals(abfragevarianteId))
             .findFirst()
             .orElseThrow(() -> {
@@ -257,9 +286,9 @@ public class AbfrageService {
     }
 
     /**
-     * Überprüft ob das Bauvorhaben wo die Abfrage zugeordnet ist keine andere Abfrage hat welche eine Relevante Abfragevariante hat.
+     * Überprüft für das der Abfrage zugeordnete Bauvorhaben, dass in keiner anderen Abfrage eine Abfragevariante als relevant markiert ist.
      *
-     * @param abfrage wo man eine Relevante Abfragevariante setzten möchte
+     * @param abfrage Abfrage in welcher die Relevantsetzung geschieht.
      * @throws UniqueViolationException          falls schon eine Relevante Abfragevariante exisitiert
      * @throws BauvorhabenNotReferencedException falls die Abfrage keinem Bauvorhaben zugeordnet ist
      */
@@ -278,8 +307,11 @@ public class AbfrageService {
         final var nameRelevantAbfragevariante = new StringBuilder();
         this.infrastrukturabfrageRepository.findAllByAbfrageBauvorhabenId(abfrage.getAbfrage().getBauvorhaben().getId())
             .forEach(infrastrukturabfrage -> {
-                infrastrukturabfrage
-                    .getAbfragevarianten()
+                Stream
+                    .concat(
+                        CollectionUtils.emptyIfNull(infrastrukturabfrage.getAbfragevarianten()).stream(),
+                        CollectionUtils.emptyIfNull(infrastrukturabfrage.getAbfragevariantenSachbearbeitung()).stream()
+                    )
                     .forEach(abfragevariante -> {
                         if (abfragevariante.isRelevant()) {
                             relevanteAbfrage.set(true);

@@ -56,4 +56,6 @@ public class AbfragevarianteModel extends BaseEntityModel {
     private BigDecimal geschossflaecheSonstiges;
 
     private List<BauabschnittModel> bauabschnitte;
+
+    private AbfragevarianteSachbearbeitungModel abfragevarianteSachbearbeitung;
 }

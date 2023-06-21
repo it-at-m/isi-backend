@@ -7,6 +7,7 @@ package de.muenchen.isi.infrastructure.entity;
 import java.util.List;
 import javax.persistence.ElementCollection;
 import javax.persistence.Embeddable;
+import javax.persistence.OrderBy;
 import lombok.Data;
 
 @Data
@@ -14,5 +15,6 @@ import lombok.Data;
 public class Foerdermix {
 
     @ElementCollection
+    @OrderBy("bezeichnung asc")
     private List<Foerderart> foerderarten;
 }

@@ -5,7 +5,8 @@
 package de.muenchen.isi.api.controller;
 
 import de.muenchen.isi.api.dto.InfrastrukturabfrageDto;
-import de.muenchen.isi.api.dto.abfrageAbfrageerstellungAngelegt.AbfrageerstellungInfrastrukturabfrageAngelegtDto;
+import de.muenchen.isi.api.dto.abfrageAbfrageerstellungAngelegt.InfrastrukturabfrageAngelegtDto;
+import de.muenchen.isi.api.dto.abfrageSachbearbeitungInBearbeitungSachbearbeitung.InfrastrukturabfrageInBearbeitungSachbearbeitungDto;
 import de.muenchen.isi.api.dto.error.InformationResponseDto;
 import de.muenchen.isi.api.mapper.AbfrageApiMapper;
 import de.muenchen.isi.domain.exception.AbfrageStatusNotAllowedException;
@@ -127,7 +128,7 @@ public class AbfrageController {
     )
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_POST_ABFRAGE.name())")
     public ResponseEntity<InfrastrukturabfrageDto> createInfrastrukturabfrage(
-        @RequestBody @Valid @NotNull final AbfrageerstellungInfrastrukturabfrageAngelegtDto abfrageDto
+        @RequestBody @Valid @NotNull final InfrastrukturabfrageAngelegtDto abfrageDto
     ) throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException {
         var requestModel = this.abfrageApiMapper.dto2Model(abfrageDto);
         final var abfrage =
@@ -143,7 +144,7 @@ public class AbfrageController {
         return new ResponseEntity<>(saved, HttpStatus.CREATED);
     }
 
-    @PatchMapping("/abfrage/{id}")
+    @PatchMapping("/abfrage-angelegt/{id}")
     @Transactional(rollbackFor = { OptimisticLockingException.class, UniqueViolationException.class })
     @Operation(summary = "Aktualisierung einer Infrastrukturabfrage im Status ANGELEGT.")
     @ApiResponses(
@@ -178,7 +179,7 @@ public class AbfrageController {
     )
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_PATCH_ABFRAGE_ANGELEGT.name())")
     public ResponseEntity<InfrastrukturabfrageDto> patchAbfrageAngelegt(
-        @RequestBody @Valid @NotNull final AbfrageerstellungInfrastrukturabfrageAngelegtDto abfrageDto,
+        @RequestBody @Valid @NotNull final InfrastrukturabfrageAngelegtDto abfrageDto,
         @PathVariable @NotNull final UUID id
     )
         throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, FileHandlingFailedException, FileHandlingWithS3FailedException {
@@ -190,6 +191,43 @@ public class AbfrageController {
                 );
         model.setAbfrage(abfrage);
         final var responseModel = this.abfrageService.patchAbfrageAngelegt(model, id);
+        final var saved = this.abfrageApiMapper.model2Dto(responseModel);
+        return ResponseEntity.ok(saved);
+    }
+
+    @PatchMapping("/abfrage-in-bearbeitung-sachbearbeitung/{id}")
+    @Transactional(rollbackFor = { OptimisticLockingException.class, UniqueViolationException.class })
+    @Operation(summary = "Aktualisierung einer Infrastrukturabfrage im Status IN_BEARBEITUNG_SACHBEARBEITUNG.")
+    @ApiResponses(
+        value = {
+            @ApiResponse(responseCode = "200", description = "OK -> Abfrage wurde erfolgreich aktualisiert."),
+            @ApiResponse(
+                responseCode = "400",
+                description = "BAD_REQUEST -> Abfrage konnte nicht aktualisiert werden, überprüfen sie die Eingabe oder die Abfrage befindet sich in einem unzulässigen Status",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+            @ApiResponse(
+                responseCode = "404",
+                description = "NOT_FOUND -> Es gibt keine Abfrage mit der ID.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+            @ApiResponse(
+                responseCode = "412",
+                description = "PRECONDITION_FAILED -> In der Anwendung ist bereits eine neuere Version der Entität gespeichert.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+        }
+    )
+    @PreAuthorize(
+        "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_PATCH_ABFRAGE_IN_BEARBEITUNG_SACHBEARBEITUNG.name())"
+    )
+    public ResponseEntity<InfrastrukturabfrageDto> patchAbfrageInBearbeitungSachbearbeitung(
+        @RequestBody @Valid @NotNull final InfrastrukturabfrageInBearbeitungSachbearbeitungDto abfrageDto,
+        @PathVariable @NotNull final UUID id
+    )
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException {
+        var model = this.abfrageApiMapper.dto2Model(abfrageDto);
+        final var responseModel = this.abfrageService.patchAbfrageInBearbeitungSachbearbeitung(model, id);
         final var saved = this.abfrageApiMapper.model2Dto(responseModel);
         return ResponseEntity.ok(saved);
     }

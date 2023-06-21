@@ -14,7 +14,7 @@ import de.muenchen.isi.domain.mapper.BauvorhabenDomainMapper;
 import de.muenchen.isi.domain.mapper.BauvorhabenDomainMapperImpl;
 import de.muenchen.isi.domain.mapper.DokumentDomainMapperImpl;
 import de.muenchen.isi.domain.model.BauvorhabenModel;
-import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.AbfrageerstellungAbfrageAngelegtModel;
+import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.AbfrageAngelegtModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.InfrastruktureinrichtungModel;
 import de.muenchen.isi.domain.service.filehandling.DokumentService;
 import de.muenchen.isi.infrastructure.entity.Abfrage;
@@ -348,8 +348,8 @@ public class BauvorhabenServiceTest {
         final var bauvorhaben = new Bauvorhaben();
         bauvorhaben.setId(id);
 
-        final var abfrage = new AbfrageerstellungAbfrageAngelegtModel();
-        AbfrageerstellungAbfrageAngelegtModel returnedAbfrage;
+        final var abfrage = new AbfrageAngelegtModel();
+        AbfrageAngelegtModel returnedAbfrage;
 
         // Wenn 'bauvorhabenId' null ist, soll nichts passieren.
 
