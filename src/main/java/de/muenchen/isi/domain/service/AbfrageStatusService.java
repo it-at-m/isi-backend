@@ -8,9 +8,9 @@ import de.muenchen.isi.domain.exception.StateMachineTransitionFailedException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
 import de.muenchen.isi.domain.model.InfrastrukturabfrageModel;
 import de.muenchen.isi.domain.model.common.TransitionModel;
-import de.muenchen.isi.domain.service.util.AuthenticationUtils;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrageEvents;
+import de.muenchen.isi.security.AuthenticationUtils;
 import de.muenchen.isi.security.AuthoritiesEnum;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -49,6 +49,8 @@ public class AbfrageStatusService {
     private final AbfrageService abfrageService;
 
     private final StateMachineFactory<StatusAbfrage, StatusAbfrageEvents> stateMachineFactory;
+
+    private final AuthenticationUtils authenticationUtils;
 
     /**
      * Ändert den Status auf {@link StatusAbfrage#OFFEN}.
@@ -313,7 +315,7 @@ public class AbfrageStatusService {
      */
     public List<TransitionModel> getStatusAbfrageEventsBasedOnStateAndAuthorities(final UUID id)
         throws EntityNotFoundException {
-        List<AuthoritiesEnum> authorities = AuthenticationUtils.getUserAuthorities();
+        List<AuthoritiesEnum> authorities = authenticationUtils.getUserAuthorities();
         List<StatusAbfrageEvents> possibleAbfrageEventsBasedOnAuthorities = getStatusAbfrageEventsForAuthorities(
             authorities,
             getAuthoritiesAndEventsMap()

@@ -4,16 +4,10 @@
  */
 package de.muenchen.isi.api.dto;
 
-import de.muenchen.isi.api.validation.NotUnspecified;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Planungsrecht;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
-import javax.validation.Valid;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -23,15 +17,12 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 public class AbfragevarianteDto extends BaseEntityDto {
 
-    @NotNull
     private Integer abfragevariantenNr;
 
-    @NotBlank
-    @Size(max = 30, message = "Es sind maximal {max} Zeichen erlaubt")
+    private boolean isRelevant;
+
     private String abfragevariantenName;
 
-    @NotNull
-    @NotUnspecified
     private Planungsrecht planungsrecht;
 
     private BigDecimal geschossflaecheWohnen;
@@ -50,19 +41,12 @@ public class AbfragevarianteDto extends BaseEntityDto {
 
     private Integer anzahlWeBaurechtlichFestgesetzt;
 
-    @NotNull
-    @Min(1900)
-    @Max(2100)
     private Integer realisierungVon;
 
-    @NotNull
-    @Min(1900)
-    @Max(2100)
-    private Integer realisierungBis;
+    private LocalDate satzungsbeschluss;
 
     private BigDecimal geschossflaecheGenossenschaftlicheWohnungen;
 
-    @NotNull
     private Boolean sonderwohnformen;
 
     private BigDecimal geschossflaecheStudentenwohnungen;
@@ -71,5 +55,7 @@ public class AbfragevarianteDto extends BaseEntityDto {
 
     private BigDecimal geschossflaecheSonstiges;
 
-    private List<@Valid @NotNull BauabschnittDto> bauabschnitte;
+    private List<BauabschnittDto> bauabschnitte;
+
+    private AbfragevarianteSachbearbeitungDto abfragevarianteSachbearbeitung;
 }

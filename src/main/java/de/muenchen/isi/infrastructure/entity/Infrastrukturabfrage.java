@@ -11,26 +11,23 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.Index;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.IndexedEmbedded;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-@EntityListeners(AuditingEntityListener.class)
 @Table(indexes = { @Index(name = "name_abfrage_index", columnList = "nameAbfrage") })
 @Indexed
 public class Infrastrukturabfrage extends BaseEntity {
@@ -47,9 +44,15 @@ public class Infrastrukturabfrage extends BaseEntity {
     @Column(nullable = true)
     private SobonVerfahrensgrundsaetzeJahr sobonJahr;
 
-    @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval = true)
-    @JoinColumn(name = "abfrage_id", referencedColumnName = "id")
+    @OneToMany(cascade = { CascadeType.ALL }, orphanRemoval = true)
+    @JoinColumn(name = "abfrage_abfragevarianten_id", referencedColumnName = "id")
+    @OrderBy("abfragevariantenNr asc")
     private List<Abfragevariante> abfragevarianten;
+
+    @OneToMany(cascade = { CascadeType.ALL }, orphanRemoval = true)
+    @JoinColumn(name = "abfrage_abfragevarianten_sachbearbeitung_id", referencedColumnName = "id")
+    @OrderBy("abfragevariantenNr asc")
+    private List<Abfragevariante> abfragevariantenSachbearbeitung;
 
     @Column(nullable = true)
     private String aktenzeichenProLbk;

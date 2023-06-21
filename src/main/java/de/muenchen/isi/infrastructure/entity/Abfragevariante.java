@@ -6,6 +6,7 @@ package de.muenchen.isi.infrastructure.entity;
 
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Planungsrecht;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -15,6 +16,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import lombok.Data;
@@ -26,7 +28,9 @@ import lombok.ToString;
     uniqueConstraints = {
         @UniqueConstraint(
             name = "UniqueNameAbfragevariantePerAbfrage",
-            columnNames = { "abfrage_id", "abfragevariantenName" }
+            columnNames = {
+                "abfrage_abfragevarianten_id", "abfrage_abfragevarianten_sachbearbeitung_id", "abfragevariantenName",
+            }
         ),
     }
 )
@@ -37,6 +41,9 @@ public class Abfragevariante extends BaseEntity {
 
     @Column(nullable = false)
     private Integer abfragevariantenNr;
+
+    @Column(nullable = false)
+    private boolean isRelevant;
 
     @Column(nullable = false, length = 30)
     private String abfragevariantenName;
@@ -72,8 +79,8 @@ public class Abfragevariante extends BaseEntity {
     @Column(nullable = false)
     private Integer realisierungVon; // JJJJ
 
-    @Column(nullable = false)
-    private Integer realisierungBis; // JJJJ
+    @Column(nullable = true)
+    private LocalDate satzungsbeschluss;
 
     @Column(precision = 10, scale = 2, nullable = true)
     private BigDecimal geschossflaecheGenossenschaftlicheWohnungen;
@@ -92,5 +99,8 @@ public class Abfragevariante extends BaseEntity {
 
     @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "abfragevariante_id")
+    @OrderBy("createdDateTime asc")
     private List<Bauabschnitt> bauabschnitte;
+
+    private AbfragevarianteSachbearbeitung abfragevarianteSachbearbeitung;
 }

@@ -1,7 +1,7 @@
 package de.muenchen.isi.api.controller;
 
 import de.muenchen.isi.api.dto.list.AbfrageListElementsDto;
-import de.muenchen.isi.api.mapper.AbfrageListElementApiMapper;
+import de.muenchen.isi.api.mapper.AbfrageApiMapper;
 import de.muenchen.isi.domain.service.AbfrageListService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -23,7 +23,7 @@ public class AbfrageListController {
 
     private final AbfrageListService abfrageListService;
 
-    private final AbfrageListElementApiMapper abfrageListElementApiMapper;
+    private final AbfrageApiMapper abfrageApiMapper;
 
     @GetMapping("abfragen")
     @Transactional(readOnly = true)
@@ -31,7 +31,7 @@ public class AbfrageListController {
     @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "OK") })
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_READ_ABFRAGE.name())")
     public ResponseEntity<AbfrageListElementsDto> getAbfrageListElements() {
-        final var dto = this.abfrageListElementApiMapper.model2Dto(this.abfrageListService.getAbfrageListElements());
+        final var dto = this.abfrageApiMapper.model2Dto(this.abfrageListService.getAbfrageListElements());
         return ResponseEntity.ok(dto);
     }
 }

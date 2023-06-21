@@ -13,8 +13,8 @@ import de.muenchen.isi.domain.exception.UniqueViolationException;
 import de.muenchen.isi.domain.mapper.BauvorhabenDomainMapper;
 import de.muenchen.isi.domain.mapper.BauvorhabenDomainMapperImpl;
 import de.muenchen.isi.domain.mapper.DokumentDomainMapperImpl;
-import de.muenchen.isi.domain.model.AbfrageModel;
 import de.muenchen.isi.domain.model.BauvorhabenModel;
+import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.AbfrageAngelegtModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.InfrastruktureinrichtungModel;
 import de.muenchen.isi.domain.service.filehandling.DokumentService;
 import de.muenchen.isi.infrastructure.entity.Abfrage;
@@ -28,6 +28,7 @@ import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Kindergart
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Kinderkrippe;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Mittelschule;
 import de.muenchen.isi.infrastructure.repository.BauvorhabenRepository;
+import de.muenchen.isi.infrastructure.repository.BauvorhabenSuchwortRepository;
 import de.muenchen.isi.infrastructure.repository.InfrastrukturabfrageRepository;
 import de.muenchen.isi.infrastructure.repository.infrastruktureinrichtung.GrundschuleRepository;
 import de.muenchen.isi.infrastructure.repository.infrastruktureinrichtung.GsNachmittagBetreuungRepository;
@@ -86,6 +87,9 @@ public class BauvorhabenServiceTest {
     @Mock
     private DokumentService dokumentService;
 
+    @Mock
+    private BauvorhabenSuchwortRepository bauvorhabenSuchwortRepository;
+
     @BeforeEach
     public void beforeEach() {
         this.bauvorhabenService =
@@ -99,10 +103,12 @@ public class BauvorhabenServiceTest {
                 this.gsNachmittagBetreuungRepository,
                 this.grundschuleRepository,
                 this.mittelschuleRepository,
-                this.dokumentService
+                this.dokumentService,
+                this.bauvorhabenSuchwortRepository
             );
 
         Mockito.reset(
+            this.bauvorhabenDomainMapper,
             this.bauvorhabenRepository,
             this.infrastrukturabfrageRepository,
             this.kinderkrippeRepository,
@@ -111,7 +117,8 @@ public class BauvorhabenServiceTest {
             this.gsNachmittagBetreuungRepository,
             this.grundschuleRepository,
             this.mittelschuleRepository,
-            this.dokumentService
+            this.dokumentService,
+            this.bauvorhabenSuchwortRepository
         );
     }
 
@@ -348,8 +355,8 @@ public class BauvorhabenServiceTest {
         final var bauvorhaben = new Bauvorhaben();
         bauvorhaben.setId(id);
 
-        final var abfrage = new AbfrageModel();
-        AbfrageModel returnedAbfrage;
+        final var abfrage = new AbfrageAngelegtModel();
+        AbfrageAngelegtModel returnedAbfrage;
 
         // Wenn 'bauvorhabenId' null ist, soll nichts passieren.
 

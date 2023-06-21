@@ -21,8 +21,8 @@
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <maven.compiler.release>${java.version}</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <spring.boot.version>2.7.10</spring.boot.version>
-        <spring.cloud.version>2021.0.6</spring.cloud.version>
+        <spring.boot.version>2.7.12</spring.boot.version>
+        <spring.cloud.version>2021.0.7</spring.cloud.version>
         <logstash.encoder>7.0.1</logstash.encoder>
         <apache.commons.collections4>4.4</apache.commons.collections4>
         <apache.commons.csv>1.9.0</apache.commons.csv>

@@ -6,6 +6,7 @@ package de.muenchen.isi.domain.model;
 
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Planungsrecht;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -17,6 +18,8 @@ import lombok.ToString;
 public class AbfragevarianteModel extends BaseEntityModel {
 
     private Integer abfragevariantenNr;
+
+    private boolean isRelevant;
 
     private String abfragevariantenName;
 
@@ -40,7 +43,7 @@ public class AbfragevarianteModel extends BaseEntityModel {
 
     private Integer realisierungVon;
 
-    private Integer realisierungBis;
+    private LocalDate satzungsbeschluss;
 
     private BigDecimal geschossflaecheGenossenschaftlicheWohnungen;
 
@@ -53,4 +56,6 @@ public class AbfragevarianteModel extends BaseEntityModel {
     private BigDecimal geschossflaecheSonstiges;
 
     private List<BauabschnittModel> bauabschnitte;
+
+    private AbfragevarianteSachbearbeitungModel abfragevarianteSachbearbeitung;
 }

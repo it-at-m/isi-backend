@@ -9,6 +9,7 @@ import de.muenchen.isi.infrastructure.entity.common.Verortung;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVorhaben;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.entity.filehandling.Dokument;
+import io.hypersistence.utils.hibernate.type.json.JsonType;
 import java.time.LocalDate;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -21,12 +22,14 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import lombok.Data;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
 
 @Embeddable
 @Data
+@TypeDef(name = "json", typeClass = JsonType.class)
 public class Abfrage {
 
     @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY, orphanRemoval = true)
@@ -39,7 +42,8 @@ public class Abfrage {
     @Embedded
     private Adresse adresse;
 
-    @OneToOne(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval = true)
+    @Type(type = "json")
+    @Column(columnDefinition = "jsonb")
     private Verortung verortung;
 
     @Column(nullable = false)

@@ -77,7 +77,6 @@ public class TestData {
         original.setGeschossflaecheWohnen(new BigDecimal("1234.56"));
         original.setGesamtanzahlWe(31);
         original.setRealisierungVon(2023);
-        original.setRealisierungBis(2024);
         original.setSonderwohnformen(false);
         original.setBauabschnitte(List.of(createBauabschnittModel()));
 
@@ -87,6 +86,7 @@ public class TestData {
     private static BauabschnittModel createBauabschnittModel() {
         final BauabschnittModel bauabschnitt = new BauabschnittModel();
         bauabschnitt.setBezeichnung("Der einzigartige Bauabschnitt");
+        bauabschnitt.setTechnical(false);
         bauabschnitt.setBaugebiete(List.of(createBaugebietModel()));
         return bauabschnitt;
     }
@@ -95,6 +95,8 @@ public class TestData {
         final BaugebietModel baugebiet = new BaugebietModel();
         baugebiet.setBezeichnung("Das Baugebiet des einzigartigen Baubschnitts");
         baugebiet.setBaugebietTyp(BaugebietTyp.WA);
+        baugebiet.setTechnical(false);
+        baugebiet.setRealisierungVon(2023);
         baugebiet.setBauraten(List.of(createBaurateModel()));
         return baugebiet;
     }

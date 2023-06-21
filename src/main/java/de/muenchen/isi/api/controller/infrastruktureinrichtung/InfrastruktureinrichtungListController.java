@@ -1,7 +1,7 @@
 package de.muenchen.isi.api.controller.infrastruktureinrichtung;
 
 import de.muenchen.isi.api.dto.list.InfrastruktureinrichtungListElementsDto;
-import de.muenchen.isi.api.mapper.InfrastruktureinrichtungListElementApiMapper;
+import de.muenchen.isi.api.mapper.InfrastruktureinrichtungApiMapper;
 import de.muenchen.isi.domain.service.infrastruktureinrichtung.InfrastruktureinrichtungListService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -23,7 +23,7 @@ public class InfrastruktureinrichtungListController {
 
     private final InfrastruktureinrichtungListService infrastruktureinrichtungListService;
 
-    private final InfrastruktureinrichtungListElementApiMapper infrastruktureinrichtungListElementApiMapper;
+    private final InfrastruktureinrichtungApiMapper infrastruktureinrichtungApiMapper;
 
     @GetMapping("infrastruktureinrichtungen")
     @Transactional(readOnly = true)
@@ -39,7 +39,7 @@ public class InfrastruktureinrichtungListController {
     )
     public ResponseEntity<InfrastruktureinrichtungListElementsDto> getInfrastruktureinrichtungListElements() {
         final var dto =
-            this.infrastruktureinrichtungListElementApiMapper.model2Dto(
+            this.infrastruktureinrichtungApiMapper.model2Dto(
                     this.infrastruktureinrichtungListService.getInfrastruktureinrichtungListElements()
                 );
         return ResponseEntity.ok(dto);

@@ -7,6 +7,7 @@ package de.muenchen.isi.infrastructure.entity;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import javax.persistence.Column;
+import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
@@ -20,6 +21,7 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @MappedSuperclass
 @NoArgsConstructor
@@ -27,6 +29,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 @Setter
 @ToString
 @EqualsAndHashCode
+@EntityListeners(AuditingEntityListener.class)
 public abstract class BaseEntity {
 
     @Column(length = 36)

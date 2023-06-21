@@ -25,6 +25,8 @@ public class InfrastrukturabfrageModel extends BaseEntityModel {
 
     private List<AbfragevarianteModel> abfragevarianten;
 
+    private List<AbfragevarianteModel> abfragevariantenSachbearbeitung;
+
     private String aktenzeichenProLbk;
 
     private UncertainBoolean offiziellerVerfahrensschritt;
