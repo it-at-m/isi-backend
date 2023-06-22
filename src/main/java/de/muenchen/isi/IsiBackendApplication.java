@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 /**
- * Application class for starting the micro-service.
+ * Application class for starting the microservice.
  */
 @Configuration
 @ComponentScan(basePackages = { "org.springframework.data.jpa.convert.threeten", "de.muenchen.isi" })
