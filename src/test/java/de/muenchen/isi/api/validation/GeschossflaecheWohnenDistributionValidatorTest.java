@@ -6,7 +6,7 @@ import static org.hamcrest.Matchers.is;
 import de.muenchen.isi.api.dto.BauabschnittDto;
 import de.muenchen.isi.api.dto.BaugebietDto;
 import de.muenchen.isi.api.dto.BaurateDto;
-import de.muenchen.isi.api.dto.abfrageAbfrageerstellungAngelegt.AbfrageerstellungAbfragevarianteAngelegtDto;
+import de.muenchen.isi.api.dto.abfrageAbfrageerstellungAngelegt.AbfragevarianteAngelegtDto;
 import java.math.BigDecimal;
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -19,23 +19,20 @@ class GeschossflaecheWohnenDistributionValidatorTest {
     @Test
     void isValidNonTechnicalBaugebiet() {
         assertThat(
-            this.geschossflaecheWohnenDistributionValidator.isValid(
-                    new AbfrageerstellungAbfragevarianteAngelegtDto(),
-                    null
-                ),
+            this.geschossflaecheWohnenDistributionValidator.isValid(new AbfragevarianteAngelegtDto(), null),
             is(true)
         );
 
         // --
 
-        var abfragevariante = new AbfrageerstellungAbfragevarianteAngelegtDto();
+        var abfragevariante = new AbfragevarianteAngelegtDto();
         abfragevariante.setGeschossflaecheWohnen(BigDecimal.valueOf(150));
 
         assertThat(this.geschossflaecheWohnenDistributionValidator.isValid(abfragevariante, null), is(true));
 
         // --
 
-        abfragevariante = new AbfrageerstellungAbfragevarianteAngelegtDto();
+        abfragevariante = new AbfragevarianteAngelegtDto();
         abfragevariante.setGeschossflaecheWohnen(BigDecimal.valueOf(150));
 
         var bauabschnitt1 = new BauabschnittDto();
@@ -46,7 +43,7 @@ class GeschossflaecheWohnenDistributionValidatorTest {
 
         // --
 
-        abfragevariante = new AbfrageerstellungAbfragevarianteAngelegtDto();
+        abfragevariante = new AbfragevarianteAngelegtDto();
         abfragevariante.setGeschossflaecheWohnen(BigDecimal.valueOf(150));
 
         var baugebiet1 = new BaugebietDto();
@@ -68,7 +65,7 @@ class GeschossflaecheWohnenDistributionValidatorTest {
 
         // --
 
-        abfragevariante = new AbfrageerstellungAbfragevarianteAngelegtDto();
+        abfragevariante = new AbfragevarianteAngelegtDto();
         abfragevariante.setGeschossflaecheWohnen(BigDecimal.valueOf(150));
 
         baugebiet1 = new BaugebietDto();
@@ -92,7 +89,7 @@ class GeschossflaecheWohnenDistributionValidatorTest {
 
         // --
 
-        abfragevariante = new AbfrageerstellungAbfragevarianteAngelegtDto();
+        abfragevariante = new AbfragevarianteAngelegtDto();
         abfragevariante.setGeschossflaecheWohnen(BigDecimal.valueOf(150));
 
         baugebiet1 = new BaugebietDto();
@@ -122,7 +119,7 @@ class GeschossflaecheWohnenDistributionValidatorTest {
 
         // --
 
-        abfragevariante = new AbfrageerstellungAbfragevarianteAngelegtDto();
+        abfragevariante = new AbfragevarianteAngelegtDto();
         abfragevariante.setGeschossflaecheWohnen(BigDecimal.valueOf(150));
 
         baugebiet1 = new BaugebietDto();
@@ -146,7 +143,7 @@ class GeschossflaecheWohnenDistributionValidatorTest {
 
         // --
 
-        abfragevariante = new AbfrageerstellungAbfragevarianteAngelegtDto();
+        abfragevariante = new AbfragevarianteAngelegtDto();
         abfragevariante.setGeschossflaecheWohnen(BigDecimal.valueOf(149));
 
         baugebiet1 = new BaugebietDto();
@@ -172,23 +169,20 @@ class GeschossflaecheWohnenDistributionValidatorTest {
     @Test
     void isValidTechnicalBaugebiet() {
         assertThat(
-            this.geschossflaecheWohnenDistributionValidator.isValid(
-                    new AbfrageerstellungAbfragevarianteAngelegtDto(),
-                    null
-                ),
+            this.geschossflaecheWohnenDistributionValidator.isValid(new AbfragevarianteAngelegtDto(), null),
             is(true)
         );
 
         // --
 
-        var abfragevariante = new AbfrageerstellungAbfragevarianteAngelegtDto();
+        var abfragevariante = new AbfragevarianteAngelegtDto();
         abfragevariante.setGeschossflaecheWohnen(BigDecimal.valueOf(150));
 
         assertThat(this.geschossflaecheWohnenDistributionValidator.isValid(abfragevariante, null), is(true));
 
         // --
 
-        abfragevariante = new AbfrageerstellungAbfragevarianteAngelegtDto();
+        abfragevariante = new AbfragevarianteAngelegtDto();
         abfragevariante.setGeschossflaecheWohnen(BigDecimal.valueOf(150));
 
         var bauabschnitt1 = new BauabschnittDto();
@@ -199,7 +193,7 @@ class GeschossflaecheWohnenDistributionValidatorTest {
 
         // --
 
-        abfragevariante = new AbfrageerstellungAbfragevarianteAngelegtDto();
+        abfragevariante = new AbfragevarianteAngelegtDto();
         abfragevariante.setGeschossflaecheWohnen(BigDecimal.valueOf(150));
 
         var baugebiet1 = new BaugebietDto();
@@ -218,7 +212,7 @@ class GeschossflaecheWohnenDistributionValidatorTest {
 
         // --
 
-        abfragevariante = new AbfrageerstellungAbfragevarianteAngelegtDto();
+        abfragevariante = new AbfragevarianteAngelegtDto();
         abfragevariante.setGeschossflaecheWohnen(BigDecimal.valueOf(150));
 
         baugebiet1 = new BaugebietDto();
@@ -250,7 +244,7 @@ class GeschossflaecheWohnenDistributionValidatorTest {
 
         // --
 
-        abfragevariante = new AbfrageerstellungAbfragevarianteAngelegtDto();
+        abfragevariante = new AbfragevarianteAngelegtDto();
         abfragevariante.setGeschossflaecheWohnen(BigDecimal.valueOf(149));
 
         baugebiet1 = new BaugebietDto();
@@ -282,7 +276,7 @@ class GeschossflaecheWohnenDistributionValidatorTest {
 
         // --
 
-        abfragevariante = new AbfrageerstellungAbfragevarianteAngelegtDto();
+        abfragevariante = new AbfragevarianteAngelegtDto();
         abfragevariante.setGeschossflaecheWohnen(BigDecimal.valueOf(151));
 
         baugebiet1 = new BaugebietDto();
@@ -314,7 +308,7 @@ class GeschossflaecheWohnenDistributionValidatorTest {
 
         // --
 
-        abfragevariante = new AbfrageerstellungAbfragevarianteAngelegtDto();
+        abfragevariante = new AbfragevarianteAngelegtDto();
         abfragevariante.setGeschossflaecheWohnen(BigDecimal.valueOf(150));
 
         baugebiet1 = new BaugebietDto();

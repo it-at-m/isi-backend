@@ -56,4 +56,6 @@ public class AbfragevarianteDto extends BaseEntityDto {
     private BigDecimal geschossflaecheSonstiges;
 
     private List<BauabschnittDto> bauabschnitte;
+
+    private AbfragevarianteSachbearbeitungDto abfragevarianteSachbearbeitung;
 }

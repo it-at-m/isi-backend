@@ -3,7 +3,7 @@ package de.muenchen.isi.api.validation;
 import de.muenchen.isi.api.dto.BauabschnittDto;
 import de.muenchen.isi.api.dto.BaugebietDto;
 import de.muenchen.isi.api.dto.BaurateDto;
-import de.muenchen.isi.api.dto.abfrageAbfrageerstellungAngelegt.AbfrageerstellungAbfragevarianteAngelegtDto;
+import de.muenchen.isi.api.dto.abfrageAbfrageerstellungAngelegt.AbfragevarianteAngelegtDto;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.apache.commons.collections4.CollectionUtils;
@@ -19,9 +19,7 @@ public class DistributionValidator {
      * @param abfragevariante zur Extraktion der nichttechnischen Baugebiete.
      * @return die Liste an nichttechnscieh Baugebieten der Abfragevariante identifiziert über {@link BaugebietDto#getTechnical()}.
      */
-    public List<BaugebietDto> getNonTechnicalBaugebiete(
-        final AbfrageerstellungAbfragevarianteAngelegtDto abfragevariante
-    ) {
+    public List<BaugebietDto> getNonTechnicalBaugebiete(final AbfragevarianteAngelegtDto abfragevariante) {
         return CollectionUtils
             .emptyIfNull(abfragevariante.getBauabschnitte())
             .stream()
@@ -38,9 +36,7 @@ public class DistributionValidator {
      * @param abfragevariante zur Extraktion der Baurante von technischen Baugebieten.
      * @return die Liste an Bauraten aller technischen Baugebiete der Abfragevariante identifiziert über {@link BaugebietDto#getTechnical()}.
      */
-    public List<BaurateDto> getBauratenFromAllTechnicalBaugebiete(
-        final AbfrageerstellungAbfragevarianteAngelegtDto abfragevariante
-    ) {
+    public List<BaurateDto> getBauratenFromAllTechnicalBaugebiete(final AbfragevarianteAngelegtDto abfragevariante) {
         return CollectionUtils
             .emptyIfNull(abfragevariante.getBauabschnitte())
             .stream()

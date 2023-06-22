@@ -6,7 +6,7 @@ import static org.hamcrest.Matchers.is;
 import de.muenchen.isi.api.dto.BauabschnittDto;
 import de.muenchen.isi.api.dto.BaugebietDto;
 import de.muenchen.isi.api.dto.BaurateDto;
-import de.muenchen.isi.api.dto.abfrageAbfrageerstellungAngelegt.AbfrageerstellungAbfragevarianteAngelegtDto;
+import de.muenchen.isi.api.dto.abfrageAbfrageerstellungAngelegt.AbfragevarianteAngelegtDto;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,13 +23,13 @@ class DistributionValidatorTest {
     @Test
     void getNonTechnicalBaugebiete() {
         assertThat(
-            this.distributionValidator.getNonTechnicalBaugebiete(new AbfrageerstellungAbfragevarianteAngelegtDto()),
+            this.distributionValidator.getNonTechnicalBaugebiete(new AbfragevarianteAngelegtDto()),
             is(List.of())
         );
 
         // --
 
-        var abfragevariante = new AbfrageerstellungAbfragevarianteAngelegtDto();
+        var abfragevariante = new AbfragevarianteAngelegtDto();
 
         var bauabschnitt1 = new BauabschnittDto();
 
@@ -39,7 +39,7 @@ class DistributionValidatorTest {
 
         // --
 
-        abfragevariante = new AbfrageerstellungAbfragevarianteAngelegtDto();
+        abfragevariante = new AbfragevarianteAngelegtDto();
         abfragevariante.setGesamtanzahlWe(150);
 
         var baugebiet1 = new BaugebietDto();
@@ -66,15 +66,13 @@ class DistributionValidatorTest {
     @Test
     void getBauratenFromAllTechnicalBaugebiete() {
         assertThat(
-            this.distributionValidator.getBauratenFromAllTechnicalBaugebiete(
-                    new AbfrageerstellungAbfragevarianteAngelegtDto()
-                ),
+            this.distributionValidator.getBauratenFromAllTechnicalBaugebiete(new AbfragevarianteAngelegtDto()),
             is(List.of())
         );
 
         // --
 
-        var abfragevariante = new AbfrageerstellungAbfragevarianteAngelegtDto();
+        var abfragevariante = new AbfragevarianteAngelegtDto();
 
         var bauabschnitt1 = new BauabschnittDto();
 
@@ -84,7 +82,7 @@ class DistributionValidatorTest {
 
         // --
 
-        abfragevariante = new AbfrageerstellungAbfragevarianteAngelegtDto();
+        abfragevariante = new AbfragevarianteAngelegtDto();
         abfragevariante.setGesamtanzahlWe(150);
 
         var baugebiet1 = new BaugebietDto();
@@ -106,7 +104,7 @@ class DistributionValidatorTest {
 
         // --
 
-        abfragevariante = new AbfrageerstellungAbfragevarianteAngelegtDto();
+        abfragevariante = new AbfragevarianteAngelegtDto();
         abfragevariante.setGesamtanzahlWe(150);
 
         baugebiet1 = new BaugebietDto();

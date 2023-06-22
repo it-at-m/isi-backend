@@ -10,6 +10,7 @@ import de.muenchen.isi.api.dto.infrastruktureinrichtung.HausFuerKinderDto;
 import de.muenchen.isi.api.dto.infrastruktureinrichtung.KindergartenDto;
 import de.muenchen.isi.api.dto.infrastruktureinrichtung.KinderkrippeDto;
 import de.muenchen.isi.api.dto.infrastruktureinrichtung.MittelschuleDto;
+import de.muenchen.isi.api.dto.list.InfrastruktureinrichtungListElementsDto;
 import de.muenchen.isi.configuration.MapstructConfiguration;
 import de.muenchen.isi.domain.model.BaugebietModel;
 import de.muenchen.isi.domain.model.BauvorhabenModel;
@@ -19,6 +20,7 @@ import de.muenchen.isi.domain.model.infrastruktureinrichtung.HausFuerKinderModel
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.KindergartenModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.KinderkrippeModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.MittelschuleModel;
+import de.muenchen.isi.domain.model.list.InfrastruktureinrichtungListElementsModel;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -26,6 +28,8 @@ import org.mapstruct.MappingTarget;
 
 @Mapper(config = MapstructConfiguration.class)
 public interface InfrastruktureinrichtungApiMapper {
+    InfrastruktureinrichtungListElementsDto model2Dto(final InfrastruktureinrichtungListElementsModel model);
+
     /*
      * Mapping für Kinderkrippe
      */

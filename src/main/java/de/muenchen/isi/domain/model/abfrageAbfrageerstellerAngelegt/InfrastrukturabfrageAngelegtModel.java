@@ -8,17 +8,17 @@ import lombok.ToString;
 
 @Data
 @ToString(callSuper = true)
-public class AbfrageerstellungInfrastrukturabfrageAngelegtModel {
+public class InfrastrukturabfrageAngelegtModel {
 
     private Long version;
 
-    private AbfrageerstellungAbfrageAngelegtModel abfrage;
+    private AbfrageAngelegtModel abfrage;
 
     private UncertainBoolean sobonRelevant;
 
     private SobonVerfahrensgrundsaetzeJahr sobonJahr;
 
-    private List<AbfrageerstellungAbfragevarianteAngelegtModel> abfragevarianten;
+    private List<AbfragevarianteAngelegtModel> abfragevarianten;
 
     private String aktenzeichenProLbk;
 
