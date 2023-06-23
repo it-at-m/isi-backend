@@ -78,7 +78,7 @@ class StammdatenImportServiceTest {
         Mockito.when(this.multipartFile.getInputStream()).thenReturn(inputStream);
 
         final var csvEntry = new StaedtebaulicheOrientierungswertCsv();
-        csvEntry.setJahr(SobonVerfahrensgrundsaetzeJahr.JAHR_2014);
+        csvEntry.setJahr(SobonVerfahrensgrundsaetzeJahr.JAHR_2021);
         csvEntry.setWohnungstyp(Wohnungstyp.GW_FREIFINANZEIRT);
         csvEntry.setDurchschnittlicheGrundflaeche(90L);
         csvEntry.setBelegungsdichte(BigDecimal.valueOf(210, 2));
@@ -88,7 +88,7 @@ class StammdatenImportServiceTest {
             .thenReturn(List.of(csvEntry));
 
         final var entity = new StaedtebaulicheOrientierungswert();
-        entity.setJahr(SobonVerfahrensgrundsaetzeJahr.JAHR_2014);
+        entity.setJahr(SobonVerfahrensgrundsaetzeJahr.JAHR_2021);
         entity.setWohnungstyp(Wohnungstyp.GW_FREIFINANZEIRT);
         entity.setDurchschnittlicheGrundflaeche(90L);
         entity.setBelegungsdichte(BigDecimal.valueOf(210, 2));
@@ -143,7 +143,7 @@ class StammdatenImportServiceTest {
         Mockito.when(this.multipartFile.getInputStream()).thenReturn(inputStream);
 
         final var csvEntry = new SobonOrientierungswertSozialeInfrastrukturCsv();
-        csvEntry.setJahr(SobonVerfahrensgrundsaetzeJahr.JAHR_2014);
+        csvEntry.setJahr(SobonVerfahrensgrundsaetzeJahr.JAHR_2021);
         csvEntry.setEinrichtungstyp(Einrichtungstyp.KINDERKRIPPE);
         csvEntry.setAltersklasse(Altersklasse.NULL_ZWEI);
         csvEntry.setWohnungstyp(Wohnungstyp.EINS_ZWEI_FH);
@@ -172,7 +172,7 @@ class StammdatenImportServiceTest {
             .thenReturn(List.of(csvEntry));
 
         final var entity = new SobonOrientierungswertSozialeInfrastruktur();
-        entity.setJahr(SobonVerfahrensgrundsaetzeJahr.JAHR_2014);
+        entity.setJahr(SobonVerfahrensgrundsaetzeJahr.JAHR_2021);
         entity.setEinrichtungstyp(Einrichtungstyp.KINDERKRIPPE);
         entity.setAltersklasse(Altersklasse.NULL_ZWEI);
         entity.setWohnungstyp(Wohnungstyp.EINS_ZWEI_FH);
