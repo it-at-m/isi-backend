@@ -12,7 +12,7 @@ import de.muenchen.isi.domain.model.infrastruktureinrichtung.Infrastruktureinric
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.KindergartenModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.KinderkrippeModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.MittelschuleModel;
-import de.muenchen.isi.domain.model.infrastruktureinrichtung.SchuleModel;
+import de.muenchen.isi.domain.model.list.InfrastruktureinrichtungListElementModel;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Grundschule;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.GsNachmittagBetreuung;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.HausFuerKinder;
@@ -20,40 +20,28 @@ import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Infrastruk
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Kindergarten;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Kinderkrippe;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Mittelschule;
-import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Schule;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.SubclassMapping;
 
 @Mapper(config = MapstructConfiguration.class)
 public interface InfrastruktureinrichtungDomainMapper {
+    @Mapping(target = "infrastruktureinrichtungTyp", ignore = true)
+    @SubclassMapping(source = Grundschule.class, target = GrundschuleModel.class)
+    @SubclassMapping(source = GsNachmittagBetreuung.class, target = GsNachmittagBetreuungModel.class)
+    @SubclassMapping(source = HausFuerKinder.class, target = HausFuerKinderModel.class)
+    @SubclassMapping(source = Kindergarten.class, target = KindergartenModel.class)
+    @SubclassMapping(source = Kinderkrippe.class, target = KinderkrippeModel.class)
+    @SubclassMapping(source = Mittelschule.class, target = MittelschuleModel.class)
     InfrastruktureinrichtungModel entity2Model(final Infrastruktureinrichtung entity);
 
+    @SubclassMapping(source = GrundschuleModel.class, target = Grundschule.class)
+    @SubclassMapping(source = GsNachmittagBetreuungModel.class, target = GsNachmittagBetreuung.class)
+    @SubclassMapping(source = HausFuerKinderModel.class, target = HausFuerKinder.class)
+    @SubclassMapping(source = KindergartenModel.class, target = Kindergarten.class)
+    @SubclassMapping(source = KinderkrippeModel.class, target = Kinderkrippe.class)
+    @SubclassMapping(source = MittelschuleModel.class, target = Mittelschule.class)
     Infrastruktureinrichtung model2Entity(final InfrastruktureinrichtungModel model);
 
-    SchuleModel entity2Model(final Schule entity);
-
-    Schule model2Entity(final SchuleModel model);
-
-    KinderkrippeModel entity2Model(final Kinderkrippe entity);
-
-    Kinderkrippe model2Entity(final KinderkrippeModel model);
-
-    KindergartenModel entity2Model(final Kindergarten entity);
-
-    Kindergarten model2Entity(final KindergartenModel model);
-
-    HausFuerKinderModel entity2Model(final HausFuerKinder entity);
-
-    HausFuerKinder model2Entity(final HausFuerKinderModel model);
-
-    GsNachmittagBetreuungModel entity2Model(final GsNachmittagBetreuung entity);
-
-    GsNachmittagBetreuung model2Entity(final GsNachmittagBetreuungModel model);
-
-    GrundschuleModel entity2Model(final Grundschule entity);
-
-    Grundschule model2Entity(final GrundschuleModel model);
-
-    MittelschuleModel entity2Model(final Mittelschule entity);
-
-    Mittelschule model2Entity(final MittelschuleModel model);
+    InfrastruktureinrichtungListElementModel entity2ListElementModel(final Infrastruktureinrichtung entity);
 }

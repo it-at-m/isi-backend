@@ -4,20 +4,44 @@
  */
 package de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung;
 
+import de.muenchen.isi.infrastructure.entity.BaseEntity;
 import de.muenchen.isi.infrastructure.entity.Baugebiet;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
 import de.muenchen.isi.infrastructure.entity.common.Adresse;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Einrichtungstraeger;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusInfrastruktureinrichtung;
 import java.math.BigDecimal;
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.DiscriminatorColumn;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
 
-@Embeddable
+@Entity
+@Inheritance(strategy = InheritanceType.JOINED)
+@DiscriminatorColumn(name = "infrastruktureinrichtung_typ")
 @Data
-public class Infrastruktureinrichtung {
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
+public abstract class Infrastruktureinrichtung extends BaseEntity {
+
+    @Setter(AccessLevel.NONE)
+    @Column(insertable = false, updatable = false, nullable = false)
+    @Enumerated(EnumType.STRING)
+    private InfrastruktureinrichtungTyp infrastruktureinrichtungTyp;
 
     @Generated(GenerationTime.INSERT)
     @Column(name = "lfdNr", columnDefinition = "serial", updatable = false)

@@ -16,25 +16,15 @@ import de.muenchen.isi.domain.mapper.DokumentDomainMapperImpl;
 import de.muenchen.isi.domain.model.BauvorhabenModel;
 import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.AbfrageAngelegtModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.InfrastruktureinrichtungModel;
+import de.muenchen.isi.domain.model.infrastruktureinrichtung.KinderkrippeModel;
 import de.muenchen.isi.domain.service.filehandling.DokumentService;
 import de.muenchen.isi.infrastructure.entity.Abfrage;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
 import de.muenchen.isi.infrastructure.entity.Infrastrukturabfrage;
-import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Grundschule;
-import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.GsNachmittagBetreuung;
-import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.HausFuerKinder;
-import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Infrastruktureinrichtung;
-import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Kindergarten;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Kinderkrippe;
-import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Mittelschule;
 import de.muenchen.isi.infrastructure.repository.BauvorhabenRepository;
 import de.muenchen.isi.infrastructure.repository.InfrastrukturabfrageRepository;
-import de.muenchen.isi.infrastructure.repository.infrastruktureinrichtung.GrundschuleRepository;
-import de.muenchen.isi.infrastructure.repository.infrastruktureinrichtung.GsNachmittagBetreuungRepository;
-import de.muenchen.isi.infrastructure.repository.infrastruktureinrichtung.HausFuerKinderRepository;
-import de.muenchen.isi.infrastructure.repository.infrastruktureinrichtung.KindergartenRepository;
-import de.muenchen.isi.infrastructure.repository.infrastruktureinrichtung.KinderkrippeRepository;
-import de.muenchen.isi.infrastructure.repository.infrastruktureinrichtung.MittelschuleRepository;
+import de.muenchen.isi.infrastructure.repository.InfrastruktureinrichtungRepository;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -66,22 +56,7 @@ public class BauvorhabenServiceTest {
     private InfrastrukturabfrageRepository infrastrukturabfrageRepository;
 
     @Mock
-    private KinderkrippeRepository kinderkrippeRepository;
-
-    @Mock
-    private KindergartenRepository kindergartenRepository;
-
-    @Mock
-    private HausFuerKinderRepository hausFuerKinderRepository;
-
-    @Mock
-    private GsNachmittagBetreuungRepository gsNachmittagBetreuungRepository;
-
-    @Mock
-    private GrundschuleRepository grundschuleRepository;
-
-    @Mock
-    private MittelschuleRepository mittelschuleRepository;
+    private InfrastruktureinrichtungRepository infrastruktureinrichtungRepository;
 
     @Mock
     private DokumentService dokumentService;
@@ -93,24 +68,14 @@ public class BauvorhabenServiceTest {
                 this.bauvorhabenDomainMapper,
                 this.bauvorhabenRepository,
                 this.infrastrukturabfrageRepository,
-                this.kinderkrippeRepository,
-                this.kindergartenRepository,
-                this.hausFuerKinderRepository,
-                this.gsNachmittagBetreuungRepository,
-                this.grundschuleRepository,
-                this.mittelschuleRepository,
+                this.infrastruktureinrichtungRepository,
                 this.dokumentService
             );
 
         Mockito.reset(
             this.bauvorhabenRepository,
             this.infrastrukturabfrageRepository,
-            this.kinderkrippeRepository,
-            this.kindergartenRepository,
-            this.hausFuerKinderRepository,
-            this.gsNachmittagBetreuungRepository,
-            this.grundschuleRepository,
-            this.mittelschuleRepository,
+            this.infrastruktureinrichtungRepository,
             this.dokumentService
         );
     }
@@ -286,54 +251,12 @@ public class BauvorhabenServiceTest {
         entity.setId(id);
 
         final Kinderkrippe kinderkrippe = new Kinderkrippe();
-        final Infrastruktureinrichtung infrastruktureinrichtungKinderkrippe = new Infrastruktureinrichtung();
-        infrastruktureinrichtungKinderkrippe.setNameEinrichtung("Kinderkrippe");
-        kinderkrippe.setInfrastruktureinrichtung(infrastruktureinrichtungKinderkrippe);
-
-        final Kindergarten kindergarten = new Kindergarten();
-        final Infrastruktureinrichtung infrastruktureinrichtungKindergarten = new Infrastruktureinrichtung();
-        infrastruktureinrichtungKindergarten.setNameEinrichtung("Kindergarten");
-        kindergarten.setInfrastruktureinrichtung(infrastruktureinrichtungKindergarten);
-
-        final HausFuerKinder hausFuerKinder = new HausFuerKinder();
-        final Infrastruktureinrichtung infrastruktureinrichtungHausFuerKinder = new Infrastruktureinrichtung();
-        infrastruktureinrichtungHausFuerKinder.setNameEinrichtung("Haus für Kinder");
-        hausFuerKinder.setInfrastruktureinrichtung(infrastruktureinrichtungHausFuerKinder);
-
-        final GsNachmittagBetreuung gsNachmittagBetreuung = new GsNachmittagBetreuung();
-        final Infrastruktureinrichtung infrastruktureinrichtungGsNachmittagBetreuung = new Infrastruktureinrichtung();
-        infrastruktureinrichtungGsNachmittagBetreuung.setNameEinrichtung("Nachmittagsbetreuung für Grundschulkinder");
-        gsNachmittagBetreuung.setInfrastruktureinrichtung(infrastruktureinrichtungGsNachmittagBetreuung);
-
-        final Grundschule grundschule = new Grundschule();
-        final Infrastruktureinrichtung infrastruktureinrichtungGrundschule = new Infrastruktureinrichtung();
-        infrastruktureinrichtungGrundschule.setNameEinrichtung("Grundschule");
-        grundschule.setInfrastruktureinrichtung(infrastruktureinrichtungGrundschule);
-
-        final Mittelschule mittelschule = new Mittelschule();
-        final Infrastruktureinrichtung infrastruktureinrichtungMittelschule = new Infrastruktureinrichtung();
-        infrastruktureinrichtungMittelschule.setNameEinrichtung("Mittelschule");
-        mittelschule.setInfrastruktureinrichtung(infrastruktureinrichtungMittelschule);
+        kinderkrippe.setNameEinrichtung("Kinderkrippe");
 
         Mockito.when(this.bauvorhabenRepository.findById(entity.getId())).thenReturn(Optional.of(entity));
         Mockito
-            .when(this.kinderkrippeRepository.findAllByInfrastruktureinrichtungBauvorhabenId(entity.getId()))
+            .when(this.infrastruktureinrichtungRepository.findAllByBauvorhabenId(entity.getId()))
             .thenReturn(Stream.of(kinderkrippe));
-        Mockito
-            .when(this.kindergartenRepository.findAllByInfrastruktureinrichtungBauvorhabenId(entity.getId()))
-            .thenReturn(Stream.of(kindergarten));
-        Mockito
-            .when(this.hausFuerKinderRepository.findAllByInfrastruktureinrichtungBauvorhabenId(entity.getId()))
-            .thenReturn(Stream.of(hausFuerKinder));
-        Mockito
-            .when(this.gsNachmittagBetreuungRepository.findAllByInfrastruktureinrichtungBauvorhabenId(entity.getId()))
-            .thenReturn(Stream.of(gsNachmittagBetreuung));
-        Mockito
-            .when(this.grundschuleRepository.findAllByInfrastruktureinrichtungBauvorhabenId(entity.getId()))
-            .thenReturn(Stream.of(grundschule));
-        Mockito
-            .when(this.mittelschuleRepository.findAllByInfrastruktureinrichtungBauvorhabenId(entity.getId()))
-            .thenReturn(Stream.of(mittelschule));
 
         Assertions.assertThrows(EntityIsReferencedException.class, () -> this.bauvorhabenService.deleteBauvorhaben(id));
 
@@ -381,7 +304,7 @@ public class BauvorhabenServiceTest {
         final var bauvorhaben = new Bauvorhaben();
         bauvorhaben.setId(id);
 
-        final var infrastruktureinrichtung = new InfrastruktureinrichtungModel();
+        final var infrastruktureinrichtung = new KinderkrippeModel();
         InfrastruktureinrichtungModel returnedInfrastruktureinrichtung;
 
         // Wenn 'bauvorhabenId' null ist, soll nichts passieren.
@@ -443,72 +366,20 @@ public class BauvorhabenServiceTest {
     void throwEntityIsReferencedExceptionWhenInfrastruktureinrichtungIsReferencingBauvorhaben()
         throws EntityIsReferencedException {
         final Kinderkrippe kinderkrippe = new Kinderkrippe();
-        final Infrastruktureinrichtung infrastruktureinrichtungKinderkrippe = new Infrastruktureinrichtung();
-        infrastruktureinrichtungKinderkrippe.setNameEinrichtung("Kinderkrippe");
-        kinderkrippe.setInfrastruktureinrichtung(infrastruktureinrichtungKinderkrippe);
-
-        final Kindergarten kindergarten = new Kindergarten();
-        final Infrastruktureinrichtung infrastruktureinrichtungKindergarten = new Infrastruktureinrichtung();
-        infrastruktureinrichtungKindergarten.setNameEinrichtung("Kindergarten");
-        kindergarten.setInfrastruktureinrichtung(infrastruktureinrichtungKindergarten);
-
-        final HausFuerKinder hausFuerKinder = new HausFuerKinder();
-        final Infrastruktureinrichtung infrastruktureinrichtungHausFuerKinder = new Infrastruktureinrichtung();
-        infrastruktureinrichtungHausFuerKinder.setNameEinrichtung("Haus für Kinder");
-        hausFuerKinder.setInfrastruktureinrichtung(infrastruktureinrichtungHausFuerKinder);
-
-        final GsNachmittagBetreuung gsNachmittagBetreuung = new GsNachmittagBetreuung();
-        final Infrastruktureinrichtung infrastruktureinrichtungGsNachmittagBetreuung = new Infrastruktureinrichtung();
-        infrastruktureinrichtungGsNachmittagBetreuung.setNameEinrichtung("Nachmittagsbetreuung für Grundschulkinder");
-        gsNachmittagBetreuung.setInfrastruktureinrichtung(infrastruktureinrichtungGsNachmittagBetreuung);
-
-        final Grundschule grundschule = new Grundschule();
-        final Infrastruktureinrichtung infrastruktureinrichtungGrundschule = new Infrastruktureinrichtung();
-        infrastruktureinrichtungGrundschule.setNameEinrichtung("Grundschule");
-        grundschule.setInfrastruktureinrichtung(infrastruktureinrichtungGrundschule);
-
-        final Mittelschule mittelschule = new Mittelschule();
-        final Infrastruktureinrichtung infrastruktureinrichtungMittelschule = new Infrastruktureinrichtung();
-        infrastruktureinrichtungMittelschule.setNameEinrichtung("Mittelschule");
-        mittelschule.setInfrastruktureinrichtung(infrastruktureinrichtungMittelschule);
+        kinderkrippe.setNameEinrichtung("Kinderkrippe");
 
         final BauvorhabenModel bauvorhaben = new BauvorhabenModel();
         bauvorhaben.setId(UUID.randomUUID());
 
         Mockito
-            .when(this.kinderkrippeRepository.findAllByInfrastruktureinrichtungBauvorhabenId(bauvorhaben.getId()))
+            .when(this.infrastruktureinrichtungRepository.findAllByBauvorhabenId(bauvorhaben.getId()))
             .thenReturn(Stream.of(kinderkrippe));
-        Mockito
-            .when(this.kindergartenRepository.findAllByInfrastruktureinrichtungBauvorhabenId(bauvorhaben.getId()))
-            .thenReturn(Stream.of(kindergarten));
-        Mockito
-            .when(this.hausFuerKinderRepository.findAllByInfrastruktureinrichtungBauvorhabenId(bauvorhaben.getId()))
-            .thenReturn(Stream.of(hausFuerKinder));
-        Mockito
-            .when(
-                this.gsNachmittagBetreuungRepository.findAllByInfrastruktureinrichtungBauvorhabenId(bauvorhaben.getId())
-            )
-            .thenReturn(Stream.of(gsNachmittagBetreuung));
-        Mockito
-            .when(this.grundschuleRepository.findAllByInfrastruktureinrichtungBauvorhabenId(bauvorhaben.getId()))
-            .thenReturn(Stream.of(grundschule));
-        Mockito
-            .when(this.mittelschuleRepository.findAllByInfrastruktureinrichtungBauvorhabenId(bauvorhaben.getId()))
-            .thenReturn(Stream.of(mittelschule));
         Assertions.assertThrows(
             EntityIsReferencedException.class,
             () ->
                 this.bauvorhabenService.throwEntityIsReferencedExceptionWhenInfrastruktureinrichtungIsReferencingBauvorhaben(
                         bauvorhaben
                     )
-        );
-        Mockito.reset(
-            this.kinderkrippeRepository,
-            this.kindergartenRepository,
-            this.hausFuerKinderRepository,
-            this.gsNachmittagBetreuungRepository,
-            this.grundschuleRepository,
-            this.mittelschuleRepository
         );
     }
 }

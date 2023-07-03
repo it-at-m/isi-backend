@@ -1,26 +1,21 @@
-/*
- * Copyright (c): it@M - Dienstleister für Informations- und Telekommunikationstechnik
- * der Landeshauptstadt München, 2022
- */
-package de.muenchen.isi.api.controller.infrastruktureinrichtung;
+package de.muenchen.isi.api.controller;
 
 import de.muenchen.isi.api.dto.error.InformationResponseDto;
-import de.muenchen.isi.api.dto.infrastruktureinrichtung.GrundschuleDto;
+import de.muenchen.isi.api.dto.infrastruktureinrichtung.InfrastruktureinrichtungDto;
+import de.muenchen.isi.api.dto.list.InfrastruktureinrichtungListElementsDto;
 import de.muenchen.isi.api.mapper.InfrastruktureinrichtungApiMapper;
 import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.service.BauvorhabenService;
-import de.muenchen.isi.domain.service.infrastruktureinrichtung.GrundschuleService;
+import de.muenchen.isi.domain.service.InfrastruktureinrichtungService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +24,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -41,36 +35,33 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@Tag(name = "Grundschule", description = "API to interact with the Grundschule")
-@Validated
-public class GrundschuleController {
+@Tag(name = "Infrastruktureinrichtunglisten", description = "API to get Infrastruktureinrichtunglisten")
+public class InfrastruktureinrichtungController {
 
-    private final GrundschuleService grundschuleService;
+    private final InfrastruktureinrichtungService infrastruktureinrichtungService;
 
     private final BauvorhabenService bauvorhabenService;
 
     private final InfrastruktureinrichtungApiMapper infrastruktureinrichtungApiMapper;
 
+    @GetMapping("infrastruktureinrichtungen")
     @Transactional(readOnly = true)
-    @GetMapping("grundschulen")
-    @Operation(
-        summary = "Lade alle Grundschulen",
-        description = "Das Ergebnis wird nach Name der Einrichtung aufsteigend sortiert"
-    )
+    @Operation(summary = "Lade alle Infrastruktureinrichtungen für die Listendarstellung")
     @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "OK") })
-    @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_READ_GRUNDSCHULE.name())")
-    public ResponseEntity<List<GrundschuleDto>> getGrundschulen() {
-        final List<GrundschuleDto> grundschuleList =
-            this.grundschuleService.getGrundschulen()
-                .stream()
-                .map(this.infrastruktureinrichtungApiMapper::model2Dto)
-                .collect(Collectors.toList());
-        return new ResponseEntity<>(grundschuleList, HttpStatus.OK);
+    @PreAuthorize(
+        "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_READ_INFRASTRUKTUREINRICHTUNG.name())"
+    )
+    public ResponseEntity<InfrastruktureinrichtungListElementsDto> getInfrastruktureinrichtungListElements() {
+        final var dto =
+            this.infrastruktureinrichtungApiMapper.model2Dto(
+                    this.infrastruktureinrichtungService.getInfrastruktureinrichtungListElements()
+                );
+        return ResponseEntity.ok(dto);
     }
 
-    @GetMapping("grundschule/{id}")
+    @GetMapping("infrastruktureinrichtung/{id}")
     @Transactional(readOnly = true)
-    @Operation(summary = "Lesen einer Grundschule")
+    @Operation(summary = "Lesen einer Infrastruktureinrichtung")
     @ApiResponses(
         value = {
             @ApiResponse(responseCode = "200", description = "OK"),
@@ -81,23 +72,29 @@ public class GrundschuleController {
             ),
         }
     )
-    @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_READ_GRUNDSCHULE.name())")
-    public ResponseEntity<GrundschuleDto> getGrundschuleById(@PathVariable @NotNull final UUID id)
-        throws EntityNotFoundException {
-        final var model = this.grundschuleService.getGrundschuleById(id);
+    @PreAuthorize(
+        "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_READ_INFRASTRUKTUREINRICHTUNG.name())"
+    )
+    public ResponseEntity<InfrastruktureinrichtungDto> getInfrastruktureinrichtungById(
+        @PathVariable @NotNull final UUID id
+    ) throws EntityNotFoundException {
+        final var model = this.infrastruktureinrichtungService.getInfrastruktureinrichtungById(id);
         final var dto = this.infrastruktureinrichtungApiMapper.model2Dto(model);
         return ResponseEntity.ok(dto);
     }
 
-    @PostMapping("grundschule")
+    @PostMapping("infrastruktureinrichtung")
     @Transactional(rollbackFor = OptimisticLockingException.class)
-    @Operation(summary = "Anlegen einer neuen Grundschule")
+    @Operation(summary = "Anlegen einer neuen Infrastruktureinrichtung")
     @ApiResponses(
         value = {
-            @ApiResponse(responseCode = "201", description = "CREATED -> Grundschule wurde erfolgreich erstellt."),
+            @ApiResponse(
+                responseCode = "201",
+                description = "CREATED -> Infrastruktureinrichtung wurde erfolgreich erstellt."
+            ),
             @ApiResponse(
                 responseCode = "400",
-                description = "BAD_REQUEST -> Grundschule konnte nicht erstellt werden, überprüfen sie die Eingabe.",
+                description = "BAD_REQUEST -> Infrastruktureinrichtung konnte nicht erstellt werden, überprüfen sie die Eingabe.",
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
             ),
             @ApiResponse(
@@ -107,36 +104,40 @@ public class GrundschuleController {
             ),
         }
     )
-    @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_WRITE_GRUNDSCHULE.name())")
-    public ResponseEntity<GrundschuleDto> createGrundschule(
-        @RequestBody @Valid @NotNull final GrundschuleDto grundschuleDto
+    @PreAuthorize(
+        "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_WRITE_INFRASTRUKTUREINRICHTUNG.name())"
+    )
+    public ResponseEntity<InfrastruktureinrichtungDto> createInfrastruktureinrichtung(
+        @RequestBody @Valid @NotNull final InfrastruktureinrichtungDto infrastruktureinrichtungDto
     ) throws EntityNotFoundException, OptimisticLockingException {
-        var model = this.infrastruktureinrichtungApiMapper.dto2Model(grundschuleDto);
-        final var infrastruktureinrichtung =
+        var model = this.infrastruktureinrichtungApiMapper.dto2Model(infrastruktureinrichtungDto);
+        model =
             this.bauvorhabenService.assignBauvorhabenToInfrastruktureinrichtung(
-                    grundschuleDto.getInfrastruktureinrichtung().getBauvorhaben(),
-                    model.getInfrastruktureinrichtung()
+                    infrastruktureinrichtungDto.getBauvorhaben(),
+                    model
                 );
-        model.setInfrastruktureinrichtung(infrastruktureinrichtung);
-        model = this.grundschuleService.saveGrundschule(model);
+        model = this.infrastruktureinrichtungService.saveInfrastruktureinrichtung(model);
         final var saved = this.infrastruktureinrichtungApiMapper.model2Dto(model);
         return new ResponseEntity<>(saved, HttpStatus.CREATED);
     }
 
-    @PutMapping("grundschule")
+    @PutMapping("infrastruktureinrichtung")
     @Transactional(rollbackFor = OptimisticLockingException.class)
-    @Operation(summary = "Aktualisierung einer Grundschule")
+    @Operation(summary = "Aktualisierung einer Infrastruktureinrichtung")
     @ApiResponses(
         value = {
-            @ApiResponse(responseCode = "200", description = "OK -> Grundschule wurde erfolgreich aktualisiert."),
+            @ApiResponse(
+                responseCode = "200",
+                description = "OK -> Infrastruktureinrichtung wurde erfolgreich aktualisiert."
+            ),
             @ApiResponse(
                 responseCode = "400",
-                description = "BAD_REQUEST -> Grundschule konnte nicht aktualisiert werden, überprüfen sie die Eingabe.",
+                description = "BAD_REQUEST -> Infrastruktureinrichtung konnte nicht aktualisiert werden, überprüfen sie die Eingabe.",
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
             ),
             @ApiResponse(
                 responseCode = "404",
-                description = "NOT_FOUND -> Es gibt keine Grundschule mit der ID.",
+                description = "NOT_FOUND -> Es gibt keine Infrastruktureinrichtung mit der ID.",
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
             ),
             @ApiResponse(
@@ -147,43 +148,42 @@ public class GrundschuleController {
         }
     )
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_WRITE_GRUNDSCHULE.name())")
-    public ResponseEntity<GrundschuleDto> updateGrundschule(
-        @RequestBody @Valid @NotNull final GrundschuleDto grundschuleDto
+    public ResponseEntity<InfrastruktureinrichtungDto> updateInfrastruktureinrichtung(
+        @RequestBody @Valid @NotNull final InfrastruktureinrichtungDto infrastruktureinrichtungDto
     ) throws EntityNotFoundException, OptimisticLockingException {
-        var model = this.infrastruktureinrichtungApiMapper.dto2Model(grundschuleDto);
-        final var infrastruktureinrichtung =
+        var model = this.infrastruktureinrichtungApiMapper.dto2Model(infrastruktureinrichtungDto);
+        model =
             this.bauvorhabenService.assignBauvorhabenToInfrastruktureinrichtung(
-                    grundschuleDto.getInfrastruktureinrichtung().getBauvorhaben(),
-                    model.getInfrastruktureinrichtung()
+                    infrastruktureinrichtungDto.getBauvorhaben(),
+                    model
                 );
-        model.setInfrastruktureinrichtung(infrastruktureinrichtung);
-        model = this.grundschuleService.updateGrundschule(model);
+        model = this.infrastruktureinrichtungService.updateInfrastruktureinrichtung(model);
         final var saved = this.infrastruktureinrichtungApiMapper.model2Dto(model);
         return ResponseEntity.ok(saved);
     }
 
-    @DeleteMapping("grundschule/{id}")
-    @Operation(summary = "Löschen einer Grundschule")
+    @DeleteMapping("infrastruktureinrichtung/{id}")
+    @Operation(summary = "Löschen einer Infrastruktureinrichtung")
     @ApiResponses(
         value = {
             @ApiResponse(responseCode = "204", description = "NO CONTENT"),
             @ApiResponse(
                 responseCode = "404",
-                description = "NOT FOUND -> Grundschule mit dieser ID nicht vorhanden.",
+                description = "NOT FOUND -> Infrastruktureinrichtung mit dieser ID nicht vorhanden.",
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
             ),
             @ApiResponse(
                 responseCode = "409",
-                description = "CONFLICT -> Die Grundschule referenziert ein Bauvorhaben.",
+                description = "CONFLICT -> Die Infrastruktureinrichtung referenziert ein Bauvorhaben.",
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
             ),
         }
     )
     @Transactional
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_DELETE_GRUNDSCHULE.name())")
-    public ResponseEntity<Void> deleteGrundschuleById(@PathVariable @NotNull final UUID id)
+    public ResponseEntity<Void> deleteInfrastruktureinrichtungById(@PathVariable @NotNull final UUID id)
         throws EntityNotFoundException, EntityIsReferencedException {
-        this.grundschuleService.deleteGrundschuleById(id);
+        this.infrastruktureinrichtungService.deleteInfrastruktureinrichtungById(id);
         return ResponseEntity.noContent().build();
     }
 }

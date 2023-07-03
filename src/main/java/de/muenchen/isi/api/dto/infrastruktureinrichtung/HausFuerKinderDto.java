@@ -4,8 +4,6 @@
  */
 package de.muenchen.isi.api.dto.infrastruktureinrichtung;
 
-import de.muenchen.isi.api.dto.BaseEntityDto;
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -14,11 +12,7 @@ import lombok.ToString;
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class HausFuerKinderDto extends BaseEntityDto {
-
-    @Valid
-    @NotNull
-    private InfrastruktureinrichtungDto infrastruktureinrichtung;
+public class HausFuerKinderDto extends InfrastruktureinrichtungDto {
 
     @NotNull
     private Integer anzahlKinderkrippePlaetze;

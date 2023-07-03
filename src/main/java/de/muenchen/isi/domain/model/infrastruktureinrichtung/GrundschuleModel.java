@@ -4,19 +4,22 @@
  */
 package de.muenchen.isi.domain.model.infrastruktureinrichtung;
 
-import de.muenchen.isi.domain.model.BaseEntityModel;
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
+@Entity
+@DiscriminatorValue("Grundschule")
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class GrundschuleModel extends BaseEntityModel {
+public class GrundschuleModel extends InfrastruktureinrichtungModel {
 
-    private InfrastruktureinrichtungModel infrastruktureinrichtung;
-
-    private SchuleModel schule;
     // TBD: Grundschulsprengel
 
+    @Embedded
+    public SchuleModel schule;
 }

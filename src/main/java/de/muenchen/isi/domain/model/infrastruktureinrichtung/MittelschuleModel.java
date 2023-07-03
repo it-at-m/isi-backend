@@ -4,7 +4,6 @@
  */
 package de.muenchen.isi.domain.model.infrastruktureinrichtung;
 
-import de.muenchen.isi.domain.model.BaseEntityModel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -12,11 +11,9 @@ import lombok.ToString;
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class MittelschuleModel extends BaseEntityModel {
+public class MittelschuleModel extends InfrastruktureinrichtungModel {
 
-    private InfrastruktureinrichtungModel infrastruktureinrichtung;
-
-    private SchuleModel schule;
     // TBD: Mittelschulsprengel
 
+    public SchuleModel schule;
 }
