@@ -21,12 +21,10 @@ import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Kindergart
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Kinderkrippe;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Mittelschule;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.mapstruct.SubclassMapping;
 
 @Mapper(config = MapstructConfiguration.class)
 public interface InfrastruktureinrichtungDomainMapper {
-    @Mapping(target = "infrastruktureinrichtungTyp", ignore = true)
     @SubclassMapping(source = Grundschule.class, target = GrundschuleModel.class)
     @SubclassMapping(source = GsNachmittagBetreuung.class, target = GsNachmittagBetreuungModel.class)
     @SubclassMapping(source = HausFuerKinder.class, target = HausFuerKinderModel.class)
