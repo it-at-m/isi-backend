@@ -32,7 +32,7 @@ import org.hibernate.annotations.GenerationTime;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-@DiscriminatorColumn(name = "infrastruktureinrichtung_typ")
+@DiscriminatorColumn(name = "infrastruktureinrichtungTyp")
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
