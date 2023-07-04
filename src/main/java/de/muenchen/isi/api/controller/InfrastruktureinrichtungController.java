@@ -30,11 +30,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RequiredArgsConstructor
 @RestController
+@RequestMapping("/infrastruktureinrichtung")
 @Tag(name = "Infrastruktureinrichtung", description = "API to get Infrastruktureinrichtungen")
 public class InfrastruktureinrichtungController {
 
@@ -44,7 +46,7 @@ public class InfrastruktureinrichtungController {
 
     private final InfrastruktureinrichtungApiMapper infrastruktureinrichtungApiMapper;
 
-    @GetMapping("infrastruktureinrichtungen")
+    @GetMapping("/all")
     @Transactional(readOnly = true)
     @Operation(summary = "Lade alle Infrastruktureinrichtungen für die Listendarstellung")
     @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "OK") })
@@ -59,7 +61,7 @@ public class InfrastruktureinrichtungController {
         return ResponseEntity.ok(dto);
     }
 
-    @GetMapping("infrastruktureinrichtung/{id}")
+    @GetMapping("/{id}")
     @Transactional(readOnly = true)
     @Operation(summary = "Lesen einer Infrastruktureinrichtung")
     @ApiResponses(
@@ -83,7 +85,7 @@ public class InfrastruktureinrichtungController {
         return ResponseEntity.ok(dto);
     }
 
-    @PostMapping("infrastruktureinrichtung")
+    @PostMapping
     @Transactional(rollbackFor = OptimisticLockingException.class)
     @Operation(summary = "Anlegen einer neuen Infrastruktureinrichtung")
     @ApiResponses(
@@ -121,7 +123,7 @@ public class InfrastruktureinrichtungController {
         return new ResponseEntity<>(saved, HttpStatus.CREATED);
     }
 
-    @PutMapping("infrastruktureinrichtung")
+    @PutMapping
     @Transactional(rollbackFor = OptimisticLockingException.class)
     @Operation(summary = "Aktualisierung einer Infrastruktureinrichtung")
     @ApiResponses(
@@ -162,7 +164,7 @@ public class InfrastruktureinrichtungController {
         return ResponseEntity.ok(saved);
     }
 
-    @DeleteMapping("infrastruktureinrichtung/{id}")
+    @DeleteMapping("/{id}")
     @Operation(summary = "Löschen einer Infrastruktureinrichtung")
     @ApiResponses(
         value = {
