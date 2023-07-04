@@ -146,18 +146,15 @@ class InfrastruktureinrichtungServiceTest {
         assertThat(savedMittelschule.getId(), is(notNullValue()));
         assertThat(savedMittelschule.getVersion(), is(0L));
         assertThat(savedMittelschule.getNameEinrichtung(), is(mittelschule.getNameEinrichtung()));
-        assertThat(
-            savedMittelschule.getInfrastruktureinrichtungTyp(),
-            is(mittelschule.getInfrastruktureinrichtungTyp())
-        );
+        assertThat(savedMittelschule.getInfrastruktureinrichtungTyp(), is(InfrastruktureinrichtungTyp.MITTELSCHULE));
         assertThat(savedMittelschule.getClass(), is(mittelschule.getClass()));
         assertThat(
             ((MittelschuleModel) savedMittelschule).getSchule().getAnzahlKlassen(),
-            is(((MittelschuleModel) mittelschule).getSchule().getAnzahlKlassen())
+            is(mittelschule.getSchule().getAnzahlKlassen())
         );
         assertThat(
             ((MittelschuleModel) savedMittelschule).getSchule().getAnzahlPlaetze(),
-            is(((MittelschuleModel) mittelschule).getSchule().getAnzahlPlaetze())
+            is(mittelschule.getSchule().getAnzahlPlaetze())
         );
     }
 
@@ -181,10 +178,7 @@ class InfrastruktureinrichtungServiceTest {
         assertThat(updatedMittelschule.getId(), is(savedMittelschule.getId()));
         assertThat(updatedMittelschule.getVersion(), is(1L));
         assertThat(updatedMittelschule.getNameEinrichtung(), is("Mittelschule XXX"));
-        assertThat(
-            updatedMittelschule.getInfrastruktureinrichtungTyp(),
-            is(savedMittelschule.getInfrastruktureinrichtungTyp())
-        );
+        assertThat(updatedMittelschule.getInfrastruktureinrichtungTyp(), is(InfrastruktureinrichtungTyp.MITTELSCHULE));
         assertThat(updatedMittelschule.getClass(), is(savedMittelschule.getClass()));
         assertThat(
             ((MittelschuleModel) updatedMittelschule).getSchule().getAnzahlKlassen(),
