@@ -1,5 +1,7 @@
 package de.muenchen.isi.infrastructure.entity.enums.lookup;
 
+import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Infrastruktureinrichtung;
+import javax.persistence.DiscriminatorValue;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -16,6 +18,9 @@ public enum InfrastruktureinrichtungTyp implements ILookup {
     @Getter
     private final String bezeichnung;
 
+    /**
+     * Werden in den Entitäten der {@link Infrastruktureinrichtung} als {@link DiscriminatorValue} verwendet.
+     */
     public static class Values {
 
         public static final String UNSPECIFIED = "UNSPECIFIED";
