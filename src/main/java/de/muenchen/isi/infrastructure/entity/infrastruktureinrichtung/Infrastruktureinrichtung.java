@@ -14,6 +14,7 @@ import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusInfrastrukturein
 import java.math.BigDecimal;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -22,11 +23,12 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
-import lombok.AccessLevel;
+import javax.persistence.Transient;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Setter;
 import lombok.ToString;
+import org.apache.commons.lang3.EnumUtils;
+import org.apache.commons.lang3.ObjectUtils;
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
 
@@ -38,10 +40,19 @@ import org.hibernate.annotations.GenerationTime;
 @EqualsAndHashCode(callSuper = true)
 public abstract class Infrastruktureinrichtung extends BaseEntity {
 
-    @Setter(AccessLevel.NONE)
-    @Column(insertable = false, updatable = false, nullable = false)
-    @Enumerated(EnumType.STRING)
-    private InfrastruktureinrichtungTyp infrastruktureinrichtungTyp;
+    /**
+     * Diese Methode gibt den Wert der {@link DiscriminatorColumn} zurück.
+     * Ist kein {@link DiscriminatorValue} gesetzt, so wird null zurückgegeben.
+     *
+     * @return Wert der {@link DiscriminatorColumn}.
+     */
+    @Transient
+    public InfrastruktureinrichtungTyp getInfrastruktureinrichtungTyp() {
+        final var discriminatorValue = this.getClass().getAnnotation(DiscriminatorValue.class);
+        return ObjectUtils.isEmpty(discriminatorValue)
+            ? null
+            : EnumUtils.getEnum(InfrastruktureinrichtungTyp.class, discriminatorValue.value());
+    }
 
     @Generated(GenerationTime.INSERT)
     @Column(name = "lfdNr", columnDefinition = "serial", updatable = false)
