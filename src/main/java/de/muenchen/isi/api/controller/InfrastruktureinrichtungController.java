@@ -35,7 +35,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@Tag(name = "Infrastruktureinrichtunglisten", description = "API to get Infrastruktureinrichtunglisten")
+@Tag(name = "Infrastruktureinrichtung", description = "API to get Infrastruktureinrichtungen")
 public class InfrastruktureinrichtungController {
 
     private final InfrastruktureinrichtungService infrastruktureinrichtungService;
