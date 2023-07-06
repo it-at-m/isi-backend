@@ -12,8 +12,11 @@ import org.apache.commons.lang3.StringUtils;
 
 @AllArgsConstructor
 public enum SobonVerfahrensgrundsaetzeJahr implements ILookup {
-    DAVOR("vor 2014"),
-    JAHR_2014("2014"),
+    JAHR_1995("1995"),
+    JAHR_1997("1997"),
+    JAHR_2001("2001"),
+    JAHR_2006("2006"),
+    JAHR_2012("2012"),
     JAHR_2017("2017"),
     JAHR_2017_PLUS("2017 plus"),
     JAHR_2021("2021");

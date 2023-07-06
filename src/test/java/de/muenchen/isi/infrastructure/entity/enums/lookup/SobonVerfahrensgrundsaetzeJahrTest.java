@@ -13,7 +13,7 @@ class SobonVerfahrensgrundsaetzeJahrTest {
         var result = SobonVerfahrensgrundsaetzeJahr.findByBezeichnung("no_valid_enum");
         assertThat(result, is(Optional.empty()));
 
-        result = SobonVerfahrensgrundsaetzeJahr.findByBezeichnung("2014");
-        assertThat(result, is(Optional.of(SobonVerfahrensgrundsaetzeJahr.JAHR_2014)));
+        result = SobonVerfahrensgrundsaetzeJahr.findByBezeichnung("1997");
+        assertThat(result, is(Optional.of(SobonVerfahrensgrundsaetzeJahr.JAHR_1997)));
     }
 }
