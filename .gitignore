@@ -29,10 +29,11 @@ dist/
 nbdist/
 .nb-gradle/
 
-# do not check in Database Filler and application profile yml
+# Internal files
 src/**/DatabaseFiller.java
 src/**/application-*.yml
 src/**/logback-spring.xml
+src/main/resources/sql
 
 node_modules/
 package-lock.json
