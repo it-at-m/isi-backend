@@ -149,7 +149,9 @@ public class InfrastruktureinrichtungController {
             ),
         }
     )
-    @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_WRITE_GRUNDSCHULE.name())")
+    @PreAuthorize(
+        "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_WRITE_INFRASTRUKTUREINRICHTUNG.name())"
+    )
     public ResponseEntity<InfrastruktureinrichtungDto> updateInfrastruktureinrichtung(
         @RequestBody @Valid @NotNull final InfrastruktureinrichtungDto infrastruktureinrichtungDto
     ) throws EntityNotFoundException, OptimisticLockingException {
@@ -182,7 +184,9 @@ public class InfrastruktureinrichtungController {
         }
     )
     @Transactional
-    @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_DELETE_GRUNDSCHULE.name())")
+    @PreAuthorize(
+        "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_DELETE_INFRASTRUKTUREINRICHTUNG.name())"
+    )
     public ResponseEntity<Void> deleteInfrastruktureinrichtungById(@PathVariable @NotNull final UUID id)
         throws EntityNotFoundException, EntityIsReferencedException {
         this.infrastruktureinrichtungService.deleteInfrastruktureinrichtungById(id);
