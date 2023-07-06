@@ -28,7 +28,7 @@ import lombok.Data;
 @FertigstellungsjahrValid
 @EinrichtungstraegerValid
 @JsonTypeInfo(
-    use = JsonTypeInfo.Id.CUSTOM,
+    use = JsonTypeInfo.Id.NAME,
     include = JsonTypeInfo.As.EXISTING_PROPERTY,
     property = "infrastruktureinrichtungTyp",
     visible = true
