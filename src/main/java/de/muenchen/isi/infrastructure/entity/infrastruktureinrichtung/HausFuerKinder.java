@@ -19,22 +19,22 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 public class HausFuerKinder extends Infrastruktureinrichtung {
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Integer anzahlKinderkrippePlaetze;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Integer anzahlKindergartenPlaetze;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Integer anzahlHortPlaetze;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Integer anzahlKinderkrippeGruppen;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Integer anzahlKindergartenGruppen;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Integer anzahlHortGruppen;
 
     @Column(nullable = true)
