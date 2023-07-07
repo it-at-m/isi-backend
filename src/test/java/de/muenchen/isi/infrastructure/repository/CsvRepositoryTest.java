@@ -82,13 +82,13 @@ class CsvRepositoryTest {
             this.csvRepository.readAllStaedtebaulicheOrientierungswertCsv(this.testfileSo);
 
         final var firstExpected = new StaedtebaulicheOrientierungswertCsv();
-        firstExpected.setJahr(SobonVerfahrensgrundsaetzeJahr.JAHR_2014);
+        firstExpected.setJahr(SobonVerfahrensgrundsaetzeJahr.JAHR_2021);
         firstExpected.setWohnungstyp(Wohnungstyp.GW_FREIFINANZEIRT);
         firstExpected.setDurchschnittlicheGrundflaeche(90L);
         firstExpected.setBelegungsdichte(BigDecimal.valueOf(210, 2));
 
         final var lastExpected = new StaedtebaulicheOrientierungswertCsv();
-        lastExpected.setJahr(SobonVerfahrensgrundsaetzeJahr.JAHR_2014);
+        lastExpected.setJahr(SobonVerfahrensgrundsaetzeJahr.JAHR_2021);
         lastExpected.setWohnungstyp(Wohnungstyp.EINS_ZWEI_FH);
         lastExpected.setDurchschnittlicheGrundflaeche(150L);
         lastExpected.setBelegungsdichte(BigDecimal.valueOf(348, 2));
@@ -121,7 +121,7 @@ class CsvRepositoryTest {
             this.csvRepository.readAllSobonOrientierungswertSozialeInfrastrukturCsv(this.testfileSobon);
 
         final var firstExpected = new SobonOrientierungswertSozialeInfrastrukturCsv();
-        firstExpected.setJahr(SobonVerfahrensgrundsaetzeJahr.JAHR_2014);
+        firstExpected.setJahr(SobonVerfahrensgrundsaetzeJahr.JAHR_2021);
         firstExpected.setEinrichtungstyp(Einrichtungstyp.KINDERKRIPPE);
         firstExpected.setAltersklasse(Altersklasse.NULL_ZWEI);
         firstExpected.setWohnungstyp(Wohnungstyp.EINS_ZWEI_FH);
@@ -142,7 +142,7 @@ class CsvRepositoryTest {
         firstExpected.setPerzentil75ProzentGerundetEinwohnerJeWohnung(BigDecimal.valueOf(19, 2));
 
         final var lastExpected = new SobonOrientierungswertSozialeInfrastrukturCsv();
-        lastExpected.setJahr(SobonVerfahrensgrundsaetzeJahr.JAHR_2014);
+        lastExpected.setJahr(SobonVerfahrensgrundsaetzeJahr.JAHR_2021);
         lastExpected.setEinrichtungstyp(Einrichtungstyp.N_N);
         lastExpected.setAltersklasse(Altersklasse.ALLE_EWO);
         lastExpected.setWohnungstyp(Wohnungstyp.GW_FREIFINANZEIRT);

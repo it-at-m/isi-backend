@@ -22,12 +22,16 @@ class SobonVerfahrensgrundsaetzeJahrConverterTest {
     @Test
     void convert() throws CsvDataTypeMismatchException {
         assertThat(
-            this.sobonVerfahrensgrundsaetzeJahrConverter.convert("vor 2014"),
-            is(SobonVerfahrensgrundsaetzeJahr.DAVOR)
+            this.sobonVerfahrensgrundsaetzeJahrConverter.convert("1997"),
+            is(SobonVerfahrensgrundsaetzeJahr.JAHR_1997)
         );
         assertThat(
-            this.sobonVerfahrensgrundsaetzeJahrConverter.convert("2014"),
-            is(SobonVerfahrensgrundsaetzeJahr.JAHR_2014)
+            this.sobonVerfahrensgrundsaetzeJahrConverter.convert("1995"),
+            is(SobonVerfahrensgrundsaetzeJahr.JAHR_1995)
+        );
+        assertThat(
+            this.sobonVerfahrensgrundsaetzeJahrConverter.convert("2021"),
+            is(SobonVerfahrensgrundsaetzeJahr.JAHR_2021)
         );
         assertThat(
             this.sobonVerfahrensgrundsaetzeJahrConverter.convert("2017"),

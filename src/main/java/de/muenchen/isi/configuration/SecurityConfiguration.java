@@ -39,6 +39,9 @@ public class SecurityConfiguration {
         http
             .antMatcher("/**")
             .authorizeRequests()
+            // allow access to /v3/api-docs
+            .antMatchers("/v3/api-docs")
+            .permitAll()
             // allow access to /actuator/info
             .antMatchers("/actuator/info")
             .permitAll()
