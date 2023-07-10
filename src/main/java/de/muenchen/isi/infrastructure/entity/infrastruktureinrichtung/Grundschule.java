@@ -4,7 +4,8 @@
  */
 package de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung;
 
-import de.muenchen.isi.infrastructure.entity.BaseEntity;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import lombok.Data;
@@ -12,16 +13,14 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 @Entity
+@DiscriminatorValue(InfrastruktureinrichtungTyp.Values.GRUNDSCHULE)
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class Grundschule extends BaseEntity {
+public class Grundschule extends Infrastruktureinrichtung {
 
-    @Embedded
-    public Infrastruktureinrichtung infrastruktureinrichtung;
+    // TBD: Grundschulsprengel
 
     @Embedded
     public Schule schule;
-    // TBD: Grundschulsprengel
-
 }

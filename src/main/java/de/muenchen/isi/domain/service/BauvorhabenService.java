@@ -13,20 +13,16 @@ import de.muenchen.isi.domain.model.BauvorhabenModel;
 import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.AbfrageAngelegtModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.InfrastruktureinrichtungModel;
 import de.muenchen.isi.domain.service.filehandling.DokumentService;
+import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Infrastruktureinrichtung;
 import de.muenchen.isi.infrastructure.repository.BauvorhabenRepository;
 import de.muenchen.isi.infrastructure.repository.InfrastrukturabfrageRepository;
-import de.muenchen.isi.infrastructure.repository.infrastruktureinrichtung.GrundschuleRepository;
-import de.muenchen.isi.infrastructure.repository.infrastruktureinrichtung.GsNachmittagBetreuungRepository;
-import de.muenchen.isi.infrastructure.repository.infrastruktureinrichtung.HausFuerKinderRepository;
-import de.muenchen.isi.infrastructure.repository.infrastruktureinrichtung.KindergartenRepository;
-import de.muenchen.isi.infrastructure.repository.infrastruktureinrichtung.KinderkrippeRepository;
-import de.muenchen.isi.infrastructure.repository.infrastruktureinrichtung.MittelschuleRepository;
-import java.util.ArrayList;
+import de.muenchen.isi.infrastructure.repository.InfrastruktureinrichtungRepository;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.lang.Nullable;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
@@ -42,17 +38,7 @@ public class BauvorhabenService {
 
     private final InfrastrukturabfrageRepository infrastrukturabfrageRepository;
 
-    private final KinderkrippeRepository kinderkrippeRepository;
-
-    private final KindergartenRepository kindergartenRepositoryRepository;
-
-    private final HausFuerKinderRepository hausFuerKinderRepository;
-
-    private final GsNachmittagBetreuungRepository gsNachmittagBetreuungRepository;
-
-    private final GrundschuleRepository grundschuleRepository;
-
-    private final MittelschuleRepository mittelschuleRepository;
+    private final InfrastruktureinrichtungRepository infrastruktureinrichtungRepository;
 
     private final DokumentService dokumentService;
 
@@ -226,38 +212,11 @@ public class BauvorhabenService {
     protected void throwEntityIsReferencedExceptionWhenInfrastruktureinrichtungIsReferencingBauvorhaben(
         final BauvorhabenModel bauvorhaben
     ) throws EntityIsReferencedException {
-        final List<String> namenInfrastruktureinrichtung = new ArrayList<String>();
-        namenInfrastruktureinrichtung.addAll(
-            this.kinderkrippeRepository.findAllByInfrastruktureinrichtungBauvorhabenId(bauvorhaben.getId())
-                .map(kinderkrippe -> kinderkrippe.getInfrastruktureinrichtung().getNameEinrichtung())
-                .collect(Collectors.toList())
-        );
-        namenInfrastruktureinrichtung.addAll(
-            this.kindergartenRepositoryRepository.findAllByInfrastruktureinrichtungBauvorhabenId(bauvorhaben.getId())
-                .map(kindergarten -> kindergarten.getInfrastruktureinrichtung().getNameEinrichtung())
-                .collect(Collectors.toList())
-        );
-        namenInfrastruktureinrichtung.addAll(
-            this.hausFuerKinderRepository.findAllByInfrastruktureinrichtungBauvorhabenId(bauvorhaben.getId())
-                .map(hausFuerKinder -> hausFuerKinder.getInfrastruktureinrichtung().getNameEinrichtung())
-                .collect(Collectors.toList())
-        );
-        namenInfrastruktureinrichtung.addAll(
-            this.gsNachmittagBetreuungRepository.findAllByInfrastruktureinrichtungBauvorhabenId(bauvorhaben.getId())
-                .map(gsNachmittagBetreuung -> gsNachmittagBetreuung.getInfrastruktureinrichtung().getNameEinrichtung())
-                .collect(Collectors.toList())
-        );
-        namenInfrastruktureinrichtung.addAll(
-            this.grundschuleRepository.findAllByInfrastruktureinrichtungBauvorhabenId(bauvorhaben.getId())
-                .map(grundschule -> grundschule.getInfrastruktureinrichtung().getNameEinrichtung())
-                .collect(Collectors.toList())
-        );
-        namenInfrastruktureinrichtung.addAll(
-            this.mittelschuleRepository.findAllByInfrastruktureinrichtungBauvorhabenId(bauvorhaben.getId())
-                .map(mittelschule -> mittelschule.getInfrastruktureinrichtung().getNameEinrichtung())
-                .collect(Collectors.toList())
-        );
-        if (!namenInfrastruktureinrichtung.isEmpty()) {
+        final List<String> namenInfrastruktureinrichtung =
+            this.infrastruktureinrichtungRepository.findAllByBauvorhabenId(bauvorhaben.getId())
+                .map(Infrastruktureinrichtung::getNameEinrichtung)
+                .collect(Collectors.toList());
+        if (CollectionUtils.isNotEmpty(namenInfrastruktureinrichtung)) {
             final var commaSeparatedNames = String.join(", ", namenInfrastruktureinrichtung);
             final var message =
                 "Das Bauvorhaben " +

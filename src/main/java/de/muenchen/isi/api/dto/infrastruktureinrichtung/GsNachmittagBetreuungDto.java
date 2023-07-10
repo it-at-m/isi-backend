@@ -4,9 +4,7 @@
  */
 package de.muenchen.isi.api.dto.infrastruktureinrichtung;
 
-import de.muenchen.isi.api.dto.BaseEntityDto;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtGsNachmittagBetreuung;
-import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import lombok.Data;
@@ -16,11 +14,7 @@ import lombok.ToString;
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class GsNachmittagBetreuungDto extends BaseEntityDto {
-
-    @Valid
-    @NotNull
-    private InfrastruktureinrichtungDto infrastruktureinrichtung;
+public class GsNachmittagBetreuungDto extends InfrastruktureinrichtungDto {
 
     private ArtGsNachmittagBetreuung artGsNachmittagBetreuung;
 
