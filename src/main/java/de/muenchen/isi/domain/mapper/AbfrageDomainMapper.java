@@ -177,8 +177,10 @@ public abstract class AbfrageDomainMapper {
         @MappingTarget final AbfrageListElementModel abfrageListElementModel,
         final InfrastrukturabfrageModel model
     ) {
-        Set<StadtbezirkModel> stadtbezirke = model.getAbfrage().getVerortung().getStadtbezirke();
-        abfrageListElementModel.setStadtbezirke(stadtbezirke);
+        if (model.getAbfrage().getVerortung() != null) {
+            Set<StadtbezirkModel> stadtbezirke = model.getAbfrage().getVerortung().getStadtbezirke();
+            abfrageListElementModel.setStadtbezirke(stadtbezirke);
+        }
         abfrageListElementModel.setType(AbfrageTyp.INFRASTRUKTURABFRAGE);
     }
 }
