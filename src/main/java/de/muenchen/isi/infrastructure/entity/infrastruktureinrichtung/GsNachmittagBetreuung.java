@@ -4,10 +4,10 @@
  */
 package de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung;
 
-import de.muenchen.isi.infrastructure.entity.BaseEntity;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtGsNachmittagBetreuung;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
 import javax.persistence.Column;
-import javax.persistence.Embedded;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -16,13 +16,11 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 @Entity
+@DiscriminatorValue(InfrastruktureinrichtungTyp.Values.GS_NACHMITTAG_BETREUUNG)
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class GsNachmittagBetreuung extends BaseEntity {
-
-    @Embedded
-    public Infrastruktureinrichtung infrastruktureinrichtung;
+public class GsNachmittagBetreuung extends Infrastruktureinrichtung {
 
     // TBD: Grundschulsprengel
 
