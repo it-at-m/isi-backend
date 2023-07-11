@@ -163,7 +163,7 @@ public abstract class AbfrageDomainMapper {
     @Mappings(
         {
             @Mapping(target = "type", ignore = true),
-            @Mapping(target = "stadtbezirke", ignore = true),
+            @Mapping(source = "abfrage.verortung.stadtbezirke", target = "stadtbezirke"),
             @Mapping(source = "abfrage.nameAbfrage", target = "nameAbfrage"),
             @Mapping(source = "abfrage.statusAbfrage", target = "statusAbfrage"),
             @Mapping(source = "abfrage.fristStellungnahme", target = "fristStellungnahme"),
@@ -177,10 +177,6 @@ public abstract class AbfrageDomainMapper {
         @MappingTarget final AbfrageListElementModel abfrageListElementModel,
         final InfrastrukturabfrageModel model
     ) {
-        if (model.getAbfrage().getVerortung() != null) {
-            Set<StadtbezirkModel> stadtbezirke = model.getAbfrage().getVerortung().getStadtbezirke();
-            abfrageListElementModel.setStadtbezirke(stadtbezirke);
-        }
         abfrageListElementModel.setType(AbfrageTyp.INFRASTRUKTURABFRAGE);
     }
 }
