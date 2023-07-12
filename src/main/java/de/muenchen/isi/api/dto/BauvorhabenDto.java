@@ -10,6 +10,7 @@ import de.muenchen.isi.infrastructure.entity.enums.lookup.Planungsrecht;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonVerfahrensgrundsaetzeJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVorhaben;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
+import java.math.BigDecimal;
 import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
@@ -29,7 +30,7 @@ public class BauvorhabenDto extends BaseEntityDto {
     private String eigentuemer;
 
     @NotNull
-    private Long grundstuecksgroesse;
+    private BigDecimal grundstuecksgroesse;
 
     @NotNull
     @NotUnspecified
