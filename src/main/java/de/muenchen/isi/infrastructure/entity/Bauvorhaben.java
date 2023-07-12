@@ -9,6 +9,7 @@ import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVorhaben;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
 import de.muenchen.isi.infrastructure.entity.filehandling.Dokument;
 import io.hypersistence.utils.hibernate.type.json.JsonType;
+import java.math.BigDecimal;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -42,8 +43,8 @@ public class Bauvorhaben extends BaseEntity {
     @Column(nullable = false)
     private String eigentuemer;
 
-    @Column(nullable = false)
-    private Long grundstuecksgroesse;
+    @Column(precision = 10, scale = 2, nullable = false)
+    private BigDecimal grundstuecksgroesse;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

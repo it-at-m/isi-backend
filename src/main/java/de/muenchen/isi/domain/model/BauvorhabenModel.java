@@ -8,6 +8,7 @@ import de.muenchen.isi.infrastructure.entity.enums.lookup.Planungsrecht;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonVerfahrensgrundsaetzeJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVorhaben;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
+import java.math.BigDecimal;
 import java.util.List;
 import lombok.Data;
 
@@ -18,7 +19,7 @@ public class BauvorhabenModel extends BaseEntityModel {
 
     private String eigentuemer;
 
-    private Long grundstuecksgroesse;
+    private BigDecimal grundstuecksgroesse;
 
     private StandVorhaben standVorhaben;
 
