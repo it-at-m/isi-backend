@@ -14,6 +14,6 @@ jobs:
         uses: advanced-security/policy-as-code@v2.3.4
         with:
           policy: it-at-m/policy-as-code
-          policy-path: default.yaml
+          policy-path: policies/default.yaml
           token: ${{ secrets.GITHUB_TOKEN }}
           argvs: "--disable-dependabot --disable-secret-scanning --disable-code-scanning"
