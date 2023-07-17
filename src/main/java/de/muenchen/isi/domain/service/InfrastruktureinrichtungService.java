@@ -8,6 +8,7 @@ import de.muenchen.isi.domain.model.BauvorhabenModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.InfrastruktureinrichtungModel;
 import de.muenchen.isi.domain.model.list.InfrastruktureinrichtungListElementModel;
 import de.muenchen.isi.domain.model.list.InfrastruktureinrichtungListElementsModel;
+import de.muenchen.isi.domain.search.SuchwortService;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Infrastruktureinrichtung;
 import de.muenchen.isi.infrastructure.repository.InfrastruktureinrichtungRepository;
 import java.util.List;
@@ -27,6 +28,8 @@ public class InfrastruktureinrichtungService {
     private final InfrastruktureinrichtungRepository infrastruktureinrichtungRepository;
 
     private final InfrastruktureinrichtungDomainMapper infrastruktureinrichtungDomainMapper;
+
+    private final SuchwortService suchwortService;
 
     /**
      * Die Methode gibt {@link InfrastruktureinrichtungListElementModel}e sortiert aufsteigend nach Name der Einrichtung zurück.
@@ -74,6 +77,7 @@ public class InfrastruktureinrichtungService {
             this.infrastruktureinrichtungDomainMapper.model2Entity(infrastruktureinrichtung);
         try {
             entity = this.infrastruktureinrichtungRepository.saveAndFlush(entity);
+            suchwortService.deleteOldSearchwordsAndAddNewSearchwords(entity);
         } catch (final ObjectOptimisticLockingFailureException exception) {
             final var message = "Die Daten wurden in der Zwischenzeit geändert. Bitte laden Sie die Seite neu!";
             throw new OptimisticLockingException(message, exception);

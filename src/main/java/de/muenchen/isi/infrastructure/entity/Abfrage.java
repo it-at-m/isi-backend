@@ -25,6 +25,7 @@ import javax.persistence.OneToMany;
 import lombok.Data;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
 
 @Embeddable
 @Data
@@ -58,6 +59,7 @@ public class Abfrage {
     @Column(nullable = true)
     private String bebauungsplannummer;
 
+    @FullTextField(analyzer = "entity_analyzer_string_field")
     @Column(nullable = false, unique = true, length = 70)
     private String nameAbfrage;
 

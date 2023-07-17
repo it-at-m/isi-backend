@@ -21,14 +21,18 @@ import javax.persistence.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.IndexedEmbedded;
 
 @Entity
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @Table(indexes = { @Index(name = "name_abfrage_index", columnList = "nameAbfrage") })
+@Indexed
 public class Infrastrukturabfrage extends BaseEntity {
 
+    @IndexedEmbedded
     @Embedded
     public Abfrage abfrage;
 

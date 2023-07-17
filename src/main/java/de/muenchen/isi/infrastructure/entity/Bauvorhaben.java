@@ -28,6 +28,8 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
 
 @Entity
 @Data
@@ -35,8 +37,10 @@ import org.hibernate.annotations.TypeDef;
 @EqualsAndHashCode(callSuper = true)
 @Table(indexes = { @Index(name = "name_vorhaben_index", columnList = "nameVorhaben") })
 @TypeDef(name = "json", typeClass = JsonType.class)
+@Indexed
 public class Bauvorhaben extends BaseEntity {
 
+    @FullTextField(analyzer = "entity_analyzer_string_field")
     @Column(nullable = false, unique = true)
     private String nameVorhaben;
 

@@ -31,6 +31,8 @@ import org.apache.commons.lang3.EnumUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -38,6 +40,7 @@ import org.hibernate.annotations.GenerationTime;
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
+@Indexed
 public abstract class Infrastruktureinrichtung extends BaseEntity {
 
     /**
@@ -67,6 +70,7 @@ public abstract class Infrastruktureinrichtung extends BaseEntity {
     @Embedded
     private Adresse adresse;
 
+    @FullTextField(analyzer = "entity_analyzer_string_field")
     @Column(nullable = false)
     private String nameEinrichtung;
 
