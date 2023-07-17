@@ -1,4 +1,4 @@
-package de.muenchen.isi.domain.search;
+package de.muenchen.isi.domain.service.search;
 
 import de.muenchen.isi.domain.mapper.SearchDomainMapper;
 import de.muenchen.isi.domain.model.search.SuchwortModel;

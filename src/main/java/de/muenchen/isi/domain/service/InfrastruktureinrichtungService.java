@@ -8,7 +8,7 @@ import de.muenchen.isi.domain.model.BauvorhabenModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.InfrastruktureinrichtungModel;
 import de.muenchen.isi.domain.model.list.InfrastruktureinrichtungListElementModel;
 import de.muenchen.isi.domain.model.list.InfrastruktureinrichtungListElementsModel;
-import de.muenchen.isi.domain.search.SuchwortService;
+import de.muenchen.isi.domain.service.search.SuchwortService;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Infrastruktureinrichtung;
 import de.muenchen.isi.infrastructure.repository.InfrastruktureinrichtungRepository;
 import java.util.List;

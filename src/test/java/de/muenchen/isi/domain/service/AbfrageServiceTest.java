@@ -28,8 +28,8 @@ import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.Abfragevaria
 import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.InfrastrukturabfrageAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageSachbearbeitungInBearbeitungSachbearbeitung.AbfragevarianteInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.domain.model.abfrageSachbearbeitungInBearbeitungSachbearbeitung.InfrastrukturabfrageInBearbeitungSachbearbeitungModel;
-import de.muenchen.isi.domain.search.SuchwortService;
 import de.muenchen.isi.domain.service.filehandling.DokumentService;
+import de.muenchen.isi.domain.service.search.SuchwortService;
 import de.muenchen.isi.infrastructure.entity.Abfrage;
 import de.muenchen.isi.infrastructure.entity.Abfragevariante;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
