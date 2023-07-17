@@ -4,22 +4,20 @@
  */
 package de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung;
 
-import de.muenchen.isi.infrastructure.entity.BaseEntity;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
 import javax.persistence.Column;
-import javax.persistence.Embedded;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 @Entity
+@DiscriminatorValue(InfrastruktureinrichtungTyp.Values.KINDERGARTEN)
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class Kindergarten extends BaseEntity {
-
-    @Embedded
-    public Infrastruktureinrichtung infrastruktureinrichtung;
+public class Kindergarten extends Infrastruktureinrichtung {
 
     @Column(nullable = false)
     private Integer anzahlKindergartenPlaetze;

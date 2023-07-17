@@ -30,6 +30,7 @@ nbdist/
 .nb-gradle/
 
 # do not check in Database Filler and application profile yml
+src/**/DatabaseFiller.java
 src/**/application-*.yml
 src/**/logback-spring.xml
 

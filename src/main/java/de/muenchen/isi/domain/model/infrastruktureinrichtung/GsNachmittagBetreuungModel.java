@@ -4,7 +4,6 @@
  */
 package de.muenchen.isi.domain.model.infrastruktureinrichtung;
 
-import de.muenchen.isi.domain.model.BaseEntityModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtGsNachmittagBetreuung;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -13,9 +12,9 @@ import lombok.ToString;
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class GsNachmittagBetreuungModel extends BaseEntityModel {
+public class GsNachmittagBetreuungModel extends InfrastruktureinrichtungModel {
 
-    private InfrastruktureinrichtungModel infrastruktureinrichtung;
+    // TBD: Grundschulsprengel
 
     private ArtGsNachmittagBetreuung artGsNachmittagBetreuung;
 

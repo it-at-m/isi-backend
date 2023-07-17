@@ -15,6 +15,7 @@ import de.muenchen.isi.domain.model.list.AbfrageListElementModel;
 import de.muenchen.isi.domain.model.list.AbfrageListElementsModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVorhaben;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
+import de.muenchen.isi.rest.TestData;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -54,7 +55,7 @@ class AbfrageListServiceTest {
         model1.setId(UUID.randomUUID());
         model1.setAbfrage(new AbfrageModel());
         model1.getAbfrage().setNameAbfrage("NameAbfrage1");
-        model1.getAbfrage().setStandVorhaben(StandVorhaben.AUFSTELLUNGSBESCHLUSS);
+        model1.getAbfrage().setVerortung(TestData.createVerortung());
         model1.getAbfrage().setStatusAbfrage(StatusAbfrage.OFFEN);
         model1.getAbfrage().setFristStellungnahme(LocalDate.of(2022, 11, 1));
 
@@ -62,7 +63,7 @@ class AbfrageListServiceTest {
         model2.setId(UUID.randomUUID());
         model2.setAbfrage(new AbfrageModel());
         model2.getAbfrage().setNameAbfrage("NameAbfrage2");
-        model2.getAbfrage().setStandVorhaben(StandVorhaben.BAUGENEHMIGUNG_ERTEILT);
+        model2.getAbfrage().setVerortung(TestData.createVerortung());
         model2.getAbfrage().setStatusAbfrage(StatusAbfrage.ANGELEGT);
         model2.getAbfrage().setFristStellungnahme(LocalDate.of(2022, 9, 1));
 
@@ -70,7 +71,7 @@ class AbfrageListServiceTest {
         model3.setId(UUID.randomUUID());
         model3.setAbfrage(new AbfrageModel());
         model3.getAbfrage().setNameAbfrage("NameAbfrage2");
-        model3.getAbfrage().setStandVorhaben(StandVorhaben.BPLAN_IN_KRAFT);
+        model3.getAbfrage().setVerortung(TestData.createVerortung());
         model3.getAbfrage().setStatusAbfrage(StatusAbfrage.OFFEN);
         model3.getAbfrage().setFristStellungnahme(LocalDate.of(2022, 12, 1));
 
@@ -81,7 +82,7 @@ class AbfrageListServiceTest {
         var abfrageListElementModel = new AbfrageListElementModel();
         abfrageListElementModel.setId(model3.getId());
         abfrageListElementModel.setNameAbfrage(model3.getAbfrage().getNameAbfrage());
-        abfrageListElementModel.setStandVorhaben(model3.getAbfrage().getStandVorhaben());
+        abfrageListElementModel.setStadtbezirke(model3.getAbfrage().getVerortung().getStadtbezirke());
         abfrageListElementModel.setStatusAbfrage(model3.getAbfrage().getStatusAbfrage());
         abfrageListElementModel.setFristStellungnahme(model3.getAbfrage().getFristStellungnahme());
         abfrageListElementModel.setType(AbfrageTyp.INFRASTRUKTURABFRAGE);
@@ -90,7 +91,7 @@ class AbfrageListServiceTest {
         abfrageListElementModel = new AbfrageListElementModel();
         abfrageListElementModel.setId(model1.getId());
         abfrageListElementModel.setNameAbfrage(model1.getAbfrage().getNameAbfrage());
-        abfrageListElementModel.setStandVorhaben(model1.getAbfrage().getStandVorhaben());
+        abfrageListElementModel.setStadtbezirke(model1.getAbfrage().getVerortung().getStadtbezirke());
         abfrageListElementModel.setStatusAbfrage(model1.getAbfrage().getStatusAbfrage());
         abfrageListElementModel.setFristStellungnahme(model1.getAbfrage().getFristStellungnahme());
         abfrageListElementModel.setType(AbfrageTyp.INFRASTRUKTURABFRAGE);
@@ -99,7 +100,7 @@ class AbfrageListServiceTest {
         abfrageListElementModel = new AbfrageListElementModel();
         abfrageListElementModel.setId(model2.getId());
         abfrageListElementModel.setNameAbfrage(model2.getAbfrage().getNameAbfrage());
-        abfrageListElementModel.setStandVorhaben(model2.getAbfrage().getStandVorhaben());
+        abfrageListElementModel.setStadtbezirke(model2.getAbfrage().getVerortung().getStadtbezirke());
         abfrageListElementModel.setStatusAbfrage(model2.getAbfrage().getStatusAbfrage());
         abfrageListElementModel.setFristStellungnahme(model2.getAbfrage().getFristStellungnahme());
         abfrageListElementModel.setType(AbfrageTyp.INFRASTRUKTURABFRAGE);

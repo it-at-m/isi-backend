@@ -4,11 +4,15 @@
  */
 package de.muenchen.isi.api.dto.infrastruktureinrichtung;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import de.muenchen.isi.api.dto.BaseEntityDto;
 import de.muenchen.isi.api.dto.common.AdresseDto;
 import de.muenchen.isi.api.validation.EinrichtungstraegerValid;
 import de.muenchen.isi.api.validation.FertigstellungsjahrValid;
 import de.muenchen.isi.api.validation.NotUnspecified;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Einrichtungstraeger;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusInfrastruktureinrichtung;
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -23,7 +27,28 @@ import lombok.Data;
 @Data
 @FertigstellungsjahrValid
 @EinrichtungstraegerValid
-public class InfrastruktureinrichtungDto {
+@JsonTypeInfo(
+    use = JsonTypeInfo.Id.NAME,
+    include = JsonTypeInfo.As.EXISTING_PROPERTY,
+    property = "infrastruktureinrichtungTyp",
+    visible = true
+)
+@JsonSubTypes(
+    {
+        @JsonSubTypes.Type(value = GrundschuleDto.class, name = InfrastruktureinrichtungTyp.Values.GRUNDSCHULE),
+        @JsonSubTypes.Type(
+            value = GsNachmittagBetreuungDto.class,
+            name = InfrastruktureinrichtungTyp.Values.GS_NACHMITTAG_BETREUUNG
+        ),
+        @JsonSubTypes.Type(value = HausFuerKinderDto.class, name = InfrastruktureinrichtungTyp.Values.HAUS_FUER_KINDER),
+        @JsonSubTypes.Type(value = KindergartenDto.class, name = InfrastruktureinrichtungTyp.Values.KINDERGARTEN),
+        @JsonSubTypes.Type(value = KinderkrippeDto.class, name = InfrastruktureinrichtungTyp.Values.KINDERKRIPPE),
+        @JsonSubTypes.Type(value = MittelschuleDto.class, name = InfrastruktureinrichtungTyp.Values.MITTELSCHULE),
+    }
+)
+public abstract class InfrastruktureinrichtungDto extends BaseEntityDto {
+
+    private InfrastruktureinrichtungTyp infrastruktureinrichtungTyp;
 
     private Long lfdNr;
 

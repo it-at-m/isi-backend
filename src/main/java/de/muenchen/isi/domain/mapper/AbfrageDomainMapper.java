@@ -10,12 +10,14 @@ import de.muenchen.isi.domain.model.AbfragevarianteModel;
 import de.muenchen.isi.domain.model.InfrastrukturabfrageModel;
 import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.InfrastrukturabfrageAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageSachbearbeitungInBearbeitungSachbearbeitung.InfrastrukturabfrageInBearbeitungSachbearbeitungModel;
+import de.muenchen.isi.domain.model.common.StadtbezirkModel;
 import de.muenchen.isi.domain.model.enums.AbfrageTyp;
 import de.muenchen.isi.domain.model.list.AbfrageListElementModel;
 import de.muenchen.isi.infrastructure.entity.Abfrage;
 import de.muenchen.isi.infrastructure.entity.Infrastrukturabfrage;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import org.apache.commons.collections4.CollectionUtils;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.BeanMapping;
@@ -161,8 +163,8 @@ public abstract class AbfrageDomainMapper {
     @Mappings(
         {
             @Mapping(target = "type", ignore = true),
+            @Mapping(source = "abfrage.verortung.stadtbezirke", target = "stadtbezirke"),
             @Mapping(source = "abfrage.nameAbfrage", target = "nameAbfrage"),
-            @Mapping(source = "abfrage.standVorhaben", target = "standVorhaben"),
             @Mapping(source = "abfrage.statusAbfrage", target = "statusAbfrage"),
             @Mapping(source = "abfrage.fristStellungnahme", target = "fristStellungnahme"),
             @Mapping(source = "sobonJahr", target = "sobonJahr"),
