@@ -18,6 +18,9 @@ import org.hibernate.search.mapper.orm.Search;
 import org.hibernate.search.mapper.orm.session.SearchSession;
 import org.springframework.stereotype.Service;
 
+/**
+ * Der Service dient dazu, die für die Suchwortvorschläge nötigen Suchwörter je Entität in der Datenbank zu speichern und zu extrahieren.
+ */
 @Service
 @RequiredArgsConstructor
 public class SuchwortService {
