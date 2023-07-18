@@ -35,7 +35,7 @@ public class SucheController {
     @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "OK") })
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_SEARCH.name())")
     public void searchForSearchwordSuggestion(
-        @RequestParam(value = "single-word-query") @NotNull String singleWordQuery
+        @RequestParam(value = "single-word-query") @NotNull final String singleWordQuery
     ) {}
 
     @GetMapping("/entities")
@@ -43,5 +43,5 @@ public class SucheController {
     @Operation(summary = "Suche nach Entitäten für die im Parameter gegebenen Suchanfrage.")
     @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "OK") })
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_SEARCH.name())")
-    public void searchForEntities(@RequestParam(value = "search-query") @NotNull String searchQuery) {}
+    public void searchForEntities(@RequestParam(value = "search-query") @NotNull final String searchQuery) {}
 }
