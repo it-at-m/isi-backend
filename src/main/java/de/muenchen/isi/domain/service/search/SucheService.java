@@ -55,9 +55,9 @@ public class SucheService {
 
     private final EntityManager entityManager;
 
-    private String[] searchableAttributes;
+    private final SearchDomainMapper searchDomainMapper;
 
-    private SearchDomainMapper searchDomainMapper;
+    private String[] searchableAttributes;
 
     public SearchResultsModel searchForEntities(final String searchQuery) {
         final var searchResults =
