@@ -2,6 +2,7 @@ package de.muenchen.isi.domain.service.search;
 
 import de.muenchen.isi.domain.mapper.SearchDomainMapper;
 import de.muenchen.isi.domain.model.BaseEntityModel;
+import de.muenchen.isi.domain.model.search.SearchQueryForEntitiesModel;
 import de.muenchen.isi.domain.model.search.SearchResultsModel;
 import de.muenchen.isi.infrastructure.entity.BaseEntity;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
@@ -14,6 +15,7 @@ import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Kinderkrip
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Mittelschule;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -23,6 +25,7 @@ import java.util.stream.Stream;
 import javax.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.hibernate.search.engine.search.common.BooleanOperator;
@@ -36,17 +39,6 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class SucheService {
 
-    private static final List<Class<? extends BaseEntity>> SUCHBARE_ENTITAETEN = List.of(
-        Infrastrukturabfrage.class,
-        Bauvorhaben.class,
-        Grundschule.class,
-        GsNachmittagBetreuung.class,
-        HausFuerKinder.class,
-        Kindergarten.class,
-        Kinderkrippe.class,
-        Mittelschule.class
-    );
-
     private static final Set<Class<? extends Annotation>> SEARCH_INDEX_ANNOTATION = Set.of(
         IndexedEmbedded.class,
         FullTextField.class
@@ -56,9 +48,10 @@ public class SucheService {
 
     private final SearchDomainMapper searchDomainMapper;
 
-    public SearchResultsModel searchForEntities(final String searchQuery) {
+    public SearchResultsModel searchForEntities(final SearchQueryForEntitiesModel searchQueryInformation) {
+        final List<Class<? extends BaseEntity>> searchableEntities = getSearchableEntities(searchQueryInformation);
         final var searchResults =
-            this.doSearchForEntities(SUCHBARE_ENTITAETEN, searchQuery)
+            this.searchForEntities(searchableEntities, searchQueryInformation.getSearchQuery())
                 .map(searchDomainMapper::model2SearchResultModel)
                 .collect(Collectors.toList());
         final var model = new SearchResultsModel();
@@ -66,7 +59,7 @@ public class SucheService {
         return model;
     }
 
-    public Stream<? extends BaseEntityModel> doSearchForEntities(
+    protected Stream<? extends BaseEntityModel> searchForEntities(
         final List<Class<? extends BaseEntity>> searchableEntities,
         final String searchQuery
     ) {
@@ -143,5 +136,30 @@ public class SucheService {
             .collect(Collectors.toSet());
         log.debug("Die Namen der suchbaren Attribute in {}: {}", clazz.getSimpleName(), fieldNamesAbfrage);
         return fieldNamesAbfrage;
+    }
+
+    protected List<Class<? extends BaseEntity>> getSearchableEntities(
+        final SearchQueryForEntitiesModel searchQueryInformation
+    ) {
+        final List<Class<? extends BaseEntity>> searchableEntities = new ArrayList<>();
+        if (BooleanUtils.isTrue(searchQueryInformation.getSelectInfrastrukturabfrage())) {
+            searchableEntities.add(Infrastrukturabfrage.class);
+        }
+        if (BooleanUtils.isTrue(searchQueryInformation.getSelectBauvorhaben())) {
+            searchableEntities.add(Bauvorhaben.class);
+        }
+        if (BooleanUtils.isTrue(searchQueryInformation.getSelectInfrastruktureinrichtung())) {
+            searchableEntities.addAll(
+                List.of(
+                    Grundschule.class,
+                    GsNachmittagBetreuung.class,
+                    HausFuerKinder.class,
+                    Kindergarten.class,
+                    Kinderkrippe.class,
+                    Mittelschule.class
+                )
+            );
+        }
+        return searchableEntities;
     }
 }
