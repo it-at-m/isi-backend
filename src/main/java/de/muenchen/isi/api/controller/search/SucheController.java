@@ -1,5 +1,6 @@
 package de.muenchen.isi.api.controller.search;
 
+import de.muenchen.isi.api.dto.search.SearchResultsDto;
 import de.muenchen.isi.api.dto.search.SuchwortSuggestionsDto;
 import de.muenchen.isi.api.mapper.SearchApiMapper;
 import de.muenchen.isi.domain.service.search.SucheService;
@@ -52,5 +53,11 @@ public class SucheController {
     @Operation(summary = "Suche nach Entitäten für die im Parameter gegebene Suchanfrage.")
     @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "OK") })
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_SEARCH.name())")
-    public void searchForEntities(@RequestParam(value = "search-query") @NotNull final String searchQuery) {}
+    public ResponseEntity<SearchResultsDto> searchForEntities(
+        @RequestParam(value = "search-query") @NotNull final String searchQuery
+    ) {
+        final var model = sucheService.searchForEntities(searchQuery);
+        final var dto = searchApiMapper.model2Dto(model);
+        return ResponseEntity.ok(dto);
+    }
 }

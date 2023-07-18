@@ -2,6 +2,7 @@ package de.muenchen.isi.domain.service.search;
 
 import de.muenchen.isi.domain.mapper.SearchDomainMapper;
 import de.muenchen.isi.domain.model.BaseEntityModel;
+import de.muenchen.isi.domain.model.search.SearchResultsModel;
 import de.muenchen.isi.infrastructure.entity.BaseEntity;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
 import de.muenchen.isi.infrastructure.entity.Infrastrukturabfrage;
@@ -58,7 +59,16 @@ public class SucheService {
 
     private SearchDomainMapper searchDomainMapper;
 
-    public List<? extends BaseEntityModel> searchForEntities(final String searchQuery) {
+    public SearchResultsModel searchForEntities(final String searchQuery) {
+        final var searchResults = doSearchForEntities(searchQuery)
+            .map(searchDomainMapper::model2SearchResultModel)
+            .collect(Collectors.toList());
+        final var model = new SearchResultsModel();
+        model.setSearchResults(searchResults);
+        return model;
+    }
+
+    public Stream<? extends BaseEntityModel> doSearchForEntities(final String searchQuery) {
         final var adaptedSearchQuery = this.createAdaptedSearchQuery(searchQuery);
 
         final var searchSession = Search.session(entityManager.getEntityManagerFactory().createEntityManager());
@@ -75,8 +85,7 @@ public class SucheService {
             )
             .fetchAllHits()
             .stream()
-            .map(searchDomainMapper::entity2Model)
-            .collect(Collectors.toList());
+            .map(searchDomainMapper::entity2Model);
     }
 
     protected String createAdaptedSearchQuery(final String searchQuery) {

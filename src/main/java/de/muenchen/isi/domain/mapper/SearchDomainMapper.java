@@ -24,12 +24,12 @@ import org.mapstruct.SubclassMapping;
     uses = { AbfrageDomainMapper.class, InfrastruktureinrichtungDomainMapper.class, BauvorhabenDomainMapper.class }
 )
 public interface SearchDomainMapper {
-    SuchwortModel entity2Model(Suchwort entity);
+    SuchwortModel entity2Model(final Suchwort entity);
 
     @SubclassMapping(source = Infrastruktureinrichtung.class, target = InfrastruktureinrichtungModel.class)
     @SubclassMapping(source = Bauvorhaben.class, target = BauvorhabenModel.class)
     @SubclassMapping(source = Infrastrukturabfrage.class, target = InfrastrukturabfrageModel.class)
-    BaseEntityModel entity2Model(BaseEntity entity);
+    BaseEntityModel entity2Model(final BaseEntity entity);
 
     @Mapping(target = "type", ignore = true)
     @SubclassMapping(
@@ -38,5 +38,5 @@ public interface SearchDomainMapper {
     )
     @SubclassMapping(source = BauvorhabenModel.class, target = BauvorhabenListElementModel.class)
     @SubclassMapping(source = InfrastrukturabfrageModel.class, target = AbfrageListElementModel.class)
-    SearchResultModel model2SearchResultModel(BaseEntityModel entity);
+    SearchResultModel model2SearchResultModel(final BaseEntityModel entity);
 }

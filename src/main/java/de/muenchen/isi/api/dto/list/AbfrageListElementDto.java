@@ -1,6 +1,7 @@
 package de.muenchen.isi.api.dto.list;
 
 import de.muenchen.isi.api.dto.common.StadtbezirkDto;
+import de.muenchen.isi.api.dto.search.SearchResultDto;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonVerfahrensgrundsaetzeJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import java.time.LocalDate;
@@ -8,9 +9,13 @@ import java.util.Set;
 import java.util.UUID;
 import javax.validation.constraints.Size;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 @Data
-public class AbfrageListElementDto {
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
+public class AbfrageListElementDto extends SearchResultDto {
 
     private UUID id;
 

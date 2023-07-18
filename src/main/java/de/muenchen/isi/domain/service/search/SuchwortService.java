@@ -12,6 +12,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import javax.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
@@ -36,14 +37,13 @@ public class SuchwortService {
     public SuchwortSuggestionsModel searchForSearchwordSuggestion(final String singleWordQuery) {
         final var suchwortSuggestions = new SuchwortSuggestionsModel();
         final var foundSuchwortSuggestions = doSearchForSearchwordSuggestion(singleWordQuery)
-            .stream()
             .map(SuchwortModel::getSuchwort)
             .collect(Collectors.toList());
         suchwortSuggestions.setSuchwortSuggestions(foundSuchwortSuggestions);
         return suchwortSuggestions;
     }
 
-    public Set<SuchwortModel> doSearchForSearchwordSuggestion(final String singleWordQuery) {
+    public Stream<SuchwortModel> doSearchForSearchwordSuggestion(final String singleWordQuery) {
         final var wildcardQuery = StringUtils.trimToEmpty(singleWordQuery) + "*";
 
         final var searchSession = Search.session(entityManager.getEntityManagerFactory().createEntityManager());
@@ -54,8 +54,7 @@ public class SuchwortService {
             .fetch(MAX_NUMBER_OF_SUGGESTION)
             .hits()
             .stream()
-            .map(searchDomainMapper::entity2Model)
-            .collect(Collectors.toSet());
+            .map(searchDomainMapper::entity2Model);
     }
 
     public void deleteOldSearchwordsAndAddNewSearchwords(final Infrastrukturabfrage infrastrukturabfrage) {
