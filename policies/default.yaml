@@ -25,7 +25,7 @@ dependencies:
   ignores:
     names:
       - npm://load-script@1.0.0
-      - slash@1.0.0
+      - npm/slash@1.0.0
 
 secretscanning:
   level: all
