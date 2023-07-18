@@ -2,6 +2,7 @@ package de.muenchen.isi.domain.service.search;
 
 import de.muenchen.isi.domain.mapper.SearchDomainMapper;
 import de.muenchen.isi.domain.model.search.SuchwortModel;
+import de.muenchen.isi.domain.model.search.SuchwortSuggestionsModel;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
 import de.muenchen.isi.infrastructure.entity.Infrastrukturabfrage;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Infrastruktureinrichtung;
@@ -32,7 +33,17 @@ public class SuchwortService {
 
     private final SearchDomainMapper searchDomainMapper;
 
-    public Set<SuchwortModel> searchForSearchwordSuggestion(final String singleWordQuery) {
+    public SuchwortSuggestionsModel searchForSearchwordSuggestion(final String singleWordQuery) {
+        final var suchwortSuggestions = new SuchwortSuggestionsModel();
+        final var foundSuchwortSuggestions = doSearchForSearchwordSuggestion(singleWordQuery)
+            .stream()
+            .map(SuchwortModel::getSuchwort)
+            .collect(Collectors.toList());
+        suchwortSuggestions.setSuchwortSuggestions(foundSuchwortSuggestions);
+        return suchwortSuggestions;
+    }
+
+    public Set<SuchwortModel> doSearchForSearchwordSuggestion(final String singleWordQuery) {
         final var wildcardQuery = StringUtils.trimToEmpty(singleWordQuery) + "*";
 
         final var searchSession = Search.session(entityManager.getEntityManagerFactory().createEntityManager());
