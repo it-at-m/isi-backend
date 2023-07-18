@@ -15,7 +15,6 @@ import javax.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.search.mapper.orm.Search;
-import org.hibernate.search.mapper.orm.session.SearchSession;
 import org.springframework.stereotype.Service;
 
 /**
@@ -25,21 +24,23 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class SuchwortService {
 
+    private static final int MAX_NUMBER_OF_SUGGESTION = 20;
+
     private final SuchwortRepository suchwortRepository;
 
     private final EntityManager entityManager;
 
     private final SearchDomainMapper searchDomainMapper;
 
-    public Set<SuchwortModel> extractSearchwordSuggestion(final String singleWordQuery) {
-        final var adaptedQuery = StringUtils.lowerCase(StringUtils.trimToEmpty(singleWordQuery));
+    public Set<SuchwortModel> searchForSearchwordSuggestion(final String singleWordQuery) {
+        final var wildcardQuery = StringUtils.trimToEmpty(singleWordQuery) + "*";
 
-        SearchSession searchSession = Search.session(entityManager.getEntityManagerFactory().createEntityManager());
+        final var searchSession = Search.session(entityManager.getEntityManagerFactory().createEntityManager());
 
         return searchSession
             .search(Suchwort.class)
-            .where(function -> function.wildcard().field("suchwort").matching(adaptedQuery))
-            .fetch(20)
+            .where(function -> function.wildcard().field("suchwort").matching(wildcardQuery))
+            .fetch(MAX_NUMBER_OF_SUGGESTION)
             .hits()
             .stream()
             .map(searchDomainMapper::entity2Model)
