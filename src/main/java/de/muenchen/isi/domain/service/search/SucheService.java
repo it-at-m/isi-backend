@@ -20,7 +20,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -57,11 +56,9 @@ public class SucheService {
 
     private final SearchDomainMapper searchDomainMapper;
 
-    private String[] searchableAttributes;
-
     public SearchResultsModel searchForEntities(final String searchQuery) {
         final var searchResults =
-            this.doSearchForEntities(searchQuery)
+            this.doSearchForEntities(SUCHBARE_ENTITAETEN, searchQuery)
                 .map(searchDomainMapper::model2SearchResultModel)
                 .collect(Collectors.toList());
         final var model = new SearchResultsModel();
@@ -69,12 +66,16 @@ public class SucheService {
         return model;
     }
 
-    public Stream<? extends BaseEntityModel> doSearchForEntities(final String searchQuery) {
+    public Stream<? extends BaseEntityModel> doSearchForEntities(
+        List<Class<? extends BaseEntity>> searchableEntities,
+        final String searchQuery
+    ) {
+        final var searchableAttributes = getNamesOfSearchableAttributes(searchableEntities);
         final var adaptedSearchQuery = this.createAdaptedSearchQuery(searchQuery);
 
         return Search
             .session(entityManager.getEntityManagerFactory().createEntityManager())
-            .search(SUCHBARE_ENTITAETEN)
+            .search(searchableEntities)
             .where(function ->
                 function
                     // https://docs.jboss.org/hibernate/stable/search/reference/en-US/html_single/#search-dsl-predicate-simple-query-string
@@ -103,17 +104,16 @@ public class SucheService {
         return adaptedSearchQuery;
     }
 
-    @PostConstruct
-    protected void setNamesOfSearchableAttributes() {
-        this.searchableAttributes =
-            SUCHBARE_ENTITAETEN
-                .stream()
-                .flatMap(classSearchablEntity ->
-                    this.getNamesOfSearchableAttributes(classSearchablEntity, SEARCH_INDEX_ANNOTATION, "").stream()
-                )
-                .distinct()
-                .toArray(String[]::new);
-        log.debug("Die Namen aller suchbaren Attribute: {}", Arrays.toString(this.searchableAttributes));
+    protected String[] getNamesOfSearchableAttributes(List<Class<? extends BaseEntity>> searchableEntities) {
+        final var searchableAttributes = searchableEntities
+            .stream()
+            .flatMap(classSearchablEntity ->
+                this.getNamesOfSearchableAttributes(classSearchablEntity, SEARCH_INDEX_ANNOTATION, "").stream()
+            )
+            .distinct()
+            .toArray(String[]::new);
+        log.debug("Die Namen aller suchbaren Attribute: {}", Arrays.toString(searchableAttributes));
+        return searchableAttributes;
     }
 
     protected Set<String> getNamesOfSearchableAttributes(
