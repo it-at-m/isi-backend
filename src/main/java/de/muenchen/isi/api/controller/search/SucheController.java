@@ -29,7 +29,7 @@ public class SucheController {
 
     private final SucheService sucheService;
 
-    @GetMapping("/suggestion")
+    @GetMapping("/searchword-suggestion")
     @Transactional(readOnly = true)
     @Operation(summary = "Suche nach Suchwortvorschläge für ein einzelnen im Parameter gegebenes Wort.")
     @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "OK") })
