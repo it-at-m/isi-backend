@@ -67,7 +67,7 @@ public class SucheService {
     }
 
     public Stream<? extends BaseEntityModel> doSearchForEntities(
-        List<Class<? extends BaseEntity>> searchableEntities,
+        final List<Class<? extends BaseEntity>> searchableEntities,
         final String searchQuery
     ) {
         final var searchableAttributes = getNamesOfSearchableAttributes(searchableEntities);
