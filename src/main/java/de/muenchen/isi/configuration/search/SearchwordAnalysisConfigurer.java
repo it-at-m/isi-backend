@@ -33,7 +33,7 @@ public class SearchwordAnalysisConfigurer implements ElasticsearchAnalysisConfig
             .custom()
             // https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-whitespace-tokenizer.html
             .tokenizer("whitespace")
-            .tokenFilters("lowercase_tokenfilter");
+            .tokenFilters("lowercase_tokenfilter", "edge_ngram_tokenfilter");
 
         context
             .tokenFilter("lowercase_tokenfilter")
