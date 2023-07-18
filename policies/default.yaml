@@ -14,11 +14,12 @@ licensing:
       - GPL-*
       - LGPL-*
       - AGPL-*
+      - Other
 
   warnings:
     # Warning is the dependency isn't known
     ids:
-      - Other
+#      - Other
       - NA
 
   ignores:
