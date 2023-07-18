@@ -20,9 +20,11 @@ licensing:
     ids:
       - Other
       - NA
+
+  ignores:
     names:
-      - load-script*
-      - slash*
+      - npm/load-script@1.0.0
+      - npm/slash@1.0.0
 
 secretscanning:
   level: all
