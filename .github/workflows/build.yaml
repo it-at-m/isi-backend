@@ -13,7 +13,7 @@ jobs:
       - name: Advance Security Policy as Code
         uses: advanced-security/policy-as-code@v2.3.6
         with:
-          policy: it-at-m/isi-backend/policies
+          policy: it-at-m/isi-backend/tree/ISI-752-GithubActionsCompliance/policies
           policy-path: default.yaml
           policy-branch: ISI-752-GithubActionsCompliance
           token: ${{ secrets.GITHUB_TOKEN }}
