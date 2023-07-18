@@ -51,7 +51,13 @@ public class SuchwortService {
 
         return searchSession
             .search(Suchwort.class)
-            .where(function -> function.wildcard().field("suchwort").matching(wildcardQuery.toLowerCase()))
+            .where(function ->
+                function
+                    // https://docs.jboss.org/hibernate/stable/search/reference/en-US/html_single/#search-dsl-predicate-wildcard
+                    .wildcard()
+                    .field("suchwort")
+                    .matching(wildcardQuery)
+            )
             .fetch(MAX_NUMBER_OF_SUGGESTION)
             .hits()
             .stream()
