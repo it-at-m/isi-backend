@@ -14,20 +14,17 @@ licensing:
       - GPL-*
       - LGPL-*
       - AGPL-*
-      - Other
 
   warnings:
     # Warning is the dependency isn't known
     ids:
-#      - Other
+      - Other
       - NA
 
   ignores:
-    ids:
+    names:
       - npm://load-script@1.0.0
-      - npm://slash@1.0.0
-      - maven/org.jacoco:jacoco-maven-plugin
-      - GPL-2.0-or-later
+      - slash
 
 secretscanning:
   level: all
