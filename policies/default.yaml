@@ -11,7 +11,7 @@ dependabot:
 licensing:
   conditions:
     ids:
-      #- GPL-*
+      - GPL-*
       - LGPL-*
       - AGPL-*
 
@@ -23,8 +23,8 @@ licensing:
 
   ignores:
     names:
-      - npm/load-script*
-      - npm/slash*
+      - load-script*
+      - slash*
 
 secretscanning:
   level: all
