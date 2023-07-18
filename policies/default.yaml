@@ -23,8 +23,8 @@ licensing:
 
   ignores:
     names:
-      - load-script*
-      - slash*
+      - load-script
+      - slash
 
 secretscanning:
   level: all
