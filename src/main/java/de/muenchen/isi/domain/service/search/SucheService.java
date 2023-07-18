@@ -60,9 +60,10 @@ public class SucheService {
     private SearchDomainMapper searchDomainMapper;
 
     public SearchResultsModel searchForEntities(final String searchQuery) {
-        final var searchResults = doSearchForEntities(searchQuery)
-            .map(searchDomainMapper::model2SearchResultModel)
-            .collect(Collectors.toList());
+        final var searchResults =
+            this.doSearchForEntities(searchQuery)
+                .map(searchDomainMapper::model2SearchResultModel)
+                .collect(Collectors.toList());
         final var model = new SearchResultsModel();
         model.setSearchResults(searchResults);
         return model;
@@ -108,7 +109,7 @@ public class SucheService {
             SUCHBARE_ENTITAETEN
                 .stream()
                 .flatMap(classSearchablEntity ->
-                    getNamesOfSearchableAttributes(classSearchablEntity, SEARCH_INDEX_ANNOTATION, "").stream()
+                    this.getNamesOfSearchableAttributes(classSearchablEntity, SEARCH_INDEX_ANNOTATION, "").stream()
                 )
                 .distinct()
                 .toArray(String[]::new);

@@ -36,9 +36,10 @@ public class SuchwortService {
 
     public SuchwortSuggestionsModel searchForSearchwordSuggestion(final String singleWordQuery) {
         final var suchwortSuggestions = new SuchwortSuggestionsModel();
-        final var foundSuchwortSuggestions = doSearchForSearchwordSuggestion(singleWordQuery)
-            .map(SuchwortModel::getSuchwort)
-            .collect(Collectors.toList());
+        final var foundSuchwortSuggestions =
+            this.doSearchForSearchwordSuggestion(singleWordQuery)
+                .map(SuchwortModel::getSuchwort)
+                .collect(Collectors.toList());
         suchwortSuggestions.setSuchwortSuggestions(foundSuchwortSuggestions);
         return suchwortSuggestions;
     }
