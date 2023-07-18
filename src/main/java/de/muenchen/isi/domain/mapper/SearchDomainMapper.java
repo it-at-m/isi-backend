@@ -5,6 +5,10 @@ import de.muenchen.isi.domain.model.BaseEntityModel;
 import de.muenchen.isi.domain.model.BauvorhabenModel;
 import de.muenchen.isi.domain.model.InfrastrukturabfrageModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.InfrastruktureinrichtungModel;
+import de.muenchen.isi.domain.model.list.AbfrageListElementModel;
+import de.muenchen.isi.domain.model.list.BauvorhabenListElementModel;
+import de.muenchen.isi.domain.model.list.InfrastruktureinrichtungListElementModel;
+import de.muenchen.isi.domain.model.search.SearchResultModel;
 import de.muenchen.isi.domain.model.search.SuchwortModel;
 import de.muenchen.isi.infrastructure.entity.BaseEntity;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
@@ -12,6 +16,7 @@ import de.muenchen.isi.infrastructure.entity.Infrastrukturabfrage;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Infrastruktureinrichtung;
 import de.muenchen.isi.infrastructure.entity.search.Suchwort;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.SubclassMapping;
 
 @Mapper(
@@ -25,4 +30,13 @@ public interface SearchDomainMapper {
     @SubclassMapping(source = Bauvorhaben.class, target = BauvorhabenModel.class)
     @SubclassMapping(source = Infrastrukturabfrage.class, target = InfrastrukturabfrageModel.class)
     BaseEntityModel entity2Model(BaseEntity entity);
+
+    @Mapping(target = "type", ignore = true)
+    @SubclassMapping(
+        source = InfrastruktureinrichtungModel.class,
+        target = InfrastruktureinrichtungListElementModel.class
+    )
+    @SubclassMapping(source = BauvorhabenModel.class, target = BauvorhabenListElementModel.class)
+    @SubclassMapping(source = InfrastrukturabfrageModel.class, target = AbfrageListElementModel.class)
+    SearchResultModel model2SearchResultModel(BaseEntityModel entity);
 }

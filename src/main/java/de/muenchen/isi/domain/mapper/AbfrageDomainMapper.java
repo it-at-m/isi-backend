@@ -10,14 +10,11 @@ import de.muenchen.isi.domain.model.AbfragevarianteModel;
 import de.muenchen.isi.domain.model.InfrastrukturabfrageModel;
 import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.InfrastrukturabfrageAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageSachbearbeitungInBearbeitungSachbearbeitung.InfrastrukturabfrageInBearbeitungSachbearbeitungModel;
-import de.muenchen.isi.domain.model.common.StadtbezirkModel;
-import de.muenchen.isi.domain.model.enums.AbfrageTyp;
 import de.muenchen.isi.domain.model.list.AbfrageListElementModel;
 import de.muenchen.isi.infrastructure.entity.Abfrage;
 import de.muenchen.isi.infrastructure.entity.Infrastrukturabfrage;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import org.apache.commons.collections4.CollectionUtils;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.BeanMapping;
@@ -162,7 +159,7 @@ public abstract class AbfrageDomainMapper {
 
     @Mappings(
         {
-            @Mapping(target = "type", ignore = true),
+            @Mapping(target = "type", constant = "INFRASTRUKTURABFRAGE"),
             @Mapping(source = "abfrage.verortung.stadtbezirke", target = "stadtbezirke"),
             @Mapping(source = "abfrage.nameAbfrage", target = "nameAbfrage"),
             @Mapping(source = "abfrage.statusAbfrage", target = "statusAbfrage"),
@@ -171,12 +168,4 @@ public abstract class AbfrageDomainMapper {
         }
     )
     public abstract AbfrageListElementModel model2ListElementModel(final InfrastrukturabfrageModel model);
-
-    @AfterMapping
-    void afterMappingModel2ListElementModel(
-        @MappingTarget final AbfrageListElementModel abfrageListElementModel,
-        final InfrastrukturabfrageModel model
-    ) {
-        abfrageListElementModel.setType(AbfrageTyp.INFRASTRUKTURABFRAGE);
-    }
 }

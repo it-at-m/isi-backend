@@ -10,10 +10,9 @@ import de.muenchen.isi.domain.mapper.BauabschnittDomainMapperImpl;
 import de.muenchen.isi.domain.mapper.DokumentDomainMapperImpl;
 import de.muenchen.isi.domain.model.AbfrageModel;
 import de.muenchen.isi.domain.model.InfrastrukturabfrageModel;
-import de.muenchen.isi.domain.model.enums.AbfrageTyp;
+import de.muenchen.isi.domain.model.enums.SearchResultType;
 import de.muenchen.isi.domain.model.list.AbfrageListElementModel;
 import de.muenchen.isi.domain.model.list.AbfrageListElementsModel;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVorhaben;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.rest.TestData;
 import java.time.LocalDate;
@@ -85,7 +84,7 @@ class AbfrageListServiceTest {
         abfrageListElementModel.setStadtbezirke(model3.getAbfrage().getVerortung().getStadtbezirke());
         abfrageListElementModel.setStatusAbfrage(model3.getAbfrage().getStatusAbfrage());
         abfrageListElementModel.setFristStellungnahme(model3.getAbfrage().getFristStellungnahme());
-        abfrageListElementModel.setType(AbfrageTyp.INFRASTRUKTURABFRAGE);
+        abfrageListElementModel.setType(SearchResultType.INFRASTRUKTURABFRAGE);
         expectedFristStellungnahmeDesc.add(abfrageListElementModel);
 
         abfrageListElementModel = new AbfrageListElementModel();
@@ -94,7 +93,7 @@ class AbfrageListServiceTest {
         abfrageListElementModel.setStadtbezirke(model1.getAbfrage().getVerortung().getStadtbezirke());
         abfrageListElementModel.setStatusAbfrage(model1.getAbfrage().getStatusAbfrage());
         abfrageListElementModel.setFristStellungnahme(model1.getAbfrage().getFristStellungnahme());
-        abfrageListElementModel.setType(AbfrageTyp.INFRASTRUKTURABFRAGE);
+        abfrageListElementModel.setType(SearchResultType.INFRASTRUKTURABFRAGE);
         expectedFristStellungnahmeDesc.add(abfrageListElementModel);
 
         abfrageListElementModel = new AbfrageListElementModel();
@@ -103,7 +102,7 @@ class AbfrageListServiceTest {
         abfrageListElementModel.setStadtbezirke(model2.getAbfrage().getVerortung().getStadtbezirke());
         abfrageListElementModel.setStatusAbfrage(model2.getAbfrage().getStatusAbfrage());
         abfrageListElementModel.setFristStellungnahme(model2.getAbfrage().getFristStellungnahme());
-        abfrageListElementModel.setType(AbfrageTyp.INFRASTRUKTURABFRAGE);
+        abfrageListElementModel.setType(SearchResultType.INFRASTRUKTURABFRAGE);
         expectedFristStellungnahmeDesc.add(abfrageListElementModel);
 
         final var expected = new AbfrageListElementsModel();
