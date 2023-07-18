@@ -1,9 +1,9 @@
-name: Default Policy
+name: it@M Default Policy
 
 codescanning:
   level: error
 
-# Dependency Security Alters
+# Dependency Security Alerts
 dependabot:
   level: high
 
@@ -20,13 +20,9 @@ licensing:
     ids:
       - Other
       - NA
-
-# General Dependency Alerts
-# dependencies:
-# warnings:
-#   ids:
-#     - Maintenance
-#     - Organization
+    names:
+      - load-script@1.0.0
+      - slash@1.0.0
 
 secretscanning:
   level: all

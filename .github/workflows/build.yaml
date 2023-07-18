@@ -13,7 +13,7 @@ jobs:
       - name: Advance Security Policy as Code
         uses: advanced-security/policy-as-code@v2.3.6
         with:
-          policy: it-at-m/policy-as-code
+          policy: isi-backend/policies@ISI-752-GithubActionsCompliance
           policy-path: default.yaml
           token: ${{ secrets.GITHUB_TOKEN }}
           argvs: "--display --disable-dependabot --disable-secret-scanning --disable-code-scanning"
