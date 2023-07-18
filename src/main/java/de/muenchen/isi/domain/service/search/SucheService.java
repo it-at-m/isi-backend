@@ -95,8 +95,9 @@ public class SucheService {
         adaptedSearchQuery =
             Arrays
                 .stream(singleQueryWords)
+                .map(StringUtils::lowerCase)
                 // Abfügen eines Wildcardprefix
-                .map(queryWord -> queryWord + "*")
+                .map(lowerCaseQueryWord -> lowerCaseQueryWord + "*")
                 // Trennen der Wildcard-Suchwörter mit Leerzeichen
                 .collect(Collectors.joining(StringUtils.SPACE));
         log.debug("Die erstellte Suchquery: {}", adaptedSearchQuery);

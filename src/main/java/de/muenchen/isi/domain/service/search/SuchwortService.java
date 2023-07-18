@@ -45,13 +45,13 @@ public class SuchwortService {
     }
 
     public Stream<SuchwortModel> doSearchForSearchwordSuggestion(final String singleWordQuery) {
-        final var wildcardQuery = StringUtils.trimToEmpty(singleWordQuery) + "*";
+        final var wildcardQuery = StringUtils.lowerCase(StringUtils.trimToEmpty(singleWordQuery) + "*");
 
         final var searchSession = Search.session(entityManager.getEntityManagerFactory().createEntityManager());
 
         return searchSession
             .search(Suchwort.class)
-            .where(function -> function.wildcard().field("suchwort").matching(wildcardQuery))
+            .where(function -> function.wildcard().field("suchwort").matching(wildcardQuery.toLowerCase()))
             .fetch(MAX_NUMBER_OF_SUGGESTION)
             .hits()
             .stream()
