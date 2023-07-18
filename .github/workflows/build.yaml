@@ -17,5 +17,4 @@ jobs:
           policy-path: policies/default.yaml
           policy-branch: ISI-752-GithubActionsCompliance
           token: ${{ secrets.GITHUB_TOKEN }}
-#          argvs: "--display --disable-dependabot --disable-secret-scanning --disable-code-scanning"
-          argvs: "--display --disable-secret-scanning --disable-code-scanning"
+          argvs: "--display --disable-dependabot --disable-secret-scanning --disable-code-scanning"
