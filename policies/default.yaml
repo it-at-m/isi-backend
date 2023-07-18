@@ -21,8 +21,8 @@ licensing:
       - Other
       - NA
     names:
-      - load-script@1.0.0
-      - slash@1.0.0
+      - load-script*
+      - slash*
 
 secretscanning:
   level: all
