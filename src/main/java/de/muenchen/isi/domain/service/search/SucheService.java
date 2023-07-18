@@ -76,8 +76,8 @@ public class SucheService {
 
         return searchSession
             .search(SUCHBARE_ENTITAETEN)
-            .where(f ->
-                f
+            .where(function ->
+                function
                     // https://docs.jboss.org/hibernate/stable/search/reference/en-US/html_single/#search-dsl-predicate-simple-query-string
                     .simpleQueryString()
                     .fields(searchableAttributes)
