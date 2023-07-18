@@ -23,8 +23,8 @@ licensing:
 
   ignores:
     names:
-      - npm/load-script@1.0.0
-      - npm/slash@1.0.0
+      - npm/load-script*
+      - npm/slash*
 
 secretscanning:
   level: all
