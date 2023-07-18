@@ -2,9 +2,15 @@ package de.muenchen.isi.domain.service.search;
 
 import de.muenchen.isi.domain.mapper.SearchDomainMapper;
 import de.muenchen.isi.domain.model.BaseEntityModel;
+import de.muenchen.isi.infrastructure.entity.BaseEntity;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
 import de.muenchen.isi.infrastructure.entity.Infrastrukturabfrage;
-import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Infrastruktureinrichtung;
+import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Grundschule;
+import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.GsNachmittagBetreuung;
+import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.HausFuerKinder;
+import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Kindergarten;
+import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Kinderkrippe;
+import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Mittelschule;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.Arrays;
@@ -17,7 +23,6 @@ import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections4.SetUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.hibernate.search.engine.search.common.BooleanOperator;
@@ -31,6 +36,22 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class SucheService {
 
+    private static final List<Class<? extends BaseEntity>> SUCHBARE_ENTITAETEN = List.of(
+        Infrastrukturabfrage.class,
+        Bauvorhaben.class,
+        Grundschule.class,
+        GsNachmittagBetreuung.class,
+        HausFuerKinder.class,
+        Kindergarten.class,
+        Kinderkrippe.class,
+        Mittelschule.class
+    );
+
+    private static final Set<Class<? extends Annotation>> SEARCH_INDEX_ANNOTATION = Set.of(
+        IndexedEmbedded.class,
+        FullTextField.class
+    );
+
     private final EntityManager entityManager;
 
     private String[] searchableAttributes;
@@ -43,7 +64,7 @@ public class SucheService {
         final var searchSession = Search.session(entityManager.getEntityManagerFactory().createEntityManager());
 
         return searchSession
-            .search(List.of(Infrastrukturabfrage.class, Bauvorhaben.class, Infrastruktureinrichtung.class))
+            .search(SUCHBARE_ENTITAETEN)
             .where(f ->
                 f
                     // https://docs.jboss.org/hibernate/stable/search/reference/en-US/html_single/#search-dsl-predicate-simple-query-string
@@ -74,23 +95,13 @@ public class SucheService {
 
     @PostConstruct
     protected void setNamesOfSearchableAttributes() {
-        Set<Class<? extends Annotation>> searchIndexAnnotation = Set.of(IndexedEmbedded.class, FullTextField.class);
-
-        final var fieldNamesAbfrage = getNamesOfSearchableAttributes(
-            Infrastrukturabfrage.class,
-            searchIndexAnnotation,
-            ""
-        );
-        final var fieldNamesBauvorhaben = getNamesOfSearchableAttributes(Bauvorhaben.class, searchIndexAnnotation, "");
-        final var fieldNamesEinrichtung = getNamesOfSearchableAttributes(
-            Infrastruktureinrichtung.class,
-            searchIndexAnnotation,
-            ""
-        );
-
         this.searchableAttributes =
-            SetUtils
-                .union(SetUtils.union(fieldNamesAbfrage, fieldNamesBauvorhaben), fieldNamesEinrichtung)
+            SUCHBARE_ENTITAETEN
+                .stream()
+                .flatMap(classSearchablEntity ->
+                    getNamesOfSearchableAttributes(classSearchablEntity, SEARCH_INDEX_ANNOTATION, "").stream()
+                )
+                .distinct()
                 .toArray(String[]::new);
         log.debug("Die Namen aller suchbaren Attribute: {}", Arrays.toString(this.searchableAttributes));
     }
@@ -98,16 +109,16 @@ public class SucheService {
     protected Set<String> getNamesOfSearchableAttributes(
         final Class<?> clazz,
         final Collection<Class<? extends Annotation>> searchIndexAnnotation,
-        final String classLevel
+        final String attributePath
     ) {
         final var fieldNamesAbfrage = searchIndexAnnotation
             .stream()
             .flatMap(annotation -> {
                 final Stream<Field> fields = FieldUtils.getFieldsListWithAnnotation(clazz, annotation).stream();
-                final String fieldDivider = StringUtils.isEmpty(classLevel) ? "" : ".";
+                final String fieldDivider = StringUtils.isEmpty(attributePath) ? "" : ".";
                 if (annotation.equals(IndexedEmbedded.class)) {
                     return fields.flatMap(field -> {
-                        final var newClassLevel = classLevel + fieldDivider + field.getName();
+                        final var newClassLevel = attributePath + fieldDivider + field.getName();
                         return this.getNamesOfSearchableAttributes(
                                 field.getType(),
                                 searchIndexAnnotation,
@@ -116,7 +127,7 @@ public class SucheService {
                             .stream();
                     });
                 } else {
-                    return fields.map(field -> classLevel + fieldDivider + field.getName());
+                    return fields.map(field -> attributePath + fieldDivider + field.getName());
                 }
             })
             .collect(Collectors.toSet());
