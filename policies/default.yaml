@@ -21,11 +21,14 @@ licensing:
       - Other
       - NA
 
-dependencies:
   ignores:
     names:
-      - npm://load-script@1.0.0
+      - pkg:npm/load-script@1.0.0
       - npm/slash@1.0.0
+      - slash@1.0.0
+      - slash*
+    ids:
+      - GPL-2.0-or-later
 
 secretscanning:
   level: all
