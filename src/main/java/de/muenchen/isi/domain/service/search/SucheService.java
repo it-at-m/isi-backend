@@ -2,16 +2,17 @@ package de.muenchen.isi.domain.service.search;
 
 import de.muenchen.isi.domain.mapper.SearchDomainMapper;
 import de.muenchen.isi.domain.model.BaseEntityModel;
-import de.muenchen.isi.infrastructure.entity.Abfrage;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
 import de.muenchen.isi.infrastructure.entity.Infrastrukturabfrage;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Infrastruktureinrichtung;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,7 @@ import org.apache.commons.lang3.reflect.FieldUtils;
 import org.hibernate.search.engine.search.common.BooleanOperator;
 import org.hibernate.search.mapper.orm.Search;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.IndexedEmbedded;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -72,35 +74,53 @@ public class SucheService {
 
     @PostConstruct
     protected void setNamesOfSearchableAttributes() {
-        Set<Class<? extends Annotation>> searchIndexAnnotation = Set.of(FullTextField.class);
+        Set<Class<? extends Annotation>> searchIndexAnnotation = Set.of(IndexedEmbedded.class, FullTextField.class);
 
-        final var fieldNamesAbfrage = searchIndexAnnotation
-            .stream()
-            .flatMap(annotation -> FieldUtils.getFieldsListWithAnnotation(Abfrage.class, annotation).stream())
-            .map(Field::getName)
-            .collect(Collectors.toSet());
-        log.debug("Die Namen der suchbaren Attribute in der Abfrage: {}", fieldNamesAbfrage);
-
-        final var fieldNamesBauvorhaben = searchIndexAnnotation
-            .stream()
-            .flatMap(annotation -> FieldUtils.getFieldsListWithAnnotation(Bauvorhaben.class, annotation).stream())
-            .map(Field::getName)
-            .collect(Collectors.toSet());
-        log.debug("Die Namen der suchbaren Attribute in der Bauvorhaben: {}", fieldNamesBauvorhaben);
-
-        final var fieldNamesEinrichtung = searchIndexAnnotation
-            .stream()
-            .flatMap(annotation ->
-                FieldUtils.getFieldsListWithAnnotation(Infrastruktureinrichtung.class, annotation).stream()
-            )
-            .map(Field::getName)
-            .collect(Collectors.toSet());
-        log.debug("Die Namen der suchbaren Attribute in der Infrastruktureinrichtung: {}", fieldNamesEinrichtung);
+        final var fieldNamesAbfrage = getNamesOfSearchableAttributes(
+            Infrastrukturabfrage.class,
+            searchIndexAnnotation,
+            ""
+        );
+        final var fieldNamesBauvorhaben = getNamesOfSearchableAttributes(Bauvorhaben.class, searchIndexAnnotation, "");
+        final var fieldNamesEinrichtung = getNamesOfSearchableAttributes(
+            Infrastruktureinrichtung.class,
+            searchIndexAnnotation,
+            ""
+        );
 
         this.searchableAttributes =
             SetUtils
                 .union(SetUtils.union(fieldNamesAbfrage, fieldNamesBauvorhaben), fieldNamesEinrichtung)
                 .toArray(String[]::new);
         log.debug("Die Namen aller suchbaren Attribute: {}", Arrays.toString(this.searchableAttributes));
+    }
+
+    protected Set<String> getNamesOfSearchableAttributes(
+        final Class<?> clazz,
+        final Collection<Class<? extends Annotation>> searchIndexAnnotation,
+        final String classLevel
+    ) {
+        final var fieldNamesAbfrage = searchIndexAnnotation
+            .stream()
+            .flatMap(annotation -> {
+                final Stream<Field> fields = FieldUtils.getFieldsListWithAnnotation(clazz, annotation).stream();
+                final String fieldDivider = StringUtils.isEmpty(classLevel) ? "" : ".";
+                if (annotation.equals(IndexedEmbedded.class)) {
+                    return fields.flatMap(field -> {
+                        final var newClassLevel = classLevel + fieldDivider + field.getName();
+                        return this.getNamesOfSearchableAttributes(
+                                field.getType(),
+                                searchIndexAnnotation,
+                                newClassLevel
+                            )
+                            .stream();
+                    });
+                } else {
+                    return fields.map(field -> classLevel + fieldDivider + field.getName());
+                }
+            })
+            .collect(Collectors.toSet());
+        log.debug("Die Namen der suchbaren Attribute in {}: {}", clazz.getSimpleName(), fieldNamesAbfrage);
+        return fieldNamesAbfrage;
     }
 }
