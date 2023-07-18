@@ -26,6 +26,7 @@ licensing:
     names:
       - npm://load-script@1.0.0
       - npm://slash@1.0.0
+      - maven://org.jacoco.*
 
 secretscanning:
   level: all
