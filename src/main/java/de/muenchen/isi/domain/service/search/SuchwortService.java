@@ -47,9 +47,8 @@ public class SuchwortService {
     public Stream<SuchwortModel> doSearchForSearchwordSuggestion(final String singleWordQuery) {
         final var wildcardQuery = StringUtils.lowerCase(StringUtils.trimToEmpty(singleWordQuery)) + "*";
 
-        final var searchSession = Search.session(entityManager.getEntityManagerFactory().createEntityManager());
-
-        return searchSession
+        return Search
+            .session(entityManager.getEntityManagerFactory().createEntityManager())
             .search(Suchwort.class)
             .where(function ->
                 function

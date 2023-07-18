@@ -72,9 +72,8 @@ public class SucheService {
     public Stream<? extends BaseEntityModel> doSearchForEntities(final String searchQuery) {
         final var adaptedSearchQuery = this.createAdaptedSearchQuery(searchQuery);
 
-        final var searchSession = Search.session(entityManager.getEntityManagerFactory().createEntityManager());
-
-        return searchSession
+        return Search
+            .session(entityManager.getEntityManagerFactory().createEntityManager())
             .search(SUCHBARE_ENTITAETEN)
             .where(function ->
                 function
