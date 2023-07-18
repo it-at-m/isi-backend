@@ -21,6 +21,7 @@ licensing:
       - Other
       - NA
 
+dependencies:
   ignores:
     names:
       - npm://load-script@1.0.0
