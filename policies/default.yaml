@@ -22,9 +22,9 @@ licensing:
       - NA
 
   ignores:
-    ids:
-      - npm/load-script@1.0.0
-      - npm/slash@1.0.0
+    names:
+      - pkg:npm/load-script@1.0.0
+      - pkg:npm/slash@1.0.0
 
 secretscanning:
   level: all
