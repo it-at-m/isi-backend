@@ -68,18 +68,22 @@ public class SuchwortService {
 
     protected Set<String> getSearchwords(final Abfragevariante abfragevariante) {
         final Set<String> suchwoerter = new HashSet<>();
-        CollectionUtils.addIgnoreNull(suchwoerter, Objects.toString(abfragevariante.getRealisierungVon(), null));
+        if (ObjectUtils.isNotEmpty(abfragevariante)) {
+            CollectionUtils.addIgnoreNull(suchwoerter, Objects.toString(abfragevariante.getRealisierungVon(), null));
+        }
         return suchwoerter;
     }
 
     protected Set<String> getSearchwords(final Verortung verortung) {
         final Set<String> suchwoerter = new HashSet<>();
-        CollectionUtils
-            .emptyIfNull(verortung.getStadtbezirke())
-            .forEach(stadtbezirk -> suchwoerter.addAll(getSearchwords(stadtbezirk)));
-        CollectionUtils
-            .emptyIfNull(verortung.getGemarkungen())
-            .forEach(gemarkung -> suchwoerter.addAll(getSearchwords(gemarkung)));
+        if (ObjectUtils.isNotEmpty(verortung)) {
+            CollectionUtils
+                .emptyIfNull(verortung.getStadtbezirke())
+                .forEach(stadtbezirk -> suchwoerter.addAll(getSearchwords(stadtbezirk)));
+            CollectionUtils
+                .emptyIfNull(verortung.getGemarkungen())
+                .forEach(gemarkung -> suchwoerter.addAll(getSearchwords(gemarkung)));
+        }
         return suchwoerter;
     }
 
@@ -106,11 +110,17 @@ public class SuchwortService {
 
     protected Set<String> getSearchwords(final Adresse adresse) {
         final Set<String> suchwoerter = new HashSet<>();
-        if (ObjectUtils.isNotEmpty(adresse) && ObjectUtils.isNotEmpty(adresse.getStrasse())) {
-            final var strasseHausnummer =
-                adresse.getStrasse() +
-                (ObjectUtils.isNotEmpty(adresse.getHausnummer()) ? StringUtils.SPACE + adresse.getHausnummer() : "");
-            CollectionUtils.addIgnoreNull(suchwoerter, strasseHausnummer);
+        if (ObjectUtils.isNotEmpty(adresse)) {
+            if (ObjectUtils.isNotEmpty(adresse) && ObjectUtils.isNotEmpty(adresse.getStrasse())) {
+                final var strasseHausnummer =
+                    adresse.getStrasse() +
+                    (
+                        ObjectUtils.isNotEmpty(adresse.getHausnummer())
+                            ? StringUtils.SPACE + adresse.getHausnummer()
+                            : ""
+                    );
+                CollectionUtils.addIgnoreNull(suchwoerter, strasseHausnummer);
+            }
         }
         return suchwoerter;
     }
