@@ -30,6 +30,7 @@ import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.IndexedEmbedded;
 
 @Entity
 @Data
@@ -60,6 +61,7 @@ public class Bauvorhaben extends BaseEntity {
     @Embedded
     private Adresse adresse;
 
+    @IndexedEmbedded
     @Type(type = "json")
     @Column(columnDefinition = "jsonb")
     private Verortung verortung;

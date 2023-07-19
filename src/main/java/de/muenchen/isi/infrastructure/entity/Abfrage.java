@@ -28,6 +28,7 @@ import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBridgeRef;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.IndexedEmbedded;
 
 @Embeddable
 @Data
@@ -44,6 +45,7 @@ public class Abfrage {
     @Embedded
     private Adresse adresse;
 
+    @IndexedEmbedded
     @Type(type = "json")
     @Column(columnDefinition = "jsonb")
     private Verortung verortung;
