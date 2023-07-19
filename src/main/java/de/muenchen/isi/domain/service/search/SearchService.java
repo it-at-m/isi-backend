@@ -35,17 +35,17 @@ public class SearchService {
     private final SearchDomainMapper searchDomainMapper;
 
     public SuchwortSuggestionsModel searchForSearchwordSuggestion(final String singleWordQuery) {
-        final var suchwortSuggestions = new SuchwortSuggestionsModel();
         final var foundSuchwortSuggestions =
             this.doSearchForSearchwordSuggestion(singleWordQuery)
                 .map(SuchwortModel::getSuchwort)
                 .collect(Collectors.toList());
-        suchwortSuggestions.setSuchwortSuggestions(foundSuchwortSuggestions);
-        return suchwortSuggestions;
+        final var model = new SuchwortSuggestionsModel();
+        model.setSuchwortSuggestions(foundSuchwortSuggestions);
+        return model;
     }
 
     public Stream<SuchwortModel> doSearchForSearchwordSuggestion(final String singleWordQuery) {
-        final var wildcardQuery = StringUtils.lowerCase(StringUtils.trimToEmpty(singleWordQuery)) + "*";
+        final var wildcardSingleWordQuery = StringUtils.lowerCase(StringUtils.trimToEmpty(singleWordQuery)) + "*";
 
         return Search
             .session(entityManager.getEntityManagerFactory().createEntityManager())
@@ -55,7 +55,7 @@ public class SearchService {
                     // https://docs.jboss.org/hibernate/stable/search/reference/en-US/html_single/#search-dsl-predicate-wildcard
                     .wildcard()
                     .field("suchwort")
-                    .matching(wildcardQuery)
+                    .matching(wildcardSingleWordQuery)
             )
             .fetch(MAX_NUMBER_OF_SUGGESTION)
             .hits()
