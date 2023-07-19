@@ -87,14 +87,18 @@ public class SearchService {
         return Search
             .session(entityManager.getEntityManagerFactory().createEntityManager())
             .search(searchableEntities)
-            .where(function ->
-                function
-                    // https://docs.jboss.org/hibernate/stable/search/reference/en-US/html_single/#search-dsl-predicate-simple-query-string
-                    .simpleQueryString()
-                    .fields(searchableAttributes)
-                    .matching(adaptedSearchQuery)
-                    .defaultOperator(BooleanOperator.AND)
-            )
+            .where(function -> {
+                if (StringUtils.isNotEmpty(searchQuery)) {
+                    return function
+                        // https://docs.jboss.org/hibernate/stable/search/reference/en-US/html_single/#search-dsl-predicate-simple-query-string
+                        .simpleQueryString()
+                        .fields(searchableAttributes)
+                        .matching(adaptedSearchQuery)
+                        .defaultOperator(BooleanOperator.AND);
+                } else {
+                    return function.matchAll();
+                }
+            })
             .sort(function -> function.field("lastModifiedDateTime").desc())
             .fetchAllHits()
             .stream()
