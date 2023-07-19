@@ -6,6 +6,7 @@ import de.muenchen.isi.domain.model.search.SuchwortSuggestionsModel;
 import de.muenchen.isi.infrastructure.entity.Abfragevariante;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
 import de.muenchen.isi.infrastructure.entity.Infrastrukturabfrage;
+import de.muenchen.isi.infrastructure.entity.common.Adresse;
 import de.muenchen.isi.infrastructure.entity.common.Flurstueck;
 import de.muenchen.isi.infrastructure.entity.common.Gemarkung;
 import de.muenchen.isi.infrastructure.entity.common.Stadtbezirk;
@@ -22,6 +23,7 @@ import java.util.stream.Stream;
 import javax.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.search.mapper.orm.Search;
 import org.springframework.stereotype.Service;
@@ -78,6 +80,8 @@ public class SuchwortService {
             infrastrukturabfrage.getAbfrage().getStatusAbfrage().getBezeichnung()
         );
         CollectionUtils.addIgnoreNull(suchwoerter, infrastrukturabfrage.getAbfrage().getBebauungsplannummer());
+        suchwoerter.addAll(getSearchwords(infrastrukturabfrage.getAbfrage().getAdresse()));
+        suchwoerter.addAll(getSearchwords(infrastrukturabfrage.getAbfrage().getVerortung()));
         CollectionUtils
             .emptyIfNull(infrastrukturabfrage.getAbfragevarianten())
             .forEach(abfragevariante -> suchwoerter.addAll(getSearchwords(abfragevariante)));
@@ -90,6 +94,8 @@ public class SuchwortService {
     public void deleteOldSearchwordsAndAddNewSearchwords(final Bauvorhaben bauvorhaben) {
         final Set<String> suchwoerter = new HashSet<>();
         CollectionUtils.addIgnoreNull(suchwoerter, bauvorhaben.getNameVorhaben());
+        suchwoerter.addAll(getSearchwords(bauvorhaben.getAdresse()));
+        suchwoerter.addAll(getSearchwords(bauvorhaben.getVerortung()));
         deleteOldSearchwordsAndAddNewSearchwords(bauvorhaben.getId(), suchwoerter);
     }
 
@@ -97,6 +103,7 @@ public class SuchwortService {
         final Set<String> suchwoerter = new HashSet<>();
         CollectionUtils.addIgnoreNull(suchwoerter, infrastruktureinrichtung.getNameEinrichtung());
         CollectionUtils.addIgnoreNull(suchwoerter, infrastruktureinrichtung.getStatus().getBezeichnung());
+        suchwoerter.addAll(getSearchwords(infrastruktureinrichtung.getAdresse()));
         deleteOldSearchwordsAndAddNewSearchwords(infrastruktureinrichtung.getId(), suchwoerter);
     }
 
@@ -135,6 +142,17 @@ public class SuchwortService {
     protected Set<String> getSearchwords(final Flurstueck flurstueck) {
         final Set<String> suchwoerter = new HashSet<>();
         CollectionUtils.addIgnoreNull(suchwoerter, flurstueck.getNummer());
+        return suchwoerter;
+    }
+
+    protected Set<String> getSearchwords(final Adresse adresse) {
+        final Set<String> suchwoerter = new HashSet<>();
+        if (ObjectUtils.isNotEmpty(adresse)) {
+            final var strasseHausnummer =
+                adresse.getStrasse() +
+                (ObjectUtils.isNotEmpty(adresse.getHausnummer()) ? StringUtils.SPACE + adresse.getHausnummer() : "");
+            CollectionUtils.addIgnoreNull(suchwoerter, strasseHausnummer);
+        }
         return suchwoerter;
     }
 
