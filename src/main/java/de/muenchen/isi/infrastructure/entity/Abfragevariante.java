@@ -22,6 +22,7 @@ import javax.persistence.UniqueConstraint;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.GenericField;
 
 @Entity
 @Table(
@@ -76,6 +77,7 @@ public class Abfragevariante extends BaseEntity {
     @Column(nullable = true)
     private Integer anzahlWeBaurechtlichFestgesetzt;
 
+    @GenericField
     @Column(nullable = false)
     private Integer realisierungVon; // JJJJ
 

@@ -3,12 +3,14 @@ package de.muenchen.isi.domain.service.search;
 import de.muenchen.isi.domain.mapper.SearchDomainMapper;
 import de.muenchen.isi.domain.model.search.SuchwortModel;
 import de.muenchen.isi.domain.model.search.SuchwortSuggestionsModel;
+import de.muenchen.isi.infrastructure.entity.Abfragevariante;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
 import de.muenchen.isi.infrastructure.entity.Infrastrukturabfrage;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Infrastruktureinrichtung;
 import de.muenchen.isi.infrastructure.entity.search.Suchwort;
 import de.muenchen.isi.infrastructure.repository.search.SuchwortRepository;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -71,7 +73,21 @@ public class SuchwortService {
             suchwoerter,
             infrastrukturabfrage.getAbfrage().getStatusAbfrage().getBezeichnung()
         );
+        CollectionUtils
+            .emptyIfNull(infrastrukturabfrage.getAbfragevarianten())
+            .stream()
+            .forEach(abfragevariante -> suchwoerter.addAll(getSearchwords(abfragevariante)));
+        CollectionUtils
+            .emptyIfNull(infrastrukturabfrage.getAbfragevariantenSachbearbeitung())
+            .stream()
+            .forEach(abfragevariante -> suchwoerter.addAll(getSearchwords(abfragevariante)));
         deleteOldSearchwordsAndAddNewSearchwords(infrastrukturabfrage.getId(), suchwoerter);
+    }
+
+    public Set<String> getSearchwords(final Abfragevariante abfragevariante) {
+        final Set<String> suchwoerter = new HashSet<>();
+        CollectionUtils.addIgnoreNull(suchwoerter, Objects.toString(abfragevariante.getRealisierungVon(), null));
+        return suchwoerter;
     }
 
     public void deleteOldSearchwordsAndAddNewSearchwords(final Bauvorhaben bauvorhaben) {
