@@ -6,6 +6,10 @@ import de.muenchen.isi.domain.model.search.SuchwortSuggestionsModel;
 import de.muenchen.isi.infrastructure.entity.Abfragevariante;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
 import de.muenchen.isi.infrastructure.entity.Infrastrukturabfrage;
+import de.muenchen.isi.infrastructure.entity.common.Flurstueck;
+import de.muenchen.isi.infrastructure.entity.common.Gemarkung;
+import de.muenchen.isi.infrastructure.entity.common.Stadtbezirk;
+import de.muenchen.isi.infrastructure.entity.common.Verortung;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Infrastruktureinrichtung;
 import de.muenchen.isi.infrastructure.entity.search.Suchwort;
 import de.muenchen.isi.infrastructure.repository.search.SuchwortRepository;
@@ -83,12 +87,6 @@ public class SuchwortService {
         deleteOldSearchwordsAndAddNewSearchwords(infrastrukturabfrage.getId(), suchwoerter);
     }
 
-    public Set<String> getSearchwords(final Abfragevariante abfragevariante) {
-        final Set<String> suchwoerter = new HashSet<>();
-        CollectionUtils.addIgnoreNull(suchwoerter, Objects.toString(abfragevariante.getRealisierungVon(), null));
-        return suchwoerter;
-    }
-
     public void deleteOldSearchwordsAndAddNewSearchwords(final Bauvorhaben bauvorhaben) {
         final Set<String> suchwoerter = new HashSet<>();
         CollectionUtils.addIgnoreNull(suchwoerter, bauvorhaben.getNameVorhaben());
@@ -102,7 +100,45 @@ public class SuchwortService {
         deleteOldSearchwordsAndAddNewSearchwords(infrastruktureinrichtung.getId(), suchwoerter);
     }
 
-    public void deleteOldSearchwordsAndAddNewSearchwords(final UUID id, Set<String> suchwoerter) {
+    protected Set<String> getSearchwords(final Abfragevariante abfragevariante) {
+        final Set<String> suchwoerter = new HashSet<>();
+        CollectionUtils.addIgnoreNull(suchwoerter, Objects.toString(abfragevariante.getRealisierungVon(), null));
+        return suchwoerter;
+    }
+
+    protected Set<String> getSearchwords(final Verortung verortung) {
+        final Set<String> suchwoerter = new HashSet<>();
+        CollectionUtils
+            .emptyIfNull(verortung.getStadtbezirke())
+            .forEach(stadtbezirk -> suchwoerter.addAll(getSearchwords(stadtbezirk)));
+        CollectionUtils
+            .emptyIfNull(verortung.getGemarkungen())
+            .forEach(gemarkung -> suchwoerter.addAll(getSearchwords(gemarkung)));
+        return suchwoerter;
+    }
+
+    protected Set<String> getSearchwords(final Stadtbezirk stadtbezirk) {
+        final Set<String> suchwoerter = new HashSet<>();
+        CollectionUtils.addIgnoreNull(suchwoerter, stadtbezirk.getName());
+        return suchwoerter;
+    }
+
+    protected Set<String> getSearchwords(final Gemarkung gemarkung) {
+        final Set<String> suchwoerter = new HashSet<>();
+        CollectionUtils.addIgnoreNull(suchwoerter, gemarkung.getName());
+        CollectionUtils
+            .emptyIfNull(gemarkung.getFlurstuecke())
+            .forEach(flurstueck -> suchwoerter.addAll(getSearchwords(flurstueck)));
+        return suchwoerter;
+    }
+
+    protected Set<String> getSearchwords(final Flurstueck flurstueck) {
+        final Set<String> suchwoerter = new HashSet<>();
+        CollectionUtils.addIgnoreNull(suchwoerter, flurstueck.getNummer());
+        return suchwoerter;
+    }
+
+    protected void deleteOldSearchwordsAndAddNewSearchwords(final UUID id, Set<String> suchwoerter) {
         suchwortRepository.deleteAllByReferenceId(id);
         final Set<Suchwort> bauvorhabenSuchwoerter = suchwoerter
             .stream()
