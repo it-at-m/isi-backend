@@ -88,6 +88,7 @@ public class SucheService {
                     .matching(adaptedSearchQuery)
                     .defaultOperator(BooleanOperator.AND)
             )
+            .sort(function -> function.field("lastModifiedDateTime").desc())
             .fetchAllHits()
             .stream()
             .map(searchDomainMapper::entity2Model);
@@ -125,7 +126,7 @@ public class SucheService {
         final Collection<Class<? extends Annotation>> searchIndexAnnotation,
         final String attributePath
     ) {
-        final var fieldNamesAbfrage = searchIndexAnnotation
+        final var fieldNames = searchIndexAnnotation
             .stream()
             .flatMap(annotation -> {
                 final Stream<Field> fields = FieldUtils.getFieldsListWithAnnotation(clazz, annotation).stream();
@@ -148,8 +149,9 @@ public class SucheService {
                 }
             })
             .collect(Collectors.toSet());
-        log.debug("Die Namen der suchbaren Attribute in {}: {}", clazz.getSimpleName(), fieldNamesAbfrage);
-        return fieldNamesAbfrage;
+        fieldNames.removeAll(Set.of("createdDateTime", "lastModifiedDateTime"));
+        log.debug("Die Namen der suchbaren Attribute in {}: {}", clazz.getSimpleName(), fieldNames);
+        return fieldNames;
     }
 
     protected List<Class<? extends BaseEntity>> getSearchableEntities(

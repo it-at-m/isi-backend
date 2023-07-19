@@ -19,6 +19,7 @@ import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.GenericField;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -42,11 +43,13 @@ public abstract class BaseEntity {
     @Version
     private Long version;
 
+    @GenericField
     @EqualsAndHashCode.Exclude
     @CreatedDate
     @Column(columnDefinition = "TIMESTAMP", updatable = false)
     private LocalDateTime createdDateTime;
 
+    @GenericField
     @EqualsAndHashCode.Exclude
     @LastModifiedDate
     @Column(columnDefinition = "TIMESTAMP")
