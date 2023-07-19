@@ -32,7 +32,11 @@ import org.apache.commons.lang3.reflect.FieldUtils;
 import org.hibernate.search.engine.search.common.BooleanOperator;
 import org.hibernate.search.mapper.orm.Search;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.GenericField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.IndexedEmbedded;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.KeywordField;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.NonStandardField;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.ScaledNumberField;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -42,7 +46,11 @@ public class SucheService {
 
     private static final Set<Class<? extends Annotation>> SEARCH_INDEX_ANNOTATION = Set.of(
         IndexedEmbedded.class,
-        FullTextField.class
+        GenericField.class,
+        FullTextField.class,
+        KeywordField.class,
+        ScaledNumberField.class,
+        NonStandardField.class
     );
 
     private final EntityManager entityManager;

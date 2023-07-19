@@ -66,6 +66,7 @@ public class SuchwortService {
     public void deleteOldSearchwordsAndAddNewSearchwords(final Infrastrukturabfrage infrastrukturabfrage) {
         final Set<String> suchwoerter = new HashSet<>();
         suchwoerter.add(infrastrukturabfrage.getAbfrage().getNameAbfrage());
+        suchwoerter.add(infrastrukturabfrage.getAbfrage().getStatusAbfrage().getBezeichnung());
         deleteOldSearchwordsAndAddNewSearchwords(infrastrukturabfrage.getId(), suchwoerter);
     }
 
