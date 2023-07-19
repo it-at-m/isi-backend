@@ -2,6 +2,7 @@ package de.muenchen.isi.infrastructure.adapter.search;
 
 import de.muenchen.isi.infrastructure.entity.common.Adresse;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.search.engine.backend.document.DocumentElement;
 import org.hibernate.search.engine.backend.document.IndexFieldReference;
@@ -38,8 +39,16 @@ public class AdresseBinder implements TypeBinder {
 
         @Override
         public void write(DocumentElement target, Adresse adresse, TypeBridgeWriteContext context) {
-            final String strasseHausnummer = adresse.getStrasse() + StringUtils.SPACE + adresse.getHausnummer();
-            target.addValue(this.strasseHausnummerField, strasseHausnummer);
+            if (ObjectUtils.isNotEmpty(adresse) && ObjectUtils.isNotEmpty(adresse.getStrasse())) {
+                final String strasseHausnummer =
+                    adresse.getStrasse() +
+                    (
+                        ObjectUtils.isNotEmpty(adresse.getHausnummer())
+                            ? StringUtils.SPACE + adresse.getHausnummer()
+                            : ""
+                    );
+                target.addValue(this.strasseHausnummerField, strasseHausnummer);
+            }
         }
     }
 }

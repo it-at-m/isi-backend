@@ -106,7 +106,7 @@ public class SuchwortService {
 
     protected Set<String> getSearchwords(final Adresse adresse) {
         final Set<String> suchwoerter = new HashSet<>();
-        if (ObjectUtils.isNotEmpty(adresse)) {
+        if (ObjectUtils.isNotEmpty(adresse) && ObjectUtils.isNotEmpty(adresse.getStrasse())) {
             final var strasseHausnummer =
                 adresse.getStrasse() +
                 (ObjectUtils.isNotEmpty(adresse.getHausnummer()) ? StringUtils.SPACE + adresse.getHausnummer() : "");
