@@ -1,8 +1,5 @@
 package de.muenchen.isi.domain.service.search;
 
-import de.muenchen.isi.domain.mapper.SearchDomainMapper;
-import de.muenchen.isi.domain.model.search.SuchwortModel;
-import de.muenchen.isi.domain.model.search.SuchwortSuggestionsModel;
 import de.muenchen.isi.infrastructure.entity.Abfragevariante;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
 import de.muenchen.isi.infrastructure.entity.Infrastrukturabfrage;
@@ -19,13 +16,10 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
-import javax.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.hibernate.search.mapper.orm.Search;
 import org.springframework.stereotype.Service;
 
 /**
@@ -35,42 +29,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class SuchwortService {
 
-    private static final int MAX_NUMBER_OF_SUGGESTION = 20;
-
     private final SuchwortRepository suchwortRepository;
-
-    private final EntityManager entityManager;
-
-    private final SearchDomainMapper searchDomainMapper;
-
-    public SuchwortSuggestionsModel searchForSearchwordSuggestion(final String singleWordQuery) {
-        final var suchwortSuggestions = new SuchwortSuggestionsModel();
-        final var foundSuchwortSuggestions =
-            this.doSearchForSearchwordSuggestion(singleWordQuery)
-                .map(SuchwortModel::getSuchwort)
-                .collect(Collectors.toList());
-        suchwortSuggestions.setSuchwortSuggestions(foundSuchwortSuggestions);
-        return suchwortSuggestions;
-    }
-
-    public Stream<SuchwortModel> doSearchForSearchwordSuggestion(final String singleWordQuery) {
-        final var wildcardQuery = StringUtils.lowerCase(StringUtils.trimToEmpty(singleWordQuery)) + "*";
-
-        return Search
-            .session(entityManager.getEntityManagerFactory().createEntityManager())
-            .search(Suchwort.class)
-            .where(function ->
-                function
-                    // https://docs.jboss.org/hibernate/stable/search/reference/en-US/html_single/#search-dsl-predicate-wildcard
-                    .wildcard()
-                    .field("suchwort")
-                    .matching(wildcardQuery)
-            )
-            .fetch(MAX_NUMBER_OF_SUGGESTION)
-            .hits()
-            .stream()
-            .map(searchDomainMapper::entity2Model);
-    }
 
     public void deleteOldSearchwordsAndAddNewSearchwords(final Infrastrukturabfrage infrastrukturabfrage) {
         final Set<String> suchwoerter = new HashSet<>();

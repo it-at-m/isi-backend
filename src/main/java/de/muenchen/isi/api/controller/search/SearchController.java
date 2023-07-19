@@ -5,8 +5,7 @@ import de.muenchen.isi.api.dto.search.SearchResultsDto;
 import de.muenchen.isi.api.dto.search.SuchwortSuggestionsDto;
 import de.muenchen.isi.api.mapper.SearchApiMapper;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
-import de.muenchen.isi.domain.service.search.SucheService;
-import de.muenchen.isi.domain.service.search.SuchwortService;
+import de.muenchen.isi.domain.service.search.SearchService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -31,13 +30,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/search")
 @Tag(name = "Suche", description = "API für die Suche")
 @Validated
-public class SucheController {
+public class SearchController {
 
     private final SearchApiMapper searchApiMapper;
 
-    private final SuchwortService suchwortService;
-
-    private final SucheService sucheService;
+    private final SearchService searchService;
 
     @GetMapping("/searchword-suggestion")
     @Transactional(readOnly = true)
@@ -47,7 +44,7 @@ public class SucheController {
     public ResponseEntity<SuchwortSuggestionsDto> searchForSearchwordSuggestion(
         @RequestParam(value = "single-word-query") @NotEmpty final String singleWordQuery
     ) {
-        final var model = suchwortService.searchForSearchwordSuggestion(singleWordQuery);
+        final var model = searchService.searchForSearchwordSuggestion(singleWordQuery);
         final var dto = searchApiMapper.model2Dto(model);
         return ResponseEntity.ok(dto);
     }
@@ -61,7 +58,7 @@ public class SucheController {
         @RequestBody @NotNull @Valid final SearchQueryForEntitiesDto searchQueryInformation
     ) throws EntityNotFoundException {
         final var requestModel = searchApiMapper.dto2Model(searchQueryInformation);
-        final var responseModel = sucheService.searchForEntities(requestModel);
+        final var responseModel = searchService.searchForEntities(requestModel);
         final var dto = searchApiMapper.model2Dto(responseModel);
         return ResponseEntity.ok(dto);
     }
