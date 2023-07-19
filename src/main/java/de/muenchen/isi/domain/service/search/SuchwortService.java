@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.search.mapper.orm.Search;
 import org.springframework.stereotype.Service;
@@ -65,20 +66,24 @@ public class SuchwortService {
 
     public void deleteOldSearchwordsAndAddNewSearchwords(final Infrastrukturabfrage infrastrukturabfrage) {
         final Set<String> suchwoerter = new HashSet<>();
-        suchwoerter.add(infrastrukturabfrage.getAbfrage().getNameAbfrage());
-        suchwoerter.add(infrastrukturabfrage.getAbfrage().getStatusAbfrage().getBezeichnung());
+        CollectionUtils.addIgnoreNull(suchwoerter, infrastrukturabfrage.getAbfrage().getNameAbfrage());
+        CollectionUtils.addIgnoreNull(
+            suchwoerter,
+            infrastrukturabfrage.getAbfrage().getStatusAbfrage().getBezeichnung()
+        );
         deleteOldSearchwordsAndAddNewSearchwords(infrastrukturabfrage.getId(), suchwoerter);
     }
 
     public void deleteOldSearchwordsAndAddNewSearchwords(final Bauvorhaben bauvorhaben) {
         final Set<String> suchwoerter = new HashSet<>();
-        suchwoerter.add(bauvorhaben.getNameVorhaben());
+        CollectionUtils.addIgnoreNull(suchwoerter, bauvorhaben.getNameVorhaben());
         deleteOldSearchwordsAndAddNewSearchwords(bauvorhaben.getId(), suchwoerter);
     }
 
     public void deleteOldSearchwordsAndAddNewSearchwords(final Infrastruktureinrichtung infrastruktureinrichtung) {
         final Set<String> suchwoerter = new HashSet<>();
-        suchwoerter.add(infrastruktureinrichtung.getNameEinrichtung());
+        CollectionUtils.addIgnoreNull(suchwoerter, infrastruktureinrichtung.getNameEinrichtung());
+        CollectionUtils.addIgnoreNull(suchwoerter, infrastruktureinrichtung.getStatus().getBezeichnung());
         deleteOldSearchwordsAndAddNewSearchwords(infrastruktureinrichtung.getId(), suchwoerter);
     }
 
