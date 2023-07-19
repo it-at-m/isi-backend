@@ -42,6 +42,7 @@ public class Abfrage {
     @Column(nullable = true)
     private String allgemeineOrtsangabe;
 
+    @IndexedEmbedded
     @Embedded
     private Adresse adresse;
 

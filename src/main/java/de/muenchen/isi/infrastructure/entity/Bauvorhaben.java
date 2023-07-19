@@ -58,6 +58,7 @@ public class Bauvorhaben extends BaseEntity {
     @Column(nullable = false)
     private String bauvorhabenNummer;
 
+    @IndexedEmbedded
     @Embedded
     private Adresse adresse;
 

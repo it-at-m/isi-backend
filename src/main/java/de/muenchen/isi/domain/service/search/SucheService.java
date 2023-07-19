@@ -115,10 +115,21 @@ public class SucheService {
             .flatMap(classSearchablEntity ->
                 this.getNamesOfSearchableAttributes(classSearchablEntity, SEARCH_INDEX_ANNOTATION, "").stream()
             )
-            .distinct()
-            .toArray(String[]::new);
+            .collect(Collectors.toSet());
+        if (searchableEntities.contains(Infrastrukturabfrage.class)) {
+            searchableAttributes.add("abfrage.adresse.strasseHausnummer");
+        }
+        if (
+            searchableEntities.contains(Infrastrukturabfrage.class) &&
+            searchableEntities.size() > 1 ||
+            !searchableEntities.contains(Infrastrukturabfrage.class) &&
+            searchableEntities.size() > 0
+        ) {
+            searchableAttributes.add("adresse.strasseHausnummer");
+        }
+        searchableAttributes.removeAll(Set.of("createdDateTime", "lastModifiedDateTime"));
         log.debug("Die Namen aller suchbaren Attribute: {}", Arrays.toString(searchableAttributes));
-        return searchableAttributes;
+        return searchableAttributes.toArray(String[]::new);
     }
 
     protected Set<String> getNamesOfSearchableAttributes(
@@ -149,7 +160,6 @@ public class SucheService {
                 }
             })
             .collect(Collectors.toSet());
-        fieldNames.removeAll(Set.of("createdDateTime", "lastModifiedDateTime"));
         log.debug("Die Namen der suchbaren Attribute in {}: {}", clazz.getSimpleName(), fieldNames);
         return fieldNames;
     }

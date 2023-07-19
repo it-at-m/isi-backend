@@ -35,6 +35,7 @@ import org.hibernate.annotations.GenerationTime;
 import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBridgeRef;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.IndexedEmbedded;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -69,6 +70,7 @@ public abstract class Infrastruktureinrichtung extends BaseEntity {
     @Column(nullable = true)
     private String allgemeineOrtsangabe;
 
+    @IndexedEmbedded
     @Embedded
     private Adresse adresse;
 
