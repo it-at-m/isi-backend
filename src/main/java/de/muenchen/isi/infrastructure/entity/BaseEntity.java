@@ -19,6 +19,7 @@ import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
+import org.hibernate.search.engine.backend.types.Sortable;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.GenericField;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -43,13 +44,13 @@ public abstract class BaseEntity {
     @Version
     private Long version;
 
-    @GenericField
+    @GenericField(sortable = Sortable.YES)
     @EqualsAndHashCode.Exclude
     @CreatedDate
     @Column(columnDefinition = "TIMESTAMP", updatable = false)
     private LocalDateTime createdDateTime;
 
-    @GenericField
+    @GenericField(sortable = Sortable.YES)
     @EqualsAndHashCode.Exclude
     @LastModifiedDate
     @Column(columnDefinition = "TIMESTAMP")
