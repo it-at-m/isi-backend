@@ -91,7 +91,7 @@ public class SucheService {
             Arrays
                 .stream(singleQueryWords)
                 .map(StringUtils::lowerCase)
-                // Abfügen eines Wildcardprefix
+                // Anfügen eines Wildcardprefix
                 .map(lowerCaseQueryWord -> lowerCaseQueryWord + "*")
                 // Trennen der Wildcard-Suchwörter mit Leerzeichen
                 .collect(Collectors.joining(StringUtils.SPACE));
