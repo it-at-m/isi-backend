@@ -4,6 +4,7 @@ import de.muenchen.isi.api.dto.search.SearchQueryForEntitiesDto;
 import de.muenchen.isi.api.dto.search.SearchResultsDto;
 import de.muenchen.isi.api.dto.search.SuchwortSuggestionsDto;
 import de.muenchen.isi.api.mapper.SearchApiMapper;
+import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.service.search.SucheService;
 import de.muenchen.isi.domain.service.search.SuchwortService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -58,7 +59,7 @@ public class SucheController {
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_SEARCH.name())")
     public ResponseEntity<SearchResultsDto> searchForEntities(
         @RequestBody @NotNull @Valid final SearchQueryForEntitiesDto searchQueryInformation
-    ) {
+    ) throws EntityNotFoundException {
         final var requestModel = searchApiMapper.dto2Model(searchQueryInformation);
         final var responseModel = sucheService.searchForEntities(requestModel);
         final var dto = searchApiMapper.model2Dto(responseModel);

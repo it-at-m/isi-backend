@@ -1,5 +1,6 @@
 package de.muenchen.isi.domain.service.search;
 
+import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.mapper.SearchDomainMapper;
 import de.muenchen.isi.domain.model.BaseEntityModel;
 import de.muenchen.isi.domain.model.search.SearchQueryForEntitiesModel;
@@ -48,7 +49,8 @@ public class SucheService {
 
     private final SearchDomainMapper searchDomainMapper;
 
-    public SearchResultsModel searchForEntities(final SearchQueryForEntitiesModel searchQueryInformation) {
+    public SearchResultsModel searchForEntities(final SearchQueryForEntitiesModel searchQueryInformation)
+        throws EntityNotFoundException {
         final List<Class<? extends BaseEntity>> searchableEntities = getSearchableEntities(searchQueryInformation);
         final var searchResults =
             this.searchForEntities(searchableEntities, searchQueryInformation.getSearchQuery())
@@ -140,7 +142,7 @@ public class SucheService {
 
     protected List<Class<? extends BaseEntity>> getSearchableEntities(
         final SearchQueryForEntitiesModel searchQueryInformation
-    ) {
+    ) throws EntityNotFoundException {
         final List<Class<? extends BaseEntity>> searchableEntities = new ArrayList<>();
         if (BooleanUtils.isTrue(searchQueryInformation.getSelectInfrastrukturabfrage())) {
             searchableEntities.add(Infrastrukturabfrage.class);
@@ -165,6 +167,12 @@ public class SucheService {
         }
         if (BooleanUtils.isTrue(searchQueryInformation.getSelectMittelschule())) {
             searchableEntities.add(Mittelschule.class);
+        }
+        if (searchableEntities.isEmpty()) {
+            final var message = "Es wurde keine Entität für die Suche markiert.";
+            final var exception = new EntityNotFoundException(message);
+            log.error(message, exception);
+            throw exception;
         }
         return searchableEntities;
     }
