@@ -4,6 +4,7 @@
  */
 package de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung;
 
+import de.muenchen.isi.infrastructure.adapter.search.StatusInfrastruktureinrichtungValueBridge;
 import de.muenchen.isi.infrastructure.entity.BaseEntity;
 import de.muenchen.isi.infrastructure.entity.Baugebiet;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
@@ -31,6 +32,7 @@ import org.apache.commons.lang3.EnumUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
+import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBridgeRef;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
 
@@ -77,6 +79,10 @@ public abstract class Infrastruktureinrichtung extends BaseEntity {
     @Column
     private Integer fertigstellungsjahr; // JJJJ
 
+    @FullTextField(
+        analyzer = "entity_analyzer_string_field",
+        valueBridge = @ValueBridgeRef(type = StatusInfrastruktureinrichtungValueBridge.class)
+    )
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private StatusInfrastruktureinrichtung status;
