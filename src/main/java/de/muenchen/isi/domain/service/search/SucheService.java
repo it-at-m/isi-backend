@@ -128,7 +128,7 @@ public class SucheService {
             searchableAttributes.add("adresse.strasseHausnummer");
         }
         searchableAttributes.removeAll(Set.of("createdDateTime", "lastModifiedDateTime"));
-        log.debug("Die Namen aller suchbaren Attribute: {}", Arrays.toString(searchableAttributes));
+        log.debug("Die Namen aller suchbaren Attribute: {}", searchableAttributes);
         return searchableAttributes.toArray(String[]::new);
     }
 
