@@ -89,6 +89,7 @@ public class SearchService {
             .search(searchableEntities)
             .where(function -> {
                 if (StringUtils.isNotEmpty(searchQuery)) {
+                    // Suche entsprechend der gegebenen Query.
                     return function
                         // https://docs.jboss.org/hibernate/stable/search/reference/en-US/html_single/#search-dsl-predicate-simple-query-string
                         .simpleQueryString()
@@ -96,6 +97,7 @@ public class SearchService {
                         .matching(adaptedSearchQuery)
                         .defaultOperator(BooleanOperator.AND);
                 } else {
+                    // Zurückgeben aller Entitäten.
                     return function.matchAll();
                 }
             })
