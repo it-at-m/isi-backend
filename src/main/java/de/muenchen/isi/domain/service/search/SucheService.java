@@ -148,17 +148,23 @@ public class SucheService {
         if (BooleanUtils.isTrue(searchQueryInformation.getSelectBauvorhaben())) {
             searchableEntities.add(Bauvorhaben.class);
         }
-        if (BooleanUtils.isTrue(searchQueryInformation.getSelectInfrastruktureinrichtung())) {
-            searchableEntities.addAll(
-                List.of(
-                    Grundschule.class,
-                    GsNachmittagBetreuung.class,
-                    HausFuerKinder.class,
-                    Kindergarten.class,
-                    Kinderkrippe.class,
-                    Mittelschule.class
-                )
-            );
+        if (BooleanUtils.isTrue(searchQueryInformation.getSelectGrundschule())) {
+            searchableEntities.add(Grundschule.class);
+        }
+        if (BooleanUtils.isTrue(searchQueryInformation.getSelectGsNachmittagBetreuung())) {
+            searchableEntities.add(GsNachmittagBetreuung.class);
+        }
+        if (BooleanUtils.isTrue(searchQueryInformation.getSelectHausFuerKinder())) {
+            searchableEntities.add(HausFuerKinder.class);
+        }
+        if (BooleanUtils.isTrue(searchQueryInformation.getSelectKindergarten())) {
+            searchableEntities.add(Kindergarten.class);
+        }
+        if (BooleanUtils.isTrue(searchQueryInformation.getSelectKinderkrippe())) {
+            searchableEntities.add(Kinderkrippe.class);
+        }
+        if (BooleanUtils.isTrue(searchQueryInformation.getSelectMittelschule())) {
+            searchableEntities.add(Mittelschule.class);
         }
         return searchableEntities;
     }

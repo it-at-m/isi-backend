@@ -16,5 +16,20 @@ public class SearchQueryForEntitiesDto {
     private Boolean selectBauvorhaben;
 
     @NotNull
-    private Boolean selectInfrastruktureinrichtung;
+    private Boolean selectGrundschule;
+
+    @NotNull
+    private Boolean selectGsNachmittagBetreuung;
+
+    @NotNull
+    private Boolean selectHausFuerKinder;
+
+    @NotNull
+    private Boolean selectKindergarten;
+
+    @NotNull
+    private Boolean selectKinderkrippe;
+
+    @NotNull
+    private Boolean selectMittelschule;
 }

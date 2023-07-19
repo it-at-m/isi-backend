@@ -11,5 +11,15 @@ public class SearchQueryForEntitiesModel {
 
     private Boolean selectBauvorhaben;
 
-    private Boolean selectInfrastruktureinrichtung;
+    private Boolean selectGrundschule;
+
+    private Boolean selectGsNachmittagBetreuung;
+
+    private Boolean selectHausFuerKinder;
+
+    private Boolean selectKindergarten;
+
+    private Boolean selectKinderkrippe;
+
+    private Boolean selectMittelschule;
 }
