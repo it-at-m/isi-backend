@@ -16,6 +16,7 @@ import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Kinderkrip
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Mittelschule;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -131,12 +132,15 @@ public class SucheService {
                 final String fieldDivider = StringUtils.isEmpty(attributePath) ? "" : ".";
                 if (annotation.equals(IndexedEmbedded.class)) {
                     return fields.flatMap(field -> {
+                        final Class<?> fieldType;
+                        if (Collection.class.isAssignableFrom(field.getType())) {
+                            final var genericType = (ParameterizedType) field.getGenericType();
+                            fieldType = (Class<?>) genericType.getActualTypeArguments()[0];
+                        } else {
+                            fieldType = field.getType();
+                        }
                         final var newClassLevel = attributePath + fieldDivider + field.getName();
-                        return this.getNamesOfSearchableAttributes(
-                                field.getType(),
-                                searchIndexAnnotation,
-                                newClassLevel
-                            )
+                        return this.getNamesOfSearchableAttributes(fieldType, searchIndexAnnotation, newClassLevel)
                             .stream();
                     });
                 } else {
