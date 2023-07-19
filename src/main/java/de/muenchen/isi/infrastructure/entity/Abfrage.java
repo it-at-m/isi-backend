@@ -4,7 +4,7 @@
  */
 package de.muenchen.isi.infrastructure.entity;
 
-import de.muenchen.isi.infrastructure.adapter.search.StatusAbfrageValueBinder;
+import de.muenchen.isi.infrastructure.adapter.search.StatusAbfrageValueBridge;
 import de.muenchen.isi.infrastructure.entity.common.Adresse;
 import de.muenchen.isi.infrastructure.entity.common.Verortung;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVorhaben;
@@ -26,9 +26,8 @@ import javax.persistence.OneToMany;
 import lombok.Data;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
-import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBinderRef;
+import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBridgeRef;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
-import org.hibernate.search.mapper.pojo.mapping.definition.annotation.NonStandardField;
 
 @Embeddable
 @Data
@@ -55,7 +54,10 @@ public class Abfrage {
     @Column(nullable = true)
     private String anmerkung;
 
-    @NonStandardField(valueBinder = @ValueBinderRef(type = StatusAbfrageValueBinder.class))
+    @FullTextField(
+        analyzer = "entity_analyzer_string_field",
+        valueBridge = @ValueBridgeRef(type = StatusAbfrageValueBridge.class)
+    )
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private StatusAbfrage statusAbfrage;
