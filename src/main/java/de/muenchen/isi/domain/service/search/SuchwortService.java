@@ -73,13 +73,12 @@ public class SuchwortService {
             suchwoerter,
             infrastrukturabfrage.getAbfrage().getStatusAbfrage().getBezeichnung()
         );
+        CollectionUtils.addIgnoreNull(suchwoerter, infrastrukturabfrage.getAbfrage().getBebauungsplannummer());
         CollectionUtils
             .emptyIfNull(infrastrukturabfrage.getAbfragevarianten())
-            .stream()
             .forEach(abfragevariante -> suchwoerter.addAll(getSearchwords(abfragevariante)));
         CollectionUtils
             .emptyIfNull(infrastrukturabfrage.getAbfragevariantenSachbearbeitung())
-            .stream()
             .forEach(abfragevariante -> suchwoerter.addAll(getSearchwords(abfragevariante)));
         deleteOldSearchwordsAndAddNewSearchwords(infrastrukturabfrage.getId(), suchwoerter);
     }

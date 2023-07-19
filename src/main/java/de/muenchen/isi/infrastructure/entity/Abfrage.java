@@ -62,6 +62,7 @@ public class Abfrage {
     @Column(nullable = false)
     private StatusAbfrage statusAbfrage;
 
+    @FullTextField(analyzer = "entity_analyzer_string_field")
     @Column(nullable = true)
     private String bebauungsplannummer;
 
