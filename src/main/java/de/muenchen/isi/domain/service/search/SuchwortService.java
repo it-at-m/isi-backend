@@ -1,5 +1,6 @@
 package de.muenchen.isi.domain.service.search;
 
+import de.muenchen.isi.infrastructure.adapter.search.SobonRelevantValueBridge;
 import de.muenchen.isi.infrastructure.entity.Abfragevariante;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
 import de.muenchen.isi.infrastructure.entity.Infrastrukturabfrage;
@@ -41,6 +42,10 @@ public class SuchwortService {
         CollectionUtils.addIgnoreNull(suchwoerter, infrastrukturabfrage.getAbfrage().getBebauungsplannummer());
         suchwoerter.addAll(getSearchwords(infrastrukturabfrage.getAbfrage().getAdresse()));
         suchwoerter.addAll(getSearchwords(infrastrukturabfrage.getAbfrage().getVerortung()));
+        CollectionUtils.addIgnoreNull(
+            suchwoerter,
+            new SobonRelevantValueBridge().toIndexedValue(infrastrukturabfrage.getSobonRelevant(), null)
+        );
         CollectionUtils
             .emptyIfNull(infrastrukturabfrage.getAbfragevarianten())
             .forEach(abfragevariante -> suchwoerter.addAll(getSearchwords(abfragevariante)));
@@ -58,6 +63,10 @@ public class SuchwortService {
         suchwoerter.addAll(getSearchwords(bauvorhaben.getAdresse()));
         suchwoerter.addAll(getSearchwords(bauvorhaben.getVerortung()));
         CollectionUtils.addIgnoreNull(suchwoerter, bauvorhaben.getBebauungsplannummer());
+        CollectionUtils.addIgnoreNull(
+            suchwoerter,
+            new SobonRelevantValueBridge().toIndexedValue(bauvorhaben.getSobonRelevant(), null)
+        );
         deleteOldSearchwordsAndAddNewSearchwords(bauvorhaben.getId(), suchwoerter);
     }
 
