@@ -1,5 +1,6 @@
 package de.muenchen.isi.infrastructure.entity;
 
+import de.muenchen.isi.infrastructure.adapter.search.SobonRelevantValueBridge;
 import de.muenchen.isi.infrastructure.adapter.search.StandVorhabenValueBridge;
 import de.muenchen.isi.infrastructure.entity.common.Adresse;
 import de.muenchen.isi.infrastructure.entity.common.Verortung;
@@ -33,6 +34,7 @@ import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBridgeRef
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.IndexedEmbedded;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.KeywordField;
 
 @Entity
 @Data
@@ -87,6 +89,7 @@ public class Bauvorhaben extends BaseEntity {
     @Column(nullable = true)
     private String anmerkung;
 
+    @KeywordField(valueBridge = @ValueBridgeRef(type = SobonRelevantValueBridge.class))
     @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "varchar(255) not null check (sobon_relevant != 'UNSPECIFIED')")
     private UncertainBoolean sobonRelevant;
