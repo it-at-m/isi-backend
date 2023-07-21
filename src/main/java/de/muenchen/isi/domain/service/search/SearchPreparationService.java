@@ -11,26 +11,14 @@ import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.HausFuerKi
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Kindergarten;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Kinderkrippe;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Mittelschule;
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
-import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.reflect.FieldUtils;
-import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
-import org.hibernate.search.mapper.pojo.mapping.definition.annotation.GenericField;
-import org.hibernate.search.mapper.pojo.mapping.definition.annotation.IndexedEmbedded;
-import org.hibernate.search.mapper.pojo.mapping.definition.annotation.KeywordField;
-import org.hibernate.search.mapper.pojo.mapping.definition.annotation.NonStandardField;
-import org.hibernate.search.mapper.pojo.mapping.definition.annotation.ScaledNumberField;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -38,68 +26,69 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class SearchPreparationService {
 
-    private static final Set<Class<? extends Annotation>> SEARCH_INDEX_ANNOTATION = Set.of(
-        IndexedEmbedded.class,
-        GenericField.class,
-        FullTextField.class,
-        KeywordField.class,
-        ScaledNumberField.class,
-        NonStandardField.class
-    );
-
     protected String[] getNamesOfSearchableAttributes(List<Class<? extends BaseEntity>> searchableEntities) {
-        final var searchableAttributes = searchableEntities
-            .stream()
-            .flatMap(classSearchablEntity ->
-                this.getNamesOfSearchableAttributes(classSearchablEntity, SEARCH_INDEX_ANNOTATION, "").stream()
-            )
-            .collect(Collectors.toSet());
-        if (searchableEntities.contains(Infrastrukturabfrage.class)) {
-            searchableAttributes.add("abfrage.adresse.strasseHausnummer");
+        final var searchableAttributes = new HashSet<String>();
+        if (CollectionUtils.containsAny(searchableAttributes, Set.of(Infrastrukturabfrage.class))) {
+            searchableAttributes.addAll(this.getNamesOfSearchableAttributesForInfrastrukturabfrage());
+        }
+        if (CollectionUtils.containsAny(searchableAttributes, Set.of(Bauvorhaben.class))) {
+            searchableAttributes.addAll(this.getNamesOfSearchableAttributesForBauvorhaben());
         }
         if (
-            searchableEntities.contains(Infrastrukturabfrage.class) &&
-            searchableEntities.size() > 1 ||
-            !searchableEntities.contains(Infrastrukturabfrage.class) &&
-            searchableEntities.size() > 0
+            CollectionUtils.containsAny(
+                searchableAttributes,
+                Set.of(
+                    Grundschule.class,
+                    GsNachmittagBetreuung.class,
+                    HausFuerKinder.class,
+                    Kindergarten.class,
+                    Kinderkrippe.class,
+                    Mittelschule.class
+                )
+            )
         ) {
-            searchableAttributes.add("adresse.strasseHausnummer");
+            searchableAttributes.addAll(this.getNamesOfSearchableAttributesForInfrastruktureinrichtung());
         }
-        searchableAttributes.removeAll(Set.of("createdDateTime", "lastModifiedDateTime"));
         log.debug("Die Namen aller suchbaren Attribute: {}", searchableAttributes);
         return searchableAttributes.toArray(String[]::new);
     }
 
-    protected Set<String> getNamesOfSearchableAttributes(
-        final Class<?> clazz,
-        final Collection<Class<? extends Annotation>> searchIndexAnnotation,
-        final String attributePath
-    ) {
-        final var fieldNames = searchIndexAnnotation
-            .stream()
-            .flatMap(annotation -> {
-                final Stream<Field> fields = FieldUtils.getFieldsListWithAnnotation(clazz, annotation).stream();
-                final String fieldDivider = StringUtils.isEmpty(attributePath) ? "" : ".";
-                if (annotation.equals(IndexedEmbedded.class)) {
-                    return fields.flatMap(field -> {
-                        final Class<?> fieldType;
-                        if (Collection.class.isAssignableFrom(field.getType())) {
-                            final var genericType = (ParameterizedType) field.getGenericType();
-                            fieldType = (Class<?>) genericType.getActualTypeArguments()[0];
-                        } else {
-                            fieldType = field.getType();
-                        }
-                        final var newClassLevel = attributePath + fieldDivider + field.getName();
-                        return this.getNamesOfSearchableAttributes(fieldType, searchIndexAnnotation, newClassLevel)
-                            .stream();
-                    });
-                } else {
-                    return fields.map(field -> attributePath + fieldDivider + field.getName());
-                }
-            })
-            .collect(Collectors.toSet());
-        log.debug("Die Namen der suchbaren Attribute in {}: {}", clazz.getSimpleName(), fieldNames);
-        return fieldNames;
+    protected Set<String> getNamesOfSearchableAttributesForInfrastrukturabfrage() {
+        final var searchableAttributes = new HashSet<String>();
+        searchableAttributes.add("abfrage.adresse.strasseHausnummer");
+        searchableAttributes.add("abfrage.verortung.stadtbezirke.name");
+        searchableAttributes.add("abfrage.verortung.gemarkungen.name");
+        searchableAttributes.add("abfrage.verortung.gemarkungen.flurstuecke.nummer");
+        searchableAttributes.add("abfrage.statusAbfrage");
+        searchableAttributes.add("abfrage.bebauungsplannummer");
+        searchableAttributes.add("abfrage.nameAbfrage");
+        searchableAttributes.add("abfragevarianten.realisierungVon");
+        searchableAttributes.add("abfragevariantenSachbearbeitung.realisierungVon");
+        log.debug("Die Namen aller suchbaren Attribute einer Infrastrukturabfrage: {}", searchableAttributes);
+        return searchableAttributes;
+    }
+
+    protected Set<String> getNamesOfSearchableAttributesForBauvorhaben() {
+        final var searchableAttributes = new HashSet<String>();
+        searchableAttributes.add("nameVorhaben");
+        searchableAttributes.add("standVorhaben");
+        searchableAttributes.add("bauvorhabenNummer");
+        searchableAttributes.add("adresse.strasseHausnummer");
+        searchableAttributes.add("verortung.stadtbezirke.name");
+        searchableAttributes.add("verortung.gemarkungen.name");
+        searchableAttributes.add("verortung.gemarkungen.flurstuecke.nummer");
+        searchableAttributes.add("bebauungsplannummer");
+        log.debug("Die Namen aller suchbaren Attribute eines Bauvorhabens: {}", searchableAttributes);
+        return searchableAttributes;
+    }
+
+    protected Set<String> getNamesOfSearchableAttributesForInfrastruktureinrichtung() {
+        final var searchableAttributes = new HashSet<String>();
+        searchableAttributes.add("adresse.strasseHausnummer");
+        searchableAttributes.add("nameEinrichtung");
+        searchableAttributes.add("status");
+        log.debug("Die Namen aller suchbaren Attribute einer Infrastruktureinrichtung: {}", searchableAttributes);
+        return searchableAttributes;
     }
 
     protected List<Class<? extends BaseEntity>> getSearchableEntities(

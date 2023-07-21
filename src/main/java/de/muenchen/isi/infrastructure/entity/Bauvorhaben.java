@@ -1,5 +1,6 @@
 package de.muenchen.isi.infrastructure.entity;
 
+import de.muenchen.isi.infrastructure.adapter.search.StandVorhabenValueBridge;
 import de.muenchen.isi.infrastructure.entity.common.Adresse;
 import de.muenchen.isi.infrastructure.entity.common.Verortung;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.BaugebietTyp;
@@ -28,6 +29,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
+import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBridgeRef;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.IndexedEmbedded;
@@ -51,10 +53,15 @@ public class Bauvorhaben extends BaseEntity {
     @Column(precision = 10, scale = 2, nullable = false)
     private BigDecimal grundstuecksgroesse;
 
+    @FullTextField(
+        analyzer = "entity_analyzer_string_field",
+        valueBridge = @ValueBridgeRef(type = StandVorhabenValueBridge.class)
+    )
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private StandVorhaben standVorhaben;
 
+    @FullTextField(analyzer = "entity_analyzer_string_field")
     @Column(nullable = false)
     private String bauvorhabenNummer;
 
@@ -70,6 +77,7 @@ public class Bauvorhaben extends BaseEntity {
     @Column(nullable = true)
     private String allgemeineOrtsangabe;
 
+    @FullTextField(analyzer = "entity_analyzer_string_field")
     @Column(nullable = true)
     private String bebauungsplannummer;
 

@@ -44,11 +44,13 @@ public class Infrastrukturabfrage extends BaseEntity {
     @Column(nullable = true)
     private SobonVerfahrensgrundsaetzeJahr sobonJahr;
 
+    @IndexedEmbedded
     @OneToMany(cascade = { CascadeType.ALL }, orphanRemoval = true)
     @JoinColumn(name = "abfrage_abfragevarianten_id", referencedColumnName = "id")
     @OrderBy("abfragevariantenNr asc")
     private List<Abfragevariante> abfragevarianten;
 
+    @IndexedEmbedded
     @OneToMany(cascade = { CascadeType.ALL }, orphanRemoval = true)
     @JoinColumn(name = "abfrage_abfragevarianten_sachbearbeitung_id", referencedColumnName = "id")
     @OrderBy("abfragevariantenNr asc")
