@@ -29,10 +29,10 @@ public class SearchPreparationService {
     protected String[] getNamesOfSearchableAttributes(final List<Class<? extends BaseEntity>> searchableEntities) {
         final var searchableAttributes = new HashSet<String>();
         if (CollectionUtils.containsAny(searchableEntities, Set.of(Infrastrukturabfrage.class))) {
-            searchableAttributes.addAll(this.getNamesOfSearchableAttributesForInfrastrukturabfrage());
+            searchableAttributes.addAll(getNamesOfSearchableAttributesForInfrastrukturabfrage());
         }
         if (CollectionUtils.containsAny(searchableEntities, Set.of(Bauvorhaben.class))) {
-            searchableAttributes.addAll(this.getNamesOfSearchableAttributesForBauvorhaben());
+            searchableAttributes.addAll(getNamesOfSearchableAttributesForBauvorhaben());
         }
         if (
             CollectionUtils.containsAny(
@@ -47,13 +47,13 @@ public class SearchPreparationService {
                 )
             )
         ) {
-            searchableAttributes.addAll(this.getNamesOfSearchableAttributesForInfrastruktureinrichtung());
+            searchableAttributes.addAll(getNamesOfSearchableAttributesForInfrastruktureinrichtung());
         }
         log.debug("Die Namen aller suchbaren Attribute: {}", searchableAttributes);
         return searchableAttributes.toArray(String[]::new);
     }
 
-    protected Set<String> getNamesOfSearchableAttributesForInfrastrukturabfrage() {
+    protected static Set<String> getNamesOfSearchableAttributesForInfrastrukturabfrage() {
         final var searchableAttributes = new HashSet<String>();
         searchableAttributes.add("abfrage.adresse.strasseHausnummer");
         searchableAttributes.add("abfrage.verortung.stadtbezirke.name");
@@ -69,7 +69,7 @@ public class SearchPreparationService {
         return searchableAttributes;
     }
 
-    protected Set<String> getNamesOfSearchableAttributesForBauvorhaben() {
+    protected static Set<String> getNamesOfSearchableAttributesForBauvorhaben() {
         final var searchableAttributes = new HashSet<String>();
         searchableAttributes.add("nameVorhaben");
         searchableAttributes.add("standVorhaben");
@@ -84,7 +84,7 @@ public class SearchPreparationService {
         return searchableAttributes;
     }
 
-    protected Set<String> getNamesOfSearchableAttributesForInfrastruktureinrichtung() {
+    protected static Set<String> getNamesOfSearchableAttributesForInfrastruktureinrichtung() {
         final var searchableAttributes = new HashSet<String>();
         searchableAttributes.add("adresse.strasseHausnummer");
         searchableAttributes.add("nameEinrichtung");
