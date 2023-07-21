@@ -4,6 +4,7 @@
  */
 package de.muenchen.isi.infrastructure.entity;
 
+import de.muenchen.isi.infrastructure.adapter.search.IntegerToStringValueBridge;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Planungsrecht;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -22,7 +23,8 @@ import javax.persistence.UniqueConstraint;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import org.hibernate.search.mapper.pojo.mapping.definition.annotation.GenericField;
+import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBridgeRef;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.KeywordField;
 
 @Entity
 @Table(
@@ -77,7 +79,7 @@ public class Abfragevariante extends BaseEntity {
     @Column(nullable = true)
     private Integer anzahlWeBaurechtlichFestgesetzt;
 
-    @GenericField
+    @KeywordField(valueBridge = @ValueBridgeRef(type = IntegerToStringValueBridge.class))
     @Column(nullable = false)
     private Integer realisierungVon; // JJJJ
 
