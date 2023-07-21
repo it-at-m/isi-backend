@@ -9,8 +9,9 @@ import de.muenchen.isi.domain.model.search.SuchwortModel;
 import de.muenchen.isi.domain.model.search.SuchwortSuggestionsModel;
 import de.muenchen.isi.infrastructure.entity.BaseEntity;
 import de.muenchen.isi.infrastructure.entity.search.Suchwort;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.persistence.EntityManager;
@@ -27,6 +28,11 @@ import org.springframework.stereotype.Service;
 public class SearchService {
 
     private static final int MAX_NUMBER_OF_SUGGESTION = 20;
+
+    /**
+     * Diese Regex matched entweder
+     */
+    private static final Pattern SEARCH_QUERY_PATTERN = Pattern.compile("[^\\s\"]+|(\"[^\"]*\")");
 
     private final EntityManager entityManager;
 
@@ -109,15 +115,22 @@ public class SearchService {
 
     protected String createAdaptedSearchQuery(final String searchQuery) {
         var adaptedSearchQuery = StringUtils.trimToEmpty(searchQuery);
-        final var singleQueryWords = StringUtils.split(adaptedSearchQuery, StringUtils.SPACE);
-        adaptedSearchQuery =
-            Arrays
-                .stream(singleQueryWords)
-                .map(StringUtils::lowerCase)
-                // Anfügen eines Wildcardprefix
-                .map(lowerCaseQueryWord -> lowerCaseQueryWord + "*")
-                // Trennen der Wildcard-Suchwörter mit Leerzeichen
-                .collect(Collectors.joining(StringUtils.SPACE));
+        final var matchingSearchwords = new ArrayList<String>();
+        final var regexMatcher = SEARCH_QUERY_PATTERN.matcher(adaptedSearchQuery);
+        while (regexMatcher.find()) {
+            if (regexMatcher.group(1) != null) {
+                // Hinzufügen String mit umschließenden Anführungszeichen ohne Wildcardprefix.
+                // Verwendung für Phrasensuche: https://docs.jboss.org/hibernate/stable/search/reference/en-US/html_single/#search-dsl-predicate-simple-query-string-phrase
+                matchingSearchwords.add(regexMatcher.group(1));
+            } else if (regexMatcher.group(0) != null) {
+                // Hinzufügen String ohne umschließende Anführungszeichen und anfügen eines Wildcardprefix.
+                final var matchingString = regexMatcher.group(0) + "*";
+                matchingSearchwords.add(matchingString);
+            } else {
+                log.error("In der Suchquery \"{}\" befindet sich ein nicht passendes Suchwort.", adaptedSearchQuery);
+            }
+        }
+        adaptedSearchQuery = String.join(StringUtils.SPACE, matchingSearchwords);
         log.debug("Die erstellte Suchquery: {}", adaptedSearchQuery);
         return adaptedSearchQuery;
     }
