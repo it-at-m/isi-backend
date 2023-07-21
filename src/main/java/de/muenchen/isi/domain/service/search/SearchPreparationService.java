@@ -26,17 +26,17 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class SearchPreparationService {
 
-    protected String[] getNamesOfSearchableAttributes(List<Class<? extends BaseEntity>> searchableEntities) {
+    protected String[] getNamesOfSearchableAttributes(final List<Class<? extends BaseEntity>> searchableEntities) {
         final var searchableAttributes = new HashSet<String>();
-        if (CollectionUtils.containsAny(searchableAttributes, Set.of(Infrastrukturabfrage.class))) {
+        if (CollectionUtils.containsAny(searchableEntities, Set.of(Infrastrukturabfrage.class))) {
             searchableAttributes.addAll(this.getNamesOfSearchableAttributesForInfrastrukturabfrage());
         }
-        if (CollectionUtils.containsAny(searchableAttributes, Set.of(Bauvorhaben.class))) {
+        if (CollectionUtils.containsAny(searchableEntities, Set.of(Bauvorhaben.class))) {
             searchableAttributes.addAll(this.getNamesOfSearchableAttributesForBauvorhaben());
         }
         if (
             CollectionUtils.containsAny(
-                searchableAttributes,
+                searchableEntities,
                 Set.of(
                     Grundschule.class,
                     GsNachmittagBetreuung.class,
