@@ -53,8 +53,11 @@ public class SuchwortService {
     public void deleteOldSearchwordsAndAddNewSearchwords(final Bauvorhaben bauvorhaben) {
         final Set<String> suchwoerter = new HashSet<>();
         CollectionUtils.addIgnoreNull(suchwoerter, bauvorhaben.getNameVorhaben());
+        CollectionUtils.addIgnoreNull(suchwoerter, bauvorhaben.getStandVorhaben().getBezeichnung());
+        CollectionUtils.addIgnoreNull(suchwoerter, bauvorhaben.getBauvorhabenNummer());
         suchwoerter.addAll(getSearchwords(bauvorhaben.getAdresse()));
         suchwoerter.addAll(getSearchwords(bauvorhaben.getVerortung()));
+        CollectionUtils.addIgnoreNull(suchwoerter, bauvorhaben.getBebauungsplannummer());
         deleteOldSearchwordsAndAddNewSearchwords(bauvorhaben.getId(), suchwoerter);
     }
 
