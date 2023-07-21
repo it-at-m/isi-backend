@@ -29,9 +29,6 @@ public class SearchService {
 
     private static final int MAX_NUMBER_OF_SUGGESTION = 20;
 
-    /**
-     * Diese Regex matched entweder
-     */
     private static final Pattern SEARCH_QUERY_PATTERN = Pattern.compile("[^\\s\"]+|(\"[^\"]*\")");
 
     private final EntityManager entityManager;
