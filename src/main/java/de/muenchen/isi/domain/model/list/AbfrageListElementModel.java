@@ -5,6 +5,7 @@ import de.muenchen.isi.domain.model.enums.AbfrageTyp;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonVerfahrensgrundsaetzeJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.UUID;
 import lombok.Data;
@@ -25,4 +26,6 @@ public class AbfrageListElementModel {
     private AbfrageTyp type;
 
     private SobonVerfahrensgrundsaetzeJahr sobonJahr;
+
+    private LocalDateTime createdDateTime;
 }

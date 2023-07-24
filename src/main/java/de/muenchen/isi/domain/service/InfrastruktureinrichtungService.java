@@ -10,6 +10,7 @@ import de.muenchen.isi.domain.model.list.InfrastruktureinrichtungListElementMode
 import de.muenchen.isi.domain.model.list.InfrastruktureinrichtungListElementsModel;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Infrastruktureinrichtung;
 import de.muenchen.isi.infrastructure.repository.InfrastruktureinrichtungRepository;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -86,7 +87,7 @@ public class InfrastruktureinrichtungService {
      *
      * @param infrastruktureinrichtung zum Updaten
      * @return das geupdatete {@link InfrastruktureinrichtungModel}
-     * @throws EntityNotFoundException falls die Infrastruktureinrichtung identifiziert durch die {@link InfrastruktureinrichtungModel#getId()} nicht gefunden wird
+     * @throws EntityNotFoundException    falls die Infrastruktureinrichtung identifiziert durch die {@link InfrastruktureinrichtungModel#getId()} nicht gefunden wird
      * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
      */
     public InfrastruktureinrichtungModel updateInfrastruktureinrichtung(
@@ -110,6 +111,19 @@ public class InfrastruktureinrichtungService {
                 infrastruktureinrichtung
             );
         this.infrastruktureinrichtungRepository.deleteById(id);
+    }
+
+    public InfrastruktureinrichtungListElementsModel getAllReferencedInfrastruktureinrichtungForBauvorhaben(
+        final UUID bauvorhabenId
+    ) {
+        final var infrastruktureinrichtungListElementsModel = new InfrastruktureinrichtungListElementsModel();
+        final List<InfrastruktureinrichtungListElementModel> listElements =
+            this.infrastruktureinrichtungRepository.findAllByBauvorhabenIdOrderByEinrichtungstraegerAsc(bauvorhabenId)
+                .sorted(Comparator.comparing(Infrastruktureinrichtung::getNameEinrichtung))
+                .map(this.infrastruktureinrichtungDomainMapper::entity2ListElementModel)
+                .collect(Collectors.toList());
+        infrastruktureinrichtungListElementsModel.setListElements(listElements);
+        return infrastruktureinrichtungListElementsModel;
     }
 
     /**

@@ -61,6 +61,26 @@ public class InfrastruktureinrichtungController {
         return ResponseEntity.ok(dto);
     }
 
+    @GetMapping("/bauvorhaben/{id}")
+    @Transactional(readOnly = true)
+    @Operation(
+        summary = "Lade alle Infrastruktureinrichtungen welche einem Bauvorhaben zugeordnet sind für die Listendarstellung"
+    )
+    @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "OK") })
+    @PreAuthorize(
+        "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_READ_INFRASTRUKTUREINRICHTUNG.name())"
+    )
+    public ResponseEntity<InfrastruktureinrichtungListElementsDto> getAllReferencedInfrastruktureinrichtungForBauvorhaben(
+        @PathVariable @NotNull final UUID id
+    ) {
+        final var dto =
+            this.infrastruktureinrichtungApiMapper.model2Dto(
+                    this.infrastruktureinrichtungService.getAllReferencedInfrastruktureinrichtungForBauvorhaben(id)
+                );
+
+        return new ResponseEntity<>(dto, HttpStatus.OK);
+    }
+
     @GetMapping("/{id}")
     @Transactional(readOnly = true)
     @Operation(summary = "Lesen einer Infrastruktureinrichtung")

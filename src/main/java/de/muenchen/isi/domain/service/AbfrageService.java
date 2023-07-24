@@ -146,9 +146,9 @@ public class AbfrageService {
      *
      * @param abfrage zum zum Updaten
      * @return das geupdatete {@link InfrastrukturabfrageModel}
-     * @throws EntityNotFoundException           falls die Abfrage identifiziert durch die {@link InfrastrukturabfrageModel#getId()} nicht gefunden wird
-     * @throws UniqueViolationException          falls der Name der Abfrage {@link InfrastrukturabfrageModel#getAbfrage().getNameAbfrage} ()} bereits vorhanden ist
-     * @throws OptimisticLockingException        falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
+     * @throws EntityNotFoundException    falls die Abfrage identifiziert durch die {@link InfrastrukturabfrageModel#getId()} nicht gefunden wird
+     * @throws UniqueViolationException   falls der Name der Abfrage {@link InfrastrukturabfrageModel#getAbfrage().getNameAbfrage} ()} bereits vorhanden ist
+     * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
      */
     public InfrastrukturabfrageModel patchAbfrageInBearbeitungSachbearbeitung(
         final InfrastrukturabfrageInBearbeitungSachbearbeitungModel abfrage,
@@ -235,6 +235,20 @@ public class AbfrageService {
         final var abfrage = this.getInfrastrukturabfrageById(id);
         this.throwEntityIsReferencedExceptionWhenAbfrageIsReferencingBauvorhaben(abfrage.getAbfrage());
         this.infrastrukturabfrageRepository.deleteById(id);
+    }
+
+    /**
+     * Die Methode gibt alle {@link InfrastrukturabfrageModel} als Liste zurück welche einem Bauvorhaben zugeordnet sind.
+     *
+     * @param bauvorhabenId zum Identifizieren des {@link BauvorhabenModel}
+     * @return Liste von {@link InfrastrukturabfrageModel} welche einem Bauvorhaben zugeordent sind
+     */
+    public List<InfrastrukturabfrageModel> getAllReferencedAbfragenForBauvorhaben(final UUID bauvorhabenId) {
+        return this.infrastrukturabfrageRepository.findAllByAbfrageBauvorhabenIdOrderByCreatedDateTimeDesc(
+                bauvorhabenId
+            )
+            .map(this.abfrageDomainMapper::entity2Model)
+            .collect(Collectors.toList());
     }
 
     /**
