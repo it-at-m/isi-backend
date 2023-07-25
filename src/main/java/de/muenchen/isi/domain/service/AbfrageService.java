@@ -244,9 +244,7 @@ public class AbfrageService {
      * @return Liste von {@link InfrastrukturabfrageModel} welche einem Bauvorhaben zugeordent sind
      */
     public List<InfrastrukturabfrageModel> getAllReferencedAbfragenForBauvorhaben(final UUID bauvorhabenId) {
-        return this.infrastrukturabfrageRepository.findAllByAbfrageBauvorhabenIdOrderByCreatedDateTimeDesc(
-                bauvorhabenId
-            )
+        return this.infrastrukturabfrageRepository.findAllByAbfrageBauvorhabenIdOrderByCreatedDateTimeAsc(bauvorhabenId)
             .map(this.abfrageDomainMapper::entity2Model)
             .collect(Collectors.toList());
     }

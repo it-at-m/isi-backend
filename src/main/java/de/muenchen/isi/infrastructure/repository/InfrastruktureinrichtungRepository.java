@@ -13,6 +13,4 @@ public interface InfrastruktureinrichtungRepository extends JpaRepository<Infras
     Stream<Infrastruktureinrichtung> findAllByOrderByNameEinrichtungAsc();
 
     Stream<Infrastruktureinrichtung> findAllByBauvorhabenId(final UUID id);
-
-    Stream<Infrastruktureinrichtung> findAllByBauvorhabenIdOrderByEinrichtungstraegerAsc(final UUID id);
 }

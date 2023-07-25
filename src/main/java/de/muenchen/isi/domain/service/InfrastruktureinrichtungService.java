@@ -118,10 +118,15 @@ public class InfrastruktureinrichtungService {
     ) {
         final var infrastruktureinrichtungListElementsModel = new InfrastruktureinrichtungListElementsModel();
         final List<InfrastruktureinrichtungListElementModel> listElements =
-            this.infrastruktureinrichtungRepository.findAllByBauvorhabenIdOrderByEinrichtungstraegerAsc(bauvorhabenId)
-                .sorted(Comparator.comparing(Infrastruktureinrichtung::getNameEinrichtung))
+            this.infrastruktureinrichtungRepository.findAllByBauvorhabenId(bauvorhabenId)
+                .sorted(
+                    Comparator
+                        .comparing(Infrastruktureinrichtung::getInfrastruktureinrichtungTyp)
+                        .thenComparing(Infrastruktureinrichtung::getNameEinrichtung)
+                )
                 .map(this.infrastruktureinrichtungDomainMapper::entity2ListElementModel)
                 .collect(Collectors.toList());
+
         infrastruktureinrichtungListElementsModel.setListElements(listElements);
         return infrastruktureinrichtungListElementsModel;
     }
