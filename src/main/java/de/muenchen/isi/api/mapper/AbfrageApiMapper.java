@@ -35,6 +35,29 @@ public interface AbfrageApiMapper {
         dto.getAbfrage().setBauvorhaben(bauvorhabenModel != null ? bauvorhabenModel.getId() : null);
     }
 
+    @AfterMapping
+    default void setAbfragevariantenNrDisplayOnAbfragevarianteDto(
+        final InfrastrukturabfrageModel model,
+        @MappingTarget final InfrastrukturabfrageDto dto
+    ) {
+        dto
+            .getAbfragevarianten()
+            .forEach(abfragevarianteDto ->
+                abfragevarianteDto.setAbfragevariantenNrDisplay(
+                    String.format("1.%s", abfragevarianteDto.getAbfragevariantenNr())
+                )
+            );
+        if (dto.getAbfragevariantenSachbearbeitung() != null) {
+            dto
+                .getAbfragevariantenSachbearbeitung()
+                .forEach(abfragevarianteDto ->
+                    abfragevarianteDto.setAbfragevariantenNrDisplay(
+                        String.format("2.%s", abfragevarianteDto.getAbfragevariantenNr())
+                    )
+                );
+        }
+    }
+
     @Mapping(target = "bauvorhaben", ignore = true)
     AbfrageAngelegtModel dto2Model(final AbfrageAngelegtDto dto);
 

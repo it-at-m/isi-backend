@@ -10,9 +10,11 @@ import de.muenchen.isi.configuration.MapstructConfiguration;
 import de.muenchen.isi.domain.model.AbfragevarianteModel;
 import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.AbfragevarianteAngelegtModel;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 @Mapper(config = MapstructConfiguration.class, uses = { BauabschnittApiMapper.class })
 public interface AbfragevarianteApiMapper {
+    @Mapping(target = "abfragevariantenNrDisplay", ignore = true)
     AbfragevarianteDto model2Dto(final AbfragevarianteModel model);
 
     AbfragevarianteModel dto2Model(final AbfragevarianteDto dto);

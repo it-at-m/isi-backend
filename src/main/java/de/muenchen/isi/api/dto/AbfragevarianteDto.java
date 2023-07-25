@@ -19,6 +19,8 @@ public class AbfragevarianteDto extends BaseEntityDto {
 
     private Integer abfragevariantenNr;
 
+    private String abfragevariantenNrDisplay;
+
     private boolean isRelevant;
 
     private String abfragevariantenName;
