@@ -45,9 +45,10 @@ public class AbfrageListService {
     }
 
     /**
-     * Die Methode gibt {@link AbfrageListElementModel}e sortiert in absteigender Reihenfolge zurück.
+     * Die Methode gibt {@link AbfrageListElementModel}e sortiert nach createdDateTime aufsteigend zurück.
      *
-     * @return die {@link AbfrageListElementModel}s sortiert in absteigender Reihenfolge.
+     * @param bauvorhabenId um Bauvorhaben zu ermitteln
+     * @return die {@link AbfrageListElementsModel}s sortiert in aufsteigender Reihenfolge.
      */
     public AbfrageListElementsModel getAbfrageListElementsThatReferenceBauvorhaben(final UUID bauvorhabenId) {
         final var abfrageListElementsModel = new AbfrageListElementsModel();

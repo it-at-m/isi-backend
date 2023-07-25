@@ -67,9 +67,7 @@ public class InfrastruktureinrichtungController {
         summary = "Lade alle Infrastruktureinrichtungen welche einem Bauvorhaben zugeordnet sind für die Listendarstellung"
     )
     @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "OK") })
-    @PreAuthorize(
-        "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_READ_INFRASTRUKTUREINRICHTUNG.name())"
-    )
+    @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_READ_BAUVORHABEN.name())")
     public ResponseEntity<InfrastruktureinrichtungListElementsDto> getAllReferencedInfrastruktureinrichtungForBauvorhaben(
         @PathVariable @NotNull final UUID id
     ) {

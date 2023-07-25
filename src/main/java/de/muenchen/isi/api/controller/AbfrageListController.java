@@ -42,7 +42,7 @@ public class AbfrageListController {
     @Transactional(readOnly = true)
     @Operation(summary = "Lade alle Abfragen die ein Bauvorhaben referenzieren für die Listendarstellung")
     @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "OK") })
-    @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_READ_ABFRAGE.name())")
+    @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_READ_BAUVORHABEN.name())")
     public ResponseEntity<AbfrageListElementsDto> getAbfrageListElementsThatReferenceBauvorhaben(
         @PathVariable @NotNull UUID id
     ) {

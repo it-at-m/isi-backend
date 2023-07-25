@@ -8,6 +8,7 @@ import de.muenchen.isi.domain.model.BauvorhabenModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.InfrastruktureinrichtungModel;
 import de.muenchen.isi.domain.model.list.InfrastruktureinrichtungListElementModel;
 import de.muenchen.isi.domain.model.list.InfrastruktureinrichtungListElementsModel;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Infrastruktureinrichtung;
 import de.muenchen.isi.infrastructure.repository.InfrastruktureinrichtungRepository;
 import java.util.Comparator;
@@ -113,6 +114,12 @@ public class InfrastruktureinrichtungService {
         this.infrastruktureinrichtungRepository.deleteById(id);
     }
 
+    /**
+     * Die Methode gibt {@link InfrastruktureinrichtungListElementModel}e sortiert nach {@link InfrastruktureinrichtungTyp} und Name der Einrichtung zurück.
+     *
+     * @param bauvorhabenId um Bauvorhaben zu ermitteln
+     * @return die {@link InfrastruktureinrichtungListElementModel}s sortiert in aufsteigender Reihenfolge.
+     */
     public InfrastruktureinrichtungListElementsModel getAllReferencedInfrastruktureinrichtungForBauvorhaben(
         final UUID bauvorhabenId
     ) {
