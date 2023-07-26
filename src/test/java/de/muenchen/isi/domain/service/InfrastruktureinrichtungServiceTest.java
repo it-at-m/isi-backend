@@ -15,19 +15,14 @@ import de.muenchen.isi.domain.model.infrastruktureinrichtung.KindergartenModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.KinderkrippeModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.MittelschuleModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.SchuleModel;
-import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.Planungsrecht;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVorhaben;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusInfrastruktureinrichtung;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Grundschule;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Kindergarten;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Kinderkrippe;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Schule;
 import de.muenchen.isi.infrastructure.repository.BauvorhabenRepository;
 import de.muenchen.isi.infrastructure.repository.InfrastruktureinrichtungRepository;
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 import javax.transaction.Transactional;
@@ -87,86 +82,6 @@ class InfrastruktureinrichtungServiceTest {
         grundschule.getSchule().setAnzahlPlaetze(50);
 
         infrastruktureinrichtungRepository.saveAll(List.of(kinderkrippe1, kinderkrippe2, kindergarten, grundschule));
-    }
-
-    @Test
-    @Transactional
-    void getReferencedInfrastruktureinrichtungListElements() {
-        Bauvorhaben bauvorhaben = new Bauvorhaben();
-        bauvorhaben.setBauvorhabenNummer("12345");
-        bauvorhaben.setEigentuemer("Eigentuemer");
-        bauvorhaben.setGrundstuecksgroesse(BigDecimal.valueOf(1));
-        bauvorhaben.setNameVorhaben("Name");
-        bauvorhaben.setPlanungsrecht(Planungsrecht.BPLAN_PARAG_11);
-        bauvorhaben.setSobonRelevant(UncertainBoolean.FALSE);
-        bauvorhaben.setStandVorhaben(StandVorhaben.AUFSTELLUNGSBESCHLUSS);
-        bauvorhaben.setId(UUID.randomUUID());
-
-        bauvorhabenRepository.save(bauvorhaben);
-
-        Kinderkrippe kinderkrippe1 = new Kinderkrippe();
-        kinderkrippe1.setNameEinrichtung("A");
-        kinderkrippe1.setStatus(StatusInfrastruktureinrichtung.BESTAND);
-        kinderkrippe1.setAnzahlKinderkrippeGruppen(10);
-        kinderkrippe1.setAnzahlKinderkrippePlaetze(100);
-        kinderkrippe1.setBauvorhaben(bauvorhaben);
-
-        Kinderkrippe kinderkrippe2 = new Kinderkrippe();
-        kinderkrippe2.setNameEinrichtung("B");
-        kinderkrippe2.setStatus(StatusInfrastruktureinrichtung.GESICHERTE_PLANUNG_NEUE_EINR);
-        kinderkrippe2.setAnzahlKinderkrippeGruppen(11);
-        kinderkrippe2.setAnzahlKinderkrippePlaetze(110);
-        kinderkrippe2.setBauvorhaben(bauvorhaben);
-
-        Kindergarten kindergarten1 = new Kindergarten();
-        kindergarten1.setNameEinrichtung("A");
-        kindergarten1.setStatus(StatusInfrastruktureinrichtung.BESTAND);
-        kindergarten1.setAnzahlKindergartenGruppen(9);
-        kindergarten1.setAnzahlKindergartenPlaetze(90);
-        kindergarten1.setBauvorhaben(bauvorhaben);
-
-        Kindergarten kindergarten2 = new Kindergarten();
-        kindergarten2.setNameEinrichtung("B");
-        kindergarten2.setStatus(StatusInfrastruktureinrichtung.BESTAND);
-        kindergarten2.setAnzahlKindergartenGruppen(9);
-        kindergarten2.setAnzahlKindergartenPlaetze(90);
-        kindergarten2.setBauvorhaben(bauvorhaben);
-
-        infrastruktureinrichtungRepository.saveAll(List.of(kinderkrippe1, kinderkrippe2, kindergarten1, kindergarten2));
-
-        final var result = infrastruktureinrichtungService.getAllReferencedInfrastruktureinrichtungForBauvorhaben(
-            bauvorhaben.getId()
-        );
-
-        assertThat(result.getListElements().size(), is(4));
-
-        assertThat(result.getListElements().get(0).getId(), is(notNullValue()));
-        assertThat(
-            result.getListElements().get(0).getInfrastruktureinrichtungTyp(),
-            is(InfrastruktureinrichtungTyp.KINDERKRIPPE)
-        );
-        assertThat(result.getListElements().get(0).getNameEinrichtung(), is("A"));
-
-        assertThat(result.getListElements().get(1).getId(), is(notNullValue()));
-        assertThat(
-            result.getListElements().get(1).getInfrastruktureinrichtungTyp(),
-            is(InfrastruktureinrichtungTyp.KINDERKRIPPE)
-        );
-        assertThat(result.getListElements().get(1).getNameEinrichtung(), is("B"));
-
-        assertThat(result.getListElements().get(2).getId(), is(notNullValue()));
-        assertThat(
-            result.getListElements().get(2).getInfrastruktureinrichtungTyp(),
-            is(InfrastruktureinrichtungTyp.KINDERGARTEN)
-        );
-        assertThat(result.getListElements().get(2).getNameEinrichtung(), is("A"));
-
-        assertThat(result.getListElements().get(3).getId(), is(notNullValue()));
-        assertThat(
-            result.getListElements().get(3).getInfrastruktureinrichtungTyp(),
-            is(InfrastruktureinrichtungTyp.KINDERGARTEN)
-        );
-        assertThat(result.getListElements().get(3).getNameEinrichtung(), is("B"));
     }
 
     @Test

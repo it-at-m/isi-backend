@@ -7,16 +7,22 @@ import de.muenchen.isi.domain.exception.FileHandlingFailedException;
 import de.muenchen.isi.domain.exception.FileHandlingWithS3FailedException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
+import de.muenchen.isi.domain.mapper.AbfrageDomainMapper;
 import de.muenchen.isi.domain.mapper.BauvorhabenDomainMapper;
+import de.muenchen.isi.domain.mapper.InfrastruktureinrichtungDomainMapper;
 import de.muenchen.isi.domain.model.AbfrageModel;
 import de.muenchen.isi.domain.model.BauvorhabenModel;
 import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.AbfrageAngelegtModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.InfrastruktureinrichtungModel;
+import de.muenchen.isi.domain.model.list.AbfrageListElementModel;
+import de.muenchen.isi.domain.model.list.BauvorhabenReferencedElementsModel;
+import de.muenchen.isi.domain.model.list.InfrastruktureinrichtungListElementModel;
 import de.muenchen.isi.domain.service.filehandling.DokumentService;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Infrastruktureinrichtung;
 import de.muenchen.isi.infrastructure.repository.BauvorhabenRepository;
 import de.muenchen.isi.infrastructure.repository.InfrastrukturabfrageRepository;
 import de.muenchen.isi.infrastructure.repository.InfrastruktureinrichtungRepository;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -33,6 +39,10 @@ import org.springframework.stereotype.Service;
 public class BauvorhabenService {
 
     private final BauvorhabenDomainMapper bauvorhabenDomainMapper;
+
+    private final InfrastruktureinrichtungDomainMapper infrastruktureinrichtungDomainMapper;
+
+    private final AbfrageDomainMapper abfrageDomainMapper;
 
     private final BauvorhabenRepository bauvorhabenRepository;
 
@@ -173,6 +183,41 @@ public class BauvorhabenService {
             infrastruktureinrichtung.setBauvorhaben(model);
         }
         return infrastruktureinrichtung;
+    }
+
+    public BauvorhabenReferencedElementsModel getReferencedElements(final UUID bauvorhabenId)
+        throws EntityNotFoundException {
+        BauvorhabenReferencedElementsModel bauvorhabenReferencedElementsModel =
+            new BauvorhabenReferencedElementsModel();
+
+        bauvorhabenReferencedElementsModel.setInfrastruktureinrichtungen(
+            this.getReferencedInfrastruktureinrichtungen(bauvorhabenId)
+        );
+        bauvorhabenReferencedElementsModel.setInfrastrukturabfragen(
+            this.getReferencedInfrastrukturabfragen(bauvorhabenId)
+        );
+
+        return bauvorhabenReferencedElementsModel;
+    }
+
+    private List<InfrastruktureinrichtungListElementModel> getReferencedInfrastruktureinrichtungen(
+        final UUID bauvorhabenId
+    ) {
+        return this.infrastruktureinrichtungRepository.findAllByBauvorhabenId(bauvorhabenId)
+            .map(this.infrastruktureinrichtungDomainMapper::entity2ListElementModel)
+            .sorted(
+                Comparator
+                    .comparing(InfrastruktureinrichtungListElementModel::getInfrastruktureinrichtungTyp)
+                    .thenComparing(InfrastruktureinrichtungListElementModel::getNameEinrichtung)
+            )
+            .collect(Collectors.toList());
+    }
+
+    private List<AbfrageListElementModel> getReferencedInfrastrukturabfragen(final UUID bauvorhabenId) {
+        return this.infrastrukturabfrageRepository.findAllByAbfrageBauvorhabenIdOrderByCreatedDateTimeAsc(bauvorhabenId)
+            .map(this.abfrageDomainMapper::entity2Model)
+            .map(this.abfrageDomainMapper::model2ListElementModel)
+            .collect(Collectors.toList());
     }
 
     /**

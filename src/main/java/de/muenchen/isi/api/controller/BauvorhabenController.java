@@ -2,6 +2,7 @@ package de.muenchen.isi.api.controller;
 
 import de.muenchen.isi.api.dto.BauvorhabenDto;
 import de.muenchen.isi.api.dto.error.InformationResponseDto;
+import de.muenchen.isi.api.dto.list.BauvorhabenReferencedElementsDto;
 import de.muenchen.isi.api.mapper.BauvorhabenApiMapper;
 import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
@@ -180,5 +181,22 @@ public class BauvorhabenController {
         throws EntityNotFoundException, EntityIsReferencedException {
         this.bauvorhabenService.deleteBauvorhaben(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @Transactional(readOnly = true)
+    @GetMapping("bauvorhaben/referenced/{id}")
+    @Operation(
+        summary = "Lade alle Abfragen und Infrastruktureinrichtungen die einem Bauvorhaben angehören",
+        description = "Das Ergebnis der Abfrage wird anhand des Erstellungsdatums aufsteigend sortiert.\n " +
+        "Das Ergebenis der Infrastruktureinrichtungen wird anhand des Infrastruktureinrichtungstypen und innerhalb der Infrastruktureinrichtungen alphabetisch sortiert."
+    )
+    @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "OK") })
+    @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_READ_BAUVORHABEN.name())")
+    public ResponseEntity<BauvorhabenReferencedElementsDto> getBauvorhabenReferencedElements(
+        @PathVariable @NotNull final UUID id
+    ) throws EntityNotFoundException {
+        var bauvorhabenReferencedElements =
+            this.bauvorhabenApiMapper.model2Dto(this.bauvorhabenService.getReferencedElements(id));
+        return new ResponseEntity<>(bauvorhabenReferencedElements, HttpStatus.OK);
     }
 }

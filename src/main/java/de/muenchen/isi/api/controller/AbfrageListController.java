@@ -7,15 +7,12 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import java.util.UUID;
-import javax.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
@@ -35,19 +32,6 @@ public class AbfrageListController {
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_READ_ABFRAGE.name())")
     public ResponseEntity<AbfrageListElementsDto> getAbfrageListElements() {
         final var dto = this.abfrageApiMapper.model2Dto(this.abfrageListService.getAbfrageListElements());
-        return ResponseEntity.ok(dto);
-    }
-
-    @GetMapping("abfragen/bauvorhaben/{id}")
-    @Transactional(readOnly = true)
-    @Operation(summary = "Lade alle Abfragen die ein Bauvorhaben referenzieren für die Listendarstellung")
-    @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "OK") })
-    @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_READ_BAUVORHABEN.name())")
-    public ResponseEntity<AbfrageListElementsDto> getAbfrageListElementsThatReferenceBauvorhaben(
-        @PathVariable @NotNull UUID id
-    ) {
-        final var dto =
-            this.abfrageApiMapper.model2Dto(this.abfrageListService.getAbfrageListElementsThatReferenceBauvorhaben(id));
         return ResponseEntity.ok(dto);
     }
 }

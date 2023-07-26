@@ -238,18 +238,6 @@ public class AbfrageService {
     }
 
     /**
-     * Die Methode gibt alle {@link InfrastrukturabfrageModel} als Liste zurück welche einem Bauvorhaben zugeordnet sind.
-     *
-     * @param bauvorhabenId zum Identifizieren des {@link BauvorhabenModel}
-     * @return Liste von {@link InfrastrukturabfrageModel} welche einem Bauvorhaben zugeordent sind
-     */
-    public List<InfrastrukturabfrageModel> getAllReferencedAbfragenForBauvorhaben(final UUID bauvorhabenId) {
-        return this.infrastrukturabfrageRepository.findAllByAbfrageBauvorhabenIdOrderByCreatedDateTimeAsc(bauvorhabenId)
-            .map(this.abfrageDomainMapper::entity2Model)
-            .collect(Collectors.toList());
-    }
-
-    /**
      * Enthält das im Parameter gegebene {@link AbfrageModel} ein {@link BauvorhabenModel},
      * wird eine {@link EntityIsReferencedException} geworfen.
      *
