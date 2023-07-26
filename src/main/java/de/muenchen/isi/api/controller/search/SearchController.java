@@ -15,7 +15,6 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,7 +39,6 @@ public class SearchController {
     @Transactional(readOnly = true)
     @Operation(summary = "Suche nach Suchwortvorschläge für ein einzelnes im Parameter gegebenes Wort.")
     @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "OK") })
-    @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_SEARCH.name())")
     public ResponseEntity<SuchwortSuggestionsDto> searchForSearchwordSuggestion(
         @RequestParam(value = "single-word-query") @NotEmpty final String singleWordQuery
     ) {
@@ -53,7 +51,6 @@ public class SearchController {
     @Transactional(readOnly = true)
     @Operation(summary = "Suche nach Entitäten für die im Request-Body gegebene Suchanfrage.")
     @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "OK") })
-    @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_SEARCH.name())")
     public ResponseEntity<SearchResultsDto> searchForEntities(
         @RequestBody @NotNull @Valid final SearchQueryForEntitiesDto searchQueryInformation
     ) throws EntityNotFoundException {
