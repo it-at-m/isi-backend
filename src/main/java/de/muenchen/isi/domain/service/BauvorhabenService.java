@@ -15,7 +15,6 @@ import de.muenchen.isi.domain.model.BauvorhabenModel;
 import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.AbfrageAngelegtModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.InfrastruktureinrichtungModel;
 import de.muenchen.isi.domain.model.list.AbfrageListElementModel;
-import de.muenchen.isi.domain.model.list.BauvorhabenReferencedElementsModel;
 import de.muenchen.isi.domain.model.list.InfrastruktureinrichtungListElementModel;
 import de.muenchen.isi.domain.service.filehandling.DokumentService;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Infrastruktureinrichtung;
@@ -185,22 +184,14 @@ public class BauvorhabenService {
         return infrastruktureinrichtung;
     }
 
-    public BauvorhabenReferencedElementsModel getReferencedElements(final UUID bauvorhabenId)
-        throws EntityNotFoundException {
-        BauvorhabenReferencedElementsModel bauvorhabenReferencedElementsModel =
-            new BauvorhabenReferencedElementsModel();
-
-        bauvorhabenReferencedElementsModel.setInfrastruktureinrichtungen(
-            this.getReferencedInfrastruktureinrichtungen(bauvorhabenId)
-        );
-        bauvorhabenReferencedElementsModel.setInfrastrukturabfragen(
-            this.getReferencedInfrastrukturabfragen(bauvorhabenId)
-        );
-
-        return bauvorhabenReferencedElementsModel;
-    }
-
-    private List<InfrastruktureinrichtungListElementModel> getReferencedInfrastruktureinrichtungen(
+    /**
+     * Die Methode gibt alle {@link InfrastruktureinrichtungListElementModel} als Liste zurück sortiert nach InfrastrukturTyp und innerhalb
+     * des InfrastrukturTyps alphabetisch aufsteigend welche einem Bauvorhaben zugeordnet sind.
+     *
+     * @param bauvorhabenId zum Identifizieren des {@link BauvorhabenModel}
+     * @return Liste von {@link InfrastruktureinrichtungListElementModel} welche einem Bauvorhaben zugeordent sind
+     */
+    public List<InfrastruktureinrichtungListElementModel> getReferencedInfrastruktureinrichtungen(
         final UUID bauvorhabenId
     ) {
         return this.infrastruktureinrichtungRepository.findAllByBauvorhabenId(bauvorhabenId)
@@ -213,7 +204,14 @@ public class BauvorhabenService {
             .collect(Collectors.toList());
     }
 
-    private List<AbfrageListElementModel> getReferencedInfrastrukturabfragen(final UUID bauvorhabenId) {
+    /**
+     * Die Methode gibt alle {@link AbfrageListElementModel} als Liste zurück sortiert nach Erstellungsdatum aufsteigend
+     * welche einem Bauvorhaben zugeordnet sind.
+     *
+     * @param bauvorhabenId zum Identifizieren des {@link BauvorhabenModel}
+     * @return Liste von {@link AbfrageListElementModel} welche einem Bauvorhaben zugeordent sind
+     */
+    public List<AbfrageListElementModel> getReferencedInfrastrukturabfragen(final UUID bauvorhabenId) {
         return this.infrastrukturabfrageRepository.findAllByAbfrageBauvorhabenIdOrderByCreatedDateTimeAsc(bauvorhabenId)
             .map(this.abfrageDomainMapper::entity2Model)
             .map(this.abfrageDomainMapper::model2ListElementModel)

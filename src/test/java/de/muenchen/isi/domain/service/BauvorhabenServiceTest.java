@@ -25,7 +25,6 @@ import de.muenchen.isi.domain.model.enums.AbfrageTyp;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.InfrastruktureinrichtungModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.KinderkrippeModel;
 import de.muenchen.isi.domain.model.list.AbfrageListElementModel;
-import de.muenchen.isi.domain.model.list.BauvorhabenReferencedElementsModel;
 import de.muenchen.isi.domain.model.list.InfrastruktureinrichtungListElementModel;
 import de.muenchen.isi.domain.service.filehandling.DokumentService;
 import de.muenchen.isi.infrastructure.entity.Abfrage;
@@ -132,10 +131,7 @@ public class BauvorhabenServiceTest {
     }
 
     @Test
-    void getReferencedBauvorhabenElements() throws EntityNotFoundException {
-        BauvorhabenReferencedElementsModel expectedBauvorhabenReferencedElementsModel =
-            new BauvorhabenReferencedElementsModel();
-
+    void getReferencedAbfragenElements() {
         var bauvorhabenId = UUID.randomUUID();
         Bauvorhaben bauvorhaben = new Bauvorhaben();
         bauvorhaben.setBauvorhabenNummer("12345");
@@ -170,6 +166,65 @@ public class BauvorhabenServiceTest {
         abfrage3.getAbfrage().setStatusAbfrage(StatusAbfrage.OFFEN);
         abfrage3.getAbfrage().setFristStellungnahme(LocalDate.of(2022, 12, 1));
         abfrage3.getAbfrage().setBauvorhaben(bauvorhaben);
+
+        final Stream<Infrastrukturabfrage> listInfrastrukturabfrage = Stream.of(abfrage1, abfrage2, abfrage3);
+
+        final List<AbfrageListElementModel> expectedAbfrageList = new ArrayList<>();
+
+        var abfrageListElementModel1 = new AbfrageListElementModel();
+        abfrageListElementModel1.setId(abfrage1.getId());
+        abfrageListElementModel1.setNameAbfrage(abfrage1.getAbfrage().getNameAbfrage());
+        abfrageListElementModel1.setStatusAbfrage(abfrage1.getAbfrage().getStatusAbfrage());
+        abfrageListElementModel1.setFristStellungnahme(abfrage1.getAbfrage().getFristStellungnahme());
+        abfrageListElementModel1.setType(AbfrageTyp.INFRASTRUKTURABFRAGE);
+        expectedAbfrageList.add(abfrageListElementModel1);
+
+        var abfrageListElementModel2 = new AbfrageListElementModel();
+        abfrageListElementModel2.setId(abfrage2.getId());
+        abfrageListElementModel2.setNameAbfrage(abfrage2.getAbfrage().getNameAbfrage());
+        abfrageListElementModel2.setStatusAbfrage(abfrage2.getAbfrage().getStatusAbfrage());
+        abfrageListElementModel2.setFristStellungnahme(abfrage2.getAbfrage().getFristStellungnahme());
+        abfrageListElementModel2.setType(AbfrageTyp.INFRASTRUKTURABFRAGE);
+        expectedAbfrageList.add(abfrageListElementModel2);
+
+        var abfrageListElementModel3 = new AbfrageListElementModel();
+        abfrageListElementModel3.setId(abfrage3.getId());
+        abfrageListElementModel3.setNameAbfrage(abfrage3.getAbfrage().getNameAbfrage());
+        abfrageListElementModel3.setStatusAbfrage(abfrage3.getAbfrage().getStatusAbfrage());
+        abfrageListElementModel3.setFristStellungnahme(abfrage3.getAbfrage().getFristStellungnahme());
+        abfrageListElementModel3.setType(AbfrageTyp.INFRASTRUKTURABFRAGE);
+        expectedAbfrageList.add(abfrageListElementModel3);
+
+        Mockito
+            .when(
+                this.infrastrukturabfrageRepository.findAllByAbfrageBauvorhabenIdOrderByCreatedDateTimeAsc(
+                        bauvorhabenId
+                    )
+            )
+            .thenReturn(listInfrastrukturabfrage);
+
+        List<AbfrageListElementModel> abfrageResult =
+            this.bauvorhabenService.getReferencedInfrastrukturabfragen(bauvorhabenId);
+
+        assertThat(expectedAbfrageList, is(abfrageResult));
+
+        Mockito
+            .verify(this.infrastrukturabfrageRepository, Mockito.times(1))
+            .findAllByAbfrageBauvorhabenIdOrderByCreatedDateTimeAsc(bauvorhabenId);
+    }
+
+    @Test
+    void getReferencedInfrastruktureinrichtungElements() {
+        var bauvorhabenId = UUID.randomUUID();
+        Bauvorhaben bauvorhaben = new Bauvorhaben();
+        bauvorhaben.setBauvorhabenNummer("12345");
+        bauvorhaben.setEigentuemer("Eigentuemer");
+        bauvorhaben.setGrundstuecksgroesse(BigDecimal.valueOf(1));
+        bauvorhaben.setNameVorhaben("Name");
+        bauvorhaben.setPlanungsrecht(Planungsrecht.BPLAN_PARAG_11);
+        bauvorhaben.setSobonRelevant(UncertainBoolean.FALSE);
+        bauvorhaben.setStandVorhaben(StandVorhaben.AUFSTELLUNGSBESCHLUSS);
+        bauvorhaben.setId(bauvorhabenId);
 
         final Kinderkrippe kinderkrippe1 = new Kinderkrippe();
         kinderkrippe1.setNameEinrichtung("A");
@@ -206,33 +261,7 @@ public class BauvorhabenServiceTest {
             kindergarten2
         );
 
-        final Stream<Infrastrukturabfrage> listInfrastrukturabfrage = Stream.of(abfrage1, abfrage2, abfrage3);
-
         final List<AbfrageListElementModel> expectedAbfrageList = new ArrayList<>();
-
-        var abfrageListElementModel1 = new AbfrageListElementModel();
-        abfrageListElementModel1.setId(abfrage1.getId());
-        abfrageListElementModel1.setNameAbfrage(abfrage1.getAbfrage().getNameAbfrage());
-        abfrageListElementModel1.setStatusAbfrage(abfrage1.getAbfrage().getStatusAbfrage());
-        abfrageListElementModel1.setFristStellungnahme(abfrage1.getAbfrage().getFristStellungnahme());
-        abfrageListElementModel1.setType(AbfrageTyp.INFRASTRUKTURABFRAGE);
-        expectedAbfrageList.add(abfrageListElementModel1);
-
-        var abfrageListElementModel2 = new AbfrageListElementModel();
-        abfrageListElementModel2.setId(abfrage2.getId());
-        abfrageListElementModel2.setNameAbfrage(abfrage2.getAbfrage().getNameAbfrage());
-        abfrageListElementModel2.setStatusAbfrage(abfrage2.getAbfrage().getStatusAbfrage());
-        abfrageListElementModel2.setFristStellungnahme(abfrage2.getAbfrage().getFristStellungnahme());
-        abfrageListElementModel2.setType(AbfrageTyp.INFRASTRUKTURABFRAGE);
-        expectedAbfrageList.add(abfrageListElementModel2);
-
-        var abfrageListElementModel3 = new AbfrageListElementModel();
-        abfrageListElementModel3.setId(abfrage3.getId());
-        abfrageListElementModel3.setNameAbfrage(abfrage3.getAbfrage().getNameAbfrage());
-        abfrageListElementModel3.setStatusAbfrage(abfrage3.getAbfrage().getStatusAbfrage());
-        abfrageListElementModel3.setFristStellungnahme(abfrage3.getAbfrage().getFristStellungnahme());
-        abfrageListElementModel3.setType(AbfrageTyp.INFRASTRUKTURABFRAGE);
-        expectedAbfrageList.add(abfrageListElementModel3);
 
         final List<InfrastruktureinrichtungListElementModel> expectedInfrastruktureinrichtungList = new ArrayList<>();
 
@@ -260,36 +289,14 @@ public class BauvorhabenServiceTest {
         kindergartenListElementModel2.setInfrastruktureinrichtungTyp(kindergarten2.getInfrastruktureinrichtungTyp());
         expectedInfrastruktureinrichtungList.add(kindergartenListElementModel2);
 
-        expectedBauvorhabenReferencedElementsModel.setInfrastrukturabfragen(expectedAbfrageList);
-        expectedBauvorhabenReferencedElementsModel.setInfrastruktureinrichtungen(expectedInfrastruktureinrichtungList);
-
-        Mockito
-            .when(
-                this.infrastrukturabfrageRepository.findAllByAbfrageBauvorhabenIdOrderByCreatedDateTimeAsc(
-                        bauvorhabenId
-                    )
-            )
-            .thenReturn(listInfrastrukturabfrage);
-
         Mockito
             .when(this.infrastruktureinrichtungRepository.findAllByBauvorhabenId(bauvorhabenId))
             .thenReturn(listInfrastruktureinrichtung);
 
-        BauvorhabenReferencedElementsModel result = this.bauvorhabenService.getReferencedElements(bauvorhabenId);
+        List<InfrastruktureinrichtungListElementModel> infraResult =
+            this.bauvorhabenService.getReferencedInfrastruktureinrichtungen(bauvorhabenId);
 
-        assertThat(
-            expectedBauvorhabenReferencedElementsModel.getInfrastrukturabfragen(),
-            is(result.getInfrastrukturabfragen())
-        );
-
-        assertThat(
-            expectedBauvorhabenReferencedElementsModel.getInfrastruktureinrichtungen(),
-            is(result.getInfrastruktureinrichtungen())
-        );
-
-        Mockito
-            .verify(this.infrastrukturabfrageRepository, Mockito.times(1))
-            .findAllByAbfrageBauvorhabenIdOrderByCreatedDateTimeAsc(bauvorhabenId);
+        assertThat(expectedInfrastruktureinrichtungList, is(infraResult));
 
         Mockito.verify(this.infrastruktureinrichtungRepository, Mockito.times(1)).findAllByBauvorhabenId(bauvorhabenId);
     }
