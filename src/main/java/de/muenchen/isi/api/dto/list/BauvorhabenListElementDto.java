@@ -17,6 +17,8 @@ public class BauvorhabenListElementDto extends SearchResultDto {
 
     private UUID id;
 
+    private String nameVorhaben;
+
     private Set<StadtbezirkModel> stadtbezirke;
 
     private BigDecimal grundstuecksgroesse;
