@@ -1,7 +1,7 @@
 package de.muenchen.isi.api.dto.list;
 
+import de.muenchen.isi.api.dto.common.StadtbezirkDto;
 import de.muenchen.isi.api.dto.search.SearchResultDto;
-import de.muenchen.isi.domain.model.common.StadtbezirkModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVorhaben;
 import java.math.BigDecimal;
 import java.util.Set;
@@ -19,7 +19,7 @@ public class BauvorhabenListElementDto extends SearchResultDto {
 
     private String nameVorhaben;
 
-    private Set<StadtbezirkModel> stadtbezirke;
+    private Set<StadtbezirkDto> stadtbezirke;
 
     private BigDecimal grundstuecksgroesse;
 

@@ -7,7 +7,6 @@ import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import java.time.LocalDate;
 import java.util.Set;
 import java.util.UUID;
-import javax.validation.constraints.Size;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -19,7 +18,6 @@ public class AbfrageListElementDto extends SearchResultDto {
 
     private UUID id;
 
-    @Size(max = 70, message = "Es sind maximal {max} Zeichen erlaubt")
     private String nameAbfrage;
 
     private Set<StadtbezirkDto> stadtbezirke;
