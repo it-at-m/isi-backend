@@ -201,7 +201,7 @@ public class BauvorhabenController {
     public ResponseEntity<List<AbfrageListElementDto>> getReferencedInfrastrukturabfragen(
         @PathVariable @NotNull final UUID id
     ) {
-        var infrastrukturabfragen =
+        final var infrastrukturabfragen =
             this.bauvorhabenService.getReferencedInfrastrukturabfragen(id)
                 .stream()
                 .map(this.abfrageApiMapper::model2ListElementDto)
@@ -220,7 +220,7 @@ public class BauvorhabenController {
     public ResponseEntity<List<InfrastruktureinrichtungListElementDto>> getReferencedInfrastruktureinrichtung(
         @PathVariable @NotNull final UUID id
     ) {
-        var infrastruktureinrichtungen =
+        final var infrastruktureinrichtungen =
             this.bauvorhabenService.getReferencedInfrastruktureinrichtungen(id)
                 .stream()
                 .map(this.infrastruktureinrichtungApiMapper::model2ListElementDto)
