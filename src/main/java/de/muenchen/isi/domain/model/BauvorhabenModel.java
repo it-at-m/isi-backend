@@ -3,7 +3,7 @@ package de.muenchen.isi.domain.model;
 import de.muenchen.isi.domain.model.common.AdresseModel;
 import de.muenchen.isi.domain.model.common.VerortungModel;
 import de.muenchen.isi.domain.model.filehandling.DokumentModel;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.BaugebietTyp;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.BaugebietArt;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Planungsrecht;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonVerfahrensgrundsaetzeJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVorhaben;
@@ -43,7 +43,7 @@ public class BauvorhabenModel extends BaseEntityModel {
 
     private Planungsrecht planungsrecht;
 
-    private List<BaugebietTyp> artFnp;
+    private List<BaugebietArt> artFnp;
 
     private List<DokumentModel> dokumente;
 }
