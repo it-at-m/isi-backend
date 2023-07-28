@@ -25,6 +25,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @RequiredArgsConstructor
+@Profile("!no-security")
 public class CustomJwtAuthenticationConverter implements Converter<Jwt, AbstractAuthenticationToken> {
 
     private final CustomUserInfoTokenServices userInfoTokenServices;

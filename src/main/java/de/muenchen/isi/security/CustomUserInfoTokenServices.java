@@ -21,6 +21,7 @@ import org.springframework.stereotype.Component;
  */
 @Slf4j
 @Component
+@Profile("!no-security")
 public class CustomUserInfoTokenServices extends UserInfoTokenServices {
 
     public static final String NAME_AUTHENTICATION_CACHE = "authentication_cache";

@@ -1,0 +1,6 @@
+io:
+  muenchendigital:
+    digiwf:
+      s3:
+        client:
+          securityEnabled: false
