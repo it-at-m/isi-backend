@@ -33,3 +33,4 @@ io:
         client:
           document-storage-url: localhost:8080
           file-expiration-time: 5 #minutes
+          securityEnabled: false

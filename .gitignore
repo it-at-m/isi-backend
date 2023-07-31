@@ -33,7 +33,6 @@ nbdist/
 src/**/DatabaseFiller.java
 src/**/application-*.yml
 !src/**/application-unittest.yml
-!src/**/application-no-security.yml
 src/**/logback-spring.xml
 
 node_modules/
