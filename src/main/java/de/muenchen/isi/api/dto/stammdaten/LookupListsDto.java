@@ -1,6 +1,5 @@
 package de.muenchen.isi.api.dto.stammdaten;
 
-import de.muenchen.isi.domain.model.stammdaten.LookupListModel;
 import lombok.Data;
 
 @Data
@@ -20,7 +19,7 @@ public class LookupListsDto {
 
     private LookupListDto planungsrecht;
 
-    private LookupListDto baugebietTyp;
+    private LookupListDto baugebietArt;
 
     private LookupListDto statusInfrastruktureinrichtung;
 
