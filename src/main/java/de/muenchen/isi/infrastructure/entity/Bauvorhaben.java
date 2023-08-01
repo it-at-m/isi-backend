@@ -4,7 +4,7 @@ import de.muenchen.isi.infrastructure.adapter.search.SobonRelevantValueBridge;
 import de.muenchen.isi.infrastructure.adapter.search.StandVorhabenValueBridge;
 import de.muenchen.isi.infrastructure.entity.common.Adresse;
 import de.muenchen.isi.infrastructure.entity.common.Verortung;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.BaugebietTyp;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.BaugebietArt;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Planungsrecht;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonVerfahrensgrundsaetzeJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVorhaben;
@@ -104,7 +104,7 @@ public class Bauvorhaben extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     @ElementCollection
-    private List<BaugebietTyp> artFnp;
+    private List<BaugebietArt> artFnp;
 
     @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "bauvorhaben_id")

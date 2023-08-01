@@ -1,7 +1,7 @@
 package de.muenchen.isi.api.dto;
 
 import de.muenchen.isi.api.validation.JahrDistributionValid;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.BaugebietTyp;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.BaugebietArt;
 import java.math.BigDecimal;
 import java.util.List;
 import javax.validation.Valid;
@@ -26,7 +26,7 @@ public class BaugebietDto extends BaseEntityDto {
     private String bezeichnung;
 
     @NotNull
-    private BaugebietTyp baugebietTyp;
+    private BaugebietArt baugebietArt;
 
     @NotNull
     @Min(1900)

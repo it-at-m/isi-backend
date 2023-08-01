@@ -19,7 +19,7 @@ public class LookupListsModel {
 
     private LookupListModel planungsrecht;
 
-    private LookupListModel baugebietTyp;
+    private LookupListModel baugebietArt;
 
     private LookupListModel statusInfrastruktureinrichtung;
 
