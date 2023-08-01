@@ -28,12 +28,15 @@ class SearchServiceTest {
         var searchQuery =
             " test test1 te--st2 \"in Anfuehrungszeichen\" test2       \"xxx xxx      1234 y\"   27.07.1982   test500?! ";
         assertThat(
-            searchService.createAdaptedSearchQuery(searchQuery),
+            searchService.createAdaptedSearchQueryForSimpleQueryStringSearch(searchQuery),
             is("test* test1* te--st2* \"in Anfuehrungszeichen\" test2* \"xxx xxx      1234 y\" 27.07.1982* test500?!*")
         );
         searchQuery = "test500?!";
-        assertThat(searchService.createAdaptedSearchQuery(searchQuery), is("test500?!*"));
+        assertThat(searchService.createAdaptedSearchQueryForSimpleQueryStringSearch(searchQuery), is("test500?!*"));
         searchQuery = "\"in Anfuehrungszeichen\"";
-        assertThat(searchService.createAdaptedSearchQuery(searchQuery), is("\"in Anfuehrungszeichen\""));
+        assertThat(
+            searchService.createAdaptedSearchQueryForSimpleQueryStringSearch(searchQuery),
+            is("\"in Anfuehrungszeichen\"")
+        );
     }
 }

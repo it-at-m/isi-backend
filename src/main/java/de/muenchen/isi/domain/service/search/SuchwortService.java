@@ -32,6 +32,15 @@ public class SuchwortService {
 
     private final SuchwortRepository suchwortRepository;
 
+    /**
+     * Die Methode extrahiert für die im Parameter gegebene Entität die im Suchindex indexierten Attributwerte
+     * und persistiert diese in der Tabelle der Entität {@link Suchwort}.
+     *
+     * Die Tabelleneinträge dienen als Grundlage für die Ermittlung der Suchwortvorschläge.
+     * Siehe {@link SearchService#doSearchForSearchwordSuggestion(String)}
+     *
+     * @param infrastrukturabfrage zur Extraktion der vorzuschlagenden Suchwörter.
+     */
     public void deleteOldSearchwordsAndAddNewSearchwords(final Infrastrukturabfrage infrastrukturabfrage) {
         final Set<String> suchwoerter = new HashSet<>();
         CollectionUtils.addIgnoreNull(suchwoerter, infrastrukturabfrage.getAbfrage().getNameAbfrage());
@@ -59,6 +68,15 @@ public class SuchwortService {
         deleteOldSearchwordsAndAddNewSearchwords(infrastrukturabfrage.getId(), suchwoerter);
     }
 
+    /**
+     * Die Methode extrahiert für die im Parameter gegebene Entität die im Suchindex indexierten Attributwerte
+     * und persistiert diese in der Tabelle der Entität {@link Suchwort}.
+     *
+     * Die Tabelleneinträge dienen als Grundlage für die Ermittlung der Suchwortvorschläge.
+     * Siehe {@link SearchService#doSearchForSearchwordSuggestion(String)}
+     *
+     * @param bauvorhaben zur Extraktion der vorzuschlagenden Suchwörter.
+     */
     public void deleteOldSearchwordsAndAddNewSearchwords(final Bauvorhaben bauvorhaben) {
         final Set<String> suchwoerter = new HashSet<>();
         CollectionUtils.addIgnoreNull(suchwoerter, bauvorhaben.getNameVorhaben());
@@ -75,6 +93,15 @@ public class SuchwortService {
         deleteOldSearchwordsAndAddNewSearchwords(bauvorhaben.getId(), suchwoerter);
     }
 
+    /**
+     * Die Methode extrahiert für die im Parameter gegebene Entität die im Suchindex indexierten Attributwerte
+     * und persistiert diese in der Tabelle der Entität {@link Suchwort}.
+     *
+     * Die Tabelleneinträge dienen als Grundlage für die Ermittlung der Suchwortvorschläge.
+     * Siehe {@link SearchService#doSearchForSearchwordSuggestion(String)}
+     *
+     * @param infrastruktureinrichtung zur Extraktion der vorzuschlagenden Suchwörter.
+     */
     public void deleteOldSearchwordsAndAddNewSearchwords(final Infrastruktureinrichtung infrastruktureinrichtung) {
         final Set<String> suchwoerter = new HashSet<>();
         CollectionUtils.addIgnoreNull(suchwoerter, infrastruktureinrichtung.getNameEinrichtung());
@@ -84,6 +111,11 @@ public class SuchwortService {
         deleteOldSearchwordsAndAddNewSearchwords(infrastruktureinrichtung.getId(), suchwoerter);
     }
 
+    /**
+     * Diese Methode löscht alle persistierten {@link Suchwort}.
+     *
+     * @param referenceId welche die zu löschenden der {@link Suchwort}er identifiziert.
+     */
     public void deleteOldSearchwords(final UUID referenceId) {
         suchwortRepository.deleteAllByReferenceId(referenceId);
     }

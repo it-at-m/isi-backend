@@ -26,6 +26,12 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class SearchPreparationService {
 
+    /**
+     * Diese Methode ermittelt auf Basis der im Parameter gegebenen Entitätsklassen die dazugehörigen suchbaren Attribute.
+     *
+     * @param searchableEntities zur Ermittlung der suchbaren Attribute.
+     * @return die suchbaren Attribute.
+     */
     protected String[] getNamesOfSearchableAttributes(final List<Class<? extends BaseEntity>> searchableEntities) {
         final var searchableAttributes = new HashSet<String>();
         if (CollectionUtils.containsAny(searchableEntities, Set.of(Infrastrukturabfrage.class))) {

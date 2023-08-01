@@ -34,6 +34,12 @@ public class SearchService {
 
     private final SearchDomainMapper searchDomainMapper;
 
+    /**
+     *
+     *
+     * @param singleWordQuery als Query bestehend aus einem Wort. Es dürfen sich keine Leerzeichen zwischen den einzelnen Buchstaben befinden.
+     * @return die Suchwortvorschläge für das im Parameter gegebene Wort.
+     */
     public SuchwortSuggestionsModel searchForSearchwordSuggestion(final String singleWordQuery) {
         final var foundSuchwortSuggestions =
             this.doSearchForSearchwordSuggestion(singleWordQuery)
@@ -44,6 +50,12 @@ public class SearchService {
         return model;
     }
 
+    /**
+     * Diese Methode führt die Suche zur Ermittlung der Suchwortvorschläge durch. Die Suche wird für die Entität {@link Suchwort} durchgeführt.
+     *
+     * @param singleWordQuery als Query bestehend aus einem Wort. Es dürfen sich keine Leerzeichen zwischen den einzelnen Buchstaben befinden.
+     * @return die Suchwortvorschläge für das im Parameter gegebene Wort.
+     */
     public Stream<SuchwortModel> doSearchForSearchwordSuggestion(final String singleWordQuery) {
         final var wildcardSingleWordQuery = StringUtils.lowerCase(StringUtils.trimToEmpty(singleWordQuery)) + "*";
 
@@ -63,6 +75,14 @@ public class SearchService {
             .map(searchDomainMapper::entity2Model);
     }
 
+    /**
+     *
+     *
+     *
+     * @param searchQueryInformation mit der Suchquery und den zu durchsuchenden Entitäten.
+     * @return die Sucherbenisse für die zu suchenden Entitäten.
+     * @throws EntityNotFoundException
+     */
     public SearchResultsModel searchForEntities(final SearchQueryForEntitiesModel searchQueryInformation)
         throws EntityNotFoundException {
         final List<Class<? extends BaseEntity>> searchableEntities = searchPreparationService.getSearchableEntities(
@@ -77,12 +97,21 @@ public class SearchService {
         return model;
     }
 
+    /**
+     * Diese Methode führt die Entitätssuche für die im Parameter gegebene Entitäten auf Basis der Suchquery durch.
+     *
+     * @param searchableEntities nach welchen gesucht werden soll.
+     * @param searchQuery die Suchquery für die Entitätssuche.
+     * @return
+     */
     protected Stream<? extends BaseEntityModel> doSearchForEntities(
         final List<Class<? extends BaseEntity>> searchableEntities,
         final String searchQuery
     ) {
+        // Ermittlung der suchbaren Attribute je suchbarer Entität
         final var searchableAttributes = searchPreparationService.getNamesOfSearchableAttributes(searchableEntities);
-        final var adaptedSearchQuery = this.createAdaptedSearchQuery(searchQuery);
+        // Anpassen der Suchquery
+        final var adaptedSearchQuery = this.createAdaptedSearchQueryForSimpleQueryStringSearch(searchQuery);
 
         return Search
             .session(entityManager.getEntityManagerFactory().createEntityManager())
@@ -95,6 +124,7 @@ public class SearchService {
                         .simpleQueryString()
                         .fields(searchableAttributes)
                         .matching(adaptedSearchQuery)
+                        // Es werden nur die Entitäten als Suchergebnis zurückgegeben, welche alle Suchwörter der Suchquery beinhalten.
                         .defaultOperator(BooleanOperator.AND);
                 } else {
                     // Zurückgeben aller Entitäten.
@@ -107,7 +137,13 @@ public class SearchService {
             .map(searchDomainMapper::entity2Model);
     }
 
-    protected String createAdaptedSearchQuery(final String searchQuery) {
+    /**
+     * Diese Methode passt die im Parameter gegebene Suchquery an, um diese bei der Simple-Query-String-Suche verwenden zu können.
+     *
+     * @param searchQuery zum anpassen.
+     * @return die für die Simple-Query-String-Suche angepasste Suchquery.
+     */
+    protected String createAdaptedSearchQueryForSimpleQueryStringSearch(final String searchQuery) {
         final var splittedSearchQuery = StringUtils.split(StringUtils.trimToEmpty(searchQuery));
         final var adaptedSearchQuery = Arrays
             .stream(splittedSearchQuery)
