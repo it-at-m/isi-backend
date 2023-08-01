@@ -197,7 +197,7 @@ public class BauvorhabenServiceTest {
 
         Mockito
             .when(
-                this.infrastrukturabfrageRepository.findAllByAbfrageBauvorhabenIdOrderByCreatedDateTimeAsc(
+                this.infrastrukturabfrageRepository.findAllByAbfrageBauvorhabenIdOrderByCreatedDateTimeDesc(
                         bauvorhabenId
                     )
             )
@@ -210,7 +210,7 @@ public class BauvorhabenServiceTest {
 
         Mockito
             .verify(this.infrastrukturabfrageRepository, Mockito.times(1))
-            .findAllByAbfrageBauvorhabenIdOrderByCreatedDateTimeAsc(bauvorhabenId);
+            .findAllByAbfrageBauvorhabenIdOrderByCreatedDateTimeDesc(bauvorhabenId);
     }
 
     @Test
