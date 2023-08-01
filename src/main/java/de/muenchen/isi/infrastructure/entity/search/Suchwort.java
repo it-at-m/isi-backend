@@ -31,6 +31,10 @@ public class Suchwort extends BaseEntity {
     @Column(nullable = false)
     private String suchwort;
 
+    /**
+     * Die Referenz zum Primärschlüssel einer Entität.
+     * Alle Suchwörder mit der selben referenceId gehören zur gleichen Entität.
+     */
     @Column(nullable = false)
     private UUID referenceId;
 }
