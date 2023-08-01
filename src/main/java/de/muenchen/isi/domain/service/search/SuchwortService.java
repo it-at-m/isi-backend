@@ -35,9 +35,13 @@ public class SuchwortService {
     public void deleteOldSearchwordsAndAddNewSearchwords(final Infrastrukturabfrage infrastrukturabfrage) {
         final Set<String> suchwoerter = new HashSet<>();
         CollectionUtils.addIgnoreNull(suchwoerter, infrastrukturabfrage.getAbfrage().getNameAbfrage());
+        suchwoerter.addAll(Set.of(StringUtils.split(infrastrukturabfrage.getAbfrage().getNameAbfrage())));
         CollectionUtils.addIgnoreNull(
             suchwoerter,
             infrastrukturabfrage.getAbfrage().getStatusAbfrage().getBezeichnung()
+        );
+        suchwoerter.addAll(
+            Set.of(StringUtils.split(infrastrukturabfrage.getAbfrage().getStatusAbfrage().getBezeichnung()))
         );
         CollectionUtils.addIgnoreNull(suchwoerter, infrastrukturabfrage.getAbfrage().getBebauungsplannummer());
         suchwoerter.addAll(getSearchwords(infrastrukturabfrage.getAbfrage().getAdresse()));
@@ -58,6 +62,7 @@ public class SuchwortService {
     public void deleteOldSearchwordsAndAddNewSearchwords(final Bauvorhaben bauvorhaben) {
         final Set<String> suchwoerter = new HashSet<>();
         CollectionUtils.addIgnoreNull(suchwoerter, bauvorhaben.getNameVorhaben());
+        suchwoerter.addAll(Set.of(StringUtils.split(bauvorhaben.getNameVorhaben())));
         CollectionUtils.addIgnoreNull(suchwoerter, bauvorhaben.getStandVorhaben().getBezeichnung());
         CollectionUtils.addIgnoreNull(suchwoerter, bauvorhaben.getBauvorhabenNummer());
         suchwoerter.addAll(getSearchwords(bauvorhaben.getAdresse()));
@@ -73,6 +78,7 @@ public class SuchwortService {
     public void deleteOldSearchwordsAndAddNewSearchwords(final Infrastruktureinrichtung infrastruktureinrichtung) {
         final Set<String> suchwoerter = new HashSet<>();
         CollectionUtils.addIgnoreNull(suchwoerter, infrastruktureinrichtung.getNameEinrichtung());
+        suchwoerter.addAll(Set.of(StringUtils.split(infrastruktureinrichtung.getNameEinrichtung())));
         CollectionUtils.addIgnoreNull(suchwoerter, infrastruktureinrichtung.getStatus().getBezeichnung());
         suchwoerter.addAll(getSearchwords(infrastruktureinrichtung.getAdresse()));
         deleteOldSearchwordsAndAddNewSearchwords(infrastruktureinrichtung.getId(), suchwoerter);
