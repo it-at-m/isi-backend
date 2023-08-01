@@ -5,7 +5,7 @@ import de.muenchen.isi.api.dto.common.VerortungDto;
 import de.muenchen.isi.api.dto.filehandling.DokumentDto;
 import de.muenchen.isi.api.validation.HasAllowedNumberOfDocuments;
 import de.muenchen.isi.api.validation.NotUnspecified;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.BaugebietTyp;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.BaugebietArt;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Planungsrecht;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonVerfahrensgrundsaetzeJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVorhaben;
@@ -69,7 +69,7 @@ public class BauvorhabenDto extends BaseEntityDto {
     private Planungsrecht planungsrecht;
 
     @NotEmpty
-    private List<BaugebietTyp> artFnp;
+    private List<BaugebietArt> artFnp;
 
     @HasAllowedNumberOfDocuments
     private List<@Valid DokumentDto> dokumente;
