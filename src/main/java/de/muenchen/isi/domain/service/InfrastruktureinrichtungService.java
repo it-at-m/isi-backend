@@ -114,6 +114,7 @@ public class InfrastruktureinrichtungService {
                 infrastruktureinrichtung
             );
         this.infrastruktureinrichtungRepository.deleteById(id);
+        this.suchwortService.deleteOldSearchwords(id);
     }
 
     /**

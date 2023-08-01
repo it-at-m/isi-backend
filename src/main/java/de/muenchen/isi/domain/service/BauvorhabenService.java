@@ -133,6 +133,7 @@ public class BauvorhabenService {
         this.throwEntityIsReferencedExceptionWhenAbfrageIsReferencingBauvorhaben(bauvorhaben);
         this.throwEntityIsReferencedExceptionWhenInfrastruktureinrichtungIsReferencingBauvorhaben(bauvorhaben);
         this.bauvorhabenRepository.deleteById(id);
+        this.suchwortService.deleteOldSearchwords(id);
     }
 
     /**

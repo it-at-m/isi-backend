@@ -78,6 +78,10 @@ public class SuchwortService {
         deleteOldSearchwordsAndAddNewSearchwords(infrastruktureinrichtung.getId(), suchwoerter);
     }
 
+    public void deleteOldSearchwords(final UUID referenceId) {
+        suchwortRepository.deleteAllByReferenceId(referenceId);
+    }
+
     protected Set<String> getSearchwords(final Abfragevariante abfragevariante) {
         final Set<String> suchwoerter = new HashSet<>();
         if (ObjectUtils.isNotEmpty(abfragevariante)) {
@@ -137,11 +141,11 @@ public class SuchwortService {
         return suchwoerter;
     }
 
-    protected void deleteOldSearchwordsAndAddNewSearchwords(final UUID id, Set<String> suchwoerter) {
-        suchwortRepository.deleteAllByReferenceId(id);
+    protected void deleteOldSearchwordsAndAddNewSearchwords(final UUID referenceId, final Set<String> suchwoerter) {
+        this.deleteOldSearchwords(referenceId);
         final Set<Suchwort> bauvorhabenSuchwoerter = suchwoerter
             .stream()
-            .map(suchwort -> new Suchwort(suchwort, id))
+            .map(suchwort -> new Suchwort(suchwort, referenceId))
             .collect(Collectors.toSet());
         suchwortRepository.saveAllAndFlush(bauvorhabenSuchwoerter);
     }

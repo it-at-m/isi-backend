@@ -239,6 +239,7 @@ public class AbfrageService {
         final var abfrage = this.getInfrastrukturabfrageById(id);
         this.throwEntityIsReferencedExceptionWhenAbfrageIsReferencingBauvorhaben(abfrage.getAbfrage());
         this.infrastrukturabfrageRepository.deleteById(id);
+        this.suchwortService.deleteOldSearchwords(id);
     }
 
     /**
