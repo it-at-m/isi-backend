@@ -4,6 +4,7 @@
  */
 package de.muenchen.isi.infrastructure.entity;
 
+import de.muenchen.isi.infrastructure.adapter.search.CustomSuggesterBinder;
 import de.muenchen.isi.infrastructure.adapter.search.StatusAbfrageValueBridge;
 import de.muenchen.isi.infrastructure.entity.common.Adresse;
 import de.muenchen.isi.infrastructure.entity.common.Verortung;
@@ -26,9 +27,11 @@ import javax.persistence.OneToMany;
 import lombok.Data;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
+import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBinderRef;
 import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBridgeRef;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.IndexedEmbedded;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.NonStandardField;
 
 @Embeddable
 @Data
@@ -70,6 +73,10 @@ public class Abfrage {
     private String bebauungsplannummer;
 
     @FullTextField(analyzer = "entity_analyzer_string_field")
+    @NonStandardField(
+        name = "nameAbfrage_completion_suggetion",
+        valueBinder = @ValueBinderRef(type = CustomSuggesterBinder.class)
+    )
     @Column(nullable = false, unique = true, length = 70)
     private String nameAbfrage;
 
