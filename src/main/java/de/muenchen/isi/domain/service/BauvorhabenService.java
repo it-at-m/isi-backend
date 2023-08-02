@@ -13,7 +13,6 @@ import de.muenchen.isi.domain.model.BauvorhabenModel;
 import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.AbfrageAngelegtModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.InfrastruktureinrichtungModel;
 import de.muenchen.isi.domain.service.filehandling.DokumentService;
-import de.muenchen.isi.domain.service.search.SuchwortService;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Infrastruktureinrichtung;
 import de.muenchen.isi.infrastructure.repository.BauvorhabenRepository;
 import de.muenchen.isi.infrastructure.repository.InfrastrukturabfrageRepository;
@@ -42,8 +41,6 @@ public class BauvorhabenService {
     private final InfrastruktureinrichtungRepository infrastruktureinrichtungRepository;
 
     private final DokumentService dokumentService;
-
-    private final SuchwortService suchwortService;
 
     /**
      * Die Methode gibt alle {@link BauvorhabenModel} als Liste zurück.
@@ -87,7 +84,6 @@ public class BauvorhabenService {
         if ((saved.isPresent() && saved.get().getId().equals(bauvorhabenEntity.getId())) || saved.isEmpty()) {
             try {
                 bauvorhabenEntity = this.bauvorhabenRepository.saveAndFlush(bauvorhabenEntity);
-                suchwortService.deleteOldSearchwordsAndAddNewSearchwords(bauvorhabenEntity);
             } catch (final ObjectOptimisticLockingFailureException exception) {
                 final var message = "Die Daten wurden in der Zwischenzeit geändert. Bitte laden Sie die Seite neu!";
                 throw new OptimisticLockingException(message, exception);
@@ -133,7 +129,6 @@ public class BauvorhabenService {
         this.throwEntityIsReferencedExceptionWhenAbfrageIsReferencingBauvorhaben(bauvorhaben);
         this.throwEntityIsReferencedExceptionWhenInfrastruktureinrichtungIsReferencingBauvorhaben(bauvorhaben);
         this.bauvorhabenRepository.deleteById(id);
-        this.suchwortService.deleteOldSearchwords(id);
     }
 
     /**

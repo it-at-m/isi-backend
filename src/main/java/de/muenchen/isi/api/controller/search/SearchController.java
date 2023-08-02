@@ -42,9 +42,9 @@ public class SearchController {
     public ResponseEntity<SuchwortSuggestionsDto> searchForSearchwordSuggestion(
         @RequestParam(value = "single-word-query") @NotEmpty final String singleWordQuery
     ) {
-        final var model = searchService.searchForSearchwordSuggestion(singleWordQuery);
-        final var dto = searchApiMapper.model2Dto(model);
-        return ResponseEntity.ok(dto);
+        //final var model = searchService.searchForSearchwordSuggestion(singleWordQuery);
+        //final var dto = searchApiMapper.model2Dto(model);
+        return ResponseEntity.ok(new SuchwortSuggestionsDto());
     }
 
     @PostMapping("/entities")

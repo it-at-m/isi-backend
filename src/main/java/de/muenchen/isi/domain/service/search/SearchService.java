@@ -17,6 +17,9 @@ import javax.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.elasticsearch.client.Request;
+import org.elasticsearch.client.RestClient;
+import org.hibernate.search.backend.elasticsearch.ElasticsearchBackend;
 import org.hibernate.search.engine.search.common.BooleanOperator;
 import org.hibernate.search.mapper.orm.Search;
 import org.springframework.stereotype.Service;
@@ -59,20 +62,38 @@ public class SearchService {
     public Stream<SuchwortModel> doSearchForSearchwordSuggestion(final String singleWordQuery) {
         final var wildcardSingleWordQuery = StringUtils.lowerCase(StringUtils.trimToEmpty(singleWordQuery)) + "*";
 
-        return Search
-            .session(entityManager.getEntityManagerFactory().createEntityManager())
-            .search(Suchwort.class)
-            .where(function ->
-                function
-                    // https://docs.jboss.org/hibernate/stable/search/reference/en-US/html_single/#search-dsl-predicate-wildcard
-                    .wildcard()
-                    .field("suchwort")
-                    .matching(wildcardSingleWordQuery)
-            )
-            .fetch(MAX_NUMBER_OF_SUGGESTION)
-            .hits()
-            .stream()
-            .map(searchDomainMapper::entity2Model);
+        /*
+
+# Es muss neben dem Textattribut noch ein zusätzliches completion-Attribut vom Typ "completion" vorgehalten werden.
+POST infrastrukturabfrage-000001/_search
+{
+  "_source": "suggest",
+  "suggest": {
+    "my-suggestion" : {
+      "text" : "D ",
+      "completion" : {
+        "field" : "abfrage.nameAbfrage_completion_suggetion"
+
+      }
+    }
+  }
+}
+
+
+
+         */
+
+        // https://docs.jboss.org/hibernate/stable/search/reference/en-US/html_single/#elasticsearch-client-access
+
+        final var restClientElasticsearch = Search
+            .mapping(entityManager.getEntityManagerFactory())
+            .backend()
+            .unwrap(ElasticsearchBackend.class)
+            .client(RestClient.class);
+
+        final var request = new Request("POST", "/");
+
+        return null;
     }
 
     /**

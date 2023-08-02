@@ -16,7 +16,6 @@ import de.muenchen.isi.domain.model.InfrastrukturabfrageModel;
 import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.InfrastrukturabfrageAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageSachbearbeitungInBearbeitungSachbearbeitung.InfrastrukturabfrageInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.domain.service.filehandling.DokumentService;
-import de.muenchen.isi.domain.service.search.SuchwortService;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.repository.InfrastrukturabfrageRepository;
 import java.util.List;
@@ -43,8 +42,6 @@ public class AbfrageService {
     private final InfrastrukturabfrageRepository infrastrukturabfrageRepository;
 
     private final DokumentService dokumentService;
-
-    private final SuchwortService suchwortService;
 
     /**
      * Die Methode gibt alle {@link InfrastrukturabfrageModel} als Liste zurück.
@@ -95,7 +92,6 @@ public class AbfrageService {
         if ((saved.isPresent() && saved.get().getId().equals(abfrageEntity.getId())) || saved.isEmpty()) {
             try {
                 abfrageEntity = this.infrastrukturabfrageRepository.saveAndFlush(abfrageEntity);
-                suchwortService.deleteOldSearchwordsAndAddNewSearchwords(abfrageEntity);
             } catch (final ObjectOptimisticLockingFailureException exception) {
                 final var message = "Die Daten wurden in der Zwischenzeit geändert. Bitte laden Sie die Seite neu!";
                 throw new OptimisticLockingException(message, exception);
@@ -239,7 +235,6 @@ public class AbfrageService {
         final var abfrage = this.getInfrastrukturabfrageById(id);
         this.throwEntityIsReferencedExceptionWhenAbfrageIsReferencingBauvorhaben(abfrage.getAbfrage());
         this.infrastrukturabfrageRepository.deleteById(id);
-        this.suchwortService.deleteOldSearchwords(id);
     }
 
     /**
