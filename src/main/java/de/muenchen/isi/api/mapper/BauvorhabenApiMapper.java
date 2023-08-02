@@ -5,7 +5,10 @@ import de.muenchen.isi.configuration.MapstructConfiguration;
 import de.muenchen.isi.domain.model.BauvorhabenModel;
 import org.mapstruct.Mapper;
 
-@Mapper(config = MapstructConfiguration.class, uses = { DokumentApiMapper.class })
+@Mapper(
+    config = MapstructConfiguration.class,
+    uses = { DokumentApiMapper.class, AbfrageApiMapper.class, InfrastruktureinrichtungApiMapper.class }
+)
 public interface BauvorhabenApiMapper {
     BauvorhabenDto model2Dto(final BauvorhabenModel model);
 

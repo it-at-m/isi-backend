@@ -2,7 +2,11 @@ package de.muenchen.isi.api.controller;
 
 import de.muenchen.isi.api.dto.BauvorhabenDto;
 import de.muenchen.isi.api.dto.error.InformationResponseDto;
+import de.muenchen.isi.api.dto.list.AbfrageListElementDto;
+import de.muenchen.isi.api.dto.list.InfrastruktureinrichtungListElementDto;
+import de.muenchen.isi.api.mapper.AbfrageApiMapper;
 import de.muenchen.isi.api.mapper.BauvorhabenApiMapper;
+import de.muenchen.isi.api.mapper.InfrastruktureinrichtungApiMapper;
 import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.FileHandlingFailedException;
@@ -46,6 +50,10 @@ public class BauvorhabenController {
     private final BauvorhabenService bauvorhabenService;
 
     private final BauvorhabenApiMapper bauvorhabenApiMapper;
+
+    private final AbfrageApiMapper abfrageApiMapper;
+
+    private final InfrastruktureinrichtungApiMapper infrastruktureinrichtungApiMapper;
 
     @Transactional(readOnly = true)
     @GetMapping("bauvorhaben")
@@ -180,5 +188,43 @@ public class BauvorhabenController {
         throws EntityNotFoundException, EntityIsReferencedException {
         this.bauvorhabenService.deleteBauvorhaben(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @Transactional(readOnly = true)
+    @GetMapping("bauvorhaben/referenced/abfragen/{id}")
+    @Operation(
+        summary = "Lade alle Infrastrukturabfragen die einem Bauvorhaben angehören",
+        description = "Das Ergebnis wird anhand des Erstellungsdatums aufsteigend sortiert."
+    )
+    @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "OK") })
+    @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_READ_BAUVORHABEN.name())")
+    public ResponseEntity<List<AbfrageListElementDto>> getReferencedInfrastrukturabfragen(
+        @PathVariable @NotNull final UUID id
+    ) {
+        final var infrastrukturabfragen =
+            this.bauvorhabenService.getReferencedInfrastrukturabfragen(id)
+                .stream()
+                .map(this.abfrageApiMapper::model2ListElementDto)
+                .collect(Collectors.toList());
+        return new ResponseEntity<>(infrastrukturabfragen, HttpStatus.OK);
+    }
+
+    @Transactional(readOnly = true)
+    @GetMapping("bauvorhaben/referenced/infrastruktureinrichtung/{id}")
+    @Operation(
+        summary = "Lade alle Infrastruktureinrichtungen die einem Bauvorhaben angehören",
+        description = "Das Ergebnis wird anhand des InfrastruktureinrichtungTyps und innerhalb des Types alphabetisch sortiert"
+    )
+    @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "OK") })
+    @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_READ_BAUVORHABEN.name())")
+    public ResponseEntity<List<InfrastruktureinrichtungListElementDto>> getReferencedInfrastruktureinrichtung(
+        @PathVariable @NotNull final UUID id
+    ) {
+        final var infrastruktureinrichtungen =
+            this.bauvorhabenService.getReferencedInfrastruktureinrichtungen(id)
+                .stream()
+                .map(this.infrastruktureinrichtungApiMapper::model2ListElementDto)
+                .collect(Collectors.toList());
+        return new ResponseEntity<>(infrastruktureinrichtungen, HttpStatus.OK);
     }
 }

@@ -21,6 +21,7 @@ import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Grundschul
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Kindergarten;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Kinderkrippe;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Schule;
+import de.muenchen.isi.infrastructure.repository.BauvorhabenRepository;
 import de.muenchen.isi.infrastructure.repository.InfrastruktureinrichtungRepository;
 import java.util.List;
 import java.util.UUID;
@@ -41,6 +42,9 @@ import org.springframework.test.context.ActiveProfiles;
 @ActiveProfiles(profiles = { TestConstants.SPRING_UNIT_TEST_PROFILE, TestConstants.SPRING_NO_SECURITY_PROFILE })
 @MockitoSettings(strictness = Strictness.LENIENT)
 class InfrastruktureinrichtungServiceTest {
+
+    @Autowired
+    BauvorhabenRepository bauvorhabenRepository;
 
     @Autowired
     private InfrastruktureinrichtungService infrastruktureinrichtungService;
