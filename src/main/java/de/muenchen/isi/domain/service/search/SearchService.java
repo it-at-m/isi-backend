@@ -8,7 +8,6 @@ import de.muenchen.isi.domain.model.search.SearchResultsModel;
 import de.muenchen.isi.domain.model.search.SuchwortModel;
 import de.muenchen.isi.domain.model.search.SuchwortSuggestionsModel;
 import de.muenchen.isi.infrastructure.entity.BaseEntity;
-import de.muenchen.isi.infrastructure.entity.search.Suchwort;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -54,7 +53,7 @@ public class SearchService {
     }
 
     /**
-     * Diese Methode führt die Suche zur Ermittlung der Suchwortvorschläge durch. Die Suche wird für die Entität {@link Suchwort} durchgeführt.
+     * Diese Methode führt die Suche zur Ermittlung der Suchwortvorschläge durch. Die Suche wird für die Entität  durchgeführt.
      *
      * @param singleWordQuery als Query bestehend aus einem Wort. Es dürfen sich keine Leerzeichen zwischen den einzelnen Buchstaben befinden.
      * @return die Suchwortvorschläge für das im Parameter gegebene Wort.
