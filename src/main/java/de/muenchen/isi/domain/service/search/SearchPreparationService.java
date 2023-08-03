@@ -12,6 +12,7 @@ import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Kindergart
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Kinderkrippe;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Mittelschule;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -25,6 +26,22 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @Slf4j
 public class SearchPreparationService {
+
+    public static final String SUFFIX_ATTRIBUTE_SEARCHWORD_SUGGESTION = "_searchword_suggestion";
+
+    /**
+     *
+     * @param searchableEntity
+     * @return
+     */
+    protected String[] getNamesOfSearchableAttributesForSearchwordSuggestion(
+        final Class<? extends BaseEntity> searchableEntity
+    ) {
+        return Arrays
+            .stream(getNamesOfSearchableAttributes(List.of(searchableEntity)))
+            .map(searchableAttribute -> searchableAttribute + SUFFIX_ATTRIBUTE_SEARCHWORD_SUGGESTION)
+            .toArray(String[]::new);
+    }
 
     /**
      * Diese Methode ermittelt auf Basis der im Parameter gegebenen Entitätsklassen die dazugehörigen suchbaren Attribute.

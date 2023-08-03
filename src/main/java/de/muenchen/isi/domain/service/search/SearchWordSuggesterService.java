@@ -3,6 +3,10 @@ package de.muenchen.isi.domain.service.search;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.model.search.SearchQueryForEntitiesModel;
 import de.muenchen.isi.domain.model.search.SuchwortSuggestionsModel;
+import de.muenchen.isi.domain.model.search.request.CompleteSuggestionRequest;
+import de.muenchen.isi.domain.model.search.request.CompletionRequest;
+import de.muenchen.isi.domain.model.search.request.FuzzyRequest;
+import de.muenchen.isi.domain.model.search.request.SuggestionRequest;
 import de.muenchen.isi.infrastructure.entity.BaseEntity;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -34,65 +38,7 @@ public class SearchWordSuggesterService {
 
     private final SearchPreparationService searchPreparationService;
 
-    /**
-     *
-     *
-     * @param searchQueryInformation mit der Suchquery bestehend aus einem Wort. Es dürfen sich keine Leerzeichen zwischen den einzelnen Buchstaben befinden.
-     * @return die Suchwortvorschläge für das im Parameter gegebene Wort.
-     */
-    public SuchwortSuggestionsModel searchForSearchwordSuggestion(
-        final SearchQueryForEntitiesModel searchQueryInformation
-    ) throws EntityNotFoundException {
-        final List<Class<? extends BaseEntity>> searchableEntities = searchPreparationService.getSearchableEntities(
-            searchQueryInformation
-        );
-        final var foundSuchwortSuggestions =
-            this.doSearchForSearchwordSuggestion(searchableEntities, searchQueryInformation.getSearchQuery())
-                .collect(Collectors.toList());
-        final var model = new SuchwortSuggestionsModel();
-        model.setSuchwortSuggestions(foundSuchwortSuggestions);
-        return model;
-    }
-
-    /**
-     * Diese Methode führt die Suche zur Ermittlung der Suchwortvorschläge durch. Die Suche wird für die Entität  durchgeführt.
-     *
-     * @param singleWordQuery als Query bestehend aus einem Wort. Es dürfen sich keine Leerzeichen zwischen den einzelnen Buchstaben befinden.
-     * @return die Suchwortvorschläge für das im Parameter gegebene Wort.
-     */
-    public Stream<String> doSearchForSearchwordSuggestion(
-        final List<Class<? extends BaseEntity>> searchableEntities,
-        final String singleWordQuery
-    ) {
-        // Ermittlung der suchbaren Attribute je suchbarer Entität
-        final var searchableAttributes = searchPreparationService.getNamesOfSearchableAttributes(searchableEntities);
-
-        final var adaptedSingleWordQuery = StringUtils.lowerCase(StringUtils.trimToEmpty(singleWordQuery));
-
-        SearchMapping searchMapping = Search.mapping(entityManager.getEntityManagerFactory());
-        Backend backend = searchMapping.backend();
-        ElasticsearchBackend elasticsearchBackend = backend.unwrap(ElasticsearchBackend.class);
-        RestClient restClient = elasticsearchBackend.client(RestClient.class);
-
-        /*
-
-# Es muss neben dem Textattribut noch ein zusätzliches completion-Attribut vom Typ "completion" vorgehalten werden.
-POST infrastrukturabfrage-read/_search
-{
-  "_source": "not-available-name",
-  "suggest": {
-    "abfrage_nameAbfrage_completion_suggetion" : {
-      "text" : "dasd",
-      "completion" : {
-        "field" : "abfrage.nameAbfrage_completion_suggetion",
-        "size": 5,
-        "fuzzy": {
-          "fuzziness": 0
-        }
-      }
-    }
-  }
-}
+    /*
 
 #Response
 
@@ -134,11 +80,62 @@ POST infrastrukturabfrage-read/_search
   }
 }
 
-
-
          */
 
-        Request request = new Request("POST", "infrastrukturabfrage-read/_search");
+    /**
+     *
+     *
+     * @param searchQueryInformation mit der Suchquery bestehend aus einem Wort. Es dürfen sich keine Leerzeichen zwischen den einzelnen Buchstaben befinden.
+     * @return die Suchwortvorschläge für das im Parameter gegebene Wort.
+     */
+    public SuchwortSuggestionsModel searchForSearchwordSuggestion(
+        final SearchQueryForEntitiesModel searchQueryInformation
+    ) throws EntityNotFoundException {
+        final List<Class<? extends BaseEntity>> searchableEntities = searchPreparationService.getSearchableEntities(
+            searchQueryInformation
+        );
+        final var foundSuchwortSuggestions =
+            this.doSearchForSearchwordSuggestion(searchableEntities, searchQueryInformation.getSearchQuery())
+                .collect(Collectors.toList());
+        final var model = new SuchwortSuggestionsModel();
+        model.setSuchwortSuggestions(foundSuchwortSuggestions);
+        return model;
+    }
+
+    /**
+     * Diese Methode führt die Suche zur Ermittlung der Suchwortvorschläge durch. Die Suche wird für die Entität  durchgeführt.
+     *
+     * @param singleWordQuery als Query bestehend aus einem Wort. Es dürfen sich keine Leerzeichen zwischen den einzelnen Buchstaben befinden.
+     * @return die Suchwortvorschläge für das im Parameter gegebene Wort.
+     */
+    public Stream<String> doSearchForSearchwordSuggestion(
+        final List<Class<? extends BaseEntity>> searchableEntities,
+        final String singleWordQuery
+    ) {
+        SearchMapping searchMapping = Search.mapping(entityManager.getEntityManagerFactory());
+        Backend backend = searchMapping.backend();
+        ElasticsearchBackend elasticsearchBackend = backend.unwrap(ElasticsearchBackend.class);
+        try (RestClient restClient = elasticsearchBackend.client(RestClient.class)) {
+            return searchableEntities
+                .stream()
+                .flatMap(searchableEntity ->
+                    this.doSearchForSearchwordSuggestion(searchableEntity, singleWordQuery, restClient)
+                );
+        } catch (IOException exception) {
+            throw new RuntimeException(exception);
+        }
+    }
+
+    protected Stream<String> doSearchForSearchwordSuggestion(
+        final Class<? extends BaseEntity> searchableEntity,
+        final String singleWordQuery,
+        final RestClient restClient
+    ) {
+        final var searchabelAttributes = searchPreparationService.getNamesOfSearchableAttributesForSearchwordSuggestion(
+            searchableEntity
+        );
+        final var pathToSearchableIndex = getPathToSearchableIndex(searchableEntity);
+        Request request = new Request("POST", pathToSearchableIndex);
         request.setJsonEntity(
             "{\n" +
             "  \"_source\": \"not-available-name\",\n" +
@@ -166,5 +163,41 @@ POST infrastrukturabfrage-read/_search
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private String getPathToSearchableIndex(final Class<? extends BaseEntity> searchableEntity) {
+        return StringUtils.lowerCase(searchableEntity.getSimpleName()) + "-read/_search";
+    }
+
+    private CompleteSuggestionRequest createCompleteSuggestionRequestBody(
+        final List<String> searchableAttributes,
+        final String singleWordQuery
+    ) {
+        final var body = new CompleteSuggestionRequest();
+        body.set_source("unknown");
+        final var suggests = searchableAttributes
+            .stream()
+            .map(searchableAttribute -> createSuggestionRequest(searchableAttribute, singleWordQuery))
+            .collect(
+                Collectors.toMap(
+                    suggestionRequest -> suggestionRequest.getCompletion().getField(),
+                    suggestionRequest -> suggestionRequest
+                )
+            );
+        body.setSuggest(suggests);
+        return body;
+    }
+
+    private SuggestionRequest createSuggestionRequest(final String searchableAttribute, final String singleWordQuery) {
+        final var fuzzy = new FuzzyRequest();
+        fuzzy.setFuzziness(3);
+        final var completion = new CompletionRequest();
+        completion.setField(searchableAttribute);
+        completion.setSize(5);
+        completion.setFuzzy(fuzzy);
+        final var suggestion = new SuggestionRequest();
+        suggestion.setText(singleWordQuery);
+        suggestion.setCompletion(completion);
+        return suggestion;
     }
 }
