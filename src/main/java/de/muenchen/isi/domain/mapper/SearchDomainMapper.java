@@ -9,12 +9,10 @@ import de.muenchen.isi.domain.model.list.AbfrageListElementModel;
 import de.muenchen.isi.domain.model.list.BauvorhabenListElementModel;
 import de.muenchen.isi.domain.model.list.InfrastruktureinrichtungListElementModel;
 import de.muenchen.isi.domain.model.search.SearchResultModel;
-import de.muenchen.isi.domain.model.search.SuchwortModel;
 import de.muenchen.isi.infrastructure.entity.BaseEntity;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
 import de.muenchen.isi.infrastructure.entity.Infrastrukturabfrage;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Infrastruktureinrichtung;
-import de.muenchen.isi.infrastructure.entity.search.Suchwort;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.SubclassMapping;
@@ -24,8 +22,6 @@ import org.mapstruct.SubclassMapping;
     uses = { AbfrageDomainMapper.class, InfrastruktureinrichtungDomainMapper.class, BauvorhabenDomainMapper.class }
 )
 public interface SearchDomainMapper {
-    SuchwortModel entity2Model(final Suchwort entity);
-
     @SubclassMapping(source = Infrastruktureinrichtung.class, target = InfrastruktureinrichtungModel.class)
     @SubclassMapping(source = Bauvorhaben.class, target = BauvorhabenModel.class)
     @SubclassMapping(source = Infrastrukturabfrage.class, target = InfrastrukturabfrageModel.class)

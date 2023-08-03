@@ -18,7 +18,6 @@ import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.AbfrageAngel
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.InfrastruktureinrichtungModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.KinderkrippeModel;
 import de.muenchen.isi.domain.service.filehandling.DokumentService;
-import de.muenchen.isi.domain.service.search.SuchwortService;
 import de.muenchen.isi.infrastructure.entity.Abfrage;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
 import de.muenchen.isi.infrastructure.entity.Infrastrukturabfrage;
@@ -62,9 +61,6 @@ public class BauvorhabenServiceTest {
     @Mock
     private DokumentService dokumentService;
 
-    @Mock
-    private SuchwortService suchwortService;
-
     @BeforeEach
     public void beforeEach() {
         this.bauvorhabenService =
@@ -73,16 +69,14 @@ public class BauvorhabenServiceTest {
                 this.bauvorhabenRepository,
                 this.infrastrukturabfrageRepository,
                 this.infrastruktureinrichtungRepository,
-                this.dokumentService,
-                this.suchwortService
+                this.dokumentService
             );
 
         Mockito.reset(
             this.bauvorhabenRepository,
             this.infrastrukturabfrageRepository,
             this.infrastruktureinrichtungRepository,
-            this.dokumentService,
-            this.suchwortService
+            this.dokumentService
         );
     }
 

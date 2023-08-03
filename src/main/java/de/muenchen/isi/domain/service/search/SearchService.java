@@ -5,9 +5,9 @@ import de.muenchen.isi.domain.mapper.SearchDomainMapper;
 import de.muenchen.isi.domain.model.BaseEntityModel;
 import de.muenchen.isi.domain.model.search.SearchQueryForEntitiesModel;
 import de.muenchen.isi.domain.model.search.SearchResultsModel;
-import de.muenchen.isi.domain.model.search.SuchwortModel;
 import de.muenchen.isi.domain.model.search.SuchwortSuggestionsModel;
 import de.muenchen.isi.infrastructure.entity.BaseEntity;
+import de.muenchen.isi.infrastructure.entity.Infrastrukturabfrage;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -16,10 +16,9 @@ import javax.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.elasticsearch.client.Request;
-import org.elasticsearch.client.RestClient;
-import org.hibernate.search.backend.elasticsearch.ElasticsearchBackend;
+import org.hibernate.search.backend.elasticsearch.ElasticsearchExtension;
 import org.hibernate.search.engine.search.common.BooleanOperator;
+import org.hibernate.search.engine.search.predicate.dsl.SearchPredicateFactory;
 import org.hibernate.search.mapper.orm.Search;
 import org.springframework.stereotype.Service;
 
@@ -39,13 +38,17 @@ public class SearchService {
     /**
      *
      *
-     * @param singleWordQuery als Query bestehend aus einem Wort. Es dürfen sich keine Leerzeichen zwischen den einzelnen Buchstaben befinden.
+     * @param searchQueryInformation mit der Suchquery bestehend aus einem Wort. Es dürfen sich keine Leerzeichen zwischen den einzelnen Buchstaben befinden.
      * @return die Suchwortvorschläge für das im Parameter gegebene Wort.
      */
-    public SuchwortSuggestionsModel searchForSearchwordSuggestion(final String singleWordQuery) {
+    public SuchwortSuggestionsModel searchForSearchwordSuggestion(
+        final SearchQueryForEntitiesModel searchQueryInformation
+    ) throws EntityNotFoundException {
+        final List<Class<? extends BaseEntity>> searchableEntities = searchPreparationService.getSearchableEntities(
+            searchQueryInformation
+        );
         final var foundSuchwortSuggestions =
-            this.doSearchForSearchwordSuggestion(singleWordQuery)
-                .map(SuchwortModel::getSuchwort)
+            this.doSearchForSearchwordSuggestion(searchableEntities, searchQueryInformation.getSearchQuery())
                 .collect(Collectors.toList());
         final var model = new SuchwortSuggestionsModel();
         model.setSuchwortSuggestions(foundSuchwortSuggestions);
@@ -58,8 +61,14 @@ public class SearchService {
      * @param singleWordQuery als Query bestehend aus einem Wort. Es dürfen sich keine Leerzeichen zwischen den einzelnen Buchstaben befinden.
      * @return die Suchwortvorschläge für das im Parameter gegebene Wort.
      */
-    public Stream<SuchwortModel> doSearchForSearchwordSuggestion(final String singleWordQuery) {
-        final var wildcardSingleWordQuery = StringUtils.lowerCase(StringUtils.trimToEmpty(singleWordQuery)) + "*";
+    public Stream<String> doSearchForSearchwordSuggestion(
+        final List<Class<? extends BaseEntity>> searchableEntities,
+        final String singleWordQuery
+    ) {
+        // Ermittlung der suchbaren Attribute je suchbarer Entität
+        final var searchableAttributes = searchPreparationService.getNamesOfSearchableAttributes(searchableEntities);
+
+        final var adaptedSingleWordQuery = StringUtils.lowerCase(StringUtils.trimToEmpty(singleWordQuery));
 
         /*
 
@@ -82,17 +91,19 @@ POST infrastrukturabfrage-000001/_search
 
          */
 
-        // https://docs.jboss.org/hibernate/stable/search/reference/en-US/html_single/#elasticsearch-client-access
-
-        final var restClientElasticsearch = Search
-            .mapping(entityManager.getEntityManagerFactory())
-            .backend()
-            .unwrap(ElasticsearchBackend.class)
-            .client(RestClient.class);
-
-        final var request = new Request("POST", "/");
-
-        return null;
+        return Search
+            .session(entityManager.getEntityManagerFactory().createEntityManager())
+            .search(List.of(Infrastrukturabfrage.class))
+            .extension(ElasticsearchExtension.get())
+            .select(f -> f.composite().from(f.field("abfrage.nameAbfrage", String.class)).as(s -> s + s))
+            // Verhindern der Entitätssuche
+            .where(SearchPredicateFactory::matchNone)
+            // Erstellen des SuggestionRequest
+            .requestTransformer(context -> {
+                System.err.println(context.parametersMap().toString());
+            })
+            .fetchAllHits()
+            .stream();
     }
 
     /**

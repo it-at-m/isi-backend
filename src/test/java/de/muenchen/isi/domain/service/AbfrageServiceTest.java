@@ -29,7 +29,6 @@ import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.Infrastruktu
 import de.muenchen.isi.domain.model.abfrageSachbearbeitungInBearbeitungSachbearbeitung.AbfragevarianteInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.domain.model.abfrageSachbearbeitungInBearbeitungSachbearbeitung.InfrastrukturabfrageInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.domain.service.filehandling.DokumentService;
-import de.muenchen.isi.domain.service.search.SuchwortService;
 import de.muenchen.isi.infrastructure.entity.Abfrage;
 import de.muenchen.isi.infrastructure.entity.Abfragevariante;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
@@ -84,19 +83,11 @@ class AbfrageServiceTest {
     @Mock
     private DokumentService dokumentService;
 
-    @Mock
-    private SuchwortService suchwortService;
-
     @BeforeEach
     public void beforeEach() {
         this.abfrageService =
-            new AbfrageService(
-                this.abfrageDomainMapper,
-                this.infrastrukturabfrageRepository,
-                this.dokumentService,
-                this.suchwortService
-            );
-        Mockito.reset(this.infrastrukturabfrageRepository, this.dokumentService, this.suchwortService);
+            new AbfrageService(this.abfrageDomainMapper, this.infrastrukturabfrageRepository, this.dokumentService);
+        Mockito.reset(this.infrastrukturabfrageRepository, this.dokumentService);
     }
 
     @Test

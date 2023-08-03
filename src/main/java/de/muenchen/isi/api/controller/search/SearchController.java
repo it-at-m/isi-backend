@@ -11,17 +11,14 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import javax.validation.Valid;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
@@ -35,16 +32,17 @@ public class SearchController {
 
     private final SearchService searchService;
 
-    @GetMapping("/searchword-suggestion")
+    @PostMapping("/searchword-suggestion")
     @Transactional(readOnly = true)
-    @Operation(summary = "Suche nach Suchwortvorschläge für ein einzelnes im Parameter gegebenes Wort.")
+    @Operation(summary = "Suche nach Suchwortvorschläge für das im Request-Body gegebene Suchwort.")
     @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "OK") })
     public ResponseEntity<SuchwortSuggestionsDto> searchForSearchwordSuggestion(
-        @RequestParam(value = "single-word-query") @NotEmpty final String singleWordQuery
-    ) {
-        //final var model = searchService.searchForSearchwordSuggestion(singleWordQuery);
-        //final var dto = searchApiMapper.model2Dto(model);
-        return ResponseEntity.ok(new SuchwortSuggestionsDto());
+        @RequestBody @NotNull @Valid final SearchQueryForEntitiesDto searchQueryInformation
+    ) throws EntityNotFoundException {
+        final var requestModel = searchApiMapper.dto2Model(searchQueryInformation);
+        final var model = searchService.searchForSearchwordSuggestion(requestModel);
+        final var dto = searchApiMapper.model2Dto(model);
+        return ResponseEntity.ok(dto);
     }
 
     @PostMapping("/entities")
