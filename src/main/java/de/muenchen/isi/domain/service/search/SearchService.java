@@ -77,11 +77,11 @@ POST infrastrukturabfrage-read/_search
 {
   "_source": "not-available-name",
   "suggest": {
-    "abfrage.nameAbfrage_completion_suggetion" : {
+    "abfrage_nameAbfrage_completion_suggetion" : {
       "text" : "dasd",
       "completion" : {
         "field" : "abfrage.nameAbfrage_completion_suggetion",
-        "size": 5
+        "size": 5,
         "fuzzy": {
           "fuzziness": 0
         }
