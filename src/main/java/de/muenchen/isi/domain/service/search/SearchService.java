@@ -73,15 +73,18 @@ public class SearchService {
         /*
 
 # Es muss neben dem Textattribut noch ein zusätzliches completion-Attribut vom Typ "completion" vorgehalten werden.
-POST infrastrukturabfrage-000001/_search
+POST infrastrukturabfrage-read/_search
 {
-  "_source": "suggest",
+  "_source": "not-available-name",
   "suggest": {
-    "my-suggestion" : {
-      "text" : "D ",
+    "abfrage.nameAbfrage_completion_suggetion" : {
+      "text" : "dasd",
       "completion" : {
-        "field" : "abfrage.nameAbfrage_completion_suggetion"
-
+        "field" : "abfrage.nameAbfrage_completion_suggetion",
+        "size": 5
+        "fuzzy": {
+          "fuzziness": 0
+        }
       }
     }
   }
@@ -100,6 +103,10 @@ POST infrastrukturabfrage-000001/_search
             .where(SearchPredicateFactory::matchNone)
             // Erstellen des SuggestionRequest
             .requestTransformer(context -> {
+                context.parametersMap().clear();
+                final var jsonBody = context.body();
+                jsonBody.entrySet().clear();
+
                 System.err.println(context.parametersMap().toString());
             })
             .fetchAllHits()
