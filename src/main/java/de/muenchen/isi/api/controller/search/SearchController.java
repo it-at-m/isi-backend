@@ -5,7 +5,8 @@ import de.muenchen.isi.api.dto.search.SearchResultsDto;
 import de.muenchen.isi.api.dto.search.SuchwortSuggestionsDto;
 import de.muenchen.isi.api.mapper.SearchApiMapper;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
-import de.muenchen.isi.domain.service.search.SearchService;
+import de.muenchen.isi.domain.service.search.EntitySearchService;
+import de.muenchen.isi.domain.service.search.SearchWordSuggesterService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -30,7 +31,9 @@ public class SearchController {
 
     private final SearchApiMapper searchApiMapper;
 
-    private final SearchService searchService;
+    private final SearchWordSuggesterService searchService;
+
+    private final EntitySearchService entitySearchService;
 
     @PostMapping("/searchword-suggestion")
     @Transactional(readOnly = true)
@@ -53,7 +56,7 @@ public class SearchController {
         @RequestBody @NotNull @Valid final SearchQueryForEntitiesDto searchQueryInformation
     ) throws EntityNotFoundException {
         final var requestModel = searchApiMapper.dto2Model(searchQueryInformation);
-        final var responseModel = searchService.searchForEntities(requestModel);
+        final var responseModel = entitySearchService.searchForEntities(requestModel);
         final var dto = searchApiMapper.model2Dto(responseModel);
         return ResponseEntity.ok(dto);
     }
