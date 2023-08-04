@@ -89,7 +89,7 @@ public class SearchwordSuggesterRepository {
         }
     }
 
-    private MultisearchRequest createMultisearchResponseRequestBody(
+    protected MultisearchRequest createMultisearchResponseRequestBody(
         final Map<Class<? extends BaseEntity>, List<String>> attributesForSearchableEntities,
         final String singleWordQuery
     ) {
@@ -105,13 +105,13 @@ public class SearchwordSuggesterRepository {
         return body;
     }
 
-    private IndexRequest createIndexRequest(final Class<? extends BaseEntity> searchableEntity) {
+    protected IndexRequest createIndexRequest(final Class<? extends BaseEntity> searchableEntity) {
         final var indexRequest = new IndexRequest();
         indexRequest.setIndex(getSearchableIndex(searchableEntity));
         return indexRequest;
     }
 
-    private CompleteSuggestionRequest createCompleteSuggestionRequest(
+    protected CompleteSuggestionRequest createCompleteSuggestionRequest(
         final List<String> searchableAttributes,
         final String singleWordQuery
     ) {
@@ -130,7 +130,10 @@ public class SearchwordSuggesterRepository {
         return completeSuggestionRequest;
     }
 
-    private SuggestionRequest createSuggestionRequest(final String searchableAttribute, final String singleWordQuery) {
+    protected SuggestionRequest createSuggestionRequest(
+        final String searchableAttribute,
+        final String singleWordQuery
+    ) {
         final var fuzzy = new FuzzyRequest();
         fuzzy.setFuzziness(3);
         final var completion = new CompletionRequest();
@@ -143,7 +146,7 @@ public class SearchwordSuggesterRepository {
         return suggestion;
     }
 
-    private String getSearchableIndex(final Class<? extends BaseEntity> searchableEntity) {
+    protected String getSearchableIndex(final Class<? extends BaseEntity> searchableEntity) {
         return StringUtils.lowerCase(searchableEntity.getSimpleName()) + "-read";
     }
 }
