@@ -87,8 +87,6 @@ public class SearchwordSuggesterRepository {
         final Map<Class<? extends BaseEntity>, List<String>> attributesForSearchableEntities,
         final String singleWordQuery
     ) {
-        final var body = new MultisearchRequest();
-
         final var multisearchIndexAndCompleteSuggestionPair = new HashMap<IndexRequest, CompleteSuggestionRequest>();
         for (final var attributesForSearchableEntity : attributesForSearchableEntities.entrySet()) {
             multisearchIndexAndCompleteSuggestionPair.put(
@@ -96,6 +94,7 @@ public class SearchwordSuggesterRepository {
                 this.createCompleteSuggestionRequest(attributesForSearchableEntity.getValue(), singleWordQuery)
             );
         }
+        final var body = new MultisearchRequest();
         body.setMultisearchIndexAndCompleteSuggestionPair(multisearchIndexAndCompleteSuggestionPair);
         return body;
     }
