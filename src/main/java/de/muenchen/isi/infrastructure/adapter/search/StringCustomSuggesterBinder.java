@@ -31,14 +31,13 @@ public class StringCustomSuggesterBinder implements ValueBinder {
 
         @Override
         public JsonElement toIndexedValue(final String value, final ValueBridgeToIndexedValueContext context) {
+            final var jsonObject = new JsonObject();
             final var jsonArray = new JsonArray();
-            Arrays
-                .stream(StringUtils.isEmpty(value) ? new String[0] : StringUtils.split(value))
-                .map(JsonPrimitive::new)
-                .forEach(jsonArray::add);
-            JsonObject jsonObject = new JsonObject();
+            if (StringUtils.isNotEmpty(value)) {
+                Arrays.stream(StringUtils.split(value)).map(JsonPrimitive::new).forEach(jsonArray::add);
+            }
             jsonObject.add("input", jsonArray);
-            return value == null ? null : jsonObject;
+            return jsonObject;
         }
     }
 }
