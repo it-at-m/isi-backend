@@ -73,7 +73,6 @@ public class SearchPreparationService {
         ) {
             searchableAttributes.addAll(getNamesOfSearchableAttributesForInfrastruktureinrichtung());
         }
-        log.debug("Die Namen aller suchbaren Attribute: {}", searchableAttributes);
         return searchableAttributes.toArray(String[]::new);
     }
 
@@ -89,7 +88,6 @@ public class SearchPreparationService {
         searchableAttributes.add("abfrage.nameAbfrage");
         searchableAttributes.add("abfragevarianten.realisierungVon");
         searchableAttributes.add("abfragevariantenSachbearbeitung.realisierungVon");
-        log.debug("Die Namen aller suchbaren Attribute einer Infrastrukturabfrage: {}", searchableAttributes);
         return searchableAttributes;
     }
 
@@ -104,7 +102,6 @@ public class SearchPreparationService {
         searchableAttributes.add("verortung.gemarkungen.name");
         searchableAttributes.add("verortung.gemarkungen.flurstuecke.nummer");
         searchableAttributes.add("bebauungsplannummer");
-        log.debug("Die Namen aller suchbaren Attribute eines Bauvorhabens: {}", searchableAttributes);
         return searchableAttributes;
     }
 
@@ -114,7 +111,6 @@ public class SearchPreparationService {
         searchableAttributes.add("adresse.hausnummer");
         searchableAttributes.add("nameEinrichtung");
         searchableAttributes.add("status");
-        log.debug("Die Namen aller suchbaren Attribute einer Infrastruktureinrichtung: {}", searchableAttributes);
         return searchableAttributes;
     }
 

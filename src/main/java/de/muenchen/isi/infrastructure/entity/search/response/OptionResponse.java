@@ -11,9 +11,11 @@ package de.muenchen.isi.infrastructure.entity.search.response;
           }
  */
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 @Data
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class OptionResponse {
 
     private String text;

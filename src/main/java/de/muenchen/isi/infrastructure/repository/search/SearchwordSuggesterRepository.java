@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.client.Request;
@@ -26,6 +27,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 @RequiredArgsConstructor
+@Slf4j
 public class SearchwordSuggesterRepository {
 
     private final EntityManager entityManager;
@@ -40,30 +42,32 @@ public class SearchwordSuggesterRepository {
             .mapping(entityManager.getEntityManagerFactory())
             .backend()
             .unwrap(ElasticsearchBackend.class);
-        try (final var restClient = elasticsearchBackend.client(RestClient.class)) {
-            return attributesForSearchableEntities
-                .entrySet()
-                .parallelStream()
-                .map(attributesForSearchableEntity ->
-                    this.doSearchForSearchwordSuggestion(
-                            attributesForSearchableEntity.getKey(),
-                            attributesForSearchableEntity.getValue(),
-                            singleWordQuery,
-                            restClient
-                        )
-                )
-                .flatMap(completeSuggestionResponse ->
-                    completeSuggestionResponse
-                        .getSuggest()
-                        .values()
-                        .stream()
-                        .flatMap(attributeSuggestionResponse -> attributeSuggestionResponse.getOptions().stream())
-                        .map(OptionResponse::getText)
-                )
-                .distinct();
-        } catch (IOException exception) {
-            throw new RuntimeException(exception);
-        }
+        final var restClient = elasticsearchBackend.client(RestClient.class);
+
+        return attributesForSearchableEntities
+            .entrySet()
+            .parallelStream()
+            .map(attributesForSearchableEntity ->
+                this.doSearchForSearchwordSuggestion(
+                        attributesForSearchableEntity.getKey(),
+                        attributesForSearchableEntity.getValue(),
+                        singleWordQuery,
+                        restClient
+                    )
+            )
+            .flatMap(completeSuggestionResponse ->
+                completeSuggestionResponse
+                    .getSuggest()
+                    .values()
+                    .stream()
+                    .flatMap(attributeSuggestionsResponse ->
+                        attributeSuggestionsResponse
+                            .stream()
+                            .flatMap(attributeSuggestionResponse -> attributeSuggestionResponse.getOptions().stream())
+                    )
+                    .map(OptionResponse::getText)
+            )
+            .distinct();
     }
 
     protected CompleteSuggestionResponse doSearchForSearchwordSuggestion(
@@ -72,11 +76,12 @@ public class SearchwordSuggesterRepository {
         final String singleWordQuery,
         final RestClient restClient
     ) {
+        final var completionSuggestionRequestBody =
+            this.createCompleteSuggestionRequestBody(searchableAttributes, singleWordQuery);
+        final var pathToSearchableIndex = this.getPathToSearchableIndex(searchableEntity);
+        log.debug("Suche nach Suchwort-Suggestion im Index: {}", pathToSearchableIndex);
         try {
-            final var completionSuggestionRequestBody =
-                this.createCompleteSuggestionRequestBody(searchableAttributes, singleWordQuery);
             final var bodyAsString = new ObjectMapper().writeValueAsString(completionSuggestionRequestBody);
-            final var pathToSearchableIndex = this.getPathToSearchableIndex(searchableEntity);
             final var request = new Request("POST", pathToSearchableIndex);
             request.setJsonEntity(bodyAsString);
             try (final var inputstream = restClient.performRequest(request).getEntity().getContent()) {
