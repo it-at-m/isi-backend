@@ -70,6 +70,10 @@ public class SearchwordSuggesterRepository {
         final RestClient restClient
     ) {
         try {
+            // Erstellen eines Multisearch-Request-Body um gleichzeitig über mehere Indices suchen zu können.
+            // https://www.elastic.co/guide/en/elasticsearch/reference/current/search-multi-search.html
+            // Je Suchindex wird eine Suche basieren auf den completion-suggester durchgeführt.
+            // https://www.elastic.co/guide/en/elasticsearch/reference/current/search-suggesters.html#completion-suggester
             final var multisearchRequest =
                 this.createMultisearchResponseRequestBody(attributesForSearchableEntities, singleWordQuery);
             final var request = new Request("POST", "_msearch");
@@ -109,8 +113,8 @@ public class SearchwordSuggesterRepository {
         final List<String> searchableAttributes,
         final String singleWordQuery
     ) {
-        final var body = new CompleteSuggestionRequest();
-        body.set_source("unknown");
+        final var completeSuggestionRequest = new CompleteSuggestionRequest();
+        completeSuggestionRequest.set_source("unknown");
         final var suggests = searchableAttributes
             .stream()
             .map(searchableAttribute -> createSuggestionRequest(searchableAttribute, singleWordQuery))
@@ -120,8 +124,8 @@ public class SearchwordSuggesterRepository {
                     suggestionRequest -> suggestionRequest
                 )
             );
-        body.setSuggest(suggests);
-        return body;
+        completeSuggestionRequest.setSuggest(suggests);
+        return completeSuggestionRequest;
     }
 
     private SuggestionRequest createSuggestionRequest(final String searchableAttribute, final String singleWordQuery) {
