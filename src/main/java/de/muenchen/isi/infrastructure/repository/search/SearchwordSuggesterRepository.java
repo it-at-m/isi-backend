@@ -1,15 +1,17 @@
 package de.muenchen.isi.infrastructure.repository.search;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import de.muenchen.isi.infrastructure.entity.BaseEntity;
 import de.muenchen.isi.infrastructure.entity.search.request.CompleteSuggestionRequest;
 import de.muenchen.isi.infrastructure.entity.search.request.CompletionRequest;
 import de.muenchen.isi.infrastructure.entity.search.request.FuzzyRequest;
+import de.muenchen.isi.infrastructure.entity.search.request.IndexRequest;
+import de.muenchen.isi.infrastructure.entity.search.request.MultisearchRequest;
 import de.muenchen.isi.infrastructure.entity.search.request.SuggestionRequest;
-import de.muenchen.isi.infrastructure.entity.search.response.CompleteSuggestionResponse;
+import de.muenchen.isi.infrastructure.entity.search.response.MultisearchResponse;
 import de.muenchen.isi.infrastructure.entity.search.response.OptionResponse;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -44,17 +46,9 @@ public class SearchwordSuggesterRepository {
             .unwrap(ElasticsearchBackend.class);
         final var restClient = elasticsearchBackend.client(RestClient.class);
 
-        return attributesForSearchableEntities
-            .entrySet()
-            .parallelStream()
-            .map(attributesForSearchableEntity ->
-                this.doSearchForSearchwordSuggestion(
-                        attributesForSearchableEntity.getKey(),
-                        attributesForSearchableEntity.getValue(),
-                        singleWordQuery,
-                        restClient
-                    )
-            )
+        return this.doSearchForSearchwordSuggestion(attributesForSearchableEntities, singleWordQuery, restClient)
+            .getResponses()
+            .stream()
             .flatMap(completeSuggestionResponse ->
                 completeSuggestionResponse
                     .getSuggest()
@@ -70,34 +64,49 @@ public class SearchwordSuggesterRepository {
             .distinct();
     }
 
-    protected CompleteSuggestionResponse doSearchForSearchwordSuggestion(
-        final Class<? extends BaseEntity> searchableEntity,
-        List<String> searchableAttributes,
+    protected MultisearchResponse doSearchForSearchwordSuggestion(
+        final Map<Class<? extends BaseEntity>, List<String>> attributesForSearchableEntities,
         final String singleWordQuery,
         final RestClient restClient
     ) {
-        final var completionSuggestionRequestBody =
-            this.createCompleteSuggestionRequestBody(searchableAttributes, singleWordQuery);
-        final var pathToSearchableIndex = this.getPathToSearchableIndex(searchableEntity);
-        log.debug("Suche nach Suchwort-Suggestion im Index: {}", pathToSearchableIndex);
         try {
-            final var bodyAsString = new ObjectMapper().writeValueAsString(completionSuggestionRequestBody);
-            final var request = new Request("POST", pathToSearchableIndex);
-            request.setJsonEntity(bodyAsString);
+            final var multisearchRequest =
+                this.createMultisearchResponseRequestBody(attributesForSearchableEntities, singleWordQuery);
+            final var request = new Request("POST", "_msearch");
+            request.setJsonEntity(multisearchRequest.toMultiSearchRequestBody());
             try (final var inputstream = restClient.performRequest(request).getEntity().getContent()) {
                 final var jsonResponseBody = IOUtils.toString(inputstream, StandardCharsets.UTF_8);
-                return CompleteSuggestionResponse.fromJson(jsonResponseBody);
+                return MultisearchResponse.fromJson(jsonResponseBody);
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private String getPathToSearchableIndex(final Class<? extends BaseEntity> searchableEntity) {
-        return StringUtils.lowerCase(searchableEntity.getSimpleName()) + "-read/_search";
+    private MultisearchRequest createMultisearchResponseRequestBody(
+        final Map<Class<? extends BaseEntity>, List<String>> attributesForSearchableEntities,
+        final String singleWordQuery
+    ) {
+        final var body = new MultisearchRequest();
+
+        final var multisearchIndexAndCompleteSuggestionPair = new HashMap<IndexRequest, CompleteSuggestionRequest>();
+        for (final var attributesForSearchableEntity : attributesForSearchableEntities.entrySet()) {
+            multisearchIndexAndCompleteSuggestionPair.put(
+                this.createIndexRequest(attributesForSearchableEntity.getKey()),
+                this.createCompleteSuggestionRequest(attributesForSearchableEntity.getValue(), singleWordQuery)
+            );
+        }
+        body.setMultisearchIndexAndCompleteSuggestionPair(multisearchIndexAndCompleteSuggestionPair);
+        return body;
     }
 
-    private CompleteSuggestionRequest createCompleteSuggestionRequestBody(
+    private IndexRequest createIndexRequest(final Class<? extends BaseEntity> searchableEntity) {
+        final var indexRequest = new IndexRequest();
+        indexRequest.setIndex(getSearchableIndex(searchableEntity));
+        return indexRequest;
+    }
+
+    private CompleteSuggestionRequest createCompleteSuggestionRequest(
         final List<String> searchableAttributes,
         final String singleWordQuery
     ) {
@@ -127,5 +136,9 @@ public class SearchwordSuggesterRepository {
         suggestion.setText(singleWordQuery);
         suggestion.setCompletion(completion);
         return suggestion;
+    }
+
+    private String getSearchableIndex(final Class<? extends BaseEntity> searchableEntity) {
+        return StringUtils.lowerCase(searchableEntity.getSimpleName()) + "-read";
     }
 }

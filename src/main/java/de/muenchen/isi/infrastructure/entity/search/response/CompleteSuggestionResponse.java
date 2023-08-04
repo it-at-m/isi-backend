@@ -1,9 +1,6 @@
 package de.muenchen.isi.infrastructure.entity.search.response;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 import java.util.Map;
 import lombok.Data;
@@ -57,10 +54,4 @@ import lombok.Data;
 public class CompleteSuggestionResponse {
 
     private Map<String, List<AttributeSuggestionResponse>> suggest;
-
-    @JsonIgnore
-    public static CompleteSuggestionResponse fromJson(final String completeSuggestionResponse)
-        throws JsonProcessingException {
-        return new ObjectMapper().readValue(completeSuggestionResponse, CompleteSuggestionResponse.class);
-    }
 }

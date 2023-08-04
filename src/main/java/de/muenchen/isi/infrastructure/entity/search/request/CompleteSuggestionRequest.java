@@ -36,8 +36,7 @@ public class CompleteSuggestionRequest {
     private Map<String, SuggestionRequest> suggest = new HashMap<>();
 
     @JsonIgnore
-    public static String toJson(final CompleteSuggestionRequest completeSuggestionRequest)
-        throws JsonProcessingException {
-        return new ObjectMapper().writeValueAsString(completeSuggestionRequest);
+    public String toJson() throws JsonProcessingException {
+        return new ObjectMapper().writeValueAsString(this);
     }
 }
