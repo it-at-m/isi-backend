@@ -8,25 +8,15 @@ import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import java.util.Arrays;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.hibernate.search.backend.elasticsearch.ElasticsearchExtension;
 import org.hibernate.search.mapper.pojo.bridge.ValueBridge;
 import org.hibernate.search.mapper.pojo.bridge.binding.ValueBindingContext;
-import org.hibernate.search.mapper.pojo.bridge.mapping.programmatic.ValueBinder;
 import org.hibernate.search.mapper.pojo.bridge.runtime.ValueBridgeToIndexedValueContext;
 
-public class StatusAbfrageVorhabenCustomSuggesterBinder implements ValueBinder {
+public class StatusAbfrageCustomSuggesterBinder implements CustomSuggestionBinder {
 
     @Override
     public void bind(final ValueBindingContext<?> context) {
-        context.bridge(
-            StatusAbfrage.class,
-            new StatusAbfrageValueCompletionBridge(),
-            context
-                .typeFactory()
-                .extension(ElasticsearchExtension.get())
-                .asNative()
-                .mapping("{\"type\": \"completion\"}")
-        );
+        this.bind(StatusAbfrage.class, new StatusAbfrageValueCompletionBridge(), context);
     }
 
     private static class StatusAbfrageValueCompletionBridge implements ValueBridge<StatusAbfrage, JsonElement> {

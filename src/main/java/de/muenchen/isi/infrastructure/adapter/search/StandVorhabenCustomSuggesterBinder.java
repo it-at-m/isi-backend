@@ -8,25 +8,15 @@ import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVorhaben;
 import java.util.Arrays;
 import java.util.Objects;
 import org.apache.commons.lang3.StringUtils;
-import org.hibernate.search.backend.elasticsearch.ElasticsearchExtension;
 import org.hibernate.search.mapper.pojo.bridge.ValueBridge;
 import org.hibernate.search.mapper.pojo.bridge.binding.ValueBindingContext;
-import org.hibernate.search.mapper.pojo.bridge.mapping.programmatic.ValueBinder;
 import org.hibernate.search.mapper.pojo.bridge.runtime.ValueBridgeToIndexedValueContext;
 
-public class StandVorhabenCustomSuggesterBinder implements ValueBinder {
+public class StandVorhabenCustomSuggesterBinder implements CustomSuggestionBinder {
 
     @Override
     public void bind(final ValueBindingContext<?> context) {
-        context.bridge(
-            StandVorhaben.class,
-            new StandVorhabenValueCompletionBridge(),
-            context
-                .typeFactory()
-                .extension(ElasticsearchExtension.get())
-                .asNative()
-                .mapping("{\"type\": \"completion\"}")
-        );
+        this.bind(StandVorhaben.class, new StandVorhabenValueCompletionBridge(), context);
     }
 
     private static class StandVorhabenValueCompletionBridge implements ValueBridge<StandVorhaben, JsonElement> {

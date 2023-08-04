@@ -8,25 +8,19 @@ import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusInfrastrukturein
 import java.util.Arrays;
 import java.util.Objects;
 import org.apache.commons.lang3.StringUtils;
-import org.hibernate.search.backend.elasticsearch.ElasticsearchExtension;
 import org.hibernate.search.mapper.pojo.bridge.ValueBridge;
 import org.hibernate.search.mapper.pojo.bridge.binding.ValueBindingContext;
-import org.hibernate.search.mapper.pojo.bridge.mapping.programmatic.ValueBinder;
 import org.hibernate.search.mapper.pojo.bridge.runtime.ValueBridgeToIndexedValueContext;
 
-public class StatusInfrastruktureinrichtungVorhabenCustomSuggesterBinder implements ValueBinder {
+public class StatusInfrastruktureinrichtungCustomSuggesterBinder implements CustomSuggestionBinder {
 
     @Override
     public void bind(final ValueBindingContext<?> context) {
-        context.bridge(
-            StatusInfrastruktureinrichtung.class,
-            new StatusInfrastruktureinrichtungValueCompletionBridge(),
-            context
-                .typeFactory()
-                .extension(ElasticsearchExtension.get())
-                .asNative()
-                .mapping("{\"type\": \"completion\"}")
-        );
+        this.bind(
+                StatusInfrastruktureinrichtung.class,
+                new StatusInfrastruktureinrichtungValueCompletionBridge(),
+                context
+            );
     }
 
     private static class StatusInfrastruktureinrichtungValueCompletionBridge

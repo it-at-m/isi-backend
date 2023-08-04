@@ -6,25 +6,15 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import java.util.Arrays;
 import org.apache.commons.lang3.StringUtils;
-import org.hibernate.search.backend.elasticsearch.ElasticsearchExtension;
 import org.hibernate.search.mapper.pojo.bridge.ValueBridge;
 import org.hibernate.search.mapper.pojo.bridge.binding.ValueBindingContext;
-import org.hibernate.search.mapper.pojo.bridge.mapping.programmatic.ValueBinder;
 import org.hibernate.search.mapper.pojo.bridge.runtime.ValueBridgeToIndexedValueContext;
 
-public class StringCustomSuggesterBinder implements ValueBinder {
+public class StringCustomSuggesterBinder implements CustomSuggestionBinder {
 
     @Override
     public void bind(final ValueBindingContext<?> context) {
-        context.bridge(
-            String.class,
-            new StringValueCompletionBridge(),
-            context
-                .typeFactory()
-                .extension(ElasticsearchExtension.get())
-                .asNative()
-                .mapping("{\"type\": \"completion\"}")
-        );
+        this.bind(String.class, new StringValueCompletionBridge(), context);
     }
 
     private static class StringValueCompletionBridge implements ValueBridge<String, JsonElement> {
