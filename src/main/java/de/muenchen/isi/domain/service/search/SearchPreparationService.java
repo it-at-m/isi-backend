@@ -11,6 +11,7 @@ import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.HausFuerKi
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Kindergarten;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Kinderkrippe;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Mittelschule;
+import de.muenchen.isi.infrastructure.repository.search.SearchwordSuggesterRepository;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -28,8 +29,6 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class SearchPreparationService {
 
-    public static final String ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION = "_searchword_suggestion";
-
     /**
      *
      * @param searchableEntity
@@ -40,7 +39,9 @@ public class SearchPreparationService {
     ) {
         return Arrays
             .stream(getNamesOfSearchableAttributes(List.of(searchableEntity)))
-            .map(searchableAttribute -> searchableAttribute + ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION)
+            .map(searchableAttribute ->
+                searchableAttribute + SearchwordSuggesterRepository.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION
+            )
             .collect(Collectors.toList());
     }
 

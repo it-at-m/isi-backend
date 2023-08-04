@@ -1,7 +1,7 @@
 package de.muenchen.isi.infrastructure.entity.common;
 
-import de.muenchen.isi.domain.service.search.SearchPreparationService;
 import de.muenchen.isi.infrastructure.adapter.search.StringSuggestionBinder;
+import de.muenchen.isi.infrastructure.repository.search.SearchwordSuggesterRepository;
 import java.math.BigDecimal;
 import lombok.Data;
 import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBinderRef;
@@ -13,7 +13,7 @@ public class Flurstueck {
 
     @FullTextField
     @NonStandardField(
-        name = "nummer" + SearchPreparationService.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
+        name = "nummer" + SearchwordSuggesterRepository.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
         valueBinder = @ValueBinderRef(type = StringSuggestionBinder.class)
     )
     private String nummer;

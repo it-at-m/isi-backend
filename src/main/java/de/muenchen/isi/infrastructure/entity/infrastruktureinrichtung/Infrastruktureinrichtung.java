@@ -4,7 +4,6 @@
  */
 package de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung;
 
-import de.muenchen.isi.domain.service.search.SearchPreparationService;
 import de.muenchen.isi.infrastructure.adapter.search.StatusInfrastruktureinrichtungSuggestionBinder;
 import de.muenchen.isi.infrastructure.adapter.search.StatusInfrastruktureinrichtungValueBridge;
 import de.muenchen.isi.infrastructure.adapter.search.StringSuggestionBinder;
@@ -15,6 +14,7 @@ import de.muenchen.isi.infrastructure.entity.common.Adresse;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Einrichtungstraeger;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusInfrastruktureinrichtung;
+import de.muenchen.isi.infrastructure.repository.search.SearchwordSuggesterRepository;
 import java.math.BigDecimal;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
@@ -81,7 +81,7 @@ public abstract class Infrastruktureinrichtung extends BaseEntity {
 
     @FullTextField
     @NonStandardField(
-        name = "nameEinrichtung" + SearchPreparationService.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
+        name = "nameEinrichtung" + SearchwordSuggesterRepository.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
         valueBinder = @ValueBinderRef(type = StringSuggestionBinder.class)
     )
     @Column(nullable = false)
@@ -92,7 +92,7 @@ public abstract class Infrastruktureinrichtung extends BaseEntity {
 
     @FullTextField(valueBridge = @ValueBridgeRef(type = StatusInfrastruktureinrichtungValueBridge.class))
     @NonStandardField(
-        name = "status" + SearchPreparationService.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
+        name = "status" + SearchwordSuggesterRepository.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
         valueBinder = @ValueBinderRef(type = StatusInfrastruktureinrichtungSuggestionBinder.class)
     )
     @Enumerated(EnumType.STRING)

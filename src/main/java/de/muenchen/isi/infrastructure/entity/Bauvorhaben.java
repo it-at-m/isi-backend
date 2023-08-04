@@ -1,6 +1,5 @@
 package de.muenchen.isi.infrastructure.entity;
 
-import de.muenchen.isi.domain.service.search.SearchPreparationService;
 import de.muenchen.isi.infrastructure.adapter.search.StandVorhabenSuggestionBinder;
 import de.muenchen.isi.infrastructure.adapter.search.StandVorhabenValueBridge;
 import de.muenchen.isi.infrastructure.adapter.search.StringSuggestionBinder;
@@ -12,6 +11,7 @@ import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonVerfahrensgrundsa
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVorhaben;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
 import de.muenchen.isi.infrastructure.entity.filehandling.Dokument;
+import de.muenchen.isi.infrastructure.repository.search.SearchwordSuggesterRepository;
 import io.hypersistence.utils.hibernate.type.json.JsonType;
 import java.math.BigDecimal;
 import java.util.List;
@@ -50,7 +50,7 @@ public class Bauvorhaben extends BaseEntity {
 
     @FullTextField
     @NonStandardField(
-        name = "nameVorhaben" + SearchPreparationService.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
+        name = "nameVorhaben" + SearchwordSuggesterRepository.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
         valueBinder = @ValueBinderRef(type = StringSuggestionBinder.class)
     )
     @Column(nullable = false, unique = true)
@@ -64,7 +64,7 @@ public class Bauvorhaben extends BaseEntity {
 
     @FullTextField(valueBridge = @ValueBridgeRef(type = StandVorhabenValueBridge.class))
     @NonStandardField(
-        name = "standVorhaben" + SearchPreparationService.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
+        name = "standVorhaben" + SearchwordSuggesterRepository.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
         valueBinder = @ValueBinderRef(type = StandVorhabenSuggestionBinder.class)
     )
     @Enumerated(EnumType.STRING)
@@ -73,7 +73,7 @@ public class Bauvorhaben extends BaseEntity {
 
     @FullTextField
     @NonStandardField(
-        name = "bauvorhabenNummer" + SearchPreparationService.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
+        name = "bauvorhabenNummer" + SearchwordSuggesterRepository.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
         valueBinder = @ValueBinderRef(type = StringSuggestionBinder.class)
     )
     @Column(nullable = false)
@@ -93,7 +93,7 @@ public class Bauvorhaben extends BaseEntity {
 
     @FullTextField
     @NonStandardField(
-        name = "bebauungsplannummer" + SearchPreparationService.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
+        name = "bebauungsplannummer" + SearchwordSuggesterRepository.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
         valueBinder = @ValueBinderRef(type = StringSuggestionBinder.class)
     )
     @Column(nullable = true)

@@ -1,7 +1,7 @@
 package de.muenchen.isi.infrastructure.entity.common;
 
-import de.muenchen.isi.domain.service.search.SearchPreparationService;
 import de.muenchen.isi.infrastructure.adapter.search.StringSuggestionBinder;
+import de.muenchen.isi.infrastructure.repository.search.SearchwordSuggesterRepository;
 import lombok.Data;
 import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBinderRef;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
@@ -14,7 +14,7 @@ public class Stadtbezirk {
 
     @FullTextField
     @NonStandardField(
-        name = "name" + SearchPreparationService.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
+        name = "name" + SearchwordSuggesterRepository.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
         valueBinder = @ValueBinderRef(type = StringSuggestionBinder.class)
     )
     private String name;

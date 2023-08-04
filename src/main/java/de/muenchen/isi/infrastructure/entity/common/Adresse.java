@@ -4,8 +4,8 @@
  */
 package de.muenchen.isi.infrastructure.entity.common;
 
-import de.muenchen.isi.domain.service.search.SearchPreparationService;
 import de.muenchen.isi.infrastructure.adapter.search.StringSuggestionBinder;
+import de.muenchen.isi.infrastructure.repository.search.SearchwordSuggesterRepository;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -25,7 +25,7 @@ public class Adresse implements Cloneable, Serializable {
 
     @FullTextField
     @NonStandardField(
-        name = "strasse" + SearchPreparationService.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
+        name = "strasse" + SearchwordSuggesterRepository.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
         valueBinder = @ValueBinderRef(type = StringSuggestionBinder.class)
     )
     @Column(nullable = true)
@@ -33,7 +33,7 @@ public class Adresse implements Cloneable, Serializable {
 
     @FullTextField
     @NonStandardField(
-        name = "hausnummer" + SearchPreparationService.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
+        name = "hausnummer" + SearchwordSuggesterRepository.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
         valueBinder = @ValueBinderRef(type = StringSuggestionBinder.class)
     )
     @Column(nullable = true)

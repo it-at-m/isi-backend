@@ -32,6 +32,8 @@ import org.springframework.stereotype.Repository;
 @Slf4j
 public class SearchwordSuggesterRepository {
 
+    public static final String ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION = "_searchword_suggestion";
+
     private final EntityManager entityManager;
 
     public Stream<String> doSearchForSearchwordSuggestion(

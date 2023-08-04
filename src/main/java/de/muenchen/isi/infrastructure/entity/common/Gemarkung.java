@@ -1,7 +1,7 @@
 package de.muenchen.isi.infrastructure.entity.common;
 
-import de.muenchen.isi.domain.service.search.SearchPreparationService;
 import de.muenchen.isi.infrastructure.adapter.search.StringSuggestionBinder;
+import de.muenchen.isi.infrastructure.repository.search.SearchwordSuggesterRepository;
 import java.math.BigDecimal;
 import java.util.Set;
 import lombok.Data;
@@ -17,7 +17,7 @@ public class Gemarkung {
 
     @FullTextField
     @NonStandardField(
-        name = "name" + SearchPreparationService.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
+        name = "name" + SearchwordSuggesterRepository.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
         valueBinder = @ValueBinderRef(type = StringSuggestionBinder.class)
     )
     private String name;

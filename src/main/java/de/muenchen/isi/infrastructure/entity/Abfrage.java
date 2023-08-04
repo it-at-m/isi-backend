@@ -4,7 +4,6 @@
  */
 package de.muenchen.isi.infrastructure.entity;
 
-import de.muenchen.isi.domain.service.search.SearchPreparationService;
 import de.muenchen.isi.infrastructure.adapter.search.StatusAbfrageSuggestionBinder;
 import de.muenchen.isi.infrastructure.adapter.search.StatusAbfrageValueBridge;
 import de.muenchen.isi.infrastructure.adapter.search.StringSuggestionBinder;
@@ -13,6 +12,7 @@ import de.muenchen.isi.infrastructure.entity.common.Verortung;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVorhaben;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.entity.filehandling.Dokument;
+import de.muenchen.isi.infrastructure.repository.search.SearchwordSuggesterRepository;
 import io.hypersistence.utils.hibernate.type.json.JsonType;
 import java.time.LocalDate;
 import java.util.List;
@@ -64,7 +64,7 @@ public class Abfrage {
 
     @FullTextField(valueBridge = @ValueBridgeRef(type = StatusAbfrageValueBridge.class))
     @NonStandardField(
-        name = "statusAbfrage" + SearchPreparationService.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
+        name = "statusAbfrage" + SearchwordSuggesterRepository.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
         valueBinder = @ValueBinderRef(type = StatusAbfrageSuggestionBinder.class)
     )
     @Enumerated(EnumType.STRING)
@@ -73,7 +73,7 @@ public class Abfrage {
 
     @FullTextField
     @NonStandardField(
-        name = "bebauungsplannummer" + SearchPreparationService.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
+        name = "bebauungsplannummer" + SearchwordSuggesterRepository.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
         valueBinder = @ValueBinderRef(type = StringSuggestionBinder.class)
     )
     @Column(nullable = true)
@@ -81,7 +81,7 @@ public class Abfrage {
 
     @FullTextField
     @NonStandardField(
-        name = "nameAbfrage" + SearchPreparationService.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
+        name = "nameAbfrage" + SearchwordSuggesterRepository.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
         valueBinder = @ValueBinderRef(type = StringSuggestionBinder.class)
     )
     @Column(nullable = false, unique = true, length = 70)
