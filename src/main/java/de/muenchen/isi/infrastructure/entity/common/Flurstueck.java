@@ -11,9 +11,9 @@ import org.hibernate.search.mapper.pojo.mapping.definition.annotation.NonStandar
 @Data
 public class Flurstueck {
 
-    @FullTextField(analyzer = "entity_analyzer_string_field")
+    @FullTextField
     @NonStandardField(
-        name = "name" + SearchPreparationService.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
+        name = "nummer" + SearchPreparationService.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
         valueBinder = @ValueBinderRef(type = StringSuggestionBinder.class)
     )
     private String nummer;

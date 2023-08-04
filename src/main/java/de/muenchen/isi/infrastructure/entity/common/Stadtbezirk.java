@@ -12,7 +12,7 @@ public class Stadtbezirk {
 
     private String nummer;
 
-    @FullTextField(analyzer = "entity_analyzer_string_field")
+    @FullTextField
     @NonStandardField(
         name = "name" + SearchPreparationService.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
         valueBinder = @ValueBinderRef(type = StringSuggestionBinder.class)

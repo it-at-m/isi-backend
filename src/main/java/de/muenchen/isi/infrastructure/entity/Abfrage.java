@@ -62,10 +62,7 @@ public class Abfrage {
     @Column(nullable = true)
     private String anmerkung;
 
-    @FullTextField(
-        analyzer = "entity_analyzer_string_field",
-        valueBridge = @ValueBridgeRef(type = StatusAbfrageValueBridge.class)
-    )
+    @FullTextField(valueBridge = @ValueBridgeRef(type = StatusAbfrageValueBridge.class))
     @NonStandardField(
         name = "statusAbfrage" + SearchPreparationService.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
         valueBinder = @ValueBinderRef(type = StatusAbfrageSuggestionBinder.class)
@@ -74,7 +71,7 @@ public class Abfrage {
     @Column(nullable = false)
     private StatusAbfrage statusAbfrage;
 
-    @FullTextField(analyzer = "entity_analyzer_string_field")
+    @FullTextField
     @NonStandardField(
         name = "bebauungsplannummer" + SearchPreparationService.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
         valueBinder = @ValueBinderRef(type = StringSuggestionBinder.class)
@@ -82,7 +79,7 @@ public class Abfrage {
     @Column(nullable = true)
     private String bebauungsplannummer;
 
-    @FullTextField(analyzer = "entity_analyzer_string_field")
+    @FullTextField
     @NonStandardField(
         name = "nameAbfrage" + SearchPreparationService.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
         valueBinder = @ValueBinderRef(type = StringSuggestionBinder.class)

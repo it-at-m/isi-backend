@@ -15,7 +15,7 @@ public class Gemarkung {
 
     private BigDecimal nummer;
 
-    @FullTextField(analyzer = "entity_analyzer_string_field")
+    @FullTextField
     @NonStandardField(
         name = "name" + SearchPreparationService.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
         valueBinder = @ValueBinderRef(type = StringSuggestionBinder.class)

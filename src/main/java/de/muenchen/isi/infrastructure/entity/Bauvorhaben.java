@@ -48,7 +48,7 @@ import org.hibernate.search.mapper.pojo.mapping.definition.annotation.NonStandar
 @Indexed
 public class Bauvorhaben extends BaseEntity {
 
-    @FullTextField(analyzer = "entity_analyzer_string_field")
+    @FullTextField
     @NonStandardField(
         name = "nameVorhaben" + SearchPreparationService.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
         valueBinder = @ValueBinderRef(type = StringSuggestionBinder.class)
@@ -62,10 +62,7 @@ public class Bauvorhaben extends BaseEntity {
     @Column(precision = 10, scale = 2, nullable = false)
     private BigDecimal grundstuecksgroesse;
 
-    @FullTextField(
-        analyzer = "entity_analyzer_string_field",
-        valueBridge = @ValueBridgeRef(type = StandVorhabenValueBridge.class)
-    )
+    @FullTextField(valueBridge = @ValueBridgeRef(type = StandVorhabenValueBridge.class))
     @NonStandardField(
         name = "standVorhaben" + SearchPreparationService.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
         valueBinder = @ValueBinderRef(type = StandVorhabenSuggestionBinder.class)
@@ -74,7 +71,7 @@ public class Bauvorhaben extends BaseEntity {
     @Column(nullable = false)
     private StandVorhaben standVorhaben;
 
-    @FullTextField(analyzer = "entity_analyzer_string_field")
+    @FullTextField
     @NonStandardField(
         name = "bauvorhabenNummer" + SearchPreparationService.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
         valueBinder = @ValueBinderRef(type = StringSuggestionBinder.class)
@@ -94,7 +91,7 @@ public class Bauvorhaben extends BaseEntity {
     @Column(nullable = true)
     private String allgemeineOrtsangabe;
 
-    @FullTextField(analyzer = "entity_analyzer_string_field")
+    @FullTextField
     @NonStandardField(
         name = "bebauungsplannummer" + SearchPreparationService.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
         valueBinder = @ValueBinderRef(type = StringSuggestionBinder.class)

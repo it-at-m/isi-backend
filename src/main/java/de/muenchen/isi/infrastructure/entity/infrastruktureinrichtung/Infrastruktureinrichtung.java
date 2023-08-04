@@ -79,7 +79,7 @@ public abstract class Infrastruktureinrichtung extends BaseEntity {
     @Embedded
     private Adresse adresse;
 
-    @FullTextField(analyzer = "entity_analyzer_string_field")
+    @FullTextField
     @NonStandardField(
         name = "nameEinrichtung" + SearchPreparationService.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
         valueBinder = @ValueBinderRef(type = StringSuggestionBinder.class)
@@ -90,10 +90,7 @@ public abstract class Infrastruktureinrichtung extends BaseEntity {
     @Column
     private Integer fertigstellungsjahr; // JJJJ
 
-    @FullTextField(
-        analyzer = "entity_analyzer_string_field",
-        valueBridge = @ValueBridgeRef(type = StatusInfrastruktureinrichtungValueBridge.class)
-    )
+    @FullTextField(valueBridge = @ValueBridgeRef(type = StatusInfrastruktureinrichtungValueBridge.class))
     @NonStandardField(
         name = "status" + SearchPreparationService.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
         valueBinder = @ValueBinderRef(type = StatusInfrastruktureinrichtungSuggestionBinder.class)

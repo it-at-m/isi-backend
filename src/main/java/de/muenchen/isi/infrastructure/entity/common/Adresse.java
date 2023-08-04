@@ -23,7 +23,7 @@ import org.hibernate.search.mapper.pojo.mapping.definition.annotation.NonStandar
 @Embeddable
 public class Adresse implements Cloneable, Serializable {
 
-    @FullTextField(analyzer = "entity_analyzer_string_field")
+    @FullTextField
     @NonStandardField(
         name = "strasse" + SearchPreparationService.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
         valueBinder = @ValueBinderRef(type = StringSuggestionBinder.class)
@@ -31,7 +31,7 @@ public class Adresse implements Cloneable, Serializable {
     @Column(nullable = true)
     private String strasse;
 
-    @FullTextField(analyzer = "entity_analyzer_string_field")
+    @FullTextField
     @NonStandardField(
         name = "hausnummer" + SearchPreparationService.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
         valueBinder = @ValueBinderRef(type = StringSuggestionBinder.class)
