@@ -4,9 +4,9 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusInfrastruktureinrichtung;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import java.util.Arrays;
-import java.util.Objects;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.search.backend.elasticsearch.ElasticsearchExtension;
 import org.hibernate.search.mapper.pojo.bridge.ValueBridge;
@@ -14,13 +14,13 @@ import org.hibernate.search.mapper.pojo.bridge.binding.ValueBindingContext;
 import org.hibernate.search.mapper.pojo.bridge.mapping.programmatic.ValueBinder;
 import org.hibernate.search.mapper.pojo.bridge.runtime.ValueBridgeToIndexedValueContext;
 
-public class StatusInfrastruktureinrichtungVorhabenCustomSuggesterBinder implements ValueBinder {
+public class StatusAbfrageVorhabenCustomSuggesterBinder implements ValueBinder {
 
     @Override
     public void bind(final ValueBindingContext<?> context) {
         context.bridge(
-            StatusInfrastruktureinrichtung.class,
-            new StatusInfrastruktureinrichtungValueCompletionBridge(),
+            StatusAbfrage.class,
+            new StatusAbfrageValueCompletionBridge(),
             context
                 .typeFactory()
                 .extension(ElasticsearchExtension.get())
@@ -29,17 +29,13 @@ public class StatusInfrastruktureinrichtungVorhabenCustomSuggesterBinder impleme
         );
     }
 
-    private static class StatusInfrastruktureinrichtungValueCompletionBridge
-        implements ValueBridge<StatusInfrastruktureinrichtung, JsonElement> {
+    private static class StatusAbfrageValueCompletionBridge implements ValueBridge<StatusAbfrage, JsonElement> {
 
         @Override
-        public JsonElement toIndexedValue(
-            final StatusInfrastruktureinrichtung value,
-            final ValueBridgeToIndexedValueContext context
-        ) {
+        public JsonElement toIndexedValue(final StatusAbfrage value, final ValueBridgeToIndexedValueContext context) {
             final var jsonObject = new JsonObject();
             final var jsonArray = new JsonArray();
-            if (!Objects.equals(StatusInfrastruktureinrichtung.UNSPECIFIED, value)) {
+            if (ObjectUtils.isNotEmpty(value)) {
                 Arrays
                     .stream(StringUtils.split(value.getBezeichnung()))
                     .map(JsonPrimitive::new)
