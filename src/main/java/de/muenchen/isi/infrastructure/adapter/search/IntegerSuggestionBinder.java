@@ -8,14 +8,14 @@ import org.hibernate.search.mapper.pojo.bridge.ValueBridge;
 import org.hibernate.search.mapper.pojo.bridge.binding.ValueBindingContext;
 import org.hibernate.search.mapper.pojo.bridge.runtime.ValueBridgeToIndexedValueContext;
 
-public class IntegerCustomSuggesterBinder implements CustomSuggestionBinder {
+public class IntegerSuggestionBinder implements CustomSuggestionBinder {
 
     @Override
     public void bind(final ValueBindingContext<?> context) {
-        this.bind(Integer.class, new IntegerCustomSuggesterBridge(), context);
+        this.bind(Integer.class, new IntegerValueCompletionBridge(), context);
     }
 
-    private static class IntegerCustomSuggesterBridge implements ValueBridge<Integer, JsonElement> {
+    private static class IntegerValueCompletionBridge implements ValueBridge<Integer, JsonElement> {
 
         @Override
         public JsonElement toIndexedValue(final Integer value, final ValueBridgeToIndexedValueContext context) {

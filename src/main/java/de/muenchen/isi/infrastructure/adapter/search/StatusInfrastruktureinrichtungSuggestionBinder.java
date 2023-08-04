@@ -12,7 +12,7 @@ import org.hibernate.search.mapper.pojo.bridge.ValueBridge;
 import org.hibernate.search.mapper.pojo.bridge.binding.ValueBindingContext;
 import org.hibernate.search.mapper.pojo.bridge.runtime.ValueBridgeToIndexedValueContext;
 
-public class StatusInfrastruktureinrichtungCustomSuggesterBinder implements CustomSuggestionBinder {
+public class StatusInfrastruktureinrichtungSuggestionBinder implements CustomSuggestionBinder {
 
     @Override
     public void bind(final ValueBindingContext<?> context) {

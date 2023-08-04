@@ -4,28 +4,28 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVorhaben;
 import java.util.Arrays;
-import org.apache.commons.lang3.ObjectUtils;
+import java.util.Objects;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.search.mapper.pojo.bridge.ValueBridge;
 import org.hibernate.search.mapper.pojo.bridge.binding.ValueBindingContext;
 import org.hibernate.search.mapper.pojo.bridge.runtime.ValueBridgeToIndexedValueContext;
 
-public class StatusAbfrageCustomSuggesterBinder implements CustomSuggestionBinder {
+public class StandVorhabenSuggestionBinder implements CustomSuggestionBinder {
 
     @Override
     public void bind(final ValueBindingContext<?> context) {
-        this.bind(StatusAbfrage.class, new StatusAbfrageValueCompletionBridge(), context);
+        this.bind(StandVorhaben.class, new StandVorhabenValueCompletionBridge(), context);
     }
 
-    private static class StatusAbfrageValueCompletionBridge implements ValueBridge<StatusAbfrage, JsonElement> {
+    private static class StandVorhabenValueCompletionBridge implements ValueBridge<StandVorhaben, JsonElement> {
 
         @Override
-        public JsonElement toIndexedValue(final StatusAbfrage value, final ValueBridgeToIndexedValueContext context) {
+        public JsonElement toIndexedValue(final StandVorhaben value, final ValueBridgeToIndexedValueContext context) {
             final var jsonObject = new JsonObject();
             final var jsonArray = new JsonArray();
-            if (ObjectUtils.isNotEmpty(value)) {
+            if (!Objects.equals(StandVorhaben.UNSPECIFIED, value)) {
                 Arrays
                     .stream(StringUtils.split(value.getBezeichnung()))
                     .map(JsonPrimitive::new)

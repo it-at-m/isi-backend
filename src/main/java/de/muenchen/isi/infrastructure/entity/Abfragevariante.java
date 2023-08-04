@@ -5,7 +5,7 @@
 package de.muenchen.isi.infrastructure.entity;
 
 import de.muenchen.isi.domain.service.search.SearchPreparationService;
-import de.muenchen.isi.infrastructure.adapter.search.IntegerCustomSuggesterBinder;
+import de.muenchen.isi.infrastructure.adapter.search.IntegerSuggestionBinder;
 import de.muenchen.isi.infrastructure.adapter.search.IntegerToStringValueBridge;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Planungsrecht;
 import java.math.BigDecimal;
@@ -86,7 +86,7 @@ public class Abfragevariante extends BaseEntity {
     @KeywordField(valueBridge = @ValueBridgeRef(type = IntegerToStringValueBridge.class))
     @NonStandardField(
         name = "realisierungVon" + SearchPreparationService.SUFFIX_ATTRIBUTE_SEARCHWORD_SUGGESTION,
-        valueBinder = @ValueBinderRef(type = IntegerCustomSuggesterBinder.class)
+        valueBinder = @ValueBinderRef(type = IntegerSuggestionBinder.class)
     )
     @Column(nullable = false)
     private Integer realisierungVon; // JJJJ

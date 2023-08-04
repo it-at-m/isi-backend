@@ -2,7 +2,7 @@ package de.muenchen.isi.infrastructure.entity;
 
 import de.muenchen.isi.domain.service.search.SearchPreparationService;
 import de.muenchen.isi.infrastructure.adapter.search.StandVorhabenValueBridge;
-import de.muenchen.isi.infrastructure.adapter.search.StringCustomSuggesterBinder;
+import de.muenchen.isi.infrastructure.adapter.search.StringSuggestionBinder;
 import de.muenchen.isi.infrastructure.entity.common.Adresse;
 import de.muenchen.isi.infrastructure.entity.common.Verortung;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.BaugebietArt;
@@ -50,7 +50,7 @@ public class Bauvorhaben extends BaseEntity {
     @FullTextField(analyzer = "entity_analyzer_string_field")
     @NonStandardField(
         name = "nameVorhaben" + SearchPreparationService.SUFFIX_ATTRIBUTE_SEARCHWORD_SUGGESTION,
-        valueBinder = @ValueBinderRef(type = StringCustomSuggesterBinder.class)
+        valueBinder = @ValueBinderRef(type = StringSuggestionBinder.class)
     )
     @Column(nullable = false, unique = true)
     private String nameVorhaben;
@@ -72,7 +72,7 @@ public class Bauvorhaben extends BaseEntity {
     @FullTextField(analyzer = "entity_analyzer_string_field")
     @NonStandardField(
         name = "bauvorhabenNummer" + SearchPreparationService.SUFFIX_ATTRIBUTE_SEARCHWORD_SUGGESTION,
-        valueBinder = @ValueBinderRef(type = StringCustomSuggesterBinder.class)
+        valueBinder = @ValueBinderRef(type = StringSuggestionBinder.class)
     )
     @Column(nullable = false)
     private String bauvorhabenNummer;
@@ -92,7 +92,7 @@ public class Bauvorhaben extends BaseEntity {
     @FullTextField(analyzer = "entity_analyzer_string_field")
     @NonStandardField(
         name = "bebauungsplannummer" + SearchPreparationService.SUFFIX_ATTRIBUTE_SEARCHWORD_SUGGESTION,
-        valueBinder = @ValueBinderRef(type = StringCustomSuggesterBinder.class)
+        valueBinder = @ValueBinderRef(type = StringSuggestionBinder.class)
     )
     @Column(nullable = true)
     private String bebauungsplannummer;

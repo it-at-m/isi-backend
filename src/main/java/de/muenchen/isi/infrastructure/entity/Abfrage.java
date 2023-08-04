@@ -6,7 +6,7 @@ package de.muenchen.isi.infrastructure.entity;
 
 import de.muenchen.isi.domain.service.search.SearchPreparationService;
 import de.muenchen.isi.infrastructure.adapter.search.StatusAbfrageValueBridge;
-import de.muenchen.isi.infrastructure.adapter.search.StringCustomSuggesterBinder;
+import de.muenchen.isi.infrastructure.adapter.search.StringSuggestionBinder;
 import de.muenchen.isi.infrastructure.entity.common.Adresse;
 import de.muenchen.isi.infrastructure.entity.common.Verortung;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVorhaben;
@@ -72,7 +72,7 @@ public class Abfrage {
     @FullTextField(analyzer = "entity_analyzer_string_field")
     @NonStandardField(
         name = "bebauungsplannummer" + SearchPreparationService.SUFFIX_ATTRIBUTE_SEARCHWORD_SUGGESTION,
-        valueBinder = @ValueBinderRef(type = StringCustomSuggesterBinder.class)
+        valueBinder = @ValueBinderRef(type = StringSuggestionBinder.class)
     )
     @Column(nullable = true)
     private String bebauungsplannummer;
@@ -80,7 +80,7 @@ public class Abfrage {
     @FullTextField(analyzer = "entity_analyzer_string_field")
     @NonStandardField(
         name = "nameAbfrage" + SearchPreparationService.SUFFIX_ATTRIBUTE_SEARCHWORD_SUGGESTION,
-        valueBinder = @ValueBinderRef(type = StringCustomSuggesterBinder.class)
+        valueBinder = @ValueBinderRef(type = StringSuggestionBinder.class)
     )
     @Column(nullable = false, unique = true, length = 70)
     private String nameAbfrage;
