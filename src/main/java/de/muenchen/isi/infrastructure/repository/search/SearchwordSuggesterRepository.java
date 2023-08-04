@@ -72,9 +72,9 @@ public class SearchwordSuggesterRepository {
         final RestClient restClient
     ) {
         try {
-            // Erstellen eines Multisearch-Request-Body um gleichzeitig über mehere Indices suchen zu können.
+            // Erstellen eines Multisearch-Request-Body um gleichzeitig über mehrere Indizes suchen zu können.
             // https://www.elastic.co/guide/en/elasticsearch/reference/current/search-multi-search.html
-            // Je Suchindex wird eine Suche basieren auf den completion-suggester durchgeführt.
+            // Je Suchindex wird eine Multisearch-Suche basierend auf dem completion-suggester durchgeführt.
             // https://www.elastic.co/guide/en/elasticsearch/reference/current/search-suggesters.html#completion-suggester
             final var multisearchRequest =
                 this.createMultisearchResponseRequestBody(attributesForSearchableEntities, singleWordQuery);
