@@ -4,7 +4,9 @@
  */
 package de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung;
 
+import de.muenchen.isi.domain.service.search.SearchPreparationService;
 import de.muenchen.isi.infrastructure.adapter.search.StatusInfrastruktureinrichtungValueBridge;
+import de.muenchen.isi.infrastructure.adapter.search.StringCustomSuggesterBinder;
 import de.muenchen.isi.infrastructure.entity.BaseEntity;
 import de.muenchen.isi.infrastructure.entity.Baugebiet;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
@@ -32,10 +34,12 @@ import org.apache.commons.lang3.EnumUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
+import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBinderRef;
 import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBridgeRef;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.IndexedEmbedded;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.NonStandardField;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -75,6 +79,10 @@ public abstract class Infrastruktureinrichtung extends BaseEntity {
     private Adresse adresse;
 
     @FullTextField(analyzer = "entity_analyzer_string_field")
+    @NonStandardField(
+        name = "nameEinrichtung" + SearchPreparationService.SUFFIX_ATTRIBUTE_SEARCHWORD_SUGGESTION,
+        valueBinder = @ValueBinderRef(type = StringCustomSuggesterBinder.class)
+    )
     @Column(nullable = false)
     private String nameEinrichtung;
 

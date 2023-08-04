@@ -70,6 +70,10 @@ public class Bauvorhaben extends BaseEntity {
     private StandVorhaben standVorhaben;
 
     @FullTextField(analyzer = "entity_analyzer_string_field")
+    @NonStandardField(
+        name = "bauvorhabenNummer" + SearchPreparationService.SUFFIX_ATTRIBUTE_SEARCHWORD_SUGGESTION,
+        valueBinder = @ValueBinderRef(type = StringCustomSuggesterBinder.class)
+    )
     @Column(nullable = false)
     private String bauvorhabenNummer;
 

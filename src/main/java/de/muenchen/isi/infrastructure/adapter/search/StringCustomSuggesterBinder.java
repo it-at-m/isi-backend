@@ -18,7 +18,7 @@ public class StringCustomSuggesterBinder implements ValueBinder {
     public void bind(ValueBindingContext<?> context) {
         context.bridge(
             String.class,
-            new CompletionBridge(),
+            new StringValueCompletionBridge(),
             context
                 .typeFactory()
                 .extension(ElasticsearchExtension.get())
@@ -27,7 +27,7 @@ public class StringCustomSuggesterBinder implements ValueBinder {
         );
     }
 
-    private static class CompletionBridge implements ValueBridge<String, JsonElement> {
+    private static class StringValueCompletionBridge implements ValueBridge<String, JsonElement> {
 
         @Override
         public JsonElement toIndexedValue(String value, ValueBridgeToIndexedValueContext context) {
