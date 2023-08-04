@@ -5,6 +5,7 @@
 package de.muenchen.isi.infrastructure.entity;
 
 import de.muenchen.isi.domain.service.search.SearchPreparationService;
+import de.muenchen.isi.infrastructure.adapter.search.StatusAbfrageSuggestionBinder;
 import de.muenchen.isi.infrastructure.adapter.search.StatusAbfrageValueBridge;
 import de.muenchen.isi.infrastructure.adapter.search.StringSuggestionBinder;
 import de.muenchen.isi.infrastructure.entity.common.Adresse;
@@ -65,13 +66,17 @@ public class Abfrage {
         analyzer = "entity_analyzer_string_field",
         valueBridge = @ValueBridgeRef(type = StatusAbfrageValueBridge.class)
     )
+    @NonStandardField(
+        name = "statusAbfrage" + SearchPreparationService.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
+        valueBinder = @ValueBinderRef(type = StatusAbfrageSuggestionBinder.class)
+    )
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private StatusAbfrage statusAbfrage;
 
     @FullTextField(analyzer = "entity_analyzer_string_field")
     @NonStandardField(
-        name = "bebauungsplannummer" + SearchPreparationService.SUFFIX_ATTRIBUTE_SEARCHWORD_SUGGESTION,
+        name = "bebauungsplannummer" + SearchPreparationService.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
         valueBinder = @ValueBinderRef(type = StringSuggestionBinder.class)
     )
     @Column(nullable = true)
@@ -79,7 +84,7 @@ public class Abfrage {
 
     @FullTextField(analyzer = "entity_analyzer_string_field")
     @NonStandardField(
-        name = "nameAbfrage" + SearchPreparationService.SUFFIX_ATTRIBUTE_SEARCHWORD_SUGGESTION,
+        name = "nameAbfrage" + SearchPreparationService.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
         valueBinder = @ValueBinderRef(type = StringSuggestionBinder.class)
     )
     @Column(nullable = false, unique = true, length = 70)

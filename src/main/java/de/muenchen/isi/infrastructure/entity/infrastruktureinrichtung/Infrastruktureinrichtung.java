@@ -5,6 +5,7 @@
 package de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung;
 
 import de.muenchen.isi.domain.service.search.SearchPreparationService;
+import de.muenchen.isi.infrastructure.adapter.search.StatusInfrastruktureinrichtungSuggestionBinder;
 import de.muenchen.isi.infrastructure.adapter.search.StatusInfrastruktureinrichtungValueBridge;
 import de.muenchen.isi.infrastructure.adapter.search.StringSuggestionBinder;
 import de.muenchen.isi.infrastructure.entity.BaseEntity;
@@ -80,7 +81,7 @@ public abstract class Infrastruktureinrichtung extends BaseEntity {
 
     @FullTextField(analyzer = "entity_analyzer_string_field")
     @NonStandardField(
-        name = "nameEinrichtung" + SearchPreparationService.SUFFIX_ATTRIBUTE_SEARCHWORD_SUGGESTION,
+        name = "nameEinrichtung" + SearchPreparationService.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
         valueBinder = @ValueBinderRef(type = StringSuggestionBinder.class)
     )
     @Column(nullable = false)
@@ -92,6 +93,10 @@ public abstract class Infrastruktureinrichtung extends BaseEntity {
     @FullTextField(
         analyzer = "entity_analyzer_string_field",
         valueBridge = @ValueBridgeRef(type = StatusInfrastruktureinrichtungValueBridge.class)
+    )
+    @NonStandardField(
+        name = "status" + SearchPreparationService.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
+        valueBinder = @ValueBinderRef(type = StatusInfrastruktureinrichtungSuggestionBinder.class)
     )
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

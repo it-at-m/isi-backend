@@ -14,7 +14,7 @@ public class Stadtbezirk {
 
     @FullTextField(analyzer = "entity_analyzer_string_field")
     @NonStandardField(
-        name = "name" + SearchPreparationService.SUFFIX_ATTRIBUTE_SEARCHWORD_SUGGESTION,
+        name = "name" + SearchPreparationService.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
         valueBinder = @ValueBinderRef(type = StringSuggestionBinder.class)
     )
     private String name;

@@ -28,7 +28,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class SearchPreparationService {
 
-    public static final String SUFFIX_ATTRIBUTE_SEARCHWORD_SUGGESTION = "_searchword_suggestion";
+    public static final String ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION = "_searchword_suggestion";
 
     /**
      *
@@ -40,7 +40,7 @@ public class SearchPreparationService {
     ) {
         return Arrays
             .stream(getNamesOfSearchableAttributes(List.of(searchableEntity)))
-            .map(searchableAttribute -> searchableAttribute + SUFFIX_ATTRIBUTE_SEARCHWORD_SUGGESTION)
+            .map(searchableAttribute -> searchableAttribute + ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION)
             .collect(Collectors.toList());
     }
 

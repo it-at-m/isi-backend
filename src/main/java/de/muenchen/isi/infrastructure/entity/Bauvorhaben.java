@@ -1,6 +1,7 @@
 package de.muenchen.isi.infrastructure.entity;
 
 import de.muenchen.isi.domain.service.search.SearchPreparationService;
+import de.muenchen.isi.infrastructure.adapter.search.StandVorhabenSuggestionBinder;
 import de.muenchen.isi.infrastructure.adapter.search.StandVorhabenValueBridge;
 import de.muenchen.isi.infrastructure.adapter.search.StringSuggestionBinder;
 import de.muenchen.isi.infrastructure.entity.common.Adresse;
@@ -49,7 +50,7 @@ public class Bauvorhaben extends BaseEntity {
 
     @FullTextField(analyzer = "entity_analyzer_string_field")
     @NonStandardField(
-        name = "nameVorhaben" + SearchPreparationService.SUFFIX_ATTRIBUTE_SEARCHWORD_SUGGESTION,
+        name = "nameVorhaben" + SearchPreparationService.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
         valueBinder = @ValueBinderRef(type = StringSuggestionBinder.class)
     )
     @Column(nullable = false, unique = true)
@@ -65,13 +66,17 @@ public class Bauvorhaben extends BaseEntity {
         analyzer = "entity_analyzer_string_field",
         valueBridge = @ValueBridgeRef(type = StandVorhabenValueBridge.class)
     )
+    @NonStandardField(
+        name = "standVorhaben" + SearchPreparationService.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
+        valueBinder = @ValueBinderRef(type = StandVorhabenSuggestionBinder.class)
+    )
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private StandVorhaben standVorhaben;
 
     @FullTextField(analyzer = "entity_analyzer_string_field")
     @NonStandardField(
-        name = "bauvorhabenNummer" + SearchPreparationService.SUFFIX_ATTRIBUTE_SEARCHWORD_SUGGESTION,
+        name = "bauvorhabenNummer" + SearchPreparationService.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
         valueBinder = @ValueBinderRef(type = StringSuggestionBinder.class)
     )
     @Column(nullable = false)
@@ -91,7 +96,7 @@ public class Bauvorhaben extends BaseEntity {
 
     @FullTextField(analyzer = "entity_analyzer_string_field")
     @NonStandardField(
-        name = "bebauungsplannummer" + SearchPreparationService.SUFFIX_ATTRIBUTE_SEARCHWORD_SUGGESTION,
+        name = "bebauungsplannummer" + SearchPreparationService.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
         valueBinder = @ValueBinderRef(type = StringSuggestionBinder.class)
     )
     @Column(nullable = true)

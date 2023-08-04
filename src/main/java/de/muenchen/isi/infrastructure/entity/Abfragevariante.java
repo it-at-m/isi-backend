@@ -85,7 +85,7 @@ public class Abfragevariante extends BaseEntity {
 
     @KeywordField(valueBridge = @ValueBridgeRef(type = IntegerToStringValueBridge.class))
     @NonStandardField(
-        name = "realisierungVon" + SearchPreparationService.SUFFIX_ATTRIBUTE_SEARCHWORD_SUGGESTION,
+        name = "realisierungVon" + SearchPreparationService.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
         valueBinder = @ValueBinderRef(type = IntegerSuggestionBinder.class)
     )
     @Column(nullable = false)
