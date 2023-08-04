@@ -98,8 +98,8 @@ public class SearchPreparationService {
         searchableAttributes.add("nameVorhaben");
         searchableAttributes.add("standVorhaben");
         searchableAttributes.add("bauvorhabenNummer");
-        searchableAttributes.add("abfrage.adresse.strasse");
-        searchableAttributes.add("abfrage.adresse.hausnummer");
+        searchableAttributes.add("adresse.strasse");
+        searchableAttributes.add("adresse.hausnummer");
         searchableAttributes.add("verortung.stadtbezirke.name");
         searchableAttributes.add("verortung.gemarkungen.name");
         searchableAttributes.add("verortung.gemarkungen.flurstuecke.nummer");
@@ -110,8 +110,8 @@ public class SearchPreparationService {
 
     protected static Set<String> getNamesOfSearchableAttributesForInfrastruktureinrichtung() {
         final var searchableAttributes = new HashSet<String>();
-        searchableAttributes.add("abfrage.adresse.strasse");
-        searchableAttributes.add("abfrage.adresse.hausnummer");
+        searchableAttributes.add("adresse.strasse");
+        searchableAttributes.add("adresse.hausnummer");
         searchableAttributes.add("nameEinrichtung");
         searchableAttributes.add("status");
         log.debug("Die Namen aller suchbaren Attribute einer Infrastruktureinrichtung: {}", searchableAttributes);
