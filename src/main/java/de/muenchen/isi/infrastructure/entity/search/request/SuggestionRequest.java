@@ -1,4 +1,4 @@
-package de.muenchen.isi.domain.model.search.request;
+package de.muenchen.isi.infrastructure.entity.search.request;
 
 /*
 

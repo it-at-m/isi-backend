@@ -16,6 +16,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
@@ -34,13 +35,13 @@ public class SearchPreparationService {
      * @param searchableEntity
      * @return
      */
-    protected String[] getNamesOfSearchableAttributesForSearchwordSuggestion(
+    protected List<String> getNamesOfSearchableAttributesForSearchwordSuggestion(
         final Class<? extends BaseEntity> searchableEntity
     ) {
         return Arrays
             .stream(getNamesOfSearchableAttributes(List.of(searchableEntity)))
             .map(searchableAttribute -> searchableAttribute + SUFFIX_ATTRIBUTE_SEARCHWORD_SUGGESTION)
-            .toArray(String[]::new);
+            .collect(Collectors.toList());
     }
 
     /**
