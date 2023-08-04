@@ -4,7 +4,8 @@
  */
 package de.muenchen.isi.infrastructure.entity.common;
 
-import de.muenchen.isi.infrastructure.adapter.search.AdresseBinder;
+import de.muenchen.isi.domain.service.search.SearchPreparationService;
+import de.muenchen.isi.infrastructure.adapter.search.StringSuggestionBinder;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -12,19 +13,29 @@ import javax.persistence.Embedded;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.TypeBinderRef;
-import org.hibernate.search.mapper.pojo.mapping.definition.annotation.TypeBinding;
+import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBinderRef;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.NonStandardField;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Embeddable
-@TypeBinding(binder = @TypeBinderRef(type = AdresseBinder.class))
 public class Adresse implements Cloneable, Serializable {
 
+    @FullTextField(analyzer = "entity_analyzer_string_field")
+    @NonStandardField(
+        name = "strasse" + SearchPreparationService.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
+        valueBinder = @ValueBinderRef(type = StringSuggestionBinder.class)
+    )
     @Column(nullable = true)
     private String strasse;
 
+    @FullTextField(analyzer = "entity_analyzer_string_field")
+    @NonStandardField(
+        name = "hausnummer" + SearchPreparationService.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
+        valueBinder = @ValueBinderRef(type = StringSuggestionBinder.class)
+    )
     @Column(nullable = true)
     private String hausnummer;
 
