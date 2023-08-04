@@ -18,8 +18,6 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class SearchWordSuggesterService {
 
-    private static final int MAX_NUMBER_OF_SUGGESTION = 20;
-
     private final SearchPreparationService searchPreparationService;
 
     private final SearchwordSuggesterRepository searchwordSuggesterRepository;
