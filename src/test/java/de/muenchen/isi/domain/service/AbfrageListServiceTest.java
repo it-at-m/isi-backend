@@ -45,6 +45,7 @@ class AbfrageListServiceTest {
     @BeforeEach
     public void beforeEach() {
         this.abfrageListService = new AbfrageListService(this.abfrageService, this.abfrageDomainMapper);
+
         Mockito.reset(this.abfrageService);
     }
 

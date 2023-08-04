@@ -5,6 +5,7 @@ import de.muenchen.isi.api.dto.search.SearchResultDto;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonVerfahrensgrundsaetzeJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.UUID;
 import lombok.Data;
@@ -27,4 +28,6 @@ public class AbfrageListElementDto extends SearchResultDto {
     private LocalDate fristStellungnahme;
 
     private SobonVerfahrensgrundsaetzeJahr sobonJahr;
+
+    private LocalDateTime createdDateTime;
 }

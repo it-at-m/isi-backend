@@ -15,5 +15,7 @@ public interface InfrastrukturabfrageRepository extends JpaRepository<Infrastruk
 
     Stream<Infrastrukturabfrage> findAllByAbfrageBauvorhabenId(final UUID id);
 
+    Stream<Infrastrukturabfrage> findAllByAbfrageBauvorhabenIdOrderByCreatedDateTimeDesc(final UUID id);
+
     Optional<Infrastrukturabfrage> findByAbfrage_NameAbfrageIgnoreCase(final String nameAbfrage);
 }
