@@ -43,7 +43,7 @@ public class SearchWordSuggesterService {
     }
 
     /**
-     * Diese Methode führt die Suche zur Ermittlung der Suchwortvorschläge durch. Die Suche wird für die Entität  durchgeführt.
+     * Diese Methode führt die Suche zur Ermittlung der Suchwortvorschläge durch. Die Suche wird für die Entität durchgeführt.
      *
      * @param singleWordQuery als Query bestehend aus einem Wort. Es dürfen sich keine Leerzeichen zwischen den einzelnen Buchstaben befinden.
      * @return die Suchwortvorschläge für das im Parameter gegebene Wort.
@@ -52,7 +52,7 @@ public class SearchWordSuggesterService {
         final List<Class<? extends BaseEntity>> searchableEntities,
         final String singleWordQuery
     ) {
-        final Map<Class<? extends BaseEntity>, List<String>> attributesForSearchableEntity = searchableEntities
+        final Map<Class<? extends BaseEntity>, List<String>> attributesForSearchableEntities = searchableEntities
             .stream()
             .collect(
                 Collectors.toMap(
@@ -61,7 +61,7 @@ public class SearchWordSuggesterService {
                 )
             );
         return searchwordSuggesterRepository.doSearchForSearchwordSuggestion(
-            attributesForSearchableEntity,
+            attributesForSearchableEntities,
             singleWordQuery
         );
     }
