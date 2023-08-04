@@ -4,7 +4,6 @@
  */
 package de.muenchen.isi.infrastructure.entity;
 
-import de.muenchen.isi.infrastructure.adapter.search.SobonRelevantValueBridge;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonVerfahrensgrundsaetzeJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
 import java.util.List;
@@ -23,11 +22,9 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.hibernate.search.mapper.pojo.automaticindexing.ReindexOnUpdate;
-import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBridgeRef;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.IndexedEmbedded;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.IndexingDependency;
-import org.hibernate.search.mapper.pojo.mapping.definition.annotation.KeywordField;
 
 @Entity
 @Data
@@ -41,7 +38,6 @@ public class Infrastrukturabfrage extends BaseEntity {
     @Embedded
     public Abfrage abfrage;
 
-    @KeywordField(valueBridge = @ValueBridgeRef(type = SobonRelevantValueBridge.class))
     @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "varchar(255) not null check (sobon_relevant != 'UNSPECIFIED')")
     private UncertainBoolean sobonRelevant;

@@ -1,7 +1,8 @@
 package de.muenchen.isi.infrastructure.entity;
 
-import de.muenchen.isi.infrastructure.adapter.search.SobonRelevantValueBridge;
+import de.muenchen.isi.domain.service.search.SearchPreparationService;
 import de.muenchen.isi.infrastructure.adapter.search.StandVorhabenValueBridge;
+import de.muenchen.isi.infrastructure.adapter.search.StringCustomSuggesterBinder;
 import de.muenchen.isi.infrastructure.entity.common.Adresse;
 import de.muenchen.isi.infrastructure.entity.common.Verortung;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.BaugebietArt;
@@ -30,11 +31,12 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
+import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBinderRef;
 import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBridgeRef;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.IndexedEmbedded;
-import org.hibernate.search.mapper.pojo.mapping.definition.annotation.KeywordField;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.NonStandardField;
 
 @Entity
 @Data
@@ -46,6 +48,10 @@ import org.hibernate.search.mapper.pojo.mapping.definition.annotation.KeywordFie
 public class Bauvorhaben extends BaseEntity {
 
     @FullTextField(analyzer = "entity_analyzer_string_field")
+    @NonStandardField(
+        name = "nameVorhaben" + SearchPreparationService.SUFFIX_ATTRIBUTE_SEARCHWORD_SUGGESTION,
+        valueBinder = @ValueBinderRef(type = StringCustomSuggesterBinder.class)
+    )
     @Column(nullable = false, unique = true)
     private String nameVorhaben;
 
@@ -80,6 +86,10 @@ public class Bauvorhaben extends BaseEntity {
     private String allgemeineOrtsangabe;
 
     @FullTextField(analyzer = "entity_analyzer_string_field")
+    @NonStandardField(
+        name = "bebauungsplannummer" + SearchPreparationService.SUFFIX_ATTRIBUTE_SEARCHWORD_SUGGESTION,
+        valueBinder = @ValueBinderRef(type = StringCustomSuggesterBinder.class)
+    )
     @Column(nullable = true)
     private String bebauungsplannummer;
 
@@ -89,7 +99,6 @@ public class Bauvorhaben extends BaseEntity {
     @Column(nullable = true)
     private String anmerkung;
 
-    @KeywordField(valueBridge = @ValueBridgeRef(type = SobonRelevantValueBridge.class))
     @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "varchar(255) not null check (sobon_relevant != 'UNSPECIFIED')")
     private UncertainBoolean sobonRelevant;

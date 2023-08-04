@@ -88,7 +88,6 @@ public class SearchPreparationService {
         searchableAttributes.add("abfrage.nameAbfrage");
         searchableAttributes.add("abfragevarianten.realisierungVon");
         searchableAttributes.add("abfragevariantenSachbearbeitung.realisierungVon");
-        searchableAttributes.add("sobonRelevant");
         log.debug("Die Namen aller suchbaren Attribute einer Infrastrukturabfrage: {}", searchableAttributes);
         return searchableAttributes;
     }
@@ -103,7 +102,6 @@ public class SearchPreparationService {
         searchableAttributes.add("verortung.gemarkungen.name");
         searchableAttributes.add("verortung.gemarkungen.flurstuecke.nummer");
         searchableAttributes.add("bebauungsplannummer");
-        searchableAttributes.add("sobonRelevant");
         log.debug("Die Namen aller suchbaren Attribute eines Bauvorhabens: {}", searchableAttributes);
         return searchableAttributes;
     }

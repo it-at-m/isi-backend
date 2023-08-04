@@ -12,7 +12,7 @@ import org.hibernate.search.mapper.pojo.bridge.binding.ValueBindingContext;
 import org.hibernate.search.mapper.pojo.bridge.mapping.programmatic.ValueBinder;
 import org.hibernate.search.mapper.pojo.bridge.runtime.ValueBridgeToIndexedValueContext;
 
-public class CustomSuggesterBinder implements ValueBinder {
+public class StringCustomSuggesterBinder implements ValueBinder {
 
     @Override
     public void bind(ValueBindingContext<?> context) {

@@ -30,69 +30,6 @@ public class SearchwordSuggesterRepository {
 
     private final EntityManager entityManager;
 
-    /*
-
-#REquest
-
-{
-  "_source": "not-available-name",
-  "suggest": {
-    "abfrage_nameAbfrage_completion_suggetion" : {
-      "text" : "dasd",
-      "completion" : {
-        "field" : "abfrage.nameAbfrage_completion_suggetion",
-        "size": 5,
-        "fuzzy": {
-          "fuzziness": 0
-        }
-      }
-    }
-  }
-}
-
-
-#Response
-
-{
-  "took" : 0,
-  "timed_out" : false,
-  "_shards" : {
-    "total" : 1,
-    "successful" : 1,
-    "skipped" : 0,
-    "failed" : 0
-  },
-  "hits" : {
-    "total" : {
-      "value" : 0,
-      "relation" : "eq"
-    },
-    "max_score" : null,
-    "hits" : [ ]
-  },
-  "suggest" : {
-    "abfrage_nameAbfrage_completion_suggetion" : [
-      {
-        "text" : "dasd",
-        "offset" : 0,
-        "length" : 4,
-        "options" : [
-          {
-            "text" : "Dasdudi",
-            "_index" : "infrastrukturabfrage-000001",
-            "_type" : "_doc",
-            "_id" : "19b5d833-54d5-4a5d-9ada-4b40d23e0eb3",
-            "_score" : 4.0,
-            "_source" : { }
-          }
-        ]
-      }
-    ]
-  }
-}
-
-         */
-
     public Stream<String> doSearchForSearchwordSuggestion(
         final Map<Class<? extends BaseEntity>, List<String>> attributesForSearchableEntities,
         final String singleWordQuery
