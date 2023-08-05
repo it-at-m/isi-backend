@@ -82,7 +82,7 @@ public class Abfrage {
     private String bebauungsplannummer;
 
     /**
-     * Einheitliche indexierter Name des sortierbaren Attributs,
+     * Einheitlicher indexierter Name des sortierbaren Attributs,
      * zur einheitlichen Sortierung der entitätsübergeifenden Suchergebnisse.
      */
     @GenericField(name = "name_sort", sortable = Sortable.YES)
