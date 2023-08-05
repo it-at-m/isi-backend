@@ -35,9 +35,11 @@ import org.apache.commons.lang3.EnumUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
+import org.hibernate.search.engine.backend.types.Sortable;
 import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBinderRef;
 import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBridgeRef;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.GenericField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.IndexedEmbedded;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.NonStandardField;
@@ -79,6 +81,7 @@ public abstract class Infrastruktureinrichtung extends BaseEntity {
     @Embedded
     private Adresse adresse;
 
+    @GenericField(name = "name_sort", sortable = Sortable.YES)
     @FullTextField
     @NonStandardField(
         name = "nameEinrichtung" + SearchwordSuggesterRepository.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,

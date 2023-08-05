@@ -29,9 +29,11 @@ import javax.persistence.OneToMany;
 import lombok.Data;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
+import org.hibernate.search.engine.backend.types.Sortable;
 import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBinderRef;
 import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBridgeRef;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.GenericField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.IndexedEmbedded;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.NonStandardField;
 
@@ -79,6 +81,7 @@ public class Abfrage {
     @Column(nullable = true)
     private String bebauungsplannummer;
 
+    @GenericField(name = "name_sort", sortable = Sortable.YES)
     @FullTextField
     @NonStandardField(
         name = "nameAbfrage" + SearchwordSuggesterRepository.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,

@@ -32,9 +32,11 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
+import org.hibernate.search.engine.backend.types.Sortable;
 import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBinderRef;
 import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBridgeRef;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.GenericField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.IndexedEmbedded;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.NonStandardField;
@@ -48,6 +50,7 @@ import org.hibernate.search.mapper.pojo.mapping.definition.annotation.NonStandar
 @Indexed
 public class Bauvorhaben extends BaseEntity {
 
+    @GenericField(name = "name_sort", sortable = Sortable.YES)
     @FullTextField
     @NonStandardField(
         name = "nameVorhaben" + SearchwordSuggesterRepository.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
