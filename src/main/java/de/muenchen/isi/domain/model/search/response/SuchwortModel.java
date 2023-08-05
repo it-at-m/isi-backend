@@ -1,4 +1,4 @@
-package de.muenchen.isi.domain.model.search;
+package de.muenchen.isi.domain.model.search.response;
 
 import de.muenchen.isi.infrastructure.entity.BaseEntity;
 import java.util.UUID;

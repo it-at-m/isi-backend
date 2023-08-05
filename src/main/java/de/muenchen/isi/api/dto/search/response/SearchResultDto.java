@@ -1,4 +1,4 @@
-package de.muenchen.isi.api.dto.search;
+package de.muenchen.isi.api.dto.search.response;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;

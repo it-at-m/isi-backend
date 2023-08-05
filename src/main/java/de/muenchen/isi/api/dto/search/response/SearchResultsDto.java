@@ -1,4 +1,4 @@
-package de.muenchen.isi.api.dto.search;
+package de.muenchen.isi.api.dto.search.response;
 
 import java.util.List;
 import lombok.Data;

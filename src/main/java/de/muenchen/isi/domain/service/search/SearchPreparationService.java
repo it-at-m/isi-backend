@@ -1,7 +1,7 @@
 package de.muenchen.isi.domain.service.search;
 
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
-import de.muenchen.isi.domain.model.search.SearchQueryForEntitiesModel;
+import de.muenchen.isi.domain.model.search.request.SearchQueryModel;
 import de.muenchen.isi.infrastructure.entity.BaseEntity;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
 import de.muenchen.isi.infrastructure.entity.Infrastrukturabfrage;
@@ -115,9 +115,8 @@ public class SearchPreparationService {
         return searchableAttributes;
     }
 
-    protected List<Class<? extends BaseEntity>> getSearchableEntities(
-        final SearchQueryForEntitiesModel searchQueryInformation
-    ) throws EntityNotFoundException {
+    protected List<Class<? extends BaseEntity>> getSearchableEntities(final SearchQueryModel searchQueryInformation)
+        throws EntityNotFoundException {
         final List<Class<? extends BaseEntity>> searchableEntities = new ArrayList<>();
         if (BooleanUtils.isTrue(searchQueryInformation.getSelectInfrastrukturabfrage())) {
             searchableEntities.add(Infrastrukturabfrage.class);

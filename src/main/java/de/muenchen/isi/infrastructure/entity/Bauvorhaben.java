@@ -50,6 +50,10 @@ import org.hibernate.search.mapper.pojo.mapping.definition.annotation.NonStandar
 @Indexed
 public class Bauvorhaben extends BaseEntity {
 
+    /**
+     * Einheitliche indexierter Name des sortierbaren Attributs,
+     * zur einheitlichen Sortierung der entitätsübergeifenden Suchergebnisse.
+     */
     @GenericField(name = "name_sort", sortable = Sortable.YES)
     @FullTextField
     @NonStandardField(

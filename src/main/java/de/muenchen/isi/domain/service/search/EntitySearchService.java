@@ -3,8 +3,9 @@ package de.muenchen.isi.domain.service.search;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.mapper.SearchDomainMapper;
 import de.muenchen.isi.domain.model.BaseEntityModel;
-import de.muenchen.isi.domain.model.search.SearchQueryForEntitiesModel;
-import de.muenchen.isi.domain.model.search.SearchResultsModel;
+import de.muenchen.isi.domain.model.enums.SortAttribute;
+import de.muenchen.isi.domain.model.search.request.SearchQueryAndSortingModel;
+import de.muenchen.isi.domain.model.search.response.SearchResultsModel;
 import de.muenchen.isi.infrastructure.entity.BaseEntity;
 import java.util.Arrays;
 import java.util.List;
@@ -35,17 +36,14 @@ public class EntitySearchService {
      *
      *
      *
-     * @param searchQueryInformation mit der Suchquery und den zu durchsuchenden Entitäten.
-     * @return die Sucherbenisse für die zu suchenden Entitäten.
+     * @param searchQueryAndSortingInformation mit der Suchquery, den Sortierinformationen und den zu durchsuchenden Entitäten.
+     * @return die Suchergebnisse in einer durch den Request definierten Reihenfolge.
      * @throws EntityNotFoundException
      */
-    public SearchResultsModel searchForEntities(final SearchQueryForEntitiesModel searchQueryInformation)
+    public SearchResultsModel searchForEntities(final SearchQueryAndSortingModel searchQueryAndSortingInformation)
         throws EntityNotFoundException {
-        final List<Class<? extends BaseEntity>> searchableEntities = searchPreparationService.getSearchableEntities(
-            searchQueryInformation
-        );
         final var searchResults =
-            this.doSearchForEntities(searchableEntities, searchQueryInformation.getSearchQuery())
+            this.doSearchForEntities(searchQueryAndSortingInformation)
                 .map(searchDomainMapper::model2SearchResultModel)
                 .collect(Collectors.toList());
         final var model = new SearchResultsModel();
@@ -56,24 +54,28 @@ public class EntitySearchService {
     /**
      * Diese Methode führt die Entitätssuche für die im Parameter gegebene Entitäten auf Basis der Suchquery durch.
      *
-     * @param searchableEntities nach welchen gesucht werden soll.
-     * @param searchQuery die Suchquery für die Entitätssuche.
-     * @return
+     * @param searchQueryAndSortingInformation mit der Suchquery, den Sortierinformationen und den zu durchsuchenden Entitäten.
+     * @return die Suchergebnisse in einer durch den Request definierten Reihenfolge.
+     * @throws EntityNotFoundException
      */
     protected Stream<? extends BaseEntityModel> doSearchForEntities(
-        final List<Class<? extends BaseEntity>> searchableEntities,
-        final String searchQuery
-    ) {
+        final SearchQueryAndSortingModel searchQueryAndSortingInformation
+    ) throws EntityNotFoundException {
+        // Ermittlung der suchbaren Entitäten
+        final List<Class<? extends BaseEntity>> searchableEntities = searchPreparationService.getSearchableEntities(
+            searchQueryAndSortingInformation
+        );
         // Ermittlung der suchbaren Attribute je suchbarer Entität
         final var searchableAttributes = searchPreparationService.getNamesOfSearchableAttributes(searchableEntities);
         // Anpassen der Suchquery
-        final var adaptedSearchQuery = this.createAdaptedSearchQueryForSimpleQueryStringSearch(searchQuery);
+        final var adaptedSearchQuery =
+            this.createAdaptedSearchQueryForSimpleQueryStringSearch(searchQueryAndSortingInformation.getSearchQuery());
 
         return Search
             .session(entityManager.getEntityManagerFactory().createEntityManager())
             .search(searchableEntities)
             .where(function -> {
-                if (StringUtils.isNotEmpty(searchQuery)) {
+                if (StringUtils.isNotEmpty(adaptedSearchQuery)) {
                     // Suche entsprechend der gegebenen Query.
                     return function
                         // https://docs.jboss.org/hibernate/stable/search/reference/en-US/html_single/#search-dsl-predicate-simple-query-string
@@ -87,7 +89,19 @@ public class EntitySearchService {
                     return function.matchAll();
                 }
             })
-            .sort(function -> function.field("lastModifiedDateTime").desc())
+            // Sortierung der Suchergebnisse.
+            // https://docs.jboss.org/hibernate/stable/search/reference/en-US/html_single/#query-sorting
+            .sort(function -> {
+                final var sortBy = searchQueryAndSortingInformation.getSortBy();
+                final var sortOrder = searchQueryAndSortingInformation.getSortOrder();
+                if (SortAttribute.NAME.equals(sortBy)) {
+                    return function.field("name_sort").order(sortOrder);
+                } else if (SortAttribute.CREATED_DATE_TIME.equals(sortBy)) {
+                    return function.field("createdDateTime").order(sortOrder);
+                } else {
+                    return function.field("lastModifiedDateTime").order(sortOrder);
+                }
+            })
             .fetchAllHits()
             .stream()
             .map(searchDomainMapper::entity2Model);

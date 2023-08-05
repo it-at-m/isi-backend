@@ -1,4 +1,4 @@
-package de.muenchen.isi.domain.model.search;
+package de.muenchen.isi.domain.model.search.response;
 
 import java.util.List;
 import lombok.Data;

@@ -81,6 +81,10 @@ public abstract class Infrastruktureinrichtung extends BaseEntity {
     @Embedded
     private Adresse adresse;
 
+    /**
+     * Einheitliche indexierter Name des sortierbaren Attributs,
+     * zur einheitlichen Sortierung der entitätsübergeifenden Suchergebnisse.
+     */
     @GenericField(name = "name_sort", sortable = Sortable.YES)
     @FullTextField
     @NonStandardField(

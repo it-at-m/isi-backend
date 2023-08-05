@@ -1,8 +1,9 @@
 package de.muenchen.isi.api.controller.search;
 
-import de.muenchen.isi.api.dto.search.SearchQueryForEntitiesDto;
-import de.muenchen.isi.api.dto.search.SearchResultsDto;
-import de.muenchen.isi.api.dto.search.SuchwortSuggestionsDto;
+import de.muenchen.isi.api.dto.search.request.SearchQueryAndSortingDto;
+import de.muenchen.isi.api.dto.search.request.SearchQueryDto;
+import de.muenchen.isi.api.dto.search.response.SearchResultsDto;
+import de.muenchen.isi.api.dto.search.response.SuchwortSuggestionsDto;
 import de.muenchen.isi.api.mapper.SearchApiMapper;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.service.search.EntitySearchService;
@@ -40,7 +41,7 @@ public class SearchController {
     @Operation(summary = "Suche nach Suchwortvorschläge für das im Request-Body gegebene Suchwort.")
     @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "OK") })
     public ResponseEntity<SuchwortSuggestionsDto> searchForSearchwordSuggestion(
-        @RequestBody @NotNull @Valid final SearchQueryForEntitiesDto searchQueryInformation
+        @RequestBody @NotNull @Valid final SearchQueryDto searchQueryInformation
     ) throws EntityNotFoundException {
         final var requestModel = searchApiMapper.dto2Model(searchQueryInformation);
         final var model = searchService.searchForSearchwordSuggestion(requestModel);
@@ -53,9 +54,9 @@ public class SearchController {
     @Operation(summary = "Suche nach Entitäten für die im Request-Body gegebene Suchanfrage.")
     @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "OK") })
     public ResponseEntity<SearchResultsDto> searchForEntities(
-        @RequestBody @NotNull @Valid final SearchQueryForEntitiesDto searchQueryInformation
+        @RequestBody @NotNull @Valid final SearchQueryAndSortingDto searchQueryAndSortingInformation
     ) throws EntityNotFoundException {
-        final var requestModel = searchApiMapper.dto2Model(searchQueryInformation);
+        final var requestModel = searchApiMapper.dto2Model(searchQueryAndSortingInformation);
         final var responseModel = entitySearchService.searchForEntities(requestModel);
         final var dto = searchApiMapper.model2Dto(responseModel);
         return ResponseEntity.ok(dto);

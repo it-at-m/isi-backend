@@ -1,7 +1,7 @@
 package de.muenchen.isi.domain.model.list;
 
 import de.muenchen.isi.domain.model.common.StadtbezirkModel;
-import de.muenchen.isi.domain.model.search.SearchResultModel;
+import de.muenchen.isi.domain.model.search.response.SearchResultModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVorhaben;
 import java.math.BigDecimal;
 import java.util.Set;

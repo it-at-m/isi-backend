@@ -1,7 +1,7 @@
 package de.muenchen.isi.api.dto.list;
 
 import de.muenchen.isi.api.dto.common.StadtbezirkDto;
-import de.muenchen.isi.api.dto.search.SearchResultDto;
+import de.muenchen.isi.api.dto.search.response.SearchResultDto;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonVerfahrensgrundsaetzeJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import java.time.LocalDate;

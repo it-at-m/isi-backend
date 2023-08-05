@@ -1,35 +1,25 @@
-package de.muenchen.isi.api.dto.search;
+package de.muenchen.isi.domain.model.search.request;
 
-import javax.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
-public class SearchQueryForEntitiesDto {
+public class SearchQueryModel {
 
-    @NotNull
     private String searchQuery;
 
-    @NotNull
     private Boolean selectInfrastrukturabfrage;
 
-    @NotNull
     private Boolean selectBauvorhaben;
 
-    @NotNull
     private Boolean selectGrundschule;
 
-    @NotNull
     private Boolean selectGsNachmittagBetreuung;
 
-    @NotNull
     private Boolean selectHausFuerKinder;
 
-    @NotNull
     private Boolean selectKindergarten;
 
-    @NotNull
     private Boolean selectKinderkrippe;
 
-    @NotNull
     private Boolean selectMittelschule;
 }

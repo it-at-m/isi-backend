@@ -1,8 +1,8 @@
 package de.muenchen.isi.domain.service.search;
 
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
-import de.muenchen.isi.domain.model.search.SearchQueryForEntitiesModel;
-import de.muenchen.isi.domain.model.search.SuchwortSuggestionsModel;
+import de.muenchen.isi.domain.model.search.request.SearchQueryModel;
+import de.muenchen.isi.domain.model.search.response.SuchwortSuggestionsModel;
 import de.muenchen.isi.infrastructure.entity.BaseEntity;
 import de.muenchen.isi.infrastructure.repository.search.SearchwordSuggesterRepository;
 import java.util.List;
@@ -28,9 +28,8 @@ public class SearchWordSuggesterService {
      * @param searchQueryInformation mit der Suchquery bestehend aus einem Wort. Es dürfen sich keine Leerzeichen zwischen den einzelnen Buchstaben befinden.
      * @return die Suchwortvorschläge für das im Parameter gegebene Wort.
      */
-    public SuchwortSuggestionsModel searchForSearchwordSuggestion(
-        final SearchQueryForEntitiesModel searchQueryInformation
-    ) throws EntityNotFoundException {
+    public SuchwortSuggestionsModel searchForSearchwordSuggestion(final SearchQueryModel searchQueryInformation)
+        throws EntityNotFoundException {
         final List<Class<? extends BaseEntity>> searchableEntities = searchPreparationService.getSearchableEntities(
             searchQueryInformation
         );

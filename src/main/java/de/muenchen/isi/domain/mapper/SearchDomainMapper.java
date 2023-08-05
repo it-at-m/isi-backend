@@ -8,7 +8,7 @@ import de.muenchen.isi.domain.model.infrastruktureinrichtung.Infrastruktureinric
 import de.muenchen.isi.domain.model.list.AbfrageListElementModel;
 import de.muenchen.isi.domain.model.list.BauvorhabenListElementModel;
 import de.muenchen.isi.domain.model.list.InfrastruktureinrichtungListElementModel;
-import de.muenchen.isi.domain.model.search.SearchResultModel;
+import de.muenchen.isi.domain.model.search.response.SearchResultModel;
 import de.muenchen.isi.infrastructure.entity.BaseEntity;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
 import de.muenchen.isi.infrastructure.entity.Infrastrukturabfrage;

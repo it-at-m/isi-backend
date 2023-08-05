@@ -1,10 +1,10 @@
-package de.muenchen.isi.api.dto.search;
+package de.muenchen.isi.domain.model.search.response;
 
 import java.util.List;
 import lombok.Data;
 
 @Data
-public class SuchwortSuggestionsDto {
+public class SuchwortSuggestionsModel {
 
     private List<String> suchwortSuggestions;
 }

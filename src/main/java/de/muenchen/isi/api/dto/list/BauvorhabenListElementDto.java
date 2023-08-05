@@ -1,7 +1,7 @@
 package de.muenchen.isi.api.dto.list;
 
 import de.muenchen.isi.api.dto.common.StadtbezirkDto;
-import de.muenchen.isi.api.dto.search.SearchResultDto;
+import de.muenchen.isi.api.dto.search.response.SearchResultDto;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVorhaben;
 import java.math.BigDecimal;
 import java.util.Set;
