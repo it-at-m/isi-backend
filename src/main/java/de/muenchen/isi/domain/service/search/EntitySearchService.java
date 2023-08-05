@@ -24,8 +24,6 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class EntitySearchService {
 
-    private static final int MAX_NUMBER_OF_SUGGESTION = 20;
-
     private final EntityManager entityManager;
 
     private final SearchPreparationService searchPreparationService;
