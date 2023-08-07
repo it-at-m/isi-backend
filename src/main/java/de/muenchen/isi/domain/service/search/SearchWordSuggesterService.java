@@ -7,6 +7,7 @@ import de.muenchen.isi.infrastructure.entity.BaseEntity;
 import de.muenchen.isi.infrastructure.repository.search.SearchwordSuggesterRepository;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
@@ -54,7 +55,7 @@ public class SearchWordSuggesterService {
         final List<Class<? extends BaseEntity>> searchableEntities,
         final String singleWordQuery
     ) {
-        final Map<Class<? extends BaseEntity>, List<String>> attributesForSearchableEntities = searchableEntities
+        final Map<Class<? extends BaseEntity>, Set<String>> attributesForSearchableEntities = searchableEntities
             .stream()
             .collect(
                 Collectors.toMap(

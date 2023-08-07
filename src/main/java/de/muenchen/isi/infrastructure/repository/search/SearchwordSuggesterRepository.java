@@ -12,8 +12,8 @@ import de.muenchen.isi.infrastructure.entity.search.response.OptionResponse;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.persistence.EntityManager;
@@ -44,7 +44,7 @@ public class SearchwordSuggesterRepository {
      * @return die Suchwortvorschläge.
      */
     public Stream<String> doSearchForSearchwordSuggestion(
-        final Map<Class<? extends BaseEntity>, List<String>> attributesForSearchableEntities,
+        final Map<Class<? extends BaseEntity>, Set<String>> attributesForSearchableEntities,
         final String singleWordQuery
     ) {
         // Verwendung des Elasticsearch-RestClients für direkten Indexzugriff.
@@ -82,7 +82,7 @@ public class SearchwordSuggesterRepository {
      * @return die Suchwortvorschläge.
      */
     protected MultisearchResponse doSearchForSearchwordSuggestion(
-        final Map<Class<? extends BaseEntity>, List<String>> attributesForSearchableEntities,
+        final Map<Class<? extends BaseEntity>, Set<String>> attributesForSearchableEntities,
         final String singleWordQuery,
         final RestClient restClient
     ) {
@@ -114,7 +114,7 @@ public class SearchwordSuggesterRepository {
      * @return den Multisearch-Request-Body.
      */
     protected MultisearchRequest createMultisearchResponseRequestBody(
-        final Map<Class<? extends BaseEntity>, List<String>> attributesForSearchableEntities,
+        final Map<Class<? extends BaseEntity>, Set<String>> attributesForSearchableEntities,
         final String singleWordQuery
     ) {
         final var multisearchIndexAndCompleteSuggestionPair = new HashMap<IndexRequest, CompleteSuggestionRequest>();
@@ -152,7 +152,7 @@ public class SearchwordSuggesterRepository {
      * @return den Body für einen Completion-Suggestion-Request.
      */
     protected CompleteSuggestionRequest createCompletionSuggestionRequest(
-        final List<String> searchableAttributes,
+        final Set<String> searchableAttributes,
         final String singleWordQuery
     ) {
         final var completeSuggestionRequest = new CompleteSuggestionRequest();

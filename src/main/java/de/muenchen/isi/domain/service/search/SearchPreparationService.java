@@ -36,7 +36,7 @@ public class SearchPreparationService {
      * @param searchableEntity zur Ermittlung der suchbaren Attribute.
      * @return die suchbaren Attribute der im Parameter gegebenen Entitätsklasse.
      */
-    public List<String> getNamesOfSearchableAttributesForSearchwordSuggestion(
+    public Set<String> getNamesOfSearchableAttributesForSearchwordSuggestion(
         final Class<? extends BaseEntity> searchableEntity
     ) {
         return Arrays
@@ -44,7 +44,7 @@ public class SearchPreparationService {
             .map(searchableAttribute ->
                 searchableAttribute + SearchwordSuggesterRepository.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION
             )
-            .collect(Collectors.toList());
+            .collect(Collectors.toSet());
     }
 
     /**
