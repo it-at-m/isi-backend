@@ -34,7 +34,7 @@ public class SearchPreparationService {
      * @param searchableEntity
      * @return
      */
-    protected List<String> getNamesOfSearchableAttributesForSearchwordSuggestion(
+    public List<String> getNamesOfSearchableAttributesForSearchwordSuggestion(
         final Class<? extends BaseEntity> searchableEntity
     ) {
         return Arrays
@@ -51,7 +51,7 @@ public class SearchPreparationService {
      * @param searchableEntities zur Ermittlung der suchbaren Attribute.
      * @return die suchbaren Attribute.
      */
-    protected String[] getNamesOfSearchableAttributes(final List<Class<? extends BaseEntity>> searchableEntities) {
+    public String[] getNamesOfSearchableAttributes(final List<Class<? extends BaseEntity>> searchableEntities) {
         final var searchableAttributes = new HashSet<String>();
         if (CollectionUtils.containsAny(searchableEntities, Set.of(Infrastrukturabfrage.class))) {
             searchableAttributes.addAll(getNamesOfSearchableAttributesForInfrastrukturabfrage());
@@ -115,7 +115,7 @@ public class SearchPreparationService {
         return searchableAttributes;
     }
 
-    protected List<Class<? extends BaseEntity>> getSearchableEntities(final SearchQueryModel searchQueryInformation)
+    public List<Class<? extends BaseEntity>> getSearchableEntities(final SearchQueryModel searchQueryInformation)
         throws EntityNotFoundException {
         final List<Class<? extends BaseEntity>> searchableEntities = new ArrayList<>();
         if (BooleanUtils.isTrue(searchQueryInformation.getSelectInfrastrukturabfrage())) {
