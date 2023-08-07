@@ -31,7 +31,7 @@ public class DatabaseReindexer implements CommandLineRunner {
      * @param searchPreparationService zur Ermittlung der zu indizierenden Entitäten.
      */
     public DatabaseReindexer(
-        @Value("${spring.jpa.properties.hibernate.search.reindex-database}") final boolean reindexDatabase,
+        @Value("${spring.jpa.properties.hibernate.search.reindex-database:false}") final boolean reindexDatabase,
         final EntityManager entityManager,
         final SearchPreparationService searchPreparationService
     ) {
