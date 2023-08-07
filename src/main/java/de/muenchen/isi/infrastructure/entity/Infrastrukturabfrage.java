@@ -18,13 +18,18 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.hibernate.search.engine.backend.types.Sortable;
 import org.hibernate.search.mapper.pojo.automaticindexing.ReindexOnUpdate;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.IndexedEmbedded;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.IndexingDependency;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.KeywordField;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.ObjectPath;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.PropertyValue;
 
 @Entity
 @Data
@@ -33,6 +38,17 @@ import org.hibernate.search.mapper.pojo.mapping.definition.annotation.IndexingDe
 @Table(indexes = { @Index(name = "name_abfrage_index", columnList = "nameAbfrage") })
 @Indexed
 public class Infrastrukturabfrage extends BaseEntity {
+
+    /**
+     * Einheitlicher indexierter Name des sortierbaren Attributs,
+     * zur einheitlichen Sortierung der entitätsübergreifenden Suchergebnisse.
+     */
+    @KeywordField(name = "name_sort", sortable = Sortable.YES)
+    @Transient
+    @IndexingDependency(derivedFrom = @ObjectPath({ @PropertyValue(propertyName = "abfrage") }))
+    public String getNameAbfrageSuche() {
+        return abfrage.getNameAbfrage();
+    }
 
     @IndexedEmbedded
     @Embedded
