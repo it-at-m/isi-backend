@@ -3,6 +3,8 @@ package de.muenchen.isi.infrastructure.repository.search;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import de.muenchen.isi.infrastructure.entity.BaseEntity;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
 import de.muenchen.isi.infrastructure.entity.Infrastrukturabfrage;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Grundschule;
@@ -11,6 +13,9 @@ import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.HausFuerKi
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Kindergarten;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Kinderkrippe;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Mittelschule;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -22,6 +27,25 @@ import org.mockito.quality.Strictness;
 class SearchwordSuggesterRepositoryTest {
 
     private SearchwordSuggesterRepository searchwordSuggesterRepository = new SearchwordSuggesterRepository(null);
+
+    @Test
+    void createMultisearchResponseRequestBody() throws JsonProcessingException {
+        final Map<Class<? extends BaseEntity>, Set<String>> attributesForSearchableEntities = new HashMap<>();
+        attributesForSearchableEntities.put(
+            Bauvorhaben.class,
+            Set.of("attribute1", "attribut2.subattribut1", "attribut3")
+        );
+        attributesForSearchableEntities.put(Grundschule.class, Set.of("attribut5.subattribut1"));
+        attributesForSearchableEntities.put(Mittelschule.class, Set.of("attribute6"));
+        final var result = searchwordSuggesterRepository
+            .createMultisearchResponseRequestBody(attributesForSearchableEntities, "die-query")
+            .toMultiSearchRequestBody();
+
+        final var expected =
+            "{\"index\":\"bauvorhaben-read\"}\n{\"_source\":\"unknown\",\"suggest\":{\"attribute1\":{\"text\":\"die-query\",\"completion\":{\"field\":\"attribute1\",\"size\":5,\"fuzzy\":{\"fuzziness\":3}}},\"attribut2.subattribut1\":{\"text\":\"die-query\",\"completion\":{\"field\":\"attribut2.subattribut1\",\"size\":5,\"fuzzy\":{\"fuzziness\":3}}},\"attribut3\":{\"text\":\"die-query\",\"completion\":{\"field\":\"attribut3\",\"size\":5,\"fuzzy\":{\"fuzziness\":3}}}}}\n{\"index\":\"mittelschule-read\"}\n{\"_source\":\"unknown\",\"suggest\":{\"attribute6\":{\"text\":\"die-query\",\"completion\":{\"field\":\"attribute6\",\"size\":5,\"fuzzy\":{\"fuzziness\":3}}}}}\n{\"index\":\"grundschule-read\"}\n{\"_source\":\"unknown\",\"suggest\":{\"attribut5.subattribut1\":{\"text\":\"die-query\",\"completion\":{\"field\":\"attribut5.subattribut1\",\"size\":5,\"fuzzy\":{\"fuzziness\":3}}}}}\n";
+
+        assertThat(result, is(expected));
+    }
 
     @Test
     void getSearchableIndex() {
