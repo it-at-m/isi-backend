@@ -21,6 +21,7 @@ import de.muenchen.isi.domain.mapper.InfrastruktureinrichtungDomainMapper;
 import de.muenchen.isi.domain.mapper.InfrastruktureinrichtungDomainMapperImpl;
 import de.muenchen.isi.domain.model.BauvorhabenModel;
 import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.AbfrageAngelegtModel;
+import de.muenchen.isi.domain.model.enums.SearchResultType;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.InfrastruktureinrichtungModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.KinderkrippeModel;
 import de.muenchen.isi.domain.model.list.AbfrageListElementModel;
@@ -171,6 +172,7 @@ public class BauvorhabenServiceTest {
         final List<AbfrageListElementModel> expectedAbfrageList = new ArrayList<>();
 
         var abfrageListElementModel1 = new AbfrageListElementModel();
+        abfrageListElementModel1.setType(SearchResultType.INFRASTRUKTURABFRAGE);
         abfrageListElementModel1.setId(abfrage1.getId());
         abfrageListElementModel1.setNameAbfrage(abfrage1.getAbfrage().getNameAbfrage());
         abfrageListElementModel1.setStatusAbfrage(abfrage1.getAbfrage().getStatusAbfrage());
@@ -178,6 +180,7 @@ public class BauvorhabenServiceTest {
         expectedAbfrageList.add(abfrageListElementModel1);
 
         var abfrageListElementModel2 = new AbfrageListElementModel();
+        abfrageListElementModel2.setType(SearchResultType.INFRASTRUKTURABFRAGE);
         abfrageListElementModel2.setId(abfrage2.getId());
         abfrageListElementModel2.setNameAbfrage(abfrage2.getAbfrage().getNameAbfrage());
         abfrageListElementModel2.setStatusAbfrage(abfrage2.getAbfrage().getStatusAbfrage());
@@ -185,6 +188,7 @@ public class BauvorhabenServiceTest {
         expectedAbfrageList.add(abfrageListElementModel2);
 
         var abfrageListElementModel3 = new AbfrageListElementModel();
+        abfrageListElementModel3.setType(SearchResultType.INFRASTRUKTURABFRAGE);
         abfrageListElementModel3.setId(abfrage3.getId());
         abfrageListElementModel3.setNameAbfrage(abfrage3.getAbfrage().getNameAbfrage());
         abfrageListElementModel3.setStatusAbfrage(abfrage3.getAbfrage().getStatusAbfrage());
@@ -262,24 +266,28 @@ public class BauvorhabenServiceTest {
         final List<InfrastruktureinrichtungListElementModel> expectedInfrastruktureinrichtungList = new ArrayList<>();
 
         var kinderkrippeListElementModel1 = new InfrastruktureinrichtungListElementModel();
+        kinderkrippeListElementModel1.setType(SearchResultType.INFRASTRUKTUREINRICHTUNG);
         kinderkrippeListElementModel1.setId(kinderkrippe1.getId());
         kinderkrippeListElementModel1.setNameEinrichtung(kinderkrippe1.getNameEinrichtung());
         kinderkrippeListElementModel1.setInfrastruktureinrichtungTyp(kinderkrippe1.getInfrastruktureinrichtungTyp());
         expectedInfrastruktureinrichtungList.add(kinderkrippeListElementModel1);
 
         var kinderkrippeListElementModel2 = new InfrastruktureinrichtungListElementModel();
+        kinderkrippeListElementModel2.setType(SearchResultType.INFRASTRUKTUREINRICHTUNG);
         kinderkrippeListElementModel2.setId(kinderkrippe2.getId());
         kinderkrippeListElementModel2.setNameEinrichtung(kinderkrippe2.getNameEinrichtung());
         kinderkrippeListElementModel2.setInfrastruktureinrichtungTyp(kinderkrippe2.getInfrastruktureinrichtungTyp());
         expectedInfrastruktureinrichtungList.add(kinderkrippeListElementModel2);
 
         var kindergartenListElementModel1 = new InfrastruktureinrichtungListElementModel();
+        kindergartenListElementModel1.setType(SearchResultType.INFRASTRUKTUREINRICHTUNG);
         kindergartenListElementModel1.setId(kindergarten1.getId());
         kindergartenListElementModel1.setNameEinrichtung(kindergarten1.getNameEinrichtung());
         kindergartenListElementModel1.setInfrastruktureinrichtungTyp(kindergarten1.getInfrastruktureinrichtungTyp());
         expectedInfrastruktureinrichtungList.add(kindergartenListElementModel1);
 
         var kindergartenListElementModel2 = new InfrastruktureinrichtungListElementModel();
+        kindergartenListElementModel2.setType(SearchResultType.INFRASTRUKTUREINRICHTUNG);
         kindergartenListElementModel2.setId(kindergarten2.getId());
         kindergartenListElementModel2.setNameEinrichtung(kindergarten2.getNameEinrichtung());
         kindergartenListElementModel2.setInfrastruktureinrichtungTyp(kindergarten2.getInfrastruktureinrichtungTyp());
