@@ -15,5 +15,6 @@ public class SearchQueryAndSortingDto extends SearchQueryDto {
     @NotNull
     private SortAttribute sortBy;
 
-    private SortOrder sortOrder = SortOrder.ASC;
+    @NotNull
+    private SortOrder sortOrder;
 }

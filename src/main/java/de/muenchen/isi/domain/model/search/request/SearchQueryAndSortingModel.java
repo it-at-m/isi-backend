@@ -13,5 +13,5 @@ public class SearchQueryAndSortingModel extends SearchQueryModel {
 
     private SortAttribute sortBy;
 
-    private SortOrder sortOrder = SortOrder.DESC;
+    private SortOrder sortOrder;
 }

@@ -33,8 +33,8 @@ import org.hibernate.search.engine.backend.types.Sortable;
 import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBinderRef;
 import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBridgeRef;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
-import org.hibernate.search.mapper.pojo.mapping.definition.annotation.GenericField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.IndexedEmbedded;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.KeywordField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.NonStandardField;
 
 @Embeddable
@@ -85,7 +85,7 @@ public class Abfrage {
      * Einheitlicher indexierter Name des sortierbaren Attributs,
      * zur einheitlichen Sortierung der entitätsübergreifenden Suchergebnisse.
      */
-    @GenericField(name = "name_sort", sortable = Sortable.YES)
+    @KeywordField(name = "name_sort", sortable = Sortable.YES)
     @FullTextField
     @NonStandardField(
         name = "nameAbfrage" + SearchwordSuggesterRepository.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
