@@ -3,6 +3,8 @@ package de.muenchen.isi.domain.service.search;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
+import de.muenchen.isi.domain.exception.EntityNotFoundException;
+import de.muenchen.isi.domain.model.search.request.SearchQueryModel;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
 import de.muenchen.isi.infrastructure.entity.Infrastrukturabfrage;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Grundschule;
@@ -13,6 +15,7 @@ import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Kinderkrip
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Mittelschule;
 import java.util.HashSet;
 import java.util.List;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -224,5 +227,143 @@ class SearchPreparationServiceTest {
     }
 
     @Test
-    void getSearchableEntities() {}
+    void getSearchableEntities() throws EntityNotFoundException {
+        final var searchQueryModel = new SearchQueryModel();
+        searchQueryModel.setSelectInfrastrukturabfrage(true);
+        searchQueryModel.setSelectBauvorhaben(true);
+        searchQueryModel.setSelectGrundschule(true);
+        searchQueryModel.setSelectGsNachmittagBetreuung(true);
+        searchQueryModel.setSelectHausFuerKinder(true);
+        searchQueryModel.setSelectKindergarten(true);
+        searchQueryModel.setSelectKinderkrippe(true);
+        searchQueryModel.setSelectMittelschule(true);
+        var result = searchPreparationService.getSearchableEntities(searchQueryModel);
+        assertThat(
+            result,
+            is(
+                List.of(
+                    Infrastrukturabfrage.class,
+                    Bauvorhaben.class,
+                    Grundschule.class,
+                    GsNachmittagBetreuung.class,
+                    HausFuerKinder.class,
+                    Kindergarten.class,
+                    Kinderkrippe.class,
+                    Mittelschule.class
+                )
+            )
+        );
+
+        searchQueryModel.setSelectInfrastrukturabfrage(true);
+        searchQueryModel.setSelectBauvorhaben(false);
+        searchQueryModel.setSelectGrundschule(false);
+        searchQueryModel.setSelectGsNachmittagBetreuung(false);
+        searchQueryModel.setSelectHausFuerKinder(false);
+        searchQueryModel.setSelectKindergarten(false);
+        searchQueryModel.setSelectKinderkrippe(false);
+        searchQueryModel.setSelectMittelschule(false);
+        result = searchPreparationService.getSearchableEntities(searchQueryModel);
+        assertThat(result, is(List.of(Infrastrukturabfrage.class)));
+
+        searchQueryModel.setSelectInfrastrukturabfrage(false);
+        searchQueryModel.setSelectBauvorhaben(true);
+        searchQueryModel.setSelectGrundschule(false);
+        searchQueryModel.setSelectGsNachmittagBetreuung(false);
+        searchQueryModel.setSelectHausFuerKinder(false);
+        searchQueryModel.setSelectKindergarten(false);
+        searchQueryModel.setSelectKinderkrippe(false);
+        searchQueryModel.setSelectMittelschule(false);
+        result = searchPreparationService.getSearchableEntities(searchQueryModel);
+        assertThat(result, is(List.of(Bauvorhaben.class)));
+
+        searchQueryModel.setSelectInfrastrukturabfrage(false);
+        searchQueryModel.setSelectBauvorhaben(false);
+        searchQueryModel.setSelectGrundschule(true);
+        searchQueryModel.setSelectGsNachmittagBetreuung(false);
+        searchQueryModel.setSelectHausFuerKinder(false);
+        searchQueryModel.setSelectKindergarten(false);
+        searchQueryModel.setSelectKinderkrippe(false);
+        searchQueryModel.setSelectMittelschule(false);
+        result = searchPreparationService.getSearchableEntities(searchQueryModel);
+        assertThat(result, is(List.of(Grundschule.class)));
+
+        searchQueryModel.setSelectInfrastrukturabfrage(false);
+        searchQueryModel.setSelectBauvorhaben(false);
+        searchQueryModel.setSelectGrundschule(false);
+        searchQueryModel.setSelectGsNachmittagBetreuung(true);
+        searchQueryModel.setSelectHausFuerKinder(false);
+        searchQueryModel.setSelectKindergarten(false);
+        searchQueryModel.setSelectKinderkrippe(false);
+        searchQueryModel.setSelectMittelschule(false);
+        result = searchPreparationService.getSearchableEntities(searchQueryModel);
+        assertThat(result, is(List.of(GsNachmittagBetreuung.class)));
+
+        searchQueryModel.setSelectInfrastrukturabfrage(false);
+        searchQueryModel.setSelectBauvorhaben(false);
+        searchQueryModel.setSelectGrundschule(false);
+        searchQueryModel.setSelectGsNachmittagBetreuung(false);
+        searchQueryModel.setSelectHausFuerKinder(true);
+        searchQueryModel.setSelectKindergarten(false);
+        searchQueryModel.setSelectKinderkrippe(false);
+        searchQueryModel.setSelectMittelschule(false);
+        result = searchPreparationService.getSearchableEntities(searchQueryModel);
+        assertThat(result, is(List.of(HausFuerKinder.class)));
+
+        searchQueryModel.setSelectInfrastrukturabfrage(false);
+        searchQueryModel.setSelectBauvorhaben(false);
+        searchQueryModel.setSelectGrundschule(false);
+        searchQueryModel.setSelectGsNachmittagBetreuung(false);
+        searchQueryModel.setSelectHausFuerKinder(false);
+        searchQueryModel.setSelectKindergarten(true);
+        searchQueryModel.setSelectKinderkrippe(false);
+        searchQueryModel.setSelectMittelschule(false);
+        result = searchPreparationService.getSearchableEntities(searchQueryModel);
+        assertThat(result, is(List.of(Kindergarten.class)));
+
+        searchQueryModel.setSelectInfrastrukturabfrage(false);
+        searchQueryModel.setSelectBauvorhaben(false);
+        searchQueryModel.setSelectGrundschule(false);
+        searchQueryModel.setSelectGsNachmittagBetreuung(false);
+        searchQueryModel.setSelectHausFuerKinder(false);
+        searchQueryModel.setSelectKindergarten(false);
+        searchQueryModel.setSelectKinderkrippe(true);
+        searchQueryModel.setSelectMittelschule(false);
+        result = searchPreparationService.getSearchableEntities(searchQueryModel);
+        assertThat(result, is(List.of(Kinderkrippe.class)));
+
+        searchQueryModel.setSelectInfrastrukturabfrage(false);
+        searchQueryModel.setSelectBauvorhaben(false);
+        searchQueryModel.setSelectGrundschule(false);
+        searchQueryModel.setSelectGsNachmittagBetreuung(false);
+        searchQueryModel.setSelectHausFuerKinder(false);
+        searchQueryModel.setSelectKindergarten(false);
+        searchQueryModel.setSelectKinderkrippe(false);
+        searchQueryModel.setSelectMittelschule(true);
+        result = searchPreparationService.getSearchableEntities(searchQueryModel);
+        assertThat(result, is(List.of(Mittelschule.class)));
+
+        searchQueryModel.setSelectInfrastrukturabfrage(false);
+        searchQueryModel.setSelectBauvorhaben(true);
+        searchQueryModel.setSelectGrundschule(false);
+        searchQueryModel.setSelectGsNachmittagBetreuung(false);
+        searchQueryModel.setSelectHausFuerKinder(false);
+        searchQueryModel.setSelectKindergarten(false);
+        searchQueryModel.setSelectKinderkrippe(true);
+        searchQueryModel.setSelectMittelschule(false);
+        result = searchPreparationService.getSearchableEntities(searchQueryModel);
+        assertThat(result, is(List.of(Bauvorhaben.class, Kinderkrippe.class)));
+
+        searchQueryModel.setSelectInfrastrukturabfrage(false);
+        searchQueryModel.setSelectBauvorhaben(false);
+        searchQueryModel.setSelectGrundschule(false);
+        searchQueryModel.setSelectGsNachmittagBetreuung(false);
+        searchQueryModel.setSelectHausFuerKinder(false);
+        searchQueryModel.setSelectKindergarten(false);
+        searchQueryModel.setSelectKinderkrippe(false);
+        searchQueryModel.setSelectMittelschule(false);
+        Assertions.assertThrows(
+            EntityNotFoundException.class,
+            () -> this.searchPreparationService.getSearchableEntities(searchQueryModel)
+        );
+    }
 }
