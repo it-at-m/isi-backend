@@ -14,12 +14,14 @@ import javax.persistence.Enumerated;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
 
 @Entity
 @DiscriminatorValue(InfrastruktureinrichtungTyp.Values.GS_NACHMITTAG_BETREUUNG)
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
+@Indexed
 public class GsNachmittagBetreuung extends Infrastruktureinrichtung {
 
     // TBD: Grundschulsprengel
