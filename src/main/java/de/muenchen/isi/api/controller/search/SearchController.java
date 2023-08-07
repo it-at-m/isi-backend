@@ -37,7 +37,7 @@ public class SearchController {
     private final EntitySearchService entitySearchService;
 
     @PostMapping("/searchword-suggestion")
-    @Operation(summary = "Suche nach Suchwortvorschläge für das im Request-Body gegebene Suchwort.")
+    @Operation(summary = "Suche nach Suchwortvorschläge für das im Request-Body gegebene Suchanfrage.")
     @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "OK") })
     public ResponseEntity<SuchwortSuggestionsDto> searchForSearchwordSuggestion(
         @RequestBody @NotNull @Valid final SearchQueryDto searchQueryInformation
