@@ -8,6 +8,6 @@ public class StandVorhabenValueBridge implements ValueBridge<StandVorhaben, Stri
 
     @Override
     public String toIndexedValue(StandVorhaben value, ValueBridgeToIndexedValueContext context) {
-        return value.getBezeichnung();
+        return value != null ? value.getBezeichnung() : null;
     }
 }

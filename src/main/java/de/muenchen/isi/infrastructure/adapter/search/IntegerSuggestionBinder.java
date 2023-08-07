@@ -8,7 +8,7 @@ import org.hibernate.search.mapper.pojo.bridge.ValueBridge;
 import org.hibernate.search.mapper.pojo.bridge.binding.ValueBindingContext;
 import org.hibernate.search.mapper.pojo.bridge.runtime.ValueBridgeToIndexedValueContext;
 
-public class IntegerSuggestionBinder implements CustomSuggestionBinder {
+public class IntegerSuggestionBinder implements ComplitionSuggestionBinder {
 
     @Override
     public void bind(final ValueBindingContext<?> context) {

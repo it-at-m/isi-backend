@@ -8,6 +8,6 @@ public class StatusAbfrageValueBridge implements ValueBridge<StatusAbfrage, Stri
 
     @Override
     public String toIndexedValue(StatusAbfrage value, ValueBridgeToIndexedValueContext context) {
-        return value.getBezeichnung();
+        return value != null ? value.getBezeichnung() : null;
     }
 }

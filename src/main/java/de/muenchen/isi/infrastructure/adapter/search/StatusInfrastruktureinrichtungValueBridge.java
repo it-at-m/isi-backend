@@ -8,6 +8,6 @@ public class StatusInfrastruktureinrichtungValueBridge implements ValueBridge<St
 
     @Override
     public String toIndexedValue(StatusInfrastruktureinrichtung value, ValueBridgeToIndexedValueContext context) {
-        return value.getBezeichnung();
+        return value != null ? value.getBezeichnung() : null;
     }
 }
