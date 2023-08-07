@@ -8,14 +8,13 @@ import java.util.Map;
 import lombok.Data;
 
 /*
-
 {
-  "_source": "not-available-name",
+  "_source": "unknown",
   "suggest": {
-    "abfrage_nameAbfrage_completion_suggetion" : {
-      "text" : "dasd",
+    "abfrage_nameAbfrage_searchword_suggestion" : {
+      "text" : "Abfr",
       "completion" : {
-        "field" : "abfrage.nameAbfrage_completion_suggetion",
+        "field" : "abfrage.nameAbfrage_searchword_suggestion",
         "size": 5,
         "fuzzy": {
           "fuzziness": 0
@@ -24,8 +23,6 @@ import lombok.Data;
     }
   }
 }
-
-
  */
 
 @Data

@@ -1,9 +1,8 @@
 package de.muenchen.isi.infrastructure.entity.search.request;
 
 /*
-
-{
-      "text" : "dasd",
+    {
+      "text" : "Abfr",
       "completion" : {
         "field" : "abfrage.nameAbfrage_completion_suggetion",
         "size": 5,
@@ -12,8 +11,6 @@ package de.muenchen.isi.infrastructure.entity.search.request;
         }
       }
     }
-
-
  */
 
 import lombok.Data;
