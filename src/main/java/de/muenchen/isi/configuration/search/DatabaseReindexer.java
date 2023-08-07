@@ -21,6 +21,15 @@ public class DatabaseReindexer implements CommandLineRunner {
 
     private final SearchPreparationService searchPreparationService;
 
+    /**
+     * Ctor.
+     *
+     * @param reindexDatabase als Property zum triggern der Reindexierung des Suchindex für alle indizierten Entitäten.
+     *                        Der Wert "true" führt die Reindexierung des Suchindex nach dem Hochfahren des Backends durch.
+     *                        Der Wert "false" verhindert eine Reindexierung des Suchindex nach dem Hochfahren des Backends.
+     * @param entityManager zur Reindexierung des Suchindex.
+     * @param searchPreparationService zur Ermittlung der zu indizierenden Entitäten.
+     */
     public DatabaseReindexer(
         @Value("${spring.jpa.properties.hibernate.search.reindex-database}") final boolean reindexDatabase,
         final EntityManager entityManager,
