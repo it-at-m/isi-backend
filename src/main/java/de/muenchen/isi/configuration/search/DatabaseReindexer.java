@@ -32,7 +32,7 @@ public class DatabaseReindexer implements CommandLineRunner {
     }
 
     @Override
-    public void run(String... args) throws Exception {
+    public void run(final String... args) throws Exception {
         if (reindexDatabase) {
             log.info("Neuindexierung des Suchindex für die Datenbank gestartet.");
             final var searchQueryModel = getSearchQueryModelForAllEntities();
