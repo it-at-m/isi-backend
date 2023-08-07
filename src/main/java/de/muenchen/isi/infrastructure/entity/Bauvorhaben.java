@@ -52,7 +52,7 @@ public class Bauvorhaben extends BaseEntity {
 
     /**
      * Einheitlicher indexierter Name des sortierbaren Attributs,
-     * zur einheitlichen Sortierung der entitätsübergeifenden Suchergebnisse.
+     * zur einheitlichen Sortierung der entitätsübergreifenden Suchergebnisse.
      */
     @GenericField(name = "name_sort", sortable = Sortable.YES)
     @FullTextField
