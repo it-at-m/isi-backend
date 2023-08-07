@@ -30,9 +30,11 @@ import org.springframework.stereotype.Service;
 public class SearchPreparationService {
 
     /**
+     * Diese Methode ermittelt auf Basis der im Parameter gegebenen Entitätsklasse
+     * die für die Suchwortvorschläge suchbaren Attribute.
      *
-     * @param searchableEntity
-     * @return
+     * @param searchableEntity zur Ermittlung der suchbaren Attribute.
+     * @return die suchbaren Attribute der im Parameter gegebenen Entitätsklasse.
      */
     public List<String> getNamesOfSearchableAttributesForSearchwordSuggestion(
         final Class<? extends BaseEntity> searchableEntity
@@ -115,6 +117,13 @@ public class SearchPreparationService {
         return searchableAttributes;
     }
 
+    /**
+     * Die Methode ermittelt die zu durchsuchenden Entitäten auf Basis des im Methodenparameter gegebenen Objekts.
+     *
+     * @param searchQueryInformation zum ermitteln der zu durchsuchenden Entitäten.
+     * @return die zu durchsuchenden Entitäten.
+     * @throws EntityNotFoundException falls im Objekt des Methodenparameters keine zu durchsuchende Entität markiert ist.
+     */
     public List<Class<? extends BaseEntity>> getSearchableEntities(final SearchQueryModel searchQueryInformation)
         throws EntityNotFoundException {
         final List<Class<? extends BaseEntity>> searchableEntities = new ArrayList<>();
