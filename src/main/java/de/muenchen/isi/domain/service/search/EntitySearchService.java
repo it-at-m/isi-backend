@@ -31,12 +31,11 @@ public class EntitySearchService {
     private final SearchDomainMapper searchDomainMapper;
 
     /**
-     *
-     *
+     * Diese Methode führt die Entitätssuche für die im Methodenparameter gegebenen Informationen durch.
      *
      * @param searchQueryAndSortingInformation mit der Suchquery, den Sortierinformationen und den zu durchsuchenden Entitäten.
-     * @return die Suchergebnisse in einer durch den Request definierten Reihenfolge.
-     * @throws EntityNotFoundException
+     * @return die Suchergebnisse in der im Methodenparameter definierten Reihenfolge.
+     * @throws EntityNotFoundException falls keine zu durchsuchende Entitat im Methodenparameter gewählt ist.
      */
     public SearchResultsModel searchForEntities(final SearchQueryAndSortingModel searchQueryAndSortingInformation)
         throws EntityNotFoundException {
@@ -50,11 +49,11 @@ public class EntitySearchService {
     }
 
     /**
-     * Diese Methode führt die Entitätssuche für die im Parameter gegebene Entitäten auf Basis der Suchquery durch.
+     * Diese Methode führt die Entitätssuche für die im Methodenparameter gegebenen Informationen durch.
      *
      * @param searchQueryAndSortingInformation mit der Suchquery, den Sortierinformationen und den zu durchsuchenden Entitäten.
-     * @return die Suchergebnisse in einer durch den Request definierten Reihenfolge.
-     * @throws EntityNotFoundException
+     * @return die Suchergebnisse in der im Methodenparameter definierten Reihenfolge.
+     * @throws EntityNotFoundException falls keine zu durchsuchende Entitat im Methodenparameter gewählt ist.
      */
     protected Stream<? extends BaseEntityModel> doSearchForEntities(
         final SearchQueryAndSortingModel searchQueryAndSortingInformation
@@ -106,7 +105,8 @@ public class EntitySearchService {
     }
 
     /**
-     * Diese Methode passt die im Parameter gegebene Suchquery an, um diese bei der Simple-Query-String-Suche verwenden zu können.
+     * Diese Methode passt die im Parameter gegebene Suchquery an,
+     * um diese bei der Simple-Query-String-Suche verwenden zu können.
      *
      * @param searchQuery zum anpassen.
      * @return die für die Simple-Query-String-Suche angepasste Suchquery.
