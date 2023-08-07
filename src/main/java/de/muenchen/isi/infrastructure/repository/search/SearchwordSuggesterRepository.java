@@ -145,6 +145,8 @@ public class SearchwordSuggesterRepository {
      * Erstellt den Request-Body für einen Completion-Suggestion-Request welcher als entitätsbezogener Bestandteil
      * im Multisearch-Request-Body eingebunden wird.
      *
+     * https://www.elastic.co/guide/en/elasticsearch/reference/current/search-suggesters.html#completion-suggester
+     *
      * @param searchableAttributes die zu durchsuchenden Attribute.
      * @param singleWordQuery als Suchquery. Es dürfen sich keine Leerzeichen zwischen den einzelnen Buchstaben befinden.
      * @return den Body für einen Completion-Suggestion-Request.
