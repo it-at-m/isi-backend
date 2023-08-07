@@ -36,6 +36,13 @@ public class SearchwordSuggesterRepository {
 
     private final EntityManager entityManager;
 
+    /**
+     * Ermittelt durch einen direkten Zugriff auf Elasticsearch die Suchwortvorschläge.
+     *
+     * @param attributesForSearchableEntities die Attribute je zu durchsuchender Entität für welche Suchwortvorschlage ermittelt werden sollen.
+     * @param singleWordQuery als Suchquery. Es dürfen sich keine Leerzeichen zwischen den einzelnen Buchstaben befinden.
+     * @return die Suchwortvorschläge.
+     */
     public Stream<String> doSearchForSearchwordSuggestion(
         final Map<Class<? extends BaseEntity>, List<String>> attributesForSearchableEntities,
         final String singleWordQuery
@@ -66,6 +73,14 @@ public class SearchwordSuggesterRepository {
             .distinct();
     }
 
+    /**
+     * Die Suchwortvorschläge werden über einen Elasticsearch-Completion-Suggester ermittelt.
+     *
+     * @param attributesForSearchableEntities die Attribute je zu durchsuchender Entität für welche Suchwortvorschlage ermittelt werden sollen.
+     * @param singleWordQuery als Suchquery. Es dürfen sich keine Leerzeichen zwischen den einzelnen Buchstaben befinden.
+     * @param restClient für den direkten Zugriff auf Elasticsearch.
+     * @return die Suchwortvorschläge.
+     */
     protected MultisearchResponse doSearchForSearchwordSuggestion(
         final Map<Class<? extends BaseEntity>, List<String>> attributesForSearchableEntities,
         final String singleWordQuery,
@@ -74,7 +89,7 @@ public class SearchwordSuggesterRepository {
         try {
             // Erstellen eines Multisearch-Request-Body um gleichzeitig über mehrere Indizes suchen zu können.
             // https://www.elastic.co/guide/en/elasticsearch/reference/current/search-multi-search.html
-            // Je Suchindex wird eine Multisearch-Suche basierend auf dem completion-suggester durchgeführt.
+            // Je entitätsbezogenen Suchindex wird die Suche basierend auf dem completion-suggester in die Multisearch-Suche aufgenommen.
             // https://www.elastic.co/guide/en/elasticsearch/reference/current/search-suggesters.html#completion-suggester
             final var multisearchRequest =
                 this.createMultisearchResponseRequestBody(attributesForSearchableEntities, singleWordQuery);
@@ -89,6 +104,15 @@ public class SearchwordSuggesterRepository {
         }
     }
 
+    /**
+     * Erstellt den Multisearch-Request-Body bestehend je zu durchsuchenden Entität aus dem completion-suggester-Requestbody.
+     *
+     * https://www.elastic.co/guide/en/elasticsearch/reference/current/search-multi-search.html
+     *
+     * @param attributesForSearchableEntities die Attribute je zu durchsuchender Entität für welche Suchwortvorschlage ermittelt werden sollen.
+     * @param singleWordQuery als Suchquery. Es dürfen sich keine Leerzeichen zwischen den einzelnen Buchstaben befinden.
+     * @return den Multisearch-Request-Body.
+     */
     protected MultisearchRequest createMultisearchResponseRequestBody(
         final Map<Class<? extends BaseEntity>, List<String>> attributesForSearchableEntities,
         final String singleWordQuery
@@ -97,7 +121,7 @@ public class SearchwordSuggesterRepository {
         for (final var attributesForSearchableEntity : attributesForSearchableEntities.entrySet()) {
             multisearchIndexAndCompleteSuggestionPair.put(
                 this.createIndexRequest(attributesForSearchableEntity.getKey()),
-                this.createCompleteSuggestionRequest(attributesForSearchableEntity.getValue(), singleWordQuery)
+                this.createCompletionSuggestionRequest(attributesForSearchableEntity.getValue(), singleWordQuery)
             );
         }
         final var body = new MultisearchRequest();
@@ -105,13 +129,27 @@ public class SearchwordSuggesterRepository {
         return body;
     }
 
+    /**
+     * Erstellt für den Multisearch-Request-Body den indexbezogenen Requestbodybestandteil einer im parameter gegebenen Entität.
+     *
+     * @param searchableEntity für den indexbezogenen Requestbodybestandteil des Multisearch-Request-Body.
+     * @return den indexbezogenen Requestbodybestandteil.
+     */
     protected IndexRequest createIndexRequest(final Class<? extends BaseEntity> searchableEntity) {
         final var indexRequest = new IndexRequest();
         indexRequest.setIndex(getSearchableIndex(searchableEntity));
         return indexRequest;
     }
 
-    protected CompleteSuggestionRequest createCompleteSuggestionRequest(
+    /**
+     * Erstellt den Request-Body für einen Completion-Suggestion-Request welcher als entitätsbezogener Bestandteil
+     * im Multisearch-Request-Body eingebunden wird.
+     *
+     * @param searchableAttributes die zu durchsuchenden Attribute.
+     * @param singleWordQuery als Suchquery. Es dürfen sich keine Leerzeichen zwischen den einzelnen Buchstaben befinden.
+     * @return den Body für einen Completion-Suggestion-Request.
+     */
+    protected CompleteSuggestionRequest createCompletionSuggestionRequest(
         final List<String> searchableAttributes,
         final String singleWordQuery
     ) {
