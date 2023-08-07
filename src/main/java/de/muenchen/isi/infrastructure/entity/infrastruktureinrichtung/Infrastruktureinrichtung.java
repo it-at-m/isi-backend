@@ -80,8 +80,8 @@ public abstract class Infrastruktureinrichtung extends BaseEntity {
     private Adresse adresse;
 
     /**
-     * Einheitlicher indexierter Name des sortierbaren Attributs,
-     * zur einheitlichen Sortierung der entitätsübergreifenden Suchergebnisse.
+     * Einheitlicher indexiertes sortierbares Namensattributs
+     * zur einheitlichen entitätsübergreifenden Sortierung der Suchergebnisse.
      */
     @KeywordField(name = "name_sort", sortable = Sortable.YES)
     @FullTextField
