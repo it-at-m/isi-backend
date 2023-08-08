@@ -15,3 +15,5 @@ jobs:
         with:
           policy: it-at-m/policy-as-code
           policy-path: default.yaml
+          token: ${{ secrets.GITHUB_TOKEN }}
+          argvs: "--disable-dependabot --disable-secret-scanning --disable-code-scanning --display"
