@@ -32,9 +32,20 @@ class EntitySearchServiceTest {
 
     @Test
     void createAdaptedSearchQueryForSimpleQueryStringSearch() {
-        final var searchQuery = "  test-abc123 ?!\"dddds      abf1-test     \"testinger\"    ";
-
-        final var result = entitySearchService.createAdaptedSearchQueryForSimpleQueryStringSearch(searchQuery);
+        var searchQuery = "  test-abc123 ?!\"dddds      abf1-test     \"testinger\"    ";
+        var result = entitySearchService.createAdaptedSearchQueryForSimpleQueryStringSearch(searchQuery);
         assertThat(result, is("test-abc123* ?!\"dddds* abf1-test* \"testinger\"*"));
+
+        searchQuery = "     ";
+        result = entitySearchService.createAdaptedSearchQueryForSimpleQueryStringSearch(searchQuery);
+        assertThat(result, is(""));
+
+        searchQuery = "";
+        result = entitySearchService.createAdaptedSearchQueryForSimpleQueryStringSearch(searchQuery);
+        assertThat(result, is(""));
+
+        searchQuery = null;
+        result = entitySearchService.createAdaptedSearchQueryForSimpleQueryStringSearch(searchQuery);
+        assertThat(result, is(""));
     }
 }
