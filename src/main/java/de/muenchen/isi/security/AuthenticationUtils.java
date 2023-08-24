@@ -83,9 +83,15 @@ public class AuthenticationUtils {
                 (DefaultOAuth2AuthenticatedPrincipal) authentication.getPrincipal();
             if (!ObjectUtils.isEmpty(principal)) {
                 JSONObject resourceAccess = principal.getAttribute("resource_access");
-                JSONObject isi = (JSONObject) resourceAccess.get("isi");
-                JSONArray rolesArray = (JSONArray) isi.get("roles");
-                rolesArray.forEach(role -> roles.add(role.toString()));
+                if (!resourceAccess.isEmpty()) {
+                    JSONObject isi = (JSONObject) resourceAccess.get("isi");
+                    if (!isi.isEmpty()) {
+                        JSONArray rolesArray = (JSONArray) isi.get("roles");
+                        if (!rolesArray.isEmpty()) {
+                            rolesArray.forEach(role -> roles.add(role.toString()));
+                        }
+                    }
+                }
             }
         }
 

@@ -231,8 +231,10 @@ public class AbfrageService {
      * Diese Methode löscht ein {@link InfrastrukturabfrageModel}.
      *
      * @param id zum Identifizieren des {@link InfrastrukturabfrageModel}.
-     * @throws EntityNotFoundException     falls die Abfrage identifiziert durch die {@link InfrastrukturabfrageModel#getId()} nicht gefunden wird.
-     * @throws EntityIsReferencedException falls ein {@link BauvorhabenModel} in der Abfrage referenziert wird.
+     * @throws EntityNotFoundException          falls die Abfrage identifiziert durch die {@link InfrastrukturabfrageModel#getId()} nicht gefunden wird.
+     * @throws EntityIsReferencedException      falls ein {@link BauvorhabenModel} in der Abfrage referenziert wird.
+     * @throws UserRoleNotAllowedException      falls der Nutzer nicht die richtige Rolle hat.
+     * @throws AbfrageStatusNotAllowedException falls die Abfrage den falschen Status hat..
      */
     public void deleteInfrasturkturabfrageById(final UUID id)
         throws EntityNotFoundException, EntityIsReferencedException, UserRoleNotAllowedException, AbfrageStatusNotAllowedException {
@@ -242,6 +244,13 @@ public class AbfrageService {
         this.infrastrukturabfrageRepository.deleteById(id);
     }
 
+    /**
+     * Diese Methode überprüft ob der Nutzer die Richtige Rolle hat und die Abfrage den richtigen Status um Sie zu löschen.
+     *
+     * @param abfrage zum Identifizieren des Status.
+     * @throws UserRoleNotAllowedException      falls der Nutzer nicht die richtige Rolle hat.
+     * @throws AbfrageStatusNotAllowedException falls die Abfrage den falschen Status hat..
+     */
     public void hasRightRoleAndStatusToDeleteAbfrage(AbfrageModel abfrage)
         throws UserRoleNotAllowedException, AbfrageStatusNotAllowedException {
         var roles = authenticationUtils.getUserRoles();

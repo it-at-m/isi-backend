@@ -631,6 +631,50 @@ class AbfrageServiceTest {
     }
 
     @Test
+    void deleteInfrastrukturabfrageStatusException() {
+        final UUID id = UUID.randomUUID();
+        String[] roles = { "abfrageerstellung" };
+        final Infrastrukturabfrage entity = new Infrastrukturabfrage();
+        entity.setId(id);
+        final Abfrage abfrage = new Abfrage();
+        abfrage.setStatusAbfrage(StatusAbfrage.OFFEN);
+        entity.setAbfrage(abfrage);
+
+        Mockito.when(this.infrastrukturabfrageRepository.findById(entity.getId())).thenReturn(Optional.of(entity));
+        Mockito.when(this.authenticationUtils.getUserRoles()).thenReturn(List.of(roles));
+
+        Assertions.assertThrows(
+            AbfrageStatusNotAllowedException.class,
+            () -> this.abfrageService.deleteInfrasturkturabfrageById(id)
+        );
+
+        Mockito.verify(this.infrastrukturabfrageRepository, Mockito.times(1)).findById(entity.getId());
+        Mockito.verify(this.infrastrukturabfrageRepository, Mockito.times(0)).deleteById(id);
+    }
+
+    @Test
+    void deleteInfrastrukturabfrageNutzerException() {
+        final UUID id = UUID.randomUUID();
+        String[] roles = { "nutzer" };
+        final Infrastrukturabfrage entity = new Infrastrukturabfrage();
+        entity.setId(id);
+        final Abfrage abfrage = new Abfrage();
+        abfrage.setStatusAbfrage(StatusAbfrage.ANGELEGT);
+        entity.setAbfrage(abfrage);
+
+        Mockito.when(this.infrastrukturabfrageRepository.findById(entity.getId())).thenReturn(Optional.of(entity));
+        Mockito.when(this.authenticationUtils.getUserRoles()).thenReturn(List.of(roles));
+
+        Assertions.assertThrows(
+            UserRoleNotAllowedException.class,
+            () -> this.abfrageService.deleteInfrasturkturabfrageById(id)
+        );
+
+        Mockito.verify(this.infrastrukturabfrageRepository, Mockito.times(1)).findById(entity.getId());
+        Mockito.verify(this.infrastrukturabfrageRepository, Mockito.times(0)).deleteById(id);
+    }
+
+    @Test
     void throwEntityIsReferencedExceptionWhenAbfrageIsReferencingBauvorhaben() throws EntityIsReferencedException {
         this.abfrageService.throwEntityIsReferencedExceptionWhenAbfrageIsReferencingBauvorhaben(new AbfrageModel());
 
