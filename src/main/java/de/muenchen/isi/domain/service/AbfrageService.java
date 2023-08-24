@@ -8,6 +8,7 @@ import de.muenchen.isi.domain.exception.FileHandlingFailedException;
 import de.muenchen.isi.domain.exception.FileHandlingWithS3FailedException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
+import de.muenchen.isi.domain.exception.UserRoleNotAllowedException;
 import de.muenchen.isi.domain.mapper.AbfrageDomainMapper;
 import de.muenchen.isi.domain.model.AbfrageModel;
 import de.muenchen.isi.domain.model.AbfragevarianteModel;
@@ -18,6 +19,7 @@ import de.muenchen.isi.domain.model.abfrageSachbearbeitungInBearbeitungSachbearb
 import de.muenchen.isi.domain.service.filehandling.DokumentService;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.repository.InfrastrukturabfrageRepository;
+import de.muenchen.isi.security.AuthenticationUtils;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -42,6 +44,8 @@ public class AbfrageService {
     private final InfrastrukturabfrageRepository infrastrukturabfrageRepository;
 
     private final DokumentService dokumentService;
+
+    private final AuthenticationUtils authenticationUtils;
 
     /**
      * Die Methode gibt alle {@link InfrastrukturabfrageModel} als Liste zurück.
@@ -231,10 +235,25 @@ public class AbfrageService {
      * @throws EntityIsReferencedException falls ein {@link BauvorhabenModel} in der Abfrage referenziert wird.
      */
     public void deleteInfrasturkturabfrageById(final UUID id)
-        throws EntityNotFoundException, EntityIsReferencedException {
+        throws EntityNotFoundException, EntityIsReferencedException, UserRoleNotAllowedException, AbfrageStatusNotAllowedException {
         final var abfrage = this.getInfrastrukturabfrageById(id);
+        this.hasRightRoleAndStatusToDeleteAbfrage(abfrage.getAbfrage());
         this.throwEntityIsReferencedExceptionWhenAbfrageIsReferencingBauvorhaben(abfrage.getAbfrage());
         this.infrastrukturabfrageRepository.deleteById(id);
+    }
+
+    public void hasRightRoleAndStatusToDeleteAbfrage(AbfrageModel abfrage)
+        throws UserRoleNotAllowedException, AbfrageStatusNotAllowedException {
+        var roles = authenticationUtils.getUserRoles();
+        if (!roles.contains("admin")) {
+            if (!roles.contains("abfrageerstellung")) {
+                throw new UserRoleNotAllowedException("Sie haben nicht die richtige Rolle zum Löschen dieser Abfrage.");
+            } else if (abfrage.getStatusAbfrage() != StatusAbfrage.ANGELEGT) {
+                throw new AbfrageStatusNotAllowedException(
+                    "Die Abfrage ist nicht im Status 'angelegt' weswegen Sie nicht gelöscht werden kann."
+                );
+            }
+        }
     }
 
     /**

@@ -1,5 +1,7 @@
 package de.muenchen.isi.security;
 
+import com.nimbusds.jose.shaded.json.JSONArray;
+import com.nimbusds.jose.shaded.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -66,5 +68,27 @@ public class AuthenticationUtils {
             }
         }
         return StringUtils.isNotBlank(username) ? username : NAME_UNAUTHENTICATED_USER;
+    }
+
+    /**
+     * Die Methode extrahiert die Nutzerrollen des Nutzers aus dem {@link DefaultOAuth2AuthenticatedPrincipal}
+     *
+     * @return Liste der Nutzerrollen des Nutzers
+     */
+    public List<String> getUserRoles() {
+        List<String> roles = new ArrayList<>();
+        final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (!ObjectUtils.isEmpty(authentication)) {
+            final DefaultOAuth2AuthenticatedPrincipal principal =
+                (DefaultOAuth2AuthenticatedPrincipal) authentication.getPrincipal();
+            if (!ObjectUtils.isEmpty(principal)) {
+                JSONObject resourceAccess = principal.getAttribute("resource_access");
+                JSONObject isi = (JSONObject) resourceAccess.get("isi");
+                JSONArray rolesArray = (JSONArray) isi.get("roles");
+                rolesArray.forEach(role -> roles.add(role.toString()));
+            }
+        }
+
+        return roles;
     }
 }
