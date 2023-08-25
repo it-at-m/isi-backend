@@ -239,27 +239,27 @@ public class AbfrageService {
     public void deleteInfrasturkturabfrageById(final UUID id)
         throws EntityNotFoundException, EntityIsReferencedException, UserRoleNotAllowedException, AbfrageStatusNotAllowedException {
         final var abfrage = this.getInfrastrukturabfrageById(id);
-        this.hasRightRoleAndStatusToDeleteAbfrage(abfrage.getAbfrage());
+        this.throwUserRoleNotAllowedOrAbfrageStatusNotAlloweExceptionWhenDeleteAbfrage(abfrage.getAbfrage());
         this.throwEntityIsReferencedExceptionWhenAbfrageIsReferencingBauvorhaben(abfrage.getAbfrage());
         this.infrastrukturabfrageRepository.deleteById(id);
     }
 
     /**
-     * Diese Methode überprüft ob der Nutzer die Richtige Rolle hat und die Abfrage den richtigen Status um Sie zu löschen.
+     * Diese Methode überprüft ob der Nutzer die richtige Rolle hat und die Abfrage im richtigen Status, um sie zu löschen.
      *
      * @param abfrage zum Identifizieren des Status.
      * @throws UserRoleNotAllowedException      falls der Nutzer nicht die richtige Rolle hat.
      * @throws AbfrageStatusNotAllowedException falls die Abfrage den falschen Status hat..
      */
-    public void hasRightRoleAndStatusToDeleteAbfrage(AbfrageModel abfrage)
+    public void throwUserRoleNotAllowedOrAbfrageStatusNotAlloweExceptionWhenDeleteAbfrage(AbfrageModel abfrage)
         throws UserRoleNotAllowedException, AbfrageStatusNotAllowedException {
         var roles = authenticationUtils.getUserRoles();
         if (!roles.contains("admin")) {
             if (!roles.contains("abfrageerstellung")) {
-                throw new UserRoleNotAllowedException("Sie haben nicht die richtige Rolle zum Löschen dieser Abfrage.");
+                throw new UserRoleNotAllowedException("Keine Berechtigung zum Löschen der Abfrage");
             } else if (abfrage.getStatusAbfrage() != StatusAbfrage.ANGELEGT) {
                 throw new AbfrageStatusNotAllowedException(
-                    "Die Abfrage ist nicht im Status 'angelegt' weswegen Sie nicht gelöscht werden kann."
+                    "Die Abfrage kann im nur im Status 'angelegt' gelöscht werden."
                 );
             }
         }

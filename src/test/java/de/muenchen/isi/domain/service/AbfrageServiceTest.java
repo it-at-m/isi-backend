@@ -585,7 +585,7 @@ class AbfrageServiceTest {
     }
 
     @Test
-    void deleteInfrastrukturabfrage()
+    void deleteInfrastrukturabfrageAbfrageerstellung()
         throws EntityNotFoundException, EntityIsReferencedException, UserRoleNotAllowedException, AbfrageStatusNotAllowedException {
         final UUID id = UUID.randomUUID();
 
@@ -595,6 +595,29 @@ class AbfrageServiceTest {
         entity.setId(id);
         final Abfrage abfrage = new Abfrage();
         abfrage.setStatusAbfrage(StatusAbfrage.ANGELEGT);
+        entity.setAbfrage(abfrage);
+
+        Mockito.when(this.infrastrukturabfrageRepository.findById(entity.getId())).thenReturn(Optional.of(entity));
+
+        Mockito.when(this.authenticationUtils.getUserRoles()).thenReturn(List.of(roles));
+
+        this.abfrageService.deleteInfrasturkturabfrageById(id);
+
+        Mockito.verify(this.infrastrukturabfrageRepository, Mockito.times(1)).findById(entity.getId());
+        Mockito.verify(this.infrastrukturabfrageRepository, Mockito.times(1)).deleteById(id);
+    }
+
+    @Test
+    void deleteInfrastrukturabfrageAdmin()
+        throws EntityNotFoundException, EntityIsReferencedException, UserRoleNotAllowedException, AbfrageStatusNotAllowedException {
+        final UUID id = UUID.randomUUID();
+
+        String[] roles = { "admin" };
+
+        final Infrastrukturabfrage entity = new Infrastrukturabfrage();
+        entity.setId(id);
+        final Abfrage abfrage = new Abfrage();
+        abfrage.setStatusAbfrage(StatusAbfrage.OFFEN);
         entity.setAbfrage(abfrage);
 
         Mockito.when(this.infrastrukturabfrageRepository.findById(entity.getId())).thenReturn(Optional.of(entity));
