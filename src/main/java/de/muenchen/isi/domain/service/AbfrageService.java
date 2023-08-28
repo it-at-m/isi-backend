@@ -8,6 +8,7 @@ import de.muenchen.isi.domain.exception.FileHandlingFailedException;
 import de.muenchen.isi.domain.exception.FileHandlingWithS3FailedException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
+import de.muenchen.isi.domain.exception.UserRoleNotAllowedException;
 import de.muenchen.isi.domain.mapper.AbfrageDomainMapper;
 import de.muenchen.isi.domain.model.AbfrageModel;
 import de.muenchen.isi.domain.model.AbfragevarianteModel;
@@ -18,6 +19,7 @@ import de.muenchen.isi.domain.model.abfrageSachbearbeitungInBearbeitungSachbearb
 import de.muenchen.isi.domain.service.filehandling.DokumentService;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.repository.InfrastrukturabfrageRepository;
+import de.muenchen.isi.security.AuthenticationUtils;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -42,6 +44,8 @@ public class AbfrageService {
     private final InfrastrukturabfrageRepository infrastrukturabfrageRepository;
 
     private final DokumentService dokumentService;
+
+    private final AuthenticationUtils authenticationUtils;
 
     /**
      * Die Methode gibt alle {@link InfrastrukturabfrageModel} als Liste zurück.
@@ -227,14 +231,38 @@ public class AbfrageService {
      * Diese Methode löscht ein {@link InfrastrukturabfrageModel}.
      *
      * @param id zum Identifizieren des {@link InfrastrukturabfrageModel}.
-     * @throws EntityNotFoundException     falls die Abfrage identifiziert durch die {@link InfrastrukturabfrageModel#getId()} nicht gefunden wird.
-     * @throws EntityIsReferencedException falls ein {@link BauvorhabenModel} in der Abfrage referenziert wird.
+     * @throws EntityNotFoundException          falls die Abfrage identifiziert durch die {@link InfrastrukturabfrageModel#getId()} nicht gefunden wird.
+     * @throws EntityIsReferencedException      falls ein {@link BauvorhabenModel} in der Abfrage referenziert wird.
+     * @throws UserRoleNotAllowedException      falls der Nutzer nicht die richtige Rolle hat.
+     * @throws AbfrageStatusNotAllowedException falls die Abfrage den falschen Status hat..
      */
     public void deleteInfrasturkturabfrageById(final UUID id)
-        throws EntityNotFoundException, EntityIsReferencedException {
+        throws EntityNotFoundException, EntityIsReferencedException, UserRoleNotAllowedException, AbfrageStatusNotAllowedException {
         final var abfrage = this.getInfrastrukturabfrageById(id);
+        this.throwUserRoleNotAllowedOrAbfrageStatusNotAlloweExceptionWhenDeleteAbfrage(abfrage.getAbfrage());
         this.throwEntityIsReferencedExceptionWhenAbfrageIsReferencingBauvorhaben(abfrage.getAbfrage());
         this.infrastrukturabfrageRepository.deleteById(id);
+    }
+
+    /**
+     * Diese Methode überprüft ob der Nutzer die richtige Rolle hat und die Abfrage im richtigen Status, um sie zu löschen.
+     *
+     * @param abfrage zum Identifizieren des Status.
+     * @throws UserRoleNotAllowedException      falls der Nutzer nicht die richtige Rolle hat.
+     * @throws AbfrageStatusNotAllowedException falls die Abfrage den falschen Status hat..
+     */
+    public void throwUserRoleNotAllowedOrAbfrageStatusNotAlloweExceptionWhenDeleteAbfrage(AbfrageModel abfrage)
+        throws UserRoleNotAllowedException, AbfrageStatusNotAllowedException {
+        var roles = authenticationUtils.getUserRoles();
+        if (!roles.contains("admin")) {
+            if (!roles.contains("abfrageerstellung")) {
+                throw new UserRoleNotAllowedException("Keine Berechtigung zum Löschen der Abfrage");
+            } else if (abfrage.getStatusAbfrage() != StatusAbfrage.ANGELEGT) {
+                throw new AbfrageStatusNotAllowedException(
+                    "Die Abfrage kann im nur im Status 'angelegt' gelöscht werden."
+                );
+            }
+        }
     }
 
     /**

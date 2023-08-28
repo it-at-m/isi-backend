@@ -15,6 +15,7 @@ import de.muenchen.isi.domain.exception.MimeTypeExtractionFailedException;
 import de.muenchen.isi.domain.exception.MimeTypeNotAllowedException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
+import de.muenchen.isi.domain.exception.UserRoleNotAllowedException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
@@ -199,6 +200,18 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(AbfrageStatusNotAllowedException.class)
     public ResponseEntity<Object> handleAbfrageStatusNotAllowedException(final AbfrageStatusNotAllowedException ex) {
+        final var httpStatus = HttpStatus.CONFLICT;
+        final var errorResponseDto =
+            this.createInformationResponseDtoWithTraceInformationAndTimestampAndOriginalExceptionNameAndStatusAndMessage(
+                    ex,
+                    httpStatus.value(),
+                    List.of(ex.getMessage())
+                );
+        return ResponseEntity.status(httpStatus).body(errorResponseDto);
+    }
+
+    @ExceptionHandler(UserRoleNotAllowedException.class)
+    public ResponseEntity<Object> handleUserRoleNotAllowedException(final UserRoleNotAllowedException ex) {
         final var httpStatus = HttpStatus.CONFLICT;
         final var errorResponseDto =
             this.createInformationResponseDtoWithTraceInformationAndTimestampAndOriginalExceptionNameAndStatusAndMessage(

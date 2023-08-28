@@ -19,5 +19,5 @@ public @interface MockCustomUser {
 
     String sub() default "12345678-1234-1234-1234-1234567890ab";
 
-    String[] roles() default { "lhm-isi-admin" };
+    String[] roles() default { "admin" };
 }

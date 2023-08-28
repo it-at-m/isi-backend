@@ -57,12 +57,12 @@ class StammdatenImportServiceTest {
     @BeforeEach
     void beforeEach() {
         this.stammdatenImportService =
-            new StammdatenImportService(
-                this.csvRepository,
-                this.staedtebaulicheOrientierungswertRepository,
-                this.sobonOrientierungswertSozialeInfrastrukturRepository,
-                this.stammdatenDomainMapper
-            );
+        new StammdatenImportService(
+            this.csvRepository,
+            this.staedtebaulicheOrientierungswertRepository,
+            this.sobonOrientierungswertSozialeInfrastrukturRepository,
+            this.stammdatenDomainMapper
+        );
         Mockito.reset(
             this.multipartFile,
             this.csvRepository,
