@@ -91,15 +91,15 @@ public class BauvorhabenServiceTest {
     @BeforeEach
     public void beforeEach() {
         this.bauvorhabenService =
-            new BauvorhabenService(
-                this.bauvorhabenDomainMapper,
-                this.infrastruktureinrichtungDomainMapper,
-                this.abfrageDomainMapper,
-                this.bauvorhabenRepository,
-                this.infrastrukturabfrageRepository,
-                this.infrastruktureinrichtungRepository,
-                this.dokumentService
-            );
+        new BauvorhabenService(
+            this.bauvorhabenDomainMapper,
+            this.infrastruktureinrichtungDomainMapper,
+            this.abfrageDomainMapper,
+            this.bauvorhabenRepository,
+            this.infrastrukturabfrageRepository,
+            this.infrastruktureinrichtungRepository,
+            this.dokumentService
+        );
 
         Mockito.reset(
             this.bauvorhabenRepository,
@@ -510,7 +510,7 @@ public class BauvorhabenServiceTest {
         // Wenn 'bauvorhabenId' null ist, soll nichts passieren.
 
         returnedInfrastruktureinrichtung =
-            this.bauvorhabenService.assignBauvorhabenToInfrastruktureinrichtung(null, infrastruktureinrichtung);
+        this.bauvorhabenService.assignBauvorhabenToInfrastruktureinrichtung(null, infrastruktureinrichtung);
         assertThat(returnedInfrastruktureinrichtung, sameInstance(infrastruktureinrichtung));
         Mockito.verify(this.bauvorhabenRepository, Mockito.times(0)).findById(bauvorhaben.getId());
 
@@ -526,7 +526,7 @@ public class BauvorhabenServiceTest {
 
         Mockito.when(this.bauvorhabenRepository.findById(bauvorhaben.getId())).thenReturn(Optional.of(bauvorhaben));
         returnedInfrastruktureinrichtung =
-            this.bauvorhabenService.assignBauvorhabenToInfrastruktureinrichtung(id, infrastruktureinrichtung);
+        this.bauvorhabenService.assignBauvorhabenToInfrastruktureinrichtung(id, infrastruktureinrichtung);
         assertThat(returnedInfrastruktureinrichtung, sameInstance(infrastruktureinrichtung));
         Mockito.verify(this.bauvorhabenRepository, Mockito.times(2)).findById(bauvorhaben.getId());
         assertThat(
