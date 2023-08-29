@@ -2,7 +2,6 @@ package de.muenchen.isi.domain.model.abfrageBedarfsmeldungInBearbeitungFachrefer
 
 import java.util.List;
 import lombok.Data;
-import lombok.ToString;
 
 @Data
 public class InfrastrukturabfrageInBearbeitungFachreferateModel {
