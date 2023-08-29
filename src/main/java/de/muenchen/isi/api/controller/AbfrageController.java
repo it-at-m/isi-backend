@@ -48,6 +48,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
@@ -275,6 +276,41 @@ public class AbfrageController {
     )
         throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, BauvorhabenNotReferencedException {
         final var abfrage = this.abfrageService.changeAbfragevarianteRelevant(abfrageId, abfragevarianteId);
+        final var saved = this.abfrageApiMapper.model2Dto(abfrage);
+        return ResponseEntity.ok(saved);
+    }
+
+    @PutMapping("/abfrage/{abfrageId}/change-anmerkung")
+    @Transactional(rollbackFor = { OptimisticLockingException.class, UniqueViolationException.class })
+    @Operation(
+        summary = "Fügt Anmerkung bei der Abfrage Anmerkung hinzu falls die Abfrage im Status IN_BEARBEITUNG_PLAN zu ERLEDIGT wechselt."
+    )
+    @ApiResponses(
+        value = {
+            @ApiResponse(responseCode = "200", description = "OK -> Anmerkung wurde erfolgreich gespeichert."),
+            @ApiResponse(
+                responseCode = "400",
+                description = "BAD_REQUEST -> Anmerkung konnte nicht gespeichert werden.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+            @ApiResponse(
+                responseCode = "404",
+                description = "NOT_FOUND -> Es gibt keine Abfrage mit der ID.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+            @ApiResponse(
+                responseCode = "412",
+                description = "PRECONDITION_FAILED -> In der Anwendung ist bereits eine neuere Version der Entität gespeichert.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+        }
+    )
+    @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_SCHLIESSEN_ABFRAGE.name())")
+    public ResponseEntity<InfrastrukturabfrageDto> putAbfrageAnmerkung(
+        @PathVariable @NotNull final UUID abfrageId,
+        @RequestParam(value = "anmerkung") String anmerkung
+    ) throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException {
+        final var abfrage = this.abfrageService.changeAbfrageAnmerkung(abfrageId, anmerkung);
         final var saved = this.abfrageApiMapper.model2Dto(abfrage);
         return ResponseEntity.ok(saved);
     }

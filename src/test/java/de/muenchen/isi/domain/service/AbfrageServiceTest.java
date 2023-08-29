@@ -541,6 +541,48 @@ class AbfrageServiceTest {
     }
 
     @Test
+    void changeAbfrageAnmerkung() throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException {
+        final UUID abfrageId = UUID.randomUUID();
+        final String anmerkung = "Test";
+        final InfrastrukturabfrageModel infrastrukturabfrage = new InfrastrukturabfrageModel();
+        infrastrukturabfrage.setId(abfrageId);
+        final AbfrageModel abfrage = new AbfrageModel();
+        abfrage.setNameAbfrage("hallo");
+        abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+        infrastrukturabfrage.setAbfrage(abfrage);
+
+        final Infrastrukturabfrage infrastrukturabfrageEntity = new Infrastrukturabfrage();
+        infrastrukturabfrageEntity.setId(abfrageId);
+        final Abfrage abfrageEntity = new Abfrage();
+        abfrageEntity.setNameAbfrage("hallo");
+        abfrageEntity.setAnmerkung("Test");
+        abfrageEntity.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+        infrastrukturabfrageEntity.setAbfrage(abfrageEntity);
+
+        Infrastrukturabfrage entity = this.abfrageDomainMapper.model2entity(infrastrukturabfrage);
+
+        Mockito.when(this.infrastrukturabfrageRepository.findById(entity.getId())).thenReturn(Optional.of(entity));
+        Mockito
+            .when(this.infrastrukturabfrageRepository.saveAndFlush(infrastrukturabfrageEntity))
+            .thenReturn(infrastrukturabfrageEntity);
+        Mockito
+            .when(this.infrastrukturabfrageRepository.findByAbfrage_NameAbfrageIgnoreCase("hallo"))
+            .thenReturn(Optional.empty());
+
+        final InfrastrukturabfrageModel result = this.abfrageService.changeAbfrageAnmerkung(abfrageId, anmerkung);
+
+        assertThat(result.getAbfrage().getAnmerkung(), is("Test"));
+
+        Mockito.verify(this.infrastrukturabfrageRepository, Mockito.times(1)).findById(entity.getId());
+        Mockito.verify(this.infrastrukturabfrageRepository, Mockito.times(1)).saveAndFlush(infrastrukturabfrageEntity);
+        Mockito
+            .verify(this.infrastrukturabfrageRepository, Mockito.times(1))
+            .findByAbfrage_NameAbfrageIgnoreCase("hallo");
+
+        Mockito.verify(this.infrastrukturabfrageRepository, Mockito.times(1)).findById(entity.getId());
+    }
+
+    @Test
     void throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid()
         throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, FileHandlingFailedException, FileHandlingWithS3FailedException {
         final UUID abfrageId = UUID.randomUUID();

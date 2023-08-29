@@ -227,6 +227,19 @@ public class AbfrageService {
         return this.saveInfrastrukturabfrage(originalAbfrageDb);
     }
 
+    public InfrastrukturabfrageModel changeAbfrageAnmerkung(final UUID id, final String anmerkung)
+        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException {
+        final var originalAbfrageDb = this.getInfrastrukturabfrageById(id);
+        if (originalAbfrageDb.getAbfrage().getAnmerkung() == null) {
+            originalAbfrageDb.getAbfrage().setAnmerkung(anmerkung);
+        } else {
+            originalAbfrageDb
+                .getAbfrage()
+                .setAnmerkung(originalAbfrageDb.getAbfrage().getAnmerkung().concat("\n").concat(anmerkung));
+        }
+        return this.saveInfrastrukturabfrage(originalAbfrageDb);
+    }
+
     /**
      * Diese Methode löscht ein {@link InfrastrukturabfrageModel}.
      *
