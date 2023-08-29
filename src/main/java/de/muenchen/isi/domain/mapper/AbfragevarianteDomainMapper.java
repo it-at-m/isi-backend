@@ -26,7 +26,6 @@ public interface AbfragevarianteDomainMapper {
         {
             @Mapping(target = "lastModifiedDateTime", ignore = true),
             @Mapping(target = "createdDateTime", ignore = true),
-            @Mapping(target = "relevant", ignore = true),
             @Mapping(target = "abfragevarianteSachbearbeitung", ignore = true),
         }
     )
@@ -52,7 +51,6 @@ public interface AbfragevarianteDomainMapper {
             @Mapping(target = "id", ignore = true),
             @Mapping(target = "lastModifiedDateTime", ignore = true),
             @Mapping(target = "createdDateTime", ignore = true),
-            @Mapping(target = "relevant", ignore = true),
         }
     )
     AbfragevarianteModel request2Model(

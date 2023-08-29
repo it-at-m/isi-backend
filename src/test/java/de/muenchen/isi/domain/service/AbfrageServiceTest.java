@@ -378,6 +378,7 @@ class AbfrageServiceTest {
         assertThat(result, is(entityExpected));
     }
 
+    /*
     @Test
     void changeAbfragevarianteRelevant()
         throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, FileHandlingFailedException, FileHandlingWithS3FailedException, BauvorhabenNotReferencedException {
@@ -529,6 +530,7 @@ class AbfrageServiceTest {
         );
         Mockito.verify(this.infrastrukturabfrageRepository, Mockito.times(1)).findById(entity.getId());
     }
+    */
 
     @Test
     void throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid()

@@ -1,6 +1,8 @@
 package de.muenchen.isi.domain.service;
 
 import de.muenchen.isi.api.dto.AbfrageDto;
+import de.muenchen.isi.domain.exception.AbfrageStatusNotAllowedException;
+import de.muenchen.isi.domain.exception.BauvorhabenNotReferencedException;
 import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.FileHandlingFailedException;
@@ -9,11 +11,15 @@ import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
 import de.muenchen.isi.domain.mapper.BauvorhabenDomainMapper;
 import de.muenchen.isi.domain.model.AbfrageModel;
+import de.muenchen.isi.domain.model.AbfragevarianteModel;
 import de.muenchen.isi.domain.model.BauvorhabenModel;
+import de.muenchen.isi.domain.model.InfrastrukturabfrageModel;
 import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.AbfrageAngelegtModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.InfrastruktureinrichtungModel;
 import de.muenchen.isi.domain.service.filehandling.DokumentService;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Infrastruktureinrichtung;
+import de.muenchen.isi.infrastructure.repository.AbfragevarianteRepository;
 import de.muenchen.isi.infrastructure.repository.BauvorhabenRepository;
 import de.muenchen.isi.infrastructure.repository.InfrastrukturabfrageRepository;
 import de.muenchen.isi.infrastructure.repository.InfrastruktureinrichtungRepository;
@@ -39,6 +45,10 @@ public class BauvorhabenService {
     private final InfrastrukturabfrageRepository infrastrukturabfrageRepository;
 
     private final InfrastruktureinrichtungRepository infrastruktureinrichtungRepository;
+
+    private final AbfragevarianteRepository abfragevarianteRepository;
+
+    private final AbfrageService abfrageService;
 
     private final DokumentService dokumentService;
 
@@ -176,6 +186,58 @@ public class BauvorhabenService {
     }
 
     /**
+     * Diese Methode setzt in einem {@link BauvorhabenModel} eine neue relevante Abfragevariante.
+     * Ist diese Abfragevariante bereits relevant, wird die relevante Abfragevariante des Bauvorhabens auf null gesetzt.
+     * Ist eine andere Abfragevariante bereits relevant, wird eine Exception geworfen.
+     * Die Abfrage muss sich im Status {@link StatusAbfrage#IN_BEARBEITUNG_SACHBEARBEITUNG} befinden.
+     *
+     * @param abfragevariante die neue relevante Abfragevariante
+     * @return das geupdatete {@link InfrastrukturabfrageModel}
+     * @throws EntityNotFoundException           falls die Abfrage oder Abfragevariante nicht gefunden wurde
+     * @throws UniqueViolationException          falls es schon eine andere Abfragevariante relevant ist
+     * @throws OptimisticLockingException        falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
+     * @throws AbfrageStatusNotAllowedException  falls die Abfrage den falschen Status hat
+     * @throws BauvorhabenNotReferencedException falls die Abfrage zu keinem Bauvorhaben gehört
+     */
+    public BauvorhabenModel changeRelevanteAbfragevariante(final AbfragevarianteModel abfragevariante)
+        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, BauvorhabenNotReferencedException {
+        final var abfrage = getAbfrageOfAbfragevariante(abfragevariante);
+        abfrageService.throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(
+            abfrage.getAbfrage(),
+            StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG
+        );
+
+        final var bauvorhaben = abfrage.getAbfrage().getBauvorhaben();
+        if (bauvorhaben == null) {
+            String message =
+                "Die Abfrage ist keinem Bauvorhaben zugeordnet. Somit kann keine Abfragevariante als relevant markiert werden.";
+            log.error(message);
+            throw new BauvorhabenNotReferencedException(message);
+        }
+
+        final var relevanteAbfragevariante = bauvorhaben.getRelevanteAbfragevariante();
+        if (relevanteAbfragevariante != null) {
+            if (!relevanteAbfragevariante.getId().equals(abfragevariante.getId())) {
+                final var relevanteAbfrage = getAbfrageOfAbfragevariante(relevanteAbfragevariante);
+                var errorMessage =
+                    "Die Abfragevariante " +
+                    relevanteAbfragevariante.getAbfragevariantenName() +
+                    " in Abfrage " +
+                    relevanteAbfrage.getAbfrage().getNameAbfrage() +
+                    " ist bereits als relevant markiert.";
+                log.error(errorMessage);
+                throw new UniqueViolationException(errorMessage);
+            } else {
+                bauvorhaben.setRelevanteAbfragevariante(null);
+            }
+        } else {
+            bauvorhaben.setRelevanteAbfragevariante(abfragevariante);
+        }
+
+        return saveBauvorhaben(bauvorhaben);
+    }
+
+    /**
      * Wird das im Parameter gegebene {@link BauvorhabenModel} durch ein {@link AbfrageModel} referenziert,
      * wird eine {@link EntityIsReferencedException} geworfen.
      *
@@ -227,5 +289,22 @@ public class BauvorhabenService {
             log.error(message);
             throw new EntityIsReferencedException(message);
         }
+    }
+
+    private InfrastrukturabfrageModel getAbfrageOfAbfragevariante(AbfragevarianteModel abfragevariante)
+        throws EntityNotFoundException {
+        final var abfrageId = abfragevarianteRepository
+            .findAbfrageAbfragevariantenIdById(abfragevariante.getId())
+            .orElse(
+                abfragevarianteRepository
+                    .findAbfrageAbfragevariantenSachbearbeitungIdById(abfragevariante.getId())
+                    .orElseThrow(() -> {
+                        final var message = "Abfragevariante nicht gefunden.";
+                        log.error(message);
+                        return new EntityNotFoundException(message);
+                    })
+            );
+
+        return abfrageService.getInfrastrukturabfrageById(abfrageId);
     }
 }

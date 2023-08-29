@@ -46,4 +46,6 @@ public class BauvorhabenModel extends BaseEntityModel {
     private List<BaugebietTyp> artFnp;
 
     private List<DokumentModel> dokumente;
+
+    private AbfragevarianteModel relevanteAbfragevariante;
 }

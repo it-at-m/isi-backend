@@ -1,7 +1,6 @@
 package de.muenchen.isi.domain.service;
 
 import de.muenchen.isi.domain.exception.AbfrageStatusNotAllowedException;
-import de.muenchen.isi.domain.exception.BauvorhabenNotReferencedException;
 import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.FileHandlingFailedException;
@@ -10,7 +9,6 @@ import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
 import de.muenchen.isi.domain.mapper.AbfrageDomainMapper;
 import de.muenchen.isi.domain.model.AbfrageModel;
-import de.muenchen.isi.domain.model.AbfragevarianteModel;
 import de.muenchen.isi.domain.model.BauvorhabenModel;
 import de.muenchen.isi.domain.model.InfrastrukturabfrageModel;
 import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.InfrastrukturabfrageAngelegtModel;
@@ -20,12 +18,9 @@ import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.repository.InfrastrukturabfrageRepository;
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
@@ -165,48 +160,6 @@ public class AbfrageService {
     }
 
     /**
-     * Diese Methode markiert ein {@link AbfragevarianteModel} als relevant, falls diese noch nicht relevant ist.
-     * Ist die Abfragevariante bereits als relevant markiert, wird der Status auf nicht relevant gesetzt.
-     * Die Abfragevariante muss sich im Status {@link StatusAbfrage#IN_BEARBEITUNG_SACHBEARBEITUNG} befinden.
-     *
-     * @param abfrageId         die Abfrage zum Ändern der Relevanz.
-     * @param abfragevarianteId die Abfragevariante welche man relevant oder nicht relevant setzten möchte
-     * @return das geupdatete {@link InfrastrukturabfrageModel}
-     * @throws EntityNotFoundException           falls die Abfrage oder Abfragevariante nicht gefunden wurde
-     * @throws UniqueViolationException          falls es schon eine Abfragevariante relevant ist
-     * @throws OptimisticLockingException        falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
-     * @throws AbfrageStatusNotAllowedException  fall die Abfrage den falschen Status hat
-     * @throws BauvorhabenNotReferencedException falls die Abfrage zu keinem Bauvorhaben dazugehört
-     */
-    public InfrastrukturabfrageModel changeAbfragevarianteRelevant(final UUID abfrageId, final UUID abfragevarianteId)
-        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, BauvorhabenNotReferencedException {
-        final var abfrage = this.getInfrastrukturabfrageById(abfrageId);
-        this.throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(
-                abfrage.getAbfrage(),
-                StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG
-            );
-        final var abfragevariante = Stream
-            .concat(
-                CollectionUtils.emptyIfNull(abfrage.getAbfragevarianten()).stream(),
-                CollectionUtils.emptyIfNull(abfrage.getAbfragevariantenSachbearbeitung()).stream()
-            )
-            .filter(abfragevarianteModel -> abfragevarianteModel.getId().equals(abfragevarianteId))
-            .findFirst()
-            .orElseThrow(() -> {
-                final var message = "Abfragevariante wurde nicht gefunden";
-                log.error(message);
-                return new EntityNotFoundException(message);
-            });
-        if (abfragevariante.isRelevant()) {
-            abfragevariante.setRelevant(false);
-        } else {
-            this.throwsBauvorhabenNotReferencedExceptionOrUniqueViolationExceptionIfRelevant(abfrage);
-            abfragevariante.setRelevant(true);
-        }
-        return this.saveInfrastrukturabfrage(abfrage);
-    }
-
-    /**
      * Diese Methode führt für eine Abfrage, die durch die {@link InfrastrukturabfrageModel#getId()} identifiziert ist, eine Statusänderung durch.
      *
      * @param id            {@link InfrastrukturabfrageModel#getId()} der Abfrage zum Updaten
@@ -282,54 +235,6 @@ public class AbfrageService {
                 ".";
             log.error(message);
             throw new AbfrageStatusNotAllowedException(message);
-        }
-    }
-
-    /**
-     * Überprüft für das der Abfrage zugeordnete Bauvorhaben, dass in keiner anderen Abfrage eine Abfragevariante als relevant markiert ist.
-     *
-     * @param abfrage Abfrage in welcher die Relevantsetzung geschieht.
-     * @throws UniqueViolationException          falls schon eine Relevante Abfragevariante exisitiert
-     * @throws BauvorhabenNotReferencedException falls die Abfrage keinem Bauvorhaben zugeordnet ist
-     */
-
-    private void throwsBauvorhabenNotReferencedExceptionOrUniqueViolationExceptionIfRelevant(
-        final InfrastrukturabfrageModel abfrage
-    ) throws UniqueViolationException, BauvorhabenNotReferencedException {
-        if (abfrage.getAbfrage().getBauvorhaben() == null) {
-            String message =
-                "Die Abfrage ist keinem Bauvorhaben zugeordnet. Somit kann keine Abfragevariante als relevant markiert werden.";
-            log.error(message);
-            throw new BauvorhabenNotReferencedException(message);
-        }
-        final var relevanteAbfrage = new AtomicBoolean(false);
-        final var nameRelevantAbfrage = new StringBuilder();
-        final var nameRelevantAbfragevariante = new StringBuilder();
-        this.infrastrukturabfrageRepository.findAllByAbfrageBauvorhabenId(abfrage.getAbfrage().getBauvorhaben().getId())
-            .forEach(infrastrukturabfrage -> {
-                Stream
-                    .concat(
-                        CollectionUtils.emptyIfNull(infrastrukturabfrage.getAbfragevarianten()).stream(),
-                        CollectionUtils.emptyIfNull(infrastrukturabfrage.getAbfragevariantenSachbearbeitung()).stream()
-                    )
-                    .forEach(abfragevariante -> {
-                        if (abfragevariante.isRelevant()) {
-                            relevanteAbfrage.set(true);
-                            nameRelevantAbfrage.append(infrastrukturabfrage.getAbfrage().getNameAbfrage());
-                            nameRelevantAbfragevariante.append(abfragevariante.getAbfragevariantenName());
-                        }
-                    });
-            });
-
-        if (relevanteAbfrage.get()) {
-            var errorMessage =
-                "Die Abfragevariante " +
-                nameRelevantAbfragevariante +
-                " in Abfrage " +
-                nameRelevantAbfrage +
-                " ist bereits als relevant markiert.";
-            log.error(errorMessage);
-            throw new UniqueViolationException(errorMessage);
         }
     }
 }

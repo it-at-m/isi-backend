@@ -22,6 +22,7 @@ import de.muenchen.isi.infrastructure.entity.Abfrage;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
 import de.muenchen.isi.infrastructure.entity.Infrastrukturabfrage;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Kinderkrippe;
+import de.muenchen.isi.infrastructure.repository.AbfragevarianteRepository;
 import de.muenchen.isi.infrastructure.repository.BauvorhabenRepository;
 import de.muenchen.isi.infrastructure.repository.InfrastrukturabfrageRepository;
 import de.muenchen.isi.infrastructure.repository.InfrastruktureinrichtungRepository;
@@ -59,6 +60,12 @@ public class BauvorhabenServiceTest {
     private InfrastruktureinrichtungRepository infrastruktureinrichtungRepository;
 
     @Mock
+    private AbfragevarianteRepository abfragevarianteRepository;
+
+    @Mock
+    private AbfrageService abfrageService;
+
+    @Mock
     private DokumentService dokumentService;
 
     @BeforeEach
@@ -69,6 +76,8 @@ public class BauvorhabenServiceTest {
                 this.bauvorhabenRepository,
                 this.infrastrukturabfrageRepository,
                 this.infrastruktureinrichtungRepository,
+                this.abfragevarianteRepository,
+                this.abfrageService,
                 this.dokumentService
             );
 

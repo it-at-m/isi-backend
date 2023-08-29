@@ -73,4 +73,6 @@ public class BauvorhabenDto extends BaseEntityDto {
 
     @HasAllowedNumberOfDocuments
     private List<@Valid DokumentDto> dokumente;
+
+    private AbfragevarianteDto relevanteAbfragevariante;
 }
