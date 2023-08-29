@@ -350,7 +350,9 @@ public class TransitionModelTest {
         thirdPossibleTransition.setIndex(5);
         thirdPossibleTransition.setButtonName("ABFRAGE SCHLIEßEN");
         thirdPossibleTransition.setUrl("abfrage-schliessen");
-        thirdPossibleTransition.setDialogText("Die Abfrage wird erfolgreich geschlossen.");
+        thirdPossibleTransition.setDialogText(
+            "Die Abfrage wird erfolgreich geschlossen. Sie können eine Anmerkung hinzufügen."
+        );
 
         expected.add(thirdPossibleTransition);
 
