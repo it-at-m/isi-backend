@@ -9,13 +9,17 @@ import de.muenchen.isi.domain.exception.FileHandlingFailedException;
 import de.muenchen.isi.domain.exception.FileHandlingWithS3FailedException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
+import de.muenchen.isi.domain.mapper.AbfrageDomainMapper;
 import de.muenchen.isi.domain.mapper.BauvorhabenDomainMapper;
+import de.muenchen.isi.domain.mapper.InfrastruktureinrichtungDomainMapper;
 import de.muenchen.isi.domain.model.AbfrageModel;
 import de.muenchen.isi.domain.model.AbfragevarianteModel;
 import de.muenchen.isi.domain.model.BauvorhabenModel;
 import de.muenchen.isi.domain.model.InfrastrukturabfrageModel;
 import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.AbfrageAngelegtModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.InfrastruktureinrichtungModel;
+import de.muenchen.isi.domain.model.list.AbfrageListElementModel;
+import de.muenchen.isi.domain.model.list.InfrastruktureinrichtungListElementModel;
 import de.muenchen.isi.domain.service.filehandling.DokumentService;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Infrastruktureinrichtung;
@@ -23,6 +27,7 @@ import de.muenchen.isi.infrastructure.repository.AbfragevarianteRepository;
 import de.muenchen.isi.infrastructure.repository.BauvorhabenRepository;
 import de.muenchen.isi.infrastructure.repository.InfrastrukturabfrageRepository;
 import de.muenchen.isi.infrastructure.repository.InfrastruktureinrichtungRepository;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -39,6 +44,10 @@ import org.springframework.stereotype.Service;
 public class BauvorhabenService {
 
     private final BauvorhabenDomainMapper bauvorhabenDomainMapper;
+
+    private final InfrastruktureinrichtungDomainMapper infrastruktureinrichtungDomainMapper;
+
+    private final AbfrageDomainMapper abfrageDomainMapper;
 
     private final BauvorhabenRepository bauvorhabenRepository;
 
@@ -235,6 +244,42 @@ public class BauvorhabenService {
         }
 
         return saveBauvorhaben(bauvorhaben);
+    }
+
+    /**
+     * Die Methode gibt alle {@link InfrastruktureinrichtungListElementModel} als Liste zurück sortiert nach InfrastrukturTyp und innerhalb
+     * des InfrastrukturTyps alphabetisch aufsteigend welche einem Bauvorhaben zugeordnet sind.
+     *
+     * @param bauvorhabenId zum Identifizieren des {@link BauvorhabenModel}
+     * @return Liste von {@link InfrastruktureinrichtungListElementModel} welche einem Bauvorhaben zugeordent sind
+     */
+    public List<InfrastruktureinrichtungListElementModel> getReferencedInfrastruktureinrichtungen(
+        final UUID bauvorhabenId
+    ) {
+        return this.infrastruktureinrichtungRepository.findAllByBauvorhabenId(bauvorhabenId)
+            .map(this.infrastruktureinrichtungDomainMapper::entity2ListElementModel)
+            .sorted(
+                Comparator
+                    .comparing(InfrastruktureinrichtungListElementModel::getInfrastruktureinrichtungTyp)
+                    .thenComparing(InfrastruktureinrichtungListElementModel::getNameEinrichtung)
+            )
+            .collect(Collectors.toList());
+    }
+
+    /**
+     * Die Methode gibt alle {@link AbfrageListElementModel} als Liste zurück sortiert nach Erstellungsdatum aufsteigend
+     * welche einem Bauvorhaben zugeordnet sind.
+     *
+     * @param bauvorhabenId zum Identifizieren des {@link BauvorhabenModel}
+     * @return Liste von {@link AbfrageListElementModel} welche einem Bauvorhaben zugeordent sind
+     */
+    public List<AbfrageListElementModel> getReferencedInfrastrukturabfragen(final UUID bauvorhabenId) {
+        return this.infrastrukturabfrageRepository.findAllByAbfrageBauvorhabenIdOrderByCreatedDateTimeDesc(
+                bauvorhabenId
+            )
+            .map(this.abfrageDomainMapper::entity2Model)
+            .map(this.abfrageDomainMapper::model2ListElementModel)
+            .collect(Collectors.toList());
     }
 
     /**

@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
@@ -25,6 +26,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @RequiredArgsConstructor
+@Profile("!no-security")
 public class CustomJwtAuthenticationConverter implements Converter<Jwt, AbstractAuthenticationToken> {
 
     private final CustomUserInfoTokenServices userInfoTokenServices;

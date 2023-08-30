@@ -1,6 +1,5 @@
-server:
-  port: 39146
 spring:
+
   # Spring data rest
   data:
     rest:
@@ -9,10 +8,9 @@ spring:
       default-page-size: 0x7fffffff
       return-body-on-update: true
       return-body-on-create: true
-
+  # Spring JPA
   datasource:
     url: jdbc:h2:mem:testdb;MODE=PostgreSQL
-  # Spring JPA
   h2.console.enabled: true
   jpa:
     database: H2
@@ -27,18 +25,15 @@ spring:
     properties:
       hibernate:
         format_sql: true
+  security:
+    # possible values: none, all, changing (With changing, only changing requests such as POST, PUT, DELETE are logged)
+    logging.requests: all
 
 io:
   muenchendigital:
     digiwf:
       s3:
         client:
-          document-storage-url: http://localhost:8080
-          file-expiration-time: 1 #minutes
-
-# duplicate in application.yml
-file:
-  number.max: 20
-  size.max: 31457280 # bytes
-  extensions.allowed: .msg # Dateiendungen welche nicht über den MIME-Type ermittelt werden können. Werden benötigt für die backendseitige Validierung der Dateiendung.
-  mimetypes.allowed: application/pdf,image/png
+          document-storage-url: localhost:8080
+          file-expiration-time: 5 #minutes
+          securityEnabled: false

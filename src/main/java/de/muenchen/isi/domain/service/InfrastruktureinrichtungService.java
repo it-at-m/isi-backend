@@ -86,7 +86,7 @@ public class InfrastruktureinrichtungService {
      *
      * @param infrastruktureinrichtung zum Updaten
      * @return das geupdatete {@link InfrastruktureinrichtungModel}
-     * @throws EntityNotFoundException falls die Infrastruktureinrichtung identifiziert durch die {@link InfrastruktureinrichtungModel#getId()} nicht gefunden wird
+     * @throws EntityNotFoundException    falls die Infrastruktureinrichtung identifiziert durch die {@link InfrastruktureinrichtungModel#getId()} nicht gefunden wird
      * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
      */
     public InfrastruktureinrichtungModel updateInfrastruktureinrichtung(

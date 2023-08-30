@@ -16,6 +16,7 @@ import de.muenchen.isi.domain.exception.FileHandlingFailedException;
 import de.muenchen.isi.domain.exception.FileHandlingWithS3FailedException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
+import de.muenchen.isi.domain.exception.UserRoleNotAllowedException;
 import de.muenchen.isi.domain.mapper.AbfrageDomainMapper;
 import de.muenchen.isi.domain.model.InfrastrukturabfrageModel;
 import de.muenchen.isi.domain.service.AbfrageService;
@@ -250,7 +251,7 @@ public class AbfrageController {
     @Transactional
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_DELETE_ABFRAGE.name())")
     public ResponseEntity<Void> deleteInfrastrukturabfrageById(@PathVariable @NotNull final UUID id)
-        throws EntityNotFoundException, EntityIsReferencedException {
+        throws EntityNotFoundException, EntityIsReferencedException, UserRoleNotAllowedException, AbfrageStatusNotAllowedException {
         this.abfrageService.deleteInfrasturkturabfrageById(id);
         return ResponseEntity.noContent().build();
     }

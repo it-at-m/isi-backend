@@ -10,22 +10,41 @@ import de.muenchen.isi.domain.exception.FileHandlingFailedException;
 import de.muenchen.isi.domain.exception.FileHandlingWithS3FailedException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
+import de.muenchen.isi.domain.mapper.AbfrageDomainMapper;
+import de.muenchen.isi.domain.mapper.AbfrageDomainMapperImpl;
+import de.muenchen.isi.domain.mapper.AbfragevarianteDomainMapperImpl;
+import de.muenchen.isi.domain.mapper.BauabschnittDomainMapperImpl;
 import de.muenchen.isi.domain.mapper.BauvorhabenDomainMapper;
 import de.muenchen.isi.domain.mapper.BauvorhabenDomainMapperImpl;
 import de.muenchen.isi.domain.mapper.DokumentDomainMapperImpl;
+import de.muenchen.isi.domain.mapper.InfrastruktureinrichtungDomainMapper;
+import de.muenchen.isi.domain.mapper.InfrastruktureinrichtungDomainMapperImpl;
 import de.muenchen.isi.domain.model.BauvorhabenModel;
 import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.AbfrageAngelegtModel;
+import de.muenchen.isi.domain.model.enums.AbfrageTyp;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.InfrastruktureinrichtungModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.KinderkrippeModel;
+import de.muenchen.isi.domain.model.list.AbfrageListElementModel;
+import de.muenchen.isi.domain.model.list.InfrastruktureinrichtungListElementModel;
 import de.muenchen.isi.domain.service.filehandling.DokumentService;
 import de.muenchen.isi.infrastructure.entity.Abfrage;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
 import de.muenchen.isi.infrastructure.entity.Infrastrukturabfrage;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.Planungsrecht;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVorhaben;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusInfrastruktureinrichtung;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
+import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Infrastruktureinrichtung;
+import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Kindergarten;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Kinderkrippe;
 import de.muenchen.isi.infrastructure.repository.AbfragevarianteRepository;
 import de.muenchen.isi.infrastructure.repository.BauvorhabenRepository;
 import de.muenchen.isi.infrastructure.repository.InfrastrukturabfrageRepository;
 import de.muenchen.isi.infrastructure.repository.InfrastruktureinrichtungRepository;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -45,6 +64,14 @@ import org.mockito.quality.Strictness;
 public class BauvorhabenServiceTest {
 
     private final BauvorhabenDomainMapper bauvorhabenDomainMapper = new BauvorhabenDomainMapperImpl(
+        new DokumentDomainMapperImpl()
+    );
+
+    private final InfrastruktureinrichtungDomainMapper infrastruktureinrichtungDomainMapper =
+        new InfrastruktureinrichtungDomainMapperImpl();
+
+    private final AbfrageDomainMapper abfrageDomainMapper = new AbfrageDomainMapperImpl(
+        new AbfragevarianteDomainMapperImpl(new BauabschnittDomainMapperImpl()),
         new DokumentDomainMapperImpl()
     );
 
@@ -73,6 +100,8 @@ public class BauvorhabenServiceTest {
         this.bauvorhabenService =
             new BauvorhabenService(
                 this.bauvorhabenDomainMapper,
+                this.infrastruktureinrichtungDomainMapper,
+                this.abfrageDomainMapper,
                 this.bauvorhabenRepository,
                 this.infrastrukturabfrageRepository,
                 this.infrastruktureinrichtungRepository,
@@ -108,6 +137,177 @@ public class BauvorhabenServiceTest {
         model2.setId(entity2.getId());
 
         assertThat(result, is(List.of(model1, model2)));
+    }
+
+    @Test
+    void getReferencedAbfragenElements() {
+        var bauvorhabenId = UUID.randomUUID();
+        Bauvorhaben bauvorhaben = new Bauvorhaben();
+        bauvorhaben.setBauvorhabenNummer("12345");
+        bauvorhaben.setEigentuemer("Eigentuemer");
+        bauvorhaben.setGrundstuecksgroesse(BigDecimal.valueOf(1));
+        bauvorhaben.setNameVorhaben("Name");
+        bauvorhaben.setPlanungsrecht(Planungsrecht.BPLAN_PARAG_11);
+        bauvorhaben.setSobonRelevant(UncertainBoolean.FALSE);
+        bauvorhaben.setStandVorhaben(StandVorhaben.AUFSTELLUNGSBESCHLUSS);
+        bauvorhaben.setId(bauvorhabenId);
+
+        final Infrastrukturabfrage abfrage1 = new Infrastrukturabfrage();
+        abfrage1.setId(UUID.randomUUID());
+        abfrage1.setAbfrage(new Abfrage());
+        abfrage1.getAbfrage().setNameAbfrage("NameAbfrage1");
+        abfrage1.getAbfrage().setStatusAbfrage(StatusAbfrage.OFFEN);
+        abfrage1.getAbfrage().setFristStellungnahme(LocalDate.of(2022, 11, 1));
+        abfrage1.getAbfrage().setBauvorhaben(bauvorhaben);
+
+        final Infrastrukturabfrage abfrage2 = new Infrastrukturabfrage();
+        abfrage2.setId(UUID.randomUUID());
+        abfrage2.setAbfrage(new Abfrage());
+        abfrage2.getAbfrage().setNameAbfrage("NameAbfrage2");
+        abfrage2.getAbfrage().setStatusAbfrage(StatusAbfrage.ANGELEGT);
+        abfrage2.getAbfrage().setFristStellungnahme(LocalDate.of(2022, 9, 1));
+        abfrage2.getAbfrage().setBauvorhaben(bauvorhaben);
+
+        final Infrastrukturabfrage abfrage3 = new Infrastrukturabfrage();
+        abfrage3.setId(UUID.randomUUID());
+        abfrage3.setAbfrage(new Abfrage());
+        abfrage3.getAbfrage().setNameAbfrage("NameAbfrage3");
+        abfrage3.getAbfrage().setStatusAbfrage(StatusAbfrage.OFFEN);
+        abfrage3.getAbfrage().setFristStellungnahme(LocalDate.of(2022, 12, 1));
+        abfrage3.getAbfrage().setBauvorhaben(bauvorhaben);
+
+        final Stream<Infrastrukturabfrage> listInfrastrukturabfrage = Stream.of(abfrage1, abfrage2, abfrage3);
+
+        final List<AbfrageListElementModel> expectedAbfrageList = new ArrayList<>();
+
+        var abfrageListElementModel1 = new AbfrageListElementModel();
+        abfrageListElementModel1.setId(abfrage1.getId());
+        abfrageListElementModel1.setNameAbfrage(abfrage1.getAbfrage().getNameAbfrage());
+        abfrageListElementModel1.setStatusAbfrage(abfrage1.getAbfrage().getStatusAbfrage());
+        abfrageListElementModel1.setFristStellungnahme(abfrage1.getAbfrage().getFristStellungnahme());
+        abfrageListElementModel1.setType(AbfrageTyp.INFRASTRUKTURABFRAGE);
+        expectedAbfrageList.add(abfrageListElementModel1);
+
+        var abfrageListElementModel2 = new AbfrageListElementModel();
+        abfrageListElementModel2.setId(abfrage2.getId());
+        abfrageListElementModel2.setNameAbfrage(abfrage2.getAbfrage().getNameAbfrage());
+        abfrageListElementModel2.setStatusAbfrage(abfrage2.getAbfrage().getStatusAbfrage());
+        abfrageListElementModel2.setFristStellungnahme(abfrage2.getAbfrage().getFristStellungnahme());
+        abfrageListElementModel2.setType(AbfrageTyp.INFRASTRUKTURABFRAGE);
+        expectedAbfrageList.add(abfrageListElementModel2);
+
+        var abfrageListElementModel3 = new AbfrageListElementModel();
+        abfrageListElementModel3.setId(abfrage3.getId());
+        abfrageListElementModel3.setNameAbfrage(abfrage3.getAbfrage().getNameAbfrage());
+        abfrageListElementModel3.setStatusAbfrage(abfrage3.getAbfrage().getStatusAbfrage());
+        abfrageListElementModel3.setFristStellungnahme(abfrage3.getAbfrage().getFristStellungnahme());
+        abfrageListElementModel3.setType(AbfrageTyp.INFRASTRUKTURABFRAGE);
+        expectedAbfrageList.add(abfrageListElementModel3);
+
+        Mockito
+            .when(
+                this.infrastrukturabfrageRepository.findAllByAbfrageBauvorhabenIdOrderByCreatedDateTimeDesc(
+                        bauvorhabenId
+                    )
+            )
+            .thenReturn(listInfrastrukturabfrage);
+
+        List<AbfrageListElementModel> abfrageResult =
+            this.bauvorhabenService.getReferencedInfrastrukturabfragen(bauvorhabenId);
+
+        assertThat(expectedAbfrageList, is(abfrageResult));
+
+        Mockito
+            .verify(this.infrastrukturabfrageRepository, Mockito.times(1))
+            .findAllByAbfrageBauvorhabenIdOrderByCreatedDateTimeDesc(bauvorhabenId);
+    }
+
+    @Test
+    void getReferencedInfrastruktureinrichtungElements() {
+        var bauvorhabenId = UUID.randomUUID();
+        Bauvorhaben bauvorhaben = new Bauvorhaben();
+        bauvorhaben.setBauvorhabenNummer("12345");
+        bauvorhaben.setEigentuemer("Eigentuemer");
+        bauvorhaben.setGrundstuecksgroesse(BigDecimal.valueOf(1));
+        bauvorhaben.setNameVorhaben("Name");
+        bauvorhaben.setPlanungsrecht(Planungsrecht.BPLAN_PARAG_11);
+        bauvorhaben.setSobonRelevant(UncertainBoolean.FALSE);
+        bauvorhaben.setStandVorhaben(StandVorhaben.AUFSTELLUNGSBESCHLUSS);
+        bauvorhaben.setId(bauvorhabenId);
+
+        final Kinderkrippe kinderkrippe1 = new Kinderkrippe();
+        kinderkrippe1.setNameEinrichtung("A");
+        kinderkrippe1.setStatus(StatusInfrastruktureinrichtung.BESTAND);
+        kinderkrippe1.setAnzahlKinderkrippeGruppen(10);
+        kinderkrippe1.setAnzahlKinderkrippePlaetze(100);
+        kinderkrippe1.setBauvorhaben(bauvorhaben);
+
+        final Kinderkrippe kinderkrippe2 = new Kinderkrippe();
+        kinderkrippe2.setNameEinrichtung("B");
+        kinderkrippe2.setStatus(StatusInfrastruktureinrichtung.GESICHERTE_PLANUNG_NEUE_EINR);
+        kinderkrippe2.setAnzahlKinderkrippeGruppen(11);
+        kinderkrippe2.setAnzahlKinderkrippePlaetze(110);
+        kinderkrippe2.setBauvorhaben(bauvorhaben);
+
+        final Kindergarten kindergarten1 = new Kindergarten();
+        kindergarten1.setNameEinrichtung("A");
+        kindergarten1.setStatus(StatusInfrastruktureinrichtung.BESTAND);
+        kindergarten1.setAnzahlKindergartenGruppen(9);
+        kindergarten1.setAnzahlKindergartenPlaetze(90);
+        kindergarten1.setBauvorhaben(bauvorhaben);
+
+        final Kindergarten kindergarten2 = new Kindergarten();
+        kindergarten2.setNameEinrichtung("B");
+        kindergarten2.setStatus(StatusInfrastruktureinrichtung.BESTAND);
+        kindergarten2.setAnzahlKindergartenGruppen(9);
+        kindergarten2.setAnzahlKindergartenPlaetze(90);
+        kindergarten2.setBauvorhaben(bauvorhaben);
+
+        final Stream<Infrastruktureinrichtung> listInfrastruktureinrichtung = Stream.of(
+            kinderkrippe1,
+            kinderkrippe2,
+            kindergarten1,
+            kindergarten2
+        );
+
+        final List<AbfrageListElementModel> expectedAbfrageList = new ArrayList<>();
+
+        final List<InfrastruktureinrichtungListElementModel> expectedInfrastruktureinrichtungList = new ArrayList<>();
+
+        var kinderkrippeListElementModel1 = new InfrastruktureinrichtungListElementModel();
+        kinderkrippeListElementModel1.setId(kinderkrippe1.getId());
+        kinderkrippeListElementModel1.setNameEinrichtung(kinderkrippe1.getNameEinrichtung());
+        kinderkrippeListElementModel1.setInfrastruktureinrichtungTyp(kinderkrippe1.getInfrastruktureinrichtungTyp());
+        expectedInfrastruktureinrichtungList.add(kinderkrippeListElementModel1);
+
+        var kinderkrippeListElementModel2 = new InfrastruktureinrichtungListElementModel();
+        kinderkrippeListElementModel2.setId(kinderkrippe2.getId());
+        kinderkrippeListElementModel2.setNameEinrichtung(kinderkrippe2.getNameEinrichtung());
+        kinderkrippeListElementModel2.setInfrastruktureinrichtungTyp(kinderkrippe2.getInfrastruktureinrichtungTyp());
+        expectedInfrastruktureinrichtungList.add(kinderkrippeListElementModel2);
+
+        var kindergartenListElementModel1 = new InfrastruktureinrichtungListElementModel();
+        kindergartenListElementModel1.setId(kindergarten1.getId());
+        kindergartenListElementModel1.setNameEinrichtung(kindergarten1.getNameEinrichtung());
+        kindergartenListElementModel1.setInfrastruktureinrichtungTyp(kindergarten1.getInfrastruktureinrichtungTyp());
+        expectedInfrastruktureinrichtungList.add(kindergartenListElementModel1);
+
+        var kindergartenListElementModel2 = new InfrastruktureinrichtungListElementModel();
+        kindergartenListElementModel2.setId(kindergarten2.getId());
+        kindergartenListElementModel2.setNameEinrichtung(kindergarten2.getNameEinrichtung());
+        kindergartenListElementModel2.setInfrastruktureinrichtungTyp(kindergarten2.getInfrastruktureinrichtungTyp());
+        expectedInfrastruktureinrichtungList.add(kindergartenListElementModel2);
+
+        Mockito
+            .when(this.infrastruktureinrichtungRepository.findAllByBauvorhabenId(bauvorhabenId))
+            .thenReturn(listInfrastruktureinrichtung);
+
+        List<InfrastruktureinrichtungListElementModel> infraResult =
+            this.bauvorhabenService.getReferencedInfrastruktureinrichtungen(bauvorhabenId);
+
+        assertThat(expectedInfrastruktureinrichtungList, is(infraResult));
+
+        Mockito.verify(this.infrastruktureinrichtungRepository, Mockito.times(1)).findAllByBauvorhabenId(bauvorhabenId);
     }
 
     @Test

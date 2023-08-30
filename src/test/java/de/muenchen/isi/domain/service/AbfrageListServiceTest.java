@@ -13,7 +13,6 @@ import de.muenchen.isi.domain.model.InfrastrukturabfrageModel;
 import de.muenchen.isi.domain.model.enums.AbfrageTyp;
 import de.muenchen.isi.domain.model.list.AbfrageListElementModel;
 import de.muenchen.isi.domain.model.list.AbfrageListElementsModel;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVorhaben;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.rest.TestData;
 import java.time.LocalDate;
@@ -46,6 +45,7 @@ class AbfrageListServiceTest {
     @BeforeEach
     public void beforeEach() {
         this.abfrageListService = new AbfrageListService(this.abfrageService, this.abfrageDomainMapper);
+
         Mockito.reset(this.abfrageService);
     }
 

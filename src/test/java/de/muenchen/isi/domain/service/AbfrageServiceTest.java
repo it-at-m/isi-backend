@@ -11,6 +11,7 @@ import de.muenchen.isi.domain.exception.FileHandlingFailedException;
 import de.muenchen.isi.domain.exception.FileHandlingWithS3FailedException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
+import de.muenchen.isi.domain.exception.UserRoleNotAllowedException;
 import de.muenchen.isi.domain.mapper.AbfrageDomainMapper;
 import de.muenchen.isi.domain.mapper.AbfrageDomainMapperImpl;
 import de.muenchen.isi.domain.mapper.AbfragevarianteDomainMapper;
@@ -35,6 +36,7 @@ import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
 import de.muenchen.isi.infrastructure.entity.Infrastrukturabfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.repository.InfrastrukturabfrageRepository;
+import de.muenchen.isi.security.AuthenticationUtils;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -75,6 +77,9 @@ class AbfrageServiceTest {
     @Autowired
     DokumentDomainMapper dokumentDomainMapper;
 
+    @Mock
+    AuthenticationUtils authenticationUtils;
+
     private AbfrageService abfrageService;
 
     @Mock
@@ -86,7 +91,12 @@ class AbfrageServiceTest {
     @BeforeEach
     public void beforeEach() {
         this.abfrageService =
-            new AbfrageService(this.abfrageDomainMapper, this.infrastrukturabfrageRepository, this.dokumentService);
+            new AbfrageService(
+                this.abfrageDomainMapper,
+                this.infrastrukturabfrageRepository,
+                this.dokumentService,
+                this.authenticationUtils
+            );
         Mockito.reset(this.infrastrukturabfrageRepository, this.dokumentService);
     }
 
@@ -577,15 +587,44 @@ class AbfrageServiceTest {
     }
 
     @Test
-    void deleteInfrastrukturabfrage() throws EntityNotFoundException, EntityIsReferencedException {
+    void deleteInfrastrukturabfrageAbfrageerstellung()
+        throws EntityNotFoundException, EntityIsReferencedException, UserRoleNotAllowedException, AbfrageStatusNotAllowedException {
         final UUID id = UUID.randomUUID();
+
+        String[] roles = { "abfrageerstellung" };
 
         final Infrastrukturabfrage entity = new Infrastrukturabfrage();
         entity.setId(id);
         final Abfrage abfrage = new Abfrage();
+        abfrage.setStatusAbfrage(StatusAbfrage.ANGELEGT);
         entity.setAbfrage(abfrage);
 
         Mockito.when(this.infrastrukturabfrageRepository.findById(entity.getId())).thenReturn(Optional.of(entity));
+
+        Mockito.when(this.authenticationUtils.getUserRoles()).thenReturn(List.of(roles));
+
+        this.abfrageService.deleteInfrasturkturabfrageById(id);
+
+        Mockito.verify(this.infrastrukturabfrageRepository, Mockito.times(1)).findById(entity.getId());
+        Mockito.verify(this.infrastrukturabfrageRepository, Mockito.times(1)).deleteById(id);
+    }
+
+    @Test
+    void deleteInfrastrukturabfrageAdmin()
+        throws EntityNotFoundException, EntityIsReferencedException, UserRoleNotAllowedException, AbfrageStatusNotAllowedException {
+        final UUID id = UUID.randomUUID();
+
+        String[] roles = { "admin" };
+
+        final Infrastrukturabfrage entity = new Infrastrukturabfrage();
+        entity.setId(id);
+        final Abfrage abfrage = new Abfrage();
+        abfrage.setStatusAbfrage(StatusAbfrage.OFFEN);
+        entity.setAbfrage(abfrage);
+
+        Mockito.when(this.infrastrukturabfrageRepository.findById(entity.getId())).thenReturn(Optional.of(entity));
+
+        Mockito.when(this.authenticationUtils.getUserRoles()).thenReturn(List.of(roles));
 
         this.abfrageService.deleteInfrasturkturabfrageById(id);
 
@@ -596,17 +635,63 @@ class AbfrageServiceTest {
     @Test
     void deleteInfrastrukturabfrageException() {
         final UUID id = UUID.randomUUID();
-
+        String[] roles = { "abfrageerstellung" };
         final Infrastrukturabfrage entity = new Infrastrukturabfrage();
         entity.setId(id);
         final Abfrage abfrage = new Abfrage();
         abfrage.setBauvorhaben(new Bauvorhaben());
+        abfrage.setStatusAbfrage(StatusAbfrage.ANGELEGT);
         entity.setAbfrage(abfrage);
 
         Mockito.when(this.infrastrukturabfrageRepository.findById(entity.getId())).thenReturn(Optional.of(entity));
+        Mockito.when(this.authenticationUtils.getUserRoles()).thenReturn(List.of(roles));
 
         Assertions.assertThrows(
             EntityIsReferencedException.class,
+            () -> this.abfrageService.deleteInfrasturkturabfrageById(id)
+        );
+
+        Mockito.verify(this.infrastrukturabfrageRepository, Mockito.times(1)).findById(entity.getId());
+        Mockito.verify(this.infrastrukturabfrageRepository, Mockito.times(0)).deleteById(id);
+    }
+
+    @Test
+    void deleteInfrastrukturabfrageStatusException() {
+        final UUID id = UUID.randomUUID();
+        String[] roles = { "abfrageerstellung" };
+        final Infrastrukturabfrage entity = new Infrastrukturabfrage();
+        entity.setId(id);
+        final Abfrage abfrage = new Abfrage();
+        abfrage.setStatusAbfrage(StatusAbfrage.OFFEN);
+        entity.setAbfrage(abfrage);
+
+        Mockito.when(this.infrastrukturabfrageRepository.findById(entity.getId())).thenReturn(Optional.of(entity));
+        Mockito.when(this.authenticationUtils.getUserRoles()).thenReturn(List.of(roles));
+
+        Assertions.assertThrows(
+            AbfrageStatusNotAllowedException.class,
+            () -> this.abfrageService.deleteInfrasturkturabfrageById(id)
+        );
+
+        Mockito.verify(this.infrastrukturabfrageRepository, Mockito.times(1)).findById(entity.getId());
+        Mockito.verify(this.infrastrukturabfrageRepository, Mockito.times(0)).deleteById(id);
+    }
+
+    @Test
+    void deleteInfrastrukturabfrageNutzerException() {
+        final UUID id = UUID.randomUUID();
+        String[] roles = { "nutzer" };
+        final Infrastrukturabfrage entity = new Infrastrukturabfrage();
+        entity.setId(id);
+        final Abfrage abfrage = new Abfrage();
+        abfrage.setStatusAbfrage(StatusAbfrage.ANGELEGT);
+        entity.setAbfrage(abfrage);
+
+        Mockito.when(this.infrastrukturabfrageRepository.findById(entity.getId())).thenReturn(Optional.of(entity));
+        Mockito.when(this.authenticationUtils.getUserRoles()).thenReturn(List.of(roles));
+
+        Assertions.assertThrows(
+            UserRoleNotAllowedException.class,
             () -> this.abfrageService.deleteInfrasturkturabfrageById(id)
         );
 
