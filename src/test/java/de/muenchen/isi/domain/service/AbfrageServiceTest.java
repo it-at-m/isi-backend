@@ -98,12 +98,12 @@ class AbfrageServiceTest {
     @BeforeEach
     public void beforeEach() {
         this.abfrageService =
-            new AbfrageService(
-                this.abfrageDomainMapper,
-                this.infrastrukturabfrageRepository,
-                this.dokumentService,
-                this.authenticationUtils
-            );
+        new AbfrageService(
+            this.abfrageDomainMapper,
+            this.infrastrukturabfrageRepository,
+            this.dokumentService,
+            this.authenticationUtils
+        );
         Mockito.reset(this.infrastrukturabfrageRepository, this.dokumentService);
     }
 
@@ -773,7 +773,7 @@ class AbfrageServiceTest {
         abfrageModel.setStatusAbfrage(StatusAbfrage.OFFEN);
         infrastrukturabfrageModel.setAbfrage(abfrageModel);
         infrastrukturabfrageModel =
-            this.abfrageDomainMapper.request2Model(infrastrukturabfrageRequestModel, infrastrukturabfrageModel);
+        this.abfrageDomainMapper.request2Model(infrastrukturabfrageRequestModel, infrastrukturabfrageModel);
 
         final Infrastrukturabfrage entity = this.abfrageDomainMapper.model2entity(infrastrukturabfrageModel);
         entity.setId(UUID.randomUUID());
