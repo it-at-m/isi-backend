@@ -59,8 +59,9 @@ public class AbfrageStatusService {
      * @throws EntityNotFoundException          falls die Abfrage nicht gefunden wird
      * @throws AbfrageStatusNotAllowedException wenn die Statusänderung nicht erlaubt ist
      */
-    public void freigabeAbfrage(final UUID id) throws EntityNotFoundException, AbfrageStatusNotAllowedException {
-        final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id);
+    public void freigabeAbfrage(final UUID id, String anmerkung)
+        throws EntityNotFoundException, AbfrageStatusNotAllowedException {
+        final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id, anmerkung);
         this.sendEvent(id, StatusAbfrageEvents.FREIGABE, stateMachine);
     }
 
@@ -71,9 +72,9 @@ public class AbfrageStatusService {
      * @throws EntityNotFoundException          falls die Abfrage nicht gefunden wird
      * @throws AbfrageStatusNotAllowedException wenn die Statusänderung nicht erlaubt ist
      */
-    public void inBearbeitungSetzenAbfrage(final UUID id)
+    public void inBearbeitungSetzenAbfrage(final UUID id, String anmerkung)
         throws EntityNotFoundException, AbfrageStatusNotAllowedException {
-        final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id);
+        final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id, anmerkung);
         this.sendEvent(id, StatusAbfrageEvents.IN_BEARBEITUNG_SETZEN, stateMachine);
     }
 
@@ -84,8 +85,9 @@ public class AbfrageStatusService {
      * @throws EntityNotFoundException          falls die Abfrage nicht gefunden wird
      * @throws AbfrageStatusNotAllowedException wenn die Statusänderung nicht erlaubt ist
      */
-    public void abbrechenAbfrage(final UUID id) throws EntityNotFoundException, AbfrageStatusNotAllowedException {
-        final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id);
+    public void abbrechenAbfrage(final UUID id, String anmerkung)
+        throws EntityNotFoundException, AbfrageStatusNotAllowedException {
+        final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id, anmerkung);
         this.sendEvent(id, StatusAbfrageEvents.ABBRECHEN, stateMachine);
     }
 
@@ -96,9 +98,9 @@ public class AbfrageStatusService {
      * @throws EntityNotFoundException          falls die Abfrage nicht gefunden wird
      * @throws AbfrageStatusNotAllowedException wenn die Statusänderung nicht erlaubt ist
      */
-    public void zurueckAnAbfrageerstellungAbfrage(final UUID id)
+    public void zurueckAnAbfrageerstellungAbfrage(final UUID id, String anmerkung)
         throws EntityNotFoundException, AbfrageStatusNotAllowedException {
-        final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id);
+        final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id, anmerkung);
         this.sendEvent(id, StatusAbfrageEvents.ZURUECK_AN_ABFRAGEERSTELLUNG, stateMachine);
     }
 
@@ -109,9 +111,9 @@ public class AbfrageStatusService {
      * @throws EntityNotFoundException          falls die Abfrage nicht gefunden wird
      * @throws AbfrageStatusNotAllowedException wenn die Statusänderung nicht erlaubt ist
      */
-    public void zurueckAnSachbearbeitungAbfrage(final UUID id)
+    public void zurueckAnSachbearbeitungAbfrage(final UUID id, String anmerkung)
         throws EntityNotFoundException, AbfrageStatusNotAllowedException {
-        final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id);
+        final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id, anmerkung);
         this.sendEvent(id, StatusAbfrageEvents.ZURUECK_AN_SACHBEARBEITUNG, stateMachine);
     }
 
@@ -122,8 +124,9 @@ public class AbfrageStatusService {
      * @throws EntityNotFoundException          falls die Abfrage nicht gefunden wird
      * @throws AbfrageStatusNotAllowedException wenn die Statusänderung nicht erlaubt ist
      */
-    public void abfrageSchliessen(final UUID id) throws EntityNotFoundException, AbfrageStatusNotAllowedException {
-        final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id);
+    public void abfrageSchliessen(final UUID id, String anmerkung)
+        throws EntityNotFoundException, AbfrageStatusNotAllowedException {
+        final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id, anmerkung);
         this.sendEvent(id, StatusAbfrageEvents.ABFRAGE_SCHLIESSEN, stateMachine);
     }
 
@@ -134,9 +137,9 @@ public class AbfrageStatusService {
      * @throws EntityNotFoundException          falls die Abfrage nicht gefunden wird
      * @throws AbfrageStatusNotAllowedException wenn die Statusänderung nicht erlaubt ist
      */
-    public void verschickenDerStellungnahme(final UUID id)
+    public void verschickenDerStellungnahme(final UUID id, String anmerkung)
         throws EntityNotFoundException, AbfrageStatusNotAllowedException {
-        final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id);
+        final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id, anmerkung);
         this.sendEvent(id, StatusAbfrageEvents.VERSCHICKEN_DER_STELLUNGNAHME, stateMachine);
     }
 
@@ -147,8 +150,9 @@ public class AbfrageStatusService {
      * @throws EntityNotFoundException          falls die Abfrage nicht gefunden wird
      * @throws AbfrageStatusNotAllowedException wenn die Statusänderung nicht erlaubt ist
      */
-    public void bedarfsmeldungErfolgt(final UUID id) throws EntityNotFoundException, AbfrageStatusNotAllowedException {
-        final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id);
+    public void bedarfsmeldungErfolgt(final UUID id, String anmerkung)
+        throws EntityNotFoundException, AbfrageStatusNotAllowedException {
+        final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id, anmerkung);
         this.sendEvent(id, StatusAbfrageEvents.BEDARFSMELDUNG_ERFOLGTE, stateMachine);
     }
 
@@ -159,9 +163,9 @@ public class AbfrageStatusService {
      * @throws EntityNotFoundException          falls die Abfrage nicht gefunden wird
      * @throws AbfrageStatusNotAllowedException wenn die Statusänderung nicht erlaubt ist
      */
-    public void speichernVonSozialinfrastrukturVersorgung(final UUID id)
+    public void speichernVonSozialinfrastrukturVersorgung(final UUID id, String anmerkung)
         throws EntityNotFoundException, AbfrageStatusNotAllowedException {
-        final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id);
+        final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id, anmerkung);
         this.sendEvent(id, StatusAbfrageEvents.SPEICHERN_VON_SOZIALINFRASTRUKTUR_VERSORGUNG, stateMachine);
     }
 
@@ -172,9 +176,9 @@ public class AbfrageStatusService {
      * @throws EntityNotFoundException          falls die Abfrage nicht gefunden wird
      * @throws AbfrageStatusNotAllowedException wenn die Statusänderung nicht erlaubt ist
      */
-    public void erneuteBearbeitenAbfrage(final UUID id)
+    public void erneuteBearbeitenAbfrage(final UUID id, String anmerkung)
         throws EntityNotFoundException, AbfrageStatusNotAllowedException {
-        final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id);
+        final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id, anmerkung);
         this.sendEvent(id, StatusAbfrageEvents.ERNEUTE_BEARBEITUNG, stateMachine);
     }
 
@@ -186,7 +190,8 @@ public class AbfrageStatusService {
      * @param id vom Typ {@link UUID}  um die Abfrage aus der DB zu holen
      * @throws EntityNotFoundException falls die Abfrage nicht gefunden wird
      */
-    private StateMachine<StatusAbfrage, StatusAbfrageEvents> build(final UUID id) throws EntityNotFoundException {
+    private StateMachine<StatusAbfrage, StatusAbfrageEvents> build(final UUID id, final String anmerkung)
+        throws EntityNotFoundException {
         final InfrastrukturabfrageModel abfrage = this.abfrageService.getInfrastrukturabfrageById(id);
         final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine =
             this.stateMachineFactory.getStateMachine(abfrage.getId());
@@ -226,7 +231,8 @@ public class AbfrageStatusService {
                                 abfrage.getAbfrage().setStatusAbfrage(state.getId());
                                 abfrageService.changeStatusAbfrage(
                                     abfrage.getId(),
-                                    abfrage.getAbfrage().getStatusAbfrage()
+                                    abfrage.getAbfrage().getStatusAbfrage(),
+                                    anmerkung
                                 );
                             } catch (
                                 final EntityNotFoundException
@@ -362,7 +368,7 @@ public class AbfrageStatusService {
      * @throws EntityNotFoundException falls die Abfrage nicht gefunden wird
      */
     private List<StatusAbfrageEvents> getStatusAbfrageEventsBasedOnState(final UUID id) throws EntityNotFoundException {
-        final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id);
+        final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id, "");
         return stateMachine
             .getTransitions()
             .stream()

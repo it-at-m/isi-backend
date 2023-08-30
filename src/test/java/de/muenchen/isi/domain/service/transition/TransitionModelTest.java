@@ -6,8 +6,6 @@ import static org.hamcrest.Matchers.is;
 import de.muenchen.isi.IsiBackendApplication;
 import de.muenchen.isi.TestConstants;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
-import de.muenchen.isi.domain.exception.FileHandlingFailedException;
-import de.muenchen.isi.domain.exception.FileHandlingWithS3FailedException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
 import de.muenchen.isi.domain.model.InfrastrukturabfrageModel;
@@ -64,10 +62,11 @@ public class TransitionModelTest {
     @Transactional
     @MockCustomUser
     void possibleTransitionsAngelegtAndRoleAdmin()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, FileHandlingFailedException, FileHandlingWithS3FailedException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException {
+        final var anmerkung = "";
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
-        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.ANGELEGT);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.ANGELEGT, anmerkung);
 
         final var uuid = abfrage.getId();
         List<TransitionModel> possibleTransitions =
@@ -87,10 +86,11 @@ public class TransitionModelTest {
     @Transactional
     @MockCustomUser(roles = { "sachbearbeitung" })
     void possibleTransitionsAngelegtAndRoleSachbearbeitung()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, FileHandlingFailedException, FileHandlingWithS3FailedException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException {
+        final var anmerkung = "";
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
-        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.ANGELEGT);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.ANGELEGT, anmerkung);
 
         final var uuid = abfrage.getId();
         List<TransitionModel> possibleTransitions =
@@ -103,10 +103,11 @@ public class TransitionModelTest {
     @Transactional
     @MockCustomUser(roles = { "abfrageerstellung" })
     void possibleTransitionsAngelegtAndRoleAbfrageerstellung()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, FileHandlingFailedException, FileHandlingWithS3FailedException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException {
+        final var anmerkung = "";
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
-        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.ANGELEGT);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.ANGELEGT, anmerkung);
 
         final var uuid = abfrage.getId();
         List<TransitionModel> possibleTransitions =
@@ -126,10 +127,11 @@ public class TransitionModelTest {
     @Transactional
     @MockCustomUser(roles = { "nutzer" })
     void possibleTransitionsAngelegtAndRoleAnwender()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, FileHandlingFailedException, FileHandlingWithS3FailedException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException {
+        final var anmerkung = "";
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
-        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.ANGELEGT);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.ANGELEGT, anmerkung);
 
         final var uuid = abfrage.getId();
         List<TransitionModel> possibleTransitions =
@@ -142,10 +144,11 @@ public class TransitionModelTest {
     @Transactional
     @MockCustomUser
     void possibleTransitionsOffenAndRoleAdmin()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, FileHandlingFailedException, FileHandlingWithS3FailedException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException {
+        final var anmerkung = "";
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
-        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.OFFEN);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.OFFEN, anmerkung);
 
         final var uuid = abfrage.getId();
         List<TransitionModel> possibleTransitions =
@@ -186,10 +189,11 @@ public class TransitionModelTest {
     @Transactional
     @MockCustomUser(roles = { "sachbearbeitung" })
     void possibleTransitionsOffenAndRoleSachbearbeitung()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, FileHandlingFailedException, FileHandlingWithS3FailedException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException {
+        final var anmerkung = "";
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
-        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.OFFEN);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.OFFEN, anmerkung);
 
         final var uuid = abfrage.getId();
         List<TransitionModel> possibleTransitions =
@@ -231,10 +235,11 @@ public class TransitionModelTest {
     @Transactional
     @MockCustomUser(roles = { "abfrageerstellung" })
     void possibleTransitionsOffenAndRoleAbfrageerstellung()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, FileHandlingFailedException, FileHandlingWithS3FailedException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException {
+        final var anmerkung = "";
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
-        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.OFFEN);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.OFFEN, anmerkung);
 
         final var uuid = abfrage.getId();
         List<TransitionModel> possibleTransitions =
@@ -247,10 +252,11 @@ public class TransitionModelTest {
     @Transactional
     @MockCustomUser(roles = { "nutzer" })
     void possibleTransitionsOffenAndRoleAnwender()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, FileHandlingFailedException, FileHandlingWithS3FailedException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException {
+        final var anmerkung = "";
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
-        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.OFFEN);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.OFFEN, anmerkung);
 
         final var uuid = abfrage.getId();
         List<TransitionModel> possibleTransitions =
@@ -263,10 +269,15 @@ public class TransitionModelTest {
     @Transactional
     @MockCustomUser
     void possibleTransitionsBearbeitungSachbearbeitungAndRoleAdmin()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, FileHandlingFailedException, FileHandlingWithS3FailedException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException {
+        final var anmerkung = "";
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
-        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+        this.abfrageService.changeStatusAbfrage(
+                abfrage.getId(),
+                StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG,
+                anmerkung
+            );
 
         final var uuid = abfrage.getId();
         List<TransitionModel> possibleTransitions =
@@ -319,10 +330,15 @@ public class TransitionModelTest {
     @Transactional
     @MockCustomUser(roles = { "sachbearbeitung" })
     void possibleTransitionsBearbeitungSachbearbeitungAndRoleSachbearbeitung()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, FileHandlingFailedException, FileHandlingWithS3FailedException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException {
+        final var anmerkung = "";
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
-        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+        this.abfrageService.changeStatusAbfrage(
+                abfrage.getId(),
+                StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG,
+                anmerkung
+            );
 
         final var uuid = abfrage.getId();
         List<TransitionModel> possibleTransitions =
@@ -375,10 +391,15 @@ public class TransitionModelTest {
     @Transactional
     @MockCustomUser(roles = { "abfrageerstellung" })
     void possibleTransitionsBearbeitungSachbearbeitungAndRoleAbfrageerstellung()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, FileHandlingFailedException, FileHandlingWithS3FailedException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException {
+        final var anmerkung = "";
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
-        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+        this.abfrageService.changeStatusAbfrage(
+                abfrage.getId(),
+                StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG,
+                anmerkung
+            );
 
         final var uuid = abfrage.getId();
         List<TransitionModel> possibleTransitions =
@@ -391,10 +412,15 @@ public class TransitionModelTest {
     @Transactional
     @MockCustomUser(roles = { "nutzer" })
     void possibleTransitionsBearbeitungSachbearbeitungAndRoleAnwender()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, FileHandlingFailedException, FileHandlingWithS3FailedException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException {
+        final var anmerkung = "";
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
-        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+        this.abfrageService.changeStatusAbfrage(
+                abfrage.getId(),
+                StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG,
+                anmerkung
+            );
 
         final var uuid = abfrage.getId();
         List<TransitionModel> possibleTransitions =
@@ -407,10 +433,11 @@ public class TransitionModelTest {
     @Transactional
     @MockCustomUser
     void possibleTransitionsBearbeitungFachreferateAndRoleAdmin()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, FileHandlingFailedException, FileHandlingWithS3FailedException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException {
+        final var anmerkung = "";
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
-        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE, anmerkung);
 
         final var uuid = abfrage.getId();
         List<TransitionModel> possibleTransitions =
@@ -452,10 +479,11 @@ public class TransitionModelTest {
     @Transactional
     @MockCustomUser(roles = { "sachbearbeitung" })
     void possibleTransitionsBearbeitungFachreferateAndRoleSachbearbeitung()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, FileHandlingFailedException, FileHandlingWithS3FailedException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException {
+        final var anmerkung = "";
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
-        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE, anmerkung);
 
         final var uuid = abfrage.getId();
         List<TransitionModel> possibleTransitions =
@@ -496,10 +524,11 @@ public class TransitionModelTest {
     @Transactional
     @MockCustomUser(roles = { "abfrageerstellung" })
     void possibleTransitionsBearbeitungFachreferateAndRoleAbfrageerstellung()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, FileHandlingFailedException, FileHandlingWithS3FailedException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException {
+        final var anmerkung = "";
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
-        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE, anmerkung);
 
         final var uuid = abfrage.getId();
         List<TransitionModel> possibleTransitions =
@@ -512,10 +541,11 @@ public class TransitionModelTest {
     @Transactional
     @MockCustomUser(roles = { "nutzer" })
     void possibleTransitionsBearbeitungFachreferateAndRoleAnwender()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, FileHandlingFailedException, FileHandlingWithS3FailedException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException {
+        final var anmerkung = "";
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
-        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE, anmerkung);
 
         final var uuid = abfrage.getId();
         List<TransitionModel> possibleTransitions =
@@ -528,10 +558,11 @@ public class TransitionModelTest {
     @Transactional
     @MockCustomUser
     void possibleTransitionsBedarfsmeldungErfolgtAndRoleAdmin()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, FileHandlingFailedException, FileHandlingWithS3FailedException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException {
+        final var anmerkung = "";
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
-        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.BEDARFSMELDUNG_ERFOLGT);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.BEDARFSMELDUNG_ERFOLGT, anmerkung);
 
         final var uuid = abfrage.getId();
         List<TransitionModel> possibleTransitions =
@@ -564,10 +595,11 @@ public class TransitionModelTest {
     @Transactional
     @MockCustomUser(roles = { "sachbearbeitung" })
     void possibleTransitionsBedarfsmeldungErfolgtAndRoleSachbearbeitung()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, FileHandlingFailedException, FileHandlingWithS3FailedException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException {
+        final var anmerkung = "";
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
-        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.BEDARFSMELDUNG_ERFOLGT);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.BEDARFSMELDUNG_ERFOLGT, anmerkung);
 
         final var uuid = abfrage.getId();
         List<TransitionModel> possibleTransitions =
@@ -591,10 +623,11 @@ public class TransitionModelTest {
     @Transactional
     @MockCustomUser(roles = { "abfrageerstellung" })
     void possibleTransitionsBedarfsmeldungErfolgtAndRoleAbfrageerstellung()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, FileHandlingFailedException, FileHandlingWithS3FailedException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException {
+        final var anmerkung = "";
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
-        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.BEDARFSMELDUNG_ERFOLGT);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.BEDARFSMELDUNG_ERFOLGT, anmerkung);
 
         final var uuid = abfrage.getId();
         List<TransitionModel> possibleTransitions =
@@ -618,10 +651,11 @@ public class TransitionModelTest {
     @Transactional
     @MockCustomUser(roles = { "nutzer" })
     void possibleTransitionsBedarfsmeldungErfolgtAndRoleAnwender()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, FileHandlingFailedException, FileHandlingWithS3FailedException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException {
+        final var anmerkung = "";
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
-        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.BEDARFSMELDUNG_ERFOLGT);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.BEDARFSMELDUNG_ERFOLGT, anmerkung);
 
         final var uuid = abfrage.getId();
         List<TransitionModel> possibleTransitions =
@@ -634,10 +668,11 @@ public class TransitionModelTest {
     @Transactional
     @MockCustomUser
     void possibleTransitionsErledigtRoleAdmin()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, FileHandlingFailedException, FileHandlingWithS3FailedException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException {
+        final var anmerkung = "";
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
-        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.ERLEDIGT);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.ERLEDIGT, anmerkung);
 
         final var uuid = abfrage.getId();
         List<TransitionModel> possibleTransitions =
@@ -662,10 +697,11 @@ public class TransitionModelTest {
     @Transactional
     @MockCustomUser(roles = { "sachbearbeitung" })
     void possibleTransitionsErledigtRoleSachbearbeitung()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, FileHandlingFailedException, FileHandlingWithS3FailedException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException {
+        final var anmerkung = "";
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
-        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.ERLEDIGT);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.ERLEDIGT, anmerkung);
 
         final var uuid = abfrage.getId();
         List<TransitionModel> possibleTransitions =
@@ -690,10 +726,11 @@ public class TransitionModelTest {
     @Transactional
     @MockCustomUser(roles = { "abfrageerstellung" })
     void possibleTransitionsErledigtRoleAbfrageerstellung()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, FileHandlingFailedException, FileHandlingWithS3FailedException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException {
+        final var anmerkung = "";
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
-        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.ERLEDIGT);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.ERLEDIGT, anmerkung);
 
         final var uuid = abfrage.getId();
         List<TransitionModel> possibleTransitions =
@@ -706,10 +743,11 @@ public class TransitionModelTest {
     @Transactional
     @MockCustomUser(roles = { "nutzer" })
     void possibleTransitionsErledigtRoleAnwender()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, FileHandlingFailedException, FileHandlingWithS3FailedException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException {
+        final var anmerkung = "";
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
-        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.ERLEDIGT);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.ERLEDIGT, anmerkung);
 
         final var uuid = abfrage.getId();
         List<TransitionModel> possibleTransitions =
@@ -722,10 +760,11 @@ public class TransitionModelTest {
     @Transactional
     @MockCustomUser
     void possibleTransitionsAbbruch()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, FileHandlingFailedException, FileHandlingWithS3FailedException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException {
+        final var anmerkung = "";
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
-        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.ABBRUCH);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.ABBRUCH, anmerkung);
 
         final var uuid = abfrage.getId();
         List<TransitionModel> possibleTransitions =

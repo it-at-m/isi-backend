@@ -220,24 +220,38 @@ public class AbfrageService {
      * @throws UniqueViolationException   falls der Name der Abfrage {@link InfrastrukturabfrageModel#getAbfrage().getNameAbfrage} ()} bereits vorhanden ist
      * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
      */
-    public InfrastrukturabfrageModel changeStatusAbfrage(final UUID id, final StatusAbfrage statusAbfrage)
-        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException {
-        final var originalAbfrageDb = this.getInfrastrukturabfrageById(id);
+    public InfrastrukturabfrageModel changeStatusAbfrage(
+        final UUID id,
+        final StatusAbfrage statusAbfrage,
+        final String anmerkung
+    ) throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException {
+        var originalAbfrageDb = this.getInfrastrukturabfrageById(id);
         originalAbfrageDb.getAbfrage().setStatusAbfrage(statusAbfrage);
+        originalAbfrageDb = this.addAbfrageAnmerkung(originalAbfrageDb, anmerkung);
         return this.saveInfrastrukturabfrage(originalAbfrageDb);
     }
 
-    public InfrastrukturabfrageModel changeAbfrageAnmerkung(final UUID id, final String anmerkung)
-        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException {
-        final var originalAbfrageDb = this.getInfrastrukturabfrageById(id);
-        if (originalAbfrageDb.getAbfrage().getAnmerkung() == null) {
-            originalAbfrageDb.getAbfrage().setAnmerkung(anmerkung);
-        } else {
-            originalAbfrageDb
-                .getAbfrage()
-                .setAnmerkung(originalAbfrageDb.getAbfrage().getAnmerkung().concat("\n").concat(anmerkung));
+    /**
+     * Fügt der Abfrage eine Anmerkung hinzu oder aktualisiert sie.
+     *
+     * @param infrastrukturabfrageModel Das InfrastrukturabfrageModel, zu dem die Anmerkung hinzugefügt wird.
+     * @param anmerkung                 Die Anmerkung, die hinzugefügt oder angehängt wird.
+     * @return Das aktualisierte InfrastrukturabfrageModel mit der hinzugefügten oder aktualisierten Anmerkung.
+     */
+    public InfrastrukturabfrageModel addAbfrageAnmerkung(
+        final InfrastrukturabfrageModel infrastrukturabfrageModel,
+        final String anmerkung
+    ) {
+        if (!anmerkung.isEmpty()) {
+            if (infrastrukturabfrageModel.getAbfrage().getAnmerkung() == null) {
+                infrastrukturabfrageModel.getAbfrage().setAnmerkung(anmerkung);
+            } else {
+                infrastrukturabfrageModel
+                    .getAbfrage()
+                    .setAnmerkung(infrastrukturabfrageModel.getAbfrage().getAnmerkung().concat("\n").concat(anmerkung));
+            }
         }
-        return this.saveInfrastrukturabfrage(originalAbfrageDb);
+        return infrastrukturabfrageModel;
     }
 
     /**
