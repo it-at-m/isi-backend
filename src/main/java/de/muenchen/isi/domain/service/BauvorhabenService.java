@@ -203,7 +203,7 @@ public class BauvorhabenService {
      * @param abfragevariante die neue relevante Abfragevariante
      * @return das geupdatete {@link InfrastrukturabfrageModel}
      * @throws EntityNotFoundException           falls die Abfrage oder Abfragevariante nicht gefunden wurde
-     * @throws UniqueViolationException          falls es schon eine andere Abfragevariante relevant ist
+     * @throws UniqueViolationException          falls schon eine andere Abfragevariante relevant ist
      * @throws OptimisticLockingException        falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
      * @throws AbfrageStatusNotAllowedException  falls die Abfrage den falschen Status hat
      * @throws BauvorhabenNotReferencedException falls die Abfrage zu keinem Bauvorhaben gehört

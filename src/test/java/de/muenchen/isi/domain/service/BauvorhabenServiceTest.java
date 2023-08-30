@@ -2,8 +2,12 @@ package de.muenchen.isi.domain.service;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.Matchers.sameInstance;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import de.muenchen.isi.domain.exception.AbfrageStatusNotAllowedException;
+import de.muenchen.isi.domain.exception.BauvorhabenNotReferencedException;
 import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.FileHandlingFailedException;
@@ -19,7 +23,10 @@ import de.muenchen.isi.domain.mapper.BauvorhabenDomainMapperImpl;
 import de.muenchen.isi.domain.mapper.DokumentDomainMapperImpl;
 import de.muenchen.isi.domain.mapper.InfrastruktureinrichtungDomainMapper;
 import de.muenchen.isi.domain.mapper.InfrastruktureinrichtungDomainMapperImpl;
+import de.muenchen.isi.domain.model.AbfrageModel;
+import de.muenchen.isi.domain.model.AbfragevarianteModel;
 import de.muenchen.isi.domain.model.BauvorhabenModel;
+import de.muenchen.isi.domain.model.InfrastrukturabfrageModel;
 import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.AbfrageAngelegtModel;
 import de.muenchen.isi.domain.model.enums.AbfrageTyp;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.InfrastruktureinrichtungModel;
@@ -28,6 +35,7 @@ import de.muenchen.isi.domain.model.list.AbfrageListElementModel;
 import de.muenchen.isi.domain.model.list.InfrastruktureinrichtungListElementModel;
 import de.muenchen.isi.domain.service.filehandling.DokumentService;
 import de.muenchen.isi.infrastructure.entity.Abfrage;
+import de.muenchen.isi.infrastructure.entity.Abfragevariante;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
 import de.muenchen.isi.infrastructure.entity.Infrastrukturabfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Planungsrecht;
@@ -49,7 +57,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Stream;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -320,7 +327,7 @@ public class BauvorhabenServiceTest {
         Mockito.reset(this.bauvorhabenRepository);
 
         Mockito.when(this.bauvorhabenRepository.findById(id)).thenReturn(Optional.empty());
-        Assertions.assertThrows(EntityNotFoundException.class, () -> this.bauvorhabenService.getBauvorhabenById(id));
+        assertThrows(EntityNotFoundException.class, () -> this.bauvorhabenService.getBauvorhabenById(id));
         Mockito.verify(this.bauvorhabenRepository, Mockito.times(1)).findById(id);
     }
 
@@ -367,10 +374,7 @@ public class BauvorhabenServiceTest {
             .thenReturn(Optional.of(entity));
         Mockito.when(this.bauvorhabenRepository.saveAndFlush(entity)).thenReturn(entity);
 
-        Assertions.assertThrows(
-            UniqueViolationException.class,
-            () -> this.bauvorhabenService.saveBauvorhaben(bauvorhabenModel2)
-        );
+        assertThrows(UniqueViolationException.class, () -> this.bauvorhabenService.saveBauvorhaben(bauvorhabenModel2));
 
         Mockito
             .verify(this.bauvorhabenRepository, Mockito.times(1))
@@ -446,7 +450,7 @@ public class BauvorhabenServiceTest {
             .when(this.infrastrukturabfrageRepository.findAllByAbfrageBauvorhabenId(entity.getId()))
             .thenReturn(Stream.of(infrastrukturabfrage));
 
-        Assertions.assertThrows(EntityIsReferencedException.class, () -> this.bauvorhabenService.deleteBauvorhaben(id));
+        assertThrows(EntityIsReferencedException.class, () -> this.bauvorhabenService.deleteBauvorhaben(id));
 
         Mockito.verify(this.bauvorhabenRepository, Mockito.times(1)).findById(entity.getId());
         Mockito.verify(this.bauvorhabenRepository, Mockito.times(0)).deleteById(id);
@@ -467,7 +471,7 @@ public class BauvorhabenServiceTest {
             .when(this.infrastruktureinrichtungRepository.findAllByBauvorhabenId(entity.getId()))
             .thenReturn(Stream.of(kinderkrippe));
 
-        Assertions.assertThrows(EntityIsReferencedException.class, () -> this.bauvorhabenService.deleteBauvorhaben(id));
+        assertThrows(EntityIsReferencedException.class, () -> this.bauvorhabenService.deleteBauvorhaben(id));
 
         Mockito.verify(this.bauvorhabenRepository, Mockito.times(1)).findById(entity.getId());
         Mockito.verify(this.bauvorhabenRepository, Mockito.times(0)).deleteById(id);
@@ -491,7 +495,7 @@ public class BauvorhabenServiceTest {
 
         // Wenn kein Bauvorhaben mit der ID 'bauvorhabenId' existiert, soll eine 'BauvorhabenNotFoundException' geworfen werden.
 
-        Assertions.assertThrows(
+        assertThrows(
             EntityNotFoundException.class,
             () -> this.bauvorhabenService.assignBauvorhabenToAbfrage(id, abfrage)
         );
@@ -525,7 +529,7 @@ public class BauvorhabenServiceTest {
 
         // Wenn kein Bauvorhaben mit der ID 'bauvorhabenId' existiert, soll eine 'BauvorhabenNotFoundException' geworfen werden.
 
-        Assertions.assertThrows(
+        assertThrows(
             EntityNotFoundException.class,
             () -> this.bauvorhabenService.assignBauvorhabenToInfrastruktureinrichtung(id, infrastruktureinrichtung)
         );
@@ -542,6 +546,108 @@ public class BauvorhabenServiceTest {
             returnedInfrastruktureinrichtung.getBauvorhaben(),
             is(this.bauvorhabenService.getBauvorhabenById(id))
         );
+    }
+
+    @Test
+    void changeRelevanteAbfragevarianteTest()
+        throws BauvorhabenNotReferencedException, UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException {
+        final UUID bauvorhabenId = UUID.randomUUID();
+        final String bauvorhabenName = "Bauvorhaben";
+        final UUID abfrageId = UUID.randomUUID();
+        final UUID abfragevarianteId = UUID.randomUUID();
+        final UUID otherAbfragevarianteId = UUID.randomUUID();
+
+        final BauvorhabenModel bauvorhabenModel = new BauvorhabenModel();
+        bauvorhabenModel.setId(bauvorhabenId);
+
+        final Bauvorhaben bauvorhabenEntity = new Bauvorhaben();
+        bauvorhabenEntity.setId(bauvorhabenId);
+        bauvorhabenEntity.setNameVorhaben(bauvorhabenName);
+
+        final InfrastrukturabfrageModel infrastrukturabfrageModel = new InfrastrukturabfrageModel();
+        infrastrukturabfrageModel.setId(abfrageId);
+        final AbfrageModel abfrageModel = new AbfrageModel();
+        abfrageModel.setStatusAbfrage(StatusAbfrage.OFFEN);
+        infrastrukturabfrageModel.setAbfrage(abfrageModel);
+
+        final Infrastrukturabfrage infrastrukturabfrageEntity = new Infrastrukturabfrage();
+        infrastrukturabfrageEntity.setId(abfrageId);
+        final Abfrage abfrageEntity = new Abfrage();
+        abfrageEntity.setStatusAbfrage(StatusAbfrage.OFFEN);
+        infrastrukturabfrageEntity.setAbfrage(abfrageEntity);
+
+        final AbfragevarianteModel abfragevarianteModel = new AbfragevarianteModel();
+        abfragevarianteModel.setId(abfragevarianteId);
+
+        final Abfragevariante abfragevarianteEntity = new Abfragevariante();
+        abfragevarianteEntity.setId(abfragevarianteId);
+
+        final AbfragevarianteModel otherAbfragevarianteModel = new AbfragevarianteModel();
+        otherAbfragevarianteModel.setId(otherAbfragevarianteId);
+
+        Mockito
+            .when(abfragevarianteRepository.findAbfrageAbfragevariantenIdById(abfragevarianteId))
+            .thenReturn(Optional.of(abfrageId));
+        Mockito
+            .when(abfragevarianteRepository.findAbfrageAbfragevariantenIdById(otherAbfragevarianteId))
+            .thenReturn(Optional.of(abfrageId));
+        Mockito.when(abfrageService.getInfrastrukturabfrageById(abfrageId)).thenReturn(infrastrukturabfrageModel);
+        Mockito
+            .doThrow(AbfrageStatusNotAllowedException.class)
+            .when(abfrageService)
+            .throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(
+                abfrageModel,
+                StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG
+            );
+        Mockito
+            .when(bauvorhabenRepository.findByNameVorhabenIgnoreCase(bauvorhabenName))
+            .thenReturn(Optional.of(bauvorhabenEntity));
+        Mockito.when(bauvorhabenRepository.saveAndFlush(bauvorhabenEntity)).thenReturn(bauvorhabenEntity);
+
+        assertThrows(
+            AbfrageStatusNotAllowedException.class,
+            () -> bauvorhabenService.changeRelevanteAbfragevariante(abfragevarianteModel)
+        );
+        abfrageEntity.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+        Mockito
+            .doNothing()
+            .when(abfrageService)
+            .throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(
+                abfrageModel,
+                StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG
+            );
+
+        assertThrows(
+            BauvorhabenNotReferencedException.class,
+            () -> bauvorhabenService.changeRelevanteAbfragevariante(abfragevarianteModel)
+        );
+        abfrageEntity.setBauvorhaben(bauvorhabenEntity);
+
+        bauvorhabenService.changeRelevanteAbfragevariante(abfragevarianteModel);
+        assertThat(bauvorhabenEntity.getRelevanteAbfragevariante(), sameInstance(abfragevarianteEntity));
+        assertThrows(
+            UniqueViolationException.class,
+            () -> bauvorhabenService.changeRelevanteAbfragevariante(otherAbfragevarianteModel)
+        );
+
+        bauvorhabenService.changeRelevanteAbfragevariante(abfragevarianteModel);
+        assertThat(bauvorhabenEntity.getRelevanteAbfragevariante(), nullValue());
+
+        Mockito
+            .verify(abfragevarianteRepository, Mockito.times(4))
+            .findAbfrageAbfragevariantenIdById(abfragevarianteId);
+        Mockito
+            .verify(abfragevarianteRepository, Mockito.times(1))
+            .findAbfrageAbfragevariantenIdById(otherAbfragevarianteId);
+        Mockito.verify(bauvorhabenRepository, Mockito.times(1)).findByNameVorhabenIgnoreCase(bauvorhabenName);
+        Mockito.verify(bauvorhabenRepository, Mockito.times(1)).saveAndFlush(bauvorhabenEntity);
+        Mockito.verify(abfrageService, Mockito.times(1)).getInfrastrukturabfrageById(abfrageId);
+        Mockito
+            .verify(abfrageService, Mockito.times(1))
+            .throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(
+                abfrageModel,
+                StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG
+            );
     }
 
     @Test
@@ -563,7 +669,7 @@ public class BauvorhabenServiceTest {
         Mockito
             .when(this.infrastrukturabfrageRepository.findAllByAbfrageBauvorhabenId(bauvorhaben.getId()))
             .thenReturn(Stream.of(infrastrukturabfrage));
-        Assertions.assertThrows(
+        assertThrows(
             EntityIsReferencedException.class,
             () ->
                 this.bauvorhabenService.throwEntityIsReferencedExceptionWhenAbfrageIsReferencingBauvorhaben(bauvorhaben)
@@ -572,8 +678,7 @@ public class BauvorhabenServiceTest {
     }
 
     @Test
-    void throwEntityIsReferencedExceptionWhenInfrastruktureinrichtungIsReferencingBauvorhaben()
-        throws EntityIsReferencedException {
+    void throwEntityIsReferencedExceptionWhenInfrastruktureinrichtungIsReferencingBauvorhaben() {
         final Kinderkrippe kinderkrippe = new Kinderkrippe();
         kinderkrippe.setNameEinrichtung("Kinderkrippe");
 
@@ -583,7 +688,7 @@ public class BauvorhabenServiceTest {
         Mockito
             .when(this.infrastruktureinrichtungRepository.findAllByBauvorhabenId(bauvorhaben.getId()))
             .thenReturn(Stream.of(kinderkrippe));
-        Assertions.assertThrows(
+        assertThrows(
             EntityIsReferencedException.class,
             () ->
                 this.bauvorhabenService.throwEntityIsReferencedExceptionWhenInfrastruktureinrichtungIsReferencingBauvorhaben(
