@@ -28,4 +28,6 @@ public class AbfrageListElementModel {
     private SobonVerfahrensgrundsaetzeJahr sobonJahr;
 
     private LocalDateTime createdDateTime;
+
+    private UUID bauvorhaben;
 }

@@ -91,15 +91,15 @@ public class BauvorhabenServiceTest {
     @BeforeEach
     public void beforeEach() {
         this.bauvorhabenService =
-        new BauvorhabenService(
-            this.bauvorhabenDomainMapper,
-            this.infrastruktureinrichtungDomainMapper,
-            this.abfrageDomainMapper,
-            this.bauvorhabenRepository,
-            this.infrastrukturabfrageRepository,
-            this.infrastruktureinrichtungRepository,
-            this.dokumentService
-        );
+            new BauvorhabenService(
+                this.bauvorhabenDomainMapper,
+                this.infrastruktureinrichtungDomainMapper,
+                this.abfrageDomainMapper,
+                this.bauvorhabenRepository,
+                this.infrastrukturabfrageRepository,
+                this.infrastruktureinrichtungRepository,
+                this.dokumentService
+            );
 
         Mockito.reset(
             this.bauvorhabenRepository,
@@ -177,6 +177,7 @@ public class BauvorhabenServiceTest {
         abfrageListElementModel1.setStatusAbfrage(abfrage1.getAbfrage().getStatusAbfrage());
         abfrageListElementModel1.setFristStellungnahme(abfrage1.getAbfrage().getFristStellungnahme());
         abfrageListElementModel1.setType(AbfrageTyp.INFRASTRUKTURABFRAGE);
+        abfrageListElementModel1.setBauvorhaben(bauvorhabenId);
         expectedAbfrageList.add(abfrageListElementModel1);
 
         var abfrageListElementModel2 = new AbfrageListElementModel();
@@ -185,6 +186,7 @@ public class BauvorhabenServiceTest {
         abfrageListElementModel2.setStatusAbfrage(abfrage2.getAbfrage().getStatusAbfrage());
         abfrageListElementModel2.setFristStellungnahme(abfrage2.getAbfrage().getFristStellungnahme());
         abfrageListElementModel2.setType(AbfrageTyp.INFRASTRUKTURABFRAGE);
+        abfrageListElementModel2.setBauvorhaben(bauvorhabenId);
         expectedAbfrageList.add(abfrageListElementModel2);
 
         var abfrageListElementModel3 = new AbfrageListElementModel();
@@ -193,6 +195,7 @@ public class BauvorhabenServiceTest {
         abfrageListElementModel3.setStatusAbfrage(abfrage3.getAbfrage().getStatusAbfrage());
         abfrageListElementModel3.setFristStellungnahme(abfrage3.getAbfrage().getFristStellungnahme());
         abfrageListElementModel3.setType(AbfrageTyp.INFRASTRUKTURABFRAGE);
+        abfrageListElementModel3.setBauvorhaben(bauvorhabenId);
         expectedAbfrageList.add(abfrageListElementModel3);
 
         Mockito
@@ -510,7 +513,7 @@ public class BauvorhabenServiceTest {
         // Wenn 'bauvorhabenId' null ist, soll nichts passieren.
 
         returnedInfrastruktureinrichtung =
-        this.bauvorhabenService.assignBauvorhabenToInfrastruktureinrichtung(null, infrastruktureinrichtung);
+            this.bauvorhabenService.assignBauvorhabenToInfrastruktureinrichtung(null, infrastruktureinrichtung);
         assertThat(returnedInfrastruktureinrichtung, sameInstance(infrastruktureinrichtung));
         Mockito.verify(this.bauvorhabenRepository, Mockito.times(0)).findById(bauvorhaben.getId());
 
@@ -526,7 +529,7 @@ public class BauvorhabenServiceTest {
 
         Mockito.when(this.bauvorhabenRepository.findById(bauvorhaben.getId())).thenReturn(Optional.of(bauvorhaben));
         returnedInfrastruktureinrichtung =
-        this.bauvorhabenService.assignBauvorhabenToInfrastruktureinrichtung(id, infrastruktureinrichtung);
+            this.bauvorhabenService.assignBauvorhabenToInfrastruktureinrichtung(id, infrastruktureinrichtung);
         assertThat(returnedInfrastruktureinrichtung, sameInstance(infrastruktureinrichtung));
         Mockito.verify(this.bauvorhabenRepository, Mockito.times(2)).findById(bauvorhaben.getId());
         assertThat(
