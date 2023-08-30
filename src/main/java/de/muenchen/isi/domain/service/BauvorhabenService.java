@@ -201,7 +201,7 @@ public class BauvorhabenService {
      * Die Abfrage muss sich im Status {@link StatusAbfrage#IN_BEARBEITUNG_SACHBEARBEITUNG} befinden.
      *
      * @param abfragevariante die neue relevante Abfragevariante
-     * @return das geupdatete {@link InfrastrukturabfrageModel}
+     * @return das geupdatete {@link BauvorhabenModel}
      * @throws EntityNotFoundException           falls die Abfrage oder Abfragevariante nicht gefunden wurde
      * @throws UniqueViolationException          falls schon eine andere Abfragevariante relevant ist
      * @throws OptimisticLockingException        falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
@@ -338,18 +338,19 @@ public class BauvorhabenService {
 
     private InfrastrukturabfrageModel getAbfrageOfAbfragevariante(AbfragevarianteModel abfragevariante)
         throws EntityNotFoundException {
-        final var abfrageId = abfragevarianteRepository
-            .findAbfrageAbfragevariantenIdById(abfragevariante.getId())
-            .orElse(
-                abfragevarianteRepository
-                    .findAbfrageAbfragevariantenSachbearbeitungIdById(abfragevariante.getId())
-                    .orElseThrow(() -> {
-                        final var message = "Abfragevariante nicht gefunden.";
-                        log.error(message);
-                        return new EntityNotFoundException(message);
-                    })
-            );
+        var abfrageId = abfragevarianteRepository.findAbfrageAbfragevariantenIdById(abfragevariante.getId());
 
-        return abfrageService.getInfrastrukturabfrageById(abfrageId);
+        if (abfrageId.isEmpty()) {
+            abfrageId =
+                abfragevarianteRepository.findAbfrageAbfragevariantenSachbearbeitungIdById(abfragevariante.getId());
+        }
+
+        if (abfrageId.isEmpty()) {
+            final var message = "Abfragevariante nicht gefunden.";
+            log.error(message);
+            throw new EntityNotFoundException(message);
+        }
+
+        return abfrageService.getInfrastrukturabfrageById(abfrageId.get());
     }
 }

@@ -559,6 +559,7 @@ public class BauvorhabenServiceTest {
 
         final BauvorhabenModel bauvorhabenModel = new BauvorhabenModel();
         bauvorhabenModel.setId(bauvorhabenId);
+        bauvorhabenModel.setNameVorhaben(bauvorhabenName);
 
         final Bauvorhaben bauvorhabenEntity = new Bauvorhaben();
         bauvorhabenEntity.setId(bauvorhabenId);
@@ -570,17 +571,8 @@ public class BauvorhabenServiceTest {
         abfrageModel.setStatusAbfrage(StatusAbfrage.OFFEN);
         infrastrukturabfrageModel.setAbfrage(abfrageModel);
 
-        final Infrastrukturabfrage infrastrukturabfrageEntity = new Infrastrukturabfrage();
-        infrastrukturabfrageEntity.setId(abfrageId);
-        final Abfrage abfrageEntity = new Abfrage();
-        abfrageEntity.setStatusAbfrage(StatusAbfrage.OFFEN);
-        infrastrukturabfrageEntity.setAbfrage(abfrageEntity);
-
         final AbfragevarianteModel abfragevarianteModel = new AbfragevarianteModel();
         abfragevarianteModel.setId(abfragevarianteId);
-
-        final Abfragevariante abfragevarianteEntity = new Abfragevariante();
-        abfragevarianteEntity.setId(abfragevarianteId);
 
         final AbfragevarianteModel otherAbfragevarianteModel = new AbfragevarianteModel();
         otherAbfragevarianteModel.setId(otherAbfragevarianteId);
@@ -593,7 +585,7 @@ public class BauvorhabenServiceTest {
             .thenReturn(Optional.of(abfrageId));
         Mockito.when(abfrageService.getInfrastrukturabfrageById(abfrageId)).thenReturn(infrastrukturabfrageModel);
         Mockito
-            .doThrow(AbfrageStatusNotAllowedException.class)
+            .doNothing()
             .when(abfrageService)
             .throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(
                 abfrageModel,
@@ -605,33 +597,18 @@ public class BauvorhabenServiceTest {
         Mockito.when(bauvorhabenRepository.saveAndFlush(bauvorhabenEntity)).thenReturn(bauvorhabenEntity);
 
         assertThrows(
-            AbfrageStatusNotAllowedException.class,
-            () -> bauvorhabenService.changeRelevanteAbfragevariante(abfragevarianteModel)
-        );
-        abfrageEntity.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
-        Mockito
-            .doNothing()
-            .when(abfrageService)
-            .throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(
-                abfrageModel,
-                StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG
-            );
-
-        assertThrows(
             BauvorhabenNotReferencedException.class,
             () -> bauvorhabenService.changeRelevanteAbfragevariante(abfragevarianteModel)
         );
-        abfrageEntity.setBauvorhaben(bauvorhabenEntity);
-
+        abfrageModel.setBauvorhaben(bauvorhabenModel);
         bauvorhabenService.changeRelevanteAbfragevariante(abfragevarianteModel);
-        assertThat(bauvorhabenEntity.getRelevanteAbfragevariante(), sameInstance(abfragevarianteEntity));
+        assertThat(bauvorhabenModel.getRelevanteAbfragevariante(), sameInstance(abfragevarianteModel));
         assertThrows(
             UniqueViolationException.class,
             () -> bauvorhabenService.changeRelevanteAbfragevariante(otherAbfragevarianteModel)
         );
-
         bauvorhabenService.changeRelevanteAbfragevariante(abfragevarianteModel);
-        assertThat(bauvorhabenEntity.getRelevanteAbfragevariante(), nullValue());
+        assertThat(bauvorhabenModel.getRelevanteAbfragevariante(), nullValue());
 
         Mockito
             .verify(abfragevarianteRepository, Mockito.times(4))
@@ -639,15 +616,15 @@ public class BauvorhabenServiceTest {
         Mockito
             .verify(abfragevarianteRepository, Mockito.times(1))
             .findAbfrageAbfragevariantenIdById(otherAbfragevarianteId);
-        Mockito.verify(bauvorhabenRepository, Mockito.times(1)).findByNameVorhabenIgnoreCase(bauvorhabenName);
-        Mockito.verify(bauvorhabenRepository, Mockito.times(1)).saveAndFlush(bauvorhabenEntity);
-        Mockito.verify(abfrageService, Mockito.times(1)).getInfrastrukturabfrageById(abfrageId);
+        Mockito.verify(abfrageService, Mockito.times(5)).getInfrastrukturabfrageById(abfrageId);
         Mockito
-            .verify(abfrageService, Mockito.times(1))
+            .verify(abfrageService, Mockito.times(4))
             .throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(
                 abfrageModel,
                 StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG
             );
+        Mockito.verify(bauvorhabenRepository, Mockito.times(2)).findByNameVorhabenIgnoreCase(bauvorhabenName);
+        Mockito.verify(bauvorhabenRepository, Mockito.times(2)).saveAndFlush(Mockito.any(Bauvorhaben.class));
     }
 
     @Test
