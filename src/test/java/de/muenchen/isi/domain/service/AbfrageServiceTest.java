@@ -603,7 +603,7 @@ class AbfrageServiceTest {
 
     @Test
     void changeAbfragevarianteRelevant()
-        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, FileHandlingFailedException, FileHandlingWithS3FailedException, BauvorhabenNotReferencedException {
+        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, BauvorhabenNotReferencedException {
         final UUID abfrageId = UUID.randomUUID();
         final UUID abfragevarianteId = UUID.randomUUID();
         final UUID bauvorhabenId = UUID.randomUUID();
@@ -755,7 +755,7 @@ class AbfrageServiceTest {
 
     @Test
     void throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid()
-        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, FileHandlingFailedException, FileHandlingWithS3FailedException {
+        throws FileHandlingFailedException, FileHandlingWithS3FailedException {
         final UUID abfrageId = UUID.randomUUID();
         final InfrastrukturabfrageAngelegtModel infrastrukturabfrageRequestModel =
             new InfrastrukturabfrageAngelegtModel();
