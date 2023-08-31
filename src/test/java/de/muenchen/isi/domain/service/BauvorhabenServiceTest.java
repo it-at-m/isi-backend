@@ -578,11 +578,11 @@ public class BauvorhabenServiceTest {
         otherAbfragevarianteModel.setId(otherAbfragevarianteId);
 
         Mockito
-            .when(abfragevarianteRepository.findAbfrageAbfragevariantenIdById(abfragevarianteId))
-            .thenReturn(Optional.of(abfrageId));
+            .when(abfragevarianteRepository.findAbfrageAbfragevariantenIdById(abfragevarianteId.toString()))
+            .thenReturn(Optional.of(abfrageId.toString()));
         Mockito
-            .when(abfragevarianteRepository.findAbfrageAbfragevariantenIdById(otherAbfragevarianteId))
-            .thenReturn(Optional.of(abfrageId));
+            .when(abfragevarianteRepository.findAbfrageAbfragevariantenIdById(otherAbfragevarianteId.toString()))
+            .thenReturn(Optional.of(abfrageId.toString()));
         Mockito.when(abfrageService.getInfrastrukturabfrageById(abfrageId)).thenReturn(infrastrukturabfrageModel);
         Mockito
             .doNothing()
@@ -612,10 +612,10 @@ public class BauvorhabenServiceTest {
 
         Mockito
             .verify(abfragevarianteRepository, Mockito.times(4))
-            .findAbfrageAbfragevariantenIdById(abfragevarianteId);
+            .findAbfrageAbfragevariantenIdById(abfragevarianteId.toString());
         Mockito
             .verify(abfragevarianteRepository, Mockito.times(1))
-            .findAbfrageAbfragevariantenIdById(otherAbfragevarianteId);
+            .findAbfrageAbfragevariantenIdById(otherAbfragevarianteId.toString());
         Mockito.verify(abfrageService, Mockito.times(5)).getInfrastrukturabfrageById(abfrageId);
         Mockito
             .verify(abfrageService, Mockito.times(4))

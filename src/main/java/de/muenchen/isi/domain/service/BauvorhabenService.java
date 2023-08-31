@@ -338,11 +338,11 @@ public class BauvorhabenService {
 
     private InfrastrukturabfrageModel getAbfrageOfAbfragevariante(AbfragevarianteModel abfragevariante)
         throws EntityNotFoundException {
-        var abfrageId = abfragevarianteRepository.findAbfrageAbfragevariantenIdById(abfragevariante.getId());
+        final var abfragevarianteId = abfragevariante.getId().toString();
+        var abfrageId = abfragevarianteRepository.findAbfrageAbfragevariantenIdById(abfragevarianteId);
 
         if (abfrageId.isEmpty()) {
-            abfrageId =
-                abfragevarianteRepository.findAbfrageAbfragevariantenSachbearbeitungIdById(abfragevariante.getId());
+            abfrageId = abfragevarianteRepository.findAbfrageAbfragevariantenSachbearbeitungIdById(abfragevarianteId);
         }
 
         if (abfrageId.isEmpty()) {
@@ -351,6 +351,6 @@ public class BauvorhabenService {
             throw new EntityNotFoundException(message);
         }
 
-        return abfrageService.getInfrastrukturabfrageById(abfrageId.get());
+        return abfrageService.getInfrastrukturabfrageById(UUID.fromString(abfrageId.get()));
     }
 }
