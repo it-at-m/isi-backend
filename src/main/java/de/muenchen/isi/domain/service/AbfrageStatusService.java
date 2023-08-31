@@ -449,7 +449,7 @@ public class AbfrageStatusService {
             }
 
             if (infrastrukturabfrage.getAbfrage().getAnmerkung().length() > 255) {
-                throw new StringLengthExceededException("Die Anmerkung überschreitet das Zeichenlimit.");
+                throw new StringLengthExceededException("Es sind maximal 255 Zeichen erlaubt\"");
             }
         }
     }

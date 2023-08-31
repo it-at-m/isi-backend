@@ -247,7 +247,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(StringLengthExceededException.class)
     public ResponseEntity<Object> handleStringLengthExceededException(final StringLengthExceededException ex) {
-        final var httpStatus = HttpStatus.CONFLICT;
+        final var httpStatus = HttpStatus.BAD_REQUEST;
         final InformationResponseDto errorResponseDto = new InformationResponseDto();
         errorResponseDto.setMessages(List.of(ex.getMessage()));
         errorResponseDto.setHttpStatus(httpStatus.value());
