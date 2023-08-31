@@ -14,6 +14,7 @@ import de.muenchen.isi.domain.exception.KoordinatenException;
 import de.muenchen.isi.domain.exception.MimeTypeExtractionFailedException;
 import de.muenchen.isi.domain.exception.MimeTypeNotAllowedException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
+import de.muenchen.isi.domain.exception.StringLengthExceededException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
 import de.muenchen.isi.domain.exception.UserRoleNotAllowedException;
 import java.time.LocalDateTime;
@@ -236,6 +237,16 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(UniqueViolationException.class)
     public ResponseEntity<Object> handleUniqueViolationException(final UniqueViolationException ex) {
+        final var httpStatus = HttpStatus.CONFLICT;
+        final InformationResponseDto errorResponseDto = new InformationResponseDto();
+        errorResponseDto.setMessages(List.of(ex.getMessage()));
+        errorResponseDto.setHttpStatus(httpStatus.value());
+        errorResponseDto.setType(InformationResponseType.ERROR);
+        return ResponseEntity.status(httpStatus).body(errorResponseDto);
+    }
+
+    @ExceptionHandler(StringLengthExceededException.class)
+    public ResponseEntity<Object> handleStringLengthExceededException(final StringLengthExceededException ex) {
         final var httpStatus = HttpStatus.CONFLICT;
         final InformationResponseDto errorResponseDto = new InformationResponseDto();
         errorResponseDto.setMessages(List.of(ex.getMessage()));

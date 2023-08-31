@@ -6,6 +6,7 @@ import de.muenchen.isi.api.mapper.TransitionApiMapper;
 import de.muenchen.isi.domain.exception.AbfrageStatusNotAllowedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
+import de.muenchen.isi.domain.exception.StringLengthExceededException;
 import de.muenchen.isi.domain.service.AbfrageStatusService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -88,7 +89,7 @@ public class AbfrageStatusController {
     public ResponseEntity<Void> freigabeInfrastrukturabfrage(
         @PathVariable @NotNull final UUID id,
         @RequestParam(value = "anmerkung", required = false, defaultValue = "") String anmerkung
-    ) throws EntityNotFoundException, AbfrageStatusNotAllowedException {
+    ) throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException {
         this.abfrageStatusService.freigabeAbfrage(id, anmerkung);
         return ResponseEntity.ok().build();
     }
@@ -115,7 +116,7 @@ public class AbfrageStatusController {
     public ResponseEntity<Void> abbrechenInfrastrukturabfrage(
         @PathVariable @NotNull final UUID id,
         @RequestParam(value = "anmerkung", required = false, defaultValue = "") String anmerkung
-    ) throws EntityNotFoundException, AbfrageStatusNotAllowedException {
+    ) throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException {
         this.abfrageStatusService.abbrechenAbfrage(id, anmerkung);
         return ResponseEntity.ok().build();
     }
@@ -147,7 +148,7 @@ public class AbfrageStatusController {
     public ResponseEntity<Void> zurueckAbfrageerstellungInfrastrukturabfrage(
         @PathVariable @NotNull final UUID id,
         @RequestParam(value = "anmerkung", required = false, defaultValue = "") String anmerkung
-    ) throws EntityNotFoundException, AbfrageStatusNotAllowedException {
+    ) throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException {
         this.abfrageStatusService.zurueckAnAbfrageerstellungAbfrage(id, anmerkung);
         return ResponseEntity.ok().build();
     }
@@ -179,7 +180,7 @@ public class AbfrageStatusController {
     public ResponseEntity<Void> inBearbeitungSetzenInfrastrukturabfrage(
         @PathVariable @NotNull final UUID id,
         @RequestParam(value = "anmerkung", required = false, defaultValue = "") String anmerkung
-    ) throws EntityNotFoundException, AbfrageStatusNotAllowedException {
+    ) throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException {
         this.abfrageStatusService.inBearbeitungSetzenAbfrage(id, anmerkung);
         return ResponseEntity.ok().build();
     }
@@ -211,7 +212,7 @@ public class AbfrageStatusController {
     public ResponseEntity<Void> zurueckAnSachbearbeitungInfrastrukturabfrage(
         @PathVariable @NotNull final UUID id,
         @RequestParam(value = "anmerkung", required = false, defaultValue = "") String anmerkung
-    ) throws EntityNotFoundException, AbfrageStatusNotAllowedException {
+    ) throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException {
         this.abfrageStatusService.zurueckAnSachbearbeitungAbfrage(id, anmerkung);
         return ResponseEntity.ok().build();
     }
@@ -238,7 +239,7 @@ public class AbfrageStatusController {
     public ResponseEntity<Void> abfrageSchliessenInfrastrukturAbfrage(
         @PathVariable @NotNull final UUID id,
         @RequestParam(value = "anmerkung", required = false, defaultValue = "") String anmerkung
-    ) throws EntityNotFoundException, AbfrageStatusNotAllowedException {
+    ) throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException {
         this.abfrageStatusService.abfrageSchliessen(id, anmerkung);
         return ResponseEntity.ok().build();
     }
@@ -270,7 +271,7 @@ public class AbfrageStatusController {
     public ResponseEntity<Void> verschickenDerStellungnahmeInfrastrukturabfrage(
         @PathVariable @NotNull final UUID id,
         @RequestParam(value = "anmerkung", required = false, defaultValue = "") String anmerkung
-    ) throws EntityNotFoundException, AbfrageStatusNotAllowedException {
+    ) throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException {
         this.abfrageStatusService.verschickenDerStellungnahme(id, anmerkung);
         return ResponseEntity.ok().build();
     }
@@ -299,7 +300,7 @@ public class AbfrageStatusController {
     public ResponseEntity<Void> bedarfsmeldungErfolgtInfrastrukturAbfrage(
         @PathVariable @NotNull final UUID id,
         @RequestParam(value = "anmerkung", required = false, defaultValue = "") String anmerkung
-    ) throws EntityNotFoundException, AbfrageStatusNotAllowedException {
+    ) throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException {
         this.abfrageStatusService.bedarfsmeldungErfolgt(id, anmerkung);
         return ResponseEntity.ok().build();
     }
@@ -328,7 +329,7 @@ public class AbfrageStatusController {
     public ResponseEntity<Void> speichernVonSozialinfrastrukturVersorgungInfrastrukturAbfrage(
         @PathVariable @NotNull final UUID id,
         @RequestParam(value = "anmerkung", required = false, defaultValue = "") String anmerkung
-    ) throws EntityNotFoundException, AbfrageStatusNotAllowedException {
+    ) throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException {
         this.abfrageStatusService.speichernVonSozialinfrastrukturVersorgung(id, anmerkung);
         return ResponseEntity.ok().build();
     }
@@ -360,7 +361,7 @@ public class AbfrageStatusController {
     public ResponseEntity<Void> erneuteBearbeitungInfrastrukturabfrage(
         @PathVariable @NotNull final UUID id,
         @RequestParam(value = "anmerkung", required = false, defaultValue = "") String anmerkung
-    ) throws EntityNotFoundException, AbfrageStatusNotAllowedException {
+    ) throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException {
         this.abfrageStatusService.erneuteBearbeitenAbfrage(id, anmerkung);
         return ResponseEntity.ok().build();
     }

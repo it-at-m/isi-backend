@@ -7,6 +7,7 @@ import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.FileHandlingFailedException;
 import de.muenchen.isi.domain.exception.FileHandlingWithS3FailedException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
+import de.muenchen.isi.domain.exception.StringLengthExceededException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
 import de.muenchen.isi.domain.exception.UserRoleNotAllowedException;
 import de.muenchen.isi.domain.mapper.AbfrageDomainMapper;
@@ -224,7 +225,8 @@ public class AbfrageService {
         final UUID id,
         final StatusAbfrage statusAbfrage,
         final String anmerkung
-    ) throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException {
+    )
+        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, StringLengthExceededException {
         var originalAbfrageDb = this.getInfrastrukturabfrageById(id);
         originalAbfrageDb.getAbfrage().setStatusAbfrage(statusAbfrage);
         originalAbfrageDb = this.addAbfrageAnmerkung(originalAbfrageDb, anmerkung);
@@ -251,6 +253,7 @@ public class AbfrageService {
                     .setAnmerkung(infrastrukturabfrageModel.getAbfrage().getAnmerkung().concat("\n").concat(anmerkung));
             }
         }
+
         return infrastrukturabfrageModel;
     }
 

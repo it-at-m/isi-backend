@@ -5,6 +5,7 @@ import de.muenchen.isi.domain.exception.AbfrageStatusNotAllowedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.StateMachineTransitionFailedException;
+import de.muenchen.isi.domain.exception.StringLengthExceededException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
 import de.muenchen.isi.domain.model.InfrastrukturabfrageModel;
 import de.muenchen.isi.domain.model.common.TransitionModel;
@@ -60,7 +61,8 @@ public class AbfrageStatusService {
      * @throws AbfrageStatusNotAllowedException wenn die Statusänderung nicht erlaubt ist
      */
     public void freigabeAbfrage(final UUID id, String anmerkung)
-        throws EntityNotFoundException, AbfrageStatusNotAllowedException {
+        throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException {
+        this.throwStringLengthExceededExceptionWhenAnmerkungExceedsLength(id, anmerkung);
         final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id, anmerkung);
         this.sendEvent(id, StatusAbfrageEvents.FREIGABE, stateMachine);
     }
@@ -73,7 +75,8 @@ public class AbfrageStatusService {
      * @throws AbfrageStatusNotAllowedException wenn die Statusänderung nicht erlaubt ist
      */
     public void inBearbeitungSetzenAbfrage(final UUID id, String anmerkung)
-        throws EntityNotFoundException, AbfrageStatusNotAllowedException {
+        throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException {
+        this.throwStringLengthExceededExceptionWhenAnmerkungExceedsLength(id, anmerkung);
         final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id, anmerkung);
         this.sendEvent(id, StatusAbfrageEvents.IN_BEARBEITUNG_SETZEN, stateMachine);
     }
@@ -86,7 +89,8 @@ public class AbfrageStatusService {
      * @throws AbfrageStatusNotAllowedException wenn die Statusänderung nicht erlaubt ist
      */
     public void abbrechenAbfrage(final UUID id, String anmerkung)
-        throws EntityNotFoundException, AbfrageStatusNotAllowedException {
+        throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException {
+        this.throwStringLengthExceededExceptionWhenAnmerkungExceedsLength(id, anmerkung);
         final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id, anmerkung);
         this.sendEvent(id, StatusAbfrageEvents.ABBRECHEN, stateMachine);
     }
@@ -99,7 +103,8 @@ public class AbfrageStatusService {
      * @throws AbfrageStatusNotAllowedException wenn die Statusänderung nicht erlaubt ist
      */
     public void zurueckAnAbfrageerstellungAbfrage(final UUID id, String anmerkung)
-        throws EntityNotFoundException, AbfrageStatusNotAllowedException {
+        throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException {
+        this.throwStringLengthExceededExceptionWhenAnmerkungExceedsLength(id, anmerkung);
         final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id, anmerkung);
         this.sendEvent(id, StatusAbfrageEvents.ZURUECK_AN_ABFRAGEERSTELLUNG, stateMachine);
     }
@@ -112,7 +117,8 @@ public class AbfrageStatusService {
      * @throws AbfrageStatusNotAllowedException wenn die Statusänderung nicht erlaubt ist
      */
     public void zurueckAnSachbearbeitungAbfrage(final UUID id, String anmerkung)
-        throws EntityNotFoundException, AbfrageStatusNotAllowedException {
+        throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException {
+        this.throwStringLengthExceededExceptionWhenAnmerkungExceedsLength(id, anmerkung);
         final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id, anmerkung);
         this.sendEvent(id, StatusAbfrageEvents.ZURUECK_AN_SACHBEARBEITUNG, stateMachine);
     }
@@ -125,7 +131,8 @@ public class AbfrageStatusService {
      * @throws AbfrageStatusNotAllowedException wenn die Statusänderung nicht erlaubt ist
      */
     public void abfrageSchliessen(final UUID id, String anmerkung)
-        throws EntityNotFoundException, AbfrageStatusNotAllowedException {
+        throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException {
+        this.throwStringLengthExceededExceptionWhenAnmerkungExceedsLength(id, anmerkung);
         final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id, anmerkung);
         this.sendEvent(id, StatusAbfrageEvents.ABFRAGE_SCHLIESSEN, stateMachine);
     }
@@ -138,7 +145,8 @@ public class AbfrageStatusService {
      * @throws AbfrageStatusNotAllowedException wenn die Statusänderung nicht erlaubt ist
      */
     public void verschickenDerStellungnahme(final UUID id, String anmerkung)
-        throws EntityNotFoundException, AbfrageStatusNotAllowedException {
+        throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException {
+        this.throwStringLengthExceededExceptionWhenAnmerkungExceedsLength(id, anmerkung);
         final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id, anmerkung);
         this.sendEvent(id, StatusAbfrageEvents.VERSCHICKEN_DER_STELLUNGNAHME, stateMachine);
     }
@@ -151,7 +159,8 @@ public class AbfrageStatusService {
      * @throws AbfrageStatusNotAllowedException wenn die Statusänderung nicht erlaubt ist
      */
     public void bedarfsmeldungErfolgt(final UUID id, String anmerkung)
-        throws EntityNotFoundException, AbfrageStatusNotAllowedException {
+        throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException {
+        this.throwStringLengthExceededExceptionWhenAnmerkungExceedsLength(id, anmerkung);
         final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id, anmerkung);
         this.sendEvent(id, StatusAbfrageEvents.BEDARFSMELDUNG_ERFOLGTE, stateMachine);
     }
@@ -164,7 +173,8 @@ public class AbfrageStatusService {
      * @throws AbfrageStatusNotAllowedException wenn die Statusänderung nicht erlaubt ist
      */
     public void speichernVonSozialinfrastrukturVersorgung(final UUID id, String anmerkung)
-        throws EntityNotFoundException, AbfrageStatusNotAllowedException {
+        throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException {
+        this.throwStringLengthExceededExceptionWhenAnmerkungExceedsLength(id, anmerkung);
         final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id, anmerkung);
         this.sendEvent(id, StatusAbfrageEvents.SPEICHERN_VON_SOZIALINFRASTRUKTUR_VERSORGUNG, stateMachine);
     }
@@ -177,7 +187,8 @@ public class AbfrageStatusService {
      * @throws AbfrageStatusNotAllowedException wenn die Statusänderung nicht erlaubt ist
      */
     public void erneuteBearbeitenAbfrage(final UUID id, String anmerkung)
-        throws EntityNotFoundException, AbfrageStatusNotAllowedException {
+        throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException {
+        this.throwStringLengthExceededExceptionWhenAnmerkungExceedsLength(id, anmerkung);
         final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id, anmerkung);
         this.sendEvent(id, StatusAbfrageEvents.ERNEUTE_BEARBEITUNG, stateMachine);
     }
@@ -237,7 +248,8 @@ public class AbfrageStatusService {
                             } catch (
                                 final EntityNotFoundException
                                 | OptimisticLockingException
-                                | UniqueViolationException exception
+                                | UniqueViolationException
+                                | StringLengthExceededException exception
                             ) {
                                 log.error(exception.getMessage(), exception);
                                 return null;
@@ -422,5 +434,23 @@ public class AbfrageStatusService {
         );
 
         return authoritiesAndEventsMap;
+    }
+
+    private void throwStringLengthExceededExceptionWhenAnmerkungExceedsLength(UUID id, String anmerkung)
+        throws StringLengthExceededException, EntityNotFoundException {
+        InfrastrukturabfrageModel infrastrukturabfrage = this.abfrageService.getInfrastrukturabfrageById(id);
+        if (!anmerkung.isEmpty()) {
+            if (infrastrukturabfrage.getAbfrage().getAnmerkung() == null) {
+                infrastrukturabfrage.getAbfrage().setAnmerkung(anmerkung);
+            } else {
+                infrastrukturabfrage
+                    .getAbfrage()
+                    .setAnmerkung(infrastrukturabfrage.getAbfrage().getAnmerkung().concat("\n").concat(anmerkung));
+            }
+
+            if (infrastrukturabfrage.getAbfrage().getAnmerkung().length() > 255) {
+                throw new StringLengthExceededException("Die Anmerkung überschreitet das Zeichenlimit.");
+            }
+        }
     }
 }
