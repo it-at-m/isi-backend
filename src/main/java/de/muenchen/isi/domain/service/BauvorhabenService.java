@@ -86,7 +86,7 @@ public class BauvorhabenService {
      * @throws UniqueViolationException   falls der Name des Bauvorhabens {@link BauvorhabenModel#getNameVorhaben()} bereits vorhanden ist
      * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
      */
-    public BauvorhabenModel saveBauvorhaben(final BauvorhabenModel bauvorhaben)
+    public BauvorhabenModel saveBauvorhaben(final BauvorhabenModel bauvorhaben, final UUID abfrage)
         throws UniqueViolationException, OptimisticLockingException {
         var bauvorhabenEntity = this.bauvorhabenDomainMapper.model2Entity(bauvorhaben);
         final var saved = this.bauvorhabenRepository.findByNameVorhabenIgnoreCase(bauvorhabenEntity.getNameVorhaben());
@@ -123,7 +123,7 @@ public class BauvorhabenService {
             bauvorhaben.getDokumente(),
             originalBauvorhabenDb.getDokumente()
         );
-        return this.saveBauvorhaben(bauvorhaben);
+        return this.saveBauvorhaben(bauvorhaben, null);
     }
 
     /**

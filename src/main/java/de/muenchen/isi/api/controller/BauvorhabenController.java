@@ -20,10 +20,12 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -38,6 +40,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
@@ -118,10 +121,11 @@ public class BauvorhabenController {
     )
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_WRITE_BAUVORHABEN.name())")
     public ResponseEntity<BauvorhabenDto> createBauvorhaben(
-        @RequestBody @Valid @NotNull final BauvorhabenDto bauvorhabenDto
+        @RequestBody @Valid @NotNull final BauvorhabenDto bauvorhabenDto,
+        @RequestParam(required = false) final UUID abfrage
     ) throws UniqueViolationException, OptimisticLockingException {
         var model = this.bauvorhabenApiMapper.dto2Model(bauvorhabenDto);
-        model = this.bauvorhabenService.saveBauvorhaben(model);
+        model = this.bauvorhabenService.saveBauvorhaben(model, abfrage);
         final var saved = this.bauvorhabenApiMapper.model2Dto(model);
         return new ResponseEntity<>(saved, HttpStatus.CREATED);
     }

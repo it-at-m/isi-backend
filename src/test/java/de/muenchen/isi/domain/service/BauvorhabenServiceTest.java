@@ -331,7 +331,7 @@ public class BauvorhabenServiceTest {
 
         Mockito.when(this.bauvorhabenRepository.saveAndFlush(bauvorhabenEntity)).thenReturn(saveResult);
 
-        final BauvorhabenModel result = this.bauvorhabenService.saveBauvorhaben(bauvorhaben);
+        final BauvorhabenModel result = this.bauvorhabenService.saveBauvorhaben(bauvorhaben, null);
 
         final BauvorhabenModel expected = new BauvorhabenModel();
         expected.setId(saveResult.getId());
@@ -363,7 +363,7 @@ public class BauvorhabenServiceTest {
 
         Assertions.assertThrows(
             UniqueViolationException.class,
-            () -> this.bauvorhabenService.saveBauvorhaben(bauvorhabenModel2)
+            () -> this.bauvorhabenService.saveBauvorhaben(bauvorhabenModel2, null)
         );
 
         Mockito
