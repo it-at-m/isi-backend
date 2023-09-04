@@ -28,6 +28,7 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.lang.Nullable;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
@@ -50,6 +51,8 @@ public class BauvorhabenService {
     private final InfrastruktureinrichtungRepository infrastruktureinrichtungRepository;
 
     private final DokumentService dokumentService;
+
+    private final AbfrageService abfrageService;
 
     /**
      * Die Methode gibt alle {@link BauvorhabenModel} als Liste zurück.
@@ -85,14 +88,25 @@ public class BauvorhabenService {
      * @return das gespeicherte {@link BauvorhabenModel}
      * @throws UniqueViolationException   falls der Name des Bauvorhabens {@link BauvorhabenModel#getNameVorhaben()} bereits vorhanden ist
      * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
+     * @throws EntityNotFoundException falls bei der Datenübernahme die ausgewählte Abfrage nicht mehr vorhanden ist
+     * @throws EntityIsReferencedException falls bei der Datenübernahme die ausgewählte Abfrage bereits ein Bauvorhaben referenziert
      */
     public BauvorhabenModel saveBauvorhaben(final BauvorhabenModel bauvorhaben, final UUID abfrage)
-        throws UniqueViolationException, OptimisticLockingException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, EntityIsReferencedException {
         var bauvorhabenEntity = this.bauvorhabenDomainMapper.model2Entity(bauvorhaben);
         final var saved = this.bauvorhabenRepository.findByNameVorhabenIgnoreCase(bauvorhabenEntity.getNameVorhaben());
         if ((saved.isPresent() && saved.get().getId().equals(bauvorhabenEntity.getId())) || saved.isEmpty()) {
             try {
                 bauvorhabenEntity = this.bauvorhabenRepository.saveAndFlush(bauvorhabenEntity);
+                // falls bei Neuanlage eines Bauvorhabens eine Datenübernahme mit einer Abfrage durchgeführt wurde, dann wird diese mit dem Bauvorhaben verknüpft
+                if (saved.isEmpty() && abfrage != null) {
+                    final var abfrageModel = this.abfrageService.getInfrastrukturabfrageById(abfrage);
+                    this.throwEntityIsReferencedExceptionWhenAbfrageIsReferencingBauvorhaben(abfrageModel.getAbfrage());
+                    abfrageModel
+                        .getAbfrage()
+                        .setBauvorhaben(this.bauvorhabenDomainMapper.entity2Model(bauvorhabenEntity));
+                    abfrageService.saveInfrastrukturabfrage(abfrageModel);
+                }
             } catch (final ObjectOptimisticLockingFailureException exception) {
                 final var message = "Die Daten wurden in der Zwischenzeit geändert. Bitte laden Sie die Seite neu!";
                 throw new OptimisticLockingException(message, exception);
@@ -115,9 +129,10 @@ public class BauvorhabenService {
      * @throws OptimisticLockingException        falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
      * @throws FileHandlingFailedException
      * @throws FileHandlingWithS3FailedException
+     * @throws EntityIsReferencedException       falls bei Neuanlage eines Bauvorhabens bei Datenübernahme einer Abfrage diese bereits ein Bauvorhaben referenziert
      */
     public BauvorhabenModel updateBauvorhaben(final BauvorhabenModel bauvorhaben)
-        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, FileHandlingFailedException, FileHandlingWithS3FailedException {
+        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, FileHandlingFailedException, FileHandlingWithS3FailedException, EntityIsReferencedException {
         final var originalBauvorhabenDb = this.getBauvorhabenById(bauvorhaben.getId());
         dokumentService.deleteDokumenteFromOriginalDokumentenListWhichAreMissingInParameterAdaptedDokumentenListe(
             bauvorhaben.getDokumente(),
@@ -269,6 +284,21 @@ public class BauvorhabenService {
                 " wird durch die Infrastruktureinrichtungen " +
                 commaSeparatedNames +
                 " referenziert.";
+            log.error(message);
+            throw new EntityIsReferencedException(message);
+        }
+    }
+
+    protected void throwEntityIsReferencedExceptionWhenAbfrageIsReferencingBauvorhaben(final AbfrageModel abfrage)
+        throws EntityIsReferencedException {
+        final var bauvorhaben = abfrage.getBauvorhaben();
+        if (ObjectUtils.isNotEmpty(bauvorhaben)) {
+            final var message =
+                "Die Abfrage " +
+                abfrage.getNameAbfrage() +
+                " referenziert das Bauvorhaben " +
+                bauvorhaben.getNameVorhaben() +
+                ".";
             log.error(message);
             throw new EntityIsReferencedException(message);
         }

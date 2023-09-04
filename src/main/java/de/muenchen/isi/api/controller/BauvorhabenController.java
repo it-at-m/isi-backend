@@ -20,12 +20,10 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import javax.validation.Valid;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -108,8 +106,13 @@ public class BauvorhabenController {
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
             ),
             @ApiResponse(
+                responseCode = "404",
+                description = "NOT_FOUND -> Die ausgewählte Abfrage existiert nicht mehr.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+            @ApiResponse(
                 responseCode = "409",
-                description = "CONFLICT -> Bauvorhaben konnte nicht erstellt werden, da der Vorhabensname bereits existiert.",
+                description = "CONFLICT -> Bauvorhaben konnte nicht erstellt werden, da der Vorhabensname bereits existiert oder bei einer Datenübernahme die Abfrage bereits ein Bauvorhaben referenziert.",
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
             ),
             @ApiResponse(
@@ -123,7 +126,8 @@ public class BauvorhabenController {
     public ResponseEntity<BauvorhabenDto> createBauvorhaben(
         @RequestBody @Valid @NotNull final BauvorhabenDto bauvorhabenDto,
         @RequestParam(required = false) final UUID abfrage
-    ) throws UniqueViolationException, OptimisticLockingException {
+    )
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, EntityIsReferencedException {
         var model = this.bauvorhabenApiMapper.dto2Model(bauvorhabenDto);
         model = this.bauvorhabenService.saveBauvorhaben(model, abfrage);
         final var saved = this.bauvorhabenApiMapper.model2Dto(model);
@@ -143,7 +147,7 @@ public class BauvorhabenController {
             ),
             @ApiResponse(
                 responseCode = "409",
-                description = "CONFLICT -> Bauvorhaben konnte nicht aktualisiert werden, da der Vorhabensname bereits existiert.",
+                description = "CONFLICT -> Bauvorhaben konnte nicht aktualisiert werden, da der Vorhabensname bereits existiert oder bei einer Datenübernahme die Abfrage bereits ein Bauvorhaben referenziert.",
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
             ),
             @ApiResponse(
@@ -162,7 +166,7 @@ public class BauvorhabenController {
     public ResponseEntity<BauvorhabenDto> updateBauvorhaben(
         @RequestBody @Valid @NotNull final BauvorhabenDto bauvorhabenDto
     )
-        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, FileHandlingFailedException, FileHandlingWithS3FailedException {
+        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, FileHandlingFailedException, FileHandlingWithS3FailedException, EntityIsReferencedException {
         var model = this.bauvorhabenApiMapper.dto2Model(bauvorhabenDto);
         model = this.bauvorhabenService.updateBauvorhaben(model);
         final var saved = this.bauvorhabenApiMapper.model2Dto(model);
