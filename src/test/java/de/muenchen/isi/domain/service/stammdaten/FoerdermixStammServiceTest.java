@@ -39,7 +39,7 @@ class FoerdermixStammServiceTest {
     @BeforeEach
     public void beforeEach() {
         this.foerdermixStammService =
-        new FoerdermixStammService(this.stammdatenDomainMapper, this.foerdermixStammRepository);
+            new FoerdermixStammService(this.stammdatenDomainMapper, this.foerdermixStammRepository);
         Mockito.reset(this.foerdermixStammRepository);
     }
 

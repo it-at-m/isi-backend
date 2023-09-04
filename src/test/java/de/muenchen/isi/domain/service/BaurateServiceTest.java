@@ -150,10 +150,10 @@ class BaurateServiceTest {
             )
             .thenReturn(Optional.empty());
         resultingException =
-        Assertions.assertThrows(
-            EntityNotFoundException.class,
-            () -> this.baurateService.determineBauraten(2000, null, BigDecimal.TEN)
-        );
+            Assertions.assertThrows(
+                EntityNotFoundException.class,
+                () -> this.baurateService.determineBauraten(2000, null, BigDecimal.TEN)
+            );
         assertThat(
             resultingException.getMessage(),
             is("Für den Wert von 10 des Typs Geschoßfläche Wohnen konnte keine idealtypische Baurate ermittelt werden.")
@@ -167,10 +167,10 @@ class BaurateServiceTest {
 
         // Ohne Wohneinheiten und ohne Geschossfläche Wohnen
         resultingException =
-        Assertions.assertThrows(
-            EntityNotFoundException.class,
-            () -> this.baurateService.determineBauraten(2000, null, null)
-        );
+            Assertions.assertThrows(
+                EntityNotFoundException.class,
+                () -> this.baurateService.determineBauraten(2000, null, null)
+            );
         assertThat(
             resultingException.getMessage(),
             is(
@@ -271,22 +271,22 @@ class BaurateServiceTest {
         );
         assertThat(result, is(BigDecimal.valueOf(0)));
         result =
-        baurateService.calculateRoundedDownRatenwertForGesamtwertAndRate(BigDecimal.TEN, BigDecimal.valueOf(0.153));
+            baurateService.calculateRoundedDownRatenwertForGesamtwertAndRate(BigDecimal.TEN, BigDecimal.valueOf(0.153));
         assertThat(result, is(BigDecimal.valueOf(1)));
         result =
-        baurateService.calculateRoundedDownRatenwertForGesamtwertAndRate(BigDecimal.TEN, BigDecimal.valueOf(0.353));
+            baurateService.calculateRoundedDownRatenwertForGesamtwertAndRate(BigDecimal.TEN, BigDecimal.valueOf(0.353));
         assertThat(result, is(BigDecimal.valueOf(3)));
         result =
-        baurateService.calculateRoundedDownRatenwertForGesamtwertAndRate(BigDecimal.TEN, BigDecimal.valueOf(0.453));
+            baurateService.calculateRoundedDownRatenwertForGesamtwertAndRate(BigDecimal.TEN, BigDecimal.valueOf(0.453));
         assertThat(result, is(BigDecimal.valueOf(4)));
         result =
-        baurateService.calculateRoundedDownRatenwertForGesamtwertAndRate(BigDecimal.TEN, BigDecimal.valueOf(0.553));
+            baurateService.calculateRoundedDownRatenwertForGesamtwertAndRate(BigDecimal.TEN, BigDecimal.valueOf(0.553));
         assertThat(result, is(BigDecimal.valueOf(5)));
         result =
-        baurateService.calculateRoundedDownRatenwertForGesamtwertAndRate(BigDecimal.TEN, BigDecimal.valueOf(0.953));
+            baurateService.calculateRoundedDownRatenwertForGesamtwertAndRate(BigDecimal.TEN, BigDecimal.valueOf(0.953));
         assertThat(result, is(BigDecimal.valueOf(9)));
         result =
-        baurateService.calculateRoundedDownRatenwertForGesamtwertAndRate(BigDecimal.TEN, BigDecimal.valueOf(1));
+            baurateService.calculateRoundedDownRatenwertForGesamtwertAndRate(BigDecimal.TEN, BigDecimal.valueOf(1));
         assertThat(result, is(BigDecimal.TEN));
     }
 }
