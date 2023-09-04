@@ -241,7 +241,7 @@ public class AbfrageService {
     public void deleteInfrasturkturabfrageById(final UUID id)
             throws EntityNotFoundException, EntityIsReferencedException, UserRoleNotAllowedException, AbfrageStatusNotAllowedException {
         final var abfrage = this.getInfrastrukturabfrageById(id);
-        if (abfrage.getSub() == authenticationUtils.getUserSub()) {
+        if (abfrage.getSub().equals(authenticationUtils.getUserSub())) {
             this.throwUserRoleNotAllowedOrAbfrageStatusNotAlloweExceptionWhenDeleteAbfrage(abfrage.getAbfrage());
             this.throwEntityIsReferencedExceptionWhenAbfrageIsReferencingBauvorhaben(abfrage.getAbfrage());
             this.infrastrukturabfrageRepository.deleteById(id);
