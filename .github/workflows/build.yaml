@@ -19,10 +19,10 @@ jobs:
 
       - name: Build with Maven
         run: mvn -B -s ./.m2/settings.xml -Pgitlab-cicd verify -Dspring.security.logging.requests=all --file pom.xml
-        
+
   check-lint:
     runs-on: ubuntu-latest
-    steps:    
+    steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
