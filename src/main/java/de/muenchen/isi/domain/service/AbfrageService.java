@@ -20,11 +20,6 @@ import de.muenchen.isi.domain.service.filehandling.DokumentService;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.repository.InfrastrukturabfrageRepository;
 import de.muenchen.isi.security.AuthenticationUtils;
-import java.util.List;
-import java.util.UUID;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
@@ -33,6 +28,12 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.UUID;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Slf4j
 @Service
@@ -54,8 +55,8 @@ public class AbfrageService {
      */
     public List<InfrastrukturabfrageModel> getInfrastrukturabfragen() {
         return this.infrastrukturabfrageRepository.findAllByOrderByAbfrageFristStellungnahmeDesc()
-            .map(this.abfrageDomainMapper::entity2Model)
-            .collect(Collectors.toList());
+                .map(this.abfrageDomainMapper::entity2Model)
+                .collect(Collectors.toList());
     }
 
     /**
@@ -84,15 +85,15 @@ public class AbfrageService {
      * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
      */
     public InfrastrukturabfrageModel saveInfrastrukturabfrage(final InfrastrukturabfrageModel abfrage)
-        throws UniqueViolationException, OptimisticLockingException {
+            throws UniqueViolationException, OptimisticLockingException {
         if (abfrage.getId() == null) {
             abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ANGELEGT);
             abfrage.setSub(authenticationUtils.getUserSub());
         }
         var abfrageEntity = this.abfrageDomainMapper.model2entity(abfrage);
         final var saved =
-            this.infrastrukturabfrageRepository.findByAbfrage_NameAbfrageIgnoreCase(
-                    abfrageEntity.getAbfrage().getNameAbfrage()
+                this.infrastrukturabfrageRepository.findByAbfrage_NameAbfrageIgnoreCase(
+                        abfrageEntity.getAbfrage().getNameAbfrage()
                 );
         if ((saved.isPresent() && saved.get().getId().equals(abfrageEntity.getId())) || saved.isEmpty()) {
             try {
@@ -102,13 +103,13 @@ public class AbfrageService {
                 throw new OptimisticLockingException(message, exception);
             } catch (final DataIntegrityViolationException exception) {
                 final var message =
-                    "Der angegebene Name der Abfragevariante ist schon vorhanden, bitte wählen Sie daher einen anderen Namen und speichern Sie die Abfrage erneut.";
+                        "Der angegebene Name der Abfragevariante ist schon vorhanden, bitte wählen Sie daher einen anderen Namen und speichern Sie die Abfrage erneut.";
                 throw new UniqueViolationException(message);
             }
             return this.abfrageDomainMapper.entity2Model(abfrageEntity);
         } else {
             throw new UniqueViolationException(
-                "Der angegebene Name der Abfrage ist schon vorhanden, bitte wählen Sie daher einen anderen Namen und speichern Sie die Abfrage erneut."
+                    "Der angegebene Name der Abfrage ist schon vorhanden, bitte wählen Sie daher einen anderen Namen und speichern Sie die Abfrage erneut."
             );
         }
     }
@@ -128,18 +129,18 @@ public class AbfrageService {
      */
     @Transactional
     public InfrastrukturabfrageModel patchAbfrageAngelegt(
-        final InfrastrukturabfrageAngelegtModel abfrage,
-        final UUID id
+            final InfrastrukturabfrageAngelegtModel abfrage,
+            final UUID id
     )
-        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, FileHandlingFailedException, FileHandlingWithS3FailedException {
+            throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, FileHandlingFailedException, FileHandlingWithS3FailedException {
         final var originalAbfrageDb = this.getInfrastrukturabfrageById(id);
         this.throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(
                 originalAbfrageDb.getAbfrage(),
                 StatusAbfrage.ANGELEGT
-            );
+        );
         dokumentService.deleteDokumenteFromOriginalDokumentenListWhichAreMissingInParameterAdaptedDokumentenListe(
-            abfrage.getAbfrage().getDokumente(),
-            originalAbfrageDb.getAbfrage().getDokumente()
+                abfrage.getAbfrage().getDokumente(),
+                originalAbfrageDb.getAbfrage().getDokumente()
         );
         final var abfrageToSave = this.abfrageDomainMapper.request2Model(abfrage, originalAbfrageDb);
         return this.saveInfrastrukturabfrage(abfrageToSave);
@@ -156,15 +157,15 @@ public class AbfrageService {
      * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
      */
     public InfrastrukturabfrageModel patchAbfrageInBearbeitungSachbearbeitung(
-        final InfrastrukturabfrageInBearbeitungSachbearbeitungModel abfrage,
-        final UUID id
+            final InfrastrukturabfrageInBearbeitungSachbearbeitungModel abfrage,
+            final UUID id
     )
-        throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException {
+            throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException {
         final var originalAbfrageDb = this.getInfrastrukturabfrageById(id);
         this.throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(
                 originalAbfrageDb.getAbfrage(),
                 StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG
-            );
+        );
         final var abfrageToSave = this.abfrageDomainMapper.request2Model(abfrage, originalAbfrageDb);
         return this.saveInfrastrukturabfrage(abfrageToSave);
     }
@@ -184,24 +185,24 @@ public class AbfrageService {
      * @throws BauvorhabenNotReferencedException falls die Abfrage zu keinem Bauvorhaben dazugehört
      */
     public InfrastrukturabfrageModel changeAbfragevarianteRelevant(final UUID abfrageId, final UUID abfragevarianteId)
-        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, BauvorhabenNotReferencedException {
+            throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, BauvorhabenNotReferencedException {
         final var abfrage = this.getInfrastrukturabfrageById(abfrageId);
         this.throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(
                 abfrage.getAbfrage(),
                 StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG
-            );
+        );
         final var abfragevariante = Stream
-            .concat(
-                CollectionUtils.emptyIfNull(abfrage.getAbfragevarianten()).stream(),
-                CollectionUtils.emptyIfNull(abfrage.getAbfragevariantenSachbearbeitung()).stream()
-            )
-            .filter(abfragevarianteModel -> abfragevarianteModel.getId().equals(abfragevarianteId))
-            .findFirst()
-            .orElseThrow(() -> {
-                final var message = "Abfragevariante wurde nicht gefunden";
-                log.error(message);
-                return new EntityNotFoundException(message);
-            });
+                .concat(
+                        CollectionUtils.emptyIfNull(abfrage.getAbfragevarianten()).stream(),
+                        CollectionUtils.emptyIfNull(abfrage.getAbfragevariantenSachbearbeitung()).stream()
+                )
+                .filter(abfragevarianteModel -> abfragevarianteModel.getId().equals(abfragevarianteId))
+                .findFirst()
+                .orElseThrow(() -> {
+                    final var message = "Abfragevariante wurde nicht gefunden";
+                    log.error(message);
+                    return new EntityNotFoundException(message);
+                });
         if (abfragevariante.isRelevant()) {
             abfragevariante.setRelevant(false);
         } else {
@@ -222,7 +223,7 @@ public class AbfrageService {
      * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
      */
     public InfrastrukturabfrageModel changeStatusAbfrage(final UUID id, final StatusAbfrage statusAbfrage)
-        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException {
+            throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException {
         final var originalAbfrageDb = this.getInfrastrukturabfrageById(id);
         originalAbfrageDb.getAbfrage().setStatusAbfrage(statusAbfrage);
         return this.saveInfrastrukturabfrage(originalAbfrageDb);
@@ -238,13 +239,15 @@ public class AbfrageService {
      * @throws AbfrageStatusNotAllowedException falls die Abfrage den falschen Status hat..
      */
     public void deleteInfrasturkturabfrageById(final UUID id)
-        throws EntityNotFoundException, EntityIsReferencedException, UserRoleNotAllowedException, AbfrageStatusNotAllowedException {
+            throws EntityNotFoundException, EntityIsReferencedException, UserRoleNotAllowedException, AbfrageStatusNotAllowedException {
         final var abfrage = this.getInfrastrukturabfrageById(id);
         if (abfrage.getSub() == authenticationUtils.getUserSub()) {
             this.throwUserRoleNotAllowedOrAbfrageStatusNotAlloweExceptionWhenDeleteAbfrage(abfrage.getAbfrage());
             this.throwEntityIsReferencedExceptionWhenAbfrageIsReferencingBauvorhaben(abfrage.getAbfrage());
             this.infrastrukturabfrageRepository.deleteById(id);
         } else {
+            log.error(abfrage.getSub());
+            log.error(authenticationUtils.getUserSub());
             throw new UserRoleNotAllowedException("Keine Berechtigung zum Löschen der Abfrage");
         }
     }
@@ -257,14 +260,14 @@ public class AbfrageService {
      * @throws AbfrageStatusNotAllowedException falls die Abfrage den falschen Status hat..
      */
     public void throwUserRoleNotAllowedOrAbfrageStatusNotAlloweExceptionWhenDeleteAbfrage(AbfrageModel abfrage)
-        throws UserRoleNotAllowedException, AbfrageStatusNotAllowedException {
+            throws UserRoleNotAllowedException, AbfrageStatusNotAllowedException {
         var roles = authenticationUtils.getUserRoles();
         if (!roles.contains("admin")) {
             if (!roles.contains("abfrageerstellung")) {
                 throw new UserRoleNotAllowedException("Keine Berechtigung zum Löschen der Abfrage");
             } else if (abfrage.getStatusAbfrage() != StatusAbfrage.ANGELEGT) {
                 throw new AbfrageStatusNotAllowedException(
-                    "Die Abfrage kann im nur im Status 'angelegt' gelöscht werden."
+                        "Die Abfrage kann im nur im Status 'angelegt' gelöscht werden."
                 );
             }
         }
@@ -278,15 +281,15 @@ public class AbfrageService {
      * @throws EntityIsReferencedException falls das {@link AbfrageModel} ein {@link BauvorhabenModel} referenziert.
      */
     protected void throwEntityIsReferencedExceptionWhenAbfrageIsReferencingBauvorhaben(final AbfrageModel abfrage)
-        throws EntityIsReferencedException {
+            throws EntityIsReferencedException {
         final var bauvorhaben = abfrage.getBauvorhaben();
         if (ObjectUtils.isNotEmpty(bauvorhaben)) {
             final var message =
-                "Die Abfrage " +
-                abfrage.getNameAbfrage() +
-                " referenziert das Bauvorhaben " +
-                bauvorhaben.getNameVorhaben() +
-                ".";
+                    "Die Abfrage " +
+                            abfrage.getNameAbfrage() +
+                            " referenziert das Bauvorhaben " +
+                            bauvorhaben.getNameVorhaben() +
+                            ".";
             log.error(message);
             throw new EntityIsReferencedException(message);
         }
@@ -301,18 +304,18 @@ public class AbfrageService {
      * @throws AbfrageStatusNotAllowedException falls das {@link AbfrageModel} einen unzulässigen Status hat
      */
     protected void throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(
-        final AbfrageModel abfrage,
-        final StatusAbfrage statusAbfrage
+            final AbfrageModel abfrage,
+            final StatusAbfrage statusAbfrage
     ) throws AbfrageStatusNotAllowedException {
         if (abfrage.getStatusAbfrage() != statusAbfrage) {
             final var message =
-                "Die Abfrage " +
-                abfrage.getNameAbfrage() +
-                " ist im Status " +
-                abfrage.getStatusAbfrage().toString() +
-                ". Der gültige Status wäre " +
-                statusAbfrage.toString() +
-                ".";
+                    "Die Abfrage " +
+                            abfrage.getNameAbfrage() +
+                            " ist im Status " +
+                            abfrage.getStatusAbfrage().toString() +
+                            ". Der gültige Status wäre " +
+                            statusAbfrage.toString() +
+                            ".";
             log.error(message);
             throw new AbfrageStatusNotAllowedException(message);
         }
@@ -327,11 +330,11 @@ public class AbfrageService {
      */
 
     private void throwsBauvorhabenNotReferencedExceptionOrUniqueViolationExceptionIfRelevant(
-        final InfrastrukturabfrageModel abfrage
+            final InfrastrukturabfrageModel abfrage
     ) throws UniqueViolationException, BauvorhabenNotReferencedException {
         if (abfrage.getAbfrage().getBauvorhaben() == null) {
             String message =
-                "Die Abfrage ist keinem Bauvorhaben zugeordnet. Somit kann keine Abfragevariante als relevant markiert werden.";
+                    "Die Abfrage ist keinem Bauvorhaben zugeordnet. Somit kann keine Abfragevariante als relevant markiert werden.";
             log.error(message);
             throw new BauvorhabenNotReferencedException(message);
         }
@@ -339,28 +342,28 @@ public class AbfrageService {
         final var nameRelevantAbfrage = new StringBuilder();
         final var nameRelevantAbfragevariante = new StringBuilder();
         this.infrastrukturabfrageRepository.findAllByAbfrageBauvorhabenId(abfrage.getAbfrage().getBauvorhaben().getId())
-            .forEach(infrastrukturabfrage -> {
-                Stream
-                    .concat(
-                        CollectionUtils.emptyIfNull(infrastrukturabfrage.getAbfragevarianten()).stream(),
-                        CollectionUtils.emptyIfNull(infrastrukturabfrage.getAbfragevariantenSachbearbeitung()).stream()
-                    )
-                    .forEach(abfragevariante -> {
-                        if (abfragevariante.isRelevant()) {
-                            relevanteAbfrage.set(true);
-                            nameRelevantAbfrage.append(infrastrukturabfrage.getAbfrage().getNameAbfrage());
-                            nameRelevantAbfragevariante.append(abfragevariante.getAbfragevariantenName());
-                        }
-                    });
-            });
+                .forEach(infrastrukturabfrage -> {
+                    Stream
+                            .concat(
+                                    CollectionUtils.emptyIfNull(infrastrukturabfrage.getAbfragevarianten()).stream(),
+                                    CollectionUtils.emptyIfNull(infrastrukturabfrage.getAbfragevariantenSachbearbeitung()).stream()
+                            )
+                            .forEach(abfragevariante -> {
+                                if (abfragevariante.isRelevant()) {
+                                    relevanteAbfrage.set(true);
+                                    nameRelevantAbfrage.append(infrastrukturabfrage.getAbfrage().getNameAbfrage());
+                                    nameRelevantAbfragevariante.append(abfragevariante.getAbfragevariantenName());
+                                }
+                            });
+                });
 
         if (relevanteAbfrage.get()) {
             var errorMessage =
-                "Die Abfragevariante " +
-                nameRelevantAbfragevariante +
-                " in Abfrage " +
-                nameRelevantAbfrage +
-                " ist bereits als relevant markiert.";
+                    "Die Abfragevariante " +
+                            nameRelevantAbfragevariante +
+                            " in Abfrage " +
+                            nameRelevantAbfrage +
+                            " ist bereits als relevant markiert.";
             log.error(errorMessage);
             throw new UniqueViolationException(errorMessage);
         }
