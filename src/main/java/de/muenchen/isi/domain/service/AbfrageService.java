@@ -87,6 +87,7 @@ public class AbfrageService {
         throws UniqueViolationException, OptimisticLockingException {
         if (abfrage.getId() == null) {
             abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ANGELEGT);
+            abfrage.setSub(authenticationUtils.getUserSub());
         }
         var abfrageEntity = this.abfrageDomainMapper.model2entity(abfrage);
         final var saved =
@@ -239,9 +240,13 @@ public class AbfrageService {
     public void deleteInfrasturkturabfrageById(final UUID id)
         throws EntityNotFoundException, EntityIsReferencedException, UserRoleNotAllowedException, AbfrageStatusNotAllowedException {
         final var abfrage = this.getInfrastrukturabfrageById(id);
-        this.throwUserRoleNotAllowedOrAbfrageStatusNotAlloweExceptionWhenDeleteAbfrage(abfrage.getAbfrage());
-        this.throwEntityIsReferencedExceptionWhenAbfrageIsReferencingBauvorhaben(abfrage.getAbfrage());
-        this.infrastrukturabfrageRepository.deleteById(id);
+        if (abfrage.getSub() == authenticationUtils.getUserSub()) {
+            this.throwUserRoleNotAllowedOrAbfrageStatusNotAlloweExceptionWhenDeleteAbfrage(abfrage.getAbfrage());
+            this.throwEntityIsReferencedExceptionWhenAbfrageIsReferencingBauvorhaben(abfrage.getAbfrage());
+            this.infrastrukturabfrageRepository.deleteById(id);
+        } else {
+            throw new UserRoleNotAllowedException("Keine Berechtigung zum Löschen der Abfrage");
+        }
     }
 
     /**
