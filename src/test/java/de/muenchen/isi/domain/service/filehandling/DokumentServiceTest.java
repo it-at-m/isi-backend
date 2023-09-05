@@ -47,7 +47,12 @@ class DokumentServiceTest {
     @BeforeEach
     public void beforeEach() {
         this.dokumentService =
-        new DokumentService(this.dokumentRepository, new DokumentDomainMapperImpl(), documentStorageFileRepository, 1);
+            new DokumentService(
+                this.dokumentRepository,
+                new DokumentDomainMapperImpl(),
+                documentStorageFileRepository,
+                1
+            );
         Mockito.reset(this.dokumentRepository, documentStorageFileRepository);
     }
 
@@ -181,30 +186,30 @@ class DokumentServiceTest {
         assertThat(result, is(expected));
 
         result =
-        dokumentService.getDokumenteInOriginalDokumentenListWhichAreMissingInAdaptedDokumentenListe(
-            new ArrayList<>(),
-            originalDokumentModels
-        );
+            dokumentService.getDokumenteInOriginalDokumentenListWhichAreMissingInAdaptedDokumentenListe(
+                new ArrayList<>(),
+                originalDokumentModels
+            );
 
         expected = List.of(originalDokument4, originalDokument2, originalDokument1, originalDokument3);
 
         assertThat(result, is(expected));
 
         result =
-        dokumentService.getDokumenteInOriginalDokumentenListWhichAreMissingInAdaptedDokumentenListe(
-            adaptedDokumentModels,
-            new ArrayList<>()
-        );
+            dokumentService.getDokumenteInOriginalDokumentenListWhichAreMissingInAdaptedDokumentenListe(
+                adaptedDokumentModels,
+                new ArrayList<>()
+            );
 
         expected = List.of();
 
         assertThat(result, is(expected));
 
         result =
-        dokumentService.getDokumenteInOriginalDokumentenListWhichAreMissingInAdaptedDokumentenListe(
-            new ArrayList<>(),
-            new ArrayList<>()
-        );
+            dokumentService.getDokumenteInOriginalDokumentenListWhichAreMissingInAdaptedDokumentenListe(
+                new ArrayList<>(),
+                new ArrayList<>()
+            );
 
         expected = List.of();
 
