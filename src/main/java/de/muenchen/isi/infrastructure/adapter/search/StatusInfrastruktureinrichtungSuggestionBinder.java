@@ -36,6 +36,7 @@ public class StatusInfrastruktureinrichtungSuggestionBinder implements Complitio
             if (!Objects.equals(StatusInfrastruktureinrichtung.UNSPECIFIED, value)) {
                 Arrays
                     .stream(StringUtils.split(value.getBezeichnung()))
+                    .filter(suggestion -> !suggestion.equals("-"))
                     .map(JsonPrimitive::new)
                     .forEach(jsonArray::add);
             }
