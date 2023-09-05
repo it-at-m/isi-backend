@@ -50,6 +50,7 @@
         <geotools.version>27.2</geotools.version>
         <spring.statemachine>3.2.0</spring.statemachine>
         <apache.tika.version>2.7.0</apache.tika.version>
+        <hibernate.search>6.2.1.Final</hibernate.search>
     </properties>
 
 
@@ -217,12 +218,12 @@
         <dependency>
             <groupId>org.hibernate.search</groupId>
             <artifactId>hibernate-search-mapper-orm</artifactId>
-            <version>6.2.0.Final</version>
+            <version>${hibernate.search}</version>
         </dependency>
         <dependency>
             <groupId>org.hibernate.search</groupId>
             <artifactId>hibernate-search-backend-elasticsearch</artifactId>
-            <version>6.2.0.Final</version>
+            <version>${hibernate.search}</version>
         </dependency>
 
         <!-- Testing -->
