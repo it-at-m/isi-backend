@@ -22,4 +22,8 @@ public class SearchQueryModel {
     private Boolean selectKinderkrippe;
 
     private Boolean selectMittelschule;
+
+    private Integer page;
+
+    private Integer pageSize;
 }

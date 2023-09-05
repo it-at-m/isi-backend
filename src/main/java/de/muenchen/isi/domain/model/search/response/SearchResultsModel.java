@@ -7,4 +7,6 @@ import lombok.Data;
 public class SearchResultsModel {
 
     private List<SearchResultModel> searchResults;
+
+    private Long numberOfTotalHits;
 }

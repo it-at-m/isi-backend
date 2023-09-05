@@ -2,8 +2,10 @@ package de.muenchen.isi.domain.service.search;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 
 import de.muenchen.isi.domain.mapper.SearchDomainMapper;
+import de.muenchen.isi.domain.model.search.request.SearchQueryAndSortingModel;
 import javax.persistence.EntityManager;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -47,5 +49,46 @@ class EntitySearchServiceTest {
         searchQuery = null;
         result = entitySearchService.createAdaptedSearchQueryForSimpleQueryStringSearch(searchQuery);
         assertThat(result, is(""));
+    }
+
+    @Test
+    void calculateOffsetOrNullIfNoPaginationRequired() {
+        var searchQueryAndSortingModel = new SearchQueryAndSortingModel();
+        searchQueryAndSortingModel.setPage(null);
+        searchQueryAndSortingModel.setPageSize(null);
+        var result = entitySearchService.calculateOffsetOrNullIfNoPaginationRequired(searchQueryAndSortingModel);
+        assertThat(result, is(nullValue()));
+
+        searchQueryAndSortingModel = new SearchQueryAndSortingModel();
+        searchQueryAndSortingModel.setPage(100);
+        searchQueryAndSortingModel.setPageSize(null);
+        result = entitySearchService.calculateOffsetOrNullIfNoPaginationRequired(searchQueryAndSortingModel);
+        assertThat(result, is(nullValue()));
+
+        searchQueryAndSortingModel = new SearchQueryAndSortingModel();
+        searchQueryAndSortingModel.setPage(null);
+        searchQueryAndSortingModel.setPageSize(100);
+        result = entitySearchService.calculateOffsetOrNullIfNoPaginationRequired(searchQueryAndSortingModel);
+        assertThat(result, is(nullValue()));
+
+        searchQueryAndSortingModel.setPage(1);
+        searchQueryAndSortingModel.setPageSize(20);
+        result = entitySearchService.calculateOffsetOrNullIfNoPaginationRequired(searchQueryAndSortingModel);
+        assertThat(result, is(0));
+
+        searchQueryAndSortingModel.setPage(1);
+        searchQueryAndSortingModel.setPageSize(20);
+        result = entitySearchService.calculateOffsetOrNullIfNoPaginationRequired(searchQueryAndSortingModel);
+        assertThat(result, is(0));
+
+        searchQueryAndSortingModel.setPage(2);
+        searchQueryAndSortingModel.setPageSize(20);
+        result = entitySearchService.calculateOffsetOrNullIfNoPaginationRequired(searchQueryAndSortingModel);
+        assertThat(result, is(20));
+
+        searchQueryAndSortingModel.setPage(3);
+        searchQueryAndSortingModel.setPageSize(20);
+        result = entitySearchService.calculateOffsetOrNullIfNoPaginationRequired(searchQueryAndSortingModel);
+        assertThat(result, is(40));
     }
 }

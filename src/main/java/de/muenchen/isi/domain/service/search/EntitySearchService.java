@@ -2,7 +2,6 @@ package de.muenchen.isi.domain.service.search;
 
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.mapper.SearchDomainMapper;
-import de.muenchen.isi.domain.model.BaseEntityModel;
 import de.muenchen.isi.domain.model.enums.SortAttribute;
 import de.muenchen.isi.domain.model.search.request.SearchQueryAndSortingModel;
 import de.muenchen.isi.domain.model.search.response.SearchResultsModel;
@@ -10,12 +9,13 @@ import de.muenchen.isi.infrastructure.entity.BaseEntity;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import javax.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.search.engine.search.common.BooleanOperator;
+import org.hibernate.search.engine.search.query.SearchResult;
 import org.hibernate.search.mapper.orm.Search;
 import org.springframework.stereotype.Service;
 
@@ -39,25 +39,6 @@ public class EntitySearchService {
      */
     public SearchResultsModel searchForEntities(final SearchQueryAndSortingModel searchQueryAndSortingInformation)
         throws EntityNotFoundException {
-        final var searchResults =
-            this.doSearchForEntities(searchQueryAndSortingInformation)
-                .map(searchDomainMapper::model2SearchResultModel)
-                .collect(Collectors.toList());
-        final var model = new SearchResultsModel();
-        model.setSearchResults(searchResults);
-        return model;
-    }
-
-    /**
-     * Diese Methode führt die Entitätssuche für die im Methodenparameter gegebenen Informationen durch.
-     *
-     * @param searchQueryAndSortingInformation mit der Suchquery, den Sortierinformationen und den zu durchsuchenden Entitäten.
-     * @return die Suchergebnisse in der im Methodenparameter definierten Reihenfolge.
-     * @throws EntityNotFoundException falls keine zu durchsuchende Entitat im Methodenparameter gewählt ist.
-     */
-    protected Stream<? extends BaseEntityModel> doSearchForEntities(
-        final SearchQueryAndSortingModel searchQueryAndSortingInformation
-    ) throws EntityNotFoundException {
         // Ermittlung der suchbaren Entitäten
         final List<Class<? extends BaseEntity>> searchableEntities = searchPreparationService.getSearchableEntities(
             searchQueryAndSortingInformation
@@ -68,7 +49,10 @@ public class EntitySearchService {
         final var adaptedSearchQuery =
             this.createAdaptedSearchQueryForSimpleQueryStringSearch(searchQueryAndSortingInformation.getSearchQuery());
 
-        return Search
+        final Integer paginationOffset = calculateOffsetOrNullIfNoPaginationRequired(searchQueryAndSortingInformation);
+
+        // Erstellen der Suchquery
+        final var searchQueryOptions = Search
             .session(entityManager.getEntityManagerFactory().createEntityManager())
             .search(searchableEntities)
             .where(function -> {
@@ -98,10 +82,26 @@ public class EntitySearchService {
                 } else {
                     return function.field("lastModifiedDateTime").order(sortOrder);
                 }
-            })
-            .fetchAllHits()
+            });
+
+        // Ausführen einer paginierten oder nicht-paginierten Suche.
+        final SearchResult<BaseEntity> searchResult = ObjectUtils.isNotEmpty(paginationOffset)
+            ? searchQueryOptions.fetch(paginationOffset, searchQueryAndSortingInformation.getPageSize())
+            : searchQueryOptions.fetchAll();
+        final Long numberOfTotalHits = searchResult.total().hitCount();
+
+        // Suchergebnisse extrahieren und zurückgeben.
+        final var searchResults = searchResult
+            .hits()
             .stream()
-            .map(searchDomainMapper::entity2Model);
+            .map(searchDomainMapper::entity2Model)
+            .map(searchDomainMapper::model2SearchResultModel)
+            .collect(Collectors.toList());
+
+        final var model = new SearchResultsModel();
+        model.setSearchResults(searchResults);
+        model.setNumberOfTotalHits(numberOfTotalHits);
+        return model;
     }
 
     /**
@@ -119,5 +119,25 @@ public class EntitySearchService {
             .collect(Collectors.joining(StringUtils.SPACE));
         log.debug("Die erstellte Suchquery: {}", adaptedSearchQuery);
         return adaptedSearchQuery;
+    }
+
+    /**
+     * Die Methode berechnet den Offset für die paginierte Suche.
+     *
+     * @param searchQueryAndSortingModel zur Ermittlung des Offset.
+     * @return ermittelt den Offset oder gibt null zurück falls keine Offsetberechnung möglich ist.
+     */
+    protected Integer calculateOffsetOrNullIfNoPaginationRequired(
+        final SearchQueryAndSortingModel searchQueryAndSortingModel
+    ) {
+        final var page = searchQueryAndSortingModel.getPage();
+        final var pageSize = searchQueryAndSortingModel.getPageSize();
+        final Integer offset;
+        if (ObjectUtils.isNotEmpty(page) && ObjectUtils.isNotEmpty(pageSize)) {
+            offset = (page - 1) * pageSize;
+        } else {
+            offset = null;
+        }
+        return offset;
     }
 }
