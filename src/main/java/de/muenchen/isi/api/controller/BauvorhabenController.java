@@ -55,23 +55,6 @@ public class BauvorhabenController {
 
     private final InfrastruktureinrichtungApiMapper infrastruktureinrichtungApiMapper;
 
-    @Transactional(readOnly = true)
-    @GetMapping("bauvorhaben")
-    @Operation(
-        summary = "Lade alle Bauvorhaben",
-        description = "Das Ergebnis wird nach der Größe des Grundstückes absteigend sortiert"
-    )
-    @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "OK") })
-    @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_READ_BAUVORHABEN.name())")
-    public ResponseEntity<List<BauvorhabenDto>> getBauvorhaben() {
-        final List<BauvorhabenDto> bauvorhabenList =
-            this.bauvorhabenService.getBauvorhaben()
-                .stream()
-                .map(this.bauvorhabenApiMapper::model2Dto)
-                .collect(Collectors.toList());
-        return new ResponseEntity<>(bauvorhabenList, HttpStatus.OK);
-    }
-
     @GetMapping("bauvorhaben/{id}")
     @Transactional(readOnly = true)
     @Operation(summary = "Lesen eines Bauvorhabens")

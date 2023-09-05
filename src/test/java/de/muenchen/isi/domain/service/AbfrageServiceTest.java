@@ -101,27 +101,6 @@ class AbfrageServiceTest {
     }
 
     @Test
-    void getInfrastrukturabfragen() {
-        final Infrastrukturabfrage entity1 = new Infrastrukturabfrage();
-        entity1.setId(UUID.randomUUID());
-        final Infrastrukturabfrage entity2 = new Infrastrukturabfrage();
-        entity2.setId(UUID.randomUUID());
-
-        Mockito
-            .when(this.infrastrukturabfrageRepository.findAllByOrderByAbfrageFristStellungnahmeDesc())
-            .thenReturn(Stream.of(entity1, entity2));
-
-        final List<InfrastrukturabfrageModel> result = this.abfrageService.getInfrastrukturabfragen();
-
-        final InfrastrukturabfrageModel model1 = new InfrastrukturabfrageModel();
-        model1.setId(entity1.getId());
-        final InfrastrukturabfrageModel model2 = new InfrastrukturabfrageModel();
-        model2.setId(entity2.getId());
-
-        assertThat(result, is(List.of(model1, model2)));
-    }
-
-    @Test
     void getInfrastrukturabfrageById() throws EntityNotFoundException {
         final UUID id = UUID.randomUUID();
 

@@ -110,27 +110,6 @@ public class BauvorhabenServiceTest {
     }
 
     @Test
-    void getBauvorhabenTest() {
-        final Bauvorhaben entity1 = new Bauvorhaben();
-        entity1.setId(UUID.randomUUID());
-        final Bauvorhaben entity2 = new Bauvorhaben();
-        entity2.setId(UUID.randomUUID());
-
-        Mockito
-            .when(this.bauvorhabenRepository.findAllByOrderByGrundstuecksgroesseDesc())
-            .thenReturn(Stream.of(entity1, entity2));
-
-        final List<BauvorhabenModel> result = this.bauvorhabenService.getBauvorhaben();
-
-        final BauvorhabenModel model1 = new BauvorhabenModel();
-        model1.setId(entity1.getId());
-        final BauvorhabenModel model2 = new BauvorhabenModel();
-        model2.setId(entity2.getId());
-
-        assertThat(result, is(List.of(model1, model2)));
-    }
-
-    @Test
     void getReferencedAbfragenElements() {
         var bauvorhabenId = UUID.randomUUID();
         Bauvorhaben bauvorhaben = new Bauvorhaben();

@@ -20,10 +20,8 @@ import de.muenchen.isi.domain.service.filehandling.DokumentService;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.repository.InfrastrukturabfrageRepository;
 import de.muenchen.isi.security.AuthenticationUtils;
-import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -46,17 +44,6 @@ public class AbfrageService {
     private final DokumentService dokumentService;
 
     private final AuthenticationUtils authenticationUtils;
-
-    /**
-     * Die Methode gibt alle {@link InfrastrukturabfrageModel} als Liste zurück.
-     *
-     * @return Liste an {@link InfrastrukturabfrageModel}.
-     */
-    public List<InfrastrukturabfrageModel> getInfrastrukturabfragen() {
-        return this.infrastrukturabfrageRepository.findAllByOrderByAbfrageFristStellungnahmeDesc()
-            .map(this.abfrageDomainMapper::entity2Model)
-            .collect(Collectors.toList());
-    }
 
     /**
      * Die Methode gibt ein {@link InfrastrukturabfrageModel} identifiziert durch die ID zurück.

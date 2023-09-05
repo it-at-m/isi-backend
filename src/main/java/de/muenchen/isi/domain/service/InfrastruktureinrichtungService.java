@@ -6,13 +6,9 @@ import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.mapper.InfrastruktureinrichtungDomainMapper;
 import de.muenchen.isi.domain.model.BauvorhabenModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.InfrastruktureinrichtungModel;
-import de.muenchen.isi.domain.model.list.InfrastruktureinrichtungListElementModel;
-import de.muenchen.isi.domain.model.list.InfrastruktureinrichtungListElementsModel;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Infrastruktureinrichtung;
 import de.muenchen.isi.infrastructure.repository.InfrastruktureinrichtungRepository;
-import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
@@ -27,21 +23,6 @@ public class InfrastruktureinrichtungService {
     private final InfrastruktureinrichtungRepository infrastruktureinrichtungRepository;
 
     private final InfrastruktureinrichtungDomainMapper infrastruktureinrichtungDomainMapper;
-
-    /**
-     * Die Methode gibt {@link InfrastruktureinrichtungListElementModel}e sortiert aufsteigend nach Name der Einrichtung zurück.
-     *
-     * @return die {@link InfrastruktureinrichtungListElementModel}s sortiert in aufsteigender Reihenfolge.
-     */
-    public InfrastruktureinrichtungListElementsModel getInfrastruktureinrichtungListElements() {
-        final var infrastruktureinrichtungListElementsModel = new InfrastruktureinrichtungListElementsModel();
-        final List<InfrastruktureinrichtungListElementModel> listElements =
-            this.infrastruktureinrichtungRepository.findAllByOrderByNameEinrichtungAsc()
-                .map(this.infrastruktureinrichtungDomainMapper::entity2ListElementModel)
-                .collect(Collectors.toList());
-        infrastruktureinrichtungListElementsModel.setListElements(listElements);
-        return infrastruktureinrichtungListElementsModel;
-    }
 
     /**
      * Die Methode gibt ein {@link InfrastruktureinrichtungModel} identifiziert durch die ID zurück.

@@ -28,9 +28,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -65,23 +63,6 @@ public class AbfrageController {
     private final AbfrageApiMapper abfrageApiMapper;
 
     private final AbfrageDomainMapper abfrageDomainMapper;
-
-    @Transactional(readOnly = true)
-    @GetMapping
-    @Operation(
-        summary = "Lade alle Infrastrukturabfragen",
-        description = "Das Ergebnis wird nach Frist Stellungnahme absteigend sortiert"
-    )
-    @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "OK") })
-    @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_READ_ABFRAGE.name())")
-    public ResponseEntity<List<InfrastrukturabfrageDto>> getInfrastrukturabfragen() {
-        final List<InfrastrukturabfrageDto> abfrageList =
-            this.abfrageService.getInfrastrukturabfragen()
-                .stream()
-                .map(this.abfrageApiMapper::model2Dto)
-                .collect(Collectors.toList());
-        return new ResponseEntity<>(abfrageList, HttpStatus.OK);
-    }
 
     @GetMapping("/{id}")
     @Transactional(readOnly = true)

@@ -52,17 +52,6 @@ public class BauvorhabenService {
     private final DokumentService dokumentService;
 
     /**
-     * Die Methode gibt alle {@link BauvorhabenModel} als Liste zurück.
-     *
-     * @return Liste an {@link BauvorhabenModel}.
-     */
-    public List<BauvorhabenModel> getBauvorhaben() {
-        return this.bauvorhabenRepository.findAllByOrderByGrundstuecksgroesseDesc()
-            .map(this.bauvorhabenDomainMapper::entity2Model)
-            .collect(Collectors.toList());
-    }
-
-    /**
      * Die Methode gibt ein {@link BauvorhabenModel} identifiziert durch die ID zurück.
      *
      * @param id zum Identifizieren des {@link BauvorhabenModel}.
