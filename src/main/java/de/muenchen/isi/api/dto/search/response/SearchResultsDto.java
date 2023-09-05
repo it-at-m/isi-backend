@@ -7,4 +7,6 @@ import lombok.Data;
 public class SearchResultsDto {
 
     private List<SearchResultDto> searchResults;
+
+    private Long numberOfPages;
 }
