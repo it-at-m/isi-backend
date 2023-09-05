@@ -2,9 +2,6 @@ package de.muenchen.isi.api.dto.search.response;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import de.muenchen.isi.api.dto.list.AbfrageListElementDto;
-import de.muenchen.isi.api.dto.list.BauvorhabenListElementDto;
-import de.muenchen.isi.api.dto.list.InfrastruktureinrichtungListElementDto;
 import de.muenchen.isi.domain.model.enums.SearchResultType;
 import lombok.Data;
 
@@ -17,10 +14,10 @@ import lombok.Data;
 )
 @JsonSubTypes(
     {
-        @JsonSubTypes.Type(value = AbfrageListElementDto.class, name = SearchResultType.Values.INFRASTRUKTURABFRAGE),
-        @JsonSubTypes.Type(value = BauvorhabenListElementDto.class, name = SearchResultType.Values.BAUVORHABEN),
+        @JsonSubTypes.Type(value = AbfrageSearchResultDto.class, name = SearchResultType.Values.INFRASTRUKTURABFRAGE),
+        @JsonSubTypes.Type(value = BauvorhabenSearchResultDto.class, name = SearchResultType.Values.BAUVORHABEN),
         @JsonSubTypes.Type(
-            value = InfrastruktureinrichtungListElementDto.class,
+            value = InfrastruktureinrichtungSearchResultDto.class,
             name = SearchResultType.Values.INFRASTRUKTUREINRICHTUNG
         ),
     }

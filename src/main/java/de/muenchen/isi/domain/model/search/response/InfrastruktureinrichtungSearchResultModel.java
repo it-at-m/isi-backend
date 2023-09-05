@@ -1,6 +1,5 @@
-package de.muenchen.isi.domain.model.list;
+package de.muenchen.isi.domain.model.search.response;
 
-import de.muenchen.isi.domain.model.search.response.SearchResultModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
 import java.util.UUID;
 import lombok.Data;
@@ -10,7 +9,7 @@ import lombok.ToString;
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class InfrastruktureinrichtungListElementModel extends SearchResultModel {
+public class InfrastruktureinrichtungSearchResultModel extends SearchResultModel {
 
     private UUID id;
 

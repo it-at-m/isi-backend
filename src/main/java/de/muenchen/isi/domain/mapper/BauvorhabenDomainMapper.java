@@ -2,7 +2,7 @@ package de.muenchen.isi.domain.mapper;
 
 import de.muenchen.isi.configuration.MapstructConfiguration;
 import de.muenchen.isi.domain.model.BauvorhabenModel;
-import de.muenchen.isi.domain.model.list.BauvorhabenListElementModel;
+import de.muenchen.isi.domain.model.search.response.BauvorhabenSearchResultModel;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -20,5 +20,5 @@ public interface BauvorhabenDomainMapper {
             @Mapping(source = "verortung.stadtbezirke", target = "stadtbezirke"),
         }
     )
-    BauvorhabenListElementModel model2ListElementModel(final BauvorhabenModel model);
+    BauvorhabenSearchResultModel model2ListElementModel(final BauvorhabenModel model);
 }

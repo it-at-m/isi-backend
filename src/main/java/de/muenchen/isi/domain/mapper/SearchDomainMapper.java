@@ -5,9 +5,9 @@ import de.muenchen.isi.domain.model.BaseEntityModel;
 import de.muenchen.isi.domain.model.BauvorhabenModel;
 import de.muenchen.isi.domain.model.InfrastrukturabfrageModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.InfrastruktureinrichtungModel;
-import de.muenchen.isi.domain.model.list.AbfrageListElementModel;
-import de.muenchen.isi.domain.model.list.BauvorhabenListElementModel;
-import de.muenchen.isi.domain.model.list.InfrastruktureinrichtungListElementModel;
+import de.muenchen.isi.domain.model.search.response.AbfrageSearchResultModel;
+import de.muenchen.isi.domain.model.search.response.BauvorhabenSearchResultModel;
+import de.muenchen.isi.domain.model.search.response.InfrastruktureinrichtungSearchResultModel;
 import de.muenchen.isi.domain.model.search.response.SearchResultModel;
 import de.muenchen.isi.infrastructure.entity.BaseEntity;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
@@ -30,9 +30,9 @@ public interface SearchDomainMapper {
     @Mapping(target = "type", ignore = true)
     @SubclassMapping(
         source = InfrastruktureinrichtungModel.class,
-        target = InfrastruktureinrichtungListElementModel.class
+        target = InfrastruktureinrichtungSearchResultModel.class
     )
-    @SubclassMapping(source = BauvorhabenModel.class, target = BauvorhabenListElementModel.class)
-    @SubclassMapping(source = InfrastrukturabfrageModel.class, target = AbfrageListElementModel.class)
+    @SubclassMapping(source = BauvorhabenModel.class, target = BauvorhabenSearchResultModel.class)
+    @SubclassMapping(source = InfrastrukturabfrageModel.class, target = AbfrageSearchResultModel.class)
     SearchResultModel model2SearchResultModel(final BaseEntityModel entity);
 }

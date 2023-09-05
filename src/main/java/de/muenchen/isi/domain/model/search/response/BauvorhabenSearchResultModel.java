@@ -1,7 +1,6 @@
-package de.muenchen.isi.domain.model.list;
+package de.muenchen.isi.domain.model.search.response;
 
 import de.muenchen.isi.domain.model.common.StadtbezirkModel;
-import de.muenchen.isi.domain.model.search.response.SearchResultModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVorhaben;
 import java.math.BigDecimal;
 import java.util.Set;
@@ -13,7 +12,7 @@ import lombok.ToString;
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class BauvorhabenListElementModel extends SearchResultModel {
+public class BauvorhabenSearchResultModel extends SearchResultModel {
 
     private UUID id;
 

@@ -10,7 +10,7 @@ import de.muenchen.isi.domain.model.AbfragevarianteModel;
 import de.muenchen.isi.domain.model.InfrastrukturabfrageModel;
 import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.InfrastrukturabfrageAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageSachbearbeitungInBearbeitungSachbearbeitung.InfrastrukturabfrageInBearbeitungSachbearbeitungModel;
-import de.muenchen.isi.domain.model.list.AbfrageListElementModel;
+import de.muenchen.isi.domain.model.search.response.AbfrageSearchResultModel;
 import de.muenchen.isi.infrastructure.entity.Abfrage;
 import de.muenchen.isi.infrastructure.entity.Infrastrukturabfrage;
 import java.util.ArrayList;
@@ -168,5 +168,5 @@ public abstract class AbfrageDomainMapper {
             @Mapping(source = "createdDateTime", target = "createdDateTime"),
         }
     )
-    public abstract AbfrageListElementModel model2ListElementModel(final InfrastrukturabfrageModel model);
+    public abstract AbfrageSearchResultModel model2ListElementModel(final InfrastrukturabfrageModel model);
 }
