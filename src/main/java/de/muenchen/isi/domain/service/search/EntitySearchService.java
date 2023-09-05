@@ -100,7 +100,13 @@ public class EntitySearchService {
 
         final var model = new SearchResultsModel();
         model.setSearchResults(searchResults);
-        model.setNumberOfTotalHits(numberOfTotalHits);
+        if (ObjectUtils.isNotEmpty(paginationOffset)) {
+            final var numberOfPages = calculateNumberOfPages(
+                numberOfTotalHits,
+                searchQueryAndSortingInformation.getPageSize()
+            );
+            model.setNumberOfPages(numberOfPages);
+        }
         return model;
     }
 
@@ -139,5 +145,15 @@ public class EntitySearchService {
             offset = null;
         }
         return offset;
+    }
+
+    protected Long calculateNumberOfPages(final long numberOfTotalHits, final int pageSize) {
+        final long numberOfPages;
+        if (numberOfTotalHits % pageSize == 0) {
+            numberOfPages = numberOfTotalHits / pageSize;
+        } else {
+            numberOfPages = numberOfTotalHits / pageSize + 1;
+        }
+        return numberOfPages;
     }
 }

@@ -8,5 +8,5 @@ public class SearchResultsModel {
 
     private List<SearchResultModel> searchResults;
 
-    private Long numberOfTotalHits;
+    private Long numberOfPages;
 }

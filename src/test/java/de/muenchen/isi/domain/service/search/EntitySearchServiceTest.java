@@ -91,4 +91,25 @@ class EntitySearchServiceTest {
         result = entitySearchService.calculateOffsetOrNullIfNoPaginationRequired(searchQueryAndSortingModel);
         assertThat(result, is(40));
     }
+
+    @Test
+    void calculateNumberOfPages() {
+        var result = entitySearchService.calculateNumberOfPages(100, 20);
+        assertThat(result, is(5L));
+
+        result = entitySearchService.calculateNumberOfPages(101, 20);
+        assertThat(result, is(6L));
+
+        result = entitySearchService.calculateNumberOfPages(99, 20);
+        assertThat(result, is(5L));
+
+        result = entitySearchService.calculateNumberOfPages(1, 20);
+        assertThat(result, is(1L));
+
+        result = entitySearchService.calculateNumberOfPages(20, 20);
+        assertThat(result, is(1L));
+
+        result = entitySearchService.calculateNumberOfPages(0, 20);
+        assertThat(result, is(0L));
+    }
 }
