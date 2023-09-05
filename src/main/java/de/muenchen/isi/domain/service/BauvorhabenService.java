@@ -99,7 +99,7 @@ public class BauvorhabenService {
             try {
                 bauvorhabenEntity = this.bauvorhabenRepository.saveAndFlush(bauvorhabenEntity);
                 // falls bei Neuanlage eines Bauvorhabens eine Datenübernahme mit einer Abfrage durchgeführt wurde, dann wird diese mit dem Bauvorhaben verknüpft
-                if (saved.isEmpty() && abfrage != null) {
+                if (bauvorhaben.getId() == null && abfrage != null) {
                     final var abfrageModel = this.abfrageService.getInfrastrukturabfrageById(abfrage);
                     this.throwEntityIsReferencedExceptionWhenAbfrageIsReferencingBauvorhaben(abfrageModel.getAbfrage());
                     abfrageModel
