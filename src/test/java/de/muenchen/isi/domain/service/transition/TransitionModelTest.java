@@ -85,7 +85,7 @@ public class TransitionModelTest {
 
     @Test
     @Transactional
-    @MockCustomUser(roles = { "lhm-isi-sachbearbeitung" })
+    @MockCustomUser(roles = { "sachbearbeitung" })
     void possibleTransitionsAngelegtAndRoleSachbearbeitung()
         throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, FileHandlingFailedException, FileHandlingWithS3FailedException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
@@ -101,7 +101,7 @@ public class TransitionModelTest {
 
     @Test
     @Transactional
-    @MockCustomUser(roles = { "lhm-isi-abfrageerstellung" })
+    @MockCustomUser(roles = { "abfrageerstellung" })
     void possibleTransitionsAngelegtAndRoleAbfrageerstellung()
         throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, FileHandlingFailedException, FileHandlingWithS3FailedException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
@@ -124,7 +124,7 @@ public class TransitionModelTest {
 
     @Test
     @Transactional
-    @MockCustomUser(roles = { "lhm-isi-anwender" })
+    @MockCustomUser(roles = { "nutzer" })
     void possibleTransitionsAngelegtAndRoleAnwender()
         throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, FileHandlingFailedException, FileHandlingWithS3FailedException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
@@ -184,7 +184,7 @@ public class TransitionModelTest {
 
     @Test
     @Transactional
-    @MockCustomUser(roles = { "lhm-isi-sachbearbeitung" })
+    @MockCustomUser(roles = { "sachbearbeitung" })
     void possibleTransitionsOffenAndRoleSachbearbeitung()
         throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, FileHandlingFailedException, FileHandlingWithS3FailedException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
@@ -229,7 +229,7 @@ public class TransitionModelTest {
 
     @Test
     @Transactional
-    @MockCustomUser(roles = { "lhm-isi-abfrageerstellung" })
+    @MockCustomUser(roles = { "abfrageerstellung" })
     void possibleTransitionsOffenAndRoleAbfrageerstellung()
         throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, FileHandlingFailedException, FileHandlingWithS3FailedException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
@@ -245,7 +245,7 @@ public class TransitionModelTest {
 
     @Test
     @Transactional
-    @MockCustomUser(roles = { "lhm-isi-anwender" })
+    @MockCustomUser(roles = { "nutzer" })
     void possibleTransitionsOffenAndRoleAnwender()
         throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, FileHandlingFailedException, FileHandlingWithS3FailedException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
@@ -315,7 +315,7 @@ public class TransitionModelTest {
 
     @Test
     @Transactional
-    @MockCustomUser(roles = { "lhm-isi-sachbearbeitung" })
+    @MockCustomUser(roles = { "sachbearbeitung" })
     void possibleTransitionsBearbeitungSachbearbeitungAndRoleSachbearbeitung()
         throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, FileHandlingFailedException, FileHandlingWithS3FailedException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
@@ -369,7 +369,7 @@ public class TransitionModelTest {
 
     @Test
     @Transactional
-    @MockCustomUser(roles = { "lhm-isi-abfrageerstellung" })
+    @MockCustomUser(roles = { "abfrageerstellung" })
     void possibleTransitionsBearbeitungSachbearbeitungAndRoleAbfrageerstellung()
         throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, FileHandlingFailedException, FileHandlingWithS3FailedException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
@@ -385,7 +385,7 @@ public class TransitionModelTest {
 
     @Test
     @Transactional
-    @MockCustomUser(roles = { "lhm-isi-anwender" })
+    @MockCustomUser(roles = { "nutzer" })
     void possibleTransitionsBearbeitungSachbearbeitungAndRoleAnwender()
         throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, FileHandlingFailedException, FileHandlingWithS3FailedException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
@@ -446,7 +446,7 @@ public class TransitionModelTest {
 
     @Test
     @Transactional
-    @MockCustomUser(roles = { "lhm-isi-sachbearbeitung" })
+    @MockCustomUser(roles = { "sachbearbeitung" })
     void possibleTransitionsBearbeitungFachreferateAndRoleSachbearbeitung()
         throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, FileHandlingFailedException, FileHandlingWithS3FailedException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
@@ -490,7 +490,7 @@ public class TransitionModelTest {
 
     @Test
     @Transactional
-    @MockCustomUser(roles = { "lhm-isi-abfrageerstellung" })
+    @MockCustomUser(roles = { "abfrageerstellung" })
     void possibleTransitionsBearbeitungFachreferateAndRoleAbfrageerstellung()
         throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, FileHandlingFailedException, FileHandlingWithS3FailedException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
@@ -506,7 +506,7 @@ public class TransitionModelTest {
 
     @Test
     @Transactional
-    @MockCustomUser(roles = { "lhm-isi-anwender" })
+    @MockCustomUser(roles = { "nutzer" })
     void possibleTransitionsBearbeitungFachreferateAndRoleAnwender()
         throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, FileHandlingFailedException, FileHandlingWithS3FailedException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
@@ -558,7 +558,7 @@ public class TransitionModelTest {
 
     @Test
     @Transactional
-    @MockCustomUser(roles = { "lhm-isi-sachbearbeitung" })
+    @MockCustomUser(roles = { "sachbearbeitung" })
     void possibleTransitionsBedarfsmeldungErfolgtAndRoleSachbearbeitung()
         throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, FileHandlingFailedException, FileHandlingWithS3FailedException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
@@ -585,7 +585,7 @@ public class TransitionModelTest {
 
     @Test
     @Transactional
-    @MockCustomUser(roles = { "lhm-isi-abfrageerstellung" })
+    @MockCustomUser(roles = { "abfrageerstellung" })
     void possibleTransitionsBedarfsmeldungErfolgtAndRoleAbfrageerstellung()
         throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, FileHandlingFailedException, FileHandlingWithS3FailedException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
@@ -612,7 +612,7 @@ public class TransitionModelTest {
 
     @Test
     @Transactional
-    @MockCustomUser(roles = { "lhm-isi-anwender" })
+    @MockCustomUser(roles = { "nutzer" })
     void possibleTransitionsBedarfsmeldungErfolgtAndRoleAnwender()
         throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, FileHandlingFailedException, FileHandlingWithS3FailedException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
@@ -656,7 +656,7 @@ public class TransitionModelTest {
 
     @Test
     @Transactional
-    @MockCustomUser(roles = { "lhm-isi-sachbearbeitung" })
+    @MockCustomUser(roles = { "sachbearbeitung" })
     void possibleTransitionsErledigtRoleSachbearbeitung()
         throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, FileHandlingFailedException, FileHandlingWithS3FailedException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
@@ -684,7 +684,7 @@ public class TransitionModelTest {
 
     @Test
     @Transactional
-    @MockCustomUser(roles = { "lhm-isi-abfrageerstellung" })
+    @MockCustomUser(roles = { "abfrageerstellung" })
     void possibleTransitionsErledigtRoleAbfrageerstellung()
         throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, FileHandlingFailedException, FileHandlingWithS3FailedException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
@@ -700,7 +700,7 @@ public class TransitionModelTest {
 
     @Test
     @Transactional
-    @MockCustomUser(roles = { "lhm-isi-anwender" })
+    @MockCustomUser(roles = { "nutzer" })
     void possibleTransitionsErledigtRoleAnwender()
         throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, FileHandlingFailedException, FileHandlingWithS3FailedException {
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();

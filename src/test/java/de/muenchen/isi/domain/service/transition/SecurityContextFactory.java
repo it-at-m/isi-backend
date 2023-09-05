@@ -22,7 +22,7 @@ public class SecurityContextFactory implements WithSecurityContextFactory<MockCu
     @Override
     public SecurityContext createSecurityContext(MockCustomUser customUser) {
         List<String> authoritiesRoles = new ArrayList<>();
-        if (customUser.roles()[0].equals("lhm-isi-admin")) {
+        if (customUser.roles()[0].equals("admin")) {
             authoritiesRoles.add("ISI_BACKEND_FREIGABE_ABFRAGE");
             authoritiesRoles.add("ISI_BACKEND_ABBRECHEN_ABFRAGE");
             authoritiesRoles.add("ISI_BACKEND_ZURUECK_AN_ABFRAGEERSTELLUNG_ABFRAGE");
@@ -35,7 +35,7 @@ public class SecurityContextFactory implements WithSecurityContextFactory<MockCu
             authoritiesRoles.add("ISI_BACKEND_ERNEUTE_BEARBEITUNG_ABFRAGE");
         }
 
-        if (customUser.roles()[0].equals("lhm-isi-sachbearbeitung")) {
+        if (customUser.roles()[0].equals("sachbearbeitung")) {
             authoritiesRoles.add("ISI_BACKEND_ABBRECHEN_ABFRAGE");
             authoritiesRoles.add("ISI_BACKEND_ZURUECK_AN_ABFRAGEERSTELLUNG_ABFRAGE");
             authoritiesRoles.add("ISI_BACKEND_IN_BEARBEITUNG_SETZTEN_ABFRAGE");
@@ -46,12 +46,12 @@ public class SecurityContextFactory implements WithSecurityContextFactory<MockCu
             authoritiesRoles.add("ISI_BACKEND_ERNEUTE_BEARBEITUNG_ABFRAGE");
         }
 
-        if (customUser.roles()[0].equals("lhm-isi-abfrageerstellung")) {
+        if (customUser.roles()[0].equals("abfrageerstellung")) {
             authoritiesRoles.add("ISI_BACKEND_FREIGABE_ABFRAGE");
             authoritiesRoles.add("ISI_BACKEND_SPEICHERN_VON_SOZIALINFRASTRUKTUR_VERSORGUNG_ABFRAGE");
         }
 
-        if (customUser.roles()[0].equals("lhm-isi-anwender")) {
+        if (customUser.roles()[0].equals("nutzer")) {
             authoritiesRoles.add("ISI_BACKEND_READ_ABFRAGE");
         }
 
