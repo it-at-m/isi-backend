@@ -4,17 +4,20 @@
  */
 package de.muenchen.isi.api.dto;
 
+import de.muenchen.isi.api.validation.TechnicalAttributesValid;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Planungsrecht;
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.List;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.List;
+
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
+@TechnicalAttributesValid
 public class AbfragevarianteDto extends BaseEntityDto {
 
     private Integer abfragevariantenNr;
