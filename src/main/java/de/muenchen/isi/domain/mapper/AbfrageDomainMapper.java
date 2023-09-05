@@ -165,6 +165,7 @@ public abstract class AbfrageDomainMapper {
             @Mapping(source = "abfrage.statusAbfrage", target = "statusAbfrage"),
             @Mapping(source = "abfrage.fristStellungnahme", target = "fristStellungnahme"),
             @Mapping(source = "sobonJahr", target = "sobonJahr"),
+            @Mapping(source = "abfrage.standVorhaben", target = "standVorhaben"),
             @Mapping(source = "createdDateTime", target = "createdDateTime"),
         }
     )

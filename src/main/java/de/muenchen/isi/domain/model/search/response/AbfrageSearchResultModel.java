@@ -2,6 +2,7 @@ package de.muenchen.isi.domain.model.search.response;
 
 import de.muenchen.isi.domain.model.common.StadtbezirkModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonVerfahrensgrundsaetzeJahr;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVorhaben;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -27,6 +28,8 @@ public class AbfrageSearchResultModel extends SearchResultModel {
     private LocalDate fristStellungnahme;
 
     private SobonVerfahrensgrundsaetzeJahr sobonJahr;
+
+    private StandVorhaben standVorhaben;
 
     private LocalDateTime createdDateTime;
 }
