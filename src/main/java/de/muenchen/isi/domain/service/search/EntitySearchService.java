@@ -88,7 +88,6 @@ public class EntitySearchService {
         final SearchResult<BaseEntity> searchResult = ObjectUtils.isNotEmpty(paginationOffset)
             ? searchQueryOptions.fetch(paginationOffset, searchQueryAndSortingInformation.getPageSize())
             : searchQueryOptions.fetchAll();
-        final Long numberOfTotalHits = searchResult.total().hitCount();
 
         // Suchergebnisse extrahieren und zurückgeben.
         final var searchResults = searchResult
@@ -101,6 +100,7 @@ public class EntitySearchService {
         final var model = new SearchResultsModel();
         model.setSearchResults(searchResults);
         if (ObjectUtils.isNotEmpty(paginationOffset)) {
+            final long numberOfTotalHits = searchResult.total().hitCount();
             final var numberOfPages = calculateNumberOfPages(
                 numberOfTotalHits,
                 searchQueryAndSortingInformation.getPageSize()
