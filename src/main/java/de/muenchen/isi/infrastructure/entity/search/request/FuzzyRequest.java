@@ -4,11 +4,15 @@ import lombok.Data;
 
 /*
         {
-          "fuzziness": 0
+          "fuzziness": "AUTO"
+        }
+        oder
+        {
+          "fuzziness": 1
         }
  */
 @Data
 public class FuzzyRequest {
 
-    private int fuzziness;
+    private String fuzziness;
 }
