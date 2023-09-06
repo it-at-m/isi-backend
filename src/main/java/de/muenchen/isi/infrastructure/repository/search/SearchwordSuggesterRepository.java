@@ -175,8 +175,8 @@ public class SearchwordSuggesterRepository {
         final String singleWordQuery
     ) {
         final var fuzzy = new FuzzyRequest();
-        //www.elastic.co/guide/en/elasticsearch/reference/7.17/search-suggesters.html#fuzzy
-        https:fuzzy.setFuzziness("AUTO");
+        // https://www.elastic.co/guide/en/elasticsearch/reference/7.17/search-suggesters.html#fuzzy
+        fuzzy.setFuzziness("AUTO");
         final var completion = new CompletionRequest();
         completion.setField(searchableAttribute);
         completion.setSize(5);
