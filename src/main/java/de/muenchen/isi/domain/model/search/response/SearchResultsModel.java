@@ -9,4 +9,6 @@ public class SearchResultsModel {
     private List<SearchResultModel> searchResults;
 
     private Long numberOfPages;
+
+    private Long page;
 }

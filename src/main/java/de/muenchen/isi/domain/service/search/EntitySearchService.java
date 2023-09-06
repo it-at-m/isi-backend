@@ -106,6 +106,10 @@ public class EntitySearchService {
                 searchQueryAndSortingInformation.getPageSize()
             );
             model.setNumberOfPages(numberOfPages);
+            final var currentPage = searchQueryAndSortingInformation.getPage() > numberOfPages
+                ? numberOfPages
+                : searchQueryAndSortingInformation.getPage();
+            model.setPage(currentPage);
         }
         return model;
     }
