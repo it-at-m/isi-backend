@@ -8,7 +8,7 @@ import org.hibernate.search.mapper.pojo.bridge.mapping.programmatic.ValueBinder;
 
 /**
  * Der Hibernate-Search-Binder um den Datentyp <T> einen einzelnen Elasticsearch-Index-Attribut zuordnen zu können.
- * Das Indexattribut dient dann zur durchführung einer Elasticsearch-Completion-Suggestion.
+ * Das Indexattribut dient dann zur Durchführung einer Elasticsearch-Completion-Suggestion.
  */
 public interface ComplitionSuggestionBinder extends ValueBinder {
     default <T> void bind(
