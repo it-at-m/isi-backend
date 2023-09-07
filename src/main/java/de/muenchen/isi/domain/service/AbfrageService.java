@@ -15,6 +15,7 @@ import de.muenchen.isi.domain.model.AbfragevarianteModel;
 import de.muenchen.isi.domain.model.BauvorhabenModel;
 import de.muenchen.isi.domain.model.InfrastrukturabfrageModel;
 import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.InfrastrukturabfrageAngelegtModel;
+import de.muenchen.isi.domain.model.abfrageBedarfsmeldungInBearbeitungFachreferate.InfrastrukturabfrageInBearbeitungFachreferateModel;
 import de.muenchen.isi.domain.model.abfrageSachbearbeitungInBearbeitungSachbearbeitung.InfrastrukturabfrageInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.domain.service.filehandling.DokumentService;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
@@ -163,6 +164,30 @@ public class AbfrageService {
         this.throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(
                 originalAbfrageDb.getAbfrage(),
                 StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG
+            );
+        final var abfrageToSave = this.abfrageDomainMapper.request2Model(abfrage, originalAbfrageDb);
+        return this.saveInfrastrukturabfrage(abfrageToSave);
+    }
+
+    /**
+     * Die Methode führt ein Update das in der Datenbank befindlichen {@link InfrastrukturabfrageModel} identifiziert durch den Parameter id durch.
+     * Dieses muss sich im Status {@link StatusAbfrage#IN_BEARBEITUNG_FACHREFERATE} befinden.
+     *
+     * @param abfrage zum zum Updaten
+     * @return das geupdatete {@link InfrastrukturabfrageModel}
+     * @throws EntityNotFoundException    falls die Abfrage identifiziert durch die {@link InfrastrukturabfrageModel#getId()} nicht gefunden wird
+     * @throws UniqueViolationException   falls der Name der Abfrage {@link InfrastrukturabfrageModel#getAbfrage().getNameAbfrage} ()} bereits vorhanden ist
+     * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
+     */
+    public InfrastrukturabfrageModel patchAbfrageInBearbeitungFachreferate(
+        final InfrastrukturabfrageInBearbeitungFachreferateModel abfrage,
+        final UUID id
+    )
+        throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException {
+        final var originalAbfrageDb = this.getInfrastrukturabfrageById(id);
+        this.throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(
+                originalAbfrageDb.getAbfrage(),
+                StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE
             );
         final var abfrageToSave = this.abfrageDomainMapper.request2Model(abfrage, originalAbfrageDb);
         return this.saveInfrastrukturabfrage(abfrageToSave);
