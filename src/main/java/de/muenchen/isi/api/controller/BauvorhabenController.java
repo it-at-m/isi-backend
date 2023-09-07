@@ -125,11 +125,11 @@ public class BauvorhabenController {
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_WRITE_BAUVORHABEN.name())")
     public ResponseEntity<BauvorhabenDto> createBauvorhaben(
         @RequestBody @Valid @NotNull final BauvorhabenDto bauvorhabenDto,
-        @RequestParam(required = false) final UUID abfrage
+        @RequestParam(required = false) final UUID abfrageId
     )
         throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, EntityIsReferencedException {
         var model = this.bauvorhabenApiMapper.dto2Model(bauvorhabenDto);
-        model = this.bauvorhabenService.saveBauvorhaben(model, abfrage);
+        model = this.bauvorhabenService.saveBauvorhaben(model, abfrageId);
         final var saved = this.bauvorhabenApiMapper.model2Dto(model);
         return new ResponseEntity<>(saved, HttpStatus.CREATED);
     }

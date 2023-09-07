@@ -85,13 +85,14 @@ public class BauvorhabenService {
      * Diese Methode speichert ein {@link BauvorhabenModel}.
      *
      * @param bauvorhaben zum Speichern
+     * @param abfrageId ID der Abfrage bei einer Datenübernahme
      * @return das gespeicherte {@link BauvorhabenModel}
      * @throws UniqueViolationException   falls der Name des Bauvorhabens {@link BauvorhabenModel#getNameVorhaben()} bereits vorhanden ist
      * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
      * @throws EntityNotFoundException falls bei der Datenübernahme die ausgewählte Abfrage nicht mehr vorhanden ist
      * @throws EntityIsReferencedException falls bei der Datenübernahme die ausgewählte Abfrage bereits ein Bauvorhaben referenziert
      */
-    public BauvorhabenModel saveBauvorhaben(final BauvorhabenModel bauvorhaben, final UUID abfrage)
+    public BauvorhabenModel saveBauvorhaben(final BauvorhabenModel bauvorhaben, final UUID abfrageId)
         throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, EntityIsReferencedException {
         var bauvorhabenEntity = this.bauvorhabenDomainMapper.model2Entity(bauvorhaben);
         final var saved = this.bauvorhabenRepository.findByNameVorhabenIgnoreCase(bauvorhabenEntity.getNameVorhaben());
@@ -99,8 +100,8 @@ public class BauvorhabenService {
             try {
                 bauvorhabenEntity = this.bauvorhabenRepository.saveAndFlush(bauvorhabenEntity);
                 // falls bei Neuanlage eines Bauvorhabens eine Datenübernahme mit einer Abfrage durchgeführt wurde, dann wird diese mit dem Bauvorhaben verknüpft
-                if (bauvorhaben.getId() == null && abfrage != null) {
-                    final var abfrageModel = this.abfrageService.getInfrastrukturabfrageById(abfrage);
+                if (bauvorhaben.getId() == null && abfrageId != null) {
+                    final var abfrageModel = this.abfrageService.getInfrastrukturabfrageById(abfrageId);
                     this.throwEntityIsReferencedExceptionWhenAbfrageIsReferencingBauvorhaben(abfrageModel.getAbfrage());
                     abfrageModel
                         .getAbfrage()
