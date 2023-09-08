@@ -33,8 +33,14 @@ public class EntitySearchService {
     /**
      * Diese Methode führt die paginierte Entitätssuche für die im Methodenparameter gegebenen Informationen durch.
      *
+     * Falls beide Parameterattribute {@link SearchQueryAndSortingModel#getPage()} und {@link SearchQueryAndSortingModel#getPageSize()}
+     * mit einem Wert versehen sind, wird eine paginierte Suche durchgeführt. Ist mindestens eines der eben genannten
+     * Parameterattribute nicht gesetzt, so wird eine nicht paginierte Suche durchgeführt.
+     *
      * @param searchQueryAndSortingInformation mit der Suchquery, den Sortier- und Seiteninformationen und den zu durchsuchenden Entitäten.
-     * @return die Suchergebnisse in der im Methodenparameter definierten Reihenfolge.
+     * @return die Suchergebnisse in der im Methodenparameter definierten Reihenfolge.Die Suchergebnisse sind paginiert
+     * sobald beide Parameterattribute {@link SearchQueryAndSortingModel#getPage()} und {@link SearchQueryAndSortingModel#getPageSize()}
+     * gesetzt sind. Ist mindestens eines der eben genannten Parameterattribute nicht gesetzt, so sind die Suchergebnisse nicht paginiert.
      * @throws EntityNotFoundException falls keine zu durchsuchende Entität im Methodenparameter gewählt ist.
      */
     public SearchResultsModel searchForEntities(final SearchQueryAndSortingModel searchQueryAndSortingInformation)
@@ -49,6 +55,7 @@ public class EntitySearchService {
         final var adaptedSearchQuery =
             this.createAdaptedSearchQueryForSimpleQueryStringSearch(searchQueryAndSortingInformation.getSearchQuery());
 
+        // Der Offset oder null falls keine Offsetberechnung möglich ist.
         final Integer paginationOffset = calculateOffsetOrNullIfNoPaginationRequired(searchQueryAndSortingInformation);
 
         // Erstellen der Suchquery
@@ -135,7 +142,7 @@ public class EntitySearchService {
      * Die Methode berechnet den Offset für die paginierte Suche.
      *
      * @param searchQueryAndSortingModel zur Ermittlung des Offset.
-     * @return ermittelt den Offset oder gibt null zurück falls keine Offsetberechnung möglich ist.
+     * @return ermittelt den Offset oder gibt null zurück, falls keine Offsetberechnung möglich ist.
      */
     protected Integer calculateOffsetOrNullIfNoPaginationRequired(
         final SearchQueryAndSortingModel searchQueryAndSortingModel
