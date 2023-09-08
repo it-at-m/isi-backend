@@ -31,11 +31,11 @@ public class EntitySearchService {
     private final SearchDomainMapper searchDomainMapper;
 
     /**
-     * Diese Methode führt die Entitätssuche für die im Methodenparameter gegebenen Informationen durch.
+     * Diese Methode führt die paginierte Entitätssuche für die im Methodenparameter gegebenen Informationen durch.
      *
-     * @param searchQueryAndSortingInformation mit der Suchquery, den Sortierinformationen und den zu durchsuchenden Entitäten.
+     * @param searchQueryAndSortingInformation mit der Suchquery, den Sortier- und Seiteninformationen und den zu durchsuchenden Entitäten.
      * @return die Suchergebnisse in der im Methodenparameter definierten Reihenfolge.
-     * @throws EntityNotFoundException falls keine zu durchsuchende Entitat im Methodenparameter gewählt ist.
+     * @throws EntityNotFoundException falls keine zu durchsuchende Entität im Methodenparameter gewählt ist.
      */
     public SearchResultsModel searchForEntities(final SearchQueryAndSortingModel searchQueryAndSortingInformation)
         throws EntityNotFoundException {

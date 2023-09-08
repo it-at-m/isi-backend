@@ -1,5 +1,6 @@
 package de.muenchen.isi.api.controller.search;
 
+import de.muenchen.isi.api.dto.error.InformationResponseDto;
 import de.muenchen.isi.api.dto.search.request.SearchQueryAndSortingDto;
 import de.muenchen.isi.api.dto.search.request.SearchQueryDto;
 import de.muenchen.isi.api.dto.search.response.SearchResultsDto;
@@ -9,6 +10,8 @@ import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.service.search.EntitySearchService;
 import de.muenchen.isi.domain.service.search.SearchWordSuggesterService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -38,7 +41,19 @@ public class SearchController {
 
     @PostMapping("/searchword-suggestion")
     @Operation(summary = "Suche nach Suchwortvorschläge für das im Request-Body gegebene Suchanfrage.")
-    @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "OK") })
+    @ApiResponses(
+        value = {
+            @ApiResponse(
+                responseCode = "200",
+                description = "OK -> Es wurde eine erfolgreiche Suche nach Suchwortvorschlägen durchgeführt."
+            ),
+            @ApiResponse(
+                responseCode = "404",
+                description = "NOT_FOUND -> Im Requestbody wurde kein zu durchsuchender Entitätstyp gewählt.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+        }
+    )
     public ResponseEntity<SuchwortSuggestionsDto> searchForSearchwordSuggestion(
         @RequestBody @NotNull @Valid final SearchQueryDto searchQueryInformation
     ) throws EntityNotFoundException {
@@ -51,7 +66,19 @@ public class SearchController {
     @PostMapping("/entities")
     @Transactional(readOnly = true)
     @Operation(summary = "Suche nach Entitäten für die im Request-Body gegebene Suchanfrage.")
-    @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "OK") })
+    @ApiResponses(
+        value = {
+            @ApiResponse(
+                responseCode = "200",
+                description = "OK -> Es wurde eine erfolgreiche Enititätssuche durchgeführt."
+            ),
+            @ApiResponse(
+                responseCode = "404",
+                description = "NOT_FOUND -> Im Requestbody wurde kein zu durchsuchender Entitätstyp gewählt.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+        }
+    )
     public ResponseEntity<SearchResultsDto> searchForEntities(
         @RequestBody @NotNull @Valid final SearchQueryAndSortingDto searchQueryAndSortingInformation
     ) throws EntityNotFoundException {
