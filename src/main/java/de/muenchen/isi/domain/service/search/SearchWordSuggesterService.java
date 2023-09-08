@@ -24,12 +24,12 @@ public class SearchWordSuggesterService {
     private final SearchwordSuggesterRepository searchwordSuggesterRepository;
 
     /**
-     * Diese Methode führt die Entitätssuche für die im Methodenparameter gegebenen Informationen durch.
+     * Diese Methode führt auf Basis der im Parameter gewählten Entitätstypen eine Suche nach Suchwortvorschlägen durch.
      *
      * @param searchQueryInformation mit der Suchquery als einzelnes Suchwort und den zu durchsuchenden Entitäten.
      *                               Es dürfen sich keine Leerzeichen zwischen den einzelnen Buchstaben befinden.
      * @return die Suchwortvorschläge für das im Parameter gegebene Wort.
-     * @throws EntityNotFoundException falls keine zu durchsuchende Entitat im Methodenparameter gewählt ist.
+     * @throws EntityNotFoundException falls keine zu durchsuchende Entität im Methodenparameter gewählt ist.
      */
     public SuchwortSuggestionsModel searchForSearchwordSuggestion(final SearchQueryModel searchQueryInformation)
         throws EntityNotFoundException {

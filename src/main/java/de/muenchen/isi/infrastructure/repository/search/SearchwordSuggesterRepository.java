@@ -39,6 +39,9 @@ public class SearchwordSuggesterRepository {
     /**
      * Ermittelt durch einen direkten Zugriff auf Elasticsearch die Suchwortvorschläge.
      *
+     * Die Ermittlung der Suchwortvorschlage wird mittels eines completion-suggesters durchgeführt:
+     * https://www.elastic.co/guide/en/elasticsearch/reference/current/search-suggesters.html#completion-suggester
+     *
      * @param attributesForSearchableEntities die Attribute je zu durchsuchender Entität für welche Suchwortvorschlage ermittelt werden sollen.
      * @param singleWordQuery als Suchquery. Es dürfen sich keine Leerzeichen zwischen den einzelnen Buchstaben befinden.
      * @return die Suchwortvorschläge.

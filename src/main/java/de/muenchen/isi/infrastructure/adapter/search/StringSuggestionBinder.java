@@ -10,6 +10,10 @@ import org.hibernate.search.mapper.pojo.bridge.ValueBridge;
 import org.hibernate.search.mapper.pojo.bridge.binding.ValueBindingContext;
 import org.hibernate.search.mapper.pojo.bridge.runtime.ValueBridgeToIndexedValueContext;
 
+/**
+ * Binder um Entitätsattribute vom Typ {@link String} für eine Completion-Suggestion indizieren zu können.
+ * Die Suchwortvorschläge werden mittels {@link StringUtils#split} erstellt.
+ */
 public class StringSuggestionBinder implements ComplitionSuggestionBinder {
 
     @Override
