@@ -49,9 +49,6 @@ public class Abfragevariante extends BaseEntity {
     @Column(nullable = false)
     private Integer abfragevariantenNr;
 
-    @Column(nullable = false)
-    private boolean isRelevant;
-
     @Column(nullable = false, length = 30)
     private String abfragevariantenName;
 

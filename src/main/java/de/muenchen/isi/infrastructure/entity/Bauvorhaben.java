@@ -26,6 +26,7 @@ import javax.persistence.FetchType;
 import javax.persistence.Index;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -131,4 +132,8 @@ public class Bauvorhaben extends BaseEntity {
     @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "bauvorhaben_id")
     private List<Dokument> dokumente;
+
+    @OneToOne
+    @JoinColumn(name = "relevante_abfragevariante_id")
+    private Abfragevariante relevanteAbfragevariante;
 }

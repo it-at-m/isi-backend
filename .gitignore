@@ -32,7 +32,7 @@ nbdist/
 # do not check in Database Filler and application profile yml
 src/**/DatabaseFiller.java
 src/**/application-*.yml
-!src/**/application-unittest.yml
+!src/test/resources/application-unittest.yml
 src/**/logback-spring.xml
 
 node_modules/
