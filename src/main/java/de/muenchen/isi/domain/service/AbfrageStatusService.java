@@ -60,6 +60,7 @@ public class AbfrageStatusService {
      * @param id vom Typ {@link UUID} um die Abfrage zu finden
      * @throws EntityNotFoundException          falls die Abfrage nicht gefunden wird
      * @throws AbfrageStatusNotAllowedException wenn die Statusänderung nicht erlaubt ist
+     * @throws StringLengthExceededException    wenn die Anmerkung zur Statusänderung die max. Länge überschreitet
      */
     public void freigabeAbfrage(final UUID id, String anmerkung)
             throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException {
@@ -74,6 +75,7 @@ public class AbfrageStatusService {
      * @param id vom Typ {@link UUID} um die Abfrage zu finden
      * @throws EntityNotFoundException          falls die Abfrage nicht gefunden wird
      * @throws AbfrageStatusNotAllowedException wenn die Statusänderung nicht erlaubt ist
+     * @throws StringLengthExceededException    wenn die Anmerkung zur Statusänderung die max. Länge überschreitet
      */
     public void inBearbeitungSetzenAbfrage(final UUID id, String anmerkung)
             throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException {
@@ -88,6 +90,7 @@ public class AbfrageStatusService {
      * @param id vom Typ {@link UUID} um die Abfrage zu finden
      * @throws EntityNotFoundException          falls die Abfrage nicht gefunden wird
      * @throws AbfrageStatusNotAllowedException wenn die Statusänderung nicht erlaubt ist
+     * @throws StringLengthExceededException    wenn die Anmerkung zur Statusänderung die max. Länge überschreitet
      */
     public void abbrechenAbfrage(final UUID id, String anmerkung)
             throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException {
@@ -102,6 +105,7 @@ public class AbfrageStatusService {
      * @param id vom Typ {@link UUID} um die Abfrage zu finden
      * @throws EntityNotFoundException          falls die Abfrage nicht gefunden wird
      * @throws AbfrageStatusNotAllowedException wenn die Statusänderung nicht erlaubt ist
+     * @throws StringLengthExceededException    wenn die Anmerkung zur Statusänderung die max. Länge überschreitet
      */
     public void zurueckAnAbfrageerstellungAbfrage(final UUID id, String anmerkung)
             throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException {
@@ -116,6 +120,7 @@ public class AbfrageStatusService {
      * @param id vom Typ {@link UUID} um die Abfrage zu finden
      * @throws EntityNotFoundException          falls die Abfrage nicht gefunden wird
      * @throws AbfrageStatusNotAllowedException wenn die Statusänderung nicht erlaubt ist
+     * @throws StringLengthExceededException    wenn die Anmerkung zur Statusänderung die max. Länge überschreitet
      */
     public void zurueckAnSachbearbeitungAbfrage(final UUID id, String anmerkung)
             throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException {
@@ -130,6 +135,7 @@ public class AbfrageStatusService {
      * @param id vom Typ {@link UUID} um die Abfrage zu finden
      * @throws EntityNotFoundException          falls die Abfrage nicht gefunden wird
      * @throws AbfrageStatusNotAllowedException wenn die Statusänderung nicht erlaubt ist
+     * @throws StringLengthExceededException    wenn die Anmerkung zur Statusänderung die max. Länge überschreitet
      */
     public void abfrageSchliessen(final UUID id, String anmerkung)
             throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException {
@@ -144,6 +150,7 @@ public class AbfrageStatusService {
      * @param id vom Typ {@link UUID} um die Abfrage zu finden
      * @throws EntityNotFoundException          falls die Abfrage nicht gefunden wird
      * @throws AbfrageStatusNotAllowedException wenn die Statusänderung nicht erlaubt ist
+     * @throws StringLengthExceededException    wenn die Anmerkung zur Statusänderung die max. Länge überschreitet
      */
     public void verschickenDerStellungnahme(final UUID id, String anmerkung)
             throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException {
@@ -158,6 +165,7 @@ public class AbfrageStatusService {
      * @param id vom Typ {@link UUID} um die Abfrage zu finden
      * @throws EntityNotFoundException          falls die Abfrage nicht gefunden wird
      * @throws AbfrageStatusNotAllowedException wenn die Statusänderung nicht erlaubt ist
+     * @throws StringLengthExceededException    wenn die Anmerkung zur Statusänderung die max. Länge überschreitet
      */
     public void bedarfsmeldungErfolgt(final UUID id, String anmerkung)
             throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException {
@@ -172,6 +180,7 @@ public class AbfrageStatusService {
      * @param id vom Typ {@link UUID} um die Abfrage zu finden
      * @throws EntityNotFoundException          falls die Abfrage nicht gefunden wird
      * @throws AbfrageStatusNotAllowedException wenn die Statusänderung nicht erlaubt ist
+     * @throws StringLengthExceededException    wenn die Anmerkung zur Statusänderung die max. Länge überschreitet
      */
     public void speichernVonSozialinfrastrukturVersorgung(final UUID id, String anmerkung)
             throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException {
@@ -186,6 +195,7 @@ public class AbfrageStatusService {
      * @param id vom Typ {@link UUID} um die Abfrage zu finden
      * @throws EntityNotFoundException          falls die Abfrage nicht gefunden wird
      * @throws AbfrageStatusNotAllowedException wenn die Statusänderung nicht erlaubt ist
+     * @throws StringLengthExceededException    wenn die Anmerkung zur Statusänderung die max. Länge überschreitet
      */
     public void erneuteBearbeitenAbfrage(final UUID id, String anmerkung)
             throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException {
@@ -437,6 +447,14 @@ public class AbfrageStatusService {
         return authoritiesAndEventsMap;
     }
 
+    /**
+     * Überprüft, ob die Länge einer Anmerkung die maximale Grenze überschreitet
+     *
+     * @param id        vom Typ {@link UUID} um die Abfrage zu finden
+     * @param anmerkung die zur Infrastrukturabfrage hinzugefügt werden soll.
+     * @throws StringLengthExceededException Wenn die Anmerkung die maximale Länge von 255 Zeichen überschreitet.
+     * @throws EntityNotFoundException       Wenn die Infrastrukturabfrage nicht gefunden wird.
+     */
     private void throwStringLengthExceededExceptionWhenAnmerkungExceedsLength(UUID id, String anmerkung)
             throws StringLengthExceededException, EntityNotFoundException {
         InfrastrukturabfrageModel infrastrukturabfrage = this.abfrageService.getInfrastrukturabfrageById(id);
