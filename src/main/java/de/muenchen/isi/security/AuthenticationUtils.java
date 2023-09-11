@@ -2,9 +2,6 @@ package de.muenchen.isi.security;
 
 import com.nimbusds.jose.shaded.json.JSONArray;
 import com.nimbusds.jose.shaded.json.JSONObject;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.EnumUtils;
 import org.apache.commons.lang3.ObjectUtils;
@@ -16,6 +13,10 @@ import org.springframework.security.oauth2.core.DefaultOAuth2AuthenticatedPrinci
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
 @Slf4j
 @Service
 public class AuthenticationUtils {
@@ -26,7 +27,7 @@ public class AuthenticationUtils {
 
     private static final String TOKEN_USER_SUB = "sub";
 
-    private static final String SUB_UNAUTHENTICATED_USER = "4c3c4d2a-e19f-4c7a-8b31-11b92dd3cf67";
+    private static final String SUB_UNAUTHENTICATED_USER = "123456789";
 
     private static final String TOKEN_RESOURCE_ACCESS = "resource_access";
 
@@ -45,7 +46,7 @@ public class AuthenticationUtils {
         if (!ObjectUtils.isEmpty(authentication)) {
             try {
                 final DefaultOAuth2AuthenticatedPrincipal principal =
-                    (DefaultOAuth2AuthenticatedPrincipal) authentication.getPrincipal();
+                        (DefaultOAuth2AuthenticatedPrincipal) authentication.getPrincipal();
                 if (!ObjectUtils.isEmpty(principal)) {
                     for (GrantedAuthority authority : principal.getAuthorities()) {
                         if (EnumUtils.isValidEnum(AuthoritiesEnum.class, authority.getAuthority())) {
@@ -83,14 +84,14 @@ public class AuthenticationUtils {
     /**
      * Die Methode extrahiert den Nutzernamen aus dem im SecurityContext vorhandenen {@link Jwt}.
      *
-     * @return den Nutzernamen oder einen Platzhalter fall kein {@link Jwt} verfügbar
+     * @return den Nutzernamen oder einen Platzhalter falls kein {@link Jwt} verfügbar
      */
     public String getUserSub() {
         String sub = null;
         final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (!ObjectUtils.isEmpty(authentication)) {
             final DefaultOAuth2AuthenticatedPrincipal principal =
-                (DefaultOAuth2AuthenticatedPrincipal) authentication.getPrincipal();
+                    (DefaultOAuth2AuthenticatedPrincipal) authentication.getPrincipal();
             if (!ObjectUtils.isEmpty(principal)) {
                 sub = principal.getAttribute(TOKEN_USER_SUB).toString();
             }
@@ -108,7 +109,7 @@ public class AuthenticationUtils {
         final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (!ObjectUtils.isEmpty(authentication)) {
             final DefaultOAuth2AuthenticatedPrincipal principal =
-                (DefaultOAuth2AuthenticatedPrincipal) authentication.getPrincipal();
+                    (DefaultOAuth2AuthenticatedPrincipal) authentication.getPrincipal();
             if (!ObjectUtils.isEmpty(principal)) {
                 JSONObject resourceAccess = principal.getAttribute(TOKEN_RESOURCE_ACCESS);
                 if (!resourceAccess.isEmpty()) {

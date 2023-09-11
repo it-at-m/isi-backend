@@ -246,8 +246,7 @@ public class AbfrageService {
             this.throwEntityIsReferencedExceptionWhenAbfrageIsReferencingBauvorhaben(abfrage.getAbfrage());
             this.infrastrukturabfrageRepository.deleteById(id);
         } else {
-            log.error(abfrage.getSub());
-            log.error(authenticationUtils.getUserSub());
+            log.error("User {} hat versucht, die Abfrage {} von User {} zu löschen.", authenticationUtils.getUserSub(), id, abfrage.getSub());
             throw new UserRoleNotAllowedException("Keine Berechtigung zum Löschen der Abfrage");
         }
     }
