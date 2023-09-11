@@ -10,6 +10,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+/**
+ * Diese Klasse führt nach dem Boot des Backends bei korrekt gesetzter Property "spring.jpa.properties.hibernate.search.reindex-database" eine Reindizierung der Datenbank durch.
+ *
+ * Eine Reindizierung der in der Datenbank gespeicherten Entiäten ist z.B. dann erforderlich, falls eine Datenmodell- oder Indexänderung vorgenommen wurde.
+ */
 @Component
 @Data
 @Slf4j
