@@ -56,6 +56,7 @@ public class EntitySearchService {
             this.createAdaptedSearchQueryForSimpleQueryStringSearch(searchQueryAndSortingInformation.getSearchQuery());
 
         // Der Offset oder null falls keine Offsetberechnung möglich ist.
+        // Ist keine Offsetberechnung möglich, so wird auch keine paginierte Suche durchgeführt.
         final Integer paginationOffset = calculateOffsetOrNullIfNoPaginationRequired(searchQueryAndSortingInformation);
 
         // Erstellen der Suchquery
