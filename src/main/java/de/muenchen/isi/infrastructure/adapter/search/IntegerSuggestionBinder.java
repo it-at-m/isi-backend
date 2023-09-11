@@ -11,7 +11,7 @@ import org.hibernate.search.mapper.pojo.bridge.runtime.ValueBridgeToIndexedValue
 /**
  * Binder um Entitätsattribute vom Typ {@link Integer} für eine Completion-Suggestion indizieren zu können.
  */
-public class IntegerSuggestionBinder implements ComplitionSuggestionBinder {
+public class IntegerSuggestionBinder implements CompletionSuggestionBinder {
 
     @Override
     public void bind(final ValueBindingContext<?> context) {

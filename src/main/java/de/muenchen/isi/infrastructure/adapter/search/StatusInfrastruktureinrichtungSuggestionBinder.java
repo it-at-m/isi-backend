@@ -16,7 +16,7 @@ import org.hibernate.search.mapper.pojo.bridge.runtime.ValueBridgeToIndexedValue
  * Binder um Entitätsattribute vom Typ {@link StatusInfrastruktureinrichtung} für eine Completion-Suggestion indizieren zu können.
  * Die Suchwortvorschläge werden aus {@link StatusInfrastruktureinrichtung#getBezeichnung} ermittelt.
  */
-public class StatusInfrastruktureinrichtungSuggestionBinder implements ComplitionSuggestionBinder {
+public class StatusInfrastruktureinrichtungSuggestionBinder implements CompletionSuggestionBinder {
 
     @Override
     public void bind(final ValueBindingContext<?> context) {
