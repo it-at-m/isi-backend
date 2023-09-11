@@ -7,6 +7,7 @@ package de.muenchen.isi.domain.mapper;
 import de.muenchen.isi.configuration.MapstructConfiguration;
 import de.muenchen.isi.domain.model.AbfragevarianteModel;
 import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.AbfragevarianteAngelegtModel;
+import de.muenchen.isi.domain.model.abfrageBedarfsmeldungInBearbeitungFachreferate.AbfragevarianteInBearbeitungFachreferateModel;
 import de.muenchen.isi.domain.model.abfrageSachbearbeitungInBearbeitungSachbearbeitung.AbfragevarianteInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.domain.model.abfrageSachbearbeitungInBearbeitungSachbearbeitung.AbfragevarianteSachbearbeitungInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.infrastructure.entity.Abfragevariante;
@@ -26,7 +27,6 @@ public interface AbfragevarianteDomainMapper {
         {
             @Mapping(target = "lastModifiedDateTime", ignore = true),
             @Mapping(target = "createdDateTime", ignore = true),
-            @Mapping(target = "relevant", ignore = true),
             @Mapping(target = "abfragevarianteSachbearbeitung", ignore = true),
         }
     )
@@ -52,11 +52,26 @@ public interface AbfragevarianteDomainMapper {
             @Mapping(target = "id", ignore = true),
             @Mapping(target = "lastModifiedDateTime", ignore = true),
             @Mapping(target = "createdDateTime", ignore = true),
-            @Mapping(target = "relevant", ignore = true),
         }
     )
     AbfragevarianteModel request2Model(
         final AbfragevarianteInBearbeitungSachbearbeitungModel request,
+        final @MappingTarget AbfragevarianteModel model
+    );
+
+    @BeanMapping(ignoreByDefault = true)
+    @Mappings(
+        {
+            @Mapping(target = "version", ignore = false),
+            @Mapping(
+                target = "abfragevarianteSachbearbeitung.bedarfsmeldungFachreferate",
+                source = "bedarfsmeldungFachreferate",
+                ignore = false
+            ),
+        }
+    )
+    AbfragevarianteModel request2Model(
+        final AbfragevarianteInBearbeitungFachreferateModel request,
         final @MappingTarget AbfragevarianteModel model
     );
 }
