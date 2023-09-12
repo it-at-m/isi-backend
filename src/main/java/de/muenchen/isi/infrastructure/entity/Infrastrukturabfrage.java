@@ -32,6 +32,9 @@ public class Infrastrukturabfrage extends BaseEntity {
     @Embedded
     public Abfrage abfrage;
 
+    @Column(nullable = false)
+    private String sub;
+
     @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "varchar(255) not null check (sobon_relevant != 'UNSPECIFIED')")
     private UncertainBoolean sobonRelevant;
