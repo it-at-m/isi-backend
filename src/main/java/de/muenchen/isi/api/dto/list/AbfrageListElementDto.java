@@ -30,4 +30,6 @@ public class AbfrageListElementDto {
     private SobonVerfahrensgrundsaetzeJahr sobonJahr;
 
     private LocalDateTime createdDateTime;
+
+    private UUID bauvorhaben;
 }

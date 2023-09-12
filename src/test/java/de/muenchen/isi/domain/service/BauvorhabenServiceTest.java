@@ -35,7 +35,6 @@ import de.muenchen.isi.domain.model.list.AbfrageListElementModel;
 import de.muenchen.isi.domain.model.list.InfrastruktureinrichtungListElementModel;
 import de.muenchen.isi.domain.service.filehandling.DokumentService;
 import de.muenchen.isi.infrastructure.entity.Abfrage;
-import de.muenchen.isi.infrastructure.entity.Abfragevariante;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
 import de.muenchen.isi.infrastructure.entity.Infrastrukturabfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Planungsrecht;
@@ -57,6 +56,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Stream;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -85,6 +85,9 @@ public class BauvorhabenServiceTest {
     private BauvorhabenService bauvorhabenService;
 
     @Mock
+    private AbfrageService abfrageService;
+
+    @Mock
     private BauvorhabenRepository bauvorhabenRepository;
 
     @Mock
@@ -95,9 +98,6 @@ public class BauvorhabenServiceTest {
 
     @Mock
     private AbfragevarianteRepository abfragevarianteRepository;
-
-    @Mock
-    private AbfrageService abfrageService;
 
     @Mock
     private DokumentService dokumentService;
@@ -121,7 +121,8 @@ public class BauvorhabenServiceTest {
             this.bauvorhabenRepository,
             this.infrastrukturabfrageRepository,
             this.infrastruktureinrichtungRepository,
-            this.dokumentService
+            this.dokumentService,
+            this.abfrageService
         );
     }
 
@@ -193,6 +194,7 @@ public class BauvorhabenServiceTest {
         abfrageListElementModel1.setStatusAbfrage(abfrage1.getAbfrage().getStatusAbfrage());
         abfrageListElementModel1.setFristStellungnahme(abfrage1.getAbfrage().getFristStellungnahme());
         abfrageListElementModel1.setType(AbfrageTyp.INFRASTRUKTURABFRAGE);
+        abfrageListElementModel1.setBauvorhaben(bauvorhabenId);
         expectedAbfrageList.add(abfrageListElementModel1);
 
         var abfrageListElementModel2 = new AbfrageListElementModel();
@@ -201,6 +203,7 @@ public class BauvorhabenServiceTest {
         abfrageListElementModel2.setStatusAbfrage(abfrage2.getAbfrage().getStatusAbfrage());
         abfrageListElementModel2.setFristStellungnahme(abfrage2.getAbfrage().getFristStellungnahme());
         abfrageListElementModel2.setType(AbfrageTyp.INFRASTRUKTURABFRAGE);
+        abfrageListElementModel2.setBauvorhaben(bauvorhabenId);
         expectedAbfrageList.add(abfrageListElementModel2);
 
         var abfrageListElementModel3 = new AbfrageListElementModel();
@@ -209,6 +212,7 @@ public class BauvorhabenServiceTest {
         abfrageListElementModel3.setStatusAbfrage(abfrage3.getAbfrage().getStatusAbfrage());
         abfrageListElementModel3.setFristStellungnahme(abfrage3.getAbfrage().getFristStellungnahme());
         abfrageListElementModel3.setType(AbfrageTyp.INFRASTRUKTURABFRAGE);
+        abfrageListElementModel3.setBauvorhaben(bauvorhabenId);
         expectedAbfrageList.add(abfrageListElementModel3);
 
         Mockito
@@ -332,7 +336,8 @@ public class BauvorhabenServiceTest {
     }
 
     @Test
-    void saveBauvorhabenTest() throws UniqueViolationException, OptimisticLockingException {
+    void saveBauvorhabenTest()
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, EntityIsReferencedException {
         final BauvorhabenModel bauvorhaben = new BauvorhabenModel();
         bauvorhaben.setId(null);
 
@@ -344,7 +349,7 @@ public class BauvorhabenServiceTest {
 
         Mockito.when(this.bauvorhabenRepository.saveAndFlush(bauvorhabenEntity)).thenReturn(saveResult);
 
-        final BauvorhabenModel result = this.bauvorhabenService.saveBauvorhaben(bauvorhaben);
+        final BauvorhabenModel result = this.bauvorhabenService.saveBauvorhaben(bauvorhaben, null);
 
         final BauvorhabenModel expected = new BauvorhabenModel();
         expected.setId(saveResult.getId());
@@ -374,7 +379,10 @@ public class BauvorhabenServiceTest {
             .thenReturn(Optional.of(entity));
         Mockito.when(this.bauvorhabenRepository.saveAndFlush(entity)).thenReturn(entity);
 
-        assertThrows(UniqueViolationException.class, () -> this.bauvorhabenService.saveBauvorhaben(bauvorhabenModel2));
+        Assertions.assertThrows(
+            UniqueViolationException.class,
+            () -> this.bauvorhabenService.saveBauvorhaben(bauvorhabenModel2, null)
+        );
 
         Mockito
             .verify(this.bauvorhabenRepository, Mockito.times(1))
@@ -383,8 +391,121 @@ public class BauvorhabenServiceTest {
     }
 
     @Test
+    void saveBauvorhabenReferencedByAbfrage()
+        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, EntityIsReferencedException {
+        final UUID abfrageId = UUID.randomUUID();
+        final BauvorhabenModel bauvorhaben = new BauvorhabenModel();
+        bauvorhaben.setId(null);
+
+        final Bauvorhaben bauvorhabenEntity = new Bauvorhaben();
+        bauvorhabenEntity.setId(bauvorhaben.getId());
+
+        final Bauvorhaben saveResult = new Bauvorhaben();
+        saveResult.setId(UUID.randomUUID());
+
+        Mockito.when(this.bauvorhabenRepository.saveAndFlush(bauvorhabenEntity)).thenReturn(saveResult);
+
+        final InfrastrukturabfrageModel abfrage = new InfrastrukturabfrageModel();
+        abfrage.setId(abfrageId);
+        abfrage.setAbfrage(new AbfrageModel());
+
+        final InfrastrukturabfrageModel abfrageToSave = new InfrastrukturabfrageModel();
+        abfrageToSave.setId(abfrageId);
+        abfrageToSave.setAbfrage(new AbfrageModel());
+        abfrageToSave.getAbfrage().setBauvorhaben(this.bauvorhabenDomainMapper.entity2Model(saveResult));
+
+        final InfrastrukturabfrageModel savedAbfrage = new InfrastrukturabfrageModel();
+        savedAbfrage.setId(abfrageId);
+        savedAbfrage.setAbfrage(new AbfrageModel());
+        savedAbfrage.getAbfrage().setBauvorhaben(this.bauvorhabenDomainMapper.entity2Model(saveResult));
+
+        Mockito.when(this.abfrageService.getInfrastrukturabfrageById(abfrageId)).thenReturn(abfrage);
+        Mockito.when(this.abfrageService.saveInfrastrukturabfrage(abfrageToSave)).thenReturn(savedAbfrage);
+
+        final BauvorhabenModel result = this.bauvorhabenService.saveBauvorhaben(bauvorhaben, abfrageId);
+
+        final BauvorhabenModel expected = new BauvorhabenModel();
+        expected.setId(saveResult.getId());
+
+        assertThat(result, is(expected));
+
+        final InfrastrukturabfrageModel expectedAbfrage = new InfrastrukturabfrageModel();
+        expectedAbfrage.setId(abfrageId);
+        expectedAbfrage.setAbfrage(new AbfrageModel());
+        expectedAbfrage.getAbfrage().setBauvorhaben(result);
+        assertThat(savedAbfrage, is(expectedAbfrage));
+
+        Mockito.verify(this.bauvorhabenRepository, Mockito.times(1)).saveAndFlush(bauvorhabenEntity);
+        Mockito.verify(this.abfrageService, Mockito.times(1)).getInfrastrukturabfrageById(abfrageId);
+    }
+
+    @Test
+    void throwEntityNotFoundExceptionSaveBauvorhabenReferencedByAbfrage() throws EntityNotFoundException {
+        final UUID abfrageId = UUID.randomUUID();
+        final BauvorhabenModel bauvorhaben = new BauvorhabenModel();
+        bauvorhaben.setId(null);
+
+        final Bauvorhaben bauvorhabenEntity = new Bauvorhaben();
+        bauvorhabenEntity.setId(bauvorhaben.getId());
+
+        final Bauvorhaben saveResult = new Bauvorhaben();
+        saveResult.setId(UUID.randomUUID());
+
+        Mockito.when(this.bauvorhabenRepository.saveAndFlush(bauvorhabenEntity)).thenReturn(saveResult);
+
+        final InfrastrukturabfrageModel abfrage = new InfrastrukturabfrageModel();
+        abfrage.setId(abfrageId);
+
+        Mockito
+            .when(this.abfrageService.getInfrastrukturabfrageById(abfrage.getId()))
+            .thenThrow(new EntityNotFoundException("Abfrage nicht gefunden"));
+
+        Assertions.assertThrows(
+            EntityNotFoundException.class,
+            () -> this.bauvorhabenService.saveBauvorhaben(bauvorhaben, abfrageId)
+        );
+
+        Mockito.verify(this.bauvorhabenRepository, Mockito.times(1)).saveAndFlush(bauvorhabenEntity);
+        Mockito.verify(this.abfrageService, Mockito.times(1)).getInfrastrukturabfrageById(abfrageId);
+    }
+
+    @Test
+    void throwEntityIsReferencedExceptionSaveBauvorhabenReferencedByAbfrage()
+        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, EntityIsReferencedException {
+        final UUID abfrageId = UUID.randomUUID();
+        final BauvorhabenModel bauvorhaben = new BauvorhabenModel();
+        bauvorhaben.setId(null);
+
+        final Bauvorhaben bauvorhabenEntity = new Bauvorhaben();
+        bauvorhabenEntity.setId(bauvorhaben.getId());
+
+        final Bauvorhaben saveResult = new Bauvorhaben();
+        saveResult.setId(UUID.randomUUID());
+
+        Mockito.when(this.bauvorhabenRepository.saveAndFlush(bauvorhabenEntity)).thenReturn(saveResult);
+
+        final InfrastrukturabfrageModel abfrage = new InfrastrukturabfrageModel();
+        abfrage.setId(abfrageId);
+        abfrage.setAbfrage(new AbfrageModel());
+        final BauvorhabenModel abfrageBauvorhaben = new BauvorhabenModel();
+        abfrageBauvorhaben.setId(UUID.randomUUID());
+        abfrageBauvorhaben.setNameVorhaben("Name Bauvorhaben");
+        abfrage.getAbfrage().setBauvorhaben(abfrageBauvorhaben);
+
+        Mockito.when(this.abfrageService.getInfrastrukturabfrageById(abfrageId)).thenReturn(abfrage);
+
+        Assertions.assertThrows(
+            EntityIsReferencedException.class,
+            () -> this.bauvorhabenService.saveBauvorhaben(bauvorhaben, abfrageId)
+        );
+
+        Mockito.verify(this.bauvorhabenRepository, Mockito.times(1)).saveAndFlush(bauvorhabenEntity);
+        Mockito.verify(this.abfrageService, Mockito.times(1)).getInfrastrukturabfrageById(abfrageId);
+    }
+
+    @Test
     void updateBauvorhabenTest()
-        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, FileHandlingFailedException, FileHandlingWithS3FailedException {
+        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, FileHandlingFailedException, FileHandlingWithS3FailedException, EntityIsReferencedException {
         final BauvorhabenModel bauvorhabenModel = new BauvorhabenModel();
         bauvorhabenModel.setId(UUID.randomUUID());
         bauvorhabenModel.setNameVorhaben("BauvorhabenTest");
@@ -550,7 +671,7 @@ public class BauvorhabenServiceTest {
 
     @Test
     void changeRelevanteAbfragevarianteTest()
-        throws BauvorhabenNotReferencedException, UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException {
+        throws BauvorhabenNotReferencedException, UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, EntityIsReferencedException {
         final UUID bauvorhabenId = UUID.randomUUID();
         final String bauvorhabenName = "Bauvorhaben";
         final UUID abfrageId = UUID.randomUUID();
