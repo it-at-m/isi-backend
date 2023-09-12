@@ -19,8 +19,6 @@ public class AbfragevarianteDto extends BaseEntityDto {
 
     private Integer abfragevariantenNr;
 
-    private boolean isRelevant;
-
     private String abfragevariantenName;
 
     private Planungsrecht planungsrecht;
