@@ -54,6 +54,7 @@ public abstract class AbfrageDomainMapper {
         {
             @Mapping(target = "abfrage.statusAbfrage", ignore = true),
             @Mapping(target = "id", ignore = true),
+            @Mapping(target = "sub", ignore = true),
             @Mapping(target = "createdDateTime", ignore = true),
             @Mapping(target = "lastModifiedDateTime", ignore = true),
             @Mapping(target = "abfragevarianten", ignore = true),

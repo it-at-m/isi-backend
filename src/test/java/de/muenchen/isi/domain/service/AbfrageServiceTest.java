@@ -4,7 +4,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
 import de.muenchen.isi.domain.exception.AbfrageStatusNotAllowedException;
-import de.muenchen.isi.domain.exception.BauvorhabenNotReferencedException;
 import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.FileHandlingFailedException;
@@ -47,7 +46,6 @@ import de.muenchen.isi.security.AuthenticationUtils;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Stream;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -130,6 +128,7 @@ class AbfrageServiceTest {
     @Test
     void saveInfrastrukturabfrage() throws UniqueViolationException, OptimisticLockingException {
         final UUID uuid = UUID.randomUUID();
+        final String sub = "1234";
         final InfrastrukturabfrageModel infrastrukturabfrageModel = new InfrastrukturabfrageModel();
         infrastrukturabfrageModel.setId(uuid);
         final AbfrageModel abfrageModel = new AbfrageModel();
@@ -141,11 +140,13 @@ class AbfrageServiceTest {
 
         final Infrastrukturabfrage saveResult = new Infrastrukturabfrage();
         saveResult.setId(uuid);
+        saveResult.setSub(sub);
         final Abfrage abfrage = new Abfrage();
         abfrage.setNameAbfrage("hallo");
         abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
         saveResult.setAbfrage(abfrage);
 
+        Mockito.when(this.authenticationUtils.getUserSub()).thenReturn(sub);
         Mockito.when(this.infrastrukturabfrageRepository.saveAndFlush(abfrageEntity)).thenReturn(saveResult);
         Mockito
             .when(this.infrastrukturabfrageRepository.findByAbfrage_NameAbfrageIgnoreCase("hallo"))
@@ -156,6 +157,7 @@ class AbfrageServiceTest {
 
         final InfrastrukturabfrageModel expected = new InfrastrukturabfrageModel();
         expected.setId(saveResult.getId());
+        expected.setSub(sub);
         final AbfrageModel expectedAbfrage = new AbfrageModel();
         expectedAbfrage.setStatusAbfrage(abfrage.getStatusAbfrage());
         expectedAbfrage.setNameAbfrage(abfrage.getNameAbfrage());
@@ -171,8 +173,10 @@ class AbfrageServiceTest {
     @Test
     void saveInfrastrukturabfrageWithAngelegtStatus() throws UniqueViolationException, OptimisticLockingException {
         final UUID uuid = UUID.randomUUID();
+        final String sub = "1234";
         final InfrastrukturabfrageModel infrastrukturabfrageModel = new InfrastrukturabfrageModel();
         infrastrukturabfrageModel.setId(null);
+        infrastrukturabfrageModel.setSub(null);
         final AbfrageModel abfrageModel = new AbfrageModel();
         abfrageModel.setNameAbfrage("hallo");
         abfrageModel.setStatusAbfrage(StatusAbfrage.OFFEN);
@@ -181,6 +185,7 @@ class AbfrageServiceTest {
         // Mockito vergleicht die Objekte auf Feldebene weshalb das Objekt genauso sein muss wie wenn es von der Methode aufgerufen wird.
         final Infrastrukturabfrage infrastrukturabfrageEntity = new Infrastrukturabfrage();
         infrastrukturabfrageEntity.setId(null);
+        infrastrukturabfrageEntity.setSub(sub);
         final Abfrage abfrageEntity = new Abfrage();
         abfrageEntity.setNameAbfrage("hallo");
         abfrageEntity.setStatusAbfrage(StatusAbfrage.ANGELEGT);
@@ -188,10 +193,13 @@ class AbfrageServiceTest {
 
         final Infrastrukturabfrage saveResult = new Infrastrukturabfrage();
         saveResult.setId(uuid);
+        saveResult.setSub(sub);
         final Abfrage abfrage = new Abfrage();
         abfrage.setNameAbfrage("hallo");
         abfrage.setStatusAbfrage(StatusAbfrage.ANGELEGT);
         saveResult.setAbfrage(abfrage);
+
+        Mockito.when(this.authenticationUtils.getUserSub()).thenReturn(sub);
 
         Mockito
             .when(this.infrastrukturabfrageRepository.saveAndFlush(infrastrukturabfrageEntity))
@@ -205,6 +213,7 @@ class AbfrageServiceTest {
 
         final InfrastrukturabfrageModel expected = new InfrastrukturabfrageModel();
         expected.setId(saveResult.getId());
+        expected.setSub(saveResult.getSub());
         final AbfrageModel expectedAbfrage = new AbfrageModel();
         expectedAbfrage.setStatusAbfrage(abfrage.getStatusAbfrage());
         expectedAbfrage.setNameAbfrage(abfrage.getNameAbfrage());
@@ -630,9 +639,11 @@ class AbfrageServiceTest {
         final UUID id = UUID.randomUUID();
 
         String[] roles = { "abfrageerstellung" };
+        String sub = "1234";
 
         final Infrastrukturabfrage entity = new Infrastrukturabfrage();
         entity.setId(id);
+        entity.setSub(sub);
         final Abfrage abfrage = new Abfrage();
         abfrage.setStatusAbfrage(StatusAbfrage.ANGELEGT);
         entity.setAbfrage(abfrage);
@@ -640,6 +651,8 @@ class AbfrageServiceTest {
         Mockito.when(this.infrastrukturabfrageRepository.findById(entity.getId())).thenReturn(Optional.of(entity));
 
         Mockito.when(this.authenticationUtils.getUserRoles()).thenReturn(List.of(roles));
+
+        Mockito.when(this.authenticationUtils.getUserSub()).thenReturn(sub);
 
         this.abfrageService.deleteInfrasturkturabfrageById(id);
 
@@ -653,9 +666,11 @@ class AbfrageServiceTest {
         final UUID id = UUID.randomUUID();
 
         String[] roles = { "admin" };
+        String sub = "1234";
 
         final Infrastrukturabfrage entity = new Infrastrukturabfrage();
         entity.setId(id);
+        entity.setSub(sub);
         final Abfrage abfrage = new Abfrage();
         abfrage.setStatusAbfrage(StatusAbfrage.OFFEN);
         entity.setAbfrage(abfrage);
@@ -664,6 +679,8 @@ class AbfrageServiceTest {
 
         Mockito.when(this.authenticationUtils.getUserRoles()).thenReturn(List.of(roles));
 
+        Mockito.when(this.authenticationUtils.getUserSub()).thenReturn(sub);
+
         this.abfrageService.deleteInfrasturkturabfrageById(id);
 
         Mockito.verify(this.infrastrukturabfrageRepository, Mockito.times(1)).findById(entity.getId());
@@ -671,11 +688,38 @@ class AbfrageServiceTest {
     }
 
     @Test
+    void deleteInfrastrukturabfrageUserNotAllowedException() {
+        final UUID id = UUID.randomUUID();
+        String[] roles = { "abfrageerstellung" };
+        String sub = "1234";
+        final Infrastrukturabfrage entity = new Infrastrukturabfrage();
+        entity.setId(id);
+        entity.setSub("123");
+        final Abfrage abfrage = new Abfrage();
+        abfrage.setStatusAbfrage(StatusAbfrage.ANGELEGT);
+        entity.setAbfrage(abfrage);
+
+        Mockito.when(this.infrastrukturabfrageRepository.findById(entity.getId())).thenReturn(Optional.of(entity));
+        Mockito.when(this.authenticationUtils.getUserRoles()).thenReturn(List.of(roles));
+        Mockito.when(this.authenticationUtils.getUserSub()).thenReturn(sub);
+
+        Assertions.assertThrows(
+            UserRoleNotAllowedException.class,
+            () -> this.abfrageService.deleteInfrasturkturabfrageById(id)
+        );
+
+        Mockito.verify(this.infrastrukturabfrageRepository, Mockito.times(1)).findById(entity.getId());
+        Mockito.verify(this.infrastrukturabfrageRepository, Mockito.times(0)).deleteById(id);
+    }
+
+    @Test
     void deleteInfrastrukturabfrageException() {
         final UUID id = UUID.randomUUID();
         String[] roles = { "abfrageerstellung" };
+        String sub = "1234";
         final Infrastrukturabfrage entity = new Infrastrukturabfrage();
         entity.setId(id);
+        entity.setSub(sub);
         final Abfrage abfrage = new Abfrage();
         abfrage.setBauvorhaben(new Bauvorhaben());
         abfrage.setStatusAbfrage(StatusAbfrage.ANGELEGT);
@@ -683,6 +727,7 @@ class AbfrageServiceTest {
 
         Mockito.when(this.infrastrukturabfrageRepository.findById(entity.getId())).thenReturn(Optional.of(entity));
         Mockito.when(this.authenticationUtils.getUserRoles()).thenReturn(List.of(roles));
+        Mockito.when(this.authenticationUtils.getUserSub()).thenReturn(sub);
 
         Assertions.assertThrows(
             EntityIsReferencedException.class,
@@ -697,14 +742,17 @@ class AbfrageServiceTest {
     void deleteInfrastrukturabfrageStatusException() {
         final UUID id = UUID.randomUUID();
         String[] roles = { "abfrageerstellung" };
+        String sub = "1234";
         final Infrastrukturabfrage entity = new Infrastrukturabfrage();
         entity.setId(id);
+        entity.setSub(sub);
         final Abfrage abfrage = new Abfrage();
         abfrage.setStatusAbfrage(StatusAbfrage.OFFEN);
         entity.setAbfrage(abfrage);
 
         Mockito.when(this.infrastrukturabfrageRepository.findById(entity.getId())).thenReturn(Optional.of(entity));
         Mockito.when(this.authenticationUtils.getUserRoles()).thenReturn(List.of(roles));
+        Mockito.when(this.authenticationUtils.getUserSub()).thenReturn(sub);
 
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
@@ -719,14 +767,17 @@ class AbfrageServiceTest {
     void deleteInfrastrukturabfrageNutzerException() {
         final UUID id = UUID.randomUUID();
         String[] roles = { "nutzer" };
+        String sub = "1234";
         final Infrastrukturabfrage entity = new Infrastrukturabfrage();
         entity.setId(id);
+        entity.setSub(sub);
         final Abfrage abfrage = new Abfrage();
         abfrage.setStatusAbfrage(StatusAbfrage.ANGELEGT);
         entity.setAbfrage(abfrage);
 
         Mockito.when(this.infrastrukturabfrageRepository.findById(entity.getId())).thenReturn(Optional.of(entity));
         Mockito.when(this.authenticationUtils.getUserRoles()).thenReturn(List.of(roles));
+        Mockito.when(this.authenticationUtils.getUserSub()).thenReturn(sub);
 
         Assertions.assertThrows(
             UserRoleNotAllowedException.class,
