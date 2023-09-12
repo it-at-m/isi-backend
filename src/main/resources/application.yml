@@ -1,6 +1,10 @@
 spring:
   application.name: @project.artifactId@
   banner.location: banner.txt
+  elasticsearch:
+    uris: ${spring.jpa.properties.hibernate.search.backend.hosts}
+    username: ${spring.jpa.properties.hibernate.search.backend.username}
+    password: ${spring.jpa.properties.hibernate.search.backend.password}
 
 server:
   shutdown: "graceful"
