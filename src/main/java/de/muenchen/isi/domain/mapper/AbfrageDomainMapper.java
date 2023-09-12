@@ -11,8 +11,7 @@ import de.muenchen.isi.domain.model.InfrastrukturabfrageModel;
 import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.InfrastrukturabfrageAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageBedarfsmeldungInBearbeitungFachreferate.InfrastrukturabfrageInBearbeitungFachreferateModel;
 import de.muenchen.isi.domain.model.abfrageSachbearbeitungInBearbeitungSachbearbeitung.InfrastrukturabfrageInBearbeitungSachbearbeitungModel;
-import de.muenchen.isi.domain.model.enums.AbfrageTyp;
-import de.muenchen.isi.domain.model.list.AbfrageListElementModel;
+import de.muenchen.isi.domain.model.search.response.AbfrageSearchResultModel;
 import de.muenchen.isi.infrastructure.entity.Abfrage;
 import de.muenchen.isi.infrastructure.entity.Infrastrukturabfrage;
 import java.util.ArrayList;
@@ -222,23 +221,16 @@ public abstract class AbfrageDomainMapper {
 
     @Mappings(
         {
-            @Mapping(target = "type", ignore = true),
+            @Mapping(target = "type", constant = "INFRASTRUKTURABFRAGE"),
             @Mapping(source = "abfrage.verortung.stadtbezirke", target = "stadtbezirke"),
             @Mapping(source = "abfrage.nameAbfrage", target = "nameAbfrage"),
             @Mapping(source = "abfrage.statusAbfrage", target = "statusAbfrage"),
             @Mapping(source = "abfrage.fristStellungnahme", target = "fristStellungnahme"),
             @Mapping(source = "sobonJahr", target = "sobonJahr"),
+            @Mapping(source = "abfrage.standVorhaben", target = "standVorhaben"),
             @Mapping(source = "createdDateTime", target = "createdDateTime"),
             @Mapping(source = "abfrage.bauvorhaben.id", target = "bauvorhaben"),
         }
     )
-    public abstract AbfrageListElementModel model2ListElementModel(final InfrastrukturabfrageModel model);
-
-    @AfterMapping
-    void afterMappingModel2ListElementModel(
-        @MappingTarget final AbfrageListElementModel abfrageListElementModel,
-        final InfrastrukturabfrageModel model
-    ) {
-        abfrageListElementModel.setType(AbfrageTyp.INFRASTRUKTURABFRAGE);
-    }
+    public abstract AbfrageSearchResultModel model2ListElementModel(final InfrastrukturabfrageModel model);
 }

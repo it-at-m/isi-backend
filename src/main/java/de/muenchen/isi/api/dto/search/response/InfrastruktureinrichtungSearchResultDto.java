@@ -1,11 +1,15 @@
-package de.muenchen.isi.api.dto.list;
+package de.muenchen.isi.api.dto.search.response;
 
 import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
 import java.util.UUID;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 @Data
-public class InfrastruktureinrichtungListElementDto {
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
+public class InfrastruktureinrichtungSearchResultDto extends SearchResultDto {
 
     private UUID id;
 

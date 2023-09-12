@@ -2,7 +2,6 @@ package de.muenchen.isi.api.controller;
 
 import de.muenchen.isi.api.dto.error.InformationResponseDto;
 import de.muenchen.isi.api.dto.infrastruktureinrichtung.InfrastruktureinrichtungDto;
-import de.muenchen.isi.api.dto.list.InfrastruktureinrichtungListElementsDto;
 import de.muenchen.isi.api.mapper.InfrastruktureinrichtungApiMapper;
 import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
@@ -45,21 +44,6 @@ public class InfrastruktureinrichtungController {
     private final BauvorhabenService bauvorhabenService;
 
     private final InfrastruktureinrichtungApiMapper infrastruktureinrichtungApiMapper;
-
-    @GetMapping("/all")
-    @Transactional(readOnly = true)
-    @Operation(summary = "Lade alle Infrastruktureinrichtungen für die Listendarstellung")
-    @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "OK") })
-    @PreAuthorize(
-        "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_READ_INFRASTRUKTUREINRICHTUNG.name())"
-    )
-    public ResponseEntity<InfrastruktureinrichtungListElementsDto> getInfrastruktureinrichtungListElements() {
-        final var dto =
-            this.infrastruktureinrichtungApiMapper.model2Dto(
-                    this.infrastruktureinrichtungService.getInfrastruktureinrichtungListElements()
-                );
-        return ResponseEntity.ok(dto);
-    }
 
     @GetMapping("/{id}")
     @Transactional(readOnly = true)

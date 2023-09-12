@@ -3,12 +3,13 @@ package de.muenchen.isi.api.controller;
 import de.muenchen.isi.api.dto.AbfragevarianteDto;
 import de.muenchen.isi.api.dto.BauvorhabenDto;
 import de.muenchen.isi.api.dto.error.InformationResponseDto;
-import de.muenchen.isi.api.dto.list.AbfrageListElementDto;
-import de.muenchen.isi.api.dto.list.InfrastruktureinrichtungListElementDto;
+import de.muenchen.isi.api.dto.search.response.AbfrageSearchResultDto;
+import de.muenchen.isi.api.dto.search.response.InfrastruktureinrichtungSearchResultDto;
 import de.muenchen.isi.api.mapper.AbfrageApiMapper;
 import de.muenchen.isi.api.mapper.AbfragevarianteApiMapper;
 import de.muenchen.isi.api.mapper.BauvorhabenApiMapper;
 import de.muenchen.isi.api.mapper.InfrastruktureinrichtungApiMapper;
+import de.muenchen.isi.api.mapper.SearchApiMapper;
 import de.muenchen.isi.domain.exception.AbfrageStatusNotAllowedException;
 import de.muenchen.isi.domain.exception.BauvorhabenNotReferencedException;
 import de.muenchen.isi.domain.exception.EntityIsReferencedException;
@@ -60,24 +61,9 @@ public class BauvorhabenController {
 
     private final AbfrageApiMapper abfrageApiMapper;
 
-    private final InfrastruktureinrichtungApiMapper infrastruktureinrichtungApiMapper;
+    private final SearchApiMapper searchApiMapper;
 
-    @Transactional(readOnly = true)
-    @GetMapping("bauvorhaben")
-    @Operation(
-        summary = "Lade alle Bauvorhaben",
-        description = "Das Ergebnis wird nach der Größe des Grundstückes absteigend sortiert"
-    )
-    @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "OK") })
-    @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_READ_BAUVORHABEN.name())")
-    public ResponseEntity<List<BauvorhabenDto>> getBauvorhaben() {
-        final List<BauvorhabenDto> bauvorhabenList =
-            this.bauvorhabenService.getBauvorhaben()
-                .stream()
-                .map(this.bauvorhabenApiMapper::model2Dto)
-                .collect(Collectors.toList());
-        return new ResponseEntity<>(bauvorhabenList, HttpStatus.OK);
-    }
+    private final InfrastruktureinrichtungApiMapper infrastruktureinrichtungApiMapper;
 
     @GetMapping("bauvorhaben/{id}")
     @Transactional(readOnly = true)
@@ -259,13 +245,14 @@ public class BauvorhabenController {
     )
     @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "OK") })
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_READ_BAUVORHABEN.name())")
-    public ResponseEntity<List<AbfrageListElementDto>> getReferencedInfrastrukturabfragen(
+    public ResponseEntity<List<AbfrageSearchResultDto>> getReferencedInfrastrukturabfragen(
         @PathVariable @NotNull final UUID id
     ) {
         final var infrastrukturabfragen =
             this.bauvorhabenService.getReferencedInfrastrukturabfragen(id)
                 .stream()
-                .map(this.abfrageApiMapper::model2ListElementDto)
+                .map(this.searchApiMapper::model2Dto)
+                .map(AbfrageSearchResultDto.class::cast)
                 .collect(Collectors.toList());
         return new ResponseEntity<>(infrastrukturabfragen, HttpStatus.OK);
     }
@@ -278,13 +265,14 @@ public class BauvorhabenController {
     )
     @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "OK") })
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_READ_BAUVORHABEN.name())")
-    public ResponseEntity<List<InfrastruktureinrichtungListElementDto>> getReferencedInfrastruktureinrichtung(
+    public ResponseEntity<List<InfrastruktureinrichtungSearchResultDto>> getReferencedInfrastruktureinrichtung(
         @PathVariable @NotNull final UUID id
     ) {
         final var infrastruktureinrichtungen =
             this.bauvorhabenService.getReferencedInfrastruktureinrichtungen(id)
                 .stream()
-                .map(this.infrastruktureinrichtungApiMapper::model2ListElementDto)
+                .map(this.searchApiMapper::model2Dto)
+                .map(InfrastruktureinrichtungSearchResultDto.class::cast)
                 .collect(Collectors.toList());
         return new ResponseEntity<>(infrastruktureinrichtungen, HttpStatus.OK);
     }

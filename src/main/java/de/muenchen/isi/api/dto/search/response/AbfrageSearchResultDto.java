@@ -1,22 +1,24 @@
-package de.muenchen.isi.api.dto.list;
+package de.muenchen.isi.api.dto.search.response;
 
 import de.muenchen.isi.api.dto.common.StadtbezirkDto;
-import de.muenchen.isi.domain.model.enums.AbfrageTyp;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonVerfahrensgrundsaetzeJahr;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVorhaben;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.UUID;
-import javax.validation.constraints.Size;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 @Data
-public class AbfrageListElementDto {
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
+public class AbfrageSearchResultDto extends SearchResultDto {
 
     private UUID id;
 
-    @Size(max = 70, message = "Es sind maximal {max} Zeichen erlaubt")
     private String nameAbfrage;
 
     private Set<StadtbezirkDto> stadtbezirke;
@@ -25,9 +27,9 @@ public class AbfrageListElementDto {
 
     private LocalDate fristStellungnahme;
 
-    private AbfrageTyp type;
-
     private SobonVerfahrensgrundsaetzeJahr sobonJahr;
+
+    private StandVorhaben standVorhaben;
 
     private LocalDateTime createdDateTime;
 

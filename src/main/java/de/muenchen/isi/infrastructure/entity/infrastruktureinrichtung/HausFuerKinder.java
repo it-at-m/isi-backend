@@ -11,12 +11,14 @@ import javax.persistence.Entity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
 
 @Entity
 @DiscriminatorValue(InfrastruktureinrichtungTyp.Values.HAUS_FUER_KINDER)
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
+@Indexed
 public class HausFuerKinder extends Infrastruktureinrichtung {
 
     @Column(nullable = true)
