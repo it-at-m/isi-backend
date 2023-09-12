@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
@@ -24,7 +25,8 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class EntitySearchService {
 
-    private final EntityManager entityManager;
+    @PersistenceContext
+    private EntityManager entityManager;
 
     private final SearchPreparationService searchPreparationService;
 
@@ -61,7 +63,7 @@ public class EntitySearchService {
 
         // Erstellen der Suchquery
         final var searchQueryOptions = Search
-            .session(entityManager.getEntityManagerFactory().createEntityManager())
+            .session(entityManager)
             .search(searchableEntities)
             .where(function -> {
                 if (StringUtils.isNotEmpty(adaptedSearchQuery)) {
