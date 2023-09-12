@@ -32,4 +32,6 @@ public class AbfrageSearchResultModel extends SearchResultModel {
     private StandVorhaben standVorhaben;
 
     private LocalDateTime createdDateTime;
+
+    private UUID bauvorhaben;
 }

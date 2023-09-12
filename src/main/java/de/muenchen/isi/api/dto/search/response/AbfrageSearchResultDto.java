@@ -32,4 +32,6 @@ public class AbfrageSearchResultDto extends SearchResultDto {
     private StandVorhaben standVorhaben;
 
     private LocalDateTime createdDateTime;
+
+    private UUID bauvorhaben;
 }

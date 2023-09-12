@@ -228,6 +228,7 @@ public abstract class AbfrageDomainMapper {
             @Mapping(source = "sobonJahr", target = "sobonJahr"),
             @Mapping(source = "abfrage.standVorhaben", target = "standVorhaben"),
             @Mapping(source = "createdDateTime", target = "createdDateTime"),
+            @Mapping(source = "abfrage.bauvorhaben.id", target = "bauvorhaben"),
         }
     )
     public abstract AbfrageSearchResultModel model2ListElementModel(final InfrastrukturabfrageModel model);
