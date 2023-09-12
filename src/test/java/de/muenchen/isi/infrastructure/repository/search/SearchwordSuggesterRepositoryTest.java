@@ -26,7 +26,7 @@ import org.mockito.quality.Strictness;
 @MockitoSettings(strictness = Strictness.LENIENT)
 class SearchwordSuggesterRepositoryTest {
 
-    private SearchwordSuggesterRepository searchwordSuggesterRepository = new SearchwordSuggesterRepository(null);
+    private SearchwordSuggesterRepository searchwordSuggesterRepository = new SearchwordSuggesterRepository();
 
     @Test
     void createMultisearchResponseRequestBody() throws JsonProcessingException {

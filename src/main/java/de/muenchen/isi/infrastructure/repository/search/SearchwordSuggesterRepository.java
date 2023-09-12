@@ -17,6 +17,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
@@ -34,7 +35,8 @@ public class SearchwordSuggesterRepository {
 
     public static final String ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION = "_searchword_suggestion";
 
-    private final EntityManager entityManager;
+    @PersistenceContext
+    private EntityManager entityManager;
 
     /**
      * Ermittelt durch einen direkten Zugriff auf Elasticsearch die Suchwortvorschläge.

@@ -6,7 +6,6 @@ import static org.hamcrest.Matchers.nullValue;
 
 import de.muenchen.isi.domain.mapper.SearchDomainMapper;
 import de.muenchen.isi.domain.model.search.request.SearchQueryAndSortingModel;
-import javax.persistence.EntityManager;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -18,16 +17,12 @@ import org.mockito.quality.Strictness;
 @MockitoSettings(strictness = Strictness.LENIENT)
 class EntitySearchServiceTest {
 
-    @Mock
-    private EntityManager entityManager;
-
     private SearchPreparationService searchPreparationService = new SearchPreparationService();
 
     @Mock
     private SearchDomainMapper searchDomainMapper;
 
     private EntitySearchService entitySearchService = new EntitySearchService(
-        entityManager,
         searchPreparationService,
         searchDomainMapper
     );
