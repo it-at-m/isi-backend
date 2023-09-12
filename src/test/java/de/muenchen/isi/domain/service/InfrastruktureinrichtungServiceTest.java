@@ -25,7 +25,6 @@ import de.muenchen.isi.infrastructure.repository.BauvorhabenRepository;
 import de.muenchen.isi.infrastructure.repository.InfrastruktureinrichtungRepository;
 import java.util.List;
 import java.util.UUID;
-import javax.transaction.Transactional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -82,42 +81,6 @@ class InfrastruktureinrichtungServiceTest {
         grundschule.getSchule().setAnzahlPlaetze(50);
 
         infrastruktureinrichtungRepository.saveAll(List.of(kinderkrippe1, kinderkrippe2, kindergarten, grundschule));
-    }
-
-    @Test
-    @Transactional
-    void getInfrastruktureinrichtungListElements() {
-        final var result = infrastruktureinrichtungService.getInfrastruktureinrichtungListElements();
-
-        assertThat(result.getListElements().size(), is(4));
-
-        assertThat(result.getListElements().get(0).getId(), is(notNullValue()));
-        assertThat(
-            result.getListElements().get(0).getInfrastruktureinrichtungTyp(),
-            is(InfrastruktureinrichtungTyp.GRUNDSCHULE)
-        );
-        assertThat(result.getListElements().get(0).getNameEinrichtung(), is("Grundschule"));
-
-        assertThat(result.getListElements().get(1).getId(), is(notNullValue()));
-        assertThat(
-            result.getListElements().get(1).getInfrastruktureinrichtungTyp(),
-            is(InfrastruktureinrichtungTyp.KINDERGARTEN)
-        );
-        assertThat(result.getListElements().get(1).getNameEinrichtung(), is("Kindergarten"));
-
-        assertThat(result.getListElements().get(2).getId(), is(notNullValue()));
-        assertThat(
-            result.getListElements().get(2).getInfrastruktureinrichtungTyp(),
-            is(InfrastruktureinrichtungTyp.KINDERKRIPPE)
-        );
-        assertThat(result.getListElements().get(2).getNameEinrichtung(), is("Kinderkrippe 1"));
-
-        assertThat(result.getListElements().get(3).getId(), is(notNullValue()));
-        assertThat(
-            result.getListElements().get(3).getInfrastruktureinrichtungTyp(),
-            is(InfrastruktureinrichtungTyp.KINDERKRIPPE)
-        );
-        assertThat(result.getListElements().get(3).getNameEinrichtung(), is("Kinderkrippe 2"));
     }
 
     @Test

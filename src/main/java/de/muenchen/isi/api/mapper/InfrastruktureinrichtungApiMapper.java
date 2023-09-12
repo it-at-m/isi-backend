@@ -11,8 +11,6 @@ import de.muenchen.isi.api.dto.infrastruktureinrichtung.Infrastruktureinrichtung
 import de.muenchen.isi.api.dto.infrastruktureinrichtung.KindergartenDto;
 import de.muenchen.isi.api.dto.infrastruktureinrichtung.KinderkrippeDto;
 import de.muenchen.isi.api.dto.infrastruktureinrichtung.MittelschuleDto;
-import de.muenchen.isi.api.dto.list.InfrastruktureinrichtungListElementDto;
-import de.muenchen.isi.api.dto.list.InfrastruktureinrichtungListElementsDto;
 import de.muenchen.isi.configuration.MapstructConfiguration;
 import de.muenchen.isi.domain.model.BaugebietModel;
 import de.muenchen.isi.domain.model.BauvorhabenModel;
@@ -23,8 +21,6 @@ import de.muenchen.isi.domain.model.infrastruktureinrichtung.Infrastruktureinric
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.KindergartenModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.KinderkrippeModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.MittelschuleModel;
-import de.muenchen.isi.domain.model.list.InfrastruktureinrichtungListElementModel;
-import de.muenchen.isi.domain.model.list.InfrastruktureinrichtungListElementsModel;
 import org.apache.commons.lang3.ObjectUtils;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
@@ -71,8 +67,4 @@ public interface InfrastruktureinrichtungApiMapper {
         final BaugebietModel baugebietModel = model.getZugeordnetesBaugebiet();
         dto.setZugeordnetesBaugebiet(ObjectUtils.isNotEmpty(baugebietModel) ? baugebietModel.getId() : null);
     }
-
-    InfrastruktureinrichtungListElementsDto model2Dto(final InfrastruktureinrichtungListElementsModel model);
-
-    InfrastruktureinrichtungListElementDto model2ListElementDto(final InfrastruktureinrichtungListElementModel model);
 }

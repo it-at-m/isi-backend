@@ -4,7 +4,10 @@
  */
 package de.muenchen.isi.infrastructure.entity;
 
+import de.muenchen.isi.infrastructure.adapter.search.IntegerSuggestionBinder;
+import de.muenchen.isi.infrastructure.adapter.search.IntegerToStringValueBridge;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Planungsrecht;
+import de.muenchen.isi.infrastructure.repository.search.SearchwordSuggesterRepository;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
@@ -22,6 +25,10 @@ import javax.persistence.UniqueConstraint;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBinderRef;
+import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBridgeRef;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.KeywordField;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.NonStandardField;
 
 @Entity
 @Table(
@@ -73,6 +80,11 @@ public class Abfragevariante extends BaseEntity {
     @Column(nullable = true)
     private Integer anzahlWeBaurechtlichFestgesetzt;
 
+    @KeywordField(valueBridge = @ValueBridgeRef(type = IntegerToStringValueBridge.class))
+    @NonStandardField(
+        name = "realisierungVon" + SearchwordSuggesterRepository.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
+        valueBinder = @ValueBinderRef(type = IntegerSuggestionBinder.class)
+    )
     @Column(nullable = false)
     private Integer realisierungVon; // JJJJ
 

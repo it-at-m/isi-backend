@@ -4,6 +4,9 @@
  */
 package de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung;
 
+import de.muenchen.isi.infrastructure.adapter.search.StatusInfrastruktureinrichtungSuggestionBinder;
+import de.muenchen.isi.infrastructure.adapter.search.StatusInfrastruktureinrichtungValueBridge;
+import de.muenchen.isi.infrastructure.adapter.search.StringSuggestionBinder;
 import de.muenchen.isi.infrastructure.entity.BaseEntity;
 import de.muenchen.isi.infrastructure.entity.Baugebiet;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
@@ -11,6 +14,7 @@ import de.muenchen.isi.infrastructure.entity.common.Adresse;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Einrichtungstraeger;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusInfrastruktureinrichtung;
+import de.muenchen.isi.infrastructure.repository.search.SearchwordSuggesterRepository;
 import java.math.BigDecimal;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
@@ -31,6 +35,13 @@ import org.apache.commons.lang3.EnumUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
+import org.hibernate.search.engine.backend.types.Sortable;
+import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBinderRef;
+import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBridgeRef;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.IndexedEmbedded;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.KeywordField;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.NonStandardField;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -64,15 +75,31 @@ public abstract class Infrastruktureinrichtung extends BaseEntity {
     @Column(nullable = true)
     private String allgemeineOrtsangabe;
 
+    @IndexedEmbedded
     @Embedded
     private Adresse adresse;
 
+    /**
+     * Einheitlicher indexiertes sortierbares Namensattributs
+     * zur einheitlichen entitätsübergreifenden Sortierung der Suchergebnisse.
+     */
+    @KeywordField(name = "name_sort", sortable = Sortable.YES)
+    @FullTextField
+    @NonStandardField(
+        name = "nameEinrichtung" + SearchwordSuggesterRepository.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
+        valueBinder = @ValueBinderRef(type = StringSuggestionBinder.class)
+    )
     @Column(nullable = false)
     private String nameEinrichtung;
 
     @Column
     private Integer fertigstellungsjahr; // JJJJ
 
+    @FullTextField(valueBridge = @ValueBridgeRef(type = StatusInfrastruktureinrichtungValueBridge.class))
+    @NonStandardField(
+        name = "status" + SearchwordSuggesterRepository.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
+        valueBinder = @ValueBinderRef(type = StatusInfrastruktureinrichtungSuggestionBinder.class)
+    )
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private StatusInfrastruktureinrichtung status;

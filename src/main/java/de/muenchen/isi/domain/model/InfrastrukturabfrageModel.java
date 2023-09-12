@@ -19,6 +19,8 @@ public class InfrastrukturabfrageModel extends BaseEntityModel {
 
     private AbfrageModel abfrage;
 
+    private String sub;
+
     private UncertainBoolean sobonRelevant;
 
     private SobonVerfahrensgrundsaetzeJahr sobonJahr;
