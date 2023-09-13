@@ -1,31 +1,29 @@
 package de.muenchen.isi.api.validation;
 
-import de.muenchen.isi.api.dto.AbfragevarianteDto;
-import de.muenchen.isi.api.dto.BauabschnittDto;
-import de.muenchen.isi.api.dto.BaugebietDto;
-import de.muenchen.isi.api.dto.BaurateDto;
-import org.junit.jupiter.api.Test;
-
-import java.util.List;
-
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
+import de.muenchen.isi.api.dto.BauabschnittDto;
+import de.muenchen.isi.api.dto.BaugebietDto;
+import de.muenchen.isi.api.dto.BaurateDto;
+import de.muenchen.isi.api.dto.abfrageAbfrageerstellungAngelegt.AbfragevarianteAngelegtDto;
+import java.util.List;
+import org.junit.jupiter.api.Test;
+
 public class TechnicalAttributesValidatorTest {
 
-    private final TechnicalAttributesValidator technicalAttributesValidator =
-            new TechnicalAttributesValidator();
+    private final TechnicalAttributesValidator technicalAttributesValidator = new TechnicalAttributesValidator();
 
     @Test
     void isValidTechnicalBauabschnittAndTechnicalBaugebiet() {
-        BaurateDto baurateDto = new BaurateDto();
-        BaugebietDto baugebietDto = new BaugebietDto();
+        final var baurateDto = new BaurateDto();
+        final var baugebietDto = new BaugebietDto();
         baugebietDto.setTechnical(true);
         baugebietDto.setBauraten(List.of(baurateDto));
-        BauabschnittDto bauabschnittDto = new BauabschnittDto();
+        final var bauabschnittDto = new BauabschnittDto();
         bauabschnittDto.setTechnical(true);
         bauabschnittDto.setBaugebiete(List.of(baugebietDto));
-        AbfragevarianteDto abfragevarianteDto = new AbfragevarianteDto();
+        final var abfragevarianteDto = new AbfragevarianteAngelegtDto();
         abfragevarianteDto.setBauabschnitte(List.of(bauabschnittDto));
 
         assertThat(this.technicalAttributesValidator.isValid(abfragevarianteDto, null), is(true));
@@ -33,14 +31,14 @@ public class TechnicalAttributesValidatorTest {
 
     @Test
     void isValidTechnicalBauabschnittAndNotTechnicalBaugebiet() {
-        BaurateDto baurateDto = new BaurateDto();
-        BaugebietDto baugebietDto = new BaugebietDto();
+        final var baurateDto = new BaurateDto();
+        final var baugebietDto = new BaugebietDto();
         baugebietDto.setTechnical(false);
         baugebietDto.setBauraten(List.of(baurateDto));
-        BauabschnittDto bauabschnittDto = new BauabschnittDto();
+        final var bauabschnittDto = new BauabschnittDto();
         bauabschnittDto.setTechnical(true);
         bauabschnittDto.setBaugebiete(List.of(baugebietDto));
-        AbfragevarianteDto abfragevarianteDto = new AbfragevarianteDto();
+        final var abfragevarianteDto = new AbfragevarianteAngelegtDto();
         abfragevarianteDto.setBauabschnitte(List.of(bauabschnittDto));
 
         assertThat(this.technicalAttributesValidator.isValid(abfragevarianteDto, null), is(true));
@@ -48,14 +46,14 @@ public class TechnicalAttributesValidatorTest {
 
     @Test
     void isValidNotTechnicalBauabschnittAndNotTechnicalBaugebiet() {
-        BaurateDto baurateDto = new BaurateDto();
-        BaugebietDto baugebietDto = new BaugebietDto();
+        final var baurateDto = new BaurateDto();
+        final var baugebietDto = new BaugebietDto();
         baugebietDto.setTechnical(false);
         baugebietDto.setBauraten(List.of(baurateDto));
-        BauabschnittDto bauabschnittDto = new BauabschnittDto();
+        final var bauabschnittDto = new BauabschnittDto();
         bauabschnittDto.setTechnical(false);
         bauabschnittDto.setBaugebiete(List.of(baugebietDto));
-        AbfragevarianteDto abfragevarianteDto = new AbfragevarianteDto();
+        final var abfragevarianteDto = new AbfragevarianteAngelegtDto();
         abfragevarianteDto.setBauabschnitte(List.of(bauabschnittDto));
 
         assertThat(this.technicalAttributesValidator.isValid(abfragevarianteDto, null), is(true));
@@ -63,14 +61,14 @@ public class TechnicalAttributesValidatorTest {
 
     @Test
     void isNotValidNotTechnicalBauabschnittAndTechnicalBaugebiet() {
-        BaurateDto baurateDto = new BaurateDto();
-        BaugebietDto baugebietDto = new BaugebietDto();
+        final var baurateDto = new BaurateDto();
+        final var baugebietDto = new BaugebietDto();
         baugebietDto.setTechnical(true);
         baugebietDto.setBauraten(List.of(baurateDto));
-        BauabschnittDto bauabschnittDto = new BauabschnittDto();
+        final var bauabschnittDto = new BauabschnittDto();
         bauabschnittDto.setTechnical(false);
         bauabschnittDto.setBaugebiete(List.of(baugebietDto));
-        AbfragevarianteDto abfragevarianteDto = new AbfragevarianteDto();
+        final var abfragevarianteDto = new AbfragevarianteAngelegtDto();
         abfragevarianteDto.setBauabschnitte(List.of(bauabschnittDto));
 
         assertThat(this.technicalAttributesValidator.isValid(abfragevarianteDto, null), is(false));
