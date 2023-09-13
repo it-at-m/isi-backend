@@ -2,8 +2,12 @@ package de.muenchen.isi.domain.service;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.Matchers.sameInstance;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import de.muenchen.isi.domain.exception.AbfrageStatusNotAllowedException;
+import de.muenchen.isi.domain.exception.BauvorhabenNotReferencedException;
 import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.FileHandlingFailedException;
@@ -19,13 +23,16 @@ import de.muenchen.isi.domain.mapper.BauvorhabenDomainMapperImpl;
 import de.muenchen.isi.domain.mapper.DokumentDomainMapperImpl;
 import de.muenchen.isi.domain.mapper.InfrastruktureinrichtungDomainMapper;
 import de.muenchen.isi.domain.mapper.InfrastruktureinrichtungDomainMapperImpl;
+import de.muenchen.isi.domain.model.AbfrageModel;
+import de.muenchen.isi.domain.model.AbfragevarianteModel;
 import de.muenchen.isi.domain.model.BauvorhabenModel;
+import de.muenchen.isi.domain.model.InfrastrukturabfrageModel;
 import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.AbfrageAngelegtModel;
-import de.muenchen.isi.domain.model.enums.AbfrageTyp;
+import de.muenchen.isi.domain.model.enums.SearchResultType;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.InfrastruktureinrichtungModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.KinderkrippeModel;
-import de.muenchen.isi.domain.model.list.AbfrageListElementModel;
-import de.muenchen.isi.domain.model.list.InfrastruktureinrichtungListElementModel;
+import de.muenchen.isi.domain.model.search.response.AbfrageSearchResultModel;
+import de.muenchen.isi.domain.model.search.response.InfrastruktureinrichtungSearchResultModel;
 import de.muenchen.isi.domain.service.filehandling.DokumentService;
 import de.muenchen.isi.infrastructure.entity.Abfrage;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
@@ -38,6 +45,7 @@ import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Infrastruktureinrichtung;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Kindergarten;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Kinderkrippe;
+import de.muenchen.isi.infrastructure.repository.AbfragevarianteRepository;
 import de.muenchen.isi.infrastructure.repository.BauvorhabenRepository;
 import de.muenchen.isi.infrastructure.repository.InfrastrukturabfrageRepository;
 import de.muenchen.isi.infrastructure.repository.InfrastruktureinrichtungRepository;
@@ -77,6 +85,9 @@ public class BauvorhabenServiceTest {
     private BauvorhabenService bauvorhabenService;
 
     @Mock
+    private AbfrageService abfrageService;
+
+    @Mock
     private BauvorhabenRepository bauvorhabenRepository;
 
     @Mock
@@ -84,6 +95,9 @@ public class BauvorhabenServiceTest {
 
     @Mock
     private InfrastruktureinrichtungRepository infrastruktureinrichtungRepository;
+
+    @Mock
+    private AbfragevarianteRepository abfragevarianteRepository;
 
     @Mock
     private DokumentService dokumentService;
@@ -98,6 +112,8 @@ public class BauvorhabenServiceTest {
                 this.bauvorhabenRepository,
                 this.infrastrukturabfrageRepository,
                 this.infrastruktureinrichtungRepository,
+                this.abfragevarianteRepository,
+                this.abfrageService,
                 this.dokumentService
             );
 
@@ -105,29 +121,9 @@ public class BauvorhabenServiceTest {
             this.bauvorhabenRepository,
             this.infrastrukturabfrageRepository,
             this.infrastruktureinrichtungRepository,
-            this.dokumentService
+            this.dokumentService,
+            this.abfrageService
         );
-    }
-
-    @Test
-    void getBauvorhabenTest() {
-        final Bauvorhaben entity1 = new Bauvorhaben();
-        entity1.setId(UUID.randomUUID());
-        final Bauvorhaben entity2 = new Bauvorhaben();
-        entity2.setId(UUID.randomUUID());
-
-        Mockito
-            .when(this.bauvorhabenRepository.findAllByOrderByGrundstuecksgroesseDesc())
-            .thenReturn(Stream.of(entity1, entity2));
-
-        final List<BauvorhabenModel> result = this.bauvorhabenService.getBauvorhaben();
-
-        final BauvorhabenModel model1 = new BauvorhabenModel();
-        model1.setId(entity1.getId());
-        final BauvorhabenModel model2 = new BauvorhabenModel();
-        model2.setId(entity2.getId());
-
-        assertThat(result, is(List.of(model1, model2)));
     }
 
     @Test
@@ -169,30 +165,36 @@ public class BauvorhabenServiceTest {
 
         final Stream<Infrastrukturabfrage> listInfrastrukturabfrage = Stream.of(abfrage1, abfrage2, abfrage3);
 
-        final List<AbfrageListElementModel> expectedAbfrageList = new ArrayList<>();
+        final List<AbfrageSearchResultModel> expectedAbfrageList = new ArrayList<>();
 
-        var abfrageListElementModel1 = new AbfrageListElementModel();
+        var abfrageListElementModel1 = new AbfrageSearchResultModel();
+        abfrageListElementModel1.setType(SearchResultType.INFRASTRUKTURABFRAGE);
         abfrageListElementModel1.setId(abfrage1.getId());
         abfrageListElementModel1.setNameAbfrage(abfrage1.getAbfrage().getNameAbfrage());
         abfrageListElementModel1.setStatusAbfrage(abfrage1.getAbfrage().getStatusAbfrage());
         abfrageListElementModel1.setFristStellungnahme(abfrage1.getAbfrage().getFristStellungnahme());
-        abfrageListElementModel1.setType(AbfrageTyp.INFRASTRUKTURABFRAGE);
+        abfrageListElementModel1.setType(SearchResultType.INFRASTRUKTURABFRAGE);
+        abfrageListElementModel1.setBauvorhaben(bauvorhabenId);
         expectedAbfrageList.add(abfrageListElementModel1);
 
-        var abfrageListElementModel2 = new AbfrageListElementModel();
+        var abfrageListElementModel2 = new AbfrageSearchResultModel();
+        abfrageListElementModel2.setType(SearchResultType.INFRASTRUKTURABFRAGE);
         abfrageListElementModel2.setId(abfrage2.getId());
         abfrageListElementModel2.setNameAbfrage(abfrage2.getAbfrage().getNameAbfrage());
         abfrageListElementModel2.setStatusAbfrage(abfrage2.getAbfrage().getStatusAbfrage());
         abfrageListElementModel2.setFristStellungnahme(abfrage2.getAbfrage().getFristStellungnahme());
-        abfrageListElementModel2.setType(AbfrageTyp.INFRASTRUKTURABFRAGE);
+        abfrageListElementModel2.setType(SearchResultType.INFRASTRUKTURABFRAGE);
+        abfrageListElementModel2.setBauvorhaben(bauvorhabenId);
         expectedAbfrageList.add(abfrageListElementModel2);
 
-        var abfrageListElementModel3 = new AbfrageListElementModel();
+        var abfrageListElementModel3 = new AbfrageSearchResultModel();
+        abfrageListElementModel3.setType(SearchResultType.INFRASTRUKTURABFRAGE);
         abfrageListElementModel3.setId(abfrage3.getId());
         abfrageListElementModel3.setNameAbfrage(abfrage3.getAbfrage().getNameAbfrage());
         abfrageListElementModel3.setStatusAbfrage(abfrage3.getAbfrage().getStatusAbfrage());
         abfrageListElementModel3.setFristStellungnahme(abfrage3.getAbfrage().getFristStellungnahme());
-        abfrageListElementModel3.setType(AbfrageTyp.INFRASTRUKTURABFRAGE);
+        abfrageListElementModel3.setType(SearchResultType.INFRASTRUKTURABFRAGE);
+        abfrageListElementModel3.setBauvorhaben(bauvorhabenId);
         expectedAbfrageList.add(abfrageListElementModel3);
 
         Mockito
@@ -203,7 +205,7 @@ public class BauvorhabenServiceTest {
             )
             .thenReturn(listInfrastrukturabfrage);
 
-        List<AbfrageListElementModel> abfrageResult =
+        List<AbfrageSearchResultModel> abfrageResult =
             this.bauvorhabenService.getReferencedInfrastrukturabfragen(bauvorhabenId);
 
         assertThat(expectedAbfrageList, is(abfrageResult));
@@ -261,29 +263,33 @@ public class BauvorhabenServiceTest {
             kindergarten2
         );
 
-        final List<AbfrageListElementModel> expectedAbfrageList = new ArrayList<>();
+        final List<AbfrageSearchResultModel> expectedAbfrageList = new ArrayList<>();
 
-        final List<InfrastruktureinrichtungListElementModel> expectedInfrastruktureinrichtungList = new ArrayList<>();
+        final List<InfrastruktureinrichtungSearchResultModel> expectedInfrastruktureinrichtungList = new ArrayList<>();
 
-        var kinderkrippeListElementModel1 = new InfrastruktureinrichtungListElementModel();
+        var kinderkrippeListElementModel1 = new InfrastruktureinrichtungSearchResultModel();
+        kinderkrippeListElementModel1.setType(SearchResultType.INFRASTRUKTUREINRICHTUNG);
         kinderkrippeListElementModel1.setId(kinderkrippe1.getId());
         kinderkrippeListElementModel1.setNameEinrichtung(kinderkrippe1.getNameEinrichtung());
         kinderkrippeListElementModel1.setInfrastruktureinrichtungTyp(kinderkrippe1.getInfrastruktureinrichtungTyp());
         expectedInfrastruktureinrichtungList.add(kinderkrippeListElementModel1);
 
-        var kinderkrippeListElementModel2 = new InfrastruktureinrichtungListElementModel();
+        var kinderkrippeListElementModel2 = new InfrastruktureinrichtungSearchResultModel();
+        kinderkrippeListElementModel2.setType(SearchResultType.INFRASTRUKTUREINRICHTUNG);
         kinderkrippeListElementModel2.setId(kinderkrippe2.getId());
         kinderkrippeListElementModel2.setNameEinrichtung(kinderkrippe2.getNameEinrichtung());
         kinderkrippeListElementModel2.setInfrastruktureinrichtungTyp(kinderkrippe2.getInfrastruktureinrichtungTyp());
         expectedInfrastruktureinrichtungList.add(kinderkrippeListElementModel2);
 
-        var kindergartenListElementModel1 = new InfrastruktureinrichtungListElementModel();
+        var kindergartenListElementModel1 = new InfrastruktureinrichtungSearchResultModel();
+        kindergartenListElementModel1.setType(SearchResultType.INFRASTRUKTUREINRICHTUNG);
         kindergartenListElementModel1.setId(kindergarten1.getId());
         kindergartenListElementModel1.setNameEinrichtung(kindergarten1.getNameEinrichtung());
         kindergartenListElementModel1.setInfrastruktureinrichtungTyp(kindergarten1.getInfrastruktureinrichtungTyp());
         expectedInfrastruktureinrichtungList.add(kindergartenListElementModel1);
 
-        var kindergartenListElementModel2 = new InfrastruktureinrichtungListElementModel();
+        var kindergartenListElementModel2 = new InfrastruktureinrichtungSearchResultModel();
+        kindergartenListElementModel2.setType(SearchResultType.INFRASTRUKTUREINRICHTUNG);
         kindergartenListElementModel2.setId(kindergarten2.getId());
         kindergartenListElementModel2.setNameEinrichtung(kindergarten2.getNameEinrichtung());
         kindergartenListElementModel2.setInfrastruktureinrichtungTyp(kindergarten2.getInfrastruktureinrichtungTyp());
@@ -293,7 +299,7 @@ public class BauvorhabenServiceTest {
             .when(this.infrastruktureinrichtungRepository.findAllByBauvorhabenId(bauvorhabenId))
             .thenReturn(listInfrastruktureinrichtung);
 
-        List<InfrastruktureinrichtungListElementModel> infraResult =
+        List<InfrastruktureinrichtungSearchResultModel> infraResult =
             this.bauvorhabenService.getReferencedInfrastruktureinrichtungen(bauvorhabenId);
 
         assertThat(expectedInfrastruktureinrichtungList, is(infraResult));
@@ -311,12 +317,13 @@ public class BauvorhabenServiceTest {
         Mockito.reset(this.bauvorhabenRepository);
 
         Mockito.when(this.bauvorhabenRepository.findById(id)).thenReturn(Optional.empty());
-        Assertions.assertThrows(EntityNotFoundException.class, () -> this.bauvorhabenService.getBauvorhabenById(id));
+        assertThrows(EntityNotFoundException.class, () -> this.bauvorhabenService.getBauvorhabenById(id));
         Mockito.verify(this.bauvorhabenRepository, Mockito.times(1)).findById(id);
     }
 
     @Test
-    void saveBauvorhabenTest() throws UniqueViolationException, OptimisticLockingException {
+    void saveBauvorhabenTest()
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, EntityIsReferencedException {
         final BauvorhabenModel bauvorhaben = new BauvorhabenModel();
         bauvorhaben.setId(null);
 
@@ -328,7 +335,7 @@ public class BauvorhabenServiceTest {
 
         Mockito.when(this.bauvorhabenRepository.saveAndFlush(bauvorhabenEntity)).thenReturn(saveResult);
 
-        final BauvorhabenModel result = this.bauvorhabenService.saveBauvorhaben(bauvorhaben);
+        final BauvorhabenModel result = this.bauvorhabenService.saveBauvorhaben(bauvorhaben, null);
 
         final BauvorhabenModel expected = new BauvorhabenModel();
         expected.setId(saveResult.getId());
@@ -360,7 +367,7 @@ public class BauvorhabenServiceTest {
 
         Assertions.assertThrows(
             UniqueViolationException.class,
-            () -> this.bauvorhabenService.saveBauvorhaben(bauvorhabenModel2)
+            () -> this.bauvorhabenService.saveBauvorhaben(bauvorhabenModel2, null)
         );
 
         Mockito
@@ -370,8 +377,121 @@ public class BauvorhabenServiceTest {
     }
 
     @Test
+    void saveBauvorhabenReferencedByAbfrage()
+        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, EntityIsReferencedException {
+        final UUID abfrageId = UUID.randomUUID();
+        final BauvorhabenModel bauvorhaben = new BauvorhabenModel();
+        bauvorhaben.setId(null);
+
+        final Bauvorhaben bauvorhabenEntity = new Bauvorhaben();
+        bauvorhabenEntity.setId(bauvorhaben.getId());
+
+        final Bauvorhaben saveResult = new Bauvorhaben();
+        saveResult.setId(UUID.randomUUID());
+
+        Mockito.when(this.bauvorhabenRepository.saveAndFlush(bauvorhabenEntity)).thenReturn(saveResult);
+
+        final InfrastrukturabfrageModel abfrage = new InfrastrukturabfrageModel();
+        abfrage.setId(abfrageId);
+        abfrage.setAbfrage(new AbfrageModel());
+
+        final InfrastrukturabfrageModel abfrageToSave = new InfrastrukturabfrageModel();
+        abfrageToSave.setId(abfrageId);
+        abfrageToSave.setAbfrage(new AbfrageModel());
+        abfrageToSave.getAbfrage().setBauvorhaben(this.bauvorhabenDomainMapper.entity2Model(saveResult));
+
+        final InfrastrukturabfrageModel savedAbfrage = new InfrastrukturabfrageModel();
+        savedAbfrage.setId(abfrageId);
+        savedAbfrage.setAbfrage(new AbfrageModel());
+        savedAbfrage.getAbfrage().setBauvorhaben(this.bauvorhabenDomainMapper.entity2Model(saveResult));
+
+        Mockito.when(this.abfrageService.getInfrastrukturabfrageById(abfrageId)).thenReturn(abfrage);
+        Mockito.when(this.abfrageService.saveInfrastrukturabfrage(abfrageToSave)).thenReturn(savedAbfrage);
+
+        final BauvorhabenModel result = this.bauvorhabenService.saveBauvorhaben(bauvorhaben, abfrageId);
+
+        final BauvorhabenModel expected = new BauvorhabenModel();
+        expected.setId(saveResult.getId());
+
+        assertThat(result, is(expected));
+
+        final InfrastrukturabfrageModel expectedAbfrage = new InfrastrukturabfrageModel();
+        expectedAbfrage.setId(abfrageId);
+        expectedAbfrage.setAbfrage(new AbfrageModel());
+        expectedAbfrage.getAbfrage().setBauvorhaben(result);
+        assertThat(savedAbfrage, is(expectedAbfrage));
+
+        Mockito.verify(this.bauvorhabenRepository, Mockito.times(1)).saveAndFlush(bauvorhabenEntity);
+        Mockito.verify(this.abfrageService, Mockito.times(1)).getInfrastrukturabfrageById(abfrageId);
+    }
+
+    @Test
+    void throwEntityNotFoundExceptionSaveBauvorhabenReferencedByAbfrage() throws EntityNotFoundException {
+        final UUID abfrageId = UUID.randomUUID();
+        final BauvorhabenModel bauvorhaben = new BauvorhabenModel();
+        bauvorhaben.setId(null);
+
+        final Bauvorhaben bauvorhabenEntity = new Bauvorhaben();
+        bauvorhabenEntity.setId(bauvorhaben.getId());
+
+        final Bauvorhaben saveResult = new Bauvorhaben();
+        saveResult.setId(UUID.randomUUID());
+
+        Mockito.when(this.bauvorhabenRepository.saveAndFlush(bauvorhabenEntity)).thenReturn(saveResult);
+
+        final InfrastrukturabfrageModel abfrage = new InfrastrukturabfrageModel();
+        abfrage.setId(abfrageId);
+
+        Mockito
+            .when(this.abfrageService.getInfrastrukturabfrageById(abfrage.getId()))
+            .thenThrow(new EntityNotFoundException("Abfrage nicht gefunden"));
+
+        Assertions.assertThrows(
+            EntityNotFoundException.class,
+            () -> this.bauvorhabenService.saveBauvorhaben(bauvorhaben, abfrageId)
+        );
+
+        Mockito.verify(this.bauvorhabenRepository, Mockito.times(1)).saveAndFlush(bauvorhabenEntity);
+        Mockito.verify(this.abfrageService, Mockito.times(1)).getInfrastrukturabfrageById(abfrageId);
+    }
+
+    @Test
+    void throwEntityIsReferencedExceptionSaveBauvorhabenReferencedByAbfrage()
+        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, EntityIsReferencedException {
+        final UUID abfrageId = UUID.randomUUID();
+        final BauvorhabenModel bauvorhaben = new BauvorhabenModel();
+        bauvorhaben.setId(null);
+
+        final Bauvorhaben bauvorhabenEntity = new Bauvorhaben();
+        bauvorhabenEntity.setId(bauvorhaben.getId());
+
+        final Bauvorhaben saveResult = new Bauvorhaben();
+        saveResult.setId(UUID.randomUUID());
+
+        Mockito.when(this.bauvorhabenRepository.saveAndFlush(bauvorhabenEntity)).thenReturn(saveResult);
+
+        final InfrastrukturabfrageModel abfrage = new InfrastrukturabfrageModel();
+        abfrage.setId(abfrageId);
+        abfrage.setAbfrage(new AbfrageModel());
+        final BauvorhabenModel abfrageBauvorhaben = new BauvorhabenModel();
+        abfrageBauvorhaben.setId(UUID.randomUUID());
+        abfrageBauvorhaben.setNameVorhaben("Name Bauvorhaben");
+        abfrage.getAbfrage().setBauvorhaben(abfrageBauvorhaben);
+
+        Mockito.when(this.abfrageService.getInfrastrukturabfrageById(abfrageId)).thenReturn(abfrage);
+
+        Assertions.assertThrows(
+            EntityIsReferencedException.class,
+            () -> this.bauvorhabenService.saveBauvorhaben(bauvorhaben, abfrageId)
+        );
+
+        Mockito.verify(this.bauvorhabenRepository, Mockito.times(1)).saveAndFlush(bauvorhabenEntity);
+        Mockito.verify(this.abfrageService, Mockito.times(1)).getInfrastrukturabfrageById(abfrageId);
+    }
+
+    @Test
     void updateBauvorhabenTest()
-        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, FileHandlingFailedException, FileHandlingWithS3FailedException {
+        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, FileHandlingFailedException, FileHandlingWithS3FailedException, EntityIsReferencedException {
         final BauvorhabenModel bauvorhabenModel = new BauvorhabenModel();
         bauvorhabenModel.setId(UUID.randomUUID());
         bauvorhabenModel.setNameVorhaben("BauvorhabenTest");
@@ -437,7 +557,7 @@ public class BauvorhabenServiceTest {
             .when(this.infrastrukturabfrageRepository.findAllByAbfrageBauvorhabenId(entity.getId()))
             .thenReturn(Stream.of(infrastrukturabfrage));
 
-        Assertions.assertThrows(EntityIsReferencedException.class, () -> this.bauvorhabenService.deleteBauvorhaben(id));
+        assertThrows(EntityIsReferencedException.class, () -> this.bauvorhabenService.deleteBauvorhaben(id));
 
         Mockito.verify(this.bauvorhabenRepository, Mockito.times(1)).findById(entity.getId());
         Mockito.verify(this.bauvorhabenRepository, Mockito.times(0)).deleteById(id);
@@ -458,7 +578,7 @@ public class BauvorhabenServiceTest {
             .when(this.infrastruktureinrichtungRepository.findAllByBauvorhabenId(entity.getId()))
             .thenReturn(Stream.of(kinderkrippe));
 
-        Assertions.assertThrows(EntityIsReferencedException.class, () -> this.bauvorhabenService.deleteBauvorhaben(id));
+        assertThrows(EntityIsReferencedException.class, () -> this.bauvorhabenService.deleteBauvorhaben(id));
 
         Mockito.verify(this.bauvorhabenRepository, Mockito.times(1)).findById(entity.getId());
         Mockito.verify(this.bauvorhabenRepository, Mockito.times(0)).deleteById(id);
@@ -482,7 +602,7 @@ public class BauvorhabenServiceTest {
 
         // Wenn kein Bauvorhaben mit der ID 'bauvorhabenId' existiert, soll eine 'BauvorhabenNotFoundException' geworfen werden.
 
-        Assertions.assertThrows(
+        assertThrows(
             EntityNotFoundException.class,
             () -> this.bauvorhabenService.assignBauvorhabenToAbfrage(id, abfrage)
         );
@@ -516,7 +636,7 @@ public class BauvorhabenServiceTest {
 
         // Wenn kein Bauvorhaben mit der ID 'bauvorhabenId' existiert, soll eine 'BauvorhabenNotFoundException' geworfen werden.
 
-        Assertions.assertThrows(
+        assertThrows(
             EntityNotFoundException.class,
             () -> this.bauvorhabenService.assignBauvorhabenToInfrastruktureinrichtung(id, infrastruktureinrichtung)
         );
@@ -533,6 +653,85 @@ public class BauvorhabenServiceTest {
             returnedInfrastruktureinrichtung.getBauvorhaben(),
             is(this.bauvorhabenService.getBauvorhabenById(id))
         );
+    }
+
+    @Test
+    void changeRelevanteAbfragevarianteTest()
+        throws BauvorhabenNotReferencedException, UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, EntityIsReferencedException {
+        final UUID bauvorhabenId = UUID.randomUUID();
+        final String bauvorhabenName = "Bauvorhaben";
+        final UUID abfrageId = UUID.randomUUID();
+        final UUID abfragevarianteId = UUID.randomUUID();
+        final UUID otherAbfragevarianteId = UUID.randomUUID();
+
+        final BauvorhabenModel bauvorhabenModel = new BauvorhabenModel();
+        bauvorhabenModel.setId(bauvorhabenId);
+        bauvorhabenModel.setNameVorhaben(bauvorhabenName);
+
+        final Bauvorhaben bauvorhabenEntity = new Bauvorhaben();
+        bauvorhabenEntity.setId(bauvorhabenId);
+        bauvorhabenEntity.setNameVorhaben(bauvorhabenName);
+
+        final InfrastrukturabfrageModel infrastrukturabfrageModel = new InfrastrukturabfrageModel();
+        infrastrukturabfrageModel.setId(abfrageId);
+        final AbfrageModel abfrageModel = new AbfrageModel();
+        abfrageModel.setStatusAbfrage(StatusAbfrage.OFFEN);
+        infrastrukturabfrageModel.setAbfrage(abfrageModel);
+
+        final AbfragevarianteModel abfragevarianteModel = new AbfragevarianteModel();
+        abfragevarianteModel.setId(abfragevarianteId);
+
+        final AbfragevarianteModel otherAbfragevarianteModel = new AbfragevarianteModel();
+        otherAbfragevarianteModel.setId(otherAbfragevarianteId);
+
+        Mockito
+            .when(abfragevarianteRepository.findAbfrageAbfragevariantenIdById(abfragevarianteId.toString()))
+            .thenReturn(Optional.of(abfrageId.toString()));
+        Mockito
+            .when(abfragevarianteRepository.findAbfrageAbfragevariantenIdById(otherAbfragevarianteId.toString()))
+            .thenReturn(Optional.of(abfrageId.toString()));
+        Mockito.when(abfrageService.getInfrastrukturabfrageById(abfrageId)).thenReturn(infrastrukturabfrageModel);
+        Mockito
+            .doNothing()
+            .when(abfrageService)
+            .throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(
+                abfrageModel,
+                StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG
+            );
+        Mockito
+            .when(bauvorhabenRepository.findByNameVorhabenIgnoreCase(bauvorhabenName))
+            .thenReturn(Optional.of(bauvorhabenEntity));
+        Mockito.when(bauvorhabenRepository.saveAndFlush(bauvorhabenEntity)).thenReturn(bauvorhabenEntity);
+
+        assertThrows(
+            BauvorhabenNotReferencedException.class,
+            () -> bauvorhabenService.changeRelevanteAbfragevariante(abfragevarianteModel)
+        );
+        abfrageModel.setBauvorhaben(bauvorhabenModel);
+        bauvorhabenService.changeRelevanteAbfragevariante(abfragevarianteModel);
+        assertThat(bauvorhabenModel.getRelevanteAbfragevariante(), sameInstance(abfragevarianteModel));
+        assertThrows(
+            UniqueViolationException.class,
+            () -> bauvorhabenService.changeRelevanteAbfragevariante(otherAbfragevarianteModel)
+        );
+        bauvorhabenService.changeRelevanteAbfragevariante(abfragevarianteModel);
+        assertThat(bauvorhabenModel.getRelevanteAbfragevariante(), nullValue());
+
+        Mockito
+            .verify(abfragevarianteRepository, Mockito.times(4))
+            .findAbfrageAbfragevariantenIdById(abfragevarianteId.toString());
+        Mockito
+            .verify(abfragevarianteRepository, Mockito.times(1))
+            .findAbfrageAbfragevariantenIdById(otherAbfragevarianteId.toString());
+        Mockito.verify(abfrageService, Mockito.times(5)).getInfrastrukturabfrageById(abfrageId);
+        Mockito
+            .verify(abfrageService, Mockito.times(4))
+            .throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(
+                abfrageModel,
+                StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG
+            );
+        Mockito.verify(bauvorhabenRepository, Mockito.times(2)).findByNameVorhabenIgnoreCase(bauvorhabenName);
+        Mockito.verify(bauvorhabenRepository, Mockito.times(2)).saveAndFlush(Mockito.any(Bauvorhaben.class));
     }
 
     @Test
@@ -554,7 +753,7 @@ public class BauvorhabenServiceTest {
         Mockito
             .when(this.infrastrukturabfrageRepository.findAllByAbfrageBauvorhabenId(bauvorhaben.getId()))
             .thenReturn(Stream.of(infrastrukturabfrage));
-        Assertions.assertThrows(
+        assertThrows(
             EntityIsReferencedException.class,
             () ->
                 this.bauvorhabenService.throwEntityIsReferencedExceptionWhenAbfrageIsReferencingBauvorhaben(bauvorhaben)
@@ -563,8 +762,7 @@ public class BauvorhabenServiceTest {
     }
 
     @Test
-    void throwEntityIsReferencedExceptionWhenInfrastruktureinrichtungIsReferencingBauvorhaben()
-        throws EntityIsReferencedException {
+    void throwEntityIsReferencedExceptionWhenInfrastruktureinrichtungIsReferencingBauvorhaben() {
         final Kinderkrippe kinderkrippe = new Kinderkrippe();
         kinderkrippe.setNameEinrichtung("Kinderkrippe");
 
@@ -574,7 +772,7 @@ public class BauvorhabenServiceTest {
         Mockito
             .when(this.infrastruktureinrichtungRepository.findAllByBauvorhabenId(bauvorhaben.getId()))
             .thenReturn(Stream.of(kinderkrippe));
-        Assertions.assertThrows(
+        assertThrows(
             EntityIsReferencedException.class,
             () ->
                 this.bauvorhabenService.throwEntityIsReferencedExceptionWhenInfrastruktureinrichtungIsReferencingBauvorhaben(

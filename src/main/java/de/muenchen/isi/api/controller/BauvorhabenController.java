@@ -1,12 +1,17 @@
 package de.muenchen.isi.api.controller;
 
+import de.muenchen.isi.api.dto.AbfragevarianteDto;
 import de.muenchen.isi.api.dto.BauvorhabenDto;
 import de.muenchen.isi.api.dto.error.InformationResponseDto;
-import de.muenchen.isi.api.dto.list.AbfrageListElementDto;
-import de.muenchen.isi.api.dto.list.InfrastruktureinrichtungListElementDto;
+import de.muenchen.isi.api.dto.search.response.AbfrageSearchResultDto;
+import de.muenchen.isi.api.dto.search.response.InfrastruktureinrichtungSearchResultDto;
 import de.muenchen.isi.api.mapper.AbfrageApiMapper;
+import de.muenchen.isi.api.mapper.AbfragevarianteApiMapper;
 import de.muenchen.isi.api.mapper.BauvorhabenApiMapper;
 import de.muenchen.isi.api.mapper.InfrastruktureinrichtungApiMapper;
+import de.muenchen.isi.api.mapper.SearchApiMapper;
+import de.muenchen.isi.domain.exception.AbfrageStatusNotAllowedException;
+import de.muenchen.isi.domain.exception.BauvorhabenNotReferencedException;
 import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.FileHandlingFailedException;
@@ -38,6 +43,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
@@ -51,26 +57,13 @@ public class BauvorhabenController {
 
     private final BauvorhabenApiMapper bauvorhabenApiMapper;
 
+    private final AbfragevarianteApiMapper abfragevarianteApiMapper;
+
     private final AbfrageApiMapper abfrageApiMapper;
 
-    private final InfrastruktureinrichtungApiMapper infrastruktureinrichtungApiMapper;
+    private final SearchApiMapper searchApiMapper;
 
-    @Transactional(readOnly = true)
-    @GetMapping("bauvorhaben")
-    @Operation(
-        summary = "Lade alle Bauvorhaben",
-        description = "Das Ergebnis wird nach der Größe des Grundstückes absteigend sortiert"
-    )
-    @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "OK") })
-    @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_READ_BAUVORHABEN.name())")
-    public ResponseEntity<List<BauvorhabenDto>> getBauvorhaben() {
-        final List<BauvorhabenDto> bauvorhabenList =
-            this.bauvorhabenService.getBauvorhaben()
-                .stream()
-                .map(this.bauvorhabenApiMapper::model2Dto)
-                .collect(Collectors.toList());
-        return new ResponseEntity<>(bauvorhabenList, HttpStatus.OK);
-    }
+    private final InfrastruktureinrichtungApiMapper infrastruktureinrichtungApiMapper;
 
     @GetMapping("bauvorhaben/{id}")
     @Transactional(readOnly = true)
@@ -105,8 +98,13 @@ public class BauvorhabenController {
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
             ),
             @ApiResponse(
+                responseCode = "404",
+                description = "NOT_FOUND -> Die ausgewählte Abfrage existiert nicht mehr.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+            @ApiResponse(
                 responseCode = "409",
-                description = "CONFLICT -> Bauvorhaben konnte nicht erstellt werden, da der Vorhabensname bereits existiert.",
+                description = "CONFLICT -> Bauvorhaben konnte nicht erstellt werden, da der Vorhabensname bereits existiert oder bei einer Datenübernahme die Abfrage bereits ein Bauvorhaben referenziert.",
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
             ),
             @ApiResponse(
@@ -118,10 +116,12 @@ public class BauvorhabenController {
     )
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_WRITE_BAUVORHABEN.name())")
     public ResponseEntity<BauvorhabenDto> createBauvorhaben(
-        @RequestBody @Valid @NotNull final BauvorhabenDto bauvorhabenDto
-    ) throws UniqueViolationException, OptimisticLockingException {
+        @RequestBody @Valid @NotNull final BauvorhabenDto bauvorhabenDto,
+        @RequestParam(required = false) final UUID abfrageId
+    )
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, EntityIsReferencedException {
         var model = this.bauvorhabenApiMapper.dto2Model(bauvorhabenDto);
-        model = this.bauvorhabenService.saveBauvorhaben(model);
+        model = this.bauvorhabenService.saveBauvorhaben(model, abfrageId);
         final var saved = this.bauvorhabenApiMapper.model2Dto(model);
         return new ResponseEntity<>(saved, HttpStatus.CREATED);
     }
@@ -139,7 +139,7 @@ public class BauvorhabenController {
             ),
             @ApiResponse(
                 responseCode = "409",
-                description = "CONFLICT -> Bauvorhaben konnte nicht aktualisiert werden, da der Vorhabensname bereits existiert.",
+                description = "CONFLICT -> Bauvorhaben konnte nicht aktualisiert werden, da der Vorhabensname bereits existiert oder bei einer Datenübernahme die Abfrage bereits ein Bauvorhaben referenziert.",
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
             ),
             @ApiResponse(
@@ -158,10 +158,57 @@ public class BauvorhabenController {
     public ResponseEntity<BauvorhabenDto> updateBauvorhaben(
         @RequestBody @Valid @NotNull final BauvorhabenDto bauvorhabenDto
     )
-        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, FileHandlingFailedException, FileHandlingWithS3FailedException {
+        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, FileHandlingFailedException, FileHandlingWithS3FailedException, EntityIsReferencedException {
         var model = this.bauvorhabenApiMapper.dto2Model(bauvorhabenDto);
         model = this.bauvorhabenService.updateBauvorhaben(model);
         final var saved = this.bauvorhabenApiMapper.model2Dto(model);
+        return ResponseEntity.ok(saved);
+    }
+
+    @PutMapping("bauvorhaben/change-relevante-abfragevariante")
+    @Transactional(rollbackFor = { OptimisticLockingException.class, UniqueViolationException.class })
+    @Operation(
+        summary = "Setzt die übergebene Abfragevariante als relevante Abfrage beim Bauvorhaben, welches mit der Abfrage der Abfragevariante verknüpft ist." +
+        "Ist die Abfragevariante bereits als relevant markiert, wird die relevante Abfragevariante des Bauvorhabens entfernt." +
+        "Eine Relevantsetzung kann nur vorgenommen werden, wenn die Abfrage ein Bauvorhaben referenziert," +
+        "die Abfrage im Status {@link StatusAbfrage#IN_BEARBEITUNG_SACHBEARBEITUNG} ist" +
+        "und noch keine andere Abfrage als relevant markiert wurde."
+    )
+    @ApiResponses(
+        value = {
+            @ApiResponse(responseCode = "200", description = "OK -> Relevante Abfragevariante erfolgreich geändert."),
+            @ApiResponse(
+                responseCode = "400",
+                description = "BAD_REQUEST -> Relevante Abfragevariante konnte nicht geändert werden.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+            @ApiResponse(
+                responseCode = "404",
+                description = "NOT_FOUND -> Abfrage oder Abfragevariante nicht gefunden.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+            @ApiResponse(
+                responseCode = "409",
+                description = "CONFLICT -> Es wurde bereits eine andere Abfragevariante als relevant markiert oder die Abfrage referenziert kein Bauvorhaben.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+            @ApiResponse(
+                responseCode = "412",
+                description = "PRECONDITION_FAILED -> In der Anwendung ist bereits eine neuere Version der Entität gespeichert.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+        }
+    )
+    @PreAuthorize(
+        "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_PUT_ABFRAGEVARIANTE_RELEVANT.name())"
+    )
+    public ResponseEntity<BauvorhabenDto> putChangeRelevanteAbfragevariante(
+        @RequestBody @NotNull final AbfragevarianteDto abfragevarianteDto
+    )
+        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, BauvorhabenNotReferencedException, EntityIsReferencedException {
+        final var abfragevariante = abfragevarianteApiMapper.dto2Model(abfragevarianteDto);
+        final var bauvorhaben = bauvorhabenService.changeRelevanteAbfragevariante(abfragevariante);
+        final var saved = bauvorhabenApiMapper.model2Dto(bauvorhaben);
         return ResponseEntity.ok(saved);
     }
 
@@ -198,13 +245,14 @@ public class BauvorhabenController {
     )
     @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "OK") })
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_READ_BAUVORHABEN.name())")
-    public ResponseEntity<List<AbfrageListElementDto>> getReferencedInfrastrukturabfragen(
+    public ResponseEntity<List<AbfrageSearchResultDto>> getReferencedInfrastrukturabfragen(
         @PathVariable @NotNull final UUID id
     ) {
         final var infrastrukturabfragen =
             this.bauvorhabenService.getReferencedInfrastrukturabfragen(id)
                 .stream()
-                .map(this.abfrageApiMapper::model2ListElementDto)
+                .map(this.searchApiMapper::model2Dto)
+                .map(AbfrageSearchResultDto.class::cast)
                 .collect(Collectors.toList());
         return new ResponseEntity<>(infrastrukturabfragen, HttpStatus.OK);
     }
@@ -217,13 +265,14 @@ public class BauvorhabenController {
     )
     @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "OK") })
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_READ_BAUVORHABEN.name())")
-    public ResponseEntity<List<InfrastruktureinrichtungListElementDto>> getReferencedInfrastruktureinrichtung(
+    public ResponseEntity<List<InfrastruktureinrichtungSearchResultDto>> getReferencedInfrastruktureinrichtung(
         @PathVariable @NotNull final UUID id
     ) {
         final var infrastruktureinrichtungen =
             this.bauvorhabenService.getReferencedInfrastruktureinrichtungen(id)
                 .stream()
-                .map(this.infrastruktureinrichtungApiMapper::model2ListElementDto)
+                .map(this.searchApiMapper::model2Dto)
+                .map(InfrastruktureinrichtungSearchResultDto.class::cast)
                 .collect(Collectors.toList());
         return new ResponseEntity<>(infrastruktureinrichtungen, HttpStatus.OK);
     }

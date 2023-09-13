@@ -9,9 +9,9 @@ import de.muenchen.isi.domain.model.AbfrageModel;
 import de.muenchen.isi.domain.model.AbfragevarianteModel;
 import de.muenchen.isi.domain.model.InfrastrukturabfrageModel;
 import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.InfrastrukturabfrageAngelegtModel;
+import de.muenchen.isi.domain.model.abfrageBedarfsmeldungInBearbeitungFachreferate.InfrastrukturabfrageInBearbeitungFachreferateModel;
 import de.muenchen.isi.domain.model.abfrageSachbearbeitungInBearbeitungSachbearbeitung.InfrastrukturabfrageInBearbeitungSachbearbeitungModel;
-import de.muenchen.isi.domain.model.enums.AbfrageTyp;
-import de.muenchen.isi.domain.model.list.AbfrageListElementModel;
+import de.muenchen.isi.domain.model.search.response.AbfrageSearchResultModel;
 import de.muenchen.isi.infrastructure.entity.Abfrage;
 import de.muenchen.isi.infrastructure.entity.Infrastrukturabfrage;
 import java.util.ArrayList;
@@ -54,6 +54,7 @@ public abstract class AbfrageDomainMapper {
         {
             @Mapping(target = "abfrage.statusAbfrage", ignore = true),
             @Mapping(target = "id", ignore = true),
+            @Mapping(target = "sub", ignore = true),
             @Mapping(target = "createdDateTime", ignore = true),
             @Mapping(target = "lastModifiedDateTime", ignore = true),
             @Mapping(target = "abfragevarianten", ignore = true),
@@ -158,24 +159,78 @@ public abstract class AbfrageDomainMapper {
         response.setAbfragevariantenSachbearbeitung(mappedAbfragevariantenSachbearbeitung);
     }
 
+    @BeanMapping(ignoreByDefault = true)
+    @Mappings({ @Mapping(target = "version", ignore = false) })
+    public abstract InfrastrukturabfrageModel request2Model(
+        final InfrastrukturabfrageInBearbeitungFachreferateModel request,
+        @MappingTarget InfrastrukturabfrageModel response
+    );
+
+    /**
+     * Führt das Mapping der Abfragevarianten für die im Parameter gegebenen Klassen durch.
+     *
+     * @param request  das Request-Objekt welches gemapped werden soll
+     * @param response das {@link InfrastrukturabfrageModel} zu dem es gemapped wird
+     */
+    @AfterMapping
+    void afterMappingRequest2Model(
+        final InfrastrukturabfrageInBearbeitungFachreferateModel request,
+        final @MappingTarget InfrastrukturabfrageModel response
+    ) {
+        // Mapping der Bedarfsmeldungen durch die Fachabteilungen der Abfragevarianten
+        final List<AbfragevarianteModel> mappedAbfragevarianten = new ArrayList<>();
+        CollectionUtils
+            .emptyIfNull(request.getAbfragevarianten())
+            .forEach(abfragevariante -> {
+                CollectionUtils
+                    .emptyIfNull(response.getAbfragevarianten())
+                    .stream()
+                    .filter(abfragevarianteModel -> abfragevarianteModel.getId().equals(abfragevariante.getId()))
+                    .findFirst()
+                    .ifPresent(abfragevarianteModel ->
+                        mappedAbfragevarianten.add(
+                            abfragevarianteDomainMapper.request2Model(abfragevariante, abfragevarianteModel)
+                        )
+                    );
+            });
+        response.setAbfragevarianten(mappedAbfragevarianten);
+        // Mapping der Abfragevarianten welche ausschließlich durch die Sachbearbeitung gemappt werden.
+        final List<AbfragevarianteModel> mappedAbfragevariantenSachbearbeitung = new ArrayList<>();
+        CollectionUtils
+            .emptyIfNull(request.getAbfragevariantenSachbearbeitung())
+            .forEach(abfragevariante -> {
+                if (abfragevariante.getId() == null) {
+                    mappedAbfragevariantenSachbearbeitung.add(
+                        abfragevarianteDomainMapper.request2Model(abfragevariante, new AbfragevarianteModel())
+                    );
+                } else {
+                    CollectionUtils
+                        .emptyIfNull(response.getAbfragevariantenSachbearbeitung())
+                        .stream()
+                        .filter(abfragevarianteModel -> abfragevarianteModel.getId().equals(abfragevariante.getId()))
+                        .findFirst()
+                        .ifPresent(model ->
+                            mappedAbfragevariantenSachbearbeitung.add(
+                                abfragevarianteDomainMapper.request2Model(abfragevariante, model)
+                            )
+                        );
+                }
+            });
+        response.setAbfragevariantenSachbearbeitung(mappedAbfragevariantenSachbearbeitung);
+    }
+
     @Mappings(
         {
-            @Mapping(target = "type", ignore = true),
+            @Mapping(target = "type", constant = "INFRASTRUKTURABFRAGE"),
             @Mapping(source = "abfrage.verortung.stadtbezirke", target = "stadtbezirke"),
             @Mapping(source = "abfrage.nameAbfrage", target = "nameAbfrage"),
             @Mapping(source = "abfrage.statusAbfrage", target = "statusAbfrage"),
             @Mapping(source = "abfrage.fristStellungnahme", target = "fristStellungnahme"),
             @Mapping(source = "sobonJahr", target = "sobonJahr"),
+            @Mapping(source = "abfrage.standVorhaben", target = "standVorhaben"),
             @Mapping(source = "createdDateTime", target = "createdDateTime"),
+            @Mapping(source = "abfrage.bauvorhaben.id", target = "bauvorhaben"),
         }
     )
-    public abstract AbfrageListElementModel model2ListElementModel(final InfrastrukturabfrageModel model);
-
-    @AfterMapping
-    void afterMappingModel2ListElementModel(
-        @MappingTarget final AbfrageListElementModel abfrageListElementModel,
-        final InfrastrukturabfrageModel model
-    ) {
-        abfrageListElementModel.setType(AbfrageTyp.INFRASTRUKTURABFRAGE);
-    }
+    public abstract AbfrageSearchResultModel model2ListElementModel(final InfrastrukturabfrageModel model);
 }

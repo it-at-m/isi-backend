@@ -6,11 +6,11 @@ package de.muenchen.isi.api.controller;
 
 import de.muenchen.isi.api.dto.InfrastrukturabfrageDto;
 import de.muenchen.isi.api.dto.abfrageAbfrageerstellungAngelegt.InfrastrukturabfrageAngelegtDto;
+import de.muenchen.isi.api.dto.abfrageBedarfsmeldungInBearbeitungFachreferate.InfrastrukturabfrageInBearbeitungFachreferateDto;
 import de.muenchen.isi.api.dto.abfrageSachbearbeitungInBearbeitungSachbearbeitung.InfrastrukturabfrageInBearbeitungSachbearbeitungDto;
 import de.muenchen.isi.api.dto.error.InformationResponseDto;
 import de.muenchen.isi.api.mapper.AbfrageApiMapper;
 import de.muenchen.isi.domain.exception.AbfrageStatusNotAllowedException;
-import de.muenchen.isi.domain.exception.BauvorhabenNotReferencedException;
 import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.FileHandlingFailedException;
@@ -28,9 +28,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -45,7 +43,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -65,23 +62,6 @@ public class AbfrageController {
     private final AbfrageApiMapper abfrageApiMapper;
 
     private final AbfrageDomainMapper abfrageDomainMapper;
-
-    @Transactional(readOnly = true)
-    @GetMapping
-    @Operation(
-        summary = "Lade alle Infrastrukturabfragen",
-        description = "Das Ergebnis wird nach Frist Stellungnahme absteigend sortiert"
-    )
-    @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "OK") })
-    @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_READ_ABFRAGE.name())")
-    public ResponseEntity<List<InfrastrukturabfrageDto>> getInfrastrukturabfragen() {
-        final List<InfrastrukturabfrageDto> abfrageList =
-            this.abfrageService.getInfrastrukturabfragen()
-                .stream()
-                .map(this.abfrageApiMapper::model2Dto)
-                .collect(Collectors.toList());
-        return new ResponseEntity<>(abfrageList, HttpStatus.OK);
-    }
 
     @GetMapping("/{id}")
     @Transactional(readOnly = true)
@@ -233,30 +213,20 @@ public class AbfrageController {
         return ResponseEntity.ok(saved);
     }
 
-    @PutMapping("/abfrage/{abfrageId}/abfragevariante/change-relevant/{abfragevarianteId}")
+    @PatchMapping("/abfrage-in-bearbeitung-fachreferate/{id}")
     @Transactional(rollbackFor = { OptimisticLockingException.class, UniqueViolationException.class })
-    @Operation(
-        summary = "Markiert für Abfragen im Status IN_BEARBEITUNG_SACHBEARBEITUNG eine Abfragevariante als relevant, fall diese noch nicht relevant ist." +
-        "Ist die Abfragevariante bereits als relevant markiert, wird der Status auf nicht relevant gesetzt." +
-        "Eine Relevantsetzung kann nur vorgenommen werden, wenn die Abfrage ein Bauvorhaben referenziert" +
-        "und noch keine andere Abfrage als relevant markiert wurde."
-    )
+    @Operation(summary = "Aktualisierung einer Infrastrukturabfrage im Status IN_BEARBEITUNG_FACHREFERATE.")
     @ApiResponses(
         value = {
-            @ApiResponse(responseCode = "200", description = "OK -> Abfrage wurde erfolgreich als relevant markiert."),
+            @ApiResponse(responseCode = "200", description = "OK -> Abfrage wurde erfolgreich aktualisiert."),
             @ApiResponse(
                 responseCode = "400",
-                description = "BAD_REQUEST -> Abfrage konnte als relevant markiert werden.",
+                description = "BAD_REQUEST -> Abfrage konnte nicht aktualisiert werden, überprüfen sie die Eingabe oder die Abfrage befindet sich in einem unzulässigen Status",
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
             ),
             @ApiResponse(
                 responseCode = "404",
-                description = "NOT_FOUND -> Es gibt keine Abfrage oder Abfragevariante mit der ID.",
-                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
-            ),
-            @ApiResponse(
-                responseCode = "409",
-                description = "CONFLICT -> Es wurde bereits eine Abfragevariante als relevant markiert oder die Abfrage referenziert kein Bauvorhaben.",
+                description = "NOT_FOUND -> Es gibt keine Abfrage mit der ID.",
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
             ),
             @ApiResponse(
@@ -267,15 +237,16 @@ public class AbfrageController {
         }
     )
     @PreAuthorize(
-        "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_PUT_ABFRAGEVARIANTE_RELEVANT.name())"
+        "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_PATCH_ABFRAGE_IN_BEARBEITUNG_FACHREFERATE.name())"
     )
-    public ResponseEntity<InfrastrukturabfrageDto> putChangeAbfragevarianteRelevant(
-        @PathVariable @NotNull final UUID abfrageId,
-        @PathVariable @NotNull final UUID abfragevarianteId
+    public ResponseEntity<InfrastrukturabfrageDto> patchAbfrageInBearbeitungFachreferate(
+        @RequestBody @Valid @NotNull final InfrastrukturabfrageInBearbeitungFachreferateDto abfrageDto,
+        @PathVariable @NotNull final UUID id
     )
-        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, BauvorhabenNotReferencedException {
-        final var abfrage = this.abfrageService.changeAbfragevarianteRelevant(abfrageId, abfragevarianteId);
-        final var saved = this.abfrageApiMapper.model2Dto(abfrage);
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException {
+        var model = this.abfrageApiMapper.dto2Model(abfrageDto);
+        final var responseModel = this.abfrageService.patchAbfrageInBearbeitungFachreferate(model, id);
+        final var saved = this.abfrageApiMapper.model2Dto(responseModel);
         return ResponseEntity.ok(saved);
     }
 

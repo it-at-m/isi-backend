@@ -25,6 +25,8 @@ spring:
     properties:
       hibernate:
         format_sql: true
+        search:
+          enabled: false
   security:
     # possible values: none, all, changing (With changing, only changing requests such as POST, PUT, DELETE are logged)
     logging.requests: all
