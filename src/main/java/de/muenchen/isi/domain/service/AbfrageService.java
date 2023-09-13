@@ -6,6 +6,7 @@ import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.FileHandlingFailedException;
 import de.muenchen.isi.domain.exception.FileHandlingWithS3FailedException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
+import de.muenchen.isi.domain.exception.StringLengthExceededException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
 import de.muenchen.isi.domain.exception.UserRoleNotAllowedException;
 import de.muenchen.isi.domain.mapper.AbfrageDomainMapper;
@@ -23,6 +24,7 @@ import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
@@ -182,15 +184,44 @@ public class AbfrageService {
      * @param id            {@link InfrastrukturabfrageModel#getId()} der Abfrage zum Updaten
      * @param statusAbfrage neuer {@link StatusAbfrage}
      * @return das geupdatete {@link InfrastrukturabfrageModel}
-     * @throws EntityNotFoundException    falls die Abfrage identifiziert durch die {@link InfrastrukturabfrageModel#getId()} nicht gefunden wird
-     * @throws UniqueViolationException   falls der Name der Abfrage {@link InfrastrukturabfrageModel#getAbfrage().getNameAbfrage} ()} bereits vorhanden ist
-     * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
+     * @throws EntityNotFoundException       falls die Abfrage identifiziert durch die {@link InfrastrukturabfrageModel#getId()} nicht gefunden wird
+     * @throws UniqueViolationException      falls der Name der Abfrage {@link InfrastrukturabfrageModel#getAbfrage().getNameAbfrage} ()} bereits vorhanden ist
+     * @throws OptimisticLockingException    falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
+     * @throws StringLengthExceededException wenn die Anmerkung zur Statusänderung die max. Länge überschreitet
      */
-    public InfrastrukturabfrageModel changeStatusAbfrage(final UUID id, final StatusAbfrage statusAbfrage)
-        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException {
-        final var originalAbfrageDb = this.getInfrastrukturabfrageById(id);
+    public InfrastrukturabfrageModel changeStatusAbfrage(
+        final UUID id,
+        final StatusAbfrage statusAbfrage,
+        final String anmerkung
+    )
+        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, StringLengthExceededException {
+        var originalAbfrageDb = this.getInfrastrukturabfrageById(id);
         originalAbfrageDb.getAbfrage().setStatusAbfrage(statusAbfrage);
+        originalAbfrageDb = this.addAbfrageAnmerkung(originalAbfrageDb, anmerkung);
         return this.saveInfrastrukturabfrage(originalAbfrageDb);
+    }
+
+    /**
+     * Fügt der Abfrage eine Anmerkung hinzu oder aktualisiert sie.
+     *
+     * @param infrastrukturabfrageModel Das InfrastrukturabfrageModel, zu dem die Anmerkung hinzugefügt wird.
+     * @param anmerkung                 Die Anmerkung, die hinzugefügt oder angehängt wird.
+     * @return Das aktualisierte InfrastrukturabfrageModel mit der hinzugefügten oder aktualisierten Anmerkung.
+     */
+    public InfrastrukturabfrageModel addAbfrageAnmerkung(
+        final InfrastrukturabfrageModel infrastrukturabfrageModel,
+        final String anmerkung
+    ) {
+        if (StringUtils.isNotEmpty(anmerkung)) {
+            if (infrastrukturabfrageModel.getAbfrage().getAnmerkung() == null) {
+                infrastrukturabfrageModel.getAbfrage().setAnmerkung(anmerkung);
+            } else {
+                infrastrukturabfrageModel
+                    .getAbfrage()
+                    .setAnmerkung(infrastrukturabfrageModel.getAbfrage().getAnmerkung().concat("\n").concat(anmerkung));
+            }
+        }
+        return infrastrukturabfrageModel;
     }
 
     /**

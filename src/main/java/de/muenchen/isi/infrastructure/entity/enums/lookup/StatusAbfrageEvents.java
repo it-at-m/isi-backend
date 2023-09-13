@@ -28,7 +28,12 @@ public enum StatusAbfrageEvents {
         "Die Abfrage wird an den Abfrageersteller zurückgegeben."
     ),
 
-    ABFRAGE_SCHLIESSEN("abfrage-schliessen", "ABFRAGE SCHLIEßEN", 5, "Die Abfrage wird erfolgreich geschlossen."),
+    ABFRAGE_SCHLIESSEN(
+        "abfrage-schliessen",
+        "ABFRAGE SCHLIEßEN",
+        5,
+        "Die Abfrage wird erfolgreich geschlossen. Sie können eine Anmerkung hinzufügen."
+    ),
     VERSCHICKEN_DER_STELLUNGNAHME(
         "verschicken-der-stellungnahme",
         "AN FACHREFERATE",
