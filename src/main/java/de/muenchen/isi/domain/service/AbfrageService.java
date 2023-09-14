@@ -244,10 +244,11 @@ public class AbfrageService {
 
     /**
      * Diese Methode überprüft ob der Nutzer die richtige Rolle hat und die Abfrage im richtigen Status, um sie zu löschen.
+     * Dabei wird auch geprüft, ob der Nutzer der Abfrage zugeordnet ist per sub Id
      *
      * @param abfrage zum Identifizieren des Status.
      * @throws UserRoleNotAllowedException      falls der Nutzer nicht die richtige Rolle hat.
-     * @throws AbfrageStatusNotAllowedException falls die Abfrage den falschen Status hat..
+     * @throws AbfrageStatusNotAllowedException falls die Abfrage den falschen Status hat oder der Sub des Nutzers nicht mit dem Sub der Abfrage übereinstimmt
      */
     public void throwUserRoleNotAllowedOrAbfrageStatusNotAlloweExceptionWhenDeleteAbfrage(InfrastrukturabfrageModel abfrage)
             throws UserRoleNotAllowedException, AbfrageStatusNotAllowedException {
