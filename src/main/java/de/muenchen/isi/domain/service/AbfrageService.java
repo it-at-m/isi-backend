@@ -20,7 +20,6 @@ import de.muenchen.isi.domain.service.filehandling.DokumentService;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.repository.InfrastrukturabfrageRepository;
 import de.muenchen.isi.security.AuthenticationUtils;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
@@ -29,6 +28,8 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -69,15 +70,15 @@ public class AbfrageService {
      * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
      */
     public InfrastrukturabfrageModel saveInfrastrukturabfrage(final InfrastrukturabfrageModel abfrage)
-        throws UniqueViolationException, OptimisticLockingException {
+            throws UniqueViolationException, OptimisticLockingException {
         if (abfrage.getId() == null) {
             abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ANGELEGT);
             abfrage.setSub(authenticationUtils.getUserSub());
         }
         var abfrageEntity = this.abfrageDomainMapper.model2entity(abfrage);
         final var saved =
-            this.infrastrukturabfrageRepository.findByAbfrage_NameAbfrageIgnoreCase(
-                    abfrageEntity.getAbfrage().getNameAbfrage()
+                this.infrastrukturabfrageRepository.findByAbfrage_NameAbfrageIgnoreCase(
+                        abfrageEntity.getAbfrage().getNameAbfrage()
                 );
         if ((saved.isPresent() && saved.get().getId().equals(abfrageEntity.getId())) || saved.isEmpty()) {
             try {
@@ -87,13 +88,13 @@ public class AbfrageService {
                 throw new OptimisticLockingException(message, exception);
             } catch (final DataIntegrityViolationException exception) {
                 final var message =
-                    "Der angegebene Name der Abfragevariante ist schon vorhanden, bitte wählen Sie daher einen anderen Namen und speichern Sie die Abfrage erneut.";
+                        "Der angegebene Name der Abfragevariante ist schon vorhanden, bitte wählen Sie daher einen anderen Namen und speichern Sie die Abfrage erneut.";
                 throw new UniqueViolationException(message);
             }
             return this.abfrageDomainMapper.entity2Model(abfrageEntity);
         } else {
             throw new UniqueViolationException(
-                "Der angegebene Name der Abfrage ist schon vorhanden, bitte wählen Sie daher einen anderen Namen und speichern Sie die Abfrage erneut."
+                    "Der angegebene Name der Abfrage ist schon vorhanden, bitte wählen Sie daher einen anderen Namen und speichern Sie die Abfrage erneut."
             );
         }
     }
@@ -113,18 +114,18 @@ public class AbfrageService {
      */
     @Transactional
     public InfrastrukturabfrageModel patchAbfrageAngelegt(
-        final InfrastrukturabfrageAngelegtModel abfrage,
-        final UUID id
+            final InfrastrukturabfrageAngelegtModel abfrage,
+            final UUID id
     )
-        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, FileHandlingFailedException, FileHandlingWithS3FailedException {
+            throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, FileHandlingFailedException, FileHandlingWithS3FailedException {
         final var originalAbfrageDb = this.getInfrastrukturabfrageById(id);
         this.throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(
                 originalAbfrageDb.getAbfrage(),
                 StatusAbfrage.ANGELEGT
-            );
+        );
         dokumentService.deleteDokumenteFromOriginalDokumentenListWhichAreMissingInParameterAdaptedDokumentenListe(
-            abfrage.getAbfrage().getDokumente(),
-            originalAbfrageDb.getAbfrage().getDokumente()
+                abfrage.getAbfrage().getDokumente(),
+                originalAbfrageDb.getAbfrage().getDokumente()
         );
         final var abfrageToSave = this.abfrageDomainMapper.request2Model(abfrage, originalAbfrageDb);
         return this.saveInfrastrukturabfrage(abfrageToSave);
@@ -141,15 +142,15 @@ public class AbfrageService {
      * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
      */
     public InfrastrukturabfrageModel patchAbfrageInBearbeitungSachbearbeitung(
-        final InfrastrukturabfrageInBearbeitungSachbearbeitungModel abfrage,
-        final UUID id
+            final InfrastrukturabfrageInBearbeitungSachbearbeitungModel abfrage,
+            final UUID id
     )
-        throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException {
+            throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException {
         final var originalAbfrageDb = this.getInfrastrukturabfrageById(id);
         this.throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(
                 originalAbfrageDb.getAbfrage(),
                 StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG
-            );
+        );
         final var abfrageToSave = this.abfrageDomainMapper.request2Model(abfrage, originalAbfrageDb);
         return this.saveInfrastrukturabfrage(abfrageToSave);
     }
@@ -165,15 +166,15 @@ public class AbfrageService {
      * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
      */
     public InfrastrukturabfrageModel patchAbfrageInBearbeitungFachreferate(
-        final InfrastrukturabfrageInBearbeitungFachreferateModel abfrage,
-        final UUID id
+            final InfrastrukturabfrageInBearbeitungFachreferateModel abfrage,
+            final UUID id
     )
-        throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException {
+            throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException {
         final var originalAbfrageDb = this.getInfrastrukturabfrageById(id);
         this.throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(
                 originalAbfrageDb.getAbfrage(),
                 StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE
-            );
+        );
         final var abfrageToSave = this.abfrageDomainMapper.request2Model(abfrage, originalAbfrageDb);
         return this.saveInfrastrukturabfrage(abfrageToSave);
     }
@@ -190,11 +191,11 @@ public class AbfrageService {
      * @throws StringLengthExceededException wenn die Anmerkung zur Statusänderung die max. Länge überschreitet
      */
     public InfrastrukturabfrageModel changeStatusAbfrage(
-        final UUID id,
-        final StatusAbfrage statusAbfrage,
-        final String anmerkung
+            final UUID id,
+            final StatusAbfrage statusAbfrage,
+            final String anmerkung
     )
-        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, StringLengthExceededException {
+            throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, StringLengthExceededException {
         var originalAbfrageDb = this.getInfrastrukturabfrageById(id);
         originalAbfrageDb.getAbfrage().setStatusAbfrage(statusAbfrage);
         originalAbfrageDb = this.addAbfrageAnmerkung(originalAbfrageDb, anmerkung);
@@ -209,16 +210,16 @@ public class AbfrageService {
      * @return Das aktualisierte InfrastrukturabfrageModel mit der hinzugefügten oder aktualisierten Anmerkung.
      */
     public InfrastrukturabfrageModel addAbfrageAnmerkung(
-        final InfrastrukturabfrageModel infrastrukturabfrageModel,
-        final String anmerkung
+            final InfrastrukturabfrageModel infrastrukturabfrageModel,
+            final String anmerkung
     ) {
         if (StringUtils.isNotEmpty(anmerkung)) {
             if (infrastrukturabfrageModel.getAbfrage().getAnmerkung() == null) {
                 infrastrukturabfrageModel.getAbfrage().setAnmerkung(anmerkung);
             } else {
                 infrastrukturabfrageModel
-                    .getAbfrage()
-                    .setAnmerkung(infrastrukturabfrageModel.getAbfrage().getAnmerkung().concat("\n").concat(anmerkung));
+                        .getAbfrage()
+                        .setAnmerkung(infrastrukturabfrageModel.getAbfrage().getAnmerkung().concat("\n").concat(anmerkung));
             }
         }
         return infrastrukturabfrageModel;
@@ -234,21 +235,11 @@ public class AbfrageService {
      * @throws AbfrageStatusNotAllowedException falls die Abfrage den falschen Status hat..
      */
     public void deleteInfrasturkturabfrageById(final UUID id)
-        throws EntityNotFoundException, EntityIsReferencedException, UserRoleNotAllowedException, AbfrageStatusNotAllowedException {
+            throws EntityNotFoundException, EntityIsReferencedException, UserRoleNotAllowedException, AbfrageStatusNotAllowedException {
         final var abfrage = this.getInfrastrukturabfrageById(id);
-        if (abfrage.getSub().equals(authenticationUtils.getUserSub())) {
-            this.throwUserRoleNotAllowedOrAbfrageStatusNotAlloweExceptionWhenDeleteAbfrage(abfrage.getAbfrage());
-            this.throwEntityIsReferencedExceptionWhenAbfrageIsReferencingBauvorhaben(abfrage.getAbfrage());
-            this.infrastrukturabfrageRepository.deleteById(id);
-        } else {
-            log.error(
-                "User {} hat versucht, die Abfrage {} von User {} zu löschen.",
-                authenticationUtils.getUserSub(),
-                id,
-                abfrage.getSub()
-            );
-            throw new UserRoleNotAllowedException("Keine Berechtigung zum Löschen der Abfrage");
-        }
+        this.throwUserRoleNotAllowedOrAbfrageStatusNotAlloweExceptionWhenDeleteAbfrage(abfrage);
+        this.throwEntityIsReferencedExceptionWhenAbfrageIsReferencingBauvorhaben(abfrage.getAbfrage());
+        this.infrastrukturabfrageRepository.deleteById(id);
     }
 
     /**
@@ -258,15 +249,23 @@ public class AbfrageService {
      * @throws UserRoleNotAllowedException      falls der Nutzer nicht die richtige Rolle hat.
      * @throws AbfrageStatusNotAllowedException falls die Abfrage den falschen Status hat..
      */
-    public void throwUserRoleNotAllowedOrAbfrageStatusNotAlloweExceptionWhenDeleteAbfrage(AbfrageModel abfrage)
-        throws UserRoleNotAllowedException, AbfrageStatusNotAllowedException {
+    public void throwUserRoleNotAllowedOrAbfrageStatusNotAlloweExceptionWhenDeleteAbfrage(InfrastrukturabfrageModel abfrage)
+            throws UserRoleNotAllowedException, AbfrageStatusNotAllowedException {
         var roles = authenticationUtils.getUserRoles();
         if (!roles.contains("admin")) {
             if (!roles.contains("abfrageerstellung")) {
                 throw new UserRoleNotAllowedException("Keine Berechtigung zum Löschen der Abfrage");
-            } else if (abfrage.getStatusAbfrage() != StatusAbfrage.ANGELEGT) {
+            } else if (!abfrage.getSub().equals(authenticationUtils.getUserSub())) {
+                log.error(
+                        "User {} hat versucht, die Abfrage {} von User {} zu löschen.",
+                        authenticationUtils.getUserSub(),
+                        abfrage.getId(),
+                        abfrage.getSub()
+                );
+                throw new UserRoleNotAllowedException("Keine Berechtigung zum Löschen der Abfrage");
+            } else if (abfrage.getAbfrage().getStatusAbfrage() != StatusAbfrage.ANGELEGT) {
                 throw new AbfrageStatusNotAllowedException(
-                    "Die Abfrage kann im nur im Status 'angelegt' gelöscht werden."
+                        "Die Abfrage kann im nur im Status 'angelegt' gelöscht werden."
                 );
             }
         }
@@ -280,15 +279,15 @@ public class AbfrageService {
      * @throws EntityIsReferencedException falls das {@link AbfrageModel} ein {@link BauvorhabenModel} referenziert.
      */
     protected void throwEntityIsReferencedExceptionWhenAbfrageIsReferencingBauvorhaben(final AbfrageModel abfrage)
-        throws EntityIsReferencedException {
+            throws EntityIsReferencedException {
         final var bauvorhaben = abfrage.getBauvorhaben();
         if (ObjectUtils.isNotEmpty(bauvorhaben)) {
             final var message =
-                "Die Abfrage " +
-                abfrage.getNameAbfrage() +
-                " referenziert das Bauvorhaben " +
-                bauvorhaben.getNameVorhaben() +
-                ".";
+                    "Die Abfrage " +
+                            abfrage.getNameAbfrage() +
+                            " referenziert das Bauvorhaben " +
+                            bauvorhaben.getNameVorhaben() +
+                            ".";
             log.error(message);
             throw new EntityIsReferencedException(message);
         }
@@ -303,18 +302,18 @@ public class AbfrageService {
      * @throws AbfrageStatusNotAllowedException falls das {@link AbfrageModel} einen unzulässigen Status hat
      */
     protected void throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(
-        final AbfrageModel abfrage,
-        final StatusAbfrage statusAbfrage
+            final AbfrageModel abfrage,
+            final StatusAbfrage statusAbfrage
     ) throws AbfrageStatusNotAllowedException {
         if (abfrage.getStatusAbfrage() != statusAbfrage) {
             final var message =
-                "Die Abfrage " +
-                abfrage.getNameAbfrage() +
-                " ist im Status " +
-                abfrage.getStatusAbfrage().toString() +
-                ". Der gültige Status wäre " +
-                statusAbfrage.toString() +
-                ".";
+                    "Die Abfrage " +
+                            abfrage.getNameAbfrage() +
+                            " ist im Status " +
+                            abfrage.getStatusAbfrage().toString() +
+                            ". Der gültige Status wäre " +
+                            statusAbfrage.toString() +
+                            ".";
             log.error(message);
             throw new AbfrageStatusNotAllowedException(message);
         }
