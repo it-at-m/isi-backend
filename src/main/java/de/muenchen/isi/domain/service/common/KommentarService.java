@@ -1,7 +1,6 @@
 package de.muenchen.isi.domain.service.common;
 
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
-import de.muenchen.isi.domain.exception.UserRoleNotAllowedException;
 import de.muenchen.isi.domain.mapper.KommentarDomainMapper;
 import de.muenchen.isi.domain.model.common.KommentarModel;
 import de.muenchen.isi.infrastructure.repository.common.KommentarRepository;
@@ -11,7 +10,6 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -25,9 +23,7 @@ public class KommentarService {
 
     private final AuthenticationUtils authenticationUtils;
 
-    public List<KommentarModel> getKommentareForBauvorhaben(final UUID bauvorhabenId)
-        throws UserRoleNotAllowedException {
-        this.throwUserRoleNotAllowedWhenRoleNotSachbearbeitungOrAdmin();
+    public List<KommentarModel> getKommentareForBauvorhaben(final UUID bauvorhabenId) {
         return kommentarRepository
             .findAllByBauvorhabenIdOrderByCreatedDateTimeDesc(bauvorhabenId)
             .map(kommentarMapper::entity2Model)
@@ -65,19 +61,5 @@ public class KommentarService {
 
     public void deleteKommentarById(final UUID id) {
         kommentarRepository.deleteById(id);
-    }
-
-    protected void throwUserRoleNotAllowedWhenRoleNotSachbearbeitungOrAdmin() throws UserRoleNotAllowedException {
-        final var roles = authenticationUtils.getUserRoles();
-        final var containsSachbearbeitungOrAdmin = CollectionUtils.containsAny(
-            roles,
-            AuthenticationUtils.ROLE_ADMIN,
-            AuthenticationUtils.ROLE_SACHBEARBEITUNG
-        );
-        if (!containsSachbearbeitungOrAdmin) {
-            throw new UserRoleNotAllowedException(
-                "Zum lesen der Kommentare ist die Rolle Sachbearbeitung oder Admin erforderlich"
-            );
-        }
     }
 }

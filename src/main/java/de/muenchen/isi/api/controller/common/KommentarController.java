@@ -5,7 +5,6 @@ import de.muenchen.isi.api.dto.error.InformationResponseDto;
 import de.muenchen.isi.api.mapper.KommentarApiMapper;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
-import de.muenchen.isi.domain.exception.UserRoleNotAllowedException;
 import de.muenchen.isi.domain.service.common.KommentarService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -58,10 +57,12 @@ public class KommentarController {
             ),
         }
     )
-    @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_READ_KOMMENTAR.name())")
+    @PreAuthorize(
+        "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_READ_KOMMENTAR_BAUVORHABEN.name())"
+    )
     public ResponseEntity<List<KommentarDto>> getKommentareForBauvorhaben(
         @PathVariable @NotNull final UUID bauvorhabenId
-    ) throws UserRoleNotAllowedException {
+    ) {
         final var models = kommentarService.getKommentareForBauvorhaben(bauvorhabenId);
         final var dtos = models.stream().map(kommentarApiMapper::model2Dto).collect(Collectors.toList());
         return ResponseEntity.ok(dtos);
@@ -71,7 +72,9 @@ public class KommentarController {
     @Transactional(readOnly = true)
     @Operation(summary = "Holen der Kommentare einer Infrastruktureinrichtung")
     @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "OK") })
-    @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_READ_KOMMENTAR.name())")
+    @PreAuthorize(
+        "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_READ_KOMMENTAR_INFRASTRUKTUREINRICHTUNG.name())"
+    )
     public ResponseEntity<List<KommentarDto>> getKommentareForInfrastruktureinrichtung(
         @PathVariable @NotNull final UUID infrastruktureinrichtungId
     ) {
