@@ -145,6 +145,7 @@ public class KommentarController {
     }
 
     @DeleteMapping("/{id}")
+    @Transactional
     @Operation(summary = "Löschen eines Kommentars")
     @ApiResponses(
         value = {
@@ -156,7 +157,6 @@ public class KommentarController {
             ),
         }
     )
-    @Transactional
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_DELETE_KOMMENTAR.name())")
     public ResponseEntity<Void> deleteBauvorhaben(@PathVariable @NotNull final UUID id) {
         this.kommentarService.deleteKommentarById(id);
