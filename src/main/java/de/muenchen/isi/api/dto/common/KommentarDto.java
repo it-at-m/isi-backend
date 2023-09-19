@@ -2,6 +2,7 @@ package de.muenchen.isi.api.dto.common;
 
 import de.muenchen.isi.api.dto.BaseEntityDto;
 import java.util.UUID;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -17,5 +18,6 @@ public class KommentarDto extends BaseEntityDto {
 
     private String text;
 
+    @NotNull
     private UUID bauvorhaben;
 }
