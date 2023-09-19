@@ -261,12 +261,12 @@ public class AbfrageService {
     public void throwUserRoleNotAllowedOrAbfrageStatusNotAlloweExceptionWhenDeleteAbfrage(AbfrageModel abfrage)
         throws UserRoleNotAllowedException, AbfrageStatusNotAllowedException {
         var roles = authenticationUtils.getUserRoles();
-        if (!roles.contains("admin")) {
-            if (!roles.contains("abfrageerstellung")) {
+        if (!roles.contains(AuthenticationUtils.ROLE_ADMIN)) {
+            if (!roles.contains(AuthenticationUtils.ROLE_ABFRAGEERSTELLUNG)) {
                 throw new UserRoleNotAllowedException("Keine Berechtigung zum Löschen der Abfrage");
             } else if (abfrage.getStatusAbfrage() != StatusAbfrage.ANGELEGT) {
                 throw new AbfrageStatusNotAllowedException(
-                    "Die Abfrage kann im nur im Status 'angelegt' gelöscht werden."
+                    "Die Abfrage kann nur im Status 'angelegt' gelöscht werden."
                 );
             }
         }
