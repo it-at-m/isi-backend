@@ -7,4 +7,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface KommentarRepository extends JpaRepository<Kommentar, UUID> {
     Stream<Kommentar> findAllByBauvorhabenIdOrderByCreatedDateTimeDesc(final UUID bauvorhabenId);
+
+    Stream<Kommentar> findAllByInfrastruktureinrichtungIdOrderByCreatedDateTimeDesc(
+        final UUID infrastruktureinrichtungId
+    );
 }

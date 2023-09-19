@@ -27,6 +27,13 @@ public class KommentarService {
             .collect(Collectors.toList());
     }
 
+    public List<KommentarModel> getKommentareForInfrastruktureinrichtung(final UUID infrastruktureinrichtungId) {
+        return kommentarRepository
+            .findAllByInfrastruktureinrichtungIdOrderByCreatedDateTimeDesc(infrastruktureinrichtungId)
+            .map(kommentarMapper::entity2Model)
+            .collect(Collectors.toList());
+    }
+
     public KommentarModel getKommentarById(final UUID id) throws EntityNotFoundException {
         final var entity = kommentarRepository
             .findById(id)
