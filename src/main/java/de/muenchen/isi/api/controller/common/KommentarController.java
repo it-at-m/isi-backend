@@ -2,7 +2,6 @@ package de.muenchen.isi.api.controller.common;
 
 import de.muenchen.isi.api.dto.common.KommentarDto;
 import de.muenchen.isi.api.mapper.KommentarApiMapper;
-import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.service.BauvorhabenService;
 import de.muenchen.isi.domain.service.common.KommentarService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -45,7 +44,7 @@ public class KommentarController {
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_READ_KOMMENTAR.name())")
     public ResponseEntity<List<KommentarDto>> getKommentareForBauvorhaben(
         @RequestParam(name = "bauvorhaben-id") @NotNull final UUID bauvorhabenId
-    ) throws EntityNotFoundException {
+    ) {
         final var models = kommentarService.getKommentareForBauvorhaben(bauvorhabenId);
         final var dtos = models.stream().map(kommentarApiMapper::model2Dto).collect(Collectors.toList());
         return ResponseEntity.ok(dtos);
