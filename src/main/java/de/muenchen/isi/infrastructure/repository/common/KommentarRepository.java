@@ -11,4 +11,8 @@ public interface KommentarRepository extends JpaRepository<Kommentar, UUID> {
     Stream<Kommentar> findAllByInfrastruktureinrichtungIdOrderByCreatedDateTimeDesc(
         final UUID infrastruktureinrichtungId
     );
+
+    void deleteAllByBauvorhabenId(final UUID bauvorhabenId);
+
+    void deleteAllByInfrastruktureinrichtungId(final UUID infrastruktureinrichtungId);
 }

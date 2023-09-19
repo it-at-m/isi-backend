@@ -49,6 +49,7 @@ import de.muenchen.isi.infrastructure.repository.AbfragevarianteRepository;
 import de.muenchen.isi.infrastructure.repository.BauvorhabenRepository;
 import de.muenchen.isi.infrastructure.repository.InfrastrukturabfrageRepository;
 import de.muenchen.isi.infrastructure.repository.InfrastruktureinrichtungRepository;
+import de.muenchen.isi.infrastructure.repository.common.KommentarRepository;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -102,6 +103,9 @@ public class BauvorhabenServiceTest {
     @Mock
     private DokumentService dokumentService;
 
+    @Mock
+    private KommentarRepository kommentarRepository;
+
     @BeforeEach
     public void beforeEach() {
         this.bauvorhabenService =
@@ -114,7 +118,8 @@ public class BauvorhabenServiceTest {
                 this.infrastruktureinrichtungRepository,
                 this.abfragevarianteRepository,
                 this.abfrageService,
-                this.dokumentService
+                this.dokumentService,
+                this.kommentarRepository
             );
 
         Mockito.reset(
@@ -122,7 +127,8 @@ public class BauvorhabenServiceTest {
             this.infrastrukturabfrageRepository,
             this.infrastruktureinrichtungRepository,
             this.dokumentService,
-            this.abfrageService
+            this.abfrageService,
+            this.kommentarRepository
         );
     }
 

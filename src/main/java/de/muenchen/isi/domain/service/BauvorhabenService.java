@@ -27,6 +27,7 @@ import de.muenchen.isi.infrastructure.repository.AbfragevarianteRepository;
 import de.muenchen.isi.infrastructure.repository.BauvorhabenRepository;
 import de.muenchen.isi.infrastructure.repository.InfrastrukturabfrageRepository;
 import de.muenchen.isi.infrastructure.repository.InfrastruktureinrichtungRepository;
+import de.muenchen.isi.infrastructure.repository.common.KommentarRepository;
 import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
@@ -61,6 +62,8 @@ public class BauvorhabenService {
     private final AbfrageService abfrageService;
 
     private final DokumentService dokumentService;
+
+    private final KommentarRepository kommentarRepository;
 
     /**
      * Die Methode gibt ein {@link BauvorhabenModel} identifiziert durch die ID zurück.
@@ -150,6 +153,7 @@ public class BauvorhabenService {
         final var bauvorhaben = this.getBauvorhabenById(id);
         this.throwEntityIsReferencedExceptionWhenAbfrageIsReferencingBauvorhaben(bauvorhaben);
         this.throwEntityIsReferencedExceptionWhenInfrastruktureinrichtungIsReferencingBauvorhaben(bauvorhaben);
+        this.kommentarRepository.deleteAllByBauvorhabenId(id);
         this.bauvorhabenRepository.deleteById(id);
     }
 
