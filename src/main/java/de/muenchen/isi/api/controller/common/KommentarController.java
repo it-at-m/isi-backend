@@ -31,7 +31,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
@@ -46,15 +45,28 @@ public class KommentarController {
 
     private final KommentarApiMapper kommentarApiMapper;
 
-    @GetMapping("/all")
+    @GetMapping("/all/bauvorhaben/{bauvorhabenId}")
     @Transactional(readOnly = true)
     @Operation(summary = "Holen der Kommentare eines Bauvorhabens")
     @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "OK") })
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_READ_KOMMENTAR.name())")
     public ResponseEntity<List<KommentarDto>> getKommentareForBauvorhaben(
-        @RequestParam(name = "bauvorhaben-id") @NotNull final UUID bauvorhabenId
+        @PathVariable @NotNull final UUID bauvorhabenId
     ) {
         final var models = kommentarService.getKommentareForBauvorhaben(bauvorhabenId);
+        final var dtos = models.stream().map(kommentarApiMapper::model2Dto).collect(Collectors.toList());
+        return ResponseEntity.ok(dtos);
+    }
+
+    @GetMapping("/all/infrastruktureinrichtung/{infrastruktureinrichtungId}")
+    @Transactional(readOnly = true)
+    @Operation(summary = "Holen der Kommentare einer Infrastruktureinrichtung")
+    @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "OK") })
+    @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_READ_KOMMENTAR.name())")
+    public ResponseEntity<List<KommentarDto>> getKommentareForInfrastruktureinrichtung(
+        @PathVariable @NotNull final UUID infrastruktureinrichtungId
+    ) {
+        final var models = kommentarService.getKommentareForInfrastruktureinrichtung(infrastruktureinrichtungId);
         final var dtos = models.stream().map(kommentarApiMapper::model2Dto).collect(Collectors.toList());
         return ResponseEntity.ok(dtos);
     }
