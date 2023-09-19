@@ -67,7 +67,7 @@ public class KommentarService {
         kommentarRepository.deleteById(id);
     }
 
-    public void throwUserRoleNotAllowedWhenRoleNotSachbearbeitungOrAdmin() throws UserRoleNotAllowedException {
+    protected void throwUserRoleNotAllowedWhenRoleNotSachbearbeitungOrAdmin() throws UserRoleNotAllowedException {
         final var roles = authenticationUtils.getUserRoles();
         final var containsSachbearbeitungOrAdmin = CollectionUtils.containsAny(
             roles,
