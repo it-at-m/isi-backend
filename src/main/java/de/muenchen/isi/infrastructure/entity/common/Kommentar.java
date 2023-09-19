@@ -2,6 +2,7 @@ package de.muenchen.isi.infrastructure.entity.common;
 
 import de.muenchen.isi.infrastructure.entity.BaseEntity;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
+import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Infrastruktureinrichtung;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -29,4 +30,8 @@ public class Kommentar extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "bauvorhaben_id")
     private Bauvorhaben bauvorhaben;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "infrastruktureinrichtung_id")
+    private Infrastruktureinrichtung infrastruktureinrichtung;
 }
