@@ -1,14 +1,17 @@
 package de.muenchen.isi.domain.service.common;
 
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
+import de.muenchen.isi.domain.exception.UserRoleNotAllowedException;
 import de.muenchen.isi.domain.mapper.KommentarDomainMapper;
 import de.muenchen.isi.domain.model.common.KommentarModel;
 import de.muenchen.isi.infrastructure.repository.common.KommentarRepository;
+import de.muenchen.isi.security.AuthenticationUtils;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -20,7 +23,11 @@ public class KommentarService {
 
     private final KommentarDomainMapper kommentarMapper;
 
-    public List<KommentarModel> getKommentareForBauvorhaben(final UUID bauvorhabenId) {
+    private final AuthenticationUtils authenticationUtils;
+
+    public List<KommentarModel> getKommentareForBauvorhaben(final UUID bauvorhabenId)
+        throws UserRoleNotAllowedException {
+        this.throwUserRoleNotAllowedWhenRoleNotSachbearbeitungOrAdmin();
         return kommentarRepository
             .findAllByBauvorhabenIdOrderByCreatedDateTimeDesc(bauvorhabenId)
             .map(kommentarMapper::entity2Model)
@@ -58,5 +65,17 @@ public class KommentarService {
 
     public void deleteKommentarById(final UUID id) {
         kommentarRepository.deleteById(id);
+    }
+
+    public void throwUserRoleNotAllowedWhenRoleNotSachbearbeitungOrAdmin() throws UserRoleNotAllowedException {
+        final var roles = authenticationUtils.getUserRoles();
+        final var containsSachbearbeitungOrAdmin = CollectionUtils.containsAny(
+            roles,
+            AuthenticationUtils.ROLE_ADMIN,
+            AuthenticationUtils.ROLE_SACHBEARBEITUNG
+        );
+        if (!containsSachbearbeitungOrAdmin) {
+            throw new UserRoleNotAllowedException("Keine Berechtigung zum Lesen der Kommentare");
+        }
     }
 }

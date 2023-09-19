@@ -5,6 +5,7 @@ import de.muenchen.isi.api.dto.error.InformationResponseDto;
 import de.muenchen.isi.api.mapper.KommentarApiMapper;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
+import de.muenchen.isi.domain.exception.UserRoleNotAllowedException;
 import de.muenchen.isi.domain.service.common.KommentarService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -48,11 +49,19 @@ public class KommentarController {
     @GetMapping("/all/bauvorhaben/{bauvorhabenId}")
     @Transactional(readOnly = true)
     @Operation(summary = "Holen der Kommentare eines Bauvorhabens")
-    @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "OK") })
+    @ApiResponses(
+        value = {
+            @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(
+                responseCode = "409",
+                description = "CONFLICT -> Es ist die Rolle Sachbearbeitung oder Admin erforderlich"
+            ),
+        }
+    )
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_READ_KOMMENTAR.name())")
     public ResponseEntity<List<KommentarDto>> getKommentareForBauvorhaben(
         @PathVariable @NotNull final UUID bauvorhabenId
-    ) {
+    ) throws UserRoleNotAllowedException {
         final var models = kommentarService.getKommentareForBauvorhaben(bauvorhabenId);
         final var dtos = models.stream().map(kommentarApiMapper::model2Dto).collect(Collectors.toList());
         return ResponseEntity.ok(dtos);
