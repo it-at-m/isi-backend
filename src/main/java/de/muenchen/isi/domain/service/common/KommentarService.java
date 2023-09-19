@@ -76,7 +76,7 @@ public class KommentarService {
         );
         if (!containsSachbearbeitungOrAdmin) {
             throw new UserRoleNotAllowedException(
-                "Zum lesen der Kommentare eines Bauvorhabens ist die Rolle Sachbearbeitung oder Admin erforderlich"
+                "Zum lesen der Kommentare ist die Rolle Sachbearbeitung oder Admin erforderlich"
             );
         }
     }
