@@ -4,6 +4,7 @@ import de.muenchen.isi.infrastructure.adapter.search.StandVorhabenSuggestionBind
 import de.muenchen.isi.infrastructure.adapter.search.StandVorhabenValueBridge;
 import de.muenchen.isi.infrastructure.adapter.search.StringSuggestionBinder;
 import de.muenchen.isi.infrastructure.entity.common.Adresse;
+import de.muenchen.isi.infrastructure.entity.common.Kommentar;
 import de.muenchen.isi.infrastructure.entity.common.Verortung;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.BaugebietArt;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Planungsrecht;
@@ -136,4 +137,8 @@ public class Bauvorhaben extends BaseEntity {
     @OneToOne
     @JoinColumn(name = "relevante_abfragevariante_id")
     private Abfragevariante relevanteAbfragevariante;
+
+    @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY, orphanRemoval = true)
+    @JoinColumn(name = "bauvorhaben_id")
+    private List<Kommentar> kommentare;
 }
