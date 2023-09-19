@@ -54,7 +54,7 @@ public class KommentarController {
             @ApiResponse(responseCode = "200", description = "OK"),
             @ApiResponse(
                 responseCode = "409",
-                description = "CONFLICT -> Es ist die Rolle Sachbearbeitung oder Admin erforderlich"
+                description = "CONFLICT -> Zum lesen der Kommentare eines Bauvorhabens ist die Rolle Sachbearbeitung oder Admin erforderlich"
             ),
         }
     )

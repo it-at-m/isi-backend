@@ -75,7 +75,9 @@ public class KommentarService {
             AuthenticationUtils.ROLE_SACHBEARBEITUNG
         );
         if (!containsSachbearbeitungOrAdmin) {
-            throw new UserRoleNotAllowedException("Keine Berechtigung zum Lesen der Kommentare");
+            throw new UserRoleNotAllowedException(
+                "Zum lesen der Kommentare eines Bauvorhabens ist die Rolle Sachbearbeitung oder Admin erforderlich"
+            );
         }
     }
 }
