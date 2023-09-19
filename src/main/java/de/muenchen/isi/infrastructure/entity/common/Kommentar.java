@@ -14,7 +14,7 @@ import org.hibernate.annotations.Type;
 @EqualsAndHashCode(callSuper = true)
 public class Kommentar extends BaseEntity {
 
-    @Column(nullable = true)
+    @Column(nullable = true, length = 32)
     private String datum;
 
     // Hibernate 6: @Column(nullable = true, length = Length.LONG32) ohne "@Type(type = "org.hibernate.type.TextType")"
