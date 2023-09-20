@@ -35,10 +35,8 @@ public class GeschossflaecheWohnenSobonUrsaechlichValidator
             .getAbfragevarianten()
             .stream()
             .anyMatch(abfragevariante ->
-                (
-                    abfragevariante.getPlanungsrecht() == Planungsrecht.BPLAN_PARAG_11 ||
-                    abfragevariante.getPlanungsrecht() == Planungsrecht.BPLAN_PARAG_12
-                ) &&
+                (abfragevariante.getPlanungsrecht() == Planungsrecht.BPLAN_PARAG_11 ||
+                    abfragevariante.getPlanungsrecht() == Planungsrecht.BPLAN_PARAG_12) &&
                 abfragevariante.getGeschossflaecheWohnenSoBoNursaechlich() == null
             );
     }
