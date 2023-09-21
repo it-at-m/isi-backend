@@ -16,7 +16,8 @@ public class TechnicalAttributesValidator
         return (
             isValidForOption1(abfragevarianteDto) ||
             isValidForOption2(abfragevarianteDto) ||
-            isValidForOption3(abfragevarianteDto)
+            isValidForOption3(abfragevarianteDto) ||
+            isValidWhenEmpty(abfragevarianteDto)
         );
     }
 
@@ -96,6 +97,33 @@ public class TechnicalAttributesValidator
                 .flatMap(baugebiet -> baugebiet.getBauraten().stream())
                 .findAny()
                 .isPresent()
+        );
+    }
+
+    private boolean isValidWhenEmpty(AbfragevarianteAngelegtDto abfragevarianteDto) {
+        return (
+            (abfragevarianteDto.getBauabschnitte() == null || abfragevarianteDto.getBauabschnitte().isEmpty()) &&
+            hasNoBauratenAndBaugebiete(abfragevarianteDto)
+        );
+    }
+
+    private boolean hasNoBauratenAndBaugebiete(AbfragevarianteAngelegtDto abfragevarianteDto) {
+        return (
+            abfragevarianteDto.getBauabschnitte() == null ||
+            (abfragevarianteDto.getBauabschnitte().isEmpty() &&
+                abfragevarianteDto
+                    .getBauabschnitte()
+                    .stream()
+                    .allMatch(bauabschnitt ->
+                        bauabschnitt.getBaugebiete() == null ||
+                        (bauabschnitt.getBaugebiete().isEmpty() &&
+                            bauabschnitt
+                                .getBaugebiete()
+                                .stream()
+                                .allMatch(baugebiet ->
+                                    baugebiet.getBauraten() == null || baugebiet.getBauraten().isEmpty()
+                                ))
+                    ))
         );
     }
 }
