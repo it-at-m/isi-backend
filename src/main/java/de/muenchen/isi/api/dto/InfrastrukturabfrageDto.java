@@ -4,7 +4,6 @@
  */
 package de.muenchen.isi.api.dto;
 
-import de.muenchen.isi.api.validation.GeschossflaecheWohnenSobonUrsaechlichValid;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonVerfahrensgrundsaetzeJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
 import java.util.List;
@@ -15,7 +14,6 @@ import lombok.ToString;
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-@GeschossflaecheWohnenSobonUrsaechlichValid
 public class InfrastrukturabfrageDto extends BaseEntityDto {
 
     private AbfrageDto abfrage;
