@@ -64,9 +64,6 @@ public class Bauvorhaben extends BaseEntity {
     @Column(nullable = false, unique = true)
     private String nameVorhaben;
 
-    @Column(nullable = false)
-    private String eigentuemer;
-
     @Column(precision = 10, scale = 2, nullable = false)
     private BigDecimal grundstuecksgroesse;
 
