@@ -25,7 +25,6 @@ public class BauvorhabenDto extends BaseEntityDto {
     @Size(max = 255, message = "Es sind maximal {max} Zeichen erlaubt")
     private String nameVorhaben;
 
-    @NotNull
     private BigDecimal grundstuecksgroesse;
 
     @NotNull
