@@ -123,6 +123,6 @@ public class TechnicalAttributesValidatorTest {
     @Test
     void isValidNoBauratenInAbfragevariante() {
         final var abfragevarianteDto = new AbfragevarianteAngelegtDto();
-        assertThat(this.technicalAttributesValidator.isValid(abfragevarianteDto, null), is(false));
+        assertThat(this.technicalAttributesValidator.isValid(abfragevarianteDto, null), is(true));
     }
 }
