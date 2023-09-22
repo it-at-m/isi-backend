@@ -6,9 +6,9 @@ import java.util.stream.Stream;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface KommentarRepository extends JpaRepository<Kommentar, UUID> {
-    Stream<Kommentar> findAllByBauvorhabenIdOrderByCreatedDateTimeDesc(final UUID bauvorhabenId);
+    Stream<Kommentar> findAllByBauvorhabenIdOrderByCreatedDateTimeAsc(final UUID bauvorhabenId);
 
-    Stream<Kommentar> findAllByInfrastruktureinrichtungIdOrderByCreatedDateTimeDesc(
+    Stream<Kommentar> findAllByInfrastruktureinrichtungIdOrderByCreatedDateTimeAsc(
         final UUID infrastruktureinrichtungId
     );
 
