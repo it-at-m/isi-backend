@@ -50,7 +50,7 @@ public class KommentarService {
 
     public KommentarModel saveKommentar(final KommentarModel kommentar) {
         var entity = kommentarMapper.model2Entity(kommentar);
-        entity = kommentarRepository.save(entity);
+        entity = kommentarRepository.saveAndFlush(entity);
         return kommentarMapper.entity2Model(entity);
     }
 
