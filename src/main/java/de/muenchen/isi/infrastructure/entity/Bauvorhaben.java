@@ -64,7 +64,7 @@ public class Bauvorhaben extends BaseEntity {
     @Column(nullable = false, unique = true)
     private String nameVorhaben;
 
-    @Column(precision = 10, scale = 2, nullable = false)
+    @Column(precision = 10, scale = 2, nullable = true)
     private BigDecimal grundstuecksgroesse;
 
     @FullTextField(valueBridge = @ValueBridgeRef(type = StandVorhabenValueBridge.class))
