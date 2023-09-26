@@ -73,4 +73,48 @@ class KommentarServiceTest {
             .verify(this.kommentarRepository, Mockito.times(1))
             .findAllByBauvorhabenOrderByCreatedDateTimeDesc(uuidBauvorhaben);
     }
+
+    @Test
+    void getKommentareForInfrastruktureinrichtung() {
+        final var uuidInfrastruktureinrichtung = UUID.randomUUID();
+        final var kommentar1 = new Kommentar();
+        kommentar1.setId(UUID.randomUUID());
+        kommentar1.setDatum("datum 1");
+        kommentar1.setText("text 1");
+        kommentar1.setBauvorhaben(uuidInfrastruktureinrichtung);
+
+        final var kommentar2 = new Kommentar();
+        kommentar2.setId(UUID.randomUUID());
+        kommentar2.setDatum("datum 2");
+        kommentar2.setText("text 2");
+        kommentar2.setBauvorhaben(uuidInfrastruktureinrichtung);
+
+        Mockito
+            .when(
+                this.kommentarRepository.findAllByInfrastruktureinrichtungOrderByCreatedDateTimeDesc(
+                        uuidInfrastruktureinrichtung
+                    )
+            )
+            .thenReturn(Stream.of(kommentar2, kommentar1));
+
+        final var result = kommentarService.getKommentareForInfrastruktureinrichtung(uuidInfrastruktureinrichtung);
+
+        final var kommentar1Model = new KommentarModel();
+        kommentar1Model.setId(kommentar1.getId());
+        kommentar1Model.setDatum("datum 1");
+        kommentar1Model.setText("text 1");
+        kommentar1Model.setBauvorhaben(uuidInfrastruktureinrichtung);
+
+        final var kommentar2Model = new KommentarModel();
+        kommentar2Model.setId(kommentar2.getId());
+        kommentar2Model.setDatum("datum 2");
+        kommentar2Model.setText("text 2");
+        kommentar2Model.setBauvorhaben(uuidInfrastruktureinrichtung);
+
+        assertThat(List.of(kommentar2Model, kommentar1Model), is(result));
+
+        Mockito
+            .verify(this.kommentarRepository, Mockito.times(1))
+            .findAllByInfrastruktureinrichtungOrderByCreatedDateTimeDesc(uuidInfrastruktureinrichtung);
+    }
 }
