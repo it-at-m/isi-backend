@@ -4,7 +4,6 @@ import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.mapper.KommentarDomainMapper;
 import de.muenchen.isi.domain.model.common.KommentarModel;
 import de.muenchen.isi.infrastructure.repository.common.KommentarRepository;
-import de.muenchen.isi.security.AuthenticationUtils;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -20,8 +19,6 @@ public class KommentarService {
     private final KommentarRepository kommentarRepository;
 
     private final KommentarDomainMapper kommentarMapper;
-
-    private final AuthenticationUtils authenticationUtils;
 
     public List<KommentarModel> getKommentareForBauvorhaben(final UUID bauvorhabenId) {
         return kommentarRepository
