@@ -93,7 +93,7 @@ public class InfrastruktureinrichtungService {
         this.throwEntityIsReferencedExceptionWhenInfrastruktureinrichtungIsReferencingBauvorhaben(
                 infrastruktureinrichtung
             );
-        this.kommentarRepository.deleteAllByInfrastruktureinrichtungId(id);
+        this.kommentarRepository.deleteAllByInfrastruktureinrichtung(id);
         this.infrastruktureinrichtungRepository.deleteById(id);
     }
 

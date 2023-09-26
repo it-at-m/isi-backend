@@ -1,14 +1,10 @@
 package de.muenchen.isi.infrastructure.entity.common;
 
 import de.muenchen.isi.infrastructure.entity.BaseEntity;
-import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
-import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Infrastruktureinrichtung;
+import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Index;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -21,8 +17,8 @@ import org.hibernate.annotations.Type;
 @EqualsAndHashCode(callSuper = true)
 @Table(
     indexes = {
-        @Index(name = "bauvorhaben_id_index", columnList = "bauvorhaben_id"),
-        @Index(name = "infrastruktureinrichtung_id_index", columnList = "infrastruktureinrichtung_id"),
+        @Index(name = "bauvorhaben_id_index", columnList = "bauvorhaben"),
+        @Index(name = "infrastruktureinrichtung_id_index", columnList = "infrastruktureinrichtung"),
     }
 )
 public class Kommentar extends BaseEntity {
@@ -35,11 +31,11 @@ public class Kommentar extends BaseEntity {
     @Column(nullable = true)
     private String text;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "bauvorhaben_id")
-    private Bauvorhaben bauvorhaben;
+    @Column(nullable = true, length = 36)
+    @Type(type = "uuid-char")
+    private UUID bauvorhaben;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "infrastruktureinrichtung_id")
-    private Infrastruktureinrichtung infrastruktureinrichtung;
+    @Column(nullable = true, length = 36)
+    @Type(type = "uuid-char")
+    private UUID infrastruktureinrichtung;
 }

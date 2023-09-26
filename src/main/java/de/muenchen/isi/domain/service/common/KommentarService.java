@@ -25,14 +25,14 @@ public class KommentarService {
 
     public List<KommentarModel> getKommentareForBauvorhaben(final UUID bauvorhabenId) {
         return kommentarRepository
-            .findAllByBauvorhabenIdOrderByCreatedDateTimeAsc(bauvorhabenId)
+            .findAllByBauvorhabenOrderByCreatedDateTimeDesc(bauvorhabenId)
             .map(kommentarMapper::entity2Model)
             .collect(Collectors.toList());
     }
 
     public List<KommentarModel> getKommentareForInfrastruktureinrichtung(final UUID infrastruktureinrichtungId) {
         return kommentarRepository
-            .findAllByInfrastruktureinrichtungIdOrderByCreatedDateTimeAsc(infrastruktureinrichtungId)
+            .findAllByInfrastruktureinrichtungOrderByCreatedDateTimeDesc(infrastruktureinrichtungId)
             .map(kommentarMapper::entity2Model)
             .collect(Collectors.toList());
     }
