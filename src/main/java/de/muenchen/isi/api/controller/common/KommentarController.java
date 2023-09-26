@@ -137,16 +137,7 @@ public class KommentarController {
     @DeleteMapping("/{id}")
     @Transactional
     @Operation(summary = "Löschen eines Kommentars")
-    @ApiResponses(
-        value = {
-            @ApiResponse(responseCode = "204", description = "NO CONTENT"),
-            @ApiResponse(
-                responseCode = "404",
-                description = "NOT FOUND -> Kommentar mit dieser ID nicht vorhanden.",
-                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
-            ),
-        }
-    )
+    @ApiResponses(value = { @ApiResponse(responseCode = "204", description = "NO CONTENT") })
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_DELETE_KOMMENTAR.name())")
     public ResponseEntity<Void> deleteKommentar(@PathVariable @NotNull final UUID id) {
         this.kommentarService.deleteKommentarById(id);
