@@ -48,15 +48,7 @@ public class KommentarController {
     @GetMapping("/all/bauvorhaben/{bauvorhabenId}")
     @Transactional(readOnly = true)
     @Operation(summary = "Holen der Kommentare eines Bauvorhabens")
-    @ApiResponses(
-        value = {
-            @ApiResponse(responseCode = "200", description = "OK"),
-            @ApiResponse(
-                responseCode = "409",
-                description = "CONFLICT -> Zum lesen der Kommentare eines Bauvorhabens ist die Rolle Sachbearbeitung oder Admin erforderlich"
-            ),
-        }
-    )
+    @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "OK") })
     @PreAuthorize(
         "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_READ_KOMMENTAR_BAUVORHABEN.name())"
     )
@@ -95,11 +87,6 @@ public class KommentarController {
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
             ),
             @ApiResponse(
-                responseCode = "404",
-                description = "NOT_FOUND -> Für den zu speichernden Kommentar existiert kein Bauvorhaben.",
-                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
-            ),
-            @ApiResponse(
                 responseCode = "412",
                 description = "PRECONDITION_FAILED -> In der Anwendung ist bereits eine neuere Version der Entität gespeichert.",
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
@@ -128,7 +115,7 @@ public class KommentarController {
             ),
             @ApiResponse(
                 responseCode = "404",
-                description = "NOT_FOUND -> Kommentar mit dieser ID nicht vorhanden oder für den zu speichernden Kommentar existiert kein Bauvorhaben.",
+                description = "NOT_FOUND -> Kommentar mit dieser ID nicht vorhanden.",
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
             ),
             @ApiResponse(
