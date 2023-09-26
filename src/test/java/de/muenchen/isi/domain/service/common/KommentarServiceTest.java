@@ -203,4 +203,11 @@ class KommentarServiceTest {
         Mockito.verify(this.kommentarRepository, Mockito.times(1)).findById(kommentar1.getId());
         Mockito.verify(this.kommentarRepository, Mockito.times(0)).saveAndFlush(kommentar1);
     }
+
+    @Test
+    void deleteKommentarById() {
+        final var id = UUID.randomUUID();
+        kommentarService.deleteKommentarById(id);
+        Mockito.verify(this.kommentarRepository, Mockito.times(1)).deleteById(id);
+    }
 }
