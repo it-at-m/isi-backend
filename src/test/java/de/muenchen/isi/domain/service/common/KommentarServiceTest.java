@@ -147,4 +147,28 @@ class KommentarServiceTest {
         assertThrows(EntityNotFoundException.class, () -> this.kommentarService.getKommentarById(kommentar1.getId()));
         Mockito.verify(this.kommentarRepository, Mockito.times(1)).findById(kommentar1.getId());
     }
+
+    @Test
+    void saveKommentar() {
+        final var uuidInfrastruktureinrichtung = UUID.randomUUID();
+        final var kommentar1 = new Kommentar();
+        kommentar1.setId(UUID.randomUUID());
+        kommentar1.setDatum("datum 1");
+        kommentar1.setText("text 1");
+        kommentar1.setBauvorhaben(uuidInfrastruktureinrichtung);
+
+        final var kommentar1Model = new KommentarModel();
+        kommentar1Model.setId(kommentar1.getId());
+        kommentar1Model.setDatum("datum 1");
+        kommentar1Model.setText("text 1");
+        kommentar1Model.setBauvorhaben(uuidInfrastruktureinrichtung);
+
+        Mockito.when(this.kommentarRepository.saveAndFlush(kommentar1)).thenReturn(kommentar1);
+
+        final var result = kommentarService.saveKommentar(kommentar1Model);
+
+        assertThat(result, is(kommentar1Model));
+
+        Mockito.verify(this.kommentarRepository, Mockito.times(1)).saveAndFlush(kommentar1);
+    }
 }
