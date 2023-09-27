@@ -43,7 +43,7 @@ public class Infrastrukturabfrage extends BaseEntity {
      * Einheitlicher indexiertes sortierbares Namensattributs
      * zur einheitlichen entitätsübergreifenden Sortierung der Suchergebnisse.
      */
-    @KeywordField(name = "name_sort", sortable = Sortable.YES)
+    @KeywordField(name = "name_sort", sortable = Sortable.YES, normalizer = "lowercase")
     @Transient
     @IndexingDependency(derivedFrom = @ObjectPath({ @PropertyValue(propertyName = "abfrage") }))
     public String getNameAbfrageSuche() {

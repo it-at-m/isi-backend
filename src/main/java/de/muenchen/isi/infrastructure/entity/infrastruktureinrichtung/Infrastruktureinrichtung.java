@@ -83,7 +83,7 @@ public abstract class Infrastruktureinrichtung extends BaseEntity {
      * Einheitlicher indexiertes sortierbares Namensattributs
      * zur einheitlichen entitätsübergreifenden Sortierung der Suchergebnisse.
      */
-    @KeywordField(name = "name_sort", sortable = Sortable.YES)
+    @KeywordField(name = "name_sort", sortable = Sortable.YES, normalizer = "lowercase")
     @FullTextField
     @NonStandardField(
         name = "nameEinrichtung" + SearchwordSuggesterRepository.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
