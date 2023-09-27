@@ -71,6 +71,9 @@ public class Abfrage {
     @Column(nullable = false)
     private StatusAbfrage statusAbfrage;
 
+    @Column(nullable = true)
+    private boolean schnellesSchliessenAbfrage;
+
     @FullTextField
     @NonStandardField(
         name = "bebauungsplannummer" + SearchwordSuggesterRepository.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,

@@ -67,7 +67,7 @@ public class TransitionModelTest {
         final var anmerkung = "";
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
-        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.ANGELEGT, anmerkung);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.ANGELEGT, anmerkung, false);
 
         final var uuid = abfrage.getId();
         List<TransitionModel> possibleTransitions =
@@ -91,7 +91,7 @@ public class TransitionModelTest {
         final var anmerkung = "";
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
-        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.ANGELEGT, anmerkung);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.ANGELEGT, anmerkung, false);
 
         final var uuid = abfrage.getId();
         List<TransitionModel> possibleTransitions =
@@ -108,7 +108,7 @@ public class TransitionModelTest {
         final var anmerkung = "";
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
-        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.ANGELEGT, anmerkung);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.ANGELEGT, anmerkung, false);
 
         final var uuid = abfrage.getId();
         List<TransitionModel> possibleTransitions =
@@ -132,7 +132,7 @@ public class TransitionModelTest {
         final var anmerkung = "";
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
-        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.ANGELEGT, anmerkung);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.ANGELEGT, anmerkung, false);
 
         final var uuid = abfrage.getId();
         List<TransitionModel> possibleTransitions =
@@ -149,7 +149,7 @@ public class TransitionModelTest {
         final var anmerkung = "";
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
-        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.OFFEN, anmerkung);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.OFFEN, anmerkung, false);
 
         final var uuid = abfrage.getId();
         List<TransitionModel> possibleTransitions =
@@ -194,7 +194,7 @@ public class TransitionModelTest {
         final var anmerkung = "";
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
-        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.OFFEN, anmerkung);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.OFFEN, anmerkung, false);
 
         final var uuid = abfrage.getId();
         List<TransitionModel> possibleTransitions =
@@ -240,7 +240,7 @@ public class TransitionModelTest {
         final var anmerkung = "";
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
-        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.OFFEN, anmerkung);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.OFFEN, anmerkung, false);
 
         final var uuid = abfrage.getId();
         List<TransitionModel> possibleTransitions =
@@ -257,7 +257,7 @@ public class TransitionModelTest {
         final var anmerkung = "";
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
-        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.OFFEN, anmerkung);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.OFFEN, anmerkung, false);
 
         final var uuid = abfrage.getId();
         List<TransitionModel> possibleTransitions =
@@ -277,7 +277,8 @@ public class TransitionModelTest {
         this.abfrageService.changeStatusAbfrage(
                 abfrage.getId(),
                 StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG,
-                anmerkung
+                anmerkung,
+                false
             );
 
         final var uuid = abfrage.getId();
@@ -338,7 +339,8 @@ public class TransitionModelTest {
         this.abfrageService.changeStatusAbfrage(
                 abfrage.getId(),
                 StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG,
-                anmerkung
+                anmerkung,
+                false
             );
 
         final var uuid = abfrage.getId();
@@ -399,7 +401,8 @@ public class TransitionModelTest {
         this.abfrageService.changeStatusAbfrage(
                 abfrage.getId(),
                 StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG,
-                anmerkung
+                anmerkung,
+                false
             );
 
         final var uuid = abfrage.getId();
@@ -420,7 +423,8 @@ public class TransitionModelTest {
         this.abfrageService.changeStatusAbfrage(
                 abfrage.getId(),
                 StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG,
-                anmerkung
+                anmerkung,
+                false
             );
 
         final var uuid = abfrage.getId();
@@ -438,7 +442,12 @@ public class TransitionModelTest {
         final var anmerkung = "";
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
-        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE, anmerkung);
+        this.abfrageService.changeStatusAbfrage(
+                abfrage.getId(),
+                StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE,
+                anmerkung,
+                false
+            );
 
         final var uuid = abfrage.getId();
         List<TransitionModel> possibleTransitions =
@@ -484,7 +493,12 @@ public class TransitionModelTest {
         final var anmerkung = "";
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
-        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE, anmerkung);
+        this.abfrageService.changeStatusAbfrage(
+                abfrage.getId(),
+                StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE,
+                anmerkung,
+                false
+            );
 
         final var uuid = abfrage.getId();
         List<TransitionModel> possibleTransitions =
@@ -529,7 +543,12 @@ public class TransitionModelTest {
         final var anmerkung = "";
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
-        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE, anmerkung);
+        this.abfrageService.changeStatusAbfrage(
+                abfrage.getId(),
+                StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE,
+                anmerkung,
+                false
+            );
 
         final var uuid = abfrage.getId();
         List<TransitionModel> possibleTransitions =
@@ -546,7 +565,12 @@ public class TransitionModelTest {
         final var anmerkung = "";
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
-        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE, anmerkung);
+        this.abfrageService.changeStatusAbfrage(
+                abfrage.getId(),
+                StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE,
+                anmerkung,
+                false
+            );
 
         final var uuid = abfrage.getId();
         List<TransitionModel> possibleTransitions =
@@ -563,7 +587,12 @@ public class TransitionModelTest {
         final var anmerkung = "";
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
-        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.BEDARFSMELDUNG_ERFOLGT, anmerkung);
+        this.abfrageService.changeStatusAbfrage(
+                abfrage.getId(),
+                StatusAbfrage.BEDARFSMELDUNG_ERFOLGT,
+                anmerkung,
+                false
+            );
 
         final var uuid = abfrage.getId();
         List<TransitionModel> possibleTransitions =
@@ -600,7 +629,12 @@ public class TransitionModelTest {
         final var anmerkung = "";
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
-        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.BEDARFSMELDUNG_ERFOLGT, anmerkung);
+        this.abfrageService.changeStatusAbfrage(
+                abfrage.getId(),
+                StatusAbfrage.BEDARFSMELDUNG_ERFOLGT,
+                anmerkung,
+                false
+            );
 
         final var uuid = abfrage.getId();
         List<TransitionModel> possibleTransitions =
@@ -628,7 +662,12 @@ public class TransitionModelTest {
         final var anmerkung = "";
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
-        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.BEDARFSMELDUNG_ERFOLGT, anmerkung);
+        this.abfrageService.changeStatusAbfrage(
+                abfrage.getId(),
+                StatusAbfrage.BEDARFSMELDUNG_ERFOLGT,
+                anmerkung,
+                false
+            );
 
         final var uuid = abfrage.getId();
         List<TransitionModel> possibleTransitions =
@@ -656,7 +695,12 @@ public class TransitionModelTest {
         final var anmerkung = "";
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
-        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.BEDARFSMELDUNG_ERFOLGT, anmerkung);
+        this.abfrageService.changeStatusAbfrage(
+                abfrage.getId(),
+                StatusAbfrage.BEDARFSMELDUNG_ERFOLGT,
+                anmerkung,
+                false
+            );
 
         final var uuid = abfrage.getId();
         List<TransitionModel> possibleTransitions =
@@ -673,7 +717,7 @@ public class TransitionModelTest {
         final var anmerkung = "";
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
-        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.ERLEDIGT, anmerkung);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.ERLEDIGT, anmerkung, false);
 
         final var uuid = abfrage.getId();
         List<TransitionModel> possibleTransitions =
@@ -702,7 +746,7 @@ public class TransitionModelTest {
         final var anmerkung = "";
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
-        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.ERLEDIGT, anmerkung);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.ERLEDIGT, anmerkung, false);
 
         final var uuid = abfrage.getId();
         List<TransitionModel> possibleTransitions =
@@ -731,7 +775,7 @@ public class TransitionModelTest {
         final var anmerkung = "";
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
-        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.ERLEDIGT, anmerkung);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.ERLEDIGT, anmerkung, false);
 
         final var uuid = abfrage.getId();
         List<TransitionModel> possibleTransitions =
@@ -748,7 +792,7 @@ public class TransitionModelTest {
         final var anmerkung = "";
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
-        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.ERLEDIGT, anmerkung);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.ERLEDIGT, anmerkung, false);
 
         final var uuid = abfrage.getId();
         List<TransitionModel> possibleTransitions =
@@ -765,7 +809,7 @@ public class TransitionModelTest {
         final var anmerkung = "";
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
-        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.ABBRUCH, anmerkung);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.ABBRUCH, anmerkung, false);
 
         final var uuid = abfrage.getId();
         List<TransitionModel> possibleTransitions =

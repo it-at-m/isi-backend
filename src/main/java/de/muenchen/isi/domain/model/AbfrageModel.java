@@ -31,6 +31,8 @@ public class AbfrageModel {
 
     private StatusAbfrage statusAbfrage;
 
+    private boolean schnellesSchliessenAbfrage;
+
     private String bebauungsplannummer;
 
     private String nameAbfrage;

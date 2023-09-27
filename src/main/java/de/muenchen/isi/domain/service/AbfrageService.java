@@ -73,6 +73,7 @@ public class AbfrageService {
         if (abfrage.getId() == null) {
             abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ANGELEGT);
             abfrage.setSub(authenticationUtils.getUserSub());
+            abfrage.getAbfrage().setSchnellesSchliessenAbfrage(false);
         }
         var abfrageEntity = this.abfrageDomainMapper.model2entity(abfrage);
         final var saved =
@@ -192,12 +193,14 @@ public class AbfrageService {
     public InfrastrukturabfrageModel changeStatusAbfrage(
         final UUID id,
         final StatusAbfrage statusAbfrage,
-        final String anmerkung
+        final String anmerkung,
+        final boolean schnellesSchliessenAbfrage
     )
         throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, StringLengthExceededException {
         var originalAbfrageDb = this.getInfrastrukturabfrageById(id);
         originalAbfrageDb.getAbfrage().setStatusAbfrage(statusAbfrage);
         originalAbfrageDb = this.addAbfrageAnmerkung(originalAbfrageDb, anmerkung);
+        originalAbfrageDb.getAbfrage().setSchnellesSchliessenAbfrage(schnellesSchliessenAbfrage);
         return this.saveInfrastrukturabfrage(originalAbfrageDb);
     }
 

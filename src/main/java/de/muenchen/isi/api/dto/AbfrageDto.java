@@ -15,6 +15,7 @@ import java.util.UUID;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import lombok.Data;
+import org.springframework.data.annotation.ReadOnlyProperty;
 
 @Data
 public class AbfrageDto {
@@ -34,6 +35,9 @@ public class AbfrageDto {
     private String anmerkung;
 
     private StatusAbfrage statusAbfrage;
+
+    @ReadOnlyProperty
+    private boolean schnellesSchliessenAbfrage;
 
     private String bebauungsplannummer;
 
