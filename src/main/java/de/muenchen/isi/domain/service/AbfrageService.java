@@ -236,35 +236,35 @@ public class AbfrageService {
     public void deleteInfrasturkturabfrageById(final UUID id)
         throws EntityNotFoundException, EntityIsReferencedException, UserRoleNotAllowedException, AbfrageStatusNotAllowedException {
         final var abfrage = this.getInfrastrukturabfrageById(id);
-        if (abfrage.getSub().equals(authenticationUtils.getUserSub())) {
-            this.throwUserRoleNotAllowedOrAbfrageStatusNotAlloweExceptionWhenDeleteAbfrage(abfrage.getAbfrage());
-            this.throwEntityIsReferencedExceptionWhenAbfrageIsReferencingBauvorhaben(abfrage.getAbfrage());
-            this.infrastrukturabfrageRepository.deleteById(id);
-        } else {
-            log.error(
-                "User {} hat versucht, die Abfrage {} von User {} zu löschen.",
-                authenticationUtils.getUserSub(),
-                id,
-                abfrage.getSub()
-            );
-            throw new UserRoleNotAllowedException("Keine Berechtigung zum Löschen der Abfrage");
-        }
+        this.throwUserRoleNotAllowedOrAbfrageStatusNotAlloweExceptionWhenDeleteAbfrage(abfrage);
+        this.throwEntityIsReferencedExceptionWhenAbfrageIsReferencingBauvorhaben(abfrage.getAbfrage());
+        this.infrastrukturabfrageRepository.deleteById(id);
     }
 
     /**
      * Diese Methode überprüft ob der Nutzer die richtige Rolle hat und die Abfrage im richtigen Status, um sie zu löschen.
+     * Dabei wird auch geprüft, ob der Nutzer der Abfrage zugeordnet ist per sub Id
      *
      * @param abfrage zum Identifizieren des Status.
      * @throws UserRoleNotAllowedException      falls der Nutzer nicht die richtige Rolle hat.
-     * @throws AbfrageStatusNotAllowedException falls die Abfrage den falschen Status hat..
+     * @throws AbfrageStatusNotAllowedException falls die Abfrage den falschen Status hat oder der Sub des Nutzers nicht mit dem Sub der Abfrage übereinstimmt
      */
-    public void throwUserRoleNotAllowedOrAbfrageStatusNotAlloweExceptionWhenDeleteAbfrage(AbfrageModel abfrage)
-        throws UserRoleNotAllowedException, AbfrageStatusNotAllowedException {
+    public void throwUserRoleNotAllowedOrAbfrageStatusNotAlloweExceptionWhenDeleteAbfrage(
+        InfrastrukturabfrageModel abfrage
+    ) throws UserRoleNotAllowedException, AbfrageStatusNotAllowedException {
         var roles = authenticationUtils.getUserRoles();
         if (!roles.contains(AuthenticationUtils.ROLE_ADMIN)) {
             if (!roles.contains(AuthenticationUtils.ROLE_ABFRAGEERSTELLUNG)) {
                 throw new UserRoleNotAllowedException("Keine Berechtigung zum Löschen der Abfrage");
-            } else if (abfrage.getStatusAbfrage() != StatusAbfrage.ANGELEGT) {
+            } else if (!abfrage.getSub().equals(authenticationUtils.getUserSub())) {
+                log.error(
+                    "User {} hat versucht, die Abfrage {} von User {} zu löschen.",
+                    authenticationUtils.getUserSub(),
+                    abfrage.getId(),
+                    abfrage.getSub()
+                );
+                throw new UserRoleNotAllowedException("Keine Berechtigung zum Löschen der Abfrage");
+            } else if (abfrage.getAbfrage().getStatusAbfrage() != StatusAbfrage.ANGELEGT) {
                 throw new AbfrageStatusNotAllowedException(
                     "Die Abfrage kann nur im Status 'angelegt' gelöscht werden."
                 );
