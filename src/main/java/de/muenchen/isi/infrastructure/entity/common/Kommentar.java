@@ -31,11 +31,11 @@ public class Kommentar extends BaseEntity {
     @Column(nullable = true)
     private String text;
 
-    @Column(nullable = true, length = 36)
+    @Column(nullable = true, length = 36, updatable = false)
     @Type(type = "uuid-char")
     private UUID bauvorhaben;
 
-    @Column(nullable = true, length = 36)
+    @Column(nullable = true, length = 36, updatable = false)
     @Type(type = "uuid-char")
     private UUID infrastruktureinrichtung;
 }
