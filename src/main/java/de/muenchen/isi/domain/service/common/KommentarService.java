@@ -22,6 +22,12 @@ public class KommentarService {
 
     private final KommentarDomainMapper kommentarMapper;
 
+    /**
+     * Die Methode holt alle für ein Bauvorhaben hinterlegten Kommentare.
+     *
+     * @param bauvorhabenId als ID des Bauvorhabens.
+     * @return die Kommentare sortiert nach absteigenden Erstellungsdatum.
+     */
     public List<KommentarModel> getKommentareForBauvorhaben(final UUID bauvorhabenId) {
         return kommentarRepository
             .findAllByBauvorhabenOrderByCreatedDateTimeDesc(bauvorhabenId)
@@ -29,6 +35,12 @@ public class KommentarService {
             .collect(Collectors.toList());
     }
 
+    /**
+     * Die Methode holt alle für eine Infrastruktureinrichtung hinterlegten Kommentare.
+     *
+     * @param infrastruktureinrichtungId als ID der Infrastruktureinrichtung.
+     * @return die Kommentare sortiert nach absteigenden Erstellungsdatum.
+     */
     public List<KommentarModel> getKommentareForInfrastruktureinrichtung(final UUID infrastruktureinrichtungId) {
         return kommentarRepository
             .findAllByInfrastruktureinrichtungOrderByCreatedDateTimeDesc(infrastruktureinrichtungId)
@@ -36,6 +48,13 @@ public class KommentarService {
             .collect(Collectors.toList());
     }
 
+    /**
+     * Holt den Kommentar identifiziert durch die ID des Kommentars.
+     *
+     * @param id des Kommentars.
+     * @return den Kommentar.
+     * @throws EntityNotFoundException falls kein Kommentar mit der ID existiert.
+     */
     public KommentarModel getKommentarById(final UUID id) throws EntityNotFoundException {
         final var entity = kommentarRepository
             .findById(id)
@@ -47,6 +66,13 @@ public class KommentarService {
         return kommentarMapper.entity2Model(entity);
     }
 
+    /**
+     * Speichert den Kommentar.
+     *
+     * @param kommentar zum Speichern.
+     * @return den gespeicherten Kommentar.
+     * @throws OptimisticLockingException falls der Kommentar in einer neueren Version gespeichert ist.
+     */
     public KommentarModel saveKommentar(final KommentarModel kommentar) throws OptimisticLockingException {
         var entity = kommentarMapper.model2Entity(kommentar);
         try {
@@ -59,12 +85,24 @@ public class KommentarService {
         return kommentarMapper.entity2Model(entity);
     }
 
+    /**
+     * Aktualisiert den bereits gespeicherten Kommentar.
+     *
+     * @param kommentar zum Aktualisieren.
+     * @return den aktualisierten Kommentar.
+     * @throws EntityNotFoundException falls kein Kommentar mit der ID existiert.
+     * @throws OptimisticLockingException falls der Kommentar in einer neueren Version gespeichert ist.
+     */
     public KommentarModel updateKommentar(final KommentarModel kommentar)
         throws EntityNotFoundException, OptimisticLockingException {
         this.getKommentarById(kommentar.getId());
         return this.saveKommentar(kommentar);
     }
 
+    /**
+     * Löscht den Kommentar identifiziert mit der im parameter gegebenen Kommentar ID.
+     * @param id des zu löschenden Kommentars.
+     */
     public void deleteKommentarById(final UUID id) {
         kommentarRepository.deleteById(id);
     }
