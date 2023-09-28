@@ -5,6 +5,7 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
+import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.mapper.KommentarDomainMapperImpl;
 import de.muenchen.isi.domain.model.common.KommentarModel;
 import de.muenchen.isi.infrastructure.entity.common.Kommentar;
@@ -149,7 +150,7 @@ class KommentarServiceTest {
     }
 
     @Test
-    void saveKommentar() {
+    void saveKommentar() throws OptimisticLockingException {
         final var uuidInfrastruktureinrichtung = UUID.randomUUID();
         final var kommentar1 = new Kommentar();
         kommentar1.setId(UUID.randomUUID());
@@ -173,7 +174,7 @@ class KommentarServiceTest {
     }
 
     @Test
-    void updateKommentar() throws EntityNotFoundException {
+    void updateKommentar() throws EntityNotFoundException, OptimisticLockingException {
         final var uuidInfrastruktureinrichtung = UUID.randomUUID();
         final var kommentar1 = new Kommentar();
         kommentar1.setId(UUID.randomUUID());

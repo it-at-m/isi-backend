@@ -1,6 +1,7 @@
 package de.muenchen.isi.domain.service.common;
 
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
+import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.mapper.KommentarDomainMapper;
 import de.muenchen.isi.domain.model.common.KommentarModel;
 import de.muenchen.isi.infrastructure.repository.common.KommentarRepository;
@@ -9,6 +10,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -45,13 +47,20 @@ public class KommentarService {
         return kommentarMapper.entity2Model(entity);
     }
 
-    public KommentarModel saveKommentar(final KommentarModel kommentar) {
+    public KommentarModel saveKommentar(final KommentarModel kommentar) throws OptimisticLockingException {
         var entity = kommentarMapper.model2Entity(kommentar);
-        entity = kommentarRepository.saveAndFlush(entity);
+        try {
+            entity = kommentarRepository.saveAndFlush(entity);
+        } catch (final ObjectOptimisticLockingFailureException exception) {
+            final var message =
+                "Der Kommentar wurde in der Zwischenzeit geändert. Bitte öffnen Sie die Kommentare neu!";
+            throw new OptimisticLockingException(message, exception);
+        }
         return kommentarMapper.entity2Model(entity);
     }
 
-    public KommentarModel updateKommentar(final KommentarModel kommentar) throws EntityNotFoundException {
+    public KommentarModel updateKommentar(final KommentarModel kommentar)
+        throws EntityNotFoundException, OptimisticLockingException {
         this.getKommentarById(kommentar.getId());
         return this.saveKommentar(kommentar);
     }

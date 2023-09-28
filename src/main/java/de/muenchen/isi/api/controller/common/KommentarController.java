@@ -95,7 +95,7 @@ public class KommentarController {
     )
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_WRITE_KOMMENTAR.name())")
     public ResponseEntity<KommentarDto> createKommentar(@RequestBody @Valid @NotNull final KommentarDto kommentarDto)
-        throws EntityNotFoundException {
+        throws EntityNotFoundException, OptimisticLockingException {
         var model = this.kommentarApiMapper.dto2Model(kommentarDto);
         model = this.kommentarService.saveKommentar(model);
         final var saved = this.kommentarApiMapper.model2Dto(model);
@@ -127,7 +127,7 @@ public class KommentarController {
     )
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_WRITE_KOMMENTAR.name())")
     public ResponseEntity<KommentarDto> updateKommentar(@RequestBody @Valid @NotNull final KommentarDto kommentarDto)
-        throws EntityNotFoundException {
+        throws EntityNotFoundException, OptimisticLockingException {
         var model = this.kommentarApiMapper.dto2Model(kommentarDto);
         model = this.kommentarService.updateKommentar(model);
         final var saved = this.kommentarApiMapper.model2Dto(model);
