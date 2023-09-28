@@ -85,13 +85,13 @@ class KommentarServiceTest {
         kommentar1.setId(UUID.randomUUID());
         kommentar1.setDatum("datum 1");
         kommentar1.setText("text 1");
-        kommentar1.setBauvorhaben(uuidInfrastruktureinrichtung);
+        kommentar1.setInfrastruktureinrichtung(uuidInfrastruktureinrichtung);
 
         final var kommentar2 = new Kommentar();
         kommentar2.setId(UUID.randomUUID());
         kommentar2.setDatum("datum 2");
         kommentar2.setText("text 2");
-        kommentar2.setBauvorhaben(uuidInfrastruktureinrichtung);
+        kommentar2.setInfrastruktureinrichtung(uuidInfrastruktureinrichtung);
 
         Mockito
             .when(
@@ -107,13 +107,13 @@ class KommentarServiceTest {
         kommentar1Model.setId(kommentar1.getId());
         kommentar1Model.setDatum("datum 1");
         kommentar1Model.setText("text 1");
-        kommentar1Model.setBauvorhaben(uuidInfrastruktureinrichtung);
+        kommentar1Model.setInfrastruktureinrichtung(uuidInfrastruktureinrichtung);
 
         final var kommentar2Model = new KommentarModel();
         kommentar2Model.setId(kommentar2.getId());
         kommentar2Model.setDatum("datum 2");
         kommentar2Model.setText("text 2");
-        kommentar2Model.setBauvorhaben(uuidInfrastruktureinrichtung);
+        kommentar2Model.setInfrastruktureinrichtung(uuidInfrastruktureinrichtung);
 
         assertThat(List.of(kommentar2Model, kommentar1Model), is(result));
 
@@ -124,12 +124,12 @@ class KommentarServiceTest {
 
     @Test
     void getKommentarById() throws EntityNotFoundException {
-        final var uuidInfrastruktureinrichtung = UUID.randomUUID();
+        final var uuidBauvorhaben = UUID.randomUUID();
         final var kommentar1 = new Kommentar();
         kommentar1.setId(UUID.randomUUID());
         kommentar1.setDatum("datum 1");
         kommentar1.setText("text 1");
-        kommentar1.setBauvorhaben(uuidInfrastruktureinrichtung);
+        kommentar1.setBauvorhaben(uuidBauvorhaben);
 
         Mockito.when(this.kommentarRepository.findById(kommentar1.getId())).thenReturn(Optional.of(kommentar1));
         final KommentarModel result = this.kommentarService.getKommentarById(kommentar1.getId());
@@ -138,7 +138,7 @@ class KommentarServiceTest {
         kommentar1Model.setId(kommentar1.getId());
         kommentar1Model.setDatum("datum 1");
         kommentar1Model.setText("text 1");
-        kommentar1Model.setBauvorhaben(uuidInfrastruktureinrichtung);
+        kommentar1Model.setBauvorhaben(uuidBauvorhaben);
         assertThat(kommentar1Model, is(result));
 
         Mockito.verify(this.kommentarRepository, Mockito.times(1)).findById(kommentar1.getId());
@@ -151,18 +151,18 @@ class KommentarServiceTest {
 
     @Test
     void saveKommentar() throws OptimisticLockingException {
-        final var uuidInfrastruktureinrichtung = UUID.randomUUID();
+        final var uuidBauvorhaben = UUID.randomUUID();
         final var kommentar1 = new Kommentar();
         kommentar1.setId(UUID.randomUUID());
         kommentar1.setDatum("datum 1");
         kommentar1.setText("text 1");
-        kommentar1.setBauvorhaben(uuidInfrastruktureinrichtung);
+        kommentar1.setBauvorhaben(uuidBauvorhaben);
 
         final var kommentar1Model = new KommentarModel();
         kommentar1Model.setId(kommentar1.getId());
         kommentar1Model.setDatum("datum 1");
         kommentar1Model.setText("text 1");
-        kommentar1Model.setBauvorhaben(uuidInfrastruktureinrichtung);
+        kommentar1Model.setBauvorhaben(uuidBauvorhaben);
 
         Mockito.when(this.kommentarRepository.saveAndFlush(kommentar1)).thenReturn(kommentar1);
 
@@ -175,18 +175,18 @@ class KommentarServiceTest {
 
     @Test
     void updateKommentar() throws EntityNotFoundException, OptimisticLockingException {
-        final var uuidInfrastruktureinrichtung = UUID.randomUUID();
+        final var uuidBauvorhaben = UUID.randomUUID();
         final var kommentar1 = new Kommentar();
         kommentar1.setId(UUID.randomUUID());
         kommentar1.setDatum("datum 1");
         kommentar1.setText("text 1");
-        kommentar1.setBauvorhaben(uuidInfrastruktureinrichtung);
+        kommentar1.setBauvorhaben(uuidBauvorhaben);
 
         final var kommentar1Model = new KommentarModel();
         kommentar1Model.setId(kommentar1.getId());
         kommentar1Model.setDatum("datum 1");
         kommentar1Model.setText("text 1");
-        kommentar1Model.setBauvorhaben(uuidInfrastruktureinrichtung);
+        kommentar1Model.setBauvorhaben(uuidBauvorhaben);
 
         Mockito.when(this.kommentarRepository.findById(kommentar1.getId())).thenReturn(Optional.of(kommentar1));
         Mockito.when(this.kommentarRepository.saveAndFlush(kommentar1)).thenReturn(kommentar1);
