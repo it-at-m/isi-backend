@@ -17,8 +17,6 @@ public class BauvorhabenModel extends BaseEntityModel {
 
     private String nameVorhaben;
 
-    private String eigentuemer;
-
     private BigDecimal grundstuecksgroesse;
 
     private StandVorhaben standVorhaben;
