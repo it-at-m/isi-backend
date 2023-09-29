@@ -23,6 +23,13 @@ import lombok.ToString;
 )
 public class GlobalCounter extends BaseEntity {
 
+    public GlobalCounter() {}
+
+    public GlobalCounter(CounterType counterType, long counter) {
+        this.counterType = counterType;
+        this.counter = counter;
+    }
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private CounterType counterType;

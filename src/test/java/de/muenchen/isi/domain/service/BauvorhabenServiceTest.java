@@ -49,6 +49,7 @@ import de.muenchen.isi.infrastructure.repository.AbfragevarianteRepository;
 import de.muenchen.isi.infrastructure.repository.BauvorhabenRepository;
 import de.muenchen.isi.infrastructure.repository.InfrastrukturabfrageRepository;
 import de.muenchen.isi.infrastructure.repository.InfrastruktureinrichtungRepository;
+import de.muenchen.isi.infrastructure.repository.common.GlobalCounterRepository;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -100,6 +101,9 @@ public class BauvorhabenServiceTest {
     private AbfragevarianteRepository abfragevarianteRepository;
 
     @Mock
+    private GlobalCounterRepository globalCounterRepository;
+
+    @Mock
     private DokumentService dokumentService;
 
     @BeforeEach
@@ -113,6 +117,7 @@ public class BauvorhabenServiceTest {
                 this.infrastrukturabfrageRepository,
                 this.infrastruktureinrichtungRepository,
                 this.abfragevarianteRepository,
+                this.globalCounterRepository,
                 this.abfrageService,
                 this.dokumentService
             );
@@ -121,6 +126,8 @@ public class BauvorhabenServiceTest {
             this.bauvorhabenRepository,
             this.infrastrukturabfrageRepository,
             this.infrastruktureinrichtungRepository,
+            this.abfragevarianteRepository,
+            this.globalCounterRepository,
             this.dokumentService,
             this.abfrageService
         );
