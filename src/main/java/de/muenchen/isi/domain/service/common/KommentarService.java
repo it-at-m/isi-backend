@@ -100,7 +100,7 @@ public class KommentarService {
     }
 
     /**
-     * Löscht den Kommentar identifiziert mit der im parameter gegebenen Kommentar ID.
+     * Löscht den Kommentar identifiziert mit der im Parameter gegebenen Kommentar ID.
      * @param id des zu löschenden Kommentars.
      */
     public void deleteKommentarById(final UUID id) {
