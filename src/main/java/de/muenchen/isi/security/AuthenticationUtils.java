@@ -89,10 +89,12 @@ public class AuthenticationUtils {
         String sub = null;
         final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (!ObjectUtils.isEmpty(authentication)) {
-            final DefaultOAuth2AuthenticatedPrincipal principal =
-                (DefaultOAuth2AuthenticatedPrincipal) authentication.getPrincipal();
-            if (!ObjectUtils.isEmpty(principal)) {
-                sub = principal.getAttribute(TOKEN_USER_SUB).toString();
+            if (!(authentication.getPrincipal() instanceof String)) {
+                final DefaultOAuth2AuthenticatedPrincipal principal =
+                    (DefaultOAuth2AuthenticatedPrincipal) authentication.getPrincipal();
+                if (!ObjectUtils.isEmpty(principal)) {
+                    sub = principal.getAttribute(TOKEN_USER_SUB).toString();
+                }
             }
         }
         return StringUtils.isNotBlank(sub) ? sub : SUB_UNAUTHENTICATED_USER;

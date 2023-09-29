@@ -131,7 +131,6 @@ public class BauvorhabenServiceTest {
         var bauvorhabenId = UUID.randomUUID();
         Bauvorhaben bauvorhaben = new Bauvorhaben();
         bauvorhaben.setBauvorhabenNummer("12345");
-        bauvorhaben.setEigentuemer("Eigentuemer");
         bauvorhaben.setGrundstuecksgroesse(BigDecimal.valueOf(1));
         bauvorhaben.setNameVorhaben("Name");
         bauvorhaben.setPlanungsrecht(Planungsrecht.BPLAN_PARAG_11);
@@ -220,7 +219,6 @@ public class BauvorhabenServiceTest {
         var bauvorhabenId = UUID.randomUUID();
         Bauvorhaben bauvorhaben = new Bauvorhaben();
         bauvorhaben.setBauvorhabenNummer("12345");
-        bauvorhaben.setEigentuemer("Eigentuemer");
         bauvorhaben.setGrundstuecksgroesse(BigDecimal.valueOf(1));
         bauvorhaben.setNameVorhaben("Name");
         bauvorhaben.setPlanungsrecht(Planungsrecht.BPLAN_PARAG_11);

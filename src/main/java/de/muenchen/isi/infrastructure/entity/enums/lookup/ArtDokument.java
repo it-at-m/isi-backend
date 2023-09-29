@@ -17,6 +17,8 @@ public enum ArtDokument implements ILookup {
     BERECHNUNG("Berechnung"),
     INFOS_BAUGENEHMIGUNG("Infos zur Baugenehmigung"),
     PRESSEARTIKEL("Presseartikel"),
+    INFOS_ZU_SOZ_INFRASTRUKTUR("Infos zu soz. Infrastruktur"),
+    PROTOKOLL("Protokoll"),
     SONSTIGES("Sonstiges");
 
     @Getter

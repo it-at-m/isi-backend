@@ -688,6 +688,34 @@ class AbfrageServiceTest {
     }
 
     @Test
+    void deleteInfrastrukturabfrageAdminNotSameSub()
+        throws EntityNotFoundException, EntityIsReferencedException, UserRoleNotAllowedException, AbfrageStatusNotAllowedException {
+        final UUID id = UUID.randomUUID();
+
+        String[] roles = { "admin" };
+        String sub = "1234";
+        String userSub = "6789";
+
+        final Infrastrukturabfrage entity = new Infrastrukturabfrage();
+        entity.setId(id);
+        entity.setSub(sub);
+        final Abfrage abfrage = new Abfrage();
+        abfrage.setStatusAbfrage(StatusAbfrage.OFFEN);
+        entity.setAbfrage(abfrage);
+
+        Mockito.when(this.infrastrukturabfrageRepository.findById(entity.getId())).thenReturn(Optional.of(entity));
+
+        Mockito.when(this.authenticationUtils.getUserRoles()).thenReturn(List.of(roles));
+
+        Mockito.when(this.authenticationUtils.getUserSub()).thenReturn(userSub);
+
+        this.abfrageService.deleteInfrasturkturabfrageById(id);
+
+        Mockito.verify(this.infrastrukturabfrageRepository, Mockito.times(1)).findById(entity.getId());
+        Mockito.verify(this.infrastrukturabfrageRepository, Mockito.times(1)).deleteById(id);
+    }
+
+    @Test
     void deleteInfrastrukturabfrageUserNotAllowedException() {
         final UUID id = UUID.randomUUID();
         String[] roles = { "abfrageerstellung" };
