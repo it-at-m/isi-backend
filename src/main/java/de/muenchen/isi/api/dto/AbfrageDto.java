@@ -20,6 +20,9 @@ import org.springframework.data.annotation.ReadOnlyProperty;
 @Data
 public class AbfrageDto {
 
+    @ReadOnlyProperty
+    private boolean schnellesSchliessenAbfrage = false;
+
     private List<DokumentDto> dokumente;
 
     private String allgemeineOrtsangabe;
@@ -35,9 +38,6 @@ public class AbfrageDto {
     private String anmerkung;
 
     private StatusAbfrage statusAbfrage;
-
-    @ReadOnlyProperty
-    private boolean schnellesSchliessenAbfrage;
 
     private String bebauungsplannummer;
 
