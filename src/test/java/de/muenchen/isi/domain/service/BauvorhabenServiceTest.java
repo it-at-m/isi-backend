@@ -28,6 +28,8 @@ import de.muenchen.isi.domain.model.AbfragevarianteModel;
 import de.muenchen.isi.domain.model.BauvorhabenModel;
 import de.muenchen.isi.domain.model.InfrastrukturabfrageModel;
 import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.AbfrageAngelegtModel;
+import de.muenchen.isi.domain.model.common.StadtbezirkModel;
+import de.muenchen.isi.domain.model.common.VerortungModel;
 import de.muenchen.isi.domain.model.enums.SearchResultType;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.InfrastruktureinrichtungModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.KinderkrippeModel;
@@ -37,6 +39,10 @@ import de.muenchen.isi.domain.service.filehandling.DokumentService;
 import de.muenchen.isi.infrastructure.entity.Abfrage;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
 import de.muenchen.isi.infrastructure.entity.Infrastrukturabfrage;
+import de.muenchen.isi.infrastructure.entity.common.GlobalCounter;
+import de.muenchen.isi.infrastructure.entity.common.Stadtbezirk;
+import de.muenchen.isi.infrastructure.entity.common.Verortung;
+import de.muenchen.isi.infrastructure.entity.enums.CounterType;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Planungsrecht;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVorhaben;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
@@ -49,12 +55,14 @@ import de.muenchen.isi.infrastructure.repository.AbfragevarianteRepository;
 import de.muenchen.isi.infrastructure.repository.BauvorhabenRepository;
 import de.muenchen.isi.infrastructure.repository.InfrastrukturabfrageRepository;
 import de.muenchen.isi.infrastructure.repository.InfrastruktureinrichtungRepository;
+import de.muenchen.isi.infrastructure.repository.common.GlobalCounterRepository;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -100,6 +108,9 @@ public class BauvorhabenServiceTest {
     private AbfragevarianteRepository abfragevarianteRepository;
 
     @Mock
+    private GlobalCounterRepository globalCounterRepository;
+
+    @Mock
     private DokumentService dokumentService;
 
     @BeforeEach
@@ -113,6 +124,7 @@ public class BauvorhabenServiceTest {
                 this.infrastrukturabfrageRepository,
                 this.infrastruktureinrichtungRepository,
                 this.abfragevarianteRepository,
+                this.globalCounterRepository,
                 this.abfrageService,
                 this.dokumentService
             );
@@ -121,6 +133,8 @@ public class BauvorhabenServiceTest {
             this.bauvorhabenRepository,
             this.infrastrukturabfrageRepository,
             this.infrastruktureinrichtungRepository,
+            this.abfragevarianteRepository,
+            this.globalCounterRepository,
             this.dokumentService,
             this.abfrageService
         );
@@ -337,6 +351,104 @@ public class BauvorhabenServiceTest {
 
         final BauvorhabenModel expected = new BauvorhabenModel();
         expected.setId(saveResult.getId());
+
+        assertThat(result, is(expected));
+
+        Mockito.verify(this.bauvorhabenRepository, Mockito.times(1)).saveAndFlush(bauvorhabenEntity);
+    }
+
+    @Test
+    void saveBauvorhabenBauvorhabennummerTest()
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, EntityIsReferencedException {
+        // BauvorhabenModel
+        final BauvorhabenModel bauvorhaben = new BauvorhabenModel();
+        bauvorhaben.setId(null);
+
+        final StadtbezirkModel sb_08 = new StadtbezirkModel();
+        sb_08.setNummer("08");
+        sb_08.setName("Stadtbezirk 8");
+
+        final StadtbezirkModel sb_20 = new StadtbezirkModel();
+        sb_20.setNummer("20");
+        sb_20.setName("Stadtbezirk 20");
+
+        final VerortungModel verortung = new VerortungModel();
+        verortung.setStadtbezirke(Stream.of(sb_20, sb_08).collect(Collectors.toSet()));
+
+        bauvorhaben.setVerortung(verortung);
+
+        // Bauvorhaben Entity
+        final Bauvorhaben bauvorhabenEntity = new Bauvorhaben();
+        bauvorhabenEntity.setId(bauvorhaben.getId());
+
+        final Stadtbezirk bauvorhabenEntity_sb_08 = new Stadtbezirk();
+        bauvorhabenEntity_sb_08.setNummer("08");
+        bauvorhabenEntity_sb_08.setName("Stadtbezirk 8");
+
+        final Stadtbezirk bauvorhabenEntity_sb_20 = new Stadtbezirk();
+        bauvorhabenEntity_sb_20.setNummer("20");
+        bauvorhabenEntity_sb_20.setName("Stadtbezirk 20");
+
+        final Verortung bauvorhabenEntityVerortung = new Verortung();
+        bauvorhabenEntityVerortung.setStadtbezirke(
+            Stream.of(bauvorhabenEntity_sb_20, bauvorhabenEntity_sb_08).collect(Collectors.toSet())
+        );
+        bauvorhabenEntity.setVerortung(bauvorhabenEntityVerortung);
+        bauvorhabenEntity.setBauvorhabenNummer("08_00001");
+
+        // Saved Bauvorhaben
+        final Bauvorhaben saveResult = new Bauvorhaben();
+        saveResult.setId(UUID.randomUUID());
+
+        final Stadtbezirk saveResult_sb_08 = new Stadtbezirk();
+        saveResult_sb_08.setNummer("08");
+        saveResult_sb_08.setName("Stadtbezirk 8");
+
+        final Stadtbezirk saveResult_sb_20 = new Stadtbezirk();
+        saveResult_sb_20.setNummer("20");
+        saveResult_sb_20.setName("Stadtbezirk 20");
+
+        final Verortung saveResultVerortung = new Verortung();
+        saveResultVerortung.setStadtbezirke(Stream.of(saveResult_sb_20, saveResult_sb_08).collect(Collectors.toSet()));
+        saveResult.setVerortung(saveResultVerortung);
+        saveResult.setBauvorhabenNummer("08_00001");
+
+        Mockito
+            .when(this.globalCounterRepository.findByCounterType(CounterType.NUMMER_BAUVORHABEN))
+            .thenReturn(Optional.empty());
+        final GlobalCounter bauvorhabennummerEntity = new GlobalCounter();
+        bauvorhabennummerEntity.setCounterType(CounterType.NUMMER_BAUVORHABEN);
+        bauvorhabennummerEntity.setCounter(1);
+
+        final GlobalCounter saveBauvorhabennummer = new GlobalCounter();
+        saveBauvorhabennummer.setId(UUID.randomUUID());
+        saveBauvorhabennummer.setCounterType(CounterType.NUMMER_BAUVORHABEN);
+        saveBauvorhabennummer.setCounter(1);
+
+        Mockito
+            .when(this.globalCounterRepository.saveAndFlush(bauvorhabennummerEntity))
+            .thenReturn(saveBauvorhabennummer);
+
+        Mockito.when(this.bauvorhabenRepository.saveAndFlush(bauvorhabenEntity)).thenReturn(saveResult);
+
+        final BauvorhabenModel result = this.bauvorhabenService.saveBauvorhaben(bauvorhaben, null);
+
+        // Expected BauvorhabenModel
+        final BauvorhabenModel expected = new BauvorhabenModel();
+        expected.setId(saveResult.getId());
+
+        final StadtbezirkModel expected_sb_08 = new StadtbezirkModel();
+        expected_sb_08.setNummer("08");
+        expected_sb_08.setName("Stadtbezirk 8");
+
+        final StadtbezirkModel expected_sb_20 = new StadtbezirkModel();
+        expected_sb_20.setNummer("20");
+        expected_sb_20.setName("Stadtbezirk 20");
+
+        final VerortungModel expectedVerortung = new VerortungModel();
+        expectedVerortung.setStadtbezirke(Stream.of(expected_sb_20, expected_sb_08).collect(Collectors.toSet()));
+        expected.setVerortung(expectedVerortung);
+        expected.setBauvorhabenNummer("08_00001");
 
         assertThat(result, is(expected));
 

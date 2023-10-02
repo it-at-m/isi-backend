@@ -1,6 +1,7 @@
 package de.muenchen.isi.domain.service;
 
 import de.muenchen.isi.api.dto.AbfrageDto;
+import de.muenchen.isi.api.dto.BaurateDto;
 import de.muenchen.isi.domain.exception.AbfrageStatusNotAllowedException;
 import de.muenchen.isi.domain.exception.BauvorhabenNotReferencedException;
 import de.muenchen.isi.domain.exception.EntityIsReferencedException;
@@ -21,20 +22,28 @@ import de.muenchen.isi.domain.model.infrastruktureinrichtung.Infrastruktureinric
 import de.muenchen.isi.domain.model.search.response.AbfrageSearchResultModel;
 import de.muenchen.isi.domain.model.search.response.InfrastruktureinrichtungSearchResultModel;
 import de.muenchen.isi.domain.service.filehandling.DokumentService;
+import de.muenchen.isi.infrastructure.entity.common.GlobalCounter;
+import de.muenchen.isi.infrastructure.entity.common.Stadtbezirk;
+import de.muenchen.isi.infrastructure.entity.common.Verortung;
+import de.muenchen.isi.infrastructure.entity.enums.CounterType;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Infrastruktureinrichtung;
 import de.muenchen.isi.infrastructure.repository.AbfragevarianteRepository;
 import de.muenchen.isi.infrastructure.repository.BauvorhabenRepository;
 import de.muenchen.isi.infrastructure.repository.InfrastrukturabfrageRepository;
 import de.muenchen.isi.infrastructure.repository.InfrastruktureinrichtungRepository;
+import de.muenchen.isi.infrastructure.repository.common.GlobalCounterRepository;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.lang.Nullable;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
@@ -57,6 +66,8 @@ public class BauvorhabenService {
     private final InfrastruktureinrichtungRepository infrastruktureinrichtungRepository;
 
     private final AbfragevarianteRepository abfragevarianteRepository;
+
+    private final GlobalCounterRepository globalCounterRepository;
 
     private final AbfrageService abfrageService;
 
@@ -95,6 +106,11 @@ public class BauvorhabenService {
         final var saved = this.bauvorhabenRepository.findByNameVorhabenIgnoreCase(bauvorhabenEntity.getNameVorhaben());
         if ((saved.isPresent() && saved.get().getId().equals(bauvorhabenEntity.getId())) || saved.isEmpty()) {
             try {
+                if (StringUtils.isEmpty(bauvorhaben.getBauvorhabenNummer())) {
+                    bauvorhabenEntity.setBauvorhabenNummer(
+                        this.buildBauvorhabennummer(bauvorhabenEntity.getVerortung())
+                    );
+                }
                 bauvorhabenEntity = this.bauvorhabenRepository.saveAndFlush(bauvorhabenEntity);
                 // falls bei Neuanlage eines Bauvorhabens eine Datenübernahme mit einer Abfrage durchgeführt wurde, dann wird diese mit dem Bauvorhaben verknüpft
                 if (bauvorhaben.getId() == null && abfrageId != null) {
@@ -370,5 +386,43 @@ public class BauvorhabenService {
         }
 
         return abfrageService.getInfrastrukturabfrageById(UUID.fromString(abfrageId.get()));
+    }
+
+    /**
+     * Leitet aus der Verortung die Bauvorhabennummer ab. Aufbau: {kleinste Stadtbezirksnummer}_{fortlaufende Bauvorhabennummer}
+     *
+     * @param verortung Verortung des Bauvorhabens
+     * @return ermittelte Bauvorhabennummer
+     * @throws OptimisticLockingException im Falle eines konkurrierenden Zugriffs auf die globale fortlaufende Bauvorhabennummer
+     */
+    private String buildBauvorhabennummer(Verortung verortung) throws OptimisticLockingException {
+        if (verortung != null) {
+            final Optional<String> minStadtbezirkNummer = CollectionUtils
+                .emptyIfNull(verortung.getStadtbezirke())
+                .stream()
+                .map(Stadtbezirk::getNummer)
+                .filter(Objects::nonNull)
+                .min(String::compareTo);
+            if (!minStadtbezirkNummer.isEmpty()) {
+                final Optional<GlobalCounter> saved =
+                    this.globalCounterRepository.findByCounterType(CounterType.NUMMER_BAUVORHABEN);
+                var bauvorhabennummerEntity = saved.isPresent()
+                    ? saved.get()
+                    : new GlobalCounter(CounterType.NUMMER_BAUVORHABEN, 0);
+                bauvorhabennummerEntity.setCounter(bauvorhabennummerEntity.getCounter() + 1);
+                try {
+                    bauvorhabennummerEntity = this.globalCounterRepository.saveAndFlush(bauvorhabennummerEntity);
+                    return String.format(
+                        "%s_%s",
+                        minStadtbezirkNummer.get(),
+                        StringUtils.leftPad(String.valueOf(bauvorhabennummerEntity.getCounter()), 5, "0")
+                    );
+                } catch (final ObjectOptimisticLockingFailureException exception) {
+                    final var message = "Die Daten wurden in der Zwischenzeit geändert. Bitte laden Sie die Seite neu!";
+                    throw new OptimisticLockingException(message, exception);
+                }
+            }
+        }
+        return null;
     }
 }
