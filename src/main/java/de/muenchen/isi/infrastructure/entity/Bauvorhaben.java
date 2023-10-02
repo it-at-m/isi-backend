@@ -81,7 +81,7 @@ public class Bauvorhaben extends BaseEntity {
         name = "bauvorhabenNummer" + SearchwordSuggesterRepository.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
         valueBinder = @ValueBinderRef(type = StringSuggestionBinder.class)
     )
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String bauvorhabenNummer;
 
     @IndexedEmbedded

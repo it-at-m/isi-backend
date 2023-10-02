@@ -106,6 +106,11 @@ public class BauvorhabenService {
         final var saved = this.bauvorhabenRepository.findByNameVorhabenIgnoreCase(bauvorhabenEntity.getNameVorhaben());
         if ((saved.isPresent() && saved.get().getId().equals(bauvorhabenEntity.getId())) || saved.isEmpty()) {
             try {
+                if (StringUtils.isEmpty(bauvorhaben.getBauvorhabenNummer())) {
+                    bauvorhabenEntity.setBauvorhabenNummer(
+                        this.buildBauvorhabennummer(bauvorhabenEntity.getVerortung())
+                    );
+                }
                 bauvorhabenEntity = this.bauvorhabenRepository.saveAndFlush(bauvorhabenEntity);
                 // falls bei Neuanlage eines Bauvorhabens eine Datenübernahme mit einer Abfrage durchgeführt wurde, dann wird diese mit dem Bauvorhaben verknüpft
                 if (bauvorhaben.getId() == null && abfrageId != null) {
@@ -409,7 +414,7 @@ public class BauvorhabenService {
                     bauvorhabennummerEntity = this.globalCounterRepository.saveAndFlush(bauvorhabennummerEntity);
                     return String.format(
                         "%s_%s",
-                        StringUtils.leftPad(minStadtbezirkNummer.get().trim(), 2, "0"),
+                        minStadtbezirkNummer.get(),
                         StringUtils.leftPad(String.valueOf(bauvorhabennummerEntity.getCounter()), 5, "0")
                     );
                 } catch (final ObjectOptimisticLockingFailureException exception) {
