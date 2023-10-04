@@ -8,6 +8,7 @@ import de.muenchen.isi.domain.model.BauvorhabenModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.InfrastruktureinrichtungModel;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Infrastruktureinrichtung;
 import de.muenchen.isi.infrastructure.repository.InfrastruktureinrichtungRepository;
+import de.muenchen.isi.infrastructure.repository.common.KommentarRepository;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +24,8 @@ public class InfrastruktureinrichtungService {
     private final InfrastruktureinrichtungRepository infrastruktureinrichtungRepository;
 
     private final InfrastruktureinrichtungDomainMapper infrastruktureinrichtungDomainMapper;
+
+    private final KommentarRepository kommentarRepository;
 
     /**
      * Die Methode gibt ein {@link InfrastruktureinrichtungModel} identifiziert durch die ID zurück.
@@ -90,6 +93,7 @@ public class InfrastruktureinrichtungService {
         this.throwEntityIsReferencedExceptionWhenInfrastruktureinrichtungIsReferencingBauvorhaben(
                 infrastruktureinrichtung
             );
+        this.kommentarRepository.deleteAllByInfrastruktureinrichtung(id);
         this.infrastruktureinrichtungRepository.deleteById(id);
     }
 

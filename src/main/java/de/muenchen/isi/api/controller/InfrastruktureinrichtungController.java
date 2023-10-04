@@ -151,6 +151,7 @@ public class InfrastruktureinrichtungController {
     }
 
     @DeleteMapping("/{id}")
+    @Transactional
     @Operation(summary = "Löschen einer Infrastruktureinrichtung")
     @ApiResponses(
         value = {
@@ -167,7 +168,6 @@ public class InfrastruktureinrichtungController {
             ),
         }
     )
-    @Transactional
     @PreAuthorize(
         "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_DELETE_INFRASTRUKTUREINRICHTUNG.name())"
     )
