@@ -400,7 +400,7 @@ public class BauvorhabenServiceTest {
             Stream.of(bauvorhabenEntity_sb_20, bauvorhabenEntity_sb_08).collect(Collectors.toSet())
         );
         bauvorhabenEntity.setVerortung(bauvorhabenEntityVerortung);
-        bauvorhabenEntity.setBauvorhabenNummer("08_00001");
+        bauvorhabenEntity.setBauvorhabenNummer("08_0001");
 
         // Saved Bauvorhaben
         final Bauvorhaben saveResult = new Bauvorhaben();
@@ -417,7 +417,7 @@ public class BauvorhabenServiceTest {
         final Verortung saveResultVerortung = new Verortung();
         saveResultVerortung.setStadtbezirke(Stream.of(saveResult_sb_20, saveResult_sb_08).collect(Collectors.toSet()));
         saveResult.setVerortung(saveResultVerortung);
-        saveResult.setBauvorhabenNummer("08_00001");
+        saveResult.setBauvorhabenNummer("08_0001");
 
         Mockito
             .when(this.globalCounterRepository.findByCounterType(CounterType.NUMMER_BAUVORHABEN))
@@ -454,7 +454,7 @@ public class BauvorhabenServiceTest {
         final VerortungModel expectedVerortung = new VerortungModel();
         expectedVerortung.setStadtbezirke(Stream.of(expected_sb_20, expected_sb_08).collect(Collectors.toSet()));
         expected.setVerortung(expectedVerortung);
-        expected.setBauvorhabenNummer("08_00001");
+        expected.setBauvorhabenNummer("08_0001");
 
         assertThat(result, is(expected));
 
