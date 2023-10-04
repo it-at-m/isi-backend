@@ -418,7 +418,7 @@ public class BauvorhabenService {
                     return String.format(
                         "%s_%s",
                         minStadtbezirkNummer.get(),
-                        StringUtils.leftPad(String.valueOf(bauvorhabennummerEntity.getCounter()), 5, "0")
+                        StringUtils.leftPad(String.valueOf(bauvorhabennummerEntity.getCounter()), 4, "0")
                     );
                 } catch (final ObjectOptimisticLockingFailureException exception) {
                     final var message = "Die Daten wurden in der Zwischenzeit geändert. Bitte laden Sie die Seite neu!";
