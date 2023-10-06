@@ -71,7 +71,7 @@ public class KommentarService {
      *
      * @param kommentar zum Speichern.
      * @return den gespeicherten Kommentar.
-     * @throws EntityNotFoundException kein referenziertes Bauvorhaben bzw. keine referenzierte Infrastruktureinrichtung existiert.
+     * @throws EntityNotFoundException falls kein referenziertes Bauvorhaben bzw. keine referenzierte Infrastruktureinrichtung existiert.
      * @throws OptimisticLockingException falls der Kommentar in einer neueren Version gespeichert ist.
      */
     public KommentarModel saveKommentar(final KommentarModel kommentar)
