@@ -213,6 +213,7 @@ public class BauvorhabenController {
     }
 
     @DeleteMapping("bauvorhaben/{id}")
+    @Transactional
     @Operation(summary = "Löschen eines Bauvorhabens")
     @ApiResponses(
         value = {
@@ -229,7 +230,6 @@ public class BauvorhabenController {
             ),
         }
     )
-    @Transactional
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_DELETE_BAUVORHABEN.name())")
     public ResponseEntity<Void> deleteBauvorhaben(@PathVariable @NotNull final UUID id)
         throws EntityNotFoundException, EntityIsReferencedException {

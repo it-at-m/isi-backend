@@ -29,7 +29,7 @@ public class SwaggerConfiguration {
                 new Info()
                     .title("ISI Backend API")
                     .version(this.buildVersion)
-                    .description("ISI Backend - Serivce für das Informationssystem für soziale Infrastrukturplanung")
+                    .description("ISI Backend - Service für das Informationssystem für soziale Infrastrukturplanung")
                     .contact(new Contact().name("ISI Management").email("noreply@mail.de"))
             );
     }

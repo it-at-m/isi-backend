@@ -34,6 +34,12 @@ public class AuthenticationUtils {
 
     private static final String TOKEN_ROLES = "roles";
 
+    public static final String ROLE_ADMIN = "admin";
+
+    public static final String ROLE_ABFRAGEERSTELLUNG = "abfrageerstellung";
+
+    public static final String ROLE_SACHBEARBEITUNG = "sachbearbeitung";
+
     /**
      * Die Methode extrahiert die Authorities des Nutzers aus dem {@link DefaultOAuth2AuthenticatedPrincipal}
      *

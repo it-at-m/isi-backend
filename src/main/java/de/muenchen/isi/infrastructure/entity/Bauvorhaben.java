@@ -55,7 +55,7 @@ public class Bauvorhaben extends BaseEntity {
      * Einheitlicher indexiertes sortierbares Namensattributs
      * zur einheitlichen entitätsübergreifenden Sortierung der Suchergebnisse.
      */
-    @KeywordField(name = "name_sort", sortable = Sortable.YES)
+    @KeywordField(name = "name_sort", sortable = Sortable.YES, normalizer = "lowercase")
     @FullTextField
     @NonStandardField(
         name = "nameVorhaben" + SearchwordSuggesterRepository.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
@@ -64,10 +64,7 @@ public class Bauvorhaben extends BaseEntity {
     @Column(nullable = false, unique = true)
     private String nameVorhaben;
 
-    @Column(nullable = false)
-    private String eigentuemer;
-
-    @Column(precision = 10, scale = 2, nullable = false)
+    @Column(precision = 10, scale = 2, nullable = true)
     private BigDecimal grundstuecksgroesse;
 
     @FullTextField(valueBridge = @ValueBridgeRef(type = StandVorhabenValueBridge.class))
@@ -84,7 +81,7 @@ public class Bauvorhaben extends BaseEntity {
         name = "bauvorhabenNummer" + SearchwordSuggesterRepository.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
         valueBinder = @ValueBinderRef(type = StringSuggestionBinder.class)
     )
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String bauvorhabenNummer;
 
     @IndexedEmbedded
