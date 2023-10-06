@@ -53,6 +53,10 @@ public abstract class KommentarDomainMapper {
                     return new EntityNotFoundException(message);
                 });
             entity.setInfrastruktureinrichtung(infastruktureinrichtung);
+        } else {
+            final var message = "Der Kommentar referenziert weder ein Bauvorhaben noch eine Infrastruktureinrichtung";
+            log.error(message);
+            throw new EntityNotFoundException(message);
         }
     }
 }

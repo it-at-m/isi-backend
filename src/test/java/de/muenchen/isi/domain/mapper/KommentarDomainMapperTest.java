@@ -51,9 +51,14 @@ class KommentarDomainMapperTest {
         var kommentar = new Kommentar();
         var kommentarModel = new KommentarModel();
 
-        kommentarDomainMapper.afterMappingModel2Entity(kommentarModel, kommentar);
-        assertThat(kommentar.getBauvorhaben(), is(nullValue()));
-        assertThat(kommentar.getInfrastruktureinrichtung(), is(nullValue()));
+        try {
+            kommentarDomainMapper.afterMappingModel2Entity(kommentarModel, kommentar);
+        } catch (EntityNotFoundException exception) {
+            assertThat(
+                exception.getMessage(),
+                is("Der Kommentar referenziert weder ein Bauvorhaben noch eine Infrastruktureinrichtung")
+            );
+        }
         Mockito.verify(this.bauvorhabenRepository, Mockito.times(0)).findById(null);
         Mockito.verify(this.infrastruktureinrichtungRepository, Mockito.times(0)).findById(null);
         Mockito.reset(this.infrastruktureinrichtungRepository, this.bauvorhabenRepository);
