@@ -181,10 +181,9 @@ public class AbfrageService {
     /**
      * Diese Methode führt für eine Abfrage, die durch die {@link InfrastrukturabfrageModel#getId()} identifiziert ist, eine Statusänderung durch.
      *
-     * @param id                         {@link InfrastrukturabfrageModel#getId()} der Abfrage zum Updaten
-     * @param statusAbfrage              neuer {@link StatusAbfrage}
-     * @param anmerkung                  falls ein Nutzer eine Anmerkung bei einem Statusübergang macht wird diese an die Abfrage Anmerkung angehängt
-     * @param schnellesSchliessenAbfrage falls diese Variable true ist wird im Frontend die kürzere Statusleiste angezeigt (z.B. vom Status IN_BEARBEITUNG_SACHBEARBEITUNG zu ERLEDIGT)
+     * @param id            {@link InfrastrukturabfrageModel#getId()} der Abfrage zum Updaten
+     * @param statusAbfrage neuer {@link StatusAbfrage}
+     * @param anmerkung     falls ein Nutzer eine Anmerkung bei einem Statusübergang macht wird diese an die Abfrage Anmerkung angehängt
      * @return das geupdatete {@link InfrastrukturabfrageModel}
      * @throws EntityNotFoundException       falls die Abfrage identifiziert durch die {@link InfrastrukturabfrageModel#getId()} nicht gefunden wird
      * @throws UniqueViolationException      falls der Name der Abfrage {@link InfrastrukturabfrageModel#getAbfrage().getNameAbfrage} ()} bereits vorhanden ist
@@ -194,14 +193,12 @@ public class AbfrageService {
     public InfrastrukturabfrageModel changeStatusAbfrage(
         final UUID id,
         final StatusAbfrage statusAbfrage,
-        final String anmerkung,
-        final boolean schnellesSchliessenAbfrage
+        final String anmerkung
     )
         throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, StringLengthExceededException {
         var originalAbfrageDb = this.getInfrastrukturabfrageById(id);
         originalAbfrageDb.getAbfrage().setStatusAbfrage(statusAbfrage);
         originalAbfrageDb = this.addAbfrageAnmerkung(originalAbfrageDb, anmerkung);
-        originalAbfrageDb.getAbfrage().setSchnellesSchliessenAbfrage(schnellesSchliessenAbfrage);
         return this.saveInfrastrukturabfrage(originalAbfrageDb);
     }
 

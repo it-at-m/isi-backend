@@ -15,13 +15,9 @@ import java.util.UUID;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import lombok.Data;
-import org.springframework.data.annotation.ReadOnlyProperty;
 
 @Data
 public class AbfrageDto {
-
-    @ReadOnlyProperty
-    private boolean schnellesSchliessenAbfrage = false;
 
     private List<DokumentDto> dokumente;
 

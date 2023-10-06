@@ -53,7 +53,6 @@ public abstract class AbfrageDomainMapper {
     @Mappings(
         {
             @Mapping(target = "abfrage.statusAbfrage", ignore = true),
-            @Mapping(target = "abfrage.schnellesSchliessenAbfrage", ignore = true),
             @Mapping(target = "id", ignore = true),
             @Mapping(target = "sub", ignore = true),
             @Mapping(target = "createdDateTime", ignore = true),

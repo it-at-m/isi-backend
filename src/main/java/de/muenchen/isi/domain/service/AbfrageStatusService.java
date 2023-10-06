@@ -65,7 +65,7 @@ public class AbfrageStatusService {
     public void freigabeAbfrage(final UUID id, String anmerkung)
         throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException {
         this.throwStringLengthExceededExceptionWhenAnmerkungExceedsLength(id, anmerkung);
-        final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id, anmerkung, false);
+        final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id, anmerkung);
         this.sendEvent(id, StatusAbfrageEvents.FREIGABE, stateMachine);
     }
 
@@ -81,7 +81,7 @@ public class AbfrageStatusService {
     public void inBearbeitungSetzenAbfrage(final UUID id, String anmerkung)
         throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException {
         this.throwStringLengthExceededExceptionWhenAnmerkungExceedsLength(id, anmerkung);
-        final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id, anmerkung, false);
+        final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id, anmerkung);
         this.sendEvent(id, StatusAbfrageEvents.IN_BEARBEITUNG_SETZEN, stateMachine);
     }
 
@@ -97,7 +97,7 @@ public class AbfrageStatusService {
     public void abbrechenAbfrage(final UUID id, String anmerkung)
         throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException {
         this.throwStringLengthExceededExceptionWhenAnmerkungExceedsLength(id, anmerkung);
-        final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id, anmerkung, false);
+        final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id, anmerkung);
         this.sendEvent(id, StatusAbfrageEvents.ABBRECHEN, stateMachine);
     }
 
@@ -113,7 +113,7 @@ public class AbfrageStatusService {
     public void zurueckAnAbfrageerstellungAbfrage(final UUID id, String anmerkung)
         throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException {
         this.throwStringLengthExceededExceptionWhenAnmerkungExceedsLength(id, anmerkung);
-        final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id, anmerkung, false);
+        final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id, anmerkung);
         this.sendEvent(id, StatusAbfrageEvents.ZURUECK_AN_ABFRAGEERSTELLUNG, stateMachine);
     }
 
@@ -129,12 +129,12 @@ public class AbfrageStatusService {
     public void zurueckAnSachbearbeitungAbfrage(final UUID id, String anmerkung)
         throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException {
         this.throwStringLengthExceededExceptionWhenAnmerkungExceedsLength(id, anmerkung);
-        final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id, anmerkung, false);
+        final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id, anmerkung);
         this.sendEvent(id, StatusAbfrageEvents.ZURUECK_AN_SACHBEARBEITUNG, stateMachine);
     }
 
     /**
-     * Ändert den Status auf {@link StatusAbfrage#ERLEDIGT}.
+     * Ändert den Status auf {@link StatusAbfrage#ERLEDIGT_OHNE_FACHREFERAT}.
      *
      * @param id        vom Typ {@link UUID} um die Abfrage zu finden
      * @param anmerkung falls ein Nutzer eine Anmerkung bei einem Statusübergang macht wird diese an die Abfrage Anmerkung angehängt
@@ -142,11 +142,11 @@ public class AbfrageStatusService {
      * @throws AbfrageStatusNotAllowedException wenn die Statusänderung nicht erlaubt ist
      * @throws StringLengthExceededException    wenn die Anmerkung zur Statusänderung die max. Länge überschreitet
      */
-    public void abfrageSchliessen(final UUID id, String anmerkung)
+    public void keineBearbeitungNoetig(final UUID id, String anmerkung)
         throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException {
         this.throwStringLengthExceededExceptionWhenAnmerkungExceedsLength(id, anmerkung);
-        final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id, anmerkung, true);
-        this.sendEvent(id, StatusAbfrageEvents.ABFRAGE_SCHLIESSEN, stateMachine);
+        final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id, anmerkung);
+        this.sendEvent(id, StatusAbfrageEvents.KEINE_BEARBEITUNG_NOETIG, stateMachine);
     }
 
     /**
@@ -161,7 +161,7 @@ public class AbfrageStatusService {
     public void verschickenDerStellungnahme(final UUID id, String anmerkung)
         throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException {
         this.throwStringLengthExceededExceptionWhenAnmerkungExceedsLength(id, anmerkung);
-        final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id, anmerkung, false);
+        final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id, anmerkung);
         this.sendEvent(id, StatusAbfrageEvents.VERSCHICKEN_DER_STELLUNGNAHME, stateMachine);
     }
 
@@ -177,12 +177,12 @@ public class AbfrageStatusService {
     public void bedarfsmeldungErfolgt(final UUID id, String anmerkung)
         throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException {
         this.throwStringLengthExceededExceptionWhenAnmerkungExceedsLength(id, anmerkung);
-        final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id, anmerkung, false);
+        final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id, anmerkung);
         this.sendEvent(id, StatusAbfrageEvents.BEDARFSMELDUNG_ERFOLGTE, stateMachine);
     }
 
     /**
-     * Ändert den Status auf {@link StatusAbfrage#ERLEDIGT}.
+     * Ändert den Status auf {@link StatusAbfrage#ERLEDIGT_MIT_FACHREFERAT}.
      *
      * @param id        vom Typ {@link UUID} um die Abfrage zu finden
      * @param anmerkung falls ein Nutzer eine Anmerkung bei einem Statusübergang macht wird diese an die Abfrage Anmerkung angehängt
@@ -193,7 +193,7 @@ public class AbfrageStatusService {
     public void speichernVonSozialinfrastrukturVersorgung(final UUID id, String anmerkung)
         throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException {
         this.throwStringLengthExceededExceptionWhenAnmerkungExceedsLength(id, anmerkung);
-        final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id, anmerkung, false);
+        final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id, anmerkung);
         this.sendEvent(id, StatusAbfrageEvents.SPEICHERN_VON_SOZIALINFRASTRUKTUR_VERSORGUNG, stateMachine);
     }
 
@@ -209,7 +209,7 @@ public class AbfrageStatusService {
     public void erneuteBearbeitenAbfrage(final UUID id, String anmerkung)
         throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException {
         this.throwStringLengthExceededExceptionWhenAnmerkungExceedsLength(id, anmerkung);
-        final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id, anmerkung, false);
+        final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id, anmerkung);
         this.sendEvent(id, StatusAbfrageEvents.ERNEUTE_BEARBEITUNG, stateMachine);
     }
 
@@ -221,11 +221,8 @@ public class AbfrageStatusService {
      * @param id vom Typ {@link UUID}  um die Abfrage aus der DB zu holen
      * @throws EntityNotFoundException falls die Abfrage nicht gefunden wird
      */
-    private StateMachine<StatusAbfrage, StatusAbfrageEvents> build(
-        final UUID id,
-        final String anmerkung,
-        final boolean schnellesSchliessenAbfrage
-    ) throws EntityNotFoundException {
+    private StateMachine<StatusAbfrage, StatusAbfrageEvents> build(final UUID id, final String anmerkung)
+        throws EntityNotFoundException {
         final InfrastrukturabfrageModel abfrage = this.abfrageService.getInfrastrukturabfrageById(id);
         final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine =
             this.stateMachineFactory.getStateMachine(abfrage.getId());
@@ -266,8 +263,7 @@ public class AbfrageStatusService {
                                 abfrageService.changeStatusAbfrage(
                                     abfrage.getId(),
                                     abfrage.getAbfrage().getStatusAbfrage(),
-                                    anmerkung,
-                                    schnellesSchliessenAbfrage
+                                    anmerkung
                                 );
                             } catch (
                                 final EntityNotFoundException
@@ -404,7 +400,7 @@ public class AbfrageStatusService {
      * @throws EntityNotFoundException falls die Abfrage nicht gefunden wird
      */
     private List<StatusAbfrageEvents> getStatusAbfrageEventsBasedOnState(final UUID id) throws EntityNotFoundException {
-        final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id, "", false);
+        final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id, "");
         return stateMachine
             .getTransitions()
             .stream()
@@ -438,7 +434,7 @@ public class AbfrageStatusService {
         );
         authoritiesAndEventsMap.put(
             AuthoritiesEnum.ISI_BACKEND_SCHLIESSEN_ABFRAGE,
-            StatusAbfrageEvents.ABFRAGE_SCHLIESSEN
+            StatusAbfrageEvents.KEINE_BEARBEITUNG_NOETIG
         );
         authoritiesAndEventsMap.put(
             AuthoritiesEnum.ISI_BACKEND_VERSCHICKEN_DER_STELLUNGNAHME_ABFRAGE,

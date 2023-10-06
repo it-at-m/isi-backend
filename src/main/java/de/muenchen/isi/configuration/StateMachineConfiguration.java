@@ -65,8 +65,8 @@ public class StateMachineConfiguration extends StateMachineConfigurerAdapter<Sta
             // Alle Events vom Status IN_BEARBEITUNG_PLAN
             .withExternal()
             .source(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG)
-            .target(StatusAbfrage.ERLEDIGT)
-            .event(StatusAbfrageEvents.ABFRAGE_SCHLIESSEN)
+            .target(StatusAbfrage.ERLEDIGT_OHNE_FACHREFERAT)
+            .event(StatusAbfrageEvents.KEINE_BEARBEITUNG_NOETIG)
             .and()
             .withExternal()
             .source(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG)
@@ -102,7 +102,7 @@ public class StateMachineConfiguration extends StateMachineConfigurerAdapter<Sta
             // Alle Events vom Status BEDARFSMELDUNG_ERFOLGT
             .withExternal()
             .source(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT)
-            .target(StatusAbfrage.ERLEDIGT)
+            .target(StatusAbfrage.ERLEDIGT_MIT_FACHREFERAT)
             .event(StatusAbfrageEvents.SPEICHERN_VON_SOZIALINFRASTRUKTUR_VERSORGUNG)
             .and()
             .withExternal()
@@ -111,7 +111,12 @@ public class StateMachineConfiguration extends StateMachineConfigurerAdapter<Sta
             .event(StatusAbfrageEvents.ABBRECHEN)
             .and()
             .withExternal()
-            .source(StatusAbfrage.ERLEDIGT)
+            .source(StatusAbfrage.ERLEDIGT_OHNE_FACHREFERAT)
+            .target(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG)
+            .event(StatusAbfrageEvents.ERNEUTE_BEARBEITUNG)
+            .and()
+            .withExternal()
+            .source(StatusAbfrage.ERLEDIGT_MIT_FACHREFERAT)
             .target(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG)
             .event(StatusAbfrageEvents.ERNEUTE_BEARBEITUNG);
     }
