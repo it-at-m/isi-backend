@@ -433,7 +433,7 @@ public class AbfrageStatusService {
             StatusAbfrageEvents.ZURUECK_AN_SACHBEARBEITUNG
         );
         authoritiesAndEventsMap.put(
-            AuthoritiesEnum.ISI_BACKEND_SCHLIESSEN_ABFRAGE,
+            AuthoritiesEnum.ISI_BACKEND_KEINE_BEARBEITUNG_NOETIG_ABFRAGE,
             StatusAbfrageEvents.KEINE_BEARBEITUNG_NOETIG
         );
         authoritiesAndEventsMap.put(

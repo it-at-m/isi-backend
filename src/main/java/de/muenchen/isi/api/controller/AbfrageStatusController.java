@@ -235,7 +235,9 @@ public class AbfrageStatusController {
             ),
         }
     )
-    @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_SCHLIESSEN_ABFRAGE.name())")
+    @PreAuthorize(
+        "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_KEINE_BEARBEITUNG_NOETIG_ABFRAGE.name())"
+    )
     public ResponseEntity<Void> keineBearbeitungNoetig(
         @PathVariable @NotNull final UUID id,
         @RequestParam(value = "anmerkung", required = false, defaultValue = "") String anmerkung
