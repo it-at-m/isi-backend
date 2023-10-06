@@ -6,10 +6,14 @@ import static org.hamcrest.Matchers.nullValue;
 
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.model.common.KommentarModel;
+import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
 import de.muenchen.isi.infrastructure.entity.common.Kommentar;
+import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Kinderkrippe;
 import de.muenchen.isi.infrastructure.repository.BauvorhabenRepository;
 import de.muenchen.isi.infrastructure.repository.InfrastruktureinrichtungRepository;
 import java.lang.reflect.Field;
+import java.util.Optional;
+import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -53,5 +57,45 @@ class KommentarDomainMapperTest {
         Mockito.verify(this.bauvorhabenRepository, Mockito.times(0)).findById(null);
         Mockito.verify(this.infrastruktureinrichtungRepository, Mockito.times(0)).findById(null);
         Mockito.reset(this.infrastruktureinrichtungRepository, this.bauvorhabenRepository);
+
+        final var uuidBauvorhaben = UUID.randomUUID();
+        final var bauvorhaben = new Bauvorhaben();
+        bauvorhaben.setId(uuidBauvorhaben);
+        kommentar = new Kommentar();
+
+        kommentarModel = new KommentarModel();
+        kommentarModel.setBauvorhaben(uuidBauvorhaben);
+
+        Mockito.when(this.bauvorhabenRepository.findById(uuidBauvorhaben)).thenReturn(Optional.of(bauvorhaben));
+
+        kommentarDomainMapper.afterMappingModel2Entity(kommentarModel, kommentar);
+
+        assertThat(kommentar.getBauvorhaben(), is(bauvorhaben));
+        assertThat(kommentar.getInfrastruktureinrichtung(), is(nullValue()));
+
+        Mockito.verify(this.bauvorhabenRepository, Mockito.times(1)).findById(uuidBauvorhaben);
+        Mockito.verify(this.infrastruktureinrichtungRepository, Mockito.times(0)).findById(uuidBauvorhaben);
+        Mockito.reset(this.infrastruktureinrichtungRepository, this.bauvorhabenRepository);
+
+        final var uuidInfrastruktureinrichtung = UUID.randomUUID();
+        final var infrastruktureinrichtung = new Kinderkrippe();
+        infrastruktureinrichtung.setId(uuidInfrastruktureinrichtung);
+        kommentar = new Kommentar();
+        kommentarModel = new KommentarModel();
+        kommentarModel.setInfrastruktureinrichtung(uuidInfrastruktureinrichtung);
+
+        Mockito
+            .when(this.infrastruktureinrichtungRepository.findById(uuidInfrastruktureinrichtung))
+            .thenReturn(Optional.of(infrastruktureinrichtung));
+
+        kommentarDomainMapper.afterMappingModel2Entity(kommentarModel, kommentar);
+
+        assertThat(kommentar.getBauvorhaben(), is(nullValue()));
+        assertThat(kommentar.getInfrastruktureinrichtung(), is(infrastruktureinrichtung));
+
+        Mockito.verify(this.bauvorhabenRepository, Mockito.times(0)).findById(uuidInfrastruktureinrichtung);
+        Mockito
+            .verify(this.infrastruktureinrichtungRepository, Mockito.times(1))
+            .findById(uuidInfrastruktureinrichtung);
     }
 }
