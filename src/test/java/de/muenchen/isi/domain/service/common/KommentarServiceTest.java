@@ -176,7 +176,7 @@ class KommentarServiceTest {
     @Test
     void saveKommentar() throws OptimisticLockingException, EntityNotFoundException {
         final var uuidBauvorhaben = UUID.randomUUID();
-        final var kommentar1 = new Kommentar();
+        var kommentar1 = new Kommentar();
         final var bauvorhaben = new Bauvorhaben();
         bauvorhaben.setId(uuidBauvorhaben);
         kommentar1.setId(UUID.randomUUID());
@@ -199,6 +199,17 @@ class KommentarServiceTest {
 
         Mockito.verify(this.kommentarRepository, Mockito.times(1)).saveAndFlush(kommentar1);
         Mockito.verify(this.bauvorhabenRepository, Mockito.times(1)).findById(uuidBauvorhaben);
+        Mockito.verify(this.infrastruktureinrichtungRepository, Mockito.times(0)).findById(uuidBauvorhaben);
+        Mockito.reset(this.infrastruktureinrichtungRepository, this.bauvorhabenRepository, this.kommentarRepository);
+
+        kommentar1 = new Kommentar();
+        kommentar1.setDatum("datum 1");
+        kommentar1.setText("text 1");
+        kommentar1.setBauvorhaben(null);
+        kommentar1.setInfrastruktureinrichtung(null);
+        assertThrows(EntityNotFoundException.class, () -> this.kommentarService.updateKommentar(kommentar1Model));
+        Mockito.verify(this.kommentarRepository, Mockito.times(0)).saveAndFlush(kommentar1);
+        Mockito.verify(this.bauvorhabenRepository, Mockito.times(0)).findById(uuidBauvorhaben);
         Mockito.verify(this.infrastruktureinrichtungRepository, Mockito.times(0)).findById(uuidBauvorhaben);
     }
 
