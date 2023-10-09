@@ -29,7 +29,6 @@ public class Kommentar extends BaseEntity {
     @Column(nullable = true, length = 32)
     private String datum;
 
-    // Hibernate 6: @Column(nullable = true, length = Length.LONG32) ohne "@Type(type = "org.hibernate.type.TextType")"
     @Type(type = "org.hibernate.type.TextType")
     @Column(nullable = true)
     private String text;
