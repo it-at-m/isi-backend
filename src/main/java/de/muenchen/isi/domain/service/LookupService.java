@@ -9,11 +9,9 @@ import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtDokument;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtGsNachmittagBetreuung;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Einrichtungstraeger;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.Planungsrecht;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonVerfahrensgrundsaetzeJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVerfahren;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVorhaben;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusInfrastruktureinrichtung;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
@@ -40,12 +38,12 @@ public class LookupService {
         model.setUncertainBoolean(this.getUncertainBooleanList());
         model.setSobonVerfahrensgrundsaetzeJahr(this.getSobonVerfahrensgrundsaetzeJahrList());
         model.setStandVerfahrenBauleitplanverfahrenList(this.getStandVerfahrenBauleitplanverfahrenList());
-        model.setStandVorhaben(this.getStandVorhabenList());
+        model.setStandVerfahren(this.getStandVerfahrenList());
         model.setStatusAbfrage(this.getStatusAbfrageList());
         model.setWesentlicheRechtsgrundlageBauleitplanverfahren(
             this.getWesentlicheRechtsgrundlageBauleitplanverfahrenList()
         );
-        model.setPlanungsrecht(this.getPlanungsrechtList());
+        model.setWesentlicheRechtsgrundlage(this.getWesentlicheRechtsgrundlageList());
         model.setArtBaulicheNutzung(this.getArtBaulicheNutzungList());
         model.setStatusInfrastruktureinrichtung((this.getStatusInfrastruktureinrichtungList()));
         model.setEinrichtungstraeger((this.getEinrichtungstraegerList()));
@@ -96,8 +94,8 @@ public class LookupService {
     }
 
     private LookupListModel getStandVerfahrenBauleitplanverfahrenList() {
-        final List<LookupEntryModel> list = EnumUtils
-            .getEnumList(StandVerfahren.class)
+        final List<LookupEntryModel> list = StandVerfahren
+            .getStandVerfahrenForBauleitplanverfahren()
             .stream()
             .map(item -> new LookupEntryModel(item.toString(), item.getBezeichnung()))
             .collect(Collectors.toList());
@@ -105,9 +103,9 @@ public class LookupService {
         return new LookupListModel(list);
     }
 
-    private LookupListModel getStandVorhabenList() {
+    private LookupListModel getStandVerfahrenList() {
         final List<LookupEntryModel> list = EnumUtils
-            .getEnumList(StandVorhaben.class)
+            .getEnumList(StandVerfahren.class)
             .stream()
             .map(item -> new LookupEntryModel(item.toString(), item.getBezeichnung()))
             .collect(Collectors.toList());
@@ -125,9 +123,9 @@ public class LookupService {
         return new LookupListModel(list);
     }
 
-    private LookupListModel getPlanungsrechtList() {
-        final List<LookupEntryModel> list = EnumUtils
-            .getEnumList(Planungsrecht.class)
+    private LookupListModel getWesentlicheRechtsgrundlageBauleitplanverfahrenList() {
+        final List<LookupEntryModel> list = WesentlicheRechtsgrundlage
+            .getWesentlicheRechtsgrundlageForBauleitplanverfahren()
             .stream()
             .map(item -> new LookupEntryModel(item.toString(), item.getBezeichnung()))
             .collect(Collectors.toList());
@@ -135,7 +133,7 @@ public class LookupService {
         return new LookupListModel(list);
     }
 
-    private LookupListModel getWesentlicheRechtsgrundlageBauleitplanverfahrenList() {
+    private LookupListModel getWesentlicheRechtsgrundlageList() {
         final List<LookupEntryModel> list = EnumUtils
             .getEnumList(WesentlicheRechtsgrundlage.class)
             .stream()

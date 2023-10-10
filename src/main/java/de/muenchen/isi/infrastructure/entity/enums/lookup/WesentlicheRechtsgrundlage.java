@@ -1,5 +1,6 @@
 package de.muenchen.isi.infrastructure.entity.enums.lookup;
 
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -34,4 +35,16 @@ public enum WesentlicheRechtsgrundlage {
 
     @Getter
     private final String bezeichnung;
+
+    public static List<WesentlicheRechtsgrundlage> getWesentlicheRechtsgrundlageForBauleitplanverfahren() {
+        return List.of(
+            UNSPECIFIED,
+            QUALIFIZIERTER_BEBAUUNGSPLAN,
+            VORHABENSBEZOGENER_BEBAUUNGSPLAN,
+            EINFACHER_BEBAUUNGSPLAN_PARAGRAPH_30,
+            SEKTORALER_BEBAUUNGSPLAN_PARAGRAPH_9,
+            INFO_FEHLT,
+            FREIE_EINGABE
+        );
+    }
 }

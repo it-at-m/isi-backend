@@ -1,5 +1,6 @@
 package de.muenchen.isi.infrastructure.entity.enums.lookup;
 
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -73,4 +74,19 @@ public enum StandVerfahren {
 
     @Getter
     private final String[] suggestions;
+
+    public static List<StandVerfahren> getStandVerfahrenForBauleitplanverfahren() {
+        return List.of(
+            UNSPECIFIED,
+            VORBEREITUNG_ECKDATENBESCHLUSS,
+            VORBEREITUNG_WETTBEWERBAUSLOBUNG,
+            VORBEREITUNG_AUFSTELLUNGSBESCHLUSS,
+            VORBEREITUNG_BILLIGUNGSBESCHLUSS_STAEDTEBAULICHER_VERTRAG,
+            VORLIEGENDER_SATZUNGSBESCHLUSS,
+            RECHTSVERBINDLICHKEIT_AMTSBLATT,
+            AUFTEILUNGSPLAN,
+            INFO_FEHLT,
+            FREIE_EINGABE
+        );
+    }
 }
