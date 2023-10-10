@@ -24,28 +24,28 @@ public class Baugebiet extends BaseEntity {
     private String bezeichnung;
 
     @Column(nullable = false)
-    private ArtBaulicheNutzung baugebietArt;
+    private ArtBaulicheNutzung artBaulicheNutzung;
 
     @Column(nullable = false)
     private Integer realisierungVon; // JJJJ
 
-    @Column(nullable = true)
-    private Integer gesamtanzahlWe;
-
-    @Column(nullable = true)
-    private Integer anzahlWohneinheitenBaurechtlichGenehmigt;
-
-    @Column(nullable = true)
-    private Integer anzahlWohneinheitenBaurechtlichFestgesetzt;
+    @Column(precision = 10, scale = 2, nullable = true)
+    private BigDecimal gfWohnenGeplant;
 
     @Column(precision = 10, scale = 2, nullable = true)
-    private BigDecimal geschossflaecheWohnen;
+    private BigDecimal gfWohnenBaurechtlichGenehmigt;
+
+    @Column(precision = 10, scale = 2, nullable = true)
+    private BigDecimal gfWohnenBaurechtlichFestgesetzt;
 
     @Column(nullable = true)
-    private BigDecimal geschossflaecheWohnenGenehmigt;
+    private Integer weGeplant;
 
     @Column(nullable = true)
-    private BigDecimal geschossflaecheWohnenFestgesetzt;
+    private Integer weBaurechtlichGenehmigt;
+
+    @Column(nullable = true)
+    private Integer weBaurechtlichFestgesetzt;
 
     @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "baugebiet_id")

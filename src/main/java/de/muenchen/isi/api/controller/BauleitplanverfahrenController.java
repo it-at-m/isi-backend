@@ -6,11 +6,7 @@ package de.muenchen.isi.api.controller;
 
 import de.muenchen.isi.api.dto.BauleitplanverfahrenDto;
 import de.muenchen.isi.api.dto.error.InformationResponseDto;
-import de.muenchen.isi.api.mapper.AbfrageApiMapper;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
-import de.muenchen.isi.domain.mapper.AbfrageDomainMapper;
-import de.muenchen.isi.domain.service.AbfrageService;
-import de.muenchen.isi.domain.service.BauvorhabenService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -37,14 +33,6 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "Bauleitplanverfahren", description = "API zum interagieren mit Abfragen vom Typ Bauleitplanverfahren")
 @Validated
 public class BauleitplanverfahrenController {
-
-    private final AbfrageService abfrageService;
-
-    private final BauvorhabenService bauvorhabenService;
-
-    private final AbfrageApiMapper abfrageApiMapper;
-
-    private final AbfrageDomainMapper abfrageDomainMapper;
 
     @GetMapping("/{id}")
     @Transactional(readOnly = true)

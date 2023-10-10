@@ -47,4 +47,7 @@ public class Adresse implements Cloneable, Serializable {
 
     @Embedded
     private Wgs84 coordinate;
+
+    @Column(nullable = true)
+    private String allgemeineOrtsangabe;
 }

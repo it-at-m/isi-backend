@@ -13,13 +13,17 @@ public class LookupListsDto {
 
     private LookupListDto sobonVerfahrensgrundsaetzeJahr;
 
+    private LookupListDto standVerfahrenBauleitplanverfahrenList;
+
     private LookupListDto standVorhaben;
 
     private LookupListDto statusAbfrage;
 
+    private LookupListDto wesentlicheRechtsgrundlageBauleitplanverfahren;
+
     private LookupListDto planungsrecht;
 
-    private LookupListDto baugebietArt;
+    private LookupListDto artBaulicheNutzung;
 
     private LookupListDto statusInfrastruktureinrichtung;
 
