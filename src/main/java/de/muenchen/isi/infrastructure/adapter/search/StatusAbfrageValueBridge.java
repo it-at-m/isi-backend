@@ -11,7 +11,7 @@ import org.hibernate.search.mapper.pojo.bridge.runtime.ValueBridgeToIndexedValue
 public class StatusAbfrageValueBridge implements ValueBridge<StatusAbfrage, String> {
 
     @Override
-    public String toIndexedValue(StatusAbfrage value, ValueBridgeToIndexedValueContext context) {
+    public String toIndexedValue(final StatusAbfrage value, final ValueBridgeToIndexedValueContext context) {
         return value != null ? value.getBezeichnung() : null;
     }
 }

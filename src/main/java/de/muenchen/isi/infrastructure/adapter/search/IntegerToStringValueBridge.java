@@ -10,7 +10,7 @@ import org.hibernate.search.mapper.pojo.bridge.runtime.ValueBridgeToIndexedValue
 public class IntegerToStringValueBridge implements ValueBridge<Integer, String> {
 
     @Override
-    public String toIndexedValue(Integer value, ValueBridgeToIndexedValueContext context) {
+    public String toIndexedValue(final Integer value, final ValueBridgeToIndexedValueContext context) {
         return Objects.toString(value, null);
     }
 }

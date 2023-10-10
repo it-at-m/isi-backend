@@ -1,5 +1,7 @@
 package de.muenchen.isi.infrastructure.entity;
 
+import de.muenchen.isi.infrastructure.adapter.search.StandVerfahrenBauleitplanverfahrenSuggestionBinder;
+import de.muenchen.isi.infrastructure.adapter.search.StandVerfahrenBeuleitplanverfahrenValueBridge;
 import de.muenchen.isi.infrastructure.adapter.search.StatusAbfrageSuggestionBinder;
 import de.muenchen.isi.infrastructure.adapter.search.StatusAbfrageValueBridge;
 import de.muenchen.isi.infrastructure.adapter.search.StringSuggestionBinder;
@@ -72,6 +74,11 @@ public class Bauleitplanverfahren extends BaseEntity {
     @Column(columnDefinition = "varchar(255) not null check (sobon_relevant != 'UNSPECIFIED')")
     private UncertainBoolean sobonRelevant;
 
+    @FullTextField(valueBridge = @ValueBridgeRef(type = StandVerfahrenBeuleitplanverfahrenValueBridge.class))
+    @NonStandardField(
+        name = "standVerfahren" + SearchwordSuggesterRepository.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
+        valueBinder = @ValueBinderRef(type = StandVerfahrenBauleitplanverfahrenSuggestionBinder.class)
+    )
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private StandVerfahrenBauleitplanverfahren standVerfahren;
