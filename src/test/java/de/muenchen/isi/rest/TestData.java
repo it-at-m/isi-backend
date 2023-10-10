@@ -26,7 +26,7 @@ import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtBaulicheNutzung;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtDokument;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Planungsrecht;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonVerfahrensgrundsaetzeJahr;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVorhaben;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVerfahren;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
 import de.muenchen.isi.infrastructure.entity.filehandling.Dokument;
@@ -53,7 +53,7 @@ public class TestData {
         abfrage.setAnmerkung("Bitte die Abfrage zeitnah behandeln");
         abfrage.setStatusAbfrage(StatusAbfrage.ANGELEGT);
         abfrage.setNameAbfrage("Neubausiedlung in Musterort");
-        abfrage.setStandVorhaben(StandVorhaben.BAUANTRAG_EINGEREICHT);
+        abfrage.setStandVerfahren(StandVerfahren.STRUKTURKONZEPT);
         abfrage.setVerortung(createVerortung());
         infrastrukturabfrage.setAbfrage(abfrage);
 

@@ -5,7 +5,7 @@ import de.muenchen.isi.api.dto.filehandling.DokumentDto;
 import de.muenchen.isi.api.validation.HasAllowedNumberOfDocuments;
 import de.muenchen.isi.api.validation.NotUnspecified;
 import de.muenchen.isi.domain.model.common.VerortungModel;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVorhaben;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVerfahren;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
@@ -45,7 +45,7 @@ public class AbfrageAngelegtDto {
 
     @NotNull
     @NotUnspecified
-    private StandVorhaben standVorhaben;
+    private StandVerfahren standVerfahren;
 
     private UUID bauvorhaben;
 }

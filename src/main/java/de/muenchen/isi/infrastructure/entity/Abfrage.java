@@ -9,7 +9,7 @@ import de.muenchen.isi.infrastructure.adapter.search.StatusAbfrageValueBridge;
 import de.muenchen.isi.infrastructure.adapter.search.StringSuggestionBinder;
 import de.muenchen.isi.infrastructure.entity.common.Adresse;
 import de.muenchen.isi.infrastructure.entity.common.Verortung;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVorhaben;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVerfahren;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.entity.filehandling.Dokument;
 import de.muenchen.isi.infrastructure.repository.search.SearchwordSuggesterRepository;
@@ -86,7 +86,7 @@ public class Abfrage {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private StandVorhaben standVorhaben;
+    private StandVerfahren standVerfahren;
 
     @ManyToOne
     private Bauvorhaben bauvorhaben;

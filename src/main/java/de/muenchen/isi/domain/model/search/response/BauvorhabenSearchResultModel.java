@@ -1,7 +1,7 @@
 package de.muenchen.isi.domain.model.search.response;
 
 import de.muenchen.isi.domain.model.common.StadtbezirkModel;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVorhaben;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVerfahren;
 import java.math.BigDecimal;
 import java.util.Set;
 import java.util.UUID;
@@ -22,5 +22,5 @@ public class BauvorhabenSearchResultModel extends SearchResultModel {
 
     private BigDecimal grundstuecksgroesse;
 
-    private StandVorhaben standVorhaben;
+    private StandVerfahren standVerfahren;
 }

@@ -4,7 +4,7 @@ import de.muenchen.isi.domain.model.BauvorhabenModel;
 import de.muenchen.isi.domain.model.common.AdresseModel;
 import de.muenchen.isi.domain.model.common.VerortungModel;
 import de.muenchen.isi.domain.model.filehandling.DokumentModel;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVorhaben;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVerfahren;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.Data;
@@ -30,7 +30,7 @@ public class AbfrageAngelegtModel {
 
     private String nameAbfrage;
 
-    private StandVorhaben standVorhaben;
+    private StandVerfahren standVerfahren;
 
     private BauvorhabenModel bauvorhaben;
 }

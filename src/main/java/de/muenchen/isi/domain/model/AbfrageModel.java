@@ -7,7 +7,7 @@ package de.muenchen.isi.domain.model;
 import de.muenchen.isi.domain.model.common.AdresseModel;
 import de.muenchen.isi.domain.model.common.VerortungModel;
 import de.muenchen.isi.domain.model.filehandling.DokumentModel;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVorhaben;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVerfahren;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import java.time.LocalDate;
 import java.util.List;
@@ -33,7 +33,7 @@ public class AbfrageModel {
 
     private String nameAbfrage;
 
-    private StandVorhaben standVorhaben;
+    private StandVerfahren standVerfahren;
 
     private BauvorhabenModel bauvorhaben;
 

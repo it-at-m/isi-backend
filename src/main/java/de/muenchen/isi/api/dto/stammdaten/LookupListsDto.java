@@ -15,7 +15,7 @@ public class LookupListsDto {
 
     private LookupListDto standVerfahrenBauleitplanverfahrenList;
 
-    private LookupListDto setStandVerfahren;
+    private LookupListDto standVerfahren;
 
     private LookupListDto statusAbfrage;
 

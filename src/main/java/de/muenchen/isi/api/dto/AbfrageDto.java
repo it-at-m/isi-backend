@@ -7,7 +7,7 @@ package de.muenchen.isi.api.dto;
 import de.muenchen.isi.api.dto.common.AdresseDto;
 import de.muenchen.isi.api.dto.common.VerortungDto;
 import de.muenchen.isi.api.dto.filehandling.DokumentDto;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVorhaben;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVerfahren;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import java.time.LocalDate;
 import java.util.List;
@@ -37,7 +37,7 @@ public class AbfrageDto {
 
     private String nameAbfrage;
 
-    private StandVorhaben standVorhaben;
+    private StandVerfahren standVerfahren;
 
     private UUID bauvorhaben;
 }

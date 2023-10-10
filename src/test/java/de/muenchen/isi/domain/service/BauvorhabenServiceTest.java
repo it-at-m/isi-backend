@@ -43,11 +43,11 @@ import de.muenchen.isi.infrastructure.entity.common.GlobalCounter;
 import de.muenchen.isi.infrastructure.entity.common.Stadtbezirk;
 import de.muenchen.isi.infrastructure.entity.common.Verortung;
 import de.muenchen.isi.infrastructure.entity.enums.CounterType;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.Planungsrecht;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVorhaben;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVerfahren;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusInfrastruktureinrichtung;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.WesentlicheRechtsgrundlage;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Infrastruktureinrichtung;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Kindergarten;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Kinderkrippe;
@@ -153,9 +153,9 @@ public class BauvorhabenServiceTest {
         bauvorhaben.setBauvorhabenNummer("12345");
         bauvorhaben.setGrundstuecksgroesse(BigDecimal.valueOf(1));
         bauvorhaben.setNameVorhaben("Name");
-        bauvorhaben.setPlanungsrecht(Planungsrecht.BPLAN_PARAG_11);
+        bauvorhaben.setWesentlicheRechtsgrundlage(List.of(WesentlicheRechtsgrundlage.AUSSENBEREICH));
         bauvorhaben.setSobonRelevant(UncertainBoolean.FALSE);
-        bauvorhaben.setStandVorhaben(StandVorhaben.AUFSTELLUNGSBESCHLUSS);
+        bauvorhaben.setStandVerfahren(StandVerfahren.INFO_FEHLT);
         bauvorhaben.setId(bauvorhabenId);
 
         final Infrastrukturabfrage abfrage1 = new Infrastrukturabfrage();
@@ -241,9 +241,11 @@ public class BauvorhabenServiceTest {
         bauvorhaben.setBauvorhabenNummer("12345");
         bauvorhaben.setGrundstuecksgroesse(BigDecimal.valueOf(1));
         bauvorhaben.setNameVorhaben("Name");
-        bauvorhaben.setPlanungsrecht(Planungsrecht.BPLAN_PARAG_11);
+        bauvorhaben.setWesentlicheRechtsgrundlage(
+            List.of(WesentlicheRechtsgrundlage.EINFACHER_BEBAUUNGSPLAN_PARAGRAPH_30)
+        );
         bauvorhaben.setSobonRelevant(UncertainBoolean.FALSE);
-        bauvorhaben.setStandVorhaben(StandVorhaben.AUFSTELLUNGSBESCHLUSS);
+        bauvorhaben.setStandVerfahren(StandVerfahren.RAHMENPLANUNG);
         bauvorhaben.setId(bauvorhabenId);
 
         final Kinderkrippe kinderkrippe1 = new Kinderkrippe();

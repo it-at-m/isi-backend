@@ -2,7 +2,7 @@ package de.muenchen.isi.api.dto.search.response;
 
 import de.muenchen.isi.api.dto.common.StadtbezirkDto;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonVerfahrensgrundsaetzeJahr;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVorhaben;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVerfahren;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -29,7 +29,7 @@ public class AbfrageSearchResultDto extends SearchResultDto {
 
     private SobonVerfahrensgrundsaetzeJahr sobonJahr;
 
-    private StandVorhaben standVorhaben;
+    private StandVerfahren standVerfahren;
 
     private LocalDateTime createdDateTime;
 
