@@ -4,6 +4,7 @@
  */
 package de.muenchen.isi.api.dto;
 
+import de.muenchen.isi.api.validation.WesentlicheRechtsgrundlageBauleitplanverfahrenValid;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.WesentlicheRechtsgrundlage;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -31,7 +32,9 @@ public class AbfragevarianteBauleitplanverfahrenDto extends BaseEntityDto {
     private LocalDate satzungsbeschlussBaugenehmigung;
 
     @NotEmpty
-    private List<WesentlicheRechtsgrundlage> wesentlicheRechtsgrundlage;
+    private List<
+        @WesentlicheRechtsgrundlageBauleitplanverfahrenValid @NotNull WesentlicheRechtsgrundlage
+    > wesentlicheRechtsgrundlage;
 
     @Size(max = 255, message = "Es sind maximal {max} Zeichen erlaubt")
     private String wesentlicheRechtsgrundlageFreieEingabe;
