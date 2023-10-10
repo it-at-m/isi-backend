@@ -8,7 +8,7 @@ import lombok.ToString;
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class BedarfsmeldungFachabteilungenDto extends BaseEntityDto {
+public class BedarfsmeldungFachreferateDto extends BaseEntityDto {
 
     private Integer anzahlEinrichtungen;
 

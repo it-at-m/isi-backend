@@ -23,7 +23,7 @@ import de.muenchen.isi.domain.model.AbfrageModel;
 import de.muenchen.isi.domain.model.AbfragevarianteModel;
 import de.muenchen.isi.domain.model.AbfragevarianteSachbearbeitungModel;
 import de.muenchen.isi.domain.model.BauvorhabenModel;
-import de.muenchen.isi.domain.model.BedarfsmeldungFachabteilungenModel;
+import de.muenchen.isi.domain.model.BedarfsmeldungFachreferateModel;
 import de.muenchen.isi.domain.model.InfrastrukturabfrageModel;
 import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.AbfrageAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.AbfragevarianteAngelegtModel;
@@ -396,7 +396,7 @@ class AbfrageServiceTest {
         final var abfragevariante = new AbfragevarianteInBearbeitungFachreferateModel();
         abfragevariante.setId(uuidAbfragevariante);
         abfragevariante.setVersion(0L);
-        final var abfragevarianteBedarfsmeldung = new BedarfsmeldungFachabteilungenModel();
+        final var abfragevarianteBedarfsmeldung = new BedarfsmeldungFachreferateModel();
         abfragevarianteBedarfsmeldung.setAnzahlEinrichtungen(5);
         abfragevarianteBedarfsmeldung.setInfrastruktureinrichtungTyp(InfrastruktureinrichtungTyp.KINDERKRIPPE);
         abfragevarianteBedarfsmeldung.setAnzahlKinderkrippengruppen(4);
@@ -408,7 +408,7 @@ class AbfrageServiceTest {
         final var abfragevarianteSachbearbeitung = new AbfragevarianteInBearbeitungFachreferateModel();
         abfragevarianteSachbearbeitung.setId(uuidAbfragevarianteSachbearbeitung);
         abfragevarianteSachbearbeitung.setVersion(0L);
-        final var abfragevarianteSachbearbeitungBedarfsmeldung = new BedarfsmeldungFachabteilungenModel();
+        final var abfragevarianteSachbearbeitungBedarfsmeldung = new BedarfsmeldungFachreferateModel();
         abfragevarianteSachbearbeitungBedarfsmeldung.setAnzahlEinrichtungen(1);
         abfragevarianteSachbearbeitungBedarfsmeldung.setInfrastruktureinrichtungTyp(
             InfrastruktureinrichtungTyp.GRUNDSCHULE
@@ -552,7 +552,7 @@ class AbfrageServiceTest {
         final var abfragevarianteExpected = new AbfragevarianteModel();
         abfragevarianteExpected.setId(abfragevarianteSaved.getId());
         abfragevarianteExpected.setVersion(1L);
-        final var abfragevarianteBedarfsmeldungExpected = new BedarfsmeldungFachabteilungenModel();
+        final var abfragevarianteBedarfsmeldungExpected = new BedarfsmeldungFachreferateModel();
         abfragevarianteBedarfsmeldungExpected.setAnzahlEinrichtungen(5);
         abfragevarianteBedarfsmeldungExpected.setInfrastruktureinrichtungTyp(InfrastruktureinrichtungTyp.KINDERKRIPPE);
         abfragevarianteBedarfsmeldungExpected.setAnzahlKinderkrippengruppen(4);
@@ -567,7 +567,7 @@ class AbfrageServiceTest {
         final var abfragevarianteSachbearbeitungExpected = new AbfragevarianteModel();
         abfragevarianteSachbearbeitungExpected.setId(abfragevarianteSachbearbeitungSaved.getId());
         abfragevarianteSachbearbeitungExpected.setVersion(1L);
-        final var abfragevarianteSachbearbeitungBedarfsmeldungExpected = new BedarfsmeldungFachabteilungenModel();
+        final var abfragevarianteSachbearbeitungBedarfsmeldungExpected = new BedarfsmeldungFachreferateModel();
         abfragevarianteSachbearbeitungBedarfsmeldungExpected.setAnzahlEinrichtungen(1);
         abfragevarianteSachbearbeitungBedarfsmeldungExpected.setInfrastruktureinrichtungTyp(
             InfrastruktureinrichtungTyp.GRUNDSCHULE

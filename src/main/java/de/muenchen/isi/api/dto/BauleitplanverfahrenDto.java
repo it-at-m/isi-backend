@@ -5,6 +5,7 @@ import de.muenchen.isi.api.dto.common.VerortungDto;
 import de.muenchen.isi.api.dto.filehandling.DokumentDto;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVerfahrenBauleitplanverfahren;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
 import java.time.LocalDate;
 import java.util.List;
@@ -58,4 +59,6 @@ public class BauleitplanverfahrenDto extends BaseEntityDto {
     private List<@Valid @NotNull AbfragevarianteBauleitplanverfahrenDto> abfragevarianten;
 
     private List<@Valid @NotNull AbfragevarianteBauleitplanverfahrenDto> abfragevariantenSachbearbeitung;
+
+    private StatusAbfrage statusAbfrage;
 }

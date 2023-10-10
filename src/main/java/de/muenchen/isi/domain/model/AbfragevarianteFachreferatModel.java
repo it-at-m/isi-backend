@@ -6,5 +6,5 @@ import lombok.Data;
 @Data
 public class AbfragevarianteFachreferatModel {
 
-    private List<BedarfsmeldungFachabteilungenModel> bedarfsmeldungFachreferate;
+    private List<BedarfsmeldungFachreferateModel> bedarfsmeldungFachreferate;
 }

@@ -12,7 +12,7 @@ import lombok.ToString;
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class BedarfsmeldungFachabteilungenModel extends BaseEntityModel {
+public class BedarfsmeldungFachreferateModel extends BaseEntityModel {
 
     private Integer anzahlEinrichtungen;
 
