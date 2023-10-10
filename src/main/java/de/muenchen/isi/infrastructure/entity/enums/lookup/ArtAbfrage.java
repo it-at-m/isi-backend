@@ -9,7 +9,11 @@ import lombok.Getter;
 
 @AllArgsConstructor
 public enum ArtAbfrage implements ILookup {
-    BAULEITPLANVERFAHREN("Bauleitplanverfahren");
+    BAULEITPLANVERFAHREN("Bauleitplanverfahren"),
+
+    BAUGENEHMIGUNGSVERFAHREN("Baugenehmigungsverfahren"),
+
+    WEITERE_ABFRAGEN("Weitere Abfragen");
 
     @Getter
     private final String bezeichnung;
