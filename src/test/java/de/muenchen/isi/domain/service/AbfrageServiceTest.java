@@ -465,9 +465,9 @@ class AbfrageServiceTest {
         abfragevarianteBedarfsmeldungToSave.setAnzahlHortgruppen(2);
         abfragevarianteBedarfsmeldungToSave.setAnzahlGrundschulzuege(1);
         abfragevarianteToSaveSave.setAbfragevarianteSachbearbeitung(new AbfragevarianteSachbearbeitung());
-        abfragevarianteToSaveSave
-            .getAbfragevarianteSachbearbeitung()
-            .setBedarfsmeldungFachreferate(List.of(abfragevarianteBedarfsmeldungToSave));
+        //abfragevarianteToSaveSave
+        //.getAbfragevarianteSachbearbeitung()
+        //.setBedarfsmeldungFachreferate(List.of(abfragevarianteBedarfsmeldungToSave));
 
         final var abfragevarianteSachbearbeitungToSave = new Abfragevariante();
         abfragevarianteSachbearbeitungToSave.setId(uuidAbfragevarianteSachbearbeitung);
@@ -482,9 +482,9 @@ class AbfrageServiceTest {
         abfragevarianteSachbearbeitungBedarfsmeldungToSave.setAnzahlHortgruppen(4);
         abfragevarianteSachbearbeitungBedarfsmeldungToSave.setAnzahlGrundschulzuege(5);
         abfragevarianteSachbearbeitungToSave.setAbfragevarianteSachbearbeitung(new AbfragevarianteSachbearbeitung());
-        abfragevarianteSachbearbeitungToSave
-            .getAbfragevarianteSachbearbeitung()
-            .setBedarfsmeldungFachreferate(List.of(abfragevarianteSachbearbeitungBedarfsmeldungToSave));
+        //abfragevarianteSachbearbeitungToSave
+        //.getAbfragevarianteSachbearbeitung()
+        //.setBedarfsmeldungFachreferate(List.of(abfragevarianteSachbearbeitungBedarfsmeldungToSave));
 
         entityToSave.setAbfragevarianten(List.of(abfragevarianteToSaveSave));
         entityToSave.setAbfragevariantenSachbearbeitung(List.of(abfragevarianteSachbearbeitungToSave));
@@ -509,9 +509,9 @@ class AbfrageServiceTest {
         abfragevarianteBedarfsmeldungSaved.setAnzahlHortgruppen(2);
         abfragevarianteBedarfsmeldungSaved.setAnzahlGrundschulzuege(1);
         abfragevarianteSaved.setAbfragevarianteSachbearbeitung(new AbfragevarianteSachbearbeitung());
-        abfragevarianteSaved
-            .getAbfragevarianteSachbearbeitung()
-            .setBedarfsmeldungFachreferate(List.of(abfragevarianteBedarfsmeldungSaved));
+        //abfragevarianteSaved
+        //.getAbfragevarianteSachbearbeitung()
+        //.setBedarfsmeldungFachreferate(List.of(abfragevarianteBedarfsmeldungSaved));
 
         final var abfragevarianteSachbearbeitungSaved = new Abfragevariante();
         abfragevarianteSachbearbeitungSaved.setId(uuidAbfragevarianteSachbearbeitung);
@@ -526,9 +526,9 @@ class AbfrageServiceTest {
         abfragevarianteSachbearbeitungBedarfsmeldungSaved.setAnzahlHortgruppen(4);
         abfragevarianteSachbearbeitungBedarfsmeldungSaved.setAnzahlGrundschulzuege(5);
         abfragevarianteSachbearbeitungSaved.setAbfragevarianteSachbearbeitung(new AbfragevarianteSachbearbeitung());
-        abfragevarianteSachbearbeitungSaved
-            .getAbfragevarianteSachbearbeitung()
-            .setBedarfsmeldungFachreferate(List.of(abfragevarianteSachbearbeitungBedarfsmeldungSaved));
+        //abfragevarianteSachbearbeitungSaved
+        //.getAbfragevarianteSachbearbeitung()
+        //.setBedarfsmeldungFachreferate(List.of(abfragevarianteSachbearbeitungBedarfsmeldungSaved));
 
         entitySaved.setAbfragevarianten(List.of(abfragevarianteSaved));
         entitySaved.setAbfragevariantenSachbearbeitung(List.of(abfragevarianteSachbearbeitungSaved));
@@ -560,9 +560,9 @@ class AbfrageServiceTest {
         abfragevarianteBedarfsmeldungExpected.setAnzahlHortgruppen(2);
         abfragevarianteBedarfsmeldungExpected.setAnzahlGrundschulzuege(1);
         abfragevarianteExpected.setAbfragevarianteSachbearbeitung(new AbfragevarianteSachbearbeitungModel());
-        abfragevarianteExpected
-            .getAbfragevarianteSachbearbeitung()
-            .setBedarfsmeldungFachreferate(List.of(abfragevarianteBedarfsmeldungExpected));
+        //abfragevarianteExpected
+        //.getAbfragevarianteSachbearbeitung()
+        //.setBedarfsmeldungFachreferate(List.of(abfragevarianteBedarfsmeldungExpected));
 
         final var abfragevarianteSachbearbeitungExpected = new AbfragevarianteModel();
         abfragevarianteSachbearbeitungExpected.setId(abfragevarianteSachbearbeitungSaved.getId());
@@ -579,9 +579,9 @@ class AbfrageServiceTest {
         abfragevarianteSachbearbeitungExpected.setAbfragevarianteSachbearbeitung(
             new AbfragevarianteSachbearbeitungModel()
         );
-        abfragevarianteSachbearbeitungExpected
-            .getAbfragevarianteSachbearbeitung()
-            .setBedarfsmeldungFachreferate(List.of(abfragevarianteSachbearbeitungBedarfsmeldungExpected));
+        //abfragevarianteSachbearbeitungExpected
+        //.getAbfragevarianteSachbearbeitung()
+        //.setBedarfsmeldungFachreferate(List.of(abfragevarianteSachbearbeitungBedarfsmeldungExpected));
 
         entityExpected.setAbfragevarianten(List.of(abfragevarianteExpected));
         entityExpected.setAbfragevariantenSachbearbeitung(List.of(abfragevarianteSachbearbeitungExpected));

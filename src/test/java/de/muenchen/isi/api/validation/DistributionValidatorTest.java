@@ -43,13 +43,13 @@ class DistributionValidatorTest {
         abfragevariante.setGesamtanzahlWe(150);
 
         var baugebiet1 = new BaugebietDto();
-        baugebiet1.setGesamtanzahlWe(50);
+        baugebiet1.setWeGeplant(50);
         baugebiet1.setTechnical(false);
         var baugebiet2 = new BaugebietDto();
-        baugebiet2.setGesamtanzahlWe(40);
+        baugebiet2.setWeGeplant(40);
         baugebiet2.setTechnical(true);
         var baugebiet3 = new BaugebietDto();
-        baugebiet3.setGesamtanzahlWe(60);
+        baugebiet3.setWeGeplant(60);
         baugebiet3.setTechnical(false);
 
         bauabschnitt1 = new BauabschnittDto();
@@ -86,13 +86,13 @@ class DistributionValidatorTest {
         abfragevariante.setGesamtanzahlWe(150);
 
         var baugebiet1 = new BaugebietDto();
-        baugebiet1.setGesamtanzahlWe(50);
+        baugebiet1.setWeGeplant(50);
         baugebiet1.setTechnical(true);
         var baugebiet2 = new BaugebietDto();
-        baugebiet2.setGesamtanzahlWe(40);
+        baugebiet2.setWeGeplant(40);
         baugebiet2.setTechnical(true);
         var baugebiet3 = new BaugebietDto();
-        baugebiet3.setGesamtanzahlWe(60);
+        baugebiet3.setWeGeplant(60);
         baugebiet3.setTechnical(true);
 
         bauabschnitt1 = new BauabschnittDto();

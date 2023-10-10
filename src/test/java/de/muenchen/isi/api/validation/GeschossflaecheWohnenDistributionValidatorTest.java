@@ -47,13 +47,13 @@ class GeschossflaecheWohnenDistributionValidatorTest {
         abfragevariante.setGeschossflaecheWohnen(BigDecimal.valueOf(150));
 
         var baugebiet1 = new BaugebietDto();
-        baugebiet1.setGeschossflaecheWohnen(BigDecimal.valueOf(50));
+        baugebiet1.setGfWohnenGeplant(BigDecimal.valueOf(50));
         baugebiet1.setTechnical(false);
         var baugebiet2 = new BaugebietDto();
-        baugebiet2.setGeschossflaecheWohnen(BigDecimal.valueOf(40));
+        baugebiet2.setGfWohnenGeplant(BigDecimal.valueOf(40));
         baugebiet2.setTechnical(false);
         var baugebiet3 = new BaugebietDto();
-        baugebiet3.setGeschossflaecheWohnen(BigDecimal.valueOf(60));
+        baugebiet3.setGfWohnenGeplant(BigDecimal.valueOf(60));
         baugebiet3.setTechnical(false);
 
         bauabschnitt1 = new BauabschnittDto();
@@ -69,13 +69,13 @@ class GeschossflaecheWohnenDistributionValidatorTest {
         abfragevariante.setGeschossflaecheWohnen(BigDecimal.valueOf(150));
 
         baugebiet1 = new BaugebietDto();
-        baugebiet1.setGeschossflaecheWohnen(BigDecimal.valueOf(50));
+        baugebiet1.setGfWohnenGeplant(BigDecimal.valueOf(50));
         baugebiet1.setTechnical(false);
         baugebiet2 = new BaugebietDto();
-        baugebiet2.setGeschossflaecheWohnen(BigDecimal.valueOf(40));
+        baugebiet2.setGfWohnenGeplant(BigDecimal.valueOf(40));
         baugebiet2.setTechnical(false);
         baugebiet3 = new BaugebietDto();
-        baugebiet3.setGeschossflaecheWohnen(BigDecimal.valueOf(60));
+        baugebiet3.setGfWohnenGeplant(BigDecimal.valueOf(60));
         baugebiet3.setTechnical(false);
 
         bauabschnitt1 = new BauabschnittDto();
@@ -93,19 +93,19 @@ class GeschossflaecheWohnenDistributionValidatorTest {
         abfragevariante.setGeschossflaecheWohnen(BigDecimal.valueOf(150));
 
         baugebiet1 = new BaugebietDto();
-        baugebiet1.setGeschossflaecheWohnen(BigDecimal.valueOf(50));
+        baugebiet1.setGfWohnenGeplant(BigDecimal.valueOf(50));
         baugebiet1.setTechnical(false);
         baugebiet2 = new BaugebietDto();
-        baugebiet2.setGeschossflaecheWohnen(BigDecimal.valueOf(40));
+        baugebiet2.setGfWohnenGeplant(BigDecimal.valueOf(40));
         baugebiet2.setTechnical(false);
         baugebiet3 = new BaugebietDto();
-        baugebiet3.setGeschossflaecheWohnen(BigDecimal.valueOf(60));
+        baugebiet3.setGfWohnenGeplant(BigDecimal.valueOf(60));
         baugebiet3.setTechnical(false);
         var baugebiet4 = new BaugebietDto();
-        baugebiet4.setGeschossflaecheWohnen(BigDecimal.valueOf(0));
+        baugebiet4.setGfWohnenGeplant(BigDecimal.valueOf(0));
         baugebiet4.setTechnical(false);
         var baugebiet5 = new BaugebietDto();
-        baugebiet5.setGeschossflaecheWohnen(null);
+        baugebiet5.setGfWohnenGeplant(null);
         baugebiet5.setTechnical(false);
 
         bauabschnitt1 = new BauabschnittDto();
@@ -123,13 +123,13 @@ class GeschossflaecheWohnenDistributionValidatorTest {
         abfragevariante.setGeschossflaecheWohnen(BigDecimal.valueOf(150));
 
         baugebiet1 = new BaugebietDto();
-        baugebiet1.setGeschossflaecheWohnen(BigDecimal.valueOf(49));
+        baugebiet1.setGfWohnenGeplant(BigDecimal.valueOf(49));
         baugebiet1.setTechnical(false);
         baugebiet2 = new BaugebietDto();
-        baugebiet2.setGeschossflaecheWohnen(BigDecimal.valueOf(40));
+        baugebiet2.setGfWohnenGeplant(BigDecimal.valueOf(40));
         baugebiet2.setTechnical(false);
         baugebiet3 = new BaugebietDto();
-        baugebiet3.setGeschossflaecheWohnen(BigDecimal.valueOf(60));
+        baugebiet3.setGfWohnenGeplant(BigDecimal.valueOf(60));
         baugebiet3.setTechnical(false);
 
         bauabschnitt1 = new BauabschnittDto();
@@ -147,13 +147,13 @@ class GeschossflaecheWohnenDistributionValidatorTest {
         abfragevariante.setGeschossflaecheWohnen(BigDecimal.valueOf(149));
 
         baugebiet1 = new BaugebietDto();
-        baugebiet1.setGeschossflaecheWohnen(BigDecimal.valueOf(50));
+        baugebiet1.setGfWohnenGeplant(BigDecimal.valueOf(50));
         baugebiet1.setTechnical(false);
         baugebiet2 = new BaugebietDto();
-        baugebiet2.setGeschossflaecheWohnen(BigDecimal.valueOf(40));
+        baugebiet2.setGfWohnenGeplant(BigDecimal.valueOf(40));
         baugebiet2.setTechnical(false);
         baugebiet3 = new BaugebietDto();
-        baugebiet3.setGeschossflaecheWohnen(BigDecimal.valueOf(60));
+        baugebiet3.setGfWohnenGeplant(BigDecimal.valueOf(60));
         baugebiet3.setTechnical(false);
 
         bauabschnitt1 = new BauabschnittDto();
@@ -218,21 +218,21 @@ class GeschossflaecheWohnenDistributionValidatorTest {
         baugebiet1 = new BaugebietDto();
         baugebiet1.setTechnical(true);
         var baurate11 = new BaurateDto();
-        baurate11.setGeschossflaecheWohnenGeplant(BigDecimal.valueOf(10));
+        baurate11.setGfWohnenGeplant(BigDecimal.valueOf(10));
         var baurate12 = new BaurateDto();
-        baurate12.setGeschossflaecheWohnenGeplant(BigDecimal.valueOf(50));
+        baurate12.setGfWohnenGeplant(BigDecimal.valueOf(50));
         baugebiet1.setBauraten(List.of(baurate11, baurate12));
 
         baugebiet2 = new BaugebietDto();
         baugebiet2.setTechnical(true);
         var baurate21 = new BaurateDto();
-        baurate21.setGeschossflaecheWohnenGeplant(BigDecimal.valueOf(50));
+        baurate21.setGfWohnenGeplant(BigDecimal.valueOf(50));
         baugebiet2.setBauraten(List.of(baurate21));
 
         baugebiet3 = new BaugebietDto();
         baugebiet3.setTechnical(true);
         var baurate31 = new BaurateDto();
-        baurate31.setGeschossflaecheWohnenGeplant(BigDecimal.valueOf(40));
+        baurate31.setGfWohnenGeplant(BigDecimal.valueOf(40));
         baugebiet3.setBauraten(List.of(baurate31));
 
         bauabschnitt1 = new BauabschnittDto();
@@ -250,21 +250,21 @@ class GeschossflaecheWohnenDistributionValidatorTest {
         baugebiet1 = new BaugebietDto();
         baugebiet1.setTechnical(true);
         baurate11 = new BaurateDto();
-        baurate11.setGeschossflaecheWohnenGeplant(BigDecimal.valueOf(10));
+        baurate11.setGfWohnenGeplant(BigDecimal.valueOf(10));
         baurate12 = new BaurateDto();
-        baurate12.setGeschossflaecheWohnenGeplant(BigDecimal.valueOf(50));
+        baurate12.setGfWohnenGeplant(BigDecimal.valueOf(50));
         baugebiet1.setBauraten(List.of(baurate11, baurate12));
 
         baugebiet2 = new BaugebietDto();
         baugebiet2.setTechnical(true);
         baurate21 = new BaurateDto();
-        baurate21.setGeschossflaecheWohnenGeplant(BigDecimal.valueOf(50));
+        baurate21.setGfWohnenGeplant(BigDecimal.valueOf(50));
         baugebiet2.setBauraten(List.of(baurate21));
 
         baugebiet3 = new BaugebietDto();
         baugebiet3.setTechnical(true);
         baurate31 = new BaurateDto();
-        baurate31.setGeschossflaecheWohnenGeplant(BigDecimal.valueOf(40));
+        baurate31.setGfWohnenGeplant(BigDecimal.valueOf(40));
         baugebiet3.setBauraten(List.of(baurate31));
 
         bauabschnitt1 = new BauabschnittDto();
@@ -282,21 +282,21 @@ class GeschossflaecheWohnenDistributionValidatorTest {
         baugebiet1 = new BaugebietDto();
         baugebiet1.setTechnical(true);
         baurate11 = new BaurateDto();
-        baurate11.setGeschossflaecheWohnenGeplant(BigDecimal.valueOf(10));
+        baurate11.setGfWohnenGeplant(BigDecimal.valueOf(10));
         baurate12 = new BaurateDto();
-        baurate12.setGeschossflaecheWohnenGeplant(BigDecimal.valueOf(50));
+        baurate12.setGfWohnenGeplant(BigDecimal.valueOf(50));
         baugebiet1.setBauraten(List.of(baurate11, baurate12));
 
         baugebiet2 = new BaugebietDto();
         baugebiet2.setTechnical(true);
         baurate21 = new BaurateDto();
-        baurate21.setGeschossflaecheWohnenGeplant(BigDecimal.valueOf(50));
+        baurate21.setGfWohnenGeplant(BigDecimal.valueOf(50));
         baugebiet2.setBauraten(List.of(baurate21));
 
         baugebiet3 = new BaugebietDto();
         baugebiet3.setTechnical(true);
         baurate31 = new BaurateDto();
-        baurate31.setGeschossflaecheWohnenGeplant(BigDecimal.valueOf(40));
+        baurate31.setGfWohnenGeplant(BigDecimal.valueOf(40));
         baugebiet3.setBauraten(List.of(baurate31));
 
         bauabschnitt1 = new BauabschnittDto();

@@ -60,16 +60,7 @@ public interface AbfragevarianteDomainMapper {
     );
 
     @BeanMapping(ignoreByDefault = true)
-    @Mappings(
-        {
-            @Mapping(target = "version", ignore = false),
-            @Mapping(
-                target = "abfragevarianteSachbearbeitung.bedarfsmeldungFachreferate",
-                source = "bedarfsmeldungFachreferate",
-                ignore = false
-            ),
-        }
-    )
+    @Mappings({ @Mapping(target = "version", ignore = false) })
     AbfragevarianteModel request2Model(
         final AbfragevarianteInBearbeitungFachreferateModel request,
         final @MappingTarget AbfragevarianteModel model

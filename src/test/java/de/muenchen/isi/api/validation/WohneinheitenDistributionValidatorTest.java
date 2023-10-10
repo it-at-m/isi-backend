@@ -49,13 +49,13 @@ class WohneinheitenDistributionValidatorTest {
         abfragevariante.setGesamtanzahlWe(150);
 
         var baugebiet1 = new BaugebietDto();
-        baugebiet1.setGesamtanzahlWe(50);
+        baugebiet1.setWeGeplant(50);
         baugebiet1.setTechnical(false);
         var baugebiet2 = new BaugebietDto();
-        baugebiet2.setGesamtanzahlWe(40);
+        baugebiet2.setWeGeplant(40);
         baugebiet2.setTechnical(false);
         var baugebiet3 = new BaugebietDto();
-        baugebiet3.setGesamtanzahlWe(60);
+        baugebiet3.setWeGeplant(60);
         baugebiet3.setTechnical(false);
 
         bauabschnitt1 = new BauabschnittDto();
@@ -71,13 +71,13 @@ class WohneinheitenDistributionValidatorTest {
         abfragevariante.setGesamtanzahlWe(150);
 
         baugebiet1 = new BaugebietDto();
-        baugebiet1.setGesamtanzahlWe(50);
+        baugebiet1.setWeGeplant(50);
         baugebiet1.setTechnical(false);
         baugebiet2 = new BaugebietDto();
-        baugebiet2.setGesamtanzahlWe(40);
+        baugebiet2.setWeGeplant(40);
         baugebiet2.setTechnical(false);
         baugebiet3 = new BaugebietDto();
-        baugebiet3.setGesamtanzahlWe(60);
+        baugebiet3.setWeGeplant(60);
         baugebiet3.setTechnical(false);
 
         bauabschnitt1 = new BauabschnittDto();
@@ -95,19 +95,19 @@ class WohneinheitenDistributionValidatorTest {
         abfragevariante.setGesamtanzahlWe(150);
 
         baugebiet1 = new BaugebietDto();
-        baugebiet1.setGesamtanzahlWe(50);
+        baugebiet1.setWeGeplant(50);
         baugebiet1.setTechnical(false);
         baugebiet2 = new BaugebietDto();
-        baugebiet2.setGesamtanzahlWe(40);
+        baugebiet2.setWeGeplant(40);
         baugebiet2.setTechnical(false);
         baugebiet3 = new BaugebietDto();
-        baugebiet3.setGesamtanzahlWe(60);
+        baugebiet3.setWeGeplant(60);
         baugebiet3.setTechnical(false);
         var baugebiet4 = new BaugebietDto();
-        baugebiet4.setGesamtanzahlWe(0);
+        baugebiet4.setWeGeplant(0);
         baugebiet4.setTechnical(false);
         var baugebiet5 = new BaugebietDto();
-        baugebiet5.setGesamtanzahlWe(null);
+        baugebiet5.setWeGeplant(null);
         baugebiet5.setTechnical(false);
 
         bauabschnitt1 = new BauabschnittDto();
@@ -125,13 +125,13 @@ class WohneinheitenDistributionValidatorTest {
         abfragevariante.setGesamtanzahlWe(150);
 
         baugebiet1 = new BaugebietDto();
-        baugebiet1.setGesamtanzahlWe(49);
+        baugebiet1.setWeGeplant(49);
         baugebiet1.setTechnical(false);
         baugebiet2 = new BaugebietDto();
-        baugebiet2.setGesamtanzahlWe(40);
+        baugebiet2.setWeGeplant(40);
         baugebiet2.setTechnical(false);
         baugebiet3 = new BaugebietDto();
-        baugebiet3.setGesamtanzahlWe(60);
+        baugebiet3.setWeGeplant(60);
         baugebiet3.setTechnical(false);
 
         bauabschnitt1 = new BauabschnittDto();
@@ -149,13 +149,13 @@ class WohneinheitenDistributionValidatorTest {
         abfragevariante.setGesamtanzahlWe(149);
 
         baugebiet1 = new BaugebietDto();
-        baugebiet1.setGesamtanzahlWe(50);
+        baugebiet1.setWeGeplant(50);
         baugebiet1.setTechnical(false);
         baugebiet2 = new BaugebietDto();
-        baugebiet2.setGesamtanzahlWe(40);
+        baugebiet2.setWeGeplant(40);
         baugebiet2.setTechnical(false);
         baugebiet3 = new BaugebietDto();
-        baugebiet3.setGesamtanzahlWe(60);
+        baugebiet3.setWeGeplant(60);
         baugebiet3.setTechnical(false);
 
         bauabschnitt1 = new BauabschnittDto();
@@ -217,21 +217,21 @@ class WohneinheitenDistributionValidatorTest {
         baugebiet1 = new BaugebietDto();
         baugebiet1.setTechnical(true);
         var baurate11 = new BaurateDto();
-        baurate11.setAnzahlWeGeplant(10);
+        baurate11.setWeGeplant(10);
         var baurate12 = new BaurateDto();
-        baurate12.setAnzahlWeGeplant(50);
+        baurate12.setWeGeplant(50);
         baugebiet1.setBauraten(List.of(baurate11, baurate12));
 
         baugebiet2 = new BaugebietDto();
         baugebiet2.setTechnical(true);
         var baurate21 = new BaurateDto();
-        baurate21.setAnzahlWeGeplant(50);
+        baurate21.setWeGeplant(50);
         baugebiet2.setBauraten(List.of(baurate21));
 
         baugebiet3 = new BaugebietDto();
         baugebiet3.setTechnical(true);
         var baurate31 = new BaurateDto();
-        baurate31.setAnzahlWeGeplant(40);
+        baurate31.setWeGeplant(40);
         baugebiet3.setBauraten(List.of(baurate31));
 
         bauabschnitt1 = new BauabschnittDto();
@@ -249,21 +249,21 @@ class WohneinheitenDistributionValidatorTest {
         baugebiet1 = new BaugebietDto();
         baugebiet1.setTechnical(true);
         baurate11 = new BaurateDto();
-        baurate11.setAnzahlWeGeplant(10);
+        baurate11.setWeGeplant(10);
         baurate12 = new BaurateDto();
-        baurate12.setAnzahlWeGeplant(50);
+        baurate12.setWeGeplant(50);
         baugebiet1.setBauraten(List.of(baurate11, baurate12));
 
         baugebiet2 = new BaugebietDto();
         baugebiet2.setTechnical(true);
         baurate21 = new BaurateDto();
-        baurate21.setAnzahlWeGeplant(50);
+        baurate21.setWeGeplant(50);
         baugebiet2.setBauraten(List.of(baurate21));
 
         baugebiet3 = new BaugebietDto();
         baugebiet3.setTechnical(true);
         baurate31 = new BaurateDto();
-        baurate31.setAnzahlWeGeplant(40);
+        baurate31.setWeGeplant(40);
         baugebiet3.setBauraten(List.of(baurate31));
 
         bauabschnitt1 = new BauabschnittDto();
@@ -281,21 +281,21 @@ class WohneinheitenDistributionValidatorTest {
         baugebiet1 = new BaugebietDto();
         baugebiet1.setTechnical(true);
         baurate11 = new BaurateDto();
-        baurate11.setAnzahlWeGeplant(10);
+        baurate11.setWeGeplant(10);
         baurate12 = new BaurateDto();
-        baurate12.setAnzahlWeGeplant(50);
+        baurate12.setWeGeplant(50);
         baugebiet1.setBauraten(List.of(baurate11, baurate12));
 
         baugebiet2 = new BaugebietDto();
         baugebiet2.setTechnical(true);
         baurate21 = new BaurateDto();
-        baurate21.setAnzahlWeGeplant(50);
+        baurate21.setWeGeplant(50);
         baugebiet2.setBauraten(List.of(baurate21));
 
         baugebiet3 = new BaugebietDto();
         baugebiet3.setTechnical(true);
         baurate31 = new BaurateDto();
-        baurate31.setAnzahlWeGeplant(40);
+        baurate31.setWeGeplant(40);
         baugebiet3.setBauraten(List.of(baurate31));
 
         bauabschnitt1 = new BauabschnittDto();

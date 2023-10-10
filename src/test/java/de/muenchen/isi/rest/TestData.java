@@ -48,7 +48,7 @@ public class TestData {
         final WGS84Model coordinate = new WGS84Model();
         coordinate.setLatitude(48.1556795465256);
         coordinate.setLongitude(11.5568456350688);
-        abfrage.setAdresse(new AdresseModel("80331", "München", "Lothstraße", "7", coordinate));
+        abfrage.setAdresse(new AdresseModel("80331", "München", "Lothstraße", "7", coordinate, null));
         abfrage.setAllgemeineOrtsangabe("12345 Musterort, Musterstraße 2");
         abfrage.setFristStellungnahme(LocalDate.of(2022, 12, 31));
         abfrage.setAnmerkung("Bitte die Abfrage zeitnah behandeln");
@@ -94,7 +94,7 @@ public class TestData {
     private static BaugebietModel createBaugebietModel() {
         final BaugebietModel baugebiet = new BaugebietModel();
         baugebiet.setBezeichnung("Das Baugebiet des einzigartigen Baubschnitts");
-        baugebiet.setBaugebietArt(ArtBaulicheNutzung.WA);
+        baugebiet.setArtBaulicheNutzung(ArtBaulicheNutzung.WA);
         baugebiet.setTechnical(false);
         baugebiet.setRealisierungVon(2023);
         baugebiet.setBauraten(List.of(createBaurateModel()));
@@ -104,8 +104,8 @@ public class TestData {
     private static BaurateModel createBaurateModel() {
         final BaurateModel baurate = new BaurateModel();
         baurate.setJahr(2022);
-        baurate.setAnzahlWeGeplant(10);
-        baurate.setGeschossflaecheWohnenGeplant(BigDecimal.valueOf(15.55));
+        baurate.setWeGeplant(10);
+        baurate.setGfWohnenGeplant(BigDecimal.valueOf(15.55));
         baurate.setFoerdermix(createFoerdermixModel());
         return baurate;
     }

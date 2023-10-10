@@ -47,15 +47,14 @@ public class WohneinheitenDistributionValidator
         if (containsNonTechnicalBaugebiet) {
             final var sumVerteilteWohneinheitenBaugebiete = nonTechnicalBaugebiete
                 .stream()
-                .map(baugebiet -> ObjectUtils.isEmpty(baugebiet.getGesamtanzahlWe()) ? 0 : baugebiet.getGesamtanzahlWe()
-                )
+                .map(baugebiet -> ObjectUtils.isEmpty(baugebiet.getWeGeplant()) ? 0 : baugebiet.getWeGeplant())
                 .reduce(0, Integer::sum);
 
             isValid = wohneinheitenAbfragevariante == sumVerteilteWohneinheitenBaugebiete;
         } else if (containsBauratenInTechnicalBaugebiet) {
             final var sumVerteilteWohneinheitenBauraten = bauratenFromAllTechnicalBaugebiete
                 .stream()
-                .map(baurate -> ObjectUtils.isEmpty(baurate.getAnzahlWeGeplant()) ? 0 : baurate.getAnzahlWeGeplant())
+                .map(baurate -> ObjectUtils.isEmpty(baurate.getWeGeplant()) ? 0 : baurate.getWeGeplant())
                 .reduce(0, Integer::sum);
 
             isValid = NumberUtils.compare(wohneinheitenAbfragevariante, sumVerteilteWohneinheitenBauraten) == 0;

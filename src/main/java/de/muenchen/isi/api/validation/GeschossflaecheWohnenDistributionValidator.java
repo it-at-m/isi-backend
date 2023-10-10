@@ -52,9 +52,9 @@ public class GeschossflaecheWohnenDistributionValidator
             final var sumVerteilteGeschossflaecheWohnenBaugebiete = nonTechnicalBaugebiete
                 .stream()
                 .map(baugebiet ->
-                    ObjectUtils.isEmpty(baugebiet.getGeschossflaecheWohnen())
+                    ObjectUtils.isEmpty(baugebiet.getGfWohnenGeplant())
                         ? BigDecimal.ZERO
-                        : baugebiet.getGeschossflaecheWohnen()
+                        : baugebiet.getGfWohnenGeplant()
                 )
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
@@ -63,9 +63,7 @@ public class GeschossflaecheWohnenDistributionValidator
             final var sumVerteilteGeschossflaecheWohnenBauraten = bauratenFromAllTechnicalBaugebiete
                 .stream()
                 .map(baurate ->
-                    ObjectUtils.isEmpty(baurate.getGeschossflaecheWohnenGeplant())
-                        ? BigDecimal.ZERO
-                        : baurate.getGeschossflaecheWohnenGeplant()
+                    ObjectUtils.isEmpty(baurate.getGfWohnenGeplant()) ? BigDecimal.ZERO : baurate.getGfWohnenGeplant()
                 )
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 

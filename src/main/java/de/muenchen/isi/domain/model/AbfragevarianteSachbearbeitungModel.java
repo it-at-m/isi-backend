@@ -6,7 +6,6 @@ package de.muenchen.isi.domain.model;
 
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
 import java.math.BigDecimal;
-import java.util.List;
 import lombok.Data;
 import lombok.ToString;
 
@@ -14,11 +13,9 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public class AbfragevarianteSachbearbeitungModel {
 
-    private BigDecimal geschossflaecheWohnenPlanungsursaechlich;
+    private BigDecimal gfWohnenPlanungsursaechlich;
 
-    private SobonOrientierungswertJahr soBoNOrientierungswertJahr;
+    private SobonOrientierungswertJahr sobonOrientierungswertJahr;
 
     private String anmerkung;
-
-    private List<BedarfsmeldungFachabteilungenModel> bedarfsmeldungFachreferate;
 }
