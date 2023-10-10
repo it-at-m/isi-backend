@@ -13,6 +13,7 @@ import java.util.UUID;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -39,6 +40,7 @@ public class BauleitplanverfahrenDto extends BaseEntityDto {
     @NotNull
     private StandVerfahrenBauleitplanverfahren standVerfahren;
 
+    @Size(max = 255, message = "Es sind maximal {max} Zeichen erlaubt")
     private String standVerfahrenFreieEingabe;
 
     private AdresseDto adresse;

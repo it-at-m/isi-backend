@@ -12,6 +12,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -24,6 +25,7 @@ public class AbfragevarianteBauleitplanverfahrenDto extends BaseEntityDto {
     private Integer abfragevariantenNr;
 
     @NotBlank
+    @Size(max = 30, message = "Es sind maximal {max} Zeichen erlaubt")
     private String name;
 
     private LocalDate satzungsbeschlussBaugenehmigung;
@@ -31,6 +33,7 @@ public class AbfragevarianteBauleitplanverfahrenDto extends BaseEntityDto {
     @NotEmpty
     private List<WesentlicheRechtsgrundlageBauleitplanverfahren> wesentlicheRechtsgrundlage;
 
+    @Size(max = 255, message = "Es sind maximal {max} Zeichen erlaubt")
     private String wesentlicheRechtsgrundlageFreieEingabe;
 
     private Integer realisierungVon;

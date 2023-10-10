@@ -11,11 +11,9 @@ import javax.persistence.Embeddable;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import lombok.Data;
-import lombok.ToString;
 
 @Embeddable
 @Data
-@ToString(callSuper = true)
 public class AbfragevarianteSachbearbeitung {
 
     @Column(precision = 10, scale = 2, nullable = true)
@@ -27,8 +25,4 @@ public class AbfragevarianteSachbearbeitung {
 
     @Column(nullable = true)
     private String anmerkung;
-    //@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval = true)
-    //@JoinColumn(name = "abfragevariante_id", referencedColumnName = "id")
-    //@OrderBy("createdDateTime asc")
-    //private List<BedarfsmeldungFachreferate> bedarfsmeldungFachreferate;
 }
