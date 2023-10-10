@@ -19,8 +19,6 @@ public class AbfrageModel {
 
     private List<DokumentModel> dokumente;
 
-    private String allgemeineOrtsangabe;
-
     private AdresseModel adresse;
 
     private VerortungModel verortung;

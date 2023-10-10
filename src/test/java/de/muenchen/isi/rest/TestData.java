@@ -49,7 +49,6 @@ public class TestData {
         coordinate.setLatitude(48.1556795465256);
         coordinate.setLongitude(11.5568456350688);
         abfrage.setAdresse(new AdresseModel("80331", "München", "Lothstraße", "7", coordinate, null));
-        abfrage.setAllgemeineOrtsangabe("12345 Musterort, Musterstraße 2");
         abfrage.setFristStellungnahme(LocalDate.of(2022, 12, 31));
         abfrage.setAnmerkung("Bitte die Abfrage zeitnah behandeln");
         abfrage.setStatusAbfrage(StatusAbfrage.ANGELEGT);

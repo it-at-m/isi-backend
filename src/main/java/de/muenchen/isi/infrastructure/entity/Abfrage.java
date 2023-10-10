@@ -44,9 +44,6 @@ public class Abfrage {
     @JoinColumn(name = "abfrage_id")
     private List<Dokument> dokumente;
 
-    @Column(nullable = true)
-    private String allgemeineOrtsangabe;
-
     @IndexedEmbedded
     @Embedded
     private Adresse adresse;

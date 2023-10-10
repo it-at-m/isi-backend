@@ -29,5 +29,5 @@ public class AdresseDto {
     private Wgs84Dto coordinate;
 
     @Size(max = 255, message = "Es sind maximal {max} Zeichen erlaubt")
-    private String allgemeineOrtsangabe;
+    private String angabeLageErgaenzendeAdressinformation;
 }

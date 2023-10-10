@@ -21,8 +21,6 @@ public class AbfrageDto {
 
     private List<DokumentDto> dokumente;
 
-    private String allgemeineOrtsangabe;
-
     private AdresseDto adresse;
 
     @Valid
