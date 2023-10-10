@@ -168,7 +168,7 @@ public class BauvorhabenService {
         final var bauvorhaben = this.getBauvorhabenById(id);
         this.throwEntityIsReferencedExceptionWhenAbfrageIsReferencingBauvorhaben(bauvorhaben);
         this.throwEntityIsReferencedExceptionWhenInfrastruktureinrichtungIsReferencingBauvorhaben(bauvorhaben);
-        this.kommentarRepository.deleteAllByBauvorhaben(id);
+        this.kommentarRepository.deleteAllByBauvorhabenId(id);
         this.bauvorhabenRepository.deleteById(id);
     }
 

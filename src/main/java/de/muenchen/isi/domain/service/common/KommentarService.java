@@ -30,7 +30,7 @@ public class KommentarService {
      */
     public List<KommentarModel> getKommentareForBauvorhaben(final UUID bauvorhabenId) {
         return kommentarRepository
-            .findAllByBauvorhabenOrderByCreatedDateTimeDesc(bauvorhabenId)
+            .findAllByBauvorhabenIdOrderByCreatedDateTimeDesc(bauvorhabenId)
             .map(kommentarMapper::entity2Model)
             .collect(Collectors.toList());
     }
@@ -43,7 +43,7 @@ public class KommentarService {
      */
     public List<KommentarModel> getKommentareForInfrastruktureinrichtung(final UUID infrastruktureinrichtungId) {
         return kommentarRepository
-            .findAllByInfrastruktureinrichtungOrderByCreatedDateTimeDesc(infrastruktureinrichtungId)
+            .findAllByInfrastruktureinrichtungIdOrderByCreatedDateTimeDesc(infrastruktureinrichtungId)
             .map(kommentarMapper::entity2Model)
             .collect(Collectors.toList());
     }
@@ -71,9 +71,11 @@ public class KommentarService {
      *
      * @param kommentar zum Speichern.
      * @return den gespeicherten Kommentar.
+     * @throws EntityNotFoundException falls kein referenzierbares Bauvorhaben bzw. keine referenzierbare Infrastruktureinrichtung existiert.
      * @throws OptimisticLockingException falls der Kommentar in einer neueren Version gespeichert ist.
      */
-    public KommentarModel saveKommentar(final KommentarModel kommentar) throws OptimisticLockingException {
+    public KommentarModel saveKommentar(final KommentarModel kommentar)
+        throws OptimisticLockingException, EntityNotFoundException {
         var entity = kommentarMapper.model2Entity(kommentar);
         try {
             entity = kommentarRepository.saveAndFlush(entity);
@@ -90,7 +92,7 @@ public class KommentarService {
      *
      * @param kommentar zum Aktualisieren.
      * @return den aktualisierten Kommentar.
-     * @throws EntityNotFoundException falls kein Kommentar mit der ID existiert.
+     * @throws EntityNotFoundException falls kein Kommentar mit der ID existiert oder kein referenzierbares Bauvorhaben bzw. keine referenzierbare Infrastruktureinrichtung existiert.
      * @throws OptimisticLockingException falls der Kommentar in einer neueren Version gespeichert ist.
      */
     public KommentarModel updateKommentar(final KommentarModel kommentar)
