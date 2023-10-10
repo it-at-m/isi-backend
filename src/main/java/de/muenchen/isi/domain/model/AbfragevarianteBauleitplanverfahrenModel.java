@@ -4,7 +4,7 @@
  */
 package de.muenchen.isi.domain.model;
 
-import de.muenchen.isi.infrastructure.entity.enums.lookup.WesentlicheRechtsgrundlageBauleitplanverfahren;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.WesentlicheRechtsgrundlage;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
@@ -23,7 +23,7 @@ public class AbfragevarianteBauleitplanverfahrenModel extends BaseEntityModel {
 
     private LocalDate satzungsbeschlussBaugenehmigung;
 
-    private List<WesentlicheRechtsgrundlageBauleitplanverfahren> wesentlicheRechtsgrundlage;
+    private List<WesentlicheRechtsgrundlage> wesentlicheRechtsgrundlage;
 
     private String wesentlicheRechtsgrundlageFreieEingabe;
 

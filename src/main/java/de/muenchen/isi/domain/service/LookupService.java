@@ -17,7 +17,7 @@ import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVorhaben;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusInfrastruktureinrichtung;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.WesentlicheRechtsgrundlageBauleitplanverfahren;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.WesentlicheRechtsgrundlage;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -137,7 +137,7 @@ public class LookupService {
 
     private LookupListModel getWesentlicheRechtsgrundlageBauleitplanverfahrenList() {
         final List<LookupEntryModel> list = EnumUtils
-            .getEnumList(WesentlicheRechtsgrundlageBauleitplanverfahren.class)
+            .getEnumList(WesentlicheRechtsgrundlage.class)
             .stream()
             .map(item -> new LookupEntryModel(item.toString(), item.getBezeichnung()))
             .collect(Collectors.toList());

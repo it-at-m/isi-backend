@@ -6,10 +6,10 @@ import de.muenchen.isi.api.dto.filehandling.DokumentDto;
 import de.muenchen.isi.api.validation.HasAllowedNumberOfDocuments;
 import de.muenchen.isi.api.validation.NotUnspecified;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtBaulicheNutzung;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.Planungsrecht;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonVerfahrensgrundsaetzeJahr;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVorhaben;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVerfahren;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.WesentlicheRechtsgrundlage;
 import java.math.BigDecimal;
 import java.util.List;
 import javax.validation.Valid;
@@ -29,7 +29,7 @@ public class BauvorhabenDto extends BaseEntityDto {
 
     @NotNull
     @NotUnspecified
-    private StandVorhaben standVorhaben;
+    private StandVerfahren standVerfahren;
 
     private String bauvorhabenNummer;
 
@@ -54,9 +54,8 @@ public class BauvorhabenDto extends BaseEntityDto {
 
     private SobonVerfahrensgrundsaetzeJahr sobonJahr;
 
-    @NotNull
-    @NotUnspecified
-    private Planungsrecht planungsrecht;
+    @NotEmpty
+    private List<@NotUnspecified @NotNull WesentlicheRechtsgrundlage> wesentlicheRechtsgrundlage;
 
     @NotEmpty
     private List<ArtBaulicheNutzung> artFnp;

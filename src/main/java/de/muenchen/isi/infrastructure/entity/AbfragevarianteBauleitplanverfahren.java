@@ -6,7 +6,7 @@ package de.muenchen.isi.infrastructure.entity;
 
 import de.muenchen.isi.infrastructure.adapter.search.IntegerSuggestionBinder;
 import de.muenchen.isi.infrastructure.adapter.search.IntegerToStringValueBridge;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.WesentlicheRechtsgrundlageBauleitplanverfahren;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.WesentlicheRechtsgrundlage;
 import de.muenchen.isi.infrastructure.repository.search.SearchwordSuggesterRepository;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -61,7 +61,7 @@ public class AbfragevarianteBauleitplanverfahren extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     @ElementCollection
-    private List<WesentlicheRechtsgrundlageBauleitplanverfahren> wesentlicheRechtsgrundlage;
+    private List<WesentlicheRechtsgrundlage> wesentlicheRechtsgrundlage;
 
     @Column
     private String wesentlicheRechtsgrundlageFreieEingabe;

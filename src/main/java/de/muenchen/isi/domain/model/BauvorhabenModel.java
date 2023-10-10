@@ -4,10 +4,10 @@ import de.muenchen.isi.domain.model.common.AdresseModel;
 import de.muenchen.isi.domain.model.common.VerortungModel;
 import de.muenchen.isi.domain.model.filehandling.DokumentModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtBaulicheNutzung;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.Planungsrecht;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonVerfahrensgrundsaetzeJahr;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVorhaben;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVerfahren;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.WesentlicheRechtsgrundlage;
 import java.math.BigDecimal;
 import java.util.List;
 import lombok.Data;
@@ -19,7 +19,7 @@ public class BauvorhabenModel extends BaseEntityModel {
 
     private BigDecimal grundstuecksgroesse;
 
-    private StandVorhaben standVorhaben;
+    private StandVerfahren standVerfahren;
 
     private String bauvorhabenNummer;
 
@@ -37,7 +37,7 @@ public class BauvorhabenModel extends BaseEntityModel {
 
     private SobonVerfahrensgrundsaetzeJahr sobonJahr;
 
-    private Planungsrecht planungsrecht;
+    private List<WesentlicheRechtsgrundlage> wesentlicheRechtsgrundlage;
 
     private List<ArtBaulicheNutzung> artFnp;
 

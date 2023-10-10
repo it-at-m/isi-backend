@@ -3,6 +3,7 @@ package de.muenchen.isi.api.dto;
 import de.muenchen.isi.api.dto.common.AdresseDto;
 import de.muenchen.isi.api.dto.common.VerortungDto;
 import de.muenchen.isi.api.dto.filehandling.DokumentDto;
+import de.muenchen.isi.api.validation.NotUnspecified;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVerfahren;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
@@ -38,6 +39,7 @@ public class BauleitplanverfahrenDto extends BaseEntityDto {
     private UncertainBoolean sobonRelevant;
 
     @NotNull
+    @NotUnspecified
     private StandVerfahren standVerfahren;
 
     @Size(max = 255, message = "Es sind maximal {max} Zeichen erlaubt")
