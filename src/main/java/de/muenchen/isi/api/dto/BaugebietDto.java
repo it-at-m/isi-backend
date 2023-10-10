@@ -1,7 +1,7 @@
 package de.muenchen.isi.api.dto;
 
 import de.muenchen.isi.api.validation.JahrDistributionValid;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.BaugebietArt;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtBaulicheNutzung;
 import java.math.BigDecimal;
 import java.util.List;
 import javax.validation.Valid;
@@ -26,24 +26,24 @@ public class BaugebietDto extends BaseEntityDto {
     private String bezeichnung;
 
     @NotNull
-    private BaugebietArt baugebietArt;
+    private ArtBaulicheNutzung artBaulicheNutzung;
 
     @NotNull
     @Min(1900)
     @Max(2100)
     private Integer realisierungVon;
 
-    private Integer gesamtanzahlWe;
+    private BigDecimal gfWohnenGeplant;
 
-    private Integer anzahlWohneinheitenBaurechtlichGenehmigt;
+    private BigDecimal gfWohnenBaurechtlichGenehmigt;
 
-    private Integer anzahlWohneinheitenBaurechtlichFestgesetzt;
+    private BigDecimal gfWohnenBaurechtlichFestgesetzt;
 
-    private BigDecimal geschossflaecheWohnen;
+    private Integer weGeplant;
 
-    private BigDecimal geschossflaecheWohnenGenehmigt;
+    private Integer weBaurechtlichGenehmigt;
 
-    private BigDecimal geschossflaecheWohnenFestgesetzt;
+    private Integer weBaurechtlichFestgesetzt;
 
     @NotEmpty
     private List<@Valid @NotNull BaurateDto> bauraten;

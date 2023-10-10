@@ -4,9 +4,9 @@ import de.muenchen.isi.domain.model.stammdaten.LookupEntryModel;
 import de.muenchen.isi.domain.model.stammdaten.LookupListModel;
 import de.muenchen.isi.domain.model.stammdaten.LookupListsModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtBaulicheNutzung;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtDokument;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtGsNachmittagBetreuung;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.BaugebietArt;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Einrichtungstraeger;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Planungsrecht;
@@ -121,7 +121,7 @@ public class LookupService {
 
     private LookupListModel getBaugebietArtList() {
         final List<LookupEntryModel> list = EnumUtils
-            .getEnumList(BaugebietArt.class)
+            .getEnumList(ArtBaulicheNutzung.class)
             .stream()
             .map(item -> new LookupEntryModel(item.toString(), item.getBezeichnung()))
             .collect(Collectors.toList());

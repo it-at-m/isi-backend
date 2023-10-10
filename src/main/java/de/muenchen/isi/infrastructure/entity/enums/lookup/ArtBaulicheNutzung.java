@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @AllArgsConstructor
-public enum BaugebietArt implements ILookup {
+public enum ArtBaulicheNutzung implements ILookup {
     WR("Reines Wohngebiet (WR)"),
     WA("Allgemeines Wohngebiet (WA)"),
     MU("Urbanes Gebiet (MU)"),

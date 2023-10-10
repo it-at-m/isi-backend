@@ -1,6 +1,6 @@
 package de.muenchen.isi.infrastructure.entity;
 
-import de.muenchen.isi.infrastructure.entity.enums.lookup.BaugebietArt;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtBaulicheNutzung;
 import java.math.BigDecimal;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -24,7 +24,7 @@ public class Baugebiet extends BaseEntity {
     private String bezeichnung;
 
     @Column(nullable = false)
-    private BaugebietArt baugebietArt;
+    private ArtBaulicheNutzung baugebietArt;
 
     @Column(nullable = false)
     private Integer realisierungVon; // JJJJ

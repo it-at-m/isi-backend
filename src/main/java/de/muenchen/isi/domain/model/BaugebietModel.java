@@ -1,6 +1,6 @@
 package de.muenchen.isi.domain.model;
 
-import de.muenchen.isi.infrastructure.entity.enums.lookup.BaugebietArt;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtBaulicheNutzung;
 import java.math.BigDecimal;
 import java.util.List;
 import lombok.Data;
@@ -14,7 +14,7 @@ public class BaugebietModel extends BaseEntityModel {
 
     private String bezeichnung;
 
-    private BaugebietArt baugebietArt;
+    private ArtBaulicheNutzung baugebietArt;
 
     private Integer realisierungVon;
 

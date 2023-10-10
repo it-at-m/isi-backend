@@ -22,8 +22,8 @@ import de.muenchen.isi.domain.model.common.VerortungModel;
 import de.muenchen.isi.domain.model.common.WGS84Model;
 import de.muenchen.isi.domain.model.filehandling.DokumentModel;
 import de.muenchen.isi.domain.model.filehandling.FilepathModel;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtBaulicheNutzung;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtDokument;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.BaugebietArt;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Planungsrecht;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonVerfahrensgrundsaetzeJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVorhaben;
@@ -94,7 +94,7 @@ public class TestData {
     private static BaugebietModel createBaugebietModel() {
         final BaugebietModel baugebiet = new BaugebietModel();
         baugebiet.setBezeichnung("Das Baugebiet des einzigartigen Baubschnitts");
-        baugebiet.setBaugebietArt(BaugebietArt.WA);
+        baugebiet.setBaugebietArt(ArtBaulicheNutzung.WA);
         baugebiet.setTechnical(false);
         baugebiet.setRealisierungVon(2023);
         baugebiet.setBauraten(List.of(createBaurateModel()));
