@@ -27,8 +27,6 @@ public class BauvorhabenModel extends BaseEntityModel {
 
     private VerortungModel verortung;
 
-    private String allgemeineOrtsangabe;
-
     private String bebauungsplannummer;
 
     private String fisNummer;

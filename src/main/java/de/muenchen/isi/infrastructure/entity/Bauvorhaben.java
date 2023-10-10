@@ -93,9 +93,6 @@ public class Bauvorhaben extends BaseEntity {
     @Column(columnDefinition = "jsonb")
     private Verortung verortung;
 
-    @Column(nullable = true)
-    private String allgemeineOrtsangabe;
-
     @FullTextField
     @NonStandardField(
         name = "bebauungsplannummer" + SearchwordSuggesterRepository.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,

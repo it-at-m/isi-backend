@@ -40,9 +40,6 @@ public class BauvorhabenDto extends BaseEntityDto {
     private VerortungDto verortung;
 
     @Size(max = 255, message = "Es sind maximal {max} Zeichen erlaubt")
-    private String allgemeineOrtsangabe;
-
-    @Size(max = 255, message = "Es sind maximal {max} Zeichen erlaubt")
     private String bebauungsplannummer;
 
     @Size(max = 255, message = "Es sind maximal {max} Zeichen erlaubt")

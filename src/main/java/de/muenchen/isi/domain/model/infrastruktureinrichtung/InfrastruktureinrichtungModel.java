@@ -27,8 +27,6 @@ public abstract class InfrastruktureinrichtungModel extends BaseEntityModel {
 
     private BauvorhabenModel bauvorhaben;
 
-    private String allgemeineOrtsangabe;
-
     private AdresseModel adresse;
 
     private String nameEinrichtung;

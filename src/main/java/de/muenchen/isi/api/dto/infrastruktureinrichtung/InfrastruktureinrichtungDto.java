@@ -54,9 +54,6 @@ public abstract class InfrastruktureinrichtungDto extends BaseEntityDto {
 
     private UUID bauvorhaben;
 
-    @Size(max = 255, message = "Es sind maximal {max} Zeichen erlaubt")
-    private String allgemeineOrtsangabe;
-
     @Valid
     private AdresseDto adresse;
 

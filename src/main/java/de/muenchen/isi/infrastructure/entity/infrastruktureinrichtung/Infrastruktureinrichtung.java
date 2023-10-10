@@ -72,9 +72,6 @@ public abstract class Infrastruktureinrichtung extends BaseEntity {
     @ManyToOne
     private Bauvorhaben bauvorhaben;
 
-    @Column(nullable = true)
-    private String allgemeineOrtsangabe;
-
     @IndexedEmbedded
     @Embedded
     private Adresse adresse;
