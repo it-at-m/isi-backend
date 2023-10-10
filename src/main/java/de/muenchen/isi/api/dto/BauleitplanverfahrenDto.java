@@ -55,7 +55,7 @@ public class BauleitplanverfahrenDto extends BaseEntityDto {
 
     private String anmerkung;
 
-    private List<@Valid AbfragevarianteBauleitplanverfahrenDto> abfragevarianten;
+    private List<@Valid @NotNull AbfragevarianteBauleitplanverfahrenDto> abfragevarianten;
 
-    private List<@Valid AbfragevarianteBauleitplanverfahrenDto> abfragevariantenSachbearbeitung;
+    private List<@Valid @NotNull AbfragevarianteBauleitplanverfahrenDto> abfragevariantenSachbearbeitung;
 }
