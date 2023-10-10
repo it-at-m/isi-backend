@@ -1,13 +1,13 @@
 package de.muenchen.isi.infrastructure.entity;
 
-import de.muenchen.isi.infrastructure.adapter.search.StandVerfahrenBauleitplanverfahrenSuggestionBinder;
-import de.muenchen.isi.infrastructure.adapter.search.StandVerfahrenBeuleitplanverfahrenValueBridge;
+import de.muenchen.isi.infrastructure.adapter.search.StandVerfahrenSuggestionBinder;
+import de.muenchen.isi.infrastructure.adapter.search.StandVerfahrenValueBridge;
 import de.muenchen.isi.infrastructure.adapter.search.StatusAbfrageSuggestionBinder;
 import de.muenchen.isi.infrastructure.adapter.search.StatusAbfrageValueBridge;
 import de.muenchen.isi.infrastructure.adapter.search.StringSuggestionBinder;
 import de.muenchen.isi.infrastructure.entity.common.Adresse;
 import de.muenchen.isi.infrastructure.entity.common.Verortung;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVerfahrenBauleitplanverfahren;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVerfahren;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
 import de.muenchen.isi.infrastructure.entity.filehandling.Dokument;
@@ -74,14 +74,14 @@ public class Bauleitplanverfahren extends BaseEntity {
     @Column(columnDefinition = "varchar(255) not null check (sobon_relevant != 'UNSPECIFIED')")
     private UncertainBoolean sobonRelevant;
 
-    @FullTextField(valueBridge = @ValueBridgeRef(type = StandVerfahrenBeuleitplanverfahrenValueBridge.class))
+    @FullTextField(valueBridge = @ValueBridgeRef(type = StandVerfahrenValueBridge.class))
     @NonStandardField(
         name = "standVerfahren" + SearchwordSuggesterRepository.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
-        valueBinder = @ValueBinderRef(type = StandVerfahrenBauleitplanverfahrenSuggestionBinder.class)
+        valueBinder = @ValueBinderRef(type = StandVerfahrenSuggestionBinder.class)
     )
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private StandVerfahrenBauleitplanverfahren standVerfahren;
+    private StandVerfahren standVerfahren;
 
     @Column
     private String standVerfahrenFreieEingabe;

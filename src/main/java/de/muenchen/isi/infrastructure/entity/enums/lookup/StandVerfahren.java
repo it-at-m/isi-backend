@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @AllArgsConstructor
-public enum StandVerfahrenBauleitplanverfahren {
+public enum StandVerfahren {
     UNSPECIFIED(ILookup.UNSPECIFIED, new String[] {}),
 
     VORBEREITUNG_ECKDATENBESCHLUSS(
@@ -38,6 +38,31 @@ public enum StandVerfahrenBauleitplanverfahren {
     ),
 
     AUFTEILUNGSPLAN("Aufteilungsplan", new String[] { "Aufteilungsplan" }),
+
+    VORBEREITUNG_VORBESCHEID("Vorbereitung Vorbescheid", new String[] { "Vorbereitung", "Vorbescheid" }),
+
+    VORBEREITUNG_BAUGENEHMIGUNG("Vorbereitung Baugenehmigung", new String[] { "Vorbereitung", "Baugenehmigung" }),
+
+    VORABFRAGE_OHNE_KONKRETEN_STAND(
+        "Vorabfrage ohne konkreten Stand",
+        new String[] { "Vorabfrage", "ohne", "konkreten", "Stand" }
+    ),
+
+    STRUKTURKONZEPT("Strukturkonzept", new String[] { "Strukturkonzept" }),
+
+    RAHMENPLANUNG("Rahmenplanung", new String[] { "Rahmenplanung" }),
+
+    POTENTIALUNTERSUCHUNG("Potentialuntersuchung", new String[] { "Potentialuntersuchung" }),
+
+    STAEDTEBAULICHE_SANIERUNGSMASSNAHME(
+        "Städtebauliche Sanierungsmaßnahme (Sanierungsgebiet)",
+        new String[] { "Städtebauliche", "Sanierungsmaßnahme", "Sanierungsgebiet" }
+    ),
+
+    STAEDTEBAULICHE_ENTWICKLUNGSMASSNAHME(
+        "Städtebauliche Entwicklungsmaßnahme (Entwicklungsgebiet)",
+        new String[] { "Städtebauliche", "Entwicklungsmaßnahme", "Entwicklungsgebiet" }
+    ),
 
     INFO_FEHLT("Info fehlt", new String[] { "Info", "fehlt" }),
 

@@ -4,7 +4,7 @@ import de.muenchen.isi.api.dto.common.AdresseDto;
 import de.muenchen.isi.api.dto.common.VerortungDto;
 import de.muenchen.isi.api.dto.filehandling.DokumentDto;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVerfahrenBauleitplanverfahren;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVerfahren;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
 import java.time.LocalDate;
@@ -38,7 +38,7 @@ public class BauleitplanverfahrenDto extends BaseEntityDto {
     private UncertainBoolean sobonRelevant;
 
     @NotNull
-    private StandVerfahrenBauleitplanverfahren standVerfahren;
+    private StandVerfahren standVerfahren;
 
     @Size(max = 255, message = "Es sind maximal {max} Zeichen erlaubt")
     private String standVerfahrenFreieEingabe;

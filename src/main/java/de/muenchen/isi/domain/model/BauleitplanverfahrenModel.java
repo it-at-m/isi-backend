@@ -3,7 +3,7 @@ package de.muenchen.isi.domain.model;
 import de.muenchen.isi.domain.model.common.AdresseModel;
 import de.muenchen.isi.domain.model.common.VerortungModel;
 import de.muenchen.isi.domain.model.filehandling.DokumentModel;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVerfahrenBauleitplanverfahren;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVerfahren;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
 import java.time.LocalDate;
@@ -26,7 +26,7 @@ public class BauleitplanverfahrenModel extends BaseEntityModel {
 
     private UncertainBoolean sobonRelevant;
 
-    private StandVerfahrenBauleitplanverfahren standVerfahren;
+    private StandVerfahren standVerfahren;
 
     private String standVerfahrenFreieEingabe;
 
