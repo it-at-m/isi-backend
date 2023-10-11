@@ -7,8 +7,9 @@ package de.muenchen.isi.domain.mapper;
 import de.muenchen.isi.configuration.MapstructConfiguration;
 import de.muenchen.isi.domain.model.AbfragevarianteBauleitplanverfahrenModel;
 import de.muenchen.isi.domain.model.abfrageAngelegt.AbfragevarianteBauleitplanverfahrenAngelegtModel;
-import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.AbfragevarianteBauleitplanverfahrenInBearbeitungSachbearbeitungAngelegtModel;
-import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.AbfragevarianteBauleitplanverfahrenSachbearbeitungInBearbeitungSachbearbeitungAngelegtModel;
+import de.muenchen.isi.domain.model.abfrageInBearbeitungFachreferat.AbfragevarianteBauleitplanverfahrenInBearbeitungFachreferatModel;
+import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.AbfragevarianteBauleitplanverfahrenInBearbeitungSachbearbeitungModel;
+import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.AbfragevarianteBauleitplanverfahrenSachbearbeitungInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.infrastructure.entity.AbfragevarianteBauleitplanverfahren;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
@@ -43,7 +44,7 @@ public interface AbfragevarianteBauleitplanverfahrenDomainMapper {
         }
     )
     AbfragevarianteBauleitplanverfahrenModel request2Model(
-        final AbfragevarianteBauleitplanverfahrenSachbearbeitungInBearbeitungSachbearbeitungAngelegtModel request,
+        final AbfragevarianteBauleitplanverfahrenSachbearbeitungInBearbeitungSachbearbeitungModel request,
         final @MappingTarget AbfragevarianteBauleitplanverfahrenModel model
     );
 
@@ -56,7 +57,14 @@ public interface AbfragevarianteBauleitplanverfahrenDomainMapper {
         }
     )
     AbfragevarianteBauleitplanverfahrenModel request2Model(
-        final AbfragevarianteBauleitplanverfahrenInBearbeitungSachbearbeitungAngelegtModel request,
+        final AbfragevarianteBauleitplanverfahrenInBearbeitungSachbearbeitungModel request,
+        final @MappingTarget AbfragevarianteBauleitplanverfahrenModel model
+    );
+
+    @BeanMapping(ignoreByDefault = true)
+    @Mappings({ @Mapping(target = "version", ignore = false) })
+    AbfragevarianteBauleitplanverfahrenModel request2Model(
+        final AbfragevarianteBauleitplanverfahrenInBearbeitungFachreferatModel request,
         final @MappingTarget AbfragevarianteBauleitplanverfahrenModel model
     );
 }

@@ -6,8 +6,6 @@ import lombok.Getter;
 
 @AllArgsConstructor
 public enum WesentlicheRechtsgrundlage {
-    UNSPECIFIED(ILookup.UNSPECIFIED),
-
     QUALIFIZIERTER_BEBAUUNGSPLAN("Qualifizierter Bebauungsplan (§30 Abs. 1 BauGB)"),
 
     VORHABENSBEZOGENER_BEBAUUNGSPLAN("Vorhabenbezogener Bebauungsplan (§12 BauGB, § 30 Abs. 2 BauGB)"),
@@ -38,7 +36,6 @@ public enum WesentlicheRechtsgrundlage {
 
     public static List<WesentlicheRechtsgrundlage> getWesentlicheRechtsgrundlageForBauleitplanverfahren() {
         return List.of(
-            UNSPECIFIED,
             QUALIFIZIERTER_BEBAUUNGSPLAN,
             VORHABENSBEZOGENER_BEBAUUNGSPLAN,
             EINFACHER_BEBAUUNGSPLAN_PARAGRAPH_30,

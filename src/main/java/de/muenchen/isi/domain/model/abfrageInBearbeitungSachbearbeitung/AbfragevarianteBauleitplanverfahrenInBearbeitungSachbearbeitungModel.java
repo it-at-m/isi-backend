@@ -9,7 +9,7 @@ import de.muenchen.isi.domain.model.abfrageAngelegt.AbfragevarianteBauleitplanve
 import lombok.Data;
 
 @Data
-public class AbfragevarianteBauleitplanverfahrenInBearbeitungSachbearbeitungAngelegtModel
+public class AbfragevarianteBauleitplanverfahrenInBearbeitungSachbearbeitungModel
     extends AbfragevarianteBauleitplanverfahrenAngelegtModel {
 
     private AbfragevarianteSachbearbeitungModel abfragevarianteSachbearbeitung;

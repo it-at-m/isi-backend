@@ -9,7 +9,7 @@ import java.util.UUID;
 import lombok.Data;
 
 @Data
-public class AbfragevarianteBauleitplanverfahrenSachbearbeitungInBearbeitungSachbearbeitungAngelegtModel {
+public class AbfragevarianteBauleitplanverfahrenSachbearbeitungInBearbeitungSachbearbeitungModel {
 
     private UUID id;
 
