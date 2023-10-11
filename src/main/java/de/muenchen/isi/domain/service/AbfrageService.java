@@ -15,6 +15,8 @@ import de.muenchen.isi.domain.model.BauvorhabenModel;
 import de.muenchen.isi.domain.model.InfrastrukturabfrageModel;
 import de.muenchen.isi.domain.model.abfrageAngelegt.AbfrageAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageAngelegt.BauleitplanverfahrenAngelegtModel;
+import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.AbfrageInBearbeitungSachbearbeitungModel;
+import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.BauleitplanverfahrenInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.domain.service.filehandling.DokumentService;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
@@ -50,7 +52,7 @@ public class AbfrageService {
      * @return {@link AbfrageModel}.
      * @throws EntityNotFoundException falls die Abfrage identifiziert durch die {@link AbfrageModel#getId()} nicht gefunden wird.
      */
-    public AbfrageModel getAbfrageById(final UUID id) throws EntityNotFoundException {
+    public AbfrageModel getById(final UUID id) throws EntityNotFoundException {
         final var optAbfrage = this.abfrageRepository.findById(id);
         final var abfrage = optAbfrage.orElseThrow(() -> {
             final var message = "Abfrage nicht gefunden.";
@@ -69,7 +71,7 @@ public class AbfrageService {
      * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
      * @throws EntityNotFoundException falls das referenzierte Bauvorhaben nicht existiert.
      */
-    public AbfrageModel saveAbfrage(final AbfrageModel abfrage)
+    public AbfrageModel save(final AbfrageModel abfrage)
         throws EntityNotFoundException, OptimisticLockingException, UniqueViolationException {
         if (abfrage.getId() == null) {
             abfrage.setStatusAbfrage(StatusAbfrage.ANGELEGT);
@@ -96,14 +98,14 @@ public class AbfrageService {
         }
     }
 
-    public AbfrageModel patchAngelegt(final AbfrageAngelegtModel abfrageAngelegt, final UUID id)
+    public AbfrageModel patchAngelegt(final AbfrageAngelegtModel abfrage, final UUID id)
         throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, FileHandlingFailedException, FileHandlingWithS3FailedException {
-        final var originalAbfrageDb = this.getAbfrageById(id);
+        final var originalAbfrageDb = this.getById(id);
         this.throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(originalAbfrageDb, StatusAbfrage.ANGELEGT);
 
-        if (ArtAbfrage.BAULEITPLANVERFAHREN.equals(abfrageAngelegt.getArtAbfrage())) {
+        if (ArtAbfrage.BAULEITPLANVERFAHREN.equals(abfrage.getArtAbfrage())) {
             return patchAngelegt(
-                (BauleitplanverfahrenAngelegtModel) abfrageAngelegt,
+                (BauleitplanverfahrenAngelegtModel) abfrage,
                 (BauleitplanverfahrenModel) originalAbfrageDb
             );
         } else {
@@ -114,16 +116,41 @@ public class AbfrageService {
     }
 
     protected AbfrageModel patchAngelegt(
-        BauleitplanverfahrenAngelegtModel abfrageAngelegt,
+        BauleitplanverfahrenAngelegtModel abfrage,
         BauleitplanverfahrenModel originalAbfrageDb
     )
         throws FileHandlingFailedException, FileHandlingWithS3FailedException, UniqueViolationException, OptimisticLockingException, EntityNotFoundException {
         dokumentService.deleteDokumenteFromOriginalDokumentenListWhichAreMissingInParameterAdaptedDokumentenListe(
-            abfrageAngelegt.getDokumente(),
+            abfrage.getDokumente(),
             originalAbfrageDb.getDokumente()
         );
-        final var abfrageToSave = this.abfrageDomainMapper.request2Model(abfrageAngelegt, originalAbfrageDb);
-        return this.saveAbfrage(abfrageToSave);
+        final var abfrageToSave = this.abfrageDomainMapper.request2Model(abfrage, originalAbfrageDb);
+        return this.save(abfrageToSave);
+    }
+
+    public AbfrageModel patchInBearbeitungSachbearbeitung(
+        final AbfrageInBearbeitungSachbearbeitungModel abfrage,
+        final UUID id
+    )
+        throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException {
+        final var originalAbfrageDb = this.getById(id);
+        this.throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(
+                originalAbfrageDb,
+                StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG
+            );
+
+        if (ArtAbfrage.BAULEITPLANVERFAHREN.equals(abfrage.getArtAbfrage())) {
+            final var abfrageToSave =
+                this.abfrageDomainMapper.request2Model(
+                        (BauleitplanverfahrenInBearbeitungSachbearbeitungModel) abfrage,
+                        (BauleitplanverfahrenModel) originalAbfrageDb
+                    );
+            return this.save(abfrageToSave);
+        } else {
+            final var message = "Die Art der Abfrage wird nicht unterstützt.";
+            log.error(message);
+            throw new EntityNotFoundException(message);
+        }
     }
 
     /**
@@ -137,7 +164,7 @@ public class AbfrageService {
      */
     public void deleteInfrasturkturabfrageById(final UUID id)
         throws EntityNotFoundException, EntityIsReferencedException, UserRoleNotAllowedException, AbfrageStatusNotAllowedException {
-        final var abfrage = this.getAbfrageById(id);
+        final var abfrage = this.getById(id);
         this.throwUserRoleNotAllowedOrAbfrageStatusNotAlloweExceptionWhenDeleteAbfrage(abfrage);
         this.throwEntityIsReferencedExceptionWhenAbfrageIsReferencingBauvorhaben(abfrage);
         this.abfrageRepository.deleteById(id);
