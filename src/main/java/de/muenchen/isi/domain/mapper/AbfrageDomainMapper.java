@@ -14,7 +14,6 @@ import de.muenchen.isi.infrastructure.entity.Abfrage;
 import de.muenchen.isi.infrastructure.entity.Bauleitplanverfahren;
 import de.muenchen.isi.infrastructure.repository.BauvorhabenRepository;
 import java.util.ArrayList;
-import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.mapstruct.AfterMapping;
@@ -97,7 +96,7 @@ public abstract class AbfrageDomainMapper {
         final BauleitplanverfahrenAngelegtModel request,
         final @MappingTarget BauleitplanverfahrenModel model
     ) {
-        final List<AbfragevarianteBauleitplanverfahrenModel> abfragevarianten = new ArrayList<>();
+        final var abfragevarianten = new ArrayList<AbfragevarianteBauleitplanverfahrenModel>();
         CollectionUtils
             .emptyIfNull(request.getAbfragevarianten())
             .forEach(abfragevariante -> {
