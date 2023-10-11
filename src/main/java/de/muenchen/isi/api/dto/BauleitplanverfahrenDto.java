@@ -50,8 +50,6 @@ public class BauleitplanverfahrenDto extends AbfrageDto {
     @NotNull
     private UncertainBoolean offizielleMitzeichnung;
 
-    private String anmerkung;
-
     private List<@Valid @NotNull AbfragevarianteBauleitplanverfahrenDto> abfragevarianten;
 
     private List<@Valid @NotNull AbfragevarianteBauleitplanverfahrenDto> abfragevariantenSachbearbeitung;

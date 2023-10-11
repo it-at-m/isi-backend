@@ -7,7 +7,7 @@ import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.StateMachineTransitionFailedException;
 import de.muenchen.isi.domain.exception.StringLengthExceededException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
-import de.muenchen.isi.domain.model.InfrastrukturabfrageModel;
+import de.muenchen.isi.domain.model.AbfrageModel;
 import de.muenchen.isi.domain.model.common.TransitionModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrageEvents;
@@ -47,7 +47,7 @@ public class AbfrageStatusService {
 
     private static final String ABFRAGE_ID_HEADER = "abfrage_id";
 
-    private final AbfrageAltService abfrageService;
+    private final AbfrageService abfrageService;
 
     private final StateMachineFactory<StatusAbfrage, StatusAbfrageEvents> stateMachineFactory;
 
@@ -213,7 +213,7 @@ public class AbfrageStatusService {
      */
     private StateMachine<StatusAbfrage, StatusAbfrageEvents> build(final UUID id, final String anmerkung)
         throws EntityNotFoundException {
-        final InfrastrukturabfrageModel abfrage = this.abfrageService.getInfrastrukturabfrageById(id);
+        final var abfrage = this.abfrageService.getById(id);
         final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine =
             this.stateMachineFactory.getStateMachine(abfrage.getId());
 
@@ -225,7 +225,7 @@ public class AbfrageStatusService {
                 // Setzt den Status der Abfrage aus der DB in der StateMachine.
                 stateMachineAccess
                     .resetStateMachineReactively(
-                        new DefaultStateMachineContext<>(abfrage.getAbfrage().getStatusAbfrage(), null, null, null)
+                        new DefaultStateMachineContext<>(abfrage.getStatusAbfrage(), null, null, null)
                     )
                     .block();
 
@@ -247,12 +247,12 @@ public class AbfrageStatusService {
                             final MessageHeaders messageHeaders = stateContext.getMessageHeaders();
                             try {
                                 final UUID abfrageId = AbfrageStatusService.this.getAbfrageId(messageHeaders);
-                                final InfrastrukturabfrageModel abfrage =
-                                    AbfrageStatusService.this.abfrageService.getInfrastrukturabfrageById(abfrageId);
-                                abfrage.getAbfrage().setStatusAbfrage(state.getId());
-                                abfrageService.changeStatusAbfrage(
+                                final AbfrageModel abfrage =
+                                    AbfrageStatusService.this.abfrageService.getById(abfrageId);
+                                abfrage.setStatusAbfrage(state.getId());
+                                abfrageService.changeStatusAbfrageAddAnmerkungForStatusChangeAndSave(
                                     abfrage.getId(),
-                                    abfrage.getAbfrage().getStatusAbfrage(),
+                                    abfrage.getStatusAbfrage(),
                                     anmerkung
                                 );
                             } catch (
@@ -450,23 +450,21 @@ public class AbfrageStatusService {
      * Überprüft, ob die Länge einer Anmerkung die maximale Grenze überschreitet
      *
      * @param id        vom Typ {@link UUID} um die Abfrage zu finden
-     * @param anmerkung die zur Infrastrukturabfrage hinzugefügt werden soll.
+     * @param anmerkung die zur Abfrage hinzugefügt werden soll.
      * @throws StringLengthExceededException Wenn die Anmerkung die maximale Länge von 255 Zeichen überschreitet.
-     * @throws EntityNotFoundException       Wenn die Infrastrukturabfrage nicht gefunden wird.
+     * @throws EntityNotFoundException       Wenn die Abfrage nicht gefunden wird.
      */
     private void throwStringLengthExceededExceptionWhenAnmerkungExceedsLength(UUID id, String anmerkung)
         throws StringLengthExceededException, EntityNotFoundException {
-        InfrastrukturabfrageModel infrastrukturabfrage = this.abfrageService.getInfrastrukturabfrageById(id);
+        var abfrage = this.abfrageService.getById(id);
         if (!anmerkung.isEmpty()) {
-            if (infrastrukturabfrage.getAbfrage().getAnmerkung() == null) {
-                infrastrukturabfrage.getAbfrage().setAnmerkung(anmerkung);
+            if (abfrage.getAnmerkung() == null) {
+                abfrage.setAnmerkung(anmerkung);
             } else {
-                infrastrukturabfrage
-                    .getAbfrage()
-                    .setAnmerkung(infrastrukturabfrage.getAbfrage().getAnmerkung().concat("\n").concat(anmerkung));
+                abfrage.setAnmerkung(abfrage.getAnmerkung().concat("\n").concat(anmerkung));
             }
 
-            if (infrastrukturabfrage.getAbfrage().getAnmerkung().length() > 255) {
+            if (abfrage.getAnmerkung().length() > 255) {
                 throw new StringLengthExceededException("Es sind maximal 255 Zeichen erlaubt");
             }
         }

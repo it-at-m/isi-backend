@@ -18,6 +18,8 @@ public abstract class AbfrageModel extends BaseEntityModel {
 
     private StatusAbfrage statusAbfrage;
 
+    private String anmerkung;
+
     private UUID bauvorhaben;
 
     private String sub;

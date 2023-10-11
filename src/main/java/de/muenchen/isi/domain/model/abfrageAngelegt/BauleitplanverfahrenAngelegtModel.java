@@ -37,7 +37,5 @@ public class BauleitplanverfahrenAngelegtModel extends AbfrageAngelegtModel {
 
     private UncertainBoolean offizielleMitzeichnung;
 
-    private String anmerkung;
-
     private List<AbfragevarianteBauleitplanverfahrenAngelegtModel> abfragevarianten;
 }

@@ -93,9 +93,6 @@ public class Bauleitplanverfahren extends Abfrage {
     @Column(columnDefinition = "varchar(255) not null check (sobon_relevant != 'UNSPECIFIED')")
     private UncertainBoolean offizielleMitzeichnung;
 
-    @Column
-    private String anmerkung;
-
     @IndexedEmbedded
     @IndexingDependency(reindexOnUpdate = ReindexOnUpdate.SHALLOW)
     @OneToMany(cascade = { CascadeType.ALL }, orphanRemoval = true)

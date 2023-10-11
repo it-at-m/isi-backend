@@ -13,5 +13,7 @@ public class AbfrageAngelegtModel {
 
     private String name;
 
+    private String anmerkung;
+
     private UUID bauvorhaben;
 }

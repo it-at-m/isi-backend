@@ -27,6 +27,8 @@ public abstract class AbfrageDto extends BaseEntityDto {
 
     private StatusAbfrage statusAbfrage;
 
+    private String anmerkung;
+
     private UUID bauvorhaben;
 
     private String sub;

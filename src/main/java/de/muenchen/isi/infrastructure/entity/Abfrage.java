@@ -71,6 +71,9 @@ public abstract class Abfrage extends BaseEntity {
     @Column(nullable = false)
     private StatusAbfrage statusAbfrage;
 
+    @Column
+    private String anmerkung;
+
     @ManyToOne
     private Bauvorhaben bauvorhaben;
 
