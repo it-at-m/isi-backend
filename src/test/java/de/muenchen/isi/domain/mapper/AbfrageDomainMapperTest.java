@@ -28,7 +28,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @ContextConfiguration(
     classes = {
         AbfrageDomainMapperImpl.class,
-        AbfragevarianteDomainMapperImpl.class,
+        AbfragevarianteAltDomainMapperImpl.class,
         BauabschnittDomainMapperImpl.class,
         DokumentDomainMapperImpl.class,
     }
@@ -39,7 +39,7 @@ public class AbfrageDomainMapperTest {
     AbfrageAltDomainMapper abfrageDomainMapper;
 
     @Autowired
-    AbfragevarianteDomainMapper abfragevarianteDomainMapper;
+    AbfragevarianteAltDomainMapper abfragevarianteDomainMapper;
 
     @Autowired
     BauabschnittDomainMapper bauabschnittDomainMapper;

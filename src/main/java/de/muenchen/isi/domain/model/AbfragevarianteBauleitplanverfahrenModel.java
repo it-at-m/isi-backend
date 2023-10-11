@@ -21,7 +21,7 @@ public class AbfragevarianteBauleitplanverfahrenModel extends BaseEntityModel {
 
     private String name;
 
-    private LocalDate satzungsbeschlussBaugenehmigung;
+    private LocalDate satzungsbeschluss;
 
     private List<WesentlicheRechtsgrundlage> wesentlicheRechtsgrundlage;
 

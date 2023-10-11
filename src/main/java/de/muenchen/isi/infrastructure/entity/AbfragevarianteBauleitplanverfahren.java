@@ -68,7 +68,7 @@ public class AbfragevarianteBauleitplanverfahren extends BaseEntity {
     private String name;
 
     @Column
-    private LocalDate satzungsbeschlussBaugenehmigung;
+    private LocalDate satzungsbeschluss;
 
     @Enumerated(EnumType.STRING)
     @ElementCollection

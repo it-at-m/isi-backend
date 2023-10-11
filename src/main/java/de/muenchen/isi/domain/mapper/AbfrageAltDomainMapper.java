@@ -25,11 +25,14 @@ import org.mapstruct.MappingTarget;
 import org.mapstruct.Mappings;
 import org.springframework.beans.factory.annotation.Autowired;
 
-@Mapper(config = MapstructConfiguration.class, uses = { AbfragevarianteDomainMapper.class, DokumentDomainMapper.class })
+@Mapper(
+    config = MapstructConfiguration.class,
+    uses = { AbfragevarianteAltDomainMapper.class, DokumentDomainMapper.class }
+)
 public abstract class AbfrageAltDomainMapper {
 
     @Autowired
-    private AbfragevarianteDomainMapper abfragevarianteDomainMapper;
+    private AbfragevarianteAltDomainMapper abfragevarianteDomainMapper;
 
     public abstract AbfrageAltModel entity2Model(final AbfrageAlt entity);
 

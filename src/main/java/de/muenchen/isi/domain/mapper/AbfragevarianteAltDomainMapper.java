@@ -18,7 +18,7 @@ import org.mapstruct.MappingTarget;
 import org.mapstruct.Mappings;
 
 @Mapper(config = MapstructConfiguration.class, uses = { BauabschnittDomainMapper.class })
-public interface AbfragevarianteDomainMapper {
+public interface AbfragevarianteAltDomainMapper {
     AbfragevarianteModel entity2Model(final Abfragevariante entity);
 
     Abfragevariante model2entity(final AbfragevarianteModel model);

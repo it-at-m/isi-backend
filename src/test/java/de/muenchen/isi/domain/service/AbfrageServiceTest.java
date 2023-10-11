@@ -13,8 +13,8 @@ import de.muenchen.isi.domain.exception.UniqueViolationException;
 import de.muenchen.isi.domain.exception.UserRoleNotAllowedException;
 import de.muenchen.isi.domain.mapper.AbfrageAltDomainMapper;
 import de.muenchen.isi.domain.mapper.AbfrageDomainMapperImpl;
-import de.muenchen.isi.domain.mapper.AbfragevarianteDomainMapper;
-import de.muenchen.isi.domain.mapper.AbfragevarianteDomainMapperImpl;
+import de.muenchen.isi.domain.mapper.AbfragevarianteAltDomainMapper;
+import de.muenchen.isi.domain.mapper.AbfragevarianteAltDomainMapperImpl;
 import de.muenchen.isi.domain.mapper.BauabschnittDomainMapper;
 import de.muenchen.isi.domain.mapper.BauabschnittDomainMapperImpl;
 import de.muenchen.isi.domain.mapper.DokumentDomainMapper;
@@ -63,7 +63,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @ContextConfiguration(
     classes = {
         AbfrageDomainMapperImpl.class,
-        AbfragevarianteDomainMapperImpl.class,
+        AbfragevarianteAltDomainMapperImpl.class,
         BauabschnittDomainMapperImpl.class,
         DokumentDomainMapperImpl.class,
     }
@@ -74,7 +74,7 @@ class AbfrageServiceTest {
     AbfrageAltDomainMapper abfrageDomainMapper;
 
     @Autowired
-    AbfragevarianteDomainMapper abfragevarianteDomainMapper;
+    AbfragevarianteAltDomainMapper abfragevarianteDomainMapper;
 
     @Autowired
     BauabschnittDomainMapper bauabschnittDomainMapper;

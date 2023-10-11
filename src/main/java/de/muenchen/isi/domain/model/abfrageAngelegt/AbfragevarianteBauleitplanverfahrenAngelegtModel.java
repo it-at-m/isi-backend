@@ -2,41 +2,31 @@
  * Copyright (c): it@M - Dienstleister für Informations- und Telekommunikationstechnik
  * der Landeshauptstadt München, 2022
  */
-package de.muenchen.isi.api.dto;
+package de.muenchen.isi.domain.model.abfrageAngelegt;
 
-import de.muenchen.isi.api.validation.WesentlicheRechtsgrundlageBauleitplanverfahrenValid;
+import de.muenchen.isi.domain.model.BauabschnittModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.WesentlicheRechtsgrundlage;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
-import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import java.util.UUID;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
 
 @Data
-@ToString(callSuper = true)
-@EqualsAndHashCode(callSuper = true)
-public class AbfragevarianteBauleitplanverfahrenDto extends BaseEntityDto {
+public class AbfragevarianteBauleitplanverfahrenAngelegtModel {
+
+    private UUID id;
+
+    private Long version;
 
     private Integer abfragevariantenNr;
 
-    @NotBlank
-    @Size(max = 30, message = "Es sind maximal {max} Zeichen erlaubt")
     private String name;
 
     private LocalDate satzungsbeschluss;
 
-    @NotEmpty
-    private List<
-        @WesentlicheRechtsgrundlageBauleitplanverfahrenValid @NotNull WesentlicheRechtsgrundlage
-    > wesentlicheRechtsgrundlage;
+    private List<WesentlicheRechtsgrundlage> wesentlicheRechtsgrundlage;
 
-    @Size(max = 255, message = "Es sind maximal {max} Zeichen erlaubt")
     private String wesentlicheRechtsgrundlageFreieEingabe;
 
     private Integer realisierungVon;
@@ -73,11 +63,5 @@ public class AbfragevarianteBauleitplanverfahrenDto extends BaseEntityDto {
 
     private Integer weWeiteresNichtInfrastrukturrelevantesWohnen;
 
-    @Valid
-    private AbfragevarianteSachbearbeitungDto abfragevarianteSachbearbeitung;
-
-    @Valid
-    private AbfragevarianteFachreferatDto abfragevarianteFachreferat;
-
-    private List<@Valid @NotNull BauabschnittDto> bauabschnitte;
+    private List<BauabschnittModel> bauabschnitte;
 }
