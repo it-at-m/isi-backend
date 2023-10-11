@@ -14,6 +14,8 @@ import de.muenchen.isi.domain.model.BauleitplanverfahrenModel;
 import de.muenchen.isi.domain.model.BauvorhabenModel;
 import de.muenchen.isi.domain.model.abfrageAngelegt.AbfrageAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageAngelegt.BauleitplanverfahrenAngelegtModel;
+import de.muenchen.isi.domain.model.abfrageInBearbeitungFachreferat.AbfrageInBearbeitungFachreferatModel;
+import de.muenchen.isi.domain.model.abfrageInBearbeitungFachreferat.BauleitplanverfahrenInBearbeitungFachreferatModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.AbfrageInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.BauleitplanverfahrenInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.domain.service.filehandling.DokumentService;
@@ -142,6 +144,30 @@ public class AbfrageService {
             final var abfrageToSave =
                 this.abfrageDomainMapper.request2Model(
                         (BauleitplanverfahrenInBearbeitungSachbearbeitungModel) abfrage,
+                        (BauleitplanverfahrenModel) originalAbfrageDb
+                    );
+            return this.save(abfrageToSave);
+        } else {
+            final var message = "Die Art der Abfrage wird nicht unterstützt.";
+            log.error(message);
+            throw new EntityNotFoundException(message);
+        }
+    }
+
+    public AbfrageModel patchInBearbeitungFachreferat(
+        final AbfrageInBearbeitungFachreferatModel abfrage,
+        final UUID id
+    )
+        throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException {
+        final var originalAbfrageDb = this.getById(id);
+        this.throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(
+                originalAbfrageDb,
+                StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE
+            );
+        if (ArtAbfrage.BAULEITPLANVERFAHREN.equals(abfrage.getArtAbfrage())) {
+            final var abfrageToSave =
+                this.abfrageDomainMapper.request2Model(
+                        (BauleitplanverfahrenInBearbeitungFachreferatModel) abfrage,
                         (BauleitplanverfahrenModel) originalAbfrageDb
                     );
             return this.save(abfrageToSave);
