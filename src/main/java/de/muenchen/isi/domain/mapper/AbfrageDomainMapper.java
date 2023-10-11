@@ -10,6 +10,7 @@ import de.muenchen.isi.domain.model.AbfrageModel;
 import de.muenchen.isi.domain.model.AbfragevarianteBauleitplanverfahrenModel;
 import de.muenchen.isi.domain.model.BauleitplanverfahrenModel;
 import de.muenchen.isi.domain.model.abfrageAngelegt.BauleitplanverfahrenAngelegtModel;
+import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.BauleitplanverfahrenInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.infrastructure.entity.Abfrage;
 import de.muenchen.isi.infrastructure.entity.Bauleitplanverfahren;
 import de.muenchen.isi.infrastructure.repository.BauvorhabenRepository;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.mapstruct.AfterMapping;
+import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
@@ -58,17 +60,6 @@ public abstract class AbfrageDomainMapper {
         entity.setBauvorhaben(bauvorhaben);
     }
 
-    /**
-     * Mapping Methode welche die Attribute des im Parameter gegebenen {@link BauleitplanverfahrenAngelegtModel}
-     * auf das ebenfalls im Parameter gegebene {@link BauleitplanverfahrenModel} mapped.
-     * <p>
-     * Die Abfragevarianten werden ignoriert da diese in der AfterMapping-Methode
-     * {@link AbfrageDomainMapper#afterMappingRequest2Model} verarbeitet werden.
-     *
-     * @param request  das Request-Model welches gemapped werden soll
-     * @param model das {@link BauleitplanverfahrenModel} zu dem es gemapped wird
-     * @return gemappte {@link BauleitplanverfahrenModel}
-     */
     @Mappings(
         {
             @Mapping(target = "id", ignore = true),
@@ -123,5 +114,73 @@ public abstract class AbfrageDomainMapper {
                 }
             });
         model.setAbfragevarianten(abfragevarianten);
+    }
+
+    @BeanMapping(ignoreByDefault = true)
+    @Mappings({ @Mapping(target = "version", ignore = false) })
+    public abstract BauleitplanverfahrenModel request2Model(
+        final BauleitplanverfahrenInBearbeitungSachbearbeitungModel request,
+        @MappingTarget BauleitplanverfahrenModel response
+    );
+
+    /**
+     * Führt das Mapping der Abfragevarianten für die im Parameter gegebenen Klassen durch.
+     *
+     * @param request  das Request-Objekt welches gemapped werden soll
+     * @param response das {@link BauleitplanverfahrenModel} zu dem es gemapped wird
+     */
+    @AfterMapping
+    void afterMappingRequest2Model(
+        final BauleitplanverfahrenInBearbeitungSachbearbeitungModel request,
+        final @MappingTarget BauleitplanverfahrenModel response
+    ) {
+        // Mapping der zusätzlichen durch die Sachbearbeitung pflegbaren Attribute der Abfragevarianten
+        final var mappedAbfragevarianten = new ArrayList<AbfragevarianteBauleitplanverfahrenModel>();
+        CollectionUtils
+            .emptyIfNull(request.getAbfragevarianten())
+            .forEach(abfragevariante -> {
+                CollectionUtils
+                    .emptyIfNull(response.getAbfragevarianten())
+                    .stream()
+                    .filter(abfragevarianteModel -> abfragevarianteModel.getId().equals(abfragevariante.getId()))
+                    .findFirst()
+                    .ifPresent(abfragevarianteModel ->
+                        mappedAbfragevarianten.add(
+                            abfragevarianteBauleitplanverfahrenDomainMapper.request2Model(
+                                abfragevariante,
+                                abfragevarianteModel
+                            )
+                        )
+                    );
+            });
+        response.setAbfragevarianten(mappedAbfragevarianten);
+        // Mapping der Abfragevarianten welche ausschließlich durch die Sachbearbeitung gemappt werden.
+        final var mappedAbfragevariantenSachbearbeitung = new ArrayList<AbfragevarianteBauleitplanverfahrenModel>();
+        CollectionUtils
+            .emptyIfNull(request.getAbfragevariantenSachbearbeitung())
+            .forEach(abfragevariante -> {
+                if (abfragevariante.getId() == null) {
+                    final var mappedModel = abfragevarianteBauleitplanverfahrenDomainMapper.request2Model(
+                        abfragevariante,
+                        new AbfragevarianteBauleitplanverfahrenModel()
+                    );
+                    mappedAbfragevariantenSachbearbeitung.add(mappedModel);
+                } else {
+                    CollectionUtils
+                        .emptyIfNull(response.getAbfragevariantenSachbearbeitung())
+                        .stream()
+                        .filter(abfragevarianteModel -> abfragevarianteModel.getId().equals(abfragevariante.getId()))
+                        .findFirst()
+                        .ifPresent(abfragevarianteModel ->
+                            mappedAbfragevariantenSachbearbeitung.add(
+                                abfragevarianteBauleitplanverfahrenDomainMapper.request2Model(
+                                    abfragevariante,
+                                    abfragevarianteModel
+                                )
+                            )
+                        );
+                }
+            });
+        response.setAbfragevariantenSachbearbeitung(mappedAbfragevariantenSachbearbeitung);
     }
 }
