@@ -12,7 +12,6 @@ import de.muenchen.isi.domain.mapper.AbfrageDomainMapper;
 import de.muenchen.isi.domain.model.AbfrageModel;
 import de.muenchen.isi.domain.model.BauleitplanverfahrenModel;
 import de.muenchen.isi.domain.model.BauvorhabenModel;
-import de.muenchen.isi.domain.model.InfrastrukturabfrageModel;
 import de.muenchen.isi.domain.model.abfrageAngelegt.AbfrageAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageAngelegt.BauleitplanverfahrenAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.AbfrageInBearbeitungSachbearbeitungModel;
@@ -157,7 +156,7 @@ public class AbfrageService {
      * Diese Methode löscht ein {@link AbfrageModel}.
      *
      * @param id zum Identifizieren des {@link AbfrageModel}.
-     * @throws EntityNotFoundException          falls die Abfrage identifiziert durch die {@link InfrastrukturabfrageModel#getId()} nicht gefunden wird.
+     * @throws EntityNotFoundException          falls die Abfrage identifiziert durch die {@link AbfrageModel#getId()} nicht gefunden wird.
      * @throws EntityIsReferencedException      falls ein {@link BauvorhabenModel} in der Abfrage referenziert wird.
      * @throws UserRoleNotAllowedException      falls der Nutzer nicht die richtige Rolle hat.
      * @throws AbfrageStatusNotAllowedException falls die Abfrage den falschen Status hat..
