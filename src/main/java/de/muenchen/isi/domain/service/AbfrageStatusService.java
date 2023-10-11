@@ -22,6 +22,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageHeaders;
 import org.springframework.messaging.support.MessageBuilder;
@@ -247,19 +248,23 @@ public class AbfrageStatusService {
                             final MessageHeaders messageHeaders = stateContext.getMessageHeaders();
                             try {
                                 final UUID abfrageId = AbfrageStatusService.this.getAbfrageId(messageHeaders);
-                                final AbfrageModel abfrage =
-                                    AbfrageStatusService.this.abfrageService.getById(abfrageId);
+                                AbfrageModel abfrage = AbfrageStatusService.this.abfrageService.getById(abfrageId);
+                                // Setzen des neuen Status
                                 abfrage.setStatusAbfrage(state.getId());
-                                abfrageService.changeStatusAbfrageAddAnmerkungForStatusChangeAndSave(
-                                    abfrage.getId(),
-                                    abfrage.getStatusAbfrage(),
-                                    anmerkung
-                                );
+                                // Anfügen der Anmerkung
+                                if (StringUtils.isNotEmpty(anmerkung)) {
+                                    if (abfrage.getAnmerkung() == null) {
+                                        abfrage.setAnmerkung(anmerkung);
+                                    } else {
+                                        abfrage.setAnmerkung(abfrage.getAnmerkung().concat("\n").concat(anmerkung));
+                                    }
+                                }
+                                // Speichern der Abfrage
+                                AbfrageStatusService.this.abfrageService.save(abfrage);
                             } catch (
                                 final EntityNotFoundException
                                 | OptimisticLockingException
-                                | UniqueViolationException
-                                | StringLengthExceededException exception
+                                | UniqueViolationException exception
                             ) {
                                 log.error(exception.getMessage(), exception);
                                 return null;

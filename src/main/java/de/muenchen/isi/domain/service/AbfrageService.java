@@ -6,7 +6,6 @@ import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.FileHandlingFailedException;
 import de.muenchen.isi.domain.exception.FileHandlingWithS3FailedException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
-import de.muenchen.isi.domain.exception.StringLengthExceededException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
 import de.muenchen.isi.domain.exception.UserRoleNotAllowedException;
 import de.muenchen.isi.domain.mapper.AbfrageDomainMapper;
@@ -28,7 +27,6 @@ import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
@@ -274,34 +272,5 @@ public class AbfrageService {
             log.error(message);
             throw new AbfrageStatusNotAllowedException(message);
         }
-    }
-
-    /**
-     * Diese Methode führt für eine Abfrage, die durch die {@link AbfrageModel#getId()} identifiziert ist, eine Statusänderung durch.
-     *
-     * @param id            {@link AbfrageModel#getId()} der Abfrage zum Updaten
-     * @param statusAbfrage neuer {@link StatusAbfrage}
-     * @return das geupdatete {@link AbfrageModel}
-     * @throws EntityNotFoundException       falls die Abfrage identifiziert durch die {@link AbfrageModel#getId()} nicht gefunden wird
-     * @throws UniqueViolationException      falls der Name der Abfrage {@link AbfrageModel#getName()} bereits vorhanden ist
-     * @throws OptimisticLockingException    falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
-     * @throws StringLengthExceededException wenn die Anmerkung zur Statusänderung die max. Länge überschreitet
-     */
-    public AbfrageModel changeStatusAbfrageAddAnmerkungForStatusChangeAndSave(
-        final UUID id,
-        final StatusAbfrage statusAbfrage,
-        final String anmerkung
-    )
-        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, StringLengthExceededException {
-        var originalAbfrageDb = this.getById(id);
-        originalAbfrageDb.setStatusAbfrage(statusAbfrage);
-        if (StringUtils.isNotEmpty(anmerkung)) {
-            if (originalAbfrageDb.getAnmerkung() == null) {
-                originalAbfrageDb.setAnmerkung(anmerkung);
-            } else {
-                originalAbfrageDb.setAnmerkung(originalAbfrageDb.getAnmerkung().concat("\n").concat(anmerkung));
-            }
-        }
-        return this.save(originalAbfrageDb);
     }
 }
