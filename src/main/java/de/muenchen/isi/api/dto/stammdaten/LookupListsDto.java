@@ -13,7 +13,7 @@ public class LookupListsDto {
 
     private LookupListDto sobonVerfahrensgrundsaetzeJahr;
 
-    private LookupListDto standVerfahrenBauleitplanverfahrenList;
+    private LookupListDto standVerfahrenBauleitplanverfahren;
 
     private LookupListDto standVerfahren;
 

@@ -37,7 +37,7 @@ public class LookupService {
         model.setArtAbfrage(this.getArtAbfrageList());
         model.setUncertainBoolean(this.getUncertainBooleanList());
         model.setSobonVerfahrensgrundsaetzeJahr(this.getSobonVerfahrensgrundsaetzeJahrList());
-        model.setStandVerfahrenBauleitplanverfahrenList(this.getStandVerfahrenBauleitplanverfahrenList());
+        model.setStandVerfahrenBauleitplanverfahren(this.getStandVerfahrenBauleitplanverfahrenList());
         model.setStandVerfahren(this.getStandVerfahrenList());
         model.setStatusAbfrage(this.getStatusAbfrageList());
         model.setWesentlicheRechtsgrundlageBauleitplanverfahren(

@@ -3,14 +3,20 @@ package de.muenchen.isi.domain.service;
 import de.muenchen.isi.domain.exception.AbfrageStatusNotAllowedException;
 import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
+import de.muenchen.isi.domain.exception.FileHandlingFailedException;
+import de.muenchen.isi.domain.exception.FileHandlingWithS3FailedException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
 import de.muenchen.isi.domain.exception.UserRoleNotAllowedException;
 import de.muenchen.isi.domain.mapper.AbfrageDomainMapper;
 import de.muenchen.isi.domain.model.AbfrageModel;
+import de.muenchen.isi.domain.model.BauleitplanverfahrenModel;
 import de.muenchen.isi.domain.model.BauvorhabenModel;
 import de.muenchen.isi.domain.model.InfrastrukturabfrageModel;
+import de.muenchen.isi.domain.model.abfrageAngelegt.AbfrageAngelegtModel;
+import de.muenchen.isi.domain.model.abfrageAngelegt.BauleitplanverfahrenAngelegtModel;
 import de.muenchen.isi.domain.service.filehandling.DokumentService;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.repository.AbfrageRepository;
 import de.muenchen.isi.security.AuthenticationUtils;
@@ -90,6 +96,36 @@ public class AbfrageService {
         }
     }
 
+    public AbfrageModel patchAngelegt(final AbfrageAngelegtModel abfrageAngelegt, final UUID id)
+        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, FileHandlingFailedException, FileHandlingWithS3FailedException {
+        final var originalAbfrageDb = this.getAbfrageById(id);
+        this.throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(originalAbfrageDb, StatusAbfrage.ANGELEGT);
+
+        if (ArtAbfrage.BAULEITPLANVERFAHREN.equals(abfrageAngelegt.getArtAbfrage())) {
+            return patchAngelegt(
+                (BauleitplanverfahrenAngelegtModel) abfrageAngelegt,
+                (BauleitplanverfahrenModel) originalAbfrageDb
+            );
+        } else {
+            final var message = "Die Art der Abfrage wird nicht unterstützt.";
+            log.error(message);
+            throw new EntityNotFoundException(message);
+        }
+    }
+
+    protected AbfrageModel patchAngelegt(
+        BauleitplanverfahrenAngelegtModel abfrageAngelegt,
+        BauleitplanverfahrenModel originalAbfrageDb
+    )
+        throws FileHandlingFailedException, FileHandlingWithS3FailedException, UniqueViolationException, OptimisticLockingException, EntityNotFoundException {
+        dokumentService.deleteDokumenteFromOriginalDokumentenListWhichAreMissingInParameterAdaptedDokumentenListe(
+            abfrageAngelegt.getDokumente(),
+            originalAbfrageDb.getDokumente()
+        );
+        final var abfrageToSave = this.abfrageDomainMapper.request2Model(abfrageAngelegt, originalAbfrageDb);
+        return this.saveAbfrage(abfrageToSave);
+    }
+
     /**
      * Diese Methode löscht ein {@link AbfrageModel}.
      *
@@ -157,6 +193,32 @@ public class AbfrageService {
                 ".";
             log.error(message);
             throw new EntityIsReferencedException(message);
+        }
+    }
+
+    /**
+     * Enthält das im Parameter gegebene {@link AbfrageModel} einen ungültigen Status {@link StatusAbfrage},
+     * wird eine {@link AbfrageStatusNotAllowedException} geworfen.
+     *
+     * @param abfrage       zum Prüfen.
+     * @param statusAbfrage gültiger Status.
+     * @throws AbfrageStatusNotAllowedException falls das {@link AbfrageModel} einen unzulässigen Status hat
+     */
+    protected void throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(
+        final AbfrageModel abfrage,
+        final StatusAbfrage statusAbfrage
+    ) throws AbfrageStatusNotAllowedException {
+        if (abfrage.getStatusAbfrage() != statusAbfrage) {
+            final var message =
+                "Die Abfrage " +
+                abfrage.getName() +
+                " ist im Status " +
+                abfrage.getStatusAbfrage().toString() +
+                ". Der gültige Status wäre " +
+                statusAbfrage.toString() +
+                ".";
+            log.error(message);
+            throw new AbfrageStatusNotAllowedException(message);
         }
     }
 }
