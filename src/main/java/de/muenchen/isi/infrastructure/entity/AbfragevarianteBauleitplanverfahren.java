@@ -19,6 +19,7 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
+import javax.persistence.Index;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
@@ -34,6 +35,16 @@ import org.hibernate.search.mapper.pojo.mapping.definition.annotation.NonStandar
 
 @Entity
 @Table(
+    indexes = {
+        @Index(
+            name = "bauleitplanverfahren_abfragevarianten_id_index",
+            columnList = "bauleitplanverfahren_abfragevarianten_id"
+        ),
+        @Index(
+            name = "bauleitplanverfahren_abfragevarianten_sachbearbeitung_id_index",
+            columnList = "bauleitplanverfahren_abfragevarianten_sachbearbeitung_id"
+        ),
+    },
     uniqueConstraints = {
         @UniqueConstraint(
             name = "UniqueNameAbfragevariantePerBauleitplanverfahren",

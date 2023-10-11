@@ -37,7 +37,7 @@ import org.springframework.transaction.annotation.Transactional;
 class AbfrageStatusServiceTest {
 
     @Autowired
-    private AbfrageService abfrageService;
+    private AbfrageAltService abfrageService;
 
     @Autowired
     private AbfrageStatusService abfrageStatusService;

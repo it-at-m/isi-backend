@@ -36,7 +36,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 public class AbfrageDomainMapperTest {
 
     @Autowired
-    AbfrageDomainMapper abfrageDomainMapper;
+    AbfrageAltDomainMapper abfrageDomainMapper;
 
     @Autowired
     AbfragevarianteDomainMapper abfragevarianteDomainMapper;

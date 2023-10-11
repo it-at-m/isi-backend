@@ -47,7 +47,7 @@ public class AbfrageStatusService {
 
     private static final String ABFRAGE_ID_HEADER = "abfrage_id";
 
-    private final AbfrageService abfrageService;
+    private final AbfrageAltService abfrageService;
 
     private final StateMachineFactory<StatusAbfrage, StatusAbfrageEvents> stateMachineFactory;
 

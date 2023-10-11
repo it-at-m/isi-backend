@@ -9,7 +9,7 @@ import de.muenchen.isi.domain.exception.FileHandlingFailedException;
 import de.muenchen.isi.domain.exception.FileHandlingWithS3FailedException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
-import de.muenchen.isi.domain.mapper.AbfrageDomainMapper;
+import de.muenchen.isi.domain.mapper.AbfrageAltDomainMapper;
 import de.muenchen.isi.domain.mapper.BauvorhabenDomainMapper;
 import de.muenchen.isi.domain.mapper.InfrastruktureinrichtungDomainMapper;
 import de.muenchen.isi.domain.model.AbfrageAltModel;
@@ -57,7 +57,7 @@ public class BauvorhabenService {
 
     private final InfrastruktureinrichtungDomainMapper infrastruktureinrichtungDomainMapper;
 
-    private final AbfrageDomainMapper abfrageDomainMapper;
+    private final AbfrageAltDomainMapper abfrageDomainMapper;
 
     private final BauvorhabenRepository bauvorhabenRepository;
 
@@ -69,7 +69,7 @@ public class BauvorhabenService {
 
     private final GlobalCounterRepository globalCounterRepository;
 
-    private final AbfrageService abfrageService;
+    private final AbfrageAltService abfrageService;
 
     private final DokumentService dokumentService;
 

@@ -18,9 +18,9 @@ import de.muenchen.isi.domain.exception.FileHandlingWithS3FailedException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
 import de.muenchen.isi.domain.exception.UserRoleNotAllowedException;
-import de.muenchen.isi.domain.mapper.AbfrageDomainMapper;
+import de.muenchen.isi.domain.mapper.AbfrageAltDomainMapper;
 import de.muenchen.isi.domain.model.InfrastrukturabfrageModel;
-import de.muenchen.isi.domain.service.AbfrageService;
+import de.muenchen.isi.domain.service.AbfrageAltService;
 import de.muenchen.isi.domain.service.BauvorhabenService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -55,13 +55,13 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 public class AbfrageAltController {
 
-    private final AbfrageService abfrageService;
+    private final AbfrageAltService abfrageService;
 
     private final BauvorhabenService bauvorhabenService;
 
     private final AbfrageApiMapper abfrageApiMapper;
 
-    private final AbfrageDomainMapper abfrageDomainMapper;
+    private final AbfrageAltDomainMapper abfrageDomainMapper;
 
     @GetMapping("/{id}")
     @Transactional(readOnly = true)

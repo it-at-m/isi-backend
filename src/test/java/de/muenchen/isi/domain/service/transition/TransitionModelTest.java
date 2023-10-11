@@ -11,7 +11,7 @@ import de.muenchen.isi.domain.exception.StringLengthExceededException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
 import de.muenchen.isi.domain.model.InfrastrukturabfrageModel;
 import de.muenchen.isi.domain.model.common.TransitionModel;
-import de.muenchen.isi.domain.service.AbfrageService;
+import de.muenchen.isi.domain.service.AbfrageAltService;
 import de.muenchen.isi.domain.service.AbfrageStatusService;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.repository.InfrastrukturabfrageRepository;
@@ -37,7 +37,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class TransitionModelTest {
 
     @Autowired
-    private AbfrageService abfrageService;
+    private AbfrageAltService abfrageService;
 
     @Autowired
     private AbfrageStatusService abfrageStatusService;

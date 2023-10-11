@@ -6,6 +6,7 @@ import de.muenchen.isi.infrastructure.adapter.search.StringSuggestionBinder;
 import de.muenchen.isi.infrastructure.entity.common.Adresse;
 import de.muenchen.isi.infrastructure.entity.common.Verortung;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonVerfahrensgrundsaetzeJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVerfahren;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
 import de.muenchen.isi.infrastructure.entity.filehandling.Dokument;
@@ -21,7 +22,6 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import lombok.Data;
@@ -53,12 +53,13 @@ public class Bauleitplanverfahren extends Abfrage {
     @Column(nullable = true)
     private String bebauungsplannummer;
 
-    @ManyToOne
-    private Bauvorhaben bauvorhaben;
-
     @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "varchar(255) not null check (sobon_relevant != 'UNSPECIFIED')")
     private UncertainBoolean sobonRelevant;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = true)
+    private SobonVerfahrensgrundsaetzeJahr sobonJahr;
 
     @FullTextField(valueBridge = @ValueBridgeRef(type = StandVerfahrenValueBridge.class))
     @NonStandardField(

@@ -11,7 +11,7 @@ import de.muenchen.isi.domain.exception.FileHandlingWithS3FailedException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
 import de.muenchen.isi.domain.exception.UserRoleNotAllowedException;
-import de.muenchen.isi.domain.mapper.AbfrageDomainMapper;
+import de.muenchen.isi.domain.mapper.AbfrageAltDomainMapper;
 import de.muenchen.isi.domain.mapper.AbfrageDomainMapperImpl;
 import de.muenchen.isi.domain.mapper.AbfragevarianteDomainMapper;
 import de.muenchen.isi.domain.mapper.AbfragevarianteDomainMapperImpl;
@@ -71,7 +71,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 class AbfrageServiceTest {
 
     @Autowired
-    AbfrageDomainMapper abfrageDomainMapper;
+    AbfrageAltDomainMapper abfrageDomainMapper;
 
     @Autowired
     AbfragevarianteDomainMapper abfragevarianteDomainMapper;
@@ -85,7 +85,7 @@ class AbfrageServiceTest {
     @Mock
     AuthenticationUtils authenticationUtils;
 
-    private AbfrageService abfrageService;
+    private AbfrageAltService abfrageService;
 
     @Mock
     private InfrastrukturabfrageRepository infrastrukturabfrageRepository;
@@ -96,7 +96,7 @@ class AbfrageServiceTest {
     @BeforeEach
     public void beforeEach() {
         this.abfrageService =
-            new AbfrageService(
+            new AbfrageAltService(
                 this.abfrageDomainMapper,
                 this.infrastrukturabfrageRepository,
                 this.dokumentService,

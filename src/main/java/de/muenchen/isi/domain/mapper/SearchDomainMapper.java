@@ -19,7 +19,7 @@ import org.mapstruct.SubclassMapping;
 
 @Mapper(
     config = MapstructConfiguration.class,
-    uses = { AbfrageDomainMapper.class, InfrastruktureinrichtungDomainMapper.class, BauvorhabenDomainMapper.class }
+    uses = { AbfrageAltDomainMapper.class, InfrastruktureinrichtungDomainMapper.class, BauvorhabenDomainMapper.class }
 )
 public interface SearchDomainMapper {
     @SubclassMapping(source = Infrastruktureinrichtung.class, target = InfrastruktureinrichtungModel.class)

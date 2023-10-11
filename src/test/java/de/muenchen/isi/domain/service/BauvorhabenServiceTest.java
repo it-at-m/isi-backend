@@ -14,8 +14,8 @@ import de.muenchen.isi.domain.exception.FileHandlingFailedException;
 import de.muenchen.isi.domain.exception.FileHandlingWithS3FailedException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
-import de.muenchen.isi.domain.mapper.AbfrageDomainMapper;
-import de.muenchen.isi.domain.mapper.AbfrageDomainMapperImpl;
+import de.muenchen.isi.domain.mapper.AbfrageAltDomainMapper;
+import de.muenchen.isi.domain.mapper.AbfrageAltDomainMapperImpl;
 import de.muenchen.isi.domain.mapper.AbfragevarianteDomainMapperImpl;
 import de.muenchen.isi.domain.mapper.BauabschnittDomainMapperImpl;
 import de.muenchen.isi.domain.mapper.BauvorhabenDomainMapper;
@@ -86,7 +86,7 @@ public class BauvorhabenServiceTest {
     private final InfrastruktureinrichtungDomainMapper infrastruktureinrichtungDomainMapper =
         new InfrastruktureinrichtungDomainMapperImpl();
 
-    private final AbfrageDomainMapper abfrageDomainMapper = new AbfrageDomainMapperImpl(
+    private final AbfrageAltDomainMapper abfrageDomainMapper = new AbfrageAltDomainMapperImpl(
         new AbfragevarianteDomainMapperImpl(new BauabschnittDomainMapperImpl()),
         new DokumentDomainMapperImpl()
     );
@@ -94,7 +94,7 @@ public class BauvorhabenServiceTest {
     private BauvorhabenService bauvorhabenService;
 
     @Mock
-    private AbfrageService abfrageService;
+    private AbfrageAltService abfrageService;
 
     @Mock
     private BauvorhabenRepository bauvorhabenRepository;

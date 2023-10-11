@@ -48,7 +48,7 @@ public class AbfrageController {
         }
     )
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_READ_ABFRAGE.name())")
-    public ResponseEntity<BauleitplanverfahrenDto> getBauleitplanverfahren(@PathVariable @NotNull final UUID id)
+    public ResponseEntity<BauleitplanverfahrenDto> getAbfrage(@PathVariable @NotNull final UUID id)
         throws EntityNotFoundException {
         return ResponseEntity.ok(new BauleitplanverfahrenDto());
     }

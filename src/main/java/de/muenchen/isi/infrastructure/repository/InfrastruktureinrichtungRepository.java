@@ -10,7 +10,5 @@ import java.util.stream.Stream;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface InfrastruktureinrichtungRepository extends JpaRepository<Infrastruktureinrichtung, UUID> {
-    Stream<Infrastruktureinrichtung> findAllByOrderByNameEinrichtungAsc();
-
     Stream<Infrastruktureinrichtung> findAllByBauvorhabenId(final UUID id);
 }

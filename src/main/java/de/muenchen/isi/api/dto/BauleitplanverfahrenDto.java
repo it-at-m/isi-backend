@@ -5,11 +5,11 @@ import de.muenchen.isi.api.dto.common.VerortungDto;
 import de.muenchen.isi.api.dto.filehandling.DokumentDto;
 import de.muenchen.isi.api.validation.NotUnspecified;
 import de.muenchen.isi.api.validation.StandVerfahrenBauleitplanverfahrenValid;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonVerfahrensgrundsaetzeJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVerfahren;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.UUID;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -24,10 +24,10 @@ public class BauleitplanverfahrenDto extends AbfrageDto {
 
     private String bebauungsplannummer;
 
-    private UUID bauvorhaben;
-
     @NotNull
     private UncertainBoolean sobonRelevant;
+
+    private SobonVerfahrensgrundsaetzeJahr sobonJahr;
 
     @NotNull
     @NotUnspecified

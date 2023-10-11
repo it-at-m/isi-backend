@@ -11,8 +11,6 @@ import java.util.stream.Stream;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface InfrastrukturabfrageRepository extends JpaRepository<Infrastrukturabfrage, UUID> {
-    Stream<Infrastrukturabfrage> findAllByOrderByAbfrageFristStellungnahmeDesc();
-
     Stream<Infrastrukturabfrage> findAllByAbfrageBauvorhabenId(final UUID id);
 
     Stream<Infrastrukturabfrage> findAllByAbfrageBauvorhabenIdOrderByCreatedDateTimeDesc(final UUID id);

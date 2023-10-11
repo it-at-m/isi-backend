@@ -15,6 +15,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.Index;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import lombok.Data;
@@ -45,7 +46,7 @@ public abstract class Abfrage extends BaseEntity {
      * @return Wert der {@link DiscriminatorColumn}.
      */
     @Transient
-    public ArtAbfrage getInfrastruktureinrichtungTyp() {
+    public ArtAbfrage getArtAbfrage() {
         final var discriminatorValue = this.getClass().getAnnotation(DiscriminatorValue.class);
         return ObjectUtils.isEmpty(discriminatorValue)
             ? null
@@ -69,4 +70,10 @@ public abstract class Abfrage extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private StatusAbfrage statusAbfrage;
+
+    @ManyToOne
+    private Bauvorhaben bauvorhaben;
+
+    @Column(nullable = false)
+    private String sub;
 }
