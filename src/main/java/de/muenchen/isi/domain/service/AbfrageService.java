@@ -46,6 +46,15 @@ public class AbfrageService {
         return this.abfrageDomainMapper.entity2Model(abfrage);
     }
 
+    /**
+     * Diese Methode speichert ein {@link AbfrageModel}.
+     *
+     * @param abfrage zum Speichern
+     * @return das gespeicherte {@link AbfrageModel}
+     * @throws UniqueViolationException   falls der Name der Abfrage oder der Abfragevariante bereits vorhanden ist
+     * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
+     * @throws EntityNotFoundException falls das referenzierte Bauvorhaben nicht existiert.
+     */
     public AbfrageModel saveAbfrage(final AbfrageModel abfrage)
         throws EntityNotFoundException, OptimisticLockingException, UniqueViolationException {
         if (abfrage.getId() == null) {
