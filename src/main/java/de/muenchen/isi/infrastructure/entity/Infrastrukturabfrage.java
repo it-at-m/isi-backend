@@ -52,7 +52,7 @@ public class Infrastrukturabfrage extends BaseEntity {
 
     @IndexedEmbedded
     @Embedded
-    public Abfrage abfrage;
+    public AbfrageAlt abfrage;
 
     @Column(nullable = false)
     private String sub;

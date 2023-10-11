@@ -10,7 +10,7 @@ import de.muenchen.isi.domain.exception.StringLengthExceededException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
 import de.muenchen.isi.domain.exception.UserRoleNotAllowedException;
 import de.muenchen.isi.domain.mapper.AbfrageDomainMapper;
-import de.muenchen.isi.domain.model.AbfrageModel;
+import de.muenchen.isi.domain.model.AbfrageAltModel;
 import de.muenchen.isi.domain.model.BauvorhabenModel;
 import de.muenchen.isi.domain.model.InfrastrukturabfrageModel;
 import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.InfrastrukturabfrageAngelegtModel;
@@ -273,13 +273,13 @@ public class AbfrageService {
     }
 
     /**
-     * Enthält das im Parameter gegebene {@link AbfrageModel} ein {@link BauvorhabenModel},
+     * Enthält das im Parameter gegebene {@link AbfrageAltModel} ein {@link BauvorhabenModel},
      * wird eine {@link EntityIsReferencedException} geworfen.
      *
      * @param abfrage zum Prüfen.
-     * @throws EntityIsReferencedException falls das {@link AbfrageModel} ein {@link BauvorhabenModel} referenziert.
+     * @throws EntityIsReferencedException falls das {@link AbfrageAltModel} ein {@link BauvorhabenModel} referenziert.
      */
-    protected void throwEntityIsReferencedExceptionWhenAbfrageIsReferencingBauvorhaben(final AbfrageModel abfrage)
+    protected void throwEntityIsReferencedExceptionWhenAbfrageIsReferencingBauvorhaben(final AbfrageAltModel abfrage)
         throws EntityIsReferencedException {
         final var bauvorhaben = abfrage.getBauvorhaben();
         if (ObjectUtils.isNotEmpty(bauvorhaben)) {
@@ -295,15 +295,15 @@ public class AbfrageService {
     }
 
     /**
-     * Enthält das im Parameter gegebene {@link AbfrageModel} einen ungültigen Status {@link StatusAbfrage},
+     * Enthält das im Parameter gegebene {@link AbfrageAltModel} einen ungültigen Status {@link StatusAbfrage},
      * wird eine {@link AbfrageStatusNotAllowedException} geworfen.
      *
      * @param abfrage       zum Prüfen.
      * @param statusAbfrage gültiger Status.
-     * @throws AbfrageStatusNotAllowedException falls das {@link AbfrageModel} einen unzulässigen Status hat
+     * @throws AbfrageStatusNotAllowedException falls das {@link AbfrageAltModel} einen unzulässigen Status hat
      */
     protected void throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(
-        final AbfrageModel abfrage,
+        final AbfrageAltModel abfrage,
         final StatusAbfrage statusAbfrage
     ) throws AbfrageStatusNotAllowedException {
         if (abfrage.getStatusAbfrage() != statusAbfrage) {

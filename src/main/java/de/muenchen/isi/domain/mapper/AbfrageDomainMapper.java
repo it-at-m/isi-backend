@@ -5,14 +5,14 @@
 package de.muenchen.isi.domain.mapper;
 
 import de.muenchen.isi.configuration.MapstructConfiguration;
-import de.muenchen.isi.domain.model.AbfrageModel;
+import de.muenchen.isi.domain.model.AbfrageAltModel;
 import de.muenchen.isi.domain.model.AbfragevarianteModel;
 import de.muenchen.isi.domain.model.InfrastrukturabfrageModel;
 import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.InfrastrukturabfrageAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageBedarfsmeldungInBearbeitungFachreferate.InfrastrukturabfrageInBearbeitungFachreferateModel;
 import de.muenchen.isi.domain.model.abfrageSachbearbeitungInBearbeitungSachbearbeitung.InfrastrukturabfrageInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.domain.model.search.response.AbfrageSearchResultModel;
-import de.muenchen.isi.infrastructure.entity.Abfrage;
+import de.muenchen.isi.infrastructure.entity.AbfrageAlt;
 import de.muenchen.isi.infrastructure.entity.Infrastrukturabfrage;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,9 +31,9 @@ public abstract class AbfrageDomainMapper {
     @Autowired
     private AbfragevarianteDomainMapper abfragevarianteDomainMapper;
 
-    public abstract AbfrageModel entity2Model(final Abfrage entity);
+    public abstract AbfrageAltModel entity2Model(final AbfrageAlt entity);
 
-    public abstract Abfrage model2Entity(final AbfrageModel model);
+    public abstract AbfrageAlt model2Entity(final AbfrageAltModel model);
 
     public abstract InfrastrukturabfrageModel entity2Model(final Infrastrukturabfrage entity);
 

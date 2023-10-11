@@ -16,7 +16,7 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 public class InfrastrukturabfrageDto extends BaseEntityDto {
 
-    private AbfrageDto abfrage;
+    private AbfrageAltDto abfrage;
 
     private UncertainBoolean sobonRelevant;
 

@@ -19,7 +19,7 @@ import de.muenchen.isi.domain.mapper.BauabschnittDomainMapper;
 import de.muenchen.isi.domain.mapper.BauabschnittDomainMapperImpl;
 import de.muenchen.isi.domain.mapper.DokumentDomainMapper;
 import de.muenchen.isi.domain.mapper.DokumentDomainMapperImpl;
-import de.muenchen.isi.domain.model.AbfrageModel;
+import de.muenchen.isi.domain.model.AbfrageAltModel;
 import de.muenchen.isi.domain.model.AbfragevarianteModel;
 import de.muenchen.isi.domain.model.AbfragevarianteSachbearbeitungModel;
 import de.muenchen.isi.domain.model.BauvorhabenModel;
@@ -33,7 +33,7 @@ import de.muenchen.isi.domain.model.abfrageBedarfsmeldungInBearbeitungFachrefera
 import de.muenchen.isi.domain.model.abfrageSachbearbeitungInBearbeitungSachbearbeitung.AbfragevarianteInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.domain.model.abfrageSachbearbeitungInBearbeitungSachbearbeitung.InfrastrukturabfrageInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.domain.service.filehandling.DokumentService;
-import de.muenchen.isi.infrastructure.entity.Abfrage;
+import de.muenchen.isi.infrastructure.entity.AbfrageAlt;
 import de.muenchen.isi.infrastructure.entity.Abfragevariante;
 import de.muenchen.isi.infrastructure.entity.AbfragevarianteSachbearbeitung;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
@@ -131,7 +131,7 @@ class AbfrageServiceTest {
         final String sub = "1234";
         final InfrastrukturabfrageModel infrastrukturabfrageModel = new InfrastrukturabfrageModel();
         infrastrukturabfrageModel.setId(uuid);
-        final AbfrageModel abfrageModel = new AbfrageModel();
+        final AbfrageAltModel abfrageModel = new AbfrageAltModel();
         abfrageModel.setNameAbfrage("hallo");
         abfrageModel.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
         infrastrukturabfrageModel.setAbfrage(abfrageModel);
@@ -141,7 +141,7 @@ class AbfrageServiceTest {
         final Infrastrukturabfrage saveResult = new Infrastrukturabfrage();
         saveResult.setId(uuid);
         saveResult.setSub(sub);
-        final Abfrage abfrage = new Abfrage();
+        final AbfrageAlt abfrage = new AbfrageAlt();
         abfrage.setNameAbfrage("hallo");
         abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
         saveResult.setAbfrage(abfrage);
@@ -158,7 +158,7 @@ class AbfrageServiceTest {
         final InfrastrukturabfrageModel expected = new InfrastrukturabfrageModel();
         expected.setId(saveResult.getId());
         expected.setSub(sub);
-        final AbfrageModel expectedAbfrage = new AbfrageModel();
+        final AbfrageAltModel expectedAbfrage = new AbfrageAltModel();
         expectedAbfrage.setStatusAbfrage(abfrage.getStatusAbfrage());
         expectedAbfrage.setNameAbfrage(abfrage.getNameAbfrage());
         expected.setAbfrage(expectedAbfrage);
@@ -177,7 +177,7 @@ class AbfrageServiceTest {
         final InfrastrukturabfrageModel infrastrukturabfrageModel = new InfrastrukturabfrageModel();
         infrastrukturabfrageModel.setId(null);
         infrastrukturabfrageModel.setSub(null);
-        final AbfrageModel abfrageModel = new AbfrageModel();
+        final AbfrageAltModel abfrageModel = new AbfrageAltModel();
         abfrageModel.setNameAbfrage("hallo");
         abfrageModel.setStatusAbfrage(StatusAbfrage.OFFEN);
         infrastrukturabfrageModel.setAbfrage(abfrageModel);
@@ -186,7 +186,7 @@ class AbfrageServiceTest {
         final Infrastrukturabfrage infrastrukturabfrageEntity = new Infrastrukturabfrage();
         infrastrukturabfrageEntity.setId(null);
         infrastrukturabfrageEntity.setSub(sub);
-        final Abfrage abfrageEntity = new Abfrage();
+        final AbfrageAlt abfrageEntity = new AbfrageAlt();
         abfrageEntity.setNameAbfrage("hallo");
         abfrageEntity.setStatusAbfrage(StatusAbfrage.ANGELEGT);
         infrastrukturabfrageEntity.setAbfrage(abfrageEntity);
@@ -194,7 +194,7 @@ class AbfrageServiceTest {
         final Infrastrukturabfrage saveResult = new Infrastrukturabfrage();
         saveResult.setId(uuid);
         saveResult.setSub(sub);
-        final Abfrage abfrage = new Abfrage();
+        final AbfrageAlt abfrage = new AbfrageAlt();
         abfrage.setNameAbfrage("hallo");
         abfrage.setStatusAbfrage(StatusAbfrage.ANGELEGT);
         saveResult.setAbfrage(abfrage);
@@ -214,7 +214,7 @@ class AbfrageServiceTest {
         final InfrastrukturabfrageModel expected = new InfrastrukturabfrageModel();
         expected.setId(saveResult.getId());
         expected.setSub(saveResult.getSub());
-        final AbfrageModel expectedAbfrage = new AbfrageModel();
+        final AbfrageAltModel expectedAbfrage = new AbfrageAltModel();
         expectedAbfrage.setStatusAbfrage(abfrage.getStatusAbfrage());
         expectedAbfrage.setNameAbfrage(abfrage.getNameAbfrage());
         expected.setAbfrage(expectedAbfrage);
@@ -230,7 +230,7 @@ class AbfrageServiceTest {
     void saveInfrastrukturabfrageUniqueViolationTest() {
         final InfrastrukturabfrageModel infrastrukturabfrageModel = new InfrastrukturabfrageModel();
         infrastrukturabfrageModel.setId(UUID.randomUUID());
-        final AbfrageModel abfrageModel = new AbfrageModel();
+        final AbfrageAltModel abfrageModel = new AbfrageAltModel();
         abfrageModel.setNameAbfrage("hallo");
         infrastrukturabfrageModel.setAbfrage(abfrageModel);
 
@@ -275,7 +275,7 @@ class AbfrageServiceTest {
         final InfrastrukturabfrageModel infrastrukturabfrageModel = new InfrastrukturabfrageModel();
         infrastrukturabfrageModel.setId(abfrageId);
 
-        final AbfrageModel abfrageModel = new AbfrageModel();
+        final AbfrageAltModel abfrageModel = new AbfrageAltModel();
         abfrageModel.setStatusAbfrage(StatusAbfrage.ANGELEGT);
         infrastrukturabfrageModel.setAbfrage(abfrageModel);
 
@@ -324,7 +324,7 @@ class AbfrageServiceTest {
         final var entityInDb = new Infrastrukturabfrage();
         entityInDb.setId(uuid);
         entityInDb.setVersion(0L);
-        final var abfrage = new Abfrage();
+        final var abfrage = new AbfrageAlt();
         abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
         abfrage.setNameAbfrage("hallo");
         entityInDb.setAbfrage(abfrage);
@@ -337,7 +337,7 @@ class AbfrageServiceTest {
         entityToSave.setAbfragevarianten(List.of());
         entityToSave.setId(uuid);
         entityToSave.setVersion(0L);
-        final var abfrageToSave = new Abfrage();
+        final var abfrageToSave = new AbfrageAlt();
         abfrageToSave.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
         abfrageToSave.setNameAbfrage("hallo");
         entityToSave.setAbfrage(abfrageToSave);
@@ -349,7 +349,7 @@ class AbfrageServiceTest {
         final var entitySaved = new Infrastrukturabfrage();
         entitySaved.setId(uuid);
         entitySaved.setVersion(1L);
-        final var abfrageSaved = new Abfrage();
+        final var abfrageSaved = new AbfrageAlt();
         abfrageSaved.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
         abfrageSaved.setNameAbfrage("hallo");
         entitySaved.setAbfrage(abfrageSaved);
@@ -370,7 +370,7 @@ class AbfrageServiceTest {
         final var entityExpected = new InfrastrukturabfrageModel();
         entityExpected.setId(uuid);
         entityExpected.setVersion(1L);
-        final var abfrageExpected = new AbfrageModel();
+        final var abfrageExpected = new AbfrageAltModel();
         abfrageExpected.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
         abfrageExpected.setNameAbfrage("hallo");
         entityExpected.setAbfrage(abfrageExpected);
@@ -427,7 +427,7 @@ class AbfrageServiceTest {
         final var entityInDb = new Infrastrukturabfrage();
         entityInDb.setId(uuid);
         entityInDb.setVersion(0L);
-        final var abfrage = new Abfrage();
+        final var abfrage = new AbfrageAlt();
         abfrage.setNameAbfrage("hallo");
         abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
         entityInDb.setAbfrage(abfrage);
@@ -449,7 +449,7 @@ class AbfrageServiceTest {
 
         entityToSave.setId(uuid);
         entityToSave.setVersion(0L);
-        final var abfrageToSave = new Abfrage();
+        final var abfrageToSave = new AbfrageAlt();
         abfrageToSave.setNameAbfrage("hallo");
         abfrageToSave.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
         entityToSave.setAbfrage(abfrageToSave);
@@ -493,7 +493,7 @@ class AbfrageServiceTest {
 
         entitySaved.setId(uuid);
         entitySaved.setVersion(1L);
-        final var abfrageSaved = new Abfrage();
+        final var abfrageSaved = new AbfrageAlt();
         abfrageSaved.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
         abfrageSaved.setNameAbfrage("hallo");
         entitySaved.setAbfrage(abfrageSaved);
@@ -544,7 +544,7 @@ class AbfrageServiceTest {
         final var entityExpected = new InfrastrukturabfrageModel();
         entityExpected.setId(uuid);
         entityExpected.setVersion(1L);
-        final var abfrageExpected = new AbfrageModel();
+        final var abfrageExpected = new AbfrageAltModel();
         abfrageExpected.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
         abfrageExpected.setNameAbfrage("hallo");
         entityExpected.setAbfrage(abfrageExpected);
@@ -605,7 +605,7 @@ class AbfrageServiceTest {
 
         InfrastrukturabfrageModel infrastrukturabfrageModel = new InfrastrukturabfrageModel();
         infrastrukturabfrageModel.setId(abfrageId);
-        AbfrageModel abfrageModel = new AbfrageModel();
+        AbfrageAltModel abfrageModel = new AbfrageAltModel();
         abfrageModel.setStatusAbfrage(StatusAbfrage.OFFEN);
         infrastrukturabfrageModel.setAbfrage(abfrageModel);
         infrastrukturabfrageModel =
@@ -644,7 +644,7 @@ class AbfrageServiceTest {
         final Infrastrukturabfrage entity = new Infrastrukturabfrage();
         entity.setId(id);
         entity.setSub(sub);
-        final Abfrage abfrage = new Abfrage();
+        final AbfrageAlt abfrage = new AbfrageAlt();
         abfrage.setStatusAbfrage(StatusAbfrage.ANGELEGT);
         entity.setAbfrage(abfrage);
 
@@ -671,7 +671,7 @@ class AbfrageServiceTest {
         final Infrastrukturabfrage entity = new Infrastrukturabfrage();
         entity.setId(id);
         entity.setSub(sub);
-        final Abfrage abfrage = new Abfrage();
+        final AbfrageAlt abfrage = new AbfrageAlt();
         abfrage.setStatusAbfrage(StatusAbfrage.OFFEN);
         entity.setAbfrage(abfrage);
 
@@ -699,7 +699,7 @@ class AbfrageServiceTest {
         final Infrastrukturabfrage entity = new Infrastrukturabfrage();
         entity.setId(id);
         entity.setSub(sub);
-        final Abfrage abfrage = new Abfrage();
+        final AbfrageAlt abfrage = new AbfrageAlt();
         abfrage.setStatusAbfrage(StatusAbfrage.OFFEN);
         entity.setAbfrage(abfrage);
 
@@ -723,7 +723,7 @@ class AbfrageServiceTest {
         final Infrastrukturabfrage entity = new Infrastrukturabfrage();
         entity.setId(id);
         entity.setSub("123");
-        final Abfrage abfrage = new Abfrage();
+        final AbfrageAlt abfrage = new AbfrageAlt();
         abfrage.setStatusAbfrage(StatusAbfrage.ANGELEGT);
         entity.setAbfrage(abfrage);
 
@@ -748,7 +748,7 @@ class AbfrageServiceTest {
         final Infrastrukturabfrage entity = new Infrastrukturabfrage();
         entity.setId(id);
         entity.setSub(sub);
-        final Abfrage abfrage = new Abfrage();
+        final AbfrageAlt abfrage = new AbfrageAlt();
         abfrage.setBauvorhaben(new Bauvorhaben());
         abfrage.setStatusAbfrage(StatusAbfrage.ANGELEGT);
         entity.setAbfrage(abfrage);
@@ -774,7 +774,7 @@ class AbfrageServiceTest {
         final Infrastrukturabfrage entity = new Infrastrukturabfrage();
         entity.setId(id);
         entity.setSub(sub);
-        final Abfrage abfrage = new Abfrage();
+        final AbfrageAlt abfrage = new AbfrageAlt();
         abfrage.setStatusAbfrage(StatusAbfrage.OFFEN);
         entity.setAbfrage(abfrage);
 
@@ -799,7 +799,7 @@ class AbfrageServiceTest {
         final Infrastrukturabfrage entity = new Infrastrukturabfrage();
         entity.setId(id);
         entity.setSub(sub);
-        final Abfrage abfrage = new Abfrage();
+        final AbfrageAlt abfrage = new AbfrageAlt();
         abfrage.setStatusAbfrage(StatusAbfrage.ANGELEGT);
         entity.setAbfrage(abfrage);
 
@@ -818,9 +818,9 @@ class AbfrageServiceTest {
 
     @Test
     void throwEntityIsReferencedExceptionWhenAbfrageIsReferencingBauvorhaben() throws EntityIsReferencedException {
-        this.abfrageService.throwEntityIsReferencedExceptionWhenAbfrageIsReferencingBauvorhaben(new AbfrageModel());
+        this.abfrageService.throwEntityIsReferencedExceptionWhenAbfrageIsReferencingBauvorhaben(new AbfrageAltModel());
 
-        final AbfrageModel abfrage = new AbfrageModel();
+        final AbfrageAltModel abfrage = new AbfrageAltModel();
         abfrage.setBauvorhaben(new BauvorhabenModel());
         Assertions.assertThrows(
             EntityIsReferencedException.class,

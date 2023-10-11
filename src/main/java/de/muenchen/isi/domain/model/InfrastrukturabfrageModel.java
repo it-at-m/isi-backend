@@ -17,7 +17,7 @@ import org.apache.commons.lang3.StringUtils;
 @EqualsAndHashCode(callSuper = true)
 public class InfrastrukturabfrageModel extends BaseEntityModel {
 
-    private AbfrageModel abfrage;
+    private AbfrageAltModel abfrage;
 
     private String sub;
 

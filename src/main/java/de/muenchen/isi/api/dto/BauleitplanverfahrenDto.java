@@ -5,15 +5,12 @@ import de.muenchen.isi.api.dto.common.VerortungDto;
 import de.muenchen.isi.api.dto.filehandling.DokumentDto;
 import de.muenchen.isi.api.validation.NotUnspecified;
 import de.muenchen.isi.api.validation.StandVerfahrenBauleitplanverfahrenValid;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVerfahren;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import lombok.Data;
@@ -23,14 +20,7 @@ import lombok.ToString;
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class BauleitplanverfahrenDto extends BaseEntityDto {
-
-    public ArtAbfrage getArtAbfrage() {
-        return ArtAbfrage.BAULEITPLANVERFAHREN;
-    }
-
-    @NotBlank
-    private String name;
+public class BauleitplanverfahrenDto extends AbfrageDto {
 
     private String bebauungsplannummer;
 
@@ -65,6 +55,4 @@ public class BauleitplanverfahrenDto extends BaseEntityDto {
     private List<@Valid @NotNull AbfragevarianteBauleitplanverfahrenDto> abfragevarianten;
 
     private List<@Valid @NotNull AbfragevarianteBauleitplanverfahrenDto> abfragevariantenSachbearbeitung;
-
-    private StatusAbfrage statusAbfrage;
 }

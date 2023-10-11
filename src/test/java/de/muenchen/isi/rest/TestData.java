@@ -5,7 +5,7 @@
 package de.muenchen.isi.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import de.muenchen.isi.domain.model.AbfrageModel;
+import de.muenchen.isi.domain.model.AbfrageAltModel;
 import de.muenchen.isi.domain.model.AbfragevarianteModel;
 import de.muenchen.isi.domain.model.BauabschnittModel;
 import de.muenchen.isi.domain.model.BaugebietModel;
@@ -44,7 +44,7 @@ public class TestData {
     public static InfrastrukturabfrageModel createInfrastrukturabfrageModel() {
         final InfrastrukturabfrageModel infrastrukturabfrage = new InfrastrukturabfrageModel();
 
-        final AbfrageModel abfrage = new AbfrageModel();
+        final AbfrageAltModel abfrage = new AbfrageAltModel();
         final WGS84Model coordinate = new WGS84Model();
         coordinate.setLatitude(48.1556795465256);
         coordinate.setLongitude(11.5568456350688);

@@ -4,7 +4,6 @@ import de.muenchen.isi.domain.model.common.AdresseModel;
 import de.muenchen.isi.domain.model.common.VerortungModel;
 import de.muenchen.isi.domain.model.filehandling.DokumentModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVerfahren;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
 import java.time.LocalDate;
 import java.util.List;
@@ -16,9 +15,7 @@ import lombok.ToString;
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class BauleitplanverfahrenModel extends BaseEntityModel {
-
-    private String name;
+public class BauleitplanverfahrenModel extends AbfrageModel {
 
     private String bebauungsplannummer;
 
@@ -45,6 +42,4 @@ public class BauleitplanverfahrenModel extends BaseEntityModel {
     private List<AbfragevarianteBauleitplanverfahrenModel> abfragevarianten;
 
     private List<AbfragevarianteBauleitplanverfahrenModel> abfragevariantenSachbearbeitung;
-
-    private StatusAbfrage statusAbfrage;
 }

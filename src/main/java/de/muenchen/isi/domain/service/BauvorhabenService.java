@@ -1,6 +1,6 @@
 package de.muenchen.isi.domain.service;
 
-import de.muenchen.isi.api.dto.AbfrageDto;
+import de.muenchen.isi.api.dto.AbfrageAltDto;
 import de.muenchen.isi.domain.exception.AbfrageStatusNotAllowedException;
 import de.muenchen.isi.domain.exception.BauvorhabenNotReferencedException;
 import de.muenchen.isi.domain.exception.EntityIsReferencedException;
@@ -12,7 +12,7 @@ import de.muenchen.isi.domain.exception.UniqueViolationException;
 import de.muenchen.isi.domain.mapper.AbfrageDomainMapper;
 import de.muenchen.isi.domain.mapper.BauvorhabenDomainMapper;
 import de.muenchen.isi.domain.mapper.InfrastruktureinrichtungDomainMapper;
-import de.muenchen.isi.domain.model.AbfrageModel;
+import de.muenchen.isi.domain.model.AbfrageAltModel;
 import de.muenchen.isi.domain.model.AbfragevarianteModel;
 import de.muenchen.isi.domain.model.BauvorhabenModel;
 import de.muenchen.isi.domain.model.InfrastrukturabfrageModel;
@@ -173,8 +173,8 @@ public class BauvorhabenService {
     }
 
     /**
-     * Setzt in einem {@link AbfrageModel} den Wert des Feldes 'bauvorhaben' auf das {@link BauvorhabenModel}, welches über die gegebene ID gefunden wurde.
-     * Da im {@link AbfrageDto} das Bauvorhaben über eine ID und im {@link AbfrageModel} als ein {@link BauvorhabenModel} gespeichert wird, wird bei einem Mapping von Dto nach Model das Feld 'bauvorhaben' auf null gesetzt.
+     * Setzt in einem {@link AbfrageAltModel} den Wert des Feldes 'bauvorhaben' auf das {@link BauvorhabenModel}, welches über die gegebene ID gefunden wurde.
+     * Da im {@link AbfrageAltDto} das Bauvorhaben über eine ID und im {@link AbfrageAltModel} als ein {@link BauvorhabenModel} gespeichert wird, wird bei einem Mapping von Dto nach Model das Feld 'bauvorhaben' auf null gesetzt.
      * Diese Methode soll dann verwendet werden, um die beim Mapping verloren gegangene Information zum Bauvorhaben wieder in die Abfrage einzusetzen.
      * Der Parameter 'bauvorhabenId' darf null sein. In diesem Fall passiert nichts.
      *
@@ -305,11 +305,11 @@ public class BauvorhabenService {
     }
 
     /**
-     * Wird das im Parameter gegebene {@link BauvorhabenModel} durch ein {@link AbfrageModel} referenziert,
+     * Wird das im Parameter gegebene {@link BauvorhabenModel} durch ein {@link AbfrageAltModel} referenziert,
      * wird eine {@link EntityIsReferencedException} geworfen.
      *
      * @param bauvorhaben zum Prüfen.
-     * @throws EntityIsReferencedException falls das {@link BauvorhabenModel} durch ein {@link AbfrageModel} referenziert wird.
+     * @throws EntityIsReferencedException falls das {@link BauvorhabenModel} durch ein {@link AbfrageAltModel} referenziert wird.
      */
     protected void throwEntityIsReferencedExceptionWhenAbfrageIsReferencingBauvorhaben(
         final BauvorhabenModel bauvorhaben
@@ -358,7 +358,7 @@ public class BauvorhabenService {
         }
     }
 
-    protected void throwEntityIsReferencedExceptionWhenAbfrageIsReferencingBauvorhaben(final AbfrageModel abfrage)
+    protected void throwEntityIsReferencedExceptionWhenAbfrageIsReferencingBauvorhaben(final AbfrageAltModel abfrage)
         throws EntityIsReferencedException {
         final var bauvorhaben = abfrage.getBauvorhaben();
         if (ObjectUtils.isNotEmpty(bauvorhaben)) {

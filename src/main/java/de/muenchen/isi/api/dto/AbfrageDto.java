@@ -1,43 +1,28 @@
-/*
- * Copyright (c): it@M - Dienstleister für Informations- und Telekommunikationstechnik
- * der Landeshauptstadt München, 2022
- */
 package de.muenchen.isi.api.dto;
 
-import de.muenchen.isi.api.dto.common.AdresseDto;
-import de.muenchen.isi.api.dto.common.VerortungDto;
-import de.muenchen.isi.api.dto.filehandling.DokumentDto;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVerfahren;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
-import java.time.LocalDate;
-import java.util.List;
-import java.util.UUID;
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data
-public class AbfrageDto {
+@JsonTypeInfo(
+    use = JsonTypeInfo.Id.NAME,
+    include = JsonTypeInfo.As.EXISTING_PROPERTY,
+    property = "artAbfrage",
+    visible = true
+)
+@JsonSubTypes(
+    { @JsonSubTypes.Type(value = BauleitplanverfahrenDto.class, name = ArtAbfrage.Values.BAULEITPLANVERFAHREN) }
+)
+public abstract class AbfrageDto extends BaseEntityDto {
 
-    private List<DokumentDto> dokumente;
+    private ArtAbfrage artAbfrage;
 
-    private AdresseDto adresse;
-
-    @Valid
-    private VerortungDto verortung;
-
-    @NotNull
-    private LocalDate fristStellungnahme;
-
-    private String anmerkung;
+    @NotBlank
+    private String name;
 
     private StatusAbfrage statusAbfrage;
-
-    private String bebauungsplannummer;
-
-    private String nameAbfrage;
-
-    private StandVerfahren standVerfahren;
-
-    private UUID bauvorhaben;
 }

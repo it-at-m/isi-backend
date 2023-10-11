@@ -1,53 +1,19 @@
-/*
- * Copyright (c): it@M - Dienstleister für Informations- und Telekommunikationstechnik
- * der Landeshauptstadt München, 2022
- */
 package de.muenchen.isi.domain.model;
 
-import de.muenchen.isi.domain.model.common.AdresseModel;
-import de.muenchen.isi.domain.model.common.VerortungModel;
-import de.muenchen.isi.domain.model.filehandling.DokumentModel;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVerfahren;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
-import java.time.LocalDate;
-import java.util.List;
 import lombok.Data;
-import org.apache.commons.lang3.StringUtils;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 @Data
-public class AbfrageModel {
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
+public abstract class AbfrageModel extends BaseEntityModel {
 
-    private List<DokumentModel> dokumente;
+    private ArtAbfrage artAbfrage;
 
-    private AdresseModel adresse;
-
-    private VerortungModel verortung;
-
-    private LocalDate fristStellungnahme;
-
-    private String anmerkung;
+    private String name;
 
     private StatusAbfrage statusAbfrage;
-
-    private String bebauungsplannummer;
-
-    private String nameAbfrage;
-
-    private StandVerfahren standVerfahren;
-
-    private BauvorhabenModel bauvorhaben;
-
-    /**
-     * Gibt den zusammengesetzten Namen der Abfrage zurück
-     *
-     * @return der zusammengesetzte Namen
-     */
-    protected String getDisplayName() {
-        final var displayName = new StringBuilder();
-        displayName.append(this.getNameAbfrage());
-        if (!StringUtils.isEmpty(this.getBebauungsplannummer())) {
-            displayName.append(String.format(" - BPlan.: %s", this.getBebauungsplannummer()));
-        }
-        return displayName.toString();
-    }
 }

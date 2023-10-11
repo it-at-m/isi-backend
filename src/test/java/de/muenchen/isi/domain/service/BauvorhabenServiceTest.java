@@ -23,7 +23,7 @@ import de.muenchen.isi.domain.mapper.BauvorhabenDomainMapperImpl;
 import de.muenchen.isi.domain.mapper.DokumentDomainMapperImpl;
 import de.muenchen.isi.domain.mapper.InfrastruktureinrichtungDomainMapper;
 import de.muenchen.isi.domain.mapper.InfrastruktureinrichtungDomainMapperImpl;
-import de.muenchen.isi.domain.model.AbfrageModel;
+import de.muenchen.isi.domain.model.AbfrageAltModel;
 import de.muenchen.isi.domain.model.AbfragevarianteModel;
 import de.muenchen.isi.domain.model.BauvorhabenModel;
 import de.muenchen.isi.domain.model.InfrastrukturabfrageModel;
@@ -36,7 +36,7 @@ import de.muenchen.isi.domain.model.infrastruktureinrichtung.KinderkrippeModel;
 import de.muenchen.isi.domain.model.search.response.AbfrageSearchResultModel;
 import de.muenchen.isi.domain.model.search.response.InfrastruktureinrichtungSearchResultModel;
 import de.muenchen.isi.domain.service.filehandling.DokumentService;
-import de.muenchen.isi.infrastructure.entity.Abfrage;
+import de.muenchen.isi.infrastructure.entity.AbfrageAlt;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
 import de.muenchen.isi.infrastructure.entity.Infrastrukturabfrage;
 import de.muenchen.isi.infrastructure.entity.common.GlobalCounter;
@@ -160,7 +160,7 @@ public class BauvorhabenServiceTest {
 
         final Infrastrukturabfrage abfrage1 = new Infrastrukturabfrage();
         abfrage1.setId(UUID.randomUUID());
-        abfrage1.setAbfrage(new Abfrage());
+        abfrage1.setAbfrage(new AbfrageAlt());
         abfrage1.getAbfrage().setNameAbfrage("NameAbfrage1");
         abfrage1.getAbfrage().setStatusAbfrage(StatusAbfrage.OFFEN);
         abfrage1.getAbfrage().setFristStellungnahme(LocalDate.of(2022, 11, 1));
@@ -168,7 +168,7 @@ public class BauvorhabenServiceTest {
 
         final Infrastrukturabfrage abfrage2 = new Infrastrukturabfrage();
         abfrage2.setId(UUID.randomUUID());
-        abfrage2.setAbfrage(new Abfrage());
+        abfrage2.setAbfrage(new AbfrageAlt());
         abfrage2.getAbfrage().setNameAbfrage("NameAbfrage2");
         abfrage2.getAbfrage().setStatusAbfrage(StatusAbfrage.ANGELEGT);
         abfrage2.getAbfrage().setFristStellungnahme(LocalDate.of(2022, 9, 1));
@@ -176,7 +176,7 @@ public class BauvorhabenServiceTest {
 
         final Infrastrukturabfrage abfrage3 = new Infrastrukturabfrage();
         abfrage3.setId(UUID.randomUUID());
-        abfrage3.setAbfrage(new Abfrage());
+        abfrage3.setAbfrage(new AbfrageAlt());
         abfrage3.getAbfrage().setNameAbfrage("NameAbfrage3");
         abfrage3.getAbfrage().setStatusAbfrage(StatusAbfrage.OFFEN);
         abfrage3.getAbfrage().setFristStellungnahme(LocalDate.of(2022, 12, 1));
@@ -511,16 +511,16 @@ public class BauvorhabenServiceTest {
 
         final InfrastrukturabfrageModel abfrage = new InfrastrukturabfrageModel();
         abfrage.setId(abfrageId);
-        abfrage.setAbfrage(new AbfrageModel());
+        abfrage.setAbfrage(new AbfrageAltModel());
 
         final InfrastrukturabfrageModel abfrageToSave = new InfrastrukturabfrageModel();
         abfrageToSave.setId(abfrageId);
-        abfrageToSave.setAbfrage(new AbfrageModel());
+        abfrageToSave.setAbfrage(new AbfrageAltModel());
         abfrageToSave.getAbfrage().setBauvorhaben(this.bauvorhabenDomainMapper.entity2Model(saveResult));
 
         final InfrastrukturabfrageModel savedAbfrage = new InfrastrukturabfrageModel();
         savedAbfrage.setId(abfrageId);
-        savedAbfrage.setAbfrage(new AbfrageModel());
+        savedAbfrage.setAbfrage(new AbfrageAltModel());
         savedAbfrage.getAbfrage().setBauvorhaben(this.bauvorhabenDomainMapper.entity2Model(saveResult));
 
         Mockito.when(this.abfrageService.getInfrastrukturabfrageById(abfrageId)).thenReturn(abfrage);
@@ -535,7 +535,7 @@ public class BauvorhabenServiceTest {
 
         final InfrastrukturabfrageModel expectedAbfrage = new InfrastrukturabfrageModel();
         expectedAbfrage.setId(abfrageId);
-        expectedAbfrage.setAbfrage(new AbfrageModel());
+        expectedAbfrage.setAbfrage(new AbfrageAltModel());
         expectedAbfrage.getAbfrage().setBauvorhaben(result);
         assertThat(savedAbfrage, is(expectedAbfrage));
 
@@ -590,7 +590,7 @@ public class BauvorhabenServiceTest {
 
         final InfrastrukturabfrageModel abfrage = new InfrastrukturabfrageModel();
         abfrage.setId(abfrageId);
-        abfrage.setAbfrage(new AbfrageModel());
+        abfrage.setAbfrage(new AbfrageAltModel());
         final BauvorhabenModel abfrageBauvorhaben = new BauvorhabenModel();
         abfrageBauvorhaben.setId(UUID.randomUUID());
         abfrageBauvorhaben.setNameVorhaben("Name Bauvorhaben");
@@ -666,7 +666,7 @@ public class BauvorhabenServiceTest {
         entity.setId(id);
 
         final Infrastrukturabfrage infrastrukturabfrage = new Infrastrukturabfrage();
-        final Abfrage abfrage1 = new Abfrage();
+        final AbfrageAlt abfrage1 = new AbfrageAlt();
         abfrage1.setNameAbfrage("test1");
         infrastrukturabfrage.setAbfrage(abfrage1);
 
@@ -792,7 +792,7 @@ public class BauvorhabenServiceTest {
 
         final InfrastrukturabfrageModel infrastrukturabfrageModel = new InfrastrukturabfrageModel();
         infrastrukturabfrageModel.setId(abfrageId);
-        final AbfrageModel abfrageModel = new AbfrageModel();
+        final AbfrageAltModel abfrageModel = new AbfrageAltModel();
         abfrageModel.setStatusAbfrage(StatusAbfrage.OFFEN);
         infrastrukturabfrageModel.setAbfrage(abfrageModel);
 
@@ -855,7 +855,7 @@ public class BauvorhabenServiceTest {
     @Test
     void throwEntityIsReferencedExceptionWhenAbfrageIsReferencingBauvorhaben() throws EntityIsReferencedException {
         final Infrastrukturabfrage infrastrukturabfrage = new Infrastrukturabfrage();
-        final Abfrage abfrage1 = new Abfrage();
+        final AbfrageAlt abfrage1 = new AbfrageAlt();
         abfrage1.setNameAbfrage("test1");
         infrastrukturabfrage.setAbfrage(abfrage1);
 
