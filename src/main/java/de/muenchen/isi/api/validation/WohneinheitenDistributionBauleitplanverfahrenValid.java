@@ -10,9 +10,9 @@ import javax.validation.Payload;
 
 @Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = WohneinheitenDistributionValidator.class)
+@Constraint(validatedBy = WohneinheitenDistributionBauleitplanverfahrenValidator.class)
 @Documented
-public @interface WohneinheitenDistributionValid {
+public @interface WohneinheitenDistributionBauleitplanverfahrenValid {
     String message() default "Die Summe der über die Baugebiete verteilten Wohneinheiten" +
     " entspricht nicht der Anzahl der Wohneinheiten in der Abfragevariante.";
 

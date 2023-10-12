@@ -1,10 +1,7 @@
 package de.muenchen.isi.api.dto.abfrageAbfrageerstellungAngelegt;
 
 import de.muenchen.isi.api.dto.BauabschnittDto;
-import de.muenchen.isi.api.validation.GeschossflaecheWohnenDistributionValid;
 import de.muenchen.isi.api.validation.NotUnspecified;
-import de.muenchen.isi.api.validation.RealisierungVonDistributionValid;
-import de.muenchen.isi.api.validation.WohneinheitenDistributionValid;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Planungsrecht;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -21,9 +18,6 @@ import lombok.ToString;
 
 @Data
 @ToString(callSuper = true)
-@GeschossflaecheWohnenDistributionValid
-@WohneinheitenDistributionValid
-@RealisierungVonDistributionValid
 public class AbfragevarianteAngelegtDto {
 
     private UUID id;

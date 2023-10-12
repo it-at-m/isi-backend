@@ -10,10 +10,11 @@ import javax.validation.Payload;
 
 @Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = RealisierungVonDistributionValidator.class)
+@Constraint(validatedBy = GeschossflaecheWohnenDistributionBauleitplanverfahrenValidator.class)
 @Documented
-public @interface RealisierungVonDistributionValid {
-    String message() default "Das Realisierungsjahr eines Baugebiets bzw. einer Baurate ist vor dem Realisierungsjahr der Abfragevariante";
+public @interface GeschossflaecheWohnenDistributionBauleitplanverfahrenValid {
+    String message() default "Die Summe der über die Baugebiete verteilten Geschossfläche Wohnen" +
+    " entspricht nicht der Geschossfläche Wohnen in der Abfragevariante.";
 
     Class<?>[] groups() default {};
 

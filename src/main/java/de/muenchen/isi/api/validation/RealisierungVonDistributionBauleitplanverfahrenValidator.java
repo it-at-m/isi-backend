@@ -2,7 +2,7 @@ package de.muenchen.isi.api.validation;
 
 import de.muenchen.isi.api.dto.BaugebietDto;
 import de.muenchen.isi.api.dto.BaurateDto;
-import de.muenchen.isi.api.dto.abfrageAbfrageerstellungAngelegt.AbfragevarianteAngelegtDto;
+import de.muenchen.isi.api.dto.abfrageAngelegt.AbfragevarianteBauleitplanverfahrenAngelegtDto;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -14,9 +14,13 @@ import org.springframework.stereotype.Component;
 
 @Component
 @NoArgsConstructor
-public class RealisierungVonDistributionValidator
+public class RealisierungVonDistributionBauleitplanverfahrenValidator
     extends DistributionValidator
-    implements ConstraintValidator<RealisierungVonDistributionValid, AbfragevarianteAngelegtDto> {
+    implements
+        ConstraintValidator<
+            RealisierungVonDistributionBauleitplanverfahrenValid,
+            AbfragevarianteBauleitplanverfahrenAngelegtDto
+        > {
 
     /**
      * @param value object to validate
@@ -24,11 +28,16 @@ public class RealisierungVonDistributionValidator
      * @return true falls das Realisierungsjahr der Abfragevariante vor oder gleich der Realisierungsjahre der Baugebiete oder einer Baurate.
      */
     @Override
-    public boolean isValid(final AbfragevarianteAngelegtDto value, final ConstraintValidatorContext context) {
+    public boolean isValid(
+        final AbfragevarianteBauleitplanverfahrenAngelegtDto value,
+        final ConstraintValidatorContext context
+    ) {
         boolean isValid = true;
 
-        final List<BaugebietDto> nonTechnicalBaugebiete = getNonTechnicalBaugebiete(value);
-        final List<BaurateDto> bauratenFromAllTechnicalBaugebiete = getBauratenFromAllTechnicalBaugebiete(value);
+        final List<BaugebietDto> nonTechnicalBaugebiete = getNonTechnicalBaugebiete(value.getBauabschnitte());
+        final List<BaurateDto> bauratenFromAllTechnicalBaugebiete = getBauratenFromAllTechnicalBaugebiete(
+            value.getBauabschnitte()
+        );
 
         final boolean containsNonTechnicalBaugebiet = CollectionUtils.isNotEmpty(nonTechnicalBaugebiete);
         final boolean containsBauratenInTechnicalBaugebiet = CollectionUtils.isNotEmpty(

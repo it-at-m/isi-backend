@@ -6,7 +6,6 @@ import static org.hamcrest.Matchers.is;
 import de.muenchen.isi.api.dto.BauabschnittDto;
 import de.muenchen.isi.api.dto.BaugebietDto;
 import de.muenchen.isi.api.dto.BaurateDto;
-import de.muenchen.isi.api.dto.abfrageAbfrageerstellungAngelegt.AbfragevarianteAngelegtDto;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,25 +21,15 @@ class DistributionValidatorTest {
 
     @Test
     void getNonTechnicalBaugebiete() {
-        assertThat(
-            this.distributionValidator.getNonTechnicalBaugebiete(new AbfragevarianteAngelegtDto()),
-            is(List.of())
-        );
+        assertThat(this.distributionValidator.getNonTechnicalBaugebiete(null), is(List.of()));
 
         // --
-
-        var abfragevariante = new AbfragevarianteAngelegtDto();
 
         var bauabschnitt1 = new BauabschnittDto();
 
-        abfragevariante.setBauabschnitte(List.of(bauabschnitt1));
-
-        assertThat(this.distributionValidator.getNonTechnicalBaugebiete(abfragevariante), is(List.of()));
+        assertThat(this.distributionValidator.getNonTechnicalBaugebiete(List.of(bauabschnitt1)), is(List.of()));
 
         // --
-
-        abfragevariante = new AbfragevarianteAngelegtDto();
-        abfragevariante.setGesamtanzahlWe(150);
 
         var baugebiet1 = new BaugebietDto();
         baugebiet1.setWeGeplant(50);
@@ -55,35 +44,26 @@ class DistributionValidatorTest {
         bauabschnitt1 = new BauabschnittDto();
         bauabschnitt1.setBaugebiete(List.of(baugebiet1, baugebiet2, baugebiet3));
 
-        abfragevariante.setBauabschnitte(List.of(bauabschnitt1));
-
         assertThat(
-            this.distributionValidator.getNonTechnicalBaugebiete(abfragevariante),
+            this.distributionValidator.getNonTechnicalBaugebiete(List.of(bauabschnitt1)),
             is(List.of(baugebiet1, baugebiet3))
         );
     }
 
     @Test
     void getBauratenFromAllTechnicalBaugebiete() {
+        assertThat(this.distributionValidator.getBauratenFromAllTechnicalBaugebiete(null), is(List.of()));
+
+        // --
+
+        var bauabschnitt1 = new BauabschnittDto();
+
         assertThat(
-            this.distributionValidator.getBauratenFromAllTechnicalBaugebiete(new AbfragevarianteAngelegtDto()),
+            this.distributionValidator.getBauratenFromAllTechnicalBaugebiete(List.of(bauabschnitt1)),
             is(List.of())
         );
 
         // --
-
-        var abfragevariante = new AbfragevarianteAngelegtDto();
-
-        var bauabschnitt1 = new BauabschnittDto();
-
-        abfragevariante.setBauabschnitte(List.of(bauabschnitt1));
-
-        assertThat(this.distributionValidator.getBauratenFromAllTechnicalBaugebiete(abfragevariante), is(List.of()));
-
-        // --
-
-        abfragevariante = new AbfragevarianteAngelegtDto();
-        abfragevariante.setGesamtanzahlWe(150);
 
         var baugebiet1 = new BaugebietDto();
         baugebiet1.setWeGeplant(50);
@@ -98,14 +78,12 @@ class DistributionValidatorTest {
         bauabschnitt1 = new BauabschnittDto();
         bauabschnitt1.setBaugebiete(List.of(baugebiet1, baugebiet2, baugebiet3));
 
-        abfragevariante.setBauabschnitte(List.of(bauabschnitt1));
-
-        assertThat(this.distributionValidator.getBauratenFromAllTechnicalBaugebiete(abfragevariante), is(List.of()));
+        assertThat(
+            this.distributionValidator.getBauratenFromAllTechnicalBaugebiete(List.of(bauabschnitt1)),
+            is(List.of())
+        );
 
         // --
-
-        abfragevariante = new AbfragevarianteAngelegtDto();
-        abfragevariante.setGesamtanzahlWe(150);
 
         baugebiet1 = new BaugebietDto();
         baugebiet1.setTechnical(true);
@@ -131,10 +109,8 @@ class DistributionValidatorTest {
         bauabschnitt1 = new BauabschnittDto();
         bauabschnitt1.setBaugebiete(List.of(baugebiet1, baugebiet2, baugebiet3, baugebiet4));
 
-        abfragevariante.setBauabschnitte(List.of(bauabschnitt1));
-
         assertThat(
-            this.distributionValidator.getBauratenFromAllTechnicalBaugebiete(abfragevariante),
+            this.distributionValidator.getBauratenFromAllTechnicalBaugebiete(List.of(bauabschnitt1)),
             is(List.of(baurate11, baurate12, baurate21, baurate31))
         );
     }

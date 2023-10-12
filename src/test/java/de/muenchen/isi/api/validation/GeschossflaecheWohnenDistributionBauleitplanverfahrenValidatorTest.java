@@ -6,56 +6,57 @@ import static org.hamcrest.Matchers.is;
 import de.muenchen.isi.api.dto.BauabschnittDto;
 import de.muenchen.isi.api.dto.BaugebietDto;
 import de.muenchen.isi.api.dto.BaurateDto;
-import de.muenchen.isi.api.dto.abfrageAbfrageerstellungAngelegt.AbfragevarianteAngelegtDto;
+import de.muenchen.isi.api.dto.abfrageAngelegt.AbfragevarianteBauleitplanverfahrenAngelegtDto;
+import java.math.BigDecimal;
 import java.util.List;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.junit.jupiter.MockitoSettings;
-import org.mockito.quality.Strictness;
 
-@ExtendWith(MockitoExtension.class)
-@MockitoSettings(strictness = Strictness.LENIENT)
-class WohneinheitenDistributionValidatorTest {
+class GeschossflaecheWohnenDistributionBauleitplanverfahrenValidatorTest {
 
-    private WohneinheitenDistributionValidator wohneinheitenDistributionValidator =
-        new WohneinheitenDistributionValidator();
+    private GeschossflaecheWohnenDistributionBauleitplanverfahrenValidator geschossflaecheWohnenDistributionValidator =
+        new GeschossflaecheWohnenDistributionBauleitplanverfahrenValidator();
 
     @Test
     void isValidNonTechnicalBaugebiet() {
-        assertThat(this.wohneinheitenDistributionValidator.isValid(new AbfragevarianteAngelegtDto(), null), is(true));
+        assertThat(
+            this.geschossflaecheWohnenDistributionValidator.isValid(
+                    new AbfragevarianteBauleitplanverfahrenAngelegtDto(),
+                    null
+                ),
+            is(true)
+        );
 
         // --
 
-        var abfragevariante = new AbfragevarianteAngelegtDto();
-        abfragevariante.setGesamtanzahlWe(150);
+        var abfragevariante = new AbfragevarianteBauleitplanverfahrenAngelegtDto();
+        abfragevariante.setGfWohnenGesamt(BigDecimal.valueOf(150));
 
-        assertThat(this.wohneinheitenDistributionValidator.isValid(abfragevariante, null), is(true));
+        assertThat(this.geschossflaecheWohnenDistributionValidator.isValid(abfragevariante, null), is(true));
 
         // --
 
-        abfragevariante = new AbfragevarianteAngelegtDto();
-        abfragevariante.setGesamtanzahlWe(150);
+        abfragevariante = new AbfragevarianteBauleitplanverfahrenAngelegtDto();
+        abfragevariante.setGfWohnenGesamt(BigDecimal.valueOf(150));
 
         var bauabschnitt1 = new BauabschnittDto();
 
         abfragevariante.setBauabschnitte(List.of(bauabschnitt1));
 
-        assertThat(this.wohneinheitenDistributionValidator.isValid(abfragevariante, null), is(true));
+        assertThat(this.geschossflaecheWohnenDistributionValidator.isValid(abfragevariante, null), is(true));
 
         // --
 
-        abfragevariante = new AbfragevarianteAngelegtDto();
-        abfragevariante.setGesamtanzahlWe(150);
+        abfragevariante = new AbfragevarianteBauleitplanverfahrenAngelegtDto();
+        abfragevariante.setGfWohnenGesamt(BigDecimal.valueOf(150));
 
         var baugebiet1 = new BaugebietDto();
-        baugebiet1.setWeGeplant(50);
+        baugebiet1.setGfWohnenGeplant(BigDecimal.valueOf(50));
         baugebiet1.setTechnical(false);
         var baugebiet2 = new BaugebietDto();
-        baugebiet2.setWeGeplant(40);
+        baugebiet2.setGfWohnenGeplant(BigDecimal.valueOf(40));
         baugebiet2.setTechnical(false);
         var baugebiet3 = new BaugebietDto();
-        baugebiet3.setWeGeplant(60);
+        baugebiet3.setGfWohnenGeplant(BigDecimal.valueOf(60));
         baugebiet3.setTechnical(false);
 
         bauabschnitt1 = new BauabschnittDto();
@@ -63,21 +64,21 @@ class WohneinheitenDistributionValidatorTest {
 
         abfragevariante.setBauabschnitte(List.of(bauabschnitt1));
 
-        assertThat(this.wohneinheitenDistributionValidator.isValid(abfragevariante, null), is(true));
+        assertThat(this.geschossflaecheWohnenDistributionValidator.isValid(abfragevariante, null), is(true));
 
         // --
 
-        abfragevariante = new AbfragevarianteAngelegtDto();
-        abfragevariante.setGesamtanzahlWe(150);
+        abfragevariante = new AbfragevarianteBauleitplanverfahrenAngelegtDto();
+        abfragevariante.setGfWohnenGesamt(BigDecimal.valueOf(150));
 
         baugebiet1 = new BaugebietDto();
-        baugebiet1.setWeGeplant(50);
+        baugebiet1.setGfWohnenGeplant(BigDecimal.valueOf(50));
         baugebiet1.setTechnical(false);
         baugebiet2 = new BaugebietDto();
-        baugebiet2.setWeGeplant(40);
+        baugebiet2.setGfWohnenGeplant(BigDecimal.valueOf(40));
         baugebiet2.setTechnical(false);
         baugebiet3 = new BaugebietDto();
-        baugebiet3.setWeGeplant(60);
+        baugebiet3.setGfWohnenGeplant(BigDecimal.valueOf(60));
         baugebiet3.setTechnical(false);
 
         bauabschnitt1 = new BauabschnittDto();
@@ -87,27 +88,27 @@ class WohneinheitenDistributionValidatorTest {
 
         abfragevariante.setBauabschnitte(List.of(bauabschnitt1, bauabschnitt2));
 
-        assertThat(this.wohneinheitenDistributionValidator.isValid(abfragevariante, null), is(true));
+        assertThat(this.geschossflaecheWohnenDistributionValidator.isValid(abfragevariante, null), is(true));
 
         // --
 
-        abfragevariante = new AbfragevarianteAngelegtDto();
-        abfragevariante.setGesamtanzahlWe(150);
+        abfragevariante = new AbfragevarianteBauleitplanverfahrenAngelegtDto();
+        abfragevariante.setGfWohnenGesamt(BigDecimal.valueOf(150));
 
         baugebiet1 = new BaugebietDto();
-        baugebiet1.setWeGeplant(50);
+        baugebiet1.setGfWohnenGeplant(BigDecimal.valueOf(50));
         baugebiet1.setTechnical(false);
         baugebiet2 = new BaugebietDto();
-        baugebiet2.setWeGeplant(40);
+        baugebiet2.setGfWohnenGeplant(BigDecimal.valueOf(40));
         baugebiet2.setTechnical(false);
         baugebiet3 = new BaugebietDto();
-        baugebiet3.setWeGeplant(60);
+        baugebiet3.setGfWohnenGeplant(BigDecimal.valueOf(60));
         baugebiet3.setTechnical(false);
         var baugebiet4 = new BaugebietDto();
-        baugebiet4.setWeGeplant(0);
+        baugebiet4.setGfWohnenGeplant(BigDecimal.valueOf(0));
         baugebiet4.setTechnical(false);
         var baugebiet5 = new BaugebietDto();
-        baugebiet5.setWeGeplant(null);
+        baugebiet5.setGfWohnenGeplant(null);
         baugebiet5.setTechnical(false);
 
         bauabschnitt1 = new BauabschnittDto();
@@ -117,21 +118,21 @@ class WohneinheitenDistributionValidatorTest {
 
         abfragevariante.setBauabschnitte(List.of(bauabschnitt1, bauabschnitt2));
 
-        assertThat(this.wohneinheitenDistributionValidator.isValid(abfragevariante, null), is(true));
+        assertThat(this.geschossflaecheWohnenDistributionValidator.isValid(abfragevariante, null), is(true));
 
         // --
 
-        abfragevariante = new AbfragevarianteAngelegtDto();
-        abfragevariante.setGesamtanzahlWe(150);
+        abfragevariante = new AbfragevarianteBauleitplanverfahrenAngelegtDto();
+        abfragevariante.setGfWohnenGesamt(BigDecimal.valueOf(150));
 
         baugebiet1 = new BaugebietDto();
-        baugebiet1.setWeGeplant(49);
+        baugebiet1.setGfWohnenGeplant(BigDecimal.valueOf(49));
         baugebiet1.setTechnical(false);
         baugebiet2 = new BaugebietDto();
-        baugebiet2.setWeGeplant(40);
+        baugebiet2.setGfWohnenGeplant(BigDecimal.valueOf(40));
         baugebiet2.setTechnical(false);
         baugebiet3 = new BaugebietDto();
-        baugebiet3.setWeGeplant(60);
+        baugebiet3.setGfWohnenGeplant(BigDecimal.valueOf(60));
         baugebiet3.setTechnical(false);
 
         bauabschnitt1 = new BauabschnittDto();
@@ -141,21 +142,21 @@ class WohneinheitenDistributionValidatorTest {
 
         abfragevariante.setBauabschnitte(List.of(bauabschnitt1, bauabschnitt2));
 
-        assertThat(this.wohneinheitenDistributionValidator.isValid(abfragevariante, null), is(false));
+        assertThat(this.geschossflaecheWohnenDistributionValidator.isValid(abfragevariante, null), is(false));
 
         // --
 
-        abfragevariante = new AbfragevarianteAngelegtDto();
-        abfragevariante.setGesamtanzahlWe(149);
+        abfragevariante = new AbfragevarianteBauleitplanverfahrenAngelegtDto();
+        abfragevariante.setGfWohnenGesamt(BigDecimal.valueOf(149));
 
         baugebiet1 = new BaugebietDto();
-        baugebiet1.setWeGeplant(50);
+        baugebiet1.setGfWohnenGeplant(BigDecimal.valueOf(50));
         baugebiet1.setTechnical(false);
         baugebiet2 = new BaugebietDto();
-        baugebiet2.setWeGeplant(40);
+        baugebiet2.setGfWohnenGeplant(BigDecimal.valueOf(40));
         baugebiet2.setTechnical(false);
         baugebiet3 = new BaugebietDto();
-        baugebiet3.setWeGeplant(60);
+        baugebiet3.setGfWohnenGeplant(BigDecimal.valueOf(60));
         baugebiet3.setTechnical(false);
 
         bauabschnitt1 = new BauabschnittDto();
@@ -165,35 +166,41 @@ class WohneinheitenDistributionValidatorTest {
 
         abfragevariante.setBauabschnitte(List.of(bauabschnitt1, bauabschnitt2));
 
-        assertThat(this.wohneinheitenDistributionValidator.isValid(abfragevariante, null), is(false));
+        assertThat(this.geschossflaecheWohnenDistributionValidator.isValid(abfragevariante, null), is(false));
     }
 
     @Test
     void isValidTechnicalBaugebiet() {
-        assertThat(this.wohneinheitenDistributionValidator.isValid(new AbfragevarianteAngelegtDto(), null), is(true));
+        assertThat(
+            this.geschossflaecheWohnenDistributionValidator.isValid(
+                    new AbfragevarianteBauleitplanverfahrenAngelegtDto(),
+                    null
+                ),
+            is(true)
+        );
 
         // --
 
-        var abfragevariante = new AbfragevarianteAngelegtDto();
-        abfragevariante.setGesamtanzahlWe(150);
+        var abfragevariante = new AbfragevarianteBauleitplanverfahrenAngelegtDto();
+        abfragevariante.setGfWohnenGesamt(BigDecimal.valueOf(150));
 
-        assertThat(this.wohneinheitenDistributionValidator.isValid(abfragevariante, null), is(true));
+        assertThat(this.geschossflaecheWohnenDistributionValidator.isValid(abfragevariante, null), is(true));
 
         // --
 
-        abfragevariante = new AbfragevarianteAngelegtDto();
-        abfragevariante.setGesamtanzahlWe(150);
+        abfragevariante = new AbfragevarianteBauleitplanverfahrenAngelegtDto();
+        abfragevariante.setGfWohnenGesamt(BigDecimal.valueOf(150));
 
         var bauabschnitt1 = new BauabschnittDto();
 
         abfragevariante.setBauabschnitte(List.of(bauabschnitt1));
 
-        assertThat(this.wohneinheitenDistributionValidator.isValid(abfragevariante, null), is(true));
+        assertThat(this.geschossflaecheWohnenDistributionValidator.isValid(abfragevariante, null), is(true));
 
         // --
 
-        abfragevariante = new AbfragevarianteAngelegtDto();
-        abfragevariante.setGesamtanzahlWe(150);
+        abfragevariante = new AbfragevarianteBauleitplanverfahrenAngelegtDto();
+        abfragevariante.setGfWohnenGesamt(BigDecimal.valueOf(150));
 
         var baugebiet1 = new BaugebietDto();
         baugebiet1.setTechnical(true);
@@ -207,31 +214,31 @@ class WohneinheitenDistributionValidatorTest {
 
         abfragevariante.setBauabschnitte(List.of(bauabschnitt1));
 
-        assertThat(this.wohneinheitenDistributionValidator.isValid(abfragevariante, null), is(true));
+        assertThat(this.geschossflaecheWohnenDistributionValidator.isValid(abfragevariante, null), is(true));
 
         // --
 
-        abfragevariante = new AbfragevarianteAngelegtDto();
-        abfragevariante.setGesamtanzahlWe(150);
+        abfragevariante = new AbfragevarianteBauleitplanverfahrenAngelegtDto();
+        abfragevariante.setGfWohnenGesamt(BigDecimal.valueOf(150));
 
         baugebiet1 = new BaugebietDto();
         baugebiet1.setTechnical(true);
         var baurate11 = new BaurateDto();
-        baurate11.setWeGeplant(10);
+        baurate11.setGfWohnenGeplant(BigDecimal.valueOf(10));
         var baurate12 = new BaurateDto();
-        baurate12.setWeGeplant(50);
+        baurate12.setGfWohnenGeplant(BigDecimal.valueOf(50));
         baugebiet1.setBauraten(List.of(baurate11, baurate12));
 
         baugebiet2 = new BaugebietDto();
         baugebiet2.setTechnical(true);
         var baurate21 = new BaurateDto();
-        baurate21.setWeGeplant(50);
+        baurate21.setGfWohnenGeplant(BigDecimal.valueOf(50));
         baugebiet2.setBauraten(List.of(baurate21));
 
         baugebiet3 = new BaugebietDto();
         baugebiet3.setTechnical(true);
         var baurate31 = new BaurateDto();
-        baurate31.setWeGeplant(40);
+        baurate31.setGfWohnenGeplant(BigDecimal.valueOf(40));
         baugebiet3.setBauraten(List.of(baurate31));
 
         bauabschnitt1 = new BauabschnittDto();
@@ -239,31 +246,31 @@ class WohneinheitenDistributionValidatorTest {
 
         abfragevariante.setBauabschnitte(List.of(bauabschnitt1));
 
-        assertThat(this.wohneinheitenDistributionValidator.isValid(abfragevariante, null), is(true));
+        assertThat(this.geschossflaecheWohnenDistributionValidator.isValid(abfragevariante, null), is(true));
 
         // --
 
-        abfragevariante = new AbfragevarianteAngelegtDto();
-        abfragevariante.setGesamtanzahlWe(149);
+        abfragevariante = new AbfragevarianteBauleitplanverfahrenAngelegtDto();
+        abfragevariante.setGfWohnenGesamt(BigDecimal.valueOf(149));
 
         baugebiet1 = new BaugebietDto();
         baugebiet1.setTechnical(true);
         baurate11 = new BaurateDto();
-        baurate11.setWeGeplant(10);
+        baurate11.setGfWohnenGeplant(BigDecimal.valueOf(10));
         baurate12 = new BaurateDto();
-        baurate12.setWeGeplant(50);
+        baurate12.setGfWohnenGeplant(BigDecimal.valueOf(50));
         baugebiet1.setBauraten(List.of(baurate11, baurate12));
 
         baugebiet2 = new BaugebietDto();
         baugebiet2.setTechnical(true);
         baurate21 = new BaurateDto();
-        baurate21.setWeGeplant(50);
+        baurate21.setGfWohnenGeplant(BigDecimal.valueOf(50));
         baugebiet2.setBauraten(List.of(baurate21));
 
         baugebiet3 = new BaugebietDto();
         baugebiet3.setTechnical(true);
         baurate31 = new BaurateDto();
-        baurate31.setWeGeplant(40);
+        baurate31.setGfWohnenGeplant(BigDecimal.valueOf(40));
         baugebiet3.setBauraten(List.of(baurate31));
 
         bauabschnitt1 = new BauabschnittDto();
@@ -271,31 +278,31 @@ class WohneinheitenDistributionValidatorTest {
 
         abfragevariante.setBauabschnitte(List.of(bauabschnitt1));
 
-        assertThat(this.wohneinheitenDistributionValidator.isValid(abfragevariante, null), is(false));
+        assertThat(this.geschossflaecheWohnenDistributionValidator.isValid(abfragevariante, null), is(false));
 
         // --
 
-        abfragevariante = new AbfragevarianteAngelegtDto();
-        abfragevariante.setGesamtanzahlWe(151);
+        abfragevariante = new AbfragevarianteBauleitplanverfahrenAngelegtDto();
+        abfragevariante.setGfWohnenGesamt(BigDecimal.valueOf(151));
 
         baugebiet1 = new BaugebietDto();
         baugebiet1.setTechnical(true);
         baurate11 = new BaurateDto();
-        baurate11.setWeGeplant(10);
+        baurate11.setGfWohnenGeplant(BigDecimal.valueOf(10));
         baurate12 = new BaurateDto();
-        baurate12.setWeGeplant(50);
+        baurate12.setGfWohnenGeplant(BigDecimal.valueOf(50));
         baugebiet1.setBauraten(List.of(baurate11, baurate12));
 
         baugebiet2 = new BaugebietDto();
         baugebiet2.setTechnical(true);
         baurate21 = new BaurateDto();
-        baurate21.setWeGeplant(50);
+        baurate21.setGfWohnenGeplant(BigDecimal.valueOf(50));
         baugebiet2.setBauraten(List.of(baurate21));
 
         baugebiet3 = new BaugebietDto();
         baugebiet3.setTechnical(true);
         baurate31 = new BaurateDto();
-        baurate31.setWeGeplant(40);
+        baurate31.setGfWohnenGeplant(BigDecimal.valueOf(40));
         baugebiet3.setBauraten(List.of(baurate31));
 
         bauabschnitt1 = new BauabschnittDto();
@@ -303,12 +310,12 @@ class WohneinheitenDistributionValidatorTest {
 
         abfragevariante.setBauabschnitte(List.of(bauabschnitt1));
 
-        assertThat(this.wohneinheitenDistributionValidator.isValid(abfragevariante, null), is(false));
+        assertThat(this.geschossflaecheWohnenDistributionValidator.isValid(abfragevariante, null), is(false));
 
         // --
 
-        abfragevariante = new AbfragevarianteAngelegtDto();
-        abfragevariante.setGesamtanzahlWe(150);
+        abfragevariante = new AbfragevarianteBauleitplanverfahrenAngelegtDto();
+        abfragevariante.setGfWohnenGesamt(BigDecimal.valueOf(150));
 
         baugebiet1 = new BaugebietDto();
         baugebiet1.setTechnical(true);
@@ -331,6 +338,6 @@ class WohneinheitenDistributionValidatorTest {
 
         abfragevariante.setBauabschnitte(List.of(bauabschnitt1));
 
-        assertThat(this.wohneinheitenDistributionValidator.isValid(abfragevariante, null), is(false));
+        assertThat(this.geschossflaecheWohnenDistributionValidator.isValid(abfragevariante, null), is(false));
     }
 }

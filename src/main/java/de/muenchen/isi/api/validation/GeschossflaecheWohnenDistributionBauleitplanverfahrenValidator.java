@@ -2,7 +2,7 @@ package de.muenchen.isi.api.validation;
 
 import de.muenchen.isi.api.dto.BaugebietDto;
 import de.muenchen.isi.api.dto.BaurateDto;
-import de.muenchen.isi.api.dto.abfrageAbfrageerstellungAngelegt.AbfragevarianteAngelegtDto;
+import de.muenchen.isi.api.dto.abfrageAngelegt.AbfragevarianteBauleitplanverfahrenAngelegtDto;
 import java.math.BigDecimal;
 import java.util.List;
 import javax.validation.ConstraintValidator;
@@ -14,9 +14,13 @@ import org.springframework.stereotype.Component;
 
 @Component
 @NoArgsConstructor
-public class GeschossflaecheWohnenDistributionValidator
+public class GeschossflaecheWohnenDistributionBauleitplanverfahrenValidator
     extends DistributionValidator
-    implements ConstraintValidator<GeschossflaecheWohnenDistributionValid, AbfragevarianteAngelegtDto> {
+    implements
+        ConstraintValidator<
+            GeschossflaecheWohnenDistributionBauleitplanverfahrenValid,
+            AbfragevarianteBauleitplanverfahrenAngelegtDto
+        > {
 
     /**
      * Validiert für die im Parameter gegebene Abfragevariante die über Baugebiete bzw. Bauraten verteilte Geschossfläche Wohnen.
@@ -29,24 +33,29 @@ public class GeschossflaecheWohnenDistributionValidator
      * Andernfalls false.
      */
     @Override
-    public boolean isValid(final AbfragevarianteAngelegtDto value, final ConstraintValidatorContext context) {
-        if (ObjectUtils.isNotEmpty(value.getGesamtanzahlWe())) {
+    public boolean isValid(
+        final AbfragevarianteBauleitplanverfahrenAngelegtDto value,
+        final ConstraintValidatorContext context
+    ) {
+        if (ObjectUtils.isNotEmpty(value.getWeGesamt())) {
             return true;
         }
 
         boolean isValid = true;
 
-        final List<BaugebietDto> nonTechnicalBaugebiete = getNonTechnicalBaugebiete(value);
-        final List<BaurateDto> bauratenFromAllTechnicalBaugebiete = getBauratenFromAllTechnicalBaugebiete(value);
+        final List<BaugebietDto> nonTechnicalBaugebiete = getNonTechnicalBaugebiete(value.getBauabschnitte());
+        final List<BaurateDto> bauratenFromAllTechnicalBaugebiete = getBauratenFromAllTechnicalBaugebiete(
+            value.getBauabschnitte()
+        );
 
         final boolean containsNonTechnicalBaugebiet = CollectionUtils.isNotEmpty(nonTechnicalBaugebiete);
         final boolean containsBauratenInTechnicalBaugebiet = CollectionUtils.isNotEmpty(
             bauratenFromAllTechnicalBaugebiete
         );
 
-        final var geschossflaecheWohnenAbfragevariante = ObjectUtils.isEmpty(value.getGeschossflaecheWohnen())
+        final var geschossflaecheWohnenAbfragevariante = ObjectUtils.isEmpty(value.getGfWohnenGesamt())
             ? BigDecimal.ZERO
-            : value.getGeschossflaecheWohnen();
+            : value.getGfWohnenGesamt();
 
         if (containsNonTechnicalBaugebiet) {
             final var sumVerteilteGeschossflaecheWohnenBaugebiete = nonTechnicalBaugebiete
