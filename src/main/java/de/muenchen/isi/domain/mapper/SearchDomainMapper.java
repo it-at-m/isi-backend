@@ -4,6 +4,7 @@ import de.muenchen.isi.configuration.MapstructConfiguration;
 import de.muenchen.isi.domain.model.BaseEntityModel;
 import de.muenchen.isi.domain.model.BauleitplanverfahrenModel;
 import de.muenchen.isi.domain.model.BauvorhabenModel;
+import de.muenchen.isi.domain.model.enums.SearchResultType;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.InfrastruktureinrichtungModel;
 import de.muenchen.isi.domain.model.search.response.AbfrageSearchResultModel;
 import de.muenchen.isi.domain.model.search.response.BauvorhabenSearchResultModel;
@@ -37,7 +38,7 @@ public interface SearchDomainMapper {
 
     @Mappings(
         {
-            @Mapping(target = "type", constant = "BAUVORHABEN"),
+            @Mapping(target = "type", constant = SearchResultType.Values.BAUVORHABEN),
             @Mapping(source = "verortung.stadtbezirke", target = "stadtbezirke"),
         }
     )
@@ -45,13 +46,13 @@ public interface SearchDomainMapper {
 
     @Mappings(
         {
-            @Mapping(target = "type", constant = "ABFRAGE"),
+            @Mapping(target = "type", constant = SearchResultType.Values.ABFRAGE),
             @Mapping(source = "verortung.stadtbezirke", target = "stadtbezirke"),
         }
     )
     AbfrageSearchResultModel entity2SearchResultModel(final Bauleitplanverfahren entity);
 
-    @Mappings({ @Mapping(target = "type", constant = "INFRASTRUKTUREINRICHTUNG") })
+    @Mappings({ @Mapping(target = "type", constant = SearchResultType.Values.INFRASTRUKTUREINRICHTUNG) })
     InfrastruktureinrichtungSearchResultModel entity2SearchResultModel(final Infrastruktureinrichtung entity);
 
     default UUID map(Bauvorhaben value) {
