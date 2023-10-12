@@ -1,7 +1,6 @@
 package de.muenchen.isi.api.dto.search.response;
 
-import de.muenchen.isi.api.dto.common.StadtbezirkDto;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonVerfahrensgrundsaetzeJahr;
+import de.muenchen.isi.domain.model.common.StadtbezirkModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVerfahren;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import java.time.LocalDate;
@@ -19,15 +18,13 @@ public class AbfrageSearchResultDto extends SearchResultDto {
 
     private UUID id;
 
-    private String nameAbfrage;
+    private String name;
 
-    private Set<StadtbezirkDto> stadtbezirke;
+    private Set<StadtbezirkModel> stadtbezirke;
 
     private StatusAbfrage statusAbfrage;
 
-    private LocalDate fristStellungnahme;
-
-    private SobonVerfahrensgrundsaetzeJahr sobonJahr;
+    private LocalDate fristBearbeitung;
 
     private StandVerfahren standVerfahren;
 

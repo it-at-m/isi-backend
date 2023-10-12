@@ -12,7 +12,6 @@ import de.muenchen.isi.domain.model.infrastruktureinrichtung.Infrastruktureinric
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.KindergartenModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.KinderkrippeModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.MittelschuleModel;
-import de.muenchen.isi.domain.model.search.response.InfrastruktureinrichtungSearchResultModel;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Grundschule;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.GsNachmittagBetreuung;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.HausFuerKinder;
@@ -21,8 +20,6 @@ import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Kindergart
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Kinderkrippe;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Mittelschule;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.Mappings;
 import org.mapstruct.SubclassMapping;
 
 @Mapper(config = MapstructConfiguration.class)
@@ -42,7 +39,4 @@ public interface InfrastruktureinrichtungDomainMapper {
     @SubclassMapping(source = KinderkrippeModel.class, target = Kinderkrippe.class)
     @SubclassMapping(source = MittelschuleModel.class, target = Mittelschule.class)
     Infrastruktureinrichtung model2Entity(final InfrastruktureinrichtungModel model);
-
-    @Mappings({ @Mapping(target = "type", constant = "INFRASTRUKTUREINRICHTUNG") })
-    InfrastruktureinrichtungSearchResultModel entity2ListElementModel(final Infrastruktureinrichtung entity);
 }

@@ -11,7 +11,6 @@ import de.muenchen.isi.domain.model.InfrastrukturabfrageModel;
 import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.InfrastrukturabfrageAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageBedarfsmeldungInBearbeitungFachreferate.InfrastrukturabfrageInBearbeitungFachreferateModel;
 import de.muenchen.isi.domain.model.abfrageSachbearbeitungInBearbeitungSachbearbeitung.InfrastrukturabfrageInBearbeitungSachbearbeitungModel;
-import de.muenchen.isi.domain.model.search.response.AbfrageSearchResultModel;
 import de.muenchen.isi.infrastructure.entity.AbfrageAlt;
 import de.muenchen.isi.infrastructure.entity.Infrastrukturabfrage;
 import java.util.ArrayList;
@@ -221,19 +220,4 @@ public abstract class AbfrageAltDomainMapper {
             });
         response.setAbfragevariantenSachbearbeitung(mappedAbfragevariantenSachbearbeitung);
     }
-
-    @Mappings(
-        {
-            @Mapping(target = "type", constant = "INFRASTRUKTURABFRAGE"),
-            @Mapping(source = "abfrage.verortung.stadtbezirke", target = "stadtbezirke"),
-            @Mapping(source = "abfrage.nameAbfrage", target = "nameAbfrage"),
-            @Mapping(source = "abfrage.statusAbfrage", target = "statusAbfrage"),
-            @Mapping(source = "abfrage.fristStellungnahme", target = "fristStellungnahme"),
-            @Mapping(source = "sobonJahr", target = "sobonJahr"),
-            @Mapping(source = "abfrage.standVerfahren", target = "standVerfahren"),
-            @Mapping(source = "createdDateTime", target = "createdDateTime"),
-            @Mapping(source = "abfrage.bauvorhaben.id", target = "bauvorhaben"),
-        }
-    )
-    public abstract AbfrageSearchResultModel model2ListElementModel(final InfrastrukturabfrageModel model);
 }

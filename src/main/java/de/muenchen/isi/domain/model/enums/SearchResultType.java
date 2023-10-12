@@ -4,13 +4,13 @@ import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public enum SearchResultType {
-    INFRASTRUKTURABFRAGE,
+    ABFRAGE,
     BAUVORHABEN,
     INFRASTRUKTUREINRICHTUNG;
 
     public static class Values {
 
-        public static final String INFRASTRUKTURABFRAGE = "INFRASTRUKTURABFRAGE";
+        public static final String ABFRAGE = "ABFRAGE";
 
         public static final String BAUVORHABEN = "BAUVORHABEN";
 

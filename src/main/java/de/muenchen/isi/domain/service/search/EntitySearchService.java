@@ -103,8 +103,7 @@ public class EntitySearchService {
         final var searchResults = searchResult
             .hits()
             .stream()
-            .map(searchDomainMapper::entity2Model)
-            .map(searchDomainMapper::model2SearchResultModel)
+            .map(searchDomainMapper::entity2SearchResultModel)
             .collect(Collectors.toList());
 
         final var model = new SearchResultsModel();

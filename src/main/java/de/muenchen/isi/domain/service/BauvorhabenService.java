@@ -9,9 +9,9 @@ import de.muenchen.isi.domain.exception.FileHandlingFailedException;
 import de.muenchen.isi.domain.exception.FileHandlingWithS3FailedException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
-import de.muenchen.isi.domain.mapper.AbfrageAltDomainMapper;
+import de.muenchen.isi.domain.mapper.AbfrageDomainMapper;
 import de.muenchen.isi.domain.mapper.BauvorhabenDomainMapper;
-import de.muenchen.isi.domain.mapper.InfrastruktureinrichtungDomainMapper;
+import de.muenchen.isi.domain.mapper.SearchDomainMapper;
 import de.muenchen.isi.domain.model.AbfrageAltModel;
 import de.muenchen.isi.domain.model.AbfragevarianteModel;
 import de.muenchen.isi.domain.model.BauvorhabenModel;
@@ -21,15 +21,16 @@ import de.muenchen.isi.domain.model.infrastruktureinrichtung.Infrastruktureinric
 import de.muenchen.isi.domain.model.search.response.AbfrageSearchResultModel;
 import de.muenchen.isi.domain.model.search.response.InfrastruktureinrichtungSearchResultModel;
 import de.muenchen.isi.domain.service.filehandling.DokumentService;
+import de.muenchen.isi.infrastructure.entity.Abfrage;
 import de.muenchen.isi.infrastructure.entity.common.GlobalCounter;
 import de.muenchen.isi.infrastructure.entity.common.Stadtbezirk;
 import de.muenchen.isi.infrastructure.entity.common.Verortung;
 import de.muenchen.isi.infrastructure.entity.enums.CounterType;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Infrastruktureinrichtung;
+import de.muenchen.isi.infrastructure.repository.AbfrageRepository;
 import de.muenchen.isi.infrastructure.repository.AbfragevarianteRepository;
 import de.muenchen.isi.infrastructure.repository.BauvorhabenRepository;
-import de.muenchen.isi.infrastructure.repository.InfrastrukturabfrageRepository;
 import de.muenchen.isi.infrastructure.repository.InfrastruktureinrichtungRepository;
 import de.muenchen.isi.infrastructure.repository.common.GlobalCounterRepository;
 import de.muenchen.isi.infrastructure.repository.common.KommentarRepository;
@@ -55,13 +56,13 @@ public class BauvorhabenService {
 
     private final BauvorhabenDomainMapper bauvorhabenDomainMapper;
 
-    private final InfrastruktureinrichtungDomainMapper infrastruktureinrichtungDomainMapper;
+    private final AbfrageDomainMapper abfrageDomainMapper;
 
-    private final AbfrageAltDomainMapper abfrageDomainMapper;
+    private final SearchDomainMapper searchDomainMapper;
 
     private final BauvorhabenRepository bauvorhabenRepository;
 
-    private final InfrastrukturabfrageRepository infrastrukturabfrageRepository;
+    private final AbfrageRepository abfrageRepository;
 
     private final InfrastruktureinrichtungRepository infrastruktureinrichtungRepository;
 
@@ -279,7 +280,7 @@ public class BauvorhabenService {
         final UUID bauvorhabenId
     ) {
         return this.infrastruktureinrichtungRepository.findAllByBauvorhabenId(bauvorhabenId)
-            .map(this.infrastruktureinrichtungDomainMapper::entity2ListElementModel)
+            .map(this.searchDomainMapper::entity2SearchResultModel)
             .sorted(
                 Comparator
                     .comparing(InfrastruktureinrichtungSearchResultModel::getInfrastruktureinrichtungTyp)
@@ -296,11 +297,9 @@ public class BauvorhabenService {
      * @return Liste von {@link AbfrageSearchResultModel} welche einem Bauvorhaben zugeordent sind
      */
     public List<AbfrageSearchResultModel> getReferencedInfrastrukturabfragen(final UUID bauvorhabenId) {
-        return this.infrastrukturabfrageRepository.findAllByAbfrageBauvorhabenIdOrderByCreatedDateTimeDesc(
-                bauvorhabenId
-            )
-            .map(this.abfrageDomainMapper::entity2Model)
-            .map(this.abfrageDomainMapper::model2ListElementModel)
+        return this.abfrageRepository.findAllByBauvorhabenIdOrderByCreatedDateTimeDesc(bauvorhabenId)
+            .map(this.searchDomainMapper::entity2SearchResultModel)
+            .map(AbfrageSearchResultModel.class::cast)
             .collect(Collectors.toList());
     }
 
@@ -315,8 +314,8 @@ public class BauvorhabenService {
         final BauvorhabenModel bauvorhaben
     ) throws EntityIsReferencedException {
         final List<String> nameAbfragen =
-            this.infrastrukturabfrageRepository.findAllByAbfrageBauvorhabenId(bauvorhaben.getId())
-                .map(abfrage -> abfrage.getAbfrage().getNameAbfrage())
+            this.abfrageRepository.findAllByBauvorhabenId(bauvorhaben.getId())
+                .map(Abfrage::getName)
                 .collect(Collectors.toList());
         if (!nameAbfragen.isEmpty()) {
             final var commaSeparatedNames = String.join(", ", nameAbfragen);
