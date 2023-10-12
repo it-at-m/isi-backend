@@ -11,7 +11,7 @@ public class SearchQueryDto {
     private String searchQuery;
 
     @NotNull
-    private Boolean selectInfrastrukturabfrage;
+    private Boolean selectBauleitplanverfahren;
 
     @NotNull
     private Boolean selectBauvorhaben;

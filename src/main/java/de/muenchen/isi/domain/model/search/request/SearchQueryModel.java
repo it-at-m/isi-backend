@@ -7,7 +7,7 @@ public class SearchQueryModel {
 
     private String searchQuery;
 
-    private Boolean selectInfrastrukturabfrage;
+    private Boolean selectBauleitplanverfahren;
 
     private Boolean selectBauvorhaben;
 

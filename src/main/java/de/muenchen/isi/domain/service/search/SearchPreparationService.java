@@ -3,8 +3,8 @@ package de.muenchen.isi.domain.service.search;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.model.search.request.SearchQueryModel;
 import de.muenchen.isi.infrastructure.entity.BaseEntity;
+import de.muenchen.isi.infrastructure.entity.Bauleitplanverfahren;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
-import de.muenchen.isi.infrastructure.entity.Infrastrukturabfrage;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Grundschule;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.GsNachmittagBetreuung;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.HausFuerKinder;
@@ -55,8 +55,8 @@ public class SearchPreparationService {
      */
     public String[] getNamesOfSearchableAttributes(final List<Class<? extends BaseEntity>> searchableEntities) {
         final var searchableAttributes = new HashSet<String>();
-        if (CollectionUtils.containsAny(searchableEntities, Set.of(Infrastrukturabfrage.class))) {
-            searchableAttributes.addAll(getNamesOfSearchableAttributesForInfrastrukturabfrage());
+        if (CollectionUtils.containsAny(searchableEntities, Set.of(Bauleitplanverfahren.class))) {
+            searchableAttributes.addAll(getNamesOfSearchableAttributesForBauleitplanverfahren());
         }
         if (CollectionUtils.containsAny(searchableEntities, Set.of(Bauvorhaben.class))) {
             searchableAttributes.addAll(getNamesOfSearchableAttributesForBauvorhaben());
@@ -79,16 +79,17 @@ public class SearchPreparationService {
         return searchableAttributes.toArray(String[]::new);
     }
 
-    protected static Set<String> getNamesOfSearchableAttributesForInfrastrukturabfrage() {
+    protected static Set<String> getNamesOfSearchableAttributesForBauleitplanverfahren() {
         final var searchableAttributes = new HashSet<String>();
-        searchableAttributes.add("abfrage.adresse.strasse");
-        searchableAttributes.add("abfrage.adresse.hausnummer");
-        searchableAttributes.add("abfrage.verortung.stadtbezirke.name");
-        searchableAttributes.add("abfrage.verortung.gemarkungen.name");
-        searchableAttributes.add("abfrage.verortung.gemarkungen.flurstuecke.nummer");
-        searchableAttributes.add("abfrage.statusAbfrage");
-        searchableAttributes.add("abfrage.bebauungsplannummer");
-        searchableAttributes.add("abfrage.nameAbfrage");
+        searchableAttributes.add("adresse.strasse");
+        searchableAttributes.add("adresse.hausnummer");
+        searchableAttributes.add("verortung.stadtbezirke.name");
+        searchableAttributes.add("verortung.gemarkungen.name");
+        searchableAttributes.add("verortung.gemarkungen.flurstuecke.nummer");
+        searchableAttributes.add("statusAbfrage");
+        searchableAttributes.add("standVerfahren");
+        searchableAttributes.add("bebauungsplannummer");
+        searchableAttributes.add("name");
         searchableAttributes.add("abfragevarianten.realisierungVon");
         searchableAttributes.add("abfragevariantenSachbearbeitung.realisierungVon");
         return searchableAttributes;
@@ -127,8 +128,8 @@ public class SearchPreparationService {
     public List<Class<? extends BaseEntity>> getSearchableEntities(final SearchQueryModel searchQueryInformation)
         throws EntityNotFoundException {
         final List<Class<? extends BaseEntity>> searchableEntities = new ArrayList<>();
-        if (BooleanUtils.isTrue(searchQueryInformation.getSelectInfrastrukturabfrage())) {
-            searchableEntities.add(Infrastrukturabfrage.class);
+        if (BooleanUtils.isTrue(searchQueryInformation.getSelectBauleitplanverfahren())) {
+            searchableEntities.add(Bauleitplanverfahren.class);
         }
         if (BooleanUtils.isTrue(searchQueryInformation.getSelectBauvorhaben())) {
             searchableEntities.add(Bauvorhaben.class);
