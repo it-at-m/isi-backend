@@ -5,6 +5,7 @@
 package de.muenchen.isi.api.dto.abfrageAngelegt;
 
 import de.muenchen.isi.api.dto.BauabschnittDto;
+import de.muenchen.isi.api.validation.TechnicalAttributesValid;
 import de.muenchen.isi.api.validation.WesentlicheRechtsgrundlageBauleitplanverfahrenValid;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.WesentlicheRechtsgrundlage;
 import java.math.BigDecimal;
@@ -83,5 +84,6 @@ public class AbfragevarianteBauleitplanverfahrenAngelegtDto {
 
     private Integer weWeiteresNichtInfrastrukturrelevantesWohnen;
 
+    @TechnicalAttributesValid
     private List<@Valid @NotNull BauabschnittDto> bauabschnitte;
 }
