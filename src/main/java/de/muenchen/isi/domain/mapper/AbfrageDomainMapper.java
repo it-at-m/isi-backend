@@ -9,11 +9,13 @@ import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.model.AbfrageModel;
 import de.muenchen.isi.domain.model.AbfragevarianteBauleitplanverfahrenModel;
 import de.muenchen.isi.domain.model.BauleitplanverfahrenModel;
+import de.muenchen.isi.domain.model.abfrageAngelegt.AbfrageAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageAngelegt.BauleitplanverfahrenAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungFachreferat.BauleitplanverfahrenInBearbeitungFachreferatModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.BauleitplanverfahrenInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.infrastructure.entity.Abfrage;
 import de.muenchen.isi.infrastructure.entity.Bauleitplanverfahren;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.repository.BauvorhabenRepository;
 import java.util.ArrayList;
 import lombok.extern.slf4j.Slf4j;
@@ -59,6 +61,16 @@ public abstract class AbfrageDomainMapper {
                 return new EntityNotFoundException(message);
             });
         entity.setBauvorhaben(bauvorhaben);
+    }
+
+    public AbfrageModel request2NewModel(final AbfrageAngelegtModel request) throws EntityNotFoundException {
+        if (ArtAbfrage.BAULEITPLANVERFAHREN.equals(request.getArtAbfrage())) {
+            return this.request2Model((BauleitplanverfahrenAngelegtModel) request, new BauleitplanverfahrenModel());
+        } else {
+            final var message = "Die Art der Abfrage wird nicht unterstützt.";
+            log.error(message);
+            throw new EntityNotFoundException(message);
+        }
     }
 
     @Mappings(
