@@ -6,6 +6,7 @@ package de.muenchen.isi.api.controller;
 
 import de.muenchen.isi.api.dto.AbfrageDto;
 import de.muenchen.isi.api.dto.abfrageAngelegt.AbfrageAngelegtDto;
+import de.muenchen.isi.api.dto.abfrageInBearbeitungSachbearbeitung.AbfrageInBearbeitungSachbearbeitungDto;
 import de.muenchen.isi.api.dto.error.InformationResponseDto;
 import de.muenchen.isi.api.mapper.AbfrageApiMapper;
 import de.muenchen.isi.domain.exception.AbfrageStatusNotAllowedException;
@@ -43,7 +44,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/abfragen")
+@RequestMapping("/abfrage")
 @Tag(name = "Abfragen", description = "API zum interagieren mit Abfragen")
 @Validated
 public class AbfrageController {
@@ -107,7 +108,7 @@ public class AbfrageController {
         return ResponseEntity.status(HttpStatus.CREATED).body(dto);
     }
 
-    @PatchMapping("/abfrage-angelegt/{id}")
+    @PatchMapping("/angelegt/{id}")
     @Transactional(rollbackFor = { OptimisticLockingException.class, UniqueViolationException.class })
     @Operation(summary = "Aktualisierung einer Abfrage im Status ANGELEGT.")
     @ApiResponses(
@@ -148,6 +149,43 @@ public class AbfrageController {
         throws UniqueViolationException, FileHandlingFailedException, FileHandlingWithS3FailedException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException {
         final var requestModel = abfrageApiMapper.dto2Model(abfrage);
         final var responseModel = abfrageService.patchAngelegt(requestModel, id);
+        final var dto = abfrageApiMapper.model2Dto(responseModel);
+        return ResponseEntity.ok(dto);
+    }
+
+    @PatchMapping("/in-bearbeitung-sachbearbeitung/{id}")
+    @Transactional(rollbackFor = { OptimisticLockingException.class, UniqueViolationException.class })
+    @Operation(summary = "Aktualisierung einer Abfrage im Status IN_BEARBEITUNG_SACHBEARBEITUNG.")
+    @ApiResponses(
+        value = {
+            @ApiResponse(responseCode = "200", description = "OK -> Abfrage wurde erfolgreich aktualisiert."),
+            @ApiResponse(
+                responseCode = "400",
+                description = "BAD_REQUEST -> Abfrage konnte nicht aktualisiert werden, überprüfen sie die Eingabe oder die Abfrage befindet sich in einem unzulässigen Status",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+            @ApiResponse(
+                responseCode = "404",
+                description = "NOT_FOUND -> Es gibt keine Abfrage mit der ID.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+            @ApiResponse(
+                responseCode = "412",
+                description = "PRECONDITION_FAILED -> In der Anwendung ist bereits eine neuere Version der Entität gespeichert.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+        }
+    )
+    @PreAuthorize(
+        "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_PATCH_ABFRAGE_IN_BEARBEITUNG_SACHBEARBEITUNG.name())"
+    )
+    public ResponseEntity<AbfrageDto> patchInBearbeitungSachbearbeitung(
+        @RequestBody @Valid @NotNull final AbfrageInBearbeitungSachbearbeitungDto abfrage,
+        @PathVariable @NotNull final UUID id
+    )
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException {
+        final var requestModel = abfrageApiMapper.dto2Model(abfrage);
+        final var responseModel = abfrageService.patchInBearbeitungSachbearbeitung(requestModel, id);
         final var dto = abfrageApiMapper.model2Dto(responseModel);
         return ResponseEntity.ok(dto);
     }
