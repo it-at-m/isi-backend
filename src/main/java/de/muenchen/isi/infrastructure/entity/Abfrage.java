@@ -36,7 +36,7 @@ import org.hibernate.search.mapper.pojo.mapping.definition.annotation.NonStandar
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-@Table(indexes = { @Index(name = "name_index", columnList = "name") })
+@Table(indexes = { @Index(name = "abfrage_name_index", columnList = "name") })
 public abstract class Abfrage extends BaseEntity {
 
     /**

@@ -13,7 +13,7 @@ import lombok.ToString;
 @Table(
     indexes = {
         @Index(
-            name = "abfragevariante_bauleitplanverfahren_id_index",
+            name = "bedarfsmeldung_fachreferate_abfragevariante_bauleitplanverfahren_id_index",
             columnList = "abfragevariante_bauleitplanverfahren_id"
         ),
     }

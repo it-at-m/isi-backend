@@ -17,7 +17,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 @Entity
-@Table(indexes = { @Index(name = "bauabschnitt_id_index", columnList = "bauabschnitt_id") })
+@Table(indexes = { @Index(name = "baugebiet_bauabschnitt_id_index", columnList = "bauabschnitt_id") })
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)

@@ -46,7 +46,7 @@ import org.hibernate.search.mapper.pojo.mapping.definition.annotation.NonStandar
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-@Table(indexes = { @Index(name = "name_vorhaben_index", columnList = "nameVorhaben") })
+@Table(indexes = { @Index(name = "bauvorhaben_name_index", columnList = "nameVorhaben") })
 @TypeDef(name = "json", typeClass = JsonType.class)
 @Indexed
 public class Bauvorhaben extends BaseEntity {

@@ -18,7 +18,9 @@ import lombok.ToString;
 @Entity
 @Table(
     uniqueConstraints = { @UniqueConstraint(columnNames = { "jahr", "wohnungstyp" }) },
-    indexes = { @Index(name = "jahr_wohnungstyp_index", columnList = "jahr, wohnungstyp") }
+    indexes = {
+        @Index(name = "staedtebaulicher_orientierungswert_jahr_wohnungstyp_index", columnList = "jahr, wohnungstyp"),
+    }
 )
 @Data
 @ToString(callSuper = true)

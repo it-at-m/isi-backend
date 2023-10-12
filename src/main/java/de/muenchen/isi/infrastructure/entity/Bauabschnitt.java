@@ -18,7 +18,7 @@ import lombok.ToString;
 @Table(
     indexes = {
         @Index(
-            name = "abfragevariante_bauleitplanverfahren_id_index",
+            name = "bauabschnitt_abfragevariante_bauleitplanverfahren_id_index",
             columnList = "abfragevariante_bauleitplanverfahren_id"
         ),
     }

@@ -20,8 +20,8 @@ import org.hibernate.annotations.Type;
 @EqualsAndHashCode(callSuper = true)
 @Table(
     indexes = {
-        @Index(name = "bauvorhaben_id_index", columnList = "bauvorhaben_id"),
-        @Index(name = "infrastruktureinrichtung_id_index", columnList = "infrastruktureinrichtung_id"),
+        @Index(name = "kommentar_bauvorhaben_id_index", columnList = "bauvorhaben_id"),
+        @Index(name = "kommentar_infrastruktureinrichtung_id_index", columnList = "infrastruktureinrichtung_id"),
     }
 )
 public class Kommentar extends BaseEntity {

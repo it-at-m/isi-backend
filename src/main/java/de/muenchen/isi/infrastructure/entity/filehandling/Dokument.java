@@ -16,8 +16,8 @@ import lombok.ToString;
 @Entity
 @Table(
     indexes = {
-        @Index(name = "bauleitplanverfahren_id_index", columnList = "bauleitplanverfahren_id"),
-        @Index(name = "bauvorhaben_id_index", columnList = "bauvorhaben_id"),
+        @Index(name = "dokument_bauleitplanverfahren_id_index", columnList = "bauleitplanverfahren_id"),
+        @Index(name = "dokument_bauvorhaben_id_index", columnList = "bauvorhaben_id"),
     }
 )
 @Data
