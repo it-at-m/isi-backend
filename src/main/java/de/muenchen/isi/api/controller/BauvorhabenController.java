@@ -5,7 +5,7 @@ import de.muenchen.isi.api.dto.BauvorhabenDto;
 import de.muenchen.isi.api.dto.error.InformationResponseDto;
 import de.muenchen.isi.api.dto.search.response.AbfrageSearchResultDto;
 import de.muenchen.isi.api.dto.search.response.InfrastruktureinrichtungSearchResultDto;
-import de.muenchen.isi.api.mapper.AbfrageApiMapper;
+import de.muenchen.isi.api.mapper.AbfrageAltApiMapper;
 import de.muenchen.isi.api.mapper.AbfragevarianteApiMapper;
 import de.muenchen.isi.api.mapper.BauvorhabenApiMapper;
 import de.muenchen.isi.api.mapper.InfrastruktureinrichtungApiMapper;
@@ -59,7 +59,7 @@ public class BauvorhabenController {
 
     private final AbfragevarianteApiMapper abfragevarianteApiMapper;
 
-    private final AbfrageApiMapper abfrageApiMapper;
+    private final AbfrageAltApiMapper abfrageApiMapper;
 
     private final SearchApiMapper searchApiMapper;
 

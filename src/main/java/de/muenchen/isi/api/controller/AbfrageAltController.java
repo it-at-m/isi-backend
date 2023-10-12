@@ -9,7 +9,7 @@ import de.muenchen.isi.api.dto.abfrageAbfrageerstellungAngelegt.Infrastrukturabf
 import de.muenchen.isi.api.dto.abfrageBedarfsmeldungInBearbeitungFachreferate.InfrastrukturabfrageInBearbeitungFachreferateDto;
 import de.muenchen.isi.api.dto.abfrageSachbearbeitungInBearbeitungSachbearbeitung.InfrastrukturabfrageInBearbeitungSachbearbeitungDto;
 import de.muenchen.isi.api.dto.error.InformationResponseDto;
-import de.muenchen.isi.api.mapper.AbfrageApiMapper;
+import de.muenchen.isi.api.mapper.AbfrageAltApiMapper;
 import de.muenchen.isi.domain.exception.AbfrageStatusNotAllowedException;
 import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
@@ -59,7 +59,7 @@ public class AbfrageAltController {
 
     private final BauvorhabenService bauvorhabenService;
 
-    private final AbfrageApiMapper abfrageApiMapper;
+    private final AbfrageAltApiMapper abfrageApiMapper;
 
     private final AbfrageAltDomainMapper abfrageDomainMapper;
 

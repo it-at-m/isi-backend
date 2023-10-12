@@ -3,7 +3,6 @@ package de.muenchen.isi.api.dto.abfrageAngelegt;
 import de.muenchen.isi.api.dto.common.AdresseDto;
 import de.muenchen.isi.api.dto.common.VerortungDto;
 import de.muenchen.isi.api.dto.filehandling.DokumentDto;
-import de.muenchen.isi.api.validation.GeschossflaecheWohnenSobonUrsaechlichValid;
 import de.muenchen.isi.api.validation.HasAllowedNumberOfDocuments;
 import de.muenchen.isi.api.validation.NotUnspecified;
 import de.muenchen.isi.api.validation.StandVerfahrenBauleitplanverfahrenValid;
@@ -22,7 +21,6 @@ import lombok.ToString;
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-@GeschossflaecheWohnenSobonUrsaechlichValid
 public class BauleitplanverfahrenAngelegtDto extends AbfrageAngelegtDto {
 
     @Size(max = 255, message = "Es sind maximal {max} Zeichen erlaubt")
