@@ -6,6 +6,7 @@ package de.muenchen.isi.infrastructure.entity;
 
 import de.muenchen.isi.infrastructure.adapter.search.IntegerSuggestionBinder;
 import de.muenchen.isi.infrastructure.adapter.search.IntegerToStringValueBridge;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.WesentlicheRechtsgrundlage;
 import de.muenchen.isi.infrastructure.repository.search.SearchwordSuggesterRepository;
 import java.math.BigDecimal;
@@ -14,7 +15,6 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
-import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -131,11 +131,20 @@ public class AbfragevarianteBauleitplanverfahren extends BaseEntity {
     @Column
     private Integer weWeiteresNichtInfrastrukturrelevantesWohnen;
 
-    @Embedded
-    private AbfragevarianteSachbearbeitung abfragevarianteSachbearbeitung;
+    @Column(precision = 10, scale = 2, nullable = true)
+    private BigDecimal gfWohnenPlanungsursaechlich;
 
-    @Embedded
-    private AbfragevarianteFachreferat abfragevarianteFachreferat;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = true)
+    private SobonOrientierungswertJahr sobonOrientierungswertJahr;
+
+    @Column(nullable = true)
+    private String anmerkung;
+
+    @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval = true)
+    @JoinColumn(name = "abfragevariante_bauleitplanverfahren_id", referencedColumnName = "id")
+    @OrderBy("createdDateTime asc")
+    private List<BedarfsmeldungFachreferate> bedarfsmeldungFachreferate;
 
     @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "abfragevariante_bauleitplanverfahren_id")

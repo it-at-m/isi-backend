@@ -4,7 +4,8 @@
  */
 package de.muenchen.isi.domain.model.abfrageInBearbeitungFachreferat;
 
-import de.muenchen.isi.domain.model.AbfragevarianteFachreferatModel;
+import de.muenchen.isi.domain.model.BedarfsmeldungFachreferateModel;
+import java.util.List;
 import java.util.UUID;
 import lombok.Data;
 
@@ -15,5 +16,5 @@ public class AbfragevarianteBauleitplanverfahrenInBearbeitungFachreferatModel {
 
     private Long version;
 
-    private AbfragevarianteFachreferatModel abfragevarianteFachreferat;
+    private List<BedarfsmeldungFachreferateModel> bedarfsmeldungFachreferate;
 }

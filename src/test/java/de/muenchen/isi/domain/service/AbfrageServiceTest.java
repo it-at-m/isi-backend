@@ -21,7 +21,6 @@ import de.muenchen.isi.domain.mapper.DokumentDomainMapper;
 import de.muenchen.isi.domain.mapper.DokumentDomainMapperImpl;
 import de.muenchen.isi.domain.model.AbfrageAltModel;
 import de.muenchen.isi.domain.model.AbfragevarianteModel;
-import de.muenchen.isi.domain.model.AbfragevarianteSachbearbeitungModel;
 import de.muenchen.isi.domain.model.BauvorhabenModel;
 import de.muenchen.isi.domain.model.BedarfsmeldungFachreferateModel;
 import de.muenchen.isi.domain.model.InfrastrukturabfrageModel;
@@ -35,7 +34,6 @@ import de.muenchen.isi.domain.model.abfrageSachbearbeitungInBearbeitungSachbearb
 import de.muenchen.isi.domain.service.filehandling.DokumentService;
 import de.muenchen.isi.infrastructure.entity.AbfrageAlt;
 import de.muenchen.isi.infrastructure.entity.Abfragevariante;
-import de.muenchen.isi.infrastructure.entity.AbfragevarianteSachbearbeitung;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
 import de.muenchen.isi.infrastructure.entity.BedarfsmeldungFachreferate;
 import de.muenchen.isi.infrastructure.entity.Infrastrukturabfrage;
@@ -464,7 +462,6 @@ class AbfrageServiceTest {
         abfragevarianteBedarfsmeldungToSave.setAnzahlKindergartengruppen(3);
         abfragevarianteBedarfsmeldungToSave.setAnzahlHortgruppen(2);
         abfragevarianteBedarfsmeldungToSave.setAnzahlGrundschulzuege(1);
-        abfragevarianteToSaveSave.setAbfragevarianteSachbearbeitung(new AbfragevarianteSachbearbeitung());
         //abfragevarianteToSaveSave
         //.getAbfragevarianteSachbearbeitung()
         //.setBedarfsmeldungFachreferate(List.of(abfragevarianteBedarfsmeldungToSave));
@@ -481,7 +478,6 @@ class AbfrageServiceTest {
         abfragevarianteSachbearbeitungBedarfsmeldungToSave.setAnzahlKindergartengruppen(3);
         abfragevarianteSachbearbeitungBedarfsmeldungToSave.setAnzahlHortgruppen(4);
         abfragevarianteSachbearbeitungBedarfsmeldungToSave.setAnzahlGrundschulzuege(5);
-        abfragevarianteSachbearbeitungToSave.setAbfragevarianteSachbearbeitung(new AbfragevarianteSachbearbeitung());
         //abfragevarianteSachbearbeitungToSave
         //.getAbfragevarianteSachbearbeitung()
         //.setBedarfsmeldungFachreferate(List.of(abfragevarianteSachbearbeitungBedarfsmeldungToSave));
@@ -508,7 +504,6 @@ class AbfrageServiceTest {
         abfragevarianteBedarfsmeldungSaved.setAnzahlKindergartengruppen(3);
         abfragevarianteBedarfsmeldungSaved.setAnzahlHortgruppen(2);
         abfragevarianteBedarfsmeldungSaved.setAnzahlGrundschulzuege(1);
-        abfragevarianteSaved.setAbfragevarianteSachbearbeitung(new AbfragevarianteSachbearbeitung());
         //abfragevarianteSaved
         //.getAbfragevarianteSachbearbeitung()
         //.setBedarfsmeldungFachreferate(List.of(abfragevarianteBedarfsmeldungSaved));
@@ -525,7 +520,6 @@ class AbfrageServiceTest {
         abfragevarianteSachbearbeitungBedarfsmeldungSaved.setAnzahlKindergartengruppen(3);
         abfragevarianteSachbearbeitungBedarfsmeldungSaved.setAnzahlHortgruppen(4);
         abfragevarianteSachbearbeitungBedarfsmeldungSaved.setAnzahlGrundschulzuege(5);
-        abfragevarianteSachbearbeitungSaved.setAbfragevarianteSachbearbeitung(new AbfragevarianteSachbearbeitung());
         //abfragevarianteSachbearbeitungSaved
         //.getAbfragevarianteSachbearbeitung()
         //.setBedarfsmeldungFachreferate(List.of(abfragevarianteSachbearbeitungBedarfsmeldungSaved));
@@ -559,7 +553,6 @@ class AbfrageServiceTest {
         abfragevarianteBedarfsmeldungExpected.setAnzahlKindergartengruppen(3);
         abfragevarianteBedarfsmeldungExpected.setAnzahlHortgruppen(2);
         abfragevarianteBedarfsmeldungExpected.setAnzahlGrundschulzuege(1);
-        abfragevarianteExpected.setAbfragevarianteSachbearbeitung(new AbfragevarianteSachbearbeitungModel());
         //abfragevarianteExpected
         //.getAbfragevarianteSachbearbeitung()
         //.setBedarfsmeldungFachreferate(List.of(abfragevarianteBedarfsmeldungExpected));
@@ -576,9 +569,6 @@ class AbfrageServiceTest {
         abfragevarianteSachbearbeitungBedarfsmeldungExpected.setAnzahlKindergartengruppen(3);
         abfragevarianteSachbearbeitungBedarfsmeldungExpected.setAnzahlHortgruppen(4);
         abfragevarianteSachbearbeitungBedarfsmeldungExpected.setAnzahlGrundschulzuege(5);
-        abfragevarianteSachbearbeitungExpected.setAbfragevarianteSachbearbeitung(
-            new AbfragevarianteSachbearbeitungModel()
-        );
         //abfragevarianteSachbearbeitungExpected
         //.getAbfragevarianteSachbearbeitung()
         //.setBedarfsmeldungFachreferate(List.of(abfragevarianteSachbearbeitungBedarfsmeldungExpected));

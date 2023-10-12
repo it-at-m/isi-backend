@@ -5,6 +5,7 @@
 package de.muenchen.isi.api.dto;
 
 import de.muenchen.isi.api.validation.WesentlicheRechtsgrundlageBauleitplanverfahrenValid;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.WesentlicheRechtsgrundlage;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -73,11 +74,13 @@ public class AbfragevarianteBauleitplanverfahrenDto extends BaseEntityDto {
 
     private Integer weWeiteresNichtInfrastrukturrelevantesWohnen;
 
-    @Valid
-    private AbfragevarianteSachbearbeitungDto abfragevarianteSachbearbeitung;
+    private BigDecimal gfWohnenPlanungsursaechlich;
 
-    @Valid
-    private AbfragevarianteFachreferatDto abfragevarianteFachreferat;
+    private SobonOrientierungswertJahr sobonOrientierungswertJahr;
+
+    private String anmerkung;
+
+    private List<@Valid BedarfsmeldungFachreferateDto> bedarfsmeldungFachreferate;
 
     private List<@Valid @NotNull BauabschnittDto> bauabschnitte;
 }

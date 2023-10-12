@@ -4,6 +4,7 @@
  */
 package de.muenchen.isi.domain.model;
 
+import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.WesentlicheRechtsgrundlage;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -61,9 +62,13 @@ public class AbfragevarianteBauleitplanverfahrenModel extends BaseEntityModel {
 
     private Integer weWeiteresNichtInfrastrukturrelevantesWohnen;
 
-    private AbfragevarianteSachbearbeitungModel abfragevarianteSachbearbeitung;
+    private BigDecimal gfWohnenPlanungsursaechlich;
 
-    private AbfragevarianteFachreferatModel abfragevarianteFachreferat;
+    private SobonOrientierungswertJahr sobonOrientierungswertJahr;
+
+    private String anmerkung;
+
+    private List<BedarfsmeldungFachreferateModel> bedarfsmeldungFachreferate;
 
     private List<BauabschnittModel> bauabschnitte;
 }

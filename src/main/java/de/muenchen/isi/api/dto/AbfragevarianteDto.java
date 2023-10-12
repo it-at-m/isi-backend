@@ -5,6 +5,7 @@
 package de.muenchen.isi.api.dto;
 
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Planungsrecht;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
@@ -55,5 +56,9 @@ public class AbfragevarianteDto extends BaseEntityDto {
 
     private List<BauabschnittDto> bauabschnitte;
 
-    private AbfragevarianteSachbearbeitungDto abfragevarianteSachbearbeitung;
+    private BigDecimal gfWohnenPlanungsursaechlich;
+
+    private SobonOrientierungswertJahr sobonOrientierungswertJahr;
+
+    private String anmerkung;
 }

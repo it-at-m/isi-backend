@@ -4,7 +4,8 @@
  */
 package de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung;
 
-import de.muenchen.isi.domain.model.AbfragevarianteSachbearbeitungModel;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
+import java.math.BigDecimal;
 import java.util.UUID;
 import lombok.Data;
 
@@ -15,5 +16,9 @@ public class AbfragevarianteBauleitplanverfahrenSachbearbeitungInBearbeitungSach
 
     private Long version;
 
-    private AbfragevarianteSachbearbeitungModel abfragevarianteSachbearbeitung;
+    private BigDecimal gfWohnenPlanungsursaechlich;
+
+    private SobonOrientierungswertJahr sobonOrientierungswertJahr;
+
+    private String anmerkung;
 }

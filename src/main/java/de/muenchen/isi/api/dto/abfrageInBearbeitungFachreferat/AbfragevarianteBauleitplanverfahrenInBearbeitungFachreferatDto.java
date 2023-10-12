@@ -4,7 +4,8 @@
  */
 package de.muenchen.isi.api.dto.abfrageInBearbeitungFachreferat;
 
-import de.muenchen.isi.api.dto.AbfragevarianteFachreferatDto;
+import de.muenchen.isi.api.dto.BedarfsmeldungFachreferateDto;
+import java.util.List;
 import java.util.UUID;
 import javax.validation.Valid;
 import lombok.Data;
@@ -16,6 +17,5 @@ public class AbfragevarianteBauleitplanverfahrenInBearbeitungFachreferatDto {
 
     private Long version;
 
-    @Valid
-    private AbfragevarianteFachreferatDto abfragevarianteFachreferat;
+    private List<@Valid BedarfsmeldungFachreferateDto> bedarfsmeldungFachreferate;
 }

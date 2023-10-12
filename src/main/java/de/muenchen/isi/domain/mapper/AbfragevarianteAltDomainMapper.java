@@ -27,7 +27,9 @@ public interface AbfragevarianteAltDomainMapper {
         {
             @Mapping(target = "lastModifiedDateTime", ignore = true),
             @Mapping(target = "createdDateTime", ignore = true),
-            @Mapping(target = "abfragevarianteSachbearbeitung", ignore = true),
+            @Mapping(target = "gfWohnenPlanungsursaechlich", ignore = true),
+            @Mapping(target = "sobonOrientierungswertJahr", ignore = true),
+            @Mapping(target = "anmerkung", ignore = true),
         }
     )
     AbfragevarianteModel request2Model(
@@ -39,7 +41,9 @@ public interface AbfragevarianteAltDomainMapper {
     @Mappings(
         {
             @Mapping(target = "version", ignore = false),
-            @Mapping(target = "abfragevarianteSachbearbeitung", ignore = false),
+            @Mapping(target = "gfWohnenPlanungsursaechlich", ignore = false),
+            @Mapping(target = "sobonOrientierungswertJahr", ignore = false),
+            @Mapping(target = "anmerkung", ignore = false),
         }
     )
     AbfragevarianteModel request2Model(

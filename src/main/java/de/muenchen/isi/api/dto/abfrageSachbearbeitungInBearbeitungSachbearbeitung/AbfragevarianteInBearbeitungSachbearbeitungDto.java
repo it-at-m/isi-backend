@@ -1,9 +1,8 @@
 package de.muenchen.isi.api.dto.abfrageSachbearbeitungInBearbeitungSachbearbeitung;
 
-import de.muenchen.isi.api.dto.AbfragevarianteSachbearbeitungDto;
 import de.muenchen.isi.api.dto.abfrageAbfrageerstellungAngelegt.AbfragevarianteAngelegtDto;
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
+import java.math.BigDecimal;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -13,7 +12,9 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 public class AbfragevarianteInBearbeitungSachbearbeitungDto extends AbfragevarianteAngelegtDto {
 
-    @NotNull
-    @Valid
-    private AbfragevarianteSachbearbeitungDto abfragevarianteSachbearbeitung;
+    private BigDecimal gfWohnenPlanungsursaechlich;
+
+    private SobonOrientierungswertJahr sobonOrientierungswertJahr;
+
+    private String anmerkung;
 }
