@@ -33,10 +33,10 @@ public class GeschossflaecheWohnenSobonUrsaechlichValidator
         ) {
             return true;
         }
-        return !value
+        return value
             .getAbfragevarianten()
             .stream()
-            .anyMatch(abfragevariante -> {
+            .noneMatch(abfragevariante -> {
                 final var containsRelevantRechtsgrundlagen = CollectionUtils.containsAny(
                     abfragevariante.getWesentlicheRechtsgrundlage(),
                     WesentlicheRechtsgrundlage.VORHABENSBEZOGENER_BEBAUUNGSPLAN
