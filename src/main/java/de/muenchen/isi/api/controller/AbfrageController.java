@@ -4,9 +4,11 @@
  */
 package de.muenchen.isi.api.controller;
 
-import de.muenchen.isi.api.dto.BauleitplanverfahrenDto;
+import de.muenchen.isi.api.dto.AbfrageDto;
 import de.muenchen.isi.api.dto.error.InformationResponseDto;
+import de.muenchen.isi.api.mapper.AbfrageApiMapper;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
+import de.muenchen.isi.domain.service.AbfrageService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -34,6 +36,10 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 public class AbfrageController {
 
+    private final AbfrageService abfrageService;
+
+    private final AbfrageApiMapper abfrageApiMapper;
+
     @GetMapping("/{id}")
     @Transactional(readOnly = true)
     @Operation(summary = "Lesen einer Abfrage.")
@@ -48,8 +54,9 @@ public class AbfrageController {
         }
     )
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_READ_ABFRAGE.name())")
-    public ResponseEntity<BauleitplanverfahrenDto> getAbfrage(@PathVariable @NotNull final UUID id)
-        throws EntityNotFoundException {
-        return ResponseEntity.ok(new BauleitplanverfahrenDto());
+    public ResponseEntity<AbfrageDto> getById(@PathVariable @NotNull final UUID id) throws EntityNotFoundException {
+        final var model = abfrageService.getById(id);
+        final var dto = abfrageApiMapper.model2Dto(model);
+        return ResponseEntity.ok(dto);
     }
 }
