@@ -97,7 +97,7 @@ public class SearchPreparationService {
     protected static Set<String> getNamesOfSearchableAttributesForBauvorhaben() {
         final var searchableAttributes = new HashSet<String>();
         searchableAttributes.add("nameVorhaben");
-        searchableAttributes.add("standVorhaben");
+        searchableAttributes.add("standVerfahren");
         searchableAttributes.add("bauvorhabenNummer");
         searchableAttributes.add("adresse.strasse");
         searchableAttributes.add("adresse.hausnummer");
