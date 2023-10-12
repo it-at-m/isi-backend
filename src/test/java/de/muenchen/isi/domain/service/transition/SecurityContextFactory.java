@@ -28,7 +28,7 @@ public class SecurityContextFactory implements WithSecurityContextFactory<MockCu
             authoritiesRoles.add("ISI_BACKEND_ZURUECK_AN_ABFRAGEERSTELLUNG_ABFRAGE");
             authoritiesRoles.add("ISI_BACKEND_IN_BEARBEITUNG_SETZTEN_ABFRAGE");
             authoritiesRoles.add("ISI_BACKEND_ZURUECK_AN_SACHBEARBEITUNG_ABFRAGE");
-            authoritiesRoles.add("ISI_BACKEND_SCHLIESSEN_ABFRAGE");
+            authoritiesRoles.add("ISI_BACKEND_KEINE_BEARBEITUNG_NOETIG_ABFRAGE");
             authoritiesRoles.add("ISI_BACKEND_VERSCHICKEN_DER_STELLUNGNAHME_ABFRAGE");
             authoritiesRoles.add("ISI_BACKEND_BEDARFSMELDUNG_ERFOLGTE_ABFRAGE");
             authoritiesRoles.add("ISI_BACKEND_SPEICHERN_VON_SOZIALINFRASTRUKTUR_VERSORGUNG_ABFRAGE");
@@ -40,7 +40,7 @@ public class SecurityContextFactory implements WithSecurityContextFactory<MockCu
             authoritiesRoles.add("ISI_BACKEND_ZURUECK_AN_ABFRAGEERSTELLUNG_ABFRAGE");
             authoritiesRoles.add("ISI_BACKEND_IN_BEARBEITUNG_SETZTEN_ABFRAGE");
             authoritiesRoles.add("ISI_BACKEND_ZURUECK_AN_SACHBEARBEITUNG_ABFRAGE");
-            authoritiesRoles.add("ISI_BACKEND_SCHLIESSEN_ABFRAGE");
+            authoritiesRoles.add("ISI_BACKEND_KEINE_BEARBEITUNG_NOETIG_ABFRAGE");
             authoritiesRoles.add("ISI_BACKEND_VERSCHICKEN_DER_STELLUNGNAHME_ABFRAGE");
             authoritiesRoles.add("ISI_BACKEND_BEDARFSMELDUNG_ERFOLGTE_ABFRAGE");
             authoritiesRoles.add("ISI_BACKEND_ERNEUTE_BEARBEITUNG_ABFRAGE");

@@ -304,8 +304,8 @@ public class TransitionModelTest {
 
         TransitionModel thirdPossibleTransition = new TransitionModel();
         thirdPossibleTransition.setIndex(5);
-        thirdPossibleTransition.setButtonName("ABFRAGE ABSCHLIESSEN");
-        thirdPossibleTransition.setUrl("abfrage-schliessen");
+        thirdPossibleTransition.setButtonName("ABFRAGE SCHLIEßEN");
+        thirdPossibleTransition.setUrl("keine-bearbeitung-noetig");
         thirdPossibleTransition.setDialogText("Die Abfrage wird abgeschlossen. Sie können eine Anmerkung hinzufügen.");
 
         expected.add(thirdPossibleTransition);
@@ -363,10 +363,9 @@ public class TransitionModelTest {
 
         TransitionModel thirdPossibleTransition = new TransitionModel();
         thirdPossibleTransition.setIndex(5);
-        thirdPossibleTransition.setButtonName("ABFRAGE ABSCHLIESSEN");
-        thirdPossibleTransition.setUrl("abfrage-schliessen");
+        thirdPossibleTransition.setButtonName("ABFRAGE SCHLIEßEN");
+        thirdPossibleTransition.setUrl("keine-bearbeitung-noetig");
         thirdPossibleTransition.setDialogText("Die Abfrage wird abgeschlossen. Sie können eine Anmerkung hinzufügen.");
-
         expected.add(thirdPossibleTransition);
 
         TransitionModel fourthPossibleTransition = new TransitionModel();
@@ -664,12 +663,41 @@ public class TransitionModelTest {
     @Test
     @Transactional
     @MockCustomUser
-    void possibleTransitionsErledigtRoleAdmin()
+    void possibleTransitionsErledigtMitFachreferateRoleAdmin()
         throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, StringLengthExceededException {
         final var anmerkung = "";
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
-        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.ERLEDIGT, anmerkung);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.ERLEDIGT_MIT_FACHREFERAT, anmerkung);
+
+        final var uuid = abfrage.getId();
+        List<TransitionModel> possibleTransitions =
+            this.abfrageStatusService.getStatusAbfrageEventsBasedOnStateAndAuthorities(uuid);
+
+        List<TransitionModel> expected = new ArrayList<>();
+
+        TransitionModel firstPossibleTransition = new TransitionModel();
+        firstPossibleTransition.setIndex(10);
+        firstPossibleTransition.setButtonName("ERNEUTE BEARBEITUNG");
+        firstPossibleTransition.setUrl("erneute-bearbeitung");
+        firstPossibleTransition.setDialogText(
+            "Die Abfrage wird wird an die Sachbearbeitung zur Bearbeitung zurückgesendet."
+        );
+        expected.add(firstPossibleTransition);
+
+        assertThat(possibleTransitions.size(), is(1));
+        assertThat(possibleTransitions.get(0), is(firstPossibleTransition));
+    }
+
+    @Test
+    @Transactional
+    @MockCustomUser
+    void possibleTransitionsErledigtOhneFachreferateRoleAdmin()
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, StringLengthExceededException {
+        final var anmerkung = "";
+        InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
+        abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.ERLEDIGT_OHNE_FACHREFERAT, anmerkung);
 
         final var uuid = abfrage.getId();
         List<TransitionModel> possibleTransitions =
@@ -693,12 +721,41 @@ public class TransitionModelTest {
     @Test
     @Transactional
     @MockCustomUser(roles = { "sachbearbeitung" })
-    void possibleTransitionsErledigtRoleSachbearbeitung()
+    void possibleTransitionsErledigtMitFachRoleSachbearbeitung()
         throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, StringLengthExceededException {
         final var anmerkung = "";
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
-        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.ERLEDIGT, anmerkung);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.ERLEDIGT_MIT_FACHREFERAT, anmerkung);
+
+        final var uuid = abfrage.getId();
+        List<TransitionModel> possibleTransitions =
+            this.abfrageStatusService.getStatusAbfrageEventsBasedOnStateAndAuthorities(uuid);
+
+        List<TransitionModel> expected = new ArrayList<>();
+
+        TransitionModel firstPossibleTransition = new TransitionModel();
+        firstPossibleTransition.setIndex(10);
+        firstPossibleTransition.setButtonName("ERNEUTE BEARBEITUNG");
+        firstPossibleTransition.setUrl("erneute-bearbeitung");
+        firstPossibleTransition.setDialogText(
+            "Die Abfrage wird wird an die Sachbearbeitung zur Bearbeitung zurückgesendet."
+        );
+        expected.add(firstPossibleTransition);
+
+        assertThat(possibleTransitions.size(), is(1));
+        assertThat(possibleTransitions.get(0), is(firstPossibleTransition));
+    }
+
+    @Test
+    @Transactional
+    @MockCustomUser(roles = { "sachbearbeitung" })
+    void possibleTransitionsErledigtOhneFachreferatRoleSachbearbeitung()
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, StringLengthExceededException {
+        final var anmerkung = "";
+        InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
+        abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.ERLEDIGT_OHNE_FACHREFERAT, anmerkung);
 
         final var uuid = abfrage.getId();
         List<TransitionModel> possibleTransitions =
@@ -722,12 +779,29 @@ public class TransitionModelTest {
     @Test
     @Transactional
     @MockCustomUser(roles = { "abfrageerstellung" })
-    void possibleTransitionsErledigtRoleAbfrageerstellung()
+    void possibleTransitionsErledigtOhneFachreferatRoleAbfrageerstellung()
         throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, StringLengthExceededException {
         final var anmerkung = "";
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
-        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.ERLEDIGT, anmerkung);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.ERLEDIGT_OHNE_FACHREFERAT, anmerkung);
+
+        final var uuid = abfrage.getId();
+        List<TransitionModel> possibleTransitions =
+            this.abfrageStatusService.getStatusAbfrageEventsBasedOnStateAndAuthorities(uuid);
+
+        assertThat(possibleTransitions.size(), is(0));
+    }
+
+    @Test
+    @Transactional
+    @MockCustomUser(roles = { "abfrageerstellung" })
+    void possibleTransitionsErledigtMitFachreferatRoleAbfrageerstellung()
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, StringLengthExceededException {
+        final var anmerkung = "";
+        InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
+        abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.ERLEDIGT_MIT_FACHREFERAT, anmerkung);
 
         final var uuid = abfrage.getId();
         List<TransitionModel> possibleTransitions =
@@ -739,12 +813,29 @@ public class TransitionModelTest {
     @Test
     @Transactional
     @MockCustomUser(roles = { "nutzer" })
-    void possibleTransitionsErledigtRoleAnwender()
+    void possibleTransitionsErledigtOhneFachreferateRoleAnwender()
         throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, StringLengthExceededException {
         final var anmerkung = "";
         InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
         abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
-        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.ERLEDIGT, anmerkung);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.ERLEDIGT_OHNE_FACHREFERAT, anmerkung);
+
+        final var uuid = abfrage.getId();
+        List<TransitionModel> possibleTransitions =
+            this.abfrageStatusService.getStatusAbfrageEventsBasedOnStateAndAuthorities(uuid);
+
+        assertThat(possibleTransitions.size(), is(0));
+    }
+
+    @Test
+    @Transactional
+    @MockCustomUser(roles = { "nutzer" })
+    void possibleTransitionsErledigtMitFachreferateRoleAnwender()
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, StringLengthExceededException {
+        final var anmerkung = "";
+        InfrastrukturabfrageModel abfrage = TestData.createInfrastrukturabfrageModel();
+        abfrage = this.abfrageService.saveInfrastrukturabfrage(abfrage);
+        this.abfrageService.changeStatusAbfrage(abfrage.getId(), StatusAbfrage.ERLEDIGT_MIT_FACHREFERAT, anmerkung);
 
         final var uuid = abfrage.getId();
         List<TransitionModel> possibleTransitions =
