@@ -203,8 +203,9 @@ public class AbfrageService {
      * @throws UserRoleNotAllowedException      falls der Nutzer nicht die richtige Rolle hat.
      * @throws AbfrageStatusNotAllowedException falls die Abfrage den falschen Status hat oder der Sub des Nutzers nicht mit dem Sub der Abfrage übereinstimmt
      */
-    public void throwUserRoleNotAllowedOrAbfrageStatusNotAlloweExceptionWhenDeleteAbfrage(final AbfrageModel abfrage)
-        throws UserRoleNotAllowedException, AbfrageStatusNotAllowedException {
+    protected void throwUserRoleNotAllowedOrAbfrageStatusNotAlloweExceptionWhenDeleteAbfrage(
+        final AbfrageModel abfrage
+    ) throws UserRoleNotAllowedException, AbfrageStatusNotAllowedException {
         var roles = authenticationUtils.getUserRoles();
         if (!roles.contains(AuthenticationUtils.ROLE_ADMIN)) {
             if (!roles.contains(AuthenticationUtils.ROLE_ABFRAGEERSTELLUNG)) {
