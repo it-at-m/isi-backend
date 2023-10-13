@@ -16,7 +16,7 @@ import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
 import de.muenchen.isi.domain.mapper.AbfrageDomainMapper;
 import de.muenchen.isi.domain.mapper.AbfrageDomainMapperImpl;
-import de.muenchen.isi.domain.mapper.AbfragevarianteBauleitplanverfahrenDomainMapperImpl;
+import de.muenchen.isi.domain.mapper.AbfragevarianteDomainMapperImpl;
 import de.muenchen.isi.domain.mapper.BauabschnittDomainMapperImpl;
 import de.muenchen.isi.domain.mapper.BauvorhabenDomainMapper;
 import de.muenchen.isi.domain.mapper.BauvorhabenDomainMapperImpl;
@@ -85,7 +85,7 @@ public class BauvorhabenServiceTest {
     );
 
     private final AbfrageDomainMapper abfrageDomainMapper = new AbfrageDomainMapperImpl(
-        new AbfragevarianteBauleitplanverfahrenDomainMapperImpl(new BauabschnittDomainMapperImpl()),
+        new AbfragevarianteDomainMapperImpl(new BauabschnittDomainMapperImpl()),
         new DokumentDomainMapperImpl()
     );
 

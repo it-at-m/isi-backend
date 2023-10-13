@@ -13,7 +13,7 @@ import de.muenchen.isi.domain.exception.UniqueViolationException;
 import de.muenchen.isi.domain.exception.UserRoleNotAllowedException;
 import de.muenchen.isi.domain.mapper.AbfrageDomainMapper;
 import de.muenchen.isi.domain.mapper.AbfrageDomainMapperImpl;
-import de.muenchen.isi.domain.mapper.AbfragevarianteBauleitplanverfahrenDomainMapperImpl;
+import de.muenchen.isi.domain.mapper.AbfragevarianteDomainMapperImpl;
 import de.muenchen.isi.domain.mapper.BauabschnittDomainMapperImpl;
 import de.muenchen.isi.domain.mapper.DokumentDomainMapperImpl;
 import de.muenchen.isi.domain.model.AbfrageModel;
@@ -76,9 +76,7 @@ class AbfrageServiceTest {
 
     @BeforeEach
     public void beforeEach() throws NoSuchFieldException, IllegalAccessException {
-        final var abfragevarianteDomainMapper = new AbfragevarianteBauleitplanverfahrenDomainMapperImpl(
-            new BauabschnittDomainMapperImpl()
-        );
+        final var abfragevarianteDomainMapper = new AbfragevarianteDomainMapperImpl(new BauabschnittDomainMapperImpl());
         this.abfrageDomainMapper =
             new AbfrageDomainMapperImpl(abfragevarianteDomainMapper, new DokumentDomainMapperImpl());
         Field field = abfrageDomainMapper

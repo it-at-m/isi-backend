@@ -31,17 +31,14 @@ import org.mapstruct.SubclassMapping;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @Slf4j
-@Mapper(
-    config = MapstructConfiguration.class,
-    uses = { AbfragevarianteBauleitplanverfahrenDomainMapper.class, DokumentDomainMapper.class }
-)
+@Mapper(config = MapstructConfiguration.class, uses = { AbfragevarianteDomainMapper.class, DokumentDomainMapper.class })
 public abstract class AbfrageDomainMapper {
 
     @Autowired
     private BauvorhabenRepository bauvorhabenRepository;
 
     @Autowired
-    private AbfragevarianteBauleitplanverfahrenDomainMapper abfragevarianteBauleitplanverfahrenDomainMapper;
+    private AbfragevarianteDomainMapper abfragevarianteBauleitplanverfahrenDomainMapper;
 
     @SubclassMapping(source = Bauleitplanverfahren.class, target = BauleitplanverfahrenModel.class)
     @Mapping(source = "bauvorhaben.id", target = "bauvorhaben")
