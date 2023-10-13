@@ -20,6 +20,7 @@ import de.muenchen.isi.infrastructure.repository.BauvorhabenRepository;
 import java.util.ArrayList;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.ObjectUtils;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
@@ -53,14 +54,16 @@ public abstract class AbfrageDomainMapper {
     @AfterMapping
     public void afterMappingModel2Entity(final AbfrageModel model, @MappingTarget final Abfrage entity)
         throws EntityNotFoundException {
-        final var bauvorhaben = bauvorhabenRepository
-            .findById(model.getBauvorhaben())
-            .orElseThrow(() -> {
-                final var message = "Bauvorhaben nicht gefunden";
-                log.error(message);
-                return new EntityNotFoundException(message);
-            });
-        entity.setBauvorhaben(bauvorhaben);
+        if (ObjectUtils.isNotEmpty(model.getBauvorhaben())) {
+            final var bauvorhaben = bauvorhabenRepository
+                .findById(model.getBauvorhaben())
+                .orElseThrow(() -> {
+                    final var message = "Bauvorhaben nicht gefunden";
+                    log.error(message);
+                    return new EntityNotFoundException(message);
+                });
+            entity.setBauvorhaben(bauvorhaben);
+        }
     }
 
     public AbfrageModel request2NewModel(final AbfrageAngelegtModel request) throws EntityNotFoundException {
