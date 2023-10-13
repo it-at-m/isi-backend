@@ -909,4 +909,24 @@ class AbfrageServiceTest {
         Mockito.verify(this.abfrageRepository, Mockito.times(1)).findById(entity.getId());
         Mockito.verify(this.abfrageRepository, Mockito.times(0)).deleteById(id);
     }
+
+    @Test
+    void throwEntityIsReferencedExceptionWhenAbfrageIsReferencingBauvorhaben()
+        throws EntityIsReferencedException, EntityNotFoundException {
+        this.abfrageService.throwEntityIsReferencedExceptionWhenAbfrageIsReferencingBauvorhaben(
+                new BauleitplanverfahrenModel()
+            );
+
+        final BauleitplanverfahrenModel abfrage = new BauleitplanverfahrenModel();
+        abfrage.setBauvorhaben(UUID.randomUUID());
+
+        final var bauvorhabenModel = new BauvorhabenModel();
+        bauvorhabenModel.setId(abfrage.getBauvorhaben());
+
+        Mockito.when(this.bauvorhabenService.getBauvorhabenById(bauvorhabenModel.getId())).thenReturn(bauvorhabenModel);
+        Assertions.assertThrows(
+            EntityIsReferencedException.class,
+            () -> this.abfrageService.throwEntityIsReferencedExceptionWhenAbfrageIsReferencingBauvorhaben(abfrage)
+        );
+    }
 }
