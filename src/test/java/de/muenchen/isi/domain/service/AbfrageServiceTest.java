@@ -17,15 +17,20 @@ import de.muenchen.isi.domain.mapper.DokumentDomainMapperImpl;
 import de.muenchen.isi.domain.model.AbfrageModel;
 import de.muenchen.isi.domain.model.AbfragevarianteBauleitplanverfahrenModel;
 import de.muenchen.isi.domain.model.BauleitplanverfahrenModel;
+import de.muenchen.isi.domain.model.BedarfsmeldungFachreferateModel;
 import de.muenchen.isi.domain.model.abfrageAngelegt.AbfragevarianteBauleitplanverfahrenAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageAngelegt.BauleitplanverfahrenAngelegtModel;
+import de.muenchen.isi.domain.model.abfrageInBearbeitungFachreferat.AbfragevarianteBauleitplanverfahrenInBearbeitungFachreferatModel;
+import de.muenchen.isi.domain.model.abfrageInBearbeitungFachreferat.BauleitplanverfahrenInBearbeitungFachreferatModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.AbfragevarianteBauleitplanverfahrenInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.BauleitplanverfahrenInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.domain.service.filehandling.DokumentService;
 import de.muenchen.isi.infrastructure.entity.Abfrage;
 import de.muenchen.isi.infrastructure.entity.AbfragevarianteBauleitplanverfahren;
 import de.muenchen.isi.infrastructure.entity.Bauleitplanverfahren;
+import de.muenchen.isi.infrastructure.entity.BedarfsmeldungFachreferate;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.repository.AbfrageRepository;
 import de.muenchen.isi.security.AuthenticationUtils;
@@ -394,4 +399,189 @@ class AbfrageServiceTest {
             assertThat(exception.getMessage(), is("Die Art der Abfrage wird nicht unterstützt."));
         }
     }
+
+    @Test
+    void patchInBearbeitungFachreferat()
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException {
+        final var uuid = UUID.randomUUID();
+        final var uuidAbfragevariante = UUID.randomUUID();
+        final var uuidAbfragevarianteSachbearbeitung = UUID.randomUUID();
+
+        final var requestModel = new BauleitplanverfahrenInBearbeitungFachreferatModel();
+        requestModel.setArtAbfrage(ArtAbfrage.BAULEITPLANVERFAHREN);
+        requestModel.setVersion(0L);
+
+        final var abfragevianteRequestModel = new AbfragevarianteBauleitplanverfahrenInBearbeitungFachreferatModel();
+        abfragevianteRequestModel.setId(uuidAbfragevariante);
+        abfragevianteRequestModel.setVersion(0L);
+        final var abfragevarianteBedarfsmeldung = new BedarfsmeldungFachreferateModel();
+        abfragevarianteBedarfsmeldung.setAnzahlEinrichtungen(5);
+        abfragevarianteBedarfsmeldung.setInfrastruktureinrichtungTyp(InfrastruktureinrichtungTyp.KINDERKRIPPE);
+        abfragevarianteBedarfsmeldung.setAnzahlKinderkrippengruppen(4);
+        abfragevarianteBedarfsmeldung.setAnzahlKindergartengruppen(3);
+        abfragevarianteBedarfsmeldung.setAnzahlHortgruppen(2);
+        abfragevarianteBedarfsmeldung.setAnzahlGrundschulzuege(1);
+        abfragevianteRequestModel.setBedarfsmeldungFachreferate(List.of(abfragevarianteBedarfsmeldung));
+
+        final var abfragevarianteSachbearbeitungRequestModel =
+            new AbfragevarianteBauleitplanverfahrenInBearbeitungFachreferatModel();
+        abfragevarianteSachbearbeitungRequestModel.setId(uuidAbfragevarianteSachbearbeitung);
+        abfragevarianteSachbearbeitungRequestModel.setVersion(0L);
+        final var abfragevarianteSachbearbeitungBedarfsmeldung = new BedarfsmeldungFachreferateModel();
+        abfragevarianteSachbearbeitungBedarfsmeldung.setAnzahlEinrichtungen(1);
+        abfragevarianteSachbearbeitungBedarfsmeldung.setInfrastruktureinrichtungTyp(
+            InfrastruktureinrichtungTyp.GRUNDSCHULE
+        );
+        abfragevarianteSachbearbeitungBedarfsmeldung.setAnzahlKinderkrippengruppen(2);
+        abfragevarianteSachbearbeitungBedarfsmeldung.setAnzahlKindergartengruppen(3);
+        abfragevarianteSachbearbeitungBedarfsmeldung.setAnzahlHortgruppen(4);
+        abfragevarianteSachbearbeitungBedarfsmeldung.setAnzahlGrundschulzuege(5);
+        abfragevarianteSachbearbeitungRequestModel.setBedarfsmeldungFachreferate(
+            List.of(abfragevarianteSachbearbeitungBedarfsmeldung)
+        );
+
+        requestModel.setAbfragevarianten(List.of(abfragevianteRequestModel));
+        requestModel.setAbfragevariantenSachbearbeitung(List.of(abfragevarianteSachbearbeitungRequestModel));
+
+        final var entityInDb = new Bauleitplanverfahren();
+        entityInDb.setId(uuid);
+        entityInDb.setVersion(0L);
+        entityInDb.setName("hallo");
+        entityInDb.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
+
+        final var entityInDbAbfragevariante = new AbfragevarianteBauleitplanverfahren();
+        entityInDbAbfragevariante.setId(uuidAbfragevariante);
+
+        final var entityInDbAbfragevarianteSachbearbeitung = new AbfragevarianteBauleitplanverfahren();
+        entityInDbAbfragevarianteSachbearbeitung.setId(uuidAbfragevarianteSachbearbeitung);
+
+        entityInDb.setAbfragevarianten(List.of(entityInDbAbfragevariante));
+        entityInDb.setAbfragevariantenSachbearbeitung(List.of(entityInDbAbfragevarianteSachbearbeitung));
+
+        Mockito.when(this.abfrageRepository.findById(entityInDb.getId())).thenReturn(Optional.of(entityInDb));
+
+        final var entityToSave = new Bauleitplanverfahren();
+
+        entityToSave.setId(uuid);
+        entityToSave.setVersion(0L);
+        entityToSave.setName("hallo");
+        entityToSave.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
+
+        final var abfragevarianteToSaveSave = new AbfragevarianteBauleitplanverfahren();
+        abfragevarianteToSaveSave.setId(uuidAbfragevariante);
+        abfragevarianteToSaveSave.setVersion(0L);
+        final var abfragevarianteBedarfsmeldungToSave = new BedarfsmeldungFachreferate();
+        abfragevarianteBedarfsmeldungToSave.setAnzahlEinrichtungen(5);
+        abfragevarianteBedarfsmeldungToSave.setInfrastruktureinrichtungTyp(InfrastruktureinrichtungTyp.KINDERKRIPPE);
+        abfragevarianteBedarfsmeldungToSave.setAnzahlKinderkrippengruppen(4);
+        abfragevarianteBedarfsmeldungToSave.setAnzahlKindergartengruppen(3);
+        abfragevarianteBedarfsmeldungToSave.setAnzahlHortgruppen(2);
+        abfragevarianteBedarfsmeldungToSave.setAnzahlGrundschulzuege(1);
+        abfragevarianteToSaveSave.setBedarfsmeldungFachreferate((List.of(abfragevarianteBedarfsmeldungToSave)));
+
+        final var abfragevarianteSachbearbeitungToSave = new AbfragevarianteBauleitplanverfahren();
+        abfragevarianteSachbearbeitungToSave.setId(uuidAbfragevarianteSachbearbeitung);
+        abfragevarianteSachbearbeitungToSave.setVersion(0L);
+        final var abfragevarianteSachbearbeitungBedarfsmeldungToSave = new BedarfsmeldungFachreferate();
+        abfragevarianteSachbearbeitungBedarfsmeldungToSave.setAnzahlEinrichtungen(1);
+        abfragevarianteSachbearbeitungBedarfsmeldungToSave.setInfrastruktureinrichtungTyp(
+            InfrastruktureinrichtungTyp.GRUNDSCHULE
+        );
+        abfragevarianteSachbearbeitungBedarfsmeldungToSave.setAnzahlKinderkrippengruppen(2);
+        abfragevarianteSachbearbeitungBedarfsmeldungToSave.setAnzahlKindergartengruppen(3);
+        abfragevarianteSachbearbeitungBedarfsmeldungToSave.setAnzahlHortgruppen(4);
+        abfragevarianteSachbearbeitungBedarfsmeldungToSave.setAnzahlGrundschulzuege(5);
+        abfragevarianteSachbearbeitungToSave.setBedarfsmeldungFachreferate(
+            List.of(abfragevarianteSachbearbeitungBedarfsmeldungToSave)
+        );
+
+        entityToSave.setAbfragevarianten(List.of(abfragevarianteToSaveSave));
+        entityToSave.setAbfragevariantenSachbearbeitung(List.of(abfragevarianteSachbearbeitungToSave));
+
+        final var entitySaved = new Bauleitplanverfahren();
+
+        entitySaved.setId(uuid);
+        entitySaved.setVersion(1L);
+        entitySaved.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
+        entitySaved.setName("hallo");
+
+        final var abfragevarianteSaved = new AbfragevarianteBauleitplanverfahren();
+        abfragevarianteSaved.setId(uuidAbfragevariante);
+        abfragevarianteSaved.setVersion(1L);
+        final var abfragevarianteBedarfsmeldungSaved = new BedarfsmeldungFachreferate();
+        abfragevarianteBedarfsmeldungSaved.setAnzahlEinrichtungen(5);
+        abfragevarianteBedarfsmeldungSaved.setInfrastruktureinrichtungTyp(InfrastruktureinrichtungTyp.KINDERKRIPPE);
+        abfragevarianteBedarfsmeldungSaved.setAnzahlKinderkrippengruppen(4);
+        abfragevarianteBedarfsmeldungSaved.setAnzahlKindergartengruppen(3);
+        abfragevarianteBedarfsmeldungSaved.setAnzahlHortgruppen(2);
+        abfragevarianteBedarfsmeldungSaved.setAnzahlGrundschulzuege(1);
+        abfragevarianteSaved.setBedarfsmeldungFachreferate(List.of(abfragevarianteBedarfsmeldungSaved));
+
+        final var abfragevarianteSachbearbeitungSaved = new AbfragevarianteBauleitplanverfahren();
+        abfragevarianteSachbearbeitungSaved.setId(uuidAbfragevarianteSachbearbeitung);
+        abfragevarianteSachbearbeitungSaved.setVersion(1L);
+        final var abfragevarianteSachbearbeitungBedarfsmeldungSaved = new BedarfsmeldungFachreferate();
+        abfragevarianteSachbearbeitungBedarfsmeldungSaved.setAnzahlEinrichtungen(1);
+        abfragevarianteSachbearbeitungBedarfsmeldungSaved.setInfrastruktureinrichtungTyp(
+            InfrastruktureinrichtungTyp.GRUNDSCHULE
+        );
+        abfragevarianteSachbearbeitungBedarfsmeldungSaved.setAnzahlKinderkrippengruppen(2);
+        abfragevarianteSachbearbeitungBedarfsmeldungSaved.setAnzahlKindergartengruppen(3);
+        abfragevarianteSachbearbeitungBedarfsmeldungSaved.setAnzahlHortgruppen(4);
+        abfragevarianteSachbearbeitungBedarfsmeldungSaved.setAnzahlGrundschulzuege(5);
+        abfragevarianteSachbearbeitungSaved.setBedarfsmeldungFachreferate(
+            List.of(abfragevarianteSachbearbeitungBedarfsmeldungSaved)
+        );
+
+        entitySaved.setAbfragevarianten(List.of(abfragevarianteSaved));
+        entitySaved.setAbfragevariantenSachbearbeitung(List.of(abfragevarianteSachbearbeitungSaved));
+
+        Mockito.when(this.abfrageRepository.saveAndFlush(entityToSave)).thenReturn(entitySaved);
+        Mockito.when(this.abfrageRepository.findByNameIgnoreCase("hallo")).thenReturn(Optional.empty());
+
+        final var result = this.abfrageService.patchInBearbeitungFachreferat(requestModel, uuid);
+
+        final var expected = new BauleitplanverfahrenModel();
+        expected.setArtAbfrage(ArtAbfrage.BAULEITPLANVERFAHREN);
+        expected.setId(uuid);
+        expected.setVersion(1L);
+        expected.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
+        expected.setName("hallo");
+
+        final var abfragevarianteExpected = new AbfragevarianteBauleitplanverfahrenModel();
+        abfragevarianteExpected.setId(abfragevarianteSaved.getId());
+        abfragevarianteExpected.setVersion(1L);
+        final var abfragevarianteBedarfsmeldungExpected = new BedarfsmeldungFachreferateModel();
+        abfragevarianteBedarfsmeldungExpected.setAnzahlEinrichtungen(5);
+        abfragevarianteBedarfsmeldungExpected.setInfrastruktureinrichtungTyp(InfrastruktureinrichtungTyp.KINDERKRIPPE);
+        abfragevarianteBedarfsmeldungExpected.setAnzahlKinderkrippengruppen(4);
+        abfragevarianteBedarfsmeldungExpected.setAnzahlKindergartengruppen(3);
+        abfragevarianteBedarfsmeldungExpected.setAnzahlHortgruppen(2);
+        abfragevarianteBedarfsmeldungExpected.setAnzahlGrundschulzuege(1);
+        abfragevarianteExpected.setBedarfsmeldungFachreferate(List.of(abfragevarianteBedarfsmeldungExpected));
+
+        final var abfragevarianteSachbearbeitungExpected = new AbfragevarianteBauleitplanverfahrenModel();
+        abfragevarianteSachbearbeitungExpected.setId(abfragevarianteSachbearbeitungSaved.getId());
+        abfragevarianteSachbearbeitungExpected.setVersion(1L);
+        final var abfragevarianteSachbearbeitungBedarfsmeldungExpected = new BedarfsmeldungFachreferateModel();
+        abfragevarianteSachbearbeitungBedarfsmeldungExpected.setAnzahlEinrichtungen(1);
+        abfragevarianteSachbearbeitungBedarfsmeldungExpected.setInfrastruktureinrichtungTyp(
+            InfrastruktureinrichtungTyp.GRUNDSCHULE
+        );
+        abfragevarianteSachbearbeitungBedarfsmeldungExpected.setAnzahlKinderkrippengruppen(2);
+        abfragevarianteSachbearbeitungBedarfsmeldungExpected.setAnzahlKindergartengruppen(3);
+        abfragevarianteSachbearbeitungBedarfsmeldungExpected.setAnzahlHortgruppen(4);
+        abfragevarianteSachbearbeitungBedarfsmeldungExpected.setAnzahlGrundschulzuege(5);
+        abfragevarianteSachbearbeitungExpected.setBedarfsmeldungFachreferate(
+            List.of(abfragevarianteSachbearbeitungBedarfsmeldungExpected)
+        );
+
+        expected.setAbfragevarianten(List.of(abfragevarianteExpected));
+        expected.setAbfragevariantenSachbearbeitung(List.of(abfragevarianteSachbearbeitungExpected));
+
+        assertThat(result, is(expected));
+    }
+
+    @Test
+    void patchInBearbeitungFachreferatAbfrageNotSupported() {}
 }

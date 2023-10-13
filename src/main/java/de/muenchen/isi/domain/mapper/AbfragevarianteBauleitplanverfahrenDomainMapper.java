@@ -66,7 +66,12 @@ public interface AbfragevarianteBauleitplanverfahrenDomainMapper {
     );
 
     @BeanMapping(ignoreByDefault = true)
-    @Mappings({ @Mapping(target = "version", ignore = false) })
+    @Mappings(
+        {
+            @Mapping(target = "version", ignore = false),
+            @Mapping(target = "bedarfsmeldungFachreferate", ignore = false),
+        }
+    )
     AbfragevarianteBauleitplanverfahrenModel request2Model(
         final AbfragevarianteBauleitplanverfahrenInBearbeitungFachreferatModel request,
         final @MappingTarget AbfragevarianteBauleitplanverfahrenModel model
