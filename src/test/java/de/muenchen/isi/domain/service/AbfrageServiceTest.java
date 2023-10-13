@@ -165,4 +165,26 @@ class AbfrageServiceTest {
         Mockito.verify(this.abfrageRepository, Mockito.times(1)).findByNameIgnoreCase("hallo");
         Mockito.verify(this.bauvorhabenService, Mockito.times(0)).getBauvorhabenById(UUID.randomUUID());
     }
+
+    @Test
+    void saveUniqueViolationTest() throws EntityNotFoundException {
+        final BauleitplanverfahrenModel abfrage = new BauleitplanverfahrenModel();
+        abfrage.setId(UUID.randomUUID());
+        abfrage.setName("hallo");
+
+        final BauleitplanverfahrenModel abfrage2 = new BauleitplanverfahrenModel();
+        abfrage2.setId(UUID.randomUUID());
+        abfrage2.setName("hallo");
+
+        final Abfrage abfrageEntity = this.abfrageDomainMapper.model2Entity(abfrage);
+
+        Mockito.when(this.abfrageRepository.saveAndFlush(abfrageEntity)).thenReturn(abfrageEntity);
+        Mockito.when(this.abfrageRepository.findByNameIgnoreCase("hallo")).thenReturn(Optional.of(abfrageEntity));
+
+        Assertions.assertThrows(UniqueViolationException.class, () -> this.abfrageService.save(abfrage2));
+
+        Mockito.verify(this.abfrageRepository, Mockito.times(0)).saveAndFlush(abfrageEntity);
+        Mockito.verify(this.abfrageRepository, Mockito.times(1)).findByNameIgnoreCase("hallo");
+        Mockito.verify(this.bauvorhabenService, Mockito.times(0)).getBauvorhabenById(UUID.randomUUID());
+    }
 }
