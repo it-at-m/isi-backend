@@ -4,6 +4,7 @@
  */
 package de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung;
 
+import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -15,6 +16,8 @@ public class AbfragevarianteBauleitplanverfahrenSachbearbeitungInBearbeitungSach
     private UUID id;
 
     private Long version;
+
+    private ArtAbfrage artAbfragevariante;
 
     private BigDecimal gfWohnenPlanungsursaechlich;
 

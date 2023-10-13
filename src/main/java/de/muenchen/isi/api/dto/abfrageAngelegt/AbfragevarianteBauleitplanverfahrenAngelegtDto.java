@@ -10,6 +10,7 @@ import de.muenchen.isi.api.validation.RealisierungVonDistributionBauleitplanverf
 import de.muenchen.isi.api.validation.TechnicalAttributesValid;
 import de.muenchen.isi.api.validation.WesentlicheRechtsgrundlageBauleitplanverfahrenValid;
 import de.muenchen.isi.api.validation.WohneinheitenDistributionBauleitplanverfahrenValid;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.WesentlicheRechtsgrundlage;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -33,6 +34,8 @@ public class AbfragevarianteBauleitplanverfahrenAngelegtDto {
     private UUID id;
 
     private Long version;
+
+    private ArtAbfrage artAbfragevariante;
 
     @NotNull
     private Integer abfragevariantenNr;

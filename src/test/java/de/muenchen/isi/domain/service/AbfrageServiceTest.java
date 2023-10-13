@@ -226,6 +226,7 @@ class AbfrageServiceTest {
 
         final AbfragevarianteBauleitplanverfahrenAngelegtModel abfragevarianteRequestModel =
             new AbfragevarianteBauleitplanverfahrenAngelegtModel();
+        abfragevarianteRequestModel.setArtAbfragevariante(ArtAbfrage.BAULEITPLANVERFAHREN);
         abfragevarianteRequestModel.setName("Abfragevariante");
         requestModel.setAbfragevarianten(List.of(abfragevarianteRequestModel));
 
@@ -298,6 +299,7 @@ class AbfrageServiceTest {
         requestModel.setArtAbfrage(ArtAbfrage.BAULEITPLANVERFAHREN);
         final var abfragevarianteSachbearbeitung =
             new AbfragevarianteBauleitplanverfahrenInBearbeitungSachbearbeitungModel();
+        abfragevarianteSachbearbeitung.setArtAbfragevariante(ArtAbfrage.BAULEITPLANVERFAHREN);
         abfragevarianteSachbearbeitung.setAbfragevariantenNr(1);
         abfragevarianteSachbearbeitung.setName("Abfragevariante 1");
         abfragevarianteSachbearbeitung.setGfWohnenPlanungsursaechlich(BigDecimal.TEN);
@@ -353,6 +355,7 @@ class AbfrageServiceTest {
         expected.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
         expected.setName("hallo");
         final var abfragevariante1Expected = new AbfragevarianteBauleitplanverfahrenModel();
+        abfragevariante1Expected.setArtAbfragevariante(ArtAbfrage.BAULEITPLANVERFAHREN);
         abfragevariante1Expected.setId(abfragevariante1Saved.getId());
         abfragevariante1Expected.setAbfragevariantenNr(1);
         abfragevariante1Expected.setName("Abfragevariante 1");
@@ -430,6 +433,7 @@ class AbfrageServiceTest {
         requestModel.setVersion(0L);
 
         final var abfragevarianteRequestModel = new AbfragevarianteBauleitplanverfahrenInBearbeitungFachreferatModel();
+        abfragevarianteRequestModel.setArtAbfragevariante(ArtAbfrage.BAULEITPLANVERFAHREN);
         abfragevarianteRequestModel.setId(uuidAbfragevariante);
         abfragevarianteRequestModel.setVersion(0L);
         final var abfragevarianteBedarfsmeldung = new BedarfsmeldungFachreferateModel();
@@ -443,6 +447,7 @@ class AbfrageServiceTest {
 
         final var abfragevarianteSachbearbeitungRequestModel =
             new AbfragevarianteBauleitplanverfahrenInBearbeitungFachreferatModel();
+        abfragevarianteSachbearbeitungRequestModel.setArtAbfragevariante(ArtAbfrage.BAULEITPLANVERFAHREN);
         abfragevarianteSachbearbeitungRequestModel.setId(uuidAbfragevarianteSachbearbeitung);
         abfragevarianteSachbearbeitungRequestModel.setVersion(0L);
         final var abfragevarianteSachbearbeitungBedarfsmeldung = new BedarfsmeldungFachreferateModel();
@@ -567,6 +572,7 @@ class AbfrageServiceTest {
         expected.setName("hallo");
 
         final var abfragevarianteExpected = new AbfragevarianteBauleitplanverfahrenModel();
+        abfragevarianteExpected.setArtAbfragevariante(ArtAbfrage.BAULEITPLANVERFAHREN);
         abfragevarianteExpected.setId(abfragevarianteSaved.getId());
         abfragevarianteExpected.setVersion(1L);
         final var abfragevarianteBedarfsmeldungExpected = new BedarfsmeldungFachreferateModel();
@@ -579,6 +585,7 @@ class AbfrageServiceTest {
         abfragevarianteExpected.setBedarfsmeldungFachreferate(List.of(abfragevarianteBedarfsmeldungExpected));
 
         final var abfragevarianteSachbearbeitungExpected = new AbfragevarianteBauleitplanverfahrenModel();
+        abfragevarianteSachbearbeitungExpected.setArtAbfragevariante(ArtAbfrage.BAULEITPLANVERFAHREN);
         abfragevarianteSachbearbeitungExpected.setId(abfragevarianteSachbearbeitungSaved.getId());
         abfragevarianteSachbearbeitungExpected.setVersion(1L);
         final var abfragevarianteSachbearbeitungBedarfsmeldungExpected = new BedarfsmeldungFachreferateModel();

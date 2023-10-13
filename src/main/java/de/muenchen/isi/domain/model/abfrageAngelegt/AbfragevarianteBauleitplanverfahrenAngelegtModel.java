@@ -5,6 +5,7 @@
 package de.muenchen.isi.domain.model.abfrageAngelegt;
 
 import de.muenchen.isi.domain.model.BauabschnittModel;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.WesentlicheRechtsgrundlage;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -18,6 +19,8 @@ public class AbfragevarianteBauleitplanverfahrenAngelegtModel {
     private UUID id;
 
     private Long version;
+
+    private ArtAbfrage artAbfragevariante;
 
     private Integer abfragevariantenNr;
 

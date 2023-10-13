@@ -5,6 +5,7 @@
 package de.muenchen.isi.domain.model.abfrageInBearbeitungFachreferat;
 
 import de.muenchen.isi.domain.model.BedarfsmeldungFachreferateModel;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import java.util.List;
 import java.util.UUID;
 import lombok.Data;
@@ -15,6 +16,8 @@ public class AbfragevarianteBauleitplanverfahrenInBearbeitungFachreferatModel {
     private UUID id;
 
     private Long version;
+
+    private ArtAbfrage artAbfragevariante;
 
     private List<BedarfsmeldungFachreferateModel> bedarfsmeldungFachreferate;
 }
