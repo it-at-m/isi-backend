@@ -88,13 +88,13 @@ class AbfrageServiceTest {
     }
 
     @Test
-    void save() throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException {
+    void saveAbfrageWithId() throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException {
         final UUID uuid = UUID.randomUUID();
         final String sub = "1234";
         final BauleitplanverfahrenModel abfrage = new BauleitplanverfahrenModel();
         abfrage.setId(uuid);
         abfrage.setName("hallo");
-        abfrage.setStatusAbfrage(StatusAbfrage.ANGELEGT);
+        abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
 
         final Abfrage abfrageEntity = this.abfrageDomainMapper.model2Entity(abfrage);
 
@@ -102,7 +102,7 @@ class AbfrageServiceTest {
         saveResult.setId(uuid);
         saveResult.setSub(sub);
         saveResult.setName("hallo");
-        saveResult.setStatusAbfrage(StatusAbfrage.ANGELEGT);
+        saveResult.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
 
         Mockito.when(this.authenticationUtils.getUserSub()).thenReturn(sub);
         Mockito.when(this.abfrageRepository.saveAndFlush(abfrageEntity)).thenReturn(saveResult);
@@ -114,6 +114,49 @@ class AbfrageServiceTest {
         expected.setArtAbfrage(ArtAbfrage.BAULEITPLANVERFAHREN);
         expected.setId(saveResult.getId());
         expected.setSub(sub);
+        expected.setStatusAbfrage(abfrage.getStatusAbfrage());
+        expected.setName(abfrage.getName());
+
+        assertThat(result, is(expected));
+        Mockito.verify(this.abfrageRepository, Mockito.times(1)).saveAndFlush(abfrageEntity);
+        Mockito.verify(this.abfrageRepository, Mockito.times(1)).findByNameIgnoreCase("hallo");
+        Mockito.verify(this.bauvorhabenService, Mockito.times(0)).getBauvorhabenById(UUID.randomUUID());
+    }
+
+    @Test
+    void saveAbfrageWithoutId() throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException {
+        final UUID uuid = UUID.randomUUID();
+        final String sub = "1234";
+        final BauleitplanverfahrenModel abfrage = new BauleitplanverfahrenModel();
+        abfrage.setId(null);
+        abfrage.setSub(null);
+        abfrage.setName("hallo");
+        abfrage.setStatusAbfrage(StatusAbfrage.OFFEN);
+
+        // Mockito vergleicht die Objekte auf Feldebene weshalb das Objekt genauso sein muss wie wenn es von der Methode aufgerufen wird.
+        final Bauleitplanverfahren abfrageEntity = new Bauleitplanverfahren();
+        abfrageEntity.setId(null);
+        abfrageEntity.setSub(sub);
+        abfrageEntity.setName("hallo");
+        abfrageEntity.setStatusAbfrage(StatusAbfrage.ANGELEGT);
+
+        final Bauleitplanverfahren saveResult = new Bauleitplanverfahren();
+        saveResult.setId(uuid);
+        saveResult.setSub(sub);
+        saveResult.setName("hallo");
+        saveResult.setStatusAbfrage(StatusAbfrage.ANGELEGT);
+
+        Mockito.when(this.authenticationUtils.getUserSub()).thenReturn(sub);
+
+        Mockito.when(this.abfrageRepository.saveAndFlush(abfrageEntity)).thenReturn(saveResult);
+        Mockito.when(this.abfrageRepository.findByNameIgnoreCase("hallo")).thenReturn(Optional.empty());
+
+        final AbfrageModel result = this.abfrageService.save(abfrage);
+
+        final BauleitplanverfahrenModel expected = new BauleitplanverfahrenModel();
+        expected.setArtAbfrage(ArtAbfrage.BAULEITPLANVERFAHREN);
+        expected.setId(saveResult.getId());
+        expected.setSub(saveResult.getSub());
         expected.setStatusAbfrage(abfrage.getStatusAbfrage());
         expected.setName(abfrage.getName());
 
