@@ -911,6 +911,64 @@ class AbfrageServiceTest {
     }
 
     @Test
+    void throwUserRoleNotAllowedOrAbfrageStatusNotAllowedExceptionWhenDeleteAbfrage()
+        throws UserRoleNotAllowedException, AbfrageStatusNotAllowedException {
+        final UUID id = UUID.randomUUID();
+        String[] roles = { "abfrageerstellung", "admin" };
+        Mockito.when(this.authenticationUtils.getUserRoles()).thenReturn(List.of(roles));
+        String sub = "1234";
+        Mockito.when(this.authenticationUtils.getUserSub()).thenReturn(sub);
+        final var model = new BauleitplanverfahrenModel();
+        model.setId(id);
+        model.setSub(sub);
+        model.setStatusAbfrage(StatusAbfrage.OFFEN);
+        this.abfrageService.throwUserRoleNotAllowedOrAbfrageStatusNotAllowedExceptionWhenDeleteAbfrage(model);
+
+        roles = new String[] { "fachreferat" };
+        model.setId(id);
+        model.setSub(sub);
+        model.setStatusAbfrage(StatusAbfrage.OFFEN);
+        Mockito.when(this.authenticationUtils.getUserRoles()).thenReturn(List.of(roles));
+        try {
+            this.abfrageService.throwUserRoleNotAllowedOrAbfrageStatusNotAllowedExceptionWhenDeleteAbfrage(model);
+        } catch (final UserRoleNotAllowedException exception) {
+            assertThat(exception.getMessage(), is("Keine Berechtigung zum Löschen der Abfrage."));
+        }
+
+        roles = new String[] { "abfrageerstellung" };
+        model.setId(id);
+        model.setSub("321");
+        model.setStatusAbfrage(StatusAbfrage.OFFEN);
+        Mockito.when(this.authenticationUtils.getUserRoles()).thenReturn(List.of(roles));
+        try {
+            this.abfrageService.throwUserRoleNotAllowedOrAbfrageStatusNotAllowedExceptionWhenDeleteAbfrage(model);
+        } catch (final UserRoleNotAllowedException exception) {
+            assertThat(
+                exception.getMessage(),
+                is("Keine Berechtigung zum Löschen der Abfrage, da diese durch einen anderen Nutzer angelegt wurde.")
+            );
+        }
+
+        roles = new String[] { "abfrageerstellung" };
+        model.setId(id);
+        model.setSub(sub);
+        model.setStatusAbfrage(StatusAbfrage.OFFEN);
+        Mockito.when(this.authenticationUtils.getUserRoles()).thenReturn(List.of(roles));
+        try {
+            this.abfrageService.throwUserRoleNotAllowedOrAbfrageStatusNotAllowedExceptionWhenDeleteAbfrage(model);
+        } catch (final AbfrageStatusNotAllowedException exception) {
+            assertThat(exception.getMessage(), is("Die Abfrage kann nur im Status 'angelegt' gelöscht werden."));
+        }
+
+        roles = new String[] { "abfrageerstellung" };
+        model.setId(id);
+        model.setSub(sub);
+        model.setStatusAbfrage(StatusAbfrage.ANGELEGT);
+        Mockito.when(this.authenticationUtils.getUserRoles()).thenReturn(List.of(roles));
+        this.abfrageService.throwUserRoleNotAllowedOrAbfrageStatusNotAllowedExceptionWhenDeleteAbfrage(model);
+    }
+
+    @Test
     void throwEntityIsReferencedExceptionWhenAbfrageIsReferencingBauvorhaben()
         throws EntityIsReferencedException, EntityNotFoundException {
         this.abfrageService.throwEntityIsReferencedExceptionWhenAbfrageIsReferencingBauvorhaben(
