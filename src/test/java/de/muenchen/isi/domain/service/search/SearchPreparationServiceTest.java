@@ -5,6 +5,7 @@ import static org.hamcrest.Matchers.is;
 
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.model.search.request.SearchQueryModel;
+import de.muenchen.isi.infrastructure.entity.Bauleitplanverfahren;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
 import de.muenchen.isi.infrastructure.entity.Infrastrukturabfrage;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Grundschule;
@@ -242,7 +243,7 @@ class SearchPreparationServiceTest {
             result,
             is(
                 List.of(
-                    Infrastrukturabfrage.class,
+                    Bauleitplanverfahren.class,
                     Bauvorhaben.class,
                     Grundschule.class,
                     GsNachmittagBetreuung.class,
