@@ -31,10 +31,12 @@ import de.muenchen.isi.infrastructure.entity.Bauleitplanverfahren;
 import de.muenchen.isi.infrastructure.entity.BedarfsmeldungFachreferate;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.repository.AbfrageRepository;
 import de.muenchen.isi.security.AuthenticationUtils;
 import java.lang.reflect.Field;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -294,6 +296,9 @@ class AbfrageServiceTest {
             new AbfragevarianteBauleitplanverfahrenInBearbeitungSachbearbeitungModel();
         abfragevarianteSachbearbeitung.setAbfragevariantenNr(1);
         abfragevarianteSachbearbeitung.setName("Abfragevariante 1");
+        abfragevarianteSachbearbeitung.setGfWohnenPlanungsursaechlich(BigDecimal.TEN);
+        abfragevarianteSachbearbeitung.setSobonOrientierungswertJahr(SobonOrientierungswertJahr.JAHR_2017);
+        abfragevarianteSachbearbeitung.setAnmerkung("Test Anmerkung");
         requestModel.setAbfragevariantenSachbearbeitung(List.of(abfragevarianteSachbearbeitung));
 
         final var entityInDb = new Bauleitplanverfahren();
@@ -313,6 +318,9 @@ class AbfrageServiceTest {
         final var abfragevariante1ToSave = new AbfragevarianteBauleitplanverfahren();
         abfragevariante1ToSave.setAbfragevariantenNr(1);
         abfragevariante1ToSave.setName("Abfragevariante 1");
+        abfragevariante1ToSave.setGfWohnenPlanungsursaechlich(BigDecimal.TEN);
+        abfragevariante1ToSave.setSobonOrientierungswertJahr(SobonOrientierungswertJahr.JAHR_2017);
+        abfragevariante1ToSave.setAnmerkung("Test Anmerkung");
         entityToSave.setAbfragevariantenSachbearbeitung(List.of(abfragevariante1ToSave));
 
         final var entitySaved = new Bauleitplanverfahren();
@@ -324,6 +332,9 @@ class AbfrageServiceTest {
         abfragevariante1Saved.setId(UUID.randomUUID());
         abfragevariante1Saved.setAbfragevariantenNr(1);
         abfragevariante1Saved.setName("Abfragevariante 1");
+        abfragevariante1Saved.setGfWohnenPlanungsursaechlich(BigDecimal.TEN);
+        abfragevariante1Saved.setSobonOrientierungswertJahr(SobonOrientierungswertJahr.JAHR_2017);
+        abfragevariante1Saved.setAnmerkung("Test Anmerkung");
         entitySaved.setAbfragevariantenSachbearbeitung(List.of(abfragevariante1Saved));
 
         Mockito.when(this.abfrageRepository.saveAndFlush(entityToSave)).thenReturn(entitySaved);
@@ -331,19 +342,22 @@ class AbfrageServiceTest {
 
         final var result = this.abfrageService.patchInBearbeitungSachbearbeitung(requestModel, uuid);
 
-        final var entityExpected = new BauleitplanverfahrenModel();
-        entityExpected.setArtAbfrage(ArtAbfrage.BAULEITPLANVERFAHREN);
-        entityExpected.setId(uuid);
-        entityExpected.setVersion(1L);
-        entityExpected.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
-        entityExpected.setName("hallo");
+        final var expected = new BauleitplanverfahrenModel();
+        expected.setArtAbfrage(ArtAbfrage.BAULEITPLANVERFAHREN);
+        expected.setId(uuid);
+        expected.setVersion(1L);
+        expected.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+        expected.setName("hallo");
         final var abfragevariante1Expected = new AbfragevarianteBauleitplanverfahrenModel();
         abfragevariante1Expected.setId(abfragevariante1Saved.getId());
         abfragevariante1Expected.setAbfragevariantenNr(1);
         abfragevariante1Expected.setName("Abfragevariante 1");
-        entityExpected.setAbfragevariantenSachbearbeitung(List.of(abfragevariante1Expected));
+        abfragevariante1Expected.setGfWohnenPlanungsursaechlich(BigDecimal.TEN);
+        abfragevariante1Expected.setSobonOrientierungswertJahr(SobonOrientierungswertJahr.JAHR_2017);
+        abfragevariante1Expected.setAnmerkung("Test Anmerkung");
+        expected.setAbfragevariantenSachbearbeitung(List.of(abfragevariante1Expected));
 
-        assertThat(result, is(entityExpected));
+        assertThat(result, is(expected));
     }
 
     @Test
