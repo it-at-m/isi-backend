@@ -929,4 +929,24 @@ class AbfrageServiceTest {
             () -> this.abfrageService.throwEntityIsReferencedExceptionWhenAbfrageIsReferencingBauvorhaben(abfrage)
         );
     }
+
+    @Test
+    void throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid() throws AbfrageStatusNotAllowedException {
+        final var model = new BauleitplanverfahrenModel();
+        model.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
+
+        this.abfrageService.throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(
+                model,
+                StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE
+            );
+
+        Assertions.assertThrows(
+            AbfrageStatusNotAllowedException.class,
+            () ->
+                this.abfrageService.throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(
+                        model,
+                        StatusAbfrage.ANGELEGT
+                    )
+        );
+    }
 }
