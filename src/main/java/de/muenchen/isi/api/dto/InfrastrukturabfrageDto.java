@@ -22,9 +22,9 @@ public class InfrastrukturabfrageDto extends BaseEntityDto {
 
     private SobonVerfahrensgrundsaetzeJahr sobonJahr;
 
-    private List<AbfragevarianteDto> abfragevarianten;
+    private List<AbfragevarianteAltDto> abfragevarianten;
 
-    private List<AbfragevarianteDto> abfragevariantenSachbearbeitung;
+    private List<AbfragevarianteAltDto> abfragevariantenSachbearbeitung;
 
     private String aktenzeichenProLbk;
 

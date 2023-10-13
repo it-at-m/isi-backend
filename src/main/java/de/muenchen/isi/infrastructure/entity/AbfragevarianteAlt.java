@@ -45,7 +45,7 @@ import org.hibernate.search.mapper.pojo.mapping.definition.annotation.NonStandar
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class Abfragevariante extends BaseEntity {
+public class AbfragevarianteAlt extends BaseEntity {
 
     @Column(nullable = false)
     private Integer abfragevariantenNr;

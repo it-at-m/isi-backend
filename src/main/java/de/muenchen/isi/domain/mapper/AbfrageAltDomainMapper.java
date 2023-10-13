@@ -6,7 +6,7 @@ package de.muenchen.isi.domain.mapper;
 
 import de.muenchen.isi.configuration.MapstructConfiguration;
 import de.muenchen.isi.domain.model.AbfrageAltModel;
-import de.muenchen.isi.domain.model.AbfragevarianteModel;
+import de.muenchen.isi.domain.model.AbfragevarianteAltModel;
 import de.muenchen.isi.domain.model.InfrastrukturabfrageModel;
 import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.InfrastrukturabfrageAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageBedarfsmeldungInBearbeitungFachreferate.InfrastrukturabfrageInBearbeitungFachreferateModel;
@@ -79,13 +79,13 @@ public abstract class AbfrageAltDomainMapper {
         final InfrastrukturabfrageAngelegtModel request,
         final @MappingTarget InfrastrukturabfrageModel response
     ) {
-        final List<AbfragevarianteModel> abfragevarianten = new ArrayList<>();
+        final List<AbfragevarianteAltModel> abfragevarianten = new ArrayList<>();
         CollectionUtils
             .emptyIfNull(request.getAbfragevarianten())
             .forEach(abfragevariante -> {
                 if (abfragevariante.getId() == null) {
                     abfragevarianten.add(
-                        abfragevarianteDomainMapper.request2Model(abfragevariante, new AbfragevarianteModel())
+                        abfragevarianteDomainMapper.request2Model(abfragevariante, new AbfragevarianteAltModel())
                     );
                 } else {
                     CollectionUtils
@@ -120,7 +120,7 @@ public abstract class AbfrageAltDomainMapper {
         final @MappingTarget InfrastrukturabfrageModel response
     ) {
         // Mapping der zusätzlichen durch die Sachbearbeitung pflegbaren Attribute der Abfragevarianten
-        final List<AbfragevarianteModel> mappedAbfragevarianten = new ArrayList<>();
+        final List<AbfragevarianteAltModel> mappedAbfragevarianten = new ArrayList<>();
         CollectionUtils
             .emptyIfNull(request.getAbfragevarianten())
             .forEach(abfragevariante -> {
@@ -137,13 +137,13 @@ public abstract class AbfrageAltDomainMapper {
             });
         response.setAbfragevarianten(mappedAbfragevarianten);
         // Mapping der Abfragevarianten welche ausschließlich durch die Sachbearbeitung gemappt werden.
-        final List<AbfragevarianteModel> mappedAbfragevariantenSachbearbeitung = new ArrayList<>();
+        final List<AbfragevarianteAltModel> mappedAbfragevariantenSachbearbeitung = new ArrayList<>();
         CollectionUtils
             .emptyIfNull(request.getAbfragevariantenSachbearbeitung())
             .forEach(abfragevariante -> {
                 if (abfragevariante.getId() == null) {
                     mappedAbfragevariantenSachbearbeitung.add(
-                        abfragevarianteDomainMapper.request2Model(abfragevariante, new AbfragevarianteModel())
+                        abfragevarianteDomainMapper.request2Model(abfragevariante, new AbfragevarianteAltModel())
                     );
                 } else {
                     CollectionUtils
@@ -180,7 +180,7 @@ public abstract class AbfrageAltDomainMapper {
         final @MappingTarget InfrastrukturabfrageModel response
     ) {
         // Mapping der Bedarfsmeldungen durch die Fachabteilungen der Abfragevarianten
-        final List<AbfragevarianteModel> mappedAbfragevarianten = new ArrayList<>();
+        final List<AbfragevarianteAltModel> mappedAbfragevarianten = new ArrayList<>();
         CollectionUtils
             .emptyIfNull(request.getAbfragevarianten())
             .forEach(abfragevariante -> {
@@ -197,13 +197,13 @@ public abstract class AbfrageAltDomainMapper {
             });
         response.setAbfragevarianten(mappedAbfragevarianten);
         // Mapping der Abfragevarianten welche ausschließlich durch die Sachbearbeitung gemappt werden.
-        final List<AbfragevarianteModel> mappedAbfragevariantenSachbearbeitung = new ArrayList<>();
+        final List<AbfragevarianteAltModel> mappedAbfragevariantenSachbearbeitung = new ArrayList<>();
         CollectionUtils
             .emptyIfNull(request.getAbfragevariantenSachbearbeitung())
             .forEach(abfragevariante -> {
                 if (abfragevariante.getId() == null) {
                     mappedAbfragevariantenSachbearbeitung.add(
-                        abfragevarianteDomainMapper.request2Model(abfragevariante, new AbfragevarianteModel())
+                        abfragevarianteDomainMapper.request2Model(abfragevariante, new AbfragevarianteAltModel())
                     );
                 } else {
                     CollectionUtils

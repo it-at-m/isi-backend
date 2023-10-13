@@ -22,7 +22,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.SubclassMapping;
 
-@Mapper(config = MapstructConfiguration.class, uses = { AbfragevarianteApiMapper.class, DokumentApiMapper.class })
+@Mapper(config = MapstructConfiguration.class, uses = { DokumentApiMapper.class })
 public interface AbfrageApiMapper {
     @SubclassMapping(source = BauleitplanverfahrenModel.class, target = BauleitplanverfahrenDto.class)
     @Mapping(target = "displayName", ignore = true)

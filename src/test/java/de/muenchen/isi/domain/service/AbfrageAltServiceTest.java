@@ -20,7 +20,7 @@ import de.muenchen.isi.domain.mapper.BauabschnittDomainMapperImpl;
 import de.muenchen.isi.domain.mapper.DokumentDomainMapper;
 import de.muenchen.isi.domain.mapper.DokumentDomainMapperImpl;
 import de.muenchen.isi.domain.model.AbfrageAltModel;
-import de.muenchen.isi.domain.model.AbfragevarianteModel;
+import de.muenchen.isi.domain.model.AbfragevarianteAltModel;
 import de.muenchen.isi.domain.model.BauvorhabenModel;
 import de.muenchen.isi.domain.model.BedarfsmeldungFachreferateModel;
 import de.muenchen.isi.domain.model.InfrastrukturabfrageModel;
@@ -33,7 +33,7 @@ import de.muenchen.isi.domain.model.abfrageSachbearbeitungInBearbeitungSachbearb
 import de.muenchen.isi.domain.model.abfrageSachbearbeitungInBearbeitungSachbearbeitung.InfrastrukturabfrageInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.domain.service.filehandling.DokumentService;
 import de.muenchen.isi.infrastructure.entity.AbfrageAlt;
-import de.muenchen.isi.infrastructure.entity.Abfragevariante;
+import de.muenchen.isi.infrastructure.entity.AbfragevarianteAlt;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
 import de.muenchen.isi.infrastructure.entity.BedarfsmeldungFachreferate;
 import de.muenchen.isi.infrastructure.entity.Infrastrukturabfrage;
@@ -339,7 +339,7 @@ class AbfrageAltServiceTest {
         abfrageToSave.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
         abfrageToSave.setNameAbfrage("hallo");
         entityToSave.setAbfrage(abfrageToSave);
-        final var abfragevariante1ToSave = new Abfragevariante();
+        final var abfragevariante1ToSave = new AbfragevarianteAlt();
         abfragevariante1ToSave.setAbfragevariantenNr(1);
         abfragevariante1ToSave.setAbfragevariantenName("Abfragevariante 1");
         entityToSave.setAbfragevariantenSachbearbeitung(List.of(abfragevariante1ToSave));
@@ -351,7 +351,7 @@ class AbfrageAltServiceTest {
         abfrageSaved.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
         abfrageSaved.setNameAbfrage("hallo");
         entitySaved.setAbfrage(abfrageSaved);
-        final var abfragevariante1Saved = new Abfragevariante();
+        final var abfragevariante1Saved = new AbfragevarianteAlt();
         abfragevariante1Saved.setId(UUID.randomUUID());
         abfragevariante1Saved.setAbfragevariantenNr(1);
         abfragevariante1Saved.setAbfragevariantenName("Abfragevariante 1");
@@ -372,7 +372,7 @@ class AbfrageAltServiceTest {
         abfrageExpected.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
         abfrageExpected.setNameAbfrage("hallo");
         entityExpected.setAbfrage(abfrageExpected);
-        final var abfragevariante1Expected = new AbfragevarianteModel();
+        final var abfragevariante1Expected = new AbfragevarianteAltModel();
         abfragevariante1Expected.setId(abfragevariante1Saved.getId());
         abfragevariante1Expected.setAbfragevariantenNr(1);
         abfragevariante1Expected.setAbfragevariantenName("Abfragevariante 1");
@@ -430,10 +430,10 @@ class AbfrageAltServiceTest {
         abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
         entityInDb.setAbfrage(abfrage);
 
-        final var entityInDbAbfragevariante = new Abfragevariante();
+        final var entityInDbAbfragevariante = new AbfragevarianteAlt();
         entityInDbAbfragevariante.setId(uuidAbfragevariante);
 
-        final var entityInDbAbfragevarianteSachbearbeitung = new Abfragevariante();
+        final var entityInDbAbfragevarianteSachbearbeitung = new AbfragevarianteAlt();
         entityInDbAbfragevarianteSachbearbeitung.setId(uuidAbfragevarianteSachbearbeitung);
 
         entityInDb.setAbfragevarianten(List.of(entityInDbAbfragevariante));
@@ -452,7 +452,7 @@ class AbfrageAltServiceTest {
         abfrageToSave.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
         entityToSave.setAbfrage(abfrageToSave);
 
-        final var abfragevarianteToSaveSave = new Abfragevariante();
+        final var abfragevarianteToSaveSave = new AbfragevarianteAlt();
         abfragevarianteToSaveSave.setId(uuidAbfragevariante);
         abfragevarianteToSaveSave.setVersion(0L);
         final var abfragevarianteBedarfsmeldungToSave = new BedarfsmeldungFachreferate();
@@ -466,7 +466,7 @@ class AbfrageAltServiceTest {
         //.getAbfragevarianteSachbearbeitung()
         //.setBedarfsmeldungFachreferate(List.of(abfragevarianteBedarfsmeldungToSave));
 
-        final var abfragevarianteSachbearbeitungToSave = new Abfragevariante();
+        final var abfragevarianteSachbearbeitungToSave = new AbfragevarianteAlt();
         abfragevarianteSachbearbeitungToSave.setId(uuidAbfragevarianteSachbearbeitung);
         abfragevarianteSachbearbeitungToSave.setVersion(0L);
         final var abfragevarianteSachbearbeitungBedarfsmeldungToSave = new BedarfsmeldungFachreferate();
@@ -494,7 +494,7 @@ class AbfrageAltServiceTest {
         abfrageSaved.setNameAbfrage("hallo");
         entitySaved.setAbfrage(abfrageSaved);
 
-        final var abfragevarianteSaved = new Abfragevariante();
+        final var abfragevarianteSaved = new AbfragevarianteAlt();
         abfragevarianteSaved.setId(uuidAbfragevariante);
         abfragevarianteSaved.setVersion(1L);
         final var abfragevarianteBedarfsmeldungSaved = new BedarfsmeldungFachreferate();
@@ -508,7 +508,7 @@ class AbfrageAltServiceTest {
         //.getAbfragevarianteSachbearbeitung()
         //.setBedarfsmeldungFachreferate(List.of(abfragevarianteBedarfsmeldungSaved));
 
-        final var abfragevarianteSachbearbeitungSaved = new Abfragevariante();
+        final var abfragevarianteSachbearbeitungSaved = new AbfragevarianteAlt();
         abfragevarianteSachbearbeitungSaved.setId(uuidAbfragevarianteSachbearbeitung);
         abfragevarianteSachbearbeitungSaved.setVersion(1L);
         final var abfragevarianteSachbearbeitungBedarfsmeldungSaved = new BedarfsmeldungFachreferate();
@@ -543,7 +543,7 @@ class AbfrageAltServiceTest {
         abfrageExpected.setNameAbfrage("hallo");
         entityExpected.setAbfrage(abfrageExpected);
 
-        final var abfragevarianteExpected = new AbfragevarianteModel();
+        final var abfragevarianteExpected = new AbfragevarianteAltModel();
         abfragevarianteExpected.setId(abfragevarianteSaved.getId());
         abfragevarianteExpected.setVersion(1L);
         final var abfragevarianteBedarfsmeldungExpected = new BedarfsmeldungFachreferateModel();
@@ -557,7 +557,7 @@ class AbfrageAltServiceTest {
         //.getAbfragevarianteSachbearbeitung()
         //.setBedarfsmeldungFachreferate(List.of(abfragevarianteBedarfsmeldungExpected));
 
-        final var abfragevarianteSachbearbeitungExpected = new AbfragevarianteModel();
+        final var abfragevarianteSachbearbeitungExpected = new AbfragevarianteAltModel();
         abfragevarianteSachbearbeitungExpected.setId(abfragevarianteSachbearbeitungSaved.getId());
         abfragevarianteSachbearbeitungExpected.setVersion(1L);
         final var abfragevarianteSachbearbeitungBedarfsmeldungExpected = new BedarfsmeldungFachreferateModel();

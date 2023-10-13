@@ -2,7 +2,7 @@
  * Copyright (c): it@M - Dienstleister für Informations- und Telekommunikationstechnik
  * der Landeshauptstadt München, 2022
  */
-package de.muenchen.isi.domain.model;
+package de.muenchen.isi.api.dto;
 
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Planungsrecht;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
@@ -16,7 +16,7 @@ import lombok.ToString;
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class AbfragevarianteModel extends BaseEntityModel {
+public class AbfragevarianteAltDto extends BaseEntityDto {
 
     private Integer abfragevariantenNr;
 
@@ -54,7 +54,7 @@ public class AbfragevarianteModel extends BaseEntityModel {
 
     private BigDecimal geschossflaecheSonstiges;
 
-    private List<BauabschnittModel> bauabschnitte;
+    private List<BauabschnittDto> bauabschnitte;
 
     private BigDecimal gfWohnenPlanungsursaechlich;
 

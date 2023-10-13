@@ -1,12 +1,12 @@
 package de.muenchen.isi.api.controller;
 
-import de.muenchen.isi.api.dto.AbfragevarianteDto;
+import de.muenchen.isi.api.dto.AbfragevarianteAltDto;
 import de.muenchen.isi.api.dto.BauvorhabenDto;
 import de.muenchen.isi.api.dto.error.InformationResponseDto;
 import de.muenchen.isi.api.dto.search.response.AbfrageSearchResultDto;
 import de.muenchen.isi.api.dto.search.response.InfrastruktureinrichtungSearchResultDto;
 import de.muenchen.isi.api.mapper.AbfrageAltApiMapper;
-import de.muenchen.isi.api.mapper.AbfragevarianteApiMapper;
+import de.muenchen.isi.api.mapper.AbfragevarianteAltApiMapper;
 import de.muenchen.isi.api.mapper.BauvorhabenApiMapper;
 import de.muenchen.isi.api.mapper.InfrastruktureinrichtungApiMapper;
 import de.muenchen.isi.api.mapper.SearchApiMapper;
@@ -57,7 +57,7 @@ public class BauvorhabenController {
 
     private final BauvorhabenApiMapper bauvorhabenApiMapper;
 
-    private final AbfragevarianteApiMapper abfragevarianteApiMapper;
+    private final AbfragevarianteAltApiMapper abfragevarianteApiMapper;
 
     private final AbfrageAltApiMapper abfrageApiMapper;
 
@@ -203,7 +203,7 @@ public class BauvorhabenController {
         "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_PUT_ABFRAGEVARIANTE_RELEVANT.name())"
     )
     public ResponseEntity<BauvorhabenDto> putChangeRelevanteAbfragevariante(
-        @RequestBody @NotNull final AbfragevarianteDto abfragevarianteDto
+        @RequestBody @NotNull final AbfragevarianteAltDto abfragevarianteDto
     )
         throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, BauvorhabenNotReferencedException, EntityIsReferencedException {
         final var abfragevariante = abfragevarianteApiMapper.dto2Model(abfragevarianteDto);

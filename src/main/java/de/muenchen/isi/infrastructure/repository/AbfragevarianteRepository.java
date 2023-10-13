@@ -1,12 +1,12 @@
 package de.muenchen.isi.infrastructure.repository;
 
-import de.muenchen.isi.infrastructure.entity.Abfragevariante;
+import de.muenchen.isi.infrastructure.entity.AbfragevarianteAlt;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-public interface AbfragevarianteRepository extends JpaRepository<Abfragevariante, UUID> {
+public interface AbfragevarianteRepository extends JpaRepository<AbfragevarianteAlt, UUID> {
     @Query(value = "select abfrage_abfragevarianten_id from abfragevariante where id = ?1", nativeQuery = true)
     Optional<String> findAbfrageAbfragevariantenIdById(String id);
 

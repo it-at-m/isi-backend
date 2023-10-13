@@ -21,7 +21,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
-@Mapper(config = MapstructConfiguration.class, uses = { AbfragevarianteApiMapper.class, DokumentApiMapper.class })
+@Mapper(config = MapstructConfiguration.class, uses = { AbfragevarianteAltApiMapper.class, DokumentApiMapper.class })
 public interface AbfrageAltApiMapper {
     @Mapping(target = "abfrage.bauvorhaben", ignore = true)
     InfrastrukturabfrageDto model2Dto(final InfrastrukturabfrageModel model);

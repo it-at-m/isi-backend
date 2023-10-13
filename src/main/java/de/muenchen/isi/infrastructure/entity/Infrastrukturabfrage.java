@@ -70,14 +70,14 @@ public class Infrastrukturabfrage extends BaseEntity {
     @OneToMany(cascade = { CascadeType.ALL }, orphanRemoval = true)
     @JoinColumn(name = "abfrage_abfragevarianten_id", referencedColumnName = "id")
     @OrderBy("abfragevariantenNr asc")
-    private List<Abfragevariante> abfragevarianten;
+    private List<AbfragevarianteAlt> abfragevarianten;
 
     @IndexedEmbedded
     @IndexingDependency(reindexOnUpdate = ReindexOnUpdate.SHALLOW)
     @OneToMany(cascade = { CascadeType.ALL }, orphanRemoval = true)
     @JoinColumn(name = "abfrage_abfragevarianten_sachbearbeitung_id", referencedColumnName = "id")
     @OrderBy("abfragevariantenNr asc")
-    private List<Abfragevariante> abfragevariantenSachbearbeitung;
+    private List<AbfragevarianteAlt> abfragevariantenSachbearbeitung;
 
     @Column(nullable = true)
     private String aktenzeichenProLbk;

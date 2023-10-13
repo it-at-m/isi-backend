@@ -25,9 +25,9 @@ public class InfrastrukturabfrageModel extends BaseEntityModel {
 
     private SobonVerfahrensgrundsaetzeJahr sobonJahr;
 
-    private List<AbfragevarianteModel> abfragevarianten;
+    private List<AbfragevarianteAltModel> abfragevarianten;
 
-    private List<AbfragevarianteModel> abfragevariantenSachbearbeitung;
+    private List<AbfragevarianteAltModel> abfragevariantenSachbearbeitung;
 
     private String aktenzeichenProLbk;
 

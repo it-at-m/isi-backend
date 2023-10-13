@@ -3,7 +3,7 @@ package de.muenchen.isi.domain.mapper;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
-import de.muenchen.isi.domain.model.AbfragevarianteModel;
+import de.muenchen.isi.domain.model.AbfragevarianteAltModel;
 import de.muenchen.isi.domain.model.InfrastrukturabfrageModel;
 import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.AbfrageAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.AbfragevarianteAngelegtModel;
@@ -110,11 +110,11 @@ public class AbfrageDomainMapperTest {
 
         InfrastrukturabfrageModel infrastrukturabfrageModel = new InfrastrukturabfrageModel();
 
-        AbfragevarianteModel abfragevarianteModel = new AbfragevarianteModel();
+        AbfragevarianteAltModel abfragevarianteModel = new AbfragevarianteAltModel();
         abfragevarianteModel.setAbfragevariantenName("Abfragevariante 3");
         abfragevarianteModel.setId(abfragevarianteId);
 
-        List<AbfragevarianteModel> abfragevariantenModelList = new ArrayList<>();
+        List<AbfragevarianteAltModel> abfragevariantenModelList = new ArrayList<>();
         abfragevariantenModelList.add(abfragevarianteModel);
 
         infrastrukturabfrageModel.setAbfragevarianten(abfragevariantenModelList);
@@ -162,11 +162,11 @@ public class AbfrageDomainMapperTest {
         expected.setVersion(99L);
         expected.setAbfragevarianten(List.of());
 
-        final var abfragevariante1 = new AbfragevarianteModel();
+        final var abfragevariante1 = new AbfragevarianteAltModel();
         abfragevariante1.setAbfragevariantenNr(1);
         abfragevariante1.setAbfragevariantenName("Abfragevariante 1");
 
-        final var abfragevariante2 = new AbfragevarianteModel();
+        final var abfragevariante2 = new AbfragevarianteAltModel();
         abfragevariante2.setAbfragevariantenNr(2);
         abfragevariante2.setAbfragevariantenName("Abfragevariante 2");
 
@@ -199,12 +199,12 @@ public class AbfrageDomainMapperTest {
         savedInfrastrukturabfrage.setAbfragevarianten(List.of());
         savedInfrastrukturabfrage.setVersion(98L);
 
-        final var savedAbfragevariante1 = new AbfragevarianteModel();
+        final var savedAbfragevariante1 = new AbfragevarianteAltModel();
         savedAbfragevariante1.setId(abfragevarianteSachbearbeitung1.getId());
         savedAbfragevariante1.setAbfragevariantenNr(99);
         savedAbfragevariante1.setAbfragevariantenName("Old Name Abfragevariante 1");
 
-        final var savedAbfragevariante2 = new AbfragevarianteModel();
+        final var savedAbfragevariante2 = new AbfragevarianteAltModel();
         savedAbfragevariante2.setId(abfragevarianteSachbearbeitung2.getId());
         savedAbfragevariante2.setAbfragevariantenNr(97);
         savedAbfragevariante2.setAbfragevariantenName("Old Name Abfragevariante 2");
@@ -219,12 +219,12 @@ public class AbfrageDomainMapperTest {
         expected.setVersion(99L);
         expected.setAbfragevarianten(List.of());
 
-        final var abfragevariante1 = new AbfragevarianteModel();
+        final var abfragevariante1 = new AbfragevarianteAltModel();
         abfragevariante1.setId(abfragevarianteSachbearbeitung1.getId());
         abfragevariante1.setAbfragevariantenNr(1);
         abfragevariante1.setAbfragevariantenName("New Name Abfragevariante 1");
 
-        final var abfragevariante2 = new AbfragevarianteModel();
+        final var abfragevariante2 = new AbfragevarianteAltModel();
         abfragevariante2.setId(abfragevarianteSachbearbeitung2.getId());
         abfragevariante2.setAbfragevariantenNr(2);
         abfragevariante2.setAbfragevariantenName("New Name Abfragevariante 2");
@@ -258,11 +258,11 @@ public class AbfrageDomainMapperTest {
         modelFromDb.setVersion(99L);
         modelFromDb.setAbfragevariantenSachbearbeitung(List.of());
 
-        final var abfragevarianteModelFromDb1 = new AbfragevarianteModel();
+        final var abfragevarianteModelFromDb1 = new AbfragevarianteAltModel();
         abfragevarianteModelFromDb1.setId(abfragevarianteSachbearbeitung1.getId());
         abfragevarianteModelFromDb1.setVersion(1L);
 
-        final var abfragevarianteModelFromDb2 = new AbfragevarianteModel();
+        final var abfragevarianteModelFromDb2 = new AbfragevarianteAltModel();
         abfragevarianteModelFromDb2.setId(abfragevarianteSachbearbeitung2.getId());
         abfragevarianteModelFromDb2.setVersion(2L);
 
@@ -274,12 +274,12 @@ public class AbfrageDomainMapperTest {
         expected.setVersion(99L);
         expected.setAbfragevariantenSachbearbeitung(List.of());
 
-        final var abfragevarianteExpected1 = new AbfragevarianteModel();
+        final var abfragevarianteExpected1 = new AbfragevarianteAltModel();
         abfragevarianteExpected1.setId(abfragevarianteSachbearbeitung1.getId());
         abfragevarianteExpected1.setVersion(1L);
         abfragevarianteExpected1.setAnmerkung("Test1");
 
-        final var abfragevarianteExpected2 = new AbfragevarianteModel();
+        final var abfragevarianteExpected2 = new AbfragevarianteAltModel();
         abfragevarianteExpected2.setId(abfragevarianteSachbearbeitung2.getId());
         abfragevarianteExpected2.setVersion(2L);
         abfragevarianteExpected2.setAnmerkung("Test2");

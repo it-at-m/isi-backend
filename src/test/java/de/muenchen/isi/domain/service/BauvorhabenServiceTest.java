@@ -25,7 +25,7 @@ import de.muenchen.isi.domain.mapper.InfrastruktureinrichtungDomainMapperImpl;
 import de.muenchen.isi.domain.mapper.SearchDomainMapper;
 import de.muenchen.isi.domain.mapper.SearchDomainMapperImpl;
 import de.muenchen.isi.domain.model.AbfrageAltModel;
-import de.muenchen.isi.domain.model.AbfragevarianteModel;
+import de.muenchen.isi.domain.model.AbfragevarianteAltModel;
 import de.muenchen.isi.domain.model.BauvorhabenModel;
 import de.muenchen.isi.domain.model.InfrastrukturabfrageModel;
 import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.AbfrageAngelegtModel;
@@ -786,10 +786,10 @@ public class BauvorhabenServiceTest {
         abfrageModel.setStatusAbfrage(StatusAbfrage.OFFEN);
         infrastrukturabfrageModel.setAbfrage(abfrageModel);
 
-        final AbfragevarianteModel abfragevarianteModel = new AbfragevarianteModel();
+        final AbfragevarianteAltModel abfragevarianteModel = new AbfragevarianteAltModel();
         abfragevarianteModel.setId(abfragevarianteId);
 
-        final AbfragevarianteModel otherAbfragevarianteModel = new AbfragevarianteModel();
+        final AbfragevarianteAltModel otherAbfragevarianteModel = new AbfragevarianteAltModel();
         otherAbfragevarianteModel.setId(otherAbfragevarianteId);
 
         Mockito

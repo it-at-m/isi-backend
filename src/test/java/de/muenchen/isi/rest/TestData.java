@@ -6,7 +6,7 @@ package de.muenchen.isi.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.muenchen.isi.domain.model.AbfrageAltModel;
-import de.muenchen.isi.domain.model.AbfragevarianteModel;
+import de.muenchen.isi.domain.model.AbfragevarianteAltModel;
 import de.muenchen.isi.domain.model.BauabschnittModel;
 import de.muenchen.isi.domain.model.BaugebietModel;
 import de.muenchen.isi.domain.model.BaurateModel;
@@ -62,14 +62,14 @@ public class TestData {
         infrastrukturabfrage.setAktenzeichenProLbk("PRO12345");
         infrastrukturabfrage.setOffiziellerVerfahrensschritt(UncertainBoolean.FALSE);
 
-        final AbfragevarianteModel abfragevariante = createAbfragevarianteModel();
+        final AbfragevarianteAltModel abfragevariante = createAbfragevarianteModel();
         infrastrukturabfrage.setAbfragevarianten(List.of(abfragevariante));
 
         return infrastrukturabfrage;
     }
 
-    public static AbfragevarianteModel createAbfragevarianteModel() {
-        final AbfragevarianteModel original = new AbfragevarianteModel();
+    public static AbfragevarianteAltModel createAbfragevarianteModel() {
+        final AbfragevarianteAltModel original = new AbfragevarianteAltModel();
         original.setAbfragevariantenNr(1);
         original.setAbfragevariantenName("Dorf");
         original.setPlanungsrecht(Planungsrecht.BPLAN_PARAG_30);

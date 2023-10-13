@@ -13,7 +13,7 @@ import de.muenchen.isi.domain.mapper.AbfrageDomainMapper;
 import de.muenchen.isi.domain.mapper.BauvorhabenDomainMapper;
 import de.muenchen.isi.domain.mapper.SearchDomainMapper;
 import de.muenchen.isi.domain.model.AbfrageAltModel;
-import de.muenchen.isi.domain.model.AbfragevarianteModel;
+import de.muenchen.isi.domain.model.AbfragevarianteAltModel;
 import de.muenchen.isi.domain.model.BauvorhabenModel;
 import de.muenchen.isi.domain.model.InfrastrukturabfrageModel;
 import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.AbfrageAngelegtModel;
@@ -231,7 +231,7 @@ public class BauvorhabenService {
      * @throws AbfrageStatusNotAllowedException  falls die Abfrage den falschen Status hat
      * @throws BauvorhabenNotReferencedException falls die Abfrage zu keinem Bauvorhaben gehört
      */
-    public BauvorhabenModel changeRelevanteAbfragevariante(final AbfragevarianteModel abfragevariante)
+    public BauvorhabenModel changeRelevanteAbfragevariante(final AbfragevarianteAltModel abfragevariante)
         throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, BauvorhabenNotReferencedException, EntityIsReferencedException {
         final var abfrage = getAbfrageOfAbfragevariante(abfragevariante);
         abfrageService.throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(
@@ -372,7 +372,7 @@ public class BauvorhabenService {
         }
     }
 
-    private InfrastrukturabfrageModel getAbfrageOfAbfragevariante(AbfragevarianteModel abfragevariante)
+    private InfrastrukturabfrageModel getAbfrageOfAbfragevariante(AbfragevarianteAltModel abfragevariante)
         throws EntityNotFoundException {
         final var abfragevarianteId = abfragevariante.getId().toString();
         var abfrageId = abfragevarianteRepository.findAbfrageAbfragevariantenIdById(abfragevarianteId);
