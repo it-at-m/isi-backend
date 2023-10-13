@@ -15,11 +15,15 @@ import de.muenchen.isi.domain.mapper.AbfragevarianteBauleitplanverfahrenDomainMa
 import de.muenchen.isi.domain.mapper.BauabschnittDomainMapperImpl;
 import de.muenchen.isi.domain.mapper.DokumentDomainMapperImpl;
 import de.muenchen.isi.domain.model.AbfrageModel;
+import de.muenchen.isi.domain.model.AbfragevarianteBauleitplanverfahrenModel;
 import de.muenchen.isi.domain.model.BauleitplanverfahrenModel;
 import de.muenchen.isi.domain.model.abfrageAngelegt.AbfragevarianteBauleitplanverfahrenAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageAngelegt.BauleitplanverfahrenAngelegtModel;
+import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.AbfragevarianteBauleitplanverfahrenInBearbeitungSachbearbeitungModel;
+import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.BauleitplanverfahrenInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.domain.service.filehandling.DokumentService;
 import de.muenchen.isi.infrastructure.entity.Abfrage;
+import de.muenchen.isi.infrastructure.entity.AbfragevarianteBauleitplanverfahren;
 import de.muenchen.isi.infrastructure.entity.Bauleitplanverfahren;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
@@ -241,6 +245,7 @@ class AbfrageServiceTest {
             );
     }
 
+    @Test
     void patchAngelegtArtAbfrageNotSupported()
         throws UniqueViolationException, FileHandlingFailedException, FileHandlingWithS3FailedException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException {
         final UUID abfrageId = UUID.randomUUID();
@@ -267,6 +272,124 @@ class AbfrageServiceTest {
 
         try {
             this.abfrageService.patchAngelegt(requestModel, entity.getId());
+        } catch (final EntityNotFoundException exception) {
+            assertThat(exception.getMessage(), is("Die Art der Abfrage wird nicht unterstützt."));
+        }
+    }
+
+    @Test
+    void patchInBearbeitungSachbearbeitung()
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException {
+        final var uuid = UUID.randomUUID();
+
+        final var requestModel = new BauleitplanverfahrenInBearbeitungSachbearbeitungModel();
+        requestModel.setVersion(0L);
+        requestModel.setArtAbfrage(ArtAbfrage.BAULEITPLANVERFAHREN);
+        final var abfragevarianteSachbearbeitung =
+            new AbfragevarianteBauleitplanverfahrenInBearbeitungSachbearbeitungModel();
+        abfragevarianteSachbearbeitung.setAbfragevariantenNr(1);
+        abfragevarianteSachbearbeitung.setName("Abfragevariante 1");
+        requestModel.setAbfragevariantenSachbearbeitung(List.of(abfragevarianteSachbearbeitung));
+
+        final var entityInDb = new Bauleitplanverfahren();
+        entityInDb.setId(uuid);
+        entityInDb.setVersion(0L);
+        entityInDb.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+        entityInDb.setName("hallo");
+
+        Mockito.when(this.abfrageRepository.findById(entityInDb.getId())).thenReturn(Optional.of(entityInDb));
+
+        final var entityToSave = new Bauleitplanverfahren();
+        entityToSave.setAbfragevarianten(List.of());
+        entityToSave.setId(uuid);
+        entityToSave.setVersion(0L);
+        entityToSave.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+        entityToSave.setName("hallo");
+        final var abfragevariante1ToSave = new AbfragevarianteBauleitplanverfahren();
+        abfragevariante1ToSave.setAbfragevariantenNr(1);
+        abfragevariante1ToSave.setName("Abfragevariante 1");
+        entityToSave.setAbfragevariantenSachbearbeitung(List.of(abfragevariante1ToSave));
+
+        final var entitySaved = new Bauleitplanverfahren();
+        entitySaved.setId(uuid);
+        entitySaved.setVersion(1L);
+        entitySaved.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+        entitySaved.setName("hallo");
+        final var abfragevariante1Saved = new AbfragevarianteBauleitplanverfahren();
+        abfragevariante1Saved.setId(UUID.randomUUID());
+        abfragevariante1Saved.setAbfragevariantenNr(1);
+        abfragevariante1Saved.setName("Abfragevariante 1");
+        entitySaved.setAbfragevariantenSachbearbeitung(List.of(abfragevariante1Saved));
+
+        Mockito.when(this.abfrageRepository.saveAndFlush(entityToSave)).thenReturn(entitySaved);
+        Mockito.when(this.abfrageRepository.findByNameIgnoreCase("hallo")).thenReturn(Optional.empty());
+
+        final var result = this.abfrageService.patchInBearbeitungSachbearbeitung(requestModel, uuid);
+
+        final var entityExpected = new BauleitplanverfahrenModel();
+        entityExpected.setArtAbfrage(ArtAbfrage.BAULEITPLANVERFAHREN);
+        entityExpected.setId(uuid);
+        entityExpected.setVersion(1L);
+        entityExpected.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+        entityExpected.setName("hallo");
+        final var abfragevariante1Expected = new AbfragevarianteBauleitplanverfahrenModel();
+        abfragevariante1Expected.setId(abfragevariante1Saved.getId());
+        abfragevariante1Expected.setAbfragevariantenNr(1);
+        abfragevariante1Expected.setName("Abfragevariante 1");
+        entityExpected.setAbfragevariantenSachbearbeitung(List.of(abfragevariante1Expected));
+
+        assertThat(result, is(entityExpected));
+    }
+
+    @Test
+    void patchInBearbeitungSachbearbeitungAbfrageNotSupported()
+        throws UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException {
+        final var uuid = UUID.randomUUID();
+
+        final var requestModel = new BauleitplanverfahrenInBearbeitungSachbearbeitungModel();
+        requestModel.setVersion(0L);
+        requestModel.setArtAbfrage(ArtAbfrage.BAULEITPLANVERFAHREN);
+        final var abfragevarianteSachbearbeitung =
+            new AbfragevarianteBauleitplanverfahrenInBearbeitungSachbearbeitungModel();
+        abfragevarianteSachbearbeitung.setAbfragevariantenNr(1);
+        abfragevarianteSachbearbeitung.setName("Abfragevariante 1");
+        requestModel.setAbfragevariantenSachbearbeitung(List.of(abfragevarianteSachbearbeitung));
+
+        final var entityInDb = new Bauleitplanverfahren();
+        entityInDb.setId(uuid);
+        entityInDb.setVersion(0L);
+        entityInDb.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+        entityInDb.setName("hallo");
+
+        Mockito.when(this.abfrageRepository.findById(entityInDb.getId())).thenReturn(Optional.of(entityInDb));
+
+        final var entityToSave = new Bauleitplanverfahren();
+        entityToSave.setAbfragevarianten(List.of());
+        entityToSave.setId(uuid);
+        entityToSave.setVersion(0L);
+        entityToSave.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+        entityToSave.setName("hallo");
+        final var abfragevariante1ToSave = new AbfragevarianteBauleitplanverfahren();
+        abfragevariante1ToSave.setAbfragevariantenNr(1);
+        abfragevariante1ToSave.setName("Abfragevariante 1");
+        entityToSave.setAbfragevariantenSachbearbeitung(List.of(abfragevariante1ToSave));
+
+        final var entitySaved = new Bauleitplanverfahren();
+        entitySaved.setId(uuid);
+        entitySaved.setVersion(1L);
+        entitySaved.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+        entitySaved.setName("hallo");
+        final var abfragevariante1Saved = new AbfragevarianteBauleitplanverfahren();
+        abfragevariante1Saved.setId(UUID.randomUUID());
+        abfragevariante1Saved.setAbfragevariantenNr(1);
+        abfragevariante1Saved.setName("Abfragevariante 1");
+        entitySaved.setAbfragevariantenSachbearbeitung(List.of(abfragevariante1Saved));
+
+        Mockito.when(this.abfrageRepository.saveAndFlush(entityToSave)).thenReturn(entitySaved);
+        Mockito.when(this.abfrageRepository.findByNameIgnoreCase("hallo")).thenReturn(Optional.empty());
+
+        try {
+            this.abfrageService.patchInBearbeitungSachbearbeitung(requestModel, uuid);
         } catch (final EntityNotFoundException exception) {
             assertThat(exception.getMessage(), is("Die Art der Abfrage wird nicht unterstützt."));
         }
