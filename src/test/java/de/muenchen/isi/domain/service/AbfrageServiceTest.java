@@ -3,7 +3,10 @@ package de.muenchen.isi.domain.service;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
+import de.muenchen.isi.domain.exception.AbfrageStatusNotAllowedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
+import de.muenchen.isi.domain.exception.FileHandlingFailedException;
+import de.muenchen.isi.domain.exception.FileHandlingWithS3FailedException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
 import de.muenchen.isi.domain.mapper.AbfrageDomainMapper;
@@ -13,6 +16,8 @@ import de.muenchen.isi.domain.mapper.BauabschnittDomainMapperImpl;
 import de.muenchen.isi.domain.mapper.DokumentDomainMapperImpl;
 import de.muenchen.isi.domain.model.AbfrageModel;
 import de.muenchen.isi.domain.model.BauleitplanverfahrenModel;
+import de.muenchen.isi.domain.model.abfrageAngelegt.AbfragevarianteBauleitplanverfahrenAngelegtModel;
+import de.muenchen.isi.domain.model.abfrageAngelegt.BauleitplanverfahrenAngelegtModel;
 import de.muenchen.isi.domain.service.filehandling.DokumentService;
 import de.muenchen.isi.infrastructure.entity.Abfrage;
 import de.muenchen.isi.infrastructure.entity.Bauleitplanverfahren;
@@ -20,6 +25,8 @@ import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.repository.AbfrageRepository;
 import de.muenchen.isi.security.AuthenticationUtils;
+import java.lang.reflect.Field;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import org.junit.jupiter.api.Assertions;
@@ -53,12 +60,18 @@ class AbfrageServiceTest {
     private AuthenticationUtils authenticationUtils;
 
     @BeforeEach
-    public void beforeEach() {
+    public void beforeEach() throws NoSuchFieldException, IllegalAccessException {
+        final var abfragevarianteDomainMapper = new AbfragevarianteBauleitplanverfahrenDomainMapperImpl(
+            new BauabschnittDomainMapperImpl()
+        );
         this.abfrageDomainMapper =
-            new AbfrageDomainMapperImpl(
-                new AbfragevarianteBauleitplanverfahrenDomainMapperImpl(new BauabschnittDomainMapperImpl()),
-                new DokumentDomainMapperImpl()
-            );
+            new AbfrageDomainMapperImpl(abfragevarianteDomainMapper, new DokumentDomainMapperImpl());
+        Field field = abfrageDomainMapper
+            .getClass()
+            .getSuperclass()
+            .getDeclaredField("abfragevarianteBauleitplanverfahrenDomainMapper");
+        field.setAccessible(true);
+        field.set(abfrageDomainMapper, abfragevarianteDomainMapper);
         this.abfrageService =
             new AbfrageService(
                 this.abfrageRepository,
@@ -133,7 +146,6 @@ class AbfrageServiceTest {
         abfrage.setName("hallo");
         abfrage.setStatusAbfrage(StatusAbfrage.OFFEN);
 
-        // Mockito vergleicht die Objekte auf Feldebene weshalb das Objekt genauso sein muss wie wenn es von der Methode aufgerufen wird.
         final Bauleitplanverfahren abfrageEntity = new Bauleitplanverfahren();
         abfrageEntity.setId(null);
         abfrageEntity.setSub(sub);
@@ -186,5 +198,77 @@ class AbfrageServiceTest {
         Mockito.verify(this.abfrageRepository, Mockito.times(0)).saveAndFlush(abfrageEntity);
         Mockito.verify(this.abfrageRepository, Mockito.times(1)).findByNameIgnoreCase("hallo");
         Mockito.verify(this.bauvorhabenService, Mockito.times(0)).getBauvorhabenById(UUID.randomUUID());
+    }
+
+    @Test
+    void patchAngelegt()
+        throws EntityNotFoundException, UniqueViolationException, FileHandlingFailedException, FileHandlingWithS3FailedException, OptimisticLockingException, AbfrageStatusNotAllowedException {
+        final UUID abfrageId = UUID.randomUUID();
+
+        final BauleitplanverfahrenAngelegtModel requestModel = new BauleitplanverfahrenAngelegtModel();
+        requestModel.setArtAbfrage(ArtAbfrage.BAULEITPLANVERFAHREN);
+        requestModel.setName("hallo");
+
+        final AbfragevarianteBauleitplanverfahrenAngelegtModel abfragevarianteRequestModel =
+            new AbfragevarianteBauleitplanverfahrenAngelegtModel();
+        abfragevarianteRequestModel.setName("Abfragevariante");
+        requestModel.setAbfragevarianten(List.of(abfragevarianteRequestModel));
+
+        final BauleitplanverfahrenModel model = new BauleitplanverfahrenModel();
+        model.setId(abfrageId);
+        model.setStatusAbfrage(StatusAbfrage.ANGELEGT);
+
+        final BauleitplanverfahrenModel abfrageModelMapped =
+            this.abfrageDomainMapper.request2Model(requestModel, model);
+        final Abfrage entity = this.abfrageDomainMapper.model2Entity(abfrageModelMapped);
+
+        Mockito.when(this.abfrageRepository.findById(entity.getId())).thenReturn(Optional.of(entity));
+        Mockito.when(this.abfrageRepository.saveAndFlush(entity)).thenReturn(entity);
+        Mockito.when(this.abfrageRepository.findByNameIgnoreCase("hallo")).thenReturn(Optional.empty());
+
+        final AbfrageModel result = this.abfrageService.patchAngelegt(requestModel, entity.getId());
+
+        assertThat(result, is(model));
+
+        Mockito.verify(this.abfrageRepository, Mockito.times(1)).findById(entity.getId());
+        Mockito.verify(this.abfrageRepository, Mockito.times(1)).saveAndFlush(entity);
+        Mockito.verify(this.abfrageRepository, Mockito.times(1)).findByNameIgnoreCase("hallo");
+        Mockito
+            .verify(this.dokumentService, Mockito.times(1))
+            .deleteDokumenteFromOriginalDokumentenListWhichAreMissingInParameterAdaptedDokumentenListe(
+                Mockito.isNull(),
+                Mockito.isNull()
+            );
+    }
+
+    void patchAngelegtArtAbfrageNotSupported()
+        throws UniqueViolationException, FileHandlingFailedException, FileHandlingWithS3FailedException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException {
+        final UUID abfrageId = UUID.randomUUID();
+
+        final BauleitplanverfahrenAngelegtModel requestModel = new BauleitplanverfahrenAngelegtModel();
+        requestModel.setName("hallo");
+
+        final AbfragevarianteBauleitplanverfahrenAngelegtModel abfragevarianteRequestModel =
+            new AbfragevarianteBauleitplanverfahrenAngelegtModel();
+        abfragevarianteRequestModel.setName("Abfragevariante");
+        requestModel.setAbfragevarianten(List.of(abfragevarianteRequestModel));
+
+        final BauleitplanverfahrenModel model = new BauleitplanverfahrenModel();
+        model.setId(abfrageId);
+        model.setStatusAbfrage(StatusAbfrage.ANGELEGT);
+
+        final BauleitplanverfahrenModel abfrageModelMapped =
+            this.abfrageDomainMapper.request2Model(requestModel, model);
+        final Abfrage entity = this.abfrageDomainMapper.model2Entity(abfrageModelMapped);
+
+        Mockito.when(this.abfrageRepository.findById(entity.getId())).thenReturn(Optional.of(entity));
+        Mockito.when(this.abfrageRepository.saveAndFlush(entity)).thenReturn(entity);
+        Mockito.when(this.abfrageRepository.findByNameIgnoreCase("hallo")).thenReturn(Optional.empty());
+
+        try {
+            this.abfrageService.patchAngelegt(requestModel, entity.getId());
+        } catch (final EntityNotFoundException exception) {
+            assertThat(exception.getMessage(), is("Die Art der Abfrage wird nicht unterstützt."));
+        }
     }
 }
