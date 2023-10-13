@@ -11,7 +11,6 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -23,12 +22,6 @@ import lombok.ToString;
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 public class AbfragevarianteBauleitplanverfahrenDto extends BaseEntityDto {
-
-    private Integer abfragevariantenNr;
-
-    @NotBlank
-    @Size(max = 30, message = "Es sind maximal {max} Zeichen erlaubt")
-    private String name;
 
     private LocalDate satzungsbeschluss;
 

@@ -6,6 +6,7 @@ package de.muenchen.isi.infrastructure.entity;
 
 import de.muenchen.isi.infrastructure.adapter.search.IntegerSuggestionBinder;
 import de.muenchen.isi.infrastructure.adapter.search.IntegerToStringValueBridge;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.WesentlicheRechtsgrundlage;
 import de.muenchen.isi.infrastructure.repository.search.SearchwordSuggesterRepository;
@@ -14,6 +15,7 @@ import java.time.LocalDate;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -34,6 +36,7 @@ import org.hibernate.search.mapper.pojo.mapping.definition.annotation.KeywordFie
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.NonStandardField;
 
 @Entity
+@DiscriminatorValue(ArtAbfrage.Values.BAULEITPLANVERFAHREN)
 @Table(
     indexes = {
         @Index(
@@ -59,13 +62,7 @@ import org.hibernate.search.mapper.pojo.mapping.definition.annotation.NonStandar
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class AbfragevarianteBauleitplanverfahren extends BaseEntity {
-
-    @Column(nullable = false)
-    private Integer abfragevariantenNr;
-
-    @Column(nullable = false, length = 30)
-    private String name;
+public class AbfragevarianteBauleitplanverfahren extends Abfragevariante {
 
     @Column
     private LocalDate satzungsbeschluss;
