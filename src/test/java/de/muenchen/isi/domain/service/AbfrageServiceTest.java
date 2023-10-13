@@ -4,11 +4,13 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
 import de.muenchen.isi.domain.exception.AbfrageStatusNotAllowedException;
+import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.FileHandlingFailedException;
 import de.muenchen.isi.domain.exception.FileHandlingWithS3FailedException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
+import de.muenchen.isi.domain.exception.UserRoleNotAllowedException;
 import de.muenchen.isi.domain.mapper.AbfrageDomainMapper;
 import de.muenchen.isi.domain.mapper.AbfrageDomainMapperImpl;
 import de.muenchen.isi.domain.mapper.AbfragevarianteBauleitplanverfahrenDomainMapperImpl;
@@ -17,6 +19,7 @@ import de.muenchen.isi.domain.mapper.DokumentDomainMapperImpl;
 import de.muenchen.isi.domain.model.AbfrageModel;
 import de.muenchen.isi.domain.model.AbfragevarianteBauleitplanverfahrenModel;
 import de.muenchen.isi.domain.model.BauleitplanverfahrenModel;
+import de.muenchen.isi.domain.model.BauvorhabenModel;
 import de.muenchen.isi.domain.model.BedarfsmeldungFachreferateModel;
 import de.muenchen.isi.domain.model.abfrageAngelegt.AbfragevarianteBauleitplanverfahrenAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageAngelegt.BauleitplanverfahrenAngelegtModel;
@@ -28,6 +31,7 @@ import de.muenchen.isi.domain.service.filehandling.DokumentService;
 import de.muenchen.isi.infrastructure.entity.Abfrage;
 import de.muenchen.isi.infrastructure.entity.AbfragevarianteBauleitplanverfahren;
 import de.muenchen.isi.infrastructure.entity.Bauleitplanverfahren;
+import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
 import de.muenchen.isi.infrastructure.entity.BedarfsmeldungFachreferate;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
@@ -740,5 +744,169 @@ class AbfrageServiceTest {
         } catch (final EntityNotFoundException exception) {
             assertThat(exception.getMessage(), is("Die Art der Abfrage wird nicht unterstützt."));
         }
+    }
+
+    @Test
+    void deleteByIdAbfrageerstellung()
+        throws UserRoleNotAllowedException, EntityIsReferencedException, EntityNotFoundException, AbfrageStatusNotAllowedException {
+        final UUID id = UUID.randomUUID();
+
+        String[] roles = { "abfrageerstellung" };
+        String sub = "1234";
+
+        final Bauleitplanverfahren entity = new Bauleitplanverfahren();
+        entity.setId(id);
+        entity.setSub(sub);
+        entity.setStatusAbfrage(StatusAbfrage.ANGELEGT);
+
+        Mockito.when(this.abfrageRepository.findById(entity.getId())).thenReturn(Optional.of(entity));
+
+        Mockito.when(this.authenticationUtils.getUserRoles()).thenReturn(List.of(roles));
+
+        Mockito.when(this.authenticationUtils.getUserSub()).thenReturn(sub);
+
+        this.abfrageService.deleteById(id);
+
+        Mockito.verify(this.abfrageRepository, Mockito.times(1)).findById(entity.getId());
+        Mockito.verify(this.abfrageRepository, Mockito.times(1)).deleteById(id);
+    }
+
+    @Test
+    void deleteByIdAdmin()
+        throws UserRoleNotAllowedException, EntityIsReferencedException, EntityNotFoundException, AbfrageStatusNotAllowedException {
+        final UUID id = UUID.randomUUID();
+
+        String[] roles = { "admin" };
+        String sub = "1234";
+
+        final Bauleitplanverfahren entity = new Bauleitplanverfahren();
+        entity.setId(id);
+        entity.setSub(sub);
+        entity.setStatusAbfrage(StatusAbfrage.OFFEN);
+
+        Mockito.when(this.abfrageRepository.findById(entity.getId())).thenReturn(Optional.of(entity));
+
+        Mockito.when(this.authenticationUtils.getUserRoles()).thenReturn(List.of(roles));
+
+        Mockito.when(this.authenticationUtils.getUserSub()).thenReturn(sub);
+
+        this.abfrageService.deleteById(id);
+
+        Mockito.verify(this.abfrageRepository, Mockito.times(1)).findById(entity.getId());
+        Mockito.verify(this.abfrageRepository, Mockito.times(1)).deleteById(id);
+    }
+
+    @Test
+    void deleteByIdAdminNotSameSub()
+        throws UserRoleNotAllowedException, EntityIsReferencedException, EntityNotFoundException, AbfrageStatusNotAllowedException {
+        final UUID id = UUID.randomUUID();
+
+        String[] roles = { "admin" };
+        String sub = "1234";
+        String userSub = "6789";
+
+        final Bauleitplanverfahren entity = new Bauleitplanverfahren();
+        entity.setId(id);
+        entity.setSub(sub);
+        entity.setStatusAbfrage(StatusAbfrage.OFFEN);
+
+        Mockito.when(this.abfrageRepository.findById(entity.getId())).thenReturn(Optional.of(entity));
+
+        Mockito.when(this.authenticationUtils.getUserRoles()).thenReturn(List.of(roles));
+
+        Mockito.when(this.authenticationUtils.getUserSub()).thenReturn(userSub);
+
+        this.abfrageService.deleteById(id);
+
+        Mockito.verify(this.abfrageRepository, Mockito.times(1)).findById(entity.getId());
+        Mockito.verify(this.abfrageRepository, Mockito.times(1)).deleteById(id);
+    }
+
+    @Test
+    void deleteByIdUserNotAllowedException() {
+        final UUID id = UUID.randomUUID();
+        String[] roles = { "abfrageerstellung" };
+        String sub = "1234";
+        final Bauleitplanverfahren entity = new Bauleitplanverfahren();
+        entity.setId(id);
+        entity.setSub("321");
+        entity.setStatusAbfrage(StatusAbfrage.ANGELEGT);
+
+        Mockito.when(this.abfrageRepository.findById(entity.getId())).thenReturn(Optional.of(entity));
+        Mockito.when(this.authenticationUtils.getUserRoles()).thenReturn(List.of(roles));
+        Mockito.when(this.authenticationUtils.getUserSub()).thenReturn(sub);
+
+        Assertions.assertThrows(UserRoleNotAllowedException.class, () -> this.abfrageService.deleteById(id));
+
+        Mockito.verify(this.abfrageRepository, Mockito.times(1)).findById(entity.getId());
+        Mockito.verify(this.abfrageRepository, Mockito.times(0)).deleteById(id);
+    }
+
+    @Test
+    void deleteByIdException() throws EntityNotFoundException {
+        final UUID id = UUID.randomUUID();
+        String[] roles = { "abfrageerstellung" };
+        String sub = "1234";
+        final Bauleitplanverfahren entity = new Bauleitplanverfahren();
+        entity.setId(id);
+        entity.setSub(sub);
+        final var bauvorhaben = new Bauvorhaben();
+        bauvorhaben.setId(UUID.randomUUID());
+        entity.setBauvorhaben(bauvorhaben);
+        entity.setStatusAbfrage(StatusAbfrage.ANGELEGT);
+
+        final var bauvorhabenModel = new BauvorhabenModel();
+        bauvorhabenModel.setId(bauvorhaben.getId());
+
+        Mockito.when(this.abfrageRepository.findById(entity.getId())).thenReturn(Optional.of(entity));
+        Mockito.when(this.bauvorhabenService.getBauvorhabenById(bauvorhaben.getId())).thenReturn(bauvorhabenModel);
+        Mockito.when(this.authenticationUtils.getUserRoles()).thenReturn(List.of(roles));
+        Mockito.when(this.authenticationUtils.getUserSub()).thenReturn(sub);
+
+        Assertions.assertThrows(EntityIsReferencedException.class, () -> this.abfrageService.deleteById(id));
+
+        Mockito.verify(this.abfrageRepository, Mockito.times(1)).findById(entity.getId());
+        Mockito.verify(this.bauvorhabenService, Mockito.times(1)).getBauvorhabenById(bauvorhabenModel.getId());
+        Mockito.verify(this.abfrageRepository, Mockito.times(0)).deleteById(id);
+    }
+
+    @Test
+    void deleteByIdStatusException() {
+        final UUID id = UUID.randomUUID();
+        String[] roles = { "abfrageerstellung" };
+        String sub = "1234";
+        final Bauleitplanverfahren entity = new Bauleitplanverfahren();
+        entity.setId(id);
+        entity.setSub(sub);
+        entity.setStatusAbfrage(StatusAbfrage.OFFEN);
+
+        Mockito.when(this.abfrageRepository.findById(entity.getId())).thenReturn(Optional.of(entity));
+        Mockito.when(this.authenticationUtils.getUserRoles()).thenReturn(List.of(roles));
+        Mockito.when(this.authenticationUtils.getUserSub()).thenReturn(sub);
+
+        Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () -> this.abfrageService.deleteById(id));
+
+        Mockito.verify(this.abfrageRepository, Mockito.times(1)).findById(entity.getId());
+        Mockito.verify(this.abfrageRepository, Mockito.times(0)).deleteById(id);
+    }
+
+    @Test
+    void deleteByIdNutzerException() {
+        final UUID id = UUID.randomUUID();
+        String[] roles = { "nutzer" };
+        String sub = "1234";
+        final Bauleitplanverfahren entity = new Bauleitplanverfahren();
+        entity.setId(id);
+        entity.setSub(sub);
+        entity.setStatusAbfrage(StatusAbfrage.ANGELEGT);
+
+        Mockito.when(this.abfrageRepository.findById(entity.getId())).thenReturn(Optional.of(entity));
+        Mockito.when(this.authenticationUtils.getUserRoles()).thenReturn(List.of(roles));
+        Mockito.when(this.authenticationUtils.getUserSub()).thenReturn(sub);
+
+        Assertions.assertThrows(UserRoleNotAllowedException.class, () -> this.abfrageService.deleteById(id));
+
+        Mockito.verify(this.abfrageRepository, Mockito.times(1)).findById(entity.getId());
+        Mockito.verify(this.abfrageRepository, Mockito.times(0)).deleteById(id);
     }
 }
