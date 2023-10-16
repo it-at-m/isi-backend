@@ -22,11 +22,11 @@ import de.muenchen.isi.domain.service.filehandling.DokumentService;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.repository.AbfrageRepository;
+import de.muenchen.isi.infrastructure.repository.BauvorhabenRepository;
 import de.muenchen.isi.security.AuthenticationUtils;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
@@ -40,7 +40,7 @@ public class AbfrageService {
 
     private final AbfrageDomainMapper abfrageDomainMapper;
 
-    private final BauvorhabenService bauvorhabenService;
+    private final BauvorhabenRepository bauvorhabenRepository;
 
     private final DokumentService dokumentService;
 
@@ -238,13 +238,13 @@ public class AbfrageService {
      */
     protected void throwEntityIsReferencedExceptionWhenAbfrageIsReferencingBauvorhaben(final AbfrageModel abfrage)
         throws EntityIsReferencedException, EntityNotFoundException {
-        final var bauvorhaben = bauvorhabenService.getBauvorhabenById(abfrage.getBauvorhaben());
-        if (ObjectUtils.isNotEmpty(bauvorhaben)) {
+        final var bauvorhaben = bauvorhabenRepository.findById(abfrage.getBauvorhaben());
+        if (!bauvorhaben.isEmpty()) {
             final var message =
                 "Die Abfrage " +
                 abfrage.getName() +
                 " referenziert das Bauvorhaben " +
-                bauvorhaben.getNameVorhaben() +
+                bauvorhaben.get().getNameVorhaben() +
                 ".";
             log.error(message);
             throw new EntityIsReferencedException(message);

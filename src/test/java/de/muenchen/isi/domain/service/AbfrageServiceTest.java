@@ -19,7 +19,6 @@ import de.muenchen.isi.domain.mapper.DokumentDomainMapperImpl;
 import de.muenchen.isi.domain.model.AbfrageModel;
 import de.muenchen.isi.domain.model.AbfragevarianteBauleitplanverfahrenModel;
 import de.muenchen.isi.domain.model.BauleitplanverfahrenModel;
-import de.muenchen.isi.domain.model.BauvorhabenModel;
 import de.muenchen.isi.domain.model.BedarfsmeldungFachreferateModel;
 import de.muenchen.isi.domain.model.abfrageAngelegt.AbfragevarianteBauleitplanverfahrenAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageAngelegt.BauleitplanverfahrenAngelegtModel;
@@ -38,6 +37,7 @@ import de.muenchen.isi.infrastructure.entity.enums.lookup.Infrastruktureinrichtu
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.repository.AbfrageRepository;
+import de.muenchen.isi.infrastructure.repository.BauvorhabenRepository;
 import de.muenchen.isi.security.AuthenticationUtils;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
@@ -66,7 +66,7 @@ class AbfrageServiceTest {
     private AbfrageDomainMapper abfrageDomainMapper;
 
     @Mock
-    private BauvorhabenService bauvorhabenService;
+    private BauvorhabenRepository bauvorhabenRepository;
 
     @Mock
     private DokumentService dokumentService;
@@ -89,11 +89,16 @@ class AbfrageServiceTest {
             new AbfrageService(
                 this.abfrageRepository,
                 this.abfrageDomainMapper,
-                this.bauvorhabenService,
+                this.bauvorhabenRepository,
                 this.dokumentService,
                 this.authenticationUtils
             );
-        Mockito.reset(this.abfrageRepository, this.bauvorhabenService, this.dokumentService, this.authenticationUtils);
+        Mockito.reset(
+            this.abfrageRepository,
+            this.bauvorhabenRepository,
+            this.dokumentService,
+            this.authenticationUtils
+        );
     }
 
     @Test
@@ -146,7 +151,7 @@ class AbfrageServiceTest {
         assertThat(result, is(expected));
         Mockito.verify(this.abfrageRepository, Mockito.times(1)).saveAndFlush(abfrageEntity);
         Mockito.verify(this.abfrageRepository, Mockito.times(1)).findByNameIgnoreCase("hallo");
-        Mockito.verify(this.bauvorhabenService, Mockito.times(0)).getBauvorhabenById(UUID.randomUUID());
+        Mockito.verify(this.bauvorhabenRepository, Mockito.times(0)).findById(UUID.randomUUID());
     }
 
     @Test
@@ -188,7 +193,7 @@ class AbfrageServiceTest {
         assertThat(result, is(expected));
         Mockito.verify(this.abfrageRepository, Mockito.times(1)).saveAndFlush(abfrageEntity);
         Mockito.verify(this.abfrageRepository, Mockito.times(1)).findByNameIgnoreCase("hallo");
-        Mockito.verify(this.bauvorhabenService, Mockito.times(0)).getBauvorhabenById(UUID.randomUUID());
+        Mockito.verify(this.bauvorhabenRepository, Mockito.times(0)).findById(UUID.randomUUID());
     }
 
     @Test
@@ -210,7 +215,7 @@ class AbfrageServiceTest {
 
         Mockito.verify(this.abfrageRepository, Mockito.times(0)).saveAndFlush(abfrageEntity);
         Mockito.verify(this.abfrageRepository, Mockito.times(1)).findByNameIgnoreCase("hallo");
-        Mockito.verify(this.bauvorhabenService, Mockito.times(0)).getBauvorhabenById(UUID.randomUUID());
+        Mockito.verify(this.bauvorhabenRepository, Mockito.times(0)).findById(UUID.randomUUID());
     }
 
     @Test
@@ -860,18 +865,20 @@ class AbfrageServiceTest {
         entity.setBauvorhaben(bauvorhaben);
         entity.setStatusAbfrage(StatusAbfrage.ANGELEGT);
 
-        final var bauvorhabenModel = new BauvorhabenModel();
-        bauvorhabenModel.setId(bauvorhaben.getId());
+        final var bauvorhabenEntity = new Bauvorhaben();
+        bauvorhabenEntity.setId(bauvorhaben.getId());
 
         Mockito.when(this.abfrageRepository.findById(entity.getId())).thenReturn(Optional.of(entity));
-        Mockito.when(this.bauvorhabenService.getBauvorhabenById(bauvorhaben.getId())).thenReturn(bauvorhabenModel);
+        Mockito
+            .when(this.bauvorhabenRepository.findById(bauvorhaben.getId()))
+            .thenReturn(Optional.of(bauvorhabenEntity));
         Mockito.when(this.authenticationUtils.getUserRoles()).thenReturn(List.of(roles));
         Mockito.when(this.authenticationUtils.getUserSub()).thenReturn(sub);
 
         Assertions.assertThrows(EntityIsReferencedException.class, () -> this.abfrageService.deleteById(id));
 
         Mockito.verify(this.abfrageRepository, Mockito.times(1)).findById(entity.getId());
-        Mockito.verify(this.bauvorhabenService, Mockito.times(1)).getBauvorhabenById(bauvorhabenModel.getId());
+        Mockito.verify(this.bauvorhabenRepository, Mockito.times(1)).findById(bauvorhabenEntity.getId());
         Mockito.verify(this.abfrageRepository, Mockito.times(0)).deleteById(id);
     }
 
@@ -983,10 +990,12 @@ class AbfrageServiceTest {
         final BauleitplanverfahrenModel abfrage = new BauleitplanverfahrenModel();
         abfrage.setBauvorhaben(UUID.randomUUID());
 
-        final var bauvorhabenModel = new BauvorhabenModel();
-        bauvorhabenModel.setId(abfrage.getBauvorhaben());
+        final var bauvorhabenEntity = new Bauvorhaben();
+        bauvorhabenEntity.setId(abfrage.getBauvorhaben());
 
-        Mockito.when(this.bauvorhabenService.getBauvorhabenById(bauvorhabenModel.getId())).thenReturn(bauvorhabenModel);
+        Mockito
+            .when(this.bauvorhabenRepository.findById(bauvorhabenEntity.getId()))
+            .thenReturn(Optional.of(bauvorhabenEntity));
         Assertions.assertThrows(
             EntityIsReferencedException.class,
             () -> this.abfrageService.throwEntityIsReferencedExceptionWhenAbfrageIsReferencingBauvorhaben(abfrage)
