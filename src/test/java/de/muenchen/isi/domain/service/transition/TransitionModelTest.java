@@ -65,6 +65,7 @@ public class TransitionModelTest {
     void possibleTransitionsAngelegtAndRoleAdmin()
         throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException {
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
+        abfrage = this.abfrageService.save(abfrage);
         abfrage.setStatusAbfrage(StatusAbfrage.ANGELEGT);
         abfrage = this.abfrageService.save(abfrage);
 
@@ -88,6 +89,7 @@ public class TransitionModelTest {
     void possibleTransitionsAngelegtAndRoleSachbearbeitung()
         throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException {
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
+        abfrage = this.abfrageService.save(abfrage);
         abfrage.setStatusAbfrage(StatusAbfrage.ANGELEGT);
         abfrage = this.abfrageService.save(abfrage);
 
@@ -104,6 +106,7 @@ public class TransitionModelTest {
     void possibleTransitionsAngelegtAndRoleAbfrageerstellung()
         throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException {
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
+        abfrage = this.abfrageService.save(abfrage);
         abfrage.setStatusAbfrage(StatusAbfrage.ANGELEGT);
         abfrage = this.abfrageService.save(abfrage);
 
@@ -127,6 +130,7 @@ public class TransitionModelTest {
     void possibleTransitionsAngelegtAndRoleAnwender()
         throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, StringLengthExceededException {
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
+        abfrage = this.abfrageService.save(abfrage);
         abfrage.setStatusAbfrage(StatusAbfrage.ANGELEGT);
         abfrage = this.abfrageService.save(abfrage);
 
@@ -143,6 +147,7 @@ public class TransitionModelTest {
     void possibleTransitionsOffenAndRoleAdmin()
         throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, StringLengthExceededException {
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
+        abfrage = this.abfrageService.save(abfrage);
         abfrage.setStatusAbfrage(StatusAbfrage.OFFEN);
         abfrage = this.abfrageService.save(abfrage);
 
@@ -187,6 +192,7 @@ public class TransitionModelTest {
     void possibleTransitionsOffenAndRoleSachbearbeitung()
         throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, StringLengthExceededException {
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
+        abfrage = this.abfrageService.save(abfrage);
         abfrage.setStatusAbfrage(StatusAbfrage.OFFEN);
         abfrage = this.abfrageService.save(abfrage);
 
@@ -232,6 +238,7 @@ public class TransitionModelTest {
     void possibleTransitionsOffenAndRoleAbfrageerstellung()
         throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, StringLengthExceededException {
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
+        abfrage = this.abfrageService.save(abfrage);
         abfrage.setStatusAbfrage(StatusAbfrage.OFFEN);
         abfrage = this.abfrageService.save(abfrage);
 
@@ -248,6 +255,7 @@ public class TransitionModelTest {
     void possibleTransitionsOffenAndRoleAnwender()
         throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, StringLengthExceededException {
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
+        abfrage = this.abfrageService.save(abfrage);
         abfrage.setStatusAbfrage(StatusAbfrage.OFFEN);
         abfrage = this.abfrageService.save(abfrage);
 
@@ -264,6 +272,7 @@ public class TransitionModelTest {
     void possibleTransitionsBearbeitungSachbearbeitungAndRoleAdmin()
         throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, StringLengthExceededException {
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
+        abfrage = this.abfrageService.save(abfrage);
         abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
         abfrage = this.abfrageService.save(abfrage);
 
@@ -318,6 +327,7 @@ public class TransitionModelTest {
     void possibleTransitionsBearbeitungSachbearbeitungAndRoleSachbearbeitung()
         throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, StringLengthExceededException {
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
+        abfrage = this.abfrageService.save(abfrage);
         abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
         abfrage = this.abfrageService.save(abfrage);
 
@@ -371,6 +381,7 @@ public class TransitionModelTest {
     void possibleTransitionsBearbeitungSachbearbeitungAndRoleAbfrageerstellung()
         throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, StringLengthExceededException {
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
+        abfrage = this.abfrageService.save(abfrage);
         abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
         abfrage = this.abfrageService.save(abfrage);
 
@@ -387,6 +398,7 @@ public class TransitionModelTest {
     void possibleTransitionsBearbeitungSachbearbeitungAndRoleAnwender()
         throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, StringLengthExceededException {
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
+        abfrage = this.abfrageService.save(abfrage);
         abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
         abfrage = this.abfrageService.save(abfrage);
 
@@ -403,6 +415,7 @@ public class TransitionModelTest {
     void possibleTransitionsBearbeitungFachreferateAndRoleAdmin()
         throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, StringLengthExceededException {
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
+        abfrage = this.abfrageService.save(abfrage);
         abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
         abfrage = this.abfrageService.save(abfrage);
 
@@ -448,6 +461,7 @@ public class TransitionModelTest {
     void possibleTransitionsBearbeitungFachreferateAndRoleSachbearbeitung()
         throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, StringLengthExceededException {
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
+        abfrage = this.abfrageService.save(abfrage);
         abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
         abfrage = this.abfrageService.save(abfrage);
 
@@ -492,6 +506,7 @@ public class TransitionModelTest {
     void possibleTransitionsBearbeitungFachreferateAndRoleAbfrageerstellung()
         throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, StringLengthExceededException {
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
+        abfrage = this.abfrageService.save(abfrage);
         abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
         abfrage = this.abfrageService.save(abfrage);
 
@@ -508,6 +523,7 @@ public class TransitionModelTest {
     void possibleTransitionsBearbeitungFachreferateAndRoleAnwender()
         throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, StringLengthExceededException {
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
+        abfrage = this.abfrageService.save(abfrage);
         abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
         abfrage = this.abfrageService.save(abfrage);
 
@@ -524,6 +540,7 @@ public class TransitionModelTest {
     void possibleTransitionsBedarfsmeldungErfolgtAndRoleAdmin()
         throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, StringLengthExceededException {
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
+        abfrage = this.abfrageService.save(abfrage);
         abfrage.setStatusAbfrage(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT);
         abfrage = this.abfrageService.save(abfrage);
 
@@ -560,6 +577,7 @@ public class TransitionModelTest {
     void possibleTransitionsBedarfsmeldungErfolgtAndRoleSachbearbeitung()
         throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, StringLengthExceededException {
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
+        abfrage = this.abfrageService.save(abfrage);
         abfrage.setStatusAbfrage(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT);
         abfrage = this.abfrageService.save(abfrage);
 
@@ -587,6 +605,7 @@ public class TransitionModelTest {
     void possibleTransitionsBedarfsmeldungErfolgtAndRoleAbfrageerstellung()
         throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, StringLengthExceededException {
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
+        abfrage = this.abfrageService.save(abfrage);
         abfrage.setStatusAbfrage(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT);
         abfrage = this.abfrageService.save(abfrage);
 
@@ -614,6 +633,7 @@ public class TransitionModelTest {
     void possibleTransitionsBedarfsmeldungErfolgtAndRoleAnwender()
         throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, StringLengthExceededException {
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
+        abfrage = this.abfrageService.save(abfrage);
         abfrage.setStatusAbfrage(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT);
         abfrage = this.abfrageService.save(abfrage);
 
@@ -630,6 +650,7 @@ public class TransitionModelTest {
     void possibleTransitionsErledigtMitFachreferateRoleAdmin()
         throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, StringLengthExceededException {
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
+        abfrage = this.abfrageService.save(abfrage);
         abfrage.setStatusAbfrage(StatusAbfrage.ERLEDIGT_MIT_FACHREFERAT);
         abfrage = this.abfrageService.save(abfrage);
 
@@ -658,6 +679,7 @@ public class TransitionModelTest {
     void possibleTransitionsErledigtOhneFachreferateRoleAdmin()
         throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, StringLengthExceededException {
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
+        abfrage = this.abfrageService.save(abfrage);
         abfrage.setStatusAbfrage(StatusAbfrage.ERLEDIGT_OHNE_FACHREFERAT);
         abfrage = this.abfrageService.save(abfrage);
 
@@ -686,6 +708,7 @@ public class TransitionModelTest {
     void possibleTransitionsErledigtMitFachRoleSachbearbeitung()
         throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, StringLengthExceededException {
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
+        abfrage = this.abfrageService.save(abfrage);
         abfrage.setStatusAbfrage(StatusAbfrage.ERLEDIGT_MIT_FACHREFERAT);
         abfrage = this.abfrageService.save(abfrage);
 
@@ -714,6 +737,7 @@ public class TransitionModelTest {
     void possibleTransitionsErledigtOhneFachreferatRoleSachbearbeitung()
         throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, StringLengthExceededException {
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
+        abfrage = this.abfrageService.save(abfrage);
         abfrage.setStatusAbfrage(StatusAbfrage.ERLEDIGT_OHNE_FACHREFERAT);
         abfrage = this.abfrageService.save(abfrage);
 
@@ -742,6 +766,7 @@ public class TransitionModelTest {
     void possibleTransitionsErledigtOhneFachreferatRoleAbfrageerstellung()
         throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, StringLengthExceededException {
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
+        abfrage = this.abfrageService.save(abfrage);
         abfrage.setStatusAbfrage(StatusAbfrage.ERLEDIGT_OHNE_FACHREFERAT);
         abfrage = this.abfrageService.save(abfrage);
 
@@ -758,6 +783,7 @@ public class TransitionModelTest {
     void possibleTransitionsErledigtMitFachreferatRoleAbfrageerstellung()
         throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, StringLengthExceededException {
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
+        abfrage = this.abfrageService.save(abfrage);
         abfrage.setStatusAbfrage(StatusAbfrage.ERLEDIGT_MIT_FACHREFERAT);
         abfrage = this.abfrageService.save(abfrage);
 
@@ -774,6 +800,7 @@ public class TransitionModelTest {
     void possibleTransitionsErledigtOhneFachreferateRoleAnwender()
         throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, StringLengthExceededException {
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
+        abfrage = this.abfrageService.save(abfrage);
         abfrage.setStatusAbfrage(StatusAbfrage.ERLEDIGT_OHNE_FACHREFERAT);
         abfrage = this.abfrageService.save(abfrage);
 
@@ -790,6 +817,7 @@ public class TransitionModelTest {
     void possibleTransitionsErledigtMitFachreferateRoleAnwender()
         throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, StringLengthExceededException {
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
+        abfrage = this.abfrageService.save(abfrage);
         abfrage.setStatusAbfrage(StatusAbfrage.ERLEDIGT_MIT_FACHREFERAT);
         abfrage = this.abfrageService.save(abfrage);
 
@@ -806,6 +834,7 @@ public class TransitionModelTest {
     void possibleTransitionsAbbruch()
         throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, StringLengthExceededException {
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
+        abfrage = this.abfrageService.save(abfrage);
         abfrage.setStatusAbfrage(StatusAbfrage.ABBRUCH);
         abfrage = this.abfrageService.save(abfrage);
 
