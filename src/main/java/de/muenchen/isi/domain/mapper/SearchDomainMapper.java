@@ -15,6 +15,7 @@ import de.muenchen.isi.infrastructure.entity.Bauleitplanverfahren;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Infrastruktureinrichtung;
 import java.util.UUID;
+import org.apache.commons.lang3.ObjectUtils;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
@@ -56,6 +57,6 @@ public interface SearchDomainMapper {
     InfrastruktureinrichtungSearchResultModel entity2SearchResultModel(final Infrastruktureinrichtung entity);
 
     default UUID map(Bauvorhaben bauvorhaben) {
-        return bauvorhaben.getId();
+        return ObjectUtils.isEmpty(bauvorhaben) ? null : bauvorhaben.getId();
     }
 }
