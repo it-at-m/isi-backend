@@ -276,7 +276,7 @@ public class BauvorhabenService {
      * @param bauvorhabenId zum Identifizieren des {@link BauvorhabenModel}
      * @return Liste von {@link AbfrageSearchResultModel} welche einem Bauvorhaben zugeordent sind
      */
-    public List<AbfrageSearchResultModel> getReferencedInfrastrukturabfragen(final UUID bauvorhabenId) {
+    public List<AbfrageSearchResultModel> getReferencedAbfrage(final UUID bauvorhabenId) {
         return this.abfrageRepository.findAllByBauvorhabenIdOrderByCreatedDateTimeDesc(bauvorhabenId)
             .map(this.searchDomainMapper::entity2SearchResultModel)
             .map(AbfrageSearchResultModel.class::cast)

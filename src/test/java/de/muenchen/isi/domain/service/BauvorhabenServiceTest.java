@@ -205,8 +205,7 @@ public class BauvorhabenServiceTest {
             .when(this.abfrageRepository.findAllByBauvorhabenIdOrderByCreatedDateTimeDesc(bauvorhabenId))
             .thenReturn(listAbfrage);
 
-        List<AbfrageSearchResultModel> abfrageResult =
-            this.bauvorhabenService.getReferencedInfrastrukturabfragen(bauvorhabenId);
+        List<AbfrageSearchResultModel> abfrageResult = this.bauvorhabenService.getReferencedAbfrage(bauvorhabenId);
 
         assertThat(expectedAbfrageList, is(abfrageResult));
 
