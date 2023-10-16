@@ -237,9 +237,9 @@ public class AbfrageService {
      * @throws EntityNotFoundException falls das referenzierte Bauvorhaben nicht existiert.
      */
     protected void throwEntityIsReferencedExceptionWhenAbfrageIsReferencingBauvorhaben(final AbfrageModel abfrage)
-        throws EntityIsReferencedException, EntityNotFoundException {
+        throws EntityIsReferencedException {
         final var bauvorhaben = bauvorhabenRepository.findById(abfrage.getBauvorhaben());
-        if (!bauvorhaben.isEmpty()) {
+        if (bauvorhaben.isPresent()) {
             final var message =
                 "Die Abfrage " +
                 abfrage.getName() +
