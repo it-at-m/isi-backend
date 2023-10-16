@@ -21,7 +21,7 @@ import lombok.ToString;
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class AbfragevarianteBauleitplanverfahrenDto extends BaseEntityDto {
+public class AbfragevarianteBauleitplanverfahrenDto extends AbfragevarianteDto {
 
     private LocalDate satzungsbeschluss;
 

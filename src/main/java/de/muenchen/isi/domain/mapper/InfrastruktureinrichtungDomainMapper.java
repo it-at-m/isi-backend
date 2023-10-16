@@ -5,6 +5,7 @@
 package de.muenchen.isi.domain.mapper;
 
 import de.muenchen.isi.configuration.MapstructConfiguration;
+import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.GrundschuleModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.GsNachmittagBetreuungModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.HausFuerKinderModel;
@@ -12,6 +13,7 @@ import de.muenchen.isi.domain.model.infrastruktureinrichtung.Infrastruktureinric
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.KindergartenModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.KinderkrippeModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.MittelschuleModel;
+import de.muenchen.isi.infrastructure.entity.Abfragevariante;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Grundschule;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.GsNachmittagBetreuung;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.HausFuerKinder;
@@ -19,10 +21,11 @@ import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Infrastruk
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Kindergarten;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Kinderkrippe;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Mittelschule;
+import java.util.UUID;
 import org.mapstruct.Mapper;
 import org.mapstruct.SubclassMapping;
 
-@Mapper(config = MapstructConfiguration.class)
+@Mapper(config = MapstructConfiguration.class, uses = { BauvorhabenDomainMapper.class })
 public interface InfrastruktureinrichtungDomainMapper {
     @SubclassMapping(source = Grundschule.class, target = GrundschuleModel.class)
     @SubclassMapping(source = GsNachmittagBetreuung.class, target = GsNachmittagBetreuungModel.class)
@@ -38,5 +41,9 @@ public interface InfrastruktureinrichtungDomainMapper {
     @SubclassMapping(source = KindergartenModel.class, target = Kindergarten.class)
     @SubclassMapping(source = KinderkrippeModel.class, target = Kinderkrippe.class)
     @SubclassMapping(source = MittelschuleModel.class, target = Mittelschule.class)
-    Infrastruktureinrichtung model2Entity(final InfrastruktureinrichtungModel model);
+    Infrastruktureinrichtung model2Entity(final InfrastruktureinrichtungModel model) throws EntityNotFoundException;
+
+    default UUID map(final Abfragevariante abfragevariante) {
+        return abfragevariante.getId();
+    }
 }

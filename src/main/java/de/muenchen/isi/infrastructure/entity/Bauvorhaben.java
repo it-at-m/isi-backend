@@ -129,5 +129,5 @@ public class Bauvorhaben extends BaseEntity {
 
     @OneToOne
     @JoinColumn(name = "relevante_abfragevariante_id")
-    private AbfragevarianteAlt relevanteAbfragevariante;
+    private Abfragevariante relevanteAbfragevariante;
 }

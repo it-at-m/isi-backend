@@ -9,13 +9,11 @@ import de.muenchen.isi.domain.exception.FileHandlingFailedException;
 import de.muenchen.isi.domain.exception.FileHandlingWithS3FailedException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
-import de.muenchen.isi.domain.mapper.AbfrageDomainMapper;
 import de.muenchen.isi.domain.mapper.BauvorhabenDomainMapper;
 import de.muenchen.isi.domain.mapper.SearchDomainMapper;
 import de.muenchen.isi.domain.model.AbfrageAltModel;
-import de.muenchen.isi.domain.model.AbfragevarianteAltModel;
+import de.muenchen.isi.domain.model.AbfrageModel;
 import de.muenchen.isi.domain.model.BauvorhabenModel;
-import de.muenchen.isi.domain.model.InfrastrukturabfrageModel;
 import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.AbfrageAngelegtModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.InfrastruktureinrichtungModel;
 import de.muenchen.isi.domain.model.search.response.AbfrageSearchResultModel;
@@ -56,8 +54,6 @@ public class BauvorhabenService {
 
     private final BauvorhabenDomainMapper bauvorhabenDomainMapper;
 
-    private final AbfrageDomainMapper abfrageDomainMapper;
-
     private final SearchDomainMapper searchDomainMapper;
 
     private final BauvorhabenRepository bauvorhabenRepository;
@@ -70,7 +66,7 @@ public class BauvorhabenService {
 
     private final GlobalCounterRepository globalCounterRepository;
 
-    private final AbfrageAltService abfrageService;
+    private final AbfrageService abfrageService;
 
     private final DokumentService dokumentService;
 
@@ -117,12 +113,13 @@ public class BauvorhabenService {
                 bauvorhabenEntity = this.bauvorhabenRepository.saveAndFlush(bauvorhabenEntity);
                 // falls bei Neuanlage eines Bauvorhabens eine Datenübernahme mit einer Abfrage durchgeführt wurde, dann wird diese mit dem Bauvorhaben verknüpft
                 if (bauvorhaben.getId() == null && abfrageId != null) {
-                    final var abfrageModel = this.abfrageService.getInfrastrukturabfrageById(abfrageId);
-                    this.throwEntityIsReferencedExceptionWhenAbfrageIsReferencingBauvorhaben(abfrageModel.getAbfrage());
-                    abfrageModel
-                        .getAbfrage()
-                        .setBauvorhaben(this.bauvorhabenDomainMapper.entity2Model(bauvorhabenEntity));
-                    abfrageService.saveInfrastrukturabfrage(abfrageModel);
+                    final var abfrageModel = this.abfrageService.getById(abfrageId);
+                    this.throwEntityIsReferencedExceptionWhenAbfrageIsReferencingBauvorhaben(
+                            abfrageModel,
+                            bauvorhabenEntity.getNameVorhaben()
+                        );
+                    abfrageModel.setBauvorhaben(bauvorhabenEntity.getId());
+                    abfrageService.save(abfrageModel);
                 }
             } catch (final ObjectOptimisticLockingFailureException exception) {
                 final var message = "Die Daten wurden in der Zwischenzeit geändert. Bitte laden Sie die Seite neu!";
@@ -223,39 +220,47 @@ public class BauvorhabenService {
      * Ist eine andere Abfragevariante bereits relevant, wird eine Exception geworfen.
      * Die Abfrage muss sich im Status {@link StatusAbfrage#IN_BEARBEITUNG_SACHBEARBEITUNG} befinden.
      *
-     * @param abfragevariante die neue relevante Abfragevariante
-     * @return das geupdatete {@link BauvorhabenModel}
+     * @param abfrageId als ID der abfrage welche die neue relevante Abfragevariante beinhaltet
+     * @param abfragevarianteId als ID der neuen relevanten Abfragevariante
+     * @return das aktualisierte {@link BauvorhabenModel}
      * @throws EntityNotFoundException           falls die Abfrage oder Abfragevariante nicht gefunden wurde
      * @throws UniqueViolationException          falls schon eine andere Abfragevariante relevant ist
      * @throws OptimisticLockingException        falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
      * @throws AbfrageStatusNotAllowedException  falls die Abfrage den falschen Status hat
      * @throws BauvorhabenNotReferencedException falls die Abfrage zu keinem Bauvorhaben gehört
      */
-    public BauvorhabenModel changeRelevanteAbfragevariante(final AbfragevarianteAltModel abfragevariante)
+    public BauvorhabenModel changeRelevanteAbfragevariante(final UUID abfrageId, final UUID abfragevarianteId)
         throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, BauvorhabenNotReferencedException, EntityIsReferencedException {
-        final var abfrage = getAbfrageOfAbfragevariante(abfragevariante);
+        final var abfrage = abfrageService.getById(abfrageId);
         abfrageService.throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(
-            abfrage.getAbfrage(),
+            abfrage,
             StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG
         );
 
-        final var bauvorhaben = abfrage.getAbfrage().getBauvorhaben();
-        if (bauvorhaben == null) {
+        final var bauvorhabenId = abfrage.getBauvorhaben();
+        if (bauvorhabenId == null) {
             String message =
                 "Die Abfrage ist keinem Bauvorhaben zugeordnet. Somit kann keine Abfragevariante als relevant markiert werden.";
             log.error(message);
             throw new BauvorhabenNotReferencedException(message);
         }
 
-        final var relevanteAbfragevariante = bauvorhaben.getRelevanteAbfragevariante();
-        if (relevanteAbfragevariante != null) {
-            if (!relevanteAbfragevariante.getId().equals(abfragevariante.getId())) {
-                final var relevanteAbfrage = getAbfrageOfAbfragevariante(relevanteAbfragevariante);
+        final var bauvorhaben = this.getBauvorhabenById(bauvorhabenId);
+        final var relevanteAbfragevarianteId = bauvorhaben.getRelevanteAbfragevariante();
+        if (relevanteAbfragevarianteId != null) {
+            if (!relevanteAbfragevarianteId.equals(abfragevarianteId)) {
+                final var relevanteAbfragevariante = abfragevarianteRepository
+                    .findById(relevanteAbfragevarianteId)
+                    .orElseThrow(() -> {
+                        final var message = "Abfragevariante nicht gefunden.";
+                        log.error(message);
+                        return new EntityNotFoundException(message);
+                    });
                 var errorMessage =
                     "Die Abfragevariante " +
-                    relevanteAbfragevariante.getAbfragevariantenName() +
+                    relevanteAbfragevariante.getName() +
                     " in Abfrage " +
-                    relevanteAbfrage.getAbfrage().getNameAbfrage() +
+                    abfrage.getName() +
                     " ist bereits als relevant markiert.";
                 log.error(errorMessage);
                 throw new UniqueViolationException(errorMessage);
@@ -263,7 +268,7 @@ public class BauvorhabenService {
                 bauvorhaben.setRelevanteAbfragevariante(null);
             }
         } else {
-            bauvorhaben.setRelevanteAbfragevariante(abfragevariante);
+            bauvorhaben.setRelevanteAbfragevariante(abfragevarianteId);
         }
 
         return this.saveBauvorhaben(bauvorhaben, null);
@@ -357,37 +362,17 @@ public class BauvorhabenService {
         }
     }
 
-    protected void throwEntityIsReferencedExceptionWhenAbfrageIsReferencingBauvorhaben(final AbfrageAltModel abfrage)
-        throws EntityIsReferencedException {
+    protected void throwEntityIsReferencedExceptionWhenAbfrageIsReferencingBauvorhaben(
+        final AbfrageModel abfrage,
+        final String nameBauvorhaben
+    ) throws EntityIsReferencedException {
         final var bauvorhaben = abfrage.getBauvorhaben();
         if (ObjectUtils.isNotEmpty(bauvorhaben)) {
             final var message =
-                "Die Abfrage " +
-                abfrage.getNameAbfrage() +
-                " referenziert das Bauvorhaben " +
-                bauvorhaben.getNameVorhaben() +
-                ".";
+                "Die Abfrage " + abfrage.getName() + " referenziert das Bauvorhaben " + nameBauvorhaben + ".";
             log.error(message);
             throw new EntityIsReferencedException(message);
         }
-    }
-
-    private InfrastrukturabfrageModel getAbfrageOfAbfragevariante(AbfragevarianteAltModel abfragevariante)
-        throws EntityNotFoundException {
-        final var abfragevarianteId = abfragevariante.getId().toString();
-        var abfrageId = abfragevarianteRepository.findAbfrageAbfragevariantenIdById(abfragevarianteId);
-
-        if (abfrageId.isEmpty()) {
-            abfrageId = abfragevarianteRepository.findAbfrageAbfragevariantenSachbearbeitungIdById(abfragevarianteId);
-        }
-
-        if (abfrageId.isEmpty()) {
-            final var message = "Abfragevariante nicht gefunden.";
-            log.error(message);
-            throw new EntityNotFoundException(message);
-        }
-
-        return abfrageService.getInfrastrukturabfrageById(UUID.fromString(abfrageId.get()));
     }
 
     /**

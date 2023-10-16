@@ -1,6 +1,5 @@
 package de.muenchen.isi.api.controller;
 
-import de.muenchen.isi.api.dto.AbfragevarianteAltDto;
 import de.muenchen.isi.api.dto.BauvorhabenDto;
 import de.muenchen.isi.api.dto.error.InformationResponseDto;
 import de.muenchen.isi.api.dto.search.response.AbfrageSearchResultDto;
@@ -203,11 +202,11 @@ public class BauvorhabenController {
         "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_PUT_ABFRAGEVARIANTE_RELEVANT.name())"
     )
     public ResponseEntity<BauvorhabenDto> putChangeRelevanteAbfragevariante(
-        @RequestBody @NotNull final AbfragevarianteAltDto abfragevarianteDto
+        @RequestParam(value = "abfrage-id", defaultValue = "") @NotNull final UUID abfrageId,
+        @RequestParam(value = "abfragevariante-id", defaultValue = "") @NotNull final UUID abfragevarianteId
     )
         throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, BauvorhabenNotReferencedException, EntityIsReferencedException {
-        final var abfragevariante = abfragevarianteApiMapper.dto2Model(abfragevarianteDto);
-        final var bauvorhaben = bauvorhabenService.changeRelevanteAbfragevariante(abfragevariante);
+        final var bauvorhaben = bauvorhabenService.changeRelevanteAbfragevariante(abfrageId, abfragevarianteId);
         final var saved = bauvorhabenApiMapper.model2Dto(bauvorhaben);
         return ResponseEntity.ok(saved);
     }

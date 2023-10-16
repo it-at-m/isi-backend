@@ -53,7 +53,7 @@ public class InfrastruktureinrichtungService {
      */
     public InfrastruktureinrichtungModel saveInfrastruktureinrichtung(
         final InfrastruktureinrichtungModel infrastruktureinrichtung
-    ) throws OptimisticLockingException {
+    ) throws OptimisticLockingException, EntityNotFoundException {
         Infrastruktureinrichtung entity =
             this.infrastruktureinrichtungDomainMapper.model2Entity(infrastruktureinrichtung);
         try {

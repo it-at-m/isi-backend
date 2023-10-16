@@ -26,7 +26,7 @@ public interface AbfragevarianteDomainMapper {
         source = AbfragevarianteBauleitplanverfahren.class,
         target = AbfragevarianteBauleitplanverfahrenModel.class
     )
-    AbfragevarianteModel entity2Model(final Abfragevariante entity);
+    AbfragevarianteModel baseEntity2baseModel(final Abfragevariante entity);
 
     AbfragevarianteBauleitplanverfahrenModel entity2Model(final AbfragevarianteBauleitplanverfahren entity);
 
@@ -34,9 +34,9 @@ public interface AbfragevarianteDomainMapper {
         source = AbfragevarianteBauleitplanverfahrenModel.class,
         target = AbfragevarianteBauleitplanverfahren.class
     )
-    Abfragevariante model2entity(final AbfragevarianteModel model);
+    Abfragevariante baseEModel2baseEntity(final AbfragevarianteModel model);
 
-    AbfragevarianteBauleitplanverfahren model2entity(final AbfragevarianteBauleitplanverfahrenModel model);
+    AbfragevarianteBauleitplanverfahren model2Entity(final AbfragevarianteBauleitplanverfahrenModel model);
 
     @Mappings(
         {

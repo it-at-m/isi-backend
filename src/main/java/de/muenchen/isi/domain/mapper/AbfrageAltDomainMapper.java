@@ -12,9 +12,11 @@ import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.Infrastruktu
 import de.muenchen.isi.domain.model.abfrageBedarfsmeldungInBearbeitungFachreferate.InfrastrukturabfrageInBearbeitungFachreferateModel;
 import de.muenchen.isi.domain.model.abfrageSachbearbeitungInBearbeitungSachbearbeitung.InfrastrukturabfrageInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.infrastructure.entity.AbfrageAlt;
+import de.muenchen.isi.infrastructure.entity.Abfragevariante;
 import de.muenchen.isi.infrastructure.entity.Infrastrukturabfrage;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import org.apache.commons.collections4.CollectionUtils;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.BeanMapping;
@@ -219,5 +221,13 @@ public abstract class AbfrageAltDomainMapper {
                 }
             });
         response.setAbfragevariantenSachbearbeitung(mappedAbfragevariantenSachbearbeitung);
+    }
+
+    public UUID map(final Abfragevariante value) {
+        return value.getId();
+    }
+
+    public Abfragevariante map(UUID value) {
+        return null;
     }
 }

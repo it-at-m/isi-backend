@@ -100,7 +100,7 @@ class InfrastruktureinrichtungServiceTest {
     }
 
     @Test
-    void saveInfrastruktureinrichtung() throws OptimisticLockingException {
+    void saveInfrastruktureinrichtung() throws OptimisticLockingException, EntityNotFoundException {
         MittelschuleModel mittelschule = new MittelschuleModel();
         mittelschule.setNameEinrichtung("Mittelschule");
         mittelschule.setStatus(StatusInfrastruktureinrichtung.UNGESICHERTE_PLANUNG_TF_KITA_STANDORT);
