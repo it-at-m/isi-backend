@@ -5,9 +5,12 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
+import de.muenchen.isi.domain.exception.FileHandlingFailedException;
+import de.muenchen.isi.domain.exception.FileHandlingWithS3FailedException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.mapper.KommentarDomainMapperImpl;
 import de.muenchen.isi.domain.model.common.KommentarModel;
+import de.muenchen.isi.domain.service.filehandling.DokumentService;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
 import de.muenchen.isi.infrastructure.entity.common.Kommentar;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Kinderkrippe;
@@ -43,6 +46,9 @@ class KommentarServiceTest {
     @Mock
     private KommentarRepository kommentarRepository;
 
+    @Mock
+    private DokumentService dokumentService;
+
     @BeforeEach
     public void beforeEach() throws NoSuchFieldException, IllegalAccessException {
         final var kommentarMapper = new KommentarDomainMapperImpl();
@@ -52,7 +58,7 @@ class KommentarServiceTest {
         field = kommentarMapper.getClass().getSuperclass().getDeclaredField("infrastruktureinrichtungRepository");
         field.setAccessible(true);
         field.set(kommentarMapper, infrastruktureinrichtungRepository);
-        this.kommentarService = new KommentarService(this.kommentarRepository, kommentarMapper);
+        this.kommentarService = new KommentarService(this.kommentarRepository, kommentarMapper, dokumentService);
         Mockito.reset(this.infrastruktureinrichtungRepository, this.bauvorhabenRepository, this.kommentarRepository);
     }
 
@@ -214,7 +220,8 @@ class KommentarServiceTest {
     }
 
     @Test
-    void updateKommentar() throws EntityNotFoundException, OptimisticLockingException {
+    void updateKommentar()
+        throws EntityNotFoundException, OptimisticLockingException, FileHandlingFailedException, FileHandlingWithS3FailedException {
         final var uuidBauvorhaben = UUID.randomUUID();
         final var kommentar1 = new Kommentar();
         final var bauvorhaben = new Bauvorhaben();
@@ -238,7 +245,7 @@ class KommentarServiceTest {
 
         assertThat(result, is(kommentar1Model));
 
-        Mockito.verify(this.kommentarRepository, Mockito.times(1)).findById(kommentar1.getId());
+        Mockito.verify(this.kommentarRepository, Mockito.times(2)).findById(kommentar1.getId());
         Mockito.verify(this.kommentarRepository, Mockito.times(1)).saveAndFlush(kommentar1);
         Mockito.verify(this.bauvorhabenRepository, Mockito.times(1)).findById(uuidBauvorhaben);
         Mockito.verify(this.infrastruktureinrichtungRepository, Mockito.times(0)).findById(uuidBauvorhaben);
