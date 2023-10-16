@@ -4,10 +4,7 @@ import de.muenchen.isi.api.dto.BauvorhabenDto;
 import de.muenchen.isi.api.dto.error.InformationResponseDto;
 import de.muenchen.isi.api.dto.search.response.AbfrageSearchResultDto;
 import de.muenchen.isi.api.dto.search.response.InfrastruktureinrichtungSearchResultDto;
-import de.muenchen.isi.api.mapper.AbfrageAltApiMapper;
-import de.muenchen.isi.api.mapper.AbfragevarianteAltApiMapper;
 import de.muenchen.isi.api.mapper.BauvorhabenApiMapper;
-import de.muenchen.isi.api.mapper.InfrastruktureinrichtungApiMapper;
 import de.muenchen.isi.api.mapper.SearchApiMapper;
 import de.muenchen.isi.domain.exception.AbfrageStatusNotAllowedException;
 import de.muenchen.isi.domain.exception.BauvorhabenNotReferencedException;
@@ -56,13 +53,7 @@ public class BauvorhabenController {
 
     private final BauvorhabenApiMapper bauvorhabenApiMapper;
 
-    private final AbfragevarianteAltApiMapper abfragevarianteApiMapper;
-
-    private final AbfrageAltApiMapper abfrageApiMapper;
-
     private final SearchApiMapper searchApiMapper;
-
-    private final InfrastruktureinrichtungApiMapper infrastruktureinrichtungApiMapper;
 
     @GetMapping("bauvorhaben/{id}")
     @Transactional(readOnly = true)

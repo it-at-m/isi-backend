@@ -7,7 +7,7 @@ import org.mapstruct.Mapper;
 
 @Mapper(
     config = MapstructConfiguration.class,
-    uses = { DokumentApiMapper.class, AbfrageAltApiMapper.class, InfrastruktureinrichtungApiMapper.class }
+    uses = { DokumentApiMapper.class, InfrastruktureinrichtungApiMapper.class }
 )
 public interface BauvorhabenApiMapper {
     BauvorhabenDto model2Dto(final BauvorhabenModel model);

@@ -7,7 +7,6 @@ import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.model.search.request.SearchQueryModel;
 import de.muenchen.isi.infrastructure.entity.Bauleitplanverfahren;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
-import de.muenchen.isi.infrastructure.entity.Infrastrukturabfrage;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Grundschule;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.GsNachmittagBetreuung;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.HausFuerKinder;
@@ -32,7 +31,7 @@ class SearchPreparationServiceTest {
     @Test
     void getNamesOfSearchableAttributesForSearchwordSuggestion() {
         var result = searchPreparationService.getNamesOfSearchableAttributesForSearchwordSuggestion(
-            Infrastrukturabfrage.class
+            Bauleitplanverfahren.class
         );
         var expected = new HashSet<String>();
         expected.add("abfrage.adresse.strasse_searchword_suggestion");
@@ -112,7 +111,7 @@ class SearchPreparationServiceTest {
 
     @Test
     void getNamesOfSearchableAttributes() {
-        var result = searchPreparationService.getNamesOfSearchableAttributes(List.of(Infrastrukturabfrage.class));
+        var result = searchPreparationService.getNamesOfSearchableAttributes(List.of(Bauleitplanverfahren.class));
         var expected = new HashSet<String>();
         expected.add("abfrage.adresse.strasse");
         expected.add("abfrage.adresse.hausnummer");
@@ -190,7 +189,7 @@ class SearchPreparationServiceTest {
         result =
             searchPreparationService.getNamesOfSearchableAttributes(
                 List.of(
-                    Infrastrukturabfrage.class,
+                    Bauleitplanverfahren.class,
                     Bauvorhaben.class,
                     Grundschule.class,
                     GsNachmittagBetreuung.class,
@@ -264,7 +263,7 @@ class SearchPreparationServiceTest {
         searchQueryModel.setSelectKinderkrippe(false);
         searchQueryModel.setSelectMittelschule(false);
         result = searchPreparationService.getSearchableEntities(searchQueryModel);
-        assertThat(result, is(List.of(Infrastrukturabfrage.class)));
+        assertThat(result, is(List.of(Bauleitplanverfahren.class)));
 
         searchQueryModel.setSelectBauleitplanverfahren(false);
         searchQueryModel.setSelectBauvorhaben(true);

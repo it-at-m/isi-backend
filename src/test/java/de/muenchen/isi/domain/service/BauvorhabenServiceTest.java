@@ -18,11 +18,8 @@ import de.muenchen.isi.domain.mapper.DokumentDomainMapperImpl;
 import de.muenchen.isi.domain.mapper.InfrastruktureinrichtungDomainMapperImpl;
 import de.muenchen.isi.domain.mapper.SearchDomainMapper;
 import de.muenchen.isi.domain.mapper.SearchDomainMapperImpl;
-import de.muenchen.isi.domain.model.AbfrageAltModel;
 import de.muenchen.isi.domain.model.BauleitplanverfahrenModel;
 import de.muenchen.isi.domain.model.BauvorhabenModel;
-import de.muenchen.isi.domain.model.InfrastrukturabfrageModel;
-import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.AbfrageAngelegtModel;
 import de.muenchen.isi.domain.model.common.StadtbezirkModel;
 import de.muenchen.isi.domain.model.common.VerortungModel;
 import de.muenchen.isi.domain.model.enums.SearchResultType;
@@ -514,10 +511,9 @@ public class BauvorhabenServiceTest {
 
         assertThat(result, is(expected));
 
-        final InfrastrukturabfrageModel expectedAbfrage = new InfrastrukturabfrageModel();
+        final BauleitplanverfahrenModel expectedAbfrage = new BauleitplanverfahrenModel();
         expectedAbfrage.setId(abfrageId);
-        expectedAbfrage.setAbfrage(new AbfrageAltModel());
-        expectedAbfrage.getAbfrage().setBauvorhaben(result);
+        expectedAbfrage.setBauvorhaben(result.getId());
         assertThat(savedAbfrage, is(expectedAbfrage));
 
         Mockito.verify(this.bauvorhabenRepository, Mockito.times(1)).saveAndFlush(bauvorhabenEntity);
@@ -674,39 +670,6 @@ public class BauvorhabenServiceTest {
 
         Mockito.verify(this.bauvorhabenRepository, Mockito.times(1)).findById(entity.getId());
         Mockito.verify(this.bauvorhabenRepository, Mockito.times(0)).deleteById(id);
-    }
-
-    @Test
-    void assignBauvorhabenToAbfrageTest() throws EntityNotFoundException {
-        final UUID id = UUID.randomUUID();
-
-        final var bauvorhaben = new Bauvorhaben();
-        bauvorhaben.setId(id);
-
-        final var abfrage = new AbfrageAngelegtModel();
-        AbfrageAngelegtModel returnedAbfrage;
-
-        // Wenn 'bauvorhabenId' null ist, soll nichts passieren.
-
-        returnedAbfrage = this.bauvorhabenService.assignBauvorhabenToAbfrage(null, abfrage);
-        assertThat(returnedAbfrage, sameInstance(abfrage));
-        Mockito.verify(this.bauvorhabenRepository, Mockito.times(0)).findById(bauvorhaben.getId());
-
-        // Wenn kein Bauvorhaben mit der ID 'bauvorhabenId' existiert, soll eine 'BauvorhabenNotFoundException' geworfen werden.
-
-        assertThrows(
-            EntityNotFoundException.class,
-            () -> this.bauvorhabenService.assignBauvorhabenToAbfrage(id, abfrage)
-        );
-        Mockito.verify(this.bauvorhabenRepository, Mockito.times(1)).findById(bauvorhaben.getId());
-
-        // Normalfall
-
-        Mockito.when(this.bauvorhabenRepository.findById(bauvorhaben.getId())).thenReturn(Optional.of(bauvorhaben));
-        returnedAbfrage = this.bauvorhabenService.assignBauvorhabenToAbfrage(id, abfrage);
-        assertThat(returnedAbfrage, sameInstance(abfrage));
-        Mockito.verify(this.bauvorhabenRepository, Mockito.times(2)).findById(bauvorhaben.getId());
-        assertThat(returnedAbfrage.getBauvorhaben(), is(this.bauvorhabenService.getBauvorhabenById(id)));
     }
 
     @Test

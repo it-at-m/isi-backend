@@ -1,6 +1,5 @@
 package de.muenchen.isi.domain.service;
 
-import de.muenchen.isi.api.dto.AbfrageAltDto;
 import de.muenchen.isi.domain.exception.AbfrageStatusNotAllowedException;
 import de.muenchen.isi.domain.exception.BauvorhabenNotReferencedException;
 import de.muenchen.isi.domain.exception.EntityIsReferencedException;
@@ -11,10 +10,8 @@ import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
 import de.muenchen.isi.domain.mapper.BauvorhabenDomainMapper;
 import de.muenchen.isi.domain.mapper.SearchDomainMapper;
-import de.muenchen.isi.domain.model.AbfrageAltModel;
 import de.muenchen.isi.domain.model.AbfrageModel;
 import de.muenchen.isi.domain.model.BauvorhabenModel;
-import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.AbfrageAngelegtModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.InfrastruktureinrichtungModel;
 import de.muenchen.isi.domain.model.search.response.AbfrageSearchResultModel;
 import de.muenchen.isi.domain.model.search.response.InfrastruktureinrichtungSearchResultModel;
@@ -171,28 +168,6 @@ public class BauvorhabenService {
     }
 
     /**
-     * Setzt in einem {@link AbfrageAltModel} den Wert des Feldes 'bauvorhaben' auf das {@link BauvorhabenModel}, welches über die gegebene ID gefunden wurde.
-     * Da im {@link AbfrageAltDto} das Bauvorhaben über eine ID und im {@link AbfrageAltModel} als ein {@link BauvorhabenModel} gespeichert wird, wird bei einem Mapping von Dto nach Model das Feld 'bauvorhaben' auf null gesetzt.
-     * Diese Methode soll dann verwendet werden, um die beim Mapping verloren gegangene Information zum Bauvorhaben wieder in die Abfrage einzusetzen.
-     * Der Parameter 'bauvorhabenId' darf null sein. In diesem Fall passiert nichts.
-     *
-     * @param bauvorhabenId id des {@link BauvorhabenModel}s. Darf null sein.
-     * @param abfrage       zum Speichern.
-     * @return Die (möglicherweise) geänderte Abfrage.
-     * @throws EntityNotFoundException falls das Bauvorhaben mit der gegebenen ID nicht gefunden wurde.
-     */
-    public AbfrageAngelegtModel assignBauvorhabenToAbfrage(
-        @Nullable final UUID bauvorhabenId,
-        final AbfrageAngelegtModel abfrage
-    ) throws EntityNotFoundException {
-        if (bauvorhabenId != null) {
-            final var model = this.getBauvorhabenById(bauvorhabenId);
-            abfrage.setBauvorhaben(model);
-        }
-        return abfrage;
-    }
-
-    /**
      * Setzt in einem {@link InfrastruktureinrichtungModel} den Wert des Feldes 'bauvorhaben' auf das {@link BauvorhabenModel}, welches über die gegebene ID gefunden wurde.
      * Da im {@link InfrastruktureinrichtungModel} das Bauvorhaben über eine ID und im {@link InfrastruktureinrichtungModel} als ein {@link BauvorhabenModel} gespeichert wird, wird bei einem Mapping von Dto nach Model das Feld 'bauvorhaben' auf null gesetzt.
      * Diese Methode soll dann verwendet werden, um die beim Mapping verloren gegangene Information zum Bauvorhaben wieder in der Infrastruktureinrichung einzusetzen.
@@ -309,11 +284,11 @@ public class BauvorhabenService {
     }
 
     /**
-     * Wird das im Parameter gegebene {@link BauvorhabenModel} durch ein {@link AbfrageAltModel} referenziert,
+     * Wird das im Parameter gegebene {@link BauvorhabenModel} durch ein {@link AbfrageModel} referenziert,
      * wird eine {@link EntityIsReferencedException} geworfen.
      *
      * @param bauvorhaben zum Prüfen.
-     * @throws EntityIsReferencedException falls das {@link BauvorhabenModel} durch ein {@link AbfrageAltModel} referenziert wird.
+     * @throws EntityIsReferencedException falls das {@link BauvorhabenModel} durch ein {@link AbfrageModel} referenziert wird.
      */
     protected void throwEntityIsReferencedExceptionWhenAbfrageIsReferencingBauvorhaben(
         final BauvorhabenModel bauvorhaben

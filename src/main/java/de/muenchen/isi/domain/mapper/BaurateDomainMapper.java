@@ -11,7 +11,7 @@ import de.muenchen.isi.infrastructure.entity.Baurate;
 import de.muenchen.isi.infrastructure.entity.stammdaten.baurate.IdealtypischeBaurate;
 import org.mapstruct.Mapper;
 
-@Mapper(config = MapstructConfiguration.class, uses = { AbfragevarianteAltDomainMapper.class })
+@Mapper(config = MapstructConfiguration.class)
 public interface BaurateDomainMapper {
     BaurateModel entity2Model(final Baurate entity);
 

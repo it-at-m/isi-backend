@@ -5,8 +5,8 @@ import static org.hamcrest.Matchers.is;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import de.muenchen.isi.infrastructure.entity.BaseEntity;
+import de.muenchen.isi.infrastructure.entity.Bauleitplanverfahren;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
-import de.muenchen.isi.infrastructure.entity.Infrastrukturabfrage;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Grundschule;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.GsNachmittagBetreuung;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.HausFuerKinder;
@@ -49,8 +49,8 @@ class SearchwordSuggesterRepositoryTest {
 
     @Test
     void getSearchableIndex() {
-        var result = searchwordSuggesterRepository.getSearchableIndex(Infrastrukturabfrage.class);
-        assertThat(result, is("infrastrukturabfrage-read"));
+        var result = searchwordSuggesterRepository.getSearchableIndex(Bauleitplanverfahren.class);
+        assertThat(result, is("bauleitplanverfahren-read"));
         result = searchwordSuggesterRepository.getSearchableIndex(Bauvorhaben.class);
         assertThat(result, is("bauvorhaben-read"));
         result = searchwordSuggesterRepository.getSearchableIndex(Grundschule.class);
