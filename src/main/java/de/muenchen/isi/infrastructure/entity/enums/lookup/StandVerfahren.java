@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @AllArgsConstructor
-public enum StandVerfahren {
+public enum StandVerfahren implements ILookup {
     UNSPECIFIED(ILookup.UNSPECIFIED, new String[] {}),
 
     VORBEREITUNG_ECKDATENBESCHLUSS(
