@@ -234,7 +234,6 @@ public class AbfrageService {
      *
      * @param abfrage zum Prüfen.
      * @throws EntityIsReferencedException falls das {@link AbfrageModel} ein {@link BauvorhabenModel} referenziert.
-     * @throws EntityNotFoundException falls das referenzierte Bauvorhaben nicht existiert.
      */
     protected void throwEntityIsReferencedExceptionWhenAbfrageIsReferencingBauvorhaben(final AbfrageModel abfrage)
         throws EntityIsReferencedException {
