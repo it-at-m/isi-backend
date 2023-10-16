@@ -117,6 +117,7 @@ class AbfrageStatusServiceTest {
         final var anmerkung = "";
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
         abfrage = this.abfrageService.save(abfrage);
+        assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.ANGELEGT));
         final var uuid = abfrage.getId();
 
         this.abfrageStatusService.freigabeAbfrage(uuid, anmerkung);
@@ -198,6 +199,7 @@ class AbfrageStatusServiceTest {
         throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException, StringLengthExceededException {
         final var anmerkung = "";
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
+        abfrage = this.abfrageService.save(abfrage);
         abfrage.setStatusAbfrage(StatusAbfrage.OFFEN);
         abfrage = this.abfrageService.save(abfrage);
         final var uuid = abfrage.getId();
@@ -244,6 +246,7 @@ class AbfrageStatusServiceTest {
         throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException, StringLengthExceededException {
         final var anmerkung = "";
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
+        abfrage = this.abfrageService.save(abfrage);
         abfrage.setStatusAbfrage(StatusAbfrage.OFFEN);
         abfrage = this.abfrageService.save(abfrage);
         final var uuid = abfrage.getId();
@@ -290,6 +293,7 @@ class AbfrageStatusServiceTest {
         throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException, StringLengthExceededException {
         final var anmerkung = "";
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
+        abfrage = this.abfrageService.save(abfrage);
         abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
         abfrage = this.abfrageService.save(abfrage);
         final var uuid = abfrage.getId();
@@ -336,6 +340,7 @@ class AbfrageStatusServiceTest {
         throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException, StringLengthExceededException {
         final var anmerkung = "";
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
+        abfrage = this.abfrageService.save(abfrage);
         abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
         abfrage = this.abfrageService.save(abfrage);
         final var uuid = abfrage.getId();
@@ -382,6 +387,7 @@ class AbfrageStatusServiceTest {
         throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException, StringLengthExceededException {
         final var anmerkung = "";
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
+        abfrage = this.abfrageService.save(abfrage);
         abfrage.setStatusAbfrage(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT);
         abfrage = this.abfrageService.save(abfrage);
         final var uuid = abfrage.getId();
@@ -428,6 +434,7 @@ class AbfrageStatusServiceTest {
         throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException, StringLengthExceededException {
         final var anmerkung = "";
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
+        abfrage = this.abfrageService.save(abfrage);
         abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
         abfrage = this.abfrageService.save(abfrage);
         final var uuid = abfrage.getId();
@@ -494,6 +501,7 @@ class AbfrageStatusServiceTest {
         throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException, StringLengthExceededException {
         final var anmerkung = "";
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
+        abfrage = this.abfrageService.save(abfrage);
         abfrage.setStatusAbfrage(StatusAbfrage.OFFEN);
         abfrage = this.abfrageService.save(abfrage);
         final var uuid = abfrage.getId();
@@ -560,6 +568,7 @@ class AbfrageStatusServiceTest {
         throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException, StringLengthExceededException {
         final var anmerkung = "";
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
+        abfrage = this.abfrageService.save(abfrage);
         abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
         abfrage = this.abfrageService.save(abfrage);
         final var uuid = abfrage.getId();
@@ -606,6 +615,7 @@ class AbfrageStatusServiceTest {
         throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException, StringLengthExceededException {
         final var anmerkung = "";
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
+        abfrage = this.abfrageService.save(abfrage);
         abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
         abfrage = this.abfrageService.save(abfrage);
         final var uuid = abfrage.getId();
@@ -692,6 +702,7 @@ class AbfrageStatusServiceTest {
         throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException, StringLengthExceededException {
         final var anmerkung = "";
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
+        abfrage = this.abfrageService.save(abfrage);
         abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
         abfrage = this.abfrageService.save(abfrage);
         final var uuid = abfrage.getId();
@@ -778,6 +789,7 @@ class AbfrageStatusServiceTest {
         throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException, StringLengthExceededException {
         final var anmerkung = "";
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
+        abfrage = this.abfrageService.save(abfrage);
         abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
         abfrage = this.abfrageService.save(abfrage);
         final var uuid = abfrage.getId();
@@ -864,6 +876,7 @@ class AbfrageStatusServiceTest {
         throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException, StringLengthExceededException {
         final var anmerkung = "";
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
+        abfrage = this.abfrageService.save(abfrage);
         abfrage.setStatusAbfrage(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT);
         abfrage = this.abfrageService.save(abfrage);
         final var uuid = abfrage.getId();
@@ -950,11 +963,12 @@ class AbfrageStatusServiceTest {
         throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException, StringLengthExceededException {
         final var anmerkung = "";
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
-        abfrage.setStatusAbfrage(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT);
+        abfrage = this.abfrageService.save(abfrage);
+        abfrage.setStatusAbfrage(StatusAbfrage.ERLEDIGT_OHNE_FACHREFERAT);
         abfrage = this.abfrageService.save(abfrage);
         final var uuid = abfrage.getId();
 
-        this.abfrageStatusService.erneuteBearbeitenAbfrage(uuid, anmerkung);
+        this.abfrageStatusService.erneuteBearbeitungAbfrage(uuid, anmerkung);
 
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG));
@@ -964,7 +978,7 @@ class AbfrageStatusServiceTest {
         this.abfrageService.save(abfrage);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.erneuteBearbeitenAbfrage(uuid, anmerkung)
+            () -> this.abfrageStatusService.erneuteBearbeitungAbfrage(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.ANGELEGT));
@@ -974,7 +988,7 @@ class AbfrageStatusServiceTest {
         this.abfrageService.save(abfrage);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.erneuteBearbeitenAbfrage(uuid, anmerkung)
+            () -> this.abfrageStatusService.erneuteBearbeitungAbfrage(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.OFFEN));
@@ -994,7 +1008,7 @@ class AbfrageStatusServiceTest {
         this.abfrageService.save(abfrage);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.erneuteBearbeitenAbfrage(uuid, anmerkung)
+            () -> this.abfrageStatusService.erneuteBearbeitungAbfrage(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE));
@@ -1004,7 +1018,7 @@ class AbfrageStatusServiceTest {
         this.abfrageService.save(abfrage);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.erneuteBearbeitenAbfrage(uuid, anmerkung)
+            () -> this.abfrageStatusService.erneuteBearbeitungAbfrage(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT));
@@ -1014,7 +1028,7 @@ class AbfrageStatusServiceTest {
         this.abfrageService.save(abfrage);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.erneuteBearbeitenAbfrage(uuid, anmerkung)
+            () -> this.abfrageStatusService.erneuteBearbeitungAbfrage(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.ABBRUCH));
@@ -1026,11 +1040,12 @@ class AbfrageStatusServiceTest {
         throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException, StringLengthExceededException {
         final var anmerkung = "";
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
+        abfrage = this.abfrageService.save(abfrage);
         abfrage.setStatusAbfrage(StatusAbfrage.ERLEDIGT_OHNE_FACHREFERAT);
         abfrage = this.abfrageService.save(abfrage);
         final var uuid = abfrage.getId();
 
-        this.abfrageStatusService.erneuteBearbeitenAbfrage(uuid, anmerkung);
+        this.abfrageStatusService.erneuteBearbeitungAbfrage(uuid, anmerkung);
 
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG));
@@ -1040,7 +1055,7 @@ class AbfrageStatusServiceTest {
         this.abfrageService.save(abfrage);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.erneuteBearbeitenAbfrage(uuid, anmerkung)
+            () -> this.abfrageStatusService.erneuteBearbeitungAbfrage(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.ANGELEGT));
@@ -1050,7 +1065,7 @@ class AbfrageStatusServiceTest {
         this.abfrageService.save(abfrage);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.erneuteBearbeitenAbfrage(uuid, anmerkung)
+            () -> this.abfrageStatusService.erneuteBearbeitungAbfrage(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.OFFEN));
@@ -1070,7 +1085,7 @@ class AbfrageStatusServiceTest {
         this.abfrageService.save(abfrage);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.erneuteBearbeitenAbfrage(uuid, anmerkung)
+            () -> this.abfrageStatusService.erneuteBearbeitungAbfrage(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE));
@@ -1080,7 +1095,7 @@ class AbfrageStatusServiceTest {
         this.abfrageService.save(abfrage);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.erneuteBearbeitenAbfrage(uuid, anmerkung)
+            () -> this.abfrageStatusService.erneuteBearbeitungAbfrage(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT));
@@ -1090,7 +1105,7 @@ class AbfrageStatusServiceTest {
         this.abfrageService.save(abfrage);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.erneuteBearbeitenAbfrage(uuid, anmerkung)
+            () -> this.abfrageStatusService.erneuteBearbeitungAbfrage(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.ABBRUCH));
@@ -1102,6 +1117,7 @@ class AbfrageStatusServiceTest {
         throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException, StringLengthExceededException {
         final var anmerkung = "Test";
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
+        abfrage = this.abfrageService.save(abfrage);
         abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
         abfrage = this.abfrageService.save(abfrage);
         final var uuid = abfrage.getId();
@@ -1116,15 +1132,14 @@ class AbfrageStatusServiceTest {
     @Test
     @Transactional
     void addAbfrageAnmerkungStringLengthExceededExceptionTest()
-        throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException, StringLengthExceededException {
+        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException {
         final var anmerkung =
             "TestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestI";
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
+        abfrage = this.abfrageService.save(abfrage);
         abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
         abfrage = this.abfrageService.save(abfrage);
         final var uuid = abfrage.getId();
-
-        this.abfrageStatusService.keineBearbeitungNoetig(uuid, anmerkung);
 
         Assertions.assertThrows(
             StringLengthExceededException.class,

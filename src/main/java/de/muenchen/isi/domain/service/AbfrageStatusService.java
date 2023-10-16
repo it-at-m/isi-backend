@@ -207,7 +207,7 @@ public class AbfrageStatusService {
      * @throws AbfrageStatusNotAllowedException wenn die Statusänderung nicht erlaubt ist
      * @throws StringLengthExceededException    wenn die Anmerkung zur Statusänderung die max. Länge überschreitet
      */
-    public void erneuteBearbeitenAbfrage(final UUID id, String anmerkung)
+    public void erneuteBearbeitungAbfrage(final UUID id, String anmerkung)
         throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException {
         this.throwStringLengthExceededExceptionWhenAnmerkungExceedsLength(id, anmerkung);
         final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id, anmerkung);

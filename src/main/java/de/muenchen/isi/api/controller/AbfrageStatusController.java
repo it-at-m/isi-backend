@@ -34,7 +34,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @Tag(name = "AbfrageStatus", description = "API to set the status for a Abfrage")
 @Validated
-@RequestMapping(value = "infrastruktur-abfrage")
+@RequestMapping(value = "abfrage-status")
 public class AbfrageStatusController {
 
     private final AbfrageStatusService abfrageStatusService;
@@ -57,7 +57,7 @@ public class AbfrageStatusController {
         }
     )
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_READ_TRANSITIONS.name())")
-    public ResponseEntity<List<TransitionDto>> transitionsInfrastrukturabfrage(@PathVariable @NotNull final UUID id)
+    public ResponseEntity<List<TransitionDto>> transitionsAbfrage(@PathVariable @NotNull final UUID id)
         throws EntityNotFoundException {
         final List<TransitionDto> transistions = abfrageStatusService
             .getStatusAbfrageEventsBasedOnStateAndAuthorities(id)
@@ -86,7 +86,7 @@ public class AbfrageStatusController {
         }
     )
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_FREIGABE_ABFRAGE.name())")
-    public ResponseEntity<Void> freigabeInfrastrukturabfrage(
+    public ResponseEntity<Void> freigabeAbfrage(
         @PathVariable @NotNull final UUID id,
         @RequestParam(value = "anmerkung", required = false, defaultValue = "") String anmerkung
     ) throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException {
@@ -113,7 +113,7 @@ public class AbfrageStatusController {
         }
     )
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_ABBRECHEN_ABFRAGE.name())")
-    public ResponseEntity<Void> abbrechenInfrastrukturabfrage(
+    public ResponseEntity<Void> abbrechenAbfrage(
         @PathVariable @NotNull final UUID id,
         @RequestParam(value = "anmerkung", required = false, defaultValue = "") String anmerkung
     ) throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException {
@@ -145,7 +145,7 @@ public class AbfrageStatusController {
     @PreAuthorize(
         "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_ZURUECK_AN_ABFRAGEERSTELLUNG_ABFRAGE.name())"
     )
-    public ResponseEntity<Void> zurueckAbfrageerstellungInfrastrukturabfrage(
+    public ResponseEntity<Void> zurueckAnAbfrageerstellungAbfrage(
         @PathVariable @NotNull final UUID id,
         @RequestParam(value = "anmerkung", required = false, defaultValue = "") String anmerkung
     ) throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException {
@@ -177,7 +177,7 @@ public class AbfrageStatusController {
     @PreAuthorize(
         "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_IN_BEARBEITUNG_SETZTEN_ABFRAGE.name())"
     )
-    public ResponseEntity<Void> inBearbeitungSetzenInfrastrukturabfrage(
+    public ResponseEntity<Void> inBearbeitungSetzenAbfrage(
         @PathVariable @NotNull final UUID id,
         @RequestParam(value = "anmerkung", required = false, defaultValue = "") String anmerkung
     ) throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException {
@@ -209,7 +209,7 @@ public class AbfrageStatusController {
     @PreAuthorize(
         "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_ZURUECK_AN_SACHBEARBEITUNG_ABFRAGE.name())"
     )
-    public ResponseEntity<Void> zurueckAnSachbearbeitungInfrastrukturabfrage(
+    public ResponseEntity<Void> zurueckAnSachbearbeitungAbfrage(
         @PathVariable @NotNull final UUID id,
         @RequestParam(value = "anmerkung", required = false, defaultValue = "") String anmerkung
     ) throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException {
@@ -270,7 +270,7 @@ public class AbfrageStatusController {
     @PreAuthorize(
         "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_VERSCHICKEN_DER_STELLUNGNAHME_ABFRAGE.name())"
     )
-    public ResponseEntity<Void> verschickenDerStellungnahmeInfrastrukturabfrage(
+    public ResponseEntity<Void> verschickenDerStellungnahme(
         @PathVariable @NotNull final UUID id,
         @RequestParam(value = "anmerkung", required = false, defaultValue = "") String anmerkung
     ) throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException {
@@ -299,7 +299,7 @@ public class AbfrageStatusController {
     @PreAuthorize(
         "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_BEDARFSMELDUNG_ERFOLGTE_ABFRAGE.name())"
     )
-    public ResponseEntity<Void> bedarfsmeldungErfolgtInfrastrukturAbfrage(
+    public ResponseEntity<Void> bedarfsmeldungErfolgt(
         @PathVariable @NotNull final UUID id,
         @RequestParam(value = "anmerkung", required = false, defaultValue = "") String anmerkung
     ) throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException {
@@ -328,7 +328,7 @@ public class AbfrageStatusController {
     @PreAuthorize(
         "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_SPEICHERN_VON_SOZIALINFRASTRUKTUR_VERSORGUNG_ABFRAGE.name())"
     )
-    public ResponseEntity<Void> speichernVonSozialinfrastrukturVersorgungInfrastrukturAbfrage(
+    public ResponseEntity<Void> speichernVonSozialinfrastrukturVersorgung(
         @PathVariable @NotNull final UUID id,
         @RequestParam(value = "anmerkung", required = false, defaultValue = "") String anmerkung
     ) throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException {
@@ -360,11 +360,11 @@ public class AbfrageStatusController {
     @PreAuthorize(
         "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_ERNEUTE_BEARBEITUNG_ABFRAGE.name())"
     )
-    public ResponseEntity<Void> erneuteBearbeitungInfrastrukturabfrage(
+    public ResponseEntity<Void> erneuteBearbeitungAbfrage(
         @PathVariable @NotNull final UUID id,
         @RequestParam(value = "anmerkung", required = false, defaultValue = "") String anmerkung
     ) throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException {
-        this.abfrageStatusService.erneuteBearbeitenAbfrage(id, anmerkung);
+        this.abfrageStatusService.erneuteBearbeitungAbfrage(id, anmerkung);
         return ResponseEntity.ok().build();
     }
 }
