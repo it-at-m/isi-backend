@@ -16,7 +16,8 @@ public enum StatusAbfrage implements ILookup {
     IN_BEARBEITUNG_SACHBEARBEITUNG("in Bearbeitung bei Sachbearbeitung"),
     IN_BEARBEITUNG_FACHREFERATE("in Bearbeitung bei den Fachreferaten"),
     BEDARFSMELDUNG_ERFOLGT("Bedarfsmeldung der Fachreferate ist erfolgt"),
-    ERLEDIGT("erledigt"),
+    ERLEDIGT_MIT_FACHREFERAT("erledigt"),
+    ERLEDIGT_OHNE_FACHREFERAT("erledigt"),
     ABBRUCH("abbruch");
 
     @Getter
