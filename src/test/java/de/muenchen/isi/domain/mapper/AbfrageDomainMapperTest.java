@@ -10,40 +10,54 @@ import de.muenchen.isi.domain.model.abfrageAngelegt.BauleitplanverfahrenAngelegt
 import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.AbfragevarianteBauleitplanverfahrenInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.AbfragevarianteBauleitplanverfahrenSachbearbeitungInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.BauleitplanverfahrenInBearbeitungSachbearbeitungModel;
+import de.muenchen.isi.infrastructure.repository.BauvorhabenRepository;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@ExtendWith(SpringExtension.class)
+@ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-@ContextConfiguration(
-    classes = {
-        AbfrageDomainMapperImpl.class,
-        AbfragevarianteDomainMapperImpl.class,
-        BauabschnittDomainMapperImpl.class,
-        DokumentDomainMapperImpl.class,
-    }
-)
 public class AbfrageDomainMapperTest {
 
-    @Autowired
-    AbfrageDomainMapper abfrageDomainMapper;
+    private DokumentDomainMapper dokumentDomainMapper = new DokumentDomainMapperImpl();
 
-    @Autowired
-    AbfragevarianteDomainMapper abfragevarianteDomainMapper;
+    private BauabschnittDomainMapper bauabschnittDomainMapper = new BauabschnittDomainMapperImpl();
 
-    @Autowired
-    BauabschnittDomainMapper bauabschnittDomainMapper;
+    private AbfragevarianteDomainMapper abfragevarianteDomainMapper = new AbfragevarianteDomainMapperImpl(
+        bauabschnittDomainMapper
+    );
 
-    @Autowired
-    DokumentDomainMapper dokumentDomainMapper;
+    private AbfrageDomainMapper abfrageDomainMapper = new AbfrageDomainMapperImpl(
+        abfragevarianteDomainMapper,
+        dokumentDomainMapper
+    );
+
+    @Mock
+    private BauvorhabenRepository bauvorhabenRepository;
+
+    @BeforeEach
+    public void beforeEach() throws NoSuchFieldException, IllegalAccessException {
+        Field field = abfrageDomainMapper.getClass().getSuperclass().getDeclaredField("bauvorhabenRepository");
+        field.setAccessible(true);
+        field.set(abfrageDomainMapper, bauvorhabenRepository);
+        field =
+            abfrageDomainMapper
+                .getClass()
+                .getSuperclass()
+                .getDeclaredField("abfragevarianteBauleitplanverfahrenDomainMapper");
+        field.setAccessible(true);
+        field.set(abfrageDomainMapper, abfragevarianteDomainMapper);
+        Mockito.reset(this.bauvorhabenRepository);
+    }
 
     @Test
     public void abfrageErstellungInfrastrukturabfrageToInfrastrukturabfrageNoExistingAbfragevariante() {
@@ -160,6 +174,7 @@ public class AbfrageDomainMapperTest {
         abfragevariante2.setAbfragevariantenNr(2);
         abfragevariante2.setName("Abfragevariante 2");
 
+        expected.setAbfragevarianten(List.of());
         expected.setAbfragevariantenSachbearbeitung(List.of(abfragevariante1, abfragevariante2));
 
         assertThat(result, is(expected));
