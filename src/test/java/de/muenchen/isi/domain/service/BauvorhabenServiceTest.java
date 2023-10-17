@@ -820,6 +820,59 @@ public class BauvorhabenServiceTest {
     }
 
     @Test
+    void changeRelevanteAbfragevarianteEntityNotFoundExceptionTest()
+        throws AbfrageStatusNotAllowedException, EntityNotFoundException {
+        final Bauvorhaben bauvorhabenEntity = new Bauvorhaben();
+        bauvorhabenEntity.setId(UUID.randomUUID());
+        final AbfragevarianteBauleitplanverfahren abfragevarianteBauleitplanverfahren =
+            new AbfragevarianteBauleitplanverfahren();
+        abfragevarianteBauleitplanverfahren.setId(UUID.randomUUID());
+
+        final AbfrageModel abfrageModel = new BauleitplanverfahrenModel();
+        abfrageModel.setId(UUID.randomUUID());
+        abfrageModel.setName("test1");
+        abfrageModel.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+        abfrageModel.setBauvorhaben(bauvorhabenEntity.getId());
+
+        Mockito.when(this.abfrageService.getById(abfrageModel.getId())).thenReturn(abfrageModel);
+        Mockito
+            .when(bauvorhabenRepository.findById(bauvorhabenEntity.getId()))
+            .thenReturn(Optional.of(bauvorhabenEntity));
+
+        Mockito
+            .doCallRealMethod()
+            .when(abfrageService)
+            .throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(
+                Mockito.any(AbfrageModel.class),
+                Mockito.any(StatusAbfrage.class)
+            );
+
+        Mockito
+            .when(abfragevarianteRepository.findById(abfragevarianteBauleitplanverfahren.getId()))
+            .thenReturn(Optional.empty());
+
+        UUID idOtherRelevanteAbfragevariante = UUID.randomUUID();
+
+        assertThrows(
+            EntityNotFoundException.class,
+            () ->
+                this.bauvorhabenService.changeRelevanteAbfragevariante(
+                        abfrageModel.getId(),
+                        abfragevarianteBauleitplanverfahren.getId()
+                    )
+        );
+
+        Mockito.verify(this.bauvorhabenRepository, Mockito.times(0)).saveAndFlush(Mockito.any());
+        Mockito.verify(this.abfrageService, Mockito.times(1)).getById(abfrageModel.getId());
+        Mockito
+            .verify(this.abfrageService, Mockito.times(1))
+            .throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(
+                Mockito.any(AbfrageModel.class),
+                Mockito.any(StatusAbfrage.class)
+            );
+    }
+
+    @Test
     void changeRelevanteAbfragevarianteBauvorhabenNotReferencedExceptionTest()
         throws EntityNotFoundException, AbfrageStatusNotAllowedException {
         final AbfrageModel abfrageModel = new BauleitplanverfahrenModel();
