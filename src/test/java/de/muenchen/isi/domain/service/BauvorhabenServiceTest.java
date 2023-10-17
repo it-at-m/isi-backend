@@ -717,7 +717,7 @@ public class BauvorhabenServiceTest {
     }
 
     @Test
-    void changeRelevanteAbfragevarianteTest1()
+    void changeRelevanteAbfragevarianteSetNewRelevanteAbfragevarianteTest()
         throws AbfrageStatusNotAllowedException, EntityNotFoundException, BauvorhabenNotReferencedException, UniqueViolationException, OptimisticLockingException, EntityIsReferencedException {
         final Bauvorhaben bauvorhabenEntity = new Bauvorhaben();
         bauvorhabenEntity.setId(UUID.randomUUID());
@@ -756,6 +756,58 @@ public class BauvorhabenServiceTest {
         final Bauvorhaben bauvorhabenToVerify = new Bauvorhaben();
         bauvorhabenToVerify.setId(bauvorhabenEntity.getId());
         bauvorhabenToVerify.setRelevanteAbfragevariante(abfragevarianteBauleitplanverfahren);
+
+        Mockito.verify(this.bauvorhabenRepository, Mockito.times(1)).saveAndFlush(bauvorhabenToVerify);
+        Mockito.verify(this.abfrageService, Mockito.times(1)).getById(abfrageModel.getId());
+        Mockito
+            .verify(this.abfrageService, Mockito.times(1))
+            .throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(
+                Mockito.any(AbfrageModel.class),
+                Mockito.any(StatusAbfrage.class)
+            );
+    }
+
+    @Test
+    void changeRelevanteAbfragevarianteUnsetRelevanteAbfragevarianteTest()
+        throws AbfrageStatusNotAllowedException, EntityNotFoundException, BauvorhabenNotReferencedException, UniqueViolationException, OptimisticLockingException, EntityIsReferencedException {
+        final Bauvorhaben bauvorhabenEntity = new Bauvorhaben();
+        bauvorhabenEntity.setId(UUID.randomUUID());
+        final AbfragevarianteBauleitplanverfahren abfragevarianteBauleitplanverfahren =
+            new AbfragevarianteBauleitplanverfahren();
+        abfragevarianteBauleitplanverfahren.setId(UUID.randomUUID());
+        bauvorhabenEntity.setRelevanteAbfragevariante(abfragevarianteBauleitplanverfahren);
+
+        final AbfrageModel abfrageModel = new BauleitplanverfahrenModel();
+        abfrageModel.setId(UUID.randomUUID());
+        abfrageModel.setName("test1");
+        abfrageModel.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+        abfrageModel.setBauvorhaben(bauvorhabenEntity.getId());
+
+        Mockito.when(this.abfrageService.getById(abfrageModel.getId())).thenReturn(abfrageModel);
+        Mockito
+            .when(bauvorhabenRepository.findById(bauvorhabenEntity.getId()))
+            .thenReturn(Optional.of(bauvorhabenEntity));
+
+        Mockito
+            .doCallRealMethod()
+            .when(abfrageService)
+            .throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(
+                Mockito.any(AbfrageModel.class),
+                Mockito.any(StatusAbfrage.class)
+            );
+
+        Mockito
+            .when(abfragevarianteRepository.findById(abfragevarianteBauleitplanverfahren.getId()))
+            .thenReturn(Optional.of(abfragevarianteBauleitplanverfahren));
+
+        this.bauvorhabenService.changeRelevanteAbfragevariante(
+                abfrageModel.getId(),
+                abfragevarianteBauleitplanverfahren.getId()
+            );
+
+        final Bauvorhaben bauvorhabenToVerify = new Bauvorhaben();
+        bauvorhabenToVerify.setId(bauvorhabenEntity.getId());
+        bauvorhabenToVerify.setRelevanteAbfragevariante(null);
 
         Mockito.verify(this.bauvorhabenRepository, Mockito.times(1)).saveAndFlush(bauvorhabenToVerify);
         Mockito.verify(this.abfrageService, Mockito.times(1)).getById(abfrageModel.getId());
