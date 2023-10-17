@@ -2,7 +2,6 @@ package de.muenchen.isi.domain.service;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.sameInstance;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -712,8 +711,19 @@ public class BauvorhabenServiceTest {
     }
 
     @Test
-    void changeRelevanteAbfragevarianteTest() {
-        assertThat(null, is(notNullValue()));
+    void changeRelevanteAbfragevarianteTest() throws AbfrageStatusNotAllowedException {
+        final AbfrageModel abfrage = new BauleitplanverfahrenModel();
+        abfrage.setId(UUID.randomUUID());
+        abfrage.setName("test1");
+        abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+
+        Mockito
+            .doCallRealMethod()
+            .when(abfrageService)
+            .throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(
+                Mockito.any(AbfrageModel.class),
+                Mockito.any(StatusAbfrage.class)
+            );
     }
 
     @Test
@@ -723,6 +733,7 @@ public class BauvorhabenServiceTest {
         abfrage.setId(UUID.randomUUID());
         abfrage.setName("test1");
         abfrage.setStatusAbfrage(StatusAbfrage.ANGELEGT);
+
         Mockito.when(this.abfrageService.getById(abfrage.getId())).thenReturn(abfrage);
         Mockito
             .doCallRealMethod()
@@ -731,10 +742,19 @@ public class BauvorhabenServiceTest {
                 Mockito.any(AbfrageModel.class),
                 Mockito.any(StatusAbfrage.class)
             );
+
         assertThrows(
             AbfrageStatusNotAllowedException.class,
             () -> this.bauvorhabenService.changeRelevanteAbfragevariante(abfrage.getId(), null)
         );
+
+        Mockito.verify(this.abfrageService, Mockito.times(1)).getById(abfrage.getId());
+        Mockito
+            .verify(this.abfrageService, Mockito.times(1))
+            .throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(
+                Mockito.any(AbfrageModel.class),
+                Mockito.any(StatusAbfrage.class)
+            );
     }
 
     @Test
