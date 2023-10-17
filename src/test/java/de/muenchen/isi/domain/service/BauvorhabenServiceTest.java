@@ -6,6 +6,7 @@ import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.sameInstance;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import de.muenchen.isi.domain.exception.AbfrageStatusNotAllowedException;
 import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.FileHandlingFailedException;
@@ -18,6 +19,7 @@ import de.muenchen.isi.domain.mapper.DokumentDomainMapperImpl;
 import de.muenchen.isi.domain.mapper.InfrastruktureinrichtungDomainMapperImpl;
 import de.muenchen.isi.domain.mapper.SearchDomainMapper;
 import de.muenchen.isi.domain.mapper.SearchDomainMapperImpl;
+import de.muenchen.isi.domain.model.AbfrageModel;
 import de.muenchen.isi.domain.model.BauleitplanverfahrenModel;
 import de.muenchen.isi.domain.model.BauvorhabenModel;
 import de.muenchen.isi.domain.model.common.StadtbezirkModel;
@@ -712,6 +714,27 @@ public class BauvorhabenServiceTest {
     @Test
     void changeRelevanteAbfragevarianteTest() {
         assertThat(null, is(notNullValue()));
+    }
+
+    @Test
+    void changeRelevanteAbfragevarianteAbfrageStatusNotAllowedExceptionTest()
+        throws EntityNotFoundException, AbfrageStatusNotAllowedException {
+        final AbfrageModel abfrage = new BauleitplanverfahrenModel();
+        abfrage.setId(UUID.randomUUID());
+        abfrage.setName("test1");
+        abfrage.setStatusAbfrage(StatusAbfrage.ANGELEGT);
+        Mockito.when(this.abfrageService.getById(abfrage.getId())).thenReturn(abfrage);
+        Mockito
+            .doCallRealMethod()
+            .when(abfrageService)
+            .throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(
+                Mockito.any(AbfrageModel.class),
+                Mockito.any(StatusAbfrage.class)
+            );
+        assertThrows(
+            AbfrageStatusNotAllowedException.class,
+            () -> this.bauvorhabenService.changeRelevanteAbfragevariante(abfrage.getId(), null)
+        );
     }
 
     @Test

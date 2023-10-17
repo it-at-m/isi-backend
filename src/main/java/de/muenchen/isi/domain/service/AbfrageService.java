@@ -258,7 +258,7 @@ public class AbfrageService {
      * @param statusAbfrage gültiger Status.
      * @throws AbfrageStatusNotAllowedException falls das {@link AbfrageModel} einen unzulässigen Status hat
      */
-    protected void throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(
+    public void throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(
         final AbfrageModel abfrage,
         final StatusAbfrage statusAbfrage
     ) throws AbfrageStatusNotAllowedException {
@@ -274,5 +274,6 @@ public class AbfrageService {
             log.error(message);
             throw new AbfrageStatusNotAllowedException(message);
         }
+        System.err.println("x");
     }
 }
