@@ -52,6 +52,7 @@ import de.muenchen.isi.infrastructure.repository.BauvorhabenRepository;
 import de.muenchen.isi.infrastructure.repository.InfrastruktureinrichtungRepository;
 import de.muenchen.isi.infrastructure.repository.common.GlobalCounterRepository;
 import de.muenchen.isi.infrastructure.repository.common.KommentarRepository;
+import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -110,7 +111,10 @@ public class BauvorhabenServiceTest {
     private KommentarRepository kommentarRepository;
 
     @BeforeEach
-    public void beforeEach() {
+    public void beforeEach() throws IllegalAccessException, NoSuchFieldException {
+        Field field = bauvorhabenDomainMapper.getClass().getSuperclass().getDeclaredField("abfragevarianteRepository");
+        field.setAccessible(true);
+        field.set(bauvorhabenDomainMapper, abfragevarianteRepository);
         this.bauvorhabenService =
             new BauvorhabenService(
                 this.bauvorhabenDomainMapper,
@@ -713,19 +717,21 @@ public class BauvorhabenServiceTest {
     }
 
     @Test
-    void changeRelevanteAbfragevarianteTest() throws AbfrageStatusNotAllowedException, EntityNotFoundException {
-        final AbfrageModel abfrageModel = new BauleitplanverfahrenModel();
-        abfrageModel.setId(UUID.randomUUID());
-        abfrageModel.setName("test1");
-        abfrageModel.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
-
+    void changeRelevanteAbfragevarianteTest1()
+        throws AbfrageStatusNotAllowedException, EntityNotFoundException, BauvorhabenNotReferencedException, UniqueViolationException, OptimisticLockingException, EntityIsReferencedException {
         final Bauvorhaben bauvorhabenEntity = new Bauvorhaben();
         bauvorhabenEntity.setId(UUID.randomUUID());
         final AbfragevarianteBauleitplanverfahren abfragevarianteBauleitplanverfahren =
             new AbfragevarianteBauleitplanverfahren();
         abfragevarianteBauleitplanverfahren.setId(UUID.randomUUID());
-        bauvorhabenEntity.setRelevanteAbfragevariante(abfragevarianteBauleitplanverfahren);
 
+        final AbfrageModel abfrageModel = new BauleitplanverfahrenModel();
+        abfrageModel.setId(UUID.randomUUID());
+        abfrageModel.setName("test1");
+        abfrageModel.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+        abfrageModel.setBauvorhaben(bauvorhabenEntity.getId());
+
+        Mockito.when(this.abfrageService.getById(abfrageModel.getId())).thenReturn(abfrageModel);
         Mockito
             .when(bauvorhabenRepository.findById(bauvorhabenEntity.getId()))
             .thenReturn(Optional.of(bauvorhabenEntity));
@@ -738,6 +744,20 @@ public class BauvorhabenServiceTest {
                 Mockito.any(StatusAbfrage.class)
             );
 
+        Mockito
+            .when(abfragevarianteRepository.findById(abfragevarianteBauleitplanverfahren.getId()))
+            .thenReturn(Optional.of(abfragevarianteBauleitplanverfahren));
+
+        this.bauvorhabenService.changeRelevanteAbfragevariante(
+                abfrageModel.getId(),
+                abfragevarianteBauleitplanverfahren.getId()
+            );
+
+        final Bauvorhaben bauvorhabenToVerify = new Bauvorhaben();
+        bauvorhabenToVerify.setId(bauvorhabenEntity.getId());
+        bauvorhabenToVerify.setRelevanteAbfragevariante(abfragevarianteBauleitplanverfahren);
+
+        Mockito.verify(this.bauvorhabenRepository, Mockito.times(1)).saveAndFlush(bauvorhabenToVerify);
         Mockito.verify(this.abfrageService, Mockito.times(1)).getById(abfrageModel.getId());
         Mockito
             .verify(this.abfrageService, Mockito.times(1))
