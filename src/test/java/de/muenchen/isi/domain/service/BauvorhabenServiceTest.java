@@ -6,6 +6,7 @@ import static org.hamcrest.Matchers.sameInstance;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import de.muenchen.isi.domain.exception.AbfrageStatusNotAllowedException;
+import de.muenchen.isi.domain.exception.BauvorhabenNotReferencedException;
 import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.FileHandlingFailedException;
@@ -30,6 +31,7 @@ import de.muenchen.isi.domain.model.search.response.AbfrageSearchResultModel;
 import de.muenchen.isi.domain.model.search.response.InfrastruktureinrichtungSearchResultModel;
 import de.muenchen.isi.domain.service.filehandling.DokumentService;
 import de.muenchen.isi.infrastructure.entity.Abfrage;
+import de.muenchen.isi.infrastructure.entity.AbfragevarianteBauleitplanverfahren;
 import de.muenchen.isi.infrastructure.entity.Bauleitplanverfahren;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
 import de.muenchen.isi.infrastructure.entity.common.GlobalCounter;
@@ -711,15 +713,65 @@ public class BauvorhabenServiceTest {
     }
 
     @Test
-    void changeRelevanteAbfragevarianteTest() throws AbfrageStatusNotAllowedException {
-        final AbfrageModel abfrage = new BauleitplanverfahrenModel();
-        abfrage.setId(UUID.randomUUID());
-        abfrage.setName("test1");
-        abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+    void changeRelevanteAbfragevarianteTest() throws AbfrageStatusNotAllowedException, EntityNotFoundException {
+        final AbfrageModel abfrageModel = new BauleitplanverfahrenModel();
+        abfrageModel.setId(UUID.randomUUID());
+        abfrageModel.setName("test1");
+        abfrageModel.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+
+        final Bauvorhaben bauvorhabenEntity = new Bauvorhaben();
+        bauvorhabenEntity.setId(UUID.randomUUID());
+        final AbfragevarianteBauleitplanverfahren abfragevarianteBauleitplanverfahren =
+            new AbfragevarianteBauleitplanverfahren();
+        abfragevarianteBauleitplanverfahren.setId(UUID.randomUUID());
+        bauvorhabenEntity.setRelevanteAbfragevariante(abfragevarianteBauleitplanverfahren);
+
+        Mockito
+            .when(bauvorhabenRepository.findById(bauvorhabenEntity.getId()))
+            .thenReturn(Optional.of(bauvorhabenEntity));
 
         Mockito
             .doCallRealMethod()
             .when(abfrageService)
+            .throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(
+                Mockito.any(AbfrageModel.class),
+                Mockito.any(StatusAbfrage.class)
+            );
+
+        Mockito.verify(this.abfrageService, Mockito.times(1)).getById(abfrageModel.getId());
+        Mockito
+            .verify(this.abfrageService, Mockito.times(1))
+            .throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(
+                Mockito.any(AbfrageModel.class),
+                Mockito.any(StatusAbfrage.class)
+            );
+    }
+
+    @Test
+    void changeRelevanteAbfragevarianteBauvorhabenNotReferencedExceptionTest()
+        throws EntityNotFoundException, AbfrageStatusNotAllowedException {
+        final AbfrageModel abfrageModel = new BauleitplanverfahrenModel();
+        abfrageModel.setId(UUID.randomUUID());
+        abfrageModel.setName("test1");
+        abfrageModel.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+
+        Mockito.when(this.abfrageService.getById(abfrageModel.getId())).thenReturn(abfrageModel);
+        Mockito
+            .doCallRealMethod()
+            .when(abfrageService)
+            .throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(
+                Mockito.any(AbfrageModel.class),
+                Mockito.any(StatusAbfrage.class)
+            );
+
+        assertThrows(
+            BauvorhabenNotReferencedException.class,
+            () -> this.bauvorhabenService.changeRelevanteAbfragevariante(abfrageModel.getId(), null)
+        );
+
+        Mockito.verify(this.abfrageService, Mockito.times(1)).getById(abfrageModel.getId());
+        Mockito
+            .verify(this.abfrageService, Mockito.times(1))
             .throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(
                 Mockito.any(AbfrageModel.class),
                 Mockito.any(StatusAbfrage.class)
@@ -729,12 +781,12 @@ public class BauvorhabenServiceTest {
     @Test
     void changeRelevanteAbfragevarianteAbfrageStatusNotAllowedExceptionTest()
         throws EntityNotFoundException, AbfrageStatusNotAllowedException {
-        final AbfrageModel abfrage = new BauleitplanverfahrenModel();
-        abfrage.setId(UUID.randomUUID());
-        abfrage.setName("test1");
-        abfrage.setStatusAbfrage(StatusAbfrage.ANGELEGT);
+        final AbfrageModel abfrageModel = new BauleitplanverfahrenModel();
+        abfrageModel.setId(UUID.randomUUID());
+        abfrageModel.setName("test1");
+        abfrageModel.setStatusAbfrage(StatusAbfrage.ANGELEGT);
 
-        Mockito.when(this.abfrageService.getById(abfrage.getId())).thenReturn(abfrage);
+        Mockito.when(this.abfrageService.getById(abfrageModel.getId())).thenReturn(abfrageModel);
         Mockito
             .doCallRealMethod()
             .when(abfrageService)
@@ -745,10 +797,10 @@ public class BauvorhabenServiceTest {
 
         assertThrows(
             AbfrageStatusNotAllowedException.class,
-            () -> this.bauvorhabenService.changeRelevanteAbfragevariante(abfrage.getId(), null)
+            () -> this.bauvorhabenService.changeRelevanteAbfragevariante(abfrageModel.getId(), null)
         );
 
-        Mockito.verify(this.abfrageService, Mockito.times(1)).getById(abfrage.getId());
+        Mockito.verify(this.abfrageService, Mockito.times(1)).getById(abfrageModel.getId());
         Mockito
             .verify(this.abfrageService, Mockito.times(1))
             .throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(

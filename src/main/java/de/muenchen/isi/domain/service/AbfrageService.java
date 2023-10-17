@@ -274,6 +274,5 @@ public class AbfrageService {
             log.error(message);
             throw new AbfrageStatusNotAllowedException(message);
         }
-        System.err.println("x");
     }
 }
