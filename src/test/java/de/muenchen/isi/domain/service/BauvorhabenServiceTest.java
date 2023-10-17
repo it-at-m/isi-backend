@@ -851,8 +851,6 @@ public class BauvorhabenServiceTest {
             .when(abfragevarianteRepository.findById(abfragevarianteBauleitplanverfahren.getId()))
             .thenReturn(Optional.empty());
 
-        UUID idOtherRelevanteAbfragevariante = UUID.randomUUID();
-
         assertThrows(
             EntityNotFoundException.class,
             () ->
