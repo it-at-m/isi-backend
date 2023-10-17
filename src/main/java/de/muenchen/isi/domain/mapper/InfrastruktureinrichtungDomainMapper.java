@@ -22,6 +22,7 @@ import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Kindergart
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Kinderkrippe;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Mittelschule;
 import java.util.UUID;
+import org.apache.commons.lang3.ObjectUtils;
 import org.mapstruct.Mapper;
 import org.mapstruct.SubclassMapping;
 
@@ -44,6 +45,6 @@ public interface InfrastruktureinrichtungDomainMapper {
     Infrastruktureinrichtung model2Entity(final InfrastruktureinrichtungModel model) throws EntityNotFoundException;
 
     default UUID map(final Abfragevariante abfragevariante) {
-        return abfragevariante.getId();
+        return ObjectUtils.isEmpty(abfragevariante) ? null : abfragevariante.getId();
     }
 }
