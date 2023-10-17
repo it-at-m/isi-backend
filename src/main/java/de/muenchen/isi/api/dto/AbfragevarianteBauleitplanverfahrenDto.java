@@ -4,16 +4,11 @@
  */
 package de.muenchen.isi.api.dto;
 
-import de.muenchen.isi.api.validation.WesentlicheRechtsgrundlageBauleitplanverfahrenValid;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.WesentlicheRechtsgrundlage;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
-import javax.validation.Valid;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -25,12 +20,8 @@ public class AbfragevarianteBauleitplanverfahrenDto extends AbfragevarianteDto {
 
     private LocalDate satzungsbeschluss;
 
-    @NotEmpty
-    private List<
-        @WesentlicheRechtsgrundlageBauleitplanverfahrenValid @NotNull WesentlicheRechtsgrundlage
-    > wesentlicheRechtsgrundlage;
+    private List<WesentlicheRechtsgrundlage> wesentlicheRechtsgrundlage;
 
-    @Size(max = 255, message = "Es sind maximal {max} Zeichen erlaubt")
     private String wesentlicheRechtsgrundlageFreieEingabe;
 
     private Integer realisierungVon;
@@ -73,7 +64,7 @@ public class AbfragevarianteBauleitplanverfahrenDto extends AbfragevarianteDto {
 
     private String anmerkung;
 
-    private List<@Valid BedarfsmeldungFachreferateDto> bedarfsmeldungFachreferate;
+    private List<BedarfsmeldungFachreferateDto> bedarfsmeldungFachreferate;
 
-    private List<@Valid @NotNull BauabschnittDto> bauabschnitte;
+    private List<BauabschnittDto> bauabschnitte;
 }
