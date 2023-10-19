@@ -21,6 +21,8 @@ public class LookupListsDto {
 
     private LookupListDto wesentlicheRechtsgrundlageBauleitplanverfahren;
 
+    private LookupListDto wesentlicheRechtsgrundlage;
+
     private LookupListDto artBaulicheNutzung;
 
     private LookupListDto statusInfrastruktureinrichtung;
