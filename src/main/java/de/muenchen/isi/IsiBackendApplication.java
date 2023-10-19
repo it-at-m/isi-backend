@@ -10,7 +10,6 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.scheduling.annotation.EnableAsync;
 
 /**
  * Application class for starting the microservice.
@@ -20,7 +19,6 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @EntityScan(basePackages = { "org.springframework.data.jpa.convert.threeten", "de.muenchen.isi" })
 @EnableJpaRepositories(basePackages = { "de.muenchen.isi" })
 @EnableAutoConfiguration
-@EnableAsync
 public class IsiBackendApplication {
 
     public static void main(final String[] args) {

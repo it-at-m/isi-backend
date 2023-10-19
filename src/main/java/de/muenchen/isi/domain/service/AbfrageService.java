@@ -27,7 +27,6 @@ import de.muenchen.isi.infrastructure.repository.BauvorhabenRepository;
 import de.muenchen.isi.security.AuthenticationUtils;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
@@ -293,36 +292,21 @@ public class AbfrageService {
     public AbfrageModel getByAbfragevarianteId(final UUID abfragevarianteId) throws EntityNotFoundException {
         final var id = abfragevarianteId.toString();
 
-        final var bauleitplanverfahrenIdAbfragevariante =
-            abfragevarianteBauleitplanverfahrenRepository.findAbfrageIdForAbfragevarianteByIdAsync(id);
-        final var bauleitplanverfahrenIdAbfragevarianteSachbearbeitung =
-            abfragevarianteBauleitplanverfahrenRepository.findAbfrageIdForAbfragevarianteSachbearbeitungByIdAsync(id);
-
-        CompletableFuture
-            .allOf(bauleitplanverfahrenIdAbfragevariante, bauleitplanverfahrenIdAbfragevarianteSachbearbeitung)
-            .join();
-
-        try {
-            final var abfrageIds = Stream
-                .of(
-                    abfragevarianteBauleitplanverfahrenRepository.findAbfrageIdForAbfragevarianteById(id),
-                    abfragevarianteBauleitplanverfahrenRepository.findAbfrageIdForAbfragevarianteSachbearbeitungById(id)
-                )
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .map(UUID::fromString)
-                .collect(Collectors.toList());
-            if (abfrageIds.size() == 1) {
-                return this.getById(abfrageIds.get(0));
-            } else {
-                final var message = "Abfrage auf Basis einer Abfragevariante ID nicht eindeutig auffindbar.";
-                log.error(message);
-                throw new EntityNotFoundException(message);
-            }
-        } catch (Exception exception) {
-            final var message = "Das Auffinden einer Abfrage auf Basis einer Abfragevariante ID ist fehlgeschlagen.";
+        final var abfrageIds = Stream
+            .of(
+                abfragevarianteBauleitplanverfahrenRepository.findAbfrageIdForAbfragevarianteById(id),
+                abfragevarianteBauleitplanverfahrenRepository.findAbfrageIdForAbfragevarianteSachbearbeitungById(id)
+            )
+            .filter(Optional::isPresent)
+            .map(Optional::get)
+            .map(UUID::fromString)
+            .collect(Collectors.toList());
+        if (abfrageIds.size() == 1) {
+            return this.getById(abfrageIds.get(0));
+        } else {
+            final var message = "Abfrage auf Basis einer Abfragevariante ID nicht eindeutig auffindbar.";
             log.error(message);
-            throw new EntityNotFoundException(message, exception);
+            throw new EntityNotFoundException(message);
         }
     }
 }
