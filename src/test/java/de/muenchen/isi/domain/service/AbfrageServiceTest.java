@@ -154,6 +154,7 @@ class AbfrageServiceTest {
         expected.setName(abfrage.getName());
 
         assertThat(result, is(expected));
+
         Mockito.verify(this.abfrageRepository, Mockito.times(1)).saveAndFlush(abfrageEntity);
         Mockito.verify(this.abfrageRepository, Mockito.times(1)).findByNameIgnoreCase("hallo");
         Mockito.verify(this.bauvorhabenRepository, Mockito.times(0)).findById(UUID.randomUUID());
