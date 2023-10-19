@@ -193,11 +193,10 @@ public class BauvorhabenController {
         "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_PUT_ABFRAGEVARIANTE_RELEVANT.name())"
     )
     public ResponseEntity<BauvorhabenDto> putChangeRelevanteAbfragevariante(
-        @RequestParam(value = "abfrage-id", defaultValue = "") @NotNull final UUID abfrageId,
         @RequestParam(value = "abfragevariante-id", defaultValue = "") @NotNull final UUID abfragevarianteId
     )
         throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, BauvorhabenNotReferencedException, EntityIsReferencedException {
-        final var bauvorhaben = bauvorhabenService.changeRelevanteAbfragevariante(abfrageId, abfragevarianteId);
+        final var bauvorhaben = bauvorhabenService.changeRelevanteAbfragevariante(abfragevarianteId);
         final var saved = bauvorhabenApiMapper.model2Dto(bauvorhaben);
         return ResponseEntity.ok(saved);
     }

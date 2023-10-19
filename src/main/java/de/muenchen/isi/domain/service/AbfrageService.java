@@ -22,9 +22,15 @@ import de.muenchen.isi.domain.service.filehandling.DokumentService;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.repository.AbfrageRepository;
+import de.muenchen.isi.infrastructure.repository.AbfragevarianteBauleitplanverfahrenRepository;
 import de.muenchen.isi.infrastructure.repository.BauvorhabenRepository;
 import de.muenchen.isi.security.AuthenticationUtils;
+import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -45,6 +51,8 @@ public class AbfrageService {
     private final DokumentService dokumentService;
 
     private final AuthenticationUtils authenticationUtils;
+
+    private final AbfragevarianteBauleitplanverfahrenRepository abfragevarianteBauleitplanverfahrenRepository;
 
     /**
      * Die Methode gibt ein {@link AbfrageModel} identifiziert durch die ID zurück.
@@ -273,6 +281,51 @@ public class AbfrageService {
                 ".";
             log.error(message);
             throw new AbfrageStatusNotAllowedException(message);
+        }
+    }
+
+    /**
+     * Ermittelt die Abfrage auf Basis der im Parameter gegebenen ID einer Abfragevariante.
+     *
+     * @param abfragevarianteId zum ermitteln der Abfrage.
+     * @return die gefundene Abfrage.
+     * @throws EntityNotFoundException falls keine Abfrage auf Basis der Abfragevariante ID eindeutig ermittelt werden konnte.
+     */
+    public AbfrageModel getAbfrageByAbfragevarianteId(final UUID abfragevarianteId) throws EntityNotFoundException {
+        final var id = abfragevarianteId.toString();
+
+        final var bauleitplanverfahrenIdAbfragevariante = CompletableFuture.supplyAsync(() ->
+            abfragevarianteBauleitplanverfahrenRepository.findAbfrageIdForAbfragevarianteById(id)
+        );
+        final var bauleitplanverfahrenIdAbfragevarianteSachbearbeitung = CompletableFuture.supplyAsync(() ->
+            abfragevarianteBauleitplanverfahrenRepository.findAbfrageIdForAbfragevarianteById(id)
+        );
+
+        CompletableFuture
+            .allOf(bauleitplanverfahrenIdAbfragevariante, bauleitplanverfahrenIdAbfragevarianteSachbearbeitung)
+            .join();
+
+        try {
+            final var abfrageIds = Stream
+                .of(
+                    bauleitplanverfahrenIdAbfragevariante.get(),
+                    bauleitplanverfahrenIdAbfragevarianteSachbearbeitung.get()
+                )
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .map(UUID::fromString)
+                .collect(Collectors.toList());
+            if (abfrageIds.size() == 1) {
+                return this.getById(abfrageIds.get(0));
+            } else {
+                final var message = "Abfrage auf Basis einer Abfragevariante ID nicht eindeutig auffindbar.";
+                log.error(message);
+                throw new EntityNotFoundException(message);
+            }
+        } catch (ExecutionException | InterruptedException exception) {
+            final var message = "Das Auffinden einer Abfrage auf Basis einer Abfragevariante ID ist fehlgeschlagen.";
+            log.error(message);
+            throw new EntityNotFoundException(message, exception);
         }
     }
 }

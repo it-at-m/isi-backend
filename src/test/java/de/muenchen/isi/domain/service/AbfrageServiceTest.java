@@ -37,6 +37,7 @@ import de.muenchen.isi.infrastructure.entity.enums.lookup.Infrastruktureinrichtu
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.repository.AbfrageRepository;
+import de.muenchen.isi.infrastructure.repository.AbfragevarianteBauleitplanverfahrenRepository;
 import de.muenchen.isi.infrastructure.repository.BauvorhabenRepository;
 import de.muenchen.isi.security.AuthenticationUtils;
 import java.lang.reflect.Field;
@@ -62,6 +63,9 @@ class AbfrageServiceTest {
 
     @Mock
     private AbfrageRepository abfrageRepository;
+
+    @Mock
+    private AbfragevarianteBauleitplanverfahrenRepository abfragevarianteBauleitplanverfahrenRepository;
 
     private AbfrageDomainMapper abfrageDomainMapper;
 
@@ -91,7 +95,8 @@ class AbfrageServiceTest {
                 this.abfrageDomainMapper,
                 this.bauvorhabenRepository,
                 this.dokumentService,
-                this.authenticationUtils
+                this.authenticationUtils,
+                this.abfragevarianteBauleitplanverfahrenRepository
             );
         Mockito.reset(
             this.abfrageRepository,

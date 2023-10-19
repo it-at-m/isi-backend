@@ -40,6 +40,8 @@ public class BauvorhabenModel extends BaseEntityModel {
 
     private List<WesentlicheRechtsgrundlage> wesentlicheRechtsgrundlage;
 
+    private String wesentlicheRechtsgrundlageFreieEingabe;
+
     private List<ArtBaulicheNutzung> artFnp;
 
     private List<DokumentModel> dokumente;

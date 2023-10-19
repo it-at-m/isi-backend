@@ -58,6 +58,9 @@ public class BauvorhabenDto extends BaseEntityDto {
     @NotEmpty
     private List<@NotUnspecified @NotNull WesentlicheRechtsgrundlage> wesentlicheRechtsgrundlage;
 
+    @Size(max = 255, message = "Es sind maximal {max} Zeichen erlaubt")
+    private String wesentlicheRechtsgrundlageFreieEingabe;
+
     @NotEmpty
     private List<ArtBaulicheNutzung> artFnp;
 

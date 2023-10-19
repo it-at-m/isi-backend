@@ -57,9 +57,9 @@ public class BauvorhabenService {
 
     private final AbfrageRepository abfrageRepository;
 
-    private final InfrastruktureinrichtungRepository infrastruktureinrichtungRepository;
-
     private final AbfragevarianteRepository abfragevarianteRepository;
+
+    private final InfrastruktureinrichtungRepository infrastruktureinrichtungRepository;
 
     private final GlobalCounterRepository globalCounterRepository;
 
@@ -195,7 +195,6 @@ public class BauvorhabenService {
      * Ist eine andere Abfragevariante bereits relevant, wird eine Exception geworfen.
      * Die Abfrage muss sich im Status {@link StatusAbfrage#IN_BEARBEITUNG_SACHBEARBEITUNG} befinden.
      *
-     * @param abfrageId als ID der abfrage welche die neue relevante Abfragevariante beinhaltet
      * @param abfragevarianteId als ID der neuen relevanten Abfragevariante
      * @return das aktualisierte {@link BauvorhabenModel}
      * @throws EntityNotFoundException           falls die Abfrage oder Abfragevariante nicht gefunden wurde
@@ -204,9 +203,9 @@ public class BauvorhabenService {
      * @throws AbfrageStatusNotAllowedException  falls die Abfrage den falschen Status hat
      * @throws BauvorhabenNotReferencedException falls die Abfrage zu keinem Bauvorhaben gehört
      */
-    public BauvorhabenModel changeRelevanteAbfragevariante(final UUID abfrageId, final UUID abfragevarianteId)
+    public BauvorhabenModel changeRelevanteAbfragevariante(final UUID abfragevarianteId)
         throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, BauvorhabenNotReferencedException, EntityIsReferencedException {
-        final var abfrage = abfrageService.getById(abfrageId);
+        final AbfrageModel abfrage = abfrageService.getAbfrageByAbfragevarianteId(abfragevarianteId);
         abfrageService.throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(
             abfrage,
             StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG
