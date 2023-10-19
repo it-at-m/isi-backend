@@ -205,7 +205,7 @@ public class BauvorhabenService {
      */
     public BauvorhabenModel changeRelevanteAbfragevariante(final UUID abfragevarianteId)
         throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, BauvorhabenNotReferencedException, EntityIsReferencedException {
-        final AbfrageModel abfrage = abfrageService.getAbfrageByAbfragevarianteId(abfragevarianteId);
+        final AbfrageModel abfrage = abfrageService.getByAbfragevarianteId(abfragevarianteId);
         abfrageService.throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(
             abfrage,
             StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG

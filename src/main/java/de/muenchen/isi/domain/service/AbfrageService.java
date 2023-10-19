@@ -291,14 +291,14 @@ public class AbfrageService {
      * @return die gefundene Abfrage.
      * @throws EntityNotFoundException falls keine Abfrage auf Basis der Abfragevariante ID eindeutig ermittelt werden konnte.
      */
-    public AbfrageModel getAbfrageByAbfragevarianteId(final UUID abfragevarianteId) throws EntityNotFoundException {
+    public AbfrageModel getByAbfragevarianteId(final UUID abfragevarianteId) throws EntityNotFoundException {
         final var id = abfragevarianteId.toString();
 
         final var bauleitplanverfahrenIdAbfragevariante = CompletableFuture.supplyAsync(() ->
             abfragevarianteBauleitplanverfahrenRepository.findAbfrageIdForAbfragevarianteById(id)
         );
         final var bauleitplanverfahrenIdAbfragevarianteSachbearbeitung = CompletableFuture.supplyAsync(() ->
-            abfragevarianteBauleitplanverfahrenRepository.findAbfrageIdForAbfragevarianteById(id)
+            abfragevarianteBauleitplanverfahrenRepository.findAbfrageIdForAbfragevarianteSachbearbeitungById(id)
         );
 
         CompletableFuture
