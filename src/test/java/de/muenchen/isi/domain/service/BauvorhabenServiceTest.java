@@ -838,9 +838,8 @@ public class BauvorhabenServiceTest {
         abfrageModel.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
         abfrageModel.setBauvorhaben(bauvorhabenEntity.getId());
 
-        Mockito
-            .when(this.abfrageService.getByAbfragevarianteId(abfragevarianteBauleitplanverfahren.getId()))
-            .thenReturn(abfrageModel);
+        final UUID otherAbfragevariante = UUID.randomUUID();
+        Mockito.when(this.abfrageService.getByAbfragevarianteId(otherAbfragevariante)).thenReturn(abfrageModel);
         Mockito
             .when(bauvorhabenRepository.findById(bauvorhabenEntity.getId()))
             .thenReturn(Optional.of(bauvorhabenEntity));
@@ -859,13 +858,11 @@ public class BauvorhabenServiceTest {
 
         assertThrows(
             UniqueViolationException.class,
-            () -> this.bauvorhabenService.changeRelevanteAbfragevariante(UUID.randomUUID())
+            () -> this.bauvorhabenService.changeRelevanteAbfragevariante(otherAbfragevariante)
         );
 
         Mockito.verify(this.bauvorhabenRepository, Mockito.times(0)).saveAndFlush(Mockito.any());
-        Mockito
-            .verify(this.abfrageService, Mockito.times(1))
-            .getByAbfragevarianteId(abfragevarianteBauleitplanverfahren.getId());
+        Mockito.verify(this.abfrageService, Mockito.times(1)).getByAbfragevarianteId(otherAbfragevariante);
         Mockito
             .verify(this.abfrageService, Mockito.times(1))
             .throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(
