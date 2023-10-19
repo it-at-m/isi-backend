@@ -6,7 +6,6 @@ import static org.hamcrest.Matchers.is;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.muenchen.isi.api.controller.LookupController;
-import de.muenchen.isi.domain.model.stammdaten.LookupListsModel;
 import org.junit.jupiter.api.Test;
 
 class LookupServiceTest {
@@ -15,8 +14,8 @@ class LookupServiceTest {
 
     @Test
     void getLookupLists() throws JsonProcessingException {
-        final LookupListsModel resultModel = this.lookupService.getLookupLists();
-        final String result = new ObjectMapper().writeValueAsString(resultModel);
+        final var resultModel = this.lookupService.getLookupLists();
+        final var result = new ObjectMapper().writeValueAsString(resultModel);
         assertThat(result, is(this.getExpectedJsonString()));
     }
 
