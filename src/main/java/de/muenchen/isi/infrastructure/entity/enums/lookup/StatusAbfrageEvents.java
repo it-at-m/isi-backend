@@ -23,9 +23,9 @@ public enum StatusAbfrageEvents {
         "Die Abfrage wird an die Abfrageerstellung zurückgegeben."
     ),
 
-    ABFRAGE_SCHLIESSEN(
-        "abfrage-schliessen",
-        "ABFRAGE ABSCHLIESSEN",
+    KEINE_BEARBEITUNG_NOETIG(
+        "keine-bearbeitung-noetig",
+        "ABFRAGE SCHLIEßEN",
         5,
         "Die Abfrage wird abgeschlossen. Sie können eine Anmerkung hinzufügen."
     ),

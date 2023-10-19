@@ -56,7 +56,8 @@ public class AbfrageStatusService {
     /**
      * Ändert den Status auf {@link StatusAbfrage#OFFEN}.
      *
-     * @param id vom Typ {@link UUID} um die Abfrage zu finden
+     * @param id        vom Typ {@link UUID} um die Abfrage zu finden
+     * @param anmerkung falls ein Nutzer eine Anmerkung bei einem Statusübergang macht wird diese an die Abfrage Anmerkung angehängt
      * @throws EntityNotFoundException          falls die Abfrage nicht gefunden wird
      * @throws AbfrageStatusNotAllowedException wenn die Statusänderung nicht erlaubt ist
      * @throws StringLengthExceededException    wenn die Anmerkung zur Statusänderung die max. Länge überschreitet
@@ -71,7 +72,8 @@ public class AbfrageStatusService {
     /**
      * Ändert den Status auf {@link StatusAbfrage#IN_BEARBEITUNG_SACHBEARBEITUNG}.
      *
-     * @param id vom Typ {@link UUID} um die Abfrage zu finden
+     * @param id        vom Typ {@link UUID} um die Abfrage zu finden
+     * @param anmerkung falls ein Nutzer eine Anmerkung bei einem Statusübergang macht wird diese an die Abfrage Anmerkung angehängt
      * @throws EntityNotFoundException          falls die Abfrage nicht gefunden wird
      * @throws AbfrageStatusNotAllowedException wenn die Statusänderung nicht erlaubt ist
      * @throws StringLengthExceededException    wenn die Anmerkung zur Statusänderung die max. Länge überschreitet
@@ -86,7 +88,8 @@ public class AbfrageStatusService {
     /**
      * Ändert den Status auf {@link StatusAbfrage#ABBRUCH}.
      *
-     * @param id vom Typ {@link UUID} um die Abfrage zu finden
+     * @param id        vom Typ {@link UUID} um die Abfrage zu finden
+     * @param anmerkung falls ein Nutzer eine Anmerkung bei einem Statusübergang macht wird diese an die Abfrage Anmerkung angehängt
      * @throws EntityNotFoundException          falls die Abfrage nicht gefunden wird
      * @throws AbfrageStatusNotAllowedException wenn die Statusänderung nicht erlaubt ist
      * @throws StringLengthExceededException    wenn die Anmerkung zur Statusänderung die max. Länge überschreitet
@@ -101,7 +104,8 @@ public class AbfrageStatusService {
     /**
      * Ändert den Status auf {@link StatusAbfrage#ANGELEGT}.
      *
-     * @param id vom Typ {@link UUID} um die Abfrage zu finden
+     * @param id        vom Typ {@link UUID} um die Abfrage zu finden
+     * @param anmerkung falls ein Nutzer eine Anmerkung bei einem Statusübergang macht wird diese an die Abfrage Anmerkung angehängt
      * @throws EntityNotFoundException          falls die Abfrage nicht gefunden wird
      * @throws AbfrageStatusNotAllowedException wenn die Statusänderung nicht erlaubt ist
      * @throws StringLengthExceededException    wenn die Anmerkung zur Statusänderung die max. Länge überschreitet
@@ -116,7 +120,8 @@ public class AbfrageStatusService {
     /**
      * Ändert den Status auf {@link StatusAbfrage#IN_BEARBEITUNG_SACHBEARBEITUNG}.
      *
-     * @param id vom Typ {@link UUID} um die Abfrage zu finden
+     * @param id        vom Typ {@link UUID} um die Abfrage zu finden
+     * @param anmerkung falls ein Nutzer eine Anmerkung bei einem Statusübergang macht wird diese an die Abfrage Anmerkung angehängt
      * @throws EntityNotFoundException          falls die Abfrage nicht gefunden wird
      * @throws AbfrageStatusNotAllowedException wenn die Statusänderung nicht erlaubt ist
      * @throws StringLengthExceededException    wenn die Anmerkung zur Statusänderung die max. Länge überschreitet
@@ -129,24 +134,26 @@ public class AbfrageStatusService {
     }
 
     /**
-     * Ändert den Status auf {@link StatusAbfrage#ERLEDIGT}.
+     * Ändert den Status auf {@link StatusAbfrage#ERLEDIGT_OHNE_FACHREFERAT}.
      *
-     * @param id vom Typ {@link UUID} um die Abfrage zu finden
+     * @param id        vom Typ {@link UUID} um die Abfrage zu finden
+     * @param anmerkung falls ein Nutzer eine Anmerkung bei einem Statusübergang macht wird diese an die Abfrage Anmerkung angehängt
      * @throws EntityNotFoundException          falls die Abfrage nicht gefunden wird
      * @throws AbfrageStatusNotAllowedException wenn die Statusänderung nicht erlaubt ist
      * @throws StringLengthExceededException    wenn die Anmerkung zur Statusänderung die max. Länge überschreitet
      */
-    public void abfrageSchliessen(final UUID id, String anmerkung)
+    public void keineBearbeitungNoetig(final UUID id, String anmerkung)
         throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException {
         this.throwStringLengthExceededExceptionWhenAnmerkungExceedsLength(id, anmerkung);
         final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id, anmerkung);
-        this.sendEvent(id, StatusAbfrageEvents.ABFRAGE_SCHLIESSEN, stateMachine);
+        this.sendEvent(id, StatusAbfrageEvents.KEINE_BEARBEITUNG_NOETIG, stateMachine);
     }
 
     /**
      * Ändert den Status auf {@link StatusAbfrage#IN_BEARBEITUNG_FACHREFERATE}.
      *
-     * @param id vom Typ {@link UUID} um die Abfrage zu finden
+     * @param id        vom Typ {@link UUID} um die Abfrage zu finden
+     * @param anmerkung falls ein Nutzer eine Anmerkung bei einem Statusübergang macht wird diese an die Abfrage Anmerkung angehängt
      * @throws EntityNotFoundException          falls die Abfrage nicht gefunden wird
      * @throws AbfrageStatusNotAllowedException wenn die Statusänderung nicht erlaubt ist
      * @throws StringLengthExceededException    wenn die Anmerkung zur Statusänderung die max. Länge überschreitet
@@ -161,7 +168,8 @@ public class AbfrageStatusService {
     /**
      * Ändert den Status auf {@link StatusAbfrage#BEDARFSMELDUNG_ERFOLGT}.
      *
-     * @param id vom Typ {@link UUID} um die Abfrage zu finden
+     * @param id        vom Typ {@link UUID} um die Abfrage zu finden
+     * @param anmerkung falls ein Nutzer eine Anmerkung bei einem Statusübergang macht wird diese an die Abfrage Anmerkung angehängt
      * @throws EntityNotFoundException          falls die Abfrage nicht gefunden wird
      * @throws AbfrageStatusNotAllowedException wenn die Statusänderung nicht erlaubt ist
      * @throws StringLengthExceededException    wenn die Anmerkung zur Statusänderung die max. Länge überschreitet
@@ -174,9 +182,10 @@ public class AbfrageStatusService {
     }
 
     /**
-     * Ändert den Status auf {@link StatusAbfrage#ERLEDIGT}.
+     * Ändert den Status auf {@link StatusAbfrage#ERLEDIGT_MIT_FACHREFERAT}.
      *
-     * @param id vom Typ {@link UUID} um die Abfrage zu finden
+     * @param id        vom Typ {@link UUID} um die Abfrage zu finden
+     * @param anmerkung falls ein Nutzer eine Anmerkung bei einem Statusübergang macht wird diese an die Abfrage Anmerkung angehängt
      * @throws EntityNotFoundException          falls die Abfrage nicht gefunden wird
      * @throws AbfrageStatusNotAllowedException wenn die Statusänderung nicht erlaubt ist
      * @throws StringLengthExceededException    wenn die Anmerkung zur Statusänderung die max. Länge überschreitet
@@ -191,7 +200,8 @@ public class AbfrageStatusService {
     /**
      * Ändert den Status auf {@link StatusAbfrage#IN_BEARBEITUNG_SACHBEARBEITUNG}.
      *
-     * @param id vom Typ {@link UUID} um die Abfrage zu finden
+     * @param id        vom Typ {@link UUID} um die Abfrage zu finden
+     * @param anmerkung falls ein Nutzer eine Anmerkung bei einem Statusübergang macht wird diese an die Abfrage Anmerkung angehängt
      * @throws EntityNotFoundException          falls die Abfrage nicht gefunden wird
      * @throws AbfrageStatusNotAllowedException wenn die Statusänderung nicht erlaubt ist
      * @throws StringLengthExceededException    wenn die Anmerkung zur Statusänderung die max. Länge überschreitet
@@ -423,8 +433,8 @@ public class AbfrageStatusService {
             StatusAbfrageEvents.ZURUECK_AN_SACHBEARBEITUNG
         );
         authoritiesAndEventsMap.put(
-            AuthoritiesEnum.ISI_BACKEND_SCHLIESSEN_ABFRAGE,
-            StatusAbfrageEvents.ABFRAGE_SCHLIESSEN
+            AuthoritiesEnum.ISI_BACKEND_KEINE_BEARBEITUNG_NOETIG_ABFRAGE,
+            StatusAbfrageEvents.KEINE_BEARBEITUNG_NOETIG
         );
         authoritiesAndEventsMap.put(
             AuthoritiesEnum.ISI_BACKEND_VERSCHICKEN_DER_STELLUNGNAHME_ABFRAGE,

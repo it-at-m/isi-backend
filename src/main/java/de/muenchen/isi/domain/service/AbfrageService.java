@@ -183,6 +183,7 @@ public class AbfrageService {
      *
      * @param id            {@link InfrastrukturabfrageModel#getId()} der Abfrage zum Updaten
      * @param statusAbfrage neuer {@link StatusAbfrage}
+     * @param anmerkung     falls ein Nutzer eine Anmerkung bei einem Statusübergang macht wird diese an die Abfrage Anmerkung angehängt
      * @return das geupdatete {@link InfrastrukturabfrageModel}
      * @throws EntityNotFoundException       falls die Abfrage identifiziert durch die {@link InfrastrukturabfrageModel#getId()} nicht gefunden wird
      * @throws UniqueViolationException      falls der Name der Abfrage {@link InfrastrukturabfrageModel#getAbfrage().getNameAbfrage} ()} bereits vorhanden ist
