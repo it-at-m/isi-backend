@@ -14,6 +14,7 @@ import de.muenchen.isi.infrastructure.repository.AbfrageRepository;
 import de.muenchen.isi.rest.TestData;
 import java.util.UUID;
 import javax.transaction.Transactional;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -42,11 +43,22 @@ class AbfrageServiceSpringTest {
         abfrage = this.abfrageService.save(abfrage);
 
         final UUID abfragevarianteId = ((BauleitplanverfahrenModel) abfrage).getAbfragevarianten().get(0).getId();
-
         AbfrageModel foundAbfrage = abfrageService.getByAbfragevarianteId(abfragevarianteId);
-
         assertThat(foundAbfrage, is(abfrage));
+        abfrageRepository.deleteAll();
+    }
 
+    @Test
+    @Transactional
+    void getByAbfragevarianteIdEntityNotFoundException()
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException {
+        AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
+        this.abfrageService.save(abfrage);
+
+        Assertions.assertThrows(
+            EntityNotFoundException.class,
+            () -> this.abfrageService.getByAbfragevarianteId(UUID.randomUUID())
+        );
         abfrageRepository.deleteAll();
     }
 }
