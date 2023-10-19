@@ -1,6 +1,12 @@
 package de.muenchen.isi.api.validation;
 
+import de.muenchen.isi.api.dto.infrastruktureinrichtung.GrundschuleDto;
+import de.muenchen.isi.api.dto.infrastruktureinrichtung.GsNachmittagBetreuungDto;
+import de.muenchen.isi.api.dto.infrastruktureinrichtung.HausFuerKinderDto;
 import de.muenchen.isi.api.dto.infrastruktureinrichtung.InfrastruktureinrichtungDto;
+import de.muenchen.isi.api.dto.infrastruktureinrichtung.KindergartenDto;
+import de.muenchen.isi.api.dto.infrastruktureinrichtung.KinderkrippeDto;
+import de.muenchen.isi.api.dto.infrastruktureinrichtung.MittelschuleDto;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusInfrastruktureinrichtung;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
@@ -13,7 +19,7 @@ public class EinrichtungstraegerValidator
     implements ConstraintValidator<EinrichtungstraegerValid, InfrastruktureinrichtungDto> {
 
     /**
-     * Prüft, ob das Feld {@link InfrastruktureinrichtungDto#getEinrichtungstraeger()} nicht null ist.
+     * Prüft, ob das Feld einrichtungstraeger nicht null ist.
      * null ist jedoch erlaubt, wenn {@link InfrastruktureinrichtungDto#getStatus()} weder {@link StatusInfrastruktureinrichtung#BESTAND} noch {@link StatusInfrastruktureinrichtung#GESICHERTE_PLANUNG_ERW_PLAETZE_BEST_EINR} ist.
      *
      * @param value   {@link InfrastruktureinrichtungDto} zum Validieren.
@@ -26,7 +32,37 @@ public class EinrichtungstraegerValidator
     }
 
     private boolean einrichtungstraegerIsValid(final InfrastruktureinrichtungDto value) {
-        return value.getEinrichtungstraeger() != null && value.getEinrichtungstraeger().getBezeichnung() != null;
+        if (value instanceof GrundschuleDto) {
+            return (
+                ((GrundschuleDto) value).getSchule().getEinrichtungstraeger() != null &&
+                ((GrundschuleDto) value).getSchule().getEinrichtungstraeger().getBezeichnung() != null
+            );
+        } else if (value instanceof MittelschuleDto) {
+            return (
+                ((MittelschuleDto) value).getSchule().getEinrichtungstraeger() != null &&
+                ((MittelschuleDto) value).getSchule().getEinrichtungstraeger().getBezeichnung() != null
+            );
+        } else if (value instanceof GsNachmittagBetreuungDto) {
+            return (
+                ((GsNachmittagBetreuungDto) value).getEinrichtungstraeger() != null &&
+                ((GsNachmittagBetreuungDto) value).getEinrichtungstraeger().getBezeichnung() != null
+            );
+        } else if (value instanceof HausFuerKinderDto) {
+            return (
+                ((HausFuerKinderDto) value).getEinrichtungstraeger() != null &&
+                ((HausFuerKinderDto) value).getEinrichtungstraeger().getBezeichnung() != null
+            );
+        } else if (value instanceof KindergartenDto) {
+            return (
+                ((KindergartenDto) value).getEinrichtungstraeger() != null &&
+                ((KindergartenDto) value).getEinrichtungstraeger().getBezeichnung() != null
+            );
+        } else {
+            return (
+                ((KinderkrippeDto) value).getEinrichtungstraeger() != null &&
+                ((KinderkrippeDto) value).getEinrichtungstraeger().getBezeichnung() != null
+            );
+        }
     }
 
     private boolean invalidEinrichtungstraegerAllowed(final InfrastruktureinrichtungDto value) {

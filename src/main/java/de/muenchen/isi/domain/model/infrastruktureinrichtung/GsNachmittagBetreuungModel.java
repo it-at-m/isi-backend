@@ -5,6 +5,7 @@
 package de.muenchen.isi.domain.model.infrastruktureinrichtung;
 
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtGsNachmittagBetreuung;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.Einrichtungstraeger;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -23,4 +24,6 @@ public class GsNachmittagBetreuungModel extends InfrastruktureinrichtungModel {
     private Integer anzahlHortGruppen;
 
     private Integer wohnungsnaheHortPlaetze;
+
+    private Einrichtungstraeger einrichtungstraeger;
 }

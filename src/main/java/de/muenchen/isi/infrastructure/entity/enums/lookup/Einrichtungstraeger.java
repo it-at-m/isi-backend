@@ -10,19 +10,12 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum Einrichtungstraeger implements ILookup {
     UNSPECIFIED(ILookup.UNSPECIFIED),
-    KITA_STAEDTISCHE_EINRICHTUNG("Kita: Städtische Einrichtung"),
-    KITA_EINRICHTUNG_BETRIEBSTRAEGERSCHAFT("Kita: Einrichtung in Betriebsträgerschaft"),
-    KITA_FREIE_GEMEINNUETZIGE_SONSTIGE("Kita: Freie / gemeinnützige / sonstige Einrichtungen"),
-    KITA_EINRICHTUNG_GESAMTSTAEDTISCH("Kita: Einrichtung, deren Plätze nur gesamtstädtisch zur Verfügung stehen"),
-    GS_BETREUUNG_STAEDTISCHE_EINRICHTUNG("GS-Betreuung: Städtische Einrichtung"),
-    GS_BETREUUNG_ELTERN_KIND_INITIATIVE("GS-Betreuung: Eltern-Kind-Initiative"),
-    GS_BETREUUNG_STAATLICHE_EINRICHTUNG("GS-Betreuung: Staatliche Einrichtung"),
-    GS_BETREUUNG_PRIVATE_TRAEGERSCHAFT("GS-Betreuung: Private Trägerschaft"),
-    GS_BETREUUNG_KIRCHLICHE_TRAEGERSCHAFT("GS-Betreuung: Kirchliche Trägerschaft"),
-    SCHULE_STAEDTISCHE_EINRICHTUNG("Schule: Städtische Einrichtung"),
-    SCHULE_STAATLICHE_EINRICHTUNG("Schule: Staatliche Einrichtung"),
-    SCHULE_PRIVATE_TRAEGERSCHAFT("Schule: Private Trägerschaft"),
-    SCHULE_KIRCHLICHE_TRAEGERSCHAFT("Schule: Kirchliche Trägerschaft");
+    STAEDTISCHE_EINRICHTUNG("Städtische Einrichtung"),
+    EINRICHTUNG_BETRIEBSTRAEGERSCHAFT("Einrichtung in Betriebsträgerschaft"),
+    FREIE_GEMEINNUETZIGE_SONSTIGE("Freie / gemeinnützige / sonstige Einrichtungen"),
+    EINRICHTUNG_GESAMTSTAEDTISCH("Einrichtung, deren Plätze nur gesamtstädtisch zur Verfügung stehen"),
+    ELTERN_KIND_INITIATIVE("Eltern-Kind-Initiative"),
+    STAATLICHE_EINRICHTUNG("Staatliche Einrichtung");
 
     @Getter
     private final String bezeichnung;

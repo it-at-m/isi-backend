@@ -8,6 +8,7 @@ import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtDokument;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtGsNachmittagBetreuung;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.BaugebietArt;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Einrichtungstraeger;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.EinrichtungstraegerSchulen;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Planungsrecht;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
@@ -43,6 +44,7 @@ public class LookupService {
         model.setBaugebietArt(this.getBaugebietArtList());
         model.setStatusInfrastruktureinrichtung((this.getStatusInfrastruktureinrichtungList()));
         model.setEinrichtungstraeger((this.getEinrichtungstraegerList()));
+        model.setEinrichtungstraegerSchulen(this.getEinrichtungstraegerSchuleList());
         model.setInfrastruktureinrichtungTyp((this.getInfrastruktureinrichtungTypList()));
         model.setArtGsNachmittagBetreuung((this.getArtGsNachmittagBetreuungList()));
         model.setSobonOrientierungswertJahr(this.getSobonOrientierungswertJahr());
@@ -142,6 +144,16 @@ public class LookupService {
     private LookupListModel getEinrichtungstraegerList() {
         final List<LookupEntryModel> list = EnumUtils
             .getEnumList(Einrichtungstraeger.class)
+            .stream()
+            .map(item -> new LookupEntryModel(item.toString(), item.getBezeichnung()))
+            .collect(Collectors.toList());
+
+        return new LookupListModel(list);
+    }
+
+    private LookupListModel getEinrichtungstraegerSchuleList() {
+        final List<LookupEntryModel> list = EnumUtils
+            .getEnumList(EinrichtungstraegerSchulen.class)
             .stream()
             .map(item -> new LookupEntryModel(item.toString(), item.getBezeichnung()))
             .collect(Collectors.toList());

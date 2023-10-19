@@ -5,6 +5,7 @@
 package de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung;
 
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtGsNachmittagBetreuung;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.Einrichtungstraeger;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
@@ -37,4 +38,8 @@ public class GsNachmittagBetreuung extends Infrastruktureinrichtung {
     private Integer anzahlHortGruppen;
 
     private Integer wohnungsnaheHortPlaetze;
+
+    @Enumerated(EnumType.STRING)
+    @Column
+    private Einrichtungstraeger einrichtungstraeger;
 }
