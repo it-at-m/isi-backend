@@ -28,7 +28,6 @@ import de.muenchen.isi.security.AuthenticationUtils;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
@@ -294,12 +293,10 @@ public class AbfrageService {
     public AbfrageModel getByAbfragevarianteId(final UUID abfragevarianteId) throws EntityNotFoundException {
         final var id = abfragevarianteId.toString();
 
-        final var bauleitplanverfahrenIdAbfragevariante = CompletableFuture.supplyAsync(() ->
-            abfragevarianteBauleitplanverfahrenRepository.findAbfrageIdForAbfragevarianteById(id)
-        );
-        final var bauleitplanverfahrenIdAbfragevarianteSachbearbeitung = CompletableFuture.supplyAsync(() ->
-            abfragevarianteBauleitplanverfahrenRepository.findAbfrageIdForAbfragevarianteSachbearbeitungById(id)
-        );
+        final var bauleitplanverfahrenIdAbfragevariante =
+            abfragevarianteBauleitplanverfahrenRepository.findAbfrageIdForAbfragevarianteByIdAsync(id);
+        final var bauleitplanverfahrenIdAbfragevarianteSachbearbeitung =
+            abfragevarianteBauleitplanverfahrenRepository.findAbfrageIdForAbfragevarianteSachbearbeitungByIdAsync(id);
 
         CompletableFuture
             .allOf(bauleitplanverfahrenIdAbfragevariante, bauleitplanverfahrenIdAbfragevarianteSachbearbeitung)
@@ -308,8 +305,8 @@ public class AbfrageService {
         try {
             final var abfrageIds = Stream
                 .of(
-                    bauleitplanverfahrenIdAbfragevariante.get(),
-                    bauleitplanverfahrenIdAbfragevarianteSachbearbeitung.get()
+                    abfragevarianteBauleitplanverfahrenRepository.findAbfrageIdForAbfragevarianteById(id),
+                    abfragevarianteBauleitplanverfahrenRepository.findAbfrageIdForAbfragevarianteSachbearbeitungById(id)
                 )
                 .filter(Optional::isPresent)
                 .map(Optional::get)
@@ -322,7 +319,7 @@ public class AbfrageService {
                 log.error(message);
                 throw new EntityNotFoundException(message);
             }
-        } catch (ExecutionException | InterruptedException exception) {
+        } catch (Exception exception) {
             final var message = "Das Auffinden einer Abfrage auf Basis einer Abfragevariante ID ist fehlgeschlagen.";
             log.error(message);
             throw new EntityNotFoundException(message, exception);
