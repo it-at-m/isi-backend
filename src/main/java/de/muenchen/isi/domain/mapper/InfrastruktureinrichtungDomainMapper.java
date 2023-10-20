@@ -13,7 +13,6 @@ import de.muenchen.isi.domain.model.infrastruktureinrichtung.Infrastruktureinric
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.KindergartenModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.KinderkrippeModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.MittelschuleModel;
-import de.muenchen.isi.infrastructure.entity.Abfragevariante;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Grundschule;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.GsNachmittagBetreuung;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.HausFuerKinder;
@@ -21,8 +20,6 @@ import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Infrastruk
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Kindergarten;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Kinderkrippe;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Mittelschule;
-import java.util.UUID;
-import org.apache.commons.lang3.ObjectUtils;
 import org.mapstruct.Mapper;
 import org.mapstruct.SubclassMapping;
 
@@ -43,8 +40,4 @@ public interface InfrastruktureinrichtungDomainMapper {
     @SubclassMapping(source = KinderkrippeModel.class, target = Kinderkrippe.class)
     @SubclassMapping(source = MittelschuleModel.class, target = Mittelschule.class)
     Infrastruktureinrichtung model2Entity(final InfrastruktureinrichtungModel model) throws EntityNotFoundException;
-
-    default UUID map(final Abfragevariante abfragevariante) {
-        return ObjectUtils.isEmpty(abfragevariante) ? null : abfragevariante.getId();
-    }
 }
