@@ -4,7 +4,7 @@
  */
 package de.muenchen.isi.api.dto.infrastruktureinrichtung;
 
-import de.muenchen.isi.infrastructure.entity.enums.lookup.EinrichtungstraegerSchulen;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.Einrichtungstraeger;
 import javax.validation.constraints.NotNull;
 import lombok.Data;
 
@@ -17,5 +17,5 @@ public class SchuleDto {
     @NotNull
     private Integer anzahlPlaetze;
 
-    private EinrichtungstraegerSchulen einrichtungstraeger;
+    private Einrichtungstraeger einrichtungstraeger;
 }

@@ -4,7 +4,7 @@
  */
 package de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung;
 
-import de.muenchen.isi.infrastructure.entity.enums.lookup.EinrichtungstraegerSchulen;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.Einrichtungstraeger;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.EnumType;
@@ -23,5 +23,5 @@ public class Schule {
 
     @Enumerated(EnumType.STRING)
     @Column
-    private EinrichtungstraegerSchulen einrichtungstraeger;
+    private Einrichtungstraeger einrichtungstraeger;
 }

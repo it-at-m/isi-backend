@@ -11,7 +11,6 @@ import de.muenchen.isi.api.dto.infrastruktureinrichtung.KinderkrippeDto;
 import de.muenchen.isi.api.dto.infrastruktureinrichtung.MittelschuleDto;
 import de.muenchen.isi.api.dto.infrastruktureinrichtung.SchuleDto;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Einrichtungstraeger;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.EinrichtungstraegerSchulen;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusInfrastruktureinrichtung;
 import org.junit.jupiter.api.Test;
 
@@ -34,7 +33,7 @@ public class EinrichtungstraegerValidatorTest {
         value.setStatus(StatusInfrastruktureinrichtung.GESICHERTE_PLANUNG_ERW_PLAETZE_BEST_EINR);
         assertThat(this.validator.isValid(value, null), is(false));
 
-        value.getSchule().setEinrichtungstraeger(EinrichtungstraegerSchulen.STAEDTISCHE_EINRICHTUNG);
+        value.getSchule().setEinrichtungstraeger(Einrichtungstraeger.STAEDTISCHE_EINRICHTUNG);
         assertThat(this.validator.isValid(value, null), is(true));
     }
 
@@ -53,7 +52,7 @@ public class EinrichtungstraegerValidatorTest {
         value.setStatus(StatusInfrastruktureinrichtung.GESICHERTE_PLANUNG_ERW_PLAETZE_BEST_EINR);
         assertThat(this.validator.isValid(value, null), is(false));
 
-        value.getSchule().setEinrichtungstraeger(EinrichtungstraegerSchulen.STAEDTISCHE_EINRICHTUNG);
+        value.getSchule().setEinrichtungstraeger(Einrichtungstraeger.STAEDTISCHE_EINRICHTUNG);
         assertThat(this.validator.isValid(value, null), is(true));
     }
 

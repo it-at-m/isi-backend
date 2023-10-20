@@ -4,7 +4,7 @@
  */
 package de.muenchen.isi.domain.model.infrastruktureinrichtung;
 
-import de.muenchen.isi.infrastructure.entity.enums.lookup.EinrichtungstraegerSchulen;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.Einrichtungstraeger;
 import lombok.Data;
 
 @Data
@@ -14,5 +14,5 @@ public class SchuleModel {
 
     private Integer anzahlPlaetze;
 
-    private EinrichtungstraegerSchulen einrichtungstraeger;
+    private Einrichtungstraeger einrichtungstraeger;
 }

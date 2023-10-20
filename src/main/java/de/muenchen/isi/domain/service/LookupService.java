@@ -8,7 +8,6 @@ import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtDokument;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtGsNachmittagBetreuung;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.BaugebietArt;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Einrichtungstraeger;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.EinrichtungstraegerSchulen;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Planungsrecht;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
@@ -142,8 +141,8 @@ public class LookupService {
     }
 
     private LookupListModel getEinrichtungstraegerList() {
-        final List<LookupEntryModel> list = EnumUtils
-            .getEnumList(Einrichtungstraeger.class)
+        final List<LookupEntryModel> list = Einrichtungstraeger
+            .getEinrichtungstraeger()
             .stream()
             .map(item -> new LookupEntryModel(item.toString(), item.getBezeichnung()))
             .collect(Collectors.toList());
@@ -152,8 +151,8 @@ public class LookupService {
     }
 
     private LookupListModel getEinrichtungstraegerSchuleList() {
-        final List<LookupEntryModel> list = EnumUtils
-            .getEnumList(EinrichtungstraegerSchulen.class)
+        final List<LookupEntryModel> list = Einrichtungstraeger
+            .getEinrichtungstraegerSchulen()
             .stream()
             .map(item -> new LookupEntryModel(item.toString(), item.getBezeichnung()))
             .collect(Collectors.toList());
