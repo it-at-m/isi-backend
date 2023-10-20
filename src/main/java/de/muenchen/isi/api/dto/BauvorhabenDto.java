@@ -32,6 +32,9 @@ public class BauvorhabenDto extends BaseEntityDto {
     @NotUnspecified
     private StandVerfahren standVerfahren;
 
+    @Size(max = 255, message = "Es sind maximal {max} Zeichen erlaubt")
+    private String standVerfahrenFreieEingabe;
+
     private String bauvorhabenNummer;
 
     @Valid

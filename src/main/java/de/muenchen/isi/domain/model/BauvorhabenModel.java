@@ -22,6 +22,8 @@ public class BauvorhabenModel extends BaseEntityModel {
 
     private StandVerfahren standVerfahren;
 
+    private String standVerfahrenFreieEingabe;
+
     private String bauvorhabenNummer;
 
     private AdresseModel adresse;

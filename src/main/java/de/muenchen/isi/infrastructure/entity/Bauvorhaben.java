@@ -76,6 +76,9 @@ public class Bauvorhaben extends BaseEntity {
     @Column(nullable = false)
     private StandVerfahren standVerfahren;
 
+    @Column
+    private String wesentlicheRechtsgrundlageFreieEingabe;
+
     @FullTextField
     @NonStandardField(
         name = "bauvorhabenNummer" + SearchwordSuggesterRepository.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
