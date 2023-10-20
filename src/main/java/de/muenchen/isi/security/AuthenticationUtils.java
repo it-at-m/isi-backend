@@ -48,7 +48,7 @@ public class AuthenticationUtils {
     public List<AuthoritiesEnum> getUserAuthorities() {
         ArrayList<AuthoritiesEnum> userRoles = new ArrayList<>();
         final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (!ObjectUtils.isEmpty(authentication)) {
+        if (!ObjectUtils.isEmpty(authentication) && !(authentication.getPrincipal() instanceof String)) {
             try {
                 final DefaultOAuth2AuthenticatedPrincipal principal =
                     (DefaultOAuth2AuthenticatedPrincipal) authentication.getPrincipal();
@@ -94,13 +94,11 @@ public class AuthenticationUtils {
     public String getUserSub() {
         String sub = null;
         final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (!ObjectUtils.isEmpty(authentication)) {
-            if (!(authentication.getPrincipal() instanceof String)) {
-                final DefaultOAuth2AuthenticatedPrincipal principal =
-                    (DefaultOAuth2AuthenticatedPrincipal) authentication.getPrincipal();
-                if (!ObjectUtils.isEmpty(principal)) {
-                    sub = principal.getAttribute(TOKEN_USER_SUB).toString();
-                }
+        if (!ObjectUtils.isEmpty(authentication) && !(authentication.getPrincipal() instanceof String)) {
+            final DefaultOAuth2AuthenticatedPrincipal principal =
+                (DefaultOAuth2AuthenticatedPrincipal) authentication.getPrincipal();
+            if (!ObjectUtils.isEmpty(principal)) {
+                sub = principal.getAttribute(TOKEN_USER_SUB).toString();
             }
         }
         return StringUtils.isNotBlank(sub) ? sub : SUB_UNAUTHENTICATED_USER;
@@ -114,7 +112,7 @@ public class AuthenticationUtils {
     public List<String> getUserRoles() {
         List<String> roles = new ArrayList<>();
         final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (!ObjectUtils.isEmpty(authentication)) {
+        if (!ObjectUtils.isEmpty(authentication) && !(authentication.getPrincipal() instanceof String)) {
             final DefaultOAuth2AuthenticatedPrincipal principal =
                 (DefaultOAuth2AuthenticatedPrincipal) authentication.getPrincipal();
             if (!ObjectUtils.isEmpty(principal)) {
@@ -130,7 +128,6 @@ public class AuthenticationUtils {
                 }
             }
         }
-
         return roles;
     }
 }
