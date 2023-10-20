@@ -35,7 +35,7 @@ public interface AbfragevarianteDomainMapper {
     )
     AbfragevarianteBauleitplanverfahrenModel request2Model(
         final AbfragevarianteBauleitplanverfahrenAngelegtModel request,
-        final @MappingTarget AbfragevarianteBauleitplanverfahrenModel model
+        @MappingTarget final AbfragevarianteBauleitplanverfahrenModel model
     );
 
     @BeanMapping(ignoreByDefault = true)
@@ -49,7 +49,7 @@ public interface AbfragevarianteDomainMapper {
     )
     AbfragevarianteBauleitplanverfahrenModel request2Model(
         final AbfragevarianteBauleitplanverfahrenSachbearbeitungInBearbeitungSachbearbeitungModel request,
-        final @MappingTarget AbfragevarianteBauleitplanverfahrenModel model
+        @MappingTarget final AbfragevarianteBauleitplanverfahrenModel model
     );
 
     @Mappings(
@@ -62,7 +62,7 @@ public interface AbfragevarianteDomainMapper {
     )
     AbfragevarianteBauleitplanverfahrenModel request2Model(
         final AbfragevarianteBauleitplanverfahrenInBearbeitungSachbearbeitungModel request,
-        final @MappingTarget AbfragevarianteBauleitplanverfahrenModel model
+        @MappingTarget final AbfragevarianteBauleitplanverfahrenModel model
     );
 
     @BeanMapping(ignoreByDefault = true)
@@ -74,6 +74,6 @@ public interface AbfragevarianteDomainMapper {
     )
     AbfragevarianteBauleitplanverfahrenModel request2Model(
         final AbfragevarianteBauleitplanverfahrenInBearbeitungFachreferatModel request,
-        final @MappingTarget AbfragevarianteBauleitplanverfahrenModel model
+        @MappingTarget final AbfragevarianteBauleitplanverfahrenModel model
     );
 }

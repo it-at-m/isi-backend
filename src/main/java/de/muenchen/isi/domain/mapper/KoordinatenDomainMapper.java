@@ -9,11 +9,11 @@ import org.mapstruct.Mapper;
 
 @Mapper(config = MapstructConfiguration.class)
 public interface KoordinatenDomainMapper {
-    WGS84Model entity2Model(Wgs84 entity);
+    WGS84Model entity2Model(final Wgs84 entity);
 
-    Wgs84 model2Entity(WGS84Model model);
+    Wgs84 model2Entity(final WGS84Model model);
 
-    UtmModel entity2Model(Utm entity);
+    UtmModel entity2Model(final Utm entity);
 
-    Utm model2Entity(UtmModel model);
+    Utm model2Entity(final UtmModel model);
 }

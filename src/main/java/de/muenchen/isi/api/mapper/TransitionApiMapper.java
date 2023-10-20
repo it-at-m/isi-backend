@@ -7,5 +7,5 @@ import org.mapstruct.Mapper;
 
 @Mapper(config = MapstructConfiguration.class)
 public interface TransitionApiMapper {
-    TransitionDto model2Dto(TransitionModel model);
+    TransitionDto model2Dto(final TransitionModel model);
 }

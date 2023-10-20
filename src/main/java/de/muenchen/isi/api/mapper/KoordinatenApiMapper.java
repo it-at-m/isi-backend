@@ -9,11 +9,11 @@ import org.mapstruct.Mapper;
 
 @Mapper(config = MapstructConfiguration.class)
 public interface KoordinatenApiMapper {
-    UtmDto model2Dto(UtmModel model);
+    UtmDto model2Dto(final UtmModel model);
 
-    UtmModel dto2Model(UtmDto dto);
+    UtmModel dto2Model(final UtmDto dto);
 
-    Wgs84Dto model2Dto(WGS84Model model);
+    Wgs84Dto model2Dto(final WGS84Model model);
 
-    WGS84Model dto2Model(Wgs84Dto dto);
+    WGS84Model dto2Model(final Wgs84Dto dto);
 }

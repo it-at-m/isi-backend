@@ -98,7 +98,7 @@ public abstract class AbfrageDomainMapper {
     @AfterMapping
     void afterMappingRequest2Model(
         final BauleitplanverfahrenAngelegtModel request,
-        final @MappingTarget BauleitplanverfahrenModel model
+        @MappingTarget final BauleitplanverfahrenModel model
     ) {
         final var abfragevarianten = new ArrayList<AbfragevarianteBauleitplanverfahrenModel>();
         CollectionUtils
@@ -133,7 +133,7 @@ public abstract class AbfrageDomainMapper {
     @Mappings({ @Mapping(target = "version", ignore = false) })
     public abstract BauleitplanverfahrenModel request2Model(
         final BauleitplanverfahrenInBearbeitungSachbearbeitungModel request,
-        @MappingTarget BauleitplanverfahrenModel response
+        @MappingTarget final BauleitplanverfahrenModel response
     );
 
     /**
@@ -201,7 +201,7 @@ public abstract class AbfrageDomainMapper {
     @Mappings({ @Mapping(target = "version", ignore = false) })
     public abstract BauleitplanverfahrenModel request2Model(
         final BauleitplanverfahrenInBearbeitungFachreferatModel request,
-        @MappingTarget BauleitplanverfahrenModel response
+        @MappingTarget final BauleitplanverfahrenModel response
     );
 
     /**
@@ -213,7 +213,7 @@ public abstract class AbfrageDomainMapper {
     @AfterMapping
     void afterMappingRequest2Model(
         final BauleitplanverfahrenInBearbeitungFachreferatModel request,
-        final @MappingTarget BauleitplanverfahrenModel response
+        @MappingTarget final BauleitplanverfahrenModel response
     ) {
         // Mapping der Bedarfsmeldungen durch die Fachabteilungen der Abfragevarianten
         final var mappedAbfragevarianten = new ArrayList<AbfragevarianteBauleitplanverfahrenModel>();

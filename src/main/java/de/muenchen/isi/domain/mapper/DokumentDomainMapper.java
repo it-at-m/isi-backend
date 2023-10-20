@@ -14,7 +14,7 @@ import org.mapstruct.Mapper;
 public interface DokumentDomainMapper {
     DokumentModel entity2Model(final Dokument entity);
 
-    List<DokumentModel> entity2Model(List<Dokument> entities);
+    List<DokumentModel> entity2Model(final List<Dokument> entities);
 
     Dokument model2Entity(final DokumentModel model);
 }
