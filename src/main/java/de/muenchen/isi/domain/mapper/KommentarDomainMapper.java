@@ -33,7 +33,7 @@ public abstract class KommentarDomainMapper {
     public abstract Kommentar model2Entity(final KommentarModel model) throws EntityNotFoundException;
 
     @AfterMapping
-    void afterMappingModel2Entity(final KommentarModel model, final @MappingTarget Kommentar entity)
+    void afterMappingModel2Entity(final KommentarModel model, @MappingTarget final Kommentar entity)
         throws EntityNotFoundException {
         if (ObjectUtils.isNotEmpty(model.getBauvorhaben())) {
             final var bauvorhaben = bauvorhabenRepository
