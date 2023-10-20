@@ -97,11 +97,6 @@ public class InfrastruktureinrichtungController {
         @RequestBody @Valid @NotNull final InfrastruktureinrichtungDto infrastruktureinrichtungDto
     ) throws EntityNotFoundException, OptimisticLockingException {
         var model = this.infrastruktureinrichtungApiMapper.dto2Model(infrastruktureinrichtungDto);
-        model =
-            this.bauvorhabenService.assignBauvorhabenToInfrastruktureinrichtung(
-                    infrastruktureinrichtungDto.getBauvorhaben(),
-                    model
-                );
         model = this.infrastruktureinrichtungService.saveInfrastruktureinrichtung(model);
         final var saved = this.infrastruktureinrichtungApiMapper.model2Dto(model);
         return new ResponseEntity<>(saved, HttpStatus.CREATED);
@@ -140,11 +135,6 @@ public class InfrastruktureinrichtungController {
         @RequestBody @Valid @NotNull final InfrastruktureinrichtungDto infrastruktureinrichtungDto
     ) throws EntityNotFoundException, OptimisticLockingException {
         var model = this.infrastruktureinrichtungApiMapper.dto2Model(infrastruktureinrichtungDto);
-        model =
-            this.bauvorhabenService.assignBauvorhabenToInfrastruktureinrichtung(
-                    infrastruktureinrichtungDto.getBauvorhaben(),
-                    model
-                );
         model = this.infrastruktureinrichtungService.updateInfrastruktureinrichtung(model);
         final var saved = this.infrastruktureinrichtungApiMapper.model2Dto(model);
         return ResponseEntity.ok(saved);

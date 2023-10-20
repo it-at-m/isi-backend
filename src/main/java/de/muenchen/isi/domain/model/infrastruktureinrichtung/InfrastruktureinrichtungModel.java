@@ -5,12 +5,12 @@
 package de.muenchen.isi.domain.model.infrastruktureinrichtung;
 
 import de.muenchen.isi.domain.model.BaseEntityModel;
-import de.muenchen.isi.domain.model.BauvorhabenModel;
 import de.muenchen.isi.domain.model.common.AdresseModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Einrichtungstraeger;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusInfrastruktureinrichtung;
 import java.math.BigDecimal;
+import java.util.UUID;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -24,7 +24,7 @@ public abstract class InfrastruktureinrichtungModel extends BaseEntityModel {
 
     private Long lfdNr;
 
-    private BauvorhabenModel bauvorhaben;
+    private UUID bauvorhaben;
 
     private AdresseModel adresse;
 

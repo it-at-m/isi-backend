@@ -40,7 +40,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.lang.Nullable;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 
@@ -165,28 +164,6 @@ public class BauvorhabenService {
         this.throwEntityIsReferencedExceptionWhenInfrastruktureinrichtungIsReferencingBauvorhaben(bauvorhaben);
         this.kommentarRepository.deleteAllByBauvorhabenId(id);
         this.bauvorhabenRepository.deleteById(id);
-    }
-
-    /**
-     * Setzt in einem {@link InfrastruktureinrichtungModel} den Wert des Feldes 'bauvorhaben' auf das {@link BauvorhabenModel}, welches über die gegebene ID gefunden wurde.
-     * Da im {@link InfrastruktureinrichtungModel} das Bauvorhaben über eine ID und im {@link InfrastruktureinrichtungModel} als ein {@link BauvorhabenModel} gespeichert wird, wird bei einem Mapping von Dto nach Model das Feld 'bauvorhaben' auf null gesetzt.
-     * Diese Methode soll dann verwendet werden, um die beim Mapping verloren gegangene Information zum Bauvorhaben wieder in der Infrastruktureinrichung einzusetzen.
-     * Der Parameter 'bauvorhabenId' darf null sein. In diesem Fall passiert nichts.
-     *
-     * @param bauvorhabenId            id des {@link BauvorhabenModel}s
-     * @param infrastruktureinrichtung zum Speichern
-     * @return Die (möglicherweise) geänderte Infrastruktureinrichtung
-     * @throws EntityNotFoundException falls das Bauvorhaben mit der gegebenen ID nicht gefunden wurde
-     */
-    public InfrastruktureinrichtungModel assignBauvorhabenToInfrastruktureinrichtung(
-        @Nullable final UUID bauvorhabenId,
-        final InfrastruktureinrichtungModel infrastruktureinrichtung
-    ) throws EntityNotFoundException {
-        if (bauvorhabenId != null) {
-            final var model = this.getBauvorhabenById(bauvorhabenId);
-            infrastruktureinrichtung.setBauvorhaben(model);
-        }
-        return infrastruktureinrichtung;
     }
 
     /**

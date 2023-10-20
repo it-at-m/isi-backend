@@ -2,7 +2,6 @@ package de.muenchen.isi.domain.service;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.sameInstance;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import de.muenchen.isi.domain.exception.AbfrageStatusNotAllowedException;
@@ -25,8 +24,6 @@ import de.muenchen.isi.domain.model.BauvorhabenModel;
 import de.muenchen.isi.domain.model.common.StadtbezirkModel;
 import de.muenchen.isi.domain.model.common.VerortungModel;
 import de.muenchen.isi.domain.model.enums.SearchResultType;
-import de.muenchen.isi.domain.model.infrastruktureinrichtung.InfrastruktureinrichtungModel;
-import de.muenchen.isi.domain.model.infrastruktureinrichtung.KinderkrippeModel;
 import de.muenchen.isi.domain.model.search.response.AbfrageSearchResultModel;
 import de.muenchen.isi.domain.model.search.response.InfrastruktureinrichtungSearchResultModel;
 import de.muenchen.isi.domain.service.filehandling.DokumentService;
@@ -80,7 +77,7 @@ public class BauvorhabenServiceTest {
     );
 
     private final SearchDomainMapper searchDomainMapper = new SearchDomainMapperImpl(
-        new InfrastruktureinrichtungDomainMapperImpl(bauvorhabenDomainMapper),
+        new InfrastruktureinrichtungDomainMapperImpl(),
         new BauvorhabenDomainMapperImpl(new DokumentDomainMapperImpl())
     );
 
@@ -676,44 +673,6 @@ public class BauvorhabenServiceTest {
 
         Mockito.verify(this.bauvorhabenRepository, Mockito.times(1)).findById(entity.getId());
         Mockito.verify(this.bauvorhabenRepository, Mockito.times(0)).deleteById(id);
-    }
-
-    @Test
-    void assignBauvorhabenToInfrastruktureinrichtungTest() throws EntityNotFoundException {
-        final UUID id = UUID.randomUUID();
-
-        final var bauvorhaben = new Bauvorhaben();
-        bauvorhaben.setId(id);
-
-        final var infrastruktureinrichtung = new KinderkrippeModel();
-        InfrastruktureinrichtungModel returnedInfrastruktureinrichtung;
-
-        // Wenn 'bauvorhabenId' null ist, soll nichts passieren.
-
-        returnedInfrastruktureinrichtung =
-            this.bauvorhabenService.assignBauvorhabenToInfrastruktureinrichtung(null, infrastruktureinrichtung);
-        assertThat(returnedInfrastruktureinrichtung, sameInstance(infrastruktureinrichtung));
-        Mockito.verify(this.bauvorhabenRepository, Mockito.times(0)).findById(bauvorhaben.getId());
-
-        // Wenn kein Bauvorhaben mit der ID 'bauvorhabenId' existiert, soll eine 'BauvorhabenNotFoundException' geworfen werden.
-
-        assertThrows(
-            EntityNotFoundException.class,
-            () -> this.bauvorhabenService.assignBauvorhabenToInfrastruktureinrichtung(id, infrastruktureinrichtung)
-        );
-        Mockito.verify(this.bauvorhabenRepository, Mockito.times(1)).findById(bauvorhaben.getId());
-
-        // Normalfall
-
-        Mockito.when(this.bauvorhabenRepository.findById(bauvorhaben.getId())).thenReturn(Optional.of(bauvorhaben));
-        returnedInfrastruktureinrichtung =
-            this.bauvorhabenService.assignBauvorhabenToInfrastruktureinrichtung(id, infrastruktureinrichtung);
-        assertThat(returnedInfrastruktureinrichtung, sameInstance(infrastruktureinrichtung));
-        Mockito.verify(this.bauvorhabenRepository, Mockito.times(2)).findById(bauvorhaben.getId());
-        assertThat(
-            returnedInfrastruktureinrichtung.getBauvorhaben(),
-            is(this.bauvorhabenService.getBauvorhabenById(id))
-        );
     }
 
     @Test

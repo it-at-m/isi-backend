@@ -12,7 +12,6 @@ import de.muenchen.isi.api.dto.infrastruktureinrichtung.KindergartenDto;
 import de.muenchen.isi.api.dto.infrastruktureinrichtung.KinderkrippeDto;
 import de.muenchen.isi.api.dto.infrastruktureinrichtung.MittelschuleDto;
 import de.muenchen.isi.configuration.MapstructConfiguration;
-import de.muenchen.isi.domain.model.BauvorhabenModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.GrundschuleModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.GsNachmittagBetreuungModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.HausFuerKinderModel;
@@ -20,16 +19,11 @@ import de.muenchen.isi.domain.model.infrastruktureinrichtung.Infrastruktureinric
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.KindergartenModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.KinderkrippeModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.MittelschuleModel;
-import org.apache.commons.lang3.ObjectUtils;
-import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
 import org.mapstruct.SubclassMapping;
 
 @Mapper(config = MapstructConfiguration.class)
 public interface InfrastruktureinrichtungApiMapper {
-    @Mapping(target = "bauvorhaben", ignore = true)
     @SubclassMapping(source = GrundschuleDto.class, target = GrundschuleModel.class)
     @SubclassMapping(source = GsNachmittagBetreuungDto.class, target = GsNachmittagBetreuungModel.class)
     @SubclassMapping(source = HausFuerKinderDto.class, target = HausFuerKinderModel.class)
@@ -38,7 +32,6 @@ public interface InfrastruktureinrichtungApiMapper {
     @SubclassMapping(source = MittelschuleDto.class, target = MittelschuleModel.class)
     InfrastruktureinrichtungModel dto2Model(final InfrastruktureinrichtungDto dto);
 
-    @Mapping(target = "bauvorhaben", ignore = true)
     @SubclassMapping(source = GrundschuleModel.class, target = GrundschuleDto.class)
     @SubclassMapping(source = GsNachmittagBetreuungModel.class, target = GsNachmittagBetreuungDto.class)
     @SubclassMapping(source = HausFuerKinderModel.class, target = HausFuerKinderDto.class)
@@ -46,13 +39,4 @@ public interface InfrastruktureinrichtungApiMapper {
     @SubclassMapping(source = KinderkrippeModel.class, target = KinderkrippeDto.class)
     @SubclassMapping(source = MittelschuleModel.class, target = MittelschuleDto.class)
     InfrastruktureinrichtungDto model2Dto(final InfrastruktureinrichtungModel model);
-
-    @AfterMapping
-    default void setBauvorhabenIdOnInfrastruktureinrichtungDto(
-        final InfrastruktureinrichtungModel model,
-        @MappingTarget final InfrastruktureinrichtungDto dto
-    ) {
-        final BauvorhabenModel bauvorhabenModel = model.getBauvorhaben();
-        dto.setBauvorhaben(ObjectUtils.isNotEmpty(bauvorhabenModel) ? bauvorhabenModel.getId() : null);
-    }
 }

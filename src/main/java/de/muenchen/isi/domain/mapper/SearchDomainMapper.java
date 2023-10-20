@@ -56,7 +56,7 @@ public interface SearchDomainMapper {
     @Mappings({ @Mapping(target = "type", constant = SearchResultType.Values.INFRASTRUKTUREINRICHTUNG) })
     InfrastruktureinrichtungSearchResultModel entity2SearchResultModel(final Infrastruktureinrichtung entity);
 
-    default UUID map(Bauvorhaben bauvorhaben) {
+    default UUID map(final Bauvorhaben bauvorhaben) {
         return ObjectUtils.isEmpty(bauvorhaben) ? null : bauvorhaben.getId();
     }
 }

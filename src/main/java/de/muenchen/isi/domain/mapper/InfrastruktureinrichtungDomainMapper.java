@@ -20,24 +20,56 @@ import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Infrastruk
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Kindergarten;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Kinderkrippe;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Mittelschule;
+import de.muenchen.isi.infrastructure.repository.BauvorhabenRepository;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ObjectUtils;
+import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 import org.mapstruct.SubclassMapping;
+import org.springframework.beans.factory.annotation.Autowired;
 
+@Slf4j
 @Mapper(config = MapstructConfiguration.class, uses = { BauvorhabenDomainMapper.class })
-public interface InfrastruktureinrichtungDomainMapper {
+public abstract class InfrastruktureinrichtungDomainMapper {
+
+    @Autowired
+    private BauvorhabenRepository bauvorhabenRepository;
+
+    @Mapping(source = "bauvorhaben.id", target = "bauvorhaben")
     @SubclassMapping(source = Grundschule.class, target = GrundschuleModel.class)
     @SubclassMapping(source = GsNachmittagBetreuung.class, target = GsNachmittagBetreuungModel.class)
     @SubclassMapping(source = HausFuerKinder.class, target = HausFuerKinderModel.class)
     @SubclassMapping(source = Kindergarten.class, target = KindergartenModel.class)
     @SubclassMapping(source = Kinderkrippe.class, target = KinderkrippeModel.class)
     @SubclassMapping(source = Mittelschule.class, target = MittelschuleModel.class)
-    InfrastruktureinrichtungModel entity2Model(final Infrastruktureinrichtung entity);
+    public abstract InfrastruktureinrichtungModel entity2Model(final Infrastruktureinrichtung entity);
 
+    @Mapping(target = "bauvorhaben", ignore = true)
     @SubclassMapping(source = GrundschuleModel.class, target = Grundschule.class)
     @SubclassMapping(source = GsNachmittagBetreuungModel.class, target = GsNachmittagBetreuung.class)
     @SubclassMapping(source = HausFuerKinderModel.class, target = HausFuerKinder.class)
     @SubclassMapping(source = KindergartenModel.class, target = Kindergarten.class)
     @SubclassMapping(source = KinderkrippeModel.class, target = Kinderkrippe.class)
     @SubclassMapping(source = MittelschuleModel.class, target = Mittelschule.class)
-    Infrastruktureinrichtung model2Entity(final InfrastruktureinrichtungModel model) throws EntityNotFoundException;
+    public abstract Infrastruktureinrichtung model2Entity(final InfrastruktureinrichtungModel model)
+        throws EntityNotFoundException;
+
+    @AfterMapping
+    void model2EntityAfterMapping(
+        final InfrastruktureinrichtungModel model,
+        @MappingTarget Infrastruktureinrichtung entity
+    ) throws EntityNotFoundException {
+        if (ObjectUtils.isNotEmpty(model.getBauvorhaben())) {
+            final var bauvorhaben = bauvorhabenRepository
+                .findById(model.getBauvorhaben())
+                .orElseThrow(() -> {
+                    final var message = "Bauvorhaben nicht gefunden";
+                    log.error(message);
+                    return new EntityNotFoundException(message);
+                });
+            entity.setBauvorhaben(bauvorhaben);
+        }
+    }
 }
