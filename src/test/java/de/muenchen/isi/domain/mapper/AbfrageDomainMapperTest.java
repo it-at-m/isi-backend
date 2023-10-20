@@ -60,7 +60,7 @@ public class AbfrageDomainMapperTest {
     }
 
     @Test
-    public void abfrageErstellungInfrastrukturabfrageToInfrastrukturabfrageNoExistingAbfragevariante() {
+    public void abfrageErstellungAbfrageToAbfrageNoExistingAbfragevariante() {
         BauleitplanverfahrenAngelegtModel bauleitplanverfahrenModel = new BauleitplanverfahrenAngelegtModel();
         bauleitplanverfahrenModel.setVersion(1L);
         bauleitplanverfahrenModel.setName("Abfrage");
@@ -94,7 +94,7 @@ public class AbfrageDomainMapperTest {
     }
 
     @Test
-    public void abfrageErstellungInfrastrukturabfrageToInfrastrukturabfrageExistingAbfragevariante() {
+    public void abfrageErstellungAbfrageToAbfrageExistingAbfragevariante() {
         var abfragevarianteId = UUID.randomUUID();
         BauleitplanverfahrenAngelegtModel bauleitplanverfahrenAngelegtModel = new BauleitplanverfahrenAngelegtModel();
         bauleitplanverfahrenAngelegtModel.setVersion(1L);
@@ -142,7 +142,7 @@ public class AbfrageDomainMapperTest {
     }
 
     @Test
-    void sachbearbeitungInfrastrukturabfrageToInfrastrukturabfrageNonExistingAbfragevariante() {
+    void sachbearbeitungAbfrageToAbfrageNonExistingAbfragevariante() {
         var bauleitplanverfahren = new BauleitplanverfahrenInBearbeitungSachbearbeitungModel();
         bauleitplanverfahren.setVersion(99L);
         bauleitplanverfahren.setAbfragevarianten(List.of());
@@ -181,7 +181,7 @@ public class AbfrageDomainMapperTest {
     }
 
     @Test
-    void sachbearbeitungInfrastrukturabfrageToInfrastrukturabfrageExistingAbfragevariante() {
+    void sachbearbeitungAbfrageToAbfrageExistingAbfragevariante() {
         var bauleitplanverfahren = new BauleitplanverfahrenInBearbeitungSachbearbeitungModel();
         bauleitplanverfahren.setVersion(99L);
         bauleitplanverfahren.setAbfragevarianten(List.of());
@@ -242,7 +242,7 @@ public class AbfrageDomainMapperTest {
     }
 
     @Test
-    void sachbearbeitungInfrastrukturabfrageToInfrastrukturabfrageNonExistingAbfragevarianteForAbfragevarianteSachbearbeitung() {
+    void sachbearbeitungAbfrageToAbfrageNonExistingAbfragevarianteForAbfragevarianteSachbearbeitung() {
         var bauleitplanverfahren = new BauleitplanverfahrenInBearbeitungSachbearbeitungModel();
         bauleitplanverfahren.setVersion(99L);
         bauleitplanverfahren.setAbfragevariantenSachbearbeitung(List.of());
