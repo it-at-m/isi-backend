@@ -77,7 +77,7 @@ public class Bauvorhaben extends BaseEntity {
     private StandVerfahren standVerfahren;
 
     @Column
-    private String wesentlicheRechtsgrundlageFreieEingabe;
+    private String standVerfahrenFreieEingabe;
 
     @FullTextField
     @NonStandardField(
