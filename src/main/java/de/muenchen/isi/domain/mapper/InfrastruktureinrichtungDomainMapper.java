@@ -59,7 +59,7 @@ public abstract class InfrastruktureinrichtungDomainMapper {
     @AfterMapping
     void model2EntityAfterMapping(
         final InfrastruktureinrichtungModel model,
-        @MappingTarget Infrastruktureinrichtung entity
+        @MappingTarget final Infrastruktureinrichtung entity
     ) throws EntityNotFoundException {
         if (ObjectUtils.isNotEmpty(model.getBauvorhaben())) {
             final var bauvorhaben = bauvorhabenRepository
