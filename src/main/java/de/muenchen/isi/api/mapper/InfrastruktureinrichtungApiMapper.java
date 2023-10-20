@@ -12,7 +12,6 @@ import de.muenchen.isi.api.dto.infrastruktureinrichtung.KindergartenDto;
 import de.muenchen.isi.api.dto.infrastruktureinrichtung.KinderkrippeDto;
 import de.muenchen.isi.api.dto.infrastruktureinrichtung.MittelschuleDto;
 import de.muenchen.isi.configuration.MapstructConfiguration;
-import de.muenchen.isi.domain.model.BaugebietModel;
 import de.muenchen.isi.domain.model.BauvorhabenModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.GrundschuleModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.GsNachmittagBetreuungModel;
@@ -30,7 +29,6 @@ import org.mapstruct.SubclassMapping;
 
 @Mapper(config = MapstructConfiguration.class)
 public interface InfrastruktureinrichtungApiMapper {
-    @Mapping(target = "zugeordnetesBaugebiet", ignore = true)
     @Mapping(target = "bauvorhaben", ignore = true)
     @SubclassMapping(source = GrundschuleDto.class, target = GrundschuleModel.class)
     @SubclassMapping(source = GsNachmittagBetreuungDto.class, target = GsNachmittagBetreuungModel.class)
@@ -40,7 +38,6 @@ public interface InfrastruktureinrichtungApiMapper {
     @SubclassMapping(source = MittelschuleDto.class, target = MittelschuleModel.class)
     InfrastruktureinrichtungModel dto2Model(final InfrastruktureinrichtungDto dto);
 
-    @Mapping(target = "zugeordnetesBaugebiet", ignore = true)
     @Mapping(target = "bauvorhaben", ignore = true)
     @SubclassMapping(source = GrundschuleModel.class, target = GrundschuleDto.class)
     @SubclassMapping(source = GsNachmittagBetreuungModel.class, target = GsNachmittagBetreuungDto.class)
@@ -57,14 +54,5 @@ public interface InfrastruktureinrichtungApiMapper {
     ) {
         final BauvorhabenModel bauvorhabenModel = model.getBauvorhaben();
         dto.setBauvorhaben(ObjectUtils.isNotEmpty(bauvorhabenModel) ? bauvorhabenModel.getId() : null);
-    }
-
-    @AfterMapping
-    default void setBaugebietIdOnInfrastruktureinrichtungDto(
-        final InfrastruktureinrichtungModel model,
-        @MappingTarget final InfrastruktureinrichtungDto dto
-    ) {
-        final BaugebietModel baugebietModel = model.getZugeordnetesBaugebiet();
-        dto.setZugeordnetesBaugebiet(ObjectUtils.isNotEmpty(baugebietModel) ? baugebietModel.getId() : null);
     }
 }

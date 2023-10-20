@@ -5,7 +5,6 @@
 package de.muenchen.isi.domain.model.infrastruktureinrichtung;
 
 import de.muenchen.isi.domain.model.BaseEntityModel;
-import de.muenchen.isi.domain.model.BaugebietModel;
 import de.muenchen.isi.domain.model.BauvorhabenModel;
 import de.muenchen.isi.domain.model.common.AdresseModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Einrichtungstraeger;
@@ -40,6 +39,4 @@ public abstract class InfrastruktureinrichtungModel extends BaseEntityModel {
     private BigDecimal flaecheGesamtgrundstueck;
 
     private BigDecimal flaecheTeilgrundstueck;
-
-    private BaugebietModel zugeordnetesBaugebiet;
 }

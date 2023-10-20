@@ -74,6 +74,4 @@ public abstract class InfrastruktureinrichtungDto extends BaseEntityDto {
     private BigDecimal flaecheGesamtgrundstueck;
 
     private BigDecimal flaecheTeilgrundstueck;
-
-    private UUID zugeordnetesBaugebiet;
 }
