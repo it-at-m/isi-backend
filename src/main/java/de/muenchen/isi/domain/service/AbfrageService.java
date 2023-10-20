@@ -19,6 +19,7 @@ import de.muenchen.isi.domain.model.abfrageInBearbeitungFachreferat.Bauleitplanv
 import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.AbfrageInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.BauleitplanverfahrenInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.domain.service.filehandling.DokumentService;
+import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.repository.AbfrageRepository;
@@ -31,6 +32,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
@@ -243,7 +245,10 @@ public class AbfrageService {
      */
     protected void throwEntityIsReferencedExceptionWhenAbfrageIsReferencingBauvorhaben(final AbfrageModel abfrage)
         throws EntityIsReferencedException {
-        final var bauvorhaben = bauvorhabenRepository.findById(abfrage.getBauvorhaben());
+        Optional<Bauvorhaben> bauvorhaben = Optional.empty();
+        if (ObjectUtils.isNotEmpty(abfrage.getBauvorhaben())) {
+            bauvorhaben = bauvorhabenRepository.findById(abfrage.getBauvorhaben());
+        }
         if (bauvorhaben.isPresent()) {
             final var message =
                 "Die Abfrage " +
