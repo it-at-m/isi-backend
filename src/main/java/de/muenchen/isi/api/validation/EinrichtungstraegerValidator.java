@@ -7,6 +7,7 @@ import de.muenchen.isi.api.dto.infrastruktureinrichtung.Infrastruktureinrichtung
 import de.muenchen.isi.api.dto.infrastruktureinrichtung.KindergartenDto;
 import de.muenchen.isi.api.dto.infrastruktureinrichtung.KinderkrippeDto;
 import de.muenchen.isi.api.dto.infrastruktureinrichtung.MittelschuleDto;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.Einrichtungstraeger;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusInfrastruktureinrichtung;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
@@ -28,40 +29,50 @@ public class EinrichtungstraegerValidator
      */
     @Override
     public boolean isValid(final InfrastruktureinrichtungDto value, final ConstraintValidatorContext context) {
-        return value != null && (einrichtungstraegerIsValid(value) || invalidEinrichtungstraegerAllowed(value));
+        return (value != null && einrichtungsTraegerValid(value));
     }
 
-    private boolean einrichtungstraegerIsValid(final InfrastruktureinrichtungDto value) {
-        if (value instanceof GrundschuleDto) {
-            return (
-                ((GrundschuleDto) value).getSchule().getEinrichtungstraeger() != null &&
-                ((GrundschuleDto) value).getSchule().getEinrichtungstraeger().getBezeichnung() != null
-            );
-        } else if (value instanceof MittelschuleDto) {
-            return (
-                ((MittelschuleDto) value).getSchule().getEinrichtungstraeger() != null &&
-                ((MittelschuleDto) value).getSchule().getEinrichtungstraeger().getBezeichnung() != null
-            );
-        } else if (value instanceof GsNachmittagBetreuungDto) {
-            return (
-                ((GsNachmittagBetreuungDto) value).getEinrichtungstraeger() != null &&
-                ((GsNachmittagBetreuungDto) value).getEinrichtungstraeger().getBezeichnung() != null
-            );
-        } else if (value instanceof HausFuerKinderDto) {
-            return (
-                ((HausFuerKinderDto) value).getEinrichtungstraeger() != null &&
-                ((HausFuerKinderDto) value).getEinrichtungstraeger().getBezeichnung() != null
-            );
-        } else if (value instanceof KindergartenDto) {
-            return (
-                ((KindergartenDto) value).getEinrichtungstraeger() != null &&
-                ((KindergartenDto) value).getEinrichtungstraeger().getBezeichnung() != null
-            );
+    private boolean einrichtungsTraegerValid(final InfrastruktureinrichtungDto value) {
+        if (!invalidEinrichtungstraegerAllowed(value)) {
+            if (value instanceof GrundschuleDto) {
+                var einrichtungstraeger = ((GrundschuleDto) value).getSchule().getEinrichtungstraeger();
+                return (
+                    this.isNotNull(einrichtungstraeger) &&
+                    Einrichtungstraeger.getEinrichtungstraegerSchulen().contains(einrichtungstraeger)
+                );
+            } else if (value instanceof MittelschuleDto) {
+                var einrichtungstraeger = ((MittelschuleDto) value).getSchule().getEinrichtungstraeger();
+                return (
+                    this.isNotNull(einrichtungstraeger) &&
+                    Einrichtungstraeger.getEinrichtungstraegerSchulen().contains(einrichtungstraeger)
+                );
+            } else if (value instanceof GsNachmittagBetreuungDto) {
+                var einrichtungstraeger = ((GsNachmittagBetreuungDto) value).getEinrichtungstraeger();
+                return (
+                    this.isNotNull(einrichtungstraeger) &&
+                    Einrichtungstraeger.getEinrichtungstraeger().contains(einrichtungstraeger)
+                );
+            } else if (value instanceof HausFuerKinderDto) {
+                var einrichtungstraeger = ((HausFuerKinderDto) value).getEinrichtungstraeger();
+                return (
+                    this.isNotNull(einrichtungstraeger) &&
+                    Einrichtungstraeger.getEinrichtungstraeger().contains(einrichtungstraeger)
+                );
+            } else if (value instanceof KindergartenDto) {
+                var einrichtungstraeger = ((KindergartenDto) value).getEinrichtungstraeger();
+                return (
+                    this.isNotNull(einrichtungstraeger) &&
+                    Einrichtungstraeger.getEinrichtungstraeger().contains(einrichtungstraeger)
+                );
+            } else {
+                var einrichtungstraeger = ((KinderkrippeDto) value).getEinrichtungstraeger();
+                return (
+                    this.isNotNull(einrichtungstraeger) &&
+                    Einrichtungstraeger.getEinrichtungstraeger().contains(einrichtungstraeger)
+                );
+            }
         } else {
-            return (
-                ((KinderkrippeDto) value).getEinrichtungstraeger() != null &&
-                ((KinderkrippeDto) value).getEinrichtungstraeger().getBezeichnung() != null
-            );
+            return true;
         }
     }
 
@@ -70,5 +81,9 @@ public class EinrichtungstraegerValidator
             value.getStatus() != StatusInfrastruktureinrichtung.BESTAND &&
             value.getStatus() != StatusInfrastruktureinrichtung.GESICHERTE_PLANUNG_ERW_PLAETZE_BEST_EINR
         );
+    }
+
+    private boolean isNotNull(final Einrichtungstraeger einrichtungstraeger) {
+        return einrichtungstraeger != null && einrichtungstraeger.getBezeichnung() != null;
     }
 }

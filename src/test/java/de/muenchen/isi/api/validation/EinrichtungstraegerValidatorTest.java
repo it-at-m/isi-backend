@@ -35,6 +35,9 @@ public class EinrichtungstraegerValidatorTest {
 
         value.getSchule().setEinrichtungstraeger(Einrichtungstraeger.STAEDTISCHE_EINRICHTUNG);
         assertThat(this.validator.isValid(value, null), is(true));
+
+        value.getSchule().setEinrichtungstraeger(Einrichtungstraeger.EINRICHTUNG_GESAMTSTAEDTISCH);
+        assertThat(this.validator.isValid(value, null), is(false));
     }
 
     @Test
@@ -54,6 +57,9 @@ public class EinrichtungstraegerValidatorTest {
 
         value.getSchule().setEinrichtungstraeger(Einrichtungstraeger.STAEDTISCHE_EINRICHTUNG);
         assertThat(this.validator.isValid(value, null), is(true));
+
+        value.getSchule().setEinrichtungstraeger(Einrichtungstraeger.EINRICHTUNG_GESAMTSTAEDTISCH);
+        assertThat(this.validator.isValid(value, null), is(false));
     }
 
     @Test
@@ -71,6 +77,9 @@ public class EinrichtungstraegerValidatorTest {
 
         value.setEinrichtungstraeger(Einrichtungstraeger.STAEDTISCHE_EINRICHTUNG);
         assertThat(this.validator.isValid(value, null), is(true));
+
+        value.setEinrichtungstraeger(Einrichtungstraeger.PRIVATE_TRAEGERSCHAFT);
+        assertThat(this.validator.isValid(value, null), is(false));
     }
 
     @Test
@@ -88,6 +97,9 @@ public class EinrichtungstraegerValidatorTest {
 
         value.setEinrichtungstraeger(Einrichtungstraeger.STAEDTISCHE_EINRICHTUNG);
         assertThat(this.validator.isValid(value, null), is(true));
+
+        value.setEinrichtungstraeger(Einrichtungstraeger.PRIVATE_TRAEGERSCHAFT);
+        assertThat(this.validator.isValid(value, null), is(false));
     }
 
     @Test
@@ -105,6 +117,9 @@ public class EinrichtungstraegerValidatorTest {
 
         value.setEinrichtungstraeger(Einrichtungstraeger.STAEDTISCHE_EINRICHTUNG);
         assertThat(this.validator.isValid(value, null), is(true));
+
+        value.setEinrichtungstraeger(Einrichtungstraeger.PRIVATE_TRAEGERSCHAFT);
+        assertThat(this.validator.isValid(value, null), is(false));
     }
 
     @Test
@@ -122,5 +137,8 @@ public class EinrichtungstraegerValidatorTest {
 
         value.setEinrichtungstraeger(Einrichtungstraeger.STAEDTISCHE_EINRICHTUNG);
         assertThat(this.validator.isValid(value, null), is(true));
+
+        value.setEinrichtungstraeger(Einrichtungstraeger.PRIVATE_TRAEGERSCHAFT);
+        assertThat(this.validator.isValid(value, null), is(false));
     }
 }
