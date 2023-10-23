@@ -137,8 +137,8 @@ public class BauvorhabenService {
      * @throws EntityNotFoundException           falls das Bauvorhaben identifiziert durch die {@link BauvorhabenModel#getId()} nicht gefunden wird
      * @throws UniqueViolationException          falls der Name des Bauvorhabens {@link BauvorhabenModel#getNameVorhaben()} bereits vorhanden ist
      * @throws OptimisticLockingException        falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
-     * @throws FileHandlingFailedException
-     * @throws FileHandlingWithS3FailedException
+     * @throws FileHandlingFailedException       falls es beim Dateihandling zu einem Fehler gekommen ist.
+     * @throws FileHandlingWithS3FailedException falls es beim Dateihandling im S3-Storage zu einem Fehler gekommen ist.
      * @throws EntityIsReferencedException       falls bei Neuanlage eines Bauvorhabens bei Datenübernahme einer Abfrage diese bereits ein Bauvorhaben referenziert
      */
     public BauvorhabenModel updateBauvorhaben(final BauvorhabenModel bauvorhaben)

@@ -107,6 +107,19 @@ public class AbfrageService {
         }
     }
 
+    /**
+     * Diese Methode aktualisiert ein {@link AbfrageAngelegtModel}.
+     *
+     * @param abfrage zum Speichern
+     * @param id der Abfrage
+     * @return das gespeicherte {@link AbfrageModel}
+     * @throws UniqueViolationException   falls der Name der Abfrage oder der Abfragevariante bereits vorhanden ist.
+     * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist.
+     * @throws EntityNotFoundException falls das referenzierte Bauvorhaben nicht existiert.
+     * @throws AbfrageStatusNotAllowedException falls die zu aktualisierende Abfrage sich nicht im Status {@link StatusAbfrage#ANGELEGT} befindet.
+     * @throws FileHandlingFailedException       falls es beim Dateihandling zu einem Fehler gekommen ist.
+     * @throws FileHandlingWithS3FailedException falls es beim Dateihandling im S3-Storage zu einem Fehler gekommen ist.
+     */
     public AbfrageModel patchAngelegt(final AbfrageAngelegtModel abfrage, final UUID id)
         throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, FileHandlingFailedException, FileHandlingWithS3FailedException {
         final var originalAbfrageDb = this.getById(id);
@@ -124,6 +137,18 @@ public class AbfrageService {
         }
     }
 
+    /**
+     * Diese Methode aktualisiert ein {@link BauleitplanverfahrenAngelegtModel}.
+     *
+     * @param abfrage mit den Attributen zum Speichern
+     * @param originalAbfrageDb welche mit den im Parameter gegebenen abfrage gegebenen Werten aktualisiert und gespeichert wird.
+     * @return das gespeicherte {@link AbfrageModel}
+     * @throws UniqueViolationException   falls der Name der Abfrage oder der Abfragevariante bereits vorhanden ist.
+     * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist.
+     * @throws EntityNotFoundException falls das referenzierte Bauvorhaben nicht existiert.
+     * @throws FileHandlingFailedException       falls es beim Dateihandling zu einem Fehler gekommen ist.
+     * @throws FileHandlingWithS3FailedException falls es beim Dateihandling im S3-Storage zu einem Fehler gekommen ist.
+     */
     protected AbfrageModel patchAngelegt(
         BauleitplanverfahrenAngelegtModel abfrage,
         BauleitplanverfahrenModel originalAbfrageDb
@@ -137,6 +162,17 @@ public class AbfrageService {
         return this.save(abfrageToSave);
     }
 
+    /**
+     * Diese Methode aktualisiert ein {@link AbfrageInBearbeitungSachbearbeitungModel}.
+     *
+     * @param abfrage zum Speichern
+     * @param id der Abfrage
+     * @return das gespeicherte {@link AbfrageModel}
+     * @throws UniqueViolationException   falls der Name der Abfrage oder der Abfragevariante bereits vorhanden ist.
+     * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist.
+     * @throws EntityNotFoundException falls das referenzierte Bauvorhaben nicht existiert.
+     * @throws AbfrageStatusNotAllowedException falls die zu aktualisierende Abfrage sich nicht im Status {@link StatusAbfrage#IN_BEARBEITUNG_SACHBEARBEITUNG} befindet.
+     */
     public AbfrageModel patchInBearbeitungSachbearbeitung(
         final AbfrageInBearbeitungSachbearbeitungModel abfrage,
         final UUID id
@@ -162,6 +198,17 @@ public class AbfrageService {
         }
     }
 
+    /**
+     * Diese Methode aktualisiert ein {@link AbfrageInBearbeitungFachreferatModel}.
+     *
+     * @param abfrage zum Speichern
+     * @param id der Abfrage
+     * @return das gespeicherte {@link AbfrageModel}
+     * @throws UniqueViolationException   falls der Name der Abfrage oder der Abfragevariante bereits vorhanden ist.
+     * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist.
+     * @throws EntityNotFoundException falls das referenzierte Bauvorhaben nicht existiert.
+     * @throws AbfrageStatusNotAllowedException falls die zu aktualisierende Abfrage sich nicht im Status {@link StatusAbfrage#IN_BEARBEITUNG_FACHREFERATE} befindet.
+     */
     public AbfrageModel patchInBearbeitungFachreferat(
         final AbfrageInBearbeitungFachreferatModel abfrage,
         final UUID id
