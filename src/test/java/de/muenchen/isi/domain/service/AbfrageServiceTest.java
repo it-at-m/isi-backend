@@ -929,7 +929,7 @@ class AbfrageServiceTest {
     }
 
     @Test
-    void throwUserRoleNotAllowedOrAbfrageStatusNotAllowedExceptionWhenDeleteAbfrage()
+    void throwUserRoleNotAllowedOrAbfrageStatusNotAllowedExceptionWhenNotTheCorrectUserWithTheCorrectRole()
         throws UserRoleNotAllowedException, AbfrageStatusNotAllowedException {
         final UUID id = UUID.randomUUID();
         String[] roles = { "abfrageerstellung", "admin" };
