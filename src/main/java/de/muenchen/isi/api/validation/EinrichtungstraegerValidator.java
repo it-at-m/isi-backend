@@ -12,6 +12,7 @@ import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusInfrastrukturein
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import lombok.NoArgsConstructor;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -62,10 +63,10 @@ public class EinrichtungstraegerValidator
      * Überprüft, ob ein {@link InfrastruktureinrichtungDto} nicht den Status {@link StatusInfrastruktureinrichtung#BESTAND}
      * oder {@link StatusInfrastruktureinrichtung#GESICHERTE_PLANUNG_ERW_PLAETZE_BEST_EINR} hat.
      *
-     * @param value Die zu überprüfende InfrastruktureinrichtungDto-Instanz.
-     * @return True, wenn der Status nicht BESTAND oder GESICHERTE_PLANUNG_ERW_PLAETZE_BEST_EINR ist, ansonsten false.
+     * @param value Die zu überprüfende {@link InfrastruktureinrichtungDto}.
+     * @return True, wenn der Status nicht {@link StatusInfrastruktureinrichtung#BESTAND} oder {@link StatusInfrastruktureinrichtung#GESICHERTE_PLANUNG_ERW_PLAETZE_BEST_EINR} ist, ansonsten false.
      */
-    private boolean isStatusBestandOrGesicherteERW(final InfrastruktureinrichtungDto value) {
+    public boolean isStatusBestandOrGesicherteERW(final InfrastruktureinrichtungDto value) {
         return (
             value.getStatus() == StatusInfrastruktureinrichtung.BESTAND ||
             value.getStatus() == StatusInfrastruktureinrichtung.GESICHERTE_PLANUNG_ERW_PLAETZE_BEST_EINR
@@ -73,10 +74,10 @@ public class EinrichtungstraegerValidator
     }
 
     /**
-     * Überprüft, ob der Einrichtungsträger der gegebenen Schule gültig ist.
+     * Überprüft, ob der {@link Einrichtungstraeger} der gegebenen Schule gültig ist.
      * Gültig bedeutet, dass der Einrichtungsträger in der Liste der Schulen enthalten ist.
      *
-     * @param einrichtungstraeger Der zu überprüfende Einrichtungsträger.
+     * @param einrichtungstraeger Der zu überprüfende {@link Einrichtungstraeger}.
      * @return True, wenn der Einrichtungsträger gültig ist, ansonsten false.
      */
     public boolean isValidEinrichtungstraegerSchule(final Einrichtungstraeger einrichtungstraeger) {
@@ -86,10 +87,10 @@ public class EinrichtungstraegerValidator
     }
 
     /**
-     * Überprüft, ob der gegebene Einrichtungsträger gültig ist.
+     * Überprüft, ob der gegebene {@link Einrichtungstraeger} gültig ist.
      * Gültig bedeutet, dass der Einrichtungsträger in der Liste der Einrichtungsträger enthalten ist.
      *
-     * @param einrichtungstraeger Der zu überprüfende Einrichtungsträger.
+     * @param einrichtungstraeger Der zu überprüfende {@link Einrichtungstraeger}.
      * @return True, wenn der Einrichtungsträger gültig ist, ansonsten false.
      */
     public boolean isValidEinrichtungstraeger(final Einrichtungstraeger einrichtungstraeger) {
@@ -99,6 +100,6 @@ public class EinrichtungstraegerValidator
     }
 
     private boolean isNotNull(final Einrichtungstraeger einrichtungstraeger) {
-        return einrichtungstraeger != null;
+        return ObjectUtils.isNotEmpty(einrichtungstraeger);
     }
 }

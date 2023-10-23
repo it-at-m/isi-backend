@@ -163,4 +163,21 @@ public class EinrichtungstraegerValidatorTest {
         einrichtungstraeger = Einrichtungstraeger.KIRCHLICHE_TRAEGERSCHAFT;
         assertThat(this.validator.isValidEinrichtungstraeger(einrichtungstraeger), is(false));
     }
+
+    @Test
+    void isStatusBestandOrGesicherteERWTest() {
+        final GrundschuleDto value = new GrundschuleDto();
+
+        value.setStatus(StatusInfrastruktureinrichtung.BESTAND);
+        assertThat(this.validator.isStatusBestandOrGesicherteERW(value), is(true));
+
+        value.setStatus(StatusInfrastruktureinrichtung.UNGESICHERTE_PLANUNG);
+        assertThat(this.validator.isStatusBestandOrGesicherteERW(value), is(false));
+
+        value.setStatus(StatusInfrastruktureinrichtung.GESICHERTE_PLANUNG_ERW_PLAETZE_BEST_EINR);
+        assertThat(this.validator.isStatusBestandOrGesicherteERW(value), is(true));
+
+        value.setStatus(StatusInfrastruktureinrichtung.GESICHERTE_PLANUNG_REDUZIERUNG_PLAETZE);
+        assertThat(this.validator.isStatusBestandOrGesicherteERW(value), is(false));
+    }
 }
