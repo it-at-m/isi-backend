@@ -198,20 +198,20 @@ public class AbfrageService {
     public void deleteById(final UUID id)
         throws EntityNotFoundException, EntityIsReferencedException, UserRoleNotAllowedException, AbfrageStatusNotAllowedException {
         final var abfrage = this.getById(id);
-        this.throwUserRoleNotAllowedOrAbfrageStatusNotAllowedExceptionWhenDeleteAbfrage(abfrage);
+        this.throwUserRoleNotAllowedOrAbfrageStatusNotAllowedExceptionWhenNotTheCorrectUserWithTheCorrectRole(abfrage);
         this.throwEntityIsReferencedExceptionWhenAbfrageIsReferencingBauvorhaben(abfrage);
         this.abfrageRepository.deleteById(id);
     }
 
     /**
-     * Diese Methode überprüft ob der Nutzer die richtige Rolle hat und die Abfrage im richtigen Status, um sie zu löschen.
-     * Dabei wird auch geprüft, ob der Nutzer der Abfrage zugeordnet ist per sub Id
+     * Diese Methode überprüft ob der Nutzer die richtige Rolle besitzt und die Abfrage sich im richtigen Status befindet.
+     * Dabei wird auch geprüft, ob der die zur Abfrage zugeordneten sub-ID (Subject-ID der Security-Session) mit der sub-ID des Nutzers übereinstimmt.
      *
      * @param abfrage zum Identifizieren des Status.
      * @throws UserRoleNotAllowedException      falls der Nutzer nicht die richtige Rolle hat.
-     * @throws AbfrageStatusNotAllowedException falls die Abfrage den falschen Status hat oder der Sub des Nutzers nicht mit dem Sub der Abfrage übereinstimmt
+     * @throws AbfrageStatusNotAllowedException falls die Abfrage den falschen Status hat oder der Sub des Nutzers nicht mit dem Sub der Abfrage übereinstimmt.
      */
-    protected void throwUserRoleNotAllowedOrAbfrageStatusNotAllowedExceptionWhenDeleteAbfrage(
+    protected void throwUserRoleNotAllowedOrAbfrageStatusNotAllowedExceptionWhenNotTheCorrectUserWithTheCorrectRole(
         final AbfrageModel abfrage
     ) throws UserRoleNotAllowedException, AbfrageStatusNotAllowedException {
         var roles = authenticationUtils.getUserRoles();

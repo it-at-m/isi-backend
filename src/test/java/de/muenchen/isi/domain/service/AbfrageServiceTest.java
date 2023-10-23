@@ -940,7 +940,9 @@ class AbfrageServiceTest {
         model.setId(id);
         model.setSub(sub);
         model.setStatusAbfrage(StatusAbfrage.OFFEN);
-        this.abfrageService.throwUserRoleNotAllowedOrAbfrageStatusNotAllowedExceptionWhenDeleteAbfrage(model);
+        this.abfrageService.throwUserRoleNotAllowedOrAbfrageStatusNotAllowedExceptionWhenNotTheCorrectUserWithTheCorrectRole(
+                model
+            );
 
         roles = new String[] { "fachreferat" };
         model.setId(id);
@@ -948,7 +950,9 @@ class AbfrageServiceTest {
         model.setStatusAbfrage(StatusAbfrage.OFFEN);
         Mockito.when(this.authenticationUtils.getUserRoles()).thenReturn(List.of(roles));
         try {
-            this.abfrageService.throwUserRoleNotAllowedOrAbfrageStatusNotAllowedExceptionWhenDeleteAbfrage(model);
+            this.abfrageService.throwUserRoleNotAllowedOrAbfrageStatusNotAllowedExceptionWhenNotTheCorrectUserWithTheCorrectRole(
+                    model
+                );
         } catch (final UserRoleNotAllowedException exception) {
             assertThat(exception.getMessage(), is("Keine Berechtigung zum Löschen der Abfrage."));
         }
@@ -959,7 +963,9 @@ class AbfrageServiceTest {
         model.setStatusAbfrage(StatusAbfrage.OFFEN);
         Mockito.when(this.authenticationUtils.getUserRoles()).thenReturn(List.of(roles));
         try {
-            this.abfrageService.throwUserRoleNotAllowedOrAbfrageStatusNotAllowedExceptionWhenDeleteAbfrage(model);
+            this.abfrageService.throwUserRoleNotAllowedOrAbfrageStatusNotAllowedExceptionWhenNotTheCorrectUserWithTheCorrectRole(
+                    model
+                );
         } catch (final UserRoleNotAllowedException exception) {
             assertThat(
                 exception.getMessage(),
@@ -973,7 +979,9 @@ class AbfrageServiceTest {
         model.setStatusAbfrage(StatusAbfrage.OFFEN);
         Mockito.when(this.authenticationUtils.getUserRoles()).thenReturn(List.of(roles));
         try {
-            this.abfrageService.throwUserRoleNotAllowedOrAbfrageStatusNotAllowedExceptionWhenDeleteAbfrage(model);
+            this.abfrageService.throwUserRoleNotAllowedOrAbfrageStatusNotAllowedExceptionWhenNotTheCorrectUserWithTheCorrectRole(
+                    model
+                );
         } catch (final AbfrageStatusNotAllowedException exception) {
             assertThat(exception.getMessage(), is("Die Abfrage kann nur im Status 'angelegt' gelöscht werden."));
         }
@@ -983,7 +991,9 @@ class AbfrageServiceTest {
         model.setSub(sub);
         model.setStatusAbfrage(StatusAbfrage.ANGELEGT);
         Mockito.when(this.authenticationUtils.getUserRoles()).thenReturn(List.of(roles));
-        this.abfrageService.throwUserRoleNotAllowedOrAbfrageStatusNotAllowedExceptionWhenDeleteAbfrage(model);
+        this.abfrageService.throwUserRoleNotAllowedOrAbfrageStatusNotAllowedExceptionWhenNotTheCorrectUserWithTheCorrectRole(
+                model
+            );
     }
 
     @Test
