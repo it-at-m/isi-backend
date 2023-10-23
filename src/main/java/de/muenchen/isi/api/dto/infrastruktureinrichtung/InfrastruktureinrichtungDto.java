@@ -11,7 +11,6 @@ import de.muenchen.isi.api.dto.common.AdresseDto;
 import de.muenchen.isi.api.validation.EinrichtungstraegerValid;
 import de.muenchen.isi.api.validation.FertigstellungsjahrValid;
 import de.muenchen.isi.api.validation.NotUnspecified;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.Einrichtungstraeger;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusInfrastruktureinrichtung;
 import java.math.BigDecimal;
@@ -71,8 +70,6 @@ public abstract class InfrastruktureinrichtungDto extends BaseEntityDto {
     @NotNull
     @NotUnspecified
     private StatusInfrastruktureinrichtung status;
-
-    private Einrichtungstraeger einrichtungstraeger;
 
     private BigDecimal flaecheGesamtgrundstueck;
 
