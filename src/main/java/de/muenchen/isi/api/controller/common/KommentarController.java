@@ -4,6 +4,8 @@ import de.muenchen.isi.api.dto.common.KommentarDto;
 import de.muenchen.isi.api.dto.error.InformationResponseDto;
 import de.muenchen.isi.api.mapper.KommentarApiMapper;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
+import de.muenchen.isi.domain.exception.FileHandlingFailedException;
+import de.muenchen.isi.domain.exception.FileHandlingWithS3FailedException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.service.common.KommentarService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -127,7 +129,7 @@ public class KommentarController {
     )
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_WRITE_KOMMENTAR.name())")
     public ResponseEntity<KommentarDto> updateKommentar(@RequestBody @Valid @NotNull final KommentarDto kommentarDto)
-        throws EntityNotFoundException, OptimisticLockingException {
+        throws EntityNotFoundException, OptimisticLockingException, FileHandlingFailedException, FileHandlingWithS3FailedException {
         var model = this.kommentarApiMapper.dto2Model(kommentarDto);
         model = this.kommentarService.updateKommentar(model);
         final var saved = this.kommentarApiMapper.model2Dto(model);

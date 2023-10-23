@@ -1,9 +1,12 @@
 package de.muenchen.isi.domain.service.common;
 
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
+import de.muenchen.isi.domain.exception.FileHandlingFailedException;
+import de.muenchen.isi.domain.exception.FileHandlingWithS3FailedException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.mapper.KommentarDomainMapper;
 import de.muenchen.isi.domain.model.common.KommentarModel;
+import de.muenchen.isi.domain.service.filehandling.DokumentService;
 import de.muenchen.isi.infrastructure.repository.common.KommentarRepository;
 import java.util.List;
 import java.util.UUID;
@@ -21,6 +24,8 @@ public class KommentarService {
     private final KommentarRepository kommentarRepository;
 
     private final KommentarDomainMapper kommentarMapper;
+
+    private final DokumentService dokumentService;
 
     /**
      * Die Methode holt alle für ein Bauvorhaben hinterlegten Kommentare.
@@ -96,8 +101,13 @@ public class KommentarService {
      * @throws OptimisticLockingException falls der Kommentar in einer neueren Version gespeichert ist.
      */
     public KommentarModel updateKommentar(final KommentarModel kommentar)
-        throws EntityNotFoundException, OptimisticLockingException {
+        throws EntityNotFoundException, OptimisticLockingException, FileHandlingFailedException, FileHandlingWithS3FailedException {
         this.getKommentarById(kommentar.getId());
+        final var orignalKommentar = this.getKommentarById(kommentar.getId());
+        dokumentService.deleteDokumenteFromOriginalDokumentenListWhichAreMissingInParameterAdaptedDokumentenListe(
+            kommentar.getDokumente(),
+            orignalKommentar.getDokumente()
+        );
         return this.saveKommentar(kommentar);
     }
 
