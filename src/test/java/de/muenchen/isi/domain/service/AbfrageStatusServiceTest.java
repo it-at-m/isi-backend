@@ -959,7 +959,7 @@ class AbfrageStatusServiceTest {
 
     @Test
     @Transactional
-    void erneuteBearbeitungVonErledigtMitFachereferat()
+    void erneuteBearbeitungSachbearbeitungVonErledigtMitFachereferat()
         throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException, StringLengthExceededException {
         final var anmerkung = "";
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
@@ -968,7 +968,7 @@ class AbfrageStatusServiceTest {
         abfrage = this.abfrageService.save(abfrage);
         final var uuid = abfrage.getId();
 
-        this.abfrageStatusService.erneuteBearbeitungAbfrage(uuid, anmerkung);
+        this.abfrageStatusService.erneuteBearbeitungSachbearbeitung(uuid, anmerkung);
 
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG));
@@ -978,7 +978,7 @@ class AbfrageStatusServiceTest {
         this.abfrageService.save(abfrage);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.erneuteBearbeitungAbfrage(uuid, anmerkung)
+            () -> this.abfrageStatusService.erneuteBearbeitungSachbearbeitung(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.ANGELEGT));
@@ -988,7 +988,7 @@ class AbfrageStatusServiceTest {
         this.abfrageService.save(abfrage);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.erneuteBearbeitungAbfrage(uuid, anmerkung)
+            () -> this.abfrageStatusService.erneuteBearbeitungSachbearbeitung(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.OFFEN));
@@ -1008,7 +1008,7 @@ class AbfrageStatusServiceTest {
         this.abfrageService.save(abfrage);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.erneuteBearbeitungAbfrage(uuid, anmerkung)
+            () -> this.abfrageStatusService.erneuteBearbeitungSachbearbeitung(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE));
@@ -1018,7 +1018,7 @@ class AbfrageStatusServiceTest {
         this.abfrageService.save(abfrage);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.erneuteBearbeitungAbfrage(uuid, anmerkung)
+            () -> this.abfrageStatusService.erneuteBearbeitungSachbearbeitung(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT));
@@ -1028,7 +1028,7 @@ class AbfrageStatusServiceTest {
         this.abfrageService.save(abfrage);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.erneuteBearbeitungAbfrage(uuid, anmerkung)
+            () -> this.abfrageStatusService.erneuteBearbeitungSachbearbeitung(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.ABBRUCH));
@@ -1036,7 +1036,7 @@ class AbfrageStatusServiceTest {
 
     @Test
     @Transactional
-    void erneuteBearbeitungVonErledigtOhneFachereferat()
+    void erneuteBearbeitungSachbearbeitungVonErledigtOhneFachereferat()
         throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException, StringLengthExceededException {
         final var anmerkung = "";
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
@@ -1045,7 +1045,7 @@ class AbfrageStatusServiceTest {
         abfrage = this.abfrageService.save(abfrage);
         final var uuid = abfrage.getId();
 
-        this.abfrageStatusService.erneuteBearbeitungAbfrage(uuid, anmerkung);
+        this.abfrageStatusService.erneuteBearbeitungSachbearbeitung(uuid, anmerkung);
 
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG));
@@ -1055,7 +1055,7 @@ class AbfrageStatusServiceTest {
         this.abfrageService.save(abfrage);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.erneuteBearbeitungAbfrage(uuid, anmerkung)
+            () -> this.abfrageStatusService.erneuteBearbeitungSachbearbeitung(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.ANGELEGT));
@@ -1065,7 +1065,7 @@ class AbfrageStatusServiceTest {
         this.abfrageService.save(abfrage);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.erneuteBearbeitungAbfrage(uuid, anmerkung)
+            () -> this.abfrageStatusService.erneuteBearbeitungSachbearbeitung(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.OFFEN));
@@ -1085,7 +1085,7 @@ class AbfrageStatusServiceTest {
         this.abfrageService.save(abfrage);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.erneuteBearbeitungAbfrage(uuid, anmerkung)
+            () -> this.abfrageStatusService.erneuteBearbeitungSachbearbeitung(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE));
@@ -1095,7 +1095,7 @@ class AbfrageStatusServiceTest {
         this.abfrageService.save(abfrage);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.erneuteBearbeitungAbfrage(uuid, anmerkung)
+            () -> this.abfrageStatusService.erneuteBearbeitungSachbearbeitung(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT));
@@ -1105,7 +1105,7 @@ class AbfrageStatusServiceTest {
         this.abfrageService.save(abfrage);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.erneuteBearbeitungAbfrage(uuid, anmerkung)
+            () -> this.abfrageStatusService.erneuteBearbeitungSachbearbeitung(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.ABBRUCH));

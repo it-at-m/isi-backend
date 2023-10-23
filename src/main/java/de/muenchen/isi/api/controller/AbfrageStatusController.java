@@ -336,7 +336,7 @@ public class AbfrageStatusController {
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping("{id}/erneute-bearbeitung")
+    @PutMapping("{id}/erneute-bearbeitung-sachbearbeitung")
     @Transactional
     @Operation(summary = "Setzt eine Abfrage auf den Status IN_BEARBEITUNG_SACHBEARBEITUNG")
     @ApiResponses(
@@ -360,11 +360,11 @@ public class AbfrageStatusController {
     @PreAuthorize(
         "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_ERNEUTE_BEARBEITUNG_ABFRAGE.name())"
     )
-    public ResponseEntity<Void> erneuteBearbeitungAbfrage(
+    public ResponseEntity<Void> erneuteBearbeitungSachbearbeitung(
         @PathVariable @NotNull final UUID id,
         @RequestParam(value = "anmerkung", required = false, defaultValue = "") String anmerkung
     ) throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException {
-        this.abfrageStatusService.erneuteBearbeitungAbfrage(id, anmerkung);
+        this.abfrageStatusService.erneuteBearbeitungSachbearbeitung(id, anmerkung);
         return ResponseEntity.ok().build();
     }
 }
