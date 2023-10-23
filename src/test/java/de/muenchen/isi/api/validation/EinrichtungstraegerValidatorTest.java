@@ -141,4 +141,26 @@ public class EinrichtungstraegerValidatorTest {
         value.setEinrichtungstraeger(Einrichtungstraeger.PRIVATE_TRAEGERSCHAFT);
         assertThat(this.validator.isValid(value, null), is(false));
     }
+
+    @Test
+    void isValidEinrichutngstraegerSchule() {
+        Einrichtungstraeger einrichtungstraeger = Einrichtungstraeger.PRIVATE_TRAEGERSCHAFT;
+
+        assertThat(this.validator.isValidEinrichtungstraegerSchule(null), is(false));
+        assertThat(this.validator.isValidEinrichtungstraegerSchule(einrichtungstraeger), is(true));
+
+        einrichtungstraeger = Einrichtungstraeger.EINRICHTUNG_GESAMTSTAEDTISCH;
+        assertThat(this.validator.isValidEinrichtungstraegerSchule(einrichtungstraeger), is(false));
+    }
+
+    @Test
+    void isValidEinrichutngstraegere() {
+        Einrichtungstraeger einrichtungstraeger = Einrichtungstraeger.ELTERN_KIND_INITIATIVE;
+
+        assertThat(this.validator.isValidEinrichtungstraeger(null), is(false));
+        assertThat(this.validator.isValidEinrichtungstraeger(einrichtungstraeger), is(true));
+
+        einrichtungstraeger = Einrichtungstraeger.KIRCHLICHE_TRAEGERSCHAFT;
+        assertThat(this.validator.isValidEinrichtungstraeger(einrichtungstraeger), is(false));
+    }
 }
