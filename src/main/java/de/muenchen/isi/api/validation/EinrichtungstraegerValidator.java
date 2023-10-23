@@ -81,7 +81,7 @@ public class EinrichtungstraegerValidator
      * @return True, wenn der Einrichtungsträger gültig ist, ansonsten false.
      */
     public boolean isValidEinrichtungstraegerSchule(final Einrichtungstraeger einrichtungstraeger) {
-        return this.isNotNull(einrichtungstraeger)
+        return ObjectUtils.isNotEmpty(einrichtungstraeger)
             ? Einrichtungstraeger.getEinrichtungstraegerSchulen().contains(einrichtungstraeger)
             : false;
     }
@@ -94,12 +94,8 @@ public class EinrichtungstraegerValidator
      * @return True, wenn der Einrichtungsträger gültig ist, ansonsten false.
      */
     public boolean isValidEinrichtungstraeger(final Einrichtungstraeger einrichtungstraeger) {
-        return this.isNotNull(einrichtungstraeger)
+        return ObjectUtils.isNotEmpty(einrichtungstraeger)
             ? Einrichtungstraeger.getEinrichtungstraeger().contains(einrichtungstraeger)
             : false;
-    }
-
-    private boolean isNotNull(final Einrichtungstraeger einrichtungstraeger) {
-        return ObjectUtils.isNotEmpty(einrichtungstraeger);
     }
 }
