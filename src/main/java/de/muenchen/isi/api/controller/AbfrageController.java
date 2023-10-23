@@ -91,6 +91,11 @@ public class AbfrageController {
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
             ),
             @ApiResponse(
+                responseCode = "404",
+                description = "NOT_FOUND -> Das referenzierte Bauvorhaben existiert nicht.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+            @ApiResponse(
                 responseCode = "409",
                 description = "CONFLICT -> Abfrage konnte nicht erstellt werden, da der Name der Abfrage oder Abfragevariante bereits existiert.",
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
@@ -125,7 +130,7 @@ public class AbfrageController {
             ),
             @ApiResponse(
                 responseCode = "404",
-                description = "NOT_FOUND -> Es gibt keine Abfrage mit der ID.",
+                description = "NOT_FOUND -> Es gibt keine Abfrage mit der ID oder das referenzierte Bauvorhaben existiert nicht.",
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
             ),
             @ApiResponse(
