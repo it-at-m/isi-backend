@@ -253,7 +253,12 @@ public class AbfrageController {
             ),
             @ApiResponse(
                 responseCode = "409",
-                description = "CONFLICT -> Die Abfrage referenziert ein Bauvorhaben.",
+                description = "CONFLICT -> Die Abfrage referenziert ein Bauvorhaben oder ist im falschen Status.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+            @ApiResponse(
+                responseCode = "403",
+                description = "CONFLICT -> Der Nutzer besitzt nicht die Berechtigung zum Löschen der Abfrage.",
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
             ),
         }

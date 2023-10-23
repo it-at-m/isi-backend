@@ -213,7 +213,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(UserRoleNotAllowedException.class)
     public ResponseEntity<Object> handleUserRoleNotAllowedException(final UserRoleNotAllowedException ex) {
-        final var httpStatus = HttpStatus.CONFLICT;
+        final var httpStatus = HttpStatus.FORBIDDEN;
         final var errorResponseDto =
             this.createInformationResponseDtoWithTraceInformationAndTimestampAndOriginalExceptionNameAndStatusAndMessage(
                     ex,
