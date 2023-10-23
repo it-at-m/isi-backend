@@ -47,6 +47,7 @@ public class LookupService {
         model.setArtBaulicheNutzung(this.getArtBaulicheNutzungList());
         model.setStatusInfrastruktureinrichtung((this.getStatusInfrastruktureinrichtungList()));
         model.setEinrichtungstraeger((this.getEinrichtungstraegerList()));
+        model.setEinrichtungstraegerSchulen(this.getEinrichtungstraegerSchuleList());
         model.setInfrastruktureinrichtungTyp((this.getInfrastruktureinrichtungTypList()));
         model.setArtGsNachmittagBetreuung((this.getArtGsNachmittagBetreuungList()));
         model.setSobonOrientierungswertJahr(this.getSobonOrientierungswertJahr());
@@ -164,8 +165,18 @@ public class LookupService {
     }
 
     private LookupListModel getEinrichtungstraegerList() {
-        final List<LookupEntryModel> list = EnumUtils
-            .getEnumList(Einrichtungstraeger.class)
+        final List<LookupEntryModel> list = Einrichtungstraeger
+            .getEinrichtungstraeger()
+            .stream()
+            .map(item -> new LookupEntryModel(item.toString(), item.getBezeichnung()))
+            .collect(Collectors.toList());
+
+        return new LookupListModel(list);
+    }
+
+    private LookupListModel getEinrichtungstraegerSchuleList() {
+        final List<LookupEntryModel> list = Einrichtungstraeger
+            .getEinrichtungstraegerSchulen()
             .stream()
             .map(item -> new LookupEntryModel(item.toString(), item.getBezeichnung()))
             .collect(Collectors.toList());

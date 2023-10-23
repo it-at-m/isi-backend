@@ -5,6 +5,7 @@
 package de.muenchen.isi.api.dto.infrastruktureinrichtung;
 
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtGsNachmittagBetreuung;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.Einrichtungstraeger;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import lombok.Data;
@@ -28,4 +29,6 @@ public class GsNachmittagBetreuungDto extends InfrastruktureinrichtungDto {
 
     @Min(0)
     private Integer wohnungsnaheHortPlaetze;
+
+    private Einrichtungstraeger einrichtungstraeger;
 }

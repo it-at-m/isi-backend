@@ -4,6 +4,7 @@
  */
 package de.muenchen.isi.domain.model.infrastruktureinrichtung;
 
+import de.muenchen.isi.infrastructure.entity.enums.lookup.Einrichtungstraeger;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -18,4 +19,6 @@ public class KinderkrippeModel extends InfrastruktureinrichtungModel {
     private Integer anzahlKinderkrippeGruppen;
 
     private Integer wohnungsnaheKinderkrippePlaetze;
+
+    private Einrichtungstraeger einrichtungstraeger;
 }

@@ -4,6 +4,7 @@
  */
 package de.muenchen.isi.api.dto.infrastruktureinrichtung;
 
+import de.muenchen.isi.infrastructure.entity.enums.lookup.Einrichtungstraeger;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -30,4 +31,6 @@ public class HausFuerKinderDto extends InfrastruktureinrichtungDto {
     private Integer wohnungsnaheKindergartenPlaetze;
 
     private Integer wohnungsnaheHortPlaetze;
+
+    private Einrichtungstraeger einrichtungstraeger;
 }

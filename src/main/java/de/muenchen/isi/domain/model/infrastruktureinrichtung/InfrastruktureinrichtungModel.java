@@ -6,7 +6,6 @@ package de.muenchen.isi.domain.model.infrastruktureinrichtung;
 
 import de.muenchen.isi.domain.model.BaseEntityModel;
 import de.muenchen.isi.domain.model.common.AdresseModel;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.Einrichtungstraeger;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusInfrastruktureinrichtung;
 import java.math.BigDecimal;
@@ -33,8 +32,6 @@ public abstract class InfrastruktureinrichtungModel extends BaseEntityModel {
     private Integer fertigstellungsjahr; // JJJJ
 
     private StatusInfrastruktureinrichtung status;
-
-    private Einrichtungstraeger einrichtungstraeger;
 
     private BigDecimal flaecheGesamtgrundstueck;
 
