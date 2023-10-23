@@ -175,7 +175,7 @@ public class AbfrageController {
             ),
             @ApiResponse(
                 responseCode = "409",
-                description = "CONFLICT -> Abfrage konnte nicht aktualisiert werden, da der Name der Abfrage oder Abfragevariante bereits existiert.",
+                description = "CONFLICT -> Abfrage konnte nicht aktualisiert werden, da der Name der Abfrage oder Abfragevariante bereits existiert oder die Abfrage nicht im korrekten Status ist.",
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
             ),
             @ApiResponse(
@@ -217,7 +217,7 @@ public class AbfrageController {
             ),
             @ApiResponse(
                 responseCode = "409",
-                description = "CONFLICT -> Abfrage konnte nicht aktualisiert werden, da der Name der Abfrage oder Abfragevariante bereits existiert.",
+                description = "CONFLICT -> Abfrage konnte nicht aktualisiert werden, da der Name der Abfrage oder Abfragevariante bereits existiert oder die Abfrage nicht im korrekten Status ist.",
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
             ),
             @ApiResponse(
@@ -253,7 +253,7 @@ public class AbfrageController {
             ),
             @ApiResponse(
                 responseCode = "409",
-                description = "CONFLICT -> Die Abfrage referenziert ein Bauvorhaben oder ist im falschen Status.",
+                description = "CONFLICT -> Die Abfrage referenziert ein Bauvorhaben oder die Abfrage nicht im korrekten Status ist.",
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
             ),
             @ApiResponse(
