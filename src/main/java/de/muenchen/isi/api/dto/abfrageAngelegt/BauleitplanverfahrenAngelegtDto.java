@@ -27,6 +27,7 @@ public class BauleitplanverfahrenAngelegtDto extends AbfrageAngelegtDto {
     private String bebauungsplannummer;
 
     @NotNull
+    @NotUnspecified
     private UncertainBoolean sobonRelevant;
 
     private SobonVerfahrensgrundsaetzeJahr sobonJahr;
