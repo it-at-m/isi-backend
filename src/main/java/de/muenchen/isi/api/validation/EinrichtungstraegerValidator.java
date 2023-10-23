@@ -33,7 +33,7 @@ public class EinrichtungstraegerValidator
     }
 
     private boolean einrichtungstraegerValid(final InfrastruktureinrichtungDto value) {
-        if (!isNotStatusBestandOrGesicherteERW(value)) {
+        if (isStatusBestandOrGesicherteERW(value)) {
             if (value instanceof GrundschuleDto) {
                 var einrichtungstraeger = ((GrundschuleDto) value).getSchule().getEinrichtungstraeger();
                 return this.isValidEinrichtungstraegerSchule(einrichtungstraeger);
@@ -65,10 +65,10 @@ public class EinrichtungstraegerValidator
      * @param value Die zu überprüfende InfrastruktureinrichtungDto-Instanz.
      * @return True, wenn der Status nicht BESTAND oder GESICHERTE_PLANUNG_ERW_PLAETZE_BEST_EINR ist, ansonsten false.
      */
-    private boolean isNotStatusBestandOrGesicherteERW(final InfrastruktureinrichtungDto value) {
+    private boolean isStatusBestandOrGesicherteERW(final InfrastruktureinrichtungDto value) {
         return (
-            value.getStatus() != StatusInfrastruktureinrichtung.BESTAND &&
-            value.getStatus() != StatusInfrastruktureinrichtung.GESICHERTE_PLANUNG_ERW_PLAETZE_BEST_EINR
+            value.getStatus() == StatusInfrastruktureinrichtung.BESTAND ||
+            value.getStatus() == StatusInfrastruktureinrichtung.GESICHERTE_PLANUNG_ERW_PLAETZE_BEST_EINR
         );
     }
 
