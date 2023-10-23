@@ -86,6 +86,11 @@ public class AbfrageController {
         value = {
             @ApiResponse(responseCode = "201", description = "CREATED -> Abfrage wurde erfolgreich erstellt."),
             @ApiResponse(
+                responseCode = "404",
+                description = "NOT_FOUND -> Es gibt keine Abfrage mit der ID.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+            @ApiResponse(
                 responseCode = "400",
                 description = "BAD_REQUEST -> Abfrage konnte nicht erstellt werden, überprüfen sie die Eingabe.",
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
