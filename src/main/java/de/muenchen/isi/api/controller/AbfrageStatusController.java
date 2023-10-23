@@ -217,7 +217,7 @@ public class AbfrageStatusController {
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping("{id}/keine-bearbeitung-noetig")
+    @PutMapping("{id}/erledigt-ohne-fachreferat")
     @Transactional
     @Operation(summary = "Setzt eine Abfrage auf den Status ERLEDIGT_OHNE_FACHREFERAT")
     @ApiResponses(
@@ -238,11 +238,11 @@ public class AbfrageStatusController {
     @PreAuthorize(
         "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_KEINE_BEARBEITUNG_NOETIG_ABFRAGE.name())"
     )
-    public ResponseEntity<Void> keineBearbeitungNoetig(
+    public ResponseEntity<Void> erledigtOhneFachreferat(
         @PathVariable @NotNull final UUID id,
         @RequestParam(value = "anmerkung", required = false, defaultValue = "") String anmerkung
     ) throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException {
-        this.abfrageStatusService.keineBearbeitungNoetig(id, anmerkung);
+        this.abfrageStatusService.erledigtOhneFachreferat(id, anmerkung);
         return ResponseEntity.ok().build();
     }
 
@@ -307,7 +307,7 @@ public class AbfrageStatusController {
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping("{id}/speicher-von-soz-infrastruktur-versorgung")
+    @PutMapping("{id}/erledigt-mit-fachreferat")
     @Transactional
     @Operation(summary = "Setzt eine Abfrage auf den Status ERLEDIGT_MIT_FACHREFERAT")
     @ApiResponses(
@@ -328,11 +328,11 @@ public class AbfrageStatusController {
     @PreAuthorize(
         "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_SPEICHERN_VON_SOZIALINFRASTRUKTUR_VERSORGUNG_ABFRAGE.name())"
     )
-    public ResponseEntity<Void> speichernVonSozialinfrastrukturVersorgung(
+    public ResponseEntity<Void> erledigtMitFachreferat(
         @PathVariable @NotNull final UUID id,
         @RequestParam(value = "anmerkung", required = false, defaultValue = "") String anmerkung
     ) throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException {
-        this.abfrageStatusService.speichernVonSozialinfrastrukturVersorgung(id, anmerkung);
+        this.abfrageStatusService.erledigtMitFachreferat(id, anmerkung);
         return ResponseEntity.ok().build();
     }
 
