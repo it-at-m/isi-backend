@@ -19,8 +19,8 @@ public enum StandVerfahren implements ILookup {
     ),
 
     VORBEREITUNG_AUFSTELLUNGSBESCHLUSS(
-        "Vorbereitung Aufstellungsbeschluss",
-        new String[] { "Vorbereitung", "Aufstellungsbeschluss" }
+        "Vorbereitung Aufstellungsbeschluss (ggf. + Eckdatenbeschluss)",
+        new String[] { "Vorbereitung", "Aufstellungsbeschluss", "Eckdatenbeschluss" }
     ),
 
     VORBEREITUNG_BILLIGUNGSBESCHLUSS_STAEDTEBAULICHER_VERTRAG(
