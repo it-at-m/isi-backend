@@ -51,14 +51,14 @@ public enum StatusAbfrageEvents {
     ),
 
     SPEICHERN_VON_SOZIALINFRASTRUKTUR_VERSORGUNG(
-        "speicher-von-soz-infrastruktur-versorgung",
+        "erledigt-mit-fachreferat",
         "ABFRAGE ABSCHLIESSEN",
         9,
         "Die Abfrage wird abgeschlossen."
     ),
 
     ERNEUTE_BEARBEITUNG(
-        "erneute-bearbeitung",
+        "erneute-bearbeitung-sachbearbeitung",
         "ERNEUTE BEARBEITUNG",
         10,
         "Die Abfrage wird wird an die Sachbearbeitung zur Bearbeitung zurückgesendet."
