@@ -24,7 +24,7 @@ public enum StatusAbfrageEvents {
     ),
 
     KEINE_BEARBEITUNG_NOETIG(
-        "keine-bearbeitung-noetig",
+        "erledigt-ohne-fachreferat",
         "ABFRAGE SCHLIEßEN",
         5,
         "Die Abfrage wird abgeschlossen. Sie können eine Anmerkung hinzufügen."
