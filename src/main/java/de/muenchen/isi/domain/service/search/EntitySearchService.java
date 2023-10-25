@@ -8,7 +8,6 @@ import de.muenchen.isi.domain.model.search.request.SearchQueryAndSortingModel;
 import de.muenchen.isi.domain.model.search.response.SearchResultsModel;
 import de.muenchen.isi.infrastructure.entity.BaseEntity;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.persistence.EntityManager;
@@ -134,8 +133,8 @@ public class EntitySearchService {
      */
     protected String createAdaptedSearchQueryForSimpleQueryStringSearch(final String searchQuery) {
         final var splittedSearchQuery = this.tokenizeAccordingUnicodeAnnex29(StringUtils.trimToEmpty(searchQuery));
-        final var adaptedSearchQuery = Arrays
-            .stream(splittedSearchQuery)
+        final var adaptedSearchQuery = splittedSearchQuery
+            .stream()
             .map(searchQueryArtifact -> searchQueryArtifact + "*")
             .collect(Collectors.joining(StringUtils.SPACE));
         log.debug("Die erstellte Suchquery: {}", adaptedSearchQuery);
@@ -150,8 +149,8 @@ public class EntitySearchService {
      * @param searchQuery zur Ermittlung der Wörter
      * @return die Wörter ermittelt aus dem im Parameter gegebenen String.
      */
-    protected String[] tokenizeAccordingUnicodeAnnex29(final String searchQuery) {
-        final var words = new ArrayList<>();
+    protected List<String> tokenizeAccordingUnicodeAnnex29(final String searchQuery) {
+        final var words = new ArrayList<String>();
         final BreakIterator breakIterator = BreakIterator.getWordInstance();
         breakIterator.setText(searchQuery);
         int start = breakIterator.first();
@@ -160,7 +159,7 @@ public class EntitySearchService {
                 words.add(searchQuery.substring(start, end));
             }
         }
-        return words.toArray(new String[words.size()]);
+        return words;
     }
 
     /**

@@ -6,6 +6,7 @@ import static org.hamcrest.Matchers.nullValue;
 
 import de.muenchen.isi.domain.mapper.SearchDomainMapper;
 import de.muenchen.isi.domain.model.search.request.SearchQueryAndSortingModel;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -56,20 +57,20 @@ class EntitySearchServiceTest {
         var result = entitySearchService.tokenizeAccordingUnicodeAnnex29(searchQuery);
         assertThat(
             result,
-            is(new String[] { "The", "2", "QUICK", "Brown", "Foxes", "jumped", "over", "the", "lazy", "dog's", "bone" })
+            is(List.of("The", "2", "QUICK", "Brown", "Foxes", "jumped", "over", "the", "lazy", "dog's", "bone"))
         );
 
         searchQuery = "      ";
         result = entitySearchService.tokenizeAccordingUnicodeAnnex29(searchQuery);
-        assertThat(result, is(new String[] {}));
+        assertThat(result, is(List.of()));
 
         searchQuery = "";
         result = entitySearchService.tokenizeAccordingUnicodeAnnex29(searchQuery);
-        assertThat(result, is(new String[] {}));
+        assertThat(result, is(List.of()));
 
         searchQuery = "., -   , :    .  .";
         result = entitySearchService.tokenizeAccordingUnicodeAnnex29(searchQuery);
-        assertThat(result, is(new String[] {}));
+        assertThat(result, is(List.of()));
     }
 
     @Test
