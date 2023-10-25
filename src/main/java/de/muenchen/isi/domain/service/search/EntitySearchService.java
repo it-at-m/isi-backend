@@ -25,6 +25,25 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class EntitySearchService {
 
+    /**
+     * Die Zeichen zur Bestimmung der Word Boundaries orientieren sich am Unicode® Standard Annex #29.
+     * https://unicode.org/reports/tr29/
+     *
+     * In der Konstanten befindeliche Word Boundaries:
+     * https://unicode.org/reports/tr29/#Newline
+     * https://unicode.org/reports/tr29/#ZWJ_WB
+     * https://unicode.org/reports/tr29/#Format
+     * https://unicode.org/reports/tr29/#ALetter
+     * https://unicode.org/reports/tr29/#Single_Quote
+     * https://unicode.org/reports/tr29/#Double_Quote
+     * https://unicode.org/reports/tr29/#MidNumLet
+     * https://unicode.org/reports/tr29/#MidLetter
+     * https://unicode.org/reports/tr29/#MidNum
+     * https://unicode.org/reports/tr29/#ExtendNumLetWB
+     */
+    private static final String UNICODE_WORD_BOUNDARIES =
+        "- \u000B\u000C\u0085\u2028\u2029\u200D\u02C2\u02C5\u02D2\u02D7\u02DE\u02DF\u02E5\u02EB\u02ED\u02EF\u02FF\u055A\u055B\u055C\u055E\u058A\u05F3\u070F\uA708\uA716\uA720\uA721\uA789\uA78A\uAB5B\u0027\"\u002E\u2018\u2019\u2024\uFE52\uFF07\uFF0E\u003A\u00B7\u0387\u055F\u05F4\u2027\uFE13\uFE55\uFF1A\u066C\uFE50\uFE54\uFF0C\uFF1B\u202F";
+
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -131,7 +150,10 @@ public class EntitySearchService {
      * @return die für die Simple-Query-String-Suche angepasste Suchquery.
      */
     protected String createAdaptedSearchQueryForSimpleQueryStringSearch(final String searchQuery) {
-        final var splittedSearchQuery = StringUtils.split(StringUtils.trimToEmpty(searchQuery));
+        final var splittedSearchQuery = StringUtils.split(
+            StringUtils.trimToEmpty(searchQuery),
+            UNICODE_WORD_BOUNDARIES
+        );
         final var adaptedSearchQuery = Arrays
             .stream(splittedSearchQuery)
             .map(searchQueryArtifact -> searchQueryArtifact + "*")
