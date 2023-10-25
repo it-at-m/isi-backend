@@ -31,11 +31,11 @@ class EntitySearchServiceTest {
     void createAdaptedSearchQueryForSimpleQueryStringSearch() {
         var searchQuery = "  test-abc123 ?!\"dddds      abf1-test     \"testinger\"    ";
         var result = entitySearchService.createAdaptedSearchQueryForSimpleQueryStringSearch(searchQuery);
-        assertThat(result, is("test* abc123* ?!* dddds* abf1* test* testinger*"));
+        assertThat(result, is("test* abc123* dddds* abf1* test* testinger*"));
 
         searchQuery = "The 2 QUICK Brown-Foxes jumped over the lazy dog's bone.";
         result = entitySearchService.createAdaptedSearchQueryForSimpleQueryStringSearch(searchQuery);
-        assertThat(result, is("The* 2* QUICK* Brown* Foxes* jumped* over* the* lazy* dog* s* bone*"));
+        assertThat(result, is("The* 2* QUICK* Brown* Foxes* jumped* over* the* lazy* dog's* bone*"));
 
         searchQuery = "     ";
         result = entitySearchService.createAdaptedSearchQueryForSimpleQueryStringSearch(searchQuery);
@@ -48,6 +48,28 @@ class EntitySearchServiceTest {
         searchQuery = null;
         result = entitySearchService.createAdaptedSearchQueryForSimpleQueryStringSearch(searchQuery);
         assertThat(result, is(""));
+    }
+
+    @Test
+    void tokenizeAccordingUnicodeAnnex29() {
+        var searchQuery = "The 2 QUICK Brown-Foxes jumped over the lazy dog's bone.";
+        var result = entitySearchService.tokenizeAccordingUnicodeAnnex29(searchQuery);
+        assertThat(
+            result,
+            is(new String[] { "The", "2", "QUICK", "Brown", "Foxes", "jumped", "over", "the", "lazy", "dog's", "bone" })
+        );
+
+        searchQuery = "      ";
+        result = entitySearchService.tokenizeAccordingUnicodeAnnex29(searchQuery);
+        assertThat(result, is(new String[] {}));
+
+        searchQuery = "";
+        result = entitySearchService.tokenizeAccordingUnicodeAnnex29(searchQuery);
+        assertThat(result, is(new String[] {}));
+
+        searchQuery = "., -   , :    .  .";
+        result = entitySearchService.tokenizeAccordingUnicodeAnnex29(searchQuery);
+        assertThat(result, is(new String[] {}));
     }
 
     @Test

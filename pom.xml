@@ -370,6 +370,13 @@
             <version>${geotools.version}</version>
         </dependency>
 
+        <!-- Unicode String Processing -->
+        <dependency>
+            <groupId>com.ibm.icu</groupId>
+            <artifactId>icu4j</artifactId>
+            <version>73.2</version>
+        </dependency>
+
         <!-- Configuration Processor -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
