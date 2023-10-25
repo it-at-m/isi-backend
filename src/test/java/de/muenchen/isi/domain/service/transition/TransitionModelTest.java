@@ -300,7 +300,7 @@ public class TransitionModelTest {
         TransitionModel thirdPossibleTransition = new TransitionModel();
         thirdPossibleTransition.setIndex(5);
         thirdPossibleTransition.setButtonName("ABFRAGE SCHLIEßEN");
-        thirdPossibleTransition.setUrl("keine-bearbeitung-noetig");
+        thirdPossibleTransition.setUrl("erledigt-ohne-fachreferat");
         thirdPossibleTransition.setDialogText("Die Abfrage wird abgeschlossen. Sie können eine Anmerkung hinzufügen.");
 
         expected.add(thirdPossibleTransition);
@@ -355,7 +355,7 @@ public class TransitionModelTest {
         TransitionModel thirdPossibleTransition = new TransitionModel();
         thirdPossibleTransition.setIndex(5);
         thirdPossibleTransition.setButtonName("ABFRAGE SCHLIEßEN");
-        thirdPossibleTransition.setUrl("keine-bearbeitung-noetig");
+        thirdPossibleTransition.setUrl("erledigt-ohne-fachreferat");
         thirdPossibleTransition.setDialogText("Die Abfrage wird abgeschlossen. Sie können eine Anmerkung hinzufügen.");
         expected.add(thirdPossibleTransition);
 
@@ -560,7 +560,7 @@ public class TransitionModelTest {
         TransitionModel secondPossibleTransition = new TransitionModel();
         secondPossibleTransition.setIndex(9);
         secondPossibleTransition.setButtonName("ABFRAGE ABSCHLIESSEN");
-        secondPossibleTransition.setUrl("speicher-von-soz-infrastruktur-versorgung");
+        secondPossibleTransition.setUrl("erledigt-mit-fachreferat");
         secondPossibleTransition.setDialogText("Die Abfrage wird abgeschlossen.");
 
         expected.add(secondPossibleTransition);
@@ -617,7 +617,7 @@ public class TransitionModelTest {
         TransitionModel firstPossibleTransition = new TransitionModel();
         firstPossibleTransition.setIndex(9);
         firstPossibleTransition.setButtonName("ABFRAGE ABSCHLIESSEN");
-        firstPossibleTransition.setUrl("speicher-von-soz-infrastruktur-versorgung");
+        firstPossibleTransition.setUrl("erledigt-mit-fachreferat");
         firstPossibleTransition.setDialogText("Die Abfrage wird abgeschlossen.");
 
         expected.add(firstPossibleTransition);
@@ -662,7 +662,7 @@ public class TransitionModelTest {
         TransitionModel firstPossibleTransition = new TransitionModel();
         firstPossibleTransition.setIndex(10);
         firstPossibleTransition.setButtonName("ERNEUTE BEARBEITUNG");
-        firstPossibleTransition.setUrl("erneute-bearbeitung");
+        firstPossibleTransition.setUrl("erneute-bearbeitung-sachbearbeitung");
         firstPossibleTransition.setDialogText(
             "Die Abfrage wird wird an die Sachbearbeitung zur Bearbeitung zurückgesendet."
         );
@@ -691,7 +691,7 @@ public class TransitionModelTest {
         TransitionModel firstPossibleTransition = new TransitionModel();
         firstPossibleTransition.setIndex(10);
         firstPossibleTransition.setButtonName("ERNEUTE BEARBEITUNG");
-        firstPossibleTransition.setUrl("erneute-bearbeitung");
+        firstPossibleTransition.setUrl("erneute-bearbeitung-sachbearbeitung");
         firstPossibleTransition.setDialogText(
             "Die Abfrage wird wird an die Sachbearbeitung zur Bearbeitung zurückgesendet."
         );
@@ -720,7 +720,7 @@ public class TransitionModelTest {
         TransitionModel firstPossibleTransition = new TransitionModel();
         firstPossibleTransition.setIndex(10);
         firstPossibleTransition.setButtonName("ERNEUTE BEARBEITUNG");
-        firstPossibleTransition.setUrl("erneute-bearbeitung");
+        firstPossibleTransition.setUrl("erneute-bearbeitung-sachbearbeitung");
         firstPossibleTransition.setDialogText(
             "Die Abfrage wird wird an die Sachbearbeitung zur Bearbeitung zurückgesendet."
         );
@@ -749,7 +749,7 @@ public class TransitionModelTest {
         TransitionModel firstPossibleTransition = new TransitionModel();
         firstPossibleTransition.setIndex(10);
         firstPossibleTransition.setButtonName("ERNEUTE BEARBEITUNG");
-        firstPossibleTransition.setUrl("erneute-bearbeitung");
+        firstPossibleTransition.setUrl("erneute-bearbeitung-sachbearbeitung");
         firstPossibleTransition.setDialogText(
             "Die Abfrage wird wird an die Sachbearbeitung zur Bearbeitung zurückgesendet."
         );
