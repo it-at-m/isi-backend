@@ -143,9 +143,12 @@ public class EntitySearchService {
     }
 
     /**
+     * Diese Methode ermittelt für den im Parameter gegebenen String die Wörter entsprechend Unicode® Standard Annex #29.
      *
-     * @param searchQuery
-     * @return
+     * https://unicode.org/reports/tr29/
+     *
+     * @param searchQuery zur Ermittlung der Wörter
+     * @return die Wörter ermittelt aus dem im Parameter gegebenen String.
      */
     protected String[] tokenizeAccordingUnicodeAnnex29(final String searchQuery) {
         final var words = new ArrayList<>();
