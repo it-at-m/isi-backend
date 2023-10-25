@@ -151,7 +151,7 @@ public class EntitySearchService {
      */
     protected List<String> tokenizeAccordingUnicodeAnnex29(final String searchQuery) {
         final var words = new ArrayList<String>();
-        final BreakIterator breakIterator = BreakIterator.getWordInstance();
+        final var breakIterator = BreakIterator.getWordInstance();
         breakIterator.setText(searchQuery);
         int start = breakIterator.first();
         for (int end = breakIterator.next(); end != BreakIterator.DONE; start = end, end = breakIterator.next()) {
