@@ -5,14 +5,13 @@
 package de.muenchen.isi.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import de.muenchen.isi.domain.model.AbfrageModel;
-import de.muenchen.isi.domain.model.AbfragevarianteModel;
+import de.muenchen.isi.domain.model.AbfragevarianteBauleitplanverfahrenModel;
 import de.muenchen.isi.domain.model.BauabschnittModel;
 import de.muenchen.isi.domain.model.BaugebietModel;
+import de.muenchen.isi.domain.model.BauleitplanverfahrenModel;
 import de.muenchen.isi.domain.model.BaurateModel;
 import de.muenchen.isi.domain.model.FoerderartModel;
 import de.muenchen.isi.domain.model.FoerdermixModel;
-import de.muenchen.isi.domain.model.InfrastrukturabfrageModel;
 import de.muenchen.isi.domain.model.common.AdresseModel;
 import de.muenchen.isi.domain.model.common.FlurstueckModel;
 import de.muenchen.isi.domain.model.common.GemarkungModel;
@@ -22,13 +21,13 @@ import de.muenchen.isi.domain.model.common.VerortungModel;
 import de.muenchen.isi.domain.model.common.WGS84Model;
 import de.muenchen.isi.domain.model.filehandling.DokumentModel;
 import de.muenchen.isi.domain.model.filehandling.FilepathModel;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtBaulicheNutzung;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtDokument;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.BaugebietArt;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.Planungsrecht;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonVerfahrensgrundsaetzeJahr;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVorhaben;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVerfahren;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.WesentlicheRechtsgrundlage;
 import de.muenchen.isi.infrastructure.entity.filehandling.Dokument;
 import de.muenchen.isi.infrastructure.entity.filehandling.Filepath;
 import java.math.BigDecimal;
@@ -41,46 +40,39 @@ import lombok.SneakyThrows;
 
 public class TestData {
 
-    public static InfrastrukturabfrageModel createInfrastrukturabfrageModel() {
-        final InfrastrukturabfrageModel infrastrukturabfrage = new InfrastrukturabfrageModel();
-
-        final AbfrageModel abfrage = new AbfrageModel();
+    public static BauleitplanverfahrenModel createBauleitplanverfahrenModel() {
+        final var bauleitplanverfahren = new BauleitplanverfahrenModel();
+        bauleitplanverfahren.setName("Neubausiedlung in Musterort");
+        bauleitplanverfahren.setStatusAbfrage(StatusAbfrage.ANGELEGT);
         final WGS84Model coordinate = new WGS84Model();
         coordinate.setLatitude(48.1556795465256);
         coordinate.setLongitude(11.5568456350688);
-        abfrage.setAdresse(new AdresseModel("80331", "München", "Lothstraße", "7", coordinate));
-        abfrage.setAllgemeineOrtsangabe("12345 Musterort, Musterstraße 2");
-        abfrage.setFristStellungnahme(LocalDate.of(2022, 12, 31));
-        abfrage.setAnmerkung("Bitte die Abfrage zeitnah behandeln");
-        abfrage.setStatusAbfrage(StatusAbfrage.ANGELEGT);
-        abfrage.setNameAbfrage("Neubausiedlung in Musterort");
-        abfrage.setStandVorhaben(StandVorhaben.BAUANTRAG_EINGEREICHT);
-        abfrage.setVerortung(createVerortung());
-        infrastrukturabfrage.setAbfrage(abfrage);
-
-        infrastrukturabfrage.setSobonRelevant(UncertainBoolean.TRUE);
-        infrastrukturabfrage.setSobonJahr(SobonVerfahrensgrundsaetzeJahr.JAHR_2021);
-        infrastrukturabfrage.setAktenzeichenProLbk("PRO12345");
-        infrastrukturabfrage.setOffiziellerVerfahrensschritt(UncertainBoolean.FALSE);
-
-        final AbfragevarianteModel abfragevariante = createAbfragevarianteModel();
-        infrastrukturabfrage.setAbfragevarianten(List.of(abfragevariante));
-
-        return infrastrukturabfrage;
+        bauleitplanverfahren.setAdresse(new AdresseModel("80331", "München", "Lothstraße", "7", coordinate, null));
+        bauleitplanverfahren.setFristBearbeitung(LocalDate.of(2022, 12, 31));
+        bauleitplanverfahren.setAnmerkung("Bitte die Abfrage zeitnah behandeln");
+        bauleitplanverfahren.setStandVerfahren(StandVerfahren.STRUKTURKONZEPT);
+        bauleitplanverfahren.setVerortung(createVerortung());
+        bauleitplanverfahren.setSobonRelevant(UncertainBoolean.TRUE);
+        bauleitplanverfahren.setSobonJahr(SobonVerfahrensgrundsaetzeJahr.JAHR_2021);
+        bauleitplanverfahren.setOffizielleMitzeichnung(UncertainBoolean.TRUE);
+        bauleitplanverfahren.setAbfragevarianten(List.of(createAbfragevarianteBauleitplanverfahrenModel()));
+        return bauleitplanverfahren;
     }
 
-    public static AbfragevarianteModel createAbfragevarianteModel() {
-        final AbfragevarianteModel original = new AbfragevarianteModel();
-        original.setAbfragevariantenNr(1);
-        original.setAbfragevariantenName("Dorf");
-        original.setPlanungsrecht(Planungsrecht.BPLAN_PARAG_30);
-        original.setGeschossflaecheWohnen(new BigDecimal("1234.56"));
-        original.setGesamtanzahlWe(31);
-        original.setRealisierungVon(2023);
-        original.setSonderwohnformen(false);
-        original.setBauabschnitte(List.of(createBauabschnittModel()));
-
-        return original;
+    public static AbfragevarianteBauleitplanverfahrenModel createAbfragevarianteBauleitplanverfahrenModel() {
+        final var abfragevariante = new AbfragevarianteBauleitplanverfahrenModel();
+        abfragevariante.setAbfragevariantenNr(1);
+        abfragevariante.setName("Name Abfragevariante 1");
+        abfragevariante.setWesentlicheRechtsgrundlage(
+            List.of(WesentlicheRechtsgrundlage.EINFACHER_BEBAUUNGSPLAN_PARAGRAPH_30)
+        );
+        abfragevariante.setGfWohnenSonderwohnformen(false);
+        abfragevariante.setGfWohnenGesamt(BigDecimal.valueOf(1234.56));
+        abfragevariante.setWeSonderwohnformen(false);
+        abfragevariante.setWeGesamt(31);
+        abfragevariante.setRealisierungVon(2023);
+        abfragevariante.setBauabschnitte(List.of(createBauabschnittModel()));
+        return abfragevariante;
     }
 
     private static BauabschnittModel createBauabschnittModel() {
@@ -94,7 +86,7 @@ public class TestData {
     private static BaugebietModel createBaugebietModel() {
         final BaugebietModel baugebiet = new BaugebietModel();
         baugebiet.setBezeichnung("Das Baugebiet des einzigartigen Baubschnitts");
-        baugebiet.setBaugebietArt(BaugebietArt.WA);
+        baugebiet.setArtBaulicheNutzung(ArtBaulicheNutzung.WA);
         baugebiet.setTechnical(false);
         baugebiet.setRealisierungVon(2023);
         baugebiet.setBauraten(List.of(createBaurateModel()));
@@ -104,8 +96,8 @@ public class TestData {
     private static BaurateModel createBaurateModel() {
         final BaurateModel baurate = new BaurateModel();
         baurate.setJahr(2022);
-        baurate.setAnzahlWeGeplant(10);
-        baurate.setGeschossflaecheWohnenGeplant(BigDecimal.valueOf(15.55));
+        baurate.setWeGeplant(10);
+        baurate.setGfWohnenGeplant(BigDecimal.valueOf(15.55));
         baurate.setFoerdermix(createFoerdermixModel());
         return baurate;
     }

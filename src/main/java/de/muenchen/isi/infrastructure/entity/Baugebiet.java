@@ -1,20 +1,23 @@
 package de.muenchen.isi.infrastructure.entity;
 
-import de.muenchen.isi.infrastructure.entity.enums.lookup.BaugebietArt;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtBaulicheNutzung;
 import java.math.BigDecimal;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.Index;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
+import javax.persistence.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 @Entity
+@Table(indexes = { @Index(name = "baugebiet_bauabschnitt_id_index", columnList = "bauabschnitt_id") })
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
@@ -24,28 +27,28 @@ public class Baugebiet extends BaseEntity {
     private String bezeichnung;
 
     @Column(nullable = false)
-    private BaugebietArt baugebietArt;
+    private ArtBaulicheNutzung artBaulicheNutzung;
 
     @Column(nullable = false)
     private Integer realisierungVon; // JJJJ
 
-    @Column(nullable = true)
-    private Integer gesamtanzahlWe;
-
-    @Column(nullable = true)
-    private Integer anzahlWohneinheitenBaurechtlichGenehmigt;
-
-    @Column(nullable = true)
-    private Integer anzahlWohneinheitenBaurechtlichFestgesetzt;
+    @Column(precision = 10, scale = 2, nullable = true)
+    private BigDecimal gfWohnenGeplant;
 
     @Column(precision = 10, scale = 2, nullable = true)
-    private BigDecimal geschossflaecheWohnen;
+    private BigDecimal gfWohnenBaurechtlichGenehmigt;
+
+    @Column(precision = 10, scale = 2, nullable = true)
+    private BigDecimal gfWohnenBaurechtlichFestgesetzt;
 
     @Column(nullable = true)
-    private BigDecimal geschossflaecheWohnenGenehmigt;
+    private Integer weGeplant;
 
     @Column(nullable = true)
-    private BigDecimal geschossflaecheWohnenFestgesetzt;
+    private Integer weBaurechtlichGenehmigt;
+
+    @Column(nullable = true)
+    private Integer weBaurechtlichFestgesetzt;
 
     @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "baugebiet_id")

@@ -14,7 +14,7 @@ import lombok.Data;
 )
 @JsonSubTypes(
     {
-        @JsonSubTypes.Type(value = AbfrageSearchResultDto.class, name = SearchResultType.Values.INFRASTRUKTURABFRAGE),
+        @JsonSubTypes.Type(value = AbfrageSearchResultDto.class, name = SearchResultType.Values.ABFRAGE),
         @JsonSubTypes.Type(value = BauvorhabenSearchResultDto.class, name = SearchResultType.Values.BAUVORHABEN),
         @JsonSubTypes.Type(
             value = InfrastruktureinrichtungSearchResultDto.class,

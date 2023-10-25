@@ -1,14 +1,10 @@
 package de.muenchen.isi.api.controller;
 
-import de.muenchen.isi.api.dto.AbfragevarianteDto;
 import de.muenchen.isi.api.dto.BauvorhabenDto;
 import de.muenchen.isi.api.dto.error.InformationResponseDto;
 import de.muenchen.isi.api.dto.search.response.AbfrageSearchResultDto;
 import de.muenchen.isi.api.dto.search.response.InfrastruktureinrichtungSearchResultDto;
-import de.muenchen.isi.api.mapper.AbfrageApiMapper;
-import de.muenchen.isi.api.mapper.AbfragevarianteApiMapper;
 import de.muenchen.isi.api.mapper.BauvorhabenApiMapper;
-import de.muenchen.isi.api.mapper.InfrastruktureinrichtungApiMapper;
 import de.muenchen.isi.api.mapper.SearchApiMapper;
 import de.muenchen.isi.domain.exception.AbfrageStatusNotAllowedException;
 import de.muenchen.isi.domain.exception.BauvorhabenNotReferencedException;
@@ -57,13 +53,7 @@ public class BauvorhabenController {
 
     private final BauvorhabenApiMapper bauvorhabenApiMapper;
 
-    private final AbfragevarianteApiMapper abfragevarianteApiMapper;
-
-    private final AbfrageApiMapper abfrageApiMapper;
-
     private final SearchApiMapper searchApiMapper;
-
-    private final InfrastruktureinrichtungApiMapper infrastruktureinrichtungApiMapper;
 
     @GetMapping("bauvorhaben/{id}")
     @Transactional(readOnly = true)
@@ -203,11 +193,10 @@ public class BauvorhabenController {
         "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_PUT_ABFRAGEVARIANTE_RELEVANT.name())"
     )
     public ResponseEntity<BauvorhabenDto> putChangeRelevanteAbfragevariante(
-        @RequestBody @NotNull final AbfragevarianteDto abfragevarianteDto
+        @RequestParam(value = "abfragevariante-id", defaultValue = "") @NotNull final UUID abfragevarianteId
     )
         throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, BauvorhabenNotReferencedException, EntityIsReferencedException {
-        final var abfragevariante = abfragevarianteApiMapper.dto2Model(abfragevarianteDto);
-        final var bauvorhaben = bauvorhabenService.changeRelevanteAbfragevariante(abfragevariante);
+        final var bauvorhaben = bauvorhabenService.changeRelevanteAbfragevariante(abfragevarianteId);
         final var saved = bauvorhabenApiMapper.model2Dto(bauvorhaben);
         return ResponseEntity.ok(saved);
     }
@@ -240,21 +229,19 @@ public class BauvorhabenController {
     @Transactional(readOnly = true)
     @GetMapping("bauvorhaben/referenced/abfragen/{id}")
     @Operation(
-        summary = "Lade alle Infrastrukturabfragen die einem Bauvorhaben angehören",
+        summary = "Lade alle Abfragen die einem Bauvorhaben angehören",
         description = "Das Ergebnis wird anhand des Erstellungsdatums aufsteigend sortiert."
     )
     @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "OK") })
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_READ_BAUVORHABEN.name())")
-    public ResponseEntity<List<AbfrageSearchResultDto>> getReferencedInfrastrukturabfragen(
-        @PathVariable @NotNull final UUID id
-    ) {
-        final var infrastrukturabfragen =
-            this.bauvorhabenService.getReferencedInfrastrukturabfragen(id)
+    public ResponseEntity<List<AbfrageSearchResultDto>> getReferencedAbfrage(@PathVariable @NotNull final UUID id) {
+        final var abfragen =
+            this.bauvorhabenService.getReferencedAbfrage(id)
                 .stream()
                 .map(this.searchApiMapper::model2Dto)
                 .map(AbfrageSearchResultDto.class::cast)
                 .collect(Collectors.toList());
-        return new ResponseEntity<>(infrastrukturabfragen, HttpStatus.OK);
+        return new ResponseEntity<>(abfragen, HttpStatus.OK);
     }
 
     @Transactional(readOnly = true)

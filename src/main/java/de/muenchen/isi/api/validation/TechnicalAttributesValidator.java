@@ -1,31 +1,28 @@
 package de.muenchen.isi.api.validation;
 
-import de.muenchen.isi.api.dto.abfrageAbfrageerstellungAngelegt.AbfragevarianteAngelegtDto;
+import de.muenchen.isi.api.dto.BauabschnittDto;
+import java.util.List;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
+import org.apache.commons.collections4.CollectionUtils;
 
 public class TechnicalAttributesValidator
-    implements ConstraintValidator<TechnicalAttributesValid, AbfragevarianteAngelegtDto> {
+    implements ConstraintValidator<TechnicalAttributesValid, List<BauabschnittDto>> {
 
     @Override
-    public boolean isValid(AbfragevarianteAngelegtDto abfragevarianteDto, ConstraintValidatorContext context) {
-        if (abfragevarianteDto == null) {
-            return true; // Wenn die DTO null ist, überspringe die Validierung
+    public boolean isValid(List<BauabschnittDto> bauabschnitte, ConstraintValidatorContext context) {
+        if (CollectionUtils.isEmpty(bauabschnitte)) {
+            return true;
         }
 
         return (
-            isValidForOption1(abfragevarianteDto) ||
-            isValidForOption2(abfragevarianteDto) ||
-            isValidForOption3(abfragevarianteDto) ||
-            isValidWhenEmpty(abfragevarianteDto)
+            isValidForOption1(bauabschnitte) || isValidForOption2(bauabschnitte) || isValidForOption3(bauabschnitte)
         );
     }
 
-    private boolean isValidForOption1(AbfragevarianteAngelegtDto abfragevarianteDto) {
+    private boolean isValidForOption1(final List<BauabschnittDto> bauabschnitte) {
         return (
-            (abfragevarianteDto.getBauabschnitte() != null &&
-                abfragevarianteDto
-                    .getBauabschnitte()
+            (bauabschnitte
                     .stream()
                     .anyMatch(bauabschnitt ->
                         !bauabschnitt.getTechnical() &&
@@ -39,15 +36,13 @@ public class TechnicalAttributesValidator
                                 !baugebiet.getBauraten().isEmpty()
                             )
                     )) &&
-            hasBauraten(abfragevarianteDto)
+            hasBauraten(bauabschnitte)
         );
     }
 
-    private boolean isValidForOption2(AbfragevarianteAngelegtDto abfragevarianteDto) {
+    private boolean isValidForOption2(final List<BauabschnittDto> bauabschnitte) {
         return (
-            (abfragevarianteDto.getBauabschnitte() != null &&
-                abfragevarianteDto
-                    .getBauabschnitte()
+            (bauabschnitte
                     .stream()
                     .anyMatch(bauabschnitt ->
                         bauabschnitt.getTechnical() &&
@@ -61,15 +56,13 @@ public class TechnicalAttributesValidator
                                 !baugebiet.getBauraten().isEmpty()
                             )
                     )) &&
-            hasBauraten(abfragevarianteDto)
+            hasBauraten(bauabschnitte)
         );
     }
 
-    private boolean isValidForOption3(AbfragevarianteAngelegtDto abfragevarianteDto) {
+    private boolean isValidForOption3(final List<BauabschnittDto> bauabschnitte) {
         return (
-            (abfragevarianteDto.getBauabschnitte() != null &&
-                abfragevarianteDto
-                    .getBauabschnitte()
+            (bauabschnitte
                     .stream()
                     .allMatch(bauabschnitt ->
                         bauabschnitt.getTechnical() &&
@@ -83,47 +76,18 @@ public class TechnicalAttributesValidator
                                 !baugebiet.getBauraten().isEmpty()
                             )
                     )) &&
-            hasBauraten(abfragevarianteDto)
+            hasBauraten(bauabschnitte)
         );
     }
 
-    private boolean hasBauraten(AbfragevarianteAngelegtDto abfragevarianteDto) {
+    private boolean hasBauraten(final List<BauabschnittDto> bauabschnitte) {
         return (
-            abfragevarianteDto.getBauabschnitte() != null &&
-            abfragevarianteDto
-                .getBauabschnitte()
+            bauabschnitte
                 .stream()
                 .flatMap(bauabschnitt -> bauabschnitt.getBaugebiete().stream())
                 .flatMap(baugebiet -> baugebiet.getBauraten().stream())
                 .findAny()
                 .isPresent()
-        );
-    }
-
-    private boolean isValidWhenEmpty(AbfragevarianteAngelegtDto abfragevarianteDto) {
-        return (
-            (abfragevarianteDto.getBauabschnitte() == null || abfragevarianteDto.getBauabschnitte().isEmpty()) &&
-            hasNoBauratenAndBaugebiete(abfragevarianteDto)
-        );
-    }
-
-    private boolean hasNoBauratenAndBaugebiete(AbfragevarianteAngelegtDto abfragevarianteDto) {
-        return (
-            abfragevarianteDto.getBauabschnitte() == null ||
-            (abfragevarianteDto.getBauabschnitte().isEmpty() &&
-                abfragevarianteDto
-                    .getBauabschnitte()
-                    .stream()
-                    .allMatch(bauabschnitt ->
-                        bauabschnitt.getBaugebiete() == null ||
-                        (bauabschnitt.getBaugebiete().isEmpty() &&
-                            bauabschnitt
-                                .getBaugebiete()
-                                .stream()
-                                .allMatch(baugebiet ->
-                                    baugebiet.getBauraten() == null || baugebiet.getBauraten().isEmpty()
-                                ))
-                    ))
         );
     }
 }

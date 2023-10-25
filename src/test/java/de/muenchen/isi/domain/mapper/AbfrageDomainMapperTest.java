@@ -3,232 +3,238 @@ package de.muenchen.isi.domain.mapper;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
-import de.muenchen.isi.domain.model.AbfragevarianteModel;
-import de.muenchen.isi.domain.model.AbfragevarianteSachbearbeitungModel;
-import de.muenchen.isi.domain.model.InfrastrukturabfrageModel;
-import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.AbfrageAngelegtModel;
-import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.AbfragevarianteAngelegtModel;
-import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.InfrastrukturabfrageAngelegtModel;
-import de.muenchen.isi.domain.model.abfrageSachbearbeitungInBearbeitungSachbearbeitung.AbfragevarianteInBearbeitungSachbearbeitungModel;
-import de.muenchen.isi.domain.model.abfrageSachbearbeitungInBearbeitungSachbearbeitung.AbfragevarianteSachbearbeitungInBearbeitungSachbearbeitungModel;
-import de.muenchen.isi.domain.model.abfrageSachbearbeitungInBearbeitungSachbearbeitung.InfrastrukturabfrageInBearbeitungSachbearbeitungModel;
+import de.muenchen.isi.domain.model.AbfragevarianteBauleitplanverfahrenModel;
+import de.muenchen.isi.domain.model.BauleitplanverfahrenModel;
+import de.muenchen.isi.domain.model.abfrageAngelegt.AbfragevarianteBauleitplanverfahrenAngelegtModel;
+import de.muenchen.isi.domain.model.abfrageAngelegt.BauleitplanverfahrenAngelegtModel;
+import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.AbfragevarianteBauleitplanverfahrenInBearbeitungSachbearbeitungModel;
+import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.AbfragevarianteBauleitplanverfahrenSachbearbeitungInBearbeitungSachbearbeitungModel;
+import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.BauleitplanverfahrenInBearbeitungSachbearbeitungModel;
+import de.muenchen.isi.infrastructure.repository.BauvorhabenRepository;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@ExtendWith(SpringExtension.class)
+@ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-@ContextConfiguration(
-    classes = {
-        AbfrageDomainMapperImpl.class,
-        AbfragevarianteDomainMapperImpl.class,
-        BauabschnittDomainMapperImpl.class,
-        DokumentDomainMapperImpl.class,
-    }
-)
 public class AbfrageDomainMapperTest {
 
-    @Autowired
-    AbfrageDomainMapper abfrageDomainMapper;
+    private DokumentDomainMapper dokumentDomainMapper = new DokumentDomainMapperImpl();
 
-    @Autowired
-    AbfragevarianteDomainMapper abfragevarianteDomainMapper;
+    private BauabschnittDomainMapper bauabschnittDomainMapper = new BauabschnittDomainMapperImpl();
 
-    @Autowired
-    BauabschnittDomainMapper bauabschnittDomainMapper;
+    private AbfragevarianteDomainMapper abfragevarianteDomainMapper = new AbfragevarianteDomainMapperImpl(
+        bauabschnittDomainMapper
+    );
 
-    @Autowired
-    DokumentDomainMapper dokumentDomainMapper;
+    private AbfrageDomainMapper abfrageDomainMapper = new AbfrageDomainMapperImpl(
+        abfragevarianteDomainMapper,
+        dokumentDomainMapper
+    );
+
+    @Mock
+    private BauvorhabenRepository bauvorhabenRepository;
+
+    @BeforeEach
+    public void beforeEach() throws NoSuchFieldException, IllegalAccessException {
+        Field field = abfrageDomainMapper.getClass().getSuperclass().getDeclaredField("bauvorhabenRepository");
+        field.setAccessible(true);
+        field.set(abfrageDomainMapper, bauvorhabenRepository);
+        field =
+            abfrageDomainMapper
+                .getClass()
+                .getSuperclass()
+                .getDeclaredField("abfragevarianteBauleitplanverfahrenDomainMapper");
+        field.setAccessible(true);
+        field.set(abfrageDomainMapper, abfragevarianteDomainMapper);
+        Mockito.reset(this.bauvorhabenRepository);
+    }
 
     @Test
-    public void abfrageErstellungInfrastrukturabfrageToInfrastrukturabfrageNoExistingAbfragevariante() {
-        InfrastrukturabfrageAngelegtModel infrastrukturabfrageAngelegtModel = new InfrastrukturabfrageAngelegtModel();
-        infrastrukturabfrageAngelegtModel.setVersion(1L);
-        AbfrageAngelegtModel abfrageAngelegtModel = new AbfrageAngelegtModel();
-        abfrageAngelegtModel.setNameAbfrage("Abfrage");
-        infrastrukturabfrageAngelegtModel.setAbfrage(abfrageAngelegtModel);
+    public void abfrageErstellungAbfrageToAbfrageNoExistingAbfragevariante() {
+        BauleitplanverfahrenAngelegtModel bauleitplanverfahrenModel = new BauleitplanverfahrenAngelegtModel();
+        bauleitplanverfahrenModel.setVersion(1L);
+        bauleitplanverfahrenModel.setName("Abfrage");
 
-        AbfragevarianteAngelegtModel abfragevarianteAngelegtModel = new AbfragevarianteAngelegtModel();
-        abfragevarianteAngelegtModel.setAbfragevariantenName("Abfragevariante 1");
+        AbfragevarianteBauleitplanverfahrenAngelegtModel abfragevarianteAngelegtModel =
+            new AbfragevarianteBauleitplanverfahrenAngelegtModel();
+        abfragevarianteAngelegtModel.setName("Abfragevariante 1");
 
-        AbfragevarianteAngelegtModel abfragevarianteAngelegtModel2 = new AbfragevarianteAngelegtModel();
-        abfragevarianteAngelegtModel2.setAbfragevariantenName("Abfragevariante 2");
+        AbfragevarianteBauleitplanverfahrenAngelegtModel abfragevarianteAngelegtModel2 =
+            new AbfragevarianteBauleitplanverfahrenAngelegtModel();
+        abfragevarianteAngelegtModel2.setName("Abfragevariante 2");
 
-        List<AbfragevarianteAngelegtModel> abfragevarianten = new ArrayList<>();
+        List<AbfragevarianteBauleitplanverfahrenAngelegtModel> abfragevarianten = new ArrayList<>();
 
         abfragevarianten.add(abfragevarianteAngelegtModel);
         abfragevarianten.add(abfragevarianteAngelegtModel2);
-        infrastrukturabfrageAngelegtModel.setAbfragevarianten(abfragevarianten);
+        bauleitplanverfahrenModel.setAbfragevarianten(abfragevarianten);
 
-        var result = abfrageDomainMapper.request2Model(
-            infrastrukturabfrageAngelegtModel,
-            new InfrastrukturabfrageModel()
-        );
+        var result = abfrageDomainMapper.request2Model(bauleitplanverfahrenModel, new BauleitplanverfahrenModel());
 
-        assertThat(result.getVersion(), is(infrastrukturabfrageAngelegtModel.getVersion()));
+        assertThat(result.getVersion(), is(bauleitplanverfahrenModel.getVersion()));
+        assertThat(result.getName(), is(bauleitplanverfahrenModel.getName()));
         assertThat(
-            result.getAbfrage().getNameAbfrage(),
-            is(infrastrukturabfrageAngelegtModel.getAbfrage().getNameAbfrage())
+            result.getAbfragevarianten().get(0).getName(),
+            is(bauleitplanverfahrenModel.getAbfragevarianten().get(0).getName())
         );
         assertThat(
-            result.getAbfragevarianten().get(0).getAbfragevariantenName(),
-            is(infrastrukturabfrageAngelegtModel.getAbfragevarianten().get(0).getAbfragevariantenName())
-        );
-        assertThat(
-            result.getAbfragevarianten().get(1).getAbfragevariantenName(),
-            is(infrastrukturabfrageAngelegtModel.getAbfragevarianten().get(1).getAbfragevariantenName())
+            result.getAbfragevarianten().get(1).getName(),
+            is(bauleitplanverfahrenModel.getAbfragevarianten().get(1).getName())
         );
     }
 
     @Test
-    public void abfrageErstellungInfrastrukturabfrageToInfrastrukturabfrageExistingAbfragevariante() {
+    public void abfrageErstellungAbfrageToAbfrageExistingAbfragevariante() {
         var abfragevarianteId = UUID.randomUUID();
-        InfrastrukturabfrageAngelegtModel infrastrukturabfrageAngelegtModel = new InfrastrukturabfrageAngelegtModel();
-        infrastrukturabfrageAngelegtModel.setVersion(1L);
+        BauleitplanverfahrenAngelegtModel bauleitplanverfahrenAngelegtModel = new BauleitplanverfahrenAngelegtModel();
+        bauleitplanverfahrenAngelegtModel.setVersion(1L);
+        bauleitplanverfahrenAngelegtModel.setName("Abfrage");
 
-        AbfrageAngelegtModel abfrageAngelegtModel = new AbfrageAngelegtModel();
-        abfrageAngelegtModel.setNameAbfrage("Abfrage");
-        infrastrukturabfrageAngelegtModel.setAbfrage(abfrageAngelegtModel);
+        AbfragevarianteBauleitplanverfahrenAngelegtModel abfragevarianteAngelegtModel =
+            new AbfragevarianteBauleitplanverfahrenAngelegtModel();
+        abfragevarianteAngelegtModel.setName("Abfragevariante 1");
 
-        AbfragevarianteAngelegtModel abfragevarianteAngelegtModel = new AbfragevarianteAngelegtModel();
-        abfragevarianteAngelegtModel.setAbfragevariantenName("Abfragevariante 1");
-
-        AbfragevarianteAngelegtModel abfragevarianteAngelegtModel2 = new AbfragevarianteAngelegtModel();
-        abfragevarianteAngelegtModel2.setAbfragevariantenName("Abfragevariante 2");
+        AbfragevarianteBauleitplanverfahrenAngelegtModel abfragevarianteAngelegtModel2 =
+            new AbfragevarianteBauleitplanverfahrenAngelegtModel();
+        abfragevarianteAngelegtModel2.setName("Abfragevariante 2");
         abfragevarianteAngelegtModel2.setId(abfragevarianteId);
 
-        List<AbfragevarianteAngelegtModel> abfragevarianteAngelegtModels = new ArrayList<>();
+        List<AbfragevarianteBauleitplanverfahrenAngelegtModel> abfragevarianteAngelegtModels = new ArrayList<>();
 
         abfragevarianteAngelegtModels.add(abfragevarianteAngelegtModel);
         abfragevarianteAngelegtModels.add(abfragevarianteAngelegtModel2);
 
-        InfrastrukturabfrageModel infrastrukturabfrageModel = new InfrastrukturabfrageModel();
+        BauleitplanverfahrenModel bauleitplanverfahrenModel = new BauleitplanverfahrenModel();
 
-        AbfragevarianteModel abfragevarianteModel = new AbfragevarianteModel();
-        abfragevarianteModel.setAbfragevariantenName("Abfragevariante 3");
+        AbfragevarianteBauleitplanverfahrenModel abfragevarianteModel = new AbfragevarianteBauleitplanverfahrenModel();
+        abfragevarianteModel.setName("Abfragevariante 3");
         abfragevarianteModel.setId(abfragevarianteId);
 
-        List<AbfragevarianteModel> abfragevariantenModelList = new ArrayList<>();
+        List<AbfragevarianteBauleitplanverfahrenModel> abfragevariantenModelList = new ArrayList<>();
         abfragevariantenModelList.add(abfragevarianteModel);
 
-        infrastrukturabfrageModel.setAbfragevarianten(abfragevariantenModelList);
+        bauleitplanverfahrenModel.setAbfragevarianten(abfragevariantenModelList);
 
-        infrastrukturabfrageAngelegtModel.setAbfragevarianten(abfragevarianteAngelegtModels);
+        bauleitplanverfahrenAngelegtModel.setAbfragevarianten(abfragevarianteAngelegtModels);
 
-        var result = abfrageDomainMapper.request2Model(infrastrukturabfrageAngelegtModel, infrastrukturabfrageModel);
+        var result = abfrageDomainMapper.request2Model(bauleitplanverfahrenAngelegtModel, bauleitplanverfahrenModel);
 
-        assertThat(result.getVersion(), is(infrastrukturabfrageAngelegtModel.getVersion()));
+        assertThat(result.getVersion(), is(bauleitplanverfahrenAngelegtModel.getVersion()));
+        assertThat(result.getName(), is(bauleitplanverfahrenAngelegtModel.getName()));
         assertThat(
-            result.getAbfrage().getNameAbfrage(),
-            is(infrastrukturabfrageAngelegtModel.getAbfrage().getNameAbfrage())
+            result.getAbfragevarianten().get(0).getName(),
+            is(bauleitplanverfahrenAngelegtModel.getAbfragevarianten().get(0).getName())
         );
         assertThat(
-            result.getAbfragevarianten().get(0).getAbfragevariantenName(),
-            is(infrastrukturabfrageAngelegtModel.getAbfragevarianten().get(0).getAbfragevariantenName())
-        );
-        assertThat(
-            result.getAbfragevarianten().get(1).getAbfragevariantenName(),
-            is(infrastrukturabfrageAngelegtModel.getAbfragevarianten().get(1).getAbfragevariantenName())
+            result.getAbfragevarianten().get(1).getName(),
+            is(bauleitplanverfahrenAngelegtModel.getAbfragevarianten().get(1).getName())
         );
     }
 
     @Test
-    void sachbearbeitungInfrastrukturabfrageToInfrastrukturabfrageNonExistingAbfragevariante() {
-        var infrastrukturabfrage = new InfrastrukturabfrageInBearbeitungSachbearbeitungModel();
-        infrastrukturabfrage.setVersion(99L);
-        infrastrukturabfrage.setAbfragevarianten(List.of());
+    void sachbearbeitungAbfrageToAbfrageNonExistingAbfragevariante() {
+        var bauleitplanverfahren = new BauleitplanverfahrenInBearbeitungSachbearbeitungModel();
+        bauleitplanverfahren.setVersion(99L);
+        bauleitplanverfahren.setAbfragevarianten(List.of());
 
-        var abfragevarianteSachbearbeitung1 = new AbfragevarianteInBearbeitungSachbearbeitungModel();
+        var abfragevarianteSachbearbeitung1 =
+            new AbfragevarianteBauleitplanverfahrenInBearbeitungSachbearbeitungModel();
         abfragevarianteSachbearbeitung1.setAbfragevariantenNr(1);
-        abfragevarianteSachbearbeitung1.setAbfragevariantenName("Abfragevariante 1");
+        abfragevarianteSachbearbeitung1.setName("Abfragevariante 1");
 
-        var abfragevarianteSachbearbeitung2 = new AbfragevarianteInBearbeitungSachbearbeitungModel();
+        var abfragevarianteSachbearbeitung2 =
+            new AbfragevarianteBauleitplanverfahrenInBearbeitungSachbearbeitungModel();
         abfragevarianteSachbearbeitung2.setAbfragevariantenNr(2);
-        abfragevarianteSachbearbeitung2.setAbfragevariantenName("Abfragevariante 2");
+        abfragevarianteSachbearbeitung2.setName("Abfragevariante 2");
 
-        infrastrukturabfrage.setAbfragevariantenSachbearbeitung(
+        bauleitplanverfahren.setAbfragevariantenSachbearbeitung(
             List.of(abfragevarianteSachbearbeitung1, abfragevarianteSachbearbeitung2)
         );
 
-        final var result = abfrageDomainMapper.request2Model(infrastrukturabfrage, new InfrastrukturabfrageModel());
+        final var result = abfrageDomainMapper.request2Model(bauleitplanverfahren, new BauleitplanverfahrenModel());
 
-        final var expected = new InfrastrukturabfrageModel();
+        final var expected = new BauleitplanverfahrenModel();
         expected.setVersion(99L);
-        expected.setAbfragevarianten(List.of());
 
-        final var abfragevariante1 = new AbfragevarianteModel();
+        final var abfragevariante1 = new AbfragevarianteBauleitplanverfahrenModel();
         abfragevariante1.setAbfragevariantenNr(1);
-        abfragevariante1.setAbfragevariantenName("Abfragevariante 1");
+        abfragevariante1.setName("Abfragevariante 1");
 
-        final var abfragevariante2 = new AbfragevarianteModel();
+        final var abfragevariante2 = new AbfragevarianteBauleitplanverfahrenModel();
         abfragevariante2.setAbfragevariantenNr(2);
-        abfragevariante2.setAbfragevariantenName("Abfragevariante 2");
+        abfragevariante2.setName("Abfragevariante 2");
 
+        expected.setAbfragevarianten(List.of());
         expected.setAbfragevariantenSachbearbeitung(List.of(abfragevariante1, abfragevariante2));
 
         assertThat(result, is(expected));
     }
 
     @Test
-    void sachbearbeitungInfrastrukturabfrageToInfrastrukturabfrageExistingAbfragevariante() {
-        var infrastrukturabfrage = new InfrastrukturabfrageInBearbeitungSachbearbeitungModel();
-        infrastrukturabfrage.setVersion(99L);
-        infrastrukturabfrage.setAbfragevarianten(List.of());
+    void sachbearbeitungAbfrageToAbfrageExistingAbfragevariante() {
+        var bauleitplanverfahren = new BauleitplanverfahrenInBearbeitungSachbearbeitungModel();
+        bauleitplanverfahren.setVersion(99L);
+        bauleitplanverfahren.setAbfragevarianten(List.of());
 
-        var abfragevarianteSachbearbeitung1 = new AbfragevarianteInBearbeitungSachbearbeitungModel();
+        var abfragevarianteSachbearbeitung1 =
+            new AbfragevarianteBauleitplanverfahrenInBearbeitungSachbearbeitungModel();
         abfragevarianteSachbearbeitung1.setId(UUID.randomUUID());
         abfragevarianteSachbearbeitung1.setAbfragevariantenNr(1);
-        abfragevarianteSachbearbeitung1.setAbfragevariantenName("New Name Abfragevariante 1");
+        abfragevarianteSachbearbeitung1.setName("New Name Abfragevariante 1");
 
-        var abfragevarianteSachbearbeitung2 = new AbfragevarianteInBearbeitungSachbearbeitungModel();
+        var abfragevarianteSachbearbeitung2 =
+            new AbfragevarianteBauleitplanverfahrenInBearbeitungSachbearbeitungModel();
         abfragevarianteSachbearbeitung2.setId(UUID.randomUUID());
         abfragevarianteSachbearbeitung2.setAbfragevariantenNr(2);
-        abfragevarianteSachbearbeitung2.setAbfragevariantenName("New Name Abfragevariante 2");
+        abfragevarianteSachbearbeitung2.setName("New Name Abfragevariante 2");
 
-        infrastrukturabfrage.setAbfragevariantenSachbearbeitung(
+        bauleitplanverfahren.setAbfragevariantenSachbearbeitung(
             List.of(abfragevarianteSachbearbeitung1, abfragevarianteSachbearbeitung2)
         );
 
-        final var savedInfrastrukturabfrage = new InfrastrukturabfrageModel();
-        savedInfrastrukturabfrage.setAbfragevarianten(List.of());
-        savedInfrastrukturabfrage.setVersion(98L);
+        final var savedBauleitplanverfahren = new BauleitplanverfahrenModel();
+        savedBauleitplanverfahren.setAbfragevarianten(List.of());
+        savedBauleitplanverfahren.setVersion(98L);
 
-        final var savedAbfragevariante1 = new AbfragevarianteModel();
+        final var savedAbfragevariante1 = new AbfragevarianteBauleitplanverfahrenModel();
         savedAbfragevariante1.setId(abfragevarianteSachbearbeitung1.getId());
         savedAbfragevariante1.setAbfragevariantenNr(99);
-        savedAbfragevariante1.setAbfragevariantenName("Old Name Abfragevariante 1");
+        savedAbfragevariante1.setName("Old Name Abfragevariante 1");
 
-        final var savedAbfragevariante2 = new AbfragevarianteModel();
+        final var savedAbfragevariante2 = new AbfragevarianteBauleitplanverfahrenModel();
         savedAbfragevariante2.setId(abfragevarianteSachbearbeitung2.getId());
         savedAbfragevariante2.setAbfragevariantenNr(97);
-        savedAbfragevariante2.setAbfragevariantenName("Old Name Abfragevariante 2");
+        savedAbfragevariante2.setName("Old Name Abfragevariante 2");
 
-        savedInfrastrukturabfrage.setAbfragevariantenSachbearbeitung(
+        savedBauleitplanverfahren.setAbfragevariantenSachbearbeitung(
             List.of(savedAbfragevariante1, savedAbfragevariante2)
         );
 
-        final var result = abfrageDomainMapper.request2Model(infrastrukturabfrage, savedInfrastrukturabfrage);
+        final var result = abfrageDomainMapper.request2Model(bauleitplanverfahren, savedBauleitplanverfahren);
 
-        final var expected = new InfrastrukturabfrageModel();
+        final var expected = new BauleitplanverfahrenModel();
         expected.setVersion(99L);
         expected.setAbfragevarianten(List.of());
 
-        final var abfragevariante1 = new AbfragevarianteModel();
+        final var abfragevariante1 = new AbfragevarianteBauleitplanverfahrenModel();
         abfragevariante1.setId(abfragevarianteSachbearbeitung1.getId());
         abfragevariante1.setAbfragevariantenNr(1);
-        abfragevariante1.setAbfragevariantenName("New Name Abfragevariante 1");
+        abfragevariante1.setName("New Name Abfragevariante 1");
 
-        final var abfragevariante2 = new AbfragevarianteModel();
+        final var abfragevariante2 = new AbfragevarianteBauleitplanverfahrenModel();
         abfragevariante2.setId(abfragevarianteSachbearbeitung2.getId());
         abfragevariante2.setAbfragevariantenNr(2);
-        abfragevariante2.setAbfragevariantenName("New Name Abfragevariante 2");
+        abfragevariante2.setName("New Name Abfragevariante 2");
 
         expected.setAbfragevariantenSachbearbeitung(List.of(abfragevariante1, abfragevariante2));
 
@@ -236,62 +242,56 @@ public class AbfrageDomainMapperTest {
     }
 
     @Test
-    void sachbearbeitungInfrastrukturabfrageToInfrastrukturabfrageNonExistingAbfragevarianteForAbfragevarianteSachbearbeitung() {
-        var infrastrukturabfrage = new InfrastrukturabfrageInBearbeitungSachbearbeitungModel();
-        infrastrukturabfrage.setVersion(99L);
-        infrastrukturabfrage.setAbfragevariantenSachbearbeitung(List.of());
+    void sachbearbeitungAbfrageToAbfrageNonExistingAbfragevarianteForAbfragevarianteSachbearbeitung() {
+        var bauleitplanverfahren = new BauleitplanverfahrenInBearbeitungSachbearbeitungModel();
+        bauleitplanverfahren.setVersion(99L);
+        bauleitplanverfahren.setAbfragevariantenSachbearbeitung(List.of());
 
-        var abfragevarianteSachbearbeitung1 = new AbfragevarianteSachbearbeitungInBearbeitungSachbearbeitungModel();
+        var abfragevarianteSachbearbeitung1 =
+            new AbfragevarianteBauleitplanverfahrenSachbearbeitungInBearbeitungSachbearbeitungModel();
         abfragevarianteSachbearbeitung1.setId(UUID.randomUUID());
         abfragevarianteSachbearbeitung1.setVersion(1L);
-        var abfragevarianteSachbearbeitungEmbedded1 = new AbfragevarianteSachbearbeitungModel();
-        abfragevarianteSachbearbeitungEmbedded1.setAnmerkung("Test1");
-        abfragevarianteSachbearbeitung1.setAbfragevarianteSachbearbeitung(abfragevarianteSachbearbeitungEmbedded1);
+        abfragevarianteSachbearbeitung1.setAnmerkung("Test1");
 
-        var abfragevarianteSachbearbeitung2 = new AbfragevarianteSachbearbeitungInBearbeitungSachbearbeitungModel();
+        var abfragevarianteSachbearbeitung2 =
+            new AbfragevarianteBauleitplanverfahrenSachbearbeitungInBearbeitungSachbearbeitungModel();
         abfragevarianteSachbearbeitung2.setId(UUID.randomUUID());
         abfragevarianteSachbearbeitung2.setVersion(2L);
-        var abfragevarianteSachbearbeitungEmbedded2 = new AbfragevarianteSachbearbeitungModel();
-        abfragevarianteSachbearbeitungEmbedded2.setAnmerkung("Test2");
-        abfragevarianteSachbearbeitung2.setAbfragevarianteSachbearbeitung(abfragevarianteSachbearbeitungEmbedded2);
+        abfragevarianteSachbearbeitung2.setAnmerkung("Test2");
 
-        infrastrukturabfrage.setAbfragevarianten(
+        bauleitplanverfahren.setAbfragevarianten(
             List.of(abfragevarianteSachbearbeitung1, abfragevarianteSachbearbeitung2)
         );
 
-        final var modelFromDb = new InfrastrukturabfrageModel();
+        final var modelFromDb = new BauleitplanverfahrenModel();
         modelFromDb.setVersion(99L);
         modelFromDb.setAbfragevariantenSachbearbeitung(List.of());
 
-        final var abfragevarianteModelFromDb1 = new AbfragevarianteModel();
+        final var abfragevarianteModelFromDb1 = new AbfragevarianteBauleitplanverfahrenModel();
         abfragevarianteModelFromDb1.setId(abfragevarianteSachbearbeitung1.getId());
         abfragevarianteModelFromDb1.setVersion(1L);
 
-        final var abfragevarianteModelFromDb2 = new AbfragevarianteModel();
+        final var abfragevarianteModelFromDb2 = new AbfragevarianteBauleitplanverfahrenModel();
         abfragevarianteModelFromDb2.setId(abfragevarianteSachbearbeitung2.getId());
         abfragevarianteModelFromDb2.setVersion(2L);
 
         modelFromDb.setAbfragevarianten(List.of(abfragevarianteModelFromDb1, abfragevarianteModelFromDb2));
 
-        final var result = abfrageDomainMapper.request2Model(infrastrukturabfrage, modelFromDb);
+        final var result = abfrageDomainMapper.request2Model(bauleitplanverfahren, modelFromDb);
 
-        final var expected = new InfrastrukturabfrageModel();
+        final var expected = new BauleitplanverfahrenModel();
         expected.setVersion(99L);
         expected.setAbfragevariantenSachbearbeitung(List.of());
 
-        final var abfragevarianteExpected1 = new AbfragevarianteModel();
+        final var abfragevarianteExpected1 = new AbfragevarianteBauleitplanverfahrenModel();
         abfragevarianteExpected1.setId(abfragevarianteSachbearbeitung1.getId());
         abfragevarianteExpected1.setVersion(1L);
-        var abfragevarianteEmbeddedExpected1 = new AbfragevarianteSachbearbeitungModel();
-        abfragevarianteEmbeddedExpected1.setAnmerkung("Test1");
-        abfragevarianteExpected1.setAbfragevarianteSachbearbeitung(abfragevarianteEmbeddedExpected1);
+        abfragevarianteExpected1.setAnmerkung("Test1");
 
-        final var abfragevarianteExpected2 = new AbfragevarianteModel();
+        final var abfragevarianteExpected2 = new AbfragevarianteBauleitplanverfahrenModel();
         abfragevarianteExpected2.setId(abfragevarianteSachbearbeitung2.getId());
         abfragevarianteExpected2.setVersion(2L);
-        var abfragevarianteEmbeddedExpected2 = new AbfragevarianteSachbearbeitungModel();
-        abfragevarianteEmbeddedExpected2.setAnmerkung("Test2");
-        abfragevarianteExpected2.setAbfragevarianteSachbearbeitung(abfragevarianteEmbeddedExpected2);
+        abfragevarianteExpected2.setAnmerkung("Test2");
 
         expected.setAbfragevarianten(List.of(abfragevarianteExpected1, abfragevarianteExpected2));
 

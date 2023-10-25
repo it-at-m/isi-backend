@@ -13,7 +13,7 @@ import org.mapstruct.Mapper;
 
 @Mapper(config = MapstructConfiguration.class)
 public interface DokumentApiMapper {
-    DokumenteDto model2Dto(DokumenteModel model);
+    DokumenteDto model2Dto(final DokumenteModel model);
 
     DokumentDto model2Dto(final DokumentModel model);
 

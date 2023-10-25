@@ -69,16 +69,16 @@ class BaurateServiceTest {
 
         var baurate1 = new BaurateModel();
         baurate1.setJahr(2000);
-        baurate1.setAnzahlWeGeplant(13);
-        baurate1.setGeschossflaecheWohnenGeplant(null);
+        baurate1.setWeGeplant(13);
+        baurate1.setGfWohnenGeplant(null);
         var baurate2 = new BaurateModel();
         baurate2.setJahr(2001);
-        baurate2.setAnzahlWeGeplant(40);
-        baurate2.setGeschossflaecheWohnenGeplant(null);
+        baurate2.setWeGeplant(40);
+        baurate2.setGfWohnenGeplant(null);
         var baurate3 = new BaurateModel();
         baurate3.setJahr(2002);
-        baurate3.setAnzahlWeGeplant(79);
-        baurate3.setGeschossflaecheWohnenGeplant(null);
+        baurate3.setWeGeplant(79);
+        baurate3.setGfWohnenGeplant(null);
 
         var expected = List.of(baurate1, baurate2, baurate3);
 
@@ -100,16 +100,16 @@ class BaurateServiceTest {
 
         baurate1 = new BaurateModel();
         baurate1.setJahr(2000);
-        baurate1.setAnzahlWeGeplant(null);
-        baurate1.setGeschossflaecheWohnenGeplant(BigDecimal.valueOf(138L));
+        baurate1.setWeGeplant(null);
+        baurate1.setGfWohnenGeplant(BigDecimal.valueOf(138L));
         baurate2 = new BaurateModel();
         baurate2.setJahr(2001);
-        baurate2.setAnzahlWeGeplant(null);
-        baurate2.setGeschossflaecheWohnenGeplant(BigDecimal.valueOf(402L));
+        baurate2.setWeGeplant(null);
+        baurate2.setGfWohnenGeplant(BigDecimal.valueOf(402L));
         baurate3 = new BaurateModel();
         baurate3.setJahr(2002);
-        baurate3.setAnzahlWeGeplant(null);
-        baurate3.setGeschossflaecheWohnenGeplant(BigDecimal.valueOf(780.53));
+        baurate3.setWeGeplant(null);
+        baurate3.setGfWohnenGeplant(BigDecimal.valueOf(780.53));
 
         expected = List.of(baurate1, baurate2, baurate3);
 

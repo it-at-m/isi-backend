@@ -1,15 +1,15 @@
 package de.muenchen.isi.infrastructure.entity;
 
-import de.muenchen.isi.infrastructure.adapter.search.StandVorhabenSuggestionBinder;
-import de.muenchen.isi.infrastructure.adapter.search.StandVorhabenValueBridge;
+import de.muenchen.isi.infrastructure.adapter.search.StandVerfahrenSuggestionBinder;
+import de.muenchen.isi.infrastructure.adapter.search.StandVerfahrenValueBridge;
 import de.muenchen.isi.infrastructure.adapter.search.StringSuggestionBinder;
 import de.muenchen.isi.infrastructure.entity.common.Adresse;
 import de.muenchen.isi.infrastructure.entity.common.Verortung;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.BaugebietArt;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.Planungsrecht;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtBaulicheNutzung;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonVerfahrensgrundsaetzeJahr;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVorhaben;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVerfahren;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.WesentlicheRechtsgrundlage;
 import de.muenchen.isi.infrastructure.entity.filehandling.Dokument;
 import de.muenchen.isi.infrastructure.repository.search.SearchwordSuggesterRepository;
 import io.hypersistence.utils.hibernate.type.json.JsonType;
@@ -46,7 +46,7 @@ import org.hibernate.search.mapper.pojo.mapping.definition.annotation.NonStandar
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-@Table(indexes = { @Index(name = "name_vorhaben_index", columnList = "nameVorhaben") })
+@Table(indexes = { @Index(name = "bauvorhaben_name_index", columnList = "nameVorhaben") })
 @TypeDef(name = "json", typeClass = JsonType.class)
 @Indexed
 public class Bauvorhaben extends BaseEntity {
@@ -67,14 +67,17 @@ public class Bauvorhaben extends BaseEntity {
     @Column(precision = 10, scale = 2, nullable = true)
     private BigDecimal grundstuecksgroesse;
 
-    @FullTextField(valueBridge = @ValueBridgeRef(type = StandVorhabenValueBridge.class))
+    @FullTextField(valueBridge = @ValueBridgeRef(type = StandVerfahrenValueBridge.class))
     @NonStandardField(
-        name = "standVorhaben" + SearchwordSuggesterRepository.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
-        valueBinder = @ValueBinderRef(type = StandVorhabenSuggestionBinder.class)
+        name = "standVerfahren" + SearchwordSuggesterRepository.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
+        valueBinder = @ValueBinderRef(type = StandVerfahrenSuggestionBinder.class)
     )
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private StandVorhaben standVorhaben;
+    private StandVerfahren standVerfahren;
+
+    @Column
+    private String standVerfahrenFreieEingabe;
 
     @FullTextField
     @NonStandardField(
@@ -92,9 +95,6 @@ public class Bauvorhaben extends BaseEntity {
     @Type(type = "json")
     @Column(columnDefinition = "jsonb")
     private Verortung verortung;
-
-    @Column(nullable = true)
-    private String allgemeineOrtsangabe;
 
     @FullTextField
     @NonStandardField(
@@ -119,12 +119,15 @@ public class Bauvorhaben extends BaseEntity {
     private SobonVerfahrensgrundsaetzeJahr sobonJahr;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private Planungsrecht planungsrecht;
+    @ElementCollection
+    private List<WesentlicheRechtsgrundlage> wesentlicheRechtsgrundlage;
+
+    @Column
+    private String wesentlicheRechtsgrundlageFreieEingabe;
 
     @Enumerated(EnumType.STRING)
     @ElementCollection
-    private List<BaugebietArt> artFnp;
+    private List<ArtBaulicheNutzung> artFnp;
 
     @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "bauvorhaben_id")

@@ -7,11 +7,19 @@ import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.Index;
+import javax.persistence.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 @Entity
+@Table(
+    indexes = {
+        @Index(name = "dokument_bauleitplanverfahren_id_index", columnList = "bauleitplanverfahren_id"),
+        @Index(name = "dokument_bauvorhaben_id_index", columnList = "bauvorhaben_id"),
+    }
+)
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)

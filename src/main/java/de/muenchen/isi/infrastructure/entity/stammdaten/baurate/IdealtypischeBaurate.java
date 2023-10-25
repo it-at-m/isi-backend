@@ -25,7 +25,7 @@ import org.hibernate.annotations.TypeDef;
      * Zur Beschleunigung der DB-Queries ausgeführt durch
      * {@link IdealtypischeBaurateRepository#findByTypAndVonLessThanEqualAndBisExklusivGreaterThan}.
      */
-    indexes = { @Index(name = "range_index", columnList = "typ ASC, von ASC, bisExklusiv ASC") },
+    indexes = { @Index(name = "idealtypische_baurate_range_index", columnList = "typ ASC, von ASC, bisExklusiv ASC") },
     uniqueConstraints = { @UniqueConstraint(columnNames = { "von", "bisExklusiv", "typ" }) }
 )
 @Data

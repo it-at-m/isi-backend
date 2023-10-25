@@ -6,82 +6,91 @@ import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.FileHandlingFailedException;
 import de.muenchen.isi.domain.exception.FileHandlingWithS3FailedException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
-import de.muenchen.isi.domain.exception.StringLengthExceededException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
 import de.muenchen.isi.domain.exception.UserRoleNotAllowedException;
 import de.muenchen.isi.domain.mapper.AbfrageDomainMapper;
 import de.muenchen.isi.domain.model.AbfrageModel;
+import de.muenchen.isi.domain.model.BauleitplanverfahrenModel;
 import de.muenchen.isi.domain.model.BauvorhabenModel;
-import de.muenchen.isi.domain.model.InfrastrukturabfrageModel;
-import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.InfrastrukturabfrageAngelegtModel;
-import de.muenchen.isi.domain.model.abfrageBedarfsmeldungInBearbeitungFachreferate.InfrastrukturabfrageInBearbeitungFachreferateModel;
-import de.muenchen.isi.domain.model.abfrageSachbearbeitungInBearbeitungSachbearbeitung.InfrastrukturabfrageInBearbeitungSachbearbeitungModel;
+import de.muenchen.isi.domain.model.abfrageAngelegt.AbfrageAngelegtModel;
+import de.muenchen.isi.domain.model.abfrageAngelegt.BauleitplanverfahrenAngelegtModel;
+import de.muenchen.isi.domain.model.abfrageInBearbeitungFachreferat.AbfrageInBearbeitungFachreferatModel;
+import de.muenchen.isi.domain.model.abfrageInBearbeitungFachreferat.BauleitplanverfahrenInBearbeitungFachreferatModel;
+import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.AbfrageInBearbeitungSachbearbeitungModel;
+import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.BauleitplanverfahrenInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.domain.service.filehandling.DokumentService;
+import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
-import de.muenchen.isi.infrastructure.repository.InfrastrukturabfrageRepository;
+import de.muenchen.isi.infrastructure.repository.AbfrageRepository;
+import de.muenchen.isi.infrastructure.repository.AbfragevarianteBauleitplanverfahrenRepository;
+import de.muenchen.isi.infrastructure.repository.BauvorhabenRepository;
 import de.muenchen.isi.security.AuthenticationUtils;
+import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class AbfrageService {
 
+    private final AbfrageRepository abfrageRepository;
+
     private final AbfrageDomainMapper abfrageDomainMapper;
 
-    private final InfrastrukturabfrageRepository infrastrukturabfrageRepository;
+    private final BauvorhabenRepository bauvorhabenRepository;
 
     private final DokumentService dokumentService;
 
     private final AuthenticationUtils authenticationUtils;
 
+    private final AbfragevarianteBauleitplanverfahrenRepository abfragevarianteBauleitplanverfahrenRepository;
+
     /**
-     * Die Methode gibt ein {@link InfrastrukturabfrageModel} identifiziert durch die ID zurück.
+     * Die Methode gibt ein {@link AbfrageModel} identifiziert durch die ID zurück.
      *
-     * @param id zum Identifizieren des {@link InfrastrukturabfrageModel}.
-     * @return {@link InfrastrukturabfrageModel}.
-     * @throws EntityNotFoundException falls die Abfrage identifiziert durch die {@link InfrastrukturabfrageModel#getId()} nicht gefunden wird.
+     * @param id zum Identifizieren des {@link AbfrageModel}.
+     * @return {@link AbfrageModel}.
+     * @throws EntityNotFoundException falls die Abfrage identifiziert durch die {@link AbfrageModel#getId()} nicht gefunden wird.
      */
-    public InfrastrukturabfrageModel getInfrastrukturabfrageById(final UUID id) throws EntityNotFoundException {
-        final var optEntity = this.infrastrukturabfrageRepository.findById(id);
-        final var entity = optEntity.orElseThrow(() -> {
-            final var message = "Infrastrukturabfrage nicht gefunden.";
+    public AbfrageModel getById(final UUID id) throws EntityNotFoundException {
+        final var optAbfrage = this.abfrageRepository.findById(id);
+        final var abfrage = optAbfrage.orElseThrow(() -> {
+            final var message = "Abfrage nicht gefunden.";
             log.error(message);
             return new EntityNotFoundException(message);
         });
-        return this.abfrageDomainMapper.entity2Model(entity);
+        return this.abfrageDomainMapper.entity2Model(abfrage);
     }
 
     /**
-     * Diese Methode speichert ein {@link InfrastrukturabfrageModel}.
+     * Diese Methode speichert ein {@link AbfrageModel}.
      *
      * @param abfrage zum Speichern
-     * @return das gespeicherte {@link InfrastrukturabfrageModel}
+     * @return das gespeicherte {@link AbfrageModel}
      * @throws UniqueViolationException   falls der Name der Abfrage oder der Abfragevariante bereits vorhanden ist
      * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
+     * @throws EntityNotFoundException falls das referenzierte Bauvorhaben nicht existiert.
      */
-    public InfrastrukturabfrageModel saveInfrastrukturabfrage(final InfrastrukturabfrageModel abfrage)
-        throws UniqueViolationException, OptimisticLockingException {
+    public AbfrageModel save(final AbfrageModel abfrage)
+        throws EntityNotFoundException, OptimisticLockingException, UniqueViolationException {
         if (abfrage.getId() == null) {
-            abfrage.getAbfrage().setStatusAbfrage(StatusAbfrage.ANGELEGT);
+            abfrage.setStatusAbfrage(StatusAbfrage.ANGELEGT);
             abfrage.setSub(authenticationUtils.getUserSub());
         }
-        var abfrageEntity = this.abfrageDomainMapper.model2entity(abfrage);
-        final var saved =
-            this.infrastrukturabfrageRepository.findByAbfrage_NameAbfrageIgnoreCase(
-                    abfrageEntity.getAbfrage().getNameAbfrage()
-                );
-        if ((saved.isPresent() && saved.get().getId().equals(abfrageEntity.getId())) || saved.isEmpty()) {
+        var entity = this.abfrageDomainMapper.model2Entity(abfrage);
+        final var saved = this.abfrageRepository.findByNameIgnoreCase(abfrage.getName());
+        if ((saved.isPresent() && saved.get().getId().equals(entity.getId())) || saved.isEmpty()) {
             try {
-                abfrageEntity = this.infrastrukturabfrageRepository.saveAndFlush(abfrageEntity);
+                entity = this.abfrageRepository.saveAndFlush(entity);
             } catch (final ObjectOptimisticLockingFailureException exception) {
                 final var message = "Die Daten wurden in der Zwischenzeit geändert. Bitte laden Sie die Seite neu!";
                 throw new OptimisticLockingException(message, exception);
@@ -90,7 +99,7 @@ public class AbfrageService {
                     "Der angegebene Name der Abfragevariante ist schon vorhanden, bitte wählen Sie daher einen anderen Namen und speichern Sie die Abfrage erneut.";
                 throw new UniqueViolationException(message);
             }
-            return this.abfrageDomainMapper.entity2Model(abfrageEntity);
+            return this.abfrageDomainMapper.entity2Model(entity);
         } else {
             throw new UniqueViolationException(
                 "Der angegebene Name der Abfrage ist schon vorhanden, bitte wählen Sie daher einen anderen Namen und speichern Sie die Abfrage erneut."
@@ -99,164 +108,163 @@ public class AbfrageService {
     }
 
     /**
-     * Die Methode führt ein Update das in der Datenbank befindlichen {@link InfrastrukturabfrageModel} identifiziert durch den Parameter id durch.
-     * Dieses muss sich im Status {@link StatusAbfrage#ANGELEGT} befinden.
+     * Diese Methode aktualisiert ein {@link AbfrageAngelegtModel}.
      *
-     * @param abfrage zum Updaten
-     * @return das geupdatete {@link InfrastrukturabfrageModel}
-     * @throws EntityNotFoundException           falls die Abfrage identifiziert durch die {@link InfrastrukturabfrageModel#getId()} nicht gefunden wird
-     * @throws UniqueViolationException          falls der Name der Abfrage {@link InfrastrukturabfrageModel#getAbfrage().getNameAbfrage} ()} bereits vorhanden ist
-     * @throws OptimisticLockingException        falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
-     * @throws AbfrageStatusNotAllowedException  falls sich die Abfrage nicht in einem zulässigen Status befindet
-     * @throws FileHandlingFailedException
-     * @throws FileHandlingWithS3FailedException
+     * @param abfrage zum Speichern
+     * @param id der Abfrage
+     * @return das gespeicherte {@link AbfrageModel}
+     * @throws UniqueViolationException   falls der Name der Abfrage oder der Abfragevariante bereits vorhanden ist.
+     * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist.
+     * @throws EntityNotFoundException falls die Abfrage oder das referenzierte Bauvorhaben nicht existiert.
+     * @throws AbfrageStatusNotAllowedException falls die zu aktualisierende Abfrage sich nicht im Status {@link StatusAbfrage#ANGELEGT} befindet.
+     * @throws FileHandlingFailedException       falls es beim Dateihandling zu einem Fehler gekommen ist.
+     * @throws FileHandlingWithS3FailedException falls es beim Dateihandling im S3-Storage zu einem Fehler gekommen ist.
      */
-    @Transactional
-    public InfrastrukturabfrageModel patchAbfrageAngelegt(
-        final InfrastrukturabfrageAngelegtModel abfrage,
-        final UUID id
-    )
+    public AbfrageModel patchAngelegt(final AbfrageAngelegtModel abfrage, final UUID id)
         throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, FileHandlingFailedException, FileHandlingWithS3FailedException {
-        final var originalAbfrageDb = this.getInfrastrukturabfrageById(id);
-        this.throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(
-                originalAbfrageDb.getAbfrage(),
-                StatusAbfrage.ANGELEGT
+        final var originalAbfrageDb = this.getById(id);
+        this.throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(originalAbfrageDb, StatusAbfrage.ANGELEGT);
+
+        if (ArtAbfrage.BAULEITPLANVERFAHREN.equals(abfrage.getArtAbfrage())) {
+            return patchAngelegt(
+                (BauleitplanverfahrenAngelegtModel) abfrage,
+                (BauleitplanverfahrenModel) originalAbfrageDb
             );
+        } else {
+            final var message = "Die Art der Abfrage wird nicht unterstützt.";
+            log.error(message);
+            throw new EntityNotFoundException(message);
+        }
+    }
+
+    /**
+     * Diese Methode aktualisiert ein {@link BauleitplanverfahrenAngelegtModel}.
+     *
+     * @param abfrage mit den Attributen zum Speichern
+     * @param originalAbfrageDb welche mit den im Parameter gegebenen abfrage gegebenen Werten aktualisiert und gespeichert wird.
+     * @return das gespeicherte {@link AbfrageModel}
+     * @throws UniqueViolationException   falls der Name der Abfrage oder der Abfragevariante bereits vorhanden ist.
+     * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist.
+     * @throws EntityNotFoundException falls das referenzierte Bauvorhaben nicht existiert.
+     * @throws FileHandlingFailedException       falls es beim Dateihandling zu einem Fehler gekommen ist.
+     * @throws FileHandlingWithS3FailedException falls es beim Dateihandling im S3-Storage zu einem Fehler gekommen ist.
+     */
+    protected AbfrageModel patchAngelegt(
+        BauleitplanverfahrenAngelegtModel abfrage,
+        BauleitplanverfahrenModel originalAbfrageDb
+    )
+        throws FileHandlingFailedException, FileHandlingWithS3FailedException, UniqueViolationException, OptimisticLockingException, EntityNotFoundException {
         dokumentService.deleteDokumenteFromOriginalDokumentenListWhichAreMissingInParameterAdaptedDokumentenListe(
-            abfrage.getAbfrage().getDokumente(),
-            originalAbfrageDb.getAbfrage().getDokumente()
+            abfrage.getDokumente(),
+            originalAbfrageDb.getDokumente()
         );
         final var abfrageToSave = this.abfrageDomainMapper.request2Model(abfrage, originalAbfrageDb);
-        return this.saveInfrastrukturabfrage(abfrageToSave);
+        return this.save(abfrageToSave);
     }
 
     /**
-     * Die Methode führt ein Update das in der Datenbank befindlichen {@link InfrastrukturabfrageModel} identifiziert durch den Parameter id durch.
-     * Dieses muss sich im Status {@link StatusAbfrage#IN_BEARBEITUNG_SACHBEARBEITUNG} befinden.
+     * Diese Methode aktualisiert ein {@link AbfrageInBearbeitungSachbearbeitungModel}.
      *
-     * @param abfrage zum zum Updaten
-     * @return das geupdatete {@link InfrastrukturabfrageModel}
-     * @throws EntityNotFoundException    falls die Abfrage identifiziert durch die {@link InfrastrukturabfrageModel#getId()} nicht gefunden wird
-     * @throws UniqueViolationException   falls der Name der Abfrage {@link InfrastrukturabfrageModel#getAbfrage().getNameAbfrage} ()} bereits vorhanden ist
-     * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
+     * @param abfrage zum Speichern
+     * @param id der Abfrage
+     * @return das gespeicherte {@link AbfrageModel}
+     * @throws UniqueViolationException   falls der Name der Abfrage oder der Abfragevariante bereits vorhanden ist.
+     * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist.
+     * @throws EntityNotFoundException falls das referenzierte Bauvorhaben nicht existiert.
+     * @throws AbfrageStatusNotAllowedException falls die zu aktualisierende Abfrage sich nicht im Status {@link StatusAbfrage#IN_BEARBEITUNG_SACHBEARBEITUNG} befindet.
      */
-    public InfrastrukturabfrageModel patchAbfrageInBearbeitungSachbearbeitung(
-        final InfrastrukturabfrageInBearbeitungSachbearbeitungModel abfrage,
+    public AbfrageModel patchInBearbeitungSachbearbeitung(
+        final AbfrageInBearbeitungSachbearbeitungModel abfrage,
         final UUID id
     )
         throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException {
-        final var originalAbfrageDb = this.getInfrastrukturabfrageById(id);
+        final var originalAbfrageDb = this.getById(id);
         this.throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(
-                originalAbfrageDb.getAbfrage(),
+                originalAbfrageDb,
                 StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG
             );
-        final var abfrageToSave = this.abfrageDomainMapper.request2Model(abfrage, originalAbfrageDb);
-        return this.saveInfrastrukturabfrage(abfrageToSave);
+
+        if (ArtAbfrage.BAULEITPLANVERFAHREN.equals(abfrage.getArtAbfrage())) {
+            final var abfrageToSave =
+                this.abfrageDomainMapper.request2Model(
+                        (BauleitplanverfahrenInBearbeitungSachbearbeitungModel) abfrage,
+                        (BauleitplanverfahrenModel) originalAbfrageDb
+                    );
+            return this.save(abfrageToSave);
+        } else {
+            final var message = "Die Art der Abfrage wird nicht unterstützt.";
+            log.error(message);
+            throw new EntityNotFoundException(message);
+        }
     }
 
     /**
-     * Die Methode führt ein Update das in der Datenbank befindlichen {@link InfrastrukturabfrageModel} identifiziert durch den Parameter id durch.
-     * Dieses muss sich im Status {@link StatusAbfrage#IN_BEARBEITUNG_FACHREFERATE} befinden.
+     * Diese Methode aktualisiert ein {@link AbfrageInBearbeitungFachreferatModel}.
      *
-     * @param abfrage zum zum Updaten
-     * @return das geupdatete {@link InfrastrukturabfrageModel}
-     * @throws EntityNotFoundException    falls die Abfrage identifiziert durch die {@link InfrastrukturabfrageModel#getId()} nicht gefunden wird
-     * @throws UniqueViolationException   falls der Name der Abfrage {@link InfrastrukturabfrageModel#getAbfrage().getNameAbfrage} ()} bereits vorhanden ist
-     * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
+     * @param abfrage zum Speichern
+     * @param id der Abfrage
+     * @return das gespeicherte {@link AbfrageModel}
+     * @throws UniqueViolationException   falls der Name der Abfrage oder der Abfragevariante bereits vorhanden ist.
+     * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist.
+     * @throws EntityNotFoundException falls das referenzierte Bauvorhaben nicht existiert.
+     * @throws AbfrageStatusNotAllowedException falls die zu aktualisierende Abfrage sich nicht im Status {@link StatusAbfrage#IN_BEARBEITUNG_FACHREFERATE} befindet.
      */
-    public InfrastrukturabfrageModel patchAbfrageInBearbeitungFachreferate(
-        final InfrastrukturabfrageInBearbeitungFachreferateModel abfrage,
+    public AbfrageModel patchInBearbeitungFachreferat(
+        final AbfrageInBearbeitungFachreferatModel abfrage,
         final UUID id
     )
         throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException {
-        final var originalAbfrageDb = this.getInfrastrukturabfrageById(id);
+        final var originalAbfrageDb = this.getById(id);
         this.throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(
-                originalAbfrageDb.getAbfrage(),
+                originalAbfrageDb,
                 StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE
             );
-        final var abfrageToSave = this.abfrageDomainMapper.request2Model(abfrage, originalAbfrageDb);
-        return this.saveInfrastrukturabfrage(abfrageToSave);
-    }
-
-    /**
-     * Diese Methode führt für eine Abfrage, die durch die {@link InfrastrukturabfrageModel#getId()} identifiziert ist, eine Statusänderung durch.
-     *
-     * @param id            {@link InfrastrukturabfrageModel#getId()} der Abfrage zum Updaten
-     * @param statusAbfrage neuer {@link StatusAbfrage}
-     * @param anmerkung     falls ein Nutzer eine Anmerkung bei einem Statusübergang macht wird diese an die Abfrage Anmerkung angehängt
-     * @return das geupdatete {@link InfrastrukturabfrageModel}
-     * @throws EntityNotFoundException       falls die Abfrage identifiziert durch die {@link InfrastrukturabfrageModel#getId()} nicht gefunden wird
-     * @throws UniqueViolationException      falls der Name der Abfrage {@link InfrastrukturabfrageModel#getAbfrage().getNameAbfrage} ()} bereits vorhanden ist
-     * @throws OptimisticLockingException    falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
-     * @throws StringLengthExceededException wenn die Anmerkung zur Statusänderung die max. Länge überschreitet
-     */
-    public InfrastrukturabfrageModel changeStatusAbfrage(
-        final UUID id,
-        final StatusAbfrage statusAbfrage,
-        final String anmerkung
-    )
-        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, StringLengthExceededException {
-        var originalAbfrageDb = this.getInfrastrukturabfrageById(id);
-        originalAbfrageDb.getAbfrage().setStatusAbfrage(statusAbfrage);
-        originalAbfrageDb = this.addAbfrageAnmerkung(originalAbfrageDb, anmerkung);
-        return this.saveInfrastrukturabfrage(originalAbfrageDb);
-    }
-
-    /**
-     * Fügt der Abfrage eine Anmerkung hinzu oder aktualisiert sie.
-     *
-     * @param infrastrukturabfrageModel Das InfrastrukturabfrageModel, zu dem die Anmerkung hinzugefügt wird.
-     * @param anmerkung                 Die Anmerkung, die hinzugefügt oder angehängt wird.
-     * @return Das aktualisierte InfrastrukturabfrageModel mit der hinzugefügten oder aktualisierten Anmerkung.
-     */
-    public InfrastrukturabfrageModel addAbfrageAnmerkung(
-        final InfrastrukturabfrageModel infrastrukturabfrageModel,
-        final String anmerkung
-    ) {
-        if (StringUtils.isNotEmpty(anmerkung)) {
-            if (infrastrukturabfrageModel.getAbfrage().getAnmerkung() == null) {
-                infrastrukturabfrageModel.getAbfrage().setAnmerkung(anmerkung);
-            } else {
-                infrastrukturabfrageModel
-                    .getAbfrage()
-                    .setAnmerkung(infrastrukturabfrageModel.getAbfrage().getAnmerkung().concat("\n").concat(anmerkung));
-            }
+        if (ArtAbfrage.BAULEITPLANVERFAHREN.equals(abfrage.getArtAbfrage())) {
+            final var abfrageToSave =
+                this.abfrageDomainMapper.request2Model(
+                        (BauleitplanverfahrenInBearbeitungFachreferatModel) abfrage,
+                        (BauleitplanverfahrenModel) originalAbfrageDb
+                    );
+            return this.save(abfrageToSave);
+        } else {
+            final var message = "Die Art der Abfrage wird nicht unterstützt.";
+            log.error(message);
+            throw new EntityNotFoundException(message);
         }
-        return infrastrukturabfrageModel;
     }
 
     /**
-     * Diese Methode löscht ein {@link InfrastrukturabfrageModel}.
+     * Diese Methode löscht ein {@link AbfrageModel}.
      *
-     * @param id zum Identifizieren des {@link InfrastrukturabfrageModel}.
-     * @throws EntityNotFoundException          falls die Abfrage identifiziert durch die {@link InfrastrukturabfrageModel#getId()} nicht gefunden wird.
+     * @param id zum Identifizieren des {@link AbfrageModel}.
+     * @throws EntityNotFoundException          falls die Abfrage identifiziert durch die {@link AbfrageModel#getId()} nicht gefunden wird.
      * @throws EntityIsReferencedException      falls ein {@link BauvorhabenModel} in der Abfrage referenziert wird.
      * @throws UserRoleNotAllowedException      falls der Nutzer nicht die richtige Rolle hat.
      * @throws AbfrageStatusNotAllowedException falls die Abfrage den falschen Status hat..
      */
-    public void deleteInfrasturkturabfrageById(final UUID id)
+    public void deleteById(final UUID id)
         throws EntityNotFoundException, EntityIsReferencedException, UserRoleNotAllowedException, AbfrageStatusNotAllowedException {
-        final var abfrage = this.getInfrastrukturabfrageById(id);
-        this.throwUserRoleNotAllowedOrAbfrageStatusNotAlloweExceptionWhenDeleteAbfrage(abfrage);
-        this.throwEntityIsReferencedExceptionWhenAbfrageIsReferencingBauvorhaben(abfrage.getAbfrage());
-        this.infrastrukturabfrageRepository.deleteById(id);
+        final var abfrage = this.getById(id);
+        this.throwUserRoleNotAllowedOrAbfrageStatusNotAllowedExceptionWhenNotTheCorrectUserWithTheCorrectRole(abfrage);
+        this.throwEntityIsReferencedExceptionWhenAbfrageIsReferencingBauvorhaben(abfrage);
+        this.abfrageRepository.deleteById(id);
     }
 
     /**
-     * Diese Methode überprüft ob der Nutzer die richtige Rolle hat und die Abfrage im richtigen Status, um sie zu löschen.
-     * Dabei wird auch geprüft, ob der Nutzer der Abfrage zugeordnet ist per sub Id
+     * Diese Methode überprüft ob der Nutzer die richtige Rolle besitzt und die Abfrage sich im richtigen Status befindet.
+     * Dabei wird auch geprüft, ob der die zur Abfrage zugeordneten sub-ID (Subject-ID der Security-Session) mit der sub-ID des Nutzers übereinstimmt.
      *
      * @param abfrage zum Identifizieren des Status.
      * @throws UserRoleNotAllowedException      falls der Nutzer nicht die richtige Rolle hat.
-     * @throws AbfrageStatusNotAllowedException falls die Abfrage den falschen Status hat oder der Sub des Nutzers nicht mit dem Sub der Abfrage übereinstimmt
+     * @throws AbfrageStatusNotAllowedException falls die Abfrage den falschen Status hat oder der Sub des Nutzers nicht mit dem Sub der Abfrage übereinstimmt.
      */
-    public void throwUserRoleNotAllowedOrAbfrageStatusNotAlloweExceptionWhenDeleteAbfrage(
-        InfrastrukturabfrageModel abfrage
+    protected void throwUserRoleNotAllowedOrAbfrageStatusNotAllowedExceptionWhenNotTheCorrectUserWithTheCorrectRole(
+        final AbfrageModel abfrage
     ) throws UserRoleNotAllowedException, AbfrageStatusNotAllowedException {
         var roles = authenticationUtils.getUserRoles();
         if (!roles.contains(AuthenticationUtils.ROLE_ADMIN)) {
             if (!roles.contains(AuthenticationUtils.ROLE_ABFRAGEERSTELLUNG)) {
-                throw new UserRoleNotAllowedException("Keine Berechtigung zum Löschen der Abfrage");
+                throw new UserRoleNotAllowedException("Keine Berechtigung zum Löschen der Abfrage.");
             } else if (!abfrage.getSub().equals(authenticationUtils.getUserSub())) {
                 log.error(
                     "User {} hat versucht, die Abfrage {} von User {} zu löschen.",
@@ -264,8 +272,10 @@ public class AbfrageService {
                     abfrage.getId(),
                     abfrage.getSub()
                 );
-                throw new UserRoleNotAllowedException("Keine Berechtigung zum Löschen der Abfrage");
-            } else if (abfrage.getAbfrage().getStatusAbfrage() != StatusAbfrage.ANGELEGT) {
+                throw new UserRoleNotAllowedException(
+                    "Keine Berechtigung zum Löschen der Abfrage, da diese durch einen anderen Nutzer angelegt wurde."
+                );
+            } else if (abfrage.getStatusAbfrage() != StatusAbfrage.ANGELEGT) {
                 throw new AbfrageStatusNotAllowedException(
                     "Die Abfrage kann nur im Status 'angelegt' gelöscht werden."
                 );
@@ -282,13 +292,16 @@ public class AbfrageService {
      */
     protected void throwEntityIsReferencedExceptionWhenAbfrageIsReferencingBauvorhaben(final AbfrageModel abfrage)
         throws EntityIsReferencedException {
-        final var bauvorhaben = abfrage.getBauvorhaben();
-        if (ObjectUtils.isNotEmpty(bauvorhaben)) {
+        Optional<Bauvorhaben> bauvorhaben = Optional.empty();
+        if (ObjectUtils.isNotEmpty(abfrage.getBauvorhaben())) {
+            bauvorhaben = bauvorhabenRepository.findById(abfrage.getBauvorhaben());
+        }
+        if (bauvorhaben.isPresent()) {
             final var message =
                 "Die Abfrage " +
-                abfrage.getNameAbfrage() +
+                abfrage.getName() +
                 " referenziert das Bauvorhaben " +
-                bauvorhaben.getNameVorhaben() +
+                bauvorhaben.get().getNameVorhaben() +
                 ".";
             log.error(message);
             throw new EntityIsReferencedException(message);
@@ -303,14 +316,14 @@ public class AbfrageService {
      * @param statusAbfrage gültiger Status.
      * @throws AbfrageStatusNotAllowedException falls das {@link AbfrageModel} einen unzulässigen Status hat
      */
-    protected void throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(
+    public void throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(
         final AbfrageModel abfrage,
         final StatusAbfrage statusAbfrage
     ) throws AbfrageStatusNotAllowedException {
         if (abfrage.getStatusAbfrage() != statusAbfrage) {
             final var message =
                 "Die Abfrage " +
-                abfrage.getNameAbfrage() +
+                abfrage.getName() +
                 " ist im Status " +
                 abfrage.getStatusAbfrage().toString() +
                 ". Der gültige Status wäre " +
@@ -318,6 +331,34 @@ public class AbfrageService {
                 ".";
             log.error(message);
             throw new AbfrageStatusNotAllowedException(message);
+        }
+    }
+
+    /**
+     * Ermittelt die Abfrage auf Basis der im Parameter gegebenen ID einer Abfragevariante.
+     *
+     * @param abfragevarianteId zum ermitteln der Abfrage.
+     * @return die gefundene Abfrage.
+     * @throws EntityNotFoundException falls keine Abfrage auf Basis der Abfragevariante ID eindeutig ermittelt werden konnte.
+     */
+    public AbfrageModel getByAbfragevarianteId(final UUID abfragevarianteId) throws EntityNotFoundException {
+        final var id = abfragevarianteId.toString();
+
+        final var abfrageIds = Stream
+            .of(
+                abfragevarianteBauleitplanverfahrenRepository.findAbfrageIdForAbfragevarianteById(id),
+                abfragevarianteBauleitplanverfahrenRepository.findAbfrageIdForAbfragevarianteSachbearbeitungById(id)
+            )
+            .filter(Optional::isPresent)
+            .map(Optional::get)
+            .map(UUID::fromString)
+            .collect(Collectors.toList());
+        if (abfrageIds.size() == 1) {
+            return this.getById(abfrageIds.get(0));
+        } else {
+            final var message = "Abfrage auf Basis einer Abfragevariante ID nicht eindeutig auffindbar.";
+            log.error(message);
+            throw new EntityNotFoundException(message);
         }
     }
 }

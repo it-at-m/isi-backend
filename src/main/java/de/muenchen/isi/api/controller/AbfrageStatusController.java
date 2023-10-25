@@ -34,7 +34,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @Tag(name = "AbfrageStatus", description = "API to set the status for a Abfrage")
 @Validated
-@RequestMapping(value = "infrastruktur-abfrage")
+@RequestMapping(value = "abfrage-status")
 public class AbfrageStatusController {
 
     private final AbfrageStatusService abfrageStatusService;
@@ -57,7 +57,7 @@ public class AbfrageStatusController {
         }
     )
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_READ_TRANSITIONS.name())")
-    public ResponseEntity<List<TransitionDto>> transitionsInfrastrukturabfrage(@PathVariable @NotNull final UUID id)
+    public ResponseEntity<List<TransitionDto>> transitionsAbfrage(@PathVariable @NotNull final UUID id)
         throws EntityNotFoundException {
         final List<TransitionDto> transistions = abfrageStatusService
             .getStatusAbfrageEventsBasedOnStateAndAuthorities(id)
@@ -69,7 +69,7 @@ public class AbfrageStatusController {
 
     @PutMapping("{id}/freigabe")
     @Transactional(rollbackFor = OptimisticLockingException.class)
-    @Operation(summary = "Setzt eine Infrastrukturabfrage auf den Status OFFEN")
+    @Operation(summary = "Setzt eine Abfrage auf den Status OFFEN")
     @ApiResponses(
         value = {
             @ApiResponse(responseCode = "200", description = "OK -> Abfrage wurde erfolgreich freigegeben."),
@@ -86,7 +86,7 @@ public class AbfrageStatusController {
         }
     )
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_FREIGABE_ABFRAGE.name())")
-    public ResponseEntity<Void> freigabeInfrastrukturabfrage(
+    public ResponseEntity<Void> freigabeAbfrage(
         @PathVariable @NotNull final UUID id,
         @RequestParam(value = "anmerkung", required = false, defaultValue = "") String anmerkung
     ) throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException {
@@ -96,7 +96,7 @@ public class AbfrageStatusController {
 
     @PutMapping("{id}/abbrechen")
     @Transactional
-    @Operation(summary = "Setzt eine Infrastrukturabfrage auf den Status ABBRUCH")
+    @Operation(summary = "Setzt eine Abfrage auf den Status ABBRUCH")
     @ApiResponses(
         value = {
             @ApiResponse(responseCode = "200", description = "OK -> Abfrage wurde erfolgreich abbgebrochen."),
@@ -113,7 +113,7 @@ public class AbfrageStatusController {
         }
     )
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_ABBRECHEN_ABFRAGE.name())")
-    public ResponseEntity<Void> abbrechenInfrastrukturabfrage(
+    public ResponseEntity<Void> abbrechenAbfrage(
         @PathVariable @NotNull final UUID id,
         @RequestParam(value = "anmerkung", required = false, defaultValue = "") String anmerkung
     ) throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException {
@@ -123,7 +123,7 @@ public class AbfrageStatusController {
 
     @PutMapping("{id}/zurueck-an-abfrageerstellung")
     @Transactional
-    @Operation(summary = "Setzt eine Infrastrukturabfrage auf den Status ANGELEGT")
+    @Operation(summary = "Setzt eine Abfrage auf den Status ANGELEGT")
     @ApiResponses(
         value = {
             @ApiResponse(
@@ -145,7 +145,7 @@ public class AbfrageStatusController {
     @PreAuthorize(
         "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_ZURUECK_AN_ABFRAGEERSTELLUNG_ABFRAGE.name())"
     )
-    public ResponseEntity<Void> zurueckAbfrageerstellungInfrastrukturabfrage(
+    public ResponseEntity<Void> zurueckAnAbfrageerstellungAbfrage(
         @PathVariable @NotNull final UUID id,
         @RequestParam(value = "anmerkung", required = false, defaultValue = "") String anmerkung
     ) throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException {
@@ -155,7 +155,7 @@ public class AbfrageStatusController {
 
     @PutMapping("{id}/in-bearbeitung-setzen")
     @Transactional
-    @Operation(summary = "Setzt eine Infrastrukturabfrage auf den Status IN_BEARBEITUNG_SACHBEARBEITUNG")
+    @Operation(summary = "Setzt eine Abfrage auf den Status IN_BEARBEITUNG_SACHBEARBEITUNG")
     @ApiResponses(
         value = {
             @ApiResponse(
@@ -177,7 +177,7 @@ public class AbfrageStatusController {
     @PreAuthorize(
         "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_IN_BEARBEITUNG_SETZTEN_ABFRAGE.name())"
     )
-    public ResponseEntity<Void> inBearbeitungSetzenInfrastrukturabfrage(
+    public ResponseEntity<Void> inBearbeitungSetzenAbfrage(
         @PathVariable @NotNull final UUID id,
         @RequestParam(value = "anmerkung", required = false, defaultValue = "") String anmerkung
     ) throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException {
@@ -187,7 +187,7 @@ public class AbfrageStatusController {
 
     @PutMapping("{id}/zurueck-an-sachbearbeitung")
     @Transactional
-    @Operation(summary = "Setzt eine Infrastrukturabfrage auf den Status IN_BEARBEITUNG_SACHBEARBEITUNG")
+    @Operation(summary = "Setzt eine Abfrage auf den Status IN_BEARBEITUNG_SACHBEARBEITUNG")
     @ApiResponses(
         value = {
             @ApiResponse(
@@ -209,7 +209,7 @@ public class AbfrageStatusController {
     @PreAuthorize(
         "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_ZURUECK_AN_SACHBEARBEITUNG_ABFRAGE.name())"
     )
-    public ResponseEntity<Void> zurueckAnSachbearbeitungInfrastrukturabfrage(
+    public ResponseEntity<Void> zurueckAnSachbearbeitungAbfrage(
         @PathVariable @NotNull final UUID id,
         @RequestParam(value = "anmerkung", required = false, defaultValue = "") String anmerkung
     ) throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException {
@@ -217,9 +217,9 @@ public class AbfrageStatusController {
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping("{id}/keine-bearbeitung-noetig")
+    @PutMapping("{id}/erledigt-ohne-fachreferat")
     @Transactional
-    @Operation(summary = "Setzt eine Infrastrukturabfrage auf den Status ERLEDIGT_OHNE_FACHREFERAT")
+    @Operation(summary = "Setzt eine Abfrage auf den Status ERLEDIGT_OHNE_FACHREFERAT")
     @ApiResponses(
         value = {
             @ApiResponse(responseCode = "200", description = "OK -> Abfrage wurde erfolgreich erledigt."),
@@ -238,17 +238,17 @@ public class AbfrageStatusController {
     @PreAuthorize(
         "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_KEINE_BEARBEITUNG_NOETIG_ABFRAGE.name())"
     )
-    public ResponseEntity<Void> keineBearbeitungNoetig(
+    public ResponseEntity<Void> erledigtOhneFachreferat(
         @PathVariable @NotNull final UUID id,
         @RequestParam(value = "anmerkung", required = false, defaultValue = "") String anmerkung
     ) throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException {
-        this.abfrageStatusService.keineBearbeitungNoetig(id, anmerkung);
+        this.abfrageStatusService.erledigtOhneFachreferat(id, anmerkung);
         return ResponseEntity.ok().build();
     }
 
     @PutMapping("{id}/verschicken-der-stellungnahme")
     @Transactional
-    @Operation(summary = "Setzt eine Infrastrukturabfrage auf den Status IN_BEARBEITUNG_FACHREFERATE")
+    @Operation(summary = "Setzt eine Abfrage auf den Status IN_BEARBEITUNG_FACHREFERATE")
     @ApiResponses(
         value = {
             @ApiResponse(
@@ -270,7 +270,7 @@ public class AbfrageStatusController {
     @PreAuthorize(
         "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_VERSCHICKEN_DER_STELLUNGNAHME_ABFRAGE.name())"
     )
-    public ResponseEntity<Void> verschickenDerStellungnahmeInfrastrukturabfrage(
+    public ResponseEntity<Void> verschickenDerStellungnahme(
         @PathVariable @NotNull final UUID id,
         @RequestParam(value = "anmerkung", required = false, defaultValue = "") String anmerkung
     ) throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException {
@@ -280,7 +280,7 @@ public class AbfrageStatusController {
 
     @PutMapping("{id}/bedarfsmeldung-erfolgt")
     @Transactional
-    @Operation(summary = "Setzt eine Infrastrukturabfrage auf den Status BEDARFSMELDUNG_ERFOLGT")
+    @Operation(summary = "Setzt eine Abfrage auf den Status BEDARFSMELDUNG_ERFOLGT")
     @ApiResponses(
         value = {
             @ApiResponse(responseCode = "200", description = "OK -> Die Bedarfsmeldung der Fachreferate ist erfolgt"),
@@ -299,7 +299,7 @@ public class AbfrageStatusController {
     @PreAuthorize(
         "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_BEDARFSMELDUNG_ERFOLGTE_ABFRAGE.name())"
     )
-    public ResponseEntity<Void> bedarfsmeldungErfolgtInfrastrukturAbfrage(
+    public ResponseEntity<Void> bedarfsmeldungErfolgt(
         @PathVariable @NotNull final UUID id,
         @RequestParam(value = "anmerkung", required = false, defaultValue = "") String anmerkung
     ) throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException {
@@ -307,9 +307,9 @@ public class AbfrageStatusController {
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping("{id}/speicher-von-soz-infrastruktur-versorgung")
+    @PutMapping("{id}/erledigt-mit-fachreferat")
     @Transactional
-    @Operation(summary = "Setzt eine Infrastrukturabfrage auf den Status ERLEDIGT_MIT_FACHREFERAT")
+    @Operation(summary = "Setzt eine Abfrage auf den Status ERLEDIGT_MIT_FACHREFERAT")
     @ApiResponses(
         value = {
             @ApiResponse(responseCode = "200", description = "OK -> Abfrage wurde erfolgreich erledigt."),
@@ -328,17 +328,17 @@ public class AbfrageStatusController {
     @PreAuthorize(
         "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_SPEICHERN_VON_SOZIALINFRASTRUKTUR_VERSORGUNG_ABFRAGE.name())"
     )
-    public ResponseEntity<Void> speichernVonSozialinfrastrukturVersorgungInfrastrukturAbfrage(
+    public ResponseEntity<Void> erledigtMitFachreferat(
         @PathVariable @NotNull final UUID id,
         @RequestParam(value = "anmerkung", required = false, defaultValue = "") String anmerkung
     ) throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException {
-        this.abfrageStatusService.speichernVonSozialinfrastrukturVersorgung(id, anmerkung);
+        this.abfrageStatusService.erledigtMitFachreferat(id, anmerkung);
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping("{id}/erneute-bearbeitung")
+    @PutMapping("{id}/erneute-bearbeitung-sachbearbeitung")
     @Transactional
-    @Operation(summary = "Setzt eine Infrastrukturabfrage auf den Status IN_BEARBEITUNG_SACHBEARBEITUNG")
+    @Operation(summary = "Setzt eine Abfrage auf den Status IN_BEARBEITUNG_SACHBEARBEITUNG")
     @ApiResponses(
         value = {
             @ApiResponse(
@@ -360,11 +360,11 @@ public class AbfrageStatusController {
     @PreAuthorize(
         "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_ERNEUTE_BEARBEITUNG_ABFRAGE.name())"
     )
-    public ResponseEntity<Void> erneuteBearbeitungInfrastrukturabfrage(
+    public ResponseEntity<Void> erneuteBearbeitungSachbearbeitung(
         @PathVariable @NotNull final UUID id,
         @RequestParam(value = "anmerkung", required = false, defaultValue = "") String anmerkung
     ) throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException {
-        this.abfrageStatusService.erneuteBearbeitenAbfrage(id, anmerkung);
+        this.abfrageStatusService.erneuteBearbeitungSachbearbeitung(id, anmerkung);
         return ResponseEntity.ok().build();
     }
 }

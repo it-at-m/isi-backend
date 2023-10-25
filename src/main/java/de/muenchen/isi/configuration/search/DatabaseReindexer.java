@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 /**
  * Diese Klasse führt nach dem Boot des Backends bei korrekt gesetzter Property "spring.jpa.properties.hibernate.search.reindex-database" eine Reindizierung der Datenbank durch.
  *
- * Eine Reindizierung der in der Datenbank gespeicherten Entiäten ist z.B. dann erforderlich, falls eine Datenmodell- oder Indexänderung vorgenommen wurde.
+ * Eine Reindizierung der in der Datenbank gespeicherten Entitäten ist z.B. dann erforderlich, falls eine Datenmodell- oder Indexänderung vorgenommen wurde.
  */
 @Component
 @Data
@@ -62,7 +62,7 @@ public class DatabaseReindexer implements CommandLineRunner {
 
     private SearchQueryModel getSearchQueryModelForAllEntities() {
         final var searchQueryModel = new SearchQueryModel();
-        searchQueryModel.setSelectInfrastrukturabfrage(true);
+        searchQueryModel.setSelectBauleitplanverfahren(true);
         searchQueryModel.setSelectBauvorhaben(true);
         searchQueryModel.setSelectGrundschule(true);
         searchQueryModel.setSelectGsNachmittagBetreuung(true);

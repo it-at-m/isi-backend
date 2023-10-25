@@ -1,7 +1,7 @@
 package de.muenchen.isi.api.dto.search.response;
 
 import de.muenchen.isi.api.dto.common.StadtbezirkDto;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVorhaben;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVerfahren;
 import java.math.BigDecimal;
 import java.util.Set;
 import java.util.UUID;
@@ -22,5 +22,5 @@ public class BauvorhabenSearchResultDto extends SearchResultDto {
 
     private BigDecimal grundstuecksgroesse;
 
-    private StandVorhaben standVorhaben;
+    private StandVerfahren standVerfahren;
 }

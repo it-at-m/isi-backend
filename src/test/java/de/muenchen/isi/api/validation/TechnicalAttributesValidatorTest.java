@@ -6,7 +6,7 @@ import static org.hamcrest.Matchers.is;
 import de.muenchen.isi.api.dto.BauabschnittDto;
 import de.muenchen.isi.api.dto.BaugebietDto;
 import de.muenchen.isi.api.dto.BaurateDto;
-import de.muenchen.isi.api.dto.abfrageAbfrageerstellungAngelegt.AbfragevarianteAngelegtDto;
+import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 
@@ -23,10 +23,8 @@ public class TechnicalAttributesValidatorTest {
         final var bauabschnittDto = new BauabschnittDto();
         bauabschnittDto.setTechnical(true);
         bauabschnittDto.setBaugebiete(List.of(baugebietDto));
-        final var abfragevarianteDto = new AbfragevarianteAngelegtDto();
-        abfragevarianteDto.setBauabschnitte(List.of(bauabschnittDto));
 
-        assertThat(this.technicalAttributesValidator.isValid(abfragevarianteDto, null), is(true));
+        assertThat(this.technicalAttributesValidator.isValid(List.of(bauabschnittDto), null), is(true));
     }
 
     @Test
@@ -38,10 +36,8 @@ public class TechnicalAttributesValidatorTest {
         final var bauabschnittDto = new BauabschnittDto();
         bauabschnittDto.setTechnical(true);
         bauabschnittDto.setBaugebiete(List.of(baugebietDto));
-        final var abfragevarianteDto = new AbfragevarianteAngelegtDto();
-        abfragevarianteDto.setBauabschnitte(List.of(bauabschnittDto));
 
-        assertThat(this.technicalAttributesValidator.isValid(abfragevarianteDto, null), is(true));
+        assertThat(this.technicalAttributesValidator.isValid(List.of(bauabschnittDto), null), is(true));
     }
 
     @Test
@@ -53,10 +49,8 @@ public class TechnicalAttributesValidatorTest {
         final var bauabschnittDto = new BauabschnittDto();
         bauabschnittDto.setTechnical(false);
         bauabschnittDto.setBaugebiete(List.of(baugebietDto));
-        final var abfragevarianteDto = new AbfragevarianteAngelegtDto();
-        abfragevarianteDto.setBauabschnitte(List.of(bauabschnittDto));
 
-        assertThat(this.technicalAttributesValidator.isValid(abfragevarianteDto, null), is(true));
+        assertThat(this.technicalAttributesValidator.isValid(List.of(bauabschnittDto), null), is(true));
     }
 
     @Test
@@ -68,30 +62,24 @@ public class TechnicalAttributesValidatorTest {
         final var bauabschnittDto = new BauabschnittDto();
         bauabschnittDto.setTechnical(false);
         bauabschnittDto.setBaugebiete(List.of(baugebietDto));
-        final var abfragevarianteDto = new AbfragevarianteAngelegtDto();
-        abfragevarianteDto.setBauabschnitte(List.of(bauabschnittDto));
 
-        assertThat(this.technicalAttributesValidator.isValid(abfragevarianteDto, null), is(false));
+        assertThat(this.technicalAttributesValidator.isValid(List.of(bauabschnittDto), null), is(false));
     }
 
     @Test
     void isNotValidOnlyTechnicalBauabschnitte() {
         final var bauabschnittDto = new BauabschnittDto();
         bauabschnittDto.setTechnical(true);
-        final var abfragevarianteDto = new AbfragevarianteAngelegtDto();
-        abfragevarianteDto.setBauabschnitte(List.of(bauabschnittDto));
 
-        assertThat(this.technicalAttributesValidator.isValid(abfragevarianteDto, null), is(false));
+        assertThat(this.technicalAttributesValidator.isValid(List.of(bauabschnittDto), null), is(false));
     }
 
     @Test
     void isNotValidOnlyNonTechnicalBauabschnitte() {
         final var bauabschnittDto = new BauabschnittDto();
         bauabschnittDto.setTechnical(false);
-        final var abfragevarianteDto = new AbfragevarianteAngelegtDto();
-        abfragevarianteDto.setBauabschnitte(List.of(bauabschnittDto));
 
-        assertThat(this.technicalAttributesValidator.isValid(abfragevarianteDto, null), is(false));
+        assertThat(this.technicalAttributesValidator.isValid(List.of(bauabschnittDto), null), is(false));
     }
 
     @Test
@@ -101,10 +89,8 @@ public class TechnicalAttributesValidatorTest {
         final var bauabschnittDto = new BauabschnittDto();
         bauabschnittDto.setTechnical(false);
         bauabschnittDto.setBaugebiete(List.of(baugebietDto));
-        final var abfragevarianteDto = new AbfragevarianteAngelegtDto();
-        abfragevarianteDto.setBauabschnitte(List.of(bauabschnittDto));
 
-        assertThat(this.technicalAttributesValidator.isValid(abfragevarianteDto, null), is(false));
+        assertThat(this.technicalAttributesValidator.isValid(List.of(bauabschnittDto), null), is(false));
     }
 
     @Test
@@ -114,15 +100,13 @@ public class TechnicalAttributesValidatorTest {
         final var bauabschnittDto = new BauabschnittDto();
         bauabschnittDto.setTechnical(true);
         bauabschnittDto.setBaugebiete(List.of(baugebietDto));
-        final var abfragevarianteDto = new AbfragevarianteAngelegtDto();
-        abfragevarianteDto.setBauabschnitte(List.of(bauabschnittDto));
 
-        assertThat(this.technicalAttributesValidator.isValid(abfragevarianteDto, null), is(false));
+        assertThat(this.technicalAttributesValidator.isValid(List.of(bauabschnittDto), null), is(false));
     }
 
     @Test
     void isValidNoBauratenInAbfragevariante() {
-        final var abfragevarianteDto = new AbfragevarianteAngelegtDto();
-        assertThat(this.technicalAttributesValidator.isValid(abfragevarianteDto, null), is(true));
+        assertThat(this.technicalAttributesValidator.isValid(null, null), is(true));
+        assertThat(this.technicalAttributesValidator.isValid(new ArrayList<>(), null), is(true));
     }
 }

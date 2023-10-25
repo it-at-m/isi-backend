@@ -7,7 +7,6 @@ import com.google.gson.JsonPrimitive;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusInfrastruktureinrichtung;
 import java.util.Arrays;
 import java.util.Objects;
-import org.apache.commons.lang3.StringUtils;
 import org.hibernate.search.mapper.pojo.bridge.ValueBridge;
 import org.hibernate.search.mapper.pojo.bridge.binding.ValueBindingContext;
 import org.hibernate.search.mapper.pojo.bridge.runtime.ValueBridgeToIndexedValueContext;
@@ -38,11 +37,7 @@ public class StatusInfrastruktureinrichtungSuggestionBinder implements Completio
             final var jsonObject = new JsonObject();
             final var jsonArray = new JsonArray();
             if (!Objects.equals(StatusInfrastruktureinrichtung.UNSPECIFIED, value)) {
-                Arrays
-                    .stream(StringUtils.split(value.getBezeichnung()))
-                    .filter(suggestion -> !suggestion.equals("-"))
-                    .map(JsonPrimitive::new)
-                    .forEach(jsonArray::add);
+                Arrays.stream(value.getSuggestions()).map(JsonPrimitive::new).forEach(jsonArray::add);
             }
             jsonObject.add("input", jsonArray);
             return jsonObject;

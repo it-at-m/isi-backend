@@ -16,9 +16,9 @@ public class BaurateModel extends BaseEntityModel {
 
     private Integer jahr; // JJJJ
 
-    private Integer anzahlWeGeplant;
+    private Integer weGeplant;
 
-    private BigDecimal geschossflaecheWohnenGeplant;
+    private BigDecimal gfWohnenGeplant;
 
     private FoerdermixModel foerdermix;
 }

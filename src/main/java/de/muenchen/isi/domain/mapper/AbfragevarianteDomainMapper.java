@@ -5,12 +5,12 @@
 package de.muenchen.isi.domain.mapper;
 
 import de.muenchen.isi.configuration.MapstructConfiguration;
-import de.muenchen.isi.domain.model.AbfragevarianteModel;
-import de.muenchen.isi.domain.model.abfrageAbfrageerstellerAngelegt.AbfragevarianteAngelegtModel;
-import de.muenchen.isi.domain.model.abfrageBedarfsmeldungInBearbeitungFachreferate.AbfragevarianteInBearbeitungFachreferateModel;
-import de.muenchen.isi.domain.model.abfrageSachbearbeitungInBearbeitungSachbearbeitung.AbfragevarianteInBearbeitungSachbearbeitungModel;
-import de.muenchen.isi.domain.model.abfrageSachbearbeitungInBearbeitungSachbearbeitung.AbfragevarianteSachbearbeitungInBearbeitungSachbearbeitungModel;
-import de.muenchen.isi.infrastructure.entity.Abfragevariante;
+import de.muenchen.isi.domain.model.AbfragevarianteBauleitplanverfahrenModel;
+import de.muenchen.isi.domain.model.abfrageAngelegt.AbfragevarianteBauleitplanverfahrenAngelegtModel;
+import de.muenchen.isi.domain.model.abfrageInBearbeitungFachreferat.AbfragevarianteBauleitplanverfahrenInBearbeitungFachreferatModel;
+import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.AbfragevarianteBauleitplanverfahrenInBearbeitungSachbearbeitungModel;
+import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.AbfragevarianteBauleitplanverfahrenSachbearbeitungInBearbeitungSachbearbeitungModel;
+import de.muenchen.isi.infrastructure.entity.AbfragevarianteBauleitplanverfahren;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -19,32 +19,37 @@ import org.mapstruct.Mappings;
 
 @Mapper(config = MapstructConfiguration.class, uses = { BauabschnittDomainMapper.class })
 public interface AbfragevarianteDomainMapper {
-    AbfragevarianteModel entity2Model(final Abfragevariante entity);
+    AbfragevarianteBauleitplanverfahrenModel entity2Model(final AbfragevarianteBauleitplanverfahren entity);
 
-    Abfragevariante model2entity(final AbfragevarianteModel model);
+    AbfragevarianteBauleitplanverfahren model2Entity(final AbfragevarianteBauleitplanverfahrenModel model);
 
     @Mappings(
         {
             @Mapping(target = "lastModifiedDateTime", ignore = true),
             @Mapping(target = "createdDateTime", ignore = true),
-            @Mapping(target = "abfragevarianteSachbearbeitung", ignore = true),
+            @Mapping(target = "gfWohnenPlanungsursaechlich", ignore = true),
+            @Mapping(target = "sobonOrientierungswertJahr", ignore = true),
+            @Mapping(target = "anmerkung", ignore = true),
+            @Mapping(target = "bedarfsmeldungFachreferate", ignore = true),
         }
     )
-    AbfragevarianteModel request2Model(
-        final AbfragevarianteAngelegtModel request,
-        final @MappingTarget AbfragevarianteModel model
+    AbfragevarianteBauleitplanverfahrenModel request2Model(
+        final AbfragevarianteBauleitplanverfahrenAngelegtModel request,
+        @MappingTarget final AbfragevarianteBauleitplanverfahrenModel model
     );
 
     @BeanMapping(ignoreByDefault = true)
     @Mappings(
         {
             @Mapping(target = "version", ignore = false),
-            @Mapping(target = "abfragevarianteSachbearbeitung", ignore = false),
+            @Mapping(target = "gfWohnenPlanungsursaechlich", ignore = false),
+            @Mapping(target = "sobonOrientierungswertJahr", ignore = false),
+            @Mapping(target = "anmerkung", ignore = false),
         }
     )
-    AbfragevarianteModel request2Model(
-        final AbfragevarianteSachbearbeitungInBearbeitungSachbearbeitungModel request,
-        final @MappingTarget AbfragevarianteModel model
+    AbfragevarianteBauleitplanverfahrenModel request2Model(
+        final AbfragevarianteBauleitplanverfahrenSachbearbeitungInBearbeitungSachbearbeitungModel request,
+        @MappingTarget final AbfragevarianteBauleitplanverfahrenModel model
     );
 
     @Mappings(
@@ -52,26 +57,23 @@ public interface AbfragevarianteDomainMapper {
             @Mapping(target = "id", ignore = true),
             @Mapping(target = "lastModifiedDateTime", ignore = true),
             @Mapping(target = "createdDateTime", ignore = true),
+            @Mapping(target = "bedarfsmeldungFachreferate", ignore = true),
         }
     )
-    AbfragevarianteModel request2Model(
-        final AbfragevarianteInBearbeitungSachbearbeitungModel request,
-        final @MappingTarget AbfragevarianteModel model
+    AbfragevarianteBauleitplanverfahrenModel request2Model(
+        final AbfragevarianteBauleitplanverfahrenInBearbeitungSachbearbeitungModel request,
+        @MappingTarget final AbfragevarianteBauleitplanverfahrenModel model
     );
 
     @BeanMapping(ignoreByDefault = true)
     @Mappings(
         {
             @Mapping(target = "version", ignore = false),
-            @Mapping(
-                target = "abfragevarianteSachbearbeitung.bedarfsmeldungFachreferate",
-                source = "bedarfsmeldungFachreferate",
-                ignore = false
-            ),
+            @Mapping(target = "bedarfsmeldungFachreferate", ignore = false),
         }
     )
-    AbfragevarianteModel request2Model(
-        final AbfragevarianteInBearbeitungFachreferateModel request,
-        final @MappingTarget AbfragevarianteModel model
+    AbfragevarianteBauleitplanverfahrenModel request2Model(
+        final AbfragevarianteBauleitplanverfahrenInBearbeitungFachreferatModel request,
+        @MappingTarget final AbfragevarianteBauleitplanverfahrenModel model
     );
 }

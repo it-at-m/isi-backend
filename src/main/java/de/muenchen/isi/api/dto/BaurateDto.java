@@ -24,9 +24,9 @@ public class BaurateDto extends BaseEntityDto {
     @Max(2100)
     private Integer jahr; // JJJJ
 
-    private Integer anzahlWeGeplant;
+    private Integer weGeplant;
 
-    private BigDecimal geschossflaecheWohnenGeplant;
+    private BigDecimal gfWohnenGeplant;
 
     @Valid
     @NotNull

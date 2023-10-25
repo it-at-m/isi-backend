@@ -24,7 +24,7 @@ import lombok.ToString;
     },
     indexes = {
         @Index(
-            name = "jahr_einrichtungstyp_altersklasse_wohnungstyp_index",
+            name = "sobon_orientierungswert_soziale_infrastruktur_jahr_einrichtungstyp_altersklasse_wohnungstyp_index",
             columnList = "jahr, einrichtungstyp, altersklasse, wohnungstyp"
         ),
     }

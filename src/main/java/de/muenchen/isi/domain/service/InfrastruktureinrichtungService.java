@@ -6,9 +6,12 @@ import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.mapper.InfrastruktureinrichtungDomainMapper;
 import de.muenchen.isi.domain.model.BauvorhabenModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.InfrastruktureinrichtungModel;
+import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Infrastruktureinrichtung;
+import de.muenchen.isi.infrastructure.repository.BauvorhabenRepository;
 import de.muenchen.isi.infrastructure.repository.InfrastruktureinrichtungRepository;
 import de.muenchen.isi.infrastructure.repository.common.KommentarRepository;
+import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +29,8 @@ public class InfrastruktureinrichtungService {
     private final InfrastruktureinrichtungDomainMapper infrastruktureinrichtungDomainMapper;
 
     private final KommentarRepository kommentarRepository;
+
+    private final BauvorhabenRepository bauvorhabenRepository;
 
     /**
      * Die Methode gibt ein {@link InfrastruktureinrichtungModel} identifiziert durch die ID zurück.
@@ -53,7 +58,7 @@ public class InfrastruktureinrichtungService {
      */
     public InfrastruktureinrichtungModel saveInfrastruktureinrichtung(
         final InfrastruktureinrichtungModel infrastruktureinrichtung
-    ) throws OptimisticLockingException {
+    ) throws OptimisticLockingException, EntityNotFoundException {
         Infrastruktureinrichtung entity =
             this.infrastruktureinrichtungDomainMapper.model2Entity(infrastruktureinrichtung);
         try {
@@ -107,13 +112,16 @@ public class InfrastruktureinrichtungService {
     protected void throwEntityIsReferencedExceptionWhenInfrastruktureinrichtungIsReferencingBauvorhaben(
         final InfrastruktureinrichtungModel infrastruktureinrichtung
     ) throws EntityIsReferencedException {
-        final var bauvorhaben = infrastruktureinrichtung.getBauvorhaben();
-        if (ObjectUtils.isNotEmpty(bauvorhaben)) {
+        Optional<Bauvorhaben> bauvorhaben = Optional.empty();
+        if (ObjectUtils.isNotEmpty(infrastruktureinrichtung.getBauvorhaben())) {
+            bauvorhaben = bauvorhabenRepository.findById(infrastruktureinrichtung.getBauvorhaben());
+        }
+        if (bauvorhaben.isPresent()) {
             final var message =
                 "Die Infrastruktureinrichtung " +
                 infrastruktureinrichtung.getNameEinrichtung() +
                 " referenziert das Bauvorhaben " +
-                bauvorhaben.getNameVorhaben() +
+                bauvorhaben.get().getNameVorhaben() +
                 ".";
             log.error(message);
             throw new EntityIsReferencedException(message);

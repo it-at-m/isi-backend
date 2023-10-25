@@ -9,14 +9,17 @@ import de.muenchen.isi.TestConstants;
 import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
-import de.muenchen.isi.domain.model.BauvorhabenModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.InfrastruktureinrichtungModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.KindergartenModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.KinderkrippeModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.MittelschuleModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.SchuleModel;
+import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVerfahren;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusInfrastruktureinrichtung;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.WesentlicheRechtsgrundlage;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Grundschule;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Kindergarten;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Kinderkrippe;
@@ -35,6 +38,7 @@ import org.mockito.quality.Strictness;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.transaction.annotation.Transactional;
 
 @ExtendWith(MockitoExtension.class)
 @SpringBootTest(classes = { IsiBackendApplication.class }, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -54,6 +58,7 @@ class InfrastruktureinrichtungServiceTest {
     @BeforeEach
     public void beforeEach() {
         infrastruktureinrichtungRepository.deleteAll();
+        bauvorhabenRepository.deleteAll();
 
         Kinderkrippe kinderkrippe1 = new Kinderkrippe();
         kinderkrippe1.setNameEinrichtung("Kinderkrippe 1");
@@ -84,14 +89,27 @@ class InfrastruktureinrichtungServiceTest {
     }
 
     @Test
+    @Transactional
     void getInfrastruktureinrichtungById() throws EntityNotFoundException {
-        final var entity = infrastruktureinrichtungRepository.findAll().get(0);
+        var entity = infrastruktureinrichtungRepository.findAll().get(0);
+
+        var bauvorhaben = new Bauvorhaben();
+        bauvorhaben.setNameVorhaben("Bauvorhaben");
+        bauvorhaben.setStandVerfahren(StandVerfahren.RAHMENPLANUNG);
+        bauvorhaben.setWesentlicheRechtsgrundlage(
+            List.of(WesentlicheRechtsgrundlage.EINFACHER_BEBAUUNGSPLAN_PARAGRAPH_30)
+        );
+        bauvorhaben.setSobonRelevant(UncertainBoolean.FALSE);
+        bauvorhaben = bauvorhabenRepository.saveAndFlush(bauvorhaben);
+        entity.setBauvorhaben(bauvorhaben);
+        entity = infrastruktureinrichtungRepository.saveAndFlush(entity);
 
         final var model = infrastruktureinrichtungService.getInfrastruktureinrichtungById(entity.getId());
 
-        assertThat(entity.getNameEinrichtung(), is(model.getNameEinrichtung()));
-        assertThat(entity.getInfrastruktureinrichtungTyp(), is(model.getInfrastruktureinrichtungTyp()));
-        assertThat(entity.getId(), is(model.getId()));
+        assertThat(model.getNameEinrichtung(), is(entity.getNameEinrichtung()));
+        assertThat(model.getBauvorhaben(), is(bauvorhaben.getId()));
+        assertThat(model.getInfrastruktureinrichtungTyp(), is(entity.getInfrastruktureinrichtungTyp()));
+        assertThat(model.getId(), is(entity.getId()));
 
         Assertions.assertThrows(
             EntityNotFoundException.class,
@@ -100,19 +118,31 @@ class InfrastruktureinrichtungServiceTest {
     }
 
     @Test
-    void saveInfrastruktureinrichtung() throws OptimisticLockingException {
+    @Transactional
+    void saveInfrastruktureinrichtung() throws OptimisticLockingException, EntityNotFoundException {
+        var bauvorhaben = new Bauvorhaben();
+        bauvorhaben.setNameVorhaben("Bauvorhaben");
+        bauvorhaben.setStandVerfahren(StandVerfahren.RAHMENPLANUNG);
+        bauvorhaben.setWesentlicheRechtsgrundlage(
+            List.of(WesentlicheRechtsgrundlage.EINFACHER_BEBAUUNGSPLAN_PARAGRAPH_30)
+        );
+        bauvorhaben.setSobonRelevant(UncertainBoolean.FALSE);
+        bauvorhaben = bauvorhabenRepository.saveAndFlush(bauvorhaben);
+
         MittelschuleModel mittelschule = new MittelschuleModel();
         mittelschule.setNameEinrichtung("Mittelschule");
         mittelschule.setStatus(StatusInfrastruktureinrichtung.UNGESICHERTE_PLANUNG_TF_KITA_STANDORT);
         mittelschule.setSchule(new SchuleModel());
         mittelschule.getSchule().setAnzahlKlassen(3);
         mittelschule.getSchule().setAnzahlPlaetze(30);
+        mittelschule.setBauvorhaben(bauvorhaben.getId());
 
         final var savedMittelschule = this.infrastruktureinrichtungService.saveInfrastruktureinrichtung(mittelschule);
 
         assertThat(savedMittelschule.getId(), is(notNullValue()));
         assertThat(savedMittelschule.getVersion(), is(0L));
         assertThat(savedMittelschule.getNameEinrichtung(), is(mittelschule.getNameEinrichtung()));
+        assertThat(savedMittelschule.getBauvorhaben(), is(bauvorhaben.getId()));
         assertThat(savedMittelschule.getInfrastruktureinrichtungTyp(), is(InfrastruktureinrichtungTyp.MITTELSCHULE));
         assertThat(savedMittelschule.getClass(), is(mittelschule.getClass()));
         assertThat(
@@ -126,13 +156,24 @@ class InfrastruktureinrichtungServiceTest {
     }
 
     @Test
+    @Transactional
     void updateInfrastruktureinrichtung() throws OptimisticLockingException, EntityNotFoundException {
+        var bauvorhaben = new Bauvorhaben();
+        bauvorhaben.setNameVorhaben("Bauvorhaben");
+        bauvorhaben.setStandVerfahren(StandVerfahren.RAHMENPLANUNG);
+        bauvorhaben.setWesentlicheRechtsgrundlage(
+            List.of(WesentlicheRechtsgrundlage.EINFACHER_BEBAUUNGSPLAN_PARAGRAPH_30)
+        );
+        bauvorhaben.setSobonRelevant(UncertainBoolean.FALSE);
+        bauvorhaben = bauvorhabenRepository.saveAndFlush(bauvorhaben);
+
         MittelschuleModel mittelschule = new MittelschuleModel();
         mittelschule.setNameEinrichtung("Mittelschule");
         mittelschule.setStatus(StatusInfrastruktureinrichtung.UNGESICHERTE_PLANUNG_TF_KITA_STANDORT);
         mittelschule.setSchule(new SchuleModel());
         mittelschule.getSchule().setAnzahlKlassen(3);
         mittelschule.getSchule().setAnzahlPlaetze(30);
+        mittelschule.setBauvorhaben(bauvorhaben.getId());
 
         final var savedMittelschule = this.infrastruktureinrichtungService.saveInfrastruktureinrichtung(mittelschule);
         assertThat(savedMittelschule.getVersion(), is(0L));
@@ -145,6 +186,7 @@ class InfrastruktureinrichtungServiceTest {
         assertThat(updatedMittelschule.getId(), is(savedMittelschule.getId()));
         assertThat(updatedMittelschule.getVersion(), is(1L));
         assertThat(updatedMittelschule.getNameEinrichtung(), is("Mittelschule XXX"));
+        assertThat(updatedMittelschule.getBauvorhaben(), is(bauvorhaben.getId()));
         assertThat(updatedMittelschule.getInfrastruktureinrichtungTyp(), is(InfrastruktureinrichtungTyp.MITTELSCHULE));
         assertThat(updatedMittelschule.getClass(), is(savedMittelschule.getClass()));
         assertThat(
@@ -170,6 +212,7 @@ class InfrastruktureinrichtungServiceTest {
     }
 
     @Test
+    @Transactional
     void deleteInfrastruktureinrichtungById() throws EntityIsReferencedException, EntityNotFoundException {
         final var entity = infrastruktureinrichtungRepository.findAll().get(0);
 
@@ -182,14 +225,24 @@ class InfrastruktureinrichtungServiceTest {
     }
 
     @Test
+    @Transactional
     void throwEntityIsReferencedExceptionWhenInfrastruktureinrichtungIsReferencingBauvorhaben()
         throws EntityIsReferencedException {
         this.infrastruktureinrichtungService.throwEntityIsReferencedExceptionWhenInfrastruktureinrichtungIsReferencingBauvorhaben(
                 new KinderkrippeModel()
             );
 
+        var bauvorhaben = new Bauvorhaben();
+        bauvorhaben.setNameVorhaben("Bauvorhaben");
+        bauvorhaben.setStandVerfahren(StandVerfahren.RAHMENPLANUNG);
+        bauvorhaben.setWesentlicheRechtsgrundlage(
+            List.of(WesentlicheRechtsgrundlage.EINFACHER_BEBAUUNGSPLAN_PARAGRAPH_30)
+        );
+        bauvorhaben.setSobonRelevant(UncertainBoolean.FALSE);
+        bauvorhaben = bauvorhabenRepository.saveAndFlush(bauvorhaben);
+
         final InfrastruktureinrichtungModel infrastruktureinrichtung = new KindergartenModel();
-        infrastruktureinrichtung.setBauvorhaben(new BauvorhabenModel());
+        infrastruktureinrichtung.setBauvorhaben(bauvorhaben.getId());
         Assertions.assertThrows(
             EntityIsReferencedException.class,
             () ->

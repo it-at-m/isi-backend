@@ -8,11 +8,14 @@ import java.math.BigDecimal;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.Index;
+import javax.persistence.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 @Entity
+@Table(indexes = { @Index(name = "baurate_baugebiet_id_index", columnList = "baugebiet_id") })
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
@@ -22,10 +25,10 @@ public class Baurate extends BaseEntity {
     private Integer jahr; // JJJJ
 
     @Column(nullable = true)
-    private Integer anzahlWeGeplant;
+    private Integer weGeplant;
 
     @Column(precision = 10, scale = 2, nullable = true)
-    private BigDecimal geschossflaecheWohnenGeplant;
+    private BigDecimal gfWohnenGeplant;
 
     @Embedded
     private Foerdermix foerdermix;
