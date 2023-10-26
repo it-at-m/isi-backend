@@ -1,5 +1,6 @@
 package de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung;
 
+import de.muenchen.isi.domain.model.common.VerortungModel;
 import java.util.List;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -13,4 +14,6 @@ public class BauleitplanverfahrenInBearbeitungSachbearbeitungModel extends Abfra
     private List<AbfragevarianteBauleitplanverfahrenSachbearbeitungInBearbeitungSachbearbeitungModel> abfragevarianten;
 
     private List<AbfragevarianteBauleitplanverfahrenInBearbeitungSachbearbeitungModel> abfragevariantenSachbearbeitung;
+
+    private VerortungModel verortung;
 }

@@ -1,5 +1,6 @@
 package de.muenchen.isi.api.dto.abfrageInBearbeitungSachbearbeitung;
 
+import de.muenchen.isi.api.dto.common.VerortungDto;
 import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
@@ -25,4 +26,7 @@ public class BauleitplanverfahrenInBearbeitungSachbearbeitungDto extends Abfrage
     private List<
         @NotNull @Valid AbfragevarianteBauleitplanverfahrenInBearbeitungSachbearbeitungDto
     > abfragevariantenSachbearbeitung;
+
+    @Valid
+    private VerortungDto verortung;
 }
