@@ -16,7 +16,16 @@ import lombok.Data;
     visible = true
 )
 @JsonSubTypes(
-    { @JsonSubTypes.Type(value = BauleitplanverfahrenAngelegtDto.class, name = ArtAbfrage.Values.BAULEITPLANVERFAHREN) }
+    {
+        @JsonSubTypes.Type(
+            value = BauleitplanverfahrenAngelegtDto.class,
+            name = ArtAbfrage.Values.BAULEITPLANVERFAHREN
+        ),
+        @JsonSubTypes.Type(
+            value = BaugenehmigungsverfahrenAngelegtDto.class,
+            name = ArtAbfrage.Values.BAUGENEHMIGUNGSVERFAHREN
+        ),
+    }
 )
 public class AbfrageAngelegtDto {
 

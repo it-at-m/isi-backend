@@ -4,6 +4,7 @@ import de.muenchen.isi.api.dto.AbfrageDto;
 import de.muenchen.isi.api.dto.BaugenehmigungsverfahrenDto;
 import de.muenchen.isi.api.dto.BauleitplanverfahrenDto;
 import de.muenchen.isi.api.dto.abfrageAngelegt.AbfrageAngelegtDto;
+import de.muenchen.isi.api.dto.abfrageAngelegt.BaugenehmigungsverfahrenAngelegtDto;
 import de.muenchen.isi.api.dto.abfrageAngelegt.BauleitplanverfahrenAngelegtDto;
 import de.muenchen.isi.api.dto.abfrageInBearbeitungFachreferat.AbfrageInBearbeitungFachreferatDto;
 import de.muenchen.isi.api.dto.abfrageInBearbeitungFachreferat.BauleitplanverfahrenInBearbeitungFachreferatDto;
@@ -14,6 +15,7 @@ import de.muenchen.isi.domain.model.AbfrageModel;
 import de.muenchen.isi.domain.model.BaugenehmigungsverfahrenModel;
 import de.muenchen.isi.domain.model.BauleitplanverfahrenModel;
 import de.muenchen.isi.domain.model.abfrageAngelegt.AbfrageAngelegtModel;
+import de.muenchen.isi.domain.model.abfrageAngelegt.BaugenehmigungsverfahrenAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageAngelegt.BauleitplanverfahrenAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungFachreferat.AbfrageInBearbeitungFachreferatModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungFachreferat.BauleitplanverfahrenInBearbeitungFachreferatModel;
@@ -45,6 +47,10 @@ public interface AbfrageApiMapper {
     }
 
     @SubclassMapping(source = BauleitplanverfahrenAngelegtDto.class, target = BauleitplanverfahrenAngelegtModel.class)
+    @SubclassMapping(
+        source = BaugenehmigungsverfahrenAngelegtDto.class,
+        target = BaugenehmigungsverfahrenAngelegtModel.class
+    )
     AbfrageAngelegtModel dto2Model(final AbfrageAngelegtDto dto);
 
     @SubclassMapping(
