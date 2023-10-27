@@ -11,9 +11,9 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 public class BauleitplanverfahrenInBearbeitungSachbearbeitungModel extends AbfrageInBearbeitungSachbearbeitungModel {
 
+    private VerortungModel verortung;
+
     private List<AbfragevarianteBauleitplanverfahrenSachbearbeitungInBearbeitungSachbearbeitungModel> abfragevarianten;
 
     private List<AbfragevarianteBauleitplanverfahrenInBearbeitungSachbearbeitungModel> abfragevariantenSachbearbeitung;
-
-    private VerortungModel verortung;
 }

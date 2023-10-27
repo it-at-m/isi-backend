@@ -15,6 +15,9 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 public class BauleitplanverfahrenInBearbeitungSachbearbeitungDto extends AbfrageInBearbeitungSachbearbeitungDto {
 
+    @Valid
+    private VerortungDto verortung;
+
     @NotEmpty
     @Size(min = 1, max = 5)
     private List<
@@ -26,7 +29,4 @@ public class BauleitplanverfahrenInBearbeitungSachbearbeitungDto extends Abfrage
     private List<
         @NotNull @Valid AbfragevarianteBauleitplanverfahrenInBearbeitungSachbearbeitungDto
     > abfragevariantenSachbearbeitung;
-
-    @Valid
-    private VerortungDto verortung;
 }
