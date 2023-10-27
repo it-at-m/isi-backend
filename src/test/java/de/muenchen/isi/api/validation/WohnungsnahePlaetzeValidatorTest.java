@@ -35,6 +35,10 @@ class WohnungsnahePlaetzeValidatorTest {
         assertThat(wohnungsnahePlaetzeValidator.isValid(kinderkrippe, null), is(true));
 
         kinderkrippe.setAnzahlKinderkrippePlaetze(100);
+        kinderkrippe.setWohnungsnaheKinderkrippePlaetze(0);
+        assertThat(wohnungsnahePlaetzeValidator.isValid(kinderkrippe, null), is(true));
+
+        kinderkrippe.setAnzahlKinderkrippePlaetze(100);
         kinderkrippe.setWohnungsnaheKinderkrippePlaetze(99);
         assertThat(wohnungsnahePlaetzeValidator.isValid(kinderkrippe, null), is(true));
 
@@ -47,6 +51,10 @@ class WohnungsnahePlaetzeValidatorTest {
         assertThat(wohnungsnahePlaetzeValidator.isValid(kinderkrippe, null), is(false));
 
         kinderkrippe.setAnzahlKinderkrippePlaetze(null);
+        kinderkrippe.setWohnungsnaheKinderkrippePlaetze(101);
+        assertThat(wohnungsnahePlaetzeValidator.isValid(kinderkrippe, null), is(false));
+
+        kinderkrippe.setAnzahlKinderkrippePlaetze(0);
         kinderkrippe.setWohnungsnaheKinderkrippePlaetze(101);
         assertThat(wohnungsnahePlaetzeValidator.isValid(kinderkrippe, null), is(false));
     }
@@ -65,6 +73,10 @@ class WohnungsnahePlaetzeValidatorTest {
         assertThat(wohnungsnahePlaetzeValidator.isValid(kinderarten, null), is(true));
 
         kinderarten.setAnzahlKindergartenPlaetze(100);
+        kinderarten.setWohnungsnaheKindergartenPlaetze(0);
+        assertThat(wohnungsnahePlaetzeValidator.isValid(kinderarten, null), is(true));
+
+        kinderarten.setAnzahlKindergartenPlaetze(100);
         kinderarten.setWohnungsnaheKindergartenPlaetze(99);
         assertThat(wohnungsnahePlaetzeValidator.isValid(kinderarten, null), is(true));
 
@@ -77,6 +89,10 @@ class WohnungsnahePlaetzeValidatorTest {
         assertThat(wohnungsnahePlaetzeValidator.isValid(kinderarten, null), is(false));
 
         kinderarten.setAnzahlKindergartenPlaetze(null);
+        kinderarten.setWohnungsnaheKindergartenPlaetze(101);
+        assertThat(wohnungsnahePlaetzeValidator.isValid(kinderarten, null), is(false));
+
+        kinderarten.setAnzahlKindergartenPlaetze(0);
         kinderarten.setWohnungsnaheKindergartenPlaetze(101);
         assertThat(wohnungsnahePlaetzeValidator.isValid(kinderarten, null), is(false));
     }
@@ -100,6 +116,14 @@ class WohnungsnahePlaetzeValidatorTest {
         hausFuerKinder.setWohnungsnaheKindergartenPlaetze(null);
         hausFuerKinder.setAnzahlHortPlaetze(100);
         hausFuerKinder.setWohnungsnaheHortPlaetze(null);
+        assertThat(wohnungsnahePlaetzeValidator.isValid(hausFuerKinder, null), is(true));
+
+        hausFuerKinder.setAnzahlKinderkrippePlaetze(100);
+        hausFuerKinder.setWohnungsnaheKinderkrippePlaetze(0);
+        hausFuerKinder.setAnzahlKindergartenPlaetze(100);
+        hausFuerKinder.setWohnungsnaheKindergartenPlaetze(0);
+        hausFuerKinder.setAnzahlHortPlaetze(100);
+        hausFuerKinder.setWohnungsnaheHortPlaetze(0);
         assertThat(wohnungsnahePlaetzeValidator.isValid(hausFuerKinder, null), is(true));
 
         hausFuerKinder.setAnzahlKinderkrippePlaetze(100);
@@ -150,9 +174,25 @@ class WohnungsnahePlaetzeValidatorTest {
         hausFuerKinder.setWohnungsnaheHortPlaetze(100);
         assertThat(wohnungsnahePlaetzeValidator.isValid(hausFuerKinder, null), is(false));
 
+        hausFuerKinder.setAnzahlKinderkrippePlaetze(0);
+        hausFuerKinder.setWohnungsnaheKinderkrippePlaetze(100);
+        hausFuerKinder.setAnzahlKindergartenPlaetze(100);
+        hausFuerKinder.setWohnungsnaheKindergartenPlaetze(100);
+        hausFuerKinder.setAnzahlHortPlaetze(100);
+        hausFuerKinder.setWohnungsnaheHortPlaetze(100);
+        assertThat(wohnungsnahePlaetzeValidator.isValid(hausFuerKinder, null), is(false));
+
         hausFuerKinder.setAnzahlKinderkrippePlaetze(100);
         hausFuerKinder.setWohnungsnaheKinderkrippePlaetze(100);
         hausFuerKinder.setAnzahlKindergartenPlaetze(null);
+        hausFuerKinder.setWohnungsnaheKindergartenPlaetze(100);
+        hausFuerKinder.setAnzahlHortPlaetze(100);
+        hausFuerKinder.setWohnungsnaheHortPlaetze(100);
+        assertThat(wohnungsnahePlaetzeValidator.isValid(hausFuerKinder, null), is(false));
+
+        hausFuerKinder.setAnzahlKinderkrippePlaetze(100);
+        hausFuerKinder.setWohnungsnaheKinderkrippePlaetze(100);
+        hausFuerKinder.setAnzahlKindergartenPlaetze(0);
         hausFuerKinder.setWohnungsnaheKindergartenPlaetze(100);
         hausFuerKinder.setAnzahlHortPlaetze(100);
         hausFuerKinder.setWohnungsnaheHortPlaetze(100);
@@ -165,12 +205,57 @@ class WohnungsnahePlaetzeValidatorTest {
         hausFuerKinder.setAnzahlHortPlaetze(null);
         hausFuerKinder.setWohnungsnaheHortPlaetze(100);
         assertThat(wohnungsnahePlaetzeValidator.isValid(hausFuerKinder, null), is(false));
+
+        hausFuerKinder.setAnzahlKinderkrippePlaetze(100);
+        hausFuerKinder.setWohnungsnaheKinderkrippePlaetze(100);
+        hausFuerKinder.setAnzahlKindergartenPlaetze(100);
+        hausFuerKinder.setWohnungsnaheKindergartenPlaetze(100);
+        hausFuerKinder.setAnzahlHortPlaetze(0);
+        hausFuerKinder.setWohnungsnaheHortPlaetze(100);
+        assertThat(wohnungsnahePlaetzeValidator.isValid(hausFuerKinder, null), is(false));
+    }
+
+    @Test
+    void isValidGsNachmittagBetreuungDto() {
+        assertThat(wohnungsnahePlaetzeValidator.isValid(null, null), is(true));
+
+        final var gsNachmittagBetreuung = new GsNachmittagBetreuungDto();
+        gsNachmittagBetreuung.setAnzahlHortPlaetze(null);
+        gsNachmittagBetreuung.setWohnungsnaheHortPlaetze(null);
+        assertThat(wohnungsnahePlaetzeValidator.isValid(gsNachmittagBetreuung, null), is(true));
+
+        gsNachmittagBetreuung.setAnzahlHortPlaetze(100);
+        gsNachmittagBetreuung.setWohnungsnaheHortPlaetze(null);
+        assertThat(wohnungsnahePlaetzeValidator.isValid(gsNachmittagBetreuung, null), is(true));
+
+        gsNachmittagBetreuung.setAnzahlHortPlaetze(100);
+        gsNachmittagBetreuung.setWohnungsnaheHortPlaetze(0);
+        assertThat(wohnungsnahePlaetzeValidator.isValid(gsNachmittagBetreuung, null), is(true));
+
+        gsNachmittagBetreuung.setAnzahlHortPlaetze(100);
+        gsNachmittagBetreuung.setWohnungsnaheHortPlaetze(99);
+        assertThat(wohnungsnahePlaetzeValidator.isValid(gsNachmittagBetreuung, null), is(true));
+
+        gsNachmittagBetreuung.setAnzahlHortPlaetze(100);
+        gsNachmittagBetreuung.setWohnungsnaheHortPlaetze(100);
+        assertThat(wohnungsnahePlaetzeValidator.isValid(gsNachmittagBetreuung, null), is(true));
+
+        gsNachmittagBetreuung.setAnzahlHortPlaetze(100);
+        gsNachmittagBetreuung.setWohnungsnaheHortPlaetze(101);
+        assertThat(wohnungsnahePlaetzeValidator.isValid(gsNachmittagBetreuung, null), is(false));
+
+        gsNachmittagBetreuung.setAnzahlHortPlaetze(null);
+        gsNachmittagBetreuung.setWohnungsnaheHortPlaetze(101);
+        assertThat(wohnungsnahePlaetzeValidator.isValid(gsNachmittagBetreuung, null), is(false));
+
+        gsNachmittagBetreuung.setAnzahlHortPlaetze(0);
+        gsNachmittagBetreuung.setWohnungsnaheHortPlaetze(101);
+        assertThat(wohnungsnahePlaetzeValidator.isValid(gsNachmittagBetreuung, null), is(false));
     }
 
     @Test
     void isValidOther() {
         assertThat(wohnungsnahePlaetzeValidator.isValid(new GrundschuleDto(), null), is(true));
         assertThat(wohnungsnahePlaetzeValidator.isValid(new MittelschuleDto(), null), is(true));
-        assertThat(wohnungsnahePlaetzeValidator.isValid(new GsNachmittagBetreuungDto(), null), is(true));
     }
 }

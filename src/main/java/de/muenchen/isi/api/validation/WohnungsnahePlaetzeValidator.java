@@ -1,5 +1,6 @@
 package de.muenchen.isi.api.validation;
 
+import de.muenchen.isi.api.dto.infrastruktureinrichtung.GsNachmittagBetreuungDto;
 import de.muenchen.isi.api.dto.infrastruktureinrichtung.HausFuerKinderDto;
 import de.muenchen.isi.api.dto.infrastruktureinrichtung.InfrastruktureinrichtungDto;
 import de.muenchen.isi.api.dto.infrastruktureinrichtung.KindergartenDto;
@@ -53,6 +54,12 @@ public class WohnungsnahePlaetzeValidator
                 return this.areWohnungsnahePlatzeValid(
                         kinderkrippe.getAnzahlKinderkrippePlaetze(),
                         kinderkrippe.getWohnungsnaheKinderkrippePlaetze()
+                    );
+            } else if (value instanceof GsNachmittagBetreuungDto) {
+                final var kinderkrippe = ((GsNachmittagBetreuungDto) value);
+                return this.areWohnungsnahePlatzeValid(
+                        kinderkrippe.getAnzahlHortPlaetze(),
+                        kinderkrippe.getWohnungsnaheHortPlaetze()
                     );
             } else {
                 return true;
