@@ -10,6 +10,7 @@ import de.muenchen.isi.api.dto.abfrageInBearbeitungFachreferat.AbfrageInBearbeit
 import de.muenchen.isi.api.dto.abfrageInBearbeitungFachreferat.BaugenehmigungsverfahrenInBearbeitungFachreferatDto;
 import de.muenchen.isi.api.dto.abfrageInBearbeitungFachreferat.BauleitplanverfahrenInBearbeitungFachreferatDto;
 import de.muenchen.isi.api.dto.abfrageInBearbeitungSachbearbeitung.AbfrageInBearbeitungSachbearbeitungDto;
+import de.muenchen.isi.api.dto.abfrageInBearbeitungSachbearbeitung.BaugenehmigungsverfahrenInBearbeitungSachbearbeitungDto;
 import de.muenchen.isi.api.dto.abfrageInBearbeitungSachbearbeitung.BauleitplanverfahrenInBearbeitungSachbearbeitungDto;
 import de.muenchen.isi.configuration.MapstructConfiguration;
 import de.muenchen.isi.domain.model.AbfrageModel;
@@ -22,6 +23,7 @@ import de.muenchen.isi.domain.model.abfrageInBearbeitungFachreferat.AbfrageInBea
 import de.muenchen.isi.domain.model.abfrageInBearbeitungFachreferat.BaugenehmigungsverfahrenInBearbeitungFachreferatModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungFachreferat.BauleitplanverfahrenInBearbeitungFachreferatModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.AbfrageInBearbeitungSachbearbeitungModel;
+import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.BaugenehmigungsverfahrenInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.BauleitplanverfahrenInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import org.mapstruct.AfterMapping;
@@ -58,6 +60,10 @@ public interface AbfrageApiMapper {
     @SubclassMapping(
         source = BauleitplanverfahrenInBearbeitungSachbearbeitungDto.class,
         target = BauleitplanverfahrenInBearbeitungSachbearbeitungModel.class
+    )
+    @SubclassMapping(
+        source = BaugenehmigungsverfahrenInBearbeitungSachbearbeitungDto.class,
+        target = BaugenehmigungsverfahrenInBearbeitungSachbearbeitungModel.class
     )
     AbfrageInBearbeitungSachbearbeitungModel dto2Model(final AbfrageInBearbeitungSachbearbeitungDto dto);
 
