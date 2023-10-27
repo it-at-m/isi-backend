@@ -16,7 +16,13 @@ import lombok.Data;
     visible = true
 )
 @JsonSubTypes(
-    { @JsonSubTypes.Type(value = BauleitplanverfahrenDto.class, name = ArtAbfrage.Values.BAULEITPLANVERFAHREN) }
+    {
+        @JsonSubTypes.Type(value = BauleitplanverfahrenDto.class, name = ArtAbfrage.Values.BAULEITPLANVERFAHREN),
+        @JsonSubTypes.Type(
+            value = BaugenehmigungsverfahrenDto.class,
+            name = ArtAbfrage.Values.BAUGENEHMIGUNGSVERFAHREN
+        ),
+    }
 )
 public abstract class AbfrageDto extends BaseEntityDto {
 

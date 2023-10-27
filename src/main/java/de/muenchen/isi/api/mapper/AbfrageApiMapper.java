@@ -1,6 +1,7 @@
 package de.muenchen.isi.api.mapper;
 
 import de.muenchen.isi.api.dto.AbfrageDto;
+import de.muenchen.isi.api.dto.BaugenehmigungsverfahrenDto;
 import de.muenchen.isi.api.dto.BauleitplanverfahrenDto;
 import de.muenchen.isi.api.dto.abfrageAngelegt.AbfrageAngelegtDto;
 import de.muenchen.isi.api.dto.abfrageAngelegt.BauleitplanverfahrenAngelegtDto;
@@ -10,6 +11,7 @@ import de.muenchen.isi.api.dto.abfrageInBearbeitungSachbearbeitung.AbfrageInBear
 import de.muenchen.isi.api.dto.abfrageInBearbeitungSachbearbeitung.BauleitplanverfahrenInBearbeitungSachbearbeitungDto;
 import de.muenchen.isi.configuration.MapstructConfiguration;
 import de.muenchen.isi.domain.model.AbfrageModel;
+import de.muenchen.isi.domain.model.BaugenehmigungsverfahrenModel;
 import de.muenchen.isi.domain.model.BauleitplanverfahrenModel;
 import de.muenchen.isi.domain.model.abfrageAngelegt.AbfrageAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageAngelegt.BauleitplanverfahrenAngelegtModel;
@@ -27,6 +29,7 @@ import org.mapstruct.SubclassMapping;
 @Mapper(config = MapstructConfiguration.class, uses = { DokumentApiMapper.class })
 public interface AbfrageApiMapper {
     @SubclassMapping(source = BauleitplanverfahrenModel.class, target = BauleitplanverfahrenDto.class)
+    @SubclassMapping(source = BaugenehmigungsverfahrenModel.class, target = BaugenehmigungsverfahrenDto.class)
     @Mapping(target = "displayName", ignore = true)
     AbfrageDto model2Dto(final AbfrageModel model);
 
@@ -35,6 +38,9 @@ public interface AbfrageApiMapper {
         if (ArtAbfrage.BAULEITPLANVERFAHREN.equals(model.getArtAbfrage())) {
             final var bauleitplanverfahren = (BauleitplanverfahrenModel) model;
             dto.setDisplayName(bauleitplanverfahren.getDisplayName());
+        } else if (ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN.equals(model.getArtAbfrage())) {
+            final var baugenehmigungsverfahren = (BaugenehmigungsverfahrenModel) model;
+            dto.setDisplayName(baugenehmigungsverfahren.getDisplayName());
         }
     }
 
