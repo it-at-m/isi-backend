@@ -49,11 +49,7 @@ public class AbfrageDomainMapperTest {
         Field field = abfrageDomainMapper.getClass().getSuperclass().getDeclaredField("bauvorhabenRepository");
         field.setAccessible(true);
         field.set(abfrageDomainMapper, bauvorhabenRepository);
-        field =
-            abfrageDomainMapper
-                .getClass()
-                .getSuperclass()
-                .getDeclaredField("abfragevarianteBauleitplanverfahrenDomainMapper");
+        field = abfrageDomainMapper.getClass().getSuperclass().getDeclaredField("abfragevarianteDomainMapper");
         field.setAccessible(true);
         field.set(abfrageDomainMapper, abfragevarianteDomainMapper);
         Mockito.reset(this.bauvorhabenRepository);

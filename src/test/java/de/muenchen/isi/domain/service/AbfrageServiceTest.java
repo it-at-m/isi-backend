@@ -83,10 +83,7 @@ class AbfrageServiceTest {
         final var abfragevarianteDomainMapper = new AbfragevarianteDomainMapperImpl(new BauabschnittDomainMapperImpl());
         this.abfrageDomainMapper =
             new AbfrageDomainMapperImpl(abfragevarianteDomainMapper, new DokumentDomainMapperImpl());
-        Field field = abfrageDomainMapper
-            .getClass()
-            .getSuperclass()
-            .getDeclaredField("abfragevarianteBauleitplanverfahrenDomainMapper");
+        Field field = abfrageDomainMapper.getClass().getSuperclass().getDeclaredField("abfragevarianteDomainMapper");
         field.setAccessible(true);
         field.set(abfrageDomainMapper, abfragevarianteDomainMapper);
         this.abfrageService =
