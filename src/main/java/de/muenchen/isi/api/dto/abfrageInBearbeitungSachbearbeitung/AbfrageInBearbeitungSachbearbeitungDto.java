@@ -2,6 +2,7 @@ package de.muenchen.isi.api.dto.abfrageInBearbeitungSachbearbeitung;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import de.muenchen.isi.api.validation.NotUnspecified;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import lombok.Data;
 
@@ -28,5 +29,6 @@ public class AbfrageInBearbeitungSachbearbeitungDto {
 
     private Long version;
 
+    @NotUnspecified
     private ArtAbfrage artAbfrage;
 }

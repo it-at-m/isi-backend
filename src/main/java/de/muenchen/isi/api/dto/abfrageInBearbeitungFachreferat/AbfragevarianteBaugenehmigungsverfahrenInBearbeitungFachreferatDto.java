@@ -5,6 +5,7 @@
 package de.muenchen.isi.api.dto.abfrageInBearbeitungFachreferat;
 
 import de.muenchen.isi.api.dto.BedarfsmeldungFachreferateDto;
+import de.muenchen.isi.api.validation.NotUnspecified;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import java.util.List;
 import java.util.UUID;
@@ -18,6 +19,7 @@ public class AbfragevarianteBaugenehmigungsverfahrenInBearbeitungFachreferatDto 
 
     private Long version;
 
+    @NotUnspecified
     private ArtAbfrage artAbfragevariante;
 
     private List<@Valid BedarfsmeldungFachreferateDto> bedarfsmeldungFachreferate;
