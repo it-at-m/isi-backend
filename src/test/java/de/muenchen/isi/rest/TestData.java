@@ -5,9 +5,11 @@
 package de.muenchen.isi.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import de.muenchen.isi.domain.model.AbfragevarianteBaugenehmigungsverfahrenModel;
 import de.muenchen.isi.domain.model.AbfragevarianteBauleitplanverfahrenModel;
 import de.muenchen.isi.domain.model.BauabschnittModel;
 import de.muenchen.isi.domain.model.BaugebietModel;
+import de.muenchen.isi.domain.model.BaugenehmigungsverfahrenModel;
 import de.muenchen.isi.domain.model.BauleitplanverfahrenModel;
 import de.muenchen.isi.domain.model.BaurateModel;
 import de.muenchen.isi.domain.model.FoerderartModel;
@@ -59,10 +61,42 @@ public class TestData {
         return bauleitplanverfahren;
     }
 
+    public static BaugenehmigungsverfahrenModel createBaugenehmigungsverfahrenModel() {
+        final var baugenehmigungsverfahren = new BaugenehmigungsverfahrenModel();
+        baugenehmigungsverfahren.setName("Altbausiedlung in Musterort");
+        baugenehmigungsverfahren.setStatusAbfrage(StatusAbfrage.ANGELEGT);
+        final WGS84Model coordinate = new WGS84Model();
+        coordinate.setLatitude(48.1556795465256);
+        coordinate.setLongitude(11.5568456350688);
+        baugenehmigungsverfahren.setAdresse(new AdresseModel("80331", "München", "Lothstraße", "7", coordinate, null));
+        baugenehmigungsverfahren.setFristBearbeitung(LocalDate.of(2022, 12, 31));
+        baugenehmigungsverfahren.setAnmerkung("Bitte die Abfrage zeitnah behandeln");
+        baugenehmigungsverfahren.setStandVerfahren(StandVerfahren.STRUKTURKONZEPT);
+        baugenehmigungsverfahren.setVerortung(createVerortung());
+        baugenehmigungsverfahren.setAbfragevarianten(List.of(createAbfragevarianteBaugenehmigungsverfahrenModel()));
+        return baugenehmigungsverfahren;
+    }
+
     public static AbfragevarianteBauleitplanverfahrenModel createAbfragevarianteBauleitplanverfahrenModel() {
         final var abfragevariante = new AbfragevarianteBauleitplanverfahrenModel();
         abfragevariante.setAbfragevariantenNr(1);
-        abfragevariante.setName("Name Abfragevariante 1");
+        abfragevariante.setName("Name Abfragevariante 10");
+        abfragevariante.setWesentlicheRechtsgrundlage(
+            List.of(WesentlicheRechtsgrundlage.EINFACHER_BEBAUUNGSPLAN_PARAGRAPH_30)
+        );
+        abfragevariante.setGfWohnenSonderwohnformen(false);
+        abfragevariante.setGfWohnenGesamt(BigDecimal.valueOf(1234.56));
+        abfragevariante.setWeSonderwohnformen(false);
+        abfragevariante.setWeGesamt(31);
+        abfragevariante.setRealisierungVon(2023);
+        abfragevariante.setBauabschnitte(List.of(createBauabschnittModel()));
+        return abfragevariante;
+    }
+
+    public static AbfragevarianteBaugenehmigungsverfahrenModel createAbfragevarianteBaugenehmigungsverfahrenModel() {
+        final var abfragevariante = new AbfragevarianteBaugenehmigungsverfahrenModel();
+        abfragevariante.setAbfragevariantenNr(1);
+        abfragevariante.setName("Name Abfragevariante 11");
         abfragevariante.setWesentlicheRechtsgrundlage(
             List.of(WesentlicheRechtsgrundlage.EINFACHER_BEBAUUNGSPLAN_PARAGRAPH_30)
         );
