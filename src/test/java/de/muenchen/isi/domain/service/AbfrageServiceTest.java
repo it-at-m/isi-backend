@@ -26,12 +26,16 @@ import de.muenchen.isi.domain.model.abfrageInBearbeitungFachreferat.Abfragevaria
 import de.muenchen.isi.domain.model.abfrageInBearbeitungFachreferat.BauleitplanverfahrenInBearbeitungFachreferatModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.AbfragevarianteBauleitplanverfahrenInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.BauleitplanverfahrenInBearbeitungSachbearbeitungModel;
+import de.muenchen.isi.domain.model.common.StadtbezirkModel;
+import de.muenchen.isi.domain.model.common.VerortungModel;
 import de.muenchen.isi.domain.service.filehandling.DokumentService;
 import de.muenchen.isi.infrastructure.entity.Abfrage;
 import de.muenchen.isi.infrastructure.entity.AbfragevarianteBauleitplanverfahren;
 import de.muenchen.isi.infrastructure.entity.Bauleitplanverfahren;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
 import de.muenchen.isi.infrastructure.entity.BedarfsmeldungFachreferate;
+import de.muenchen.isi.infrastructure.entity.common.Stadtbezirk;
+import de.muenchen.isi.infrastructure.entity.common.Verortung;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
@@ -45,6 +49,8 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -303,9 +309,21 @@ class AbfrageServiceTest {
         throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException {
         final var uuid = UUID.randomUUID();
 
+        final StadtbezirkModel abfrage_sb_08 = new StadtbezirkModel();
+        abfrage_sb_08.setNummer("08");
+        abfrage_sb_08.setName("Stadtbezirk 8");
+
+        final StadtbezirkModel abfraqe_sb_20 = new StadtbezirkModel();
+        abfraqe_sb_20.setNummer("20");
+        abfraqe_sb_20.setName("Stadtbezirk 20");
+
+        final VerortungModel abfrageVerortung = new VerortungModel();
+        abfrageVerortung.setStadtbezirke(Stream.of(abfraqe_sb_20, abfrage_sb_08).collect(Collectors.toSet()));
+
         final var requestModel = new BauleitplanverfahrenInBearbeitungSachbearbeitungModel();
         requestModel.setVersion(0L);
         requestModel.setArtAbfrage(ArtAbfrage.BAULEITPLANVERFAHREN);
+        requestModel.setVerortung(abfrageVerortung);
         final var abfragevarianteSachbearbeitung =
             new AbfragevarianteBauleitplanverfahrenInBearbeitungSachbearbeitungModel();
         abfragevarianteSachbearbeitung.setArtAbfragevariante(ArtAbfrage.BAULEITPLANVERFAHREN);
@@ -324,12 +342,26 @@ class AbfrageServiceTest {
 
         Mockito.when(this.abfrageRepository.findById(entityInDb.getId())).thenReturn(Optional.of(entityInDb));
 
+        final Stadtbezirk abfrageEntity_sb_08 = new Stadtbezirk();
+        abfrageEntity_sb_08.setNummer("08");
+        abfrageEntity_sb_08.setName("Stadtbezirk 8");
+
+        final Stadtbezirk abfraqgeEntity_sb_20 = new Stadtbezirk();
+        abfraqgeEntity_sb_20.setNummer("20");
+        abfraqgeEntity_sb_20.setName("Stadtbezirk 20");
+
+        final Verortung abfrageEntityVerortung = new Verortung();
+        abfrageEntityVerortung.setStadtbezirke(
+            Stream.of(abfraqgeEntity_sb_20, abfrageEntity_sb_08).collect(Collectors.toSet())
+        );
+
         final var entityToSave = new Bauleitplanverfahren();
         entityToSave.setAbfragevarianten(List.of());
         entityToSave.setId(uuid);
         entityToSave.setVersion(0L);
         entityToSave.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
         entityToSave.setName("hallo");
+        entityToSave.setVerortung(abfrageEntityVerortung);
         final var abfragevariante1ToSave = new AbfragevarianteBauleitplanverfahren();
         abfragevariante1ToSave.setAbfragevariantenNr(1);
         abfragevariante1ToSave.setName("Abfragevariante 1");
@@ -343,6 +375,7 @@ class AbfrageServiceTest {
         entitySaved.setVersion(1L);
         entitySaved.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
         entitySaved.setName("hallo");
+        entitySaved.setVerortung(abfrageEntityVerortung);
         final var abfragevariante1Saved = new AbfragevarianteBauleitplanverfahren();
         abfragevariante1Saved.setId(UUID.randomUUID());
         abfragevariante1Saved.setAbfragevariantenNr(1);
@@ -363,6 +396,7 @@ class AbfrageServiceTest {
         expected.setVersion(1L);
         expected.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
         expected.setName("hallo");
+        expected.setVerortung(abfrageVerortung);
         final var abfragevariante1Expected = new AbfragevarianteBauleitplanverfahrenModel();
         abfragevariante1Expected.setArtAbfragevariante(ArtAbfrage.BAULEITPLANVERFAHREN);
         abfragevariante1Expected.setId(abfragevariante1Saved.getId());

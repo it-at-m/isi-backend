@@ -1,5 +1,6 @@
 package de.muenchen.isi.api.dto.abfrageInBearbeitungSachbearbeitung;
 
+import de.muenchen.isi.api.dto.common.VerortungDto;
 import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
@@ -13,6 +14,9 @@ import lombok.ToString;
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 public class BauleitplanverfahrenInBearbeitungSachbearbeitungDto extends AbfrageInBearbeitungSachbearbeitungDto {
+
+    @Valid
+    private VerortungDto verortung;
 
     @NotEmpty
     @Size(min = 1, max = 5)
