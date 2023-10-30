@@ -18,9 +18,12 @@ import de.muenchen.isi.domain.mapper.BauabschnittDomainMapperImpl;
 import de.muenchen.isi.domain.mapper.DokumentDomainMapperImpl;
 import de.muenchen.isi.domain.model.AbfrageModel;
 import de.muenchen.isi.domain.model.AbfragevarianteBauleitplanverfahrenModel;
+import de.muenchen.isi.domain.model.BaugenehmigungsverfahrenModel;
 import de.muenchen.isi.domain.model.BauleitplanverfahrenModel;
 import de.muenchen.isi.domain.model.BedarfsmeldungFachreferateModel;
+import de.muenchen.isi.domain.model.abfrageAngelegt.AbfragevarianteBaugenehmigungsverfahrenAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageAngelegt.AbfragevarianteBauleitplanverfahrenAngelegtModel;
+import de.muenchen.isi.domain.model.abfrageAngelegt.BaugenehmigungsverfahrenAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageAngelegt.BauleitplanverfahrenAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungFachreferat.AbfragevarianteBauleitplanverfahrenInBearbeitungFachreferatModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungFachreferat.BauleitplanverfahrenInBearbeitungFachreferatModel;
@@ -235,7 +238,7 @@ class AbfrageServiceTest {
     }
 
     @Test
-    void patchAngelegt()
+    void patchAngelegtBauleitplanverfahren()
         throws EntityNotFoundException, UniqueViolationException, FileHandlingFailedException, FileHandlingWithS3FailedException, OptimisticLockingException, AbfrageStatusNotAllowedException {
         final UUID abfrageId = UUID.randomUUID();
 
@@ -254,6 +257,48 @@ class AbfrageServiceTest {
         model.setStatusAbfrage(StatusAbfrage.ANGELEGT);
 
         final BauleitplanverfahrenModel abfrageModelMapped =
+            this.abfrageDomainMapper.request2Model(requestModel, model);
+        final Abfrage entity = this.abfrageDomainMapper.model2Entity(abfrageModelMapped);
+
+        Mockito.when(this.abfrageRepository.findById(entity.getId())).thenReturn(Optional.of(entity));
+        Mockito.when(this.abfrageRepository.saveAndFlush(entity)).thenReturn(entity);
+        Mockito.when(this.abfrageRepository.findByNameIgnoreCase("hallo")).thenReturn(Optional.empty());
+
+        final AbfrageModel result = this.abfrageService.patchAngelegt(requestModel, entity.getId());
+
+        assertThat(result, is(model));
+
+        Mockito.verify(this.abfrageRepository, Mockito.times(1)).findById(entity.getId());
+        Mockito.verify(this.abfrageRepository, Mockito.times(1)).saveAndFlush(entity);
+        Mockito.verify(this.abfrageRepository, Mockito.times(1)).findByNameIgnoreCase("hallo");
+        Mockito
+            .verify(this.dokumentService, Mockito.times(1))
+            .deleteDokumenteFromOriginalDokumentenListWhichAreMissingInParameterAdaptedDokumentenListe(
+                Mockito.isNull(),
+                Mockito.isNull()
+            );
+    }
+
+    @Test
+    void patchAngelegtBaugenehmigungsverfahren()
+        throws EntityNotFoundException, UniqueViolationException, FileHandlingFailedException, FileHandlingWithS3FailedException, OptimisticLockingException, AbfrageStatusNotAllowedException {
+        final UUID abfrageId = UUID.randomUUID();
+
+        final BaugenehmigungsverfahrenAngelegtModel requestModel = new BaugenehmigungsverfahrenAngelegtModel();
+        requestModel.setArtAbfrage(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN);
+        requestModel.setName("hallo");
+
+        final AbfragevarianteBaugenehmigungsverfahrenAngelegtModel abfragevarianteRequestModel =
+            new AbfragevarianteBaugenehmigungsverfahrenAngelegtModel();
+        abfragevarianteRequestModel.setArtAbfragevariante(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN);
+        abfragevarianteRequestModel.setName("Abfragevariante");
+        requestModel.setAbfragevarianten(List.of(abfragevarianteRequestModel));
+
+        final BaugenehmigungsverfahrenModel model = new BaugenehmigungsverfahrenModel();
+        model.setId(abfrageId);
+        model.setStatusAbfrage(StatusAbfrage.ANGELEGT);
+
+        final BaugenehmigungsverfahrenModel abfrageModelMapped =
             this.abfrageDomainMapper.request2Model(requestModel, model);
         final Abfrage entity = this.abfrageDomainMapper.model2Entity(abfrageModelMapped);
 

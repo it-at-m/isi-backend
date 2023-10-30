@@ -34,7 +34,7 @@ import org.hibernate.search.mapper.pojo.mapping.definition.annotation.KeywordFie
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.NonStandardField;
 
 @Entity
-@DiscriminatorValue(ArtAbfrage.Values.BAULEITPLANVERFAHREN)
+@DiscriminatorValue(ArtAbfrage.Values.BAUGENEHMIGUNGSVERFAHREN)
 @Table(
     indexes = {
         @Index(
