@@ -15,7 +15,6 @@ import de.muenchen.isi.domain.exception.UniqueViolationException;
 import de.muenchen.isi.domain.mapper.BauvorhabenDomainMapper;
 import de.muenchen.isi.domain.mapper.BauvorhabenDomainMapperImpl;
 import de.muenchen.isi.domain.mapper.DokumentDomainMapperImpl;
-import de.muenchen.isi.domain.mapper.InfrastruktureinrichtungDomainMapperImpl;
 import de.muenchen.isi.domain.mapper.SearchDomainMapper;
 import de.muenchen.isi.domain.mapper.SearchDomainMapperImpl;
 import de.muenchen.isi.domain.model.AbfrageModel;
@@ -76,10 +75,7 @@ public class BauvorhabenServiceTest {
         new DokumentDomainMapperImpl()
     );
 
-    private final SearchDomainMapper searchDomainMapper = new SearchDomainMapperImpl(
-        new InfrastruktureinrichtungDomainMapperImpl(),
-        new BauvorhabenDomainMapperImpl(new DokumentDomainMapperImpl())
-    );
+    private final SearchDomainMapper searchDomainMapper = new SearchDomainMapperImpl();
 
     private BauvorhabenService bauvorhabenService;
 
