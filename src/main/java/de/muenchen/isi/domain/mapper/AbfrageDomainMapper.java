@@ -105,8 +105,8 @@ public abstract class AbfrageDomainMapper {
     /**
      * Führt das Mapping der Abfragevarianten für die im Parameter gegebenen Klassen durch.
      *
-     * @param request  das Request-Objekt welches gemapped werden soll
-     * @param model das {@link BauleitplanverfahrenModel} zu dem es gemapped wird
+     * @param request das Request-Objekt welches gemapped werden soll
+     * @param model   das {@link BauleitplanverfahrenModel} zu dem es gemapped wird
      */
     @AfterMapping
     void afterMappingRequest2Model(
@@ -193,7 +193,7 @@ public abstract class AbfrageDomainMapper {
     }
 
     @BeanMapping(ignoreByDefault = true)
-    @Mappings({ @Mapping(target = "version", ignore = false) })
+    @Mappings({ @Mapping(target = "version", ignore = false), @Mapping(target = "verortung", ignore = false) })
     public abstract BauleitplanverfahrenModel request2Model(
         final BauleitplanverfahrenInBearbeitungSachbearbeitungModel request,
         @MappingTarget final BauleitplanverfahrenModel response
