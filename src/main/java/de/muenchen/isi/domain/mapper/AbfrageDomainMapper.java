@@ -19,6 +19,7 @@ import de.muenchen.isi.domain.model.abfrageInBearbeitungFachreferat.Bauleitplanv
 import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.BaugenehmigungsverfahrenInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.BauleitplanverfahrenInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.infrastructure.entity.Abfrage;
+import de.muenchen.isi.infrastructure.entity.Baugenehmigungsverfahren;
 import de.muenchen.isi.infrastructure.entity.Bauleitplanverfahren;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.repository.BauvorhabenRepository;
@@ -46,10 +47,12 @@ public abstract class AbfrageDomainMapper {
     private AbfragevarianteDomainMapper abfragevarianteDomainMapper;
 
     @SubclassMapping(source = Bauleitplanverfahren.class, target = BauleitplanverfahrenModel.class)
+    @SubclassMapping(source = Baugenehmigungsverfahren.class, target = BaugenehmigungsverfahrenModel.class)
     @Mapping(source = "bauvorhaben.id", target = "bauvorhaben")
     public abstract AbfrageModel entity2Model(final Abfrage entity);
 
     @SubclassMapping(source = BauleitplanverfahrenModel.class, target = Bauleitplanverfahren.class)
+    @SubclassMapping(source = BaugenehmigungsverfahrenModel.class, target = Baugenehmigungsverfahren.class)
     @Mapping(target = "bauvorhaben", ignore = true)
     public abstract Abfrage model2Entity(final AbfrageModel model) throws EntityNotFoundException;
 

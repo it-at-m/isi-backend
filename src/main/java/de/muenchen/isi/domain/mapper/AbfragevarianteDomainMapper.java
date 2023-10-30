@@ -15,6 +15,7 @@ import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.Abfragev
 import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.AbfragevarianteBaugenehmigungsverfahrenSachbearbeitungInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.AbfragevarianteBauleitplanverfahrenInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.AbfragevarianteBauleitplanverfahrenSachbearbeitungInBearbeitungSachbearbeitungModel;
+import de.muenchen.isi.infrastructure.entity.AbfragevarianteBaugenehmigungsverfahren;
 import de.muenchen.isi.infrastructure.entity.AbfragevarianteBauleitplanverfahren;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
@@ -26,7 +27,11 @@ import org.mapstruct.Mappings;
 public interface AbfragevarianteDomainMapper {
     AbfragevarianteBauleitplanverfahrenModel entity2Model(final AbfragevarianteBauleitplanverfahren entity);
 
+    AbfragevarianteBaugenehmigungsverfahrenModel entity2Model(final AbfragevarianteBaugenehmigungsverfahren entity);
+
     AbfragevarianteBauleitplanverfahren model2Entity(final AbfragevarianteBauleitplanverfahrenModel model);
+
+    AbfragevarianteBaugenehmigungsverfahren model2Entity(final AbfragevarianteBaugenehmigungsverfahrenModel model);
 
     @Mappings(
         {
