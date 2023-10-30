@@ -599,7 +599,7 @@ class AbfrageServiceTest {
     }
 
     @Test
-    void patchInBearbeitungSachbearbeitungAbfrageNotSupported()
+    void patchInBearbeitungSachbearbeitungAbfrageNotSupportedBauleitplanverfahren()
         throws UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException {
         final var uuid = UUID.randomUUID();
 
@@ -637,6 +637,60 @@ class AbfrageServiceTest {
         entitySaved.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
         entitySaved.setName("hallo");
         final var abfragevariante1Saved = new AbfragevarianteBauleitplanverfahren();
+        abfragevariante1Saved.setId(UUID.randomUUID());
+        abfragevariante1Saved.setAbfragevariantenNr(1);
+        abfragevariante1Saved.setName("Abfragevariante 1");
+        entitySaved.setAbfragevariantenSachbearbeitung(List.of(abfragevariante1Saved));
+
+        Mockito.when(this.abfrageRepository.saveAndFlush(entityToSave)).thenReturn(entitySaved);
+        Mockito.when(this.abfrageRepository.findByNameIgnoreCase("hallo")).thenReturn(Optional.empty());
+
+        try {
+            this.abfrageService.patchInBearbeitungSachbearbeitung(requestModel, uuid);
+        } catch (final EntityNotFoundException exception) {
+            assertThat(exception.getMessage(), is("Die Art der Abfrage wird nicht unterstützt."));
+        }
+    }
+
+    @Test
+    void patchInBearbeitungSachbearbeitungAbfrageNotSupportedBaugenehmigungsverfahren()
+        throws UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException {
+        final var uuid = UUID.randomUUID();
+
+        final var requestModel = new BaugenehmigungsverfahrenInBearbeitungSachbearbeitungModel();
+        requestModel.setVersion(0L);
+        requestModel.setArtAbfrage(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN);
+        final var abfragevarianteSachbearbeitung =
+            new AbfragevarianteBaugenehmigungsverfahrenInBearbeitungSachbearbeitungModel();
+        abfragevarianteSachbearbeitung.setAbfragevariantenNr(1);
+        abfragevarianteSachbearbeitung.setName("Abfragevariante 1");
+        requestModel.setAbfragevariantenSachbearbeitung(List.of(abfragevarianteSachbearbeitung));
+
+        final var entityInDb = new Baugenehmigungsverfahren();
+        entityInDb.setId(uuid);
+        entityInDb.setVersion(0L);
+        entityInDb.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+        entityInDb.setName("hallo");
+
+        Mockito.when(this.abfrageRepository.findById(entityInDb.getId())).thenReturn(Optional.of(entityInDb));
+
+        final var entityToSave = new Baugenehmigungsverfahren();
+        entityToSave.setAbfragevarianten(List.of());
+        entityToSave.setId(uuid);
+        entityToSave.setVersion(0L);
+        entityToSave.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+        entityToSave.setName("hallo");
+        final var abfragevariante1ToSave = new AbfragevarianteBaugenehmigungsverfahren();
+        abfragevariante1ToSave.setAbfragevariantenNr(1);
+        abfragevariante1ToSave.setName("Abfragevariante 1");
+        entityToSave.setAbfragevariantenSachbearbeitung(List.of(abfragevariante1ToSave));
+
+        final var entitySaved = new Baugenehmigungsverfahren();
+        entitySaved.setId(uuid);
+        entitySaved.setVersion(1L);
+        entitySaved.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+        entitySaved.setName("hallo");
+        final var abfragevariante1Saved = new AbfragevarianteBaugenehmigungsverfahren();
         abfragevariante1Saved.setId(UUID.randomUUID());
         abfragevariante1Saved.setAbfragevariantenNr(1);
         abfragevariante1Saved.setName("Abfragevariante 1");
