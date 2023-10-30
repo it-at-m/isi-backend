@@ -9,6 +9,7 @@ import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
 import de.muenchen.isi.domain.model.AbfrageModel;
+import de.muenchen.isi.domain.model.BaugenehmigungsverfahrenModel;
 import de.muenchen.isi.domain.model.BauleitplanverfahrenModel;
 import de.muenchen.isi.infrastructure.repository.AbfrageRepository;
 import de.muenchen.isi.rest.TestData;
@@ -41,10 +42,16 @@ class AbfrageServiceSpringTest {
     void getByAbfragevarianteId() throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException {
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
         abfrage = this.abfrageService.save(abfrage);
-
-        final UUID abfragevarianteId = ((BauleitplanverfahrenModel) abfrage).getAbfragevarianten().get(0).getId();
+        UUID abfragevarianteId = ((BauleitplanverfahrenModel) abfrage).getAbfragevarianten().get(0).getId();
         AbfrageModel foundAbfrage = abfrageService.getByAbfragevarianteId(abfragevarianteId);
         assertThat(foundAbfrage, is(abfrage));
+
+        abfrage = TestData.createBaugenehmigungsverfahrenModel();
+        abfrage = this.abfrageService.save(abfrage);
+        abfragevarianteId = ((BaugenehmigungsverfahrenModel) abfrage).getAbfragevarianten().get(0).getId();
+        foundAbfrage = abfrageService.getByAbfragevarianteId(abfragevarianteId);
+        assertThat(foundAbfrage, is(abfrage));
+
         abfrageRepository.deleteAll();
     }
 

@@ -27,6 +27,7 @@ import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.repository.AbfrageRepository;
+import de.muenchen.isi.infrastructure.repository.AbfragevarianteBaugenehmigungsverfahrenRepository;
 import de.muenchen.isi.infrastructure.repository.AbfragevarianteBauleitplanverfahrenRepository;
 import de.muenchen.isi.infrastructure.repository.BauvorhabenRepository;
 import de.muenchen.isi.security.AuthenticationUtils;
@@ -57,6 +58,8 @@ public class AbfrageService {
     private final AuthenticationUtils authenticationUtils;
 
     private final AbfragevarianteBauleitplanverfahrenRepository abfragevarianteBauleitplanverfahrenRepository;
+
+    private final AbfragevarianteBaugenehmigungsverfahrenRepository abfragevarianteBaugenehmigungsverfahrenRepository;
 
     /**
      * Die Methode gibt ein {@link AbfrageModel} identifiziert durch die ID zurück.
@@ -396,7 +399,9 @@ public class AbfrageService {
         final var abfrageIds = Stream
             .of(
                 abfragevarianteBauleitplanverfahrenRepository.findAbfrageIdForAbfragevarianteById(id),
-                abfragevarianteBauleitplanverfahrenRepository.findAbfrageIdForAbfragevarianteSachbearbeitungById(id)
+                abfragevarianteBauleitplanverfahrenRepository.findAbfrageIdForAbfragevarianteSachbearbeitungById(id),
+                abfragevarianteBaugenehmigungsverfahrenRepository.findAbfrageIdForAbfragevarianteById(id),
+                abfragevarianteBaugenehmigungsverfahrenRepository.findAbfrageIdForAbfragevarianteSachbearbeitungById(id)
             )
             .filter(Optional::isPresent)
             .map(Optional::get)

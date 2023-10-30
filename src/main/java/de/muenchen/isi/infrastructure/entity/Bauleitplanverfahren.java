@@ -96,14 +96,14 @@ public class Bauleitplanverfahren extends Abfrage {
     @IndexedEmbedded
     @IndexingDependency(reindexOnUpdate = ReindexOnUpdate.SHALLOW)
     @OneToMany(cascade = { CascadeType.ALL }, orphanRemoval = true)
-    @JoinColumn(name = "abfragevarianten_bauleitplanverfahren_id", referencedColumnName = "id")
+    @JoinColumn(name = "bauleitplanverfahren_abfragevarianten_id", referencedColumnName = "id")
     @OrderBy("abfragevariantenNr asc")
     private List<AbfragevarianteBauleitplanverfahren> abfragevarianten;
 
     @IndexedEmbedded
     @IndexingDependency(reindexOnUpdate = ReindexOnUpdate.SHALLOW)
     @OneToMany(cascade = { CascadeType.ALL }, orphanRemoval = true)
-    @JoinColumn(name = "abfragevarianten_sachbearbeitung_bauleitplanverfahren_id", referencedColumnName = "id")
+    @JoinColumn(name = "bauleitplanverfahren_abfragevarianten_sachbearbeitung_id", referencedColumnName = "id")
     @OrderBy("abfragevariantenNr asc")
     private List<AbfragevarianteBauleitplanverfahren> abfragevariantenSachbearbeitung;
 }
