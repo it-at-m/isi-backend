@@ -17,6 +17,7 @@ import de.muenchen.isi.domain.mapper.AbfragevarianteDomainMapperImpl;
 import de.muenchen.isi.domain.mapper.BauabschnittDomainMapperImpl;
 import de.muenchen.isi.domain.mapper.DokumentDomainMapperImpl;
 import de.muenchen.isi.domain.model.AbfrageModel;
+import de.muenchen.isi.domain.model.AbfragevarianteBaugenehmigungsverfahrenModel;
 import de.muenchen.isi.domain.model.AbfragevarianteBauleitplanverfahrenModel;
 import de.muenchen.isi.domain.model.BaugenehmigungsverfahrenModel;
 import de.muenchen.isi.domain.model.BauleitplanverfahrenModel;
@@ -27,13 +28,17 @@ import de.muenchen.isi.domain.model.abfrageAngelegt.BaugenehmigungsverfahrenAnge
 import de.muenchen.isi.domain.model.abfrageAngelegt.BauleitplanverfahrenAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungFachreferat.AbfragevarianteBauleitplanverfahrenInBearbeitungFachreferatModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungFachreferat.BauleitplanverfahrenInBearbeitungFachreferatModel;
+import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.AbfragevarianteBaugenehmigungsverfahrenInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.AbfragevarianteBauleitplanverfahrenInBearbeitungSachbearbeitungModel;
+import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.BaugenehmigungsverfahrenInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.BauleitplanverfahrenInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.domain.model.common.StadtbezirkModel;
 import de.muenchen.isi.domain.model.common.VerortungModel;
 import de.muenchen.isi.domain.service.filehandling.DokumentService;
 import de.muenchen.isi.infrastructure.entity.Abfrage;
+import de.muenchen.isi.infrastructure.entity.AbfragevarianteBaugenehmigungsverfahren;
 import de.muenchen.isi.infrastructure.entity.AbfragevarianteBauleitplanverfahren;
+import de.muenchen.isi.infrastructure.entity.Baugenehmigungsverfahren;
 import de.muenchen.isi.infrastructure.entity.Bauleitplanverfahren;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
 import de.muenchen.isi.infrastructure.entity.BedarfsmeldungFachreferate;
@@ -386,7 +391,7 @@ class AbfrageServiceTest {
     }
 
     @Test
-    void patchInBearbeitungSachbearbeitung()
+    void patchInBearbeitungSachbearbeitungBauleitplanverfahren()
         throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException {
         final var uuid = UUID.randomUUID();
 
@@ -485,6 +490,108 @@ class AbfrageServiceTest {
         abfragevariante1Expected.setName("Abfragevariante 1");
         abfragevariante1Expected.setGfWohnenPlanungsursaechlich(BigDecimal.TEN);
         abfragevariante1Expected.setSobonOrientierungswertJahr(SobonOrientierungswertJahr.JAHR_2017);
+        abfragevariante1Expected.setAnmerkung("Test Anmerkung");
+        expected.setAbfragevariantenSachbearbeitung(List.of(abfragevariante1Expected));
+
+        assertThat(result, is(expected));
+    }
+
+    @Test
+    void patchInBearbeitungSachbearbeitungBaugenehmigungsverfahren()
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException {
+        final var uuid = UUID.randomUUID();
+
+        final StadtbezirkModel abfrage_sb_08 = new StadtbezirkModel();
+        abfrage_sb_08.setNummer("08");
+        abfrage_sb_08.setName("Stadtbezirk 8");
+
+        final StadtbezirkModel abfraqe_sb_20 = new StadtbezirkModel();
+        abfraqe_sb_20.setNummer("20");
+        abfraqe_sb_20.setName("Stadtbezirk 20");
+
+        final VerortungModel abfrageVerortung = new VerortungModel();
+        abfrageVerortung.setStadtbezirke(Stream.of(abfraqe_sb_20, abfrage_sb_08).collect(Collectors.toSet()));
+
+        final var requestModel = new BaugenehmigungsverfahrenInBearbeitungSachbearbeitungModel();
+        requestModel.setVersion(0L);
+        requestModel.setArtAbfrage(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN);
+        requestModel.setVerortung(abfrageVerortung);
+        final var abfragevarianteSachbearbeitung =
+            new AbfragevarianteBaugenehmigungsverfahrenInBearbeitungSachbearbeitungModel();
+        abfragevarianteSachbearbeitung.setArtAbfragevariante(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN);
+        abfragevarianteSachbearbeitung.setAbfragevariantenNr(1);
+        abfragevarianteSachbearbeitung.setName("Abfragevariante 1");
+        abfragevarianteSachbearbeitung.setGfWohnenPlanungsursaechlich(BigDecimal.TEN);
+        abfragevarianteSachbearbeitung.setAnmerkung("Test Anmerkung");
+        requestModel.setAbfragevariantenSachbearbeitung(List.of(abfragevarianteSachbearbeitung));
+
+        final var entityInDb = new Baugenehmigungsverfahren();
+        entityInDb.setId(uuid);
+        entityInDb.setVersion(0L);
+        entityInDb.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+        entityInDb.setName("hallo");
+
+        Mockito.when(this.abfrageRepository.findById(entityInDb.getId())).thenReturn(Optional.of(entityInDb));
+
+        final Stadtbezirk abfrageEntity_sb_08 = new Stadtbezirk();
+        abfrageEntity_sb_08.setNummer("08");
+        abfrageEntity_sb_08.setName("Stadtbezirk 8");
+
+        final Stadtbezirk abfraqgeEntity_sb_20 = new Stadtbezirk();
+        abfraqgeEntity_sb_20.setNummer("20");
+        abfraqgeEntity_sb_20.setName("Stadtbezirk 20");
+
+        final Verortung abfrageEntityVerortung = new Verortung();
+        abfrageEntityVerortung.setStadtbezirke(
+            Stream.of(abfraqgeEntity_sb_20, abfrageEntity_sb_08).collect(Collectors.toSet())
+        );
+
+        final var entityToSave = new Baugenehmigungsverfahren();
+        entityToSave.setAbfragevarianten(List.of());
+        entityToSave.setId(uuid);
+        entityToSave.setVersion(0L);
+        entityToSave.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+        entityToSave.setName("hallo");
+        entityToSave.setVerortung(abfrageEntityVerortung);
+        final var abfragevariante1ToSave = new AbfragevarianteBaugenehmigungsverfahren();
+        abfragevariante1ToSave.setAbfragevariantenNr(1);
+        abfragevariante1ToSave.setName("Abfragevariante 1");
+        abfragevariante1ToSave.setGfWohnenPlanungsursaechlich(BigDecimal.TEN);
+        abfragevariante1ToSave.setAnmerkung("Test Anmerkung");
+        entityToSave.setAbfragevariantenSachbearbeitung(List.of(abfragevariante1ToSave));
+
+        final var entitySaved = new Baugenehmigungsverfahren();
+        entitySaved.setId(uuid);
+        entitySaved.setVersion(1L);
+        entitySaved.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+        entitySaved.setName("hallo");
+        entitySaved.setVerortung(abfrageEntityVerortung);
+        final var abfragevariante1Saved = new AbfragevarianteBaugenehmigungsverfahren();
+        abfragevariante1Saved.setId(UUID.randomUUID());
+        abfragevariante1Saved.setAbfragevariantenNr(1);
+        abfragevariante1Saved.setName("Abfragevariante 1");
+        abfragevariante1Saved.setGfWohnenPlanungsursaechlich(BigDecimal.TEN);
+        abfragevariante1Saved.setAnmerkung("Test Anmerkung");
+        entitySaved.setAbfragevariantenSachbearbeitung(List.of(abfragevariante1Saved));
+
+        Mockito.when(this.abfrageRepository.saveAndFlush(entityToSave)).thenReturn(entitySaved);
+        Mockito.when(this.abfrageRepository.findByNameIgnoreCase("hallo")).thenReturn(Optional.empty());
+
+        final var result = this.abfrageService.patchInBearbeitungSachbearbeitung(requestModel, uuid);
+
+        final var expected = new BaugenehmigungsverfahrenModel();
+        expected.setArtAbfrage(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN);
+        expected.setId(uuid);
+        expected.setVersion(1L);
+        expected.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+        expected.setName("hallo");
+        expected.setVerortung(abfrageVerortung);
+        final var abfragevariante1Expected = new AbfragevarianteBaugenehmigungsverfahrenModel();
+        abfragevariante1Expected.setArtAbfragevariante(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN);
+        abfragevariante1Expected.setId(abfragevariante1Saved.getId());
+        abfragevariante1Expected.setAbfragevariantenNr(1);
+        abfragevariante1Expected.setName("Abfragevariante 1");
+        abfragevariante1Expected.setGfWohnenPlanungsursaechlich(BigDecimal.TEN);
         abfragevariante1Expected.setAnmerkung("Test Anmerkung");
         expected.setAbfragevariantenSachbearbeitung(List.of(abfragevariante1Expected));
 
