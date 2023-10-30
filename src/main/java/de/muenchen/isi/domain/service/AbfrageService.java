@@ -33,6 +33,7 @@ import de.muenchen.isi.infrastructure.repository.BauvorhabenRepository;
 import de.muenchen.isi.security.AuthenticationUtils;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -395,7 +396,7 @@ public class AbfrageService {
     public AbfrageModel getByAbfragevarianteId(final UUID abfragevarianteId) throws EntityNotFoundException {
         final var id = abfragevarianteId.toString();
 
-        final var abfrageId = Stream
+        final var abfrageIds = Stream
             .of(
                 abfragevarianteBauleitplanverfahrenRepository.findAbfrageIdForAbfragevarianteById(id),
                 abfragevarianteBauleitplanverfahrenRepository.findAbfrageIdForAbfragevarianteSachbearbeitungById(id),
@@ -405,13 +406,14 @@ public class AbfrageService {
             .filter(Optional::isPresent)
             .map(Optional::get)
             .map(UUID::fromString)
-            .findFirst()
-            .orElseThrow(() -> {
-                final var message = "Abfrage auf Basis einer Abfragevariante ID nicht eindeutig auffindbar.";
-                log.error(message);
-                return new EntityNotFoundException(message);
-            });
+            .collect(Collectors.toList());
 
-        return this.getById(abfrageId);
+        if (abfrageIds.size() != 1) {
+            final var message = "Abfrage auf Basis einer Abfragevariante ID nicht eindeutig auffindbar.";
+            log.error(message);
+            throw new EntityNotFoundException(message);
+        }
+
+        return this.getById(abfrageIds.get(0));
     }
 }
