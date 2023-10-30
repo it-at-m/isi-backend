@@ -322,7 +322,7 @@ class AbfrageServiceTest {
     }
 
     @Test
-    void patchAngelegtArtAbfrageNotSupported()
+    void patchAngelegtArtAbfrageNotSupportedBauleitplanverfahren()
         throws UniqueViolationException, FileHandlingFailedException, FileHandlingWithS3FailedException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException {
         final UUID abfrageId = UUID.randomUUID();
 
@@ -339,6 +339,38 @@ class AbfrageServiceTest {
         model.setStatusAbfrage(StatusAbfrage.ANGELEGT);
 
         final BauleitplanverfahrenModel abfrageModelMapped =
+            this.abfrageDomainMapper.request2Model(requestModel, model);
+        final Abfrage entity = this.abfrageDomainMapper.model2Entity(abfrageModelMapped);
+
+        Mockito.when(this.abfrageRepository.findById(entity.getId())).thenReturn(Optional.of(entity));
+        Mockito.when(this.abfrageRepository.saveAndFlush(entity)).thenReturn(entity);
+        Mockito.when(this.abfrageRepository.findByNameIgnoreCase("hallo")).thenReturn(Optional.empty());
+
+        try {
+            this.abfrageService.patchAngelegt(requestModel, entity.getId());
+        } catch (final EntityNotFoundException exception) {
+            assertThat(exception.getMessage(), is("Die Art der Abfrage wird nicht unterstützt."));
+        }
+    }
+
+    @Test
+    void patchAngelegtArtAbfrageNotSupportedBaugenehmigungsverfahren()
+        throws UniqueViolationException, FileHandlingFailedException, FileHandlingWithS3FailedException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException {
+        final UUID abfrageId = UUID.randomUUID();
+
+        final BaugenehmigungsverfahrenAngelegtModel requestModel = new BaugenehmigungsverfahrenAngelegtModel();
+        requestModel.setName("hallo");
+
+        final AbfragevarianteBaugenehmigungsverfahrenAngelegtModel abfragevarianteRequestModel =
+            new AbfragevarianteBaugenehmigungsverfahrenAngelegtModel();
+        abfragevarianteRequestModel.setName("Abfragevariante");
+        requestModel.setAbfragevarianten(List.of(abfragevarianteRequestModel));
+
+        final BaugenehmigungsverfahrenModel model = new BaugenehmigungsverfahrenModel();
+        model.setId(abfrageId);
+        model.setStatusAbfrage(StatusAbfrage.ANGELEGT);
+
+        final BaugenehmigungsverfahrenModel abfrageModelMapped =
             this.abfrageDomainMapper.request2Model(requestModel, model);
         final Abfrage entity = this.abfrageDomainMapper.model2Entity(abfrageModelMapped);
 
