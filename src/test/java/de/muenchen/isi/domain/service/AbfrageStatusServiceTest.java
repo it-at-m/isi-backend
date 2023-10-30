@@ -13,11 +13,9 @@ import de.muenchen.isi.domain.exception.UniqueViolationException;
 import de.muenchen.isi.domain.model.AbfrageModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrageEvents;
-import de.muenchen.isi.infrastructure.repository.AbfrageRepository;
 import de.muenchen.isi.rest.TestData;
 import java.util.UUID;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -41,14 +39,6 @@ class AbfrageStatusServiceTest {
 
     @Autowired
     private AbfrageStatusService abfrageStatusService;
-
-    @Autowired
-    private AbfrageRepository abfrageRepository;
-
-    @BeforeEach
-    public void beforeEach() {
-        this.abfrageRepository.deleteAll();
-    }
 
     @Test
     void getAbfrageIdHeaderSuccessfull() throws EntityNotFoundException {
