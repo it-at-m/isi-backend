@@ -255,7 +255,7 @@ public abstract class AbfrageDomainMapper {
     }
 
     @BeanMapping(ignoreByDefault = true)
-    @Mappings({ @Mapping(target = "version", ignore = false) })
+    @Mappings({ @Mapping(target = "version", ignore = false), @Mapping(target = "verortung", ignore = false) })
     public abstract BaugenehmigungsverfahrenModel request2Model(
         final BaugenehmigungsverfahrenInBearbeitungSachbearbeitungModel request,
         @MappingTarget final BaugenehmigungsverfahrenModel response
