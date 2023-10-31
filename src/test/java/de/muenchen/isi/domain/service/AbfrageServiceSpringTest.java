@@ -15,12 +15,16 @@ import de.muenchen.isi.domain.exception.UniqueViolationException;
 import de.muenchen.isi.domain.model.AbfrageModel;
 import de.muenchen.isi.domain.model.BaugenehmigungsverfahrenModel;
 import de.muenchen.isi.domain.model.BauleitplanverfahrenModel;
+import de.muenchen.isi.domain.model.BedarfsmeldungFachreferateModel;
 import de.muenchen.isi.domain.model.abfrageAngelegt.AbfrageAngelegtModel;
+import de.muenchen.isi.domain.model.abfrageInBearbeitungFachreferat.AbfragevarianteBaugenehmigungsverfahrenInBearbeitungFachreferatModel;
+import de.muenchen.isi.domain.model.abfrageInBearbeitungFachreferat.BaugenehmigungsverfahrenInBearbeitungFachreferatModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.AbfragevarianteBaugenehmigungsverfahrenSachbearbeitungInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.AbfragevarianteBauleitplanverfahrenSachbearbeitungInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.BaugenehmigungsverfahrenInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.BauleitplanverfahrenInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.repository.AbfrageRepository;
@@ -122,7 +126,7 @@ class AbfrageServiceSpringTest {
     @Test
     @Transactional
     void patchInBearbeitungSachbearbeitungBauleitplanverfahren()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, FileHandlingFailedException, FileHandlingWithS3FailedException, AbfrageStatusNotAllowedException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException {
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
         abfrage = this.abfrageService.save(abfrage);
         abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
@@ -158,7 +162,7 @@ class AbfrageServiceSpringTest {
     @Test
     @Transactional
     void patchInBearbeitungSachbearbeitungBaugenehmigungsverfahren()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, FileHandlingFailedException, FileHandlingWithS3FailedException, AbfrageStatusNotAllowedException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException {
         AbfrageModel abfrage = TestData.createBaugenehmigungsverfahrenModel();
         abfrage = this.abfrageService.save(abfrage);
         abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
@@ -187,6 +191,52 @@ class AbfrageServiceSpringTest {
         assertThat(
             ((BaugenehmigungsverfahrenModel) abfrage).getAbfragevarianten().get(0).getAnmerkung(),
             is("Die Anmerkung Baugenehmigungsverfahren Patch Sachbearbeitung")
+        );
+
+        abfrageRepository.deleteAll();
+    }
+
+    @Test
+    @Transactional
+    void patchInBearbeitungFachreferatBaugenehmigungsverfahren()
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException {
+        AbfrageModel abfrage = TestData.createBaugenehmigungsverfahrenModel();
+        abfrage = this.abfrageService.save(abfrage);
+        abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
+        abfrage = this.abfrageService.save(abfrage);
+
+        final var abfragePatch = new BaugenehmigungsverfahrenInBearbeitungFachreferatModel();
+        abfragePatch.setArtAbfrage(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN);
+        abfragePatch.setVersion(abfrage.getVersion());
+        abfragePatch.setAbfragevariantenSachbearbeitung(List.of());
+        final var abfragevariantePatch = new AbfragevarianteBaugenehmigungsverfahrenInBearbeitungFachreferatModel();
+        abfragevariantePatch.setId(((BaugenehmigungsverfahrenModel) abfrage).getAbfragevarianten().get(0).getId());
+        abfragevariantePatch.setVersion(
+            ((BaugenehmigungsverfahrenModel) abfrage).getAbfragevarianten().get(0).getVersion()
+        );
+        abfragevariantePatch.setArtAbfragevariante(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN);
+        final var bedarfmeldungFachreferate = new BedarfsmeldungFachreferateModel();
+        bedarfmeldungFachreferate.setAnzahlEinrichtungen(2);
+        bedarfmeldungFachreferate.setInfrastruktureinrichtungTyp(InfrastruktureinrichtungTyp.KINDERKRIPPE);
+        abfragevariantePatch.setBedarfsmeldungFachreferate(List.of(bedarfmeldungFachreferate));
+        abfragePatch.setAbfragevarianten(List.of(abfragevariantePatch));
+
+        abfrage = this.abfrageService.patchInBearbeitungFachreferat(abfragePatch, abfrage.getId());
+        assertThat(
+            ((BaugenehmigungsverfahrenModel) abfrage).getAbfragevarianten()
+                .get(0)
+                .getBedarfsmeldungFachreferate()
+                .get(0)
+                .getAnzahlEinrichtungen(),
+            is(2)
+        );
+        assertThat(
+            ((BaugenehmigungsverfahrenModel) abfrage).getAbfragevarianten()
+                .get(0)
+                .getBedarfsmeldungFachreferate()
+                .get(0)
+                .getInfrastruktureinrichtungTyp(),
+            is(InfrastruktureinrichtungTyp.KINDERKRIPPE)
         );
 
         abfrageRepository.deleteAll();
