@@ -5,12 +5,12 @@
 package de.muenchen.isi.api.dto.abfrageAngelegt;
 
 import de.muenchen.isi.api.dto.BauabschnittDto;
-import de.muenchen.isi.api.validation.GeschossflaecheWohnenDistributionBauleitplanverfahrenValid;
+import de.muenchen.isi.api.validation.GeschossflaecheWohnenDistributionBaugenehmigungsverfahrenValid;
 import de.muenchen.isi.api.validation.NotUnspecified;
-import de.muenchen.isi.api.validation.RealisierungVonDistributionBauleitplanverfahrenValid;
+import de.muenchen.isi.api.validation.RealisierungVonDistributionBaugenehmigungsverfahrenValid;
 import de.muenchen.isi.api.validation.TechnicalAttributesValid;
 import de.muenchen.isi.api.validation.WesentlicheRechtsgrundlageBauleitplanverfahrenValid;
-import de.muenchen.isi.api.validation.WohneinheitenDistributionBauleitplanverfahrenValid;
+import de.muenchen.isi.api.validation.WohneinheitenDistributionBaugenehmigungsverfahrenValid;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.WesentlicheRechtsgrundlage;
 import java.math.BigDecimal;
@@ -26,9 +26,9 @@ import javax.validation.constraints.Size;
 import lombok.Data;
 
 @Data
-@WohneinheitenDistributionBauleitplanverfahrenValid
-@GeschossflaecheWohnenDistributionBauleitplanverfahrenValid
-@RealisierungVonDistributionBauleitplanverfahrenValid
+@WohneinheitenDistributionBaugenehmigungsverfahrenValid
+@GeschossflaecheWohnenDistributionBaugenehmigungsverfahrenValid
+@RealisierungVonDistributionBaugenehmigungsverfahrenValid
 public class AbfragevarianteBaugenehmigungsverfahrenAngelegtDto {
 
     private UUID id;
