@@ -4,6 +4,7 @@
  */
 package de.muenchen.isi.api.dto;
 
+import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.WesentlicheRechtsgrundlage;
 import java.math.BigDecimal;
 import java.util.List;
@@ -61,6 +62,8 @@ public class AbfragevarianteBaugenehmigungsverfahrenDto extends AbfragevarianteD
     private Integer weGenossenschaftlichesWohnen;
 
     private Integer weWeiteresNichtInfrastrukturrelevantesWohnen;
+
+    private SobonOrientierungswertJahr sobonOrientierungswertJahr;
 
     private String anmerkung;
 

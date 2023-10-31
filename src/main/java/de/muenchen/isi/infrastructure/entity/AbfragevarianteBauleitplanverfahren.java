@@ -132,10 +132,10 @@ public class AbfragevarianteBauleitplanverfahren extends Abfragevariante {
     private Integer weWeiteresNichtInfrastrukturrelevantesWohnen;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = true)
+    @Column
     private SobonOrientierungswertJahr sobonOrientierungswertJahr;
 
-    @Column(nullable = true)
+    @Column
     private String anmerkung;
 
     @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval = true)

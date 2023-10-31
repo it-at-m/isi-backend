@@ -6,6 +6,7 @@ package de.muenchen.isi.api.dto.abfrageInBearbeitungSachbearbeitung;
 
 import de.muenchen.isi.api.validation.NotUnspecified;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
 import java.math.BigDecimal;
 import java.util.UUID;
 import lombok.Data;
@@ -21,6 +22,8 @@ public class AbfragevarianteBaugenehmigungsverfahrenSachbearbeitungInBearbeitung
     private ArtAbfrage artAbfragevariante;
 
     private BigDecimal gfWohnenPlanungsursaechlich;
+
+    private SobonOrientierungswertJahr sobonOrientierungswertJahr;
 
     private String anmerkung;
 }
