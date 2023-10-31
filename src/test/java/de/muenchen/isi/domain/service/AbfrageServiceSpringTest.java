@@ -18,7 +18,9 @@ import de.muenchen.isi.domain.model.BauleitplanverfahrenModel;
 import de.muenchen.isi.domain.model.BedarfsmeldungFachreferateModel;
 import de.muenchen.isi.domain.model.abfrageAngelegt.AbfrageAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungFachreferat.AbfragevarianteBaugenehmigungsverfahrenInBearbeitungFachreferatModel;
+import de.muenchen.isi.domain.model.abfrageInBearbeitungFachreferat.AbfragevarianteBauleitplanverfahrenInBearbeitungFachreferatModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungFachreferat.BaugenehmigungsverfahrenInBearbeitungFachreferatModel;
+import de.muenchen.isi.domain.model.abfrageInBearbeitungFachreferat.BauleitplanverfahrenInBearbeitungFachreferatModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.AbfragevarianteBaugenehmigungsverfahrenSachbearbeitungInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.AbfragevarianteBauleitplanverfahrenSachbearbeitungInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.BaugenehmigungsverfahrenInBearbeitungSachbearbeitungModel;
@@ -191,6 +193,52 @@ class AbfrageServiceSpringTest {
         assertThat(
             ((BaugenehmigungsverfahrenModel) abfrage).getAbfragevarianten().get(0).getAnmerkung(),
             is("Die Anmerkung Baugenehmigungsverfahren Patch Sachbearbeitung")
+        );
+
+        abfrageRepository.deleteAll();
+    }
+
+    @Test
+    @Transactional
+    void patchInBearbeitungFachreferatBauleitplanverfahren()
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException {
+        AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
+        abfrage = this.abfrageService.save(abfrage);
+        abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
+        abfrage = this.abfrageService.save(abfrage);
+
+        final var abfragePatch = new BauleitplanverfahrenInBearbeitungFachreferatModel();
+        abfragePatch.setArtAbfrage(ArtAbfrage.BAULEITPLANVERFAHREN);
+        abfragePatch.setVersion(abfrage.getVersion());
+        abfragePatch.setAbfragevariantenSachbearbeitung(List.of());
+        final var abfragevariantePatch = new AbfragevarianteBauleitplanverfahrenInBearbeitungFachreferatModel();
+        abfragevariantePatch.setId(((BauleitplanverfahrenModel) abfrage).getAbfragevarianten().get(0).getId());
+        abfragevariantePatch.setVersion(
+            ((BauleitplanverfahrenModel) abfrage).getAbfragevarianten().get(0).getVersion()
+        );
+        abfragevariantePatch.setArtAbfragevariante(ArtAbfrage.BAULEITPLANVERFAHREN);
+        final var bedarfmeldungFachreferate = new BedarfsmeldungFachreferateModel();
+        bedarfmeldungFachreferate.setAnzahlEinrichtungen(3);
+        bedarfmeldungFachreferate.setInfrastruktureinrichtungTyp(InfrastruktureinrichtungTyp.KINDERGARTEN);
+        abfragevariantePatch.setBedarfsmeldungFachreferate(List.of(bedarfmeldungFachreferate));
+        abfragePatch.setAbfragevarianten(List.of(abfragevariantePatch));
+
+        abfrage = this.abfrageService.patchInBearbeitungFachreferat(abfragePatch, abfrage.getId());
+        assertThat(
+            ((BauleitplanverfahrenModel) abfrage).getAbfragevarianten()
+                .get(0)
+                .getBedarfsmeldungFachreferate()
+                .get(0)
+                .getAnzahlEinrichtungen(),
+            is(3)
+        );
+        assertThat(
+            ((BauleitplanverfahrenModel) abfrage).getAbfragevarianten()
+                .get(0)
+                .getBedarfsmeldungFachreferate()
+                .get(0)
+                .getInfrastruktureinrichtungTyp(),
+            is(InfrastruktureinrichtungTyp.KINDERGARTEN)
         );
 
         abfrageRepository.deleteAll();
