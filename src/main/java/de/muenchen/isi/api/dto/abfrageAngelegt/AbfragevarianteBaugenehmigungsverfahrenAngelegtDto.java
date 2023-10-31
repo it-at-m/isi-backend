@@ -9,7 +9,7 @@ import de.muenchen.isi.api.validation.GeschossflaecheWohnenDistributionBaugenehm
 import de.muenchen.isi.api.validation.NotUnspecified;
 import de.muenchen.isi.api.validation.RealisierungVonDistributionBaugenehmigungsverfahrenValid;
 import de.muenchen.isi.api.validation.TechnicalAttributesValid;
-import de.muenchen.isi.api.validation.WesentlicheRechtsgrundlageBauleitplanverfahrenValid;
+import de.muenchen.isi.api.validation.WesentlicheRechtsgrundlageBaugenehmigungsverfahrenValid;
 import de.muenchen.isi.api.validation.WohneinheitenDistributionBaugenehmigungsverfahrenValid;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.WesentlicheRechtsgrundlage;
@@ -47,7 +47,7 @@ public class AbfragevarianteBaugenehmigungsverfahrenAngelegtDto {
 
     @NotEmpty
     private List<
-        @WesentlicheRechtsgrundlageBauleitplanverfahrenValid @NotNull WesentlicheRechtsgrundlage
+        @WesentlicheRechtsgrundlageBaugenehmigungsverfahrenValid @NotNull WesentlicheRechtsgrundlage
     > wesentlicheRechtsgrundlage;
 
     @Size(max = 255, message = "Es sind maximal {max} Zeichen erlaubt")
