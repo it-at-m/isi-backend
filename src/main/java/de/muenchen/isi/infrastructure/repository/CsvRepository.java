@@ -4,7 +4,7 @@ import com.opencsv.bean.CsvToBeanBuilder;
 import com.opencsv.enums.CSVReaderNullFieldIndicator;
 import com.opencsv.exceptions.CsvDataTypeMismatchException;
 import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
-import de.muenchen.isi.infrastructure.csv.SobonOrientierungswertSozialeInfrastrukturCsv;
+import de.muenchen.isi.infrastructure.csv.SobonOrientierungswertCsv;
 import de.muenchen.isi.infrastructure.csv.StaedtebaulicheOrientierungswertCsv;
 import java.io.InputStreamReader;
 import java.util.Collections;
@@ -41,21 +41,21 @@ public class CsvRepository {
     }
 
     /**
-     * Erstellt je Zeile in der CSV-Datei ein {@link SobonOrientierungswertSozialeInfrastrukturCsv}.
+     * Erstellt je Zeile in der CSV-Datei ein {@link SobonOrientierungswertCsv}.
      *
-     * @param csvImportFile zum Auslesen der {@link SobonOrientierungswertSozialeInfrastrukturCsv}s
-     * @return das {@link SobonOrientierungswertSozialeInfrastrukturCsv} je Zeile
-     * @throws CsvDataTypeMismatchException falls nicht der passende Typ in Feld steht
+     * @param csvImportFile zum Auslesen der {@link SobonOrientierungswertCsv}s
+     * @return das {@link SobonOrientierungswertCsv} je Zeile
+     * @throws CsvDataTypeMismatchException   falls nicht der passende Typ in Feld steht
      * @throws CsvRequiredFieldEmptyException falls ein Feld keinen Wert (null oder leerer String) beinhaltet
      */
-    public List<SobonOrientierungswertSozialeInfrastrukturCsv> readAllSobonOrientierungswertSozialeInfrastrukturCsv(
+    public List<SobonOrientierungswertCsv> readAllSobonOrientierungswertSozialeInfrastrukturCsv(
         final InputStreamReader csvImportFile
     ) throws CsvDataTypeMismatchException, CsvRequiredFieldEmptyException {
         try {
-            final var csvToBean = new CsvToBeanBuilder<SobonOrientierungswertSozialeInfrastrukturCsv>(csvImportFile)
+            final var csvToBean = new CsvToBeanBuilder<SobonOrientierungswertCsv>(csvImportFile)
                 .withSeparator(CSV_SEPERATOR)
                 .withFieldAsNull(CSVReaderNullFieldIndicator.BOTH)
-                .withType(SobonOrientierungswertSozialeInfrastrukturCsv.class)
+                .withType(SobonOrientierungswertCsv.class)
                 .build();
             return Collections.list(IteratorUtils.asEnumeration(csvToBean.iterator()));
         } catch (final RuntimeException exception) {

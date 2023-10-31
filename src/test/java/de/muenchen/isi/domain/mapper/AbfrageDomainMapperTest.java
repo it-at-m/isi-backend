@@ -209,12 +209,12 @@ public class AbfrageDomainMapperTest {
         final var savedAbfragevariante1 = new AbfragevarianteBauleitplanverfahrenModel();
         savedAbfragevariante1.setId(abfragevarianteSachbearbeitung1.getId());
         savedAbfragevariante1.setAbfragevariantenNr(99);
-        savedAbfragevariante1.setName("Old Name Abfragevariante 1");
+        savedAbfragevariante1.setName("OldStädtischeOrierntierungswerte Name Abfragevariante 1");
 
         final var savedAbfragevariante2 = new AbfragevarianteBauleitplanverfahrenModel();
         savedAbfragevariante2.setId(abfragevarianteSachbearbeitung2.getId());
         savedAbfragevariante2.setAbfragevariantenNr(97);
-        savedAbfragevariante2.setName("Old Name Abfragevariante 2");
+        savedAbfragevariante2.setName("OldStädtischeOrierntierungswerte Name Abfragevariante 2");
 
         savedBauleitplanverfahren.setAbfragevariantenSachbearbeitung(
             List.of(savedAbfragevariante1, savedAbfragevariante2)

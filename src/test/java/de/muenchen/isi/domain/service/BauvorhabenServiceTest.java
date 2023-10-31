@@ -373,19 +373,6 @@ public class BauvorhabenServiceTest {
         final Bauvorhaben bauvorhabenEntity = new Bauvorhaben();
         bauvorhabenEntity.setId(bauvorhaben.getId());
 
-        final Stadtbezirk bauvorhabenEntity_sb_08 = new Stadtbezirk();
-        bauvorhabenEntity_sb_08.setNummer("08");
-        bauvorhabenEntity_sb_08.setName("Stadtbezirk 8");
-
-        final Stadtbezirk bauvorhabenEntity_sb_20 = new Stadtbezirk();
-        bauvorhabenEntity_sb_20.setNummer("20");
-        bauvorhabenEntity_sb_20.setName("Stadtbezirk 20");
-
-        final Verortung bauvorhabenEntityVerortung = new Verortung();
-        bauvorhabenEntityVerortung.setStadtbezirke(
-            Stream.of(bauvorhabenEntity_sb_20, bauvorhabenEntity_sb_08).collect(Collectors.toSet())
-        );
-        bauvorhabenEntity.setVerortung(bauvorhabenEntityVerortung);
         bauvorhabenEntity.setBauvorhabenNummer("08_0001");
 
         // Saved Bauvorhaben

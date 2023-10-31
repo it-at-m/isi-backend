@@ -1,27 +1,18 @@
 package de.muenchen.isi.api.dto.stammdaten;
 
-import de.muenchen.isi.api.dto.BaseEntityDto;
 import de.muenchen.isi.infrastructure.entity.enums.Altersklasse;
 import de.muenchen.isi.infrastructure.entity.enums.Einrichtungstyp;
-import de.muenchen.isi.infrastructure.entity.enums.Wohnungstyp;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonVerfahrensgrundsaetzeJahr;
 import java.math.BigDecimal;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
 
 @Data
-@ToString(callSuper = true)
-@EqualsAndHashCode(callSuper = true)
-public class SobonOrientierungswertSozialeInfrastrukturDto extends BaseEntityDto {
-
-    private SobonVerfahrensgrundsaetzeJahr jahr;
+public class SobonOrientierungswertDto {
 
     private Einrichtungstyp einrichtungstyp;
 
     private Altersklasse altersklasse;
 
-    private Wohnungstyp wohnungstyp;
+    private String foerderArt;
 
     private BigDecimal einwohnerJahr1NachErsterstellung;
 

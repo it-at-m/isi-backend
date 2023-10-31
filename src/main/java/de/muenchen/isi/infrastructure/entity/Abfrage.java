@@ -19,8 +19,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
 import org.apache.commons.lang3.EnumUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.hibernate.search.engine.backend.types.Sortable;
@@ -34,24 +32,8 @@ import org.hibernate.search.mapper.pojo.mapping.definition.annotation.NonStandar
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @DiscriminatorColumn(name = "artAbfrage")
 @Data
-@ToString(callSuper = true)
-@EqualsAndHashCode(callSuper = true)
 @Table(indexes = { @Index(name = "abfrage_name_index", columnList = "name") })
 public abstract class Abfrage extends BaseEntity {
-
-    /**
-     * Diese Methode gibt den Wert der {@link DiscriminatorColumn} zurück.
-     * Ist kein {@link DiscriminatorValue} gesetzt, so wird null zurückgegeben.
-     *
-     * @return Wert der {@link DiscriminatorColumn}.
-     */
-    @Transient
-    public ArtAbfrage getArtAbfrage() {
-        final var discriminatorValue = this.getClass().getAnnotation(DiscriminatorValue.class);
-        return ObjectUtils.isEmpty(discriminatorValue)
-            ? null
-            : EnumUtils.getEnum(ArtAbfrage.class, discriminatorValue.value());
-    }
 
     @KeywordField(name = "name_sort", sortable = Sortable.YES, normalizer = "lowercase")
     @FullTextField
@@ -79,4 +61,18 @@ public abstract class Abfrage extends BaseEntity {
 
     @Column(nullable = false)
     private String sub;
+
+    /**
+     * Diese Methode gibt den Wert der {@link DiscriminatorColumn} zurück.
+     * Ist kein {@link DiscriminatorValue} gesetzt, so wird null zurückgegeben.
+     *
+     * @return Wert der {@link DiscriminatorColumn}.
+     */
+    @Transient
+    public ArtAbfrage getArtAbfrage() {
+        final var discriminatorValue = this.getClass().getAnnotation(DiscriminatorValue.class);
+        return ObjectUtils.isEmpty(discriminatorValue)
+            ? null
+            : EnumUtils.getEnum(ArtAbfrage.class, discriminatorValue.value());
+    }
 }

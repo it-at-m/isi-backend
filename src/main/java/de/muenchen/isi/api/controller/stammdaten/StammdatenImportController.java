@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.UUID;
 import javax.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -17,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,7 +34,7 @@ public class StammdatenImportController {
 
     @Transactional
     @PostMapping(
-        path = "stammdaten/staedtebauliche-orientierungswerte/import",
+        path = "stammdaten/staedtebauliche-orientierungswerte/import/{id}",
         consumes = { MediaType.MULTIPART_FORM_DATA_VALUE }
     )
     @Operation(summary = "Importiert die CSV-Datei und persistiert die Einträge in der Datenbank.")
@@ -55,15 +57,16 @@ public class StammdatenImportController {
         "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_WRITE_STAMMDATEN_ORIENTIERUNGSWERTE.name())"
     )
     public ResponseEntity<Void> importStaedtebaulicheOrientierungswerte(
+        @PathVariable @NotNull final UUID id,
         @RequestParam("file") @NotNull final MultipartFile csvImportFile
     ) throws CsvAttributeErrorException, FileImportFailedException {
-        this.stammdatenImportService.importStaedtebaulicheOrientierungswerte(csvImportFile);
+        this.stammdatenImportService.importStaedtebaulicheOrientierungswerte(id, csvImportFile);
         return ResponseEntity.ok().build();
     }
 
     @Transactional
     @PostMapping(
-        path = "stammdaten/sobon-orientierungswerte-soziale-infrastruktur/import",
+        path = "stammdaten/sobon-orientierungswerte-soziale-infrastruktur/import/{id}",
         consumes = { MediaType.MULTIPART_FORM_DATA_VALUE }
     )
     @Operation(summary = "Importiert die CSV-Datei und persistiert die Einträge in der Datenbank.")
@@ -86,9 +89,10 @@ public class StammdatenImportController {
         "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_WRITE_STAMMDATEN_ORIENTIERUNGSWERTE.name())"
     )
     public ResponseEntity<Void> importSoBoNOrientierungswerteSozialeInfrastruktur(
+        @PathVariable final UUID id,
         @RequestParam("file") @NotNull final MultipartFile csvImportFile
     ) throws CsvAttributeErrorException, FileImportFailedException {
-        this.stammdatenImportService.importSobonOrientierungswerteSozialeInfrastruktur(csvImportFile);
+        this.stammdatenImportService.importSobonOrientierungswerteSozialeInfrastruktur(id, csvImportFile);
         return ResponseEntity.ok().build();
     }
 }

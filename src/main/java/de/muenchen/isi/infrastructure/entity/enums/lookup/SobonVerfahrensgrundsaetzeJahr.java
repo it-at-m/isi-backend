@@ -19,7 +19,8 @@ public enum SobonVerfahrensgrundsaetzeJahr implements ILookup {
     JAHR_2012("2012"),
     JAHR_2017("2017"),
     JAHR_2017_PLUS("2017 plus"),
-    JAHR_2021("2021");
+    JAHR_2021("2021"),
+    JAHR_2022("2022");
 
     @Getter
     private final String bezeichnung;

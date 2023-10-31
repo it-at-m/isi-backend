@@ -5,12 +5,10 @@ import static org.hamcrest.Matchers.is;
 
 import com.opencsv.exceptions.CsvDataTypeMismatchException;
 import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
-import de.muenchen.isi.infrastructure.csv.SobonOrientierungswertSozialeInfrastrukturCsv;
+import de.muenchen.isi.infrastructure.csv.SobonOrientierungswertCsv;
 import de.muenchen.isi.infrastructure.csv.StaedtebaulicheOrientierungswertCsv;
 import de.muenchen.isi.infrastructure.entity.enums.Altersklasse;
 import de.muenchen.isi.infrastructure.entity.enums.Einrichtungstyp;
-import de.muenchen.isi.infrastructure.entity.enums.Wohnungstyp;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonVerfahrensgrundsaetzeJahr;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
@@ -43,20 +41,13 @@ class CsvRepositoryTest {
         "testfile_StaedtebaulicheOrientierungswerteNotValid.csv";
 
     private static final String NAME_CSV_TESTFILE_SO_EMPTY = "testfile_StaedtebaulicheOrientierungswerteEmpty.csv";
-
-    private InputStreamReader testfileSobon;
-
-    private InputStreamReader testfileSobonNotValid;
-
-    private InputStreamReader testfileSobonEmpty;
-
-    private InputStreamReader testfileSo;
-
-    private InputStreamReader testfileSoNotValid;
-
-    private InputStreamReader testfileSoEmpty;
-
     private final CsvRepository csvRepository = new CsvRepository();
+    private InputStreamReader testfileSobon;
+    private InputStreamReader testfileSobonNotValid;
+    private InputStreamReader testfileSobonEmpty;
+    private InputStreamReader testfileSo;
+    private InputStreamReader testfileSoNotValid;
+    private InputStreamReader testfileSoEmpty;
 
     @BeforeEach
     void beforeEach() throws IOException {
@@ -82,14 +73,12 @@ class CsvRepositoryTest {
             this.csvRepository.readAllStaedtebaulicheOrientierungswertCsv(this.testfileSo);
 
         final var firstExpected = new StaedtebaulicheOrientierungswertCsv();
-        firstExpected.setJahr(SobonVerfahrensgrundsaetzeJahr.JAHR_2021);
-        firstExpected.setWohnungstyp(Wohnungstyp.GW_FREIFINANZEIRT);
+        firstExpected.setFoerderArt("GW-freifinanziert");
         firstExpected.setDurchschnittlicheGrundflaeche(90L);
         firstExpected.setBelegungsdichte(BigDecimal.valueOf(210, 2));
 
         final var lastExpected = new StaedtebaulicheOrientierungswertCsv();
-        lastExpected.setJahr(SobonVerfahrensgrundsaetzeJahr.JAHR_2021);
-        lastExpected.setWohnungstyp(Wohnungstyp.EINS_ZWEI_FH);
+        lastExpected.setFoerderArt("GW-freifinanziert");
         lastExpected.setDurchschnittlicheGrundflaeche(150L);
         lastExpected.setBelegungsdichte(BigDecimal.valueOf(348, 2));
 
@@ -117,14 +106,13 @@ class CsvRepositoryTest {
     @Test
     void readAllSobonOrientierungswertSozialeInfrastrukturCsv()
         throws CsvRequiredFieldEmptyException, CsvDataTypeMismatchException {
-        final List<SobonOrientierungswertSozialeInfrastrukturCsv> resultList =
+        final List<SobonOrientierungswertCsv> resultList =
             this.csvRepository.readAllSobonOrientierungswertSozialeInfrastrukturCsv(this.testfileSobon);
 
-        final var firstExpected = new SobonOrientierungswertSozialeInfrastrukturCsv();
-        firstExpected.setJahr(SobonVerfahrensgrundsaetzeJahr.JAHR_2021);
+        final var firstExpected = new SobonOrientierungswertCsv();
         firstExpected.setEinrichtungstyp(Einrichtungstyp.KINDERKRIPPE);
         firstExpected.setAltersklasse(Altersklasse.NULL_ZWEI);
-        firstExpected.setWohnungstyp(Wohnungstyp.EINS_ZWEI_FH);
+        firstExpected.setFoerderArt("1-2-FH");
         firstExpected.setEinwohnerJahr1NachErsterstellung(BigDecimal.valueOf(2877, 4));
         firstExpected.setEinwohnerJahr2NachErsterstellung(BigDecimal.valueOf(2610, 4));
         firstExpected.setEinwohnerJahr3NachErsterstellung(BigDecimal.valueOf(2118, 4));
@@ -141,11 +129,10 @@ class CsvRepositoryTest {
         firstExpected.setPerzentil75ProzentEinwohnerJeWohnung(BigDecimal.valueOf(1937, 4));
         firstExpected.setPerzentil75ProzentGerundetEinwohnerJeWohnung(BigDecimal.valueOf(19, 2));
 
-        final var lastExpected = new SobonOrientierungswertSozialeInfrastrukturCsv();
-        lastExpected.setJahr(SobonVerfahrensgrundsaetzeJahr.JAHR_2021);
+        final var lastExpected = new SobonOrientierungswertCsv();
         lastExpected.setEinrichtungstyp(Einrichtungstyp.N_N);
         lastExpected.setAltersklasse(Altersklasse.ALLE_EWO);
-        lastExpected.setWohnungstyp(Wohnungstyp.GW_FREIFINANZEIRT);
+        lastExpected.setFoerderArt("1-2-FH");
         lastExpected.setEinwohnerJahr1NachErsterstellung(BigDecimal.valueOf(19188, 4));
         lastExpected.setEinwohnerJahr2NachErsterstellung(BigDecimal.valueOf(20447, 4));
         lastExpected.setEinwohnerJahr3NachErsterstellung(BigDecimal.valueOf(21063, 4));

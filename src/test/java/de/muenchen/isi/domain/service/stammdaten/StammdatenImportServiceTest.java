@@ -6,23 +6,24 @@ import de.muenchen.isi.domain.exception.CsvAttributeErrorException;
 import de.muenchen.isi.domain.exception.FileImportFailedException;
 import de.muenchen.isi.domain.mapper.StammdatenDomainMapper;
 import de.muenchen.isi.domain.mapper.StammdatenDomainMapperImpl;
-import de.muenchen.isi.infrastructure.csv.SobonOrientierungswertSozialeInfrastrukturCsv;
+import de.muenchen.isi.infrastructure.csv.SobonOrientierungswertCsv;
 import de.muenchen.isi.infrastructure.csv.StaedtebaulicheOrientierungswertCsv;
 import de.muenchen.isi.infrastructure.entity.enums.Altersklasse;
 import de.muenchen.isi.infrastructure.entity.enums.Einrichtungstyp;
-import de.muenchen.isi.infrastructure.entity.enums.Wohnungstyp;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonVerfahrensgrundsaetzeJahr;
-import de.muenchen.isi.infrastructure.entity.stammdaten.SobonOrientierungswertSozialeInfrastruktur;
-import de.muenchen.isi.infrastructure.entity.stammdaten.StaedtebaulicheOrientierungswert;
+import de.muenchen.isi.infrastructure.entity.stammdaten.SobonJahr;
+import de.muenchen.isi.infrastructure.entity.stammdaten.SobonOrientierungswert;
+import de.muenchen.isi.infrastructure.entity.stammdaten.StaedtbaulicherOrientierungwert;
 import de.muenchen.isi.infrastructure.repository.CsvRepository;
-import de.muenchen.isi.infrastructure.repository.stammdaten.SobonOrientierungswertSozialeInfrastrukturRepository;
-import de.muenchen.isi.infrastructure.repository.stammdaten.StaedtebaulicheOrientierungswertRepository;
+import de.muenchen.isi.infrastructure.repository.stammdaten.SobonJahrRepository;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,37 +39,24 @@ import org.springframework.web.multipart.MultipartFile;
 @MockitoSettings(strictness = Strictness.LENIENT)
 class StammdatenImportServiceTest {
 
+    private final StammdatenDomainMapper stammdatenDomainMapper = new StammdatenDomainMapperImpl();
+
     @Mock
     private MultipartFile multipartFile;
 
     @Mock
     private CsvRepository csvRepository;
 
-    @Mock
-    private StaedtebaulicheOrientierungswertRepository staedtebaulicheOrientierungswertRepository;
-
-    @Mock
-    private SobonOrientierungswertSozialeInfrastrukturRepository sobonOrientierungswertSozialeInfrastrukturRepository;
-
-    private final StammdatenDomainMapper stammdatenDomainMapper = new StammdatenDomainMapperImpl();
-
     private StammdatenImportService stammdatenImportService;
+
+    @Mock
+    private SobonJahrRepository sobonJahrRepository;
 
     @BeforeEach
     void beforeEach() {
         this.stammdatenImportService =
-            new StammdatenImportService(
-                this.csvRepository,
-                this.staedtebaulicheOrientierungswertRepository,
-                this.sobonOrientierungswertSozialeInfrastrukturRepository,
-                this.stammdatenDomainMapper
-            );
-        Mockito.reset(
-            this.multipartFile,
-            this.csvRepository,
-            this.staedtebaulicheOrientierungswertRepository,
-            this.sobonOrientierungswertSozialeInfrastrukturRepository
-        );
+            new StammdatenImportService(this.csvRepository, this.sobonJahrRepository, this.stammdatenDomainMapper);
+        Mockito.reset(this.multipartFile, this.csvRepository, this.sobonJahrRepository);
     }
 
     @Test
@@ -77,9 +65,15 @@ class StammdatenImportServiceTest {
         final InputStream inputStream = new ByteArrayInputStream("the-file".getBytes());
         Mockito.when(this.multipartFile.getInputStream()).thenReturn(inputStream);
 
+        SobonJahr sobonJahr = new SobonJahr();
+        sobonJahr.setId(UUID.randomUUID());
+        sobonJahr.setJahr(2014);
+        sobonJahr.setGueltigAb(LocalDate.parse("2014-01-01"));
+
+        Mockito.when(this.sobonJahrRepository.findById(sobonJahr.getId())).thenReturn(Optional.of(sobonJahr));
+
         final var csvEntry = new StaedtebaulicheOrientierungswertCsv();
-        csvEntry.setJahr(SobonVerfahrensgrundsaetzeJahr.JAHR_2021);
-        csvEntry.setWohnungstyp(Wohnungstyp.GW_FREIFINANZEIRT);
+        csvEntry.setFoerderArt("GW-Freifinanziert");
         csvEntry.setDurchschnittlicheGrundflaeche(90L);
         csvEntry.setBelegungsdichte(BigDecimal.valueOf(210, 2));
 
@@ -87,24 +81,28 @@ class StammdatenImportServiceTest {
             .when(this.csvRepository.readAllStaedtebaulicheOrientierungswertCsv(Mockito.any(InputStreamReader.class)))
             .thenReturn(List.of(csvEntry));
 
-        final var entity = new StaedtebaulicheOrientierungswert();
-        entity.setJahr(SobonVerfahrensgrundsaetzeJahr.JAHR_2021);
-        entity.setWohnungstyp(Wohnungstyp.GW_FREIFINANZEIRT);
+        final var entity = new StaedtbaulicherOrientierungwert();
+        entity.setFoerderArt("GW-Freifinanziert");
         entity.setDurchschnittlicheGrundflaeche(90L);
         entity.setBelegungsdichte(BigDecimal.valueOf(210, 2));
-        final List<StaedtebaulicheOrientierungswert> entities = List.of(entity);
+        sobonJahr.setStaedtebaulicheOrientierungswerte(List.of(entity));
 
-        this.stammdatenImportService.importStaedtebaulicheOrientierungswerte(this.multipartFile);
+        this.stammdatenImportService.importStaedtebaulicheOrientierungswerte(sobonJahr.getId(), this.multipartFile);
 
         Mockito
             .verify(this.csvRepository, Mockito.times(1))
             .readAllStaedtebaulicheOrientierungswertCsv(Mockito.any(InputStreamReader.class));
-        Mockito.verify(this.staedtebaulicheOrientierungswertRepository, Mockito.times(1)).saveAll(entities);
+        Mockito.verify(this.sobonJahrRepository, Mockito.times(1)).save(sobonJahr);
     }
 
     @Test
     void importStaedtebaulicheOrientierungswerteException()
         throws IOException, CsvRequiredFieldEmptyException, CsvDataTypeMismatchException {
+        SobonJahr sobonJahr = new SobonJahr();
+        sobonJahr.setId(UUID.randomUUID());
+        sobonJahr.setJahr(2014);
+        Mockito.when(this.sobonJahrRepository.findById(sobonJahr.getId())).thenReturn(Optional.of(sobonJahr));
+
         InputStream inputStream = new ByteArrayInputStream("the-file".getBytes());
         Mockito.when(this.multipartFile.getInputStream()).thenReturn(inputStream);
         Mockito
@@ -113,7 +111,11 @@ class StammdatenImportServiceTest {
             .readAllStaedtebaulicheOrientierungswertCsv(Mockito.any(InputStreamReader.class));
         Assertions.assertThrows(
             CsvAttributeErrorException.class,
-            () -> this.stammdatenImportService.importStaedtebaulicheOrientierungswerte(this.multipartFile)
+            () ->
+                this.stammdatenImportService.importStaedtebaulicheOrientierungswerte(
+                        sobonJahr.getId(),
+                        this.multipartFile
+                    )
         );
         Mockito.reset(this.csvRepository, this.multipartFile);
 
@@ -125,28 +127,40 @@ class StammdatenImportServiceTest {
             .readAllStaedtebaulicheOrientierungswertCsv(Mockito.any(InputStreamReader.class));
         Assertions.assertThrows(
             CsvAttributeErrorException.class,
-            () -> this.stammdatenImportService.importStaedtebaulicheOrientierungswerte(this.multipartFile)
+            () ->
+                this.stammdatenImportService.importStaedtebaulicheOrientierungswerte(
+                        sobonJahr.getId(),
+                        this.multipartFile
+                    )
         );
         Mockito.reset(this.csvRepository, this.multipartFile);
 
         Mockito.when(this.multipartFile.getInputStream()).thenThrow(new IOException());
         Assertions.assertThrows(
             FileImportFailedException.class,
-            () -> this.stammdatenImportService.importStaedtebaulicheOrientierungswerte(this.multipartFile)
+            () ->
+                this.stammdatenImportService.importStaedtebaulicheOrientierungswerte(
+                        sobonJahr.getId(),
+                        this.multipartFile
+                    )
         );
     }
 
     @Test
     void importSoBoNOrientierungswerteSozialeInfrastruktur()
         throws IOException, CsvRequiredFieldEmptyException, CsvDataTypeMismatchException, CsvAttributeErrorException, FileImportFailedException {
+        SobonJahr sobonJahr = new SobonJahr();
+        sobonJahr.setId(UUID.randomUUID());
+        sobonJahr.setJahr(2014);
+        Mockito.when(this.sobonJahrRepository.findById(sobonJahr.getId())).thenReturn(Optional.of(sobonJahr));
+
         final InputStream inputStream = new ByteArrayInputStream("the-file".getBytes());
         Mockito.when(this.multipartFile.getInputStream()).thenReturn(inputStream);
 
-        final var csvEntry = new SobonOrientierungswertSozialeInfrastrukturCsv();
-        csvEntry.setJahr(SobonVerfahrensgrundsaetzeJahr.JAHR_2021);
+        final var csvEntry = new SobonOrientierungswertCsv();
         csvEntry.setEinrichtungstyp(Einrichtungstyp.KINDERKRIPPE);
         csvEntry.setAltersklasse(Altersklasse.NULL_ZWEI);
-        csvEntry.setWohnungstyp(Wohnungstyp.EINS_ZWEI_FH);
+        csvEntry.setFoerderArt("1-2-FH");
         csvEntry.setEinwohnerJahr1NachErsterstellung(BigDecimal.valueOf(2877, 4));
         csvEntry.setEinwohnerJahr2NachErsterstellung(BigDecimal.valueOf(2610, 4));
         csvEntry.setEinwohnerJahr3NachErsterstellung(BigDecimal.valueOf(2118, 4));
@@ -171,11 +185,10 @@ class StammdatenImportServiceTest {
             )
             .thenReturn(List.of(csvEntry));
 
-        final var entity = new SobonOrientierungswertSozialeInfrastruktur();
-        entity.setJahr(SobonVerfahrensgrundsaetzeJahr.JAHR_2021);
+        final var entity = new SobonOrientierungswert();
         entity.setEinrichtungstyp(Einrichtungstyp.KINDERKRIPPE);
         entity.setAltersklasse(Altersklasse.NULL_ZWEI);
-        entity.setWohnungstyp(Wohnungstyp.EINS_ZWEI_FH);
+        entity.setFoerderArt("1-2-FH");
         entity.setEinwohnerJahr1NachErsterstellung(BigDecimal.valueOf(2877, 4));
         entity.setEinwohnerJahr2NachErsterstellung(BigDecimal.valueOf(2610, 4));
         entity.setEinwohnerJahr3NachErsterstellung(BigDecimal.valueOf(2118, 4));
@@ -191,19 +204,27 @@ class StammdatenImportServiceTest {
         entity.setFaktorEinwohnerJeWohnung(BigDecimal.valueOf(12569, 4));
         entity.setPerzentil75ProzentEinwohnerJeWohnung(BigDecimal.valueOf(1937, 4));
         entity.setPerzentil75ProzentGerundetEinwohnerJeWohnung(BigDecimal.valueOf(19, 2));
-        final List<SobonOrientierungswertSozialeInfrastruktur> entities = List.of(entity);
+        sobonJahr.setSobonOrientierungswerte(List.of(entity));
 
-        this.stammdatenImportService.importSobonOrientierungswerteSozialeInfrastruktur(this.multipartFile);
+        this.stammdatenImportService.importSobonOrientierungswerteSozialeInfrastruktur(
+                sobonJahr.getId(),
+                this.multipartFile
+            );
 
         Mockito
             .verify(this.csvRepository, Mockito.times(1))
             .readAllSobonOrientierungswertSozialeInfrastrukturCsv(Mockito.any(InputStreamReader.class));
-        Mockito.verify(this.sobonOrientierungswertSozialeInfrastrukturRepository, Mockito.times(1)).saveAll(entities);
+        Mockito.verify(this.sobonJahrRepository, Mockito.times(1)).save(sobonJahr);
     }
 
     @Test
     void importSoBoNOrientierungswerteSozialeInfrastrukturException()
         throws IOException, CsvRequiredFieldEmptyException, CsvDataTypeMismatchException {
+        SobonJahr sobonJahr = new SobonJahr();
+        sobonJahr.setId(UUID.randomUUID());
+        sobonJahr.setJahr(2014);
+        Mockito.when(this.sobonJahrRepository.findById(sobonJahr.getId())).thenReturn(Optional.of(sobonJahr));
+
         InputStream inputStream = new ByteArrayInputStream("the-file".getBytes());
         Mockito.when(this.multipartFile.getInputStream()).thenReturn(inputStream);
         Mockito
@@ -212,7 +233,11 @@ class StammdatenImportServiceTest {
             .readAllSobonOrientierungswertSozialeInfrastrukturCsv(Mockito.any(InputStreamReader.class));
         Assertions.assertThrows(
             CsvAttributeErrorException.class,
-            () -> this.stammdatenImportService.importSobonOrientierungswerteSozialeInfrastruktur(this.multipartFile)
+            () ->
+                this.stammdatenImportService.importSobonOrientierungswerteSozialeInfrastruktur(
+                        sobonJahr.getId(),
+                        this.multipartFile
+                    )
         );
         Mockito.reset(this.csvRepository, this.multipartFile);
 
@@ -224,14 +249,22 @@ class StammdatenImportServiceTest {
             .readAllSobonOrientierungswertSozialeInfrastrukturCsv(Mockito.any(InputStreamReader.class));
         Assertions.assertThrows(
             CsvAttributeErrorException.class,
-            () -> this.stammdatenImportService.importSobonOrientierungswerteSozialeInfrastruktur(this.multipartFile)
+            () ->
+                this.stammdatenImportService.importSobonOrientierungswerteSozialeInfrastruktur(
+                        sobonJahr.getId(),
+                        this.multipartFile
+                    )
         );
         Mockito.reset(this.csvRepository, this.multipartFile);
 
         Mockito.when(this.multipartFile.getInputStream()).thenThrow(new IOException());
         Assertions.assertThrows(
             FileImportFailedException.class,
-            () -> this.stammdatenImportService.importSobonOrientierungswerteSozialeInfrastruktur(this.multipartFile)
+            () ->
+                this.stammdatenImportService.importSobonOrientierungswerteSozialeInfrastruktur(
+                        sobonJahr.getId(),
+                        this.multipartFile
+                    )
         );
     }
 }

@@ -4,20 +4,13 @@ import com.opencsv.bean.CsvBindByName;
 import com.opencsv.bean.CsvCustomBindByName;
 import de.muenchen.isi.infrastructure.adapter.AltersklasseConverter;
 import de.muenchen.isi.infrastructure.adapter.EinrichtungstypConverter;
-import de.muenchen.isi.infrastructure.adapter.SobonVerfahrensgrundsaetzeJahrConverter;
-import de.muenchen.isi.infrastructure.adapter.WohnungstypConverter;
 import de.muenchen.isi.infrastructure.entity.enums.Altersklasse;
 import de.muenchen.isi.infrastructure.entity.enums.Einrichtungstyp;
-import de.muenchen.isi.infrastructure.entity.enums.Wohnungstyp;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonVerfahrensgrundsaetzeJahr;
 import java.math.BigDecimal;
 import lombok.Data;
 
 @Data
-public class SobonOrientierungswertSozialeInfrastrukturCsv {
-
-    @CsvCustomBindByName(column = "JAHR", converter = SobonVerfahrensgrundsaetzeJahrConverter.class, required = true)
-    private SobonVerfahrensgrundsaetzeJahr jahr;
+public class SobonOrientierungswertCsv {
 
     @CsvCustomBindByName(column = "EINRICHTUNGSTYP", converter = EinrichtungstypConverter.class, required = true)
     private Einrichtungstyp einrichtungstyp;
@@ -25,8 +18,8 @@ public class SobonOrientierungswertSozialeInfrastrukturCsv {
     @CsvCustomBindByName(column = "ALTERSKLASSE", converter = AltersklasseConverter.class, required = true)
     private Altersklasse altersklasse;
 
-    @CsvCustomBindByName(column = "WOHNUNGSTYP", converter = WohnungstypConverter.class, required = true)
-    private Wohnungstyp wohnungstyp;
+    @CsvBindByName(column = "WOHNUNGSTYP", required = true)
+    private String foerderArt;
 
     @CsvBindByName(column = "JAHR_1_NACH_ERSTELLUNG", required = true)
     private BigDecimal einwohnerJahr1NachErsterstellung;
