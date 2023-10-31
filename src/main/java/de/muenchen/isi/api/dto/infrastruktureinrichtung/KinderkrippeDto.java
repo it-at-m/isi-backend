@@ -4,6 +4,7 @@
  */
 package de.muenchen.isi.api.dto.infrastruktureinrichtung;
 
+import de.muenchen.isi.api.validation.WohnungsnahePlaetzeValid;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Einrichtungstraeger;
 import javax.validation.constraints.NotNull;
 import lombok.Data;
@@ -13,6 +14,7 @@ import lombok.ToString;
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
+@WohnungsnahePlaetzeValid
 public class KinderkrippeDto extends InfrastruktureinrichtungDto {
 
     @NotNull
