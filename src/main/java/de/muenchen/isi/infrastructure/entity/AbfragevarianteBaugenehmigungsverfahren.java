@@ -137,7 +137,7 @@ public class AbfragevarianteBaugenehmigungsverfahren extends Abfragevariante {
     private Integer weWeiteresNichtInfrastrukturrelevantesWohnen;
 
     @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "varchar(255) not null check (sobon_orientierungswert_jahr != 'UNSPECIFIED')")
+    @Column
     private SobonOrientierungswertJahr sobonOrientierungswertJahr;
 
     @Column
