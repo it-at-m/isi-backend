@@ -16,7 +16,15 @@ import de.muenchen.isi.domain.model.AbfrageModel;
 import de.muenchen.isi.domain.model.BaugenehmigungsverfahrenModel;
 import de.muenchen.isi.domain.model.BauleitplanverfahrenModel;
 import de.muenchen.isi.domain.model.abfrageAngelegt.AbfrageAngelegtModel;
+import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.AbfragevarianteBaugenehmigungsverfahrenSachbearbeitungInBearbeitungSachbearbeitungModel;
+import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.AbfragevarianteBauleitplanverfahrenSachbearbeitungInBearbeitungSachbearbeitungModel;
+import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.BaugenehmigungsverfahrenInBearbeitungSachbearbeitungModel;
+import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.BauleitplanverfahrenInBearbeitungSachbearbeitungModel;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.repository.AbfrageRepository;
+import java.util.List;
 import java.util.UUID;
 import javax.transaction.Transactional;
 import org.junit.jupiter.api.Assertions;
@@ -106,6 +114,79 @@ class AbfrageServiceSpringTest {
         assertThat(
             ((BaugenehmigungsverfahrenModel) abfrage).getAbfragevarianten().get(0).getName(),
             is("Name Abfragevariante 112")
+        );
+
+        abfrageRepository.deleteAll();
+    }
+
+    @Test
+    @Transactional
+    void patchInBearbeitungSachbearbeitungBauleitplanverfahren()
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, FileHandlingFailedException, FileHandlingWithS3FailedException, AbfrageStatusNotAllowedException {
+        AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
+        abfrage = this.abfrageService.save(abfrage);
+        abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+        abfrage = this.abfrageService.save(abfrage);
+
+        final var abfragePatch = new BauleitplanverfahrenInBearbeitungSachbearbeitungModel();
+        abfragePatch.setArtAbfrage(ArtAbfrage.BAULEITPLANVERFAHREN);
+        abfragePatch.setVersion(abfrage.getVersion());
+        abfragePatch.setAbfragevariantenSachbearbeitung(List.of());
+        final var abfragevariantePatch =
+            new AbfragevarianteBauleitplanverfahrenSachbearbeitungInBearbeitungSachbearbeitungModel();
+        abfragevariantePatch.setId(((BauleitplanverfahrenModel) abfrage).getAbfragevarianten().get(0).getId());
+        abfragevariantePatch.setVersion(
+            ((BauleitplanverfahrenModel) abfrage).getAbfragevarianten().get(0).getVersion()
+        );
+        abfragevariantePatch.setArtAbfragevariante(ArtAbfrage.BAULEITPLANVERFAHREN);
+        abfragevariantePatch.setGfWohnenPlanungsursaechlich(
+            ((BauleitplanverfahrenModel) abfrage).getAbfragevarianten().get(0).getGfWohnenPlanungsursaechlich()
+        );
+        abfragevariantePatch.setSobonOrientierungswertJahr(SobonOrientierungswertJahr.JAHR_2017);
+        abfragevariantePatch.setAnmerkung("Die Anmerkung Bauleitplanverfahren Patch Sachbearbeitung");
+        abfragePatch.setAbfragevarianten(List.of(abfragevariantePatch));
+
+        abfrage = this.abfrageService.patchInBearbeitungSachbearbeitung(abfragePatch, abfrage.getId());
+        assertThat(
+            ((BauleitplanverfahrenModel) abfrage).getAbfragevarianten().get(0).getAnmerkung(),
+            is("Die Anmerkung Bauleitplanverfahren Patch Sachbearbeitung")
+        );
+
+        abfrageRepository.deleteAll();
+    }
+
+    @Test
+    @Transactional
+    void patchInBearbeitungSachbearbeitungBaugenehmigungsverfahren()
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, FileHandlingFailedException, FileHandlingWithS3FailedException, AbfrageStatusNotAllowedException {
+        AbfrageModel abfrage = TestData.createBaugenehmigungsverfahrenModel();
+        abfrage = this.abfrageService.save(abfrage);
+        abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+        abfrage = this.abfrageService.save(abfrage);
+
+        final var abfragePatch = new BaugenehmigungsverfahrenInBearbeitungSachbearbeitungModel();
+        abfragePatch.setArtAbfrage(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN);
+        abfragePatch.setVersion(abfrage.getVersion());
+        abfragePatch.setVerortung(((BaugenehmigungsverfahrenModel) abfrage).getVerortung());
+        abfragePatch.setAbfragevariantenSachbearbeitung(List.of());
+        final var abfragevariantePatch =
+            new AbfragevarianteBaugenehmigungsverfahrenSachbearbeitungInBearbeitungSachbearbeitungModel();
+        abfragevariantePatch.setId(((BaugenehmigungsverfahrenModel) abfrage).getAbfragevarianten().get(0).getId());
+        abfragevariantePatch.setVersion(
+            ((BaugenehmigungsverfahrenModel) abfrage).getAbfragevarianten().get(0).getVersion()
+        );
+        abfragevariantePatch.setArtAbfragevariante(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN);
+        abfragevariantePatch.setGfWohnenPlanungsursaechlich(
+            ((BaugenehmigungsverfahrenModel) abfrage).getAbfragevarianten().get(0).getGfWohnenPlanungsursaechlich()
+        );
+        abfragevariantePatch.setSobonOrientierungswertJahr(SobonOrientierungswertJahr.JAHR_2017);
+        abfragevariantePatch.setAnmerkung("Die Anmerkung Baugenehmigungsverfahren Patch Sachbearbeitung");
+        abfragePatch.setAbfragevarianten(List.of(abfragevariantePatch));
+
+        abfrage = this.abfrageService.patchInBearbeitungSachbearbeitung(abfragePatch, abfrage.getId());
+        assertThat(
+            ((BaugenehmigungsverfahrenModel) abfrage).getAbfragevarianten().get(0).getAnmerkung(),
+            is("Die Anmerkung Baugenehmigungsverfahren Patch Sachbearbeitung")
         );
 
         abfrageRepository.deleteAll();
