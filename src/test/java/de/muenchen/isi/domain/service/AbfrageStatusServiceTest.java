@@ -5,6 +5,7 @@ import static org.hamcrest.Matchers.is;
 
 import de.muenchen.isi.IsiBackendApplication;
 import de.muenchen.isi.TestConstants;
+import de.muenchen.isi.TestData;
 import de.muenchen.isi.domain.exception.AbfrageStatusNotAllowedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
@@ -13,7 +14,6 @@ import de.muenchen.isi.domain.exception.UniqueViolationException;
 import de.muenchen.isi.domain.model.AbfrageModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrageEvents;
-import de.muenchen.isi.rest.TestData;
 import java.util.UUID;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

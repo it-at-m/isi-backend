@@ -5,6 +5,7 @@ import static org.hamcrest.Matchers.is;
 
 import de.muenchen.isi.IsiBackendApplication;
 import de.muenchen.isi.TestConstants;
+import de.muenchen.isi.TestData;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
@@ -12,7 +13,6 @@ import de.muenchen.isi.domain.model.AbfrageModel;
 import de.muenchen.isi.domain.model.BaugenehmigungsverfahrenModel;
 import de.muenchen.isi.domain.model.BauleitplanverfahrenModel;
 import de.muenchen.isi.infrastructure.repository.AbfrageRepository;
-import de.muenchen.isi.rest.TestData;
 import java.util.UUID;
 import javax.transaction.Transactional;
 import org.junit.jupiter.api.Assertions;

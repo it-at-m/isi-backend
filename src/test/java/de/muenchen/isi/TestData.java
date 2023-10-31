@@ -2,7 +2,7 @@
  * Copyright (c): it@M - Dienstleister für Informations- und Telekommunikationstechnik
  * der Landeshauptstadt München, 2022
  */
-package de.muenchen.isi.rest;
+package de.muenchen.isi;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.muenchen.isi.domain.model.AbfragevarianteBaugenehmigungsverfahrenModel;
