@@ -104,7 +104,7 @@ public class AbfrageService {
             } catch (final DataIntegrityViolationException exception) {
                 final var message =
                     "Der angegebene Name der Abfragevariante ist schon vorhanden, bitte wählen Sie daher einen anderen Namen und speichern Sie die Abfrage erneut.";
-                throw new UniqueViolationException(message);
+                throw new UniqueViolationException(message, exception);
             }
             return this.abfrageDomainMapper.entity2Model(entity);
         } else {
