@@ -13,13 +13,13 @@ import org.junit.jupiter.api.Test;
 
 class GeschossflaecheWohnenDistributionBaugenehmigungsverfahrenValidatorTest {
 
-    private GeschossflaecheWohnenDistributionBaugenehmigungsverfahrenValidator geschossflaecheWohnenDistributionBauleitplanverfahrenValidator =
+    private GeschossflaecheWohnenDistributionBaugenehmigungsverfahrenValidator geschossflaecheWohnenDistributionValidator =
         new GeschossflaecheWohnenDistributionBaugenehmigungsverfahrenValidator();
 
     @Test
     void isValidNonTechnicalBaugebiet() {
         assertThat(
-            this.geschossflaecheWohnenDistributionBauleitplanverfahrenValidator.isValid(
+            this.geschossflaecheWohnenDistributionValidator.isValid(
                     new AbfragevarianteBaugenehmigungsverfahrenAngelegtDto(),
                     null
                 ),
@@ -31,10 +31,7 @@ class GeschossflaecheWohnenDistributionBaugenehmigungsverfahrenValidatorTest {
         var abfragevariante = new AbfragevarianteBaugenehmigungsverfahrenAngelegtDto();
         abfragevariante.setGfWohnenGesamt(BigDecimal.valueOf(150));
 
-        assertThat(
-            this.geschossflaecheWohnenDistributionBauleitplanverfahrenValidator.isValid(abfragevariante, null),
-            is(true)
-        );
+        assertThat(this.geschossflaecheWohnenDistributionValidator.isValid(abfragevariante, null), is(true));
 
         // --
 
@@ -45,10 +42,7 @@ class GeschossflaecheWohnenDistributionBaugenehmigungsverfahrenValidatorTest {
 
         abfragevariante.setBauabschnitte(List.of(bauabschnitt1));
 
-        assertThat(
-            this.geschossflaecheWohnenDistributionBauleitplanverfahrenValidator.isValid(abfragevariante, null),
-            is(true)
-        );
+        assertThat(this.geschossflaecheWohnenDistributionValidator.isValid(abfragevariante, null), is(true));
 
         // --
 
@@ -70,10 +64,7 @@ class GeschossflaecheWohnenDistributionBaugenehmigungsverfahrenValidatorTest {
 
         abfragevariante.setBauabschnitte(List.of(bauabschnitt1));
 
-        assertThat(
-            this.geschossflaecheWohnenDistributionBauleitplanverfahrenValidator.isValid(abfragevariante, null),
-            is(true)
-        );
+        assertThat(this.geschossflaecheWohnenDistributionValidator.isValid(abfragevariante, null), is(true));
 
         // --
 
@@ -97,10 +88,7 @@ class GeschossflaecheWohnenDistributionBaugenehmigungsverfahrenValidatorTest {
 
         abfragevariante.setBauabschnitte(List.of(bauabschnitt1, bauabschnitt2));
 
-        assertThat(
-            this.geschossflaecheWohnenDistributionBauleitplanverfahrenValidator.isValid(abfragevariante, null),
-            is(true)
-        );
+        assertThat(this.geschossflaecheWohnenDistributionValidator.isValid(abfragevariante, null), is(true));
 
         // --
 
@@ -130,10 +118,7 @@ class GeschossflaecheWohnenDistributionBaugenehmigungsverfahrenValidatorTest {
 
         abfragevariante.setBauabschnitte(List.of(bauabschnitt1, bauabschnitt2));
 
-        assertThat(
-            this.geschossflaecheWohnenDistributionBauleitplanverfahrenValidator.isValid(abfragevariante, null),
-            is(true)
-        );
+        assertThat(this.geschossflaecheWohnenDistributionValidator.isValid(abfragevariante, null), is(true));
 
         // --
 
@@ -157,10 +142,7 @@ class GeschossflaecheWohnenDistributionBaugenehmigungsverfahrenValidatorTest {
 
         abfragevariante.setBauabschnitte(List.of(bauabschnitt1, bauabschnitt2));
 
-        assertThat(
-            this.geschossflaecheWohnenDistributionBauleitplanverfahrenValidator.isValid(abfragevariante, null),
-            is(false)
-        );
+        assertThat(this.geschossflaecheWohnenDistributionValidator.isValid(abfragevariante, null), is(false));
 
         // --
 
@@ -184,16 +166,13 @@ class GeschossflaecheWohnenDistributionBaugenehmigungsverfahrenValidatorTest {
 
         abfragevariante.setBauabschnitte(List.of(bauabschnitt1, bauabschnitt2));
 
-        assertThat(
-            this.geschossflaecheWohnenDistributionBauleitplanverfahrenValidator.isValid(abfragevariante, null),
-            is(false)
-        );
+        assertThat(this.geschossflaecheWohnenDistributionValidator.isValid(abfragevariante, null), is(false));
     }
 
     @Test
     void isValidTechnicalBaugebiet() {
         assertThat(
-            this.geschossflaecheWohnenDistributionBauleitplanverfahrenValidator.isValid(
+            this.geschossflaecheWohnenDistributionValidator.isValid(
                     new AbfragevarianteBaugenehmigungsverfahrenAngelegtDto(),
                     null
                 ),
@@ -205,10 +184,7 @@ class GeschossflaecheWohnenDistributionBaugenehmigungsverfahrenValidatorTest {
         var abfragevariante = new AbfragevarianteBaugenehmigungsverfahrenAngelegtDto();
         abfragevariante.setGfWohnenGesamt(BigDecimal.valueOf(150));
 
-        assertThat(
-            this.geschossflaecheWohnenDistributionBauleitplanverfahrenValidator.isValid(abfragevariante, null),
-            is(true)
-        );
+        assertThat(this.geschossflaecheWohnenDistributionValidator.isValid(abfragevariante, null), is(true));
 
         // --
 
@@ -219,10 +195,7 @@ class GeschossflaecheWohnenDistributionBaugenehmigungsverfahrenValidatorTest {
 
         abfragevariante.setBauabschnitte(List.of(bauabschnitt1));
 
-        assertThat(
-            this.geschossflaecheWohnenDistributionBauleitplanverfahrenValidator.isValid(abfragevariante, null),
-            is(true)
-        );
+        assertThat(this.geschossflaecheWohnenDistributionValidator.isValid(abfragevariante, null), is(true));
 
         // --
 
@@ -241,10 +214,7 @@ class GeschossflaecheWohnenDistributionBaugenehmigungsverfahrenValidatorTest {
 
         abfragevariante.setBauabschnitte(List.of(bauabschnitt1));
 
-        assertThat(
-            this.geschossflaecheWohnenDistributionBauleitplanverfahrenValidator.isValid(abfragevariante, null),
-            is(true)
-        );
+        assertThat(this.geschossflaecheWohnenDistributionValidator.isValid(abfragevariante, null), is(true));
 
         // --
 
@@ -276,10 +246,7 @@ class GeschossflaecheWohnenDistributionBaugenehmigungsverfahrenValidatorTest {
 
         abfragevariante.setBauabschnitte(List.of(bauabschnitt1));
 
-        assertThat(
-            this.geschossflaecheWohnenDistributionBauleitplanverfahrenValidator.isValid(abfragevariante, null),
-            is(true)
-        );
+        assertThat(this.geschossflaecheWohnenDistributionValidator.isValid(abfragevariante, null), is(true));
 
         // --
 
@@ -311,10 +278,7 @@ class GeschossflaecheWohnenDistributionBaugenehmigungsverfahrenValidatorTest {
 
         abfragevariante.setBauabschnitte(List.of(bauabschnitt1));
 
-        assertThat(
-            this.geschossflaecheWohnenDistributionBauleitplanverfahrenValidator.isValid(abfragevariante, null),
-            is(false)
-        );
+        assertThat(this.geschossflaecheWohnenDistributionValidator.isValid(abfragevariante, null), is(false));
 
         // --
 
@@ -346,10 +310,7 @@ class GeschossflaecheWohnenDistributionBaugenehmigungsverfahrenValidatorTest {
 
         abfragevariante.setBauabschnitte(List.of(bauabschnitt1));
 
-        assertThat(
-            this.geschossflaecheWohnenDistributionBauleitplanverfahrenValidator.isValid(abfragevariante, null),
-            is(false)
-        );
+        assertThat(this.geschossflaecheWohnenDistributionValidator.isValid(abfragevariante, null), is(false));
 
         // --
 
@@ -377,9 +338,6 @@ class GeschossflaecheWohnenDistributionBaugenehmigungsverfahrenValidatorTest {
 
         abfragevariante.setBauabschnitte(List.of(bauabschnitt1));
 
-        assertThat(
-            this.geschossflaecheWohnenDistributionBauleitplanverfahrenValidator.isValid(abfragevariante, null),
-            is(false)
-        );
+        assertThat(this.geschossflaecheWohnenDistributionValidator.isValid(abfragevariante, null), is(false));
     }
 }
