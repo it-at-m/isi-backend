@@ -25,6 +25,7 @@ import de.muenchen.isi.domain.model.filehandling.DokumentModel;
 import de.muenchen.isi.domain.model.filehandling.FilepathModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtBaulicheNutzung;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtDokument;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonVerfahrensgrundsaetzeJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVerfahren;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
@@ -89,6 +90,7 @@ public class TestData {
         abfragevariante.setWeSonderwohnformen(false);
         abfragevariante.setWeGesamt(31);
         abfragevariante.setRealisierungVon(2023);
+        abfragevariante.setSobonOrientierungswertJahr(SobonOrientierungswertJahr.JAHR_2022);
         abfragevariante.setBauabschnitte(List.of(createBauabschnittModel()));
         return abfragevariante;
     }
@@ -105,6 +107,7 @@ public class TestData {
         abfragevariante.setWeSonderwohnformen(false);
         abfragevariante.setWeGesamt(31);
         abfragevariante.setRealisierungVon(2023);
+        abfragevariante.setSobonOrientierungswertJahr(SobonOrientierungswertJahr.JAHR_2014);
         abfragevariante.setBauabschnitte(List.of(createBauabschnittModel()));
         return abfragevariante;
     }
