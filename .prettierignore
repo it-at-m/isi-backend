@@ -5,4 +5,4 @@ target
 *.yml
 
 # Interne Dateien
-src/**/DatabaseFiller.java
+src/**/ImportStammdatenFromFile.java
