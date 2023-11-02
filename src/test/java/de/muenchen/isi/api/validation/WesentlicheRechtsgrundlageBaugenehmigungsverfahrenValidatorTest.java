@@ -36,7 +36,21 @@ class WesentlicheRechtsgrundlageBaugenehmigungsverfahrenValidatorTest {
         );
         assertThat(
             this.wesentlicheRechtsgrundlageValidator.isValid(
+                    WesentlicheRechtsgrundlage.EINFACHER_BEBAUUNGSPLAN_PARAGRAPH_30,
+                    null
+                ),
+            is(true)
+        );
+        assertThat(
+            this.wesentlicheRechtsgrundlageValidator.isValid(
                     WesentlicheRechtsgrundlage.EINFACHER_BEBAUUNGSPLAN_PARAGRAPH_30_IVM_34_35,
+                    null
+                ),
+            is(true)
+        );
+        assertThat(
+            this.wesentlicheRechtsgrundlageValidator.isValid(
+                    WesentlicheRechtsgrundlage.SEKTORALER_BEBAUUNGSPLAN_PARAGRAPH_9,
                     null
                 ),
             is(true)
@@ -67,13 +81,6 @@ class WesentlicheRechtsgrundlageBaugenehmigungsverfahrenValidatorTest {
         assertThat(
             this.wesentlicheRechtsgrundlageValidator.isValid(WesentlicheRechtsgrundlage.FREIE_EINGABE, null),
             is(true)
-        );
-        assertThat(
-            this.wesentlicheRechtsgrundlageValidator.isValid(
-                    WesentlicheRechtsgrundlage.EINFACHER_BEBAUUNGSPLAN_PARAGRAPH_30,
-                    null
-                ),
-            is(false)
         );
     }
 }
