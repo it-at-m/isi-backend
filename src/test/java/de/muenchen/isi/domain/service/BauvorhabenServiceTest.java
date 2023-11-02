@@ -379,17 +379,18 @@ public class BauvorhabenServiceTest {
         final Bauvorhaben saveResult = new Bauvorhaben();
         saveResult.setId(UUID.randomUUID());
 
-        final Stadtbezirk saveResult_sb_08 = new Stadtbezirk();
-        saveResult_sb_08.setNummer("08");
-        saveResult_sb_08.setName("Stadtbezirk 8");
+        final Stadtbezirk stadtbezirk08 = new Stadtbezirk();
+        stadtbezirk08.setNummer("08");
+        stadtbezirk08.setName("Stadtbezirk 8");
 
-        final Stadtbezirk saveResult_sb_20 = new Stadtbezirk();
-        saveResult_sb_20.setNummer("20");
-        saveResult_sb_20.setName("Stadtbezirk 20");
+        final Stadtbezirk stadtbezirk20 = new Stadtbezirk();
+        stadtbezirk20.setNummer("20");
+        stadtbezirk20.setName("Stadtbezirk 20");
 
-        final Verortung saveResultVerortung = new Verortung();
-        saveResultVerortung.setStadtbezirke(Stream.of(saveResult_sb_20, saveResult_sb_08).collect(Collectors.toSet()));
-        saveResult.setVerortung(saveResultVerortung);
+        final Verortung verortungEntity = new Verortung();
+        verortungEntity.setStadtbezirke(Stream.of(stadtbezirk20, stadtbezirk08).collect(Collectors.toSet()));
+        saveResult.setVerortung(verortungEntity);
+        bauvorhabenEntity.setVerortung(verortungEntity);
         saveResult.setBauvorhabenNummer("08_0001");
 
         Mockito

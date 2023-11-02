@@ -78,7 +78,7 @@ class CsvRepositoryTest {
         firstExpected.setBelegungsdichte(BigDecimal.valueOf(210, 2));
 
         final var lastExpected = new StaedtebaulicheOrientierungswertCsv();
-        lastExpected.setFoerderArt("GW-freifinanziert");
+        lastExpected.setFoerderArt("1-2-FH");
         lastExpected.setDurchschnittlicheGrundflaeche(150L);
         lastExpected.setBelegungsdichte(BigDecimal.valueOf(348, 2));
 
@@ -132,7 +132,7 @@ class CsvRepositoryTest {
         final var lastExpected = new SobonOrientierungswertCsv();
         lastExpected.setEinrichtungstyp(Einrichtungstyp.N_N);
         lastExpected.setAltersklasse(Altersklasse.ALLE_EWO);
-        lastExpected.setFoerderArt("1-2-FH");
+        lastExpected.setFoerderArt("GW-freifinanziert");
         lastExpected.setEinwohnerJahr1NachErsterstellung(BigDecimal.valueOf(19188, 4));
         lastExpected.setEinwohnerJahr2NachErsterstellung(BigDecimal.valueOf(20447, 4));
         lastExpected.setEinwohnerJahr3NachErsterstellung(BigDecimal.valueOf(21063, 4));
