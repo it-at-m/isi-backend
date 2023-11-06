@@ -27,20 +27,23 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 @Slf4j
 public class ImportStammdatenFromFile implements CommandLineRunner {
 
+    private static final String localPath = "src/main/resources/csv/";
+    private static final String osPath = "csv/";
+    private final String activeProfile;
     private final SobonJahrRepository sobonJahrRepository;
-
     private final StammdatenImportService stammdatenImportService;
-
     private final Boolean deferDatasourceInit;
 
     public ImportStammdatenFromFile(
         @Value("${spring.jpa.defer-datasource-initialization:true}") final Boolean deferDatasourceInit,
+        @Value("${spring.profiles.active:local}") final String activeProfile,
         final SobonJahrRepository sobonJahrRepository,
         final StammdatenImportService stammdatenImportService
     ) {
         this.deferDatasourceInit = deferDatasourceInit;
         this.stammdatenImportService = stammdatenImportService;
         this.sobonJahrRepository = sobonJahrRepository;
+        this.activeProfile = activeProfile;
     }
 
     @Override
@@ -48,7 +51,11 @@ public class ImportStammdatenFromFile implements CommandLineRunner {
         if ((deferDatasourceInit != null && deferDatasourceInit.booleanValue())) {
             log.info("START LOADING STAMMDATEN");
             this.clearDatabase();
-            this.addSobonJahre();
+            if (activeProfile.equals("local")) {
+                this.addSobonJahre(localPath);
+            } else {
+                this.addSobonJahre(osPath);
+            }
             log.info("FINISHED LOADING STAMMDATEN");
         }
     }
@@ -57,7 +64,7 @@ public class ImportStammdatenFromFile implements CommandLineRunner {
         this.sobonJahrRepository.deleteAll();
     }
 
-    public void addSobonJahre() {
+    public void addSobonJahre(String dateipfad) {
         SobonJahr sobonJahr2014 = new SobonJahr();
         sobonJahr2014.setId(UUID.randomUUID());
         sobonJahr2014.setJahr(2014);
@@ -76,29 +83,29 @@ public class ImportStammdatenFromFile implements CommandLineRunner {
 
         try {
             this.addSobonOrientierungswerte(
-                    "csv/SoBoNOrientierungswerteSozialeInfrastruktur2014.csv",
+                    dateipfad + "SoBoNOrientierungswerteSozialeInfrastruktur2014.csv",
                     sobonJahr2014.getId()
                 );
             this.addStaedtebaulicheOrientierungswerte(
-                    "csv/StaedteBaulicheOrientierungswerte2014.csv",
+                    dateipfad + "StaedteBaulicheOrientierungswerte2014.csv",
                     sobonJahr2014.getId()
                 );
             log.info("--------------------2014 Eingespielt----------------------------");
             this.addSobonOrientierungswerte(
-                    "csv/SoBoNOrientierungswerteSozialeInfrastruktur2017.csv",
+                    dateipfad + "SoBoNOrientierungswerteSozialeInfrastruktur2017.csv",
                     sobonJahr2017.getId()
                 );
             this.addStaedtebaulicheOrientierungswerte(
-                    "csv/StaedteBaulicheOrientierungswerte2017.csv",
+                    dateipfad + "StaedteBaulicheOrientierungswerte2017.csv",
                     sobonJahr2017.getId()
                 );
             log.info("--------------------2017 Eingespielt----------------------------");
             this.addSobonOrientierungswerte(
-                    "csv/SoBoNOrientierungswerteSozialeInfrastruktur2022.csv",
+                    dateipfad + "SoBoNOrientierungswerteSozialeInfrastruktur2022.csv",
                     sobonJahr2022.getId()
                 );
             this.addStaedtebaulicheOrientierungswerte(
-                    "csv/StaedteBaulicheOrientierungswerte2022.csv",
+                    dateipfad + "StaedteBaulicheOrientierungswerte2022.csv",
                     sobonJahr2022.getId()
                 );
             log.info("--------------------2022 Eingespielt----------------------------");
