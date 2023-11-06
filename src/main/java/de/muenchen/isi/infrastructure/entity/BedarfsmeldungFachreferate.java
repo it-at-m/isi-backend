@@ -20,6 +20,10 @@ import lombok.ToString;
             name = "bedarfsmeldung_fachreferate_abfragevariante_baugenehmigungsverfahren_id_index",
             columnList = "abfragevariante_baugenehmigungsverfahren_id"
         ),
+        @Index(
+            name = "bedarfsmeldung_fachreferate_abfragevariante_weiteres_verfahren_id_index",
+            columnList = "abfragevariante_weiteres_verfahren_id"
+        ),
     }
 )
 @Data

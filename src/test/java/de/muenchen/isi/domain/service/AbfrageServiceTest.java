@@ -53,6 +53,7 @@ import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.repository.AbfrageRepository;
 import de.muenchen.isi.infrastructure.repository.AbfragevarianteBaugenehmigungsverfahrenRepository;
 import de.muenchen.isi.infrastructure.repository.AbfragevarianteBauleitplanverfahrenRepository;
+import de.muenchen.isi.infrastructure.repository.AbfragevarianteWeiteresVerfahrenRepository;
 import de.muenchen.isi.infrastructure.repository.BauvorhabenRepository;
 import de.muenchen.isi.security.AuthenticationUtils;
 import java.lang.reflect.Field;
@@ -87,6 +88,9 @@ class AbfrageServiceTest {
     @Mock
     private AbfragevarianteBaugenehmigungsverfahrenRepository abfragevarianteBaugenehmigungsverfahrenRepository;
 
+    @Mock
+    private AbfragevarianteWeiteresVerfahrenRepository abfragevarianteWeiteresVerfahrenRepository;
+
     private AbfrageDomainMapper abfrageDomainMapper;
 
     @Mock
@@ -114,7 +118,8 @@ class AbfrageServiceTest {
                 this.dokumentService,
                 this.authenticationUtils,
                 this.abfragevarianteBauleitplanverfahrenRepository,
-                this.abfragevarianteBaugenehmigungsverfahrenRepository
+                this.abfragevarianteBaugenehmigungsverfahrenRepository,
+                this.abfragevarianteWeiteresVerfahrenRepository
             );
         Mockito.reset(
             this.abfrageRepository,
