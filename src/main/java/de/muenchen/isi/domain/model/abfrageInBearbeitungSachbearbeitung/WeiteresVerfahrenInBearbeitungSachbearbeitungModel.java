@@ -1,0 +1,23 @@
+package de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung;
+
+import de.muenchen.isi.api.dto.common.VerortungDto;
+import java.util.List;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+
+@Data
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
+public class WeiteresVerfahrenInBearbeitungSachbearbeitungModel extends AbfrageInBearbeitungSachbearbeitungModel {
+
+    private VerortungDto verortung;
+
+    private List<
+        AbfragevarianteWeiteresVerfahrenSachbearbeitungInBearbeitungSachbearbeitungModel
+    > abfragevariantenBauleitplanverfahren;
+
+    private List<
+        AbfragevarianteWeiteresVerfahrenInBearbeitungSachbearbeitungModel
+    > abfragevariantenSachbearbeitungBauleitplanverfahren;
+}
