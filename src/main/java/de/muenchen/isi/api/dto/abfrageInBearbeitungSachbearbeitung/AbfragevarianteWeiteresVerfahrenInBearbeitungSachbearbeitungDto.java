@@ -4,7 +4,7 @@
  */
 package de.muenchen.isi.api.dto.abfrageInBearbeitungSachbearbeitung;
 
-import de.muenchen.isi.api.dto.abfrageAngelegt.AbfragevarianteBauleitplanverfahrenAngelegtDto;
+import de.muenchen.isi.api.dto.abfrageAngelegt.AbfragevarianteWeiteresVerfahrenAngelegtDto;
 import de.muenchen.isi.api.validation.NotUnspecified;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
 import java.math.BigDecimal;
@@ -16,8 +16,8 @@ import lombok.ToString;
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class AbfragevarianteBauleitplanverfahrenInBearbeitungSachbearbeitungDto
-    extends AbfragevarianteBauleitplanverfahrenAngelegtDto {
+public class AbfragevarianteWeiteresVerfahrenInBearbeitungSachbearbeitungDto
+    extends AbfragevarianteWeiteresVerfahrenAngelegtDto {
 
     private BigDecimal gfWohnenPlanungsursaechlich;
 

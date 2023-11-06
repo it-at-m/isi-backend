@@ -23,6 +23,10 @@ import lombok.Data;
             value = BaugenehmigungsverfahrenInBearbeitungSachbearbeitungDto.class,
             name = ArtAbfrage.Values.BAUGENEHMIGUNGSVERFAHREN
         ),
+        @JsonSubTypes.Type(
+            value = WeiteresVerfahrenInBearbeitungSachbearbeitungDto.class,
+            name = ArtAbfrage.Values.WEITERES_VERFAHREN
+        ),
     }
 )
 public class AbfrageInBearbeitungSachbearbeitungDto {
