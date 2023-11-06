@@ -26,6 +26,10 @@ import lombok.ToString;
             value = AbfragevarianteBaugenehmigungsverfahrenDto.class,
             name = ArtAbfrage.Values.BAUGENEHMIGUNGSVERFAHREN
         ),
+        @JsonSubTypes.Type(
+            value = AbfragevarianteWeiteresVerfahrenDto.class,
+            name = ArtAbfrage.Values.WEITERES_VERFAHREN
+        ),
     }
 )
 public abstract class AbfragevarianteDto extends BaseEntityDto {
