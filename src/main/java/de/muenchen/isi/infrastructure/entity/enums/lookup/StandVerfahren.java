@@ -93,4 +93,18 @@ public enum StandVerfahren implements ILookup {
     public static List<StandVerfahren> getStandVerfahrenForBaugenehmigungsverfahren() {
         return List.of(UNSPECIFIED, VORBEREITUNG_VORBESCHEID, VORBEREITUNG_BAUGENEHMIGUNG, INFO_FEHLT, FREIE_EINGABE);
     }
+
+    public static List<StandVerfahren> getStandVerfahrenForWeiteresVerfahren() {
+        return List.of(
+            UNSPECIFIED,
+            VORABFRAGE_OHNE_KONKRETEN_STAND,
+            STRUKTURKONZEPT,
+            RAHMENPLANUNG,
+            POTENTIALUNTERSUCHUNG,
+            STAEDTEBAULICHE_SANIERUNGSMASSNAHME,
+            STAEDTEBAULICHE_ENTWICKLUNGSMASSNAHME,
+            INFO_FEHLT,
+            FREIE_EINGABE
+        );
+    }
 }

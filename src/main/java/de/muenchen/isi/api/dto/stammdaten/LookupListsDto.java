@@ -1,5 +1,6 @@
 package de.muenchen.isi.api.dto.stammdaten;
 
+import de.muenchen.isi.domain.model.stammdaten.LookupListModel;
 import lombok.Data;
 
 @Data
@@ -16,6 +17,8 @@ public class LookupListsDto {
     private LookupListDto standVerfahrenBauleitplanverfahren;
 
     private LookupListDto standVerfahrenBaugenehmigungsverfahren;
+
+    private LookupListModel standVerfahrenWeiteresVerfahren;
 
     private LookupListDto standVerfahren;
 

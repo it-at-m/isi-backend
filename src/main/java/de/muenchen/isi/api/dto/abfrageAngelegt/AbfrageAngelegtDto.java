@@ -26,6 +26,7 @@ import lombok.Data;
             value = BaugenehmigungsverfahrenAngelegtDto.class,
             name = ArtAbfrage.Values.BAUGENEHMIGUNGSVERFAHREN
         ),
+        @JsonSubTypes.Type(value = WeiteresVerfahrenAngelegtDto.class, name = ArtAbfrage.Values.WEITERES_VERFAHREN),
     }
 )
 public class AbfrageAngelegtDto {
