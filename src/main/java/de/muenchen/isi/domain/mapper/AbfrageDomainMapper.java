@@ -11,6 +11,7 @@ import de.muenchen.isi.domain.model.AbfragevarianteBaugenehmigungsverfahrenModel
 import de.muenchen.isi.domain.model.AbfragevarianteBauleitplanverfahrenModel;
 import de.muenchen.isi.domain.model.BaugenehmigungsverfahrenModel;
 import de.muenchen.isi.domain.model.BauleitplanverfahrenModel;
+import de.muenchen.isi.domain.model.WeiteresVerfahrenModel;
 import de.muenchen.isi.domain.model.abfrageAngelegt.AbfrageAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageAngelegt.BaugenehmigungsverfahrenAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageAngelegt.BauleitplanverfahrenAngelegtModel;
@@ -21,6 +22,7 @@ import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.Bauleitp
 import de.muenchen.isi.infrastructure.entity.Abfrage;
 import de.muenchen.isi.infrastructure.entity.Baugenehmigungsverfahren;
 import de.muenchen.isi.infrastructure.entity.Bauleitplanverfahren;
+import de.muenchen.isi.infrastructure.entity.WeiteresVerfahren;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.repository.BauvorhabenRepository;
 import java.util.ArrayList;
@@ -48,11 +50,13 @@ public abstract class AbfrageDomainMapper {
 
     @SubclassMapping(source = Bauleitplanverfahren.class, target = BauleitplanverfahrenModel.class)
     @SubclassMapping(source = Baugenehmigungsverfahren.class, target = BaugenehmigungsverfahrenModel.class)
+    @SubclassMapping(source = WeiteresVerfahren.class, target = WeiteresVerfahrenModel.class)
     @Mapping(source = "bauvorhaben.id", target = "bauvorhaben")
     public abstract AbfrageModel entity2Model(final Abfrage entity);
 
     @SubclassMapping(source = BauleitplanverfahrenModel.class, target = Bauleitplanverfahren.class)
     @SubclassMapping(source = BaugenehmigungsverfahrenModel.class, target = Baugenehmigungsverfahren.class)
+    @SubclassMapping(source = WeiteresVerfahrenModel.class, target = WeiteresVerfahren.class)
     @Mapping(target = "bauvorhaben", ignore = true)
     public abstract Abfrage model2Entity(final AbfrageModel model) throws EntityNotFoundException;
 
