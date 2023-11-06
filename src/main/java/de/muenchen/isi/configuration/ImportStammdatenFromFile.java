@@ -76,29 +76,29 @@ public class ImportStammdatenFromFile implements CommandLineRunner {
 
         try {
             this.addSobonOrientierungswerte(
-                    "src/main/resources/csv/SoBoNOrientierungswerteSozialeInfrastruktur2014.csv",
+                    "csv/SoBoNOrientierungswerteSozialeInfrastruktur2014.csv",
                     sobonJahr2014.getId()
                 );
             this.addStaedtebaulicheOrientierungswerte(
-                    "src/main/resources/csv/StaedteBaulicheOrientierungswerte2014.csv",
+                    "csv/StaedteBaulicheOrientierungswerte2014.csv",
                     sobonJahr2014.getId()
                 );
             log.info("--------------------2014 Eingespielt----------------------------");
             this.addSobonOrientierungswerte(
-                    "src/main/resources/csv/SoBoNOrientierungswerteSozialeInfrastruktur2017.csv",
+                    "csv/SoBoNOrientierungswerteSozialeInfrastruktur2017.csv",
                     sobonJahr2017.getId()
                 );
             this.addStaedtebaulicheOrientierungswerte(
-                    "src/main/resources/csv/StaedteBaulicheOrientierungswerte2017.csv",
+                    "csv/StaedteBaulicheOrientierungswerte2017.csv",
                     sobonJahr2017.getId()
                 );
             log.info("--------------------2017 Eingespielt----------------------------");
             this.addSobonOrientierungswerte(
-                    "src/main/resources/csv/SoBoNOrientierungswerteSozialeInfrastruktur2022.csv",
+                    "csv/SoBoNOrientierungswerteSozialeInfrastruktur2022.csv",
                     sobonJahr2022.getId()
                 );
             this.addStaedtebaulicheOrientierungswerte(
-                    "src/main/resources/csv/StaedteBaulicheOrientierungswerte2022.csv",
+                    "csv/StaedteBaulicheOrientierungswerte2022.csv",
                     sobonJahr2022.getId()
                 );
             log.info("--------------------2022 Eingespielt----------------------------");
