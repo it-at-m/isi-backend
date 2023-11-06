@@ -60,13 +60,15 @@ class AbfrageServiceSpringTest {
     void getByAbfragevarianteId() throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException {
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
         abfrage = this.abfrageService.save(abfrage);
-        UUID abfragevarianteId = ((BauleitplanverfahrenModel) abfrage).getAbfragevarianten().get(0).getId();
+        UUID abfragevarianteId =
+            ((BauleitplanverfahrenModel) abfrage).getAbfragevariantenBauleitplanverfahren().get(0).getId();
         AbfrageModel foundAbfrage = abfrageService.getByAbfragevarianteId(abfragevarianteId);
         assertThat(foundAbfrage, is(abfrage));
 
         abfrage = TestData.createBaugenehmigungsverfahrenModel();
         abfrage = this.abfrageService.save(abfrage);
-        abfragevarianteId = ((BaugenehmigungsverfahrenModel) abfrage).getAbfragevarianten().get(0).getId();
+        abfragevarianteId =
+            ((BaugenehmigungsverfahrenModel) abfrage).getAbfragevariantenBaugenehmigungsverfahren().get(0).getId();
         foundAbfrage = abfrageService.getByAbfragevarianteId(abfragevarianteId);
         assertThat(foundAbfrage, is(abfrage));
 
@@ -99,7 +101,7 @@ class AbfrageServiceSpringTest {
         abfrage = this.abfrageService.patchAngelegt(abfrageAngelegt, abfrage.getId());
         assertThat(abfrage.getName(), is("Neubausiedlung in Musterort 2"));
         assertThat(
-            ((BauleitplanverfahrenModel) abfrage).getAbfragevarianten().get(0).getName(),
+            ((BauleitplanverfahrenModel) abfrage).getAbfragevariantenBauleitplanverfahren().get(0).getName(),
             is("Name Abfragevariante 102")
         );
 
@@ -118,7 +120,7 @@ class AbfrageServiceSpringTest {
         abfrage = this.abfrageService.patchAngelegt(abfrageAngelegt, abfrage.getId());
         assertThat(abfrage.getName(), is("Altbausiedlung in Musterort 2"));
         assertThat(
-            ((BaugenehmigungsverfahrenModel) abfrage).getAbfragevarianten().get(0).getName(),
+            ((BaugenehmigungsverfahrenModel) abfrage).getAbfragevariantenBaugenehmigungsverfahren().get(0).getName(),
             is("Name Abfragevariante 112")
         );
 
@@ -137,24 +139,28 @@ class AbfrageServiceSpringTest {
         final var abfragePatch = new BauleitplanverfahrenInBearbeitungSachbearbeitungModel();
         abfragePatch.setArtAbfrage(ArtAbfrage.BAULEITPLANVERFAHREN);
         abfragePatch.setVersion(abfrage.getVersion());
-        abfragePatch.setAbfragevariantenSachbearbeitung(List.of());
+        abfragePatch.setAbfragevariantenSachbearbeitungBauleitplanverfahren(List.of());
         final var abfragevariantePatch =
             new AbfragevarianteBauleitplanverfahrenSachbearbeitungInBearbeitungSachbearbeitungModel();
-        abfragevariantePatch.setId(((BauleitplanverfahrenModel) abfrage).getAbfragevarianten().get(0).getId());
+        abfragevariantePatch.setId(
+            ((BauleitplanverfahrenModel) abfrage).getAbfragevariantenBauleitplanverfahren().get(0).getId()
+        );
         abfragevariantePatch.setVersion(
-            ((BauleitplanverfahrenModel) abfrage).getAbfragevarianten().get(0).getVersion()
+            ((BauleitplanverfahrenModel) abfrage).getAbfragevariantenBauleitplanverfahren().get(0).getVersion()
         );
         abfragevariantePatch.setArtAbfragevariante(ArtAbfrage.BAULEITPLANVERFAHREN);
         abfragevariantePatch.setGfWohnenPlanungsursaechlich(
-            ((BauleitplanverfahrenModel) abfrage).getAbfragevarianten().get(0).getGfWohnenPlanungsursaechlich()
+            ((BauleitplanverfahrenModel) abfrage).getAbfragevariantenBauleitplanverfahren()
+                .get(0)
+                .getGfWohnenPlanungsursaechlich()
         );
         abfragevariantePatch.setSobonOrientierungswertJahr(SobonOrientierungswertJahr.JAHR_2017);
         abfragevariantePatch.setAnmerkung("Die Anmerkung Bauleitplanverfahren Patch Sachbearbeitung");
-        abfragePatch.setAbfragevarianten(List.of(abfragevariantePatch));
+        abfragePatch.setAbfragevariantenBauleitplanverfahren(List.of(abfragevariantePatch));
 
         abfrage = this.abfrageService.patchInBearbeitungSachbearbeitung(abfragePatch, abfrage.getId());
         assertThat(
-            ((BauleitplanverfahrenModel) abfrage).getAbfragevarianten().get(0).getAnmerkung(),
+            ((BauleitplanverfahrenModel) abfrage).getAbfragevariantenBauleitplanverfahren().get(0).getAnmerkung(),
             is("Die Anmerkung Bauleitplanverfahren Patch Sachbearbeitung")
         );
 
@@ -174,24 +180,30 @@ class AbfrageServiceSpringTest {
         abfragePatch.setArtAbfrage(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN);
         abfragePatch.setVersion(abfrage.getVersion());
         abfragePatch.setVerortung(((BaugenehmigungsverfahrenModel) abfrage).getVerortung());
-        abfragePatch.setAbfragevariantenSachbearbeitung(List.of());
+        abfragePatch.setAbfragevariantenSachbearbeitungBaugenehmigungsverfahren(List.of());
         final var abfragevariantePatch =
             new AbfragevarianteBaugenehmigungsverfahrenSachbearbeitungInBearbeitungSachbearbeitungModel();
-        abfragevariantePatch.setId(((BaugenehmigungsverfahrenModel) abfrage).getAbfragevarianten().get(0).getId());
+        abfragevariantePatch.setId(
+            ((BaugenehmigungsverfahrenModel) abfrage).getAbfragevariantenBaugenehmigungsverfahren().get(0).getId()
+        );
         abfragevariantePatch.setVersion(
-            ((BaugenehmigungsverfahrenModel) abfrage).getAbfragevarianten().get(0).getVersion()
+            ((BaugenehmigungsverfahrenModel) abfrage).getAbfragevariantenBaugenehmigungsverfahren().get(0).getVersion()
         );
         abfragevariantePatch.setArtAbfragevariante(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN);
         abfragevariantePatch.setGfWohnenPlanungsursaechlich(
-            ((BaugenehmigungsverfahrenModel) abfrage).getAbfragevarianten().get(0).getGfWohnenPlanungsursaechlich()
+            ((BaugenehmigungsverfahrenModel) abfrage).getAbfragevariantenBaugenehmigungsverfahren()
+                .get(0)
+                .getGfWohnenPlanungsursaechlich()
         );
         abfragevariantePatch.setSobonOrientierungswertJahr(SobonOrientierungswertJahr.JAHR_2017);
         abfragevariantePatch.setAnmerkung("Die Anmerkung Baugenehmigungsverfahren Patch Sachbearbeitung");
-        abfragePatch.setAbfragevarianten(List.of(abfragevariantePatch));
+        abfragePatch.setAbfragevariantenBaugenehmigungsverfahren(List.of(abfragevariantePatch));
 
         abfrage = this.abfrageService.patchInBearbeitungSachbearbeitung(abfragePatch, abfrage.getId());
         assertThat(
-            ((BaugenehmigungsverfahrenModel) abfrage).getAbfragevarianten().get(0).getAnmerkung(),
+            ((BaugenehmigungsverfahrenModel) abfrage).getAbfragevariantenBaugenehmigungsverfahren()
+                .get(0)
+                .getAnmerkung(),
             is("Die Anmerkung Baugenehmigungsverfahren Patch Sachbearbeitung")
         );
 
@@ -210,22 +222,24 @@ class AbfrageServiceSpringTest {
         final var abfragePatch = new BauleitplanverfahrenInBearbeitungFachreferatModel();
         abfragePatch.setArtAbfrage(ArtAbfrage.BAULEITPLANVERFAHREN);
         abfragePatch.setVersion(abfrage.getVersion());
-        abfragePatch.setAbfragevariantenSachbearbeitung(List.of());
+        abfragePatch.setAbfragevariantenSachbearbeitungBauleitplanverfahren(List.of());
         final var abfragevariantePatch = new AbfragevarianteBauleitplanverfahrenInBearbeitungFachreferatModel();
-        abfragevariantePatch.setId(((BauleitplanverfahrenModel) abfrage).getAbfragevarianten().get(0).getId());
+        abfragevariantePatch.setId(
+            ((BauleitplanverfahrenModel) abfrage).getAbfragevariantenBauleitplanverfahren().get(0).getId()
+        );
         abfragevariantePatch.setVersion(
-            ((BauleitplanverfahrenModel) abfrage).getAbfragevarianten().get(0).getVersion()
+            ((BauleitplanverfahrenModel) abfrage).getAbfragevariantenBauleitplanverfahren().get(0).getVersion()
         );
         abfragevariantePatch.setArtAbfragevariante(ArtAbfrage.BAULEITPLANVERFAHREN);
         final var bedarfmeldungFachreferate = new BedarfsmeldungFachreferateModel();
         bedarfmeldungFachreferate.setAnzahlEinrichtungen(3);
         bedarfmeldungFachreferate.setInfrastruktureinrichtungTyp(InfrastruktureinrichtungTyp.KINDERGARTEN);
         abfragevariantePatch.setBedarfsmeldungFachreferate(List.of(bedarfmeldungFachreferate));
-        abfragePatch.setAbfragevarianten(List.of(abfragevariantePatch));
+        abfragePatch.setAbfragevariantenBauleitplanverfahren(List.of(abfragevariantePatch));
 
         abfrage = this.abfrageService.patchInBearbeitungFachreferat(abfragePatch, abfrage.getId());
         assertThat(
-            ((BauleitplanverfahrenModel) abfrage).getAbfragevarianten()
+            ((BauleitplanverfahrenModel) abfrage).getAbfragevariantenBauleitplanverfahren()
                 .get(0)
                 .getBedarfsmeldungFachreferate()
                 .get(0)
@@ -233,7 +247,7 @@ class AbfrageServiceSpringTest {
             is(3)
         );
         assertThat(
-            ((BauleitplanverfahrenModel) abfrage).getAbfragevarianten()
+            ((BauleitplanverfahrenModel) abfrage).getAbfragevariantenBauleitplanverfahren()
                 .get(0)
                 .getBedarfsmeldungFachreferate()
                 .get(0)
@@ -256,22 +270,24 @@ class AbfrageServiceSpringTest {
         final var abfragePatch = new BaugenehmigungsverfahrenInBearbeitungFachreferatModel();
         abfragePatch.setArtAbfrage(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN);
         abfragePatch.setVersion(abfrage.getVersion());
-        abfragePatch.setAbfragevariantenSachbearbeitung(List.of());
+        abfragePatch.setAbfragevariantenSachbearbeitungBaugenehmigungsverfahren(List.of());
         final var abfragevariantePatch = new AbfragevarianteBaugenehmigungsverfahrenInBearbeitungFachreferatModel();
-        abfragevariantePatch.setId(((BaugenehmigungsverfahrenModel) abfrage).getAbfragevarianten().get(0).getId());
+        abfragevariantePatch.setId(
+            ((BaugenehmigungsverfahrenModel) abfrage).getAbfragevariantenBaugenehmigungsverfahren().get(0).getId()
+        );
         abfragevariantePatch.setVersion(
-            ((BaugenehmigungsverfahrenModel) abfrage).getAbfragevarianten().get(0).getVersion()
+            ((BaugenehmigungsverfahrenModel) abfrage).getAbfragevariantenBaugenehmigungsverfahren().get(0).getVersion()
         );
         abfragevariantePatch.setArtAbfragevariante(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN);
         final var bedarfmeldungFachreferate = new BedarfsmeldungFachreferateModel();
         bedarfmeldungFachreferate.setAnzahlEinrichtungen(2);
         bedarfmeldungFachreferate.setInfrastruktureinrichtungTyp(InfrastruktureinrichtungTyp.KINDERKRIPPE);
         abfragevariantePatch.setBedarfsmeldungFachreferate(List.of(bedarfmeldungFachreferate));
-        abfragePatch.setAbfragevarianten(List.of(abfragevariantePatch));
+        abfragePatch.setAbfragevariantenBaugenehmigungsverfahren(List.of(abfragevariantePatch));
 
         abfrage = this.abfrageService.patchInBearbeitungFachreferat(abfragePatch, abfrage.getId());
         assertThat(
-            ((BaugenehmigungsverfahrenModel) abfrage).getAbfragevarianten()
+            ((BaugenehmigungsverfahrenModel) abfrage).getAbfragevariantenBaugenehmigungsverfahren()
                 .get(0)
                 .getBedarfsmeldungFachreferate()
                 .get(0)
@@ -279,7 +295,7 @@ class AbfrageServiceSpringTest {
             is(2)
         );
         assertThat(
-            ((BaugenehmigungsverfahrenModel) abfrage).getAbfragevarianten()
+            ((BaugenehmigungsverfahrenModel) abfrage).getAbfragevariantenBaugenehmigungsverfahren()
                 .get(0)
                 .getBedarfsmeldungFachreferate()
                 .get(0)

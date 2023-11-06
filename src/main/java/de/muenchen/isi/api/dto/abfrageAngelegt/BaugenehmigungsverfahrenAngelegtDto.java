@@ -47,5 +47,7 @@ public class BaugenehmigungsverfahrenAngelegtDto extends AbfrageAngelegtDto {
     @NotNull
     private LocalDate fristBearbeitung;
 
-    private List<@Valid @NotNull AbfragevarianteBaugenehmigungsverfahrenAngelegtDto> abfragevarianten;
+    private List<
+        @Valid @NotNull AbfragevarianteBaugenehmigungsverfahrenAngelegtDto
+    > abfragevariantenBaugenehmigungsverfahren;
 }

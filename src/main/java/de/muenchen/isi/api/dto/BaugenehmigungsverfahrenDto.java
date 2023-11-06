@@ -31,7 +31,7 @@ public class BaugenehmigungsverfahrenDto extends AbfrageDto {
 
     private LocalDate fristBearbeitung;
 
-    private List<AbfragevarianteBaugenehmigungsverfahrenDto> abfragevarianten;
+    private List<AbfragevarianteBaugenehmigungsverfahrenDto> abfragevariantenBaugenehmigungsverfahren;
 
-    private List<AbfragevarianteBaugenehmigungsverfahrenDto> abfragevariantenSachbearbeitung;
+    private List<AbfragevarianteBaugenehmigungsverfahrenDto> abfragevariantenSachbearbeitungBaugenehmigungsverfahren;
 }

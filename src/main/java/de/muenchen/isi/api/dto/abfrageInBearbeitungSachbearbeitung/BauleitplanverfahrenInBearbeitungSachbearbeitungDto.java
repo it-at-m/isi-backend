@@ -22,11 +22,11 @@ public class BauleitplanverfahrenInBearbeitungSachbearbeitungDto extends Abfrage
     @Size(min = 1, max = 5)
     private List<
         @NotNull @Valid AbfragevarianteBauleitplanverfahrenSachbearbeitungInBearbeitungSachbearbeitungDto
-    > abfragevarianten;
+    > abfragevariantenBauleitplanverfahren;
 
     @NotNull
     @Size(min = 0, max = 5)
     private List<
         @NotNull @Valid AbfragevarianteBauleitplanverfahrenInBearbeitungSachbearbeitungDto
-    > abfragevariantenSachbearbeitung;
+    > abfragevariantenSachbearbeitungBauleitplanverfahren;
 }

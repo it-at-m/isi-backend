@@ -16,9 +16,9 @@ public class BaugenehmigungsverfahrenInBearbeitungSachbearbeitungModel
 
     private List<
         AbfragevarianteBaugenehmigungsverfahrenSachbearbeitungInBearbeitungSachbearbeitungModel
-    > abfragevarianten;
+    > abfragevariantenBaugenehmigungsverfahren;
 
     private List<
         AbfragevarianteBaugenehmigungsverfahrenInBearbeitungSachbearbeitungModel
-    > abfragevariantenSachbearbeitung;
+    > abfragevariantenSachbearbeitungBaugenehmigungsverfahren;
 }

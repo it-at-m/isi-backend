@@ -16,11 +16,13 @@ public class BaugenehmigungsverfahrenInBearbeitungFachreferatDto extends Abfrage
 
     @NotEmpty
     @Size(min = 1, max = 5)
-    private List<@NotNull @Valid AbfragevarianteBaugenehmigungsverfahrenInBearbeitungFachreferatDto> abfragevarianten;
+    private List<
+        @NotNull @Valid AbfragevarianteBaugenehmigungsverfahrenInBearbeitungFachreferatDto
+    > abfragevariantenBaugenehmigungsverfahren;
 
     @NotNull
     @Size(min = 0, max = 5)
     private List<
         @NotNull @Valid AbfragevarianteBaugenehmigungsverfahrenInBearbeitungFachreferatDto
-    > abfragevariantenSachbearbeitung;
+    > abfragevariantenSachbearbeitungBaugenehmigungsverfahren;
 }

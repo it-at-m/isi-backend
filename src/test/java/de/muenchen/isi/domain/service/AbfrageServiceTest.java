@@ -257,7 +257,7 @@ class AbfrageServiceTest {
             new AbfragevarianteBauleitplanverfahrenAngelegtModel();
         abfragevarianteRequestModel.setArtAbfragevariante(ArtAbfrage.BAULEITPLANVERFAHREN);
         abfragevarianteRequestModel.setName("Abfragevariante");
-        requestModel.setAbfragevarianten(List.of(abfragevarianteRequestModel));
+        requestModel.setAbfragevariantenBauleitplanverfahren(List.of(abfragevarianteRequestModel));
 
         final BauleitplanverfahrenModel model = new BauleitplanverfahrenModel();
         model.setId(abfrageId);
@@ -299,7 +299,7 @@ class AbfrageServiceTest {
             new AbfragevarianteBaugenehmigungsverfahrenAngelegtModel();
         abfragevarianteRequestModel.setArtAbfragevariante(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN);
         abfragevarianteRequestModel.setName("Abfragevariante");
-        requestModel.setAbfragevarianten(List.of(abfragevarianteRequestModel));
+        requestModel.setAbfragevariantenBaugenehmigungsverfahren(List.of(abfragevarianteRequestModel));
 
         final BaugenehmigungsverfahrenModel model = new BaugenehmigungsverfahrenModel();
         model.setId(abfrageId);
@@ -339,7 +339,7 @@ class AbfrageServiceTest {
         final AbfragevarianteBauleitplanverfahrenAngelegtModel abfragevarianteRequestModel =
             new AbfragevarianteBauleitplanverfahrenAngelegtModel();
         abfragevarianteRequestModel.setName("Abfragevariante");
-        requestModel.setAbfragevarianten(List.of(abfragevarianteRequestModel));
+        requestModel.setAbfragevariantenBauleitplanverfahren(List.of(abfragevarianteRequestModel));
 
         final BauleitplanverfahrenModel model = new BauleitplanverfahrenModel();
         model.setId(abfrageId);
@@ -371,7 +371,7 @@ class AbfrageServiceTest {
         final AbfragevarianteBaugenehmigungsverfahrenAngelegtModel abfragevarianteRequestModel =
             new AbfragevarianteBaugenehmigungsverfahrenAngelegtModel();
         abfragevarianteRequestModel.setName("Abfragevariante");
-        requestModel.setAbfragevarianten(List.of(abfragevarianteRequestModel));
+        requestModel.setAbfragevariantenBaugenehmigungsverfahren(List.of(abfragevarianteRequestModel));
 
         final BaugenehmigungsverfahrenModel model = new BaugenehmigungsverfahrenModel();
         model.setId(abfrageId);
@@ -420,7 +420,7 @@ class AbfrageServiceTest {
         abfragevarianteSachbearbeitung.setGfWohnenPlanungsursaechlich(BigDecimal.TEN);
         abfragevarianteSachbearbeitung.setSobonOrientierungswertJahr(SobonOrientierungswertJahr.JAHR_2017);
         abfragevarianteSachbearbeitung.setAnmerkung("Test Anmerkung");
-        requestModel.setAbfragevariantenSachbearbeitung(List.of(abfragevarianteSachbearbeitung));
+        requestModel.setAbfragevariantenSachbearbeitungBauleitplanverfahren(List.of(abfragevarianteSachbearbeitung));
 
         final var entityInDb = new Bauleitplanverfahren();
         entityInDb.setId(uuid);
@@ -444,7 +444,7 @@ class AbfrageServiceTest {
         );
 
         final var entityToSave = new Bauleitplanverfahren();
-        entityToSave.setAbfragevarianten(List.of());
+        entityToSave.setAbfragevariantenBauleitplanverfahren(List.of());
         entityToSave.setId(uuid);
         entityToSave.setVersion(0L);
         entityToSave.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
@@ -456,7 +456,7 @@ class AbfrageServiceTest {
         abfragevariante1ToSave.setGfWohnenPlanungsursaechlich(BigDecimal.TEN);
         abfragevariante1ToSave.setSobonOrientierungswertJahr(SobonOrientierungswertJahr.JAHR_2017);
         abfragevariante1ToSave.setAnmerkung("Test Anmerkung");
-        entityToSave.setAbfragevariantenSachbearbeitung(List.of(abfragevariante1ToSave));
+        entityToSave.setAbfragevariantenSachbearbeitungBauleitplanverfahren(List.of(abfragevariante1ToSave));
 
         final var entitySaved = new Bauleitplanverfahren();
         entitySaved.setId(uuid);
@@ -471,7 +471,7 @@ class AbfrageServiceTest {
         abfragevariante1Saved.setGfWohnenPlanungsursaechlich(BigDecimal.TEN);
         abfragevariante1Saved.setSobonOrientierungswertJahr(SobonOrientierungswertJahr.JAHR_2017);
         abfragevariante1Saved.setAnmerkung("Test Anmerkung");
-        entitySaved.setAbfragevariantenSachbearbeitung(List.of(abfragevariante1Saved));
+        entitySaved.setAbfragevariantenSachbearbeitungBauleitplanverfahren(List.of(abfragevariante1Saved));
 
         Mockito.when(this.abfrageRepository.saveAndFlush(entityToSave)).thenReturn(entitySaved);
         Mockito.when(this.abfrageRepository.findByNameIgnoreCase("hallo")).thenReturn(Optional.empty());
@@ -493,7 +493,7 @@ class AbfrageServiceTest {
         abfragevariante1Expected.setGfWohnenPlanungsursaechlich(BigDecimal.TEN);
         abfragevariante1Expected.setSobonOrientierungswertJahr(SobonOrientierungswertJahr.JAHR_2017);
         abfragevariante1Expected.setAnmerkung("Test Anmerkung");
-        expected.setAbfragevariantenSachbearbeitung(List.of(abfragevariante1Expected));
+        expected.setAbfragevariantenSachbearbeitungBauleitplanverfahren(List.of(abfragevariante1Expected));
 
         assertThat(result, is(expected));
     }
@@ -525,7 +525,9 @@ class AbfrageServiceTest {
         abfragevarianteSachbearbeitung.setName("Abfragevariante 1");
         abfragevarianteSachbearbeitung.setGfWohnenPlanungsursaechlich(BigDecimal.TEN);
         abfragevarianteSachbearbeitung.setAnmerkung("Test Anmerkung");
-        requestModel.setAbfragevariantenSachbearbeitung(List.of(abfragevarianteSachbearbeitung));
+        requestModel.setAbfragevariantenSachbearbeitungBaugenehmigungsverfahren(
+            List.of(abfragevarianteSachbearbeitung)
+        );
 
         final var entityInDb = new Baugenehmigungsverfahren();
         entityInDb.setId(uuid);
@@ -549,7 +551,7 @@ class AbfrageServiceTest {
         );
 
         final var entityToSave = new Baugenehmigungsverfahren();
-        entityToSave.setAbfragevarianten(List.of());
+        entityToSave.setAbfragevariantenBaugenehmigungsverfahren(List.of());
         entityToSave.setId(uuid);
         entityToSave.setVersion(0L);
         entityToSave.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
@@ -560,7 +562,7 @@ class AbfrageServiceTest {
         abfragevariante1ToSave.setName("Abfragevariante 1");
         abfragevariante1ToSave.setGfWohnenPlanungsursaechlich(BigDecimal.TEN);
         abfragevariante1ToSave.setAnmerkung("Test Anmerkung");
-        entityToSave.setAbfragevariantenSachbearbeitung(List.of(abfragevariante1ToSave));
+        entityToSave.setAbfragevariantenSachbearbeitungBaugenehmigungsverfahren(List.of(abfragevariante1ToSave));
 
         final var entitySaved = new Baugenehmigungsverfahren();
         entitySaved.setId(uuid);
@@ -574,7 +576,7 @@ class AbfrageServiceTest {
         abfragevariante1Saved.setName("Abfragevariante 1");
         abfragevariante1Saved.setGfWohnenPlanungsursaechlich(BigDecimal.TEN);
         abfragevariante1Saved.setAnmerkung("Test Anmerkung");
-        entitySaved.setAbfragevariantenSachbearbeitung(List.of(abfragevariante1Saved));
+        entitySaved.setAbfragevariantenSachbearbeitungBaugenehmigungsverfahren(List.of(abfragevariante1Saved));
 
         Mockito.when(this.abfrageRepository.saveAndFlush(entityToSave)).thenReturn(entitySaved);
         Mockito.when(this.abfrageRepository.findByNameIgnoreCase("hallo")).thenReturn(Optional.empty());
@@ -595,7 +597,7 @@ class AbfrageServiceTest {
         abfragevariante1Expected.setName("Abfragevariante 1");
         abfragevariante1Expected.setGfWohnenPlanungsursaechlich(BigDecimal.TEN);
         abfragevariante1Expected.setAnmerkung("Test Anmerkung");
-        expected.setAbfragevariantenSachbearbeitung(List.of(abfragevariante1Expected));
+        expected.setAbfragevariantenSachbearbeitungBaugenehmigungsverfahren(List.of(abfragevariante1Expected));
 
         assertThat(result, is(expected));
     }
@@ -612,7 +614,7 @@ class AbfrageServiceTest {
             new AbfragevarianteBauleitplanverfahrenInBearbeitungSachbearbeitungModel();
         abfragevarianteSachbearbeitung.setAbfragevariantenNr(1);
         abfragevarianteSachbearbeitung.setName("Abfragevariante 1");
-        requestModel.setAbfragevariantenSachbearbeitung(List.of(abfragevarianteSachbearbeitung));
+        requestModel.setAbfragevariantenSachbearbeitungBauleitplanverfahren(List.of(abfragevarianteSachbearbeitung));
 
         final var entityInDb = new Bauleitplanverfahren();
         entityInDb.setId(uuid);
@@ -623,7 +625,7 @@ class AbfrageServiceTest {
         Mockito.when(this.abfrageRepository.findById(entityInDb.getId())).thenReturn(Optional.of(entityInDb));
 
         final var entityToSave = new Bauleitplanverfahren();
-        entityToSave.setAbfragevarianten(List.of());
+        entityToSave.setAbfragevariantenBauleitplanverfahren(List.of());
         entityToSave.setId(uuid);
         entityToSave.setVersion(0L);
         entityToSave.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
@@ -631,7 +633,7 @@ class AbfrageServiceTest {
         final var abfragevariante1ToSave = new AbfragevarianteBauleitplanverfahren();
         abfragevariante1ToSave.setAbfragevariantenNr(1);
         abfragevariante1ToSave.setName("Abfragevariante 1");
-        entityToSave.setAbfragevariantenSachbearbeitung(List.of(abfragevariante1ToSave));
+        entityToSave.setAbfragevariantenSachbearbeitungBauleitplanverfahren(List.of(abfragevariante1ToSave));
 
         final var entitySaved = new Bauleitplanverfahren();
         entitySaved.setId(uuid);
@@ -642,7 +644,7 @@ class AbfrageServiceTest {
         abfragevariante1Saved.setId(UUID.randomUUID());
         abfragevariante1Saved.setAbfragevariantenNr(1);
         abfragevariante1Saved.setName("Abfragevariante 1");
-        entitySaved.setAbfragevariantenSachbearbeitung(List.of(abfragevariante1Saved));
+        entitySaved.setAbfragevariantenSachbearbeitungBauleitplanverfahren(List.of(abfragevariante1Saved));
 
         Mockito.when(this.abfrageRepository.saveAndFlush(entityToSave)).thenReturn(entitySaved);
         Mockito.when(this.abfrageRepository.findByNameIgnoreCase("hallo")).thenReturn(Optional.empty());
@@ -666,7 +668,9 @@ class AbfrageServiceTest {
             new AbfragevarianteBaugenehmigungsverfahrenInBearbeitungSachbearbeitungModel();
         abfragevarianteSachbearbeitung.setAbfragevariantenNr(1);
         abfragevarianteSachbearbeitung.setName("Abfragevariante 1");
-        requestModel.setAbfragevariantenSachbearbeitung(List.of(abfragevarianteSachbearbeitung));
+        requestModel.setAbfragevariantenSachbearbeitungBaugenehmigungsverfahren(
+            List.of(abfragevarianteSachbearbeitung)
+        );
 
         final var entityInDb = new Baugenehmigungsverfahren();
         entityInDb.setId(uuid);
@@ -677,7 +681,7 @@ class AbfrageServiceTest {
         Mockito.when(this.abfrageRepository.findById(entityInDb.getId())).thenReturn(Optional.of(entityInDb));
 
         final var entityToSave = new Baugenehmigungsverfahren();
-        entityToSave.setAbfragevarianten(List.of());
+        entityToSave.setAbfragevariantenBaugenehmigungsverfahren(List.of());
         entityToSave.setId(uuid);
         entityToSave.setVersion(0L);
         entityToSave.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
@@ -685,7 +689,7 @@ class AbfrageServiceTest {
         final var abfragevariante1ToSave = new AbfragevarianteBaugenehmigungsverfahren();
         abfragevariante1ToSave.setAbfragevariantenNr(1);
         abfragevariante1ToSave.setName("Abfragevariante 1");
-        entityToSave.setAbfragevariantenSachbearbeitung(List.of(abfragevariante1ToSave));
+        entityToSave.setAbfragevariantenSachbearbeitungBaugenehmigungsverfahren(List.of(abfragevariante1ToSave));
 
         final var entitySaved = new Baugenehmigungsverfahren();
         entitySaved.setId(uuid);
@@ -696,7 +700,7 @@ class AbfrageServiceTest {
         abfragevariante1Saved.setId(UUID.randomUUID());
         abfragevariante1Saved.setAbfragevariantenNr(1);
         abfragevariante1Saved.setName("Abfragevariante 1");
-        entitySaved.setAbfragevariantenSachbearbeitung(List.of(abfragevariante1Saved));
+        entitySaved.setAbfragevariantenSachbearbeitungBaugenehmigungsverfahren(List.of(abfragevariante1Saved));
 
         Mockito.when(this.abfrageRepository.saveAndFlush(entityToSave)).thenReturn(entitySaved);
         Mockito.when(this.abfrageRepository.findByNameIgnoreCase("hallo")).thenReturn(Optional.empty());
@@ -750,8 +754,10 @@ class AbfrageServiceTest {
             List.of(abfragevarianteSachbearbeitungBedarfsmeldung)
         );
 
-        requestModel.setAbfragevarianten(List.of(abfragevarianteRequestModel));
-        requestModel.setAbfragevariantenSachbearbeitung(List.of(abfragevarianteSachbearbeitungRequestModel));
+        requestModel.setAbfragevariantenBauleitplanverfahren(List.of(abfragevarianteRequestModel));
+        requestModel.setAbfragevariantenSachbearbeitungBauleitplanverfahren(
+            List.of(abfragevarianteSachbearbeitungRequestModel)
+        );
 
         final var entityInDb = new Bauleitplanverfahren();
         entityInDb.setId(uuid);
@@ -765,8 +771,10 @@ class AbfrageServiceTest {
         final var entityInDbAbfragevarianteSachbearbeitung = new AbfragevarianteBauleitplanverfahren();
         entityInDbAbfragevarianteSachbearbeitung.setId(uuidAbfragevarianteSachbearbeitung);
 
-        entityInDb.setAbfragevarianten(List.of(entityInDbAbfragevariante));
-        entityInDb.setAbfragevariantenSachbearbeitung(List.of(entityInDbAbfragevarianteSachbearbeitung));
+        entityInDb.setAbfragevariantenBauleitplanverfahren(List.of(entityInDbAbfragevariante));
+        entityInDb.setAbfragevariantenSachbearbeitungBauleitplanverfahren(
+            List.of(entityInDbAbfragevarianteSachbearbeitung)
+        );
 
         Mockito.when(this.abfrageRepository.findById(entityInDb.getId())).thenReturn(Optional.of(entityInDb));
 
@@ -805,8 +813,10 @@ class AbfrageServiceTest {
             List.of(abfragevarianteSachbearbeitungBedarfsmeldungToSave)
         );
 
-        entityToSave.setAbfragevarianten(List.of(abfragevarianteToSaveSave));
-        entityToSave.setAbfragevariantenSachbearbeitung(List.of(abfragevarianteSachbearbeitungToSave));
+        entityToSave.setAbfragevariantenBauleitplanverfahren(List.of(abfragevarianteToSaveSave));
+        entityToSave.setAbfragevariantenSachbearbeitungBauleitplanverfahren(
+            List.of(abfragevarianteSachbearbeitungToSave)
+        );
 
         final var entitySaved = new Bauleitplanverfahren();
 
@@ -843,8 +853,10 @@ class AbfrageServiceTest {
             List.of(abfragevarianteSachbearbeitungBedarfsmeldungSaved)
         );
 
-        entitySaved.setAbfragevarianten(List.of(abfragevarianteSaved));
-        entitySaved.setAbfragevariantenSachbearbeitung(List.of(abfragevarianteSachbearbeitungSaved));
+        entitySaved.setAbfragevariantenBauleitplanverfahren(List.of(abfragevarianteSaved));
+        entitySaved.setAbfragevariantenSachbearbeitungBauleitplanverfahren(
+            List.of(abfragevarianteSachbearbeitungSaved)
+        );
 
         Mockito.when(this.abfrageRepository.saveAndFlush(entityToSave)).thenReturn(entitySaved);
         Mockito.when(this.abfrageRepository.findByNameIgnoreCase("hallo")).thenReturn(Optional.empty());
@@ -888,8 +900,10 @@ class AbfrageServiceTest {
             List.of(abfragevarianteSachbearbeitungBedarfsmeldungExpected)
         );
 
-        expected.setAbfragevarianten(List.of(abfragevarianteExpected));
-        expected.setAbfragevariantenSachbearbeitung(List.of(abfragevarianteSachbearbeitungExpected));
+        expected.setAbfragevariantenBauleitplanverfahren(List.of(abfragevarianteExpected));
+        expected.setAbfragevariantenSachbearbeitungBauleitplanverfahren(
+            List.of(abfragevarianteSachbearbeitungExpected)
+        );
 
         assertThat(result, is(expected));
     }
@@ -937,8 +951,10 @@ class AbfrageServiceTest {
             List.of(abfragevarianteSachbearbeitungBedarfsmeldung)
         );
 
-        requestModel.setAbfragevarianten(List.of(abfragevarianteRequestModel));
-        requestModel.setAbfragevariantenSachbearbeitung(List.of(abfragevarianteSachbearbeitungRequestModel));
+        requestModel.setAbfragevariantenBaugenehmigungsverfahren(List.of(abfragevarianteRequestModel));
+        requestModel.setAbfragevariantenSachbearbeitungBaugenehmigungsverfahren(
+            List.of(abfragevarianteSachbearbeitungRequestModel)
+        );
 
         final var entityInDb = new Baugenehmigungsverfahren();
         entityInDb.setId(uuid);
@@ -952,8 +968,10 @@ class AbfrageServiceTest {
         final var entityInDbAbfragevarianteSachbearbeitung = new AbfragevarianteBaugenehmigungsverfahren();
         entityInDbAbfragevarianteSachbearbeitung.setId(uuidAbfragevarianteSachbearbeitung);
 
-        entityInDb.setAbfragevarianten(List.of(entityInDbAbfragevariante));
-        entityInDb.setAbfragevariantenSachbearbeitung(List.of(entityInDbAbfragevarianteSachbearbeitung));
+        entityInDb.setAbfragevariantenBaugenehmigungsverfahren(List.of(entityInDbAbfragevariante));
+        entityInDb.setAbfragevariantenSachbearbeitungBaugenehmigungsverfahren(
+            List.of(entityInDbAbfragevarianteSachbearbeitung)
+        );
 
         Mockito.when(this.abfrageRepository.findById(entityInDb.getId())).thenReturn(Optional.of(entityInDb));
 
@@ -992,8 +1010,10 @@ class AbfrageServiceTest {
             List.of(abfragevarianteSachbearbeitungBedarfsmeldungToSave)
         );
 
-        entityToSave.setAbfragevarianten(List.of(abfragevarianteToSaveSave));
-        entityToSave.setAbfragevariantenSachbearbeitung(List.of(abfragevarianteSachbearbeitungToSave));
+        entityToSave.setAbfragevariantenBaugenehmigungsverfahren(List.of(abfragevarianteToSaveSave));
+        entityToSave.setAbfragevariantenSachbearbeitungBaugenehmigungsverfahren(
+            List.of(abfragevarianteSachbearbeitungToSave)
+        );
 
         final var entitySaved = new Baugenehmigungsverfahren();
 
@@ -1030,8 +1050,10 @@ class AbfrageServiceTest {
             List.of(abfragevarianteSachbearbeitungBedarfsmeldungSaved)
         );
 
-        entitySaved.setAbfragevarianten(List.of(abfragevarianteSaved));
-        entitySaved.setAbfragevariantenSachbearbeitung(List.of(abfragevarianteSachbearbeitungSaved));
+        entitySaved.setAbfragevariantenBaugenehmigungsverfahren(List.of(abfragevarianteSaved));
+        entitySaved.setAbfragevariantenSachbearbeitungBaugenehmigungsverfahren(
+            List.of(abfragevarianteSachbearbeitungSaved)
+        );
 
         Mockito.when(this.abfrageRepository.saveAndFlush(entityToSave)).thenReturn(entitySaved);
         Mockito.when(this.abfrageRepository.findByNameIgnoreCase("hallo")).thenReturn(Optional.empty());
@@ -1075,8 +1097,10 @@ class AbfrageServiceTest {
             List.of(abfragevarianteSachbearbeitungBedarfsmeldungExpected)
         );
 
-        expected.setAbfragevarianten(List.of(abfragevarianteExpected));
-        expected.setAbfragevariantenSachbearbeitung(List.of(abfragevarianteSachbearbeitungExpected));
+        expected.setAbfragevariantenBaugenehmigungsverfahren(List.of(abfragevarianteExpected));
+        expected.setAbfragevariantenSachbearbeitungBaugenehmigungsverfahren(
+            List.of(abfragevarianteSachbearbeitungExpected)
+        );
 
         assertThat(result, is(expected));
     }
@@ -1121,8 +1145,10 @@ class AbfrageServiceTest {
             List.of(abfragevarianteSachbearbeitungBedarfsmeldung)
         );
 
-        requestModel.setAbfragevarianten(List.of(abfragevarianteRequestModel));
-        requestModel.setAbfragevariantenSachbearbeitung(List.of(abfragevarianteSachbearbeitungRequestModel));
+        requestModel.setAbfragevariantenBauleitplanverfahren(List.of(abfragevarianteRequestModel));
+        requestModel.setAbfragevariantenSachbearbeitungBauleitplanverfahren(
+            List.of(abfragevarianteSachbearbeitungRequestModel)
+        );
 
         final var entityInDb = new Bauleitplanverfahren();
         entityInDb.setId(uuid);
@@ -1136,8 +1162,10 @@ class AbfrageServiceTest {
         final var entityInDbAbfragevarianteSachbearbeitung = new AbfragevarianteBauleitplanverfahren();
         entityInDbAbfragevarianteSachbearbeitung.setId(uuidAbfragevarianteSachbearbeitung);
 
-        entityInDb.setAbfragevarianten(List.of(entityInDbAbfragevariante));
-        entityInDb.setAbfragevariantenSachbearbeitung(List.of(entityInDbAbfragevarianteSachbearbeitung));
+        entityInDb.setAbfragevariantenBauleitplanverfahren(List.of(entityInDbAbfragevariante));
+        entityInDb.setAbfragevariantenSachbearbeitungBauleitplanverfahren(
+            List.of(entityInDbAbfragevarianteSachbearbeitung)
+        );
 
         Mockito.when(this.abfrageRepository.findById(entityInDb.getId())).thenReturn(Optional.of(entityInDb));
 
@@ -1176,8 +1204,10 @@ class AbfrageServiceTest {
             List.of(abfragevarianteSachbearbeitungBedarfsmeldungToSave)
         );
 
-        entityToSave.setAbfragevarianten(List.of(abfragevarianteToSaveSave));
-        entityToSave.setAbfragevariantenSachbearbeitung(List.of(abfragevarianteSachbearbeitungToSave));
+        entityToSave.setAbfragevariantenBauleitplanverfahren(List.of(abfragevarianteToSaveSave));
+        entityToSave.setAbfragevariantenSachbearbeitungBauleitplanverfahren(
+            List.of(abfragevarianteSachbearbeitungToSave)
+        );
 
         final var entitySaved = new Bauleitplanverfahren();
 
@@ -1214,8 +1244,10 @@ class AbfrageServiceTest {
             List.of(abfragevarianteSachbearbeitungBedarfsmeldungSaved)
         );
 
-        entitySaved.setAbfragevarianten(List.of(abfragevarianteSaved));
-        entitySaved.setAbfragevariantenSachbearbeitung(List.of(abfragevarianteSachbearbeitungSaved));
+        entitySaved.setAbfragevariantenBauleitplanverfahren(List.of(abfragevarianteSaved));
+        entitySaved.setAbfragevariantenSachbearbeitungBauleitplanverfahren(
+            List.of(abfragevarianteSachbearbeitungSaved)
+        );
 
         Mockito.when(this.abfrageRepository.saveAndFlush(entityToSave)).thenReturn(entitySaved);
         Mockito.when(this.abfrageRepository.findByNameIgnoreCase("hallo")).thenReturn(Optional.empty());
@@ -1268,8 +1300,10 @@ class AbfrageServiceTest {
             List.of(abfragevarianteSachbearbeitungBedarfsmeldung)
         );
 
-        requestModel.setAbfragevarianten(List.of(abfragevarianteRequestModel));
-        requestModel.setAbfragevariantenSachbearbeitung(List.of(abfragevarianteSachbearbeitungRequestModel));
+        requestModel.setAbfragevariantenBaugenehmigungsverfahren(List.of(abfragevarianteRequestModel));
+        requestModel.setAbfragevariantenSachbearbeitungBaugenehmigungsverfahren(
+            List.of(abfragevarianteSachbearbeitungRequestModel)
+        );
 
         final var entityInDb = new Baugenehmigungsverfahren();
         entityInDb.setId(uuid);
@@ -1283,8 +1317,10 @@ class AbfrageServiceTest {
         final var entityInDbAbfragevarianteSachbearbeitung = new AbfragevarianteBaugenehmigungsverfahren();
         entityInDbAbfragevarianteSachbearbeitung.setId(uuidAbfragevarianteSachbearbeitung);
 
-        entityInDb.setAbfragevarianten(List.of(entityInDbAbfragevariante));
-        entityInDb.setAbfragevariantenSachbearbeitung(List.of(entityInDbAbfragevarianteSachbearbeitung));
+        entityInDb.setAbfragevariantenBaugenehmigungsverfahren(List.of(entityInDbAbfragevariante));
+        entityInDb.setAbfragevariantenSachbearbeitungBaugenehmigungsverfahren(
+            List.of(entityInDbAbfragevarianteSachbearbeitung)
+        );
 
         Mockito.when(this.abfrageRepository.findById(entityInDb.getId())).thenReturn(Optional.of(entityInDb));
 
@@ -1323,8 +1359,10 @@ class AbfrageServiceTest {
             List.of(abfragevarianteSachbearbeitungBedarfsmeldungToSave)
         );
 
-        entityToSave.setAbfragevarianten(List.of(abfragevarianteToSaveSave));
-        entityToSave.setAbfragevariantenSachbearbeitung(List.of(abfragevarianteSachbearbeitungToSave));
+        entityToSave.setAbfragevariantenBaugenehmigungsverfahren(List.of(abfragevarianteToSaveSave));
+        entityToSave.setAbfragevariantenSachbearbeitungBaugenehmigungsverfahren(
+            List.of(abfragevarianteSachbearbeitungToSave)
+        );
 
         final var entitySaved = new Baugenehmigungsverfahren();
 
@@ -1361,8 +1399,10 @@ class AbfrageServiceTest {
             List.of(abfragevarianteSachbearbeitungBedarfsmeldungSaved)
         );
 
-        entitySaved.setAbfragevarianten(List.of(abfragevarianteSaved));
-        entitySaved.setAbfragevariantenSachbearbeitung(List.of(abfragevarianteSachbearbeitungSaved));
+        entitySaved.setAbfragevariantenBaugenehmigungsverfahren(List.of(abfragevarianteSaved));
+        entitySaved.setAbfragevariantenSachbearbeitungBaugenehmigungsverfahren(
+            List.of(abfragevarianteSachbearbeitungSaved)
+        );
 
         Mockito.when(this.abfrageRepository.saveAndFlush(entityToSave)).thenReturn(entitySaved);
         Mockito.when(this.abfrageRepository.findByNameIgnoreCase("hallo")).thenReturn(Optional.empty());

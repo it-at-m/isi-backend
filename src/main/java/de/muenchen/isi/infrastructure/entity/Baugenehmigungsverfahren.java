@@ -85,14 +85,14 @@ public class Baugenehmigungsverfahren extends Abfrage {
     @IndexedEmbedded
     @IndexingDependency(reindexOnUpdate = ReindexOnUpdate.SHALLOW)
     @OneToMany(cascade = { CascadeType.ALL }, orphanRemoval = true)
-    @JoinColumn(name = "baugenehmigungsverfahren_abfragevarianten_id", referencedColumnName = "id")
+    @JoinColumn(name = "abfragevarianten_baugenehmigungsverfahren_id", referencedColumnName = "id")
     @OrderBy("abfragevariantenNr asc")
-    private List<AbfragevarianteBaugenehmigungsverfahren> abfragevarianten;
+    private List<AbfragevarianteBaugenehmigungsverfahren> abfragevariantenBaugenehmigungsverfahren;
 
     @IndexedEmbedded
     @IndexingDependency(reindexOnUpdate = ReindexOnUpdate.SHALLOW)
     @OneToMany(cascade = { CascadeType.ALL }, orphanRemoval = true)
-    @JoinColumn(name = "baugenehmigungsverfahren_abfragevarianten_sachbearbeitung_id", referencedColumnName = "id")
+    @JoinColumn(name = "abfragevarianten_sachbearbeitung_baugenehmigungsverfahren_id", referencedColumnName = "id")
     @OrderBy("abfragevariantenNr asc")
-    private List<AbfragevarianteBaugenehmigungsverfahren> abfragevariantenSachbearbeitung;
+    private List<AbfragevarianteBaugenehmigungsverfahren> abfragevariantenSachbearbeitungBaugenehmigungsverfahren;
 }

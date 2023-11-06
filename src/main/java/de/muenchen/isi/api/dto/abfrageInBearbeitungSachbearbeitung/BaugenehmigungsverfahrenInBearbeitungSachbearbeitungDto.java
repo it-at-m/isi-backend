@@ -22,11 +22,11 @@ public class BaugenehmigungsverfahrenInBearbeitungSachbearbeitungDto extends Abf
     @Size(min = 1, max = 5)
     private List<
         @NotNull @Valid AbfragevarianteBaugenehmigungsverfahrenSachbearbeitungInBearbeitungSachbearbeitungDto
-    > abfragevarianten;
+    > abfragevariantenBaugenehmigungsverfahren;
 
     @NotNull
     @Size(min = 0, max = 5)
     private List<
         @NotNull @Valid AbfragevarianteBaugenehmigungsverfahrenInBearbeitungSachbearbeitungDto
-    > abfragevariantenSachbearbeitung;
+    > abfragevariantenSachbearbeitungBaugenehmigungsverfahren;
 }

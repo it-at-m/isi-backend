@@ -55,5 +55,5 @@ public class BauleitplanverfahrenAngelegtDto extends AbfrageAngelegtDto {
     @NotNull
     private UncertainBoolean offizielleMitzeichnung;
 
-    private List<@Valid @NotNull AbfragevarianteBauleitplanverfahrenAngelegtDto> abfragevarianten;
+    private List<@Valid @NotNull AbfragevarianteBauleitplanverfahrenAngelegtDto> abfragevariantenBauleitplanverfahren;
 }

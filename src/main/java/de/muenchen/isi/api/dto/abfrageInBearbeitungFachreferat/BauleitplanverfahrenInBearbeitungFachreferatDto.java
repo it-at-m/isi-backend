@@ -16,11 +16,13 @@ public class BauleitplanverfahrenInBearbeitungFachreferatDto extends AbfrageInBe
 
     @NotEmpty
     @Size(min = 1, max = 5)
-    private List<@NotNull @Valid AbfragevarianteBauleitplanverfahrenInBearbeitungFachreferatDto> abfragevarianten;
+    private List<
+        @NotNull @Valid AbfragevarianteBauleitplanverfahrenInBearbeitungFachreferatDto
+    > abfragevariantenBauleitplanverfahren;
 
     @NotNull
     @Size(min = 0, max = 5)
     private List<
         @NotNull @Valid AbfragevarianteBauleitplanverfahrenInBearbeitungFachreferatDto
-    > abfragevariantenSachbearbeitung;
+    > abfragevariantenSachbearbeitungBauleitplanverfahren;
 }

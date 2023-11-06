@@ -80,19 +80,19 @@ public class AbfrageDomainMapperTest {
 
         abfragevarianten.add(abfragevarianteAngelegtModel);
         abfragevarianten.add(abfragevarianteAngelegtModel2);
-        bauleitplanverfahrenModel.setAbfragevarianten(abfragevarianten);
+        bauleitplanverfahrenModel.setAbfragevariantenBauleitplanverfahren(abfragevarianten);
 
         var result = abfrageDomainMapper.request2Model(bauleitplanverfahrenModel, new BauleitplanverfahrenModel());
 
         assertThat(result.getVersion(), is(bauleitplanverfahrenModel.getVersion()));
         assertThat(result.getName(), is(bauleitplanverfahrenModel.getName()));
         assertThat(
-            result.getAbfragevarianten().get(0).getName(),
-            is(bauleitplanverfahrenModel.getAbfragevarianten().get(0).getName())
+            result.getAbfragevariantenBauleitplanverfahren().get(0).getName(),
+            is(bauleitplanverfahrenModel.getAbfragevariantenBauleitplanverfahren().get(0).getName())
         );
         assertThat(
-            result.getAbfragevarianten().get(1).getName(),
-            is(bauleitplanverfahrenModel.getAbfragevarianten().get(1).getName())
+            result.getAbfragevariantenBauleitplanverfahren().get(1).getName(),
+            is(bauleitplanverfahrenModel.getAbfragevariantenBauleitplanverfahren().get(1).getName())
         );
     }
 
@@ -115,7 +115,7 @@ public class AbfrageDomainMapperTest {
 
         abfragevarianten.add(abfragevarianteAngelegtModel);
         abfragevarianten.add(abfragevarianteAngelegtModel2);
-        baugenehmigungsverfahrenModel.setAbfragevarianten(abfragevarianten);
+        baugenehmigungsverfahrenModel.setAbfragevariantenBaugenehmigungsverfahren(abfragevarianten);
 
         var result = abfrageDomainMapper.request2Model(
             baugenehmigungsverfahrenModel,
@@ -125,12 +125,12 @@ public class AbfrageDomainMapperTest {
         assertThat(result.getVersion(), is(baugenehmigungsverfahrenModel.getVersion()));
         assertThat(result.getName(), is(baugenehmigungsverfahrenModel.getName()));
         assertThat(
-            result.getAbfragevarianten().get(0).getName(),
-            is(baugenehmigungsverfahrenModel.getAbfragevarianten().get(0).getName())
+            result.getAbfragevariantenBaugenehmigungsverfahren().get(0).getName(),
+            is(baugenehmigungsverfahrenModel.getAbfragevariantenBaugenehmigungsverfahren().get(0).getName())
         );
         assertThat(
-            result.getAbfragevarianten().get(1).getName(),
-            is(baugenehmigungsverfahrenModel.getAbfragevarianten().get(1).getName())
+            result.getAbfragevariantenBaugenehmigungsverfahren().get(1).getName(),
+            is(baugenehmigungsverfahrenModel.getAbfragevariantenBaugenehmigungsverfahren().get(1).getName())
         );
     }
 
@@ -164,21 +164,21 @@ public class AbfrageDomainMapperTest {
         List<AbfragevarianteBauleitplanverfahrenModel> abfragevariantenModelList = new ArrayList<>();
         abfragevariantenModelList.add(abfragevarianteModel);
 
-        bauleitplanverfahrenModel.setAbfragevarianten(abfragevariantenModelList);
+        bauleitplanverfahrenModel.setAbfragevariantenBauleitplanverfahren(abfragevariantenModelList);
 
-        bauleitplanverfahrenAngelegtModel.setAbfragevarianten(abfragevarianteAngelegtModels);
+        bauleitplanverfahrenAngelegtModel.setAbfragevariantenBauleitplanverfahren(abfragevarianteAngelegtModels);
 
         var result = abfrageDomainMapper.request2Model(bauleitplanverfahrenAngelegtModel, bauleitplanverfahrenModel);
 
         assertThat(result.getVersion(), is(bauleitplanverfahrenAngelegtModel.getVersion()));
         assertThat(result.getName(), is(bauleitplanverfahrenAngelegtModel.getName()));
         assertThat(
-            result.getAbfragevarianten().get(0).getName(),
-            is(bauleitplanverfahrenAngelegtModel.getAbfragevarianten().get(0).getName())
+            result.getAbfragevariantenBauleitplanverfahren().get(0).getName(),
+            is(bauleitplanverfahrenAngelegtModel.getAbfragevariantenBauleitplanverfahren().get(0).getName())
         );
         assertThat(
-            result.getAbfragevarianten().get(1).getName(),
-            is(bauleitplanverfahrenAngelegtModel.getAbfragevarianten().get(1).getName())
+            result.getAbfragevariantenBauleitplanverfahren().get(1).getName(),
+            is(bauleitplanverfahrenAngelegtModel.getAbfragevariantenBauleitplanverfahren().get(1).getName())
         );
     }
 
@@ -214,9 +214,11 @@ public class AbfrageDomainMapperTest {
         List<AbfragevarianteBaugenehmigungsverfahrenModel> abfragevariantenModelList = new ArrayList<>();
         abfragevariantenModelList.add(abfragevarianteModel);
 
-        baugenehmigungsverfahrenModel.setAbfragevarianten(abfragevariantenModelList);
+        baugenehmigungsverfahrenModel.setAbfragevariantenBaugenehmigungsverfahren(abfragevariantenModelList);
 
-        baugenehmigungsverfahrenAngelegtModel.setAbfragevarianten(abfragevarianteAngelegtModels);
+        baugenehmigungsverfahrenAngelegtModel.setAbfragevariantenBaugenehmigungsverfahren(
+            abfragevarianteAngelegtModels
+        );
 
         var result = abfrageDomainMapper.request2Model(
             baugenehmigungsverfahrenAngelegtModel,
@@ -226,12 +228,12 @@ public class AbfrageDomainMapperTest {
         assertThat(result.getVersion(), is(baugenehmigungsverfahrenAngelegtModel.getVersion()));
         assertThat(result.getName(), is(baugenehmigungsverfahrenAngelegtModel.getName()));
         assertThat(
-            result.getAbfragevarianten().get(0).getName(),
-            is(baugenehmigungsverfahrenAngelegtModel.getAbfragevarianten().get(0).getName())
+            result.getAbfragevariantenBaugenehmigungsverfahren().get(0).getName(),
+            is(baugenehmigungsverfahrenAngelegtModel.getAbfragevariantenBaugenehmigungsverfahren().get(0).getName())
         );
         assertThat(
-            result.getAbfragevarianten().get(1).getName(),
-            is(baugenehmigungsverfahrenAngelegtModel.getAbfragevarianten().get(1).getName())
+            result.getAbfragevariantenBaugenehmigungsverfahren().get(1).getName(),
+            is(baugenehmigungsverfahrenAngelegtModel.getAbfragevariantenBaugenehmigungsverfahren().get(1).getName())
         );
     }
 
@@ -239,7 +241,7 @@ public class AbfrageDomainMapperTest {
     void sachbearbeitungAbfrageToAbfrageNonExistingAbfragevarianteBauleitplanverfahren() {
         var bauleitplanverfahren = new BauleitplanverfahrenInBearbeitungSachbearbeitungModel();
         bauleitplanverfahren.setVersion(99L);
-        bauleitplanverfahren.setAbfragevarianten(List.of());
+        bauleitplanverfahren.setAbfragevariantenBauleitplanverfahren(List.of());
 
         var abfragevarianteSachbearbeitung1 =
             new AbfragevarianteBauleitplanverfahrenInBearbeitungSachbearbeitungModel();
@@ -251,7 +253,7 @@ public class AbfrageDomainMapperTest {
         abfragevarianteSachbearbeitung2.setAbfragevariantenNr(2);
         abfragevarianteSachbearbeitung2.setName("Abfragevariante 2");
 
-        bauleitplanverfahren.setAbfragevariantenSachbearbeitung(
+        bauleitplanverfahren.setAbfragevariantenSachbearbeitungBauleitplanverfahren(
             List.of(abfragevarianteSachbearbeitung1, abfragevarianteSachbearbeitung2)
         );
 
@@ -268,8 +270,8 @@ public class AbfrageDomainMapperTest {
         abfragevariante2.setAbfragevariantenNr(2);
         abfragevariante2.setName("Abfragevariante 2");
 
-        expected.setAbfragevarianten(List.of());
-        expected.setAbfragevariantenSachbearbeitung(List.of(abfragevariante1, abfragevariante2));
+        expected.setAbfragevariantenBauleitplanverfahren(List.of());
+        expected.setAbfragevariantenSachbearbeitungBauleitplanverfahren(List.of(abfragevariante1, abfragevariante2));
 
         assertThat(result, is(expected));
     }
@@ -278,7 +280,7 @@ public class AbfrageDomainMapperTest {
     void sachbearbeitungAbfrageToAbfrageNonExistingAbfragevarianteBaugenehmigungsverfahren() {
         var baugenehmigungsverfahren = new BaugenehmigungsverfahrenInBearbeitungSachbearbeitungModel();
         baugenehmigungsverfahren.setVersion(99L);
-        baugenehmigungsverfahren.setAbfragevarianten(List.of());
+        baugenehmigungsverfahren.setAbfragevariantenBaugenehmigungsverfahren(List.of());
 
         var abfragevarianteSachbearbeitung1 =
             new AbfragevarianteBaugenehmigungsverfahrenInBearbeitungSachbearbeitungModel();
@@ -290,7 +292,7 @@ public class AbfrageDomainMapperTest {
         abfragevarianteSachbearbeitung2.setAbfragevariantenNr(2);
         abfragevarianteSachbearbeitung2.setName("Abfragevariante 2");
 
-        baugenehmigungsverfahren.setAbfragevariantenSachbearbeitung(
+        baugenehmigungsverfahren.setAbfragevariantenSachbearbeitungBaugenehmigungsverfahren(
             List.of(abfragevarianteSachbearbeitung1, abfragevarianteSachbearbeitung2)
         );
 
@@ -310,8 +312,10 @@ public class AbfrageDomainMapperTest {
         abfragevariante2.setAbfragevariantenNr(2);
         abfragevariante2.setName("Abfragevariante 2");
 
-        expected.setAbfragevarianten(List.of());
-        expected.setAbfragevariantenSachbearbeitung(List.of(abfragevariante1, abfragevariante2));
+        expected.setAbfragevariantenBaugenehmigungsverfahren(List.of());
+        expected.setAbfragevariantenSachbearbeitungBaugenehmigungsverfahren(
+            List.of(abfragevariante1, abfragevariante2)
+        );
 
         assertThat(result, is(expected));
     }
@@ -320,7 +324,7 @@ public class AbfrageDomainMapperTest {
     void sachbearbeitungAbfrageToAbfrageExistingAbfragevarianteBauleitplanverfahren() {
         var bauleitplanverfahren = new BauleitplanverfahrenInBearbeitungSachbearbeitungModel();
         bauleitplanverfahren.setVersion(99L);
-        bauleitplanverfahren.setAbfragevarianten(List.of());
+        bauleitplanverfahren.setAbfragevariantenBauleitplanverfahren(List.of());
 
         var abfragevarianteSachbearbeitung1 =
             new AbfragevarianteBauleitplanverfahrenInBearbeitungSachbearbeitungModel();
@@ -334,12 +338,12 @@ public class AbfrageDomainMapperTest {
         abfragevarianteSachbearbeitung2.setAbfragevariantenNr(2);
         abfragevarianteSachbearbeitung2.setName("New Name Abfragevariante 2");
 
-        bauleitplanverfahren.setAbfragevariantenSachbearbeitung(
+        bauleitplanverfahren.setAbfragevariantenSachbearbeitungBauleitplanverfahren(
             List.of(abfragevarianteSachbearbeitung1, abfragevarianteSachbearbeitung2)
         );
 
         final var savedBauleitplanverfahren = new BauleitplanverfahrenModel();
-        savedBauleitplanverfahren.setAbfragevarianten(List.of());
+        savedBauleitplanverfahren.setAbfragevariantenBauleitplanverfahren(List.of());
         savedBauleitplanverfahren.setVersion(98L);
 
         final var savedAbfragevariante1 = new AbfragevarianteBauleitplanverfahrenModel();
@@ -352,7 +356,7 @@ public class AbfrageDomainMapperTest {
         savedAbfragevariante2.setAbfragevariantenNr(97);
         savedAbfragevariante2.setName("Old Name Abfragevariante 2");
 
-        savedBauleitplanverfahren.setAbfragevariantenSachbearbeitung(
+        savedBauleitplanverfahren.setAbfragevariantenSachbearbeitungBauleitplanverfahren(
             List.of(savedAbfragevariante1, savedAbfragevariante2)
         );
 
@@ -360,7 +364,7 @@ public class AbfrageDomainMapperTest {
 
         final var expected = new BauleitplanverfahrenModel();
         expected.setVersion(99L);
-        expected.setAbfragevarianten(List.of());
+        expected.setAbfragevariantenBauleitplanverfahren(List.of());
 
         final var abfragevariante1 = new AbfragevarianteBauleitplanverfahrenModel();
         abfragevariante1.setId(abfragevarianteSachbearbeitung1.getId());
@@ -372,7 +376,7 @@ public class AbfrageDomainMapperTest {
         abfragevariante2.setAbfragevariantenNr(2);
         abfragevariante2.setName("New Name Abfragevariante 2");
 
-        expected.setAbfragevariantenSachbearbeitung(List.of(abfragevariante1, abfragevariante2));
+        expected.setAbfragevariantenSachbearbeitungBauleitplanverfahren(List.of(abfragevariante1, abfragevariante2));
 
         assertThat(result, is(expected));
     }
@@ -381,7 +385,7 @@ public class AbfrageDomainMapperTest {
     void sachbearbeitungAbfrageToAbfrageExistingAbfragevarianteBaugenehmigungsverfahren() {
         var baugenehmigungsverfahren = new BaugenehmigungsverfahrenInBearbeitungSachbearbeitungModel();
         baugenehmigungsverfahren.setVersion(99L);
-        baugenehmigungsverfahren.setAbfragevarianten(List.of());
+        baugenehmigungsverfahren.setAbfragevariantenBaugenehmigungsverfahren(List.of());
 
         var abfragevarianteSachbearbeitung1 =
             new AbfragevarianteBaugenehmigungsverfahrenInBearbeitungSachbearbeitungModel();
@@ -395,12 +399,12 @@ public class AbfrageDomainMapperTest {
         abfragevarianteSachbearbeitung2.setAbfragevariantenNr(2);
         abfragevarianteSachbearbeitung2.setName("New Name Abfragevariante 2");
 
-        baugenehmigungsverfahren.setAbfragevariantenSachbearbeitung(
+        baugenehmigungsverfahren.setAbfragevariantenSachbearbeitungBaugenehmigungsverfahren(
             List.of(abfragevarianteSachbearbeitung1, abfragevarianteSachbearbeitung2)
         );
 
         final var savedBaugenehmigungsverfahren = new BaugenehmigungsverfahrenModel();
-        savedBaugenehmigungsverfahren.setAbfragevarianten(List.of());
+        savedBaugenehmigungsverfahren.setAbfragevariantenBaugenehmigungsverfahren(List.of());
         savedBaugenehmigungsverfahren.setVersion(98L);
 
         final var savedAbfragevariante1 = new AbfragevarianteBaugenehmigungsverfahrenModel();
@@ -413,7 +417,7 @@ public class AbfrageDomainMapperTest {
         savedAbfragevariante2.setAbfragevariantenNr(97);
         savedAbfragevariante2.setName("Old Name Abfragevariante 2");
 
-        savedBaugenehmigungsverfahren.setAbfragevariantenSachbearbeitung(
+        savedBaugenehmigungsverfahren.setAbfragevariantenSachbearbeitungBaugenehmigungsverfahren(
             List.of(savedAbfragevariante1, savedAbfragevariante2)
         );
 
@@ -421,7 +425,7 @@ public class AbfrageDomainMapperTest {
 
         final var expected = new BaugenehmigungsverfahrenModel();
         expected.setVersion(99L);
-        expected.setAbfragevarianten(List.of());
+        expected.setAbfragevariantenBaugenehmigungsverfahren(List.of());
 
         final var abfragevariante1 = new AbfragevarianteBaugenehmigungsverfahrenModel();
         abfragevariante1.setId(abfragevarianteSachbearbeitung1.getId());
@@ -433,7 +437,9 @@ public class AbfrageDomainMapperTest {
         abfragevariante2.setAbfragevariantenNr(2);
         abfragevariante2.setName("New Name Abfragevariante 2");
 
-        expected.setAbfragevariantenSachbearbeitung(List.of(abfragevariante1, abfragevariante2));
+        expected.setAbfragevariantenSachbearbeitungBaugenehmigungsverfahren(
+            List.of(abfragevariante1, abfragevariante2)
+        );
 
         assertThat(result, is(expected));
     }
@@ -442,7 +448,7 @@ public class AbfrageDomainMapperTest {
     void sachbearbeitungAbfrageToAbfrageNonExistingAbfragevarianteForAbfragevarianteSachbearbeitungBauleitplanverfahren() {
         var bauleitplanverfahren = new BauleitplanverfahrenInBearbeitungSachbearbeitungModel();
         bauleitplanverfahren.setVersion(99L);
-        bauleitplanverfahren.setAbfragevariantenSachbearbeitung(List.of());
+        bauleitplanverfahren.setAbfragevariantenSachbearbeitungBauleitplanverfahren(List.of());
 
         var abfragevarianteSachbearbeitung1 =
             new AbfragevarianteBauleitplanverfahrenSachbearbeitungInBearbeitungSachbearbeitungModel();
@@ -456,13 +462,13 @@ public class AbfrageDomainMapperTest {
         abfragevarianteSachbearbeitung2.setVersion(2L);
         abfragevarianteSachbearbeitung2.setAnmerkung("Test2");
 
-        bauleitplanverfahren.setAbfragevarianten(
+        bauleitplanverfahren.setAbfragevariantenBauleitplanverfahren(
             List.of(abfragevarianteSachbearbeitung1, abfragevarianteSachbearbeitung2)
         );
 
         final var modelFromDb = new BauleitplanverfahrenModel();
         modelFromDb.setVersion(99L);
-        modelFromDb.setAbfragevariantenSachbearbeitung(List.of());
+        modelFromDb.setAbfragevariantenSachbearbeitungBauleitplanverfahren(List.of());
 
         final var abfragevarianteModelFromDb1 = new AbfragevarianteBauleitplanverfahrenModel();
         abfragevarianteModelFromDb1.setId(abfragevarianteSachbearbeitung1.getId());
@@ -472,13 +478,15 @@ public class AbfrageDomainMapperTest {
         abfragevarianteModelFromDb2.setId(abfragevarianteSachbearbeitung2.getId());
         abfragevarianteModelFromDb2.setVersion(2L);
 
-        modelFromDb.setAbfragevarianten(List.of(abfragevarianteModelFromDb1, abfragevarianteModelFromDb2));
+        modelFromDb.setAbfragevariantenBauleitplanverfahren(
+            List.of(abfragevarianteModelFromDb1, abfragevarianteModelFromDb2)
+        );
 
         final var result = abfrageDomainMapper.request2Model(bauleitplanverfahren, modelFromDb);
 
         final var expected = new BauleitplanverfahrenModel();
         expected.setVersion(99L);
-        expected.setAbfragevariantenSachbearbeitung(List.of());
+        expected.setAbfragevariantenSachbearbeitungBauleitplanverfahren(List.of());
 
         final var abfragevarianteExpected1 = new AbfragevarianteBauleitplanverfahrenModel();
         abfragevarianteExpected1.setId(abfragevarianteSachbearbeitung1.getId());
@@ -490,7 +498,7 @@ public class AbfrageDomainMapperTest {
         abfragevarianteExpected2.setVersion(2L);
         abfragevarianteExpected2.setAnmerkung("Test2");
 
-        expected.setAbfragevarianten(List.of(abfragevarianteExpected1, abfragevarianteExpected2));
+        expected.setAbfragevariantenBauleitplanverfahren(List.of(abfragevarianteExpected1, abfragevarianteExpected2));
 
         assertThat(result, is(expected));
     }
@@ -499,7 +507,7 @@ public class AbfrageDomainMapperTest {
     void sachbearbeitungAbfrageToAbfrageNonExistingAbfragevarianteForAbfragevarianteSachbearbeitungBaugenehmigungsverfahren() {
         var baugenehmigungsverfahren = new BaugenehmigungsverfahrenInBearbeitungSachbearbeitungModel();
         baugenehmigungsverfahren.setVersion(99L);
-        baugenehmigungsverfahren.setAbfragevariantenSachbearbeitung(List.of());
+        baugenehmigungsverfahren.setAbfragevariantenSachbearbeitungBaugenehmigungsverfahren(List.of());
 
         var abfragevarianteSachbearbeitung1 =
             new AbfragevarianteBaugenehmigungsverfahrenSachbearbeitungInBearbeitungSachbearbeitungModel();
@@ -513,13 +521,13 @@ public class AbfrageDomainMapperTest {
         abfragevarianteSachbearbeitung2.setVersion(2L);
         abfragevarianteSachbearbeitung2.setAnmerkung("Test2");
 
-        baugenehmigungsverfahren.setAbfragevarianten(
+        baugenehmigungsverfahren.setAbfragevariantenBaugenehmigungsverfahren(
             List.of(abfragevarianteSachbearbeitung1, abfragevarianteSachbearbeitung2)
         );
 
         final var modelFromDb = new BaugenehmigungsverfahrenModel();
         modelFromDb.setVersion(99L);
-        modelFromDb.setAbfragevariantenSachbearbeitung(List.of());
+        modelFromDb.setAbfragevariantenSachbearbeitungBaugenehmigungsverfahren(List.of());
 
         final var abfragevarianteModelFromDb1 = new AbfragevarianteBaugenehmigungsverfahrenModel();
         abfragevarianteModelFromDb1.setId(abfragevarianteSachbearbeitung1.getId());
@@ -529,13 +537,15 @@ public class AbfrageDomainMapperTest {
         abfragevarianteModelFromDb2.setId(abfragevarianteSachbearbeitung2.getId());
         abfragevarianteModelFromDb2.setVersion(2L);
 
-        modelFromDb.setAbfragevarianten(List.of(abfragevarianteModelFromDb1, abfragevarianteModelFromDb2));
+        modelFromDb.setAbfragevariantenBaugenehmigungsverfahren(
+            List.of(abfragevarianteModelFromDb1, abfragevarianteModelFromDb2)
+        );
 
         final var result = abfrageDomainMapper.request2Model(baugenehmigungsverfahren, modelFromDb);
 
         final var expected = new BaugenehmigungsverfahrenModel();
         expected.setVersion(99L);
-        expected.setAbfragevariantenSachbearbeitung(List.of());
+        expected.setAbfragevariantenSachbearbeitungBaugenehmigungsverfahren(List.of());
 
         final var abfragevarianteExpected1 = new AbfragevarianteBaugenehmigungsverfahrenModel();
         abfragevarianteExpected1.setId(abfragevarianteSachbearbeitung1.getId());
@@ -547,7 +557,9 @@ public class AbfrageDomainMapperTest {
         abfragevarianteExpected2.setVersion(2L);
         abfragevarianteExpected2.setAnmerkung("Test2");
 
-        expected.setAbfragevarianten(List.of(abfragevarianteExpected1, abfragevarianteExpected2));
+        expected.setAbfragevariantenBaugenehmigungsverfahren(
+            List.of(abfragevarianteExpected1, abfragevarianteExpected2)
+        );
 
         assertThat(result, is(expected));
     }

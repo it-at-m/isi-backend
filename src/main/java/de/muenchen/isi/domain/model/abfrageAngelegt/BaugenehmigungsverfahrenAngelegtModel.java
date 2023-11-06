@@ -31,5 +31,5 @@ public class BaugenehmigungsverfahrenAngelegtModel extends AbfrageAngelegtModel 
 
     private LocalDate fristBearbeitung;
 
-    private List<AbfragevarianteBaugenehmigungsverfahrenAngelegtModel> abfragevarianten;
+    private List<AbfragevarianteBaugenehmigungsverfahrenAngelegtModel> abfragevariantenBaugenehmigungsverfahren;
 }

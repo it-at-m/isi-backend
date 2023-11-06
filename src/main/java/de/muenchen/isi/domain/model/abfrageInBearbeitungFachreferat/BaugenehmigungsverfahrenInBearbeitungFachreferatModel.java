@@ -10,7 +10,11 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 public class BaugenehmigungsverfahrenInBearbeitungFachreferatModel extends AbfrageInBearbeitungFachreferatModel {
 
-    private List<AbfragevarianteBaugenehmigungsverfahrenInBearbeitungFachreferatModel> abfragevarianten;
+    private List<
+        AbfragevarianteBaugenehmigungsverfahrenInBearbeitungFachreferatModel
+    > abfragevariantenBaugenehmigungsverfahren;
 
-    private List<AbfragevarianteBaugenehmigungsverfahrenInBearbeitungFachreferatModel> abfragevariantenSachbearbeitung;
+    private List<
+        AbfragevarianteBaugenehmigungsverfahrenInBearbeitungFachreferatModel
+    > abfragevariantenSachbearbeitungBaugenehmigungsverfahren;
 }

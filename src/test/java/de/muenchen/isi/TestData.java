@@ -64,7 +64,9 @@ public class TestData {
         bauleitplanverfahren.setSobonJahr(SobonVerfahrensgrundsaetzeJahr.JAHR_2021);
         bauleitplanverfahren.setOffizielleMitzeichnung(UncertainBoolean.TRUE);
         bauleitplanverfahren.setOffizielleMitzeichnung(UncertainBoolean.FALSE);
-        bauleitplanverfahren.setAbfragevarianten(List.of(createAbfragevarianteBauleitplanverfahrenModel()));
+        bauleitplanverfahren.setAbfragevariantenBauleitplanverfahren(
+            List.of(createAbfragevarianteBauleitplanverfahrenModel())
+        );
         return bauleitplanverfahren;
     }
 
@@ -80,7 +82,9 @@ public class TestData {
         baugenehmigungsverfahren.setAnmerkung("Bitte die Abfrage zeitnah behandeln");
         baugenehmigungsverfahren.setStandVerfahren(StandVerfahren.STRUKTURKONZEPT);
         baugenehmigungsverfahren.setVerortung(createVerortung());
-        baugenehmigungsverfahren.setAbfragevarianten(List.of(createAbfragevarianteBaugenehmigungsverfahrenModel()));
+        baugenehmigungsverfahren.setAbfragevariantenBaugenehmigungsverfahren(
+            List.of(createAbfragevarianteBaugenehmigungsverfahrenModel())
+        );
         return baugenehmigungsverfahren;
     }
 
@@ -98,7 +102,9 @@ public class TestData {
         bauleitplanverfahren.setVerortung(createVerortung());
         bauleitplanverfahren.setSobonRelevant(UncertainBoolean.FALSE);
         bauleitplanverfahren.setOffizielleMitzeichnung(UncertainBoolean.FALSE);
-        bauleitplanverfahren.setAbfragevarianten(List.of(createAbfragevarianteBauleitplanverfahrenAngelegtModel()));
+        bauleitplanverfahren.setAbfragevariantenBauleitplanverfahren(
+            List.of(createAbfragevarianteBauleitplanverfahrenAngelegtModel())
+        );
         return bauleitplanverfahren;
     }
 
@@ -114,7 +120,7 @@ public class TestData {
         baugenehmigungsverfahren.setAnmerkung("Bitte die Abfrage zeitnah behandeln");
         baugenehmigungsverfahren.setStandVerfahren(StandVerfahren.STRUKTURKONZEPT);
         baugenehmigungsverfahren.setVerortung(createVerortung());
-        baugenehmigungsverfahren.setAbfragevarianten(
+        baugenehmigungsverfahren.setAbfragevariantenBaugenehmigungsverfahren(
             List.of(createAbfragevarianteBaugenehmigungsverfahrenAngelegtModel())
         );
         return baugenehmigungsverfahren;

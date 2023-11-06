@@ -32,9 +32,9 @@ public class BaugenehmigungsverfahrenModel extends AbfrageModel {
 
     private LocalDate fristBearbeitung;
 
-    private List<AbfragevarianteBaugenehmigungsverfahrenModel> abfragevarianten;
+    private List<AbfragevarianteBaugenehmigungsverfahrenModel> abfragevariantenBaugenehmigungsverfahren;
 
-    private List<AbfragevarianteBaugenehmigungsverfahrenModel> abfragevariantenSachbearbeitung;
+    private List<AbfragevarianteBaugenehmigungsverfahrenModel> abfragevariantenSachbearbeitungBaugenehmigungsverfahren;
 
     /**
      * @return der zusammengesetzte Name der Abfrage

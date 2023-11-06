@@ -40,20 +40,20 @@ import org.hibernate.search.mapper.pojo.mapping.definition.annotation.NonStandar
 @Table(
     indexes = {
         @Index(
-            name = "bauleitplanverfahren_abfragevarianten_id_index",
-            columnList = "bauleitplanverfahren_abfragevarianten_id"
+            name = "abfragevarianten_bauleitplanverfahren_id_index",
+            columnList = "abfragevarianten_bauleitplanverfahren_id"
         ),
         @Index(
-            name = "bauleitplanverfahren_abfragevarianten_sachbearbeitung_id_index",
-            columnList = "bauleitplanverfahren_abfragevarianten_sachbearbeitung_id"
+            name = "abfragevarianten_sachbearbeitung_bauleitplanverfahren_id_index",
+            columnList = "abfragevarianten_sachbearbeitung_bauleitplanverfahren_id"
         ),
     },
     uniqueConstraints = {
         @UniqueConstraint(
             name = "UniqueNameAbfragevariantePerBauleitplanverfahren",
             columnNames = {
-                "bauleitplanverfahren_abfragevarianten_id",
-                "bauleitplanverfahren_abfragevarianten_sachbearbeitung_id",
+                "abfragevarianten_bauleitplanverfahren_id",
+                "abfragevarianten_sachbearbeitung_bauleitplanverfahren_id",
                 "name",
             }
         ),
