@@ -1,6 +1,6 @@
 package de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung;
 
-import de.muenchen.isi.api.dto.common.VerortungDto;
+import de.muenchen.isi.domain.model.common.VerortungModel;
 import java.util.List;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -11,7 +11,7 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 public class WeiteresVerfahrenInBearbeitungSachbearbeitungModel extends AbfrageInBearbeitungSachbearbeitungModel {
 
-    private VerortungDto verortung;
+    private VerortungModel verortung;
 
     private List<
         AbfragevarianteWeiteresVerfahrenSachbearbeitungInBearbeitungSachbearbeitungModel
