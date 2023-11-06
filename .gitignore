@@ -30,7 +30,6 @@ nbdist/
 .nb-gradle/
 
 # do not check in Database Filler and application profile yml
-src/**/ImportStammdatemFromFile.java
 src/**/application-*.yml
 src/main/resources/*.csv
 !src/test/resources/application-unittest.yml
