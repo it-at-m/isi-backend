@@ -8,6 +8,7 @@ import de.muenchen.isi.infrastructure.repository.stammdaten.SobonJahrRepository;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.time.LocalDate;
 import java.util.UUID;
@@ -15,9 +16,11 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItem;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
@@ -120,43 +123,53 @@ public class ImportStammdatenFromFile implements CommandLineRunner {
 
     public void addSobonOrientierungswerte(String filePath, UUID sobonJahrId)
         throws IOException, CsvAttributeErrorException, FileImportFailedException {
-        File file = new File(filePath);
-        FileItem fileItem = new DiskFileItem(
-            "tempfile",
-            Files.probeContentType(file.toPath()),
-            false,
-            file.getName(),
-            (int) file.length(),
-            file.getParentFile()
-        );
+        FileItem fileItem = null;
+        InputStream inputStream = new ClassPathResource(filePath).getInputStream();
 
-        try {
-            IOUtils.copy(new FileInputStream(file), fileItem.getOutputStream());
-        } catch (IOException ex) {
-            log.error(ex.getMessage());
+        if (inputStream != null) {
+            File tempFile = File.createTempFile("tempfile", ".tmp");
+            FileUtils.copyInputStreamToFile(inputStream, tempFile);
+            fileItem =
+                new DiskFileItem(
+                    "tempfile",
+                    Files.probeContentType(tempFile.toPath()),
+                    false,
+                    tempFile.getName(),
+                    (int) tempFile.length(),
+                    tempFile.getParentFile()
+                );
+            IOUtils.copy(new FileInputStream(tempFile), fileItem.getOutputStream());
+
+            MultipartFile multipartFile = new CommonsMultipartFile(fileItem);
+            this.stammdatenImportService.importSobonOrientierungswerteSozialeInfrastruktur(sobonJahrId, multipartFile);
+        } else {
+            log.error("Datei nicht gefunden: " + filePath);
         }
-        MultipartFile multipartFile = new CommonsMultipartFile(fileItem);
-        this.stammdatenImportService.importSobonOrientierungswerteSozialeInfrastruktur(sobonJahrId, multipartFile);
     }
 
     public void addStaedtebaulicheOrientierungswerte(String filePath, UUID sobonJahrId)
         throws IOException, CsvAttributeErrorException, FileImportFailedException {
-        File file = new File(filePath);
-        FileItem fileItem = new DiskFileItem(
-            "tempfile",
-            Files.probeContentType(file.toPath()),
-            false,
-            file.getName(),
-            (int) file.length(),
-            file.getParentFile()
-        );
+        FileItem fileItem = null;
+        InputStream inputStream = new ClassPathResource(filePath).getInputStream();
 
-        try {
-            IOUtils.copy(new FileInputStream(file), fileItem.getOutputStream());
-        } catch (IOException ex) {
-            log.info(ex.getMessage());
+        if (inputStream != null) {
+            File tempFile = File.createTempFile("tempfile", ".tmp");
+            FileUtils.copyInputStreamToFile(inputStream, tempFile);
+            fileItem =
+                new DiskFileItem(
+                    "tempfile",
+                    Files.probeContentType(tempFile.toPath()),
+                    false,
+                    tempFile.getName(),
+                    (int) tempFile.length(),
+                    tempFile.getParentFile()
+                );
+            IOUtils.copy(new FileInputStream(tempFile), fileItem.getOutputStream());
+
+            MultipartFile multipartFile = new CommonsMultipartFile(fileItem);
+            this.stammdatenImportService.importStaedtebaulicheOrientierungswerte(sobonJahrId, multipartFile);
+        } else {
+            log.error("Datei nicht gefunden: " + filePath);
         }
-        MultipartFile multipartFile = new CommonsMultipartFile(fileItem);
-        this.stammdatenImportService.importStaedtebaulicheOrientierungswerte(sobonJahrId, multipartFile);
     }
 }
