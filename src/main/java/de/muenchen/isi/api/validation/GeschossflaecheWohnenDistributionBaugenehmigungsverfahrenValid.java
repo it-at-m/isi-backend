@@ -10,7 +10,7 @@ import javax.validation.Payload;
 
 @Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = GeschossflaecheWohnenDistributionBauleitplanverfahrenValidator.class)
+@Constraint(validatedBy = GeschossflaecheWohnenDistributionBaugenehmigungsverfahrenValidator.class)
 @Documented
 public @interface GeschossflaecheWohnenDistributionBaugenehmigungsverfahrenValid {
     String message() default "Die Summe der über die Baugebiete verteilten Geschossfläche Wohnen" +

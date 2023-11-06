@@ -10,7 +10,7 @@ import javax.validation.Payload;
 
 @Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = RealisierungVonDistributionBauleitplanverfahrenValidator.class)
+@Constraint(validatedBy = RealisierungVonDistributionBaugenehmigungsverfahrenValidator.class)
 @Documented
 public @interface RealisierungVonDistributionBaugenehmigungsverfahrenValid {
     String message() default "Das Realisierungsjahr eines Baugebiets bzw. einer Baurate ist vor dem Realisierungsjahr der Abfragevariante";
