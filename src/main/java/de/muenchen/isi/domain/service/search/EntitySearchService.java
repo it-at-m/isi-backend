@@ -1,12 +1,13 @@
 package de.muenchen.isi.domain.service.search;
 
+import com.ibm.icu.text.BreakIterator;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.mapper.SearchDomainMapper;
 import de.muenchen.isi.domain.model.enums.SortAttribute;
 import de.muenchen.isi.domain.model.search.request.SearchQueryAndSortingModel;
 import de.muenchen.isi.domain.model.search.response.SearchResultsModel;
 import de.muenchen.isi.infrastructure.entity.BaseEntity;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.persistence.EntityManager;
@@ -131,13 +132,34 @@ public class EntitySearchService {
      * @return die für die Simple-Query-String-Suche angepasste Suchquery.
      */
     protected String createAdaptedSearchQueryForSimpleQueryStringSearch(final String searchQuery) {
-        final var splittedSearchQuery = StringUtils.split(StringUtils.trimToEmpty(searchQuery));
-        final var adaptedSearchQuery = Arrays
-            .stream(splittedSearchQuery)
+        final var splittedSearchQuery = this.tokenizeAccordingUnicodeAnnex29(StringUtils.trimToEmpty(searchQuery));
+        final var adaptedSearchQuery = splittedSearchQuery
+            .stream()
             .map(searchQueryArtifact -> searchQueryArtifact + "*")
             .collect(Collectors.joining(StringUtils.SPACE));
         log.debug("Die erstellte Suchquery: {}", adaptedSearchQuery);
         return adaptedSearchQuery;
+    }
+
+    /**
+     * Diese Methode ermittelt für den im Parameter gegebenen String die Wörter entsprechend Unicode® Standard Annex #29.
+     *
+     * https://unicode.org/reports/tr29/
+     *
+     * @param searchQuery zur Ermittlung der Wörter
+     * @return die Wörter ermittelt aus dem im Parameter gegebenen String.
+     */
+    protected List<String> tokenizeAccordingUnicodeAnnex29(final String searchQuery) {
+        final var words = new ArrayList<String>();
+        final var breakIterator = BreakIterator.getWordInstance();
+        breakIterator.setText(searchQuery);
+        int start = breakIterator.first();
+        for (int end = breakIterator.next(); end != BreakIterator.DONE; start = end, end = breakIterator.next()) {
+            if (breakIterator.getRuleStatus() != BreakIterator.WORD_NONE) {
+                words.add(searchQuery.substring(start, end));
+            }
+        }
+        return words;
     }
 
     /**
