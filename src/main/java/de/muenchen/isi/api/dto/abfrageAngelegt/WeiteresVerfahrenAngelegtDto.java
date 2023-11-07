@@ -3,6 +3,7 @@ package de.muenchen.isi.api.dto.abfrageAngelegt;
 import de.muenchen.isi.api.dto.common.AdresseDto;
 import de.muenchen.isi.api.dto.common.VerortungDto;
 import de.muenchen.isi.api.dto.filehandling.DokumentDto;
+import de.muenchen.isi.api.validation.CustomNotNull;
 import de.muenchen.isi.api.validation.HasAllowedNumberOfDocuments;
 import de.muenchen.isi.api.validation.NotUnspecified;
 import de.muenchen.isi.api.validation.StandVerfahrenWeiteresVerfahrenValid;
@@ -58,5 +59,7 @@ public class WeiteresVerfahrenAngelegtDto extends AbfrageAngelegtDto {
     @NotNull
     private UncertainBoolean offizielleMitzeichnung;
 
+    @CustomNotNull
+    @Size(min = 1, max = 5)
     private List<@Valid @NotNull AbfragevarianteWeiteresVerfahrenAngelegtDto> abfragevariantenWeiteresVerfahren;
 }
