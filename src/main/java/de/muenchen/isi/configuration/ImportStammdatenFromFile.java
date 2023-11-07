@@ -7,6 +7,7 @@ import de.muenchen.isi.infrastructure.entity.stammdaten.SobonJahr;
 import de.muenchen.isi.infrastructure.repository.stammdaten.SobonJahrRepository;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -30,43 +31,48 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 @Slf4j
 public class ImportStammdatenFromFile implements CommandLineRunner {
 
-    private static final String localPath = "src/main/resources/csv/";
-    private static final String osPath = "csv/";
-    private final String activeProfile;
+    private static final String PATH = "csv/";
     private final SobonJahrRepository sobonJahrRepository;
     private final StammdatenImportService stammdatenImportService;
     private final Boolean deferDatasourceInit;
 
     public ImportStammdatenFromFile(
         @Value("${spring.jpa.defer-datasource-initialization:true}") final Boolean deferDatasourceInit,
-        @Value("${spring.profiles.active:local}") final String activeProfile,
         final SobonJahrRepository sobonJahrRepository,
         final StammdatenImportService stammdatenImportService
     ) {
         this.deferDatasourceInit = deferDatasourceInit;
         this.stammdatenImportService = stammdatenImportService;
         this.sobonJahrRepository = sobonJahrRepository;
-        this.activeProfile = activeProfile;
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Führt den Import von Stammdaten aus den angegebenen CSV-Dateien durch.
+     */
     @Override
     public void run(String... args) {
         if ((deferDatasourceInit != null && deferDatasourceInit.booleanValue())) {
             log.info("START LOADING STAMMDATEN");
             this.clearDatabase();
-            if (activeProfile.equals("local")) {
-                this.addSobonJahre(localPath);
-            } else {
-                this.addSobonJahre(osPath);
-            }
+            this.addSobonJahre(PATH);
             log.info("FINISHED LOADING STAMMDATEN");
         }
     }
 
+    /**
+     * Löscht alle vorhandenen Datensätze in der Datenbank.
+     */
     private void clearDatabase() {
         this.sobonJahrRepository.deleteAll();
     }
 
+    /**
+     * Fügt die Sobon-Jahre in die Datenbank ein.
+     *
+     * @param dateipfad Der Dateipfad zum Verzeichnis der CSV-Dateien.
+     */
     public void addSobonJahre(String dateipfad) {
         SobonJahr sobonJahr2014 = new SobonJahr();
         sobonJahr2014.setId(UUID.randomUUID());
@@ -116,39 +122,51 @@ public class ImportStammdatenFromFile implements CommandLineRunner {
             log.error(e.getMessage());
         } catch (FileImportFailedException e) {
             log.error(e.getMessage());
+        } catch (FileNotFoundException e) {
+            log.error(e.getMessage());
         } catch (IOException e) {
             log.error(e.getMessage());
         }
     }
 
+    /**
+     * Importiert die Sobon-Orientierungswerte aus der angegebenen CSV-Datei.
+     *
+     * @param filePath    Der Dateipfad zur Sobon-Orientierungswerte CSV-Datei.
+     * @param sobonJahrId Die ID des Sobon-Jahres.
+     * @throws IOException                Wenn ein Fehler beim Lesen der Datei auftritt.
+     * @throws CsvAttributeErrorException Wenn ein Fehler in den CSV-Attributen auftritt.
+     * @throws FileImportFailedException  Wenn der Import der Datei fehlschlägt.
+     */
     public void addSobonOrientierungswerte(String filePath, UUID sobonJahrId)
         throws IOException, CsvAttributeErrorException, FileImportFailedException {
-        FileItem fileItem = null;
-        InputStream inputStream = new ClassPathResource(filePath).getInputStream();
-
-        if (inputStream != null) {
-            File tempFile = File.createTempFile("tempfile", ".tmp");
-            FileUtils.copyInputStreamToFile(inputStream, tempFile);
-            fileItem =
-                new DiskFileItem(
-                    "tempfile",
-                    Files.probeContentType(tempFile.toPath()),
-                    false,
-                    tempFile.getName(),
-                    (int) tempFile.length(),
-                    tempFile.getParentFile()
-                );
-            IOUtils.copy(new FileInputStream(tempFile), fileItem.getOutputStream());
-
-            MultipartFile multipartFile = new CommonsMultipartFile(fileItem);
-            this.stammdatenImportService.importSobonOrientierungswerteSozialeInfrastruktur(sobonJahrId, multipartFile);
-        } else {
-            log.error("Datei nicht gefunden: " + filePath);
-        }
+        MultipartFile multipartFile = createMultipartFile(filePath);
+        this.stammdatenImportService.importSobonOrientierungswerteSozialeInfrastruktur(sobonJahrId, multipartFile);
     }
 
+    /**
+     * Importiert die städtebaulichen Orientierungswerte aus der angegebenen CSV-Datei.
+     *
+     * @param filePath    Der Dateipfad zur städtebaulichen Orientierungswerte CSV-Datei.
+     * @param sobonJahrId Die ID des Sobon-Jahres.
+     * @throws IOException                Wenn ein Fehler beim Lesen der Datei auftritt.
+     * @throws CsvAttributeErrorException Wenn ein Fehler in den CSV-Attributen auftritt.
+     * @throws FileImportFailedException  Wenn der Import der Datei fehlschlägt.
+     */
     public void addStaedtebaulicheOrientierungswerte(String filePath, UUID sobonJahrId)
         throws IOException, CsvAttributeErrorException, FileImportFailedException {
+        MultipartFile multipartFile = createMultipartFile(filePath);
+        this.stammdatenImportService.importStaedtebaulicheOrientierungswerte(sobonJahrId, multipartFile);
+    }
+
+    /**
+     * Erstellt ein MultipartFile-Objekt aus der angegebenen Datei.
+     *
+     * @param filePath Der Dateipfad zur CSV-Datei.
+     * @return Das MultipartFile-Objekt.
+     * @throws IOException Wenn ein Fehler beim Lesen der Datei auftritt.
+     */
+    public MultipartFile createMultipartFile(String filePath) throws IOException {
         FileItem fileItem = null;
         InputStream inputStream = new ClassPathResource(filePath).getInputStream();
 
@@ -165,11 +183,9 @@ public class ImportStammdatenFromFile implements CommandLineRunner {
                     tempFile.getParentFile()
                 );
             IOUtils.copy(new FileInputStream(tempFile), fileItem.getOutputStream());
-
-            MultipartFile multipartFile = new CommonsMultipartFile(fileItem);
-            this.stammdatenImportService.importStaedtebaulicheOrientierungswerte(sobonJahrId, multipartFile);
         } else {
-            log.error("Datei nicht gefunden: " + filePath);
+            throw new FileNotFoundException("Datei wurde nicht gefunden");
         }
+        return new CommonsMultipartFile(fileItem);
     }
 }
