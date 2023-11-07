@@ -3,6 +3,7 @@ package de.muenchen.isi.api.dto.abfrageAngelegt;
 import de.muenchen.isi.api.dto.common.AdresseDto;
 import de.muenchen.isi.api.dto.common.VerortungDto;
 import de.muenchen.isi.api.dto.filehandling.DokumentDto;
+import de.muenchen.isi.api.validation.CustomNotNull;
 import de.muenchen.isi.api.validation.HasAllowedNumberOfDocuments;
 import de.muenchen.isi.api.validation.NotUnspecified;
 import de.muenchen.isi.api.validation.StandVerfahrenBaugenehmigungsverfahrenValid;
@@ -10,7 +11,6 @@ import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVerfahren;
 import java.time.LocalDate;
 import java.util.List;
 import javax.validation.Valid;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import lombok.Data;
@@ -48,7 +48,7 @@ public class BaugenehmigungsverfahrenAngelegtDto extends AbfrageAngelegtDto {
     @NotNull
     private LocalDate fristBearbeitung;
 
-    @NotEmpty
+    @CustomNotNull
     @Size(min = 1, max = 5)
     private List<
         @Valid @NotNull AbfragevarianteBaugenehmigungsverfahrenAngelegtDto
