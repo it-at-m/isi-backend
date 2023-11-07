@@ -169,7 +169,7 @@ public class DistributionValidator {
      * - {@link BaugebietDto#getTechnical}
      * - {@link BauabschnittDto#getTechnical}
      *
-     * @param bauabschnitte zur Extraktion der Baurante von technischen Baugebieten.
+     * @param bauabschnitte zur Extraktion der Bauraten von technischen Baugebieten.
      * @return die Liste an Bauraten aller technischen Baugebiete identifiziert über {@link BaugebietDto#getTechnical()}.
      */
     public List<BaurateDto> getBauratenFromAllTechnicalBaugebiete(final List<BauabschnittDto> bauabschnitte) {
