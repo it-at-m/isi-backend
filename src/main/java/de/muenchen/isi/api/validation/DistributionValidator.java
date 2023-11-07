@@ -4,11 +4,55 @@ import de.muenchen.isi.api.dto.BauabschnittDto;
 import de.muenchen.isi.api.dto.BaugebietDto;
 import de.muenchen.isi.api.dto.BaurateDto;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;
 
 public class DistributionValidator {
+
+    /**
+     *
+     * @param bauabschnitte zur Validierung.
+     * @param realisierungVon zur Validierung
+     * @return true falls das Realisierungsjahr vor oder gleich der Realisierungsjahre der in den Bauabschnitten enthaltenen Baugebiete oder einer Baurate ist.
+     */
+    public boolean isRealisierungVonDistributionValid(
+        final List<BauabschnittDto> bauabschnitte,
+        final Integer realisierungVon
+    ) {
+        boolean isValid = true;
+
+        final List<BaugebietDto> nonTechnicalBaugebiete = getNonTechnicalBaugebiete(bauabschnitte);
+        final List<BaurateDto> bauratenFromAllTechnicalBaugebiete = getBauratenFromAllTechnicalBaugebiete(
+            bauabschnitte
+        );
+
+        final boolean containsNonTechnicalBaugebiet = CollectionUtils.isNotEmpty(nonTechnicalBaugebiete);
+        final boolean containsBauratenInTechnicalBaugebiet = CollectionUtils.isNotEmpty(
+            bauratenFromAllTechnicalBaugebiete
+        );
+
+        if (containsNonTechnicalBaugebiet) {
+            final Optional<Integer> minJahrBaugebiete = nonTechnicalBaugebiete
+                .stream()
+                .map(BaugebietDto::getRealisierungVon)
+                .filter(Objects::nonNull)
+                .min(Integer::compareTo);
+
+            isValid = minJahrBaugebiete.isEmpty() || realisierungVon.compareTo(minJahrBaugebiete.get()) <= 0;
+        } else if (containsBauratenInTechnicalBaugebiet) {
+            final Optional<Integer> minJahrBauraten = bauratenFromAllTechnicalBaugebiete
+                .stream()
+                .map(BaurateDto::getJahr)
+                .filter(Objects::nonNull)
+                .min(Integer::compareTo);
+
+            isValid = minJahrBauraten.isEmpty() || realisierungVon.compareTo(minJahrBauraten.get()) <= 0;
+        }
+        return isValid;
+    }
 
     /**
      * Dokumentation bezüglich Verwendung technischer und nicht technischer Baugebiete und Bauabschnitte siehe:
