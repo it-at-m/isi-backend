@@ -10,7 +10,6 @@ import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVerfahren;
 import java.time.LocalDate;
 import java.util.List;
 import javax.validation.Valid;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import lombok.Data;
@@ -48,7 +47,6 @@ public class BaugenehmigungsverfahrenAngelegtDto extends AbfrageAngelegtDto {
     @NotNull
     private LocalDate fristBearbeitung;
 
-    @NotEmpty
     @Size(min = 1, max = 5)
     private List<
         @Valid @NotNull AbfragevarianteBaugenehmigungsverfahrenAngelegtDto

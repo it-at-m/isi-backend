@@ -3,7 +3,6 @@ package de.muenchen.isi.api.dto.abfrageInBearbeitungSachbearbeitung;
 import de.muenchen.isi.api.dto.common.VerortungDto;
 import java.util.List;
 import javax.validation.Valid;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import lombok.Data;
@@ -18,7 +17,6 @@ public class BaugenehmigungsverfahrenInBearbeitungSachbearbeitungDto extends Abf
     @Valid
     private VerortungDto verortung;
 
-    @NotEmpty
     @Size(min = 1, max = 5)
     private List<
         @NotNull @Valid AbfragevarianteBaugenehmigungsverfahrenSachbearbeitungInBearbeitungSachbearbeitungDto
