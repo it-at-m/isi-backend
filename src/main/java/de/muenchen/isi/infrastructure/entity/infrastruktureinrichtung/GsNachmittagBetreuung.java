@@ -28,7 +28,7 @@ public class GsNachmittagBetreuung extends Infrastruktureinrichtung {
     // TBD: Grundschulsprengel
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = true)
+    @Column
     private ArtGsNachmittagBetreuung artGsNachmittagBetreuung;
 
     @Column(nullable = false)

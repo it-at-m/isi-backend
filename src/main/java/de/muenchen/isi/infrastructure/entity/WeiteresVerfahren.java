@@ -53,7 +53,7 @@ public class WeiteresVerfahren extends Abfrage {
         name = "bebauungsplannummer" + SearchwordSuggesterRepository.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
         valueBinder = @ValueBinderRef(type = StringSuggestionBinder.class)
     )
-    @Column(nullable = true)
+    @Column
     private String bebauungsplannummer;
 
     @Enumerated(EnumType.STRING)
@@ -61,7 +61,7 @@ public class WeiteresVerfahren extends Abfrage {
     private UncertainBoolean sobonRelevant;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = true)
+    @Column
     private SobonVerfahrensgrundsaetzeJahr sobonJahr;
 
     @FullTextField(valueBridge = @ValueBridgeRef(type = StandVerfahrenValueBridge.class))

@@ -1,14 +1,9 @@
 package de.muenchen.isi.api.validation;
 
-import de.muenchen.isi.api.dto.BaugebietDto;
-import de.muenchen.isi.api.dto.BaurateDto;
 import de.muenchen.isi.api.dto.abfrageAngelegt.AbfragevarianteBauleitplanverfahrenAngelegtDto;
-import java.math.BigDecimal;
-import java.util.List;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import lombok.NoArgsConstructor;
-import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.stereotype.Component;
 
@@ -37,47 +32,9 @@ public class GeschossflaecheWohnenDistributionBauleitplanverfahrenValidator
         final AbfragevarianteBauleitplanverfahrenAngelegtDto value,
         final ConstraintValidatorContext context
     ) {
-        if (ObjectUtils.isNotEmpty(value.getWeGesamt())) {
-            return true;
-        }
-
-        boolean isValid = true;
-
-        final List<BaugebietDto> nonTechnicalBaugebiete = getNonTechnicalBaugebiete(value.getBauabschnitte());
-        final List<BaurateDto> bauratenFromAllTechnicalBaugebiete = getBauratenFromAllTechnicalBaugebiete(
-            value.getBauabschnitte()
+        return (
+            ObjectUtils.isNotEmpty(value.getWeGesamt()) ||
+            this.isGeschossflaecheWohnenDistributionValid(value.getBauabschnitte(), value.getGfWohnenGesamt())
         );
-
-        final boolean containsNonTechnicalBaugebiet = CollectionUtils.isNotEmpty(nonTechnicalBaugebiete);
-        final boolean containsBauratenInTechnicalBaugebiet = CollectionUtils.isNotEmpty(
-            bauratenFromAllTechnicalBaugebiete
-        );
-
-        final var geschossflaecheWohnenAbfragevariante = ObjectUtils.isEmpty(value.getGfWohnenGesamt())
-            ? BigDecimal.ZERO
-            : value.getGfWohnenGesamt();
-
-        if (containsNonTechnicalBaugebiet) {
-            final var sumVerteilteGeschossflaecheWohnenBaugebiete = nonTechnicalBaugebiete
-                .stream()
-                .map(baugebiet ->
-                    ObjectUtils.isEmpty(baugebiet.getGfWohnenGeplant())
-                        ? BigDecimal.ZERO
-                        : baugebiet.getGfWohnenGeplant()
-                )
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-
-            isValid = sumVerteilteGeschossflaecheWohnenBaugebiete.compareTo(geschossflaecheWohnenAbfragevariante) == 0;
-        } else if (containsBauratenInTechnicalBaugebiet) {
-            final var sumVerteilteGeschossflaecheWohnenBauraten = bauratenFromAllTechnicalBaugebiete
-                .stream()
-                .map(baurate ->
-                    ObjectUtils.isEmpty(baurate.getGfWohnenGeplant()) ? BigDecimal.ZERO : baurate.getGfWohnenGeplant()
-                )
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-
-            isValid = sumVerteilteGeschossflaecheWohnenBauraten.compareTo(geschossflaecheWohnenAbfragevariante) == 0;
-        }
-        return isValid;
     }
 }

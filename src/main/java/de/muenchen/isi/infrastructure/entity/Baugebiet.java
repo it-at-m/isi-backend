@@ -32,22 +32,22 @@ public class Baugebiet extends BaseEntity {
     @Column(nullable = false)
     private Integer realisierungVon; // JJJJ
 
-    @Column(precision = 10, scale = 2, nullable = true)
+    @Column(precision = 10, scale = 2)
     private BigDecimal gfWohnenGeplant;
 
-    @Column(precision = 10, scale = 2, nullable = true)
+    @Column(precision = 10, scale = 2)
     private BigDecimal gfWohnenBaurechtlichGenehmigt;
 
-    @Column(precision = 10, scale = 2, nullable = true)
+    @Column(precision = 10, scale = 2)
     private BigDecimal gfWohnenBaurechtlichFestgesetzt;
 
-    @Column(nullable = true)
+    @Column
     private Integer weGeplant;
 
-    @Column(nullable = true)
+    @Column
     private Integer weBaurechtlichGenehmigt;
 
-    @Column(nullable = true)
+    @Column
     private Integer weBaurechtlichFestgesetzt;
 
     @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY, orphanRemoval = true)

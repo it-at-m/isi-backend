@@ -31,11 +31,11 @@ import org.hibernate.annotations.Type;
 )
 public class Kommentar extends BaseEntity {
 
-    @Column(nullable = true, length = 32)
+    @Column(length = 32)
     private String datum;
 
     @Type(type = "org.hibernate.type.TextType")
-    @Column(nullable = true)
+    @Column
     private String text;
 
     @ManyToOne

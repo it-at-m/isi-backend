@@ -107,7 +107,7 @@ public class AbfragevarianteBaugenehmigungsverfahren extends Abfragevariante {
     @Column(precision = 10, scale = 2)
     private BigDecimal gfWohnenWeiteresNichtInfrastrukturrelevantesWohnen;
 
-    @Column(precision = 10, scale = 2, nullable = true)
+    @Column(precision = 10, scale = 2)
     private BigDecimal gfWohnenPlanungsursaechlich;
 
     // Anzahl Wohneinheiten
