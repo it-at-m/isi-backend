@@ -5,15 +5,19 @@ import de.muenchen.isi.infrastructure.entity.enums.Einrichtungstyp;
 import java.math.BigDecimal;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import lombok.Data;
 
 @Data
 @Embeddable
 public class SobonOrientierungswert {
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Einrichtungstyp einrichtungstyp;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Altersklasse altersklasse;
 
