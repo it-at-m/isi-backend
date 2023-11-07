@@ -33,15 +33,15 @@ public class BedarfsmeldungFachreferate extends BaseEntity {
     @Column(nullable = false)
     private InfrastruktureinrichtungTyp infrastruktureinrichtungTyp;
 
-    @Column(nullable = true)
+    @Column
     private Integer anzahlKinderkrippengruppen;
 
-    @Column(nullable = true)
+    @Column
     private Integer anzahlKindergartengruppen;
 
-    @Column(nullable = true)
+    @Column
     private Integer anzahlHortgruppen;
 
-    @Column(nullable = true)
+    @Column
     private Integer anzahlGrundschulzuege;
 }

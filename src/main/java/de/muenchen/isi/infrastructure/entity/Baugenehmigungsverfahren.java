@@ -51,7 +51,7 @@ public class Baugenehmigungsverfahren extends Abfrage {
         name = "bebauungsplannummer" + SearchwordSuggesterRepository.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
         valueBinder = @ValueBinderRef(type = StringSuggestionBinder.class)
     )
-    @Column(nullable = true)
+    @Column
     private String bebauungsplannummer;
 
     @FullTextField(valueBridge = @ValueBridgeRef(type = StandVerfahrenValueBridge.class))
