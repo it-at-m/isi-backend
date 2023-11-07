@@ -52,6 +52,7 @@
         <spring.statemachine>3.2.0</spring.statemachine>
         <apache.tika.version>2.7.0</apache.tika.version>
         <hibernate.search>6.2.1.Final</hibernate.search>
+        <icu4j.version>73.2</icu4j.version>
     </properties>
 
 
@@ -373,6 +374,13 @@
             <groupId>org.geotools</groupId>
             <artifactId>gt-epsg-extension</artifactId>
             <version>${geotools.version}</version>
+        </dependency>
+
+        <!-- Unicode String Processing -->
+        <dependency>
+            <groupId>com.ibm.icu</groupId>
+            <artifactId>icu4j</artifactId>
+            <version>${icu4j.version}</version>
         </dependency>
 
         <!-- Configuration Processor -->
