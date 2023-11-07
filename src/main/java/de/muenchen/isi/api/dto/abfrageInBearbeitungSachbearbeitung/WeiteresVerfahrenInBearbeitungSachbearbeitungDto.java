@@ -22,11 +22,11 @@ public class WeiteresVerfahrenInBearbeitungSachbearbeitungDto extends AbfrageInB
     @Size(min = 1, max = 5)
     private List<
         @NotNull @Valid AbfragevarianteWeiteresVerfahrenSachbearbeitungInBearbeitungSachbearbeitungDto
-    > abfragevariantenBauleitplanverfahren;
+    > abfragevariantenWeiteresVerfahren;
 
     @NotNull
     @Size(min = 0, max = 5)
     private List<
         @NotNull @Valid AbfragevarianteWeiteresVerfahrenInBearbeitungSachbearbeitungDto
-    > abfragevariantenSachbearbeitungBauleitplanverfahren;
+    > abfragevariantenSachbearbeitungWeiteresVerfahren;
 }
