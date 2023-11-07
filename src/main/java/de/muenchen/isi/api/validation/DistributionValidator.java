@@ -149,8 +149,8 @@ public class DistributionValidator {
 
     /**
      * Dokumentation bezüglich Verwendung technischer und nicht technischer Baugebiete und Bauabschnitte siehe:
-     * - {@link BaugebietDto#technical}
-     * - {@link BauabschnittDto#technical}
+     * - {@link BaugebietDto#getTechnical()}
+     * - {@link BauabschnittDto#getTechnical}
      *
      * @param bauabschnitte zur Extraktion der nichttechnischen Baugebiete.
      * @return die Liste an nichttechnischen Baugebieten identifiziert über {@link BaugebietDto#getTechnical()}.
@@ -166,8 +166,8 @@ public class DistributionValidator {
 
     /**
      * Dokumentation bezüglich Verwendung technischer und nicht technischer Baugebiete und Bauabschnitte siehe:
-     * - {@link BaugebietDto#technical}
-     * - {@link BauabschnittDto#technical}
+     * - {@link BaugebietDto#getTechnical}
+     * - {@link BauabschnittDto#getTechnical}
      *
      * @param bauabschnitte zur Extraktion der Baurante von technischen Baugebieten.
      * @return die Liste an Bauraten aller technischen Baugebiete identifiziert über {@link BaugebietDto#getTechnical()}.
