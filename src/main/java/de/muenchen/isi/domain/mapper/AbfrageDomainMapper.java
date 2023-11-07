@@ -400,7 +400,7 @@ public abstract class AbfrageDomainMapper {
         // Mapping der zusätzlichen durch die Sachbearbeitung pflegbaren Attribute der Abfragevarianten
         final var mappedAbfragevarianten = new ArrayList<AbfragevarianteWeiteresVerfahrenModel>();
         CollectionUtils
-            .emptyIfNull(request.getAbfragevariantenBauleitplanverfahren())
+            .emptyIfNull(request.getAbfragevariantenWeiteresVerfahren())
             .forEach(abfragevariante -> {
                 CollectionUtils
                     .emptyIfNull(response.getAbfragevariantenWeiteresVerfahren())
@@ -417,7 +417,7 @@ public abstract class AbfrageDomainMapper {
         // Mapping der Abfragevarianten welche ausschließlich durch die Sachbearbeitung gemappt werden.
         final var mappedAbfragevariantenSachbearbeitung = new ArrayList<AbfragevarianteWeiteresVerfahrenModel>();
         CollectionUtils
-            .emptyIfNull(request.getAbfragevariantenSachbearbeitungBauleitplanverfahren())
+            .emptyIfNull(request.getAbfragevariantenSachbearbeitungWeiteresVerfahren())
             .forEach(abfragevariante -> {
                 if (abfragevariante.getId() == null) {
                     final var mappedModel = abfragevarianteDomainMapper.request2Model(

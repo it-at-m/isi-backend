@@ -15,9 +15,9 @@ public class WeiteresVerfahrenInBearbeitungSachbearbeitungModel extends AbfrageI
 
     private List<
         AbfragevarianteWeiteresVerfahrenSachbearbeitungInBearbeitungSachbearbeitungModel
-    > abfragevariantenBauleitplanverfahren;
+    > abfragevariantenWeiteresVerfahren;
 
     private List<
         AbfragevarianteWeiteresVerfahrenInBearbeitungSachbearbeitungModel
-    > abfragevariantenSachbearbeitungBauleitplanverfahren;
+    > abfragevariantenSachbearbeitungWeiteresVerfahren;
 }
