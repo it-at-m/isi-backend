@@ -94,7 +94,7 @@ public class TestData {
 
     public static WeiteresVerfahrenModel createWeiteresVerfahrenModel() {
         final var weiteresVerfahren = new WeiteresVerfahrenModel();
-        weiteresVerfahren.setName("Neubausiedlung in Musterort");
+        weiteresVerfahren.setName("Überbausiedlung in Musterort");
         weiteresVerfahren.setStatusAbfrage(StatusAbfrage.ANGELEGT);
         final WGS84Model coordinate = new WGS84Model();
         coordinate.setLatitude(48.1556795465256);
@@ -153,7 +153,7 @@ public class TestData {
     public static WeiteresVerfahrenAngelegtModel createWeiteresVerfahrenAngelegtModel() {
         final var bauleitplanverfahren = new WeiteresVerfahrenAngelegtModel();
         bauleitplanverfahren.setArtAbfrage(ArtAbfrage.WEITERES_VERFAHREN);
-        bauleitplanverfahren.setName("Neubausiedlung in Musterort 2");
+        bauleitplanverfahren.setName("Überbausiedlung in Musterort 2");
         final WGS84Model coordinate = new WGS84Model();
         coordinate.setLatitude(48.1556795465256);
         coordinate.setLongitude(11.5568456350688);
@@ -207,7 +207,7 @@ public class TestData {
     public static AbfragevarianteWeiteresVerfahrenModel createAbfragevarianteWeiteresVerfahrenModel() {
         final var abfragevariante = new AbfragevarianteWeiteresVerfahrenModel();
         abfragevariante.setAbfragevariantenNr(1);
-        abfragevariante.setName("Name Abfragevariante 10");
+        abfragevariante.setName("Name Abfragevariante 9");
         abfragevariante.setWesentlicheRechtsgrundlage(
             List.of(WesentlicheRechtsgrundlage.EINFACHER_BEBAUUNGSPLAN_PARAGRAPH_30)
         );
@@ -256,7 +256,7 @@ public class TestData {
     public static AbfragevarianteWeiteresVerfahrenAngelegtModel createAbfragevarianteWeiteresVerfahrenAngelegtModel() {
         final var abfragevariante = new AbfragevarianteWeiteresVerfahrenAngelegtModel();
         abfragevariante.setAbfragevariantenNr(1);
-        abfragevariante.setName("Name Abfragevariante 102");
+        abfragevariante.setName("Name Abfragevariante 92");
         abfragevariante.setWesentlicheRechtsgrundlage(
             List.of(WesentlicheRechtsgrundlage.EINFACHER_BEBAUUNGSPLAN_PARAGRAPH_30)
         );

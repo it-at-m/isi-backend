@@ -16,6 +16,7 @@ import de.muenchen.isi.domain.model.AbfrageModel;
 import de.muenchen.isi.domain.model.BaugenehmigungsverfahrenModel;
 import de.muenchen.isi.domain.model.BauleitplanverfahrenModel;
 import de.muenchen.isi.domain.model.BedarfsmeldungFachreferateModel;
+import de.muenchen.isi.domain.model.WeiteresVerfahrenModel;
 import de.muenchen.isi.domain.model.abfrageAngelegt.AbfrageAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungFachreferat.AbfragevarianteBaugenehmigungsverfahrenInBearbeitungFachreferatModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungFachreferat.AbfragevarianteBauleitplanverfahrenInBearbeitungFachreferatModel;
@@ -69,6 +70,12 @@ class AbfrageServiceSpringTest {
         abfrage = this.abfrageService.save(abfrage);
         abfragevarianteId =
             ((BaugenehmigungsverfahrenModel) abfrage).getAbfragevariantenBaugenehmigungsverfahren().get(0).getId();
+        foundAbfrage = abfrageService.getByAbfragevarianteId(abfragevarianteId);
+        assertThat(foundAbfrage, is(abfrage));
+
+        abfrage = TestData.createWeiteresVerfahrenModel();
+        abfrage = this.abfrageService.save(abfrage);
+        abfragevarianteId = ((WeiteresVerfahrenModel) abfrage).getAbfragevariantenWeiteresVerfahren().get(0).getId();
         foundAbfrage = abfrageService.getByAbfragevarianteId(abfragevarianteId);
         assertThat(foundAbfrage, is(abfrage));
 
