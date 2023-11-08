@@ -10,6 +10,7 @@ import de.muenchen.isi.infrastructure.entity.BaseEntity;
 import de.muenchen.isi.infrastructure.entity.Baugenehmigungsverfahren;
 import de.muenchen.isi.infrastructure.entity.Bauleitplanverfahren;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
+import de.muenchen.isi.infrastructure.entity.WeiteresVerfahren;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Infrastruktureinrichtung;
 import java.util.UUID;
 import org.apache.commons.lang3.ObjectUtils;
@@ -28,6 +29,7 @@ public interface SearchDomainMapper {
     @SubclassMapping(source = Bauvorhaben.class, target = BauvorhabenSearchResultModel.class)
     @SubclassMapping(source = Bauleitplanverfahren.class, target = AbfrageSearchResultModel.class)
     @SubclassMapping(source = Baugenehmigungsverfahren.class, target = AbfrageSearchResultModel.class)
+    @SubclassMapping(source = WeiteresVerfahren.class, target = AbfrageSearchResultModel.class)
     SearchResultModel entity2SearchResultModel(final BaseEntity entity);
 
     @Mappings(
@@ -53,6 +55,14 @@ public interface SearchDomainMapper {
         }
     )
     AbfrageSearchResultModel entity2SearchResultModel(final Baugenehmigungsverfahren entity);
+
+    @Mappings(
+        {
+            @Mapping(target = "type", constant = SearchResultType.Values.ABFRAGE),
+            @Mapping(source = "verortung.stadtbezirke", target = "stadtbezirke"),
+        }
+    )
+    AbfrageSearchResultModel entity2SearchResultModel(final WeiteresVerfahren entity);
 
     @Mappings({ @Mapping(target = "type", constant = SearchResultType.Values.INFRASTRUKTUREINRICHTUNG) })
     InfrastruktureinrichtungSearchResultModel entity2SearchResultModel(final Infrastruktureinrichtung entity);

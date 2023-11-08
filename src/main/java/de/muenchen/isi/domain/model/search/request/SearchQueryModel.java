@@ -9,9 +9,9 @@ public class SearchQueryModel {
 
     private Boolean selectBauleitplanverfahren;
 
-    private Boolean selectWeiteresVerfahren;
-
     private Boolean selectBaugenehmigungsverfahren;
+
+    private Boolean selectWeiteresVerfahren;
 
     private Boolean selectBauvorhaben;
 
