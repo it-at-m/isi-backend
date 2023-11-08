@@ -44,8 +44,8 @@ class SearchPreparationServiceTest {
         expected.add("standVerfahren_searchword_suggestion");
         expected.add("bebauungsplannummer_searchword_suggestion");
         expected.add("name_searchword_suggestion");
-        expected.add("abfragevarianten.realisierungVon_searchword_suggestion");
-        expected.add("abfragevariantenSachbearbeitung.realisierungVon_searchword_suggestion");
+        expected.add("abfragevariantenBauleitplanverfahren.realisierungVon_searchword_suggestion");
+        expected.add("abfragevariantenSachbearbeitungBauleitplanverfahren.realisierungVon_searchword_suggestion");
         assertThat(result, is(expected));
 
         result =
@@ -62,8 +62,8 @@ class SearchPreparationServiceTest {
         expected.add("standVerfahren_searchword_suggestion");
         expected.add("bebauungsplannummer_searchword_suggestion");
         expected.add("name_searchword_suggestion");
-        expected.add("abfragevarianten.realisierungVon_searchword_suggestion");
-        expected.add("abfragevariantenSachbearbeitung.realisierungVon_searchword_suggestion");
+        expected.add("abfragevariantenBaugenehmigungsverfahren.realisierungVon_searchword_suggestion");
+        expected.add("abfragevariantenSachbearbeitungBaugenehmigungsverfahren.realisierungVon_searchword_suggestion");
         assertThat(result, is(expected));
 
         result = searchPreparationService.getNamesOfSearchableAttributesForSearchwordSuggestion(Bauvorhaben.class);
@@ -142,8 +142,8 @@ class SearchPreparationServiceTest {
         expected.add("standVerfahren");
         expected.add("bebauungsplannummer");
         expected.add("name");
-        expected.add("abfragevarianten.realisierungVon");
-        expected.add("abfragevariantenSachbearbeitung.realisierungVon");
+        expected.add("abfragevariantenBauleitplanverfahren.realisierungVon");
+        expected.add("abfragevariantenSachbearbeitungBauleitplanverfahren.realisierungVon");
         assertThat(result, is(expected.toArray(String[]::new)));
 
         result = searchPreparationService.getNamesOfSearchableAttributes(List.of(Baugenehmigungsverfahren.class));
@@ -157,8 +157,8 @@ class SearchPreparationServiceTest {
         expected.add("standVerfahren");
         expected.add("bebauungsplannummer");
         expected.add("name");
-        expected.add("abfragevarianten.realisierungVon");
-        expected.add("abfragevariantenSachbearbeitung.realisierungVon");
+        expected.add("abfragevariantenBaugenehmigungsverfahren.realisierungVon");
+        expected.add("abfragevariantenSachbearbeitungBaugenehmigungsverfahren.realisierungVon");
         assertThat(result, is(expected.toArray(String[]::new)));
 
         result = searchPreparationService.getNamesOfSearchableAttributes(List.of(Bauvorhaben.class));
@@ -226,6 +226,7 @@ class SearchPreparationServiceTest {
             searchPreparationService.getNamesOfSearchableAttributes(
                 List.of(
                     Bauleitplanverfahren.class,
+                    Baugenehmigungsverfahren.class,
                     Bauvorhaben.class,
                     Grundschule.class,
                     GsNachmittagBetreuung.class,
@@ -245,8 +246,10 @@ class SearchPreparationServiceTest {
         expected.add("standVerfahren");
         expected.add("bebauungsplannummer");
         expected.add("name");
-        expected.add("abfragevarianten.realisierungVon");
-        expected.add("abfragevariantenSachbearbeitung.realisierungVon");
+        expected.add("abfragevariantenBauleitplanverfahren.realisierungVon");
+        expected.add("abfragevariantenSachbearbeitungBauleitplanverfahren.realisierungVon");
+        expected.add("abfragevariantenBaugenehmigungsverfahren.realisierungVon");
+        expected.add("abfragevariantenSachbearbeitungBaugenehmigungsverfahren.realisierungVon");
         expected.add("nameVorhaben");
         expected.add("standVerfahren");
         expected.add("bauvorhabenNummer");

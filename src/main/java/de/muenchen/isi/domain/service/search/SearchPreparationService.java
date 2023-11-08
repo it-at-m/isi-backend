@@ -94,8 +94,8 @@ public class SearchPreparationService {
         searchableAttributes.add("standVerfahren");
         searchableAttributes.add("bebauungsplannummer");
         searchableAttributes.add("name");
-        searchableAttributes.add("abfragevarianten.realisierungVon");
-        searchableAttributes.add("abfragevariantenSachbearbeitung.realisierungVon");
+        searchableAttributes.add("abfragevariantenBauleitplanverfahren.realisierungVon");
+        searchableAttributes.add("abfragevariantenSachbearbeitungBauleitplanverfahren.realisierungVon");
         return searchableAttributes;
     }
 
@@ -110,8 +110,8 @@ public class SearchPreparationService {
         searchableAttributes.add("standVerfahren");
         searchableAttributes.add("bebauungsplannummer");
         searchableAttributes.add("name");
-        searchableAttributes.add("abfragevarianten.realisierungVon");
-        searchableAttributes.add("abfragevariantenSachbearbeitung.realisierungVon");
+        searchableAttributes.add("abfragevariantenBaugenehmigungsverfahren.realisierungVon");
+        searchableAttributes.add("abfragevariantenSachbearbeitungBaugenehmigungsverfahren.realisierungVon");
         return searchableAttributes;
     }
 
