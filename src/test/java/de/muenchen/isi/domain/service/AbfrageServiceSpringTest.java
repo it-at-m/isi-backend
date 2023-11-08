@@ -24,8 +24,10 @@ import de.muenchen.isi.domain.model.abfrageInBearbeitungFachreferat.Baugenehmigu
 import de.muenchen.isi.domain.model.abfrageInBearbeitungFachreferat.BauleitplanverfahrenInBearbeitungFachreferatModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.AbfragevarianteBaugenehmigungsverfahrenSachbearbeitungInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.AbfragevarianteBauleitplanverfahrenSachbearbeitungInBearbeitungSachbearbeitungModel;
+import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.AbfragevarianteWeiteresVerfahrenSachbearbeitungInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.BaugenehmigungsverfahrenInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.BauleitplanverfahrenInBearbeitungSachbearbeitungModel;
+import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.WeiteresVerfahrenInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
@@ -231,6 +233,47 @@ class AbfrageServiceSpringTest {
                 .get(0)
                 .getAnmerkung(),
             is("Die Anmerkung Baugenehmigungsverfahren Patch Sachbearbeitung")
+        );
+
+        abfrageRepository.deleteAll();
+    }
+
+    @Test
+    @Transactional
+    void patchInBearbeitungSachbearbeitungWeiteresVerfahren()
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException {
+        AbfrageModel abfrage = TestData.createWeiteresVerfahrenModel();
+        abfrage = this.abfrageService.save(abfrage);
+        abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+        abfrage = this.abfrageService.save(abfrage);
+
+        final var abfragePatch = new WeiteresVerfahrenInBearbeitungSachbearbeitungModel();
+        abfragePatch.setArtAbfrage(ArtAbfrage.WEITERES_VERFAHREN);
+        abfragePatch.setVersion(abfrage.getVersion());
+        abfragePatch.setVerortung(((WeiteresVerfahrenModel) abfrage).getVerortung());
+        abfragePatch.setAbfragevariantenSachbearbeitungWeiteresVerfahren(List.of());
+        final var abfragevariantePatch =
+            new AbfragevarianteWeiteresVerfahrenSachbearbeitungInBearbeitungSachbearbeitungModel();
+        abfragevariantePatch.setId(
+            ((WeiteresVerfahrenModel) abfrage).getAbfragevariantenWeiteresVerfahren().get(0).getId()
+        );
+        abfragevariantePatch.setVersion(
+            ((WeiteresVerfahrenModel) abfrage).getAbfragevariantenWeiteresVerfahren().get(0).getVersion()
+        );
+        abfragevariantePatch.setArtAbfragevariante(ArtAbfrage.WEITERES_VERFAHREN);
+        abfragevariantePatch.setGfWohnenPlanungsursaechlich(
+            ((WeiteresVerfahrenModel) abfrage).getAbfragevariantenWeiteresVerfahren()
+                .get(0)
+                .getGfWohnenPlanungsursaechlich()
+        );
+        abfragevariantePatch.setSobonOrientierungswertJahr(SobonOrientierungswertJahr.JAHR_2017);
+        abfragevariantePatch.setAnmerkung("Die Anmerkung WeiteresVerfahren Patch Sachbearbeitung");
+        abfragePatch.setAbfragevariantenWeiteresVerfahren(List.of(abfragevariantePatch));
+
+        abfrage = this.abfrageService.patchInBearbeitungSachbearbeitung(abfragePatch, abfrage.getId());
+        assertThat(
+            ((WeiteresVerfahrenModel) abfrage).getAbfragevariantenWeiteresVerfahren().get(0).getAnmerkung(),
+            is("Die Anmerkung WeiteresVerfahren Patch Sachbearbeitung")
         );
 
         abfrageRepository.deleteAll();
