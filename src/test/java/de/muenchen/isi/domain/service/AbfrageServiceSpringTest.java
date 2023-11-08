@@ -20,8 +20,10 @@ import de.muenchen.isi.domain.model.WeiteresVerfahrenModel;
 import de.muenchen.isi.domain.model.abfrageAngelegt.AbfrageAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungFachreferat.AbfragevarianteBaugenehmigungsverfahrenInBearbeitungFachreferatModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungFachreferat.AbfragevarianteBauleitplanverfahrenInBearbeitungFachreferatModel;
+import de.muenchen.isi.domain.model.abfrageInBearbeitungFachreferat.AbfragevarianteWeiteresVerfahrenInBearbeitungFachreferatModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungFachreferat.BaugenehmigungsverfahrenInBearbeitungFachreferatModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungFachreferat.BauleitplanverfahrenInBearbeitungFachreferatModel;
+import de.muenchen.isi.domain.model.abfrageInBearbeitungFachreferat.WeiteresVerfahrenInBearbeitungFachreferatModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.AbfragevarianteBaugenehmigungsverfahrenSachbearbeitungInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.AbfragevarianteBauleitplanverfahrenSachbearbeitungInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.AbfragevarianteWeiteresVerfahrenSachbearbeitungInBearbeitungSachbearbeitungModel;
@@ -365,6 +367,54 @@ class AbfrageServiceSpringTest {
         );
         assertThat(
             ((BaugenehmigungsverfahrenModel) abfrage).getAbfragevariantenBaugenehmigungsverfahren()
+                .get(0)
+                .getBedarfsmeldungFachreferate()
+                .get(0)
+                .getInfrastruktureinrichtungTyp(),
+            is(InfrastruktureinrichtungTyp.KINDERKRIPPE)
+        );
+
+        abfrageRepository.deleteAll();
+    }
+
+    @Test
+    @Transactional
+    void patchInBearbeitungFachreferatWeiteresVerfahren()
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException {
+        AbfrageModel abfrage = TestData.createWeiteresVerfahrenModel();
+        abfrage = this.abfrageService.save(abfrage);
+        abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
+        abfrage = this.abfrageService.save(abfrage);
+
+        final var abfragePatch = new WeiteresVerfahrenInBearbeitungFachreferatModel();
+        abfragePatch.setArtAbfrage(ArtAbfrage.WEITERES_VERFAHREN);
+        abfragePatch.setVersion(abfrage.getVersion());
+        abfragePatch.setAbfragevariantenSachbearbeitungWeiteresVerfahren(List.of());
+        final var abfragevariantePatch = new AbfragevarianteWeiteresVerfahrenInBearbeitungFachreferatModel();
+        abfragevariantePatch.setId(
+            ((WeiteresVerfahrenModel) abfrage).getAbfragevariantenWeiteresVerfahren().get(0).getId()
+        );
+        abfragevariantePatch.setVersion(
+            ((WeiteresVerfahrenModel) abfrage).getAbfragevariantenWeiteresVerfahren().get(0).getVersion()
+        );
+        abfragevariantePatch.setArtAbfragevariante(ArtAbfrage.WEITERES_VERFAHREN);
+        final var bedarfmeldungFachreferate = new BedarfsmeldungFachreferateModel();
+        bedarfmeldungFachreferate.setAnzahlEinrichtungen(2);
+        bedarfmeldungFachreferate.setInfrastruktureinrichtungTyp(InfrastruktureinrichtungTyp.KINDERKRIPPE);
+        abfragevariantePatch.setBedarfsmeldungFachreferate(List.of(bedarfmeldungFachreferate));
+        abfragePatch.setAbfragevariantenWeiteresVerfahren(List.of(abfragevariantePatch));
+
+        abfrage = this.abfrageService.patchInBearbeitungFachreferat(abfragePatch, abfrage.getId());
+        assertThat(
+            ((WeiteresVerfahrenModel) abfrage).getAbfragevariantenWeiteresVerfahren()
+                .get(0)
+                .getBedarfsmeldungFachreferate()
+                .get(0)
+                .getAnzahlEinrichtungen(),
+            is(2)
+        );
+        assertThat(
+            ((WeiteresVerfahrenModel) abfrage).getAbfragevariantenWeiteresVerfahren()
                 .get(0)
                 .getBedarfsmeldungFachreferate()
                 .get(0)
