@@ -1,6 +1,6 @@
 package de.muenchen.isi.api.dto.search.response;
 
-import de.muenchen.isi.domain.model.common.StadtbezirkModel;
+import de.muenchen.isi.api.dto.common.StadtbezirkDto;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVerfahren;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
@@ -23,7 +23,7 @@ public class AbfrageSearchResultDto extends SearchResultDto {
 
     private String name;
 
-    private Set<StadtbezirkModel> stadtbezirke;
+    private Set<StadtbezirkDto> stadtbezirke;
 
     private StatusAbfrage statusAbfrage;
 
