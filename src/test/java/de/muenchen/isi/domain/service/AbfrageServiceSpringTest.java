@@ -136,6 +136,25 @@ class AbfrageServiceSpringTest {
 
     @Test
     @Transactional
+    void patchAngelegtWeiteresVerfahren()
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, FileHandlingFailedException, FileHandlingWithS3FailedException, AbfrageStatusNotAllowedException {
+        AbfrageModel abfrage = TestData.createWeiteresVerfahrenModel();
+        abfrage = this.abfrageService.save(abfrage);
+
+        AbfrageAngelegtModel abfrageAngelegt = TestData.createWeiteresVerfahrenAngelegtModel();
+
+        abfrage = this.abfrageService.patchAngelegt(abfrageAngelegt, abfrage.getId());
+        assertThat(abfrage.getName(), is("Überbausiedlung in Musterort 2"));
+        assertThat(
+            ((WeiteresVerfahrenModel) abfrage).getAbfragevariantenWeiteresVerfahren().get(0).getName(),
+            is("Name Abfragevariante 92")
+        );
+
+        abfrageRepository.deleteAll();
+    }
+
+    @Test
+    @Transactional
     void patchInBearbeitungSachbearbeitungBauleitplanverfahren()
         throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException {
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
