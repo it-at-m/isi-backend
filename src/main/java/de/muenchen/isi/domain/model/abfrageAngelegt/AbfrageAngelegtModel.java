@@ -5,7 +5,7 @@ import java.util.UUID;
 import lombok.Data;
 
 @Data
-public class AbfrageAngelegtModel {
+public abstract class AbfrageAngelegtModel {
 
     private Long version;
 

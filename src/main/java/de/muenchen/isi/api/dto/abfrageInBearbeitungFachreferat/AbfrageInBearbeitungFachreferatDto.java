@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import de.muenchen.isi.api.validation.NotUnspecified;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
+import io.swagger.v3.oas.annotations.media.DiscriminatorMapping;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 @Data
@@ -29,7 +31,25 @@ import lombok.Data;
         ),
     }
 )
-public class AbfrageInBearbeitungFachreferatDto {
+@Schema(
+    description = "AbfrageInBearbeitungFachreferatDto",
+    discriminatorProperty = "artAbfrage",
+    discriminatorMapping = {
+        @DiscriminatorMapping(
+            value = ArtAbfrage.Values.BAULEITPLANVERFAHREN,
+            schema = BauleitplanverfahrenInBearbeitungFachreferatDto.class
+        ),
+        @DiscriminatorMapping(
+            value = ArtAbfrage.Values.BAUGENEHMIGUNGSVERFAHREN,
+            schema = BaugenehmigungsverfahrenInBearbeitungFachreferatDto.class
+        ),
+        @DiscriminatorMapping(
+            value = ArtAbfrage.Values.WEITERES_VERFAHREN,
+            schema = WeiteresVerfahrenInBearbeitungFachreferatDto.class
+        ),
+    }
+)
+public abstract class AbfrageInBearbeitungFachreferatDto {
 
     private Long version;
 

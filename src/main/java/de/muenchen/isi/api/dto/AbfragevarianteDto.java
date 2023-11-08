@@ -3,6 +3,8 @@ package de.muenchen.isi.api.dto;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
+import io.swagger.v3.oas.annotations.media.DiscriminatorMapping;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -29,6 +31,24 @@ import lombok.ToString;
         @JsonSubTypes.Type(
             value = AbfragevarianteWeiteresVerfahrenDto.class,
             name = ArtAbfrage.Values.WEITERES_VERFAHREN
+        ),
+    }
+)
+@Schema(
+    description = "AbfragevarianteDto",
+    discriminatorProperty = "artAbfragevariante",
+    discriminatorMapping = {
+        @DiscriminatorMapping(
+            value = ArtAbfrage.Values.BAULEITPLANVERFAHREN,
+            schema = AbfragevarianteBauleitplanverfahrenDto.class
+        ),
+        @DiscriminatorMapping(
+            value = ArtAbfrage.Values.BAUGENEHMIGUNGSVERFAHREN,
+            schema = AbfragevarianteBaugenehmigungsverfahrenDto.class
+        ),
+        @DiscriminatorMapping(
+            value = ArtAbfrage.Values.WEITERES_VERFAHREN,
+            schema = AbfragevarianteWeiteresVerfahrenDto.class
         ),
     }
 )
