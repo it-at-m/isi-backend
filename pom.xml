@@ -278,12 +278,6 @@
             <artifactId>hamcrest-library</artifactId>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>com.github.javafaker</groupId>
-            <artifactId>javafaker</artifactId>
-            <version>${javafaker.version}</version>
-            <scope>test</scope>
-        </dependency>
 
         <!-- Logging -->
         <dependency>
