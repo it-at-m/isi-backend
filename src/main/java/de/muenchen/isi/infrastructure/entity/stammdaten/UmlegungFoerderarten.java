@@ -28,7 +28,6 @@ public class UmlegungFoerderarten extends BaseEntity {
     @Column(nullable = false)
     private LocalDate gueltigAb;
 
-    // Die Klasse Foerderart existiert bereits.
     @Type(type = "json")
     @Column(columnDefinition = "jsonb")
     private Set<Foerderart> umlegungsschluessel;
