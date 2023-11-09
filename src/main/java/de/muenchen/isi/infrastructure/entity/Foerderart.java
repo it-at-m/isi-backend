@@ -11,6 +11,6 @@ public class Foerderart {
 
     private String bezeichnung;
 
-    @Column(precision = 4, scale = 2)
+    @Column(precision = 5, scale = 2)
     private BigDecimal anteilProzent;
 }
