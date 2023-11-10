@@ -5,10 +5,15 @@ import java.time.LocalDate;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 public interface UmlegungFoerderartenRepository extends JpaRepository<UmlegungFoerderarten, UUID> {
-    Optional<UmlegungFoerderarten> findFirstByBezeichnungAndGueltigAbBeforeOrderByGueltigAbDesc(
-        final String bezeichnung,
-        final LocalDate datum
+    @Query(
+        "SELECT umlegung FROM UmlegungFoerderarten umlegung WHERE umlegung.bezeichnung = :bezeichnung AND umlegung.gueltigAb <= :datum ORDER BY umlegung.gueltigAb DESC"
+    )
+    Optional<UmlegungFoerderarten> findFirstByBezeichnungAndGueltigAbBeforeOrEqualToOrderByGueltigAbDesc(
+        @Param("bezeichnung") final String bezeichnung,
+        @Param("datum") final LocalDate datum
     );
 }

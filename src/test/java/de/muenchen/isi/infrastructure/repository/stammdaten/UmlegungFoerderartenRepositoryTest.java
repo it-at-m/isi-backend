@@ -58,46 +58,97 @@ public class UmlegungFoerderartenRepositoryTest {
             );
 
         Optional<UmlegungFoerderarten> result1 =
-            this.umlegungFoerderartenRepository.findFirstByBezeichnungAndGueltigAbBeforeOrderByGueltigAbDesc(
+            this.umlegungFoerderartenRepository.findFirstByBezeichnungAndGueltigAbBeforeOrEqualToOrderByGueltigAbDesc(
                     umlegungFoerderarten1.getBezeichnung(),
                     LocalDate.parse("2003-05-05")
                 );
 
         Optional<UmlegungFoerderarten> result2 =
-            this.umlegungFoerderartenRepository.findFirstByBezeichnungAndGueltigAbBeforeOrderByGueltigAbDesc(
+            this.umlegungFoerderartenRepository.findFirstByBezeichnungAndGueltigAbBeforeOrEqualToOrderByGueltigAbDesc(
+                    umlegungFoerderarten2.getBezeichnung(),
+                    LocalDate.parse("2005-05-05")
+                );
+
+        Optional<UmlegungFoerderarten> result3 =
+            this.umlegungFoerderartenRepository.findFirstByBezeichnungAndGueltigAbBeforeOrEqualToOrderByGueltigAbDesc(
                     umlegungFoerderarten2.getBezeichnung(),
                     LocalDate.parse("2007-10-15")
                 );
 
-        Optional<UmlegungFoerderarten> result3 =
-            this.umlegungFoerderartenRepository.findFirstByBezeichnungAndGueltigAbBeforeOrderByGueltigAbDesc(
+        Optional<UmlegungFoerderarten> result4 =
+            this.umlegungFoerderartenRepository.findFirstByBezeichnungAndGueltigAbBeforeOrEqualToOrderByGueltigAbDesc(
                     umlegungFoerderarten3.getBezeichnung(),
                     LocalDate.parse("2011-06-14")
                 );
 
-        Optional<UmlegungFoerderarten> result4 =
-            this.umlegungFoerderartenRepository.findFirstByBezeichnungAndGueltigAbBeforeOrderByGueltigAbDesc(
-                    umlegungFoerderarten1.getBezeichnung(),
-                    LocalDate.parse("1999-06-14")
-                );
-
         Optional<UmlegungFoerderarten> result5 =
-            this.umlegungFoerderartenRepository.findFirstByBezeichnungAndGueltigAbBeforeOrderByGueltigAbDesc(
-                    "Test4",
-                    LocalDate.parse("2003-05-05")
+            this.umlegungFoerderartenRepository.findFirstByBezeichnungAndGueltigAbBeforeOrEqualToOrderByGueltigAbDesc(
+                    umlegungFoerderarten1.getBezeichnung(),
+                    LocalDate.parse("2005-05-04")
                 );
 
         Optional<UmlegungFoerderarten> result6 =
-            this.umlegungFoerderartenRepository.findFirstByBezeichnungAndGueltigAbBeforeOrderByGueltigAbDesc(
-                    "Test5",
-                    LocalDate.parse("1980-05-05")
+            this.umlegungFoerderartenRepository.findFirstByBezeichnungAndGueltigAbBeforeOrEqualToOrderByGueltigAbDesc(
+                    umlegungFoerderarten2.getBezeichnung(),
+                    LocalDate.parse("2005-05-06")
                 );
 
         assertThat(result1.get(), is(umlegungFoerderarten1));
         assertThat(result2.get(), is(umlegungFoerderarten2));
-        assertThat(result3.get(), is(umlegungFoerderarten3));
+        assertThat(result3.get(), is(umlegungFoerderarten2));
+        assertThat(result4.get(), is(umlegungFoerderarten3));
+        assertThat(result5.get(), is(umlegungFoerderarten1));
+        assertThat(result6.get(), is(umlegungFoerderarten2));
+    }
+
+    @Test
+    void NoSuchElementExceptionUmlegungFoerderartenbyBezeichnungAndDatum() {
+        UmlegungFoerderarten umlegungFoerderarten1 = new UmlegungFoerderarten();
+        umlegungFoerderarten1.setId(UUID.randomUUID());
+        umlegungFoerderarten1.setBezeichnung("Test1");
+        umlegungFoerderarten1.setGueltigAb(LocalDate.parse("2000-01-01"));
+
+        UmlegungFoerderarten umlegungFoerderarten2 = new UmlegungFoerderarten();
+        umlegungFoerderarten2.setId(UUID.randomUUID());
+        umlegungFoerderarten2.setBezeichnung("Test2");
+        umlegungFoerderarten2.setGueltigAb(LocalDate.parse("2005-05-05"));
+
+        UmlegungFoerderarten umlegungFoerderarten3 = new UmlegungFoerderarten();
+        umlegungFoerderarten3.setId(UUID.randomUUID());
+        umlegungFoerderarten3.setBezeichnung("Test3");
+        umlegungFoerderarten3.setGueltigAb(LocalDate.parse("2010-01-01"));
+
+        this.umlegungFoerderartenRepository.saveAll(
+                List.of(umlegungFoerderarten1, umlegungFoerderarten2, umlegungFoerderarten3)
+            );
+
+        Optional<UmlegungFoerderarten> result1 =
+            this.umlegungFoerderartenRepository.findFirstByBezeichnungAndGueltigAbBeforeOrEqualToOrderByGueltigAbDesc(
+                    umlegungFoerderarten1.getBezeichnung(),
+                    LocalDate.parse("1999-06-14")
+                );
+
+        Optional<UmlegungFoerderarten> result2 =
+            this.umlegungFoerderartenRepository.findFirstByBezeichnungAndGueltigAbBeforeOrEqualToOrderByGueltigAbDesc(
+                    "Test4",
+                    LocalDate.parse("2003-05-05")
+                );
+
+        Optional<UmlegungFoerderarten> result3 =
+            this.umlegungFoerderartenRepository.findFirstByBezeichnungAndGueltigAbBeforeOrEqualToOrderByGueltigAbDesc(
+                    "Test5",
+                    LocalDate.parse("1980-05-05")
+                );
+
+        Optional<UmlegungFoerderarten> result4 =
+            this.umlegungFoerderartenRepository.findFirstByBezeichnungAndGueltigAbBeforeOrEqualToOrderByGueltigAbDesc(
+                    umlegungFoerderarten2.getBezeichnung(),
+                    LocalDate.parse("2005-05-04")
+                );
+
+        Assertions.assertThrows(NoSuchElementException.class, () -> result1.get());
+        Assertions.assertThrows(NoSuchElementException.class, () -> result2.get());
+        Assertions.assertThrows(NoSuchElementException.class, () -> result3.get());
         Assertions.assertThrows(NoSuchElementException.class, () -> result4.get());
-        Assertions.assertThrows(NoSuchElementException.class, () -> result5.get());
-        Assertions.assertThrows(NoSuchElementException.class, () -> result6.get());
     }
 }
