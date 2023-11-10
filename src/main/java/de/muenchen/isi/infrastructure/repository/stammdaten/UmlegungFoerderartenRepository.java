@@ -5,15 +5,18 @@ import java.time.LocalDate;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 
 public interface UmlegungFoerderartenRepository extends JpaRepository<UmlegungFoerderarten, UUID> {
-    @Query(
-        "SELECT umlegung FROM UmlegungFoerderarten umlegung WHERE umlegung.bezeichnung = :bezeichnung AND umlegung.gueltigAb <= :datum ORDER BY umlegung.gueltigAb DESC"
-    )
-    Optional<UmlegungFoerderarten> findFirstByBezeichnungAndGueltigAbBeforeOrEqualToOrderByGueltigAbDesc(
-        @Param("bezeichnung") final String bezeichnung,
-        @Param("datum") final LocalDate datum
+    /**
+     * Findet den ersten Eintrag mit einer bestimmten Bezeichnung, bei dem das Gültigkeitsdatum vor oder am
+     * angegebenen Datum liegt, und sortiert die Ergebnisse nach dem Gültigkeitsdatum absteigend.
+     *
+     * @param bezeichnung Die Bezeichnung, nach der gesucht werden soll.
+     * @param datum       Das Datum, bis zu dem das Gültigkeitsdatum liegen soll (einschließlich).
+     * @return Ein {@link Optional} mit dem gefundenen Eintrag, oder ein leeres {@link Optional}, falls kein Eintrag gefunden wurde.
+     */
+    Optional<UmlegungFoerderarten> findFirstByBezeichnungAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
+        final String bezeichnung,
+        final LocalDate datum
     );
 }
