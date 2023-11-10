@@ -58,37 +58,37 @@ public class UmlegungFoerderartenRepositoryTest {
             );
 
         Optional<UmlegungFoerderarten> result1 =
-            this.umlegungFoerderartenRepository.findByBezeichnungAndGueltigAbBeforeOrderByGueltigAbDesc(
+            this.umlegungFoerderartenRepository.findFirstByBezeichnungAndGueltigAbBeforeOrderByGueltigAbDesc(
                     umlegungFoerderarten1.getBezeichnung(),
                     LocalDate.parse("2003-05-05")
                 );
 
         Optional<UmlegungFoerderarten> result2 =
-            this.umlegungFoerderartenRepository.findByBezeichnungAndGueltigAbBeforeOrderByGueltigAbDesc(
+            this.umlegungFoerderartenRepository.findFirstByBezeichnungAndGueltigAbBeforeOrderByGueltigAbDesc(
                     umlegungFoerderarten2.getBezeichnung(),
                     LocalDate.parse("2007-10-15")
                 );
 
         Optional<UmlegungFoerderarten> result3 =
-            this.umlegungFoerderartenRepository.findByBezeichnungAndGueltigAbBeforeOrderByGueltigAbDesc(
+            this.umlegungFoerderartenRepository.findFirstByBezeichnungAndGueltigAbBeforeOrderByGueltigAbDesc(
                     umlegungFoerderarten3.getBezeichnung(),
                     LocalDate.parse("2011-06-14")
                 );
 
         Optional<UmlegungFoerderarten> result4 =
-            this.umlegungFoerderartenRepository.findByBezeichnungAndGueltigAbBeforeOrderByGueltigAbDesc(
+            this.umlegungFoerderartenRepository.findFirstByBezeichnungAndGueltigAbBeforeOrderByGueltigAbDesc(
                     umlegungFoerderarten1.getBezeichnung(),
                     LocalDate.parse("1999-06-14")
                 );
 
         Optional<UmlegungFoerderarten> result5 =
-            this.umlegungFoerderartenRepository.findByBezeichnungAndGueltigAbBeforeOrderByGueltigAbDesc(
+            this.umlegungFoerderartenRepository.findFirstByBezeichnungAndGueltigAbBeforeOrderByGueltigAbDesc(
                     "Test4",
                     LocalDate.parse("2003-05-05")
                 );
 
         Optional<UmlegungFoerderarten> result6 =
-            this.umlegungFoerderartenRepository.findByBezeichnungAndGueltigAbBeforeOrderByGueltigAbDesc(
+            this.umlegungFoerderartenRepository.findFirstByBezeichnungAndGueltigAbBeforeOrderByGueltigAbDesc(
                     "Test5",
                     LocalDate.parse("1980-05-05")
                 );

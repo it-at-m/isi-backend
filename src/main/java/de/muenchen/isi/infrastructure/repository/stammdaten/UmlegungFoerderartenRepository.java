@@ -7,7 +7,7 @@ import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UmlegungFoerderartenRepository extends JpaRepository<UmlegungFoerderarten, UUID> {
-    Optional<UmlegungFoerderarten> findByBezeichnungAndGueltigAbBeforeOrderByGueltigAbDesc(
+    Optional<UmlegungFoerderarten> findFirstByBezeichnungAndGueltigAbBeforeOrderByGueltigAbDesc(
         final String bezeichnung,
         final LocalDate datum
     );
