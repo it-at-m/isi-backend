@@ -3,9 +3,8 @@ package de.muenchen.isi.infrastructure.entity.stammdaten;
 import de.muenchen.isi.infrastructure.entity.BaseEntity;
 import de.muenchen.isi.infrastructure.entity.enums.Altersklasse;
 import de.muenchen.isi.infrastructure.entity.enums.Einrichtungstyp;
-import de.muenchen.isi.infrastructure.entity.enums.Wohnungstyp;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonVerfahrensgrundsaetzeJahr;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -20,12 +19,12 @@ import lombok.ToString;
 @Entity
 @Table(
     uniqueConstraints = {
-        @UniqueConstraint(columnNames = { "jahr", "einrichtungstyp", "altersklasse", "wohnungstyp" }),
+        @UniqueConstraint(columnNames = { "gueltigAb", "einrichtungstyp", "altersklasse", "foerderartBezeichnung" }),
     },
     indexes = {
         @Index(
-            name = "sobon_orientierungswert_soziale_infrastruktur_jahr_einrichtungstyp_altersklasse_wohnungstyp_index",
-            columnList = "jahr, einrichtungstyp, altersklasse, wohnungstyp"
+            name = "sobon_orientierungswert_soziale_infrastruktur_jahr_einrichtungstyp_altersklasse_foerderartBezeichnung_index",
+            columnList = "gueltigAb, einrichtungstyp, altersklasse, foerderartBezeichnung"
         ),
     }
 )
@@ -34,9 +33,8 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 public class SobonOrientierungswertSozialeInfrastruktur extends BaseEntity {
 
-    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private SobonVerfahrensgrundsaetzeJahr jahr;
+    private LocalDate gueltigAb;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -46,9 +44,8 @@ public class SobonOrientierungswertSozialeInfrastruktur extends BaseEntity {
     @Column(nullable = false)
     private Altersklasse altersklasse;
 
-    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Wohnungstyp wohnungstyp;
+    private String foerderartBezeichnung;
 
     @Column(precision = 10, scale = 4, nullable = false)
     private BigDecimal einwohnerJahr1NachErsterstellung;
@@ -79,19 +76,4 @@ public class SobonOrientierungswertSozialeInfrastruktur extends BaseEntity {
 
     @Column(precision = 10, scale = 4, nullable = false)
     private BigDecimal einwohnerJahr10NachErsterstellung;
-
-    @Column(precision = 10, scale = 4, nullable = false)
-    private BigDecimal mittelwertEinwohnerJeWohnung;
-
-    @Column(precision = 10, scale = 4, nullable = false)
-    private BigDecimal faktor1EinwohnerJeWohnung;
-
-    @Column(precision = 10, scale = 4, nullable = false)
-    private BigDecimal faktorEinwohnerJeWohnung;
-
-    @Column(precision = 10, scale = 4, nullable = false)
-    private BigDecimal perzentil75ProzentEinwohnerJeWohnung;
-
-    @Column(precision = 10, scale = 2, nullable = false)
-    private BigDecimal perzentil75ProzentGerundetEinwohnerJeWohnung;
 }
