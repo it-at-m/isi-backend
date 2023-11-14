@@ -43,7 +43,7 @@ public class ImportStammdatenFromFile implements CommandLineRunner {
     private final List<String> csvStaedtebaulicheOrientierungswerte;
 
     public ImportStammdatenFromFile(
-        @Value("${spring.jpa.defer-datasource-initialization:false}") final Boolean deferDatasourceInit,
+        @Value("${spring.jpa.defer-datasource-initialization}") final Boolean deferDatasourceInit,
         @Value("${stammdaten.csv-locations.sobon-orientierungswerte-sozialinfrastruktur}") final List<
             String
         > csvSobonOrientierungswertSozialeInfrastruktur,
