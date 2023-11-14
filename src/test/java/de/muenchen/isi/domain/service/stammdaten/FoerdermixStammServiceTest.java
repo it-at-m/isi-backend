@@ -8,7 +8,9 @@ import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
 import de.muenchen.isi.domain.mapper.StammdatenDomainMapper;
 import de.muenchen.isi.domain.mapper.StammdatenDomainMapperImpl;
+import de.muenchen.isi.domain.model.FoerdermixModel;
 import de.muenchen.isi.domain.model.stammdaten.FoerdermixStammModel;
+import de.muenchen.isi.infrastructure.entity.Foerdermix;
 import de.muenchen.isi.infrastructure.entity.stammdaten.FoerdermixStamm;
 import de.muenchen.isi.infrastructure.repository.stammdaten.FoerdermixStammRepository;
 import java.util.List;
@@ -51,7 +53,7 @@ class FoerdermixStammServiceTest {
         entity2.setId(UUID.randomUUID());
 
         Mockito
-            .when(this.foerdermixStammRepository.findAllByOrderByBezeichnungAsc())
+            .when(this.foerdermixStammRepository.findAllByOrderByFoerdermixBezeichnungAsc())
             .thenReturn(Stream.of(entity1, entity2));
 
         final List<FoerdermixStammModel> result = this.foerdermixStammService.getFoerdermixStaemme();
@@ -107,10 +109,13 @@ class FoerdermixStammServiceTest {
 
     @Test
     void saveFoerdermixStammUniqueViolationTest() throws UniqueViolationException, OptimisticLockingException {
+        FoerdermixModel foerdermixModel = new FoerdermixModel();
+        foerdermixModel.setBezeichnungJahr("Test 2022");
+        foerdermixModel.setBezeichnung("Testfall 1");
+
         final FoerdermixStammModel model = new FoerdermixStammModel();
         model.setId(UUID.randomUUID());
-        model.setBezeichnungJahr("Test 2022");
-        model.setBezeichnung("Testfall 1");
+        model.setFoerdermix(foerdermixModel);
 
         final FoerdermixStamm entity = this.stammdatenDomainMapper.model2Entity(model);
         entity.setId(UUID.randomUUID());
@@ -121,7 +126,7 @@ class FoerdermixStammServiceTest {
         Mockito.when(this.foerdermixStammRepository.saveAndFlush(entity)).thenReturn(saveResult);
         Mockito
             .when(
-                this.foerdermixStammRepository.findByBezeichnungJahrIgnoreCaseAndBezeichnungIgnoreCase(
+                this.foerdermixStammRepository.findByFoerdermixBezeichnungJahrIgnoreCaseAndFoerdermixBezeichnungIgnoreCase(
                         "Test 2022",
                         "Testfall 1"
                     )
@@ -136,7 +141,7 @@ class FoerdermixStammServiceTest {
         Mockito.verify(this.foerdermixStammRepository, Mockito.times(0)).saveAndFlush(entity);
         Mockito
             .verify(this.foerdermixStammRepository, Mockito.times(1))
-            .findByBezeichnungJahrIgnoreCaseAndBezeichnungIgnoreCase("Test 2022", "Testfall 1");
+            .findByFoerdermixBezeichnungJahrIgnoreCaseAndFoerdermixBezeichnungIgnoreCase("Test 2022", "Testfall 1");
     }
 
     @Test
