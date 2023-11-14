@@ -23,7 +23,7 @@ public class SobonOrientierungswertSozialeInfrastrukturCsv {
     @CsvCustomBindByName(column = "ALTERSKLASSE", converter = AltersklasseConverter.class, required = true)
     private Altersklasse altersklasse;
 
-    @CsvBindByName(column = "WOHNUNGSTYP", required = true)
+    @CsvBindByName(column = "FOERDERART_BEZEICHNUNG", required = true)
     private String foerderartBezeichnung;
 
     @CsvBindByName(column = "JAHR_1_NACH_ERSTELLUNG", required = true)

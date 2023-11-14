@@ -13,7 +13,7 @@ public class StaedtebaulicheOrientierungswertCsv {
     @CsvCustomBindByName(column = "JAHR", converter = JahrConverter.class, required = true)
     private LocalDate gueltigAb;
 
-    @CsvBindByName(column = "WOHNUNGSTYP", required = true)
+    @CsvBindByName(column = "FOERDERART_BEZEICHNUNG", required = true)
     private String foerderartBezeichnung;
 
     @CsvBindByName(column = "DURCHSCHNITTLICHE_GRUNDFLAECHE", required = true)
