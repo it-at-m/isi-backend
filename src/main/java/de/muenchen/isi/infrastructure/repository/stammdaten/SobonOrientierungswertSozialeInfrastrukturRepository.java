@@ -11,7 +11,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface SobonOrientierungswertSozialeInfrastrukturRepository
     extends JpaRepository<SobonOrientierungswertSozialeInfrastruktur, UUID> {
     /**
-     * Findet den Eintrag mit einer bestimmten Einrichtungstyp, Altersklasse und Förderart-Bezeichnung,
+     * Findet den Eintrag mit einem bestimmten Einrichtungstyp, Altersklasse und Förderart-Bezeichnung,
      * bei dem das Gültigkeitsdatum vor oder am angegebenen Datum liegt, und sortiert die Ergebnisse nach dem
      * Gültigkeitsdatum absteigend.
      *
