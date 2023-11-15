@@ -15,7 +15,6 @@ import de.muenchen.isi.domain.exception.UniqueViolationException;
 import de.muenchen.isi.domain.mapper.BauvorhabenDomainMapper;
 import de.muenchen.isi.domain.mapper.BauvorhabenDomainMapperImpl;
 import de.muenchen.isi.domain.mapper.DokumentDomainMapperImpl;
-import de.muenchen.isi.domain.mapper.InfrastruktureinrichtungDomainMapperImpl;
 import de.muenchen.isi.domain.mapper.SearchDomainMapper;
 import de.muenchen.isi.domain.mapper.SearchDomainMapperImpl;
 import de.muenchen.isi.domain.model.AbfrageModel;
@@ -29,12 +28,14 @@ import de.muenchen.isi.domain.model.search.response.InfrastruktureinrichtungSear
 import de.muenchen.isi.domain.service.filehandling.DokumentService;
 import de.muenchen.isi.infrastructure.entity.Abfrage;
 import de.muenchen.isi.infrastructure.entity.AbfragevarianteBauleitplanverfahren;
+import de.muenchen.isi.infrastructure.entity.Baugenehmigungsverfahren;
 import de.muenchen.isi.infrastructure.entity.Bauleitplanverfahren;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
 import de.muenchen.isi.infrastructure.entity.common.GlobalCounter;
 import de.muenchen.isi.infrastructure.entity.common.Stadtbezirk;
 import de.muenchen.isi.infrastructure.entity.common.Verortung;
 import de.muenchen.isi.infrastructure.entity.enums.CounterType;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVerfahren;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusInfrastruktureinrichtung;
@@ -76,10 +77,7 @@ public class BauvorhabenServiceTest {
         new DokumentDomainMapperImpl()
     );
 
-    private final SearchDomainMapper searchDomainMapper = new SearchDomainMapperImpl(
-        new InfrastruktureinrichtungDomainMapperImpl(),
-        new BauvorhabenDomainMapperImpl(new DokumentDomainMapperImpl())
-    );
+    private final SearchDomainMapper searchDomainMapper = new SearchDomainMapperImpl();
 
     private BauvorhabenService bauvorhabenService;
 
@@ -164,7 +162,7 @@ public class BauvorhabenServiceTest {
         abfrage2.setFristBearbeitung(LocalDate.of(2022, 9, 1));
         abfrage2.setBauvorhaben(bauvorhaben);
 
-        final Bauleitplanverfahren abfrage3 = new Bauleitplanverfahren();
+        final Baugenehmigungsverfahren abfrage3 = new Baugenehmigungsverfahren();
         abfrage3.setId(UUID.randomUUID());
         abfrage3.setName("NameAbfrage3");
         abfrage3.setStatusAbfrage(StatusAbfrage.OFFEN);
@@ -177,6 +175,7 @@ public class BauvorhabenServiceTest {
 
         var abfrageListElementModel1 = new AbfrageSearchResultModel();
         abfrageListElementModel1.setType(SearchResultType.ABFRAGE);
+        abfrageListElementModel1.setArtAbfrage(ArtAbfrage.BAULEITPLANVERFAHREN);
         abfrageListElementModel1.setId(abfrage1.getId());
         abfrageListElementModel1.setName(abfrage1.getName());
         abfrageListElementModel1.setStatusAbfrage(abfrage1.getStatusAbfrage());
@@ -187,6 +186,7 @@ public class BauvorhabenServiceTest {
 
         var abfrageListElementModel2 = new AbfrageSearchResultModel();
         abfrageListElementModel2.setType(SearchResultType.ABFRAGE);
+        abfrageListElementModel2.setArtAbfrage(ArtAbfrage.BAULEITPLANVERFAHREN);
         abfrageListElementModel2.setId(abfrage2.getId());
         abfrageListElementModel2.setName(abfrage2.getName());
         abfrageListElementModel2.setStatusAbfrage(abfrage2.getStatusAbfrage());
@@ -197,6 +197,7 @@ public class BauvorhabenServiceTest {
 
         var abfrageListElementModel3 = new AbfrageSearchResultModel();
         abfrageListElementModel3.setType(SearchResultType.ABFRAGE);
+        abfrageListElementModel3.setArtAbfrage(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN);
         abfrageListElementModel3.setId(abfrage3.getId());
         abfrageListElementModel3.setName(abfrage3.getName());
         abfrageListElementModel3.setStatusAbfrage(abfrage3.getStatusAbfrage());

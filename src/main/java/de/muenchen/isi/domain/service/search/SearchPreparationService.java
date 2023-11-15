@@ -3,6 +3,7 @@ package de.muenchen.isi.domain.service.search;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.model.search.request.SearchQueryModel;
 import de.muenchen.isi.infrastructure.entity.BaseEntity;
+import de.muenchen.isi.infrastructure.entity.Baugenehmigungsverfahren;
 import de.muenchen.isi.infrastructure.entity.Bauleitplanverfahren;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Grundschule;
@@ -58,6 +59,9 @@ public class SearchPreparationService {
         if (CollectionUtils.containsAny(searchableEntities, Set.of(Bauleitplanverfahren.class))) {
             searchableAttributes.addAll(getNamesOfSearchableAttributesForBauleitplanverfahren());
         }
+        if (CollectionUtils.containsAny(searchableEntities, Set.of(Baugenehmigungsverfahren.class))) {
+            searchableAttributes.addAll(getNamesOfSearchableAttributesForBaugenehmigungsverfahren());
+        }
         if (CollectionUtils.containsAny(searchableEntities, Set.of(Bauvorhaben.class))) {
             searchableAttributes.addAll(getNamesOfSearchableAttributesForBauvorhaben());
         }
@@ -90,8 +94,24 @@ public class SearchPreparationService {
         searchableAttributes.add("standVerfahren");
         searchableAttributes.add("bebauungsplannummer");
         searchableAttributes.add("name");
-        searchableAttributes.add("abfragevarianten.realisierungVon");
-        searchableAttributes.add("abfragevariantenSachbearbeitung.realisierungVon");
+        searchableAttributes.add("abfragevariantenBauleitplanverfahren.realisierungVon");
+        searchableAttributes.add("abfragevariantenSachbearbeitungBauleitplanverfahren.realisierungVon");
+        return searchableAttributes;
+    }
+
+    protected static Set<String> getNamesOfSearchableAttributesForBaugenehmigungsverfahren() {
+        final var searchableAttributes = new HashSet<String>();
+        searchableAttributes.add("adresse.strasse");
+        searchableAttributes.add("adresse.hausnummer");
+        searchableAttributes.add("verortung.stadtbezirke.name");
+        searchableAttributes.add("verortung.gemarkungen.name");
+        searchableAttributes.add("verortung.gemarkungen.flurstuecke.nummer");
+        searchableAttributes.add("statusAbfrage");
+        searchableAttributes.add("standVerfahren");
+        searchableAttributes.add("bebauungsplannummer");
+        searchableAttributes.add("name");
+        searchableAttributes.add("abfragevariantenBaugenehmigungsverfahren.realisierungVon");
+        searchableAttributes.add("abfragevariantenSachbearbeitungBaugenehmigungsverfahren.realisierungVon");
         return searchableAttributes;
     }
 
@@ -130,6 +150,9 @@ public class SearchPreparationService {
         final List<Class<? extends BaseEntity>> searchableEntities = new ArrayList<>();
         if (BooleanUtils.isTrue(searchQueryInformation.getSelectBauleitplanverfahren())) {
             searchableEntities.add(Bauleitplanverfahren.class);
+        }
+        if (BooleanUtils.isTrue(searchQueryInformation.getSelectBaugenehmigungsverfahren())) {
+            searchableEntities.add(Baugenehmigungsverfahren.class);
         }
         if (BooleanUtils.isTrue(searchQueryInformation.getSelectBauvorhaben())) {
             searchableEntities.add(Bauvorhaben.class);

@@ -16,6 +16,10 @@ import lombok.ToString;
             name = "bedarfsmeldung_fachreferate_abfragevariante_bauleitplanverfahren_id_index",
             columnList = "abfragevariante_bauleitplanverfahren_id"
         ),
+        @Index(
+            name = "bedarfsmeldung_fachreferate_abfragevariante_baugenehmigungsverfahren_id_index",
+            columnList = "abfragevariante_baugenehmigungsverfahren_id"
+        ),
     }
 )
 @Data
@@ -29,15 +33,15 @@ public class BedarfsmeldungFachreferate extends BaseEntity {
     @Column(nullable = false)
     private InfrastruktureinrichtungTyp infrastruktureinrichtungTyp;
 
-    @Column(nullable = true)
+    @Column
     private Integer anzahlKinderkrippengruppen;
 
-    @Column(nullable = true)
+    @Column
     private Integer anzahlKindergartengruppen;
 
-    @Column(nullable = true)
+    @Column
     private Integer anzahlHortgruppen;
 
-    @Column(nullable = true)
+    @Column
     private Integer anzahlGrundschulzuege;
 }

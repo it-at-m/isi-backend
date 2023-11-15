@@ -16,5 +16,4 @@ public class InfrastruktureinrichtungSearchResultModel extends SearchResultModel
     private InfrastruktureinrichtungTyp infrastruktureinrichtungTyp;
 
     private String nameEinrichtung;
-    //TBD: StadtbezirkDto
 }

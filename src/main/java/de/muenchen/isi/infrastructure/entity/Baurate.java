@@ -24,10 +24,10 @@ public class Baurate extends BaseEntity {
     @Column(nullable = false)
     private Integer jahr; // JJJJ
 
-    @Column(nullable = true)
+    @Column
     private Integer weGeplant;
 
-    @Column(precision = 10, scale = 2, nullable = true)
+    @Column(precision = 10, scale = 2)
     private BigDecimal gfWohnenGeplant;
 
     @Embedded

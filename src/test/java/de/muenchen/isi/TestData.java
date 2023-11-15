@@ -2,16 +2,22 @@
  * Copyright (c): it@M - Dienstleister für Informations- und Telekommunikationstechnik
  * der Landeshauptstadt München, 2022
  */
-package de.muenchen.isi.rest;
+package de.muenchen.isi;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import de.muenchen.isi.domain.model.AbfragevarianteBaugenehmigungsverfahrenModel;
 import de.muenchen.isi.domain.model.AbfragevarianteBauleitplanverfahrenModel;
 import de.muenchen.isi.domain.model.BauabschnittModel;
 import de.muenchen.isi.domain.model.BaugebietModel;
+import de.muenchen.isi.domain.model.BaugenehmigungsverfahrenModel;
 import de.muenchen.isi.domain.model.BauleitplanverfahrenModel;
 import de.muenchen.isi.domain.model.BaurateModel;
 import de.muenchen.isi.domain.model.FoerderartModel;
 import de.muenchen.isi.domain.model.FoerdermixModel;
+import de.muenchen.isi.domain.model.abfrageAngelegt.AbfragevarianteBaugenehmigungsverfahrenAngelegtModel;
+import de.muenchen.isi.domain.model.abfrageAngelegt.AbfragevarianteBauleitplanverfahrenAngelegtModel;
+import de.muenchen.isi.domain.model.abfrageAngelegt.BaugenehmigungsverfahrenAngelegtModel;
+import de.muenchen.isi.domain.model.abfrageAngelegt.BauleitplanverfahrenAngelegtModel;
 import de.muenchen.isi.domain.model.common.AdresseModel;
 import de.muenchen.isi.domain.model.common.FlurstueckModel;
 import de.muenchen.isi.domain.model.common.GemarkungModel;
@@ -21,8 +27,10 @@ import de.muenchen.isi.domain.model.common.VerortungModel;
 import de.muenchen.isi.domain.model.common.WGS84Model;
 import de.muenchen.isi.domain.model.filehandling.DokumentModel;
 import de.muenchen.isi.domain.model.filehandling.FilepathModel;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtBaulicheNutzung;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtDokument;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonVerfahrensgrundsaetzeJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVerfahren;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
@@ -55,14 +63,123 @@ public class TestData {
         bauleitplanverfahren.setSobonRelevant(UncertainBoolean.TRUE);
         bauleitplanverfahren.setSobonJahr(SobonVerfahrensgrundsaetzeJahr.JAHR_2021);
         bauleitplanverfahren.setOffizielleMitzeichnung(UncertainBoolean.TRUE);
-        bauleitplanverfahren.setAbfragevarianten(List.of(createAbfragevarianteBauleitplanverfahrenModel()));
+        bauleitplanverfahren.setOffizielleMitzeichnung(UncertainBoolean.FALSE);
+        bauleitplanverfahren.setAbfragevariantenBauleitplanverfahren(
+            List.of(createAbfragevarianteBauleitplanverfahrenModel())
+        );
         return bauleitplanverfahren;
+    }
+
+    public static BaugenehmigungsverfahrenModel createBaugenehmigungsverfahrenModel() {
+        final var baugenehmigungsverfahren = new BaugenehmigungsverfahrenModel();
+        baugenehmigungsverfahren.setName("Altbausiedlung in Musterort");
+        baugenehmigungsverfahren.setStatusAbfrage(StatusAbfrage.ANGELEGT);
+        final WGS84Model coordinate = new WGS84Model();
+        coordinate.setLatitude(48.1556795465256);
+        coordinate.setLongitude(11.5568456350688);
+        baugenehmigungsverfahren.setAdresse(new AdresseModel("80331", "München", "Lothstraße", "7", coordinate, null));
+        baugenehmigungsverfahren.setFristBearbeitung(LocalDate.of(2022, 12, 31));
+        baugenehmigungsverfahren.setAnmerkung("Bitte die Abfrage zeitnah behandeln");
+        baugenehmigungsverfahren.setStandVerfahren(StandVerfahren.STRUKTURKONZEPT);
+        baugenehmigungsverfahren.setVerortung(createVerortung());
+        baugenehmigungsverfahren.setAbfragevariantenBaugenehmigungsverfahren(
+            List.of(createAbfragevarianteBaugenehmigungsverfahrenModel())
+        );
+        return baugenehmigungsverfahren;
+    }
+
+    public static BauleitplanverfahrenAngelegtModel createBauleitplanverfahrenAngelegtModel() {
+        final var bauleitplanverfahren = new BauleitplanverfahrenAngelegtModel();
+        bauleitplanverfahren.setArtAbfrage(ArtAbfrage.BAULEITPLANVERFAHREN);
+        bauleitplanverfahren.setName("Neubausiedlung in Musterort 2");
+        final WGS84Model coordinate = new WGS84Model();
+        coordinate.setLatitude(48.1556795465256);
+        coordinate.setLongitude(11.5568456350688);
+        bauleitplanverfahren.setAdresse(new AdresseModel("80331", "München", "Lothstraße", "7", coordinate, null));
+        bauleitplanverfahren.setFristBearbeitung(LocalDate.of(2022, 12, 31));
+        bauleitplanverfahren.setAnmerkung("Bitte die Abfrage zeitnah behandeln");
+        bauleitplanverfahren.setStandVerfahren(StandVerfahren.STRUKTURKONZEPT);
+        bauleitplanverfahren.setVerortung(createVerortung());
+        bauleitplanverfahren.setSobonRelevant(UncertainBoolean.FALSE);
+        bauleitplanverfahren.setOffizielleMitzeichnung(UncertainBoolean.FALSE);
+        bauleitplanverfahren.setAbfragevariantenBauleitplanverfahren(
+            List.of(createAbfragevarianteBauleitplanverfahrenAngelegtModel())
+        );
+        return bauleitplanverfahren;
+    }
+
+    public static BaugenehmigungsverfahrenAngelegtModel createBaugenehmigungsverfahrenAngelegtModel() {
+        final var baugenehmigungsverfahren = new BaugenehmigungsverfahrenAngelegtModel();
+        baugenehmigungsverfahren.setArtAbfrage(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN);
+        baugenehmigungsverfahren.setName("Altbausiedlung in Musterort 2");
+        final WGS84Model coordinate = new WGS84Model();
+        coordinate.setLatitude(48.1556795465256);
+        coordinate.setLongitude(11.5568456350688);
+        baugenehmigungsverfahren.setAdresse(new AdresseModel("80331", "München", "Lothstraße", "7", coordinate, null));
+        baugenehmigungsverfahren.setFristBearbeitung(LocalDate.of(2022, 12, 31));
+        baugenehmigungsverfahren.setAnmerkung("Bitte die Abfrage zeitnah behandeln");
+        baugenehmigungsverfahren.setStandVerfahren(StandVerfahren.STRUKTURKONZEPT);
+        baugenehmigungsverfahren.setVerortung(createVerortung());
+        baugenehmigungsverfahren.setAbfragevariantenBaugenehmigungsverfahren(
+            List.of(createAbfragevarianteBaugenehmigungsverfahrenAngelegtModel())
+        );
+        return baugenehmigungsverfahren;
     }
 
     public static AbfragevarianteBauleitplanverfahrenModel createAbfragevarianteBauleitplanverfahrenModel() {
         final var abfragevariante = new AbfragevarianteBauleitplanverfahrenModel();
         abfragevariante.setAbfragevariantenNr(1);
-        abfragevariante.setName("Name Abfragevariante 1");
+        abfragevariante.setName("Name Abfragevariante 10");
+        abfragevariante.setWesentlicheRechtsgrundlage(
+            List.of(WesentlicheRechtsgrundlage.EINFACHER_BEBAUUNGSPLAN_PARAGRAPH_30)
+        );
+        abfragevariante.setGfWohnenSonderwohnformen(false);
+        abfragevariante.setGfWohnenGesamt(BigDecimal.valueOf(1234.56));
+        abfragevariante.setWeSonderwohnformen(false);
+        abfragevariante.setWeGesamt(31);
+        abfragevariante.setRealisierungVon(2023);
+        abfragevariante.setSobonOrientierungswertJahr(SobonOrientierungswertJahr.JAHR_2022);
+        abfragevariante.setBauabschnitte(List.of(createBauabschnittModel()));
+        return abfragevariante;
+    }
+
+    public static AbfragevarianteBaugenehmigungsverfahrenModel createAbfragevarianteBaugenehmigungsverfahrenModel() {
+        final var abfragevariante = new AbfragevarianteBaugenehmigungsverfahrenModel();
+        abfragevariante.setAbfragevariantenNr(1);
+        abfragevariante.setName("Name Abfragevariante 11");
+        abfragevariante.setWesentlicheRechtsgrundlage(
+            List.of(WesentlicheRechtsgrundlage.EINFACHER_BEBAUUNGSPLAN_PARAGRAPH_30)
+        );
+        abfragevariante.setGfWohnenSonderwohnformen(false);
+        abfragevariante.setGfWohnenGesamt(BigDecimal.valueOf(1234.56));
+        abfragevariante.setWeSonderwohnformen(false);
+        abfragevariante.setWeGesamt(31);
+        abfragevariante.setRealisierungVon(2023);
+        abfragevariante.setSobonOrientierungswertJahr(SobonOrientierungswertJahr.JAHR_2014);
+        abfragevariante.setBauabschnitte(List.of(createBauabschnittModel()));
+        return abfragevariante;
+    }
+
+    public static AbfragevarianteBauleitplanverfahrenAngelegtModel createAbfragevarianteBauleitplanverfahrenAngelegtModel() {
+        final var abfragevariante = new AbfragevarianteBauleitplanverfahrenAngelegtModel();
+        abfragevariante.setAbfragevariantenNr(1);
+        abfragevariante.setName("Name Abfragevariante 102");
+        abfragevariante.setWesentlicheRechtsgrundlage(
+            List.of(WesentlicheRechtsgrundlage.EINFACHER_BEBAUUNGSPLAN_PARAGRAPH_30)
+        );
+        abfragevariante.setGfWohnenSonderwohnformen(false);
+        abfragevariante.setGfWohnenGesamt(BigDecimal.valueOf(1234.56));
+        abfragevariante.setWeSonderwohnformen(false);
+        abfragevariante.setWeGesamt(31);
+        abfragevariante.setRealisierungVon(2023);
+        abfragevariante.setBauabschnitte(List.of(createBauabschnittModel()));
+        return abfragevariante;
+    }
+
+    public static AbfragevarianteBaugenehmigungsverfahrenAngelegtModel createAbfragevarianteBaugenehmigungsverfahrenAngelegtModel() {
+        final var abfragevariante = new AbfragevarianteBaugenehmigungsverfahrenAngelegtModel();
+        abfragevariante.setAbfragevariantenNr(1);
+        abfragevariante.setName("Name Abfragevariante 112");
         abfragevariante.setWesentlicheRechtsgrundlage(
             List.of(WesentlicheRechtsgrundlage.EINFACHER_BEBAUUNGSPLAN_PARAGRAPH_30)
         );

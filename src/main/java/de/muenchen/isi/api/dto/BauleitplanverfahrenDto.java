@@ -37,7 +37,7 @@ public class BauleitplanverfahrenDto extends AbfrageDto {
 
     private UncertainBoolean offizielleMitzeichnung;
 
-    private List<AbfragevarianteBauleitplanverfahrenDto> abfragevarianten;
+    private List<AbfragevarianteBauleitplanverfahrenDto> abfragevariantenBauleitplanverfahren;
 
-    private List<AbfragevarianteBauleitplanverfahrenDto> abfragevariantenSachbearbeitung;
+    private List<AbfragevarianteBauleitplanverfahrenDto> abfragevariantenSachbearbeitungBauleitplanverfahren;
 }

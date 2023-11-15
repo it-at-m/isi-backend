@@ -44,4 +44,18 @@ public enum WesentlicheRechtsgrundlage implements ILookup {
             FREIE_EINGABE
         );
     }
+
+    public static List<WesentlicheRechtsgrundlage> getWesentlicheRechtsgrundlageForBaugenehmigungsverfahren() {
+        return List.of(
+            QUALIFIZIERTER_BEBAUUNGSPLAN,
+            VORHABENSBEZOGENER_BEBAUUNGSPLAN,
+            EINFACHER_BEBAUUNGSPLAN_PARAGRAPH_30_IVM_34_35,
+            SEKTORALER_BEBAUUNGSPLAN_PARAGRAPH_30_IVM_34_35,
+            INNENBEREICH,
+            AUSSENBEREICH,
+            BEFREIUNG,
+            INFO_FEHLT,
+            FREIE_EINGABE
+        );
+    }
 }

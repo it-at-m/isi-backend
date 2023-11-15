@@ -9,6 +9,8 @@ public class SearchQueryModel {
 
     private Boolean selectBauleitplanverfahren;
 
+    private Boolean selectBaugenehmigungsverfahren;
+
     private Boolean selectBauvorhaben;
 
     private Boolean selectGrundschule;

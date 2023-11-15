@@ -53,11 +53,30 @@ class EntitySearchServiceTest {
 
     @Test
     void tokenizeAccordingUnicodeAnnex29() {
-        var searchQuery = "The 2 QUICK Brown-Foxes jumped over the lazy dog's bone.";
+        var searchQuery = "The 2 QUICK Brown-Foxes jumped over the lazy dog's bone. | and this is a \"test\"";
         var result = entitySearchService.tokenizeAccordingUnicodeAnnex29(searchQuery);
         assertThat(
             result,
-            is(List.of("The", "2", "QUICK", "Brown", "Foxes", "jumped", "over", "the", "lazy", "dog's", "bone"))
+            is(
+                List.of(
+                    "The",
+                    "2",
+                    "QUICK",
+                    "Brown",
+                    "Foxes",
+                    "jumped",
+                    "over",
+                    "the",
+                    "lazy",
+                    "dog's",
+                    "bone",
+                    "and",
+                    "this",
+                    "is",
+                    "a",
+                    "test"
+                )
+            )
         );
 
         searchQuery = "      ";

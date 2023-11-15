@@ -24,31 +24,31 @@ import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
 @Indexed
 public class HausFuerKinder extends Infrastruktureinrichtung {
 
-    @Column(nullable = true)
+    @Column
     private Integer anzahlKinderkrippePlaetze;
 
-    @Column(nullable = true)
+    @Column
     private Integer anzahlKindergartenPlaetze;
 
-    @Column(nullable = true)
+    @Column
     private Integer anzahlHortPlaetze;
 
-    @Column(nullable = true)
+    @Column
     private Integer anzahlKinderkrippeGruppen;
 
-    @Column(nullable = true)
+    @Column
     private Integer anzahlKindergartenGruppen;
 
-    @Column(nullable = true)
+    @Column
     private Integer anzahlHortGruppen;
 
-    @Column(nullable = true)
+    @Column
     private Integer wohnungsnaheKinderkrippePlaetze;
 
-    @Column(nullable = true)
+    @Column
     private Integer wohnungsnaheKindergartenPlaetze;
 
-    @Column(nullable = true)
+    @Column
     private Integer wohnungsnaheHortPlaetze;
 
     @Enumerated(EnumType.STRING)

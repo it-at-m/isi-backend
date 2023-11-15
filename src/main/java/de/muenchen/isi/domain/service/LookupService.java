@@ -38,10 +38,14 @@ public class LookupService {
         model.setUncertainBoolean(this.getUncertainBooleanList());
         model.setSobonVerfahrensgrundsaetzeJahr(this.getSobonVerfahrensgrundsaetzeJahrList());
         model.setStandVerfahrenBauleitplanverfahren(this.getStandVerfahrenBauleitplanverfahrenList());
+        model.setStandVerfahrenBaugenehmigungsverfahren(this.getStandVerfahrenBaugenehmigungsverfahrenList());
         model.setStandVerfahren(this.getStandVerfahrenList());
         model.setStatusAbfrage(this.getStatusAbfrageList());
         model.setWesentlicheRechtsgrundlageBauleitplanverfahren(
             this.getWesentlicheRechtsgrundlageBauleitplanverfahrenList()
+        );
+        model.setWesentlicheRechtsgrundlageBaugenehmigungsverfahren(
+            this.getWesentlicheRechtsgrundlageBaugenehmigungsverfahrenList()
         );
         model.setWesentlicheRechtsgrundlage(this.getWesentlicheRechtsgrundlageList());
         model.setArtBaulicheNutzung(this.getArtBaulicheNutzungList());
@@ -104,6 +108,16 @@ public class LookupService {
         return new LookupListModel(list);
     }
 
+    private LookupListModel getStandVerfahrenBaugenehmigungsverfahrenList() {
+        final List<LookupEntryModel> list = StandVerfahren
+            .getStandVerfahrenForBaugenehmigungsverfahren()
+            .stream()
+            .map(item -> new LookupEntryModel(item.toString(), item.getBezeichnung()))
+            .collect(Collectors.toList());
+
+        return new LookupListModel(list);
+    }
+
     private LookupListModel getStandVerfahrenList() {
         final List<LookupEntryModel> list = EnumUtils
             .getEnumList(StandVerfahren.class)
@@ -127,6 +141,16 @@ public class LookupService {
     private LookupListModel getWesentlicheRechtsgrundlageBauleitplanverfahrenList() {
         final List<LookupEntryModel> list = WesentlicheRechtsgrundlage
             .getWesentlicheRechtsgrundlageForBauleitplanverfahren()
+            .stream()
+            .map(item -> new LookupEntryModel(item.toString(), item.getBezeichnung()))
+            .collect(Collectors.toList());
+
+        return new LookupListModel(list);
+    }
+
+    private LookupListModel getWesentlicheRechtsgrundlageBaugenehmigungsverfahrenList() {
+        final List<LookupEntryModel> list = WesentlicheRechtsgrundlage
+            .getWesentlicheRechtsgrundlageForBaugenehmigungsverfahren()
             .stream()
             .map(item -> new LookupEntryModel(item.toString(), item.getBezeichnung()))
             .collect(Collectors.toList());
