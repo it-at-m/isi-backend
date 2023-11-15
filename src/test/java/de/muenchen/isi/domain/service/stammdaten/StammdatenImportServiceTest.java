@@ -10,8 +10,6 @@ import de.muenchen.isi.infrastructure.csv.SobonOrientierungswertSozialeInfrastru
 import de.muenchen.isi.infrastructure.csv.StaedtebaulicheOrientierungswertCsv;
 import de.muenchen.isi.infrastructure.entity.enums.Altersklasse;
 import de.muenchen.isi.infrastructure.entity.enums.Einrichtungstyp;
-import de.muenchen.isi.infrastructure.entity.enums.Wohnungstyp;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonVerfahrensgrundsaetzeJahr;
 import de.muenchen.isi.infrastructure.entity.stammdaten.SobonOrientierungswertSozialeInfrastruktur;
 import de.muenchen.isi.infrastructure.entity.stammdaten.StaedtebaulicheOrientierungswert;
 import de.muenchen.isi.infrastructure.repository.CsvRepository;
@@ -22,6 +20,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -38,6 +37,8 @@ import org.springframework.web.multipart.MultipartFile;
 @MockitoSettings(strictness = Strictness.LENIENT)
 class StammdatenImportServiceTest {
 
+    private final StammdatenDomainMapper stammdatenDomainMapper = new StammdatenDomainMapperImpl();
+
     @Mock
     private MultipartFile multipartFile;
 
@@ -49,8 +50,6 @@ class StammdatenImportServiceTest {
 
     @Mock
     private SobonOrientierungswertSozialeInfrastrukturRepository sobonOrientierungswertSozialeInfrastrukturRepository;
-
-    private final StammdatenDomainMapper stammdatenDomainMapper = new StammdatenDomainMapperImpl();
 
     private StammdatenImportService stammdatenImportService;
 
@@ -78,8 +77,8 @@ class StammdatenImportServiceTest {
         Mockito.when(this.multipartFile.getInputStream()).thenReturn(inputStream);
 
         final var csvEntry = new StaedtebaulicheOrientierungswertCsv();
-        csvEntry.setJahr(SobonVerfahrensgrundsaetzeJahr.JAHR_2021);
-        csvEntry.setWohnungstyp(Wohnungstyp.GW_FREIFINANZEIRT);
+        csvEntry.setGueltigAb(LocalDate.parse("2021-01-01"));
+        csvEntry.setFoerderartBezeichnung("freifinanzierte Geschosswohnungsbau");
         csvEntry.setDurchschnittlicheGrundflaeche(90L);
         csvEntry.setBelegungsdichte(BigDecimal.valueOf(210, 2));
 
@@ -88,8 +87,8 @@ class StammdatenImportServiceTest {
             .thenReturn(List.of(csvEntry));
 
         final var entity = new StaedtebaulicheOrientierungswert();
-        entity.setJahr(SobonVerfahrensgrundsaetzeJahr.JAHR_2021);
-        entity.setWohnungstyp(Wohnungstyp.GW_FREIFINANZEIRT);
+        entity.setGueltigAb(LocalDate.parse("2021-01-01"));
+        entity.setFoerderartBezeichnung("freifinanzierte Geschosswohnungsbau");
         entity.setDurchschnittlicheGrundflaeche(90L);
         entity.setBelegungsdichte(BigDecimal.valueOf(210, 2));
         final List<StaedtebaulicheOrientierungswert> entities = List.of(entity);
@@ -143,10 +142,10 @@ class StammdatenImportServiceTest {
         Mockito.when(this.multipartFile.getInputStream()).thenReturn(inputStream);
 
         final var csvEntry = new SobonOrientierungswertSozialeInfrastrukturCsv();
-        csvEntry.setJahr(SobonVerfahrensgrundsaetzeJahr.JAHR_2021);
+        csvEntry.setGueltigAb(LocalDate.parse("2021-01-01"));
         csvEntry.setEinrichtungstyp(Einrichtungstyp.KINDERKRIPPE);
         csvEntry.setAltersklasse(Altersklasse.NULL_ZWEI);
-        csvEntry.setWohnungstyp(Wohnungstyp.EINS_ZWEI_FH);
+        csvEntry.setFoerderartBezeichnung("Ein- und Zweifamilienhäuser");
         csvEntry.setEinwohnerJahr1NachErsterstellung(BigDecimal.valueOf(2877, 4));
         csvEntry.setEinwohnerJahr2NachErsterstellung(BigDecimal.valueOf(2610, 4));
         csvEntry.setEinwohnerJahr3NachErsterstellung(BigDecimal.valueOf(2118, 4));
@@ -157,11 +156,6 @@ class StammdatenImportServiceTest {
         csvEntry.setEinwohnerJahr8NachErsterstellung(BigDecimal.valueOf(850, 4));
         csvEntry.setEinwohnerJahr9NachErsterstellung(BigDecimal.valueOf(776, 4));
         csvEntry.setEinwohnerJahr10NachErsterstellung(BigDecimal.valueOf(716, 4));
-        csvEntry.setMittelwertEinwohnerJeWohnung(BigDecimal.valueOf(1541, 4));
-        csvEntry.setFaktor1EinwohnerJeWohnung(BigDecimal.valueOf(2569, 4));
-        csvEntry.setFaktorEinwohnerJeWohnung(BigDecimal.valueOf(12569, 4));
-        csvEntry.setPerzentil75ProzentEinwohnerJeWohnung(BigDecimal.valueOf(1937, 4));
-        csvEntry.setPerzentil75ProzentGerundetEinwohnerJeWohnung(BigDecimal.valueOf(19, 2));
 
         Mockito
             .when(
@@ -172,10 +166,10 @@ class StammdatenImportServiceTest {
             .thenReturn(List.of(csvEntry));
 
         final var entity = new SobonOrientierungswertSozialeInfrastruktur();
-        entity.setJahr(SobonVerfahrensgrundsaetzeJahr.JAHR_2021);
+        entity.setGueltigAb(LocalDate.parse("2021-01-01"));
         entity.setEinrichtungstyp(Einrichtungstyp.KINDERKRIPPE);
         entity.setAltersklasse(Altersklasse.NULL_ZWEI);
-        entity.setWohnungstyp(Wohnungstyp.EINS_ZWEI_FH);
+        entity.setFoerderartBezeichnung("Ein- und Zweifamilienhäuser");
         entity.setEinwohnerJahr1NachErsterstellung(BigDecimal.valueOf(2877, 4));
         entity.setEinwohnerJahr2NachErsterstellung(BigDecimal.valueOf(2610, 4));
         entity.setEinwohnerJahr3NachErsterstellung(BigDecimal.valueOf(2118, 4));
@@ -186,11 +180,6 @@ class StammdatenImportServiceTest {
         entity.setEinwohnerJahr8NachErsterstellung(BigDecimal.valueOf(850, 4));
         entity.setEinwohnerJahr9NachErsterstellung(BigDecimal.valueOf(776, 4));
         entity.setEinwohnerJahr10NachErsterstellung(BigDecimal.valueOf(716, 4));
-        entity.setMittelwertEinwohnerJeWohnung(BigDecimal.valueOf(1541, 4));
-        entity.setFaktor1EinwohnerJeWohnung(BigDecimal.valueOf(2569, 4));
-        entity.setFaktorEinwohnerJeWohnung(BigDecimal.valueOf(12569, 4));
-        entity.setPerzentil75ProzentEinwohnerJeWohnung(BigDecimal.valueOf(1937, 4));
-        entity.setPerzentil75ProzentGerundetEinwohnerJeWohnung(BigDecimal.valueOf(19, 2));
         final List<SobonOrientierungswertSozialeInfrastruktur> entities = List.of(entity);
 
         this.stammdatenImportService.importSobonOrientierungswerteSozialeInfrastruktur(this.multipartFile);
