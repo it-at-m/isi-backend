@@ -41,4 +41,6 @@ public class SobonOrientierungswertSozialeInfrastrukturModel extends BaseEntityM
     private BigDecimal einwohnerJahr9NachErsterstellung;
 
     private BigDecimal einwohnerJahr10NachErsterstellung;
+
+    private BigDecimal stammwertArbeitsgruppe;
 }

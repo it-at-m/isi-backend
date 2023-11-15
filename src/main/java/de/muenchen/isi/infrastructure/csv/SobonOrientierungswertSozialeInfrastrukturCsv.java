@@ -55,4 +55,7 @@ public class SobonOrientierungswertSozialeInfrastrukturCsv {
 
     @CsvBindByName(column = "JAHR_10_NACH_ERSTELLUNG", required = true)
     private BigDecimal einwohnerJahr10NachErsterstellung;
+
+    @CsvBindByName(column = "STAMMWERT_ARBEITSGRUPPE", required = true)
+    private BigDecimal stammwertArbeitsgruppe;
 }

@@ -127,6 +127,7 @@ class CsvRepositoryTest {
         firstExpected.setEinwohnerJahr8NachErsterstellung(BigDecimal.valueOf(850, 4));
         firstExpected.setEinwohnerJahr9NachErsterstellung(BigDecimal.valueOf(776, 4));
         firstExpected.setEinwohnerJahr10NachErsterstellung(BigDecimal.valueOf(716, 4));
+        firstExpected.setStammwertArbeitsgruppe(BigDecimal.valueOf(716, 4));
         final var lastExpected = new SobonOrientierungswertSozialeInfrastrukturCsv();
         lastExpected.setGueltigAb(LocalDate.parse("2021-01-01"));
         lastExpected.setEinrichtungstyp(Einrichtungstyp.N_N);
@@ -142,6 +143,7 @@ class CsvRepositoryTest {
         lastExpected.setEinwohnerJahr8NachErsterstellung(BigDecimal.valueOf(21416, 4));
         lastExpected.setEinwohnerJahr9NachErsterstellung(BigDecimal.valueOf(21326, 4));
         lastExpected.setEinwohnerJahr10NachErsterstellung(BigDecimal.valueOf(21237, 4));
+        lastExpected.setStammwertArbeitsgruppe(BigDecimal.valueOf(21237, 4));
 
         assertThat(resultList.size(), is(35));
         assertThat(resultList.get(0), is(firstExpected));

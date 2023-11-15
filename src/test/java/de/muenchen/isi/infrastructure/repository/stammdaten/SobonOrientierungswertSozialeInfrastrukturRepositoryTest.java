@@ -55,7 +55,8 @@ public class SobonOrientierungswertSozialeInfrastrukturRepositoryTest {
             new BigDecimal("4000.7890"),
             new BigDecimal("4500.8901"),
             new BigDecimal("5000.9012"),
-            new BigDecimal("5500.0123")
+            new BigDecimal("5500.0123"),
+            new BigDecimal("6000.8965")
         );
 
         SobonOrientierungswertSozialeInfrastruktur orientierungswert2 = createOrientierungswert(
@@ -72,7 +73,8 @@ public class SobonOrientierungswertSozialeInfrastrukturRepositoryTest {
             new BigDecimal("4500.7890"),
             new BigDecimal("5000.8901"),
             new BigDecimal("5500.9012"),
-            new BigDecimal("6000.0123")
+            new BigDecimal("6000.0123"),
+            new BigDecimal("6500.1234")
         );
 
         SobonOrientierungswertSozialeInfrastruktur orientierungswert3 = createOrientierungswert(
@@ -89,7 +91,8 @@ public class SobonOrientierungswertSozialeInfrastrukturRepositoryTest {
             new BigDecimal("5500.8901"),
             new BigDecimal("6000.9012"),
             new BigDecimal("6500.0123"),
-            new BigDecimal("7000.1234")
+            new BigDecimal("7000.1234"),
+            new BigDecimal("8000.5134")
         );
 
         this.sobonOrientierungswertSozialeInfrastrukturRepository.saveAll(
@@ -157,7 +160,8 @@ public class SobonOrientierungswertSozialeInfrastrukturRepositoryTest {
             new BigDecimal("4000.7890"),
             new BigDecimal("4500.8901"),
             new BigDecimal("5000.9012"),
-            new BigDecimal("5500.0123")
+            new BigDecimal("5500.0123"),
+            new BigDecimal("6500.1234")
         );
 
         SobonOrientierungswertSozialeInfrastruktur orientierungswert2 = createOrientierungswert(
@@ -174,7 +178,8 @@ public class SobonOrientierungswertSozialeInfrastrukturRepositoryTest {
             new BigDecimal("4500.7890"),
             new BigDecimal("5000.8901"),
             new BigDecimal("5500.9012"),
-            new BigDecimal("6000.0123")
+            new BigDecimal("6000.0123"),
+            new BigDecimal("7000.7913")
         );
 
         SobonOrientierungswertSozialeInfrastruktur orientierungswert3 = createOrientierungswert(
@@ -191,7 +196,8 @@ public class SobonOrientierungswertSozialeInfrastrukturRepositoryTest {
             new BigDecimal("5500.8901"),
             new BigDecimal("6000.9012"),
             new BigDecimal("6500.0123"),
-            new BigDecimal("7000.1234")
+            new BigDecimal("7000.1234"),
+            new BigDecimal("8200.4323")
         );
 
         this.sobonOrientierungswertSozialeInfrastrukturRepository.saveAll(
@@ -259,7 +265,8 @@ public class SobonOrientierungswertSozialeInfrastrukturRepositoryTest {
         BigDecimal einwohnerJahr7NachErsterstellung,
         BigDecimal einwohnerJahr8NachErsterstellung,
         BigDecimal einwohnerJahr9NachErsterstellung,
-        BigDecimal einwohnerJahr10NachErsterstellung
+        BigDecimal einwohnerJahr10NachErsterstellung,
+        BigDecimal stammwertArbeitsgruppe
     ) {
         SobonOrientierungswertSozialeInfrastruktur orientierungswert = new SobonOrientierungswertSozialeInfrastruktur();
         orientierungswert.setId(UUID.randomUUID());
@@ -277,7 +284,7 @@ public class SobonOrientierungswertSozialeInfrastrukturRepositoryTest {
         orientierungswert.setEinwohnerJahr8NachErsterstellung(einwohnerJahr8NachErsterstellung);
         orientierungswert.setEinwohnerJahr9NachErsterstellung(einwohnerJahr9NachErsterstellung);
         orientierungswert.setEinwohnerJahr10NachErsterstellung(einwohnerJahr10NachErsterstellung);
-
+        orientierungswert.setStammwertArbeitsgruppe(stammwertArbeitsgruppe);
         return orientierungswert;
     }
 }

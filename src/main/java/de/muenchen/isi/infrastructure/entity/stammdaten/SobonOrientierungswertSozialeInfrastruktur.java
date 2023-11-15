@@ -76,4 +76,7 @@ public class SobonOrientierungswertSozialeInfrastruktur extends BaseEntity {
 
     @Column(precision = 10, scale = 4, nullable = false)
     private BigDecimal einwohnerJahr10NachErsterstellung;
+
+    @Column(precision = 10, scale = 4, nullable = false)
+    private BigDecimal stammwertArbeitsgruppe;
 }
