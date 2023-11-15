@@ -13,7 +13,11 @@ public class BauleitplanverfahrenInBearbeitungSachbearbeitungModel extends Abfra
 
     private VerortungModel verortung;
 
-    private List<AbfragevarianteBauleitplanverfahrenSachbearbeitungInBearbeitungSachbearbeitungModel> abfragevarianten;
+    private List<
+        AbfragevarianteBauleitplanverfahrenSachbearbeitungInBearbeitungSachbearbeitungModel
+    > abfragevariantenBauleitplanverfahren;
 
-    private List<AbfragevarianteBauleitplanverfahrenInBearbeitungSachbearbeitungModel> abfragevariantenSachbearbeitung;
+    private List<
+        AbfragevarianteBauleitplanverfahrenInBearbeitungSachbearbeitungModel
+    > abfragevariantenSachbearbeitungBauleitplanverfahren;
 }

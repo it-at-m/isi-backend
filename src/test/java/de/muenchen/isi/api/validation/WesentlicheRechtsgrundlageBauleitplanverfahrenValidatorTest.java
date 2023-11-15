@@ -14,90 +14,75 @@ import org.mockito.quality.Strictness;
 @MockitoSettings(strictness = Strictness.LENIENT)
 class WesentlicheRechtsgrundlageBauleitplanverfahrenValidatorTest {
 
-    private WesentlicheRechtsgrundlageBauleitplanverfahrenValidator wesentlicheRechtsgrundlageBauleitplanverfahrenValidator =
+    private WesentlicheRechtsgrundlageBauleitplanverfahrenValidator wesentlicheRechtsgrundlageValidator =
         new WesentlicheRechtsgrundlageBauleitplanverfahrenValidator();
 
     @Test
     void isValid() {
         // Valid
-        assertThat(this.wesentlicheRechtsgrundlageBauleitplanverfahrenValidator.isValid(null, null), is(true));
+        assertThat(this.wesentlicheRechtsgrundlageValidator.isValid(null, null), is(true));
         assertThat(
-            this.wesentlicheRechtsgrundlageBauleitplanverfahrenValidator.isValid(
+            this.wesentlicheRechtsgrundlageValidator.isValid(
                     WesentlicheRechtsgrundlage.QUALIFIZIERTER_BEBAUUNGSPLAN,
                     null
                 ),
             is(true)
         );
         assertThat(
-            this.wesentlicheRechtsgrundlageBauleitplanverfahrenValidator.isValid(
+            this.wesentlicheRechtsgrundlageValidator.isValid(
                     WesentlicheRechtsgrundlage.VORHABENSBEZOGENER_BEBAUUNGSPLAN,
                     null
                 ),
             is(true)
         );
         assertThat(
-            this.wesentlicheRechtsgrundlageBauleitplanverfahrenValidator.isValid(
+            this.wesentlicheRechtsgrundlageValidator.isValid(
                     WesentlicheRechtsgrundlage.EINFACHER_BEBAUUNGSPLAN_PARAGRAPH_30,
                     null
                 ),
             is(true)
         );
         assertThat(
-            this.wesentlicheRechtsgrundlageBauleitplanverfahrenValidator.isValid(
+            this.wesentlicheRechtsgrundlageValidator.isValid(
                     WesentlicheRechtsgrundlage.SEKTORALER_BEBAUUNGSPLAN_PARAGRAPH_9,
                     null
                 ),
             is(true)
         );
         assertThat(
-            this.wesentlicheRechtsgrundlageBauleitplanverfahrenValidator.isValid(
-                    WesentlicheRechtsgrundlage.INFO_FEHLT,
-                    null
-                ),
+            this.wesentlicheRechtsgrundlageValidator.isValid(WesentlicheRechtsgrundlage.INFO_FEHLT, null),
             is(true)
         );
         assertThat(
-            this.wesentlicheRechtsgrundlageBauleitplanverfahrenValidator.isValid(
-                    WesentlicheRechtsgrundlage.FREIE_EINGABE,
-                    null
-                ),
+            this.wesentlicheRechtsgrundlageValidator.isValid(WesentlicheRechtsgrundlage.FREIE_EINGABE, null),
             is(true)
         );
 
         // Invalid
         assertThat(
-            this.wesentlicheRechtsgrundlageBauleitplanverfahrenValidator.isValid(
+            this.wesentlicheRechtsgrundlageValidator.isValid(
                     WesentlicheRechtsgrundlage.EINFACHER_BEBAUUNGSPLAN_PARAGRAPH_30_IVM_34_35,
                     null
                 ),
             is(false)
         );
         assertThat(
-            this.wesentlicheRechtsgrundlageBauleitplanverfahrenValidator.isValid(
+            this.wesentlicheRechtsgrundlageValidator.isValid(
                     WesentlicheRechtsgrundlage.SEKTORALER_BEBAUUNGSPLAN_PARAGRAPH_30_IVM_34_35,
                     null
                 ),
             is(false)
         );
         assertThat(
-            this.wesentlicheRechtsgrundlageBauleitplanverfahrenValidator.isValid(
-                    WesentlicheRechtsgrundlage.INNENBEREICH,
-                    null
-                ),
+            this.wesentlicheRechtsgrundlageValidator.isValid(WesentlicheRechtsgrundlage.INNENBEREICH, null),
             is(false)
         );
         assertThat(
-            this.wesentlicheRechtsgrundlageBauleitplanverfahrenValidator.isValid(
-                    WesentlicheRechtsgrundlage.AUSSENBEREICH,
-                    null
-                ),
+            this.wesentlicheRechtsgrundlageValidator.isValid(WesentlicheRechtsgrundlage.AUSSENBEREICH, null),
             is(false)
         );
         assertThat(
-            this.wesentlicheRechtsgrundlageBauleitplanverfahrenValidator.isValid(
-                    WesentlicheRechtsgrundlage.BEFREIUNG,
-                    null
-                ),
+            this.wesentlicheRechtsgrundlageValidator.isValid(WesentlicheRechtsgrundlage.BEFREIUNG, null),
             is(false)
         );
     }

@@ -6,6 +6,7 @@ package de.muenchen.isi.api.dto.abfrageAngelegt;
 
 import de.muenchen.isi.api.dto.BauabschnittDto;
 import de.muenchen.isi.api.validation.GeschossflaecheWohnenDistributionBauleitplanverfahrenValid;
+import de.muenchen.isi.api.validation.NotUnspecified;
 import de.muenchen.isi.api.validation.RealisierungVonDistributionBauleitplanverfahrenValid;
 import de.muenchen.isi.api.validation.TechnicalAttributesValid;
 import de.muenchen.isi.api.validation.WesentlicheRechtsgrundlageBauleitplanverfahrenValid;
@@ -35,6 +36,7 @@ public class AbfragevarianteBauleitplanverfahrenAngelegtDto {
 
     private Long version;
 
+    @NotUnspecified
     private ArtAbfrage artAbfragevariante;
 
     @NotNull

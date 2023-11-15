@@ -50,7 +50,7 @@ public class Bauleitplanverfahren extends Abfrage {
         name = "bebauungsplannummer" + SearchwordSuggesterRepository.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
         valueBinder = @ValueBinderRef(type = StringSuggestionBinder.class)
     )
-    @Column(nullable = true)
+    @Column
     private String bebauungsplannummer;
 
     @Enumerated(EnumType.STRING)
@@ -58,7 +58,7 @@ public class Bauleitplanverfahren extends Abfrage {
     private UncertainBoolean sobonRelevant;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = true)
+    @Column
     private SobonVerfahrensgrundsaetzeJahr sobonJahr;
 
     @FullTextField(valueBridge = @ValueBridgeRef(type = StandVerfahrenValueBridge.class))
@@ -98,12 +98,12 @@ public class Bauleitplanverfahren extends Abfrage {
     @OneToMany(cascade = { CascadeType.ALL }, orphanRemoval = true)
     @JoinColumn(name = "abfragevarianten_bauleitplanverfahren_id", referencedColumnName = "id")
     @OrderBy("abfragevariantenNr asc")
-    private List<AbfragevarianteBauleitplanverfahren> abfragevarianten;
+    private List<AbfragevarianteBauleitplanverfahren> abfragevariantenBauleitplanverfahren;
 
     @IndexedEmbedded
     @IndexingDependency(reindexOnUpdate = ReindexOnUpdate.SHALLOW)
     @OneToMany(cascade = { CascadeType.ALL }, orphanRemoval = true)
     @JoinColumn(name = "abfragevarianten_sachbearbeitung_bauleitplanverfahren_id", referencedColumnName = "id")
     @OrderBy("abfragevariantenNr asc")
-    private List<AbfragevarianteBauleitplanverfahren> abfragevariantenSachbearbeitung;
+    private List<AbfragevarianteBauleitplanverfahren> abfragevariantenSachbearbeitungBauleitplanverfahren;
 }

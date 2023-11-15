@@ -64,7 +64,7 @@ public class Bauvorhaben extends BaseEntity {
     @Column(nullable = false, unique = true)
     private String nameVorhaben;
 
-    @Column(precision = 10, scale = 2, nullable = true)
+    @Column(precision = 10, scale = 2)
     private BigDecimal grundstuecksgroesse;
 
     @FullTextField(valueBridge = @ValueBridgeRef(type = StandVerfahrenValueBridge.class))
@@ -84,7 +84,7 @@ public class Bauvorhaben extends BaseEntity {
         name = "bauvorhabenNummer" + SearchwordSuggesterRepository.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
         valueBinder = @ValueBinderRef(type = StringSuggestionBinder.class)
     )
-    @Column(nullable = true)
+    @Column
     private String bauvorhabenNummer;
 
     @IndexedEmbedded
@@ -101,13 +101,13 @@ public class Bauvorhaben extends BaseEntity {
         name = "bebauungsplannummer" + SearchwordSuggesterRepository.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
         valueBinder = @ValueBinderRef(type = StringSuggestionBinder.class)
     )
-    @Column(nullable = true)
+    @Column
     private String bebauungsplannummer;
 
-    @Column(nullable = true)
+    @Column
     private String fisNummer;
 
-    @Column(nullable = true)
+    @Column
     private String anmerkung;
 
     @Enumerated(EnumType.STRING)
@@ -115,7 +115,7 @@ public class Bauvorhaben extends BaseEntity {
     private UncertainBoolean sobonRelevant;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = true)
+    @Column
     private SobonVerfahrensgrundsaetzeJahr sobonJahr;
 
     @Enumerated(EnumType.STRING)

@@ -15,11 +15,15 @@ public class LookupListsModel {
 
     private LookupListModel standVerfahrenBauleitplanverfahren;
 
+    private LookupListModel standVerfahrenBaugenehmigungsverfahren;
+
     private LookupListModel standVerfahren;
 
     private LookupListModel statusAbfrage;
 
     private LookupListModel wesentlicheRechtsgrundlageBauleitplanverfahren;
+
+    private LookupListModel wesentlicheRechtsgrundlageBaugenehmigungsverfahren;
 
     private LookupListModel wesentlicheRechtsgrundlage;
 

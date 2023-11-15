@@ -2,6 +2,7 @@ package de.muenchen.isi.api.dto.abfrageAngelegt;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import de.muenchen.isi.api.validation.NotUnspecified;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import java.util.UUID;
 import javax.validation.constraints.NotBlank;
@@ -16,12 +17,22 @@ import lombok.Data;
     visible = true
 )
 @JsonSubTypes(
-    { @JsonSubTypes.Type(value = BauleitplanverfahrenAngelegtDto.class, name = ArtAbfrage.Values.BAULEITPLANVERFAHREN) }
+    {
+        @JsonSubTypes.Type(
+            value = BauleitplanverfahrenAngelegtDto.class,
+            name = ArtAbfrage.Values.BAULEITPLANVERFAHREN
+        ),
+        @JsonSubTypes.Type(
+            value = BaugenehmigungsverfahrenAngelegtDto.class,
+            name = ArtAbfrage.Values.BAUGENEHMIGUNGSVERFAHREN
+        ),
+    }
 )
 public class AbfrageAngelegtDto {
 
     private Long version;
 
+    @NotUnspecified
     private ArtAbfrage artAbfrage;
 
     @NotBlank

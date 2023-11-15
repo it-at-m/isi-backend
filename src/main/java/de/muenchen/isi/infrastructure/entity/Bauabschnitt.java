@@ -21,6 +21,10 @@ import lombok.ToString;
             name = "bauabschnitt_abfragevariante_bauleitplanverfahren_id_index",
             columnList = "abfragevariante_bauleitplanverfahren_id"
         ),
+        @Index(
+            name = "bauabschnitt_abfragevariante_baugenehmigungsverfahren_id_index",
+            columnList = "abfragevariante_baugenehmigungsverfahren_id"
+        ),
     }
 )
 @Data

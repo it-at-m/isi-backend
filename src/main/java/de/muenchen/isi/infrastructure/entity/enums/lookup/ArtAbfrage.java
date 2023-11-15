@@ -11,6 +11,8 @@ import lombok.Getter;
 
 @AllArgsConstructor
 public enum ArtAbfrage implements ILookup {
+    UNSPECIFIED(ILookup.UNSPECIFIED),
+
     BAULEITPLANVERFAHREN("Bauleitplanverfahren"),
 
     BAUGENEHMIGUNGSVERFAHREN("Baugenehmigungsverfahren"),
