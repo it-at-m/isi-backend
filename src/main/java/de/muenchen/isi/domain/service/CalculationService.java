@@ -3,6 +3,7 @@ package de.muenchen.isi.domain.service;
 import static org.apache.commons.collections4.ListUtils.emptyIfNull;
 
 import de.muenchen.isi.domain.exception.CalculationException;
+import de.muenchen.isi.domain.model.AbfragevarianteBaugenehmigungsverfahrenModel;
 import de.muenchen.isi.domain.model.AbfragevarianteBauleitplanverfahrenModel;
 import de.muenchen.isi.domain.model.AbfragevarianteModel;
 import de.muenchen.isi.domain.model.BauabschnittModel;
@@ -33,41 +34,16 @@ public class CalculationService {
 
     public static final String SUMMARY_NAME = "Gesamt";
 
-    /**
-     * TODO
-     *
-     * @param abfragevariante Die Abfragvariante, für die der planungsursächliche Bedarf ermittelt werden soll.
-     * @return Der ermittelte planungsursächliche Bedarf.
-     */
+    public static final int DIVISION_SCALE = 10;
+
     public PlanungsursaechlicherBedarfModel calculatePlanungsursaechlicherBedarf(
-        final AbfragevarianteModel abfragevariante,
+        final List<BauabschnittModel> bauabschnitte,
+        final SobonOrientierungswertJahr sobonJahr,
         final LocalDate gueltigAb
     ) throws CalculationException {
-        final var durchschnittlicheGf = 90;
-
         // Sammeln der Berechnungsgrundlagen
 
-        SobonOrientierungswertJahr sobonJahr = null;
-        List<BauabschnittModel> bauabschnitte = null;
-
-        final var art = abfragevariante.getArtAbfragevariante();
-        if (art != null) {
-            switch (art) {
-                case BAULEITPLANVERFAHREN:
-                    var bauleitplanverfahren = (AbfragevarianteBauleitplanverfahrenModel) abfragevariante;
-                    sobonJahr = bauleitplanverfahren.getSobonOrientierungswertJahr();
-                    bauabschnitte = bauleitplanverfahren.getBauabschnitte();
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        if (sobonJahr == null || bauabschnitte == null) {
-            throw new CalculationException(
-                "Die Berechnung kann für diese Art von Abfragevariante nicht durchgeführt werden."
-            );
-        }
+        final var durchschnittlicheGf = 90;
 
         // Aggregation aller Bauraten + Umlegung von Förderarten
 
@@ -110,7 +86,7 @@ public class CalculationService {
                             baurate
                                 .getGfWohnenGeplant()
                                 .multiply(foerderart.getAnteilProzent())
-                                .divide(average, 10, RoundingMode.HALF_EVEN);
+                                .divide(average, DIVISION_SCALE, RoundingMode.HALF_EVEN);
                     }
 
                     jahrMap.merge(baurate.getJahr(), wohneinheiten, BigDecimal::add);

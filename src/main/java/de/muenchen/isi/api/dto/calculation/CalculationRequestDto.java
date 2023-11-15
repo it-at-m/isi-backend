@@ -1,7 +1,7 @@
 package de.muenchen.isi.api.dto.calculation;
 
-import de.muenchen.isi.api.dto.AbfragevarianteDto;
 import java.time.LocalDate;
+import java.util.UUID;
 import javax.validation.constraints.NotNull;
 import lombok.Data;
 
@@ -9,7 +9,10 @@ import lombok.Data;
 public class CalculationRequestDto {
 
     @NotNull
-    private AbfragevarianteDto abfragevariante;
+    private UUID abfrageId;
+
+    @NotNull
+    private UUID abfragevarianteId;
 
     @NotNull
     private LocalDate gueltigAb;

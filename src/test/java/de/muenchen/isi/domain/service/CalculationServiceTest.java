@@ -121,10 +121,7 @@ public class CalculationServiceTest {
         var bauabschnittB = new BauabschnittModel();
         bauabschnittB.setBaugebiete(List.of(baugebietB));
 
-        var abfragevariante = new AbfragevarianteBauleitplanverfahrenModel();
-        abfragevariante.setArtAbfragevariante(ArtAbfrage.BAULEITPLANVERFAHREN);
-        abfragevariante.setBauabschnitte(List.of(bauabschnittA, bauabschnittB));
-        abfragevariante.setSobonOrientierungswertJahr(SobonOrientierungswertJahr.JAHR_2022);
+        var bauabschnitte = List.of(bauabschnittA, bauabschnittB);
 
         // Erwarteter Output
 
@@ -142,7 +139,8 @@ public class CalculationServiceTest {
         );
 
         PlanungsursaechlicherBedarfModel actual = calculationService.calculatePlanungsursaechlicherBedarf(
-            abfragevariante,
+            bauabschnitte,
+            SobonOrientierungswertJahr.JAHR_2022,
             LocalDate.of(2024, 1, 1)
         );
         assertThat(planungsursaechlicherBedarfToMap(actual), is(expected));
