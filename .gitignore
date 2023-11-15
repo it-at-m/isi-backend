@@ -29,9 +29,12 @@ dist/
 nbdist/
 .nb-gradle/
 
-# do not check in Database Filler and application profile yml
-src/**/DatabaseFiller.java
+# do not check in master data and application profile yml
 src/**/application-*.yml
+src/main/resources/*.csv
+src/main/resources/**/*.csv
+src/main/resources/*.sql
+src/main/resources/**/*.sql
 !src/test/resources/application-unittest.yml
 src/**/logback-spring.xml
 

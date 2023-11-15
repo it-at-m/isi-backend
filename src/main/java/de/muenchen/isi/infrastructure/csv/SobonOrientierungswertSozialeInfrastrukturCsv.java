@@ -4,20 +4,18 @@ import com.opencsv.bean.CsvBindByName;
 import com.opencsv.bean.CsvCustomBindByName;
 import de.muenchen.isi.infrastructure.adapter.AltersklasseConverter;
 import de.muenchen.isi.infrastructure.adapter.EinrichtungstypConverter;
-import de.muenchen.isi.infrastructure.adapter.SobonVerfahrensgrundsaetzeJahrConverter;
-import de.muenchen.isi.infrastructure.adapter.WohnungstypConverter;
+import de.muenchen.isi.infrastructure.adapter.JahrConverter;
 import de.muenchen.isi.infrastructure.entity.enums.Altersklasse;
 import de.muenchen.isi.infrastructure.entity.enums.Einrichtungstyp;
-import de.muenchen.isi.infrastructure.entity.enums.Wohnungstyp;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonVerfahrensgrundsaetzeJahr;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import lombok.Data;
 
 @Data
 public class SobonOrientierungswertSozialeInfrastrukturCsv {
 
-    @CsvCustomBindByName(column = "JAHR", converter = SobonVerfahrensgrundsaetzeJahrConverter.class, required = true)
-    private SobonVerfahrensgrundsaetzeJahr jahr;
+    @CsvCustomBindByName(column = "JAHR", converter = JahrConverter.class, required = true)
+    private LocalDate gueltigAb;
 
     @CsvCustomBindByName(column = "EINRICHTUNGSTYP", converter = EinrichtungstypConverter.class, required = true)
     private Einrichtungstyp einrichtungstyp;
@@ -25,8 +23,8 @@ public class SobonOrientierungswertSozialeInfrastrukturCsv {
     @CsvCustomBindByName(column = "ALTERSKLASSE", converter = AltersklasseConverter.class, required = true)
     private Altersklasse altersklasse;
 
-    @CsvCustomBindByName(column = "WOHNUNGSTYP", converter = WohnungstypConverter.class, required = true)
-    private Wohnungstyp wohnungstyp;
+    @CsvBindByName(column = "FOERDERART_BEZEICHNUNG", required = true)
+    private String foerderartBezeichnung;
 
     @CsvBindByName(column = "JAHR_1_NACH_ERSTELLUNG", required = true)
     private BigDecimal einwohnerJahr1NachErsterstellung;
@@ -58,18 +56,6 @@ public class SobonOrientierungswertSozialeInfrastrukturCsv {
     @CsvBindByName(column = "JAHR_10_NACH_ERSTELLUNG", required = true)
     private BigDecimal einwohnerJahr10NachErsterstellung;
 
-    @CsvBindByName(column = "MITTELWERT", required = true)
-    private BigDecimal mittelwertEinwohnerJeWohnung;
-
-    @CsvBindByName(column = "FAKTOR1", required = true)
-    private BigDecimal faktor1EinwohnerJeWohnung;
-
-    @CsvBindByName(column = "FAKTOR", required = true)
-    private BigDecimal faktorEinwohnerJeWohnung;
-
-    @CsvBindByName(column = "PERZENTIL75", required = true)
-    private BigDecimal perzentil75ProzentEinwohnerJeWohnung;
-
-    @CsvBindByName(column = "PERZENTIL_GERUNDET", required = true)
-    private BigDecimal perzentil75ProzentGerundetEinwohnerJeWohnung;
+    @CsvBindByName(column = "STAMMWERT_ARBEITSGRUPPE", required = true)
+    private BigDecimal stammwertArbeitsgruppe;
 }

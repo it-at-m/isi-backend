@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
@@ -30,6 +30,7 @@
         <apache.commons.lang3>3.12.0</apache.commons.lang3>
         <apache.commons.text>1.9</apache.commons.text>
         <apache.commons.validator>1.7</apache.commons.validator>
+        <apache.commons.fileupload>1.5</apache.commons.fileupload>
         <apache.tika.parsers>1.19</apache.tika.parsers>
         <opencsv.version>5.6</opencsv.version>
         <javafaker.version>1.0.2</javafaker.version>
@@ -349,7 +350,11 @@
             <artifactId>commons-validator</artifactId>
             <version>${apache.commons.validator}</version>
         </dependency>
-
+        <dependency>
+            <groupId>commons-fileupload</groupId>
+            <artifactId>commons-fileupload</artifactId>
+            <version>${apache.commons.fileupload}</version>
+        </dependency>
         <dependency>
             <groupId>org.geotools</groupId>
             <artifactId>gt-main</artifactId>
