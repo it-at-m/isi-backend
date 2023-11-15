@@ -18,6 +18,7 @@ import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
 import de.muenchen.isi.infrastructure.repository.stammdaten.StaedtebaulicheOrientierungswertRepository;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -141,7 +142,8 @@ public class CalculationServiceTest {
         );
 
         PlanungsursaechlicherBedarfModel actual = calculationService.calculatePlanungsursaechlicherBedarf(
-            abfragevariante
+            abfragevariante,
+            LocalDate.of(2024, 1, 1)
         );
         assertThat(planungsursaechlicherBedarfToMap(actual), is(expected));
     }

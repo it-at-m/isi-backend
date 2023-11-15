@@ -15,6 +15,7 @@ import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswert
 import de.muenchen.isi.infrastructure.repository.stammdaten.StaedtebaulicheOrientierungswertRepository;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,9 +39,13 @@ public class CalculationService {
      * @param abfragevariante Die Abfragvariante, für die der planungsursächliche Bedarf ermittelt werden soll.
      * @return Der ermittelte planungsursächliche Bedarf.
      */
-    public PlanungsursaechlicherBedarfModel calculatePlanungsursaechlicherBedarf(AbfragevarianteModel abfragevariante)
-        throws CalculationException {
+    public PlanungsursaechlicherBedarfModel calculatePlanungsursaechlicherBedarf(
+        final AbfragevarianteModel abfragevariante,
+        final LocalDate gueltigAb
+    ) throws CalculationException {
         final var durchschnittlicheGf = 90;
+
+        // Sammeln der Berechnungsgrundlagen
 
         SobonOrientierungswertJahr sobonJahr = null;
         List<BauabschnittModel> bauabschnitte = null;
@@ -129,7 +134,7 @@ public class CalculationService {
         return bedarf;
     }
 
-    private FoerdermixModel foerdermixUmlegen(FoerdermixModel foerdermix) {
+    private FoerdermixModel foerdermixUmlegen(final FoerdermixModel foerdermix) {
         final var umlegungen = Map.of(
             "preis-gedämpfter Mietwohnungsbau",
             Map.of(
@@ -184,7 +189,7 @@ public class CalculationService {
         return umgelegterFoerdermix;
     }
 
-    private List<WohneinheitenProFoerderartModel> mapToWohneinheiten(Map<String, Map<Integer, BigDecimal>> map) {
+    private List<WohneinheitenProFoerderartModel> mapToWohneinheiten(final Map<String, Map<Integer, BigDecimal>> map) {
         return map
             .entrySet()
             .stream()
