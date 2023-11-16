@@ -1,10 +1,10 @@
 package de.muenchen.isi.domain.model.calculation;
 
-import java.util.List;
+import java.util.Set;
 import lombok.Data;
 
 @Data
 public class PlanungsursaechlicherBedarfModel {
 
-    List<WohneinheitenProFoerderartModel> wohneinheitenProFoerderart;
+    Set<WohneinheitenBedarfModel> wohneinheitenBedarfe;
 }

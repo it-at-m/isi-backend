@@ -1,27 +1,22 @@
 package de.muenchen.isi.domain.service;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.is;
 
 import de.muenchen.isi.domain.exception.CalculationException;
-import de.muenchen.isi.domain.model.AbfragevarianteBauleitplanverfahrenModel;
 import de.muenchen.isi.domain.model.BauabschnittModel;
 import de.muenchen.isi.domain.model.BaugebietModel;
 import de.muenchen.isi.domain.model.BaurateModel;
 import de.muenchen.isi.domain.model.FoerderartModel;
 import de.muenchen.isi.domain.model.FoerdermixModel;
 import de.muenchen.isi.domain.model.calculation.PlanungsursaechlicherBedarfModel;
-import de.muenchen.isi.domain.model.calculation.WohneinheitenProFoerderartModel;
-import de.muenchen.isi.domain.model.calculation.WohneinheitenProJahrModel;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
+import de.muenchen.isi.domain.model.calculation.WohneinheitenBedarfModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
 import de.muenchen.isi.infrastructure.repository.stammdaten.StaedtebaulicheOrientierungswertRepository;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -125,47 +120,26 @@ public class CalculationServiceTest {
 
         // Erwarteter Output
 
-        Map<String, Map<Integer, BigDecimal>> expected = Map.of(
-            "freifinanzierter Geschosswohnungsbau",
-            Map.of(2024, new BigDecimal("100"), 2025, new BigDecimal("25.0000")),
-            "MünchenModell",
-            Map.of(2024, new BigDecimal("166.6666666667"), 2025, new BigDecimal("83.3333333333")),
-            "geförderter Mietwohnungsbau",
-            Map.of(2024, new BigDecimal("55.5555555556"), 2025, new BigDecimal("75.0000")),
-            "Ein-/Zweifamilienhäuser",
-            Map.of(2025, new BigDecimal("250.0000000000")),
-            CalculationService.SUMMARY_NAME,
-            Map.of(2024, new BigDecimal("322.2222222223"), 2025, new BigDecimal("433.3333333333"))
+        final PlanungsursaechlicherBedarfModel expected = new PlanungsursaechlicherBedarfModel();
+        expected.setWohneinheitenBedarfe(
+            Set.of(
+                new WohneinheitenBedarfModel("freifinanzierter Geschosswohnungsbau", 2024, new BigDecimal("100")),
+                new WohneinheitenBedarfModel("freifinanzierter Geschosswohnungsbau", 2025, new BigDecimal("25.0000")),
+                new WohneinheitenBedarfModel("MünchenModell", 2024, new BigDecimal("166.6666666667")),
+                new WohneinheitenBedarfModel("MünchenModell", 2025, new BigDecimal("83.3333333333")),
+                new WohneinheitenBedarfModel("geförderter Mietwohnungsbau", 2024, new BigDecimal("55.5555555556")),
+                new WohneinheitenBedarfModel("geförderter Mietwohnungsbau", 2025, new BigDecimal("75.0000")),
+                new WohneinheitenBedarfModel("Ein-/Zweifamilienhäuser", 2025, new BigDecimal("250.0000000000")),
+                new WohneinheitenBedarfModel(CalculationService.SUMMARY_NAME, 2024, new BigDecimal("322.2222222223")),
+                new WohneinheitenBedarfModel(CalculationService.SUMMARY_NAME, 2025, new BigDecimal("433.3333333333"))
+            )
         );
 
-        PlanungsursaechlicherBedarfModel actual = calculationService.calculatePlanungsursaechlicherBedarf(
+        final PlanungsursaechlicherBedarfModel actual = calculationService.calculatePlanungsursaechlicherBedarf(
             bauabschnitte,
             SobonOrientierungswertJahr.JAHR_2022,
             LocalDate.of(2024, 1, 1)
         );
-        assertThat(planungsursaechlicherBedarfToMap(actual), is(expected));
-    }
-
-    private Map<String, Map<Integer, BigDecimal>> planungsursaechlicherBedarfToMap(
-        PlanungsursaechlicherBedarfModel bedarf
-    ) {
-        return bedarf
-            .getWohneinheitenProFoerderart()
-            .stream()
-            .collect(
-                Collectors.toMap(
-                    WohneinheitenProFoerderartModel::getFoerderart,
-                    wohneinheitenProFoerderart ->
-                        wohneinheitenProFoerderart
-                            .getWohneinheitenProJahr()
-                            .stream()
-                            .collect(
-                                Collectors.toMap(
-                                    WohneinheitenProJahrModel::getJahr,
-                                    WohneinheitenProJahrModel::getWohneinheiten
-                                )
-                            )
-                )
-            );
+        assertThat(actual, is(expected));
     }
 }

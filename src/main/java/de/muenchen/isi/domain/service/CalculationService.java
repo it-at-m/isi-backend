@@ -3,23 +3,23 @@ package de.muenchen.isi.domain.service;
 import static org.apache.commons.collections4.ListUtils.emptyIfNull;
 
 import de.muenchen.isi.domain.exception.CalculationException;
-import de.muenchen.isi.domain.model.AbfragevarianteBaugenehmigungsverfahrenModel;
-import de.muenchen.isi.domain.model.AbfragevarianteBauleitplanverfahrenModel;
-import de.muenchen.isi.domain.model.AbfragevarianteModel;
 import de.muenchen.isi.domain.model.BauabschnittModel;
+import de.muenchen.isi.domain.model.BaurateModel;
 import de.muenchen.isi.domain.model.FoerderartModel;
 import de.muenchen.isi.domain.model.FoerdermixModel;
 import de.muenchen.isi.domain.model.calculation.PlanungsursaechlicherBedarfModel;
-import de.muenchen.isi.domain.model.calculation.WohneinheitenProFoerderartModel;
-import de.muenchen.isi.domain.model.calculation.WohneinheitenProJahrModel;
+import de.muenchen.isi.domain.model.calculation.WohneinheitenBedarfModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
 import de.muenchen.isi.infrastructure.repository.stammdaten.StaedtebaulicheOrientierungswertRepository;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -41,21 +41,24 @@ public class CalculationService {
         final SobonOrientierungswertJahr sobonJahr,
         final LocalDate gueltigAb
     ) throws CalculationException {
-        // Sammeln der Berechnungsgrundlagen
+        final var planungsursaechlicherBedarf = new PlanungsursaechlicherBedarfModel();
+        final var wohneinheitenBedarfe = new HashSet<WohneinheitenBedarfModel>();
+        planungsursaechlicherBedarf.setWohneinheitenBedarfe(wohneinheitenBedarfe);
 
-        final var durchschnittlicheGf = 90;
-
-        // Aggregation aller Bauraten + Umlegung von Förderarten
+        // Aggregation aller Bauraten + Umlegen von Förderarten
 
         final var bauraten = bauabschnitte
             .stream()
             .flatMap(bauabschnitt ->
-                emptyIfNull(bauabschnitt.getBaugebiete())
+                bauabschnitt
+                    .getBaugebiete()
                     .stream()
                     .flatMap(baugebiet ->
-                        emptyIfNull(baugebiet.getBauraten())
+                        baugebiet
+                            .getBauraten()
                             .stream()
-                            .peek(baurate -> baurate.setFoerdermix(foerdermixUmlegen(baurate.getFoerdermix())))
+                            .peek(baurate -> baurate.setFoerdermix(legeFoerdermixUm(baurate.getFoerdermix(), gueltigAb))
+                            )
                     )
             )
             .collect(Collectors.toList());
@@ -64,53 +67,32 @@ public class CalculationService {
             throw new CalculationException("Die Berechnung erfordert Bauraten.");
         }
 
-        // Berechnung der Wohneinheiten pro Förderart pro Jahr
+        // Berechnen der Wohneinheiten pro Förderart pro Jahr
 
-        // Strutkur von List<WohneinheitenProFoerderartModel> in Map-Darstellung
-        final var wohneinheitenList = new HashMap<String, Map<Integer, BigDecimal>>();
-        bauraten.forEach(baurate ->
-            baurate
-                .getFoerdermix()
-                .getFoerderarten()
-                .forEach(foerderart -> {
-                    wohneinheitenList.putIfAbsent(foerderart.getBezeichnung(), new HashMap<>());
-                    final Map<Integer, BigDecimal> jahrMap = wohneinheitenList.get(foerderart.getBezeichnung());
-
-                    var wohneinheiten = BigDecimal.ZERO;
-                    if (baurate.getWeGeplant() != null) {
-                        wohneinheiten =
-                            BigDecimal.valueOf(baurate.getWeGeplant()).multiply(foerderart.getAnteilProzent());
-                    } else if (baurate.getGfWohnenGeplant() != null) {
-                        final var average = BigDecimal.valueOf(durchschnittlicheGf);
-                        wohneinheiten =
-                            baurate
-                                .getGfWohnenGeplant()
-                                .multiply(foerderart.getAnteilProzent())
-                                .divide(average, DIVISION_SCALE, RoundingMode.HALF_EVEN);
-                    }
-
-                    jahrMap.merge(baurate.getJahr(), wohneinheiten, BigDecimal::add);
-                })
-        );
+        for (final var baurate : bauraten) {
+            for (final var foerderart : baurate.getFoerdermix().getFoerderarten()) {
+                final var wohneinheiten = calculateWohneinheiten(baurate, foerderart, sobonJahr);
+                mergeWohneinheitenBedarf(
+                    wohneinheitenBedarfe,
+                    foerderart.getBezeichnung(),
+                    baurate.getJahr(),
+                    wohneinheiten
+                );
+            }
+        }
 
         // Hinzufügen einer Förderart mit den Summen aller anderer Förderarten pro Jahr
 
-        wohneinheitenList.put(
-            SUMMARY_NAME,
-            wohneinheitenList
-                .values()
-                .stream()
-                .flatMap(entry -> entry.entrySet().stream())
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, BigDecimal::add))
-        );
+        final var sums = new HashSet<WohneinheitenBedarfModel>();
+        for (final var bedarf : wohneinheitenBedarfe) {
+            mergeWohneinheitenBedarf(sums, SUMMARY_NAME, bedarf.getJahr(), bedarf.getWohneinheiten());
+        }
+        wohneinheitenBedarfe.addAll(sums);
 
-        final var bedarf = new PlanungsursaechlicherBedarfModel();
-        bedarf.setWohneinheitenProFoerderart(mapToWohneinheiten(wohneinheitenList));
-
-        return bedarf;
+        return planungsursaechlicherBedarf;
     }
 
-    private FoerdermixModel foerdermixUmlegen(final FoerdermixModel foerdermix) {
+    private FoerdermixModel legeFoerdermixUm(final FoerdermixModel foerdermix, final LocalDate gueltigAb) {
         final var umlegungen = Map.of(
             "preis-gedämpfter Mietwohnungsbau",
             Map.of(
@@ -130,63 +112,83 @@ public class CalculationService {
             Map.of("Ein-/Zweifamilienhäuser", new BigDecimal("0.5"), "MünchenModell", new BigDecimal("0.5"))
         );
 
-        // Strutkur vom FoerdermixModel in Map-Darstellung
-        final var foerderarten = new HashMap<String, BigDecimal>();
-        emptyIfNull(foerdermix != null ? foerdermix.getFoerderarten() : null)
-            .forEach(foerderart -> {
-                if (foerderart.getBezeichnung() != null && foerderart.getAnteilProzent() != null) {
-                    if (umlegungen.containsKey(foerderart.getBezeichnung())) {
-                        umlegungen
-                            .get(foerderart.getBezeichnung())
-                            .forEach((bezeichnung, anteil) -> {
-                                final var umgelegterAnteil = foerderart.getAnteilProzent().multiply(anteil);
-                                foerderarten.merge(bezeichnung, umgelegterAnteil, BigDecimal::add);
-                            });
-                    } else {
-                        foerderarten.putIfAbsent(foerderart.getBezeichnung(), foerderart.getAnteilProzent());
-                    }
-                }
-            });
-
         final var umgelegterFoerdermix = new FoerdermixModel();
-        umgelegterFoerdermix.setFoerderarten(
-            foerderarten
-                .entrySet()
-                .stream()
-                .map(entry -> {
-                    final var foerderart = new FoerderartModel();
-                    foerderart.setBezeichnung(entry.getKey());
-                    foerderart.setAnteilProzent(entry.getValue());
-                    return foerderart;
-                })
-                .collect(Collectors.toList())
-        );
+        final var umgelegteFoerderarten = new ArrayList<FoerderartModel>();
+        umgelegterFoerdermix.setFoerderarten(umgelegteFoerderarten);
+
+        for (final var foerderart : foerdermix.getFoerderarten()) {
+            if (foerderart.getBezeichnung() != null && foerderart.getAnteilProzent() != null) {
+                if (umlegungen.containsKey(foerderart.getBezeichnung())) {
+                    umlegungen
+                        .get(foerderart.getBezeichnung())
+                        .forEach((bezeichnung, anteil) -> {
+                            final var umgelegterAnteil = foerderart.getAnteilProzent().multiply(anteil);
+                            mergeFoerderart(umgelegteFoerderarten, bezeichnung, umgelegterAnteil);
+                        });
+                } else {
+                    mergeFoerderart(umgelegteFoerderarten, foerderart.getBezeichnung(), foerderart.getAnteilProzent());
+                }
+            }
+        }
 
         return umgelegterFoerdermix;
     }
 
-    private List<WohneinheitenProFoerderartModel> mapToWohneinheiten(final Map<String, Map<Integer, BigDecimal>> map) {
-        return map
-            .entrySet()
+    private BigDecimal calculateWohneinheiten(
+        final BaurateModel baurate,
+        final FoerderartModel foerderart,
+        final SobonOrientierungswertJahr sobonJahr
+    ) {
+        final var durchschnittlicheGf = 90;
+
+        if (baurate.getWeGeplant() != null) {
+            return BigDecimal.valueOf(baurate.getWeGeplant()).multiply(foerderart.getAnteilProzent());
+        } else if (baurate.getGfWohnenGeplant() != null) {
+            final var average = BigDecimal.valueOf(durchschnittlicheGf);
+            return baurate
+                .getGfWohnenGeplant()
+                .multiply(foerderart.getAnteilProzent())
+                .divide(average, DIVISION_SCALE, RoundingMode.HALF_EVEN);
+        }
+
+        return BigDecimal.ZERO;
+    }
+
+    private void mergeWohneinheitenBedarf(
+        final Set<WohneinheitenBedarfModel> wohneinheitenBedarfe,
+        final String foerderart,
+        final Integer jahr,
+        final BigDecimal wohneinheiten
+    ) {
+        final var wohneinheitenBedarf = wohneinheitenBedarfe
             .stream()
-            .map(entry -> {
-                final var wohneinheitenProFoerderart = new WohneinheitenProFoerderartModel();
-                wohneinheitenProFoerderart.setFoerderart(entry.getKey());
-                wohneinheitenProFoerderart.setWohneinheitenProJahr(
-                    entry
-                        .getValue()
-                        .entrySet()
-                        .stream()
-                        .map(jahresBedarf -> {
-                            var wohneinheitenProJahr = new WohneinheitenProJahrModel();
-                            wohneinheitenProJahr.setJahr(jahresBedarf.getKey());
-                            wohneinheitenProJahr.setWohneinheiten(jahresBedarf.getValue());
-                            return wohneinheitenProJahr;
-                        })
-                        .collect(Collectors.toList())
-                );
-                return wohneinheitenProFoerderart;
-            })
-            .collect(Collectors.toList());
+            .filter(bedarf -> bedarf.getFoerderart().equals(foerderart) && bedarf.getJahr().equals(jahr))
+            .findAny();
+
+        if (wohneinheitenBedarf.isEmpty()) {
+            wohneinheitenBedarfe.add(new WohneinheitenBedarfModel(foerderart, jahr, wohneinheiten));
+        } else {
+            wohneinheitenBedarf.get().setWohneinheiten(wohneinheitenBedarf.get().getWohneinheiten().add(wohneinheiten));
+        }
+    }
+
+    private void mergeFoerderart(
+        final List<FoerderartModel> foerderarten,
+        final String bezeichnung,
+        final BigDecimal anteilProzent
+    ) {
+        final var foerderart = foerderarten
+            .stream()
+            .filter(bedarf -> bedarf.getBezeichnung().equals(bezeichnung))
+            .findAny();
+
+        if (foerderart.isEmpty()) {
+            final var newFoerderart = new FoerderartModel();
+            newFoerderart.setBezeichnung(bezeichnung);
+            newFoerderart.setAnteilProzent(anteilProzent);
+            foerderarten.add(newFoerderart);
+        } else {
+            foerderart.get().setAnteilProzent(foerderart.get().getAnteilProzent().add(anteilProzent));
+        }
     }
 }
