@@ -1,7 +1,5 @@
 package de.muenchen.isi.domain.service;
 
-import static org.apache.commons.collections4.ListUtils.emptyIfNull;
-
 import de.muenchen.isi.domain.exception.CalculationException;
 import de.muenchen.isi.domain.model.BauabschnittModel;
 import de.muenchen.isi.domain.model.BaurateModel;
@@ -15,11 +13,8 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -42,7 +37,7 @@ public class CalculationService {
         final LocalDate gueltigAb
     ) throws CalculationException {
         final var planungsursaechlicherBedarf = new PlanungsursaechlicherBedarfModel();
-        final var wohneinheitenBedarfe = new HashSet<WohneinheitenBedarfModel>();
+        final var wohneinheitenBedarfe = new ArrayList<WohneinheitenBedarfModel>();
         planungsursaechlicherBedarf.setWohneinheitenBedarfe(wohneinheitenBedarfe);
 
         // Aggregation aller Bauraten + Umlegen von Förderarten
@@ -83,7 +78,7 @@ public class CalculationService {
 
         // Hinzufügen einer Förderart mit den Summen aller anderer Förderarten pro Jahr
 
-        final var sums = new HashSet<WohneinheitenBedarfModel>();
+        final var sums = new ArrayList<WohneinheitenBedarfModel>();
         for (final var bedarf : wohneinheitenBedarfe) {
             mergeWohneinheitenBedarf(sums, SUMMARY_NAME, bedarf.getJahr(), bedarf.getWohneinheiten());
         }
@@ -155,7 +150,7 @@ public class CalculationService {
     }
 
     private void mergeWohneinheitenBedarf(
-        final Set<WohneinheitenBedarfModel> wohneinheitenBedarfe,
+        final List<WohneinheitenBedarfModel> wohneinheitenBedarfe,
         final String foerderart,
         final Integer jahr,
         final BigDecimal wohneinheiten

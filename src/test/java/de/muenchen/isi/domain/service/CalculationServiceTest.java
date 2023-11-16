@@ -1,7 +1,7 @@
 package de.muenchen.isi.domain.service;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 
 import de.muenchen.isi.domain.exception.CalculationException;
 import de.muenchen.isi.domain.model.BauabschnittModel;
@@ -16,7 +16,7 @@ import de.muenchen.isi.infrastructure.repository.stammdaten.StaedtebaulicheOrien
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Set;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -122,7 +122,7 @@ public class CalculationServiceTest {
 
         final PlanungsursaechlicherBedarfModel expected = new PlanungsursaechlicherBedarfModel();
         expected.setWohneinheitenBedarfe(
-            Set.of(
+            List.of(
                 new WohneinheitenBedarfModel("freifinanzierter Geschosswohnungsbau", 2024, new BigDecimal("100")),
                 new WohneinheitenBedarfModel("freifinanzierter Geschosswohnungsbau", 2025, new BigDecimal("25.0000")),
                 new WohneinheitenBedarfModel("MünchenModell", 2024, new BigDecimal("166.6666666667")),
@@ -140,6 +140,6 @@ public class CalculationServiceTest {
             SobonOrientierungswertJahr.JAHR_2022,
             LocalDate.of(2024, 1, 1)
         );
-        assertThat(actual, is(expected));
+        assertThat(actual.getWohneinheitenBedarfe(), containsInAnyOrder(expected.getWohneinheitenBedarfe().toArray()));
     }
 }
