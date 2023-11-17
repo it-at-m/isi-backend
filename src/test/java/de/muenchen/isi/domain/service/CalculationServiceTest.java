@@ -3,7 +3,6 @@ package de.muenchen.isi.domain.service;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 
-import de.muenchen.isi.domain.exception.CalculationException;
 import de.muenchen.isi.domain.model.BauabschnittModel;
 import de.muenchen.isi.domain.model.BaugebietModel;
 import de.muenchen.isi.domain.model.BaurateModel;
@@ -16,7 +15,6 @@ import de.muenchen.isi.infrastructure.repository.stammdaten.StaedtebaulicheOrien
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
-import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -40,7 +38,7 @@ public class CalculationServiceTest {
     }
 
     @Test
-    void calculatePlanungsursaechlicherBedarf() throws CalculationException {
+    void calculatePlanungsursaechlicherBedarf() {
         // Input
 
         var FF100 = new FoerderartModel();

@@ -1,6 +1,5 @@
 package de.muenchen.isi.domain.service;
 
-import de.muenchen.isi.domain.exception.CalculationException;
 import de.muenchen.isi.domain.model.BauabschnittModel;
 import de.muenchen.isi.domain.model.BaurateModel;
 import de.muenchen.isi.domain.model.FoerderartModel;
@@ -35,7 +34,7 @@ public class CalculationService {
         final List<BauabschnittModel> bauabschnitte,
         final SobonOrientierungswertJahr sobonJahr,
         final LocalDate gueltigAb
-    ) throws CalculationException {
+    ) {
         final var planungsursaechlicherBedarf = new PlanungsursaechlicherBedarfModel();
         final var wohneinheitenBedarfe = new ArrayList<WohneinheitenBedarfModel>();
         planungsursaechlicherBedarf.setWohneinheitenBedarfe(wohneinheitenBedarfe);
@@ -57,10 +56,6 @@ public class CalculationService {
                     )
             )
             .collect(Collectors.toList());
-
-        if (bauraten.isEmpty()) {
-            throw new CalculationException("Die Berechnung erfordert Bauraten.");
-        }
 
         // Berechnen der Wohneinheiten pro Förderart pro Jahr
 
