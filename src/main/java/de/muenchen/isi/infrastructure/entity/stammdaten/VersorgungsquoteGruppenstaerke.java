@@ -18,7 +18,7 @@ import lombok.ToString;
 @Entity
 @Table(
     uniqueConstraints = { @UniqueConstraint(columnNames = { "gueltigAb", "bildungseinrichtung" }) },
-    indexes = { @Index(name = "versorgungsqoute_gruppen", columnList = "gueltigAb, bildungseinrichtung") }
+    indexes = { @Index(name = "versorgungsqoute_gruppenstaerke", columnList = "gueltigAb, bildungseinrichtung") }
 )
 @Data
 @ToString(callSuper = true)
@@ -32,10 +32,14 @@ public class VersorgungsquoteGruppenstaerke extends BaseEntity {
     @Column(nullable = false)
     private Bildungseinrichtung bildungseinrichtung;
 
-    @Column(nullable = false, precision = 4, scale = 3)
+    @Column(
+        columnDefinition = "numeric(4,3) not null check (versorgungsquote_planungsursaechlich >= 0 AND versorgungsquote_planungsursaechlich <= 1)"
+    )
     private BigDecimal versorgungsquotePlanungsursaechlich;
 
-    @Column(nullable = false, precision = 4, scale = 3)
+    @Column(
+        columnDefinition = "numeric(4,3) not null check (versorgungsquote_sobon_ursaechlich >= 0 AND versorgungsquote_sobon_ursaechlich <= 1)"
+    )
     private BigDecimal versorgungsquoteSobonUrsaechlich;
 
     @Column(nullable = false)
