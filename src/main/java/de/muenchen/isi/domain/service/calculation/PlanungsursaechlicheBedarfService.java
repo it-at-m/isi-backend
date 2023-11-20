@@ -33,12 +33,12 @@ public class PlanungsursaechlicheBedarfService {
     /**
      * Errechnet planungsursächliche Wohneinheiten pro Förderart und Jahr.
      * Dafür werden entweder die Anzahl der Wohneinheiten oder die Geschossflächen von Bauraten herangezogen.
-     * Hat eine Baurate nur die Geschossfläche, wird sie entsprechend der städtebäulichen Orientierungswerte in Wohneinheiten umgerechnet.
+     * Hat eine Baurate nur die Geschossfläche, wird sie entsprechend der städtebaulichen Orientierungswerte in Wohneinheiten umgerechnet.
      * Die Fördermixe aller Bauraten werden vor der Berechnung umgelegt, siehe {@link FoerdermixUmlageService}.
      * Außerdem wird eine zusätzliche "Förderart" hinzugefügt, welche die Summen aller Förderarten pro Jahr enthält.
      *
      * @param bauabschnitte Eine List von {@link BauabschnittModel}, aus denen die {@link BaurateModel} extrahiert werden.
-     * @param sobonJahr Das SoBoN-Jahr, welches die städtebäulichen Orientierungswerte diktiert.
+     * @param sobonJahr Das SoBoN-Jahr, welches die städtebaulichen Orientierungswerte diktiert.
      * @param gueltigAb Das Gültigkeitsdatum der Stammdaten, welche die Umlegung diktieren.
      * @return Ein {@link PlanungsursaechlicherBedarfModel} mit planungsursächlichen Wohneinheiten pro Förderart und Jahr.
      */
