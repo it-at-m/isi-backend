@@ -11,8 +11,6 @@ import javax.persistence.Enumerated;
 import javax.persistence.Index;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
-import javax.validation.constraints.DecimalMax;
-import javax.validation.constraints.DecimalMin;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -35,13 +33,9 @@ public class VersorgungsquoteGruppenstaerke extends BaseEntity {
     private Bildungseinrichtung bildungseinrichtung;
 
     @Column(nullable = false, precision = 4, scale = 3)
-    @DecimalMin("0.0")
-    @DecimalMax("1.0")
     private BigDecimal versorgungsquotePlanungsursaechlich;
 
     @Column(nullable = false, precision = 4, scale = 3)
-    @DecimalMin("0.0")
-    @DecimalMax("1.0")
     private BigDecimal versorgungsquoteSobonUrsaechlich;
 
     @Column(nullable = false)
