@@ -22,6 +22,7 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.ActiveProfiles;
 
 @ExtendWith(MockitoExtension.class)
@@ -113,7 +114,7 @@ public class VersorgungsquoteGruppenstaerkeRepositoryTest {
     }
 
     @Test
-    void NoSuchElementExceptionUmlegungFoerderartenbyBezeichnungAndDatum() {
+    void noSuchElementExceptionUmlegungFoerderartenbyBezeichnungAndDatum() {
         VersorgungsquoteGruppenstaerke bildungseinrichtung1 = new VersorgungsquoteGruppenstaerke();
         bildungseinrichtung1.setId(UUID.randomUUID());
         bildungseinrichtung1.setBildungseinrichtung(Bildungseinrichtung.KINDERGARTEN);
@@ -146,5 +147,113 @@ public class VersorgungsquoteGruppenstaerkeRepositoryTest {
 
         Assertions.assertThrows(NoSuchElementException.class, () -> result1.get());
         Assertions.assertThrows(NoSuchElementException.class, () -> result2.get());
+    }
+
+    @Test
+    void percentValicationCheckTest() {
+        VersorgungsquoteGruppenstaerke value0 = createBildungseinrichtung(
+            new BigDecimal("0.500"),
+            LocalDate.parse("2000-01-01")
+        );
+        Assertions.assertDoesNotThrow(() -> this.versorgungsquoteGruppenstaerkeRepository.save(value0));
+        VersorgungsquoteGruppenstaerke value1 = createBildungseinrichtung(
+            new BigDecimal("0"),
+            LocalDate.parse("2001-01-01")
+        );
+        Assertions.assertDoesNotThrow(() -> this.versorgungsquoteGruppenstaerkeRepository.save(value1));
+        VersorgungsquoteGruppenstaerke value2 = createBildungseinrichtung(
+            new BigDecimal("0.0"),
+            LocalDate.parse("2002-01-01")
+        );
+        Assertions.assertDoesNotThrow(() -> this.versorgungsquoteGruppenstaerkeRepository.save(value2));
+        VersorgungsquoteGruppenstaerke value3 = createBildungseinrichtung(
+            new BigDecimal("0.00"),
+            LocalDate.parse("2003-01-01")
+        );
+        Assertions.assertDoesNotThrow(() -> this.versorgungsquoteGruppenstaerkeRepository.save(value3));
+        VersorgungsquoteGruppenstaerke value4 = createBildungseinrichtung(
+            new BigDecimal("0.000"),
+            LocalDate.parse("2004-01-01")
+        );
+        Assertions.assertDoesNotThrow(() -> this.versorgungsquoteGruppenstaerkeRepository.save(value4));
+        VersorgungsquoteGruppenstaerke value5 = createBildungseinrichtung(
+            new BigDecimal("1"),
+            LocalDate.parse("2005-01-01")
+        );
+        Assertions.assertDoesNotThrow(() -> this.versorgungsquoteGruppenstaerkeRepository.save(value5));
+        VersorgungsquoteGruppenstaerke value6 = createBildungseinrichtung(
+            new BigDecimal("1.0"),
+            LocalDate.parse("2006-01-01")
+        );
+        Assertions.assertDoesNotThrow(() -> this.versorgungsquoteGruppenstaerkeRepository.save(value6));
+        VersorgungsquoteGruppenstaerke value7 = createBildungseinrichtung(
+            new BigDecimal("1.00"),
+            LocalDate.parse("2007-01-01")
+        );
+        Assertions.assertDoesNotThrow(() -> this.versorgungsquoteGruppenstaerkeRepository.save(value7));
+        VersorgungsquoteGruppenstaerke value8 = createBildungseinrichtung(
+            new BigDecimal("1.000"),
+            LocalDate.parse("2008-01-01")
+        );
+        Assertions.assertDoesNotThrow(() -> this.versorgungsquoteGruppenstaerkeRepository.save(value8));
+        VersorgungsquoteGruppenstaerke value9 = createBildungseinrichtung(
+            new BigDecimal("1.01"),
+            LocalDate.parse("2009-01-01")
+        );
+        Assertions.assertThrows(
+            DataIntegrityViolationException.class,
+            () -> this.versorgungsquoteGruppenstaerkeRepository.save(value9)
+        );
+        VersorgungsquoteGruppenstaerke value10 = createBildungseinrichtung(
+            new BigDecimal("1.1"),
+            LocalDate.parse("2010-01-01")
+        );
+        Assertions.assertThrows(
+            DataIntegrityViolationException.class,
+            () -> this.versorgungsquoteGruppenstaerkeRepository.save(value10)
+        );
+        VersorgungsquoteGruppenstaerke value11 = createBildungseinrichtung(
+            new BigDecimal("1.001"),
+            LocalDate.parse("2011-01-01")
+        );
+        Assertions.assertThrows(
+            DataIntegrityViolationException.class,
+            () -> this.versorgungsquoteGruppenstaerkeRepository.save(value11)
+        );
+        VersorgungsquoteGruppenstaerke value12 = createBildungseinrichtung(
+            new BigDecimal("-0.001"),
+            LocalDate.parse("2012-01-01")
+        );
+        Assertions.assertThrows(
+            DataIntegrityViolationException.class,
+            () -> this.versorgungsquoteGruppenstaerkeRepository.save(value12)
+        );
+        VersorgungsquoteGruppenstaerke value13 = createBildungseinrichtung(
+            new BigDecimal("-0.01"),
+            LocalDate.parse("2013-01-01")
+        );
+        Assertions.assertThrows(
+            DataIntegrityViolationException.class,
+            () -> this.versorgungsquoteGruppenstaerkeRepository.save(value13)
+        );
+        VersorgungsquoteGruppenstaerke value14 = createBildungseinrichtung(
+            new BigDecimal("-0.1"),
+            LocalDate.parse("2014-01-01")
+        );
+        Assertions.assertThrows(
+            DataIntegrityViolationException.class,
+            () -> this.versorgungsquoteGruppenstaerkeRepository.save(value14)
+        );
+    }
+
+    private VersorgungsquoteGruppenstaerke createBildungseinrichtung(BigDecimal value, LocalDate gueltigAb) {
+        VersorgungsquoteGruppenstaerke versorgungsquoteGruppenstaerke = new VersorgungsquoteGruppenstaerke();
+        versorgungsquoteGruppenstaerke.setId(UUID.randomUUID());
+        versorgungsquoteGruppenstaerke.setBildungseinrichtung(Bildungseinrichtung.KINDERKRIPPE);
+        versorgungsquoteGruppenstaerke.setGruppenstaerke(50);
+        versorgungsquoteGruppenstaerke.setVersorgungsquotePlanungsursaechlich(value);
+        versorgungsquoteGruppenstaerke.setVersorgungsquoteSobonUrsaechlich(value);
+        versorgungsquoteGruppenstaerke.setGueltigAb(gueltigAb);
+        return versorgungsquoteGruppenstaerke;
     }
 }
