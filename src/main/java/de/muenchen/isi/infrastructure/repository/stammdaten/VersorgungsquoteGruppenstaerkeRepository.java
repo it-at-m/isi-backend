@@ -1,5 +1,6 @@
 package de.muenchen.isi.infrastructure.repository.stammdaten;
 
+import de.muenchen.isi.infrastructure.entity.enums.Bildungseinrichtung;
 import de.muenchen.isi.infrastructure.entity.stammdaten.VersorgungsquoteGruppenstaerke;
 import java.time.LocalDate;
 import java.util.Optional;
@@ -11,14 +12,14 @@ public interface VersorgungsquoteGruppenstaerkeRepository extends JpaRepository<
      * Findet den Eintrag mit einer bestimmten Bildungseinrichtung-Bezeichnung, bei dem das Gültigkeitsdatum vor oder am
      * angegebenen Datum liegt, und sortiert die Ergebnisse nach dem Gültigkeitsdatum absteigend.
      *
-     * @param bildungseinrichtungBezeichnung Die Bezeichnung der Bildungseinrichtung, nach der gesucht werden soll.
-     * @param gueltigAb                      Das Gültigkeitsdatum, vor oder am dem gesucht werden soll (einschließlich).
+     * @param bildungseinrichtung Die Bildungseinrichtung, nach der gesucht werden soll.
+     * @param gueltigAb           Das Gültigkeitsdatum, vor oder am dem gesucht werden soll (einschließlich).
      * @return Ein {@link Optional} mit dem gefundenen Eintrag, oder ein leeres {@link Optional}, falls kein Eintrag gefunden wurde.
      */
     Optional<
         VersorgungsquoteGruppenstaerke
-    > findFirstByBildungseinrichtungBezeichnungAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
-        String bildungseinrichtungBezeichnung,
+    > findFirstByBildungseinrichtungAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
+        Bildungseinrichtung bildungseinrichtung,
         LocalDate gueltigAb
     );
 }

@@ -1,6 +1,8 @@
 package de.muenchen.isi.domain.model.stammdaten;
 
 import de.muenchen.isi.domain.model.BaseEntityModel;
+import de.muenchen.isi.infrastructure.entity.enums.Bildungseinrichtung;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import lombok.Data;
 
@@ -9,11 +11,11 @@ public class VersorgungsquoteGruppenstaerkeModel extends BaseEntityModel {
 
     private LocalDate gueltigAb;
 
-    private String bildungseinrichtungBezeichnung;
+    private Bildungseinrichtung bildungseinrichtung;
 
-    private int versorgungsquotePlanungsursaechlich;
+    private BigDecimal versorgungsquotePlanungsursaechlich;
 
-    private int versorgungsquoteSobonUrsaechlich;
+    private BigDecimal versorgungsquoteSobonUrsaechlich;
 
     private int gruppenstaerke;
 }
