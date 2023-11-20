@@ -8,6 +8,7 @@ import de.muenchen.isi.domain.model.calculation.PlanungsursaechlicherBedarfModel
 import de.muenchen.isi.domain.model.calculation.WohneinheitenBedarfModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
 import de.muenchen.isi.infrastructure.repository.stammdaten.StaedtebaulicheOrientierungswertRepository;
+import de.muenchen.isi.infrastructure.repository.stammdaten.UmlegungFoerderartenRepository;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
@@ -23,6 +24,8 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class CalculationService {
+
+    private final UmlegungFoerderartenRepository umlegungFoerderartenRepository;
 
     private final StaedtebaulicheOrientierungswertRepository staedtebaulicheOrientierungswertRepository;
 
@@ -83,38 +86,24 @@ public class CalculationService {
     }
 
     private FoerdermixModel legeFoerdermixUm(final FoerdermixModel foerdermix, final LocalDate gueltigAb) {
-        final var umlegungen = Map.of(
-            "preis-gedämpfter Mietwohnungsbau",
-            Map.of(
-                "freifinanzierter Geschosswohnungsbau",
-                new BigDecimal("0.25"),
-                "geförderter Mietwohnungsbau",
-                new BigDecimal("0.75")
-            ),
-            "konzeptioneller Mietwohnungsbau",
-            Map.of(
-                "freifinanzierter Geschosswohnungsbau",
-                new BigDecimal("0.25"),
-                "geförderter Mietwohnungsbau",
-                new BigDecimal("0.75")
-            ),
-            "Baugemeinschaften",
-            Map.of("Ein-/Zweifamilienhäuser", new BigDecimal("0.5"), "MünchenModell", new BigDecimal("0.5"))
-        );
-
         final var umgelegterFoerdermix = new FoerdermixModel();
         final var umgelegteFoerderarten = new ArrayList<FoerderartModel>();
         umgelegterFoerdermix.setFoerderarten(umgelegteFoerderarten);
 
         for (final var foerderart : foerdermix.getFoerderarten()) {
             if (foerderart.getBezeichnung() != null && foerderart.getAnteilProzent() != null) {
-                if (umlegungen.containsKey(foerderart.getBezeichnung())) {
-                    umlegungen
-                        .get(foerderart.getBezeichnung())
-                        .forEach((bezeichnung, anteil) -> {
-                            final var umgelegterAnteil = foerderart.getAnteilProzent().multiply(anteil);
-                            mergeFoerderart(umgelegteFoerderarten, bezeichnung, umgelegterAnteil);
-                        });
+                final var umlegung =
+                    umlegungFoerderartenRepository.findFirstByBezeichnungAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
+                        foerderart.getBezeichnung(),
+                        gueltigAb
+                    );
+                if (umlegung.isPresent()) {
+                    for (final var schluessel : umlegung.get().getUmlegungsschluessel()) {
+                        final var umgelegterAnteil = foerderart
+                            .getAnteilProzent()
+                            .multiply(schluessel.getAnteilProzent());
+                        mergeFoerderart(umgelegteFoerderarten, schluessel.getBezeichnung(), umgelegterAnteil);
+                    }
                 } else {
                     mergeFoerderart(umgelegteFoerderarten, foerderart.getBezeichnung(), foerderart.getAnteilProzent());
                 }
@@ -129,16 +118,21 @@ public class CalculationService {
         final FoerderartModel foerderart,
         final SobonOrientierungswertJahr sobonJahr
     ) {
-        final var durchschnittlicheGf = 90;
-
         if (baurate.getWeGeplant() != null) {
             return BigDecimal.valueOf(baurate.getWeGeplant()).multiply(foerderart.getAnteilProzent());
         } else if (baurate.getGfWohnenGeplant() != null) {
-            final var average = BigDecimal.valueOf(durchschnittlicheGf);
-            return baurate
-                .getGfWohnenGeplant()
-                .multiply(foerderart.getAnteilProzent())
-                .divide(average, DIVISION_SCALE, RoundingMode.HALF_EVEN);
+            final var orientierungswert =
+                staedtebaulicheOrientierungswertRepository.findFirstByFoerderartBezeichnungAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
+                    foerderart.getBezeichnung(),
+                    sobonJahr.getGueltigAb()
+                );
+            if (orientierungswert.isPresent()) {
+                final var average = BigDecimal.valueOf(orientierungswert.get().getDurchschnittlicheGrundflaeche());
+                return baurate
+                    .getGfWohnenGeplant()
+                    .multiply(foerderart.getAnteilProzent())
+                    .divide(average, DIVISION_SCALE, RoundingMode.HALF_EVEN);
+            }
         }
 
         return BigDecimal.ZERO;
