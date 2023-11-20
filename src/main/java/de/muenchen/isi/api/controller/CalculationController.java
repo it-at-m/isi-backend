@@ -5,7 +5,7 @@ import de.muenchen.isi.api.dto.calculation.PlanungsursaechlicherBedarfDto;
 import de.muenchen.isi.api.dto.error.InformationResponseDto;
 import de.muenchen.isi.api.mapper.PlanungsursaechlicherBedarfApiMapper;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
-import de.muenchen.isi.domain.service.CalculationService;
+import de.muenchen.isi.domain.service.calculation.PlanungsursaechlicheBedarfService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -34,7 +34,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 public class CalculationController {
 
-    private final CalculationService calculationService;
+    private final PlanungsursaechlicheBedarfService planungsursaechlicheBedarfService;
 
     private final PlanungsursaechlicherBedarfApiMapper planungsursaechlicherBedarfApiMapper;
 
@@ -55,7 +55,7 @@ public class CalculationController {
     public ResponseEntity<PlanungsursaechlicherBedarfDto> calculatePlanungsursaechlicherBedarf(
         @RequestBody @Valid @NotNull final CalculationRequestDto calculationRequestDto
     ) {
-        final var bedarfModel = calculationService.calculatePlanungsursaechlicherBedarf(
+        final var bedarfModel = planungsursaechlicheBedarfService.calculatePlanungsursaechlicherBedarf(
             calculationRequestDto.getBauabschnitte(),
             calculationRequestDto.getSobonJahr(),
             calculationRequestDto.getGueltigAb()
