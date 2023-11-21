@@ -77,121 +77,121 @@ public class SobonOrientierungswertSozialeInfrastrukturModel extends BaseEntityM
         );
     }
 
-    private BigDecimal getObererRichtwertEinwohnerJahr1NachErsterstellung() {
+    public BigDecimal getObererRichtwertEinwohnerJahr1NachErsterstellung() {
         return einwohnerJahr1NachErsterstellung
             .multiply(this.getFactorOfDistanceMittelwertEinwohner10JahreToStammwertArbeitsgruppe())
             .setScale(SCALE, RoundingMode.HALF_EVEN);
     }
 
-    private BigDecimal getObererRichtwertEinwohnerJahr2NachErsterstellung() {
+    public BigDecimal getObererRichtwertEinwohnerJahr2NachErsterstellung() {
         return einwohnerJahr2NachErsterstellung
             .multiply(this.getFactorOfDistanceMittelwertEinwohner10JahreToStammwertArbeitsgruppe())
             .setScale(SCALE, RoundingMode.HALF_EVEN);
     }
 
-    private BigDecimal getObererRichtwertEinwohnerJahr3NachErsterstellung() {
+    public BigDecimal getObererRichtwertEinwohnerJahr3NachErsterstellung() {
         return einwohnerJahr3NachErsterstellung
             .multiply(this.getFactorOfDistanceMittelwertEinwohner10JahreToStammwertArbeitsgruppe())
             .setScale(SCALE, RoundingMode.HALF_EVEN);
     }
 
-    private BigDecimal getObererRichtwertEinwohnerJahr4NachErsterstellung() {
+    public BigDecimal getObererRichtwertEinwohnerJahr4NachErsterstellung() {
         return einwohnerJahr4NachErsterstellung
             .multiply(this.getFactorOfDistanceMittelwertEinwohner10JahreToStammwertArbeitsgruppe())
             .setScale(SCALE, RoundingMode.HALF_EVEN);
     }
 
-    private BigDecimal getObererRichtwertEinwohnerJahr5NachErsterstellung() {
+    public BigDecimal getObererRichtwertEinwohnerJahr5NachErsterstellung() {
         return einwohnerJahr5NachErsterstellung
             .multiply(this.getFactorOfDistanceMittelwertEinwohner10JahreToStammwertArbeitsgruppe())
             .setScale(SCALE, RoundingMode.HALF_EVEN);
     }
 
-    private BigDecimal getObererRichtwertEinwohnerJahr6NachErsterstellung() {
+    public BigDecimal getObererRichtwertEinwohnerJahr6NachErsterstellung() {
         return einwohnerJahr6NachErsterstellung
             .multiply(this.getFactorOfDistanceMittelwertEinwohner10JahreToStammwertArbeitsgruppe())
             .setScale(SCALE, RoundingMode.HALF_EVEN);
     }
 
-    private BigDecimal getObererRichtwertEinwohnerJahr7NachErsterstellung() {
+    public BigDecimal getObererRichtwertEinwohnerJahr7NachErsterstellung() {
         return einwohnerJahr7NachErsterstellung
             .multiply(this.getFactorOfDistanceMittelwertEinwohner10JahreToStammwertArbeitsgruppe())
             .setScale(SCALE, RoundingMode.HALF_EVEN);
     }
 
-    private BigDecimal getObererRichtwertEinwohnerJahr8NachErsterstellung() {
+    public BigDecimal getObererRichtwertEinwohnerJahr8NachErsterstellung() {
         return einwohnerJahr8NachErsterstellung
             .multiply(this.getFactorOfDistanceMittelwertEinwohner10JahreToStammwertArbeitsgruppe())
             .setScale(SCALE, RoundingMode.HALF_EVEN);
     }
 
-    private BigDecimal getObererRichtwertEinwohnerJahr9NachErsterstellung() {
+    public BigDecimal getObererRichtwertEinwohnerJahr9NachErsterstellung() {
         return einwohnerJahr9NachErsterstellung
             .multiply(this.getFactorOfDistanceMittelwertEinwohner10JahreToStammwertArbeitsgruppe())
             .setScale(SCALE, RoundingMode.HALF_EVEN);
     }
 
-    private BigDecimal getObererRichtwertEinwohnerJahr10NachErsterstellung() {
+    public BigDecimal getObererRichtwertEinwohnerJahr10NachErsterstellung() {
         return einwohnerJahr10NachErsterstellung
             .multiply(this.getFactorOfDistanceMittelwertEinwohner10JahreToStammwertArbeitsgruppe())
             .setScale(SCALE, RoundingMode.HALF_EVEN);
     }
 
-    private BigDecimal getObererRichtwertEinwohnerJahr11NachErsterstellung() {
+    public BigDecimal getObererRichtwertEinwohnerJahr11NachErsterstellung() {
         return getObererRichtwertEinwohnerJahr10NachErsterstellung()
             .multiply(FAKTOR_DISTANCE_JAHR_11_BIS_20)
             .setScale(SCALE, RoundingMode.HALF_EVEN);
     }
 
-    private BigDecimal getObererRichtwertEinwohnerJahr12NachErsterstellung() {
+    public BigDecimal getObererRichtwertEinwohnerJahr12NachErsterstellung() {
         return getObererRichtwertEinwohnerJahr10NachErsterstellung()
             .multiply(FAKTOR_DISTANCE_JAHR_11_BIS_20.pow(2))
             .setScale(SCALE, RoundingMode.HALF_EVEN);
     }
 
-    private BigDecimal getObererRichtwertEinwohnerJahr13NachErsterstellung() {
+    public BigDecimal getObererRichtwertEinwohnerJahr13NachErsterstellung() {
         return getObererRichtwertEinwohnerJahr10NachErsterstellung()
             .multiply(FAKTOR_DISTANCE_JAHR_11_BIS_20.pow(3))
             .setScale(SCALE, RoundingMode.HALF_EVEN);
     }
 
-    private BigDecimal getObererRichtwertEinwohnerJahr14NachErsterstellung() {
+    public BigDecimal getObererRichtwertEinwohnerJahr14NachErsterstellung() {
         return getObererRichtwertEinwohnerJahr10NachErsterstellung()
             .multiply(FAKTOR_DISTANCE_JAHR_11_BIS_20.pow(4))
             .setScale(SCALE, RoundingMode.HALF_EVEN);
     }
 
-    private BigDecimal getObererRichtwertEinwohnerJahr15NachErsterstellung() {
+    public BigDecimal getObererRichtwertEinwohnerJahr15NachErsterstellung() {
         return getObererRichtwertEinwohnerJahr10NachErsterstellung()
             .multiply(FAKTOR_DISTANCE_JAHR_11_BIS_20.pow(5))
             .setScale(SCALE, RoundingMode.HALF_EVEN);
     }
 
-    private BigDecimal getObererRichtwertEinwohnerJahr16NachErsterstellung() {
+    public BigDecimal getObererRichtwertEinwohnerJahr16NachErsterstellung() {
         return getObererRichtwertEinwohnerJahr10NachErsterstellung()
             .multiply(FAKTOR_DISTANCE_JAHR_11_BIS_20.pow(6))
             .setScale(SCALE, RoundingMode.HALF_EVEN);
     }
 
-    private BigDecimal getObererRichtwertEinwohnerJahr17NachErsterstellung() {
+    public BigDecimal getObererRichtwertEinwohnerJahr17NachErsterstellung() {
         return getObererRichtwertEinwohnerJahr10NachErsterstellung()
             .multiply(FAKTOR_DISTANCE_JAHR_11_BIS_20.pow(7))
             .setScale(SCALE, RoundingMode.HALF_EVEN);
     }
 
-    private BigDecimal getObererRichtwertEinwohnerJahr18NachErsterstellung() {
+    public BigDecimal getObererRichtwertEinwohnerJahr18NachErsterstellung() {
         return getObererRichtwertEinwohnerJahr10NachErsterstellung()
             .multiply(FAKTOR_DISTANCE_JAHR_11_BIS_20.pow(8))
             .setScale(SCALE, RoundingMode.HALF_EVEN);
     }
 
-    private BigDecimal getObererRichtwertEinwohnerJahr19NachErsterstellung() {
+    public BigDecimal getObererRichtwertEinwohnerJahr19NachErsterstellung() {
         return getObererRichtwertEinwohnerJahr10NachErsterstellung()
             .multiply(FAKTOR_DISTANCE_JAHR_11_BIS_20.pow(9))
             .setScale(SCALE, RoundingMode.HALF_EVEN);
     }
 
-    private BigDecimal getObererRichtwertEinwohnerJahr20NachErsterstellung() {
+    public BigDecimal getObererRichtwertEinwohnerJahr20NachErsterstellung() {
         return getObererRichtwertEinwohnerJahr10NachErsterstellung()
             .multiply(FAKTOR_DISTANCE_JAHR_11_BIS_20.pow(10))
             .setScale(SCALE, RoundingMode.HALF_EVEN);
