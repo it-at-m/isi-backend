@@ -4,6 +4,7 @@ import de.muenchen.isi.domain.mapper.StammdatenDomainMapper;
 import de.muenchen.isi.domain.model.BauabschnittModel;
 import de.muenchen.isi.domain.model.calculation.LangfristigerPlanungsursaechlicherBedarfModel;
 import de.muenchen.isi.domain.model.calculation.PlanungsursaechlicherBedarfModel;
+import de.muenchen.isi.domain.model.calculation.PlanungsursaechlicherBedarfTestModel;
 import de.muenchen.isi.domain.model.calculation.WohneinheitenBedarfModel;
 import de.muenchen.isi.domain.model.stammdaten.SobonOrientierungswertSozialeInfrastrukturModel;
 import de.muenchen.isi.infrastructure.entity.enums.Einrichtungstyp;
@@ -55,253 +56,311 @@ public class LangfristigerPlanungsursaechlicherBedarfService {
                     Einrichtungstyp.KINDERKRIPPE
                 );
 
+        final var planungsursaechlicherBedarfForFoerderart = wohneinheitenBedarfForFoerderart
+            .keySet()
+            .stream()
+            .collect(
+                Collectors.toMap(
+                    foerderart -> foerderart,
+                    foerderart ->
+                        calculatePlanungsursaechlicherBedarfe(
+                            wohneinheitenBedarfForFoerderart.get(foerderart),
+                            sobonOrientierungswertForFoerderart.get(foerderart)
+                        )
+                )
+            );
+
         return null;
     }
 
-    protected void calculatePlanungsursaechlicherBedarf(
+    protected List<PlanungsursaechlicherBedarfTestModel> calculatePlanungsursaechlicherBedarfe(
         final List<WohneinheitenBedarfModel> wohneinheitenBedarfe,
         final SobonOrientierungswertSozialeInfrastrukturModel sobonOrientierungswertSozialeInfrastruktur
     ) {
         wohneinheitenBedarfe.sort(Comparator.comparing(WohneinheitenBedarfModel::getJahr));
-        BigDecimal kinderJahr1NachErstellung = BigDecimal.ZERO;
-        BigDecimal kinderJahr2NachErstellung = BigDecimal.ZERO;
-        BigDecimal kinderJahr3NachErstellung = BigDecimal.ZERO;
-        BigDecimal kinderJahr4NachErstellung = BigDecimal.ZERO;
-        BigDecimal kinderJahr5NachErstellung = BigDecimal.ZERO;
-        BigDecimal kinderJahr6NachErstellung = BigDecimal.ZERO;
-        BigDecimal kinderJahr7NachErstellung = BigDecimal.ZERO;
-        BigDecimal kinderJahr8NachErstellung = BigDecimal.ZERO;
-        BigDecimal kinderJahr9NachErstellung = BigDecimal.ZERO;
-        BigDecimal kinderJahr10NachErstellung = BigDecimal.ZERO;
-        BigDecimal kinderJahr11NachErstellung = BigDecimal.ZERO;
-        BigDecimal kinderJahr12NachErstellung = BigDecimal.ZERO;
-        BigDecimal kinderJahr13NachErstellung = BigDecimal.ZERO;
-        BigDecimal kinderJahr14NachErstellung = BigDecimal.ZERO;
-        BigDecimal kinderJahr15NachErstellung = BigDecimal.ZERO;
-        BigDecimal kinderJahr16NachErstellung = BigDecimal.ZERO;
-        BigDecimal kinderJahr17NachErstellung = BigDecimal.ZERO;
-        BigDecimal kinderJahr18NachErstellung = BigDecimal.ZERO;
-        BigDecimal kinderJahr19NachErstellung = BigDecimal.ZERO;
-        BigDecimal kinderJahr20NachErstellung = BigDecimal.ZERO;
+        final var planungsursaechlicheBedarfe = new ArrayList<PlanungsursaechlicherBedarfTestModel>();
+        var anzahlKinderGesamt = BigDecimal.ZERO;
+        WohneinheitenBedarfModel wohneinheitenBedarf = null;
         if (0 < wohneinheitenBedarfe.size()) {
-            kinderJahr1NachErstellung =
-                wohneinheitenBedarfe
-                    .get(0)
+            wohneinheitenBedarf = wohneinheitenBedarfe.get(0);
+            anzahlKinderGesamt =
+                wohneinheitenBedarf
                     .getWohneinheiten()
                     .multiply(
                         sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr1NachErsterstellung()
                     )
                     .setScale(SobonOrientierungswertSozialeInfrastrukturModel.SCALE, RoundingMode.HALF_EVEN);
+            planungsursaechlicheBedarfe.add(
+                createPlanungsursaechlicherBedarfTest(wohneinheitenBedarf.getJahr(), anzahlKinderGesamt)
+            );
         }
         if (1 < wohneinheitenBedarfe.size()) {
-            kinderJahr2NachErstellung =
-                wohneinheitenBedarfe
-                    .get(1)
+            wohneinheitenBedarf = wohneinheitenBedarfe.get(1);
+            anzahlKinderGesamt =
+                wohneinheitenBedarf
                     .getWohneinheiten()
                     .multiply(
                         sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr2NachErsterstellung()
                     )
-                    .add(kinderJahr1NachErstellung)
+                    .add(planungsursaechlicheBedarfe.get(0).getAnzahlKinderGesamt())
                     .setScale(SobonOrientierungswertSozialeInfrastrukturModel.SCALE, RoundingMode.HALF_EVEN);
+            planungsursaechlicheBedarfe.add(
+                createPlanungsursaechlicherBedarfTest(wohneinheitenBedarf.getJahr(), anzahlKinderGesamt)
+            );
         }
         if (2 < wohneinheitenBedarfe.size()) {
-            kinderJahr3NachErstellung =
-                wohneinheitenBedarfe
-                    .get(2)
+            wohneinheitenBedarf = wohneinheitenBedarfe.get(2);
+            anzahlKinderGesamt =
+                wohneinheitenBedarf
                     .getWohneinheiten()
                     .multiply(
                         sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr3NachErsterstellung()
                     )
-                    .add(kinderJahr2NachErstellung)
+                    .add(planungsursaechlicheBedarfe.get(1).getAnzahlKinderGesamt())
                     .setScale(SobonOrientierungswertSozialeInfrastrukturModel.SCALE, RoundingMode.HALF_EVEN);
+            planungsursaechlicheBedarfe.add(
+                createPlanungsursaechlicherBedarfTest(wohneinheitenBedarf.getJahr(), anzahlKinderGesamt)
+            );
         }
         if (3 < wohneinheitenBedarfe.size()) {
-            kinderJahr4NachErstellung =
-                wohneinheitenBedarfe
-                    .get(3)
+            wohneinheitenBedarf = wohneinheitenBedarfe.get(3);
+            anzahlKinderGesamt =
+                wohneinheitenBedarf
                     .getWohneinheiten()
                     .multiply(
                         sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr4NachErsterstellung()
                     )
-                    .add(kinderJahr3NachErstellung)
+                    .add(planungsursaechlicheBedarfe.get(2).getAnzahlKinderGesamt())
                     .setScale(SobonOrientierungswertSozialeInfrastrukturModel.SCALE, RoundingMode.HALF_EVEN);
+            planungsursaechlicheBedarfe.add(
+                createPlanungsursaechlicherBedarfTest(wohneinheitenBedarf.getJahr(), anzahlKinderGesamt)
+            );
         }
         if (4 < wohneinheitenBedarfe.size()) {
-            kinderJahr5NachErstellung =
-                wohneinheitenBedarfe
-                    .get(4)
+            wohneinheitenBedarf = wohneinheitenBedarfe.get(4);
+            anzahlKinderGesamt =
+                wohneinheitenBedarf
                     .getWohneinheiten()
                     .multiply(
                         sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr5NachErsterstellung()
                     )
-                    .add(kinderJahr4NachErstellung)
+                    .add(planungsursaechlicheBedarfe.get(3).getAnzahlKinderGesamt())
                     .setScale(SobonOrientierungswertSozialeInfrastrukturModel.SCALE, RoundingMode.HALF_EVEN);
+            planungsursaechlicheBedarfe.add(
+                createPlanungsursaechlicherBedarfTest(wohneinheitenBedarf.getJahr(), anzahlKinderGesamt)
+            );
         }
         if (5 < wohneinheitenBedarfe.size()) {
-            kinderJahr6NachErstellung =
-                wohneinheitenBedarfe
-                    .get(5)
+            wohneinheitenBedarf = wohneinheitenBedarfe.get(5);
+            anzahlKinderGesamt =
+                wohneinheitenBedarf
                     .getWohneinheiten()
                     .multiply(
                         sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr6NachErsterstellung()
                     )
-                    .add(kinderJahr5NachErstellung)
+                    .add(planungsursaechlicheBedarfe.get(4).getAnzahlKinderGesamt())
                     .setScale(SobonOrientierungswertSozialeInfrastrukturModel.SCALE, RoundingMode.HALF_EVEN);
+            planungsursaechlicheBedarfe.add(
+                createPlanungsursaechlicherBedarfTest(wohneinheitenBedarf.getJahr(), anzahlKinderGesamt)
+            );
         }
         if (6 < wohneinheitenBedarfe.size()) {
-            kinderJahr7NachErstellung =
-                wohneinheitenBedarfe
-                    .get(6)
+            wohneinheitenBedarf = wohneinheitenBedarfe.get(6);
+            anzahlKinderGesamt =
+                wohneinheitenBedarf
                     .getWohneinheiten()
                     .multiply(
                         sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr7NachErsterstellung()
                     )
-                    .add(kinderJahr6NachErstellung)
+                    .add(planungsursaechlicheBedarfe.get(5).getAnzahlKinderGesamt())
                     .setScale(SobonOrientierungswertSozialeInfrastrukturModel.SCALE, RoundingMode.HALF_EVEN);
+            planungsursaechlicheBedarfe.add(
+                createPlanungsursaechlicherBedarfTest(wohneinheitenBedarf.getJahr(), anzahlKinderGesamt)
+            );
         }
         if (7 < wohneinheitenBedarfe.size()) {
-            kinderJahr8NachErstellung =
-                wohneinheitenBedarfe
-                    .get(7)
+            wohneinheitenBedarf = wohneinheitenBedarfe.get(7);
+            anzahlKinderGesamt =
+                wohneinheitenBedarf
                     .getWohneinheiten()
                     .multiply(
                         sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr8NachErsterstellung()
                     )
-                    .add(kinderJahr7NachErstellung)
+                    .add(planungsursaechlicheBedarfe.get(6).getAnzahlKinderGesamt())
                     .setScale(SobonOrientierungswertSozialeInfrastrukturModel.SCALE, RoundingMode.HALF_EVEN);
+            planungsursaechlicheBedarfe.add(
+                createPlanungsursaechlicherBedarfTest(wohneinheitenBedarf.getJahr(), anzahlKinderGesamt)
+            );
         }
         if (8 < wohneinheitenBedarfe.size()) {
-            kinderJahr9NachErstellung =
-                wohneinheitenBedarfe
-                    .get(8)
+            wohneinheitenBedarf = wohneinheitenBedarfe.get(8);
+            anzahlKinderGesamt =
+                wohneinheitenBedarf
                     .getWohneinheiten()
                     .multiply(
                         sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr9NachErsterstellung()
                     )
-                    .add(kinderJahr8NachErstellung)
+                    .add(planungsursaechlicheBedarfe.get(7).getAnzahlKinderGesamt())
                     .setScale(SobonOrientierungswertSozialeInfrastrukturModel.SCALE, RoundingMode.HALF_EVEN);
+            planungsursaechlicheBedarfe.add(
+                createPlanungsursaechlicherBedarfTest(wohneinheitenBedarf.getJahr(), anzahlKinderGesamt)
+            );
         }
         if (9 < wohneinheitenBedarfe.size()) {
-            kinderJahr10NachErstellung =
-                wohneinheitenBedarfe
-                    .get(9)
+            wohneinheitenBedarf = wohneinheitenBedarfe.get(9);
+            anzahlKinderGesamt =
+                wohneinheitenBedarf
                     .getWohneinheiten()
                     .multiply(
                         sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr10NachErsterstellung()
                     )
-                    .add(kinderJahr9NachErstellung)
+                    .add(planungsursaechlicheBedarfe.get(8).getAnzahlKinderGesamt())
                     .setScale(SobonOrientierungswertSozialeInfrastrukturModel.SCALE, RoundingMode.HALF_EVEN);
+            planungsursaechlicheBedarfe.add(
+                createPlanungsursaechlicherBedarfTest(wohneinheitenBedarf.getJahr(), anzahlKinderGesamt)
+            );
         }
         if (10 < wohneinheitenBedarfe.size()) {
-            kinderJahr11NachErstellung =
-                wohneinheitenBedarfe
-                    .get(10)
+            wohneinheitenBedarf = wohneinheitenBedarfe.get(10);
+            anzahlKinderGesamt =
+                wohneinheitenBedarf
                     .getWohneinheiten()
                     .multiply(
                         sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr11NachErsterstellung()
                     )
-                    .add(kinderJahr10NachErstellung)
+                    .add(planungsursaechlicheBedarfe.get(9).getAnzahlKinderGesamt())
                     .setScale(SobonOrientierungswertSozialeInfrastrukturModel.SCALE, RoundingMode.HALF_EVEN);
+            planungsursaechlicheBedarfe.add(
+                createPlanungsursaechlicherBedarfTest(wohneinheitenBedarf.getJahr(), anzahlKinderGesamt)
+            );
         }
         if (11 < wohneinheitenBedarfe.size()) {
-            kinderJahr12NachErstellung =
-                wohneinheitenBedarfe
-                    .get(11)
+            wohneinheitenBedarf = wohneinheitenBedarfe.get(11);
+            anzahlKinderGesamt =
+                wohneinheitenBedarf
                     .getWohneinheiten()
                     .multiply(
                         sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr12NachErsterstellung()
                     )
-                    .add(kinderJahr11NachErstellung)
+                    .add(planungsursaechlicheBedarfe.get(10).getAnzahlKinderGesamt())
                     .setScale(SobonOrientierungswertSozialeInfrastrukturModel.SCALE, RoundingMode.HALF_EVEN);
+            planungsursaechlicheBedarfe.add(
+                createPlanungsursaechlicherBedarfTest(wohneinheitenBedarf.getJahr(), anzahlKinderGesamt)
+            );
         }
         if (12 < wohneinheitenBedarfe.size()) {
-            kinderJahr13NachErstellung =
-                wohneinheitenBedarfe
-                    .get(12)
+            wohneinheitenBedarf = wohneinheitenBedarfe.get(12);
+            anzahlKinderGesamt =
+                wohneinheitenBedarf
                     .getWohneinheiten()
                     .multiply(
                         sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr13NachErsterstellung()
                     )
-                    .add(kinderJahr12NachErstellung)
+                    .add(planungsursaechlicheBedarfe.get(11).getAnzahlKinderGesamt())
                     .setScale(SobonOrientierungswertSozialeInfrastrukturModel.SCALE, RoundingMode.HALF_EVEN);
+            planungsursaechlicheBedarfe.add(
+                createPlanungsursaechlicherBedarfTest(wohneinheitenBedarf.getJahr(), anzahlKinderGesamt)
+            );
         }
         if (13 < wohneinheitenBedarfe.size()) {
-            kinderJahr14NachErstellung =
-                wohneinheitenBedarfe
-                    .get(13)
+            wohneinheitenBedarf = wohneinheitenBedarfe.get(13);
+            anzahlKinderGesamt =
+                wohneinheitenBedarf
                     .getWohneinheiten()
                     .multiply(
                         sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr14NachErsterstellung()
                     )
-                    .add(kinderJahr13NachErstellung)
+                    .add(planungsursaechlicheBedarfe.get(12).getAnzahlKinderGesamt())
                     .setScale(SobonOrientierungswertSozialeInfrastrukturModel.SCALE, RoundingMode.HALF_EVEN);
+            planungsursaechlicheBedarfe.add(
+                createPlanungsursaechlicherBedarfTest(wohneinheitenBedarf.getJahr(), anzahlKinderGesamt)
+            );
         }
         if (14 < wohneinheitenBedarfe.size()) {
-            kinderJahr15NachErstellung =
-                wohneinheitenBedarfe
-                    .get(14)
+            wohneinheitenBedarf = wohneinheitenBedarfe.get(14);
+            anzahlKinderGesamt =
+                wohneinheitenBedarf
                     .getWohneinheiten()
                     .multiply(
                         sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr15NachErsterstellung()
                     )
-                    .add(kinderJahr14NachErstellung)
+                    .add(planungsursaechlicheBedarfe.get(13).getAnzahlKinderGesamt())
                     .setScale(SobonOrientierungswertSozialeInfrastrukturModel.SCALE, RoundingMode.HALF_EVEN);
+            planungsursaechlicheBedarfe.add(
+                createPlanungsursaechlicherBedarfTest(wohneinheitenBedarf.getJahr(), anzahlKinderGesamt)
+            );
         }
         if (15 < wohneinheitenBedarfe.size()) {
-            kinderJahr16NachErstellung =
-                wohneinheitenBedarfe
-                    .get(15)
+            wohneinheitenBedarf = wohneinheitenBedarfe.get(15);
+            anzahlKinderGesamt =
+                wohneinheitenBedarf
                     .getWohneinheiten()
                     .multiply(
                         sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr16NachErsterstellung()
                     )
-                    .add(kinderJahr15NachErstellung)
+                    .add(planungsursaechlicheBedarfe.get(14).getAnzahlKinderGesamt())
                     .setScale(SobonOrientierungswertSozialeInfrastrukturModel.SCALE, RoundingMode.HALF_EVEN);
+            planungsursaechlicheBedarfe.add(
+                createPlanungsursaechlicherBedarfTest(wohneinheitenBedarf.getJahr(), anzahlKinderGesamt)
+            );
         }
         if (16 < wohneinheitenBedarfe.size()) {
-            kinderJahr17NachErstellung =
-                wohneinheitenBedarfe
-                    .get(16)
+            wohneinheitenBedarf = wohneinheitenBedarfe.get(16);
+            anzahlKinderGesamt =
+                wohneinheitenBedarf
                     .getWohneinheiten()
                     .multiply(
                         sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr17NachErsterstellung()
                     )
-                    .add(kinderJahr16NachErstellung)
+                    .add(planungsursaechlicheBedarfe.get(15).getAnzahlKinderGesamt())
                     .setScale(SobonOrientierungswertSozialeInfrastrukturModel.SCALE, RoundingMode.HALF_EVEN);
+            planungsursaechlicheBedarfe.add(
+                createPlanungsursaechlicherBedarfTest(wohneinheitenBedarf.getJahr(), anzahlKinderGesamt)
+            );
         }
         if (17 < wohneinheitenBedarfe.size()) {
-            kinderJahr18NachErstellung =
-                wohneinheitenBedarfe
-                    .get(17)
+            wohneinheitenBedarf = wohneinheitenBedarfe.get(17);
+            anzahlKinderGesamt =
+                wohneinheitenBedarf
                     .getWohneinheiten()
                     .multiply(
                         sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr18NachErsterstellung()
                     )
-                    .add(kinderJahr17NachErstellung)
+                    .add(planungsursaechlicheBedarfe.get(16).getAnzahlKinderGesamt())
                     .setScale(SobonOrientierungswertSozialeInfrastrukturModel.SCALE, RoundingMode.HALF_EVEN);
+            planungsursaechlicheBedarfe.add(
+                createPlanungsursaechlicherBedarfTest(wohneinheitenBedarf.getJahr(), anzahlKinderGesamt)
+            );
         }
         if (18 < wohneinheitenBedarfe.size()) {
-            kinderJahr19NachErstellung =
-                wohneinheitenBedarfe
-                    .get(18)
+            wohneinheitenBedarf = wohneinheitenBedarfe.get(18);
+            anzahlKinderGesamt =
+                wohneinheitenBedarf
                     .getWohneinheiten()
                     .multiply(
                         sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr19NachErsterstellung()
                     )
-                    .add(kinderJahr18NachErstellung)
+                    .add(planungsursaechlicheBedarfe.get(17).getAnzahlKinderGesamt())
                     .setScale(SobonOrientierungswertSozialeInfrastrukturModel.SCALE, RoundingMode.HALF_EVEN);
+            planungsursaechlicheBedarfe.add(
+                createPlanungsursaechlicherBedarfTest(wohneinheitenBedarf.getJahr(), anzahlKinderGesamt)
+            );
         }
         if (19 < wohneinheitenBedarfe.size()) {
-            kinderJahr20NachErstellung =
-                wohneinheitenBedarfe
-                    .get(19)
+            wohneinheitenBedarf = wohneinheitenBedarfe.get(19);
+            anzahlKinderGesamt =
+                wohneinheitenBedarf
                     .getWohneinheiten()
                     .multiply(
                         sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr20NachErsterstellung()
                     )
-                    .add(kinderJahr19NachErstellung)
+                    .add(planungsursaechlicheBedarfe.get(18).getAnzahlKinderGesamt())
                     .setScale(SobonOrientierungswertSozialeInfrastrukturModel.SCALE, RoundingMode.HALF_EVEN);
+            planungsursaechlicheBedarfe.add(
+                createPlanungsursaechlicherBedarfTest(wohneinheitenBedarf.getJahr(), anzahlKinderGesamt)
+            );
         }
+        return planungsursaechlicheBedarfe;
     }
 
     protected Map<String, List<WohneinheitenBedarfModel>> getWohneinheitenBedarfForFoerderart(
@@ -345,5 +404,15 @@ public class LangfristigerPlanungsursaechlicherBedarfService {
                     Function.identity()
                 )
             );
+    }
+
+    private PlanungsursaechlicherBedarfTestModel createPlanungsursaechlicherBedarfTest(
+        final Integer jahr,
+        final BigDecimal anzahlKinderGesamt
+    ) {
+        final var planungsursaechlicherBedarf = new PlanungsursaechlicherBedarfTestModel();
+        planungsursaechlicherBedarf.setJahr(jahr);
+        planungsursaechlicherBedarf.setAnzahlKinderGesamt(anzahlKinderGesamt);
+        return planungsursaechlicherBedarf;
     }
 }
