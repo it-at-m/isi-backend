@@ -56,10 +56,7 @@ public class LangfristigerPlanungsursaechlicherBedarfService {
                     Einrichtungstyp.KINDERKRIPPE
                 );
 
-        final var planungsursaechlicherBedarfForJahr = new HashMap<
-            Integer,
-            List<PlanungsursaechlicherBedarfTestModel>
-        >();
+        final var planungsursaechlicherBedarfForJahr = new HashMap<Integer, PlanungsursaechlicherBedarfTestModel>();
         // Berechnung der Gesamtanzahl der Kinder
         wohneinheitenBedarfForFoerderart
             .keySet()
@@ -73,15 +70,17 @@ public class LangfristigerPlanungsursaechlicherBedarfService {
             )
             .forEach(planungsursaechlicherBedarfTest -> {
                 if (planungsursaechlicherBedarfForJahr.containsKey(planungsursaechlicherBedarfTest.getJahr())) {
+                    final var sumAnzahlKinderGesamt = planungsursaechlicherBedarfForJahr
+                        .get(planungsursaechlicherBedarfTest.getJahr())
+                        .getAnzahlKinderGesamt()
+                        .add(planungsursaechlicherBedarfTest.getAnzahlKinderGesamt());
                     planungsursaechlicherBedarfForJahr
                         .get(planungsursaechlicherBedarfTest.getJahr())
-                        .add(planungsursaechlicherBedarfTest);
+                        .setAnzahlKinderGesamt(sumAnzahlKinderGesamt);
                 } else {
-                    final var planungsursaechlicherBedarfeTest = new ArrayList<PlanungsursaechlicherBedarfTestModel>();
-                    planungsursaechlicherBedarfeTest.add(planungsursaechlicherBedarfTest);
                     planungsursaechlicherBedarfForJahr.put(
                         planungsursaechlicherBedarfTest.getJahr(),
-                        planungsursaechlicherBedarfeTest
+                        planungsursaechlicherBedarfTest
                     );
                 }
             });
