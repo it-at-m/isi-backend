@@ -47,7 +47,10 @@ public class SobonOrientierungswertSozialeInfrastrukturModel extends BaseEntityM
 
     private BigDecimal stammwertArbeitsgruppe;
 
-    public BigDecimal getMittelwertEinwohner10Jahre() {
+    /**
+     * @return den des 10-Jährigen-Mittelwert der Einwohner nach Ersterstellung.
+     */
+    public BigDecimal getMittelwertEinwohnerNachErsterstellung10Jahre() {
         return einwohnerJahr1NachErsterstellung
             .add(einwohnerJahr2NachErsterstellung)
             .add(einwohnerJahr3NachErsterstellung)
@@ -61,8 +64,15 @@ public class SobonOrientierungswertSozialeInfrastrukturModel extends BaseEntityM
             .divide(BigDecimal.TEN, SCALE, RoundingMode.HALF_EVEN);
     }
 
+    /**
+     * @return die Distanz des 10-Jährigen-Mittelwertes vom Attribut Stammwert-Arbeitsgruppe als Faktor zur Ermittlung der oberen Richtwerte.
+     */
     public BigDecimal getFactorOfDistanceMittelwertEinwohner10JahreToStammwertArbeitsgruppe() {
-        return stammwertArbeitsgruppe.divide(getMittelwertEinwohner10Jahre(), SCALE, RoundingMode.HALF_EVEN);
+        return stammwertArbeitsgruppe.divide(
+            getMittelwertEinwohnerNachErsterstellung10Jahre(),
+            SCALE,
+            RoundingMode.HALF_EVEN
+        );
     }
 
     private BigDecimal getObererRichtwertEinwohnerJahr1NachErsterstellung() {
