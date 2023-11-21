@@ -56,19 +56,37 @@ public class LangfristigerPlanungsursaechlicherBedarfService {
                     Einrichtungstyp.KINDERKRIPPE
                 );
 
-        final var planungsursaechlicherBedarfForFoerderart = wohneinheitenBedarfForFoerderart
+        final var planungsursaechlicherBedarfForJahr = new HashMap<
+            Integer,
+            List<PlanungsursaechlicherBedarfTestModel>
+        >();
+        // Berechnung der Gesamtanzahl der Kinder
+        wohneinheitenBedarfForFoerderart
             .keySet()
             .stream()
-            .collect(
-                Collectors.toMap(
-                    foerderart -> foerderart,
-                    foerderart ->
-                        calculatePlanungsursaechlicherBedarfe(
-                            wohneinheitenBedarfForFoerderart.get(foerderart),
-                            sobonOrientierungswertForFoerderart.get(foerderart)
-                        )
-                )
-            );
+            .flatMap(foerderart ->
+                this.calculatePlanungsursaechlicherBedarfe(
+                        wohneinheitenBedarfForFoerderart.get(foerderart),
+                        sobonOrientierungswertForFoerderart.get(foerderart)
+                    )
+                    .stream()
+            )
+            .forEach(planungsursaechlicherBedarfTest -> {
+                if (planungsursaechlicherBedarfForJahr.containsKey(planungsursaechlicherBedarfTest.getJahr())) {
+                    planungsursaechlicherBedarfForJahr
+                        .get(planungsursaechlicherBedarfTest.getJahr())
+                        .add(planungsursaechlicherBedarfTest);
+                } else {
+                    final var planungsursaechlicherBedarfeTest = new ArrayList<PlanungsursaechlicherBedarfTestModel>();
+                    planungsursaechlicherBedarfeTest.add(planungsursaechlicherBedarfTest);
+                    planungsursaechlicherBedarfForJahr.put(
+                        planungsursaechlicherBedarfTest.getJahr(),
+                        planungsursaechlicherBedarfeTest
+                    );
+                }
+            });
+
+        //
 
         return null;
     }
