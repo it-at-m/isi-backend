@@ -56,8 +56,8 @@ public class LangfristigerPlanungsursaechlicherBedarfService {
                     Einrichtungstyp.KINDERKRIPPE
                 );
 
+        // Berechnung der Gesamtanzahl der Kinder je Jahr
         final var planungsursaechlicherBedarfForJahr = new HashMap<Integer, PlanungsursaechlicherBedarfTestModel>();
-        // Berechnung der Gesamtanzahl der Kinder
         wohneinheitenBedarfForFoerderart
             .keySet()
             .stream()
