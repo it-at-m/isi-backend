@@ -100,33 +100,29 @@ public class SobonOrientierungswertSozialeInfrastrukturRepositoryTest {
             );
 
         Optional<SobonOrientierungswertSozialeInfrastruktur> result1 =
-            this.sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndAltersklasseAndFoerderartBezeichnungAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
+            this.sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndFoerderartBezeichnungAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
                     orientierungswert1.getEinrichtungstyp(),
-                    orientierungswert1.getAltersklasse(),
                     orientierungswert1.getFoerderartBezeichnung(),
                     LocalDate.parse("2022-06-03")
                 );
 
         Optional<SobonOrientierungswertSozialeInfrastruktur> result2 =
-            this.sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndAltersklasseAndFoerderartBezeichnungAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
+            this.sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndFoerderartBezeichnungAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
                     orientierungswert2.getEinrichtungstyp(),
-                    orientierungswert2.getAltersklasse(),
                     orientierungswert2.getFoerderartBezeichnung(),
                     LocalDate.parse("2020-05-05")
                 );
 
         Optional<SobonOrientierungswertSozialeInfrastruktur> result3 =
-            this.sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndAltersklasseAndFoerderartBezeichnungAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
+            this.sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndFoerderartBezeichnungAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
                     orientierungswert3.getEinrichtungstyp(),
-                    orientierungswert3.getAltersklasse(),
                     orientierungswert3.getFoerderartBezeichnung(),
                     LocalDate.parse("2020-05-04")
                 );
 
         Optional<SobonOrientierungswertSozialeInfrastruktur> result4 =
-            this.sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndAltersklasseAndFoerderartBezeichnungAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
+            this.sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndFoerderartBezeichnungAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
                     Einrichtungstyp.KINDERHORT,
-                    Altersklasse.SECHSEINHALB_NEUNEINHALB,
                     orientierungswert3.getFoerderartBezeichnung(),
                     LocalDate.parse("2019-12-01")
                 );
@@ -205,50 +201,36 @@ public class SobonOrientierungswertSozialeInfrastrukturRepositoryTest {
             );
 
         Optional<SobonOrientierungswertSozialeInfrastruktur> result1 =
-            this.sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndAltersklasseAndFoerderartBezeichnungAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
+            this.sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndFoerderartBezeichnungAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
                     orientierungswert1.getEinrichtungstyp(),
-                    orientierungswert1.getAltersklasse(),
                     orientierungswert1.getFoerderartBezeichnung(),
                     LocalDate.parse("2019-12-31")
                 );
 
         Optional<SobonOrientierungswertSozialeInfrastruktur> result2 =
-            this.sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndAltersklasseAndFoerderartBezeichnungAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
+            this.sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndFoerderartBezeichnungAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
                     Einrichtungstyp.N_N,
-                    orientierungswert1.getAltersklasse(),
-                    orientierungswert1.getFoerderartBezeichnung(),
-                    orientierungswert1.getGueltigAb()
-                );
-
-        Optional<SobonOrientierungswertSozialeInfrastruktur> result3 =
-            this.sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndAltersklasseAndFoerderartBezeichnungAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
-                    orientierungswert1.getEinrichtungstyp(),
-                    Altersklasse.ZEHNEINHALB_FUENFZEHN,
                     orientierungswert1.getFoerderartBezeichnung(),
                     orientierungswert1.getGueltigAb()
                 );
 
         Optional<SobonOrientierungswertSozialeInfrastruktur> result4 =
-            this.sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndAltersklasseAndFoerderartBezeichnungAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
+            this.sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndFoerderartBezeichnungAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
                     orientierungswert1.getEinrichtungstyp(),
-                    orientierungswert1.getAltersklasse(),
                     "NonexistentFoerderart",
                     orientierungswert1.getGueltigAb()
                 );
 
         Optional<SobonOrientierungswertSozialeInfrastruktur> result6 =
-            this.sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndAltersklasseAndFoerderartBezeichnungAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
+            this.sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndFoerderartBezeichnungAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
                     Einrichtungstyp.KINDERHORT,
-                    Altersklasse.DREI_SECHSEINHALB,
                     orientierungswert3.getFoerderartBezeichnung(),
                     LocalDate.parse("2020-01-01")
                 );
 
         Assertions.assertThrows(NoSuchElementException.class, () -> result1.get());
         Assertions.assertThrows(NoSuchElementException.class, () -> result2.get());
-        Assertions.assertThrows(NoSuchElementException.class, () -> result3.get());
         Assertions.assertThrows(NoSuchElementException.class, () -> result4.get());
-        Assertions.assertThrows(NoSuchElementException.class, () -> result6.get());
     }
 
     private SobonOrientierungswertSozialeInfrastruktur createOrientierungswert(
