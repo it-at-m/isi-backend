@@ -84,10 +84,15 @@ public class LangfristigerPlanungsursaechlicherBedarfService {
                     );
                 }
             });
-
-        //
-
-        return null;
+        final var planungsursaechlicherBedarfe = planungsursaechlicherBedarfForJahr
+            .values()
+            .stream()
+            .sorted(Comparator.comparing(PlanungsursaechlicherBedarfTestModel::getJahr))
+            // .map -> Berechnen der Anzahl Kinder je Krippe (generisch) sowie der Anzahl der grupen
+            .collect(Collectors.toList());
+        final var langfristigerPlanungsursaechlicherBedarf = new LangfristigerPlanungsursaechlicherBedarfModel();
+        langfristigerPlanungsursaechlicherBedarf.setPlanungsursaechlicheBedarfe(planungsursaechlicherBedarfe);
+        return langfristigerPlanungsursaechlicherBedarf;
     }
 
     protected List<PlanungsursaechlicherBedarfTestModel> calculatePlanungsursaechlicherBedarfe(
