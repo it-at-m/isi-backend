@@ -17,6 +17,7 @@ public class SobonOrientierungswertSozialeInfrastrukturModel extends BaseEntityM
 
     public static final int SCALE = 4;
 
+    // 0.99
     public static final BigDecimal FAKTOR_DISTANCE_JAHR_11_BIS_20 = BigDecimal.valueOf(99, 2);
 
     private LocalDate gueltigAb;
