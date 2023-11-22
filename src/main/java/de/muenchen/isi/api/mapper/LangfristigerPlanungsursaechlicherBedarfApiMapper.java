@@ -6,6 +6,6 @@ import de.muenchen.isi.domain.model.calculation.LangfristigerPlanungsursaechlich
 import org.mapstruct.Mapper;
 
 @Mapper(config = MapstructConfiguration.class)
-public interface PlanungsursaechlicherBedarfApiMapper {
+public interface LangfristigerPlanungsursaechlicherBedarfApiMapper {
     LangfristigerPlanungsursaechlicherBedarfDto model2Dto(final LangfristigerPlanungsursaechlicherBedarfModel model);
 }

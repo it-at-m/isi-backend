@@ -4,7 +4,7 @@ import de.muenchen.isi.api.dto.calculation.CalculationRequestDto;
 import de.muenchen.isi.api.dto.calculation.LangfristigerPlanungsursaechlicherBedarfDto;
 import de.muenchen.isi.api.dto.error.InformationResponseDto;
 import de.muenchen.isi.api.mapper.BauabschnittApiMapper;
-import de.muenchen.isi.api.mapper.PlanungsursaechlicherBedarfApiMapper;
+import de.muenchen.isi.api.mapper.LangfristigerPlanungsursaechlicherBedarfApiMapper;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.service.calculation.CalculationService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -40,7 +40,7 @@ public class CalculationController {
 
     private final BauabschnittApiMapper bauabschnittApiMapper;
 
-    private final PlanungsursaechlicherBedarfApiMapper planungsursaechlicherBedarfApiMapper;
+    private final LangfristigerPlanungsursaechlicherBedarfApiMapper langfristigerPlanungsursaechlicherBedarfApiMapper;
 
     @GetMapping("/planungsursaechlich")
     @Transactional(rollbackFor = OptimisticLockingException.class)
@@ -71,7 +71,7 @@ public class CalculationController {
             calculationRequestDto.getSobonJahr(),
             calculationRequestDto.getGueltigAb()
         );
-        final var bedarfDto = planungsursaechlicherBedarfApiMapper.model2Dto(bedarfModel);
+        final var bedarfDto = langfristigerPlanungsursaechlicherBedarfApiMapper.model2Dto(bedarfModel);
         return new ResponseEntity<>(bedarfDto, HttpStatus.OK);
     }
 }
