@@ -1,7 +1,6 @@
 package de.muenchen.isi.domain.service.calculation;
 
 import de.muenchen.isi.domain.mapper.StammdatenDomainMapper;
-import de.muenchen.isi.domain.model.calculation.LangfristigerPlanungsursaechlicherBedarfModel;
 import de.muenchen.isi.domain.model.calculation.PlanungsursaechlicherBedarfModel;
 import de.muenchen.isi.domain.model.calculation.PlanungsursaechlicherBedarfTestModel;
 import de.muenchen.isi.domain.model.calculation.WohneinheitenBedarfModel;
@@ -54,8 +53,8 @@ public class LangfristigerPlanungsursaechlicherBedarfService {
                 gueltigAb
             );
 
-        // Berechnung der Gesamtanzahl der Kinder je Jahr
-        final var planungsursaechlicherBedarfe = wohneinheitenBedarfForFoerderart
+        // Berechnung Gesamtanzahl der Kinder je Jahr
+        return wohneinheitenBedarfForFoerderart
             .keySet()
             .stream()
             .flatMap(foerderart ->
@@ -84,10 +83,6 @@ public class LangfristigerPlanungsursaechlicherBedarfService {
             .sorted(Comparator.comparing(PlanungsursaechlicherBedarfTestModel::getJahr))
             // .map -> Berechnen der Anzahl Kinder je Krippe (generisch) sowie der Anzahl der Gruppen
             .collect(Collectors.toList());
-
-        final var langfristigerPlanungsursaechlicherBedarf = new LangfristigerPlanungsursaechlicherBedarfModel();
-        langfristigerPlanungsursaechlicherBedarf.setPlanungsursaechlicheBedarfe(planungsursaechlicherBedarfe);
-        return langfristigerPlanungsursaechlicherBedarf;
     }
 
     protected PlanungsursaechlicherBedarfTestModel add(
