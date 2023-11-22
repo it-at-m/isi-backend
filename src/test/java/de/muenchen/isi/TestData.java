@@ -27,9 +27,12 @@ import de.muenchen.isi.domain.model.common.VerortungModel;
 import de.muenchen.isi.domain.model.common.WGS84Model;
 import de.muenchen.isi.domain.model.filehandling.DokumentModel;
 import de.muenchen.isi.domain.model.filehandling.FilepathModel;
+import de.muenchen.isi.domain.model.stammdaten.SobonOrientierungswertSozialeInfrastrukturModel;
+import de.muenchen.isi.infrastructure.entity.enums.Altersklasse;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtBaulicheNutzung;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtDokument;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonVerfahrensgrundsaetzeJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVerfahren;
@@ -47,6 +50,27 @@ import java.util.Set;
 import lombok.SneakyThrows;
 
 public class TestData {
+
+    public static SobonOrientierungswertSozialeInfrastrukturModel createSobonOrientierungswertSozialeInfrastrukturModel() {
+        SobonOrientierungswertSozialeInfrastrukturModel sobonOrientierungswertSozialeInfrastruktur =
+            new SobonOrientierungswertSozialeInfrastrukturModel();
+        sobonOrientierungswertSozialeInfrastruktur.setGueltigAb(LocalDate.now());
+        sobonOrientierungswertSozialeInfrastruktur.setAltersklasse(Altersklasse.NULL_ZWEI);
+        sobonOrientierungswertSozialeInfrastruktur.setEinrichtungstyp(InfrastruktureinrichtungTyp.KINDERKRIPPE);
+        sobonOrientierungswertSozialeInfrastruktur.setFoerderartBezeichnung("test-foerderart");
+        sobonOrientierungswertSozialeInfrastruktur.setEinwohnerJahr1NachErsterstellung(BigDecimal.valueOf(3500, 4));
+        sobonOrientierungswertSozialeInfrastruktur.setEinwohnerJahr2NachErsterstellung(BigDecimal.valueOf(3450, 4));
+        sobonOrientierungswertSozialeInfrastruktur.setEinwohnerJahr3NachErsterstellung(BigDecimal.valueOf(3400, 4));
+        sobonOrientierungswertSozialeInfrastruktur.setEinwohnerJahr4NachErsterstellung(BigDecimal.valueOf(3350, 4));
+        sobonOrientierungswertSozialeInfrastruktur.setEinwohnerJahr5NachErsterstellung(BigDecimal.valueOf(3300, 4));
+        sobonOrientierungswertSozialeInfrastruktur.setEinwohnerJahr6NachErsterstellung(BigDecimal.valueOf(3250, 4));
+        sobonOrientierungswertSozialeInfrastruktur.setEinwohnerJahr7NachErsterstellung(BigDecimal.valueOf(3200, 4));
+        sobonOrientierungswertSozialeInfrastruktur.setEinwohnerJahr8NachErsterstellung(BigDecimal.valueOf(3150, 4));
+        sobonOrientierungswertSozialeInfrastruktur.setEinwohnerJahr9NachErsterstellung(BigDecimal.valueOf(3100, 4));
+        sobonOrientierungswertSozialeInfrastruktur.setEinwohnerJahr10NachErsterstellung(BigDecimal.valueOf(3050, 4));
+        sobonOrientierungswertSozialeInfrastruktur.setStammwertArbeitsgruppe(BigDecimal.valueOf(4500, 4));
+        return sobonOrientierungswertSozialeInfrastruktur;
+    }
 
     public static BauleitplanverfahrenModel createBauleitplanverfahrenModel() {
         final var bauleitplanverfahren = new BauleitplanverfahrenModel();

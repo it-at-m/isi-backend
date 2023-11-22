@@ -3,6 +3,7 @@ package de.muenchen.isi.domain.service.calculation;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
+import de.muenchen.isi.TestData;
 import de.muenchen.isi.domain.mapper.StammdatenDomainMapperImpl;
 import de.muenchen.isi.domain.model.calculation.PlanungsursaechlicherBedarfModel;
 import de.muenchen.isi.infrastructure.repository.stammdaten.SobonOrientierungswertSozialeInfrastrukturRepository;
@@ -38,6 +39,12 @@ class PlanungsursaechlicherBedarfServiceTest {
                 new StammdatenDomainMapperImpl()
             );
         Mockito.reset(sobonOrientierungswertSozialeInfrastrukturRepository, versorgungsquoteGruppenstaerkeRepository);
+    }
+
+    @Test
+    void calculatePlanungsursaechlicherBedarfe20Wohneinheiten() {
+        final var sobonOrientierungswertSozialeInfrastruktur =
+            TestData.createSobonOrientierungswertSozialeInfrastrukturModel();
     }
 
     @Test
