@@ -38,7 +38,33 @@ public class LangfristigerPlanungsursaechlicherBedarfService {
 
     private final StammdatenDomainMapper stammdatenDomainMapper;
 
-    public List<PlanungsursaechlicherBedarfTestModel> calculateLangfristigerPlanungsursaechlicherBedarf(
+    public List<PlanungsursaechlicherBedarfTestModel> calculatePlanungsursaechlicherBedarfForKinderkrippe(
+        final PlanungsursaechlicherBedarfModel planungsursaechlicherBedarf,
+        final SobonOrientierungswertJahr sobonJahr,
+        final LocalDate gueltigAb
+    ) throws EntityNotFoundException {
+        return this.calculatePlanungsursaechlicherBedarf(
+                InfrastruktureinrichtungTyp.KINDERKRIPPE,
+                planungsursaechlicherBedarf,
+                sobonJahr,
+                gueltigAb
+            );
+    }
+
+    public List<PlanungsursaechlicherBedarfTestModel> calculatePlanungsursaechlicherBedarfForKindergarten(
+        final PlanungsursaechlicherBedarfModel planungsursaechlicherBedarf,
+        final SobonOrientierungswertJahr sobonJahr,
+        final LocalDate gueltigAb
+    ) throws EntityNotFoundException {
+        return this.calculatePlanungsursaechlicherBedarf(
+                InfrastruktureinrichtungTyp.KINDERGARTEN,
+                planungsursaechlicherBedarf,
+                sobonJahr,
+                gueltigAb
+            );
+    }
+
+    protected List<PlanungsursaechlicherBedarfTestModel> calculatePlanungsursaechlicherBedarf(
         final InfrastruktureinrichtungTyp einrichtung,
         final PlanungsursaechlicherBedarfModel planungsursaechlicherBedarf,
         final SobonOrientierungswertJahr sobonJahr,
