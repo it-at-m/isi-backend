@@ -1,5 +1,6 @@
 package de.muenchen.isi.domain.service.calculation;
 
+import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.model.BauabschnittModel;
 import de.muenchen.isi.domain.model.BaurateModel;
 import de.muenchen.isi.domain.model.calculation.LangfristigerPlanungsursaechlicherBedarfModel;
@@ -19,6 +20,8 @@ public class CalculationService {
 
     private final PlanungsursaechlicheWohneinheitenService planungsursaechlicheWohneinheitenService;
 
+    private final PlanungsursaechlicherBedarfService planungsursaechlicherBedarfService;
+
     /**
      * Dieser Service vereint die Funktionalitäten mehrere Berechnungsservices, um den langfristigen planungsursächlichen Bedarf zu ermitteln.
      *
@@ -31,14 +34,35 @@ public class CalculationService {
         final List<BauabschnittModel> bauabschnitte,
         final SobonOrientierungswertJahr sobonJahr,
         final LocalDate gueltigAb
-    ) {
+    ) throws EntityNotFoundException {
         final var bedarf = new LangfristigerPlanungsursaechlicherBedarfModel();
+
+        // Ermittlung Wohneinheiten
         final var wohneinheiten = planungsursaechlicheWohneinheitenService.calculatePlanungsursaechlicheWohneinheiten(
             bauabschnitte,
             sobonJahr,
             gueltigAb
         );
         bedarf.setWohneinheiten(wohneinheiten);
+
+        // Ermittlung Bedarf Kinderkrippe
+        final var bedarfKinderkrippe =
+            planungsursaechlicherBedarfService.calculatePlanungsursaechlicherBedarfForKinderkrippe(
+                wohneinheiten,
+                sobonJahr,
+                gueltigAb
+            );
+        bedarf.setPlanungsursaechlicherBedarfKinderkrippe(bedarfKinderkrippe);
+
+        // Ermittlung Bedarf Kindergarten
+        final var bedarfKindergarten =
+            planungsursaechlicherBedarfService.calculatePlanungsursaechlicherBedarfForKindergarten(
+                wohneinheiten,
+                sobonJahr,
+                gueltigAb
+            );
+        bedarf.setPlanungsursaechlicherBedarfKindergarten(bedarfKindergarten);
+
         return bedarf;
     }
 }

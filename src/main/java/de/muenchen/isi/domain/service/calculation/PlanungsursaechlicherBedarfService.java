@@ -3,7 +3,7 @@ package de.muenchen.isi.domain.service.calculation;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.mapper.StammdatenDomainMapper;
 import de.muenchen.isi.domain.model.calculation.PlanungsursachlicheWohneinheitenModel;
-import de.muenchen.isi.domain.model.calculation.PlanungsursaechlicherBedarfTestModel;
+import de.muenchen.isi.domain.model.calculation.PlanungsursaechlicherBedarfModel;
 import de.muenchen.isi.domain.model.stammdaten.SobonOrientierungswertSozialeInfrastrukturModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
@@ -28,7 +28,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class LangfristigerPlanungsursaechlicherBedarfService {
+public class PlanungsursaechlicherBedarfService {
 
     private final SobonOrientierungswertSozialeInfrastrukturRepository sobonOrientierungswertSozialeInfrastrukturRepository;
 
@@ -36,7 +36,7 @@ public class LangfristigerPlanungsursaechlicherBedarfService {
 
     private final StammdatenDomainMapper stammdatenDomainMapper;
 
-    public List<PlanungsursaechlicherBedarfTestModel> calculatePlanungsursaechlicherBedarfForKinderkrippe(
+    public List<PlanungsursaechlicherBedarfModel> calculatePlanungsursaechlicherBedarfForKinderkrippe(
         final List<PlanungsursachlicheWohneinheitenModel> wohneinheiten,
         final SobonOrientierungswertJahr sobonJahr,
         final LocalDate gueltigAb
@@ -49,7 +49,7 @@ public class LangfristigerPlanungsursaechlicherBedarfService {
             );
     }
 
-    public List<PlanungsursaechlicherBedarfTestModel> calculatePlanungsursaechlicherBedarfForKindergarten(
+    public List<PlanungsursaechlicherBedarfModel> calculatePlanungsursaechlicherBedarfForKindergarten(
         final List<PlanungsursachlicheWohneinheitenModel> wohneinheiten,
         final SobonOrientierungswertJahr sobonJahr,
         final LocalDate gueltigAb
@@ -62,7 +62,7 @@ public class LangfristigerPlanungsursaechlicherBedarfService {
             );
     }
 
-    protected List<PlanungsursaechlicherBedarfTestModel> calculatePlanungsursaechlicherBedarf(
+    protected List<PlanungsursaechlicherBedarfModel> calculatePlanungsursaechlicherBedarf(
         final InfrastruktureinrichtungTyp einrichtung,
         final List<PlanungsursachlicheWohneinheitenModel> wohneinheiten,
         final SobonOrientierungswertJahr sobonJahr,
@@ -103,7 +103,7 @@ public class LangfristigerPlanungsursaechlicherBedarfService {
             // Gruppieren der planungsursächlichen Bedarfe je Jahr
             .collect(
                 Collectors.groupingBy(
-                    PlanungsursaechlicherBedarfTestModel::getJahr,
+                    PlanungsursaechlicherBedarfModel::getJahr,
                     Collectors.mapping(Function.identity(), Collectors.toList())
                 )
             )
@@ -111,11 +111,9 @@ public class LangfristigerPlanungsursaechlicherBedarfService {
             .stream()
             // Bilden der Jahressumme der vorher gruppierten planungsursächlichen Bedarfe.
             .map(planungsursaechlicheBedarfeForJahr ->
-                planungsursaechlicheBedarfeForJahr
-                    .stream()
-                    .reduce(new PlanungsursaechlicherBedarfTestModel(), this::add)
+                planungsursaechlicheBedarfeForJahr.stream().reduce(new PlanungsursaechlicherBedarfModel(), this::add)
             )
-            .sorted(Comparator.comparing(PlanungsursaechlicherBedarfTestModel::getJahr))
+            .sorted(Comparator.comparing(PlanungsursaechlicherBedarfModel::getJahr))
             // Ermitteln der Versorgungsquote und Gruppenstärke
             .map(planungsursaechlicherBedarfTest ->
                 setVersorgungsquoteAndGruppenstaerke(planungsursaechlicherBedarfTest, versorgungsquoteGruppenstaerke)
@@ -123,8 +121,8 @@ public class LangfristigerPlanungsursaechlicherBedarfService {
             .collect(Collectors.toList());
     }
 
-    private PlanungsursaechlicherBedarfTestModel setVersorgungsquoteAndGruppenstaerke(
-        final PlanungsursaechlicherBedarfTestModel planungsursaechlicherBedarf,
+    private PlanungsursaechlicherBedarfModel setVersorgungsquoteAndGruppenstaerke(
+        final PlanungsursaechlicherBedarfModel planungsursaechlicherBedarf,
         final VersorgungsquoteGruppenstaerke versorgungsquoteGruppenstaerke
     ) {
         final var anzahlKinderGesamt = planungsursaechlicherBedarf.getAnzahlKinderGesamt();
@@ -141,11 +139,11 @@ public class LangfristigerPlanungsursaechlicherBedarfService {
         return planungsursaechlicherBedarf;
     }
 
-    protected PlanungsursaechlicherBedarfTestModel add(
-        final PlanungsursaechlicherBedarfTestModel o1,
-        final PlanungsursaechlicherBedarfTestModel o2
+    protected PlanungsursaechlicherBedarfModel add(
+        final PlanungsursaechlicherBedarfModel o1,
+        final PlanungsursaechlicherBedarfModel o2
     ) {
-        final var planungsursaechlicherBedarf = new PlanungsursaechlicherBedarfTestModel();
+        final var planungsursaechlicherBedarf = new PlanungsursaechlicherBedarfModel();
         final var jahr = ObjectUtils.defaultIfNull(o1.getJahr(), o2.getJahr());
         final var sumAnzahlKinderGesamt = ObjectUtils
             .defaultIfNull(o1.getAnzahlKinderGesamt(), BigDecimal.ZERO)
@@ -194,22 +192,22 @@ public class LangfristigerPlanungsursaechlicherBedarfService {
             );
     }
 
-    private PlanungsursaechlicherBedarfTestModel createPlanungsursaechlicherBedarfTest(
+    private PlanungsursaechlicherBedarfModel createPlanungsursaechlicherBedarfTest(
         final Integer jahr,
         final BigDecimal anzahlKinderGesamt
     ) {
-        final var planungsursaechlicherBedarf = new PlanungsursaechlicherBedarfTestModel();
+        final var planungsursaechlicherBedarf = new PlanungsursaechlicherBedarfModel();
         planungsursaechlicherBedarf.setJahr(jahr);
         planungsursaechlicherBedarf.setAnzahlKinderGesamt(anzahlKinderGesamt);
         return planungsursaechlicherBedarf;
     }
 
-    protected List<PlanungsursaechlicherBedarfTestModel> calculatePlanungsursaechlicherBedarfe(
+    protected List<PlanungsursaechlicherBedarfModel> calculatePlanungsursaechlicherBedarfe(
         final List<PlanungsursachlicheWohneinheitenModel> planungsursachlicheWohneinheiten,
         final SobonOrientierungswertSozialeInfrastrukturModel sobonOrientierungswertSozialeInfrastruktur
     ) {
         planungsursachlicheWohneinheiten.sort(Comparator.comparing(PlanungsursachlicheWohneinheitenModel::getJahr));
-        final var planungsursaechlicheBedarfe = new ArrayList<PlanungsursaechlicherBedarfTestModel>();
+        final var planungsursaechlicheBedarfe = new ArrayList<PlanungsursaechlicherBedarfModel>();
         BigDecimal anzahlKinderGesamt;
         PlanungsursachlicheWohneinheitenModel wohneinheiten;
         if (0 < planungsursachlicheWohneinheiten.size()) {

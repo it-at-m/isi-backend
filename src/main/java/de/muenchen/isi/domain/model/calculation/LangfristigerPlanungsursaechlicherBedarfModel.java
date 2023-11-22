@@ -7,4 +7,8 @@ import lombok.Data;
 public class LangfristigerPlanungsursaechlicherBedarfModel {
 
     private List<PlanungsursachlicheWohneinheitenModel> wohneinheiten;
+
+    private List<PlanungsursaechlicherBedarfModel> planungsursaechlicherBedarfKinderkrippe;
+
+    private List<PlanungsursaechlicherBedarfModel> planungsursaechlicherBedarfKindergarten;
 }

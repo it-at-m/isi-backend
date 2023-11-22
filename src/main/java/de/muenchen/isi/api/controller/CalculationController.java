@@ -5,6 +5,7 @@ import de.muenchen.isi.api.dto.calculation.LangfristigerPlanungsursaechlicherBed
 import de.muenchen.isi.api.dto.error.InformationResponseDto;
 import de.muenchen.isi.api.mapper.BauabschnittApiMapper;
 import de.muenchen.isi.api.mapper.LangfristigerPlanungsursaechlicherBedarfApiMapper;
+import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.service.calculation.CalculationService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -60,7 +61,7 @@ public class CalculationController {
         LangfristigerPlanungsursaechlicherBedarfDto
     > calculateLangfristigerPlanungsursaechlicherBedarf(
         @RequestBody @Valid @NotNull final CalculationRequestDto calculationRequestDto
-    ) {
+    ) throws EntityNotFoundException {
         final var bauabschnittModels = calculationRequestDto
             .getBauabschnitte()
             .stream()
