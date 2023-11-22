@@ -29,6 +29,7 @@ public class CalculationService {
      * @param sobonJahr Das SoBoN-Jahr, welches die städtebaulichen Orientierungswerte diktiert.
      * @param gueltigAb Das Gültigkeitsdatum der Stammdaten, welche die Umlegung diktieren.
      * @return Das {@link LangfristigerPlanungsursaechlicherBedarfModel}.
+     * @throws EntityNotFoundException falls bestimmte Stammdaten nicht aus der Datenbank extrahiert werden können.
      */
     public LangfristigerPlanungsursaechlicherBedarfModel calculateLangfristigerPlanungsursaechlicherBedarf(
         final List<BauabschnittModel> bauabschnitte,
