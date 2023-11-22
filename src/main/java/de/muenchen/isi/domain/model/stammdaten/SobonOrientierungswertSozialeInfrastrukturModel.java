@@ -2,7 +2,7 @@ package de.muenchen.isi.domain.model.stammdaten;
 
 import de.muenchen.isi.domain.model.BaseEntityModel;
 import de.muenchen.isi.infrastructure.entity.enums.Altersklasse;
-import de.muenchen.isi.infrastructure.entity.enums.Einrichtungstyp;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
@@ -22,7 +22,7 @@ public class SobonOrientierungswertSozialeInfrastrukturModel extends BaseEntityM
 
     private LocalDate gueltigAb;
 
-    private Einrichtungstyp einrichtungstyp;
+    private InfrastruktureinrichtungTyp einrichtungstyp;
 
     private Altersklasse altersklasse;
 

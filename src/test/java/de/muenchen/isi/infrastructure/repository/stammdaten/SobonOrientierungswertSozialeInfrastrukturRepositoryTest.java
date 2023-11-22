@@ -6,7 +6,7 @@ import static org.hamcrest.Matchers.is;
 import de.muenchen.isi.IsiBackendApplication;
 import de.muenchen.isi.TestConstants;
 import de.muenchen.isi.infrastructure.entity.enums.Altersklasse;
-import de.muenchen.isi.infrastructure.entity.enums.Einrichtungstyp;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
 import de.muenchen.isi.infrastructure.entity.stammdaten.SobonOrientierungswertSozialeInfrastruktur;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -44,7 +44,7 @@ public class SobonOrientierungswertSozialeInfrastrukturRepositoryTest {
         SobonOrientierungswertSozialeInfrastruktur orientierungswert1 = createOrientierungswert(
             "Test1",
             LocalDate.parse("2021-01-01"),
-            Einrichtungstyp.GRUNDSCHULE,
+            InfrastruktureinrichtungTyp.GRUNDSCHULE,
             Altersklasse.NULL_ZWEI,
             new BigDecimal("1000.1234"),
             new BigDecimal("1500.2345"),
@@ -62,7 +62,7 @@ public class SobonOrientierungswertSozialeInfrastrukturRepositoryTest {
         SobonOrientierungswertSozialeInfrastruktur orientierungswert2 = createOrientierungswert(
             "Test2",
             LocalDate.parse("2020-05-05"),
-            Einrichtungstyp.KINDERGARTEN,
+            InfrastruktureinrichtungTyp.KINDERGARTEN,
             Altersklasse.DREI_SECHSEINHALB,
             new BigDecimal("1000.1234"),
             new BigDecimal("2000.2345"),
@@ -80,7 +80,7 @@ public class SobonOrientierungswertSozialeInfrastrukturRepositoryTest {
         SobonOrientierungswertSozialeInfrastruktur orientierungswert3 = createOrientierungswert(
             "Test3",
             LocalDate.parse("2019-12-01"),
-            Einrichtungstyp.KINDERHORT,
+            InfrastruktureinrichtungTyp.GS_NACHMITTAG_BETREUUNG,
             Altersklasse.SECHSEINHALB_NEUNEINHALB,
             new BigDecimal("1000.1234"),
             new BigDecimal("3000.3456"),
@@ -122,7 +122,7 @@ public class SobonOrientierungswertSozialeInfrastrukturRepositoryTest {
 
         Optional<SobonOrientierungswertSozialeInfrastruktur> result4 =
             this.sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndFoerderartBezeichnungAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
-                    Einrichtungstyp.KINDERHORT,
+                    InfrastruktureinrichtungTyp.GS_NACHMITTAG_BETREUUNG,
                     orientierungswert3.getFoerderartBezeichnung(),
                     LocalDate.parse("2019-12-01")
                 );
@@ -145,7 +145,7 @@ public class SobonOrientierungswertSozialeInfrastrukturRepositoryTest {
         SobonOrientierungswertSozialeInfrastruktur orientierungswert1 = createOrientierungswert(
             "Test1",
             LocalDate.parse("2021-01-01"),
-            Einrichtungstyp.GRUNDSCHULE,
+            InfrastruktureinrichtungTyp.GRUNDSCHULE,
             Altersklasse.NULL_ZWEI,
             new BigDecimal("1000.1234"),
             new BigDecimal("1500.2345"),
@@ -163,7 +163,7 @@ public class SobonOrientierungswertSozialeInfrastrukturRepositoryTest {
         SobonOrientierungswertSozialeInfrastruktur orientierungswert2 = createOrientierungswert(
             "Test2",
             LocalDate.parse("2020-05-05"),
-            Einrichtungstyp.KINDERGARTEN,
+            InfrastruktureinrichtungTyp.KINDERGARTEN,
             Altersklasse.DREI_SECHSEINHALB,
             new BigDecimal("1000.1234"),
             new BigDecimal("2000.2345"),
@@ -181,7 +181,7 @@ public class SobonOrientierungswertSozialeInfrastrukturRepositoryTest {
         SobonOrientierungswertSozialeInfrastruktur orientierungswert3 = createOrientierungswert(
             "Test3",
             LocalDate.parse("2019-12-01"),
-            Einrichtungstyp.KINDERHORT,
+            InfrastruktureinrichtungTyp.GS_NACHMITTAG_BETREUUNG,
             Altersklasse.SECHSEINHALB_NEUNEINHALB,
             new BigDecimal("1000.1234"),
             new BigDecimal("3000.3456"),
@@ -209,7 +209,7 @@ public class SobonOrientierungswertSozialeInfrastrukturRepositoryTest {
 
         Optional<SobonOrientierungswertSozialeInfrastruktur> result2 =
             this.sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndFoerderartBezeichnungAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
-                    Einrichtungstyp.N_N,
+                    InfrastruktureinrichtungTyp.UNSPECIFIED,
                     orientierungswert1.getFoerderartBezeichnung(),
                     orientierungswert1.getGueltigAb()
                 );
@@ -223,7 +223,7 @@ public class SobonOrientierungswertSozialeInfrastrukturRepositoryTest {
 
         Optional<SobonOrientierungswertSozialeInfrastruktur> result6 =
             this.sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndFoerderartBezeichnungAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
-                    Einrichtungstyp.KINDERHORT,
+                    InfrastruktureinrichtungTyp.GS_NACHMITTAG_BETREUUNG,
                     orientierungswert3.getFoerderartBezeichnung(),
                     LocalDate.parse("2020-01-01")
                 );
@@ -236,7 +236,7 @@ public class SobonOrientierungswertSozialeInfrastrukturRepositoryTest {
     private SobonOrientierungswertSozialeInfrastruktur createOrientierungswert(
         String foerderartBezeichnung,
         LocalDate gueltigAb,
-        Einrichtungstyp einrichtungstyp,
+        InfrastruktureinrichtungTyp einrichtungstyp,
         Altersklasse altersklasse,
         BigDecimal einwohnerJahr1NachErsterstellung,
         BigDecimal einwohnerJahr2NachErsterstellung,

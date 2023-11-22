@@ -7,7 +7,7 @@ import de.muenchen.isi.domain.model.calculation.PlanungsursaechlicherBedarfModel
 import de.muenchen.isi.domain.model.calculation.PlanungsursaechlicherBedarfTestModel;
 import de.muenchen.isi.domain.model.calculation.WohneinheitenBedarfModel;
 import de.muenchen.isi.domain.model.stammdaten.SobonOrientierungswertSozialeInfrastrukturModel;
-import de.muenchen.isi.infrastructure.entity.enums.Einrichtungstyp;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
 import de.muenchen.isi.infrastructure.repository.stammdaten.SobonOrientierungswertSozialeInfrastrukturRepository;
 import java.math.BigDecimal;
@@ -54,7 +54,7 @@ public class LangfristigerPlanungsursaechlicherBedarfService {
             this.getSobonOrientierungswertForFoerderart(
                     planungsursaechlicherBedarf,
                     sobonJahr,
-                    Einrichtungstyp.KINDERKRIPPE
+                    InfrastruktureinrichtungTyp.KINDERKRIPPE
                 );
 
         // Berechnung der Gesamtanzahl der Kinder je Jahr
@@ -126,7 +126,7 @@ public class LangfristigerPlanungsursaechlicherBedarfService {
     protected Map<String, SobonOrientierungswertSozialeInfrastrukturModel> getSobonOrientierungswertForFoerderart(
         final PlanungsursaechlicherBedarfModel planungsursaechlicherBedarf,
         final SobonOrientierungswertJahr sobonJahr,
-        final Einrichtungstyp einrichtungstyp
+        final InfrastruktureinrichtungTyp einrichtungstyp
     ) {
         return planungsursaechlicherBedarf
             .getWohneinheitenBedarfe()

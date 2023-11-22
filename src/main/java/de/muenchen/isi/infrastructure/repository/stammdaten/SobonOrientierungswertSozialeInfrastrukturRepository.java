@@ -1,6 +1,6 @@
 package de.muenchen.isi.infrastructure.repository.stammdaten;
 
-import de.muenchen.isi.infrastructure.entity.enums.Einrichtungstyp;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
 import de.muenchen.isi.infrastructure.entity.stammdaten.SobonOrientierungswertSozialeInfrastruktur;
 import java.time.LocalDate;
 import java.util.Optional;
@@ -22,7 +22,7 @@ public interface SobonOrientierungswertSozialeInfrastrukturRepository
     Optional<
         SobonOrientierungswertSozialeInfrastruktur
     > findFirstByEinrichtungstypAndFoerderartBezeichnungAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
-        final Einrichtungstyp einrichtungstyp,
+        final InfrastruktureinrichtungTyp einrichtungstyp,
         final String foerderartBezeichnung,
         final LocalDate gueltigAb
     );
