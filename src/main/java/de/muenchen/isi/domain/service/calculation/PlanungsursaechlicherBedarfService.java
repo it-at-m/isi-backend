@@ -121,7 +121,7 @@ public class PlanungsursaechlicherBedarfService {
             .collect(Collectors.toList());
     }
 
-    private PlanungsursaechlicherBedarfModel setVersorgungsquoteAndGruppenstaerke(
+    protected PlanungsursaechlicherBedarfModel setVersorgungsquoteAndGruppenstaerke(
         final PlanungsursaechlicherBedarfModel planungsursaechlicherBedarf,
         final VersorgungsquoteGruppenstaerke versorgungsquoteGruppenstaerke
     ) {
@@ -192,16 +192,6 @@ public class PlanungsursaechlicherBedarfService {
             );
     }
 
-    private PlanungsursaechlicherBedarfModel createPlanungsursaechlicherBedarfTest(
-        final Integer jahr,
-        final BigDecimal anzahlKinderGesamt
-    ) {
-        final var planungsursaechlicherBedarf = new PlanungsursaechlicherBedarfModel();
-        planungsursaechlicherBedarf.setJahr(jahr);
-        planungsursaechlicherBedarf.setAnzahlKinderGesamt(anzahlKinderGesamt);
-        return planungsursaechlicherBedarf;
-    }
-
     protected List<PlanungsursaechlicherBedarfModel> calculatePlanungsursaechlicherBedarfe(
         final List<PlanungsursachlicheWohneinheitenModel> planungsursachlicheWohneinheiten,
         final SobonOrientierungswertSozialeInfrastrukturModel sobonOrientierungswertSozialeInfrastruktur
@@ -220,7 +210,7 @@ public class PlanungsursaechlicherBedarfService {
                     )
                     .setScale(SobonOrientierungswertSozialeInfrastrukturModel.SCALE, RoundingMode.HALF_EVEN);
             planungsursaechlicheBedarfe.add(
-                createPlanungsursaechlicherBedarfTest(wohneinheiten.getJahr(), anzahlKinderGesamt)
+                createPlanungsursaechlicherBedarf(wohneinheiten.getJahr(), anzahlKinderGesamt)
             );
         }
         if (1 < planungsursachlicheWohneinheiten.size()) {
@@ -234,7 +224,7 @@ public class PlanungsursaechlicherBedarfService {
                     .add(planungsursaechlicheBedarfe.get(0).getAnzahlKinderGesamt())
                     .setScale(SobonOrientierungswertSozialeInfrastrukturModel.SCALE, RoundingMode.HALF_EVEN);
             planungsursaechlicheBedarfe.add(
-                createPlanungsursaechlicherBedarfTest(wohneinheiten.getJahr(), anzahlKinderGesamt)
+                createPlanungsursaechlicherBedarf(wohneinheiten.getJahr(), anzahlKinderGesamt)
             );
         }
         if (2 < planungsursachlicheWohneinheiten.size()) {
@@ -248,7 +238,7 @@ public class PlanungsursaechlicherBedarfService {
                     .add(planungsursaechlicheBedarfe.get(1).getAnzahlKinderGesamt())
                     .setScale(SobonOrientierungswertSozialeInfrastrukturModel.SCALE, RoundingMode.HALF_EVEN);
             planungsursaechlicheBedarfe.add(
-                createPlanungsursaechlicherBedarfTest(wohneinheiten.getJahr(), anzahlKinderGesamt)
+                createPlanungsursaechlicherBedarf(wohneinheiten.getJahr(), anzahlKinderGesamt)
             );
         }
         if (3 < planungsursachlicheWohneinheiten.size()) {
@@ -262,7 +252,7 @@ public class PlanungsursaechlicherBedarfService {
                     .add(planungsursaechlicheBedarfe.get(2).getAnzahlKinderGesamt())
                     .setScale(SobonOrientierungswertSozialeInfrastrukturModel.SCALE, RoundingMode.HALF_EVEN);
             planungsursaechlicheBedarfe.add(
-                createPlanungsursaechlicherBedarfTest(wohneinheiten.getJahr(), anzahlKinderGesamt)
+                createPlanungsursaechlicherBedarf(wohneinheiten.getJahr(), anzahlKinderGesamt)
             );
         }
         if (4 < planungsursachlicheWohneinheiten.size()) {
@@ -276,7 +266,7 @@ public class PlanungsursaechlicherBedarfService {
                     .add(planungsursaechlicheBedarfe.get(3).getAnzahlKinderGesamt())
                     .setScale(SobonOrientierungswertSozialeInfrastrukturModel.SCALE, RoundingMode.HALF_EVEN);
             planungsursaechlicheBedarfe.add(
-                createPlanungsursaechlicherBedarfTest(wohneinheiten.getJahr(), anzahlKinderGesamt)
+                createPlanungsursaechlicherBedarf(wohneinheiten.getJahr(), anzahlKinderGesamt)
             );
         }
         if (5 < planungsursachlicheWohneinheiten.size()) {
@@ -290,7 +280,7 @@ public class PlanungsursaechlicherBedarfService {
                     .add(planungsursaechlicheBedarfe.get(4).getAnzahlKinderGesamt())
                     .setScale(SobonOrientierungswertSozialeInfrastrukturModel.SCALE, RoundingMode.HALF_EVEN);
             planungsursaechlicheBedarfe.add(
-                createPlanungsursaechlicherBedarfTest(wohneinheiten.getJahr(), anzahlKinderGesamt)
+                createPlanungsursaechlicherBedarf(wohneinheiten.getJahr(), anzahlKinderGesamt)
             );
         }
         if (6 < planungsursachlicheWohneinheiten.size()) {
@@ -304,7 +294,7 @@ public class PlanungsursaechlicherBedarfService {
                     .add(planungsursaechlicheBedarfe.get(5).getAnzahlKinderGesamt())
                     .setScale(SobonOrientierungswertSozialeInfrastrukturModel.SCALE, RoundingMode.HALF_EVEN);
             planungsursaechlicheBedarfe.add(
-                createPlanungsursaechlicherBedarfTest(wohneinheiten.getJahr(), anzahlKinderGesamt)
+                createPlanungsursaechlicherBedarf(wohneinheiten.getJahr(), anzahlKinderGesamt)
             );
         }
         if (7 < planungsursachlicheWohneinheiten.size()) {
@@ -318,7 +308,7 @@ public class PlanungsursaechlicherBedarfService {
                     .add(planungsursaechlicheBedarfe.get(6).getAnzahlKinderGesamt())
                     .setScale(SobonOrientierungswertSozialeInfrastrukturModel.SCALE, RoundingMode.HALF_EVEN);
             planungsursaechlicheBedarfe.add(
-                createPlanungsursaechlicherBedarfTest(wohneinheiten.getJahr(), anzahlKinderGesamt)
+                createPlanungsursaechlicherBedarf(wohneinheiten.getJahr(), anzahlKinderGesamt)
             );
         }
         if (8 < planungsursachlicheWohneinheiten.size()) {
@@ -332,7 +322,7 @@ public class PlanungsursaechlicherBedarfService {
                     .add(planungsursaechlicheBedarfe.get(7).getAnzahlKinderGesamt())
                     .setScale(SobonOrientierungswertSozialeInfrastrukturModel.SCALE, RoundingMode.HALF_EVEN);
             planungsursaechlicheBedarfe.add(
-                createPlanungsursaechlicherBedarfTest(wohneinheiten.getJahr(), anzahlKinderGesamt)
+                createPlanungsursaechlicherBedarf(wohneinheiten.getJahr(), anzahlKinderGesamt)
             );
         }
         if (9 < planungsursachlicheWohneinheiten.size()) {
@@ -346,7 +336,7 @@ public class PlanungsursaechlicherBedarfService {
                     .add(planungsursaechlicheBedarfe.get(8).getAnzahlKinderGesamt())
                     .setScale(SobonOrientierungswertSozialeInfrastrukturModel.SCALE, RoundingMode.HALF_EVEN);
             planungsursaechlicheBedarfe.add(
-                createPlanungsursaechlicherBedarfTest(wohneinheiten.getJahr(), anzahlKinderGesamt)
+                createPlanungsursaechlicherBedarf(wohneinheiten.getJahr(), anzahlKinderGesamt)
             );
         }
         if (10 < planungsursachlicheWohneinheiten.size()) {
@@ -360,7 +350,7 @@ public class PlanungsursaechlicherBedarfService {
                     .add(planungsursaechlicheBedarfe.get(9).getAnzahlKinderGesamt())
                     .setScale(SobonOrientierungswertSozialeInfrastrukturModel.SCALE, RoundingMode.HALF_EVEN);
             planungsursaechlicheBedarfe.add(
-                createPlanungsursaechlicherBedarfTest(wohneinheiten.getJahr(), anzahlKinderGesamt)
+                createPlanungsursaechlicherBedarf(wohneinheiten.getJahr(), anzahlKinderGesamt)
             );
         }
         if (11 < planungsursachlicheWohneinheiten.size()) {
@@ -374,7 +364,7 @@ public class PlanungsursaechlicherBedarfService {
                     .add(planungsursaechlicheBedarfe.get(10).getAnzahlKinderGesamt())
                     .setScale(SobonOrientierungswertSozialeInfrastrukturModel.SCALE, RoundingMode.HALF_EVEN);
             planungsursaechlicheBedarfe.add(
-                createPlanungsursaechlicherBedarfTest(wohneinheiten.getJahr(), anzahlKinderGesamt)
+                createPlanungsursaechlicherBedarf(wohneinheiten.getJahr(), anzahlKinderGesamt)
             );
         }
         if (12 < planungsursachlicheWohneinheiten.size()) {
@@ -388,7 +378,7 @@ public class PlanungsursaechlicherBedarfService {
                     .add(planungsursaechlicheBedarfe.get(11).getAnzahlKinderGesamt())
                     .setScale(SobonOrientierungswertSozialeInfrastrukturModel.SCALE, RoundingMode.HALF_EVEN);
             planungsursaechlicheBedarfe.add(
-                createPlanungsursaechlicherBedarfTest(wohneinheiten.getJahr(), anzahlKinderGesamt)
+                createPlanungsursaechlicherBedarf(wohneinheiten.getJahr(), anzahlKinderGesamt)
             );
         }
         if (13 < planungsursachlicheWohneinheiten.size()) {
@@ -402,7 +392,7 @@ public class PlanungsursaechlicherBedarfService {
                     .add(planungsursaechlicheBedarfe.get(12).getAnzahlKinderGesamt())
                     .setScale(SobonOrientierungswertSozialeInfrastrukturModel.SCALE, RoundingMode.HALF_EVEN);
             planungsursaechlicheBedarfe.add(
-                createPlanungsursaechlicherBedarfTest(wohneinheiten.getJahr(), anzahlKinderGesamt)
+                createPlanungsursaechlicherBedarf(wohneinheiten.getJahr(), anzahlKinderGesamt)
             );
         }
         if (14 < planungsursachlicheWohneinheiten.size()) {
@@ -416,7 +406,7 @@ public class PlanungsursaechlicherBedarfService {
                     .add(planungsursaechlicheBedarfe.get(13).getAnzahlKinderGesamt())
                     .setScale(SobonOrientierungswertSozialeInfrastrukturModel.SCALE, RoundingMode.HALF_EVEN);
             planungsursaechlicheBedarfe.add(
-                createPlanungsursaechlicherBedarfTest(wohneinheiten.getJahr(), anzahlKinderGesamt)
+                createPlanungsursaechlicherBedarf(wohneinheiten.getJahr(), anzahlKinderGesamt)
             );
         }
         if (15 < planungsursachlicheWohneinheiten.size()) {
@@ -430,7 +420,7 @@ public class PlanungsursaechlicherBedarfService {
                     .add(planungsursaechlicheBedarfe.get(14).getAnzahlKinderGesamt())
                     .setScale(SobonOrientierungswertSozialeInfrastrukturModel.SCALE, RoundingMode.HALF_EVEN);
             planungsursaechlicheBedarfe.add(
-                createPlanungsursaechlicherBedarfTest(wohneinheiten.getJahr(), anzahlKinderGesamt)
+                createPlanungsursaechlicherBedarf(wohneinheiten.getJahr(), anzahlKinderGesamt)
             );
         }
         if (16 < planungsursachlicheWohneinheiten.size()) {
@@ -444,7 +434,7 @@ public class PlanungsursaechlicherBedarfService {
                     .add(planungsursaechlicheBedarfe.get(15).getAnzahlKinderGesamt())
                     .setScale(SobonOrientierungswertSozialeInfrastrukturModel.SCALE, RoundingMode.HALF_EVEN);
             planungsursaechlicheBedarfe.add(
-                createPlanungsursaechlicherBedarfTest(wohneinheiten.getJahr(), anzahlKinderGesamt)
+                createPlanungsursaechlicherBedarf(wohneinheiten.getJahr(), anzahlKinderGesamt)
             );
         }
         if (17 < planungsursachlicheWohneinheiten.size()) {
@@ -458,7 +448,7 @@ public class PlanungsursaechlicherBedarfService {
                     .add(planungsursaechlicheBedarfe.get(16).getAnzahlKinderGesamt())
                     .setScale(SobonOrientierungswertSozialeInfrastrukturModel.SCALE, RoundingMode.HALF_EVEN);
             planungsursaechlicheBedarfe.add(
-                createPlanungsursaechlicherBedarfTest(wohneinheiten.getJahr(), anzahlKinderGesamt)
+                createPlanungsursaechlicherBedarf(wohneinheiten.getJahr(), anzahlKinderGesamt)
             );
         }
         if (18 < planungsursachlicheWohneinheiten.size()) {
@@ -472,7 +462,7 @@ public class PlanungsursaechlicherBedarfService {
                     .add(planungsursaechlicheBedarfe.get(17).getAnzahlKinderGesamt())
                     .setScale(SobonOrientierungswertSozialeInfrastrukturModel.SCALE, RoundingMode.HALF_EVEN);
             planungsursaechlicheBedarfe.add(
-                createPlanungsursaechlicherBedarfTest(wohneinheiten.getJahr(), anzahlKinderGesamt)
+                createPlanungsursaechlicherBedarf(wohneinheiten.getJahr(), anzahlKinderGesamt)
             );
         }
         if (19 < planungsursachlicheWohneinheiten.size()) {
@@ -486,9 +476,19 @@ public class PlanungsursaechlicherBedarfService {
                     .add(planungsursaechlicheBedarfe.get(18).getAnzahlKinderGesamt())
                     .setScale(SobonOrientierungswertSozialeInfrastrukturModel.SCALE, RoundingMode.HALF_EVEN);
             planungsursaechlicheBedarfe.add(
-                createPlanungsursaechlicherBedarfTest(wohneinheiten.getJahr(), anzahlKinderGesamt)
+                createPlanungsursaechlicherBedarf(wohneinheiten.getJahr(), anzahlKinderGesamt)
             );
         }
         return planungsursaechlicheBedarfe;
+    }
+
+    protected PlanungsursaechlicherBedarfModel createPlanungsursaechlicherBedarf(
+        final Integer jahr,
+        final BigDecimal anzahlKinderGesamt
+    ) {
+        final var planungsursaechlicherBedarf = new PlanungsursaechlicherBedarfModel();
+        planungsursaechlicherBedarf.setJahr(jahr);
+        planungsursaechlicherBedarf.setAnzahlKinderGesamt(anzahlKinderGesamt);
+        return planungsursaechlicherBedarf;
     }
 }
