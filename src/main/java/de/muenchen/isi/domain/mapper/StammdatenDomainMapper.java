@@ -4,11 +4,13 @@ import de.muenchen.isi.configuration.MapstructConfiguration;
 import de.muenchen.isi.domain.model.stammdaten.FoerdermixStammModel;
 import de.muenchen.isi.domain.model.stammdaten.SobonOrientierungswertSozialeInfrastrukturModel;
 import de.muenchen.isi.domain.model.stammdaten.StaedtebaulicheOrientierungswertModel;
+import de.muenchen.isi.domain.model.stammdaten.VersorgungsquoteGruppenstaerkeModel;
 import de.muenchen.isi.infrastructure.csv.SobonOrientierungswertSozialeInfrastrukturCsv;
 import de.muenchen.isi.infrastructure.csv.StaedtebaulicheOrientierungswertCsv;
 import de.muenchen.isi.infrastructure.entity.stammdaten.FoerdermixStamm;
 import de.muenchen.isi.infrastructure.entity.stammdaten.SobonOrientierungswertSozialeInfrastruktur;
 import de.muenchen.isi.infrastructure.entity.stammdaten.StaedtebaulicheOrientierungswert;
+import de.muenchen.isi.infrastructure.entity.stammdaten.VersorgungsquoteGruppenstaerke;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
@@ -50,4 +52,8 @@ public interface StammdatenDomainMapper {
     FoerdermixStammModel entity2Model(final FoerdermixStamm entity);
 
     FoerdermixStamm model2Entity(final FoerdermixStammModel model);
+
+    VersorgungsquoteGruppenstaerkeModel entity2Model(final VersorgungsquoteGruppenstaerke entity);
+
+    VersorgungsquoteGruppenstaerke model2entity(final VersorgungsquoteGruppenstaerkeModel model);
 }
