@@ -1,7 +1,6 @@
 package de.muenchen.isi.domain.service.calculation;
 
 import de.muenchen.isi.domain.mapper.StammdatenDomainMapper;
-import de.muenchen.isi.domain.model.BauabschnittModel;
 import de.muenchen.isi.domain.model.calculation.LangfristigerPlanungsursaechlicherBedarfModel;
 import de.muenchen.isi.domain.model.calculation.PlanungsursaechlicherBedarfModel;
 import de.muenchen.isi.domain.model.calculation.PlanungsursaechlicherBedarfTestModel;
@@ -10,6 +9,7 @@ import de.muenchen.isi.domain.model.stammdaten.SobonOrientierungswertSozialeInfr
 import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
 import de.muenchen.isi.infrastructure.repository.stammdaten.SobonOrientierungswertSozialeInfrastrukturRepository;
+import de.muenchen.isi.infrastructure.repository.stammdaten.VersorgungsquoteGruppenstaerkeRepository;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
@@ -31,31 +31,28 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class LangfristigerPlanungsursaechlicherBedarfService {
 
-    private final PlanungsursaechlicheBedarfService planungsursaechlicheBedarfService;
-
     private final SobonOrientierungswertSozialeInfrastrukturRepository sobonOrientierungswertSozialeInfrastrukturRepository;
+
+    private final VersorgungsquoteGruppenstaerkeRepository versorgungsquoteGruppenstaerkeRepository;
 
     private final StammdatenDomainMapper stammdatenDomainMapper;
 
-    public LangfristigerPlanungsursaechlicherBedarfModel calculateLangfristigerPlanungsursaechlicherBedarfForKinderkrippe(
-        final List<BauabschnittModel> bauabschnitte,
+    public List<PlanungsursaechlicherBedarfTestModel> calculateLangfristigerPlanungsursaechlicherBedarf(
+        final InfrastruktureinrichtungTyp einrichtung,
+        final PlanungsursaechlicherBedarfModel planungsursaechlicherBedarf,
         final SobonOrientierungswertJahr sobonJahr,
         final LocalDate gueltigAb
     ) {
-        final var planungsursaechlicherBedarf = planungsursaechlicheBedarfService.calculatePlanungsursaechlicherBedarf(
-            bauabschnitte,
-            sobonJahr,
-            gueltigAb
-        );
-
         final var wohneinheitenBedarfForFoerderart = getWohneinheitenBedarfForFoerderart(planungsursaechlicherBedarf);
 
         final var sobonOrientierungswertForFoerderart =
-            this.getSobonOrientierungswertForFoerderart(
-                    planungsursaechlicherBedarf,
-                    sobonJahr,
-                    InfrastruktureinrichtungTyp.KINDERKRIPPE
-                );
+            this.getSobonOrientierungswertForFoerderart(planungsursaechlicherBedarf, sobonJahr, einrichtung);
+
+        final var versorgungsquoteGruppenstaerke =
+            versorgungsquoteGruppenstaerkeRepository.findFirstByInfrastruktureinrichtungTypAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
+                einrichtung,
+                gueltigAb
+            );
 
         // Berechnung der Gesamtanzahl der Kinder je Jahr
         final var planungsursaechlicherBedarfe = wohneinheitenBedarfForFoerderart
