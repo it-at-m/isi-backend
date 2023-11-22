@@ -5,8 +5,8 @@ import javax.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
-public class PlanungsursaechlicherBedarfDto {
+public class LangfristigerPlanungsursaechlicherBedarfDto {
 
     @NotNull
-    private List<WohneinheitenBedarfDto> wohneinheitenBedarfe;
+    private List<PlanungsursachlicheWohneinheitenDto> wohneinheiten;
 }

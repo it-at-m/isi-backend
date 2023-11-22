@@ -1,17 +1,19 @@
 package de.muenchen.isi.api.controller;
 
 import de.muenchen.isi.api.dto.calculation.CalculationRequestDto;
-import de.muenchen.isi.api.dto.calculation.PlanungsursaechlicherBedarfDto;
+import de.muenchen.isi.api.dto.calculation.LangfristigerPlanungsursaechlicherBedarfDto;
 import de.muenchen.isi.api.dto.error.InformationResponseDto;
+import de.muenchen.isi.api.mapper.BauabschnittApiMapper;
 import de.muenchen.isi.api.mapper.PlanungsursaechlicherBedarfApiMapper;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
-import de.muenchen.isi.domain.service.calculation.PlanungsursaechlicheBedarfService;
+import de.muenchen.isi.domain.service.calculation.CalculationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.stream.Collectors;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -34,13 +36,15 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 public class CalculationController {
 
-    private final PlanungsursaechlicheBedarfService planungsursaechlicheBedarfService;
+    private final CalculationService calculationService;
+
+    private final BauabschnittApiMapper bauabschnittApiMapper;
 
     private final PlanungsursaechlicherBedarfApiMapper planungsursaechlicherBedarfApiMapper;
 
     @GetMapping("/planungsursaechlich")
     @Transactional(rollbackFor = OptimisticLockingException.class)
-    @Operation(summary = "Berechnung der planungsursächlichen Bedarfe")
+    @Operation(summary = "Berechnung des langfristigen planungsursächlichen Bedarfes")
     @ApiResponses(
         value = {
             @ApiResponse(responseCode = "200", description = "OK -> Berechnung konnte durchgeführt werden."),
@@ -52,11 +56,18 @@ public class CalculationController {
         }
     )
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_READ_ABFRAGE.name())")
-    public ResponseEntity<PlanungsursaechlicherBedarfDto> calculatePlanungsursaechlicherBedarf(
+    public ResponseEntity<
+        LangfristigerPlanungsursaechlicherBedarfDto
+    > calculateLangfristigerPlanungsursaechlicherBedarf(
         @RequestBody @Valid @NotNull final CalculationRequestDto calculationRequestDto
     ) {
-        final var bedarfModel = planungsursaechlicheBedarfService.calculatePlanungsursaechlicherBedarf(
-            calculationRequestDto.getBauabschnitte(),
+        final var bauabschnittModels = calculationRequestDto
+            .getBauabschnitte()
+            .stream()
+            .map(bauabschnittApiMapper::dto2Model)
+            .collect(Collectors.toList());
+        final var bedarfModel = calculationService.calculateLangfristigerPlanungsursaechlicherBedarf(
+            bauabschnittModels,
             calculationRequestDto.getSobonJahr(),
             calculationRequestDto.getGueltigAb()
         );
