@@ -1,5 +1,6 @@
 package de.muenchen.isi.domain.service.calculation;
 
+import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.mapper.StammdatenDomainMapper;
 import de.muenchen.isi.domain.model.calculation.PlanungsursaechlicherBedarfModel;
 import de.muenchen.isi.domain.model.calculation.PlanungsursaechlicherBedarfTestModel;
@@ -7,6 +8,7 @@ import de.muenchen.isi.domain.model.calculation.WohneinheitenBedarfModel;
 import de.muenchen.isi.domain.model.stammdaten.SobonOrientierungswertSozialeInfrastrukturModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
+import de.muenchen.isi.infrastructure.entity.stammdaten.VersorgungsquoteGruppenstaerke;
 import de.muenchen.isi.infrastructure.repository.stammdaten.SobonOrientierungswertSozialeInfrastrukturRepository;
 import de.muenchen.isi.infrastructure.repository.stammdaten.VersorgungsquoteGruppenstaerkeRepository;
 import java.math.BigDecimal;
@@ -41,17 +43,25 @@ public class LangfristigerPlanungsursaechlicherBedarfService {
         final PlanungsursaechlicherBedarfModel planungsursaechlicherBedarf,
         final SobonOrientierungswertJahr sobonJahr,
         final LocalDate gueltigAb
-    ) {
+    ) throws EntityNotFoundException {
         final var wohneinheitenBedarfForFoerderart = getWohneinheitenBedarfForFoerderart(planungsursaechlicherBedarf);
 
         final var sobonOrientierungswertForFoerderart =
             this.getSobonOrientierungswertForFoerderart(planungsursaechlicherBedarf, sobonJahr, einrichtung);
 
-        final var versorgungsquoteGruppenstaerke =
-            versorgungsquoteGruppenstaerkeRepository.findFirstByInfrastruktureinrichtungTypAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
+        final var versorgungsquoteGruppenstaerke = versorgungsquoteGruppenstaerkeRepository
+            .findFirstByInfrastruktureinrichtungTypAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
                 einrichtung,
                 gueltigAb
-            );
+            )
+            .orElseThrow(() -> {
+                final var message =
+                    "Das Stammdatum der Versorgungsquote und Gruppenstärke für den Einrichtungstyp " +
+                    einrichtung +
+                    "wurde nicht gefunden.";
+                log.error(message);
+                return new EntityNotFoundException(message);
+            });
 
         // Berechnung Gesamtanzahl der Kinder je Jahr
         return wohneinheitenBedarfForFoerderart
@@ -81,8 +91,28 @@ public class LangfristigerPlanungsursaechlicherBedarfService {
                     .reduce(new PlanungsursaechlicherBedarfTestModel(), this::add)
             )
             .sorted(Comparator.comparing(PlanungsursaechlicherBedarfTestModel::getJahr))
-            // .map -> Berechnen der Anzahl Kinder je Krippe (generisch) sowie der Anzahl der Gruppen
+            .map(planungsursaechlicherBedarfTest ->
+                setVersorgungsquoteAndGruppenstaerke(planungsursaechlicherBedarfTest, versorgungsquoteGruppenstaerke)
+            )
             .collect(Collectors.toList());
+    }
+
+    private PlanungsursaechlicherBedarfTestModel setVersorgungsquoteAndGruppenstaerke(
+        final PlanungsursaechlicherBedarfTestModel planungsursaechlicherBedarf,
+        final VersorgungsquoteGruppenstaerke versorgungsquoteGruppenstaerke
+    ) {
+        final var anzahlKinderGesamt = planungsursaechlicherBedarf.getAnzahlKinderGesamt();
+        final var anzahlKinderZuVersorgen = anzahlKinderGesamt.multiply(
+            versorgungsquoteGruppenstaerke.getVersorgungsquotePlanungsursaechlich()
+        );
+        final var anzahlGruppen = anzahlKinderZuVersorgen.divide(
+            BigDecimal.valueOf(versorgungsquoteGruppenstaerke.getGruppenstaerke()),
+            2,
+            RoundingMode.HALF_EVEN
+        );
+        planungsursaechlicherBedarf.setAnzahlKinderZuVersorgen(anzahlKinderZuVersorgen);
+        planungsursaechlicherBedarf.setAnzahlGruppen(anzahlGruppen);
+        return planungsursaechlicherBedarf;
     }
 
     protected PlanungsursaechlicherBedarfTestModel add(
