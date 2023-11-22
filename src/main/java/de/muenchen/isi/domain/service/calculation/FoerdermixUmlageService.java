@@ -61,7 +61,7 @@ public class FoerdermixUmlageService {
         return umgelegterFoerdermix;
     }
 
-    private void mergeFoerderart(
+    protected void mergeFoerderart(
         final List<FoerderartModel> foerderarten,
         final String bezeichnung,
         final BigDecimal anteilProzent

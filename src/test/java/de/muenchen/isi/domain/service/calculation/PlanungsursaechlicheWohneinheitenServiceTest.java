@@ -15,8 +15,7 @@ import de.muenchen.isi.domain.model.BaugebietModel;
 import de.muenchen.isi.domain.model.BaurateModel;
 import de.muenchen.isi.domain.model.FoerderartModel;
 import de.muenchen.isi.domain.model.FoerdermixModel;
-import de.muenchen.isi.domain.model.calculation.PlanungsursaechlicherBedarfModel;
-import de.muenchen.isi.domain.model.calculation.WohneinheitenBedarfModel;
+import de.muenchen.isi.domain.model.calculation.PlanungsursachlicheWohneinheitenModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
 import de.muenchen.isi.infrastructure.entity.stammdaten.StaedtebaulicheOrientierungswert;
 import de.muenchen.isi.infrastructure.repository.stammdaten.StaedtebaulicheOrientierungswertRepository;
@@ -36,9 +35,9 @@ import org.mockito.quality.Strictness;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-public class PlanungsursaechlicheBedarfServiceTest {
+public class PlanungsursaechlicheWohneinheitenServiceTest {
 
-    private PlanungsursaechlicheBedarfService planungsursaechlicheBedarfService;
+    private PlanungsursaechlicheWohneinheitenService planungsursaechlicheWohneinheitenService;
 
     @Mock
     private UmlegungFoerderartenRepository umlegungFoerderartenRepository;
@@ -49,13 +48,16 @@ public class PlanungsursaechlicheBedarfServiceTest {
     @BeforeEach
     public void beforeEach() {
         final var foerdermixUmlageService = new FoerdermixUmlageService(umlegungFoerderartenRepository);
-        this.planungsursaechlicheBedarfService =
-            new PlanungsursaechlicheBedarfService(foerdermixUmlageService, staedtebaulicheOrientierungswertRepository);
+        this.planungsursaechlicheWohneinheitenService =
+            new PlanungsursaechlicheWohneinheitenService(
+                foerdermixUmlageService,
+                staedtebaulicheOrientierungswertRepository
+            );
         Mockito.reset(umlegungFoerderartenRepository, staedtebaulicheOrientierungswertRepository);
     }
 
     @Test
-    void calculatePlanungsursaechlicherBedarf() {
+    void calculatePlanungsursaechlicheWohneinheitenTest() {
         // Input
 
         final var FF100 = new FoerderartModel();
@@ -192,34 +194,31 @@ public class PlanungsursaechlicheBedarfServiceTest {
 
         // Erwarteter Output
 
-        final var expected = new PlanungsursaechlicherBedarfModel();
-        expected.setWohneinheitenBedarfe(
-            List.of(
-                new WohneinheitenBedarfModel(FF, 2024, new BigDecimal("100")),
-                new WohneinheitenBedarfModel(FF, 2025, new BigDecimal("25.0000")),
-                new WohneinheitenBedarfModel(EOF, 2024, new BigDecimal("55.5555555556")),
-                new WohneinheitenBedarfModel(EOF, 2025, new BigDecimal("75.0000")),
-                new WohneinheitenBedarfModel(MM, 2024, new BigDecimal("150.0000000000")),
-                new WohneinheitenBedarfModel(MM, 2025, new BigDecimal("75.0000000000")),
-                new WohneinheitenBedarfModel(FH, 2025, new BigDecimal("140.6250000000")),
-                new WohneinheitenBedarfModel(
-                    PlanungsursaechlicheBedarfService.SUMMARY_NAME,
-                    2024,
-                    new BigDecimal("305.5555555556")
-                ),
-                new WohneinheitenBedarfModel(
-                    PlanungsursaechlicheBedarfService.SUMMARY_NAME,
-                    2025,
-                    new BigDecimal("315.6250000000")
-                )
+        final var expected = List.of(
+            new PlanungsursachlicheWohneinheitenModel(FF, 2024, new BigDecimal("100")),
+            new PlanungsursachlicheWohneinheitenModel(FF, 2025, new BigDecimal("25.0000")),
+            new PlanungsursachlicheWohneinheitenModel(EOF, 2024, new BigDecimal("55.5555555556")),
+            new PlanungsursachlicheWohneinheitenModel(EOF, 2025, new BigDecimal("75.0000")),
+            new PlanungsursachlicheWohneinheitenModel(MM, 2024, new BigDecimal("150.0000000000")),
+            new PlanungsursachlicheWohneinheitenModel(MM, 2025, new BigDecimal("75.0000000000")),
+            new PlanungsursachlicheWohneinheitenModel(FH, 2025, new BigDecimal("140.6250000000")),
+            new PlanungsursachlicheWohneinheitenModel(
+                PlanungsursaechlicheWohneinheitenService.SUMMARY_NAME,
+                2024,
+                new BigDecimal("305.5555555556")
+            ),
+            new PlanungsursachlicheWohneinheitenModel(
+                PlanungsursaechlicheWohneinheitenService.SUMMARY_NAME,
+                2025,
+                new BigDecimal("315.6250000000")
             )
         );
 
-        final var actual = planungsursaechlicheBedarfService.calculatePlanungsursaechlicherBedarf(
+        final var actual = planungsursaechlicheWohneinheitenService.calculatePlanungsursaechlicheWohneinheiten(
             bauabschnitte,
             SobonOrientierungswertJahr.JAHR_2022,
             LocalDate.EPOCH
         );
-        assertThat(actual.getWohneinheitenBedarfe(), containsInAnyOrder(expected.getWohneinheitenBedarfe().toArray()));
+        assertThat(actual, containsInAnyOrder(expected.toArray()));
     }
 }
