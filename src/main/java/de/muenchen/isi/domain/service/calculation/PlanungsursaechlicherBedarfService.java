@@ -94,7 +94,7 @@ public class PlanungsursaechlicherBedarfService {
             .stream()
             .flatMap(foerderart ->
                 // Ermittlung der planungsursächlichen Bedarfe je Förderart für 20 Jahre
-                this.calculatePlanungsursaechlicherBedarfe(
+                this.calculatePlanungsursaechlicheBedarfe(
                         planungsursachlicheWohneinheitenForFoerderart.get(foerderart),
                         sobonOrientierungswertForFoerderart.get(foerderart)
                     )
@@ -192,7 +192,7 @@ public class PlanungsursaechlicherBedarfService {
             );
     }
 
-    protected List<PlanungsursaechlicherBedarfModel> calculatePlanungsursaechlicherBedarfe(
+    protected List<PlanungsursaechlicherBedarfModel> calculatePlanungsursaechlicheBedarfe(
         final List<PlanungsursachlicheWohneinheitenModel> planungsursachlicheWohneinheiten,
         final SobonOrientierungswertSozialeInfrastrukturModel sobonOrientierungswertSozialeInfrastruktur
     ) {
