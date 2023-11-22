@@ -5,7 +5,7 @@ import static org.hamcrest.Matchers.is;
 
 import de.muenchen.isi.IsiBackendApplication;
 import de.muenchen.isi.TestConstants;
-import de.muenchen.isi.infrastructure.entity.enums.Bildungseinrichtung;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
 import de.muenchen.isi.infrastructure.entity.stammdaten.VersorgungsquoteGruppenstaerke;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -43,7 +43,7 @@ public class VersorgungsquoteGruppenstaerkeRepositoryTest {
     void findUmlegungFoerderartenbyBezeichnungAndDatum() {
         VersorgungsquoteGruppenstaerke bildungseinrichtung1 = new VersorgungsquoteGruppenstaerke();
         bildungseinrichtung1.setId(UUID.randomUUID());
-        bildungseinrichtung1.setBildungseinrichtung(Bildungseinrichtung.KINDERGARTEN);
+        bildungseinrichtung1.setInfrastruktureinrichtungTyp(InfrastruktureinrichtungTyp.KINDERGARTEN);
         bildungseinrichtung1.setGruppenstaerke(50);
         bildungseinrichtung1.setVersorgungsquotePlanungsursaechlich(new BigDecimal("0.650"));
         bildungseinrichtung1.setVersorgungsquoteSobonUrsaechlich(new BigDecimal("0.650"));
@@ -51,7 +51,7 @@ public class VersorgungsquoteGruppenstaerkeRepositoryTest {
 
         VersorgungsquoteGruppenstaerke bildungseinrichtung2 = new VersorgungsquoteGruppenstaerke();
         bildungseinrichtung2.setId(UUID.randomUUID());
-        bildungseinrichtung2.setBildungseinrichtung(Bildungseinrichtung.KINDERKRIPPE);
+        bildungseinrichtung2.setInfrastruktureinrichtungTyp(InfrastruktureinrichtungTyp.KINDERKRIPPE);
         bildungseinrichtung2.setGruppenstaerke(75);
         bildungseinrichtung2.setVersorgungsquotePlanungsursaechlich(new BigDecimal("0.750"));
         bildungseinrichtung2.setVersorgungsquoteSobonUrsaechlich(new BigDecimal("0.750"));
@@ -59,7 +59,7 @@ public class VersorgungsquoteGruppenstaerkeRepositoryTest {
 
         VersorgungsquoteGruppenstaerke bildungseinrichtung3 = new VersorgungsquoteGruppenstaerke();
         bildungseinrichtung3.setId(UUID.randomUUID());
-        bildungseinrichtung3.setBildungseinrichtung(Bildungseinrichtung.GRUNDSCHULE);
+        bildungseinrichtung3.setInfrastruktureinrichtungTyp(InfrastruktureinrichtungTyp.GRUNDSCHULE);
         bildungseinrichtung3.setGruppenstaerke(100);
         bildungseinrichtung3.setVersorgungsquotePlanungsursaechlich(new BigDecimal("0.540"));
         bildungseinrichtung3.setVersorgungsquoteSobonUrsaechlich(new BigDecimal("0.540"));
@@ -70,38 +70,38 @@ public class VersorgungsquoteGruppenstaerkeRepositoryTest {
             );
 
         Optional<VersorgungsquoteGruppenstaerke> result1 =
-            this.versorgungsquoteGruppenstaerkeRepository.findFirstByBildungseinrichtungAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
-                    bildungseinrichtung1.getBildungseinrichtung(),
+            this.versorgungsquoteGruppenstaerkeRepository.findFirstByInfrastruktureinrichtungTypAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
+                    bildungseinrichtung1.getInfrastruktureinrichtungTyp(),
                     LocalDate.parse("2003-05-05")
                 );
 
         Optional<VersorgungsquoteGruppenstaerke> result2 =
-            this.versorgungsquoteGruppenstaerkeRepository.findFirstByBildungseinrichtungAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
-                    bildungseinrichtung2.getBildungseinrichtung(),
+            this.versorgungsquoteGruppenstaerkeRepository.findFirstByInfrastruktureinrichtungTypAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
+                    bildungseinrichtung2.getInfrastruktureinrichtungTyp(),
                     LocalDate.parse("2005-06-10")
                 );
 
         Optional<VersorgungsquoteGruppenstaerke> result3 =
-            this.versorgungsquoteGruppenstaerkeRepository.findFirstByBildungseinrichtungAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
-                    bildungseinrichtung2.getBildungseinrichtung(),
+            this.versorgungsquoteGruppenstaerkeRepository.findFirstByInfrastruktureinrichtungTypAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
+                    bildungseinrichtung2.getInfrastruktureinrichtungTyp(),
                     LocalDate.parse("2007-10-15")
                 );
 
         Optional<VersorgungsquoteGruppenstaerke> result4 =
-            this.versorgungsquoteGruppenstaerkeRepository.findFirstByBildungseinrichtungAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
-                    bildungseinrichtung3.getBildungseinrichtung(),
+            this.versorgungsquoteGruppenstaerkeRepository.findFirstByInfrastruktureinrichtungTypAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
+                    bildungseinrichtung3.getInfrastruktureinrichtungTyp(),
                     LocalDate.parse("2011-06-14")
                 );
 
         Optional<VersorgungsquoteGruppenstaerke> result5 =
-            this.versorgungsquoteGruppenstaerkeRepository.findFirstByBildungseinrichtungAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
-                    bildungseinrichtung1.getBildungseinrichtung(),
+            this.versorgungsquoteGruppenstaerkeRepository.findFirstByInfrastruktureinrichtungTypAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
+                    bildungseinrichtung1.getInfrastruktureinrichtungTyp(),
                     LocalDate.parse("2005-06-10")
                 );
 
         Optional<VersorgungsquoteGruppenstaerke> result6 =
-            this.versorgungsquoteGruppenstaerkeRepository.findFirstByBildungseinrichtungAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
-                    bildungseinrichtung2.getBildungseinrichtung(),
+            this.versorgungsquoteGruppenstaerkeRepository.findFirstByInfrastruktureinrichtungTypAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
+                    bildungseinrichtung2.getInfrastruktureinrichtungTyp(),
                     LocalDate.parse("2005-06-11")
                 );
 
@@ -117,7 +117,7 @@ public class VersorgungsquoteGruppenstaerkeRepositoryTest {
     void noSuchElementExceptionUmlegungFoerderartenbyBezeichnungAndDatum() {
         VersorgungsquoteGruppenstaerke bildungseinrichtung1 = new VersorgungsquoteGruppenstaerke();
         bildungseinrichtung1.setId(UUID.randomUUID());
-        bildungseinrichtung1.setBildungseinrichtung(Bildungseinrichtung.KINDERGARTEN);
+        bildungseinrichtung1.setInfrastruktureinrichtungTyp(InfrastruktureinrichtungTyp.KINDERGARTEN);
         bildungseinrichtung1.setGruppenstaerke(50);
         bildungseinrichtung1.setVersorgungsquotePlanungsursaechlich(new BigDecimal("0.650"));
         bildungseinrichtung1.setVersorgungsquoteSobonUrsaechlich(new BigDecimal("0.650"));
@@ -125,7 +125,7 @@ public class VersorgungsquoteGruppenstaerkeRepositoryTest {
 
         VersorgungsquoteGruppenstaerke bildungseinrichtung2 = new VersorgungsquoteGruppenstaerke();
         bildungseinrichtung2.setId(UUID.randomUUID());
-        bildungseinrichtung2.setBildungseinrichtung(Bildungseinrichtung.KINDERKRIPPE);
+        bildungseinrichtung2.setInfrastruktureinrichtungTyp(InfrastruktureinrichtungTyp.KINDERKRIPPE);
         bildungseinrichtung2.setGruppenstaerke(75);
         bildungseinrichtung2.setVersorgungsquotePlanungsursaechlich(new BigDecimal("0.750"));
         bildungseinrichtung2.setVersorgungsquoteSobonUrsaechlich(new BigDecimal("0.750"));
@@ -134,14 +134,14 @@ public class VersorgungsquoteGruppenstaerkeRepositoryTest {
         this.versorgungsquoteGruppenstaerkeRepository.saveAll(List.of(bildungseinrichtung1, bildungseinrichtung2));
 
         Optional<VersorgungsquoteGruppenstaerke> result1 =
-            this.versorgungsquoteGruppenstaerkeRepository.findFirstByBildungseinrichtungAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
-                    bildungseinrichtung1.getBildungseinrichtung(),
+            this.versorgungsquoteGruppenstaerkeRepository.findFirstByInfrastruktureinrichtungTypAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
+                    bildungseinrichtung1.getInfrastruktureinrichtungTyp(),
                     LocalDate.parse("1999-06-14")
                 );
 
         Optional<VersorgungsquoteGruppenstaerke> result2 =
-            this.versorgungsquoteGruppenstaerkeRepository.findFirstByBildungseinrichtungAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
-                    bildungseinrichtung2.getBildungseinrichtung(),
+            this.versorgungsquoteGruppenstaerkeRepository.findFirstByInfrastruktureinrichtungTypAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
+                    bildungseinrichtung2.getInfrastruktureinrichtungTyp(),
                     LocalDate.parse("2005-05-04")
                 );
 
@@ -249,7 +249,7 @@ public class VersorgungsquoteGruppenstaerkeRepositoryTest {
     private VersorgungsquoteGruppenstaerke createBildungseinrichtung(BigDecimal value, LocalDate gueltigAb) {
         VersorgungsquoteGruppenstaerke versorgungsquoteGruppenstaerke = new VersorgungsquoteGruppenstaerke();
         versorgungsquoteGruppenstaerke.setId(UUID.randomUUID());
-        versorgungsquoteGruppenstaerke.setBildungseinrichtung(Bildungseinrichtung.KINDERKRIPPE);
+        versorgungsquoteGruppenstaerke.setInfrastruktureinrichtungTyp(InfrastruktureinrichtungTyp.KINDERKRIPPE);
         versorgungsquoteGruppenstaerke.setGruppenstaerke(50);
         versorgungsquoteGruppenstaerke.setVersorgungsquotePlanungsursaechlich(value);
         versorgungsquoteGruppenstaerke.setVersorgungsquoteSobonUrsaechlich(value);
