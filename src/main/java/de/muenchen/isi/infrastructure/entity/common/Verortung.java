@@ -14,4 +14,6 @@ public class Verortung {
     private Set<Gemarkung> gemarkungen;
 
     private MultiPolygonGeometry multiPolygon;
+
+    private PointGeometry pointGeometry;
 }

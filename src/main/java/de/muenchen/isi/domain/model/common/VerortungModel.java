@@ -11,4 +11,6 @@ public class VerortungModel {
     private Set<GemarkungModel> gemarkungen;
 
     private MultiPolygonGeometryModel multiPolygon;
+
+    private PointGeometryModel pointGeometry;
 }

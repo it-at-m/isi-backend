@@ -18,4 +18,7 @@ public class VerortungDto {
     @Valid
     @NotNull
     private MultiPolygonGeometryDto multiPolygon;
+
+    @Valid
+    private PointGeometryDto pointGeometry;
 }
