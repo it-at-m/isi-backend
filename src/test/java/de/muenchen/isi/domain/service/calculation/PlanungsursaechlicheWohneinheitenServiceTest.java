@@ -9,6 +9,7 @@ import static de.muenchen.isi.TestConstants.MM;
 import static de.muenchen.isi.TestConstants.PMB;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.is;
 
 import de.muenchen.isi.domain.model.BauabschnittModel;
 import de.muenchen.isi.domain.model.BaugebietModel;
@@ -22,6 +23,7 @@ import de.muenchen.isi.infrastructure.repository.stammdaten.StaedtebaulicheOrien
 import de.muenchen.isi.infrastructure.repository.stammdaten.UmlegungFoerderartenRepository;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
@@ -58,7 +60,8 @@ public class PlanungsursaechlicheWohneinheitenServiceTest {
 
     @Test
     void calculatePlanungsursaechlicheWohneinheitenTest() {
-        // Input
+        FoerdermixUmlageServiceTest.fillUmlegungFoerderartenRepository(umlegungFoerderartenRepository);
+        fillStaedtebaulicheOrientierungswertRepository(staedtebaulicheOrientierungswertRepository);
 
         final var FF100 = new FoerderartModel();
         FF100.setBezeichnung(FF);
@@ -135,65 +138,6 @@ public class PlanungsursaechlicheWohneinheitenServiceTest {
 
         final var bauabschnitte = List.of(bauabschnittA, bauabschnittB);
 
-        // Repo Mocking
-
-        final var orientierungswertFF2022 = new StaedtebaulicheOrientierungswert();
-        orientierungswertFF2022.setFoerderartBezeichnung(FF);
-        orientierungswertFF2022.setGueltigAb(SobonOrientierungswertJahr.JAHR_2022.getGueltigAb());
-        orientierungswertFF2022.setDurchschnittlicheGrundflaeche(95L);
-
-        final var orientierungswertEOF2022 = new StaedtebaulicheOrientierungswert();
-        orientierungswertEOF2022.setFoerderartBezeichnung(EOF);
-        orientierungswertEOF2022.setGueltigAb(SobonOrientierungswertJahr.JAHR_2022.getGueltigAb());
-        orientierungswertEOF2022.setDurchschnittlicheGrundflaeche(90L);
-
-        final var orientierungswertMM2022 = new StaedtebaulicheOrientierungswert();
-        orientierungswertMM2022.setFoerderartBezeichnung(MM);
-        orientierungswertMM2022.setGueltigAb(SobonOrientierungswertJahr.JAHR_2022.getGueltigAb());
-        orientierungswertMM2022.setDurchschnittlicheGrundflaeche(100L);
-
-        final var orientierungswertFH2022 = new StaedtebaulicheOrientierungswert();
-        orientierungswertFH2022.setFoerderartBezeichnung(FH);
-        orientierungswertFH2022.setGueltigAb(SobonOrientierungswertJahr.JAHR_2022.getGueltigAb());
-        orientierungswertFH2022.setDurchschnittlicheGrundflaeche(160L);
-
-        Mockito
-            .when(
-                staedtebaulicheOrientierungswertRepository.findFirstByFoerderartBezeichnungAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
-                    FF,
-                    SobonOrientierungswertJahr.JAHR_2022.getGueltigAb()
-                )
-            )
-            .thenReturn(Optional.of(orientierungswertFF2022));
-        Mockito
-            .when(
-                staedtebaulicheOrientierungswertRepository.findFirstByFoerderartBezeichnungAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
-                    EOF,
-                    SobonOrientierungswertJahr.JAHR_2022.getGueltigAb()
-                )
-            )
-            .thenReturn(Optional.of(orientierungswertEOF2022));
-        Mockito
-            .when(
-                staedtebaulicheOrientierungswertRepository.findFirstByFoerderartBezeichnungAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
-                    MM,
-                    SobonOrientierungswertJahr.JAHR_2022.getGueltigAb()
-                )
-            )
-            .thenReturn(Optional.of(orientierungswertMM2022));
-        Mockito
-            .when(
-                staedtebaulicheOrientierungswertRepository.findFirstByFoerderartBezeichnungAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
-                    FH,
-                    SobonOrientierungswertJahr.JAHR_2022.getGueltigAb()
-                )
-            )
-            .thenReturn(Optional.of(orientierungswertFH2022));
-
-        FoerdermixUmlageServiceTest.fillUmlegungFoerderartenRepository(umlegungFoerderartenRepository);
-
-        // Erwarteter Output
-
         final var expected = List.of(
             new PlanungsursachlicheWohneinheitenModel(FF, 2024, new BigDecimal("100")),
             new PlanungsursachlicheWohneinheitenModel(FF, 2025, new BigDecimal("25.0000")),
@@ -220,5 +164,166 @@ public class PlanungsursaechlicheWohneinheitenServiceTest {
             LocalDate.EPOCH
         );
         assertThat(actual, containsInAnyOrder(expected.toArray()));
+    }
+
+    @Test
+    void calculateWohneinheitenTest() {
+        fillStaedtebaulicheOrientierungswertRepository(staedtebaulicheOrientierungswertRepository);
+
+        final var baurate = new BaurateModel();
+        final var foerderart = new FoerderartModel();
+        foerderart.setBezeichnung(MM);
+        foerderart.setAnteilProzent(new BigDecimal("0.5"));
+        final var sobonJahr = SobonOrientierungswertJahr.JAHR_2022;
+
+        final var result1 = planungsursaechlicheWohneinheitenService.calculateWohneinheiten(
+            baurate,
+            foerderart,
+            sobonJahr
+        );
+        assertThat(result1, is(BigDecimal.ZERO));
+
+        baurate.setGfWohnenGeplant(new BigDecimal("20000"));
+        final var result2 = planungsursaechlicheWohneinheitenService.calculateWohneinheiten(
+            baurate,
+            foerderart,
+            sobonJahr
+        );
+        assertThat(result2, is(new BigDecimal("100.0000000000")));
+
+        baurate.setWeGeplant(100);
+        final var result3 = planungsursaechlicheWohneinheitenService.calculateWohneinheiten(
+            baurate,
+            foerderart,
+            sobonJahr
+        );
+        assertThat(result3, is(new BigDecimal("50.0")));
+    }
+
+    @Test
+    void mergePlanungsursaechlicheWohneinheitenTest() {
+        final var foerderart1 = FF;
+        final var foerderart2 = EOF;
+        final var jahr1 = 2024;
+        final var jahr2 = 2025;
+        final var wohneinheiten1 = new BigDecimal("1000");
+        final var wohneinheiten2 = new BigDecimal("500");
+        final var wohneinheiten3 = new BigDecimal("2000");
+        final var wohneinheiten4 = new BigDecimal("3000");
+
+        final var planungsursaechlicheWohneinheiten1 = new PlanungsursachlicheWohneinheitenModel();
+        planungsursaechlicheWohneinheiten1.setFoerderart(foerderart1);
+        planungsursaechlicheWohneinheiten1.setJahr(jahr1);
+        planungsursaechlicheWohneinheiten1.setWohneinheiten(wohneinheiten1);
+        final var planungsursaechlicheWohneinheitenList = new ArrayList<PlanungsursachlicheWohneinheitenModel>();
+        planungsursaechlicheWohneinheitenList.add(planungsursaechlicheWohneinheiten1);
+
+        planungsursaechlicheWohneinheitenService.mergePlanungsursaechlicheWohneinheiten(
+            planungsursaechlicheWohneinheitenList,
+            foerderart2,
+            jahr1,
+            wohneinheiten2
+        );
+        assertThat(planungsursaechlicheWohneinheitenList.size(), is(2));
+        assertThat(planungsursaechlicheWohneinheitenList.get(0).getFoerderart(), is(foerderart1));
+        assertThat(planungsursaechlicheWohneinheitenList.get(0).getJahr(), is(jahr1));
+        assertThat(planungsursaechlicheWohneinheitenList.get(0).getWohneinheiten(), is(wohneinheiten1));
+        assertThat(planungsursaechlicheWohneinheitenList.get(1).getFoerderart(), is(foerderart2));
+        assertThat(planungsursaechlicheWohneinheitenList.get(1).getJahr(), is(jahr1));
+        assertThat(planungsursaechlicheWohneinheitenList.get(1).getWohneinheiten(), is(wohneinheiten2));
+
+        planungsursaechlicheWohneinheitenService.mergePlanungsursaechlicheWohneinheiten(
+            planungsursaechlicheWohneinheitenList,
+            foerderart1,
+            jahr2,
+            wohneinheiten3
+        );
+        assertThat(planungsursaechlicheWohneinheitenList.size(), is(3));
+        assertThat(planungsursaechlicheWohneinheitenList.get(0).getFoerderart(), is(foerderart1));
+        assertThat(planungsursaechlicheWohneinheitenList.get(0).getJahr(), is(jahr1));
+        assertThat(planungsursaechlicheWohneinheitenList.get(0).getWohneinheiten(), is(wohneinheiten1));
+        assertThat(planungsursaechlicheWohneinheitenList.get(1).getFoerderart(), is(foerderart2));
+        assertThat(planungsursaechlicheWohneinheitenList.get(1).getJahr(), is(jahr1));
+        assertThat(planungsursaechlicheWohneinheitenList.get(1).getWohneinheiten(), is(wohneinheiten2));
+        assertThat(planungsursaechlicheWohneinheitenList.get(2).getFoerderart(), is(foerderart1));
+        assertThat(planungsursaechlicheWohneinheitenList.get(2).getJahr(), is(jahr2));
+        assertThat(planungsursaechlicheWohneinheitenList.get(2).getWohneinheiten(), is(wohneinheiten3));
+
+        planungsursaechlicheWohneinheitenService.mergePlanungsursaechlicheWohneinheiten(
+            planungsursaechlicheWohneinheitenList,
+            foerderart2,
+            jahr1,
+            wohneinheiten4
+        );
+        assertThat(planungsursaechlicheWohneinheitenList.size(), is(3));
+        assertThat(planungsursaechlicheWohneinheitenList.get(0).getFoerderart(), is(foerderart1));
+        assertThat(planungsursaechlicheWohneinheitenList.get(0).getJahr(), is(jahr1));
+        assertThat(planungsursaechlicheWohneinheitenList.get(0).getWohneinheiten(), is(wohneinheiten1));
+        assertThat(planungsursaechlicheWohneinheitenList.get(1).getFoerderart(), is(foerderart2));
+        assertThat(planungsursaechlicheWohneinheitenList.get(1).getJahr(), is(jahr1));
+        assertThat(
+            planungsursaechlicheWohneinheitenList.get(1).getWohneinheiten(),
+            is(wohneinheiten2.add(wohneinheiten4))
+        );
+        assertThat(planungsursaechlicheWohneinheitenList.get(2).getFoerderart(), is(foerderart1));
+        assertThat(planungsursaechlicheWohneinheitenList.get(2).getJahr(), is(jahr2));
+        assertThat(planungsursaechlicheWohneinheitenList.get(2).getWohneinheiten(), is(wohneinheiten3));
+    }
+
+    public static void fillStaedtebaulicheOrientierungswertRepository(
+        StaedtebaulicheOrientierungswertRepository repository
+    ) {
+        final var orientierungswertFF2022 = new StaedtebaulicheOrientierungswert();
+        orientierungswertFF2022.setFoerderartBezeichnung(FF);
+        orientierungswertFF2022.setGueltigAb(SobonOrientierungswertJahr.JAHR_2022.getGueltigAb());
+        orientierungswertFF2022.setDurchschnittlicheGrundflaeche(95L);
+
+        final var orientierungswertEOF2022 = new StaedtebaulicheOrientierungswert();
+        orientierungswertEOF2022.setFoerderartBezeichnung(EOF);
+        orientierungswertEOF2022.setGueltigAb(SobonOrientierungswertJahr.JAHR_2022.getGueltigAb());
+        orientierungswertEOF2022.setDurchschnittlicheGrundflaeche(90L);
+
+        final var orientierungswertMM2022 = new StaedtebaulicheOrientierungswert();
+        orientierungswertMM2022.setFoerderartBezeichnung(MM);
+        orientierungswertMM2022.setGueltigAb(SobonOrientierungswertJahr.JAHR_2022.getGueltigAb());
+        orientierungswertMM2022.setDurchschnittlicheGrundflaeche(100L);
+
+        final var orientierungswertFH2022 = new StaedtebaulicheOrientierungswert();
+        orientierungswertFH2022.setFoerderartBezeichnung(FH);
+        orientierungswertFH2022.setGueltigAb(SobonOrientierungswertJahr.JAHR_2022.getGueltigAb());
+        orientierungswertFH2022.setDurchschnittlicheGrundflaeche(160L);
+
+        Mockito
+            .when(
+                repository.findFirstByFoerderartBezeichnungAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
+                    FF,
+                    SobonOrientierungswertJahr.JAHR_2022.getGueltigAb()
+                )
+            )
+            .thenReturn(Optional.of(orientierungswertFF2022));
+        Mockito
+            .when(
+                repository.findFirstByFoerderartBezeichnungAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
+                    EOF,
+                    SobonOrientierungswertJahr.JAHR_2022.getGueltigAb()
+                )
+            )
+            .thenReturn(Optional.of(orientierungswertEOF2022));
+        Mockito
+            .when(
+                repository.findFirstByFoerderartBezeichnungAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
+                    MM,
+                    SobonOrientierungswertJahr.JAHR_2022.getGueltigAb()
+                )
+            )
+            .thenReturn(Optional.of(orientierungswertMM2022));
+        Mockito
+            .when(
+                repository.findFirstByFoerderartBezeichnungAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
+                    FH,
+                    SobonOrientierungswertJahr.JAHR_2022.getGueltigAb()
+                )
+            )
+            .thenReturn(Optional.of(orientierungswertFH2022));
     }
 }

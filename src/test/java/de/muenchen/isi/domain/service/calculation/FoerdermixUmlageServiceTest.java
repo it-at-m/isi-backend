@@ -9,6 +9,7 @@ import static de.muenchen.isi.TestConstants.MM;
 import static de.muenchen.isi.TestConstants.PMB;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.is;
 
 import de.muenchen.isi.domain.model.FoerderartModel;
 import de.muenchen.isi.domain.model.FoerdermixModel;
@@ -17,6 +18,8 @@ import de.muenchen.isi.infrastructure.entity.stammdaten.UmlegungFoerderarten;
 import de.muenchen.isi.infrastructure.repository.stammdaten.UmlegungFoerderartenRepository;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -84,6 +87,35 @@ public class FoerdermixUmlageServiceTest {
 
         final var actual = foerdermixUmlageService.legeFoerdermixUm(foerdermix, LocalDate.EPOCH);
         assertThat(actual.getFoerderarten(), containsInAnyOrder(expected.getFoerderarten().toArray()));
+    }
+
+    @Test
+    void mergeFoerderartTest() {
+        final var bezeichnung1 = FF;
+        final var bezeichnung2 = EOF;
+        final var anteil1 = new BigDecimal("0.25");
+        final var anteil2 = new BigDecimal("0.3");
+        final var anteil3 = new BigDecimal("0.45");
+
+        final var foerderart1 = new FoerderartModel();
+        foerderart1.setBezeichnung(bezeichnung1);
+        foerderart1.setAnteilProzent(anteil1);
+        final var foerderarten = new ArrayList<FoerderartModel>();
+        foerderarten.add(foerderart1);
+
+        foerdermixUmlageService.mergeFoerderart(foerderarten, bezeichnung2, anteil2);
+        assertThat(foerderarten.size(), is(2));
+        assertThat(foerderarten.get(0).getBezeichnung(), is(bezeichnung1));
+        assertThat(foerderarten.get(0).getAnteilProzent(), is(anteil1));
+        assertThat(foerderarten.get(1).getBezeichnung(), is(bezeichnung2));
+        assertThat(foerderarten.get(1).getAnteilProzent(), is(anteil2));
+
+        foerdermixUmlageService.mergeFoerderart(foerderarten, bezeichnung2, anteil3);
+        assertThat(foerderarten.size(), is(2));
+        assertThat(foerderarten.get(0).getBezeichnung(), is(bezeichnung1));
+        assertThat(foerderarten.get(0).getAnteilProzent(), is(anteil1));
+        assertThat(foerderarten.get(1).getBezeichnung(), is(bezeichnung2));
+        assertThat(foerderarten.get(1).getAnteilProzent(), is(anteil2.add(anteil3)));
     }
 
     public static void fillUmlegungFoerderartenRepository(UmlegungFoerderartenRepository repository) {
