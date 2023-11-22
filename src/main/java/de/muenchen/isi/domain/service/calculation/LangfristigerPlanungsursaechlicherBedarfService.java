@@ -91,6 +91,7 @@ public class LangfristigerPlanungsursaechlicherBedarfService {
                     .reduce(new PlanungsursaechlicherBedarfTestModel(), this::add)
             )
             .sorted(Comparator.comparing(PlanungsursaechlicherBedarfTestModel::getJahr))
+            // Ermitteln der Versorgungsquote und Gruppenstärke
             .map(planungsursaechlicherBedarfTest ->
                 setVersorgungsquoteAndGruppenstaerke(planungsursaechlicherBedarfTest, versorgungsquoteGruppenstaerke)
             )
