@@ -88,11 +88,64 @@ public class LangfristigerPlanungsursaechlicherBedarfService {
             .values()
             .stream()
             .sorted(Comparator.comparing(PlanungsursaechlicherBedarfTestModel::getJahr))
-            // .map -> Berechnen der Anzahl Kinder je Krippe (generisch) sowie der Anzahl der grupen
+            // .map -> Berechnen der Anzahl Kinder je Krippe (generisch) sowie der Anzahl der Gruppen
             .collect(Collectors.toList());
         final var langfristigerPlanungsursaechlicherBedarf = new LangfristigerPlanungsursaechlicherBedarfModel();
         langfristigerPlanungsursaechlicherBedarf.setPlanungsursaechlicheBedarfe(planungsursaechlicherBedarfe);
         return langfristigerPlanungsursaechlicherBedarf;
+    }
+
+    protected Map<String, List<WohneinheitenBedarfModel>> getWohneinheitenBedarfForFoerderart(
+        final PlanungsursaechlicherBedarfModel planungsursaechlicherBedarf
+    ) {
+        final var wohneinheitenBedarfForForderart = new HashMap<String, List<WohneinheitenBedarfModel>>();
+        for (final var wohneinheitBedarf : planungsursaechlicherBedarf.getWohneinheitenBedarfe()) {
+            if (wohneinheitenBedarfForForderart.containsKey(wohneinheitBedarf.getFoerderart())) {
+                wohneinheitenBedarfForForderart.get(wohneinheitBedarf.getFoerderart()).add(wohneinheitBedarf);
+            } else {
+                final var wohneinheitenBedarf = new ArrayList<WohneinheitenBedarfModel>();
+                wohneinheitenBedarf.add(wohneinheitBedarf);
+                wohneinheitenBedarfForForderart.put(wohneinheitBedarf.getFoerderart(), wohneinheitenBedarf);
+            }
+        }
+        return wohneinheitenBedarfForForderart;
+    }
+
+    protected Map<String, SobonOrientierungswertSozialeInfrastrukturModel> getSobonOrientierungswertForFoerderart(
+        final PlanungsursaechlicherBedarfModel planungsursaechlicherBedarf,
+        final SobonOrientierungswertJahr sobonJahr,
+        final Einrichtungstyp einrichtungstyp
+    ) {
+        return planungsursaechlicherBedarf
+            .getWohneinheitenBedarfe()
+            .stream()
+            .map(WohneinheitenBedarfModel::getFoerderart)
+            .map(foerderart ->
+                sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndFoerderartBezeichnungAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
+                    einrichtungstyp,
+                    foerderart,
+                    sobonJahr.getGueltigAb()
+                )
+            )
+            .filter(Optional::isPresent)
+            .map(Optional::get)
+            .map(stammdatenDomainMapper::entity2Model)
+            .collect(
+                Collectors.toMap(
+                    SobonOrientierungswertSozialeInfrastrukturModel::getFoerderartBezeichnung,
+                    Function.identity()
+                )
+            );
+    }
+
+    private PlanungsursaechlicherBedarfTestModel createPlanungsursaechlicherBedarfTest(
+        final Integer jahr,
+        final BigDecimal anzahlKinderGesamt
+    ) {
+        final var planungsursaechlicherBedarf = new PlanungsursaechlicherBedarfTestModel();
+        planungsursaechlicherBedarf.setJahr(jahr);
+        planungsursaechlicherBedarf.setAnzahlKinderGesamt(anzahlKinderGesamt);
+        return planungsursaechlicherBedarf;
     }
 
     protected List<PlanungsursaechlicherBedarfTestModel> calculatePlanungsursaechlicherBedarfe(
@@ -101,8 +154,8 @@ public class LangfristigerPlanungsursaechlicherBedarfService {
     ) {
         wohneinheitenBedarfe.sort(Comparator.comparing(WohneinheitenBedarfModel::getJahr));
         final var planungsursaechlicheBedarfe = new ArrayList<PlanungsursaechlicherBedarfTestModel>();
-        var anzahlKinderGesamt = BigDecimal.ZERO;
-        WohneinheitenBedarfModel wohneinheitenBedarf = null;
+        BigDecimal anzahlKinderGesamt;
+        WohneinheitenBedarfModel wohneinheitenBedarf;
         if (0 < wohneinheitenBedarfe.size()) {
             wohneinheitenBedarf = wohneinheitenBedarfe.get(0);
             anzahlKinderGesamt =
@@ -383,58 +436,5 @@ public class LangfristigerPlanungsursaechlicherBedarfService {
             );
         }
         return planungsursaechlicheBedarfe;
-    }
-
-    protected Map<String, List<WohneinheitenBedarfModel>> getWohneinheitenBedarfForFoerderart(
-        final PlanungsursaechlicherBedarfModel planungsursaechlicherBedarf
-    ) {
-        final var wohneinheitenBedarfForForderart = new HashMap<String, List<WohneinheitenBedarfModel>>();
-        for (final var wohneinheitBedarf : planungsursaechlicherBedarf.getWohneinheitenBedarfe()) {
-            if (wohneinheitenBedarfForForderart.containsKey(wohneinheitBedarf.getFoerderart())) {
-                wohneinheitenBedarfForForderart.get(wohneinheitBedarf.getFoerderart()).add(wohneinheitBedarf);
-            } else {
-                final var wohneinheitenBedarf = new ArrayList<WohneinheitenBedarfModel>();
-                wohneinheitenBedarf.add(wohneinheitBedarf);
-                wohneinheitenBedarfForForderart.put(wohneinheitBedarf.getFoerderart(), wohneinheitenBedarf);
-            }
-        }
-        return wohneinheitenBedarfForForderart;
-    }
-
-    protected Map<String, SobonOrientierungswertSozialeInfrastrukturModel> getSobonOrientierungswertForFoerderart(
-        final PlanungsursaechlicherBedarfModel planungsursaechlicherBedarf,
-        final SobonOrientierungswertJahr sobonJahr,
-        final Einrichtungstyp einrichtungstyp
-    ) {
-        return planungsursaechlicherBedarf
-            .getWohneinheitenBedarfe()
-            .stream()
-            .map(WohneinheitenBedarfModel::getFoerderart)
-            .map(foerderart ->
-                sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndFoerderartBezeichnungAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
-                    einrichtungstyp,
-                    foerderart,
-                    sobonJahr.getGueltigAb()
-                )
-            )
-            .filter(Optional::isPresent)
-            .map(Optional::get)
-            .map(stammdatenDomainMapper::entity2Model)
-            .collect(
-                Collectors.toMap(
-                    SobonOrientierungswertSozialeInfrastrukturModel::getFoerderartBezeichnung,
-                    Function.identity()
-                )
-            );
-    }
-
-    private PlanungsursaechlicherBedarfTestModel createPlanungsursaechlicherBedarfTest(
-        final Integer jahr,
-        final BigDecimal anzahlKinderGesamt
-    ) {
-        final var planungsursaechlicherBedarf = new PlanungsursaechlicherBedarfTestModel();
-        planungsursaechlicherBedarf.setJahr(jahr);
-        planungsursaechlicherBedarf.setAnzahlKinderGesamt(anzahlKinderGesamt);
-        return planungsursaechlicherBedarf;
     }
 }
