@@ -89,4 +89,8 @@ public enum StandVerfahren implements ILookup {
             FREIE_EINGABE
         );
     }
+
+    public static List<StandVerfahren> getStandVerfahrenForBaugenehmigungsverfahren() {
+        return List.of(UNSPECIFIED, VORBEREITUNG_VORBESCHEID, VORBEREITUNG_BAUGENEHMIGUNG, INFO_FEHLT, FREIE_EINGABE);
+    }
 }

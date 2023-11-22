@@ -3,6 +3,7 @@ package de.muenchen.isi.api.dto.abfrageAngelegt;
 import de.muenchen.isi.api.dto.common.AdresseDto;
 import de.muenchen.isi.api.dto.common.VerortungDto;
 import de.muenchen.isi.api.dto.filehandling.DokumentDto;
+import de.muenchen.isi.api.validation.CustomNotNull;
 import de.muenchen.isi.api.validation.HasAllowedNumberOfDocuments;
 import de.muenchen.isi.api.validation.NotUnspecified;
 import de.muenchen.isi.api.validation.StandVerfahrenBauleitplanverfahrenValid;
@@ -55,5 +56,7 @@ public class BauleitplanverfahrenAngelegtDto extends AbfrageAngelegtDto {
     @NotNull
     private UncertainBoolean offizielleMitzeichnung;
 
-    private List<@Valid @NotNull AbfragevarianteBauleitplanverfahrenAngelegtDto> abfragevarianten;
+    @CustomNotNull
+    @Size(min = 1, max = 5)
+    private List<@Valid @NotNull AbfragevarianteBauleitplanverfahrenAngelegtDto> abfragevariantenBauleitplanverfahren;
 }

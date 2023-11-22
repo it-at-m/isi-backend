@@ -5,6 +5,7 @@ import static org.hamcrest.Matchers.is;
 
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.model.search.request.SearchQueryModel;
+import de.muenchen.isi.infrastructure.entity.Baugenehmigungsverfahren;
 import de.muenchen.isi.infrastructure.entity.Bauleitplanverfahren;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Grundschule;
@@ -43,8 +44,26 @@ class SearchPreparationServiceTest {
         expected.add("standVerfahren_searchword_suggestion");
         expected.add("bebauungsplannummer_searchword_suggestion");
         expected.add("name_searchword_suggestion");
-        expected.add("abfragevarianten.realisierungVon_searchword_suggestion");
-        expected.add("abfragevariantenSachbearbeitung.realisierungVon_searchword_suggestion");
+        expected.add("abfragevariantenBauleitplanverfahren.realisierungVon_searchword_suggestion");
+        expected.add("abfragevariantenSachbearbeitungBauleitplanverfahren.realisierungVon_searchword_suggestion");
+        assertThat(result, is(expected));
+
+        result =
+            searchPreparationService.getNamesOfSearchableAttributesForSearchwordSuggestion(
+                Baugenehmigungsverfahren.class
+            );
+        expected = new HashSet<>();
+        expected.add("adresse.strasse_searchword_suggestion");
+        expected.add("adresse.hausnummer_searchword_suggestion");
+        expected.add("verortung.stadtbezirke.name_searchword_suggestion");
+        expected.add("verortung.gemarkungen.name_searchword_suggestion");
+        expected.add("verortung.gemarkungen.flurstuecke.nummer_searchword_suggestion");
+        expected.add("statusAbfrage_searchword_suggestion");
+        expected.add("standVerfahren_searchword_suggestion");
+        expected.add("bebauungsplannummer_searchword_suggestion");
+        expected.add("name_searchword_suggestion");
+        expected.add("abfragevariantenBaugenehmigungsverfahren.realisierungVon_searchword_suggestion");
+        expected.add("abfragevariantenSachbearbeitungBaugenehmigungsverfahren.realisierungVon_searchword_suggestion");
         assertThat(result, is(expected));
 
         result = searchPreparationService.getNamesOfSearchableAttributesForSearchwordSuggestion(Bauvorhaben.class);
@@ -123,8 +142,23 @@ class SearchPreparationServiceTest {
         expected.add("standVerfahren");
         expected.add("bebauungsplannummer");
         expected.add("name");
-        expected.add("abfragevarianten.realisierungVon");
-        expected.add("abfragevariantenSachbearbeitung.realisierungVon");
+        expected.add("abfragevariantenBauleitplanverfahren.realisierungVon");
+        expected.add("abfragevariantenSachbearbeitungBauleitplanverfahren.realisierungVon");
+        assertThat(result, is(expected.toArray(String[]::new)));
+
+        result = searchPreparationService.getNamesOfSearchableAttributes(List.of(Baugenehmigungsverfahren.class));
+        expected = new HashSet<>();
+        expected.add("adresse.strasse");
+        expected.add("adresse.hausnummer");
+        expected.add("verortung.stadtbezirke.name");
+        expected.add("verortung.gemarkungen.name");
+        expected.add("verortung.gemarkungen.flurstuecke.nummer");
+        expected.add("statusAbfrage");
+        expected.add("standVerfahren");
+        expected.add("bebauungsplannummer");
+        expected.add("name");
+        expected.add("abfragevariantenBaugenehmigungsverfahren.realisierungVon");
+        expected.add("abfragevariantenSachbearbeitungBaugenehmigungsverfahren.realisierungVon");
         assertThat(result, is(expected.toArray(String[]::new)));
 
         result = searchPreparationService.getNamesOfSearchableAttributes(List.of(Bauvorhaben.class));
@@ -192,6 +226,7 @@ class SearchPreparationServiceTest {
             searchPreparationService.getNamesOfSearchableAttributes(
                 List.of(
                     Bauleitplanverfahren.class,
+                    Baugenehmigungsverfahren.class,
                     Bauvorhaben.class,
                     Grundschule.class,
                     GsNachmittagBetreuung.class,
@@ -211,8 +246,10 @@ class SearchPreparationServiceTest {
         expected.add("standVerfahren");
         expected.add("bebauungsplannummer");
         expected.add("name");
-        expected.add("abfragevarianten.realisierungVon");
-        expected.add("abfragevariantenSachbearbeitung.realisierungVon");
+        expected.add("abfragevariantenBauleitplanverfahren.realisierungVon");
+        expected.add("abfragevariantenSachbearbeitungBauleitplanverfahren.realisierungVon");
+        expected.add("abfragevariantenBaugenehmigungsverfahren.realisierungVon");
+        expected.add("abfragevariantenSachbearbeitungBaugenehmigungsverfahren.realisierungVon");
         expected.add("nameVorhaben");
         expected.add("standVerfahren");
         expected.add("bauvorhabenNummer");
@@ -233,6 +270,7 @@ class SearchPreparationServiceTest {
     void getSearchableEntities() throws EntityNotFoundException {
         final var searchQueryModel = new SearchQueryModel();
         searchQueryModel.setSelectBauleitplanverfahren(true);
+        searchQueryModel.setSelectBaugenehmigungsverfahren(true);
         searchQueryModel.setSelectBauvorhaben(true);
         searchQueryModel.setSelectGrundschule(true);
         searchQueryModel.setSelectGsNachmittagBetreuung(true);
@@ -246,6 +284,7 @@ class SearchPreparationServiceTest {
             is(
                 List.of(
                     Bauleitplanverfahren.class,
+                    Baugenehmigungsverfahren.class,
                     Bauvorhaben.class,
                     Grundschule.class,
                     GsNachmittagBetreuung.class,
@@ -258,6 +297,7 @@ class SearchPreparationServiceTest {
         );
 
         searchQueryModel.setSelectBauleitplanverfahren(true);
+        searchQueryModel.setSelectBaugenehmigungsverfahren(false);
         searchQueryModel.setSelectBauvorhaben(false);
         searchQueryModel.setSelectGrundschule(false);
         searchQueryModel.setSelectGsNachmittagBetreuung(false);
@@ -269,6 +309,19 @@ class SearchPreparationServiceTest {
         assertThat(result, is(List.of(Bauleitplanverfahren.class)));
 
         searchQueryModel.setSelectBauleitplanverfahren(false);
+        searchQueryModel.setSelectBaugenehmigungsverfahren(true);
+        searchQueryModel.setSelectBauvorhaben(false);
+        searchQueryModel.setSelectGrundschule(false);
+        searchQueryModel.setSelectGsNachmittagBetreuung(false);
+        searchQueryModel.setSelectHausFuerKinder(false);
+        searchQueryModel.setSelectKindergarten(false);
+        searchQueryModel.setSelectKinderkrippe(false);
+        searchQueryModel.setSelectMittelschule(false);
+        result = searchPreparationService.getSearchableEntities(searchQueryModel);
+        assertThat(result, is(List.of(Baugenehmigungsverfahren.class)));
+
+        searchQueryModel.setSelectBauleitplanverfahren(false);
+        searchQueryModel.setSelectBaugenehmigungsverfahren(false);
         searchQueryModel.setSelectBauvorhaben(true);
         searchQueryModel.setSelectGrundschule(false);
         searchQueryModel.setSelectGsNachmittagBetreuung(false);
@@ -280,6 +333,7 @@ class SearchPreparationServiceTest {
         assertThat(result, is(List.of(Bauvorhaben.class)));
 
         searchQueryModel.setSelectBauleitplanverfahren(false);
+        searchQueryModel.setSelectBaugenehmigungsverfahren(false);
         searchQueryModel.setSelectBauvorhaben(false);
         searchQueryModel.setSelectGrundschule(true);
         searchQueryModel.setSelectGsNachmittagBetreuung(false);
@@ -291,6 +345,7 @@ class SearchPreparationServiceTest {
         assertThat(result, is(List.of(Grundschule.class)));
 
         searchQueryModel.setSelectBauleitplanverfahren(false);
+        searchQueryModel.setSelectBaugenehmigungsverfahren(false);
         searchQueryModel.setSelectBauvorhaben(false);
         searchQueryModel.setSelectGrundschule(false);
         searchQueryModel.setSelectGsNachmittagBetreuung(true);
@@ -302,6 +357,7 @@ class SearchPreparationServiceTest {
         assertThat(result, is(List.of(GsNachmittagBetreuung.class)));
 
         searchQueryModel.setSelectBauleitplanverfahren(false);
+        searchQueryModel.setSelectBaugenehmigungsverfahren(false);
         searchQueryModel.setSelectBauvorhaben(false);
         searchQueryModel.setSelectGrundschule(false);
         searchQueryModel.setSelectGsNachmittagBetreuung(false);
@@ -313,6 +369,7 @@ class SearchPreparationServiceTest {
         assertThat(result, is(List.of(HausFuerKinder.class)));
 
         searchQueryModel.setSelectBauleitplanverfahren(false);
+        searchQueryModel.setSelectBaugenehmigungsverfahren(false);
         searchQueryModel.setSelectBauvorhaben(false);
         searchQueryModel.setSelectGrundschule(false);
         searchQueryModel.setSelectGsNachmittagBetreuung(false);
@@ -324,6 +381,7 @@ class SearchPreparationServiceTest {
         assertThat(result, is(List.of(Kindergarten.class)));
 
         searchQueryModel.setSelectBauleitplanverfahren(false);
+        searchQueryModel.setSelectBaugenehmigungsverfahren(false);
         searchQueryModel.setSelectBauvorhaben(false);
         searchQueryModel.setSelectGrundschule(false);
         searchQueryModel.setSelectGsNachmittagBetreuung(false);
@@ -335,6 +393,7 @@ class SearchPreparationServiceTest {
         assertThat(result, is(List.of(Kinderkrippe.class)));
 
         searchQueryModel.setSelectBauleitplanverfahren(false);
+        searchQueryModel.setSelectBaugenehmigungsverfahren(false);
         searchQueryModel.setSelectBauvorhaben(false);
         searchQueryModel.setSelectGrundschule(false);
         searchQueryModel.setSelectGsNachmittagBetreuung(false);
@@ -346,6 +405,7 @@ class SearchPreparationServiceTest {
         assertThat(result, is(List.of(Mittelschule.class)));
 
         searchQueryModel.setSelectBauleitplanverfahren(false);
+        searchQueryModel.setSelectBaugenehmigungsverfahren(false);
         searchQueryModel.setSelectBauvorhaben(true);
         searchQueryModel.setSelectGrundschule(false);
         searchQueryModel.setSelectGsNachmittagBetreuung(false);
@@ -357,6 +417,7 @@ class SearchPreparationServiceTest {
         assertThat(result, is(List.of(Bauvorhaben.class, Kinderkrippe.class)));
 
         searchQueryModel.setSelectBauleitplanverfahren(false);
+        searchQueryModel.setSelectBaugenehmigungsverfahren(false);
         searchQueryModel.setSelectBauvorhaben(false);
         searchQueryModel.setSelectGrundschule(false);
         searchQueryModel.setSelectGsNachmittagBetreuung(false);

@@ -30,7 +30,7 @@ public class Kindergarten extends Infrastruktureinrichtung {
     @Column(nullable = false)
     private Integer anzahlKindergartenGruppen;
 
-    @Column(nullable = true)
+    @Column
     private Integer wohnungsnaheKindergartenPlaetze;
 
     @Enumerated(EnumType.STRING)

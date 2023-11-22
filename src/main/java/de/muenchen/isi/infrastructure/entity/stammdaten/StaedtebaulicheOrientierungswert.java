@@ -1,13 +1,10 @@
 package de.muenchen.isi.infrastructure.entity.stammdaten;
 
 import de.muenchen.isi.infrastructure.entity.BaseEntity;
-import de.muenchen.isi.infrastructure.entity.enums.Wohnungstyp;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonVerfahrensgrundsaetzeJahr;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.Index;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
@@ -17,9 +14,12 @@ import lombok.ToString;
 
 @Entity
 @Table(
-    uniqueConstraints = { @UniqueConstraint(columnNames = { "jahr", "wohnungstyp" }) },
+    uniqueConstraints = { @UniqueConstraint(columnNames = { "gueltigAb", "foerderartBezeichnung" }) },
     indexes = {
-        @Index(name = "staedtebaulicher_orientierungswert_jahr_wohnungstyp_index", columnList = "jahr, wohnungstyp"),
+        @Index(
+            name = "staedtebaulicher_orientierungswert_gueltigAb_foerderartBezeichnung_index",
+            columnList = "gueltigAb, foerderartBezeichnung"
+        ),
     }
 )
 @Data
@@ -27,13 +27,11 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 public class StaedtebaulicheOrientierungswert extends BaseEntity {
 
-    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private SobonVerfahrensgrundsaetzeJahr jahr;
+    private LocalDate gueltigAb;
 
-    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Wohnungstyp wohnungstyp;
+    private String foerderartBezeichnung;
 
     @Column(nullable = false)
     private Long durchschnittlicheGrundflaeche;

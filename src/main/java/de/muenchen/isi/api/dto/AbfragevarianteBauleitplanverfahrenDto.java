@@ -44,6 +44,8 @@ public class AbfragevarianteBauleitplanverfahrenDto extends AbfragevarianteDto {
 
     private BigDecimal gfWohnenWeiteresNichtInfrastrukturrelevantesWohnen;
 
+    private BigDecimal gfWohnenPlanungsursaechlich;
+
     // Anzahl Wohneinheiten
 
     private Integer weGesamt;
@@ -57,8 +59,6 @@ public class AbfragevarianteBauleitplanverfahrenDto extends AbfragevarianteDto {
     private Integer weGenossenschaftlichesWohnen;
 
     private Integer weWeiteresNichtInfrastrukturrelevantesWohnen;
-
-    private BigDecimal gfWohnenPlanungsursaechlich;
 
     private SobonOrientierungswertJahr sobonOrientierungswertJahr;
 

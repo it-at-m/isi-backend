@@ -15,11 +15,15 @@ public class LookupListsDto {
 
     private LookupListDto standVerfahrenBauleitplanverfahren;
 
+    private LookupListDto standVerfahrenBaugenehmigungsverfahren;
+
     private LookupListDto standVerfahren;
 
     private LookupListDto statusAbfrage;
 
     private LookupListDto wesentlicheRechtsgrundlageBauleitplanverfahren;
+
+    private LookupListDto wesentlicheRechtsgrundlageBaugenehmigungsverfahren;
 
     private LookupListDto wesentlicheRechtsgrundlage;
 

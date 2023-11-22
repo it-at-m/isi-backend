@@ -10,19 +10,24 @@ import de.muenchen.isi.domain.exception.UniqueViolationException;
 import de.muenchen.isi.domain.exception.UserRoleNotAllowedException;
 import de.muenchen.isi.domain.mapper.AbfrageDomainMapper;
 import de.muenchen.isi.domain.model.AbfrageModel;
+import de.muenchen.isi.domain.model.BaugenehmigungsverfahrenModel;
 import de.muenchen.isi.domain.model.BauleitplanverfahrenModel;
 import de.muenchen.isi.domain.model.BauvorhabenModel;
 import de.muenchen.isi.domain.model.abfrageAngelegt.AbfrageAngelegtModel;
+import de.muenchen.isi.domain.model.abfrageAngelegt.BaugenehmigungsverfahrenAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageAngelegt.BauleitplanverfahrenAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungFachreferat.AbfrageInBearbeitungFachreferatModel;
+import de.muenchen.isi.domain.model.abfrageInBearbeitungFachreferat.BaugenehmigungsverfahrenInBearbeitungFachreferatModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungFachreferat.BauleitplanverfahrenInBearbeitungFachreferatModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.AbfrageInBearbeitungSachbearbeitungModel;
+import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.BaugenehmigungsverfahrenInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.BauleitplanverfahrenInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.domain.service.filehandling.DokumentService;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.repository.AbfrageRepository;
+import de.muenchen.isi.infrastructure.repository.AbfragevarianteBaugenehmigungsverfahrenRepository;
 import de.muenchen.isi.infrastructure.repository.AbfragevarianteBauleitplanverfahrenRepository;
 import de.muenchen.isi.infrastructure.repository.BauvorhabenRepository;
 import de.muenchen.isi.security.AuthenticationUtils;
@@ -53,6 +58,8 @@ public class AbfrageService {
     private final AuthenticationUtils authenticationUtils;
 
     private final AbfragevarianteBauleitplanverfahrenRepository abfragevarianteBauleitplanverfahrenRepository;
+
+    private final AbfragevarianteBaugenehmigungsverfahrenRepository abfragevarianteBaugenehmigungsverfahrenRepository;
 
     /**
      * Die Methode gibt ein {@link AbfrageModel} identifiziert durch die ID zurück.
@@ -97,7 +104,7 @@ public class AbfrageService {
             } catch (final DataIntegrityViolationException exception) {
                 final var message =
                     "Der angegebene Name der Abfragevariante ist schon vorhanden, bitte wählen Sie daher einen anderen Namen und speichern Sie die Abfrage erneut.";
-                throw new UniqueViolationException(message);
+                throw new UniqueViolationException(message, exception);
             }
             return this.abfrageDomainMapper.entity2Model(entity);
         } else {
@@ -126,10 +133,15 @@ public class AbfrageService {
         this.throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(originalAbfrageDb, StatusAbfrage.ANGELEGT);
 
         if (ArtAbfrage.BAULEITPLANVERFAHREN.equals(abfrage.getArtAbfrage())) {
-            return patchAngelegt(
-                (BauleitplanverfahrenAngelegtModel) abfrage,
-                (BauleitplanverfahrenModel) originalAbfrageDb
-            );
+            return this.patchBauleitplanverfahrenAngelegt(
+                    (BauleitplanverfahrenAngelegtModel) abfrage,
+                    (BauleitplanverfahrenModel) originalAbfrageDb
+                );
+        } else if (ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN.equals(abfrage.getArtAbfrage())) {
+            return this.patchBaugenehmigungsverfahrenAngelegt(
+                    (BaugenehmigungsverfahrenAngelegtModel) abfrage,
+                    (BaugenehmigungsverfahrenModel) originalAbfrageDb
+                );
         } else {
             final var message = "Die Art der Abfrage wird nicht unterstützt.";
             log.error(message);
@@ -149,9 +161,34 @@ public class AbfrageService {
      * @throws FileHandlingFailedException       falls es beim Dateihandling zu einem Fehler gekommen ist.
      * @throws FileHandlingWithS3FailedException falls es beim Dateihandling im S3-Storage zu einem Fehler gekommen ist.
      */
-    protected AbfrageModel patchAngelegt(
+    protected AbfrageModel patchBauleitplanverfahrenAngelegt(
         BauleitplanverfahrenAngelegtModel abfrage,
         BauleitplanverfahrenModel originalAbfrageDb
+    )
+        throws FileHandlingFailedException, FileHandlingWithS3FailedException, UniqueViolationException, OptimisticLockingException, EntityNotFoundException {
+        dokumentService.deleteDokumenteFromOriginalDokumentenListWhichAreMissingInParameterAdaptedDokumentenListe(
+            abfrage.getDokumente(),
+            originalAbfrageDb.getDokumente()
+        );
+        final var abfrageToSave = this.abfrageDomainMapper.request2Model(abfrage, originalAbfrageDb);
+        return this.save(abfrageToSave);
+    }
+
+    /**
+     * Diese Methode aktualisiert ein {@link BaugenehmigungsverfahrenAngelegtModel}.
+     *
+     * @param abfrage mit den Attributen zum Speichern
+     * @param originalAbfrageDb welche mit den im Parameter gegebenen abfrage gegebenen Werten aktualisiert und gespeichert wird.
+     * @return das gespeicherte {@link AbfrageModel}
+     * @throws UniqueViolationException   falls der Name der Abfrage oder der Abfragevariante bereits vorhanden ist.
+     * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist.
+     * @throws EntityNotFoundException falls das referenzierte Bauvorhaben nicht existiert.
+     * @throws FileHandlingFailedException       falls es beim Dateihandling zu einem Fehler gekommen ist.
+     * @throws FileHandlingWithS3FailedException falls es beim Dateihandling im S3-Storage zu einem Fehler gekommen ist.
+     */
+    protected AbfrageModel patchBaugenehmigungsverfahrenAngelegt(
+        BaugenehmigungsverfahrenAngelegtModel abfrage,
+        BaugenehmigungsverfahrenModel originalAbfrageDb
     )
         throws FileHandlingFailedException, FileHandlingWithS3FailedException, UniqueViolationException, OptimisticLockingException, EntityNotFoundException {
         dokumentService.deleteDokumenteFromOriginalDokumentenListWhichAreMissingInParameterAdaptedDokumentenListe(
@@ -184,18 +221,25 @@ public class AbfrageService {
                 StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG
             );
 
+        final AbfrageModel abfrageToSave;
         if (ArtAbfrage.BAULEITPLANVERFAHREN.equals(abfrage.getArtAbfrage())) {
-            final var abfrageToSave =
+            abfrageToSave =
                 this.abfrageDomainMapper.request2Model(
                         (BauleitplanverfahrenInBearbeitungSachbearbeitungModel) abfrage,
                         (BauleitplanverfahrenModel) originalAbfrageDb
                     );
-            return this.save(abfrageToSave);
+        } else if (ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN.equals(abfrage.getArtAbfrage())) {
+            abfrageToSave =
+                this.abfrageDomainMapper.request2Model(
+                        (BaugenehmigungsverfahrenInBearbeitungSachbearbeitungModel) abfrage,
+                        (BaugenehmigungsverfahrenModel) originalAbfrageDb
+                    );
         } else {
             final var message = "Die Art der Abfrage wird nicht unterstützt.";
             log.error(message);
             throw new EntityNotFoundException(message);
         }
+        return this.save(abfrageToSave);
     }
 
     /**
@@ -219,18 +263,26 @@ public class AbfrageService {
                 originalAbfrageDb,
                 StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE
             );
+
+        final AbfrageModel abfrageToSave;
         if (ArtAbfrage.BAULEITPLANVERFAHREN.equals(abfrage.getArtAbfrage())) {
-            final var abfrageToSave =
+            abfrageToSave =
                 this.abfrageDomainMapper.request2Model(
                         (BauleitplanverfahrenInBearbeitungFachreferatModel) abfrage,
                         (BauleitplanverfahrenModel) originalAbfrageDb
                     );
-            return this.save(abfrageToSave);
+        } else if (ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN.equals(abfrage.getArtAbfrage())) {
+            abfrageToSave =
+                this.abfrageDomainMapper.request2Model(
+                        (BaugenehmigungsverfahrenInBearbeitungFachreferatModel) abfrage,
+                        (BaugenehmigungsverfahrenModel) originalAbfrageDb
+                    );
         } else {
             final var message = "Die Art der Abfrage wird nicht unterstützt.";
             log.error(message);
             throw new EntityNotFoundException(message);
         }
+        return this.save(abfrageToSave);
     }
 
     /**
@@ -347,18 +399,21 @@ public class AbfrageService {
         final var abfrageIds = Stream
             .of(
                 abfragevarianteBauleitplanverfahrenRepository.findAbfrageIdForAbfragevarianteById(id),
-                abfragevarianteBauleitplanverfahrenRepository.findAbfrageIdForAbfragevarianteSachbearbeitungById(id)
+                abfragevarianteBauleitplanverfahrenRepository.findAbfrageIdForAbfragevarianteSachbearbeitungById(id),
+                abfragevarianteBaugenehmigungsverfahrenRepository.findAbfrageIdForAbfragevarianteById(id),
+                abfragevarianteBaugenehmigungsverfahrenRepository.findAbfrageIdForAbfragevarianteSachbearbeitungById(id)
             )
             .filter(Optional::isPresent)
             .map(Optional::get)
             .map(UUID::fromString)
             .collect(Collectors.toList());
-        if (abfrageIds.size() == 1) {
-            return this.getById(abfrageIds.get(0));
-        } else {
+
+        if (abfrageIds.size() != 1) {
             final var message = "Abfrage auf Basis einer Abfragevariante ID nicht eindeutig auffindbar.";
             log.error(message);
             throw new EntityNotFoundException(message);
         }
+
+        return this.getById(abfrageIds.get(0));
     }
 }

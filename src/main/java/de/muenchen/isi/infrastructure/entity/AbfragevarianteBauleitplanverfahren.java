@@ -108,6 +108,9 @@ public class AbfragevarianteBauleitplanverfahren extends Abfragevariante {
     @Column(precision = 10, scale = 2)
     private BigDecimal gfWohnenWeiteresNichtInfrastrukturrelevantesWohnen;
 
+    @Column(precision = 10, scale = 2)
+    private BigDecimal gfWohnenPlanungsursaechlich;
+
     // Anzahl Wohneinheiten
 
     @Column
@@ -128,14 +131,11 @@ public class AbfragevarianteBauleitplanverfahren extends Abfragevariante {
     @Column
     private Integer weWeiteresNichtInfrastrukturrelevantesWohnen;
 
-    @Column(precision = 10, scale = 2, nullable = true)
-    private BigDecimal gfWohnenPlanungsursaechlich;
-
     @Enumerated(EnumType.STRING)
-    @Column(nullable = true)
+    @Column
     private SobonOrientierungswertJahr sobonOrientierungswertJahr;
 
-    @Column(nullable = true)
+    @Column
     private String anmerkung;
 
     @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval = true)

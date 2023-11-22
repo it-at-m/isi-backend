@@ -42,6 +42,17 @@ file:
   size.max: 31457280 # bytes
   mimetypes.allowed: application/octet-stream,application/x-dbf,text/plain,application/pdf,application/vnd.ms-outlook,application/vnd.oasis.opendocument.spreadsheet,application/vnd.oasis.opendocument.text,application/vnd.oasis.opendocument.presentation,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.openxmlformats-officedocument.presentationml.presentation,text/csv,message/rfc822,image/jpeg,image/png,image/svg+xml
 
+stammdaten:
+  csv-locations:
+    sobon-orientierungswerte-sozialinfrastruktur: >
+      csv/SoBoNOrientierungswerteSozialeInfrastruktur2014.csv,
+      csv/SoBoNOrientierungswerteSozialeInfrastruktur2017.csv,
+      csv/SoBoNOrientierungswerteSozialeInfrastruktur2022.csv
+    staedtebauliche-orientierungswerte: >
+      csv/StaedteBaulicheOrientierungswerte2014.csv,
+      csv/StaedteBaulicheOrientierungswerte2017.csv,
+      csv/StaedteBaulicheOrientierungswerte2022.csv
+
 io:
   muenchendigital:
     digiwf:

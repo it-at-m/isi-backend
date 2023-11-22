@@ -28,7 +28,7 @@ public class Adresse implements Cloneable, Serializable {
         name = "strasse" + SearchwordSuggesterRepository.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
         valueBinder = @ValueBinderRef(type = StringSuggestionBinder.class)
     )
-    @Column(nullable = true)
+    @Column
     private String strasse;
 
     @FullTextField
@@ -36,18 +36,18 @@ public class Adresse implements Cloneable, Serializable {
         name = "hausnummer" + SearchwordSuggesterRepository.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
         valueBinder = @ValueBinderRef(type = StringSuggestionBinder.class)
     )
-    @Column(nullable = true)
+    @Column
     private String hausnummer;
 
-    @Column(nullable = true)
+    @Column
     private String plz;
 
-    @Column(nullable = true)
+    @Column
     private String ort;
 
     @Embedded
     private Wgs84 coordinate;
 
-    @Column(nullable = true)
+    @Column
     private String angabeLageErgaenzendeAdressinformation;
 }
