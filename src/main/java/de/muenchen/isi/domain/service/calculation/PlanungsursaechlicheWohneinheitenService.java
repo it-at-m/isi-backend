@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 public class PlanungsursaechlicheWohneinheitenService {
 
     public static final String SUMMARY_NAME = "Gesamt";
+
     public static final List<Integer> SUMMARY_PERIODS = List.of(10, 15, 20);
 
     public static final String SUMMARY_OVER_PERIOD_NAME = "Summe der ersten %d Jahre";
