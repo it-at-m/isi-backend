@@ -103,23 +103,26 @@ public class PlanungsursaechlicheWohneinheitenServiceTest {
         final var foerdermixPMB75KMB25 = new FoerdermixModel();
         foerdermixPMB75KMB25.setFoerderarten(List.of(PMB75, KMB25));
 
+        final var jahr1 = 2024;
+        final var jahr2 = 2034;
+
         final var baurate2024A = new BaurateModel();
-        baurate2024A.setJahr(2024);
+        baurate2024A.setJahr(jahr1);
         baurate2024A.setWeGeplant(100);
         baurate2024A.setFoerdermix(foerdermixFF100);
 
         final var baurate2025A = new BaurateModel();
-        baurate2025A.setJahr(2025);
+        baurate2025A.setJahr(jahr2);
         baurate2025A.setGfWohnenGeplant(BigDecimal.valueOf(30000));
         baurate2025A.setFoerdermix(foerdermixFH50BAU50);
 
         final var baurate2024B = new BaurateModel();
-        baurate2024B.setJahr(2024);
+        baurate2024B.setJahr(jahr1);
         baurate2024B.setGfWohnenGeplant(BigDecimal.valueOf(20000));
         baurate2024B.setFoerdermix(foerdermixMM75EOF25);
 
         final var baurate2025B = new BaurateModel();
-        baurate2025B.setJahr(2025);
+        baurate2025B.setJahr(jahr2);
         baurate2025B.setWeGeplant(100);
         baurate2025B.setGfWohnenGeplant(BigDecimal.valueOf(10000));
         baurate2025B.setFoerdermix(foerdermixPMB75KMB25);
@@ -138,23 +141,55 @@ public class PlanungsursaechlicheWohneinheitenServiceTest {
 
         final var bauabschnitte = List.of(bauabschnittA, bauabschnittB);
 
+        final var jahr1String = String.valueOf(jahr1);
+        final var jahr2String = String.valueOf(jahr2);
+        final var summe10Jahre = String.format(PlanungsursaechlicheWohneinheitenService.SUMMARY_OVER_PERIOD_NAME, 10);
+        final var summe15Jahre = String.format(PlanungsursaechlicheWohneinheitenService.SUMMARY_OVER_PERIOD_NAME, 15);
+        final var summe20Jahre = String.format(PlanungsursaechlicheWohneinheitenService.SUMMARY_OVER_PERIOD_NAME, 20);
+
         final var expected = List.of(
-            new PlanungsursachlicheWohneinheitenModel(FF, 2024, new BigDecimal("100")),
-            new PlanungsursachlicheWohneinheitenModel(FF, 2025, new BigDecimal("25.0000")),
-            new PlanungsursachlicheWohneinheitenModel(EOF, 2024, new BigDecimal("55.5555555556")),
-            new PlanungsursachlicheWohneinheitenModel(EOF, 2025, new BigDecimal("75.0000")),
-            new PlanungsursachlicheWohneinheitenModel(MM, 2024, new BigDecimal("150.0000000000")),
-            new PlanungsursachlicheWohneinheitenModel(MM, 2025, new BigDecimal("75.0000000000")),
-            new PlanungsursachlicheWohneinheitenModel(FH, 2025, new BigDecimal("140.6250000000")),
+            new PlanungsursachlicheWohneinheitenModel(FF, jahr1String, new BigDecimal("100")),
+            new PlanungsursachlicheWohneinheitenModel(FF, jahr2String, new BigDecimal("25.0000")),
+            new PlanungsursachlicheWohneinheitenModel(FF, summe10Jahre, new BigDecimal("100")),
+            new PlanungsursachlicheWohneinheitenModel(FF, summe15Jahre, new BigDecimal("125.0000")),
+            new PlanungsursachlicheWohneinheitenModel(FF, summe20Jahre, new BigDecimal("125.0000")),
+            new PlanungsursachlicheWohneinheitenModel(EOF, jahr1String, new BigDecimal("55.5555555556")),
+            new PlanungsursachlicheWohneinheitenModel(EOF, jahr2String, new BigDecimal("75.0000")),
+            new PlanungsursachlicheWohneinheitenModel(EOF, summe10Jahre, new BigDecimal("55.5555555556")),
+            new PlanungsursachlicheWohneinheitenModel(EOF, summe15Jahre, new BigDecimal("130.5555555556")),
+            new PlanungsursachlicheWohneinheitenModel(EOF, summe20Jahre, new BigDecimal("130.5555555556")),
+            new PlanungsursachlicheWohneinheitenModel(MM, jahr1String, new BigDecimal("150.0000000000")),
+            new PlanungsursachlicheWohneinheitenModel(MM, jahr2String, new BigDecimal("75.0000000000")),
+            new PlanungsursachlicheWohneinheitenModel(MM, summe10Jahre, new BigDecimal("150.0000000000")),
+            new PlanungsursachlicheWohneinheitenModel(MM, summe15Jahre, new BigDecimal("225.0000000000")),
+            new PlanungsursachlicheWohneinheitenModel(MM, summe20Jahre, new BigDecimal("225.0000000000")),
+            new PlanungsursachlicheWohneinheitenModel(FH, jahr2String, new BigDecimal("140.6250000000")),
+            new PlanungsursachlicheWohneinheitenModel(FH, summe15Jahre, new BigDecimal("140.6250000000")),
+            new PlanungsursachlicheWohneinheitenModel(FH, summe20Jahre, new BigDecimal("140.6250000000")),
             new PlanungsursachlicheWohneinheitenModel(
                 PlanungsursaechlicheWohneinheitenService.SUMMARY_NAME,
-                2024,
+                jahr1String,
                 new BigDecimal("305.5555555556")
             ),
             new PlanungsursachlicheWohneinheitenModel(
                 PlanungsursaechlicheWohneinheitenService.SUMMARY_NAME,
-                2025,
+                jahr2String,
                 new BigDecimal("315.6250000000")
+            ),
+            new PlanungsursachlicheWohneinheitenModel(
+                PlanungsursaechlicheWohneinheitenService.SUMMARY_NAME,
+                summe10Jahre,
+                new BigDecimal("305.5555555556")
+            ),
+            new PlanungsursachlicheWohneinheitenModel(
+                PlanungsursaechlicheWohneinheitenService.SUMMARY_NAME,
+                summe15Jahre,
+                new BigDecimal("621.1805555556")
+            ),
+            new PlanungsursachlicheWohneinheitenModel(
+                PlanungsursaechlicheWohneinheitenService.SUMMARY_NAME,
+                summe20Jahre,
+                new BigDecimal("621.1805555556")
             )
         );
 
@@ -204,8 +239,8 @@ public class PlanungsursaechlicheWohneinheitenServiceTest {
     void mergePlanungsursaechlicheWohneinheitenTest() {
         final var foerderart1 = FF;
         final var foerderart2 = EOF;
-        final var jahr1 = 2024;
-        final var jahr2 = 2025;
+        final var jahr1 = "2024";
+        final var jahr2 = "2034";
         final var wohneinheiten1 = new BigDecimal("1000");
         final var wohneinheiten2 = new BigDecimal("500");
         final var wohneinheiten3 = new BigDecimal("2000");

@@ -11,7 +11,7 @@ public class PlanungsursachlicheWohneinheitenDto {
     private String foerderart;
 
     @NotNull
-    private Integer jahr; // JJJJ
+    private String jahr;
 
     @NotNull
     private BigDecimal wohneinheiten;
