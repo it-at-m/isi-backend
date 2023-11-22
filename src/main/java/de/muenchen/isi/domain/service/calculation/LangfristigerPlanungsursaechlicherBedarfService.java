@@ -23,6 +23,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -57,42 +58,53 @@ public class LangfristigerPlanungsursaechlicherBedarfService {
                 );
 
         // Berechnung der Gesamtanzahl der Kinder je Jahr
-        final var planungsursaechlicherBedarfForJahr = new HashMap<Integer, PlanungsursaechlicherBedarfTestModel>();
-        wohneinheitenBedarfForFoerderart
+        final var planungsursaechlicherBedarfe = wohneinheitenBedarfForFoerderart
             .keySet()
             .stream()
             .flatMap(foerderart ->
+                // Ermittlung der planungsursächlichen Bedarfe je Förderart für 20 Jahre
                 this.calculatePlanungsursaechlicherBedarfe(
                         wohneinheitenBedarfForFoerderart.get(foerderart),
                         sobonOrientierungswertForFoerderart.get(foerderart)
                     )
                     .stream()
             )
-            .forEach(planungsursaechlicherBedarfTest -> {
-                if (planungsursaechlicherBedarfForJahr.containsKey(planungsursaechlicherBedarfTest.getJahr())) {
-                    final var sumAnzahlKinderGesamt = planungsursaechlicherBedarfForJahr
-                        .get(planungsursaechlicherBedarfTest.getJahr())
-                        .getAnzahlKinderGesamt()
-                        .add(planungsursaechlicherBedarfTest.getAnzahlKinderGesamt());
-                    planungsursaechlicherBedarfForJahr
-                        .get(planungsursaechlicherBedarfTest.getJahr())
-                        .setAnzahlKinderGesamt(sumAnzahlKinderGesamt);
-                } else {
-                    planungsursaechlicherBedarfForJahr.put(
-                        planungsursaechlicherBedarfTest.getJahr(),
-                        planungsursaechlicherBedarfTest
-                    );
-                }
-            });
-        final var planungsursaechlicherBedarfe = planungsursaechlicherBedarfForJahr
+            // Gruppieren der planungsursächlichen Bedarfe je Jahr
+            .collect(
+                Collectors.groupingBy(
+                    PlanungsursaechlicherBedarfTestModel::getJahr,
+                    Collectors.mapping(Function.identity(), Collectors.toList())
+                )
+            )
             .values()
             .stream()
+            // Bilden der Jahressumme der vorher gruppierten planungsursächlichen Bedarfe.
+            .map(planungsursaechlicheBedarfeForJahr ->
+                planungsursaechlicheBedarfeForJahr
+                    .stream()
+                    .reduce(new PlanungsursaechlicherBedarfTestModel(), this::add)
+            )
             .sorted(Comparator.comparing(PlanungsursaechlicherBedarfTestModel::getJahr))
             // .map -> Berechnen der Anzahl Kinder je Krippe (generisch) sowie der Anzahl der Gruppen
             .collect(Collectors.toList());
+
         final var langfristigerPlanungsursaechlicherBedarf = new LangfristigerPlanungsursaechlicherBedarfModel();
         langfristigerPlanungsursaechlicherBedarf.setPlanungsursaechlicheBedarfe(planungsursaechlicherBedarfe);
         return langfristigerPlanungsursaechlicherBedarf;
+    }
+
+    protected PlanungsursaechlicherBedarfTestModel add(
+        final PlanungsursaechlicherBedarfTestModel o1,
+        final PlanungsursaechlicherBedarfTestModel o2
+    ) {
+        final var planungsursaechlicherBedarf = new PlanungsursaechlicherBedarfTestModel();
+        final var jahr = ObjectUtils.defaultIfNull(o1.getJahr(), o2.getJahr());
+        final var sumAnzahlKinderGesamt = ObjectUtils
+            .defaultIfNull(o1.getAnzahlKinderGesamt(), BigDecimal.ZERO)
+            .add(ObjectUtils.defaultIfNull(o2.getAnzahlKinderGesamt(), BigDecimal.ZERO));
+        planungsursaechlicherBedarf.setJahr(jahr);
+        planungsursaechlicherBedarf.setAnzahlKinderGesamt(sumAnzahlKinderGesamt);
+        return planungsursaechlicherBedarf;
     }
 
     protected Map<String, List<WohneinheitenBedarfModel>> getWohneinheitenBedarfForFoerderart(
