@@ -8,5 +8,5 @@ import lombok.Data;
 public class PlanungsursaechlicherBedarfDto {
 
     @NotNull
-    List<WohneinheitenBedarfDto> wohneinheitenBedarfe;
+    private List<WohneinheitenBedarfDto> wohneinheitenBedarfe;
 }
