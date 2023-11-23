@@ -46,7 +46,7 @@ class PlanungsursaechlicherBedarfServiceTest {
 
     @Test
     void calculatePlanungsursaechlicheBedarfeFor20Jahre() {
-        final var planungsursachlicheWohneinheiten = createListOfPlanungsursachlicheWohneinheiten(1);
+        final var planungsursachlicheWohneinheiten = createListOfPlanungsursachlicheWohneinheiten(2000, 1);
         final var sobonOrientierungswertSozialeInfrastruktur =
             TestData.createSobonOrientierungswertSozialeInfrastrukturModel();
 
@@ -152,12 +152,14 @@ class PlanungsursaechlicherBedarfServiceTest {
         assertThat(result, is(expected));
     }
 
-    private List<PlanungsursachlicheWohneinheitenModel> createListOfPlanungsursachlicheWohneinheiten(final int size) {
+    private List<PlanungsursachlicheWohneinheitenModel> createListOfPlanungsursachlicheWohneinheiten(
+        final int firstYear,
+        final int size
+    ) {
         final var planungsursachlicheWohneinheiten = new ArrayList<PlanungsursachlicheWohneinheitenModel>();
-        int baseYear = 2000;
         for (int index = 0; index < size; index++) {
             final var planungsursachlicheWohneinheit = new PlanungsursachlicheWohneinheitenModel();
-            planungsursachlicheWohneinheit.setJahr(Integer.toString(baseYear + index));
+            planungsursachlicheWohneinheit.setJahr(Integer.toString(firstYear + index));
             planungsursachlicheWohneinheit.setWohneinheiten(BigDecimal.valueOf(10000, 0));
             planungsursachlicheWohneinheiten.add(planungsursachlicheWohneinheit);
         }
