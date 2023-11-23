@@ -108,7 +108,7 @@ public class PlanungsursaechlicherBedarfService {
                 return new EntityNotFoundException(message);
             });
 
-        final var firstPlanungsUrsaechlichesJahr = wohneinheitenWithoutSum
+        final var earliestPlanungsUrsaechlichesJahr = wohneinheitenWithoutSum
             .stream()
             .map(PlanungsursachlicheWohneinheitenModel::getJahr)
             .mapToInt(Integer::parseInt)
@@ -120,7 +120,7 @@ public class PlanungsursaechlicherBedarfService {
             .stream()
             .flatMap(planungsursaechlicheWohneinheiten ->
                 calculatePlanungsursaechlicheBedarfe(
-                    firstPlanungsUrsaechlichesJahr,
+                    earliestPlanungsUrsaechlichesJahr,
                     planungsursaechlicheWohneinheiten,
                     sobonOrientierungswertForFoerderart.get(planungsursaechlicheWohneinheiten.getFoerderart())
                 )
