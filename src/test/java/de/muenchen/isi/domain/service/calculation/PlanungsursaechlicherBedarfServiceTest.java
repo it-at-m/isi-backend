@@ -45,7 +45,93 @@ class PlanungsursaechlicherBedarfServiceTest {
     }
 
     @Test
-    void calculatePlanungsursaechlicheBedarfeFor20Jahre() {
+    void calculatePlanungsursaechlicheBedarfeStartAtYear20() {
+        final var planungsursachlicheWohneinheiten = createListOfPlanungsursachlicheWohneinheiten(2019, 1);
+        final var sobonOrientierungswertSozialeInfrastruktur =
+            TestData.createSobonOrientierungswertSozialeInfrastrukturModel();
+
+        final var result = planungsursaechlicherBedarfService.calculatePlanungsursaechlicheBedarfe(
+            2000,
+            planungsursachlicheWohneinheiten.get(0),
+            sobonOrientierungswertSozialeInfrastruktur
+        );
+
+        final var expected = new ArrayList<PlanungsursaechlicherBedarfModel>();
+        var planungsursaechlicherBedarf = new PlanungsursaechlicherBedarfModel();
+        planungsursaechlicherBedarf.setJahr(Integer.toString(2019));
+        planungsursaechlicherBedarf.setAnzahlKinderGesamt(BigDecimal.valueOf(48090000, 4));
+        expected.add(planungsursaechlicherBedarf);
+
+        assertThat(result, is(expected));
+    }
+
+    @Test
+    void calculatePlanungsursaechlicheBedarfeStartAtYear9() {
+        final var planungsursachlicheWohneinheiten = createListOfPlanungsursachlicheWohneinheiten(2008, 1);
+        final var sobonOrientierungswertSozialeInfrastruktur =
+            TestData.createSobonOrientierungswertSozialeInfrastrukturModel();
+
+        final var result = planungsursaechlicherBedarfService.calculatePlanungsursaechlicheBedarfe(
+            2000,
+            planungsursachlicheWohneinheiten.get(0),
+            sobonOrientierungswertSozialeInfrastruktur
+        );
+
+        final var expected = new ArrayList<PlanungsursaechlicherBedarfModel>();
+        var planungsursaechlicherBedarf = new PlanungsursaechlicherBedarfModel();
+        planungsursaechlicherBedarf.setJahr(Integer.toString(2008));
+        planungsursaechlicherBedarf.setAnzahlKinderGesamt(BigDecimal.valueOf(48090000, 4));
+        expected.add(planungsursaechlicherBedarf);
+        planungsursaechlicherBedarf = new PlanungsursaechlicherBedarfModel();
+        planungsursaechlicherBedarf.setJahr(Integer.toString(2009));
+        planungsursaechlicherBedarf.setAnzahlKinderGesamt(BigDecimal.valueOf(47400000, 4));
+        expected.add(planungsursaechlicherBedarf);
+        planungsursaechlicherBedarf = new PlanungsursaechlicherBedarfModel();
+        planungsursaechlicherBedarf.setJahr(Integer.toString(2010));
+        planungsursaechlicherBedarf.setAnzahlKinderGesamt(BigDecimal.valueOf(46720000, 4));
+        expected.add(planungsursaechlicherBedarf);
+        planungsursaechlicherBedarf = new PlanungsursaechlicherBedarfModel();
+        planungsursaechlicherBedarf.setJahr(Integer.toString(2011));
+        planungsursaechlicherBedarf.setAnzahlKinderGesamt(BigDecimal.valueOf(46030000, 4));
+        expected.add(planungsursaechlicherBedarf);
+        planungsursaechlicherBedarf = new PlanungsursaechlicherBedarfModel();
+        planungsursaechlicherBedarf.setJahr(Integer.toString(2012));
+        planungsursaechlicherBedarf.setAnzahlKinderGesamt(BigDecimal.valueOf(45340000, 4));
+        expected.add(planungsursaechlicherBedarf);
+        planungsursaechlicherBedarf = new PlanungsursaechlicherBedarfModel();
+        planungsursaechlicherBedarf.setJahr(Integer.toString(2013));
+        planungsursaechlicherBedarf.setAnzahlKinderGesamt(BigDecimal.valueOf(44660000, 4));
+        expected.add(planungsursaechlicherBedarf);
+        planungsursaechlicherBedarf = new PlanungsursaechlicherBedarfModel();
+        planungsursaechlicherBedarf.setJahr(Integer.toString(2014));
+        planungsursaechlicherBedarf.setAnzahlKinderGesamt(BigDecimal.valueOf(43970000, 4));
+        expected.add(planungsursaechlicherBedarf);
+        planungsursaechlicherBedarf = new PlanungsursaechlicherBedarfModel();
+        planungsursaechlicherBedarf.setJahr(Integer.toString(2015));
+        planungsursaechlicherBedarf.setAnzahlKinderGesamt(BigDecimal.valueOf(43280000, 4));
+        expected.add(planungsursaechlicherBedarf);
+        planungsursaechlicherBedarf = new PlanungsursaechlicherBedarfModel();
+        planungsursaechlicherBedarf.setJahr(Integer.toString(2016));
+        planungsursaechlicherBedarf.setAnzahlKinderGesamt(BigDecimal.valueOf(42590000, 4));
+        expected.add(planungsursaechlicherBedarf);
+        planungsursaechlicherBedarf = new PlanungsursaechlicherBedarfModel();
+        planungsursaechlicherBedarf.setJahr(Integer.toString(2017));
+        planungsursaechlicherBedarf.setAnzahlKinderGesamt(BigDecimal.valueOf(41910000, 4));
+        expected.add(planungsursaechlicherBedarf);
+        planungsursaechlicherBedarf = new PlanungsursaechlicherBedarfModel();
+        planungsursaechlicherBedarf.setJahr(Integer.toString(2018));
+        planungsursaechlicherBedarf.setAnzahlKinderGesamt(BigDecimal.valueOf(41490000, 4));
+        expected.add(planungsursaechlicherBedarf);
+        planungsursaechlicherBedarf = new PlanungsursaechlicherBedarfModel();
+        planungsursaechlicherBedarf.setJahr(Integer.toString(2019));
+        planungsursaechlicherBedarf.setAnzahlKinderGesamt(BigDecimal.valueOf(41080000, 4));
+        expected.add(planungsursaechlicherBedarf);
+
+        assertThat(result, is(expected));
+    }
+
+    @Test
+    void calculatePlanungsursaechlicheBedarfeStartAtYear1() {
         final var planungsursachlicheWohneinheiten = createListOfPlanungsursachlicheWohneinheiten(2000, 1);
         final var sobonOrientierungswertSozialeInfrastruktur =
             TestData.createSobonOrientierungswertSozialeInfrastrukturModel();
