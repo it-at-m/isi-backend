@@ -64,6 +64,15 @@ public class CalculationService {
             );
         bedarf.setPlanungsursaechlicherBedarfKindergarten(bedarfKindergarten);
 
+        // Ermittlung Bedarf alle Einwohner
+        final var bedarfAlleEinwohner =
+            planungsursaechlicherBedarfService.calculatePlanungsursaechlicherBedarfForAlleEinwohner(
+                wohneinheiten,
+                sobonJahr,
+                gueltigAb
+            );
+        bedarf.setPlanungsursaechlicherBedarfAlleEinwohner(bedarfAlleEinwohner);
+
         return bedarf;
     }
 }

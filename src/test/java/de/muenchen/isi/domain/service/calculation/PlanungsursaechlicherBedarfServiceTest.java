@@ -54,6 +54,19 @@ class PlanungsursaechlicherBedarfServiceTest {
     }
 
     @Test
+    void calculatePlanungsursaechlicherBedarf() {
+        final InfrastruktureinrichtungTyp einrichtung = InfrastruktureinrichtungTyp.KINDERKRIPPE;
+        final SobonOrientierungswertJahr sobonJahr = SobonOrientierungswertJahr.JAHR_2017;
+        final LocalDate gueltigAb = LocalDate.of(2020, 1, 1);
+        final List<PlanungsursachlicheWohneinheitenModel> wohneinheiten = new ArrayList<
+            PlanungsursachlicheWohneinheitenModel
+        >();
+        var wohneinheitenModel = new PlanungsursachlicheWohneinheitenModel();
+        wohneinheitenModel.setJahr("2000");
+        wohneinheitenModel.setWohneinheiten(BigDecimal.valueOf(10000));
+    }
+
+    @Test
     void setVersorgungsquoteAndGruppenstaerkeInPlanungsursaechlichenBedarf() {
         final var planungsursaechlicherBedarf = new PlanungsursaechlicherBedarfModel();
         planungsursaechlicherBedarf.setAnzahlKinderGesamt(BigDecimal.valueOf(100));

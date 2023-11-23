@@ -15,4 +15,7 @@ public class LangfristigerPlanungsursaechlicherBedarfDto {
 
     @NotNull
     private List<PlanungsursaechlicherBedarfDto> planungsursaechlicherBedarfKindergarten;
+
+    @NotNull
+    private List<PlanungsursaechlicherBedarfDto> planungsursaechlicherBedarfAlleEinwohner;
 }

@@ -63,6 +63,19 @@ public class PlanungsursaechlicherBedarfService {
             );
     }
 
+    public List<PlanungsursaechlicherBedarfModel> calculatePlanungsursaechlicherBedarfForAlleEinwohner(
+        final List<PlanungsursachlicheWohneinheitenModel> wohneinheiten,
+        final SobonOrientierungswertJahr sobonJahr,
+        final LocalDate gueltigAb
+    ) throws EntityNotFoundException {
+        return this.calculatePlanungsursaechlicherBedarf(
+                InfrastruktureinrichtungTyp.UNSPECIFIED,
+                wohneinheiten,
+                sobonJahr,
+                gueltigAb
+            );
+    }
+
     protected List<PlanungsursaechlicherBedarfModel> calculatePlanungsursaechlicherBedarf(
         final InfrastruktureinrichtungTyp einrichtung,
         final List<PlanungsursachlicheWohneinheitenModel> wohneinheiten,

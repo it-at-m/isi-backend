@@ -11,4 +11,6 @@ public class LangfristigerPlanungsursaechlicherBedarfModel {
     private List<PlanungsursaechlicherBedarfModel> planungsursaechlicherBedarfKinderkrippe;
 
     private List<PlanungsursaechlicherBedarfModel> planungsursaechlicherBedarfKindergarten;
+
+    private List<PlanungsursaechlicherBedarfModel> planungsursaechlicherBedarfAlleEinwohner;
 }
