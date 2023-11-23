@@ -45,7 +45,7 @@ class PlanungsursaechlicherBedarfServiceTest {
     }
 
     @Test
-    void calculatePlanungsursaechlicheBedarfeFor30Jahre() {
+    void calculatePlanungsursaechlicheBedarfeFor20Jahre() {
         final var planungsursachlicheWohneinheiten = createListOfPlanungsursachlicheWohneinheiten(1);
         final var sobonOrientierungswertSozialeInfrastruktur =
             TestData.createSobonOrientierungswertSozialeInfrastrukturModel();
