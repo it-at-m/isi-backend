@@ -5,6 +5,7 @@
 package de.muenchen.isi;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import de.muenchen.isi.domain.mapper.StammdatenDomainMapperImpl;
 import de.muenchen.isi.domain.model.AbfragevarianteBaugenehmigungsverfahrenModel;
 import de.muenchen.isi.domain.model.AbfragevarianteBauleitplanverfahrenModel;
 import de.muenchen.isi.domain.model.BauabschnittModel;
@@ -41,6 +42,7 @@ import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.WesentlicheRechtsgrundlage;
 import de.muenchen.isi.infrastructure.entity.filehandling.Dokument;
 import de.muenchen.isi.infrastructure.entity.filehandling.Filepath;
+import de.muenchen.isi.infrastructure.entity.stammdaten.SobonOrientierungswertSozialeInfrastruktur;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -51,9 +53,9 @@ import lombok.SneakyThrows;
 
 public class TestData {
 
-    public static SobonOrientierungswertSozialeInfrastrukturModel createSobonOrientierungswertSozialeInfrastrukturModel() {
-        SobonOrientierungswertSozialeInfrastrukturModel sobonOrientierungswertSozialeInfrastruktur =
-            new SobonOrientierungswertSozialeInfrastrukturModel();
+    public static SobonOrientierungswertSozialeInfrastruktur createSobonOrientierungswertSozialeInfrastrukturEntity() {
+        SobonOrientierungswertSozialeInfrastruktur sobonOrientierungswertSozialeInfrastruktur =
+            new SobonOrientierungswertSozialeInfrastruktur();
         sobonOrientierungswertSozialeInfrastruktur.setGueltigAb(LocalDate.now());
         sobonOrientierungswertSozialeInfrastruktur.setAltersklasse(Altersklasse.NULL_ZWEI);
         sobonOrientierungswertSozialeInfrastruktur.setEinrichtungstyp(InfrastruktureinrichtungTyp.KINDERKRIPPE);
@@ -70,6 +72,10 @@ public class TestData {
         sobonOrientierungswertSozialeInfrastruktur.setEinwohnerJahr10NachErsterstellung(BigDecimal.valueOf(3050, 4));
         sobonOrientierungswertSozialeInfrastruktur.setStammwertArbeitsgruppe(BigDecimal.valueOf(4500, 4));
         return sobonOrientierungswertSozialeInfrastruktur;
+    }
+
+    public static SobonOrientierungswertSozialeInfrastrukturModel createSobonOrientierungswertSozialeInfrastrukturModel() {
+        return new StammdatenDomainMapperImpl().entity2Model(createSobonOrientierungswertSozialeInfrastrukturEntity());
     }
 
     public static BauleitplanverfahrenModel createBauleitplanverfahrenModel() {
