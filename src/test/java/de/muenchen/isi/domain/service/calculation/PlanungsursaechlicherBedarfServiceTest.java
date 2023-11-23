@@ -52,6 +52,81 @@ class PlanungsursaechlicherBedarfServiceTest {
     }
 
     @Test
+    void add() {
+        var model1 = new PlanungsursaechlicherBedarfModel();
+        model1.setJahr("2000");
+        model1.setAnzahlKinderGesamt(BigDecimal.valueOf(10));
+        var model2 = new PlanungsursaechlicherBedarfModel();
+        model2.setJahr("2001");
+        model2.setAnzahlKinderGesamt(BigDecimal.valueOf(22));
+        var result = planungsursaechlicherBedarfService.add(model1, model2);
+        var expected = new PlanungsursaechlicherBedarfModel();
+        expected.setJahr("2000");
+        expected.setAnzahlKinderGesamt(BigDecimal.valueOf(32));
+        assertThat(result, is(expected));
+
+        model1.setJahr("2000");
+        model1.setAnzahlKinderGesamt(null);
+        model2.setJahr("2001");
+        model2.setAnzahlKinderGesamt(BigDecimal.valueOf(22));
+        result = planungsursaechlicherBedarfService.add(model1, model2);
+        expected = new PlanungsursaechlicherBedarfModel();
+        expected.setJahr("2000");
+        expected.setAnzahlKinderGesamt(BigDecimal.valueOf(22));
+        assertThat(result, is(expected));
+
+        model1.setJahr("2000");
+        model1.setAnzahlKinderGesamt(BigDecimal.valueOf(10));
+        model2.setJahr("2001");
+        model2.setAnzahlKinderGesamt(null);
+        result = planungsursaechlicherBedarfService.add(model1, model2);
+        expected = new PlanungsursaechlicherBedarfModel();
+        expected.setJahr("2000");
+        expected.setAnzahlKinderGesamt(BigDecimal.valueOf(10));
+        assertThat(result, is(expected));
+
+        model1.setJahr("2000");
+        model1.setAnzahlKinderGesamt(null);
+        model2.setJahr("2001");
+        model2.setAnzahlKinderGesamt(null);
+        result = planungsursaechlicherBedarfService.add(model1, model2);
+        expected = new PlanungsursaechlicherBedarfModel();
+        expected.setJahr("2000");
+        expected.setAnzahlKinderGesamt(BigDecimal.valueOf(0));
+        assertThat(result, is(expected));
+
+        model1.setJahr("2000");
+        model1.setAnzahlKinderGesamt(null);
+        model2.setJahr(null);
+        model2.setAnzahlKinderGesamt(null);
+        result = planungsursaechlicherBedarfService.add(model1, model2);
+        expected = new PlanungsursaechlicherBedarfModel();
+        expected.setJahr("2000");
+        expected.setAnzahlKinderGesamt(BigDecimal.valueOf(0));
+        assertThat(result, is(expected));
+
+        model1.setJahr(null);
+        model1.setAnzahlKinderGesamt(null);
+        model2.setJahr("2001");
+        model2.setAnzahlKinderGesamt(null);
+        result = planungsursaechlicherBedarfService.add(model1, model2);
+        expected = new PlanungsursaechlicherBedarfModel();
+        expected.setJahr("2001");
+        expected.setAnzahlKinderGesamt(BigDecimal.valueOf(0));
+        assertThat(result, is(expected));
+
+        model1.setJahr(null);
+        model1.setAnzahlKinderGesamt(null);
+        model2.setJahr(null);
+        model2.setAnzahlKinderGesamt(null);
+        result = planungsursaechlicherBedarfService.add(model1, model2);
+        expected = new PlanungsursaechlicherBedarfModel();
+        expected.setJahr(null);
+        expected.setAnzahlKinderGesamt(BigDecimal.valueOf(0));
+        assertThat(result, is(expected));
+    }
+
+    @Test
     void getSobonOrientierungswertForFoerderart() {
         final var wohneinheiten = new ArrayList<PlanungsursachlicheWohneinheitenModel>();
         var planungsursachlicheWohneinheiten = new PlanungsursachlicheWohneinheitenModel();

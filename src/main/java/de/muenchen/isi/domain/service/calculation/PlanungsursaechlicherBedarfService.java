@@ -166,19 +166,6 @@ public class PlanungsursaechlicherBedarfService {
         return planungsursaechlicherBedarf;
     }
 
-    protected Map<String, List<PlanungsursachlicheWohneinheitenModel>> getPlanungsursachlicheWohneinheitenForFoerderart(
-        final List<PlanungsursachlicheWohneinheitenModel> wohneinheiten
-    ) {
-        return wohneinheiten
-            .stream()
-            .collect(
-                Collectors.groupingBy(
-                    PlanungsursachlicheWohneinheitenModel::getFoerderart,
-                    Collectors.mapping(Function.identity(), Collectors.toList())
-                )
-            );
-    }
-
     protected Map<String, SobonOrientierungswertSozialeInfrastrukturModel> getSobonOrientierungswertForFoerderart(
         final List<PlanungsursachlicheWohneinheitenModel> wohneinheiten,
         final SobonOrientierungswertJahr sobonJahr,
