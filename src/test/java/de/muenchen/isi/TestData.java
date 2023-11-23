@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.muenchen.isi.domain.mapper.StammdatenDomainMapperImpl;
 import de.muenchen.isi.domain.model.AbfragevarianteBaugenehmigungsverfahrenModel;
 import de.muenchen.isi.domain.model.AbfragevarianteBauleitplanverfahrenModel;
+import de.muenchen.isi.domain.model.AbfragevarianteWeiteresVerfahrenModel;
 import de.muenchen.isi.domain.model.BauabschnittModel;
 import de.muenchen.isi.domain.model.BaugebietModel;
 import de.muenchen.isi.domain.model.BaugenehmigungsverfahrenModel;
@@ -15,10 +16,13 @@ import de.muenchen.isi.domain.model.BauleitplanverfahrenModel;
 import de.muenchen.isi.domain.model.BaurateModel;
 import de.muenchen.isi.domain.model.FoerderartModel;
 import de.muenchen.isi.domain.model.FoerdermixModel;
+import de.muenchen.isi.domain.model.WeiteresVerfahrenModel;
 import de.muenchen.isi.domain.model.abfrageAngelegt.AbfragevarianteBaugenehmigungsverfahrenAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageAngelegt.AbfragevarianteBauleitplanverfahrenAngelegtModel;
+import de.muenchen.isi.domain.model.abfrageAngelegt.AbfragevarianteWeiteresVerfahrenAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageAngelegt.BaugenehmigungsverfahrenAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageAngelegt.BauleitplanverfahrenAngelegtModel;
+import de.muenchen.isi.domain.model.abfrageAngelegt.WeiteresVerfahrenAngelegtModel;
 import de.muenchen.isi.domain.model.common.AdresseModel;
 import de.muenchen.isi.domain.model.common.FlurstueckModel;
 import de.muenchen.isi.domain.model.common.GemarkungModel;
@@ -118,6 +122,26 @@ public class TestData {
         return baugenehmigungsverfahren;
     }
 
+    public static WeiteresVerfahrenModel createWeiteresVerfahrenModel() {
+        final var weiteresVerfahren = new WeiteresVerfahrenModel();
+        weiteresVerfahren.setName("Überbausiedlung in Musterort");
+        weiteresVerfahren.setStatusAbfrage(StatusAbfrage.ANGELEGT);
+        final WGS84Model coordinate = new WGS84Model();
+        coordinate.setLatitude(48.1556795465256);
+        coordinate.setLongitude(11.5568456350688);
+        weiteresVerfahren.setAdresse(new AdresseModel("80331", "München", "Lothstraße", "7", coordinate, null));
+        weiteresVerfahren.setFristBearbeitung(LocalDate.of(2022, 12, 31));
+        weiteresVerfahren.setAnmerkung("Bitte die Abfrage zeitnah behandeln");
+        weiteresVerfahren.setStandVerfahren(StandVerfahren.STRUKTURKONZEPT);
+        weiteresVerfahren.setVerortung(createVerortung());
+        weiteresVerfahren.setSobonRelevant(UncertainBoolean.TRUE);
+        weiteresVerfahren.setSobonJahr(SobonVerfahrensgrundsaetzeJahr.JAHR_2021);
+        weiteresVerfahren.setOffizielleMitzeichnung(UncertainBoolean.TRUE);
+        weiteresVerfahren.setOffizielleMitzeichnung(UncertainBoolean.FALSE);
+        weiteresVerfahren.setAbfragevariantenWeiteresVerfahren(List.of(createAbfragevarianteWeiteresVerfahrenModel()));
+        return weiteresVerfahren;
+    }
+
     public static BauleitplanverfahrenAngelegtModel createBauleitplanverfahrenAngelegtModel() {
         final var bauleitplanverfahren = new BauleitplanverfahrenAngelegtModel();
         bauleitplanverfahren.setArtAbfrage(ArtAbfrage.BAULEITPLANVERFAHREN);
@@ -156,6 +180,26 @@ public class TestData {
         return baugenehmigungsverfahren;
     }
 
+    public static WeiteresVerfahrenAngelegtModel createWeiteresVerfahrenAngelegtModel() {
+        final var bauleitplanverfahren = new WeiteresVerfahrenAngelegtModel();
+        bauleitplanverfahren.setArtAbfrage(ArtAbfrage.WEITERES_VERFAHREN);
+        bauleitplanverfahren.setName("Überbausiedlung in Musterort 2");
+        final WGS84Model coordinate = new WGS84Model();
+        coordinate.setLatitude(48.1556795465256);
+        coordinate.setLongitude(11.5568456350688);
+        bauleitplanverfahren.setAdresse(new AdresseModel("80331", "München", "Lothstraße", "7", coordinate, null));
+        bauleitplanverfahren.setFristBearbeitung(LocalDate.of(2022, 12, 31));
+        bauleitplanverfahren.setAnmerkung("Bitte die Abfrage zeitnah behandeln");
+        bauleitplanverfahren.setStandVerfahren(StandVerfahren.STRUKTURKONZEPT);
+        bauleitplanverfahren.setVerortung(createVerortung());
+        bauleitplanverfahren.setSobonRelevant(UncertainBoolean.FALSE);
+        bauleitplanverfahren.setOffizielleMitzeichnung(UncertainBoolean.FALSE);
+        bauleitplanverfahren.setAbfragevariantenWeiteresVerfahren(
+            List.of(createAbfragevarianteWeiteresVerfahrenAngelegtModel())
+        );
+        return bauleitplanverfahren;
+    }
+
     public static AbfragevarianteBauleitplanverfahrenModel createAbfragevarianteBauleitplanverfahrenModel() {
         final var abfragevariante = new AbfragevarianteBauleitplanverfahrenModel();
         abfragevariante.setAbfragevariantenNr(1);
@@ -190,6 +234,23 @@ public class TestData {
         return abfragevariante;
     }
 
+    public static AbfragevarianteWeiteresVerfahrenModel createAbfragevarianteWeiteresVerfahrenModel() {
+        final var abfragevariante = new AbfragevarianteWeiteresVerfahrenModel();
+        abfragevariante.setAbfragevariantenNr(1);
+        abfragevariante.setName("Name Abfragevariante 9");
+        abfragevariante.setWesentlicheRechtsgrundlage(
+            List.of(WesentlicheRechtsgrundlage.EINFACHER_BEBAUUNGSPLAN_PARAGRAPH_30)
+        );
+        abfragevariante.setGfWohnenSonderwohnformen(false);
+        abfragevariante.setGfWohnenGesamt(BigDecimal.valueOf(1234.56));
+        abfragevariante.setWeSonderwohnformen(false);
+        abfragevariante.setWeGesamt(31);
+        abfragevariante.setRealisierungVon(2023);
+        abfragevariante.setSobonOrientierungswertJahr(SobonOrientierungswertJahr.JAHR_2022);
+        abfragevariante.setBauabschnitte(List.of(createBauabschnittModel()));
+        return abfragevariante;
+    }
+
     public static AbfragevarianteBauleitplanverfahrenAngelegtModel createAbfragevarianteBauleitplanverfahrenAngelegtModel() {
         final var abfragevariante = new AbfragevarianteBauleitplanverfahrenAngelegtModel();
         abfragevariante.setAbfragevariantenNr(1);
@@ -210,6 +271,22 @@ public class TestData {
         final var abfragevariante = new AbfragevarianteBaugenehmigungsverfahrenAngelegtModel();
         abfragevariante.setAbfragevariantenNr(1);
         abfragevariante.setName("Name Abfragevariante 112");
+        abfragevariante.setWesentlicheRechtsgrundlage(
+            List.of(WesentlicheRechtsgrundlage.EINFACHER_BEBAUUNGSPLAN_PARAGRAPH_30)
+        );
+        abfragevariante.setGfWohnenSonderwohnformen(false);
+        abfragevariante.setGfWohnenGesamt(BigDecimal.valueOf(1234.56));
+        abfragevariante.setWeSonderwohnformen(false);
+        abfragevariante.setWeGesamt(31);
+        abfragevariante.setRealisierungVon(2023);
+        abfragevariante.setBauabschnitte(List.of(createBauabschnittModel()));
+        return abfragevariante;
+    }
+
+    public static AbfragevarianteWeiteresVerfahrenAngelegtModel createAbfragevarianteWeiteresVerfahrenAngelegtModel() {
+        final var abfragevariante = new AbfragevarianteWeiteresVerfahrenAngelegtModel();
+        abfragevariante.setAbfragevariantenNr(1);
+        abfragevariante.setName("Name Abfragevariante 92");
         abfragevariante.setWesentlicheRechtsgrundlage(
             List.of(WesentlicheRechtsgrundlage.EINFACHER_BEBAUUNGSPLAN_PARAGRAPH_30)
         );

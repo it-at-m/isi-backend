@@ -33,7 +33,6 @@
         <apache.commons.fileupload>1.5</apache.commons.fileupload>
         <apache.tika.parsers>1.19</apache.tika.parsers>
         <opencsv.version>5.6</opencsv.version>
-        <javafaker.version>1.0.2</javafaker.version>
         <springdoc.version>1.6.13</springdoc.version>
         <!-- SonarQube -->
         <sonar.scanner.version>3.9.0.2155</sonar.scanner.version>
@@ -277,12 +276,6 @@
         <dependency>
             <groupId>org.hamcrest</groupId>
             <artifactId>hamcrest-library</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.github.javafaker</groupId>
-            <artifactId>javafaker</artifactId>
-            <version>${javafaker.version}</version>
             <scope>test</scope>
         </dependency>
 
