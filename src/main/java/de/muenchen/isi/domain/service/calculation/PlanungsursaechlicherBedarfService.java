@@ -129,12 +129,15 @@ public class PlanungsursaechlicherBedarfService {
             .sorted(Comparator.comparing(PlanungsursaechlicherBedarfModel::getJahr))
             // Ermitteln der Versorgungsquote und Gruppenstärke
             .map(planungsursaechlicherBedarfTest ->
-                setVersorgungsquoteAndGruppenstaerke(planungsursaechlicherBedarfTest, versorgungsquoteGruppenstaerke)
+                this.setVersorgungsquoteAndGruppenstaerkeInPlanungsursaechlichenBedarf(
+                        planungsursaechlicherBedarfTest,
+                        versorgungsquoteGruppenstaerke
+                    )
             )
             .collect(Collectors.toList());
     }
 
-    protected PlanungsursaechlicherBedarfModel setVersorgungsquoteAndGruppenstaerke(
+    protected PlanungsursaechlicherBedarfModel setVersorgungsquoteAndGruppenstaerkeInPlanungsursaechlichenBedarf(
         final PlanungsursaechlicherBedarfModel planungsursaechlicherBedarf,
         final VersorgungsquoteGruppenstaerke versorgungsquoteGruppenstaerke
     ) {

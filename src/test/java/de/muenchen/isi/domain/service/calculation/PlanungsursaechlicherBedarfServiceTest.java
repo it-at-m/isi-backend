@@ -11,6 +11,7 @@ import de.muenchen.isi.domain.model.stammdaten.SobonOrientierungswertSozialeInfr
 import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
 import de.muenchen.isi.infrastructure.entity.stammdaten.SobonOrientierungswertSozialeInfrastruktur;
+import de.muenchen.isi.infrastructure.entity.stammdaten.VersorgungsquoteGruppenstaerke;
 import de.muenchen.isi.infrastructure.repository.stammdaten.SobonOrientierungswertSozialeInfrastrukturRepository;
 import de.muenchen.isi.infrastructure.repository.stammdaten.VersorgungsquoteGruppenstaerkeRepository;
 import java.math.BigDecimal;
@@ -19,6 +20,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -52,11 +54,70 @@ class PlanungsursaechlicherBedarfServiceTest {
     }
 
     @Test
+    void setVersorgungsquoteAndGruppenstaerkeInPlanungsursaechlichenBedarf() {
+        final var planungsursaechlicherBedarf = new PlanungsursaechlicherBedarfModel();
+        planungsursaechlicherBedarf.setAnzahlKinderGesamt(BigDecimal.valueOf(100));
+        final var versorgungsQuote = new VersorgungsquoteGruppenstaerke();
+        versorgungsQuote.setVersorgungsquotePlanungsursaechlich(BigDecimal.valueOf(60, 2));
+        versorgungsQuote.setGruppenstaerke(10);
+        var result =
+            planungsursaechlicherBedarfService.setVersorgungsquoteAndGruppenstaerkeInPlanungsursaechlichenBedarf(
+                planungsursaechlicherBedarf,
+                versorgungsQuote
+            );
+        var expected = new PlanungsursaechlicherBedarfModel();
+        expected.setAnzahlKinderGesamt(BigDecimal.valueOf(100));
+        expected.setAnzahlKinderZuVersorgen(BigDecimal.valueOf(6000, 2));
+        expected.setAnzahlGruppen(BigDecimal.valueOf(600, 2));
+        assertThat(result, is(expected));
+
+        planungsursaechlicherBedarf.setAnzahlKinderGesamt(BigDecimal.valueOf(73));
+        versorgungsQuote.setVersorgungsquotePlanungsursaechlich(BigDecimal.valueOf(58, 2));
+        versorgungsQuote.setGruppenstaerke(10);
+        result =
+            planungsursaechlicherBedarfService.setVersorgungsquoteAndGruppenstaerkeInPlanungsursaechlichenBedarf(
+                planungsursaechlicherBedarf,
+                versorgungsQuote
+            );
+        expected = new PlanungsursaechlicherBedarfModel();
+        expected.setAnzahlKinderGesamt(BigDecimal.valueOf(73));
+        expected.setAnzahlKinderZuVersorgen(BigDecimal.valueOf(4234, 2));
+        expected.setAnzahlGruppen(BigDecimal.valueOf(423, 2));
+        assertThat(result, is(expected));
+
+        planungsursaechlicherBedarf.setAnzahlKinderGesamt(null);
+        versorgungsQuote.setVersorgungsquotePlanungsursaechlich(BigDecimal.valueOf(58, 2));
+        versorgungsQuote.setGruppenstaerke(10);
+        Assertions.assertThrows(
+            NullPointerException.class,
+            () -> {
+                planungsursaechlicherBedarfService.setVersorgungsquoteAndGruppenstaerkeInPlanungsursaechlichenBedarf(
+                    planungsursaechlicherBedarf,
+                    versorgungsQuote
+                );
+            }
+        );
+
+        planungsursaechlicherBedarf.setAnzahlKinderGesamt(BigDecimal.valueOf(73));
+        versorgungsQuote.setVersorgungsquotePlanungsursaechlich(null);
+        versorgungsQuote.setGruppenstaerke(10);
+        Assertions.assertThrows(
+            NullPointerException.class,
+            () -> {
+                planungsursaechlicherBedarfService.setVersorgungsquoteAndGruppenstaerkeInPlanungsursaechlichenBedarf(
+                    planungsursaechlicherBedarf,
+                    versorgungsQuote
+                );
+            }
+        );
+    }
+
+    @Test
     void add() {
-        var model1 = new PlanungsursaechlicherBedarfModel();
+        final var model1 = new PlanungsursaechlicherBedarfModel();
         model1.setJahr("2000");
         model1.setAnzahlKinderGesamt(BigDecimal.valueOf(10));
-        var model2 = new PlanungsursaechlicherBedarfModel();
+        final var model2 = new PlanungsursaechlicherBedarfModel();
         model2.setJahr("2001");
         model2.setAnzahlKinderGesamt(BigDecimal.valueOf(22));
         var result = planungsursaechlicherBedarfService.add(model1, model2);
