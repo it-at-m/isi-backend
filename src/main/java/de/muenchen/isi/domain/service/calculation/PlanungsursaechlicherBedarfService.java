@@ -37,6 +37,19 @@ public class PlanungsursaechlicherBedarfService {
 
     private final StammdatenDomainMapper stammdatenDomainMapper;
 
+    //
+
+    public List<PlanungsursaechlicherBedarfModel> calculatePlanungsursaechlicherBedarfForKinderkrippeRounded(
+        final List<PlanungsursachlicheWohneinheitenModel> wohneinheiten,
+        final SobonOrientierungswertJahr sobonJahr,
+        final LocalDate gueltigAb
+    ) throws EntityNotFoundException {
+        return this.calculatePlanungsursaechlicherBedarfForKinderkrippe(wohneinheiten, sobonJahr, gueltigAb)
+            .stream()
+            .map(this::roundValuesAndReturnModelWithRoundedValues)
+            .collect(Collectors.toList());
+    }
+
     public List<PlanungsursaechlicherBedarfModel> calculatePlanungsursaechlicherBedarfForKinderkrippe(
         final List<PlanungsursachlicheWohneinheitenModel> wohneinheiten,
         final SobonOrientierungswertJahr sobonJahr,
@@ -50,6 +63,17 @@ public class PlanungsursaechlicherBedarfService {
             );
     }
 
+    public List<PlanungsursaechlicherBedarfModel> calculatePlanungsursaechlicherBedarfForKindergartenRounded(
+        final List<PlanungsursachlicheWohneinheitenModel> wohneinheiten,
+        final SobonOrientierungswertJahr sobonJahr,
+        final LocalDate gueltigAb
+    ) throws EntityNotFoundException {
+        return this.calculatePlanungsursaechlicherBedarfForKindergarten(wohneinheiten, sobonJahr, gueltigAb)
+            .stream()
+            .map(this::roundValuesAndReturnModelWithRoundedValues)
+            .collect(Collectors.toList());
+    }
+
     public List<PlanungsursaechlicherBedarfModel> calculatePlanungsursaechlicherBedarfForKindergarten(
         final List<PlanungsursachlicheWohneinheitenModel> wohneinheiten,
         final SobonOrientierungswertJahr sobonJahr,
@@ -61,6 +85,17 @@ public class PlanungsursaechlicherBedarfService {
                 sobonJahr,
                 gueltigAb
             );
+    }
+
+    public List<PlanungsursaechlicherBedarfModel> calculatePlanungsursaechlicherBedarfForAlleEinwohnerRounded(
+        final List<PlanungsursachlicheWohneinheitenModel> wohneinheiten,
+        final SobonOrientierungswertJahr sobonJahr,
+        final LocalDate gueltigAb
+    ) throws EntityNotFoundException {
+        return this.calculatePlanungsursaechlicherBedarfForAlleEinwohner(wohneinheiten, sobonJahr, gueltigAb)
+            .stream()
+            .map(this::roundValuesAndReturnModelWithRoundedValues)
+            .collect(Collectors.toList());
     }
 
     public List<PlanungsursaechlicherBedarfModel> calculatePlanungsursaechlicherBedarfForAlleEinwohner(
@@ -147,7 +182,6 @@ public class PlanungsursaechlicherBedarfService {
                         versorgungsquoteGruppenstaerke
                     )
             )
-            .map(this::roundValuesAndReturnModelWithRoundedValues)
             .collect(Collectors.toList());
     }
 
