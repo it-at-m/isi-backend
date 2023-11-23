@@ -90,12 +90,11 @@ class PlanungsursaechlicherBedarfServiceTest {
         versorgungsQuote.setGruppenstaerke(10);
         Assertions.assertThrows(
             NullPointerException.class,
-            () -> {
+            () ->
                 planungsursaechlicherBedarfService.setVersorgungsquoteAndGruppenstaerkeInPlanungsursaechlichenBedarf(
                     planungsursaechlicherBedarf,
                     versorgungsQuote
-                );
-            }
+                )
         );
 
         planungsursaechlicherBedarf.setAnzahlKinderGesamt(BigDecimal.valueOf(73));
@@ -103,12 +102,11 @@ class PlanungsursaechlicherBedarfServiceTest {
         versorgungsQuote.setGruppenstaerke(10);
         Assertions.assertThrows(
             NullPointerException.class,
-            () -> {
+            () ->
                 planungsursaechlicherBedarfService.setVersorgungsquoteAndGruppenstaerkeInPlanungsursaechlichenBedarf(
                     planungsursaechlicherBedarf,
                     versorgungsQuote
-                );
-            }
+                )
         );
     }
 
