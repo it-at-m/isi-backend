@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 public class PlanungsursaechlicherBedarfModel {
 
-    private Integer jahr; // JJJJ
+    private String jahr; // JJJJ
 
     private BigDecimal anzahlKinderGesamt;
 
