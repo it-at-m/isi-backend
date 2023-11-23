@@ -8,6 +8,7 @@ import de.muenchen.isi.domain.model.search.request.SearchQueryModel;
 import de.muenchen.isi.infrastructure.entity.Baugenehmigungsverfahren;
 import de.muenchen.isi.infrastructure.entity.Bauleitplanverfahren;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
+import de.muenchen.isi.infrastructure.entity.WeiteresVerfahren;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Grundschule;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.GsNachmittagBetreuung;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.HausFuerKinder;
@@ -64,6 +65,22 @@ class SearchPreparationServiceTest {
         expected.add("name_searchword_suggestion");
         expected.add("abfragevariantenBaugenehmigungsverfahren.realisierungVon_searchword_suggestion");
         expected.add("abfragevariantenSachbearbeitungBaugenehmigungsverfahren.realisierungVon_searchword_suggestion");
+        assertThat(result, is(expected));
+
+        result =
+            searchPreparationService.getNamesOfSearchableAttributesForSearchwordSuggestion(WeiteresVerfahren.class);
+        expected = new HashSet<>();
+        expected.add("adresse.strasse_searchword_suggestion");
+        expected.add("adresse.hausnummer_searchword_suggestion");
+        expected.add("verortung.stadtbezirke.name_searchword_suggestion");
+        expected.add("verortung.gemarkungen.name_searchword_suggestion");
+        expected.add("verortung.gemarkungen.flurstuecke.nummer_searchword_suggestion");
+        expected.add("statusAbfrage_searchword_suggestion");
+        expected.add("standVerfahren_searchword_suggestion");
+        expected.add("bebauungsplannummer_searchword_suggestion");
+        expected.add("name_searchword_suggestion");
+        expected.add("abfragevariantenWeiteresVerfahren.realisierungVon_searchword_suggestion");
+        expected.add("abfragevariantenSachbearbeitungWeiteresVerfahren.realisierungVon_searchword_suggestion");
         assertThat(result, is(expected));
 
         result = searchPreparationService.getNamesOfSearchableAttributesForSearchwordSuggestion(Bauvorhaben.class);
@@ -161,6 +178,21 @@ class SearchPreparationServiceTest {
         expected.add("abfragevariantenSachbearbeitungBaugenehmigungsverfahren.realisierungVon");
         assertThat(result, is(expected.toArray(String[]::new)));
 
+        result = searchPreparationService.getNamesOfSearchableAttributes(List.of(WeiteresVerfahren.class));
+        expected = new HashSet<>();
+        expected.add("adresse.strasse");
+        expected.add("adresse.hausnummer");
+        expected.add("verortung.stadtbezirke.name");
+        expected.add("verortung.gemarkungen.name");
+        expected.add("verortung.gemarkungen.flurstuecke.nummer");
+        expected.add("statusAbfrage");
+        expected.add("standVerfahren");
+        expected.add("bebauungsplannummer");
+        expected.add("name");
+        expected.add("abfragevariantenWeiteresVerfahren.realisierungVon");
+        expected.add("abfragevariantenSachbearbeitungWeiteresVerfahren.realisierungVon");
+        assertThat(result, is(expected.toArray(String[]::new)));
+
         result = searchPreparationService.getNamesOfSearchableAttributes(List.of(Bauvorhaben.class));
         expected = new HashSet<>();
         expected.add("nameVorhaben");
@@ -227,6 +259,7 @@ class SearchPreparationServiceTest {
                 List.of(
                     Bauleitplanverfahren.class,
                     Baugenehmigungsverfahren.class,
+                    WeiteresVerfahren.class,
                     Bauvorhaben.class,
                     Grundschule.class,
                     GsNachmittagBetreuung.class,
@@ -250,6 +283,8 @@ class SearchPreparationServiceTest {
         expected.add("abfragevariantenSachbearbeitungBauleitplanverfahren.realisierungVon");
         expected.add("abfragevariantenBaugenehmigungsverfahren.realisierungVon");
         expected.add("abfragevariantenSachbearbeitungBaugenehmigungsverfahren.realisierungVon");
+        expected.add("abfragevariantenWeiteresVerfahren.realisierungVon");
+        expected.add("abfragevariantenSachbearbeitungWeiteresVerfahren.realisierungVon");
         expected.add("nameVorhaben");
         expected.add("standVerfahren");
         expected.add("bauvorhabenNummer");
@@ -271,6 +306,7 @@ class SearchPreparationServiceTest {
         final var searchQueryModel = new SearchQueryModel();
         searchQueryModel.setSelectBauleitplanverfahren(true);
         searchQueryModel.setSelectBaugenehmigungsverfahren(true);
+        searchQueryModel.setSelectWeiteresVerfahren(true);
         searchQueryModel.setSelectBauvorhaben(true);
         searchQueryModel.setSelectGrundschule(true);
         searchQueryModel.setSelectGsNachmittagBetreuung(true);
@@ -285,6 +321,7 @@ class SearchPreparationServiceTest {
                 List.of(
                     Bauleitplanverfahren.class,
                     Baugenehmigungsverfahren.class,
+                    WeiteresVerfahren.class,
                     Bauvorhaben.class,
                     Grundschule.class,
                     GsNachmittagBetreuung.class,
@@ -298,6 +335,7 @@ class SearchPreparationServiceTest {
 
         searchQueryModel.setSelectBauleitplanverfahren(true);
         searchQueryModel.setSelectBaugenehmigungsverfahren(false);
+        searchQueryModel.setSelectWeiteresVerfahren(false);
         searchQueryModel.setSelectBauvorhaben(false);
         searchQueryModel.setSelectGrundschule(false);
         searchQueryModel.setSelectGsNachmittagBetreuung(false);
@@ -310,6 +348,7 @@ class SearchPreparationServiceTest {
 
         searchQueryModel.setSelectBauleitplanverfahren(false);
         searchQueryModel.setSelectBaugenehmigungsverfahren(true);
+        searchQueryModel.setSelectWeiteresVerfahren(false);
         searchQueryModel.setSelectBauvorhaben(false);
         searchQueryModel.setSelectGrundschule(false);
         searchQueryModel.setSelectGsNachmittagBetreuung(false);
@@ -322,6 +361,20 @@ class SearchPreparationServiceTest {
 
         searchQueryModel.setSelectBauleitplanverfahren(false);
         searchQueryModel.setSelectBaugenehmigungsverfahren(false);
+        searchQueryModel.setSelectWeiteresVerfahren(true);
+        searchQueryModel.setSelectBauvorhaben(false);
+        searchQueryModel.setSelectGrundschule(false);
+        searchQueryModel.setSelectGsNachmittagBetreuung(false);
+        searchQueryModel.setSelectHausFuerKinder(false);
+        searchQueryModel.setSelectKindergarten(false);
+        searchQueryModel.setSelectKinderkrippe(false);
+        searchQueryModel.setSelectMittelschule(false);
+        result = searchPreparationService.getSearchableEntities(searchQueryModel);
+        assertThat(result, is(List.of(WeiteresVerfahren.class)));
+
+        searchQueryModel.setSelectBauleitplanverfahren(false);
+        searchQueryModel.setSelectBaugenehmigungsverfahren(false);
+        searchQueryModel.setSelectWeiteresVerfahren(false);
         searchQueryModel.setSelectBauvorhaben(true);
         searchQueryModel.setSelectGrundschule(false);
         searchQueryModel.setSelectGsNachmittagBetreuung(false);
@@ -334,6 +387,7 @@ class SearchPreparationServiceTest {
 
         searchQueryModel.setSelectBauleitplanverfahren(false);
         searchQueryModel.setSelectBaugenehmigungsverfahren(false);
+        searchQueryModel.setSelectWeiteresVerfahren(false);
         searchQueryModel.setSelectBauvorhaben(false);
         searchQueryModel.setSelectGrundschule(true);
         searchQueryModel.setSelectGsNachmittagBetreuung(false);
@@ -346,6 +400,7 @@ class SearchPreparationServiceTest {
 
         searchQueryModel.setSelectBauleitplanverfahren(false);
         searchQueryModel.setSelectBaugenehmigungsverfahren(false);
+        searchQueryModel.setSelectWeiteresVerfahren(false);
         searchQueryModel.setSelectBauvorhaben(false);
         searchQueryModel.setSelectGrundschule(false);
         searchQueryModel.setSelectGsNachmittagBetreuung(true);
@@ -358,6 +413,7 @@ class SearchPreparationServiceTest {
 
         searchQueryModel.setSelectBauleitplanverfahren(false);
         searchQueryModel.setSelectBaugenehmigungsverfahren(false);
+        searchQueryModel.setSelectWeiteresVerfahren(false);
         searchQueryModel.setSelectBauvorhaben(false);
         searchQueryModel.setSelectGrundschule(false);
         searchQueryModel.setSelectGsNachmittagBetreuung(false);
@@ -370,6 +426,7 @@ class SearchPreparationServiceTest {
 
         searchQueryModel.setSelectBauleitplanverfahren(false);
         searchQueryModel.setSelectBaugenehmigungsverfahren(false);
+        searchQueryModel.setSelectWeiteresVerfahren(false);
         searchQueryModel.setSelectBauvorhaben(false);
         searchQueryModel.setSelectGrundschule(false);
         searchQueryModel.setSelectGsNachmittagBetreuung(false);
@@ -382,6 +439,7 @@ class SearchPreparationServiceTest {
 
         searchQueryModel.setSelectBauleitplanverfahren(false);
         searchQueryModel.setSelectBaugenehmigungsverfahren(false);
+        searchQueryModel.setSelectWeiteresVerfahren(false);
         searchQueryModel.setSelectBauvorhaben(false);
         searchQueryModel.setSelectGrundschule(false);
         searchQueryModel.setSelectGsNachmittagBetreuung(false);
@@ -394,6 +452,7 @@ class SearchPreparationServiceTest {
 
         searchQueryModel.setSelectBauleitplanverfahren(false);
         searchQueryModel.setSelectBaugenehmigungsverfahren(false);
+        searchQueryModel.setSelectWeiteresVerfahren(false);
         searchQueryModel.setSelectBauvorhaben(false);
         searchQueryModel.setSelectGrundschule(false);
         searchQueryModel.setSelectGsNachmittagBetreuung(false);
@@ -406,6 +465,7 @@ class SearchPreparationServiceTest {
 
         searchQueryModel.setSelectBauleitplanverfahren(false);
         searchQueryModel.setSelectBaugenehmigungsverfahren(false);
+        searchQueryModel.setSelectWeiteresVerfahren(false);
         searchQueryModel.setSelectBauvorhaben(true);
         searchQueryModel.setSelectGrundschule(false);
         searchQueryModel.setSelectGsNachmittagBetreuung(false);
@@ -418,6 +478,7 @@ class SearchPreparationServiceTest {
 
         searchQueryModel.setSelectBauleitplanverfahren(false);
         searchQueryModel.setSelectBaugenehmigungsverfahren(false);
+        searchQueryModel.setSelectWeiteresVerfahren(false);
         searchQueryModel.setSelectBauvorhaben(false);
         searchQueryModel.setSelectGrundschule(false);
         searchQueryModel.setSelectGsNachmittagBetreuung(false);

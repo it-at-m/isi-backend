@@ -26,6 +26,6 @@ public class RealisierungVonDistributionBauleitplanverfahrenValidator
         final AbfragevarianteBauleitplanverfahrenAngelegtDto value,
         final ConstraintValidatorContext context
     ) {
-        return isRealisierungVonDistributionValid(value.getBauabschnitte(), value.getRealisierungVon());
+        return this.isRealisierungVonDistributionValid(value.getBauabschnitte(), value.getRealisierungVon());
     }
 }

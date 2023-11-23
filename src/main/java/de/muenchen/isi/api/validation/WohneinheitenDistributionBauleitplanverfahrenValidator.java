@@ -31,6 +31,6 @@ public class WohneinheitenDistributionBauleitplanverfahrenValidator
         final AbfragevarianteBauleitplanverfahrenAngelegtDto value,
         final ConstraintValidatorContext context
     ) {
-        return isWohneinheitenDistributionValid(value.getBauabschnitte(), value.getWeGesamt());
+        return this.isWohneinheitenDistributionValid(value.getBauabschnitte(), value.getWeGesamt());
     }
 }
