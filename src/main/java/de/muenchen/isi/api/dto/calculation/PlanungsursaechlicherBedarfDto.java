@@ -8,7 +8,7 @@ import lombok.Data;
 public class PlanungsursaechlicherBedarfDto {
 
     @NotNull
-    private Integer jahr; // JJJJ
+    private String jahr; // JJJJ
 
     @NotNull
     private BigDecimal anzahlKinderGesamt;
