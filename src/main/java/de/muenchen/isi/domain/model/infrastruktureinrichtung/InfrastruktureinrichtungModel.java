@@ -6,6 +6,7 @@ package de.muenchen.isi.domain.model.infrastruktureinrichtung;
 
 import de.muenchen.isi.domain.model.BaseEntityModel;
 import de.muenchen.isi.domain.model.common.AdresseModel;
+import de.muenchen.isi.domain.model.common.VerortungModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusInfrastruktureinrichtung;
 import java.math.BigDecimal;
@@ -26,6 +27,8 @@ public abstract class InfrastruktureinrichtungModel extends BaseEntityModel {
     private UUID bauvorhaben;
 
     private AdresseModel adresse;
+
+    private VerortungModel verortung;
 
     private String nameEinrichtung;
 

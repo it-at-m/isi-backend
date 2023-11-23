@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import de.muenchen.isi.api.dto.BaseEntityDto;
 import de.muenchen.isi.api.dto.common.AdresseDto;
+import de.muenchen.isi.api.dto.common.VerortungDto;
 import de.muenchen.isi.api.validation.EinrichtungstraegerValid;
 import de.muenchen.isi.api.validation.FertigstellungsjahrValid;
 import de.muenchen.isi.api.validation.NotUnspecified;
@@ -55,6 +56,9 @@ public abstract class InfrastruktureinrichtungDto extends BaseEntityDto {
 
     @Valid
     private AdresseDto adresse;
+
+    @Valid
+    private VerortungDto verortung;
 
     @NotBlank
     @Size(max = 255, message = "Es sind maximal {max} Zeichen erlaubt")
