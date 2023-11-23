@@ -147,6 +147,7 @@ public class PlanungsursaechlicherBedarfService {
                         versorgungsquoteGruppenstaerke
                     )
             )
+            .map(this::roundValuesAndReturnModelWithRoundedValues)
             .collect(Collectors.toList());
     }
 
@@ -165,6 +166,24 @@ public class PlanungsursaechlicherBedarfService {
         );
         planungsursaechlicherBedarf.setAnzahlKinderZuVersorgen(anzahlKinderZuVersorgen);
         planungsursaechlicherBedarf.setAnzahlGruppen(anzahlGruppen);
+        return planungsursaechlicherBedarf;
+    }
+
+    protected PlanungsursaechlicherBedarfModel roundValuesAndReturnModelWithRoundedValues(
+        final PlanungsursaechlicherBedarfModel planungsursaechlicherBedarf
+    ) {
+        final var anzahlKinderGesamtRounded = planungsursaechlicherBedarf
+            .getAnzahlKinderGesamt()
+            .setScale(0, RoundingMode.HALF_EVEN);
+        final var anzahlKinderZuVersorgenRounded = planungsursaechlicherBedarf
+            .getAnzahlKinderZuVersorgen()
+            .setScale(0, RoundingMode.HALF_EVEN);
+        final var anzahlGruppenRounded = planungsursaechlicherBedarf
+            .getAnzahlGruppen()
+            .setScale(2, RoundingMode.HALF_EVEN);
+        planungsursaechlicherBedarf.setAnzahlKinderGesamt(anzahlKinderGesamtRounded);
+        planungsursaechlicherBedarf.setAnzahlKinderZuVersorgen(anzahlKinderZuVersorgenRounded);
+        planungsursaechlicherBedarf.setAnzahlGruppen(anzahlGruppenRounded);
         return planungsursaechlicherBedarf;
     }
 
