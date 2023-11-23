@@ -68,12 +68,15 @@ public class PlanungsursaechlicherBedarfService {
         final SobonOrientierungswertJahr sobonJahr,
         final LocalDate gueltigAb
     ) throws EntityNotFoundException {
+        // Gruppieren der planungsursächlichen Wohneinheiten nach Förderart
         final var planungsursachlicheWohneinheitenForFoerderart =
             this.getPlanungsursachlicheWohneinheitenForFoerderart(wohneinheiten);
 
+        // Ermittlung und Gruppierung der SoBon-Orientierungswerte nach Förderart
         final var sobonOrientierungswertForFoerderart =
             this.getSobonOrientierungswertForFoerderart(wohneinheiten, sobonJahr, einrichtung);
 
+        // Ermittlung der Versorgungsquote und Gruppenstärke für die Einrichtung.
         final var versorgungsquoteGruppenstaerke = versorgungsquoteGruppenstaerkeRepository
             .findFirstByInfrastruktureinrichtungTypAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
                 einrichtung,
