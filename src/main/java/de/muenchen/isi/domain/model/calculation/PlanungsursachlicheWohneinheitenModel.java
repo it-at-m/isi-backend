@@ -12,7 +12,7 @@ public class PlanungsursachlicheWohneinheitenModel {
 
     private String foerderart;
 
-    private Integer jahr; // JJJJ
+    private String jahr;
 
     private BigDecimal wohneinheiten;
 }
