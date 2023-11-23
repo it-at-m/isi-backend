@@ -59,9 +59,7 @@ class PlanungsursaechlicherBedarfServiceTest {
         final InfrastruktureinrichtungTyp einrichtung = InfrastruktureinrichtungTyp.KINDERKRIPPE;
         final SobonOrientierungswertJahr sobonJahr = SobonOrientierungswertJahr.JAHR_2017;
         final LocalDate gueltigAb = LocalDate.of(1998, 1, 1);
-        final List<PlanungsursachlicheWohneinheitenModel> wohneinheiten = new ArrayList<
-            PlanungsursachlicheWohneinheitenModel
-        >();
+        final var wohneinheiten = new ArrayList<PlanungsursachlicheWohneinheitenModel>();
         var wohneinheitenModel = new PlanungsursachlicheWohneinheitenModel();
         wohneinheitenModel.setFoerderart("foerderart1");
         wohneinheitenModel.setJahr("2000");
@@ -341,6 +339,25 @@ class PlanungsursaechlicherBedarfServiceTest {
                     versorgungsQuote
                 )
         );
+    }
+
+    @Test
+    void roundValuesAndReturnModelWithRoundedValues() {
+        final var model = new PlanungsursaechlicherBedarfModel();
+        model.setJahr("2000");
+        model.setAnzahlKinderGesamt(BigDecimal.valueOf(46, 1));
+        model.setAnzahlKinderZuVersorgen(BigDecimal.valueOf(44, 1));
+        model.setAnzahlGruppen(BigDecimal.valueOf(44460, 4));
+
+        final var result = planungsursaechlicherBedarfService.roundValuesAndReturnModelWithRoundedValues(model);
+
+        final var expected = new PlanungsursaechlicherBedarfModel();
+        expected.setJahr("2000");
+        expected.setAnzahlKinderGesamt(BigDecimal.valueOf(5));
+        expected.setAnzahlKinderZuVersorgen(BigDecimal.valueOf(4));
+        expected.setAnzahlGruppen(BigDecimal.valueOf(445, 2));
+
+        assertThat(result, is(expected));
     }
 
     @Test
