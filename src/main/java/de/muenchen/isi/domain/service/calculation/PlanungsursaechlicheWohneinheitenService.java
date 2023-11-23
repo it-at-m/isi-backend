@@ -22,12 +22,6 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class PlanungsursaechlicheWohneinheitenService {
 
-    public static final String SUMMARY_NAME = "Gesamt";
-
-    public static final List<Integer> SUMMARY_PERIODS = List.of(10, 15, 20);
-
-    public static final String SUMMARY_OVER_PERIOD_NAME = "Summe der ersten %d Jahre";
-
     private final FoerdermixUmlageService foerdermixUmlageService;
 
     private final StaedtebaulicheOrientierungswertRepository staedtebaulicheOrientierungswertRepository;
@@ -90,18 +84,18 @@ public class PlanungsursaechlicheWohneinheitenService {
             return planungsursachlicheWohneinheitenList;
         }
 
-        // Hinzufügen von zusätzlichen Jahren pro Förderart, welche eine Anzahl von Jahren über einen Zeitraum summieren.
+        // Summieren der Wohneinheiten aller Jahre in bestimmten Zeiträumen (siehe SUMMATION_PERIODS) je Förderart.
 
         planungsursachlicheWohneinheitenList.sort(Comparator.comparingInt(a -> Integer.parseInt(a.getJahr())));
         final var firstYear = Integer.parseInt(planungsursachlicheWohneinheitenList.get(0).getJahr());
         final var sumsPerFoerderart = new ArrayList<PlanungsursachlicheWohneinheitenModel>();
         for (final var planungsursachlicheWohneinheiten : planungsursachlicheWohneinheitenList) {
-            for (final var period : SUMMARY_PERIODS) {
+            for (final var period : CalculationService.SUMMATION_PERIODS) {
                 if (Integer.parseInt(planungsursachlicheWohneinheiten.getJahr()) <= firstYear + period - 1) {
                     mergePlanungsursaechlicheWohneinheiten(
                         sumsPerFoerderart,
                         planungsursachlicheWohneinheiten.getFoerderart(),
-                        String.format(SUMMARY_OVER_PERIOD_NAME, period),
+                        String.format(CalculationService.SUMMATION_PERIOD_NAME, period),
                         planungsursachlicheWohneinheiten.getWohneinheiten()
                     );
                 }
@@ -109,13 +103,13 @@ public class PlanungsursaechlicheWohneinheitenService {
         }
         planungsursachlicheWohneinheitenList.addAll(sumsPerFoerderart);
 
-        // Hinzufügen einer Förderart mit den Summen aller anderer Förderarten pro Jahr.
+        // Summieren der Wohneinheiten aller Förderarten je Jahr.
 
         final var sumsPerYear = new ArrayList<PlanungsursachlicheWohneinheitenModel>();
         for (final var planungsursachlicheWohneinheiten : planungsursachlicheWohneinheitenList) {
             mergePlanungsursaechlicheWohneinheiten(
                 sumsPerYear,
-                SUMMARY_NAME,
+                CalculationService.SUMMATION_TOTAL_NAME,
                 planungsursachlicheWohneinheiten.getJahr(),
                 planungsursachlicheWohneinheiten.getWohneinheiten()
             );

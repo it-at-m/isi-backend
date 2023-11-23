@@ -143,9 +143,9 @@ public class PlanungsursaechlicheWohneinheitenServiceTest {
 
         final var jahr1String = String.valueOf(jahr1);
         final var jahr2String = String.valueOf(jahr2);
-        final var summe10Jahre = String.format(PlanungsursaechlicheWohneinheitenService.SUMMARY_OVER_PERIOD_NAME, 10);
-        final var summe15Jahre = String.format(PlanungsursaechlicheWohneinheitenService.SUMMARY_OVER_PERIOD_NAME, 15);
-        final var summe20Jahre = String.format(PlanungsursaechlicheWohneinheitenService.SUMMARY_OVER_PERIOD_NAME, 20);
+        final var summe10Jahre = String.format(CalculationService.SUMMATION_PERIOD_NAME, 10);
+        final var summe15Jahre = String.format(CalculationService.SUMMATION_PERIOD_NAME, 15);
+        final var summe20Jahre = String.format(CalculationService.SUMMATION_PERIOD_NAME, 20);
 
         final var expected = List.of(
             new PlanungsursachlicheWohneinheitenModel(FF, jahr1String, new BigDecimal("100")),
@@ -167,27 +167,27 @@ public class PlanungsursaechlicheWohneinheitenServiceTest {
             new PlanungsursachlicheWohneinheitenModel(FH, summe15Jahre, new BigDecimal("140.6250000000")),
             new PlanungsursachlicheWohneinheitenModel(FH, summe20Jahre, new BigDecimal("140.6250000000")),
             new PlanungsursachlicheWohneinheitenModel(
-                PlanungsursaechlicheWohneinheitenService.SUMMARY_NAME,
+                CalculationService.SUMMATION_TOTAL_NAME,
                 jahr1String,
                 new BigDecimal("305.5555555556")
             ),
             new PlanungsursachlicheWohneinheitenModel(
-                PlanungsursaechlicheWohneinheitenService.SUMMARY_NAME,
+                CalculationService.SUMMATION_TOTAL_NAME,
                 jahr2String,
                 new BigDecimal("315.6250000000")
             ),
             new PlanungsursachlicheWohneinheitenModel(
-                PlanungsursaechlicheWohneinheitenService.SUMMARY_NAME,
+                CalculationService.SUMMATION_TOTAL_NAME,
                 summe10Jahre,
                 new BigDecimal("305.5555555556")
             ),
             new PlanungsursachlicheWohneinheitenModel(
-                PlanungsursaechlicheWohneinheitenService.SUMMARY_NAME,
+                CalculationService.SUMMATION_TOTAL_NAME,
                 summe15Jahre,
                 new BigDecimal("621.1805555556")
             ),
             new PlanungsursachlicheWohneinheitenModel(
-                PlanungsursaechlicheWohneinheitenService.SUMMARY_NAME,
+                CalculationService.SUMMATION_TOTAL_NAME,
                 summe20Jahre,
                 new BigDecimal("621.1805555556")
             )
