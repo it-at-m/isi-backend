@@ -366,7 +366,7 @@ public class PlanungsursaechlicherBedarfService {
                     .multiply(
                         sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr1NachErsterstellung()
                     )
-                    .setScale(SobonOrientierungswertSozialeInfrastrukturModel.SCALE, RoundingMode.HALF_EVEN);
+                    .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_EVEN);
             planungsursaechlicheBedarfe.add(
                 createPlanungsursaechlicherBedarf(
                     Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate,
@@ -382,7 +382,7 @@ public class PlanungsursaechlicherBedarfService {
                     .multiply(
                         sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr2NachErsterstellung()
                     )
-                    .setScale(SobonOrientierungswertSozialeInfrastrukturModel.SCALE, RoundingMode.HALF_EVEN);
+                    .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_EVEN);
             planungsursaechlicheBedarfe.add(
                 createPlanungsursaechlicherBedarf(
                     Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate,
@@ -398,7 +398,7 @@ public class PlanungsursaechlicherBedarfService {
                     .multiply(
                         sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr3NachErsterstellung()
                     )
-                    .setScale(SobonOrientierungswertSozialeInfrastrukturModel.SCALE, RoundingMode.HALF_EVEN);
+                    .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_EVEN);
             planungsursaechlicheBedarfe.add(
                 createPlanungsursaechlicherBedarf(
                     Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate,
@@ -414,7 +414,7 @@ public class PlanungsursaechlicherBedarfService {
                     .multiply(
                         sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr4NachErsterstellung()
                     )
-                    .setScale(SobonOrientierungswertSozialeInfrastrukturModel.SCALE, RoundingMode.HALF_EVEN);
+                    .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_EVEN);
             planungsursaechlicheBedarfe.add(
                 createPlanungsursaechlicherBedarf(
                     Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate,
@@ -430,7 +430,7 @@ public class PlanungsursaechlicherBedarfService {
                     .multiply(
                         sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr5NachErsterstellung()
                     )
-                    .setScale(SobonOrientierungswertSozialeInfrastrukturModel.SCALE, RoundingMode.HALF_EVEN);
+                    .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_EVEN);
             planungsursaechlicheBedarfe.add(
                 createPlanungsursaechlicherBedarf(
                     Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate,
@@ -446,7 +446,7 @@ public class PlanungsursaechlicherBedarfService {
                     .multiply(
                         sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr6NachErsterstellung()
                     )
-                    .setScale(SobonOrientierungswertSozialeInfrastrukturModel.SCALE, RoundingMode.HALF_EVEN);
+                    .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_EVEN);
             planungsursaechlicheBedarfe.add(
                 createPlanungsursaechlicherBedarf(
                     Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate,
@@ -462,7 +462,7 @@ public class PlanungsursaechlicherBedarfService {
                     .multiply(
                         sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr7NachErsterstellung()
                     )
-                    .setScale(SobonOrientierungswertSozialeInfrastrukturModel.SCALE, RoundingMode.HALF_EVEN);
+                    .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_EVEN);
             planungsursaechlicheBedarfe.add(
                 createPlanungsursaechlicherBedarf(
                     Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate,
@@ -478,7 +478,7 @@ public class PlanungsursaechlicherBedarfService {
                     .multiply(
                         sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr8NachErsterstellung()
                     )
-                    .setScale(SobonOrientierungswertSozialeInfrastrukturModel.SCALE, RoundingMode.HALF_EVEN);
+                    .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_EVEN);
             planungsursaechlicheBedarfe.add(
                 createPlanungsursaechlicherBedarf(
                     Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate,
@@ -494,7 +494,7 @@ public class PlanungsursaechlicherBedarfService {
                     .multiply(
                         sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr9NachErsterstellung()
                     )
-                    .setScale(SobonOrientierungswertSozialeInfrastrukturModel.SCALE, RoundingMode.HALF_EVEN);
+                    .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_EVEN);
             planungsursaechlicheBedarfe.add(
                 createPlanungsursaechlicherBedarf(
                     Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate,
@@ -510,7 +510,7 @@ public class PlanungsursaechlicherBedarfService {
                     .multiply(
                         sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr10NachErsterstellung()
                     )
-                    .setScale(SobonOrientierungswertSozialeInfrastrukturModel.SCALE, RoundingMode.HALF_EVEN);
+                    .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_EVEN);
             planungsursaechlicheBedarfe.add(
                 createPlanungsursaechlicherBedarf(
                     Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate,
@@ -526,7 +526,7 @@ public class PlanungsursaechlicherBedarfService {
                     .multiply(
                         sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr11NachErsterstellung()
                     )
-                    .setScale(SobonOrientierungswertSozialeInfrastrukturModel.SCALE, RoundingMode.HALF_EVEN);
+                    .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_EVEN);
             planungsursaechlicheBedarfe.add(
                 createPlanungsursaechlicherBedarf(
                     Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate,
@@ -542,7 +542,7 @@ public class PlanungsursaechlicherBedarfService {
                     .multiply(
                         sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr12NachErsterstellung()
                     )
-                    .setScale(SobonOrientierungswertSozialeInfrastrukturModel.SCALE, RoundingMode.HALF_EVEN);
+                    .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_EVEN);
             planungsursaechlicheBedarfe.add(
                 createPlanungsursaechlicherBedarf(
                     Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate,
@@ -558,7 +558,7 @@ public class PlanungsursaechlicherBedarfService {
                     .multiply(
                         sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr13NachErsterstellung()
                     )
-                    .setScale(SobonOrientierungswertSozialeInfrastrukturModel.SCALE, RoundingMode.HALF_EVEN);
+                    .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_EVEN);
             planungsursaechlicheBedarfe.add(
                 createPlanungsursaechlicherBedarf(
                     Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate,
@@ -574,7 +574,7 @@ public class PlanungsursaechlicherBedarfService {
                     .multiply(
                         sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr14NachErsterstellung()
                     )
-                    .setScale(SobonOrientierungswertSozialeInfrastrukturModel.SCALE, RoundingMode.HALF_EVEN);
+                    .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_EVEN);
             planungsursaechlicheBedarfe.add(
                 createPlanungsursaechlicherBedarf(
                     Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate,
@@ -590,7 +590,7 @@ public class PlanungsursaechlicherBedarfService {
                     .multiply(
                         sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr15NachErsterstellung()
                     )
-                    .setScale(SobonOrientierungswertSozialeInfrastrukturModel.SCALE, RoundingMode.HALF_EVEN);
+                    .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_EVEN);
             planungsursaechlicheBedarfe.add(
                 createPlanungsursaechlicherBedarf(
                     Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate,
@@ -606,7 +606,7 @@ public class PlanungsursaechlicherBedarfService {
                     .multiply(
                         sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr16NachErsterstellung()
                     )
-                    .setScale(SobonOrientierungswertSozialeInfrastrukturModel.SCALE, RoundingMode.HALF_EVEN);
+                    .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_EVEN);
             planungsursaechlicheBedarfe.add(
                 createPlanungsursaechlicherBedarf(
                     Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate,
@@ -622,7 +622,7 @@ public class PlanungsursaechlicherBedarfService {
                     .multiply(
                         sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr17NachErsterstellung()
                     )
-                    .setScale(SobonOrientierungswertSozialeInfrastrukturModel.SCALE, RoundingMode.HALF_EVEN);
+                    .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_EVEN);
             planungsursaechlicheBedarfe.add(
                 createPlanungsursaechlicherBedarf(
                     Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate,
@@ -638,7 +638,7 @@ public class PlanungsursaechlicherBedarfService {
                     .multiply(
                         sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr18NachErsterstellung()
                     )
-                    .setScale(SobonOrientierungswertSozialeInfrastrukturModel.SCALE, RoundingMode.HALF_EVEN);
+                    .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_EVEN);
             planungsursaechlicheBedarfe.add(
                 createPlanungsursaechlicherBedarf(
                     Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate,
@@ -654,7 +654,7 @@ public class PlanungsursaechlicherBedarfService {
                     .multiply(
                         sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr19NachErsterstellung()
                     )
-                    .setScale(SobonOrientierungswertSozialeInfrastrukturModel.SCALE, RoundingMode.HALF_EVEN);
+                    .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_EVEN);
             planungsursaechlicheBedarfe.add(
                 createPlanungsursaechlicherBedarf(
                     Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate,
@@ -670,7 +670,7 @@ public class PlanungsursaechlicherBedarfService {
                     .multiply(
                         sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr20NachErsterstellung()
                     )
-                    .setScale(SobonOrientierungswertSozialeInfrastrukturModel.SCALE, RoundingMode.HALF_EVEN);
+                    .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_EVEN);
             planungsursaechlicheBedarfe.add(
                 createPlanungsursaechlicherBedarf(
                     Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate,
