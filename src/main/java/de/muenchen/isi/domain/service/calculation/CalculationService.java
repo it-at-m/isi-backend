@@ -48,7 +48,7 @@ public class CalculationService {
 
         // Ermittlung Bedarf Kinderkrippe
         final var bedarfKinderkrippe =
-            planungsursaechlicherBedarfService.calculatePlanungsursaechlicherBedarfForKinderkrippeRounded(
+            planungsursaechlicherBedarfService.calculatePlanungsursaechlicherBedarfForKinderkrippeRoundedAndWithMean(
                 wohneinheiten,
                 sobonJahr,
                 gueltigAb
@@ -57,7 +57,7 @@ public class CalculationService {
 
         // Ermittlung Bedarf Kindergarten
         final var bedarfKindergarten =
-            planungsursaechlicherBedarfService.calculatePlanungsursaechlicherBedarfForKindergartenRounded(
+            planungsursaechlicherBedarfService.calculatePlanungsursaechlicherBedarfForKindergartenRoundedAndWithMean(
                 wohneinheiten,
                 sobonJahr,
                 gueltigAb
@@ -66,7 +66,7 @@ public class CalculationService {
 
         // Ermittlung Bedarf alle Einwohner
         final var bedarfAlleEinwohner =
-            planungsursaechlicherBedarfService.calculatePlanungsursaechlicherBedarfForAlleEinwohnerRounded(
+            planungsursaechlicherBedarfService.calculatePlanungsursaechlicherBedarfForAlleEinwohnerRoundedAndWithMean(
                 wohneinheiten,
                 sobonJahr,
                 gueltigAb

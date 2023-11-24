@@ -50,7 +50,7 @@ public class PlanungsursaechlicherBedarfService {
 
     //
 
-    public List<PlanungsursaechlicherBedarfModel> calculatePlanungsursaechlicherBedarfForKinderkrippeRounded(
+    public List<PlanungsursaechlicherBedarfModel> calculatePlanungsursaechlicherBedarfForKinderkrippeRoundedAndWithMean(
         final List<PlanungsursachlicheWohneinheitenModel> wohneinheiten,
         final SobonOrientierungswertJahr sobonJahr,
         final LocalDate gueltigAb
@@ -78,7 +78,7 @@ public class PlanungsursaechlicherBedarfService {
             );
     }
 
-    public List<PlanungsursaechlicherBedarfModel> calculatePlanungsursaechlicherBedarfForKindergartenRounded(
+    public List<PlanungsursaechlicherBedarfModel> calculatePlanungsursaechlicherBedarfForKindergartenRoundedAndWithMean(
         final List<PlanungsursachlicheWohneinheitenModel> wohneinheiten,
         final SobonOrientierungswertJahr sobonJahr,
         final LocalDate gueltigAb
@@ -106,7 +106,9 @@ public class PlanungsursaechlicherBedarfService {
             );
     }
 
-    public List<PlanungsursaechlicherBedarfModel> calculatePlanungsursaechlicherBedarfForAlleEinwohnerRounded(
+    public List<
+        PlanungsursaechlicherBedarfModel
+    > calculatePlanungsursaechlicherBedarfForAlleEinwohnerRoundedAndWithMean(
         final List<PlanungsursachlicheWohneinheitenModel> wohneinheiten,
         final SobonOrientierungswertJahr sobonJahr,
         final LocalDate gueltigAb
