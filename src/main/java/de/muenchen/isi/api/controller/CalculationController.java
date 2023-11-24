@@ -3,8 +3,9 @@ package de.muenchen.isi.api.controller;
 import de.muenchen.isi.api.dto.calculation.CalculationRequestDto;
 import de.muenchen.isi.api.dto.calculation.LangfristigerPlanungsursaechlicherBedarfDto;
 import de.muenchen.isi.api.dto.error.InformationResponseDto;
-import de.muenchen.isi.api.mapper.BauabschnittApiMapper;
 import de.muenchen.isi.api.mapper.LangfristigerPlanungsursaechlicherBedarfApiMapper;
+import de.muenchen.isi.domain.exception.CalculationException;
+import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.service.calculation.CalculationService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -13,7 +14,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import java.util.stream.Collectors;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -38,8 +38,6 @@ public class CalculationController {
 
     private final CalculationService calculationService;
 
-    private final BauabschnittApiMapper bauabschnittApiMapper;
-
     private final LangfristigerPlanungsursaechlicherBedarfApiMapper langfristigerPlanungsursaechlicherBedarfApiMapper;
 
     @GetMapping("/planungsursaechlich")
@@ -53,6 +51,11 @@ public class CalculationController {
                 description = "BAD_REQUEST -> Berechnung konnte wegen fehlerhafter Daten nicht durchgeführt werden.",
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
             ),
+            @ApiResponse(
+                responseCode = "404",
+                description = "NOT_FOUND -> Abfrage oder Abfragevariante konnte nicht gefunden werden.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
         }
     )
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_READ_ABFRAGE.name())")
@@ -60,15 +63,10 @@ public class CalculationController {
         LangfristigerPlanungsursaechlicherBedarfDto
     > calculateLangfristigerPlanungsursaechlicherBedarf(
         @RequestBody @Valid @NotNull final CalculationRequestDto calculationRequestDto
-    ) {
-        final var bauabschnittModels = calculationRequestDto
-            .getBauabschnitte()
-            .stream()
-            .map(bauabschnittApiMapper::dto2Model)
-            .collect(Collectors.toList());
+    ) throws EntityNotFoundException, CalculationException {
         final var bedarfModel = calculationService.calculateLangfristigerPlanungsursaechlicherBedarf(
-            bauabschnittModels,
-            calculationRequestDto.getSobonJahr(),
+            calculationRequestDto.getAbfrageId(),
+            calculationRequestDto.getAbfragevarianteId(),
             calculationRequestDto.getGueltigAb()
         );
         final var bedarfDto = langfristigerPlanungsursaechlicherBedarfApiMapper.model2Dto(bedarfModel);
