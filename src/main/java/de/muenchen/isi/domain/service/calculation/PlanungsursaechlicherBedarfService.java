@@ -32,9 +32,15 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class PlanungsursaechlicherBedarfService {
 
-    private final int SCALE_ROUNDING_RESULT_INTEGER = 0;
+    public static final int SCALE_ROUNDING_RESULT_INTEGER = 0;
 
-    private final int SCALE_ROUNDING_RESULT_DECIMAL = 2;
+    public static final int SCALE_ROUNDING_RESULT_DECIMAL = 2;
+
+    public static final String TITLE_MEAN_YEAR_10 = "Mittelwert 10 Jahre";
+
+    public static final String TITLE_MEAN_YEAR_15 = "Mittelwert 15 Jahre";
+
+    public static final String TITLE_MEAN_YEAR_20 = "Mittelwert 20 Jahre";
 
     private final SobonOrientierungswertSozialeInfrastrukturRepository sobonOrientierungswertSozialeInfrastrukturRepository;
 
@@ -623,48 +629,68 @@ public class PlanungsursaechlicherBedarfService {
         final List<PlanungsursaechlicherBedarfModel> planungsursaechlicheBedarfe
     ) {
         final var means10Year15YearAnd20Year = new ArrayList<PlanungsursaechlicherBedarfModel>(3);
-        var meanAnzahlKinderGesamt = BigDecimal.ZERO;
-        BigDecimal meanAnzahlKinderZuVersorgen = BigDecimal.ZERO;
-        BigDecimal meanAnzahlGruppen = BigDecimal.ZERO;
+        var sumAnzahlKinderGesamt = BigDecimal.ZERO;
+        BigDecimal sumAnzahlKinderZuVersorgen = BigDecimal.ZERO;
+        BigDecimal sumAnzahlGruppen = BigDecimal.ZERO;
         BigDecimal numberOfYear;
         for (int index = 0; index < planungsursaechlicheBedarfe.size(); index++) {
             numberOfYear = BigDecimal.valueOf(index + 1);
-            meanAnzahlKinderGesamt =
-                planungsursaechlicheBedarfe
-                    .get(index)
-                    .getAnzahlKinderGesamt()
-                    .add(meanAnzahlKinderGesamt)
-                    .divide(numberOfYear, SCALE_ROUNDING_RESULT_DECIMAL, RoundingMode.HALF_EVEN);
-            meanAnzahlKinderZuVersorgen =
-                planungsursaechlicheBedarfe
-                    .get(index)
-                    .getAnzahlKinderZuVersorgen()
-                    .add(meanAnzahlKinderZuVersorgen)
-                    .divide(numberOfYear, SCALE_ROUNDING_RESULT_DECIMAL, RoundingMode.HALF_EVEN);
-            meanAnzahlGruppen =
-                planungsursaechlicheBedarfe
-                    .get(index)
-                    .getAnzahlGruppen()
-                    .add(meanAnzahlGruppen)
-                    .divide(numberOfYear, SCALE_ROUNDING_RESULT_DECIMAL, RoundingMode.HALF_EVEN);
+            sumAnzahlKinderGesamt =
+                planungsursaechlicheBedarfe.get(index).getAnzahlKinderGesamt().add(sumAnzahlKinderGesamt);
+            sumAnzahlKinderZuVersorgen =
+                planungsursaechlicheBedarfe.get(index).getAnzahlKinderZuVersorgen().add(sumAnzahlKinderZuVersorgen);
+            sumAnzahlGruppen = planungsursaechlicheBedarfe.get(index).getAnzahlGruppen().add(sumAnzahlGruppen);
             if (index == 9) {
                 final var meanYear10 = new PlanungsursaechlicherBedarfModel();
-                meanYear10.setAnzahlKinderGesamt(meanAnzahlKinderGesamt);
-                meanYear10.setAnzahlKinderZuVersorgen(meanAnzahlKinderZuVersorgen);
-                meanYear10.setAnzahlGruppen(meanAnzahlGruppen);
-                means10Year15YearAnd20Year.add(0, meanYear10);
+                meanYear10.setJahr(TITLE_MEAN_YEAR_10);
+                meanYear10.setAnzahlKinderGesamt(
+                    sumAnzahlKinderGesamt.divide(numberOfYear, SCALE_ROUNDING_RESULT_DECIMAL, RoundingMode.HALF_EVEN)
+                );
+                meanYear10.setAnzahlKinderZuVersorgen(
+                    sumAnzahlKinderZuVersorgen.divide(
+                        numberOfYear,
+                        SCALE_ROUNDING_RESULT_DECIMAL,
+                        RoundingMode.HALF_EVEN
+                    )
+                );
+                meanYear10.setAnzahlGruppen(
+                    sumAnzahlGruppen.divide(numberOfYear, SCALE_ROUNDING_RESULT_DECIMAL, RoundingMode.HALF_EVEN)
+                );
+                means10Year15YearAnd20Year.add(meanYear10);
             } else if (index == 14) {
                 final var meanYear15 = new PlanungsursaechlicherBedarfModel();
-                meanYear15.setAnzahlKinderGesamt(meanAnzahlKinderGesamt);
-                meanYear15.setAnzahlKinderZuVersorgen(meanAnzahlKinderZuVersorgen);
-                meanYear15.setAnzahlGruppen(meanAnzahlGruppen);
-                means10Year15YearAnd20Year.add(0, meanYear15);
+                meanYear15.setJahr(TITLE_MEAN_YEAR_15);
+                meanYear15.setAnzahlKinderGesamt(
+                    sumAnzahlKinderGesamt.divide(numberOfYear, SCALE_ROUNDING_RESULT_DECIMAL, RoundingMode.HALF_EVEN)
+                );
+                meanYear15.setAnzahlKinderZuVersorgen(
+                    sumAnzahlKinderZuVersorgen.divide(
+                        numberOfYear,
+                        SCALE_ROUNDING_RESULT_DECIMAL,
+                        RoundingMode.HALF_EVEN
+                    )
+                );
+                meanYear15.setAnzahlGruppen(
+                    sumAnzahlGruppen.divide(numberOfYear, SCALE_ROUNDING_RESULT_DECIMAL, RoundingMode.HALF_EVEN)
+                );
+                means10Year15YearAnd20Year.add(meanYear15);
             } else if (index == 19) {
                 final var meanYear20 = new PlanungsursaechlicherBedarfModel();
-                meanYear20.setAnzahlKinderGesamt(meanAnzahlKinderGesamt);
-                meanYear20.setAnzahlKinderZuVersorgen(meanAnzahlKinderZuVersorgen);
-                meanYear20.setAnzahlGruppen(meanAnzahlGruppen);
-                means10Year15YearAnd20Year.add(0, meanYear20);
+                meanYear20.setJahr(TITLE_MEAN_YEAR_20);
+                meanYear20.setAnzahlKinderGesamt(
+                    sumAnzahlKinderGesamt.divide(numberOfYear, SCALE_ROUNDING_RESULT_DECIMAL, RoundingMode.HALF_EVEN)
+                );
+                meanYear20.setAnzahlKinderZuVersorgen(
+                    sumAnzahlKinderZuVersorgen.divide(
+                        numberOfYear,
+                        SCALE_ROUNDING_RESULT_DECIMAL,
+                        RoundingMode.HALF_EVEN
+                    )
+                );
+                meanYear20.setAnzahlGruppen(
+                    sumAnzahlGruppen.divide(numberOfYear, SCALE_ROUNDING_RESULT_DECIMAL, RoundingMode.HALF_EVEN)
+                );
+                means10Year15YearAnd20Year.add(meanYear20);
             }
         }
         return means10Year15YearAnd20Year;
