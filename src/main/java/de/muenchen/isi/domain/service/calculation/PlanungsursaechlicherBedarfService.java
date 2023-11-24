@@ -48,8 +48,6 @@ public class PlanungsursaechlicherBedarfService {
 
     private final StammdatenDomainMapper stammdatenDomainMapper;
 
-    //
-
     public List<PlanungsursaechlicherBedarfModel> calculatePlanungsursaechlicherBedarfForKinderkrippeRoundedAndWithMean(
         final List<PlanungsursachlicheWohneinheitenModel> wohneinheiten,
         final SobonOrientierungswertJahr sobonJahr,
