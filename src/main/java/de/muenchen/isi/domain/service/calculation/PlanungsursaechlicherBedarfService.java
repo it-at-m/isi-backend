@@ -20,6 +20,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
@@ -45,12 +46,11 @@ public class PlanungsursaechlicherBedarfService {
         final LocalDate gueltigAb
     ) throws EntityNotFoundException {
         return this.calculatePlanungsursaechlicherBedarfForKinderkrippe(wohneinheiten, sobonJahr, gueltigAb)
-            .stream()
             .map(this::roundValuesAndReturnModelWithRoundedValues)
             .collect(Collectors.toList());
     }
 
-    public List<PlanungsursaechlicherBedarfModel> calculatePlanungsursaechlicherBedarfForKinderkrippe(
+    public Stream<PlanungsursaechlicherBedarfModel> calculatePlanungsursaechlicherBedarfForKinderkrippe(
         final List<PlanungsursachlicheWohneinheitenModel> wohneinheiten,
         final SobonOrientierungswertJahr sobonJahr,
         final LocalDate gueltigAb
@@ -69,12 +69,11 @@ public class PlanungsursaechlicherBedarfService {
         final LocalDate gueltigAb
     ) throws EntityNotFoundException {
         return this.calculatePlanungsursaechlicherBedarfForKindergarten(wohneinheiten, sobonJahr, gueltigAb)
-            .stream()
             .map(this::roundValuesAndReturnModelWithRoundedValues)
             .collect(Collectors.toList());
     }
 
-    public List<PlanungsursaechlicherBedarfModel> calculatePlanungsursaechlicherBedarfForKindergarten(
+    public Stream<PlanungsursaechlicherBedarfModel> calculatePlanungsursaechlicherBedarfForKindergarten(
         final List<PlanungsursachlicheWohneinheitenModel> wohneinheiten,
         final SobonOrientierungswertJahr sobonJahr,
         final LocalDate gueltigAb
@@ -93,12 +92,11 @@ public class PlanungsursaechlicherBedarfService {
         final LocalDate gueltigAb
     ) throws EntityNotFoundException {
         return this.calculatePlanungsursaechlicherBedarfForAlleEinwohner(wohneinheiten, sobonJahr, gueltigAb)
-            .stream()
             .map(this::roundValuesAndReturnModelWithRoundedValues)
             .collect(Collectors.toList());
     }
 
-    public List<PlanungsursaechlicherBedarfModel> calculatePlanungsursaechlicherBedarfForAlleEinwohner(
+    public Stream<PlanungsursaechlicherBedarfModel> calculatePlanungsursaechlicherBedarfForAlleEinwohner(
         final List<PlanungsursachlicheWohneinheitenModel> wohneinheiten,
         final SobonOrientierungswertJahr sobonJahr,
         final LocalDate gueltigAb
@@ -111,7 +109,7 @@ public class PlanungsursaechlicherBedarfService {
             );
     }
 
-    protected List<PlanungsursaechlicherBedarfModel> calculatePlanungsursaechlicherBedarf(
+    protected Stream<PlanungsursaechlicherBedarfModel> calculatePlanungsursaechlicherBedarf(
         final InfrastruktureinrichtungTyp einrichtung,
         final List<PlanungsursachlicheWohneinheitenModel> wohneinheiten,
         final SobonOrientierungswertJahr sobonJahr,
@@ -159,7 +157,6 @@ public class PlanungsursaechlicherBedarfService {
                     planungsursaechlicheWohneinheiten,
                     sobonOrientierungswertForFoerderart.get(planungsursaechlicheWohneinheiten.getFoerderart())
                 )
-                    .stream()
             )
             // Gruppieren der planungsursächlichen Bedarfe je Jahr
             .collect(
@@ -181,8 +178,7 @@ public class PlanungsursaechlicherBedarfService {
                         planungsursaechlicherBedarfTest,
                         versorgungsquoteGruppenstaerke
                     )
-            )
-            .collect(Collectors.toList());
+            );
     }
 
     protected PlanungsursaechlicherBedarfModel setVersorgungsquoteAndGruppenstaerkeInPlanungsursaechlichenBedarf(
@@ -262,7 +258,7 @@ public class PlanungsursaechlicherBedarfService {
             );
     }
 
-    protected List<PlanungsursaechlicherBedarfModel> calculatePlanungsursaechlicheBedarfe(
+    protected Stream<PlanungsursaechlicherBedarfModel> calculatePlanungsursaechlicheBedarfe(
         final Integer firstPlanungsursaechlichesJahr,
         final PlanungsursachlicheWohneinheitenModel wohneinheiten,
         final SobonOrientierungswertSozialeInfrastrukturModel sobonOrientierungswertSozialeInfrastruktur
@@ -591,7 +587,7 @@ public class PlanungsursaechlicherBedarfService {
                 )
             );
         }
-        return planungsursaechlicheBedarfe;
+        return planungsursaechlicheBedarfe.stream();
     }
 
     protected PlanungsursaechlicherBedarfModel createPlanungsursaechlicherBedarf(

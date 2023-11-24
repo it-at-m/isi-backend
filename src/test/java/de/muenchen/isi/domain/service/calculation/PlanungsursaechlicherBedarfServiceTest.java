@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -281,7 +282,7 @@ class PlanungsursaechlicherBedarfServiceTest {
         planungsursaechlicherBedarf.setAnzahlGruppen(BigDecimal.valueOf(400470, 2));
         expected.add(planungsursaechlicherBedarf);
 
-        assertThat(result, is(expected));
+        assertThat(result.collect(Collectors.toList()), is(expected));
     }
 
     @Test
@@ -582,7 +583,7 @@ class PlanungsursaechlicherBedarfServiceTest {
         planungsursaechlicherBedarf.setAnzahlKinderGesamt(BigDecimal.valueOf(48090000, 4));
         expected.add(planungsursaechlicherBedarf);
 
-        assertThat(result, is(expected));
+        assertThat(result.collect(Collectors.toList()), is(expected));
     }
 
     @Test
@@ -647,7 +648,7 @@ class PlanungsursaechlicherBedarfServiceTest {
         planungsursaechlicherBedarf.setAnzahlKinderGesamt(BigDecimal.valueOf(41080000, 4));
         expected.add(planungsursaechlicherBedarf);
 
-        assertThat(result, is(expected));
+        assertThat(result.collect(Collectors.toList()), is(expected));
     }
 
     @Test
@@ -744,7 +745,7 @@ class PlanungsursaechlicherBedarfServiceTest {
         planungsursaechlicherBedarf.setAnzahlKinderGesamt(BigDecimal.valueOf(37900000, 4));
         expected.add(planungsursaechlicherBedarf);
 
-        assertThat(result, is(expected));
+        assertThat(result.collect(Collectors.toList()), is(expected));
     }
 
     @Test
