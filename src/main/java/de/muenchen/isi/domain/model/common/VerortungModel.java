@@ -4,13 +4,9 @@ import java.util.Set;
 import lombok.Data;
 
 @Data
-public class VerortungModel {
+public abstract class VerortungModel {
 
     private Set<StadtbezirkModel> stadtbezirke;
 
     private Set<GemarkungModel> gemarkungen;
-
-    private MultiPolygonGeometryModel multiPolygon;
-
-    private PointGeometryModel pointGeometry;
 }
