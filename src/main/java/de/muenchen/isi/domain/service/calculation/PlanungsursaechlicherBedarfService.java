@@ -32,6 +32,10 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class PlanungsursaechlicherBedarfService {
 
+    private final int SCALE_ROUNDING_RESULT_INTEGER = 0;
+
+    private final int SCALE_ROUNDING_RESULT_DECIMAL = 2;
+
     private final SobonOrientierungswertSozialeInfrastrukturRepository sobonOrientierungswertSozialeInfrastrukturRepository;
 
     private final VersorgungsquoteGruppenstaerkeRepository versorgungsquoteGruppenstaerkeRepository;
@@ -45,9 +49,14 @@ public class PlanungsursaechlicherBedarfService {
         final SobonOrientierungswertJahr sobonJahr,
         final LocalDate gueltigAb
     ) throws EntityNotFoundException {
-        return this.calculatePlanungsursaechlicherBedarfForKinderkrippe(wohneinheiten, sobonJahr, gueltigAb)
-            .map(this::roundValuesAndReturnModelWithRoundedValues)
-            .collect(Collectors.toList());
+        final var roundedPlanungsursaechlicheBedarfe =
+            this.calculatePlanungsursaechlicherBedarfForKinderkrippe(wohneinheiten, sobonJahr, gueltigAb)
+                .map(this::roundValuesAndReturnModelWithRoundedValues)
+                .collect(Collectors.toList());
+        final var meansForRoundedPlanungsursaechlicheBedarfe =
+            this.calculate10Year15YearAnd20YearMean(roundedPlanungsursaechlicheBedarfe);
+        roundedPlanungsursaechlicheBedarfe.addAll(meansForRoundedPlanungsursaechlicheBedarfe);
+        return roundedPlanungsursaechlicheBedarfe;
     }
 
     public Stream<PlanungsursaechlicherBedarfModel> calculatePlanungsursaechlicherBedarfForKinderkrippe(
@@ -68,9 +77,14 @@ public class PlanungsursaechlicherBedarfService {
         final SobonOrientierungswertJahr sobonJahr,
         final LocalDate gueltigAb
     ) throws EntityNotFoundException {
-        return this.calculatePlanungsursaechlicherBedarfForKindergarten(wohneinheiten, sobonJahr, gueltigAb)
-            .map(this::roundValuesAndReturnModelWithRoundedValues)
-            .collect(Collectors.toList());
+        final var roundedPlanungsursaechlicheBedarfe =
+            this.calculatePlanungsursaechlicherBedarfForKindergarten(wohneinheiten, sobonJahr, gueltigAb)
+                .map(this::roundValuesAndReturnModelWithRoundedValues)
+                .collect(Collectors.toList());
+        final var meansForRoundedPlanungsursaechlicheBedarfe =
+            this.calculate10Year15YearAnd20YearMean(roundedPlanungsursaechlicheBedarfe);
+        roundedPlanungsursaechlicheBedarfe.addAll(meansForRoundedPlanungsursaechlicheBedarfe);
+        return roundedPlanungsursaechlicheBedarfe;
     }
 
     public Stream<PlanungsursaechlicherBedarfModel> calculatePlanungsursaechlicherBedarfForKindergarten(
@@ -91,9 +105,14 @@ public class PlanungsursaechlicherBedarfService {
         final SobonOrientierungswertJahr sobonJahr,
         final LocalDate gueltigAb
     ) throws EntityNotFoundException {
-        return this.calculatePlanungsursaechlicherBedarfForAlleEinwohner(wohneinheiten, sobonJahr, gueltigAb)
-            .map(this::roundValuesAndReturnModelWithRoundedValues)
-            .collect(Collectors.toList());
+        final var roundedPlanungsursaechlicheBedarfe =
+            this.calculatePlanungsursaechlicherBedarfForAlleEinwohner(wohneinheiten, sobonJahr, gueltigAb)
+                .map(this::roundValuesAndReturnModelWithRoundedValues)
+                .collect(Collectors.toList());
+        final var meansForRoundedPlanungsursaechlicheBedarfe =
+            this.calculate10Year15YearAnd20YearMean(roundedPlanungsursaechlicheBedarfe);
+        roundedPlanungsursaechlicheBedarfe.addAll(meansForRoundedPlanungsursaechlicheBedarfe);
+        return roundedPlanungsursaechlicheBedarfe;
     }
 
     public Stream<PlanungsursaechlicherBedarfModel> calculatePlanungsursaechlicherBedarfForAlleEinwohner(
@@ -204,13 +223,13 @@ public class PlanungsursaechlicherBedarfService {
     ) {
         final var anzahlKinderGesamtRounded = planungsursaechlicherBedarf
             .getAnzahlKinderGesamt()
-            .setScale(0, RoundingMode.HALF_EVEN);
+            .setScale(SCALE_ROUNDING_RESULT_INTEGER, RoundingMode.HALF_EVEN);
         final var anzahlKinderZuVersorgenRounded = planungsursaechlicherBedarf
             .getAnzahlKinderZuVersorgen()
-            .setScale(0, RoundingMode.HALF_EVEN);
+            .setScale(SCALE_ROUNDING_RESULT_INTEGER, RoundingMode.HALF_EVEN);
         final var anzahlGruppenRounded = planungsursaechlicherBedarf
             .getAnzahlGruppen()
-            .setScale(2, RoundingMode.HALF_EVEN);
+            .setScale(SCALE_ROUNDING_RESULT_DECIMAL, RoundingMode.HALF_EVEN);
         planungsursaechlicherBedarf.setAnzahlKinderGesamt(anzahlKinderGesamtRounded);
         planungsursaechlicherBedarf.setAnzahlKinderZuVersorgen(anzahlKinderZuVersorgenRounded);
         planungsursaechlicherBedarf.setAnzahlGruppen(anzahlGruppenRounded);
@@ -598,5 +617,56 @@ public class PlanungsursaechlicherBedarfService {
         planungsursaechlicherBedarf.setJahr(Integer.toString(jahr));
         planungsursaechlicherBedarf.setAnzahlKinderGesamt(anzahlKinderGesamt);
         return planungsursaechlicherBedarf;
+    }
+
+    protected List<PlanungsursaechlicherBedarfModel> calculate10Year15YearAnd20YearMean(
+        final List<PlanungsursaechlicherBedarfModel> planungsursaechlicheBedarfe
+    ) {
+        final var means10Year15YearAnd20Year = new ArrayList<PlanungsursaechlicherBedarfModel>(3);
+        var meanAnzahlKinderGesamt = BigDecimal.ZERO;
+        BigDecimal meanAnzahlKinderZuVersorgen = BigDecimal.ZERO;
+        BigDecimal meanAnzahlGruppen = BigDecimal.ZERO;
+        BigDecimal numberOfYear = BigDecimal.ZERO;
+        for (int index = 0; index < planungsursaechlicheBedarfe.size(); index++) {
+            numberOfYear = BigDecimal.valueOf(index + 1);
+            meanAnzahlKinderGesamt =
+                planungsursaechlicheBedarfe
+                    .get(index)
+                    .getAnzahlKinderGesamt()
+                    .add(meanAnzahlKinderGesamt)
+                    .divide(numberOfYear, SCALE_ROUNDING_RESULT_DECIMAL, RoundingMode.HALF_EVEN);
+            meanAnzahlKinderZuVersorgen =
+                planungsursaechlicheBedarfe
+                    .get(index)
+                    .getAnzahlKinderZuVersorgen()
+                    .add(meanAnzahlKinderZuVersorgen)
+                    .divide(numberOfYear, SCALE_ROUNDING_RESULT_DECIMAL, RoundingMode.HALF_EVEN);
+            meanAnzahlGruppen =
+                planungsursaechlicheBedarfe
+                    .get(index)
+                    .getAnzahlGruppen()
+                    .add(meanAnzahlGruppen)
+                    .divide(numberOfYear, SCALE_ROUNDING_RESULT_DECIMAL, RoundingMode.HALF_EVEN);
+            if (index == 9) {
+                final var meanYear10 = new PlanungsursaechlicherBedarfModel();
+                meanYear10.setAnzahlKinderGesamt(meanAnzahlKinderGesamt);
+                meanYear10.setAnzahlKinderZuVersorgen(meanAnzahlKinderZuVersorgen);
+                meanYear10.setAnzahlGruppen(meanAnzahlGruppen);
+                means10Year15YearAnd20Year.add(0, meanYear10);
+            } else if (index == 14) {
+                final var meanYear15 = new PlanungsursaechlicherBedarfModel();
+                meanYear15.setAnzahlKinderGesamt(meanAnzahlKinderGesamt);
+                meanYear15.setAnzahlKinderZuVersorgen(meanAnzahlKinderZuVersorgen);
+                meanYear15.setAnzahlGruppen(meanAnzahlGruppen);
+                means10Year15YearAnd20Year.add(0, meanYear15);
+            } else if (index == 19) {
+                final var meanYear20 = new PlanungsursaechlicherBedarfModel();
+                meanYear20.setAnzahlKinderGesamt(meanAnzahlKinderGesamt);
+                meanYear20.setAnzahlKinderZuVersorgen(meanAnzahlKinderZuVersorgen);
+                meanYear20.setAnzahlGruppen(meanAnzahlGruppen);
+                means10Year15YearAnd20Year.add(0, meanYear20);
+            }
+        }
+        return means10Year15YearAnd20Year;
     }
 }
