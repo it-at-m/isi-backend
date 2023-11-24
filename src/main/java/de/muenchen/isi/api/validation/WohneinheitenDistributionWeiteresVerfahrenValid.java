@@ -8,12 +8,13 @@ import java.lang.annotation.Target;
 import javax.validation.Constraint;
 import javax.validation.Payload;
 
-@Target({ ElementType.FIELD })
+@Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = CustomNotNullValidator.class)
+@Constraint(validatedBy = WohneinheitenDistributionWeiteresVerfahrenValidator.class)
 @Documented
-public @interface CustomNotNull {
-    String message() default "Darf nicht null sein.";
+public @interface WohneinheitenDistributionWeiteresVerfahrenValid {
+    String message() default "Die Summe der über die Baugebiete verteilten Wohneinheiten" +
+    " entspricht nicht der Anzahl der Wohneinheiten in der Abfragevariante.";
 
     Class<?>[] groups() default {};
 

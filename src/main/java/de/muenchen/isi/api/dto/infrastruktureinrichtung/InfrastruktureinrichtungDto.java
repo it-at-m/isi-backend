@@ -14,6 +14,8 @@ import de.muenchen.isi.api.validation.FertigstellungsjahrValid;
 import de.muenchen.isi.api.validation.NotUnspecified;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusInfrastruktureinrichtung;
+import io.swagger.v3.oas.annotations.media.DiscriminatorMapping;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.math.BigDecimal;
 import java.util.UUID;
 import javax.validation.Valid;
@@ -44,6 +46,24 @@ import lombok.Data;
         @JsonSubTypes.Type(value = KindergartenDto.class, name = InfrastruktureinrichtungTyp.Values.KINDERGARTEN),
         @JsonSubTypes.Type(value = KinderkrippeDto.class, name = InfrastruktureinrichtungTyp.Values.KINDERKRIPPE),
         @JsonSubTypes.Type(value = MittelschuleDto.class, name = InfrastruktureinrichtungTyp.Values.MITTELSCHULE),
+    }
+)
+@Schema(
+    description = "InfrastruktureinrichtungDto",
+    discriminatorProperty = "infrastruktureinrichtungTyp",
+    discriminatorMapping = {
+        @DiscriminatorMapping(value = InfrastruktureinrichtungTyp.Values.GRUNDSCHULE, schema = GrundschuleDto.class),
+        @DiscriminatorMapping(
+            value = InfrastruktureinrichtungTyp.Values.GS_NACHMITTAG_BETREUUNG,
+            schema = GsNachmittagBetreuungDto.class
+        ),
+        @DiscriminatorMapping(
+            value = InfrastruktureinrichtungTyp.Values.HAUS_FUER_KINDER,
+            schema = HausFuerKinderDto.class
+        ),
+        @DiscriminatorMapping(value = InfrastruktureinrichtungTyp.Values.KINDERGARTEN, schema = KindergartenDto.class),
+        @DiscriminatorMapping(value = InfrastruktureinrichtungTyp.Values.KINDERKRIPPE, schema = KinderkrippeDto.class),
+        @DiscriminatorMapping(value = InfrastruktureinrichtungTyp.Values.MITTELSCHULE, schema = MittelschuleDto.class),
     }
 )
 public abstract class InfrastruktureinrichtungDto extends BaseEntityDto {
