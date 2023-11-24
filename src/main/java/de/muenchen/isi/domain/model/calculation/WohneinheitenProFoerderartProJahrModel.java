@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PlanungsursachlicheWohneinheitenModel {
+public class WohneinheitenProFoerderartProJahrModel {
 
     private String foerderart;
 

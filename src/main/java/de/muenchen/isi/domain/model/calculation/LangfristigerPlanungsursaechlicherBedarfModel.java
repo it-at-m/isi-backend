@@ -6,5 +6,5 @@ import lombok.Data;
 @Data
 public class LangfristigerPlanungsursaechlicherBedarfModel {
 
-    private List<PlanungsursachlicheWohneinheitenModel> wohneinheiten;
+    private List<WohneinheitenProFoerderartProJahrModel> wohneinheiten;
 }

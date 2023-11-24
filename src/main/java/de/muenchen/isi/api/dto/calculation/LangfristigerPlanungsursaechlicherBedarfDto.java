@@ -8,5 +8,5 @@ import lombok.Data;
 public class LangfristigerPlanungsursaechlicherBedarfDto {
 
     @NotNull
-    private List<PlanungsursachlicheWohneinheitenDto> wohneinheiten;
+    private List<WohneinheitenProFoerderartProJahrDto> wohneinheiten;
 }
