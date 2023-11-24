@@ -3,7 +3,9 @@ package de.muenchen.isi.domain.service.calculation;
 import de.muenchen.isi.domain.exception.CalculationException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.model.BauabschnittModel;
+import de.muenchen.isi.domain.model.BaugenehmigungsverfahrenModel;
 import de.muenchen.isi.domain.model.BauleitplanverfahrenModel;
+import de.muenchen.isi.domain.model.WeiteresVerfahrenModel;
 import de.muenchen.isi.domain.model.calculation.LangfristigerPlanungsursaechlicherBedarfModel;
 import de.muenchen.isi.domain.service.AbfrageService;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
@@ -54,16 +56,44 @@ public class CalculationService {
         switch (abfrage.getArtAbfrage()) {
             case BAULEITPLANVERFAHREN:
                 final var bauleitplanverfahren = (BauleitplanverfahrenModel) abfrage;
-                final var optionalAbfragevariante = Stream
+                final var optionalAbfragevarianteBauleitplanverfahren = Stream
                     .concat(
                         bauleitplanverfahren.getAbfragevariantenBauleitplanverfahren().stream(),
                         bauleitplanverfahren.getAbfragevariantenSachbearbeitungBauleitplanverfahren().stream()
                     )
                     .filter(abfragevariante -> abfragevariante.getId().equals(abfragevarianteId))
                     .findAny();
-                if (optionalAbfragevariante.isPresent()) {
-                    bauabschnitte = optionalAbfragevariante.get().getBauabschnitte();
-                    sobonJahr = optionalAbfragevariante.get().getSobonOrientierungswertJahr();
+                if (optionalAbfragevarianteBauleitplanverfahren.isPresent()) {
+                    bauabschnitte = optionalAbfragevarianteBauleitplanverfahren.get().getBauabschnitte();
+                    sobonJahr = optionalAbfragevarianteBauleitplanverfahren.get().getSobonOrientierungswertJahr();
+                }
+                break;
+            case BAUGENEHMIGUNGSVERFAHREN:
+                final var baugenehmigungsverfahren = (BaugenehmigungsverfahrenModel) abfrage;
+                final var optionalAbfragevarianteBaugenehmigungsverfahren = Stream
+                    .concat(
+                        baugenehmigungsverfahren.getAbfragevariantenBaugenehmigungsverfahren().stream(),
+                        baugenehmigungsverfahren.getAbfragevariantenSachbearbeitungBaugenehmigungsverfahren().stream()
+                    )
+                    .filter(abfragevariante -> abfragevariante.getId().equals(abfragevarianteId))
+                    .findAny();
+                if (optionalAbfragevarianteBaugenehmigungsverfahren.isPresent()) {
+                    bauabschnitte = optionalAbfragevarianteBaugenehmigungsverfahren.get().getBauabschnitte();
+                    sobonJahr = optionalAbfragevarianteBaugenehmigungsverfahren.get().getSobonOrientierungswertJahr();
+                }
+                break;
+            case WEITERES_VERFAHREN:
+                final var weiteresVerfahren = (WeiteresVerfahrenModel) abfrage;
+                final var optionalAbfragevarianteWeiteresVerfahren = Stream
+                    .concat(
+                        weiteresVerfahren.getAbfragevariantenWeiteresVerfahren().stream(),
+                        weiteresVerfahren.getAbfragevariantenSachbearbeitungWeiteresVerfahren().stream()
+                    )
+                    .filter(abfragevariante -> abfragevariante.getId().equals(abfragevarianteId))
+                    .findAny();
+                if (optionalAbfragevarianteWeiteresVerfahren.isPresent()) {
+                    bauabschnitte = optionalAbfragevarianteWeiteresVerfahren.get().getBauabschnitte();
+                    sobonJahr = optionalAbfragevarianteWeiteresVerfahren.get().getSobonOrientierungswertJahr();
                 }
                 break;
             default:
