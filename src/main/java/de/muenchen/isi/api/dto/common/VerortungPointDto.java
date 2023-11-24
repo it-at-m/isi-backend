@@ -13,5 +13,5 @@ public class VerortungPointDto extends VerortungDto {
 
     @Valid
     @NotEmpty
-    private PointGeometryDto pointGeometry;
+    private PointGeometryDto point;
 }

@@ -9,5 +9,5 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 public class VerortungPointModel extends VerortungModel {
 
-    private PointGeometryModel pointGeometry;
+    private PointGeometryModel point;
 }

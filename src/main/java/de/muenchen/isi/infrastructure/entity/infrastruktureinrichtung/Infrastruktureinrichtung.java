@@ -10,7 +10,7 @@ import de.muenchen.isi.infrastructure.adapter.search.StringSuggestionBinder;
 import de.muenchen.isi.infrastructure.entity.BaseEntity;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
 import de.muenchen.isi.infrastructure.entity.common.Adresse;
-import de.muenchen.isi.infrastructure.entity.common.Verortung;
+import de.muenchen.isi.infrastructure.entity.common.VerortungPoint;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusInfrastruktureinrichtung;
 import de.muenchen.isi.infrastructure.repository.search.SearchwordSuggesterRepository;
@@ -78,7 +78,7 @@ public abstract class Infrastruktureinrichtung extends BaseEntity {
     @IndexedEmbedded
     @Type(type = "json")
     @Column(columnDefinition = "jsonb")
-    private Verortung verortung;
+    private VerortungPoint verortung;
 
     /**
      * Einheitlicher indexiertes sortierbares Namensattributs
