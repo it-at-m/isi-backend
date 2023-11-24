@@ -17,6 +17,8 @@ public class LookupListsModel {
 
     private LookupListModel standVerfahrenBaugenehmigungsverfahren;
 
+    private LookupListModel standVerfahrenWeiteresVerfahren;
+
     private LookupListModel standVerfahren;
 
     private LookupListModel statusAbfrage;

@@ -6,6 +6,7 @@ import de.muenchen.isi.infrastructure.entity.BaseEntity;
 import de.muenchen.isi.infrastructure.entity.Baugenehmigungsverfahren;
 import de.muenchen.isi.infrastructure.entity.Bauleitplanverfahren;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
+import de.muenchen.isi.infrastructure.entity.WeiteresVerfahren;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Grundschule;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.GsNachmittagBetreuung;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.HausFuerKinder;
@@ -62,6 +63,9 @@ public class SearchPreparationService {
         if (CollectionUtils.containsAny(searchableEntities, Set.of(Baugenehmigungsverfahren.class))) {
             searchableAttributes.addAll(getNamesOfSearchableAttributesForBaugenehmigungsverfahren());
         }
+        if (CollectionUtils.containsAny(searchableEntities, Set.of(WeiteresVerfahren.class))) {
+            searchableAttributes.addAll(getNamesOfSearchableAttributesForWeiteresVerfahren());
+        }
         if (CollectionUtils.containsAny(searchableEntities, Set.of(Bauvorhaben.class))) {
             searchableAttributes.addAll(getNamesOfSearchableAttributesForBauvorhaben());
         }
@@ -115,6 +119,22 @@ public class SearchPreparationService {
         return searchableAttributes;
     }
 
+    protected static Set<String> getNamesOfSearchableAttributesForWeiteresVerfahren() {
+        final var searchableAttributes = new HashSet<String>();
+        searchableAttributes.add("adresse.strasse");
+        searchableAttributes.add("adresse.hausnummer");
+        searchableAttributes.add("verortung.stadtbezirke.name");
+        searchableAttributes.add("verortung.gemarkungen.name");
+        searchableAttributes.add("verortung.gemarkungen.flurstuecke.nummer");
+        searchableAttributes.add("statusAbfrage");
+        searchableAttributes.add("standVerfahren");
+        searchableAttributes.add("bebauungsplannummer");
+        searchableAttributes.add("name");
+        searchableAttributes.add("abfragevariantenWeiteresVerfahren.realisierungVon");
+        searchableAttributes.add("abfragevariantenSachbearbeitungWeiteresVerfahren.realisierungVon");
+        return searchableAttributes;
+    }
+
     protected static Set<String> getNamesOfSearchableAttributesForBauvorhaben() {
         final var searchableAttributes = new HashSet<String>();
         searchableAttributes.add("nameVorhaben");
@@ -153,6 +173,9 @@ public class SearchPreparationService {
         }
         if (BooleanUtils.isTrue(searchQueryInformation.getSelectBaugenehmigungsverfahren())) {
             searchableEntities.add(Baugenehmigungsverfahren.class);
+        }
+        if (BooleanUtils.isTrue(searchQueryInformation.getSelectWeiteresVerfahren())) {
+            searchableEntities.add(WeiteresVerfahren.class);
         }
         if (BooleanUtils.isTrue(searchQueryInformation.getSelectBauvorhaben())) {
             searchableEntities.add(Bauvorhaben.class);
