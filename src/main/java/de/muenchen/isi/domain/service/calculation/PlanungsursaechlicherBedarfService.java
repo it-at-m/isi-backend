@@ -626,7 +626,7 @@ public class PlanungsursaechlicherBedarfService {
         var meanAnzahlKinderGesamt = BigDecimal.ZERO;
         BigDecimal meanAnzahlKinderZuVersorgen = BigDecimal.ZERO;
         BigDecimal meanAnzahlGruppen = BigDecimal.ZERO;
-        BigDecimal numberOfYear = BigDecimal.ZERO;
+        BigDecimal numberOfYear;
         for (int index = 0; index < planungsursaechlicheBedarfe.size(); index++) {
             numberOfYear = BigDecimal.valueOf(index + 1);
             meanAnzahlKinderGesamt =
