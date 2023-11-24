@@ -8,11 +8,11 @@ import lombok.Data;
 public class LangfristigerPlanungsursaechlicherBedarfDto {
 
     @NotNull
-    private List<PlanungsursachlicheWohneinheitenDto> wohneinheiten;
+    private List<WohneinheitenProFoerderartProJahrDto> wohneinheiten;
 
     @NotNull
-    private List<PlanungsursaechlicherBedarfDto> planungsursaechlicherBedarfKinderkrippe;
+    private List<PlanungsursaechlicherBedarfProJahrDto> planungsursaechlicherBedarfKinderkrippe;
 
     @NotNull
-    private List<PlanungsursaechlicherBedarfDto> planungsursaechlicherBedarfKindergarten;
+    private List<PlanungsursaechlicherBedarfProJahrDto> planungsursaechlicherBedarfKindergarten;
 }

@@ -5,7 +5,7 @@ import javax.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
-public class PlanungsursachlicheWohneinheitenDto {
+public class WohneinheitenProFoerderartProJahrDto {
 
     @NotNull
     private String foerderart;

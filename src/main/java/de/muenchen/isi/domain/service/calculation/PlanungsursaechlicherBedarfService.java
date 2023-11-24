@@ -1,8 +1,8 @@
 package de.muenchen.isi.domain.service.calculation;
 
 import de.muenchen.isi.domain.mapper.StammdatenDomainMapper;
-import de.muenchen.isi.domain.model.calculation.PlanungsursachlicheWohneinheitenModel;
-import de.muenchen.isi.domain.model.calculation.PlanungsursaechlicherBedarfModel;
+import de.muenchen.isi.domain.model.calculation.PlanungsursaechlicherBedarfProJahrModel;
+import de.muenchen.isi.domain.model.calculation.WohneinheitenProFoerderartProJahrModel;
 import de.muenchen.isi.domain.model.stammdaten.SobonOrientierungswertSozialeInfrastrukturModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
@@ -35,11 +35,11 @@ public class PlanungsursaechlicherBedarfService {
 
     public static final int SCALE_ROUNDING_RESULT_DECIMAL = 2;
 
-    public static final String TITLE_MEAN_YEAR_10 = "Mittelwert 10 Jahre";
+    public static final String TITLE_MEAN_YEAR_10 = "Mittelwert 10 J.";
 
-    public static final String TITLE_MEAN_YEAR_15 = "Mittelwert 15 Jahre";
+    public static final String TITLE_MEAN_YEAR_15 = "Mittelwert 15 J.";
 
-    public static final String TITLE_MEAN_YEAR_20 = "Mittelwert 20 Jahre";
+    public static final String TITLE_MEAN_YEAR_20 = "Mittelwert 20 J.";
 
     private final SobonOrientierungswertSozialeInfrastrukturRepository sobonOrientierungswertSozialeInfrastrukturRepository;
 
@@ -56,8 +56,10 @@ public class PlanungsursaechlicherBedarfService {
      * @param gueltigAb zur Ermittlung der korrekten Versorgungsquote und Gruppenstärke.
      * @return die planungsursächlichen Bedarfe für den Zeitraum von 20 Jahren
      */
-    public List<PlanungsursaechlicherBedarfModel> calculatePlanungsursaechlicherBedarfForKinderkrippeRoundedAndWithMean(
-        final List<PlanungsursachlicheWohneinheitenModel> wohneinheiten,
+    public List<
+        PlanungsursaechlicherBedarfProJahrModel
+    > calculatePlanungsursaechlicherBedarfForKinderkrippeRoundedAndWithMean(
+        final List<WohneinheitenProFoerderartProJahrModel> wohneinheiten,
         final SobonOrientierungswertJahr sobonJahr,
         final LocalDate gueltigAb
     ) {
@@ -80,8 +82,8 @@ public class PlanungsursaechlicherBedarfService {
      * @param gueltigAb zur Ermittlung der korrekten Versorgungsquote und Gruppenstärke.
      * @return die planungsursächlichen Bedarfe für den Zeitraum von 20 Jahren
      */
-    public Stream<PlanungsursaechlicherBedarfModel> calculatePlanungsursaechlicherBedarfForKinderkrippe(
-        final List<PlanungsursachlicheWohneinheitenModel> wohneinheiten,
+    public Stream<PlanungsursaechlicherBedarfProJahrModel> calculatePlanungsursaechlicherBedarfForKinderkrippe(
+        final List<WohneinheitenProFoerderartProJahrModel> wohneinheiten,
         final SobonOrientierungswertJahr sobonJahr,
         final LocalDate gueltigAb
     ) {
@@ -102,8 +104,10 @@ public class PlanungsursaechlicherBedarfService {
      * @param gueltigAb zur Ermittlung der korrekten Versorgungsquote und Gruppenstärke.
      * @return die planungsursächlichen Bedarfe für den Zeitraum von 20 Jahren
      */
-    public List<PlanungsursaechlicherBedarfModel> calculatePlanungsursaechlicherBedarfForKindergartenRoundedAndWithMean(
-        final List<PlanungsursachlicheWohneinheitenModel> wohneinheiten,
+    public List<
+        PlanungsursaechlicherBedarfProJahrModel
+    > calculatePlanungsursaechlicherBedarfForKindergartenRoundedAndWithMean(
+        final List<WohneinheitenProFoerderartProJahrModel> wohneinheiten,
         final SobonOrientierungswertJahr sobonJahr,
         final LocalDate gueltigAb
     ) {
@@ -126,8 +130,8 @@ public class PlanungsursaechlicherBedarfService {
      * @param gueltigAb zur Ermittlung der korrekten Versorgungsquote und Gruppenstärke.
      * @return die planungsursächlichen Bedarfe für den Zeitraum von 20 Jahren
      */
-    public Stream<PlanungsursaechlicherBedarfModel> calculatePlanungsursaechlicherBedarfForKindergarten(
-        final List<PlanungsursachlicheWohneinheitenModel> wohneinheiten,
+    public Stream<PlanungsursaechlicherBedarfProJahrModel> calculatePlanungsursaechlicherBedarfForKindergarten(
+        final List<WohneinheitenProFoerderartProJahrModel> wohneinheiten,
         final SobonOrientierungswertJahr sobonJahr,
         final LocalDate gueltigAb
     ) {
@@ -149,9 +153,9 @@ public class PlanungsursaechlicherBedarfService {
      * @param gueltigAb zur Ermittlung der korrekten Versorgungsquote und Gruppenstärke.
      * @return die planungsursächlichen Bedarfe für den Zeitraum von 20 Jahren
      */
-    protected Stream<PlanungsursaechlicherBedarfModel> calculatePlanungsursaechlicherBedarf(
+    protected Stream<PlanungsursaechlicherBedarfProJahrModel> calculatePlanungsursaechlicherBedarf(
         final InfrastruktureinrichtungTyp einrichtung,
-        final List<PlanungsursachlicheWohneinheitenModel> wohneinheiten,
+        final List<WohneinheitenProFoerderartProJahrModel> wohneinheiten,
         final SobonOrientierungswertJahr sobonJahr,
         final LocalDate gueltigAb
     ) {
@@ -176,7 +180,7 @@ public class PlanungsursaechlicherBedarfService {
 
         final var earliestPlanungsUrsaechlichesJahr = wohneinheitenWithoutSum
             .stream()
-            .map(PlanungsursachlicheWohneinheitenModel::getJahr)
+            .map(WohneinheitenProFoerderartProJahrModel::getJahr)
             .mapToInt(Integer::parseInt)
             .min()
             .getAsInt();
@@ -194,7 +198,7 @@ public class PlanungsursaechlicherBedarfService {
             // Gruppieren der planungsursächlichen Bedarfe je Jahr
             .collect(
                 Collectors.groupingBy(
-                    PlanungsursaechlicherBedarfModel::getJahr,
+                    PlanungsursaechlicherBedarfProJahrModel::getJahr,
                     Collectors.mapping(Function.identity(), Collectors.toList())
                 )
             )
@@ -202,9 +206,11 @@ public class PlanungsursaechlicherBedarfService {
             .stream()
             // Bilden der Jahressumme der vorher gruppierten planungsursächlichen Bedarfe.
             .map(planungsursaechlicheBedarfeForJahr ->
-                planungsursaechlicheBedarfeForJahr.stream().reduce(new PlanungsursaechlicherBedarfModel(), this::add)
+                planungsursaechlicheBedarfeForJahr
+                    .stream()
+                    .reduce(new PlanungsursaechlicherBedarfProJahrModel(), this::add)
             )
-            .sorted(Comparator.comparing(PlanungsursaechlicherBedarfModel::getJahr))
+            .sorted(Comparator.comparing(PlanungsursaechlicherBedarfProJahrModel::getJahr))
             // Ermitteln der Versorgungsquote und Gruppenstärke
             .map(planungsursaechlicherBedarfTest ->
                 this.setVersorgungsquoteAndGruppenstaerkeInPlanungsursaechlichenBedarf(
@@ -223,8 +229,8 @@ public class PlanungsursaechlicherBedarfService {
      * @param versorgungsquoteGruppenstaerke zur Ermittlung.
      * @return den um die zu versorgenden Kinder und die Anzahl der Gruppen angereicherten planungsursächlichen Bedarf.
      */
-    protected PlanungsursaechlicherBedarfModel setVersorgungsquoteAndGruppenstaerkeInPlanungsursaechlichenBedarf(
-        final PlanungsursaechlicherBedarfModel planungsursaechlicherBedarf,
+    protected PlanungsursaechlicherBedarfProJahrModel setVersorgungsquoteAndGruppenstaerkeInPlanungsursaechlichenBedarf(
+        final PlanungsursaechlicherBedarfProJahrModel planungsursaechlicherBedarf,
         final VersorgungsquoteGruppenstaerke versorgungsquoteGruppenstaerke
     ) {
         final var anzahlKinderGesamt = planungsursaechlicherBedarf.getAnzahlKinderGesamt();
@@ -244,15 +250,15 @@ public class PlanungsursaechlicherBedarfService {
     /**
      * Rundet die Werte für den im Parameter gegebenen planungsursächlichen Bedarf und gibt den Bedarf mit den gerundeten Werten zurück.
      *
-     * - {@link PlanungsursaechlicherBedarfModel#getAnzahlKinderGesamt()} runden auf {@link this#SCALE_ROUNDING_RESULT_INTEGER}.
-     * - {@link PlanungsursaechlicherBedarfModel#getAnzahlKinderZuVersorgen()} ()} runden auf {@link this#SCALE_ROUNDING_RESULT_INTEGER}.
-     * - {@link PlanungsursaechlicherBedarfModel#getAnzahlGruppen()} runden auf {@link this#SCALE_ROUNDING_RESULT_DECIMAL}.
+     * - {@link PlanungsursaechlicherBedarfProJahrModel#getAnzahlKinderGesamt()} runden auf {@link this#SCALE_ROUNDING_RESULT_INTEGER}.
+     * - {@link PlanungsursaechlicherBedarfProJahrModel#getAnzahlKinderZuVersorgen()} ()} runden auf {@link this#SCALE_ROUNDING_RESULT_INTEGER}.
+     * - {@link PlanungsursaechlicherBedarfProJahrModel#getAnzahlGruppen()} runden auf {@link this#SCALE_ROUNDING_RESULT_DECIMAL}.
      *
      * @param planungsursaechlicherBedarf zum Runden der Werte.
      * @return den planungsursächliechen Bedarf mit gerundeten Werten.
      */
-    protected PlanungsursaechlicherBedarfModel roundValuesAndReturnModelWithRoundedValues(
-        final PlanungsursaechlicherBedarfModel planungsursaechlicherBedarf
+    protected PlanungsursaechlicherBedarfProJahrModel roundValuesAndReturnModelWithRoundedValues(
+        final PlanungsursaechlicherBedarfProJahrModel planungsursaechlicherBedarf
     ) {
         final var anzahlKinderGesamtRounded = planungsursaechlicherBedarf
             .getAnzahlKinderGesamt()
@@ -279,11 +285,11 @@ public class PlanungsursaechlicherBedarfService {
      * @param o2 zum Summieren.
      * @return den planungsursächlichen Bedarf mit der summierten Gesamtanzahl der Kinder
      */
-    protected PlanungsursaechlicherBedarfModel add(
-        final PlanungsursaechlicherBedarfModel o1,
-        final PlanungsursaechlicherBedarfModel o2
+    protected PlanungsursaechlicherBedarfProJahrModel add(
+        final PlanungsursaechlicherBedarfProJahrModel o1,
+        final PlanungsursaechlicherBedarfProJahrModel o2
     ) {
-        final var planungsursaechlicherBedarf = new PlanungsursaechlicherBedarfModel();
+        final var planungsursaechlicherBedarf = new PlanungsursaechlicherBedarfProJahrModel();
         final var jahr = ObjectUtils.defaultIfNull(o1.getJahr(), o2.getJahr());
         final var sumAnzahlKinderGesamt = ObjectUtils
             .defaultIfNull(o1.getAnzahlKinderGesamt(), BigDecimal.ZERO)
@@ -303,13 +309,13 @@ public class PlanungsursaechlicherBedarfService {
      * @return die Sobon-Orientierungswerte zur sozialen Infrastruktur gruppiert nach Förderart.
      */
     protected Map<String, SobonOrientierungswertSozialeInfrastrukturModel> getSobonOrientierungswertGroupedByFoerderart(
-        final List<PlanungsursachlicheWohneinheitenModel> wohneinheiten,
+        final List<WohneinheitenProFoerderartProJahrModel> wohneinheiten,
         final SobonOrientierungswertJahr sobonJahr,
         final InfrastruktureinrichtungTyp einrichtungstyp
     ) {
         return wohneinheiten
             .stream()
-            .map(PlanungsursachlicheWohneinheitenModel::getFoerderart)
+            .map(WohneinheitenProFoerderartProJahrModel::getFoerderart)
             .distinct()
             .map(foerderart ->
                 sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndFoerderartBezeichnungAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
@@ -343,12 +349,12 @@ public class PlanungsursaechlicherBedarfService {
      * @param sobonOrientierungswertSozialeInfrastruktur zur Ermittlung der planungsursächlichen Bedarfe.
      * @return die planungsursächlichen Bedarfe der gegebenen Wohneinheiten unter Berücksichtung des ersten planungsursächlichen Jahres.
      */
-    protected Stream<PlanungsursaechlicherBedarfModel> calculatePlanungsursaechlicheBedarfe(
+    protected Stream<PlanungsursaechlicherBedarfProJahrModel> calculatePlanungsursaechlicheBedarfe(
         final Integer firstPlanungsursaechlichesJahr,
-        final PlanungsursachlicheWohneinheitenModel wohneinheiten,
+        final WohneinheitenProFoerderartProJahrModel wohneinheiten,
         final SobonOrientierungswertSozialeInfrastrukturModel sobonOrientierungswertSozialeInfrastruktur
     ) {
-        final var planungsursaechlicheBedarfe = new ArrayList<PlanungsursaechlicherBedarfModel>();
+        final var planungsursaechlicheBedarfe = new ArrayList<PlanungsursaechlicherBedarfProJahrModel>();
         final var numberOfYearsToCalculate =
             20 - (Integer.parseInt(wohneinheiten.getJahr()) - firstPlanungsursaechlichesJahr);
         var yearToCalculate = 0;
@@ -676,17 +682,17 @@ public class PlanungsursaechlicherBedarfService {
     }
 
     /**
-     * Erstellt ein {@link PlanungsursaechlicherBedarfModel} mit den im Parameter gegebenen Werten.
+     * Erstellt ein {@link PlanungsursaechlicherBedarfProJahrModel} mit den im Parameter gegebenen Werten.
      *
      * @param jahr des planungsursächlichen Bedarfs.
      * @param anzahlKinderGesamt des planungsursächlichen Bedarfs.
      * @return den planungsursächlichen Bedarf mit gesetzten Jahr und der Gesamtanzahl an Kinder.
      */
-    protected PlanungsursaechlicherBedarfModel createPlanungsursaechlicherBedarf(
+    protected PlanungsursaechlicherBedarfProJahrModel createPlanungsursaechlicherBedarf(
         final Integer jahr,
         final BigDecimal anzahlKinderGesamt
     ) {
-        final var planungsursaechlicherBedarf = new PlanungsursaechlicherBedarfModel();
+        final var planungsursaechlicherBedarf = new PlanungsursaechlicherBedarfProJahrModel();
         planungsursaechlicherBedarf.setJahr(Integer.toString(jahr));
         planungsursaechlicherBedarf.setAnzahlKinderGesamt(anzahlKinderGesamt);
         return planungsursaechlicherBedarf;
@@ -699,10 +705,10 @@ public class PlanungsursaechlicherBedarfService {
      * @param planungsursaechlicheBedarfe zur Ermittlung der 10-Jahres-, 15-Jahres- und 20-Jahres-Mittelwerte
      * @return den 10-Jahres-, 15-Jahres- und 20-Jahres-Mittelwert als Liste.
      */
-    protected List<PlanungsursaechlicherBedarfModel> calculate10Year15YearAnd20YearMean(
-        final List<PlanungsursaechlicherBedarfModel> planungsursaechlicheBedarfe
+    protected List<PlanungsursaechlicherBedarfProJahrModel> calculate10Year15YearAnd20YearMean(
+        final List<PlanungsursaechlicherBedarfProJahrModel> planungsursaechlicheBedarfe
     ) {
-        final var means10Year15YearAnd20Year = new ArrayList<PlanungsursaechlicherBedarfModel>(3);
+        final var means10Year15YearAnd20Year = new ArrayList<PlanungsursaechlicherBedarfProJahrModel>(3);
         var sumAnzahlKinderGesamt = BigDecimal.ZERO;
         BigDecimal sumAnzahlKinderZuVersorgen = BigDecimal.ZERO;
         BigDecimal sumAnzahlGruppen = BigDecimal.ZERO;
@@ -715,7 +721,7 @@ public class PlanungsursaechlicherBedarfService {
                 planungsursaechlicheBedarfe.get(index).getAnzahlKinderZuVersorgen().add(sumAnzahlKinderZuVersorgen);
             sumAnzahlGruppen = planungsursaechlicheBedarfe.get(index).getAnzahlGruppen().add(sumAnzahlGruppen);
             if (index == 9) {
-                final var meanYear10 = new PlanungsursaechlicherBedarfModel();
+                final var meanYear10 = new PlanungsursaechlicherBedarfProJahrModel();
                 meanYear10.setJahr(TITLE_MEAN_YEAR_10);
                 meanYear10.setAnzahlKinderGesamt(
                     sumAnzahlKinderGesamt.divide(numberOfYear, SCALE_ROUNDING_RESULT_DECIMAL, RoundingMode.HALF_EVEN)
@@ -732,7 +738,7 @@ public class PlanungsursaechlicherBedarfService {
                 );
                 means10Year15YearAnd20Year.add(meanYear10);
             } else if (index == 14) {
-                final var meanYear15 = new PlanungsursaechlicherBedarfModel();
+                final var meanYear15 = new PlanungsursaechlicherBedarfProJahrModel();
                 meanYear15.setJahr(TITLE_MEAN_YEAR_15);
                 meanYear15.setAnzahlKinderGesamt(
                     sumAnzahlKinderGesamt.divide(numberOfYear, SCALE_ROUNDING_RESULT_DECIMAL, RoundingMode.HALF_EVEN)
@@ -749,7 +755,7 @@ public class PlanungsursaechlicherBedarfService {
                 );
                 means10Year15YearAnd20Year.add(meanYear15);
             } else if (index == 19) {
-                final var meanYear20 = new PlanungsursaechlicherBedarfModel();
+                final var meanYear20 = new PlanungsursaechlicherBedarfProJahrModel();
                 meanYear20.setJahr(TITLE_MEAN_YEAR_20);
                 meanYear20.setAnzahlKinderGesamt(
                     sumAnzahlKinderGesamt.divide(numberOfYear, SCALE_ROUNDING_RESULT_DECIMAL, RoundingMode.HALF_EVEN)

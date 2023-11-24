@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import lombok.Data;
 
 @Data
-public class PlanungsursaechlicherBedarfModel {
+public class PlanungsursaechlicherBedarfProJahrModel {
 
     private String jahr; // JJJJ
 
