@@ -1,6 +1,5 @@
 package de.muenchen.isi.domain.service.calculation;
 
-import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.mapper.StammdatenDomainMapper;
 import de.muenchen.isi.domain.model.calculation.PlanungsursachlicheWohneinheitenModel;
 import de.muenchen.isi.domain.model.calculation.PlanungsursaechlicherBedarfModel;
@@ -48,11 +47,20 @@ public class PlanungsursaechlicherBedarfService {
 
     private final StammdatenDomainMapper stammdatenDomainMapper;
 
+    /**
+     * Ermittlung die gerundeten planungsursächlichen Bedarfe sowie den 10-Jahres, 15-jahres und 20-Jahres-Mittelwert
+     * für den Zeitraum von 20 Jahren auf Basis der gegebenen planungsursächlichen Wohneinheiten für Kinderkrippen.
+     *
+     * @param wohneinheiten zur Ermittlung der planungsursächlichen Bedarfe.
+     * @param sobonJahr zur Ermittlung der Sobon-Orientierungswerte der sozialen Infrastuktur.
+     * @param gueltigAb zur Ermittlung der korrekten Versorgungsquote und Gruppenstärke.
+     * @return die planungsursächlichen Bedarfe für den Zeitraum von 20 Jahren
+     */
     public List<PlanungsursaechlicherBedarfModel> calculatePlanungsursaechlicherBedarfForKinderkrippeRoundedAndWithMean(
         final List<PlanungsursachlicheWohneinheitenModel> wohneinheiten,
         final SobonOrientierungswertJahr sobonJahr,
         final LocalDate gueltigAb
-    ) throws EntityNotFoundException {
+    ) {
         final var roundedPlanungsursaechlicheBedarfe =
             this.calculatePlanungsursaechlicherBedarfForKinderkrippe(wohneinheiten, sobonJahr, gueltigAb)
                 .map(this::roundValuesAndReturnModelWithRoundedValues)
@@ -63,11 +71,20 @@ public class PlanungsursaechlicherBedarfService {
         return roundedPlanungsursaechlicheBedarfe;
     }
 
+    /**
+     * Ermittlung die planungsursächlichen Bedarfe für den Zeitraum von 20 Jahren auf Basis der gegebenen
+     * planungsursächlichen Wohneinheiten für Kinderkrippen.
+     *
+     * @param wohneinheiten zur Ermittlung der planungsursächlichen Bedarfe.
+     * @param sobonJahr zur Ermittlung der Sobon-Orientierungswerte der sozialen Infrastuktur.
+     * @param gueltigAb zur Ermittlung der korrekten Versorgungsquote und Gruppenstärke.
+     * @return die planungsursächlichen Bedarfe für den Zeitraum von 20 Jahren
+     */
     public Stream<PlanungsursaechlicherBedarfModel> calculatePlanungsursaechlicherBedarfForKinderkrippe(
         final List<PlanungsursachlicheWohneinheitenModel> wohneinheiten,
         final SobonOrientierungswertJahr sobonJahr,
         final LocalDate gueltigAb
-    ) throws EntityNotFoundException {
+    ) {
         return this.calculatePlanungsursaechlicherBedarf(
                 InfrastruktureinrichtungTyp.KINDERKRIPPE,
                 wohneinheiten,
@@ -76,11 +93,20 @@ public class PlanungsursaechlicherBedarfService {
             );
     }
 
+    /**
+     * Ermittlung die gerundeten planungsursächlichen Bedarfe sowie den 10-Jahres, 15-jahres und 20-Jahres-Mittelwert
+     * für den Zeitraum von 20 Jahren auf Basis der gegebenen planungsursächlichen Wohneinheiten für Kindergärten.
+     *
+     * @param wohneinheiten zur Ermittlung der planungsursächlichen Bedarfe.
+     * @param sobonJahr zur Ermittlung der Sobon-Orientierungswerte der sozialen Infrastuktur.
+     * @param gueltigAb zur Ermittlung der korrekten Versorgungsquote und Gruppenstärke.
+     * @return die planungsursächlichen Bedarfe für den Zeitraum von 20 Jahren
+     */
     public List<PlanungsursaechlicherBedarfModel> calculatePlanungsursaechlicherBedarfForKindergartenRoundedAndWithMean(
         final List<PlanungsursachlicheWohneinheitenModel> wohneinheiten,
         final SobonOrientierungswertJahr sobonJahr,
         final LocalDate gueltigAb
-    ) throws EntityNotFoundException {
+    ) {
         final var roundedPlanungsursaechlicheBedarfe =
             this.calculatePlanungsursaechlicherBedarfForKindergarten(wohneinheiten, sobonJahr, gueltigAb)
                 .map(this::roundValuesAndReturnModelWithRoundedValues)
@@ -91,11 +117,20 @@ public class PlanungsursaechlicherBedarfService {
         return roundedPlanungsursaechlicheBedarfe;
     }
 
+    /**
+     * Ermittlung die planungsursächlichen Bedarfe für den Zeitraum von 20 Jahren auf Basis der gegebenen
+     * planungsursächlichen Wohneinheiten für Kindergärten.
+     *
+     * @param wohneinheiten zur Ermittlung der planungsursächlichen Bedarfe.
+     * @param sobonJahr zur Ermittlung der Sobon-Orientierungswerte der sozialen Infrastuktur.
+     * @param gueltigAb zur Ermittlung der korrekten Versorgungsquote und Gruppenstärke.
+     * @return die planungsursächlichen Bedarfe für den Zeitraum von 20 Jahren
+     */
     public Stream<PlanungsursaechlicherBedarfModel> calculatePlanungsursaechlicherBedarfForKindergarten(
         final List<PlanungsursachlicheWohneinheitenModel> wohneinheiten,
         final SobonOrientierungswertJahr sobonJahr,
         final LocalDate gueltigAb
-    ) throws EntityNotFoundException {
+    ) {
         return this.calculatePlanungsursaechlicherBedarf(
                 InfrastruktureinrichtungTyp.KINDERGARTEN,
                 wohneinheiten,
@@ -104,42 +139,22 @@ public class PlanungsursaechlicherBedarfService {
             );
     }
 
-    public List<
-        PlanungsursaechlicherBedarfModel
-    > calculatePlanungsursaechlicherBedarfForAlleEinwohnerRoundedAndWithMean(
-        final List<PlanungsursachlicheWohneinheitenModel> wohneinheiten,
-        final SobonOrientierungswertJahr sobonJahr,
-        final LocalDate gueltigAb
-    ) throws EntityNotFoundException {
-        final var roundedPlanungsursaechlicheBedarfe =
-            this.calculatePlanungsursaechlicherBedarfForAlleEinwohner(wohneinheiten, sobonJahr, gueltigAb)
-                .map(this::roundValuesAndReturnModelWithRoundedValues)
-                .collect(Collectors.toList());
-        final var meansForRoundedPlanungsursaechlicheBedarfe =
-            this.calculate10Year15YearAnd20YearMean(roundedPlanungsursaechlicheBedarfe);
-        roundedPlanungsursaechlicheBedarfe.addAll(meansForRoundedPlanungsursaechlicheBedarfe);
-        return roundedPlanungsursaechlicheBedarfe;
-    }
-
-    public Stream<PlanungsursaechlicherBedarfModel> calculatePlanungsursaechlicherBedarfForAlleEinwohner(
-        final List<PlanungsursachlicheWohneinheitenModel> wohneinheiten,
-        final SobonOrientierungswertJahr sobonJahr,
-        final LocalDate gueltigAb
-    ) throws EntityNotFoundException {
-        return this.calculatePlanungsursaechlicherBedarf(
-                InfrastruktureinrichtungTyp.UNSPECIFIED,
-                wohneinheiten,
-                sobonJahr,
-                gueltigAb
-            );
-    }
-
+    /**
+     * Ermittlung die planungsursächlichen Bedarfe für den Zeitraum von 20 Jahren für die im Parameter gegebene Einrichtung
+     * auf Basis der gegebenen planungsursächlichen Wohneinheiten.
+     *
+     * @param einrichtung zur Ermittlung der planungsursächlichen Bedarfe.
+     * @param wohneinheiten zur Ermittlung der planungsursächlichen Bedarfe.
+     * @param sobonJahr zur Ermittlung der Sobon-Orientierungswerte der sozialen Infrastuktur.
+     * @param gueltigAb zur Ermittlung der korrekten Versorgungsquote und Gruppenstärke.
+     * @return die planungsursächlichen Bedarfe für den Zeitraum von 20 Jahren
+     */
     protected Stream<PlanungsursaechlicherBedarfModel> calculatePlanungsursaechlicherBedarf(
         final InfrastruktureinrichtungTyp einrichtung,
         final List<PlanungsursachlicheWohneinheitenModel> wohneinheiten,
         final SobonOrientierungswertJahr sobonJahr,
         final LocalDate gueltigAb
-    ) throws EntityNotFoundException {
+    ) {
         final var wohneinheitenWithoutSum = wohneinheiten
             .stream()
             .filter(planungsursachlicheWohneinheiten ->
@@ -149,7 +164,7 @@ public class PlanungsursaechlicherBedarfService {
 
         // Ermittlung und Gruppierung der SoBon-Orientierungswerte nach Förderart
         final var sobonOrientierungswertForFoerderart =
-            this.getSobonOrientierungswertForFoerderart(wohneinheiten, sobonJahr, einrichtung);
+            this.getSobonOrientierungswertGroupedByFoerderart(wohneinheiten, sobonJahr, einrichtung);
 
         // Ermittlung der Versorgungsquote und Gruppenstärke für die Einrichtung.
         final var versorgungsquoteGruppenstaerke = versorgungsquoteGruppenstaerkeRepository
@@ -157,14 +172,7 @@ public class PlanungsursaechlicherBedarfService {
                 einrichtung,
                 gueltigAb
             )
-            .orElseThrow(() -> {
-                final var message =
-                    "Das Stammdatum der Versorgungsquote und Gruppenstärke für den Einrichtungstyp " +
-                    einrichtung +
-                    "wurde nicht gefunden.";
-                log.error(message);
-                return new EntityNotFoundException(message);
-            });
+            .get();
 
         final var earliestPlanungsUrsaechlichesJahr = wohneinheitenWithoutSum
             .stream()
@@ -206,6 +214,15 @@ public class PlanungsursaechlicherBedarfService {
             );
     }
 
+    /**
+     * Ermittelt auf Basis des planungsursächlichen Bedarfs und der Versorgungsquote und Gruppenstärke die Anzahl
+     * an zu versorgenden Kinder sowie die Gruppenstärke für die zu versorgenden Kinder und setzt die ermittelten Werte
+     * im gegebenen Bedarfsobjekt.
+     *
+     * @param planungsursaechlicherBedarf zur Ermittlung.
+     * @param versorgungsquoteGruppenstaerke zur Ermittlung.
+     * @return den um die zu versorgenden Kinder und die Anzahl der Gruppen angereicherten planungsursächlichen Bedarf.
+     */
     protected PlanungsursaechlicherBedarfModel setVersorgungsquoteAndGruppenstaerkeInPlanungsursaechlichenBedarf(
         final PlanungsursaechlicherBedarfModel planungsursaechlicherBedarf,
         final VersorgungsquoteGruppenstaerke versorgungsquoteGruppenstaerke
@@ -216,7 +233,7 @@ public class PlanungsursaechlicherBedarfService {
         );
         final var anzahlGruppen = anzahlKinderZuVersorgen.divide(
             BigDecimal.valueOf(versorgungsquoteGruppenstaerke.getGruppenstaerke()),
-            2,
+            SCALE_ROUNDING_RESULT_DECIMAL,
             RoundingMode.HALF_EVEN
         );
         planungsursaechlicherBedarf.setAnzahlKinderZuVersorgen(anzahlKinderZuVersorgen);
@@ -224,6 +241,16 @@ public class PlanungsursaechlicherBedarfService {
         return planungsursaechlicherBedarf;
     }
 
+    /**
+     * Rundet die Werte für den im Parameter gegebenen planungsursächlichen Bedarf und gibt den Bedarf mit den gerundeten Werten zurück.
+     *
+     * - {@link PlanungsursaechlicherBedarfModel#getAnzahlKinderGesamt()} runden auf {@link this#SCALE_ROUNDING_RESULT_INTEGER}.
+     * - {@link PlanungsursaechlicherBedarfModel#getAnzahlKinderZuVersorgen()} ()} runden auf {@link this#SCALE_ROUNDING_RESULT_INTEGER}.
+     * - {@link PlanungsursaechlicherBedarfModel#getAnzahlGruppen()} runden auf {@link this#SCALE_ROUNDING_RESULT_DECIMAL}.
+     *
+     * @param planungsursaechlicherBedarf zum Runden der Werte.
+     * @return den planungsursächliechen Bedarf mit gerundeten Werten.
+     */
     protected PlanungsursaechlicherBedarfModel roundValuesAndReturnModelWithRoundedValues(
         final PlanungsursaechlicherBedarfModel planungsursaechlicherBedarf
     ) {
@@ -242,6 +269,16 @@ public class PlanungsursaechlicherBedarfService {
         return planungsursaechlicherBedarf;
     }
 
+    /**
+     * Summiert die Gesamtanzahl der Kinder der in den Parameter gegebenen planungsursächlichen Bedarfe.
+     *
+     * Als relevantes Jahr wird das Jahr der Bedarfe im Parameter o1 gesetzt, falls diese vorhanden ist.
+     * Ansonsten wird das jahr des Parameter o2 verwendet.
+     *
+     * @param o1 zum Summieren.
+     * @param o2 zum Summieren.
+     * @return den planungsursächlichen Bedarf mit der summierten Gesamtanzahl der Kinder
+     */
     protected PlanungsursaechlicherBedarfModel add(
         final PlanungsursaechlicherBedarfModel o1,
         final PlanungsursaechlicherBedarfModel o2
@@ -256,7 +293,16 @@ public class PlanungsursaechlicherBedarfService {
         return planungsursaechlicherBedarf;
     }
 
-    protected Map<String, SobonOrientierungswertSozialeInfrastrukturModel> getSobonOrientierungswertForFoerderart(
+    /**
+     * Ermittelt je Förderart in den gegebenen planungsursächlichen Wohneinheiten die Sobon-Orientierungswerte zur
+     * sozialen Infrastruktur.
+     *
+     * @param wohneinheiten mit Förderarten zur Ermittlung der Sobon-Orientierungswerte zur sozialen Infrastruktur je Förderart.
+     * @param sobonJahr zur Extraktion der korrekten Sobon-Orientierungswerte zur sozialen Infrastruktur je Förderart.
+     * @param einrichtungstyp zur Extraktion der korrekten Sobon-Orientierungswerte zur sozialen Infrastruktur je Förderart.
+     * @return die Sobon-Orientierungswerte zur sozialen Infrastruktur gruppiert nach Förderart.
+     */
+    protected Map<String, SobonOrientierungswertSozialeInfrastrukturModel> getSobonOrientierungswertGroupedByFoerderart(
         final List<PlanungsursachlicheWohneinheitenModel> wohneinheiten,
         final SobonOrientierungswertJahr sobonJahr,
         final InfrastruktureinrichtungTyp einrichtungstyp
@@ -283,6 +329,20 @@ public class PlanungsursaechlicherBedarfService {
             );
     }
 
+    /**
+     * Ermittelt für die im Parameter gegebenen Wohneinheiten die planungsursächlichen Bedarfe
+     * auf Basis der im Paramter Sobon-Orientierungswerte der sozialen Infrastruktur.
+     *
+     * Entspricht das jahr der planungsursächlichen Wohneinheiten dem ersten planungsursächlichen Jahr,
+     * so werden planungsursächlichen Bedarfe für 20 Jahre ermittelt.
+     * Jedes weitere Jahr der planungsursächlichen Wohneinheiten reduziert die Anzahl der planungsursächlichen Bedarfe
+     * jeweils um ein Jahr.
+     *
+     * @param firstPlanungsursaechlichesJahr zur Ermittlung der notwendigen Anzahl an jährlichen planungsursächlichen Bedarfe.
+     * @param wohneinheiten zur Ermittlung der planungsursächliechen Bedarfe.
+     * @param sobonOrientierungswertSozialeInfrastruktur zur Ermittlung der planungsursächlichen Bedarfe.
+     * @return die planungsursächlichen Bedarfe der gegebenen Wohneinheiten unter Berücksichtung des ersten planungsursächlichen Jahres.
+     */
     protected Stream<PlanungsursaechlicherBedarfModel> calculatePlanungsursaechlicheBedarfe(
         final Integer firstPlanungsursaechlichesJahr,
         final PlanungsursachlicheWohneinheitenModel wohneinheiten,
@@ -615,6 +675,13 @@ public class PlanungsursaechlicherBedarfService {
         return planungsursaechlicheBedarfe.stream();
     }
 
+    /**
+     * Erstellt ein {@link PlanungsursaechlicherBedarfModel} mit den im Parameter gegebenen Werten.
+     *
+     * @param jahr des planungsursächlichen Bedarfs.
+     * @param anzahlKinderGesamt des planungsursächlichen Bedarfs.
+     * @return den planungsursächlichen Bedarf mit gesetzten Jahr und der Gesamtanzahl an Kinder.
+     */
     protected PlanungsursaechlicherBedarfModel createPlanungsursaechlicherBedarf(
         final Integer jahr,
         final BigDecimal anzahlKinderGesamt
@@ -625,6 +692,13 @@ public class PlanungsursaechlicherBedarfService {
         return planungsursaechlicherBedarf;
     }
 
+    /**
+     * Die Methode ermittelt den 10-Jahres-, 15-Jahres- und 20-Jahres-Mittelwert für die im Parameter gegebenen Liste
+     * an planungsursächlichen Bedarfen.
+     *
+     * @param planungsursaechlicheBedarfe zur Ermittlung der 10-Jahres-, 15-Jahres- und 20-Jahres-Mittelwerte
+     * @return den 10-Jahres-, 15-Jahres- und 20-Jahres-Mittelwert als Liste.
+     */
     protected List<PlanungsursaechlicherBedarfModel> calculate10Year15YearAnd20YearMean(
         final List<PlanungsursaechlicherBedarfModel> planungsursaechlicheBedarfe
     ) {

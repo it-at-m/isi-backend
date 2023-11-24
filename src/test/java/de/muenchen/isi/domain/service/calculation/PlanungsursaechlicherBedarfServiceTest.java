@@ -4,7 +4,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
 import de.muenchen.isi.TestData;
-import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.mapper.StammdatenDomainMapperImpl;
 import de.muenchen.isi.domain.model.calculation.PlanungsursachlicheWohneinheitenModel;
 import de.muenchen.isi.domain.model.calculation.PlanungsursaechlicherBedarfModel;
@@ -56,7 +55,7 @@ class PlanungsursaechlicherBedarfServiceTest {
     }
 
     @Test
-    void calculatePlanungsursaechlicherBedarf() throws EntityNotFoundException {
+    void calculatePlanungsursaechlicherBedarf() {
         final InfrastruktureinrichtungTyp einrichtung = InfrastruktureinrichtungTyp.KINDERKRIPPE;
         final SobonOrientierungswertJahr sobonJahr = SobonOrientierungswertJahr.JAHR_2017;
         final LocalDate gueltigAb = LocalDate.of(1998, 1, 1);
@@ -437,7 +436,7 @@ class PlanungsursaechlicherBedarfServiceTest {
     }
 
     @Test
-    void getSobonOrientierungswertForFoerderart() {
+    void getSobonOrientierungswertGroupedByFoerderart() {
         final var wohneinheiten = new ArrayList<PlanungsursachlicheWohneinheitenModel>();
         var planungsursachlicheWohneinheiten = new PlanungsursachlicheWohneinheitenModel();
         planungsursachlicheWohneinheiten.setFoerderart("foerderart1");
@@ -506,7 +505,7 @@ class PlanungsursaechlicherBedarfServiceTest {
             )
             .thenReturn(Optional.of(sobonOrientierungswertFoerderart4));
 
-        final var result = planungsursaechlicherBedarfService.getSobonOrientierungswertForFoerderart(
+        final var result = planungsursaechlicherBedarfService.getSobonOrientierungswertGroupedByFoerderart(
             wohneinheiten,
             SobonOrientierungswertJahr.JAHR_2017,
             InfrastruktureinrichtungTyp.KINDERKRIPPE

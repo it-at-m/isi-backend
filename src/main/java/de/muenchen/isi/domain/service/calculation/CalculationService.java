@@ -1,6 +1,5 @@
 package de.muenchen.isi.domain.service.calculation;
 
-import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.model.BauabschnittModel;
 import de.muenchen.isi.domain.model.BaurateModel;
 import de.muenchen.isi.domain.model.calculation.LangfristigerPlanungsursaechlicherBedarfModel;
@@ -29,13 +28,12 @@ public class CalculationService {
      * @param sobonJahr Das SoBoN-Jahr, welches die städtebaulichen Orientierungswerte diktiert.
      * @param gueltigAb Das Gültigkeitsdatum der Stammdaten, welche die Umlegung diktieren.
      * @return Das {@link LangfristigerPlanungsursaechlicherBedarfModel}.
-     * @throws EntityNotFoundException falls bestimmte Stammdaten nicht aus der Datenbank extrahiert werden können.
      */
     public LangfristigerPlanungsursaechlicherBedarfModel calculateLangfristigerPlanungsursaechlicherBedarf(
         final List<BauabschnittModel> bauabschnitte,
         final SobonOrientierungswertJahr sobonJahr,
         final LocalDate gueltigAb
-    ) throws EntityNotFoundException {
+    ) {
         final var bedarf = new LangfristigerPlanungsursaechlicherBedarfModel();
 
         // Ermittlung Wohneinheiten
@@ -63,15 +61,6 @@ public class CalculationService {
                 gueltigAb
             );
         bedarf.setPlanungsursaechlicherBedarfKindergarten(bedarfKindergarten);
-
-        // Ermittlung Bedarf alle Einwohner
-        final var bedarfAlleEinwohner =
-            planungsursaechlicherBedarfService.calculatePlanungsursaechlicherBedarfForAlleEinwohnerRoundedAndWithMean(
-                wohneinheiten,
-                sobonJahr,
-                gueltigAb
-            );
-        bedarf.setPlanungsursaechlicherBedarfAlleEinwohner(bedarfAlleEinwohner);
 
         return bedarf;
     }
