@@ -24,7 +24,7 @@ public class CalculationService {
 
     public static final List<Integer> SUMMATION_PERIODS = List.of(10, 15, 20);
 
-    public static final String SUMMATION_PERIOD_NAME = "Summe der ersten %d Jahre";
+    public static final String SUMMATION_PERIOD_NAME = "Summe erste %d J.";
 
     public static final String SUMMATION_TOTAL_NAME = "Gesamt";
 
