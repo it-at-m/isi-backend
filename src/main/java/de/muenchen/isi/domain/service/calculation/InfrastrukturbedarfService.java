@@ -73,7 +73,7 @@ public class InfrastrukturbedarfService {
             this.calculateBedarfForKinderkrippe(wohneinheiten, sobonJahr, artInfrastrukturbedarf, gueltigAb)
                 .map(this::roundValuesAndReturnModelWithRoundedValues)
                 .collect(Collectors.toList());
-        final var meansForRoundedBedarfe = this.calculate10Year15YearAnd20YearMean(roundedBedarfe);
+        final var meansForRoundedBedarfe = this.calculate10Year15YearAnd20YearMeanInfrastrukturbedarfe(roundedBedarfe);
         roundedBedarfe.addAll(meansForRoundedBedarfe);
         return roundedBedarfe;
     }
@@ -132,7 +132,7 @@ public class InfrastrukturbedarfService {
             this.calculateBedarfForKindergarten(wohneinheiten, sobonJahr, artInfrastrukturbedarf, gueltigAb)
                 .map(this::roundValuesAndReturnModelWithRoundedValues)
                 .collect(Collectors.toList());
-        final var meansForRoundedBedarfe = this.calculate10Year15YearAnd20YearMean(roundedBedarfe);
+        final var meansForRoundedBedarfe = this.calculate10Year15YearAnd20YearMeanInfrastrukturbedarfe(roundedBedarfe);
         roundedBedarfe.addAll(meansForRoundedBedarfe);
         return roundedBedarfe;
     }
@@ -645,7 +645,7 @@ public class InfrastrukturbedarfService {
      * @param bedarfe zur Ermittlung der 10-Jahres-, 15-Jahres- und 20-Jahres-Mittelwerte
      * @return den 10-Jahres-, 15-Jahres- und 20-Jahres-Mittelwert als Liste.
      */
-    protected List<InfrastrukturbedarfProJahrModel> calculate10Year15YearAnd20YearMean(
+    protected List<InfrastrukturbedarfProJahrModel> calculate10Year15YearAnd20YearMeanInfrastrukturbedarfe(
         final List<InfrastrukturbedarfProJahrModel> bedarfe
     ) {
         final var means10Year15YearAnd20Year = new ArrayList<InfrastrukturbedarfProJahrModel>(3);
@@ -708,6 +708,48 @@ public class InfrastrukturbedarfService {
                 );
                 meanYear20.setAnzahlGruppen(
                     sumAnzahlGruppen.divide(numberOfYear, SCALE_ROUNDING_RESULT_DECIMAL, RoundingMode.HALF_EVEN)
+                );
+                means10Year15YearAnd20Year.add(meanYear20);
+            }
+        }
+        return means10Year15YearAnd20Year;
+    }
+
+    /**
+     * Die Methode ermittelt den 10-Jahres-, 15-Jahres- und 20-Jahres-Mittelwert für die im Parameter gegebenen Liste
+     * an Personen.
+     *
+     * @param personen zur Ermittlung der 10-Jahres-, 15-Jahres- und 20-Jahres-Mittelwerte
+     * @return den 10-Jahres-, 15-Jahres- und 20-Jahres-Mittelwert als Liste.
+     */
+    protected List<PersonenProJahrModel> calculate10Year15YearAnd20YearMeanForPersonen(
+        final List<PersonenProJahrModel> personen
+    ) {
+        final var means10Year15YearAnd20Year = new ArrayList<PersonenProJahrModel>(3);
+        var sumAnzahlPersonenGesamt = BigDecimal.ZERO;
+        BigDecimal numberOfYear;
+        for (int index = 0; index < personen.size(); index++) {
+            numberOfYear = BigDecimal.valueOf(index + 1);
+            sumAnzahlPersonenGesamt = personen.get(index).getAnzahlPersonenGesamt().add(sumAnzahlPersonenGesamt);
+            if (index == 9) {
+                final var meanYear10 = new PersonenProJahrModel();
+                meanYear10.setJahr(TITLE_MEAN_YEAR_10);
+                meanYear10.setAnzahlPersonenGesamt(
+                    sumAnzahlPersonenGesamt.divide(numberOfYear, SCALE_ROUNDING_RESULT_DECIMAL, RoundingMode.HALF_EVEN)
+                );
+                means10Year15YearAnd20Year.add(meanYear10);
+            } else if (index == 14) {
+                final var meanYear15 = new PersonenProJahrModel();
+                meanYear15.setJahr(TITLE_MEAN_YEAR_15);
+                meanYear15.setAnzahlPersonenGesamt(
+                    sumAnzahlPersonenGesamt.divide(numberOfYear, SCALE_ROUNDING_RESULT_DECIMAL, RoundingMode.HALF_EVEN)
+                );
+                means10Year15YearAnd20Year.add(meanYear15);
+            } else if (index == 19) {
+                final var meanYear20 = new PersonenProJahrModel();
+                meanYear20.setJahr(TITLE_MEAN_YEAR_20);
+                meanYear20.setAnzahlPersonenGesamt(
+                    sumAnzahlPersonenGesamt.divide(numberOfYear, SCALE_ROUNDING_RESULT_DECIMAL, RoundingMode.HALF_EVEN)
                 );
                 means10Year15YearAnd20Year.add(meanYear20);
             }

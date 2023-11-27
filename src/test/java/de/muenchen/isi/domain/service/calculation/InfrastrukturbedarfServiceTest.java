@@ -1269,7 +1269,7 @@ class InfrastrukturbedarfServiceTest {
     }
 
     @Test
-    void calculate10Year15YearAnd20YearMean() {
+    void calculate10Year15YearAnd20YearMeanInfrastrukturbedarfe() {
         final var bedarfe = new ArrayList<InfrastrukturbedarfProJahrModel>();
         var bedarf = new InfrastrukturbedarfProJahrModel();
         bedarf.setJahr("2000");
@@ -1392,7 +1392,7 @@ class InfrastrukturbedarfServiceTest {
         bedarf.setAnzahlGruppen(BigDecimal.valueOf(200));
         bedarfe.add(bedarf);
 
-        final var result = infrastrukturbedarfService.calculate10Year15YearAnd20YearMean(bedarfe);
+        final var result = infrastrukturbedarfService.calculate10Year15YearAnd20YearMeanInfrastrukturbedarfe(bedarfe);
 
         final var expected = new ArrayList<InfrastrukturbedarfProJahrModel>();
         final var meanYear10 = new InfrastrukturbedarfProJahrModel();
@@ -1412,6 +1412,109 @@ class InfrastrukturbedarfServiceTest {
         meanYear20.setAnzahlPersonenGesamt(BigDecimal.valueOf(10500, 2));
         meanYear20.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(10500, 2));
         meanYear20.setAnzahlGruppen(BigDecimal.valueOf(10500, 2));
+        expected.add(meanYear20);
+
+        assertThat(result, is(expected));
+    }
+
+    @Test
+    void calculate10Year15YearAnd20YearMeanForPersonen() {
+        final var personen = new ArrayList<PersonenProJahrModel>();
+        var person = new PersonenProJahrModel();
+        person.setJahr("2000");
+        person.setAnzahlPersonenGesamt(BigDecimal.valueOf(10));
+        personen.add(person);
+        person = new PersonenProJahrModel();
+        person.setJahr("2001");
+        person.setAnzahlPersonenGesamt(BigDecimal.valueOf(20));
+        personen.add(person);
+        person = new PersonenProJahrModel();
+        person.setJahr("2003");
+        person.setAnzahlPersonenGesamt(BigDecimal.valueOf(30));
+        personen.add(person);
+        person = new PersonenProJahrModel();
+        person.setJahr("2004");
+        person.setAnzahlPersonenGesamt(BigDecimal.valueOf(40));
+        personen.add(person);
+        person = new PersonenProJahrModel();
+        person.setJahr("2005");
+        person.setAnzahlPersonenGesamt(BigDecimal.valueOf(50));
+        personen.add(person);
+        person = new PersonenProJahrModel();
+        person.setJahr("2006");
+        person.setAnzahlPersonenGesamt(BigDecimal.valueOf(60));
+        personen.add(person);
+        person = new PersonenProJahrModel();
+        person.setJahr("2007");
+        person.setAnzahlPersonenGesamt(BigDecimal.valueOf(70));
+        personen.add(person);
+        person = new PersonenProJahrModel();
+        person.setJahr("2008");
+        person.setAnzahlPersonenGesamt(BigDecimal.valueOf(80));
+        personen.add(person);
+        person = new PersonenProJahrModel();
+        person.setJahr("2009");
+        person.setAnzahlPersonenGesamt(BigDecimal.valueOf(90));
+        personen.add(person);
+        person = new PersonenProJahrModel();
+        person.setJahr("2010");
+        person.setAnzahlPersonenGesamt(BigDecimal.valueOf(100));
+        personen.add(person);
+        person = new PersonenProJahrModel();
+        person.setJahr("2011");
+        person.setAnzahlPersonenGesamt(BigDecimal.valueOf(110));
+        personen.add(person);
+        person = new PersonenProJahrModel();
+        person.setJahr("2012");
+        person.setAnzahlPersonenGesamt(BigDecimal.valueOf(120));
+        personen.add(person);
+        person = new PersonenProJahrModel();
+        person.setJahr("2013");
+        person.setAnzahlPersonenGesamt(BigDecimal.valueOf(130));
+        personen.add(person);
+        person = new PersonenProJahrModel();
+        person.setJahr("2014");
+        person.setAnzahlPersonenGesamt(BigDecimal.valueOf(140));
+        personen.add(person);
+        person = new PersonenProJahrModel();
+        person.setJahr("2015");
+        person.setAnzahlPersonenGesamt(BigDecimal.valueOf(150));
+        personen.add(person);
+        person = new PersonenProJahrModel();
+        person.setJahr("2016");
+        person.setAnzahlPersonenGesamt(BigDecimal.valueOf(160));
+        personen.add(person);
+        person = new PersonenProJahrModel();
+        person.setJahr("2017");
+        person.setAnzahlPersonenGesamt(BigDecimal.valueOf(170));
+        personen.add(person);
+        person = new PersonenProJahrModel();
+        person.setJahr("2018");
+        person.setAnzahlPersonenGesamt(BigDecimal.valueOf(180));
+        personen.add(person);
+        person = new PersonenProJahrModel();
+        person.setJahr("2019");
+        person.setAnzahlPersonenGesamt(BigDecimal.valueOf(190));
+        personen.add(person);
+        person = new PersonenProJahrModel();
+        person.setJahr("2020");
+        person.setAnzahlPersonenGesamt(BigDecimal.valueOf(200));
+        personen.add(person);
+
+        final var result = infrastrukturbedarfService.calculate10Year15YearAnd20YearMeanForPersonen(personen);
+
+        final var expected = new ArrayList<PersonenProJahrModel>();
+        final var meanYear10 = new PersonenProJahrModel();
+        meanYear10.setJahr(InfrastrukturbedarfService.TITLE_MEAN_YEAR_10);
+        meanYear10.setAnzahlPersonenGesamt(BigDecimal.valueOf(5500, 2));
+        expected.add(meanYear10);
+        final var meanYear15 = new PersonenProJahrModel();
+        meanYear15.setJahr(InfrastrukturbedarfService.TITLE_MEAN_YEAR_15);
+        meanYear15.setAnzahlPersonenGesamt(BigDecimal.valueOf(8000, 2));
+        expected.add(meanYear15);
+        final var meanYear20 = new PersonenProJahrModel();
+        meanYear20.setJahr(InfrastrukturbedarfService.TITLE_MEAN_YEAR_20);
+        meanYear20.setAnzahlPersonenGesamt(BigDecimal.valueOf(10500, 2));
         expected.add(meanYear20);
 
         assertThat(result, is(expected));
