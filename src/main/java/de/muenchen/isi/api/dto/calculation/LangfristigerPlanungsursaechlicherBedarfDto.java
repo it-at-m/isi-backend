@@ -15,4 +15,7 @@ public class LangfristigerPlanungsursaechlicherBedarfDto {
 
     @NotNull
     private List<InfrastrukturbedarfProJahrDto> bedarfKindergarten;
+
+    @NotNull
+    private List<PersonenProJahrDto> alleEinwohner;
 }

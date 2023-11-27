@@ -11,4 +11,6 @@ public class LangfristigerPlanungsursaechlicherBedarfModel {
     private List<InfrastrukturbedarfProJahrModel> bedarfKinderkrippe;
 
     private List<InfrastrukturbedarfProJahrModel> bedarfKindergarten;
+
+    private List<PersonenProJahrModel> alleEinwohner;
 }
