@@ -34,7 +34,7 @@ public class CalculationService {
 
     private final PlanungsursaechlicheWohneinheitenService planungsursaechlicheWohneinheitenService;
 
-    private final PlanungsursaechlicherBedarfService planungsursaechlicherBedarfService;
+    private final InfrastrukturbedarfService infrastrukturbedarfService;
 
     /**
      * Dieser Service vereint die Funktionalitäten mehrere Berechnungsservices, um den langfristigen planungsursächlichen Bedarf zu ermitteln.
@@ -117,22 +117,20 @@ public class CalculationService {
         bedarf.setWohneinheiten(wohneinheiten);
 
         // Ermittlung Bedarf Kinderkrippe
-        final var bedarfKinderkrippe =
-            planungsursaechlicherBedarfService.calculatePlanungsursaechlicherBedarfForKinderkrippeRoundedAndWithMean(
-                wohneinheiten,
-                sobonJahr,
-                gueltigAb
-            );
-        bedarf.setPlanungsursaechlicherBedarfKinderkrippe(bedarfKinderkrippe);
+        final var bedarfKinderkrippe = infrastrukturbedarfService.calculateBedarfForKinderkrippeRoundedAndWithMean(
+            wohneinheiten,
+            sobonJahr,
+            gueltigAb
+        );
+        bedarf.setBedarfKinderkrippe(bedarfKinderkrippe);
 
         // Ermittlung Bedarf Kindergarten
-        final var bedarfKindergarten =
-            planungsursaechlicherBedarfService.calculatePlanungsursaechlicherBedarfForKindergartenRoundedAndWithMean(
-                wohneinheiten,
-                sobonJahr,
-                gueltigAb
-            );
-        bedarf.setPlanungsursaechlicherBedarfKindergarten(bedarfKindergarten);
+        final var bedarfKindergarten = infrastrukturbedarfService.calculateBedarfForKindergartenRoundedAndWithMean(
+            wohneinheiten,
+            sobonJahr,
+            gueltigAb
+        );
+        bedarf.setBedarfKindergarten(bedarfKindergarten);
 
         return bedarf;
     }

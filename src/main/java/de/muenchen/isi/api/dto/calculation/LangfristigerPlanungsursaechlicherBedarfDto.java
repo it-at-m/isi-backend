@@ -11,8 +11,8 @@ public class LangfristigerPlanungsursaechlicherBedarfDto {
     private List<WohneinheitenProFoerderartProJahrDto> wohneinheiten;
 
     @NotNull
-    private List<PlanungsursaechlicherBedarfProJahrDto> planungsursaechlicherBedarfKinderkrippe;
+    private List<InfrastrukturbedarfProJahrDto> bedarfKinderkrippe;
 
     @NotNull
-    private List<PlanungsursaechlicherBedarfProJahrDto> planungsursaechlicherBedarfKindergarten;
+    private List<InfrastrukturbedarfProJahrDto> bedarfKindergarten;
 }

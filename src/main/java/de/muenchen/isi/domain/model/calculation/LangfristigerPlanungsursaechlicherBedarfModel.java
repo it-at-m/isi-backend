@@ -8,7 +8,7 @@ public class LangfristigerPlanungsursaechlicherBedarfModel {
 
     private List<WohneinheitenProFoerderartProJahrModel> wohneinheiten;
 
-    private List<PlanungsursaechlicherBedarfProJahrModel> planungsursaechlicherBedarfKinderkrippe;
+    private List<InfrastrukturbedarfProJahrModel> bedarfKinderkrippe;
 
-    private List<PlanungsursaechlicherBedarfProJahrModel> planungsursaechlicherBedarfKindergarten;
+    private List<InfrastrukturbedarfProJahrModel> bedarfKindergarten;
 }
