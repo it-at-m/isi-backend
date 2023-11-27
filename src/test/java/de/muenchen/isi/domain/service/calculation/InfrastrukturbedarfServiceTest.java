@@ -1038,7 +1038,7 @@ class InfrastrukturbedarfServiceTest {
     }
 
     @Test
-    void roundValuesAndReturnModelWithRoundedValues() {
+    void roundValuesAndReturnModelWithRoundedValuesInfrastrukturbedarf() {
         final var model = new InfrastrukturbedarfProJahrModel();
         model.setJahr("2000");
         model.setAnzahlPersonenGesamt(BigDecimal.valueOf(46, 1));
@@ -1052,6 +1052,21 @@ class InfrastrukturbedarfServiceTest {
         expected.setAnzahlPersonenGesamt(BigDecimal.valueOf(5));
         expected.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(4));
         expected.setAnzahlGruppen(BigDecimal.valueOf(445, 2));
+
+        assertThat(result, is(expected));
+    }
+
+    @Test
+    void roundValuesAndReturnModelWithRoundedValuesPersonen() {
+        final var model = new PersonenProJahrModel();
+        model.setJahr("2000");
+        model.setAnzahlPersonenGesamt(BigDecimal.valueOf(46, 1));
+
+        final var result = infrastrukturbedarfService.roundValuesAndReturnModelWithRoundedValues(model);
+
+        final var expected = new PersonenProJahrModel();
+        expected.setJahr("2000");
+        expected.setAnzahlPersonenGesamt(BigDecimal.valueOf(5));
 
         assertThat(result, is(expected));
     }
