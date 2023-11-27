@@ -550,6 +550,192 @@ class InfrastrukturbedarfServiceTest {
     }
 
     @Test
+    void calculateAlleEinwohnerRoundedAndWithMean() {
+        final SobonOrientierungswertJahr sobonJahr = SobonOrientierungswertJahr.JAHR_2017;
+        final var wohneinheiten = new ArrayList<WohneinheitenProFoerderartProJahrModel>();
+        var wohneinheitenModel = new WohneinheitenProFoerderartProJahrModel();
+        wohneinheitenModel.setFoerderart("foerderart1");
+        wohneinheitenModel.setJahr("2000");
+        wohneinheitenModel.setWohneinheiten(BigDecimal.valueOf(10000));
+        wohneinheiten.add(wohneinheitenModel);
+        wohneinheitenModel = new WohneinheitenProFoerderartProJahrModel();
+        wohneinheitenModel.setFoerderart("foerderart1");
+        wohneinheitenModel.setJahr("2001");
+        wohneinheitenModel.setWohneinheiten(BigDecimal.valueOf(20000));
+        wohneinheiten.add(wohneinheitenModel);
+        wohneinheitenModel = new WohneinheitenProFoerderartProJahrModel();
+        wohneinheitenModel.setFoerderart("foerderart1");
+        wohneinheitenModel.setJahr("2002");
+        wohneinheitenModel.setWohneinheiten(BigDecimal.valueOf(30000));
+        wohneinheiten.add(wohneinheitenModel);
+        wohneinheitenModel = new WohneinheitenProFoerderartProJahrModel();
+        wohneinheitenModel.setFoerderart("foerderart2");
+        wohneinheitenModel.setJahr("2000");
+        wohneinheitenModel.setWohneinheiten(BigDecimal.valueOf(40000));
+        wohneinheiten.add(wohneinheitenModel);
+        wohneinheitenModel = new WohneinheitenProFoerderartProJahrModel();
+        wohneinheitenModel.setFoerderart("foerderart2");
+        wohneinheitenModel.setJahr("2001");
+        wohneinheitenModel.setWohneinheiten(BigDecimal.valueOf(50000));
+        wohneinheiten.add(wohneinheitenModel);
+        wohneinheitenModel = new WohneinheitenProFoerderartProJahrModel();
+        wohneinheitenModel.setFoerderart("foerderart3");
+        wohneinheitenModel.setJahr("2000");
+        wohneinheitenModel.setWohneinheiten(BigDecimal.valueOf(60000));
+        wohneinheiten.add(wohneinheitenModel);
+        wohneinheitenModel = new WohneinheitenProFoerderartProJahrModel();
+        wohneinheitenModel.setFoerderart("foerderart1");
+        wohneinheitenModel.setJahr("Gesamt 10 Jare");
+        wohneinheitenModel.setWohneinheiten(BigDecimal.valueOf(60000));
+        wohneinheiten.add(wohneinheitenModel);
+        wohneinheitenModel = new WohneinheitenProFoerderartProJahrModel();
+        wohneinheitenModel.setFoerderart("foerderart2");
+        wohneinheitenModel.setJahr("Gesamt 10 Jahre");
+        wohneinheitenModel.setWohneinheiten(BigDecimal.valueOf(90000));
+        wohneinheiten.add(wohneinheitenModel);
+        wohneinheitenModel = new WohneinheitenProFoerderartProJahrModel();
+        wohneinheitenModel.setFoerderart("foerderart3");
+        wohneinheitenModel.setJahr("Gesamt 10 Jare");
+        wohneinheitenModel.setWohneinheiten(BigDecimal.valueOf(60000));
+        wohneinheiten.add(wohneinheitenModel);
+
+        var sobonOrientierungswertFoerderart1 = TestData.createSobonOrientierungswertSozialeInfrastrukturEntity();
+        sobonOrientierungswertFoerderart1.setFoerderartBezeichnung("foerderart1");
+        Mockito
+            .when(
+                this.sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndFoerderartBezeichnungAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
+                        InfrastruktureinrichtungTyp.UNSPECIFIED,
+                        "foerderart1",
+                        SobonOrientierungswertJahr.JAHR_2017.getGueltigAb()
+                    )
+            )
+            .thenReturn(Optional.of(sobonOrientierungswertFoerderart1));
+        var sobonOrientierungswertFoerderart2 = TestData.createSobonOrientierungswertSozialeInfrastrukturEntity();
+        sobonOrientierungswertFoerderart2.setFoerderartBezeichnung("foerderart2");
+        Mockito
+            .when(
+                this.sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndFoerderartBezeichnungAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
+                        InfrastruktureinrichtungTyp.UNSPECIFIED,
+                        "foerderart2",
+                        SobonOrientierungswertJahr.JAHR_2017.getGueltigAb()
+                    )
+            )
+            .thenReturn(Optional.of(sobonOrientierungswertFoerderart2));
+        var sobonOrientierungswertFoerderart3 = TestData.createSobonOrientierungswertSozialeInfrastrukturEntity();
+        sobonOrientierungswertFoerderart3.setFoerderartBezeichnung("foerderart3");
+        Mockito
+            .when(
+                this.sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndFoerderartBezeichnungAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
+                        InfrastruktureinrichtungTyp.UNSPECIFIED,
+                        "foerderart3",
+                        SobonOrientierungswertJahr.JAHR_2017.getGueltigAb()
+                    )
+            )
+            .thenReturn(Optional.of(sobonOrientierungswertFoerderart3));
+
+        final var result = infrastrukturbedarfService.calculateAlleEinwohnerRoundedAndWithMean(
+            wohneinheiten,
+            sobonJahr
+        );
+
+        final var expected = new ArrayList<PersonenProJahrModel>();
+        var bedarf = new PersonenProJahrModel();
+        bedarf.setJahr(Integer.toString(2000));
+        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(52899));
+        expected.add(bedarf);
+        bedarf = new PersonenProJahrModel();
+        bedarf.setJahr(Integer.toString(2001));
+        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(85803));
+        expected.add(bedarf);
+        bedarf = new PersonenProJahrModel();
+        bedarf.setJahr(Integer.toString(2002));
+        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(98999));
+        expected.add(bedarf);
+        bedarf = new PersonenProJahrModel();
+        bedarf.setJahr(Integer.toString(2003));
+        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(97557));
+        expected.add(bedarf);
+        bedarf = new PersonenProJahrModel();
+        bedarf.setJahr(Integer.toString(2004));
+        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(96111));
+        expected.add(bedarf);
+        bedarf = new PersonenProJahrModel();
+        bedarf.setJahr(Integer.toString(2005));
+        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(94673));
+        expected.add(bedarf);
+        bedarf = new PersonenProJahrModel();
+        bedarf.setJahr(Integer.toString(2006));
+        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(93231));
+        expected.add(bedarf);
+        bedarf = new PersonenProJahrModel();
+        bedarf.setJahr(Integer.toString(2007));
+        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(91785));
+        expected.add(bedarf);
+        bedarf = new PersonenProJahrModel();
+        bedarf.setJahr(Integer.toString(2008));
+        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(90336));
+        expected.add(bedarf);
+        bedarf = new PersonenProJahrModel();
+        bedarf.setJahr(Integer.toString(2009));
+        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(88898));
+        expected.add(bedarf);
+        bedarf = new PersonenProJahrModel();
+        bedarf.setJahr(Integer.toString(2010));
+        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(87753));
+        expected.add(bedarf);
+        bedarf = new PersonenProJahrModel();
+        bedarf.setJahr(Integer.toString(2011));
+        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(86804));
+        expected.add(bedarf);
+        bedarf = new PersonenProJahrModel();
+        bedarf.setJahr(Integer.toString(2012));
+        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(85940));
+        expected.add(bedarf);
+        bedarf = new PersonenProJahrModel();
+        bedarf.setJahr(Integer.toString(2013));
+        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(85079));
+        expected.add(bedarf);
+        bedarf = new PersonenProJahrModel();
+        bedarf.setJahr(Integer.toString(2014));
+        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(84229));
+        expected.add(bedarf);
+        bedarf = new PersonenProJahrModel();
+        bedarf.setJahr(Integer.toString(2015));
+        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(83386));
+        expected.add(bedarf);
+        bedarf = new PersonenProJahrModel();
+        bedarf.setJahr(Integer.toString(2016));
+        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(82546));
+        expected.add(bedarf);
+        bedarf = new PersonenProJahrModel();
+        bedarf.setJahr(Integer.toString(2017));
+        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(81717));
+        expected.add(bedarf);
+        bedarf = new PersonenProJahrModel();
+        bedarf.setJahr(Integer.toString(2018));
+        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(80906));
+        expected.add(bedarf);
+        bedarf = new PersonenProJahrModel();
+        bedarf.setJahr(Integer.toString(2019));
+        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(80094));
+        expected.add(bedarf);
+        bedarf = new PersonenProJahrModel();
+        bedarf.setJahr(InfrastrukturbedarfService.TITLE_MEAN_YEAR_10);
+        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(8902920, 2));
+        expected.add(bedarf);
+        bedarf = new PersonenProJahrModel();
+        bedarf.setJahr(InfrastrukturbedarfService.TITLE_MEAN_YEAR_15);
+        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(8800647, 2));
+        expected.add(bedarf);
+        bedarf = new PersonenProJahrModel();
+        bedarf.setJahr(InfrastrukturbedarfService.TITLE_MEAN_YEAR_20);
+        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(8643730, 2));
+        expected.add(bedarf);
+
+        assertThat(result, is(expected));
+    }
+
+    @Test
     void calculatePersonen() {
         final InfrastruktureinrichtungTyp einrichtung = InfrastruktureinrichtungTyp.KINDERKRIPPE;
         final SobonOrientierungswertJahr sobonJahr = SobonOrientierungswertJahr.JAHR_2017;

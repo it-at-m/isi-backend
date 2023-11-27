@@ -58,7 +58,7 @@ public class InfrastrukturbedarfService {
      * für den Zeitraum von 20 Jahren auf Basis der gegebenen Wohneinheiten für Kinderkrippen.
      *
      * @param wohneinheiten zur Ermittlung der Bedarfe.
-     * @param sobonJahr zur Ermittlung der Sobon-Orientierungswerte der sozialen Infrastuktur.
+     * @param sobonJahr zur Ermittlung der Sobon-Orientierungswerte der sozialen Infrastruktur.
      * @param artInfrastrukturbedarf zur Ermittlung der korrekten Versorgungsquote und Gruppenstärke.
      * @param gueltigAb zur Ermittlung der korrekten Versorgungsquote und Gruppenstärke.
      * @return die Bedarfe für den Zeitraum von 20 Jahren
@@ -82,7 +82,7 @@ public class InfrastrukturbedarfService {
      * Ermittlung die Bedarfe für den Zeitraum von 20 Jahren auf Basis der gegebenen Wohneinheiten für Kinderkrippen.
      *
      * @param wohneinheiten zur Ermittlung der Bedarfe.
-     * @param sobonJahr zur Ermittlung der Sobon-Orientierungswerte der sozialen Infrastuktur.
+     * @param sobonJahr zur Ermittlung der Sobon-Orientierungswerte der sozialen Infrastruktur.
      * @param artInfrastrukturbedarf zur Ermittlung der korrekten Versorgungsquote und Gruppenstärke.
      * @param gueltigAb zur Ermittlung der korrekten Versorgungsquote und Gruppenstärke.
      * @return die Bedarfe für den Zeitraum von 20 Jahren
@@ -141,7 +141,7 @@ public class InfrastrukturbedarfService {
      * Ermittlung die Bedarfe für den Zeitraum von 20 Jahren auf Basis der gegebenen Wohneinheiten für Kindergärten.
      *
      * @param wohneinheiten zur Ermittlung der Bedarfe.
-     * @param sobonJahr zur Ermittlung der Sobon-Orientierungswerte der sozialen Infrastuktur.
+     * @param sobonJahr zur Ermittlung der Sobon-Orientierungswerte der sozialen Infrastruktur.
      * @param artInfrastrukturbedarf zur Ermittlung der korrekten Versorgungsquote und Gruppenstärke.
      * @param gueltigAb zur Ermittlung der korrekten Versorgungsquote und Gruppenstärke.
      * @return die Bedarfe für den Zeitraum von 20 Jahren
@@ -169,6 +169,41 @@ public class InfrastrukturbedarfService {
                         artInfrastrukturbedarf
                     )
             );
+    }
+
+    /**
+     * Ermittlung aller Einwohner sowie den 10-Jahres, 15-jahres und 20-Jahres-Mittelwert
+     * für den Zeitraum von 20 Jahren auf Basis der gegebenen Wohneinheiten.
+     *
+     * @param wohneinheiten zur Ermittlung der Personen.
+     * @param sobonJahr zur Ermittlung der Sobon-Orientierungswerte der sozialen Infrastruktur.
+     * @return die Personen für den Zeitraum von 20 Jahren
+     */
+    public List<PersonenProJahrModel> calculateAlleEinwohnerRoundedAndWithMean(
+        final List<WohneinheitenProFoerderartProJahrModel> wohneinheiten,
+        final SobonOrientierungswertJahr sobonJahr
+    ) {
+        final var roundedPersonen =
+            this.calculateAlleEinwohner(wohneinheiten, sobonJahr)
+                .map(this::roundValuesAndReturnModelWithRoundedValues)
+                .collect(Collectors.toList());
+        final var meansForRoundedPersonen = this.calculate10Year15YearAnd20YearMeanForPersonen(roundedPersonen);
+        roundedPersonen.addAll(meansForRoundedPersonen);
+        return roundedPersonen;
+    }
+
+    /**
+     * Ermittlung aller Einwohner für den Zeitraum von 20 Jahren auf Basis der gegebenen Wohneinheiten.
+     *
+     * @param wohneinheiten zur Ermittlung der Personen.
+     * @param sobonJahr zur Ermittlung der Sobon-Orientierungswerte der sozialen Infrastruktur.
+     * @return die Personen für den Zeitraum von 20 Jahren
+     */
+    public Stream<PersonenProJahrModel> calculateAlleEinwohner(
+        final List<WohneinheitenProFoerderartProJahrModel> wohneinheiten,
+        final SobonOrientierungswertJahr sobonJahr
+    ) {
+        return this.calculatePersonen(InfrastruktureinrichtungTyp.UNSPECIFIED, wohneinheiten, sobonJahr);
     }
 
     /**
@@ -283,6 +318,22 @@ public class InfrastrukturbedarfService {
         bedarf.setAnzahlPersonenZuVersorgen(anzahlPersonenZuVersorgenRounded);
         bedarf.setAnzahlGruppen(anzahlGruppenRounded);
         return bedarf;
+    }
+
+    /**
+     * Rundet die Werte für die im Parameter gegebenen Personen und gibt das Objekt mit den gerundeten Werten zurück.
+     *
+     * - {@link InfrastrukturbedarfProJahrModel#getAnzahlPersonenGesamt()} runden auf {@link this#SCALE_ROUNDING_RESULT_INTEGER}.
+     *
+     * @param personen zum Runden der Werte.
+     * @return das Objekt mit gerundeten Werten.
+     */
+    protected PersonenProJahrModel roundValuesAndReturnModelWithRoundedValues(final PersonenProJahrModel personen) {
+        final var anzahlPersonenGesamtRounded = personen
+            .getAnzahlPersonenGesamt()
+            .setScale(SCALE_ROUNDING_RESULT_INTEGER, RoundingMode.HALF_EVEN);
+        personen.setAnzahlPersonenGesamt(anzahlPersonenGesamtRounded);
+        return personen;
     }
 
     /**

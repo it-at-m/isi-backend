@@ -134,6 +134,13 @@ public class CalculationService {
         );
         bedarf.setBedarfKindergarten(bedarfKindergarten);
 
+        // Ermittlung aller Einwohner
+        final var alleEinwohner = infrastrukturbedarfService.calculateAlleEinwohnerRoundedAndWithMean(
+            wohneinheiten,
+            sobonJahr
+        );
+        bedarf.setAlleEinwohner(alleEinwohner);
+
         return bedarf;
     }
 }
