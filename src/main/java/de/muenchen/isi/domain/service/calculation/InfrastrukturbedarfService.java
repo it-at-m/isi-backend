@@ -93,12 +93,22 @@ public class InfrastrukturbedarfService {
         final ArtInfrastrukturbedarf artInfrastrukturbedarf,
         final LocalDate gueltigAb
     ) {
-        return this.calculateBedarf(
+        // Ermittlung der Versorgungsquote und Gruppenstärke für die Einrichtung.
+        final var versorgungsquoteGruppenstaerke = versorgungsquoteGruppenstaerkeRepository
+            .findFirstByInfrastruktureinrichtungTypAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
                 InfrastruktureinrichtungTyp.KINDERKRIPPE,
-                wohneinheiten,
-                sobonJahr,
-                artInfrastrukturbedarf,
                 gueltigAb
+            )
+            .get();
+
+        return this.calculatePersonen(InfrastruktureinrichtungTyp.KINDERKRIPPE, wohneinheiten, sobonJahr)
+            // Ermitteln der Versorgungsquote und Gruppenstärke
+            .map(bedarf ->
+                this.getVersorgungsquoteAndGruppenstaerkeWithBedarf(
+                        bedarf,
+                        versorgungsquoteGruppenstaerke,
+                        artInfrastrukturbedarf
+                    )
             );
     }
 
@@ -142,31 +152,37 @@ public class InfrastrukturbedarfService {
         final ArtInfrastrukturbedarf artInfrastrukturbedarf,
         final LocalDate gueltigAb
     ) {
-        return this.calculateBedarf(
+        // Ermittlung der Versorgungsquote und Gruppenstärke für die Einrichtung.
+        final var versorgungsquoteGruppenstaerke = versorgungsquoteGruppenstaerkeRepository
+            .findFirstByInfrastruktureinrichtungTypAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
                 InfrastruktureinrichtungTyp.KINDERGARTEN,
-                wohneinheiten,
-                sobonJahr,
-                artInfrastrukturbedarf,
                 gueltigAb
+            )
+            .get();
+
+        return this.calculatePersonen(InfrastruktureinrichtungTyp.KINDERGARTEN, wohneinheiten, sobonJahr)
+            // Ermitteln der Versorgungsquote und Gruppenstärke
+            .map(bedarf ->
+                this.getVersorgungsquoteAndGruppenstaerkeWithBedarf(
+                        bedarf,
+                        versorgungsquoteGruppenstaerke,
+                        artInfrastrukturbedarf
+                    )
             );
     }
 
     /**
-     * Ermittlung die Bedarfe für den Zeitraum von 20 Jahren für die im Parameter gegebene Einrichtung auf Basis der gegebenen Wohneinheiten.
+     * Ermittlung die Personen für den Zeitraum von 20 Jahren für die im Parameter gegebene Einrichtung auf Basis der gegebenen Wohneinheiten.
      *
-     * @param einrichtung zur Ermittlung der Bedarfe.
-     * @param wohneinheiten zur Ermittlung der Bedarfe.
+     * @param einrichtung zur Ermittlung der Personen.
+     * @param wohneinheiten zur Ermittlung der Personen.
      * @param sobonJahr zur Ermittlung der Sobon-Orientierungswerte der sozialen Infrastuktur.
-     * @param artInfrastrukturbedarf zur Ermittlung der korrekten Versorgungsquote und Gruppenstärke.
-     * @param gueltigAb zur Ermittlung der korrekten Versorgungsquote und Gruppenstärke.
      * @return die Bedarfe für den Zeitraum von 20 Jahren
      */
-    protected Stream<InfrastrukturbedarfProJahrModel> calculateBedarf(
+    protected Stream<PersonenProJahrModel> calculatePersonen(
         final InfrastruktureinrichtungTyp einrichtung,
         final List<WohneinheitenProFoerderartProJahrModel> wohneinheiten,
-        final SobonOrientierungswertJahr sobonJahr,
-        final ArtInfrastrukturbedarf artInfrastrukturbedarf,
-        final LocalDate gueltigAb
+        final SobonOrientierungswertJahr sobonJahr
     ) {
         final var wohneinheitenWithoutSum = wohneinheiten
             .stream()
@@ -177,14 +193,6 @@ public class InfrastrukturbedarfService {
         final var sobonOrientierungswertForFoerderart =
             this.getSobonOrientierungswertGroupedByFoerderart(wohneinheiten, sobonJahr, einrichtung);
 
-        // Ermittlung der Versorgungsquote und Gruppenstärke für die Einrichtung.
-        final var versorgungsquoteGruppenstaerke = versorgungsquoteGruppenstaerkeRepository
-            .findFirstByInfrastruktureinrichtungTypAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
-                einrichtung,
-                gueltigAb
-            )
-            .get();
-
         final var earliestYear = wohneinheitenWithoutSum
             .stream()
             .map(WohneinheitenProFoerderartProJahrModel::getJahr)
@@ -192,11 +200,11 @@ public class InfrastrukturbedarfService {
             .min()
             .getAsInt();
 
-        // Berechnung Gesamtanzahl der Kinder je Jahr
+        // Berechnung Gesamtanzahl der Personen je Jahr
         return wohneinheitenWithoutSum
             .stream()
             .flatMap(wohneinheitenProJahr ->
-                calculateBedarfeForWohneinheitProJahr(
+                calculatePersonenForWohneinheitProJahr(
                     earliestYear,
                     wohneinheitenProJahr,
                     sobonOrientierungswertForFoerderart.get(wohneinheitenProJahr.getFoerderart())
@@ -205,23 +213,15 @@ public class InfrastrukturbedarfService {
             // Gruppieren der Bedarfe je Jahr
             .collect(
                 Collectors.groupingBy(
-                    InfrastrukturbedarfProJahrModel::getJahr,
+                    PersonenProJahrModel::getJahr,
                     Collectors.mapping(Function.identity(), Collectors.toList())
                 )
             )
             .values()
             .stream()
-            // Bilden der Jahressumme der vorher gruppierten Bedarfe.
-            .map(bedarfeForJahr -> bedarfeForJahr.stream().reduce(new InfrastrukturbedarfProJahrModel(), this::add))
-            .sorted(Comparator.comparing(InfrastrukturbedarfProJahrModel::getJahr))
-            // Ermitteln der Versorgungsquote und Gruppenstärke
-            .map(bedarf ->
-                this.getVersorgungsquoteAndGruppenstaerkeWithBedarf(
-                        bedarf,
-                        versorgungsquoteGruppenstaerke,
-                        artInfrastrukturbedarf
-                    )
-            );
+            // Bilden der Jahressumme der vorher gruppierten Personen.
+            .map(bedarfeForJahr -> bedarfeForJahr.stream().reduce(new PersonenProJahrModel(), this::add))
+            .sorted(Comparator.comparing(PersonenProJahrModel::getJahr));
     }
 
     /**
@@ -239,12 +239,12 @@ public class InfrastrukturbedarfService {
         final VersorgungsquoteGruppenstaerke versorgungsquoteGruppenstaerke,
         final ArtInfrastrukturbedarf artInfrastrukturbedarf
     ) {
-        final var anzahlKinderGesamt = bedarf.getAnzahlPersonenGesamt();
+        final var anzahlPersonenGesamt = bedarf.getAnzahlPersonenGesamt();
         final var versorgungsquote = ArtInfrastrukturbedarf.PLANUNGSURSAECHLICH.equals(artInfrastrukturbedarf)
             ? versorgungsquoteGruppenstaerke.getVersorgungsquotePlanungsursaechlich()
             : versorgungsquoteGruppenstaerke.getVersorgungsquoteSobonUrsaechlich();
-        final var anzahlKinderZuVersorgen = anzahlKinderGesamt.multiply(versorgungsquote);
-        final var anzahlGruppen = anzahlKinderZuVersorgen.divide(
+        final var anzahlPersonenZuVersorgen = anzahlPersonenGesamt.multiply(versorgungsquote);
+        final var anzahlGruppen = anzahlPersonenZuVersorgen.divide(
             BigDecimal.valueOf(versorgungsquoteGruppenstaerke.getGruppenstaerke()),
             SCALE_ROUNDING_RESULT_DECIMAL,
             RoundingMode.HALF_EVEN
@@ -252,7 +252,7 @@ public class InfrastrukturbedarfService {
         final var bedarfMitVersorgungsquoteAndGruppen = new InfrastrukturbedarfProJahrModel();
         bedarfMitVersorgungsquoteAndGruppen.setJahr(bedarf.getJahr());
         bedarfMitVersorgungsquoteAndGruppen.setAnzahlPersonenGesamt(bedarf.getAnzahlPersonenGesamt());
-        bedarfMitVersorgungsquoteAndGruppen.setAnzahlPersonenZuVersorgen(anzahlKinderZuVersorgen);
+        bedarfMitVersorgungsquoteAndGruppen.setAnzahlPersonenZuVersorgen(anzahlPersonenZuVersorgen);
         bedarfMitVersorgungsquoteAndGruppen.setAnzahlGruppen(anzahlGruppen);
         return bedarfMitVersorgungsquoteAndGruppen;
     }
@@ -270,42 +270,39 @@ public class InfrastrukturbedarfService {
     protected InfrastrukturbedarfProJahrModel roundValuesAndReturnModelWithRoundedValues(
         final InfrastrukturbedarfProJahrModel bedarf
     ) {
-        final var anzahlKinderGesamtRounded = bedarf
+        final var anzahlPersonenGesamtRounded = bedarf
             .getAnzahlPersonenGesamt()
             .setScale(SCALE_ROUNDING_RESULT_INTEGER, RoundingMode.HALF_EVEN);
-        final var anzahlKinderZuVersorgenRounded = bedarf
+        final var anzahlPersonenZuVersorgenRounded = bedarf
             .getAnzahlPersonenZuVersorgen()
             .setScale(SCALE_ROUNDING_RESULT_INTEGER, RoundingMode.HALF_EVEN);
         final var anzahlGruppenRounded = bedarf
             .getAnzahlGruppen()
             .setScale(SCALE_ROUNDING_RESULT_DECIMAL, RoundingMode.HALF_EVEN);
-        bedarf.setAnzahlPersonenGesamt(anzahlKinderGesamtRounded);
-        bedarf.setAnzahlPersonenZuVersorgen(anzahlKinderZuVersorgenRounded);
+        bedarf.setAnzahlPersonenGesamt(anzahlPersonenGesamtRounded);
+        bedarf.setAnzahlPersonenZuVersorgen(anzahlPersonenZuVersorgenRounded);
         bedarf.setAnzahlGruppen(anzahlGruppenRounded);
         return bedarf;
     }
 
     /**
-     * Summiert die Gesamtanzahl der Kinder der in den Parameter gegebenen Bedarfe.
+     * Summiert die Gesamtanzahl der Personen der in den Parameter gegebenen Bedarfe.
      *
      * Als relevantes Jahr wird das Jahr der Bedarfe im Parameter o1 gesetzt, falls diese vorhanden ist.
      * Ansonsten wird das jahr des Parameter o2 verwendet.
      *
      * @param o1 zum Summieren.
      * @param o2 zum Summieren.
-     * @return den Bedarf mit der summierten Gesamtanzahl der Kinder
+     * @return den Bedarf mit der summierten Gesamtanzahl der Personen
      */
-    protected InfrastrukturbedarfProJahrModel add(
-        final InfrastrukturbedarfProJahrModel o1,
-        final InfrastrukturbedarfProJahrModel o2
-    ) {
-        final var bedarf = new InfrastrukturbedarfProJahrModel();
+    protected PersonenProJahrModel add(final PersonenProJahrModel o1, final PersonenProJahrModel o2) {
+        final var bedarf = new PersonenProJahrModel();
         final var jahr = ObjectUtils.defaultIfNull(o1.getJahr(), o2.getJahr());
-        final var sumAnzahlKinderGesamt = ObjectUtils
+        final var sumAnzahlPersonenGesamt = ObjectUtils
             .defaultIfNull(o1.getAnzahlPersonenGesamt(), BigDecimal.ZERO)
             .add(ObjectUtils.defaultIfNull(o2.getAnzahlPersonenGesamt(), BigDecimal.ZERO));
         bedarf.setJahr(jahr);
-        bedarf.setAnzahlPersonenGesamt(sumAnzahlKinderGesamt);
+        bedarf.setAnzahlPersonenGesamt(sumAnzahlPersonenGesamt);
         return bedarf;
     }
 
@@ -345,362 +342,299 @@ public class InfrastrukturbedarfService {
     }
 
     /**
-     * Ermittelt für die im Parameter gegebenen Wohneinheiten die Bedarfe
+     * Ermittelt für die im Parameter gegebenen Wohneinheiten die Personen
      * auf Basis der im Paramter Sobon-Orientierungswerte der sozialen Infrastruktur.
      *
      * Entspricht das Jahr der Wohneinheiten dem frühesten Jahr, so werden Bedarfe für 20 Jahre ermittelt.
-     * Jedes weitere Jahr der Wohneinheiten reduziert die Anzahl der Bedarfe jeweils um ein Jahr.
+     * Jedes weitere Jahr der Wohneinheiten reduziert die Anzahl der Personen jeweils um ein Jahr.
      *
-     * @param earliestYear zur Ermittlung der notwendigen Anzahl an jährlichen Bedarfe.
-     * @param wohneinheiten zur Ermittlung der Bedarfe.
-     * @param sobonOrientierungswertSozialeInfrastruktur zur Ermittlung der Bedarfe.
-     * @return die Bedarfe der gegebenen Wohneinheiten unter Berücksichtung des ersten Jahres.
+     * @param earliestYear zur Ermittlung der notwendigen Anzahl an jährlichen Personen.
+     * @param wohneinheiten zur Ermittlung der Personen.
+     * @param sobonOrientierungswertSozialeInfrastruktur zur Ermittlung der Personen.
+     * @return die Personen der gegebenen Wohneinheiten unter Berücksichtung des ersten Jahres.
      */
-    protected Stream<InfrastrukturbedarfProJahrModel> calculateBedarfeForWohneinheitProJahr(
+    protected Stream<PersonenProJahrModel> calculatePersonenForWohneinheitProJahr(
         final Integer earliestYear,
         final WohneinheitenProFoerderartProJahrModel wohneinheiten,
         final SobonOrientierungswertSozialeInfrastrukturModel sobonOrientierungswertSozialeInfrastruktur
     ) {
-        final var bedarfe = new ArrayList<InfrastrukturbedarfProJahrModel>();
+        final var personen = new ArrayList<PersonenProJahrModel>();
         final var numberOfYearsToCalculate = 20 - (Integer.parseInt(wohneinheiten.getJahr()) - earliestYear);
         var yearToCalculate = 0;
-        BigDecimal anzahlKinderGesamt;
+        BigDecimal anzahlPersonenGesamt;
         if (yearToCalculate < numberOfYearsToCalculate) {
-            anzahlKinderGesamt =
+            anzahlPersonenGesamt =
                 wohneinheiten
                     .getWohneinheiten()
                     .multiply(
                         sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr1NachErsterstellung()
                     )
                     .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_EVEN);
-            bedarfe.add(
-                createInfrastrukturbedarf(
-                    Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate,
-                    anzahlKinderGesamt
-                )
+            personen.add(
+                createPersonenProJahr(Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate, anzahlPersonenGesamt)
             );
             yearToCalculate++;
         }
         if (yearToCalculate < numberOfYearsToCalculate) {
-            anzahlKinderGesamt =
+            anzahlPersonenGesamt =
                 wohneinheiten
                     .getWohneinheiten()
                     .multiply(
                         sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr2NachErsterstellung()
                     )
                     .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_EVEN);
-            bedarfe.add(
-                createInfrastrukturbedarf(
-                    Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate,
-                    anzahlKinderGesamt
-                )
+            personen.add(
+                createPersonenProJahr(Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate, anzahlPersonenGesamt)
             );
             yearToCalculate++;
         }
         if (yearToCalculate < numberOfYearsToCalculate) {
-            anzahlKinderGesamt =
+            anzahlPersonenGesamt =
                 wohneinheiten
                     .getWohneinheiten()
                     .multiply(
                         sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr3NachErsterstellung()
                     )
                     .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_EVEN);
-            bedarfe.add(
-                createInfrastrukturbedarf(
-                    Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate,
-                    anzahlKinderGesamt
-                )
+            personen.add(
+                createPersonenProJahr(Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate, anzahlPersonenGesamt)
             );
             yearToCalculate++;
         }
         if (yearToCalculate < numberOfYearsToCalculate) {
-            anzahlKinderGesamt =
+            anzahlPersonenGesamt =
                 wohneinheiten
                     .getWohneinheiten()
                     .multiply(
                         sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr4NachErsterstellung()
                     )
                     .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_EVEN);
-            bedarfe.add(
-                createInfrastrukturbedarf(
-                    Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate,
-                    anzahlKinderGesamt
-                )
+            personen.add(
+                createPersonenProJahr(Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate, anzahlPersonenGesamt)
             );
             yearToCalculate++;
         }
         if (yearToCalculate < numberOfYearsToCalculate) {
-            anzahlKinderGesamt =
+            anzahlPersonenGesamt =
                 wohneinheiten
                     .getWohneinheiten()
                     .multiply(
                         sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr5NachErsterstellung()
                     )
                     .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_EVEN);
-            bedarfe.add(
-                createInfrastrukturbedarf(
-                    Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate,
-                    anzahlKinderGesamt
-                )
+            personen.add(
+                createPersonenProJahr(Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate, anzahlPersonenGesamt)
             );
             yearToCalculate++;
         }
         if (yearToCalculate < numberOfYearsToCalculate) {
-            anzahlKinderGesamt =
+            anzahlPersonenGesamt =
                 wohneinheiten
                     .getWohneinheiten()
                     .multiply(
                         sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr6NachErsterstellung()
                     )
                     .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_EVEN);
-            bedarfe.add(
-                createInfrastrukturbedarf(
-                    Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate,
-                    anzahlKinderGesamt
-                )
+            personen.add(
+                createPersonenProJahr(Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate, anzahlPersonenGesamt)
             );
             yearToCalculate++;
         }
         if (yearToCalculate < numberOfYearsToCalculate) {
-            anzahlKinderGesamt =
+            anzahlPersonenGesamt =
                 wohneinheiten
                     .getWohneinheiten()
                     .multiply(
                         sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr7NachErsterstellung()
                     )
                     .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_EVEN);
-            bedarfe.add(
-                createInfrastrukturbedarf(
-                    Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate,
-                    anzahlKinderGesamt
-                )
+            personen.add(
+                createPersonenProJahr(Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate, anzahlPersonenGesamt)
             );
             yearToCalculate++;
         }
         if (yearToCalculate < numberOfYearsToCalculate) {
-            anzahlKinderGesamt =
+            anzahlPersonenGesamt =
                 wohneinheiten
                     .getWohneinheiten()
                     .multiply(
                         sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr8NachErsterstellung()
                     )
                     .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_EVEN);
-            bedarfe.add(
-                createInfrastrukturbedarf(
-                    Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate,
-                    anzahlKinderGesamt
-                )
+            personen.add(
+                createPersonenProJahr(Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate, anzahlPersonenGesamt)
             );
             yearToCalculate++;
         }
         if (yearToCalculate < numberOfYearsToCalculate) {
-            anzahlKinderGesamt =
+            anzahlPersonenGesamt =
                 wohneinheiten
                     .getWohneinheiten()
                     .multiply(
                         sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr9NachErsterstellung()
                     )
                     .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_EVEN);
-            bedarfe.add(
-                createInfrastrukturbedarf(
-                    Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate,
-                    anzahlKinderGesamt
-                )
+            personen.add(
+                createPersonenProJahr(Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate, anzahlPersonenGesamt)
             );
             yearToCalculate++;
         }
         if (yearToCalculate < numberOfYearsToCalculate) {
-            anzahlKinderGesamt =
+            anzahlPersonenGesamt =
                 wohneinheiten
                     .getWohneinheiten()
                     .multiply(
                         sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr10NachErsterstellung()
                     )
                     .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_EVEN);
-            bedarfe.add(
-                createInfrastrukturbedarf(
-                    Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate,
-                    anzahlKinderGesamt
-                )
+            personen.add(
+                createPersonenProJahr(Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate, anzahlPersonenGesamt)
             );
             yearToCalculate++;
         }
         if (yearToCalculate < numberOfYearsToCalculate) {
-            anzahlKinderGesamt =
+            anzahlPersonenGesamt =
                 wohneinheiten
                     .getWohneinheiten()
                     .multiply(
                         sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr11NachErsterstellung()
                     )
                     .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_EVEN);
-            bedarfe.add(
-                createInfrastrukturbedarf(
-                    Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate,
-                    anzahlKinderGesamt
-                )
+            personen.add(
+                createPersonenProJahr(Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate, anzahlPersonenGesamt)
             );
             yearToCalculate++;
         }
         if (yearToCalculate < numberOfYearsToCalculate) {
-            anzahlKinderGesamt =
+            anzahlPersonenGesamt =
                 wohneinheiten
                     .getWohneinheiten()
                     .multiply(
                         sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr12NachErsterstellung()
                     )
                     .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_EVEN);
-            bedarfe.add(
-                createInfrastrukturbedarf(
-                    Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate,
-                    anzahlKinderGesamt
-                )
+            personen.add(
+                createPersonenProJahr(Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate, anzahlPersonenGesamt)
             );
             yearToCalculate++;
         }
         if (yearToCalculate < numberOfYearsToCalculate) {
-            anzahlKinderGesamt =
+            anzahlPersonenGesamt =
                 wohneinheiten
                     .getWohneinheiten()
                     .multiply(
                         sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr13NachErsterstellung()
                     )
                     .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_EVEN);
-            bedarfe.add(
-                createInfrastrukturbedarf(
-                    Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate,
-                    anzahlKinderGesamt
-                )
+            personen.add(
+                createPersonenProJahr(Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate, anzahlPersonenGesamt)
             );
             yearToCalculate++;
         }
         if (yearToCalculate < numberOfYearsToCalculate) {
-            anzahlKinderGesamt =
+            anzahlPersonenGesamt =
                 wohneinheiten
                     .getWohneinheiten()
                     .multiply(
                         sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr14NachErsterstellung()
                     )
                     .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_EVEN);
-            bedarfe.add(
-                createInfrastrukturbedarf(
-                    Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate,
-                    anzahlKinderGesamt
-                )
+            personen.add(
+                createPersonenProJahr(Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate, anzahlPersonenGesamt)
             );
             yearToCalculate++;
         }
         if (yearToCalculate < numberOfYearsToCalculate) {
-            anzahlKinderGesamt =
+            anzahlPersonenGesamt =
                 wohneinheiten
                     .getWohneinheiten()
                     .multiply(
                         sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr15NachErsterstellung()
                     )
                     .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_EVEN);
-            bedarfe.add(
-                createInfrastrukturbedarf(
-                    Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate,
-                    anzahlKinderGesamt
-                )
+            personen.add(
+                createPersonenProJahr(Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate, anzahlPersonenGesamt)
             );
             yearToCalculate++;
         }
         if (yearToCalculate < numberOfYearsToCalculate) {
-            anzahlKinderGesamt =
+            anzahlPersonenGesamt =
                 wohneinheiten
                     .getWohneinheiten()
                     .multiply(
                         sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr16NachErsterstellung()
                     )
                     .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_EVEN);
-            bedarfe.add(
-                createInfrastrukturbedarf(
-                    Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate,
-                    anzahlKinderGesamt
-                )
+            personen.add(
+                createPersonenProJahr(Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate, anzahlPersonenGesamt)
             );
             yearToCalculate++;
         }
         if (yearToCalculate < numberOfYearsToCalculate) {
-            anzahlKinderGesamt =
+            anzahlPersonenGesamt =
                 wohneinheiten
                     .getWohneinheiten()
                     .multiply(
                         sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr17NachErsterstellung()
                     )
                     .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_EVEN);
-            bedarfe.add(
-                createInfrastrukturbedarf(
-                    Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate,
-                    anzahlKinderGesamt
-                )
+            personen.add(
+                createPersonenProJahr(Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate, anzahlPersonenGesamt)
             );
             yearToCalculate++;
         }
         if (yearToCalculate < numberOfYearsToCalculate) {
-            anzahlKinderGesamt =
+            anzahlPersonenGesamt =
                 wohneinheiten
                     .getWohneinheiten()
                     .multiply(
                         sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr18NachErsterstellung()
                     )
                     .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_EVEN);
-            bedarfe.add(
-                createInfrastrukturbedarf(
-                    Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate,
-                    anzahlKinderGesamt
-                )
+            personen.add(
+                createPersonenProJahr(Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate, anzahlPersonenGesamt)
             );
             yearToCalculate++;
         }
         if (yearToCalculate < numberOfYearsToCalculate) {
-            anzahlKinderGesamt =
+            anzahlPersonenGesamt =
                 wohneinheiten
                     .getWohneinheiten()
                     .multiply(
                         sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr19NachErsterstellung()
                     )
                     .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_EVEN);
-            bedarfe.add(
-                createInfrastrukturbedarf(
-                    Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate,
-                    anzahlKinderGesamt
-                )
+            personen.add(
+                createPersonenProJahr(Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate, anzahlPersonenGesamt)
             );
             yearToCalculate++;
         }
         if (yearToCalculate < numberOfYearsToCalculate) {
-            anzahlKinderGesamt =
+            anzahlPersonenGesamt =
                 wohneinheiten
                     .getWohneinheiten()
                     .multiply(
                         sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr20NachErsterstellung()
                     )
                     .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_EVEN);
-            bedarfe.add(
-                createInfrastrukturbedarf(
-                    Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate,
-                    anzahlKinderGesamt
-                )
+            personen.add(
+                createPersonenProJahr(Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate, anzahlPersonenGesamt)
             );
         }
-        return bedarfe.stream();
+        return personen.stream();
     }
 
     /**
      * Erstellt ein {@link InfrastrukturbedarfProJahrModel} mit den im Parameter gegebenen Werten.
      *
-     * @param jahr des Bedarfs.
-     * @param anzahlKinderGesamt des Bedarfs.
-     * @return den Bedarf mit gesetzten Jahr und der Gesamtanzahl an Kinder.
+     * @param jahr der Personen.
+     * @param anzahlPersonenGesamt der Personen.
+     * @return die Personen mit gesetzten Jahr und der Gesamtanzahl an Personen.
      */
-    protected InfrastrukturbedarfProJahrModel createInfrastrukturbedarf(
-        final Integer jahr,
-        final BigDecimal anzahlKinderGesamt
-    ) {
-        final var bedarf = new InfrastrukturbedarfProJahrModel();
+    protected PersonenProJahrModel createPersonenProJahr(final Integer jahr, final BigDecimal anzahlPersonenGesamt) {
+        final var bedarf = new PersonenProJahrModel();
         bedarf.setJahr(Integer.toString(jahr));
-        bedarf.setAnzahlPersonenGesamt(anzahlKinderGesamt);
+        bedarf.setAnzahlPersonenGesamt(anzahlPersonenGesamt);
         return bedarf;
     }
 
