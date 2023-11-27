@@ -267,7 +267,7 @@ public class InfrastrukturbedarfService {
      * @param bedarf zur Ermittlung.
      * @param versorgungsquoteGruppenstaerke zur Ermittlung.
      * @param artInfrastrukturbedarf zur Ermittlung der korrekten Versorgungsquote.
-     * @return den um die zu versorgenden Kinder und die Anzahl der Gruppen angereicherten Bedarf.
+     * @return den um die zu versorgenden Personen und die Anzahl der Gruppen angereicherten Bedarf.
      */
     protected InfrastrukturbedarfProJahrModel getVersorgungsquoteAndGruppenstaerkeWithBedarf(
         final PersonenProJahrModel bedarf,
@@ -700,24 +700,24 @@ public class InfrastrukturbedarfService {
         final List<InfrastrukturbedarfProJahrModel> bedarfe
     ) {
         final var means10Year15YearAnd20Year = new ArrayList<InfrastrukturbedarfProJahrModel>(3);
-        var sumAnzahlKinderGesamt = BigDecimal.ZERO;
-        BigDecimal sumAnzahlKinderZuVersorgen = BigDecimal.ZERO;
+        var sumAnzahlPersonenGesamt = BigDecimal.ZERO;
+        BigDecimal sumAnzahlPersonenZuVersorgen = BigDecimal.ZERO;
         BigDecimal sumAnzahlGruppen = BigDecimal.ZERO;
         BigDecimal numberOfYear;
         for (int index = 0; index < bedarfe.size(); index++) {
             numberOfYear = BigDecimal.valueOf(index + 1);
-            sumAnzahlKinderGesamt = bedarfe.get(index).getAnzahlPersonenGesamt().add(sumAnzahlKinderGesamt);
-            sumAnzahlKinderZuVersorgen =
-                bedarfe.get(index).getAnzahlPersonenZuVersorgen().add(sumAnzahlKinderZuVersorgen);
+            sumAnzahlPersonenGesamt = bedarfe.get(index).getAnzahlPersonenGesamt().add(sumAnzahlPersonenGesamt);
+            sumAnzahlPersonenZuVersorgen =
+                bedarfe.get(index).getAnzahlPersonenZuVersorgen().add(sumAnzahlPersonenZuVersorgen);
             sumAnzahlGruppen = bedarfe.get(index).getAnzahlGruppen().add(sumAnzahlGruppen);
             if (index == 9) {
                 final var meanYear10 = new InfrastrukturbedarfProJahrModel();
                 meanYear10.setJahr(TITLE_MEAN_YEAR_10);
                 meanYear10.setAnzahlPersonenGesamt(
-                    sumAnzahlKinderGesamt.divide(numberOfYear, SCALE_ROUNDING_RESULT_DECIMAL, RoundingMode.HALF_EVEN)
+                    sumAnzahlPersonenGesamt.divide(numberOfYear, SCALE_ROUNDING_RESULT_DECIMAL, RoundingMode.HALF_EVEN)
                 );
                 meanYear10.setAnzahlPersonenZuVersorgen(
-                    sumAnzahlKinderZuVersorgen.divide(
+                    sumAnzahlPersonenZuVersorgen.divide(
                         numberOfYear,
                         SCALE_ROUNDING_RESULT_DECIMAL,
                         RoundingMode.HALF_EVEN
@@ -731,10 +731,10 @@ public class InfrastrukturbedarfService {
                 final var meanYear15 = new InfrastrukturbedarfProJahrModel();
                 meanYear15.setJahr(TITLE_MEAN_YEAR_15);
                 meanYear15.setAnzahlPersonenGesamt(
-                    sumAnzahlKinderGesamt.divide(numberOfYear, SCALE_ROUNDING_RESULT_DECIMAL, RoundingMode.HALF_EVEN)
+                    sumAnzahlPersonenGesamt.divide(numberOfYear, SCALE_ROUNDING_RESULT_DECIMAL, RoundingMode.HALF_EVEN)
                 );
                 meanYear15.setAnzahlPersonenZuVersorgen(
-                    sumAnzahlKinderZuVersorgen.divide(
+                    sumAnzahlPersonenZuVersorgen.divide(
                         numberOfYear,
                         SCALE_ROUNDING_RESULT_DECIMAL,
                         RoundingMode.HALF_EVEN
@@ -748,10 +748,10 @@ public class InfrastrukturbedarfService {
                 final var meanYear20 = new InfrastrukturbedarfProJahrModel();
                 meanYear20.setJahr(TITLE_MEAN_YEAR_20);
                 meanYear20.setAnzahlPersonenGesamt(
-                    sumAnzahlKinderGesamt.divide(numberOfYear, SCALE_ROUNDING_RESULT_DECIMAL, RoundingMode.HALF_EVEN)
+                    sumAnzahlPersonenGesamt.divide(numberOfYear, SCALE_ROUNDING_RESULT_DECIMAL, RoundingMode.HALF_EVEN)
                 );
                 meanYear20.setAnzahlPersonenZuVersorgen(
-                    sumAnzahlKinderZuVersorgen.divide(
+                    sumAnzahlPersonenZuVersorgen.divide(
                         numberOfYear,
                         SCALE_ROUNDING_RESULT_DECIMAL,
                         RoundingMode.HALF_EVEN
