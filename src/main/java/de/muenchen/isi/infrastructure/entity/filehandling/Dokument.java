@@ -18,6 +18,7 @@ import lombok.ToString;
     indexes = {
         @Index(name = "dokument_bauleitplanverfahren_id_index", columnList = "bauleitplanverfahren_id"),
         @Index(name = "dokument_baugenehmigungsverfahren_id_index", columnList = "baugenehmigungsverfahren_id"),
+        @Index(name = "dokument_weiteres_verfahren_id_index", columnList = "weiteres_verfahren_id"),
         @Index(name = "dokument_bauvorhaben_id_index", columnList = "bauvorhaben_id"),
         @Index(name = "dokument_kommentar_id_index", columnList = "kommentar_id"),
     }
