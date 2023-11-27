@@ -2,6 +2,7 @@ package de.muenchen.isi.domain.service.calculation;
 
 import de.muenchen.isi.domain.mapper.StammdatenDomainMapper;
 import de.muenchen.isi.domain.model.calculation.InfrastrukturbedarfProJahrModel;
+import de.muenchen.isi.domain.model.calculation.PersonenProJahrModel;
 import de.muenchen.isi.domain.model.calculation.WohneinheitenProFoerderartProJahrModel;
 import de.muenchen.isi.domain.model.stammdaten.SobonOrientierungswertSozialeInfrastrukturModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
@@ -215,7 +216,7 @@ public class InfrastrukturbedarfService {
             .sorted(Comparator.comparing(InfrastrukturbedarfProJahrModel::getJahr))
             // Ermitteln der Versorgungsquote und Gruppenstärke
             .map(bedarf ->
-                this.setVersorgungsquoteAndGruppenstaerkeInBedarf(
+                this.getVersorgungsquoteAndGruppenstaerkeWithBedarf(
                         bedarf,
                         versorgungsquoteGruppenstaerke,
                         artInfrastrukturbedarf
@@ -224,16 +225,17 @@ public class InfrastrukturbedarfService {
     }
 
     /**
-     * Ermittelt auf Basis des Bedarfs und der Versorgungsquote und Gruppenstärke die Anzahl an zu versorgenden Kinder
-     * sowie die Gruppenstärke für die zu versorgenden Kinder und setzt die ermittelten Werte im gegebenen Bedarfsobjekt.
+     * Ermittelt auf Basis des Bedarfs und der Versorgungsquote und Gruppenstärke die Anzahl an zu versorgenden Personen
+     * sowie die Gruppenstärke für die zu versorgenden Personen und gibt diese Informationen samt den
+     * übergebenen Bedarfsinformationen zurück.
      *
      * @param bedarf zur Ermittlung.
      * @param versorgungsquoteGruppenstaerke zur Ermittlung.
      * @param artInfrastrukturbedarf zur Ermittlung der korrekten Versorgungsquote.
      * @return den um die zu versorgenden Kinder und die Anzahl der Gruppen angereicherten Bedarf.
      */
-    protected InfrastrukturbedarfProJahrModel setVersorgungsquoteAndGruppenstaerkeInBedarf(
-        final InfrastrukturbedarfProJahrModel bedarf,
+    protected InfrastrukturbedarfProJahrModel getVersorgungsquoteAndGruppenstaerkeWithBedarf(
+        final PersonenProJahrModel bedarf,
         final VersorgungsquoteGruppenstaerke versorgungsquoteGruppenstaerke,
         final ArtInfrastrukturbedarf artInfrastrukturbedarf
     ) {
@@ -247,9 +249,12 @@ public class InfrastrukturbedarfService {
             SCALE_ROUNDING_RESULT_DECIMAL,
             RoundingMode.HALF_EVEN
         );
-        bedarf.setAnzahlPersonenZuVersorgen(anzahlKinderZuVersorgen);
-        bedarf.setAnzahlGruppen(anzahlGruppen);
-        return bedarf;
+        final var bedarfMitVersorgungsquoteAndGruppen = new InfrastrukturbedarfProJahrModel();
+        bedarfMitVersorgungsquoteAndGruppen.setJahr(bedarf.getJahr());
+        bedarfMitVersorgungsquoteAndGruppen.setAnzahlPersonenGesamt(bedarf.getAnzahlPersonenGesamt());
+        bedarfMitVersorgungsquoteAndGruppen.setAnzahlPersonenZuVersorgen(anzahlKinderZuVersorgen);
+        bedarfMitVersorgungsquoteAndGruppen.setAnzahlGruppen(anzahlGruppen);
+        return bedarfMitVersorgungsquoteAndGruppen;
     }
 
     /**

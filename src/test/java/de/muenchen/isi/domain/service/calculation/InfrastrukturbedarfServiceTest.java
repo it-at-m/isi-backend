@@ -6,6 +6,7 @@ import static org.hamcrest.Matchers.is;
 import de.muenchen.isi.TestData;
 import de.muenchen.isi.domain.mapper.StammdatenDomainMapperImpl;
 import de.muenchen.isi.domain.model.calculation.InfrastrukturbedarfProJahrModel;
+import de.muenchen.isi.domain.model.calculation.PersonenProJahrModel;
 import de.muenchen.isi.domain.model.calculation.WohneinheitenProFoerderartProJahrModel;
 import de.muenchen.isi.domain.model.stammdaten.SobonOrientierungswertSozialeInfrastrukturModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
@@ -780,19 +781,21 @@ class InfrastrukturbedarfServiceTest {
     }
 
     @Test
-    void setVersorgungsquoteAndGruppenstaerkeInBedarf() {
-        final var bedarf = new InfrastrukturbedarfProJahrModel();
+    void getVersorgungsquoteAndGruppenstaerkeWithBedarf() {
+        final var bedarf = new PersonenProJahrModel();
+        bedarf.setJahr("2031");
         bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(100));
         final var versorgungsQuote = new VersorgungsquoteGruppenstaerke();
         versorgungsQuote.setVersorgungsquotePlanungsursaechlich(BigDecimal.valueOf(60, 2));
         versorgungsQuote.setVersorgungsquoteSobonUrsaechlich(null);
         versorgungsQuote.setGruppenstaerke(10);
-        var result = infrastrukturbedarfService.setVersorgungsquoteAndGruppenstaerkeInBedarf(
+        var result = infrastrukturbedarfService.getVersorgungsquoteAndGruppenstaerkeWithBedarf(
             bedarf,
             versorgungsQuote,
             InfrastrukturbedarfService.ArtInfrastrukturbedarf.PLANUNGSURSAECHLICH
         );
         var expected = new InfrastrukturbedarfProJahrModel();
+        expected.setJahr("2031");
         expected.setAnzahlPersonenGesamt(BigDecimal.valueOf(100));
         expected.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(6000, 2));
         expected.setAnzahlGruppen(BigDecimal.valueOf(600, 2));
@@ -803,12 +806,13 @@ class InfrastrukturbedarfServiceTest {
         versorgungsQuote.setVersorgungsquoteSobonUrsaechlich(BigDecimal.valueOf(60, 2));
         versorgungsQuote.setGruppenstaerke(10);
         result =
-            infrastrukturbedarfService.setVersorgungsquoteAndGruppenstaerkeInBedarf(
+            infrastrukturbedarfService.getVersorgungsquoteAndGruppenstaerkeWithBedarf(
                 bedarf,
                 versorgungsQuote,
                 InfrastrukturbedarfService.ArtInfrastrukturbedarf.SOBON_URSAECHLICH
             );
         expected = new InfrastrukturbedarfProJahrModel();
+        expected.setJahr("2031");
         expected.setAnzahlPersonenGesamt(BigDecimal.valueOf(100));
         expected.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(6000, 2));
         expected.setAnzahlGruppen(BigDecimal.valueOf(600, 2));
@@ -819,12 +823,13 @@ class InfrastrukturbedarfServiceTest {
         versorgungsQuote.setVersorgungsquoteSobonUrsaechlich(null);
         versorgungsQuote.setGruppenstaerke(10);
         result =
-            infrastrukturbedarfService.setVersorgungsquoteAndGruppenstaerkeInBedarf(
+            infrastrukturbedarfService.getVersorgungsquoteAndGruppenstaerkeWithBedarf(
                 bedarf,
                 versorgungsQuote,
                 InfrastrukturbedarfService.ArtInfrastrukturbedarf.PLANUNGSURSAECHLICH
             );
         expected = new InfrastrukturbedarfProJahrModel();
+        expected.setJahr("2031");
         expected.setAnzahlPersonenGesamt(BigDecimal.valueOf(73));
         expected.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(4234, 2));
         expected.setAnzahlGruppen(BigDecimal.valueOf(423, 2));
@@ -835,12 +840,13 @@ class InfrastrukturbedarfServiceTest {
         versorgungsQuote.setVersorgungsquoteSobonUrsaechlich(BigDecimal.valueOf(58, 2));
         versorgungsQuote.setGruppenstaerke(10);
         result =
-            infrastrukturbedarfService.setVersorgungsquoteAndGruppenstaerkeInBedarf(
+            infrastrukturbedarfService.getVersorgungsquoteAndGruppenstaerkeWithBedarf(
                 bedarf,
                 versorgungsQuote,
                 InfrastrukturbedarfService.ArtInfrastrukturbedarf.SOBON_URSAECHLICH
             );
         expected = new InfrastrukturbedarfProJahrModel();
+        expected.setJahr("2031");
         expected.setAnzahlPersonenGesamt(BigDecimal.valueOf(73));
         expected.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(4234, 2));
         expected.setAnzahlGruppen(BigDecimal.valueOf(423, 2));
@@ -853,7 +859,7 @@ class InfrastrukturbedarfServiceTest {
         Assertions.assertThrows(
             NullPointerException.class,
             () ->
-                infrastrukturbedarfService.setVersorgungsquoteAndGruppenstaerkeInBedarf(
+                infrastrukturbedarfService.getVersorgungsquoteAndGruppenstaerkeWithBedarf(
                     bedarf,
                     versorgungsQuote,
                     InfrastrukturbedarfService.ArtInfrastrukturbedarf.PLANUNGSURSAECHLICH
@@ -867,7 +873,7 @@ class InfrastrukturbedarfServiceTest {
         Assertions.assertThrows(
             NullPointerException.class,
             () ->
-                infrastrukturbedarfService.setVersorgungsquoteAndGruppenstaerkeInBedarf(
+                infrastrukturbedarfService.getVersorgungsquoteAndGruppenstaerkeWithBedarf(
                     bedarf,
                     versorgungsQuote,
                     InfrastrukturbedarfService.ArtInfrastrukturbedarf.SOBON_URSAECHLICH
@@ -881,7 +887,7 @@ class InfrastrukturbedarfServiceTest {
         Assertions.assertThrows(
             NullPointerException.class,
             () ->
-                infrastrukturbedarfService.setVersorgungsquoteAndGruppenstaerkeInBedarf(
+                infrastrukturbedarfService.getVersorgungsquoteAndGruppenstaerkeWithBedarf(
                     bedarf,
                     versorgungsQuote,
                     InfrastrukturbedarfService.ArtInfrastrukturbedarf.PLANUNGSURSAECHLICH
@@ -895,7 +901,7 @@ class InfrastrukturbedarfServiceTest {
         Assertions.assertThrows(
             NullPointerException.class,
             () ->
-                infrastrukturbedarfService.setVersorgungsquoteAndGruppenstaerkeInBedarf(
+                infrastrukturbedarfService.getVersorgungsquoteAndGruppenstaerkeWithBedarf(
                     bedarf,
                     versorgungsQuote,
                     InfrastrukturbedarfService.ArtInfrastrukturbedarf.SOBON_URSAECHLICH
