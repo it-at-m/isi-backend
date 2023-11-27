@@ -3,18 +3,16 @@ package de.muenchen.isi.api.dto.calculation;
 import java.math.BigDecimal;
 import javax.validation.constraints.NotNull;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 @Data
-public class InfrastrukturbedarfProJahrDto {
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
+public class InfrastrukturbedarfProJahrDto extends PersonenProJahrDto {
 
     @NotNull
-    private String jahr; // JJJJ
-
-    @NotNull
-    private BigDecimal anzahlKinderGesamt;
-
-    @NotNull
-    private BigDecimal anzahlKinderZuVersorgen;
+    private BigDecimal anzahlPersonenZuVersorgen;
 
     @NotNull
     private BigDecimal anzahlGruppen;
