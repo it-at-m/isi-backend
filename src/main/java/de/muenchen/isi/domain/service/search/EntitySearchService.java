@@ -7,6 +7,8 @@ import de.muenchen.isi.domain.model.enums.SortAttribute;
 import de.muenchen.isi.domain.model.search.request.SearchQueryAndSortingModel;
 import de.muenchen.isi.domain.model.search.response.SearchResultsModel;
 import de.muenchen.isi.infrastructure.entity.BaseEntity;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
+import de.muenchen.isi.security.AuthenticationUtils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,16 +28,16 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class EntitySearchService {
 
+    private final SearchPreparationService searchPreparationService;
+    private final SearchDomainMapper searchDomainMapper;
+    private final AuthenticationUtils authenticationUtils;
+
     @PersistenceContext
     private EntityManager entityManager;
 
-    private final SearchPreparationService searchPreparationService;
-
-    private final SearchDomainMapper searchDomainMapper;
-
     /**
      * Diese Methode führt die paginierte Entitätssuche für die im Methodenparameter gegebenen Informationen durch.
-     *
+     * <p>
      * Falls beide Parameterattribute {@link SearchQueryAndSortingModel#getPage()} und {@link SearchQueryAndSortingModel#getPageSize()}
      * mit einem Wert versehen sind, wird eine paginierte Suche durchgeführt. Ist mindestens eines der eben genannten
      * Parameterattribute nicht gesetzt, so wird eine nicht paginierte Suche durchgeführt.
@@ -67,6 +69,63 @@ public class EntitySearchService {
             .session(entityManager)
             .search(searchableEntities)
             .where(function -> {
+                if (isRoleAnwender()) {
+                    if (StringUtils.isNotEmpty(adaptedSearchQuery)) {
+                        return function
+                            .bool()
+                            .must(
+                                function
+                                    .simpleQueryString()
+                                    .fields(searchableAttributes)
+                                    .matching(adaptedSearchQuery)
+                                    // Es werden nur die Entitäten als Suchergebnis zurückgegeben, welche alle Suchwörter der Suchquery beinhalten.
+                                    .defaultOperator(BooleanOperator.AND)
+                            )
+                            .should(
+                                function
+                                    .bool()
+                                    .filter(
+                                        function
+                                            .match()
+                                            .field("statusAbfrage_filter")
+                                            .matching(StatusAbfrage.ERLEDIGT_OHNE_FACHREFERAT)
+                                    )
+                            )
+                            .should(
+                                function
+                                    .bool()
+                                    .filter(
+                                        function
+                                            .match()
+                                            .field("statusAbfrage_filter")
+                                            .matching(StatusAbfrage.ERLEDIGT_MIT_FACHREFERAT)
+                                    )
+                            );
+                    } else {
+                        return function
+                            .bool()
+                            .should(
+                                function
+                                    .bool()
+                                    .filter(
+                                        function
+                                            .match()
+                                            .field("statusAbfrage_filter")
+                                            .matching(StatusAbfrage.ERLEDIGT_OHNE_FACHREFERAT)
+                                    )
+                            )
+                            .should(
+                                function
+                                    .bool()
+                                    .filter(
+                                        function
+                                            .match()
+                                            .field("statusAbfrage_filter")
+                                            .matching(StatusAbfrage.ERLEDIGT_MIT_FACHREFERAT)
+                                    )
+                            );
+                    }
+                }
                 if (StringUtils.isNotEmpty(adaptedSearchQuery)) {
                     // Suche entsprechend der gegebenen Query.
                     return function
@@ -143,7 +202,7 @@ public class EntitySearchService {
 
     /**
      * Diese Methode ermittelt für den im Parameter gegebenen String die Wörter entsprechend Unicode® Standard Annex #29.
-     *
+     * <p>
      * https://unicode.org/reports/tr29/
      *
      * @param searchQuery zur Ermittlung der Wörter
@@ -190,5 +249,9 @@ public class EntitySearchService {
             numberOfPages = numberOfTotalHits / pageSize + 1;
         }
         return numberOfPages;
+    }
+
+    protected boolean isRoleAnwender() {
+        return authenticationUtils.getUserRoles().stream().anyMatch(s -> s.contains("anwender"));
     }
 }
