@@ -31,6 +31,11 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class InfrastrukturbedarfService {
 
+    public enum ArtInfrastrukturbedarf {
+        PLANUNGSURSAECHLICH,
+        SOBON_URSAECHLICH,
+    }
+
     public static final int SCALE_ROUNDING_RESULT_INTEGER = 0;
 
     public static final int SCALE_ROUNDING_RESULT_DECIMAL = 2;
@@ -53,16 +58,18 @@ public class InfrastrukturbedarfService {
      *
      * @param wohneinheiten zur Ermittlung der Bedarfe.
      * @param sobonJahr zur Ermittlung der Sobon-Orientierungswerte der sozialen Infrastuktur.
+     * @param artInfrastrukturbedarf zur Ermittlung der korrekten Versorgungsquote und Gruppenstärke.
      * @param gueltigAb zur Ermittlung der korrekten Versorgungsquote und Gruppenstärke.
      * @return die Bedarfe für den Zeitraum von 20 Jahren
      */
     public List<InfrastrukturbedarfProJahrModel> calculateBedarfForKinderkrippeRoundedAndWithMean(
         final List<WohneinheitenProFoerderartProJahrModel> wohneinheiten,
         final SobonOrientierungswertJahr sobonJahr,
+        final ArtInfrastrukturbedarf artInfrastrukturbedarf,
         final LocalDate gueltigAb
     ) {
         final var roundedBedarfe =
-            this.calculateBedarfForKinderkrippe(wohneinheiten, sobonJahr, gueltigAb)
+            this.calculateBedarfForKinderkrippe(wohneinheiten, sobonJahr, artInfrastrukturbedarf, gueltigAb)
                 .map(this::roundValuesAndReturnModelWithRoundedValues)
                 .collect(Collectors.toList());
         final var meansForRoundedBedarfe = this.calculate10Year15YearAnd20YearMean(roundedBedarfe);
@@ -75,15 +82,23 @@ public class InfrastrukturbedarfService {
      *
      * @param wohneinheiten zur Ermittlung der Bedarfe.
      * @param sobonJahr zur Ermittlung der Sobon-Orientierungswerte der sozialen Infrastuktur.
+     * @param artInfrastrukturbedarf zur Ermittlung der korrekten Versorgungsquote und Gruppenstärke.
      * @param gueltigAb zur Ermittlung der korrekten Versorgungsquote und Gruppenstärke.
      * @return die Bedarfe für den Zeitraum von 20 Jahren
      */
     public Stream<InfrastrukturbedarfProJahrModel> calculateBedarfForKinderkrippe(
         final List<WohneinheitenProFoerderartProJahrModel> wohneinheiten,
         final SobonOrientierungswertJahr sobonJahr,
+        final ArtInfrastrukturbedarf artInfrastrukturbedarf,
         final LocalDate gueltigAb
     ) {
-        return this.calculateBedarf(InfrastruktureinrichtungTyp.KINDERKRIPPE, wohneinheiten, sobonJahr, gueltigAb);
+        return this.calculateBedarf(
+                InfrastruktureinrichtungTyp.KINDERKRIPPE,
+                wohneinheiten,
+                sobonJahr,
+                artInfrastrukturbedarf,
+                gueltigAb
+            );
     }
 
     /**
@@ -92,16 +107,18 @@ public class InfrastrukturbedarfService {
      *
      * @param wohneinheiten zur Ermittlung der Bedarfe.
      * @param sobonJahr zur Ermittlung der Sobon-Orientierungswerte der sozialen Infrastruktur.
+     * @param artInfrastrukturbedarf zur Ermittlung der korrekten Versorgungsquote und Gruppenstärke.
      * @param gueltigAb zur Ermittlung der korrekten Versorgungsquote und Gruppenstärke.
      * @return die Bedarfe für den Zeitraum von 20 Jahren
      */
     public List<InfrastrukturbedarfProJahrModel> calculateBedarfForKindergartenRoundedAndWithMean(
         final List<WohneinheitenProFoerderartProJahrModel> wohneinheiten,
         final SobonOrientierungswertJahr sobonJahr,
+        final ArtInfrastrukturbedarf artInfrastrukturbedarf,
         final LocalDate gueltigAb
     ) {
         final var roundedBedarfe =
-            this.calculateBedarfForKindergarten(wohneinheiten, sobonJahr, gueltigAb)
+            this.calculateBedarfForKindergarten(wohneinheiten, sobonJahr, artInfrastrukturbedarf, gueltigAb)
                 .map(this::roundValuesAndReturnModelWithRoundedValues)
                 .collect(Collectors.toList());
         final var meansForRoundedBedarfe = this.calculate10Year15YearAnd20YearMean(roundedBedarfe);
@@ -114,15 +131,23 @@ public class InfrastrukturbedarfService {
      *
      * @param wohneinheiten zur Ermittlung der Bedarfe.
      * @param sobonJahr zur Ermittlung der Sobon-Orientierungswerte der sozialen Infrastuktur.
+     * @param artInfrastrukturbedarf zur Ermittlung der korrekten Versorgungsquote und Gruppenstärke.
      * @param gueltigAb zur Ermittlung der korrekten Versorgungsquote und Gruppenstärke.
      * @return die Bedarfe für den Zeitraum von 20 Jahren
      */
     public Stream<InfrastrukturbedarfProJahrModel> calculateBedarfForKindergarten(
         final List<WohneinheitenProFoerderartProJahrModel> wohneinheiten,
         final SobonOrientierungswertJahr sobonJahr,
+        final ArtInfrastrukturbedarf artInfrastrukturbedarf,
         final LocalDate gueltigAb
     ) {
-        return this.calculateBedarf(InfrastruktureinrichtungTyp.KINDERGARTEN, wohneinheiten, sobonJahr, gueltigAb);
+        return this.calculateBedarf(
+                InfrastruktureinrichtungTyp.KINDERGARTEN,
+                wohneinheiten,
+                sobonJahr,
+                artInfrastrukturbedarf,
+                gueltigAb
+            );
     }
 
     /**
@@ -131,6 +156,7 @@ public class InfrastrukturbedarfService {
      * @param einrichtung zur Ermittlung der Bedarfe.
      * @param wohneinheiten zur Ermittlung der Bedarfe.
      * @param sobonJahr zur Ermittlung der Sobon-Orientierungswerte der sozialen Infrastuktur.
+     * @param artInfrastrukturbedarf zur Ermittlung der korrekten Versorgungsquote und Gruppenstärke.
      * @param gueltigAb zur Ermittlung der korrekten Versorgungsquote und Gruppenstärke.
      * @return die Bedarfe für den Zeitraum von 20 Jahren
      */
@@ -138,6 +164,7 @@ public class InfrastrukturbedarfService {
         final InfrastruktureinrichtungTyp einrichtung,
         final List<WohneinheitenProFoerderartProJahrModel> wohneinheiten,
         final SobonOrientierungswertJahr sobonJahr,
+        final ArtInfrastrukturbedarf artInfrastrukturbedarf,
         final LocalDate gueltigAb
     ) {
         final var wohneinheitenWithoutSum = wohneinheiten
@@ -187,7 +214,13 @@ public class InfrastrukturbedarfService {
             .map(bedarfeForJahr -> bedarfeForJahr.stream().reduce(new InfrastrukturbedarfProJahrModel(), this::add))
             .sorted(Comparator.comparing(InfrastrukturbedarfProJahrModel::getJahr))
             // Ermitteln der Versorgungsquote und Gruppenstärke
-            .map(bedarf -> this.setVersorgungsquoteAndGruppenstaerkeInBedarf(bedarf, versorgungsquoteGruppenstaerke));
+            .map(bedarf ->
+                this.setVersorgungsquoteAndGruppenstaerkeInBedarf(
+                        bedarf,
+                        versorgungsquoteGruppenstaerke,
+                        artInfrastrukturbedarf
+                    )
+            );
     }
 
     /**
@@ -196,16 +229,19 @@ public class InfrastrukturbedarfService {
      *
      * @param bedarf zur Ermittlung.
      * @param versorgungsquoteGruppenstaerke zur Ermittlung.
+     * @param artInfrastrukturbedarf zur Ermittlung der korrekten Versorgungsquote.
      * @return den um die zu versorgenden Kinder und die Anzahl der Gruppen angereicherten Bedarf.
      */
     protected InfrastrukturbedarfProJahrModel setVersorgungsquoteAndGruppenstaerkeInBedarf(
         final InfrastrukturbedarfProJahrModel bedarf,
-        final VersorgungsquoteGruppenstaerke versorgungsquoteGruppenstaerke
+        final VersorgungsquoteGruppenstaerke versorgungsquoteGruppenstaerke,
+        final ArtInfrastrukturbedarf artInfrastrukturbedarf
     ) {
         final var anzahlKinderGesamt = bedarf.getAnzahlKinderGesamt();
-        final var anzahlKinderZuVersorgen = anzahlKinderGesamt.multiply(
-            versorgungsquoteGruppenstaerke.getVersorgungsquotePlanungsursaechlich()
-        );
+        final var versorgungsquote = ArtInfrastrukturbedarf.PLANUNGSURSAECHLICH.equals(artInfrastrukturbedarf)
+            ? versorgungsquoteGruppenstaerke.getVersorgungsquotePlanungsursaechlich()
+            : versorgungsquoteGruppenstaerke.getVersorgungsquoteSobonUrsaechlich();
+        final var anzahlKinderZuVersorgen = anzahlKinderGesamt.multiply(versorgungsquote);
         final var anzahlGruppen = anzahlKinderZuVersorgen.divide(
             BigDecimal.valueOf(versorgungsquoteGruppenstaerke.getGruppenstaerke()),
             SCALE_ROUNDING_RESULT_DECIMAL,

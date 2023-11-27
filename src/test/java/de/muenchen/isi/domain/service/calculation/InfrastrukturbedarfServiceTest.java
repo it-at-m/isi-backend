@@ -154,6 +154,7 @@ class InfrastrukturbedarfServiceTest {
         final var result = infrastrukturbedarfService.calculateBedarfForKinderkrippeRoundedAndWithMean(
             wohneinheiten,
             sobonJahr,
+            InfrastrukturbedarfService.ArtInfrastrukturbedarf.PLANUNGSURSAECHLICH,
             gueltigAb
         );
 
@@ -400,6 +401,7 @@ class InfrastrukturbedarfServiceTest {
         final var result = infrastrukturbedarfService.calculateBedarfForKindergartenRoundedAndWithMean(
             wohneinheiten,
             sobonJahr,
+            InfrastrukturbedarfService.ArtInfrastrukturbedarf.PLANUNGSURSAECHLICH,
             gueltigAb
         );
 
@@ -644,7 +646,13 @@ class InfrastrukturbedarfServiceTest {
             )
             .thenReturn(Optional.of(versorgungsQuote));
 
-        final var result = infrastrukturbedarfService.calculateBedarf(einrichtung, wohneinheiten, sobonJahr, gueltigAb);
+        final var result = infrastrukturbedarfService.calculateBedarf(
+            einrichtung,
+            wohneinheiten,
+            sobonJahr,
+            InfrastrukturbedarfService.ArtInfrastrukturbedarf.PLANUNGSURSAECHLICH,
+            gueltigAb
+        );
 
         final var expected = new ArrayList<InfrastrukturbedarfProJahrModel>();
         var bedarf = new InfrastrukturbedarfProJahrModel();
@@ -777,9 +785,30 @@ class InfrastrukturbedarfServiceTest {
         bedarf.setAnzahlKinderGesamt(BigDecimal.valueOf(100));
         final var versorgungsQuote = new VersorgungsquoteGruppenstaerke();
         versorgungsQuote.setVersorgungsquotePlanungsursaechlich(BigDecimal.valueOf(60, 2));
+        versorgungsQuote.setVersorgungsquoteSobonUrsaechlich(null);
         versorgungsQuote.setGruppenstaerke(10);
-        var result = infrastrukturbedarfService.setVersorgungsquoteAndGruppenstaerkeInBedarf(bedarf, versorgungsQuote);
+        var result = infrastrukturbedarfService.setVersorgungsquoteAndGruppenstaerkeInBedarf(
+            bedarf,
+            versorgungsQuote,
+            InfrastrukturbedarfService.ArtInfrastrukturbedarf.PLANUNGSURSAECHLICH
+        );
         var expected = new InfrastrukturbedarfProJahrModel();
+        expected.setAnzahlKinderGesamt(BigDecimal.valueOf(100));
+        expected.setAnzahlKinderZuVersorgen(BigDecimal.valueOf(6000, 2));
+        expected.setAnzahlGruppen(BigDecimal.valueOf(600, 2));
+        assertThat(result, is(expected));
+
+        bedarf.setAnzahlKinderGesamt(BigDecimal.valueOf(100));
+        versorgungsQuote.setVersorgungsquotePlanungsursaechlich(null);
+        versorgungsQuote.setVersorgungsquoteSobonUrsaechlich(BigDecimal.valueOf(60, 2));
+        versorgungsQuote.setGruppenstaerke(10);
+        result =
+            infrastrukturbedarfService.setVersorgungsquoteAndGruppenstaerkeInBedarf(
+                bedarf,
+                versorgungsQuote,
+                InfrastrukturbedarfService.ArtInfrastrukturbedarf.SOBON_URSAECHLICH
+            );
+        expected = new InfrastrukturbedarfProJahrModel();
         expected.setAnzahlKinderGesamt(BigDecimal.valueOf(100));
         expected.setAnzahlKinderZuVersorgen(BigDecimal.valueOf(6000, 2));
         expected.setAnzahlGruppen(BigDecimal.valueOf(600, 2));
@@ -787,8 +816,30 @@ class InfrastrukturbedarfServiceTest {
 
         bedarf.setAnzahlKinderGesamt(BigDecimal.valueOf(73));
         versorgungsQuote.setVersorgungsquotePlanungsursaechlich(BigDecimal.valueOf(58, 2));
+        versorgungsQuote.setVersorgungsquoteSobonUrsaechlich(null);
         versorgungsQuote.setGruppenstaerke(10);
-        result = infrastrukturbedarfService.setVersorgungsquoteAndGruppenstaerkeInBedarf(bedarf, versorgungsQuote);
+        result =
+            infrastrukturbedarfService.setVersorgungsquoteAndGruppenstaerkeInBedarf(
+                bedarf,
+                versorgungsQuote,
+                InfrastrukturbedarfService.ArtInfrastrukturbedarf.PLANUNGSURSAECHLICH
+            );
+        expected = new InfrastrukturbedarfProJahrModel();
+        expected.setAnzahlKinderGesamt(BigDecimal.valueOf(73));
+        expected.setAnzahlKinderZuVersorgen(BigDecimal.valueOf(4234, 2));
+        expected.setAnzahlGruppen(BigDecimal.valueOf(423, 2));
+        assertThat(result, is(expected));
+
+        bedarf.setAnzahlKinderGesamt(BigDecimal.valueOf(73));
+        versorgungsQuote.setVersorgungsquotePlanungsursaechlich(null);
+        versorgungsQuote.setVersorgungsquoteSobonUrsaechlich(BigDecimal.valueOf(58, 2));
+        versorgungsQuote.setGruppenstaerke(10);
+        result =
+            infrastrukturbedarfService.setVersorgungsquoteAndGruppenstaerkeInBedarf(
+                bedarf,
+                versorgungsQuote,
+                InfrastrukturbedarfService.ArtInfrastrukturbedarf.SOBON_URSAECHLICH
+            );
         expected = new InfrastrukturbedarfProJahrModel();
         expected.setAnzahlKinderGesamt(BigDecimal.valueOf(73));
         expected.setAnzahlKinderZuVersorgen(BigDecimal.valueOf(4234, 2));
@@ -797,18 +848,58 @@ class InfrastrukturbedarfServiceTest {
 
         bedarf.setAnzahlKinderGesamt(null);
         versorgungsQuote.setVersorgungsquotePlanungsursaechlich(BigDecimal.valueOf(58, 2));
+        versorgungsQuote.setVersorgungsquoteSobonUrsaechlich(null);
         versorgungsQuote.setGruppenstaerke(10);
         Assertions.assertThrows(
             NullPointerException.class,
-            () -> infrastrukturbedarfService.setVersorgungsquoteAndGruppenstaerkeInBedarf(bedarf, versorgungsQuote)
+            () ->
+                infrastrukturbedarfService.setVersorgungsquoteAndGruppenstaerkeInBedarf(
+                    bedarf,
+                    versorgungsQuote,
+                    InfrastrukturbedarfService.ArtInfrastrukturbedarf.PLANUNGSURSAECHLICH
+                )
+        );
+
+        bedarf.setAnzahlKinderGesamt(null);
+        versorgungsQuote.setVersorgungsquotePlanungsursaechlich(null);
+        versorgungsQuote.setVersorgungsquoteSobonUrsaechlich(BigDecimal.valueOf(58, 2));
+        versorgungsQuote.setGruppenstaerke(10);
+        Assertions.assertThrows(
+            NullPointerException.class,
+            () ->
+                infrastrukturbedarfService.setVersorgungsquoteAndGruppenstaerkeInBedarf(
+                    bedarf,
+                    versorgungsQuote,
+                    InfrastrukturbedarfService.ArtInfrastrukturbedarf.SOBON_URSAECHLICH
+                )
         );
 
         bedarf.setAnzahlKinderGesamt(BigDecimal.valueOf(73));
         versorgungsQuote.setVersorgungsquotePlanungsursaechlich(null);
+        versorgungsQuote.setVersorgungsquoteSobonUrsaechlich(null);
         versorgungsQuote.setGruppenstaerke(10);
         Assertions.assertThrows(
             NullPointerException.class,
-            () -> infrastrukturbedarfService.setVersorgungsquoteAndGruppenstaerkeInBedarf(bedarf, versorgungsQuote)
+            () ->
+                infrastrukturbedarfService.setVersorgungsquoteAndGruppenstaerkeInBedarf(
+                    bedarf,
+                    versorgungsQuote,
+                    InfrastrukturbedarfService.ArtInfrastrukturbedarf.PLANUNGSURSAECHLICH
+                )
+        );
+
+        bedarf.setAnzahlKinderGesamt(BigDecimal.valueOf(73));
+        versorgungsQuote.setVersorgungsquotePlanungsursaechlich(null);
+        versorgungsQuote.setVersorgungsquoteSobonUrsaechlich(null);
+        versorgungsQuote.setGruppenstaerke(10);
+        Assertions.assertThrows(
+            NullPointerException.class,
+            () ->
+                infrastrukturbedarfService.setVersorgungsquoteAndGruppenstaerkeInBedarf(
+                    bedarf,
+                    versorgungsQuote,
+                    InfrastrukturbedarfService.ArtInfrastrukturbedarf.SOBON_URSAECHLICH
+                )
         );
     }
 

@@ -120,6 +120,7 @@ public class CalculationService {
         final var bedarfKinderkrippe = infrastrukturbedarfService.calculateBedarfForKinderkrippeRoundedAndWithMean(
             wohneinheiten,
             sobonJahr,
+            InfrastrukturbedarfService.ArtInfrastrukturbedarf.PLANUNGSURSAECHLICH,
             gueltigAb
         );
         bedarf.setBedarfKinderkrippe(bedarfKinderkrippe);
@@ -128,6 +129,7 @@ public class CalculationService {
         final var bedarfKindergarten = infrastrukturbedarfService.calculateBedarfForKindergartenRoundedAndWithMean(
             wohneinheiten,
             sobonJahr,
+            InfrastrukturbedarfService.ArtInfrastrukturbedarf.PLANUNGSURSAECHLICH,
             gueltigAb
         );
         bedarf.setBedarfKindergarten(bedarfKindergarten);
