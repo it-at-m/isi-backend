@@ -62,6 +62,8 @@ public class AbfragevarianteBauleitplanverfahrenModel extends AbfragevarianteMod
 
     private SobonOrientierungswertJahr sobonOrientierungswertJahr;
 
+    private LocalDate stammdatenGueltigAb;
+
     private String anmerkung;
 
     private List<BedarfsmeldungFachreferateModel> bedarfsmeldungFachreferate;
