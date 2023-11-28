@@ -41,16 +41,15 @@ public class CalculationService {
      *
      * @param abfrageId Die ID der Abfrage, zu der die Abfragevariante gehört.
      * @param abfragevarianteId Die ID der Abfragevariante, für die der Bedarf ermittelt werden soll.
-     * @param gueltigAb Das Gültigkeitsdatum der Stammdaten, welche die Umlegung diktieren.
      * @return Das {@link LangfristigerPlanungsursaechlicherBedarfModel}.
      */
     public LangfristigerPlanungsursaechlicherBedarfModel calculateLangfristigerPlanungsursaechlicherBedarf(
         final UUID abfrageId,
-        final UUID abfragevarianteId,
-        final LocalDate gueltigAb
+        final UUID abfragevarianteId
     ) throws EntityNotFoundException, CalculationException {
         List<BauabschnittModel> bauabschnitte = null;
         SobonOrientierungswertJahr sobonJahr = null;
+        LocalDate gueltigAb = null;
 
         final var abfrage = abfrageService.getById(abfrageId);
         switch (abfrage.getArtAbfrage()) {
@@ -64,8 +63,10 @@ public class CalculationService {
                     .filter(abfragevariante -> abfragevariante.getId().equals(abfragevarianteId))
                     .findAny();
                 if (optionalAbfragevarianteBauleitplanverfahren.isPresent()) {
-                    bauabschnitte = optionalAbfragevarianteBauleitplanverfahren.get().getBauabschnitte();
-                    sobonJahr = optionalAbfragevarianteBauleitplanverfahren.get().getSobonOrientierungswertJahr();
+                    final var abfragevarianteBauleitplanverfahren = optionalAbfragevarianteBauleitplanverfahren.get();
+                    bauabschnitte = abfragevarianteBauleitplanverfahren.getBauabschnitte();
+                    sobonJahr = abfragevarianteBauleitplanverfahren.getSobonOrientierungswertJahr();
+                    gueltigAb = abfragevarianteBauleitplanverfahren.getStammdatenGueltigAb();
                 }
                 break;
             case BAUGENEHMIGUNGSVERFAHREN:
@@ -78,8 +79,11 @@ public class CalculationService {
                     .filter(abfragevariante -> abfragevariante.getId().equals(abfragevarianteId))
                     .findAny();
                 if (optionalAbfragevarianteBaugenehmigungsverfahren.isPresent()) {
-                    bauabschnitte = optionalAbfragevarianteBaugenehmigungsverfahren.get().getBauabschnitte();
-                    sobonJahr = optionalAbfragevarianteBaugenehmigungsverfahren.get().getSobonOrientierungswertJahr();
+                    final var abfragevarianteBaugenehmigungsverfahren =
+                        optionalAbfragevarianteBaugenehmigungsverfahren.get();
+                    bauabschnitte = abfragevarianteBaugenehmigungsverfahren.getBauabschnitte();
+                    sobonJahr = abfragevarianteBaugenehmigungsverfahren.getSobonOrientierungswertJahr();
+                    gueltigAb = abfragevarianteBaugenehmigungsverfahren.getStammdatenGueltigAb();
                 }
                 break;
             case WEITERES_VERFAHREN:
@@ -92,8 +96,10 @@ public class CalculationService {
                     .filter(abfragevariante -> abfragevariante.getId().equals(abfragevarianteId))
                     .findAny();
                 if (optionalAbfragevarianteWeiteresVerfahren.isPresent()) {
-                    bauabschnitte = optionalAbfragevarianteWeiteresVerfahren.get().getBauabschnitte();
-                    sobonJahr = optionalAbfragevarianteWeiteresVerfahren.get().getSobonOrientierungswertJahr();
+                    final var abfragevarianteWeiteresVerfahren = optionalAbfragevarianteWeiteresVerfahren.get();
+                    bauabschnitte = abfragevarianteWeiteresVerfahren.getBauabschnitte();
+                    sobonJahr = abfragevarianteWeiteresVerfahren.getSobonOrientierungswertJahr();
+                    gueltigAb = abfragevarianteWeiteresVerfahren.getStammdatenGueltigAb();
                 }
                 break;
             default:

@@ -70,6 +70,8 @@ public class AbfragevarianteWeiteresVerfahrenModel extends AbfragevarianteModel 
 
     private SobonOrientierungswertJahr sobonOrientierungswertJahr;
 
+    private LocalDate stammdatenGueltigAb;
+
     private String anmerkung;
 
     private List<BedarfsmeldungFachreferateModel> bedarfsmeldungFachreferate;

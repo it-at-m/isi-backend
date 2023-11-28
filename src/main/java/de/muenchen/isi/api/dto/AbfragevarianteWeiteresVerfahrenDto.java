@@ -9,6 +9,7 @@ import de.muenchen.isi.infrastructure.entity.enums.lookup.WesentlicheRechtsgrund
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import javax.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -69,6 +70,8 @@ public class AbfragevarianteWeiteresVerfahrenDto extends AbfragevarianteDto {
     private Integer weWeiteresNichtInfrastrukturrelevantesWohnen;
 
     private SobonOrientierungswertJahr sobonOrientierungswertJahr;
+
+    private LocalDate stammdatenGueltigAb;
 
     private String anmerkung;
 

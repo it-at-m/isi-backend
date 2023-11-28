@@ -13,7 +13,4 @@ public class CalculationRequestDto {
 
     @NotNull
     private UUID abfragevarianteId;
-
-    @NotNull
-    private LocalDate gueltigAb;
 }

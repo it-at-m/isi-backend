@@ -11,6 +11,7 @@ import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswert
 import de.muenchen.isi.infrastructure.entity.enums.lookup.WesentlicheRechtsgrundlage;
 import de.muenchen.isi.infrastructure.repository.search.SearchwordSuggesterRepository;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -139,6 +140,9 @@ public class AbfragevarianteBaugenehmigungsverfahren extends Abfragevariante {
     @Enumerated(EnumType.STRING)
     @Column
     private SobonOrientierungswertJahr sobonOrientierungswertJahr;
+
+    @Column
+    private LocalDate stammdatenGueltigAb;
 
     @Column
     private String anmerkung;

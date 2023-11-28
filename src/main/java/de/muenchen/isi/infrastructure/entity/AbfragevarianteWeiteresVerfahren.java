@@ -149,6 +149,9 @@ public class AbfragevarianteWeiteresVerfahren extends Abfragevariante {
     private SobonOrientierungswertJahr sobonOrientierungswertJahr;
 
     @Column
+    private LocalDate stammdatenGueltigAb;
+
+    @Column
     private String anmerkung;
 
     @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval = true)
