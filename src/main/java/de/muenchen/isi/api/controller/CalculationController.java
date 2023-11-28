@@ -66,8 +66,7 @@ public class CalculationController {
     ) throws EntityNotFoundException, CalculationException {
         final var bedarfModel = calculationService.calculateLangfristigerPlanungsursaechlicherBedarf(
             calculationRequestDto.getAbfrageId(),
-            calculationRequestDto.getAbfragevarianteId(),
-            calculationRequestDto.getGueltigAb()
+            calculationRequestDto.getAbfragevarianteId()
         );
         final var bedarfDto = langfristigerPlanungsursaechlicherBedarfApiMapper.model2Dto(bedarfModel);
         return new ResponseEntity<>(bedarfDto, HttpStatus.OK);
