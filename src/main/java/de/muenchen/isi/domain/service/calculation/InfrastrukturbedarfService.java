@@ -743,7 +743,7 @@ public class InfrastrukturbedarfService {
      * gegebene Anzahl an in der Liste befindlichen Objekten.
      *
      * @param personen zur Ermittlung der 10-Jahres-, 15-Jahres- und 20-Jahres-Mittelwerte
-     * @param numberOfBedarfeProJahrForMean als Anzahl der Objekte für welche der Mittelwert errechnet werden soll.
+     * @param numberOfPersonenProJahrForMean als Anzahl der Objekte für welche der Mittelwert errechnet werden soll.
      * @return den 10-Jahres-, 15-Jahres- und 20-Jahres-Mittelwert als Liste.
      */
     protected PersonenProJahrModel calculateMeanPersonen(
