@@ -9,4 +9,16 @@ public class LangfristigerPlanungsursaechlicherBedarfDto {
 
     @NotNull
     private List<WohneinheitenProFoerderartProJahrDto> wohneinheiten;
+
+    @NotNull
+    private List<WohneinheitenProFoerderartProJahrDto> wohneinheitenSumme10Jahre;
+
+    @NotNull
+    private List<WohneinheitenProFoerderartProJahrDto> wohneinheitenSumme15Jahre;
+
+    @NotNull
+    private List<WohneinheitenProFoerderartProJahrDto> wohneinheitenSumme20Jahre;
+
+    @NotNull
+    private List<WohneinheitenProFoerderartProJahrDto> wohneinheitenGesamt;
 }

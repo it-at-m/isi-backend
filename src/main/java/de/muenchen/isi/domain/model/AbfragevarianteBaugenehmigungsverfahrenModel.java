@@ -4,6 +4,7 @@
  */
 package de.muenchen.isi.domain.model;
 
+import de.muenchen.isi.domain.model.calculation.LangfristigerPlanungsursaechlicherBedarfModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.WesentlicheRechtsgrundlage;
 import java.math.BigDecimal;
@@ -73,4 +74,6 @@ public class AbfragevarianteBaugenehmigungsverfahrenModel extends Abfragevariant
     private List<BedarfsmeldungFachreferateModel> bedarfsmeldungFachreferate;
 
     private List<BauabschnittModel> bauabschnitte;
+
+    private LangfristigerPlanungsursaechlicherBedarfModel langfristigerPlanungsursaechlicherBedarf;
 }
