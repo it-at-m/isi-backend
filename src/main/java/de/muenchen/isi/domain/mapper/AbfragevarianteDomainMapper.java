@@ -7,16 +7,22 @@ package de.muenchen.isi.domain.mapper;
 import de.muenchen.isi.configuration.MapstructConfiguration;
 import de.muenchen.isi.domain.model.AbfragevarianteBaugenehmigungsverfahrenModel;
 import de.muenchen.isi.domain.model.AbfragevarianteBauleitplanverfahrenModel;
+import de.muenchen.isi.domain.model.AbfragevarianteWeiteresVerfahrenModel;
 import de.muenchen.isi.domain.model.abfrageAngelegt.AbfragevarianteBaugenehmigungsverfahrenAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageAngelegt.AbfragevarianteBauleitplanverfahrenAngelegtModel;
+import de.muenchen.isi.domain.model.abfrageAngelegt.AbfragevarianteWeiteresVerfahrenAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungFachreferat.AbfragevarianteBaugenehmigungsverfahrenInBearbeitungFachreferatModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungFachreferat.AbfragevarianteBauleitplanverfahrenInBearbeitungFachreferatModel;
+import de.muenchen.isi.domain.model.abfrageInBearbeitungFachreferat.AbfragevarianteWeiteresVerfahrenInBearbeitungFachreferatModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.AbfragevarianteBaugenehmigungsverfahrenInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.AbfragevarianteBaugenehmigungsverfahrenSachbearbeitungInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.AbfragevarianteBauleitplanverfahrenInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.AbfragevarianteBauleitplanverfahrenSachbearbeitungInBearbeitungSachbearbeitungModel;
+import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.AbfragevarianteWeiteresVerfahrenInBearbeitungSachbearbeitungModel;
+import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.AbfragevarianteWeiteresVerfahrenSachbearbeitungInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.infrastructure.entity.AbfragevarianteBaugenehmigungsverfahren;
 import de.muenchen.isi.infrastructure.entity.AbfragevarianteBauleitplanverfahren;
+import de.muenchen.isi.infrastructure.entity.AbfragevarianteWeiteresVerfahren;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -29,9 +35,13 @@ public interface AbfragevarianteDomainMapper {
 
     AbfragevarianteBaugenehmigungsverfahrenModel entity2Model(final AbfragevarianteBaugenehmigungsverfahren entity);
 
+    AbfragevarianteWeiteresVerfahrenModel entity2Model(final AbfragevarianteWeiteresVerfahren entity);
+
     AbfragevarianteBauleitplanverfahren model2Entity(final AbfragevarianteBauleitplanverfahrenModel model);
 
     AbfragevarianteBaugenehmigungsverfahren model2Entity(final AbfragevarianteBaugenehmigungsverfahrenModel model);
+
+    AbfragevarianteWeiteresVerfahren model2Entity(final AbfragevarianteWeiteresVerfahrenModel model);
 
     @Mappings(
         {
@@ -63,6 +73,21 @@ public interface AbfragevarianteDomainMapper {
         @MappingTarget final AbfragevarianteBaugenehmigungsverfahrenModel model
     );
 
+    @Mappings(
+        {
+            @Mapping(target = "lastModifiedDateTime", ignore = true),
+            @Mapping(target = "createdDateTime", ignore = true),
+            @Mapping(target = "gfWohnenPlanungsursaechlich", ignore = true),
+            @Mapping(target = "sobonOrientierungswertJahr", ignore = true),
+            @Mapping(target = "anmerkung", ignore = true),
+            @Mapping(target = "bedarfsmeldungFachreferate", ignore = true),
+        }
+    )
+    AbfragevarianteWeiteresVerfahrenModel request2Model(
+        final AbfragevarianteWeiteresVerfahrenAngelegtModel request,
+        @MappingTarget final AbfragevarianteWeiteresVerfahrenModel model
+    );
+
     @BeanMapping(ignoreByDefault = true)
     @Mappings(
         {
@@ -91,6 +116,20 @@ public interface AbfragevarianteDomainMapper {
         @MappingTarget final AbfragevarianteBaugenehmigungsverfahrenModel model
     );
 
+    @BeanMapping(ignoreByDefault = true)
+    @Mappings(
+        {
+            @Mapping(target = "version", ignore = false),
+            @Mapping(target = "gfWohnenPlanungsursaechlich", ignore = false),
+            @Mapping(target = "sobonOrientierungswertJahr", ignore = false),
+            @Mapping(target = "anmerkung", ignore = false),
+        }
+    )
+    AbfragevarianteWeiteresVerfahrenModel request2Model(
+        final AbfragevarianteWeiteresVerfahrenSachbearbeitungInBearbeitungSachbearbeitungModel request,
+        @MappingTarget final AbfragevarianteWeiteresVerfahrenModel model
+    );
+
     @Mappings(
         {
             @Mapping(target = "id", ignore = true),
@@ -117,6 +156,19 @@ public interface AbfragevarianteDomainMapper {
         @MappingTarget final AbfragevarianteBaugenehmigungsverfahrenModel model
     );
 
+    @Mappings(
+        {
+            @Mapping(target = "id", ignore = true),
+            @Mapping(target = "lastModifiedDateTime", ignore = true),
+            @Mapping(target = "createdDateTime", ignore = true),
+            @Mapping(target = "bedarfsmeldungFachreferate", ignore = true),
+        }
+    )
+    AbfragevarianteWeiteresVerfahrenModel request2Model(
+        final AbfragevarianteWeiteresVerfahrenInBearbeitungSachbearbeitungModel request,
+        @MappingTarget final AbfragevarianteWeiteresVerfahrenModel model
+    );
+
     @BeanMapping(ignoreByDefault = true)
     @Mappings(
         {
@@ -139,5 +191,17 @@ public interface AbfragevarianteDomainMapper {
     AbfragevarianteBaugenehmigungsverfahrenModel request2Model(
         final AbfragevarianteBaugenehmigungsverfahrenInBearbeitungFachreferatModel request,
         @MappingTarget final AbfragevarianteBaugenehmigungsverfahrenModel model
+    );
+
+    @BeanMapping(ignoreByDefault = true)
+    @Mappings(
+        {
+            @Mapping(target = "version", ignore = false),
+            @Mapping(target = "bedarfsmeldungFachreferate", ignore = false),
+        }
+    )
+    AbfragevarianteWeiteresVerfahrenModel request2Model(
+        final AbfragevarianteWeiteresVerfahrenInBearbeitungFachreferatModel request,
+        @MappingTarget final AbfragevarianteWeiteresVerfahrenModel model
     );
 }

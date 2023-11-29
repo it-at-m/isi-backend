@@ -3,6 +3,8 @@ package de.muenchen.isi.api.dto.search.response;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import de.muenchen.isi.domain.model.enums.SearchResultType;
+import io.swagger.v3.oas.annotations.media.DiscriminatorMapping;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 @Data
@@ -19,6 +21,18 @@ import lombok.Data;
         @JsonSubTypes.Type(
             value = InfrastruktureinrichtungSearchResultDto.class,
             name = SearchResultType.Values.INFRASTRUKTUREINRICHTUNG
+        ),
+    }
+)
+@Schema(
+    description = "SearchResultDto",
+    discriminatorProperty = "type",
+    discriminatorMapping = {
+        @DiscriminatorMapping(value = SearchResultType.Values.ABFRAGE, schema = AbfrageSearchResultDto.class),
+        @DiscriminatorMapping(value = SearchResultType.Values.BAUVORHABEN, schema = BauvorhabenSearchResultDto.class),
+        @DiscriminatorMapping(
+            value = SearchResultType.Values.INFRASTRUKTUREINRICHTUNG,
+            schema = InfrastruktureinrichtungSearchResultDto.class
         ),
     }
 )

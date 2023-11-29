@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import de.muenchen.isi.api.validation.NotUnspecified;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
+import io.swagger.v3.oas.annotations.media.DiscriminatorMapping;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.UUID;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -26,9 +28,28 @@ import lombok.Data;
             value = BaugenehmigungsverfahrenAngelegtDto.class,
             name = ArtAbfrage.Values.BAUGENEHMIGUNGSVERFAHREN
         ),
+        @JsonSubTypes.Type(value = WeiteresVerfahrenAngelegtDto.class, name = ArtAbfrage.Values.WEITERES_VERFAHREN),
     }
 )
-public class AbfrageAngelegtDto {
+@Schema(
+    description = "AbfrageAngelegtDto",
+    discriminatorProperty = "artAbfrage",
+    discriminatorMapping = {
+        @DiscriminatorMapping(
+            value = ArtAbfrage.Values.BAULEITPLANVERFAHREN,
+            schema = BauleitplanverfahrenAngelegtDto.class
+        ),
+        @DiscriminatorMapping(
+            value = ArtAbfrage.Values.BAUGENEHMIGUNGSVERFAHREN,
+            schema = BaugenehmigungsverfahrenAngelegtDto.class
+        ),
+        @DiscriminatorMapping(
+            value = ArtAbfrage.Values.WEITERES_VERFAHREN,
+            schema = WeiteresVerfahrenAngelegtDto.class
+        ),
+    }
+)
+public abstract class AbfrageAngelegtDto {
 
     private Long version;
 

@@ -4,7 +4,7 @@ import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import lombok.Data;
 
 @Data
-public class AbfrageInBearbeitungSachbearbeitungModel {
+public abstract class AbfrageInBearbeitungSachbearbeitungModel {
 
     private Long version;
 

@@ -17,6 +17,9 @@ public class SearchQueryDto {
     private Boolean selectBaugenehmigungsverfahren;
 
     @NotNull
+    private Boolean selectWeiteresVerfahren;
+
+    @NotNull
     private Boolean selectBauvorhaben;
 
     @NotNull
