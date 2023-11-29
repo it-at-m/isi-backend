@@ -71,7 +71,7 @@ public class AbfrageService {
 
     private final AbfragevarianteWeiteresVerfahrenRepository abfragevarianteWeiteresVerfahrenRepository;
 
-    private CalculationService calculationService;
+    private final CalculationService calculationService;
 
     /**
      * Die Methode gibt ein {@link AbfrageModel} identifiziert durch die ID zurück.
