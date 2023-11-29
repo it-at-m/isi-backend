@@ -692,9 +692,9 @@ public class InfrastrukturbedarfService {
      * Die Methode ermittelt den für die im Parameter gegebenen Liste an Infrastrukturbedarfen für die zweiten Parameter
      * gegebene Anzahl an in der Liste befindlichen Objekten.
      *
-     * @param bedarfe zur Ermittlung der 10-Jahres-, 15-Jahres- und 20-Jahres-Mittelwerte
+     * @param bedarfe zur Ermittlung des Mittelwerts.
      * @param numberOfBedarfeProJahrForMean als Anzahl der Objekte für welche der Mittelwert errechnet werden soll.
-     * @return den 10-Jahres-, 15-Jahres- und 20-Jahres-Mittelwert als Liste.
+     * @return den Mittelwert.
      */
     protected InfrastrukturbedarfProJahrModel calculateMeanInfrastrukturbedarfe(
         final List<InfrastrukturbedarfProJahrModel> bedarfe,
@@ -742,9 +742,9 @@ public class InfrastrukturbedarfService {
      * Die Methode ermittelt den für die im Parameter gegebenen Liste an Personen für die zweiten Parameter
      * gegebene Anzahl an in der Liste befindlichen Objekten.
      *
-     * @param personen zur Ermittlung der 10-Jahres-, 15-Jahres- und 20-Jahres-Mittelwerte
+     * @param personen zur Ermittlung des Mittelwerts.
      * @param numberOfPersonenProJahrForMean als Anzahl der Objekte für welche der Mittelwert errechnet werden soll.
-     * @return den 10-Jahres-, 15-Jahres- und 20-Jahres-Mittelwert als Liste.
+     * @return den Mittelwert.
      */
     protected PersonenProJahrModel calculateMeanPersonen(
         final List<PersonenProJahrModel> personen,
