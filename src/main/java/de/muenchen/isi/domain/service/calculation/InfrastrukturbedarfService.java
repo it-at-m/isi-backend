@@ -1,5 +1,6 @@
 package de.muenchen.isi.domain.service.calculation;
 
+import de.muenchen.isi.domain.exception.CalculationException;
 import de.muenchen.isi.domain.mapper.StammdatenDomainMapper;
 import de.muenchen.isi.domain.model.calculation.InfrastrukturbedarfProJahrModel;
 import de.muenchen.isi.domain.model.calculation.PersonenProJahrModel;
@@ -60,13 +61,14 @@ public class InfrastrukturbedarfService {
      * @param artInfrastrukturbedarf zur Ermittlung der korrekten Versorgungsquote und Gruppenstärke.
      * @param gueltigAb zur Ermittlung der korrekten Versorgungsquote und Gruppenstärke.
      * @return die Bedarfe für den Zeitraum von 20 Jahren
+     * @throws CalculationException falls die Stammdaten zur Versorgungsquote und Gruppenstärke nicht geladen werden können.
      */
     public List<InfrastrukturbedarfProJahrModel> calculateBedarfForKinderkrippeRounded(
         final List<WohneinheitenProFoerderartProJahrModel> wohneinheiten,
         final SobonOrientierungswertJahr sobonJahr,
         final ArtInfrastrukturbedarf artInfrastrukturbedarf,
         final LocalDate gueltigAb
-    ) {
+    ) throws CalculationException {
         return this.calculateBedarfForKinderkrippe(wohneinheiten, sobonJahr, artInfrastrukturbedarf, gueltigAb)
             .map(this::roundValuesAndReturnModelWithRoundedValues)
             .collect(Collectors.toList());
@@ -80,20 +82,26 @@ public class InfrastrukturbedarfService {
      * @param artInfrastrukturbedarf zur Ermittlung der korrekten Versorgungsquote und Gruppenstärke.
      * @param gueltigAb zur Ermittlung der korrekten Versorgungsquote und Gruppenstärke.
      * @return die Bedarfe für den Zeitraum von 20 Jahren
+     * @throws CalculationException falls die Stammdaten zur Versorgungsquote und Gruppenstärke nicht geladen werden können.
      */
     public Stream<InfrastrukturbedarfProJahrModel> calculateBedarfForKinderkrippe(
         final List<WohneinheitenProFoerderartProJahrModel> wohneinheiten,
         final SobonOrientierungswertJahr sobonJahr,
         final ArtInfrastrukturbedarf artInfrastrukturbedarf,
         final LocalDate gueltigAb
-    ) {
+    ) throws CalculationException {
         // Ermittlung der Versorgungsquote und Gruppenstärke für die Einrichtung.
         final var versorgungsquoteGruppenstaerke = versorgungsquoteGruppenstaerkeRepository
             .findFirstByInfrastruktureinrichtungTypAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
                 InfrastruktureinrichtungTyp.KINDERKRIPPE,
                 gueltigAb
             )
-            .get();
+            .orElseThrow(() -> {
+                final var message =
+                    "Für die planungsursächliche Bedarfsberechnung der Kinderkrippen konnten die Stammdaten zur Versorgungsquote und Gruppenstärke nicht geladen werden.";
+                log.error(message);
+                return new CalculationException(message);
+            });
 
         return this.calculatePersonen(InfrastruktureinrichtungTyp.KINDERKRIPPE, wohneinheiten, sobonJahr)
             // Ermitteln der Versorgungsquote und Gruppenstärke
@@ -114,13 +122,14 @@ public class InfrastrukturbedarfService {
      * @param artInfrastrukturbedarf zur Ermittlung der korrekten Versorgungsquote und Gruppenstärke.
      * @param gueltigAb zur Ermittlung der korrekten Versorgungsquote und Gruppenstärke.
      * @return die Bedarfe für den Zeitraum von 20 Jahren
+     * @throws CalculationException falls die Stammdaten zur Versorgungsquote und Gruppenstärke nicht geladen werden können.
      */
     public List<InfrastrukturbedarfProJahrModel> calculateBedarfForKindergartenRounded(
         final List<WohneinheitenProFoerderartProJahrModel> wohneinheiten,
         final SobonOrientierungswertJahr sobonJahr,
         final ArtInfrastrukturbedarf artInfrastrukturbedarf,
         final LocalDate gueltigAb
-    ) {
+    ) throws CalculationException {
         return this.calculateBedarfForKindergarten(wohneinheiten, sobonJahr, artInfrastrukturbedarf, gueltigAb)
             .map(this::roundValuesAndReturnModelWithRoundedValues)
             .collect(Collectors.toList());
@@ -134,20 +143,26 @@ public class InfrastrukturbedarfService {
      * @param artInfrastrukturbedarf zur Ermittlung der korrekten Versorgungsquote und Gruppenstärke.
      * @param gueltigAb zur Ermittlung der korrekten Versorgungsquote und Gruppenstärke.
      * @return die Bedarfe für den Zeitraum von 20 Jahren
+     * @throws CalculationException falls die Stammdaten zur Versorgungsquote und Gruppenstärke nicht geladen werden können.
      */
     public Stream<InfrastrukturbedarfProJahrModel> calculateBedarfForKindergarten(
         final List<WohneinheitenProFoerderartProJahrModel> wohneinheiten,
         final SobonOrientierungswertJahr sobonJahr,
         final ArtInfrastrukturbedarf artInfrastrukturbedarf,
         final LocalDate gueltigAb
-    ) {
+    ) throws CalculationException {
         // Ermittlung der Versorgungsquote und Gruppenstärke für die Einrichtung.
         final var versorgungsquoteGruppenstaerke = versorgungsquoteGruppenstaerkeRepository
             .findFirstByInfrastruktureinrichtungTypAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
                 InfrastruktureinrichtungTyp.KINDERGARTEN,
                 gueltigAb
             )
-            .get();
+            .orElseThrow(() -> {
+                final var message =
+                    "Für die planungsursächliche Bedarfsberechnung der Kindergärten konnten die Stammdaten zur Versorgungsquote und Gruppenstärke nicht geladen werden.";
+                log.error(message);
+                return new CalculationException(message);
+            });
 
         return this.calculatePersonen(InfrastruktureinrichtungTyp.KINDERGARTEN, wohneinheiten, sobonJahr)
             // Ermitteln der Versorgungsquote und Gruppenstärke

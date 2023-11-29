@@ -5,6 +5,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 
 import de.muenchen.isi.TestData;
+import de.muenchen.isi.domain.exception.CalculationException;
 import de.muenchen.isi.domain.mapper.StammdatenDomainMapperImpl;
 import de.muenchen.isi.domain.model.calculation.InfrastrukturbedarfProJahrModel;
 import de.muenchen.isi.domain.model.calculation.PersonenProJahrModel;
@@ -57,7 +58,7 @@ class InfrastrukturbedarfServiceTest {
     }
 
     @Test
-    void calculateBedarfForKinderkrippeRounded() {
+    void calculateBedarfForKinderkrippeRounded() throws CalculationException {
         final SobonOrientierungswertJahr sobonJahr = SobonOrientierungswertJahr.JAHR_2017;
         final LocalDate gueltigAb = LocalDate.of(1998, 1, 1);
         final var wohneinheiten = new ArrayList<WohneinheitenProFoerderartProJahrModel>();
@@ -286,7 +287,7 @@ class InfrastrukturbedarfServiceTest {
     }
 
     @Test
-    void calculateBedarfForKindergartenRounded() {
+    void calculateBedarfForKindergartenRounded() throws CalculationException {
         final SobonOrientierungswertJahr sobonJahr = SobonOrientierungswertJahr.JAHR_2017;
         final LocalDate gueltigAb = LocalDate.of(1998, 1, 1);
         final var wohneinheiten = new ArrayList<WohneinheitenProFoerderartProJahrModel>();

@@ -23,6 +23,8 @@ import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.Abfragev
 import de.muenchen.isi.infrastructure.entity.AbfragevarianteBaugenehmigungsverfahren;
 import de.muenchen.isi.infrastructure.entity.AbfragevarianteBauleitplanverfahren;
 import de.muenchen.isi.infrastructure.entity.AbfragevarianteWeiteresVerfahren;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
+import org.mapstruct.AfterMapping;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -52,6 +54,7 @@ public interface AbfragevarianteDomainMapper {
             @Mapping(target = "stammdatenGueltigAb", ignore = true),
             @Mapping(target = "anmerkung", ignore = true),
             @Mapping(target = "bedarfsmeldungFachreferate", ignore = true),
+            @Mapping(target = "langfristigerPlanungsursaechlicherBedarf", ignore = true),
         }
     )
     AbfragevarianteBauleitplanverfahrenModel request2Model(
@@ -68,6 +71,7 @@ public interface AbfragevarianteDomainMapper {
             @Mapping(target = "stammdatenGueltigAb", ignore = true),
             @Mapping(target = "anmerkung", ignore = true),
             @Mapping(target = "bedarfsmeldungFachreferate", ignore = true),
+            @Mapping(target = "langfristigerPlanungsursaechlicherBedarf", ignore = true),
         }
     )
     AbfragevarianteBaugenehmigungsverfahrenModel request2Model(
@@ -84,6 +88,7 @@ public interface AbfragevarianteDomainMapper {
             @Mapping(target = "stammdatenGueltigAb", ignore = true),
             @Mapping(target = "anmerkung", ignore = true),
             @Mapping(target = "bedarfsmeldungFachreferate", ignore = true),
+            @Mapping(target = "langfristigerPlanungsursaechlicherBedarf", ignore = true),
         }
     )
     AbfragevarianteWeiteresVerfahrenModel request2Model(
@@ -142,6 +147,7 @@ public interface AbfragevarianteDomainMapper {
             @Mapping(target = "lastModifiedDateTime", ignore = true),
             @Mapping(target = "createdDateTime", ignore = true),
             @Mapping(target = "bedarfsmeldungFachreferate", ignore = true),
+            @Mapping(target = "langfristigerPlanungsursaechlicherBedarf", ignore = true),
         }
     )
     AbfragevarianteBauleitplanverfahrenModel request2Model(
@@ -155,6 +161,7 @@ public interface AbfragevarianteDomainMapper {
             @Mapping(target = "lastModifiedDateTime", ignore = true),
             @Mapping(target = "createdDateTime", ignore = true),
             @Mapping(target = "bedarfsmeldungFachreferate", ignore = true),
+            @Mapping(target = "langfristigerPlanungsursaechlicherBedarf", ignore = true),
         }
     )
     AbfragevarianteBaugenehmigungsverfahrenModel request2Model(
@@ -168,6 +175,7 @@ public interface AbfragevarianteDomainMapper {
             @Mapping(target = "lastModifiedDateTime", ignore = true),
             @Mapping(target = "createdDateTime", ignore = true),
             @Mapping(target = "bedarfsmeldungFachreferate", ignore = true),
+            @Mapping(target = "langfristigerPlanungsursaechlicherBedarf", ignore = true),
         }
     )
     AbfragevarianteWeiteresVerfahrenModel request2Model(
@@ -210,4 +218,19 @@ public interface AbfragevarianteDomainMapper {
         final AbfragevarianteWeiteresVerfahrenInBearbeitungFachreferatModel request,
         @MappingTarget final AbfragevarianteWeiteresVerfahrenModel model
     );
+
+    @AfterMapping
+    default void afterMappingToModel(@MappingTarget final AbfragevarianteBaugenehmigungsverfahrenModel model) {
+        model.setArtAbfragevariante(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN);
+    }
+
+    @AfterMapping
+    default void afterMappingToModel(@MappingTarget final AbfragevarianteBauleitplanverfahrenModel model) {
+        model.setArtAbfragevariante(ArtAbfrage.BAULEITPLANVERFAHREN);
+    }
+
+    @AfterMapping
+    default void afterMappingToModel(@MappingTarget final AbfragevarianteWeiteresVerfahrenModel model) {
+        model.setArtAbfragevariante(ArtAbfrage.WEITERES_VERFAHREN);
+    }
 }
