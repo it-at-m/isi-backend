@@ -60,28 +60,23 @@ public class FoerdermixStammService {
     public FoerdermixStammModel saveFoerdermixStamm(final FoerdermixStammModel foerdermixstamm)
         throws UniqueViolationException, OptimisticLockingException {
         var entity = this.stammdatenDomainMapper.model2Entity(foerdermixstamm);
-
-        if (entity.getFoerdermix() == null) {
-            return null;
-        } else {
-            final var saved =
-                this.foerdermixStammRepository.findByFoerdermixBezeichnungJahrIgnoreCaseAndFoerdermixBezeichnungIgnoreCase(
-                        foerdermixstamm.getFoerdermix().getBezeichnungJahr(),
-                        foerdermixstamm.getFoerdermix().getBezeichnung()
-                    );
-            if ((saved.isPresent() && saved.get().getId().equals(entity.getId())) || saved.isEmpty()) {
-                try {
-                    entity = this.foerdermixStammRepository.saveAndFlush(entity);
-                } catch (final ObjectOptimisticLockingFailureException exception) {
-                    final var message = "Die Daten wurden in der Zwischenzeit geändert. Bitte laden Sie die Seite neu!";
-                    throw new OptimisticLockingException(message, exception);
-                }
-                return this.stammdatenDomainMapper.entity2Model(entity);
-            } else {
-                throw new UniqueViolationException(
-                    "Die Bezeichnung exisitiert bereits unter dem angegebenen Jahr. Bitte wählen Sie daher eine andere Bezeichnung und speichern Sie den Fördermix erneut."
+        final var saved =
+            this.foerdermixStammRepository.findByFoerdermixBezeichnungJahrIgnoreCaseAndFoerdermixBezeichnungIgnoreCase(
+                    foerdermixstamm.getFoerdermix().getBezeichnungJahr(),
+                    foerdermixstamm.getFoerdermix().getBezeichnung()
                 );
+        if ((saved.isPresent() && saved.get().getId().equals(entity.getId())) || saved.isEmpty()) {
+            try {
+                entity = this.foerdermixStammRepository.saveAndFlush(entity);
+            } catch (final ObjectOptimisticLockingFailureException exception) {
+                final var message = "Die Daten wurden in der Zwischenzeit geändert. Bitte laden Sie die Seite neu!";
+                throw new OptimisticLockingException(message, exception);
             }
+            return this.stammdatenDomainMapper.entity2Model(entity);
+        } else {
+            throw new UniqueViolationException(
+                "Die Bezeichnung exisitiert bereits unter dem angegebenen Jahr. Bitte wählen Sie daher eine andere Bezeichnung und speichern Sie den Fördermix erneut."
+            );
         }
     }
 
