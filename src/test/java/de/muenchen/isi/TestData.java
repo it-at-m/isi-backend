@@ -54,6 +54,7 @@ public class TestData {
 
     public static BauleitplanverfahrenModel createBauleitplanverfahrenModel() {
         final var bauleitplanverfahren = new BauleitplanverfahrenModel();
+        bauleitplanverfahren.setArtAbfrage(ArtAbfrage.BAULEITPLANVERFAHREN);
         bauleitplanverfahren.setName("Neubausiedlung in Musterort");
         bauleitplanverfahren.setStatusAbfrage(StatusAbfrage.ANGELEGT);
         final WGS84Model coordinate = new WGS84Model();
@@ -76,6 +77,7 @@ public class TestData {
 
     public static BaugenehmigungsverfahrenModel createBaugenehmigungsverfahrenModel() {
         final var baugenehmigungsverfahren = new BaugenehmigungsverfahrenModel();
+        baugenehmigungsverfahren.setArtAbfrage(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN);
         baugenehmigungsverfahren.setName("Altbausiedlung in Musterort");
         baugenehmigungsverfahren.setStatusAbfrage(StatusAbfrage.ANGELEGT);
         final WGS84Model coordinate = new WGS84Model();
@@ -94,6 +96,7 @@ public class TestData {
 
     public static WeiteresVerfahrenModel createWeiteresVerfahrenModel() {
         final var weiteresVerfahren = new WeiteresVerfahrenModel();
+        weiteresVerfahren.setArtAbfrage(ArtAbfrage.WEITERES_VERFAHREN);
         weiteresVerfahren.setName("Überbausiedlung in Musterort");
         weiteresVerfahren.setStatusAbfrage(StatusAbfrage.ANGELEGT);
         final WGS84Model coordinate = new WGS84Model();
@@ -172,6 +175,7 @@ public class TestData {
 
     public static AbfragevarianteBauleitplanverfahrenModel createAbfragevarianteBauleitplanverfahrenModel() {
         final var abfragevariante = new AbfragevarianteBauleitplanverfahrenModel();
+        abfragevariante.setArtAbfragevariante(ArtAbfrage.BAULEITPLANVERFAHREN);
         abfragevariante.setAbfragevariantenNr(1);
         abfragevariante.setName("Name Abfragevariante 10");
         abfragevariante.setWesentlicheRechtsgrundlage(
@@ -190,6 +194,7 @@ public class TestData {
 
     public static AbfragevarianteBaugenehmigungsverfahrenModel createAbfragevarianteBaugenehmigungsverfahrenModel() {
         final var abfragevariante = new AbfragevarianteBaugenehmigungsverfahrenModel();
+        abfragevariante.setArtAbfragevariante(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN);
         abfragevariante.setAbfragevariantenNr(1);
         abfragevariante.setName("Name Abfragevariante 11");
         abfragevariante.setWesentlicheRechtsgrundlage(
@@ -208,6 +213,7 @@ public class TestData {
 
     public static AbfragevarianteWeiteresVerfahrenModel createAbfragevarianteWeiteresVerfahrenModel() {
         final var abfragevariante = new AbfragevarianteWeiteresVerfahrenModel();
+        abfragevariante.setArtAbfragevariante(ArtAbfrage.WEITERES_VERFAHREN);
         abfragevariante.setAbfragevariantenNr(1);
         abfragevariante.setName("Name Abfragevariante 9");
         abfragevariante.setWesentlicheRechtsgrundlage(

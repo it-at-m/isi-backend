@@ -45,6 +45,7 @@ import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.Bauleitp
 import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.WeiteresVerfahrenInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.domain.model.common.StadtbezirkModel;
 import de.muenchen.isi.domain.model.common.VerortungModel;
+import de.muenchen.isi.domain.service.calculation.CalculationService;
 import de.muenchen.isi.domain.service.filehandling.DokumentService;
 import de.muenchen.isi.infrastructure.entity.Abfrage;
 import de.muenchen.isi.infrastructure.entity.AbfragevarianteBaugenehmigungsverfahren;
@@ -113,6 +114,9 @@ class AbfrageServiceTest {
     @Mock
     private AuthenticationUtils authenticationUtils;
 
+    @Mock
+    private CalculationService calculationService;
+
     @BeforeEach
     public void beforeEach() throws NoSuchFieldException, IllegalAccessException {
         final var abfragevarianteDomainMapper = new AbfragevarianteDomainMapperImpl(new BauabschnittDomainMapperImpl());
@@ -130,7 +134,8 @@ class AbfrageServiceTest {
                 this.authenticationUtils,
                 this.abfragevarianteBauleitplanverfahrenRepository,
                 this.abfragevarianteBaugenehmigungsverfahrenRepository,
-                this.abfragevarianteWeiteresVerfahrenRepository
+                this.abfragevarianteWeiteresVerfahrenRepository,
+                this.calculationService
             );
         Mockito.reset(
             this.abfrageRepository,
@@ -139,7 +144,8 @@ class AbfrageServiceTest {
             this.authenticationUtils,
             this.abfragevarianteBauleitplanverfahrenRepository,
             this.abfragevarianteBaugenehmigungsverfahrenRepository,
-            this.abfragevarianteWeiteresVerfahrenRepository
+            this.abfragevarianteWeiteresVerfahrenRepository,
+            this.calculationService
         );
     }
 

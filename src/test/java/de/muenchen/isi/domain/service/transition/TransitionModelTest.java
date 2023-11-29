@@ -14,6 +14,7 @@ import de.muenchen.isi.domain.model.AbfrageModel;
 import de.muenchen.isi.domain.model.common.TransitionModel;
 import de.muenchen.isi.domain.service.AbfrageService;
 import de.muenchen.isi.domain.service.AbfrageStatusService;
+import de.muenchen.isi.domain.service.calculation.CalculationService;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.repository.AbfrageRepository;
 import java.util.ArrayList;
@@ -26,6 +27,7 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,6 +46,9 @@ public class TransitionModelTest {
 
     @Autowired
     private AbfrageRepository abfrageRepository;
+
+    @MockBean
+    private CalculationService calculationService;
 
     @BeforeEach
     public void beforeEach() {
