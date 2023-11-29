@@ -24,6 +24,7 @@ import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.stereotype.Service;
 
@@ -41,11 +42,9 @@ public class InfrastrukturbedarfService {
 
     public static final int SCALE_ROUNDING_RESULT_DECIMAL = 2;
 
-    public static final String TITLE_MEAN_YEAR_10 = "Mittelwert 10 J.";
+    public static final String TITLE_MEAN_WITH_PLACEHOLDER = "Mittelwert {} J.";
 
-    public static final String TITLE_MEAN_YEAR_15 = "Mittelwert 15 J.";
-
-    public static final String TITLE_MEAN_YEAR_20 = "Mittelwert 20 J.";
+    public static final String TITLE_PLACEHOLDER = "{}";
 
     private final SobonOrientierungswertSozialeInfrastrukturRepository sobonOrientierungswertSozialeInfrastrukturRepository;
 
@@ -54,8 +53,7 @@ public class InfrastrukturbedarfService {
     private final StammdatenDomainMapper stammdatenDomainMapper;
 
     /**
-     * Ermittlung die gerundeten Bedarfe sowie den 10-Jahres, 15-jahres und 20-Jahres-Mittelwert
-     * für den Zeitraum von 20 Jahren auf Basis der gegebenen Wohneinheiten für Kinderkrippen.
+     * Ermittlung die gerundeten Bedarfe für den Zeitraum von 20 Jahren auf Basis der gegebenen Wohneinheiten für Kinderkrippen.
      *
      * @param wohneinheiten zur Ermittlung der Bedarfe.
      * @param sobonJahr zur Ermittlung der Sobon-Orientierungswerte der sozialen Infrastruktur.
@@ -63,19 +61,15 @@ public class InfrastrukturbedarfService {
      * @param gueltigAb zur Ermittlung der korrekten Versorgungsquote und Gruppenstärke.
      * @return die Bedarfe für den Zeitraum von 20 Jahren
      */
-    public List<InfrastrukturbedarfProJahrModel> calculateBedarfForKinderkrippeRoundedAndWithMean(
+    public List<InfrastrukturbedarfProJahrModel> calculateBedarfForKinderkrippeRounded(
         final List<WohneinheitenProFoerderartProJahrModel> wohneinheiten,
         final SobonOrientierungswertJahr sobonJahr,
         final ArtInfrastrukturbedarf artInfrastrukturbedarf,
         final LocalDate gueltigAb
     ) {
-        final var roundedBedarfe =
-            this.calculateBedarfForKinderkrippe(wohneinheiten, sobonJahr, artInfrastrukturbedarf, gueltigAb)
-                .map(this::roundValuesAndReturnModelWithRoundedValues)
-                .collect(Collectors.toList());
-        final var meansForRoundedBedarfe = this.calculate10Year15YearAnd20YearMeanInfrastrukturbedarfe(roundedBedarfe);
-        roundedBedarfe.addAll(meansForRoundedBedarfe);
-        return roundedBedarfe;
+        return this.calculateBedarfForKinderkrippe(wohneinheiten, sobonJahr, artInfrastrukturbedarf, gueltigAb)
+            .map(this::roundValuesAndReturnModelWithRoundedValues)
+            .collect(Collectors.toList());
     }
 
     /**
@@ -113,8 +107,7 @@ public class InfrastrukturbedarfService {
     }
 
     /**
-     * Ermittlung die gerundeten Bedarfe sowie den 10-Jahres, 15-jahres und 20-Jahres-Mittelwert
-     * für den Zeitraum von 20 Jahren auf Basis der gegebenen Wohneinheiten für Kindergärten.
+     * Ermittlung die gerundeten Bedarfe für den Zeitraum von 20 Jahren auf Basis der gegebenen Wohneinheiten für Kindergärten.
      *
      * @param wohneinheiten zur Ermittlung der Bedarfe.
      * @param sobonJahr zur Ermittlung der Sobon-Orientierungswerte der sozialen Infrastruktur.
@@ -122,19 +115,15 @@ public class InfrastrukturbedarfService {
      * @param gueltigAb zur Ermittlung der korrekten Versorgungsquote und Gruppenstärke.
      * @return die Bedarfe für den Zeitraum von 20 Jahren
      */
-    public List<InfrastrukturbedarfProJahrModel> calculateBedarfForKindergartenRoundedAndWithMean(
+    public List<InfrastrukturbedarfProJahrModel> calculateBedarfForKindergartenRounded(
         final List<WohneinheitenProFoerderartProJahrModel> wohneinheiten,
         final SobonOrientierungswertJahr sobonJahr,
         final ArtInfrastrukturbedarf artInfrastrukturbedarf,
         final LocalDate gueltigAb
     ) {
-        final var roundedBedarfe =
-            this.calculateBedarfForKindergarten(wohneinheiten, sobonJahr, artInfrastrukturbedarf, gueltigAb)
-                .map(this::roundValuesAndReturnModelWithRoundedValues)
-                .collect(Collectors.toList());
-        final var meansForRoundedBedarfe = this.calculate10Year15YearAnd20YearMeanInfrastrukturbedarfe(roundedBedarfe);
-        roundedBedarfe.addAll(meansForRoundedBedarfe);
-        return roundedBedarfe;
+        return this.calculateBedarfForKindergarten(wohneinheiten, sobonJahr, artInfrastrukturbedarf, gueltigAb)
+            .map(this::roundValuesAndReturnModelWithRoundedValues)
+            .collect(Collectors.toList());
     }
 
     /**
@@ -172,24 +161,19 @@ public class InfrastrukturbedarfService {
     }
 
     /**
-     * Ermittlung aller Einwohner sowie den 10-Jahres, 15-jahres und 20-Jahres-Mittelwert
-     * für den Zeitraum von 20 Jahren auf Basis der gegebenen Wohneinheiten.
+     * Ermittlung aller Einwohner für den Zeitraum von 20 Jahren auf Basis der gegebenen Wohneinheiten.
      *
      * @param wohneinheiten zur Ermittlung der Personen.
      * @param sobonJahr zur Ermittlung der Sobon-Orientierungswerte der sozialen Infrastruktur.
      * @return die Personen für den Zeitraum von 20 Jahren
      */
-    public List<PersonenProJahrModel> calculateAlleEinwohnerRoundedAndWithMean(
+    public List<PersonenProJahrModel> calculateAlleEinwohnerRounded(
         final List<WohneinheitenProFoerderartProJahrModel> wohneinheiten,
         final SobonOrientierungswertJahr sobonJahr
     ) {
-        final var roundedPersonen =
-            this.calculateAlleEinwohner(wohneinheiten, sobonJahr)
-                .map(this::roundValuesAndReturnModelWithRoundedValues)
-                .collect(Collectors.toList());
-        final var meansForRoundedPersonen = this.calculate10Year15YearAnd20YearMeanForPersonen(roundedPersonen);
-        roundedPersonen.addAll(meansForRoundedPersonen);
-        return roundedPersonen;
+        return this.calculateAlleEinwohner(wohneinheiten, sobonJahr)
+            .map(this::roundValuesAndReturnModelWithRoundedValues)
+            .collect(Collectors.toList());
     }
 
     /**
@@ -690,17 +674,18 @@ public class InfrastrukturbedarfService {
     }
 
     /**
-     * Die Methode ermittelt den 10-Jahres-, 15-Jahres- und 20-Jahres-Mittelwert für die im Parameter gegebenen Liste
-     * an Infrastrukturbedarfen.
+     * Die Methode ermittelt den für die im Parameter gegebenen Liste an Infrastrukturbedarfen für die zweiten Parameter
+     * gegebene Anzahl an in der Liste befindlichen Objekten.
      *
      * @param bedarfe zur Ermittlung der 10-Jahres-, 15-Jahres- und 20-Jahres-Mittelwerte
+     * @param numberOfBedarfeProJahrForMean als Anzahl der Objekte für welche der Mittelwert errechnet werden soll.
      * @return den 10-Jahres-, 15-Jahres- und 20-Jahres-Mittelwert als Liste.
      */
-    protected List<InfrastrukturbedarfProJahrModel> calculate10Year15YearAnd20YearMeanInfrastrukturbedarfe(
-        final List<InfrastrukturbedarfProJahrModel> bedarfe
+    protected InfrastrukturbedarfProJahrModel calculateMeanInfrastrukturbedarfe(
+        final List<InfrastrukturbedarfProJahrModel> bedarfe,
+        final int numberOfBedarfeProJahrForMean
     ) {
-        final var means10Year15YearAnd20Year = new ArrayList<InfrastrukturbedarfProJahrModel>(3);
-        var sumAnzahlPersonenGesamt = BigDecimal.ZERO;
+        BigDecimal sumAnzahlPersonenGesamt = BigDecimal.ZERO;
         BigDecimal sumAnzahlPersonenZuVersorgen = BigDecimal.ZERO;
         BigDecimal sumAnzahlGruppen = BigDecimal.ZERO;
         BigDecimal numberOfYear;
@@ -710,101 +695,66 @@ public class InfrastrukturbedarfService {
             sumAnzahlPersonenZuVersorgen =
                 bedarfe.get(index).getAnzahlPersonenZuVersorgen().add(sumAnzahlPersonenZuVersorgen);
             sumAnzahlGruppen = bedarfe.get(index).getAnzahlGruppen().add(sumAnzahlGruppen);
-            if (index == 9) {
-                final var meanYear10 = new InfrastrukturbedarfProJahrModel();
-                meanYear10.setJahr(TITLE_MEAN_YEAR_10);
-                meanYear10.setAnzahlPersonenGesamt(
+            if (index == numberOfBedarfeProJahrForMean - 1) {
+                final var mean = new InfrastrukturbedarfProJahrModel();
+                mean.setJahr(
+                    StringUtils.replace(
+                        TITLE_MEAN_WITH_PLACEHOLDER,
+                        TITLE_PLACEHOLDER,
+                        Integer.toString(numberOfBedarfeProJahrForMean)
+                    )
+                );
+                mean.setAnzahlPersonenGesamt(
                     sumAnzahlPersonenGesamt.divide(numberOfYear, SCALE_ROUNDING_RESULT_DECIMAL, RoundingMode.HALF_EVEN)
                 );
-                meanYear10.setAnzahlPersonenZuVersorgen(
+                mean.setAnzahlPersonenZuVersorgen(
                     sumAnzahlPersonenZuVersorgen.divide(
                         numberOfYear,
                         SCALE_ROUNDING_RESULT_DECIMAL,
                         RoundingMode.HALF_EVEN
                     )
                 );
-                meanYear10.setAnzahlGruppen(
+                mean.setAnzahlGruppen(
                     sumAnzahlGruppen.divide(numberOfYear, SCALE_ROUNDING_RESULT_DECIMAL, RoundingMode.HALF_EVEN)
                 );
-                means10Year15YearAnd20Year.add(meanYear10);
-            } else if (index == 14) {
-                final var meanYear15 = new InfrastrukturbedarfProJahrModel();
-                meanYear15.setJahr(TITLE_MEAN_YEAR_15);
-                meanYear15.setAnzahlPersonenGesamt(
-                    sumAnzahlPersonenGesamt.divide(numberOfYear, SCALE_ROUNDING_RESULT_DECIMAL, RoundingMode.HALF_EVEN)
-                );
-                meanYear15.setAnzahlPersonenZuVersorgen(
-                    sumAnzahlPersonenZuVersorgen.divide(
-                        numberOfYear,
-                        SCALE_ROUNDING_RESULT_DECIMAL,
-                        RoundingMode.HALF_EVEN
-                    )
-                );
-                meanYear15.setAnzahlGruppen(
-                    sumAnzahlGruppen.divide(numberOfYear, SCALE_ROUNDING_RESULT_DECIMAL, RoundingMode.HALF_EVEN)
-                );
-                means10Year15YearAnd20Year.add(meanYear15);
-            } else if (index == 19) {
-                final var meanYear20 = new InfrastrukturbedarfProJahrModel();
-                meanYear20.setJahr(TITLE_MEAN_YEAR_20);
-                meanYear20.setAnzahlPersonenGesamt(
-                    sumAnzahlPersonenGesamt.divide(numberOfYear, SCALE_ROUNDING_RESULT_DECIMAL, RoundingMode.HALF_EVEN)
-                );
-                meanYear20.setAnzahlPersonenZuVersorgen(
-                    sumAnzahlPersonenZuVersorgen.divide(
-                        numberOfYear,
-                        SCALE_ROUNDING_RESULT_DECIMAL,
-                        RoundingMode.HALF_EVEN
-                    )
-                );
-                meanYear20.setAnzahlGruppen(
-                    sumAnzahlGruppen.divide(numberOfYear, SCALE_ROUNDING_RESULT_DECIMAL, RoundingMode.HALF_EVEN)
-                );
-                means10Year15YearAnd20Year.add(meanYear20);
+                return mean;
             }
         }
-        return means10Year15YearAnd20Year;
+        return null;
     }
 
     /**
-     * Die Methode ermittelt den 10-Jahres-, 15-Jahres- und 20-Jahres-Mittelwert für die im Parameter gegebenen Liste
-     * an Personen.
+     * Die Methode ermittelt den für die im Parameter gegebenen Liste an Personen für die zweiten Parameter
+     * gegebene Anzahl an in der Liste befindlichen Objekten.
      *
      * @param personen zur Ermittlung der 10-Jahres-, 15-Jahres- und 20-Jahres-Mittelwerte
+     * @param numberOfBedarfeProJahrForMean als Anzahl der Objekte für welche der Mittelwert errechnet werden soll.
      * @return den 10-Jahres-, 15-Jahres- und 20-Jahres-Mittelwert als Liste.
      */
-    protected List<PersonenProJahrModel> calculate10Year15YearAnd20YearMeanForPersonen(
-        final List<PersonenProJahrModel> personen
+    protected PersonenProJahrModel calculateMeanPersonen(
+        final List<PersonenProJahrModel> personen,
+        final int numberOfPersonenProJahrForMean
     ) {
-        final var means10Year15YearAnd20Year = new ArrayList<PersonenProJahrModel>(3);
-        var sumAnzahlPersonenGesamt = BigDecimal.ZERO;
+        BigDecimal sumAnzahlPersonenGesamt = BigDecimal.ZERO;
         BigDecimal numberOfYear;
         for (int index = 0; index < personen.size(); index++) {
             numberOfYear = BigDecimal.valueOf(index + 1);
             sumAnzahlPersonenGesamt = personen.get(index).getAnzahlPersonenGesamt().add(sumAnzahlPersonenGesamt);
-            if (index == 9) {
-                final var meanYear10 = new PersonenProJahrModel();
-                meanYear10.setJahr(TITLE_MEAN_YEAR_10);
-                meanYear10.setAnzahlPersonenGesamt(
+            if (index == numberOfPersonenProJahrForMean - 1) {
+                final var mean = new PersonenProJahrModel();
+                mean.setJahr(
+                    StringUtils.replace(
+                        TITLE_MEAN_WITH_PLACEHOLDER,
+                        TITLE_PLACEHOLDER,
+                        Integer.toString(numberOfPersonenProJahrForMean)
+                    )
+                );
+                mean.setAnzahlPersonenGesamt(
                     sumAnzahlPersonenGesamt.divide(numberOfYear, SCALE_ROUNDING_RESULT_DECIMAL, RoundingMode.HALF_EVEN)
                 );
-                means10Year15YearAnd20Year.add(meanYear10);
-            } else if (index == 14) {
-                final var meanYear15 = new PersonenProJahrModel();
-                meanYear15.setJahr(TITLE_MEAN_YEAR_15);
-                meanYear15.setAnzahlPersonenGesamt(
-                    sumAnzahlPersonenGesamt.divide(numberOfYear, SCALE_ROUNDING_RESULT_DECIMAL, RoundingMode.HALF_EVEN)
-                );
-                means10Year15YearAnd20Year.add(meanYear15);
-            } else if (index == 19) {
-                final var meanYear20 = new PersonenProJahrModel();
-                meanYear20.setJahr(TITLE_MEAN_YEAR_20);
-                meanYear20.setAnzahlPersonenGesamt(
-                    sumAnzahlPersonenGesamt.divide(numberOfYear, SCALE_ROUNDING_RESULT_DECIMAL, RoundingMode.HALF_EVEN)
-                );
-                means10Year15YearAnd20Year.add(meanYear20);
+                return mean;
             }
         }
-        return means10Year15YearAnd20Year;
+        return null;
     }
 }

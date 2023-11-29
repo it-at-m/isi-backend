@@ -123,29 +123,62 @@ public class CalculationService {
         bedarf.setWohneinheiten(wohneinheiten);
 
         // Ermittlung Bedarf Kinderkrippe
-        final var bedarfKinderkrippe = infrastrukturbedarfService.calculateBedarfForKinderkrippeRoundedAndWithMean(
+        final var bedarfKinderkrippe = infrastrukturbedarfService.calculateBedarfForKinderkrippeRounded(
             wohneinheiten,
             sobonJahr,
             InfrastrukturbedarfService.ArtInfrastrukturbedarf.PLANUNGSURSAECHLICH,
             gueltigAb
         );
         bedarf.setBedarfKinderkrippe(bedarfKinderkrippe);
+        final var bedarfKinderkrippeMittelwert10 = infrastrukturbedarfService.calculateMeanInfrastrukturbedarfe(
+            bedarfKinderkrippe,
+            10
+        );
+        bedarf.setBedarfKindergartenMittelwert10(bedarfKinderkrippeMittelwert10);
+        final var bedarfKinderkrippeMittelwert15 = infrastrukturbedarfService.calculateMeanInfrastrukturbedarfe(
+            bedarfKinderkrippe,
+            15
+        );
+        bedarf.setBedarfKindergartenMittelwert15(bedarfKinderkrippeMittelwert15);
+        final var bedarfKinderkrippeMittelwert20 = infrastrukturbedarfService.calculateMeanInfrastrukturbedarfe(
+            bedarfKinderkrippe,
+            20
+        );
+        bedarf.setBedarfKindergartenMittelwert20(bedarfKinderkrippeMittelwert20);
 
         // Ermittlung Bedarf Kindergarten
-        final var bedarfKindergarten = infrastrukturbedarfService.calculateBedarfForKindergartenRoundedAndWithMean(
+        final var bedarfKindergarten = infrastrukturbedarfService.calculateBedarfForKindergartenRounded(
             wohneinheiten,
             sobonJahr,
             InfrastrukturbedarfService.ArtInfrastrukturbedarf.PLANUNGSURSAECHLICH,
             gueltigAb
         );
         bedarf.setBedarfKindergarten(bedarfKindergarten);
+        final var bedarfKindergartenMittelwert10 = infrastrukturbedarfService.calculateMeanInfrastrukturbedarfe(
+            bedarfKindergarten,
+            10
+        );
+        bedarf.setBedarfKindergartenMittelwert10(bedarfKindergartenMittelwert10);
+        final var bedarfKindergartenMittelwert15 = infrastrukturbedarfService.calculateMeanInfrastrukturbedarfe(
+            bedarfKindergarten,
+            15
+        );
+        bedarf.setBedarfKindergartenMittelwert15(bedarfKindergartenMittelwert15);
+        final var bedarfKindergartenMittelwert20 = infrastrukturbedarfService.calculateMeanInfrastrukturbedarfe(
+            bedarfKindergarten,
+            20
+        );
+        bedarf.setBedarfKindergartenMittelwert20(bedarfKindergartenMittelwert20);
 
         // Ermittlung aller Einwohner
-        final var alleEinwohner = infrastrukturbedarfService.calculateAlleEinwohnerRoundedAndWithMean(
-            wohneinheiten,
-            sobonJahr
-        );
+        final var alleEinwohner = infrastrukturbedarfService.calculateAlleEinwohnerRounded(wohneinheiten, sobonJahr);
         bedarf.setAlleEinwohner(alleEinwohner);
+        final var alleEinwohnerMittelwert10 = infrastrukturbedarfService.calculateMeanPersonen(alleEinwohner, 10);
+        bedarf.setAlleEinwohnerMittelwert10(alleEinwohnerMittelwert10);
+        final var alleEinwohnerMittelwert15 = infrastrukturbedarfService.calculateMeanPersonen(alleEinwohner, 15);
+        bedarf.setAlleEinwohnerMittelwert15(alleEinwohnerMittelwert15);
+        final var alleEinwohnerMittelwert20 = infrastrukturbedarfService.calculateMeanPersonen(alleEinwohner, 20);
+        bedarf.setAlleEinwohnerMittelwert20(alleEinwohnerMittelwert20);
 
         return bedarf;
     }

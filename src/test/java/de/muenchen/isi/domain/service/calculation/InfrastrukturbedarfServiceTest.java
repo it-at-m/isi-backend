@@ -2,6 +2,7 @@ package de.muenchen.isi.domain.service.calculation;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 
 import de.muenchen.isi.TestData;
 import de.muenchen.isi.domain.mapper.StammdatenDomainMapperImpl;
@@ -56,7 +57,7 @@ class InfrastrukturbedarfServiceTest {
     }
 
     @Test
-    void calculateBedarfForKinderkrippeRoundedAndWithMean() {
+    void calculateBedarfForKinderkrippeRounded() {
         final SobonOrientierungswertJahr sobonJahr = SobonOrientierungswertJahr.JAHR_2017;
         final LocalDate gueltigAb = LocalDate.of(1998, 1, 1);
         final var wohneinheiten = new ArrayList<WohneinheitenProFoerderartProJahrModel>();
@@ -152,7 +153,7 @@ class InfrastrukturbedarfServiceTest {
             )
             .thenReturn(Optional.of(versorgungsQuote));
 
-        final var result = infrastrukturbedarfService.calculateBedarfForKinderkrippeRoundedAndWithMean(
+        final var result = infrastrukturbedarfService.calculateBedarfForKinderkrippeRounded(
             wohneinheiten,
             sobonJahr,
             InfrastrukturbedarfService.ArtInfrastrukturbedarf.PLANUNGSURSAECHLICH,
@@ -280,30 +281,12 @@ class InfrastrukturbedarfServiceTest {
         bedarf.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(48056));
         bedarf.setAnzahlGruppen(BigDecimal.valueOf(400470, 2));
         expected.add(bedarf);
-        bedarf = new InfrastrukturbedarfProJahrModel();
-        bedarf.setJahr(InfrastrukturbedarfService.TITLE_MEAN_YEAR_10);
-        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(8902920, 2));
-        bedarf.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(5341760, 2));
-        bedarf.setAnzahlGruppen(BigDecimal.valueOf(445146, 2));
-        expected.add(bedarf);
-        bedarf = new InfrastrukturbedarfProJahrModel();
-        bedarf.setJahr(InfrastrukturbedarfService.TITLE_MEAN_YEAR_15);
-        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(8800647, 2));
-        bedarf.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(5280387, 2));
-        bedarf.setAnzahlGruppen(BigDecimal.valueOf(440032, 2));
-        expected.add(bedarf);
-        bedarf = new InfrastrukturbedarfProJahrModel();
-        bedarf.setJahr(InfrastrukturbedarfService.TITLE_MEAN_YEAR_20);
-        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(8643730, 2));
-        bedarf.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(5186240, 2));
-        bedarf.setAnzahlGruppen(BigDecimal.valueOf(432186, 2));
-        expected.add(bedarf);
 
         assertThat(result, is(expected));
     }
 
     @Test
-    void calculateBedarfForKindergartenRoundedAndWithMean() {
+    void calculateBedarfForKindergartenRounded() {
         final SobonOrientierungswertJahr sobonJahr = SobonOrientierungswertJahr.JAHR_2017;
         final LocalDate gueltigAb = LocalDate.of(1998, 1, 1);
         final var wohneinheiten = new ArrayList<WohneinheitenProFoerderartProJahrModel>();
@@ -399,7 +382,7 @@ class InfrastrukturbedarfServiceTest {
             )
             .thenReturn(Optional.of(versorgungsQuote));
 
-        final var result = infrastrukturbedarfService.calculateBedarfForKindergartenRoundedAndWithMean(
+        final var result = infrastrukturbedarfService.calculateBedarfForKindergartenRounded(
             wohneinheiten,
             sobonJahr,
             InfrastrukturbedarfService.ArtInfrastrukturbedarf.PLANUNGSURSAECHLICH,
@@ -527,30 +510,12 @@ class InfrastrukturbedarfServiceTest {
         bedarf.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(48056));
         bedarf.setAnzahlGruppen(BigDecimal.valueOf(400470, 2));
         expected.add(bedarf);
-        bedarf = new InfrastrukturbedarfProJahrModel();
-        bedarf.setJahr(InfrastrukturbedarfService.TITLE_MEAN_YEAR_10);
-        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(8902920, 2));
-        bedarf.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(5341760, 2));
-        bedarf.setAnzahlGruppen(BigDecimal.valueOf(445146, 2));
-        expected.add(bedarf);
-        bedarf = new InfrastrukturbedarfProJahrModel();
-        bedarf.setJahr(InfrastrukturbedarfService.TITLE_MEAN_YEAR_15);
-        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(8800647, 2));
-        bedarf.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(5280387, 2));
-        bedarf.setAnzahlGruppen(BigDecimal.valueOf(440032, 2));
-        expected.add(bedarf);
-        bedarf = new InfrastrukturbedarfProJahrModel();
-        bedarf.setJahr(InfrastrukturbedarfService.TITLE_MEAN_YEAR_20);
-        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(8643730, 2));
-        bedarf.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(5186240, 2));
-        bedarf.setAnzahlGruppen(BigDecimal.valueOf(432186, 2));
-        expected.add(bedarf);
 
         assertThat(result, is(expected));
     }
 
     @Test
-    void calculateAlleEinwohnerRoundedAndWithMean() {
+    void calculateAlleEinwohnerRounded() {
         final SobonOrientierungswertJahr sobonJahr = SobonOrientierungswertJahr.JAHR_2017;
         final var wohneinheiten = new ArrayList<WohneinheitenProFoerderartProJahrModel>();
         var wohneinheitenModel = new WohneinheitenProFoerderartProJahrModel();
@@ -633,10 +598,7 @@ class InfrastrukturbedarfServiceTest {
             )
             .thenReturn(Optional.of(sobonOrientierungswertFoerderart3));
 
-        final var result = infrastrukturbedarfService.calculateAlleEinwohnerRoundedAndWithMean(
-            wohneinheiten,
-            sobonJahr
-        );
+        final var result = infrastrukturbedarfService.calculateAlleEinwohnerRounded(wohneinheiten, sobonJahr);
 
         final var expected = new ArrayList<PersonenProJahrModel>();
         var bedarf = new PersonenProJahrModel();
@@ -718,18 +680,6 @@ class InfrastrukturbedarfServiceTest {
         bedarf = new PersonenProJahrModel();
         bedarf.setJahr(Integer.toString(2019));
         bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(80094));
-        expected.add(bedarf);
-        bedarf = new PersonenProJahrModel();
-        bedarf.setJahr(InfrastrukturbedarfService.TITLE_MEAN_YEAR_10);
-        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(8902920, 2));
-        expected.add(bedarf);
-        bedarf = new PersonenProJahrModel();
-        bedarf.setJahr(InfrastrukturbedarfService.TITLE_MEAN_YEAR_15);
-        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(8800647, 2));
-        expected.add(bedarf);
-        bedarf = new PersonenProJahrModel();
-        bedarf.setJahr(InfrastrukturbedarfService.TITLE_MEAN_YEAR_20);
-        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(8643730, 2));
         expected.add(bedarf);
 
         assertThat(result, is(expected));
@@ -1470,7 +1420,7 @@ class InfrastrukturbedarfServiceTest {
     }
 
     @Test
-    void calculate10Year15YearAnd20YearMeanInfrastrukturbedarfe() {
+    void calculateMeanInfrastrukturbedarfe() {
         final var bedarfe = new ArrayList<InfrastrukturbedarfProJahrModel>();
         var bedarf = new InfrastrukturbedarfProJahrModel();
         bedarf.setJahr("2000");
@@ -1593,33 +1543,39 @@ class InfrastrukturbedarfServiceTest {
         bedarf.setAnzahlGruppen(BigDecimal.valueOf(200));
         bedarfe.add(bedarf);
 
-        final var result = infrastrukturbedarfService.calculate10Year15YearAnd20YearMeanInfrastrukturbedarfe(bedarfe);
-
-        final var expected = new ArrayList<InfrastrukturbedarfProJahrModel>();
-        final var meanYear10 = new InfrastrukturbedarfProJahrModel();
-        meanYear10.setJahr(InfrastrukturbedarfService.TITLE_MEAN_YEAR_10);
-        meanYear10.setAnzahlPersonenGesamt(BigDecimal.valueOf(5500, 2));
-        meanYear10.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(5500, 2));
-        meanYear10.setAnzahlGruppen(BigDecimal.valueOf(5500, 2));
-        expected.add(meanYear10);
-        final var meanYear15 = new InfrastrukturbedarfProJahrModel();
-        meanYear15.setJahr(InfrastrukturbedarfService.TITLE_MEAN_YEAR_15);
-        meanYear15.setAnzahlPersonenGesamt(BigDecimal.valueOf(8000, 2));
-        meanYear15.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(8000, 2));
-        meanYear15.setAnzahlGruppen(BigDecimal.valueOf(8000, 2));
-        expected.add(meanYear15);
-        final var meanYear20 = new InfrastrukturbedarfProJahrModel();
-        meanYear20.setJahr(InfrastrukturbedarfService.TITLE_MEAN_YEAR_20);
-        meanYear20.setAnzahlPersonenGesamt(BigDecimal.valueOf(10500, 2));
-        meanYear20.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(10500, 2));
-        meanYear20.setAnzahlGruppen(BigDecimal.valueOf(10500, 2));
-        expected.add(meanYear20);
-
+        var result = infrastrukturbedarfService.calculateMeanInfrastrukturbedarfe(bedarfe, 10);
+        var expected = new InfrastrukturbedarfProJahrModel();
+        expected.setJahr("Mittelwert 10 J.");
+        expected.setAnzahlPersonenGesamt(BigDecimal.valueOf(5500, 2));
+        expected.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(5500, 2));
+        expected.setAnzahlGruppen(BigDecimal.valueOf(5500, 2));
         assertThat(result, is(expected));
+
+        result = infrastrukturbedarfService.calculateMeanInfrastrukturbedarfe(bedarfe, 15);
+        expected = new InfrastrukturbedarfProJahrModel();
+        expected.setJahr("Mittelwert 15 J.");
+        expected.setAnzahlPersonenGesamt(BigDecimal.valueOf(8000, 2));
+        expected.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(8000, 2));
+        expected.setAnzahlGruppen(BigDecimal.valueOf(8000, 2));
+        assertThat(result, is(expected));
+
+        result = infrastrukturbedarfService.calculateMeanInfrastrukturbedarfe(bedarfe, 20);
+        expected = new InfrastrukturbedarfProJahrModel();
+        expected.setJahr("Mittelwert 20 J.");
+        expected.setAnzahlPersonenGesamt(BigDecimal.valueOf(10500, 2));
+        expected.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(10500, 2));
+        expected.setAnzahlGruppen(BigDecimal.valueOf(10500, 2));
+        assertThat(result, is(expected));
+
+        result = infrastrukturbedarfService.calculateMeanInfrastrukturbedarfe(bedarfe, 21);
+        assertThat(result, is(nullValue()));
+
+        result = infrastrukturbedarfService.calculateMeanInfrastrukturbedarfe(List.of(), 20);
+        assertThat(result, is(nullValue()));
     }
 
     @Test
-    void calculate10Year15YearAnd20YearMeanForPersonen() {
+    void calculateMeanPersonen() {
         final var personen = new ArrayList<PersonenProJahrModel>();
         var person = new PersonenProJahrModel();
         person.setJahr("2000");
@@ -1702,23 +1658,29 @@ class InfrastrukturbedarfServiceTest {
         person.setAnzahlPersonenGesamt(BigDecimal.valueOf(200));
         personen.add(person);
 
-        final var result = infrastrukturbedarfService.calculate10Year15YearAnd20YearMeanForPersonen(personen);
-
-        final var expected = new ArrayList<PersonenProJahrModel>();
-        final var meanYear10 = new PersonenProJahrModel();
-        meanYear10.setJahr(InfrastrukturbedarfService.TITLE_MEAN_YEAR_10);
-        meanYear10.setAnzahlPersonenGesamt(BigDecimal.valueOf(5500, 2));
-        expected.add(meanYear10);
-        final var meanYear15 = new PersonenProJahrModel();
-        meanYear15.setJahr(InfrastrukturbedarfService.TITLE_MEAN_YEAR_15);
-        meanYear15.setAnzahlPersonenGesamt(BigDecimal.valueOf(8000, 2));
-        expected.add(meanYear15);
-        final var meanYear20 = new PersonenProJahrModel();
-        meanYear20.setJahr(InfrastrukturbedarfService.TITLE_MEAN_YEAR_20);
-        meanYear20.setAnzahlPersonenGesamt(BigDecimal.valueOf(10500, 2));
-        expected.add(meanYear20);
-
+        var result = infrastrukturbedarfService.calculateMeanPersonen(personen, 10);
+        var expected = new PersonenProJahrModel();
+        expected.setJahr("Mittelwert 10 J.");
+        expected.setAnzahlPersonenGesamt(BigDecimal.valueOf(5500, 2));
         assertThat(result, is(expected));
+
+        result = infrastrukturbedarfService.calculateMeanPersonen(personen, 15);
+        expected = new PersonenProJahrModel();
+        expected.setJahr("Mittelwert 15 J.");
+        expected.setAnzahlPersonenGesamt(BigDecimal.valueOf(8000, 2));
+        assertThat(result, is(expected));
+
+        result = infrastrukturbedarfService.calculateMeanPersonen(personen, 20);
+        expected = new PersonenProJahrModel();
+        expected.setJahr("Mittelwert 20 J.");
+        expected.setAnzahlPersonenGesamt(BigDecimal.valueOf(10500, 2));
+        assertThat(result, is(expected));
+
+        result = infrastrukturbedarfService.calculateMeanPersonen(personen, 21);
+        assertThat(result, is(nullValue()));
+
+        result = infrastrukturbedarfService.calculateMeanPersonen(List.of(), 20);
+        assertThat(result, is(nullValue()));
     }
 
     private List<WohneinheitenProFoerderartProJahrModel> createListOfWohneinheiten(
