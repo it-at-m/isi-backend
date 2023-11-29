@@ -36,6 +36,13 @@ public class CalculationService {
 
     private final PlanungsursaechlicheWohneinheitenService planungsursaechlicheWohneinheitenService;
 
+    /**
+     * Die Methode ermittelt den {@link LangfristigerPlanungsursaechlicherBedarfModel} für jede in der Abfrage vorhandene Abfragevariante.
+     * Ist keine Berechnung der Bedarfe möglich so wird der Wert null im Attribute für die langfristigen planugsursächlichen Bedarfe gesetzt.
+     *
+     * @param abfrage zum Ermitteln und Setzen der langfristigen planugsursächlichen Bedarfe.
+     * @throws CalculationException falls keine Berechnung wegen einer nicht gesetzten Art der Abfrage oder Abfragevariante möglich ist.
+     */
     public void calculateAndAppendLangfristigerPlanungsursaechlicherBedarfToEachAbfragevarianteOfAbfrage(
         final AbfrageModel abfrage
     ) throws CalculationException {
@@ -71,6 +78,13 @@ public class CalculationService {
         }
     }
 
+    /**
+     * Die Methode ermittelt den {@link LangfristigerPlanungsursaechlicherBedarfModel} für die im Parameter gegebene Abfragevariante.
+     * Ist keine Berechnung der Bedarfe möglich so wird der Wert null im Abfragevariantenattribut für die langfristigen planugsursächlichen Bedarfe gesetzt.
+     *
+     * @param abfragevariante zum Ermitteln und Setzen der langfristigen planugsursächlichen Bedarfe.
+     * @throws CalculationException falls keine Berechnung wegen einer nicht gesetzten Art der Abfragevariante möglich ist.
+     */
     public void calculateAndAppendLangfristigerPlanungsursaechlicherBedarfToAbfragevariante(
         final AbfragevarianteModel abfragevariante
     ) throws CalculationException {
@@ -128,6 +142,15 @@ public class CalculationService {
         }
     }
 
+    /**
+     * Die Methode ermittelt den {@link LangfristigerPlanungsursaechlicherBedarfModel} für die im Paramter gegebenen Werte.
+     * Besitzt ein Parameter den Wert null so gibt die Methode ebenfalls den Wert null zurück.
+     *
+     * @param bauabschnitte zum Ermitteln der Bedarfe.
+     * @param sobonOrientierungswertJahr zur Extraktion der korrekten Sobon-Orientierungswerte.
+     * @param stammdatenGueltigAb zur Extraktion der Stammdaten welche sich nicht auf ein konkretes Jahr der Sobon-Orientierungswerte beziehen.
+     * @return den {@link LangfristigerPlanungsursaechlicherBedarfModel} oder null falls ein Methodenparameter null ist.
+     */
     public LangfristigerPlanungsursaechlicherBedarfModel calculateLangfristigerPlanungsursaechlicherBedarf(
         final List<BauabschnittModel> bauabschnitte,
         final SobonOrientierungswertJahr sobonOrientierungswertJahr,
