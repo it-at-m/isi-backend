@@ -156,7 +156,7 @@ public class AbfrageController {
         @RequestBody @Valid @NotNull final AbfrageAngelegtDto abfrage,
         @PathVariable @NotNull final UUID id
     )
-        throws UniqueViolationException, FileHandlingFailedException, FileHandlingWithS3FailedException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException {
+        throws UniqueViolationException, FileHandlingFailedException, FileHandlingWithS3FailedException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException {
         final var requestModel = abfrageApiMapper.dto2Model(abfrage);
         final var responseModel = abfrageService.patchAngelegt(requestModel, id);
         final var dto = abfrageApiMapper.model2Dto(responseModel);
@@ -198,7 +198,7 @@ public class AbfrageController {
         @RequestBody @Valid @NotNull final AbfrageInBearbeitungSachbearbeitungDto abfrage,
         @PathVariable @NotNull final UUID id
     )
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException {
         final var requestModel = abfrageApiMapper.dto2Model(abfrage);
         final var responseModel = abfrageService.patchInBearbeitungSachbearbeitung(requestModel, id);
         final var dto = abfrageApiMapper.model2Dto(responseModel);
@@ -240,7 +240,7 @@ public class AbfrageController {
         @RequestBody @Valid @NotNull final AbfrageInBearbeitungFachreferatDto abfrage,
         @PathVariable @NotNull final UUID id
     )
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException {
         final var requestModel = abfrageApiMapper.dto2Model(abfrage);
         final var responseModel = abfrageService.patchInBearbeitungFachreferat(requestModel, id);
         final var dto = abfrageApiMapper.model2Dto(responseModel);
