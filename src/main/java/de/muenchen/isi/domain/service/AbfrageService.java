@@ -1,6 +1,7 @@
 package de.muenchen.isi.domain.service;
 
 import de.muenchen.isi.domain.exception.AbfrageStatusNotAllowedException;
+import de.muenchen.isi.domain.exception.CalculationException;
 import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.FileHandlingFailedException;
@@ -98,11 +99,14 @@ public class AbfrageService {
      * @throws EntityNotFoundException falls das referenzierte Bauvorhaben nicht existiert.
      */
     public AbfrageModel save(final AbfrageModel abfrage)
-        throws EntityNotFoundException, OptimisticLockingException, UniqueViolationException {
+        throws EntityNotFoundException, OptimisticLockingException, UniqueViolationException, CalculationException {
         if (abfrage.getId() == null) {
             abfrage.setStatusAbfrage(StatusAbfrage.ANGELEGT);
             abfrage.setSub(authenticationUtils.getUserSub());
         }
+        this.calculationService.calculateAndAppendLangfristigerPlanungsursaechlicherBedarfToEachAbfragevarianteOfAbfrage(
+                abfrage
+            );
         var entity = this.abfrageDomainMapper.model2Entity(abfrage);
         final var saved = this.abfrageRepository.findByNameIgnoreCase(abfrage.getName());
         if ((saved.isPresent() && saved.get().getId().equals(entity.getId())) || saved.isEmpty()) {
