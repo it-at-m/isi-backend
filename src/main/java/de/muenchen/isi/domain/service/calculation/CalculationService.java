@@ -17,6 +17,7 @@ import java.time.LocalDate;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.stereotype.Service;
@@ -159,7 +160,10 @@ public class CalculationService {
         final SobonOrientierungswertJahr sobonOrientierungswertJahr,
         final LocalDate stammdatenGueltigAb
     ) throws CalculationException {
-        if (ObjectUtils.anyNull(bauabschnitte, sobonOrientierungswertJahr, stammdatenGueltigAb)) {
+        if (
+            CollectionUtils.isEmpty(bauabschnitte) ||
+            ObjectUtils.anyNull(sobonOrientierungswertJahr, stammdatenGueltigAb)
+        ) {
             return null;
         }
 
