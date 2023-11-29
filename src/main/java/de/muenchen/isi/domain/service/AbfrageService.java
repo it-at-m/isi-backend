@@ -27,6 +27,7 @@ import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.AbfrageI
 import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.BaugenehmigungsverfahrenInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.BauleitplanverfahrenInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.WeiteresVerfahrenInBearbeitungSachbearbeitungModel;
+import de.muenchen.isi.domain.model.calculation.LangfristigerPlanungsursaechlicherBedarfModel;
 import de.muenchen.isi.domain.service.calculation.CalculationService;
 import de.muenchen.isi.domain.service.filehandling.DokumentService;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
@@ -91,12 +92,15 @@ public class AbfrageService {
 
     /**
      * Diese Methode speichert ein {@link AbfrageModel}.
+     * Vor der Persistierung werden je Abfragevariante das {@link LangfristigerPlanungsursaechlicherBedarfModel}
+     * ermittelt und an die Abfragevariante angefügt.
      *
      * @param abfrage zum Speichern
      * @return das gespeicherte {@link AbfrageModel}
      * @throws UniqueViolationException   falls der Name der Abfrage oder der Abfragevariante bereits vorhanden ist
      * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
      * @throws EntityNotFoundException falls das referenzierte Bauvorhaben nicht existiert.
+     * @throws CalculationException falls bei den Berechnungen ein Fehler auftritt.
      */
     public AbfrageModel save(final AbfrageModel abfrage)
         throws EntityNotFoundException, OptimisticLockingException, UniqueViolationException, CalculationException {
