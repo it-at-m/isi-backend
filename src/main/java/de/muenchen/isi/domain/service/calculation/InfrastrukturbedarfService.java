@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -61,7 +62,7 @@ public class InfrastrukturbedarfService {
      * @param artInfrastrukturbedarf zur Ermittlung der korrekten Versorgungsquote und Gruppenstärke.
      * @param gueltigAb zur Ermittlung der korrekten Versorgungsquote und Gruppenstärke.
      * @return die Bedarfe für den Zeitraum von 20 Jahren
-     * @throws CalculationException falls die Stammdaten zur Versorgungsquote und Gruppenstärke nicht geladen werden können.
+     * @throws CalculationException falls die Stammdaten zur Durchführung der Berechnung nicht geladen werden können.
      */
     public List<InfrastrukturbedarfProJahrModel> calculateBedarfForKinderkrippeRounded(
         final List<WohneinheitenProFoerderartProJahrModel> wohneinheiten,
@@ -82,7 +83,7 @@ public class InfrastrukturbedarfService {
      * @param artInfrastrukturbedarf zur Ermittlung der korrekten Versorgungsquote und Gruppenstärke.
      * @param gueltigAb zur Ermittlung der korrekten Versorgungsquote und Gruppenstärke.
      * @return die Bedarfe für den Zeitraum von 20 Jahren
-     * @throws CalculationException falls die Stammdaten zur Versorgungsquote und Gruppenstärke nicht geladen werden können.
+     * @throws CalculationException falls die Stammdaten zur Durchführung der Berechnung nicht geladen werden können.
      */
     public Stream<InfrastrukturbedarfProJahrModel> calculateBedarfForKinderkrippe(
         final List<WohneinheitenProFoerderartProJahrModel> wohneinheiten,
@@ -122,7 +123,7 @@ public class InfrastrukturbedarfService {
      * @param artInfrastrukturbedarf zur Ermittlung der korrekten Versorgungsquote und Gruppenstärke.
      * @param gueltigAb zur Ermittlung der korrekten Versorgungsquote und Gruppenstärke.
      * @return die Bedarfe für den Zeitraum von 20 Jahren
-     * @throws CalculationException falls die Stammdaten zur Versorgungsquote und Gruppenstärke nicht geladen werden können.
+     * @throws CalculationException falls die Stammdaten zur Durchführung der Berechnung nicht geladen werden können.
      */
     public List<InfrastrukturbedarfProJahrModel> calculateBedarfForKindergartenRounded(
         final List<WohneinheitenProFoerderartProJahrModel> wohneinheiten,
@@ -143,7 +144,7 @@ public class InfrastrukturbedarfService {
      * @param artInfrastrukturbedarf zur Ermittlung der korrekten Versorgungsquote und Gruppenstärke.
      * @param gueltigAb zur Ermittlung der korrekten Versorgungsquote und Gruppenstärke.
      * @return die Bedarfe für den Zeitraum von 20 Jahren
-     * @throws CalculationException falls die Stammdaten zur Versorgungsquote und Gruppenstärke nicht geladen werden können.
+     * @throws CalculationException falls die Stammdaten zur Durchführung der Berechnung nicht geladen werden können.
      */
     public Stream<InfrastrukturbedarfProJahrModel> calculateBedarfForKindergarten(
         final List<WohneinheitenProFoerderartProJahrModel> wohneinheiten,
@@ -181,11 +182,12 @@ public class InfrastrukturbedarfService {
      * @param wohneinheiten zur Ermittlung der Personen.
      * @param sobonJahr zur Ermittlung der Sobon-Orientierungswerte der sozialen Infrastruktur.
      * @return die Personen für den Zeitraum von 20 Jahren
+     * @throws CalculationException falls die Stammdaten zur Durchführung der Berechnung nicht geladen werden können.
      */
     public List<PersonenProJahrModel> calculateAlleEinwohnerRounded(
         final List<WohneinheitenProFoerderartProJahrModel> wohneinheiten,
         final SobonOrientierungswertJahr sobonJahr
-    ) {
+    ) throws CalculationException {
         return this.calculateAlleEinwohner(wohneinheiten, sobonJahr)
             .map(this::roundValuesAndReturnModelWithRoundedValues)
             .collect(Collectors.toList());
@@ -197,11 +199,12 @@ public class InfrastrukturbedarfService {
      * @param wohneinheiten zur Ermittlung der Personen.
      * @param sobonJahr zur Ermittlung der Sobon-Orientierungswerte der sozialen Infrastruktur.
      * @return die Personen für den Zeitraum von 20 Jahren
+     * @throws CalculationException falls die Stammdaten zur Durchführung der Berechnung nicht geladen werden können.
      */
     public Stream<PersonenProJahrModel> calculateAlleEinwohner(
         final List<WohneinheitenProFoerderartProJahrModel> wohneinheiten,
         final SobonOrientierungswertJahr sobonJahr
-    ) {
+    ) throws CalculationException {
         return this.calculatePersonen(InfrastruktureinrichtungTyp.UNSPECIFIED, wohneinheiten, sobonJahr);
     }
 
@@ -212,12 +215,13 @@ public class InfrastrukturbedarfService {
      * @param wohneinheiten zur Ermittlung der Personen.
      * @param sobonJahr zur Ermittlung der Sobon-Orientierungswerte der sozialen Infrastuktur.
      * @return die Bedarfe für den Zeitraum von 20 Jahren
+     * @throws CalculationException falls die Stammdaten zur Durchführung der Berechnung nicht geladen werden können.
      */
     protected Stream<PersonenProJahrModel> calculatePersonen(
         final InfrastruktureinrichtungTyp einrichtung,
         final List<WohneinheitenProFoerderartProJahrModel> wohneinheiten,
         final SobonOrientierungswertJahr sobonJahr
-    ) {
+    ) throws CalculationException {
         final var wohneinheitenWithoutSum = wohneinheiten
             .stream()
             .filter(wohneinheitenProJahr -> NumberUtils.isParsable(wohneinheitenProJahr.getJahr()))
@@ -363,32 +367,39 @@ public class InfrastrukturbedarfService {
      * @param sobonJahr zur Extraktion der korrekten Sobon-Orientierungswerte zur sozialen Infrastruktur je Förderart.
      * @param einrichtungstyp zur Extraktion der korrekten Sobon-Orientierungswerte zur sozialen Infrastruktur je Förderart.
      * @return die Sobon-Orientierungswerte zur sozialen Infrastruktur gruppiert nach Förderart.
+     * @throws CalculationException falls die Stammdaten zur Durchführung der Berechnung nicht geladen werden können.
      */
     protected Map<String, SobonOrientierungswertSozialeInfrastrukturModel> getSobonOrientierungswertGroupedByFoerderart(
         final List<WohneinheitenProFoerderartProJahrModel> wohneinheiten,
         final SobonOrientierungswertJahr sobonJahr,
         final InfrastruktureinrichtungTyp einrichtungstyp
-    ) {
-        return wohneinheiten
-            .stream()
-            .map(WohneinheitenProFoerderartProJahrModel::getFoerderart)
-            .distinct()
-            .map(foerderart ->
-                sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndFoerderartBezeichnungAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
-                    einrichtungstyp,
-                    foerderart,
-                    sobonJahr.getGueltigAb()
+    ) throws CalculationException {
+        try {
+            return wohneinheiten
+                .stream()
+                .map(WohneinheitenProFoerderartProJahrModel::getFoerderart)
+                .distinct()
+                .map(foerderart ->
+                    sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndFoerderartBezeichnungAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
+                        einrichtungstyp,
+                        foerderart,
+                        sobonJahr.getGueltigAb()
+                    )
                 )
-            )
-            .filter(Optional::isPresent)
-            .map(Optional::get)
-            .map(stammdatenDomainMapper::entity2Model)
-            .collect(
-                Collectors.toMap(
-                    SobonOrientierungswertSozialeInfrastrukturModel::getFoerderartBezeichnung,
-                    Function.identity()
-                )
-            );
+                .map(Optional::get)
+                .map(stammdatenDomainMapper::entity2Model)
+                .collect(
+                    Collectors.toMap(
+                        SobonOrientierungswertSozialeInfrastrukturModel::getFoerderartBezeichnung,
+                        Function.identity()
+                    )
+                );
+        } catch (final NoSuchElementException exception) {
+            final var message =
+                "Für die planungsursächliche Bedarfsberechnung konnten die Stammdaten zu den Sobon-Orientierungswerten zur sozialen Infrastruktur nicht geladen werden.";
+            log.error(message);
+            throw new CalculationException(message, exception);
+        }
     }
 
     /**

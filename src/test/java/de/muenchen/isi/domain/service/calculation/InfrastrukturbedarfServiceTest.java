@@ -516,7 +516,7 @@ class InfrastrukturbedarfServiceTest {
     }
 
     @Test
-    void calculateAlleEinwohnerRounded() {
+    void calculateAlleEinwohnerRounded() throws CalculationException {
         final SobonOrientierungswertJahr sobonJahr = SobonOrientierungswertJahr.JAHR_2017;
         final var wohneinheiten = new ArrayList<WohneinheitenProFoerderartProJahrModel>();
         var wohneinheitenModel = new WohneinheitenProFoerderartProJahrModel();
@@ -687,7 +687,7 @@ class InfrastrukturbedarfServiceTest {
     }
 
     @Test
-    void calculatePersonen() {
+    void calculatePersonen() throws CalculationException {
         final InfrastruktureinrichtungTyp einrichtung = InfrastruktureinrichtungTyp.KINDERKRIPPE;
         final SobonOrientierungswertJahr sobonJahr = SobonOrientierungswertJahr.JAHR_2017;
         final LocalDate gueltigAb = LocalDate.of(1998, 1, 1);
@@ -1098,7 +1098,7 @@ class InfrastrukturbedarfServiceTest {
     }
 
     @Test
-    void getSobonOrientierungswertGroupedByFoerderart() {
+    void getSobonOrientierungswertGroupedByFoerderart() throws CalculationException {
         final var wohneinheiten = new ArrayList<WohneinheitenProFoerderartProJahrModel>();
         var wohneinheitenProJahr = new WohneinheitenProFoerderartProJahrModel();
         wohneinheitenProJahr.setFoerderart("foerderart1");
@@ -1224,6 +1224,49 @@ class InfrastrukturbedarfServiceTest {
                 Mockito.anyString(),
                 Mockito.any(LocalDate.class)
             );
+    }
+
+    @Test
+    void getSobonOrientierungswertGroupedByFoerderartCalculationException() {
+        final var wohneinheiten = new ArrayList<WohneinheitenProFoerderartProJahrModel>();
+        var wohneinheitenProJahr = new WohneinheitenProFoerderartProJahrModel();
+        wohneinheitenProJahr.setFoerderart("foerderart-existing");
+        wohneinheiten.add(wohneinheitenProJahr);
+        wohneinheitenProJahr = new WohneinheitenProFoerderartProJahrModel();
+        wohneinheitenProJahr.setFoerderart("foerderart-NOT-existing");
+        wohneinheiten.add(wohneinheitenProJahr);
+
+        var sobonOrientierungswertFoerderartExisting = new SobonOrientierungswertSozialeInfrastruktur();
+        sobonOrientierungswertFoerderartExisting.setFoerderartBezeichnung("foerderart-existing");
+        Mockito
+            .when(
+                this.sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndFoerderartBezeichnungAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
+                        InfrastruktureinrichtungTyp.KINDERKRIPPE,
+                        "foerderart-existing",
+                        SobonOrientierungswertJahr.JAHR_2017.getGueltigAb()
+                    )
+            )
+            .thenReturn(Optional.of(sobonOrientierungswertFoerderartExisting));
+
+        Mockito
+            .when(
+                this.sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndFoerderartBezeichnungAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
+                        InfrastruktureinrichtungTyp.KINDERKRIPPE,
+                        "foerderart-NOT-existing",
+                        SobonOrientierungswertJahr.JAHR_2017.getGueltigAb()
+                    )
+            )
+            .thenReturn(Optional.empty());
+
+        Assertions.assertThrows(
+            CalculationException.class,
+            () ->
+                infrastrukturbedarfService.getSobonOrientierungswertGroupedByFoerderart(
+                    wohneinheiten,
+                    SobonOrientierungswertJahr.JAHR_2017,
+                    InfrastruktureinrichtungTyp.KINDERKRIPPE
+                )
+        );
     }
 
     @Test
