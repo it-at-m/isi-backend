@@ -44,9 +44,8 @@ public class CalculationService {
      * @param abfrage zum Ermitteln und Setzen der langfristigen planugsursächlichen Bedarfe.
      * @throws CalculationException falls keine Berechnung wegen einer nicht gesetzten Art der Abfrage oder Abfragevariante möglich ist.
      */
-    public void calculateAndAppendLangfristigerPlanungsursaechlicherBedarfToEachAbfragevarianteOfAbfrage(
-        final AbfrageModel abfrage
-    ) throws CalculationException {
+    public void calculateAndAppendBedarfToEachAbfragevarianteOfAbfrage(final AbfrageModel abfrage)
+        throws CalculationException {
         List<? extends AbfragevarianteModel> abfragevarianten;
         if (ArtAbfrage.BAULEITPLANVERFAHREN.equals(abfrage.getArtAbfrage())) {
             final var bauleitplanverfahren = (BauleitplanverfahrenModel) abfrage;
@@ -75,7 +74,7 @@ public class CalculationService {
             throw new CalculationException("Die Berechnung kann für diese Art von Abfrage nicht durchgeführt werden.");
         }
         for (final var abfragevariante : abfragevarianten) {
-            this.calculateAndAppendLangfristigerPlanungsursaechlicherBedarfToAbfragevariante(abfragevariante);
+            this.calculateAndAppendBedarfToAbfragevariante(abfragevariante);
         }
     }
 
@@ -86,9 +85,8 @@ public class CalculationService {
      * @param abfragevariante zum Ermitteln und Setzen der langfristigen planugsursächlichen Bedarfe.
      * @throws CalculationException falls keine Berechnung wegen einer nicht gesetzten Art der Abfragevariante möglich ist.
      */
-    public void calculateAndAppendLangfristigerPlanungsursaechlicherBedarfToAbfragevariante(
-        final AbfragevarianteModel abfragevariante
-    ) throws CalculationException {
+    public void calculateAndAppendBedarfToAbfragevariante(final AbfragevarianteModel abfragevariante)
+        throws CalculationException {
         final List<BauabschnittModel> bauabschnitte;
         final SobonOrientierungswertJahr sobonOrientierungswertJahr;
         final LocalDate stammdatenGueltigAb;
