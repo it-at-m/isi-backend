@@ -37,12 +37,14 @@ public class CalculationService {
 
     private final PlanungsursaechlicheWohneinheitenService planungsursaechlicheWohneinheitenService;
 
+    private final InfrastrukturbedarfService infrastrukturbedarfService;
+
     /**
      * Die Methode ermittelt den {@link LangfristigerPlanungsursaechlicherBedarfModel} für jede in der Abfrage vorhandene Abfragevariante.
      * Ist keine Berechnung der Bedarfe möglich so wird der Wert null im Attribute für die langfristigen planugsursächlichen Bedarfe gesetzt.
      *
      * @param abfrage zum Ermitteln und Setzen der langfristigen planugsursächlichen Bedarfe.
-     * @throws CalculationException falls keine Berechnung wegen einer nicht gesetzten Art der Abfrage oder Abfragevariante möglich ist.
+     * @throws CalculationException falls keine Berechnung wegen einer nicht gesetzten Art der Abfrage oder Abfragevariante oder nicht vorhandener Stammdaten möglich ist.
      */
     public void calculateAndAppendBedarfeToEachAbfragevarianteOfAbfrage(final AbfrageModel abfrage)
         throws CalculationException {
@@ -83,7 +85,7 @@ public class CalculationService {
      * Ist keine Berechnung der Bedarfe möglich so wird der Wert null im Abfragevariantenattribut für die langfristigen planugsursächlichen Bedarfe gesetzt.
      *
      * @param abfragevariante zum Ermitteln und Setzen der langfristigen planugsursächlichen Bedarfe.
-     * @throws CalculationException falls keine Berechnung wegen einer nicht gesetzten Art der Abfragevariante möglich ist.
+     * @throws CalculationException falls keine Berechnung wegen einer nicht gesetzten Art der Abfragevariante oder nicht vorhandener Stammdaten möglich ist.
      */
     public void calculateAndAppendBedarfeToAbfragevariante(final AbfragevarianteModel abfragevariante)
         throws CalculationException {
@@ -149,12 +151,13 @@ public class CalculationService {
      * @param sobonOrientierungswertJahr zur Extraktion der korrekten Sobon-Orientierungswerte.
      * @param stammdatenGueltigAb zur Extraktion der Stammdaten welche sich nicht auf ein konkretes Jahr der Sobon-Orientierungswerte beziehen.
      * @return den {@link LangfristigerPlanungsursaechlicherBedarfModel} oder null falls ein Methodenparameter null ist.
+     * @throws CalculationException falls die Stammdaten zur Durchführung der Berechnung nicht geladen werden können.
      */
     public LangfristigerPlanungsursaechlicherBedarfModel calculateLangfristigerPlanungsursaechlicherBedarf(
         final List<BauabschnittModel> bauabschnitte,
         final SobonOrientierungswertJahr sobonOrientierungswertJahr,
         final LocalDate stammdatenGueltigAb
-    ) {
+    ) throws CalculationException {
         if (
             CollectionUtils.isEmpty(bauabschnitte) ||
             ObjectUtils.anyNull(sobonOrientierungswertJahr, stammdatenGueltigAb)
@@ -163,12 +166,76 @@ public class CalculationService {
         }
 
         final var bedarf = new LangfristigerPlanungsursaechlicherBedarfModel();
+
+        // Ermittlung Wohneinheiten
         final var wohneinheiten = planungsursaechlicheWohneinheitenService.calculatePlanungsursaechlicheWohneinheiten(
             bauabschnitte,
             sobonOrientierungswertJahr,
             stammdatenGueltigAb
         );
         bedarf.setWohneinheiten(wohneinheiten);
+
+        // Ermittlung Bedarf Kinderkrippe
+        final var bedarfKinderkrippe = infrastrukturbedarfService.calculateBedarfForKinderkrippeRounded(
+            wohneinheiten,
+            sobonOrientierungswertJahr,
+            InfrastrukturbedarfService.ArtInfrastrukturbedarf.PLANUNGSURSAECHLICH,
+            stammdatenGueltigAb
+        );
+        bedarf.setBedarfKinderkrippe(bedarfKinderkrippe);
+        final var bedarfKinderkrippeMittelwert10 = infrastrukturbedarfService.calculateMeanInfrastrukturbedarfe(
+            bedarfKinderkrippe,
+            10
+        );
+        bedarf.setBedarfKindergartenMittelwert10(bedarfKinderkrippeMittelwert10);
+        final var bedarfKinderkrippeMittelwert15 = infrastrukturbedarfService.calculateMeanInfrastrukturbedarfe(
+            bedarfKinderkrippe,
+            15
+        );
+        bedarf.setBedarfKindergartenMittelwert15(bedarfKinderkrippeMittelwert15);
+        final var bedarfKinderkrippeMittelwert20 = infrastrukturbedarfService.calculateMeanInfrastrukturbedarfe(
+            bedarfKinderkrippe,
+            20
+        );
+        bedarf.setBedarfKindergartenMittelwert20(bedarfKinderkrippeMittelwert20);
+
+        // Ermittlung Bedarf Kindergarten
+        final var bedarfKindergarten = infrastrukturbedarfService.calculateBedarfForKindergartenRounded(
+            wohneinheiten,
+            sobonOrientierungswertJahr,
+            InfrastrukturbedarfService.ArtInfrastrukturbedarf.PLANUNGSURSAECHLICH,
+            stammdatenGueltigAb
+        );
+        bedarf.setBedarfKindergarten(bedarfKindergarten);
+        final var bedarfKindergartenMittelwert10 = infrastrukturbedarfService.calculateMeanInfrastrukturbedarfe(
+            bedarfKindergarten,
+            10
+        );
+        bedarf.setBedarfKindergartenMittelwert10(bedarfKindergartenMittelwert10);
+        final var bedarfKindergartenMittelwert15 = infrastrukturbedarfService.calculateMeanInfrastrukturbedarfe(
+            bedarfKindergarten,
+            15
+        );
+        bedarf.setBedarfKindergartenMittelwert15(bedarfKindergartenMittelwert15);
+        final var bedarfKindergartenMittelwert20 = infrastrukturbedarfService.calculateMeanInfrastrukturbedarfe(
+            bedarfKindergarten,
+            20
+        );
+        bedarf.setBedarfKindergartenMittelwert20(bedarfKindergartenMittelwert20);
+
+        // Ermittlung aller Einwohner
+        final var alleEinwohner = infrastrukturbedarfService.calculateAlleEinwohnerRounded(
+            wohneinheiten,
+            sobonOrientierungswertJahr
+        );
+        bedarf.setAlleEinwohner(alleEinwohner);
+        final var alleEinwohnerMittelwert10 = infrastrukturbedarfService.calculateMeanPersonen(alleEinwohner, 10);
+        bedarf.setAlleEinwohnerMittelwert10(alleEinwohnerMittelwert10);
+        final var alleEinwohnerMittelwert15 = infrastrukturbedarfService.calculateMeanPersonen(alleEinwohner, 15);
+        bedarf.setAlleEinwohnerMittelwert15(alleEinwohnerMittelwert15);
+        final var alleEinwohnerMittelwert20 = infrastrukturbedarfService.calculateMeanPersonen(alleEinwohner, 20);
+        bedarf.setAlleEinwohnerMittelwert20(alleEinwohnerMittelwert20);
+
         return bedarf;
     }
 }

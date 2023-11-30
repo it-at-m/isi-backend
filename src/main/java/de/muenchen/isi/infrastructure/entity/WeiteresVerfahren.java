@@ -86,7 +86,7 @@ public class WeiteresVerfahren extends Abfrage {
     private Verortung verortung;
 
     @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY, orphanRemoval = true)
-    @JoinColumn(name = "bauleitplanverfahren_id")
+    @JoinColumn(name = "weiteres_verfahren_id")
     private List<Dokument> dokumente;
 
     @Column(nullable = false)

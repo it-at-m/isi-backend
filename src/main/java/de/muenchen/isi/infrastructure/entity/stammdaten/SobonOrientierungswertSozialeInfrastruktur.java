@@ -2,7 +2,7 @@ package de.muenchen.isi.infrastructure.entity.stammdaten;
 
 import de.muenchen.isi.infrastructure.entity.BaseEntity;
 import de.muenchen.isi.infrastructure.entity.enums.Altersklasse;
-import de.muenchen.isi.infrastructure.entity.enums.Einrichtungstyp;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import javax.persistence.Column;
@@ -38,7 +38,7 @@ public class SobonOrientierungswertSozialeInfrastruktur extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Einrichtungstyp einrichtungstyp;
+    private InfrastruktureinrichtungTyp einrichtungstyp;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

@@ -9,7 +9,7 @@ import de.muenchen.isi.domain.mapper.StammdatenDomainMapperImpl;
 import de.muenchen.isi.infrastructure.csv.SobonOrientierungswertSozialeInfrastrukturCsv;
 import de.muenchen.isi.infrastructure.csv.StaedtebaulicheOrientierungswertCsv;
 import de.muenchen.isi.infrastructure.entity.enums.Altersklasse;
-import de.muenchen.isi.infrastructure.entity.enums.Einrichtungstyp;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
 import de.muenchen.isi.infrastructure.entity.stammdaten.SobonOrientierungswertSozialeInfrastruktur;
 import de.muenchen.isi.infrastructure.entity.stammdaten.StaedtebaulicheOrientierungswert;
 import de.muenchen.isi.infrastructure.repository.CsvRepository;
@@ -143,7 +143,7 @@ class StammdatenImportServiceTest {
 
         final var csvEntry = new SobonOrientierungswertSozialeInfrastrukturCsv();
         csvEntry.setGueltigAb(LocalDate.parse("2021-01-01"));
-        csvEntry.setEinrichtungstyp(Einrichtungstyp.KINDERKRIPPE);
+        csvEntry.setEinrichtungstyp(InfrastruktureinrichtungTyp.KINDERKRIPPE);
         csvEntry.setAltersklasse(Altersklasse.NULL_ZWEI);
         csvEntry.setFoerderartBezeichnung("Ein- und Zweifamilienhäuser");
         csvEntry.setEinwohnerJahr1NachErsterstellung(BigDecimal.valueOf(2877, 4));
@@ -167,7 +167,7 @@ class StammdatenImportServiceTest {
 
         final var entity = new SobonOrientierungswertSozialeInfrastruktur();
         entity.setGueltigAb(LocalDate.parse("2021-01-01"));
-        entity.setEinrichtungstyp(Einrichtungstyp.KINDERKRIPPE);
+        entity.setEinrichtungstyp(InfrastruktureinrichtungTyp.KINDERKRIPPE);
         entity.setAltersklasse(Altersklasse.NULL_ZWEI);
         entity.setFoerderartBezeichnung("Ein- und Zweifamilienhäuser");
         entity.setEinwohnerJahr1NachErsterstellung(BigDecimal.valueOf(2877, 4));
