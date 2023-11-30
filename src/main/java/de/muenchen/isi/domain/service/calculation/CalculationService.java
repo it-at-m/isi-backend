@@ -22,6 +22,9 @@ import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.stereotype.Service;
 
+/**
+ * Die Serviceklasse zur Ermittlung der planungsursächlichen und Sobon-ursächlichen Bedarfe.
+ */
 @Slf4j
 @Service
 @RequiredArgsConstructor
