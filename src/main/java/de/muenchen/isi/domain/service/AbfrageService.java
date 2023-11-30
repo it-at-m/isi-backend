@@ -108,7 +108,7 @@ public class AbfrageService {
             abfrage.setStatusAbfrage(StatusAbfrage.ANGELEGT);
             abfrage.setSub(authenticationUtils.getUserSub());
         }
-        this.calculationService.calculateAndAppendBedarfToEachAbfragevarianteOfAbfrage(abfrage);
+        this.calculationService.calculateAndAppendBedarfeToEachAbfragevarianteOfAbfrage(abfrage);
         var entity = this.abfrageDomainMapper.model2Entity(abfrage);
         final var saved = this.abfrageRepository.findByNameIgnoreCase(abfrage.getName());
         if ((saved.isPresent() && saved.get().getId().equals(entity.getId())) || saved.isEmpty()) {

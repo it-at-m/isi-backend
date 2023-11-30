@@ -204,7 +204,7 @@ class AbfrageServiceTest {
         Mockito.verify(this.bauvorhabenRepository, Mockito.times(0)).findById(UUID.randomUUID());
         Mockito
             .verify(this.calculationService, Mockito.times(1))
-            .calculateAndAppendBedarfToEachAbfragevarianteOfAbfrage(abfrage);
+            .calculateAndAppendBedarfeToEachAbfragevarianteOfAbfrage(abfrage);
     }
 
     @Test
@@ -250,7 +250,7 @@ class AbfrageServiceTest {
         Mockito.verify(this.bauvorhabenRepository, Mockito.times(0)).findById(UUID.randomUUID());
         Mockito
             .verify(this.calculationService, Mockito.times(1))
-            .calculateAndAppendBedarfToEachAbfragevarianteOfAbfrage(abfrage);
+            .calculateAndAppendBedarfeToEachAbfragevarianteOfAbfrage(abfrage);
     }
 
     @Test
