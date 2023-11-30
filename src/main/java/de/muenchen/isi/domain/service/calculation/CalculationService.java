@@ -44,7 +44,7 @@ public class CalculationService {
      * Ist keine Berechnung der Bedarfe möglich so wird der Wert null im Attribute für die langfristigen planugsursächlichen Bedarfe gesetzt.
      *
      * @param abfrage zum Ermitteln und Setzen der langfristigen planugsursächlichen Bedarfe.
-     * @throws CalculationException falls keine Berechnung wegen einer nicht gesetzten Art der Abfrage oder Abfragevariante oder nicht vorhandener Stammdaten möglich ist
+     * @throws CalculationException falls keine Berechnung wegen einer nicht gesetzten Art der Abfrage oder Abfragevariante oder nicht vorhandener Stammdaten möglich ist.
      */
     public void calculateAndAppendBedarfeToEachAbfragevarianteOfAbfrage(final AbfrageModel abfrage)
         throws CalculationException {
@@ -85,7 +85,7 @@ public class CalculationService {
      * Ist keine Berechnung der Bedarfe möglich so wird der Wert null im Abfragevariantenattribut für die langfristigen planugsursächlichen Bedarfe gesetzt.
      *
      * @param abfragevariante zum Ermitteln und Setzen der langfristigen planugsursächlichen Bedarfe.
-     * @throws CalculationException falls keine Berechnung wegen einer nicht gesetzten Art der Abfragevariante oder nicht vorhandener Stammdaten möglich ist
+     * @throws CalculationException falls keine Berechnung wegen einer nicht gesetzten Art der Abfragevariante oder nicht vorhandener Stammdaten möglich ist.
      */
     public void calculateAndAppendBedarfeToAbfragevariante(final AbfragevarianteModel abfragevariante)
         throws CalculationException {
@@ -151,7 +151,7 @@ public class CalculationService {
      * @param sobonOrientierungswertJahr zur Extraktion der korrekten Sobon-Orientierungswerte.
      * @param stammdatenGueltigAb zur Extraktion der Stammdaten welche sich nicht auf ein konkretes Jahr der Sobon-Orientierungswerte beziehen.
      * @return den {@link LangfristigerPlanungsursaechlicherBedarfModel} oder null falls ein Methodenparameter null ist.
-     * @throws CalculationException falls die Stammdaten zur Versorgungsquote und Gruppenstärke nicht geladen werden können.
+     * @throws CalculationException falls die Stammdaten zur Durchführung der Berechnung nicht geladen werden können.
      */
     public LangfristigerPlanungsursaechlicherBedarfModel calculateLangfristigerPlanungsursaechlicherBedarf(
         final List<BauabschnittModel> bauabschnitte,
