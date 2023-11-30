@@ -187,17 +187,17 @@ public class CalculationService {
             bedarfKinderkrippe,
             10
         );
-        bedarf.setBedarfKindergartenMittelwert10(bedarfKinderkrippeMittelwert10);
+        bedarf.setBedarfKinderkrippeMittelwert10(bedarfKinderkrippeMittelwert10);
         final var bedarfKinderkrippeMittelwert15 = infrastrukturbedarfService.calculateMeanInfrastrukturbedarfe(
             bedarfKinderkrippe,
             15
         );
-        bedarf.setBedarfKindergartenMittelwert15(bedarfKinderkrippeMittelwert15);
+        bedarf.setBedarfKinderkrippeMittelwert15(bedarfKinderkrippeMittelwert15);
         final var bedarfKinderkrippeMittelwert20 = infrastrukturbedarfService.calculateMeanInfrastrukturbedarfe(
             bedarfKinderkrippe,
             20
         );
-        bedarf.setBedarfKindergartenMittelwert20(bedarfKinderkrippeMittelwert20);
+        bedarf.setBedarfKinderkrippeMittelwert20(bedarfKinderkrippeMittelwert20);
 
         // Ermittlung Bedarf Kindergarten
         final var bedarfKindergarten = infrastrukturbedarfService.calculateBedarfForKindergartenRounded(
