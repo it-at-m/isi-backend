@@ -48,6 +48,10 @@ public class CalculationService {
      * Die Methode ermittelt den {@link LangfristigerPlanungsursaechlicherBedarfModel} für jede in der Abfrage vorhandene Abfragevariante.
      * Ist keine Berechnung der Bedarfe möglich so wird der Wert null im Attribute für die langfristigen planugsursächlichen Bedarfe gesetzt.
      *
+     * Handelt es sich bei einer Abfrage um den Typ {@link ArtAbfrage#WEITERES_VERFAHREN}, so werden für Abfragevarianten mit Wert
+     * {@link SobonOrientierungswertJahr#STANDORTABFRAGE} im Attribut {@link AbfragevarianteWeiteresVerfahrenModel#getSobonOrientierungswertJahr()}
+     * keine Berechnungen durchgeführt.
+     *
      * @param abfrage zum Ermitteln und Setzen der langfristigen planugsursächlichen Bedarfe.
      * @throws CalculationException falls keine Berechnung wegen einer nicht gesetzten Art der Abfrage oder Abfragevariante oder nicht vorhandener Stammdaten möglich ist.
      */
