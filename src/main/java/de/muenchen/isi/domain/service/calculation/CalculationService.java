@@ -14,9 +14,11 @@ import de.muenchen.isi.domain.model.calculation.LangfristigerPlanungsursaechlich
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
@@ -214,8 +216,14 @@ public class CalculationService {
             );
         bedarf.setWohneinheitenSumme20Jahre(wohneinheitenSumme20Jahre);
 
+        final var wohneinheitenSumsForGesamt = Stream
+            .of(wohneinheiten, wohneinheitenSumme10Jahre, wohneinheitenSumme15Jahre, wohneinheitenSumme20Jahre)
+            .flatMap(Collection::stream)
+            .collect(Collectors.toList());
         final var wohneinheitenGesamt =
-            planungsursaechlicheWohneinheitenService.sumWohneinheitenOverFoerderartenForEachYear(wohneinheiten);
+            planungsursaechlicheWohneinheitenService.sumWohneinheitenOverFoerderartenForEachYear(
+                wohneinheitenSumsForGesamt
+            );
         bedarf.setWohneinheitenGesamt(wohneinheitenGesamt);
 
         // Ermittlung Bedarf Kinderkrippe
