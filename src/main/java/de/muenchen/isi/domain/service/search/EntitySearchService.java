@@ -19,6 +19,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.search.engine.search.common.BooleanOperator;
+import org.hibernate.search.engine.search.predicate.dsl.BooleanPredicateClausesStep;
+import org.hibernate.search.engine.search.predicate.dsl.SearchPredicateFactory;
 import org.hibernate.search.engine.search.query.SearchResult;
 import org.hibernate.search.mapper.orm.Search;
 import org.springframework.stereotype.Service;
@@ -64,79 +66,22 @@ public class EntitySearchService {
         // Ist keine Offsetberechnung möglich, so wird auch keine paginierte Suche durchgeführt.
         final Integer paginationOffset = calculateOffsetOrNullIfNoPaginationRequired(searchQueryAndSortingInformation);
 
+        final var isRoleAnwender = isRoleAnwender();
+
         // Erstellen der Suchquery
         final var searchQueryOptions = Search
             .session(entityManager)
             .search(searchableEntities)
             .where(function -> {
-                if (isRoleAnwender()) {
-                    if (StringUtils.isNotEmpty(adaptedSearchQuery)) {
-                        return function
-                            .bool()
-                            .must(
-                                function
-                                    .simpleQueryString()
-                                    .fields(searchableAttributes)
-                                    .matching(adaptedSearchQuery)
-                                    // Es werden nur die Entitäten als Suchergebnis zurückgegeben, welche alle Suchwörter der Suchquery beinhalten.
-                                    .defaultOperator(BooleanOperator.AND)
-                            )
-                            .should(
-                                function
-                                    .bool()
-                                    .filter(
-                                        function
-                                            .match()
-                                            .field("statusAbfrage_filter")
-                                            .matching(StatusAbfrage.ERLEDIGT_OHNE_FACHREFERAT)
-                                    )
-                            )
-                            .should(
-                                function
-                                    .bool()
-                                    .filter(
-                                        function
-                                            .match()
-                                            .field("statusAbfrage_filter")
-                                            .matching(StatusAbfrage.ERLEDIGT_MIT_FACHREFERAT)
-                                    )
-                            );
-                    } else {
-                        return function
-                            .bool()
-                            .should(
-                                function
-                                    .bool()
-                                    .filter(
-                                        function
-                                            .match()
-                                            .field("statusAbfrage_filter")
-                                            .matching(StatusAbfrage.ERLEDIGT_OHNE_FACHREFERAT)
-                                    )
-                            )
-                            .should(
-                                function
-                                    .bool()
-                                    .filter(
-                                        function
-                                            .match()
-                                            .field("statusAbfrage_filter")
-                                            .matching(StatusAbfrage.ERLEDIGT_MIT_FACHREFERAT)
-                                    )
-                            );
-                    }
-                }
                 if (StringUtils.isNotEmpty(adaptedSearchQuery)) {
-                    // Suche entsprechend der gegebenen Query.
-                    return function
-                        // https://docs.jboss.org/hibernate/stable/search/reference/en-US/html_single/#search-dsl-predicate-simple-query-string
-                        .simpleQueryString()
-                        .fields(searchableAttributes)
-                        .matching(adaptedSearchQuery)
-                        // Es werden nur die Entitäten als Suchergebnis zurückgegeben, welche alle Suchwörter der Suchquery beinhalten.
-                        .defaultOperator(BooleanOperator.AND);
+                    if (isRoleAnwender) {
+                        return buildSimpleQueryString(function, searchableAttributes, adaptedSearchQuery)
+                            .should(buildStatusFilterRoleAnwender(function));
+                    }
+                    return buildSimpleQueryString(function, searchableAttributes, adaptedSearchQuery);
+                } else if (isRoleAnwender) {
+                    return buildStatusFilterRoleAnwender(function);
                 } else {
-                    // Zurückgeben aller Entitäten.
                     return function.matchAll();
                 }
             })
@@ -252,6 +197,60 @@ public class EntitySearchService {
     }
 
     protected boolean isRoleAnwender() {
-        return authenticationUtils.getUserRoles().stream().anyMatch(s -> s.contains("anwender"));
+        return authenticationUtils.getUserRoles().stream().allMatch(s -> s.contains("anwender"));
+    }
+
+    /**
+     * Erstellt eine Suchabfrage, die für die Rolle "Anwender" spezifische Statusfilter enthält.
+     * Die Suchabfrage gibt Entitäten zurück, die entweder den Status "ERLEDIGT_OHNE_FACHREFERAT" oder "ERLEDIGT_MIT_FACHREFERAT" haben.
+     *
+     * @param function Die Factory zum Erstellen von Suchprädikaten.
+     * @return Ein Boolesches Suchprädikat, das die spezifischen Statusfilter für die Rolle "Anwender" enthält.
+     */
+    protected BooleanPredicateClausesStep<?> buildStatusFilterRoleAnwender(SearchPredicateFactory function) {
+        return function
+            .bool()
+            .should(
+                function
+                    .bool()
+                    .filter(
+                        function.match().field("statusAbfrage_filter").matching(StatusAbfrage.ERLEDIGT_OHNE_FACHREFERAT)
+                    )
+            )
+            .should(
+                function
+                    .bool()
+                    .filter(
+                        function.match().field("statusAbfrage_filter").matching(StatusAbfrage.ERLEDIGT_MIT_FACHREFERAT)
+                    )
+            );
+    }
+
+    /**
+     * Erstellt eine Suchabfrage basierend auf einer einfachen Zeichenfolgenabfrage.
+     * Die Suchabfrage gibt Entitäten zurück, die alle Suchwörter der gegebenen Suchanfrage beinhalten.
+     *
+     * @param function             Die Factory zum Erstellen von Suchprädikaten.
+     * @param searchableAttributes Die durchsuchbaren Attribute.
+     * @param adaptedSearchQuery   Die angepasste Suchanfrage.
+     * @return Ein Boolesches Suchprädikat für eine einfache Zeichenfolgenabfrage.
+     */
+    protected BooleanPredicateClausesStep<?> buildSimpleQueryString(
+        SearchPredicateFactory function,
+        String[] searchableAttributes,
+        String adaptedSearchQuery
+    ) {
+        // Suche entsprechend der gegebenen Query.
+        return function
+            .bool()
+            .must(
+                function
+                    // https://docs.jboss.org/hibernate/stable/search/reference/en-US/html_single/#search-dsl-predicate-simple-query-string
+                    .simpleQueryString()
+                    .fields(searchableAttributes)
+                    .matching(adaptedSearchQuery)
+                    // Es werden nur die Entitäten als Suchergebnis zurückgegeben, welche alle Suchwörter der Suchquery beinhalten.
+                    .defaultOperator(BooleanOperator.AND)
+            );
     }
 }

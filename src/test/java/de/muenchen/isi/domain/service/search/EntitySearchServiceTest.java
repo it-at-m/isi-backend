@@ -6,7 +6,6 @@ import static org.hamcrest.Matchers.nullValue;
 
 import de.muenchen.isi.domain.mapper.SearchDomainMapper;
 import de.muenchen.isi.domain.model.search.request.SearchQueryAndSortingModel;
-import de.muenchen.isi.domain.service.transition.MockCustomUser;
 import de.muenchen.isi.security.AuthenticationUtils;
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -35,7 +34,6 @@ class EntitySearchServiceTest {
     );
 
     @Test
-    @MockCustomUser(roles = "admin")
     void createAdaptedSearchQueryForSimpleQueryStringSearch() {
         var searchQuery = "  test-abc123 ?!\"dddds      abf1-test     \"testinger\"    ";
         var result = entitySearchService.createAdaptedSearchQueryForSimpleQueryStringSearch(searchQuery);
