@@ -26,12 +26,6 @@ public class SobonursaechlicheWohneinheitenService extends WohneinheitenCalculat
 
     private final StaedtebaulicheOrientierungswertRepository staedtebaulicheOrientierungswertRepository;
 
-    public static final String SUMMARY_NAME = "Gesamt";
-
-    public static final List<Integer> SUMMARY_PERIODS = List.of(10, 15, 20);
-
-    public static final String SUMMARY_OVER_PERIOD_NAME = "Summe der ersten %d Jahre";
-
     /**
      * Errechnet SoBoN-ursächliche Wohneinheiten je Förderart und Jahr.
      * Ursprungsinfo ist die SoBoN-ursächliche Geschossfläche in der Abfragevariante
@@ -107,8 +101,6 @@ public class SobonursaechlicheWohneinheitenService extends WohneinheitenCalculat
                 sobonsursachlicheWohneinheitenList
             );
         }
-
-        // TODO Summenbildung
 
         return sobonsursachlicheWohneinheitenList;
     }

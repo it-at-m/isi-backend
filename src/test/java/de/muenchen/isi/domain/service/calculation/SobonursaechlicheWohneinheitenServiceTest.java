@@ -130,7 +130,7 @@ public class SobonursaechlicheWohneinheitenServiceTest {
 
         assertThat(actualB, containsInAnyOrder(expectedB.toArray()));
 
-        // 3. Test über 1000 Wohneinheiten mit zwei 1000er Block/Jahr
+        // 3. Test über 1000 Wohneinheiten mit zwei 1000er Blöcken/Jahren
         final var expectedC = List.of(
             new WohneinheitenProFoerderartProJahrModel(FF, "2024", new BigDecimal("501.9520357105")),
             new WohneinheitenProFoerderartProJahrModel(EOF, "2024", new BigDecimal("211.9353039667")),
