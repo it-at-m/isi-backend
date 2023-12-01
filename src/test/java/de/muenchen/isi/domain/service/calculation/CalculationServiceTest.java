@@ -201,10 +201,10 @@ class CalculationServiceTest {
         final var expected = new LangfristigerPlanungsursaechlicherBedarfModel();
 
         expected.setWohneinheiten(wohneinheiten);
-        expected.setWohneinheitenSumme10Jahre(null);
-        expected.setWohneinheitenSumme15Jahre(null);
-        expected.setWohneinheitenSumme20Jahre(null);
-        expected.setWohneinheitenGesamt(null);
+        expected.setWohneinheitenSumme10Jahre(List.of());
+        expected.setWohneinheitenSumme15Jahre(List.of());
+        expected.setWohneinheitenSumme20Jahre(List.of());
+        expected.setWohneinheitenGesamt(List.of());
         expected.setBedarfKinderkrippe(bedarfeProJahrKinderkrippe);
         expected.setBedarfKinderkrippeMittelwert10(bedarfeProJahrMeanKinderkrippe10);
         expected.setBedarfKinderkrippeMittelwert15(bedarfeProJahrMeanKinderkrippe15);
