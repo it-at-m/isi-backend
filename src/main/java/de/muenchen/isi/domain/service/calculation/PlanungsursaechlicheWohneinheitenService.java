@@ -95,7 +95,6 @@ public class PlanungsursaechlicheWohneinheitenService {
         final List<WohneinheitenProFoerderartProJahrModel> wohneinheitenProJahrToSum,
         final int numberOfYears
     ) {
-        // Summieren der Wohneinheiten aller Jahre in bestimmten Zeiträumen (siehe SUMMATION_PERIODS) je Förderart.
         return wohneinheitenProJahrToSum
             .stream()
             .sorted(Comparator.comparingInt(a -> Integer.parseInt(a.getJahr())))
