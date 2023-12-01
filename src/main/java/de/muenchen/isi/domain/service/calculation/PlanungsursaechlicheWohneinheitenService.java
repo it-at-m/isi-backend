@@ -48,26 +48,15 @@ public class PlanungsursaechlicheWohneinheitenService extends WohneinheitenCalcu
         final var bauraten = bauabschnitte
             .stream()
             .flatMap(bauabschnitt ->
-                bauabschnitt
-                    .getBaugebiete()
-                    .stream()
-                    .flatMap(baugebiet ->
-                        baugebiet
-                            .getBauraten()
-                            .stream()
-                            .peek(baurate ->
-                                baurate.setFoerdermix(
-                                    foerdermixUmlageService.legeFoerdermixUm(baurate.getFoerdermix(), gueltigAb)
-                                )
-                            )
-                    )
+                bauabschnitt.getBaugebiete().stream().flatMap(baugebiet -> baugebiet.getBauraten().stream())
             )
             .collect(Collectors.toList());
 
         // Berechnen der Wohneinheiten pro Förderart und Jahr.
 
         for (final var baurate : bauraten) {
-            for (final var foerderart : baurate.getFoerdermix().getFoerderarten()) {
+            final var foerdermixUmgelegt = foerdermixUmlageService.legeFoerdermixUm(baurate.getFoerdermix(), gueltigAb);
+            for (final var foerderart : foerdermixUmgelegt.getFoerderarten()) {
                 final var wohneinheiten = calculateWohneinheiten(baurate, foerderart, sobonJahr);
                 mergeWohneinheitenProFoerderartProJahr(
                     wohneinheitenProFoerderartProJahrList,
