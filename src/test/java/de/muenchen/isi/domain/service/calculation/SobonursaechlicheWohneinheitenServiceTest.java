@@ -1,12 +1,8 @@
 package de.muenchen.isi.domain.service.calculation;
 
-import static de.muenchen.isi.TestConstants.BAU;
 import static de.muenchen.isi.TestConstants.EOF;
 import static de.muenchen.isi.TestConstants.FF;
-import static de.muenchen.isi.TestConstants.FH;
-import static de.muenchen.isi.TestConstants.KMB;
 import static de.muenchen.isi.TestConstants.MM;
-import static de.muenchen.isi.TestConstants.PMB;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 
