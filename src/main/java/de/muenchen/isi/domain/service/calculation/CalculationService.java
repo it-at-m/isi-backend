@@ -193,6 +193,31 @@ public class CalculationService {
         );
         bedarf.setWohneinheiten(wohneinheiten);
 
+        final var wohneinheitenSumme10Jahre =
+            planungsursaechlicheWohneinheitenService.sumWohneinheitenForNumberOfYearsForEachFoerderart(
+                wohneinheiten,
+                10
+            );
+        bedarf.setWohneinheitenSumme10Jahre(wohneinheitenSumme10Jahre);
+
+        final var wohneinheitenSumme15Jahre =
+            planungsursaechlicheWohneinheitenService.sumWohneinheitenForNumberOfYearsForEachFoerderart(
+                wohneinheiten,
+                15
+            );
+        bedarf.setWohneinheitenSumme15Jahre(wohneinheitenSumme15Jahre);
+
+        final var wohneinheitenSumme20Jahre =
+            planungsursaechlicheWohneinheitenService.sumWohneinheitenForNumberOfYearsForEachFoerderart(
+                wohneinheiten,
+                20
+            );
+        bedarf.setWohneinheitenSumme20Jahre(wohneinheitenSumme20Jahre);
+
+        final var wohneinheitenGesamt =
+            planungsursaechlicheWohneinheitenService.sumWohneinheitenOverFoerderartenForEachYear(wohneinheiten);
+        bedarf.setWohneinheitenGesamt(wohneinheitenGesamt);
+
         // Ermittlung Bedarf Kinderkrippe
         final var bedarfKinderkrippe = infrastrukturbedarfService.calculateBedarfForKinderkrippeRounded(
             wohneinheiten,

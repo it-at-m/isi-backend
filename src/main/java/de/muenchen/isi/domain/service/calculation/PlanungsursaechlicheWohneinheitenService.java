@@ -12,9 +12,11 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -79,44 +81,91 @@ public class PlanungsursaechlicheWohneinheitenService {
                 );
             }
         }
+        return wohneinheitenProFoerderartProJahrList;
+    }
 
-        if (wohneinheitenProFoerderartProJahrList.isEmpty()) {
-            return wohneinheitenProFoerderartProJahrList;
-        }
-
+    /**
+     * Die Methode summiert die im Parameter gegebenen Wohneinheiten für den im Parameter gegebenn Zeitraum.
+     *
+     * @param wohneinheitenProJahrToSum zum Summieren.
+     * @param numberOfYears anzahl der Jahre welche summiert werden sollen.
+     * @return die über die Jahre summierten Wohneinheiten je Förderart.
+     */
+    public List<WohneinheitenProFoerderartProJahrModel> sumWohneinheitenForNumberOfYearsForEachFoerderart(
+        final List<WohneinheitenProFoerderartProJahrModel> wohneinheitenProJahrToSum,
+        final int numberOfYears
+    ) {
         // Summieren der Wohneinheiten aller Jahre in bestimmten Zeiträumen (siehe SUMMATION_PERIODS) je Förderart.
+        return wohneinheitenProJahrToSum
+            .stream()
+            .sorted(Comparator.comparingInt(a -> Integer.parseInt(a.getJahr())))
+            .collect(
+                Collectors.groupingBy(
+                    WohneinheitenProFoerderartProJahrModel::getFoerderart,
+                    Collectors.mapping(Function.identity(), Collectors.toList())
+                )
+            )
+            .values()
+            .stream()
+            .map(wohneinheitenProJahrForFoerderart ->
+                sumWohneinheitenForNumberOfYears(wohneinheitenProJahrForFoerderart, numberOfYears)
+            )
+            .collect(Collectors.toList());
+    }
 
-        wohneinheitenProFoerderartProJahrList.sort(Comparator.comparingInt(a -> Integer.parseInt(a.getJahr())));
-        final var firstYear = Integer.parseInt(wohneinheitenProFoerderartProJahrList.get(0).getJahr());
-        final var sumsPerFoerderart = new ArrayList<WohneinheitenProFoerderartProJahrModel>();
-        for (final var wohneinheitenProFoerderartProJahr : wohneinheitenProFoerderartProJahrList) {
-            for (final var period : CalculationService.SUMMATION_PERIODS) {
-                if (Integer.parseInt(wohneinheitenProFoerderartProJahr.getJahr()) <= firstYear + period - 1) {
-                    mergeWohneinheitenProFoerderartProJahr(
-                        sumsPerFoerderart,
-                        wohneinheitenProFoerderartProJahr.getFoerderart(),
-                        String.format(CalculationService.SUMMATION_PERIOD_NAME, period),
-                        wohneinheitenProFoerderartProJahr.getWohneinheiten()
-                    );
-                }
+    public List<WohneinheitenProFoerderartProJahrModel> sumWohneinheitenOverFoerderartenForEachYear(
+        final List<WohneinheitenProFoerderartProJahrModel> wohneinheitenProJahrToSum
+    ) {
+        return wohneinheitenProJahrToSum
+            .stream()
+            .sorted(Comparator.comparingInt(a -> Integer.parseInt(a.getJahr())))
+            .collect(
+                Collectors.groupingBy(
+                    WohneinheitenProFoerderartProJahrModel::getJahr,
+                    Collectors.mapping(Function.identity(), Collectors.toList())
+                )
+            )
+            .values()
+            .stream()
+            .map(this::sumWohneinheiten)
+            .collect(Collectors.toList());
+    }
+
+    protected WohneinheitenProFoerderartProJahrModel sumWohneinheitenForNumberOfYears(
+        final List<WohneinheitenProFoerderartProJahrModel> wohneinheitenProJahr,
+        final int numberOfYears
+    ) {
+        wohneinheitenProJahr.sort(Comparator.comparingInt(a -> Integer.parseInt(a.getJahr())));
+        final var firstYear = Integer.parseInt(wohneinheitenProJahr.get(0).getJahr());
+        final var summedWohneinheitenProJahr = new WohneinheitenProFoerderartProJahrModel();
+        summedWohneinheitenProJahr.setJahr(String.format(CalculationService.SUMMATION_PERIOD_NAME, numberOfYears));
+        summedWohneinheitenProJahr.setWohneinheiten(BigDecimal.ZERO);
+        for (final var wohneinheiten : wohneinheitenProJahr) {
+            if (Integer.parseInt(wohneinheiten.getJahr()) <= firstYear + numberOfYears - 1) {
+                summedWohneinheitenProJahr.setFoerderart(wohneinheiten.getFoerderart());
+                final var sum = summedWohneinheitenProJahr
+                    .getWohneinheiten()
+                    .add(ObjectUtils.defaultIfNull(wohneinheiten.getWohneinheiten(), BigDecimal.ZERO));
+                summedWohneinheitenProJahr.setWohneinheiten(sum);
             }
         }
-        wohneinheitenProFoerderartProJahrList.addAll(sumsPerFoerderart);
+        return summedWohneinheitenProJahr;
+    }
 
-        // Summieren der Wohneinheiten aller Förderarten je Jahr.
-
-        final var sumsPerYear = new ArrayList<WohneinheitenProFoerderartProJahrModel>();
-        for (final var wohneinheitenProFoerderartProJahr : wohneinheitenProFoerderartProJahrList) {
-            mergeWohneinheitenProFoerderartProJahr(
-                sumsPerYear,
-                CalculationService.SUMMATION_TOTAL_NAME,
-                wohneinheitenProFoerderartProJahr.getJahr(),
-                wohneinheitenProFoerderartProJahr.getWohneinheiten()
-            );
+    protected WohneinheitenProFoerderartProJahrModel sumWohneinheiten(
+        final List<WohneinheitenProFoerderartProJahrModel> wohneinheitenProJahr
+    ) {
+        final var summedWohneinheiten = new WohneinheitenProFoerderartProJahrModel();
+        summedWohneinheiten.setFoerderart(CalculationService.SUMMATION_TOTAL_NAME);
+        summedWohneinheiten.setWohneinheiten(BigDecimal.ZERO);
+        for (final var wohneinheiten : wohneinheitenProJahr) {
+            summedWohneinheiten.setJahr(wohneinheiten.getJahr());
+            final var sum = summedWohneinheiten
+                .getWohneinheiten()
+                .add(ObjectUtils.defaultIfNull(wohneinheiten.getWohneinheiten(), BigDecimal.ZERO));
+            summedWohneinheiten.setWohneinheiten(sum);
         }
-        wohneinheitenProFoerderartProJahrList.addAll(sumsPerYear);
-
-        return wohneinheitenProFoerderartProJahrList;
+        return summedWohneinheiten;
     }
 
     protected BigDecimal calculateWohneinheiten(
