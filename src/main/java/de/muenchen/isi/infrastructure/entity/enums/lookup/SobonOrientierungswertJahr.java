@@ -5,6 +5,7 @@
 package de.muenchen.isi.infrastructure.entity.enums.lookup;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,7 +17,8 @@ public enum SobonOrientierungswertJahr implements ILookup {
     UNSPECIFIED(ILookup.UNSPECIFIED, LocalDate.EPOCH),
     JAHR_2014("2014", LocalDate.of(2014, 1, 1)),
     JAHR_2017("2017", LocalDate.of(2017, 1, 1)),
-    JAHR_2022("2022", LocalDate.of(2022, 1, 1));
+    JAHR_2022("2022", LocalDate.of(2022, 1, 1)),
+    STANDORTABFRAGE("Standortabfrage", null);
 
     @Getter
     private final String bezeichnung;
@@ -32,5 +34,9 @@ public enum SobonOrientierungswertJahr implements ILookup {
                 StringUtils.equals(sobonOrientierungswertJahr.getBezeichnung(), bezeichnung)
             )
             .findFirst();
+    }
+
+    public static List<SobonOrientierungswertJahr> getSobonOrientierungswertJahrWithoutStandortabfrage() {
+        return List.of(UNSPECIFIED, JAHR_2014, JAHR_2017, JAHR_2022);
     }
 }

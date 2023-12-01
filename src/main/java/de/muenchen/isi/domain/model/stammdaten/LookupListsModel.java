@@ -17,6 +17,8 @@ public class LookupListsModel {
 
     private LookupListModel standVerfahrenBaugenehmigungsverfahren;
 
+    private LookupListModel standVerfahrenWeiteresVerfahren;
+
     private LookupListModel standVerfahren;
 
     private LookupListModel statusAbfrage;
@@ -42,4 +44,6 @@ public class LookupListsModel {
     private LookupListModel artGsNachmittagBetreuung;
 
     private LookupListModel sobonOrientierungswertJahr;
+
+    private LookupListModel sobonOrientierungswertJahrWithoutStandortabfrage;
 }

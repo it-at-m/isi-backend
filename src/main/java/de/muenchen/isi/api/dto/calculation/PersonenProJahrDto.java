@@ -5,14 +5,11 @@ import javax.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
-public class PlanungsursachlicheWohneinheitenDto {
+public class PersonenProJahrDto {
 
     @NotNull
-    private String foerderart;
+    private String jahr; // JJJJ
 
     @NotNull
-    private String jahr;
-
-    @NotNull
-    private BigDecimal wohneinheiten;
+    private BigDecimal anzahlPersonenGesamt;
 }

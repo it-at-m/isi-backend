@@ -3,7 +3,7 @@ package de.muenchen.isi.domain.service.calculation;
 import de.muenchen.isi.domain.model.BauabschnittModel;
 import de.muenchen.isi.domain.model.BaurateModel;
 import de.muenchen.isi.domain.model.FoerderartModel;
-import de.muenchen.isi.domain.model.calculation.PlanungsursachlicheWohneinheitenModel;
+import de.muenchen.isi.domain.model.calculation.WohneinheitenProFoerderartProJahrModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
 import de.muenchen.isi.infrastructure.repository.stammdaten.StaedtebaulicheOrientierungswertRepository;
 import java.math.BigDecimal;
@@ -12,21 +12,17 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class PlanungsursaechlicheWohneinheitenService {
-
-    public static final String SUMMARY_NAME = "Gesamt";
-
-    public static final List<Integer> SUMMARY_PERIODS = List.of(10, 15, 20);
-
-    public static final String SUMMARY_OVER_PERIOD_NAME = "Summe der ersten %d Jahre";
 
     private final FoerdermixUmlageService foerdermixUmlageService;
 
@@ -42,14 +38,14 @@ public class PlanungsursaechlicheWohneinheitenService {
      * @param bauabschnitte Eine List von {@link BauabschnittModel}, aus denen die {@link BaurateModel} extrahiert werden.
      * @param sobonJahr Das SoBoN-Jahr, welches die städtebaulichen Orientierungswerte diktiert.
      * @param gueltigAb Das Gültigkeitsdatum der Stammdaten, welche die Umlegung diktieren.
-     * @return Eine List von {@link PlanungsursachlicheWohneinheitenModel}, welche alle Wohneinheiten pro Förderart und Jahr darstellt.
+     * @return Eine List von {@link WohneinheitenProFoerderartProJahrModel}, welche alle Wohneinheiten pro Förderart und Jahr darstellt.
      */
-    public List<PlanungsursachlicheWohneinheitenModel> calculatePlanungsursaechlicheWohneinheiten(
+    public List<WohneinheitenProFoerderartProJahrModel> calculatePlanungsursaechlicheWohneinheiten(
         final List<BauabschnittModel> bauabschnitte,
         final SobonOrientierungswertJahr sobonJahr,
         final LocalDate gueltigAb
     ) {
-        final var planungsursachlicheWohneinheitenList = new ArrayList<PlanungsursachlicheWohneinheitenModel>();
+        final var wohneinheitenProFoerderartProJahrList = new ArrayList<WohneinheitenProFoerderartProJahrModel>();
 
         // Aggregation aller Bauraten und Umlegen von Förderarten.
 
@@ -77,52 +73,98 @@ public class PlanungsursaechlicheWohneinheitenService {
         for (final var baurate : bauraten) {
             for (final var foerderart : baurate.getFoerdermix().getFoerderarten()) {
                 final var wohneinheiten = calculateWohneinheiten(baurate, foerderart, sobonJahr);
-                mergePlanungsursaechlicheWohneinheiten(
-                    planungsursachlicheWohneinheitenList,
+                mergeWohneinheitenProFoerderartProJahr(
+                    wohneinheitenProFoerderartProJahrList,
                     foerderart.getBezeichnung(),
                     baurate.getJahr().toString(),
                     wohneinheiten
                 );
             }
         }
+        return wohneinheitenProFoerderartProJahrList;
+    }
 
-        if (planungsursachlicheWohneinheitenList.isEmpty()) {
-            return planungsursachlicheWohneinheitenList;
-        }
+    /**
+     * Die Methode summiert die im Parameter gegebenen Wohneinheiten für den im Parameter gegebenn Zeitraum.
+     *
+     * @param wohneinheitenProJahrToSum zum Summieren.
+     * @param numberOfYears anzahl der Jahre welche summiert werden sollen.
+     * @return die über die Jahre summierten Wohneinheiten je Förderart.
+     */
+    public List<WohneinheitenProFoerderartProJahrModel> sumWohneinheitenForNumberOfYearsForEachFoerderart(
+        final List<WohneinheitenProFoerderartProJahrModel> wohneinheitenProJahrToSum,
+        final int numberOfYears
+    ) {
+        return wohneinheitenProJahrToSum
+            .stream()
+            .sorted(Comparator.comparingInt(a -> Integer.parseInt(a.getJahr())))
+            .collect(
+                Collectors.groupingBy(
+                    WohneinheitenProFoerderartProJahrModel::getFoerderart,
+                    Collectors.mapping(Function.identity(), Collectors.toList())
+                )
+            )
+            .values()
+            .stream()
+            .map(wohneinheitenProJahrForFoerderart ->
+                sumWohneinheitenForNumberOfYears(wohneinheitenProJahrForFoerderart, numberOfYears)
+            )
+            .collect(Collectors.toList());
+    }
 
-        // Hinzufügen von zusätzlichen Jahren pro Förderart, welche eine Anzahl von Jahren über einen Zeitraum summieren.
+    public List<WohneinheitenProFoerderartProJahrModel> sumWohneinheitenOverFoerderartenForEachYear(
+        final List<WohneinheitenProFoerderartProJahrModel> wohneinheitenProJahrToSum
+    ) {
+        return wohneinheitenProJahrToSum
+            .stream()
+            .sorted(Comparator.comparingInt(a -> Integer.parseInt(a.getJahr())))
+            .collect(
+                Collectors.groupingBy(
+                    WohneinheitenProFoerderartProJahrModel::getJahr,
+                    Collectors.mapping(Function.identity(), Collectors.toList())
+                )
+            )
+            .values()
+            .stream()
+            .map(this::sumWohneinheiten)
+            .collect(Collectors.toList());
+    }
 
-        planungsursachlicheWohneinheitenList.sort(Comparator.comparingInt(a -> Integer.parseInt(a.getJahr())));
-        final var firstYear = Integer.parseInt(planungsursachlicheWohneinheitenList.get(0).getJahr());
-        final var sumsPerFoerderart = new ArrayList<PlanungsursachlicheWohneinheitenModel>();
-        for (final var planungsursachlicheWohneinheiten : planungsursachlicheWohneinheitenList) {
-            for (final var period : SUMMARY_PERIODS) {
-                if (Integer.parseInt(planungsursachlicheWohneinheiten.getJahr()) <= firstYear + period - 1) {
-                    mergePlanungsursaechlicheWohneinheiten(
-                        sumsPerFoerderart,
-                        planungsursachlicheWohneinheiten.getFoerderart(),
-                        String.format(SUMMARY_OVER_PERIOD_NAME, period),
-                        planungsursachlicheWohneinheiten.getWohneinheiten()
-                    );
-                }
+    protected WohneinheitenProFoerderartProJahrModel sumWohneinheitenForNumberOfYears(
+        final List<WohneinheitenProFoerderartProJahrModel> wohneinheitenProJahr,
+        final int numberOfYears
+    ) {
+        wohneinheitenProJahr.sort(Comparator.comparingInt(a -> Integer.parseInt(a.getJahr())));
+        final var firstYear = Integer.parseInt(wohneinheitenProJahr.get(0).getJahr());
+        final var summedWohneinheitenProJahr = new WohneinheitenProFoerderartProJahrModel();
+        summedWohneinheitenProJahr.setJahr(String.format(CalculationService.SUMMATION_PERIOD_NAME, numberOfYears));
+        summedWohneinheitenProJahr.setWohneinheiten(BigDecimal.ZERO);
+        for (final var wohneinheiten : wohneinheitenProJahr) {
+            if (Integer.parseInt(wohneinheiten.getJahr()) <= firstYear + numberOfYears - 1) {
+                summedWohneinheitenProJahr.setFoerderart(wohneinheiten.getFoerderart());
+                final var sum = summedWohneinheitenProJahr
+                    .getWohneinheiten()
+                    .add(ObjectUtils.defaultIfNull(wohneinheiten.getWohneinheiten(), BigDecimal.ZERO));
+                summedWohneinheitenProJahr.setWohneinheiten(sum);
             }
         }
-        planungsursachlicheWohneinheitenList.addAll(sumsPerFoerderart);
+        return summedWohneinheitenProJahr;
+    }
 
-        // Hinzufügen einer Förderart mit den Summen aller anderer Förderarten pro Jahr.
-
-        final var sumsPerYear = new ArrayList<PlanungsursachlicheWohneinheitenModel>();
-        for (final var planungsursachlicheWohneinheiten : planungsursachlicheWohneinheitenList) {
-            mergePlanungsursaechlicheWohneinheiten(
-                sumsPerYear,
-                SUMMARY_NAME,
-                planungsursachlicheWohneinheiten.getJahr(),
-                planungsursachlicheWohneinheiten.getWohneinheiten()
-            );
+    protected WohneinheitenProFoerderartProJahrModel sumWohneinheiten(
+        final List<WohneinheitenProFoerderartProJahrModel> wohneinheitenProJahr
+    ) {
+        final var summedWohneinheiten = new WohneinheitenProFoerderartProJahrModel();
+        summedWohneinheiten.setFoerderart(CalculationService.SUMMATION_TOTAL_NAME);
+        summedWohneinheiten.setWohneinheiten(BigDecimal.ZERO);
+        for (final var wohneinheiten : wohneinheitenProJahr) {
+            summedWohneinheiten.setJahr(wohneinheiten.getJahr());
+            final var sum = summedWohneinheiten
+                .getWohneinheiten()
+                .add(ObjectUtils.defaultIfNull(wohneinheiten.getWohneinheiten(), BigDecimal.ZERO));
+            summedWohneinheiten.setWohneinheiten(sum);
         }
-        planungsursachlicheWohneinheitenList.addAll(sumsPerYear);
-
-        return planungsursachlicheWohneinheitenList;
+        return summedWohneinheiten;
     }
 
     protected BigDecimal calculateWohneinheiten(
@@ -150,29 +192,29 @@ public class PlanungsursaechlicheWohneinheitenService {
         return BigDecimal.ZERO;
     }
 
-    protected void mergePlanungsursaechlicheWohneinheiten(
-        final List<PlanungsursachlicheWohneinheitenModel> planungsursachlicheWohneinheitenList,
+    protected void mergeWohneinheitenProFoerderartProJahr(
+        final List<WohneinheitenProFoerderartProJahrModel> wohneinheitenProFoerderartProJahrList,
         final String foerderart,
         final String jahr,
         final BigDecimal wohneinheiten
     ) {
-        final var planungsursaechlicheWohneinheitenOptional = planungsursachlicheWohneinheitenList
+        final var wohneinheitenProFoerderartProJahrOptional = wohneinheitenProFoerderartProJahrList
             .stream()
-            .filter(planungsursachlicheWohneinheiten ->
-                planungsursachlicheWohneinheiten.getFoerderart().equals(foerderart) &&
-                planungsursachlicheWohneinheiten.getJahr().equals(jahr)
+            .filter(wohneinheitenProFoerderartProJahr ->
+                wohneinheitenProFoerderartProJahr.getFoerderart().equals(foerderart) &&
+                wohneinheitenProFoerderartProJahr.getJahr().equals(jahr)
             )
             .findAny();
 
-        if (planungsursaechlicheWohneinheitenOptional.isEmpty()) {
-            planungsursachlicheWohneinheitenList.add(
-                new PlanungsursachlicheWohneinheitenModel(foerderart, jahr, wohneinheiten)
+        if (wohneinheitenProFoerderartProJahrOptional.isEmpty()) {
+            wohneinheitenProFoerderartProJahrList.add(
+                new WohneinheitenProFoerderartProJahrModel(foerderart, jahr, wohneinheiten)
             );
         } else {
-            planungsursaechlicheWohneinheitenOptional
+            wohneinheitenProFoerderartProJahrOptional
                 .get()
                 .setWohneinheiten(
-                    planungsursaechlicheWohneinheitenOptional.get().getWohneinheiten().add(wohneinheiten)
+                    wohneinheitenProFoerderartProJahrOptional.get().getWohneinheiten().add(wohneinheiten)
                 );
         }
     }

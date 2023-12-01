@@ -4,6 +4,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
 import de.muenchen.isi.domain.exception.AbfrageStatusNotAllowedException;
+import de.muenchen.isi.domain.exception.CalculationException;
 import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.FileHandlingFailedException;
@@ -19,31 +20,42 @@ import de.muenchen.isi.domain.mapper.DokumentDomainMapperImpl;
 import de.muenchen.isi.domain.model.AbfrageModel;
 import de.muenchen.isi.domain.model.AbfragevarianteBaugenehmigungsverfahrenModel;
 import de.muenchen.isi.domain.model.AbfragevarianteBauleitplanverfahrenModel;
+import de.muenchen.isi.domain.model.AbfragevarianteWeiteresVerfahrenModel;
 import de.muenchen.isi.domain.model.BaugenehmigungsverfahrenModel;
 import de.muenchen.isi.domain.model.BauleitplanverfahrenModel;
 import de.muenchen.isi.domain.model.BedarfsmeldungFachreferateModel;
+import de.muenchen.isi.domain.model.WeiteresVerfahrenModel;
 import de.muenchen.isi.domain.model.abfrageAngelegt.AbfragevarianteBaugenehmigungsverfahrenAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageAngelegt.AbfragevarianteBauleitplanverfahrenAngelegtModel;
+import de.muenchen.isi.domain.model.abfrageAngelegt.AbfragevarianteWeiteresVerfahrenAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageAngelegt.BaugenehmigungsverfahrenAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageAngelegt.BauleitplanverfahrenAngelegtModel;
+import de.muenchen.isi.domain.model.abfrageAngelegt.WeiteresVerfahrenAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungFachreferat.AbfragevarianteBaugenehmigungsverfahrenInBearbeitungFachreferatModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungFachreferat.AbfragevarianteBauleitplanverfahrenInBearbeitungFachreferatModel;
+import de.muenchen.isi.domain.model.abfrageInBearbeitungFachreferat.AbfragevarianteWeiteresVerfahrenInBearbeitungFachreferatModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungFachreferat.BaugenehmigungsverfahrenInBearbeitungFachreferatModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungFachreferat.BauleitplanverfahrenInBearbeitungFachreferatModel;
+import de.muenchen.isi.domain.model.abfrageInBearbeitungFachreferat.WeiteresVerfahrenInBearbeitungFachreferatModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.AbfragevarianteBaugenehmigungsverfahrenInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.AbfragevarianteBauleitplanverfahrenInBearbeitungSachbearbeitungModel;
+import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.AbfragevarianteWeiteresVerfahrenInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.BaugenehmigungsverfahrenInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.BauleitplanverfahrenInBearbeitungSachbearbeitungModel;
+import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.WeiteresVerfahrenInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.domain.model.common.StadtbezirkModel;
 import de.muenchen.isi.domain.model.common.VerortungModel;
+import de.muenchen.isi.domain.service.calculation.CalculationService;
 import de.muenchen.isi.domain.service.filehandling.DokumentService;
 import de.muenchen.isi.infrastructure.entity.Abfrage;
 import de.muenchen.isi.infrastructure.entity.AbfragevarianteBaugenehmigungsverfahren;
 import de.muenchen.isi.infrastructure.entity.AbfragevarianteBauleitplanverfahren;
+import de.muenchen.isi.infrastructure.entity.AbfragevarianteWeiteresVerfahren;
 import de.muenchen.isi.infrastructure.entity.Baugenehmigungsverfahren;
 import de.muenchen.isi.infrastructure.entity.Bauleitplanverfahren;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
 import de.muenchen.isi.infrastructure.entity.BedarfsmeldungFachreferate;
+import de.muenchen.isi.infrastructure.entity.WeiteresVerfahren;
 import de.muenchen.isi.infrastructure.entity.common.Stadtbezirk;
 import de.muenchen.isi.infrastructure.entity.common.Verortung;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
@@ -53,6 +65,7 @@ import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.repository.AbfrageRepository;
 import de.muenchen.isi.infrastructure.repository.AbfragevarianteBaugenehmigungsverfahrenRepository;
 import de.muenchen.isi.infrastructure.repository.AbfragevarianteBauleitplanverfahrenRepository;
+import de.muenchen.isi.infrastructure.repository.AbfragevarianteWeiteresVerfahrenRepository;
 import de.muenchen.isi.infrastructure.repository.BauvorhabenRepository;
 import de.muenchen.isi.security.AuthenticationUtils;
 import java.lang.reflect.Field;
@@ -87,6 +100,9 @@ class AbfrageServiceTest {
     @Mock
     private AbfragevarianteBaugenehmigungsverfahrenRepository abfragevarianteBaugenehmigungsverfahrenRepository;
 
+    @Mock
+    private AbfragevarianteWeiteresVerfahrenRepository abfragevarianteWeiteresVerfahrenRepository;
+
     private AbfrageDomainMapper abfrageDomainMapper;
 
     @Mock
@@ -97,6 +113,9 @@ class AbfrageServiceTest {
 
     @Mock
     private AuthenticationUtils authenticationUtils;
+
+    @Mock
+    private CalculationService calculationService;
 
     @BeforeEach
     public void beforeEach() throws NoSuchFieldException, IllegalAccessException {
@@ -114,7 +133,9 @@ class AbfrageServiceTest {
                 this.dokumentService,
                 this.authenticationUtils,
                 this.abfragevarianteBauleitplanverfahrenRepository,
-                this.abfragevarianteBaugenehmigungsverfahrenRepository
+                this.abfragevarianteBaugenehmigungsverfahrenRepository,
+                this.abfragevarianteWeiteresVerfahrenRepository,
+                this.calculationService
             );
         Mockito.reset(
             this.abfrageRepository,
@@ -122,7 +143,9 @@ class AbfrageServiceTest {
             this.dokumentService,
             this.authenticationUtils,
             this.abfragevarianteBauleitplanverfahrenRepository,
-            this.abfragevarianteBaugenehmigungsverfahrenRepository
+            this.abfragevarianteBaugenehmigungsverfahrenRepository,
+            this.abfragevarianteWeiteresVerfahrenRepository,
+            this.calculationService
         );
     }
 
@@ -144,7 +167,8 @@ class AbfrageServiceTest {
     }
 
     @Test
-    void saveAbfrageWithId() throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException {
+    void saveAbfrageWithId()
+        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, CalculationException {
         final UUID uuid = UUID.randomUUID();
         final String sub = "1234";
         final BauleitplanverfahrenModel abfrage = new BauleitplanverfahrenModel();
@@ -178,10 +202,14 @@ class AbfrageServiceTest {
         Mockito.verify(this.abfrageRepository, Mockito.times(1)).saveAndFlush(abfrageEntity);
         Mockito.verify(this.abfrageRepository, Mockito.times(1)).findByNameIgnoreCase("hallo");
         Mockito.verify(this.bauvorhabenRepository, Mockito.times(0)).findById(UUID.randomUUID());
+        Mockito
+            .verify(this.calculationService, Mockito.times(1))
+            .calculateAndAppendBedarfeToEachAbfragevarianteOfAbfrage(abfrage);
     }
 
     @Test
-    void saveAbfrageWithoutId() throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException {
+    void saveAbfrageWithoutId()
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, CalculationException {
         final UUID uuid = UUID.randomUUID();
         final String sub = "1234";
         final BauleitplanverfahrenModel abfrage = new BauleitplanverfahrenModel();
@@ -220,6 +248,9 @@ class AbfrageServiceTest {
         Mockito.verify(this.abfrageRepository, Mockito.times(1)).saveAndFlush(abfrageEntity);
         Mockito.verify(this.abfrageRepository, Mockito.times(1)).findByNameIgnoreCase("hallo");
         Mockito.verify(this.bauvorhabenRepository, Mockito.times(0)).findById(UUID.randomUUID());
+        Mockito
+            .verify(this.calculationService, Mockito.times(1))
+            .calculateAndAppendBedarfeToEachAbfragevarianteOfAbfrage(abfrage);
     }
 
     @Test
@@ -246,7 +277,7 @@ class AbfrageServiceTest {
 
     @Test
     void patchAngelegtBauleitplanverfahren()
-        throws EntityNotFoundException, UniqueViolationException, FileHandlingFailedException, FileHandlingWithS3FailedException, OptimisticLockingException, AbfrageStatusNotAllowedException {
+        throws EntityNotFoundException, UniqueViolationException, FileHandlingFailedException, FileHandlingWithS3FailedException, OptimisticLockingException, AbfrageStatusNotAllowedException, CalculationException {
         final UUID abfrageId = UUID.randomUUID();
 
         final BauleitplanverfahrenAngelegtModel requestModel = new BauleitplanverfahrenAngelegtModel();
@@ -288,7 +319,7 @@ class AbfrageServiceTest {
 
     @Test
     void patchAngelegtBaugenehmigungsverfahren()
-        throws EntityNotFoundException, UniqueViolationException, FileHandlingFailedException, FileHandlingWithS3FailedException, OptimisticLockingException, AbfrageStatusNotAllowedException {
+        throws EntityNotFoundException, UniqueViolationException, FileHandlingFailedException, FileHandlingWithS3FailedException, OptimisticLockingException, AbfrageStatusNotAllowedException, CalculationException {
         final UUID abfrageId = UUID.randomUUID();
 
         final BaugenehmigungsverfahrenAngelegtModel requestModel = new BaugenehmigungsverfahrenAngelegtModel();
@@ -329,8 +360,49 @@ class AbfrageServiceTest {
     }
 
     @Test
+    void patchAngelegtWeiteresVerfahren()
+        throws EntityNotFoundException, UniqueViolationException, FileHandlingFailedException, FileHandlingWithS3FailedException, OptimisticLockingException, AbfrageStatusNotAllowedException, CalculationException {
+        final UUID abfrageId = UUID.randomUUID();
+
+        final WeiteresVerfahrenAngelegtModel requestModel = new WeiteresVerfahrenAngelegtModel();
+        requestModel.setArtAbfrage(ArtAbfrage.WEITERES_VERFAHREN);
+        requestModel.setName("hallo");
+
+        final AbfragevarianteWeiteresVerfahrenAngelegtModel abfragevarianteRequestModel =
+            new AbfragevarianteWeiteresVerfahrenAngelegtModel();
+        abfragevarianteRequestModel.setArtAbfragevariante(ArtAbfrage.WEITERES_VERFAHREN);
+        abfragevarianteRequestModel.setName("Abfragevariante");
+        requestModel.setAbfragevariantenWeiteresVerfahren(List.of(abfragevarianteRequestModel));
+
+        final WeiteresVerfahrenModel model = new WeiteresVerfahrenModel();
+        model.setId(abfrageId);
+        model.setStatusAbfrage(StatusAbfrage.ANGELEGT);
+
+        final WeiteresVerfahrenModel abfrageModelMapped = this.abfrageDomainMapper.request2Model(requestModel, model);
+        final Abfrage entity = this.abfrageDomainMapper.model2Entity(abfrageModelMapped);
+
+        Mockito.when(this.abfrageRepository.findById(entity.getId())).thenReturn(Optional.of(entity));
+        Mockito.when(this.abfrageRepository.saveAndFlush(entity)).thenReturn(entity);
+        Mockito.when(this.abfrageRepository.findByNameIgnoreCase("hallo")).thenReturn(Optional.empty());
+
+        final AbfrageModel result = this.abfrageService.patchAngelegt(requestModel, entity.getId());
+
+        assertThat(result, is(model));
+
+        Mockito.verify(this.abfrageRepository, Mockito.times(1)).findById(entity.getId());
+        Mockito.verify(this.abfrageRepository, Mockito.times(1)).saveAndFlush(entity);
+        Mockito.verify(this.abfrageRepository, Mockito.times(1)).findByNameIgnoreCase("hallo");
+        Mockito
+            .verify(this.dokumentService, Mockito.times(1))
+            .deleteDokumenteFromOriginalDokumentenListWhichAreMissingInParameterAdaptedDokumentenListe(
+                Mockito.isNull(),
+                Mockito.isNull()
+            );
+    }
+
+    @Test
     void patchAngelegtArtAbfrageNotSupportedBauleitplanverfahren()
-        throws UniqueViolationException, FileHandlingFailedException, FileHandlingWithS3FailedException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException {
+        throws UniqueViolationException, FileHandlingFailedException, FileHandlingWithS3FailedException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException {
         final UUID abfrageId = UUID.randomUUID();
 
         final BauleitplanverfahrenAngelegtModel requestModel = new BauleitplanverfahrenAngelegtModel();
@@ -362,7 +434,7 @@ class AbfrageServiceTest {
 
     @Test
     void patchAngelegtArtAbfrageNotSupportedBaugenehmigungsverfahren()
-        throws UniqueViolationException, FileHandlingFailedException, FileHandlingWithS3FailedException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException {
+        throws UniqueViolationException, FileHandlingFailedException, FileHandlingWithS3FailedException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException {
         final UUID abfrageId = UUID.randomUUID();
 
         final BaugenehmigungsverfahrenAngelegtModel requestModel = new BaugenehmigungsverfahrenAngelegtModel();
@@ -393,8 +465,39 @@ class AbfrageServiceTest {
     }
 
     @Test
+    void patchAngelegtArtAbfrageNotSupportedWeiteresVerfahren()
+        throws UniqueViolationException, FileHandlingFailedException, FileHandlingWithS3FailedException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException {
+        final UUID abfrageId = UUID.randomUUID();
+
+        final var requestModel = new WeiteresVerfahrenAngelegtModel();
+        requestModel.setName("hallo");
+
+        final AbfragevarianteWeiteresVerfahrenAngelegtModel abfragevarianteRequestModel =
+            new AbfragevarianteWeiteresVerfahrenAngelegtModel();
+        abfragevarianteRequestModel.setName("Abfragevariante");
+        requestModel.setAbfragevariantenWeiteresVerfahren(List.of(abfragevarianteRequestModel));
+
+        final WeiteresVerfahrenModel model = new WeiteresVerfahrenModel();
+        model.setId(abfrageId);
+        model.setStatusAbfrage(StatusAbfrage.ANGELEGT);
+
+        final WeiteresVerfahrenModel abfrageModelMapped = this.abfrageDomainMapper.request2Model(requestModel, model);
+        final Abfrage entity = this.abfrageDomainMapper.model2Entity(abfrageModelMapped);
+
+        Mockito.when(this.abfrageRepository.findById(entity.getId())).thenReturn(Optional.of(entity));
+        Mockito.when(this.abfrageRepository.saveAndFlush(entity)).thenReturn(entity);
+        Mockito.when(this.abfrageRepository.findByNameIgnoreCase("hallo")).thenReturn(Optional.empty());
+
+        try {
+            this.abfrageService.patchAngelegt(requestModel, entity.getId());
+        } catch (final EntityNotFoundException exception) {
+            assertThat(exception.getMessage(), is("Die Art der Abfrage wird nicht unterstützt."));
+        }
+    }
+
+    @Test
     void patchInBearbeitungSachbearbeitungBauleitplanverfahren()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException {
         final var uuid = UUID.randomUUID();
 
         final StadtbezirkModel abfrage_sb_08 = new StadtbezirkModel();
@@ -500,7 +603,7 @@ class AbfrageServiceTest {
 
     @Test
     void patchInBearbeitungSachbearbeitungBaugenehmigungsverfahren()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException {
         final var uuid = UUID.randomUUID();
 
         final StadtbezirkModel abfrage_sb_08 = new StadtbezirkModel();
@@ -603,8 +706,110 @@ class AbfrageServiceTest {
     }
 
     @Test
+    void patchInBearbeitungSachbearbeitungWeiteresVerfahren()
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException {
+        final var uuid = UUID.randomUUID();
+
+        final StadtbezirkModel abfrage_sb_08 = new StadtbezirkModel();
+        abfrage_sb_08.setNummer("08");
+        abfrage_sb_08.setName("Stadtbezirk 8");
+
+        final StadtbezirkModel abfraqe_sb_20 = new StadtbezirkModel();
+        abfraqe_sb_20.setNummer("20");
+        abfraqe_sb_20.setName("Stadtbezirk 20");
+
+        final VerortungModel abfrageVerortung = new VerortungModel();
+        abfrageVerortung.setStadtbezirke(Stream.of(abfraqe_sb_20, abfrage_sb_08).collect(Collectors.toSet()));
+
+        final var requestModel = new WeiteresVerfahrenInBearbeitungSachbearbeitungModel();
+        requestModel.setVersion(0L);
+        requestModel.setArtAbfrage(ArtAbfrage.WEITERES_VERFAHREN);
+        requestModel.setVerortung(abfrageVerortung);
+        final var abfragevarianteSachbearbeitung =
+            new AbfragevarianteWeiteresVerfahrenInBearbeitungSachbearbeitungModel();
+        abfragevarianteSachbearbeitung.setArtAbfragevariante(ArtAbfrage.WEITERES_VERFAHREN);
+        abfragevarianteSachbearbeitung.setAbfragevariantenNr(1);
+        abfragevarianteSachbearbeitung.setName("Abfragevariante 1");
+        abfragevarianteSachbearbeitung.setGfWohnenPlanungsursaechlich(BigDecimal.TEN);
+        abfragevarianteSachbearbeitung.setAnmerkung("Test Anmerkung");
+        requestModel.setAbfragevariantenSachbearbeitungWeiteresVerfahren(List.of(abfragevarianteSachbearbeitung));
+
+        final var entityInDb = new WeiteresVerfahren();
+        entityInDb.setId(uuid);
+        entityInDb.setVersion(0L);
+        entityInDb.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+        entityInDb.setName("hallo");
+
+        Mockito.when(this.abfrageRepository.findById(entityInDb.getId())).thenReturn(Optional.of(entityInDb));
+
+        final Stadtbezirk abfrageEntity_sb_08 = new Stadtbezirk();
+        abfrageEntity_sb_08.setNummer("08");
+        abfrageEntity_sb_08.setName("Stadtbezirk 8");
+
+        final Stadtbezirk abfraqgeEntity_sb_20 = new Stadtbezirk();
+        abfraqgeEntity_sb_20.setNummer("20");
+        abfraqgeEntity_sb_20.setName("Stadtbezirk 20");
+
+        final Verortung abfrageEntityVerortung = new Verortung();
+        abfrageEntityVerortung.setStadtbezirke(
+            Stream.of(abfraqgeEntity_sb_20, abfrageEntity_sb_08).collect(Collectors.toSet())
+        );
+
+        final var entityToSave = new WeiteresVerfahren();
+        entityToSave.setAbfragevariantenWeiteresVerfahren(List.of());
+        entityToSave.setId(uuid);
+        entityToSave.setVersion(0L);
+        entityToSave.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+        entityToSave.setName("hallo");
+        entityToSave.setVerortung(abfrageEntityVerortung);
+        final var abfragevariante1ToSave = new AbfragevarianteWeiteresVerfahren();
+        abfragevariante1ToSave.setAbfragevariantenNr(1);
+        abfragevariante1ToSave.setName("Abfragevariante 1");
+        abfragevariante1ToSave.setGfWohnenPlanungsursaechlich(BigDecimal.TEN);
+        abfragevariante1ToSave.setAnmerkung("Test Anmerkung");
+        entityToSave.setAbfragevariantenSachbearbeitungWeiteresVerfahren(List.of(abfragevariante1ToSave));
+
+        final var entitySaved = new WeiteresVerfahren();
+        entitySaved.setId(uuid);
+        entitySaved.setVersion(1L);
+        entitySaved.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+        entitySaved.setName("hallo");
+        entitySaved.setVerortung(abfrageEntityVerortung);
+        final var abfragevariante1Saved = new AbfragevarianteWeiteresVerfahren();
+        abfragevariante1Saved.setId(UUID.randomUUID());
+        abfragevariante1Saved.setAbfragevariantenNr(1);
+        abfragevariante1Saved.setName("Abfragevariante 1");
+        abfragevariante1Saved.setGfWohnenPlanungsursaechlich(BigDecimal.TEN);
+        abfragevariante1Saved.setAnmerkung("Test Anmerkung");
+        entitySaved.setAbfragevariantenSachbearbeitungWeiteresVerfahren(List.of(abfragevariante1Saved));
+
+        Mockito.when(this.abfrageRepository.saveAndFlush(entityToSave)).thenReturn(entitySaved);
+        Mockito.when(this.abfrageRepository.findByNameIgnoreCase("hallo")).thenReturn(Optional.empty());
+
+        final var result = this.abfrageService.patchInBearbeitungSachbearbeitung(requestModel, uuid);
+
+        final var expected = new WeiteresVerfahrenModel();
+        expected.setArtAbfrage(ArtAbfrage.WEITERES_VERFAHREN);
+        expected.setId(uuid);
+        expected.setVersion(1L);
+        expected.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+        expected.setName("hallo");
+        expected.setVerortung(abfrageVerortung);
+        final var abfragevariante1Expected = new AbfragevarianteWeiteresVerfahrenModel();
+        abfragevariante1Expected.setArtAbfragevariante(ArtAbfrage.WEITERES_VERFAHREN);
+        abfragevariante1Expected.setId(abfragevariante1Saved.getId());
+        abfragevariante1Expected.setAbfragevariantenNr(1);
+        abfragevariante1Expected.setName("Abfragevariante 1");
+        abfragevariante1Expected.setGfWohnenPlanungsursaechlich(BigDecimal.TEN);
+        abfragevariante1Expected.setAnmerkung("Test Anmerkung");
+        expected.setAbfragevariantenSachbearbeitungWeiteresVerfahren(List.of(abfragevariante1Expected));
+
+        assertThat(result, is(expected));
+    }
+
+    @Test
     void patchInBearbeitungSachbearbeitungAbfrageNotSupportedBauleitplanverfahren()
-        throws UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException {
+        throws UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, CalculationException {
         final var uuid = UUID.randomUUID();
 
         final var requestModel = new BauleitplanverfahrenInBearbeitungSachbearbeitungModel();
@@ -658,7 +863,7 @@ class AbfrageServiceTest {
 
     @Test
     void patchInBearbeitungSachbearbeitungAbfrageNotSupportedBaugenehmigungsverfahren()
-        throws UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException {
+        throws UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, CalculationException {
         final var uuid = UUID.randomUUID();
 
         final var requestModel = new BaugenehmigungsverfahrenInBearbeitungSachbearbeitungModel();
@@ -713,8 +918,62 @@ class AbfrageServiceTest {
     }
 
     @Test
+    void patchInBearbeitungSachbearbeitungAbfrageNotSupportedWeiteresVerfahren()
+        throws UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, CalculationException {
+        final var uuid = UUID.randomUUID();
+
+        final var requestModel = new WeiteresVerfahrenInBearbeitungSachbearbeitungModel();
+        requestModel.setVersion(0L);
+        requestModel.setArtAbfrage(ArtAbfrage.WEITERES_VERFAHREN);
+        final var abfragevarianteSachbearbeitung =
+            new AbfragevarianteWeiteresVerfahrenInBearbeitungSachbearbeitungModel();
+        abfragevarianteSachbearbeitung.setAbfragevariantenNr(1);
+        abfragevarianteSachbearbeitung.setName("Abfragevariante 1");
+        requestModel.setAbfragevariantenSachbearbeitungWeiteresVerfahren(List.of(abfragevarianteSachbearbeitung));
+
+        final var entityInDb = new WeiteresVerfahren();
+        entityInDb.setId(uuid);
+        entityInDb.setVersion(0L);
+        entityInDb.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+        entityInDb.setName("hallo");
+
+        Mockito.when(this.abfrageRepository.findById(entityInDb.getId())).thenReturn(Optional.of(entityInDb));
+
+        final var entityToSave = new WeiteresVerfahren();
+        entityToSave.setAbfragevariantenWeiteresVerfahren(List.of());
+        entityToSave.setId(uuid);
+        entityToSave.setVersion(0L);
+        entityToSave.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+        entityToSave.setName("hallo");
+        final var abfragevariante1ToSave = new AbfragevarianteWeiteresVerfahren();
+        abfragevariante1ToSave.setAbfragevariantenNr(1);
+        abfragevariante1ToSave.setName("Abfragevariante 1");
+        entityToSave.setAbfragevariantenSachbearbeitungWeiteresVerfahren(List.of(abfragevariante1ToSave));
+
+        final var entitySaved = new WeiteresVerfahren();
+        entitySaved.setId(uuid);
+        entitySaved.setVersion(1L);
+        entitySaved.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+        entitySaved.setName("hallo");
+        final var abfragevariante1Saved = new AbfragevarianteWeiteresVerfahren();
+        abfragevariante1Saved.setId(UUID.randomUUID());
+        abfragevariante1Saved.setAbfragevariantenNr(1);
+        abfragevariante1Saved.setName("Abfragevariante 1");
+        entitySaved.setAbfragevariantenSachbearbeitungWeiteresVerfahren(List.of(abfragevariante1Saved));
+
+        Mockito.when(this.abfrageRepository.saveAndFlush(entityToSave)).thenReturn(entitySaved);
+        Mockito.when(this.abfrageRepository.findByNameIgnoreCase("hallo")).thenReturn(Optional.empty());
+
+        try {
+            this.abfrageService.patchInBearbeitungSachbearbeitung(requestModel, uuid);
+        } catch (final EntityNotFoundException exception) {
+            assertThat(exception.getMessage(), is("Die Art der Abfrage wird nicht unterstützt."));
+        }
+    }
+
+    @Test
     void patchInBearbeitungFachreferatBauleitplanverfahren()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException {
         final var uuid = UUID.randomUUID();
         final var uuidAbfragevariante = UUID.randomUUID();
         final var uuidAbfragevarianteSachbearbeitung = UUID.randomUUID();
@@ -910,7 +1169,7 @@ class AbfrageServiceTest {
 
     @Test
     void patchInBearbeitungFachreferatBaugenehmigungsverfahren()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException {
         final var uuid = UUID.randomUUID();
         final var uuidAbfragevariante = UUID.randomUUID();
         final var uuidAbfragevarianteSachbearbeitung = UUID.randomUUID();
@@ -1106,8 +1365,198 @@ class AbfrageServiceTest {
     }
 
     @Test
+    void patchInBearbeitungFachreferatWeiteresVerfahren()
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException {
+        final var uuid = UUID.randomUUID();
+        final var uuidAbfragevariante = UUID.randomUUID();
+        final var uuidAbfragevarianteSachbearbeitung = UUID.randomUUID();
+
+        final var requestModel = new WeiteresVerfahrenInBearbeitungFachreferatModel();
+        requestModel.setArtAbfrage(ArtAbfrage.WEITERES_VERFAHREN);
+        requestModel.setVersion(0L);
+
+        final var abfragevarianteRequestModel = new AbfragevarianteWeiteresVerfahrenInBearbeitungFachreferatModel();
+        abfragevarianteRequestModel.setArtAbfragevariante(ArtAbfrage.WEITERES_VERFAHREN);
+        abfragevarianteRequestModel.setId(uuidAbfragevariante);
+        abfragevarianteRequestModel.setVersion(0L);
+        final var abfragevarianteBedarfsmeldung = new BedarfsmeldungFachreferateModel();
+        abfragevarianteBedarfsmeldung.setAnzahlEinrichtungen(5);
+        abfragevarianteBedarfsmeldung.setInfrastruktureinrichtungTyp(InfrastruktureinrichtungTyp.KINDERKRIPPE);
+        abfragevarianteBedarfsmeldung.setAnzahlKinderkrippengruppen(4);
+        abfragevarianteBedarfsmeldung.setAnzahlKindergartengruppen(3);
+        abfragevarianteBedarfsmeldung.setAnzahlHortgruppen(2);
+        abfragevarianteBedarfsmeldung.setAnzahlGrundschulzuege(1);
+        abfragevarianteRequestModel.setBedarfsmeldungFachreferate(List.of(abfragevarianteBedarfsmeldung));
+
+        final var abfragevarianteSachbearbeitungRequestModel =
+            new AbfragevarianteWeiteresVerfahrenInBearbeitungFachreferatModel();
+        abfragevarianteSachbearbeitungRequestModel.setArtAbfragevariante(ArtAbfrage.WEITERES_VERFAHREN);
+        abfragevarianteSachbearbeitungRequestModel.setId(uuidAbfragevarianteSachbearbeitung);
+        abfragevarianteSachbearbeitungRequestModel.setVersion(0L);
+        final var abfragevarianteSachbearbeitungBedarfsmeldung = new BedarfsmeldungFachreferateModel();
+        abfragevarianteSachbearbeitungBedarfsmeldung.setAnzahlEinrichtungen(1);
+        abfragevarianteSachbearbeitungBedarfsmeldung.setInfrastruktureinrichtungTyp(
+            InfrastruktureinrichtungTyp.GRUNDSCHULE
+        );
+        abfragevarianteSachbearbeitungBedarfsmeldung.setAnzahlKinderkrippengruppen(2);
+        abfragevarianteSachbearbeitungBedarfsmeldung.setAnzahlKindergartengruppen(3);
+        abfragevarianteSachbearbeitungBedarfsmeldung.setAnzahlHortgruppen(4);
+        abfragevarianteSachbearbeitungBedarfsmeldung.setAnzahlGrundschulzuege(5);
+        abfragevarianteSachbearbeitungRequestModel.setBedarfsmeldungFachreferate(
+            List.of(abfragevarianteSachbearbeitungBedarfsmeldung)
+        );
+
+        requestModel.setAbfragevariantenWeiteresVerfahren(List.of(abfragevarianteRequestModel));
+        requestModel.setAbfragevariantenSachbearbeitungWeiteresVerfahren(
+            List.of(abfragevarianteSachbearbeitungRequestModel)
+        );
+
+        final var entityInDb = new WeiteresVerfahren();
+        entityInDb.setId(uuid);
+        entityInDb.setVersion(0L);
+        entityInDb.setName("hallo");
+        entityInDb.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
+
+        final var entityInDbAbfragevariante = new AbfragevarianteWeiteresVerfahren();
+        entityInDbAbfragevariante.setId(uuidAbfragevariante);
+
+        final var entityInDbAbfragevarianteSachbearbeitung = new AbfragevarianteWeiteresVerfahren();
+        entityInDbAbfragevarianteSachbearbeitung.setId(uuidAbfragevarianteSachbearbeitung);
+
+        entityInDb.setAbfragevariantenWeiteresVerfahren(List.of(entityInDbAbfragevariante));
+        entityInDb.setAbfragevariantenSachbearbeitungWeiteresVerfahren(
+            List.of(entityInDbAbfragevarianteSachbearbeitung)
+        );
+
+        Mockito.when(this.abfrageRepository.findById(entityInDb.getId())).thenReturn(Optional.of(entityInDb));
+
+        final var entityToSave = new WeiteresVerfahren();
+
+        entityToSave.setId(uuid);
+        entityToSave.setVersion(0L);
+        entityToSave.setName("hallo");
+        entityToSave.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
+
+        final var abfragevarianteToSaveSave = new AbfragevarianteWeiteresVerfahren();
+        abfragevarianteToSaveSave.setId(uuidAbfragevariante);
+        abfragevarianteToSaveSave.setVersion(0L);
+        final var abfragevarianteBedarfsmeldungToSave = new BedarfsmeldungFachreferate();
+        abfragevarianteBedarfsmeldungToSave.setAnzahlEinrichtungen(5);
+        abfragevarianteBedarfsmeldungToSave.setInfrastruktureinrichtungTyp(InfrastruktureinrichtungTyp.KINDERKRIPPE);
+        abfragevarianteBedarfsmeldungToSave.setAnzahlKinderkrippengruppen(4);
+        abfragevarianteBedarfsmeldungToSave.setAnzahlKindergartengruppen(3);
+        abfragevarianteBedarfsmeldungToSave.setAnzahlHortgruppen(2);
+        abfragevarianteBedarfsmeldungToSave.setAnzahlGrundschulzuege(1);
+        abfragevarianteToSaveSave.setBedarfsmeldungFachreferate((List.of(abfragevarianteBedarfsmeldungToSave)));
+
+        final var abfragevarianteSachbearbeitungToSave = new AbfragevarianteWeiteresVerfahren();
+        abfragevarianteSachbearbeitungToSave.setId(uuidAbfragevarianteSachbearbeitung);
+        abfragevarianteSachbearbeitungToSave.setVersion(0L);
+        final var abfragevarianteSachbearbeitungBedarfsmeldungToSave = new BedarfsmeldungFachreferate();
+        abfragevarianteSachbearbeitungBedarfsmeldungToSave.setAnzahlEinrichtungen(1);
+        abfragevarianteSachbearbeitungBedarfsmeldungToSave.setInfrastruktureinrichtungTyp(
+            InfrastruktureinrichtungTyp.GRUNDSCHULE
+        );
+        abfragevarianteSachbearbeitungBedarfsmeldungToSave.setAnzahlKinderkrippengruppen(2);
+        abfragevarianteSachbearbeitungBedarfsmeldungToSave.setAnzahlKindergartengruppen(3);
+        abfragevarianteSachbearbeitungBedarfsmeldungToSave.setAnzahlHortgruppen(4);
+        abfragevarianteSachbearbeitungBedarfsmeldungToSave.setAnzahlGrundschulzuege(5);
+        abfragevarianteSachbearbeitungToSave.setBedarfsmeldungFachreferate(
+            List.of(abfragevarianteSachbearbeitungBedarfsmeldungToSave)
+        );
+
+        entityToSave.setAbfragevariantenWeiteresVerfahren(List.of(abfragevarianteToSaveSave));
+        entityToSave.setAbfragevariantenSachbearbeitungWeiteresVerfahren(List.of(abfragevarianteSachbearbeitungToSave));
+
+        final var entitySaved = new WeiteresVerfahren();
+
+        entitySaved.setId(uuid);
+        entitySaved.setVersion(1L);
+        entitySaved.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
+        entitySaved.setName("hallo");
+
+        final var abfragevarianteSaved = new AbfragevarianteWeiteresVerfahren();
+        abfragevarianteSaved.setId(uuidAbfragevariante);
+        abfragevarianteSaved.setVersion(1L);
+        final var abfragevarianteBedarfsmeldungSaved = new BedarfsmeldungFachreferate();
+        abfragevarianteBedarfsmeldungSaved.setAnzahlEinrichtungen(5);
+        abfragevarianteBedarfsmeldungSaved.setInfrastruktureinrichtungTyp(InfrastruktureinrichtungTyp.KINDERKRIPPE);
+        abfragevarianteBedarfsmeldungSaved.setAnzahlKinderkrippengruppen(4);
+        abfragevarianteBedarfsmeldungSaved.setAnzahlKindergartengruppen(3);
+        abfragevarianteBedarfsmeldungSaved.setAnzahlHortgruppen(2);
+        abfragevarianteBedarfsmeldungSaved.setAnzahlGrundschulzuege(1);
+        abfragevarianteSaved.setBedarfsmeldungFachreferate(List.of(abfragevarianteBedarfsmeldungSaved));
+
+        final var abfragevarianteSachbearbeitungSaved = new AbfragevarianteWeiteresVerfahren();
+        abfragevarianteSachbearbeitungSaved.setId(uuidAbfragevarianteSachbearbeitung);
+        abfragevarianteSachbearbeitungSaved.setVersion(1L);
+        final var abfragevarianteSachbearbeitungBedarfsmeldungSaved = new BedarfsmeldungFachreferate();
+        abfragevarianteSachbearbeitungBedarfsmeldungSaved.setAnzahlEinrichtungen(1);
+        abfragevarianteSachbearbeitungBedarfsmeldungSaved.setInfrastruktureinrichtungTyp(
+            InfrastruktureinrichtungTyp.GRUNDSCHULE
+        );
+        abfragevarianteSachbearbeitungBedarfsmeldungSaved.setAnzahlKinderkrippengruppen(2);
+        abfragevarianteSachbearbeitungBedarfsmeldungSaved.setAnzahlKindergartengruppen(3);
+        abfragevarianteSachbearbeitungBedarfsmeldungSaved.setAnzahlHortgruppen(4);
+        abfragevarianteSachbearbeitungBedarfsmeldungSaved.setAnzahlGrundschulzuege(5);
+        abfragevarianteSachbearbeitungSaved.setBedarfsmeldungFachreferate(
+            List.of(abfragevarianteSachbearbeitungBedarfsmeldungSaved)
+        );
+
+        entitySaved.setAbfragevariantenWeiteresVerfahren(List.of(abfragevarianteSaved));
+        entitySaved.setAbfragevariantenSachbearbeitungWeiteresVerfahren(List.of(abfragevarianteSachbearbeitungSaved));
+
+        Mockito.when(this.abfrageRepository.saveAndFlush(entityToSave)).thenReturn(entitySaved);
+        Mockito.when(this.abfrageRepository.findByNameIgnoreCase("hallo")).thenReturn(Optional.empty());
+
+        final var result = this.abfrageService.patchInBearbeitungFachreferat(requestModel, uuid);
+
+        final var expected = new WeiteresVerfahrenModel();
+        expected.setArtAbfrage(ArtAbfrage.WEITERES_VERFAHREN);
+        expected.setId(uuid);
+        expected.setVersion(1L);
+        expected.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
+        expected.setName("hallo");
+
+        final var abfragevarianteExpected = new AbfragevarianteWeiteresVerfahrenModel();
+        abfragevarianteExpected.setArtAbfragevariante(ArtAbfrage.WEITERES_VERFAHREN);
+        abfragevarianteExpected.setId(abfragevarianteSaved.getId());
+        abfragevarianteExpected.setVersion(1L);
+        final var abfragevarianteBedarfsmeldungExpected = new BedarfsmeldungFachreferateModel();
+        abfragevarianteBedarfsmeldungExpected.setAnzahlEinrichtungen(5);
+        abfragevarianteBedarfsmeldungExpected.setInfrastruktureinrichtungTyp(InfrastruktureinrichtungTyp.KINDERKRIPPE);
+        abfragevarianteBedarfsmeldungExpected.setAnzahlKinderkrippengruppen(4);
+        abfragevarianteBedarfsmeldungExpected.setAnzahlKindergartengruppen(3);
+        abfragevarianteBedarfsmeldungExpected.setAnzahlHortgruppen(2);
+        abfragevarianteBedarfsmeldungExpected.setAnzahlGrundschulzuege(1);
+        abfragevarianteExpected.setBedarfsmeldungFachreferate(List.of(abfragevarianteBedarfsmeldungExpected));
+
+        final var abfragevarianteSachbearbeitungExpected = new AbfragevarianteWeiteresVerfahrenModel();
+        abfragevarianteSachbearbeitungExpected.setArtAbfragevariante(ArtAbfrage.WEITERES_VERFAHREN);
+        abfragevarianteSachbearbeitungExpected.setId(abfragevarianteSachbearbeitungSaved.getId());
+        abfragevarianteSachbearbeitungExpected.setVersion(1L);
+        final var abfragevarianteSachbearbeitungBedarfsmeldungExpected = new BedarfsmeldungFachreferateModel();
+        abfragevarianteSachbearbeitungBedarfsmeldungExpected.setAnzahlEinrichtungen(1);
+        abfragevarianteSachbearbeitungBedarfsmeldungExpected.setInfrastruktureinrichtungTyp(
+            InfrastruktureinrichtungTyp.GRUNDSCHULE
+        );
+        abfragevarianteSachbearbeitungBedarfsmeldungExpected.setAnzahlKinderkrippengruppen(2);
+        abfragevarianteSachbearbeitungBedarfsmeldungExpected.setAnzahlKindergartengruppen(3);
+        abfragevarianteSachbearbeitungBedarfsmeldungExpected.setAnzahlHortgruppen(4);
+        abfragevarianteSachbearbeitungBedarfsmeldungExpected.setAnzahlGrundschulzuege(5);
+        abfragevarianteSachbearbeitungExpected.setBedarfsmeldungFachreferate(
+            List.of(abfragevarianteSachbearbeitungBedarfsmeldungExpected)
+        );
+
+        expected.setAbfragevariantenWeiteresVerfahren(List.of(abfragevarianteExpected));
+        expected.setAbfragevariantenSachbearbeitungWeiteresVerfahren(List.of(abfragevarianteSachbearbeitungExpected));
+
+        assertThat(result, is(expected));
+    }
+
+    @Test
     void patchInBearbeitungFachreferatAbfrageNotSupportedBauleitplanverfahren()
-        throws UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException {
+        throws UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, CalculationException {
         final var uuid = UUID.randomUUID();
         final var uuidAbfragevariante = UUID.randomUUID();
         final var uuidAbfragevarianteSachbearbeitung = UUID.randomUUID();
@@ -1261,7 +1710,7 @@ class AbfrageServiceTest {
 
     @Test
     void patchInBearbeitungFachreferatAbfrageNotSupportedBaugenehmigungsverfahren()
-        throws UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException {
+        throws UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, CalculationException {
         final var uuid = UUID.randomUUID();
         final var uuidAbfragevariante = UUID.randomUUID();
         final var uuidAbfragevarianteSachbearbeitung = UUID.randomUUID();
@@ -1403,6 +1852,156 @@ class AbfrageServiceTest {
         entitySaved.setAbfragevariantenSachbearbeitungBaugenehmigungsverfahren(
             List.of(abfragevarianteSachbearbeitungSaved)
         );
+
+        Mockito.when(this.abfrageRepository.saveAndFlush(entityToSave)).thenReturn(entitySaved);
+        Mockito.when(this.abfrageRepository.findByNameIgnoreCase("hallo")).thenReturn(Optional.empty());
+
+        try {
+            this.abfrageService.patchInBearbeitungFachreferat(requestModel, uuid);
+        } catch (final EntityNotFoundException exception) {
+            assertThat(exception.getMessage(), is("Die Art der Abfrage wird nicht unterstützt."));
+        }
+    }
+
+    @Test
+    void patchInBearbeitungFachreferatAbfrageNotSupportedWeiteresVerfahren()
+        throws UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, CalculationException {
+        final var uuid = UUID.randomUUID();
+        final var uuidAbfragevariante = UUID.randomUUID();
+        final var uuidAbfragevarianteSachbearbeitung = UUID.randomUUID();
+
+        final var requestModel = new WeiteresVerfahrenInBearbeitungFachreferatModel();
+        requestModel.setArtAbfrage(ArtAbfrage.WEITERES_VERFAHREN);
+        requestModel.setVersion(0L);
+
+        final var abfragevarianteRequestModel = new AbfragevarianteWeiteresVerfahrenInBearbeitungFachreferatModel();
+        abfragevarianteRequestModel.setId(uuidAbfragevariante);
+        abfragevarianteRequestModel.setVersion(0L);
+        final var abfragevarianteBedarfsmeldung = new BedarfsmeldungFachreferateModel();
+        abfragevarianteBedarfsmeldung.setAnzahlEinrichtungen(5);
+        abfragevarianteBedarfsmeldung.setInfrastruktureinrichtungTyp(InfrastruktureinrichtungTyp.KINDERKRIPPE);
+        abfragevarianteBedarfsmeldung.setAnzahlKinderkrippengruppen(4);
+        abfragevarianteBedarfsmeldung.setAnzahlKindergartengruppen(3);
+        abfragevarianteBedarfsmeldung.setAnzahlHortgruppen(2);
+        abfragevarianteBedarfsmeldung.setAnzahlGrundschulzuege(1);
+        abfragevarianteRequestModel.setBedarfsmeldungFachreferate(List.of(abfragevarianteBedarfsmeldung));
+
+        final var abfragevarianteSachbearbeitungRequestModel =
+            new AbfragevarianteWeiteresVerfahrenInBearbeitungFachreferatModel();
+        abfragevarianteSachbearbeitungRequestModel.setId(uuidAbfragevarianteSachbearbeitung);
+        abfragevarianteSachbearbeitungRequestModel.setVersion(0L);
+        final var abfragevarianteSachbearbeitungBedarfsmeldung = new BedarfsmeldungFachreferateModel();
+        abfragevarianteSachbearbeitungBedarfsmeldung.setAnzahlEinrichtungen(1);
+        abfragevarianteSachbearbeitungBedarfsmeldung.setInfrastruktureinrichtungTyp(
+            InfrastruktureinrichtungTyp.GRUNDSCHULE
+        );
+        abfragevarianteSachbearbeitungBedarfsmeldung.setAnzahlKinderkrippengruppen(2);
+        abfragevarianteSachbearbeitungBedarfsmeldung.setAnzahlKindergartengruppen(3);
+        abfragevarianteSachbearbeitungBedarfsmeldung.setAnzahlHortgruppen(4);
+        abfragevarianteSachbearbeitungBedarfsmeldung.setAnzahlGrundschulzuege(5);
+        abfragevarianteSachbearbeitungRequestModel.setBedarfsmeldungFachreferate(
+            List.of(abfragevarianteSachbearbeitungBedarfsmeldung)
+        );
+
+        requestModel.setAbfragevariantenWeiteresVerfahren(List.of(abfragevarianteRequestModel));
+        requestModel.setAbfragevariantenSachbearbeitungWeiteresVerfahren(
+            List.of(abfragevarianteSachbearbeitungRequestModel)
+        );
+
+        final var entityInDb = new WeiteresVerfahren();
+        entityInDb.setId(uuid);
+        entityInDb.setVersion(0L);
+        entityInDb.setName("hallo");
+        entityInDb.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
+
+        final var entityInDbAbfragevariante = new AbfragevarianteWeiteresVerfahren();
+        entityInDbAbfragevariante.setId(uuidAbfragevariante);
+
+        final var entityInDbAbfragevarianteSachbearbeitung = new AbfragevarianteWeiteresVerfahren();
+        entityInDbAbfragevarianteSachbearbeitung.setId(uuidAbfragevarianteSachbearbeitung);
+
+        entityInDb.setAbfragevariantenWeiteresVerfahren(List.of(entityInDbAbfragevariante));
+        entityInDb.setAbfragevariantenSachbearbeitungWeiteresVerfahren(
+            List.of(entityInDbAbfragevarianteSachbearbeitung)
+        );
+
+        Mockito.when(this.abfrageRepository.findById(entityInDb.getId())).thenReturn(Optional.of(entityInDb));
+
+        final var entityToSave = new WeiteresVerfahren();
+
+        entityToSave.setId(uuid);
+        entityToSave.setVersion(0L);
+        entityToSave.setName("hallo");
+        entityToSave.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
+
+        final var abfragevarianteToSaveSave = new AbfragevarianteWeiteresVerfahren();
+        abfragevarianteToSaveSave.setId(uuidAbfragevariante);
+        abfragevarianteToSaveSave.setVersion(0L);
+        final var abfragevarianteBedarfsmeldungToSave = new BedarfsmeldungFachreferate();
+        abfragevarianteBedarfsmeldungToSave.setAnzahlEinrichtungen(5);
+        abfragevarianteBedarfsmeldungToSave.setInfrastruktureinrichtungTyp(InfrastruktureinrichtungTyp.KINDERKRIPPE);
+        abfragevarianteBedarfsmeldungToSave.setAnzahlKinderkrippengruppen(4);
+        abfragevarianteBedarfsmeldungToSave.setAnzahlKindergartengruppen(3);
+        abfragevarianteBedarfsmeldungToSave.setAnzahlHortgruppen(2);
+        abfragevarianteBedarfsmeldungToSave.setAnzahlGrundschulzuege(1);
+        abfragevarianteToSaveSave.setBedarfsmeldungFachreferate((List.of(abfragevarianteBedarfsmeldungToSave)));
+
+        final var abfragevarianteSachbearbeitungToSave = new AbfragevarianteWeiteresVerfahren();
+        abfragevarianteSachbearbeitungToSave.setId(uuidAbfragevarianteSachbearbeitung);
+        abfragevarianteSachbearbeitungToSave.setVersion(0L);
+        final var abfragevarianteSachbearbeitungBedarfsmeldungToSave = new BedarfsmeldungFachreferate();
+        abfragevarianteSachbearbeitungBedarfsmeldungToSave.setAnzahlEinrichtungen(1);
+        abfragevarianteSachbearbeitungBedarfsmeldungToSave.setInfrastruktureinrichtungTyp(
+            InfrastruktureinrichtungTyp.GRUNDSCHULE
+        );
+        abfragevarianteSachbearbeitungBedarfsmeldungToSave.setAnzahlKinderkrippengruppen(2);
+        abfragevarianteSachbearbeitungBedarfsmeldungToSave.setAnzahlKindergartengruppen(3);
+        abfragevarianteSachbearbeitungBedarfsmeldungToSave.setAnzahlHortgruppen(4);
+        abfragevarianteSachbearbeitungBedarfsmeldungToSave.setAnzahlGrundschulzuege(5);
+        abfragevarianteSachbearbeitungToSave.setBedarfsmeldungFachreferate(
+            List.of(abfragevarianteSachbearbeitungBedarfsmeldungToSave)
+        );
+
+        entityToSave.setAbfragevariantenWeiteresVerfahren(List.of(abfragevarianteToSaveSave));
+        entityToSave.setAbfragevariantenSachbearbeitungWeiteresVerfahren(List.of(abfragevarianteSachbearbeitungToSave));
+
+        final var entitySaved = new WeiteresVerfahren();
+
+        entitySaved.setId(uuid);
+        entitySaved.setVersion(1L);
+        entitySaved.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
+        entitySaved.setName("hallo");
+
+        final var abfragevarianteSaved = new AbfragevarianteWeiteresVerfahren();
+        abfragevarianteSaved.setId(uuidAbfragevariante);
+        abfragevarianteSaved.setVersion(1L);
+        final var abfragevarianteBedarfsmeldungSaved = new BedarfsmeldungFachreferate();
+        abfragevarianteBedarfsmeldungSaved.setAnzahlEinrichtungen(5);
+        abfragevarianteBedarfsmeldungSaved.setInfrastruktureinrichtungTyp(InfrastruktureinrichtungTyp.KINDERKRIPPE);
+        abfragevarianteBedarfsmeldungSaved.setAnzahlKinderkrippengruppen(4);
+        abfragevarianteBedarfsmeldungSaved.setAnzahlKindergartengruppen(3);
+        abfragevarianteBedarfsmeldungSaved.setAnzahlHortgruppen(2);
+        abfragevarianteBedarfsmeldungSaved.setAnzahlGrundschulzuege(1);
+        abfragevarianteSaved.setBedarfsmeldungFachreferate(List.of(abfragevarianteBedarfsmeldungSaved));
+
+        final var abfragevarianteSachbearbeitungSaved = new AbfragevarianteWeiteresVerfahren();
+        abfragevarianteSachbearbeitungSaved.setId(uuidAbfragevarianteSachbearbeitung);
+        abfragevarianteSachbearbeitungSaved.setVersion(1L);
+        final var abfragevarianteSachbearbeitungBedarfsmeldungSaved = new BedarfsmeldungFachreferate();
+        abfragevarianteSachbearbeitungBedarfsmeldungSaved.setAnzahlEinrichtungen(1);
+        abfragevarianteSachbearbeitungBedarfsmeldungSaved.setInfrastruktureinrichtungTyp(
+            InfrastruktureinrichtungTyp.GRUNDSCHULE
+        );
+        abfragevarianteSachbearbeitungBedarfsmeldungSaved.setAnzahlKinderkrippengruppen(2);
+        abfragevarianteSachbearbeitungBedarfsmeldungSaved.setAnzahlKindergartengruppen(3);
+        abfragevarianteSachbearbeitungBedarfsmeldungSaved.setAnzahlHortgruppen(4);
+        abfragevarianteSachbearbeitungBedarfsmeldungSaved.setAnzahlGrundschulzuege(5);
+        abfragevarianteSachbearbeitungSaved.setBedarfsmeldungFachreferate(
+            List.of(abfragevarianteSachbearbeitungBedarfsmeldungSaved)
+        );
+
+        entitySaved.setAbfragevariantenWeiteresVerfahren(List.of(abfragevarianteSaved));
+        entitySaved.setAbfragevariantenSachbearbeitungWeiteresVerfahren(List.of(abfragevarianteSachbearbeitungSaved));
 
         Mockito.when(this.abfrageRepository.saveAndFlush(entityToSave)).thenReturn(entitySaved);
         Mockito.when(this.abfrageRepository.findByNameIgnoreCase("hallo")).thenReturn(Optional.empty());

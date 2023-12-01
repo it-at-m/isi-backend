@@ -17,6 +17,8 @@ public class LookupListsDto {
 
     private LookupListDto standVerfahrenBaugenehmigungsverfahren;
 
+    private LookupListDto standVerfahrenWeiteresVerfahren;
+
     private LookupListDto standVerfahren;
 
     private LookupListDto statusAbfrage;
@@ -40,4 +42,6 @@ public class LookupListsDto {
     private LookupListDto artGsNachmittagBetreuung;
 
     private LookupListDto sobonOrientierungswertJahr;
+
+    private LookupListDto sobonOrientierungswertJahrWithoutStandortabfrage;
 }

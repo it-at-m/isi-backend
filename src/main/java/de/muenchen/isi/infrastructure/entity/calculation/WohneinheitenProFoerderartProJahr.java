@@ -1,4 +1,4 @@
-package de.muenchen.isi.domain.model.calculation;
+package de.muenchen.isi.infrastructure.entity.calculation;
 
 import java.math.BigDecimal;
 import lombok.AllArgsConstructor;
@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PlanungsursachlicheWohneinheitenModel {
+public class WohneinheitenProFoerderartProJahr {
 
     private String foerderart;
 

@@ -16,7 +16,7 @@ import de.muenchen.isi.domain.model.BaugebietModel;
 import de.muenchen.isi.domain.model.BaurateModel;
 import de.muenchen.isi.domain.model.FoerderartModel;
 import de.muenchen.isi.domain.model.FoerdermixModel;
-import de.muenchen.isi.domain.model.calculation.PlanungsursachlicheWohneinheitenModel;
+import de.muenchen.isi.domain.model.calculation.WohneinheitenProFoerderartProJahrModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
 import de.muenchen.isi.infrastructure.entity.stammdaten.StaedtebaulicheOrientierungswert;
 import de.muenchen.isi.infrastructure.repository.stammdaten.StaedtebaulicheOrientierungswertRepository;
@@ -143,54 +143,57 @@ public class PlanungsursaechlicheWohneinheitenServiceTest {
 
         final var jahr1String = String.valueOf(jahr1);
         final var jahr2String = String.valueOf(jahr2);
-        final var summe10Jahre = String.format(PlanungsursaechlicheWohneinheitenService.SUMMARY_OVER_PERIOD_NAME, 10);
-        final var summe15Jahre = String.format(PlanungsursaechlicheWohneinheitenService.SUMMARY_OVER_PERIOD_NAME, 15);
-        final var summe20Jahre = String.format(PlanungsursaechlicheWohneinheitenService.SUMMARY_OVER_PERIOD_NAME, 20);
+        final var summe10Jahre = String.format(CalculationService.SUMMATION_PERIOD_NAME, 10);
+        final var summe15Jahre = String.format(CalculationService.SUMMATION_PERIOD_NAME, 15);
+        final var summe20Jahre = String.format(CalculationService.SUMMATION_PERIOD_NAME, 20);
 
         final var expected = List.of(
-            new PlanungsursachlicheWohneinheitenModel(FF, jahr1String, new BigDecimal("100")),
-            new PlanungsursachlicheWohneinheitenModel(FF, jahr2String, new BigDecimal("25.0000")),
-            new PlanungsursachlicheWohneinheitenModel(FF, summe10Jahre, new BigDecimal("100")),
-            new PlanungsursachlicheWohneinheitenModel(FF, summe15Jahre, new BigDecimal("125.0000")),
-            new PlanungsursachlicheWohneinheitenModel(FF, summe20Jahre, new BigDecimal("125.0000")),
-            new PlanungsursachlicheWohneinheitenModel(EOF, jahr1String, new BigDecimal("55.5555555556")),
-            new PlanungsursachlicheWohneinheitenModel(EOF, jahr2String, new BigDecimal("75.0000")),
-            new PlanungsursachlicheWohneinheitenModel(EOF, summe10Jahre, new BigDecimal("55.5555555556")),
-            new PlanungsursachlicheWohneinheitenModel(EOF, summe15Jahre, new BigDecimal("130.5555555556")),
-            new PlanungsursachlicheWohneinheitenModel(EOF, summe20Jahre, new BigDecimal("130.5555555556")),
-            new PlanungsursachlicheWohneinheitenModel(MM, jahr1String, new BigDecimal("150.0000000000")),
-            new PlanungsursachlicheWohneinheitenModel(MM, jahr2String, new BigDecimal("75.0000000000")),
-            new PlanungsursachlicheWohneinheitenModel(MM, summe10Jahre, new BigDecimal("150.0000000000")),
-            new PlanungsursachlicheWohneinheitenModel(MM, summe15Jahre, new BigDecimal("225.0000000000")),
-            new PlanungsursachlicheWohneinheitenModel(MM, summe20Jahre, new BigDecimal("225.0000000000")),
-            new PlanungsursachlicheWohneinheitenModel(FH, jahr2String, new BigDecimal("140.6250000000")),
-            new PlanungsursachlicheWohneinheitenModel(FH, summe15Jahre, new BigDecimal("140.6250000000")),
-            new PlanungsursachlicheWohneinheitenModel(FH, summe20Jahre, new BigDecimal("140.6250000000")),
-            new PlanungsursachlicheWohneinheitenModel(
-                PlanungsursaechlicheWohneinheitenService.SUMMARY_NAME,
+            new WohneinheitenProFoerderartProJahrModel(FF, jahr1String, new BigDecimal("100")),
+            new WohneinheitenProFoerderartProJahrModel(FF, jahr2String, new BigDecimal("25.0000")),
+            //new WohneinheitenProFoerderartProJahrModel(FF, summe10Jahre, new BigDecimal("100")),
+            //new WohneinheitenProFoerderartProJahrModel(FF, summe15Jahre, new BigDecimal("125.0000")),
+            //new WohneinheitenProFoerderartProJahrModel(FF, summe20Jahre, new BigDecimal("125.0000")),
+            new WohneinheitenProFoerderartProJahrModel(EOF, jahr1String, new BigDecimal("55.5555555556")),
+            new WohneinheitenProFoerderartProJahrModel(EOF, jahr2String, new BigDecimal("75.0000")),
+            //new WohneinheitenProFoerderartProJahrModel(EOF, summe10Jahre, new BigDecimal("55.5555555556")),
+            //new WohneinheitenProFoerderartProJahrModel(EOF, summe15Jahre, new BigDecimal("130.5555555556")),
+            //new WohneinheitenProFoerderartProJahrModel(EOF, summe20Jahre, new BigDecimal("130.5555555556")),
+            new WohneinheitenProFoerderartProJahrModel(MM, jahr1String, new BigDecimal("150.0000000000")),
+            new WohneinheitenProFoerderartProJahrModel(MM, jahr2String, new BigDecimal("75.0000000000")),
+            //new WohneinheitenProFoerderartProJahrModel(MM, summe10Jahre, new BigDecimal("150.0000000000")),
+            //new WohneinheitenProFoerderartProJahrModel(MM, summe15Jahre, new BigDecimal("225.0000000000")),
+            //new WohneinheitenProFoerderartProJahrModel(MM, summe20Jahre, new BigDecimal("225.0000000000")),
+            new WohneinheitenProFoerderartProJahrModel(FH, jahr2String, new BigDecimal("140.6250000000"))
+            //new WohneinheitenProFoerderartProJahrModel(FH, summe15Jahre, new BigDecimal("140.6250000000")),
+            //new WohneinheitenProFoerderartProJahrModel(FH, summe20Jahre, new BigDecimal("140.6250000000")),
+            /*
+            new WohneinheitenProFoerderartProJahrModel(
+                CalculationService.SUMMATION_TOTAL_NAME,
                 jahr1String,
                 new BigDecimal("305.5555555556")
             ),
-            new PlanungsursachlicheWohneinheitenModel(
-                PlanungsursaechlicheWohneinheitenService.SUMMARY_NAME,
+            new WohneinheitenProFoerderartProJahrModel(
+                CalculationService.SUMMATION_TOTAL_NAME,
                 jahr2String,
                 new BigDecimal("315.6250000000")
             ),
-            new PlanungsursachlicheWohneinheitenModel(
-                PlanungsursaechlicheWohneinheitenService.SUMMARY_NAME,
+            new WohneinheitenProFoerderartProJahrModel(
+                CalculationService.SUMMATION_TOTAL_NAME,
                 summe10Jahre,
                 new BigDecimal("305.5555555556")
             ),
-            new PlanungsursachlicheWohneinheitenModel(
-                PlanungsursaechlicheWohneinheitenService.SUMMARY_NAME,
+            new WohneinheitenProFoerderartProJahrModel(
+                CalculationService.SUMMATION_TOTAL_NAME,
                 summe15Jahre,
                 new BigDecimal("621.1805555556")
             ),
-            new PlanungsursachlicheWohneinheitenModel(
-                PlanungsursaechlicheWohneinheitenService.SUMMARY_NAME,
+            new WohneinheitenProFoerderartProJahrModel(
+                CalculationService.SUMMATION_TOTAL_NAME,
                 summe20Jahre,
                 new BigDecimal("621.1805555556")
             )
+
+             */
         );
 
         final var actual = planungsursaechlicheWohneinheitenService.calculatePlanungsursaechlicheWohneinheiten(
@@ -199,6 +202,122 @@ public class PlanungsursaechlicheWohneinheitenServiceTest {
             LocalDate.EPOCH
         );
         assertThat(actual, containsInAnyOrder(expected.toArray()));
+    }
+
+    @Test
+    void sumWohneinheitenForNumberOfYearsForEachFoerderart() {
+        final var jahr1 = 2024;
+        final var jahr2 = 2034;
+        final var jahr1String = String.valueOf(jahr1);
+        final var jahr2String = String.valueOf(jahr2);
+        final var summe10Jahre = String.format(CalculationService.SUMMATION_PERIOD_NAME, 10);
+        final var summe15Jahre = String.format(CalculationService.SUMMATION_PERIOD_NAME, 15);
+        final var summe20Jahre = String.format(CalculationService.SUMMATION_PERIOD_NAME, 20);
+        final var wohneinheitenProJahr = List.of(
+            new WohneinheitenProFoerderartProJahrModel(FF, jahr1String, new BigDecimal("100")),
+            new WohneinheitenProFoerderartProJahrModel(FF, jahr2String, new BigDecimal("25.0000")),
+            new WohneinheitenProFoerderartProJahrModel(EOF, jahr1String, new BigDecimal("55.5555555556")),
+            new WohneinheitenProFoerderartProJahrModel(EOF, jahr2String, new BigDecimal("75.0000")),
+            new WohneinheitenProFoerderartProJahrModel(MM, jahr1String, new BigDecimal("150.0000000000")),
+            new WohneinheitenProFoerderartProJahrModel(MM, jahr2String, new BigDecimal("75.0000000000")),
+            new WohneinheitenProFoerderartProJahrModel(FH, jahr2String, new BigDecimal("140.6250000000"))
+        );
+
+        var actual = planungsursaechlicheWohneinheitenService.sumWohneinheitenForNumberOfYearsForEachFoerderart(
+            wohneinheitenProJahr,
+            10
+        );
+
+        var expected = List.of(
+            new WohneinheitenProFoerderartProJahrModel(MM, summe10Jahre, new BigDecimal("150.0000000000")),
+            new WohneinheitenProFoerderartProJahrModel(FH, summe10Jahre, new BigDecimal("140.6250000000")),
+            new WohneinheitenProFoerderartProJahrModel(FF, summe10Jahre, new BigDecimal("100")),
+            new WohneinheitenProFoerderartProJahrModel(EOF, summe10Jahre, new BigDecimal("55.5555555556"))
+        );
+        assertThat(actual, is(expected));
+
+        actual =
+            planungsursaechlicheWohneinheitenService.sumWohneinheitenForNumberOfYearsForEachFoerderart(
+                wohneinheitenProJahr,
+                15
+            );
+
+        expected =
+            List.of(
+                new WohneinheitenProFoerderartProJahrModel(MM, summe15Jahre, new BigDecimal("225.0000000000")),
+                new WohneinheitenProFoerderartProJahrModel(FH, summe15Jahre, new BigDecimal("140.6250000000")),
+                new WohneinheitenProFoerderartProJahrModel(FF, summe15Jahre, new BigDecimal("125.0000")),
+                new WohneinheitenProFoerderartProJahrModel(EOF, summe15Jahre, new BigDecimal("130.5555555556"))
+            );
+        assertThat(actual, is(expected));
+
+        actual =
+            planungsursaechlicheWohneinheitenService.sumWohneinheitenForNumberOfYearsForEachFoerderart(
+                wohneinheitenProJahr,
+                20
+            );
+
+        expected =
+            List.of(
+                new WohneinheitenProFoerderartProJahrModel(MM, summe20Jahre, new BigDecimal("225.0000000000")),
+                new WohneinheitenProFoerderartProJahrModel(FH, summe20Jahre, new BigDecimal("140.6250000000")),
+                new WohneinheitenProFoerderartProJahrModel(FF, summe20Jahre, new BigDecimal("125.0000")),
+                new WohneinheitenProFoerderartProJahrModel(EOF, summe20Jahre, new BigDecimal("130.5555555556"))
+            );
+        assertThat(actual, is(expected));
+    }
+
+    @Test
+    void sumWohneinheitenOverFoerderartenForEachYear() {
+        final var jahr1 = 2024;
+        final var jahr2 = 2034;
+        final var jahr1String = String.valueOf(jahr1);
+        final var jahr2String = String.valueOf(jahr2);
+        final var summe10Jahre = String.format(CalculationService.SUMMATION_PERIOD_NAME, 10);
+        final var summe15Jahre = String.format(CalculationService.SUMMATION_PERIOD_NAME, 15);
+        final var summe20Jahre = String.format(CalculationService.SUMMATION_PERIOD_NAME, 20);
+        final var wohneinheitenProJahr = List.of(
+            new WohneinheitenProFoerderartProJahrModel(FF, jahr1String, new BigDecimal("100")),
+            new WohneinheitenProFoerderartProJahrModel(FF, jahr2String, new BigDecimal("25.0000")),
+            new WohneinheitenProFoerderartProJahrModel(EOF, jahr1String, new BigDecimal("55.5555555556")),
+            new WohneinheitenProFoerderartProJahrModel(EOF, jahr2String, new BigDecimal("75.0000")),
+            new WohneinheitenProFoerderartProJahrModel(MM, jahr1String, new BigDecimal("150.0000000000")),
+            new WohneinheitenProFoerderartProJahrModel(MM, jahr2String, new BigDecimal("75.0000000000")),
+            new WohneinheitenProFoerderartProJahrModel(FH, jahr2String, new BigDecimal("140.6250000000"))
+        );
+
+        var actual = planungsursaechlicheWohneinheitenService.sumWohneinheitenOverFoerderartenForEachYear(
+            wohneinheitenProJahr
+        );
+
+        var expected = List.of(
+            new WohneinheitenProFoerderartProJahrModel(
+                CalculationService.SUMMATION_TOTAL_NAME,
+                jahr1String,
+                new BigDecimal("305.5555555556")
+            ),
+            new WohneinheitenProFoerderartProJahrModel(
+                CalculationService.SUMMATION_TOTAL_NAME,
+                jahr2String,
+                new BigDecimal("315.6250000000")
+            ),
+            new WohneinheitenProFoerderartProJahrModel(
+                CalculationService.SUMMATION_TOTAL_NAME,
+                summe10Jahre,
+                new BigDecimal("305.5555555556")
+            ),
+            new WohneinheitenProFoerderartProJahrModel(
+                CalculationService.SUMMATION_TOTAL_NAME,
+                summe15Jahre,
+                new BigDecimal("621.1805555556")
+            ),
+            new WohneinheitenProFoerderartProJahrModel(
+                CalculationService.SUMMATION_TOTAL_NAME,
+                summe20Jahre,
+                new BigDecimal("621.1805555556")
+            )
+        );
+        assertThat(actual, is(expected));
     }
 
     @Test
@@ -236,7 +355,7 @@ public class PlanungsursaechlicheWohneinheitenServiceTest {
     }
 
     @Test
-    void mergePlanungsursaechlicheWohneinheitenTest() {
+    void mergeWohneinheitenProFoerderartProJahrTest() {
         final var foerderart1 = FF;
         final var foerderart2 = EOF;
         final var jahr1 = "2024";
@@ -246,63 +365,63 @@ public class PlanungsursaechlicheWohneinheitenServiceTest {
         final var wohneinheiten3 = new BigDecimal("2000");
         final var wohneinheiten4 = new BigDecimal("3000");
 
-        final var planungsursaechlicheWohneinheiten1 = new PlanungsursachlicheWohneinheitenModel();
-        planungsursaechlicheWohneinheiten1.setFoerderart(foerderart1);
-        planungsursaechlicheWohneinheiten1.setJahr(jahr1);
-        planungsursaechlicheWohneinheiten1.setWohneinheiten(wohneinheiten1);
-        final var planungsursaechlicheWohneinheitenList = new ArrayList<PlanungsursachlicheWohneinheitenModel>();
-        planungsursaechlicheWohneinheitenList.add(planungsursaechlicheWohneinheiten1);
+        final var wohneinheitenProFoerderartProJahr1 = new WohneinheitenProFoerderartProJahrModel();
+        wohneinheitenProFoerderartProJahr1.setFoerderart(foerderart1);
+        wohneinheitenProFoerderartProJahr1.setJahr(jahr1);
+        wohneinheitenProFoerderartProJahr1.setWohneinheiten(wohneinheiten1);
+        final var wohneinheitenProFoerderartProJahrList = new ArrayList<WohneinheitenProFoerderartProJahrModel>();
+        wohneinheitenProFoerderartProJahrList.add(wohneinheitenProFoerderartProJahr1);
 
-        planungsursaechlicheWohneinheitenService.mergePlanungsursaechlicheWohneinheiten(
-            planungsursaechlicheWohneinheitenList,
+        planungsursaechlicheWohneinheitenService.mergeWohneinheitenProFoerderartProJahr(
+            wohneinheitenProFoerderartProJahrList,
             foerderart2,
             jahr1,
             wohneinheiten2
         );
-        assertThat(planungsursaechlicheWohneinheitenList.size(), is(2));
-        assertThat(planungsursaechlicheWohneinheitenList.get(0).getFoerderart(), is(foerderart1));
-        assertThat(planungsursaechlicheWohneinheitenList.get(0).getJahr(), is(jahr1));
-        assertThat(planungsursaechlicheWohneinheitenList.get(0).getWohneinheiten(), is(wohneinheiten1));
-        assertThat(planungsursaechlicheWohneinheitenList.get(1).getFoerderart(), is(foerderart2));
-        assertThat(planungsursaechlicheWohneinheitenList.get(1).getJahr(), is(jahr1));
-        assertThat(planungsursaechlicheWohneinheitenList.get(1).getWohneinheiten(), is(wohneinheiten2));
+        assertThat(wohneinheitenProFoerderartProJahrList.size(), is(2));
+        assertThat(wohneinheitenProFoerderartProJahrList.get(0).getFoerderart(), is(foerderart1));
+        assertThat(wohneinheitenProFoerderartProJahrList.get(0).getJahr(), is(jahr1));
+        assertThat(wohneinheitenProFoerderartProJahrList.get(0).getWohneinheiten(), is(wohneinheiten1));
+        assertThat(wohneinheitenProFoerderartProJahrList.get(1).getFoerderart(), is(foerderart2));
+        assertThat(wohneinheitenProFoerderartProJahrList.get(1).getJahr(), is(jahr1));
+        assertThat(wohneinheitenProFoerderartProJahrList.get(1).getWohneinheiten(), is(wohneinheiten2));
 
-        planungsursaechlicheWohneinheitenService.mergePlanungsursaechlicheWohneinheiten(
-            planungsursaechlicheWohneinheitenList,
+        planungsursaechlicheWohneinheitenService.mergeWohneinheitenProFoerderartProJahr(
+            wohneinheitenProFoerderartProJahrList,
             foerderart1,
             jahr2,
             wohneinheiten3
         );
-        assertThat(planungsursaechlicheWohneinheitenList.size(), is(3));
-        assertThat(planungsursaechlicheWohneinheitenList.get(0).getFoerderart(), is(foerderart1));
-        assertThat(planungsursaechlicheWohneinheitenList.get(0).getJahr(), is(jahr1));
-        assertThat(planungsursaechlicheWohneinheitenList.get(0).getWohneinheiten(), is(wohneinheiten1));
-        assertThat(planungsursaechlicheWohneinheitenList.get(1).getFoerderart(), is(foerderart2));
-        assertThat(planungsursaechlicheWohneinheitenList.get(1).getJahr(), is(jahr1));
-        assertThat(planungsursaechlicheWohneinheitenList.get(1).getWohneinheiten(), is(wohneinheiten2));
-        assertThat(planungsursaechlicheWohneinheitenList.get(2).getFoerderart(), is(foerderart1));
-        assertThat(planungsursaechlicheWohneinheitenList.get(2).getJahr(), is(jahr2));
-        assertThat(planungsursaechlicheWohneinheitenList.get(2).getWohneinheiten(), is(wohneinheiten3));
+        assertThat(wohneinheitenProFoerderartProJahrList.size(), is(3));
+        assertThat(wohneinheitenProFoerderartProJahrList.get(0).getFoerderart(), is(foerderart1));
+        assertThat(wohneinheitenProFoerderartProJahrList.get(0).getJahr(), is(jahr1));
+        assertThat(wohneinheitenProFoerderartProJahrList.get(0).getWohneinheiten(), is(wohneinheiten1));
+        assertThat(wohneinheitenProFoerderartProJahrList.get(1).getFoerderart(), is(foerderart2));
+        assertThat(wohneinheitenProFoerderartProJahrList.get(1).getJahr(), is(jahr1));
+        assertThat(wohneinheitenProFoerderartProJahrList.get(1).getWohneinheiten(), is(wohneinheiten2));
+        assertThat(wohneinheitenProFoerderartProJahrList.get(2).getFoerderart(), is(foerderart1));
+        assertThat(wohneinheitenProFoerderartProJahrList.get(2).getJahr(), is(jahr2));
+        assertThat(wohneinheitenProFoerderartProJahrList.get(2).getWohneinheiten(), is(wohneinheiten3));
 
-        planungsursaechlicheWohneinheitenService.mergePlanungsursaechlicheWohneinheiten(
-            planungsursaechlicheWohneinheitenList,
+        planungsursaechlicheWohneinheitenService.mergeWohneinheitenProFoerderartProJahr(
+            wohneinheitenProFoerderartProJahrList,
             foerderart2,
             jahr1,
             wohneinheiten4
         );
-        assertThat(planungsursaechlicheWohneinheitenList.size(), is(3));
-        assertThat(planungsursaechlicheWohneinheitenList.get(0).getFoerderart(), is(foerderart1));
-        assertThat(planungsursaechlicheWohneinheitenList.get(0).getJahr(), is(jahr1));
-        assertThat(planungsursaechlicheWohneinheitenList.get(0).getWohneinheiten(), is(wohneinheiten1));
-        assertThat(planungsursaechlicheWohneinheitenList.get(1).getFoerderart(), is(foerderart2));
-        assertThat(planungsursaechlicheWohneinheitenList.get(1).getJahr(), is(jahr1));
+        assertThat(wohneinheitenProFoerderartProJahrList.size(), is(3));
+        assertThat(wohneinheitenProFoerderartProJahrList.get(0).getFoerderart(), is(foerderart1));
+        assertThat(wohneinheitenProFoerderartProJahrList.get(0).getJahr(), is(jahr1));
+        assertThat(wohneinheitenProFoerderartProJahrList.get(0).getWohneinheiten(), is(wohneinheiten1));
+        assertThat(wohneinheitenProFoerderartProJahrList.get(1).getFoerderart(), is(foerderart2));
+        assertThat(wohneinheitenProFoerderartProJahrList.get(1).getJahr(), is(jahr1));
         assertThat(
-            planungsursaechlicheWohneinheitenList.get(1).getWohneinheiten(),
+            wohneinheitenProFoerderartProJahrList.get(1).getWohneinheiten(),
             is(wohneinheiten2.add(wohneinheiten4))
         );
-        assertThat(planungsursaechlicheWohneinheitenList.get(2).getFoerderart(), is(foerderart1));
-        assertThat(planungsursaechlicheWohneinheitenList.get(2).getJahr(), is(jahr2));
-        assertThat(planungsursaechlicheWohneinheitenList.get(2).getWohneinheiten(), is(wohneinheiten3));
+        assertThat(wohneinheitenProFoerderartProJahrList.get(2).getFoerderart(), is(foerderart1));
+        assertThat(wohneinheitenProFoerderartProJahrList.get(2).getJahr(), is(jahr2));
+        assertThat(wohneinheitenProFoerderartProJahrList.get(2).getWohneinheiten(), is(wohneinheiten3));
     }
 
     public static void fillStaedtebaulicheOrientierungswertRepository(
