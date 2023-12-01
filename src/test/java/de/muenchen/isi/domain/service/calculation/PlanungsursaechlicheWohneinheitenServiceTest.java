@@ -283,7 +283,19 @@ public class PlanungsursaechlicheWohneinheitenServiceTest {
             new WohneinheitenProFoerderartProJahrModel(EOF, jahr2String, new BigDecimal("75.0000")),
             new WohneinheitenProFoerderartProJahrModel(MM, jahr1String, new BigDecimal("150.0000000000")),
             new WohneinheitenProFoerderartProJahrModel(MM, jahr2String, new BigDecimal("75.0000000000")),
-            new WohneinheitenProFoerderartProJahrModel(FH, jahr2String, new BigDecimal("140.6250000000"))
+            new WohneinheitenProFoerderartProJahrModel(FH, jahr2String, new BigDecimal("140.6250000000")),
+            new WohneinheitenProFoerderartProJahrModel(MM, summe10Jahre, new BigDecimal("150.0000000000")),
+            new WohneinheitenProFoerderartProJahrModel(FH, summe10Jahre, new BigDecimal("140.6250000000")),
+            new WohneinheitenProFoerderartProJahrModel(FF, summe10Jahre, new BigDecimal("100")),
+            new WohneinheitenProFoerderartProJahrModel(EOF, summe10Jahre, new BigDecimal("55.5555555556")),
+            new WohneinheitenProFoerderartProJahrModel(MM, summe15Jahre, new BigDecimal("225.0000000000")),
+            new WohneinheitenProFoerderartProJahrModel(FH, summe15Jahre, new BigDecimal("140.6250000000")),
+            new WohneinheitenProFoerderartProJahrModel(FF, summe15Jahre, new BigDecimal("125.0000")),
+            new WohneinheitenProFoerderartProJahrModel(EOF, summe15Jahre, new BigDecimal("130.5555555556")),
+            new WohneinheitenProFoerderartProJahrModel(MM, summe20Jahre, new BigDecimal("225.0000000000")),
+            new WohneinheitenProFoerderartProJahrModel(FH, summe20Jahre, new BigDecimal("140.6250000000")),
+            new WohneinheitenProFoerderartProJahrModel(FF, summe20Jahre, new BigDecimal("125.0000")),
+            new WohneinheitenProFoerderartProJahrModel(EOF, summe20Jahre, new BigDecimal("130.5555555556"))
         );
 
         var actual = planungsursaechlicheWohneinheitenService.sumWohneinheitenOverFoerderartenForEachYear(
@@ -293,6 +305,16 @@ public class PlanungsursaechlicheWohneinheitenServiceTest {
         var expected = List.of(
             new WohneinheitenProFoerderartProJahrModel(
                 CalculationService.SUMMATION_TOTAL_NAME,
+                summe10Jahre,
+                new BigDecimal("446.1805555556")
+            ),
+            new WohneinheitenProFoerderartProJahrModel(
+                CalculationService.SUMMATION_TOTAL_NAME,
+                summe15Jahre,
+                new BigDecimal("621.1805555556")
+            ),
+            new WohneinheitenProFoerderartProJahrModel(
+                CalculationService.SUMMATION_TOTAL_NAME,
                 jahr1String,
                 new BigDecimal("305.5555555556")
             ),
@@ -300,16 +322,6 @@ public class PlanungsursaechlicheWohneinheitenServiceTest {
                 CalculationService.SUMMATION_TOTAL_NAME,
                 jahr2String,
                 new BigDecimal("315.6250000000")
-            ),
-            new WohneinheitenProFoerderartProJahrModel(
-                CalculationService.SUMMATION_TOTAL_NAME,
-                summe10Jahre,
-                new BigDecimal("305.5555555556")
-            ),
-            new WohneinheitenProFoerderartProJahrModel(
-                CalculationService.SUMMATION_TOTAL_NAME,
-                summe15Jahre,
-                new BigDecimal("621.1805555556")
             ),
             new WohneinheitenProFoerderartProJahrModel(
                 CalculationService.SUMMATION_TOTAL_NAME,

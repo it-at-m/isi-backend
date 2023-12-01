@@ -97,7 +97,6 @@ public class PlanungsursaechlicheWohneinheitenService {
     ) {
         return wohneinheitenProJahrToSum
             .stream()
-            .sorted(Comparator.comparingInt(a -> Integer.parseInt(a.getJahr())))
             .collect(
                 Collectors.groupingBy(
                     WohneinheitenProFoerderartProJahrModel::getFoerderart,
@@ -117,7 +116,6 @@ public class PlanungsursaechlicheWohneinheitenService {
     ) {
         return wohneinheitenProJahrToSum
             .stream()
-            .sorted(Comparator.comparingInt(a -> Integer.parseInt(a.getJahr())))
             .collect(
                 Collectors.groupingBy(
                     WohneinheitenProFoerderartProJahrModel::getJahr,
