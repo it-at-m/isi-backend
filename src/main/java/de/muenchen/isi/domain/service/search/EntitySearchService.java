@@ -210,14 +210,20 @@ public class EntitySearchService {
                 function
                     .bool()
                     .filter(
-                        function.match().field("statusAbfrage_filter").matching(StatusAbfrage.ERLEDIGT_OHNE_FACHREFERAT)
+                        function
+                            .match()
+                            .field("abfrage.statusAbfrage_filter")
+                            .matching(StatusAbfrage.ERLEDIGT_OHNE_FACHREFERAT)
                     )
             )
             .should(
                 function
                     .bool()
                     .filter(
-                        function.match().field("statusAbfrage_filter").matching(StatusAbfrage.ERLEDIGT_MIT_FACHREFERAT)
+                        function
+                            .match()
+                            .field("abfrage.statusAbfrage_filter")
+                            .matching(StatusAbfrage.ERLEDIGT_MIT_FACHREFERAT)
                     )
             );
     }
