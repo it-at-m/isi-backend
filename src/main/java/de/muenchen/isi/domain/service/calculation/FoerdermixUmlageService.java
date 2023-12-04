@@ -44,7 +44,7 @@ public class FoerdermixUmlageService {
                         for (final var schluessel : umlegung.get().getUmlegungsschluessel()) {
                             final var umgelegterAnteil = foerderart
                                 .getAnteilProzent()
-                                .multiply(schluessel.getAnteilProzent());
+                                .multiply(schluessel.getAnteilProzent().scaleByPowerOfTen(-2));
                             mergeFoerderart(umgelegteFoerderarten, schluessel.getBezeichnung(), umgelegterAnteil);
                         }
                     } else {
