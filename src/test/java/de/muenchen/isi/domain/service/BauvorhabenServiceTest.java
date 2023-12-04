@@ -329,7 +329,7 @@ public class BauvorhabenServiceTest {
 
     @Test
     void saveBauvorhabenTest()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, EntityIsReferencedException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, EntityIsReferencedException, UserRoleNotAllowedException {
         final BauvorhabenModel bauvorhaben = new BauvorhabenModel();
         bauvorhaben.setId(null);
 
@@ -353,7 +353,7 @@ public class BauvorhabenServiceTest {
 
     @Test
     void saveBauvorhabenBauvorhabennummerTest()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, EntityIsReferencedException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, EntityIsReferencedException, UserRoleNotAllowedException {
         // BauvorhabenModel
         final BauvorhabenModel bauvorhaben = new BauvorhabenModel();
         bauvorhaben.setId(null);
@@ -591,7 +591,7 @@ public class BauvorhabenServiceTest {
 
     @Test
     void updateBauvorhabenTest()
-        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, FileHandlingFailedException, FileHandlingWithS3FailedException, EntityIsReferencedException {
+        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, FileHandlingFailedException, FileHandlingWithS3FailedException, EntityIsReferencedException, UserRoleNotAllowedException {
         final BauvorhabenModel bauvorhabenModel = new BauvorhabenModel();
         bauvorhabenModel.setId(UUID.randomUUID());
         bauvorhabenModel.setNameVorhaben("BauvorhabenTest");

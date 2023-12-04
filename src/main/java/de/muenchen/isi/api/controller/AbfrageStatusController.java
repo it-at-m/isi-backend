@@ -51,6 +51,11 @@ public class AbfrageStatusController {
         value = {
             @ApiResponse(responseCode = "200", description = "OK -> Alle mögliche Transistions gefunden"),
             @ApiResponse(
+                responseCode = "403",
+                description = "FORBIDDEN -> Keine Berechtigung um die Abfrage zu bearbeiten.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+            @ApiResponse(
                 responseCode = "404",
                 description = "NOT_FOUND -> Es gibt keine Abfrage mit der ID.",
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
@@ -74,6 +79,11 @@ public class AbfrageStatusController {
     @ApiResponses(
         value = {
             @ApiResponse(responseCode = "200", description = "OK -> Abfrage wurde erfolgreich freigegeben."),
+            @ApiResponse(
+                responseCode = "403",
+                description = "FORBIDDEN -> Keine Berechtigung um die Abfrage zu bearbeiten.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
             @ApiResponse(
                 responseCode = "404",
                 description = "NOT_FOUND -> Es gibt keine Abfrage mit der ID.",
@@ -102,6 +112,11 @@ public class AbfrageStatusController {
     @ApiResponses(
         value = {
             @ApiResponse(responseCode = "200", description = "OK -> Abfrage wurde erfolgreich abbgebrochen."),
+            @ApiResponse(
+                responseCode = "403",
+                description = "FORBIDDEN -> Keine Berechtigung um die Abfrage zu bearbeiten.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
             @ApiResponse(
                 responseCode = "404",
                 description = "NOT_FOUND -> Es gibt keine Abfrage mit der ID.",
@@ -132,6 +147,11 @@ public class AbfrageStatusController {
             @ApiResponse(
                 responseCode = "200",
                 description = "OK -> Abfrage wurde erfolgreich zurückgegeben an den Abfrage Ersteller."
+            ),
+            @ApiResponse(
+                responseCode = "403",
+                description = "FORBIDDEN -> Keine Berechtigung um die Abfrage zu bearbeiten.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
             ),
             @ApiResponse(
                 responseCode = "404",
@@ -167,6 +187,11 @@ public class AbfrageStatusController {
                 description = "OK -> Abfrage wurde erfolgreich zurückgegeben an den Abfrage Ersteller."
             ),
             @ApiResponse(
+                responseCode = "403",
+                description = "FORBIDDEN -> Keine Berechtigung um die Abfrage zu bearbeiten.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+            @ApiResponse(
                 responseCode = "404",
                 description = "NOT_FOUND -> Es gibt keine Abfrage mit der ID.",
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
@@ -200,6 +225,11 @@ public class AbfrageStatusController {
                 description = "OK -> Abfrage wurde erfolgreich zurückgegeben an den Abfrage Ersteller."
             ),
             @ApiResponse(
+                responseCode = "403",
+                description = "FORBIDDEN -> Keine Berechtigung um die Abfrage zu bearbeiten.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+            @ApiResponse(
                 responseCode = "404",
                 description = "NOT_FOUND -> Es gibt keine Abfrage mit der ID.",
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
@@ -229,6 +259,11 @@ public class AbfrageStatusController {
     @ApiResponses(
         value = {
             @ApiResponse(responseCode = "200", description = "OK -> Abfrage wurde erfolgreich erledigt."),
+            @ApiResponse(
+                responseCode = "403",
+                description = "FORBIDDEN -> Keine Berechtigung um die Abfrage zu bearbeiten.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
             @ApiResponse(
                 responseCode = "404",
                 description = "NOT_FOUND -> Es gibt keine Abfrage mit der ID.",
@@ -263,6 +298,11 @@ public class AbfrageStatusController {
                 description = "OK -> Abfrage wurde erfolgreich an RBS oder SOZ zur Bearbeitung weitergegeben."
             ),
             @ApiResponse(
+                responseCode = "403",
+                description = "FORBIDDEN -> Keine Berechtigung um die Abfrage zu bearbeiten.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+            @ApiResponse(
                 responseCode = "404",
                 description = "NOT_FOUND -> Es gibt keine Abfrage mit der ID.",
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
@@ -293,6 +333,11 @@ public class AbfrageStatusController {
         value = {
             @ApiResponse(responseCode = "200", description = "OK -> Die Bedarfsmeldung der Fachreferate ist erfolgt"),
             @ApiResponse(
+                responseCode = "403",
+                description = "FORBIDDEN -> Keine Berechtigung um die Abfrage zu bearbeiten.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+            @ApiResponse(
                 responseCode = "404",
                 description = "NOT_FOUND -> Es gibt keine Abfrage mit der ID.",
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
@@ -322,6 +367,11 @@ public class AbfrageStatusController {
     @ApiResponses(
         value = {
             @ApiResponse(responseCode = "200", description = "OK -> Abfrage wurde erfolgreich erledigt."),
+            @ApiResponse(
+                responseCode = "403",
+                description = "FORBIDDEN -> Keine Berechtigung um die Abfrage zu bearbeiten.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
             @ApiResponse(
                 responseCode = "404",
                 description = "NOT_FOUND -> Es gibt keine Abfrage mit der ID.",
@@ -354,6 +404,11 @@ public class AbfrageStatusController {
             @ApiResponse(
                 responseCode = "200",
                 description = "OK -> Abfrage wurde erfolgreich zur bearbeitung freigestellt."
+            ),
+            @ApiResponse(
+                responseCode = "403",
+                description = "FORBIDDEN -> Keine Berechtigung um die Abfrage zu bearbeiten.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
             ),
             @ApiResponse(
                 responseCode = "404",

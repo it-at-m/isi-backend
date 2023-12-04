@@ -66,6 +66,11 @@ public class AbfrageController {
         value = {
             @ApiResponse(responseCode = "200", description = "OK"),
             @ApiResponse(
+                responseCode = "403",
+                description = "FORBIDDEN -> Keine Berechtigung um die Abfrage zu öffnen.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+            @ApiResponse(
                 responseCode = "404",
                 description = "NOT FOUND -> Abfrage mit dieser ID nicht vorhanden.",
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
@@ -130,6 +135,11 @@ public class AbfrageController {
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
             ),
             @ApiResponse(
+                responseCode = "403",
+                description = "FORBIDDEN -> Keine Berechtigung um die Abfrage zu bearbeiten.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+            @ApiResponse(
                 responseCode = "404",
                 description = "NOT_FOUND -> Es gibt keine Abfrage mit der ID oder das referenzierte Bauvorhaben existiert nicht.",
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
@@ -175,6 +185,11 @@ public class AbfrageController {
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
             ),
             @ApiResponse(
+                responseCode = "403",
+                description = "FORBIDDEN -> Keine Berechtigung um die Abfrage zu bearbeiten.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+            @ApiResponse(
                 responseCode = "404",
                 description = "NOT_FOUND -> Es gibt keine Abfrage mit der ID.",
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
@@ -214,6 +229,11 @@ public class AbfrageController {
             @ApiResponse(
                 responseCode = "400",
                 description = "BAD_REQUEST -> Abfrage konnte nicht aktualisiert werden, überprüfen sie die Eingabe oder die Abfrage befindet sich in einem unzulässigen Status",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+            @ApiResponse(
+                responseCode = "403",
+                description = "FORBIDDEN -> Keine Berechtigung um die Abfrage zu bearbeiten.",
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
             ),
             @ApiResponse(

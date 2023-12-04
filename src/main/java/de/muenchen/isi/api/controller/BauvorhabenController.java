@@ -89,6 +89,11 @@ public class BauvorhabenController {
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
             ),
             @ApiResponse(
+                responseCode = "403",
+                description = "FORBIDDEN -> Keine Berechtigung um die Abfrage mit dem Bauvorhaben zu verknüpfen.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+            @ApiResponse(
                 responseCode = "404",
                 description = "NOT_FOUND -> Die ausgewählte Abfrage existiert nicht mehr.",
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
@@ -110,7 +115,7 @@ public class BauvorhabenController {
         @RequestBody @Valid @NotNull final BauvorhabenDto bauvorhabenDto,
         @RequestParam(required = false) final UUID abfrageId
     )
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, EntityIsReferencedException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, EntityIsReferencedException, UserRoleNotAllowedException {
         var model = this.bauvorhabenApiMapper.dto2Model(bauvorhabenDto);
         model = this.bauvorhabenService.saveBauvorhaben(model, abfrageId);
         final var saved = this.bauvorhabenApiMapper.model2Dto(model);
@@ -123,6 +128,11 @@ public class BauvorhabenController {
     @ApiResponses(
         value = {
             @ApiResponse(responseCode = "200", description = "OK -> Bauvorhaben wurde erfolgreich aktualisiert."),
+            @ApiResponse(
+                responseCode = "403",
+                description = "FORBIDDEN -> Keine Berechtigung um die Abfrage mit dem Bauvorhaben zu verknüpfen.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
             @ApiResponse(
                 responseCode = "404",
                 description = "NOT_FOUND -> Bauvorhaben mit dieser ID nicht vorhanden.",
@@ -149,7 +159,7 @@ public class BauvorhabenController {
     public ResponseEntity<BauvorhabenDto> updateBauvorhaben(
         @RequestBody @Valid @NotNull final BauvorhabenDto bauvorhabenDto
     )
-        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, FileHandlingFailedException, FileHandlingWithS3FailedException, EntityIsReferencedException {
+        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, FileHandlingFailedException, FileHandlingWithS3FailedException, EntityIsReferencedException, UserRoleNotAllowedException {
         var model = this.bauvorhabenApiMapper.dto2Model(bauvorhabenDto);
         model = this.bauvorhabenService.updateBauvorhaben(model);
         final var saved = this.bauvorhabenApiMapper.model2Dto(model);
@@ -171,6 +181,11 @@ public class BauvorhabenController {
             @ApiResponse(
                 responseCode = "400",
                 description = "BAD_REQUEST -> Relevante Abfragevariante konnte nicht geändert werden.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+            @ApiResponse(
+                responseCode = "403",
+                description = "FORBIDDEN -> Keine Berechtigung um die Abfrage zu bearbeiten.",
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
             ),
             @ApiResponse(

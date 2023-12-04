@@ -74,7 +74,8 @@ public class AbfrageService {
      *
      * @param id zum Identifizieren des {@link AbfrageModel}.
      * @return {@link AbfrageModel}.
-     * @throws EntityNotFoundException falls die Abfrage identifiziert durch die {@link AbfrageModel#getId()} nicht gefunden wird.
+     * @throws EntityNotFoundException     falls die Abfrage identifiziert durch die {@link AbfrageModel#getId()} nicht gefunden wird.
+     * @throws UserRoleNotAllowedException falls der User nicht die richtige Rolle hat um eine Abfrage anzuschauen.
      */
     public AbfrageModel getById(final UUID id) throws EntityNotFoundException, UserRoleNotAllowedException {
         final var optAbfrage = this.abfrageRepository.findById(id);
@@ -135,6 +136,7 @@ public class AbfrageService {
      * @throws AbfrageStatusNotAllowedException  falls die zu aktualisierende Abfrage sich nicht im Status {@link StatusAbfrage#ANGELEGT} befindet.
      * @throws FileHandlingFailedException       falls es beim Dateihandling zu einem Fehler gekommen ist.
      * @throws FileHandlingWithS3FailedException falls es beim Dateihandling im S3-Storage zu einem Fehler gekommen ist.
+     * @throws UserRoleNotAllowedException       falls der User nicht die richtige Rolle hat um eine Abfrage anzuschauen.
      */
     public AbfrageModel patchAngelegt(final AbfrageAngelegtModel abfrage, final UUID id)
         throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, FileHandlingFailedException, FileHandlingWithS3FailedException, UserRoleNotAllowedException {
@@ -211,7 +213,7 @@ public class AbfrageService {
     /**
      * Diese Methode aktualisiert ein {@link WeiteresVerfahrenAngelegtModel}.
      *
-     * @param abfrage mit den Attributen zum Speichern
+     * @param abfrage           mit den Attributen zum Speichern
      * @param originalAbfrageDb welche mit den im Parameter gegebenen abfrage gegebenen Werten aktualisiert und gespeichert wird.
      * @return das gespeicherte {@link AbfrageModel}
      * @throws FileHandlingFailedException       falls es beim Dateihandling zu einem Fehler gekommen ist.
@@ -238,6 +240,7 @@ public class AbfrageService {
      * @throws OptimisticLockingException       falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist.
      * @throws EntityNotFoundException          falls das referenzierte Bauvorhaben nicht existiert.
      * @throws AbfrageStatusNotAllowedException falls die zu aktualisierende Abfrage sich nicht im Status {@link StatusAbfrage#IN_BEARBEITUNG_SACHBEARBEITUNG} befindet.
+     * @throws UserRoleNotAllowedException      falls der User nicht die richtige Rolle hat um eine Abfrage anzuschauen.
      */
     public AbfrageModel patchInBearbeitungSachbearbeitung(
         final AbfrageInBearbeitungSachbearbeitungModel abfrage,
@@ -287,6 +290,7 @@ public class AbfrageService {
      * @throws OptimisticLockingException       falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist.
      * @throws EntityNotFoundException          falls das referenzierte Bauvorhaben nicht existiert.
      * @throws AbfrageStatusNotAllowedException falls die zu aktualisierende Abfrage sich nicht im Status {@link StatusAbfrage#IN_BEARBEITUNG_FACHREFERATE} befindet.
+     * @throws UserRoleNotAllowedException      falls der User nicht die richtige Rolle hat um eine Abfrage anzuschauen.
      */
     public AbfrageModel patchInBearbeitungFachreferat(
         final AbfrageInBearbeitungFachreferatModel abfrage,
@@ -432,7 +436,8 @@ public class AbfrageService {
      *
      * @param abfragevarianteId zum ermitteln der Abfrage.
      * @return die gefundene Abfrage.
-     * @throws EntityNotFoundException falls keine Abfrage auf Basis der Abfragevariante ID eindeutig ermittelt werden konnte.
+     * @throws EntityNotFoundException     falls keine Abfrage auf Basis der Abfragevariante ID eindeutig ermittelt werden konnte.
+     * @throws UserRoleNotAllowedException falls der User nicht die richtige Rolle hat um eine Abfrage anzuschauen.
      */
     public AbfrageModel getByAbfragevarianteId(final UUID abfragevarianteId)
         throws EntityNotFoundException, UserRoleNotAllowedException {
@@ -463,6 +468,11 @@ public class AbfrageService {
         return this.getById(abfrageIds.get(0));
     }
 
+    /**
+     * Wirf eine {@link UserRoleNotAllowedException} wenn der User die Rolle Anwender hat
+     * und der Status der Abfrage nicht {@link  StatusAbfrage#ERLEDIGT_OHNE_FACHREFERAT} oder
+     * {@link StatusAbfrage#ERLEDIGT_MIT_FACHREFERAT} ist.
+     */
     public void throwUserRoleNotAllowedExceptionWhenRoleIsAnwenderAndAbfragestatusIsNotErledigt(Abfrage abfrage)
         throws UserRoleNotAllowedException {
         if (authenticationUtils.isRoleAnwender()) {
