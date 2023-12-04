@@ -75,8 +75,8 @@ public class EntitySearchService {
             .where(function -> {
                 if (StringUtils.isNotEmpty(adaptedSearchQuery)) {
                     if (isRoleAnwender) {
-                        return buildStatusFilterRoleAnwender(function)
-                            .must(buildSimpleQueryString(function, searchableAttributes, adaptedSearchQuery));
+                        return buildSimpleQueryString(function, searchableAttributes, adaptedSearchQuery)
+                            .must(buildStatusFilterRoleAnwender(function));
                     }
                     return buildSimpleQueryString(function, searchableAttributes, adaptedSearchQuery);
                 } else if (isRoleAnwender) {
