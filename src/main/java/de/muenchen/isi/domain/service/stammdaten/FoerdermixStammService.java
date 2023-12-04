@@ -29,7 +29,7 @@ public class FoerdermixStammService {
      * @return Liste an {@link FoerdermixStammModel}
      */
     public List<FoerdermixStammModel> getFoerdermixStaemme() {
-        return this.foerdermixStammRepository.findAllByOrderByBezeichnungAsc()
+        return this.foerdermixStammRepository.findAllByOrderByFoerdermixBezeichnungAsc()
             .map(this.stammdatenDomainMapper::entity2Model)
             .collect(Collectors.toList());
     }
@@ -53,17 +53,17 @@ public class FoerdermixStammService {
     /**
      * Diese Methode speichert ein {@link FoerdermixStammModel}.
      *
-     * @param foerdermix zum Speichern
+     * @param foerdermixstamm zum Speichern
      * @return das gespeicherte {@link FoerdermixStammModel}
-     * @throws UniqueViolationException falls die Bezeichnung {@link FoerdermixStammModel#getBezeichnung()} des Fördermixes bereits im gleichen Jahr {@link FoerdermixStammModel#getBezeichnungJahr()} vorhanden ist
+     * @throws UniqueViolationException falls die Bezeichnung {@link FoerdermixStammModel#getFoerdermix()#ge} des Fördermixes bereits im gleichen Jahr {@link FoerdermixStammModel#getFoerdermix()#getBezeichnungJahr()} vorhanden ist
      */
-    public FoerdermixStammModel saveFoerdermixStamm(final FoerdermixStammModel foerdermix)
+    public FoerdermixStammModel saveFoerdermixStamm(final FoerdermixStammModel foerdermixstamm)
         throws UniqueViolationException, OptimisticLockingException {
-        var entity = this.stammdatenDomainMapper.model2Entity(foerdermix);
+        var entity = this.stammdatenDomainMapper.model2Entity(foerdermixstamm);
         final var saved =
-            this.foerdermixStammRepository.findByBezeichnungJahrIgnoreCaseAndBezeichnungIgnoreCase(
-                    foerdermix.getBezeichnungJahr(),
-                    foerdermix.getBezeichnung()
+            this.foerdermixStammRepository.findByFoerdermixBezeichnungJahrIgnoreCaseAndFoerdermixBezeichnungIgnoreCase(
+                    foerdermixstamm.getFoerdermix().getBezeichnungJahr(),
+                    foerdermixstamm.getFoerdermix().getBezeichnung()
                 );
         if ((saved.isPresent() && saved.get().getId().equals(entity.getId())) || saved.isEmpty()) {
             try {

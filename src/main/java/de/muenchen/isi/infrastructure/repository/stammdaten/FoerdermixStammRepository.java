@@ -7,9 +7,9 @@ import java.util.stream.Stream;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface FoerdermixStammRepository extends JpaRepository<FoerdermixStamm, UUID> {
-    Stream<FoerdermixStamm> findAllByOrderByBezeichnungAsc();
+    Stream<FoerdermixStamm> findAllByOrderByFoerdermixBezeichnungAsc();
 
-    Optional<FoerdermixStamm> findByBezeichnungJahrIgnoreCaseAndBezeichnungIgnoreCase(
+    Optional<FoerdermixStamm> findByFoerdermixBezeichnungJahrIgnoreCaseAndFoerdermixBezeichnungIgnoreCase(
         final String bezeichnungJahr,
         final String bezeichnung
     );

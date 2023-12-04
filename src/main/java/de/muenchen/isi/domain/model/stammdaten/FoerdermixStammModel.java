@@ -15,9 +15,5 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 public class FoerdermixStammModel extends BaseEntityModel {
 
-    private String bezeichnungJahr;
-
-    private String bezeichnung;
-
     private FoerdermixModel foerdermix;
 }
