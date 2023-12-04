@@ -7,6 +7,7 @@ import de.muenchen.isi.domain.exception.AbfrageStatusNotAllowedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.StringLengthExceededException;
+import de.muenchen.isi.domain.exception.UserRoleNotAllowedException;
 import de.muenchen.isi.domain.service.AbfrageStatusService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -58,7 +59,7 @@ public class AbfrageStatusController {
     )
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_READ_TRANSITIONS.name())")
     public ResponseEntity<List<TransitionDto>> transitionsAbfrage(@PathVariable @NotNull final UUID id)
-        throws EntityNotFoundException {
+        throws EntityNotFoundException, UserRoleNotAllowedException {
         final List<TransitionDto> transistions = abfrageStatusService
             .getStatusAbfrageEventsBasedOnStateAndAuthorities(id)
             .stream()
@@ -89,7 +90,8 @@ public class AbfrageStatusController {
     public ResponseEntity<Void> freigabeAbfrage(
         @PathVariable @NotNull final UUID id,
         @RequestParam(value = "anmerkung", required = false, defaultValue = "") String anmerkung
-    ) throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException {
+    )
+        throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException, UserRoleNotAllowedException {
         this.abfrageStatusService.freigabeAbfrage(id, anmerkung);
         return ResponseEntity.ok().build();
     }
@@ -116,7 +118,8 @@ public class AbfrageStatusController {
     public ResponseEntity<Void> abbrechenAbfrage(
         @PathVariable @NotNull final UUID id,
         @RequestParam(value = "anmerkung", required = false, defaultValue = "") String anmerkung
-    ) throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException {
+    )
+        throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException, UserRoleNotAllowedException {
         this.abfrageStatusService.abbrechenAbfrage(id, anmerkung);
         return ResponseEntity.ok().build();
     }
@@ -148,7 +151,8 @@ public class AbfrageStatusController {
     public ResponseEntity<Void> zurueckAnAbfrageerstellungAbfrage(
         @PathVariable @NotNull final UUID id,
         @RequestParam(value = "anmerkung", required = false, defaultValue = "") String anmerkung
-    ) throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException {
+    )
+        throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException, UserRoleNotAllowedException {
         this.abfrageStatusService.zurueckAnAbfrageerstellungAbfrage(id, anmerkung);
         return ResponseEntity.ok().build();
     }
@@ -180,7 +184,8 @@ public class AbfrageStatusController {
     public ResponseEntity<Void> inBearbeitungSetzenAbfrage(
         @PathVariable @NotNull final UUID id,
         @RequestParam(value = "anmerkung", required = false, defaultValue = "") String anmerkung
-    ) throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException {
+    )
+        throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException, UserRoleNotAllowedException {
         this.abfrageStatusService.inBearbeitungSetzenAbfrage(id, anmerkung);
         return ResponseEntity.ok().build();
     }
@@ -212,7 +217,8 @@ public class AbfrageStatusController {
     public ResponseEntity<Void> zurueckAnSachbearbeitungAbfrage(
         @PathVariable @NotNull final UUID id,
         @RequestParam(value = "anmerkung", required = false, defaultValue = "") String anmerkung
-    ) throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException {
+    )
+        throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException, UserRoleNotAllowedException {
         this.abfrageStatusService.zurueckAnSachbearbeitungAbfrage(id, anmerkung);
         return ResponseEntity.ok().build();
     }
@@ -241,7 +247,8 @@ public class AbfrageStatusController {
     public ResponseEntity<Void> erledigtOhneFachreferat(
         @PathVariable @NotNull final UUID id,
         @RequestParam(value = "anmerkung", required = false, defaultValue = "") String anmerkung
-    ) throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException {
+    )
+        throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException, UserRoleNotAllowedException {
         this.abfrageStatusService.erledigtOhneFachreferat(id, anmerkung);
         return ResponseEntity.ok().build();
     }
@@ -273,7 +280,8 @@ public class AbfrageStatusController {
     public ResponseEntity<Void> verschickenDerStellungnahme(
         @PathVariable @NotNull final UUID id,
         @RequestParam(value = "anmerkung", required = false, defaultValue = "") String anmerkung
-    ) throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException {
+    )
+        throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException, UserRoleNotAllowedException {
         this.abfrageStatusService.verschickenDerStellungnahme(id, anmerkung);
         return ResponseEntity.ok().build();
     }
@@ -302,7 +310,8 @@ public class AbfrageStatusController {
     public ResponseEntity<Void> bedarfsmeldungErfolgt(
         @PathVariable @NotNull final UUID id,
         @RequestParam(value = "anmerkung", required = false, defaultValue = "") String anmerkung
-    ) throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException {
+    )
+        throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException, UserRoleNotAllowedException {
         this.abfrageStatusService.bedarfsmeldungErfolgt(id, anmerkung);
         return ResponseEntity.ok().build();
     }
@@ -331,7 +340,8 @@ public class AbfrageStatusController {
     public ResponseEntity<Void> erledigtMitFachreferat(
         @PathVariable @NotNull final UUID id,
         @RequestParam(value = "anmerkung", required = false, defaultValue = "") String anmerkung
-    ) throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException {
+    )
+        throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException, UserRoleNotAllowedException {
         this.abfrageStatusService.erledigtMitFachreferat(id, anmerkung);
         return ResponseEntity.ok().build();
     }
@@ -363,7 +373,8 @@ public class AbfrageStatusController {
     public ResponseEntity<Void> erneuteBearbeitungSachbearbeitung(
         @PathVariable @NotNull final UUID id,
         @RequestParam(value = "anmerkung", required = false, defaultValue = "") String anmerkung
-    ) throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException {
+    )
+        throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException, UserRoleNotAllowedException {
         this.abfrageStatusService.erneuteBearbeitungSachbearbeitung(id, anmerkung);
         return ResponseEntity.ok().build();
     }

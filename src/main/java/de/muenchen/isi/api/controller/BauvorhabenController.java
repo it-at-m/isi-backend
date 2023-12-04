@@ -14,6 +14,7 @@ import de.muenchen.isi.domain.exception.FileHandlingFailedException;
 import de.muenchen.isi.domain.exception.FileHandlingWithS3FailedException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
+import de.muenchen.isi.domain.exception.UserRoleNotAllowedException;
 import de.muenchen.isi.domain.service.BauvorhabenService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -195,7 +196,7 @@ public class BauvorhabenController {
     public ResponseEntity<BauvorhabenDto> putChangeRelevanteAbfragevariante(
         @RequestParam(value = "abfragevariante-id", defaultValue = "") @NotNull final UUID abfragevarianteId
     )
-        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, BauvorhabenNotReferencedException, EntityIsReferencedException {
+        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, BauvorhabenNotReferencedException, EntityIsReferencedException, UserRoleNotAllowedException {
         final var bauvorhaben = bauvorhabenService.changeRelevanteAbfragevariante(abfragevarianteId);
         final var saved = bauvorhabenApiMapper.model2Dto(bauvorhaben);
         return ResponseEntity.ok(saved);

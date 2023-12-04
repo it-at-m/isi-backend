@@ -8,6 +8,7 @@ import de.muenchen.isi.domain.exception.FileHandlingFailedException;
 import de.muenchen.isi.domain.exception.FileHandlingWithS3FailedException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
+import de.muenchen.isi.domain.exception.UserRoleNotAllowedException;
 import de.muenchen.isi.domain.mapper.BauvorhabenDomainMapper;
 import de.muenchen.isi.domain.mapper.SearchDomainMapper;
 import de.muenchen.isi.domain.model.AbfrageModel;
@@ -88,11 +89,11 @@ public class BauvorhabenService {
      * Diese Methode speichert ein {@link BauvorhabenModel}.
      *
      * @param bauvorhaben zum Speichern
-     * @param abfrageId ID der Abfrage bei einer Datenübernahme
+     * @param abfrageId   ID der Abfrage bei einer Datenübernahme
      * @return das gespeicherte {@link BauvorhabenModel}
-     * @throws UniqueViolationException   falls der Name des Bauvorhabens {@link BauvorhabenModel#getNameVorhaben()} bereits vorhanden ist
-     * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
-     * @throws EntityNotFoundException falls bei der Datenübernahme die ausgewählte Abfrage nicht mehr vorhanden ist
+     * @throws UniqueViolationException    falls der Name des Bauvorhabens {@link BauvorhabenModel#getNameVorhaben()} bereits vorhanden ist
+     * @throws OptimisticLockingException  falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
+     * @throws EntityNotFoundException     falls bei der Datenübernahme die ausgewählte Abfrage nicht mehr vorhanden ist
      * @throws EntityIsReferencedException falls bei der Datenübernahme die ausgewählte Abfrage bereits ein Bauvorhaben referenziert
      */
     public BauvorhabenModel saveBauvorhaben(final BauvorhabenModel bauvorhaben, final UUID abfrageId)
@@ -120,6 +121,8 @@ public class BauvorhabenService {
             } catch (final ObjectOptimisticLockingFailureException exception) {
                 final var message = "Die Daten wurden in der Zwischenzeit geändert. Bitte laden Sie die Seite neu!";
                 throw new OptimisticLockingException(message, exception);
+            } catch (UserRoleNotAllowedException e) {
+                final var message = "Die Daten wurden in der Zwischenzeit geändert. Bitte laden Sie die Seite neu!";
             }
             return this.bauvorhabenDomainMapper.entity2Model(bauvorhabenEntity);
         } else {
@@ -181,7 +184,7 @@ public class BauvorhabenService {
      * @throws BauvorhabenNotReferencedException falls die Abfrage zu keinem Bauvorhaben gehört
      */
     public BauvorhabenModel changeRelevanteAbfragevariante(final UUID abfragevarianteId)
-        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, BauvorhabenNotReferencedException, EntityIsReferencedException {
+        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, BauvorhabenNotReferencedException, EntityIsReferencedException, UserRoleNotAllowedException {
         final AbfrageModel abfrage = abfrageService.getByAbfragevarianteId(abfragevarianteId);
         abfrageService.throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(
             abfrage,

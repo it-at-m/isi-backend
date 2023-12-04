@@ -73,7 +73,8 @@ public class AbfrageController {
         }
     )
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_READ_ABFRAGE.name())")
-    public ResponseEntity<AbfrageDto> getById(@PathVariable @NotNull final UUID id) throws EntityNotFoundException {
+    public ResponseEntity<AbfrageDto> getById(@PathVariable @NotNull final UUID id)
+        throws EntityNotFoundException, UserRoleNotAllowedException {
         final var model = abfrageService.getById(id);
         final var dto = abfrageApiMapper.model2Dto(model);
         return ResponseEntity.ok(dto);
@@ -155,7 +156,7 @@ public class AbfrageController {
         @RequestBody @Valid @NotNull final AbfrageAngelegtDto abfrage,
         @PathVariable @NotNull final UUID id
     )
-        throws UniqueViolationException, FileHandlingFailedException, FileHandlingWithS3FailedException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException {
+        throws UniqueViolationException, FileHandlingFailedException, FileHandlingWithS3FailedException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, UserRoleNotAllowedException {
         final var requestModel = abfrageApiMapper.dto2Model(abfrage);
         final var responseModel = abfrageService.patchAngelegt(requestModel, id);
         final var dto = abfrageApiMapper.model2Dto(responseModel);
@@ -197,7 +198,7 @@ public class AbfrageController {
         @RequestBody @Valid @NotNull final AbfrageInBearbeitungSachbearbeitungDto abfrage,
         @PathVariable @NotNull final UUID id
     )
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, UserRoleNotAllowedException {
         final var requestModel = abfrageApiMapper.dto2Model(abfrage);
         final var responseModel = abfrageService.patchInBearbeitungSachbearbeitung(requestModel, id);
         final var dto = abfrageApiMapper.model2Dto(responseModel);
@@ -239,7 +240,7 @@ public class AbfrageController {
         @RequestBody @Valid @NotNull final AbfrageInBearbeitungFachreferatDto abfrage,
         @PathVariable @NotNull final UUID id
     )
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, UserRoleNotAllowedException {
         final var requestModel = abfrageApiMapper.dto2Model(abfrage);
         final var responseModel = abfrageService.patchInBearbeitungFachreferat(requestModel, id);
         final var dto = abfrageApiMapper.model2Dto(responseModel);

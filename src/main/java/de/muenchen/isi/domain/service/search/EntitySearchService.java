@@ -66,7 +66,7 @@ public class EntitySearchService {
         // Ist keine Offsetberechnung möglich, so wird auch keine paginierte Suche durchgeführt.
         final Integer paginationOffset = calculateOffsetOrNullIfNoPaginationRequired(searchQueryAndSortingInformation);
 
-        final var isRoleAnwender = isRoleAnwender();
+        final var isRoleAnwender = authenticationUtils.isRoleAnwender();
 
         // Erstellen der Suchquery
         final var searchQueryOptions = Search
@@ -194,10 +194,6 @@ public class EntitySearchService {
             numberOfPages = numberOfTotalHits / pageSize + 1;
         }
         return numberOfPages;
-    }
-
-    protected boolean isRoleAnwender() {
-        return authenticationUtils.getUserRoles().stream().allMatch(s -> s.contains("anwender"));
     }
 
     /**
