@@ -22,12 +22,6 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 public class FoerdermixStamm extends BaseEntity {
 
-    @Column(nullable = false)
-    private String bezeichnungJahr;
-
-    @Column(length = 80, nullable = false)
-    private String bezeichnung;
-
     @Embedded
     private Foerdermix foerdermix;
 }

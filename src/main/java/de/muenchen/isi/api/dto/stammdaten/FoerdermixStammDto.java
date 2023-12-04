@@ -20,14 +20,6 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 public class FoerdermixStammDto extends BaseEntityDto {
 
-    @NotEmpty
-    @Size(max = 255, message = "Es sind maximal {max} Zeichen erlaubt")
-    private String bezeichnungJahr;
-
-    @NotEmpty
-    @Size(max = 80, message = "Es sind maximal {max} Zeichen erlaubt")
-    private String bezeichnung;
-
     @NotNull
     @Valid
     @HasFoerdermixRequiredSum
