@@ -17,7 +17,7 @@ public enum ArtAbfrage implements ILookup {
 
     BAUGENEHMIGUNGSVERFAHREN("Baugenehmigungsverfahren"),
 
-    WEITERE_ABFRAGEN("Weitere Abfragen");
+    WEITERES_VERFAHREN("Weiteres Verfahren");
 
     @Getter
     private final String bezeichnung;
@@ -31,6 +31,6 @@ public enum ArtAbfrage implements ILookup {
 
         public static final String BAUGENEHMIGUNGSVERFAHREN = "BAUGENEHMIGUNGSVERFAHREN";
 
-        public static final String WEITERE_ABFRAGEN = "WEITERE_ABFRAGEN";
+        public static final String WEITERES_VERFAHREN = "WEITERES_VERFAHREN";
     }
 }

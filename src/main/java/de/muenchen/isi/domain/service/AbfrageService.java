@@ -13,15 +13,19 @@ import de.muenchen.isi.domain.model.AbfrageModel;
 import de.muenchen.isi.domain.model.BaugenehmigungsverfahrenModel;
 import de.muenchen.isi.domain.model.BauleitplanverfahrenModel;
 import de.muenchen.isi.domain.model.BauvorhabenModel;
+import de.muenchen.isi.domain.model.WeiteresVerfahrenModel;
 import de.muenchen.isi.domain.model.abfrageAngelegt.AbfrageAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageAngelegt.BaugenehmigungsverfahrenAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageAngelegt.BauleitplanverfahrenAngelegtModel;
+import de.muenchen.isi.domain.model.abfrageAngelegt.WeiteresVerfahrenAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungFachreferat.AbfrageInBearbeitungFachreferatModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungFachreferat.BaugenehmigungsverfahrenInBearbeitungFachreferatModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungFachreferat.BauleitplanverfahrenInBearbeitungFachreferatModel;
+import de.muenchen.isi.domain.model.abfrageInBearbeitungFachreferat.WeiteresVerfahrenInBearbeitungFachreferatModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.AbfrageInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.BaugenehmigungsverfahrenInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.BauleitplanverfahrenInBearbeitungSachbearbeitungModel;
+import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.WeiteresVerfahrenInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.domain.service.filehandling.DokumentService;
 import de.muenchen.isi.infrastructure.entity.Abfrage;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
@@ -30,6 +34,7 @@ import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.repository.AbfrageRepository;
 import de.muenchen.isi.infrastructure.repository.AbfragevarianteBaugenehmigungsverfahrenRepository;
 import de.muenchen.isi.infrastructure.repository.AbfragevarianteBauleitplanverfahrenRepository;
+import de.muenchen.isi.infrastructure.repository.AbfragevarianteWeiteresVerfahrenRepository;
 import de.muenchen.isi.infrastructure.repository.BauvorhabenRepository;
 import de.muenchen.isi.security.AuthenticationUtils;
 import java.util.Optional;
@@ -61,6 +66,8 @@ public class AbfrageService {
     private final AbfragevarianteBauleitplanverfahrenRepository abfragevarianteBauleitplanverfahrenRepository;
 
     private final AbfragevarianteBaugenehmigungsverfahrenRepository abfragevarianteBaugenehmigungsverfahrenRepository;
+
+    private final AbfragevarianteWeiteresVerfahrenRepository abfragevarianteWeiteresVerfahrenRepository;
 
     /**
      * Die Methode gibt ein {@link AbfrageModel} identifiziert durch die ID zurück.
@@ -134,21 +141,31 @@ public class AbfrageService {
         final var originalAbfrageDb = this.getById(id);
         this.throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(originalAbfrageDb, StatusAbfrage.ANGELEGT);
 
+        final AbfrageModel abfrageToSave;
         if (ArtAbfrage.BAULEITPLANVERFAHREN.equals(abfrage.getArtAbfrage())) {
-            return this.patchBauleitplanverfahrenAngelegt(
-                    (BauleitplanverfahrenAngelegtModel) abfrage,
-                    (BauleitplanverfahrenModel) originalAbfrageDb
-                );
+            abfrageToSave =
+                this.patchBauleitplanverfahrenAngelegt(
+                        (BauleitplanverfahrenAngelegtModel) abfrage,
+                        (BauleitplanverfahrenModel) originalAbfrageDb
+                    );
         } else if (ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN.equals(abfrage.getArtAbfrage())) {
-            return this.patchBaugenehmigungsverfahrenAngelegt(
-                    (BaugenehmigungsverfahrenAngelegtModel) abfrage,
-                    (BaugenehmigungsverfahrenModel) originalAbfrageDb
-                );
+            abfrageToSave =
+                this.patchBaugenehmigungsverfahrenAngelegt(
+                        (BaugenehmigungsverfahrenAngelegtModel) abfrage,
+                        (BaugenehmigungsverfahrenModel) originalAbfrageDb
+                    );
+        } else if (ArtAbfrage.WEITERES_VERFAHREN.equals(abfrage.getArtAbfrage())) {
+            abfrageToSave =
+                this.patchWeiteresVerfahrenAngelegt(
+                        (WeiteresVerfahrenAngelegtModel) abfrage,
+                        (WeiteresVerfahrenModel) originalAbfrageDb
+                    );
         } else {
             final var message = "Die Art der Abfrage wird nicht unterstützt.";
             log.error(message);
             throw new EntityNotFoundException(message);
         }
+        return this.save(abfrageToSave);
     }
 
     /**
@@ -157,23 +174,18 @@ public class AbfrageService {
      * @param abfrage           mit den Attributen zum Speichern
      * @param originalAbfrageDb welche mit den im Parameter gegebenen abfrage gegebenen Werten aktualisiert und gespeichert wird.
      * @return das gespeicherte {@link AbfrageModel}
-     * @throws UniqueViolationException          falls der Name der Abfrage oder der Abfragevariante bereits vorhanden ist.
-     * @throws OptimisticLockingException        falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist.
-     * @throws EntityNotFoundException           falls das referenzierte Bauvorhaben nicht existiert.
      * @throws FileHandlingFailedException       falls es beim Dateihandling zu einem Fehler gekommen ist.
      * @throws FileHandlingWithS3FailedException falls es beim Dateihandling im S3-Storage zu einem Fehler gekommen ist.
      */
     protected AbfrageModel patchBauleitplanverfahrenAngelegt(
         BauleitplanverfahrenAngelegtModel abfrage,
         BauleitplanverfahrenModel originalAbfrageDb
-    )
-        throws FileHandlingFailedException, FileHandlingWithS3FailedException, UniqueViolationException, OptimisticLockingException, EntityNotFoundException {
+    ) throws FileHandlingFailedException, FileHandlingWithS3FailedException {
         dokumentService.deleteDokumenteFromOriginalDokumentenListWhichAreMissingInParameterAdaptedDokumentenListe(
             abfrage.getDokumente(),
             originalAbfrageDb.getDokumente()
         );
-        final var abfrageToSave = this.abfrageDomainMapper.request2Model(abfrage, originalAbfrageDb);
-        return this.save(abfrageToSave);
+        return this.abfrageDomainMapper.request2Model(abfrage, originalAbfrageDb);
     }
 
     /**
@@ -182,23 +194,38 @@ public class AbfrageService {
      * @param abfrage           mit den Attributen zum Speichern
      * @param originalAbfrageDb welche mit den im Parameter gegebenen abfrage gegebenen Werten aktualisiert und gespeichert wird.
      * @return das gespeicherte {@link AbfrageModel}
-     * @throws UniqueViolationException          falls der Name der Abfrage oder der Abfragevariante bereits vorhanden ist.
-     * @throws OptimisticLockingException        falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist.
-     * @throws EntityNotFoundException           falls das referenzierte Bauvorhaben nicht existiert.
      * @throws FileHandlingFailedException       falls es beim Dateihandling zu einem Fehler gekommen ist.
      * @throws FileHandlingWithS3FailedException falls es beim Dateihandling im S3-Storage zu einem Fehler gekommen ist.
      */
     protected AbfrageModel patchBaugenehmigungsverfahrenAngelegt(
         BaugenehmigungsverfahrenAngelegtModel abfrage,
         BaugenehmigungsverfahrenModel originalAbfrageDb
-    )
-        throws FileHandlingFailedException, FileHandlingWithS3FailedException, UniqueViolationException, OptimisticLockingException, EntityNotFoundException {
+    ) throws FileHandlingFailedException, FileHandlingWithS3FailedException {
         dokumentService.deleteDokumenteFromOriginalDokumentenListWhichAreMissingInParameterAdaptedDokumentenListe(
             abfrage.getDokumente(),
             originalAbfrageDb.getDokumente()
         );
-        final var abfrageToSave = this.abfrageDomainMapper.request2Model(abfrage, originalAbfrageDb);
-        return this.save(abfrageToSave);
+        return this.abfrageDomainMapper.request2Model(abfrage, originalAbfrageDb);
+    }
+
+    /**
+     * Diese Methode aktualisiert ein {@link WeiteresVerfahrenAngelegtModel}.
+     *
+     * @param abfrage mit den Attributen zum Speichern
+     * @param originalAbfrageDb welche mit den im Parameter gegebenen abfrage gegebenen Werten aktualisiert und gespeichert wird.
+     * @return das gespeicherte {@link AbfrageModel}
+     * @throws FileHandlingFailedException       falls es beim Dateihandling zu einem Fehler gekommen ist.
+     * @throws FileHandlingWithS3FailedException falls es beim Dateihandling im S3-Storage zu einem Fehler gekommen ist.
+     */
+    protected AbfrageModel patchWeiteresVerfahrenAngelegt(
+        WeiteresVerfahrenAngelegtModel abfrage,
+        WeiteresVerfahrenModel originalAbfrageDb
+    ) throws FileHandlingFailedException, FileHandlingWithS3FailedException {
+        dokumentService.deleteDokumenteFromOriginalDokumentenListWhichAreMissingInParameterAdaptedDokumentenListe(
+            abfrage.getDokumente(),
+            originalAbfrageDb.getDokumente()
+        );
+        return this.abfrageDomainMapper.request2Model(abfrage, originalAbfrageDb);
     }
 
     /**
@@ -235,6 +262,12 @@ public class AbfrageService {
                 this.abfrageDomainMapper.request2Model(
                         (BaugenehmigungsverfahrenInBearbeitungSachbearbeitungModel) abfrage,
                         (BaugenehmigungsverfahrenModel) originalAbfrageDb
+                    );
+        } else if (ArtAbfrage.WEITERES_VERFAHREN.equals(abfrage.getArtAbfrage())) {
+            abfrageToSave =
+                this.abfrageDomainMapper.request2Model(
+                        (WeiteresVerfahrenInBearbeitungSachbearbeitungModel) abfrage,
+                        (WeiteresVerfahrenModel) originalAbfrageDb
                     );
         } else {
             final var message = "Die Art der Abfrage wird nicht unterstützt.";
@@ -278,6 +311,12 @@ public class AbfrageService {
                 this.abfrageDomainMapper.request2Model(
                         (BaugenehmigungsverfahrenInBearbeitungFachreferatModel) abfrage,
                         (BaugenehmigungsverfahrenModel) originalAbfrageDb
+                    );
+        } else if (ArtAbfrage.WEITERES_VERFAHREN.equals(abfrage.getArtAbfrage())) {
+            abfrageToSave =
+                this.abfrageDomainMapper.request2Model(
+                        (WeiteresVerfahrenInBearbeitungFachreferatModel) abfrage,
+                        (WeiteresVerfahrenModel) originalAbfrageDb
                     );
         } else {
             final var message = "Die Art der Abfrage wird nicht unterstützt.";
@@ -404,7 +443,11 @@ public class AbfrageService {
                 abfragevarianteBauleitplanverfahrenRepository.findAbfrageIdForAbfragevarianteById(id),
                 abfragevarianteBauleitplanverfahrenRepository.findAbfrageIdForAbfragevarianteSachbearbeitungById(id),
                 abfragevarianteBaugenehmigungsverfahrenRepository.findAbfrageIdForAbfragevarianteById(id),
-                abfragevarianteBaugenehmigungsverfahrenRepository.findAbfrageIdForAbfragevarianteSachbearbeitungById(id)
+                abfragevarianteBaugenehmigungsverfahrenRepository.findAbfrageIdForAbfragevarianteSachbearbeitungById(
+                    id
+                ),
+                abfragevarianteWeiteresVerfahrenRepository.findAbfrageIdForAbfragevarianteById(id),
+                abfragevarianteWeiteresVerfahrenRepository.findAbfrageIdForAbfragevarianteSachbearbeitungById(id)
             )
             .filter(Optional::isPresent)
             .map(Optional::get)

@@ -34,7 +34,7 @@ public class GeschossflaecheWohnenDistributionBaugenehmigungsverfahrenValidator
     ) {
         return (
             ObjectUtils.isNotEmpty(value.getWeGesamt()) ||
-            isGeschossflaecheWohnenDistributionValid(value.getBauabschnitte(), value.getGfWohnenGesamt())
+            this.isGeschossflaecheWohnenDistributionValid(value.getBauabschnitte(), value.getGfWohnenGesamt())
         );
     }
 }
