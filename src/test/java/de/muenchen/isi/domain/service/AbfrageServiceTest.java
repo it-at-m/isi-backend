@@ -346,7 +346,7 @@ class AbfrageServiceTest {
 
     @Test
     void patchAngelegtWeiteresVerfahren()
-        throws EntityNotFoundException, UniqueViolationException, FileHandlingFailedException, FileHandlingWithS3FailedException, OptimisticLockingException, AbfrageStatusNotAllowedException {
+        throws EntityNotFoundException, UniqueViolationException, FileHandlingFailedException, FileHandlingWithS3FailedException, OptimisticLockingException, AbfrageStatusNotAllowedException, UserRoleNotAllowedException {
         final UUID abfrageId = UUID.randomUUID();
 
         final WeiteresVerfahrenAngelegtModel requestModel = new WeiteresVerfahrenAngelegtModel();
@@ -451,7 +451,7 @@ class AbfrageServiceTest {
 
     @Test
     void patchAngelegtArtAbfrageNotSupportedWeiteresVerfahren()
-        throws UniqueViolationException, FileHandlingFailedException, FileHandlingWithS3FailedException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException {
+        throws UniqueViolationException, FileHandlingFailedException, FileHandlingWithS3FailedException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, UserRoleNotAllowedException {
         final UUID abfrageId = UUID.randomUUID();
 
         final var requestModel = new WeiteresVerfahrenAngelegtModel();
@@ -692,7 +692,7 @@ class AbfrageServiceTest {
 
     @Test
     void patchInBearbeitungSachbearbeitungWeiteresVerfahren()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, UserRoleNotAllowedException {
         final var uuid = UUID.randomUUID();
 
         final StadtbezirkModel abfrage_sb_08 = new StadtbezirkModel();
@@ -904,7 +904,7 @@ class AbfrageServiceTest {
 
     @Test
     void patchInBearbeitungSachbearbeitungAbfrageNotSupportedWeiteresVerfahren()
-        throws UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException {
+        throws UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, UserRoleNotAllowedException {
         final var uuid = UUID.randomUUID();
 
         final var requestModel = new WeiteresVerfahrenInBearbeitungSachbearbeitungModel();
@@ -1351,7 +1351,7 @@ class AbfrageServiceTest {
 
     @Test
     void patchInBearbeitungFachreferatWeiteresVerfahren()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, UserRoleNotAllowedException {
         final var uuid = UUID.randomUUID();
         final var uuidAbfragevariante = UUID.randomUUID();
         final var uuidAbfragevarianteSachbearbeitung = UUID.randomUUID();
@@ -1850,7 +1850,7 @@ class AbfrageServiceTest {
 
     @Test
     void patchInBearbeitungFachreferatAbfrageNotSupportedWeiteresVerfahren()
-        throws UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException {
+        throws UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, UserRoleNotAllowedException {
         final var uuid = UUID.randomUUID();
         final var uuidAbfragevariante = UUID.randomUUID();
         final var uuidAbfragevarianteSachbearbeitung = UUID.randomUUID();
