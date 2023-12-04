@@ -239,7 +239,7 @@ public class EntitySearchService {
         // Suche entsprechend der gegebenen Query.
         return function
             .bool()
-            .must(
+            .should(
                 function
                     // https://docs.jboss.org/hibernate/stable/search/reference/en-US/html_single/#search-dsl-predicate-simple-query-string
                     .simpleQueryString()
