@@ -308,6 +308,8 @@ public class TestData {
 
         List<FoerderartModel> foerderarten = new ArrayList<>(Arrays.asList(foerderart, foerderart2));
         foerdermix.setFoerderarten(foerderarten);
+        foerdermix.setBezeichnung("Test Fördermix");
+        foerdermix.setBezeichnungJahr("2023");
         return foerdermix;
     }
 

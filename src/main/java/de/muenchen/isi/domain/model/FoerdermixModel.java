@@ -10,5 +10,9 @@ import lombok.Data;
 @Data
 public class FoerdermixModel {
 
+    private String bezeichnungJahr;
+
+    private String bezeichnung;
+
     private List<FoerderartModel> foerderarten;
 }
