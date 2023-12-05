@@ -26,7 +26,6 @@ import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.stereotype.Service;
 
@@ -44,9 +43,7 @@ public class InfrastrukturbedarfService {
 
     public static final int SCALE_ROUNDING_RESULT_DECIMAL = 2;
 
-    public static final String TITLE_MEAN_WITH_PLACEHOLDER = "Mittelwert {} J.";
-
-    public static final String TITLE_PLACEHOLDER = "{}";
+    public static final String TITLE_MEAN_WITH_PLACEHOLDER = "Mittelwert %d J.";
 
     private final SobonOrientierungswertSozialeInfrastrukturRepository sobonOrientierungswertSozialeInfrastrukturRepository;
 
@@ -723,13 +720,7 @@ public class InfrastrukturbedarfService {
             sumAnzahlGruppen = bedarfe.get(index).getAnzahlGruppen().add(sumAnzahlGruppen);
             if (index == numberOfBedarfeProJahrForMean - 1) {
                 final var mean = new InfrastrukturbedarfProJahrModel();
-                mean.setJahr(
-                    StringUtils.replace(
-                        TITLE_MEAN_WITH_PLACEHOLDER,
-                        TITLE_PLACEHOLDER,
-                        Integer.toString(numberOfBedarfeProJahrForMean)
-                    )
-                );
+                mean.setJahr(String.format(TITLE_MEAN_WITH_PLACEHOLDER, numberOfBedarfeProJahrForMean));
                 mean.setAnzahlPersonenGesamt(
                     sumAnzahlPersonenGesamt.divide(numberOfYear, SCALE_ROUNDING_RESULT_DECIMAL, RoundingMode.HALF_EVEN)
                 );
@@ -768,13 +759,7 @@ public class InfrastrukturbedarfService {
             sumAnzahlPersonenGesamt = personen.get(index).getAnzahlPersonenGesamt().add(sumAnzahlPersonenGesamt);
             if (index == numberOfPersonenProJahrForMean - 1) {
                 final var mean = new PersonenProJahrModel();
-                mean.setJahr(
-                    StringUtils.replace(
-                        TITLE_MEAN_WITH_PLACEHOLDER,
-                        TITLE_PLACEHOLDER,
-                        Integer.toString(numberOfPersonenProJahrForMean)
-                    )
-                );
+                mean.setJahr(String.format(TITLE_MEAN_WITH_PLACEHOLDER, numberOfPersonenProJahrForMean));
                 mean.setAnzahlPersonenGesamt(
                     sumAnzahlPersonenGesamt.divide(numberOfYear, SCALE_ROUNDING_RESULT_DECIMAL, RoundingMode.HALF_EVEN)
                 );
