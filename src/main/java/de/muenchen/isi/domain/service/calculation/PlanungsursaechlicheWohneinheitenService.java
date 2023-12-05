@@ -75,7 +75,9 @@ public class PlanungsursaechlicheWohneinheitenService extends WohneinheitenCalcu
         final SobonOrientierungswertJahr sobonJahr
     ) {
         if (baurate.getWeGeplant() != null) {
-            return BigDecimal.valueOf(baurate.getWeGeplant()).multiply(foerderart.getAnteilProzent());
+            return BigDecimal
+                .valueOf(baurate.getWeGeplant())
+                .multiply(foerderart.getAnteilProzent().scaleByPowerOfTen(-2));
         } else if (baurate.getGfWohnenGeplant() != null) {
             final var orientierungswert =
                 staedtebaulicheOrientierungswertRepository.findFirstByFoerderartBezeichnungAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
@@ -86,7 +88,7 @@ public class PlanungsursaechlicheWohneinheitenService extends WohneinheitenCalcu
                 final var average = BigDecimal.valueOf(orientierungswert.get().getDurchschnittlicheGrundflaeche());
                 return baurate
                     .getGfWohnenGeplant()
-                    .multiply(foerderart.getAnteilProzent())
+                    .multiply(foerderart.getAnteilProzent().scaleByPowerOfTen(-2))
                     .divide(average, CalculationService.DIVISION_SCALE, RoundingMode.HALF_EVEN);
             }
         }
