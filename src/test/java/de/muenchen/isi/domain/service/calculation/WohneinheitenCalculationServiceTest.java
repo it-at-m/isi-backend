@@ -24,6 +24,16 @@ class WohneinheitenCalculationServiceTest {
         new PlanungsursaechlicheWohneinheitenService(null, null);
 
     @Test
+    void sumWohneinheitenForNumberOfYearsForEachFoerderartEmptyWohneinheiten() {
+        final var actual = planungsursaechlicheWohneinheitenService.sumWohneinheitenForNumberOfYearsForEachFoerderart(
+            List.of(),
+            10
+        );
+
+        assertThat(actual, is(List.of()));
+    }
+
+    @Test
     void sumWohneinheitenForNumberOfYearsForEachFoerderart() {
         final var jahr1 = 2024;
         final var jahr2 = 2034;
@@ -84,6 +94,14 @@ class WohneinheitenCalculationServiceTest {
                 new WohneinheitenProFoerderartProJahrModel(EOF, summe20Jahre, new BigDecimal("130.5555555556"))
             );
         assertThat(actual, is(expected));
+    }
+
+    @Test
+    void sumWohneinheitenOverFoerderartenForEachYearEmptyWohneinheiten() {
+        final var actual = planungsursaechlicheWohneinheitenService.sumWohneinheitenOverFoerderartenForEachYear(
+            List.of()
+        );
+        assertThat(actual, is(List.of()));
     }
 
     @Test
