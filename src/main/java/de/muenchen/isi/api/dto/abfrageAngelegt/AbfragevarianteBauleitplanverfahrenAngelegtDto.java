@@ -12,6 +12,7 @@ import de.muenchen.isi.api.validation.TechnicalAttributesValid;
 import de.muenchen.isi.api.validation.WesentlicheRechtsgrundlageBauleitplanverfahrenValid;
 import de.muenchen.isi.api.validation.WohneinheitenDistributionBauleitplanverfahrenValid;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.WesentlicheRechtsgrundlage;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -49,9 +50,7 @@ public class AbfragevarianteBauleitplanverfahrenAngelegtDto {
     private LocalDate satzungsbeschluss;
 
     @NotEmpty
-    private List<
-        @WesentlicheRechtsgrundlageBauleitplanverfahrenValid @NotNull WesentlicheRechtsgrundlage
-    > wesentlicheRechtsgrundlage;
+    private List<@WesentlicheRechtsgrundlageBauleitplanverfahrenValid @NotNull WesentlicheRechtsgrundlage> wesentlicheRechtsgrundlage;
 
     @Size(max = 255, message = "Es sind maximal {max} Zeichen erlaubt")
     private String wesentlicheRechtsgrundlageFreieEingabe;
@@ -97,4 +96,26 @@ public class AbfragevarianteBauleitplanverfahrenAngelegtDto {
 
     @TechnicalAttributesValid
     private List<@Valid @NotNull BauabschnittDto> bauabschnitte;
+
+    // Kindertagesbetreuung
+
+    private UncertainBoolean ausgelBedarfImBaugebietBeruecksichtigenKita;
+
+    private UncertainBoolean ausgelBedarfMitversorgungImBplanKita;
+
+    private UncertainBoolean ausgelBedarfMitversorgungInBestEinrichtungenKita;
+
+    private UncertainBoolean ausgelBedarfMitversorgungInBestEinrichtungenNachAusbauKita;
+
+    // Schule
+
+    private UncertainBoolean ausgelBedarfImBaugebietBeruecksichtigenSchule;
+
+    private UncertainBoolean ausgelBedarfMitversorgungImBplanSchule;
+
+    private UncertainBoolean ausgelBedarfMitversorgungInBestEinrichtungenSchule;
+
+    private UncertainBoolean ausgelBedarfMitversorgungInBestEinrichtungenNachAusbauSchule;
+
+    private String hinweisVersorgung;
 }

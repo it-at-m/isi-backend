@@ -5,6 +5,7 @@
 package de.muenchen.isi.api.dto;
 
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.WesentlicheRechtsgrundlage;
 import java.math.BigDecimal;
 import java.util.List;
@@ -70,4 +71,26 @@ public class AbfragevarianteBaugenehmigungsverfahrenDto extends AbfragevarianteD
     private List<BedarfsmeldungFachreferateDto> bedarfsmeldungFachreferate;
 
     private List<BauabschnittDto> bauabschnitte;
+
+    // Kindertagesbetreuung
+
+    private UncertainBoolean ausgelBedarfImBaugebietBeruecksichtigenKita;
+
+    private UncertainBoolean ausgelBedarfMitversorgungImBplanKita;
+
+    private UncertainBoolean ausgelBedarfMitversorgungInBestEinrichtungenKita;
+
+    private UncertainBoolean ausgelBedarfMitversorgungInBestEinrichtungenNachAusbauKita;
+
+    // Schule
+
+    private UncertainBoolean ausgelBedarfImBaugebietBeruecksichtigenSchule;
+
+    private UncertainBoolean ausgelBedarfMitversorgungImBplanSchule;
+
+    private UncertainBoolean ausgelBedarfMitversorgungInBestEinrichtungenSchule;
+
+    private UncertainBoolean ausgelBedarfMitversorgungInBestEinrichtungenNachAusbauSchule;
+
+    private String hinweisVersorgung;
 }

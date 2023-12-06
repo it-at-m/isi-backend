@@ -8,6 +8,7 @@ import de.muenchen.isi.infrastructure.adapter.search.IntegerSuggestionBinder;
 import de.muenchen.isi.infrastructure.adapter.search.IntegerToStringValueBridge;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.WesentlicheRechtsgrundlage;
 import de.muenchen.isi.infrastructure.repository.search.SearchwordSuggesterRepository;
 import java.math.BigDecimal;
@@ -160,4 +161,35 @@ public class AbfragevarianteWeiteresVerfahren extends Abfragevariante {
     @JoinColumn(name = "abfragevariante_weiteres_verfahren_id")
     @OrderBy("createdDateTime asc")
     private List<Bauabschnitt> bauabschnitte;
+
+    // Kindertagesbetreuung
+
+    @Column
+    private UncertainBoolean ausgelBedarfImBaugebietBeruecksichtigenKita;
+
+    @Column
+    private UncertainBoolean ausgelBedarfMitversorgungImBplanKita;
+
+    @Column
+    private UncertainBoolean ausgelBedarfMitversorgungInBestEinrichtungenKita;
+
+    @Column
+    private UncertainBoolean ausgelBedarfMitversorgungInBestEinrichtungenNachAusbauKita;
+
+    // Schule
+
+    @Column
+    private UncertainBoolean ausgelBedarfImBaugebietBeruecksichtigenSchule;
+
+    @Column
+    private UncertainBoolean ausgelBedarfMitversorgungImBplanSchule;
+
+    @Column
+    private UncertainBoolean ausgelBedarfMitversorgungInBestEinrichtungenSchule;
+
+    @Column
+    private UncertainBoolean ausgelBedarfMitversorgungInBestEinrichtungenNachAusbauSchule;
+
+    @Column
+    private String hinweisVersorgung;
 }
