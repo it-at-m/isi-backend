@@ -57,20 +57,20 @@ public class SobonursaechlicheWohneinheitenService extends WohneinheitenCalculat
         calculateWohneinheiten(baurate, 0, sobonGf, sobonJahr.getGueltigAb(), sobonsursachlicheWohneinheitenList);
 
         // Summe der Wohneinheiten aller Förderarten
-        BigDecimal summeWE = BigDecimal.ZERO;
-        for (WohneinheitenProFoerderartProJahrModel sobonursaechlicheWE : sobonsursachlicheWohneinheitenList) {
-            summeWE = summeWE.add(sobonursaechlicheWE.getWohneinheiten());
+        BigDecimal summeWe = BigDecimal.ZERO;
+        for (WohneinheitenProFoerderartProJahrModel sobonursaechlicheWe : sobonsursachlicheWohneinheitenList) {
+            summeWe = summeWe.add(sobonursaechlicheWe.getWohneinheiten());
         }
 
         // Ist das Ergebnis über 1000, werden 1000er-Blöcke/Jahre gebildet.
-        if (1 == summeWE.compareTo(TAUSEND)) {
+        if (1 == summeWe.compareTo(TAUSEND)) {
             sobonsursachlicheWohneinheitenList.clear();
 
             BigDecimal gfWohnen1000 = sobonGf.multiply(
-                TAUSEND.divide(summeWE, CalculationService.DIVISION_SCALE, RoundingMode.HALF_EVEN)
+                TAUSEND.divide(summeWe, CalculationService.DIVISION_SCALE, RoundingMode.HALF_EVEN)
             );
-            // Anzahl 1000er-Blöcke/Jahre = summeWE / 1000 = Ergebnis abrunden
-            BigDecimal anzahl = summeWE.divide(TAUSEND, 0, RoundingMode.HALF_DOWN);
+            // Anzahl 1000er-Blöcke/Jahre = summeWe / 1000 = Ergebnis abrunden
+            BigDecimal anzahl = summeWe.divide(TAUSEND, 0, RoundingMode.HALF_DOWN);
 
             int jahr = 0;
             for (BigDecimal i = BigDecimal.ZERO; i.compareTo(anzahl) < 0; i = i.add(BigDecimal.ONE)) {
@@ -86,7 +86,7 @@ public class SobonursaechlicheWohneinheitenService extends WohneinheitenCalculat
 
             // letztes Jahr
             BigDecimal gfWohnenRest = sobonGf.multiply(
-                summeWE.remainder(TAUSEND).divide(summeWE, CalculationService.DIVISION_SCALE, RoundingMode.HALF_EVEN)
+                summeWe.remainder(TAUSEND).divide(summeWe, CalculationService.DIVISION_SCALE, RoundingMode.HALF_EVEN)
             );
             calculateWohneinheiten(
                 baurate,
