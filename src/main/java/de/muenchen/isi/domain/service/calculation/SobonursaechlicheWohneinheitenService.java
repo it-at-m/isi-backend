@@ -22,6 +22,8 @@ public class SobonursaechlicheWohneinheitenService extends WohneinheitenCalculat
 
     private final StaedtebaulicheOrientierungswertRepository staedtebaulicheOrientierungswertRepository;
 
+    public static final BigDecimal TAUSEND = new BigDecimal(1000);
+
     /**
      * Errechnet SoBoN-ursächliche Wohneinheiten je Förderart und Jahr.
      * Ursprungsinfo ist die SoBoN-ursächliche Geschossfläche in der Abfragevariante
@@ -33,8 +35,7 @@ public class SobonursaechlicheWohneinheitenService extends WohneinheitenCalculat
      * Für die Summenbildung gibt es eine zusätzliche "Förderart", die die Summen aller Förderarten pro Jahr enthält.
      * Außerdem gibt es zusätzliche Jahre pro Förderart, die über 10, 15 & 20 Jahre die Wohneinheiten aufsummieren.
      *
-     *
-     * @param sobonGF SoBoN-ursächliche Geschossfläche in der Abfragevariante
+     * @param sobonGf SoBoN-ursächliche Geschossfläche in der Abfragevariante
      * @param baurate Baurate (erstes Jahr). Werden mehrere Bauabschnitte angelegt, wird vom ersten Bauabschnitt,
      *         der angelegt wurde, das erste Baugebiet, das angelegt wurde und dann davon die erste Baurate verwendet.
      * @param sobonJahr Das SoBoN-Jahr, welches die städtebaulichen Orientierungswerte diktiert.
@@ -42,7 +43,7 @@ public class SobonursaechlicheWohneinheitenService extends WohneinheitenCalculat
      * @return Eine Liste von {@link WohneinheitenProFoerderartProJahrModel}, welche alle Wohneinheiten pro Förderart und Jahr darstellt.
      */
     public List<WohneinheitenProFoerderartProJahrModel> calculateSobonursaechlicheWohneinheiten(
-        final BigDecimal sobonGF,
+        final BigDecimal sobonGf,
         final BaurateModel baurate,
         final SobonOrientierungswertJahr sobonJahr,
         final LocalDate gueltigAb
@@ -53,7 +54,7 @@ public class SobonursaechlicheWohneinheitenService extends WohneinheitenCalculat
         baurate.setFoerdermix(foerdermixUmlageService.legeFoerdermixUm(baurate.getFoerdermix(), gueltigAb));
 
         // Berechnen der Wohneinheiten pro Förderart und Jahr
-        calculateWohneinheiten(baurate, 0, sobonGF, sobonJahr.getGueltigAb(), sobonsursachlicheWohneinheitenList);
+        calculateWohneinheiten(baurate, 0, sobonGf, sobonJahr.getGueltigAb(), sobonsursachlicheWohneinheitenList);
 
         // Summe der Wohneinheiten aller Förderarten
         BigDecimal summeWE = BigDecimal.ZERO;
@@ -62,36 +63,34 @@ public class SobonursaechlicheWohneinheitenService extends WohneinheitenCalculat
         }
 
         // Ist das Ergebnis über 1000, werden 1000er-Blöcke/Jahre gebildet.
-        if (summeWE.intValue() > 1000) {
+        if (1 == summeWE.compareTo(TAUSEND)) {
             sobonsursachlicheWohneinheitenList.clear();
 
-            BigDecimal gfWohnen1000 = sobonGF.multiply(
-                new BigDecimal(1000).divide(summeWE, CalculationService.DIVISION_SCALE, RoundingMode.HALF_EVEN)
+            BigDecimal gfWohnen1000 = sobonGf.multiply(
+                TAUSEND.divide(summeWE, CalculationService.DIVISION_SCALE, RoundingMode.HALF_EVEN)
             );
             // Anzahl 1000er-Blöcke/Jahre = summeWE / 1000 = Ergebnis abrunden
-            Integer anzahl = summeWE
-                .divide(new BigDecimal(1000), CalculationService.DIVISION_SCALE, RoundingMode.HALF_DOWN)
-                .intValue();
+            BigDecimal anzahl = summeWE.divide(TAUSEND, 0, RoundingMode.HALF_DOWN);
 
-            for (int i = 0; i < anzahl; i++) {
+            int jahr = 0;
+            for (BigDecimal i = BigDecimal.ZERO; i.compareTo(anzahl) < 0; i = i.add(BigDecimal.ONE)) {
                 calculateWohneinheiten(
                     baurate,
-                    i,
+                    jahr,
                     gfWohnen1000,
                     sobonJahr.getGueltigAb(),
                     sobonsursachlicheWohneinheitenList
                 );
+                jahr++;
             }
 
             // letztes Jahr
-            BigDecimal gfWohnenRest = sobonGF.multiply(
-                summeWE
-                    .remainder(new BigDecimal(1000))
-                    .divide(summeWE, CalculationService.DIVISION_SCALE, RoundingMode.HALF_EVEN)
+            BigDecimal gfWohnenRest = sobonGf.multiply(
+                summeWE.remainder(TAUSEND).divide(summeWE, CalculationService.DIVISION_SCALE, RoundingMode.HALF_EVEN)
             );
             calculateWohneinheiten(
                 baurate,
-                anzahl,
+                anzahl.intValue(),
                 gfWohnenRest,
                 sobonJahr.getGueltigAb(),
                 sobonsursachlicheWohneinheitenList
@@ -101,15 +100,23 @@ public class SobonursaechlicheWohneinheitenService extends WohneinheitenCalculat
         return sobonsursachlicheWohneinheitenList;
     }
 
-    // Wohneinheiten je Förderart = SoBoN-ursächliche GF Wohnen * Anteil GF von gesamt (Prozentsatz Förderart) / Durchschnittliche GF je Wohnungstyp
-    //
-    // Durchschnittliche GF je Wohnungstyp:
-    // Stammdaten aus den städtebaulichen Orientierungswerten (Werte in Abhängigkeit des Jahres der SoBoN-Orientierungswerte -->
-    // Auswahl in Abfragevariante im Rahmen "Weitere Berechnungsgrundlagen" im Feld "Jahr für SoBoN-Orientierungswerte"
+    /** Wohneinheiten je Förderart = SoBoN-ursächliche GF Wohnen * Anteil GF von gesamt (Prozentsatz Förderart) / Durchschnittliche GF je Wohnungstyp
+     *
+     *  Durchschnittliche GF je Wohnungstyp:
+     *  Stammdaten aus den städtebaulichen Orientierungswerten (Werte in Abhängigkeit des Jahres der SoBoN-Orientierungswerte -->
+     *  Auswahl in Abfragevariante im Rahmen "Weitere Berechnungsgrundlagen" im Feld "Jahr für SoBoN-Orientierungswerte"
+     *
+     * @param baurate Baurate (erstes Jahr). Werden mehrere Bauabschnitte angelegt, wird vom ersten Bauabschnitt,
+     *         der angelegt wurde, das erste Baugebiet, das angelegt wurde und dann davon die erste Baurate verwendet.
+     * @param jahr bzw. 1000er Block
+     * @param sobonGf SoBoN-ursächliche Geschossfläche in der Abfragevariante
+     * @param sobonJahr Das SoBoN-Jahr, welches die städtebaulichen Orientierungswerte diktiert.
+     * @param sobonsursachlicheWohneinheitenList Eine Liste von {@link WohneinheitenProFoerderartProJahrModel}, welche alle Wohneinheiten pro Förderart und Jahr darstellt.
+     */
     protected void calculateWohneinheiten(
         final BaurateModel baurate,
-        final Integer jahr,
-        final BigDecimal sobonGF,
+        final int jahr,
+        final BigDecimal sobonGf,
         final LocalDate sobonJahr,
         final List<WohneinheitenProFoerderartProJahrModel> sobonsursachlicheWohneinheitenList
     ) {
@@ -124,8 +131,8 @@ public class SobonursaechlicheWohneinheitenService extends WohneinheitenCalculat
             if (orientierungswert.isPresent()) {
                 final var average = BigDecimal.valueOf(orientierungswert.get().getDurchschnittlicheGrundflaeche());
                 wohneinheiten =
-                    sobonGF
-                        .multiply(foerderart.getAnteilProzent())
+                    sobonGf
+                        .multiply(foerderart.getAnteilProzent().scaleByPowerOfTen(-2))
                         .divide(average, CalculationService.DIVISION_SCALE, RoundingMode.HALF_EVEN);
             }
 

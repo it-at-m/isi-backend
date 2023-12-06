@@ -58,15 +58,15 @@ public class SobonursaechlicheWohneinheitenServiceTest {
         // Fördermixe
         final var FF50 = new FoerderartModel();
         FF50.setBezeichnung(FF);
-        FF50.setAnteilProzent(new BigDecimal("0.5"));
+        FF50.setAnteilProzent(new BigDecimal("50"));
 
         final var MM30 = new FoerderartModel();
         MM30.setBezeichnung(MM);
-        MM30.setAnteilProzent(new BigDecimal("0.3"));
+        MM30.setAnteilProzent(new BigDecimal("30"));
 
         final var EOF20 = new FoerderartModel();
         EOF20.setBezeichnung(EOF);
-        EOF20.setAnteilProzent(new BigDecimal("0.2"));
+        EOF20.setAnteilProzent(new BigDecimal("20"));
 
         final var meinFoerdermix = new FoerdermixModel();
         meinFoerdermix.setFoerderarten(List.of(FF50, EOF20, MM30));
