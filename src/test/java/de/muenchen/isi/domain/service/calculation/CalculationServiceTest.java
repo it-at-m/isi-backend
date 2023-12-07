@@ -47,7 +47,7 @@ class CalculationServiceTest {
     @BeforeEach
     public void beforeEach() {
         this.calculationService =
-            new CalculationService(planungsursaechlicheWohneinheitenService, infrastrukturbedarfService);
+            Mockito.spy(new CalculationService(planungsursaechlicheWohneinheitenService, infrastrukturbedarfService));
         Mockito.reset(planungsursaechlicheWohneinheitenService, infrastrukturbedarfService);
     }
 
@@ -265,6 +265,14 @@ class CalculationServiceTest {
         expectedAbfragevariante.setLangfristigerPlanungsursaechlicherBedarf(expected);
 
         assertThat(abfragevarianteBaugenehmigungsverfahren, is(expectedAbfragevariante));
+
+        Mockito
+            .verify(calculationService)
+            .calculateLangfristigerPlanungsursaechlicherBedarf(
+                bauabschnitte,
+                sobonOrientierungswertJahr,
+                stammdatenGueltigAb
+            );
     }
 
     @Test
@@ -471,6 +479,14 @@ class CalculationServiceTest {
         expectedAbfragevariante.setLangfristigerPlanungsursaechlicherBedarf(expected);
 
         assertThat(abfragevarianteBaugenehmigungsverfahren, is(expectedAbfragevariante));
+
+        Mockito
+            .verify(calculationService)
+            .calculateLangfristigerPlanungsursaechlicherBedarf(
+                bauabschnitte,
+                sobonOrientierungswertJahr,
+                stammdatenGueltigAb
+            );
     }
 
     @Test
@@ -677,6 +693,14 @@ class CalculationServiceTest {
         expectedAbfragevariante.setLangfristigerPlanungsursaechlicherBedarf(expected);
 
         assertThat(abfragevarianteBauleitplanverfahren, is(expectedAbfragevariante));
+
+        Mockito
+            .verify(calculationService)
+            .calculateLangfristigerPlanungsursaechlicherBedarf(
+                bauabschnitte,
+                sobonOrientierungswertJahr,
+                stammdatenGueltigAb
+            );
     }
 
     @Test
