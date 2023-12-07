@@ -90,6 +90,14 @@ class CalculationServiceTest {
                 LocalDate.now()
             );
         assertThat(result, is(nullValue()));
+
+        result =
+            calculationService.calculateLangfristigerPlanungsursaechlicherBedarf(
+                List.of(new BauabschnittModel()),
+                SobonOrientierungswertJahr.STANDORTABFRAGE,
+                LocalDate.now()
+            );
+        assertThat(result, is(nullValue()));
     }
 
     @Test
