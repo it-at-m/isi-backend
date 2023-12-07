@@ -22,6 +22,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -48,6 +49,17 @@ class CalculationServiceTest {
         this.calculationService =
             Mockito.spy(new CalculationService(planungsursaechlicheWohneinheitenService, infrastrukturbedarfService));
         Mockito.reset(planungsursaechlicheWohneinheitenService, infrastrukturbedarfService);
+    }
+
+    @Test
+    void calculateAndAppendBedarfeToAbfragevarianteUnspecified() {
+        final var abfragevarianteBauleitplanverfahren = new AbfragevarianteWeiteresVerfahrenModel();
+        abfragevarianteBauleitplanverfahren.setArtAbfragevariante(ArtAbfrage.UNSPECIFIED);
+        Assertions.assertThrows(
+            CalculationException.class,
+            () ->
+                this.calculationService.calculateAndAppendBedarfeToAbfragevariante(abfragevarianteBauleitplanverfahren)
+        );
     }
 
     @Test
