@@ -136,24 +136,15 @@ public class CalculationService {
             bauabschnitte = abfragevarianteWeiteresVerfahren.getBauabschnitte();
             sobonOrientierungswertJahr = abfragevarianteWeiteresVerfahren.getSobonOrientierungswertJahr();
             stammdatenGueltigAb = abfragevarianteWeiteresVerfahren.getStammdatenGueltigAb();
-            if (
-                Objects.equals(
-                    abfragevarianteWeiteresVerfahren.getSobonOrientierungswertJahr(),
-                    SobonOrientierungswertJahr.STANDORTABFRAGE
-                )
-            ) {
-                abfragevarianteWeiteresVerfahren.setLangfristigerPlanungsursaechlicherBedarf(null);
-            } else {
-                langfristigerPlanungsursaechlicherBedarf =
-                    this.calculateLangfristigerPlanungsursaechlicherBedarf(
-                            bauabschnitte,
-                            sobonOrientierungswertJahr,
-                            stammdatenGueltigAb
-                        );
-                abfragevarianteWeiteresVerfahren.setLangfristigerPlanungsursaechlicherBedarf(
-                    langfristigerPlanungsursaechlicherBedarf
-                );
-            }
+            langfristigerPlanungsursaechlicherBedarf =
+                this.calculateLangfristigerPlanungsursaechlicherBedarf(
+                        bauabschnitte,
+                        sobonOrientierungswertJahr,
+                        stammdatenGueltigAb
+                    );
+            abfragevarianteWeiteresVerfahren.setLangfristigerPlanungsursaechlicherBedarf(
+                langfristigerPlanungsursaechlicherBedarf
+            );
         } else {
             throw new CalculationException(
                 "Die Berechnung kann für diese Art von Abfragevariante nicht durchgeführt werden."
@@ -178,7 +169,8 @@ public class CalculationService {
     ) throws CalculationException {
         if (
             CollectionUtils.isEmpty(bauabschnitte) ||
-            ObjectUtils.anyNull(sobonOrientierungswertJahr, stammdatenGueltigAb)
+            ObjectUtils.anyNull(sobonOrientierungswertJahr, stammdatenGueltigAb) ||
+            Objects.equals(sobonOrientierungswertJahr, SobonOrientierungswertJahr.STANDORTABFRAGE)
         ) {
             return null;
         }
