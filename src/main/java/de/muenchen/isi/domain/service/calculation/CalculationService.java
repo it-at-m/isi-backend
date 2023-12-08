@@ -46,11 +46,10 @@ public class CalculationService {
 
     /**
      * Die Methode ermittelt den {@link LangfristigerPlanungsursaechlicherBedarfModel} für jede in der Abfrage vorhandene Abfragevariante.
-     * Ist keine Berechnung der Bedarfe möglich so wird der Wert null im Attribute für die langfristigen planugsursächlichen Bedarfe gesetzt.
+     * Ist keine Berechnung der Bedarfe möglich so wird der Wert null im Attribut für die langfristigen planugsursächlichen Bedarfe gesetzt.
      *
-     * Handelt es sich bei einer Abfrage um den Typ {@link ArtAbfrage#WEITERES_VERFAHREN}, so werden für Abfragevarianten mit Wert
-     * {@link SobonOrientierungswertJahr#STANDORTABFRAGE} im Attribut {@link AbfragevarianteWeiteresVerfahrenModel#getSobonOrientierungswertJahr()}
-     * keine Berechnungen durchgeführt.
+     * Handelt es sich um eine Abfragevarianten mit Wert {@link SobonOrientierungswertJahr#STANDORTABFRAGE}
+     * im Attribut {@link AbfragevarianteWeiteresVerfahrenModel#getSobonOrientierungswertJahr()} wird keine Berechnungen durchgeführt.
      *
      * @param abfrage zum Ermitteln und Setzen der langfristigen planugsursächlichen Bedarfe.
      * @throws CalculationException falls keine Berechnung wegen einer nicht gesetzten Art der Abfrage oder Abfragevariante oder nicht vorhandener Stammdaten möglich ist.
@@ -92,6 +91,9 @@ public class CalculationService {
     /**
      * Die Methode ermittelt den {@link LangfristigerPlanungsursaechlicherBedarfModel} für die im Parameter gegebene Abfragevariante.
      * Ist keine Berechnung der Bedarfe möglich so wird der Wert null im Abfragevariantenattribut für die langfristigen planugsursächlichen Bedarfe gesetzt.
+     *
+     * Handelt es sich um eine Abfragevariante mit Wert {@link SobonOrientierungswertJahr#STANDORTABFRAGE}
+     * im Attribut {@link AbfragevarianteWeiteresVerfahrenModel#getSobonOrientierungswertJahr()} wird keine Berechnungen durchgeführt.
      *
      * @param abfragevariante zum Ermitteln und Setzen der langfristigen planugsursächlichen Bedarfe.
      * @throws CalculationException falls keine Berechnung wegen einer nicht gesetzten Art der Abfragevariante oder nicht vorhandener Stammdaten möglich ist.
@@ -153,13 +155,14 @@ public class CalculationService {
     }
 
     /**
-     * Die Methode ermittelt den {@link LangfristigerPlanungsursaechlicherBedarfModel} für die im Paramter gegebenen Werte.
-     * Besitzt ein Parameter den Wert null so gibt die Methode ebenfalls den Wert null zurück.
+     * Die Methode ermittelt den {@link LangfristigerPlanungsursaechlicherBedarfModel} für die im Parameter gegebenen Werte.
+     *
+     * Ist auf Basis der übergebenen Methodenparameter keine Berechnung möglich, so wird der Wert null zurückgegeben.
      *
      * @param bauabschnitte zum Ermitteln der Bedarfe.
      * @param sobonOrientierungswertJahr zur Extraktion der korrekten Sobon-Orientierungswerte.
      * @param stammdatenGueltigAb zur Extraktion der Stammdaten welche sich nicht auf ein konkretes Jahr der Sobon-Orientierungswerte beziehen.
-     * @return den {@link LangfristigerPlanungsursaechlicherBedarfModel} oder null falls ein Methodenparameter null ist.
+     * @return den {@link LangfristigerPlanungsursaechlicherBedarfModel} oder null falls auf Basis der übergebenen Methodenparameter keine Berechnung möglich ist.
      * @throws CalculationException falls die Stammdaten zur Durchführung der Berechnung nicht geladen werden können.
      */
     public LangfristigerPlanungsursaechlicherBedarfModel calculateLangfristigerPlanungsursaechlicherBedarf(
