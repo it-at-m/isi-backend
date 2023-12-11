@@ -876,8 +876,8 @@ class InfrastrukturbedarfServiceTest {
         var expected = new InfrastrukturbedarfProJahrModel();
         expected.setJahr("2031");
         expected.setAnzahlPersonenGesamt(BigDecimal.valueOf(100));
-        expected.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(6000, 2));
-        expected.setAnzahlGruppen(BigDecimal.valueOf(600, 2));
+        expected.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(600000000000L, 10));
+        expected.setAnzahlGruppen(BigDecimal.valueOf(60000000000L, 10));
         assertThat(result, is(expected));
 
         bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(100));
@@ -893,12 +893,12 @@ class InfrastrukturbedarfServiceTest {
         expected = new InfrastrukturbedarfProJahrModel();
         expected.setJahr("2031");
         expected.setAnzahlPersonenGesamt(BigDecimal.valueOf(100));
-        expected.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(6000, 2));
-        expected.setAnzahlGruppen(BigDecimal.valueOf(600, 2));
+        expected.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(600000000000L, 10));
+        expected.setAnzahlGruppen(BigDecimal.valueOf(60000000000L, 10));
         assertThat(result, is(expected));
 
         bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(73));
-        versorgungsQuote.setVersorgungsquotePlanungsursaechlich(BigDecimal.valueOf(58, 2));
+        versorgungsQuote.setVersorgungsquotePlanungsursaechlich(BigDecimal.valueOf(5800000000L, 10));
         versorgungsQuote.setVersorgungsquoteSobonUrsaechlich(null);
         versorgungsQuote.setGruppenstaerke(10);
         result =
@@ -910,13 +910,13 @@ class InfrastrukturbedarfServiceTest {
         expected = new InfrastrukturbedarfProJahrModel();
         expected.setJahr("2031");
         expected.setAnzahlPersonenGesamt(BigDecimal.valueOf(73));
-        expected.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(4234, 2));
-        expected.setAnzahlGruppen(BigDecimal.valueOf(423, 2));
+        expected.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(423400000000L, 10));
+        expected.setAnzahlGruppen(BigDecimal.valueOf(42340000000L, 10));
         assertThat(result, is(expected));
 
         bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(73));
         versorgungsQuote.setVersorgungsquotePlanungsursaechlich(null);
-        versorgungsQuote.setVersorgungsquoteSobonUrsaechlich(BigDecimal.valueOf(58, 2));
+        versorgungsQuote.setVersorgungsquoteSobonUrsaechlich(BigDecimal.valueOf(5800000000L, 10));
         versorgungsQuote.setGruppenstaerke(10);
         result =
             infrastrukturbedarfService.getVersorgungsquoteAndGruppenstaerkeWithBedarf(
@@ -927,8 +927,8 @@ class InfrastrukturbedarfServiceTest {
         expected = new InfrastrukturbedarfProJahrModel();
         expected.setJahr("2031");
         expected.setAnzahlPersonenGesamt(BigDecimal.valueOf(73));
-        expected.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(4234, 2));
-        expected.setAnzahlGruppen(BigDecimal.valueOf(423, 2));
+        expected.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(423400000000L, 10));
+        expected.setAnzahlGruppen(BigDecimal.valueOf(42340000000L, 10));
         assertThat(result, is(expected));
 
         bedarf.setAnzahlPersonenGesamt(null);

@@ -278,10 +278,12 @@ public class InfrastrukturbedarfService {
         final var versorgungsquote = ArtInfrastrukturbedarf.PLANUNGSURSAECHLICH.equals(artInfrastrukturbedarf)
             ? versorgungsquoteGruppenstaerke.getVersorgungsquotePlanungsursaechlich()
             : versorgungsquoteGruppenstaerke.getVersorgungsquoteSobonUrsaechlich();
-        final var anzahlPersonenZuVersorgen = anzahlPersonenGesamt.multiply(versorgungsquote);
+        final var anzahlPersonenZuVersorgen = anzahlPersonenGesamt
+            .multiply(versorgungsquote)
+            .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_EVEN);
         final var anzahlGruppen = anzahlPersonenZuVersorgen.divide(
             BigDecimal.valueOf(versorgungsquoteGruppenstaerke.getGruppenstaerke()),
-            SCALE_ROUNDING_RESULT_DECIMAL,
+            CalculationService.DIVISION_SCALE,
             RoundingMode.HALF_EVEN
         );
         final var bedarfMitVersorgungsquoteAndGruppen = new InfrastrukturbedarfProJahrModel();
