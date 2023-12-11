@@ -534,7 +534,7 @@ class RestExceptionHandlerTest {
         assertThat(responseDto.getSpanId(), is("ffffffffffffffff"));
         assertThat(
             responseDto.getMessages(),
-            is(List.of("Der Nutzlast der Anfrage an das Backend konnte nicht verarbeitet werden."))
+            is(List.of("Die Nutzlast der Backendanfrage konnte nicht verarbeitet werden."))
         );
         assertThat(responseDto.getOriginalException(), is("HttpMessageNotReadableException"));
     }
@@ -561,7 +561,7 @@ class RestExceptionHandlerTest {
         assertThat(responseDto.getSpanId(), is("ffffffffffffffff"));
         assertThat(
             responseDto.getMessages(),
-            is(List.of("Die Nutzlast des Antwort vom Backend konnte nicht verarbeitet werden."))
+            is(List.of("Die Nutzlast der Backendantwort konnte nicht verarbeitet werden."))
         );
         assertThat(responseDto.getOriginalException(), is("HttpMessageNotWritableException"));
     }
