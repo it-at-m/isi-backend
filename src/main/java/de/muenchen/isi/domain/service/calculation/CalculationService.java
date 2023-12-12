@@ -34,7 +34,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class CalculationService {
 
-    public static final int DIVISION_SCALE = 10;
+    public static final int DIVISION_SCALE = 15;
 
     public static final String SUMMATION_PERIOD_NAME = "Summe erste %d J.";
 

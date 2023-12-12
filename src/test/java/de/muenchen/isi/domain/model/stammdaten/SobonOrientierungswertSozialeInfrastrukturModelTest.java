@@ -15,154 +15,220 @@ class SobonOrientierungswertSozialeInfrastrukturModelTest {
     @Test
     void getMittelwertEinwohnerNachErsterstellung10Jahre() {
         final var result = model.getMittelwertEinwohnerNachErsterstellung10Jahre();
-        final var expected = BigDecimal.valueOf(3275000000L, SobonOrientierungswertSozialeInfrastrukturModel.SCALE);
+        final var expected = BigDecimal.valueOf(
+            327500000000000L,
+            SobonOrientierungswertSozialeInfrastrukturModel.SCALE
+        );
         assertThat(result, is(expected));
     }
 
     @Test
     void getFactorOfDistanceMittelwertEinwohner10JahreToStammwertArbeitsgruppe() {
         final var result = model.getFactorOfDistanceMittelwertEinwohner10JahreToStammwertArbeitsgruppe();
-        final var expected = BigDecimal.valueOf(13740458015L, SobonOrientierungswertSozialeInfrastrukturModel.SCALE);
+        final var expected = BigDecimal.valueOf(
+            1374045801526718L,
+            SobonOrientierungswertSozialeInfrastrukturModel.SCALE
+        );
         assertThat(result, is(expected));
     }
 
     @Test
     void getObererRichtwertEinwohnerJahr1NachErsterstellung() {
         final var result = model.getObererRichtwertEinwohnerJahr1NachErsterstellung();
-        final var expected = BigDecimal.valueOf(4809160305L, SobonOrientierungswertSozialeInfrastrukturModel.SCALE);
+        final var expected = BigDecimal.valueOf(
+            480916030534351L,
+            SobonOrientierungswertSozialeInfrastrukturModel.SCALE
+        );
         assertThat(result, is(expected));
     }
 
     @Test
     void getObererRichtwertEinwohnerJahr2NachErsterstellung() {
         final var result = model.getObererRichtwertEinwohnerJahr2NachErsterstellung();
-        final var expected = BigDecimal.valueOf(4740458015L, SobonOrientierungswertSozialeInfrastrukturModel.SCALE);
+        final var expected = BigDecimal.valueOf(
+            474045801526718L,
+            SobonOrientierungswertSozialeInfrastrukturModel.SCALE
+        );
         assertThat(result, is(expected));
     }
 
     @Test
     void getObererRichtwertEinwohnerJahr3NachErsterstellung() {
         final var result = model.getObererRichtwertEinwohnerJahr3NachErsterstellung();
-        final var expected = BigDecimal.valueOf(4671755725L, SobonOrientierungswertSozialeInfrastrukturModel.SCALE);
+        final var expected = BigDecimal.valueOf(
+            467175572519084L,
+            SobonOrientierungswertSozialeInfrastrukturModel.SCALE
+        );
         assertThat(result, is(expected));
     }
 
     @Test
     void getObererRichtwertEinwohnerJahr4NachErsterstellung() {
         final var result = model.getObererRichtwertEinwohnerJahr4NachErsterstellung();
-        final var expected = BigDecimal.valueOf(4603053435L, SobonOrientierungswertSozialeInfrastrukturModel.SCALE);
+        final var expected = BigDecimal.valueOf(
+            460305343511451L,
+            SobonOrientierungswertSozialeInfrastrukturModel.SCALE
+        );
         assertThat(result, is(expected));
     }
 
     @Test
     void getObererRichtwertEinwohnerJahr5NachErsterstellung() {
         final var result = model.getObererRichtwertEinwohnerJahr5NachErsterstellung();
-        final var expected = BigDecimal.valueOf(4534351145L, SobonOrientierungswertSozialeInfrastrukturModel.SCALE);
+        final var expected = BigDecimal.valueOf(
+            453435114503817L,
+            SobonOrientierungswertSozialeInfrastrukturModel.SCALE
+        );
         assertThat(result, is(expected));
     }
 
     @Test
     void getObererRichtwertEinwohnerJahr6NachErsterstellung() {
         final var result = model.getObererRichtwertEinwohnerJahr6NachErsterstellung();
-        final var expected = BigDecimal.valueOf(4465648855L, SobonOrientierungswertSozialeInfrastrukturModel.SCALE);
+        final var expected = BigDecimal.valueOf(
+            446564885496183L,
+            SobonOrientierungswertSozialeInfrastrukturModel.SCALE
+        );
         assertThat(result, is(expected));
     }
 
     @Test
     void getObererRichtwertEinwohnerJahr7NachErsterstellung() {
         final var result = model.getObererRichtwertEinwohnerJahr7NachErsterstellung();
-        final var expected = BigDecimal.valueOf(4396946565L, SobonOrientierungswertSozialeInfrastrukturModel.SCALE);
+        final var expected = BigDecimal.valueOf(
+            439694656488550L,
+            SobonOrientierungswertSozialeInfrastrukturModel.SCALE
+        );
         assertThat(result, is(expected));
     }
 
     @Test
     void getObererRichtwertEinwohnerJahr8NachErsterstellung() {
         final var result = model.getObererRichtwertEinwohnerJahr8NachErsterstellung();
-        final var expected = BigDecimal.valueOf(4328244275L, SobonOrientierungswertSozialeInfrastrukturModel.SCALE);
+        final var expected = BigDecimal.valueOf(
+            432824427480916L,
+            SobonOrientierungswertSozialeInfrastrukturModel.SCALE
+        );
         assertThat(result, is(expected));
     }
 
     @Test
     void getObererRichtwertEinwohnerJahr9NachErsterstellung() {
         final var result = model.getObererRichtwertEinwohnerJahr9NachErsterstellung();
-        final var expected = BigDecimal.valueOf(4259541985L, SobonOrientierungswertSozialeInfrastrukturModel.SCALE);
+        final var expected = BigDecimal.valueOf(
+            425954198473283L,
+            SobonOrientierungswertSozialeInfrastrukturModel.SCALE
+        );
         assertThat(result, is(expected));
     }
 
     @Test
     void getObererRichtwertEinwohnerJahr10NachErsterstellung() {
         final var result = model.getObererRichtwertEinwohnerJahr10NachErsterstellung();
-        final var expected = BigDecimal.valueOf(4190839695L, SobonOrientierungswertSozialeInfrastrukturModel.SCALE);
+        final var expected = BigDecimal.valueOf(
+            419083969465649L,
+            SobonOrientierungswertSozialeInfrastrukturModel.SCALE
+        );
         assertThat(result, is(expected));
     }
 
     @Test
     void getObererRichtwertEinwohnerJahr11NachErsterstellung() {
         final var result = model.getObererRichtwertEinwohnerJahr11NachErsterstellung();
-        final var expected = BigDecimal.valueOf(4148931298L, SobonOrientierungswertSozialeInfrastrukturModel.SCALE);
+        final var expected = BigDecimal.valueOf(
+            414893129770993L,
+            SobonOrientierungswertSozialeInfrastrukturModel.SCALE
+        );
         assertThat(result, is(expected));
     }
 
     @Test
     void getObererRichtwertEinwohnerJahr12NachErsterstellung() {
         final var result = model.getObererRichtwertEinwohnerJahr12NachErsterstellung();
-        final var expected = BigDecimal.valueOf(4107441985L, SobonOrientierungswertSozialeInfrastrukturModel.SCALE);
+        final var expected = BigDecimal.valueOf(
+            410744198473283L,
+            SobonOrientierungswertSozialeInfrastrukturModel.SCALE
+        );
         assertThat(result, is(expected));
     }
 
     @Test
     void getObererRichtwertEinwohnerJahr13NachErsterstellung() {
         final var result = model.getObererRichtwertEinwohnerJahr13NachErsterstellung();
-        final var expected = BigDecimal.valueOf(4066367565L, SobonOrientierungswertSozialeInfrastrukturModel.SCALE);
+        final var expected = BigDecimal.valueOf(
+            406636756488550L,
+            SobonOrientierungswertSozialeInfrastrukturModel.SCALE
+        );
         assertThat(result, is(expected));
     }
 
     @Test
     void getObererRichtwertEinwohnerJahr14NachErsterstellung() {
         final var result = model.getObererRichtwertEinwohnerJahr14NachErsterstellung();
-        final var expected = BigDecimal.valueOf(4025703890L, SobonOrientierungswertSozialeInfrastrukturModel.SCALE);
+        final var expected = BigDecimal.valueOf(
+            402570388923664L,
+            SobonOrientierungswertSozialeInfrastrukturModel.SCALE
+        );
         assertThat(result, is(expected));
     }
 
     @Test
     void getObererRichtwertEinwohnerJahr15NachErsterstellung() {
         final var result = model.getObererRichtwertEinwohnerJahr15NachErsterstellung();
-        final var expected = BigDecimal.valueOf(3985446851L, SobonOrientierungswertSozialeInfrastrukturModel.SCALE);
+        final var expected = BigDecimal.valueOf(
+            398544685034428L,
+            SobonOrientierungswertSozialeInfrastrukturModel.SCALE
+        );
         assertThat(result, is(expected));
     }
 
     @Test
     void getObererRichtwertEinwohnerJahr16NachErsterstellung() {
         final var result = model.getObererRichtwertEinwohnerJahr16NachErsterstellung();
-        final var expected = BigDecimal.valueOf(3945592382L, SobonOrientierungswertSozialeInfrastrukturModel.SCALE);
+        final var expected = BigDecimal.valueOf(
+            394559238184083L,
+            SobonOrientierungswertSozialeInfrastrukturModel.SCALE
+        );
         assertThat(result, is(expected));
     }
 
     @Test
     void getObererRichtwertEinwohnerJahr17NachErsterstellung() {
         final var result = model.getObererRichtwertEinwohnerJahr17NachErsterstellung();
-        final var expected = BigDecimal.valueOf(3906136458L, SobonOrientierungswertSozialeInfrastrukturModel.SCALE);
+        final var expected = BigDecimal.valueOf(
+            390613645802243L,
+            SobonOrientierungswertSozialeInfrastrukturModel.SCALE
+        );
         assertThat(result, is(expected));
     }
 
     @Test
     void getObererRichtwertEinwohnerJahr18NachErsterstellung() {
         final var result = model.getObererRichtwertEinwohnerJahr18NachErsterstellung();
-        final var expected = BigDecimal.valueOf(3867075094L, SobonOrientierungswertSozialeInfrastrukturModel.SCALE);
+        final var expected = BigDecimal.valueOf(
+            386707509344220L,
+            SobonOrientierungswertSozialeInfrastrukturModel.SCALE
+        );
         assertThat(result, is(expected));
     }
 
     @Test
     void getObererRichtwertEinwohnerJahr19NachErsterstellung() {
         final var result = model.getObererRichtwertEinwohnerJahr19NachErsterstellung();
-        final var expected = BigDecimal.valueOf(3828404343L, SobonOrientierungswertSozialeInfrastrukturModel.SCALE);
+        final var expected = BigDecimal.valueOf(
+            382840434250778L,
+            SobonOrientierungswertSozialeInfrastrukturModel.SCALE
+        );
         assertThat(result, is(expected));
     }
 
     @Test
     void getObererRichtwertEinwohnerJahr20NachErsterstellung() {
         final var result = model.getObererRichtwertEinwohnerJahr20NachErsterstellung();
-        final var expected = BigDecimal.valueOf(3790120299L, SobonOrientierungswertSozialeInfrastrukturModel.SCALE);
+        final var expected = BigDecimal.valueOf(
+            379012029908270L,
+            SobonOrientierungswertSozialeInfrastrukturModel.SCALE
+        );
         assertThat(result, is(expected));
     }
 }

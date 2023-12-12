@@ -280,11 +280,11 @@ public class InfrastrukturbedarfService {
             : versorgungsquoteGruppenstaerke.getVersorgungsquoteSobonUrsaechlich();
         final var anzahlPersonenZuVersorgen = anzahlPersonenGesamt
             .multiply(versorgungsquote)
-            .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_EVEN);
+            .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
         final var anzahlGruppen = anzahlPersonenZuVersorgen.divide(
             BigDecimal.valueOf(versorgungsquoteGruppenstaerke.getGruppenstaerke()),
             CalculationService.DIVISION_SCALE,
-            RoundingMode.HALF_EVEN
+            RoundingMode.HALF_UP
         );
         final var bedarfMitVersorgungsquoteAndGruppen = new InfrastrukturbedarfProJahrModel();
         bedarfMitVersorgungsquoteAndGruppen.setJahr(bedarf.getJahr());
@@ -309,13 +309,13 @@ public class InfrastrukturbedarfService {
     ) {
         final var anzahlPersonenGesamtRounded = bedarf
             .getAnzahlPersonenGesamt()
-            .setScale(SCALE_ROUNDING_RESULT_INTEGER, RoundingMode.HALF_EVEN);
+            .setScale(SCALE_ROUNDING_RESULT_INTEGER, RoundingMode.HALF_UP);
         final var anzahlPersonenZuVersorgenRounded = bedarf
             .getAnzahlPersonenZuVersorgen()
-            .setScale(SCALE_ROUNDING_RESULT_INTEGER, RoundingMode.HALF_EVEN);
+            .setScale(SCALE_ROUNDING_RESULT_INTEGER, RoundingMode.HALF_UP);
         final var anzahlGruppenRounded = bedarf
             .getAnzahlGruppen()
-            .setScale(SCALE_ROUNDING_RESULT_DECIMAL, RoundingMode.HALF_EVEN);
+            .setScale(SCALE_ROUNDING_RESULT_DECIMAL, RoundingMode.HALF_UP);
         bedarf.setAnzahlPersonenGesamt(anzahlPersonenGesamtRounded);
         bedarf.setAnzahlPersonenZuVersorgen(anzahlPersonenZuVersorgenRounded);
         bedarf.setAnzahlGruppen(anzahlGruppenRounded);
@@ -333,7 +333,7 @@ public class InfrastrukturbedarfService {
     protected PersonenProJahrModel roundValuesAndReturnModelWithRoundedValues(final PersonenProJahrModel personen) {
         final var anzahlPersonenGesamtRounded = personen
             .getAnzahlPersonenGesamt()
-            .setScale(SCALE_ROUNDING_RESULT_INTEGER, RoundingMode.HALF_EVEN);
+            .setScale(SCALE_ROUNDING_RESULT_INTEGER, RoundingMode.HALF_UP);
         personen.setAnzahlPersonenGesamt(anzahlPersonenGesamtRounded);
         return personen;
     }
@@ -429,7 +429,7 @@ public class InfrastrukturbedarfService {
                     .multiply(
                         sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr1NachErsterstellung()
                     )
-                    .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_EVEN);
+                    .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
             personen.add(
                 createPersonenProJahr(Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate, anzahlPersonenGesamt)
             );
@@ -442,7 +442,7 @@ public class InfrastrukturbedarfService {
                     .multiply(
                         sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr2NachErsterstellung()
                     )
-                    .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_EVEN);
+                    .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
             personen.add(
                 createPersonenProJahr(Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate, anzahlPersonenGesamt)
             );
@@ -455,7 +455,7 @@ public class InfrastrukturbedarfService {
                     .multiply(
                         sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr3NachErsterstellung()
                     )
-                    .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_EVEN);
+                    .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
             personen.add(
                 createPersonenProJahr(Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate, anzahlPersonenGesamt)
             );
@@ -468,7 +468,7 @@ public class InfrastrukturbedarfService {
                     .multiply(
                         sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr4NachErsterstellung()
                     )
-                    .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_EVEN);
+                    .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
             personen.add(
                 createPersonenProJahr(Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate, anzahlPersonenGesamt)
             );
@@ -481,7 +481,7 @@ public class InfrastrukturbedarfService {
                     .multiply(
                         sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr5NachErsterstellung()
                     )
-                    .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_EVEN);
+                    .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
             personen.add(
                 createPersonenProJahr(Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate, anzahlPersonenGesamt)
             );
@@ -494,7 +494,7 @@ public class InfrastrukturbedarfService {
                     .multiply(
                         sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr6NachErsterstellung()
                     )
-                    .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_EVEN);
+                    .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
             personen.add(
                 createPersonenProJahr(Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate, anzahlPersonenGesamt)
             );
@@ -507,7 +507,7 @@ public class InfrastrukturbedarfService {
                     .multiply(
                         sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr7NachErsterstellung()
                     )
-                    .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_EVEN);
+                    .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
             personen.add(
                 createPersonenProJahr(Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate, anzahlPersonenGesamt)
             );
@@ -520,7 +520,7 @@ public class InfrastrukturbedarfService {
                     .multiply(
                         sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr8NachErsterstellung()
                     )
-                    .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_EVEN);
+                    .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
             personen.add(
                 createPersonenProJahr(Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate, anzahlPersonenGesamt)
             );
@@ -533,7 +533,7 @@ public class InfrastrukturbedarfService {
                     .multiply(
                         sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr9NachErsterstellung()
                     )
-                    .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_EVEN);
+                    .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
             personen.add(
                 createPersonenProJahr(Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate, anzahlPersonenGesamt)
             );
@@ -546,7 +546,7 @@ public class InfrastrukturbedarfService {
                     .multiply(
                         sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr10NachErsterstellung()
                     )
-                    .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_EVEN);
+                    .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
             personen.add(
                 createPersonenProJahr(Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate, anzahlPersonenGesamt)
             );
@@ -559,7 +559,7 @@ public class InfrastrukturbedarfService {
                     .multiply(
                         sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr11NachErsterstellung()
                     )
-                    .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_EVEN);
+                    .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
             personen.add(
                 createPersonenProJahr(Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate, anzahlPersonenGesamt)
             );
@@ -572,7 +572,7 @@ public class InfrastrukturbedarfService {
                     .multiply(
                         sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr12NachErsterstellung()
                     )
-                    .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_EVEN);
+                    .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
             personen.add(
                 createPersonenProJahr(Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate, anzahlPersonenGesamt)
             );
@@ -585,7 +585,7 @@ public class InfrastrukturbedarfService {
                     .multiply(
                         sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr13NachErsterstellung()
                     )
-                    .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_EVEN);
+                    .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
             personen.add(
                 createPersonenProJahr(Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate, anzahlPersonenGesamt)
             );
@@ -598,7 +598,7 @@ public class InfrastrukturbedarfService {
                     .multiply(
                         sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr14NachErsterstellung()
                     )
-                    .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_EVEN);
+                    .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
             personen.add(
                 createPersonenProJahr(Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate, anzahlPersonenGesamt)
             );
@@ -611,7 +611,7 @@ public class InfrastrukturbedarfService {
                     .multiply(
                         sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr15NachErsterstellung()
                     )
-                    .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_EVEN);
+                    .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
             personen.add(
                 createPersonenProJahr(Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate, anzahlPersonenGesamt)
             );
@@ -624,7 +624,7 @@ public class InfrastrukturbedarfService {
                     .multiply(
                         sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr16NachErsterstellung()
                     )
-                    .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_EVEN);
+                    .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
             personen.add(
                 createPersonenProJahr(Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate, anzahlPersonenGesamt)
             );
@@ -637,7 +637,7 @@ public class InfrastrukturbedarfService {
                     .multiply(
                         sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr17NachErsterstellung()
                     )
-                    .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_EVEN);
+                    .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
             personen.add(
                 createPersonenProJahr(Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate, anzahlPersonenGesamt)
             );
@@ -650,7 +650,7 @@ public class InfrastrukturbedarfService {
                     .multiply(
                         sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr18NachErsterstellung()
                     )
-                    .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_EVEN);
+                    .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
             personen.add(
                 createPersonenProJahr(Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate, anzahlPersonenGesamt)
             );
@@ -663,7 +663,7 @@ public class InfrastrukturbedarfService {
                     .multiply(
                         sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr19NachErsterstellung()
                     )
-                    .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_EVEN);
+                    .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
             personen.add(
                 createPersonenProJahr(Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate, anzahlPersonenGesamt)
             );
@@ -676,7 +676,7 @@ public class InfrastrukturbedarfService {
                     .multiply(
                         sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr20NachErsterstellung()
                     )
-                    .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_EVEN);
+                    .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
             personen.add(
                 createPersonenProJahr(Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate, anzahlPersonenGesamt)
             );
@@ -724,17 +724,17 @@ public class InfrastrukturbedarfService {
                 final var mean = new InfrastrukturbedarfProJahrModel();
                 mean.setJahr(String.format(TITLE_MEAN_WITH_PLACEHOLDER, numberOfBedarfeProJahrForMean));
                 mean.setAnzahlPersonenGesamt(
-                    sumAnzahlPersonenGesamt.divide(numberOfYear, SCALE_ROUNDING_RESULT_DECIMAL, RoundingMode.HALF_EVEN)
+                    sumAnzahlPersonenGesamt.divide(numberOfYear, SCALE_ROUNDING_RESULT_DECIMAL, RoundingMode.HALF_UP)
                 );
                 mean.setAnzahlPersonenZuVersorgen(
                     sumAnzahlPersonenZuVersorgen.divide(
                         numberOfYear,
                         SCALE_ROUNDING_RESULT_DECIMAL,
-                        RoundingMode.HALF_EVEN
+                        RoundingMode.HALF_UP
                     )
                 );
                 mean.setAnzahlGruppen(
-                    sumAnzahlGruppen.divide(numberOfYear, SCALE_ROUNDING_RESULT_DECIMAL, RoundingMode.HALF_EVEN)
+                    sumAnzahlGruppen.divide(numberOfYear, SCALE_ROUNDING_RESULT_DECIMAL, RoundingMode.HALF_UP)
                 );
                 return mean;
             }
@@ -763,7 +763,7 @@ public class InfrastrukturbedarfService {
                 final var mean = new PersonenProJahrModel();
                 mean.setJahr(String.format(TITLE_MEAN_WITH_PLACEHOLDER, numberOfPersonenProJahrForMean));
                 mean.setAnzahlPersonenGesamt(
-                    sumAnzahlPersonenGesamt.divide(numberOfYear, SCALE_ROUNDING_RESULT_DECIMAL, RoundingMode.HALF_EVEN)
+                    sumAnzahlPersonenGesamt.divide(numberOfYear, SCALE_ROUNDING_RESULT_DECIMAL, RoundingMode.HALF_UP)
                 );
                 return mean;
             }

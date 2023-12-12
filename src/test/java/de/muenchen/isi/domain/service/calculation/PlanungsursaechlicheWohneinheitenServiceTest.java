@@ -147,11 +147,11 @@ public class PlanungsursaechlicheWohneinheitenServiceTest {
         final var expected = List.of(
             new WohneinheitenProFoerderartProJahrModel(FF, jahr1String, new BigDecimal("100.00")),
             new WohneinheitenProFoerderartProJahrModel(FF, jahr2String, new BigDecimal("25.0000")),
-            new WohneinheitenProFoerderartProJahrModel(EOF, jahr1String, new BigDecimal("55.5555555556")),
+            new WohneinheitenProFoerderartProJahrModel(EOF, jahr1String, new BigDecimal("55.555555555555556")),
             new WohneinheitenProFoerderartProJahrModel(EOF, jahr2String, new BigDecimal("75.0000")),
-            new WohneinheitenProFoerderartProJahrModel(MM, jahr1String, new BigDecimal("150.0000000000")),
-            new WohneinheitenProFoerderartProJahrModel(MM, jahr2String, new BigDecimal("75.0000000000")),
-            new WohneinheitenProFoerderartProJahrModel(FH, jahr2String, new BigDecimal("140.6250000000"))
+            new WohneinheitenProFoerderartProJahrModel(MM, jahr1String, new BigDecimal("150.000000000000000")),
+            new WohneinheitenProFoerderartProJahrModel(MM, jahr2String, new BigDecimal("75.000000000000000")),
+            new WohneinheitenProFoerderartProJahrModel(FH, jahr2String, new BigDecimal("140.625000000000000"))
         );
 
         final var actual = planungsursaechlicheWohneinheitenService.calculatePlanungsursaechlicheWohneinheiten(
@@ -185,7 +185,7 @@ public class PlanungsursaechlicheWohneinheitenServiceTest {
             foerderart,
             sobonJahr
         );
-        assertThat(result2, is(new BigDecimal("100.0000000000")));
+        assertThat(result2, is(new BigDecimal("100.000000000000000")));
 
         baurate.setWeGeplant(100);
         final var result3 = planungsursaechlicheWohneinheitenService.calculateWohneinheiten(

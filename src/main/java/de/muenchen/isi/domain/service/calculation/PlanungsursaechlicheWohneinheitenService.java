@@ -89,7 +89,7 @@ public class PlanungsursaechlicheWohneinheitenService extends WohneinheitenCalcu
                 return baurate
                     .getGfWohnenGeplant()
                     .multiply(foerderart.getAnteilProzent().scaleByPowerOfTen(-2))
-                    .divide(average, CalculationService.DIVISION_SCALE, RoundingMode.HALF_EVEN);
+                    .divide(average, CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
             }
         }
 
