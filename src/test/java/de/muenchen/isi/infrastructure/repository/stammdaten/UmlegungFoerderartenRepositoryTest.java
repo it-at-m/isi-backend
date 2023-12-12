@@ -5,11 +5,14 @@ import static org.hamcrest.Matchers.is;
 
 import de.muenchen.isi.IsiBackendApplication;
 import de.muenchen.isi.TestConstants;
+import de.muenchen.isi.infrastructure.entity.Foerderart;
 import de.muenchen.isi.infrastructure.entity.stammdaten.UmlegungFoerderarten;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -42,6 +45,14 @@ public class UmlegungFoerderartenRepositoryTest {
         umlegungFoerderarten1.setId(UUID.randomUUID());
         umlegungFoerderarten1.setBezeichnung("Test1");
         umlegungFoerderarten1.setGueltigAb(LocalDate.parse("2000-01-01"));
+        var foerderart1 = new Foerderart();
+        foerderart1.setBezeichnung("foerderart1");
+        foerderart1.setAnteilProzent(BigDecimal.valueOf(75));
+        var foerderart2 = new Foerderart();
+        foerderart2.setBezeichnung("foerderart2");
+        foerderart2.setAnteilProzent(BigDecimal.valueOf(25));
+        var umlegungschluessel = Set.of(foerderart1, foerderart2);
+        umlegungFoerderarten1.setUmlegungsschluessel(umlegungschluessel);
 
         UmlegungFoerderarten umlegungFoerderarten2 = new UmlegungFoerderarten();
         umlegungFoerderarten2.setId(UUID.randomUUID());

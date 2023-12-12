@@ -91,7 +91,7 @@ public abstract class WohneinheitenCalculationService {
     }
 
     /**
-     * Die Methode summiert die Wohneinheiten der gegebnen Objekte.
+     * Die Methode summiert die Wohneinheiten der gegebenen Objekte.
      *
      * @param wohneinheitenProJahrToSum zum Summieren.
      * @return die Summe der Wohneinheiten für die gegebenen Objekte.

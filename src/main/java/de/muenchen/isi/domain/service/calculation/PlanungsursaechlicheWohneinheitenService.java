@@ -48,26 +48,15 @@ public class PlanungsursaechlicheWohneinheitenService extends WohneinheitenCalcu
         final var bauraten = bauabschnitte
             .stream()
             .flatMap(bauabschnitt ->
-                bauabschnitt
-                    .getBaugebiete()
-                    .stream()
-                    .flatMap(baugebiet ->
-                        baugebiet
-                            .getBauraten()
-                            .stream()
-                            .peek(baurate ->
-                                baurate.setFoerdermix(
-                                    foerdermixUmlageService.legeFoerdermixUm(baurate.getFoerdermix(), gueltigAb)
-                                )
-                            )
-                    )
+                bauabschnitt.getBaugebiete().stream().flatMap(baugebiet -> baugebiet.getBauraten().stream())
             )
             .collect(Collectors.toList());
 
         // Berechnen der Wohneinheiten pro Förderart und Jahr.
 
         for (final var baurate : bauraten) {
-            for (final var foerderart : baurate.getFoerdermix().getFoerderarten()) {
+            final var foerdermixUmgelegt = foerdermixUmlageService.legeFoerdermixUm(baurate.getFoerdermix(), gueltigAb);
+            for (final var foerderart : foerdermixUmgelegt.getFoerderarten()) {
                 final var wohneinheiten = calculateWohneinheiten(baurate, foerderart, sobonJahr);
                 mergeWohneinheitenProFoerderartProJahr(
                     wohneinheitenProFoerderartProJahrList,
@@ -86,7 +75,9 @@ public class PlanungsursaechlicheWohneinheitenService extends WohneinheitenCalcu
         final SobonOrientierungswertJahr sobonJahr
     ) {
         if (baurate.getWeGeplant() != null) {
-            return BigDecimal.valueOf(baurate.getWeGeplant()).multiply(foerderart.getAnteilProzent());
+            return BigDecimal
+                .valueOf(baurate.getWeGeplant())
+                .multiply(foerderart.getAnteilProzent().scaleByPowerOfTen(-2));
         } else if (baurate.getGfWohnenGeplant() != null) {
             final var orientierungswert =
                 staedtebaulicheOrientierungswertRepository.findFirstByFoerderartBezeichnungAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
@@ -97,8 +88,8 @@ public class PlanungsursaechlicheWohneinheitenService extends WohneinheitenCalcu
                 final var average = BigDecimal.valueOf(orientierungswert.get().getDurchschnittlicheGrundflaeche());
                 return baurate
                     .getGfWohnenGeplant()
-                    .multiply(foerderart.getAnteilProzent())
-                    .divide(average, CalculationService.DIVISION_SCALE, RoundingMode.HALF_EVEN);
+                    .multiply(foerderart.getAnteilProzent().scaleByPowerOfTen(-2))
+                    .divide(average, CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
             }
         }
 

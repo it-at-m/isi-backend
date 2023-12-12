@@ -65,31 +65,31 @@ public class PlanungsursaechlicheWohneinheitenServiceTest {
 
         final var FF100 = new FoerderartModel();
         FF100.setBezeichnung(FF);
-        FF100.setAnteilProzent(BigDecimal.ONE);
+        FF100.setAnteilProzent(new BigDecimal("100"));
 
         final var MM75 = new FoerderartModel();
         MM75.setBezeichnung(MM);
-        MM75.setAnteilProzent(new BigDecimal("0.75"));
+        MM75.setAnteilProzent(new BigDecimal("75"));
 
         final var EOF25 = new FoerderartModel();
         EOF25.setBezeichnung(EOF);
-        EOF25.setAnteilProzent(new BigDecimal("0.25"));
+        EOF25.setAnteilProzent(new BigDecimal("25"));
 
         final var FH50 = new FoerderartModel();
         FH50.setBezeichnung(FH);
-        FH50.setAnteilProzent(new BigDecimal("0.5"));
+        FH50.setAnteilProzent(new BigDecimal("50"));
 
         final var PMB75 = new FoerderartModel();
         PMB75.setBezeichnung(PMB);
-        PMB75.setAnteilProzent(new BigDecimal("0.75"));
+        PMB75.setAnteilProzent(new BigDecimal("75"));
 
         final var KMB25 = new FoerderartModel();
         KMB25.setBezeichnung(KMB);
-        KMB25.setAnteilProzent(new BigDecimal("0.25"));
+        KMB25.setAnteilProzent(new BigDecimal("25"));
 
         final var BAU50 = new FoerderartModel();
         BAU50.setBezeichnung(BAU);
-        BAU50.setAnteilProzent(new BigDecimal("0.5"));
+        BAU50.setAnteilProzent(new BigDecimal("50"));
 
         final var foerdermixFF100 = new FoerdermixModel();
         foerdermixFF100.setFoerderarten(List.of(FF100));
@@ -143,57 +143,15 @@ public class PlanungsursaechlicheWohneinheitenServiceTest {
 
         final var jahr1String = String.valueOf(jahr1);
         final var jahr2String = String.valueOf(jahr2);
-        final var summe10Jahre = String.format(CalculationService.SUMMATION_PERIOD_NAME, 10);
-        final var summe15Jahre = String.format(CalculationService.SUMMATION_PERIOD_NAME, 15);
-        final var summe20Jahre = String.format(CalculationService.SUMMATION_PERIOD_NAME, 20);
 
         final var expected = List.of(
-            new WohneinheitenProFoerderartProJahrModel(FF, jahr1String, new BigDecimal("100")),
+            new WohneinheitenProFoerderartProJahrModel(FF, jahr1String, new BigDecimal("100.00")),
             new WohneinheitenProFoerderartProJahrModel(FF, jahr2String, new BigDecimal("25.0000")),
-            //new WohneinheitenProFoerderartProJahrModel(FF, summe10Jahre, new BigDecimal("100")),
-            //new WohneinheitenProFoerderartProJahrModel(FF, summe15Jahre, new BigDecimal("125.0000")),
-            //new WohneinheitenProFoerderartProJahrModel(FF, summe20Jahre, new BigDecimal("125.0000")),
-            new WohneinheitenProFoerderartProJahrModel(EOF, jahr1String, new BigDecimal("55.5555555556")),
+            new WohneinheitenProFoerderartProJahrModel(EOF, jahr1String, new BigDecimal("55.555555555555556")),
             new WohneinheitenProFoerderartProJahrModel(EOF, jahr2String, new BigDecimal("75.0000")),
-            //new WohneinheitenProFoerderartProJahrModel(EOF, summe10Jahre, new BigDecimal("55.5555555556")),
-            //new WohneinheitenProFoerderartProJahrModel(EOF, summe15Jahre, new BigDecimal("130.5555555556")),
-            //new WohneinheitenProFoerderartProJahrModel(EOF, summe20Jahre, new BigDecimal("130.5555555556")),
-            new WohneinheitenProFoerderartProJahrModel(MM, jahr1String, new BigDecimal("150.0000000000")),
-            new WohneinheitenProFoerderartProJahrModel(MM, jahr2String, new BigDecimal("75.0000000000")),
-            //new WohneinheitenProFoerderartProJahrModel(MM, summe10Jahre, new BigDecimal("150.0000000000")),
-            //new WohneinheitenProFoerderartProJahrModel(MM, summe15Jahre, new BigDecimal("225.0000000000")),
-            //new WohneinheitenProFoerderartProJahrModel(MM, summe20Jahre, new BigDecimal("225.0000000000")),
-            new WohneinheitenProFoerderartProJahrModel(FH, jahr2String, new BigDecimal("140.6250000000"))
-            //new WohneinheitenProFoerderartProJahrModel(FH, summe15Jahre, new BigDecimal("140.6250000000")),
-            //new WohneinheitenProFoerderartProJahrModel(FH, summe20Jahre, new BigDecimal("140.6250000000")),
-            /*
-            new WohneinheitenProFoerderartProJahrModel(
-                CalculationService.SUMMATION_TOTAL_NAME,
-                jahr1String,
-                new BigDecimal("305.5555555556")
-            ),
-            new WohneinheitenProFoerderartProJahrModel(
-                CalculationService.SUMMATION_TOTAL_NAME,
-                jahr2String,
-                new BigDecimal("315.6250000000")
-            ),
-            new WohneinheitenProFoerderartProJahrModel(
-                CalculationService.SUMMATION_TOTAL_NAME,
-                summe10Jahre,
-                new BigDecimal("305.5555555556")
-            ),
-            new WohneinheitenProFoerderartProJahrModel(
-                CalculationService.SUMMATION_TOTAL_NAME,
-                summe15Jahre,
-                new BigDecimal("621.1805555556")
-            ),
-            new WohneinheitenProFoerderartProJahrModel(
-                CalculationService.SUMMATION_TOTAL_NAME,
-                summe20Jahre,
-                new BigDecimal("621.1805555556")
-            )
-
-             */
+            new WohneinheitenProFoerderartProJahrModel(MM, jahr1String, new BigDecimal("150.000000000000000")),
+            new WohneinheitenProFoerderartProJahrModel(MM, jahr2String, new BigDecimal("75.000000000000000")),
+            new WohneinheitenProFoerderartProJahrModel(FH, jahr2String, new BigDecimal("140.625000000000000"))
         );
 
         final var actual = planungsursaechlicheWohneinheitenService.calculatePlanungsursaechlicheWohneinheiten(
@@ -211,7 +169,7 @@ public class PlanungsursaechlicheWohneinheitenServiceTest {
         final var baurate = new BaurateModel();
         final var foerderart = new FoerderartModel();
         foerderart.setBezeichnung(MM);
-        foerderart.setAnteilProzent(new BigDecimal("0.5"));
+        foerderart.setAnteilProzent(new BigDecimal("50"));
         final var sobonJahr = SobonOrientierungswertJahr.JAHR_2022;
 
         final var result1 = planungsursaechlicheWohneinheitenService.calculateWohneinheiten(
@@ -227,7 +185,7 @@ public class PlanungsursaechlicheWohneinheitenServiceTest {
             foerderart,
             sobonJahr
         );
-        assertThat(result2, is(new BigDecimal("100.0000000000")));
+        assertThat(result2, is(new BigDecimal("100.000000000000000")));
 
         baurate.setWeGeplant(100);
         final var result3 = planungsursaechlicheWohneinheitenService.calculateWohneinheiten(
@@ -235,7 +193,7 @@ public class PlanungsursaechlicheWohneinheitenServiceTest {
             foerderart,
             sobonJahr
         );
-        assertThat(result3, is(new BigDecimal("50.0")));
+        assertThat(result3, is(new BigDecimal("50.00")));
     }
 
     @Test

@@ -19,7 +19,6 @@ import de.muenchen.isi.infrastructure.repository.stammdaten.UmlegungFoerderarten
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -53,31 +52,31 @@ public class FoerdermixUmlageServiceTest {
 
         final var PMB25 = new FoerderartModel();
         PMB25.setBezeichnung(PMB);
-        PMB25.setAnteilProzent(new BigDecimal("0.25"));
+        PMB25.setAnteilProzent(new BigDecimal("25.00"));
 
         final var KMB25 = new FoerderartModel();
         KMB25.setBezeichnung(KMB);
-        KMB25.setAnteilProzent(new BigDecimal("0.25"));
+        KMB25.setAnteilProzent(new BigDecimal("25.00"));
 
         final var BAU50 = new FoerderartModel();
         BAU50.setBezeichnung(BAU);
-        BAU50.setAnteilProzent(new BigDecimal("0.5"));
+        BAU50.setAnteilProzent(new BigDecimal("50.00"));
 
         final var FF125 = new FoerderartModel();
         FF125.setBezeichnung(FF);
-        FF125.setAnteilProzent(new BigDecimal("0.1250"));
+        FF125.setAnteilProzent(new BigDecimal("12.5000"));
 
         final var EOF375 = new FoerderartModel();
         EOF375.setBezeichnung(EOF);
-        EOF375.setAnteilProzent(new BigDecimal("0.3750"));
+        EOF375.setAnteilProzent(new BigDecimal("37.5000"));
 
         final var MM25 = new FoerderartModel();
         MM25.setBezeichnung(MM);
-        MM25.setAnteilProzent(new BigDecimal("0.250"));
+        MM25.setAnteilProzent(new BigDecimal("25.0000"));
 
         final var FH25 = new FoerderartModel();
         FH25.setBezeichnung(FH);
-        FH25.setAnteilProzent(new BigDecimal("0.250"));
+        FH25.setAnteilProzent(new BigDecimal("25.0000"));
 
         final var foerdermix = new FoerdermixModel();
         foerdermix.setFoerderarten(List.of(PMB25, KMB25, BAU50));
@@ -93,9 +92,9 @@ public class FoerdermixUmlageServiceTest {
     void mergeFoerderartTest() {
         final var bezeichnung1 = FF;
         final var bezeichnung2 = EOF;
-        final var anteil1 = new BigDecimal("0.25");
-        final var anteil2 = new BigDecimal("0.3");
-        final var anteil3 = new BigDecimal("0.45");
+        final var anteil1 = new BigDecimal("25.00");
+        final var anteil2 = new BigDecimal("30.00");
+        final var anteil3 = new BigDecimal("45.00");
 
         final var foerderart1 = new FoerderartModel();
         foerderart1.setBezeichnung(bezeichnung1);
@@ -121,19 +120,19 @@ public class FoerdermixUmlageServiceTest {
     public static void fillUmlegungFoerderartenRepository(UmlegungFoerderartenRepository repository) {
         final var FF25 = new Foerderart();
         FF25.setBezeichnung(FF);
-        FF25.setAnteilProzent(new BigDecimal("0.25"));
+        FF25.setAnteilProzent(new BigDecimal("25"));
 
         final var EOF75 = new Foerderart();
         EOF75.setBezeichnung(EOF);
-        EOF75.setAnteilProzent(new BigDecimal("0.75"));
+        EOF75.setAnteilProzent(new BigDecimal("75"));
 
         final var FH50 = new Foerderart();
         FH50.setBezeichnung(FH);
-        FH50.setAnteilProzent(new BigDecimal("0.50"));
+        FH50.setAnteilProzent(new BigDecimal("50"));
 
         final var MM50 = new Foerderart();
         MM50.setBezeichnung(MM);
-        MM50.setAnteilProzent(new BigDecimal("0.50"));
+        MM50.setAnteilProzent(new BigDecimal("50"));
 
         final var umlegungPMB = new UmlegungFoerderarten();
         umlegungPMB.setBezeichnung(PMB);

@@ -1,6 +1,7 @@
 package de.muenchen.isi.domain.model.stammdaten;
 
 import de.muenchen.isi.domain.model.BaseEntityModel;
+import de.muenchen.isi.domain.service.calculation.CalculationService;
 import de.muenchen.isi.infrastructure.entity.enums.Altersklasse;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
 import java.math.BigDecimal;
@@ -15,7 +16,7 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 public class SobonOrientierungswertSozialeInfrastrukturModel extends BaseEntityModel {
 
-    public static final int SCALE = 4;
+    public static final int SCALE = CalculationService.DIVISION_SCALE;
 
     // 0.99
     public static final BigDecimal FAKTOR_DISTANCE_JAHR_11_BIS_20 = BigDecimal.valueOf(99, 2);

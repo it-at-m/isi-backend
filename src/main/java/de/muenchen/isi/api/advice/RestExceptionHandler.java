@@ -482,9 +482,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         final var errorResponseDto =
             this.createInformationResponseDtoWithTraceInformationAndTimestampAndOriginalExceptionName(ex);
         errorResponseDto.setHttpStatus(status.value());
-        errorResponseDto.setMessages(
-            List.of("Der Nutzlast der Anfrage an das Backend konnte nicht verarbeitet werden.")
-        );
+        errorResponseDto.setMessages(List.of("Die Nutzlast der Backendanfrage konnte nicht verarbeitet werden."));
         return ResponseEntity.status(errorResponseDto.getHttpStatus()).headers(headers).body(errorResponseDto);
     }
 
@@ -508,7 +506,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         final var errorResponseDto =
             this.createInformationResponseDtoWithTraceInformationAndTimestampAndOriginalExceptionName(ex);
         errorResponseDto.setHttpStatus(status.value());
-        errorResponseDto.setMessages(List.of("Die Nutzlast des Antwort vom Backend konnte nicht verarbeitet werden."));
+        errorResponseDto.setMessages(List.of("Die Nutzlast der Backendantwort konnte nicht verarbeitet werden."));
         return ResponseEntity.status(errorResponseDto.getHttpStatus()).headers(headers).body(errorResponseDto);
     }
 

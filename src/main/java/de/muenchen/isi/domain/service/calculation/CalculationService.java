@@ -14,9 +14,11 @@ import de.muenchen.isi.domain.model.calculation.LangfristigerPlanungsursaechlich
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
@@ -33,9 +35,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class CalculationService {
 
-    public static final int DIVISION_SCALE = 10;
-
-    public static final List<Integer> SUMMATION_PERIODS = List.of(10, 15, 20);
+    public static final int DIVISION_SCALE = 15;
 
     public static final String SUMMATION_PERIOD_NAME = "Summe erste %d J.";
 
@@ -47,11 +47,10 @@ public class CalculationService {
 
     /**
      * Die Methode ermittelt den {@link LangfristigerPlanungsursaechlicherBedarfModel} für jede in der Abfrage vorhandene Abfragevariante.
-     * Ist keine Berechnung der Bedarfe möglich so wird der Wert null im Attribute für die langfristigen planugsursächlichen Bedarfe gesetzt.
+     * Ist keine Berechnung der Bedarfe möglich, so wird der Wert null im Attribut für die langfristigen planugsursächlichen Bedarfe gesetzt.
      *
-     * Handelt es sich bei einer Abfrage um den Typ {@link ArtAbfrage#WEITERES_VERFAHREN}, so werden für Abfragevarianten mit Wert
-     * {@link SobonOrientierungswertJahr#STANDORTABFRAGE} im Attribut {@link AbfragevarianteWeiteresVerfahrenModel#getSobonOrientierungswertJahr()}
-     * keine Berechnungen durchgeführt.
+     * Handelt es sich um eine Abfragevarianten mit Wert {@link SobonOrientierungswertJahr#STANDORTABFRAGE}
+     * im Attribut {@link AbfragevarianteWeiteresVerfahrenModel#getSobonOrientierungswertJahr()} wird keine Berechnungen durchgeführt.
      *
      * @param abfrage zum Ermitteln und Setzen der langfristigen planugsursächlichen Bedarfe.
      * @throws CalculationException falls keine Berechnung wegen einer nicht gesetzten Art der Abfrage oder Abfragevariante oder nicht vorhandener Stammdaten möglich ist.
@@ -78,19 +77,10 @@ public class CalculationService {
         } else if (ArtAbfrage.WEITERES_VERFAHREN.equals(abfrage.getArtAbfrage())) {
             final var weiteresVerfahren = (WeiteresVerfahrenModel) abfrage;
             abfragevarianten =
-                ListUtils
-                    .union(
-                        ListUtils.emptyIfNull(weiteresVerfahren.getAbfragevariantenWeiteresVerfahren()),
-                        ListUtils.emptyIfNull(weiteresVerfahren.getAbfragevariantenSachbearbeitungWeiteresVerfahren())
-                    )
-                    .stream()
-                    .filter(abfragevariante ->
-                        !Objects.equals(
-                            abfragevariante.getSobonOrientierungswertJahr(),
-                            SobonOrientierungswertJahr.STANDORTABFRAGE
-                        )
-                    )
-                    .collect(Collectors.toList());
+                ListUtils.union(
+                    ListUtils.emptyIfNull(weiteresVerfahren.getAbfragevariantenWeiteresVerfahren()),
+                    ListUtils.emptyIfNull(weiteresVerfahren.getAbfragevariantenSachbearbeitungWeiteresVerfahren())
+                );
         } else {
             throw new CalculationException("Die Berechnung kann für diese Art von Abfrage nicht durchgeführt werden.");
         }
@@ -101,7 +91,10 @@ public class CalculationService {
 
     /**
      * Die Methode ermittelt den {@link LangfristigerPlanungsursaechlicherBedarfModel} für die im Parameter gegebene Abfragevariante.
-     * Ist keine Berechnung der Bedarfe möglich so wird der Wert null im Abfragevariantenattribut für die langfristigen planugsursächlichen Bedarfe gesetzt.
+     * Ist keine Berechnung der Bedarfe möglich, so wird der Wert null im Abfragevariantenattribut für die langfristigen planugsursächlichen Bedarfe gesetzt.
+     *
+     * Handelt es sich um eine Abfragevariante mit Wert {@link SobonOrientierungswertJahr#STANDORTABFRAGE}
+     * im Attribut {@link AbfragevarianteWeiteresVerfahrenModel#getSobonOrientierungswertJahr()} wird keine Berechnungen durchgeführt.
      *
      * @param abfragevariante zum Ermitteln und Setzen der langfristigen planugsursächlichen Bedarfe.
      * @throws CalculationException falls keine Berechnung wegen einer nicht gesetzten Art der Abfragevariante oder nicht vorhandener Stammdaten möglich ist.
@@ -163,13 +156,14 @@ public class CalculationService {
     }
 
     /**
-     * Die Methode ermittelt den {@link LangfristigerPlanungsursaechlicherBedarfModel} für die im Paramter gegebenen Werte.
-     * Besitzt ein Parameter den Wert null so gibt die Methode ebenfalls den Wert null zurück.
+     * Die Methode ermittelt den {@link LangfristigerPlanungsursaechlicherBedarfModel} für die im Parameter gegebenen Werte.
+     *
+     * Ist auf Basis der übergebenen Methodenparameter keine Berechnung möglich, so wird der Wert null zurückgegeben.
      *
      * @param bauabschnitte zum Ermitteln der Bedarfe.
      * @param sobonOrientierungswertJahr zur Extraktion der korrekten Sobon-Orientierungswerte.
      * @param stammdatenGueltigAb zur Extraktion der Stammdaten welche sich nicht auf ein konkretes Jahr der Sobon-Orientierungswerte beziehen.
-     * @return den {@link LangfristigerPlanungsursaechlicherBedarfModel} oder null falls ein Methodenparameter null ist.
+     * @return den {@link LangfristigerPlanungsursaechlicherBedarfModel} oder null falls auf Basis der übergebenen Methodenparameter keine Berechnung möglich ist.
      * @throws CalculationException falls die Stammdaten zur Durchführung der Berechnung nicht geladen werden können.
      */
     public LangfristigerPlanungsursaechlicherBedarfModel calculateLangfristigerPlanungsursaechlicherBedarf(
@@ -179,7 +173,8 @@ public class CalculationService {
     ) throws CalculationException {
         if (
             CollectionUtils.isEmpty(bauabschnitte) ||
-            ObjectUtils.anyNull(sobonOrientierungswertJahr, stammdatenGueltigAb)
+            ObjectUtils.anyNull(sobonOrientierungswertJahr, stammdatenGueltigAb) ||
+            Objects.equals(sobonOrientierungswertJahr, SobonOrientierungswertJahr.STANDORTABFRAGE)
         ) {
             return null;
         }
@@ -215,8 +210,14 @@ public class CalculationService {
             );
         bedarf.setWohneinheitenSumme20Jahre(wohneinheitenSumme20Jahre);
 
+        final var wohneinheitenSumsForGesamt = Stream
+            .of(wohneinheiten, wohneinheitenSumme10Jahre, wohneinheitenSumme15Jahre, wohneinheitenSumme20Jahre)
+            .flatMap(Collection::stream)
+            .collect(Collectors.toList());
         final var wohneinheitenGesamt =
-            planungsursaechlicheWohneinheitenService.sumWohneinheitenOverFoerderartenForEachYear(wohneinheiten);
+            planungsursaechlicheWohneinheitenService.sumWohneinheitenOverFoerderartenForEachYear(
+                wohneinheitenSumsForGesamt
+            );
         bedarf.setWohneinheitenGesamt(wohneinheitenGesamt);
 
         // Ermittlung Bedarf Kinderkrippe

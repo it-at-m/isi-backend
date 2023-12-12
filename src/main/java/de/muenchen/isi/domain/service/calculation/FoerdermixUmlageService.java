@@ -19,9 +19,9 @@ public class FoerdermixUmlageService {
     private final UmlegungFoerderartenRepository umlegungFoerderartenRepository;
 
     /**
+     * Diese Methode legt die Förderarten eines Fördermixes auf andere Förderarten um und gibt den umgelegten Fördermix zurück.
      * Manche Förderarten dürfen nicht direkt in Berechnungen einfließen, da für sie Erfahrungswerte fehlen.
      * Stattdessen müssen ihre Anteile in bestimmten Anteilen auf Förderarten mit Erfahrungswerten umgelegt werden.
-     * Diese Methode kann so eine Umlegung durchführen.
      *
      * @param foerdermix Das {@link FoerdermixModel}, welches umgelegt werden soll.
      * @param gueltigAb Das Gültigkeitsdatum der Stammdaten, welche die Umlegung diktieren.
@@ -44,7 +44,7 @@ public class FoerdermixUmlageService {
                         for (final var schluessel : umlegung.get().getUmlegungsschluessel()) {
                             final var umgelegterAnteil = foerderart
                                 .getAnteilProzent()
-                                .multiply(schluessel.getAnteilProzent());
+                                .multiply(schluessel.getAnteilProzent().scaleByPowerOfTen(-2));
                             mergeFoerderart(umgelegteFoerderarten, schluessel.getBezeichnung(), umgelegterAnteil);
                         }
                     } else {
