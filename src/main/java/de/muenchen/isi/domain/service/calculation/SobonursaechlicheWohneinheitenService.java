@@ -67,7 +67,7 @@ public class SobonursaechlicheWohneinheitenService extends WohneinheitenCalculat
             sobonsursachlicheWohneinheitenList.clear();
 
             BigDecimal gfWohnen1000 = sobonGf.multiply(
-                TAUSEND.divide(summeWe, CalculationService.DIVISION_SCALE, RoundingMode.HALF_EVEN)
+                TAUSEND.divide(summeWe, CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP)
             );
             // Anzahl 1000er-Blöcke/Jahre = summeWe / 1000 = Ergebnis abrunden
             BigDecimal anzahl = summeWe.divide(TAUSEND, 0, RoundingMode.HALF_DOWN);
@@ -86,7 +86,7 @@ public class SobonursaechlicheWohneinheitenService extends WohneinheitenCalculat
 
             // letztes Jahr
             BigDecimal gfWohnenRest = sobonGf.multiply(
-                summeWe.remainder(TAUSEND).divide(summeWe, CalculationService.DIVISION_SCALE, RoundingMode.HALF_EVEN)
+                summeWe.remainder(TAUSEND).divide(summeWe, CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP)
             );
             calculateWohneinheiten(
                 baurate,
@@ -133,7 +133,7 @@ public class SobonursaechlicheWohneinheitenService extends WohneinheitenCalculat
                 wohneinheiten =
                     sobonGf
                         .multiply(foerderart.getAnteilProzent().scaleByPowerOfTen(-2))
-                        .divide(average, CalculationService.DIVISION_SCALE, RoundingMode.HALF_EVEN);
+                        .divide(average, CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
             }
 
             sobonsursachlicheWohneinheitenList.add(

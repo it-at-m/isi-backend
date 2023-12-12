@@ -77,9 +77,9 @@ public class SobonursaechlicheWohneinheitenServiceTest {
 
         // 1. Test unter 1000 Wohneinheiten
         final var expected = List.of(
-            new WohneinheitenProFoerderartProJahrModel(FF, "2024", new BigDecimal("157.8947368421")),
-            new WohneinheitenProFoerderartProJahrModel(EOF, "2024", new BigDecimal("66.6666666667")),
-            new WohneinheitenProFoerderartProJahrModel(MM, "2024", new BigDecimal("90.0000000000"))
+            new WohneinheitenProFoerderartProJahrModel(FF, "2024", new BigDecimal("157.894736842105263")),
+            new WohneinheitenProFoerderartProJahrModel(EOF, "2024", new BigDecimal("66.666666666666667")),
+            new WohneinheitenProFoerderartProJahrModel(MM, "2024", new BigDecimal("90.000000000000000"))
         );
 
         final var actual = sobonursaechlicheWohneinheitenService.calculateSobonursaechlicheWohneinheiten(
@@ -101,12 +101,12 @@ public class SobonursaechlicheWohneinheitenServiceTest {
 
         // 2. Test über 1000 Wohneinheiten mit einem 1000er Block/Jahr
         final var expectedB = List.of(
-            new WohneinheitenProFoerderartProJahrModel(FF, "2024", new BigDecimal("501.9520356842")),
-            new WohneinheitenProFoerderartProJahrModel(EOF, "2024", new BigDecimal("211.9353039556")),
-            new WohneinheitenProFoerderartProJahrModel(MM, "2024", new BigDecimal("286.1126603400")),
-            new WohneinheitenProFoerderartProJahrModel(FF, "2025", new BigDecimal("182.2584906316")),
-            new WohneinheitenProFoerderartProJahrModel(EOF, "2025", new BigDecimal("76.9535849333")),
-            new WohneinheitenProFoerderartProJahrModel(MM, "2025", new BigDecimal("103.8873396600"))
+            new WohneinheitenProFoerderartProJahrModel(FF, "2024", new BigDecimal("501.952035694366947")),
+            new WohneinheitenProFoerderartProJahrModel(EOF, "2024", new BigDecimal("211.935303959843822")),
+            new WohneinheitenProFoerderartProJahrModel(MM, "2024", new BigDecimal("286.112660345789160")),
+            new WohneinheitenProFoerderartProJahrModel(FF, "2025", new BigDecimal("182.258490621422526")),
+            new WohneinheitenProFoerderartProJahrModel(EOF, "2025", new BigDecimal("76.953584929045067")),
+            new WohneinheitenProFoerderartProJahrModel(MM, "2025", new BigDecimal("103.887339654210840"))
         );
 
         final var actualB = sobonursaechlicheWohneinheitenService.calculateSobonursaechlicheWohneinheiten(
@@ -128,15 +128,15 @@ public class SobonursaechlicheWohneinheitenServiceTest {
 
         // 3. Test über 1000 Wohneinheiten mit zwei 1000er Blöcken/Jahren
         final var expectedC = List.of(
-            new WohneinheitenProFoerderartProJahrModel(FF, "2024", new BigDecimal("501.9520357105")),
-            new WohneinheitenProFoerderartProJahrModel(EOF, "2024", new BigDecimal("211.9353039667")),
-            new WohneinheitenProFoerderartProJahrModel(MM, "2024", new BigDecimal("286.1126603550")),
-            new WohneinheitenProFoerderartProJahrModel(FF, "2025", new BigDecimal("501.9520357105")),
-            new WohneinheitenProFoerderartProJahrModel(EOF, "2025", new BigDecimal("211.9353039667")),
-            new WohneinheitenProFoerderartProJahrModel(MM, "2025", new BigDecimal("286.1126603550")),
-            new WohneinheitenProFoerderartProJahrModel(FF, "2026", new BigDecimal("206.6222443684")),
-            new WohneinheitenProFoerderartProJahrModel(EOF, "2026", new BigDecimal("87.2405031778")),
-            new WohneinheitenProFoerderartProJahrModel(MM, "2026", new BigDecimal("117.7746792900"))
+            new WohneinheitenProFoerderartProJahrModel(FF, "2024", new BigDecimal("501.952035694367000")),
+            new WohneinheitenProFoerderartProJahrModel(EOF, "2024", new BigDecimal("211.935303959843844")),
+            new WohneinheitenProFoerderartProJahrModel(MM, "2024", new BigDecimal("286.112660345789190")),
+            new WohneinheitenProFoerderartProJahrModel(FF, "2025", new BigDecimal("501.952035694367000")),
+            new WohneinheitenProFoerderartProJahrModel(EOF, "2025", new BigDecimal("211.935303959843844")),
+            new WohneinheitenProFoerderartProJahrModel(MM, "2025", new BigDecimal("286.112660345789190")),
+            new WohneinheitenProFoerderartProJahrModel(FF, "2026", new BigDecimal("206.622244400739684")),
+            new WohneinheitenProFoerderartProJahrModel(EOF, "2026", new BigDecimal("87.240503191423422")),
+            new WohneinheitenProFoerderartProJahrModel(MM, "2026", new BigDecimal("117.774679308421620"))
         );
 
         final var actualC = sobonursaechlicheWohneinheitenService.calculateSobonursaechlicheWohneinheiten(
