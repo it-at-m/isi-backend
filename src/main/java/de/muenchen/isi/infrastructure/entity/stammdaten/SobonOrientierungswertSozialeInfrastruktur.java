@@ -47,36 +47,36 @@ public class SobonOrientierungswertSozialeInfrastruktur extends BaseEntity {
     @Column(nullable = false)
     private String foerderartBezeichnung;
 
-    @Column(precision = 10, scale = 4, nullable = false)
+    @Column(precision = 20, scale = 15, nullable = false)
     private BigDecimal einwohnerJahr1NachErsterstellung;
 
-    @Column(precision = 10, scale = 4, nullable = false)
+    @Column(precision = 20, scale = 15, nullable = false)
     private BigDecimal einwohnerJahr2NachErsterstellung;
 
-    @Column(precision = 10, scale = 4, nullable = false)
+    @Column(precision = 20, scale = 15, nullable = false)
     private BigDecimal einwohnerJahr3NachErsterstellung;
 
-    @Column(precision = 10, scale = 4, nullable = false)
+    @Column(precision = 20, scale = 15, nullable = false)
     private BigDecimal einwohnerJahr4NachErsterstellung;
 
-    @Column(precision = 10, scale = 4, nullable = false)
+    @Column(precision = 20, scale = 15, nullable = false)
     private BigDecimal einwohnerJahr5NachErsterstellung;
 
-    @Column(precision = 10, scale = 4, nullable = false)
+    @Column(precision = 20, scale = 15, nullable = false)
     private BigDecimal einwohnerJahr6NachErsterstellung;
 
-    @Column(precision = 10, scale = 4, nullable = false)
+    @Column(precision = 20, scale = 15, nullable = false)
     private BigDecimal einwohnerJahr7NachErsterstellung;
 
-    @Column(precision = 10, scale = 4, nullable = false)
+    @Column(precision = 20, scale = 15, nullable = false)
     private BigDecimal einwohnerJahr8NachErsterstellung;
 
-    @Column(precision = 10, scale = 4, nullable = false)
+    @Column(precision = 20, scale = 15, nullable = false)
     private BigDecimal einwohnerJahr9NachErsterstellung;
 
-    @Column(precision = 10, scale = 4, nullable = false)
+    @Column(precision = 20, scale = 15, nullable = false)
     private BigDecimal einwohnerJahr10NachErsterstellung;
 
-    @Column(precision = 10, scale = 4, nullable = false)
+    @Column(precision = 20, scale = 15, nullable = false)
     private BigDecimal stammwertArbeitsgruppe;
 }
