@@ -13,7 +13,7 @@ import java.time.LocalDate;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.reactive.function.client.WebClientException;
@@ -171,7 +171,7 @@ public class PresignedUrlCreationService {
         log.error(errorMessage);
     }
 
-    private HttpStatus getStatusCode(final HttpStatusCodeException exception) {
+    private HttpStatusCode getStatusCode(final HttpStatusCodeException exception) {
         return exception.getStatusCode();
     }
 }

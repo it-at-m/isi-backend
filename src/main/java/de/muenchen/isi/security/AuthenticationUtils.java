@@ -1,7 +1,7 @@
 package de.muenchen.isi.security;
 
-import com.nimbusds.jose.shaded.json.JSONArray;
-import com.nimbusds.jose.shaded.json.JSONObject;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -116,11 +116,11 @@ public class AuthenticationUtils {
             final DefaultOAuth2AuthenticatedPrincipal principal =
                 (DefaultOAuth2AuthenticatedPrincipal) authentication.getPrincipal();
             if (!ObjectUtils.isEmpty(principal)) {
-                JSONObject resourceAccess = principal.getAttribute(TOKEN_RESOURCE_ACCESS);
+                JsonObject resourceAccess = principal.getAttribute(TOKEN_RESOURCE_ACCESS);
                 if (!resourceAccess.isEmpty()) {
-                    JSONObject isi = (JSONObject) resourceAccess.get(TOKEN_ISI);
+                    JsonObject isi = (JsonObject) resourceAccess.get(TOKEN_ISI);
                     if (!isi.isEmpty()) {
-                        JSONArray rolesArray = (JSONArray) isi.get(TOKEN_ROLES);
+                        JsonArray rolesArray = (JsonArray) isi.get(TOKEN_ROLES);
                         if (!rolesArray.isEmpty()) {
                             rolesArray.forEach(role -> roles.add(role.toString()));
                         }

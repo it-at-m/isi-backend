@@ -12,7 +12,7 @@ import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.WesentlicheRechtsgrundlage;
 import de.muenchen.isi.infrastructure.entity.filehandling.Dokument;
 import de.muenchen.isi.infrastructure.repository.search.SearchwordSuggesterRepository;
-import io.hypersistence.utils.hibernate.type.json.JsonType;
+import io.hypersistence.utils.hibernate.type.json.JsonBinaryType;
 import java.math.BigDecimal;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -32,7 +32,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.hibernate.annotations.Type;
-import org.hibernate.annotations.TypeDef;
 import org.hibernate.search.engine.backend.types.Sortable;
 import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBinderRef;
 import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBridgeRef;
@@ -47,7 +46,6 @@ import org.hibernate.search.mapper.pojo.mapping.definition.annotation.NonStandar
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @Table(indexes = { @Index(name = "bauvorhaben_name_index", columnList = "nameVorhaben") })
-@TypeDef(name = "json", typeClass = JsonType.class)
 @Indexed
 public class Bauvorhaben extends BaseEntity {
 
@@ -92,7 +90,7 @@ public class Bauvorhaben extends BaseEntity {
     private Adresse adresse;
 
     @IndexedEmbedded
-    @Type(type = "json")
+    @Type(JsonBinaryType.class)
     @Column(columnDefinition = "jsonb")
     private Verortung verortung;
 

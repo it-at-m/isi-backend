@@ -16,13 +16,13 @@
     <properties>
         <git.scm.url>scm:git:git@github.com:it-at-m/isi-backend.git</git.scm.url>
         <git.url>https://github.com/it-at-m/isi-backend</git.url>
-        <java.version>11</java.version>
+        <java.version>17</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <maven.compiler.release>${java.version}</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <spring.boot.version>2.7.14</spring.boot.version>
-        <spring.cloud.version>2021.0.8</spring.cloud.version>
+        <spring.boot.version>3.1.6</spring.boot.version>
+        <spring.cloud.version>2022.0.4</spring.cloud.version>
         <logstash.encoder>7.0.1</logstash.encoder>
         <apache.commons.collections4>4.4</apache.commons.collections4>
         <apache.commons.csv>1.9.0</apache.commons.csv>
@@ -50,7 +50,7 @@
         <geotools.version>27.2</geotools.version>
         <spring.statemachine>3.2.0</spring.statemachine>
         <apache.tika.version>2.7.0</apache.tika.version>
-        <hibernate.search>6.2.1.Final</hibernate.search>
+        <hibernate.search>6.2.2.Final</hibernate.search>
         <icu4j.version>73.2</icu4j.version>
     </properties>
 
@@ -119,6 +119,7 @@
         <dependency>
             <groupId>org.springframework.security.oauth.boot</groupId>
             <artifactId>spring-security-oauth2-autoconfigure</artifactId>
+            <version>2.6.8</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.security</groupId>
@@ -162,25 +163,31 @@
             <artifactId>h2</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-entitymanager</artifactId>
+            <groupId>org.hibernate.orm</groupId>
+            <artifactId>hibernate-core</artifactId>
         </dependency>
         <!-- Hibernate Model Gen for type safe criterias -->
         <dependency>
-            <groupId>org.hibernate</groupId>
+            <groupId>org.hibernate.orm</groupId>
             <artifactId>hibernate-jpamodelgen</artifactId>
         </dependency>
         <!-- Version muss zur Hibernateversion passen: https://github.com/vladmihalcea/hypersistence-utils -->
         <dependency>
             <groupId>io.hypersistence</groupId>
-            <artifactId>hypersistence-utils-hibernate-55</artifactId>
-            <version>3.3.2</version>
+            <artifactId>hypersistence-utils-hibernate-62</artifactId>
+            <version>3.6.1</version>
+        </dependency>
+        <dependency>
+        <groupId>jakarta.persistence</groupId>
+        <artifactId>jakarta.persistence-api</artifactId>
+        <version>3.1.0</version>
         </dependency>
 
         <!-- Other -->
         <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpclient</artifactId>
+            <groupId>org.apache.httpcomponents.client5</groupId>
+            <artifactId>httpclient5</artifactId>
+            <version>5.2.1</version>
         </dependency>
         <dependency>
             <groupId>org.mapstruct</groupId>
@@ -207,8 +214,8 @@
 
         <!-- Validation -->
         <dependency>
-            <groupId>javax.validation</groupId>
-            <artifactId>validation-api</artifactId>
+            <groupId>jakarta.validation</groupId>
+            <artifactId>jakarta.validation-api</artifactId>
         </dependency>
         <dependency>
             <groupId>org.hibernate.validator</groupId>
@@ -249,6 +256,12 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <!-- this is needed or IntelliJ gives junit.jar or junit-platform-launcher:1.9.2 not found errors -->
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-launcher</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
             <scope>test</scope>
@@ -256,6 +269,7 @@
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-inline</artifactId>
+            <version>5.2.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -281,8 +295,12 @@
 
         <!-- Logging -->
         <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-sleuth</artifactId>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-tracing</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-tracing-bridge-brave</artifactId>
         </dependency>
         <dependency>
             <groupId>net.logstash.logback</groupId>
@@ -342,11 +360,6 @@
             <groupId>commons-validator</groupId>
             <artifactId>commons-validator</artifactId>
             <version>${apache.commons.validator}</version>
-        </dependency>
-        <dependency>
-            <groupId>commons-fileupload</groupId>
-            <artifactId>commons-fileupload</artifactId>
-            <version>${apache.commons.fileupload}</version>
         </dependency>
         <dependency>
             <groupId>org.geotools</groupId>

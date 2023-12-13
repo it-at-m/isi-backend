@@ -17,6 +17,7 @@ import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.StringLengthExceededException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
 import de.muenchen.isi.domain.exception.UserRoleNotAllowedException;
+import io.micrometer.tracing.Tracer;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
@@ -28,7 +29,6 @@ import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.ConversionNotSupportedException;
 import org.springframework.beans.TypeMismatchException;
-import org.springframework.cloud.sleuth.Tracer;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -54,9 +54,6 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 /**
  * Zur Behandlung der in den Controller geworfenen Exceptions.
  * Erforderlich um ein einheitliches {@link InformationResponseDto} an das Frontend zurückzugeben.
- * <p>
- * Die Methoden annotiert mit {@link Override} überschreiben alle handleXXX-Methoden des {@link ResponseEntityExceptionHandler}s,
- * um bei jeder Spring-Exception einen einheitlichen Response-Body vom Typ {@link InformationResponseDto} zu gewährleisten.
  */
 @RestControllerAdvice
 @RequiredArgsConstructor
@@ -265,7 +262,6 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
      * @param request the current request
      * @return das {@link InformationResponseDto}.
      */
-    @Override
     protected ResponseEntity<Object> handleHttpRequestMethodNotSupported(
         final HttpRequestMethodNotSupportedException ex,
         final HttpHeaders headers,
@@ -290,7 +286,6 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
      * @param request the current request
      * @return das {@link InformationResponseDto}.
      */
-    @Override
     protected ResponseEntity<Object> handleHttpMediaTypeNotSupported(
         final HttpMediaTypeNotSupportedException ex,
         final HttpHeaders headers,
@@ -315,7 +310,6 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
      * @param request the current request
      * @return das {@link InformationResponseDto}.
      */
-    @Override
     protected ResponseEntity<Object> handleHttpMediaTypeNotAcceptable(
         final HttpMediaTypeNotAcceptableException ex,
         final HttpHeaders headers,
@@ -339,7 +333,6 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
      * @param request the current request
      * @return das {@link InformationResponseDto}.
      */
-    @Override
     protected ResponseEntity<Object> handleMissingPathVariable(
         final MissingPathVariableException ex,
         final HttpHeaders headers,
@@ -363,7 +356,6 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
      * @param request the current request
      * @return das {@link InformationResponseDto}.
      */
-    @Override
     protected ResponseEntity<Object> handleMissingServletRequestParameter(
         final MissingServletRequestParameterException ex,
         final HttpHeaders headers,
@@ -387,7 +379,6 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
      * @param request the current request
      * @return das {@link InformationResponseDto}.
      */
-    @Override
     protected ResponseEntity<Object> handleServletRequestBindingException(
         final ServletRequestBindingException ex,
         final HttpHeaders headers,
@@ -411,7 +402,6 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
      * @param request the current request
      * @return das {@link InformationResponseDto}.
      */
-    @Override
     protected ResponseEntity<Object> handleConversionNotSupported(
         final ConversionNotSupportedException ex,
         final HttpHeaders headers,
@@ -435,7 +425,6 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
      * @param request the current request
      * @return das {@link InformationResponseDto}.
      */
-    @Override
     protected ResponseEntity<Object> handleTypeMismatch(
         final TypeMismatchException ex,
         final HttpHeaders headers,
@@ -461,7 +450,6 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
      * @param request the current request
      * @return das {@link InformationResponseDto}.
      */
-    @Override
     protected ResponseEntity<Object> handleHttpMessageNotReadable(
         final HttpMessageNotReadableException ex,
         final HttpHeaders headers,
@@ -487,7 +475,6 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
      * @param request the current request
      * @return das {@link InformationResponseDto}.
      */
-    @Override
     protected ResponseEntity<Object> handleHttpMessageNotWritable(
         final HttpMessageNotWritableException ex,
         final HttpHeaders headers,
@@ -511,7 +498,6 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
      * @param request the current request
      * @return das {@link InformationResponseDto}.
      */
-    @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(
         final MethodArgumentNotValidException ex,
         final HttpHeaders headers,
@@ -551,7 +537,6 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
      * @param request the current request
      * @return das {@link InformationResponseDto}.
      */
-    @Override
     protected ResponseEntity<Object> handleMissingServletRequestPart(
         final MissingServletRequestPartException ex,
         final HttpHeaders headers,
@@ -577,7 +562,6 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
      * @param request the current request
      * @return das {@link InformationResponseDto}.
      */
-    @Override
     protected ResponseEntity<Object> handleBindException(
         final BindException ex,
         final HttpHeaders headers,
@@ -601,7 +585,6 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
      * @param request the current request
      * @return das {@link InformationResponseDto}.
      */
-    @Override
     protected ResponseEntity<Object> handleNoHandlerFoundException(
         final NoHandlerFoundException ex,
         final HttpHeaders headers,
@@ -633,7 +616,6 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
      * @param webRequest the current request
      * @return das {@link InformationResponseDto}.
      */
-    @Override
     protected ResponseEntity<Object> handleAsyncRequestTimeoutException(
         final AsyncRequestTimeoutException ex,
         final HttpHeaders headers,

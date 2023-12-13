@@ -17,7 +17,8 @@ import javax.persistence.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import org.hibernate.annotations.Type;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 @Entity
 @Data
@@ -34,7 +35,7 @@ public class Kommentar extends BaseEntity {
     @Column(length = 32)
     private String datum;
 
-    @Type(type = "org.hibernate.type.TextType")
+    @JdbcTypeCode(SqlTypes.LONG32VARCHAR)
     @Column
     private String text;
 

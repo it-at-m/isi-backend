@@ -3,6 +3,7 @@ package de.muenchen.isi.infrastructure.entity.stammdaten.baurate;
 import de.muenchen.isi.infrastructure.entity.BaseEntity;
 import de.muenchen.isi.infrastructure.entity.enums.IdealtypischeBaurateTyp;
 import de.muenchen.isi.infrastructure.repository.stammdaten.IdealtypischeBaurateRepository;
+import io.hypersistence.utils.hibernate.type.json.JsonBinaryType;
 import io.hypersistence.utils.hibernate.type.json.JsonType;
 import java.math.BigDecimal;
 import java.util.List;
@@ -44,7 +45,7 @@ public class IdealtypischeBaurate extends BaseEntity {
     @Column(nullable = false)
     private IdealtypischeBaurateTyp typ;
 
-    @Type(type = "json")
+    @Type(JsonBinaryType.class)
     @Column(nullable = false, columnDefinition = "jsonb")
     private List<Jahresrate> jahresraten;
 }

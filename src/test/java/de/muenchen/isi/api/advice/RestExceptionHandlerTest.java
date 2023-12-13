@@ -18,6 +18,9 @@ import de.muenchen.isi.domain.exception.MimeTypeExtractionFailedException;
 import de.muenchen.isi.domain.exception.MimeTypeNotAllowedException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
+import io.micrometer.tracing.Span;
+import io.micrometer.tracing.TraceContext;
+import io.micrometer.tracing.Tracer;
 import java.util.List;
 import javax.validation.ConstraintViolationException;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,9 +33,7 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import org.springframework.beans.ConversionNotSupportedException;
 import org.springframework.beans.TypeMismatchException;
-import org.springframework.cloud.sleuth.Span;
-import org.springframework.cloud.sleuth.TraceContext;
-import org.springframework.cloud.sleuth.Tracer;
+import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -577,7 +578,7 @@ class RestExceptionHandlerTest {
                 )
             );
         final MethodArgumentNotValidException methodArgumentNotValidException = new MethodArgumentNotValidException(
-            null,
+            (MethodParameter) null,
             this.bindingResult
         );
 

@@ -9,6 +9,7 @@ import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVerfahren;
 import de.muenchen.isi.infrastructure.entity.filehandling.Dokument;
 import de.muenchen.isi.infrastructure.repository.search.SearchwordSuggesterRepository;
+import io.hypersistence.utils.hibernate.type.json.JsonBinaryType;
 import java.time.LocalDate;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -71,7 +72,7 @@ public class Baugenehmigungsverfahren extends Abfrage {
     private Adresse adresse;
 
     @IndexedEmbedded
-    @Type(type = "json")
+    @Type(JsonBinaryType.class)
     @Column(columnDefinition = "jsonb")
     private Verortung verortung;
 
