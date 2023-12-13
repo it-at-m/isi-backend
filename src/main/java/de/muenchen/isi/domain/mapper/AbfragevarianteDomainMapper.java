@@ -51,6 +51,15 @@ public interface AbfragevarianteDomainMapper {
             @Mapping(target = "sobonOrientierungswertJahr", ignore = true),
             @Mapping(target = "anmerkung", ignore = true),
             @Mapping(target = "bedarfsmeldungFachreferate", ignore = true),
+            @Mapping(target = "ausgelBedarfImBaugebietBeruecksichtigenKita", ignore = true),
+            @Mapping(target = "ausgelBedarfMitversorgungImBplanKita", ignore = true),
+            @Mapping(target = "ausgelBedarfMitversorgungInBestEinrichtungenKita", ignore = true),
+            @Mapping(target = "ausgelBedarfMitversorgungInBestEinrichtungenNachAusbauKita", ignore = true),
+            @Mapping(target = "ausgelBedarfImBaugebietBeruecksichtigenSchule", ignore = true),
+            @Mapping(target = "ausgelBedarfMitversorgungImBplanSchule", ignore = true),
+            @Mapping(target = "ausgelBedarfMitversorgungInBestEinrichtungenSchule", ignore = true),
+            @Mapping(target = "ausgelBedarfMitversorgungInBestEinrichtungenNachAusbauSchule", ignore = true),
+            @Mapping(target = "hinweisVersorgung", ignore = true),
         }
     )
     AbfragevarianteBauleitplanverfahrenModel request2Model(
@@ -66,6 +75,15 @@ public interface AbfragevarianteDomainMapper {
             @Mapping(target = "sobonOrientierungswertJahr", ignore = true),
             @Mapping(target = "anmerkung", ignore = true),
             @Mapping(target = "bedarfsmeldungFachreferate", ignore = true),
+            @Mapping(target = "ausgelBedarfImBaugebietBeruecksichtigenKita", ignore = true),
+            @Mapping(target = "ausgelBedarfMitversorgungImBplanKita", ignore = true),
+            @Mapping(target = "ausgelBedarfMitversorgungInBestEinrichtungenKita", ignore = true),
+            @Mapping(target = "ausgelBedarfMitversorgungInBestEinrichtungenNachAusbauKita", ignore = true),
+            @Mapping(target = "ausgelBedarfImBaugebietBeruecksichtigenSchule", ignore = true),
+            @Mapping(target = "ausgelBedarfMitversorgungImBplanSchule", ignore = true),
+            @Mapping(target = "ausgelBedarfMitversorgungInBestEinrichtungenSchule", ignore = true),
+            @Mapping(target = "ausgelBedarfMitversorgungInBestEinrichtungenNachAusbauSchule", ignore = true),
+            @Mapping(target = "hinweisVersorgung", ignore = true),
         }
     )
     AbfragevarianteBaugenehmigungsverfahrenModel request2Model(
@@ -81,6 +99,15 @@ public interface AbfragevarianteDomainMapper {
             @Mapping(target = "sobonOrientierungswertJahr", ignore = true),
             @Mapping(target = "anmerkung", ignore = true),
             @Mapping(target = "bedarfsmeldungFachreferate", ignore = true),
+            @Mapping(target = "ausgelBedarfImBaugebietBeruecksichtigenKita", ignore = true),
+            @Mapping(target = "ausgelBedarfMitversorgungImBplanKita", ignore = true),
+            @Mapping(target = "ausgelBedarfMitversorgungInBestEinrichtungenKita", ignore = true),
+            @Mapping(target = "ausgelBedarfMitversorgungInBestEinrichtungenNachAusbauKita", ignore = true),
+            @Mapping(target = "ausgelBedarfImBaugebietBeruecksichtigenSchule", ignore = true),
+            @Mapping(target = "ausgelBedarfMitversorgungImBplanSchule", ignore = true),
+            @Mapping(target = "ausgelBedarfMitversorgungInBestEinrichtungenSchule", ignore = true),
+            @Mapping(target = "ausgelBedarfMitversorgungInBestEinrichtungenNachAusbauSchule", ignore = true),
+            @Mapping(target = "hinweisVersorgung", ignore = true),
         }
     )
     AbfragevarianteWeiteresVerfahrenModel request2Model(
@@ -136,6 +163,15 @@ public interface AbfragevarianteDomainMapper {
             @Mapping(target = "lastModifiedDateTime", ignore = true),
             @Mapping(target = "createdDateTime", ignore = true),
             @Mapping(target = "bedarfsmeldungFachreferate", ignore = true),
+            @Mapping(target = "ausgelBedarfImBaugebietBeruecksichtigenKita", ignore = true),
+            @Mapping(target = "ausgelBedarfMitversorgungImBplanKita", ignore = true),
+            @Mapping(target = "ausgelBedarfMitversorgungInBestEinrichtungenKita", ignore = true),
+            @Mapping(target = "ausgelBedarfMitversorgungInBestEinrichtungenNachAusbauKita", ignore = true),
+            @Mapping(target = "ausgelBedarfImBaugebietBeruecksichtigenSchule", ignore = true),
+            @Mapping(target = "ausgelBedarfMitversorgungImBplanSchule", ignore = true),
+            @Mapping(target = "ausgelBedarfMitversorgungInBestEinrichtungenSchule", ignore = true),
+            @Mapping(target = "ausgelBedarfMitversorgungInBestEinrichtungenNachAusbauSchule", ignore = true),
+            @Mapping(target = "hinweisVersorgung", ignore = true),
         }
     )
     AbfragevarianteBauleitplanverfahrenModel request2Model(
@@ -149,6 +185,15 @@ public interface AbfragevarianteDomainMapper {
             @Mapping(target = "lastModifiedDateTime", ignore = true),
             @Mapping(target = "createdDateTime", ignore = true),
             @Mapping(target = "bedarfsmeldungFachreferate", ignore = true),
+            @Mapping(target = "ausgelBedarfImBaugebietBeruecksichtigenKita", ignore = true),
+            @Mapping(target = "ausgelBedarfMitversorgungImBplanKita", ignore = true),
+            @Mapping(target = "ausgelBedarfMitversorgungInBestEinrichtungenKita", ignore = true),
+            @Mapping(target = "ausgelBedarfMitversorgungInBestEinrichtungenNachAusbauKita", ignore = true),
+            @Mapping(target = "ausgelBedarfImBaugebietBeruecksichtigenSchule", ignore = true),
+            @Mapping(target = "ausgelBedarfMitversorgungImBplanSchule", ignore = true),
+            @Mapping(target = "ausgelBedarfMitversorgungInBestEinrichtungenSchule", ignore = true),
+            @Mapping(target = "ausgelBedarfMitversorgungInBestEinrichtungenNachAusbauSchule", ignore = true),
+            @Mapping(target = "hinweisVersorgung", ignore = true),
         }
     )
     AbfragevarianteBaugenehmigungsverfahrenModel request2Model(
@@ -162,6 +207,15 @@ public interface AbfragevarianteDomainMapper {
             @Mapping(target = "lastModifiedDateTime", ignore = true),
             @Mapping(target = "createdDateTime", ignore = true),
             @Mapping(target = "bedarfsmeldungFachreferate", ignore = true),
+            @Mapping(target = "ausgelBedarfImBaugebietBeruecksichtigenKita", ignore = true),
+            @Mapping(target = "ausgelBedarfMitversorgungImBplanKita", ignore = true),
+            @Mapping(target = "ausgelBedarfMitversorgungInBestEinrichtungenKita", ignore = true),
+            @Mapping(target = "ausgelBedarfMitversorgungInBestEinrichtungenNachAusbauKita", ignore = true),
+            @Mapping(target = "ausgelBedarfImBaugebietBeruecksichtigenSchule", ignore = true),
+            @Mapping(target = "ausgelBedarfMitversorgungImBplanSchule", ignore = true),
+            @Mapping(target = "ausgelBedarfMitversorgungInBestEinrichtungenSchule", ignore = true),
+            @Mapping(target = "ausgelBedarfMitversorgungInBestEinrichtungenNachAusbauSchule", ignore = true),
+            @Mapping(target = "hinweisVersorgung", ignore = true),
         }
     )
     AbfragevarianteWeiteresVerfahrenModel request2Model(

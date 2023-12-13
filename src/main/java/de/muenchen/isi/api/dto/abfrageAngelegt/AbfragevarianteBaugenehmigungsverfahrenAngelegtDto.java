@@ -12,7 +12,6 @@ import de.muenchen.isi.api.validation.TechnicalAttributesValid;
 import de.muenchen.isi.api.validation.WesentlicheRechtsgrundlageBaugenehmigungsverfahrenValid;
 import de.muenchen.isi.api.validation.WohneinheitenDistributionBaugenehmigungsverfahrenValid;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.WesentlicheRechtsgrundlage;
 import java.math.BigDecimal;
 import java.util.List;
@@ -99,26 +98,4 @@ public class AbfragevarianteBaugenehmigungsverfahrenAngelegtDto {
 
     @TechnicalAttributesValid
     private List<@Valid @NotNull BauabschnittDto> bauabschnitte;
-
-    // Kindertagesbetreuung
-
-    private UncertainBoolean ausgelBedarfImBaugebietBeruecksichtigenKita;
-
-    private UncertainBoolean ausgelBedarfMitversorgungImBplanKita;
-
-    private UncertainBoolean ausgelBedarfMitversorgungInBestEinrichtungenKita;
-
-    private UncertainBoolean ausgelBedarfMitversorgungInBestEinrichtungenNachAusbauKita;
-
-    // Schule
-
-    private UncertainBoolean ausgelBedarfImBaugebietBeruecksichtigenSchule;
-
-    private UncertainBoolean ausgelBedarfMitversorgungImBplanSchule;
-
-    private UncertainBoolean ausgelBedarfMitversorgungInBestEinrichtungenSchule;
-
-    private UncertainBoolean ausgelBedarfMitversorgungInBestEinrichtungenNachAusbauSchule;
-
-    private String hinweisVersorgung;
 }

@@ -6,7 +6,6 @@ package de.muenchen.isi.domain.model.abfrageAngelegt;
 
 import de.muenchen.isi.domain.model.BauabschnittModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.WesentlicheRechtsgrundlage;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -68,26 +67,4 @@ public class AbfragevarianteBauleitplanverfahrenAngelegtModel {
     private Integer weWeiteresNichtInfrastrukturrelevantesWohnen;
 
     private List<BauabschnittModel> bauabschnitte;
-
-    // Kindertagesbetreuung
-
-    private UncertainBoolean ausgelBedarfImBaugebietBeruecksichtigenKita;
-
-    private UncertainBoolean ausgelBedarfMitversorgungImBplanKita;
-
-    private UncertainBoolean ausgelBedarfMitversorgungInBestEinrichtungenKita;
-
-    private UncertainBoolean ausgelBedarfMitversorgungInBestEinrichtungenNachAusbauKita;
-
-    // Schule
-
-    private UncertainBoolean ausgelBedarfImBaugebietBeruecksichtigenSchule;
-
-    private UncertainBoolean ausgelBedarfMitversorgungImBplanSchule;
-
-    private UncertainBoolean ausgelBedarfMitversorgungInBestEinrichtungenSchule;
-
-    private UncertainBoolean ausgelBedarfMitversorgungInBestEinrichtungenNachAusbauSchule;
-
-    private String hinweisVersorgung;
 }

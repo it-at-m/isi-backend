@@ -152,30 +152,30 @@ public class AbfragevarianteBauleitplanverfahren extends Abfragevariante {
     // Kindertagesbetreuung
 
     @Column
-    private UncertainBoolean ausgelBedarfImBaugebietBeruecksichtigenKita;
+    private boolean ausgelBedarfImBaugebietBeruecksichtigenKita;
 
     @Column
-    private UncertainBoolean ausgelBedarfMitversorgungImBplanKita;
+    private boolean ausgelBedarfMitversorgungImBplanKita;
 
     @Column
-    private UncertainBoolean ausgelBedarfMitversorgungInBestEinrichtungenKita;
+    private boolean ausgelBedarfMitversorgungInBestEinrichtungenKita;
 
     @Column
-    private UncertainBoolean ausgelBedarfMitversorgungInBestEinrichtungenNachAusbauKita;
+    private boolean ausgelBedarfMitversorgungInBestEinrichtungenNachAusbauKita;
 
     // Schule
 
     @Column
-    private UncertainBoolean ausgelBedarfImBaugebietBeruecksichtigenSchule;
+    private boolean ausgelBedarfImBaugebietBeruecksichtigenSchule;
 
     @Column
-    private UncertainBoolean ausgelBedarfMitversorgungImBplanSchule;
+    private boolean ausgelBedarfMitversorgungImBplanSchule;
 
     @Column
-    private UncertainBoolean ausgelBedarfMitversorgungInBestEinrichtungenSchule;
+    private boolean ausgelBedarfMitversorgungInBestEinrichtungenSchule;
 
     @Column
-    private UncertainBoolean ausgelBedarfMitversorgungInBestEinrichtungenNachAusbauSchule;
+    private boolean ausgelBedarfMitversorgungInBestEinrichtungenNachAusbauSchule;
 
     @Column
     private String hinweisVersorgung;
