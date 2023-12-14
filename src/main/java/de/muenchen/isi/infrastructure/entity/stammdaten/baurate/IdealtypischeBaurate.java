@@ -4,7 +4,6 @@ import de.muenchen.isi.infrastructure.entity.BaseEntity;
 import de.muenchen.isi.infrastructure.entity.enums.IdealtypischeBaurateTyp;
 import de.muenchen.isi.infrastructure.repository.stammdaten.IdealtypischeBaurateRepository;
 import io.hypersistence.utils.hibernate.type.json.JsonBinaryType;
-import io.hypersistence.utils.hibernate.type.json.JsonType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -18,7 +17,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.hibernate.annotations.Type;
-import org.hibernate.annotations.TypeDef;
 
 @Entity
 @Table(
@@ -32,7 +30,6 @@ import org.hibernate.annotations.TypeDef;
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-@TypeDef(name = "json", typeClass = JsonType.class)
 public class IdealtypischeBaurate extends BaseEntity {
 
     @Column(nullable = false)

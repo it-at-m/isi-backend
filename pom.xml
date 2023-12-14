@@ -50,7 +50,7 @@
         <geotools.version>29.1</geotools.version>
         <spring.statemachine>4.0.0</spring.statemachine>
         <apache.tika.version>2.9.1</apache.tika.version>
-        <hibernate.search>6.2.2.Final</hibernate.search>
+        <hibernate.search>7.0.0.Final</hibernate.search>
         <icu4j.version>73.2</icu4j.version>
     </properties>
 
@@ -225,7 +225,7 @@
         <!-- Search -->
         <dependency>
             <groupId>org.hibernate.search</groupId>
-            <artifactId>hibernate-search-mapper-orm-jakarta</artifactId>
+            <artifactId>hibernate-search-mapper-orm</artifactId>
             <version>${hibernate.search}</version>
         </dependency>
         <dependency>

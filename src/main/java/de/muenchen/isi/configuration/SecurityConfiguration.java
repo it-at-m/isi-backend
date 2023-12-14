@@ -18,6 +18,7 @@ import org.springframework.security.oauth2.client.OAuth2AuthorizedClientProvider
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 /**
  * The central class for configuration of all security aspects.
@@ -39,21 +40,21 @@ public class SecurityConfiguration {
         http
             .authorizeHttpRequests(request ->
                 request
-                    .requestMatchers("/**")
+                    .requestMatchers(AntPathRequestMatcher.antMatcher("/**"))
                     .authenticated()
                     .requestMatchers(
                         // allow access to /v3/api-docs
-                        "/v3/api-docs",
+                        AntPathRequestMatcher.antMatcher("/v3/api-docs"),
                         // allow access to /actuator/info
-                        "/actuator/info",
+                        AntPathRequestMatcher.antMatcher("/actuator/info"),
                         // allow access to /actuator/health for OpenShift Health Check
-                        "/actuator/health",
+                        AntPathRequestMatcher.antMatcher("/actuator/health"),
                         // allow access to /actuator/health/liveness for OpenShift Liveness Check
-                        "/actuator/health/liveness",
+                        AntPathRequestMatcher.antMatcher("/actuator/health/liveness"),
                         // allow access to /actuator/health/readiness for OpenShift Readiness Check
-                        "/actuator/health/readiness",
+                        AntPathRequestMatcher.antMatcher("/actuator/health/readiness"),
                         // allow access to /actuator/metrics for Prometheus monitoring in OpenShift
-                        "/actuator/metrics"
+                        AntPathRequestMatcher.antMatcher("/actuator/metrics")
                     )
                     .permitAll()
             )
