@@ -25,11 +25,9 @@
         <spring.cloud.version>2022.0.4</spring.cloud.version>
         <logstash.encoder>7.0.1</logstash.encoder>
         <apache.commons.collections4>4.4</apache.commons.collections4>
-        <apache.commons.csv>1.9.0</apache.commons.csv>
-        <apache.commons.io>2.11.0</apache.commons.io>
-        <apache.commons.lang3>3.12.0</apache.commons.lang3>
-        <apache.commons.text>1.9</apache.commons.text>
-        <apache.commons.validator>1.7</apache.commons.validator>
+        <apache.commons.io>2.15.1</apache.commons.io>
+        <apache.commons.lang3>3.14.0</apache.commons.lang3>
+        <apache.commons.text>1.11.0</apache.commons.text>
         <apache.commons.fileupload>1.5</apache.commons.fileupload>
         <apache.tika.parsers>1.19</apache.tika.parsers>
         <opencsv.version>5.9</opencsv.version>
@@ -51,7 +49,8 @@
         <spring.statemachine>4.0.0</spring.statemachine>
         <apache.tika.version>2.9.1</apache.tika.version>
         <hibernate.search>7.0.0.Final</hibernate.search>
-        <icu4j.version>73.2</icu4j.version>
+        <icu4j.version>74.2</icu4j.version>
+        <hypersistence.version>3.6.1</hypersistence.version>
     </properties>
 
 
@@ -170,19 +169,17 @@
         <dependency>
             <groupId>io.hypersistence</groupId>
             <artifactId>hypersistence-utils-hibernate-62</artifactId>
-            <version>3.6.1</version>
+            <version>${hypersistence.version}</version>
         </dependency>
         <dependency>
-        <groupId>jakarta.persistence</groupId>
-        <artifactId>jakarta.persistence-api</artifactId>
-        <version>3.1.0</version>
+            <groupId>jakarta.persistence</groupId>
+            <artifactId>jakarta.persistence-api</artifactId>
         </dependency>
 
         <!-- Other -->
         <dependency>
             <groupId>org.apache.httpcomponents.client5</groupId>
             <artifactId>httpclient5</artifactId>
-            <version>5.2.1</version>
         </dependency>
         <dependency>
             <groupId>org.mapstruct</groupId>
@@ -332,11 +329,6 @@
             <version>${apache.commons.collections4}</version>
         </dependency>
         <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-csv</artifactId>
-            <version>${apache.commons.csv}</version>
-        </dependency>
-        <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
             <version>${apache.commons.io}</version>
@@ -351,11 +343,8 @@
             <artifactId>commons-text</artifactId>
             <version>${apache.commons.text}</version>
         </dependency>
-        <dependency>
-            <groupId>commons-validator</groupId>
-            <artifactId>commons-validator</artifactId>
-            <version>${apache.commons.validator}</version>
-        </dependency>
+
+        <!-- geotools -->
         <dependency>
             <groupId>org.geotools</groupId>
             <artifactId>gt-main</artifactId>
