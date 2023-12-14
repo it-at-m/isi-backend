@@ -1,9 +1,8 @@
 package de.muenchen.isi.security;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.EnumUtils;
@@ -105,13 +104,13 @@ public class AuthenticationUtils {
         if (ObjectUtils.isNotEmpty(authentication) && !(authentication.getPrincipal() instanceof String)) {
             final var jwt = (Jwt) authentication.getPrincipal();
             if (ObjectUtils.isNotEmpty(jwt)) {
-                JsonObject resourceAccess = jwt.getClaim(TOKEN_RESOURCE_ACCESS);
-                if (!resourceAccess.isEmpty()) {
-                    JsonObject isi = (JsonObject) resourceAccess.get(TOKEN_ISI);
-                    if (!isi.isEmpty()) {
-                        JsonArray rolesArray = (JsonArray) isi.get(TOKEN_ROLES);
-                        if (!rolesArray.isEmpty()) {
-                            rolesArray.forEach(role -> roles.add(role.toString()));
+                final var resourceAccess = (Map<String, Object>) jwt.getClaim(TOKEN_RESOURCE_ACCESS);
+                if (ObjectUtils.isNotEmpty(resourceAccess)) {
+                    final var isi = (Map<String, Object>) resourceAccess.get(TOKEN_ISI);
+                    if (ObjectUtils.isNotEmpty(isi)) {
+                        final var rolesInToken = (List<String>) isi.get(TOKEN_ROLES);
+                        if (ObjectUtils.isNotEmpty(rolesInToken)) {
+                            roles.addAll(rolesInToken);
                         }
                     }
                 }
