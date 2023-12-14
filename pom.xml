@@ -46,7 +46,7 @@
         <org.projectlombok.lombok.version>1.18.28</org.projectlombok.lombok.version>
         <org.projectlombok.mapstructbinding.version>0.2.0</org.projectlombok.mapstructbinding.version>
         <mapstruct.version>1.5.5.Final</mapstruct.version>
-        <s3.integration>0.15.0</s3.integration>
+        <s3.integration>1.3.0</s3.integration>
         <geotools.version>27.2</geotools.version>
         <spring.statemachine>3.2.0</spring.statemachine>
         <apache.tika.version>2.7.0</apache.tika.version>
@@ -397,7 +397,7 @@
         </dependency>
 
         <dependency>
-            <groupId>io.muenchendigital.digiwf</groupId>
+            <groupId>de.muenchen.oss.digiwf</groupId>
             <artifactId>digiwf-s3-integration-client-starter</artifactId>
             <version>${s3.integration}</version>
         </dependency>
