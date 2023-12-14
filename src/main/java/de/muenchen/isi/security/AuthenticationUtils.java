@@ -41,31 +41,23 @@ public class AuthenticationUtils {
     public static final String ROLE_SACHBEARBEITUNG = "sachbearbeitung";
 
     /**
-     * Die Methode extrahiert die Authorities des Nutzers aus dem {@link DefaultOAuth2AuthenticatedPrincipal}
+     * Die Methode extrahiert die Authorities des Nutzers aus der {@link Authentication} des {@link SecurityContextHolder}.
      *
      * @return Liste der Authorities aus {@link AuthoritiesEnum} des Nutzers
      */
     public List<AuthoritiesEnum> getUserAuthorities() {
-        ArrayList<AuthoritiesEnum> userRoles = new ArrayList<>();
+        ArrayList<AuthoritiesEnum> authorities = new ArrayList<>();
         final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (!ObjectUtils.isEmpty(authentication) && !(authentication.getPrincipal() instanceof String)) {
-            try {
-                final DefaultOAuth2AuthenticatedPrincipal principal =
-                    (DefaultOAuth2AuthenticatedPrincipal) authentication.getPrincipal();
-                if (!ObjectUtils.isEmpty(principal)) {
-                    for (GrantedAuthority authority : principal.getAuthorities()) {
-                        if (EnumUtils.isValidEnum(AuthoritiesEnum.class, authority.getAuthority())) {
-                            userRoles.add(AuthoritiesEnum.valueOf(authority.getAuthority()));
-                        } else {
-                            log.error("Authority {} nicht in AuthoritiesEnum vorhanden.\n", authority.getAuthority());
-                        }
-                    }
+        if (ObjectUtils.isNotEmpty(authentication)) {
+            for (GrantedAuthority authority : authentication.getAuthorities()) {
+                if (EnumUtils.isValidEnum(AuthoritiesEnum.class, authority.getAuthority())) {
+                    authorities.add(AuthoritiesEnum.valueOf(authority.getAuthority()));
+                } else {
+                    log.error("Authority {} nicht in AuthoritiesEnum vorhanden.\n", authority.getAuthority());
                 }
-            } catch (final ClassCastException | IllegalArgumentException exception) {
-                log.error(exception.getMessage(), exception);
             }
         }
-        return userRoles;
+        return authorities;
     }
 
     /**
@@ -94,11 +86,10 @@ public class AuthenticationUtils {
     public String getUserSub() {
         String sub = null;
         final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (!ObjectUtils.isEmpty(authentication) && !(authentication.getPrincipal() instanceof String)) {
-            final DefaultOAuth2AuthenticatedPrincipal principal =
-                (DefaultOAuth2AuthenticatedPrincipal) authentication.getPrincipal();
-            if (!ObjectUtils.isEmpty(principal)) {
-                sub = principal.getAttribute(TOKEN_USER_SUB).toString();
+        if (ObjectUtils.isNotEmpty(authentication) && !(authentication.getPrincipal() instanceof String)) {
+            final Jwt jwt = (Jwt) authentication.getPrincipal();
+            if (ObjectUtils.isNotEmpty(jwt)) {
+                sub = jwt.getClaimAsString(TOKEN_USER_SUB);
             }
         }
         return StringUtils.isNotBlank(sub) ? sub : SUB_UNAUTHENTICATED_USER;
@@ -112,10 +103,10 @@ public class AuthenticationUtils {
     public List<String> getUserRoles() {
         List<String> roles = new ArrayList<>();
         final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (!ObjectUtils.isEmpty(authentication) && !(authentication.getPrincipal() instanceof String)) {
+        if (ObjectUtils.isNotEmpty(authentication) && !(authentication.getPrincipal() instanceof String)) {
             final DefaultOAuth2AuthenticatedPrincipal principal =
                 (DefaultOAuth2AuthenticatedPrincipal) authentication.getPrincipal();
-            if (!ObjectUtils.isEmpty(principal)) {
+            if (ObjectUtils.isNotEmpty(principal)) {
                 JsonObject resourceAccess = principal.getAttribute(TOKEN_RESOURCE_ACCESS);
                 if (!resourceAccess.isEmpty()) {
                     JsonObject isi = (JsonObject) resourceAccess.get(TOKEN_ISI);
