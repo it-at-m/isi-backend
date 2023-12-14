@@ -108,6 +108,7 @@ class AbfrageServiceSpringTest {
         abfrage = this.abfrageService.save(abfrage);
 
         AbfrageAngelegtModel abfrageAngelegt = TestData.createBauleitplanverfahrenAngelegtModel();
+        abfrageAngelegt.setVersion(abfrage.getVersion());
 
         abfrage = this.abfrageService.patchAngelegt(abfrageAngelegt, abfrage.getId());
         assertThat(abfrage.getName(), is("Neubausiedlung in Musterort 2"));
@@ -127,6 +128,7 @@ class AbfrageServiceSpringTest {
         abfrage = this.abfrageService.save(abfrage);
 
         AbfrageAngelegtModel abfrageAngelegt = TestData.createBaugenehmigungsverfahrenAngelegtModel();
+        abfrageAngelegt.setVersion(abfrage.getVersion());
 
         abfrage = this.abfrageService.patchAngelegt(abfrageAngelegt, abfrage.getId());
         assertThat(abfrage.getName(), is("Altbausiedlung in Musterort 2"));
@@ -146,6 +148,7 @@ class AbfrageServiceSpringTest {
         abfrage = this.abfrageService.save(abfrage);
 
         AbfrageAngelegtModel abfrageAngelegt = TestData.createWeiteresVerfahrenAngelegtModel();
+        abfrageAngelegt.setVersion(abfrage.getVersion());
 
         abfrage = this.abfrageService.patchAngelegt(abfrageAngelegt, abfrage.getId());
         assertThat(abfrage.getName(), is("Überbausiedlung in Musterort 2"));
