@@ -67,7 +67,7 @@ public class AuthenticationUtils {
      */
     public String getUsername() {
         String username = null;
-        final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        final var authentication = SecurityContextHolder.getContext().getAuthentication();
         if (!ObjectUtils.isEmpty(authentication)) {
             final var principal = authentication.getPrincipal();
             if (Objects.equals(Jwt.class, principal.getClass())) {
@@ -85,9 +85,9 @@ public class AuthenticationUtils {
      */
     public String getUserSub() {
         String sub = null;
-        final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        final var authentication = SecurityContextHolder.getContext().getAuthentication();
         if (ObjectUtils.isNotEmpty(authentication) && !(authentication.getPrincipal() instanceof String)) {
-            final Jwt jwt = (Jwt) authentication.getPrincipal();
+            final var jwt = (Jwt) authentication.getPrincipal();
             if (ObjectUtils.isNotEmpty(jwt)) {
                 sub = jwt.getClaimAsString(TOKEN_USER_SUB);
             }
@@ -101,13 +101,12 @@ public class AuthenticationUtils {
      * @return Liste der Nutzerrollen des Nutzers
      */
     public List<String> getUserRoles() {
-        List<String> roles = new ArrayList<>();
-        final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        final var roles = new ArrayList<String>();
+        final var authentication = SecurityContextHolder.getContext().getAuthentication();
         if (ObjectUtils.isNotEmpty(authentication) && !(authentication.getPrincipal() instanceof String)) {
-            final DefaultOAuth2AuthenticatedPrincipal principal =
-                (DefaultOAuth2AuthenticatedPrincipal) authentication.getPrincipal();
-            if (ObjectUtils.isNotEmpty(principal)) {
-                JsonObject resourceAccess = principal.getAttribute(TOKEN_RESOURCE_ACCESS);
+            final var jwt = (Jwt) authentication.getPrincipal();
+            if (ObjectUtils.isNotEmpty(jwt)) {
+                JsonObject resourceAccess = jwt.getClaim(TOKEN_RESOURCE_ACCESS);
                 if (!resourceAccess.isEmpty()) {
                     JsonObject isi = (JsonObject) resourceAccess.get(TOKEN_ISI);
                     if (!isi.isEmpty()) {
