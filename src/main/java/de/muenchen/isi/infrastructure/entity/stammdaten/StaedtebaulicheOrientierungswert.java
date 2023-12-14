@@ -1,13 +1,13 @@
 package de.muenchen.isi.infrastructure.entity.stammdaten;
 
 import de.muenchen.isi.infrastructure.entity.BaseEntity;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Index;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Index;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;

@@ -2,9 +2,9 @@ package de.muenchen.isi.api.validation;
 
 import de.muenchen.isi.api.dto.filehandling.DokumentDto;
 import de.muenchen.isi.domain.service.stammdaten.FileInformationStammService;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 import java.util.List;
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Component;
 

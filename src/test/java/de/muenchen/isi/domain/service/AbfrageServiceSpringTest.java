@@ -35,9 +35,9 @@ import de.muenchen.isi.infrastructure.entity.enums.lookup.Infrastruktureinrichtu
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.repository.AbfrageRepository;
+import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.UUID;
-import javax.transaction.Transactional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

@@ -4,14 +4,14 @@
  */
 package de.muenchen.isi.infrastructure.entity;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.Version;
 import java.time.LocalDateTime;
 import java.util.UUID;
-import javax.persistence.Column;
-import javax.persistence.EntityListeners;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
-import javax.persistence.Version;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

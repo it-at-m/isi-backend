@@ -1,9 +1,8 @@
 package de.muenchen.isi.api.dto.common;
 
+import jakarta.validation.constraints.NotNull;
 import java.util.UUID;
-import javax.validation.constraints.NotNull;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
 public class RelationConnectionDto {

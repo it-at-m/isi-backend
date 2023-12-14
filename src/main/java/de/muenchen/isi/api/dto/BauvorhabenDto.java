@@ -10,13 +10,13 @@ import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonVerfahrensgrundsa
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVerfahren;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.WesentlicheRechtsgrundlage;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
-import javax.validation.Valid;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
