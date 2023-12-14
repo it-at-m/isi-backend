@@ -104,13 +104,13 @@ public class AuthenticationUtils {
         if (ObjectUtils.isNotEmpty(authentication) && !(authentication.getPrincipal() instanceof String)) {
             final var jwt = (Jwt) authentication.getPrincipal();
             if (ObjectUtils.isNotEmpty(jwt)) {
-                final var resourceAccess = (Map<String, Object>) jwt.getClaim(TOKEN_RESOURCE_ACCESS);
+                final var resourceAccess = jwt.getClaim(TOKEN_RESOURCE_ACCESS);
                 if (ObjectUtils.isNotEmpty(resourceAccess)) {
-                    final var isi = (Map<String, Object>) resourceAccess.get(TOKEN_ISI);
-                    if (ObjectUtils.isNotEmpty(isi)) {
-                        final var rolesInToken = (List<String>) isi.get(TOKEN_ROLES);
-                        if (ObjectUtils.isNotEmpty(rolesInToken)) {
-                            roles.addAll(rolesInToken);
+                    final var isi = ((Map<?, ?>) resourceAccess).get(TOKEN_ISI);
+                    if (ObjectUtils.isNotEmpty(isi) && isi instanceof Map) {
+                        final var rolesInToken = ((Map<?, ?>) isi).get(TOKEN_ROLES);
+                        if (ObjectUtils.isNotEmpty(rolesInToken) && rolesInToken instanceof List) {
+                            roles.addAll((List<String>) rolesInToken);
                         }
                     }
                 }
