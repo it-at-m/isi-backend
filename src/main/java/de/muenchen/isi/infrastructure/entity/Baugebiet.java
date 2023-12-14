@@ -4,6 +4,8 @@ import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtBaulicheNutzung;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
@@ -27,6 +29,7 @@ public class Baugebiet extends BaseEntity {
     private String bezeichnung;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private ArtBaulicheNutzung artBaulicheNutzung;
 
     @Column(nullable = false)
