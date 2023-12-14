@@ -12,7 +12,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.core.DefaultOAuth2AuthenticatedPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 
@@ -61,7 +60,7 @@ public class AuthenticationUtils {
     }
 
     /**
-     * Die Methode extrahiert den Nutzernamen aus dem im SecurityContext vorhandenen {@link Jwt}.
+     * Die Methode extrahiert den Nutzernamen aus dem {@link Jwt} der {@link Authentication} des {@link SecurityContextHolder}.
      *
      * @return den Nutzernamen oder einen Platzhalter fall kein {@link Jwt} verfügbar
      */
@@ -79,7 +78,7 @@ public class AuthenticationUtils {
     }
 
     /**
-     * Die Methode extrahiert den Nutzernamen aus dem im SecurityContext vorhandenen {@link Jwt}.
+     * Die Methode extrahiert den Nutzernamen aus dem {@link Jwt} der {@link Authentication} des {@link SecurityContextHolder}.
      *
      * @return den Nutzernamen oder einen Platzhalter falls kein {@link Jwt} verfügbar
      */
@@ -96,7 +95,7 @@ public class AuthenticationUtils {
     }
 
     /**
-     * Die Methode extrahiert die Nutzerrollen des Nutzers aus dem {@link DefaultOAuth2AuthenticatedPrincipal}
+     * Die Methode extrahiert die Nutzerrollen des Nutzers aus dem {@link Jwt} der {@link Authentication} des {@link SecurityContextHolder}.
      *
      * @return Liste der Nutzerrollen des Nutzers
      */
