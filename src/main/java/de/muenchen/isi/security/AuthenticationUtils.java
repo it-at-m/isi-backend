@@ -36,8 +36,6 @@ public class AuthenticationUtils {
 
     public static final String ROLE_ABFRAGEERSTELLUNG = "abfrageerstellung";
 
-    public static final String ROLE_SACHBEARBEITUNG = "sachbearbeitung";
-
     /**
      * Die Methode extrahiert die Authorities des Nutzers aus der {@link Authentication} des {@link SecurityContextHolder}.
      *
