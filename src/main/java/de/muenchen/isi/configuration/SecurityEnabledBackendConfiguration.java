@@ -41,8 +41,6 @@ public class SecurityEnabledBackendConfiguration {
         http
             .authorizeHttpRequests(request ->
                 request
-                    .requestMatchers(AntPathRequestMatcher.antMatcher("/**"))
-                    .authenticated()
                     .requestMatchers(
                         // allow access to /v3/api-docs
                         AntPathRequestMatcher.antMatcher("/v3/api-docs"),
@@ -58,6 +56,8 @@ public class SecurityEnabledBackendConfiguration {
                         AntPathRequestMatcher.antMatcher("/actuator/metrics")
                     )
                     .permitAll()
+                    .requestMatchers(AntPathRequestMatcher.antMatcher("/**"))
+                    .authenticated()
             )
             .oauth2ResourceServer(oauth2ResourceServer ->
                 oauth2ResourceServer.jwt(jwt ->
