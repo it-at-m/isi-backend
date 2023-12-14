@@ -17,7 +17,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @Configuration
 @Profile("no-security")
 @EnableWebSecurity
-public class NoSecurityConfiguration {
+public class SecurityDisabledConfiguration {
 
     /**
      * Deaktivierung der Security.
