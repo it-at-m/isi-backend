@@ -74,5 +74,7 @@ public class AbfragevarianteWeiteresVerfahrenModel extends AbfragevarianteModel 
 
     private List<BedarfsmeldungFachreferateModel> bedarfsmeldungFachreferate;
 
+    private List<BedarfsmeldungFachreferateModel> bedarfsmeldungAbfrageersteller;
+
     private List<BauabschnittModel> bauabschnitte;
 }

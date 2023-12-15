@@ -148,6 +148,11 @@ public class AbfragevarianteBaugenehmigungsverfahren extends Abfragevariante {
     @OrderBy("createdDateTime asc")
     private List<BedarfsmeldungFachreferate> bedarfsmeldungFachreferate;
 
+    @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval = true)
+    @JoinColumn(name = "abfragevariante_baugenehmigungsverfahren_id", referencedColumnName = "id")
+    @OrderBy("createdDateTime asc")
+    private List<BedarfsmeldungFachreferate> bedarfsmeldungAbfrageersteller;
+
     @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "abfragevariante_baugenehmigungsverfahren_id")
     @OrderBy("createdDateTime asc")

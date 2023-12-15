@@ -69,5 +69,7 @@ public class AbfragevarianteBaugenehmigungsverfahrenDto extends AbfragevarianteD
 
     private List<BedarfsmeldungFachreferateDto> bedarfsmeldungFachreferate;
 
+    private List<BedarfsmeldungFachreferateDto> bedarfsmeldungAbfrageersteller;
+
     private List<BauabschnittDto> bauabschnitte;
 }
