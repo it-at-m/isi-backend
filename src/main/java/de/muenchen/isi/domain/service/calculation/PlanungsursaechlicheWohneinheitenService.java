@@ -69,6 +69,18 @@ public class PlanungsursaechlicheWohneinheitenService extends WohneinheitenCalcu
         return wohneinheitenProFoerderartProJahrList;
     }
 
+    /**
+     * Berechnet die Wohneinheiten für eine Baurate mit Angabe einer Förderart und eines SoBoN-Jahres.
+     * Falls die Baurate Wohneinheiten hat, werden diese mit dem prozentualen Anteil der Förderart multipliziert.
+     * Falls die Baurate nur Geschossfläche hat, wird der Wert zuerst anhand des SoBoN-Jahres in Wohneinheiten umgerechnet.
+     * Falls die Baurate weder Wohneinheiten noch Geschossfläche hat, wird 0 zurückgegeben.
+     * Sollte nur mit Förderarten verwendet werden, die nicht umgelegt werden müssen.
+     *
+     * @param baurate Das {@link BaurateModel}, für welches die Wohneinheiten berechnet werden sollen.
+     * @param foerderart Das {@link FoerderartModel}, das für die Berechnung angewandt werden soll.
+     * @param sobonJahr Das {@link SobonOrientierungswertJahr}, das für die Berechnung angewandt werden soll.
+     * @return Eine Anzahl von Wohneinheiten als BigDecimal.
+     */
     protected BigDecimal calculateWohneinheiten(
         final BaurateModel baurate,
         final FoerderartModel foerderart,
