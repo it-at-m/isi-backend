@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -54,7 +53,7 @@ public class SecurityContextFactory implements WithSecurityContextFactory<MockCu
             authoritiesRoles.add("ISI_BACKEND_READ_ABFRAGE");
         }
 
-        SecurityContext context = SecurityContextHolder.createEmptyContext();
+        final var context = SecurityContextHolder.createEmptyContext();
 
         final var isi = new HashMap<String, Object>();
         isi.put("roles", Arrays.asList(customUser.roles()));
@@ -84,10 +83,8 @@ public class SecurityContextFactory implements WithSecurityContextFactory<MockCu
             )
         );
 
-        List<GrantedAuthority> authorities = AuthorityUtils.createAuthorityList(
-            authoritiesRoles.toArray(String[]::new)
-        );
-        final var authentication = new JwtAuthenticationToken(jwtPrincipal, authorities);
+        final var grantedAuthorities = AuthorityUtils.createAuthorityList(authoritiesRoles.toArray(String[]::new));
+        final var authentication = new JwtAuthenticationToken(jwtPrincipal, grantedAuthorities);
         context.setAuthentication(authentication);
         return context;
     }
