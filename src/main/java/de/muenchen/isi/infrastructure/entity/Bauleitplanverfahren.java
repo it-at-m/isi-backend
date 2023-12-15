@@ -4,7 +4,7 @@ import de.muenchen.isi.infrastructure.adapter.search.StandVerfahrenSuggestionBin
 import de.muenchen.isi.infrastructure.adapter.search.StandVerfahrenValueBridge;
 import de.muenchen.isi.infrastructure.adapter.search.StringSuggestionBinder;
 import de.muenchen.isi.infrastructure.entity.common.Adresse;
-import de.muenchen.isi.infrastructure.entity.common.Verortung;
+import de.muenchen.isi.infrastructure.entity.common.VerortungMultiPolygon;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonVerfahrensgrundsaetzeJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVerfahren;
@@ -80,7 +80,7 @@ public class Bauleitplanverfahren extends Abfrage {
     @IndexedEmbedded
     @Type(type = "json")
     @Column(columnDefinition = "jsonb")
-    private Verortung verortung;
+    private VerortungMultiPolygon verortung;
 
     @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "bauleitplanverfahren_id")

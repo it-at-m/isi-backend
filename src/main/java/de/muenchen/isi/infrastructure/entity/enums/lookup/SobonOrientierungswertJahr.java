@@ -37,6 +37,8 @@ public enum SobonOrientierungswertJahr implements ILookup {
     }
 
     public static List<SobonOrientierungswertJahr> getSobonOrientierungswertJahrWithoutStandortabfrage() {
-        return List.of(UNSPECIFIED, JAHR_2014, JAHR_2017, JAHR_2022);
+        final var withoutStandortabfrage = EnumUtils.getEnumList(SobonOrientierungswertJahr.class);
+        withoutStandortabfrage.remove(SobonOrientierungswertJahr.STANDORTABFRAGE);
+        return withoutStandortabfrage;
     }
 }

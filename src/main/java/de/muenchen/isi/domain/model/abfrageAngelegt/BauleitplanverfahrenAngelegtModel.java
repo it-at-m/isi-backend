@@ -1,7 +1,7 @@
 package de.muenchen.isi.domain.model.abfrageAngelegt;
 
 import de.muenchen.isi.domain.model.common.AdresseModel;
-import de.muenchen.isi.domain.model.common.VerortungModel;
+import de.muenchen.isi.domain.model.common.VerortungMultiPolygonModel;
 import de.muenchen.isi.domain.model.filehandling.DokumentModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonVerfahrensgrundsaetzeJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVerfahren;
@@ -29,7 +29,7 @@ public class BauleitplanverfahrenAngelegtModel extends AbfrageAngelegtModel {
 
     private AdresseModel adresse;
 
-    private VerortungModel verortung;
+    private VerortungMultiPolygonModel verortung;
 
     private List<DokumentModel> dokumente;
 
