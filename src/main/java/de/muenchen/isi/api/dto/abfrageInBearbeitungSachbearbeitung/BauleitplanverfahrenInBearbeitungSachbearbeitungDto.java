@@ -1,6 +1,6 @@
 package de.muenchen.isi.api.dto.abfrageInBearbeitungSachbearbeitung;
 
-import de.muenchen.isi.api.dto.common.VerortungDto;
+import de.muenchen.isi.api.dto.common.VerortungMultiPolygonDto;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -16,7 +16,7 @@ import lombok.ToString;
 public class BauleitplanverfahrenInBearbeitungSachbearbeitungDto extends AbfrageInBearbeitungSachbearbeitungDto {
 
     @Valid
-    private VerortungDto verortung;
+    private VerortungMultiPolygonDto verortung;
 
     @NotEmpty
     @Size(min = 1, max = 5)

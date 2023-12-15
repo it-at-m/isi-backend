@@ -47,7 +47,7 @@ public class KoordinatenService {
             final MathTransform transform = CRS.findMathTransform(WGS84, UTM32);
             final Coordinate result = JTS.transform(in, out, transform);
 
-            utmDto.setZone("32N");
+            utmDto.setZone("32U");
             utmDto.setEast(result.getX());
             utmDto.setNorth(result.getY());
         } catch (FactoryException | TransformException exception) {
