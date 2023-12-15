@@ -1,7 +1,7 @@
 package de.muenchen.isi.api.dto;
 
 import de.muenchen.isi.api.dto.common.AdresseDto;
-import de.muenchen.isi.api.dto.common.VerortungDto;
+import de.muenchen.isi.api.dto.common.VerortungMultiPolygonDto;
 import de.muenchen.isi.api.dto.filehandling.DokumentDto;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonVerfahrensgrundsaetzeJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVerfahren;
@@ -29,7 +29,7 @@ public class BauleitplanverfahrenDto extends AbfrageDto {
 
     private AdresseDto adresse;
 
-    private VerortungDto verortung;
+    private VerortungMultiPolygonDto verortung;
 
     private List<DokumentDto> dokumente;
 
