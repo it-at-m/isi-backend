@@ -23,8 +23,8 @@ class SobonOrientierungswertSozialeInfrastrukturModelTest {
     }
 
     @Test
-    void getFactorOfDistanceMittelwertEinwohner10JahreToStammwertArbeitsgruppe() {
-        final var result = model.getFactorOfDistanceMittelwertEinwohner10JahreToStammwertArbeitsgruppe();
+    void getRatioOfMittelwertEinwohner10JahreToStammwertArbeitsgruppe() {
+        final var result = model.getRatioOfMittelwertEinwohner10JahreToStammwertArbeitsgruppe();
         final var expected = BigDecimal.valueOf(
             1374045801526718L,
             SobonOrientierungswertSozialeInfrastrukturModel.SCALE

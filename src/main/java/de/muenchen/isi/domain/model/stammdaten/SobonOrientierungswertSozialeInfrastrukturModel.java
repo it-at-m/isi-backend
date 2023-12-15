@@ -69,9 +69,9 @@ public class SobonOrientierungswertSozialeInfrastrukturModel extends BaseEntityM
     }
 
     /**
-     * @return die Distanz des 10-Jährigen-Mittelwertes vom Attribut Stammwert-Arbeitsgruppe als Faktor zur Ermittlung der oberen Richtwerte.
+     * @return das Verhältnis des 10-Jährigen-Mittelwertes zum Attribut Stammwert-Arbeitsgruppe als Faktor zur Ermittlung der oberen Richtwerte.
      */
-    public BigDecimal getFactorOfDistanceMittelwertEinwohner10JahreToStammwertArbeitsgruppe() {
+    public BigDecimal getRatioOfMittelwertEinwohner10JahreToStammwertArbeitsgruppe() {
         return stammwertArbeitsgruppe.divide(
             getMittelwertEinwohnerNachErsterstellung10Jahre(),
             SCALE,
@@ -81,61 +81,61 @@ public class SobonOrientierungswertSozialeInfrastrukturModel extends BaseEntityM
 
     public BigDecimal getObererRichtwertEinwohnerJahr1NachErsterstellung() {
         return einwohnerJahr1NachErsterstellung
-            .multiply(this.getFactorOfDistanceMittelwertEinwohner10JahreToStammwertArbeitsgruppe())
+            .multiply(this.getRatioOfMittelwertEinwohner10JahreToStammwertArbeitsgruppe())
             .setScale(SCALE, RoundingMode.HALF_UP);
     }
 
     public BigDecimal getObererRichtwertEinwohnerJahr2NachErsterstellung() {
         return einwohnerJahr2NachErsterstellung
-            .multiply(this.getFactorOfDistanceMittelwertEinwohner10JahreToStammwertArbeitsgruppe())
+            .multiply(this.getRatioOfMittelwertEinwohner10JahreToStammwertArbeitsgruppe())
             .setScale(SCALE, RoundingMode.HALF_UP);
     }
 
     public BigDecimal getObererRichtwertEinwohnerJahr3NachErsterstellung() {
         return einwohnerJahr3NachErsterstellung
-            .multiply(this.getFactorOfDistanceMittelwertEinwohner10JahreToStammwertArbeitsgruppe())
+            .multiply(this.getRatioOfMittelwertEinwohner10JahreToStammwertArbeitsgruppe())
             .setScale(SCALE, RoundingMode.HALF_UP);
     }
 
     public BigDecimal getObererRichtwertEinwohnerJahr4NachErsterstellung() {
         return einwohnerJahr4NachErsterstellung
-            .multiply(this.getFactorOfDistanceMittelwertEinwohner10JahreToStammwertArbeitsgruppe())
+            .multiply(this.getRatioOfMittelwertEinwohner10JahreToStammwertArbeitsgruppe())
             .setScale(SCALE, RoundingMode.HALF_UP);
     }
 
     public BigDecimal getObererRichtwertEinwohnerJahr5NachErsterstellung() {
         return einwohnerJahr5NachErsterstellung
-            .multiply(this.getFactorOfDistanceMittelwertEinwohner10JahreToStammwertArbeitsgruppe())
+            .multiply(this.getRatioOfMittelwertEinwohner10JahreToStammwertArbeitsgruppe())
             .setScale(SCALE, RoundingMode.HALF_UP);
     }
 
     public BigDecimal getObererRichtwertEinwohnerJahr6NachErsterstellung() {
         return einwohnerJahr6NachErsterstellung
-            .multiply(this.getFactorOfDistanceMittelwertEinwohner10JahreToStammwertArbeitsgruppe())
+            .multiply(this.getRatioOfMittelwertEinwohner10JahreToStammwertArbeitsgruppe())
             .setScale(SCALE, RoundingMode.HALF_UP);
     }
 
     public BigDecimal getObererRichtwertEinwohnerJahr7NachErsterstellung() {
         return einwohnerJahr7NachErsterstellung
-            .multiply(this.getFactorOfDistanceMittelwertEinwohner10JahreToStammwertArbeitsgruppe())
+            .multiply(this.getRatioOfMittelwertEinwohner10JahreToStammwertArbeitsgruppe())
             .setScale(SCALE, RoundingMode.HALF_UP);
     }
 
     public BigDecimal getObererRichtwertEinwohnerJahr8NachErsterstellung() {
         return einwohnerJahr8NachErsterstellung
-            .multiply(this.getFactorOfDistanceMittelwertEinwohner10JahreToStammwertArbeitsgruppe())
+            .multiply(this.getRatioOfMittelwertEinwohner10JahreToStammwertArbeitsgruppe())
             .setScale(SCALE, RoundingMode.HALF_UP);
     }
 
     public BigDecimal getObererRichtwertEinwohnerJahr9NachErsterstellung() {
         return einwohnerJahr9NachErsterstellung
-            .multiply(this.getFactorOfDistanceMittelwertEinwohner10JahreToStammwertArbeitsgruppe())
+            .multiply(this.getRatioOfMittelwertEinwohner10JahreToStammwertArbeitsgruppe())
             .setScale(SCALE, RoundingMode.HALF_UP);
     }
 
     public BigDecimal getObererRichtwertEinwohnerJahr10NachErsterstellung() {
         return einwohnerJahr10NachErsterstellung
-            .multiply(this.getFactorOfDistanceMittelwertEinwohner10JahreToStammwertArbeitsgruppe())
+            .multiply(this.getRatioOfMittelwertEinwohner10JahreToStammwertArbeitsgruppe())
             .setScale(SCALE, RoundingMode.HALF_UP);
     }
 
