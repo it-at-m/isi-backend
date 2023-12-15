@@ -29,8 +29,6 @@ public class Baugebiet extends BaseEntity {
     private String bezeichnung;
 
     @Column(nullable = false)
-    // Vor Hebung war keine String-Repräsentation des Enums gegeben.
-    //@Enumerated(EnumType.STRING)
     @JdbcTypeCode(SqlTypes.INTEGER)
     private ArtBaulicheNutzung artBaulicheNutzung;
 

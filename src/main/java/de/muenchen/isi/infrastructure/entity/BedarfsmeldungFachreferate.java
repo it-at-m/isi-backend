@@ -37,8 +37,6 @@ public class BedarfsmeldungFachreferate extends BaseEntity {
     private Integer anzahlEinrichtungen;
 
     @Column(nullable = false)
-    // Vor Hebung war keine String-Repräsentation des Enums gegeben.
-    //@Enumerated(EnumType.STRING)
     @JdbcTypeCode(SqlTypes.INTEGER)
     private InfrastruktureinrichtungTyp infrastruktureinrichtungTyp;
 
