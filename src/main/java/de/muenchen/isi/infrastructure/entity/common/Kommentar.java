@@ -17,8 +17,6 @@ import java.util.List;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
 
 @Entity
 @Data
@@ -35,8 +33,7 @@ public class Kommentar extends BaseEntity {
     @Column(length = 32)
     private String datum;
 
-    @JdbcTypeCode(SqlTypes.LONG32VARCHAR)
-    @Column
+    @Column(columnDefinition = "text")
     private String text;
 
     @ManyToOne
