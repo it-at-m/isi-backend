@@ -15,7 +15,7 @@ import lombok.ToString;
  * Die Klasse repräsentiert die SoBon-Orientierungswerte eines Einrichtungstyps für eine Förderart.
  *
  * Die oberen Richtwerte der ersten zehn Jahre werden auf Basis der {@link SobonOrientierungswertSozialeInfrastrukturModel#getRatioOfMittelwertEinwohner10JahreToStammwertArbeitsgruppe} ermittelt.
- * Bei den oberen Richtwerten der Jahre elf bis zwanzig findet jährlich eine Reduktion des Richtwertes auf Basis des Vorjahres um ein Prozent statt.
+ * Bei den oberen Richtwerten der Jahre elf bis zwanzig findet jährlich eine prozentuale Reduktion des Richtwertes auf Basis des Vorjahres statt.
  */
 @Data
 @ToString(callSuper = true)
