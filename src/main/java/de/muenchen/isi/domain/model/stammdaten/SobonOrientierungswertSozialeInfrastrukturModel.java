@@ -16,8 +16,6 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 public class SobonOrientierungswertSozialeInfrastrukturModel extends BaseEntityModel {
 
-    public static final int SCALE = CalculationService.DIVISION_SCALE;
-
     // 0.99
     public static final BigDecimal FAKTOR_JAHR_11_BIS_20 = BigDecimal.valueOf(99, 2);
 
@@ -65,7 +63,7 @@ public class SobonOrientierungswertSozialeInfrastrukturModel extends BaseEntityM
             .add(einwohnerJahr8NachErsterstellung)
             .add(einwohnerJahr9NachErsterstellung)
             .add(einwohnerJahr10NachErsterstellung)
-            .divide(BigDecimal.TEN, SCALE, RoundingMode.HALF_UP);
+            .divide(BigDecimal.TEN, CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
     }
 
     /**
@@ -74,7 +72,7 @@ public class SobonOrientierungswertSozialeInfrastrukturModel extends BaseEntityM
     public BigDecimal getRatioOfMittelwertEinwohner10JahreToStammwertArbeitsgruppe() {
         return stammwertArbeitsgruppe.divide(
             getMittelwertEinwohnerNachErsterstellung10Jahre(),
-            SCALE,
+            CalculationService.DIVISION_SCALE,
             RoundingMode.HALF_UP
         );
     }
@@ -82,120 +80,120 @@ public class SobonOrientierungswertSozialeInfrastrukturModel extends BaseEntityM
     public BigDecimal getObererRichtwertEinwohnerJahr1NachErsterstellung() {
         return einwohnerJahr1NachErsterstellung
             .multiply(this.getRatioOfMittelwertEinwohner10JahreToStammwertArbeitsgruppe())
-            .setScale(SCALE, RoundingMode.HALF_UP);
+            .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
     }
 
     public BigDecimal getObererRichtwertEinwohnerJahr2NachErsterstellung() {
         return einwohnerJahr2NachErsterstellung
             .multiply(this.getRatioOfMittelwertEinwohner10JahreToStammwertArbeitsgruppe())
-            .setScale(SCALE, RoundingMode.HALF_UP);
+            .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
     }
 
     public BigDecimal getObererRichtwertEinwohnerJahr3NachErsterstellung() {
         return einwohnerJahr3NachErsterstellung
             .multiply(this.getRatioOfMittelwertEinwohner10JahreToStammwertArbeitsgruppe())
-            .setScale(SCALE, RoundingMode.HALF_UP);
+            .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
     }
 
     public BigDecimal getObererRichtwertEinwohnerJahr4NachErsterstellung() {
         return einwohnerJahr4NachErsterstellung
             .multiply(this.getRatioOfMittelwertEinwohner10JahreToStammwertArbeitsgruppe())
-            .setScale(SCALE, RoundingMode.HALF_UP);
+            .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
     }
 
     public BigDecimal getObererRichtwertEinwohnerJahr5NachErsterstellung() {
         return einwohnerJahr5NachErsterstellung
             .multiply(this.getRatioOfMittelwertEinwohner10JahreToStammwertArbeitsgruppe())
-            .setScale(SCALE, RoundingMode.HALF_UP);
+            .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
     }
 
     public BigDecimal getObererRichtwertEinwohnerJahr6NachErsterstellung() {
         return einwohnerJahr6NachErsterstellung
             .multiply(this.getRatioOfMittelwertEinwohner10JahreToStammwertArbeitsgruppe())
-            .setScale(SCALE, RoundingMode.HALF_UP);
+            .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
     }
 
     public BigDecimal getObererRichtwertEinwohnerJahr7NachErsterstellung() {
         return einwohnerJahr7NachErsterstellung
             .multiply(this.getRatioOfMittelwertEinwohner10JahreToStammwertArbeitsgruppe())
-            .setScale(SCALE, RoundingMode.HALF_UP);
+            .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
     }
 
     public BigDecimal getObererRichtwertEinwohnerJahr8NachErsterstellung() {
         return einwohnerJahr8NachErsterstellung
             .multiply(this.getRatioOfMittelwertEinwohner10JahreToStammwertArbeitsgruppe())
-            .setScale(SCALE, RoundingMode.HALF_UP);
+            .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
     }
 
     public BigDecimal getObererRichtwertEinwohnerJahr9NachErsterstellung() {
         return einwohnerJahr9NachErsterstellung
             .multiply(this.getRatioOfMittelwertEinwohner10JahreToStammwertArbeitsgruppe())
-            .setScale(SCALE, RoundingMode.HALF_UP);
+            .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
     }
 
     public BigDecimal getObererRichtwertEinwohnerJahr10NachErsterstellung() {
         return einwohnerJahr10NachErsterstellung
             .multiply(this.getRatioOfMittelwertEinwohner10JahreToStammwertArbeitsgruppe())
-            .setScale(SCALE, RoundingMode.HALF_UP);
+            .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
     }
 
     public BigDecimal getObererRichtwertEinwohnerJahr11NachErsterstellung() {
         return getObererRichtwertEinwohnerJahr10NachErsterstellung()
             .multiply(FAKTOR_JAHR_11_BIS_20)
-            .setScale(SCALE, RoundingMode.HALF_UP);
+            .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
     }
 
     public BigDecimal getObererRichtwertEinwohnerJahr12NachErsterstellung() {
         return getObererRichtwertEinwohnerJahr10NachErsterstellung()
             .multiply(FAKTOR_JAHR_11_BIS_20.pow(2))
-            .setScale(SCALE, RoundingMode.HALF_UP);
+            .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
     }
 
     public BigDecimal getObererRichtwertEinwohnerJahr13NachErsterstellung() {
         return getObererRichtwertEinwohnerJahr10NachErsterstellung()
             .multiply(FAKTOR_JAHR_11_BIS_20.pow(3))
-            .setScale(SCALE, RoundingMode.HALF_UP);
+            .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
     }
 
     public BigDecimal getObererRichtwertEinwohnerJahr14NachErsterstellung() {
         return getObererRichtwertEinwohnerJahr10NachErsterstellung()
             .multiply(FAKTOR_JAHR_11_BIS_20.pow(4))
-            .setScale(SCALE, RoundingMode.HALF_UP);
+            .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
     }
 
     public BigDecimal getObererRichtwertEinwohnerJahr15NachErsterstellung() {
         return getObererRichtwertEinwohnerJahr10NachErsterstellung()
             .multiply(FAKTOR_JAHR_11_BIS_20.pow(5))
-            .setScale(SCALE, RoundingMode.HALF_UP);
+            .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
     }
 
     public BigDecimal getObererRichtwertEinwohnerJahr16NachErsterstellung() {
         return getObererRichtwertEinwohnerJahr10NachErsterstellung()
             .multiply(FAKTOR_JAHR_11_BIS_20.pow(6))
-            .setScale(SCALE, RoundingMode.HALF_UP);
+            .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
     }
 
     public BigDecimal getObererRichtwertEinwohnerJahr17NachErsterstellung() {
         return getObererRichtwertEinwohnerJahr10NachErsterstellung()
             .multiply(FAKTOR_JAHR_11_BIS_20.pow(7))
-            .setScale(SCALE, RoundingMode.HALF_UP);
+            .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
     }
 
     public BigDecimal getObererRichtwertEinwohnerJahr18NachErsterstellung() {
         return getObererRichtwertEinwohnerJahr10NachErsterstellung()
             .multiply(FAKTOR_JAHR_11_BIS_20.pow(8))
-            .setScale(SCALE, RoundingMode.HALF_UP);
+            .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
     }
 
     public BigDecimal getObererRichtwertEinwohnerJahr19NachErsterstellung() {
         return getObererRichtwertEinwohnerJahr10NachErsterstellung()
             .multiply(FAKTOR_JAHR_11_BIS_20.pow(9))
-            .setScale(SCALE, RoundingMode.HALF_UP);
+            .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
     }
 
     public BigDecimal getObererRichtwertEinwohnerJahr20NachErsterstellung() {
         return getObererRichtwertEinwohnerJahr10NachErsterstellung()
             .multiply(FAKTOR_JAHR_11_BIS_20.pow(10))
-            .setScale(SCALE, RoundingMode.HALF_UP);
+            .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
     }
 }
