@@ -423,14 +423,17 @@ public class InfrastrukturbedarfService {
         final var numberOfYearsToCalculate = 20 - (Integer.parseInt(wohneinheiten.getJahr()) - earliestYear);
         BigDecimal anzahlPersonenGesamt;
         final var obererRichtwerteByYear = getObererRichtwerteByYear(sobonOrientierungswertSozialeInfrastruktur);
-        for (var yearToCalculate = 0; yearToCalculate < numberOfYearsToCalculate; yearToCalculate++) {
+        for (var yearToCalculate = 1; yearToCalculate <= numberOfYearsToCalculate; yearToCalculate++) {
             anzahlPersonenGesamt =
                 wohneinheiten
                     .getWohneinheiten()
-                    .multiply(obererRichtwerteByYear.get(yearToCalculate + 1))
+                    .multiply(obererRichtwerteByYear.get(yearToCalculate))
                     .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
             personen.add(
-                createPersonenProJahr(Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate, anzahlPersonenGesamt)
+                createPersonenProJahr(
+                    Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate - 1,
+                    anzahlPersonenGesamt
+                )
             );
         }
         return personen.stream();
