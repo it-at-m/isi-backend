@@ -1453,6 +1453,28 @@ class InfrastrukturbedarfServiceTest {
     }
 
     @Test
+    void calculatePersonenWithObererRichtwertAndWohneinheitenForCertainYear() {
+        final var wohneinheiten = new WohneinheitenProFoerderartProJahrModel();
+        wohneinheiten.setWohneinheiten(BigDecimal.valueOf(1000));
+        wohneinheiten.setJahr("2000");
+        final var obererRichtwert = BigDecimal.valueOf(1.3);
+        final var yearToCalculate = 5;
+
+        final var result =
+            infrastrukturbedarfService.calculatePersonenWithObererRichtwertAndWohneinheitenForCertainYear(
+                wohneinheiten,
+                obererRichtwert,
+                yearToCalculate
+            );
+
+        final var expected = new PersonenProJahrModel();
+        expected.setJahr("2005");
+        expected.setAnzahlPersonenGesamt(BigDecimal.valueOf(1300000000000000000L, 15));
+
+        assertThat(result, is(expected));
+    }
+
+    @Test
     void createBedarf() {
         final var result = infrastrukturbedarfService.createPersonenProJahr(2023, BigDecimal.TEN);
 
