@@ -26,7 +26,6 @@ public class SecurityDisabledConfiguration {
     public SecurityFilterChain securityFilterChain(final HttpSecurity http) throws Exception {
         http
             .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
-            //.authorizeHttpRequests(request -> request.requestMatchers("/**").permitAll().anyRequest().permitAll())
             .authorizeHttpRequests(request ->
                 request.requestMatchers(AntPathRequestMatcher.antMatcher("/**")).permitAll().anyRequest().permitAll()
             )
