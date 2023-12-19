@@ -29,7 +29,6 @@
         <apache.commons.lang3>3.14.0</apache.commons.lang3>
         <apache.commons.text>1.11.0</apache.commons.text>
         <apache.commons.fileupload>1.5</apache.commons.fileupload>
-        <apache.tika.parsers>1.19</apache.tika.parsers>
         <opencsv.version>5.9</opencsv.version>
         <springdoc.version>2.3.0</springdoc.version>
         <!-- SonarQube -->
