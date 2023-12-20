@@ -112,7 +112,7 @@ public class ImportStammdatenFromFile implements CommandLineRunner {
     }
 
     /**
-     * Erstellt ein MultipartFile-Objekt aus der angegebenen Datei.
+     * Erstellt einen FileInputStream aus der angegebenen Datei.
      *
      * @param filePath Der Dateipfad zur CSV-Datei.
      * @return den FileInputStream der CSV-Datei.
