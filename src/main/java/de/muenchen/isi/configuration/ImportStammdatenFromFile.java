@@ -91,8 +91,9 @@ public class ImportStammdatenFromFile implements CommandLineRunner {
      */
     public void addSobonOrientierungswerteSozialeInfrastruktur(String filePath)
         throws IOException, CsvAttributeErrorException, FileImportFailedException {
-        final var fileInputStream = this.createFileInputStream(filePath);
-        this.stammdatenImportService.importSobonOrientierungswerteSozialeInfrastruktur(fileInputStream);
+        try (final var fileInputStream = this.createFileInputStream(filePath)) {
+            this.stammdatenImportService.importSobonOrientierungswerteSozialeInfrastruktur(fileInputStream);
+        }
     }
 
     /**
@@ -105,8 +106,9 @@ public class ImportStammdatenFromFile implements CommandLineRunner {
      */
     public void addStaedtebaulicheOrientierungswerte(String filePath)
         throws IOException, CsvAttributeErrorException, FileImportFailedException {
-        final var fileInputStream = this.createFileInputStream(filePath);
-        this.stammdatenImportService.importStaedtebaulicheOrientierungswerte(fileInputStream);
+        try (final var fileInputStream = this.createFileInputStream(filePath)) {
+            this.stammdatenImportService.importStaedtebaulicheOrientierungswerte(fileInputStream);
+        }
     }
 
     /**
