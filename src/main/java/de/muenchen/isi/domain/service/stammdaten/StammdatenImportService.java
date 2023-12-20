@@ -46,8 +46,8 @@ public class StammdatenImportService {
      */
     public void importStaedtebaulicheOrientierungswerte(final MultipartFile csvImportFile)
         throws FileImportFailedException, CsvAttributeErrorException {
-        try {
-            this.importStaedtebaulicheOrientierungswerte(csvImportFile.getInputStream());
+        try (final var inputStream = csvImportFile.getInputStream()) {
+            this.importStaedtebaulicheOrientierungswerte(inputStream);
         } catch (final IOException exception) {
             final var message = "Der Import einer CSV-Datei für StaedtebaulicheOrientierungswerte ist fehlgeschlagen.";
             log.error(message);
@@ -92,8 +92,8 @@ public class StammdatenImportService {
      */
     public void importSobonOrientierungswerteSozialeInfrastruktur(final MultipartFile csvImportFile)
         throws CsvAttributeErrorException, FileImportFailedException {
-        try {
-            this.importSobonOrientierungswerteSozialeInfrastruktur(csvImportFile.getInputStream());
+        try (final var inputStream = csvImportFile.getInputStream()) {
+            this.importSobonOrientierungswerteSozialeInfrastruktur(inputStream);
         } catch (final IOException exception) {
             final var message =
                 "Der Import einer CSV-Datei für SoBoNOrientierungswerteSozialeInfrastruktur ist fehlgeschlagen.";
