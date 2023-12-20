@@ -113,7 +113,7 @@ public class ImportStammdatenFromFile implements CommandLineRunner {
      * Erstellt ein MultipartFile-Objekt aus der angegebenen Datei.
      *
      * @param filePath Der Dateipfad zur CSV-Datei.
-     * @return Das MultipartFile-Objekt.
+     * @return den FileInputStream der CSV-Datei.
      * @throws IOException sobald ein Fehler beim Lesen der Datei auftritt.
      */
     public FileInputStream createFileInputStream(String filePath) throws IOException {
