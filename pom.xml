@@ -414,7 +414,6 @@
                         </goals>
                         <!-- https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-3.2-Release-Notes#nested-jar-support -->
                         <!-- Erforderlich wegen Hibernate-Search-Kompatibilität -->
-                        <!-- https://github.com/spring-projects/spring-boot/issues/38585 -->
                         <configuration>
                             <loaderImplementation>CLASSIC</loaderImplementation>
                         </configuration>
@@ -428,7 +427,6 @@
                 <configuration>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
-                    <!-- https://github.com/spring-projects/spring-boot/issues/38723 -->
                     <!-- https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-3.2-Release-Notes#parameter-name-discovery -->
                     <parameters>true</parameters>
                     <annotationProcessorPaths>
