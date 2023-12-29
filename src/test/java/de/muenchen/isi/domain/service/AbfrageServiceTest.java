@@ -3,6 +3,7 @@ package de.muenchen.isi.domain.service;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
+import de.muenchen.isi.api.mapper.ReportingApiMapperImpl;
 import de.muenchen.isi.domain.exception.AbfrageStatusNotAllowedException;
 import de.muenchen.isi.domain.exception.CalculationException;
 import de.muenchen.isi.domain.exception.EntityIsReferencedException;
@@ -84,6 +85,8 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
+import org.openapitools.client.api.ReportingApi;
+import reactor.core.publisher.Mono;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
@@ -117,6 +120,9 @@ class AbfrageServiceTest {
     @Mock
     private CalculationService calculationService;
 
+    @Mock
+    private ReportingApi reportingApi;
+
     @BeforeEach
     public void beforeEach() throws NoSuchFieldException, IllegalAccessException {
         final var abfragevarianteDomainMapper = new AbfragevarianteDomainMapperImpl(new BauabschnittDomainMapperImpl());
@@ -135,7 +141,9 @@ class AbfrageServiceTest {
                 this.abfragevarianteBauleitplanverfahrenRepository,
                 this.abfragevarianteBaugenehmigungsverfahrenRepository,
                 this.abfragevarianteWeiteresVerfahrenRepository,
-                this.calculationService
+                this.calculationService,
+                this.reportingApi,
+                new ReportingApiMapperImpl()
             );
         Mockito.reset(
             this.abfrageRepository,
@@ -147,6 +155,7 @@ class AbfrageServiceTest {
             this.abfragevarianteWeiteresVerfahrenRepository,
             this.calculationService
         );
+        Mockito.when(this.reportingApi.saveCalculations(Mockito.any())).thenReturn(Mono.just("OK"));
     }
 
     @Test

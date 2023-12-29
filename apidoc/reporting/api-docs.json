@@ -1,0 +1,154 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "ISI Reporting EAI",
+    "description": "ISI Reporting EAI - Service zum Befüllen der Metabase-DB",
+    "contact": { "name": "ISI Management", "email": "unbekannt@muenchen.de" },
+    "version": "1.1.0"
+  },
+  "servers": [{ "url": "http://localhost:8087", "description": "Generated server url" }],
+  "tags": [{ "name": "Reporting", "description": "API zum Speichern von Daten in der Metabase-DB." }],
+  "paths": {
+    "/calculations": {
+      "post": {
+        "tags": ["Reporting"],
+        "summary": "Speichert Berechnungsergebnisse in der Metabase-DB.",
+        "operationId": "saveCalculations",
+        "requestBody": {
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CalculationsDto" } } },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "description": "BAD_REQUEST -> Berechnungsergebnisse konnten wegen fehlerhaften Angaben nicht gespeichert werden.",
+            "content": { "*/*": { "schema": { "$ref": "#/components/schemas/InformationResponseDto" } } }
+          },
+          "200": {
+            "description": "OK -> Berechnungsergebnisse erfolgreich gespeichert.",
+            "content": { "*/*": { "schema": { "type": "string" } } }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "CalculationsDto": {
+        "required": [
+          "abfrageName",
+          "abfragevarianteId",
+          "abfragevarianteName",
+          "langfristigerPlanungsursaechlicherBedarfDto"
+        ],
+        "type": "object",
+        "properties": {
+          "abfragevarianteId": { "type": "string", "format": "uuid" },
+          "abfrageName": { "type": "string" },
+          "abfragevarianteName": { "type": "string" },
+          "langfristigerPlanungsursaechlicherBedarfDto": {
+            "$ref": "#/components/schemas/LangfristigerPlanungsursaechlicherBedarfDto"
+          }
+        },
+        "description": "Berechnungsergebnisse und zusätzliche Daten"
+      },
+      "InfrastrukturbedarfProJahrDto": {
+        "required": ["anzahlGruppen", "anzahlPersonenGesamt", "anzahlPersonenZuVersorgen", "jahr"],
+        "type": "object",
+        "properties": {
+          "jahr": { "type": "string" },
+          "anzahlPersonenGesamt": { "type": "number" },
+          "anzahlPersonenZuVersorgen": { "type": "number" },
+          "anzahlGruppen": { "type": "number" }
+        }
+      },
+      "LangfristigerPlanungsursaechlicherBedarfDto": {
+        "required": [
+          "alleEinwohner",
+          "alleEinwohnerMittelwert10",
+          "alleEinwohnerMittelwert15",
+          "alleEinwohnerMittelwert20",
+          "bedarfKindergarten",
+          "bedarfKindergartenMittelwert10",
+          "bedarfKindergartenMittelwert15",
+          "bedarfKindergartenMittelwert20",
+          "bedarfKinderkrippe",
+          "bedarfKinderkrippeMittelwert10",
+          "bedarfKinderkrippeMittelwert15",
+          "bedarfKinderkrippeMittelwert20",
+          "wohneinheiten",
+          "wohneinheitenGesamt",
+          "wohneinheitenSumme10Jahre",
+          "wohneinheitenSumme15Jahre",
+          "wohneinheitenSumme20Jahre"
+        ],
+        "type": "object",
+        "properties": {
+          "wohneinheiten": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/WohneinheitenProFoerderartProJahrDto" }
+          },
+          "wohneinheitenSumme10Jahre": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/WohneinheitenProFoerderartProJahrDto" }
+          },
+          "wohneinheitenSumme15Jahre": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/WohneinheitenProFoerderartProJahrDto" }
+          },
+          "wohneinheitenSumme20Jahre": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/WohneinheitenProFoerderartProJahrDto" }
+          },
+          "wohneinheitenGesamt": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/WohneinheitenProFoerderartProJahrDto" }
+          },
+          "bedarfKinderkrippe": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/InfrastrukturbedarfProJahrDto" }
+          },
+          "bedarfKinderkrippeMittelwert10": { "$ref": "#/components/schemas/InfrastrukturbedarfProJahrDto" },
+          "bedarfKinderkrippeMittelwert15": { "$ref": "#/components/schemas/InfrastrukturbedarfProJahrDto" },
+          "bedarfKinderkrippeMittelwert20": { "$ref": "#/components/schemas/InfrastrukturbedarfProJahrDto" },
+          "bedarfKindergarten": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/InfrastrukturbedarfProJahrDto" }
+          },
+          "bedarfKindergartenMittelwert10": { "$ref": "#/components/schemas/InfrastrukturbedarfProJahrDto" },
+          "bedarfKindergartenMittelwert15": { "$ref": "#/components/schemas/InfrastrukturbedarfProJahrDto" },
+          "bedarfKindergartenMittelwert20": { "$ref": "#/components/schemas/InfrastrukturbedarfProJahrDto" },
+          "alleEinwohner": { "type": "array", "items": { "$ref": "#/components/schemas/PersonenProJahrDto" } },
+          "alleEinwohnerMittelwert10": { "$ref": "#/components/schemas/PersonenProJahrDto" },
+          "alleEinwohnerMittelwert15": { "$ref": "#/components/schemas/PersonenProJahrDto" },
+          "alleEinwohnerMittelwert20": { "$ref": "#/components/schemas/PersonenProJahrDto" }
+        }
+      },
+      "PersonenProJahrDto": {
+        "required": ["anzahlPersonenGesamt", "jahr"],
+        "type": "object",
+        "properties": { "jahr": { "type": "string" }, "anzahlPersonenGesamt": { "type": "number" } }
+      },
+      "WohneinheitenProFoerderartProJahrDto": {
+        "required": ["foerderart", "jahr", "wohneinheiten"],
+        "type": "object",
+        "properties": {
+          "foerderart": { "type": "string" },
+          "jahr": { "type": "string" },
+          "wohneinheiten": { "type": "number" }
+        }
+      },
+      "InformationResponseDto": {
+        "type": "object",
+        "properties": {
+          "type": { "type": "string", "enum": ["ERROR", "WARNING", "INFORMATION_SUCCESS", "INFORMATION_NEUTRAL"] },
+          "timestamp": { "type": "string", "format": "date-time" },
+          "traceId": { "type": "string" },
+          "spanId": { "type": "string" },
+          "httpStatus": { "type": "integer", "format": "int32" },
+          "originalException": { "type": "string" },
+          "messages": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    }
+  }
+}

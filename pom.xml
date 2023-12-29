@@ -52,6 +52,7 @@
         <apache.tika.version>2.7.0</apache.tika.version>
         <hibernate.search>6.2.1.Final</hibernate.search>
         <icu4j.version>73.2</icu4j.version>
+        <openapi-generator-version>6.2.1</openapi-generator-version>
     </properties>
 
 
@@ -507,6 +508,32 @@
                 </executions>
             </plugin>
 
+            <plugin>
+                <groupId>org.openapitools</groupId>
+                <artifactId>openapi-generator-maven-plugin</artifactId>
+                <version>${openapi-generator-version}</version>
+                <executions>
+                    <execution>
+                        <id>backend-api</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <inputSpec>${project.basedir}/apidoc/reporting/api-docs.json</inputSpec>
+                            <generatorName>java</generatorName>
+                            <library>webclient</library>
+                            <generateApiTests>false</generateApiTests>
+                            <generateApiDocumentation>false</generateApiDocumentation>
+                            <generateModelTests>false</generateModelTests>
+                            <generateModelDocumentation>false</generateModelDocumentation>
+                            <configOptions>
+                                <hideGenerationTimestamp>true</hideGenerationTimestamp>
+                                <generateClientAsBean>true</generateClientAsBean>
+                            </configOptions>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 

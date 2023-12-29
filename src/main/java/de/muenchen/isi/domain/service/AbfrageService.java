@@ -1,5 +1,6 @@
 package de.muenchen.isi.domain.service;
 
+import de.muenchen.isi.api.mapper.ReportingApiMapper;
 import de.muenchen.isi.domain.exception.AbfrageStatusNotAllowedException;
 import de.muenchen.isi.domain.exception.CalculationException;
 import de.muenchen.isi.domain.exception.EntityIsReferencedException;
@@ -7,10 +8,15 @@ import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.FileHandlingFailedException;
 import de.muenchen.isi.domain.exception.FileHandlingWithS3FailedException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
+import de.muenchen.isi.domain.exception.ReportingException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
 import de.muenchen.isi.domain.exception.UserRoleNotAllowedException;
 import de.muenchen.isi.domain.mapper.AbfrageDomainMapper;
 import de.muenchen.isi.domain.model.AbfrageModel;
+import de.muenchen.isi.domain.model.AbfragevarianteBaugenehmigungsverfahrenModel;
+import de.muenchen.isi.domain.model.AbfragevarianteBauleitplanverfahrenModel;
+import de.muenchen.isi.domain.model.AbfragevarianteModel;
+import de.muenchen.isi.domain.model.AbfragevarianteWeiteresVerfahrenModel;
 import de.muenchen.isi.domain.model.BaugenehmigungsverfahrenModel;
 import de.muenchen.isi.domain.model.BauleitplanverfahrenModel;
 import de.muenchen.isi.domain.model.BauvorhabenModel;
@@ -39,16 +45,22 @@ import de.muenchen.isi.infrastructure.repository.AbfragevarianteBauleitplanverfa
 import de.muenchen.isi.infrastructure.repository.AbfragevarianteWeiteresVerfahrenRepository;
 import de.muenchen.isi.infrastructure.repository.BauvorhabenRepository;
 import de.muenchen.isi.security.AuthenticationUtils;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.lang3.ObjectUtils;
+import org.openapitools.client.api.ReportingApi;
+import org.openapitools.client.model.CalculationsDto;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClientRequestException;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 @Slf4j
 @Service
@@ -72,6 +84,10 @@ public class AbfrageService {
     private final AbfragevarianteWeiteresVerfahrenRepository abfragevarianteWeiteresVerfahrenRepository;
 
     private final CalculationService calculationService;
+
+    private final ReportingApi reportingApi;
+
+    private final ReportingApiMapper reportingApiMapper;
 
     /**
      * Die Methode gibt ein {@link AbfrageModel} identifiziert durch die ID zurück.
@@ -114,6 +130,7 @@ public class AbfrageService {
         if ((saved.isPresent() && saved.get().getId().equals(entity.getId())) || saved.isEmpty()) {
             try {
                 entity = this.abfrageRepository.saveAndFlush(entity);
+                saveCalculations(this.abfrageDomainMapper.entity2Model(entity));
             } catch (final ObjectOptimisticLockingFailureException exception) {
                 final var message = "Die Daten wurden in der Zwischenzeit geändert. Bitte laden Sie die Seite neu!";
                 throw new OptimisticLockingException(message, exception);
@@ -121,6 +138,9 @@ public class AbfrageService {
                 final var message =
                     "Der angegebene Name der Abfragevariante ist schon vorhanden, bitte wählen Sie daher einen anderen Namen und speichern Sie die Abfrage erneut.";
                 throw new UniqueViolationException(message, exception);
+            } catch (final ReportingException exception) {
+                final var message = "Die Berechnungsergebnisse konnten nicht abgespeichert werden.";
+                throw new CalculationException(message, exception);
             }
             return this.abfrageDomainMapper.entity2Model(entity);
         } else {
@@ -467,5 +487,87 @@ public class AbfrageService {
         }
 
         return this.getById(abfrageIds.get(0));
+    }
+
+    /**
+     * Speichert Berechnungsergebnisse in der Metabase-DB.
+     *
+     * @param abfrage {@link AbfrageModel} Abfrage mit den Berechnungsergebnissen.
+     * @throws ReportingException falls der Service einen Fehler zurückgibt.
+     */
+    public void saveCalculations(final AbfrageModel abfrage) throws ReportingException {
+        List<? extends AbfragevarianteModel> abfragevarianten;
+        switch (abfrage.getArtAbfrage()) {
+            case BAULEITPLANVERFAHREN:
+                final var bauleitplanverfahren = (BauleitplanverfahrenModel) abfrage;
+                abfragevarianten =
+                    ListUtils.union(
+                        ListUtils.emptyIfNull(bauleitplanverfahren.getAbfragevariantenBauleitplanverfahren()),
+                        ListUtils.emptyIfNull(
+                            bauleitplanverfahren.getAbfragevariantenSachbearbeitungBauleitplanverfahren()
+                        )
+                    );
+                break;
+            case BAUGENEHMIGUNGSVERFAHREN:
+                final var baugenehmigungsverfahren = (BaugenehmigungsverfahrenModel) abfrage;
+                abfragevarianten =
+                    ListUtils.union(
+                        ListUtils.emptyIfNull(baugenehmigungsverfahren.getAbfragevariantenBaugenehmigungsverfahren()),
+                        ListUtils.emptyIfNull(
+                            baugenehmigungsverfahren.getAbfragevariantenSachbearbeitungBaugenehmigungsverfahren()
+                        )
+                    );
+                break;
+            case WEITERES_VERFAHREN:
+                final var weiteresVerfahren = (WeiteresVerfahrenModel) abfrage;
+                abfragevarianten =
+                    ListUtils.union(
+                        ListUtils.emptyIfNull(weiteresVerfahren.getAbfragevariantenWeiteresVerfahren()),
+                        ListUtils.emptyIfNull(weiteresVerfahren.getAbfragevariantenSachbearbeitungWeiteresVerfahren())
+                    );
+                break;
+            default:
+                throw new ReportingException(
+                    "Die Berechnungsergbnisse konnten für diese Art von Abfrage nicht gespeichert werden."
+                );
+        }
+
+        for (final var abfragevariante : abfragevarianten) {
+            final LangfristigerPlanungsursaechlicherBedarfModel langfristigerPlanungsursaechlicherBedarf;
+            switch (abfragevariante.getArtAbfragevariante()) {
+                case BAULEITPLANVERFAHREN:
+                    langfristigerPlanungsursaechlicherBedarf =
+                        ((AbfragevarianteBauleitplanverfahrenModel) abfragevariante).getLangfristigerPlanungsursaechlicherBedarf();
+                    break;
+                case BAUGENEHMIGUNGSVERFAHREN:
+                    langfristigerPlanungsursaechlicherBedarf =
+                        ((AbfragevarianteBaugenehmigungsverfahrenModel) abfragevariante).getLangfristigerPlanungsursaechlicherBedarf();
+                    break;
+                case WEITERES_VERFAHREN:
+                    langfristigerPlanungsursaechlicherBedarf =
+                        ((AbfragevarianteWeiteresVerfahrenModel) abfragevariante).getLangfristigerPlanungsursaechlicherBedarf();
+                    break;
+                default:
+                    throw new ReportingException(
+                        "Die Berechnungsergbnisse konnten für diese Art von Abfrage nicht gespeichert werden."
+                    );
+            }
+
+            try {
+                final var calculations = new CalculationsDto();
+                calculations.setAbfragevarianteId(abfragevariante.getId());
+                calculations.setAbfrageName(abfrage.getName());
+                calculations.setAbfragevarianteName(abfragevariante.getName());
+                calculations.setLangfristigerPlanungsursaechlicherBedarfDto(
+                    reportingApiMapper.model2Dto(langfristigerPlanungsursaechlicherBedarf)
+                );
+                log.info(reportingApi.saveCalculations(calculations).block());
+            } catch (final WebClientResponseException | WebClientRequestException exception) {
+                throw new ReportingException(
+                    "Bei der Speicherung der Berechnungsergebnisse ist ein Fehler aufgetreten.",
+                    exception
+                );
+            }
+        }
     }
 }
