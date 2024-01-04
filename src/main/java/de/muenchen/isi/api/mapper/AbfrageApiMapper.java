@@ -29,6 +29,7 @@ import de.muenchen.isi.domain.model.abfrageAngelegt.AbfrageAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageAngelegt.BaugenehmigungsverfahrenAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageAngelegt.BauleitplanverfahrenAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageAngelegt.WeiteresVerfahrenAngelegtModel;
+import de.muenchen.isi.domain.model.abfrageBedarfsmeldungErfolgt.AbfrageBedarfsmeldungErfolgtModel;
 import de.muenchen.isi.domain.model.abfrageBedarfsmeldungErfolgt.BaugenehmigungsverfahrenBedarfsmeldungErfolgtModel;
 import de.muenchen.isi.domain.model.abfrageBedarfsmeldungErfolgt.BauleitplanverfahrenBedarfsmeldungErfolgtModel;
 import de.muenchen.isi.domain.model.abfrageBedarfsmeldungErfolgt.WeiteresVerfahrenBedarfsmeldungErfolgtModel;
@@ -117,5 +118,5 @@ public interface AbfrageApiMapper {
         source = WeiteresVerfahrenBedarfsmeldungErfolgtDto.class,
         target = WeiteresVerfahrenBedarfsmeldungErfolgtModel.class
     )
-    AbfrageInBearbeitungFachreferatModel dto2Model(final AbfrageBedarfsmeldungErfolgtDto dto);
+    AbfrageBedarfsmeldungErfolgtModel dto2Model(final AbfrageBedarfsmeldungErfolgtDto dto);
 }

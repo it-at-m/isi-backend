@@ -18,6 +18,10 @@ import de.muenchen.isi.domain.model.abfrageAngelegt.AbfrageAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageAngelegt.BaugenehmigungsverfahrenAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageAngelegt.BauleitplanverfahrenAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageAngelegt.WeiteresVerfahrenAngelegtModel;
+import de.muenchen.isi.domain.model.abfrageBedarfsmeldungErfolgt.AbfrageBedarfsmeldungErfolgtModel;
+import de.muenchen.isi.domain.model.abfrageBedarfsmeldungErfolgt.BaugenehmigungsverfahrenBedarfsmeldungErfolgtModel;
+import de.muenchen.isi.domain.model.abfrageBedarfsmeldungErfolgt.BauleitplanverfahrenBedarfsmeldungErfolgtModel;
+import de.muenchen.isi.domain.model.abfrageBedarfsmeldungErfolgt.WeiteresVerfahrenBedarfsmeldungErfolgtModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungFachreferat.AbfrageInBearbeitungFachreferatModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungFachreferat.BaugenehmigungsverfahrenInBearbeitungFachreferatModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungFachreferat.BauleitplanverfahrenInBearbeitungFachreferatModel;
@@ -314,6 +318,52 @@ public class AbfrageService {
             abfrageToSave =
                 this.abfrageDomainMapper.request2Model(
                         (WeiteresVerfahrenInBearbeitungFachreferatModel) abfrage,
+                        (WeiteresVerfahrenModel) originalAbfrageDb
+                    );
+        } else {
+            final var message = "Die Art der Abfrage wird nicht unterstützt.";
+            log.error(message);
+            throw new EntityNotFoundException(message);
+        }
+        return this.save(abfrageToSave);
+    }
+
+    /**
+     * Diese Methode aktualisiert ein {@link AbfrageBedarfsmeldungErfolgtModel}.
+     *
+     * @param abfrage zum Speichern
+     * @param id der Abfrage
+     * @return das gespeicherte {@link AbfrageModel}
+     * @throws UniqueViolationException   falls der Name der Abfrage oder der Abfragevariante bereits vorhanden ist.
+     * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist.
+     * @throws EntityNotFoundException falls das referenzierte Bauvorhaben nicht existiert.
+     * @throws AbfrageStatusNotAllowedException falls die zu aktualisierende Abfrage sich nicht im Status {@link StatusAbfrage#IN_BEARBEITUNG_FACHREFERATE} befindet.
+     */
+    public AbfrageModel patchBedarfsmeldungErfolgt(final AbfrageBedarfsmeldungErfolgtModel abfrage, final UUID id)
+        throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException {
+        final var originalAbfrageDb = this.getById(id);
+        this.throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(
+                originalAbfrageDb,
+                StatusAbfrage.BEDARFSMELDUNG_ERFOLGT
+            );
+
+        final AbfrageModel abfrageToSave;
+        if (ArtAbfrage.BAULEITPLANVERFAHREN.equals(abfrage.getArtAbfrage())) {
+            abfrageToSave =
+                this.abfrageDomainMapper.request2Model(
+                        (BauleitplanverfahrenBedarfsmeldungErfolgtModel) abfrage,
+                        (BauleitplanverfahrenModel) originalAbfrageDb
+                    );
+        } else if (ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN.equals(abfrage.getArtAbfrage())) {
+            abfrageToSave =
+                this.abfrageDomainMapper.request2Model(
+                        (BaugenehmigungsverfahrenBedarfsmeldungErfolgtModel) abfrage,
+                        (BaugenehmigungsverfahrenModel) originalAbfrageDb
+                    );
+        } else if (ArtAbfrage.WEITERES_VERFAHREN.equals(abfrage.getArtAbfrage())) {
+            abfrageToSave =
+                this.abfrageDomainMapper.request2Model(
+                        (WeiteresVerfahrenBedarfsmeldungErfolgtModel) abfrage,
                         (WeiteresVerfahrenModel) originalAbfrageDb
                     );
         } else {

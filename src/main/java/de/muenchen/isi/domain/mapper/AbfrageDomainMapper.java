@@ -648,7 +648,7 @@ public abstract class AbfrageDomainMapper {
         final BauleitplanverfahrenBedarfsmeldungErfolgtModel request,
         @MappingTarget final BauleitplanverfahrenModel response
     ) {
-        // Mapping der Bedarfsmeldungen durch die Fachabteilungen der Abfragevarianten
+        // Mapping der Bedarfsmeldungen durch die abfrageerstellende Person der Abfragevarianten
         final var mappedAbfragevarianten = new ArrayList<AbfragevarianteBauleitplanverfahrenModel>();
         CollectionUtils
             .emptyIfNull(request.getAbfragevariantenBauleitplanverfahren())
@@ -710,7 +710,7 @@ public abstract class AbfrageDomainMapper {
         final BaugenehmigungsverfahrenBedarfsmeldungErfolgtModel request,
         @MappingTarget final BaugenehmigungsverfahrenModel response
     ) {
-        // Mapping der Bedarfsmeldungen durch die Fachabteilungen der Abfragevarianten
+        // Mapping der Bedarfsmeldungen durch die abfrageerstellende Person der Abfragevarianten
         final var mappedAbfragevarianten = new ArrayList<AbfragevarianteBaugenehmigungsverfahrenModel>();
         CollectionUtils
             .emptyIfNull(request.getAbfragevariantenBaugenehmigungsverfahren())
@@ -772,7 +772,7 @@ public abstract class AbfrageDomainMapper {
         final WeiteresVerfahrenBedarfsmeldungErfolgtModel request,
         @MappingTarget final WeiteresVerfahrenModel response
     ) {
-        // Mapping der Bedarfsmeldungen durch die Fachabteilungen der Abfragevarianten
+        // Mapping der Bedarfsmeldungen durch die abfrageerstellende Person der Abfragevarianten
         final var mappedAbfragevarianten = new ArrayList<AbfragevarianteWeiteresVerfahrenModel>();
         CollectionUtils
             .emptyIfNull(request.getAbfragevariantenWeiteresVerfahren())
