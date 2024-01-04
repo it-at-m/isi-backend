@@ -2,7 +2,7 @@
  * Copyright (c): it@M - Dienstleister für Informations- und Telekommunikationstechnik
  * der Landeshauptstadt München, 2022
  */
-package de.muenchen.isi.api.dto.abfrageErledigtMitFachreferat;
+package de.muenchen.isi.api.dto.abfrageBedarfsmeldungErfolgt;
 
 import de.muenchen.isi.api.dto.BedarfsmeldungFachreferateDto;
 import de.muenchen.isi.api.validation.NotUnspecified;
@@ -13,7 +13,7 @@ import javax.validation.Valid;
 import lombok.Data;
 
 @Data
-public class AbfragevarianteBauleitplanverfahrenErledigtMitFachreferatDto {
+public class AbfragevarianteBauleitplanverfahrenBedarfsmeldungErfolgtDto {
 
     private UUID id;
 

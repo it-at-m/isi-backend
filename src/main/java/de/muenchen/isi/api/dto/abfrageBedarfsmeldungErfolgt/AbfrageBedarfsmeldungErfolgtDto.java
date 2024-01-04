@@ -1,4 +1,4 @@
-package de.muenchen.isi.api.dto.abfrageErledigtMitFachreferat;
+package de.muenchen.isi.api.dto.abfrageBedarfsmeldungErfolgt;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
@@ -18,38 +18,38 @@ import lombok.Data;
 @JsonSubTypes(
     {
         @JsonSubTypes.Type(
-            value = BauleitplanverfahrenErledigtMitFachreferatDto.class,
+            value = BauleitplanverfahrenBedarfsmeldungErfolgtDto.class,
             name = ArtAbfrage.Values.BAULEITPLANVERFAHREN
         ),
         @JsonSubTypes.Type(
-            value = BaugenehmigungsverfahrenErledigtMitFachreferatDto.class,
+            value = BaugenehmigungsverfahrenBedarfsmeldungErfolgtDto.class,
             name = ArtAbfrage.Values.BAUGENEHMIGUNGSVERFAHREN
         ),
         @JsonSubTypes.Type(
-            value = WeiteresVerfahrenErledigtMitFachreferatDto.class,
+            value = WeiteresVerfahrenBedarfsmeldungErfolgtDto.class,
             name = ArtAbfrage.Values.WEITERES_VERFAHREN
         ),
     }
 )
 @Schema(
-    description = "AbfrageErledigtMitFachreferatDto",
+    description = "AbfrageBedarfsmeldungErfolgtDto",
     discriminatorProperty = "artAbfrage",
     discriminatorMapping = {
         @DiscriminatorMapping(
             value = ArtAbfrage.Values.BAULEITPLANVERFAHREN,
-            schema = BauleitplanverfahrenErledigtMitFachreferatDto.class
+            schema = BauleitplanverfahrenBedarfsmeldungErfolgtDto.class
         ),
         @DiscriminatorMapping(
             value = ArtAbfrage.Values.BAUGENEHMIGUNGSVERFAHREN,
-            schema = BaugenehmigungsverfahrenErledigtMitFachreferatDto.class
+            schema = BaugenehmigungsverfahrenBedarfsmeldungErfolgtDto.class
         ),
         @DiscriminatorMapping(
             value = ArtAbfrage.Values.WEITERES_VERFAHREN,
-            schema = WeiteresVerfahrenErledigtMitFachreferatDto.class
+            schema = WeiteresVerfahrenBedarfsmeldungErfolgtDto.class
         ),
     }
 )
-public abstract class AbfrageErledigtMitFachreferatDto {
+public abstract class AbfrageBedarfsmeldungErfolgtDto {
 
     private Long version;
 

@@ -175,6 +175,7 @@ public interface AbfragevarianteDomainMapper {
         @MappingTarget final AbfragevarianteWeiteresVerfahrenModel model
     );
 
+    //aschaenz hier weitermachen
     @BeanMapping(ignoreByDefault = true)
     @Mappings(
         {

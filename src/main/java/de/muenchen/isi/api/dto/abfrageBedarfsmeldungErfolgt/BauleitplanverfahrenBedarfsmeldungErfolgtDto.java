@@ -1,4 +1,4 @@
-package de.muenchen.isi.api.dto.abfrageErledigtMitFachreferat;
+package de.muenchen.isi.api.dto.abfrageBedarfsmeldungErfolgt;
 
 import java.util.List;
 import javax.validation.Valid;
@@ -12,17 +12,17 @@ import lombok.ToString;
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class WeiteresVerfahrenErledigtMitFachreferatDto extends AbfrageErledigtMitFachreferatDto {
+public class BauleitplanverfahrenBedarfsmeldungErfolgtDto extends AbfrageBedarfsmeldungErfolgtDto {
 
     @NotEmpty
     @Size(min = 1, max = 5)
     private List<
-        @NotNull @Valid AbfragevarianteWeiteresVerfahrenErledigtMitFachreferatDto
-    > abfragevariantenWeiteresVerfahren;
+        @NotNull @Valid AbfragevarianteBauleitplanverfahrenBedarfsmeldungErfolgtDto
+    > abfragevariantenBauleitplanverfahren;
 
     @NotNull
     @Size(min = 0, max = 5)
     private List<
-        @NotNull @Valid AbfragevarianteWeiteresVerfahrenErledigtMitFachreferatDto
-    > abfragevariantenSachbearbeitungWeiteresVerfahren;
+        @NotNull @Valid AbfragevarianteBauleitplanverfahrenBedarfsmeldungErfolgtDto
+    > abfragevariantenSachbearbeitungBauleitplanverfahren;
 }

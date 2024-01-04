@@ -1,10 +1,10 @@
-package de.muenchen.isi.domain.model.abfrageErledigtMitFachreferat;
+package de.muenchen.isi.domain.model.abfrageBedarfsmeldungErfolgt;
 
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import lombok.Data;
 
 @Data
-public abstract class AbfrageErledigtMitFachreferatModel {
+public abstract class AbfrageBedarfsmeldungErfolgtModel {
 
     private Long version;
 

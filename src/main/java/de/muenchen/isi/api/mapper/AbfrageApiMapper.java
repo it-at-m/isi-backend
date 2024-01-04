@@ -8,6 +8,10 @@ import de.muenchen.isi.api.dto.abfrageAngelegt.AbfrageAngelegtDto;
 import de.muenchen.isi.api.dto.abfrageAngelegt.BaugenehmigungsverfahrenAngelegtDto;
 import de.muenchen.isi.api.dto.abfrageAngelegt.BauleitplanverfahrenAngelegtDto;
 import de.muenchen.isi.api.dto.abfrageAngelegt.WeiteresVerfahrenAngelegtDto;
+import de.muenchen.isi.api.dto.abfrageBedarfsmeldungErfolgt.AbfrageBedarfsmeldungErfolgtDto;
+import de.muenchen.isi.api.dto.abfrageBedarfsmeldungErfolgt.BaugenehmigungsverfahrenBedarfsmeldungErfolgtDto;
+import de.muenchen.isi.api.dto.abfrageBedarfsmeldungErfolgt.BauleitplanverfahrenBedarfsmeldungErfolgtDto;
+import de.muenchen.isi.api.dto.abfrageBedarfsmeldungErfolgt.WeiteresVerfahrenBedarfsmeldungErfolgtDto;
 import de.muenchen.isi.api.dto.abfrageInBearbeitungFachreferat.AbfrageInBearbeitungFachreferatDto;
 import de.muenchen.isi.api.dto.abfrageInBearbeitungFachreferat.BaugenehmigungsverfahrenInBearbeitungFachreferatDto;
 import de.muenchen.isi.api.dto.abfrageInBearbeitungFachreferat.BauleitplanverfahrenInBearbeitungFachreferatDto;
@@ -25,6 +29,9 @@ import de.muenchen.isi.domain.model.abfrageAngelegt.AbfrageAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageAngelegt.BaugenehmigungsverfahrenAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageAngelegt.BauleitplanverfahrenAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageAngelegt.WeiteresVerfahrenAngelegtModel;
+import de.muenchen.isi.domain.model.abfrageBedarfsmeldungErfolgt.BaugenehmigungsverfahrenBedarfsmeldungErfolgtModel;
+import de.muenchen.isi.domain.model.abfrageBedarfsmeldungErfolgt.BauleitplanverfahrenBedarfsmeldungErfolgtModel;
+import de.muenchen.isi.domain.model.abfrageBedarfsmeldungErfolgt.WeiteresVerfahrenBedarfsmeldungErfolgtModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungFachreferat.AbfrageInBearbeitungFachreferatModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungFachreferat.BaugenehmigungsverfahrenInBearbeitungFachreferatModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungFachreferat.BauleitplanverfahrenInBearbeitungFachreferatModel;
@@ -97,4 +104,18 @@ public interface AbfrageApiMapper {
         target = WeiteresVerfahrenInBearbeitungFachreferatModel.class
     )
     AbfrageInBearbeitungFachreferatModel dto2Model(final AbfrageInBearbeitungFachreferatDto dto);
+
+    @SubclassMapping(
+        source = BauleitplanverfahrenBedarfsmeldungErfolgtDto.class,
+        target = BauleitplanverfahrenBedarfsmeldungErfolgtModel.class
+    )
+    @SubclassMapping(
+        source = BaugenehmigungsverfahrenBedarfsmeldungErfolgtDto.class,
+        target = BaugenehmigungsverfahrenBedarfsmeldungErfolgtModel.class
+    )
+    @SubclassMapping(
+        source = WeiteresVerfahrenBedarfsmeldungErfolgtDto.class,
+        target = WeiteresVerfahrenBedarfsmeldungErfolgtModel.class
+    )
+    AbfrageInBearbeitungFachreferatModel dto2Model(final AbfrageBedarfsmeldungErfolgtDto dto);
 }
