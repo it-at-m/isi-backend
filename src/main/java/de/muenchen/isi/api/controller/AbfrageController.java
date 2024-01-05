@@ -285,7 +285,7 @@ public class AbfrageController {
         throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException {
         final var requestModel = abfrageApiMapper.dto2Model(abfrage);
         final var responseModel = abfrageService.patchBedarfsmeldungErfolgt(requestModel, id);
-        final var dto = abfrageApiMapper.model2Dto(responseModel); // aschaenz: hier weitermachen
+        final var dto = abfrageApiMapper.model2Dto(responseModel);
         return ResponseEntity.ok(dto);
     }
 

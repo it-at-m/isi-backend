@@ -2087,7 +2087,7 @@ class AbfrageServiceTest {
         abfragevarianteBedarfsmeldungToSave.setAnzahlKindergartengruppen(3);
         abfragevarianteBedarfsmeldungToSave.setAnzahlHortgruppen(2);
         abfragevarianteBedarfsmeldungToSave.setAnzahlGrundschulzuege(1);
-        abfragevarianteToSaveSave.setBedarfsmeldungFachreferate((List.of(abfragevarianteBedarfsmeldungToSave)));
+        abfragevarianteToSaveSave.setBedarfsmeldungAbfrageersteller(List.of(abfragevarianteBedarfsmeldungToSave));
 
         final var abfragevarianteSachbearbeitungToSave = new AbfragevarianteBauleitplanverfahren();
         abfragevarianteSachbearbeitungToSave.setId(uuidAbfragevarianteSachbearbeitung);
@@ -2101,7 +2101,7 @@ class AbfrageServiceTest {
         abfragevarianteSachbearbeitungBedarfsmeldungToSave.setAnzahlKindergartengruppen(3);
         abfragevarianteSachbearbeitungBedarfsmeldungToSave.setAnzahlHortgruppen(4);
         abfragevarianteSachbearbeitungBedarfsmeldungToSave.setAnzahlGrundschulzuege(5);
-        abfragevarianteSachbearbeitungToSave.setBedarfsmeldungFachreferate(
+        abfragevarianteSachbearbeitungToSave.setBedarfsmeldungAbfrageersteller(
             List.of(abfragevarianteSachbearbeitungBedarfsmeldungToSave)
         );
 
@@ -2127,7 +2127,7 @@ class AbfrageServiceTest {
         abfragevarianteBedarfsmeldungSaved.setAnzahlKindergartengruppen(3);
         abfragevarianteBedarfsmeldungSaved.setAnzahlHortgruppen(2);
         abfragevarianteBedarfsmeldungSaved.setAnzahlGrundschulzuege(1);
-        abfragevarianteSaved.setBedarfsmeldungFachreferate(List.of(abfragevarianteBedarfsmeldungSaved));
+        abfragevarianteSaved.setBedarfsmeldungAbfrageersteller(List.of(abfragevarianteBedarfsmeldungSaved));
 
         final var abfragevarianteSachbearbeitungSaved = new AbfragevarianteBauleitplanverfahren();
         abfragevarianteSachbearbeitungSaved.setId(uuidAbfragevarianteSachbearbeitung);
@@ -2141,7 +2141,7 @@ class AbfrageServiceTest {
         abfragevarianteSachbearbeitungBedarfsmeldungSaved.setAnzahlKindergartengruppen(3);
         abfragevarianteSachbearbeitungBedarfsmeldungSaved.setAnzahlHortgruppen(4);
         abfragevarianteSachbearbeitungBedarfsmeldungSaved.setAnzahlGrundschulzuege(5);
-        abfragevarianteSachbearbeitungSaved.setBedarfsmeldungFachreferate(
+        abfragevarianteSachbearbeitungSaved.setBedarfsmeldungAbfrageersteller(
             List.of(abfragevarianteSachbearbeitungBedarfsmeldungSaved)
         );
 
@@ -2173,7 +2173,7 @@ class AbfrageServiceTest {
         abfragevarianteBedarfsmeldungExpected.setAnzahlKindergartengruppen(3);
         abfragevarianteBedarfsmeldungExpected.setAnzahlHortgruppen(2);
         abfragevarianteBedarfsmeldungExpected.setAnzahlGrundschulzuege(1);
-        abfragevarianteExpected.setBedarfsmeldungFachreferate(List.of(abfragevarianteBedarfsmeldungExpected));
+        abfragevarianteExpected.setBedarfsmeldungAbfrageersteller(List.of(abfragevarianteBedarfsmeldungExpected));
 
         final var abfragevarianteSachbearbeitungExpected = new AbfragevarianteBauleitplanverfahrenModel();
         abfragevarianteSachbearbeitungExpected.setArtAbfragevariante(ArtAbfrage.BAULEITPLANVERFAHREN);
@@ -2188,7 +2188,7 @@ class AbfrageServiceTest {
         abfragevarianteSachbearbeitungBedarfsmeldungExpected.setAnzahlKindergartengruppen(3);
         abfragevarianteSachbearbeitungBedarfsmeldungExpected.setAnzahlHortgruppen(4);
         abfragevarianteSachbearbeitungBedarfsmeldungExpected.setAnzahlGrundschulzuege(5);
-        abfragevarianteSachbearbeitungExpected.setBedarfsmeldungFachreferate(
+        abfragevarianteSachbearbeitungExpected.setBedarfsmeldungAbfrageersteller(
             List.of(abfragevarianteSachbearbeitungBedarfsmeldungExpected)
         );
 
@@ -2283,7 +2283,7 @@ class AbfrageServiceTest {
         abfragevarianteBedarfsmeldungToSave.setAnzahlKindergartengruppen(3);
         abfragevarianteBedarfsmeldungToSave.setAnzahlHortgruppen(2);
         abfragevarianteBedarfsmeldungToSave.setAnzahlGrundschulzuege(1);
-        abfragevarianteToSaveSave.setBedarfsmeldungFachreferate((List.of(abfragevarianteBedarfsmeldungToSave)));
+        abfragevarianteToSaveSave.setBedarfsmeldungAbfrageersteller(List.of(abfragevarianteBedarfsmeldungToSave));
 
         final var abfragevarianteSachbearbeitungToSave = new AbfragevarianteBaugenehmigungsverfahren();
         abfragevarianteSachbearbeitungToSave.setId(uuidAbfragevarianteSachbearbeitung);
@@ -2297,7 +2297,7 @@ class AbfrageServiceTest {
         abfragevarianteSachbearbeitungBedarfsmeldungToSave.setAnzahlKindergartengruppen(3);
         abfragevarianteSachbearbeitungBedarfsmeldungToSave.setAnzahlHortgruppen(4);
         abfragevarianteSachbearbeitungBedarfsmeldungToSave.setAnzahlGrundschulzuege(5);
-        abfragevarianteSachbearbeitungToSave.setBedarfsmeldungFachreferate(
+        abfragevarianteSachbearbeitungToSave.setBedarfsmeldungAbfrageersteller(
             List.of(abfragevarianteSachbearbeitungBedarfsmeldungToSave)
         );
 
@@ -2323,7 +2323,7 @@ class AbfrageServiceTest {
         abfragevarianteBedarfsmeldungSaved.setAnzahlKindergartengruppen(3);
         abfragevarianteBedarfsmeldungSaved.setAnzahlHortgruppen(2);
         abfragevarianteBedarfsmeldungSaved.setAnzahlGrundschulzuege(1);
-        abfragevarianteSaved.setBedarfsmeldungFachreferate(List.of(abfragevarianteBedarfsmeldungSaved));
+        abfragevarianteSaved.setBedarfsmeldungAbfrageersteller(List.of(abfragevarianteBedarfsmeldungSaved));
 
         final var abfragevarianteSachbearbeitungSaved = new AbfragevarianteBaugenehmigungsverfahren();
         abfragevarianteSachbearbeitungSaved.setId(uuidAbfragevarianteSachbearbeitung);
@@ -2337,7 +2337,7 @@ class AbfrageServiceTest {
         abfragevarianteSachbearbeitungBedarfsmeldungSaved.setAnzahlKindergartengruppen(3);
         abfragevarianteSachbearbeitungBedarfsmeldungSaved.setAnzahlHortgruppen(4);
         abfragevarianteSachbearbeitungBedarfsmeldungSaved.setAnzahlGrundschulzuege(5);
-        abfragevarianteSachbearbeitungSaved.setBedarfsmeldungFachreferate(
+        abfragevarianteSachbearbeitungSaved.setBedarfsmeldungAbfrageersteller(
             List.of(abfragevarianteSachbearbeitungBedarfsmeldungSaved)
         );
 
@@ -2369,7 +2369,7 @@ class AbfrageServiceTest {
         abfragevarianteBedarfsmeldungExpected.setAnzahlKindergartengruppen(3);
         abfragevarianteBedarfsmeldungExpected.setAnzahlHortgruppen(2);
         abfragevarianteBedarfsmeldungExpected.setAnzahlGrundschulzuege(1);
-        abfragevarianteExpected.setBedarfsmeldungFachreferate(List.of(abfragevarianteBedarfsmeldungExpected));
+        abfragevarianteExpected.setBedarfsmeldungAbfrageersteller(List.of(abfragevarianteBedarfsmeldungExpected));
 
         final var abfragevarianteSachbearbeitungExpected = new AbfragevarianteBaugenehmigungsverfahrenModel();
         abfragevarianteSachbearbeitungExpected.setArtAbfragevariante(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN);
@@ -2384,7 +2384,7 @@ class AbfrageServiceTest {
         abfragevarianteSachbearbeitungBedarfsmeldungExpected.setAnzahlKindergartengruppen(3);
         abfragevarianteSachbearbeitungBedarfsmeldungExpected.setAnzahlHortgruppen(4);
         abfragevarianteSachbearbeitungBedarfsmeldungExpected.setAnzahlGrundschulzuege(5);
-        abfragevarianteSachbearbeitungExpected.setBedarfsmeldungFachreferate(
+        abfragevarianteSachbearbeitungExpected.setBedarfsmeldungAbfrageersteller(
             List.of(abfragevarianteSachbearbeitungBedarfsmeldungExpected)
         );
 
@@ -2479,7 +2479,7 @@ class AbfrageServiceTest {
         abfragevarianteBedarfsmeldungToSave.setAnzahlKindergartengruppen(3);
         abfragevarianteBedarfsmeldungToSave.setAnzahlHortgruppen(2);
         abfragevarianteBedarfsmeldungToSave.setAnzahlGrundschulzuege(1);
-        abfragevarianteToSaveSave.setBedarfsmeldungFachreferate((List.of(abfragevarianteBedarfsmeldungToSave)));
+        abfragevarianteToSaveSave.setBedarfsmeldungAbfrageersteller(List.of(abfragevarianteBedarfsmeldungToSave));
 
         final var abfragevarianteSachbearbeitungToSave = new AbfragevarianteWeiteresVerfahren();
         abfragevarianteSachbearbeitungToSave.setId(uuidAbfragevarianteSachbearbeitung);
@@ -2493,7 +2493,7 @@ class AbfrageServiceTest {
         abfragevarianteSachbearbeitungBedarfsmeldungToSave.setAnzahlKindergartengruppen(3);
         abfragevarianteSachbearbeitungBedarfsmeldungToSave.setAnzahlHortgruppen(4);
         abfragevarianteSachbearbeitungBedarfsmeldungToSave.setAnzahlGrundschulzuege(5);
-        abfragevarianteSachbearbeitungToSave.setBedarfsmeldungFachreferate(
+        abfragevarianteSachbearbeitungToSave.setBedarfsmeldungAbfrageersteller(
             List.of(abfragevarianteSachbearbeitungBedarfsmeldungToSave)
         );
 
@@ -2517,7 +2517,7 @@ class AbfrageServiceTest {
         abfragevarianteBedarfsmeldungSaved.setAnzahlKindergartengruppen(3);
         abfragevarianteBedarfsmeldungSaved.setAnzahlHortgruppen(2);
         abfragevarianteBedarfsmeldungSaved.setAnzahlGrundschulzuege(1);
-        abfragevarianteSaved.setBedarfsmeldungFachreferate(List.of(abfragevarianteBedarfsmeldungSaved));
+        abfragevarianteSaved.setBedarfsmeldungAbfrageersteller(List.of(abfragevarianteBedarfsmeldungSaved));
 
         final var abfragevarianteSachbearbeitungSaved = new AbfragevarianteWeiteresVerfahren();
         abfragevarianteSachbearbeitungSaved.setId(uuidAbfragevarianteSachbearbeitung);
@@ -2531,7 +2531,7 @@ class AbfrageServiceTest {
         abfragevarianteSachbearbeitungBedarfsmeldungSaved.setAnzahlKindergartengruppen(3);
         abfragevarianteSachbearbeitungBedarfsmeldungSaved.setAnzahlHortgruppen(4);
         abfragevarianteSachbearbeitungBedarfsmeldungSaved.setAnzahlGrundschulzuege(5);
-        abfragevarianteSachbearbeitungSaved.setBedarfsmeldungFachreferate(
+        abfragevarianteSachbearbeitungSaved.setBedarfsmeldungAbfrageersteller(
             List.of(abfragevarianteSachbearbeitungBedarfsmeldungSaved)
         );
 
@@ -2561,7 +2561,7 @@ class AbfrageServiceTest {
         abfragevarianteBedarfsmeldungExpected.setAnzahlKindergartengruppen(3);
         abfragevarianteBedarfsmeldungExpected.setAnzahlHortgruppen(2);
         abfragevarianteBedarfsmeldungExpected.setAnzahlGrundschulzuege(1);
-        abfragevarianteExpected.setBedarfsmeldungFachreferate(List.of(abfragevarianteBedarfsmeldungExpected));
+        abfragevarianteExpected.setBedarfsmeldungAbfrageersteller(List.of(abfragevarianteBedarfsmeldungExpected));
 
         final var abfragevarianteSachbearbeitungExpected = new AbfragevarianteWeiteresVerfahrenModel();
         abfragevarianteSachbearbeitungExpected.setArtAbfragevariante(ArtAbfrage.WEITERES_VERFAHREN);
@@ -2576,7 +2576,7 @@ class AbfrageServiceTest {
         abfragevarianteSachbearbeitungBedarfsmeldungExpected.setAnzahlKindergartengruppen(3);
         abfragevarianteSachbearbeitungBedarfsmeldungExpected.setAnzahlHortgruppen(4);
         abfragevarianteSachbearbeitungBedarfsmeldungExpected.setAnzahlGrundschulzuege(5);
-        abfragevarianteSachbearbeitungExpected.setBedarfsmeldungFachreferate(
+        abfragevarianteSachbearbeitungExpected.setBedarfsmeldungAbfrageersteller(
             List.of(abfragevarianteSachbearbeitungBedarfsmeldungExpected)
         );
 
@@ -2667,7 +2667,7 @@ class AbfrageServiceTest {
         abfragevarianteBedarfsmeldungToSave.setAnzahlKindergartengruppen(3);
         abfragevarianteBedarfsmeldungToSave.setAnzahlHortgruppen(2);
         abfragevarianteBedarfsmeldungToSave.setAnzahlGrundschulzuege(1);
-        abfragevarianteToSaveSave.setBedarfsmeldungFachreferate((List.of(abfragevarianteBedarfsmeldungToSave)));
+        abfragevarianteToSaveSave.setBedarfsmeldungAbfrageersteller(List.of(abfragevarianteBedarfsmeldungToSave));
 
         final var abfragevarianteSachbearbeitungToSave = new AbfragevarianteBauleitplanverfahren();
         abfragevarianteSachbearbeitungToSave.setId(uuidAbfragevarianteSachbearbeitung);
@@ -2681,7 +2681,7 @@ class AbfrageServiceTest {
         abfragevarianteSachbearbeitungBedarfsmeldungToSave.setAnzahlKindergartengruppen(3);
         abfragevarianteSachbearbeitungBedarfsmeldungToSave.setAnzahlHortgruppen(4);
         abfragevarianteSachbearbeitungBedarfsmeldungToSave.setAnzahlGrundschulzuege(5);
-        abfragevarianteSachbearbeitungToSave.setBedarfsmeldungFachreferate(
+        abfragevarianteSachbearbeitungToSave.setBedarfsmeldungAbfrageersteller(
             List.of(abfragevarianteSachbearbeitungBedarfsmeldungToSave)
         );
 
@@ -2707,7 +2707,7 @@ class AbfrageServiceTest {
         abfragevarianteBedarfsmeldungSaved.setAnzahlKindergartengruppen(3);
         abfragevarianteBedarfsmeldungSaved.setAnzahlHortgruppen(2);
         abfragevarianteBedarfsmeldungSaved.setAnzahlGrundschulzuege(1);
-        abfragevarianteSaved.setBedarfsmeldungFachreferate(List.of(abfragevarianteBedarfsmeldungSaved));
+        abfragevarianteSaved.setBedarfsmeldungAbfrageersteller(List.of(abfragevarianteBedarfsmeldungSaved));
 
         final var abfragevarianteSachbearbeitungSaved = new AbfragevarianteBauleitplanverfahren();
         abfragevarianteSachbearbeitungSaved.setId(uuidAbfragevarianteSachbearbeitung);
@@ -2721,7 +2721,7 @@ class AbfrageServiceTest {
         abfragevarianteSachbearbeitungBedarfsmeldungSaved.setAnzahlKindergartengruppen(3);
         abfragevarianteSachbearbeitungBedarfsmeldungSaved.setAnzahlHortgruppen(4);
         abfragevarianteSachbearbeitungBedarfsmeldungSaved.setAnzahlGrundschulzuege(5);
-        abfragevarianteSachbearbeitungSaved.setBedarfsmeldungFachreferate(
+        abfragevarianteSachbearbeitungSaved.setBedarfsmeldungAbfrageersteller(
             List.of(abfragevarianteSachbearbeitungBedarfsmeldungSaved)
         );
 
@@ -2821,7 +2821,7 @@ class AbfrageServiceTest {
         abfragevarianteBedarfsmeldungToSave.setAnzahlKindergartengruppen(3);
         abfragevarianteBedarfsmeldungToSave.setAnzahlHortgruppen(2);
         abfragevarianteBedarfsmeldungToSave.setAnzahlGrundschulzuege(1);
-        abfragevarianteToSaveSave.setBedarfsmeldungFachreferate((List.of(abfragevarianteBedarfsmeldungToSave)));
+        abfragevarianteToSaveSave.setBedarfsmeldungAbfrageersteller(List.of(abfragevarianteBedarfsmeldungToSave));
 
         final var abfragevarianteSachbearbeitungToSave = new AbfragevarianteBaugenehmigungsverfahren();
         abfragevarianteSachbearbeitungToSave.setId(uuidAbfragevarianteSachbearbeitung);
@@ -2835,7 +2835,7 @@ class AbfrageServiceTest {
         abfragevarianteSachbearbeitungBedarfsmeldungToSave.setAnzahlKindergartengruppen(3);
         abfragevarianteSachbearbeitungBedarfsmeldungToSave.setAnzahlHortgruppen(4);
         abfragevarianteSachbearbeitungBedarfsmeldungToSave.setAnzahlGrundschulzuege(5);
-        abfragevarianteSachbearbeitungToSave.setBedarfsmeldungFachreferate(
+        abfragevarianteSachbearbeitungToSave.setBedarfsmeldungAbfrageersteller(
             List.of(abfragevarianteSachbearbeitungBedarfsmeldungToSave)
         );
 
@@ -2861,7 +2861,7 @@ class AbfrageServiceTest {
         abfragevarianteBedarfsmeldungSaved.setAnzahlKindergartengruppen(3);
         abfragevarianteBedarfsmeldungSaved.setAnzahlHortgruppen(2);
         abfragevarianteBedarfsmeldungSaved.setAnzahlGrundschulzuege(1);
-        abfragevarianteSaved.setBedarfsmeldungFachreferate(List.of(abfragevarianteBedarfsmeldungSaved));
+        abfragevarianteSaved.setBedarfsmeldungAbfrageersteller(List.of(abfragevarianteBedarfsmeldungSaved));
 
         final var abfragevarianteSachbearbeitungSaved = new AbfragevarianteBaugenehmigungsverfahren();
         abfragevarianteSachbearbeitungSaved.setId(uuidAbfragevarianteSachbearbeitung);
@@ -2875,7 +2875,7 @@ class AbfrageServiceTest {
         abfragevarianteSachbearbeitungBedarfsmeldungSaved.setAnzahlKindergartengruppen(3);
         abfragevarianteSachbearbeitungBedarfsmeldungSaved.setAnzahlHortgruppen(4);
         abfragevarianteSachbearbeitungBedarfsmeldungSaved.setAnzahlGrundschulzuege(5);
-        abfragevarianteSachbearbeitungSaved.setBedarfsmeldungFachreferate(
+        abfragevarianteSachbearbeitungSaved.setBedarfsmeldungAbfrageersteller(
             List.of(abfragevarianteSachbearbeitungBedarfsmeldungSaved)
         );
 
@@ -2975,7 +2975,7 @@ class AbfrageServiceTest {
         abfragevarianteBedarfsmeldungToSave.setAnzahlKindergartengruppen(3);
         abfragevarianteBedarfsmeldungToSave.setAnzahlHortgruppen(2);
         abfragevarianteBedarfsmeldungToSave.setAnzahlGrundschulzuege(1);
-        abfragevarianteToSaveSave.setBedarfsmeldungFachreferate((List.of(abfragevarianteBedarfsmeldungToSave)));
+        abfragevarianteToSaveSave.setBedarfsmeldungAbfrageersteller(List.of(abfragevarianteBedarfsmeldungToSave));
 
         final var abfragevarianteSachbearbeitungToSave = new AbfragevarianteWeiteresVerfahren();
         abfragevarianteSachbearbeitungToSave.setId(uuidAbfragevarianteSachbearbeitung);
@@ -2989,7 +2989,7 @@ class AbfrageServiceTest {
         abfragevarianteSachbearbeitungBedarfsmeldungToSave.setAnzahlKindergartengruppen(3);
         abfragevarianteSachbearbeitungBedarfsmeldungToSave.setAnzahlHortgruppen(4);
         abfragevarianteSachbearbeitungBedarfsmeldungToSave.setAnzahlGrundschulzuege(5);
-        abfragevarianteSachbearbeitungToSave.setBedarfsmeldungFachreferate(
+        abfragevarianteSachbearbeitungToSave.setBedarfsmeldungAbfrageersteller(
             List.of(abfragevarianteSachbearbeitungBedarfsmeldungToSave)
         );
 
@@ -3013,7 +3013,7 @@ class AbfrageServiceTest {
         abfragevarianteBedarfsmeldungSaved.setAnzahlKindergartengruppen(3);
         abfragevarianteBedarfsmeldungSaved.setAnzahlHortgruppen(2);
         abfragevarianteBedarfsmeldungSaved.setAnzahlGrundschulzuege(1);
-        abfragevarianteSaved.setBedarfsmeldungFachreferate(List.of(abfragevarianteBedarfsmeldungSaved));
+        abfragevarianteSaved.setBedarfsmeldungAbfrageersteller(List.of(abfragevarianteBedarfsmeldungSaved));
 
         final var abfragevarianteSachbearbeitungSaved = new AbfragevarianteWeiteresVerfahren();
         abfragevarianteSachbearbeitungSaved.setId(uuidAbfragevarianteSachbearbeitung);
@@ -3027,7 +3027,7 @@ class AbfrageServiceTest {
         abfragevarianteSachbearbeitungBedarfsmeldungSaved.setAnzahlKindergartengruppen(3);
         abfragevarianteSachbearbeitungBedarfsmeldungSaved.setAnzahlHortgruppen(4);
         abfragevarianteSachbearbeitungBedarfsmeldungSaved.setAnzahlGrundschulzuege(5);
-        abfragevarianteSachbearbeitungSaved.setBedarfsmeldungFachreferate(
+        abfragevarianteSachbearbeitungSaved.setBedarfsmeldungAbfrageersteller(
             List.of(abfragevarianteSachbearbeitungBedarfsmeldungSaved)
         );
 
