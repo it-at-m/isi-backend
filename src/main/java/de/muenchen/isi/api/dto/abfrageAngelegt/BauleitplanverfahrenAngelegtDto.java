@@ -1,7 +1,7 @@
 package de.muenchen.isi.api.dto.abfrageAngelegt;
 
 import de.muenchen.isi.api.dto.common.AdresseDto;
-import de.muenchen.isi.api.dto.common.VerortungDto;
+import de.muenchen.isi.api.dto.common.VerortungMultiPolygonDto;
 import de.muenchen.isi.api.dto.filehandling.DokumentDto;
 import de.muenchen.isi.api.validation.HasAllowedNumberOfDocuments;
 import de.muenchen.isi.api.validation.NotUnspecified;
@@ -45,7 +45,7 @@ public class BauleitplanverfahrenAngelegtDto extends AbfrageAngelegtDto {
     private AdresseDto adresse;
 
     @Valid
-    private VerortungDto verortung;
+    private VerortungMultiPolygonDto verortung;
 
     @HasAllowedNumberOfDocuments
     private List<@Valid DokumentDto> dokumente;

@@ -43,7 +43,7 @@ import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.Baugeneh
 import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.BauleitplanverfahrenInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.WeiteresVerfahrenInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.domain.model.common.StadtbezirkModel;
-import de.muenchen.isi.domain.model.common.VerortungModel;
+import de.muenchen.isi.domain.model.common.VerortungMultiPolygonModel;
 import de.muenchen.isi.domain.service.filehandling.DokumentService;
 import de.muenchen.isi.infrastructure.entity.Abfrage;
 import de.muenchen.isi.infrastructure.entity.AbfragevarianteBaugenehmigungsverfahren;
@@ -55,7 +55,7 @@ import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
 import de.muenchen.isi.infrastructure.entity.BedarfsmeldungFachreferate;
 import de.muenchen.isi.infrastructure.entity.WeiteresVerfahren;
 import de.muenchen.isi.infrastructure.entity.common.Stadtbezirk;
-import de.muenchen.isi.infrastructure.entity.common.Verortung;
+import de.muenchen.isi.infrastructure.entity.common.VerortungMultiPolygon;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
@@ -493,7 +493,7 @@ class AbfrageServiceTest {
         abfraqe_sb_20.setNummer("20");
         abfraqe_sb_20.setName("Stadtbezirk 20");
 
-        final VerortungModel abfrageVerortung = new VerortungModel();
+        final VerortungMultiPolygonModel abfrageVerortung = new VerortungMultiPolygonModel();
         abfrageVerortung.setStadtbezirke(Stream.of(abfraqe_sb_20, abfrage_sb_08).collect(Collectors.toSet()));
 
         final var requestModel = new BauleitplanverfahrenInBearbeitungSachbearbeitungModel();
@@ -526,7 +526,7 @@ class AbfrageServiceTest {
         abfraqgeEntity_sb_20.setNummer("20");
         abfraqgeEntity_sb_20.setName("Stadtbezirk 20");
 
-        final Verortung abfrageEntityVerortung = new Verortung();
+        final VerortungMultiPolygon abfrageEntityVerortung = new VerortungMultiPolygon();
         abfrageEntityVerortung.setStadtbezirke(
             Stream.of(abfraqgeEntity_sb_20, abfrageEntity_sb_08).collect(Collectors.toSet())
         );
@@ -599,7 +599,7 @@ class AbfrageServiceTest {
         abfraqe_sb_20.setNummer("20");
         abfraqe_sb_20.setName("Stadtbezirk 20");
 
-        final VerortungModel abfrageVerortung = new VerortungModel();
+        final VerortungMultiPolygonModel abfrageVerortung = new VerortungMultiPolygonModel();
         abfrageVerortung.setStadtbezirke(Stream.of(abfraqe_sb_20, abfrage_sb_08).collect(Collectors.toSet()));
 
         final var requestModel = new BaugenehmigungsverfahrenInBearbeitungSachbearbeitungModel();
@@ -633,7 +633,7 @@ class AbfrageServiceTest {
         abfraqgeEntity_sb_20.setNummer("20");
         abfraqgeEntity_sb_20.setName("Stadtbezirk 20");
 
-        final Verortung abfrageEntityVerortung = new Verortung();
+        final VerortungMultiPolygon abfrageEntityVerortung = new VerortungMultiPolygon();
         abfrageEntityVerortung.setStadtbezirke(
             Stream.of(abfraqgeEntity_sb_20, abfrageEntity_sb_08).collect(Collectors.toSet())
         );
@@ -703,7 +703,7 @@ class AbfrageServiceTest {
         abfraqe_sb_20.setNummer("20");
         abfraqe_sb_20.setName("Stadtbezirk 20");
 
-        final VerortungModel abfrageVerortung = new VerortungModel();
+        final VerortungMultiPolygonModel abfrageVerortung = new VerortungMultiPolygonModel();
         abfrageVerortung.setStadtbezirke(Stream.of(abfraqe_sb_20, abfrage_sb_08).collect(Collectors.toSet()));
 
         final var requestModel = new WeiteresVerfahrenInBearbeitungSachbearbeitungModel();
@@ -735,7 +735,7 @@ class AbfrageServiceTest {
         abfraqgeEntity_sb_20.setNummer("20");
         abfraqgeEntity_sb_20.setName("Stadtbezirk 20");
 
-        final Verortung abfrageEntityVerortung = new Verortung();
+        final VerortungMultiPolygon abfrageEntityVerortung = new VerortungMultiPolygon();
         abfrageEntityVerortung.setStadtbezirke(
             Stream.of(abfraqgeEntity_sb_20, abfrageEntity_sb_08).collect(Collectors.toSet())
         );

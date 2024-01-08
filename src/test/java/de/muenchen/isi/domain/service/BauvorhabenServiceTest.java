@@ -22,7 +22,7 @@ import de.muenchen.isi.domain.model.AbfrageModel;
 import de.muenchen.isi.domain.model.BauleitplanverfahrenModel;
 import de.muenchen.isi.domain.model.BauvorhabenModel;
 import de.muenchen.isi.domain.model.common.StadtbezirkModel;
-import de.muenchen.isi.domain.model.common.VerortungModel;
+import de.muenchen.isi.domain.model.common.VerortungMultiPolygonModel;
 import de.muenchen.isi.domain.model.enums.SearchResultType;
 import de.muenchen.isi.domain.model.search.response.AbfrageSearchResultModel;
 import de.muenchen.isi.domain.model.search.response.InfrastruktureinrichtungSearchResultModel;
@@ -34,7 +34,7 @@ import de.muenchen.isi.infrastructure.entity.Bauleitplanverfahren;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
 import de.muenchen.isi.infrastructure.entity.common.GlobalCounter;
 import de.muenchen.isi.infrastructure.entity.common.Stadtbezirk;
-import de.muenchen.isi.infrastructure.entity.common.Verortung;
+import de.muenchen.isi.infrastructure.entity.common.VerortungMultiPolygon;
 import de.muenchen.isi.infrastructure.entity.enums.CounterType;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVerfahren;
@@ -366,7 +366,7 @@ public class BauvorhabenServiceTest {
         sb_20.setNummer("20");
         sb_20.setName("Stadtbezirk 20");
 
-        final VerortungModel verortung = new VerortungModel();
+        final VerortungMultiPolygonModel verortung = new VerortungMultiPolygonModel();
         verortung.setStadtbezirke(Stream.of(sb_20, sb_08).collect(Collectors.toSet()));
 
         bauvorhaben.setVerortung(verortung);
@@ -383,7 +383,7 @@ public class BauvorhabenServiceTest {
         bauvorhabenEntity_sb_20.setNummer("20");
         bauvorhabenEntity_sb_20.setName("Stadtbezirk 20");
 
-        final Verortung bauvorhabenEntityVerortung = new Verortung();
+        final VerortungMultiPolygon bauvorhabenEntityVerortung = new VerortungMultiPolygon();
         bauvorhabenEntityVerortung.setStadtbezirke(
             Stream.of(bauvorhabenEntity_sb_20, bauvorhabenEntity_sb_08).collect(Collectors.toSet())
         );
@@ -402,7 +402,7 @@ public class BauvorhabenServiceTest {
         saveResult_sb_20.setNummer("20");
         saveResult_sb_20.setName("Stadtbezirk 20");
 
-        final Verortung saveResultVerortung = new Verortung();
+        final VerortungMultiPolygon saveResultVerortung = new VerortungMultiPolygon();
         saveResultVerortung.setStadtbezirke(Stream.of(saveResult_sb_20, saveResult_sb_08).collect(Collectors.toSet()));
         saveResult.setVerortung(saveResultVerortung);
         saveResult.setBauvorhabenNummer("08_0001");
@@ -439,7 +439,7 @@ public class BauvorhabenServiceTest {
         expected_sb_20.setNummer("20");
         expected_sb_20.setName("Stadtbezirk 20");
 
-        final VerortungModel expectedVerortung = new VerortungModel();
+        final VerortungMultiPolygonModel expectedVerortung = new VerortungMultiPolygonModel();
         expectedVerortung.setStadtbezirke(Stream.of(expected_sb_20, expected_sb_08).collect(Collectors.toSet()));
         expected.setVerortung(expectedVerortung);
         expected.setBauvorhabenNummer("08_0001");
