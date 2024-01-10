@@ -14,27 +14,27 @@ import lombok.ToString;
     indexes = {
         @Index(
             name = "bedarfsmeldung_fachreferate_abfragevariante_bauleitplanverfahren_id_index",
-            columnList = "abfragevariante_bauleitplanverfahren_id"
+            columnList = "abfragevariante_bauleitplanverfahren_fachreferate_id"
         ),
         @Index(
             name = "bedarfsmeldung_fachreferate_abfragevariante_baugenehmigungsverfahren_id_index",
-            columnList = "abfragevariante_baugenehmigungsverfahren_id"
+            columnList = "abfragevariante_baugenehmigungsverfahren_fachreferate_id"
         ),
         @Index(
             name = "bedarfsmeldung_fachreferate_abfragevariante_weiteres_verfahren_id_index",
-            columnList = "abfragevariante_weiteres_verfahren_id"
+            columnList = "abfragevariante_weiteres_verfahren_fachreferate_id"
         ),
         @Index(
             name = "bedarfsmeldung_abfrageersteller_abfragevariante_bauleitplanverfahren_id_index",
-            columnList = "abfragevariante_bauleitplanverfahren_id"
+            columnList = "abfragevariante_bauleitplanverfahren_abfrageersteller_id"
         ),
         @Index(
             name = "bedarfsmeldung_abfrageersteller_abfragevariante_baugenehmigungsverfahren_id_index",
-            columnList = "abfragevariante_baugenehmigungsverfahren_id"
+            columnList = "abfragevariante_baugenehmigungsverfahren_abfrageersteller_id"
         ),
         @Index(
             name = "bedarfsmeldung_abfrageersteller_abfragevariante_weiteres_verfahren_id_index",
-            columnList = "abfragevariante_weiteres_verfahren_id"
+            columnList = "abfragevariante_weiteres_verfahren_abfrageersteller_id"
         ),
     }
 )

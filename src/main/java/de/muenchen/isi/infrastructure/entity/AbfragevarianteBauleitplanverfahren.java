@@ -138,13 +138,13 @@ public class AbfragevarianteBauleitplanverfahren extends Abfragevariante {
     @Column
     private String anmerkung;
 
-    @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval = true)
-    @JoinColumn(name = "abfragevariante_bauleitplanverfahren_id", referencedColumnName = "id")
+    @OneToMany(cascade = { CascadeType.ALL }, orphanRemoval = true)
+    @JoinColumn(name = "abfragevariante_bauleitplanverfahren_fachreferate_id", referencedColumnName = "id")
     @OrderBy("createdDateTime asc")
     private List<BedarfsmeldungFachreferate> bedarfsmeldungFachreferate;
 
-    @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval = true)
-    @JoinColumn(name = "abfragevariante_bauleitplanverfahren_id", referencedColumnName = "id")
+    @OneToMany(cascade = { CascadeType.ALL }, orphanRemoval = true)
+    @JoinColumn(name = "abfragevariante_bauleitplanverfahren_abfrageersteller_id", referencedColumnName = "id")
     @OrderBy("createdDateTime asc")
     private List<BedarfsmeldungFachreferate> bedarfsmeldungAbfrageersteller;
 
