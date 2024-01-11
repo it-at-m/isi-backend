@@ -95,7 +95,7 @@ public class BauvorhabenService {
      * @throws OptimisticLockingException  falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
      * @throws EntityNotFoundException     falls bei der Datenübernahme die ausgewählte Abfrage nicht mehr vorhanden ist
      * @throws EntityIsReferencedException falls bei der Datenübernahme die ausgewählte Abfrage bereits ein Bauvorhaben referenziert
-     * @throws UserRoleNotAllowedException falls der User nicht die richtige Rolle hat um eine Abfrage zu öffnen.
+     * @throws UserRoleNotAllowedException falls der User keine Berechtigung für die Abfrage hat.
      */
     public BauvorhabenModel saveBauvorhaben(final BauvorhabenModel bauvorhaben, final UUID abfrageId)
         throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, EntityIsReferencedException, UserRoleNotAllowedException {
@@ -145,7 +145,7 @@ public class BauvorhabenService {
      * @throws FileHandlingFailedException       falls es beim Dateihandling zu einem Fehler gekommen ist.
      * @throws FileHandlingWithS3FailedException falls es beim Dateihandling im S3-Storage zu einem Fehler gekommen ist.
      * @throws EntityIsReferencedException       falls bei Neuanlage eines Bauvorhabens bei Datenübernahme einer Abfrage diese bereits ein Bauvorhaben referenziert
-     * @throws UserRoleNotAllowedException       falls der User nicht die richtige Rolle hat um eine Abfrage zu öffnen.
+     * @throws UserRoleNotAllowedException       falls der User keine Berechtigung für die Abfrage hat.
      */
     public BauvorhabenModel updateBauvorhaben(final BauvorhabenModel bauvorhaben)
         throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, FileHandlingFailedException, FileHandlingWithS3FailedException, EntityIsReferencedException, UserRoleNotAllowedException {
@@ -185,7 +185,7 @@ public class BauvorhabenService {
      * @throws OptimisticLockingException        falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
      * @throws AbfrageStatusNotAllowedException  falls die Abfrage den falschen Status hat
      * @throws BauvorhabenNotReferencedException falls die Abfrage zu keinem Bauvorhaben gehört
-     * @throws UserRoleNotAllowedException       falls der User nicht die richtige Rolle hat um eine Abfrage zu bearbeiten.
+     * @throws UserRoleNotAllowedException       falls der User keine Berechtigung für die Abfrage hat.
      */
     public BauvorhabenModel changeRelevanteAbfragevariante(final UUID abfragevarianteId)
         throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, BauvorhabenNotReferencedException, EntityIsReferencedException, UserRoleNotAllowedException {

@@ -63,7 +63,7 @@ public class AbfrageStatusService {
      * @throws EntityNotFoundException          falls die Abfrage nicht gefunden wird
      * @throws AbfrageStatusNotAllowedException wenn die Statusänderung nicht erlaubt ist
      * @throws StringLengthExceededException    wenn die Anmerkung zur Statusänderung die max. Länge überschreitet
-     * @throws UserRoleNotAllowedException      falls der User nicht die richtige Rolle hat um eine Abfrage zu öffnen.
+     * @throws UserRoleNotAllowedException      falls der User keine Berechtigung für die Abfrage hat.
      */
     public void freigabeAbfrage(final UUID id, String anmerkung)
         throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException, UserRoleNotAllowedException {
@@ -80,7 +80,7 @@ public class AbfrageStatusService {
      * @throws EntityNotFoundException          falls die Abfrage nicht gefunden wird
      * @throws AbfrageStatusNotAllowedException wenn die Statusänderung nicht erlaubt ist
      * @throws StringLengthExceededException    wenn die Anmerkung zur Statusänderung die max. Länge überschreitet
-     * @throws UserRoleNotAllowedException      falls der User nicht die richtige Rolle hat um eine Abfrage zu öffnen.
+     * @throws UserRoleNotAllowedException      falls der User keine Berechtigung für die Abfrage hat.
      */
     public void inBearbeitungSetzenAbfrage(final UUID id, String anmerkung)
         throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException, UserRoleNotAllowedException {
@@ -97,7 +97,7 @@ public class AbfrageStatusService {
      * @throws EntityNotFoundException          falls die Abfrage nicht gefunden wird
      * @throws AbfrageStatusNotAllowedException wenn die Statusänderung nicht erlaubt ist
      * @throws StringLengthExceededException    wenn die Anmerkung zur Statusänderung die max. Länge überschreitet
-     * @throws UserRoleNotAllowedException      falls der User nicht die richtige Rolle hat um eine Abfrage zu öffnen.
+     * @throws UserRoleNotAllowedException      falls der User keine Berechtigung für die Abfrage hat.
      */
     public void abbrechenAbfrage(final UUID id, String anmerkung)
         throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException, UserRoleNotAllowedException {
@@ -114,7 +114,7 @@ public class AbfrageStatusService {
      * @throws EntityNotFoundException          falls die Abfrage nicht gefunden wird
      * @throws AbfrageStatusNotAllowedException wenn die Statusänderung nicht erlaubt ist
      * @throws StringLengthExceededException    wenn die Anmerkung zur Statusänderung die max. Länge überschreitet
-     * @throws UserRoleNotAllowedException      falls der User nicht die richtige Rolle hat um eine Abfrage zu öffnen.
+     * @throws UserRoleNotAllowedException      falls der User keine Berechtigung für die Abfrage hat.
      */
     public void zurueckAnAbfrageerstellungAbfrage(final UUID id, String anmerkung)
         throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException, UserRoleNotAllowedException {
@@ -131,7 +131,7 @@ public class AbfrageStatusService {
      * @throws EntityNotFoundException          falls die Abfrage nicht gefunden wird
      * @throws AbfrageStatusNotAllowedException wenn die Statusänderung nicht erlaubt ist
      * @throws StringLengthExceededException    wenn die Anmerkung zur Statusänderung die max. Länge überschreitet
-     * @throws UserRoleNotAllowedException      falls der User nicht die richtige Rolle hat um eine Abfrage zu öffnen.
+     * @throws UserRoleNotAllowedException      falls der User keine Berechtigung für die Abfrage hat.
      */
     public void zurueckAnSachbearbeitungAbfrage(final UUID id, String anmerkung)
         throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException, UserRoleNotAllowedException {
@@ -148,7 +148,7 @@ public class AbfrageStatusService {
      * @throws EntityNotFoundException          falls die Abfrage nicht gefunden wird
      * @throws AbfrageStatusNotAllowedException wenn die Statusänderung nicht erlaubt ist
      * @throws StringLengthExceededException    wenn die Anmerkung zur Statusänderung die max. Länge überschreitet
-     * @throws UserRoleNotAllowedException      falls der User nicht die richtige Rolle hat um eine Abfrage zu öffnen.
+     * @throws UserRoleNotAllowedException      falls der User keine Berechtigung für die Abfrage hat.
      */
     public void erledigtOhneFachreferat(final UUID id, String anmerkung)
         throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException, UserRoleNotAllowedException {
@@ -165,7 +165,7 @@ public class AbfrageStatusService {
      * @throws EntityNotFoundException          falls die Abfrage nicht gefunden wird
      * @throws AbfrageStatusNotAllowedException wenn die Statusänderung nicht erlaubt ist
      * @throws StringLengthExceededException    wenn die Anmerkung zur Statusänderung die max. Länge überschreitet
-     * @throws UserRoleNotAllowedException      falls der User nicht die richtige Rolle hat um eine Abfrage zu öffnen.
+     * @throws UserRoleNotAllowedException      falls der User keine Berechtigung für die Abfrage hat.
      */
     public void verschickenDerStellungnahme(final UUID id, String anmerkung)
         throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException, UserRoleNotAllowedException {
@@ -182,7 +182,7 @@ public class AbfrageStatusService {
      * @throws EntityNotFoundException          falls die Abfrage nicht gefunden wird
      * @throws AbfrageStatusNotAllowedException wenn die Statusänderung nicht erlaubt ist
      * @throws StringLengthExceededException    wenn die Anmerkung zur Statusänderung die max. Länge überschreitet
-     * @throws UserRoleNotAllowedException      falls der User nicht die richtige Rolle hat um eine Abfrage zu öffnen.
+     * @throws UserRoleNotAllowedException      falls der User keine Berechtigung für die Abfrage hat.
      */
     public void bedarfsmeldungErfolgt(final UUID id, String anmerkung)
         throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException, UserRoleNotAllowedException {
@@ -199,7 +199,7 @@ public class AbfrageStatusService {
      * @throws EntityNotFoundException          falls die Abfrage nicht gefunden wird
      * @throws AbfrageStatusNotAllowedException wenn die Statusänderung nicht erlaubt ist
      * @throws StringLengthExceededException    wenn die Anmerkung zur Statusänderung die max. Länge überschreitet
-     * @throws UserRoleNotAllowedException      falls der User nicht die richtige Rolle hat um eine Abfrage zu öffnen.
+     * @throws UserRoleNotAllowedException      falls der User keine Berechtigung für die Abfrage hat.
      */
     public void erledigtMitFachreferat(final UUID id, String anmerkung)
         throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException, UserRoleNotAllowedException {
@@ -216,7 +216,7 @@ public class AbfrageStatusService {
      * @throws EntityNotFoundException          falls die Abfrage nicht gefunden wird
      * @throws AbfrageStatusNotAllowedException wenn die Statusänderung nicht erlaubt ist
      * @throws StringLengthExceededException    wenn die Anmerkung zur Statusänderung die max. Länge überschreitet
-     * @throws UserRoleNotAllowedException      falls der User nicht die richtige Rolle hat um eine Abfrage zu öffnen.
+     * @throws UserRoleNotAllowedException      falls der User keine Berechtigung für die Abfrage hat.
      */
     public void erneuteBearbeitungSachbearbeitung(final UUID id, String anmerkung)
         throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException, UserRoleNotAllowedException {
@@ -232,7 +232,7 @@ public class AbfrageStatusService {
      *
      * @param id vom Typ {@link UUID}  um die Abfrage aus der DB zu holen
      * @throws EntityNotFoundException     falls die Abfrage nicht gefunden wird
-     * @throws UserRoleNotAllowedException falls der User nicht die richtige Rolle hat um eine Abfrage zu öffnen.
+     * @throws UserRoleNotAllowedException falls der User keine Berechtigung für die Abfrage hat.
      */
     private StateMachine<StatusAbfrage, StatusAbfrageEvents> build(final UUID id, final String anmerkung)
         throws EntityNotFoundException, UserRoleNotAllowedException {
@@ -367,7 +367,7 @@ public class AbfrageStatusService {
      * @param id vom Typ {@link UUID} um die Abfrage zu finden
      * @return Liste von {@link TransitionModel} welche möglich sind
      * @throws EntityNotFoundException     falls die Abfrage nicht gefunden wird
-     * @throws UserRoleNotAllowedException falls der User nicht die richtige Rolle hat um eine Abfrage zu öffnen.
+     * @throws UserRoleNotAllowedException falls der User keine Berechtigung für die Abfrage hat.
      */
     public List<TransitionModel> getStatusAbfrageEventsBasedOnStateAndAuthorities(final UUID id)
         throws EntityNotFoundException, UserRoleNotAllowedException {
@@ -416,7 +416,7 @@ public class AbfrageStatusService {
      * @param id vom Typ {@link UUID} um die Abfrage zu finden
      * @return Liste von {@link StatusAbfrageEvents} welche möglich sind
      * @throws EntityNotFoundException     falls die Abfrage nicht gefunden wird
-     * @throws UserRoleNotAllowedException falls der User nicht die richtige Rolle hat um eine Abfrage zu öffnen.
+     * @throws UserRoleNotAllowedException falls der User keine Berechtigung für die Abfrage hat.
      */
     private List<StatusAbfrageEvents> getStatusAbfrageEventsBasedOnState(final UUID id)
         throws EntityNotFoundException, UserRoleNotAllowedException {

@@ -52,7 +52,7 @@ public class AbfrageStatusController {
             @ApiResponse(responseCode = "200", description = "OK -> Alle mögliche Transistions gefunden"),
             @ApiResponse(
                 responseCode = "403",
-                description = "FORBIDDEN -> Keine Berechtigung um die Abfrage zu bearbeiten.",
+                description = "FORBIDDEN -> Sie haben keine Berechtigung, den Statuswechsel durchzuführen.",
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
             ),
             @ApiResponse(
@@ -81,7 +81,7 @@ public class AbfrageStatusController {
             @ApiResponse(responseCode = "200", description = "OK -> Abfrage wurde erfolgreich freigegeben."),
             @ApiResponse(
                 responseCode = "403",
-                description = "FORBIDDEN -> Keine Berechtigung um die Abfrage zu bearbeiten.",
+                description = "FORBIDDEN -> Sie haben keine Berechtigung, den Statuswechsel durchzuführen.",
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
             ),
             @ApiResponse(
@@ -114,7 +114,7 @@ public class AbfrageStatusController {
             @ApiResponse(responseCode = "200", description = "OK -> Abfrage wurde erfolgreich abbgebrochen."),
             @ApiResponse(
                 responseCode = "403",
-                description = "FORBIDDEN -> Keine Berechtigung um die Abfrage zu bearbeiten.",
+                description = "FORBIDDEN -> Sie haben keine Berechtigung, den Statuswechsel durchzuführen.",
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
             ),
             @ApiResponse(
@@ -150,7 +150,7 @@ public class AbfrageStatusController {
             ),
             @ApiResponse(
                 responseCode = "403",
-                description = "FORBIDDEN -> Keine Berechtigung um die Abfrage zu bearbeiten.",
+                description = "FORBIDDEN -> Sie haben keine Berechtigung, den Statuswechsel durchzuführen.",
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
             ),
             @ApiResponse(
@@ -188,7 +188,7 @@ public class AbfrageStatusController {
             ),
             @ApiResponse(
                 responseCode = "403",
-                description = "FORBIDDEN -> Keine Berechtigung um die Abfrage zu bearbeiten.",
+                description = "FORBIDDEN -> Sie haben keine Berechtigung, den Statuswechsel durchzuführen.",
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
             ),
             @ApiResponse(
@@ -226,7 +226,7 @@ public class AbfrageStatusController {
             ),
             @ApiResponse(
                 responseCode = "403",
-                description = "FORBIDDEN -> Keine Berechtigung um die Abfrage zu bearbeiten.",
+                description = "FORBIDDEN -> Sie haben keine Berechtigung, den Statuswechsel durchzuführen.",
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
             ),
             @ApiResponse(
@@ -261,7 +261,7 @@ public class AbfrageStatusController {
             @ApiResponse(responseCode = "200", description = "OK -> Abfrage wurde erfolgreich erledigt."),
             @ApiResponse(
                 responseCode = "403",
-                description = "FORBIDDEN -> Keine Berechtigung um die Abfrage zu bearbeiten.",
+                description = "FORBIDDEN -> Sie haben keine Berechtigung, den Statuswechsel durchzuführen.",
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
             ),
             @ApiResponse(
@@ -299,7 +299,7 @@ public class AbfrageStatusController {
             ),
             @ApiResponse(
                 responseCode = "403",
-                description = "FORBIDDEN -> Keine Berechtigung um die Abfrage zu bearbeiten.",
+                description = "FORBIDDEN -> Sie haben keine Berechtigung, den Statuswechsel durchzuführen.",
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
             ),
             @ApiResponse(
@@ -334,7 +334,7 @@ public class AbfrageStatusController {
             @ApiResponse(responseCode = "200", description = "OK -> Die Bedarfsmeldung der Fachreferate ist erfolgt"),
             @ApiResponse(
                 responseCode = "403",
-                description = "FORBIDDEN -> Keine Berechtigung um die Abfrage zu bearbeiten.",
+                description = "FORBIDDEN -> Sie haben keine Berechtigung, den Statuswechsel durchzuführen.",
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
             ),
             @ApiResponse(
@@ -369,7 +369,7 @@ public class AbfrageStatusController {
             @ApiResponse(responseCode = "200", description = "OK -> Abfrage wurde erfolgreich erledigt."),
             @ApiResponse(
                 responseCode = "403",
-                description = "FORBIDDEN -> Keine Berechtigung um die Abfrage zu bearbeiten.",
+                description = "FORBIDDEN -> Sie haben keine Berechtigung, den Statuswechsel durchzuführen.",
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
             ),
             @ApiResponse(
@@ -407,7 +407,7 @@ public class AbfrageStatusController {
             ),
             @ApiResponse(
                 responseCode = "403",
-                description = "FORBIDDEN -> Keine Berechtigung um die Abfrage zu bearbeiten.",
+                description = "FORBIDDEN -> Sie haben keine Berechtigung, den Statuswechsel durchzuführen.",
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
             ),
             @ApiResponse(

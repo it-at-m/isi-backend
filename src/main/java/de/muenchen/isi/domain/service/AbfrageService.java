@@ -75,7 +75,7 @@ public class AbfrageService {
      * @param id zum Identifizieren des {@link AbfrageModel}.
      * @return {@link AbfrageModel}.
      * @throws EntityNotFoundException     falls die Abfrage identifiziert durch die {@link AbfrageModel#getId()} nicht gefunden wird.
-     * @throws UserRoleNotAllowedException falls der User nicht die richtige Rolle hat um eine Abfrage anzuschauen.
+     * @throws UserRoleNotAllowedException falls der User keine Berechtigung für die Abfrage hat.
      */
     public AbfrageModel getById(final UUID id) throws EntityNotFoundException, UserRoleNotAllowedException {
         final var optAbfrage = this.abfrageRepository.findById(id);
@@ -136,7 +136,7 @@ public class AbfrageService {
      * @throws AbfrageStatusNotAllowedException  falls die zu aktualisierende Abfrage sich nicht im Status {@link StatusAbfrage#ANGELEGT} befindet.
      * @throws FileHandlingFailedException       falls es beim Dateihandling zu einem Fehler gekommen ist.
      * @throws FileHandlingWithS3FailedException falls es beim Dateihandling im S3-Storage zu einem Fehler gekommen ist.
-     * @throws UserRoleNotAllowedException       falls der User nicht die richtige Rolle hat um eine Abfrage anzuschauen.
+     * @throws UserRoleNotAllowedException       falls der User keine Berechtigung für die Abfrage hat.
      */
     public AbfrageModel patchAngelegt(final AbfrageAngelegtModel abfrage, final UUID id)
         throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, FileHandlingFailedException, FileHandlingWithS3FailedException, UserRoleNotAllowedException {
@@ -240,7 +240,7 @@ public class AbfrageService {
      * @throws OptimisticLockingException       falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist.
      * @throws EntityNotFoundException          falls das referenzierte Bauvorhaben nicht existiert.
      * @throws AbfrageStatusNotAllowedException falls die zu aktualisierende Abfrage sich nicht im Status {@link StatusAbfrage#IN_BEARBEITUNG_SACHBEARBEITUNG} befindet.
-     * @throws UserRoleNotAllowedException      falls der User nicht die richtige Rolle hat um eine Abfrage anzuschauen.
+     * @throws UserRoleNotAllowedException      falls der User keine Berechtigung für die Abfrage hat.
      */
     public AbfrageModel patchInBearbeitungSachbearbeitung(
         final AbfrageInBearbeitungSachbearbeitungModel abfrage,
@@ -290,7 +290,7 @@ public class AbfrageService {
      * @throws OptimisticLockingException       falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist.
      * @throws EntityNotFoundException          falls das referenzierte Bauvorhaben nicht existiert.
      * @throws AbfrageStatusNotAllowedException falls die zu aktualisierende Abfrage sich nicht im Status {@link StatusAbfrage#IN_BEARBEITUNG_FACHREFERATE} befindet.
-     * @throws UserRoleNotAllowedException      falls der User nicht die richtige Rolle hat um eine Abfrage anzuschauen.
+     * @throws UserRoleNotAllowedException      falls der User keine Berechtigung für die Abfrage hat.
      */
     public AbfrageModel patchInBearbeitungFachreferat(
         final AbfrageInBearbeitungFachreferatModel abfrage,
@@ -336,8 +336,8 @@ public class AbfrageService {
      * @param id zum Identifizieren des {@link AbfrageModel}.
      * @throws EntityNotFoundException          falls die Abfrage identifiziert durch die {@link AbfrageModel#getId()} nicht gefunden wird.
      * @throws EntityIsReferencedException      falls ein {@link BauvorhabenModel} in der Abfrage referenziert wird.
-     * @throws UserRoleNotAllowedException      falls der Nutzer nicht die richtige Rolle hat.
-     * @throws AbfrageStatusNotAllowedException falls die Abfrage den falschen Status hat..
+     * @throws UserRoleNotAllowedException      falls der User keine Berechtigung für die Abfrage hat.
+     * @throws AbfrageStatusNotAllowedException falls die Abfrage den falschen Status hat.
      */
     public void deleteById(final UUID id)
         throws EntityNotFoundException, EntityIsReferencedException, UserRoleNotAllowedException, AbfrageStatusNotAllowedException {
@@ -352,7 +352,7 @@ public class AbfrageService {
      * Dabei wird auch geprüft, ob der die zur Abfrage zugeordneten sub-ID (Subject-ID der Security-Session) mit der sub-ID des Nutzers übereinstimmt.
      *
      * @param abfrage zum Identifizieren des Status.
-     * @throws UserRoleNotAllowedException      falls der Nutzer nicht die richtige Rolle hat.
+     * @throws UserRoleNotAllowedException      falls der User keine Berechtigung für die Abfrage hat.
      * @throws AbfrageStatusNotAllowedException falls die Abfrage den falschen Status hat oder der Sub des Nutzers nicht mit dem Sub der Abfrage übereinstimmt.
      */
     protected void throwUserRoleNotAllowedOrAbfrageStatusNotAllowedExceptionWhenNotTheCorrectUserWithTheCorrectRole(
@@ -437,7 +437,7 @@ public class AbfrageService {
      * @param abfragevarianteId zum ermitteln der Abfrage.
      * @return die gefundene Abfrage.
      * @throws EntityNotFoundException     falls keine Abfrage auf Basis der Abfragevariante ID eindeutig ermittelt werden konnte.
-     * @throws UserRoleNotAllowedException falls der User nicht die richtige Rolle hat um eine Abfrage anzuschauen.
+     * @throws UserRoleNotAllowedException falls der User keine Berechtigung für die Abfrage hat.
      */
     public AbfrageModel getByAbfragevarianteId(final UUID abfragevarianteId)
         throws EntityNotFoundException, UserRoleNotAllowedException {
@@ -469,9 +469,12 @@ public class AbfrageService {
     }
 
     /**
-     * Wirf eine {@link UserRoleNotAllowedException} wenn der User die Rolle Anwender hat
+     * Wirft eine {@link UserRoleNotAllowedException} wenn der User die Rolle Anwender hat
      * und der Status der Abfrage nicht {@link  StatusAbfrage#ERLEDIGT_OHNE_FACHREFERAT} oder
      * {@link StatusAbfrage#ERLEDIGT_MIT_FACHREFERAT} ist.
+     *
+     * @param abfrage die bearbeitet werden soll.
+     * @throws UserRoleNotAllowedException falls der User keine Berechtigung für die Abfrage hat.
      */
     public void throwUserRoleNotAllowedExceptionWhenRoleIsAnwenderAndAbfragestatusIsNotErledigt(Abfrage abfrage)
         throws UserRoleNotAllowedException {
@@ -480,7 +483,7 @@ public class AbfrageService {
                 abfrage.getStatusAbfrage() != StatusAbfrage.ERLEDIGT_OHNE_FACHREFERAT &&
                 abfrage.getStatusAbfrage() != StatusAbfrage.ERLEDIGT_MIT_FACHREFERAT
             ) {
-                throw new UserRoleNotAllowedException("Keine Berechtigung zum öffnen der Abfrage");
+                throw new UserRoleNotAllowedException("Fehlende Berechtigung für die Abfrage");
             }
         }
     }
