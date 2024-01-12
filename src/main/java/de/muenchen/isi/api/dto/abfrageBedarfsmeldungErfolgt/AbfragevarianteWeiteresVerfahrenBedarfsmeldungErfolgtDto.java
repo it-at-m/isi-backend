@@ -4,7 +4,7 @@
  */
 package de.muenchen.isi.api.dto.abfrageBedarfsmeldungErfolgt;
 
-import de.muenchen.isi.api.dto.BedarfsmeldungFachreferateDto;
+import de.muenchen.isi.api.dto.BedarfsmeldungDto;
 import de.muenchen.isi.api.validation.NotUnspecified;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import java.util.List;
@@ -22,5 +22,5 @@ public class AbfragevarianteWeiteresVerfahrenBedarfsmeldungErfolgtDto {
     @NotUnspecified
     private ArtAbfrage artAbfragevariante;
 
-    private List<@Valid BedarfsmeldungFachreferateDto> bedarfsmeldungAbfrageersteller;
+    private List<@Valid BedarfsmeldungDto> bedarfsmeldungAbfrageersteller;
 }

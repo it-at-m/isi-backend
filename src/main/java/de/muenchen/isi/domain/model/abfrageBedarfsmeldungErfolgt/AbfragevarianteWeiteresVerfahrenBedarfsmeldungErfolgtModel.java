@@ -4,7 +4,7 @@
  */
 package de.muenchen.isi.domain.model.abfrageBedarfsmeldungErfolgt;
 
-import de.muenchen.isi.domain.model.BedarfsmeldungFachreferateModel;
+import de.muenchen.isi.domain.model.BedarfsmeldungModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import java.util.List;
 import java.util.UUID;
@@ -19,5 +19,5 @@ public class AbfragevarianteWeiteresVerfahrenBedarfsmeldungErfolgtModel {
 
     private ArtAbfrage artAbfragevariante;
 
-    private List<BedarfsmeldungFachreferateModel> bedarfsmeldungAbfrageersteller;
+    private List<BedarfsmeldungModel> bedarfsmeldungAbfrageersteller;
 }

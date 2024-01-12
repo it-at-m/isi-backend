@@ -22,7 +22,7 @@ import de.muenchen.isi.domain.model.AbfragevarianteBauleitplanverfahrenModel;
 import de.muenchen.isi.domain.model.AbfragevarianteWeiteresVerfahrenModel;
 import de.muenchen.isi.domain.model.BaugenehmigungsverfahrenModel;
 import de.muenchen.isi.domain.model.BauleitplanverfahrenModel;
-import de.muenchen.isi.domain.model.BedarfsmeldungFachreferateModel;
+import de.muenchen.isi.domain.model.BedarfsmeldungModel;
 import de.muenchen.isi.domain.model.WeiteresVerfahrenModel;
 import de.muenchen.isi.domain.model.abfrageAngelegt.AbfragevarianteBaugenehmigungsverfahrenAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageAngelegt.AbfragevarianteBauleitplanverfahrenAngelegtModel;
@@ -58,7 +58,7 @@ import de.muenchen.isi.infrastructure.entity.AbfragevarianteWeiteresVerfahren;
 import de.muenchen.isi.infrastructure.entity.Baugenehmigungsverfahren;
 import de.muenchen.isi.infrastructure.entity.Bauleitplanverfahren;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
-import de.muenchen.isi.infrastructure.entity.BedarfsmeldungFachreferate;
+import de.muenchen.isi.infrastructure.entity.Bedarfsmeldung;
 import de.muenchen.isi.infrastructure.entity.WeiteresVerfahren;
 import de.muenchen.isi.infrastructure.entity.common.Stadtbezirk;
 import de.muenchen.isi.infrastructure.entity.common.VerortungMultiPolygon;
@@ -977,7 +977,7 @@ class AbfrageServiceTest {
         abfragevarianteRequestModel.setArtAbfragevariante(ArtAbfrage.BAULEITPLANVERFAHREN);
         abfragevarianteRequestModel.setId(uuidAbfragevariante);
         abfragevarianteRequestModel.setVersion(0L);
-        final var abfragevarianteBedarfsmeldung = new BedarfsmeldungFachreferateModel();
+        final var abfragevarianteBedarfsmeldung = new BedarfsmeldungModel();
         abfragevarianteBedarfsmeldung.setAnzahlEinrichtungen(5);
         abfragevarianteBedarfsmeldung.setInfrastruktureinrichtungTyp(InfrastruktureinrichtungTyp.KINDERKRIPPE);
         abfragevarianteBedarfsmeldung.setAnzahlKinderkrippengruppen(4);
@@ -991,7 +991,7 @@ class AbfrageServiceTest {
         abfragevarianteSachbearbeitungRequestModel.setArtAbfragevariante(ArtAbfrage.BAULEITPLANVERFAHREN);
         abfragevarianteSachbearbeitungRequestModel.setId(uuidAbfragevarianteSachbearbeitung);
         abfragevarianteSachbearbeitungRequestModel.setVersion(0L);
-        final var abfragevarianteSachbearbeitungBedarfsmeldung = new BedarfsmeldungFachreferateModel();
+        final var abfragevarianteSachbearbeitungBedarfsmeldung = new BedarfsmeldungModel();
         abfragevarianteSachbearbeitungBedarfsmeldung.setAnzahlEinrichtungen(1);
         abfragevarianteSachbearbeitungBedarfsmeldung.setInfrastruktureinrichtungTyp(
             InfrastruktureinrichtungTyp.GRUNDSCHULE
@@ -1038,7 +1038,7 @@ class AbfrageServiceTest {
         final var abfragevarianteToSaveSave = new AbfragevarianteBauleitplanverfahren();
         abfragevarianteToSaveSave.setId(uuidAbfragevariante);
         abfragevarianteToSaveSave.setVersion(0L);
-        final var abfragevarianteBedarfsmeldungToSave = new BedarfsmeldungFachreferate();
+        final var abfragevarianteBedarfsmeldungToSave = new Bedarfsmeldung();
         abfragevarianteBedarfsmeldungToSave.setAnzahlEinrichtungen(5);
         abfragevarianteBedarfsmeldungToSave.setInfrastruktureinrichtungTyp(InfrastruktureinrichtungTyp.KINDERKRIPPE);
         abfragevarianteBedarfsmeldungToSave.setAnzahlKinderkrippengruppen(4);
@@ -1050,7 +1050,7 @@ class AbfrageServiceTest {
         final var abfragevarianteSachbearbeitungToSave = new AbfragevarianteBauleitplanverfahren();
         abfragevarianteSachbearbeitungToSave.setId(uuidAbfragevarianteSachbearbeitung);
         abfragevarianteSachbearbeitungToSave.setVersion(0L);
-        final var abfragevarianteSachbearbeitungBedarfsmeldungToSave = new BedarfsmeldungFachreferate();
+        final var abfragevarianteSachbearbeitungBedarfsmeldungToSave = new Bedarfsmeldung();
         abfragevarianteSachbearbeitungBedarfsmeldungToSave.setAnzahlEinrichtungen(1);
         abfragevarianteSachbearbeitungBedarfsmeldungToSave.setInfrastruktureinrichtungTyp(
             InfrastruktureinrichtungTyp.GRUNDSCHULE
@@ -1078,7 +1078,7 @@ class AbfrageServiceTest {
         final var abfragevarianteSaved = new AbfragevarianteBauleitplanverfahren();
         abfragevarianteSaved.setId(uuidAbfragevariante);
         abfragevarianteSaved.setVersion(1L);
-        final var abfragevarianteBedarfsmeldungSaved = new BedarfsmeldungFachreferate();
+        final var abfragevarianteBedarfsmeldungSaved = new Bedarfsmeldung();
         abfragevarianteBedarfsmeldungSaved.setAnzahlEinrichtungen(5);
         abfragevarianteBedarfsmeldungSaved.setInfrastruktureinrichtungTyp(InfrastruktureinrichtungTyp.KINDERKRIPPE);
         abfragevarianteBedarfsmeldungSaved.setAnzahlKinderkrippengruppen(4);
@@ -1090,7 +1090,7 @@ class AbfrageServiceTest {
         final var abfragevarianteSachbearbeitungSaved = new AbfragevarianteBauleitplanverfahren();
         abfragevarianteSachbearbeitungSaved.setId(uuidAbfragevarianteSachbearbeitung);
         abfragevarianteSachbearbeitungSaved.setVersion(1L);
-        final var abfragevarianteSachbearbeitungBedarfsmeldungSaved = new BedarfsmeldungFachreferate();
+        final var abfragevarianteSachbearbeitungBedarfsmeldungSaved = new Bedarfsmeldung();
         abfragevarianteSachbearbeitungBedarfsmeldungSaved.setAnzahlEinrichtungen(1);
         abfragevarianteSachbearbeitungBedarfsmeldungSaved.setInfrastruktureinrichtungTyp(
             InfrastruktureinrichtungTyp.GRUNDSCHULE
@@ -1124,7 +1124,7 @@ class AbfrageServiceTest {
         abfragevarianteExpected.setArtAbfragevariante(ArtAbfrage.BAULEITPLANVERFAHREN);
         abfragevarianteExpected.setId(abfragevarianteSaved.getId());
         abfragevarianteExpected.setVersion(1L);
-        final var abfragevarianteBedarfsmeldungExpected = new BedarfsmeldungFachreferateModel();
+        final var abfragevarianteBedarfsmeldungExpected = new BedarfsmeldungModel();
         abfragevarianteBedarfsmeldungExpected.setAnzahlEinrichtungen(5);
         abfragevarianteBedarfsmeldungExpected.setInfrastruktureinrichtungTyp(InfrastruktureinrichtungTyp.KINDERKRIPPE);
         abfragevarianteBedarfsmeldungExpected.setAnzahlKinderkrippengruppen(4);
@@ -1137,7 +1137,7 @@ class AbfrageServiceTest {
         abfragevarianteSachbearbeitungExpected.setArtAbfragevariante(ArtAbfrage.BAULEITPLANVERFAHREN);
         abfragevarianteSachbearbeitungExpected.setId(abfragevarianteSachbearbeitungSaved.getId());
         abfragevarianteSachbearbeitungExpected.setVersion(1L);
-        final var abfragevarianteSachbearbeitungBedarfsmeldungExpected = new BedarfsmeldungFachreferateModel();
+        final var abfragevarianteSachbearbeitungBedarfsmeldungExpected = new BedarfsmeldungModel();
         abfragevarianteSachbearbeitungBedarfsmeldungExpected.setAnzahlEinrichtungen(1);
         abfragevarianteSachbearbeitungBedarfsmeldungExpected.setInfrastruktureinrichtungTyp(
             InfrastruktureinrichtungTyp.GRUNDSCHULE
@@ -1174,7 +1174,7 @@ class AbfrageServiceTest {
         abfragevarianteRequestModel.setArtAbfragevariante(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN);
         abfragevarianteRequestModel.setId(uuidAbfragevariante);
         abfragevarianteRequestModel.setVersion(0L);
-        final var abfragevarianteBedarfsmeldung = new BedarfsmeldungFachreferateModel();
+        final var abfragevarianteBedarfsmeldung = new BedarfsmeldungModel();
         abfragevarianteBedarfsmeldung.setAnzahlEinrichtungen(5);
         abfragevarianteBedarfsmeldung.setInfrastruktureinrichtungTyp(InfrastruktureinrichtungTyp.KINDERKRIPPE);
         abfragevarianteBedarfsmeldung.setAnzahlKinderkrippengruppen(4);
@@ -1188,7 +1188,7 @@ class AbfrageServiceTest {
         abfragevarianteSachbearbeitungRequestModel.setArtAbfragevariante(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN);
         abfragevarianteSachbearbeitungRequestModel.setId(uuidAbfragevarianteSachbearbeitung);
         abfragevarianteSachbearbeitungRequestModel.setVersion(0L);
-        final var abfragevarianteSachbearbeitungBedarfsmeldung = new BedarfsmeldungFachreferateModel();
+        final var abfragevarianteSachbearbeitungBedarfsmeldung = new BedarfsmeldungModel();
         abfragevarianteSachbearbeitungBedarfsmeldung.setAnzahlEinrichtungen(1);
         abfragevarianteSachbearbeitungBedarfsmeldung.setInfrastruktureinrichtungTyp(
             InfrastruktureinrichtungTyp.GRUNDSCHULE
@@ -1235,7 +1235,7 @@ class AbfrageServiceTest {
         final var abfragevarianteToSaveSave = new AbfragevarianteBaugenehmigungsverfahren();
         abfragevarianteToSaveSave.setId(uuidAbfragevariante);
         abfragevarianteToSaveSave.setVersion(0L);
-        final var abfragevarianteBedarfsmeldungToSave = new BedarfsmeldungFachreferate();
+        final var abfragevarianteBedarfsmeldungToSave = new Bedarfsmeldung();
         abfragevarianteBedarfsmeldungToSave.setAnzahlEinrichtungen(5);
         abfragevarianteBedarfsmeldungToSave.setInfrastruktureinrichtungTyp(InfrastruktureinrichtungTyp.KINDERKRIPPE);
         abfragevarianteBedarfsmeldungToSave.setAnzahlKinderkrippengruppen(4);
@@ -1247,7 +1247,7 @@ class AbfrageServiceTest {
         final var abfragevarianteSachbearbeitungToSave = new AbfragevarianteBaugenehmigungsverfahren();
         abfragevarianteSachbearbeitungToSave.setId(uuidAbfragevarianteSachbearbeitung);
         abfragevarianteSachbearbeitungToSave.setVersion(0L);
-        final var abfragevarianteSachbearbeitungBedarfsmeldungToSave = new BedarfsmeldungFachreferate();
+        final var abfragevarianteSachbearbeitungBedarfsmeldungToSave = new Bedarfsmeldung();
         abfragevarianteSachbearbeitungBedarfsmeldungToSave.setAnzahlEinrichtungen(1);
         abfragevarianteSachbearbeitungBedarfsmeldungToSave.setInfrastruktureinrichtungTyp(
             InfrastruktureinrichtungTyp.GRUNDSCHULE
@@ -1275,7 +1275,7 @@ class AbfrageServiceTest {
         final var abfragevarianteSaved = new AbfragevarianteBaugenehmigungsverfahren();
         abfragevarianteSaved.setId(uuidAbfragevariante);
         abfragevarianteSaved.setVersion(1L);
-        final var abfragevarianteBedarfsmeldungSaved = new BedarfsmeldungFachreferate();
+        final var abfragevarianteBedarfsmeldungSaved = new Bedarfsmeldung();
         abfragevarianteBedarfsmeldungSaved.setAnzahlEinrichtungen(5);
         abfragevarianteBedarfsmeldungSaved.setInfrastruktureinrichtungTyp(InfrastruktureinrichtungTyp.KINDERKRIPPE);
         abfragevarianteBedarfsmeldungSaved.setAnzahlKinderkrippengruppen(4);
@@ -1287,7 +1287,7 @@ class AbfrageServiceTest {
         final var abfragevarianteSachbearbeitungSaved = new AbfragevarianteBaugenehmigungsverfahren();
         abfragevarianteSachbearbeitungSaved.setId(uuidAbfragevarianteSachbearbeitung);
         abfragevarianteSachbearbeitungSaved.setVersion(1L);
-        final var abfragevarianteSachbearbeitungBedarfsmeldungSaved = new BedarfsmeldungFachreferate();
+        final var abfragevarianteSachbearbeitungBedarfsmeldungSaved = new Bedarfsmeldung();
         abfragevarianteSachbearbeitungBedarfsmeldungSaved.setAnzahlEinrichtungen(1);
         abfragevarianteSachbearbeitungBedarfsmeldungSaved.setInfrastruktureinrichtungTyp(
             InfrastruktureinrichtungTyp.GRUNDSCHULE
@@ -1321,7 +1321,7 @@ class AbfrageServiceTest {
         abfragevarianteExpected.setArtAbfragevariante(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN);
         abfragevarianteExpected.setId(abfragevarianteSaved.getId());
         abfragevarianteExpected.setVersion(1L);
-        final var abfragevarianteBedarfsmeldungExpected = new BedarfsmeldungFachreferateModel();
+        final var abfragevarianteBedarfsmeldungExpected = new BedarfsmeldungModel();
         abfragevarianteBedarfsmeldungExpected.setAnzahlEinrichtungen(5);
         abfragevarianteBedarfsmeldungExpected.setInfrastruktureinrichtungTyp(InfrastruktureinrichtungTyp.KINDERKRIPPE);
         abfragevarianteBedarfsmeldungExpected.setAnzahlKinderkrippengruppen(4);
@@ -1334,7 +1334,7 @@ class AbfrageServiceTest {
         abfragevarianteSachbearbeitungExpected.setArtAbfragevariante(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN);
         abfragevarianteSachbearbeitungExpected.setId(abfragevarianteSachbearbeitungSaved.getId());
         abfragevarianteSachbearbeitungExpected.setVersion(1L);
-        final var abfragevarianteSachbearbeitungBedarfsmeldungExpected = new BedarfsmeldungFachreferateModel();
+        final var abfragevarianteSachbearbeitungBedarfsmeldungExpected = new BedarfsmeldungModel();
         abfragevarianteSachbearbeitungBedarfsmeldungExpected.setAnzahlEinrichtungen(1);
         abfragevarianteSachbearbeitungBedarfsmeldungExpected.setInfrastruktureinrichtungTyp(
             InfrastruktureinrichtungTyp.GRUNDSCHULE
@@ -1370,7 +1370,7 @@ class AbfrageServiceTest {
         abfragevarianteRequestModel.setArtAbfragevariante(ArtAbfrage.WEITERES_VERFAHREN);
         abfragevarianteRequestModel.setId(uuidAbfragevariante);
         abfragevarianteRequestModel.setVersion(0L);
-        final var abfragevarianteBedarfsmeldung = new BedarfsmeldungFachreferateModel();
+        final var abfragevarianteBedarfsmeldung = new BedarfsmeldungModel();
         abfragevarianteBedarfsmeldung.setAnzahlEinrichtungen(5);
         abfragevarianteBedarfsmeldung.setInfrastruktureinrichtungTyp(InfrastruktureinrichtungTyp.KINDERKRIPPE);
         abfragevarianteBedarfsmeldung.setAnzahlKinderkrippengruppen(4);
@@ -1384,7 +1384,7 @@ class AbfrageServiceTest {
         abfragevarianteSachbearbeitungRequestModel.setArtAbfragevariante(ArtAbfrage.WEITERES_VERFAHREN);
         abfragevarianteSachbearbeitungRequestModel.setId(uuidAbfragevarianteSachbearbeitung);
         abfragevarianteSachbearbeitungRequestModel.setVersion(0L);
-        final var abfragevarianteSachbearbeitungBedarfsmeldung = new BedarfsmeldungFachreferateModel();
+        final var abfragevarianteSachbearbeitungBedarfsmeldung = new BedarfsmeldungModel();
         abfragevarianteSachbearbeitungBedarfsmeldung.setAnzahlEinrichtungen(1);
         abfragevarianteSachbearbeitungBedarfsmeldung.setInfrastruktureinrichtungTyp(
             InfrastruktureinrichtungTyp.GRUNDSCHULE
@@ -1431,7 +1431,7 @@ class AbfrageServiceTest {
         final var abfragevarianteToSaveSave = new AbfragevarianteWeiteresVerfahren();
         abfragevarianteToSaveSave.setId(uuidAbfragevariante);
         abfragevarianteToSaveSave.setVersion(0L);
-        final var abfragevarianteBedarfsmeldungToSave = new BedarfsmeldungFachreferate();
+        final var abfragevarianteBedarfsmeldungToSave = new Bedarfsmeldung();
         abfragevarianteBedarfsmeldungToSave.setAnzahlEinrichtungen(5);
         abfragevarianteBedarfsmeldungToSave.setInfrastruktureinrichtungTyp(InfrastruktureinrichtungTyp.KINDERKRIPPE);
         abfragevarianteBedarfsmeldungToSave.setAnzahlKinderkrippengruppen(4);
@@ -1443,7 +1443,7 @@ class AbfrageServiceTest {
         final var abfragevarianteSachbearbeitungToSave = new AbfragevarianteWeiteresVerfahren();
         abfragevarianteSachbearbeitungToSave.setId(uuidAbfragevarianteSachbearbeitung);
         abfragevarianteSachbearbeitungToSave.setVersion(0L);
-        final var abfragevarianteSachbearbeitungBedarfsmeldungToSave = new BedarfsmeldungFachreferate();
+        final var abfragevarianteSachbearbeitungBedarfsmeldungToSave = new Bedarfsmeldung();
         abfragevarianteSachbearbeitungBedarfsmeldungToSave.setAnzahlEinrichtungen(1);
         abfragevarianteSachbearbeitungBedarfsmeldungToSave.setInfrastruktureinrichtungTyp(
             InfrastruktureinrichtungTyp.GRUNDSCHULE
@@ -1469,7 +1469,7 @@ class AbfrageServiceTest {
         final var abfragevarianteSaved = new AbfragevarianteWeiteresVerfahren();
         abfragevarianteSaved.setId(uuidAbfragevariante);
         abfragevarianteSaved.setVersion(1L);
-        final var abfragevarianteBedarfsmeldungSaved = new BedarfsmeldungFachreferate();
+        final var abfragevarianteBedarfsmeldungSaved = new Bedarfsmeldung();
         abfragevarianteBedarfsmeldungSaved.setAnzahlEinrichtungen(5);
         abfragevarianteBedarfsmeldungSaved.setInfrastruktureinrichtungTyp(InfrastruktureinrichtungTyp.KINDERKRIPPE);
         abfragevarianteBedarfsmeldungSaved.setAnzahlKinderkrippengruppen(4);
@@ -1481,7 +1481,7 @@ class AbfrageServiceTest {
         final var abfragevarianteSachbearbeitungSaved = new AbfragevarianteWeiteresVerfahren();
         abfragevarianteSachbearbeitungSaved.setId(uuidAbfragevarianteSachbearbeitung);
         abfragevarianteSachbearbeitungSaved.setVersion(1L);
-        final var abfragevarianteSachbearbeitungBedarfsmeldungSaved = new BedarfsmeldungFachreferate();
+        final var abfragevarianteSachbearbeitungBedarfsmeldungSaved = new Bedarfsmeldung();
         abfragevarianteSachbearbeitungBedarfsmeldungSaved.setAnzahlEinrichtungen(1);
         abfragevarianteSachbearbeitungBedarfsmeldungSaved.setInfrastruktureinrichtungTyp(
             InfrastruktureinrichtungTyp.GRUNDSCHULE
@@ -1513,7 +1513,7 @@ class AbfrageServiceTest {
         abfragevarianteExpected.setArtAbfragevariante(ArtAbfrage.WEITERES_VERFAHREN);
         abfragevarianteExpected.setId(abfragevarianteSaved.getId());
         abfragevarianteExpected.setVersion(1L);
-        final var abfragevarianteBedarfsmeldungExpected = new BedarfsmeldungFachreferateModel();
+        final var abfragevarianteBedarfsmeldungExpected = new BedarfsmeldungModel();
         abfragevarianteBedarfsmeldungExpected.setAnzahlEinrichtungen(5);
         abfragevarianteBedarfsmeldungExpected.setInfrastruktureinrichtungTyp(InfrastruktureinrichtungTyp.KINDERKRIPPE);
         abfragevarianteBedarfsmeldungExpected.setAnzahlKinderkrippengruppen(4);
@@ -1526,7 +1526,7 @@ class AbfrageServiceTest {
         abfragevarianteSachbearbeitungExpected.setArtAbfragevariante(ArtAbfrage.WEITERES_VERFAHREN);
         abfragevarianteSachbearbeitungExpected.setId(abfragevarianteSachbearbeitungSaved.getId());
         abfragevarianteSachbearbeitungExpected.setVersion(1L);
-        final var abfragevarianteSachbearbeitungBedarfsmeldungExpected = new BedarfsmeldungFachreferateModel();
+        final var abfragevarianteSachbearbeitungBedarfsmeldungExpected = new BedarfsmeldungModel();
         abfragevarianteSachbearbeitungBedarfsmeldungExpected.setAnzahlEinrichtungen(1);
         abfragevarianteSachbearbeitungBedarfsmeldungExpected.setInfrastruktureinrichtungTyp(
             InfrastruktureinrichtungTyp.GRUNDSCHULE
@@ -1559,7 +1559,7 @@ class AbfrageServiceTest {
         final var abfragevarianteRequestModel = new AbfragevarianteBauleitplanverfahrenInBearbeitungFachreferatModel();
         abfragevarianteRequestModel.setId(uuidAbfragevariante);
         abfragevarianteRequestModel.setVersion(0L);
-        final var abfragevarianteBedarfsmeldung = new BedarfsmeldungFachreferateModel();
+        final var abfragevarianteBedarfsmeldung = new BedarfsmeldungModel();
         abfragevarianteBedarfsmeldung.setAnzahlEinrichtungen(5);
         abfragevarianteBedarfsmeldung.setInfrastruktureinrichtungTyp(InfrastruktureinrichtungTyp.KINDERKRIPPE);
         abfragevarianteBedarfsmeldung.setAnzahlKinderkrippengruppen(4);
@@ -1572,7 +1572,7 @@ class AbfrageServiceTest {
             new AbfragevarianteBauleitplanverfahrenInBearbeitungFachreferatModel();
         abfragevarianteSachbearbeitungRequestModel.setId(uuidAbfragevarianteSachbearbeitung);
         abfragevarianteSachbearbeitungRequestModel.setVersion(0L);
-        final var abfragevarianteSachbearbeitungBedarfsmeldung = new BedarfsmeldungFachreferateModel();
+        final var abfragevarianteSachbearbeitungBedarfsmeldung = new BedarfsmeldungModel();
         abfragevarianteSachbearbeitungBedarfsmeldung.setAnzahlEinrichtungen(1);
         abfragevarianteSachbearbeitungBedarfsmeldung.setInfrastruktureinrichtungTyp(
             InfrastruktureinrichtungTyp.GRUNDSCHULE
@@ -1619,7 +1619,7 @@ class AbfrageServiceTest {
         final var abfragevarianteToSaveSave = new AbfragevarianteBauleitplanverfahren();
         abfragevarianteToSaveSave.setId(uuidAbfragevariante);
         abfragevarianteToSaveSave.setVersion(0L);
-        final var abfragevarianteBedarfsmeldungToSave = new BedarfsmeldungFachreferate();
+        final var abfragevarianteBedarfsmeldungToSave = new Bedarfsmeldung();
         abfragevarianteBedarfsmeldungToSave.setAnzahlEinrichtungen(5);
         abfragevarianteBedarfsmeldungToSave.setInfrastruktureinrichtungTyp(InfrastruktureinrichtungTyp.KINDERKRIPPE);
         abfragevarianteBedarfsmeldungToSave.setAnzahlKinderkrippengruppen(4);
@@ -1631,7 +1631,7 @@ class AbfrageServiceTest {
         final var abfragevarianteSachbearbeitungToSave = new AbfragevarianteBauleitplanverfahren();
         abfragevarianteSachbearbeitungToSave.setId(uuidAbfragevarianteSachbearbeitung);
         abfragevarianteSachbearbeitungToSave.setVersion(0L);
-        final var abfragevarianteSachbearbeitungBedarfsmeldungToSave = new BedarfsmeldungFachreferate();
+        final var abfragevarianteSachbearbeitungBedarfsmeldungToSave = new Bedarfsmeldung();
         abfragevarianteSachbearbeitungBedarfsmeldungToSave.setAnzahlEinrichtungen(1);
         abfragevarianteSachbearbeitungBedarfsmeldungToSave.setInfrastruktureinrichtungTyp(
             InfrastruktureinrichtungTyp.GRUNDSCHULE
@@ -1659,7 +1659,7 @@ class AbfrageServiceTest {
         final var abfragevarianteSaved = new AbfragevarianteBauleitplanverfahren();
         abfragevarianteSaved.setId(uuidAbfragevariante);
         abfragevarianteSaved.setVersion(1L);
-        final var abfragevarianteBedarfsmeldungSaved = new BedarfsmeldungFachreferate();
+        final var abfragevarianteBedarfsmeldungSaved = new Bedarfsmeldung();
         abfragevarianteBedarfsmeldungSaved.setAnzahlEinrichtungen(5);
         abfragevarianteBedarfsmeldungSaved.setInfrastruktureinrichtungTyp(InfrastruktureinrichtungTyp.KINDERKRIPPE);
         abfragevarianteBedarfsmeldungSaved.setAnzahlKinderkrippengruppen(4);
@@ -1671,7 +1671,7 @@ class AbfrageServiceTest {
         final var abfragevarianteSachbearbeitungSaved = new AbfragevarianteBauleitplanverfahren();
         abfragevarianteSachbearbeitungSaved.setId(uuidAbfragevarianteSachbearbeitung);
         abfragevarianteSachbearbeitungSaved.setVersion(1L);
-        final var abfragevarianteSachbearbeitungBedarfsmeldungSaved = new BedarfsmeldungFachreferate();
+        final var abfragevarianteSachbearbeitungBedarfsmeldungSaved = new Bedarfsmeldung();
         abfragevarianteSachbearbeitungBedarfsmeldungSaved.setAnzahlEinrichtungen(1);
         abfragevarianteSachbearbeitungBedarfsmeldungSaved.setInfrastruktureinrichtungTyp(
             InfrastruktureinrichtungTyp.GRUNDSCHULE
@@ -1714,7 +1714,7 @@ class AbfrageServiceTest {
             new AbfragevarianteBaugenehmigungsverfahrenInBearbeitungFachreferatModel();
         abfragevarianteRequestModel.setId(uuidAbfragevariante);
         abfragevarianteRequestModel.setVersion(0L);
-        final var abfragevarianteBedarfsmeldung = new BedarfsmeldungFachreferateModel();
+        final var abfragevarianteBedarfsmeldung = new BedarfsmeldungModel();
         abfragevarianteBedarfsmeldung.setAnzahlEinrichtungen(5);
         abfragevarianteBedarfsmeldung.setInfrastruktureinrichtungTyp(InfrastruktureinrichtungTyp.KINDERKRIPPE);
         abfragevarianteBedarfsmeldung.setAnzahlKinderkrippengruppen(4);
@@ -1727,7 +1727,7 @@ class AbfrageServiceTest {
             new AbfragevarianteBaugenehmigungsverfahrenInBearbeitungFachreferatModel();
         abfragevarianteSachbearbeitungRequestModel.setId(uuidAbfragevarianteSachbearbeitung);
         abfragevarianteSachbearbeitungRequestModel.setVersion(0L);
-        final var abfragevarianteSachbearbeitungBedarfsmeldung = new BedarfsmeldungFachreferateModel();
+        final var abfragevarianteSachbearbeitungBedarfsmeldung = new BedarfsmeldungModel();
         abfragevarianteSachbearbeitungBedarfsmeldung.setAnzahlEinrichtungen(1);
         abfragevarianteSachbearbeitungBedarfsmeldung.setInfrastruktureinrichtungTyp(
             InfrastruktureinrichtungTyp.GRUNDSCHULE
@@ -1774,7 +1774,7 @@ class AbfrageServiceTest {
         final var abfragevarianteToSaveSave = new AbfragevarianteBaugenehmigungsverfahren();
         abfragevarianteToSaveSave.setId(uuidAbfragevariante);
         abfragevarianteToSaveSave.setVersion(0L);
-        final var abfragevarianteBedarfsmeldungToSave = new BedarfsmeldungFachreferate();
+        final var abfragevarianteBedarfsmeldungToSave = new Bedarfsmeldung();
         abfragevarianteBedarfsmeldungToSave.setAnzahlEinrichtungen(5);
         abfragevarianteBedarfsmeldungToSave.setInfrastruktureinrichtungTyp(InfrastruktureinrichtungTyp.KINDERKRIPPE);
         abfragevarianteBedarfsmeldungToSave.setAnzahlKinderkrippengruppen(4);
@@ -1786,7 +1786,7 @@ class AbfrageServiceTest {
         final var abfragevarianteSachbearbeitungToSave = new AbfragevarianteBaugenehmigungsverfahren();
         abfragevarianteSachbearbeitungToSave.setId(uuidAbfragevarianteSachbearbeitung);
         abfragevarianteSachbearbeitungToSave.setVersion(0L);
-        final var abfragevarianteSachbearbeitungBedarfsmeldungToSave = new BedarfsmeldungFachreferate();
+        final var abfragevarianteSachbearbeitungBedarfsmeldungToSave = new Bedarfsmeldung();
         abfragevarianteSachbearbeitungBedarfsmeldungToSave.setAnzahlEinrichtungen(1);
         abfragevarianteSachbearbeitungBedarfsmeldungToSave.setInfrastruktureinrichtungTyp(
             InfrastruktureinrichtungTyp.GRUNDSCHULE
@@ -1814,7 +1814,7 @@ class AbfrageServiceTest {
         final var abfragevarianteSaved = new AbfragevarianteBaugenehmigungsverfahren();
         abfragevarianteSaved.setId(uuidAbfragevariante);
         abfragevarianteSaved.setVersion(1L);
-        final var abfragevarianteBedarfsmeldungSaved = new BedarfsmeldungFachreferate();
+        final var abfragevarianteBedarfsmeldungSaved = new Bedarfsmeldung();
         abfragevarianteBedarfsmeldungSaved.setAnzahlEinrichtungen(5);
         abfragevarianteBedarfsmeldungSaved.setInfrastruktureinrichtungTyp(InfrastruktureinrichtungTyp.KINDERKRIPPE);
         abfragevarianteBedarfsmeldungSaved.setAnzahlKinderkrippengruppen(4);
@@ -1826,7 +1826,7 @@ class AbfrageServiceTest {
         final var abfragevarianteSachbearbeitungSaved = new AbfragevarianteBaugenehmigungsverfahren();
         abfragevarianteSachbearbeitungSaved.setId(uuidAbfragevarianteSachbearbeitung);
         abfragevarianteSachbearbeitungSaved.setVersion(1L);
-        final var abfragevarianteSachbearbeitungBedarfsmeldungSaved = new BedarfsmeldungFachreferate();
+        final var abfragevarianteSachbearbeitungBedarfsmeldungSaved = new Bedarfsmeldung();
         abfragevarianteSachbearbeitungBedarfsmeldungSaved.setAnzahlEinrichtungen(1);
         abfragevarianteSachbearbeitungBedarfsmeldungSaved.setInfrastruktureinrichtungTyp(
             InfrastruktureinrichtungTyp.GRUNDSCHULE
@@ -1868,7 +1868,7 @@ class AbfrageServiceTest {
         final var abfragevarianteRequestModel = new AbfragevarianteWeiteresVerfahrenInBearbeitungFachreferatModel();
         abfragevarianteRequestModel.setId(uuidAbfragevariante);
         abfragevarianteRequestModel.setVersion(0L);
-        final var abfragevarianteBedarfsmeldung = new BedarfsmeldungFachreferateModel();
+        final var abfragevarianteBedarfsmeldung = new BedarfsmeldungModel();
         abfragevarianteBedarfsmeldung.setAnzahlEinrichtungen(5);
         abfragevarianteBedarfsmeldung.setInfrastruktureinrichtungTyp(InfrastruktureinrichtungTyp.KINDERKRIPPE);
         abfragevarianteBedarfsmeldung.setAnzahlKinderkrippengruppen(4);
@@ -1881,7 +1881,7 @@ class AbfrageServiceTest {
             new AbfragevarianteWeiteresVerfahrenInBearbeitungFachreferatModel();
         abfragevarianteSachbearbeitungRequestModel.setId(uuidAbfragevarianteSachbearbeitung);
         abfragevarianteSachbearbeitungRequestModel.setVersion(0L);
-        final var abfragevarianteSachbearbeitungBedarfsmeldung = new BedarfsmeldungFachreferateModel();
+        final var abfragevarianteSachbearbeitungBedarfsmeldung = new BedarfsmeldungModel();
         abfragevarianteSachbearbeitungBedarfsmeldung.setAnzahlEinrichtungen(1);
         abfragevarianteSachbearbeitungBedarfsmeldung.setInfrastruktureinrichtungTyp(
             InfrastruktureinrichtungTyp.GRUNDSCHULE
@@ -1928,7 +1928,7 @@ class AbfrageServiceTest {
         final var abfragevarianteToSaveSave = new AbfragevarianteWeiteresVerfahren();
         abfragevarianteToSaveSave.setId(uuidAbfragevariante);
         abfragevarianteToSaveSave.setVersion(0L);
-        final var abfragevarianteBedarfsmeldungToSave = new BedarfsmeldungFachreferate();
+        final var abfragevarianteBedarfsmeldungToSave = new Bedarfsmeldung();
         abfragevarianteBedarfsmeldungToSave.setAnzahlEinrichtungen(5);
         abfragevarianteBedarfsmeldungToSave.setInfrastruktureinrichtungTyp(InfrastruktureinrichtungTyp.KINDERKRIPPE);
         abfragevarianteBedarfsmeldungToSave.setAnzahlKinderkrippengruppen(4);
@@ -1940,7 +1940,7 @@ class AbfrageServiceTest {
         final var abfragevarianteSachbearbeitungToSave = new AbfragevarianteWeiteresVerfahren();
         abfragevarianteSachbearbeitungToSave.setId(uuidAbfragevarianteSachbearbeitung);
         abfragevarianteSachbearbeitungToSave.setVersion(0L);
-        final var abfragevarianteSachbearbeitungBedarfsmeldungToSave = new BedarfsmeldungFachreferate();
+        final var abfragevarianteSachbearbeitungBedarfsmeldungToSave = new Bedarfsmeldung();
         abfragevarianteSachbearbeitungBedarfsmeldungToSave.setAnzahlEinrichtungen(1);
         abfragevarianteSachbearbeitungBedarfsmeldungToSave.setInfrastruktureinrichtungTyp(
             InfrastruktureinrichtungTyp.GRUNDSCHULE
@@ -1966,7 +1966,7 @@ class AbfrageServiceTest {
         final var abfragevarianteSaved = new AbfragevarianteWeiteresVerfahren();
         abfragevarianteSaved.setId(uuidAbfragevariante);
         abfragevarianteSaved.setVersion(1L);
-        final var abfragevarianteBedarfsmeldungSaved = new BedarfsmeldungFachreferate();
+        final var abfragevarianteBedarfsmeldungSaved = new Bedarfsmeldung();
         abfragevarianteBedarfsmeldungSaved.setAnzahlEinrichtungen(5);
         abfragevarianteBedarfsmeldungSaved.setInfrastruktureinrichtungTyp(InfrastruktureinrichtungTyp.KINDERKRIPPE);
         abfragevarianteBedarfsmeldungSaved.setAnzahlKinderkrippengruppen(4);
@@ -1978,7 +1978,7 @@ class AbfrageServiceTest {
         final var abfragevarianteSachbearbeitungSaved = new AbfragevarianteWeiteresVerfahren();
         abfragevarianteSachbearbeitungSaved.setId(uuidAbfragevarianteSachbearbeitung);
         abfragevarianteSachbearbeitungSaved.setVersion(1L);
-        final var abfragevarianteSachbearbeitungBedarfsmeldungSaved = new BedarfsmeldungFachreferate();
+        final var abfragevarianteSachbearbeitungBedarfsmeldungSaved = new Bedarfsmeldung();
         abfragevarianteSachbearbeitungBedarfsmeldungSaved.setAnzahlEinrichtungen(1);
         abfragevarianteSachbearbeitungBedarfsmeldungSaved.setInfrastruktureinrichtungTyp(
             InfrastruktureinrichtungTyp.GRUNDSCHULE
@@ -2019,7 +2019,7 @@ class AbfrageServiceTest {
         abfragevarianteRequestModel.setArtAbfragevariante(ArtAbfrage.BAULEITPLANVERFAHREN);
         abfragevarianteRequestModel.setId(uuidAbfragevariante);
         abfragevarianteRequestModel.setVersion(0L);
-        final var abfragevarianteBedarfsmeldung = new BedarfsmeldungFachreferateModel();
+        final var abfragevarianteBedarfsmeldung = new BedarfsmeldungModel();
         abfragevarianteBedarfsmeldung.setAnzahlEinrichtungen(5);
         abfragevarianteBedarfsmeldung.setInfrastruktureinrichtungTyp(InfrastruktureinrichtungTyp.KINDERKRIPPE);
         abfragevarianteBedarfsmeldung.setAnzahlKinderkrippengruppen(4);
@@ -2033,7 +2033,7 @@ class AbfrageServiceTest {
         abfragevarianteSachbearbeitungRequestModel.setArtAbfragevariante(ArtAbfrage.BAULEITPLANVERFAHREN);
         abfragevarianteSachbearbeitungRequestModel.setId(uuidAbfragevarianteSachbearbeitung);
         abfragevarianteSachbearbeitungRequestModel.setVersion(0L);
-        final var abfragevarianteSachbearbeitungBedarfsmeldung = new BedarfsmeldungFachreferateModel();
+        final var abfragevarianteSachbearbeitungBedarfsmeldung = new BedarfsmeldungModel();
         abfragevarianteSachbearbeitungBedarfsmeldung.setAnzahlEinrichtungen(1);
         abfragevarianteSachbearbeitungBedarfsmeldung.setInfrastruktureinrichtungTyp(
             InfrastruktureinrichtungTyp.GRUNDSCHULE
@@ -2080,7 +2080,7 @@ class AbfrageServiceTest {
         final var abfragevarianteToSaveSave = new AbfragevarianteBauleitplanverfahren();
         abfragevarianteToSaveSave.setId(uuidAbfragevariante);
         abfragevarianteToSaveSave.setVersion(0L);
-        final var abfragevarianteBedarfsmeldungToSave = new BedarfsmeldungFachreferate();
+        final var abfragevarianteBedarfsmeldungToSave = new Bedarfsmeldung();
         abfragevarianteBedarfsmeldungToSave.setAnzahlEinrichtungen(5);
         abfragevarianteBedarfsmeldungToSave.setInfrastruktureinrichtungTyp(InfrastruktureinrichtungTyp.KINDERKRIPPE);
         abfragevarianteBedarfsmeldungToSave.setAnzahlKinderkrippengruppen(4);
@@ -2092,7 +2092,7 @@ class AbfrageServiceTest {
         final var abfragevarianteSachbearbeitungToSave = new AbfragevarianteBauleitplanverfahren();
         abfragevarianteSachbearbeitungToSave.setId(uuidAbfragevarianteSachbearbeitung);
         abfragevarianteSachbearbeitungToSave.setVersion(0L);
-        final var abfragevarianteSachbearbeitungBedarfsmeldungToSave = new BedarfsmeldungFachreferate();
+        final var abfragevarianteSachbearbeitungBedarfsmeldungToSave = new Bedarfsmeldung();
         abfragevarianteSachbearbeitungBedarfsmeldungToSave.setAnzahlEinrichtungen(1);
         abfragevarianteSachbearbeitungBedarfsmeldungToSave.setInfrastruktureinrichtungTyp(
             InfrastruktureinrichtungTyp.GRUNDSCHULE
@@ -2120,7 +2120,7 @@ class AbfrageServiceTest {
         final var abfragevarianteSaved = new AbfragevarianteBauleitplanverfahren();
         abfragevarianteSaved.setId(uuidAbfragevariante);
         abfragevarianteSaved.setVersion(1L);
-        final var abfragevarianteBedarfsmeldungSaved = new BedarfsmeldungFachreferate();
+        final var abfragevarianteBedarfsmeldungSaved = new Bedarfsmeldung();
         abfragevarianteBedarfsmeldungSaved.setAnzahlEinrichtungen(5);
         abfragevarianteBedarfsmeldungSaved.setInfrastruktureinrichtungTyp(InfrastruktureinrichtungTyp.KINDERKRIPPE);
         abfragevarianteBedarfsmeldungSaved.setAnzahlKinderkrippengruppen(4);
@@ -2132,7 +2132,7 @@ class AbfrageServiceTest {
         final var abfragevarianteSachbearbeitungSaved = new AbfragevarianteBauleitplanverfahren();
         abfragevarianteSachbearbeitungSaved.setId(uuidAbfragevarianteSachbearbeitung);
         abfragevarianteSachbearbeitungSaved.setVersion(1L);
-        final var abfragevarianteSachbearbeitungBedarfsmeldungSaved = new BedarfsmeldungFachreferate();
+        final var abfragevarianteSachbearbeitungBedarfsmeldungSaved = new Bedarfsmeldung();
         abfragevarianteSachbearbeitungBedarfsmeldungSaved.setAnzahlEinrichtungen(1);
         abfragevarianteSachbearbeitungBedarfsmeldungSaved.setInfrastruktureinrichtungTyp(
             InfrastruktureinrichtungTyp.GRUNDSCHULE
@@ -2166,7 +2166,7 @@ class AbfrageServiceTest {
         abfragevarianteExpected.setArtAbfragevariante(ArtAbfrage.BAULEITPLANVERFAHREN);
         abfragevarianteExpected.setId(abfragevarianteSaved.getId());
         abfragevarianteExpected.setVersion(1L);
-        final var abfragevarianteBedarfsmeldungExpected = new BedarfsmeldungFachreferateModel();
+        final var abfragevarianteBedarfsmeldungExpected = new BedarfsmeldungModel();
         abfragevarianteBedarfsmeldungExpected.setAnzahlEinrichtungen(5);
         abfragevarianteBedarfsmeldungExpected.setInfrastruktureinrichtungTyp(InfrastruktureinrichtungTyp.KINDERKRIPPE);
         abfragevarianteBedarfsmeldungExpected.setAnzahlKinderkrippengruppen(4);
@@ -2179,7 +2179,7 @@ class AbfrageServiceTest {
         abfragevarianteSachbearbeitungExpected.setArtAbfragevariante(ArtAbfrage.BAULEITPLANVERFAHREN);
         abfragevarianteSachbearbeitungExpected.setId(abfragevarianteSachbearbeitungSaved.getId());
         abfragevarianteSachbearbeitungExpected.setVersion(1L);
-        final var abfragevarianteSachbearbeitungBedarfsmeldungExpected = new BedarfsmeldungFachreferateModel();
+        final var abfragevarianteSachbearbeitungBedarfsmeldungExpected = new BedarfsmeldungModel();
         abfragevarianteSachbearbeitungBedarfsmeldungExpected.setAnzahlEinrichtungen(1);
         abfragevarianteSachbearbeitungBedarfsmeldungExpected.setInfrastruktureinrichtungTyp(
             InfrastruktureinrichtungTyp.GRUNDSCHULE
@@ -2215,7 +2215,7 @@ class AbfrageServiceTest {
         abfragevarianteRequestModel.setArtAbfragevariante(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN);
         abfragevarianteRequestModel.setId(uuidAbfragevariante);
         abfragevarianteRequestModel.setVersion(0L);
-        final var abfragevarianteBedarfsmeldung = new BedarfsmeldungFachreferateModel();
+        final var abfragevarianteBedarfsmeldung = new BedarfsmeldungModel();
         abfragevarianteBedarfsmeldung.setAnzahlEinrichtungen(5);
         abfragevarianteBedarfsmeldung.setInfrastruktureinrichtungTyp(InfrastruktureinrichtungTyp.KINDERKRIPPE);
         abfragevarianteBedarfsmeldung.setAnzahlKinderkrippengruppen(4);
@@ -2229,7 +2229,7 @@ class AbfrageServiceTest {
         abfragevarianteSachbearbeitungRequestModel.setArtAbfragevariante(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN);
         abfragevarianteSachbearbeitungRequestModel.setId(uuidAbfragevarianteSachbearbeitung);
         abfragevarianteSachbearbeitungRequestModel.setVersion(0L);
-        final var abfragevarianteSachbearbeitungBedarfsmeldung = new BedarfsmeldungFachreferateModel();
+        final var abfragevarianteSachbearbeitungBedarfsmeldung = new BedarfsmeldungModel();
         abfragevarianteSachbearbeitungBedarfsmeldung.setAnzahlEinrichtungen(1);
         abfragevarianteSachbearbeitungBedarfsmeldung.setInfrastruktureinrichtungTyp(
             InfrastruktureinrichtungTyp.GRUNDSCHULE
@@ -2276,7 +2276,7 @@ class AbfrageServiceTest {
         final var abfragevarianteToSaveSave = new AbfragevarianteBaugenehmigungsverfahren();
         abfragevarianteToSaveSave.setId(uuidAbfragevariante);
         abfragevarianteToSaveSave.setVersion(0L);
-        final var abfragevarianteBedarfsmeldungToSave = new BedarfsmeldungFachreferate();
+        final var abfragevarianteBedarfsmeldungToSave = new Bedarfsmeldung();
         abfragevarianteBedarfsmeldungToSave.setAnzahlEinrichtungen(5);
         abfragevarianteBedarfsmeldungToSave.setInfrastruktureinrichtungTyp(InfrastruktureinrichtungTyp.KINDERKRIPPE);
         abfragevarianteBedarfsmeldungToSave.setAnzahlKinderkrippengruppen(4);
@@ -2288,7 +2288,7 @@ class AbfrageServiceTest {
         final var abfragevarianteSachbearbeitungToSave = new AbfragevarianteBaugenehmigungsverfahren();
         abfragevarianteSachbearbeitungToSave.setId(uuidAbfragevarianteSachbearbeitung);
         abfragevarianteSachbearbeitungToSave.setVersion(0L);
-        final var abfragevarianteSachbearbeitungBedarfsmeldungToSave = new BedarfsmeldungFachreferate();
+        final var abfragevarianteSachbearbeitungBedarfsmeldungToSave = new Bedarfsmeldung();
         abfragevarianteSachbearbeitungBedarfsmeldungToSave.setAnzahlEinrichtungen(1);
         abfragevarianteSachbearbeitungBedarfsmeldungToSave.setInfrastruktureinrichtungTyp(
             InfrastruktureinrichtungTyp.GRUNDSCHULE
@@ -2316,7 +2316,7 @@ class AbfrageServiceTest {
         final var abfragevarianteSaved = new AbfragevarianteBaugenehmigungsverfahren();
         abfragevarianteSaved.setId(uuidAbfragevariante);
         abfragevarianteSaved.setVersion(1L);
-        final var abfragevarianteBedarfsmeldungSaved = new BedarfsmeldungFachreferate();
+        final var abfragevarianteBedarfsmeldungSaved = new Bedarfsmeldung();
         abfragevarianteBedarfsmeldungSaved.setAnzahlEinrichtungen(5);
         abfragevarianteBedarfsmeldungSaved.setInfrastruktureinrichtungTyp(InfrastruktureinrichtungTyp.KINDERKRIPPE);
         abfragevarianteBedarfsmeldungSaved.setAnzahlKinderkrippengruppen(4);
@@ -2328,7 +2328,7 @@ class AbfrageServiceTest {
         final var abfragevarianteSachbearbeitungSaved = new AbfragevarianteBaugenehmigungsverfahren();
         abfragevarianteSachbearbeitungSaved.setId(uuidAbfragevarianteSachbearbeitung);
         abfragevarianteSachbearbeitungSaved.setVersion(1L);
-        final var abfragevarianteSachbearbeitungBedarfsmeldungSaved = new BedarfsmeldungFachreferate();
+        final var abfragevarianteSachbearbeitungBedarfsmeldungSaved = new Bedarfsmeldung();
         abfragevarianteSachbearbeitungBedarfsmeldungSaved.setAnzahlEinrichtungen(1);
         abfragevarianteSachbearbeitungBedarfsmeldungSaved.setInfrastruktureinrichtungTyp(
             InfrastruktureinrichtungTyp.GRUNDSCHULE
@@ -2362,7 +2362,7 @@ class AbfrageServiceTest {
         abfragevarianteExpected.setArtAbfragevariante(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN);
         abfragevarianteExpected.setId(abfragevarianteSaved.getId());
         abfragevarianteExpected.setVersion(1L);
-        final var abfragevarianteBedarfsmeldungExpected = new BedarfsmeldungFachreferateModel();
+        final var abfragevarianteBedarfsmeldungExpected = new BedarfsmeldungModel();
         abfragevarianteBedarfsmeldungExpected.setAnzahlEinrichtungen(5);
         abfragevarianteBedarfsmeldungExpected.setInfrastruktureinrichtungTyp(InfrastruktureinrichtungTyp.KINDERKRIPPE);
         abfragevarianteBedarfsmeldungExpected.setAnzahlKinderkrippengruppen(4);
@@ -2375,7 +2375,7 @@ class AbfrageServiceTest {
         abfragevarianteSachbearbeitungExpected.setArtAbfragevariante(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN);
         abfragevarianteSachbearbeitungExpected.setId(abfragevarianteSachbearbeitungSaved.getId());
         abfragevarianteSachbearbeitungExpected.setVersion(1L);
-        final var abfragevarianteSachbearbeitungBedarfsmeldungExpected = new BedarfsmeldungFachreferateModel();
+        final var abfragevarianteSachbearbeitungBedarfsmeldungExpected = new BedarfsmeldungModel();
         abfragevarianteSachbearbeitungBedarfsmeldungExpected.setAnzahlEinrichtungen(1);
         abfragevarianteSachbearbeitungBedarfsmeldungExpected.setInfrastruktureinrichtungTyp(
             InfrastruktureinrichtungTyp.GRUNDSCHULE
@@ -2411,7 +2411,7 @@ class AbfrageServiceTest {
         abfragevarianteRequestModel.setArtAbfragevariante(ArtAbfrage.WEITERES_VERFAHREN);
         abfragevarianteRequestModel.setId(uuidAbfragevariante);
         abfragevarianteRequestModel.setVersion(0L);
-        final var abfragevarianteBedarfsmeldung = new BedarfsmeldungFachreferateModel();
+        final var abfragevarianteBedarfsmeldung = new BedarfsmeldungModel();
         abfragevarianteBedarfsmeldung.setAnzahlEinrichtungen(5);
         abfragevarianteBedarfsmeldung.setInfrastruktureinrichtungTyp(InfrastruktureinrichtungTyp.KINDERKRIPPE);
         abfragevarianteBedarfsmeldung.setAnzahlKinderkrippengruppen(4);
@@ -2425,7 +2425,7 @@ class AbfrageServiceTest {
         abfragevarianteSachbearbeitungRequestModel.setArtAbfragevariante(ArtAbfrage.WEITERES_VERFAHREN);
         abfragevarianteSachbearbeitungRequestModel.setId(uuidAbfragevarianteSachbearbeitung);
         abfragevarianteSachbearbeitungRequestModel.setVersion(0L);
-        final var abfragevarianteSachbearbeitungBedarfsmeldung = new BedarfsmeldungFachreferateModel();
+        final var abfragevarianteSachbearbeitungBedarfsmeldung = new BedarfsmeldungModel();
         abfragevarianteSachbearbeitungBedarfsmeldung.setAnzahlEinrichtungen(1);
         abfragevarianteSachbearbeitungBedarfsmeldung.setInfrastruktureinrichtungTyp(
             InfrastruktureinrichtungTyp.GRUNDSCHULE
@@ -2472,7 +2472,7 @@ class AbfrageServiceTest {
         final var abfragevarianteToSaveSave = new AbfragevarianteWeiteresVerfahren();
         abfragevarianteToSaveSave.setId(uuidAbfragevariante);
         abfragevarianteToSaveSave.setVersion(0L);
-        final var abfragevarianteBedarfsmeldungToSave = new BedarfsmeldungFachreferate();
+        final var abfragevarianteBedarfsmeldungToSave = new Bedarfsmeldung();
         abfragevarianteBedarfsmeldungToSave.setAnzahlEinrichtungen(5);
         abfragevarianteBedarfsmeldungToSave.setInfrastruktureinrichtungTyp(InfrastruktureinrichtungTyp.KINDERKRIPPE);
         abfragevarianteBedarfsmeldungToSave.setAnzahlKinderkrippengruppen(4);
@@ -2484,7 +2484,7 @@ class AbfrageServiceTest {
         final var abfragevarianteSachbearbeitungToSave = new AbfragevarianteWeiteresVerfahren();
         abfragevarianteSachbearbeitungToSave.setId(uuidAbfragevarianteSachbearbeitung);
         abfragevarianteSachbearbeitungToSave.setVersion(0L);
-        final var abfragevarianteSachbearbeitungBedarfsmeldungToSave = new BedarfsmeldungFachreferate();
+        final var abfragevarianteSachbearbeitungBedarfsmeldungToSave = new Bedarfsmeldung();
         abfragevarianteSachbearbeitungBedarfsmeldungToSave.setAnzahlEinrichtungen(1);
         abfragevarianteSachbearbeitungBedarfsmeldungToSave.setInfrastruktureinrichtungTyp(
             InfrastruktureinrichtungTyp.GRUNDSCHULE
@@ -2510,7 +2510,7 @@ class AbfrageServiceTest {
         final var abfragevarianteSaved = new AbfragevarianteWeiteresVerfahren();
         abfragevarianteSaved.setId(uuidAbfragevariante);
         abfragevarianteSaved.setVersion(1L);
-        final var abfragevarianteBedarfsmeldungSaved = new BedarfsmeldungFachreferate();
+        final var abfragevarianteBedarfsmeldungSaved = new Bedarfsmeldung();
         abfragevarianteBedarfsmeldungSaved.setAnzahlEinrichtungen(5);
         abfragevarianteBedarfsmeldungSaved.setInfrastruktureinrichtungTyp(InfrastruktureinrichtungTyp.KINDERKRIPPE);
         abfragevarianteBedarfsmeldungSaved.setAnzahlKinderkrippengruppen(4);
@@ -2522,7 +2522,7 @@ class AbfrageServiceTest {
         final var abfragevarianteSachbearbeitungSaved = new AbfragevarianteWeiteresVerfahren();
         abfragevarianteSachbearbeitungSaved.setId(uuidAbfragevarianteSachbearbeitung);
         abfragevarianteSachbearbeitungSaved.setVersion(1L);
-        final var abfragevarianteSachbearbeitungBedarfsmeldungSaved = new BedarfsmeldungFachreferate();
+        final var abfragevarianteSachbearbeitungBedarfsmeldungSaved = new Bedarfsmeldung();
         abfragevarianteSachbearbeitungBedarfsmeldungSaved.setAnzahlEinrichtungen(1);
         abfragevarianteSachbearbeitungBedarfsmeldungSaved.setInfrastruktureinrichtungTyp(
             InfrastruktureinrichtungTyp.GRUNDSCHULE
@@ -2554,7 +2554,7 @@ class AbfrageServiceTest {
         abfragevarianteExpected.setArtAbfragevariante(ArtAbfrage.WEITERES_VERFAHREN);
         abfragevarianteExpected.setId(abfragevarianteSaved.getId());
         abfragevarianteExpected.setVersion(1L);
-        final var abfragevarianteBedarfsmeldungExpected = new BedarfsmeldungFachreferateModel();
+        final var abfragevarianteBedarfsmeldungExpected = new BedarfsmeldungModel();
         abfragevarianteBedarfsmeldungExpected.setAnzahlEinrichtungen(5);
         abfragevarianteBedarfsmeldungExpected.setInfrastruktureinrichtungTyp(InfrastruktureinrichtungTyp.KINDERKRIPPE);
         abfragevarianteBedarfsmeldungExpected.setAnzahlKinderkrippengruppen(4);
@@ -2567,7 +2567,7 @@ class AbfrageServiceTest {
         abfragevarianteSachbearbeitungExpected.setArtAbfragevariante(ArtAbfrage.WEITERES_VERFAHREN);
         abfragevarianteSachbearbeitungExpected.setId(abfragevarianteSachbearbeitungSaved.getId());
         abfragevarianteSachbearbeitungExpected.setVersion(1L);
-        final var abfragevarianteSachbearbeitungBedarfsmeldungExpected = new BedarfsmeldungFachreferateModel();
+        final var abfragevarianteSachbearbeitungBedarfsmeldungExpected = new BedarfsmeldungModel();
         abfragevarianteSachbearbeitungBedarfsmeldungExpected.setAnzahlEinrichtungen(1);
         abfragevarianteSachbearbeitungBedarfsmeldungExpected.setInfrastruktureinrichtungTyp(
             InfrastruktureinrichtungTyp.GRUNDSCHULE
@@ -2600,7 +2600,7 @@ class AbfrageServiceTest {
         final var abfragevarianteRequestModel = new AbfragevarianteBauleitplanverfahrenBedarfsmeldungErfolgtModel();
         abfragevarianteRequestModel.setId(uuidAbfragevariante);
         abfragevarianteRequestModel.setVersion(0L);
-        final var abfragevarianteBedarfsmeldung = new BedarfsmeldungFachreferateModel();
+        final var abfragevarianteBedarfsmeldung = new BedarfsmeldungModel();
         abfragevarianteBedarfsmeldung.setAnzahlEinrichtungen(5);
         abfragevarianteBedarfsmeldung.setInfrastruktureinrichtungTyp(InfrastruktureinrichtungTyp.KINDERKRIPPE);
         abfragevarianteBedarfsmeldung.setAnzahlKinderkrippengruppen(4);
@@ -2613,7 +2613,7 @@ class AbfrageServiceTest {
             new AbfragevarianteBauleitplanverfahrenBedarfsmeldungErfolgtModel();
         abfragevarianteSachbearbeitungRequestModel.setId(uuidAbfragevarianteSachbearbeitung);
         abfragevarianteSachbearbeitungRequestModel.setVersion(0L);
-        final var abfragevarianteSachbearbeitungBedarfsmeldung = new BedarfsmeldungFachreferateModel();
+        final var abfragevarianteSachbearbeitungBedarfsmeldung = new BedarfsmeldungModel();
         abfragevarianteSachbearbeitungBedarfsmeldung.setAnzahlEinrichtungen(1);
         abfragevarianteSachbearbeitungBedarfsmeldung.setInfrastruktureinrichtungTyp(
             InfrastruktureinrichtungTyp.GRUNDSCHULE
@@ -2660,7 +2660,7 @@ class AbfrageServiceTest {
         final var abfragevarianteToSaveSave = new AbfragevarianteBauleitplanverfahren();
         abfragevarianteToSaveSave.setId(uuidAbfragevariante);
         abfragevarianteToSaveSave.setVersion(0L);
-        final var abfragevarianteBedarfsmeldungToSave = new BedarfsmeldungFachreferate();
+        final var abfragevarianteBedarfsmeldungToSave = new Bedarfsmeldung();
         abfragevarianteBedarfsmeldungToSave.setAnzahlEinrichtungen(5);
         abfragevarianteBedarfsmeldungToSave.setInfrastruktureinrichtungTyp(InfrastruktureinrichtungTyp.KINDERKRIPPE);
         abfragevarianteBedarfsmeldungToSave.setAnzahlKinderkrippengruppen(4);
@@ -2672,7 +2672,7 @@ class AbfrageServiceTest {
         final var abfragevarianteSachbearbeitungToSave = new AbfragevarianteBauleitplanverfahren();
         abfragevarianteSachbearbeitungToSave.setId(uuidAbfragevarianteSachbearbeitung);
         abfragevarianteSachbearbeitungToSave.setVersion(0L);
-        final var abfragevarianteSachbearbeitungBedarfsmeldungToSave = new BedarfsmeldungFachreferate();
+        final var abfragevarianteSachbearbeitungBedarfsmeldungToSave = new Bedarfsmeldung();
         abfragevarianteSachbearbeitungBedarfsmeldungToSave.setAnzahlEinrichtungen(1);
         abfragevarianteSachbearbeitungBedarfsmeldungToSave.setInfrastruktureinrichtungTyp(
             InfrastruktureinrichtungTyp.GRUNDSCHULE
@@ -2700,7 +2700,7 @@ class AbfrageServiceTest {
         final var abfragevarianteSaved = new AbfragevarianteBauleitplanverfahren();
         abfragevarianteSaved.setId(uuidAbfragevariante);
         abfragevarianteSaved.setVersion(1L);
-        final var abfragevarianteBedarfsmeldungSaved = new BedarfsmeldungFachreferate();
+        final var abfragevarianteBedarfsmeldungSaved = new Bedarfsmeldung();
         abfragevarianteBedarfsmeldungSaved.setAnzahlEinrichtungen(5);
         abfragevarianteBedarfsmeldungSaved.setInfrastruktureinrichtungTyp(InfrastruktureinrichtungTyp.KINDERKRIPPE);
         abfragevarianteBedarfsmeldungSaved.setAnzahlKinderkrippengruppen(4);
@@ -2712,7 +2712,7 @@ class AbfrageServiceTest {
         final var abfragevarianteSachbearbeitungSaved = new AbfragevarianteBauleitplanverfahren();
         abfragevarianteSachbearbeitungSaved.setId(uuidAbfragevarianteSachbearbeitung);
         abfragevarianteSachbearbeitungSaved.setVersion(1L);
-        final var abfragevarianteSachbearbeitungBedarfsmeldungSaved = new BedarfsmeldungFachreferate();
+        final var abfragevarianteSachbearbeitungBedarfsmeldungSaved = new Bedarfsmeldung();
         abfragevarianteSachbearbeitungBedarfsmeldungSaved.setAnzahlEinrichtungen(1);
         abfragevarianteSachbearbeitungBedarfsmeldungSaved.setInfrastruktureinrichtungTyp(
             InfrastruktureinrichtungTyp.GRUNDSCHULE
@@ -2754,7 +2754,7 @@ class AbfrageServiceTest {
         final var abfragevarianteRequestModel = new AbfragevarianteBaugenehmigungsverfahrenBedarfsmeldungErfolgtModel();
         abfragevarianteRequestModel.setId(uuidAbfragevariante);
         abfragevarianteRequestModel.setVersion(0L);
-        final var abfragevarianteBedarfsmeldung = new BedarfsmeldungFachreferateModel();
+        final var abfragevarianteBedarfsmeldung = new BedarfsmeldungModel();
         abfragevarianteBedarfsmeldung.setAnzahlEinrichtungen(5);
         abfragevarianteBedarfsmeldung.setInfrastruktureinrichtungTyp(InfrastruktureinrichtungTyp.KINDERKRIPPE);
         abfragevarianteBedarfsmeldung.setAnzahlKinderkrippengruppen(4);
@@ -2767,7 +2767,7 @@ class AbfrageServiceTest {
             new AbfragevarianteBaugenehmigungsverfahrenBedarfsmeldungErfolgtModel();
         abfragevarianteSachbearbeitungRequestModel.setId(uuidAbfragevarianteSachbearbeitung);
         abfragevarianteSachbearbeitungRequestModel.setVersion(0L);
-        final var abfragevarianteSachbearbeitungBedarfsmeldung = new BedarfsmeldungFachreferateModel();
+        final var abfragevarianteSachbearbeitungBedarfsmeldung = new BedarfsmeldungModel();
         abfragevarianteSachbearbeitungBedarfsmeldung.setAnzahlEinrichtungen(1);
         abfragevarianteSachbearbeitungBedarfsmeldung.setInfrastruktureinrichtungTyp(
             InfrastruktureinrichtungTyp.GRUNDSCHULE
@@ -2814,7 +2814,7 @@ class AbfrageServiceTest {
         final var abfragevarianteToSaveSave = new AbfragevarianteBaugenehmigungsverfahren();
         abfragevarianteToSaveSave.setId(uuidAbfragevariante);
         abfragevarianteToSaveSave.setVersion(0L);
-        final var abfragevarianteBedarfsmeldungToSave = new BedarfsmeldungFachreferate();
+        final var abfragevarianteBedarfsmeldungToSave = new Bedarfsmeldung();
         abfragevarianteBedarfsmeldungToSave.setAnzahlEinrichtungen(5);
         abfragevarianteBedarfsmeldungToSave.setInfrastruktureinrichtungTyp(InfrastruktureinrichtungTyp.KINDERKRIPPE);
         abfragevarianteBedarfsmeldungToSave.setAnzahlKinderkrippengruppen(4);
@@ -2826,7 +2826,7 @@ class AbfrageServiceTest {
         final var abfragevarianteSachbearbeitungToSave = new AbfragevarianteBaugenehmigungsverfahren();
         abfragevarianteSachbearbeitungToSave.setId(uuidAbfragevarianteSachbearbeitung);
         abfragevarianteSachbearbeitungToSave.setVersion(0L);
-        final var abfragevarianteSachbearbeitungBedarfsmeldungToSave = new BedarfsmeldungFachreferate();
+        final var abfragevarianteSachbearbeitungBedarfsmeldungToSave = new Bedarfsmeldung();
         abfragevarianteSachbearbeitungBedarfsmeldungToSave.setAnzahlEinrichtungen(1);
         abfragevarianteSachbearbeitungBedarfsmeldungToSave.setInfrastruktureinrichtungTyp(
             InfrastruktureinrichtungTyp.GRUNDSCHULE
@@ -2854,7 +2854,7 @@ class AbfrageServiceTest {
         final var abfragevarianteSaved = new AbfragevarianteBaugenehmigungsverfahren();
         abfragevarianteSaved.setId(uuidAbfragevariante);
         abfragevarianteSaved.setVersion(1L);
-        final var abfragevarianteBedarfsmeldungSaved = new BedarfsmeldungFachreferate();
+        final var abfragevarianteBedarfsmeldungSaved = new Bedarfsmeldung();
         abfragevarianteBedarfsmeldungSaved.setAnzahlEinrichtungen(5);
         abfragevarianteBedarfsmeldungSaved.setInfrastruktureinrichtungTyp(InfrastruktureinrichtungTyp.KINDERKRIPPE);
         abfragevarianteBedarfsmeldungSaved.setAnzahlKinderkrippengruppen(4);
@@ -2866,7 +2866,7 @@ class AbfrageServiceTest {
         final var abfragevarianteSachbearbeitungSaved = new AbfragevarianteBaugenehmigungsverfahren();
         abfragevarianteSachbearbeitungSaved.setId(uuidAbfragevarianteSachbearbeitung);
         abfragevarianteSachbearbeitungSaved.setVersion(1L);
-        final var abfragevarianteSachbearbeitungBedarfsmeldungSaved = new BedarfsmeldungFachreferate();
+        final var abfragevarianteSachbearbeitungBedarfsmeldungSaved = new Bedarfsmeldung();
         abfragevarianteSachbearbeitungBedarfsmeldungSaved.setAnzahlEinrichtungen(1);
         abfragevarianteSachbearbeitungBedarfsmeldungSaved.setInfrastruktureinrichtungTyp(
             InfrastruktureinrichtungTyp.GRUNDSCHULE
@@ -2908,7 +2908,7 @@ class AbfrageServiceTest {
         final var abfragevarianteRequestModel = new AbfragevarianteWeiteresVerfahrenBedarfsmeldungErfolgtModel();
         abfragevarianteRequestModel.setId(uuidAbfragevariante);
         abfragevarianteRequestModel.setVersion(0L);
-        final var abfragevarianteBedarfsmeldung = new BedarfsmeldungFachreferateModel();
+        final var abfragevarianteBedarfsmeldung = new BedarfsmeldungModel();
         abfragevarianteBedarfsmeldung.setAnzahlEinrichtungen(5);
         abfragevarianteBedarfsmeldung.setInfrastruktureinrichtungTyp(InfrastruktureinrichtungTyp.KINDERKRIPPE);
         abfragevarianteBedarfsmeldung.setAnzahlKinderkrippengruppen(4);
@@ -2921,7 +2921,7 @@ class AbfrageServiceTest {
             new AbfragevarianteWeiteresVerfahrenBedarfsmeldungErfolgtModel();
         abfragevarianteSachbearbeitungRequestModel.setId(uuidAbfragevarianteSachbearbeitung);
         abfragevarianteSachbearbeitungRequestModel.setVersion(0L);
-        final var abfragevarianteSachbearbeitungBedarfsmeldung = new BedarfsmeldungFachreferateModel();
+        final var abfragevarianteSachbearbeitungBedarfsmeldung = new BedarfsmeldungModel();
         abfragevarianteSachbearbeitungBedarfsmeldung.setAnzahlEinrichtungen(1);
         abfragevarianteSachbearbeitungBedarfsmeldung.setInfrastruktureinrichtungTyp(
             InfrastruktureinrichtungTyp.GRUNDSCHULE
@@ -2968,7 +2968,7 @@ class AbfrageServiceTest {
         final var abfragevarianteToSaveSave = new AbfragevarianteWeiteresVerfahren();
         abfragevarianteToSaveSave.setId(uuidAbfragevariante);
         abfragevarianteToSaveSave.setVersion(0L);
-        final var abfragevarianteBedarfsmeldungToSave = new BedarfsmeldungFachreferate();
+        final var abfragevarianteBedarfsmeldungToSave = new Bedarfsmeldung();
         abfragevarianteBedarfsmeldungToSave.setAnzahlEinrichtungen(5);
         abfragevarianteBedarfsmeldungToSave.setInfrastruktureinrichtungTyp(InfrastruktureinrichtungTyp.KINDERKRIPPE);
         abfragevarianteBedarfsmeldungToSave.setAnzahlKinderkrippengruppen(4);
@@ -2980,7 +2980,7 @@ class AbfrageServiceTest {
         final var abfragevarianteSachbearbeitungToSave = new AbfragevarianteWeiteresVerfahren();
         abfragevarianteSachbearbeitungToSave.setId(uuidAbfragevarianteSachbearbeitung);
         abfragevarianteSachbearbeitungToSave.setVersion(0L);
-        final var abfragevarianteSachbearbeitungBedarfsmeldungToSave = new BedarfsmeldungFachreferate();
+        final var abfragevarianteSachbearbeitungBedarfsmeldungToSave = new Bedarfsmeldung();
         abfragevarianteSachbearbeitungBedarfsmeldungToSave.setAnzahlEinrichtungen(1);
         abfragevarianteSachbearbeitungBedarfsmeldungToSave.setInfrastruktureinrichtungTyp(
             InfrastruktureinrichtungTyp.GRUNDSCHULE
@@ -3006,7 +3006,7 @@ class AbfrageServiceTest {
         final var abfragevarianteSaved = new AbfragevarianteWeiteresVerfahren();
         abfragevarianteSaved.setId(uuidAbfragevariante);
         abfragevarianteSaved.setVersion(1L);
-        final var abfragevarianteBedarfsmeldungSaved = new BedarfsmeldungFachreferate();
+        final var abfragevarianteBedarfsmeldungSaved = new Bedarfsmeldung();
         abfragevarianteBedarfsmeldungSaved.setAnzahlEinrichtungen(5);
         abfragevarianteBedarfsmeldungSaved.setInfrastruktureinrichtungTyp(InfrastruktureinrichtungTyp.KINDERKRIPPE);
         abfragevarianteBedarfsmeldungSaved.setAnzahlKinderkrippengruppen(4);
@@ -3018,7 +3018,7 @@ class AbfrageServiceTest {
         final var abfragevarianteSachbearbeitungSaved = new AbfragevarianteWeiteresVerfahren();
         abfragevarianteSachbearbeitungSaved.setId(uuidAbfragevarianteSachbearbeitung);
         abfragevarianteSachbearbeitungSaved.setVersion(1L);
-        final var abfragevarianteSachbearbeitungBedarfsmeldungSaved = new BedarfsmeldungFachreferate();
+        final var abfragevarianteSachbearbeitungBedarfsmeldungSaved = new Bedarfsmeldung();
         abfragevarianteSachbearbeitungBedarfsmeldungSaved.setAnzahlEinrichtungen(1);
         abfragevarianteSachbearbeitungBedarfsmeldungSaved.setInfrastruktureinrichtungTyp(
             InfrastruktureinrichtungTyp.GRUNDSCHULE

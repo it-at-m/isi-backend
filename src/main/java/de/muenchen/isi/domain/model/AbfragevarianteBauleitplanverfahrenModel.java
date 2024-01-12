@@ -64,9 +64,9 @@ public class AbfragevarianteBauleitplanverfahrenModel extends AbfragevarianteMod
 
     private String anmerkung;
 
-    private List<BedarfsmeldungFachreferateModel> bedarfsmeldungFachreferate;
+    private List<BedarfsmeldungModel> bedarfsmeldungFachreferate;
 
-    private List<BedarfsmeldungFachreferateModel> bedarfsmeldungAbfrageersteller;
+    private List<BedarfsmeldungModel> bedarfsmeldungAbfrageersteller;
 
     private List<BauabschnittModel> bauabschnitte;
 }
