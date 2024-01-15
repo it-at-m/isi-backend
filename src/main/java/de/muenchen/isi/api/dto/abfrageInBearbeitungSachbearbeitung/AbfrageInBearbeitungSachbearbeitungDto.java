@@ -6,6 +6,7 @@ import de.muenchen.isi.api.validation.NotUnspecified;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import io.swagger.v3.oas.annotations.media.DiscriminatorMapping;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.UUID;
 import lombok.Data;
 
 @Data
@@ -55,4 +56,6 @@ public abstract class AbfrageInBearbeitungSachbearbeitungDto {
 
     @NotUnspecified
     private ArtAbfrage artAbfrage;
+
+    private UUID bauvorhaben;
 }
