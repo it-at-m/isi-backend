@@ -1,8 +1,7 @@
 package de.muenchen.isi.api.dto.calculation;
 
-import java.time.LocalDate;
+import jakarta.validation.constraints.NotNull;
 import java.util.UUID;
-import javax.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data

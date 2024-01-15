@@ -7,13 +7,13 @@ import de.muenchen.isi.IsiBackendApplication;
 import de.muenchen.isi.TestConstants;
 import de.muenchen.isi.infrastructure.entity.Foerderart;
 import de.muenchen.isi.infrastructure.entity.stammdaten.UmlegungFoerderarten;
+import de.muenchen.isi.infrastructure.entity.stammdaten.Umlegungsschluessel;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Set;
-import java.util.UUID;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -42,7 +42,6 @@ public class UmlegungFoerderartenRepositoryTest {
     @Test
     void findUmlegungFoerderartenbyBezeichnungAndDatum() {
         UmlegungFoerderarten umlegungFoerderarten1 = new UmlegungFoerderarten();
-        umlegungFoerderarten1.setId(UUID.randomUUID());
         umlegungFoerderarten1.setBezeichnung("Test1");
         umlegungFoerderarten1.setGueltigAb(LocalDate.parse("2000-01-01"));
         var foerderart1 = new Foerderart();
@@ -51,16 +50,16 @@ public class UmlegungFoerderartenRepositoryTest {
         var foerderart2 = new Foerderart();
         foerderart2.setBezeichnung("foerderart2");
         foerderart2.setAnteilProzent(BigDecimal.valueOf(25));
-        var umlegungschluessel = Set.of(foerderart1, foerderart2);
+        var foerderarten = Set.of(foerderart1, foerderart2);
+        var umlegungschluessel = new Umlegungsschluessel();
+        umlegungschluessel.setFoerderarten(foerderarten);
         umlegungFoerderarten1.setUmlegungsschluessel(umlegungschluessel);
 
         UmlegungFoerderarten umlegungFoerderarten2 = new UmlegungFoerderarten();
-        umlegungFoerderarten2.setId(UUID.randomUUID());
         umlegungFoerderarten2.setBezeichnung("Test2");
         umlegungFoerderarten2.setGueltigAb(LocalDate.parse("2005-05-05"));
 
         UmlegungFoerderarten umlegungFoerderarten3 = new UmlegungFoerderarten();
-        umlegungFoerderarten3.setId(UUID.randomUUID());
         umlegungFoerderarten3.setBezeichnung("Test3");
         umlegungFoerderarten3.setGueltigAb(LocalDate.parse("2010-01-01"));
 
@@ -115,17 +114,14 @@ public class UmlegungFoerderartenRepositoryTest {
     @Test
     void NoSuchElementExceptionUmlegungFoerderartenbyBezeichnungAndDatum() {
         UmlegungFoerderarten umlegungFoerderarten1 = new UmlegungFoerderarten();
-        umlegungFoerderarten1.setId(UUID.randomUUID());
         umlegungFoerderarten1.setBezeichnung("Test1");
         umlegungFoerderarten1.setGueltigAb(LocalDate.parse("2000-01-01"));
 
         UmlegungFoerderarten umlegungFoerderarten2 = new UmlegungFoerderarten();
-        umlegungFoerderarten2.setId(UUID.randomUUID());
         umlegungFoerderarten2.setBezeichnung("Test2");
         umlegungFoerderarten2.setGueltigAb(LocalDate.parse("2005-05-05"));
 
         UmlegungFoerderarten umlegungFoerderarten3 = new UmlegungFoerderarten();
-        umlegungFoerderarten3.setId(UUID.randomUUID());
         umlegungFoerderarten3.setBezeichnung("Test3");
         umlegungFoerderarten3.setGueltigAb(LocalDate.parse("2010-01-01"));
 

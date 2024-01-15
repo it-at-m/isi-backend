@@ -1,10 +1,10 @@
 package de.muenchen.isi.api.validation;
 
 import de.muenchen.isi.api.dto.stammdaten.baurate.JahresrateDto;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 import java.math.BigDecimal;
 import java.util.List;
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;

@@ -1,6 +1,6 @@
 package de.muenchen.isi.api.dto.common;
 
-import javax.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 
 @Data
