@@ -5,10 +5,10 @@
 package de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung;
 
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Einrichtungstraeger;
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.Data;
 
 @Embeddable

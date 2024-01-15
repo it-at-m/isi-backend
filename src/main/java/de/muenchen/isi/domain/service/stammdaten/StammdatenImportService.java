@@ -13,6 +13,7 @@ import de.muenchen.isi.infrastructure.repository.CsvRepository;
 import de.muenchen.isi.infrastructure.repository.stammdaten.SobonOrientierungswertSozialeInfrastrukturRepository;
 import de.muenchen.isi.infrastructure.repository.stammdaten.StaedtebaulicheOrientierungswertRepository;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -45,7 +46,26 @@ public class StammdatenImportService {
      */
     public void importStaedtebaulicheOrientierungswerte(final MultipartFile csvImportFile)
         throws FileImportFailedException, CsvAttributeErrorException {
-        try (final InputStreamReader csvInputStreamReader = new InputStreamReader(csvImportFile.getInputStream())) {
+        try (final var inputStream = csvImportFile.getInputStream()) {
+            this.importStaedtebaulicheOrientierungswerte(inputStream);
+        } catch (final IOException exception) {
+            final var message = "Der Import einer CSV-Datei für StaedtebaulicheOrientierungswerte ist fehlgeschlagen.";
+            log.error(message);
+            log.error(exception.getMessage());
+            throw new FileImportFailedException(message, exception);
+        }
+    }
+
+    /**
+     * Die Methode extrahiert aus der CSV-Datei im Parameter, die entsprechenden Entitäten und persistiert diese in der Datenbank.
+     *
+     * @param csvImportFile mit den Informationen bezüglich {@link StaedtebaulicheOrientierungswertCsv}.
+     * @throws FileImportFailedException  tritt auf, falls ein Fehler beim Import passiert.
+     * @throws CsvAttributeErrorException tritt auf, falls ein Attribut in der CSV nicht gesetzt oder fehlerhaft ist.
+     */
+    public void importStaedtebaulicheOrientierungswerte(final InputStream csvImportFile)
+        throws FileImportFailedException, CsvAttributeErrorException {
+        try (final InputStreamReader csvInputStreamReader = new InputStreamReader(csvImportFile)) {
             final List<StaedtebaulicheOrientierungswert> entities =
                 this.csvRepository.readAllStaedtebaulicheOrientierungswertCsv(csvInputStreamReader)
                     .stream()
@@ -64,6 +84,26 @@ public class StammdatenImportService {
     }
 
     /**
+     * Die Methode extrahiert aus der CSV-Datei im Parameter, die entsprechenden Entitäten und persistiert diese in der Datenbank.
+     *
+     * @param csvImportFile mit den Informationen bezüglich {@link SobonOrientierungswertSozialeInfrastrukturCsv}.
+     * @throws FileImportFailedException  tritt auf, falls ein Fehler beim Import passiert.
+     * @throws CsvAttributeErrorException tritt auf, falls ein Attribut in der CSV nicht gesetzt oder fehlerhaft ist.
+     */
+    public void importSobonOrientierungswerteSozialeInfrastruktur(final MultipartFile csvImportFile)
+        throws CsvAttributeErrorException, FileImportFailedException {
+        try (final var inputStream = csvImportFile.getInputStream()) {
+            this.importSobonOrientierungswerteSozialeInfrastruktur(inputStream);
+        } catch (final IOException exception) {
+            final var message =
+                "Der Import einer CSV-Datei für SoBoNOrientierungswerteSozialeInfrastruktur ist fehlgeschlagen.";
+            log.error(message);
+            log.error(exception.getMessage());
+            throw new FileImportFailedException(message, exception);
+        }
+    }
+
+    /**
      * Die Methode extrahiert aus der CSV-Datei im Parameter, die entsprechenden Entitäten
      * und persistiert diese in der Datenbank.
      *
@@ -71,9 +111,9 @@ public class StammdatenImportService {
      * @throws FileImportFailedException  tritt auf, falls ein Fehler beim Import passiert.
      * @throws CsvAttributeErrorException tritt auf, falls ein Attribut in der CSV nicht gesetzt oder fehlerhaft ist.
      */
-    public void importSobonOrientierungswerteSozialeInfrastruktur(final MultipartFile csvImportFile)
+    public void importSobonOrientierungswerteSozialeInfrastruktur(final InputStream csvImportFile)
         throws FileImportFailedException, CsvAttributeErrorException {
-        try (final InputStreamReader csvInputStreamReader = new InputStreamReader(csvImportFile.getInputStream())) {
+        try (final InputStreamReader csvInputStreamReader = new InputStreamReader(csvImportFile)) {
             final List<SobonOrientierungswertSozialeInfrastruktur> entities =
                 this.csvRepository.readAllSobonOrientierungswertSozialeInfrastrukturCsv(csvInputStreamReader)
                     .stream()

@@ -5,8 +5,12 @@ import de.muenchen.isi.infrastructure.entity.enums.lookup.Infrastruktureinrichtu
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 @Data
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
 public class VersorgungsquoteGruppenstaerkeModel extends BaseEntityModel {
 
     private LocalDate gueltigAb;

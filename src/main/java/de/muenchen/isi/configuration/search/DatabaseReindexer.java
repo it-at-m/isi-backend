@@ -2,7 +2,7 @@ package de.muenchen.isi.configuration.search;
 
 import de.muenchen.isi.domain.model.search.request.SearchQueryModel;
 import de.muenchen.isi.domain.service.search.SearchPreparationService;
-import javax.persistence.EntityManager;
+import jakarta.persistence.EntityManager;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.search.mapper.orm.Search;

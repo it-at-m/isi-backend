@@ -12,7 +12,6 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
-import java.util.UUID;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -42,7 +41,6 @@ public class VersorgungsquoteGruppenstaerkeRepositoryTest {
     @Test
     void findUmlegungFoerderartenbyBezeichnungAndDatum() {
         VersorgungsquoteGruppenstaerke bildungseinrichtung1 = new VersorgungsquoteGruppenstaerke();
-        bildungseinrichtung1.setId(UUID.randomUUID());
         bildungseinrichtung1.setInfrastruktureinrichtungTyp(InfrastruktureinrichtungTyp.KINDERGARTEN);
         bildungseinrichtung1.setGruppenstaerke(50);
         bildungseinrichtung1.setVersorgungsquotePlanungsursaechlich(new BigDecimal("0.650"));
@@ -50,7 +48,6 @@ public class VersorgungsquoteGruppenstaerkeRepositoryTest {
         bildungseinrichtung1.setGueltigAb(LocalDate.parse("2000-01-01"));
 
         VersorgungsquoteGruppenstaerke bildungseinrichtung2 = new VersorgungsquoteGruppenstaerke();
-        bildungseinrichtung2.setId(UUID.randomUUID());
         bildungseinrichtung2.setInfrastruktureinrichtungTyp(InfrastruktureinrichtungTyp.KINDERKRIPPE);
         bildungseinrichtung2.setGruppenstaerke(75);
         bildungseinrichtung2.setVersorgungsquotePlanungsursaechlich(new BigDecimal("0.750"));
@@ -58,7 +55,6 @@ public class VersorgungsquoteGruppenstaerkeRepositoryTest {
         bildungseinrichtung2.setGueltigAb(LocalDate.parse("2005-06-10"));
 
         VersorgungsquoteGruppenstaerke bildungseinrichtung3 = new VersorgungsquoteGruppenstaerke();
-        bildungseinrichtung3.setId(UUID.randomUUID());
         bildungseinrichtung3.setInfrastruktureinrichtungTyp(InfrastruktureinrichtungTyp.GRUNDSCHULE);
         bildungseinrichtung3.setGruppenstaerke(100);
         bildungseinrichtung3.setVersorgungsquotePlanungsursaechlich(new BigDecimal("0.540"));
@@ -116,7 +112,6 @@ public class VersorgungsquoteGruppenstaerkeRepositoryTest {
     @Test
     void noSuchElementExceptionUmlegungFoerderartenbyBezeichnungAndDatum() {
         VersorgungsquoteGruppenstaerke bildungseinrichtung1 = new VersorgungsquoteGruppenstaerke();
-        bildungseinrichtung1.setId(UUID.randomUUID());
         bildungseinrichtung1.setInfrastruktureinrichtungTyp(InfrastruktureinrichtungTyp.KINDERGARTEN);
         bildungseinrichtung1.setGruppenstaerke(50);
         bildungseinrichtung1.setVersorgungsquotePlanungsursaechlich(new BigDecimal("0.650"));
@@ -124,7 +119,6 @@ public class VersorgungsquoteGruppenstaerkeRepositoryTest {
         bildungseinrichtung1.setGueltigAb(LocalDate.parse("2000-01-01"));
 
         VersorgungsquoteGruppenstaerke bildungseinrichtung2 = new VersorgungsquoteGruppenstaerke();
-        bildungseinrichtung2.setId(UUID.randomUUID());
         bildungseinrichtung2.setInfrastruktureinrichtungTyp(InfrastruktureinrichtungTyp.KINDERKRIPPE);
         bildungseinrichtung2.setGruppenstaerke(75);
         bildungseinrichtung2.setVersorgungsquotePlanungsursaechlich(new BigDecimal("0.750"));
@@ -248,7 +242,6 @@ public class VersorgungsquoteGruppenstaerkeRepositoryTest {
 
     private VersorgungsquoteGruppenstaerke createBildungseinrichtung(BigDecimal value, LocalDate gueltigAb) {
         VersorgungsquoteGruppenstaerke versorgungsquoteGruppenstaerke = new VersorgungsquoteGruppenstaerke();
-        versorgungsquoteGruppenstaerke.setId(UUID.randomUUID());
         versorgungsquoteGruppenstaerke.setInfrastruktureinrichtungTyp(InfrastruktureinrichtungTyp.KINDERKRIPPE);
         versorgungsquoteGruppenstaerke.setGruppenstaerke(50);
         versorgungsquoteGruppenstaerke.setVersorgungsquotePlanungsursaechlich(value);

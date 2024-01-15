@@ -1,7 +1,7 @@
 package de.muenchen.isi.api.dto;
 
 import de.muenchen.isi.api.dto.common.AdresseDto;
-import de.muenchen.isi.api.dto.common.VerortungDto;
+import de.muenchen.isi.api.dto.common.VerortungMultiPolygonDto;
 import de.muenchen.isi.api.dto.filehandling.DokumentDto;
 import de.muenchen.isi.api.validation.HasAllowedNumberOfDocuments;
 import de.muenchen.isi.api.validation.NotUnspecified;
@@ -10,16 +10,20 @@ import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonVerfahrensgrundsa
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVerfahren;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.WesentlicheRechtsgrundlage;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
-import javax.validation.Valid;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 @Data
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
 public class BauvorhabenDto extends BaseEntityDto {
 
     @NotEmpty
@@ -41,7 +45,7 @@ public class BauvorhabenDto extends BaseEntityDto {
     private AdresseDto adresse;
 
     @Valid
-    private VerortungDto verortung;
+    private VerortungMultiPolygonDto verortung;
 
     @Size(max = 255, message = "Es sind maximal {max} Zeichen erlaubt")
     private String bebauungsplannummer;

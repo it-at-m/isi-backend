@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import de.muenchen.isi.api.dto.BaseEntityDto;
 import de.muenchen.isi.api.dto.common.AdresseDto;
+import de.muenchen.isi.api.dto.common.VerortungPointDto;
 import de.muenchen.isi.api.validation.EinrichtungstraegerValid;
 import de.muenchen.isi.api.validation.FertigstellungsjahrValid;
 import de.muenchen.isi.api.validation.NotUnspecified;
@@ -15,17 +16,21 @@ import de.muenchen.isi.infrastructure.entity.enums.lookup.Infrastruktureinrichtu
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusInfrastruktureinrichtung;
 import io.swagger.v3.oas.annotations.media.DiscriminatorMapping;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.util.UUID;
-import javax.validation.Valid;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 @Data
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
 @FertigstellungsjahrValid
 @EinrichtungstraegerValid
 @JsonTypeInfo(
@@ -75,6 +80,9 @@ public abstract class InfrastruktureinrichtungDto extends BaseEntityDto {
 
     @Valid
     private AdresseDto adresse;
+
+    @Valid
+    private VerortungPointDto verortung;
 
     @NotBlank
     @Size(max = 255, message = "Es sind maximal {max} Zeichen erlaubt")

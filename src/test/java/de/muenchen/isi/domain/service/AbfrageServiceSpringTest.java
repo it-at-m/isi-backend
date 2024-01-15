@@ -35,9 +35,9 @@ import de.muenchen.isi.infrastructure.entity.enums.lookup.Infrastruktureinrichtu
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.repository.AbfrageRepository;
+import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.UUID;
-import javax.transaction.Transactional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -108,6 +108,7 @@ class AbfrageServiceSpringTest {
         abfrage = this.abfrageService.save(abfrage);
 
         AbfrageAngelegtModel abfrageAngelegt = TestData.createBauleitplanverfahrenAngelegtModel();
+        abfrageAngelegt.setVersion(abfrage.getVersion());
 
         abfrage = this.abfrageService.patchAngelegt(abfrageAngelegt, abfrage.getId());
         assertThat(abfrage.getName(), is("Neubausiedlung in Musterort 2"));
@@ -127,6 +128,7 @@ class AbfrageServiceSpringTest {
         abfrage = this.abfrageService.save(abfrage);
 
         AbfrageAngelegtModel abfrageAngelegt = TestData.createBaugenehmigungsverfahrenAngelegtModel();
+        abfrageAngelegt.setVersion(abfrage.getVersion());
 
         abfrage = this.abfrageService.patchAngelegt(abfrageAngelegt, abfrage.getId());
         assertThat(abfrage.getName(), is("Altbausiedlung in Musterort 2"));
@@ -146,6 +148,7 @@ class AbfrageServiceSpringTest {
         abfrage = this.abfrageService.save(abfrage);
 
         AbfrageAngelegtModel abfrageAngelegt = TestData.createWeiteresVerfahrenAngelegtModel();
+        abfrageAngelegt.setVersion(abfrage.getVersion());
 
         abfrage = this.abfrageService.patchAngelegt(abfrageAngelegt, abfrage.getId());
         assertThat(abfrage.getName(), is("Überbausiedlung in Musterort 2"));

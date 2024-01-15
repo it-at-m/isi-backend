@@ -1,6 +1,6 @@
 package de.muenchen.isi.domain.model.common;
 
-import javax.persistence.Embeddable;
+import jakarta.persistence.Embeddable;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
