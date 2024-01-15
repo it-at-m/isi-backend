@@ -12,11 +12,11 @@ public interface AbfragevarianteBaugenehmigungsverfahrenRepository
         value = "select abfragevarianten_baugenehmigungsverfahren_id from abfragevariante_baugenehmigungsverfahren where id = ?1",
         nativeQuery = true
     )
-    Optional<String> findAbfrageIdForAbfragevarianteById(final String id);
+    Optional<UUID> findAbfrageIdForAbfragevarianteById(final UUID id);
 
     @Query(
         value = "select abfragevarianten_sachbearbeitung_baugenehmigungsverfahren_id from abfragevariante_baugenehmigungsverfahren where id = ?1",
         nativeQuery = true
     )
-    Optional<String> findAbfrageIdForAbfragevarianteSachbearbeitungById(final String id);
+    Optional<UUID> findAbfrageIdForAbfragevarianteSachbearbeitungById(final UUID id);
 }

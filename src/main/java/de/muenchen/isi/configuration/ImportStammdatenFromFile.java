@@ -8,22 +8,16 @@ import de.muenchen.isi.infrastructure.repository.stammdaten.StaedtebaulicheOrien
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.util.List;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.ListUtils;
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.disk.DiskFileItem;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.BooleanUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 @Component
 @Data
@@ -97,8 +91,9 @@ public class ImportStammdatenFromFile implements CommandLineRunner {
      */
     public void addSobonOrientierungswerteSozialeInfrastruktur(String filePath)
         throws IOException, CsvAttributeErrorException, FileImportFailedException {
-        final var multipartFile = this.createMultipartFile(filePath);
-        this.stammdatenImportService.importSobonOrientierungswerteSozialeInfrastruktur(multipartFile);
+        try (final var fileInputStream = this.createFileInputStream(filePath)) {
+            this.stammdatenImportService.importSobonOrientierungswerteSozialeInfrastruktur(fileInputStream);
+        }
     }
 
     /**
@@ -111,30 +106,22 @@ public class ImportStammdatenFromFile implements CommandLineRunner {
      */
     public void addStaedtebaulicheOrientierungswerte(String filePath)
         throws IOException, CsvAttributeErrorException, FileImportFailedException {
-        final var multipartFile = this.createMultipartFile(filePath);
-        this.stammdatenImportService.importStaedtebaulicheOrientierungswerte(multipartFile);
+        try (final var fileInputStream = this.createFileInputStream(filePath)) {
+            this.stammdatenImportService.importStaedtebaulicheOrientierungswerte(fileInputStream);
+        }
     }
 
     /**
-     * Erstellt ein MultipartFile-Objekt aus der angegebenen Datei.
+     * Erstellt einen FileInputStream aus der angegebenen Datei.
      *
      * @param filePath Der Dateipfad zur CSV-Datei.
-     * @return Das MultipartFile-Objekt.
+     * @return den FileInputStream der CSV-Datei.
      * @throws IOException sobald ein Fehler beim Lesen der Datei auftritt.
      */
-    public MultipartFile createMultipartFile(String filePath) throws IOException {
+    public FileInputStream createFileInputStream(String filePath) throws IOException {
         final var inputStream = new ClassPathResource(filePath).getInputStream();
         final var tempFile = File.createTempFile("tempfile", ".tmp");
         FileUtils.copyInputStreamToFile(inputStream, tempFile);
-        final FileItem fileItem = new DiskFileItem(
-            "tempfile",
-            Files.probeContentType(tempFile.toPath()),
-            false,
-            tempFile.getName(),
-            (int) tempFile.length(),
-            tempFile.getParentFile()
-        );
-        IOUtils.copy(new FileInputStream(tempFile), fileItem.getOutputStream());
-        return new CommonsMultipartFile(fileItem);
+        return new FileInputStream(tempFile);
     }
 }

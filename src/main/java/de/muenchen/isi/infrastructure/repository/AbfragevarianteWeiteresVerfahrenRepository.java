@@ -12,11 +12,11 @@ public interface AbfragevarianteWeiteresVerfahrenRepository
         value = "select abfragevarianten_weiteres_verfahren_id from abfragevariante_weiteres_verfahren where id = ?1",
         nativeQuery = true
     )
-    Optional<String> findAbfrageIdForAbfragevarianteById(final String id);
+    Optional<UUID> findAbfrageIdForAbfragevarianteById(final UUID id);
 
     @Query(
         value = "select abfragevarianten_sachbearbeitung_weiteres_verfahren_id from abfragevariante_weiteres_verfahren where id = ?1",
         nativeQuery = true
     )
-    Optional<String> findAbfrageIdForAbfragevarianteSachbearbeitungById(final String id);
+    Optional<UUID> findAbfrageIdForAbfragevarianteSachbearbeitungById(final UUID id);
 }
