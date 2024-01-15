@@ -165,30 +165,30 @@ public class AbfragevarianteWeiteresVerfahren extends Abfragevariante {
     // Kindertagesbetreuung
 
     @Column
-    private boolean ausgelBedarfImBaugebietBeruecksichtigenKita;
+    private boolean ausgeloesterBedarfImBaugebietBeruecksichtigenKita;
 
     @Column
-    private boolean ausgelBedarfMitversorgungImBplanKita;
+    private boolean ausgeloesterBedarfMitversorgungImBplanKita;
 
     @Column
-    private boolean ausgelBedarfMitversorgungInBestEinrichtungenKita;
+    private boolean ausgeloesterBedarfMitversorgungInBestEinrichtungenKita;
 
     @Column
-    private boolean ausgelBedarfMitversorgungInBestEinrichtungenNachAusbauKita;
+    private boolean ausgeloesterBedarfMitversorgungInBestEinrichtungenNachAusbauKita;
 
     // Schule
 
     @Column
-    private boolean ausgelBedarfImBaugebietBeruecksichtigenSchule;
+    private boolean ausgeloesterBedarfImBaugebietBeruecksichtigenSchule;
 
     @Column
-    private boolean ausgelBedarfMitversorgungImBplanSchule;
+    private boolean ausgeloesterBedarfMitversorgungImBplanSchule;
 
     @Column
-    private boolean ausgelBedarfMitversorgungInBestEinrichtungenSchule;
+    private boolean ausgeloesterBedarfMitversorgungInBestEinrichtungenSchule;
 
     @Column
-    private boolean ausgelBedarfMitversorgungInBestEinrichtungenNachAusbauSchule;
+    private boolean ausgeloesterBedarfMitversorgungInBestEinrichtungenNachAusbauSchule;
 
     @Column
     private String hinweisVersorgung;

@@ -79,23 +79,23 @@ public class AbfragevarianteWeiteresVerfahrenDto extends AbfragevarianteDto {
 
     // Kindertagesbetreuung
 
-    private boolean ausgelBedarfImBaugebietBeruecksichtigenKita;
+    private boolean ausgeloesterBedarfImBaugebietBeruecksichtigenKita;
 
-    private boolean ausgelBedarfMitversorgungImBplanKita;
+    private boolean ausgeloesterBedarfMitversorgungImBplanKita;
 
-    private boolean ausgelBedarfMitversorgungInBestEinrichtungenKita;
+    private boolean ausgeloesterBedarfMitversorgungInBestEinrichtungenKita;
 
-    private boolean ausgelBedarfMitversorgungInBestEinrichtungenNachAusbauKita;
+    private boolean ausgeloesterBedarfMitversorgungInBestEinrichtungenNachAusbauKita;
 
     // Schule
 
-    private boolean ausgelBedarfImBaugebietBeruecksichtigenSchule;
+    private boolean ausgeloesterBedarfImBaugebietBeruecksichtigenSchule;
 
-    private boolean ausgelBedarfMitversorgungImBplanSchule;
+    private boolean ausgeloesterBedarfMitversorgungImBplanSchule;
 
-    private boolean ausgelBedarfMitversorgungInBestEinrichtungenSchule;
+    private boolean ausgeloesterBedarfMitversorgungInBestEinrichtungenSchule;
 
-    private boolean ausgelBedarfMitversorgungInBestEinrichtungenNachAusbauSchule;
+    private boolean ausgeloesterBedarfMitversorgungInBestEinrichtungenNachAusbauSchule;
 
     private String hinweisVersorgung;
 }
