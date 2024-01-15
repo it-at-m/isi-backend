@@ -39,7 +39,6 @@ import de.muenchen.isi.infrastructure.repository.BauvorhabenRepository;
 import de.muenchen.isi.security.AuthenticationUtils;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -445,19 +444,24 @@ public class AbfrageService {
 
         final var abfrageIds = Stream
             .of(
-                abfragevarianteBauleitplanverfahrenRepository.findAbfrageIdForAbfragevarianteById(id),
-                abfragevarianteBauleitplanverfahrenRepository.findAbfrageIdForAbfragevarianteSachbearbeitungById(id),
-                abfragevarianteBaugenehmigungsverfahrenRepository.findAbfrageIdForAbfragevarianteById(id),
-                abfragevarianteBaugenehmigungsverfahrenRepository.findAbfrageIdForAbfragevarianteSachbearbeitungById(
-                    id
+                abfragevarianteBauleitplanverfahrenRepository.findAbfrageIdForAbfragevarianteById(abfragevarianteId),
+                abfragevarianteBauleitplanverfahrenRepository.findAbfrageIdForAbfragevarianteSachbearbeitungById(
+                    abfragevarianteId
                 ),
-                abfragevarianteWeiteresVerfahrenRepository.findAbfrageIdForAbfragevarianteById(id),
-                abfragevarianteWeiteresVerfahrenRepository.findAbfrageIdForAbfragevarianteSachbearbeitungById(id)
+                abfragevarianteBaugenehmigungsverfahrenRepository.findAbfrageIdForAbfragevarianteById(
+                    abfragevarianteId
+                ),
+                abfragevarianteBaugenehmigungsverfahrenRepository.findAbfrageIdForAbfragevarianteSachbearbeitungById(
+                    abfragevarianteId
+                ),
+                abfragevarianteWeiteresVerfahrenRepository.findAbfrageIdForAbfragevarianteById(abfragevarianteId),
+                abfragevarianteWeiteresVerfahrenRepository.findAbfrageIdForAbfragevarianteSachbearbeitungById(
+                    abfragevarianteId
+                )
             )
             .filter(Optional::isPresent)
             .map(Optional::get)
-            .map(UUID::fromString)
-            .collect(Collectors.toList());
+            .toList();
 
         if (abfrageIds.size() != 1) {
             final var message = "Abfrage auf Basis einer Abfragevariante ID nicht eindeutig auffindbar.";

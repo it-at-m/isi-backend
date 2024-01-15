@@ -4,9 +4,9 @@
  */
 package de.muenchen.isi.api.dto;
 
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 import java.util.List;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
 import lombok.Data;
 import org.hibernate.validator.constraints.UniqueElements;
 

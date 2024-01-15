@@ -13,7 +13,6 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
-import java.util.UUID;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -269,7 +268,6 @@ public class SobonOrientierungswertSozialeInfrastrukturRepositoryTest {
         BigDecimal stammwertArbeitsgruppe
     ) {
         SobonOrientierungswertSozialeInfrastruktur orientierungswert = new SobonOrientierungswertSozialeInfrastruktur();
-        orientierungswert.setId(UUID.randomUUID());
         orientierungswert.setGueltigAb(gueltigAb);
         orientierungswert.setEinrichtungstyp(einrichtungstyp);
         orientierungswert.setAltersklasse(altersklasse);

@@ -11,7 +11,6 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
-import java.util.UUID;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -40,21 +39,18 @@ public class StaedtebaulicheOrientierungswertRepositoryTest {
     @Test
     void findStaedtebaulicheOrientierungswertByFoerderartBezeichnungAndGueltigAb() {
         StaedtebaulicheOrientierungswert orientierungswert1 = new StaedtebaulicheOrientierungswert();
-        orientierungswert1.setId(UUID.randomUUID());
         orientierungswert1.setFoerderartBezeichnung("Test1");
         orientierungswert1.setGueltigAb(LocalDate.parse("2000-01-01"));
         orientierungswert1.setDurchschnittlicheGrundflaeche(100L);
         orientierungswert1.setBelegungsdichte(new BigDecimal("1.50"));
 
         StaedtebaulicheOrientierungswert orientierungswert2 = new StaedtebaulicheOrientierungswert();
-        orientierungswert2.setId(UUID.randomUUID());
         orientierungswert2.setFoerderartBezeichnung("Test2");
         orientierungswert2.setGueltigAb(LocalDate.parse("2005-05-05"));
         orientierungswert2.setDurchschnittlicheGrundflaeche(150L);
         orientierungswert2.setBelegungsdichte(new BigDecimal("2.00"));
 
         StaedtebaulicheOrientierungswert orientierungswert3 = new StaedtebaulicheOrientierungswert();
-        orientierungswert3.setId(UUID.randomUUID());
         orientierungswert3.setFoerderartBezeichnung("Test3");
         orientierungswert3.setGueltigAb(LocalDate.parse("2010-01-01"));
         orientierungswert3.setDurchschnittlicheGrundflaeche(120L);
@@ -111,14 +107,12 @@ public class StaedtebaulicheOrientierungswertRepositoryTest {
     @Test
     void noSuchElementExceptionStaedtebaulicheOrientierungswertByFoerderartBezeichnungAndGueltigAb() {
         StaedtebaulicheOrientierungswert orientierungswert1 = new StaedtebaulicheOrientierungswert();
-        orientierungswert1.setId(UUID.randomUUID());
         orientierungswert1.setFoerderartBezeichnung("Test1");
         orientierungswert1.setGueltigAb(LocalDate.parse("2000-01-01"));
         orientierungswert1.setDurchschnittlicheGrundflaeche(100L);
         orientierungswert1.setBelegungsdichte(new BigDecimal("1.50"));
 
         StaedtebaulicheOrientierungswert orientierungswert2 = new StaedtebaulicheOrientierungswert();
-        orientierungswert2.setId(UUID.randomUUID());
         orientierungswert2.setFoerderartBezeichnung("Test2");
         orientierungswert2.setGueltigAb(LocalDate.parse("2005-05-05"));
         orientierungswert2.setDurchschnittlicheGrundflaeche(150L);
