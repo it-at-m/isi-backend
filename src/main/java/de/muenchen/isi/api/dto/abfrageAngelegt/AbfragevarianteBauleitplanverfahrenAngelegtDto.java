@@ -49,7 +49,9 @@ public class AbfragevarianteBauleitplanverfahrenAngelegtDto {
     private LocalDate satzungsbeschluss;
 
     @NotEmpty
-    private List<@WesentlicheRechtsgrundlageBauleitplanverfahrenValid @NotNull WesentlicheRechtsgrundlage> wesentlicheRechtsgrundlage;
+    private List<
+        @WesentlicheRechtsgrundlageBauleitplanverfahrenValid @NotNull WesentlicheRechtsgrundlage
+    > wesentlicheRechtsgrundlage;
 
     @Size(max = 255, message = "Es sind maximal {max} Zeichen erlaubt")
     private String wesentlicheRechtsgrundlageFreieEingabe;
