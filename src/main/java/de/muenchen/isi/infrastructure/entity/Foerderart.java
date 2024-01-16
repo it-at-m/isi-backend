@@ -1,7 +1,7 @@
 package de.muenchen.isi.infrastructure.entity;
 
+import jakarta.persistence.Embeddable;
 import java.math.BigDecimal;
-import javax.persistence.Embeddable;
 import lombok.Data;
 
 @Embeddable

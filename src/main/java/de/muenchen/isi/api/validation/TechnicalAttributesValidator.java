@@ -1,9 +1,9 @@
 package de.muenchen.isi.api.validation;
 
 import de.muenchen.isi.api.dto.BauabschnittDto;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 import java.util.List;
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
 import org.apache.commons.collections4.CollectionUtils;
 
 public class TechnicalAttributesValidator

@@ -5,7 +5,7 @@
 package de.muenchen.isi.infrastructure.entity.enums.lookup;
 
 import de.muenchen.isi.infrastructure.entity.Abfrage;
-import javax.persistence.DiscriminatorValue;
+import jakarta.persistence.DiscriminatorValue;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

@@ -1,13 +1,15 @@
 package de.muenchen.isi.infrastructure.entity;
 
 import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Index;
-import javax.persistence.Table;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Index;
+import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 @Entity
 @Table(
@@ -47,6 +49,7 @@ public class Bedarfsmeldung extends BaseEntity {
     private Integer anzahlEinrichtungen;
 
     @Column(nullable = false)
+    @JdbcTypeCode(SqlTypes.INTEGER)
     private InfrastruktureinrichtungTyp infrastruktureinrichtungTyp;
 
     @Column

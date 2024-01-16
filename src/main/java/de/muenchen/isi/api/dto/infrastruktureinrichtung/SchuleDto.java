@@ -5,7 +5,7 @@
 package de.muenchen.isi.api.dto.infrastruktureinrichtung;
 
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Einrichtungstraeger;
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
