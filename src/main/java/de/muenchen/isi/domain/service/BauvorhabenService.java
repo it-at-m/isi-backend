@@ -2,6 +2,7 @@ package de.muenchen.isi.domain.service;
 
 import de.muenchen.isi.domain.exception.AbfrageStatusNotAllowedException;
 import de.muenchen.isi.domain.exception.BauvorhabenNotReferencedException;
+import de.muenchen.isi.domain.exception.CalculationException;
 import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.FileHandlingFailedException;
@@ -120,6 +121,8 @@ public class BauvorhabenService {
             } catch (final ObjectOptimisticLockingFailureException exception) {
                 final var message = "Die Daten wurden in der Zwischenzeit geändert. Bitte laden Sie die Seite neu!";
                 throw new OptimisticLockingException(message, exception);
+            } catch (CalculationException e) {
+                throw new RuntimeException(e);
             }
             return this.bauvorhabenDomainMapper.entity2Model(bauvorhabenEntity);
         } else {

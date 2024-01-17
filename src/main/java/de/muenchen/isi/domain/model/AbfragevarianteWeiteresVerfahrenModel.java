@@ -4,8 +4,8 @@
  */
 package de.muenchen.isi.domain.model;
 
+import de.muenchen.isi.domain.model.calculation.LangfristigerPlanungsursaechlicherBedarfModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.WesentlicheRechtsgrundlage;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -71,6 +71,8 @@ public class AbfragevarianteWeiteresVerfahrenModel extends AbfragevarianteModel 
 
     private SobonOrientierungswertJahr sobonOrientierungswertJahr;
 
+    private LocalDate stammdatenGueltigAb;
+
     private String anmerkung;
 
     private List<BedarfsmeldungFachreferateModel> bedarfsmeldungFachreferate;
@@ -98,4 +100,6 @@ public class AbfragevarianteWeiteresVerfahrenModel extends AbfragevarianteModel 
     private boolean ausgeloesterBedarfMitversorgungInBestEinrichtungenNachAusbauSchule;
 
     private String hinweisVersorgung;
+
+    private LangfristigerPlanungsursaechlicherBedarfModel langfristigerPlanungsursaechlicherBedarf;
 }

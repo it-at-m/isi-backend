@@ -44,4 +44,6 @@ public class LookupListsModel {
     private LookupListModel artGsNachmittagBetreuung;
 
     private LookupListModel sobonOrientierungswertJahr;
+
+    private LookupListModel sobonOrientierungswertJahrWithoutStandortabfrage;
 }

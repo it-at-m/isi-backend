@@ -6,9 +6,9 @@ package de.muenchen.isi.infrastructure.entity;
 
 import de.muenchen.isi.infrastructure.adapter.search.IntegerSuggestionBinder;
 import de.muenchen.isi.infrastructure.adapter.search.IntegerToStringValueBridge;
+import de.muenchen.isi.infrastructure.entity.calculation.LangfristigerPlanungsursaechlicherBedarf;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.WesentlicheRechtsgrundlage;
 import de.muenchen.isi.infrastructure.repository.search.SearchwordSuggesterRepository;
 import jakarta.persistence.CascadeType;
@@ -31,10 +31,12 @@ import java.util.List;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBinderRef;
 import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBridgeRef;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.KeywordField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.NonStandardField;
+import org.hibernate.type.SqlTypes;
 
 @Entity
 @DiscriminatorValue(ArtAbfrage.Values.BAULEITPLANVERFAHREN)
@@ -137,6 +139,9 @@ public class AbfragevarianteBauleitplanverfahren extends Abfragevariante {
     private SobonOrientierungswertJahr sobonOrientierungswertJahr;
 
     @Column
+    private LocalDate stammdatenGueltigAb;
+
+    @Column
     private String anmerkung;
 
     @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval = true)
@@ -179,4 +184,8 @@ public class AbfragevarianteBauleitplanverfahren extends Abfragevariante {
 
     @Column
     private String hinweisVersorgung;
+
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(columnDefinition = "jsonb")
+    private LangfristigerPlanungsursaechlicherBedarf langfristigerPlanungsursaechlicherBedarf;
 }

@@ -4,8 +4,8 @@
  */
 package de.muenchen.isi.api.dto;
 
+import de.muenchen.isi.api.dto.calculation.LangfristigerPlanungsursaechlicherBedarfDto;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.WesentlicheRechtsgrundlage;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -71,6 +71,8 @@ public class AbfragevarianteWeiteresVerfahrenDto extends AbfragevarianteDto {
 
     private SobonOrientierungswertJahr sobonOrientierungswertJahr;
 
+    private LocalDate stammdatenGueltigAb;
+
     private String anmerkung;
 
     private List<BedarfsmeldungFachreferateDto> bedarfsmeldungFachreferate;
@@ -98,4 +100,6 @@ public class AbfragevarianteWeiteresVerfahrenDto extends AbfragevarianteDto {
     private boolean ausgeloesterBedarfMitversorgungInBestEinrichtungenNachAusbauSchule;
 
     private String hinweisVersorgung;
+
+    private LangfristigerPlanungsursaechlicherBedarfDto langfristigerPlanungsursaechlicherBedarf;
 }
