@@ -2,11 +2,9 @@ package de.muenchen.isi.infrastructure.csv;
 
 import com.opencsv.bean.CsvBindByName;
 import com.opencsv.bean.CsvCustomBindByName;
-import de.muenchen.isi.infrastructure.adapter.AltersklasseConverter;
-import de.muenchen.isi.infrastructure.adapter.EinrichtungstypConverter;
 import de.muenchen.isi.infrastructure.adapter.JahrConverter;
 import de.muenchen.isi.infrastructure.entity.enums.Altersklasse;
-import de.muenchen.isi.infrastructure.entity.enums.Einrichtungstyp;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import lombok.Data;
@@ -17,10 +15,10 @@ public class SobonOrientierungswertSozialeInfrastrukturCsv {
     @CsvCustomBindByName(column = "JAHR", converter = JahrConverter.class, required = true)
     private LocalDate gueltigAb;
 
-    @CsvCustomBindByName(column = "EINRICHTUNGSTYP", converter = EinrichtungstypConverter.class, required = true)
-    private Einrichtungstyp einrichtungstyp;
+    @CsvBindByName(column = "EINRICHTUNGSTYP", required = true)
+    private InfrastruktureinrichtungTyp einrichtungstyp;
 
-    @CsvCustomBindByName(column = "ALTERSKLASSE", converter = AltersklasseConverter.class, required = true)
+    @CsvBindByName(column = "ALTERSKLASSE", required = true)
     private Altersklasse altersklasse;
 
     @CsvBindByName(column = "FOERDERART_BEZEICHNUNG", required = true)

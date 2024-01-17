@@ -8,7 +8,7 @@ import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
 import de.muenchen.isi.infrastructure.csv.SobonOrientierungswertSozialeInfrastrukturCsv;
 import de.muenchen.isi.infrastructure.csv.StaedtebaulicheOrientierungswertCsv;
 import de.muenchen.isi.infrastructure.entity.enums.Altersklasse;
-import de.muenchen.isi.infrastructure.entity.enums.Einrichtungstyp;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
@@ -114,7 +114,7 @@ class CsvRepositoryTest {
 
         final var firstExpected = new SobonOrientierungswertSozialeInfrastrukturCsv();
         firstExpected.setGueltigAb(LocalDate.parse("2021-01-01"));
-        firstExpected.setEinrichtungstyp(Einrichtungstyp.KINDERKRIPPE);
+        firstExpected.setEinrichtungstyp(InfrastruktureinrichtungTyp.KINDERKRIPPE);
         firstExpected.setAltersklasse(Altersklasse.NULL_ZWEI);
         firstExpected.setFoerderartBezeichnung("1-2-FH");
         firstExpected.setEinwohnerJahr1NachErsterstellung(BigDecimal.valueOf(2877, 4));
@@ -130,7 +130,7 @@ class CsvRepositoryTest {
         firstExpected.setStammwertArbeitsgruppe(BigDecimal.valueOf(716, 4));
         final var lastExpected = new SobonOrientierungswertSozialeInfrastrukturCsv();
         lastExpected.setGueltigAb(LocalDate.parse("2021-01-01"));
-        lastExpected.setEinrichtungstyp(Einrichtungstyp.N_N);
+        lastExpected.setEinrichtungstyp(InfrastruktureinrichtungTyp.UNSPECIFIED);
         lastExpected.setAltersklasse(Altersklasse.ALLE_EWO);
         lastExpected.setFoerderartBezeichnung("GW-freifinanziert");
         lastExpected.setEinwohnerJahr1NachErsterstellung(BigDecimal.valueOf(19188, 4));
