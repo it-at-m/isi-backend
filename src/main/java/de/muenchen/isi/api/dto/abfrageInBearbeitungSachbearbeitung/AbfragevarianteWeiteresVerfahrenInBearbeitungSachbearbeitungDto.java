@@ -7,8 +7,9 @@ package de.muenchen.isi.api.dto.abfrageInBearbeitungSachbearbeitung;
 import de.muenchen.isi.api.dto.abfrageAngelegt.AbfragevarianteWeiteresVerfahrenAngelegtDto;
 import de.muenchen.isi.api.validation.NotUnspecified;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
+import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
-import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -24,6 +25,9 @@ public class AbfragevarianteWeiteresVerfahrenInBearbeitungSachbearbeitungDto
     @NotUnspecified
     @NotNull
     private SobonOrientierungswertJahr sobonOrientierungswertJahr;
+
+    @NotNull
+    private LocalDate stammdatenGueltigAb;
 
     private String anmerkung;
 }

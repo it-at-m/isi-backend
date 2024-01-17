@@ -2,7 +2,7 @@ package de.muenchen.isi.configuration.search;
 
 import de.muenchen.isi.domain.model.search.request.SearchQueryModel;
 import de.muenchen.isi.domain.service.search.SearchPreparationService;
-import javax.persistence.EntityManager;
+import jakarta.persistence.EntityManager;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.search.mapper.orm.Search;
@@ -63,6 +63,8 @@ public class DatabaseReindexer implements CommandLineRunner {
     private SearchQueryModel getSearchQueryModelForAllEntities() {
         final var searchQueryModel = new SearchQueryModel();
         searchQueryModel.setSelectBauleitplanverfahren(true);
+        searchQueryModel.setSelectBaugenehmigungsverfahren(true);
+        searchQueryModel.setSelectWeiteresVerfahren(true);
         searchQueryModel.setSelectBauvorhaben(true);
         searchQueryModel.setSelectGrundschule(true);
         searchQueryModel.setSelectGsNachmittagBetreuung(true);

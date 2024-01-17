@@ -4,6 +4,7 @@ import de.muenchen.isi.api.dto.enums.InformationResponseType;
 import de.muenchen.isi.api.dto.error.InformationResponseDto;
 import de.muenchen.isi.domain.exception.AbfrageStatusNotAllowedException;
 import de.muenchen.isi.domain.exception.BauvorhabenNotReferencedException;
+import de.muenchen.isi.domain.exception.CalculationException;
 import de.muenchen.isi.domain.exception.CsvAttributeErrorException;
 import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
@@ -17,18 +18,18 @@ import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.StringLengthExceededException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
 import de.muenchen.isi.domain.exception.UserRoleNotAllowedException;
+import io.micrometer.tracing.Tracer;
+import jakarta.validation.ConstraintViolationException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import javax.validation.ConstraintViolationException;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.ConversionNotSupportedException;
 import org.springframework.beans.TypeMismatchException;
-import org.springframework.cloud.sleuth.Tracer;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -54,9 +55,6 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 /**
  * Zur Behandlung der in den Controller geworfenen Exceptions.
  * Erforderlich um ein einheitliches {@link InformationResponseDto} an das Frontend zurückzugeben.
- * <p>
- * Die Methoden annotiert mit {@link Override} überschreiben alle handleXXX-Methoden des {@link ResponseEntityExceptionHandler}s,
- * um bei jeder Spring-Exception einen einheitlichen Response-Body vom Typ {@link InformationResponseDto} zu gewährleisten.
  */
 @RestControllerAdvice
 @RequiredArgsConstructor
@@ -255,6 +253,16 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(httpStatus).body(errorResponseDto);
     }
 
+    @ExceptionHandler(CalculationException.class)
+    public ResponseEntity<Object> handleCalculationException(final CalculationException ex) {
+        final var httpStatus = HttpStatus.BAD_REQUEST;
+        final InformationResponseDto errorResponseDto = new InformationResponseDto();
+        errorResponseDto.setMessages(List.of(ex.getMessage()));
+        errorResponseDto.setHttpStatus(httpStatus.value());
+        errorResponseDto.setType(InformationResponseType.ERROR);
+        return ResponseEntity.status(httpStatus).body(errorResponseDto);
+    }
+
     /**
      * Überschreibt die Methode im {@link ResponseEntityExceptionHandler},
      * um ein einheitliches {@link InformationResponseDto} zurückzugeben.
@@ -265,7 +273,6 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
      * @param request the current request
      * @return das {@link InformationResponseDto}.
      */
-    @Override
     protected ResponseEntity<Object> handleHttpRequestMethodNotSupported(
         final HttpRequestMethodNotSupportedException ex,
         final HttpHeaders headers,
@@ -290,7 +297,6 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
      * @param request the current request
      * @return das {@link InformationResponseDto}.
      */
-    @Override
     protected ResponseEntity<Object> handleHttpMediaTypeNotSupported(
         final HttpMediaTypeNotSupportedException ex,
         final HttpHeaders headers,
@@ -315,7 +321,6 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
      * @param request the current request
      * @return das {@link InformationResponseDto}.
      */
-    @Override
     protected ResponseEntity<Object> handleHttpMediaTypeNotAcceptable(
         final HttpMediaTypeNotAcceptableException ex,
         final HttpHeaders headers,
@@ -339,7 +344,6 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
      * @param request the current request
      * @return das {@link InformationResponseDto}.
      */
-    @Override
     protected ResponseEntity<Object> handleMissingPathVariable(
         final MissingPathVariableException ex,
         final HttpHeaders headers,
@@ -363,7 +367,6 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
      * @param request the current request
      * @return das {@link InformationResponseDto}.
      */
-    @Override
     protected ResponseEntity<Object> handleMissingServletRequestParameter(
         final MissingServletRequestParameterException ex,
         final HttpHeaders headers,
@@ -387,7 +390,6 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
      * @param request the current request
      * @return das {@link InformationResponseDto}.
      */
-    @Override
     protected ResponseEntity<Object> handleServletRequestBindingException(
         final ServletRequestBindingException ex,
         final HttpHeaders headers,
@@ -411,7 +413,6 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
      * @param request the current request
      * @return das {@link InformationResponseDto}.
      */
-    @Override
     protected ResponseEntity<Object> handleConversionNotSupported(
         final ConversionNotSupportedException ex,
         final HttpHeaders headers,
@@ -435,7 +436,6 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
      * @param request the current request
      * @return das {@link InformationResponseDto}.
      */
-    @Override
     protected ResponseEntity<Object> handleTypeMismatch(
         final TypeMismatchException ex,
         final HttpHeaders headers,
@@ -461,7 +461,6 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
      * @param request the current request
      * @return das {@link InformationResponseDto}.
      */
-    @Override
     protected ResponseEntity<Object> handleHttpMessageNotReadable(
         final HttpMessageNotReadableException ex,
         final HttpHeaders headers,
@@ -471,9 +470,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         final var errorResponseDto =
             this.createInformationResponseDtoWithTraceInformationAndTimestampAndOriginalExceptionName(ex);
         errorResponseDto.setHttpStatus(status.value());
-        errorResponseDto.setMessages(
-            List.of("Der Nutzlast der Anfrage an das Backend konnte nicht verarbeitet werden.")
-        );
+        errorResponseDto.setMessages(List.of("Die Nutzlast der Backendanfrage konnte nicht verarbeitet werden."));
         return ResponseEntity.status(errorResponseDto.getHttpStatus()).headers(headers).body(errorResponseDto);
     }
 
@@ -487,7 +484,6 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
      * @param request the current request
      * @return das {@link InformationResponseDto}.
      */
-    @Override
     protected ResponseEntity<Object> handleHttpMessageNotWritable(
         final HttpMessageNotWritableException ex,
         final HttpHeaders headers,
@@ -497,7 +493,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         final var errorResponseDto =
             this.createInformationResponseDtoWithTraceInformationAndTimestampAndOriginalExceptionName(ex);
         errorResponseDto.setHttpStatus(status.value());
-        errorResponseDto.setMessages(List.of("Die Nutzlast des Antwort vom Backend konnte nicht verarbeitet werden."));
+        errorResponseDto.setMessages(List.of("Die Nutzlast der Backendantwort konnte nicht verarbeitet werden."));
         return ResponseEntity.status(errorResponseDto.getHttpStatus()).headers(headers).body(errorResponseDto);
     }
 
@@ -511,7 +507,6 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
      * @param request the current request
      * @return das {@link InformationResponseDto}.
      */
-    @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(
         final MethodArgumentNotValidException ex,
         final HttpHeaders headers,
@@ -551,7 +546,6 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
      * @param request the current request
      * @return das {@link InformationResponseDto}.
      */
-    @Override
     protected ResponseEntity<Object> handleMissingServletRequestPart(
         final MissingServletRequestPartException ex,
         final HttpHeaders headers,
@@ -577,7 +571,6 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
      * @param request the current request
      * @return das {@link InformationResponseDto}.
      */
-    @Override
     protected ResponseEntity<Object> handleBindException(
         final BindException ex,
         final HttpHeaders headers,
@@ -601,7 +594,6 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
      * @param request the current request
      * @return das {@link InformationResponseDto}.
      */
-    @Override
     protected ResponseEntity<Object> handleNoHandlerFoundException(
         final NoHandlerFoundException ex,
         final HttpHeaders headers,
@@ -633,7 +625,6 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
      * @param webRequest the current request
      * @return das {@link InformationResponseDto}.
      */
-    @Override
     protected ResponseEntity<Object> handleAsyncRequestTimeoutException(
         final AsyncRequestTimeoutException ex,
         final HttpHeaders headers,

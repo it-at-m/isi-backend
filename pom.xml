@@ -16,42 +16,39 @@
     <properties>
         <git.scm.url>scm:git:git@github.com:it-at-m/isi-backend.git</git.scm.url>
         <git.url>https://github.com/it-at-m/isi-backend</git.url>
-        <java.version>11</java.version>
+        <java.version>17</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <maven.compiler.release>${java.version}</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <spring.boot.version>2.7.14</spring.boot.version>
-        <spring.cloud.version>2021.0.8</spring.cloud.version>
+        <spring.boot.version>3.2.0</spring.boot.version>
+        <spring.cloud.version>2023.0.0</spring.cloud.version>
         <logstash.encoder>7.0.1</logstash.encoder>
         <apache.commons.collections4>4.4</apache.commons.collections4>
-        <apache.commons.csv>1.9.0</apache.commons.csv>
-        <apache.commons.io>2.11.0</apache.commons.io>
-        <apache.commons.lang3>3.12.0</apache.commons.lang3>
-        <apache.commons.text>1.9</apache.commons.text>
-        <apache.commons.validator>1.7</apache.commons.validator>
+        <apache.commons.io>2.15.1</apache.commons.io>
+        <apache.commons.lang3>3.14.0</apache.commons.lang3>
+        <apache.commons.text>1.11.0</apache.commons.text>
         <apache.commons.fileupload>1.5</apache.commons.fileupload>
-        <apache.tika.parsers>1.19</apache.tika.parsers>
-        <opencsv.version>5.6</opencsv.version>
-        <springdoc.version>1.6.13</springdoc.version>
+        <opencsv.version>5.9</opencsv.version>
+        <springdoc.version>2.3.0</springdoc.version>
         <!-- SonarQube -->
         <sonar.scanner.version>3.9.0.2155</sonar.scanner.version>
         <!-- TestCoverage -->
         <jacoco.version>0.8.7</jacoco.version>
         <!-- Plugins -->
         <maven-scm-plugin.version>1.10.0</maven-scm-plugin.version>
-        <maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version>
-        <maven.compiler.plugin.version>3.8.1</maven.compiler.plugin.version>
+        <maven-surefire-plugin.version>3.2.2</maven-surefire-plugin.version>
+        <maven.compiler.plugin.version>3.11.0</maven.compiler.plugin.version>
         <!-- Version muss mit der in den spring-boot-dependencies bereitgestellten Lombok-Version übereinstimmen -->
-        <org.projectlombok.lombok.version>1.18.28</org.projectlombok.lombok.version>
+        <org.projectlombok.lombok.version>1.18.30</org.projectlombok.lombok.version>
         <org.projectlombok.mapstructbinding.version>0.2.0</org.projectlombok.mapstructbinding.version>
         <mapstruct.version>1.5.5.Final</mapstruct.version>
-        <s3.integration>0.15.0</s3.integration>
-        <geotools.version>27.2</geotools.version>
-        <spring.statemachine>3.2.0</spring.statemachine>
-        <apache.tika.version>2.7.0</apache.tika.version>
-        <hibernate.search>6.2.1.Final</hibernate.search>
-        <icu4j.version>73.2</icu4j.version>
+        <s3.integration>1.3.0</s3.integration>
+        <geotools.version>29.1</geotools.version>
+        <spring.statemachine>4.0.0</spring.statemachine>
+        <apache.tika.version>2.9.1</apache.tika.version>
+        <hibernate.search>6.2.2.Final</hibernate.search>
+        <icu4j.version>74.2</icu4j.version>
     </properties>
 
 
@@ -117,10 +114,6 @@
             <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.springframework.security.oauth.boot</groupId>
-            <artifactId>spring-security-oauth2-autoconfigure</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-oauth2-jose</artifactId>
         </dependency>
@@ -162,25 +155,23 @@
             <artifactId>h2</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-entitymanager</artifactId>
+            <groupId>org.hibernate.orm</groupId>
+            <artifactId>hibernate-core</artifactId>
         </dependency>
         <!-- Hibernate Model Gen for type safe criterias -->
         <dependency>
-            <groupId>org.hibernate</groupId>
+            <groupId>org.hibernate.orm</groupId>
             <artifactId>hibernate-jpamodelgen</artifactId>
         </dependency>
-        <!-- Version muss zur Hibernateversion passen: https://github.com/vladmihalcea/hypersistence-utils -->
         <dependency>
-            <groupId>io.hypersistence</groupId>
-            <artifactId>hypersistence-utils-hibernate-55</artifactId>
-            <version>3.3.2</version>
+            <groupId>jakarta.persistence</groupId>
+            <artifactId>jakarta.persistence-api</artifactId>
         </dependency>
 
         <!-- Other -->
         <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpclient</artifactId>
+            <groupId>org.apache.httpcomponents.client5</groupId>
+            <artifactId>httpclient5</artifactId>
         </dependency>
         <dependency>
             <groupId>org.mapstruct</groupId>
@@ -207,8 +198,8 @@
 
         <!-- Validation -->
         <dependency>
-            <groupId>javax.validation</groupId>
-            <artifactId>validation-api</artifactId>
+            <groupId>jakarta.validation</groupId>
+            <artifactId>jakarta.validation-api</artifactId>
         </dependency>
         <dependency>
             <groupId>org.hibernate.validator</groupId>
@@ -218,7 +209,7 @@
         <!-- Search -->
         <dependency>
             <groupId>org.hibernate.search</groupId>
-            <artifactId>hibernate-search-mapper-orm</artifactId>
+            <artifactId>hibernate-search-mapper-orm-orm6</artifactId>
             <version>${hibernate.search}</version>
         </dependency>
         <dependency>
@@ -249,6 +240,12 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <!-- this is needed or IntelliJ gives junit.jar or junit-platform-launcher:1.9.2 not found errors -->
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-launcher</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
             <scope>test</scope>
@@ -256,6 +253,7 @@
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-inline</artifactId>
+            <version>5.2.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -281,8 +279,12 @@
 
         <!-- Logging -->
         <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-sleuth</artifactId>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-tracing</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-tracing-bridge-brave</artifactId>
         </dependency>
         <dependency>
             <groupId>net.logstash.logback</groupId>
@@ -308,7 +310,7 @@
         <!--  OpenAPI -->
         <dependency>
             <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-ui</artifactId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
             <version>${springdoc.version}</version>
         </dependency>
 
@@ -317,11 +319,6 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-collections4</artifactId>
             <version>${apache.commons.collections4}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-csv</artifactId>
-            <version>${apache.commons.csv}</version>
         </dependency>
         <dependency>
             <groupId>commons-io</groupId>
@@ -338,16 +335,8 @@
             <artifactId>commons-text</artifactId>
             <version>${apache.commons.text}</version>
         </dependency>
-        <dependency>
-            <groupId>commons-validator</groupId>
-            <artifactId>commons-validator</artifactId>
-            <version>${apache.commons.validator}</version>
-        </dependency>
-        <dependency>
-            <groupId>commons-fileupload</groupId>
-            <artifactId>commons-fileupload</artifactId>
-            <version>${apache.commons.fileupload}</version>
-        </dependency>
+
+        <!-- geotools -->
         <dependency>
             <groupId>org.geotools</groupId>
             <artifactId>gt-main</artifactId>
@@ -384,7 +373,7 @@
         </dependency>
 
         <dependency>
-            <groupId>io.muenchendigital.digiwf</groupId>
+            <groupId>de.muenchen.oss.digiwf</groupId>
             <artifactId>digiwf-s3-integration-client-starter</artifactId>
             <version>${s3.integration}</version>
         </dependency>
@@ -422,6 +411,11 @@
                         <goals>
                             <goal>repackage</goal>
                         </goals>
+                        <!-- https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-3.2-Release-Notes#nested-jar-support -->
+                        <!-- Erforderlich wegen Hibernate-Search-Kompatibilität -->
+                        <configuration>
+                            <loaderImplementation>CLASSIC</loaderImplementation>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
@@ -432,6 +426,8 @@
                 <configuration>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
+                    <!-- https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-3.2-Release-Notes#parameter-name-discovery -->
+                    <parameters>true</parameters>
                     <annotationProcessorPaths>
                         <path>
                             <groupId>org.projectlombok</groupId>
