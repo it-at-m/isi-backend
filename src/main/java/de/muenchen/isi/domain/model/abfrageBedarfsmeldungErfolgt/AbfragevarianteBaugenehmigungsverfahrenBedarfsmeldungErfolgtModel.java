@@ -2,7 +2,7 @@
  * Copyright (c): it@M - Dienstleister für Informations- und Telekommunikationstechnik
  * der Landeshauptstadt München, 2022
  */
-package de.muenchen.isi.domain.model.abfrageInBearbeitungFachreferat;
+package de.muenchen.isi.domain.model.abfrageBedarfsmeldungErfolgt;
 
 import de.muenchen.isi.domain.model.BedarfsmeldungModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
@@ -11,7 +11,7 @@ import java.util.UUID;
 import lombok.Data;
 
 @Data
-public class AbfragevarianteWeiteresVerfahrenInBearbeitungFachreferatModel {
+public class AbfragevarianteBaugenehmigungsverfahrenBedarfsmeldungErfolgtModel {
 
     private UUID id;
 
@@ -19,5 +19,5 @@ public class AbfragevarianteWeiteresVerfahrenInBearbeitungFachreferatModel {
 
     private ArtAbfrage artAbfragevariante;
 
-    private List<BedarfsmeldungModel> bedarfsmeldungFachreferate;
+    private List<BedarfsmeldungModel> bedarfsmeldungAbfrageersteller;
 }

@@ -16,7 +16,7 @@ import de.muenchen.isi.domain.exception.UniqueViolationException;
 import de.muenchen.isi.domain.model.AbfrageModel;
 import de.muenchen.isi.domain.model.BaugenehmigungsverfahrenModel;
 import de.muenchen.isi.domain.model.BauleitplanverfahrenModel;
-import de.muenchen.isi.domain.model.BedarfsmeldungFachreferateModel;
+import de.muenchen.isi.domain.model.BedarfsmeldungModel;
 import de.muenchen.isi.domain.model.WeiteresVerfahrenModel;
 import de.muenchen.isi.domain.model.abfrageAngelegt.AbfrageAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungFachreferat.AbfragevarianteBaugenehmigungsverfahrenInBearbeitungFachreferatModel;
@@ -312,7 +312,7 @@ class AbfrageServiceSpringTest {
             ((BauleitplanverfahrenModel) abfrage).getAbfragevariantenBauleitplanverfahren().get(0).getVersion()
         );
         abfragevariantePatch.setArtAbfragevariante(ArtAbfrage.BAULEITPLANVERFAHREN);
-        final var bedarfmeldungFachreferate = new BedarfsmeldungFachreferateModel();
+        final var bedarfmeldungFachreferate = new BedarfsmeldungModel();
         bedarfmeldungFachreferate.setAnzahlEinrichtungen(3);
         bedarfmeldungFachreferate.setInfrastruktureinrichtungTyp(InfrastruktureinrichtungTyp.KINDERGARTEN);
         abfragevariantePatch.setBedarfsmeldungFachreferate(List.of(bedarfmeldungFachreferate));
@@ -360,7 +360,7 @@ class AbfrageServiceSpringTest {
             ((BaugenehmigungsverfahrenModel) abfrage).getAbfragevariantenBaugenehmigungsverfahren().get(0).getVersion()
         );
         abfragevariantePatch.setArtAbfragevariante(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN);
-        final var bedarfmeldungFachreferate = new BedarfsmeldungFachreferateModel();
+        final var bedarfmeldungFachreferate = new BedarfsmeldungModel();
         bedarfmeldungFachreferate.setAnzahlEinrichtungen(2);
         bedarfmeldungFachreferate.setInfrastruktureinrichtungTyp(InfrastruktureinrichtungTyp.KINDERKRIPPE);
         abfragevariantePatch.setBedarfsmeldungFachreferate(List.of(bedarfmeldungFachreferate));
@@ -408,7 +408,7 @@ class AbfrageServiceSpringTest {
             ((WeiteresVerfahrenModel) abfrage).getAbfragevariantenWeiteresVerfahren().get(0).getVersion()
         );
         abfragevariantePatch.setArtAbfragevariante(ArtAbfrage.WEITERES_VERFAHREN);
-        final var bedarfmeldungFachreferate = new BedarfsmeldungFachreferateModel();
+        final var bedarfmeldungFachreferate = new BedarfsmeldungModel();
         bedarfmeldungFachreferate.setAnzahlEinrichtungen(2);
         bedarfmeldungFachreferate.setInfrastruktureinrichtungTyp(InfrastruktureinrichtungTyp.KINDERKRIPPE);
         abfragevariantePatch.setBedarfsmeldungFachreferate(List.of(bedarfmeldungFachreferate));

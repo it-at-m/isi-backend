@@ -11,6 +11,9 @@ import de.muenchen.isi.domain.model.AbfragevarianteWeiteresVerfahrenModel;
 import de.muenchen.isi.domain.model.abfrageAngelegt.AbfragevarianteBaugenehmigungsverfahrenAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageAngelegt.AbfragevarianteBauleitplanverfahrenAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageAngelegt.AbfragevarianteWeiteresVerfahrenAngelegtModel;
+import de.muenchen.isi.domain.model.abfrageBedarfsmeldungErfolgt.AbfragevarianteBaugenehmigungsverfahrenBedarfsmeldungErfolgtModel;
+import de.muenchen.isi.domain.model.abfrageBedarfsmeldungErfolgt.AbfragevarianteBauleitplanverfahrenBedarfsmeldungErfolgtModel;
+import de.muenchen.isi.domain.model.abfrageBedarfsmeldungErfolgt.AbfragevarianteWeiteresVerfahrenBedarfsmeldungErfolgtModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungFachreferat.AbfragevarianteBaugenehmigungsverfahrenInBearbeitungFachreferatModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungFachreferat.AbfragevarianteBauleitplanverfahrenInBearbeitungFachreferatModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungFachreferat.AbfragevarianteWeiteresVerfahrenInBearbeitungFachreferatModel;
@@ -54,6 +57,7 @@ public interface AbfragevarianteDomainMapper {
             @Mapping(target = "stammdatenGueltigAb", ignore = true),
             @Mapping(target = "anmerkung", ignore = true),
             @Mapping(target = "bedarfsmeldungFachreferate", ignore = true),
+            @Mapping(target = "bedarfsmeldungAbfrageersteller", ignore = true),
             @Mapping(target = "langfristigerPlanungsursaechlicherBedarf", ignore = true),
         }
     )
@@ -71,6 +75,7 @@ public interface AbfragevarianteDomainMapper {
             @Mapping(target = "stammdatenGueltigAb", ignore = true),
             @Mapping(target = "anmerkung", ignore = true),
             @Mapping(target = "bedarfsmeldungFachreferate", ignore = true),
+            @Mapping(target = "bedarfsmeldungAbfrageersteller", ignore = true),
             @Mapping(target = "langfristigerPlanungsursaechlicherBedarf", ignore = true),
         }
     )
@@ -88,6 +93,7 @@ public interface AbfragevarianteDomainMapper {
             @Mapping(target = "stammdatenGueltigAb", ignore = true),
             @Mapping(target = "anmerkung", ignore = true),
             @Mapping(target = "bedarfsmeldungFachreferate", ignore = true),
+            @Mapping(target = "bedarfsmeldungAbfrageersteller", ignore = true),
             @Mapping(target = "langfristigerPlanungsursaechlicherBedarf", ignore = true),
         }
     )
@@ -147,6 +153,7 @@ public interface AbfragevarianteDomainMapper {
             @Mapping(target = "lastModifiedDateTime", ignore = true),
             @Mapping(target = "createdDateTime", ignore = true),
             @Mapping(target = "bedarfsmeldungFachreferate", ignore = true),
+            @Mapping(target = "bedarfsmeldungAbfrageersteller", ignore = true),
             @Mapping(target = "langfristigerPlanungsursaechlicherBedarf", ignore = true),
         }
     )
@@ -161,6 +168,7 @@ public interface AbfragevarianteDomainMapper {
             @Mapping(target = "lastModifiedDateTime", ignore = true),
             @Mapping(target = "createdDateTime", ignore = true),
             @Mapping(target = "bedarfsmeldungFachreferate", ignore = true),
+            @Mapping(target = "bedarfsmeldungAbfrageersteller", ignore = true),
             @Mapping(target = "langfristigerPlanungsursaechlicherBedarf", ignore = true),
         }
     )
@@ -175,6 +183,7 @@ public interface AbfragevarianteDomainMapper {
             @Mapping(target = "lastModifiedDateTime", ignore = true),
             @Mapping(target = "createdDateTime", ignore = true),
             @Mapping(target = "bedarfsmeldungFachreferate", ignore = true),
+            @Mapping(target = "bedarfsmeldungAbfrageersteller", ignore = true),
             @Mapping(target = "langfristigerPlanungsursaechlicherBedarf", ignore = true),
         }
     )
@@ -216,6 +225,42 @@ public interface AbfragevarianteDomainMapper {
     )
     AbfragevarianteWeiteresVerfahrenModel request2Model(
         final AbfragevarianteWeiteresVerfahrenInBearbeitungFachreferatModel request,
+        @MappingTarget final AbfragevarianteWeiteresVerfahrenModel model
+    );
+
+    @BeanMapping(ignoreByDefault = true)
+    @Mappings(
+        {
+            @Mapping(target = "version", ignore = false),
+            @Mapping(target = "bedarfsmeldungAbfrageersteller", ignore = false),
+        }
+    )
+    AbfragevarianteBauleitplanverfahrenModel request2Model(
+        final AbfragevarianteBauleitplanverfahrenBedarfsmeldungErfolgtModel request,
+        @MappingTarget final AbfragevarianteBauleitplanverfahrenModel model
+    );
+
+    @BeanMapping(ignoreByDefault = true)
+    @Mappings(
+        {
+            @Mapping(target = "version", ignore = false),
+            @Mapping(target = "bedarfsmeldungAbfrageersteller", ignore = false),
+        }
+    )
+    AbfragevarianteBaugenehmigungsverfahrenModel request2Model(
+        final AbfragevarianteBaugenehmigungsverfahrenBedarfsmeldungErfolgtModel request,
+        @MappingTarget final AbfragevarianteBaugenehmigungsverfahrenModel model
+    );
+
+    @BeanMapping(ignoreByDefault = true)
+    @Mappings(
+        {
+            @Mapping(target = "version", ignore = false),
+            @Mapping(target = "bedarfsmeldungAbfrageersteller", ignore = false),
+        }
+    )
+    AbfragevarianteWeiteresVerfahrenModel request2Model(
+        final AbfragevarianteWeiteresVerfahrenBedarfsmeldungErfolgtModel request,
         @MappingTarget final AbfragevarianteWeiteresVerfahrenModel model
     );
 
