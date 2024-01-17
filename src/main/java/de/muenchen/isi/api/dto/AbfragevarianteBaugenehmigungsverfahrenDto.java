@@ -4,9 +4,11 @@
  */
 package de.muenchen.isi.api.dto;
 
+import de.muenchen.isi.api.dto.calculation.LangfristigerPlanungsursaechlicherBedarfDto;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.WesentlicheRechtsgrundlage;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -65,6 +67,8 @@ public class AbfragevarianteBaugenehmigungsverfahrenDto extends AbfragevarianteD
 
     private SobonOrientierungswertJahr sobonOrientierungswertJahr;
 
+    private LocalDate stammdatenGueltigAb;
+
     private String anmerkung;
 
     private List<BedarfsmeldungDto> bedarfsmeldungFachreferate;
@@ -72,4 +76,6 @@ public class AbfragevarianteBaugenehmigungsverfahrenDto extends AbfragevarianteD
     private List<BedarfsmeldungDto> bedarfsmeldungAbfrageersteller;
 
     private List<BauabschnittDto> bauabschnitte;
+
+    private LangfristigerPlanungsursaechlicherBedarfDto langfristigerPlanungsursaechlicherBedarf;
 }

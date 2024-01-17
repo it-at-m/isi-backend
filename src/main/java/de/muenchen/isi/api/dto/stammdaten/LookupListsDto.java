@@ -42,4 +42,6 @@ public class LookupListsDto {
     private LookupListDto artGsNachmittagBetreuung;
 
     private LookupListDto sobonOrientierungswertJahr;
+
+    private LookupListDto sobonOrientierungswertJahrWithoutStandortabfrage;
 }

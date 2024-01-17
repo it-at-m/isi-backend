@@ -4,6 +4,7 @@ import de.muenchen.isi.api.dto.enums.InformationResponseType;
 import de.muenchen.isi.api.dto.error.InformationResponseDto;
 import de.muenchen.isi.domain.exception.AbfrageStatusNotAllowedException;
 import de.muenchen.isi.domain.exception.BauvorhabenNotReferencedException;
+import de.muenchen.isi.domain.exception.CalculationException;
 import de.muenchen.isi.domain.exception.CsvAttributeErrorException;
 import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
@@ -252,6 +253,16 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(httpStatus).body(errorResponseDto);
     }
 
+    @ExceptionHandler(CalculationException.class)
+    public ResponseEntity<Object> handleCalculationException(final CalculationException ex) {
+        final var httpStatus = HttpStatus.BAD_REQUEST;
+        final InformationResponseDto errorResponseDto = new InformationResponseDto();
+        errorResponseDto.setMessages(List.of(ex.getMessage()));
+        errorResponseDto.setHttpStatus(httpStatus.value());
+        errorResponseDto.setType(InformationResponseType.ERROR);
+        return ResponseEntity.status(httpStatus).body(errorResponseDto);
+    }
+
     /**
      * Überschreibt die Methode im {@link ResponseEntityExceptionHandler},
      * um ein einheitliches {@link InformationResponseDto} zurückzugeben.
@@ -459,9 +470,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         final var errorResponseDto =
             this.createInformationResponseDtoWithTraceInformationAndTimestampAndOriginalExceptionName(ex);
         errorResponseDto.setHttpStatus(status.value());
-        errorResponseDto.setMessages(
-            List.of("Der Nutzlast der Anfrage an das Backend konnte nicht verarbeitet werden.")
-        );
+        errorResponseDto.setMessages(List.of("Die Nutzlast der Backendanfrage konnte nicht verarbeitet werden."));
         return ResponseEntity.status(errorResponseDto.getHttpStatus()).headers(headers).body(errorResponseDto);
     }
 
@@ -484,7 +493,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         final var errorResponseDto =
             this.createInformationResponseDtoWithTraceInformationAndTimestampAndOriginalExceptionName(ex);
         errorResponseDto.setHttpStatus(status.value());
-        errorResponseDto.setMessages(List.of("Die Nutzlast des Antwort vom Backend konnte nicht verarbeitet werden."));
+        errorResponseDto.setMessages(List.of("Die Nutzlast der Backendantwort konnte nicht verarbeitet werden."));
         return ResponseEntity.status(errorResponseDto.getHttpStatus()).headers(headers).body(errorResponseDto);
     }
 

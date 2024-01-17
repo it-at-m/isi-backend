@@ -61,7 +61,7 @@ public enum StatusAbfrageEvents {
         "erneute-bearbeitung-sachbearbeitung",
         "ERNEUTE BEARBEITUNG",
         10,
-        "Die Abfrage wird wird an die Sachbearbeitung zur Bearbeitung zurückgesendet."
+        "Die Abfrage wird an die Sachbearbeitung zur Bearbeitung zurückgesendet."
     );
 
     @Getter
