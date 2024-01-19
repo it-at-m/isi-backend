@@ -141,7 +141,7 @@ class RestExceptionHandlerTest {
         final ResponseEntity<Object> response =
             this.restExceptionHandler.handleFileImportFailedException(fileImportFailedException);
 
-        assertThat(response.getStatusCodeValue(), is(555));
+        assertThat(response.getStatusCode().value(), is(555));
 
         final InformationResponseDto responseDto = (InformationResponseDto) response.getBody();
 
@@ -158,7 +158,7 @@ class RestExceptionHandlerTest {
         final ResponseEntity<Object> response =
             this.restExceptionHandler.handleMimeTypeNotAllowedException(mimeTypeNotAllowedException);
 
-        assertThat(response.getStatusCodeValue(), is(406));
+        assertThat(response.getStatusCode().value(), is(406));
 
         final InformationResponseDto responseDto = (InformationResponseDto) response.getBody();
 
@@ -176,7 +176,7 @@ class RestExceptionHandlerTest {
         final ResponseEntity<Object> response =
             this.restExceptionHandler.handleMimeTypeExtractionFailedException(mimeTypeExtractionFailedException);
 
-        assertThat(response.getStatusCodeValue(), is(555));
+        assertThat(response.getStatusCode().value(), is(555));
 
         final InformationResponseDto responseDto = (InformationResponseDto) response.getBody();
 
@@ -193,7 +193,7 @@ class RestExceptionHandlerTest {
         final ResponseEntity<Object> response =
             this.restExceptionHandler.handleFileHandlingFailedException(fileImportFailedException);
 
-        assertThat(response.getStatusCodeValue(), is(555));
+        assertThat(response.getStatusCode().value(), is(555));
 
         final InformationResponseDto responseDto = (InformationResponseDto) response.getBody();
 
@@ -236,7 +236,7 @@ class RestExceptionHandlerTest {
         fileHandlingWithS3FailedException = new FileHandlingWithS3FailedException("test", HttpStatus.NOT_ACCEPTABLE);
         response = this.restExceptionHandler.handleFileHandlingWithS3FailedException(fileHandlingWithS3FailedException);
 
-        assertThat(response.getStatusCodeValue(), is(555));
+        assertThat(response.getStatusCode().value(), is(555));
 
         responseDto = (InformationResponseDto) response.getBody();
 
@@ -253,7 +253,7 @@ class RestExceptionHandlerTest {
         final ResponseEntity<Object> response =
             this.restExceptionHandler.handleKoordinatenException(koordinatenException);
 
-        assertThat(response.getStatusCodeValue(), is(555));
+        assertThat(response.getStatusCode().value(), is(555));
 
         final InformationResponseDto responseDto = (InformationResponseDto) response.getBody();
 
