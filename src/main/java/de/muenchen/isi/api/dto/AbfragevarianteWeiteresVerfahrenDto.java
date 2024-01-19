@@ -75,7 +75,9 @@ public class AbfragevarianteWeiteresVerfahrenDto extends AbfragevarianteDto {
 
     private String anmerkung;
 
-    private List<BedarfsmeldungFachreferateDto> bedarfsmeldungFachreferate;
+    private List<BedarfsmeldungDto> bedarfsmeldungFachreferate;
+
+    private List<BedarfsmeldungDto> bedarfsmeldungAbfrageersteller;
 
     private List<BauabschnittDto> bauabschnitte;
 

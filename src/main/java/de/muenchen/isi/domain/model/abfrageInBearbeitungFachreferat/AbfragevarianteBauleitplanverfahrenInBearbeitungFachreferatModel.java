@@ -4,7 +4,7 @@
  */
 package de.muenchen.isi.domain.model.abfrageInBearbeitungFachreferat;
 
-import de.muenchen.isi.domain.model.BedarfsmeldungFachreferateModel;
+import de.muenchen.isi.domain.model.BedarfsmeldungModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import java.util.List;
 import java.util.UUID;
@@ -19,7 +19,7 @@ public class AbfragevarianteBauleitplanverfahrenInBearbeitungFachreferatModel {
 
     private ArtAbfrage artAbfragevariante;
 
-    private List<BedarfsmeldungFachreferateModel> bedarfsmeldungFachreferate;
+    private List<BedarfsmeldungModel> bedarfsmeldungFachreferate;
 
     // Kindertagesbetreuung
 

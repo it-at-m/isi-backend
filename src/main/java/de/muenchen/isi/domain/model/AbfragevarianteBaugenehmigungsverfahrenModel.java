@@ -71,7 +71,9 @@ public class AbfragevarianteBaugenehmigungsverfahrenModel extends Abfragevariant
 
     private String anmerkung;
 
-    private List<BedarfsmeldungFachreferateModel> bedarfsmeldungFachreferate;
+    private List<BedarfsmeldungModel> bedarfsmeldungFachreferate;
+
+    private List<BedarfsmeldungModel> bedarfsmeldungAbfrageersteller;
 
     private List<BauabschnittModel> bauabschnitte;
 

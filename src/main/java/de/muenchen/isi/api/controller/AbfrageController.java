@@ -6,6 +6,7 @@ package de.muenchen.isi.api.controller;
 
 import de.muenchen.isi.api.dto.AbfrageDto;
 import de.muenchen.isi.api.dto.abfrageAngelegt.AbfrageAngelegtDto;
+import de.muenchen.isi.api.dto.abfrageBedarfsmeldungErfolgt.AbfrageBedarfsmeldungErfolgtDto;
 import de.muenchen.isi.api.dto.abfrageInBearbeitungFachreferat.AbfrageInBearbeitungFachreferatDto;
 import de.muenchen.isi.api.dto.abfrageInBearbeitungSachbearbeitung.AbfrageInBearbeitungSachbearbeitungDto;
 import de.muenchen.isi.api.dto.error.InformationResponseDto;
@@ -243,6 +244,48 @@ public class AbfrageController {
         throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException {
         final var requestModel = abfrageApiMapper.dto2Model(abfrage);
         final var responseModel = abfrageService.patchInBearbeitungFachreferat(requestModel, id);
+        final var dto = abfrageApiMapper.model2Dto(responseModel);
+        return ResponseEntity.ok(dto);
+    }
+
+    @PatchMapping("/bedarfsmeldung-erfolgt/{id}")
+    @Transactional(rollbackFor = { OptimisticLockingException.class, UniqueViolationException.class })
+    @Operation(summary = "Aktualisierung einer Abfrage im Status BEDARFSMELDUNG_ERFOLGT.")
+    @ApiResponses(
+        value = {
+            @ApiResponse(responseCode = "200", description = "OK -> Abfrage wurde erfolgreich aktualisiert."),
+            @ApiResponse(
+                responseCode = "400",
+                description = "BAD_REQUEST -> Abfrage konnte nicht aktualisiert werden, überprüfen sie die Eingabe oder die Abfrage befindet sich in einem unzulässigen Status",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+            @ApiResponse(
+                responseCode = "404",
+                description = "NOT_FOUND -> Es gibt keine Abfrage mit der ID.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+            @ApiResponse(
+                responseCode = "409",
+                description = "CONFLICT -> Abfrage konnte nicht aktualisiert werden, da der Name der Abfrage oder Abfragevariante bereits existiert oder die Abfrage nicht im korrekten Status ist.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+            @ApiResponse(
+                responseCode = "412",
+                description = "PRECONDITION_FAILED -> In der Anwendung ist bereits eine neuere Version der Entität gespeichert.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+        }
+    )
+    @PreAuthorize(
+        "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_PATCH_ABFRAGE_BEDARFSMELDUNG_ERFOLGT.name())"
+    )
+    public ResponseEntity<AbfrageDto> patchBedarfsmeldungErfolgt(
+        @RequestBody @Valid @NotNull final AbfrageBedarfsmeldungErfolgtDto abfrage,
+        @PathVariable @NotNull final UUID id
+    )
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException {
+        final var requestModel = abfrageApiMapper.dto2Model(abfrage);
+        final var responseModel = abfrageService.patchBedarfsmeldungErfolgt(requestModel, id);
         final var dto = abfrageApiMapper.model2Dto(responseModel);
         return ResponseEntity.ok(dto);
     }
