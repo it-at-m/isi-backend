@@ -169,30 +169,30 @@ public class AbfragevarianteWeiteresVerfahren extends Abfragevariante {
 
     // Kindertagesbetreuung
 
-    @Column
+    @Column(name = "ausglstr_bdrf_im_bgbt_brckschtgn_kita")
     private boolean ausgeloesterBedarfImBaugebietBeruecksichtigenKita;
 
-    @Column
+    @Column(name = "ausglstr_bdrf_mtvrsrg_im_bplan_kita")
     private boolean ausgeloesterBedarfMitversorgungImBplanKita;
 
-    @Column
+    @Column(name = "ausglstr_bdrf_mtvrsrg_in_bsthnd_einr_kita")
     private boolean ausgeloesterBedarfMitversorgungInBestEinrichtungenKita;
 
-    @Column
+    @Column(name = "ausglstr_bdrf_mtvrsrg_in_bsthnd_einr_nch_asbau_kita")
     private boolean ausgeloesterBedarfMitversorgungInBestEinrichtungenNachAusbauKita;
 
     // Schule
 
-    @Column
+    @Column(name = "ausglstr_bdrf_im_bgbt_brckschtgn_schule")
     private boolean ausgeloesterBedarfImBaugebietBeruecksichtigenSchule;
 
-    @Column
+    @Column(name = "ausglstr_bdrf_mtvrsrg_im_bplan_schule")
     private boolean ausgeloesterBedarfMitversorgungImBplanSchule;
 
-    @Column
+    @Column(name = "ausglstr_bdrf_mtvrsrg_in_bsthnd_einr_schule")
     private boolean ausgeloesterBedarfMitversorgungInBestEinrichtungenSchule;
 
-    @Column
+    @Column(name = "ausglstr_bdrf_mtvrsrg_in_bsthnd_einr_nch_asbau_schule")
     private boolean ausgeloesterBedarfMitversorgungInBestEinrichtungenNachAusbauSchule;
 
     @Column
