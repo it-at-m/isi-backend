@@ -21,7 +21,7 @@
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <maven.compiler.release>${java.version}</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <spring.boot.version>3.2.0</spring.boot.version>
+        <spring.boot.version>3.2.1</spring.boot.version>
         <spring.cloud.version>2023.0.0</spring.cloud.version>
         <logstash.encoder>7.0.1</logstash.encoder>
         <apache.commons.collections4>4.4</apache.commons.collections4>
@@ -47,7 +47,7 @@
         <geotools.version>29.1</geotools.version>
         <spring.statemachine>4.0.0</spring.statemachine>
         <apache.tika.version>2.9.1</apache.tika.version>
-        <hibernate.search>6.2.2.Final</hibernate.search>
+        <hibernate.search>7.0.0.Final</hibernate.search>
         <icu4j.version>74.2</icu4j.version>
     </properties>
 
@@ -209,7 +209,7 @@
         <!-- Search -->
         <dependency>
             <groupId>org.hibernate.search</groupId>
-            <artifactId>hibernate-search-mapper-orm-orm6</artifactId>
+            <artifactId>hibernate-search-mapper-orm</artifactId>
             <version>${hibernate.search}</version>
         </dependency>
         <dependency>
