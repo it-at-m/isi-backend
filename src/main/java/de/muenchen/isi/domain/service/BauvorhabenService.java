@@ -127,7 +127,7 @@ public class BauvorhabenService {
             return this.bauvorhabenDomainMapper.entity2Model(bauvorhabenEntity);
         } else {
             throw new UniqueViolationException(
-                "Der angegebene Name des Bauvorhabens ist schon vorhanden, bitte wählen Sie daher einen anderen Namen und speichern Sie die Abfrage erneut."
+                "Der angegebene Name des Bauvorhabens ist schon vorhanden, bitte wählen Sie daher einen anderen Namen und speichern Sie das Bauvorhaben erneut."
             );
         }
     }
