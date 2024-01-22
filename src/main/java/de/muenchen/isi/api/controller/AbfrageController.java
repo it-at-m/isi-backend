@@ -304,7 +304,7 @@ public class AbfrageController {
         @RequestBody @Valid @NotNull final AbfrageBedarfsmeldungErfolgtDto abfrage,
         @PathVariable @NotNull final UUID id
     )
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, UserRoleNotAllowedException, CalculationException {
         final var requestModel = abfrageApiMapper.dto2Model(abfrage);
         final var responseModel = abfrageService.patchBedarfsmeldungErfolgt(requestModel, id);
         final var dto = abfrageApiMapper.model2Dto(responseModel);

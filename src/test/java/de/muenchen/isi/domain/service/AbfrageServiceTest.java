@@ -2021,7 +2021,7 @@ class AbfrageServiceTest {
 
     @Test
     void patchBedarfsmeldungErfolgtBauleitplanverfahren()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException, UserRoleNotAllowedException {
         final var uuid = UUID.randomUUID();
         final var uuidAbfragevariante = UUID.randomUUID();
         final var uuidAbfragevarianteSachbearbeitung = UUID.randomUUID();
@@ -2217,7 +2217,7 @@ class AbfrageServiceTest {
 
     @Test
     void patchBedarfsmeldungErfolgtBaugenehmigungsverfahren()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException, UserRoleNotAllowedException {
         final var uuid = UUID.randomUUID();
         final var uuidAbfragevariante = UUID.randomUUID();
         final var uuidAbfragevarianteSachbearbeitung = UUID.randomUUID();
@@ -2413,7 +2413,7 @@ class AbfrageServiceTest {
 
     @Test
     void patchBedarfsmeldungErfolgtWeiteresVerfahren()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException, UserRoleNotAllowedException {
         final var uuid = UUID.randomUUID();
         final var uuidAbfragevariante = UUID.randomUUID();
         final var uuidAbfragevarianteSachbearbeitung = UUID.randomUUID();
@@ -2752,6 +2752,8 @@ class AbfrageServiceTest {
             this.abfrageService.patchBedarfsmeldungErfolgt(requestModel, uuid);
         } catch (final EntityNotFoundException exception) {
             assertThat(exception.getMessage(), is("Die Art der Abfrage wird nicht unterstützt."));
+        } catch (UserRoleNotAllowedException exception) {
+            assertThat(exception.getMessage(), is("Fehlende Berechtigung für die Abfrage"));
         }
     }
 
@@ -2906,6 +2908,8 @@ class AbfrageServiceTest {
             this.abfrageService.patchBedarfsmeldungErfolgt(requestModel, uuid);
         } catch (final EntityNotFoundException exception) {
             assertThat(exception.getMessage(), is("Die Art der Abfrage wird nicht unterstützt."));
+        } catch (UserRoleNotAllowedException exception) {
+            assertThat(exception.getMessage(), is("Fehlende Berechtigung für die Abfrage"));
         }
     }
 
@@ -3056,6 +3060,8 @@ class AbfrageServiceTest {
             this.abfrageService.patchBedarfsmeldungErfolgt(requestModel, uuid);
         } catch (final EntityNotFoundException exception) {
             assertThat(exception.getMessage(), is("Die Art der Abfrage wird nicht unterstützt."));
+        } catch (UserRoleNotAllowedException exception) {
+            assertThat(exception.getMessage(), is("Fehlende Berechtigung für die Abfrage"));
         }
     }
 

@@ -115,7 +115,7 @@ class AbfrageServiceSpringTest {
     @Transactional
     @MockCustomUser(roles = { "anwender" })
     void throwUserRoleNotAllowedExceptionWhenStatusIsNotErledigt()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, UserRoleNotAllowedException, CalculationException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, CalculationException {
         AbfrageModel abfrageModel = TestData.createBauleitplanverfahrenModel();
         abfrageModel = this.abfrageService.save(abfrageModel);
 

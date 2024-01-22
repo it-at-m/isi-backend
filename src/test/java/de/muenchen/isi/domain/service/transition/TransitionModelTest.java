@@ -93,7 +93,7 @@ public class TransitionModelTest {
     @Transactional
     @MockCustomUser(roles = { "sachbearbeitung" })
     void possibleTransitionsAngelegtAndRoleSachbearbeitung()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, UserRoleNotAllowedException.CalculationException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, UserRoleNotAllowedException, CalculationException {
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
         abfrage = this.abfrageService.save(abfrage);
         abfrage.setStatusAbfrage(StatusAbfrage.ANGELEGT);
