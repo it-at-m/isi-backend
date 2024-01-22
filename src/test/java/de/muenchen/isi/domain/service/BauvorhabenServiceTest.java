@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import de.muenchen.isi.domain.exception.AbfrageStatusNotAllowedException;
 import de.muenchen.isi.domain.exception.BauvorhabenNotReferencedException;
+import de.muenchen.isi.domain.exception.CalculationException;
 import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.FileHandlingFailedException;
@@ -482,7 +483,7 @@ public class BauvorhabenServiceTest {
 
     @Test
     void saveBauvorhabenReferencedByAbfrage()
-        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, EntityIsReferencedException, UserRoleNotAllowedException {
+        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, EntityIsReferencedException, UserRoleNotAllowedException, CalculationException {
         final UUID abfrageId = UUID.randomUUID();
         final BauvorhabenModel bauvorhaben = new BauvorhabenModel();
         bauvorhaben.setId(null);

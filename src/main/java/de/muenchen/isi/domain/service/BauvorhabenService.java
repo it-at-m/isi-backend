@@ -2,6 +2,7 @@ package de.muenchen.isi.domain.service;
 
 import de.muenchen.isi.domain.exception.AbfrageStatusNotAllowedException;
 import de.muenchen.isi.domain.exception.BauvorhabenNotReferencedException;
+import de.muenchen.isi.domain.exception.CalculationException;
 import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.FileHandlingFailedException;
@@ -125,11 +126,13 @@ public class BauvorhabenService {
             } catch (UserRoleNotAllowedException e) {
                 final var message = "Keine Berechtigung um die Abfrage zu bearbeiten!";
                 throw new UserRoleNotAllowedException(message);
+            } catch (CalculationException e) {
+                throw new RuntimeException(e);
             }
             return this.bauvorhabenDomainMapper.entity2Model(bauvorhabenEntity);
         } else {
             throw new UniqueViolationException(
-                "Der angegebene Name des Bauvorhabens ist schon vorhanden, bitte wählen Sie daher einen anderen Namen und speichern Sie die Abfrage erneut."
+                "Der angegebene Name des Bauvorhabens ist schon vorhanden, bitte wählen Sie daher einen anderen Namen und speichern Sie das Bauvorhaben erneut."
             );
         }
     }

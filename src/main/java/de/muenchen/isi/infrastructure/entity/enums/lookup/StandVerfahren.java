@@ -67,7 +67,9 @@ public enum StandVerfahren implements ILookup {
 
     INFO_FEHLT("Info fehlt", new String[] { "Info", "fehlt" }),
 
-    FREIE_EINGABE("freie Eingabe", new String[] { "freie", "Eingabe" });
+    FREIE_EINGABE("freie Eingabe", new String[] { "freie", "Eingabe" }),
+
+    STANDORTABFRAGE("Standortabfrage", new String[] { "Standortabfrage" });
 
     @Getter
     private final String bezeichnung;
@@ -104,7 +106,8 @@ public enum StandVerfahren implements ILookup {
             STAEDTEBAULICHE_SANIERUNGSMASSNAHME,
             STAEDTEBAULICHE_ENTWICKLUNGSMASSNAHME,
             INFO_FEHLT,
-            FREIE_EINGABE
+            FREIE_EINGABE,
+            STANDORTABFRAGE
         );
     }
 }

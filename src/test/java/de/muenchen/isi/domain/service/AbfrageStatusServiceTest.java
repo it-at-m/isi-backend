@@ -7,12 +7,14 @@ import de.muenchen.isi.IsiBackendApplication;
 import de.muenchen.isi.TestConstants;
 import de.muenchen.isi.TestData;
 import de.muenchen.isi.domain.exception.AbfrageStatusNotAllowedException;
+import de.muenchen.isi.domain.exception.CalculationException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.StringLengthExceededException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
 import de.muenchen.isi.domain.exception.UserRoleNotAllowedException;
 import de.muenchen.isi.domain.model.AbfrageModel;
+import de.muenchen.isi.domain.service.calculation.CalculationService;
 import de.muenchen.isi.domain.service.transition.MockCustomUser;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrageEvents;
@@ -25,6 +27,7 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.test.context.ActiveProfiles;
@@ -41,6 +44,9 @@ class AbfrageStatusServiceTest {
 
     @Autowired
     private AbfrageStatusService abfrageStatusService;
+
+    @MockBean
+    private CalculationService calculationService;
 
     @Test
     void getAbfrageIdHeaderSuccessfull() throws EntityNotFoundException {
@@ -106,13 +112,13 @@ class AbfrageStatusServiceTest {
     @Transactional
     @MockCustomUser
     void freigabeInfrasturkturabfrageVonAngelegt()
-        throws UniqueViolationException, OptimisticLockingException, StringLengthExceededException, EntityNotFoundException, AbfrageStatusNotAllowedException, UserRoleNotAllowedException {
+        throws UniqueViolationException, OptimisticLockingException, StringLengthExceededException, EntityNotFoundException, AbfrageStatusNotAllowedException, UserRoleNotAllowedException, CalculationException {
         this.freigabeInfrasturkturabfrageVonAngelegt(TestData.createBauleitplanverfahrenModel());
         this.freigabeInfrasturkturabfrageVonAngelegt(TestData.createBaugenehmigungsverfahrenModel());
     }
 
     void freigabeInfrasturkturabfrageVonAngelegt(final AbfrageModel abfrageToTest)
-        throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException, StringLengthExceededException, UserRoleNotAllowedException {
+        throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException, StringLengthExceededException, UserRoleNotAllowedException, CalculationException {
         final var anmerkung = "";
         AbfrageModel abfrage = abfrageToTest;
         abfrage = this.abfrageService.save(abfrage);
@@ -196,13 +202,13 @@ class AbfrageStatusServiceTest {
     @Transactional
     @MockCustomUser
     void abbrechenAbfrageVonOffen()
-        throws UniqueViolationException, OptimisticLockingException, StringLengthExceededException, EntityNotFoundException, AbfrageStatusNotAllowedException, UserRoleNotAllowedException {
+        throws UniqueViolationException, OptimisticLockingException, StringLengthExceededException, EntityNotFoundException, AbfrageStatusNotAllowedException, UserRoleNotAllowedException, CalculationException {
         this.abbrechenAbfrageVonOffen(TestData.createBauleitplanverfahrenModel());
         this.abbrechenAbfrageVonOffen(TestData.createBaugenehmigungsverfahrenModel());
     }
 
     void abbrechenAbfrageVonOffen(final AbfrageModel abfrageToTest)
-        throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException, StringLengthExceededException, UserRoleNotAllowedException {
+        throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException, StringLengthExceededException, UserRoleNotAllowedException, CalculationException {
         final var anmerkung = "";
         AbfrageModel abfrage = abfrageToTest;
         abfrage = this.abfrageService.save(abfrage);
@@ -250,13 +256,13 @@ class AbfrageStatusServiceTest {
     @Transactional
     @MockCustomUser
     void inBearbeitungSetztVonOffen()
-        throws UniqueViolationException, OptimisticLockingException, StringLengthExceededException, EntityNotFoundException, AbfrageStatusNotAllowedException, UserRoleNotAllowedException {
+        throws UniqueViolationException, OptimisticLockingException, StringLengthExceededException, EntityNotFoundException, AbfrageStatusNotAllowedException, UserRoleNotAllowedException, CalculationException {
         this.inBearbeitungSetztVonOffen(TestData.createBauleitplanverfahrenModel());
         this.inBearbeitungSetztVonOffen(TestData.createBaugenehmigungsverfahrenModel());
     }
 
     void inBearbeitungSetztVonOffen(final AbfrageModel abfrageToTest)
-        throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException, StringLengthExceededException, UserRoleNotAllowedException {
+        throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException, StringLengthExceededException, UserRoleNotAllowedException, CalculationException {
         final var anmerkung = "";
         AbfrageModel abfrage = abfrageToTest;
         abfrage = this.abfrageService.save(abfrage);
@@ -304,13 +310,13 @@ class AbfrageStatusServiceTest {
     @Transactional
     @MockCustomUser
     void abbrechenAbfrageVonInBearbeitungSachbearbeitung()
-        throws UniqueViolationException, OptimisticLockingException, StringLengthExceededException, EntityNotFoundException, AbfrageStatusNotAllowedException, UserRoleNotAllowedException {
+        throws UniqueViolationException, OptimisticLockingException, StringLengthExceededException, EntityNotFoundException, AbfrageStatusNotAllowedException, UserRoleNotAllowedException, CalculationException {
         this.abbrechenAbfrageVonInBearbeitungSachbearbeitung(TestData.createBauleitplanverfahrenModel());
         this.abbrechenAbfrageVonInBearbeitungSachbearbeitung(TestData.createBaugenehmigungsverfahrenModel());
     }
 
     void abbrechenAbfrageVonInBearbeitungSachbearbeitung(final AbfrageModel abfrageToTest)
-        throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException, StringLengthExceededException, UserRoleNotAllowedException {
+        throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException, StringLengthExceededException, UserRoleNotAllowedException, CalculationException {
         final var anmerkung = "";
         AbfrageModel abfrage = abfrageToTest;
         abfrage = this.abfrageService.save(abfrage);
@@ -358,13 +364,13 @@ class AbfrageStatusServiceTest {
     @Transactional
     @MockCustomUser
     void abbrechenAbfrageVonInBearbeitungFachreferate()
-        throws UniqueViolationException, OptimisticLockingException, StringLengthExceededException, EntityNotFoundException, AbfrageStatusNotAllowedException, UserRoleNotAllowedException {
+        throws UniqueViolationException, OptimisticLockingException, StringLengthExceededException, EntityNotFoundException, AbfrageStatusNotAllowedException, UserRoleNotAllowedException, CalculationException {
         this.abbrechenAbfrageVonInBearbeitungFachreferate(TestData.createBauleitplanverfahrenModel());
         this.abbrechenAbfrageVonInBearbeitungFachreferate(TestData.createBaugenehmigungsverfahrenModel());
     }
 
     void abbrechenAbfrageVonInBearbeitungFachreferate(final AbfrageModel abfrageToTest)
-        throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException, StringLengthExceededException, UserRoleNotAllowedException {
+        throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException, StringLengthExceededException, UserRoleNotAllowedException, CalculationException {
         final var anmerkung = "";
         AbfrageModel abfrage = abfrageToTest;
         abfrage = this.abfrageService.save(abfrage);
@@ -412,13 +418,13 @@ class AbfrageStatusServiceTest {
     @Transactional
     @MockCustomUser
     void abbrechenAbfrageVonBedarfsmeldungErfolgt()
-        throws UniqueViolationException, OptimisticLockingException, StringLengthExceededException, EntityNotFoundException, AbfrageStatusNotAllowedException, UserRoleNotAllowedException {
+        throws UniqueViolationException, OptimisticLockingException, StringLengthExceededException, EntityNotFoundException, AbfrageStatusNotAllowedException, UserRoleNotAllowedException, CalculationException {
         this.abbrechenAbfrageVonBedarfsmeldungErfolgt(TestData.createBauleitplanverfahrenModel());
         this.abbrechenAbfrageVonBedarfsmeldungErfolgt(TestData.createBaugenehmigungsverfahrenModel());
     }
 
     void abbrechenAbfrageVonBedarfsmeldungErfolgt(final AbfrageModel abfrageToTest)
-        throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException, StringLengthExceededException, UserRoleNotAllowedException {
+        throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException, StringLengthExceededException, UserRoleNotAllowedException, CalculationException {
         final var anmerkung = "";
         AbfrageModel abfrage = abfrageToTest;
         abfrage = this.abfrageService.save(abfrage);
@@ -466,13 +472,13 @@ class AbfrageStatusServiceTest {
     @Transactional
     @MockCustomUser
     void zurueckAnAbfrageerstellungVonInBearbeitungSachbearbeitung()
-        throws UniqueViolationException, OptimisticLockingException, StringLengthExceededException, EntityNotFoundException, AbfrageStatusNotAllowedException, UserRoleNotAllowedException {
+        throws UniqueViolationException, OptimisticLockingException, StringLengthExceededException, EntityNotFoundException, AbfrageStatusNotAllowedException, UserRoleNotAllowedException, CalculationException {
         this.zurueckAnAbfrageerstellungVonInBearbeitungSachbearbeitung(TestData.createBauleitplanverfahrenModel());
         this.zurueckAnAbfrageerstellungVonInBearbeitungSachbearbeitung(TestData.createBaugenehmigungsverfahrenModel());
     }
 
     void zurueckAnAbfrageerstellungVonInBearbeitungSachbearbeitung(final AbfrageModel abfrageToTest)
-        throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException, StringLengthExceededException, UserRoleNotAllowedException {
+        throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException, StringLengthExceededException, UserRoleNotAllowedException, CalculationException {
         final var anmerkung = "";
         AbfrageModel abfrage = abfrageToTest;
         abfrage = this.abfrageService.save(abfrage);
@@ -540,13 +546,13 @@ class AbfrageStatusServiceTest {
     @Transactional
     @MockCustomUser
     void zurueckAnAbfrageerstellungVonOffen()
-        throws UniqueViolationException, OptimisticLockingException, StringLengthExceededException, EntityNotFoundException, AbfrageStatusNotAllowedException, UserRoleNotAllowedException {
+        throws UniqueViolationException, OptimisticLockingException, StringLengthExceededException, EntityNotFoundException, AbfrageStatusNotAllowedException, UserRoleNotAllowedException, CalculationException {
         this.zurueckAnAbfrageerstellungVonOffen(TestData.createBauleitplanverfahrenModel());
         this.zurueckAnAbfrageerstellungVonOffen(TestData.createBaugenehmigungsverfahrenModel());
     }
 
     void zurueckAnAbfrageerstellungVonOffen(final AbfrageModel abfrageToTest)
-        throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException, StringLengthExceededException, UserRoleNotAllowedException {
+        throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException, StringLengthExceededException, UserRoleNotAllowedException, CalculationException {
         final var anmerkung = "";
         AbfrageModel abfrage = abfrageToTest;
         abfrage = this.abfrageService.save(abfrage);
@@ -614,13 +620,13 @@ class AbfrageStatusServiceTest {
     @Transactional
     @MockCustomUser
     void zurueckAnSachbearbeitungVonInBearbeitungFachreferate()
-        throws UniqueViolationException, OptimisticLockingException, StringLengthExceededException, EntityNotFoundException, AbfrageStatusNotAllowedException, UserRoleNotAllowedException {
+        throws UniqueViolationException, OptimisticLockingException, StringLengthExceededException, EntityNotFoundException, AbfrageStatusNotAllowedException, UserRoleNotAllowedException, CalculationException {
         this.zurueckAnSachbearbeitungVonInBearbeitungFachreferate(TestData.createBauleitplanverfahrenModel());
         this.zurueckAnSachbearbeitungVonInBearbeitungFachreferate(TestData.createBaugenehmigungsverfahrenModel());
     }
 
     void zurueckAnSachbearbeitungVonInBearbeitungFachreferate(final AbfrageModel abfrageToTest)
-        throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException, StringLengthExceededException, UserRoleNotAllowedException {
+        throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException, StringLengthExceededException, UserRoleNotAllowedException, CalculationException {
         final var anmerkung = "";
         AbfrageModel abfrage = abfrageToTest;
         abfrage = this.abfrageService.save(abfrage);
@@ -668,13 +674,13 @@ class AbfrageStatusServiceTest {
     @Transactional
     @MockCustomUser
     void erledigtOhneFachreferatVonInBearbeitungSachbearbeitung()
-        throws UniqueViolationException, OptimisticLockingException, StringLengthExceededException, EntityNotFoundException, AbfrageStatusNotAllowedException, UserRoleNotAllowedException {
+        throws UniqueViolationException, OptimisticLockingException, StringLengthExceededException, EntityNotFoundException, AbfrageStatusNotAllowedException, UserRoleNotAllowedException, CalculationException {
         this.erledigtOhneFachreferatVonInBearbeitungSachbearbeitung(TestData.createBauleitplanverfahrenModel());
         this.erledigtOhneFachreferatVonInBearbeitungSachbearbeitung(TestData.createBaugenehmigungsverfahrenModel());
     }
 
     void erledigtOhneFachreferatVonInBearbeitungSachbearbeitung(final AbfrageModel abfrageToTest)
-        throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException, StringLengthExceededException, UserRoleNotAllowedException {
+        throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException, StringLengthExceededException, UserRoleNotAllowedException, CalculationException {
         final var anmerkung = "";
         AbfrageModel abfrage = abfrageToTest;
         abfrage = this.abfrageService.save(abfrage);
@@ -762,13 +768,13 @@ class AbfrageStatusServiceTest {
     @Transactional
     @MockCustomUser
     void verschickenDerStellungnahmeVonInBearbeitungSachbearbeitung()
-        throws UniqueViolationException, OptimisticLockingException, StringLengthExceededException, EntityNotFoundException, AbfrageStatusNotAllowedException, UserRoleNotAllowedException {
+        throws UniqueViolationException, OptimisticLockingException, StringLengthExceededException, EntityNotFoundException, AbfrageStatusNotAllowedException, UserRoleNotAllowedException, CalculationException {
         this.verschickenDerStellungnahmeVonInBearbeitungSachbearbeitung(TestData.createBauleitplanverfahrenModel());
         this.verschickenDerStellungnahmeVonInBearbeitungSachbearbeitung(TestData.createBaugenehmigungsverfahrenModel());
     }
 
     void verschickenDerStellungnahmeVonInBearbeitungSachbearbeitung(final AbfrageModel abfrageToTest)
-        throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException, StringLengthExceededException, UserRoleNotAllowedException {
+        throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException, StringLengthExceededException, UserRoleNotAllowedException, CalculationException {
         final var anmerkung = "";
         AbfrageModel abfrage = abfrageToTest;
         abfrage = this.abfrageService.save(abfrage);
@@ -856,13 +862,13 @@ class AbfrageStatusServiceTest {
     @Transactional
     @MockCustomUser
     void bedarfsmeldungErfolgtVonInBearbeitungFachreferate()
-        throws UniqueViolationException, OptimisticLockingException, StringLengthExceededException, EntityNotFoundException, AbfrageStatusNotAllowedException, UserRoleNotAllowedException {
+        throws UniqueViolationException, OptimisticLockingException, StringLengthExceededException, EntityNotFoundException, AbfrageStatusNotAllowedException, UserRoleNotAllowedException, CalculationException {
         this.bedarfsmeldungErfolgtVonInBearbeitungFachreferate(TestData.createBauleitplanverfahrenModel());
         this.bedarfsmeldungErfolgtVonInBearbeitungFachreferate(TestData.createBaugenehmigungsverfahrenModel());
     }
 
     void bedarfsmeldungErfolgtVonInBearbeitungFachreferate(final AbfrageModel abfrageToTest)
-        throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException, StringLengthExceededException, UserRoleNotAllowedException {
+        throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException, StringLengthExceededException, UserRoleNotAllowedException, CalculationException {
         final var anmerkung = "";
         AbfrageModel abfrage = abfrageToTest;
         abfrage = this.abfrageService.save(abfrage);
@@ -950,13 +956,13 @@ class AbfrageStatusServiceTest {
     @Transactional
     @MockCustomUser
     void erledigtMitFachreferatVonBedarfsmeldungErfolgt()
-        throws UniqueViolationException, OptimisticLockingException, StringLengthExceededException, EntityNotFoundException, AbfrageStatusNotAllowedException, UserRoleNotAllowedException {
+        throws UniqueViolationException, OptimisticLockingException, StringLengthExceededException, EntityNotFoundException, AbfrageStatusNotAllowedException, UserRoleNotAllowedException, CalculationException {
         this.erledigtMitFachreferatVonBedarfsmeldungErfolgt(TestData.createBauleitplanverfahrenModel());
         this.erledigtMitFachreferatVonBedarfsmeldungErfolgt(TestData.createBaugenehmigungsverfahrenModel());
     }
 
     void erledigtMitFachreferatVonBedarfsmeldungErfolgt(final AbfrageModel abfrageToTest)
-        throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException, StringLengthExceededException, UserRoleNotAllowedException {
+        throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException, StringLengthExceededException, UserRoleNotAllowedException, CalculationException {
         final var anmerkung = "";
         AbfrageModel abfrage = abfrageToTest;
         abfrage = this.abfrageService.save(abfrage);
@@ -1044,7 +1050,7 @@ class AbfrageStatusServiceTest {
     @Transactional
     @MockCustomUser
     void erneuteBearbeitungSachbearbeitungVonErledigtMitFachereferat()
-        throws UniqueViolationException, OptimisticLockingException, StringLengthExceededException, EntityNotFoundException, AbfrageStatusNotAllowedException, UserRoleNotAllowedException {
+        throws UniqueViolationException, OptimisticLockingException, StringLengthExceededException, EntityNotFoundException, AbfrageStatusNotAllowedException, UserRoleNotAllowedException, CalculationException {
         this.erneuteBearbeitungSachbearbeitungVonErledigtMitFachereferat(TestData.createBauleitplanverfahrenModel());
         this.erneuteBearbeitungSachbearbeitungVonErledigtMitFachereferat(
                 TestData.createBaugenehmigungsverfahrenModel()
@@ -1052,7 +1058,7 @@ class AbfrageStatusServiceTest {
     }
 
     void erneuteBearbeitungSachbearbeitungVonErledigtMitFachereferat(final AbfrageModel abfrageToTest)
-        throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException, StringLengthExceededException, UserRoleNotAllowedException {
+        throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException, StringLengthExceededException, UserRoleNotAllowedException, CalculationException {
         final var anmerkung = "";
         AbfrageModel abfrage = abfrageToTest;
         abfrage = this.abfrageService.save(abfrage);
@@ -1130,7 +1136,7 @@ class AbfrageStatusServiceTest {
     @Transactional
     @MockCustomUser
     void erneuteBearbeitungSachbearbeitungVonErledigtOhneFachereferat()
-        throws UniqueViolationException, OptimisticLockingException, StringLengthExceededException, EntityNotFoundException, AbfrageStatusNotAllowedException, UserRoleNotAllowedException {
+        throws UniqueViolationException, OptimisticLockingException, StringLengthExceededException, EntityNotFoundException, AbfrageStatusNotAllowedException, UserRoleNotAllowedException, CalculationException {
         this.erneuteBearbeitungSachbearbeitungVonErledigtOhneFachereferat(TestData.createBauleitplanverfahrenModel());
         this.erneuteBearbeitungSachbearbeitungVonErledigtOhneFachereferat(
                 TestData.createBaugenehmigungsverfahrenModel()
@@ -1138,7 +1144,7 @@ class AbfrageStatusServiceTest {
     }
 
     void erneuteBearbeitungSachbearbeitungVonErledigtOhneFachereferat(final AbfrageModel abfrageToTest)
-        throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException, StringLengthExceededException, UserRoleNotAllowedException {
+        throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException, StringLengthExceededException, UserRoleNotAllowedException, CalculationException {
         final var anmerkung = "";
         AbfrageModel abfrage = abfrageToTest;
         abfrage = this.abfrageService.save(abfrage);
@@ -1216,13 +1222,13 @@ class AbfrageStatusServiceTest {
     @Transactional
     @MockCustomUser
     void addAbfrageAnmerkungTest()
-        throws UniqueViolationException, OptimisticLockingException, StringLengthExceededException, EntityNotFoundException, AbfrageStatusNotAllowedException, UserRoleNotAllowedException {
+        throws UniqueViolationException, OptimisticLockingException, StringLengthExceededException, EntityNotFoundException, AbfrageStatusNotAllowedException, UserRoleNotAllowedException, CalculationException {
         this.addAbfrageAnmerkungTest(TestData.createBauleitplanverfahrenModel());
         this.addAbfrageAnmerkungTest(TestData.createBaugenehmigungsverfahrenModel());
     }
 
     void addAbfrageAnmerkungTest(final AbfrageModel abfrageToTest)
-        throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException, StringLengthExceededException, UserRoleNotAllowedException {
+        throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException, StringLengthExceededException, UserRoleNotAllowedException, CalculationException {
         final var anmerkung = "Test";
         AbfrageModel abfrage = abfrageToTest;
         abfrage = this.abfrageService.save(abfrage);
@@ -1241,13 +1247,13 @@ class AbfrageStatusServiceTest {
     @Transactional
     @MockCustomUser
     void addAbfrageAnmerkungStringLengthExceededExceptionTest()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, UserRoleNotAllowedException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, UserRoleNotAllowedException, CalculationException {
         this.addAbfrageAnmerkungStringLengthExceededExceptionTest(TestData.createBauleitplanverfahrenModel());
         this.addAbfrageAnmerkungStringLengthExceededExceptionTest(TestData.createBaugenehmigungsverfahrenModel());
     }
 
     void addAbfrageAnmerkungStringLengthExceededExceptionTest(final AbfrageModel abfrageToTest)
-        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, UserRoleNotAllowedException {
+        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, UserRoleNotAllowedException, CalculationException {
         final var anmerkung =
             "TestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestI";
         AbfrageModel abfrage = abfrageToTest;

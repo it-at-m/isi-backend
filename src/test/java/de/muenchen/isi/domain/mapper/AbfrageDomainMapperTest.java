@@ -24,6 +24,7 @@ import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.Abfragev
 import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.BaugenehmigungsverfahrenInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.BauleitplanverfahrenInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.WeiteresVerfahrenInBearbeitungSachbearbeitungModel;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.repository.BauvorhabenRepository;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -352,10 +353,12 @@ public class AbfrageDomainMapperTest {
         expected.setVersion(99L);
 
         final var abfragevariante1 = new AbfragevarianteBauleitplanverfahrenModel();
+        abfragevariante1.setArtAbfragevariante(ArtAbfrage.BAULEITPLANVERFAHREN);
         abfragevariante1.setAbfragevariantenNr(1);
         abfragevariante1.setName("Abfragevariante 1");
 
         final var abfragevariante2 = new AbfragevarianteBauleitplanverfahrenModel();
+        abfragevariante2.setArtAbfragevariante(ArtAbfrage.BAULEITPLANVERFAHREN);
         abfragevariante2.setAbfragevariantenNr(2);
         abfragevariante2.setName("Abfragevariante 2");
 
@@ -394,10 +397,12 @@ public class AbfrageDomainMapperTest {
         expected.setVersion(99L);
 
         final var abfragevariante1 = new AbfragevarianteBaugenehmigungsverfahrenModel();
+        abfragevariante1.setArtAbfragevariante(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN);
         abfragevariante1.setAbfragevariantenNr(1);
         abfragevariante1.setName("Abfragevariante 1");
 
         final var abfragevariante2 = new AbfragevarianteBaugenehmigungsverfahrenModel();
+        abfragevariante2.setArtAbfragevariante(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN);
         abfragevariante2.setAbfragevariantenNr(2);
         abfragevariante2.setName("Abfragevariante 2");
 
@@ -433,10 +438,12 @@ public class AbfrageDomainMapperTest {
         expected.setVersion(99L);
 
         final var abfragevariante1 = new AbfragevarianteWeiteresVerfahrenModel();
+        abfragevariante1.setArtAbfragevariante(ArtAbfrage.WEITERES_VERFAHREN);
         abfragevariante1.setAbfragevariantenNr(1);
         abfragevariante1.setName("Abfragevariante 1");
 
         final var abfragevariante2 = new AbfragevarianteWeiteresVerfahrenModel();
+        abfragevariante2.setArtAbfragevariante(ArtAbfrage.WEITERES_VERFAHREN);
         abfragevariante2.setAbfragevariantenNr(2);
         abfragevariante2.setName("Abfragevariante 2");
 
@@ -493,11 +500,13 @@ public class AbfrageDomainMapperTest {
         expected.setAbfragevariantenBauleitplanverfahren(List.of());
 
         final var abfragevariante1 = new AbfragevarianteBauleitplanverfahrenModel();
+        abfragevariante1.setArtAbfragevariante(ArtAbfrage.BAULEITPLANVERFAHREN);
         abfragevariante1.setId(abfragevarianteSachbearbeitung1.getId());
         abfragevariante1.setAbfragevariantenNr(1);
         abfragevariante1.setName("New Name Abfragevariante 1");
 
         final var abfragevariante2 = new AbfragevarianteBauleitplanverfahrenModel();
+        abfragevariante2.setArtAbfragevariante(ArtAbfrage.BAULEITPLANVERFAHREN);
         abfragevariante2.setId(abfragevarianteSachbearbeitung2.getId());
         abfragevariante2.setAbfragevariantenNr(2);
         abfragevariante2.setName("New Name Abfragevariante 2");
@@ -554,11 +563,13 @@ public class AbfrageDomainMapperTest {
         expected.setAbfragevariantenBaugenehmigungsverfahren(List.of());
 
         final var abfragevariante1 = new AbfragevarianteBaugenehmigungsverfahrenModel();
+        abfragevariante1.setArtAbfragevariante(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN);
         abfragevariante1.setId(abfragevarianteSachbearbeitung1.getId());
         abfragevariante1.setAbfragevariantenNr(1);
         abfragevariante1.setName("New Name Abfragevariante 1");
 
         final var abfragevariante2 = new AbfragevarianteBaugenehmigungsverfahrenModel();
+        abfragevariante2.setArtAbfragevariante(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN);
         abfragevariante2.setId(abfragevarianteSachbearbeitung2.getId());
         abfragevariante2.setAbfragevariantenNr(2);
         abfragevariante2.setName("New Name Abfragevariante 2");
@@ -615,11 +626,13 @@ public class AbfrageDomainMapperTest {
         expected.setAbfragevariantenWeiteresVerfahren(List.of());
 
         final var abfragevariante1 = new AbfragevarianteWeiteresVerfahrenModel();
+        abfragevariante1.setArtAbfragevariante(ArtAbfrage.WEITERES_VERFAHREN);
         abfragevariante1.setId(abfragevarianteSachbearbeitung1.getId());
         abfragevariante1.setAbfragevariantenNr(1);
         abfragevariante1.setName("New Name Abfragevariante 1");
 
         final var abfragevariante2 = new AbfragevarianteWeiteresVerfahrenModel();
+        abfragevariante2.setArtAbfragevariante(ArtAbfrage.WEITERES_VERFAHREN);
         abfragevariante2.setId(abfragevarianteSachbearbeitung2.getId());
         abfragevariante2.setAbfragevariantenNr(2);
         abfragevariante2.setName("New Name Abfragevariante 2");
@@ -674,11 +687,13 @@ public class AbfrageDomainMapperTest {
         expected.setAbfragevariantenSachbearbeitungBauleitplanverfahren(List.of());
 
         final var abfragevarianteExpected1 = new AbfragevarianteBauleitplanverfahrenModel();
+        abfragevarianteExpected1.setArtAbfragevariante(ArtAbfrage.BAULEITPLANVERFAHREN);
         abfragevarianteExpected1.setId(abfragevarianteSachbearbeitung1.getId());
         abfragevarianteExpected1.setVersion(1L);
         abfragevarianteExpected1.setAnmerkung("Test1");
 
         final var abfragevarianteExpected2 = new AbfragevarianteBauleitplanverfahrenModel();
+        abfragevarianteExpected2.setArtAbfragevariante(ArtAbfrage.BAULEITPLANVERFAHREN);
         abfragevarianteExpected2.setId(abfragevarianteSachbearbeitung2.getId());
         abfragevarianteExpected2.setVersion(2L);
         abfragevarianteExpected2.setAnmerkung("Test2");
@@ -733,11 +748,13 @@ public class AbfrageDomainMapperTest {
         expected.setAbfragevariantenSachbearbeitungBaugenehmigungsverfahren(List.of());
 
         final var abfragevarianteExpected1 = new AbfragevarianteBaugenehmigungsverfahrenModel();
+        abfragevarianteExpected1.setArtAbfragevariante(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN);
         abfragevarianteExpected1.setId(abfragevarianteSachbearbeitung1.getId());
         abfragevarianteExpected1.setVersion(1L);
         abfragevarianteExpected1.setAnmerkung("Test1");
 
         final var abfragevarianteExpected2 = new AbfragevarianteBaugenehmigungsverfahrenModel();
+        abfragevarianteExpected2.setArtAbfragevariante(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN);
         abfragevarianteExpected2.setId(abfragevarianteSachbearbeitung2.getId());
         abfragevarianteExpected2.setVersion(2L);
         abfragevarianteExpected2.setAnmerkung("Test2");
@@ -794,11 +811,13 @@ public class AbfrageDomainMapperTest {
         expected.setAbfragevariantenSachbearbeitungWeiteresVerfahren(List.of());
 
         final var abfragevarianteExpected1 = new AbfragevarianteWeiteresVerfahrenModel();
+        abfragevarianteExpected1.setArtAbfragevariante(ArtAbfrage.WEITERES_VERFAHREN);
         abfragevarianteExpected1.setId(abfragevarianteSachbearbeitung1.getId());
         abfragevarianteExpected1.setVersion(1L);
         abfragevarianteExpected1.setAnmerkung("Test1");
 
         final var abfragevarianteExpected2 = new AbfragevarianteWeiteresVerfahrenModel();
+        abfragevarianteExpected2.setArtAbfragevariante(ArtAbfrage.WEITERES_VERFAHREN);
         abfragevarianteExpected2.setId(abfragevarianteSachbearbeitung2.getId());
         abfragevarianteExpected2.setVersion(2L);
         abfragevarianteExpected2.setAnmerkung("Test2");
