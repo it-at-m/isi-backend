@@ -15,10 +15,10 @@ public class AbfrageReportingRepository {
     private final AbfrageReportingEaiApi abfrageReportingEaiApi;
 
     public void save(final AbfrageDto abfrage) {
-        abfrageReportingEaiApi.save(abfrage);
+        abfrageReportingEaiApi.save(abfrage).block();
     }
 
     public void deleteById(final UUID id) {
-        abfrageReportingEaiApi.delete(id);
+        abfrageReportingEaiApi.delete(id).block();
     }
 }
