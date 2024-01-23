@@ -1,10 +1,11 @@
 package de.muenchen.isi.domain.service.calculation;
 
-import de.muenchen.isi.domain.exception.CalculationException;
+import de.muenchen.isi.domain.exception.ReportingException;
 import de.muenchen.isi.domain.mapper.ReportingApiDomainMapper;
+import de.muenchen.isi.domain.model.AbfrageModel;
 import de.muenchen.isi.domain.model.calculation.LangfristigerPlanungsursaechlicherBedarfModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
-import de.muenchen.isi.infrastructure.repository.reporting.ReportingRepository;
+import de.muenchen.isi.infrastructure.repository.reporting.AbfrageReportingRepository;
 import de.muenchen.isi.reporting.client.model.AbfrageDto;
 import de.muenchen.isi.reporting.client.model.BaugenehmigungsverfahrenDto;
 import de.muenchen.isi.reporting.client.model.BauleitplanverfahrenDto;
@@ -23,12 +24,37 @@ public class CalculationTransferService {
 
     private final ReportingApiDomainMapper reportingApiDomainMapper;
 
-    private final ReportingRepository reportingRepository;
+    private final AbfrageReportingRepository abfrageReportingRepository;
+
+    /**
+     *
+     * @param model
+     * @param bedarfForEachAbfragevariante
+     * @throws ReportingException
+     */
+    public void addCalculationResultsToAbfrageAndTransferData(
+        final AbfrageModel model,
+        final Map<UUID, LangfristigerPlanungsursaechlicherBedarfModel> bedarfForEachAbfragevariante
+    ) throws ReportingException {
+        var reportingDto = reportingApiDomainMapper.model2ReportingDto(model);
+        reportingDto = this.addCalculationResultsToAbfrage(reportingDto, bedarfForEachAbfragevariante);
+        this.transferAbfrage(reportingDto);
+    }
+
+    protected void transferAbfrage(final AbfrageDto abfrage) throws ReportingException {
+        try {
+            abfrageReportingRepository.save(abfrage);
+        } catch (final Exception exception) {
+            final var error = "Beim Versenden der Berechnungsergebnisse ist ein Fehler aufgetreten.";
+            log.error(error, exception);
+            throw new ReportingException(error, exception);
+        }
+    }
 
     protected AbfrageDto addCalculationResultsToAbfrage(
         final AbfrageDto abfrage,
         final Map<UUID, LangfristigerPlanungsursaechlicherBedarfModel> bedarfForEachAbfragevariante
-    ) throws CalculationException {
+    ) throws ReportingException {
         if (ArtAbfrage.BAULEITPLANVERFAHREN.equals(abfrage.getArtAbfrage())) {
             final var bauleitplanverfahren = (BauleitplanverfahrenDto) abfrage;
             Stream
@@ -53,7 +79,7 @@ public class CalculationTransferService {
                     final var bedarfDto = reportingApiDomainMapper.model2ReportingDto(bedarfModel);
                     abfragevariante.setLangfristigerPlanungsursaechlicherBedarf(bedarfDto);
                 });
-        } else if (ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN.equals(abfrage.getArtAbfrage())) {
+        } else if (ArtAbfrage.WEITERES_VERFAHREN.equals(abfrage.getArtAbfrage())) {
             final var weiteresVerfahren = (WeiteresVerfahrenDto) abfrage;
             Stream
                 .concat(
@@ -66,7 +92,7 @@ public class CalculationTransferService {
                     abfragevariante.setLangfristigerPlanungsursaechlicherBedarf(bedarfDto);
                 });
         } else {
-            throw new CalculationException("Die Berechnung kann für diese Art von Abfrage nicht durchgeführt werden.");
+            throw new ReportingException("Für diese Art der Abfrage kann kein Reporting durchgeführt werden.");
         }
         return abfrage;
     }

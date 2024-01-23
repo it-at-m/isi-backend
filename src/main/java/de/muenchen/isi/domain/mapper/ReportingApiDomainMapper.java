@@ -15,7 +15,7 @@ import de.muenchen.isi.reporting.client.model.AbfragevarianteBauleitplanverfahre
 import de.muenchen.isi.reporting.client.model.AbfragevarianteWeiteresVerfahrenDto;
 import de.muenchen.isi.reporting.client.model.BaugenehmigungsverfahrenDto;
 import de.muenchen.isi.reporting.client.model.BauleitplanverfahrenDto;
-import de.muenchen.isi.reporting.client.model.LangfristigerPlanungsursaechlicherBedarfDto;
+import de.muenchen.isi.reporting.client.model.LangfristigerBedarfDto;
 import de.muenchen.isi.reporting.client.model.WeiteresVerfahrenDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -47,7 +47,5 @@ public interface ReportingApiDomainMapper {
     @Mapping(target = "langfristigerPlanungsursaechlicherBedarf", ignore = true)
     AbfragevarianteWeiteresVerfahrenDto model2ReportingDto(final AbfragevarianteWeiteresVerfahrenModel model);
 
-    LangfristigerPlanungsursaechlicherBedarfDto model2ReportingDto(
-        final LangfristigerPlanungsursaechlicherBedarfModel model
-    );
+    LangfristigerBedarfDto model2ReportingDto(final LangfristigerPlanungsursaechlicherBedarfModel model);
 }
