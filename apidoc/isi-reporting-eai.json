@@ -1,0 +1,357 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "ISI Reporting EAI",
+    "description": "ISI Reporting EAI - Service zum Befüllen der Metabase-DB",
+    "contact": {
+      "name": "ISI Management",
+      "email": "unbekannt@muenchen.de"
+    },
+    "version": "1.1.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8088",
+      "description": "Generated server url"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Reporting",
+      "description": "API zum Speichern von Abfragen mit reportingrelevanten Informationen."
+    }
+  ],
+  "paths": {
+    "/abfrage": {
+      "post": {
+        "tags": ["Reporting"],
+        "summary": "Speichert Abfragen mit reportingrelevanten Informationen.",
+        "operationId": "save",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/BaugenehmigungsverfahrenDto"
+                  },
+                  {
+                    "$ref": "#/components/schemas/BauleitplanverfahrenDto"
+                  },
+                  {
+                    "$ref": "#/components/schemas/WeiteresVerfahrenDto"
+                  }
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK -> Abfrage gespeichert."
+          }
+        }
+      }
+    },
+    "/abfrage/{id}": {
+      "delete": {
+        "tags": ["Reporting"],
+        "summary": "Löscht eine Abfrage mitsamt aller reportingrelevanten Informationen.",
+        "operationId": "delete",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "NO CONTENT"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AbfrageDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "createdDateTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "lastModifiedDateTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "artAbfrage": {
+            "type": "string",
+            "enum": ["UNSPECIFIED", "BAULEITPLANVERFAHREN", "BAUGENEHMIGUNGSVERFAHREN", "WEITERES_VERFAHREN"]
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "description": "AbfrageDto",
+        "discriminator": {
+          "propertyName": "artAbfrage",
+          "mapping": {
+            "BAULEITPLANVERFAHREN": "#/components/schemas/BauleitplanverfahrenDto",
+            "BAUGENEHMIGUNGSVERFAHREN": "#/components/schemas/BaugenehmigungsverfahrenDto",
+            "WEITERES_VERFAHREN": "#/components/schemas/WeiteresVerfahrenDto"
+          }
+        }
+      },
+      "AbfragevarianteBaugenehmigungsverfahrenDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "createdDateTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "lastModifiedDateTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "artAbfragevariante": {
+            "type": "string",
+            "enum": ["UNSPECIFIED", "BAULEITPLANVERFAHREN", "BAUGENEHMIGUNGSVERFAHREN", "WEITERES_VERFAHREN"]
+          },
+          "abfragevariantenNr": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string"
+          },
+          "langfristigerPlanungsursaechlicherBedarf": {
+            "$ref": "#/components/schemas/LangfristigerPlanungsursaechlicherBedarfDto"
+          }
+        }
+      },
+      "AbfragevarianteBauleitplanverfahrenDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "createdDateTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "lastModifiedDateTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "artAbfragevariante": {
+            "type": "string",
+            "enum": ["UNSPECIFIED", "BAULEITPLANVERFAHREN", "BAUGENEHMIGUNGSVERFAHREN", "WEITERES_VERFAHREN"]
+          },
+          "abfragevariantenNr": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string"
+          },
+          "langfristigerPlanungsursaechlicherBedarf": {
+            "$ref": "#/components/schemas/LangfristigerPlanungsursaechlicherBedarfDto"
+          }
+        }
+      },
+      "AbfragevarianteWeiteresVerfahrenDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "createdDateTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "lastModifiedDateTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "artAbfragevariante": {
+            "type": "string",
+            "enum": ["UNSPECIFIED", "BAULEITPLANVERFAHREN", "BAUGENEHMIGUNGSVERFAHREN", "WEITERES_VERFAHREN"]
+          },
+          "abfragevariantenNr": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string"
+          },
+          "langfristigerPlanungsursaechlicherBedarf": {
+            "$ref": "#/components/schemas/LangfristigerPlanungsursaechlicherBedarfDto"
+          }
+        }
+      },
+      "BaugenehmigungsverfahrenDto": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/AbfrageDto"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "abfragevariantenBaugenehmigungsverfahren": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/AbfragevarianteBaugenehmigungsverfahrenDto"
+                }
+              },
+              "abfragevariantenSachbearbeitungBaugenehmigungsverfahren": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/AbfragevarianteBaugenehmigungsverfahrenDto"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "BauleitplanverfahrenDto": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/AbfrageDto"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "abfragevariantenBauleitplanverfahren": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/AbfragevarianteBauleitplanverfahrenDto"
+                }
+              },
+              "abfragevariantenSachbearbeitungBauleitplanverfahren": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/AbfragevarianteBauleitplanverfahrenDto"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "InfrastrukturbedarfProJahrDto": {
+        "type": "object",
+        "properties": {
+          "jahr": {
+            "type": "string"
+          },
+          "anzahlPersonenGesamt": {
+            "type": "number"
+          },
+          "anzahlPersonenZuVersorgen": {
+            "type": "number"
+          },
+          "anzahlGruppen": {
+            "type": "number"
+          }
+        }
+      },
+      "LangfristigerPlanungsursaechlicherBedarfDto": {
+        "type": "object",
+        "properties": {
+          "wohneinheiten": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/WohneinheitenProFoerderartProJahrDto"
+            }
+          },
+          "bedarfKinderkrippe": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/InfrastrukturbedarfProJahrDto"
+            }
+          },
+          "bedarfKindergarten": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/InfrastrukturbedarfProJahrDto"
+            }
+          },
+          "alleEinwohner": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PersonenProJahrDto"
+            }
+          }
+        }
+      },
+      "PersonenProJahrDto": {
+        "type": "object",
+        "properties": {
+          "jahr": {
+            "type": "string"
+          },
+          "anzahlPersonenGesamt": {
+            "type": "number"
+          }
+        }
+      },
+      "WeiteresVerfahrenDto": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/AbfrageDto"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "abfragevariantenWeiteresVerfahren": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/AbfragevarianteWeiteresVerfahrenDto"
+                }
+              },
+              "abfragevariantenSachbearbeitungWeiteresVerfahren": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/AbfragevarianteWeiteresVerfahrenDto"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "WohneinheitenProFoerderartProJahrDto": {
+        "type": "object",
+        "properties": {
+          "foerderart": {
+            "type": "string"
+          },
+          "jahr": {
+            "type": "string"
+          },
+          "wohneinheiten": {
+            "type": "number"
+          }
+        }
+      }
+    }
+  }
+}

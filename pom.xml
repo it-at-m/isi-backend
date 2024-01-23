@@ -49,6 +49,7 @@
         <apache.tika.version>2.9.1</apache.tika.version>
         <hibernate.search>7.0.0.Final</hibernate.search>
         <icu4j.version>74.2</icu4j.version>
+        <openapi-generator-version>6.6.0</openapi-generator-version>
     </properties>
 
 
@@ -502,6 +503,48 @@
                     </execution>
                 </executions>
             </plugin>
+
+            <plugin>
+                <groupId>org.openapitools</groupId>
+                <artifactId>openapi-generator-maven-plugin</artifactId>
+                <version>${openapi-generator-version}</version>
+                <executions>
+                    <execution>
+                        <id>isi-reporting-eai-api</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <inputSpec>${project.basedir}/apidoc/isi-reporting-eai.json</inputSpec>
+                            <generatorName>java</generatorName>
+                            <library>webclient</library>
+
+                            <apiPackage>de.muenchen.isi.testinger.reporting.eai.client.api</apiPackage>
+                            <modelPackage>de.muenchen.isi.testinger.reporting.client.model</modelPackage>
+                            <invokerPackage>de.muenchen.isi.testinger.reporting.client</invokerPackage>
+
+                            <generateApiTests>false</generateApiTests>
+                            <generateApiDocumentation>false</generateApiDocumentation>
+                            <generateModelTests>false</generateModelTests>
+                            <generateModelDocumentation>false</generateModelDocumentation>
+                            <generateSupportingFiles>true</generateSupportingFiles>
+
+                            <configOptions>
+                                <hideGenerationTimestamp>true</hideGenerationTimestamp>
+                                <generateClientAsBean>true</generateClientAsBean>
+                                <legacyDiscriminatorBehavior>false</legacyDiscriminatorBehavior>
+                                <useJakartaEe>true</useJakartaEe>
+                            </configOptions>
+                            <globalProperties>
+                                <supportingFiles>
+                                    ApiClient.java,JavaTimeFormatter.java,Authentication.java,OAuth.java,ApiKeyAuth.java,HttpBasicAuth.java,HttpBearerAuth.java,RFC3339DateFormat.java
+                                </supportingFiles>
+                            </globalProperties>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
 
         </plugins>
     </build>
