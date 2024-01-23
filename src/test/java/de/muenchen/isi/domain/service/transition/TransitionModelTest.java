@@ -16,7 +16,7 @@ import de.muenchen.isi.domain.model.common.TransitionModel;
 import de.muenchen.isi.domain.service.AbfrageService;
 import de.muenchen.isi.domain.service.AbfrageStatusService;
 import de.muenchen.isi.domain.service.calculation.CalculationService;
-import de.muenchen.isi.domain.service.reporting.ReportDataTransferService;
+import de.muenchen.isi.domain.service.reporting.ReportingdataTransferService;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.repository.AbfrageRepository;
 import java.util.ArrayList;
@@ -53,7 +53,7 @@ public class TransitionModelTest {
     private CalculationService calculationService;
 
     @MockBean
-    private ReportDataTransferService calculationTransferService;
+    private ReportingdataTransferService reportingdataTransferService;
 
     @BeforeEach
     public void beforeEach() {

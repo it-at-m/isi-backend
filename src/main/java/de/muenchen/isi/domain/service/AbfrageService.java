@@ -35,7 +35,7 @@ import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.Weiteres
 import de.muenchen.isi.domain.model.calculation.LangfristigerBedarfModel;
 import de.muenchen.isi.domain.service.calculation.CalculationService;
 import de.muenchen.isi.domain.service.filehandling.DokumentService;
-import de.muenchen.isi.domain.service.reporting.ReportDataTransferService;
+import de.muenchen.isi.domain.service.reporting.ReportingdataTransferService;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
@@ -78,7 +78,7 @@ public class AbfrageService {
 
     private final CalculationService calculationService;
 
-    private final ReportDataTransferService calculationTransferService;
+    private final ReportingdataTransferService reportingdataTransferService;
 
     /**
      * Die Methode gibt ein {@link AbfrageModel} identifiziert durch die ID zurück.
@@ -132,7 +132,10 @@ public class AbfrageService {
             final var bedarfeForAbfragevarianten = calculationService.calculateBedarfeForEachAbfragevarianteOfAbfrage(
                 model
             );
-            calculationTransferService.addCalculationResultsToAbfrageAndTransferData(model, bedarfeForAbfragevarianten);
+            reportingdataTransferService.addCalculationResultsToAbfrageAndTransferData(
+                model,
+                bedarfeForAbfragevarianten
+            );
             return model;
         } else {
             throw new UniqueViolationException(

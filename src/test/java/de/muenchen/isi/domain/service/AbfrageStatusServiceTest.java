@@ -15,7 +15,7 @@ import de.muenchen.isi.domain.exception.StringLengthExceededException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
 import de.muenchen.isi.domain.model.AbfrageModel;
 import de.muenchen.isi.domain.service.calculation.CalculationService;
-import de.muenchen.isi.domain.service.reporting.ReportDataTransferService;
+import de.muenchen.isi.domain.service.reporting.ReportingdataTransferService;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrageEvents;
 import java.util.UUID;
@@ -49,7 +49,7 @@ class AbfrageStatusServiceTest {
     private CalculationService calculationService;
 
     @MockBean
-    private ReportDataTransferService calculationTransferService;
+    private ReportingdataTransferService reportingdataTransferService;
 
     @Test
     void getAbfrageIdHeaderSuccessfull() throws EntityNotFoundException {

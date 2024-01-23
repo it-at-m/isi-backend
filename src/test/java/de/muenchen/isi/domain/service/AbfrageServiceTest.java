@@ -54,7 +54,7 @@ import de.muenchen.isi.domain.model.common.StadtbezirkModel;
 import de.muenchen.isi.domain.model.common.VerortungMultiPolygonModel;
 import de.muenchen.isi.domain.service.calculation.CalculationService;
 import de.muenchen.isi.domain.service.filehandling.DokumentService;
-import de.muenchen.isi.domain.service.reporting.ReportDataTransferService;
+import de.muenchen.isi.domain.service.reporting.ReportingdataTransferService;
 import de.muenchen.isi.infrastructure.entity.Abfrage;
 import de.muenchen.isi.infrastructure.entity.AbfragevarianteBaugenehmigungsverfahren;
 import de.muenchen.isi.infrastructure.entity.AbfragevarianteBauleitplanverfahren;
@@ -126,7 +126,7 @@ class AbfrageServiceTest {
     private CalculationService calculationService;
 
     @Mock
-    private ReportDataTransferService calculationTransferService;
+    private ReportingdataTransferService reportingdataTransferService;
 
     @BeforeEach
     public void beforeEach() throws NoSuchFieldException, IllegalAccessException {

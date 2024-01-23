@@ -33,7 +33,7 @@ import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.Baugeneh
 import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.BauleitplanverfahrenInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.WeiteresVerfahrenInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.domain.service.calculation.CalculationService;
-import de.muenchen.isi.domain.service.reporting.ReportDataTransferService;
+import de.muenchen.isi.domain.service.reporting.ReportingdataTransferService;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
@@ -69,7 +69,7 @@ class AbfrageServiceSpringTest {
     private CalculationService calculationService;
 
     @MockBean
-    private ReportDataTransferService calculationTransferService;
+    private ReportingdataTransferService reportingdataTransferService;
 
     @Test
     @Transactional
