@@ -8,19 +8,21 @@ import de.muenchen.isi.domain.model.AbfragevarianteWeiteresVerfahrenModel;
 import de.muenchen.isi.domain.model.BaugenehmigungsverfahrenModel;
 import de.muenchen.isi.domain.model.BauleitplanverfahrenModel;
 import de.muenchen.isi.domain.model.WeiteresVerfahrenModel;
+import de.muenchen.isi.domain.model.calculation.LangfristigerPlanungsursaechlicherBedarfModel;
 import de.muenchen.isi.reporting.client.model.AbfrageDto;
 import de.muenchen.isi.reporting.client.model.AbfragevarianteBaugenehmigungsverfahrenDto;
 import de.muenchen.isi.reporting.client.model.AbfragevarianteBauleitplanverfahrenDto;
 import de.muenchen.isi.reporting.client.model.AbfragevarianteWeiteresVerfahrenDto;
 import de.muenchen.isi.reporting.client.model.BaugenehmigungsverfahrenDto;
 import de.muenchen.isi.reporting.client.model.BauleitplanverfahrenDto;
+import de.muenchen.isi.reporting.client.model.LangfristigerPlanungsursaechlicherBedarfDto;
 import de.muenchen.isi.reporting.client.model.WeiteresVerfahrenDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.SubclassMapping;
 
 @Mapper(config = MapstructConfiguration.class)
-public interface ReportingApiMapper {
+public interface ReportingApiDomainMapper {
     @Mapping(target = "createdDateTime", ignore = true)
     @Mapping(target = "lastModifiedDateTime", ignore = true)
     @SubclassMapping(source = BauleitplanverfahrenModel.class, target = BauleitplanverfahrenDto.class)
@@ -44,4 +46,8 @@ public interface ReportingApiMapper {
     @Mapping(target = "lastModifiedDateTime", ignore = true)
     @Mapping(target = "langfristigerPlanungsursaechlicherBedarf", ignore = true)
     AbfragevarianteWeiteresVerfahrenDto model2ReportingDto(final AbfragevarianteWeiteresVerfahrenModel model);
+
+    LangfristigerPlanungsursaechlicherBedarfDto model2ReportingDto(
+        final LangfristigerPlanungsursaechlicherBedarfModel model
+    );
 }

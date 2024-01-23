@@ -1,7 +1,7 @@
 package de.muenchen.isi.configuration;
 
 import de.muenchen.isi.reporting.client.ApiClient;
-import de.muenchen.isi.reporting.eai.client.api.AbfrageReportingEaiApi;
+import de.muenchen.isi.reporting.client.api.AbfrageReportingEaiApi;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

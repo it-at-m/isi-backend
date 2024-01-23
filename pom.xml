@@ -519,7 +519,7 @@
                             <generatorName>java</generatorName>
                             <library>webclient</library>
 
-                            <apiPackage>de.muenchen.isi.reporting.eai.client.api</apiPackage>
+                            <apiPackage>de.muenchen.isi.reporting.client.api</apiPackage>
                             <modelPackage>de.muenchen.isi.reporting.client.model</modelPackage>
                             <invokerPackage>de.muenchen.isi.reporting.client</invokerPackage>
 
