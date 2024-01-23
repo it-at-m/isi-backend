@@ -4,7 +4,6 @@
  */
 package de.muenchen.isi.api.dto;
 
-import de.muenchen.isi.api.dto.calculation.LangfristigerPlanungsursaechlicherBedarfDto;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.WesentlicheRechtsgrundlage;
 import java.math.BigDecimal;
@@ -72,6 +71,4 @@ public class AbfragevarianteBauleitplanverfahrenDto extends AbfragevarianteDto {
     private List<BedarfsmeldungDto> bedarfsmeldungAbfrageersteller;
 
     private List<BauabschnittDto> bauabschnitte;
-
-    private LangfristigerPlanungsursaechlicherBedarfDto langfristigerPlanungsursaechlicherBedarf;
 }

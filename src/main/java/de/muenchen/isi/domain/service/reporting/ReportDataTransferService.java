@@ -1,9 +1,9 @@
-package de.muenchen.isi.domain.service.calculation;
+package de.muenchen.isi.domain.service.reporting;
 
 import de.muenchen.isi.domain.exception.ReportingException;
 import de.muenchen.isi.domain.mapper.ReportingApiDomainMapper;
 import de.muenchen.isi.domain.model.AbfrageModel;
-import de.muenchen.isi.domain.model.calculation.LangfristigerPlanungsursaechlicherBedarfModel;
+import de.muenchen.isi.domain.model.calculation.BedarfeForAbfragevariante;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.repository.reporting.AbfrageReportingRepository;
 import de.muenchen.isi.reporting.client.model.AbfrageDto;
@@ -20,7 +20,7 @@ import org.springframework.stereotype.Service;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class CalculationTransferService {
+public class ReportDataTransferService {
 
     private final ReportingApiDomainMapper reportingApiDomainMapper;
 
@@ -34,7 +34,7 @@ public class CalculationTransferService {
      */
     public void addCalculationResultsToAbfrageAndTransferData(
         final AbfrageModel model,
-        final Map<UUID, LangfristigerPlanungsursaechlicherBedarfModel> bedarfForEachAbfragevariante
+        final Map<UUID, BedarfeForAbfragevariante> bedarfForEachAbfragevariante
     ) throws ReportingException {
         var reportingDto = reportingApiDomainMapper.model2ReportingDto(model);
         reportingDto = this.addCalculationResultsToAbfrage(reportingDto, bedarfForEachAbfragevariante);
@@ -53,7 +53,7 @@ public class CalculationTransferService {
 
     protected AbfrageDto addCalculationResultsToAbfrage(
         final AbfrageDto abfrage,
-        final Map<UUID, LangfristigerPlanungsursaechlicherBedarfModel> bedarfForEachAbfragevariante
+        final Map<UUID, BedarfeForAbfragevariante> bedarfForEachAbfragevariante
     ) throws ReportingException {
         if (ArtAbfrage.BAULEITPLANVERFAHREN.equals(abfrage.getArtAbfrage())) {
             final var bauleitplanverfahren = (BauleitplanverfahrenDto) abfrage;
@@ -64,7 +64,9 @@ public class CalculationTransferService {
                 )
                 .forEach(abfragevariante -> {
                     final var bedarfModel = bedarfForEachAbfragevariante.get(abfragevariante.getId());
-                    final var bedarfDto = reportingApiDomainMapper.model2ReportingDto(bedarfModel);
+                    final var bedarfDto = reportingApiDomainMapper.model2ReportingDto(
+                        bedarfModel.getLangfristigerPlanungsursaechlicherBedarf()
+                    );
                     abfragevariante.setLangfristigerPlanungsursaechlicherBedarf(bedarfDto);
                 });
         } else if (ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN.equals(abfrage.getArtAbfrage())) {
@@ -76,7 +78,9 @@ public class CalculationTransferService {
                 )
                 .forEach(abfragevariante -> {
                     final var bedarfModel = bedarfForEachAbfragevariante.get(abfragevariante.getId());
-                    final var bedarfDto = reportingApiDomainMapper.model2ReportingDto(bedarfModel);
+                    final var bedarfDto = reportingApiDomainMapper.model2ReportingDto(
+                        bedarfModel.getLangfristigerPlanungsursaechlicherBedarf()
+                    );
                     abfragevariante.setLangfristigerPlanungsursaechlicherBedarf(bedarfDto);
                 });
         } else if (ArtAbfrage.WEITERES_VERFAHREN.equals(abfrage.getArtAbfrage())) {
@@ -88,7 +92,9 @@ public class CalculationTransferService {
                 )
                 .forEach(abfragevariante -> {
                     final var bedarfModel = bedarfForEachAbfragevariante.get(abfragevariante.getId());
-                    final var bedarfDto = reportingApiDomainMapper.model2ReportingDto(bedarfModel);
+                    final var bedarfDto = reportingApiDomainMapper.model2ReportingDto(
+                        bedarfModel.getLangfristigerPlanungsursaechlicherBedarf()
+                    );
                     abfragevariante.setLangfristigerPlanungsursaechlicherBedarf(bedarfDto);
                 });
         } else {

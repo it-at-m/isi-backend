@@ -58,7 +58,6 @@ public interface AbfragevarianteDomainMapper {
             @Mapping(target = "anmerkung", ignore = true),
             @Mapping(target = "bedarfsmeldungFachreferate", ignore = true),
             @Mapping(target = "bedarfsmeldungAbfrageersteller", ignore = true),
-            @Mapping(target = "langfristigerPlanungsursaechlicherBedarf", ignore = true),
         }
     )
     AbfragevarianteBauleitplanverfahrenModel request2Model(
@@ -76,7 +75,6 @@ public interface AbfragevarianteDomainMapper {
             @Mapping(target = "anmerkung", ignore = true),
             @Mapping(target = "bedarfsmeldungFachreferate", ignore = true),
             @Mapping(target = "bedarfsmeldungAbfrageersteller", ignore = true),
-            @Mapping(target = "langfristigerPlanungsursaechlicherBedarf", ignore = true),
         }
     )
     AbfragevarianteBaugenehmigungsverfahrenModel request2Model(
@@ -94,7 +92,6 @@ public interface AbfragevarianteDomainMapper {
             @Mapping(target = "anmerkung", ignore = true),
             @Mapping(target = "bedarfsmeldungFachreferate", ignore = true),
             @Mapping(target = "bedarfsmeldungAbfrageersteller", ignore = true),
-            @Mapping(target = "langfristigerPlanungsursaechlicherBedarf", ignore = true),
         }
     )
     AbfragevarianteWeiteresVerfahrenModel request2Model(
@@ -154,7 +151,6 @@ public interface AbfragevarianteDomainMapper {
             @Mapping(target = "createdDateTime", ignore = true),
             @Mapping(target = "bedarfsmeldungFachreferate", ignore = true),
             @Mapping(target = "bedarfsmeldungAbfrageersteller", ignore = true),
-            @Mapping(target = "langfristigerPlanungsursaechlicherBedarf", ignore = true),
         }
     )
     AbfragevarianteBauleitplanverfahrenModel request2Model(
@@ -169,7 +165,6 @@ public interface AbfragevarianteDomainMapper {
             @Mapping(target = "createdDateTime", ignore = true),
             @Mapping(target = "bedarfsmeldungFachreferate", ignore = true),
             @Mapping(target = "bedarfsmeldungAbfrageersteller", ignore = true),
-            @Mapping(target = "langfristigerPlanungsursaechlicherBedarf", ignore = true),
         }
     )
     AbfragevarianteBaugenehmigungsverfahrenModel request2Model(
@@ -184,7 +179,6 @@ public interface AbfragevarianteDomainMapper {
             @Mapping(target = "createdDateTime", ignore = true),
             @Mapping(target = "bedarfsmeldungFachreferate", ignore = true),
             @Mapping(target = "bedarfsmeldungAbfrageersteller", ignore = true),
-            @Mapping(target = "langfristigerPlanungsursaechlicherBedarf", ignore = true),
         }
     )
     AbfragevarianteWeiteresVerfahrenModel request2Model(

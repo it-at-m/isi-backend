@@ -12,6 +12,7 @@ import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.FileHandlingFailedException;
 import de.muenchen.isi.domain.exception.FileHandlingWithS3FailedException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
+import de.muenchen.isi.domain.exception.ReportingException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
 import de.muenchen.isi.domain.model.AbfrageModel;
 import de.muenchen.isi.domain.model.BaugenehmigungsverfahrenModel;
@@ -32,6 +33,7 @@ import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.Baugeneh
 import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.BauleitplanverfahrenInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.WeiteresVerfahrenInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.domain.service.calculation.CalculationService;
+import de.muenchen.isi.domain.service.reporting.ReportDataTransferService;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
@@ -66,10 +68,13 @@ class AbfrageServiceSpringTest {
     @MockBean
     private CalculationService calculationService;
 
+    @MockBean
+    private ReportDataTransferService calculationTransferService;
+
     @Test
     @Transactional
     void getByAbfragevarianteId()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, CalculationException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, CalculationException, ReportingException {
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
         abfrage = this.abfrageService.save(abfrage);
         UUID abfragevarianteId =
@@ -96,7 +101,7 @@ class AbfrageServiceSpringTest {
     @Test
     @Transactional
     void getByAbfragevarianteIdEntityNotFoundException()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, CalculationException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, CalculationException, ReportingException {
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
         this.abfrageService.save(abfrage);
 
@@ -110,7 +115,7 @@ class AbfrageServiceSpringTest {
     @Test
     @Transactional
     void patchAngelegtBauleitplanverfahren()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, FileHandlingFailedException, FileHandlingWithS3FailedException, AbfrageStatusNotAllowedException, CalculationException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, FileHandlingFailedException, FileHandlingWithS3FailedException, AbfrageStatusNotAllowedException, CalculationException, ReportingException {
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
         abfrage = this.abfrageService.save(abfrage);
 
@@ -130,7 +135,7 @@ class AbfrageServiceSpringTest {
     @Test
     @Transactional
     void patchAngelegtBaugenehmigungsverfahren()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, FileHandlingFailedException, FileHandlingWithS3FailedException, AbfrageStatusNotAllowedException, CalculationException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, FileHandlingFailedException, FileHandlingWithS3FailedException, AbfrageStatusNotAllowedException, CalculationException, ReportingException {
         AbfrageModel abfrage = TestData.createBaugenehmigungsverfahrenModel();
         abfrage = this.abfrageService.save(abfrage);
 
@@ -150,7 +155,7 @@ class AbfrageServiceSpringTest {
     @Test
     @Transactional
     void patchAngelegtWeiteresVerfahren()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, FileHandlingFailedException, FileHandlingWithS3FailedException, AbfrageStatusNotAllowedException, CalculationException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, FileHandlingFailedException, FileHandlingWithS3FailedException, AbfrageStatusNotAllowedException, CalculationException, ReportingException {
         AbfrageModel abfrage = TestData.createWeiteresVerfahrenModel();
         abfrage = this.abfrageService.save(abfrage);
 
@@ -170,7 +175,7 @@ class AbfrageServiceSpringTest {
     @Test
     @Transactional
     void patchInBearbeitungSachbearbeitungBauleitplanverfahren()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException, ReportingException {
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
         abfrage = this.abfrageService.save(abfrage);
         abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
@@ -210,7 +215,7 @@ class AbfrageServiceSpringTest {
     @Test
     @Transactional
     void patchInBearbeitungSachbearbeitungBaugenehmigungsverfahren()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException, ReportingException {
         AbfrageModel abfrage = TestData.createBaugenehmigungsverfahrenModel();
         abfrage = this.abfrageService.save(abfrage);
         abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
@@ -253,7 +258,7 @@ class AbfrageServiceSpringTest {
     @Test
     @Transactional
     void patchInBearbeitungSachbearbeitungWeiteresVerfahren()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException, ReportingException {
         AbfrageModel abfrage = TestData.createWeiteresVerfahrenModel();
         abfrage = this.abfrageService.save(abfrage);
         abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
@@ -294,7 +299,7 @@ class AbfrageServiceSpringTest {
     @Test
     @Transactional
     void patchInBearbeitungFachreferatBauleitplanverfahren()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException, ReportingException {
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
         abfrage = this.abfrageService.save(abfrage);
         abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
@@ -342,7 +347,7 @@ class AbfrageServiceSpringTest {
     @Test
     @Transactional
     void patchInBearbeitungFachreferatBaugenehmigungsverfahren()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException, ReportingException {
         AbfrageModel abfrage = TestData.createBaugenehmigungsverfahrenModel();
         abfrage = this.abfrageService.save(abfrage);
         abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
@@ -390,7 +395,7 @@ class AbfrageServiceSpringTest {
     @Test
     @Transactional
     void patchInBearbeitungFachreferatWeiteresVerfahren()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException, ReportingException {
         AbfrageModel abfrage = TestData.createWeiteresVerfahrenModel();
         abfrage = this.abfrageService.save(abfrage);
         abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);

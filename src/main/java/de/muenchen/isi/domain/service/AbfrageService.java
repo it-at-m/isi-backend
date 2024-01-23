@@ -7,6 +7,7 @@ import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.FileHandlingFailedException;
 import de.muenchen.isi.domain.exception.FileHandlingWithS3FailedException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
+import de.muenchen.isi.domain.exception.ReportingException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
 import de.muenchen.isi.domain.exception.UserRoleNotAllowedException;
 import de.muenchen.isi.domain.mapper.AbfrageDomainMapper;
@@ -31,9 +32,10 @@ import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.AbfrageI
 import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.BaugenehmigungsverfahrenInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.BauleitplanverfahrenInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.WeiteresVerfahrenInBearbeitungSachbearbeitungModel;
-import de.muenchen.isi.domain.model.calculation.LangfristigerPlanungsursaechlicherBedarfModel;
+import de.muenchen.isi.domain.model.calculation.LangfristigerBedarfModel;
 import de.muenchen.isi.domain.service.calculation.CalculationService;
 import de.muenchen.isi.domain.service.filehandling.DokumentService;
+import de.muenchen.isi.domain.service.reporting.ReportDataTransferService;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
@@ -76,6 +78,8 @@ public class AbfrageService {
 
     private final CalculationService calculationService;
 
+    private final ReportDataTransferService calculationTransferService;
+
     /**
      * Die Methode gibt ein {@link AbfrageModel} identifiziert durch die ID zurück.
      *
@@ -95,7 +99,7 @@ public class AbfrageService {
 
     /**
      * Diese Methode speichert ein {@link AbfrageModel}.
-     * Vor der Persistierung werden je Abfragevariante das {@link LangfristigerPlanungsursaechlicherBedarfModel}
+     * Vor der Persistierung werden je Abfragevariante das {@link LangfristigerBedarfModel}
      * ermittelt und an die Abfragevariante angefügt.
      *
      * @param abfrage zum Speichern
@@ -106,12 +110,11 @@ public class AbfrageService {
      * @throws CalculationException falls bei den Berechnungen ein Fehler auftritt.
      */
     public AbfrageModel save(final AbfrageModel abfrage)
-        throws EntityNotFoundException, OptimisticLockingException, UniqueViolationException, CalculationException {
+        throws EntityNotFoundException, OptimisticLockingException, UniqueViolationException, CalculationException, ReportingException {
         if (abfrage.getId() == null) {
             abfrage.setStatusAbfrage(StatusAbfrage.ANGELEGT);
             abfrage.setSub(authenticationUtils.getUserSub());
         }
-        this.calculationService.calculateAndAppendBedarfeToEachAbfragevarianteOfAbfrage(abfrage);
         var entity = this.abfrageDomainMapper.model2Entity(abfrage);
         final var saved = this.abfrageRepository.findByNameIgnoreCase(abfrage.getName());
         if ((saved.isPresent() && saved.get().getId().equals(entity.getId())) || saved.isEmpty()) {
@@ -125,7 +128,12 @@ public class AbfrageService {
                     "Der angegebene Name der Abfragevariante ist schon vorhanden, bitte wählen Sie daher einen anderen Namen und speichern Sie die Abfrage erneut.";
                 throw new UniqueViolationException(message, exception);
             }
-            return this.abfrageDomainMapper.entity2Model(entity);
+            final var model = this.abfrageDomainMapper.entity2Model(entity);
+            final var bedarfeForAbfragevarianten = calculationService.calculateBedarfeForEachAbfragevarianteOfAbfrage(
+                model
+            );
+            calculationTransferService.addCalculationResultsToAbfrageAndTransferData(model, bedarfeForAbfragevarianten);
+            return model;
         } else {
             throw new UniqueViolationException(
                 "Der angegebene Name der Abfrage ist schon vorhanden, bitte wählen Sie daher einen anderen Namen und speichern Sie die Abfrage erneut."
@@ -147,7 +155,7 @@ public class AbfrageService {
      * @throws FileHandlingWithS3FailedException falls es beim Dateihandling im S3-Storage zu einem Fehler gekommen ist.
      */
     public AbfrageModel patchAngelegt(final AbfrageAngelegtModel abfrage, final UUID id)
-        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, FileHandlingFailedException, FileHandlingWithS3FailedException, CalculationException {
+        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, FileHandlingFailedException, FileHandlingWithS3FailedException, CalculationException, ReportingException {
         final var originalAbfrageDb = this.getById(id);
         this.throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(originalAbfrageDb, StatusAbfrage.ANGELEGT);
 
@@ -253,7 +261,7 @@ public class AbfrageService {
         final AbfrageInBearbeitungSachbearbeitungModel abfrage,
         final UUID id
     )
-        throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException, CalculationException {
+        throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException, CalculationException, ReportingException {
         final var originalAbfrageDb = this.getById(id);
         this.throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(
                 originalAbfrageDb,
@@ -302,7 +310,7 @@ public class AbfrageService {
         final AbfrageInBearbeitungFachreferatModel abfrage,
         final UUID id
     )
-        throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException, CalculationException {
+        throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException, CalculationException, ReportingException {
         final var originalAbfrageDb = this.getById(id);
         this.throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(
                 originalAbfrageDb,
@@ -348,7 +356,7 @@ public class AbfrageService {
      * @throws AbfrageStatusNotAllowedException falls die zu aktualisierende Abfrage sich nicht im Status {@link StatusAbfrage#IN_BEARBEITUNG_FACHREFERATE} befindet.
      */
     public AbfrageModel patchBedarfsmeldungErfolgt(final AbfrageBedarfsmeldungErfolgtModel abfrage, final UUID id)
-        throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException, CalculationException {
+        throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException, CalculationException, ReportingException {
         final var originalAbfrageDb = this.getById(id);
         this.throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(
                 originalAbfrageDb,
