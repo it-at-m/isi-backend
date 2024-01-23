@@ -44,7 +44,7 @@ public class ReportingdataTransferService {
         try {
             abfrageReportingRepository.save(abfrage);
         } catch (final Exception exception) {
-            final var error = "Beim Versenden der Berechnungsergebnisse ist ein Fehler aufgetreten.";
+            final var error = "Beim Transfer der zu reportenden Abfrage ist ein Fehler aufgetreten.";
             log.error(error, exception);
             throw new ReportingException(error, exception);
         }
