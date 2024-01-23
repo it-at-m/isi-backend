@@ -17,14 +17,14 @@
   ],
   "tags": [
     {
-      "name": "Reporting",
+      "name": "AbfrageReportingEai",
       "description": "API zum Speichern von Abfragen mit reportingrelevanten Informationen."
     }
   ],
   "paths": {
     "/abfrage": {
       "post": {
-        "tags": ["Reporting"],
+        "tags": ["AbfrageReportingEai"],
         "summary": "Speichert Abfragen mit reportingrelevanten Informationen.",
         "operationId": "save",
         "requestBody": {
@@ -56,7 +56,7 @@
     },
     "/abfrage/{id}": {
       "delete": {
-        "tags": ["Reporting"],
+        "tags": ["AbfrageReportingEai"],
         "summary": "Löscht eine Abfrage mitsamt aller reportingrelevanten Informationen.",
         "operationId": "delete",
         "parameters": [
