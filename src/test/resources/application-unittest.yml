@@ -49,3 +49,7 @@ io:
           document-storage-url: localhost:8080
           file-expiration-time: 5 #minutes
           securityEnabled: false
+
+isi:
+  reporting:
+    url: http://localhost:8087

@@ -147,7 +147,7 @@ class AbfrageServiceTest {
                 this.abfragevarianteBaugenehmigungsverfahrenRepository,
                 this.abfragevarianteWeiteresVerfahrenRepository,
                 this.calculationService,
-                this.calculationTransferService
+                this.reportingdataTransferService
             );
         Mockito.reset(
             this.abfrageRepository,
@@ -158,7 +158,7 @@ class AbfrageServiceTest {
             this.abfragevarianteBaugenehmigungsverfahrenRepository,
             this.abfragevarianteWeiteresVerfahrenRepository,
             this.calculationService,
-            this.calculationTransferService
+            this.reportingdataTransferService
         );
     }
 
@@ -204,6 +204,7 @@ class AbfrageServiceTest {
         final AbfrageModel result = this.abfrageService.save(abfrage);
 
         final BauleitplanverfahrenModel expected = new BauleitplanverfahrenModel();
+        expected.setId(result.getId());
         expected.setArtAbfrage(ArtAbfrage.BAULEITPLANVERFAHREN);
         expected.setId(saveResult.getId());
         expected.setSub(sub);
@@ -251,6 +252,7 @@ class AbfrageServiceTest {
         final AbfrageModel result = this.abfrageService.save(abfrage);
 
         final BauleitplanverfahrenModel expected = new BauleitplanverfahrenModel();
+        expected.setId(result.getId());
         expected.setArtAbfrage(ArtAbfrage.BAULEITPLANVERFAHREN);
         expected.setId(saveResult.getId());
         expected.setSub(saveResult.getSub());
