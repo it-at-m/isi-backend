@@ -101,4 +101,14 @@ public class ReportingdataTransferService {
         }
         return abfrage;
     }
+
+    public void deleteTransferedAbfrage(final UUID id) throws ReportingException {
+        try {
+            abfrageReportingRepository.deleteById(id);
+        } catch (final Exception exception) {
+            final var error = "Beim Löschen einer im Reporting vorhandenen Abfrage ist ein Fehler aufgetreten.";
+            log.error(error, exception);
+            throw new ReportingException(error, exception);
+        }
+    }
 }

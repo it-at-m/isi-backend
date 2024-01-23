@@ -403,11 +403,12 @@ public class AbfrageService {
      * @throws AbfrageStatusNotAllowedException falls die Abfrage den falschen Status hat..
      */
     public void deleteById(final UUID id)
-        throws EntityNotFoundException, EntityIsReferencedException, UserRoleNotAllowedException, AbfrageStatusNotAllowedException {
+        throws EntityNotFoundException, EntityIsReferencedException, UserRoleNotAllowedException, AbfrageStatusNotAllowedException, ReportingException {
         final var abfrage = this.getById(id);
         this.throwUserRoleNotAllowedOrAbfrageStatusNotAllowedExceptionWhenNotTheCorrectUserWithTheCorrectRole(abfrage);
         this.throwEntityIsReferencedExceptionWhenAbfrageIsReferencingBauvorhaben(abfrage);
         this.abfrageRepository.deleteById(id);
+        this.reportingdataTransferService.deleteTransferedAbfrage(id);
     }
 
     /**

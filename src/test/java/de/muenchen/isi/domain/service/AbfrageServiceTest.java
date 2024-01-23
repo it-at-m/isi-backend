@@ -3070,7 +3070,7 @@ class AbfrageServiceTest {
 
     @Test
     void deleteByIdAbfrageerstellung()
-        throws UserRoleNotAllowedException, EntityIsReferencedException, EntityNotFoundException, AbfrageStatusNotAllowedException {
+        throws UserRoleNotAllowedException, EntityIsReferencedException, EntityNotFoundException, AbfrageStatusNotAllowedException, ReportingException {
         final UUID id = UUID.randomUUID();
 
         String[] roles = { "abfrageerstellung" };
@@ -3095,7 +3095,7 @@ class AbfrageServiceTest {
 
     @Test
     void deleteByIdAdmin()
-        throws UserRoleNotAllowedException, EntityIsReferencedException, EntityNotFoundException, AbfrageStatusNotAllowedException {
+        throws UserRoleNotAllowedException, EntityIsReferencedException, EntityNotFoundException, AbfrageStatusNotAllowedException, ReportingException {
         final UUID id = UUID.randomUUID();
 
         String[] roles = { "admin" };
@@ -3120,7 +3120,7 @@ class AbfrageServiceTest {
 
     @Test
     void deleteByIdAdminNotSameSub()
-        throws UserRoleNotAllowedException, EntityIsReferencedException, EntityNotFoundException, AbfrageStatusNotAllowedException {
+        throws UserRoleNotAllowedException, EntityIsReferencedException, EntityNotFoundException, AbfrageStatusNotAllowedException, ReportingException {
         final UUID id = UUID.randomUUID();
 
         String[] roles = { "admin" };

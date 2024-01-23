@@ -348,10 +348,10 @@ public class AbfrageController {
             ),
         }
     )
-    @Transactional
+    @Transactional(rollbackFor = { ReportingException.class })
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_DELETE_ABFRAGE.name())")
     public ResponseEntity<Void> deleteById(@PathVariable @NotNull final UUID id)
-        throws UserRoleNotAllowedException, EntityIsReferencedException, EntityNotFoundException, AbfrageStatusNotAllowedException {
+        throws UserRoleNotAllowedException, EntityIsReferencedException, EntityNotFoundException, AbfrageStatusNotAllowedException, ReportingException {
         this.abfrageService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
