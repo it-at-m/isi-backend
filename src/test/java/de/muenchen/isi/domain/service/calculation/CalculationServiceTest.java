@@ -82,39 +82,29 @@ class CalculationServiceTest {
 
         Mockito.reset(calculationService);
         abfrage.setAbfragevariantenWeiteresVerfahren(null);
-        abfrage.setAbfragevariantenSachbearbeitungWeiteresVerfahren(
-            List.of(new AbfragevarianteWeiteresVerfahrenModel())
-        );
-        Mockito
-            .doNothing()
-            .when(calculationService)
-            .calculateBedarfeForAbfragevariante(new AbfragevarianteWeiteresVerfahrenModel());
+        var abfragevariante = new AbfragevarianteWeiteresVerfahrenModel();
+        abfragevariante.setArtAbfragevariante(ArtAbfrage.WEITERES_VERFAHREN);
+        abfrage.setAbfragevariantenSachbearbeitungWeiteresVerfahren(List.of(abfragevariante));
         calculationService.calculateBedarfeForEachAbfragevarianteOfAbfrage(abfrage);
-        Mockito.verify(calculationService, Mockito.times(1)).calculateBedarfeForAbfragevariante(Mockito.any());
+        Mockito.verify(calculationService, Mockito.times(1)).calculateBedarfeForAbfragevariante(abfragevariante);
 
         Mockito.reset(calculationService);
         abfrage.setAbfragevariantenWeiteresVerfahren(null);
-        abfrage.setAbfragevariantenSachbearbeitungWeiteresVerfahren(
-            List.of(new AbfragevarianteWeiteresVerfahrenModel())
-        );
-        Mockito
-            .doNothing()
-            .when(calculationService)
-            .calculateBedarfeForAbfragevariante(new AbfragevarianteWeiteresVerfahrenModel());
+        abfragevariante = new AbfragevarianteWeiteresVerfahrenModel();
+        abfragevariante.setArtAbfragevariante(ArtAbfrage.WEITERES_VERFAHREN);
+        abfrage.setAbfragevariantenSachbearbeitungWeiteresVerfahren(List.of(abfragevariante));
         calculationService.calculateBedarfeForEachAbfragevarianteOfAbfrage(abfrage);
-        Mockito.verify(calculationService, Mockito.times(1)).calculateBedarfeForAbfragevariante(Mockito.any());
+        Mockito.verify(calculationService, Mockito.times(1)).calculateBedarfeForAbfragevariante(abfragevariante);
 
         Mockito.reset(calculationService);
-        abfrage.setAbfragevariantenWeiteresVerfahren(List.of(new AbfragevarianteWeiteresVerfahrenModel()));
-        abfrage.setAbfragevariantenSachbearbeitungWeiteresVerfahren(
-            List.of(new AbfragevarianteWeiteresVerfahrenModel())
-        );
-        Mockito
-            .doNothing()
-            .when(calculationService)
-            .calculateBedarfeForAbfragevariante(new AbfragevarianteWeiteresVerfahrenModel());
+        abfragevariante = new AbfragevarianteWeiteresVerfahrenModel();
+        abfragevariante.setArtAbfragevariante(ArtAbfrage.WEITERES_VERFAHREN);
+        abfrage.setAbfragevariantenWeiteresVerfahren(List.of(abfragevariante));
+        abfragevariante = new AbfragevarianteWeiteresVerfahrenModel();
+        abfragevariante.setArtAbfragevariante(ArtAbfrage.WEITERES_VERFAHREN);
+        abfrage.setAbfragevariantenSachbearbeitungWeiteresVerfahren(List.of(abfragevariante));
         calculationService.calculateBedarfeForEachAbfragevarianteOfAbfrage(abfrage);
-        Mockito.verify(calculationService, Mockito.times(2)).calculateBedarfeForAbfragevariante(Mockito.any());
+        Mockito.verify(calculationService, Mockito.times(2)).calculateBedarfeForAbfragevariante(abfragevariante);
     }
 
     @Test
@@ -133,42 +123,28 @@ class CalculationServiceTest {
         Mockito.verify(calculationService, Mockito.times(0)).calculateBedarfeForAbfragevariante(Mockito.any());
 
         Mockito.reset(calculationService);
+        var abfragevariante = new AbfragevarianteBaugenehmigungsverfahrenModel();
+        abfragevariante.setArtAbfragevariante(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN);
         abfrage.setAbfragevariantenBaugenehmigungsverfahren(null);
-        abfrage.setAbfragevariantenSachbearbeitungBaugenehmigungsverfahren(
-            List.of(new AbfragevarianteBaugenehmigungsverfahrenModel())
-        );
-        Mockito
-            .doNothing()
-            .when(calculationService)
-            .calculateBedarfeForAbfragevariante(new AbfragevarianteBaugenehmigungsverfahrenModel());
+        abfrage.setAbfragevariantenSachbearbeitungBaugenehmigungsverfahren(List.of(abfragevariante));
         calculationService.calculateBedarfeForEachAbfragevarianteOfAbfrage(abfrage);
-        Mockito.verify(calculationService, Mockito.times(1)).calculateBedarfeForAbfragevariante(Mockito.any());
+        Mockito.verify(calculationService, Mockito.times(1)).calculateBedarfeForAbfragevariante(abfragevariante);
 
         Mockito.reset(calculationService);
         abfrage.setAbfragevariantenBaugenehmigungsverfahren(null);
-        abfrage.setAbfragevariantenSachbearbeitungBaugenehmigungsverfahren(
-            List.of(new AbfragevarianteBaugenehmigungsverfahrenModel())
-        );
-        Mockito
-            .doNothing()
-            .when(calculationService)
-            .calculateBedarfeForAbfragevariante(new AbfragevarianteBaugenehmigungsverfahrenModel());
+        abfragevariante = new AbfragevarianteBaugenehmigungsverfahrenModel();
+        abfragevariante.setArtAbfragevariante(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN);
+        abfrage.setAbfragevariantenSachbearbeitungBaugenehmigungsverfahren(List.of(abfragevariante));
         calculationService.calculateBedarfeForEachAbfragevarianteOfAbfrage(abfrage);
-        Mockito.verify(calculationService, Mockito.times(1)).calculateBedarfeForAbfragevariante(Mockito.any());
+        Mockito.verify(calculationService, Mockito.times(1)).calculateBedarfeForAbfragevariante(abfragevariante);
 
         Mockito.reset(calculationService);
-        abfrage.setAbfragevariantenBaugenehmigungsverfahren(
-            List.of(new AbfragevarianteBaugenehmigungsverfahrenModel())
-        );
-        abfrage.setAbfragevariantenSachbearbeitungBaugenehmigungsverfahren(
-            List.of(new AbfragevarianteBaugenehmigungsverfahrenModel())
-        );
-        Mockito
-            .doNothing()
-            .when(calculationService)
-            .calculateBedarfeForAbfragevariante(new AbfragevarianteBaugenehmigungsverfahrenModel());
+        abfragevariante = new AbfragevarianteBaugenehmigungsverfahrenModel();
+        abfragevariante.setArtAbfragevariante(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN);
+        abfrage.setAbfragevariantenBaugenehmigungsverfahren(List.of(abfragevariante));
+        abfrage.setAbfragevariantenSachbearbeitungBaugenehmigungsverfahren(List.of(abfragevariante));
         calculationService.calculateBedarfeForEachAbfragevarianteOfAbfrage(abfrage);
-        Mockito.verify(calculationService, Mockito.times(2)).calculateBedarfeForAbfragevariante(Mockito.any());
+        Mockito.verify(calculationService, Mockito.times(2)).calculateBedarfeForAbfragevariante(abfragevariante);
     }
 
     @Test
@@ -188,39 +164,29 @@ class CalculationServiceTest {
 
         Mockito.reset(calculationService);
         abfrage.setAbfragevariantenBauleitplanverfahren(null);
-        abfrage.setAbfragevariantenSachbearbeitungBauleitplanverfahren(
-            List.of(new AbfragevarianteBauleitplanverfahrenModel())
-        );
-        Mockito
-            .doNothing()
-            .when(calculationService)
-            .calculateBedarfeForAbfragevariante(new AbfragevarianteBauleitplanverfahrenModel());
+        var abfragevariante = new AbfragevarianteBauleitplanverfahrenModel();
+        abfragevariante.setArtAbfragevariante(ArtAbfrage.BAULEITPLANVERFAHREN);
+        abfrage.setAbfragevariantenSachbearbeitungBauleitplanverfahren(List.of(abfragevariante));
         calculationService.calculateBedarfeForEachAbfragevarianteOfAbfrage(abfrage);
-        Mockito.verify(calculationService, Mockito.times(1)).calculateBedarfeForAbfragevariante(Mockito.any());
+        Mockito.verify(calculationService, Mockito.times(1)).calculateBedarfeForAbfragevariante(abfragevariante);
 
         Mockito.reset(calculationService);
         abfrage.setAbfragevariantenBauleitplanverfahren(null);
-        abfrage.setAbfragevariantenSachbearbeitungBauleitplanverfahren(
-            List.of(new AbfragevarianteBauleitplanverfahrenModel())
-        );
-        Mockito
-            .doNothing()
-            .when(calculationService)
-            .calculateBedarfeForAbfragevariante(new AbfragevarianteBauleitplanverfahrenModel());
+        abfragevariante = new AbfragevarianteBauleitplanverfahrenModel();
+        abfragevariante.setArtAbfragevariante(ArtAbfrage.BAULEITPLANVERFAHREN);
+        abfrage.setAbfragevariantenSachbearbeitungBauleitplanverfahren(List.of(abfragevariante));
         calculationService.calculateBedarfeForEachAbfragevarianteOfAbfrage(abfrage);
-        Mockito.verify(calculationService, Mockito.times(1)).calculateBedarfeForAbfragevariante(Mockito.any());
+        Mockito.verify(calculationService, Mockito.times(1)).calculateBedarfeForAbfragevariante(abfragevariante);
 
         Mockito.reset(calculationService);
-        abfrage.setAbfragevariantenBauleitplanverfahren(List.of(new AbfragevarianteBauleitplanverfahrenModel()));
-        abfrage.setAbfragevariantenSachbearbeitungBauleitplanverfahren(
-            List.of(new AbfragevarianteBauleitplanverfahrenModel())
-        );
-        Mockito
-            .doNothing()
-            .when(calculationService)
-            .calculateBedarfeForAbfragevariante(new AbfragevarianteBauleitplanverfahrenModel());
+        abfragevariante = new AbfragevarianteBauleitplanverfahrenModel();
+        abfragevariante.setArtAbfragevariante(ArtAbfrage.BAULEITPLANVERFAHREN);
+        abfrage.setAbfragevariantenBauleitplanverfahren(List.of(abfragevariante));
+        abfragevariante = new AbfragevarianteBauleitplanverfahrenModel();
+        abfragevariante.setArtAbfragevariante(ArtAbfrage.BAULEITPLANVERFAHREN);
+        abfrage.setAbfragevariantenSachbearbeitungBauleitplanverfahren(List.of(abfragevariante));
         calculationService.calculateBedarfeForEachAbfragevarianteOfAbfrage(abfrage);
-        Mockito.verify(calculationService, Mockito.times(2)).calculateBedarfeForAbfragevariante(Mockito.any());
+        Mockito.verify(calculationService, Mockito.times(2)).calculateBedarfeForAbfragevariante(abfragevariante);
     }
 
     @Test
