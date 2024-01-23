@@ -19,9 +19,13 @@ import de.muenchen.isi.reporting.client.model.LangfristigerBedarfDto;
 import de.muenchen.isi.reporting.client.model.WeiteresVerfahrenDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.NullValueMappingStrategy;
 import org.mapstruct.SubclassMapping;
 
-@Mapper(config = MapstructConfiguration.class)
+@Mapper(
+    config = MapstructConfiguration.class,
+    nullValueIterableMappingStrategy = NullValueMappingStrategy.RETURN_DEFAULT
+)
 public interface ReportingApiDomainMapper {
     @Mapping(target = "createdDateTime", ignore = true)
     @Mapping(target = "lastModifiedDateTime", ignore = true)

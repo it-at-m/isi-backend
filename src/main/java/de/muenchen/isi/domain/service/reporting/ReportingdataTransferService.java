@@ -4,7 +4,6 @@ import de.muenchen.isi.domain.exception.ReportingException;
 import de.muenchen.isi.domain.mapper.ReportingApiDomainMapper;
 import de.muenchen.isi.domain.model.AbfrageModel;
 import de.muenchen.isi.domain.model.calculation.BedarfeForAbfragevariante;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.repository.reporting.AbfrageReportingRepository;
 import de.muenchen.isi.reporting.client.model.AbfrageDto;
 import de.muenchen.isi.reporting.client.model.BaugenehmigungsverfahrenDto;
@@ -55,7 +54,7 @@ public class ReportingdataTransferService {
         final AbfrageDto abfrage,
         final Map<UUID, BedarfeForAbfragevariante> bedarfForEachAbfragevariante
     ) throws ReportingException {
-        if (ArtAbfrage.BAULEITPLANVERFAHREN.equals(abfrage.getArtAbfrage())) {
+        if (AbfrageDto.ArtAbfrageEnum.BAULEITPLANVERFAHREN.equals(abfrage.getArtAbfrage())) {
             final var bauleitplanverfahren = (BauleitplanverfahrenDto) abfrage;
             Stream
                 .concat(
@@ -69,7 +68,7 @@ public class ReportingdataTransferService {
                     );
                     abfragevariante.setLangfristigerPlanungsursaechlicherBedarf(bedarfDto);
                 });
-        } else if (ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN.equals(abfrage.getArtAbfrage())) {
+        } else if (AbfrageDto.ArtAbfrageEnum.BAUGENEHMIGUNGSVERFAHREN.equals(abfrage.getArtAbfrage())) {
             final var baugenehmigungsverfahren = (BaugenehmigungsverfahrenDto) abfrage;
             Stream
                 .concat(
@@ -83,7 +82,7 @@ public class ReportingdataTransferService {
                     );
                     abfragevariante.setLangfristigerPlanungsursaechlicherBedarf(bedarfDto);
                 });
-        } else if (ArtAbfrage.WEITERES_VERFAHREN.equals(abfrage.getArtAbfrage())) {
+        } else if (AbfrageDto.ArtAbfrageEnum.WEITERES_VERFAHREN.equals(abfrage.getArtAbfrage())) {
             final var weiteresVerfahren = (WeiteresVerfahrenDto) abfrage;
             Stream
                 .concat(
