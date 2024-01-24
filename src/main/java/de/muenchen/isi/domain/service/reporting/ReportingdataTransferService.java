@@ -26,12 +26,14 @@ public class ReportingdataTransferService {
     private final AbfrageReportingRepository abfrageReportingRepository;
 
     /**
+     * Übermittelt die Abfrage samt der Bedarfe an die Reportingschnittstelle.
      *
-     * @param model
-     * @param bedarfForEachAbfragevariante
-     * @throws ReportingException
+     * @param model die Abfrage.
+     * @param bedarfForEachAbfragevariante die planungs- und sobonursächlichen Bedarfe je Abfragevariante repräsentiert
+     *                                     durch die eindeutige ID der Abfragevariante.
+     * @throws ReportingException falls die Datenübermittlung fehlgeschlagen ist.
      */
-    public void addBedarfeToAbfrageAndTransferData(
+    public void transferAbfrageAndBedarfe(
         final AbfrageModel model,
         final Map<UUID, BedarfeForAbfragevarianteModel> bedarfForEachAbfragevariante
     ) throws ReportingException {
@@ -40,6 +42,12 @@ public class ReportingdataTransferService {
         this.transferAbfrage(reportingDto);
     }
 
+    /**
+     * Übermittelt die Abfrage mit den angefügten Bedarfen an die Reportingschnittstelle.
+     *
+     * @param abfrage mit den angefügten Bedarfen.
+     * @throws ReportingException falls die Datenübermittlung fehlgeschlagen ist.
+     */
     protected void transferAbfrage(final AbfrageDto abfrage) throws ReportingException {
         try {
             abfrageReportingRepository.save(abfrage);
@@ -50,6 +58,15 @@ public class ReportingdataTransferService {
         }
     }
 
+    /**
+     * Fügt die Bedarfe an die entsprechende Abfragevariante in der Abfrage an.
+     *
+     * @param abfrage zum Anfügen der Bedarfe.
+     * @param bedarfForEachAbfragevariante die planungs- und sobonursächlichen Bedarfe je Abfragevariante repräsentiert
+     *                                     durch die eindeutige ID der Abfragevariante.
+     * @return die Abfrage mit den an die Abfragevarianten angefügten Bedarfe.
+     * @throws ReportingException falls es sich um keine bekannte Abfrage handelt.
+     */
     protected AbfrageDto addBedarfeToAbfrage(
         final AbfrageDto abfrage,
         final Map<UUID, BedarfeForAbfragevarianteModel> bedarfForEachAbfragevariante
@@ -93,6 +110,12 @@ public class ReportingdataTransferService {
         return abfrage;
     }
 
+    /**
+     * Löscht die Abfrage welche ggf. vorher über die Reportingschnittstelle übermittelt wurde.
+     *
+     * @param id zum identifizieren der Abfrage.
+     * @throws ReportingException falls der Löschvorgang fehlgeschlagen ist.
+     */
     public void deleteTransferedAbfrage(final UUID id) throws ReportingException {
         try {
             abfrageReportingRepository.deleteById(id);
