@@ -14,6 +14,7 @@ import java.util.UUID;
 import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.ListUtils;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -75,8 +76,10 @@ public class ReportingdataTransferService {
             final var bauleitplanverfahren = (BauleitplanverfahrenDto) abfrage;
             Stream
                 .concat(
-                    bauleitplanverfahren.getAbfragevariantenBauleitplanverfahren().stream(),
-                    bauleitplanverfahren.getAbfragevariantenSachbearbeitungBauleitplanverfahren().stream()
+                    ListUtils.emptyIfNull(bauleitplanverfahren.getAbfragevariantenBauleitplanverfahren()).stream(),
+                    ListUtils
+                        .emptyIfNull(bauleitplanverfahren.getAbfragevariantenSachbearbeitungBauleitplanverfahren())
+                        .stream()
                 )
                 .forEach(abfragevariante -> {
                     final var bedarfModel = bedarfForEachAbfragevariante.get(abfragevariante.getId());
@@ -86,8 +89,14 @@ public class ReportingdataTransferService {
             final var baugenehmigungsverfahren = (BaugenehmigungsverfahrenDto) abfrage;
             Stream
                 .concat(
-                    baugenehmigungsverfahren.getAbfragevariantenBaugenehmigungsverfahren().stream(),
-                    baugenehmigungsverfahren.getAbfragevariantenSachbearbeitungBaugenehmigungsverfahren().stream()
+                    ListUtils
+                        .emptyIfNull(baugenehmigungsverfahren.getAbfragevariantenBaugenehmigungsverfahren())
+                        .stream(),
+                    ListUtils
+                        .emptyIfNull(
+                            baugenehmigungsverfahren.getAbfragevariantenSachbearbeitungBaugenehmigungsverfahren()
+                        )
+                        .stream()
                 )
                 .forEach(abfragevariante -> {
                     final var bedarfModel = bedarfForEachAbfragevariante.get(abfragevariante.getId());
@@ -97,8 +106,10 @@ public class ReportingdataTransferService {
             final var weiteresVerfahren = (WeiteresVerfahrenDto) abfrage;
             Stream
                 .concat(
-                    weiteresVerfahren.getAbfragevariantenWeiteresVerfahren().stream(),
-                    weiteresVerfahren.getAbfragevariantenSachbearbeitungWeiteresVerfahren().stream()
+                    ListUtils.emptyIfNull(weiteresVerfahren.getAbfragevariantenWeiteresVerfahren()).stream(),
+                    ListUtils
+                        .emptyIfNull(weiteresVerfahren.getAbfragevariantenSachbearbeitungWeiteresVerfahren())
+                        .stream()
                 )
                 .forEach(abfragevariante -> {
                     final var bedarfModel = bedarfForEachAbfragevariante.get(abfragevariante.getId());
