@@ -78,6 +78,7 @@ import de.muenchen.isi.infrastructure.repository.BauvorhabenRepository;
 import de.muenchen.isi.security.AuthenticationUtils;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -219,6 +220,9 @@ class AbfrageServiceTest {
         Mockito
             .verify(this.calculationService, Mockito.times(1))
             .calculateBedarfeForEachAbfragevarianteOfAbfrage(expected);
+        Mockito
+            .verify(this.reportingdataTransferService, Mockito.times(1))
+            .transferAbfrageAndBedarfe(expected, new HashMap<>());
     }
 
     @Test
@@ -266,6 +270,9 @@ class AbfrageServiceTest {
         Mockito
             .verify(this.calculationService, Mockito.times(1))
             .calculateBedarfeForEachAbfragevarianteOfAbfrage(expected);
+        Mockito
+            .verify(this.reportingdataTransferService, Mockito.times(1))
+            .transferAbfrageAndBedarfe(expected, new HashMap<>());
     }
 
     @Test
