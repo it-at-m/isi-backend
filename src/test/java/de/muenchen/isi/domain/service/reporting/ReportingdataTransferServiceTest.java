@@ -66,6 +66,29 @@ class ReportingdataTransferServiceTest {
     }
 
     @Test
+    void transferAbfrageAndBedarfeExceptionAtAddBedarfeToAbfrageBauleitplanverfahren() throws ReportingException {
+        var abfrageModel = new BauleitplanverfahrenModel();
+        abfrageModel.setArtAbfrage(ArtAbfrage.BAULEITPLANVERFAHREN);
+        var bedarfForEachAbfragevariante = Map.of(UUID.randomUUID(), new BedarfeForAbfragevarianteModel());
+
+        var abfrageReportingDto = new BauleitplanverfahrenDto();
+        abfrageReportingDto.setAbfragevariantenBauleitplanverfahren(List.of());
+        abfrageReportingDto.setAbfragevariantenSachbearbeitungBauleitplanverfahren(List.of());
+        abfrageReportingDto.setArtAbfrage(AbfrageDto.ArtAbfrageEnum.BAULEITPLANVERFAHREN);
+        Mockito
+            .when(reportingdataTransferService.addBedarfeToAbfrage(abfrageReportingDto, bedarfForEachAbfragevariante))
+            .thenThrow(new ReportingException("test"));
+        Assertions.assertThrows(
+            ReportingException.class,
+            () -> reportingdataTransferService.transferAbfrageAndBedarfe(abfrageModel, bedarfForEachAbfragevariante)
+        );
+        Mockito
+            .verify(reportingdataTransferService, Mockito.times(1))
+            .addBedarfeToAbfrage(abfrageReportingDto, bedarfForEachAbfragevariante);
+        Mockito.verify(reportingdataTransferService, Mockito.times(0)).transferAbfrage(abfrageReportingDto);
+    }
+
+    @Test
     void transferAbfrageAndBedarfeBaugenehmigungsverfahren() throws ReportingException {
         var abfrageModel = new BaugenehmigungsverfahrenModel();
         abfrageModel.setArtAbfrage(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN);
@@ -86,6 +109,29 @@ class ReportingdataTransferServiceTest {
     }
 
     @Test
+    void transferAbfrageAndBedarfeExceptionAtAddBedarfeToAbfrageBaugenehmigungsverfahren() throws ReportingException {
+        var abfrageModel = new BaugenehmigungsverfahrenModel();
+        abfrageModel.setArtAbfrage(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN);
+        var bedarfForEachAbfragevariante = Map.of(UUID.randomUUID(), new BedarfeForAbfragevarianteModel());
+
+        var abfrageReportingDto = new BaugenehmigungsverfahrenDto();
+        abfrageReportingDto.setAbfragevariantenBaugenehmigungsverfahren(List.of());
+        abfrageReportingDto.setAbfragevariantenSachbearbeitungBaugenehmigungsverfahren(List.of());
+        abfrageReportingDto.setArtAbfrage(AbfrageDto.ArtAbfrageEnum.BAUGENEHMIGUNGSVERFAHREN);
+        Mockito
+            .when(reportingdataTransferService.addBedarfeToAbfrage(abfrageReportingDto, bedarfForEachAbfragevariante))
+            .thenThrow(new ReportingException("test"));
+        Assertions.assertThrows(
+            ReportingException.class,
+            () -> reportingdataTransferService.transferAbfrageAndBedarfe(abfrageModel, bedarfForEachAbfragevariante)
+        );
+        Mockito
+            .verify(reportingdataTransferService, Mockito.times(1))
+            .addBedarfeToAbfrage(abfrageReportingDto, bedarfForEachAbfragevariante);
+        Mockito.verify(reportingdataTransferService, Mockito.times(0)).transferAbfrage(abfrageReportingDto);
+    }
+
+    @Test
     void transferAbfrageAndBedarfeWeitersVerfahren() throws ReportingException {
         var abfrageModel = new WeiteresVerfahrenModel();
         abfrageModel.setArtAbfrage(ArtAbfrage.WEITERES_VERFAHREN);
@@ -103,6 +149,29 @@ class ReportingdataTransferServiceTest {
             .verify(reportingdataTransferService, Mockito.times(1))
             .addBedarfeToAbfrage(abfrageReportingDto, bedarfForEachAbfragevariante);
         Mockito.verify(reportingdataTransferService, Mockito.times(1)).transferAbfrage(abfrageReportingDto);
+    }
+
+    @Test
+    void transferAbfrageAndBedarfeExceptionAtAddBedarfeToAbfrageWeitersVerfahren() throws ReportingException {
+        var abfrageModel = new WeiteresVerfahrenModel();
+        abfrageModel.setArtAbfrage(ArtAbfrage.WEITERES_VERFAHREN);
+        var bedarfForEachAbfragevariante = Map.of(UUID.randomUUID(), new BedarfeForAbfragevarianteModel());
+
+        var abfrageReportingDto = new WeiteresVerfahrenDto();
+        abfrageReportingDto.setAbfragevariantenWeiteresVerfahren(List.of());
+        abfrageReportingDto.setAbfragevariantenSachbearbeitungWeiteresVerfahren(List.of());
+        abfrageReportingDto.setArtAbfrage(AbfrageDto.ArtAbfrageEnum.WEITERES_VERFAHREN);
+        Mockito
+            .when(reportingdataTransferService.addBedarfeToAbfrage(abfrageReportingDto, bedarfForEachAbfragevariante))
+            .thenThrow(new ReportingException("test"));
+        Assertions.assertThrows(
+            ReportingException.class,
+            () -> reportingdataTransferService.transferAbfrageAndBedarfe(abfrageModel, bedarfForEachAbfragevariante)
+        );
+        Mockito
+            .verify(reportingdataTransferService, Mockito.times(1))
+            .addBedarfeToAbfrage(abfrageReportingDto, bedarfForEachAbfragevariante);
+        Mockito.verify(reportingdataTransferService, Mockito.times(0)).transferAbfrage(abfrageReportingDto);
     }
 
     @Test
