@@ -99,8 +99,8 @@ public class AbfrageService {
 
     /**
      * Diese Methode speichert ein {@link AbfrageModel}.
-     * Vor der Persistierung werden je Abfragevariante das {@link LangfristigerBedarfModel}
-     * ermittelt und an die Abfragevariante angefügt.
+     * Des Weiteren werden je Abfragevariante die planungs- und sobonursächlichen {@link LangfristigerBedarfModel} ermittelt
+     * und samt mit der Abfrage an die Reportingschnittstelle übermittelt.
      *
      * @param abfrage zum Speichern
      * @return das gespeicherte {@link AbfrageModel}
@@ -108,6 +108,7 @@ public class AbfrageService {
      * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
      * @throws EntityNotFoundException falls das referenzierte Bauvorhaben nicht existiert.
      * @throws CalculationException falls bei den Berechnungen ein Fehler auftritt.
+     * @throws ReportingException falls bei der Übermittlung an die Reportingschnittstelle ein Fehler auftritt.
      */
     public AbfrageModel save(final AbfrageModel abfrage)
         throws EntityNotFoundException, OptimisticLockingException, UniqueViolationException, CalculationException, ReportingException {
@@ -129,9 +130,11 @@ public class AbfrageService {
                 throw new UniqueViolationException(message, exception);
             }
             final var model = this.abfrageDomainMapper.entity2Model(entity);
+            // Berechnen der langfristigen planungs- und sobonursächlichen Bedarfe
             final var bedarfeForAbfragevarianten = calculationService.calculateBedarfeForEachAbfragevarianteOfAbfrage(
                 model
             );
+            // Übermitteln der Abfrage samt der vorher berechneten Bedarfe an die Reportingschnittstelle
             reportingdataTransferService.transferAbfrageAndBedarfe(model, bedarfeForAbfragevarianten);
             return model;
         } else {
@@ -143,6 +146,8 @@ public class AbfrageService {
 
     /**
      * Diese Methode aktualisiert ein {@link AbfrageAngelegtModel}.
+     * Des Weiteren werden je Abfragevariante die planungs- und sobonursächlichen {@link LangfristigerBedarfModel} ermittelt
+     * und samt mit der Abfrage an die Reportingschnittstelle übermittelt.
      *
      * @param abfrage zum Speichern
      * @param id der Abfrage
@@ -153,6 +158,8 @@ public class AbfrageService {
      * @throws AbfrageStatusNotAllowedException falls die zu aktualisierende Abfrage sich nicht im Status {@link StatusAbfrage#ANGELEGT} befindet.
      * @throws FileHandlingFailedException       falls es beim Dateihandling zu einem Fehler gekommen ist.
      * @throws FileHandlingWithS3FailedException falls es beim Dateihandling im S3-Storage zu einem Fehler gekommen ist.
+     * @throws CalculationException falls bei den Berechnungen ein Fehler auftritt.
+     * @throws ReportingException falls bei der Übermittlung an die Reportingschnittstelle ein Fehler auftritt.
      */
     public AbfrageModel patchAngelegt(final AbfrageAngelegtModel abfrage, final UUID id)
         throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, FileHandlingFailedException, FileHandlingWithS3FailedException, CalculationException, ReportingException {
@@ -248,6 +255,8 @@ public class AbfrageService {
 
     /**
      * Diese Methode aktualisiert ein {@link AbfrageInBearbeitungSachbearbeitungModel}.
+     * Des Weiteren werden je Abfragevariante die planungs- und sobonursächlichen {@link LangfristigerBedarfModel} ermittelt
+     * und samt mit der Abfrage an die Reportingschnittstelle übermittelt.
      *
      * @param abfrage zum Speichern
      * @param id der Abfrage
@@ -256,6 +265,8 @@ public class AbfrageService {
      * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist.
      * @throws EntityNotFoundException falls das referenzierte Bauvorhaben nicht existiert.
      * @throws AbfrageStatusNotAllowedException falls die zu aktualisierende Abfrage sich nicht im Status {@link StatusAbfrage#IN_BEARBEITUNG_SACHBEARBEITUNG} befindet.
+     * @throws CalculationException falls bei den Berechnungen ein Fehler auftritt.
+     * @throws ReportingException falls bei der Übermittlung an die Reportingschnittstelle ein Fehler auftritt.
      */
     public AbfrageModel patchInBearbeitungSachbearbeitung(
         final AbfrageInBearbeitungSachbearbeitungModel abfrage,
@@ -297,6 +308,8 @@ public class AbfrageService {
 
     /**
      * Diese Methode aktualisiert ein {@link AbfrageInBearbeitungFachreferatModel}.
+     * Des Weiteren werden je Abfragevariante die planungs- und sobonursächlichen {@link LangfristigerBedarfModel} ermittelt
+     * und samt mit der Abfrage an die Reportingschnittstelle übermittelt.
      *
      * @param abfrage zum Speichern
      * @param id der Abfrage
@@ -305,6 +318,8 @@ public class AbfrageService {
      * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist.
      * @throws EntityNotFoundException falls das referenzierte Bauvorhaben nicht existiert.
      * @throws AbfrageStatusNotAllowedException falls die zu aktualisierende Abfrage sich nicht im Status {@link StatusAbfrage#IN_BEARBEITUNG_FACHREFERATE} befindet.
+     * @throws CalculationException falls bei den Berechnungen ein Fehler auftritt.
+     * @throws ReportingException falls bei der Übermittlung an die Reportingschnittstelle ein Fehler auftritt.
      */
     public AbfrageModel patchInBearbeitungFachreferat(
         final AbfrageInBearbeitungFachreferatModel abfrage,
@@ -346,6 +361,8 @@ public class AbfrageService {
 
     /**
      * Diese Methode aktualisiert ein {@link AbfrageBedarfsmeldungErfolgtModel}.
+     * Des Weiteren werden je Abfragevariante die planungs- und sobonursächlichen {@link LangfristigerBedarfModel} ermittelt
+     * und samt mit der Abfrage an die Reportingschnittstelle übermittelt.
      *
      * @param abfrage zum Speichern
      * @param id der Abfrage
@@ -354,6 +371,8 @@ public class AbfrageService {
      * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist.
      * @throws EntityNotFoundException falls das referenzierte Bauvorhaben nicht existiert.
      * @throws AbfrageStatusNotAllowedException falls die zu aktualisierende Abfrage sich nicht im Status {@link StatusAbfrage#IN_BEARBEITUNG_FACHREFERATE} befindet.
+     * @throws CalculationException falls bei den Berechnungen ein Fehler auftritt.
+     * @throws ReportingException falls bei der Übermittlung an die Reportingschnittstelle ein Fehler auftritt.
      */
     public AbfrageModel patchBedarfsmeldungErfolgt(final AbfrageBedarfsmeldungErfolgtModel abfrage, final UUID id)
         throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException, CalculationException, ReportingException {
@@ -391,13 +410,15 @@ public class AbfrageService {
     }
 
     /**
-     * Diese Methode löscht ein {@link AbfrageModel}.
+     * Diese Methode löscht ein {@link AbfrageModel} aus der Datenbank und über die Reportingschnittstelle.
+     *
      *
      * @param id zum Identifizieren des {@link AbfrageModel}.
      * @throws EntityNotFoundException          falls die Abfrage identifiziert durch die {@link AbfrageModel#getId()} nicht gefunden wird.
      * @throws EntityIsReferencedException      falls ein {@link BauvorhabenModel} in der Abfrage referenziert wird.
      * @throws UserRoleNotAllowedException      falls der Nutzer nicht die richtige Rolle hat.
-     * @throws AbfrageStatusNotAllowedException falls die Abfrage den falschen Status hat..
+     * @throws AbfrageStatusNotAllowedException falls die Abfrage den falschen Status hat.
+     * @throws ReportingException falls beim Löschen über die Reportingschnittstelle ein Fehler auftritt.
      */
     public void deleteById(final UUID id)
         throws EntityNotFoundException, EntityIsReferencedException, UserRoleNotAllowedException, AbfrageStatusNotAllowedException, ReportingException {
