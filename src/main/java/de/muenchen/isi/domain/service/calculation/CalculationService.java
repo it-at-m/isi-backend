@@ -31,7 +31,7 @@ import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.stereotype.Service;
 
 /**
- * Die Serviceklasse zur Ermittlung der planungsursächlichen und Sobon-ursächlichen Bedarfe.
+ * Die Serviceklasse zur Ermittlung der planungsursächlichen und sobonursächlichen Bedarfe.
  */
 @Slf4j
 @Service
