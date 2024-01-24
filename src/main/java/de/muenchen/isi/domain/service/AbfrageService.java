@@ -132,10 +132,7 @@ public class AbfrageService {
             final var bedarfeForAbfragevarianten = calculationService.calculateBedarfeForEachAbfragevarianteOfAbfrage(
                 model
             );
-            reportingdataTransferService.addCalculationResultsToAbfrageAndTransferData(
-                model,
-                bedarfeForAbfragevarianten
-            );
+            reportingdataTransferService.addBedarfeToAbfrageAndTransferData(model, bedarfeForAbfragevarianten);
             return model;
         } else {
             throw new UniqueViolationException(

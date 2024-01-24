@@ -31,12 +31,12 @@ public class ReportingdataTransferService {
      * @param bedarfForEachAbfragevariante
      * @throws ReportingException
      */
-    public void addCalculationResultsToAbfrageAndTransferData(
+    public void addBedarfeToAbfrageAndTransferData(
         final AbfrageModel model,
         final Map<UUID, BedarfeForAbfragevarianteModel> bedarfForEachAbfragevariante
     ) throws ReportingException {
         var reportingDto = reportingApiDomainMapper.model2ReportingDto(model);
-        reportingDto = this.addCalculationResultsToAbfrage(reportingDto, bedarfForEachAbfragevariante);
+        reportingDto = this.addBedarfeToAbfrage(reportingDto, bedarfForEachAbfragevariante);
         this.transferAbfrage(reportingDto);
     }
 
@@ -50,7 +50,7 @@ public class ReportingdataTransferService {
         }
     }
 
-    protected AbfrageDto addCalculationResultsToAbfrage(
+    protected AbfrageDto addBedarfeToAbfrage(
         final AbfrageDto abfrage,
         final Map<UUID, BedarfeForAbfragevarianteModel> bedarfForEachAbfragevariante
     ) throws ReportingException {
