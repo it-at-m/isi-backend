@@ -56,7 +56,7 @@ class CalculationServiceTest {
     }
 
     @Test
-    void calculateAndAppendBedarfeToEachAbfragevarianteOfAbfrageUnspecified() {
+    void calculateBedarfeForEachAbfragevarianteOfAbfrageUnspecified() {
         final var abfrage = new WeiteresVerfahrenModel();
         abfrage.setArtAbfrage(ArtAbfrage.UNSPECIFIED);
         Assertions.assertThrows(
@@ -66,7 +66,7 @@ class CalculationServiceTest {
     }
 
     @Test
-    void calculateAndAppendBedarfeToEachAbfragevarianteOfAbfrageWeiteresVerfahren() throws CalculationException {
+    void calculateBedarfeForEachAbfragevarianteOfAbfrageWeiteresVerfahren() throws CalculationException {
         final var abfrage = new WeiteresVerfahrenModel();
         abfrage.setArtAbfrage(ArtAbfrage.WEITERES_VERFAHREN);
         abfrage.setAbfragevariantenWeiteresVerfahren(null);
@@ -108,7 +108,7 @@ class CalculationServiceTest {
     }
 
     @Test
-    void calculateAndAppendBedarfeToEachAbfragevarianteOfAbfrageBaugenehmigungsverfahren() throws CalculationException {
+    void calculateBedarfeForEachAbfragevarianteOfAbfrageBaugenehmigungsverfahren() throws CalculationException {
         final var abfrage = new BaugenehmigungsverfahrenModel();
         abfrage.setArtAbfrage(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN);
         abfrage.setAbfragevariantenBaugenehmigungsverfahren(null);
@@ -148,7 +148,7 @@ class CalculationServiceTest {
     }
 
     @Test
-    void calculateAndAppendBedarfeToEachAbfragevarianteOfAbfrageBauleitplanverfahren() throws CalculationException {
+    void calculateBedarfeForEachAbfragevarianteOfAbfrageBauleitplanverfahren() throws CalculationException {
         final var abfrage = new BauleitplanverfahrenModel();
         abfrage.setArtAbfrage(ArtAbfrage.BAULEITPLANVERFAHREN);
         abfrage.setAbfragevariantenBauleitplanverfahren(null);
@@ -190,7 +190,7 @@ class CalculationServiceTest {
     }
 
     @Test
-    void calculateAndAppendBedarfeToAbfragevarianteUnspecified() {
+    void calculateBedarfeForAbfragevarianteUnspecified() {
         final var abfragevarianteBauleitplanverfahren = new AbfragevarianteWeiteresVerfahrenModel();
         abfragevarianteBauleitplanverfahren.setArtAbfragevariante(ArtAbfrage.UNSPECIFIED);
         Assertions.assertThrows(
@@ -244,7 +244,7 @@ class CalculationServiceTest {
     }
 
     @Test
-    void calculateAndAppendBedarfeToAbfragevarianteBaugenehmigungsverfahren() throws CalculationException {
+    void calculateBedarfeForAbfragevarianteBaugenehmigungsverfahren() throws CalculationException {
         final var bauabschnitte = List.of(new BauabschnittModel());
         final var sobonOrientierungswertJahr = SobonOrientierungswertJahr.JAHR_2017;
         final var stammdatenGueltigAb = LocalDate.of(2020, 5, 30);
@@ -288,7 +288,7 @@ class CalculationServiceTest {
     }
 
     @Test
-    void calculateAndAppendBedarfeToAbfragevarianteBauleitplanverfahren() throws CalculationException {
+    void calculateBedarfeForAbfragevarianteBauleitplanverfahren() throws CalculationException {
         final var bauabschnitte = List.of(new BauabschnittModel());
         final var sobonOrientierungswertJahr = SobonOrientierungswertJahr.JAHR_2017;
         final var stammdatenGueltigAb = LocalDate.of(2020, 5, 30);
