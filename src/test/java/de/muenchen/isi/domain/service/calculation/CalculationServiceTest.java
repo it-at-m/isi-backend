@@ -12,7 +12,7 @@ import de.muenchen.isi.domain.model.BauabschnittModel;
 import de.muenchen.isi.domain.model.BaugenehmigungsverfahrenModel;
 import de.muenchen.isi.domain.model.BauleitplanverfahrenModel;
 import de.muenchen.isi.domain.model.WeiteresVerfahrenModel;
-import de.muenchen.isi.domain.model.calculation.BedarfeForAbfragevariante;
+import de.muenchen.isi.domain.model.calculation.BedarfeForAbfragevarianteModel;
 import de.muenchen.isi.domain.model.calculation.InfrastrukturbedarfProJahrModel;
 import de.muenchen.isi.domain.model.calculation.LangfristigerBedarfModel;
 import de.muenchen.isi.domain.model.calculation.PersonenProJahrModel;
@@ -229,7 +229,7 @@ class CalculationServiceTest {
             abfragevarianteBauleitplanverfahren
         );
 
-        final var expected = new BedarfeForAbfragevariante();
+        final var expected = new BedarfeForAbfragevarianteModel();
         expected.setLangfristigerPlanungsursaechlicherBedarf(langfristigerPlanungsursaechlicherBedarf);
 
         assertThat(bedarfeForAbfragevariante, is(expected));
@@ -273,7 +273,7 @@ class CalculationServiceTest {
             abfragevarianteBauleitplanverfahren
         );
 
-        final var expected = new BedarfeForAbfragevariante();
+        final var expected = new BedarfeForAbfragevarianteModel();
         expected.setLangfristigerPlanungsursaechlicherBedarf(langfristigerPlanungsursaechlicherBedarf);
 
         assertThat(bedarfeForAbfragevariante, is(expected));
@@ -317,7 +317,7 @@ class CalculationServiceTest {
             abfragevarianteBauleitplanverfahren
         );
 
-        final var expected = new BedarfeForAbfragevariante();
+        final var expected = new BedarfeForAbfragevarianteModel();
         expected.setLangfristigerPlanungsursaechlicherBedarf(langfristigerPlanungsursaechlicherBedarf);
 
         assertThat(bedarfeForAbfragevariante, is(expected));

@@ -10,7 +10,7 @@ import de.muenchen.isi.domain.model.BauabschnittModel;
 import de.muenchen.isi.domain.model.BaugenehmigungsverfahrenModel;
 import de.muenchen.isi.domain.model.BauleitplanverfahrenModel;
 import de.muenchen.isi.domain.model.WeiteresVerfahrenModel;
-import de.muenchen.isi.domain.model.calculation.BedarfeForAbfragevariante;
+import de.muenchen.isi.domain.model.calculation.BedarfeForAbfragevarianteModel;
 import de.muenchen.isi.domain.model.calculation.LangfristigerBedarfModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
@@ -58,7 +58,7 @@ public class CalculationService {
      * @param abfrage zum Ermitteln und Setzen der langfristigen planugsursächlichen Bedarfe.
      * @throws CalculationException falls keine Berechnung wegen einer nicht gesetzten Art der Abfrage oder Abfragevariante oder nicht vorhandener Stammdaten möglich ist.
      */
-    public Map<UUID, BedarfeForAbfragevariante> calculateBedarfeForEachAbfragevarianteOfAbfrage(
+    public Map<UUID, BedarfeForAbfragevarianteModel> calculateBedarfeForEachAbfragevarianteOfAbfrage(
         final AbfrageModel abfrage
     ) throws CalculationException {
         List<? extends AbfragevarianteModel> abfragevarianten;
@@ -88,7 +88,7 @@ public class CalculationService {
         } else {
             throw new CalculationException("Die Berechnung kann für diese Art von Abfrage nicht durchgeführt werden.");
         }
-        final var bedarfeForEachAbfragevariante = new HashMap<UUID, BedarfeForAbfragevariante>();
+        final var bedarfeForEachAbfragevariante = new HashMap<UUID, BedarfeForAbfragevarianteModel>();
         for (final var abfragevariante : abfragevarianten) {
             final var bedarfeForAbfragevariante = this.calculateBedarfeForAbfragevariante(abfragevariante);
             bedarfeForEachAbfragevariante.put(abfragevariante.getId(), bedarfeForAbfragevariante);
@@ -106,12 +106,13 @@ public class CalculationService {
      * @param abfragevariante zum Ermitteln und Setzen der langfristigen planugsursächlichen Bedarfe.
      * @throws CalculationException falls keine Berechnung wegen einer nicht gesetzten Art der Abfragevariante oder nicht vorhandener Stammdaten möglich ist.
      */
-    public BedarfeForAbfragevariante calculateBedarfeForAbfragevariante(final AbfragevarianteModel abfragevariante)
-        throws CalculationException {
+    public BedarfeForAbfragevarianteModel calculateBedarfeForAbfragevariante(
+        final AbfragevarianteModel abfragevariante
+    ) throws CalculationException {
         final List<BauabschnittModel> bauabschnitte;
         final SobonOrientierungswertJahr sobonOrientierungswertJahr;
         final LocalDate stammdatenGueltigAb;
-        final var bedarfeForAbfragevariante = new BedarfeForAbfragevariante();
+        final var bedarfeForAbfragevariante = new BedarfeForAbfragevarianteModel();
         final LangfristigerBedarfModel langfristigerPlanungsursaechlicherBedarf;
         final LangfristigerBedarfModel langfristigerSobonursaechlicherBedarf;
         if (ArtAbfrage.BAULEITPLANVERFAHREN.equals(abfragevariante.getArtAbfragevariante())) {

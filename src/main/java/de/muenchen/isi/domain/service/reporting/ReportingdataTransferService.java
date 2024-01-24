@@ -3,7 +3,7 @@ package de.muenchen.isi.domain.service.reporting;
 import de.muenchen.isi.domain.exception.ReportingException;
 import de.muenchen.isi.domain.mapper.ReportingApiDomainMapper;
 import de.muenchen.isi.domain.model.AbfrageModel;
-import de.muenchen.isi.domain.model.calculation.BedarfeForAbfragevariante;
+import de.muenchen.isi.domain.model.calculation.BedarfeForAbfragevarianteModel;
 import de.muenchen.isi.infrastructure.repository.reporting.AbfrageReportingRepository;
 import de.muenchen.isi.reporting.client.model.AbfrageDto;
 import de.muenchen.isi.reporting.client.model.BaugenehmigungsverfahrenDto;
@@ -33,7 +33,7 @@ public class ReportingdataTransferService {
      */
     public void addCalculationResultsToAbfrageAndTransferData(
         final AbfrageModel model,
-        final Map<UUID, BedarfeForAbfragevariante> bedarfForEachAbfragevariante
+        final Map<UUID, BedarfeForAbfragevarianteModel> bedarfForEachAbfragevariante
     ) throws ReportingException {
         var reportingDto = reportingApiDomainMapper.model2ReportingDto(model);
         reportingDto = this.addCalculationResultsToAbfrage(reportingDto, bedarfForEachAbfragevariante);
@@ -52,7 +52,7 @@ public class ReportingdataTransferService {
 
     protected AbfrageDto addCalculationResultsToAbfrage(
         final AbfrageDto abfrage,
-        final Map<UUID, BedarfeForAbfragevariante> bedarfForEachAbfragevariante
+        final Map<UUID, BedarfeForAbfragevarianteModel> bedarfForEachAbfragevariante
     ) throws ReportingException {
         if (AbfrageDto.ArtAbfrageEnum.BAULEITPLANVERFAHREN.equals(abfrage.getArtAbfrage())) {
             final var bauleitplanverfahren = (BauleitplanverfahrenDto) abfrage;
@@ -63,10 +63,7 @@ public class ReportingdataTransferService {
                 )
                 .forEach(abfragevariante -> {
                     final var bedarfModel = bedarfForEachAbfragevariante.get(abfragevariante.getId());
-                    final var bedarfDto = reportingApiDomainMapper.model2ReportingDto(
-                        bedarfModel.getLangfristigerPlanungsursaechlicherBedarf()
-                    );
-                    abfragevariante.setLangfristigerPlanungsursaechlicherBedarf(bedarfDto);
+                    reportingApiDomainMapper.reportingDtoAndBedarfe2ReportingDto(abfragevariante, bedarfModel);
                 });
         } else if (AbfrageDto.ArtAbfrageEnum.BAUGENEHMIGUNGSVERFAHREN.equals(abfrage.getArtAbfrage())) {
             final var baugenehmigungsverfahren = (BaugenehmigungsverfahrenDto) abfrage;
@@ -77,10 +74,7 @@ public class ReportingdataTransferService {
                 )
                 .forEach(abfragevariante -> {
                     final var bedarfModel = bedarfForEachAbfragevariante.get(abfragevariante.getId());
-                    final var bedarfDto = reportingApiDomainMapper.model2ReportingDto(
-                        bedarfModel.getLangfristigerPlanungsursaechlicherBedarf()
-                    );
-                    abfragevariante.setLangfristigerPlanungsursaechlicherBedarf(bedarfDto);
+                    reportingApiDomainMapper.reportingDtoAndBedarfe2ReportingDto(abfragevariante, bedarfModel);
                 });
         } else if (AbfrageDto.ArtAbfrageEnum.WEITERES_VERFAHREN.equals(abfrage.getArtAbfrage())) {
             final var weiteresVerfahren = (WeiteresVerfahrenDto) abfrage;
@@ -91,10 +85,7 @@ public class ReportingdataTransferService {
                 )
                 .forEach(abfragevariante -> {
                     final var bedarfModel = bedarfForEachAbfragevariante.get(abfragevariante.getId());
-                    final var bedarfDto = reportingApiDomainMapper.model2ReportingDto(
-                        bedarfModel.getLangfristigerPlanungsursaechlicherBedarf()
-                    );
-                    abfragevariante.setLangfristigerPlanungsursaechlicherBedarf(bedarfDto);
+                    reportingApiDomainMapper.reportingDtoAndBedarfe2ReportingDto(abfragevariante, bedarfModel);
                 });
         } else {
             throw new ReportingException("Für diese Art der Abfrage kann kein Reporting durchgeführt werden.");

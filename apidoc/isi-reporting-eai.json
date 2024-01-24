@@ -74,7 +74,8 @@
           },
           "abfragevariantenNr": { "type": "integer", "format": "int32" },
           "name": { "type": "string" },
-          "langfristigerPlanungsursaechlicherBedarf": { "$ref": "#/components/schemas/LangfristigerBedarfDto" }
+          "langfristigerPlanungsursaechlicherBedarf": { "$ref": "#/components/schemas/LangfristigerBedarfDto" },
+          "langfristigerSobonursaechlicherBedarf": { "$ref": "#/components/schemas/LangfristigerBedarfDto" }
         }
       },
       "AbfragevarianteBauleitplanverfahrenDto": {
@@ -89,7 +90,8 @@
           },
           "abfragevariantenNr": { "type": "integer", "format": "int32" },
           "name": { "type": "string" },
-          "langfristigerPlanungsursaechlicherBedarf": { "$ref": "#/components/schemas/LangfristigerBedarfDto" }
+          "langfristigerPlanungsursaechlicherBedarf": { "$ref": "#/components/schemas/LangfristigerBedarfDto" },
+          "langfristigerSobonursaechlicherBedarf": { "$ref": "#/components/schemas/LangfristigerBedarfDto" }
         }
       },
       "AbfragevarianteWeiteresVerfahrenDto": {
@@ -104,7 +106,8 @@
           },
           "abfragevariantenNr": { "type": "integer", "format": "int32" },
           "name": { "type": "string" },
-          "langfristigerPlanungsursaechlicherBedarf": { "$ref": "#/components/schemas/LangfristigerBedarfDto" }
+          "langfristigerPlanungsursaechlicherBedarf": { "$ref": "#/components/schemas/LangfristigerBedarfDto" },
+          "langfristigerSobonursaechlicherBedarf": { "$ref": "#/components/schemas/LangfristigerBedarfDto" }
         }
       },
       "BaugenehmigungsverfahrenDto": {

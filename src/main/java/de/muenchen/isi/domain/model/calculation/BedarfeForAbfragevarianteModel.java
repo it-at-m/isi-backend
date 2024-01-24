@@ -3,7 +3,7 @@ package de.muenchen.isi.domain.model.calculation;
 import lombok.Data;
 
 @Data
-public class BedarfeForAbfragevariante {
+public class BedarfeForAbfragevarianteModel {
 
     private LangfristigerBedarfModel langfristigerPlanungsursaechlicherBedarf;
 
