@@ -4,7 +4,7 @@ import de.muenchen.isi.domain.exception.ReportingException;
 import de.muenchen.isi.domain.mapper.ReportingApiDomainMapper;
 import de.muenchen.isi.domain.model.AbfrageModel;
 import de.muenchen.isi.domain.model.calculation.BedarfeForAbfragevarianteModel;
-import de.muenchen.isi.infrastructure.repository.reporting.AbfrageReportingRepository;
+import de.muenchen.isi.infrastructure.repository.reporting.ReportingdataTransferRepository;
 import de.muenchen.isi.reporting.client.model.AbfrageDto;
 import de.muenchen.isi.reporting.client.model.BaugenehmigungsverfahrenDto;
 import de.muenchen.isi.reporting.client.model.BauleitplanverfahrenDto;
@@ -23,7 +23,7 @@ public class ReportingdataTransferService {
 
     private final ReportingApiDomainMapper reportingApiDomainMapper;
 
-    private final AbfrageReportingRepository abfrageReportingRepository;
+    private final ReportingdataTransferRepository reportingdataTransferRepository;
 
     /**
      * Übermittelt die Abfrage samt der Bedarfe an die Reportingschnittstelle.
@@ -50,7 +50,7 @@ public class ReportingdataTransferService {
      */
     protected void transferAbfrage(final AbfrageDto abfrage) throws ReportingException {
         try {
-            abfrageReportingRepository.save(abfrage);
+            reportingdataTransferRepository.save(abfrage);
         } catch (final Exception exception) {
             final var error = "Beim Transfer der zu reportenden Abfrage ist ein Fehler aufgetreten.";
             log.error(error, exception);
@@ -118,7 +118,7 @@ public class ReportingdataTransferService {
      */
     public void deleteTransferedAbfrage(final UUID id) throws ReportingException {
         try {
-            abfrageReportingRepository.deleteById(id);
+            reportingdataTransferRepository.deleteById(id);
         } catch (final Exception exception) {
             final var error = "Beim Löschen einer im Reporting vorhandenen Abfrage ist ein Fehler aufgetreten.";
             log.error(error, exception);
