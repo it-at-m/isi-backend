@@ -35,8 +35,15 @@ class ReportingdataTransferServiceTest {
     }
 
     @Test
+    void deleteTransferedAbfrag() {
+        final var id = UUID.randomUUID();
+        reportingdataTransferRepository.deleteById(id);
+        Mockito.verify(reportingdataTransferRepository, Mockito.times(1)).deleteById(id);
+    }
+
+    @Test
     void deleteTransferedAbfrageException() {
-        var id = UUID.randomUUID();
+        final var id = UUID.randomUUID();
         Mockito
             .doThrow(new WebClientResponseException(500, "An error", null, null, null))
             .when(reportingdataTransferRepository)
@@ -45,5 +52,6 @@ class ReportingdataTransferServiceTest {
             ReportingException.class,
             () -> reportingdataTransferService.deleteTransferedAbfrage(id)
         );
+        Mockito.verify(reportingdataTransferRepository, Mockito.times(1)).deleteById(id);
     }
 }
