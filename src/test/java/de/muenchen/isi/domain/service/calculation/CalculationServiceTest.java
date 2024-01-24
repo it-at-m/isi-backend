@@ -281,6 +281,7 @@ class CalculationServiceTest {
 
         final var expected = new BedarfeForAbfragevarianteModel();
         expected.setLangfristigerPlanungsursaechlicherBedarf(langfristigerPlanungsursaechlicherBedarf);
+        expected.setLangfristigerSobonursaechlicherBedarf(null);
 
         assertThat(bedarfeForAbfragevariante, is(expected));
 
@@ -325,6 +326,7 @@ class CalculationServiceTest {
 
         final var expected = new BedarfeForAbfragevarianteModel();
         expected.setLangfristigerPlanungsursaechlicherBedarf(langfristigerPlanungsursaechlicherBedarf);
+        expected.setLangfristigerSobonursaechlicherBedarf(null);
 
         assertThat(bedarfeForAbfragevariante, is(expected));
 
@@ -369,6 +371,7 @@ class CalculationServiceTest {
 
         final var expected = new BedarfeForAbfragevarianteModel();
         expected.setLangfristigerPlanungsursaechlicherBedarf(langfristigerPlanungsursaechlicherBedarf);
+        expected.setLangfristigerSobonursaechlicherBedarf(null);
 
         assertThat(bedarfeForAbfragevariante, is(expected));
 
