@@ -113,7 +113,7 @@ public class ReportingdataTransferService {
     /**
      * Löscht die Abfrage welche ggf. vorher über die Reportingschnittstelle übermittelt wurde.
      *
-     * @param id zum identifizieren der Abfrage.
+     * @param id zum Identifizieren der Abfrage.
      * @throws ReportingException falls der Löschvorgang fehlgeschlagen ist.
      */
     public void deleteTransferedAbfrage(final UUID id) throws ReportingException {
