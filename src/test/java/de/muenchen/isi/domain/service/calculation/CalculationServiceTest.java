@@ -21,13 +21,10 @@ import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -454,71 +451,6 @@ class CalculationServiceTest {
                     )
             )
             .thenReturn(wohneinheiten);
-
-        final var sumWohneinheiten10Years = List.of(
-            new WohneinheitenProFoerderartProJahrModel(),
-            new WohneinheitenProFoerderartProJahrModel()
-        );
-        Mockito
-            .when(
-                this.planungsursaechlicheWohneinheitenService.sumWohneinheitenForNumberOfYearsForEachFoerderart(
-                        wohneinheiten,
-                        10
-                    )
-            )
-            .thenReturn(sumWohneinheiten10Years);
-
-        final var sumWohneinheiten15Years = List.of(
-            new WohneinheitenProFoerderartProJahrModel(),
-            new WohneinheitenProFoerderartProJahrModel(),
-            new WohneinheitenProFoerderartProJahrModel()
-        );
-        Mockito
-            .when(
-                this.planungsursaechlicheWohneinheitenService.sumWohneinheitenForNumberOfYearsForEachFoerderart(
-                        wohneinheiten,
-                        15
-                    )
-            )
-            .thenReturn(sumWohneinheiten15Years);
-
-        final var sumWohneinheiten20Years = List.of(
-            new WohneinheitenProFoerderartProJahrModel(),
-            new WohneinheitenProFoerderartProJahrModel(),
-            new WohneinheitenProFoerderartProJahrModel(),
-            new WohneinheitenProFoerderartProJahrModel()
-        );
-        Mockito
-            .when(
-                this.planungsursaechlicheWohneinheitenService.sumWohneinheitenForNumberOfYearsForEachFoerderart(
-                        wohneinheiten,
-                        20
-                    )
-            )
-            .thenReturn(sumWohneinheiten20Years);
-
-        final var sumWohneinheitenOverFoerderartenEachYear = List.of(
-            new WohneinheitenProFoerderartProJahrModel(),
-            new WohneinheitenProFoerderartProJahrModel(),
-            new WohneinheitenProFoerderartProJahrModel(),
-            new WohneinheitenProFoerderartProJahrModel(),
-            new WohneinheitenProFoerderartProJahrModel()
-        );
-        Mockito
-            .when(
-                this.planungsursaechlicheWohneinheitenService.sumWohneinheitenOverFoerderartenForEachYear(
-                        Stream
-                            .of(
-                                wohneinheiten,
-                                sumWohneinheiten10Years,
-                                sumWohneinheiten15Years,
-                                sumWohneinheiten20Years
-                            )
-                            .flatMap(Collection::stream)
-                            .collect(Collectors.toList())
-                    )
-            )
-            .thenReturn(sumWohneinheitenOverFoerderartenEachYear);
 
         final var bedarfeProJahrKinderkrippe = List.of(new InfrastrukturbedarfProJahrModel());
 

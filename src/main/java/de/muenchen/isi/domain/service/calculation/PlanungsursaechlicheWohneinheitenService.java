@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class PlanungsursaechlicheWohneinheitenService extends WohneinheitenCalculationService {
+public class PlanungsursaechlicheWohneinheitenService {
 
     private final FoerdermixUmlageService foerdermixUmlageService;
 
