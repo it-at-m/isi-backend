@@ -1010,6 +1010,15 @@ class ReportingdataTransferServiceTest {
     }
 
     @Test
+    void addBedarfeToAbfrageException() {
+        var abfrage = new AbfrageDto();
+        Assertions.assertThrows(
+            ReportingException.class,
+            () -> reportingdataTransferService.addBedarfeToAbfrage(abfrage, null)
+        );
+    }
+
+    @Test
     void transferAbfrage() throws ReportingException {
         final var abfrage = new AbfrageDto();
         reportingdataTransferService.transferAbfrage(abfrage);
