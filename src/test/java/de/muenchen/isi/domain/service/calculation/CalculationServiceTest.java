@@ -531,7 +531,7 @@ class CalculationServiceTest {
 
         Mockito
             .when(
-                this.infrastrukturbedarfService.calculateBedarfForKinderkrippeRounded(
+                this.infrastrukturbedarfService.calculateBedarfForKinderkrippe(
                         wohneinheiten,
                         sobonOrientierungswertJahr,
                         InfrastrukturbedarfService.ArtInfrastrukturbedarf.PLANUNGSURSAECHLICH,
@@ -563,7 +563,7 @@ class CalculationServiceTest {
 
         Mockito
             .when(
-                this.infrastrukturbedarfService.calculateBedarfForKindergartenRounded(
+                this.infrastrukturbedarfService.calculateBedarfForKindergarten(
                         wohneinheiten,
                         sobonOrientierungswertJahr,
                         InfrastrukturbedarfService.ArtInfrastrukturbedarf.PLANUNGSURSAECHLICH,
@@ -591,9 +591,7 @@ class CalculationServiceTest {
         alleEinwohnerMean20.setAnzahlPersonenGesamt(BigDecimal.valueOf(220));
 
         Mockito
-            .when(
-                this.infrastrukturbedarfService.calculateAlleEinwohnerRounded(wohneinheiten, sobonOrientierungswertJahr)
-            )
+            .when(this.infrastrukturbedarfService.calculateAlleEinwohner(wohneinheiten, sobonOrientierungswertJahr))
             .thenReturn(alleEinwohnerProJahr);
 
         Mockito
@@ -615,22 +613,9 @@ class CalculationServiceTest {
         final var expected = new LangfristigerBedarfModel();
 
         expected.setWohneinheiten(wohneinheiten);
-        expected.setWohneinheitenSumme10Jahre(sumWohneinheiten10Years);
-        expected.setWohneinheitenSumme15Jahre(sumWohneinheiten15Years);
-        expected.setWohneinheitenSumme20Jahre(sumWohneinheiten20Years);
-        expected.setWohneinheitenGesamt(sumWohneinheitenOverFoerderartenEachYear);
         expected.setBedarfKinderkrippe(bedarfeProJahrKinderkrippe);
-        expected.setBedarfKinderkrippeMittelwert10(bedarfeProJahrMeanKinderkrippe10);
-        expected.setBedarfKinderkrippeMittelwert15(bedarfeProJahrMeanKinderkrippe15);
-        expected.setBedarfKinderkrippeMittelwert20(bedarfeProJahrMeanKinderkrippe20);
         expected.setBedarfKindergarten(bedarfeProJahrKindergarten);
-        expected.setBedarfKindergartenMittelwert10(bedarfeProJahrMeanKindergarten10);
-        expected.setBedarfKindergartenMittelwert15(bedarfeProJahrMeanKindergarten15);
-        expected.setBedarfKindergartenMittelwert20(bedarfeProJahrMeanKindergarten20);
         expected.setAlleEinwohner(alleEinwohnerProJahr);
-        expected.setAlleEinwohnerMittelwert10(alleEinwohnerMean10);
-        expected.setAlleEinwohnerMittelwert15(alleEinwohnerMean15);
-        expected.setAlleEinwohnerMittelwert20(alleEinwohnerMean20);
 
         assertThat(result, is(expected));
     }
