@@ -17,6 +17,7 @@ import de.muenchen.isi.domain.model.calculation.WohneinheitenProFoerderartProJah
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.repository.reporting.ReportingdataTransferRepository;
 import de.muenchen.isi.reporting.client.model.AbfrageDto;
+import de.muenchen.isi.reporting.client.model.AbfragevarianteBaugenehmigungsverfahrenDto;
 import de.muenchen.isi.reporting.client.model.AbfragevarianteBauleitplanverfahrenDto;
 import de.muenchen.isi.reporting.client.model.BaugenehmigungsverfahrenDto;
 import de.muenchen.isi.reporting.client.model.BauleitplanverfahrenDto;
@@ -509,6 +510,252 @@ class ReportingdataTransferServiceTest {
         sobonursaechlichBedarfDto.setAlleEinwohner(List.of(personenDto));
         expected
             .getAbfragevariantenSachbearbeitungBauleitplanverfahren()
+            .get(0)
+            .setLangfristigerSobonursaechlicherBedarf(sobonursaechlichBedarfDto);
+
+        assertThat(result, is(expected));
+    }
+
+    @Test
+    void addBedarfeToAbfrageBaugenehmigungsverfahren() throws ReportingException {
+        var abfrage = new BaugenehmigungsverfahrenDto();
+        abfrage.setId(UUID.randomUUID());
+        abfrage.setArtAbfrage(AbfrageDto.ArtAbfrageEnum.BAUGENEHMIGUNGSVERFAHREN);
+        var abfragevariante1 = new AbfragevarianteBaugenehmigungsverfahrenDto();
+        abfragevariante1.setId(UUID.randomUUID());
+        abfragevariante1.setName("Variante 1");
+        abfragevariante1.setAbfragevariantenNr(1);
+        var abfragevariante2 = new AbfragevarianteBaugenehmigungsverfahrenDto();
+        abfragevariante2.setId(UUID.randomUUID());
+        abfragevariante2.setName("Variante 2");
+        abfragevariante2.setAbfragevariantenNr(2);
+        abfrage.setAbfragevariantenBaugenehmigungsverfahren(List.of(abfragevariante1));
+        abfrage.setAbfragevariantenSachbearbeitungBaugenehmigungsverfahren(List.of(abfragevariante2));
+
+        var bedarf = new BedarfeForAbfragevarianteModel();
+        var planungsursaechlichBedarf = new LangfristigerBedarfModel();
+        var wohneinheiten = new WohneinheitenProFoerderartProJahrModel();
+        wohneinheiten.setJahr("2020");
+        wohneinheiten.setFoerderart("forderart1");
+        wohneinheiten.setWohneinheiten(BigDecimal.valueOf(10));
+        planungsursaechlichBedarf.setWohneinheiten(List.of(wohneinheiten));
+        var infrastrukturbedarf = new InfrastrukturbedarfProJahrModel();
+        infrastrukturbedarf.setJahr("2021");
+        infrastrukturbedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(100));
+        infrastrukturbedarf.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(80));
+        infrastrukturbedarf.setAnzahlGruppen(BigDecimal.valueOf(10));
+        planungsursaechlichBedarf.setBedarfKinderkrippe(List.of(infrastrukturbedarf));
+        infrastrukturbedarf = new InfrastrukturbedarfProJahrModel();
+        infrastrukturbedarf.setJahr("2022");
+        infrastrukturbedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(101));
+        infrastrukturbedarf.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(81));
+        infrastrukturbedarf.setAnzahlGruppen(BigDecimal.valueOf(11));
+        planungsursaechlichBedarf.setBedarfKindergarten(List.of(infrastrukturbedarf));
+        var personen = new PersonenProJahrModel();
+        personen.setJahr("2023");
+        personen.setAnzahlPersonenGesamt(BigDecimal.valueOf(102));
+        planungsursaechlichBedarf.setAlleEinwohner(List.of(personen));
+        bedarf.setLangfristigerPlanungsursaechlicherBedarf(planungsursaechlichBedarf);
+
+        var sobonursaechlichBedarf = new LangfristigerBedarfModel();
+        wohneinheiten = new WohneinheitenProFoerderartProJahrModel();
+        wohneinheiten.setJahr("2024");
+        wohneinheiten.setFoerderart("forderart2");
+        wohneinheiten.setWohneinheiten(BigDecimal.valueOf(20));
+        sobonursaechlichBedarf.setWohneinheiten(List.of(wohneinheiten));
+        infrastrukturbedarf = new InfrastrukturbedarfProJahrModel();
+        infrastrukturbedarf.setJahr("2025");
+        infrastrukturbedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(200));
+        infrastrukturbedarf.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(70));
+        infrastrukturbedarf.setAnzahlGruppen(BigDecimal.valueOf(5));
+        sobonursaechlichBedarf.setBedarfKinderkrippe(List.of(infrastrukturbedarf));
+        infrastrukturbedarf = new InfrastrukturbedarfProJahrModel();
+        infrastrukturbedarf.setJahr("2026");
+        infrastrukturbedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(201));
+        infrastrukturbedarf.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(71));
+        infrastrukturbedarf.setAnzahlGruppen(BigDecimal.valueOf(6));
+        sobonursaechlichBedarf.setBedarfKindergarten(List.of(infrastrukturbedarf));
+        personen = new PersonenProJahrModel();
+        personen.setJahr("2027");
+        personen.setAnzahlPersonenGesamt(BigDecimal.valueOf(201));
+        sobonursaechlichBedarf.setAlleEinwohner(List.of(personen));
+        bedarf.setLangfristigerSobonursaechlicherBedarf(sobonursaechlichBedarf);
+
+        final var bedarfForEachAbfragevariante = new HashMap<UUID, BedarfeForAbfragevarianteModel>();
+        bedarfForEachAbfragevariante.put(abfragevariante1.getId(), bedarf);
+
+        bedarf = new BedarfeForAbfragevarianteModel();
+        planungsursaechlichBedarf = new LangfristigerBedarfModel();
+        wohneinheiten = new WohneinheitenProFoerderartProJahrModel();
+        wohneinheiten.setJahr("1020");
+        wohneinheiten.setFoerderart("forderart3");
+        wohneinheiten.setWohneinheiten(BigDecimal.valueOf(600));
+        planungsursaechlichBedarf.setWohneinheiten(List.of(wohneinheiten));
+        infrastrukturbedarf = new InfrastrukturbedarfProJahrModel();
+        infrastrukturbedarf.setJahr("1021");
+        infrastrukturbedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(6000));
+        infrastrukturbedarf.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(800));
+        infrastrukturbedarf.setAnzahlGruppen(BigDecimal.valueOf(100));
+        planungsursaechlichBedarf.setBedarfKinderkrippe(List.of(infrastrukturbedarf));
+        infrastrukturbedarf = new InfrastrukturbedarfProJahrModel();
+        infrastrukturbedarf.setJahr("1022");
+        infrastrukturbedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(1001));
+        infrastrukturbedarf.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(801));
+        infrastrukturbedarf.setAnzahlGruppen(BigDecimal.valueOf(110));
+        planungsursaechlichBedarf.setBedarfKindergarten(List.of(infrastrukturbedarf));
+        personen = new PersonenProJahrModel();
+        personen.setJahr("1023");
+        personen.setAnzahlPersonenGesamt(BigDecimal.valueOf(1030));
+        planungsursaechlichBedarf.setAlleEinwohner(List.of(personen));
+        bedarf.setLangfristigerPlanungsursaechlicherBedarf(planungsursaechlichBedarf);
+
+        sobonursaechlichBedarf = new LangfristigerBedarfModel();
+        wohneinheiten = new WohneinheitenProFoerderartProJahrModel();
+        wohneinheiten.setJahr("1024");
+        wohneinheiten.setFoerderart("forderart4");
+        wohneinheiten.setWohneinheiten(BigDecimal.valueOf(88));
+        sobonursaechlichBedarf.setWohneinheiten(List.of(wohneinheiten));
+        infrastrukturbedarf = new InfrastrukturbedarfProJahrModel();
+        infrastrukturbedarf.setJahr("1025");
+        infrastrukturbedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(222));
+        infrastrukturbedarf.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(999));
+        infrastrukturbedarf.setAnzahlGruppen(BigDecimal.valueOf(87));
+        sobonursaechlichBedarf.setBedarfKinderkrippe(List.of(infrastrukturbedarf));
+        infrastrukturbedarf = new InfrastrukturbedarfProJahrModel();
+        infrastrukturbedarf.setJahr("1026");
+        infrastrukturbedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(999));
+        infrastrukturbedarf.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(998));
+        infrastrukturbedarf.setAnzahlGruppen(BigDecimal.valueOf(8));
+        sobonursaechlichBedarf.setBedarfKindergarten(List.of(infrastrukturbedarf));
+        personen = new PersonenProJahrModel();
+        personen.setJahr("1027");
+        personen.setAnzahlPersonenGesamt(BigDecimal.valueOf(235));
+        sobonursaechlichBedarf.setAlleEinwohner(List.of(personen));
+        bedarf.setLangfristigerSobonursaechlicherBedarf(sobonursaechlichBedarf);
+
+        bedarfForEachAbfragevariante.put(abfragevariante2.getId(), bedarf);
+
+        final var result = reportingdataTransferService.addBedarfeToAbfrage(abfrage, bedarfForEachAbfragevariante);
+
+        var expected = new BaugenehmigungsverfahrenDto();
+        expected.setId(abfrage.getId());
+        expected.setArtAbfrage(AbfrageDto.ArtAbfrageEnum.BAUGENEHMIGUNGSVERFAHREN);
+        var abfragevariante1expected = new AbfragevarianteBaugenehmigungsverfahrenDto();
+        abfragevariante1expected.setId(abfragevariante1.getId());
+        abfragevariante1expected.setName("Variante 1");
+        abfragevariante1expected.setAbfragevariantenNr(1);
+        var abfragevariante2expected = new AbfragevarianteBaugenehmigungsverfahrenDto();
+        abfragevariante2expected.setId(abfragevariante2.getId());
+        abfragevariante2expected.setName("Variante 2");
+        abfragevariante2expected.setAbfragevariantenNr(2);
+        expected.setAbfragevariantenBaugenehmigungsverfahren(List.of(abfragevariante1expected));
+        expected.setAbfragevariantenSachbearbeitungBaugenehmigungsverfahren(List.of(abfragevariante2expected));
+
+        var planungsursaechlichBedarfDto = new LangfristigerBedarfDto();
+        var wohneinheitenDto = new WohneinheitenProFoerderartProJahrDto();
+        wohneinheitenDto.setJahr("2020");
+        wohneinheitenDto.setFoerderart("forderart1");
+        wohneinheitenDto.setWohneinheiten(BigDecimal.valueOf(10));
+        planungsursaechlichBedarfDto.setWohneinheiten(List.of(wohneinheitenDto));
+        var infrastrukturbedarfDto = new InfrastrukturbedarfProJahrDto();
+        infrastrukturbedarfDto.setJahr("2021");
+        infrastrukturbedarfDto.setAnzahlPersonenGesamt(BigDecimal.valueOf(100));
+        infrastrukturbedarfDto.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(80));
+        infrastrukturbedarfDto.setAnzahlGruppen(BigDecimal.valueOf(10));
+        planungsursaechlichBedarfDto.setBedarfKinderkrippe(List.of(infrastrukturbedarfDto));
+        infrastrukturbedarfDto = new InfrastrukturbedarfProJahrDto();
+        infrastrukturbedarfDto.setJahr("2022");
+        infrastrukturbedarfDto.setAnzahlPersonenGesamt(BigDecimal.valueOf(101));
+        infrastrukturbedarfDto.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(81));
+        infrastrukturbedarfDto.setAnzahlGruppen(BigDecimal.valueOf(11));
+        planungsursaechlichBedarfDto.setBedarfKindergarten(List.of(infrastrukturbedarfDto));
+        var personenDto = new PersonenProJahrDto();
+        personenDto.setJahr("2023");
+        personenDto.setAnzahlPersonenGesamt(BigDecimal.valueOf(102));
+        planungsursaechlichBedarfDto.setAlleEinwohner(List.of(personenDto));
+        expected
+            .getAbfragevariantenBaugenehmigungsverfahren()
+            .get(0)
+            .setLangfristigerPlanungsursaechlicherBedarf(planungsursaechlichBedarfDto);
+
+        var sobonursaechlichBedarfDto = new LangfristigerBedarfDto();
+        wohneinheitenDto = new WohneinheitenProFoerderartProJahrDto();
+        wohneinheitenDto.setJahr("2024");
+        wohneinheitenDto.setFoerderart("forderart2");
+        wohneinheitenDto.setWohneinheiten(BigDecimal.valueOf(20));
+        sobonursaechlichBedarfDto.setWohneinheiten(List.of(wohneinheitenDto));
+        infrastrukturbedarfDto = new InfrastrukturbedarfProJahrDto();
+        infrastrukturbedarfDto.setJahr("2025");
+        infrastrukturbedarfDto.setAnzahlPersonenGesamt(BigDecimal.valueOf(200));
+        infrastrukturbedarfDto.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(70));
+        infrastrukturbedarfDto.setAnzahlGruppen(BigDecimal.valueOf(5));
+        sobonursaechlichBedarfDto.setBedarfKinderkrippe(List.of(infrastrukturbedarfDto));
+        infrastrukturbedarfDto = new InfrastrukturbedarfProJahrDto();
+        infrastrukturbedarfDto.setJahr("2026");
+        infrastrukturbedarfDto.setAnzahlPersonenGesamt(BigDecimal.valueOf(201));
+        infrastrukturbedarfDto.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(71));
+        infrastrukturbedarfDto.setAnzahlGruppen(BigDecimal.valueOf(6));
+        sobonursaechlichBedarfDto.setBedarfKindergarten(List.of(infrastrukturbedarfDto));
+        personenDto = new PersonenProJahrDto();
+        personenDto.setJahr("2027");
+        personenDto.setAnzahlPersonenGesamt(BigDecimal.valueOf(201));
+        sobonursaechlichBedarfDto.setAlleEinwohner(List.of(personenDto));
+        expected
+            .getAbfragevariantenBaugenehmigungsverfahren()
+            .get(0)
+            .setLangfristigerSobonursaechlicherBedarf(sobonursaechlichBedarfDto);
+
+        planungsursaechlichBedarfDto = new LangfristigerBedarfDto();
+        wohneinheitenDto = new WohneinheitenProFoerderartProJahrDto();
+        wohneinheitenDto.setJahr("1020");
+        wohneinheitenDto.setFoerderart("forderart3");
+        wohneinheitenDto.setWohneinheiten(BigDecimal.valueOf(600));
+        planungsursaechlichBedarfDto.setWohneinheiten(List.of(wohneinheitenDto));
+        infrastrukturbedarfDto = new InfrastrukturbedarfProJahrDto();
+        infrastrukturbedarfDto.setJahr("1021");
+        infrastrukturbedarfDto.setAnzahlPersonenGesamt(BigDecimal.valueOf(6000));
+        infrastrukturbedarfDto.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(800));
+        infrastrukturbedarfDto.setAnzahlGruppen(BigDecimal.valueOf(100));
+        planungsursaechlichBedarfDto.setBedarfKinderkrippe(List.of(infrastrukturbedarfDto));
+        infrastrukturbedarfDto = new InfrastrukturbedarfProJahrDto();
+        infrastrukturbedarfDto.setJahr("1022");
+        infrastrukturbedarfDto.setAnzahlPersonenGesamt(BigDecimal.valueOf(1001));
+        infrastrukturbedarfDto.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(801));
+        infrastrukturbedarfDto.setAnzahlGruppen(BigDecimal.valueOf(110));
+        planungsursaechlichBedarfDto.setBedarfKindergarten(List.of(infrastrukturbedarfDto));
+        personenDto = new PersonenProJahrDto();
+        personenDto.setJahr("1023");
+        personenDto.setAnzahlPersonenGesamt(BigDecimal.valueOf(1030));
+        planungsursaechlichBedarfDto.setAlleEinwohner(List.of(personenDto));
+        expected
+            .getAbfragevariantenSachbearbeitungBaugenehmigungsverfahren()
+            .get(0)
+            .setLangfristigerPlanungsursaechlicherBedarf(planungsursaechlichBedarfDto);
+
+        sobonursaechlichBedarfDto = new LangfristigerBedarfDto();
+        wohneinheitenDto = new WohneinheitenProFoerderartProJahrDto();
+        wohneinheitenDto.setJahr("1024");
+        wohneinheitenDto.setFoerderart("forderart4");
+        wohneinheitenDto.setWohneinheiten(BigDecimal.valueOf(88));
+        sobonursaechlichBedarfDto.setWohneinheiten(List.of(wohneinheitenDto));
+        infrastrukturbedarfDto = new InfrastrukturbedarfProJahrDto();
+        infrastrukturbedarfDto.setJahr("1025");
+        infrastrukturbedarfDto.setAnzahlPersonenGesamt(BigDecimal.valueOf(222));
+        infrastrukturbedarfDto.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(999));
+        infrastrukturbedarfDto.setAnzahlGruppen(BigDecimal.valueOf(87));
+        sobonursaechlichBedarfDto.setBedarfKinderkrippe(List.of(infrastrukturbedarfDto));
+        infrastrukturbedarfDto = new InfrastrukturbedarfProJahrDto();
+        infrastrukturbedarfDto.setJahr("1026");
+        infrastrukturbedarfDto.setAnzahlPersonenGesamt(BigDecimal.valueOf(999));
+        infrastrukturbedarfDto.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(998));
+        infrastrukturbedarfDto.setAnzahlGruppen(BigDecimal.valueOf(8));
+        sobonursaechlichBedarfDto.setBedarfKindergarten(List.of(infrastrukturbedarfDto));
+        personenDto = new PersonenProJahrDto();
+        personenDto.setJahr("1027");
+        personenDto.setAnzahlPersonenGesamt(BigDecimal.valueOf(235));
+        sobonursaechlichBedarfDto.setAlleEinwohner(List.of(personenDto));
+        expected
+            .getAbfragevariantenSachbearbeitungBaugenehmigungsverfahren()
             .get(0)
             .setLangfristigerSobonursaechlicherBedarf(sobonursaechlichBedarfDto);
 
