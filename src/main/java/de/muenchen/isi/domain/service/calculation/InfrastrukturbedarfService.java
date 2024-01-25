@@ -40,12 +40,6 @@ public class InfrastrukturbedarfService {
         SOBON_URSAECHLICH,
     }
 
-    public static final int SCALE_ROUNDING_RESULT_INTEGER = 0;
-
-    public static final int SCALE_ROUNDING_RESULT_DECIMAL = 2;
-
-    public static final String TITLE_MEAN_WITH_PLACEHOLDER = "Mittelwert %d J.";
-
     private final SobonOrientierungswertSozialeInfrastrukturRepository sobonOrientierungswertSozialeInfrastrukturRepository;
 
     private final VersorgungsquoteGruppenstaerkeRepository versorgungsquoteGruppenstaerkeRepository;
@@ -350,79 +344,6 @@ public class InfrastrukturbedarfService {
         bedarf.setJahr(Integer.toString(jahr));
         bedarf.setAnzahlPersonenGesamt(anzahlPersonenGesamt);
         return bedarf;
-    }
-
-    /**
-     * Die Methode ermittelt den für die im Parameter gegebenen Liste an Infrastrukturbedarfen für die zweiten Parameter
-     * gegebene Anzahl an in der Liste befindlichen Objekten.
-     *
-     * @param bedarfe zur Ermittlung des Mittelwerts.
-     * @param numberOfBedarfeProJahrForMean als Anzahl der Objekte für welche der Mittelwert errechnet werden soll.
-     * @return den Mittelwert.
-     */
-    protected InfrastrukturbedarfProJahrModel calculateMeanInfrastrukturbedarfe(
-        final List<InfrastrukturbedarfProJahrModel> bedarfe,
-        final int numberOfBedarfeProJahrForMean
-    ) {
-        BigDecimal sumAnzahlPersonenGesamt = BigDecimal.ZERO;
-        BigDecimal sumAnzahlPersonenZuVersorgen = BigDecimal.ZERO;
-        BigDecimal sumAnzahlGruppen = BigDecimal.ZERO;
-        BigDecimal numberOfYear;
-        for (int index = 0; index < bedarfe.size(); index++) {
-            numberOfYear = BigDecimal.valueOf(index + 1);
-            sumAnzahlPersonenGesamt = bedarfe.get(index).getAnzahlPersonenGesamt().add(sumAnzahlPersonenGesamt);
-            sumAnzahlPersonenZuVersorgen =
-                bedarfe.get(index).getAnzahlPersonenZuVersorgen().add(sumAnzahlPersonenZuVersorgen);
-            sumAnzahlGruppen = bedarfe.get(index).getAnzahlGruppen().add(sumAnzahlGruppen);
-            if (index == numberOfBedarfeProJahrForMean - 1) {
-                final var mean = new InfrastrukturbedarfProJahrModel();
-                mean.setJahr(String.format(TITLE_MEAN_WITH_PLACEHOLDER, numberOfBedarfeProJahrForMean));
-                mean.setAnzahlPersonenGesamt(
-                    sumAnzahlPersonenGesamt.divide(numberOfYear, SCALE_ROUNDING_RESULT_DECIMAL, RoundingMode.HALF_UP)
-                );
-                mean.setAnzahlPersonenZuVersorgen(
-                    sumAnzahlPersonenZuVersorgen.divide(
-                        numberOfYear,
-                        SCALE_ROUNDING_RESULT_DECIMAL,
-                        RoundingMode.HALF_UP
-                    )
-                );
-                mean.setAnzahlGruppen(
-                    sumAnzahlGruppen.divide(numberOfYear, SCALE_ROUNDING_RESULT_DECIMAL, RoundingMode.HALF_UP)
-                );
-                return mean;
-            }
-        }
-        return null;
-    }
-
-    /**
-     * Die Methode ermittelt den für die im Parameter gegebenen Liste an Personen für die zweiten Parameter
-     * gegebene Anzahl an in der Liste befindlichen Objekten.
-     *
-     * @param personen zur Ermittlung des Mittelwerts.
-     * @param numberOfPersonenProJahrForMean als Anzahl der Objekte für welche der Mittelwert errechnet werden soll.
-     * @return den Mittelwert.
-     */
-    protected PersonenProJahrModel calculateMeanPersonen(
-        final List<PersonenProJahrModel> personen,
-        final int numberOfPersonenProJahrForMean
-    ) {
-        BigDecimal sumAnzahlPersonenGesamt = BigDecimal.ZERO;
-        BigDecimal numberOfYear;
-        for (int index = 0; index < personen.size(); index++) {
-            numberOfYear = BigDecimal.valueOf(index + 1);
-            sumAnzahlPersonenGesamt = personen.get(index).getAnzahlPersonenGesamt().add(sumAnzahlPersonenGesamt);
-            if (index == numberOfPersonenProJahrForMean - 1) {
-                final var mean = new PersonenProJahrModel();
-                mean.setJahr(String.format(TITLE_MEAN_WITH_PLACEHOLDER, numberOfPersonenProJahrForMean));
-                mean.setAnzahlPersonenGesamt(
-                    sumAnzahlPersonenGesamt.divide(numberOfYear, SCALE_ROUNDING_RESULT_DECIMAL, RoundingMode.HALF_UP)
-                );
-                return mean;
-            }
-        }
-        return null;
     }
 
     /**
