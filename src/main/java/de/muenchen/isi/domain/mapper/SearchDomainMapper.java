@@ -195,7 +195,7 @@ public abstract class SearchDomainMapper {
             if (ObjectUtils.isNotEmpty(entity.getVerortung().getPoint())) {
                 WGS84Model wgs84Model = new WGS84Model();
                 wgs84Model.setLongitude(entity.getVerortung().getPoint().getCoordinates().get(0).doubleValue());
-                wgs84Model.setLongitude(entity.getVerortung().getPoint().getCoordinates().get(1).doubleValue());
+                wgs84Model.setLatitude(entity.getVerortung().getPoint().getCoordinates().get(1).doubleValue());
                 model.setCoordinate(wgs84Model);
             }
         } else {
