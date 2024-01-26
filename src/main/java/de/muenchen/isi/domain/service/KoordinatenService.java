@@ -1,5 +1,7 @@
 package de.muenchen.isi.domain.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import de.muenchen.isi.api.dto.common.UtmDto;
 import de.muenchen.isi.api.dto.common.Wgs84Dto;
 import de.muenchen.isi.domain.exception.GeometryOperationFailedException;
@@ -9,6 +11,7 @@ import de.muenchen.isi.infrastructure.entity.common.MultiPolygonGeometry;
 import java.io.IOException;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.geotools.geojson.geom.GeometryJSON;
 import org.geotools.geometry.jts.JTS;
 import org.geotools.referencing.CRS;
 import org.locationtech.jts.geom.Coordinate;
@@ -27,6 +30,8 @@ public class KoordinatenService {
 
     public static final CoordinateReferenceSystem WGS84;
     public static final CoordinateReferenceSystem UTM32;
+
+    private static final int NUMBER_GEO_JSON_DECIMALS = 25;
 
     static {
         try {
