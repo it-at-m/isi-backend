@@ -16,6 +16,7 @@ import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
 import de.muenchen.isi.infrastructure.entity.WeiteresVerfahren;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Infrastruktureinrichtung;
 import java.util.UUID;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
@@ -34,6 +35,7 @@ import org.springframework.beans.factory.annotation.Autowired;
         KoordinatenDomainMapper.class,
     }
 )
+@Slf4j
 public abstract class SearchDomainMapper {
 
     @Autowired
@@ -67,7 +69,15 @@ public abstract class SearchDomainMapper {
         if (ObjectUtils.isNotEmpty(entity.getAdresse().getCoordinate())) {
             model.setCoordinate(koordinatenDomainMapper.entity2Model(entity.getAdresse().getCoordinate()));
         } else if (ObjectUtils.isNotEmpty(entity.getVerortung().getMultiPolygon())) {
-            model.setCoordinate(koordinatenService.getMultiPolygonCentroid(entity.getVerortung().getMultiPolygon()));
+            try {
+                model.setCoordinate(
+                    koordinatenService.getMultiPolygonCentroid(entity.getVerortung().getMultiPolygon())
+                );
+            } catch (GeometryOperationFailedException exception) {
+                var message = "Ermitteln des Schwerpunktes ist fehlgeschlagen.";
+                log.error(message);
+                throw new GeometryOperationFailedException(message);
+            }
         } else {
             model.setCoordinate(null);
         }
@@ -90,7 +100,15 @@ public abstract class SearchDomainMapper {
         if (ObjectUtils.isNotEmpty(entity.getAdresse().getCoordinate())) {
             model.setCoordinate(koordinatenDomainMapper.entity2Model(entity.getAdresse().getCoordinate()));
         } else if (ObjectUtils.isNotEmpty(entity.getVerortung().getMultiPolygon())) {
-            model.setCoordinate(koordinatenService.getMultiPolygonCentroid(entity.getVerortung().getMultiPolygon()));
+            try {
+                model.setCoordinate(
+                    koordinatenService.getMultiPolygonCentroid(entity.getVerortung().getMultiPolygon())
+                );
+            } catch (GeometryOperationFailedException exception) {
+                var message = "Ermitteln des Schwerpunktes ist fehlgeschlagen.";
+                log.error(message);
+                throw new GeometryOperationFailedException(message);
+            }
         } else {
             model.setCoordinate(null);
         }
@@ -113,7 +131,15 @@ public abstract class SearchDomainMapper {
         if (ObjectUtils.isNotEmpty(entity.getAdresse().getCoordinate())) {
             model.setCoordinate(koordinatenDomainMapper.entity2Model(entity.getAdresse().getCoordinate()));
         } else if (ObjectUtils.isNotEmpty(entity.getVerortung().getMultiPolygon())) {
-            model.setCoordinate(koordinatenService.getMultiPolygonCentroid(entity.getVerortung().getMultiPolygon()));
+            try {
+                model.setCoordinate(
+                    koordinatenService.getMultiPolygonCentroid(entity.getVerortung().getMultiPolygon())
+                );
+            } catch (GeometryOperationFailedException exception) {
+                var message = "Ermitteln des Schwerpunktes ist fehlgeschlagen.";
+                log.error(message);
+                throw new GeometryOperationFailedException(message);
+            }
         } else {
             model.setCoordinate(null);
         }
@@ -136,7 +162,15 @@ public abstract class SearchDomainMapper {
         if (ObjectUtils.isNotEmpty(entity.getAdresse().getCoordinate())) {
             model.setCoordinate(koordinatenDomainMapper.entity2Model(entity.getAdresse().getCoordinate()));
         } else if (ObjectUtils.isNotEmpty(entity.getVerortung().getMultiPolygon())) {
-            model.setCoordinate(koordinatenService.getMultiPolygonCentroid(entity.getVerortung().getMultiPolygon()));
+            try {
+                model.setCoordinate(
+                    koordinatenService.getMultiPolygonCentroid(entity.getVerortung().getMultiPolygon())
+                );
+            } catch (GeometryOperationFailedException exception) {
+                var message = "Ermitteln des Schwerpunktes ist fehlgeschlagen.";
+                log.error(message);
+                throw new GeometryOperationFailedException(message);
+            }
         } else {
             model.setCoordinate(null);
         }
@@ -156,15 +190,13 @@ public abstract class SearchDomainMapper {
     public void afterEntity2SearchResultModel(
         final Infrastruktureinrichtung entity,
         @MappingTarget final InfrastruktureinrichtungSearchResultModel model
-    ) throws GeometryOperationFailedException {
+    ) {
         if (ObjectUtils.isNotEmpty(entity.getAdresse().getCoordinate())) {
             model.setCoordinate(koordinatenDomainMapper.entity2Model(entity.getAdresse().getCoordinate()));
         } else if (ObjectUtils.isNotEmpty(entity.getVerortung().getPoint())) {
             WGS84Model wgs84Model = new WGS84Model();
-            Double longitude = entity.getVerortung().getPoint().getCoordinates().get(0).doubleValue();
-            Double latitude = entity.getVerortung().getPoint().getCoordinates().get(1).doubleValue();
-            wgs84Model.setLongitude(longitude);
-            wgs84Model.setLongitude(latitude);
+            wgs84Model.setLongitude(entity.getVerortung().getPoint().getCoordinates().get(0).doubleValue());
+            wgs84Model.setLongitude(entity.getVerortung().getPoint().getCoordinates().get(1).doubleValue());
             model.setCoordinate(wgs84Model);
         } else {
             model.setCoordinate(null);
