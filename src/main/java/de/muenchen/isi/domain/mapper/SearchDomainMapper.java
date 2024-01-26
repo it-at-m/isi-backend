@@ -14,6 +14,8 @@ import de.muenchen.isi.infrastructure.entity.Baugenehmigungsverfahren;
 import de.muenchen.isi.infrastructure.entity.Bauleitplanverfahren;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
 import de.muenchen.isi.infrastructure.entity.WeiteresVerfahren;
+import de.muenchen.isi.infrastructure.entity.common.Adresse;
+import de.muenchen.isi.infrastructure.entity.common.VerortungMultiPolygon;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Infrastruktureinrichtung;
 import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
@@ -66,9 +68,9 @@ public abstract class SearchDomainMapper {
         final Bauvorhaben entity,
         @MappingTarget final BauvorhabenSearchResultModel model
     ) {
-        if (ObjectUtils.isNotEmpty(entity.getAdresse().getCoordinate())) {
+        if (hasAdressCoordinate(entity.getAdresse())) {
             model.setCoordinate(koordinatenDomainMapper.entity2Model(entity.getAdresse().getCoordinate()));
-        } else if (ObjectUtils.isNotEmpty(entity.getVerortung().getMultiPolygon())) {
+        } else if (hasVerortungCoordinate(entity.getVerortung())) {
             try {
                 model.setCoordinate(
                     koordinatenService.getMultiPolygonCentroid(entity.getVerortung().getMultiPolygon())
@@ -96,9 +98,9 @@ public abstract class SearchDomainMapper {
         final Bauleitplanverfahren entity,
         @MappingTarget final AbfrageSearchResultModel model
     ) {
-        if (ObjectUtils.isNotEmpty(entity.getAdresse().getCoordinate())) {
+        if (hasAdressCoordinate(entity.getAdresse())) {
             model.setCoordinate(koordinatenDomainMapper.entity2Model(entity.getAdresse().getCoordinate()));
-        } else if (ObjectUtils.isNotEmpty(entity.getVerortung().getMultiPolygon())) {
+        } else if (hasVerortungCoordinate(entity.getVerortung())) {
             try {
                 model.setCoordinate(
                     koordinatenService.getMultiPolygonCentroid(entity.getVerortung().getMultiPolygon())
@@ -126,9 +128,9 @@ public abstract class SearchDomainMapper {
         final Baugenehmigungsverfahren entity,
         @MappingTarget final AbfrageSearchResultModel model
     ) {
-        if (ObjectUtils.isNotEmpty(entity.getAdresse().getCoordinate())) {
+        if (hasAdressCoordinate(entity.getAdresse())) {
             model.setCoordinate(koordinatenDomainMapper.entity2Model(entity.getAdresse().getCoordinate()));
-        } else if (ObjectUtils.isNotEmpty(entity.getVerortung().getMultiPolygon())) {
+        } else if (hasVerortungCoordinate(entity.getVerortung())) {
             try {
                 model.setCoordinate(
                     koordinatenService.getMultiPolygonCentroid(entity.getVerortung().getMultiPolygon())
@@ -156,9 +158,9 @@ public abstract class SearchDomainMapper {
         final WeiteresVerfahren entity,
         @MappingTarget final AbfrageSearchResultModel model
     ) {
-        if (ObjectUtils.isNotEmpty(entity.getAdresse().getCoordinate())) {
+        if (hasAdressCoordinate(entity.getAdresse())) {
             model.setCoordinate(koordinatenDomainMapper.entity2Model(entity.getAdresse().getCoordinate()));
-        } else if (ObjectUtils.isNotEmpty(entity.getVerortung().getMultiPolygon())) {
+        } else if (hasVerortungCoordinate(entity.getVerortung())) {
             try {
                 model.setCoordinate(
                     koordinatenService.getMultiPolygonCentroid(entity.getVerortung().getMultiPolygon())
@@ -187,13 +189,15 @@ public abstract class SearchDomainMapper {
         final Infrastruktureinrichtung entity,
         @MappingTarget final InfrastruktureinrichtungSearchResultModel model
     ) {
-        if (ObjectUtils.isNotEmpty(entity.getAdresse().getCoordinate())) {
+        if (hasAdressCoordinate(entity.getAdresse())) {
             model.setCoordinate(koordinatenDomainMapper.entity2Model(entity.getAdresse().getCoordinate()));
-        } else if (ObjectUtils.isNotEmpty(entity.getVerortung().getPoint())) {
-            WGS84Model wgs84Model = new WGS84Model();
-            wgs84Model.setLongitude(entity.getVerortung().getPoint().getCoordinates().get(0).doubleValue());
-            wgs84Model.setLongitude(entity.getVerortung().getPoint().getCoordinates().get(1).doubleValue());
-            model.setCoordinate(wgs84Model);
+        } else if (ObjectUtils.isNotEmpty(entity.getVerortung())) {
+            if (ObjectUtils.isNotEmpty(entity.getVerortung().getPoint())) {
+                WGS84Model wgs84Model = new WGS84Model();
+                wgs84Model.setLongitude(entity.getVerortung().getPoint().getCoordinates().get(0).doubleValue());
+                wgs84Model.setLongitude(entity.getVerortung().getPoint().getCoordinates().get(1).doubleValue());
+                model.setCoordinate(wgs84Model);
+            }
         } else {
             model.setCoordinate(null);
         }
@@ -201,5 +205,23 @@ public abstract class SearchDomainMapper {
 
     public UUID map(final Bauvorhaben bauvorhaben) {
         return ObjectUtils.isEmpty(bauvorhaben) ? null : bauvorhaben.getId();
+    }
+
+    public boolean hasAdressCoordinate(final Adresse adresse) {
+        if (ObjectUtils.isNotEmpty(adresse)) {
+            if (ObjectUtils.isNotEmpty(adresse.getCoordinate())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean hasVerortungCoordinate(final VerortungMultiPolygon verortung) {
+        if (ObjectUtils.isNotEmpty(verortung)) {
+            if (ObjectUtils.isNotEmpty(verortung.getMultiPolygon())) {
+                return true;
+            }
+        }
+        return false;
     }
 }
