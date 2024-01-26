@@ -65,7 +65,7 @@ public abstract class SearchDomainMapper {
     public void afterEntity2SearchResultModel(
         final Bauvorhaben entity,
         @MappingTarget final BauvorhabenSearchResultModel model
-    ) throws GeometryOperationFailedException {
+    ) {
         if (ObjectUtils.isNotEmpty(entity.getAdresse().getCoordinate())) {
             model.setCoordinate(koordinatenDomainMapper.entity2Model(entity.getAdresse().getCoordinate()));
         } else if (ObjectUtils.isNotEmpty(entity.getVerortung().getMultiPolygon())) {
@@ -76,7 +76,6 @@ public abstract class SearchDomainMapper {
             } catch (GeometryOperationFailedException exception) {
                 var message = "Ermitteln des Schwerpunktes ist fehlgeschlagen.";
                 log.error(message);
-                throw new GeometryOperationFailedException(message);
             }
         } else {
             model.setCoordinate(null);
@@ -96,7 +95,7 @@ public abstract class SearchDomainMapper {
     public void afterEntity2SearchResultModel(
         final Bauleitplanverfahren entity,
         @MappingTarget final AbfrageSearchResultModel model
-    ) throws GeometryOperationFailedException {
+    ) {
         if (ObjectUtils.isNotEmpty(entity.getAdresse().getCoordinate())) {
             model.setCoordinate(koordinatenDomainMapper.entity2Model(entity.getAdresse().getCoordinate()));
         } else if (ObjectUtils.isNotEmpty(entity.getVerortung().getMultiPolygon())) {
@@ -107,7 +106,6 @@ public abstract class SearchDomainMapper {
             } catch (GeometryOperationFailedException exception) {
                 var message = "Ermitteln des Schwerpunktes ist fehlgeschlagen.";
                 log.error(message);
-                throw new GeometryOperationFailedException(message);
             }
         } else {
             model.setCoordinate(null);
@@ -127,7 +125,7 @@ public abstract class SearchDomainMapper {
     public void afterEntity2SearchResultModel(
         final Baugenehmigungsverfahren entity,
         @MappingTarget final AbfrageSearchResultModel model
-    ) throws GeometryOperationFailedException {
+    ) {
         if (ObjectUtils.isNotEmpty(entity.getAdresse().getCoordinate())) {
             model.setCoordinate(koordinatenDomainMapper.entity2Model(entity.getAdresse().getCoordinate()));
         } else if (ObjectUtils.isNotEmpty(entity.getVerortung().getMultiPolygon())) {
@@ -138,7 +136,6 @@ public abstract class SearchDomainMapper {
             } catch (GeometryOperationFailedException exception) {
                 var message = "Ermitteln des Schwerpunktes ist fehlgeschlagen.";
                 log.error(message);
-                throw new GeometryOperationFailedException(message);
             }
         } else {
             model.setCoordinate(null);
@@ -158,7 +155,7 @@ public abstract class SearchDomainMapper {
     public void afterEntity2SearchResultModel(
         final WeiteresVerfahren entity,
         @MappingTarget final AbfrageSearchResultModel model
-    ) throws GeometryOperationFailedException {
+    ) {
         if (ObjectUtils.isNotEmpty(entity.getAdresse().getCoordinate())) {
             model.setCoordinate(koordinatenDomainMapper.entity2Model(entity.getAdresse().getCoordinate()));
         } else if (ObjectUtils.isNotEmpty(entity.getVerortung().getMultiPolygon())) {
@@ -169,7 +166,6 @@ public abstract class SearchDomainMapper {
             } catch (GeometryOperationFailedException exception) {
                 var message = "Ermitteln des Schwerpunktes ist fehlgeschlagen.";
                 log.error(message);
-                throw new GeometryOperationFailedException(message);
             }
         } else {
             model.setCoordinate(null);
