@@ -2,12 +2,18 @@ package de.muenchen.isi.domain.service;
 
 import de.muenchen.isi.api.dto.common.UtmDto;
 import de.muenchen.isi.api.dto.common.Wgs84Dto;
+import de.muenchen.isi.domain.exception.GeometryOperationFailedException;
 import de.muenchen.isi.domain.exception.KoordinatenException;
+import de.muenchen.isi.domain.model.common.WGS84Model;
+import de.muenchen.isi.infrastructure.entity.common.MultiPolygonGeometry;
+import java.io.IOException;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.geotools.geometry.jts.JTS;
 import org.geotools.referencing.CRS;
 import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.MultiPolygon;
+import org.locationtech.jts.geom.Point;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.referencing.operation.MathTransform;
@@ -103,5 +109,28 @@ public class KoordinatenService {
             wgs84Dto.getLongitude()
         );
         return wgs84Dto;
+    }
+
+    public MultiPolygon createMultiPolygon(final MultiPolygonGeometry multiPolygonGeometry)
+        throws GeometryOperationFailedException {
+        final GeometryJSON jsonGeometry = new GeometryJSON(NUMBER_GEO_JSON_DECIMALS);
+        final ObjectWriter objectWriter = new ObjectMapper().writer().withDefaultPrettyPrinter();
+        try {
+            final String geoJsonMultiPolygon = objectWriter.writeValueAsString(multiPolygonGeometry);
+            return (MultiPolygon) jsonGeometry.read(geoJsonMultiPolygon);
+        } catch (final IOException exception) {
+            final var message = "Das übergebene Multipolygon konnte nicht verarbeitet werden.";
+            log.error(message);
+            throw new GeometryOperationFailedException(message, exception);
+        }
+    }
+
+    public WGS84Model getMultiPolygonCentroid(final MultiPolygonGeometry multiPolygonGeometry)
+        throws GeometryOperationFailedException {
+        Point schwerpunkt = createMultiPolygon(multiPolygonGeometry).getCentroid();
+        WGS84Model wgs84Model = new WGS84Model();
+        wgs84Model.setLatitude(schwerpunkt.getX());
+        wgs84Model.setLongitude(schwerpunkt.getY());
+        return wgs84Model;
     }
 }

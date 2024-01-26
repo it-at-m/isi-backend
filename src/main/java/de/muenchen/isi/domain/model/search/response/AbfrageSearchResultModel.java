@@ -1,6 +1,7 @@
 package de.muenchen.isi.domain.model.search.response;
 
 import de.muenchen.isi.domain.model.common.StadtbezirkModel;
+import de.muenchen.isi.domain.model.common.WGS84Model;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVerfahren;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
@@ -34,4 +35,6 @@ public class AbfrageSearchResultModel extends SearchResultModel {
     private LocalDateTime createdDateTime;
 
     private UUID bauvorhaben;
+
+    private WGS84Model coordinate;
 }

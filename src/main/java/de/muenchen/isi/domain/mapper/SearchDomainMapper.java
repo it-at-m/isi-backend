@@ -1,11 +1,14 @@
 package de.muenchen.isi.domain.mapper;
 
 import de.muenchen.isi.configuration.MapstructConfiguration;
+import de.muenchen.isi.domain.exception.GeometryOperationFailedException;
+import de.muenchen.isi.domain.model.common.WGS84Model;
 import de.muenchen.isi.domain.model.enums.SearchResultType;
 import de.muenchen.isi.domain.model.search.response.AbfrageSearchResultModel;
 import de.muenchen.isi.domain.model.search.response.BauvorhabenSearchResultModel;
 import de.muenchen.isi.domain.model.search.response.InfrastruktureinrichtungSearchResultModel;
 import de.muenchen.isi.domain.model.search.response.SearchResultModel;
+import de.muenchen.isi.domain.service.KoordinatenService;
 import de.muenchen.isi.infrastructure.entity.BaseEntity;
 import de.muenchen.isi.infrastructure.entity.Baugenehmigungsverfahren;
 import de.muenchen.isi.infrastructure.entity.Bauleitplanverfahren;
@@ -14,60 +17,161 @@ import de.muenchen.isi.infrastructure.entity.WeiteresVerfahren;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Infrastruktureinrichtung;
 import java.util.UUID;
 import org.apache.commons.lang3.ObjectUtils;
+import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 import org.mapstruct.Mappings;
 import org.mapstruct.SubclassMapping;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Mapper(
     config = MapstructConfiguration.class,
-    uses = { AbfrageDomainMapper.class, InfrastruktureinrichtungDomainMapper.class, BauvorhabenDomainMapper.class }
+    uses = {
+        AbfrageDomainMapper.class,
+        InfrastruktureinrichtungDomainMapper.class,
+        BauvorhabenDomainMapper.class,
+        KoordinatenDomainMapper.class,
+    }
 )
-public interface SearchDomainMapper {
+public abstract class SearchDomainMapper {
+
+    @Autowired
+    private KoordinatenDomainMapper koordinatenDomainMapper;
+
+    @Autowired
+    private KoordinatenService koordinatenService;
+
     @Mapping(target = "type", ignore = true)
     @SubclassMapping(source = Infrastruktureinrichtung.class, target = InfrastruktureinrichtungSearchResultModel.class)
     @SubclassMapping(source = Bauvorhaben.class, target = BauvorhabenSearchResultModel.class)
     @SubclassMapping(source = Bauleitplanverfahren.class, target = AbfrageSearchResultModel.class)
     @SubclassMapping(source = Baugenehmigungsverfahren.class, target = AbfrageSearchResultModel.class)
     @SubclassMapping(source = WeiteresVerfahren.class, target = AbfrageSearchResultModel.class)
-    SearchResultModel entity2SearchResultModel(final BaseEntity entity);
+    public abstract SearchResultModel entity2SearchResultModel(final BaseEntity entity);
 
     @Mappings(
         {
             @Mapping(target = "type", constant = SearchResultType.Values.BAUVORHABEN),
             @Mapping(source = "verortung.stadtbezirke", target = "stadtbezirke"),
+            @Mapping(target = "coordinate", ignore = true),
         }
     )
-    BauvorhabenSearchResultModel entity2SearchResultModel(final Bauvorhaben entity);
+    public abstract BauvorhabenSearchResultModel entity2SearchResultModel(final Bauvorhaben entity);
+
+    @AfterMapping
+    public void afterEntity2SearchResultModel(
+        final Bauvorhaben entity,
+        @MappingTarget final BauvorhabenSearchResultModel model
+    ) throws GeometryOperationFailedException {
+        if (ObjectUtils.isNotEmpty(entity.getAdresse().getCoordinate())) {
+            model.setCoordinate(koordinatenDomainMapper.entity2Model(entity.getAdresse().getCoordinate()));
+        } else if (ObjectUtils.isNotEmpty(entity.getVerortung().getMultiPolygon())) {
+            model.setCoordinate(koordinatenService.getMultiPolygonCentroid(entity.getVerortung().getMultiPolygon()));
+        } else {
+            model.setCoordinate(null);
+        }
+    }
 
     @Mappings(
         {
             @Mapping(target = "type", constant = SearchResultType.Values.ABFRAGE),
             @Mapping(source = "verortung.stadtbezirke", target = "stadtbezirke"),
+            @Mapping(target = "coordinate", ignore = true),
         }
     )
-    AbfrageSearchResultModel entity2SearchResultModel(final Bauleitplanverfahren entity);
+    public abstract AbfrageSearchResultModel entity2SearchResultModel(final Bauleitplanverfahren entity);
+
+    @AfterMapping
+    public void afterEntity2SearchResultModel(
+        final Bauleitplanverfahren entity,
+        @MappingTarget final AbfrageSearchResultModel model
+    ) throws GeometryOperationFailedException {
+        if (ObjectUtils.isNotEmpty(entity.getAdresse().getCoordinate())) {
+            model.setCoordinate(koordinatenDomainMapper.entity2Model(entity.getAdresse().getCoordinate()));
+        } else if (ObjectUtils.isNotEmpty(entity.getVerortung().getMultiPolygon())) {
+            model.setCoordinate(koordinatenService.getMultiPolygonCentroid(entity.getVerortung().getMultiPolygon()));
+        } else {
+            model.setCoordinate(null);
+        }
+    }
 
     @Mappings(
         {
             @Mapping(target = "type", constant = SearchResultType.Values.ABFRAGE),
             @Mapping(source = "verortung.stadtbezirke", target = "stadtbezirke"),
+            @Mapping(target = "coordinate", ignore = true),
         }
     )
-    AbfrageSearchResultModel entity2SearchResultModel(final Baugenehmigungsverfahren entity);
+    public abstract AbfrageSearchResultModel entity2SearchResultModel(final Baugenehmigungsverfahren entity);
+
+    @AfterMapping
+    public void afterEntity2SearchResultModel(
+        final Baugenehmigungsverfahren entity,
+        @MappingTarget final AbfrageSearchResultModel model
+    ) throws GeometryOperationFailedException {
+        if (ObjectUtils.isNotEmpty(entity.getAdresse().getCoordinate())) {
+            model.setCoordinate(koordinatenDomainMapper.entity2Model(entity.getAdresse().getCoordinate()));
+        } else if (ObjectUtils.isNotEmpty(entity.getVerortung().getMultiPolygon())) {
+            model.setCoordinate(koordinatenService.getMultiPolygonCentroid(entity.getVerortung().getMultiPolygon()));
+        } else {
+            model.setCoordinate(null);
+        }
+    }
 
     @Mappings(
         {
             @Mapping(target = "type", constant = SearchResultType.Values.ABFRAGE),
             @Mapping(source = "verortung.stadtbezirke", target = "stadtbezirke"),
+            @Mapping(target = "coordinate", ignore = true),
         }
     )
-    AbfrageSearchResultModel entity2SearchResultModel(final WeiteresVerfahren entity);
+    public abstract AbfrageSearchResultModel entity2SearchResultModel(final WeiteresVerfahren entity);
 
-    @Mappings({ @Mapping(target = "type", constant = SearchResultType.Values.INFRASTRUKTUREINRICHTUNG) })
-    InfrastruktureinrichtungSearchResultModel entity2SearchResultModel(final Infrastruktureinrichtung entity);
+    @AfterMapping
+    public void afterEntity2SearchResultModel(
+        final WeiteresVerfahren entity,
+        @MappingTarget final AbfrageSearchResultModel model
+    ) throws GeometryOperationFailedException {
+        if (ObjectUtils.isNotEmpty(entity.getAdresse().getCoordinate())) {
+            model.setCoordinate(koordinatenDomainMapper.entity2Model(entity.getAdresse().getCoordinate()));
+        } else if (ObjectUtils.isNotEmpty(entity.getVerortung().getMultiPolygon())) {
+            model.setCoordinate(koordinatenService.getMultiPolygonCentroid(entity.getVerortung().getMultiPolygon()));
+        } else {
+            model.setCoordinate(null);
+        }
+    }
 
-    default UUID map(final Bauvorhaben bauvorhaben) {
+    @Mappings(
+        {
+            @Mapping(target = "type", constant = SearchResultType.Values.INFRASTRUKTUREINRICHTUNG),
+            @Mapping(target = "coordinate", ignore = true),
+        }
+    )
+    public abstract InfrastruktureinrichtungSearchResultModel entity2SearchResultModel(
+        final Infrastruktureinrichtung entity
+    );
+
+    @AfterMapping
+    public void afterEntity2SearchResultModel(
+        final Infrastruktureinrichtung entity,
+        @MappingTarget final InfrastruktureinrichtungSearchResultModel model
+    ) throws GeometryOperationFailedException {
+        if (ObjectUtils.isNotEmpty(entity.getAdresse().getCoordinate())) {
+            model.setCoordinate(koordinatenDomainMapper.entity2Model(entity.getAdresse().getCoordinate()));
+        } else if (ObjectUtils.isNotEmpty(entity.getVerortung().getPoint())) {
+            WGS84Model wgs84Model = new WGS84Model();
+            Double longitude = entity.getVerortung().getPoint().getCoordinates().get(0).doubleValue();
+            Double latitude = entity.getVerortung().getPoint().getCoordinates().get(1).doubleValue();
+            wgs84Model.setLongitude(longitude);
+            wgs84Model.setLongitude(latitude);
+            model.setCoordinate(wgs84Model);
+        } else {
+            model.setCoordinate(null);
+        }
+    }
+
+    public UUID map(final Bauvorhaben bauvorhaben) {
         return ObjectUtils.isEmpty(bauvorhaben) ? null : bauvorhaben.getId();
     }
 }
