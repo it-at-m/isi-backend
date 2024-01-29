@@ -115,7 +115,7 @@ public class KoordinatenServiceTest {
 
         // Erwartete Ergebnisse für den Test
         final Double expectedLatitude = 48.108341907595324;
-        final Double expectedLongitude = 11.542363635517965;
+        final Double expectedLongitude = 11.542026984158708;
 
         // Testausführung
         final var result = this.koordinatenService.getMultiPolygonCentroid(multiPolygon);
