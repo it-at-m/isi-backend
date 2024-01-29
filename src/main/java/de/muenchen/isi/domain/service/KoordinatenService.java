@@ -134,8 +134,8 @@ public class KoordinatenService {
         throws GeometryOperationFailedException {
         Point schwerpunkt = createMultiPolygon(multiPolygonGeometry).getCentroid();
         WGS84Model wgs84Model = new WGS84Model();
-        wgs84Model.setLatitude(schwerpunkt.getX());
-        wgs84Model.setLongitude(schwerpunkt.getY());
+        wgs84Model.setLatitude(schwerpunkt.getY());
+        wgs84Model.setLongitude(schwerpunkt.getX());
         return wgs84Model;
     }
 }
