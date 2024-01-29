@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.geotools.geometry.jts.JTSFactoryFinder;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.locationtech.jts.geom.Coordinate;
@@ -59,7 +58,6 @@ public class KoordinatenServiceTest {
         assertEquals(wgs84Dto.getLongitude(), 11.552230994968712);
     }
 
-    @Disabled("Disabled bis ich ihn lokal richtig testen kann")
     @Test
     void createMultiPolygon() throws GeometryOperationFailedException {
         final var polygon = List.of(
@@ -97,7 +95,6 @@ public class KoordinatenServiceTest {
         assertThat(result, is(expected));
     }
 
-    @Disabled("Disabled bis ich ihn lokal richtig testen kann")
     @Test
     void testGetMultiPolygonCentroid() throws GeometryOperationFailedException {
         // Beispiel-MultiPolygon für den Test
