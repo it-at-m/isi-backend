@@ -114,8 +114,8 @@ public class KoordinatenServiceTest {
         multiPolygon.setCoordinates(polygon);
 
         // Erwartete Ergebnisse für den Test
-        final var expectedLatitude = BigDecimal.valueOf(48.108778);
-        final var expectedLongitude = BigDecimal.valueOf(11.542363);
+        final var expectedLatitude = BigDecimal.valueOf(48.10877803675924);
+        final var expectedLongitude = BigDecimal.valueOf(11.542363635517965);
 
         // Testausführung
         final var result = this.koordinatenService.getMultiPolygonCentroid(multiPolygon);
