@@ -28,6 +28,7 @@ import org.mapstruct.Mappings;
 import org.mapstruct.SubclassMapping;
 import org.springframework.beans.factory.annotation.Autowired;
 
+@Slf4j
 @Mapper(
     config = MapstructConfiguration.class,
     uses = {
@@ -37,7 +38,6 @@ import org.springframework.beans.factory.annotation.Autowired;
         KoordinatenDomainMapper.class,
     }
 )
-@Slf4j
 public abstract class SearchDomainMapper {
 
     @Autowired
