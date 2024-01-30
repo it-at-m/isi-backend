@@ -69,7 +69,7 @@ public class BauvorhabenDto extends BaseEntityDto {
     private String wesentlicheRechtsgrundlageFreieEingabe;
 
     @NotEmpty
-    private List<@NotUnspecified ArtBaulicheNutzung> artFnp;
+    private List<@NotUnspecified @NotNull ArtBaulicheNutzung> artFnp;
 
     @HasAllowedNumberOfDocuments
     private List<@Valid DokumentDto> dokumente;
