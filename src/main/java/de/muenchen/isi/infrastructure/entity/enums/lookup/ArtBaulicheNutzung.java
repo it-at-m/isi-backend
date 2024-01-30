@@ -11,12 +11,14 @@ import lombok.Getter;
  */
 @AllArgsConstructor
 public enum ArtBaulicheNutzung implements ILookup {
+    UNSPECIFIED(ILookup.UNSPECIFIED),
     WR("Reines Wohngebiet (WR)"),
     WA("Allgemeines Wohngebiet (WA)"),
     MU("Urbanes Gebiet (MU)"),
     MK("Kerngebiet (MK)"),
     MI("Mischgebiet (MI)"),
-    GE("Gewerbegebiet (GE)");
+    GE("Gewerbegebiet (GE)"),
+    INFO_FEHLT("Info fehlt");
 
     @Getter
     private final String bezeichnung;
