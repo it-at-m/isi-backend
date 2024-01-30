@@ -1,8 +1,10 @@
 package de.muenchen.isi.infrastructure.entity.enums.lookup;
 
 import de.muenchen.isi.infrastructure.entity.Baugebiet;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.apache.commons.lang3.EnumUtils;
 
 /**
  * In {@link Baugebiet#getArtBaulicheNutzung()} wird der Enum
@@ -22,4 +24,10 @@ public enum ArtBaulicheNutzung implements ILookup {
 
     @Getter
     private final String bezeichnung;
+
+    public static List<ArtBaulicheNutzung> getArtBaulicheNutzungForBauvorhaben() {
+        final var withoutUnspecified = EnumUtils.getEnumList(ArtBaulicheNutzung.class);
+        withoutUnspecified.remove(ArtBaulicheNutzung.UNSPECIFIED);
+        return withoutUnspecified;
+    }
 }
