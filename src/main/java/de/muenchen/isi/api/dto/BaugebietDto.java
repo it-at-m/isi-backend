@@ -1,6 +1,7 @@
 package de.muenchen.isi.api.dto;
 
 import de.muenchen.isi.api.validation.JahrDistributionValid;
+import de.muenchen.isi.api.validation.NotUnspecified;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtBaulicheNutzung;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
@@ -26,6 +27,7 @@ public class BaugebietDto extends BaseEntityDto {
     private String bezeichnung;
 
     @NotNull
+    @NotUnspecified
     private ArtBaulicheNutzung artBaulicheNutzung;
 
     @NotNull
