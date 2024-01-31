@@ -155,6 +155,12 @@ public abstract class SearchDomainMapper {
         return ObjectUtils.isEmpty(bauvorhaben) ? null : bauvorhaben.getId();
     }
 
+    /**
+     * Überprüft, ob die übergebene Adresse eine Koordinate hat.
+     *
+     * @param adresse Die Adresse, deren Koordinate überprüft werden soll.
+     * @return {@code true}, wenn die Adresse eine Koordinate hat, ansonsten {@code false}.
+     */
     public boolean hasAdressCoordinate(final Adresse adresse) {
         if (ObjectUtils.isNotEmpty(adresse)) {
             if (ObjectUtils.isNotEmpty(adresse.getCoordinate())) {
@@ -164,6 +170,12 @@ public abstract class SearchDomainMapper {
         return false;
     }
 
+    /**
+     * Überprüft, ob die übergebene Verortung ein Mehrfachpolygon mit Koordinaten hat.
+     *
+     * @param verortung Die Verortung, deren Mehrfachpolygon-Koordinaten überprüft werden sollen.
+     * @return {@code true}, wenn die Verortung Koordinaten hat, ansonsten {@code false}.
+     */
     public boolean hasVerortungCoordinate(final VerortungMultiPolygon verortung) {
         if (ObjectUtils.isNotEmpty(verortung)) {
             if (ObjectUtils.isNotEmpty(verortung.getMultiPolygon())) {
@@ -173,6 +185,15 @@ public abstract class SearchDomainMapper {
         return false;
     }
 
+    /**
+     * Gibt die Koordinaten einer Adresse oder Verortung zurück. Wenn die Adresse Koordinaten hat,
+     * wird die Koordinate mithilfe des {@link KoordinatenDomainMapper} extrahiert. Wenn die Verortung Koordinaten hat,
+     * wird der Schwerpunkt des Mehrfachpolygons mithilfe des {@link KoordinatenService} ermittelt.
+     *
+     * @param adresse               Die Adresse, deren Koordinate zurückgegeben werden soll.
+     * @param verortungMultiPolygon Die Verortung, deren Koordinate zurückgegeben werden soll.
+     * @return Ein WGS84Model-Objekt mit den extrahierten Koordinaten oder {@code null}, wenn keine Koordinaten vorhanden sind.
+     */
     public WGS84Model getCoordinateFromAdresseOrVerortung(
         final Adresse adresse,
         final VerortungMultiPolygon verortungMultiPolygon
