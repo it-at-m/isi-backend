@@ -193,7 +193,7 @@ public class AbfragevarianteBaugenehmigungsverfahren extends Abfragevariante {
     @Column(name = "ausglstr_bdrf_mtvrsrg_in_bsthnd_einr_nch_asbau_schule")
     private boolean ausgeloesterBedarfMitversorgungInBestEinrichtungenNachAusbauSchule;
 
-    @Column
+    @Column(length = 1000)
     private String hinweisVersorgung;
 
     @JdbcTypeCode(SqlTypes.JSON)
