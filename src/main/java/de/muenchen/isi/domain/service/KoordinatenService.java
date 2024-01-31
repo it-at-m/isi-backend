@@ -116,6 +116,14 @@ public class KoordinatenService {
         return wgs84Dto;
     }
 
+    /**
+     * Erstellt ein JTS MultiPolygon-Objekt aus einem {@link MultiPolygonGeometry} Objekt. Die Methode verwendet
+     * GeoJSON zur Konvertierung.
+     *
+     * @param multiPolygonGeometry Das {@link MultiPolygonGeometry} Objekt, das in ein JTS MultiPolygon umgewandelt werden soll.
+     * @return Ein JTS MultiPolygon-Objekt, das aus dem MultiPolygonGeometry erstellt wurde.
+     * @throws GeometryOperationFailedException Wenn die Geometrieoperation fehlschlägt oder das MultiPolygon nicht verarbeitet werden kann.
+     */
     public MultiPolygon createMultiPolygon(final MultiPolygonGeometry multiPolygonGeometry)
         throws GeometryOperationFailedException {
         final GeometryJSON jsonGeometry = new GeometryJSON(NUMBER_GEO_JSON_DECIMALS);
@@ -130,6 +138,15 @@ public class KoordinatenService {
         }
     }
 
+    /**
+     * Ermittelt den Schwerpunkt (Centroid) eines {@link MultiPolygonGeometry} Objekts und gibt die Koordinaten
+     * als {@link WGS84Model} zurück. Falls die Geometrieoperation fehlschlägt oder das MultiPolygon nicht verarbeitet werden kann,
+     * wird eine GeometryOperationFailedException ausgelöst.
+     *
+     * @param multiPolygonGeometry Das {@link MultiPolygonGeometry}Objekt, dessen Schwerpunkt ermittelt werden soll.
+     * @return Ein {@link WGS84Model} Objekt mit den Koordinaten des Schwerpunkts des MultiPolygons.
+     * @throws GeometryOperationFailedException Wenn die Geometrieoperation fehlschlägt oder das MultiPolygon nicht verarbeitet werden kann.
+     */
     public WGS84Model getMultiPolygonCentroid(final MultiPolygonGeometry multiPolygonGeometry)
         throws GeometryOperationFailedException {
         Point schwerpunkt = createMultiPolygon(multiPolygonGeometry).getCentroid();
