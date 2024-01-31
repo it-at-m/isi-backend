@@ -40,7 +40,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 )
 public abstract class SearchDomainMapper {
 
-    private KoordinatenDomainMapper koordinatenDomainMapper = new KoordinatenDomainMapperImpl();
+    @Autowired
+    private KoordinatenDomainMapper koordinatenDomainMapper;
 
     @Autowired
     private KoordinatenService koordinatenService;
