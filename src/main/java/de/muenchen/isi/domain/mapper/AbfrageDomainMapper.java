@@ -171,8 +171,8 @@ public abstract class AbfrageDomainMapper {
     /**
      * Führt das Mapping der Abfragevarianten für die im Parameter gegebenen Klassen durch.
      *
-     * @param request  das Request-Objekt welches gemapped werden soll
-     * @param model das {@link BaugenehmigungsverfahrenModel} zu dem es gemapped wird
+     * @param request das Request-Objekt welches gemapped werden soll
+     * @param model   das {@link BaugenehmigungsverfahrenModel} zu dem es gemapped wird
      */
     @AfterMapping
     void afterMappingRequest2Model(
@@ -224,8 +224,8 @@ public abstract class AbfrageDomainMapper {
     /**
      * Führt das Mapping der Abfragevarianten für die im Parameter gegebenen Klassen durch.
      *
-     * @param request  das Request-Objekt welches gemapped werden soll
-     * @param model das {@link WeiteresVerfahrenModel} zu dem es gemapped wird
+     * @param request das Request-Objekt welches gemapped werden soll
+     * @param model   das {@link WeiteresVerfahrenModel} zu dem es gemapped wird
      */
     @AfterMapping
     void afterMappingRequest2Model(
@@ -259,7 +259,13 @@ public abstract class AbfrageDomainMapper {
     }
 
     @BeanMapping(ignoreByDefault = true)
-    @Mappings({ @Mapping(target = "version", ignore = false), @Mapping(target = "verortung", ignore = false) })
+    @Mappings(
+        {
+            @Mapping(target = "version", ignore = false),
+            @Mapping(target = "verortung", ignore = false),
+            @Mapping(target = "bauvorhaben", ignore = false),
+        }
+    )
     public abstract BauleitplanverfahrenModel request2Model(
         final BauleitplanverfahrenInBearbeitungSachbearbeitungModel request,
         @MappingTarget final BauleitplanverfahrenModel response
@@ -321,7 +327,13 @@ public abstract class AbfrageDomainMapper {
     }
 
     @BeanMapping(ignoreByDefault = true)
-    @Mappings({ @Mapping(target = "version", ignore = false), @Mapping(target = "verortung", ignore = false) })
+    @Mappings(
+        {
+            @Mapping(target = "version", ignore = false),
+            @Mapping(target = "verortung", ignore = false),
+            @Mapping(target = "bauvorhaben", ignore = false),
+        }
+    )
     public abstract BaugenehmigungsverfahrenModel request2Model(
         final BaugenehmigungsverfahrenInBearbeitungSachbearbeitungModel request,
         @MappingTarget final BaugenehmigungsverfahrenModel response
@@ -383,7 +395,13 @@ public abstract class AbfrageDomainMapper {
     }
 
     @BeanMapping(ignoreByDefault = true)
-    @Mappings({ @Mapping(target = "version", ignore = false), @Mapping(target = "verortung", ignore = false) })
+    @Mappings(
+        {
+            @Mapping(target = "version", ignore = false),
+            @Mapping(target = "verortung", ignore = false),
+            @Mapping(target = "bauvorhaben", ignore = false),
+        }
+    )
     public abstract WeiteresVerfahrenModel request2Model(
         final WeiteresVerfahrenInBearbeitungSachbearbeitungModel request,
         @MappingTarget final WeiteresVerfahrenModel response
