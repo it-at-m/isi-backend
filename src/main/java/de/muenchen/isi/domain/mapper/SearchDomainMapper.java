@@ -64,24 +64,11 @@ public abstract class SearchDomainMapper {
     public abstract BauvorhabenSearchResultModel entity2SearchResultModel(final Bauvorhaben entity);
 
     @AfterMapping
-    public void afterEntity2SearchResultModel(
+    public void afterMappingEntity2SearchResultModel(
         final Bauvorhaben entity,
         @MappingTarget final BauvorhabenSearchResultModel model
     ) {
-        if (hasAdressCoordinate(entity.getAdresse())) {
-            model.setCoordinate(koordinatenDomainMapper.entity2Model(entity.getAdresse().getCoordinate()));
-        } else if (hasVerortungCoordinate(entity.getVerortung())) {
-            try {
-                model.setCoordinate(
-                    koordinatenService.getMultiPolygonCentroid(entity.getVerortung().getMultiPolygon())
-                );
-            } catch (GeometryOperationFailedException exception) {
-                var message = "Ermitteln des Schwerpunktes ist fehlgeschlagen.";
-                log.error(message);
-            }
-        } else {
-            model.setCoordinate(null);
-        }
+        model.setCoordinate(this.getCoordinateFromAdresseOrVerortung(entity.getAdresse(), entity.getVerortung()));
     }
 
     @Mappings(
@@ -94,24 +81,11 @@ public abstract class SearchDomainMapper {
     public abstract AbfrageSearchResultModel entity2SearchResultModel(final Bauleitplanverfahren entity);
 
     @AfterMapping
-    public void afterEntity2SearchResultModel(
+    public void afterMappingEntity2SearchResultModel(
         final Bauleitplanverfahren entity,
         @MappingTarget final AbfrageSearchResultModel model
     ) {
-        if (hasAdressCoordinate(entity.getAdresse())) {
-            model.setCoordinate(koordinatenDomainMapper.entity2Model(entity.getAdresse().getCoordinate()));
-        } else if (hasVerortungCoordinate(entity.getVerortung())) {
-            try {
-                model.setCoordinate(
-                    koordinatenService.getMultiPolygonCentroid(entity.getVerortung().getMultiPolygon())
-                );
-            } catch (GeometryOperationFailedException exception) {
-                var message = "Ermitteln des Schwerpunktes ist fehlgeschlagen.";
-                log.error(message);
-            }
-        } else {
-            model.setCoordinate(null);
-        }
+        model.setCoordinate(this.getCoordinateFromAdresseOrVerortung(entity.getAdresse(), entity.getVerortung()));
     }
 
     @Mappings(
@@ -124,24 +98,11 @@ public abstract class SearchDomainMapper {
     public abstract AbfrageSearchResultModel entity2SearchResultModel(final Baugenehmigungsverfahren entity);
 
     @AfterMapping
-    public void afterEntity2SearchResultModel(
+    public void afterMappingEntity2SearchResultModel(
         final Baugenehmigungsverfahren entity,
         @MappingTarget final AbfrageSearchResultModel model
     ) {
-        if (hasAdressCoordinate(entity.getAdresse())) {
-            model.setCoordinate(koordinatenDomainMapper.entity2Model(entity.getAdresse().getCoordinate()));
-        } else if (hasVerortungCoordinate(entity.getVerortung())) {
-            try {
-                model.setCoordinate(
-                    koordinatenService.getMultiPolygonCentroid(entity.getVerortung().getMultiPolygon())
-                );
-            } catch (GeometryOperationFailedException exception) {
-                var message = "Ermitteln des Schwerpunktes ist fehlgeschlagen.";
-                log.error(message);
-            }
-        } else {
-            model.setCoordinate(null);
-        }
+        model.setCoordinate(this.getCoordinateFromAdresseOrVerortung(entity.getAdresse(), entity.getVerortung()));
     }
 
     @Mappings(
@@ -154,24 +115,11 @@ public abstract class SearchDomainMapper {
     public abstract AbfrageSearchResultModel entity2SearchResultModel(final WeiteresVerfahren entity);
 
     @AfterMapping
-    public void afterEntity2SearchResultModel(
+    public void afterMappingEntity2SearchResultModel(
         final WeiteresVerfahren entity,
         @MappingTarget final AbfrageSearchResultModel model
     ) {
-        if (hasAdressCoordinate(entity.getAdresse())) {
-            model.setCoordinate(koordinatenDomainMapper.entity2Model(entity.getAdresse().getCoordinate()));
-        } else if (hasVerortungCoordinate(entity.getVerortung())) {
-            try {
-                model.setCoordinate(
-                    koordinatenService.getMultiPolygonCentroid(entity.getVerortung().getMultiPolygon())
-                );
-            } catch (GeometryOperationFailedException exception) {
-                var message = "Ermitteln des Schwerpunktes ist fehlgeschlagen.";
-                log.error(message);
-            }
-        } else {
-            model.setCoordinate(null);
-        }
+        model.setCoordinate(this.getCoordinateFromAdresseOrVerortung(entity.getAdresse(), entity.getVerortung()));
     }
 
     @Mappings(
@@ -185,7 +133,7 @@ public abstract class SearchDomainMapper {
     );
 
     @AfterMapping
-    public void afterEntity2SearchResultModel(
+    public void afterMappingEntity2SearchResultModel(
         final Infrastruktureinrichtung entity,
         @MappingTarget final InfrastruktureinrichtungSearchResultModel model
     ) {
@@ -223,5 +171,22 @@ public abstract class SearchDomainMapper {
             }
         }
         return false;
+    }
+
+    public WGS84Model getCoordinateFromAdresseOrVerortung(
+        final Adresse adresse,
+        final VerortungMultiPolygon verortungMultiPolygon
+    ) {
+        if (hasAdressCoordinate(adresse)) {
+            return this.koordinatenDomainMapper.entity2Model(adresse.getCoordinate());
+        } else if (hasVerortungCoordinate(verortungMultiPolygon)) {
+            try {
+                return koordinatenService.getMultiPolygonCentroid(verortungMultiPolygon.getMultiPolygon());
+            } catch (GeometryOperationFailedException exception) {
+                var message = "Ermitteln des Schwerpunktes ist fehlgeschlagen.";
+                log.error(message);
+            }
+        }
+        return null;
     }
 }

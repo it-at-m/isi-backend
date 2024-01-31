@@ -83,7 +83,7 @@ public class SearchDomainMapperTest {
             .thenReturn(mockCoordinateModel);
 
         // Test der Methode
-        searchDomainMapper.afterEntity2SearchResultModel(bauvorhaben, model);
+        searchDomainMapper.afterMappingEntity2SearchResultModel(bauvorhaben, model);
 
         Mockito
             .verify(this.koordinatenDomainMapper, Mockito.times(1))
@@ -115,7 +115,7 @@ public class SearchDomainMapperTest {
         InfrastruktureinrichtungSearchResultModel model = new InfrastruktureinrichtungSearchResultModel();
 
         // Test der Methode
-        searchDomainMapper.afterEntity2SearchResultModel(infrastruktureinrichtung, model);
+        searchDomainMapper.afterMappingEntity2SearchResultModel(infrastruktureinrichtung, model);
 
         assertThat(model.getCoordinate(), is(mockCoordinateModel));
     }
@@ -148,7 +148,7 @@ public class SearchDomainMapperTest {
             .thenReturn(mockCoordinateModel);
 
         // Test der Methode
-        searchDomainMapper.afterEntity2SearchResultModel(abfrage, model);
+        searchDomainMapper.afterMappingEntity2SearchResultModel(abfrage, model);
 
         Mockito
             .verify(this.koordinatenService, Mockito.times(1))
@@ -183,7 +183,7 @@ public class SearchDomainMapperTest {
             .thenReturn(mockCoordinateModel);
 
         // Test der Methode
-        searchDomainMapper.afterEntity2SearchResultModel(abfrage, model);
+        searchDomainMapper.afterMappingEntity2SearchResultModel(abfrage, model);
 
         Mockito
             .verify(this.koordinatenDomainMapper, Mockito.times(1))
@@ -203,7 +203,7 @@ public class SearchDomainMapperTest {
         AbfrageSearchResultModel model = new AbfrageSearchResultModel();
 
         // Test der Methode
-        searchDomainMapper.afterEntity2SearchResultModel(abfrage, model);
+        searchDomainMapper.afterMappingEntity2SearchResultModel(abfrage, model);
 
         assertThat(model.getCoordinate(), is(nullValue()));
     }
