@@ -9,13 +9,13 @@ import org.springframework.data.jpa.repository.Query;
 public interface AbfragevarianteBauleitplanverfahrenRepository
     extends JpaRepository<AbfragevarianteBauleitplanverfahren, UUID> {
     @Query(
-        value = "select abfragevarianten_bauleitplanverfahren_id from abfragevariante_bauleitplanverfahren where id = ?1",
+        value = "select abfragevarianten_bauleitplanverfahren_id from abfragevariante_bauleitplanverfahren where id =  CAST(?1 AS uuid)",
         nativeQuery = true
     )
     Optional<UUID> findAbfrageIdForAbfragevarianteById(final UUID id);
 
     @Query(
-        value = "select abfragevarianten_sachbearbeitung_bauleitplanverfahren_id from abfragevariante_bauleitplanverfahren where id = ?1",
+        value = "select abfragevarianten_sachbearbeitung_bauleitplanverfahren_id from abfragevariante_bauleitplanverfahren where id =  CAST(?1 AS uuid)",
         nativeQuery = true
     )
     Optional<UUID> findAbfrageIdForAbfragevarianteSachbearbeitungById(final UUID id);
