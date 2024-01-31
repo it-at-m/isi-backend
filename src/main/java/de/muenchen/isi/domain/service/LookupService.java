@@ -50,6 +50,7 @@ public class LookupService {
         );
         model.setWesentlicheRechtsgrundlage(this.getWesentlicheRechtsgrundlageList());
         model.setArtBaulicheNutzung(this.getArtBaulicheNutzungList());
+        model.setArtBaulicheNutzungBauvorhaben(this.getArtBaulicheNutzungBauvorhabenList());
         model.setStatusInfrastruktureinrichtung((this.getStatusInfrastruktureinrichtungList()));
         model.setEinrichtungstraeger((this.getEinrichtungstraegerList()));
         model.setEinrichtungstraegerSchulen(this.getEinrichtungstraegerSchuleList());
@@ -185,6 +186,16 @@ public class LookupService {
     private LookupListModel getArtBaulicheNutzungList() {
         final List<LookupEntryModel> list = EnumUtils
             .getEnumList(ArtBaulicheNutzung.class)
+            .stream()
+            .map(item -> new LookupEntryModel(item.toString(), item.getBezeichnung()))
+            .collect(Collectors.toList());
+
+        return new LookupListModel(list);
+    }
+
+    private LookupListModel getArtBaulicheNutzungBauvorhabenList() {
+        final List<LookupEntryModel> list = ArtBaulicheNutzung
+            .getArtBaulicheNutzungForBauvorhaben()
             .stream()
             .map(item -> new LookupEntryModel(item.toString(), item.getBezeichnung()))
             .collect(Collectors.toList());
