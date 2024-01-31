@@ -63,6 +63,8 @@ public class DatabaseReindexer implements CommandLineRunner {
     private SearchQueryModel getSearchQueryModelForAllEntities() {
         final var searchQueryModel = new SearchQueryModel();
         searchQueryModel.setSelectBauleitplanverfahren(true);
+        searchQueryModel.setSelectBaugenehmigungsverfahren(true);
+        searchQueryModel.setSelectWeiteresVerfahren(true);
         searchQueryModel.setSelectBauvorhaben(true);
         searchQueryModel.setSelectGrundschule(true);
         searchQueryModel.setSelectGsNachmittagBetreuung(true);

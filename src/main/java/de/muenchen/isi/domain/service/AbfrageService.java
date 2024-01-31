@@ -1,6 +1,7 @@
 package de.muenchen.isi.domain.service;
 
 import de.muenchen.isi.domain.exception.AbfrageStatusNotAllowedException;
+import de.muenchen.isi.domain.exception.CalculationException;
 import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.FileHandlingFailedException;
@@ -18,6 +19,10 @@ import de.muenchen.isi.domain.model.abfrageAngelegt.AbfrageAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageAngelegt.BaugenehmigungsverfahrenAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageAngelegt.BauleitplanverfahrenAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageAngelegt.WeiteresVerfahrenAngelegtModel;
+import de.muenchen.isi.domain.model.abfrageBedarfsmeldungErfolgt.AbfrageBedarfsmeldungErfolgtModel;
+import de.muenchen.isi.domain.model.abfrageBedarfsmeldungErfolgt.BaugenehmigungsverfahrenBedarfsmeldungErfolgtModel;
+import de.muenchen.isi.domain.model.abfrageBedarfsmeldungErfolgt.BauleitplanverfahrenBedarfsmeldungErfolgtModel;
+import de.muenchen.isi.domain.model.abfrageBedarfsmeldungErfolgt.WeiteresVerfahrenBedarfsmeldungErfolgtModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungFachreferat.AbfrageInBearbeitungFachreferatModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungFachreferat.BaugenehmigungsverfahrenInBearbeitungFachreferatModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungFachreferat.BauleitplanverfahrenInBearbeitungFachreferatModel;
@@ -26,6 +31,8 @@ import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.AbfrageI
 import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.BaugenehmigungsverfahrenInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.BauleitplanverfahrenInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.WeiteresVerfahrenInBearbeitungSachbearbeitungModel;
+import de.muenchen.isi.domain.model.calculation.LangfristigerPlanungsursaechlicherBedarfModel;
+import de.muenchen.isi.domain.service.calculation.CalculationService;
 import de.muenchen.isi.domain.service.filehandling.DokumentService;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
@@ -67,6 +74,8 @@ public class AbfrageService {
 
     private final AbfragevarianteWeiteresVerfahrenRepository abfragevarianteWeiteresVerfahrenRepository;
 
+    private final CalculationService calculationService;
+
     /**
      * Die Methode gibt ein {@link AbfrageModel} identifiziert durch die ID zurück.
      *
@@ -86,19 +95,23 @@ public class AbfrageService {
 
     /**
      * Diese Methode speichert ein {@link AbfrageModel}.
+     * Vor der Persistierung werden je Abfragevariante das {@link LangfristigerPlanungsursaechlicherBedarfModel}
+     * ermittelt und an die Abfragevariante angefügt.
      *
      * @param abfrage zum Speichern
      * @return das gespeicherte {@link AbfrageModel}
      * @throws UniqueViolationException   falls der Name der Abfrage oder der Abfragevariante bereits vorhanden ist
      * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
      * @throws EntityNotFoundException falls das referenzierte Bauvorhaben nicht existiert.
+     * @throws CalculationException falls bei den Berechnungen ein Fehler auftritt.
      */
     public AbfrageModel save(final AbfrageModel abfrage)
-        throws EntityNotFoundException, OptimisticLockingException, UniqueViolationException {
+        throws EntityNotFoundException, OptimisticLockingException, UniqueViolationException, CalculationException {
         if (abfrage.getId() == null) {
             abfrage.setStatusAbfrage(StatusAbfrage.ANGELEGT);
             abfrage.setSub(authenticationUtils.getUserSub());
         }
+        this.calculationService.calculateAndAppendBedarfeToEachAbfragevarianteOfAbfrage(abfrage);
         var entity = this.abfrageDomainMapper.model2Entity(abfrage);
         final var saved = this.abfrageRepository.findByNameIgnoreCase(abfrage.getName());
         if ((saved.isPresent() && saved.get().getId().equals(entity.getId())) || saved.isEmpty()) {
@@ -134,7 +147,7 @@ public class AbfrageService {
      * @throws FileHandlingWithS3FailedException falls es beim Dateihandling im S3-Storage zu einem Fehler gekommen ist.
      */
     public AbfrageModel patchAngelegt(final AbfrageAngelegtModel abfrage, final UUID id)
-        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, FileHandlingFailedException, FileHandlingWithS3FailedException {
+        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, FileHandlingFailedException, FileHandlingWithS3FailedException, CalculationException {
         final var originalAbfrageDb = this.getById(id);
         this.throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(originalAbfrageDb, StatusAbfrage.ANGELEGT);
 
@@ -240,7 +253,7 @@ public class AbfrageService {
         final AbfrageInBearbeitungSachbearbeitungModel abfrage,
         final UUID id
     )
-        throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException {
+        throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException, CalculationException {
         final var originalAbfrageDb = this.getById(id);
         this.throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(
                 originalAbfrageDb,
@@ -289,7 +302,7 @@ public class AbfrageService {
         final AbfrageInBearbeitungFachreferatModel abfrage,
         final UUID id
     )
-        throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException {
+        throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException, CalculationException {
         final var originalAbfrageDb = this.getById(id);
         this.throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(
                 originalAbfrageDb,
@@ -313,6 +326,52 @@ public class AbfrageService {
             abfrageToSave =
                 this.abfrageDomainMapper.request2Model(
                         (WeiteresVerfahrenInBearbeitungFachreferatModel) abfrage,
+                        (WeiteresVerfahrenModel) originalAbfrageDb
+                    );
+        } else {
+            final var message = "Die Art der Abfrage wird nicht unterstützt.";
+            log.error(message);
+            throw new EntityNotFoundException(message);
+        }
+        return this.save(abfrageToSave);
+    }
+
+    /**
+     * Diese Methode aktualisiert ein {@link AbfrageBedarfsmeldungErfolgtModel}.
+     *
+     * @param abfrage zum Speichern
+     * @param id der Abfrage
+     * @return das gespeicherte {@link AbfrageModel}
+     * @throws UniqueViolationException   falls der Name der Abfrage oder der Abfragevariante bereits vorhanden ist.
+     * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist.
+     * @throws EntityNotFoundException falls das referenzierte Bauvorhaben nicht existiert.
+     * @throws AbfrageStatusNotAllowedException falls die zu aktualisierende Abfrage sich nicht im Status {@link StatusAbfrage#IN_BEARBEITUNG_FACHREFERATE} befindet.
+     */
+    public AbfrageModel patchBedarfsmeldungErfolgt(final AbfrageBedarfsmeldungErfolgtModel abfrage, final UUID id)
+        throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException, CalculationException {
+        final var originalAbfrageDb = this.getById(id);
+        this.throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(
+                originalAbfrageDb,
+                StatusAbfrage.BEDARFSMELDUNG_ERFOLGT
+            );
+
+        final AbfrageModel abfrageToSave;
+        if (ArtAbfrage.BAULEITPLANVERFAHREN.equals(abfrage.getArtAbfrage())) {
+            abfrageToSave =
+                this.abfrageDomainMapper.request2Model(
+                        (BauleitplanverfahrenBedarfsmeldungErfolgtModel) abfrage,
+                        (BauleitplanverfahrenModel) originalAbfrageDb
+                    );
+        } else if (ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN.equals(abfrage.getArtAbfrage())) {
+            abfrageToSave =
+                this.abfrageDomainMapper.request2Model(
+                        (BaugenehmigungsverfahrenBedarfsmeldungErfolgtModel) abfrage,
+                        (BaugenehmigungsverfahrenModel) originalAbfrageDb
+                    );
+        } else if (ArtAbfrage.WEITERES_VERFAHREN.equals(abfrage.getArtAbfrage())) {
+            abfrageToSave =
+                this.abfrageDomainMapper.request2Model(
+                        (WeiteresVerfahrenBedarfsmeldungErfolgtModel) abfrage,
                         (WeiteresVerfahrenModel) originalAbfrageDb
                     );
         } else {

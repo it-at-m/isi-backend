@@ -33,6 +33,8 @@ public class LookupListsModel {
 
     private LookupListModel artBaulicheNutzung;
 
+    private LookupListModel artBaulicheNutzungBauvorhaben;
+
     private LookupListModel statusInfrastruktureinrichtung;
 
     private LookupListModel einrichtungstraeger;
@@ -44,4 +46,6 @@ public class LookupListsModel {
     private LookupListModel artGsNachmittagBetreuung;
 
     private LookupListModel sobonOrientierungswertJahr;
+
+    private LookupListModel sobonOrientierungswertJahrWithoutStandortabfrage;
 }

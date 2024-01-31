@@ -31,6 +31,8 @@ public class LookupListsDto {
 
     private LookupListDto artBaulicheNutzung;
 
+    private LookupListDto artBaulicheNutzungBauvorhaben;
+
     private LookupListDto statusInfrastruktureinrichtung;
 
     private LookupListDto einrichtungstraeger;
@@ -42,4 +44,6 @@ public class LookupListsDto {
     private LookupListDto artGsNachmittagBetreuung;
 
     private LookupListDto sobonOrientierungswertJahr;
+
+    private LookupListDto sobonOrientierungswertJahrWithoutStandortabfrage;
 }

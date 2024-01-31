@@ -50,12 +50,16 @@ public class LookupService {
         );
         model.setWesentlicheRechtsgrundlage(this.getWesentlicheRechtsgrundlageList());
         model.setArtBaulicheNutzung(this.getArtBaulicheNutzungList());
+        model.setArtBaulicheNutzungBauvorhaben(this.getArtBaulicheNutzungBauvorhabenList());
         model.setStatusInfrastruktureinrichtung((this.getStatusInfrastruktureinrichtungList()));
         model.setEinrichtungstraeger((this.getEinrichtungstraegerList()));
         model.setEinrichtungstraegerSchulen(this.getEinrichtungstraegerSchuleList());
         model.setInfrastruktureinrichtungTyp((this.getInfrastruktureinrichtungTypList()));
         model.setArtGsNachmittagBetreuung((this.getArtGsNachmittagBetreuungList()));
         model.setSobonOrientierungswertJahr(this.getSobonOrientierungswertJahr());
+        model.setSobonOrientierungswertJahrWithoutStandortabfrage(
+            this.getSobonOrientierungswertJahrWithoutStandortabfrage()
+        );
         return model;
     }
 
@@ -189,6 +193,16 @@ public class LookupService {
         return new LookupListModel(list);
     }
 
+    private LookupListModel getArtBaulicheNutzungBauvorhabenList() {
+        final List<LookupEntryModel> list = ArtBaulicheNutzung
+            .getArtBaulicheNutzungForBauvorhaben()
+            .stream()
+            .map(item -> new LookupEntryModel(item.toString(), item.getBezeichnung()))
+            .collect(Collectors.toList());
+
+        return new LookupListModel(list);
+    }
+
     private LookupListModel getStatusInfrastruktureinrichtungList() {
         final List<LookupEntryModel> list = EnumUtils
             .getEnumList(StatusInfrastruktureinrichtung.class)
@@ -242,6 +256,16 @@ public class LookupService {
     private LookupListModel getSobonOrientierungswertJahr() {
         final List<LookupEntryModel> list = EnumUtils
             .getEnumList(SobonOrientierungswertJahr.class)
+            .stream()
+            .map(item -> new LookupEntryModel(item.toString(), item.getBezeichnung()))
+            .collect(Collectors.toList());
+
+        return new LookupListModel(list);
+    }
+
+    private LookupListModel getSobonOrientierungswertJahrWithoutStandortabfrage() {
+        final List<LookupEntryModel> list = SobonOrientierungswertJahr
+            .getSobonOrientierungswertJahrWithoutStandortabfrage()
             .stream()
             .map(item -> new LookupEntryModel(item.toString(), item.getBezeichnung()))
             .collect(Collectors.toList());

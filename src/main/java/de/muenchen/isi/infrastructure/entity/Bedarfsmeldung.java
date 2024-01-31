@@ -16,22 +16,34 @@ import org.hibernate.type.SqlTypes;
     indexes = {
         @Index(
             name = "bedarfsmeldung_fachreferate_abfragevariante_bauleitplanverfahren_id_index",
-            columnList = "abfragevariante_bauleitplanverfahren_id"
+            columnList = "abfragevariante_bauleitplanverfahren_fachreferate_id"
         ),
         @Index(
             name = "bedarfsmeldung_fachreferate_abfragevariante_baugenehmigungsverfahren_id_index",
-            columnList = "abfragevariante_baugenehmigungsverfahren_id"
+            columnList = "abfragevariante_baugenehmigungsverfahren_fachreferate_id"
         ),
         @Index(
             name = "bedarfsmeldung_fachreferate_abfragevariante_weiteres_verfahren_id_index",
-            columnList = "abfragevariante_weiteres_verfahren_id"
+            columnList = "abfragevariante_weiteres_verfahren_fachreferate_id"
+        ),
+        @Index(
+            name = "bedarfsmeldung_abfrageersteller_abfragevariante_bauleitplanverfahren_id_index",
+            columnList = "abfragevariante_bauleitplanverfahren_abfrageersteller_id"
+        ),
+        @Index(
+            name = "bedarfsmeldung_abfrageersteller_abfragevariante_baugenehmigungsverfahren_id_index",
+            columnList = "abfragevariante_baugenehmigungsverfahren_abfrageersteller_id"
+        ),
+        @Index(
+            name = "bedarfsmeldung_abfrageersteller_abfragevariante_weiteres_verfahren_id_index",
+            columnList = "abfragevariante_weiteres_verfahren_abfrageersteller_id"
         ),
     }
 )
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class BedarfsmeldungFachreferate extends BaseEntity {
+public class Bedarfsmeldung extends BaseEntity {
 
     @Column(nullable = false)
     private Integer anzahlEinrichtungen;

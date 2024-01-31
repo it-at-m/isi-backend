@@ -6,11 +6,13 @@ package de.muenchen.isi.api.controller;
 
 import de.muenchen.isi.api.dto.AbfrageDto;
 import de.muenchen.isi.api.dto.abfrageAngelegt.AbfrageAngelegtDto;
+import de.muenchen.isi.api.dto.abfrageBedarfsmeldungErfolgt.AbfrageBedarfsmeldungErfolgtDto;
 import de.muenchen.isi.api.dto.abfrageInBearbeitungFachreferat.AbfrageInBearbeitungFachreferatDto;
 import de.muenchen.isi.api.dto.abfrageInBearbeitungSachbearbeitung.AbfrageInBearbeitungSachbearbeitungDto;
 import de.muenchen.isi.api.dto.error.InformationResponseDto;
 import de.muenchen.isi.api.mapper.AbfrageApiMapper;
 import de.muenchen.isi.domain.exception.AbfrageStatusNotAllowedException;
+import de.muenchen.isi.domain.exception.CalculationException;
 import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.FileHandlingFailedException;
@@ -109,7 +111,7 @@ public class AbfrageController {
     )
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_POST_ABFRAGE.name())")
     public ResponseEntity<AbfrageDto> save(@RequestBody @Valid @NotNull AbfrageAngelegtDto abfrage)
-        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException {
+        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, CalculationException {
         final var requestModel = abfrageApiMapper.dto2Model(abfrage);
         var model = abfrageDomainMapper.request2NewModel(requestModel);
         model = abfrageService.save(model);
@@ -155,7 +157,7 @@ public class AbfrageController {
         @RequestBody @Valid @NotNull final AbfrageAngelegtDto abfrage,
         @PathVariable @NotNull final UUID id
     )
-        throws UniqueViolationException, FileHandlingFailedException, FileHandlingWithS3FailedException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException {
+        throws UniqueViolationException, FileHandlingFailedException, FileHandlingWithS3FailedException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException {
         final var requestModel = abfrageApiMapper.dto2Model(abfrage);
         final var responseModel = abfrageService.patchAngelegt(requestModel, id);
         final var dto = abfrageApiMapper.model2Dto(responseModel);
@@ -197,7 +199,7 @@ public class AbfrageController {
         @RequestBody @Valid @NotNull final AbfrageInBearbeitungSachbearbeitungDto abfrage,
         @PathVariable @NotNull final UUID id
     )
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException {
         final var requestModel = abfrageApiMapper.dto2Model(abfrage);
         final var responseModel = abfrageService.patchInBearbeitungSachbearbeitung(requestModel, id);
         final var dto = abfrageApiMapper.model2Dto(responseModel);
@@ -239,9 +241,51 @@ public class AbfrageController {
         @RequestBody @Valid @NotNull final AbfrageInBearbeitungFachreferatDto abfrage,
         @PathVariable @NotNull final UUID id
     )
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException {
         final var requestModel = abfrageApiMapper.dto2Model(abfrage);
         final var responseModel = abfrageService.patchInBearbeitungFachreferat(requestModel, id);
+        final var dto = abfrageApiMapper.model2Dto(responseModel);
+        return ResponseEntity.ok(dto);
+    }
+
+    @PatchMapping("/bedarfsmeldung-erfolgt/{id}")
+    @Transactional(rollbackFor = { OptimisticLockingException.class, UniqueViolationException.class })
+    @Operation(summary = "Aktualisierung einer Abfrage im Status BEDARFSMELDUNG_ERFOLGT.")
+    @ApiResponses(
+        value = {
+            @ApiResponse(responseCode = "200", description = "OK -> Abfrage wurde erfolgreich aktualisiert."),
+            @ApiResponse(
+                responseCode = "400",
+                description = "BAD_REQUEST -> Abfrage konnte nicht aktualisiert werden, überprüfen sie die Eingabe oder die Abfrage befindet sich in einem unzulässigen Status",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+            @ApiResponse(
+                responseCode = "404",
+                description = "NOT_FOUND -> Es gibt keine Abfrage mit der ID.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+            @ApiResponse(
+                responseCode = "409",
+                description = "CONFLICT -> Abfrage konnte nicht aktualisiert werden, da der Name der Abfrage oder Abfragevariante bereits existiert oder die Abfrage nicht im korrekten Status ist.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+            @ApiResponse(
+                responseCode = "412",
+                description = "PRECONDITION_FAILED -> In der Anwendung ist bereits eine neuere Version der Entität gespeichert.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+        }
+    )
+    @PreAuthorize(
+        "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_PATCH_ABFRAGE_BEDARFSMELDUNG_ERFOLGT.name())"
+    )
+    public ResponseEntity<AbfrageDto> patchBedarfsmeldungErfolgt(
+        @RequestBody @Valid @NotNull final AbfrageBedarfsmeldungErfolgtDto abfrage,
+        @PathVariable @NotNull final UUID id
+    )
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException {
+        final var requestModel = abfrageApiMapper.dto2Model(abfrage);
+        final var responseModel = abfrageService.patchBedarfsmeldungErfolgt(requestModel, id);
         final var dto = abfrageApiMapper.model2Dto(responseModel);
         return ResponseEntity.ok(dto);
     }
