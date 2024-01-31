@@ -426,7 +426,7 @@ public class AbfrageService {
         this.throwUserRoleNotAllowedOrAbfrageStatusNotAllowedExceptionWhenNotTheCorrectUserWithTheCorrectRole(abfrage);
         this.throwEntityIsReferencedExceptionWhenAbfrageIsReferencingBauvorhaben(abfrage);
         this.abfrageRepository.deleteById(id);
-        this.reportingdataTransferService.deleteTransferedAbfrage(id);
+        this.reportingdataTransferService.deleteTransferedAbfrage(abfrage);
     }
 
     /**

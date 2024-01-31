@@ -32,7 +32,16 @@
         "summary": "Löscht eine Abfrage mitsamt aller reportingrelevanten Informationen.",
         "operationId": "delete",
         "parameters": [
-          { "name": "id", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } }
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } },
+          {
+            "name": "art-abfrage",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": ["UNSPECIFIED", "BAULEITPLANVERFAHREN", "BAUGENEHMIGUNGSVERFAHREN", "WEITERES_VERFAHREN"]
+            }
+          }
         ],
         "responses": { "204": { "description": "NO CONTENT" } }
       }

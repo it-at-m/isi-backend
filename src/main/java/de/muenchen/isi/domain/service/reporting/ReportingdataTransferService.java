@@ -124,12 +124,15 @@ public class ReportingdataTransferService {
     /**
      * Löscht die Abfrage welche ggf. vorher über die Reportingschnittstelle übermittelt wurde.
      *
-     * @param id zum Identifizieren der Abfrage.
+     * @param abfrage zum löschen.
      * @throws ReportingException falls der Löschvorgang fehlgeschlagen ist.
      */
-    public void deleteTransferedAbfrage(final UUID id) throws ReportingException {
+    public void deleteTransferedAbfrage(final AbfrageModel abfrage) throws ReportingException {
         try {
-            reportingdataTransferRepository.deleteById(id);
+            final var artAbfrageReporting = reportingApiDomainMapper.artAbfrage2ArtAbfrageReporting(
+                abfrage.getArtAbfrage()
+            );
+            reportingdataTransferRepository.deleteById(abfrage.getId(), artAbfrageReporting);
         } catch (final Exception exception) {
             final var error = "Beim Löschen einer im Reporting vorhandenen Abfrage ist ein Fehler aufgetreten.";
             log.error(error, exception);

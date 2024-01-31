@@ -1038,22 +1038,30 @@ class ReportingdataTransferServiceTest {
 
     @Test
     void deleteTransferedAbfrage() throws ReportingException {
-        final var id = UUID.randomUUID();
-        reportingdataTransferService.deleteTransferedAbfrage(id);
-        Mockito.verify(reportingdataTransferRepository, Mockito.times(1)).deleteById(id);
+        final var abfrage = new BauleitplanverfahrenModel();
+        abfrage.setId(UUID.randomUUID());
+        abfrage.setArtAbfrage(ArtAbfrage.BAULEITPLANVERFAHREN);
+        reportingdataTransferService.deleteTransferedAbfrage(abfrage);
+        Mockito
+            .verify(reportingdataTransferRepository, Mockito.times(1))
+            .deleteById(abfrage.getId(), AbfrageDto.ArtAbfrageEnum.BAULEITPLANVERFAHREN);
     }
 
     @Test
     void deleteTransferedAbfrageException() {
-        final var id = UUID.randomUUID();
+        final var abfrage = new BauleitplanverfahrenModel();
+        abfrage.setId(UUID.randomUUID());
+        abfrage.setArtAbfrage(ArtAbfrage.BAULEITPLANVERFAHREN);
         Mockito
             .doThrow(new WebClientResponseException(500, "An error", null, null, null))
             .when(reportingdataTransferRepository)
-            .deleteById(id);
+            .deleteById(abfrage.getId(), AbfrageDto.ArtAbfrageEnum.BAULEITPLANVERFAHREN);
         Assertions.assertThrows(
             ReportingException.class,
-            () -> reportingdataTransferService.deleteTransferedAbfrage(id)
+            () -> reportingdataTransferService.deleteTransferedAbfrage(abfrage)
         );
-        Mockito.verify(reportingdataTransferRepository, Mockito.times(1)).deleteById(id);
+        Mockito
+            .verify(reportingdataTransferRepository, Mockito.times(1))
+            .deleteById(abfrage.getId(), AbfrageDto.ArtAbfrageEnum.BAULEITPLANVERFAHREN);
     }
 }
