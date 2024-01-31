@@ -1044,7 +1044,7 @@ class ReportingdataTransferServiceTest {
         reportingdataTransferService.deleteTransferedAbfrage(abfrage);
         Mockito
             .verify(reportingdataTransferRepository, Mockito.times(1))
-            .deleteById(abfrage.getId(), AbfrageDto.ArtAbfrageEnum.BAULEITPLANVERFAHREN);
+            .deleteByIdAndArtAbfrage(abfrage.getId(), AbfrageDto.ArtAbfrageEnum.BAULEITPLANVERFAHREN);
     }
 
     @Test
@@ -1055,13 +1055,13 @@ class ReportingdataTransferServiceTest {
         Mockito
             .doThrow(new WebClientResponseException(500, "An error", null, null, null))
             .when(reportingdataTransferRepository)
-            .deleteById(abfrage.getId(), AbfrageDto.ArtAbfrageEnum.BAULEITPLANVERFAHREN);
+            .deleteByIdAndArtAbfrage(abfrage.getId(), AbfrageDto.ArtAbfrageEnum.BAULEITPLANVERFAHREN);
         Assertions.assertThrows(
             ReportingException.class,
             () -> reportingdataTransferService.deleteTransferedAbfrage(abfrage)
         );
         Mockito
             .verify(reportingdataTransferRepository, Mockito.times(1))
-            .deleteById(abfrage.getId(), AbfrageDto.ArtAbfrageEnum.BAULEITPLANVERFAHREN);
+            .deleteByIdAndArtAbfrage(abfrage.getId(), AbfrageDto.ArtAbfrageEnum.BAULEITPLANVERFAHREN);
     }
 }

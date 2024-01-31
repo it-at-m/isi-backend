@@ -132,7 +132,7 @@ public class ReportingdataTransferService {
             final var artAbfrageReporting = reportingApiDomainMapper.artAbfrage2ArtAbfrageReporting(
                 abfrage.getArtAbfrage()
             );
-            reportingdataTransferRepository.deleteById(abfrage.getId(), artAbfrageReporting);
+            reportingdataTransferRepository.deleteByIdAndArtAbfrage(abfrage.getId(), artAbfrageReporting);
         } catch (final Exception exception) {
             final var error = "Beim Löschen einer im Reporting vorhandenen Abfrage ist ein Fehler aufgetreten.";
             log.error(error, exception);

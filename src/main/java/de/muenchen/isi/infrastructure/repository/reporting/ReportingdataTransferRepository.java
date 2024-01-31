@@ -28,7 +28,7 @@ public class ReportingdataTransferRepository {
      *
      * @param id der zu löschenden Abfrage.
      */
-    public void deleteById(final UUID id, final AbfrageDto.ArtAbfrageEnum artAbfrage) {
+    public void deleteByIdAndArtAbfrage(final UUID id, final AbfrageDto.ArtAbfrageEnum artAbfrage) {
         abfrageReportingEaiApi.delete(id, artAbfrage.name()).block();
     }
 }
