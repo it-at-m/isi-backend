@@ -31,6 +31,8 @@ public class LookupListsDto {
 
     private LookupListDto artBaulicheNutzung;
 
+    private LookupListDto artBaulicheNutzungBauvorhaben;
+
     private LookupListDto statusInfrastruktureinrichtung;
 
     private LookupListDto einrichtungstraeger;
