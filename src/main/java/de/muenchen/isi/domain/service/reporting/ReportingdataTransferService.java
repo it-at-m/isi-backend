@@ -124,7 +124,7 @@ public class ReportingdataTransferService {
     /**
      * Löscht die Abfrage welche ggf. vorher über die Reportingschnittstelle übermittelt wurde.
      *
-     * @param abfrage zum löschen.
+     * @param abfrage zum Löschen.
      * @throws ReportingException falls der Löschvorgang fehlgeschlagen ist.
      */
     public void deleteTransferedAbfrage(final AbfrageModel abfrage) throws ReportingException {
