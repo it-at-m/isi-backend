@@ -81,5 +81,27 @@ public class AbfragevarianteWeiteresVerfahrenModel extends AbfragevarianteModel 
 
     private List<BauabschnittModel> bauabschnitte;
 
+    // Kindertagesbetreuung
+
+    private boolean ausgeloesterBedarfImBaugebietBeruecksichtigenKita;
+
+    private boolean ausgeloesterBedarfMitversorgungImBplanKita;
+
+    private boolean ausgeloesterBedarfMitversorgungInBestEinrichtungenKita;
+
+    private boolean ausgeloesterBedarfMitversorgungInBestEinrichtungenNachAusbauKita;
+
+    // Schule
+
+    private boolean ausgeloesterBedarfImBaugebietBeruecksichtigenSchule;
+
+    private boolean ausgeloesterBedarfMitversorgungImBplanSchule;
+
+    private boolean ausgeloesterBedarfMitversorgungInBestEinrichtungenSchule;
+
+    private boolean ausgeloesterBedarfMitversorgungInBestEinrichtungenNachAusbauSchule;
+
+    private String hinweisVersorgung;
+
     private LangfristigerPlanungsursaechlicherBedarfModel langfristigerPlanungsursaechlicherBedarf;
 }

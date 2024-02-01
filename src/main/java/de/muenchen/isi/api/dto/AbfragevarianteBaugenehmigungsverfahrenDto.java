@@ -77,5 +77,27 @@ public class AbfragevarianteBaugenehmigungsverfahrenDto extends AbfragevarianteD
 
     private List<BauabschnittDto> bauabschnitte;
 
+    // Kindertagesbetreuung
+
+    private boolean ausgeloesterBedarfImBaugebietBeruecksichtigenKita;
+
+    private boolean ausgeloesterBedarfMitversorgungImBplanKita;
+
+    private boolean ausgeloesterBedarfMitversorgungInBestEinrichtungenKita;
+
+    private boolean ausgeloesterBedarfMitversorgungInBestEinrichtungenNachAusbauKita;
+
+    // Schule
+
+    private boolean ausgeloesterBedarfImBaugebietBeruecksichtigenSchule;
+
+    private boolean ausgeloesterBedarfMitversorgungImBplanSchule;
+
+    private boolean ausgeloesterBedarfMitversorgungInBestEinrichtungenSchule;
+
+    private boolean ausgeloesterBedarfMitversorgungInBestEinrichtungenNachAusbauSchule;
+
+    private String hinweisVersorgung;
+
     private LangfristigerPlanungsursaechlicherBedarfDto langfristigerPlanungsursaechlicherBedarf;
 }
