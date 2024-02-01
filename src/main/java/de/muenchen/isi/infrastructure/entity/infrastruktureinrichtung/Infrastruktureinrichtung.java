@@ -32,8 +32,8 @@ import lombok.ToString;
 import org.apache.commons.lang3.EnumUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.hibernate.annotations.Generated;
-import org.hibernate.annotations.GenerationTime;
 import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.generator.EventType;
 import org.hibernate.search.engine.backend.types.Sortable;
 import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBinderRef;
 import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBridgeRef;
@@ -65,7 +65,7 @@ public abstract class Infrastruktureinrichtung extends BaseEntity {
             : EnumUtils.getEnum(InfrastruktureinrichtungTyp.class, discriminatorValue.value());
     }
 
-    @Generated(GenerationTime.INSERT)
+    @Generated(event = EventType.INSERT)
     @Column(name = "lfdNr", columnDefinition = "serial", updatable = false)
     private Long lfdNr;
 
