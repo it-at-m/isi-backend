@@ -49,7 +49,7 @@ public class SecurityContextFactory implements WithSecurityContextFactory<MockCu
             authoritiesRoles.add("ISI_BACKEND_SPEICHERN_VON_SOZIALINFRASTRUKTUR_VERSORGUNG_ABFRAGE");
         }
 
-        if (customUser.roles()[0].equals("nutzer")) {
+        if (customUser.roles()[0].equals("anwender")) {
             authoritiesRoles.add("ISI_BACKEND_READ_ABFRAGE");
         }
 
