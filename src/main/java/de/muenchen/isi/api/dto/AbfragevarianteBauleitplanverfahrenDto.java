@@ -71,4 +71,26 @@ public class AbfragevarianteBauleitplanverfahrenDto extends AbfragevarianteDto {
     private List<BedarfsmeldungDto> bedarfsmeldungAbfrageersteller;
 
     private List<BauabschnittDto> bauabschnitte;
+
+    // Kindertagesbetreuung
+
+    private boolean ausgeloesterBedarfImBaugebietBeruecksichtigenKita;
+
+    private boolean ausgeloesterBedarfMitversorgungImBplanKita;
+
+    private boolean ausgeloesterBedarfMitversorgungInBestEinrichtungenKita;
+
+    private boolean ausgeloesterBedarfMitversorgungInBestEinrichtungenNachAusbauKita;
+
+    // Schule
+
+    private boolean ausgeloesterBedarfImBaugebietBeruecksichtigenSchule;
+
+    private boolean ausgeloesterBedarfMitversorgungImBplanSchule;
+
+    private boolean ausgeloesterBedarfMitversorgungInBestEinrichtungenSchule;
+
+    private boolean ausgeloesterBedarfMitversorgungInBestEinrichtungenNachAusbauSchule;
+
+    private String hinweisVersorgung;
 }

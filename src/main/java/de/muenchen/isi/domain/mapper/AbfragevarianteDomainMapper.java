@@ -57,6 +57,15 @@ public interface AbfragevarianteDomainMapper {
             @Mapping(target = "stammdatenGueltigAb", ignore = true),
             @Mapping(target = "anmerkung", ignore = true),
             @Mapping(target = "bedarfsmeldungFachreferate", ignore = true),
+            @Mapping(target = "ausgeloesterBedarfImBaugebietBeruecksichtigenKita", ignore = true),
+            @Mapping(target = "ausgeloesterBedarfMitversorgungImBplanKita", ignore = true),
+            @Mapping(target = "ausgeloesterBedarfMitversorgungInBestEinrichtungenKita", ignore = true),
+            @Mapping(target = "ausgeloesterBedarfMitversorgungInBestEinrichtungenNachAusbauKita", ignore = true),
+            @Mapping(target = "ausgeloesterBedarfImBaugebietBeruecksichtigenSchule", ignore = true),
+            @Mapping(target = "ausgeloesterBedarfMitversorgungImBplanSchule", ignore = true),
+            @Mapping(target = "ausgeloesterBedarfMitversorgungInBestEinrichtungenSchule", ignore = true),
+            @Mapping(target = "ausgeloesterBedarfMitversorgungInBestEinrichtungenNachAusbauSchule", ignore = true),
+            @Mapping(target = "hinweisVersorgung", ignore = true),
             @Mapping(target = "bedarfsmeldungAbfrageersteller", ignore = true),
         }
     )
@@ -74,6 +83,15 @@ public interface AbfragevarianteDomainMapper {
             @Mapping(target = "stammdatenGueltigAb", ignore = true),
             @Mapping(target = "anmerkung", ignore = true),
             @Mapping(target = "bedarfsmeldungFachreferate", ignore = true),
+            @Mapping(target = "ausgeloesterBedarfImBaugebietBeruecksichtigenKita", ignore = true),
+            @Mapping(target = "ausgeloesterBedarfMitversorgungImBplanKita", ignore = true),
+            @Mapping(target = "ausgeloesterBedarfMitversorgungInBestEinrichtungenKita", ignore = true),
+            @Mapping(target = "ausgeloesterBedarfMitversorgungInBestEinrichtungenNachAusbauKita", ignore = true),
+            @Mapping(target = "ausgeloesterBedarfImBaugebietBeruecksichtigenSchule", ignore = true),
+            @Mapping(target = "ausgeloesterBedarfMitversorgungImBplanSchule", ignore = true),
+            @Mapping(target = "ausgeloesterBedarfMitversorgungInBestEinrichtungenSchule", ignore = true),
+            @Mapping(target = "ausgeloesterBedarfMitversorgungInBestEinrichtungenNachAusbauSchule", ignore = true),
+            @Mapping(target = "hinweisVersorgung", ignore = true),
             @Mapping(target = "bedarfsmeldungAbfrageersteller", ignore = true),
         }
     )
@@ -91,6 +109,15 @@ public interface AbfragevarianteDomainMapper {
             @Mapping(target = "stammdatenGueltigAb", ignore = true),
             @Mapping(target = "anmerkung", ignore = true),
             @Mapping(target = "bedarfsmeldungFachreferate", ignore = true),
+            @Mapping(target = "ausgeloesterBedarfImBaugebietBeruecksichtigenKita", ignore = true),
+            @Mapping(target = "ausgeloesterBedarfMitversorgungImBplanKita", ignore = true),
+            @Mapping(target = "ausgeloesterBedarfMitversorgungInBestEinrichtungenKita", ignore = true),
+            @Mapping(target = "ausgeloesterBedarfMitversorgungInBestEinrichtungenNachAusbauKita", ignore = true),
+            @Mapping(target = "ausgeloesterBedarfImBaugebietBeruecksichtigenSchule", ignore = true),
+            @Mapping(target = "ausgeloesterBedarfMitversorgungImBplanSchule", ignore = true),
+            @Mapping(target = "ausgeloesterBedarfMitversorgungInBestEinrichtungenSchule", ignore = true),
+            @Mapping(target = "ausgeloesterBedarfMitversorgungInBestEinrichtungenNachAusbauSchule", ignore = true),
+            @Mapping(target = "hinweisVersorgung", ignore = true),
             @Mapping(target = "bedarfsmeldungAbfrageersteller", ignore = true),
         }
     )
@@ -150,6 +177,15 @@ public interface AbfragevarianteDomainMapper {
             @Mapping(target = "lastModifiedDateTime", ignore = true),
             @Mapping(target = "createdDateTime", ignore = true),
             @Mapping(target = "bedarfsmeldungFachreferate", ignore = true),
+            @Mapping(target = "ausgeloesterBedarfImBaugebietBeruecksichtigenKita", ignore = true),
+            @Mapping(target = "ausgeloesterBedarfMitversorgungImBplanKita", ignore = true),
+            @Mapping(target = "ausgeloesterBedarfMitversorgungInBestEinrichtungenKita", ignore = true),
+            @Mapping(target = "ausgeloesterBedarfMitversorgungInBestEinrichtungenNachAusbauKita", ignore = true),
+            @Mapping(target = "ausgeloesterBedarfImBaugebietBeruecksichtigenSchule", ignore = true),
+            @Mapping(target = "ausgeloesterBedarfMitversorgungImBplanSchule", ignore = true),
+            @Mapping(target = "ausgeloesterBedarfMitversorgungInBestEinrichtungenSchule", ignore = true),
+            @Mapping(target = "ausgeloesterBedarfMitversorgungInBestEinrichtungenNachAusbauSchule", ignore = true),
+            @Mapping(target = "hinweisVersorgung", ignore = true),
             @Mapping(target = "bedarfsmeldungAbfrageersteller", ignore = true),
         }
     )
@@ -164,6 +200,15 @@ public interface AbfragevarianteDomainMapper {
             @Mapping(target = "lastModifiedDateTime", ignore = true),
             @Mapping(target = "createdDateTime", ignore = true),
             @Mapping(target = "bedarfsmeldungFachreferate", ignore = true),
+            @Mapping(target = "ausgeloesterBedarfImBaugebietBeruecksichtigenKita", ignore = true),
+            @Mapping(target = "ausgeloesterBedarfMitversorgungImBplanKita", ignore = true),
+            @Mapping(target = "ausgeloesterBedarfMitversorgungInBestEinrichtungenKita", ignore = true),
+            @Mapping(target = "ausgeloesterBedarfMitversorgungInBestEinrichtungenNachAusbauKita", ignore = true),
+            @Mapping(target = "ausgeloesterBedarfImBaugebietBeruecksichtigenSchule", ignore = true),
+            @Mapping(target = "ausgeloesterBedarfMitversorgungImBplanSchule", ignore = true),
+            @Mapping(target = "ausgeloesterBedarfMitversorgungInBestEinrichtungenSchule", ignore = true),
+            @Mapping(target = "ausgeloesterBedarfMitversorgungInBestEinrichtungenNachAusbauSchule", ignore = true),
+            @Mapping(target = "hinweisVersorgung", ignore = true),
             @Mapping(target = "bedarfsmeldungAbfrageersteller", ignore = true),
         }
     )
@@ -178,6 +223,15 @@ public interface AbfragevarianteDomainMapper {
             @Mapping(target = "lastModifiedDateTime", ignore = true),
             @Mapping(target = "createdDateTime", ignore = true),
             @Mapping(target = "bedarfsmeldungFachreferate", ignore = true),
+            @Mapping(target = "ausgeloesterBedarfImBaugebietBeruecksichtigenKita", ignore = true),
+            @Mapping(target = "ausgeloesterBedarfMitversorgungImBplanKita", ignore = true),
+            @Mapping(target = "ausgeloesterBedarfMitversorgungInBestEinrichtungenKita", ignore = true),
+            @Mapping(target = "ausgeloesterBedarfMitversorgungInBestEinrichtungenNachAusbauKita", ignore = true),
+            @Mapping(target = "ausgeloesterBedarfImBaugebietBeruecksichtigenSchule", ignore = true),
+            @Mapping(target = "ausgeloesterBedarfMitversorgungImBplanSchule", ignore = true),
+            @Mapping(target = "ausgeloesterBedarfMitversorgungInBestEinrichtungenSchule", ignore = true),
+            @Mapping(target = "ausgeloesterBedarfMitversorgungInBestEinrichtungenNachAusbauSchule", ignore = true),
+            @Mapping(target = "hinweisVersorgung", ignore = true),
             @Mapping(target = "bedarfsmeldungAbfrageersteller", ignore = true),
         }
     )
@@ -191,6 +245,15 @@ public interface AbfragevarianteDomainMapper {
         {
             @Mapping(target = "version", ignore = false),
             @Mapping(target = "bedarfsmeldungFachreferate", ignore = false),
+            @Mapping(target = "ausgeloesterBedarfImBaugebietBeruecksichtigenKita", ignore = false),
+            @Mapping(target = "ausgeloesterBedarfMitversorgungImBplanKita", ignore = false),
+            @Mapping(target = "ausgeloesterBedarfMitversorgungInBestEinrichtungenKita", ignore = false),
+            @Mapping(target = "ausgeloesterBedarfMitversorgungInBestEinrichtungenNachAusbauKita", ignore = false),
+            @Mapping(target = "ausgeloesterBedarfImBaugebietBeruecksichtigenSchule", ignore = false),
+            @Mapping(target = "ausgeloesterBedarfMitversorgungImBplanSchule", ignore = false),
+            @Mapping(target = "ausgeloesterBedarfMitversorgungInBestEinrichtungenSchule", ignore = false),
+            @Mapping(target = "ausgeloesterBedarfMitversorgungInBestEinrichtungenNachAusbauSchule", ignore = false),
+            @Mapping(target = "hinweisVersorgung", ignore = false),
         }
     )
     AbfragevarianteBauleitplanverfahrenModel request2Model(
@@ -203,6 +266,15 @@ public interface AbfragevarianteDomainMapper {
         {
             @Mapping(target = "version", ignore = false),
             @Mapping(target = "bedarfsmeldungFachreferate", ignore = false),
+            @Mapping(target = "ausgeloesterBedarfImBaugebietBeruecksichtigenKita", ignore = false),
+            @Mapping(target = "ausgeloesterBedarfMitversorgungImBplanKita", ignore = false),
+            @Mapping(target = "ausgeloesterBedarfMitversorgungInBestEinrichtungenKita", ignore = false),
+            @Mapping(target = "ausgeloesterBedarfMitversorgungInBestEinrichtungenNachAusbauKita", ignore = false),
+            @Mapping(target = "ausgeloesterBedarfImBaugebietBeruecksichtigenSchule", ignore = false),
+            @Mapping(target = "ausgeloesterBedarfMitversorgungImBplanSchule", ignore = false),
+            @Mapping(target = "ausgeloesterBedarfMitversorgungInBestEinrichtungenSchule", ignore = false),
+            @Mapping(target = "ausgeloesterBedarfMitversorgungInBestEinrichtungenNachAusbauSchule", ignore = false),
+            @Mapping(target = "hinweisVersorgung", ignore = false),
         }
     )
     AbfragevarianteBaugenehmigungsverfahrenModel request2Model(
@@ -215,6 +287,15 @@ public interface AbfragevarianteDomainMapper {
         {
             @Mapping(target = "version", ignore = false),
             @Mapping(target = "bedarfsmeldungFachreferate", ignore = false),
+            @Mapping(target = "ausgeloesterBedarfImBaugebietBeruecksichtigenKita", ignore = false),
+            @Mapping(target = "ausgeloesterBedarfMitversorgungImBplanKita", ignore = false),
+            @Mapping(target = "ausgeloesterBedarfMitversorgungInBestEinrichtungenKita", ignore = false),
+            @Mapping(target = "ausgeloesterBedarfMitversorgungInBestEinrichtungenNachAusbauKita", ignore = false),
+            @Mapping(target = "ausgeloesterBedarfImBaugebietBeruecksichtigenSchule", ignore = false),
+            @Mapping(target = "ausgeloesterBedarfMitversorgungImBplanSchule", ignore = false),
+            @Mapping(target = "ausgeloesterBedarfMitversorgungInBestEinrichtungenSchule", ignore = false),
+            @Mapping(target = "ausgeloesterBedarfMitversorgungInBestEinrichtungenNachAusbauSchule", ignore = false),
+            @Mapping(target = "hinweisVersorgung", ignore = false),
         }
     )
     AbfragevarianteWeiteresVerfahrenModel request2Model(
