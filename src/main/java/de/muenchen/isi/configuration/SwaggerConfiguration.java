@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 @Configuration
-@Profile({ "local", "dev" })
+@Profile("!prod")
 public class SwaggerConfiguration {
 
     private final String buildVersion;
@@ -35,7 +35,6 @@ public class SwaggerConfiguration {
     }
 
     @Bean
-    @Profile("!prod")
     public String[] whitelist() {
         return new String[] {
             // -- swagger ui
@@ -44,11 +43,5 @@ public class SwaggerConfiguration {
             "/swagger-ui/**",
             "/swagger-ui.html",
         };
-    }
-
-    @Bean
-    @Profile("prod")
-    public String[] whitelistProd() {
-        return new String[] {};
     }
 }

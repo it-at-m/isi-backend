@@ -28,7 +28,7 @@ import de.muenchen.isi.domain.model.common.FlurstueckModel;
 import de.muenchen.isi.domain.model.common.GemarkungModel;
 import de.muenchen.isi.domain.model.common.MultiPolygonGeometryModel;
 import de.muenchen.isi.domain.model.common.StadtbezirkModel;
-import de.muenchen.isi.domain.model.common.VerortungModel;
+import de.muenchen.isi.domain.model.common.VerortungMultiPolygonModel;
 import de.muenchen.isi.domain.model.common.WGS84Model;
 import de.muenchen.isi.domain.model.filehandling.DokumentModel;
 import de.muenchen.isi.domain.model.filehandling.FilepathModel;
@@ -370,8 +370,8 @@ public class TestData {
         return dokument;
     }
 
-    public static VerortungModel createVerortung() {
-        final var verortung = new VerortungModel();
+    public static VerortungMultiPolygonModel createVerortung() {
+        final var verortung = new VerortungMultiPolygonModel();
         verortung.setMultiPolygon(createMultipolygon());
 
         final var stadtbezirk1 = new StadtbezirkModel();

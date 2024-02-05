@@ -1,7 +1,7 @@
 package de.muenchen.isi.api.dto.calculation;
 
+import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
-import javax.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data

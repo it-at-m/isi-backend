@@ -11,31 +11,32 @@ import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.WesentlicheRechtsgrundlage;
 import de.muenchen.isi.infrastructure.repository.search.SearchwordSuggesterRepository;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.Index;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OrderBy;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.Index;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.OrderBy;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import org.hibernate.annotations.Type;
+import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBinderRef;
 import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBridgeRef;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.KeywordField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.NonStandardField;
+import org.hibernate.type.SqlTypes;
 
 @Entity
 @DiscriminatorValue(ArtAbfrage.Values.BAULEITPLANVERFAHREN)
@@ -143,17 +144,53 @@ public class AbfragevarianteBauleitplanverfahren extends Abfragevariante {
     @Column
     private String anmerkung;
 
-    @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval = true)
-    @JoinColumn(name = "abfragevariante_bauleitplanverfahren_id", referencedColumnName = "id")
+    @OneToMany(cascade = { CascadeType.ALL }, orphanRemoval = true)
+    @JoinColumn(name = "abfragevariante_bauleitplanverfahren_fachreferate_id", referencedColumnName = "id")
     @OrderBy("createdDateTime asc")
-    private List<BedarfsmeldungFachreferate> bedarfsmeldungFachreferate;
+    private List<Bedarfsmeldung> bedarfsmeldungFachreferate;
+
+    @OneToMany(cascade = { CascadeType.ALL }, orphanRemoval = true)
+    @JoinColumn(name = "abfragevariante_bauleitplanverfahren_abfrageersteller_id", referencedColumnName = "id")
+    @OrderBy("createdDateTime asc")
+    private List<Bedarfsmeldung> bedarfsmeldungAbfrageersteller;
 
     @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "abfragevariante_bauleitplanverfahren_id")
     @OrderBy("createdDateTime asc")
     private List<Bauabschnitt> bauabschnitte;
 
-    @Type(type = "json")
+    // Kindertagesbetreuung
+
+    @Column(name = "ausglstr_bdrf_im_bgbt_brckschtgn_kita")
+    private boolean ausgeloesterBedarfImBaugebietBeruecksichtigenKita;
+
+    @Column(name = "ausglstr_bdrf_mtvrsrg_im_bplan_kita")
+    private boolean ausgeloesterBedarfMitversorgungImBplanKita;
+
+    @Column(name = "ausglstr_bdrf_mtvrsrg_in_bsthnd_einr_kita")
+    private boolean ausgeloesterBedarfMitversorgungInBestEinrichtungenKita;
+
+    @Column(name = "ausglstr_bdrf_mtvrsrg_in_bsthnd_einr_nch_asbau_kita")
+    private boolean ausgeloesterBedarfMitversorgungInBestEinrichtungenNachAusbauKita;
+
+    // Schule
+
+    @Column(name = "ausglstr_bdrf_im_bgbt_brckschtgn_schule")
+    private boolean ausgeloesterBedarfImBaugebietBeruecksichtigenSchule;
+
+    @Column(name = "ausglstr_bdrf_mtvrsrg_im_bplan_schule")
+    private boolean ausgeloesterBedarfMitversorgungImBplanSchule;
+
+    @Column(name = "ausglstr_bdrf_mtvrsrg_in_bsthnd_einr_schule")
+    private boolean ausgeloesterBedarfMitversorgungInBestEinrichtungenSchule;
+
+    @Column(name = "ausglstr_bdrf_mtvrsrg_in_bsthnd_einr_nch_asbau_schule")
+    private boolean ausgeloesterBedarfMitversorgungInBestEinrichtungenNachAusbauSchule;
+
+    @Column(length = 1000)
+    private String hinweisVersorgung;
+
+    @JdbcTypeCode(SqlTypes.JSON)
     @Column(columnDefinition = "jsonb")
     private LangfristigerPlanungsursaechlicherBedarf langfristigerPlanungsursaechlicherBedarf;
 }

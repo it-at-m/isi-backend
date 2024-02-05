@@ -1,9 +1,8 @@
 package de.muenchen.isi.security;
 
-import com.nimbusds.jose.shaded.json.JSONArray;
-import com.nimbusds.jose.shaded.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.EnumUtils;
@@ -12,7 +11,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.core.DefaultOAuth2AuthenticatedPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 
@@ -20,62 +18,46 @@ import org.springframework.stereotype.Service;
 @Service
 public class AuthenticationUtils {
 
+    public static final String ROLE_ADMIN = "admin";
+    public static final String ROLE_ABFRAGEERSTELLUNG = "abfrageerstellung";
+    public static final String ROLE_SACHBEARBEITUNG = "sachbearbeitung";
+    public static final String ROLE_ANWENDER = "anwender";
     private static final String NAME_UNAUTHENTICATED_USER = "unauthenticated";
-
     private static final String TOKEN_USER_NAME = "username";
-
     private static final String TOKEN_USER_SUB = "sub";
-
     private static final String SUB_UNAUTHENTICATED_USER = "123456789";
-
     private static final String TOKEN_RESOURCE_ACCESS = "resource_access";
-
     private static final String TOKEN_ISI = "isi";
-
     private static final String TOKEN_ROLES = "roles";
 
-    public static final String ROLE_ADMIN = "admin";
-
-    public static final String ROLE_ABFRAGEERSTELLUNG = "abfrageerstellung";
-
-    public static final String ROLE_SACHBEARBEITUNG = "sachbearbeitung";
-
     /**
-     * Die Methode extrahiert die Authorities des Nutzers aus dem {@link DefaultOAuth2AuthenticatedPrincipal}
+     * Die Methode extrahiert die Authorities des Nutzers aus der {@link Authentication} des {@link SecurityContextHolder}.
      *
      * @return Liste der Authorities aus {@link AuthoritiesEnum} des Nutzers
      */
     public List<AuthoritiesEnum> getUserAuthorities() {
-        ArrayList<AuthoritiesEnum> userRoles = new ArrayList<>();
+        ArrayList<AuthoritiesEnum> authorities = new ArrayList<>();
         final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (!ObjectUtils.isEmpty(authentication) && !(authentication.getPrincipal() instanceof String)) {
-            try {
-                final DefaultOAuth2AuthenticatedPrincipal principal =
-                    (DefaultOAuth2AuthenticatedPrincipal) authentication.getPrincipal();
-                if (!ObjectUtils.isEmpty(principal)) {
-                    for (GrantedAuthority authority : principal.getAuthorities()) {
-                        if (EnumUtils.isValidEnum(AuthoritiesEnum.class, authority.getAuthority())) {
-                            userRoles.add(AuthoritiesEnum.valueOf(authority.getAuthority()));
-                        } else {
-                            log.error("Authority {} nicht in AuthoritiesEnum vorhanden.\n", authority.getAuthority());
-                        }
-                    }
+        if (ObjectUtils.isNotEmpty(authentication)) {
+            for (GrantedAuthority authority : authentication.getAuthorities()) {
+                if (EnumUtils.isValidEnum(AuthoritiesEnum.class, authority.getAuthority())) {
+                    authorities.add(AuthoritiesEnum.valueOf(authority.getAuthority()));
+                } else {
+                    log.error("Authority {} nicht in AuthoritiesEnum vorhanden.\n", authority.getAuthority());
                 }
-            } catch (final ClassCastException | IllegalArgumentException exception) {
-                log.error(exception.getMessage(), exception);
             }
         }
-        return userRoles;
+        return authorities;
     }
 
     /**
-     * Die Methode extrahiert den Nutzernamen aus dem im SecurityContext vorhandenen {@link Jwt}.
+     * Die Methode extrahiert den Nutzernamen aus dem {@link Jwt} der {@link Authentication} des {@link SecurityContextHolder}.
      *
      * @return den Nutzernamen oder einen Platzhalter fall kein {@link Jwt} verfügbar
      */
     public String getUsername() {
         String username = null;
-        final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        final var authentication = SecurityContextHolder.getContext().getAuthentication();
         if (!ObjectUtils.isEmpty(authentication)) {
             final var principal = authentication.getPrincipal();
             if (Objects.equals(Jwt.class, principal.getClass())) {
@@ -87,47 +69,49 @@ public class AuthenticationUtils {
     }
 
     /**
-     * Die Methode extrahiert den Nutzernamen aus dem im SecurityContext vorhandenen {@link Jwt}.
+     * Die Methode extrahiert den Nutzernamen aus dem {@link Jwt} der {@link Authentication} des {@link SecurityContextHolder}.
      *
      * @return den Nutzernamen oder einen Platzhalter falls kein {@link Jwt} verfügbar
      */
     public String getUserSub() {
         String sub = null;
-        final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (!ObjectUtils.isEmpty(authentication) && !(authentication.getPrincipal() instanceof String)) {
-            final DefaultOAuth2AuthenticatedPrincipal principal =
-                (DefaultOAuth2AuthenticatedPrincipal) authentication.getPrincipal();
-            if (!ObjectUtils.isEmpty(principal)) {
-                sub = principal.getAttribute(TOKEN_USER_SUB).toString();
+        final var authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (ObjectUtils.isNotEmpty(authentication) && !(authentication.getPrincipal() instanceof String)) {
+            final var jwt = (Jwt) authentication.getPrincipal();
+            if (ObjectUtils.isNotEmpty(jwt)) {
+                sub = jwt.getClaimAsString(TOKEN_USER_SUB);
             }
         }
         return StringUtils.isNotBlank(sub) ? sub : SUB_UNAUTHENTICATED_USER;
     }
 
     /**
-     * Die Methode extrahiert die Nutzerrollen des Nutzers aus dem {@link DefaultOAuth2AuthenticatedPrincipal}
+     * Die Methode extrahiert die Nutzerrollen des Nutzers aus dem {@link Jwt} der {@link Authentication} des {@link SecurityContextHolder}.
      *
      * @return Liste der Nutzerrollen des Nutzers
      */
     public List<String> getUserRoles() {
-        List<String> roles = new ArrayList<>();
-        final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (!ObjectUtils.isEmpty(authentication) && !(authentication.getPrincipal() instanceof String)) {
-            final DefaultOAuth2AuthenticatedPrincipal principal =
-                (DefaultOAuth2AuthenticatedPrincipal) authentication.getPrincipal();
-            if (!ObjectUtils.isEmpty(principal)) {
-                JSONObject resourceAccess = principal.getAttribute(TOKEN_RESOURCE_ACCESS);
-                if (!resourceAccess.isEmpty()) {
-                    JSONObject isi = (JSONObject) resourceAccess.get(TOKEN_ISI);
-                    if (!isi.isEmpty()) {
-                        JSONArray rolesArray = (JSONArray) isi.get(TOKEN_ROLES);
-                        if (!rolesArray.isEmpty()) {
-                            rolesArray.forEach(role -> roles.add(role.toString()));
+        final var roles = new ArrayList<String>();
+        final var authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (ObjectUtils.isNotEmpty(authentication) && !(authentication.getPrincipal() instanceof String)) {
+            final var jwt = (Jwt) authentication.getPrincipal();
+            if (ObjectUtils.isNotEmpty(jwt)) {
+                final var resourceAccess = jwt.getClaim(TOKEN_RESOURCE_ACCESS);
+                if (ObjectUtils.isNotEmpty(resourceAccess)) {
+                    final var isi = ((Map<?, ?>) resourceAccess).get(TOKEN_ISI);
+                    if (ObjectUtils.isNotEmpty(isi) && isi instanceof Map) {
+                        final var rolesInToken = ((Map<?, ?>) isi).get(TOKEN_ROLES);
+                        if (ObjectUtils.isNotEmpty(rolesInToken) && rolesInToken instanceof List) {
+                            roles.addAll((List<String>) rolesInToken);
                         }
                     }
                 }
             }
         }
         return roles;
+    }
+
+    public boolean isRoleAnwender() {
+        return getUserRoles().stream().allMatch(s -> s.contains(ROLE_ANWENDER));
     }
 }

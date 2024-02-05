@@ -41,7 +41,7 @@ public class FoerdermixUmlageService {
                             gueltigAb
                         );
                     if (umlegung.isPresent()) {
-                        for (final var schluessel : umlegung.get().getUmlegungsschluessel()) {
+                        for (final var schluessel : umlegung.get().getUmlegungsschluessel().getFoerderarten()) {
                             final var umgelegterAnteil = foerderart
                                 .getAnteilProzent()
                                 .multiply(schluessel.getAnteilProzent().scaleByPowerOfTen(-2));

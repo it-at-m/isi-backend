@@ -12,11 +12,11 @@ public interface AbfragevarianteBauleitplanverfahrenRepository
         value = "select abfragevarianten_bauleitplanverfahren_id from abfragevariante_bauleitplanverfahren where id = ?1",
         nativeQuery = true
     )
-    Optional<String> findAbfrageIdForAbfragevarianteById(final String id);
+    Optional<UUID> findAbfrageIdForAbfragevarianteById(final UUID id);
 
     @Query(
         value = "select abfragevarianten_sachbearbeitung_bauleitplanverfahren_id from abfragevariante_bauleitplanverfahren where id = ?1",
         nativeQuery = true
     )
-    Optional<String> findAbfrageIdForAbfragevarianteSachbearbeitungById(final String id);
+    Optional<UUID> findAbfrageIdForAbfragevarianteSachbearbeitungById(final UUID id);
 }

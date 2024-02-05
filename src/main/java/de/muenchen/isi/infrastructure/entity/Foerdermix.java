@@ -4,11 +4,11 @@
  */
 package de.muenchen.isi.infrastructure.entity;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.OrderBy;
 import java.util.List;
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import javax.persistence.Embeddable;
-import javax.persistence.OrderBy;
 import lombok.Data;
 
 @Data

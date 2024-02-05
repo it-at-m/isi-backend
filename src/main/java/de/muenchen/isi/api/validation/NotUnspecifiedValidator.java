@@ -1,8 +1,8 @@
 package de.muenchen.isi.api.validation;
 
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ILookup;
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 

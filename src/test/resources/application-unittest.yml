@@ -27,6 +27,16 @@ spring:
         format_sql: true
         search:
           enabled: false
+          # Trigger um die in der Datenbank gespeicherten Entitäten beim Hochfahren der Anwendung neu indizieren zu können.
+          reindex-database: false
+          schema_management:
+            # Muss der Strategy bei spring.jpa.hibernate.ddl-auto entsprechen.
+            strategy: drop-and-create
+          backend:
+            hosts : localhost:9200
+            username: elastic
+            password: changeme
+
   security:
     # possible values: none, all, changing (With changing, only changing requests such as POST, PUT, DELETE are logged)
     logging.requests: all
@@ -39,3 +49,9 @@ io:
           document-storage-url: localhost:8080
           file-expiration-time: 5 #minutes
           securityEnabled: false
+
+file:
+  number.max: 20
+  size.max: 31457280 # bytes
+  mimetypes.allowed: application/octet-stream,application/x-dbf,text/plain,application/pdf,application/vnd.ms-outlook,application/vnd.oasis.opendocument.spreadsheet,application/vnd.oasis.opendocument.text,application/vnd.oasis.opendocument.presentation,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.openxmlformats-officedocument.presentationml.presentation,text/csv,message/rfc822,image/jpeg,image/png,image/svg+xml
+

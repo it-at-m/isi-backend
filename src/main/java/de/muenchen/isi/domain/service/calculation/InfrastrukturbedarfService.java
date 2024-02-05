@@ -16,6 +16,7 @@ import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -420,265 +421,19 @@ public class InfrastrukturbedarfService {
     ) {
         final var personen = new ArrayList<PersonenProJahrModel>();
         final var numberOfYearsToCalculate = 20 - (Integer.parseInt(wohneinheiten.getJahr()) - earliestYear);
-        var yearToCalculate = 0;
         BigDecimal anzahlPersonenGesamt;
-        if (yearToCalculate < numberOfYearsToCalculate) {
+        final var obererRichtwerteByYear = getObererRichtwerteByYear(sobonOrientierungswertSozialeInfrastruktur);
+        for (var yearToCalculate = 1; yearToCalculate <= numberOfYearsToCalculate; yearToCalculate++) {
             anzahlPersonenGesamt =
                 wohneinheiten
                     .getWohneinheiten()
-                    .multiply(
-                        sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr1NachErsterstellung()
-                    )
+                    .multiply(obererRichtwerteByYear.get(yearToCalculate))
                     .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
             personen.add(
-                createPersonenProJahr(Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate, anzahlPersonenGesamt)
-            );
-            yearToCalculate++;
-        }
-        if (yearToCalculate < numberOfYearsToCalculate) {
-            anzahlPersonenGesamt =
-                wohneinheiten
-                    .getWohneinheiten()
-                    .multiply(
-                        sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr2NachErsterstellung()
-                    )
-                    .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
-            personen.add(
-                createPersonenProJahr(Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate, anzahlPersonenGesamt)
-            );
-            yearToCalculate++;
-        }
-        if (yearToCalculate < numberOfYearsToCalculate) {
-            anzahlPersonenGesamt =
-                wohneinheiten
-                    .getWohneinheiten()
-                    .multiply(
-                        sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr3NachErsterstellung()
-                    )
-                    .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
-            personen.add(
-                createPersonenProJahr(Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate, anzahlPersonenGesamt)
-            );
-            yearToCalculate++;
-        }
-        if (yearToCalculate < numberOfYearsToCalculate) {
-            anzahlPersonenGesamt =
-                wohneinheiten
-                    .getWohneinheiten()
-                    .multiply(
-                        sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr4NachErsterstellung()
-                    )
-                    .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
-            personen.add(
-                createPersonenProJahr(Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate, anzahlPersonenGesamt)
-            );
-            yearToCalculate++;
-        }
-        if (yearToCalculate < numberOfYearsToCalculate) {
-            anzahlPersonenGesamt =
-                wohneinheiten
-                    .getWohneinheiten()
-                    .multiply(
-                        sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr5NachErsterstellung()
-                    )
-                    .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
-            personen.add(
-                createPersonenProJahr(Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate, anzahlPersonenGesamt)
-            );
-            yearToCalculate++;
-        }
-        if (yearToCalculate < numberOfYearsToCalculate) {
-            anzahlPersonenGesamt =
-                wohneinheiten
-                    .getWohneinheiten()
-                    .multiply(
-                        sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr6NachErsterstellung()
-                    )
-                    .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
-            personen.add(
-                createPersonenProJahr(Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate, anzahlPersonenGesamt)
-            );
-            yearToCalculate++;
-        }
-        if (yearToCalculate < numberOfYearsToCalculate) {
-            anzahlPersonenGesamt =
-                wohneinheiten
-                    .getWohneinheiten()
-                    .multiply(
-                        sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr7NachErsterstellung()
-                    )
-                    .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
-            personen.add(
-                createPersonenProJahr(Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate, anzahlPersonenGesamt)
-            );
-            yearToCalculate++;
-        }
-        if (yearToCalculate < numberOfYearsToCalculate) {
-            anzahlPersonenGesamt =
-                wohneinheiten
-                    .getWohneinheiten()
-                    .multiply(
-                        sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr8NachErsterstellung()
-                    )
-                    .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
-            personen.add(
-                createPersonenProJahr(Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate, anzahlPersonenGesamt)
-            );
-            yearToCalculate++;
-        }
-        if (yearToCalculate < numberOfYearsToCalculate) {
-            anzahlPersonenGesamt =
-                wohneinheiten
-                    .getWohneinheiten()
-                    .multiply(
-                        sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr9NachErsterstellung()
-                    )
-                    .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
-            personen.add(
-                createPersonenProJahr(Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate, anzahlPersonenGesamt)
-            );
-            yearToCalculate++;
-        }
-        if (yearToCalculate < numberOfYearsToCalculate) {
-            anzahlPersonenGesamt =
-                wohneinheiten
-                    .getWohneinheiten()
-                    .multiply(
-                        sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr10NachErsterstellung()
-                    )
-                    .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
-            personen.add(
-                createPersonenProJahr(Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate, anzahlPersonenGesamt)
-            );
-            yearToCalculate++;
-        }
-        if (yearToCalculate < numberOfYearsToCalculate) {
-            anzahlPersonenGesamt =
-                wohneinheiten
-                    .getWohneinheiten()
-                    .multiply(
-                        sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr11NachErsterstellung()
-                    )
-                    .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
-            personen.add(
-                createPersonenProJahr(Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate, anzahlPersonenGesamt)
-            );
-            yearToCalculate++;
-        }
-        if (yearToCalculate < numberOfYearsToCalculate) {
-            anzahlPersonenGesamt =
-                wohneinheiten
-                    .getWohneinheiten()
-                    .multiply(
-                        sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr12NachErsterstellung()
-                    )
-                    .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
-            personen.add(
-                createPersonenProJahr(Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate, anzahlPersonenGesamt)
-            );
-            yearToCalculate++;
-        }
-        if (yearToCalculate < numberOfYearsToCalculate) {
-            anzahlPersonenGesamt =
-                wohneinheiten
-                    .getWohneinheiten()
-                    .multiply(
-                        sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr13NachErsterstellung()
-                    )
-                    .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
-            personen.add(
-                createPersonenProJahr(Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate, anzahlPersonenGesamt)
-            );
-            yearToCalculate++;
-        }
-        if (yearToCalculate < numberOfYearsToCalculate) {
-            anzahlPersonenGesamt =
-                wohneinheiten
-                    .getWohneinheiten()
-                    .multiply(
-                        sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr14NachErsterstellung()
-                    )
-                    .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
-            personen.add(
-                createPersonenProJahr(Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate, anzahlPersonenGesamt)
-            );
-            yearToCalculate++;
-        }
-        if (yearToCalculate < numberOfYearsToCalculate) {
-            anzahlPersonenGesamt =
-                wohneinheiten
-                    .getWohneinheiten()
-                    .multiply(
-                        sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr15NachErsterstellung()
-                    )
-                    .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
-            personen.add(
-                createPersonenProJahr(Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate, anzahlPersonenGesamt)
-            );
-            yearToCalculate++;
-        }
-        if (yearToCalculate < numberOfYearsToCalculate) {
-            anzahlPersonenGesamt =
-                wohneinheiten
-                    .getWohneinheiten()
-                    .multiply(
-                        sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr16NachErsterstellung()
-                    )
-                    .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
-            personen.add(
-                createPersonenProJahr(Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate, anzahlPersonenGesamt)
-            );
-            yearToCalculate++;
-        }
-        if (yearToCalculate < numberOfYearsToCalculate) {
-            anzahlPersonenGesamt =
-                wohneinheiten
-                    .getWohneinheiten()
-                    .multiply(
-                        sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr17NachErsterstellung()
-                    )
-                    .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
-            personen.add(
-                createPersonenProJahr(Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate, anzahlPersonenGesamt)
-            );
-            yearToCalculate++;
-        }
-        if (yearToCalculate < numberOfYearsToCalculate) {
-            anzahlPersonenGesamt =
-                wohneinheiten
-                    .getWohneinheiten()
-                    .multiply(
-                        sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr18NachErsterstellung()
-                    )
-                    .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
-            personen.add(
-                createPersonenProJahr(Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate, anzahlPersonenGesamt)
-            );
-            yearToCalculate++;
-        }
-        if (yearToCalculate < numberOfYearsToCalculate) {
-            anzahlPersonenGesamt =
-                wohneinheiten
-                    .getWohneinheiten()
-                    .multiply(
-                        sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr19NachErsterstellung()
-                    )
-                    .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
-            personen.add(
-                createPersonenProJahr(Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate, anzahlPersonenGesamt)
-            );
-            yearToCalculate++;
-        }
-        if (yearToCalculate < numberOfYearsToCalculate) {
-            anzahlPersonenGesamt =
-                wohneinheiten
-                    .getWohneinheiten()
-                    .multiply(
-                        sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr20NachErsterstellung()
-                    )
-                    .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
-            personen.add(
-                createPersonenProJahr(Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate, anzahlPersonenGesamt)
+                createPersonenProJahr(
+                    Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate - 1,
+                    anzahlPersonenGesamt
+                )
             );
         }
         return personen.stream();
@@ -769,5 +524,98 @@ public class InfrastrukturbedarfService {
             }
         }
         return null;
+    }
+
+    /**
+     * Die Methode gibt die oberen Richtwerte für die Jahre ein bis zwanzig als Map zurück.
+     *
+     * @param sobonOrientierungswertSozialeInfrastruktur zur Erstellung der Map.
+     * @return die oberen Rechtwerte der Jahre 1 bis 20 als Map mit Jahr als Schlüssel und oberer Richtwert als Wert.
+     */
+    protected Map<Integer, BigDecimal> getObererRichtwerteByYear(
+        final SobonOrientierungswertSozialeInfrastrukturModel sobonOrientierungswertSozialeInfrastruktur
+    ) {
+        final var obereRichtwerteByYear = new HashMap<Integer, BigDecimal>();
+        obereRichtwerteByYear.put(
+            1,
+            sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr1NachErsterstellung()
+        );
+        obereRichtwerteByYear.put(
+            2,
+            sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr2NachErsterstellung()
+        );
+        obereRichtwerteByYear.put(
+            3,
+            sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr3NachErsterstellung()
+        );
+        obereRichtwerteByYear.put(
+            4,
+            sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr4NachErsterstellung()
+        );
+        obereRichtwerteByYear.put(
+            5,
+            sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr5NachErsterstellung()
+        );
+        obereRichtwerteByYear.put(
+            6,
+            sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr6NachErsterstellung()
+        );
+        obereRichtwerteByYear.put(
+            7,
+            sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr7NachErsterstellung()
+        );
+        obereRichtwerteByYear.put(
+            8,
+            sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr8NachErsterstellung()
+        );
+        obereRichtwerteByYear.put(
+            9,
+            sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr9NachErsterstellung()
+        );
+        obereRichtwerteByYear.put(
+            10,
+            sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr10NachErsterstellung()
+        );
+        obereRichtwerteByYear.put(
+            11,
+            sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr11NachErsterstellung()
+        );
+        obereRichtwerteByYear.put(
+            12,
+            sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr12NachErsterstellung()
+        );
+        obereRichtwerteByYear.put(
+            13,
+            sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr13NachErsterstellung()
+        );
+        obereRichtwerteByYear.put(
+            14,
+            sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr14NachErsterstellung()
+        );
+        obereRichtwerteByYear.put(
+            15,
+            sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr15NachErsterstellung()
+        );
+        obereRichtwerteByYear.put(
+            16,
+            sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr16NachErsterstellung()
+        );
+        obereRichtwerteByYear.put(
+            17,
+            sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr17NachErsterstellung()
+        );
+        obereRichtwerteByYear.put(
+            18,
+            sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr18NachErsterstellung()
+        );
+        obereRichtwerteByYear.put(
+            19,
+            sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr19NachErsterstellung()
+        );
+        obereRichtwerteByYear.put(
+            20,
+            sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr20NachErsterstellung()
+        );
+        return obereRichtwerteByYear;
     }
 }

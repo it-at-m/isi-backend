@@ -9,8 +9,12 @@ import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswert
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 @Data
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
 public class AbfragevarianteBauleitplanverfahrenInBearbeitungSachbearbeitungModel
     extends AbfragevarianteBauleitplanverfahrenAngelegtModel {
 

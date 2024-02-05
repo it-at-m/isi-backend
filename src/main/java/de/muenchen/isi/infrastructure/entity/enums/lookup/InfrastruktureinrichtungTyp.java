@@ -1,10 +1,16 @@
 package de.muenchen.isi.infrastructure.entity.enums.lookup;
 
+import de.muenchen.isi.infrastructure.entity.Bedarfsmeldung;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Infrastruktureinrichtung;
-import javax.persistence.DiscriminatorValue;
+import jakarta.persistence.DiscriminatorValue;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+/**
+ * In {@link Bedarfsmeldung#getInfrastruktureinrichtungTyp()} wird der Enum
+ * nicht mittels @Enumerated(EnumType.STRING) als String repräsentiert.
+ * Somit sind neue Enumausprägungen am Ende der Enumration anzufügen.
+ */
 @AllArgsConstructor
 public enum InfrastruktureinrichtungTyp implements ILookup {
     UNSPECIFIED(ILookup.UNSPECIFIED),

@@ -10,6 +10,7 @@ import de.muenchen.isi.domain.exception.CalculationException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
+import de.muenchen.isi.domain.exception.UserRoleNotAllowedException;
 import de.muenchen.isi.domain.model.AbfrageModel;
 import de.muenchen.isi.domain.model.common.TransitionModel;
 import de.muenchen.isi.domain.service.AbfrageService;
@@ -68,7 +69,7 @@ public class TransitionModelTest {
     @Transactional
     @MockCustomUser
     void possibleTransitionsAngelegtAndRoleAdmin()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, CalculationException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, UserRoleNotAllowedException, CalculationException {
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
         abfrage = this.abfrageService.save(abfrage);
         abfrage.setStatusAbfrage(StatusAbfrage.ANGELEGT);
@@ -92,7 +93,7 @@ public class TransitionModelTest {
     @Transactional
     @MockCustomUser(roles = { "sachbearbeitung" })
     void possibleTransitionsAngelegtAndRoleSachbearbeitung()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, CalculationException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, UserRoleNotAllowedException, CalculationException {
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
         abfrage = this.abfrageService.save(abfrage);
         abfrage.setStatusAbfrage(StatusAbfrage.ANGELEGT);
@@ -109,7 +110,7 @@ public class TransitionModelTest {
     @Transactional
     @MockCustomUser(roles = { "abfrageerstellung" })
     void possibleTransitionsAngelegtAndRoleAbfrageerstellung()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, CalculationException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, UserRoleNotAllowedException, CalculationException {
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
         abfrage = this.abfrageService.save(abfrage);
         abfrage.setStatusAbfrage(StatusAbfrage.ANGELEGT);
@@ -131,26 +132,26 @@ public class TransitionModelTest {
 
     @Test
     @Transactional
-    @MockCustomUser(roles = { "nutzer" })
+    @MockCustomUser(roles = { "anwender" })
     void possibleTransitionsAngelegtAndRoleAnwender()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, CalculationException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, UserRoleNotAllowedException, CalculationException {
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
         abfrage = this.abfrageService.save(abfrage);
         abfrage.setStatusAbfrage(StatusAbfrage.ANGELEGT);
         abfrage = this.abfrageService.save(abfrage);
 
         final var uuid = abfrage.getId();
-        List<TransitionModel> possibleTransitions =
-            this.abfrageStatusService.getStatusAbfrageEventsBasedOnStateAndAuthorities(uuid);
-
-        assertThat(possibleTransitions.size(), is(0));
+        Assertions.assertThrows(
+            UserRoleNotAllowedException.class,
+            () -> this.abfrageStatusService.getStatusAbfrageEventsBasedOnStateAndAuthorities(uuid)
+        );
     }
 
     @Test
     @Transactional
     @MockCustomUser
     void possibleTransitionsOffenAndRoleAdmin()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, CalculationException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, UserRoleNotAllowedException, CalculationException {
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
         abfrage = this.abfrageService.save(abfrage);
         abfrage.setStatusAbfrage(StatusAbfrage.OFFEN);
@@ -195,7 +196,7 @@ public class TransitionModelTest {
     @Transactional
     @MockCustomUser(roles = { "sachbearbeitung" })
     void possibleTransitionsOffenAndRoleSachbearbeitung()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, CalculationException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, UserRoleNotAllowedException, CalculationException {
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
         abfrage = this.abfrageService.save(abfrage);
         abfrage.setStatusAbfrage(StatusAbfrage.OFFEN);
@@ -241,7 +242,7 @@ public class TransitionModelTest {
     @Transactional
     @MockCustomUser(roles = { "abfrageerstellung" })
     void possibleTransitionsOffenAndRoleAbfrageerstellung()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, CalculationException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, UserRoleNotAllowedException, CalculationException {
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
         abfrage = this.abfrageService.save(abfrage);
         abfrage.setStatusAbfrage(StatusAbfrage.OFFEN);
@@ -256,26 +257,26 @@ public class TransitionModelTest {
 
     @Test
     @Transactional
-    @MockCustomUser(roles = { "nutzer" })
+    @MockCustomUser(roles = { "anwender" })
     void possibleTransitionsOffenAndRoleAnwender()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, CalculationException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, UserRoleNotAllowedException, CalculationException {
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
         abfrage = this.abfrageService.save(abfrage);
         abfrage.setStatusAbfrage(StatusAbfrage.OFFEN);
         abfrage = this.abfrageService.save(abfrage);
 
         final var uuid = abfrage.getId();
-        List<TransitionModel> possibleTransitions =
-            this.abfrageStatusService.getStatusAbfrageEventsBasedOnStateAndAuthorities(uuid);
-
-        assertThat(possibleTransitions.size(), is(0));
+        Assertions.assertThrows(
+            UserRoleNotAllowedException.class,
+            () -> this.abfrageStatusService.getStatusAbfrageEventsBasedOnStateAndAuthorities(uuid)
+        );
     }
 
     @Test
     @Transactional
     @MockCustomUser
     void possibleTransitionsBearbeitungSachbearbeitungAndRoleAdmin()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, CalculationException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, UserRoleNotAllowedException, CalculationException {
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
         abfrage = this.abfrageService.save(abfrage);
         abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
@@ -330,7 +331,7 @@ public class TransitionModelTest {
     @Transactional
     @MockCustomUser(roles = { "sachbearbeitung" })
     void possibleTransitionsBearbeitungSachbearbeitungAndRoleSachbearbeitung()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, CalculationException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, UserRoleNotAllowedException, CalculationException {
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
         abfrage = this.abfrageService.save(abfrage);
         abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
@@ -384,7 +385,7 @@ public class TransitionModelTest {
     @Transactional
     @MockCustomUser(roles = { "abfrageerstellung" })
     void possibleTransitionsBearbeitungSachbearbeitungAndRoleAbfrageerstellung()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, CalculationException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, UserRoleNotAllowedException, CalculationException {
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
         abfrage = this.abfrageService.save(abfrage);
         abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
@@ -399,26 +400,26 @@ public class TransitionModelTest {
 
     @Test
     @Transactional
-    @MockCustomUser(roles = { "nutzer" })
+    @MockCustomUser(roles = { "anwender" })
     void possibleTransitionsBearbeitungSachbearbeitungAndRoleAnwender()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, CalculationException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, UserRoleNotAllowedException, CalculationException {
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
         abfrage = this.abfrageService.save(abfrage);
         abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
         abfrage = this.abfrageService.save(abfrage);
 
         final var uuid = abfrage.getId();
-        List<TransitionModel> possibleTransitions =
-            this.abfrageStatusService.getStatusAbfrageEventsBasedOnStateAndAuthorities(uuid);
-
-        assertThat(possibleTransitions.size(), is(0));
+        Assertions.assertThrows(
+            UserRoleNotAllowedException.class,
+            () -> this.abfrageStatusService.getStatusAbfrageEventsBasedOnStateAndAuthorities(uuid)
+        );
     }
 
     @Test
     @Transactional
     @MockCustomUser
     void possibleTransitionsBearbeitungFachreferateAndRoleAdmin()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, CalculationException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, UserRoleNotAllowedException, CalculationException {
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
         abfrage = this.abfrageService.save(abfrage);
         abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
@@ -464,7 +465,7 @@ public class TransitionModelTest {
     @Transactional
     @MockCustomUser(roles = { "sachbearbeitung" })
     void possibleTransitionsBearbeitungFachreferateAndRoleSachbearbeitung()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, CalculationException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, UserRoleNotAllowedException, CalculationException {
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
         abfrage = this.abfrageService.save(abfrage);
         abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
@@ -509,7 +510,7 @@ public class TransitionModelTest {
     @Transactional
     @MockCustomUser(roles = { "abfrageerstellung" })
     void possibleTransitionsBearbeitungFachreferateAndRoleAbfrageerstellung()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, CalculationException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, UserRoleNotAllowedException, CalculationException {
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
         abfrage = this.abfrageService.save(abfrage);
         abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
@@ -524,26 +525,26 @@ public class TransitionModelTest {
 
     @Test
     @Transactional
-    @MockCustomUser(roles = { "nutzer" })
+    @MockCustomUser(roles = { "anwender" })
     void possibleTransitionsBearbeitungFachreferateAndRoleAnwender()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, CalculationException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, UserRoleNotAllowedException, CalculationException {
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
         abfrage = this.abfrageService.save(abfrage);
         abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
         abfrage = this.abfrageService.save(abfrage);
 
         final var uuid = abfrage.getId();
-        List<TransitionModel> possibleTransitions =
-            this.abfrageStatusService.getStatusAbfrageEventsBasedOnStateAndAuthorities(uuid);
-
-        assertThat(possibleTransitions.size(), is(0));
+        Assertions.assertThrows(
+            UserRoleNotAllowedException.class,
+            () -> this.abfrageStatusService.getStatusAbfrageEventsBasedOnStateAndAuthorities(uuid)
+        );
     }
 
     @Test
     @Transactional
     @MockCustomUser
     void possibleTransitionsBedarfsmeldungErfolgtAndRoleAdmin()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, CalculationException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, UserRoleNotAllowedException, CalculationException {
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
         abfrage = this.abfrageService.save(abfrage);
         abfrage.setStatusAbfrage(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT);
@@ -580,7 +581,7 @@ public class TransitionModelTest {
     @Transactional
     @MockCustomUser(roles = { "sachbearbeitung" })
     void possibleTransitionsBedarfsmeldungErfolgtAndRoleSachbearbeitung()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, CalculationException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, UserRoleNotAllowedException, CalculationException {
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
         abfrage = this.abfrageService.save(abfrage);
         abfrage.setStatusAbfrage(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT);
@@ -608,7 +609,7 @@ public class TransitionModelTest {
     @Transactional
     @MockCustomUser(roles = { "abfrageerstellung" })
     void possibleTransitionsBedarfsmeldungErfolgtAndRoleAbfrageerstellung()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, CalculationException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, UserRoleNotAllowedException, CalculationException {
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
         abfrage = this.abfrageService.save(abfrage);
         abfrage.setStatusAbfrage(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT);
@@ -634,26 +635,26 @@ public class TransitionModelTest {
 
     @Test
     @Transactional
-    @MockCustomUser(roles = { "nutzer" })
+    @MockCustomUser(roles = { "anwender" })
     void possibleTransitionsBedarfsmeldungErfolgtAndRoleAnwender()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, CalculationException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, UserRoleNotAllowedException, CalculationException {
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
         abfrage = this.abfrageService.save(abfrage);
         abfrage.setStatusAbfrage(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT);
         abfrage = this.abfrageService.save(abfrage);
 
         final var uuid = abfrage.getId();
-        List<TransitionModel> possibleTransitions =
-            this.abfrageStatusService.getStatusAbfrageEventsBasedOnStateAndAuthorities(uuid);
-
-        assertThat(possibleTransitions.size(), is(0));
+        Assertions.assertThrows(
+            UserRoleNotAllowedException.class,
+            () -> this.abfrageStatusService.getStatusAbfrageEventsBasedOnStateAndAuthorities(uuid)
+        );
     }
 
     @Test
     @Transactional
     @MockCustomUser
     void possibleTransitionsErledigtMitFachreferateRoleAdmin()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, CalculationException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, UserRoleNotAllowedException, CalculationException {
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
         abfrage = this.abfrageService.save(abfrage);
         abfrage.setStatusAbfrage(StatusAbfrage.ERLEDIGT_MIT_FACHREFERAT);
@@ -682,7 +683,7 @@ public class TransitionModelTest {
     @Transactional
     @MockCustomUser
     void possibleTransitionsErledigtOhneFachreferateRoleAdmin()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, CalculationException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, UserRoleNotAllowedException, CalculationException {
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
         abfrage = this.abfrageService.save(abfrage);
         abfrage.setStatusAbfrage(StatusAbfrage.ERLEDIGT_OHNE_FACHREFERAT);
@@ -711,7 +712,7 @@ public class TransitionModelTest {
     @Transactional
     @MockCustomUser(roles = { "sachbearbeitung" })
     void possibleTransitionsErledigtMitFachRoleSachbearbeitung()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, CalculationException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, UserRoleNotAllowedException, CalculationException {
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
         abfrage = this.abfrageService.save(abfrage);
         abfrage.setStatusAbfrage(StatusAbfrage.ERLEDIGT_MIT_FACHREFERAT);
@@ -740,7 +741,7 @@ public class TransitionModelTest {
     @Transactional
     @MockCustomUser(roles = { "sachbearbeitung" })
     void possibleTransitionsErledigtOhneFachreferatRoleSachbearbeitung()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, CalculationException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, UserRoleNotAllowedException, CalculationException {
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
         abfrage = this.abfrageService.save(abfrage);
         abfrage.setStatusAbfrage(StatusAbfrage.ERLEDIGT_OHNE_FACHREFERAT);
@@ -769,7 +770,7 @@ public class TransitionModelTest {
     @Transactional
     @MockCustomUser(roles = { "abfrageerstellung" })
     void possibleTransitionsErledigtOhneFachreferatRoleAbfrageerstellung()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, CalculationException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, UserRoleNotAllowedException, CalculationException {
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
         abfrage = this.abfrageService.save(abfrage);
         abfrage.setStatusAbfrage(StatusAbfrage.ERLEDIGT_OHNE_FACHREFERAT);
@@ -786,7 +787,7 @@ public class TransitionModelTest {
     @Transactional
     @MockCustomUser(roles = { "abfrageerstellung" })
     void possibleTransitionsErledigtMitFachreferatRoleAbfrageerstellung()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, CalculationException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, UserRoleNotAllowedException, CalculationException {
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
         abfrage = this.abfrageService.save(abfrage);
         abfrage.setStatusAbfrage(StatusAbfrage.ERLEDIGT_MIT_FACHREFERAT);
@@ -801,9 +802,9 @@ public class TransitionModelTest {
 
     @Test
     @Transactional
-    @MockCustomUser(roles = { "nutzer" })
+    @MockCustomUser(roles = { "anwender" })
     void possibleTransitionsErledigtOhneFachreferateRoleAnwender()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, CalculationException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, UserRoleNotAllowedException, CalculationException {
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
         abfrage = this.abfrageService.save(abfrage);
         abfrage.setStatusAbfrage(StatusAbfrage.ERLEDIGT_OHNE_FACHREFERAT);
@@ -818,9 +819,9 @@ public class TransitionModelTest {
 
     @Test
     @Transactional
-    @MockCustomUser(roles = { "nutzer" })
+    @MockCustomUser(roles = { "anwender" })
     void possibleTransitionsErledigtMitFachreferateRoleAnwender()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, CalculationException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, UserRoleNotAllowedException, CalculationException {
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
         abfrage = this.abfrageService.save(abfrage);
         abfrage.setStatusAbfrage(StatusAbfrage.ERLEDIGT_MIT_FACHREFERAT);
@@ -837,7 +838,7 @@ public class TransitionModelTest {
     @Transactional
     @MockCustomUser
     void possibleTransitionsAbbruch()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, CalculationException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, UserRoleNotAllowedException, CalculationException {
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
         abfrage = this.abfrageService.save(abfrage);
         abfrage.setStatusAbfrage(StatusAbfrage.ABBRUCH);

@@ -1,20 +1,22 @@
 package de.muenchen.isi.infrastructure.entity;
 
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtBaulicheNutzung;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.Index;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OrderBy;
+import jakarta.persistence.Table;
 import java.math.BigDecimal;
 import java.util.List;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Index;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.OrderBy;
-import javax.persistence.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 @Entity
 @Table(indexes = { @Index(name = "baugebiet_bauabschnitt_id_index", columnList = "bauabschnitt_id") })
@@ -27,6 +29,7 @@ public class Baugebiet extends BaseEntity {
     private String bezeichnung;
 
     @Column(nullable = false)
+    @JdbcTypeCode(SqlTypes.INTEGER)
     private ArtBaulicheNutzung artBaulicheNutzung;
 
     @Column(nullable = false)

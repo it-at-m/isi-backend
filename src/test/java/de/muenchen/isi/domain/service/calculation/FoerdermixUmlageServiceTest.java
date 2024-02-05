@@ -15,6 +15,7 @@ import de.muenchen.isi.domain.model.FoerderartModel;
 import de.muenchen.isi.domain.model.FoerdermixModel;
 import de.muenchen.isi.infrastructure.entity.Foerderart;
 import de.muenchen.isi.infrastructure.entity.stammdaten.UmlegungFoerderarten;
+import de.muenchen.isi.infrastructure.entity.stammdaten.Umlegungsschluessel;
 import de.muenchen.isi.infrastructure.repository.stammdaten.UmlegungFoerderartenRepository;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -137,17 +138,23 @@ public class FoerdermixUmlageServiceTest {
         final var umlegungPMB = new UmlegungFoerderarten();
         umlegungPMB.setBezeichnung(PMB);
         umlegungPMB.setGueltigAb(LocalDate.EPOCH);
-        umlegungPMB.setUmlegungsschluessel(Set.of(FF25, EOF75));
+        final var umlegungsschluesselPMB = new Umlegungsschluessel();
+        umlegungsschluesselPMB.setFoerderarten(Set.of(FF25, EOF75));
+        umlegungPMB.setUmlegungsschluessel(umlegungsschluesselPMB);
 
         final var umlegungKMB = new UmlegungFoerderarten();
         umlegungKMB.setBezeichnung(KMB);
         umlegungKMB.setGueltigAb(LocalDate.EPOCH);
-        umlegungKMB.setUmlegungsschluessel(Set.of(FF25, EOF75));
+        final var umlegungsschluesselKMB = new Umlegungsschluessel();
+        umlegungsschluesselKMB.setFoerderarten(Set.of(FF25, EOF75));
+        umlegungKMB.setUmlegungsschluessel(umlegungsschluesselKMB);
 
         final var umlegungBAU = new UmlegungFoerderarten();
         umlegungBAU.setBezeichnung(BAU);
         umlegungBAU.setGueltigAb(LocalDate.EPOCH);
-        umlegungBAU.setUmlegungsschluessel(Set.of(FH50, MM50));
+        final var umlegungsschluesselBAU = new Umlegungsschluessel();
+        umlegungsschluesselBAU.setFoerderarten(Set.of(FH50, MM50));
+        umlegungBAU.setUmlegungsschluessel(umlegungsschluesselBAU);
 
         Mockito
             .when(

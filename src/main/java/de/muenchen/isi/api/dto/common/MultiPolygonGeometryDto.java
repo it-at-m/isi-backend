@@ -1,8 +1,8 @@
 package de.muenchen.isi.api.dto.common;
 
+import jakarta.validation.constraints.NotEmpty;
 import java.math.BigDecimal;
 import java.util.List;
-import javax.validation.constraints.NotEmpty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;

@@ -4,16 +4,16 @@ import de.muenchen.isi.domain.exception.FileHandlingFailedException;
 import de.muenchen.isi.domain.exception.FileHandlingWithS3FailedException;
 import de.muenchen.isi.domain.model.filehandling.FilepathModel;
 import de.muenchen.isi.domain.model.filehandling.PresignedUrlModel;
-import io.muenchendigital.digiwf.s3.integration.client.exception.DocumentStorageClientErrorException;
-import io.muenchendigital.digiwf.s3.integration.client.exception.DocumentStorageException;
-import io.muenchendigital.digiwf.s3.integration.client.exception.DocumentStorageServerErrorException;
-import io.muenchendigital.digiwf.s3.integration.client.exception.PropertyNotSetException;
-import io.muenchendigital.digiwf.s3.integration.client.repository.presignedurl.PresignedUrlRepository;
+import de.muenchen.oss.digiwf.s3.integration.client.exception.DocumentStorageClientErrorException;
+import de.muenchen.oss.digiwf.s3.integration.client.exception.DocumentStorageException;
+import de.muenchen.oss.digiwf.s3.integration.client.exception.DocumentStorageServerErrorException;
+import de.muenchen.oss.digiwf.s3.integration.client.exception.PropertyNotSetException;
+import de.muenchen.oss.digiwf.s3.integration.client.repository.presignedurl.PresignedUrlRepository;
 import java.time.LocalDate;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.reactive.function.client.WebClientException;
@@ -171,7 +171,7 @@ public class PresignedUrlCreationService {
         log.error(errorMessage);
     }
 
-    private HttpStatus getStatusCode(final HttpStatusCodeException exception) {
+    private HttpStatusCode getStatusCode(final HttpStatusCodeException exception) {
         return exception.getStatusCode();
     }
 }

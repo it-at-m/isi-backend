@@ -6,6 +6,7 @@ import static org.hamcrest.Matchers.nullValue;
 
 import de.muenchen.isi.domain.mapper.SearchDomainMapper;
 import de.muenchen.isi.domain.model.search.request.SearchQueryAndSortingModel;
+import de.muenchen.isi.security.AuthenticationUtils;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,9 +24,13 @@ class EntitySearchServiceTest {
     @Mock
     private SearchDomainMapper searchDomainMapper;
 
+    @Mock
+    private AuthenticationUtils authenticationUtils;
+
     private EntitySearchService entitySearchService = new EntitySearchService(
         searchPreparationService,
-        searchDomainMapper
+        searchDomainMapper,
+        authenticationUtils
     );
 
     @Test
