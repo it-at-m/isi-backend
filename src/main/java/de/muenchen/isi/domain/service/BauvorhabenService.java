@@ -8,6 +8,7 @@ import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.FileHandlingFailedException;
 import de.muenchen.isi.domain.exception.FileHandlingWithS3FailedException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
+import de.muenchen.isi.domain.exception.ReportingException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
 import de.muenchen.isi.domain.exception.UserRoleNotAllowedException;
 import de.muenchen.isi.domain.mapper.BauvorhabenDomainMapper;
@@ -126,7 +127,7 @@ public class BauvorhabenService {
             } catch (UserRoleNotAllowedException e) {
                 final var message = "Keine Berechtigung um die Abfrage zu bearbeiten!";
                 throw new UserRoleNotAllowedException(message);
-            } catch (CalculationException e) {
+            } catch (CalculationException | ReportingException e) {
                 throw new RuntimeException(e);
             }
             return this.bauvorhabenDomainMapper.entity2Model(bauvorhabenEntity);

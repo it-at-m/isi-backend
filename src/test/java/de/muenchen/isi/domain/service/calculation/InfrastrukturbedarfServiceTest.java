@@ -2,7 +2,6 @@ package de.muenchen.isi.domain.service.calculation;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
 
 import de.muenchen.isi.TestData;
 import de.muenchen.isi.domain.exception.CalculationException;
@@ -58,7 +57,7 @@ class InfrastrukturbedarfServiceTest {
     }
 
     @Test
-    void calculateBedarfForKinderkrippeRounded() throws CalculationException {
+    void calculateBedarfForKinderkrippe() throws CalculationException {
         final SobonOrientierungswertJahr sobonJahr = SobonOrientierungswertJahr.JAHR_2017;
         final LocalDate gueltigAb = LocalDate.of(1998, 1, 1);
         final var wohneinheiten = new ArrayList<WohneinheitenProFoerderartProJahrModel>();
@@ -154,7 +153,7 @@ class InfrastrukturbedarfServiceTest {
             )
             .thenReturn(Optional.of(versorgungsQuote));
 
-        final var result = infrastrukturbedarfService.calculateBedarfForKinderkrippeRounded(
+        final var result = infrastrukturbedarfService.calculateBedarfForKinderkrippe(
             wohneinheiten,
             sobonJahr,
             InfrastrukturbedarfService.ArtInfrastrukturbedarf.PLANUNGSURSAECHLICH,
@@ -164,130 +163,130 @@ class InfrastrukturbedarfServiceTest {
         final var expected = new ArrayList<InfrastrukturbedarfProJahrModel>();
         var bedarf = new InfrastrukturbedarfProJahrModel();
         bedarf.setJahr(Integer.toString(2000));
-        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(52901));
-        bedarf.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(31740));
-        bedarf.setAnzahlGruppen(BigDecimal.valueOf(264504, 2));
+        bedarf.setAnzahlPersonenGesamt(new BigDecimal("52900.763358778610000"));
+        bedarf.setAnzahlPersonenZuVersorgen(new BigDecimal("31740.458015267166000"));
+        bedarf.setAnzahlGruppen(new BigDecimal("2645.038167938930500"));
         expected.add(bedarf);
         bedarf = new InfrastrukturbedarfProJahrModel();
         bedarf.setJahr(Integer.toString(2001));
-        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(85809));
-        bedarf.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(51485));
-        bedarf.setAnzahlGruppen(BigDecimal.valueOf(429046, 2));
+        bedarf.setAnzahlPersonenGesamt(new BigDecimal("85809.160305343550000"));
+        bedarf.setAnzahlPersonenZuVersorgen(new BigDecimal("51485.496183206130000"));
+        bedarf.setAnzahlGruppen(new BigDecimal("4290.458015267177500"));
         expected.add(bedarf);
         bedarf = new InfrastrukturbedarfProJahrModel();
         bedarf.setJahr(Integer.toString(2002));
-        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(99000));
-        bedarf.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(59400));
-        bedarf.setAnzahlGruppen(BigDecimal.valueOf(495000, 2));
+        bedarf.setAnzahlPersonenGesamt(new BigDecimal("99000.000000000030000"));
+        bedarf.setAnzahlPersonenZuVersorgen(new BigDecimal("59400.000000000018000"));
+        bedarf.setAnzahlGruppen(new BigDecimal("4950.000000000001500"));
         expected.add(bedarf);
         bedarf = new InfrastrukturbedarfProJahrModel();
         bedarf.setJahr(Integer.toString(2003));
-        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(97557));
-        bedarf.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(58534));
-        bedarf.setAnzahlGruppen(BigDecimal.valueOf(487786, 2));
+        bedarf.setAnzahlPersonenGesamt(new BigDecimal("97557.251908397030000"));
+        bedarf.setAnzahlPersonenZuVersorgen(new BigDecimal("58534.351145038218000"));
+        bedarf.setAnzahlGruppen(new BigDecimal("4877.862595419851500"));
         expected.add(bedarf);
         bedarf = new InfrastrukturbedarfProJahrModel();
         bedarf.setJahr(Integer.toString(2004));
-        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(96115));
-        bedarf.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(57669));
-        bedarf.setAnzahlGruppen(BigDecimal.valueOf(480573, 2));
+        bedarf.setAnzahlPersonenGesamt(new BigDecimal("96114.503816793960000"));
+        bedarf.setAnzahlPersonenZuVersorgen(new BigDecimal("57668.702290076376000"));
+        bedarf.setAnzahlGruppen(new BigDecimal("4805.725190839698000"));
         expected.add(bedarf);
         bedarf = new InfrastrukturbedarfProJahrModel();
         bedarf.setJahr(Integer.toString(2005));
-        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(94672));
-        bedarf.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(56803));
-        bedarf.setAnzahlGruppen(BigDecimal.valueOf(473359, 2));
+        bedarf.setAnzahlPersonenGesamt(new BigDecimal("94671.755725190850000"));
+        bedarf.setAnzahlPersonenZuVersorgen(new BigDecimal("56803.053435114510000"));
+        bedarf.setAnzahlGruppen(new BigDecimal("4733.587786259542500"));
         expected.add(bedarf);
         bedarf = new InfrastrukturbedarfProJahrModel();
         bedarf.setJahr(Integer.toString(2006));
-        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(93229));
-        bedarf.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(55937));
-        bedarf.setAnzahlGruppen(BigDecimal.valueOf(466145, 2));
+        bedarf.setAnzahlPersonenGesamt(new BigDecimal("93229.007633587820000"));
+        bedarf.setAnzahlPersonenZuVersorgen(new BigDecimal("55937.404580152692000"));
+        bedarf.setAnzahlGruppen(new BigDecimal("4661.450381679391000"));
         expected.add(bedarf);
         bedarf = new InfrastrukturbedarfProJahrModel();
         bedarf.setJahr(Integer.toString(2007));
-        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(91786));
-        bedarf.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(55072));
-        bedarf.setAnzahlGruppen(BigDecimal.valueOf(458931, 2));
+        bedarf.setAnzahlPersonenGesamt(new BigDecimal("91786.259541984750000"));
+        bedarf.setAnzahlPersonenZuVersorgen(new BigDecimal("55071.755725190850000"));
+        bedarf.setAnzahlGruppen(new BigDecimal("4589.312977099237500"));
         expected.add(bedarf);
         bedarf = new InfrastrukturbedarfProJahrModel();
         bedarf.setJahr(Integer.toString(2008));
-        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(90344));
-        bedarf.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(54206));
-        bedarf.setAnzahlGruppen(BigDecimal.valueOf(451718, 2));
+        bedarf.setAnzahlPersonenGesamt(new BigDecimal("90343.511450381750000"));
+        bedarf.setAnzahlPersonenZuVersorgen(new BigDecimal("54206.106870229050000"));
+        bedarf.setAnzahlGruppen(new BigDecimal("4517.175572519087500"));
         expected.add(bedarf);
         bedarf = new InfrastrukturbedarfProJahrModel();
         bedarf.setJahr(Integer.toString(2009));
-        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(88901));
-        bedarf.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(53340));
-        bedarf.setAnzahlGruppen(BigDecimal.valueOf(444504, 2));
+        bedarf.setAnzahlPersonenGesamt(new BigDecimal("88900.763358778680000"));
+        bedarf.setAnzahlPersonenZuVersorgen(new BigDecimal("53340.458015267208000"));
+        bedarf.setAnzahlGruppen(new BigDecimal("4445.038167938934000"));
         expected.add(bedarf);
         bedarf = new InfrastrukturbedarfProJahrModel();
         bedarf.setJahr(Integer.toString(2010));
-        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(87753));
-        bedarf.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(52652));
-        bedarf.setAnzahlGruppen(BigDecimal.valueOf(438764, 2));
+        bedarf.setAnzahlPersonenGesamt(new BigDecimal("87752.748091603150000"));
+        bedarf.setAnzahlPersonenZuVersorgen(new BigDecimal("52651.648854961890000"));
+        bedarf.setAnzahlGruppen(new BigDecimal("4387.637404580157500"));
         expected.add(bedarf);
         bedarf = new InfrastrukturbedarfProJahrModel();
         bedarf.setJahr(Integer.toString(2011));
-        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(86797));
-        bedarf.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(52078));
-        bedarf.setAnzahlGruppen(BigDecimal.valueOf(433985, 2));
+        bedarf.setAnzahlPersonenGesamt(new BigDecimal("86796.900000000110000"));
+        bedarf.setAnzahlPersonenZuVersorgen(new BigDecimal("52078.140000000066000"));
+        bedarf.setAnzahlGruppen(new BigDecimal("4339.845000000005500"));
         expected.add(bedarf);
         bedarf = new InfrastrukturbedarfProJahrModel();
         bedarf.setJahr(Integer.toString(2012));
-        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(85929));
-        bedarf.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(51557));
-        bedarf.setAnzahlGruppen(BigDecimal.valueOf(429645, 2));
+        bedarf.setAnzahlPersonenGesamt(new BigDecimal("85928.931000000100000"));
+        bedarf.setAnzahlPersonenZuVersorgen(new BigDecimal("51557.358600000060000"));
+        bedarf.setAnzahlGruppen(new BigDecimal("4296.446550000005000"));
         expected.add(bedarf);
         bedarf = new InfrastrukturbedarfProJahrModel();
         bedarf.setJahr(Integer.toString(2013));
-        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(85070));
-        bedarf.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(51042));
-        bedarf.setAnzahlGruppen(BigDecimal.valueOf(425348, 2));
+        bedarf.setAnzahlPersonenGesamt(new BigDecimal("85069.641690000030000"));
+        bedarf.setAnzahlPersonenZuVersorgen(new BigDecimal("51041.785014000018000"));
+        bedarf.setAnzahlGruppen(new BigDecimal("4253.482084500001500"));
         expected.add(bedarf);
         bedarf = new InfrastrukturbedarfProJahrModel();
         bedarf.setJahr(Integer.toString(2014));
-        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(84219));
-        bedarf.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(50531));
-        bedarf.setAnzahlGruppen(BigDecimal.valueOf(421095, 2));
+        bedarf.setAnzahlPersonenGesamt(new BigDecimal("84218.945273100060000"));
+        bedarf.setAnzahlPersonenZuVersorgen(new BigDecimal("50531.367163860036000"));
+        bedarf.setAnzahlGruppen(new BigDecimal("4210.947263655003000"));
         expected.add(bedarf);
         bedarf = new InfrastrukturbedarfProJahrModel();
         bedarf.setJahr(Integer.toString(2015));
-        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(83377));
-        bedarf.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(50026));
-        bedarf.setAnzahlGruppen(BigDecimal.valueOf(416884, 2));
+        bedarf.setAnzahlPersonenGesamt(new BigDecimal("83376.755820369010000"));
+        bedarf.setAnzahlPersonenZuVersorgen(new BigDecimal("50026.053492221406000"));
+        bedarf.setAnzahlGruppen(new BigDecimal("4168.837791018450500"));
         expected.add(bedarf);
         bedarf = new InfrastrukturbedarfProJahrModel();
         bedarf.setJahr(Integer.toString(2016));
-        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(82543));
-        bedarf.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(49526));
-        bedarf.setAnzahlGruppen(BigDecimal.valueOf(412715, 2));
+        bedarf.setAnzahlPersonenGesamt(new BigDecimal("82542.988262165380000"));
+        bedarf.setAnzahlPersonenZuVersorgen(new BigDecimal("49525.792957299228000"));
+        bedarf.setAnzahlGruppen(new BigDecimal("4127.149413108269000"));
         expected.add(bedarf);
         bedarf = new InfrastrukturbedarfProJahrModel();
         bedarf.setJahr(Integer.toString(2017));
-        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(81718));
-        bedarf.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(49031));
-        bedarf.setAnzahlGruppen(BigDecimal.valueOf(408588, 2));
+        bedarf.setAnzahlPersonenGesamt(new BigDecimal("81717.558379543700000"));
+        bedarf.setAnzahlPersonenZuVersorgen(new BigDecimal("49030.535027726220000"));
+        bedarf.setAnzahlGruppen(new BigDecimal("4085.877918977185000"));
         expected.add(bedarf);
         bedarf = new InfrastrukturbedarfProJahrModel();
         bedarf.setJahr(Integer.toString(2018));
-        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(80900));
-        bedarf.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(48540));
-        bedarf.setAnzahlGruppen(BigDecimal.valueOf(404502, 2));
+        bedarf.setAnzahlPersonenGesamt(new BigDecimal("80900.382795748270000"));
+        bedarf.setAnzahlPersonenZuVersorgen(new BigDecimal("48540.229677448962000"));
+        bedarf.setAnzahlGruppen(new BigDecimal("4045.019139787413500"));
         expected.add(bedarf);
         bedarf = new InfrastrukturbedarfProJahrModel();
         bedarf.setJahr(Integer.toString(2019));
-        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(80091));
-        bedarf.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(48055));
-        bedarf.setAnzahlGruppen(BigDecimal.valueOf(400457, 2));
+        bedarf.setAnzahlPersonenGesamt(new BigDecimal("80091.378967790760000"));
+        bedarf.setAnzahlPersonenZuVersorgen(new BigDecimal("48054.827380674456000"));
+        bedarf.setAnzahlGruppen(new BigDecimal("4004.568948389538000"));
         expected.add(bedarf);
 
         assertThat(result, is(expected));
     }
 
     @Test
-    void calculateBedarfForKindergartenRounded() throws CalculationException {
+    void calculateBedarfForKindergarten() throws CalculationException {
         final SobonOrientierungswertJahr sobonJahr = SobonOrientierungswertJahr.JAHR_2017;
         final LocalDate gueltigAb = LocalDate.of(1998, 1, 1);
         final var wohneinheiten = new ArrayList<WohneinheitenProFoerderartProJahrModel>();
@@ -383,7 +382,7 @@ class InfrastrukturbedarfServiceTest {
             )
             .thenReturn(Optional.of(versorgungsQuote));
 
-        final var result = infrastrukturbedarfService.calculateBedarfForKindergartenRounded(
+        final var result = infrastrukturbedarfService.calculateBedarfForKindergarten(
             wohneinheiten,
             sobonJahr,
             InfrastrukturbedarfService.ArtInfrastrukturbedarf.PLANUNGSURSAECHLICH,
@@ -393,130 +392,130 @@ class InfrastrukturbedarfServiceTest {
         final var expected = new ArrayList<InfrastrukturbedarfProJahrModel>();
         var bedarf = new InfrastrukturbedarfProJahrModel();
         bedarf.setJahr(Integer.toString(2000));
-        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(52901));
-        bedarf.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(31740));
-        bedarf.setAnzahlGruppen(BigDecimal.valueOf(264504, 2));
+        bedarf.setAnzahlPersonenGesamt(new BigDecimal("52900.763358778610000"));
+        bedarf.setAnzahlPersonenZuVersorgen(new BigDecimal("31740.458015267166000"));
+        bedarf.setAnzahlGruppen(new BigDecimal("2645.038167938930500"));
         expected.add(bedarf);
         bedarf = new InfrastrukturbedarfProJahrModel();
         bedarf.setJahr(Integer.toString(2001));
-        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(85809));
-        bedarf.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(51485));
-        bedarf.setAnzahlGruppen(BigDecimal.valueOf(429046, 2));
+        bedarf.setAnzahlPersonenGesamt(new BigDecimal("85809.160305343550000"));
+        bedarf.setAnzahlPersonenZuVersorgen(new BigDecimal("51485.496183206130000"));
+        bedarf.setAnzahlGruppen(new BigDecimal("4290.458015267177500"));
         expected.add(bedarf);
         bedarf = new InfrastrukturbedarfProJahrModel();
         bedarf.setJahr(Integer.toString(2002));
-        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(99000));
-        bedarf.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(59400));
-        bedarf.setAnzahlGruppen(BigDecimal.valueOf(495000, 2));
+        bedarf.setAnzahlPersonenGesamt(new BigDecimal("99000.000000000030000"));
+        bedarf.setAnzahlPersonenZuVersorgen(new BigDecimal("59400.000000000018000"));
+        bedarf.setAnzahlGruppen(new BigDecimal("4950.000000000001500"));
         expected.add(bedarf);
         bedarf = new InfrastrukturbedarfProJahrModel();
         bedarf.setJahr(Integer.toString(2003));
-        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(97557));
-        bedarf.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(58534));
-        bedarf.setAnzahlGruppen(BigDecimal.valueOf(487786, 2));
+        bedarf.setAnzahlPersonenGesamt(new BigDecimal("97557.251908397030000"));
+        bedarf.setAnzahlPersonenZuVersorgen(new BigDecimal("58534.351145038218000"));
+        bedarf.setAnzahlGruppen(new BigDecimal("4877.862595419851500"));
         expected.add(bedarf);
         bedarf = new InfrastrukturbedarfProJahrModel();
         bedarf.setJahr(Integer.toString(2004));
-        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(96115));
-        bedarf.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(57669));
-        bedarf.setAnzahlGruppen(BigDecimal.valueOf(480573, 2));
+        bedarf.setAnzahlPersonenGesamt(new BigDecimal("96114.503816793960000"));
+        bedarf.setAnzahlPersonenZuVersorgen(new BigDecimal("57668.702290076376000"));
+        bedarf.setAnzahlGruppen(new BigDecimal("4805.725190839698000"));
         expected.add(bedarf);
         bedarf = new InfrastrukturbedarfProJahrModel();
         bedarf.setJahr(Integer.toString(2005));
-        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(94672));
-        bedarf.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(56803));
-        bedarf.setAnzahlGruppen(BigDecimal.valueOf(473359, 2));
+        bedarf.setAnzahlPersonenGesamt(new BigDecimal("94671.755725190850000"));
+        bedarf.setAnzahlPersonenZuVersorgen(new BigDecimal("56803.053435114510000"));
+        bedarf.setAnzahlGruppen(new BigDecimal("4733.587786259542500"));
         expected.add(bedarf);
         bedarf = new InfrastrukturbedarfProJahrModel();
         bedarf.setJahr(Integer.toString(2006));
-        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(93229));
-        bedarf.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(55937));
-        bedarf.setAnzahlGruppen(BigDecimal.valueOf(466145, 2));
+        bedarf.setAnzahlPersonenGesamt(new BigDecimal("93229.007633587820000"));
+        bedarf.setAnzahlPersonenZuVersorgen(new BigDecimal("55937.404580152692000"));
+        bedarf.setAnzahlGruppen(new BigDecimal("4661.450381679391000"));
         expected.add(bedarf);
         bedarf = new InfrastrukturbedarfProJahrModel();
         bedarf.setJahr(Integer.toString(2007));
-        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(91786));
-        bedarf.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(55072));
-        bedarf.setAnzahlGruppen(BigDecimal.valueOf(458931, 2));
+        bedarf.setAnzahlPersonenGesamt(new BigDecimal("91786.259541984750000"));
+        bedarf.setAnzahlPersonenZuVersorgen(new BigDecimal("55071.755725190850000"));
+        bedarf.setAnzahlGruppen(new BigDecimal("4589.312977099237500"));
         expected.add(bedarf);
         bedarf = new InfrastrukturbedarfProJahrModel();
         bedarf.setJahr(Integer.toString(2008));
-        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(90344));
-        bedarf.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(54206));
-        bedarf.setAnzahlGruppen(BigDecimal.valueOf(451718, 2));
+        bedarf.setAnzahlPersonenGesamt(new BigDecimal("90343.511450381750000"));
+        bedarf.setAnzahlPersonenZuVersorgen(new BigDecimal("54206.106870229050000"));
+        bedarf.setAnzahlGruppen(new BigDecimal("4517.175572519087500"));
         expected.add(bedarf);
         bedarf = new InfrastrukturbedarfProJahrModel();
         bedarf.setJahr(Integer.toString(2009));
-        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(88901));
-        bedarf.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(53340));
-        bedarf.setAnzahlGruppen(BigDecimal.valueOf(444504, 2));
+        bedarf.setAnzahlPersonenGesamt(new BigDecimal("88900.763358778680000"));
+        bedarf.setAnzahlPersonenZuVersorgen(new BigDecimal("53340.458015267208000"));
+        bedarf.setAnzahlGruppen(new BigDecimal("4445.038167938934000"));
         expected.add(bedarf);
         bedarf = new InfrastrukturbedarfProJahrModel();
         bedarf.setJahr(Integer.toString(2010));
-        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(87753));
-        bedarf.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(52652));
-        bedarf.setAnzahlGruppen(BigDecimal.valueOf(438764, 2));
+        bedarf.setAnzahlPersonenGesamt(new BigDecimal("87752.748091603150000"));
+        bedarf.setAnzahlPersonenZuVersorgen(new BigDecimal("52651.648854961890000"));
+        bedarf.setAnzahlGruppen(new BigDecimal("4387.637404580157500"));
         expected.add(bedarf);
         bedarf = new InfrastrukturbedarfProJahrModel();
         bedarf.setJahr(Integer.toString(2011));
-        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(86797));
-        bedarf.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(52078));
-        bedarf.setAnzahlGruppen(BigDecimal.valueOf(433985, 2));
+        bedarf.setAnzahlPersonenGesamt(new BigDecimal("86796.900000000110000"));
+        bedarf.setAnzahlPersonenZuVersorgen(new BigDecimal("52078.140000000066000"));
+        bedarf.setAnzahlGruppen(new BigDecimal("4339.845000000005500"));
         expected.add(bedarf);
         bedarf = new InfrastrukturbedarfProJahrModel();
         bedarf.setJahr(Integer.toString(2012));
-        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(85929));
-        bedarf.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(51557));
-        bedarf.setAnzahlGruppen(BigDecimal.valueOf(429645, 2));
+        bedarf.setAnzahlPersonenGesamt(new BigDecimal("85928.931000000100000"));
+        bedarf.setAnzahlPersonenZuVersorgen(new BigDecimal("51557.358600000060000"));
+        bedarf.setAnzahlGruppen(new BigDecimal("4296.446550000005000"));
         expected.add(bedarf);
         bedarf = new InfrastrukturbedarfProJahrModel();
         bedarf.setJahr(Integer.toString(2013));
-        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(85070));
-        bedarf.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(51042));
-        bedarf.setAnzahlGruppen(BigDecimal.valueOf(425348, 2));
+        bedarf.setAnzahlPersonenGesamt(new BigDecimal("85069.641690000030000"));
+        bedarf.setAnzahlPersonenZuVersorgen(new BigDecimal("51041.785014000018000"));
+        bedarf.setAnzahlGruppen(new BigDecimal("4253.482084500001500"));
         expected.add(bedarf);
         bedarf = new InfrastrukturbedarfProJahrModel();
         bedarf.setJahr(Integer.toString(2014));
-        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(84219));
-        bedarf.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(50531));
-        bedarf.setAnzahlGruppen(BigDecimal.valueOf(421095, 2));
+        bedarf.setAnzahlPersonenGesamt(new BigDecimal("84218.945273100060000"));
+        bedarf.setAnzahlPersonenZuVersorgen(new BigDecimal("50531.367163860036000"));
+        bedarf.setAnzahlGruppen(new BigDecimal("4210.947263655003000"));
         expected.add(bedarf);
         bedarf = new InfrastrukturbedarfProJahrModel();
         bedarf.setJahr(Integer.toString(2015));
-        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(83377));
-        bedarf.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(50026));
-        bedarf.setAnzahlGruppen(BigDecimal.valueOf(416884, 2));
+        bedarf.setAnzahlPersonenGesamt(new BigDecimal("83376.755820369010000"));
+        bedarf.setAnzahlPersonenZuVersorgen(new BigDecimal("50026.053492221406000"));
+        bedarf.setAnzahlGruppen(new BigDecimal("4168.837791018450500"));
         expected.add(bedarf);
         bedarf = new InfrastrukturbedarfProJahrModel();
         bedarf.setJahr(Integer.toString(2016));
-        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(82543));
-        bedarf.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(49526));
-        bedarf.setAnzahlGruppen(BigDecimal.valueOf(412715, 2));
+        bedarf.setAnzahlPersonenGesamt(new BigDecimal("82542.988262165380000"));
+        bedarf.setAnzahlPersonenZuVersorgen(new BigDecimal("49525.792957299228000"));
+        bedarf.setAnzahlGruppen(new BigDecimal("4127.149413108269000"));
         expected.add(bedarf);
         bedarf = new InfrastrukturbedarfProJahrModel();
         bedarf.setJahr(Integer.toString(2017));
-        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(81718));
-        bedarf.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(49031));
-        bedarf.setAnzahlGruppen(BigDecimal.valueOf(408588, 2));
+        bedarf.setAnzahlPersonenGesamt(new BigDecimal("81717.558379543700000"));
+        bedarf.setAnzahlPersonenZuVersorgen(new BigDecimal("49030.535027726220000"));
+        bedarf.setAnzahlGruppen(new BigDecimal("4085.877918977185000"));
         expected.add(bedarf);
         bedarf = new InfrastrukturbedarfProJahrModel();
         bedarf.setJahr(Integer.toString(2018));
-        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(80900));
-        bedarf.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(48540));
-        bedarf.setAnzahlGruppen(BigDecimal.valueOf(404502, 2));
+        bedarf.setAnzahlPersonenGesamt(new BigDecimal("80900.382795748270000"));
+        bedarf.setAnzahlPersonenZuVersorgen(new BigDecimal("48540.229677448962000"));
+        bedarf.setAnzahlGruppen(new BigDecimal("4045.019139787413500"));
         expected.add(bedarf);
         bedarf = new InfrastrukturbedarfProJahrModel();
         bedarf.setJahr(Integer.toString(2019));
-        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(80091));
-        bedarf.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(48055));
-        bedarf.setAnzahlGruppen(BigDecimal.valueOf(400457, 2));
+        bedarf.setAnzahlPersonenGesamt(new BigDecimal("80091.378967790760000"));
+        bedarf.setAnzahlPersonenZuVersorgen(new BigDecimal("48054.827380674456000"));
+        bedarf.setAnzahlGruppen(new BigDecimal("4004.568948389538000"));
         expected.add(bedarf);
 
         assertThat(result, is(expected));
     }
 
     @Test
-    void calculateAlleEinwohnerRounded() throws CalculationException {
+    void calculateAlleEinwohner() throws CalculationException {
         final SobonOrientierungswertJahr sobonJahr = SobonOrientierungswertJahr.JAHR_2017;
         final var wohneinheiten = new ArrayList<WohneinheitenProFoerderartProJahrModel>();
         var wohneinheitenModel = new WohneinheitenProFoerderartProJahrModel();
@@ -599,88 +598,88 @@ class InfrastrukturbedarfServiceTest {
             )
             .thenReturn(Optional.of(sobonOrientierungswertFoerderart3));
 
-        final var result = infrastrukturbedarfService.calculateAlleEinwohnerRounded(wohneinheiten, sobonJahr);
+        final var result = infrastrukturbedarfService.calculateAlleEinwohner(wohneinheiten, sobonJahr);
 
         final var expected = new ArrayList<PersonenProJahrModel>();
         var bedarf = new PersonenProJahrModel();
         bedarf.setJahr(Integer.toString(2000));
-        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(52901));
+        bedarf.setAnzahlPersonenGesamt(new BigDecimal("52900.763358778610000"));
         expected.add(bedarf);
         bedarf = new PersonenProJahrModel();
         bedarf.setJahr(Integer.toString(2001));
-        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(85809));
+        bedarf.setAnzahlPersonenGesamt(new BigDecimal("85809.160305343550000"));
         expected.add(bedarf);
         bedarf = new PersonenProJahrModel();
         bedarf.setJahr(Integer.toString(2002));
-        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(99000));
+        bedarf.setAnzahlPersonenGesamt(new BigDecimal("99000.000000000030000"));
         expected.add(bedarf);
         bedarf = new PersonenProJahrModel();
         bedarf.setJahr(Integer.toString(2003));
-        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(97557));
+        bedarf.setAnzahlPersonenGesamt(new BigDecimal("97557.251908397030000"));
         expected.add(bedarf);
         bedarf = new PersonenProJahrModel();
         bedarf.setJahr(Integer.toString(2004));
-        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(96115));
+        bedarf.setAnzahlPersonenGesamt(new BigDecimal("96114.503816793960000"));
         expected.add(bedarf);
         bedarf = new PersonenProJahrModel();
         bedarf.setJahr(Integer.toString(2005));
-        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(94672));
+        bedarf.setAnzahlPersonenGesamt(new BigDecimal("94671.755725190850000"));
         expected.add(bedarf);
         bedarf = new PersonenProJahrModel();
         bedarf.setJahr(Integer.toString(2006));
-        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(93229));
+        bedarf.setAnzahlPersonenGesamt(new BigDecimal("93229.007633587820000"));
         expected.add(bedarf);
         bedarf = new PersonenProJahrModel();
         bedarf.setJahr(Integer.toString(2007));
-        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(91786));
+        bedarf.setAnzahlPersonenGesamt(new BigDecimal("91786.259541984750000"));
         expected.add(bedarf);
         bedarf = new PersonenProJahrModel();
         bedarf.setJahr(Integer.toString(2008));
-        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(90344));
+        bedarf.setAnzahlPersonenGesamt(new BigDecimal("90343.511450381750000"));
         expected.add(bedarf);
         bedarf = new PersonenProJahrModel();
         bedarf.setJahr(Integer.toString(2009));
-        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(88901));
+        bedarf.setAnzahlPersonenGesamt(new BigDecimal("88900.763358778680000"));
         expected.add(bedarf);
         bedarf = new PersonenProJahrModel();
         bedarf.setJahr(Integer.toString(2010));
-        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(87753));
+        bedarf.setAnzahlPersonenGesamt(new BigDecimal("87752.748091603150000"));
         expected.add(bedarf);
         bedarf = new PersonenProJahrModel();
         bedarf.setJahr(Integer.toString(2011));
-        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(86797));
+        bedarf.setAnzahlPersonenGesamt(new BigDecimal("86796.900000000110000"));
         expected.add(bedarf);
         bedarf = new PersonenProJahrModel();
         bedarf.setJahr(Integer.toString(2012));
-        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(85929));
+        bedarf.setAnzahlPersonenGesamt(new BigDecimal("85928.931000000100000"));
         expected.add(bedarf);
         bedarf = new PersonenProJahrModel();
         bedarf.setJahr(Integer.toString(2013));
-        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(85070));
+        bedarf.setAnzahlPersonenGesamt(new BigDecimal("85069.641690000030000"));
         expected.add(bedarf);
         bedarf = new PersonenProJahrModel();
         bedarf.setJahr(Integer.toString(2014));
-        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(84219));
+        bedarf.setAnzahlPersonenGesamt(new BigDecimal("84218.945273100060000"));
         expected.add(bedarf);
         bedarf = new PersonenProJahrModel();
         bedarf.setJahr(Integer.toString(2015));
-        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(83377));
+        bedarf.setAnzahlPersonenGesamt(new BigDecimal("83376.755820369010000"));
         expected.add(bedarf);
         bedarf = new PersonenProJahrModel();
         bedarf.setJahr(Integer.toString(2016));
-        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(82543));
+        bedarf.setAnzahlPersonenGesamt(new BigDecimal("82542.988262165380000"));
         expected.add(bedarf);
         bedarf = new PersonenProJahrModel();
         bedarf.setJahr(Integer.toString(2017));
-        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(81718));
+        bedarf.setAnzahlPersonenGesamt(new BigDecimal("81717.558379543700000"));
         expected.add(bedarf);
         bedarf = new PersonenProJahrModel();
         bedarf.setJahr(Integer.toString(2018));
-        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(80900));
+        bedarf.setAnzahlPersonenGesamt(new BigDecimal("80900.382795748270000"));
         expected.add(bedarf);
         bedarf = new PersonenProJahrModel();
         bedarf.setJahr(Integer.toString(2019));
-        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(80091));
+        bedarf.setAnzahlPersonenGesamt(new BigDecimal("80091.378967790760000"));
         expected.add(bedarf);
 
         assertThat(result, is(expected));
@@ -986,40 +985,6 @@ class InfrastrukturbedarfServiceTest {
                     InfrastrukturbedarfService.ArtInfrastrukturbedarf.SOBON_URSAECHLICH
                 )
         );
-    }
-
-    @Test
-    void roundValuesAndReturnModelWithRoundedValuesInfrastrukturbedarf() {
-        final var model = new InfrastrukturbedarfProJahrModel();
-        model.setJahr("2000");
-        model.setAnzahlPersonenGesamt(BigDecimal.valueOf(46, 1));
-        model.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(44, 1));
-        model.setAnzahlGruppen(BigDecimal.valueOf(44460, 4));
-
-        final var result = infrastrukturbedarfService.roundValuesAndReturnModelWithRoundedValues(model);
-
-        final var expected = new InfrastrukturbedarfProJahrModel();
-        expected.setJahr("2000");
-        expected.setAnzahlPersonenGesamt(BigDecimal.valueOf(5));
-        expected.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(4));
-        expected.setAnzahlGruppen(BigDecimal.valueOf(445, 2));
-
-        assertThat(result, is(expected));
-    }
-
-    @Test
-    void roundValuesAndReturnModelWithRoundedValuesPersonen() {
-        final var model = new PersonenProJahrModel();
-        model.setJahr("2000");
-        model.setAnzahlPersonenGesamt(BigDecimal.valueOf(46, 1));
-
-        final var result = infrastrukturbedarfService.roundValuesAndReturnModelWithRoundedValues(model);
-
-        final var expected = new PersonenProJahrModel();
-        expected.setJahr("2000");
-        expected.setAnzahlPersonenGesamt(BigDecimal.valueOf(5));
-
-        assertThat(result, is(expected));
     }
 
     @Test
@@ -1461,270 +1426,6 @@ class InfrastrukturbedarfServiceTest {
         expected.setAnzahlPersonenGesamt(BigDecimal.TEN);
 
         assertThat(result, is(expected));
-    }
-
-    @Test
-    void calculateMeanInfrastrukturbedarfe() {
-        final var bedarfe = new ArrayList<InfrastrukturbedarfProJahrModel>();
-        var bedarf = new InfrastrukturbedarfProJahrModel();
-        bedarf.setJahr("2000");
-        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(10));
-        bedarf.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(10));
-        bedarf.setAnzahlGruppen(BigDecimal.valueOf(10));
-        bedarfe.add(bedarf);
-        bedarf = new InfrastrukturbedarfProJahrModel();
-        bedarf.setJahr("2001");
-        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(20));
-        bedarf.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(20));
-        bedarf.setAnzahlGruppen(BigDecimal.valueOf(20));
-        bedarfe.add(bedarf);
-        bedarf = new InfrastrukturbedarfProJahrModel();
-        bedarf.setJahr("2003");
-        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(30));
-        bedarf.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(30));
-        bedarf.setAnzahlGruppen(BigDecimal.valueOf(30));
-        bedarfe.add(bedarf);
-        bedarf = new InfrastrukturbedarfProJahrModel();
-        bedarf.setJahr("2004");
-        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(40));
-        bedarf.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(40));
-        bedarf.setAnzahlGruppen(BigDecimal.valueOf(40));
-        bedarfe.add(bedarf);
-        bedarf = new InfrastrukturbedarfProJahrModel();
-        bedarf.setJahr("2005");
-        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(50));
-        bedarf.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(50));
-        bedarf.setAnzahlGruppen(BigDecimal.valueOf(50));
-        bedarfe.add(bedarf);
-        bedarf = new InfrastrukturbedarfProJahrModel();
-        bedarf.setJahr("2006");
-        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(60));
-        bedarf.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(60));
-        bedarf.setAnzahlGruppen(BigDecimal.valueOf(60));
-        bedarfe.add(bedarf);
-        bedarf = new InfrastrukturbedarfProJahrModel();
-        bedarf.setJahr("2007");
-        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(70));
-        bedarf.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(70));
-        bedarf.setAnzahlGruppen(BigDecimal.valueOf(70));
-        bedarfe.add(bedarf);
-        bedarf = new InfrastrukturbedarfProJahrModel();
-        bedarf.setJahr("2008");
-        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(80));
-        bedarf.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(80));
-        bedarf.setAnzahlGruppen(BigDecimal.valueOf(80));
-        bedarfe.add(bedarf);
-        bedarf = new InfrastrukturbedarfProJahrModel();
-        bedarf.setJahr("2009");
-        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(90));
-        bedarf.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(90));
-        bedarf.setAnzahlGruppen(BigDecimal.valueOf(90));
-        bedarfe.add(bedarf);
-        bedarf = new InfrastrukturbedarfProJahrModel();
-        bedarf.setJahr("2010");
-        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(100));
-        bedarf.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(100));
-        bedarf.setAnzahlGruppen(BigDecimal.valueOf(100));
-        bedarfe.add(bedarf);
-        bedarf = new InfrastrukturbedarfProJahrModel();
-        bedarf.setJahr("2011");
-        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(110));
-        bedarf.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(110));
-        bedarf.setAnzahlGruppen(BigDecimal.valueOf(110));
-        bedarfe.add(bedarf);
-        bedarf = new InfrastrukturbedarfProJahrModel();
-        bedarf.setJahr("2012");
-        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(120));
-        bedarf.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(120));
-        bedarf.setAnzahlGruppen(BigDecimal.valueOf(120));
-        bedarfe.add(bedarf);
-        bedarf = new InfrastrukturbedarfProJahrModel();
-        bedarf.setJahr("2013");
-        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(130));
-        bedarf.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(130));
-        bedarf.setAnzahlGruppen(BigDecimal.valueOf(130));
-        bedarfe.add(bedarf);
-        bedarf = new InfrastrukturbedarfProJahrModel();
-        bedarf.setJahr("2014");
-        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(140));
-        bedarf.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(140));
-        bedarf.setAnzahlGruppen(BigDecimal.valueOf(140));
-        bedarfe.add(bedarf);
-        bedarf = new InfrastrukturbedarfProJahrModel();
-        bedarf.setJahr("2015");
-        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(150));
-        bedarf.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(150));
-        bedarf.setAnzahlGruppen(BigDecimal.valueOf(150));
-        bedarfe.add(bedarf);
-        bedarf = new InfrastrukturbedarfProJahrModel();
-        bedarf.setJahr("2016");
-        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(160));
-        bedarf.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(160));
-        bedarf.setAnzahlGruppen(BigDecimal.valueOf(160));
-        bedarfe.add(bedarf);
-        bedarf = new InfrastrukturbedarfProJahrModel();
-        bedarf.setJahr("2017");
-        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(170));
-        bedarf.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(170));
-        bedarf.setAnzahlGruppen(BigDecimal.valueOf(170));
-        bedarfe.add(bedarf);
-        bedarf = new InfrastrukturbedarfProJahrModel();
-        bedarf.setJahr("2018");
-        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(180));
-        bedarf.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(180));
-        bedarf.setAnzahlGruppen(BigDecimal.valueOf(180));
-        bedarfe.add(bedarf);
-        bedarf = new InfrastrukturbedarfProJahrModel();
-        bedarf.setJahr("2019");
-        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(190));
-        bedarf.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(190));
-        bedarf.setAnzahlGruppen(BigDecimal.valueOf(190));
-        bedarfe.add(bedarf);
-        bedarf = new InfrastrukturbedarfProJahrModel();
-        bedarf.setJahr("2020");
-        bedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(200));
-        bedarf.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(200));
-        bedarf.setAnzahlGruppen(BigDecimal.valueOf(200));
-        bedarfe.add(bedarf);
-
-        var result = infrastrukturbedarfService.calculateMeanInfrastrukturbedarfe(bedarfe, 10);
-        var expected = new InfrastrukturbedarfProJahrModel();
-        expected.setJahr("Mittelwert 10 J.");
-        expected.setAnzahlPersonenGesamt(BigDecimal.valueOf(5500, 2));
-        expected.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(5500, 2));
-        expected.setAnzahlGruppen(BigDecimal.valueOf(5500, 2));
-        assertThat(result, is(expected));
-
-        result = infrastrukturbedarfService.calculateMeanInfrastrukturbedarfe(bedarfe, 15);
-        expected = new InfrastrukturbedarfProJahrModel();
-        expected.setJahr("Mittelwert 15 J.");
-        expected.setAnzahlPersonenGesamt(BigDecimal.valueOf(8000, 2));
-        expected.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(8000, 2));
-        expected.setAnzahlGruppen(BigDecimal.valueOf(8000, 2));
-        assertThat(result, is(expected));
-
-        result = infrastrukturbedarfService.calculateMeanInfrastrukturbedarfe(bedarfe, 20);
-        expected = new InfrastrukturbedarfProJahrModel();
-        expected.setJahr("Mittelwert 20 J.");
-        expected.setAnzahlPersonenGesamt(BigDecimal.valueOf(10500, 2));
-        expected.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(10500, 2));
-        expected.setAnzahlGruppen(BigDecimal.valueOf(10500, 2));
-        assertThat(result, is(expected));
-
-        result = infrastrukturbedarfService.calculateMeanInfrastrukturbedarfe(bedarfe, 21);
-        assertThat(result, is(nullValue()));
-
-        result = infrastrukturbedarfService.calculateMeanInfrastrukturbedarfe(List.of(), 20);
-        assertThat(result, is(nullValue()));
-    }
-
-    @Test
-    void calculateMeanPersonen() {
-        final var personen = new ArrayList<PersonenProJahrModel>();
-        var person = new PersonenProJahrModel();
-        person.setJahr("2000");
-        person.setAnzahlPersonenGesamt(BigDecimal.valueOf(10));
-        personen.add(person);
-        person = new PersonenProJahrModel();
-        person.setJahr("2001");
-        person.setAnzahlPersonenGesamt(BigDecimal.valueOf(20));
-        personen.add(person);
-        person = new PersonenProJahrModel();
-        person.setJahr("2003");
-        person.setAnzahlPersonenGesamt(BigDecimal.valueOf(30));
-        personen.add(person);
-        person = new PersonenProJahrModel();
-        person.setJahr("2004");
-        person.setAnzahlPersonenGesamt(BigDecimal.valueOf(40));
-        personen.add(person);
-        person = new PersonenProJahrModel();
-        person.setJahr("2005");
-        person.setAnzahlPersonenGesamt(BigDecimal.valueOf(50));
-        personen.add(person);
-        person = new PersonenProJahrModel();
-        person.setJahr("2006");
-        person.setAnzahlPersonenGesamt(BigDecimal.valueOf(60));
-        personen.add(person);
-        person = new PersonenProJahrModel();
-        person.setJahr("2007");
-        person.setAnzahlPersonenGesamt(BigDecimal.valueOf(70));
-        personen.add(person);
-        person = new PersonenProJahrModel();
-        person.setJahr("2008");
-        person.setAnzahlPersonenGesamt(BigDecimal.valueOf(80));
-        personen.add(person);
-        person = new PersonenProJahrModel();
-        person.setJahr("2009");
-        person.setAnzahlPersonenGesamt(BigDecimal.valueOf(90));
-        personen.add(person);
-        person = new PersonenProJahrModel();
-        person.setJahr("2010");
-        person.setAnzahlPersonenGesamt(BigDecimal.valueOf(100));
-        personen.add(person);
-        person = new PersonenProJahrModel();
-        person.setJahr("2011");
-        person.setAnzahlPersonenGesamt(BigDecimal.valueOf(110));
-        personen.add(person);
-        person = new PersonenProJahrModel();
-        person.setJahr("2012");
-        person.setAnzahlPersonenGesamt(BigDecimal.valueOf(120));
-        personen.add(person);
-        person = new PersonenProJahrModel();
-        person.setJahr("2013");
-        person.setAnzahlPersonenGesamt(BigDecimal.valueOf(130));
-        personen.add(person);
-        person = new PersonenProJahrModel();
-        person.setJahr("2014");
-        person.setAnzahlPersonenGesamt(BigDecimal.valueOf(140));
-        personen.add(person);
-        person = new PersonenProJahrModel();
-        person.setJahr("2015");
-        person.setAnzahlPersonenGesamt(BigDecimal.valueOf(150));
-        personen.add(person);
-        person = new PersonenProJahrModel();
-        person.setJahr("2016");
-        person.setAnzahlPersonenGesamt(BigDecimal.valueOf(160));
-        personen.add(person);
-        person = new PersonenProJahrModel();
-        person.setJahr("2017");
-        person.setAnzahlPersonenGesamt(BigDecimal.valueOf(170));
-        personen.add(person);
-        person = new PersonenProJahrModel();
-        person.setJahr("2018");
-        person.setAnzahlPersonenGesamt(BigDecimal.valueOf(180));
-        personen.add(person);
-        person = new PersonenProJahrModel();
-        person.setJahr("2019");
-        person.setAnzahlPersonenGesamt(BigDecimal.valueOf(190));
-        personen.add(person);
-        person = new PersonenProJahrModel();
-        person.setJahr("2020");
-        person.setAnzahlPersonenGesamt(BigDecimal.valueOf(200));
-        personen.add(person);
-
-        var result = infrastrukturbedarfService.calculateMeanPersonen(personen, 10);
-        var expected = new PersonenProJahrModel();
-        expected.setJahr("Mittelwert 10 J.");
-        expected.setAnzahlPersonenGesamt(BigDecimal.valueOf(5500, 2));
-        assertThat(result, is(expected));
-
-        result = infrastrukturbedarfService.calculateMeanPersonen(personen, 15);
-        expected = new PersonenProJahrModel();
-        expected.setJahr("Mittelwert 15 J.");
-        expected.setAnzahlPersonenGesamt(BigDecimal.valueOf(8000, 2));
-        assertThat(result, is(expected));
-
-        result = infrastrukturbedarfService.calculateMeanPersonen(personen, 20);
-        expected = new PersonenProJahrModel();
-        expected.setJahr("Mittelwert 20 J.");
-        expected.setAnzahlPersonenGesamt(BigDecimal.valueOf(10500, 2));
-        assertThat(result, is(expected));
-
-        result = infrastrukturbedarfService.calculateMeanPersonen(personen, 21);
-        assertThat(result, is(nullValue()));
-
-        result = infrastrukturbedarfService.calculateMeanPersonen(List.of(), 20);
-        assertThat(result, is(nullValue()));
     }
 
     private List<WohneinheitenProFoerderartProJahrModel> createListOfWohneinheiten(
