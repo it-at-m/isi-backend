@@ -43,6 +43,9 @@ class CalculationServiceTest {
     private PlanungsursaechlicheWohneinheitenService planungsursaechlicheWohneinheitenService;
 
     @Mock
+    private SobonursaechlicheWohneinheitenService sobonursaechlicheWohneinheitenService;
+
+    @Mock
     private InfrastrukturbedarfService infrastrukturbedarfService;
 
     private CalculationService calculationService;
@@ -50,7 +53,13 @@ class CalculationServiceTest {
     @BeforeEach
     public void beforeEach() {
         this.calculationService =
-            Mockito.spy(new CalculationService(planungsursaechlicheWohneinheitenService, infrastrukturbedarfService));
+            Mockito.spy(
+                new CalculationService(
+                    planungsursaechlicheWohneinheitenService,
+                    sobonursaechlicheWohneinheitenService,
+                    infrastrukturbedarfService
+                )
+            );
         Mockito.reset(planungsursaechlicheWohneinheitenService, infrastrukturbedarfService, calculationService);
     }
 

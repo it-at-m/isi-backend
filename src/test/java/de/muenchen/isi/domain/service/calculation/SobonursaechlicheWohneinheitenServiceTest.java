@@ -6,6 +6,8 @@ import static de.muenchen.isi.TestConstants.MM;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 
+import de.muenchen.isi.domain.model.BauabschnittModel;
+import de.muenchen.isi.domain.model.BaugebietModel;
 import de.muenchen.isi.domain.model.BaurateModel;
 import de.muenchen.isi.domain.model.FoerderartModel;
 import de.muenchen.isi.domain.model.FoerdermixModel;
@@ -15,6 +17,7 @@ import de.muenchen.isi.infrastructure.repository.stammdaten.StaedtebaulicheOrien
 import de.muenchen.isi.infrastructure.repository.stammdaten.UmlegungFoerderartenRepository;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -75,6 +78,13 @@ public class SobonursaechlicheWohneinheitenServiceTest {
         baurate2024.setJahr(2024);
         baurate2024.setFoerdermix(meinFoerdermix);
 
+        final var baugebiet = new BaugebietModel();
+        baugebiet.setBauraten(Collections.singletonList(baurate2024));
+
+        final var bauabschnitt = new BauabschnittModel();
+        bauabschnitt.setBaugebiete(Collections.singletonList(baugebiet));
+        final var bauabschnitte = Collections.singletonList(bauabschnitt);
+
         // 1. Test unter 1000 Wohneinheiten
         final var expected = List.of(
             new WohneinheitenProFoerderartProJahrModel(FF, "2024", new BigDecimal("157.894736842105263")),
@@ -84,7 +94,7 @@ public class SobonursaechlicheWohneinheitenServiceTest {
 
         final var actual = sobonursaechlicheWohneinheitenService.calculateSobonursaechlicheWohneinheiten(
             new BigDecimal(30000),
-            baurate2024,
+            bauabschnitte,
             SobonOrientierungswertJahr.JAHR_2022,
             LocalDate.of(2013, 1, 1)
         );
@@ -111,7 +121,7 @@ public class SobonursaechlicheWohneinheitenServiceTest {
 
         final var actualB = sobonursaechlicheWohneinheitenService.calculateSobonursaechlicheWohneinheiten(
             new BigDecimal(130000),
-            baurate2024,
+            bauabschnitte,
             SobonOrientierungswertJahr.JAHR_2022,
             LocalDate.of(2013, 1, 1)
         );
@@ -141,7 +151,7 @@ public class SobonursaechlicheWohneinheitenServiceTest {
 
         final var actualC = sobonursaechlicheWohneinheitenService.calculateSobonursaechlicheWohneinheiten(
             new BigDecimal(230000),
-            baurate2024,
+            bauabschnitte,
             SobonOrientierungswertJahr.JAHR_2022,
             LocalDate.of(2013, 1, 1)
         );
