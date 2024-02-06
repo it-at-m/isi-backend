@@ -127,7 +127,7 @@ public class CalculationService {
                     );
             sobonGf = abfragevarianteBauleitplanverfahren.getGfWohnenSobonUrsaechlich();
             langfristigerSobonursaechlicherBedarf =
-                this.calculateSobonursaechlicherBedarf(
+                this.calculateLangfristigerSobonursaechlicherBedarf(
                         sobonGf,
                         bauabschnitte,
                         sobonOrientierungswertJahr,
@@ -159,7 +159,7 @@ public class CalculationService {
                     );
             sobonGf = abfragevarianteWeiteresVerfahren.getGfWohnenSobonUrsaechlich();
             langfristigerSobonursaechlicherBedarf =
-                this.calculateSobonursaechlicherBedarf(
+                this.calculateLangfristigerSobonursaechlicherBedarf(
                         sobonGf,
                         bauabschnitte,
                         sobonOrientierungswertJahr,
@@ -249,7 +249,7 @@ public class CalculationService {
      * @return den {@link LangfristigerBedarfModel} oder null falls auf Basis der übergebenen Methodenparameter keine Berechnung möglich ist.
      * @throws CalculationException falls die Stammdaten zur Durchführung der Berechnung nicht geladen werden können.
      */
-    public LangfristigerBedarfModel calculateSobonursaechlicherBedarf(
+    public LangfristigerBedarfModel calculateLangfristigerSobonursaechlicherBedarf(
         final BigDecimal sobonGf,
         final List<BauabschnittModel> bauabschnitte,
         final SobonOrientierungswertJahr sobonOrientierungswertJahr,
@@ -257,7 +257,7 @@ public class CalculationService {
     ) throws CalculationException {
         if (
             CollectionUtils.isEmpty(bauabschnitte) ||
-            ObjectUtils.anyNull(sobonOrientierungswertJahr, stammdatenGueltigAb) ||
+            ObjectUtils.anyNull(sobonOrientierungswertJahr, stammdatenGueltigAb, sobonGf) ||
             Objects.equals(sobonOrientierungswertJahr, SobonOrientierungswertJahr.STANDORTABFRAGE)
         ) {
             return null;
