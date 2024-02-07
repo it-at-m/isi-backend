@@ -1,13 +1,22 @@
 package de.muenchen.isi.domain.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import de.muenchen.isi.api.dto.common.UtmDto;
 import de.muenchen.isi.api.dto.common.Wgs84Dto;
+import de.muenchen.isi.domain.exception.GeometryOperationFailedException;
 import de.muenchen.isi.domain.exception.KoordinatenException;
+import de.muenchen.isi.domain.model.common.WGS84Model;
+import de.muenchen.isi.infrastructure.entity.common.MultiPolygonGeometry;
+import java.io.IOException;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.geotools.geojson.geom.GeometryJSON;
 import org.geotools.geometry.jts.JTS;
 import org.geotools.referencing.CRS;
 import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.MultiPolygon;
+import org.locationtech.jts.geom.Point;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.referencing.operation.MathTransform;
@@ -21,6 +30,8 @@ public class KoordinatenService {
 
     public static final CoordinateReferenceSystem WGS84;
     public static final CoordinateReferenceSystem UTM32;
+
+    private static final int NUMBER_GEO_JSON_DECIMALS = 25;
 
     static {
         try {
@@ -103,5 +114,45 @@ public class KoordinatenService {
             wgs84Dto.getLongitude()
         );
         return wgs84Dto;
+    }
+
+    /**
+     * Erstellt ein JTS MultiPolygon-Objekt aus einem {@link MultiPolygonGeometry} Objekt. Die Methode verwendet
+     * GeoJSON zur Konvertierung.
+     *
+     * @param multiPolygonGeometry Das {@link MultiPolygonGeometry} Objekt, das in ein JTS MultiPolygon umgewandelt werden soll.
+     * @return Ein JTS MultiPolygon-Objekt, das aus dem MultiPolygonGeometry erstellt wurde.
+     * @throws GeometryOperationFailedException Wenn die Geometrieoperation fehlschlägt oder das MultiPolygon nicht verarbeitet werden kann.
+     */
+    public MultiPolygon createMultiPolygon(final MultiPolygonGeometry multiPolygonGeometry)
+        throws GeometryOperationFailedException {
+        final GeometryJSON jsonGeometry = new GeometryJSON(NUMBER_GEO_JSON_DECIMALS);
+        final ObjectWriter objectWriter = new ObjectMapper().writer().withDefaultPrettyPrinter();
+        try {
+            final String geoJsonMultiPolygon = objectWriter.writeValueAsString(multiPolygonGeometry);
+            return (MultiPolygon) jsonGeometry.read(geoJsonMultiPolygon);
+        } catch (final IOException exception) {
+            final var message = "Das übergebene Multipolygon konnte nicht verarbeitet werden.";
+            log.error(message);
+            throw new GeometryOperationFailedException(message, exception);
+        }
+    }
+
+    /**
+     * Ermittelt den Schwerpunkt (Centroid) eines {@link MultiPolygonGeometry} Objekts und gibt die Koordinaten
+     * als {@link WGS84Model} zurück. Falls die Geometrieoperation fehlschlägt oder das MultiPolygon nicht verarbeitet werden kann,
+     * wird eine GeometryOperationFailedException ausgelöst.
+     *
+     * @param multiPolygonGeometry Das {@link MultiPolygonGeometry}Objekt, dessen Schwerpunkt ermittelt werden soll.
+     * @return Ein {@link WGS84Model} Objekt mit den Koordinaten des Schwerpunkts des MultiPolygons.
+     * @throws GeometryOperationFailedException Wenn die Geometrieoperation fehlschlägt oder das MultiPolygon nicht verarbeitet werden kann.
+     */
+    public WGS84Model getMultiPolygonCentroid(final MultiPolygonGeometry multiPolygonGeometry)
+        throws GeometryOperationFailedException {
+        Point schwerpunkt = createMultiPolygon(multiPolygonGeometry).getCentroid();
+        WGS84Model wgs84Model = new WGS84Model();
+        wgs84Model.setLatitude(schwerpunkt.getY());
+        wgs84Model.setLongitude(schwerpunkt.getX());
+        return wgs84Model;
     }
 }
