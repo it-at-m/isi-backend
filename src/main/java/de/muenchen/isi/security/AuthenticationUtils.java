@@ -18,23 +18,17 @@ import org.springframework.stereotype.Service;
 @Service
 public class AuthenticationUtils {
 
-    private static final String NAME_UNAUTHENTICATED_USER = "unauthenticated";
-
-    private static final String TOKEN_USER_NAME = "username";
-
-    private static final String TOKEN_USER_SUB = "sub";
-
-    private static final String SUB_UNAUTHENTICATED_USER = "123456789";
-
-    private static final String TOKEN_RESOURCE_ACCESS = "resource_access";
-
-    private static final String TOKEN_ISI = "isi";
-
-    private static final String TOKEN_ROLES = "roles";
-
     public static final String ROLE_ADMIN = "admin";
-
     public static final String ROLE_ABFRAGEERSTELLUNG = "abfrageerstellung";
+    public static final String ROLE_SACHBEARBEITUNG = "sachbearbeitung";
+    public static final String ROLE_ANWENDER = "anwender";
+    private static final String NAME_UNAUTHENTICATED_USER = "unauthenticated";
+    private static final String TOKEN_USER_NAME = "username";
+    private static final String TOKEN_USER_SUB = "sub";
+    private static final String SUB_UNAUTHENTICATED_USER = "123456789";
+    private static final String TOKEN_RESOURCE_ACCESS = "resource_access";
+    private static final String TOKEN_ISI = "isi";
+    private static final String TOKEN_ROLES = "roles";
 
     /**
      * Die Methode extrahiert die Authorities des Nutzers aus der {@link Authentication} des {@link SecurityContextHolder}.
@@ -115,5 +109,9 @@ public class AuthenticationUtils {
             }
         }
         return roles;
+    }
+
+    public boolean isRoleAnwender() {
+        return getUserRoles().stream().allMatch(s -> s.contains(ROLE_ANWENDER));
     }
 }

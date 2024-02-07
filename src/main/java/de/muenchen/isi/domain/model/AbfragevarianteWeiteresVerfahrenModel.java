@@ -4,7 +4,6 @@
  */
 package de.muenchen.isi.domain.model;
 
-import de.muenchen.isi.domain.model.calculation.LangfristigerPlanungsursaechlicherBedarfModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.WesentlicheRechtsgrundlage;
 import java.math.BigDecimal;
@@ -81,5 +80,25 @@ public class AbfragevarianteWeiteresVerfahrenModel extends AbfragevarianteModel 
 
     private List<BauabschnittModel> bauabschnitte;
 
-    private LangfristigerPlanungsursaechlicherBedarfModel langfristigerPlanungsursaechlicherBedarf;
+    // Kindertagesbetreuung
+
+    private boolean ausgeloesterBedarfImBaugebietBeruecksichtigenKita;
+
+    private boolean ausgeloesterBedarfMitversorgungImBplanKita;
+
+    private boolean ausgeloesterBedarfMitversorgungInBestEinrichtungenKita;
+
+    private boolean ausgeloesterBedarfMitversorgungInBestEinrichtungenNachAusbauKita;
+
+    // Schule
+
+    private boolean ausgeloesterBedarfImBaugebietBeruecksichtigenSchule;
+
+    private boolean ausgeloesterBedarfMitversorgungImBplanSchule;
+
+    private boolean ausgeloesterBedarfMitversorgungInBestEinrichtungenSchule;
+
+    private boolean ausgeloesterBedarfMitversorgungInBestEinrichtungenNachAusbauSchule;
+
+    private String hinweisVersorgung;
 }

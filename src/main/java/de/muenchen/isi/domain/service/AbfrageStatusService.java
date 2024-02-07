@@ -7,6 +7,7 @@ import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.StateMachineTransitionFailedException;
 import de.muenchen.isi.domain.exception.StringLengthExceededException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
+import de.muenchen.isi.domain.exception.UserRoleNotAllowedException;
 import de.muenchen.isi.domain.model.AbfrageModel;
 import de.muenchen.isi.domain.model.common.TransitionModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
@@ -62,9 +63,10 @@ public class AbfrageStatusService {
      * @throws EntityNotFoundException          falls die Abfrage nicht gefunden wird
      * @throws AbfrageStatusNotAllowedException wenn die Statusänderung nicht erlaubt ist
      * @throws StringLengthExceededException    wenn die Anmerkung zur Statusänderung die max. Länge überschreitet
+     * @throws UserRoleNotAllowedException      falls der User keine Berechtigung für die Abfrage hat.
      */
     public void freigabeAbfrage(final UUID id, String anmerkung)
-        throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException {
+        throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException, UserRoleNotAllowedException {
         this.throwStringLengthExceededExceptionWhenAnmerkungExceedsLength(id, anmerkung);
         final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id, anmerkung);
         this.sendEvent(id, StatusAbfrageEvents.FREIGABE, stateMachine);
@@ -78,9 +80,10 @@ public class AbfrageStatusService {
      * @throws EntityNotFoundException          falls die Abfrage nicht gefunden wird
      * @throws AbfrageStatusNotAllowedException wenn die Statusänderung nicht erlaubt ist
      * @throws StringLengthExceededException    wenn die Anmerkung zur Statusänderung die max. Länge überschreitet
+     * @throws UserRoleNotAllowedException      falls der User keine Berechtigung für die Abfrage hat.
      */
     public void inBearbeitungSetzenAbfrage(final UUID id, String anmerkung)
-        throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException {
+        throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException, UserRoleNotAllowedException {
         this.throwStringLengthExceededExceptionWhenAnmerkungExceedsLength(id, anmerkung);
         final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id, anmerkung);
         this.sendEvent(id, StatusAbfrageEvents.IN_BEARBEITUNG_SETZEN, stateMachine);
@@ -94,9 +97,10 @@ public class AbfrageStatusService {
      * @throws EntityNotFoundException          falls die Abfrage nicht gefunden wird
      * @throws AbfrageStatusNotAllowedException wenn die Statusänderung nicht erlaubt ist
      * @throws StringLengthExceededException    wenn die Anmerkung zur Statusänderung die max. Länge überschreitet
+     * @throws UserRoleNotAllowedException      falls der User keine Berechtigung für die Abfrage hat.
      */
     public void abbrechenAbfrage(final UUID id, String anmerkung)
-        throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException {
+        throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException, UserRoleNotAllowedException {
         this.throwStringLengthExceededExceptionWhenAnmerkungExceedsLength(id, anmerkung);
         final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id, anmerkung);
         this.sendEvent(id, StatusAbfrageEvents.ABBRECHEN, stateMachine);
@@ -110,9 +114,10 @@ public class AbfrageStatusService {
      * @throws EntityNotFoundException          falls die Abfrage nicht gefunden wird
      * @throws AbfrageStatusNotAllowedException wenn die Statusänderung nicht erlaubt ist
      * @throws StringLengthExceededException    wenn die Anmerkung zur Statusänderung die max. Länge überschreitet
+     * @throws UserRoleNotAllowedException      falls der User keine Berechtigung für die Abfrage hat.
      */
     public void zurueckAnAbfrageerstellungAbfrage(final UUID id, String anmerkung)
-        throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException {
+        throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException, UserRoleNotAllowedException {
         this.throwStringLengthExceededExceptionWhenAnmerkungExceedsLength(id, anmerkung);
         final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id, anmerkung);
         this.sendEvent(id, StatusAbfrageEvents.ZURUECK_AN_ABFRAGEERSTELLUNG, stateMachine);
@@ -126,9 +131,10 @@ public class AbfrageStatusService {
      * @throws EntityNotFoundException          falls die Abfrage nicht gefunden wird
      * @throws AbfrageStatusNotAllowedException wenn die Statusänderung nicht erlaubt ist
      * @throws StringLengthExceededException    wenn die Anmerkung zur Statusänderung die max. Länge überschreitet
+     * @throws UserRoleNotAllowedException      falls der User keine Berechtigung für die Abfrage hat.
      */
     public void zurueckAnSachbearbeitungAbfrage(final UUID id, String anmerkung)
-        throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException {
+        throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException, UserRoleNotAllowedException {
         this.throwStringLengthExceededExceptionWhenAnmerkungExceedsLength(id, anmerkung);
         final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id, anmerkung);
         this.sendEvent(id, StatusAbfrageEvents.ZURUECK_AN_SACHBEARBEITUNG, stateMachine);
@@ -142,9 +148,10 @@ public class AbfrageStatusService {
      * @throws EntityNotFoundException          falls die Abfrage nicht gefunden wird
      * @throws AbfrageStatusNotAllowedException wenn die Statusänderung nicht erlaubt ist
      * @throws StringLengthExceededException    wenn die Anmerkung zur Statusänderung die max. Länge überschreitet
+     * @throws UserRoleNotAllowedException      falls der User keine Berechtigung für die Abfrage hat.
      */
     public void erledigtOhneFachreferat(final UUID id, String anmerkung)
-        throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException {
+        throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException, UserRoleNotAllowedException {
         this.throwStringLengthExceededExceptionWhenAnmerkungExceedsLength(id, anmerkung);
         final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id, anmerkung);
         this.sendEvent(id, StatusAbfrageEvents.KEINE_BEARBEITUNG_NOETIG, stateMachine);
@@ -158,9 +165,10 @@ public class AbfrageStatusService {
      * @throws EntityNotFoundException          falls die Abfrage nicht gefunden wird
      * @throws AbfrageStatusNotAllowedException wenn die Statusänderung nicht erlaubt ist
      * @throws StringLengthExceededException    wenn die Anmerkung zur Statusänderung die max. Länge überschreitet
+     * @throws UserRoleNotAllowedException      falls der User keine Berechtigung für die Abfrage hat.
      */
     public void verschickenDerStellungnahme(final UUID id, String anmerkung)
-        throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException {
+        throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException, UserRoleNotAllowedException {
         this.throwStringLengthExceededExceptionWhenAnmerkungExceedsLength(id, anmerkung);
         final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id, anmerkung);
         this.sendEvent(id, StatusAbfrageEvents.VERSCHICKEN_DER_STELLUNGNAHME, stateMachine);
@@ -174,9 +182,10 @@ public class AbfrageStatusService {
      * @throws EntityNotFoundException          falls die Abfrage nicht gefunden wird
      * @throws AbfrageStatusNotAllowedException wenn die Statusänderung nicht erlaubt ist
      * @throws StringLengthExceededException    wenn die Anmerkung zur Statusänderung die max. Länge überschreitet
+     * @throws UserRoleNotAllowedException      falls der User keine Berechtigung für die Abfrage hat.
      */
     public void bedarfsmeldungErfolgt(final UUID id, String anmerkung)
-        throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException {
+        throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException, UserRoleNotAllowedException {
         this.throwStringLengthExceededExceptionWhenAnmerkungExceedsLength(id, anmerkung);
         final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id, anmerkung);
         this.sendEvent(id, StatusAbfrageEvents.BEDARFSMELDUNG_ERFOLGTE, stateMachine);
@@ -190,9 +199,10 @@ public class AbfrageStatusService {
      * @throws EntityNotFoundException          falls die Abfrage nicht gefunden wird
      * @throws AbfrageStatusNotAllowedException wenn die Statusänderung nicht erlaubt ist
      * @throws StringLengthExceededException    wenn die Anmerkung zur Statusänderung die max. Länge überschreitet
+     * @throws UserRoleNotAllowedException      falls der User keine Berechtigung für die Abfrage hat.
      */
     public void erledigtMitFachreferat(final UUID id, String anmerkung)
-        throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException {
+        throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException, UserRoleNotAllowedException {
         this.throwStringLengthExceededExceptionWhenAnmerkungExceedsLength(id, anmerkung);
         final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id, anmerkung);
         this.sendEvent(id, StatusAbfrageEvents.SPEICHERN_VON_SOZIALINFRASTRUKTUR_VERSORGUNG, stateMachine);
@@ -206,9 +216,10 @@ public class AbfrageStatusService {
      * @throws EntityNotFoundException          falls die Abfrage nicht gefunden wird
      * @throws AbfrageStatusNotAllowedException wenn die Statusänderung nicht erlaubt ist
      * @throws StringLengthExceededException    wenn die Anmerkung zur Statusänderung die max. Länge überschreitet
+     * @throws UserRoleNotAllowedException      falls der User keine Berechtigung für die Abfrage hat.
      */
     public void erneuteBearbeitungSachbearbeitung(final UUID id, String anmerkung)
-        throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException {
+        throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException, UserRoleNotAllowedException {
         this.throwStringLengthExceededExceptionWhenAnmerkungExceedsLength(id, anmerkung);
         final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id, anmerkung);
         this.sendEvent(id, StatusAbfrageEvents.ERNEUTE_BEARBEITUNG, stateMachine);
@@ -220,10 +231,11 @@ public class AbfrageStatusService {
      * Ausserdem wird ein preTransition-Listener definiert, der bei einer Statusänderung den Status in der DB aktualisiert.
      *
      * @param id vom Typ {@link UUID}  um die Abfrage aus der DB zu holen
-     * @throws EntityNotFoundException falls die Abfrage nicht gefunden wird
+     * @throws EntityNotFoundException     falls die Abfrage nicht gefunden wird
+     * @throws UserRoleNotAllowedException falls der User keine Berechtigung für die Abfrage hat.
      */
     private StateMachine<StatusAbfrage, StatusAbfrageEvents> build(final UUID id, final String anmerkung)
-        throws EntityNotFoundException {
+        throws EntityNotFoundException, UserRoleNotAllowedException {
         final var abfrage = this.abfrageService.getById(id);
         final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine =
             this.stateMachineFactory.getStateMachine(abfrage.getId());
@@ -354,10 +366,11 @@ public class AbfrageStatusService {
      *
      * @param id vom Typ {@link UUID} um die Abfrage zu finden
      * @return Liste von {@link TransitionModel} welche möglich sind
-     * @throws EntityNotFoundException falls die Abfrage nicht gefunden wird
+     * @throws EntityNotFoundException     falls die Abfrage nicht gefunden wird
+     * @throws UserRoleNotAllowedException falls der User keine Berechtigung für die Abfrage hat.
      */
     public List<TransitionModel> getStatusAbfrageEventsBasedOnStateAndAuthorities(final UUID id)
-        throws EntityNotFoundException {
+        throws EntityNotFoundException, UserRoleNotAllowedException {
         List<AuthoritiesEnum> authorities = authenticationUtils.getUserAuthorities();
         List<StatusAbfrageEvents> possibleAbfrageEventsBasedOnAuthorities = getStatusAbfrageEventsForAuthorities(
             authorities,
@@ -402,9 +415,11 @@ public class AbfrageStatusService {
      *
      * @param id vom Typ {@link UUID} um die Abfrage zu finden
      * @return Liste von {@link StatusAbfrageEvents} welche möglich sind
-     * @throws EntityNotFoundException falls die Abfrage nicht gefunden wird
+     * @throws EntityNotFoundException     falls die Abfrage nicht gefunden wird
+     * @throws UserRoleNotAllowedException falls der User keine Berechtigung für die Abfrage hat.
      */
-    private List<StatusAbfrageEvents> getStatusAbfrageEventsBasedOnState(final UUID id) throws EntityNotFoundException {
+    private List<StatusAbfrageEvents> getStatusAbfrageEventsBasedOnState(final UUID id)
+        throws EntityNotFoundException, UserRoleNotAllowedException {
         final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id, "");
         return stateMachine
             .getTransitions()
@@ -470,7 +485,7 @@ public class AbfrageStatusService {
      * @throws EntityNotFoundException       Wenn die Abfrage nicht gefunden wird.
      */
     private void throwStringLengthExceededExceptionWhenAnmerkungExceedsLength(UUID id, String anmerkung)
-        throws StringLengthExceededException, EntityNotFoundException {
+        throws StringLengthExceededException, EntityNotFoundException, UserRoleNotAllowedException {
         var abfrage = this.abfrageService.getById(id);
         if (!anmerkung.isEmpty()) {
             if (abfrage.getAnmerkung() == null) {
