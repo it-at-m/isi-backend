@@ -49,3 +49,12 @@ io:
           document-storage-url: localhost:8080
           file-expiration-time: 5 #minutes
           securityEnabled: false
+
+isi:
+  reporting:
+    url: http://localhost:8088
+
+file:
+  number.max: 20
+  size.max: 31457280 # bytes
+  mimetypes.allowed: application/octet-stream,application/x-dbf,text/plain,application/pdf,application/vnd.ms-outlook,application/vnd.oasis.opendocument.spreadsheet,application/vnd.oasis.opendocument.text,application/vnd.oasis.opendocument.presentation,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.openxmlformats-officedocument.presentationml.presentation,text/csv,message/rfc822,image/jpeg,image/png,image/svg+xml

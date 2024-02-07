@@ -12,7 +12,9 @@ import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.FileHandlingFailedException;
 import de.muenchen.isi.domain.exception.FileHandlingWithS3FailedException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
+import de.muenchen.isi.domain.exception.ReportingException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
+import de.muenchen.isi.domain.exception.UserRoleNotAllowedException;
 import de.muenchen.isi.domain.mapper.BauvorhabenDomainMapper;
 import de.muenchen.isi.domain.mapper.BauvorhabenDomainMapperImpl;
 import de.muenchen.isi.domain.mapper.DokumentDomainMapperImpl;
@@ -329,7 +331,7 @@ public class BauvorhabenServiceTest {
 
     @Test
     void saveBauvorhabenTest()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, EntityIsReferencedException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, EntityIsReferencedException, UserRoleNotAllowedException {
         final BauvorhabenModel bauvorhaben = new BauvorhabenModel();
         bauvorhaben.setId(null);
 
@@ -353,7 +355,7 @@ public class BauvorhabenServiceTest {
 
     @Test
     void saveBauvorhabenBauvorhabennummerTest()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, EntityIsReferencedException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, EntityIsReferencedException, UserRoleNotAllowedException {
         // BauvorhabenModel
         final BauvorhabenModel bauvorhaben = new BauvorhabenModel();
         bauvorhaben.setId(null);
@@ -482,7 +484,7 @@ public class BauvorhabenServiceTest {
 
     @Test
     void saveBauvorhabenReferencedByAbfrage()
-        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, EntityIsReferencedException, CalculationException {
+        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, EntityIsReferencedException, UserRoleNotAllowedException, CalculationException, ReportingException {
         final UUID abfrageId = UUID.randomUUID();
         final BauvorhabenModel bauvorhaben = new BauvorhabenModel();
         bauvorhaben.setId(null);
@@ -526,7 +528,8 @@ public class BauvorhabenServiceTest {
     }
 
     @Test
-    void throwEntityNotFoundExceptionSaveBauvorhabenReferencedByAbfrage() throws EntityNotFoundException {
+    void throwEntityNotFoundExceptionSaveBauvorhabenReferencedByAbfrage()
+        throws EntityNotFoundException, UserRoleNotAllowedException {
         final UUID abfrageId = UUID.randomUUID();
         final BauvorhabenModel bauvorhaben = new BauvorhabenModel();
         bauvorhaben.setId(null);
@@ -557,7 +560,7 @@ public class BauvorhabenServiceTest {
 
     @Test
     void throwEntityIsReferencedExceptionSaveBauvorhabenReferencedByAbfrage()
-        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, EntityIsReferencedException {
+        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, EntityIsReferencedException, UserRoleNotAllowedException {
         final UUID abfrageId = UUID.randomUUID();
         final BauvorhabenModel bauvorhaben = new BauvorhabenModel();
         bauvorhaben.setId(null);
@@ -590,7 +593,7 @@ public class BauvorhabenServiceTest {
 
     @Test
     void updateBauvorhabenTest()
-        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, FileHandlingFailedException, FileHandlingWithS3FailedException, EntityIsReferencedException {
+        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, FileHandlingFailedException, FileHandlingWithS3FailedException, EntityIsReferencedException, UserRoleNotAllowedException {
         final BauvorhabenModel bauvorhabenModel = new BauvorhabenModel();
         bauvorhabenModel.setId(UUID.randomUUID());
         bauvorhabenModel.setNameVorhaben("BauvorhabenTest");
@@ -679,7 +682,7 @@ public class BauvorhabenServiceTest {
 
     @Test
     void changeRelevanteAbfragevarianteSetNewRelevanteAbfragevarianteTest()
-        throws AbfrageStatusNotAllowedException, EntityNotFoundException, BauvorhabenNotReferencedException, UniqueViolationException, OptimisticLockingException, EntityIsReferencedException {
+        throws AbfrageStatusNotAllowedException, EntityNotFoundException, BauvorhabenNotReferencedException, UniqueViolationException, OptimisticLockingException, EntityIsReferencedException, UserRoleNotAllowedException {
         final Bauvorhaben bauvorhabenEntity = new Bauvorhaben();
         bauvorhabenEntity.setId(UUID.randomUUID());
         final AbfragevarianteBauleitplanverfahren abfragevarianteBauleitplanverfahren =
@@ -731,7 +734,7 @@ public class BauvorhabenServiceTest {
 
     @Test
     void changeRelevanteAbfragevarianteUnsetRelevanteAbfragevarianteTest()
-        throws AbfrageStatusNotAllowedException, EntityNotFoundException, BauvorhabenNotReferencedException, UniqueViolationException, OptimisticLockingException, EntityIsReferencedException {
+        throws AbfrageStatusNotAllowedException, EntityNotFoundException, BauvorhabenNotReferencedException, UniqueViolationException, OptimisticLockingException, EntityIsReferencedException, UserRoleNotAllowedException {
         final Bauvorhaben bauvorhabenEntity = new Bauvorhaben();
         bauvorhabenEntity.setId(UUID.randomUUID());
         final AbfragevarianteBauleitplanverfahren abfragevarianteBauleitplanverfahren =
@@ -784,7 +787,7 @@ public class BauvorhabenServiceTest {
 
     @Test
     void changeRelevanteAbfragevarianteUniqueViolationExceptionTest()
-        throws AbfrageStatusNotAllowedException, EntityNotFoundException {
+        throws AbfrageStatusNotAllowedException, EntityNotFoundException, UserRoleNotAllowedException {
         final Bauvorhaben bauvorhabenEntity = new Bauvorhaben();
         bauvorhabenEntity.setId(UUID.randomUUID());
         final AbfragevarianteBauleitplanverfahren abfragevarianteBauleitplanverfahren =
@@ -834,7 +837,7 @@ public class BauvorhabenServiceTest {
 
     @Test
     void changeRelevanteAbfragevarianteEntityNotFoundExceptionTest()
-        throws AbfrageStatusNotAllowedException, EntityNotFoundException {
+        throws AbfrageStatusNotAllowedException, EntityNotFoundException, UserRoleNotAllowedException {
         final Bauvorhaben bauvorhabenEntity = new Bauvorhaben();
         bauvorhabenEntity.setId(UUID.randomUUID());
         final AbfragevarianteBauleitplanverfahren abfragevarianteBauleitplanverfahren =
@@ -885,7 +888,7 @@ public class BauvorhabenServiceTest {
 
     @Test
     void changeRelevanteAbfragevarianteBauvorhabenNotReferencedExceptionTest()
-        throws EntityNotFoundException, AbfrageStatusNotAllowedException {
+        throws EntityNotFoundException, AbfrageStatusNotAllowedException, UserRoleNotAllowedException {
         UUID abfragevarianteId = UUID.randomUUID();
 
         final AbfrageModel abfrageModel = new BauleitplanverfahrenModel();
@@ -918,7 +921,7 @@ public class BauvorhabenServiceTest {
 
     @Test
     void changeRelevanteAbfragevarianteAbfrageStatusNotAllowedExceptionTest()
-        throws EntityNotFoundException, AbfrageStatusNotAllowedException {
+        throws EntityNotFoundException, AbfrageStatusNotAllowedException, UserRoleNotAllowedException {
         UUID abfragevarianteId = UUID.randomUUID();
 
         final AbfrageModel abfrageModel = new BauleitplanverfahrenModel();

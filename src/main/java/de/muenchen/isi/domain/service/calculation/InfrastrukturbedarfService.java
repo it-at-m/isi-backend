@@ -40,38 +40,11 @@ public class InfrastrukturbedarfService {
         SOBON_URSAECHLICH,
     }
 
-    public static final int SCALE_ROUNDING_RESULT_INTEGER = 0;
-
-    public static final int SCALE_ROUNDING_RESULT_DECIMAL = 2;
-
-    public static final String TITLE_MEAN_WITH_PLACEHOLDER = "Mittelwert %d J.";
-
     private final SobonOrientierungswertSozialeInfrastrukturRepository sobonOrientierungswertSozialeInfrastrukturRepository;
 
     private final VersorgungsquoteGruppenstaerkeRepository versorgungsquoteGruppenstaerkeRepository;
 
     private final StammdatenDomainMapper stammdatenDomainMapper;
-
-    /**
-     * Ermittlung die gerundeten Bedarfe für den Zeitraum von 20 Jahren auf Basis der gegebenen Wohneinheiten für Kinderkrippen.
-     *
-     * @param wohneinheiten zur Ermittlung der Bedarfe.
-     * @param sobonJahr zur Ermittlung der Sobon-Orientierungswerte der sozialen Infrastruktur.
-     * @param artInfrastrukturbedarf zur Ermittlung der korrekten Versorgungsquote und Gruppenstärke.
-     * @param gueltigAb zur Ermittlung der korrekten Versorgungsquote und Gruppenstärke.
-     * @return die Bedarfe für den Zeitraum von 20 Jahren
-     * @throws CalculationException falls die Stammdaten zur Durchführung der Berechnung nicht geladen werden können.
-     */
-    public List<InfrastrukturbedarfProJahrModel> calculateBedarfForKinderkrippeRounded(
-        final List<WohneinheitenProFoerderartProJahrModel> wohneinheiten,
-        final SobonOrientierungswertJahr sobonJahr,
-        final ArtInfrastrukturbedarf artInfrastrukturbedarf,
-        final LocalDate gueltigAb
-    ) throws CalculationException {
-        return this.calculateBedarfForKinderkrippe(wohneinheiten, sobonJahr, artInfrastrukturbedarf, gueltigAb)
-            .map(this::roundValuesAndReturnModelWithRoundedValues)
-            .collect(Collectors.toList());
-    }
 
     /**
      * Ermittlung die Bedarfe für den Zeitraum von 20 Jahren auf Basis der gegebenen Wohneinheiten für Kinderkrippen.
@@ -83,7 +56,7 @@ public class InfrastrukturbedarfService {
      * @return die Bedarfe für den Zeitraum von 20 Jahren
      * @throws CalculationException falls die Stammdaten zur Durchführung der Berechnung nicht geladen werden können.
      */
-    public Stream<InfrastrukturbedarfProJahrModel> calculateBedarfForKinderkrippe(
+    public List<InfrastrukturbedarfProJahrModel> calculateBedarfForKinderkrippe(
         final List<WohneinheitenProFoerderartProJahrModel> wohneinheiten,
         final SobonOrientierungswertJahr sobonJahr,
         final ArtInfrastrukturbedarf artInfrastrukturbedarf,
@@ -110,28 +83,8 @@ public class InfrastrukturbedarfService {
                         versorgungsquoteGruppenstaerke,
                         artInfrastrukturbedarf
                     )
-            );
-    }
-
-    /**
-     * Ermittlung die gerundeten Bedarfe für den Zeitraum von 20 Jahren auf Basis der gegebenen Wohneinheiten für Kindergärten.
-     *
-     * @param wohneinheiten zur Ermittlung der Bedarfe.
-     * @param sobonJahr zur Ermittlung der Sobon-Orientierungswerte der sozialen Infrastruktur.
-     * @param artInfrastrukturbedarf zur Ermittlung der korrekten Versorgungsquote und Gruppenstärke.
-     * @param gueltigAb zur Ermittlung der korrekten Versorgungsquote und Gruppenstärke.
-     * @return die Bedarfe für den Zeitraum von 20 Jahren
-     * @throws CalculationException falls die Stammdaten zur Durchführung der Berechnung nicht geladen werden können.
-     */
-    public List<InfrastrukturbedarfProJahrModel> calculateBedarfForKindergartenRounded(
-        final List<WohneinheitenProFoerderartProJahrModel> wohneinheiten,
-        final SobonOrientierungswertJahr sobonJahr,
-        final ArtInfrastrukturbedarf artInfrastrukturbedarf,
-        final LocalDate gueltigAb
-    ) throws CalculationException {
-        return this.calculateBedarfForKindergarten(wohneinheiten, sobonJahr, artInfrastrukturbedarf, gueltigAb)
-            .map(this::roundValuesAndReturnModelWithRoundedValues)
-            .collect(Collectors.toList());
+            )
+            .toList();
     }
 
     /**
@@ -144,7 +97,7 @@ public class InfrastrukturbedarfService {
      * @return die Bedarfe für den Zeitraum von 20 Jahren
      * @throws CalculationException falls die Stammdaten zur Durchführung der Berechnung nicht geladen werden können.
      */
-    public Stream<InfrastrukturbedarfProJahrModel> calculateBedarfForKindergarten(
+    public List<InfrastrukturbedarfProJahrModel> calculateBedarfForKindergarten(
         final List<WohneinheitenProFoerderartProJahrModel> wohneinheiten,
         final SobonOrientierungswertJahr sobonJahr,
         final ArtInfrastrukturbedarf artInfrastrukturbedarf,
@@ -171,7 +124,8 @@ public class InfrastrukturbedarfService {
                         versorgungsquoteGruppenstaerke,
                         artInfrastrukturbedarf
                     )
-            );
+            )
+            .toList();
     }
 
     /**
@@ -182,28 +136,11 @@ public class InfrastrukturbedarfService {
      * @return die Personen für den Zeitraum von 20 Jahren
      * @throws CalculationException falls die Stammdaten zur Durchführung der Berechnung nicht geladen werden können.
      */
-    public List<PersonenProJahrModel> calculateAlleEinwohnerRounded(
+    public List<PersonenProJahrModel> calculateAlleEinwohner(
         final List<WohneinheitenProFoerderartProJahrModel> wohneinheiten,
         final SobonOrientierungswertJahr sobonJahr
     ) throws CalculationException {
-        return this.calculateAlleEinwohner(wohneinheiten, sobonJahr)
-            .map(this::roundValuesAndReturnModelWithRoundedValues)
-            .collect(Collectors.toList());
-    }
-
-    /**
-     * Ermittlung aller Einwohner für den Zeitraum von 20 Jahren auf Basis der gegebenen Wohneinheiten.
-     *
-     * @param wohneinheiten zur Ermittlung der Personen.
-     * @param sobonJahr zur Ermittlung der Sobon-Orientierungswerte der sozialen Infrastruktur.
-     * @return die Personen für den Zeitraum von 20 Jahren
-     * @throws CalculationException falls die Stammdaten zur Durchführung der Berechnung nicht geladen werden können.
-     */
-    public Stream<PersonenProJahrModel> calculateAlleEinwohner(
-        final List<WohneinheitenProFoerderartProJahrModel> wohneinheiten,
-        final SobonOrientierungswertJahr sobonJahr
-    ) throws CalculationException {
-        return this.calculatePersonen(InfrastruktureinrichtungTyp.UNSPECIFIED, wohneinheiten, sobonJahr);
+        return this.calculatePersonen(InfrastruktureinrichtungTyp.UNSPECIFIED, wohneinheiten, sobonJahr).toList();
     }
 
     /**
@@ -223,7 +160,7 @@ public class InfrastrukturbedarfService {
         final var wohneinheitenWithoutSum = wohneinheiten
             .stream()
             .filter(wohneinheitenProJahr -> NumberUtils.isParsable(wohneinheitenProJahr.getJahr()))
-            .collect(Collectors.toList());
+            .toList();
 
         // Ermittlung und Gruppierung der SoBon-Orientierungswerte nach Förderart
         final var sobonOrientierungswertForFoerderart =
@@ -293,50 +230,6 @@ public class InfrastrukturbedarfService {
         bedarfMitVersorgungsquoteAndGruppen.setAnzahlPersonenZuVersorgen(anzahlPersonenZuVersorgen);
         bedarfMitVersorgungsquoteAndGruppen.setAnzahlGruppen(anzahlGruppen);
         return bedarfMitVersorgungsquoteAndGruppen;
-    }
-
-    /**
-     * Rundet die Werte für den im Parameter gegebenen Bedarf und gibt den Bedarf mit den gerundeten Werten zurück.
-     *
-     * - {@link InfrastrukturbedarfProJahrModel#getAnzahlPersonenGesamt()} runden auf {@link this#SCALE_ROUNDING_RESULT_INTEGER}.
-     * - {@link InfrastrukturbedarfProJahrModel#getAnzahlPersonenZuVersorgen()} ()} runden auf {@link this#SCALE_ROUNDING_RESULT_INTEGER}.
-     * - {@link InfrastrukturbedarfProJahrModel#getAnzahlGruppen()} runden auf {@link this#SCALE_ROUNDING_RESULT_DECIMAL}.
-     *
-     * @param bedarf zum Runden der Werte.
-     * @return den Bedarf mit gerundeten Werten.
-     */
-    protected InfrastrukturbedarfProJahrModel roundValuesAndReturnModelWithRoundedValues(
-        final InfrastrukturbedarfProJahrModel bedarf
-    ) {
-        final var anzahlPersonenGesamtRounded = bedarf
-            .getAnzahlPersonenGesamt()
-            .setScale(SCALE_ROUNDING_RESULT_INTEGER, RoundingMode.HALF_UP);
-        final var anzahlPersonenZuVersorgenRounded = bedarf
-            .getAnzahlPersonenZuVersorgen()
-            .setScale(SCALE_ROUNDING_RESULT_INTEGER, RoundingMode.HALF_UP);
-        final var anzahlGruppenRounded = bedarf
-            .getAnzahlGruppen()
-            .setScale(SCALE_ROUNDING_RESULT_DECIMAL, RoundingMode.HALF_UP);
-        bedarf.setAnzahlPersonenGesamt(anzahlPersonenGesamtRounded);
-        bedarf.setAnzahlPersonenZuVersorgen(anzahlPersonenZuVersorgenRounded);
-        bedarf.setAnzahlGruppen(anzahlGruppenRounded);
-        return bedarf;
-    }
-
-    /**
-     * Rundet die Werte für die im Parameter gegebenen Personen und gibt das Objekt mit den gerundeten Werten zurück.
-     *
-     * - {@link InfrastrukturbedarfProJahrModel#getAnzahlPersonenGesamt()} runden auf {@link this#SCALE_ROUNDING_RESULT_INTEGER}.
-     *
-     * @param personen zum Runden der Werte.
-     * @return das Objekt mit gerundeten Werten.
-     */
-    protected PersonenProJahrModel roundValuesAndReturnModelWithRoundedValues(final PersonenProJahrModel personen) {
-        final var anzahlPersonenGesamtRounded = personen
-            .getAnzahlPersonenGesamt()
-            .setScale(SCALE_ROUNDING_RESULT_INTEGER, RoundingMode.HALF_UP);
-        personen.setAnzahlPersonenGesamt(anzahlPersonenGesamtRounded);
-        return personen;
     }
 
     /**
@@ -451,79 +344,6 @@ public class InfrastrukturbedarfService {
         bedarf.setJahr(Integer.toString(jahr));
         bedarf.setAnzahlPersonenGesamt(anzahlPersonenGesamt);
         return bedarf;
-    }
-
-    /**
-     * Die Methode ermittelt den für die im Parameter gegebenen Liste an Infrastrukturbedarfen für die zweiten Parameter
-     * gegebene Anzahl an in der Liste befindlichen Objekten.
-     *
-     * @param bedarfe zur Ermittlung des Mittelwerts.
-     * @param numberOfBedarfeProJahrForMean als Anzahl der Objekte für welche der Mittelwert errechnet werden soll.
-     * @return den Mittelwert.
-     */
-    protected InfrastrukturbedarfProJahrModel calculateMeanInfrastrukturbedarfe(
-        final List<InfrastrukturbedarfProJahrModel> bedarfe,
-        final int numberOfBedarfeProJahrForMean
-    ) {
-        BigDecimal sumAnzahlPersonenGesamt = BigDecimal.ZERO;
-        BigDecimal sumAnzahlPersonenZuVersorgen = BigDecimal.ZERO;
-        BigDecimal sumAnzahlGruppen = BigDecimal.ZERO;
-        BigDecimal numberOfYear;
-        for (int index = 0; index < bedarfe.size(); index++) {
-            numberOfYear = BigDecimal.valueOf(index + 1);
-            sumAnzahlPersonenGesamt = bedarfe.get(index).getAnzahlPersonenGesamt().add(sumAnzahlPersonenGesamt);
-            sumAnzahlPersonenZuVersorgen =
-                bedarfe.get(index).getAnzahlPersonenZuVersorgen().add(sumAnzahlPersonenZuVersorgen);
-            sumAnzahlGruppen = bedarfe.get(index).getAnzahlGruppen().add(sumAnzahlGruppen);
-            if (index == numberOfBedarfeProJahrForMean - 1) {
-                final var mean = new InfrastrukturbedarfProJahrModel();
-                mean.setJahr(String.format(TITLE_MEAN_WITH_PLACEHOLDER, numberOfBedarfeProJahrForMean));
-                mean.setAnzahlPersonenGesamt(
-                    sumAnzahlPersonenGesamt.divide(numberOfYear, SCALE_ROUNDING_RESULT_DECIMAL, RoundingMode.HALF_UP)
-                );
-                mean.setAnzahlPersonenZuVersorgen(
-                    sumAnzahlPersonenZuVersorgen.divide(
-                        numberOfYear,
-                        SCALE_ROUNDING_RESULT_DECIMAL,
-                        RoundingMode.HALF_UP
-                    )
-                );
-                mean.setAnzahlGruppen(
-                    sumAnzahlGruppen.divide(numberOfYear, SCALE_ROUNDING_RESULT_DECIMAL, RoundingMode.HALF_UP)
-                );
-                return mean;
-            }
-        }
-        return null;
-    }
-
-    /**
-     * Die Methode ermittelt den für die im Parameter gegebenen Liste an Personen für die zweiten Parameter
-     * gegebene Anzahl an in der Liste befindlichen Objekten.
-     *
-     * @param personen zur Ermittlung des Mittelwerts.
-     * @param numberOfPersonenProJahrForMean als Anzahl der Objekte für welche der Mittelwert errechnet werden soll.
-     * @return den Mittelwert.
-     */
-    protected PersonenProJahrModel calculateMeanPersonen(
-        final List<PersonenProJahrModel> personen,
-        final int numberOfPersonenProJahrForMean
-    ) {
-        BigDecimal sumAnzahlPersonenGesamt = BigDecimal.ZERO;
-        BigDecimal numberOfYear;
-        for (int index = 0; index < personen.size(); index++) {
-            numberOfYear = BigDecimal.valueOf(index + 1);
-            sumAnzahlPersonenGesamt = personen.get(index).getAnzahlPersonenGesamt().add(sumAnzahlPersonenGesamt);
-            if (index == numberOfPersonenProJahrForMean - 1) {
-                final var mean = new PersonenProJahrModel();
-                mean.setJahr(String.format(TITLE_MEAN_WITH_PLACEHOLDER, numberOfPersonenProJahrForMean));
-                mean.setAnzahlPersonenGesamt(
-                    sumAnzahlPersonenGesamt.divide(numberOfYear, SCALE_ROUNDING_RESULT_DECIMAL, RoundingMode.HALF_UP)
-                );
-                return mean;
-            }
-        }
-        return null;
     }
 
     /**

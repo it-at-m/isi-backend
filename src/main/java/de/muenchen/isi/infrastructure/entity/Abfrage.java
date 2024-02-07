@@ -27,6 +27,7 @@ import org.hibernate.search.engine.backend.types.Sortable;
 import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBinderRef;
 import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBridgeRef;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.GenericField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.KeywordField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.NonStandardField;
 
@@ -39,20 +40,6 @@ import org.hibernate.search.mapper.pojo.mapping.definition.annotation.NonStandar
 @Table(indexes = { @Index(name = "abfrage_name_index", columnList = "name") })
 public abstract class Abfrage extends BaseEntity {
 
-    /**
-     * Diese Methode gibt den Wert der {@link DiscriminatorColumn} zurück.
-     * Ist kein {@link DiscriminatorValue} gesetzt, so wird null zurückgegeben.
-     *
-     * @return Wert der {@link DiscriminatorColumn}.
-     */
-    @Transient
-    public ArtAbfrage getArtAbfrage() {
-        final var discriminatorValue = this.getClass().getAnnotation(DiscriminatorValue.class);
-        return ObjectUtils.isEmpty(discriminatorValue)
-            ? null
-            : EnumUtils.getEnum(ArtAbfrage.class, discriminatorValue.value());
-    }
-
     @KeywordField(name = "name_sort", sortable = Sortable.YES, normalizer = "lowercase")
     @FullTextField
     @NonStandardField(
@@ -62,6 +49,7 @@ public abstract class Abfrage extends BaseEntity {
     @Column(nullable = false, unique = true, length = 70)
     private String name;
 
+    @GenericField(name = "statusAbfrage_filter")
     @FullTextField(valueBridge = @ValueBridgeRef(type = StatusAbfrageValueBridge.class))
     @NonStandardField(
         name = "statusAbfrage" + SearchwordSuggesterRepository.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
@@ -79,4 +67,18 @@ public abstract class Abfrage extends BaseEntity {
 
     @Column(nullable = false)
     private String sub;
+
+    /**
+     * Diese Methode gibt den Wert der {@link DiscriminatorColumn} zurück.
+     * Ist kein {@link DiscriminatorValue} gesetzt, so wird null zurückgegeben.
+     *
+     * @return Wert der {@link DiscriminatorColumn}.
+     */
+    @Transient
+    public ArtAbfrage getArtAbfrage() {
+        final var discriminatorValue = this.getClass().getAnnotation(DiscriminatorValue.class);
+        return ObjectUtils.isEmpty(discriminatorValue)
+            ? null
+            : EnumUtils.getEnum(ArtAbfrage.class, discriminatorValue.value());
+    }
 }

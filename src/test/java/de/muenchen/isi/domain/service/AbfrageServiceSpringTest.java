@@ -12,7 +12,9 @@ import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.FileHandlingFailedException;
 import de.muenchen.isi.domain.exception.FileHandlingWithS3FailedException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
+import de.muenchen.isi.domain.exception.ReportingException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
+import de.muenchen.isi.domain.exception.UserRoleNotAllowedException;
 import de.muenchen.isi.domain.model.AbfrageModel;
 import de.muenchen.isi.domain.model.BaugenehmigungsverfahrenModel;
 import de.muenchen.isi.domain.model.BauleitplanverfahrenModel;
@@ -32,6 +34,8 @@ import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.Baugeneh
 import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.BauleitplanverfahrenInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.WeiteresVerfahrenInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.domain.service.calculation.CalculationService;
+import de.muenchen.isi.domain.service.reporting.ReportingdataTransferService;
+import de.muenchen.isi.domain.service.transition.MockCustomUser;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
@@ -66,10 +70,89 @@ class AbfrageServiceSpringTest {
     @MockBean
     private CalculationService calculationService;
 
+    @MockBean
+    private ReportingdataTransferService reportingdataTransferService;
+
     @Test
     @Transactional
+    @MockCustomUser(roles = { "anwender" })
+    void getAbfrageInStatusErledigtMitFachreferateRoleAnwender()
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, UserRoleNotAllowedException, CalculationException, ReportingException {
+        AbfrageModel abfrageModel = TestData.createBauleitplanverfahrenModel();
+        abfrageModel = this.abfrageService.save(abfrageModel);
+        abfrageModel.setStatusAbfrage(StatusAbfrage.ERLEDIGT_MIT_FACHREFERAT);
+        abfrageModel = this.abfrageService.save(abfrageModel);
+
+        var result = this.abfrageService.getById(abfrageModel.getId());
+
+        assertThat(result, is(abfrageModel));
+    }
+
+    @Test
+    @Transactional
+    @MockCustomUser(roles = { "anwender" })
+    void getAbfrageInStatusErledigtOhneFachreferateRoleAnwender()
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, UserRoleNotAllowedException, CalculationException, ReportingException {
+        AbfrageModel abfrageModel = TestData.createBauleitplanverfahrenModel();
+        abfrageModel = this.abfrageService.save(abfrageModel);
+        abfrageModel.setStatusAbfrage(StatusAbfrage.ERLEDIGT_OHNE_FACHREFERAT);
+        abfrageModel = this.abfrageService.save(abfrageModel);
+
+        var result = this.abfrageService.getById(abfrageModel.getId());
+
+        assertThat(result, is(abfrageModel));
+    }
+
+    @Test
+    @Transactional
+    @MockCustomUser(roles = { "anwender", "admin" })
+    void getAbfrageInStatusAngelegtRoleAnwenderAndAdmin()
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, UserRoleNotAllowedException, CalculationException, ReportingException {
+        AbfrageModel abfrageModel = TestData.createBauleitplanverfahrenModel();
+        abfrageModel = this.abfrageService.save(abfrageModel);
+
+        var result = this.abfrageService.getById(abfrageModel.getId());
+
+        assertThat(result, is(abfrageModel));
+    }
+
+    @Test
+    @Transactional
+    @MockCustomUser(roles = { "anwender" })
+    void throwUserRoleNotAllowedExceptionWhenStatusIsNotErledigt()
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, CalculationException, ReportingException {
+        AbfrageModel abfrageModel = TestData.createBauleitplanverfahrenModel();
+        abfrageModel = this.abfrageService.save(abfrageModel);
+
+        final var uuid = abfrageModel.getId();
+        Assertions.assertThrows(UserRoleNotAllowedException.class, () -> this.abfrageService.getById(uuid));
+
+        abfrageModel.setStatusAbfrage(StatusAbfrage.OFFEN);
+        abfrageModel = this.abfrageService.save(abfrageModel);
+        Assertions.assertThrows(UserRoleNotAllowedException.class, () -> this.abfrageService.getById(uuid));
+
+        abfrageModel.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+        abfrageModel = this.abfrageService.save(abfrageModel);
+        Assertions.assertThrows(UserRoleNotAllowedException.class, () -> this.abfrageService.getById(uuid));
+
+        abfrageModel.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
+        abfrageModel = this.abfrageService.save(abfrageModel);
+        Assertions.assertThrows(UserRoleNotAllowedException.class, () -> this.abfrageService.getById(uuid));
+
+        abfrageModel.setStatusAbfrage(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT);
+        abfrageModel = this.abfrageService.save(abfrageModel);
+        Assertions.assertThrows(UserRoleNotAllowedException.class, () -> this.abfrageService.getById(uuid));
+
+        abfrageModel.setStatusAbfrage(StatusAbfrage.ABBRUCH);
+        this.abfrageService.save(abfrageModel);
+        Assertions.assertThrows(UserRoleNotAllowedException.class, () -> this.abfrageService.getById(uuid));
+    }
+
+    @Test
+    @Transactional
+    @MockCustomUser
     void getByAbfragevarianteId()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, CalculationException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, UserRoleNotAllowedException, CalculationException, ReportingException {
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
         abfrage = this.abfrageService.save(abfrage);
         UUID abfragevarianteId =
@@ -95,8 +178,9 @@ class AbfrageServiceSpringTest {
 
     @Test
     @Transactional
+    @MockCustomUser
     void getByAbfragevarianteIdEntityNotFoundException()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, CalculationException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, CalculationException, ReportingException {
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
         this.abfrageService.save(abfrage);
 
@@ -109,8 +193,9 @@ class AbfrageServiceSpringTest {
 
     @Test
     @Transactional
+    @MockCustomUser
     void patchAngelegtBauleitplanverfahren()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, FileHandlingFailedException, FileHandlingWithS3FailedException, AbfrageStatusNotAllowedException, CalculationException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, FileHandlingFailedException, FileHandlingWithS3FailedException, AbfrageStatusNotAllowedException, UserRoleNotAllowedException, CalculationException, ReportingException {
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
         abfrage = this.abfrageService.save(abfrage);
 
@@ -129,8 +214,9 @@ class AbfrageServiceSpringTest {
 
     @Test
     @Transactional
+    @MockCustomUser
     void patchAngelegtBaugenehmigungsverfahren()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, FileHandlingFailedException, FileHandlingWithS3FailedException, AbfrageStatusNotAllowedException, CalculationException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, FileHandlingFailedException, FileHandlingWithS3FailedException, AbfrageStatusNotAllowedException, CalculationException, ReportingException, UserRoleNotAllowedException {
         AbfrageModel abfrage = TestData.createBaugenehmigungsverfahrenModel();
         abfrage = this.abfrageService.save(abfrage);
 
@@ -149,8 +235,9 @@ class AbfrageServiceSpringTest {
 
     @Test
     @Transactional
+    @MockCustomUser
     void patchAngelegtWeiteresVerfahren()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, FileHandlingFailedException, FileHandlingWithS3FailedException, AbfrageStatusNotAllowedException, CalculationException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, FileHandlingFailedException, FileHandlingWithS3FailedException, AbfrageStatusNotAllowedException, UserRoleNotAllowedException, CalculationException, ReportingException {
         AbfrageModel abfrage = TestData.createWeiteresVerfahrenModel();
         abfrage = this.abfrageService.save(abfrage);
 
@@ -169,8 +256,9 @@ class AbfrageServiceSpringTest {
 
     @Test
     @Transactional
+    @MockCustomUser
     void patchInBearbeitungSachbearbeitungBauleitplanverfahren()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException, ReportingException, UserRoleNotAllowedException {
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
         abfrage = this.abfrageService.save(abfrage);
         abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
@@ -209,8 +297,9 @@ class AbfrageServiceSpringTest {
 
     @Test
     @Transactional
+    @MockCustomUser
     void patchInBearbeitungSachbearbeitungBaugenehmigungsverfahren()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException, ReportingException, UserRoleNotAllowedException {
         AbfrageModel abfrage = TestData.createBaugenehmigungsverfahrenModel();
         abfrage = this.abfrageService.save(abfrage);
         abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
@@ -252,8 +341,9 @@ class AbfrageServiceSpringTest {
 
     @Test
     @Transactional
+    @MockCustomUser
     void patchInBearbeitungSachbearbeitungWeiteresVerfahren()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException, ReportingException, UserRoleNotAllowedException {
         AbfrageModel abfrage = TestData.createWeiteresVerfahrenModel();
         abfrage = this.abfrageService.save(abfrage);
         abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
@@ -293,8 +383,9 @@ class AbfrageServiceSpringTest {
 
     @Test
     @Transactional
+    @MockCustomUser
     void patchInBearbeitungFachreferatBauleitplanverfahren()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException, ReportingException, UserRoleNotAllowedException {
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
         abfrage = this.abfrageService.save(abfrage);
         abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
@@ -341,8 +432,9 @@ class AbfrageServiceSpringTest {
 
     @Test
     @Transactional
+    @MockCustomUser
     void patchInBearbeitungFachreferatBaugenehmigungsverfahren()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException, ReportingException, UserRoleNotAllowedException {
         AbfrageModel abfrage = TestData.createBaugenehmigungsverfahrenModel();
         abfrage = this.abfrageService.save(abfrage);
         abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
@@ -389,8 +481,9 @@ class AbfrageServiceSpringTest {
 
     @Test
     @Transactional
+    @MockCustomUser
     void patchInBearbeitungFachreferatWeiteresVerfahren()
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException, ReportingException, UserRoleNotAllowedException {
         AbfrageModel abfrage = TestData.createWeiteresVerfahrenModel();
         abfrage = this.abfrageService.save(abfrage);
         abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
