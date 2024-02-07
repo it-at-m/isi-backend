@@ -15,6 +15,7 @@ import de.muenchen.isi.domain.exception.KoordinatenException;
 import de.muenchen.isi.domain.exception.MimeTypeExtractionFailedException;
 import de.muenchen.isi.domain.exception.MimeTypeNotAllowedException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
+import de.muenchen.isi.domain.exception.ReportingException;
 import de.muenchen.isi.domain.exception.StringLengthExceededException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
 import de.muenchen.isi.domain.exception.UserRoleNotAllowedException;
@@ -255,6 +256,16 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(CalculationException.class)
     public ResponseEntity<Object> handleCalculationException(final CalculationException ex) {
+        final var httpStatus = HttpStatus.BAD_REQUEST;
+        final InformationResponseDto errorResponseDto = new InformationResponseDto();
+        errorResponseDto.setMessages(List.of(ex.getMessage()));
+        errorResponseDto.setHttpStatus(httpStatus.value());
+        errorResponseDto.setType(InformationResponseType.ERROR);
+        return ResponseEntity.status(httpStatus).body(errorResponseDto);
+    }
+
+    @ExceptionHandler(ReportingException.class)
+    public ResponseEntity<Object> handleReportingException(final ReportingException ex) {
         final var httpStatus = HttpStatus.BAD_REQUEST;
         final InformationResponseDto errorResponseDto = new InformationResponseDto();
         errorResponseDto.setMessages(List.of(ex.getMessage()));

@@ -23,4 +23,26 @@ public class AbfragevarianteBaugenehmigungsverfahrenInBearbeitungFachreferatDto 
     private ArtAbfrage artAbfragevariante;
 
     private List<@Valid BedarfsmeldungDto> bedarfsmeldungFachreferate;
+
+    // Kindertagesbetreuung
+
+    private boolean ausgeloesterBedarfImBaugebietBeruecksichtigenKita;
+
+    private boolean ausgeloesterBedarfMitversorgungImBplanKita;
+
+    private boolean ausgeloesterBedarfMitversorgungInBestEinrichtungenKita;
+
+    private boolean ausgeloesterBedarfMitversorgungInBestEinrichtungenNachAusbauKita;
+
+    // Schule
+
+    private boolean ausgeloesterBedarfImBaugebietBeruecksichtigenSchule;
+
+    private boolean ausgeloesterBedarfMitversorgungImBplanSchule;
+
+    private boolean ausgeloesterBedarfMitversorgungInBestEinrichtungenSchule;
+
+    private boolean ausgeloesterBedarfMitversorgungInBestEinrichtungenNachAusbauSchule;
+
+    private String hinweisVersorgung;
 }
