@@ -12,6 +12,7 @@ import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.FileHandlingFailedException;
 import de.muenchen.isi.domain.exception.FileHandlingWithS3FailedException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
+import de.muenchen.isi.domain.exception.ReportingException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
 import de.muenchen.isi.domain.exception.UserRoleNotAllowedException;
 import de.muenchen.isi.domain.mapper.BauvorhabenDomainMapper;
@@ -483,7 +484,7 @@ public class BauvorhabenServiceTest {
 
     @Test
     void saveBauvorhabenReferencedByAbfrage()
-        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, EntityIsReferencedException, UserRoleNotAllowedException, CalculationException {
+        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, EntityIsReferencedException, UserRoleNotAllowedException, CalculationException, ReportingException {
         final UUID abfrageId = UUID.randomUUID();
         final BauvorhabenModel bauvorhaben = new BauvorhabenModel();
         bauvorhaben.setId(null);
