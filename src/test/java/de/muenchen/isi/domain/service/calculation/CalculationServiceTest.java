@@ -313,6 +313,15 @@ class CalculationServiceTest {
                 sobonOrientierungswertJahr,
                 stammdatenGueltigAb
             );
+
+        Mockito
+            .verify(calculationService, Mockito.times(1))
+            .calculateLangfristigerSobonursaechlicherBedarf(
+                sobonGf,
+                bauabschnitte,
+                sobonOrientierungswertJahr,
+                stammdatenGueltigAb
+            );
     }
 
     @Test
@@ -414,6 +423,15 @@ class CalculationServiceTest {
         Mockito
             .verify(calculationService, Mockito.times(1))
             .calculateLangfristigerPlanungsursaechlicherBedarf(
+                bauabschnitte,
+                sobonOrientierungswertJahr,
+                stammdatenGueltigAb
+            );
+
+        Mockito
+            .verify(calculationService, Mockito.times(1))
+            .calculateLangfristigerSobonursaechlicherBedarf(
+                sobonGf,
                 bauabschnitte,
                 sobonOrientierungswertJahr,
                 stammdatenGueltigAb
