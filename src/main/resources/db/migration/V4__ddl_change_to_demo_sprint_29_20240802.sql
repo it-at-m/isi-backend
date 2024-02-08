@@ -53,7 +53,7 @@ ALTER TABLE isidbuser.abfragevariante_weiteres_verfahren
 ALTER TABLE isidbuser.abfragevariante_weiteres_verfahren_wesentliche_rechtsgrundlage
     ADD CONSTRAINT abfragevariante_weiteres_verf_wesentliche_rechtsgrundlage_check CHECK (((wesentliche_rechtsgrundlage)::text = ANY ((ARRAY['QUALIFIZIERTER_BEBAUUNGSPLAN'::character varying, 'VORHABENSBEZOGENER_BEBAUUNGSPLAN'::character varying, 'EINFACHER_BEBAUUNGSPLAN_PARAGRAPH_30'::character varying, 'EINFACHER_BEBAUUNGSPLAN_PARAGRAPH_30_IVM_34_35'::character varying, 'SEKTORALER_BEBAUUNGSPLAN_PARAGRAPH_9'::character varying, 'SEKTORALER_BEBAUUNGSPLAN_PARAGRAPH_30_IVM_34_35'::character varying, 'INNENBEREICH'::character varying, 'AUSSENBEREICH'::character varying, 'BEFREIUNG'::character varying, 'INFO_FEHLT'::character varying, 'FREIE_EINGABE'::character varying])::text[])));
 
-ALTER TABLE isidbuser.bauabschnitt
+ALTER TABLE isidbuser.baugebiet
     ADD CONSTRAINT baugebiet_art_bauliche_nutzung_check CHECK (((art_bauliche_nutzung >= 0) AND (art_bauliche_nutzung <= 7)));
 
 
