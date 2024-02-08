@@ -35,6 +35,9 @@ src/main/resources/*.csv
 src/main/resources/**/*.csv
 src/main/resources/*.sql
 src/main/resources/**/*.sql
+src/main/resources/db/migration/R*.sql
+!src/main/resources/db/migration/V*.sql
+!src/main/resources/db/migration/U*.sql
 !src/test/resources/application-unittest.yml
 src/**/logback-spring.xml
 
