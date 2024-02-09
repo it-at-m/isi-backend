@@ -313,6 +313,16 @@ ALTER TABLE IF EXISTS isidbuser.gs_nachmittag_betreuung
     ADD CONSTRAINT gs_nachmittag_betreuung_einrichtungstraeger_check CHECK (einrichtungstraeger::text = ANY (ARRAY['UNSPECIFIED'::character varying, 'STAEDTISCHE_EINRICHTUNG'::character varying, 'EINRICHTUNG_BETRIEBSTRAEGERSCHAFT'::character varying, 'FREIE_GEMEINNUETZIGE_SONSTIGE'::character varying, 'EINRICHTUNG_GESAMTSTAEDTISCH'::character varying, 'ELTERN_KIND_INITIATIVE'::character varying, 'STAATLICHE_EINRICHTUNG'::character varying, 'PRIVATE_TRAEGERSCHAFT'::character varying, 'KIRCHLICHE_TRAEGERSCHAFT'::character varying]::text[]));
 
 ALTER TABLE IF EXISTS isidbuser.abfragevariante_baugenehmigungsverfahren
+    ADD COLUMN ausglstr_bdrf_im_bgbt_brckschtgn_kita boolean,
+    ADD COLUMN ausglstr_bdrf_im_bgbt_brckschtgn_schule boolean,
+    ADD COLUMN ausglstr_bdrf_mtvrsrg_im_bplan_kita boolean,
+    ADD COLUMN ausglstr_bdrf_mtvrsrg_im_bplan_schule boolean,
+    ADD COLUMN ausglstr_bdrf_mtvrsrg_in_bsthnd_einr_kita boolean,
+    ADD COLUMN ausglstr_bdrf_mtvrsrg_in_bsthnd_einr_nch_asbau_kita boolean,
+    ADD COLUMN ausglstr_bdrf_mtvrsrg_in_bsthnd_einr_nch_asbau_schule boolean,
+    ADD COLUMN ausglstr_bdrf_mtvrsrg_in_bsthnd_einr_schule boolean,
+    ADD COLUMN stammdaten_gueltig_ab timestamp(6) without time zone,
+    ADD COLUMN hinweis_versorgung character varying(1000),
     ADD CONSTRAINT abfragevariante_baugenehmigu_sobon_orientierungswert_jahr_check CHECK (sobon_orientierungswert_jahr::text = ANY (ARRAY['UNSPECIFIED'::character varying, 'JAHR_2014'::character varying, 'JAHR_2017'::character varying, 'JAHR_2022'::character varying, 'STANDORTABFRAGE'::character varying]::text[]));
 
 ALTER TABLE IF EXISTS isidbuser.kindergarten
