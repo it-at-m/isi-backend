@@ -134,6 +134,10 @@ DROP TABLE IF EXISTS isidbuser.gemarkung CASCADE;
 
 DROP TABLE IF EXISTS isidbuser.stadtbezirk CASCADE;
 
+ALTER TABLE IF EXISTS isidbuser.weiteres_verfahren
+    ALTER COLUMN frist_bearbeitung TYPE timestamp(6),
+    ALTER COLUMN frist_bearbeitung SET NOT NULL;
+
 ALTER TABLE IF EXISTS isidbuser.weiteres_verfahren DROP CONSTRAINT IF EXISTS uk_pi2mh2r4x50x8eufgyj2j2wj8;
 
 ALTER TABLE IF EXISTS isidbuser.weiteres_verfahren
