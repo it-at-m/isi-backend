@@ -263,7 +263,7 @@ ALTER TABLE IF EXISTS isidbuser.sobon_orientierungswert_soziale_infrastruktur
 
 UPDATE isidbuser.sobon_orientierungswert_soziale_infrastruktur
     SET einrichtungstyp = 'UNSPECIFIED'::character
-    WHERE einrichtungstyp = 'N_N'::character
+    WHERE einrichtungstyp = 'N_N'::character;
 
 ALTER TABLE IF EXISTS isidbuser.versorgungsquote_gruppenstaerke DROP CONSTRAINT IF EXISTS ukjf69cklrwiws07t3by33ikcig;
 
