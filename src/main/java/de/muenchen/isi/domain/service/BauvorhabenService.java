@@ -220,9 +220,9 @@ public class BauvorhabenService {
                     });
                 var errorMessage =
                     "Die Abfragevariante " +
-                    relevanteAbfragevariante.getName() +
-                    " in Abfrage " +
                     abfrage.getName() +
+                    " in Abfrage " +
+                    relevanteAbfragevariante.getName() +
                     " ist bereits als relevant markiert.";
                 log.error(errorMessage);
                 throw new UniqueViolationException(errorMessage);
