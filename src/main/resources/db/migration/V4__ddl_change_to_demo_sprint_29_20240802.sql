@@ -71,6 +71,40 @@ CREATE INDEX IF NOT EXISTS bedarfsmeldung_abfrageersteller_abfragevariante_weite
     (abfragevariante_weiteres_verfahren_abfrageersteller_id COLLATE pg_catalog."default" ASC NULLS LAST)
     TABLESPACE pg_default;
 
+--
+--
+--
+INSERT INTO isidbuser.bedarfsmeldung(
+    id,
+    created_date_time,
+    last_modified_date_time,
+    version,
+    anzahl_einrichtungen,
+    anzahl_grundschulzuege,
+    anzahl_hortgruppen,
+    anzahl_kindergartengruppen,
+    anzahl_kinderkrippengruppen,
+    infrastruktureinrichtung_typ,
+    abfragevariante_baugenehmigungsverfahren_fachreferate_id,
+    abfragevariante_bauleitplanverfahren_fachreferate_id,
+    abfragevariante_weiteres_verfahren_fachreferate_id
+)
+    SELECT
+        id,
+        created_date_time,
+        last_modified_date_time,
+        version,
+        anzahl_einrichtungen,
+        anzahl_grundschulzuege,
+        anzahl_hortgruppen,
+        anzahl_kindergartengruppen,
+        anzahl_kinderkrippengruppen,
+        infrastruktureinrichtung_typ,
+        abfragevariante_baugenehmigungsverfahren_id,
+        abfragevariante_bauleitplanverfahren_id,
+        abfragevariante_weiteres_verfahren_id
+    FROM isidbuser.bedarfsmeldung_fachreferate
+
 CREATE TABLE IF NOT EXISTS isidbuser.umlegung_foerderarten
 (
     created_date_time timestamp without time zone,
@@ -88,9 +122,13 @@ CREATE TABLE IF NOT EXISTS isidbuser.umlegung_foerderarten
 
 ALTER TABLE IF EXISTS isidbuser.umlegung_foerderarten
     OWNER to isidbuser;
+
 DROP TABLE IF EXISTS isidbuser.flurstueck CASCADE;
+
 DROP TABLE IF EXISTS isidbuser.verortung CASCADE;
+
 DROP TABLE IF EXISTS isidbuser.gemarkung CASCADE;
+
 DROP TABLE IF EXISTS isidbuser.stadtbezirk CASCADE;
 
 ALTER TABLE IF EXISTS isidbuser.weiteres_verfahren DROP CONSTRAINT IF EXISTS uk_pi2mh2r4x50x8eufgyj2j2wj8;
