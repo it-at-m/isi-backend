@@ -72,3 +72,10 @@ ALTER TABLE isidbuser.bauleitplanverfahren
 ALTER TABLE isidbuser.baurate_foerderarten
     ALTER COLUMN anteil_prozent TYPE numeric(5,2);
 
+ALTER TABLE isidbuser.bauvorhaben
+    ADD CONSTRAINT bauvorhaben_sobon_jahr_check CHECK (((sobon_jahr)::text = ANY ((ARRAY['JAHR_1995'::character varying, 'JAHR_1997'::character varying, 'JAHR_2001'::character varying, 'JAHR_2006'::character varying, 'JAHR_2012'::character varying, 'JAHR_2017'::character varying, 'JAHR_2017_PLUS'::character varying, 'JAHR_2021'::character varying])::text[]))),
+    ADD CONSTRAINT bauvorhaben_sobon_relevant_check1 CHECK (((sobon_relevant)::text = ANY ((ARRAY['UNSPECIFIED'::character varying, 'TRUE'::character varying, 'FALSE'::character varying])::text[]))),
+    ADD CONSTRAINT bauvorhaben_stand_verfahren_check CHECK (((stand_verfahren)::text = ANY ((ARRAY['UNSPECIFIED'::character varying, 'VORBEREITUNG_ECKDATENBESCHLUSS'::character varying, 'VORBEREITUNG_WETTBEWERBAUSLOBUNG'::character varying, 'VORBEREITUNG_AUFSTELLUNGSBESCHLUSS'::character varying, 'VORBEREITUNG_BILLIGUNGSBESCHLUSS_STAEDTEBAULICHER_VERTRAG'::character varying, 'VORLIEGENDER_SATZUNGSBESCHLUSS'::character varying, 'RECHTSVERBINDLICHKEIT_AMTSBLATT'::character varying, 'AUFTEILUNGSPLAN'::character varying, 'VORBEREITUNG_VORBESCHEID'::character varying, 'VORBEREITUNG_BAUGENEHMIGUNG'::character varying, 'VORABFRAGE_OHNE_KONKRETEN_STAND'::character varying, 'STRUKTURKONZEPT'::character varying, 'RAHMENPLANUNG'::character varying, 'POTENTIALUNTERSUCHUNG'::character varying, 'STAEDTEBAULICHE_SANIERUNGSMASSNAHME'::character varying, 'STAEDTEBAULICHE_ENTWICKLUNGSMASSNAHME'::character varying, 'INFO_FEHLT'::character varying, 'FREIE_EINGABE'::character varying, 'STANDORTABFRAGE'::character varying])::text[])));
+
+
+
