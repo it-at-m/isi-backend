@@ -249,6 +249,10 @@ ALTER TABLE IF EXISTS isidbuser.sobon_orientierungswert_soziale_infrastruktur
 ALTER TABLE IF EXISTS isidbuser.sobon_orientierungswert_soziale_infrastruktur
     ADD CONSTRAINT sobon_orientierungswert_soziale_infrastruktu_altersklasse_check CHECK (altersklasse::text = ANY (ARRAY['NULL_ZWEI'::character varying, 'DREI_SECHSEINHALB'::character varying, 'SECHSEINHALB_NEUNEINHALB'::character varying, 'ZEHNEINHALB_FUENFZEHN'::character varying, 'SECHSZEHN_ACHTZEHN'::character varying, 'ALLE_EWO'::character varying]::text[]));
 
+UPDATE isidbuser.sobon_orientierungswert_soziale_infrastruktur
+    SET einrichtungstyp = 'UNSPECIFIED'::character
+    WHERE einrichtungstyp = 'N_N'::character
+
 ALTER TABLE IF EXISTS isidbuser.versorgungsquote_gruppenstaerke DROP CONSTRAINT IF EXISTS ukjf69cklrwiws07t3by33ikcig;
 
 ALTER TABLE IF EXISTS isidbuser.versorgungsquote_gruppenstaerke
