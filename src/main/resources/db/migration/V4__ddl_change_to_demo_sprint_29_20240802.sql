@@ -72,7 +72,7 @@ CREATE INDEX IF NOT EXISTS bedarfsmeldung_abfrageersteller_abfragevariante_weite
     TABLESPACE pg_default;
 
 --
---
+-- Befüllung isidbuser.bedarfsmeldung mit Daten aus isidbuser.bedarfsmeldung_fachreferate
 --
 INSERT INTO isidbuser.bedarfsmeldung(
     id,
