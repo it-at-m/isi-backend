@@ -186,7 +186,12 @@ ALTER TABLE IF EXISTS isidbuser.bauvorhaben_art_fnp
 ALTER TABLE IF EXISTS isidbuser.kinderkrippe
     ADD CONSTRAINT kinderkrippe_einrichtungstraeger_check CHECK (einrichtungstraeger::text = ANY (ARRAY['UNSPECIFIED'::character varying, 'STAEDTISCHE_EINRICHTUNG'::character varying, 'EINRICHTUNG_BETRIEBSTRAEGERSCHAFT'::character varying, 'FREIE_GEMEINNUETZIGE_SONSTIGE'::character varying, 'EINRICHTUNG_GESAMTSTAEDTISCH'::character varying, 'ELTERN_KIND_INITIATIVE'::character varying, 'STAATLICHE_EINRICHTUNG'::character varying, 'PRIVATE_TRAEGERSCHAFT'::character varying, 'KIRCHLICHE_TRAEGERSCHAFT'::character varying]::text[]));
 
-ALTER TABLE IF EXISTS isidbuser.bauleitplanverfahren DROP CONSTRAINT IF EXISTS uk_jnr63296n1hkn4qkoo7kvi4tu;
+ALTER TABLE IF EXISTS isidbuser.bauleitplanverfahren
+    ALTER COLUMN frist_bearbeitung TYPE timestamp(6),
+    ALTER COLUMN frist_bearbeitung SET NOT NULL;
+
+ALTER TABLE IF EXISTS isidbuser.bauleitplanverfahren
+    DROP CONSTRAINT IF EXISTS uk_jnr63296n1hkn4qkoo7kvi4tu;
 
 ALTER TABLE IF EXISTS isidbuser.bauleitplanverfahren
     ADD CONSTRAINT bauleitplanverfahren_name_key UNIQUE (name);
@@ -294,7 +299,12 @@ ALTER TABLE IF EXISTS isidbuser.grundschule
 
 ALTER TABLE IF EXISTS isidbuser.abfragevariante DROP COLUMN IF EXISTS is_relevant;
 
-ALTER TABLE IF EXISTS isidbuser.baugenehmigungsverfahren DROP CONSTRAINT IF EXISTS uk_jebiouc3rgyvww5my14ratjxk;
+ALTER TABLE IF EXISTS isidbuser.baugenehmigungsverfahren
+    ALTER COLUMN frist_bearbeitung  TYPE timestamp(6),
+    ALTER COLUMN frist_bearbeitung SET NOT NULL;
+
+ALTER TABLE IF EXISTS isidbuser.baugenehmigungsverfahren
+    DROP CONSTRAINT IF EXISTS uk_jebiouc3rgyvww5my14ratjxk;
 
 ALTER TABLE IF EXISTS isidbuser.baugenehmigungsverfahren
     ADD CONSTRAINT baugenehmigungsverfahren_name_key UNIQUE (name);
