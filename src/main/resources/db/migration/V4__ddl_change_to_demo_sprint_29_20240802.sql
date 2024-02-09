@@ -236,7 +236,7 @@ ALTER TABLE IF EXISTS isidbuser.sobon_orientierungswert_soziale_infrastruktur
     ALTER COLUMN einwohner_jahr9nach_ersterstellung TYPE numeric(20,15),
     ALTER COLUMN einwohner_jahr10nach_ersterstellung TYPE numeric(20,15),
     ALTER COLUMN stammwert_arbeitsgruppe TYPE numeric(20,15),
-    ALTER COLUMN gueltig_ab TYPE timestamp(6) without time zone;
+    ALTER COLUMN gueltig_ab TYPE timestamp(6) without time zone,
     ALTER COLUMN einwohner_jahr1nach_ersterstellung SET NOT NULL,
     ALTER COLUMN einwohner_jahr2nach_ersterstellung SET NOT NULL,
     ALTER COLUMN einwohner_jahr3nach_ersterstellung SET NOT NULL,
