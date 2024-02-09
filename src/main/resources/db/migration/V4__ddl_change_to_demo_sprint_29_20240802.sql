@@ -120,6 +120,9 @@ CREATE TABLE IF NOT EXISTS isidbuser.umlegung_foerderarten
 
     TABLESPACE pg_default;
 
+ALTER TABLE IF EXISTS isidbuser.baurate_foerderarten
+    ALTER COLUMN anteil_prozent TYPE numeric(5,2);
+
 ALTER TABLE IF EXISTS isidbuser.umlegung_foerderarten
     OWNER to isidbuser;
 
