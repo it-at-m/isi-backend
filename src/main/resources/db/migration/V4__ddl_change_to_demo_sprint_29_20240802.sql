@@ -226,6 +226,9 @@ ALTER TABLE IF EXISTS isidbuser.foerdermix_stamm DROP CONSTRAINT IF EXISTS uka1u
 ALTER TABLE IF EXISTS isidbuser.foerdermix_stamm
     ADD CONSTRAINT foerdermix_stamm_bezeichnung_bezeichnung_jahr_key UNIQUE (bezeichnung, bezeichnung_jahr);
 
+ALTER TABLE IF EXISTS isidbuser.foerdermix_stamm_foerderarten
+    ALTER COLUMN anteil_prozent  TYPE numeric(5,2);
+
 ALTER TABLE IF EXISTS isidbuser.abfragevariante_weiteres_verfahren_wesentliche_rechtsgrundlage
     ADD CONSTRAINT abfragevariante_weiteres_verf_wesentliche_rechtsgrundlage_check CHECK (wesentliche_rechtsgrundlage::text = ANY (ARRAY['QUALIFIZIERTER_BEBAUUNGSPLAN'::character varying, 'VORHABENSBEZOGENER_BEBAUUNGSPLAN'::character varying, 'EINFACHER_BEBAUUNGSPLAN_PARAGRAPH_30'::character varying, 'EINFACHER_BEBAUUNGSPLAN_PARAGRAPH_30_IVM_34_35'::character varying, 'SEKTORALER_BEBAUUNGSPLAN_PARAGRAPH_9'::character varying, 'SEKTORALER_BEBAUUNGSPLAN_PARAGRAPH_30_IVM_34_35'::character varying, 'INNENBEREICH'::character varying, 'AUSSENBEREICH'::character varying, 'BEFREIUNG'::character varying, 'INFO_FEHLT'::character varying, 'FREIE_EINGABE'::character varying]::text[]));
 
