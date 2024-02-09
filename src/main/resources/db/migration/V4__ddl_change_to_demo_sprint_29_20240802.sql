@@ -103,7 +103,7 @@ INSERT INTO isidbuser.bedarfsmeldung(
         abfragevariante_baugenehmigungsverfahren_id,
         abfragevariante_bauleitplanverfahren_id,
         abfragevariante_weiteres_verfahren_id
-    FROM isidbuser.bedarfsmeldung_fachreferate
+    FROM isidbuser.bedarfsmeldung_fachreferate;
 
 CREATE TABLE IF NOT EXISTS isidbuser.umlegung_foerderarten
 (
