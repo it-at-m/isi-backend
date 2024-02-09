@@ -225,18 +225,18 @@ ALTER TABLE IF EXISTS isidbuser.dokument
     ADD CONSTRAINT dokument_art_dokument_check CHECK (art_dokument::text = ANY (ARRAY['UNSPECIFIED'::character varying, 'EMAIL'::character varying, 'BESCHLUSS'::character varying, 'ANLAGE'::character varying, 'ANTRAG'::character varying, 'KARTE'::character varying, 'STELLUNGNAHME'::character varying, 'DATEN_BAUVORHABEN'::character varying, 'GEBAEUDEPLAN'::character varying, 'BERECHNUNG'::character varying, 'INFOS_BAUGENEHMIGUNG'::character varying, 'PRESSEARTIKEL'::character varying, 'INFOS_ZU_SOZ_INFRASTRUKTUR'::character varying, 'PROTOKOLL'::character varying, 'SONSTIGES'::character varying]::text[]));
 
 ALTER TABLE IF EXISTS isidbuser.sobon_orientierungswert_soziale_infrastruktur
-    ALTER COLUMN einwohner_jahr1nach_ersterstellung numeric(20,15) NOT NULL,
-    ALTER COLUMN einwohner_jahr2nach_ersterstellung numeric(20,15) NOT NULL,
-    ALTER COLUMN einwohner_jahr3nach_ersterstellung numeric(20,15) NOT NULL,
-    ALTER COLUMN einwohner_jahr4nach_ersterstellung numeric(20,15) NOT NULL,
-    ALTER COLUMN einwohner_jahr5nach_ersterstellung numeric(20,15) NOT NULL,
-    ALTER COLUMN einwohner_jahr6nach_ersterstellung numeric(20,15) NOT NULL,
-    ALTER COLUMN einwohner_jahr7nach_ersterstellung numeric(20,15) NOT NULL,
-    ALTER COLUMN einwohner_jahr8nach_ersterstellung numeric(20,15) NOT NULL,
-    ALTER COLUMN einwohner_jahr9nach_ersterstellung numeric(20,15) NOT NULL,
-    ALTER COLUMN einwohner_jahr10nach_ersterstellung numeric(20,15) NOT NULL,
-    ALTER COLUMN stammwert_arbeitsgruppe numeric(20,15) NOT NULL,
-    ALTER COLUMN gueltig_ab timestamp(6) without time zone NOT NULL;
+    ALTER COLUMN einwohner_jahr1nach_ersterstellung TYPE numeric(20,15) NOT NULL,
+    ALTER COLUMN einwohner_jahr2nach_ersterstellung TYPE numeric(20,15) NOT NULL,
+    ALTER COLUMN einwohner_jahr3nach_ersterstellung TYPE numeric(20,15) NOT NULL,
+    ALTER COLUMN einwohner_jahr4nach_ersterstellung TYPE numeric(20,15) NOT NULL,
+    ALTER COLUMN einwohner_jahr5nach_ersterstellung TYPE numeric(20,15) NOT NULL,
+    ALTER COLUMN einwohner_jahr6nach_ersterstellung TYPE numeric(20,15) NOT NULL,
+    ALTER COLUMN einwohner_jahr7nach_ersterstellung TYPE numeric(20,15) NOT NULL,
+    ALTER COLUMN einwohner_jahr8nach_ersterstellung TYPE numeric(20,15) NOT NULL,
+    ALTER COLUMN einwohner_jahr9nach_ersterstellung TYPE numeric(20,15) NOT NULL,
+    ALTER COLUMN einwohner_jahr10nach_ersterstellung TYPE numeric(20,15) NOT NULL,
+    ALTER COLUMN stammwert_arbeitsgruppe TYPE numeric(20,15) NOT NULL,
+    ALTER COLUMN gueltig_ab TYPE timestamp(6) without time zone NOT NULL;
 
 ALTER TABLE IF EXISTS isidbuser.sobon_orientierungswert_soziale_infrastruktur DROP CONSTRAINT IF EXISTS ukehqrkyn8jho506swcldo2xc7j;
 
