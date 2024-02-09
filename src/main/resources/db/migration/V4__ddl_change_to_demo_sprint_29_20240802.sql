@@ -155,6 +155,12 @@ ALTER TABLE IF EXISTS isidbuser.weiteres_verfahren
     ADD CONSTRAINT weiteres_verfahren_status_abfrage_check CHECK (status_abfrage::text = ANY (ARRAY['ANGELEGT'::character varying, 'OFFEN'::character varying, 'IN_BEARBEITUNG_SACHBEARBEITUNG'::character varying, 'IN_BEARBEITUNG_FACHREFERATE'::character varying, 'BEDARFSMELDUNG_ERFOLGT'::character varying, 'ERLEDIGT_MIT_FACHREFERAT'::character varying, 'ERLEDIGT_OHNE_FACHREFERAT'::character varying, 'ABBRUCH'::character varying]::text[]));
 DROP INDEX IF EXISTS isidbuser.weiteres_verfahrenabfrage_name_index;
 
+ALTER TABLE IF EXISTS isidbuser.idealtypische_baurate
+    ALTER COLUMN von TYPE numeric(38,2),
+    ALTER COLUMN bis_exklusiv TYPE numeric(38,2),
+    ALTER COLUMN von SET NOT NULL,
+    ALTER COLUMN bis_exklusiv SET NOT NULL;
+
 ALTER TABLE IF EXISTS isidbuser.idealtypische_baurate DROP CONSTRAINT IF EXISTS ukqqep9tj7owsp9pywkxscmx4mo;
 
 ALTER TABLE IF EXISTS isidbuser.idealtypische_baurate
