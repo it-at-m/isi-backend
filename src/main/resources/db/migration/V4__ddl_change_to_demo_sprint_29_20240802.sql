@@ -255,8 +255,8 @@ UPDATE isidbuser.sobon_orientierungswert_soziale_infrastruktur
     WHERE einrichtungstyp = 'N_N';
 
 UPDATE isidbuser.sobon_orientierungswert_soziale_infrastruktur
-SET einrichtungstyp = 'GS_NACHMITTAG_BETREUUNG'
-WHERE einrichtungstyp = 'KINDERHORT';
+    SET einrichtungstyp = 'GS_NACHMITTAG_BETREUUNG'
+    WHERE einrichtungstyp = 'KINDERHORT';
 
 ALTER TABLE IF EXISTS isidbuser.sobon_orientierungswert_soziale_infrastruktur DROP CONSTRAINT IF EXISTS ukehqrkyn8jho506swcldo2xc7j;
 
