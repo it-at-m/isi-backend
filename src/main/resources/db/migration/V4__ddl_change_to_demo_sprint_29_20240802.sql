@@ -53,6 +53,18 @@ CREATE TABLE IF NOT EXISTS isidbuser.bedarfsmeldung
 
 ALTER TABLE IF EXISTS isidbuser.bedarfsmeldung
     OWNER to isidbuser;
+CREATE INDEX IF NOT EXISTS bedarfsmeldung_fachreferate_abfragevariante_baugenehmigungs
+    ON isidbuser.bedarfsmeldung USING btree
+    (abfragevariante_baugenehmigungsverfahren_fachreferate_id COLLATE pg_catalog."default" ASC NULLS LAST)
+    TABLESPACE pg_default;
+CREATE INDEX IF NOT EXISTS bedarfsmeldung_fachreferate_abfragevariante_bauleitplanverf
+    ON isidbuser.bedarfsmeldung USING btree
+    (abfragevariante_bauleitplanverfahren_fachreferate_id COLLATE pg_catalog."default" ASC NULLS LAST)
+    TABLESPACE pg_default;
+CREATE INDEX IF NOT EXISTS bedarfsmeldung_fachreferate_abfragevariante_weiteres_verfah
+    ON isidbuser.bedarfsmeldung USING btree
+    (abfragevariante_weiteres_verfahren_fachreferate_id COLLATE pg_catalog."default" ASC NULLS LAST)
+    TABLESPACE pg_default;
 CREATE INDEX IF NOT EXISTS bedarfsmeldung_abfrageersteller_abfragevariante_baugenehmigungs
     ON isidbuser.bedarfsmeldung USING btree
     (abfragevariante_baugenehmigungsverfahren_abfrageersteller_id COLLATE pg_catalog."default" ASC NULLS LAST)
