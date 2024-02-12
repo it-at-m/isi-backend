@@ -218,11 +218,12 @@ public class BauvorhabenService {
                         log.error(message);
                         return new EntityNotFoundException(message);
                     });
+                final var aktuellRelevanteAbfrage = abfrageService.getByAbfragevarianteId(relevanteAbfragevarianteId);
                 var errorMessage =
                     "Die Abfragevariante " +
-                    abfrage.getName() +
-                    " in Abfrage " +
                     relevanteAbfragevariante.getName() +
+                    " in Abfrage " +
+                    aktuellRelevanteAbfrage.getName() +
                     " ist bereits als relevant markiert.";
                 log.error(errorMessage);
                 throw new UniqueViolationException(errorMessage);
