@@ -17,11 +17,6 @@
 -- Name: abfragevariante; Type: TABLE; Schema: isidbuser; Owner: isidbuser
 --
 
-CREATE SCHEMA isidbuser;
-
-
-ALTER SCHEMA isidbuser OWNER TO isidbuser;
-
 SET default_tablespace = '';
 
 SET default_table_access_method = heap;
