@@ -53,7 +53,7 @@ public class BauvorhabenDto extends BaseEntityDto {
     @Size(max = 255, message = "Es sind maximal {max} Zeichen erlaubt")
     private String fisNummer;
 
-    @Size(max = 255, message = "Es sind maximal {max} Zeichen erlaubt")
+    @Size(max = 1000, message = "Es sind maximal {max} Zeichen erlaubt")
     private String anmerkung;
 
     @NotNull
