@@ -28,6 +28,11 @@ public enum StandVerfahren implements ILookup {
         new String[] { "Vorbereitung", "Billigungsbeschluss", "Städtebaulicher", "Vertrag" }
     ),
 
+    VORBEREITUNG_SATZUNGSBESCHLUSS(
+        "Vorbereitung Satzungsbeschluss",
+        new String[] { "Vorbereitung", "Satzungsbeschluss" }
+    ),
+
     VORLIEGENDER_SATZUNGSBESCHLUSS(
         "vorliegender Satzungsbeschluss",
         new String[] { "vorliegender", "Satzungsbeschluss" }
@@ -84,6 +89,7 @@ public enum StandVerfahren implements ILookup {
             VORBEREITUNG_WETTBEWERBAUSLOBUNG,
             VORBEREITUNG_AUFSTELLUNGSBESCHLUSS,
             VORBEREITUNG_BILLIGUNGSBESCHLUSS_STAEDTEBAULICHER_VERTRAG,
+            VORBEREITUNG_SATZUNGSBESCHLUSS,
             VORLIEGENDER_SATZUNGSBESCHLUSS,
             RECHTSVERBINDLICHKEIT_AMTSBLATT,
             AUFTEILUNGSPLAN,
