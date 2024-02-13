@@ -71,7 +71,7 @@ public class Bauleitplanverfahren extends Abfrage {
     @Column(nullable = false)
     private StandVerfahren standVerfahren;
 
-    @Column
+    @Column (length = 1000)
     private String standVerfahrenFreieEingabe;
 
     @IndexedEmbedded

@@ -74,7 +74,7 @@ public class Bauvorhaben extends BaseEntity {
     @Column(nullable = false)
     private StandVerfahren standVerfahren;
 
-    @Column
+    @Column(length = 1000)
     private String standVerfahrenFreieEingabe;
 
     @FullTextField
