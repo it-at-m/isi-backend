@@ -64,7 +64,7 @@ public class Baugenehmigungsverfahren extends Abfrage {
     @Column(nullable = false)
     private StandVerfahren standVerfahren;
 
-    @Column (length = 1000)
+    @Column(length = 1000)
     private String standVerfahrenFreieEingabe;
 
     @IndexedEmbedded
