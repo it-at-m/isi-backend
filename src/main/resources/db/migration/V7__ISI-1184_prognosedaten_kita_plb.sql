@@ -11,7 +11,7 @@ CREATE TABLE isidbuser.prognose_kita_plb
     kita_plb                bigint                NOT NULL,
     berichtsstand           timestamp(6) without time zone NOT NULL,
     altersgruppe            character varying(255) NOT NULL,
-    anzahlKinder            numeric(19,2) NOT NULL,
+    anzahl_kinder            numeric(19,2) NOT NULL,
     CONSTRAINT prognose_kita_plb_pkey PRIMARY KEY (id),
     CONSTRAINT prognose_kita_plb_altersgruppe_check CHECK (altersgruppe::text = ANY (ARRAY['NULL_ZWEI_JAEHRIGE'::character varying, 'DREI_FUENF_UND_FUENFZIG_PROZENT_SECHS_JAEHRIGE'::character varying]::text[])),
     CONSTRAINT prognose_kita_plb_altersgruppe_unique UNIQUE (kita_plb, berichtsstand, altersgruppe)
