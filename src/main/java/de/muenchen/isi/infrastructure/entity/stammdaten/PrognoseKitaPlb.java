@@ -6,11 +6,18 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.Index;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import lombok.Data;
 
 @Entity
+@Table(
+    uniqueConstraints = { @UniqueConstraint(columnNames = { "kitaPlb", "berichtsstand", "altersgruppe" }) },
+    indexes = { @Index(name = "prognosedaten_kita_plb_index", columnList = "kitaPlb, berichtsstand, altersgruppe") }
+)
 @Data
 public class PrognoseKitaPlb extends BaseEntity {
 
