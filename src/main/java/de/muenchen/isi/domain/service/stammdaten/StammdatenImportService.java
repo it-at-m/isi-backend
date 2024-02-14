@@ -8,16 +8,13 @@ import de.muenchen.isi.domain.mapper.StammdatenDomainMapper;
 import de.muenchen.isi.infrastructure.csv.PrognosedatenKitaPlbCsv;
 import de.muenchen.isi.infrastructure.csv.SobonOrientierungswertSozialeInfrastrukturCsv;
 import de.muenchen.isi.infrastructure.csv.StaedtebaulicheOrientierungswertCsv;
-import de.muenchen.isi.infrastructure.entity.stammdaten.SobonOrientierungswertSozialeInfrastruktur;
-import de.muenchen.isi.infrastructure.entity.stammdaten.StaedtebaulicheOrientierungswert;
 import de.muenchen.isi.infrastructure.repository.CsvRepository;
+import de.muenchen.isi.infrastructure.repository.stammdaten.PrognoseKitaPlbRepository;
 import de.muenchen.isi.infrastructure.repository.stammdaten.SobonOrientierungswertSozialeInfrastrukturRepository;
 import de.muenchen.isi.infrastructure.repository.stammdaten.StaedtebaulicheOrientierungswertRepository;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.List;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
@@ -34,6 +31,8 @@ public class StammdatenImportService {
     private final StaedtebaulicheOrientierungswertRepository staedtebaulicheOrientierungswertRepository;
 
     private final SobonOrientierungswertSozialeInfrastrukturRepository sobonOrientierungswertSozialeInfrastrukturRepository;
+
+    private final PrognoseKitaPlbRepository prognoseKitaPlbRepository;
 
     private final StammdatenDomainMapper stammdatenDomainMapper;
 
@@ -67,7 +66,12 @@ public class StammdatenImportService {
     public void importPrognosedatenKitaPlb(final InputStream csvImportFile)
         throws FileImportFailedException, CsvAttributeErrorException {
         try (final InputStreamReader csvInputStreamReader = new InputStreamReader(csvImportFile)) {
-            this.csvRepository.readAllPrognosedatenKitaPlbCsv(csvInputStreamReader);
+            final var entities =
+                this.csvRepository.readAllPrognosedatenKitaPlbCsv(csvInputStreamReader)
+                    .stream()
+                    .flatMap(stammdatenDomainMapper::csv2EntityForEachAltersgruppe)
+                    .toList();
+            prognoseKitaPlbRepository.saveAll(entities);
         } catch (final CsvDataTypeMismatchException | CsvRequiredFieldEmptyException exception) {
             log.error(exception.getMessage());
             throw new CsvAttributeErrorException(exception.getMessage(), exception);
@@ -109,11 +113,11 @@ public class StammdatenImportService {
     public void importStaedtebaulicheOrientierungswerte(final InputStream csvImportFile)
         throws FileImportFailedException, CsvAttributeErrorException {
         try (final InputStreamReader csvInputStreamReader = new InputStreamReader(csvImportFile)) {
-            final List<StaedtebaulicheOrientierungswert> entities =
+            final var entities =
                 this.csvRepository.readAllStaedtebaulicheOrientierungswertCsv(csvInputStreamReader)
                     .stream()
                     .map(this.stammdatenDomainMapper::csv2Entity)
-                    .collect(Collectors.toList());
+                    .toList();
             this.staedtebaulicheOrientierungswertRepository.saveAll(entities);
         } catch (final CsvDataTypeMismatchException | CsvRequiredFieldEmptyException exception) {
             log.error(exception.getMessage());
@@ -157,11 +161,11 @@ public class StammdatenImportService {
     public void importSobonOrientierungswerteSozialeInfrastruktur(final InputStream csvImportFile)
         throws FileImportFailedException, CsvAttributeErrorException {
         try (final InputStreamReader csvInputStreamReader = new InputStreamReader(csvImportFile)) {
-            final List<SobonOrientierungswertSozialeInfrastruktur> entities =
+            final var entities =
                 this.csvRepository.readAllSobonOrientierungswertSozialeInfrastrukturCsv(csvInputStreamReader)
                     .stream()
                     .map(this.stammdatenDomainMapper::csv2Entity)
-                    .collect(Collectors.toList());
+                    .toList();
             this.sobonOrientierungswertSozialeInfrastrukturRepository.saveAll(entities);
         } catch (final CsvDataTypeMismatchException | CsvRequiredFieldEmptyException exception) {
             log.error(exception.getMessage());

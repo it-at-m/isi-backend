@@ -10,4 +10,12 @@ public enum Altersgruppe {
 
     @Getter
     private final String bezeichnung;
+
+    public static class Values {
+
+        public static final String NULL_ZWEI_JAEHRIGE = "NULL_ZWEI_JAEHRIGE";
+
+        public static final String DREI_FUENF_UND_FUENFZIG_PROZENT_SECHS_JAEHRIGE =
+            "DREI_FUENF_UND_FUENFZIG_PROZENT_SECHS_JAEHRIGE";
+    }
 }
