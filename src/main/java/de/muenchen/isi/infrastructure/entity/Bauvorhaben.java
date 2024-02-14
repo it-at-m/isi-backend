@@ -120,7 +120,7 @@ public class Bauvorhaben extends BaseEntity {
     @ElementCollection
     private List<WesentlicheRechtsgrundlage> wesentlicheRechtsgrundlage;
 
-    @Column
+    @Column(length = 1000)
     private String wesentlicheRechtsgrundlageFreieEingabe;
 
     @Enumerated(EnumType.STRING)

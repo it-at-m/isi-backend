@@ -8,6 +8,7 @@ import de.muenchen.isi.api.dto.abfrageAngelegt.AbfragevarianteWeiteresVerfahrenA
 import de.muenchen.isi.api.validation.NotUnspecified;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import lombok.Data;
@@ -29,5 +30,6 @@ public class AbfragevarianteWeiteresVerfahrenInBearbeitungSachbearbeitungDto
     @NotNull
     private LocalDate stammdatenGueltigAb;
 
+    @Size(max = 1000, message = "Es sind maximal {max} Zeichen erlaubt")
     private String anmerkung;
 }

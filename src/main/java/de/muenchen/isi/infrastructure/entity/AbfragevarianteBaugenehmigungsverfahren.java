@@ -144,7 +144,7 @@ public class AbfragevarianteBaugenehmigungsverfahren extends Abfragevariante {
     @Column
     private LocalDate stammdatenGueltigAb;
 
-    @Column
+    @Column(length = 1000)
     private String anmerkung;
 
     @OneToMany(cascade = { CascadeType.ALL }, orphanRemoval = true)
