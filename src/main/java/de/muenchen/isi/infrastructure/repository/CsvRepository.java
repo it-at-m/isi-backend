@@ -4,6 +4,7 @@ import com.opencsv.bean.CsvToBeanBuilder;
 import com.opencsv.enums.CSVReaderNullFieldIndicator;
 import com.opencsv.exceptions.CsvDataTypeMismatchException;
 import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
+import de.muenchen.isi.infrastructure.csv.PrognosedatenKitaPlbCsv;
 import de.muenchen.isi.infrastructure.csv.SobonOrientierungswertSozialeInfrastrukturCsv;
 import de.muenchen.isi.infrastructure.csv.StaedtebaulicheOrientierungswertCsv;
 import java.io.InputStreamReader;
@@ -16,6 +17,28 @@ import org.springframework.stereotype.Repository;
 public class CsvRepository {
 
     private static final Character CSV_SEPERATOR = ';';
+
+    /**
+     * Erstellt je Zeile in der CSV-Datei ein {@link PrognosedatenKitaPlbCsv}.
+     *
+     * @param csvImportFile zum Auslesen der {@link PrognosedatenKitaPlbCsv}s.
+     * @return das {@link PrognosedatenKitaPlbCsv} je Zeile.
+     * @throws CsvDataTypeMismatchException   falls nicht der passende Typ in Feld steht.
+     * @throws CsvRequiredFieldEmptyException falls ein Feld keinen Wert (null oder leerer String) beinhaltet.
+     */
+    public List<PrognosedatenKitaPlbCsv> readAllPrognosedatenKitaPlbCsv(final InputStreamReader csvImportFile)
+        throws CsvDataTypeMismatchException, CsvRequiredFieldEmptyException {
+        try {
+            final var csvToBean = new CsvToBeanBuilder<PrognosedatenKitaPlbCsv>(csvImportFile)
+                .withSeparator(CSV_SEPERATOR)
+                .withFieldAsNull(CSVReaderNullFieldIndicator.BOTH)
+                .withType(PrognosedatenKitaPlbCsv.class)
+                .build();
+            return Collections.list(IteratorUtils.asEnumeration(csvToBean.iterator()));
+        } catch (final RuntimeException exception) {
+            throw this.checkAndCastAndThrowCorrectException(exception);
+        }
+    }
 
     /**
      * Erstellt je Zeile in der CSV-Datei ein {@link StaedtebaulicheOrientierungswertCsv}.

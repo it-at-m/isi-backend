@@ -5,6 +5,7 @@ import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
 import de.muenchen.isi.domain.exception.CsvAttributeErrorException;
 import de.muenchen.isi.domain.exception.FileImportFailedException;
 import de.muenchen.isi.domain.mapper.StammdatenDomainMapper;
+import de.muenchen.isi.infrastructure.csv.PrognosedatenKitaPlbCsv;
 import de.muenchen.isi.infrastructure.csv.SobonOrientierungswertSozialeInfrastrukturCsv;
 import de.muenchen.isi.infrastructure.csv.StaedtebaulicheOrientierungswertCsv;
 import de.muenchen.isi.infrastructure.entity.stammdaten.SobonOrientierungswertSozialeInfrastruktur;
@@ -35,6 +36,35 @@ public class StammdatenImportService {
     private final SobonOrientierungswertSozialeInfrastrukturRepository sobonOrientierungswertSozialeInfrastrukturRepository;
 
     private final StammdatenDomainMapper stammdatenDomainMapper;
+
+    /**
+     * Die Methode extrahiert aus der CSV-Datei im Parameter, die entsprechenden Entitäten
+     * und persistiert diese in der Datenbank.
+     *
+     * @param csvImportFile mit den Informationen bezüglich {@link PrognosedatenKitaPlbCsv}.
+     * @throws FileImportFailedException  tritt auf, falls ein Fehler beim Import passiert.
+     * @throws CsvAttributeErrorException tritt auf, falls ein Attribut in der CSV nicht gesetzt oder fehlerhaft ist.
+     */
+    public void importPrognosedatenKitaPlb(final MultipartFile csvImportFile)
+        throws FileImportFailedException, CsvAttributeErrorException {
+        try (final var inputStream = csvImportFile.getInputStream()) {
+            this.importPrognosedatenKitaPlb(inputStream);
+        } catch (final IOException exception) {
+            final var message = "Der Import einer CSV-Datei für Prognosedaten der KitaPlb ist fehlgeschlagen.";
+            log.error(message);
+            log.error(exception.getMessage());
+            throw new FileImportFailedException(message, exception);
+        }
+    }
+
+    /**
+     * Die Methode extrahiert aus der CSV-Datei im Parameter, die entsprechenden Entitäten und persistiert diese in der Datenbank.
+     *
+     * @param csvImportFile mit den Informationen bezüglich {@link PrognosedatenKitaPlbCsv}.
+     * @throws FileImportFailedException  tritt auf, falls ein Fehler beim Import passiert.
+     * @throws CsvAttributeErrorException tritt auf, falls ein Attribut in der CSV nicht gesetzt oder fehlerhaft ist.
+     */
+    public void importPrognosedatenKitaPlb(final InputStream csvImportFile) {}
 
     /**
      * Die Methode extrahiert aus der CSV-Datei im Parameter, die entsprechenden Entitäten
