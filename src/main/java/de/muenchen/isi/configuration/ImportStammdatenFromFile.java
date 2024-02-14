@@ -3,6 +3,7 @@ package de.muenchen.isi.configuration;
 import de.muenchen.isi.domain.exception.CsvAttributeErrorException;
 import de.muenchen.isi.domain.exception.FileImportFailedException;
 import de.muenchen.isi.domain.service.stammdaten.StammdatenImportService;
+import de.muenchen.isi.infrastructure.repository.stammdaten.PrognoseKitaPlbRepository;
 import de.muenchen.isi.infrastructure.repository.stammdaten.SobonOrientierungswertSozialeInfrastrukturRepository;
 import de.muenchen.isi.infrastructure.repository.stammdaten.StaedtebaulicheOrientierungswertRepository;
 import java.io.File;
@@ -26,11 +27,15 @@ public class ImportStammdatenFromFile implements CommandLineRunner {
 
     private final StammdatenImportService stammdatenImportService;
 
+    private final PrognoseKitaPlbRepository prognoseKitaPlbRepository;
+
     private final StaedtebaulicheOrientierungswertRepository staedtebaulicheOrientierungswertRepository;
 
     private final SobonOrientierungswertSozialeInfrastrukturRepository sobonOrientierungswertSozialeInfrastrukturRepository;
 
     private final Boolean deferDatasourceInit;
+
+    private final String csvPrognosedatenKitaPlb;
 
     private final List<String> csvSobonOrientierungswertSozialeInfrastruktur;
 
@@ -38,6 +43,7 @@ public class ImportStammdatenFromFile implements CommandLineRunner {
 
     public ImportStammdatenFromFile(
         @Value("${spring.jpa.defer-datasource-initialization:false}") final Boolean deferDatasourceInit,
+        @Value("${stammdaten.csv-locations.prognosedaten-kita-plb}") final String csvPrognosedatenKitaPlb,
         @Value("${stammdaten.csv-locations.sobon-orientierungswerte-sozialinfrastruktur}") final List<
             String
         > csvSobonOrientierungswertSozialeInfrastruktur,
@@ -45,6 +51,7 @@ public class ImportStammdatenFromFile implements CommandLineRunner {
             String
         > csvStaedtebaulicheOrientierungswerte,
         final StammdatenImportService stammdatenImportService,
+        final PrognoseKitaPlbRepository prognoseKitaPlbRepository,
         final SobonOrientierungswertSozialeInfrastrukturRepository sobonOrientierungswertSozialeInfrastrukturRepository,
         final StaedtebaulicheOrientierungswertRepository staedtebaulicheOrientierungswertRepository
     ) {
@@ -52,7 +59,9 @@ public class ImportStammdatenFromFile implements CommandLineRunner {
         this.csvSobonOrientierungswertSozialeInfrastruktur =
             ListUtils.emptyIfNull(csvSobonOrientierungswertSozialeInfrastruktur);
         this.csvStaedtebaulicheOrientierungswerte = ListUtils.emptyIfNull(csvStaedtebaulicheOrientierungswerte);
+        this.csvPrognosedatenKitaPlb = csvPrognosedatenKitaPlb;
         this.stammdatenImportService = stammdatenImportService;
+        this.prognoseKitaPlbRepository = prognoseKitaPlbRepository;
         this.sobonOrientierungswertSozialeInfrastrukturRepository =
             sobonOrientierungswertSozialeInfrastrukturRepository;
         this.staedtebaulicheOrientierungswertRepository = staedtebaulicheOrientierungswertRepository;
@@ -66,6 +75,11 @@ public class ImportStammdatenFromFile implements CommandLineRunner {
     @Override
     public void run(String... args) throws CsvAttributeErrorException, FileImportFailedException, IOException {
         if (BooleanUtils.isTrue(deferDatasourceInit)) {
+            log.info("START IMPORT PROGNOSEDATEN KITA-PLB");
+            prognoseKitaPlbRepository.deleteAll();
+            this.addPrognosedatenKitaPlb(this.csvPrognosedatenKitaPlb);
+            log.info("FINISHED IMPORT PROGNOSEDATEN KITA-PLB");
+
             log.info("START IMPORT SOBON STAMMDATEN");
             this.sobonOrientierungswertSozialeInfrastrukturRepository.deleteAll();
             this.staedtebaulicheOrientierungswertRepository.deleteAll();
@@ -82,6 +96,21 @@ public class ImportStammdatenFromFile implements CommandLineRunner {
     }
 
     /**
+     * Importiert die Prognosedaten der Kita-Planungsbereiche aus der angegebenen CSV-Datei.
+     *
+     * @param filePath Der Dateipfad zur CSV-Datei für die Prognosedaten der Kita-Planungsbereich.
+     * @throws IOException                Wenn ein Fehler beim Lesen der Datei auftritt.
+     * @throws CsvAttributeErrorException Wenn ein Fehler in den CSV-Attributen auftritt.
+     * @throws FileImportFailedException  Wenn der Import der Datei fehlschlägt.
+     */
+    public void addPrognosedatenKitaPlb(final String filePath)
+        throws IOException, CsvAttributeErrorException, FileImportFailedException {
+        try (final var fileInputStream = this.createFileInputStream(filePath)) {
+            this.stammdatenImportService.importPrognosedatenKitaPlb(fileInputStream);
+        }
+    }
+
+    /**
      * Importiert die Sobon-Orientierungswerte für soziale Infrastruktur aus der angegebenen CSV-Datei.
      *
      * @param filePath Der Dateipfad zur Sobon-Orientierungswerte für soziale Infrastruktur CSV-Datei.
@@ -89,7 +118,7 @@ public class ImportStammdatenFromFile implements CommandLineRunner {
      * @throws CsvAttributeErrorException Wenn ein Fehler in den CSV-Attributen auftritt.
      * @throws FileImportFailedException  Wenn der Import der Datei fehlschlägt.
      */
-    public void addSobonOrientierungswerteSozialeInfrastruktur(String filePath)
+    public void addSobonOrientierungswerteSozialeInfrastruktur(final String filePath)
         throws IOException, CsvAttributeErrorException, FileImportFailedException {
         try (final var fileInputStream = this.createFileInputStream(filePath)) {
             this.stammdatenImportService.importSobonOrientierungswerteSozialeInfrastruktur(fileInputStream);
@@ -104,7 +133,7 @@ public class ImportStammdatenFromFile implements CommandLineRunner {
      * @throws CsvAttributeErrorException Wenn ein Fehler in den CSV-Attributen auftritt.
      * @throws FileImportFailedException  Wenn der Import der Datei fehlschlägt.
      */
-    public void addStaedtebaulicheOrientierungswerte(String filePath)
+    public void addStaedtebaulicheOrientierungswerte(final String filePath)
         throws IOException, CsvAttributeErrorException, FileImportFailedException {
         try (final var fileInputStream = this.createFileInputStream(filePath)) {
             this.stammdatenImportService.importStaedtebaulicheOrientierungswerte(fileInputStream);
@@ -118,7 +147,7 @@ public class ImportStammdatenFromFile implements CommandLineRunner {
      * @return den FileInputStream der CSV-Datei.
      * @throws IOException sobald ein Fehler beim Lesen der Datei auftritt.
      */
-    public FileInputStream createFileInputStream(String filePath) throws IOException {
+    public FileInputStream createFileInputStream(final String filePath) throws IOException {
         final var inputStream = new ClassPathResource(filePath).getInputStream();
         final var tempFile = File.createTempFile("tempfile", ".tmp");
         FileUtils.copyInputStreamToFile(inputStream, tempFile);
