@@ -15,7 +15,12 @@ import lombok.Data;
 
 @Entity
 @Table(
-    uniqueConstraints = { @UniqueConstraint(columnNames = { "kitaPlb", "berichtsstand", "altersgruppe" }) },
+    uniqueConstraints = {
+        @UniqueConstraint(
+            name = "prognose_kita_plb_altersgruppe_unique",
+            columnNames = { "kitaPlb", "berichtsstand", "altersgruppe" }
+        ),
+    },
     indexes = { @Index(name = "prognosedaten_kita_plb_index", columnList = "kitaPlb, berichtsstand, altersgruppe") }
 )
 @Data
@@ -31,6 +36,6 @@ public class PrognoseKitaPlb extends BaseEntity {
     @Column(nullable = false)
     private Altersgruppe altersgruppe;
 
-    @Column(precision = 20, scale = 2, nullable = false)
+    @Column(precision = 19, scale = 2, nullable = false)
     private BigDecimal anzahlKinder;
 }
