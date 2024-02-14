@@ -13,6 +13,7 @@ import de.muenchen.isi.infrastructure.entity.enums.lookup.Infrastruktureinrichtu
 import de.muenchen.isi.infrastructure.entity.stammdaten.SobonOrientierungswertSozialeInfrastruktur;
 import de.muenchen.isi.infrastructure.entity.stammdaten.StaedtebaulicheOrientierungswert;
 import de.muenchen.isi.infrastructure.repository.CsvRepository;
+import de.muenchen.isi.infrastructure.repository.stammdaten.PrognoseKitaPlbRepository;
 import de.muenchen.isi.infrastructure.repository.stammdaten.SobonOrientierungswertSozialeInfrastrukturRepository;
 import de.muenchen.isi.infrastructure.repository.stammdaten.StaedtebaulicheOrientierungswertRepository;
 import java.io.ByteArrayInputStream;
@@ -51,6 +52,9 @@ class StammdatenImportServiceTest {
     @Mock
     private SobonOrientierungswertSozialeInfrastrukturRepository sobonOrientierungswertSozialeInfrastrukturRepository;
 
+    @Mock
+    private PrognoseKitaPlbRepository prognoseKitaPlbRepository;
+
     private StammdatenImportService stammdatenImportService;
 
     @BeforeEach
@@ -60,13 +64,15 @@ class StammdatenImportServiceTest {
                 this.csvRepository,
                 this.staedtebaulicheOrientierungswertRepository,
                 this.sobonOrientierungswertSozialeInfrastrukturRepository,
+                this.prognoseKitaPlbRepository,
                 this.stammdatenDomainMapper
             );
         Mockito.reset(
             this.multipartFile,
             this.csvRepository,
             this.staedtebaulicheOrientierungswertRepository,
-            this.sobonOrientierungswertSozialeInfrastrukturRepository
+            this.sobonOrientierungswertSozialeInfrastrukturRepository,
+            this.prognoseKitaPlbRepository
         );
     }
 
