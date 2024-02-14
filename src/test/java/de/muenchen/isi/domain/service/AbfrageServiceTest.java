@@ -2,6 +2,7 @@ package de.muenchen.isi.domain.service;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 
 import de.muenchen.isi.domain.exception.AbfrageStatusNotAllowedException;
 import de.muenchen.isi.domain.exception.CalculationException;
@@ -3400,5 +3401,174 @@ class AbfrageServiceTest {
                         StatusAbfrage.ANGELEGT
                     )
         );
+    }
+
+    @Test
+    void changeRelevanteAbfragevarianteWhenNewBauvorhabenAbfrageAngelgt() {
+        var bauvorhabenOriginal = UUID.randomUUID();
+        var bauvorhabenNeu = UUID.randomUUID();
+        final var model = new BauleitplanverfahrenAngelegtModel();
+        model.setBauvorhaben(bauvorhabenNeu);
+        final var originalAbfrage = new BauleitplanverfahrenModel();
+        originalAbfrage.setBauvorhaben(bauvorhabenOriginal);
+
+        AbfragevarianteBauleitplanverfahren abfragevariante = new AbfragevarianteBauleitplanverfahren();
+        Bauvorhaben bauvorhaben = new Bauvorhaben();
+        bauvorhaben.setId(bauvorhabenOriginal);
+        bauvorhaben.setRelevanteAbfragevariante(abfragevariante);
+
+        Mockito.when(this.bauvorhabenRepository.getReferenceById(bauvorhabenOriginal)).thenReturn(bauvorhaben);
+
+        Mockito.when(this.bauvorhabenRepository.save(bauvorhaben)).thenReturn(bauvorhaben);
+
+        this.abfrageService.changeRelevantAbfragevarianteOnBauvorhabenChangeAbfrageAngelegtModel(
+                model,
+                originalAbfrage
+            );
+
+        assertThat(bauvorhaben.getRelevanteAbfragevariante(), is(nullValue()));
+
+        Mockito.verify(this.bauvorhabenRepository, Mockito.times(1)).save(bauvorhaben);
+        Mockito.verify(this.bauvorhabenRepository, Mockito.times(1)).getReferenceById(bauvorhabenOriginal);
+    }
+
+    @Test
+    void changeRelevanteAbfragevarianteWhenBauvorhabenIsRemovedAbfrageAngelgt() {
+        var bauvorhabenOriginal = UUID.randomUUID();
+        final var model = new BauleitplanverfahrenAngelegtModel();
+        model.setBauvorhaben(null);
+        final var originalAbfrage = new BauleitplanverfahrenModel();
+        originalAbfrage.setBauvorhaben(bauvorhabenOriginal);
+
+        AbfragevarianteBauleitplanverfahren abfragevariante = new AbfragevarianteBauleitplanverfahren();
+        Bauvorhaben bauvorhaben = new Bauvorhaben();
+        bauvorhaben.setId(bauvorhabenOriginal);
+        bauvorhaben.setRelevanteAbfragevariante(abfragevariante);
+
+        Mockito.when(this.bauvorhabenRepository.getReferenceById(bauvorhabenOriginal)).thenReturn(bauvorhaben);
+
+        Mockito.when(this.bauvorhabenRepository.save(bauvorhaben)).thenReturn(bauvorhaben);
+
+        this.abfrageService.changeRelevantAbfragevarianteOnBauvorhabenChangeAbfrageAngelegtModel(
+                model,
+                originalAbfrage
+            );
+
+        assertThat(bauvorhaben.getRelevanteAbfragevariante(), is(nullValue()));
+
+        Mockito.verify(this.bauvorhabenRepository, Mockito.times(1)).save(bauvorhaben);
+        Mockito.verify(this.bauvorhabenRepository, Mockito.times(1)).getReferenceById(bauvorhabenOriginal);
+    }
+
+    @Test
+    void notChangeRelevanteAbfragevarianteAbfrageAngelgt() {
+        var bauvorhabenOriginal = UUID.randomUUID();
+        final var model = new BauleitplanverfahrenAngelegtModel();
+        model.setBauvorhaben(bauvorhabenOriginal);
+        final var originalAbfrage = new BauleitplanverfahrenModel();
+        originalAbfrage.setBauvorhaben(bauvorhabenOriginal);
+
+        AbfragevarianteBauleitplanverfahren abfragevariante = new AbfragevarianteBauleitplanverfahren();
+        Bauvorhaben bauvorhaben = new Bauvorhaben();
+        bauvorhaben.setId(bauvorhabenOriginal);
+        bauvorhaben.setRelevanteAbfragevariante(abfragevariante);
+
+        Mockito.when(this.bauvorhabenRepository.getReferenceById(bauvorhabenOriginal)).thenReturn(bauvorhaben);
+
+        Mockito.when(this.bauvorhabenRepository.save(bauvorhaben)).thenReturn(bauvorhaben);
+
+        this.abfrageService.changeRelevantAbfragevarianteOnBauvorhabenChangeAbfrageAngelegtModel(
+                model,
+                originalAbfrage
+            );
+
+        assertThat(bauvorhaben.getRelevanteAbfragevariante(), is(abfragevariante));
+
+        Mockito.verify(this.bauvorhabenRepository, Mockito.times(0)).save(bauvorhaben);
+        Mockito.verify(this.bauvorhabenRepository, Mockito.times(0)).getReferenceById(bauvorhabenOriginal);
+    }
+
+    @Test
+    void changeRelevanteAbfragevarianteWhenNewBauvorhabenAbfrageInBearbeitungSachbearbeitung() {
+        var bauvorhabenOriginal = UUID.randomUUID();
+        var bauvorhabenNeu = UUID.randomUUID();
+        final var model = new BauleitplanverfahrenInBearbeitungSachbearbeitungModel();
+        model.setBauvorhaben(bauvorhabenNeu);
+        final var originalAbfrage = new BauleitplanverfahrenModel();
+        originalAbfrage.setBauvorhaben(bauvorhabenOriginal);
+
+        AbfragevarianteBauleitplanverfahren abfragevariante = new AbfragevarianteBauleitplanverfahren();
+        Bauvorhaben bauvorhaben = new Bauvorhaben();
+        bauvorhaben.setId(bauvorhabenOriginal);
+        bauvorhaben.setRelevanteAbfragevariante(abfragevariante);
+
+        Mockito.when(this.bauvorhabenRepository.getReferenceById(bauvorhabenOriginal)).thenReturn(bauvorhaben);
+
+        Mockito.when(this.bauvorhabenRepository.save(bauvorhaben)).thenReturn(bauvorhaben);
+
+        this.abfrageService.changeRelevantAbfragevarianteOnBauvorhabenChangeAbfrageInBearbeitungSachbearbeitung(
+                model,
+                originalAbfrage
+            );
+
+        assertThat(bauvorhaben.getRelevanteAbfragevariante(), is(nullValue()));
+
+        Mockito.verify(this.bauvorhabenRepository, Mockito.times(1)).save(bauvorhaben);
+        Mockito.verify(this.bauvorhabenRepository, Mockito.times(1)).getReferenceById(bauvorhabenOriginal);
+    }
+
+    @Test
+    void changeRelevanteAbfragevarianteWhenBauvorhabenIsRemovedAbfrageInBearbeitungSachbearbeitung() {
+        var bauvorhabenOriginal = UUID.randomUUID();
+        final var model = new BauleitplanverfahrenInBearbeitungSachbearbeitungModel();
+        model.setBauvorhaben(null);
+        final var originalAbfrage = new BauleitplanverfahrenModel();
+        originalAbfrage.setBauvorhaben(bauvorhabenOriginal);
+
+        AbfragevarianteBauleitplanverfahren abfragevariante = new AbfragevarianteBauleitplanverfahren();
+        Bauvorhaben bauvorhaben = new Bauvorhaben();
+        bauvorhaben.setId(bauvorhabenOriginal);
+        bauvorhaben.setRelevanteAbfragevariante(abfragevariante);
+
+        Mockito.when(this.bauvorhabenRepository.getReferenceById(bauvorhabenOriginal)).thenReturn(bauvorhaben);
+
+        Mockito.when(this.bauvorhabenRepository.save(bauvorhaben)).thenReturn(bauvorhaben);
+
+        this.abfrageService.changeRelevantAbfragevarianteOnBauvorhabenChangeAbfrageInBearbeitungSachbearbeitung(
+                model,
+                originalAbfrage
+            );
+
+        assertThat(bauvorhaben.getRelevanteAbfragevariante(), is(nullValue()));
+
+        Mockito.verify(this.bauvorhabenRepository, Mockito.times(1)).save(bauvorhaben);
+        Mockito.verify(this.bauvorhabenRepository, Mockito.times(1)).getReferenceById(bauvorhabenOriginal);
+    }
+
+    @Test
+    void notChangeRelevanteAbfragevarianteInBearbeitungSachbearbeitung() {
+        var bauvorhabenOriginal = UUID.randomUUID();
+        final var model = new BauleitplanverfahrenInBearbeitungSachbearbeitungModel();
+        model.setBauvorhaben(bauvorhabenOriginal);
+        final var originalAbfrage = new BauleitplanverfahrenModel();
+        originalAbfrage.setBauvorhaben(bauvorhabenOriginal);
+
+        AbfragevarianteBauleitplanverfahren abfragevariante = new AbfragevarianteBauleitplanverfahren();
+        Bauvorhaben bauvorhaben = new Bauvorhaben();
+        bauvorhaben.setId(bauvorhabenOriginal);
+        bauvorhaben.setRelevanteAbfragevariante(abfragevariante);
+
+        Mockito.when(this.bauvorhabenRepository.getReferenceById(bauvorhabenOriginal)).thenReturn(bauvorhaben);
+
+        Mockito.when(this.bauvorhabenRepository.save(bauvorhaben)).thenReturn(bauvorhaben);
+
+        this.abfrageService.changeRelevantAbfragevarianteOnBauvorhabenChangeAbfrageInBearbeitungSachbearbeitung(
+                model,
+                originalAbfrage
+            );
+
+        assertThat(bauvorhaben.getRelevanteAbfragevariante(), is(abfragevariante));
+        Mockito.verify(this.bauvorhabenRepository, Mockito.times(0)).save(bauvorhaben);
+        Mockito.verify(this.bauvorhabenRepository, Mockito.times(0)).getReferenceById(bauvorhabenOriginal);
     }
 }
