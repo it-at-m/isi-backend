@@ -64,7 +64,20 @@ public class StammdatenImportService {
      * @throws FileImportFailedException  tritt auf, falls ein Fehler beim Import passiert.
      * @throws CsvAttributeErrorException tritt auf, falls ein Attribut in der CSV nicht gesetzt oder fehlerhaft ist.
      */
-    public void importPrognosedatenKitaPlb(final InputStream csvImportFile) {}
+    public void importPrognosedatenKitaPlb(final InputStream csvImportFile)
+        throws FileImportFailedException, CsvAttributeErrorException {
+        try (final InputStreamReader csvInputStreamReader = new InputStreamReader(csvImportFile)) {
+            this.csvRepository.readAllPrognosedatenKitaPlbCsv(csvInputStreamReader);
+        } catch (final CsvDataTypeMismatchException | CsvRequiredFieldEmptyException exception) {
+            log.error(exception.getMessage());
+            throw new CsvAttributeErrorException(exception.getMessage(), exception);
+        } catch (final IOException | DataAccessException exception) {
+            final var message = "Der Import einer CSV-Datei für Prognosedaten der KitaPlb ist fehlgeschlagen.";
+            log.error(message);
+            log.error(exception.getMessage());
+            throw new FileImportFailedException(message, exception);
+        }
+    }
 
     /**
      * Die Methode extrahiert aus der CSV-Datei im Parameter, die entsprechenden Entitäten
