@@ -2,6 +2,8 @@
 -- Erweitern um Entität für Prognosedaten der Kita-Plb.
 --
 
+BEGIN;
+
 CREATE TABLE isidbuser.prognose_kita_plb
 (
     id                      character varying(36) COLLATE pg_catalog."default" NOT NULL,
@@ -19,3 +21,5 @@ CREATE TABLE isidbuser.prognose_kita_plb
 
 CREATE INDEX IF NOT EXISTS prognosedaten_kita_plb_index
     ON isidbuser.prognose_kita_plb USING btree (kita_plb, berichtsstand, altersgruppe);
+
+END;
