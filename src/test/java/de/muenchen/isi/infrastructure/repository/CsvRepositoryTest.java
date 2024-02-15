@@ -31,6 +31,12 @@ class CsvRepositoryTest {
 
     private static final String NAME_CSV_TESTFILE_PROGNOSEDATEN_KITA_PLB = "testfile_PrognosedatenKitaPlb.csv";
 
+    private static final String NAME_CSV_TESTFILE_PROGNOSEDATEN_KITA_PLB_NOT_VALID =
+        "testfile_PrognosedatenKitaPlbNotValid.csv";
+
+    private static final String NAME_CSV_TESTFILE_PROGNOSEDATEN_KITA_PLB_EMTPY =
+        "testfile_PrognosedatenKitaPlbEmpty.csv";
+
     private static final String NAME_CSV_TESTFILE_SOBON = "testfile_SoBoNOrientierungswerteSozialeInfrastruktur.csv";
 
     private static final String NAME_CSV_TESTFILE_SOBON_NOT_VALID =
@@ -48,6 +54,8 @@ class CsvRepositoryTest {
     private final CsvRepository csvRepository = new CsvRepository();
 
     private InputStreamReader testFilePrognosedatenKitaPlb;
+    private InputStreamReader testFilePrognosedatenKitaPlbNotValid;
+    private InputStreamReader testFilePrognosedatenKitaPlbEmpty;
     private InputStreamReader testfileSobon;
     private InputStreamReader testfileSobonNotValid;
     private InputStreamReader testfileSobonEmpty;
@@ -59,6 +67,10 @@ class CsvRepositoryTest {
     void beforeEach() throws IOException {
         Resource resource = new ClassPathResource(NAME_CSV_TESTFILE_PROGNOSEDATEN_KITA_PLB);
         this.testFilePrognosedatenKitaPlb = new InputStreamReader(resource.getInputStream());
+        resource = new ClassPathResource(NAME_CSV_TESTFILE_PROGNOSEDATEN_KITA_PLB_NOT_VALID);
+        this.testFilePrognosedatenKitaPlbNotValid = new InputStreamReader(resource.getInputStream());
+        resource = new ClassPathResource(NAME_CSV_TESTFILE_PROGNOSEDATEN_KITA_PLB_EMTPY);
+        this.testFilePrognosedatenKitaPlbEmpty = new InputStreamReader(resource.getInputStream());
 
         resource = new ClassPathResource(NAME_CSV_TESTFILE_SOBON);
         this.testfileSobon = new InputStreamReader(resource.getInputStream());
@@ -94,6 +106,22 @@ class CsvRepositoryTest {
 
         assertThat(resultList.size(), is(2));
         assertThat(resultList, is(List.of(firstExpected, lastExpected)));
+    }
+
+    @Test
+    void readAllPrognosedatenKitaPlbCsvNotValid() {
+        Assertions.assertThrows(
+            CsvDataTypeMismatchException.class,
+            () -> this.csvRepository.readAllPrognosedatenKitaPlbCsv(this.testFilePrognosedatenKitaPlbNotValid)
+        );
+    }
+
+    @Test
+    void readAllPrognosedatenKitaPlbCsvEmpty() {
+        Assertions.assertThrows(
+            CsvRequiredFieldEmptyException.class,
+            () -> this.csvRepository.readAllPrognosedatenKitaPlbCsv(this.testFilePrognosedatenKitaPlbEmpty)
+        );
     }
 
     @Test
