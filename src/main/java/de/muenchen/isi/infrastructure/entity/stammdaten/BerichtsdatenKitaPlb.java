@@ -17,14 +17,14 @@ import lombok.Data;
 @Table(
     uniqueConstraints = {
         @UniqueConstraint(
-            name = "prognose_kita_plb_unique",
+            name = "berichtsdaten_kita_plb_unique",
             columnNames = { "kitaPlb", "berichtsstand", "altersgruppe" }
         ),
     },
-    indexes = { @Index(name = "prognosedaten_kita_plb_index", columnList = "kitaPlb, berichtsstand, altersgruppe") }
+    indexes = { @Index(name = "berichtsdaten_kita_plb_index", columnList = "kitaPlb, berichtsstand, altersgruppe") }
 )
 @Data
-public class PrognoseKitaPlb extends BaseEntity {
+public class BerichtsdatenKitaPlb extends BaseEntity {
 
     @Column(nullable = false)
     private Long kitaPlb;

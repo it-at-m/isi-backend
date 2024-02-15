@@ -7,7 +7,7 @@ import java.time.LocalDate;
 import lombok.Data;
 
 @Data
-public class PrognosedatenKitaPlbCsv {
+public class BerichtsdatenKitaPlbCsv {
 
     @CsvBindByName(column = "KITA_PLB", required = true)
     private Long kitaPlb;

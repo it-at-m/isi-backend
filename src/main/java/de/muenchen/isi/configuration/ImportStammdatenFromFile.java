@@ -3,7 +3,7 @@ package de.muenchen.isi.configuration;
 import de.muenchen.isi.domain.exception.CsvAttributeErrorException;
 import de.muenchen.isi.domain.exception.FileImportFailedException;
 import de.muenchen.isi.domain.service.stammdaten.StammdatenImportService;
-import de.muenchen.isi.infrastructure.repository.stammdaten.PrognoseKitaPlbRepository;
+import de.muenchen.isi.infrastructure.repository.stammdaten.BerichtsdatenKitaPlbRepository;
 import de.muenchen.isi.infrastructure.repository.stammdaten.SobonOrientierungswertSozialeInfrastrukturRepository;
 import de.muenchen.isi.infrastructure.repository.stammdaten.StaedtebaulicheOrientierungswertRepository;
 import java.io.File;
@@ -27,7 +27,7 @@ public class ImportStammdatenFromFile implements CommandLineRunner {
 
     private final StammdatenImportService stammdatenImportService;
 
-    private final PrognoseKitaPlbRepository prognoseKitaPlbRepository;
+    private final BerichtsdatenKitaPlbRepository prognoseKitaPlbRepository;
 
     private final StaedtebaulicheOrientierungswertRepository staedtebaulicheOrientierungswertRepository;
 
@@ -51,7 +51,7 @@ public class ImportStammdatenFromFile implements CommandLineRunner {
             String
         > csvStaedtebaulicheOrientierungswerte,
         final StammdatenImportService stammdatenImportService,
-        final PrognoseKitaPlbRepository prognoseKitaPlbRepository,
+        final BerichtsdatenKitaPlbRepository prognoseKitaPlbRepository,
         final SobonOrientierungswertSozialeInfrastrukturRepository sobonOrientierungswertSozialeInfrastrukturRepository,
         final StaedtebaulicheOrientierungswertRepository staedtebaulicheOrientierungswertRepository
     ) {
@@ -106,7 +106,7 @@ public class ImportStammdatenFromFile implements CommandLineRunner {
     public void addPrognosedatenKitaPlb(final String filePath)
         throws IOException, CsvAttributeErrorException, FileImportFailedException {
         try (final var fileInputStream = this.createFileInputStream(filePath)) {
-            this.stammdatenImportService.importPrognosedatenKitaPlb(fileInputStream);
+            this.stammdatenImportService.importBerichtsdatenKitaPlb(fileInputStream);
         }
     }
 

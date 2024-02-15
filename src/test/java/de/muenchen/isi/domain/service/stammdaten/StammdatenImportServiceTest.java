@@ -6,17 +6,17 @@ import de.muenchen.isi.domain.exception.CsvAttributeErrorException;
 import de.muenchen.isi.domain.exception.FileImportFailedException;
 import de.muenchen.isi.domain.mapper.StammdatenDomainMapper;
 import de.muenchen.isi.domain.mapper.StammdatenDomainMapperImpl;
-import de.muenchen.isi.infrastructure.csv.PrognosedatenKitaPlbCsv;
+import de.muenchen.isi.infrastructure.csv.BerichtsdatenKitaPlbCsv;
 import de.muenchen.isi.infrastructure.csv.SobonOrientierungswertSozialeInfrastrukturCsv;
 import de.muenchen.isi.infrastructure.csv.StaedtebaulicheOrientierungswertCsv;
 import de.muenchen.isi.infrastructure.entity.enums.Altersgruppe;
 import de.muenchen.isi.infrastructure.entity.enums.Altersklasse;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
-import de.muenchen.isi.infrastructure.entity.stammdaten.PrognoseKitaPlb;
+import de.muenchen.isi.infrastructure.entity.stammdaten.BerichtsdatenKitaPlb;
 import de.muenchen.isi.infrastructure.entity.stammdaten.SobonOrientierungswertSozialeInfrastruktur;
 import de.muenchen.isi.infrastructure.entity.stammdaten.StaedtebaulicheOrientierungswert;
 import de.muenchen.isi.infrastructure.repository.CsvRepository;
-import de.muenchen.isi.infrastructure.repository.stammdaten.PrognoseKitaPlbRepository;
+import de.muenchen.isi.infrastructure.repository.stammdaten.BerichtsdatenKitaPlbRepository;
 import de.muenchen.isi.infrastructure.repository.stammdaten.SobonOrientierungswertSozialeInfrastrukturRepository;
 import de.muenchen.isi.infrastructure.repository.stammdaten.StaedtebaulicheOrientierungswertRepository;
 import java.io.ByteArrayInputStream;
@@ -56,7 +56,7 @@ class StammdatenImportServiceTest {
     private SobonOrientierungswertSozialeInfrastrukturRepository sobonOrientierungswertSozialeInfrastrukturRepository;
 
     @Mock
-    private PrognoseKitaPlbRepository prognoseKitaPlbRepository;
+    private BerichtsdatenKitaPlbRepository prognoseKitaPlbRepository;
 
     private StammdatenImportService stammdatenImportService;
 
@@ -80,53 +80,53 @@ class StammdatenImportServiceTest {
     }
 
     @Test
-    void importPrognosedatenKitaPlb()
+    void importBerichtsdatenKitaPlb()
         throws IOException, CsvRequiredFieldEmptyException, CsvDataTypeMismatchException, CsvAttributeErrorException, FileImportFailedException {
         final InputStream inputStream = new ByteArrayInputStream("the-file".getBytes());
         Mockito.when(this.multipartFile.getInputStream()).thenReturn(inputStream);
 
-        final var csvEntry = new PrognosedatenKitaPlbCsv();
+        final var csvEntry = new BerichtsdatenKitaPlbCsv();
         csvEntry.setKitaPlb(99L);
         csvEntry.setBerichtsstand(LocalDate.of(2024, 5, 1));
         csvEntry.setAnzahlNullBisZweiJaehrige(BigDecimal.ONE);
         csvEntry.setAnzahlDreiBisFuenfJaehrigeUndFuenfzigProzentSechsJaehrige(BigDecimal.TEN);
 
         Mockito
-            .when(this.csvRepository.readAllPrognosedatenKitaPlbCsv(Mockito.any(InputStreamReader.class)))
+            .when(this.csvRepository.readAllBerichtsdatenKitaPlbCsv(Mockito.any(InputStreamReader.class)))
             .thenReturn(List.of(csvEntry));
 
-        final var entity1 = new PrognoseKitaPlb();
+        final var entity1 = new BerichtsdatenKitaPlb();
         entity1.setKitaPlb(99L);
         entity1.setBerichtsstand(LocalDate.of(2024, 5, 1));
         entity1.setAltersgruppe(Altersgruppe.NULL_ZWEI_JAEHRIGE);
         entity1.setAnzahlKinder(BigDecimal.ONE);
-        final var entity2 = new PrognoseKitaPlb();
+        final var entity2 = new BerichtsdatenKitaPlb();
         entity2.setKitaPlb(99L);
         entity2.setBerichtsstand(LocalDate.of(2024, 5, 1));
         entity2.setAltersgruppe(Altersgruppe.DREI_FUENF_UND_FUENFZIG_PROZENT_SECHS_JAEHRIGE);
         entity2.setAnzahlKinder(BigDecimal.TEN);
         final var entities = List.of(entity1, entity2);
 
-        this.stammdatenImportService.importPrognosedatenKitaPlb(this.multipartFile);
+        this.stammdatenImportService.importBerichtsdatenKitaPlb(this.multipartFile);
 
         Mockito
             .verify(this.csvRepository, Mockito.times(1))
-            .readAllPrognosedatenKitaPlbCsv(Mockito.any(InputStreamReader.class));
+            .readAllBerichtsdatenKitaPlbCsv(Mockito.any(InputStreamReader.class));
         Mockito.verify(this.prognoseKitaPlbRepository, Mockito.times(1)).saveAll(entities);
     }
 
     @Test
-    void importPrognosedatenKitaPlbException()
+    void importBerichtsdatenKitaPlbException()
         throws CsvRequiredFieldEmptyException, CsvDataTypeMismatchException, IOException {
         InputStream inputStream = new ByteArrayInputStream("the-file".getBytes());
         Mockito.when(this.multipartFile.getInputStream()).thenReturn(inputStream);
         Mockito
             .doThrow(new CsvDataTypeMismatchException())
             .when(this.csvRepository)
-            .readAllPrognosedatenKitaPlbCsv(Mockito.any(InputStreamReader.class));
+            .readAllBerichtsdatenKitaPlbCsv(Mockito.any(InputStreamReader.class));
         Assertions.assertThrows(
             CsvAttributeErrorException.class,
-            () -> this.stammdatenImportService.importPrognosedatenKitaPlb(this.multipartFile)
+            () -> this.stammdatenImportService.importBerichtsdatenKitaPlb(this.multipartFile)
         );
         Mockito.reset(this.csvRepository, this.multipartFile);
 
@@ -135,17 +135,17 @@ class StammdatenImportServiceTest {
         Mockito
             .doThrow(new CsvRequiredFieldEmptyException())
             .when(this.csvRepository)
-            .readAllPrognosedatenKitaPlbCsv(Mockito.any(InputStreamReader.class));
+            .readAllBerichtsdatenKitaPlbCsv(Mockito.any(InputStreamReader.class));
         Assertions.assertThrows(
             CsvAttributeErrorException.class,
-            () -> this.stammdatenImportService.importPrognosedatenKitaPlb(this.multipartFile)
+            () -> this.stammdatenImportService.importBerichtsdatenKitaPlb(this.multipartFile)
         );
         Mockito.reset(this.csvRepository, this.multipartFile);
 
         Mockito.when(this.multipartFile.getInputStream()).thenThrow(new IOException());
         Assertions.assertThrows(
             FileImportFailedException.class,
-            () -> this.stammdatenImportService.importPrognosedatenKitaPlb(this.multipartFile)
+            () -> this.stammdatenImportService.importBerichtsdatenKitaPlb(this.multipartFile)
         );
     }
 

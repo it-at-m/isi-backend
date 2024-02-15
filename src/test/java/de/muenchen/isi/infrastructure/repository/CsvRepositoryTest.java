@@ -5,7 +5,7 @@ import static org.hamcrest.Matchers.is;
 
 import com.opencsv.exceptions.CsvDataTypeMismatchException;
 import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
-import de.muenchen.isi.infrastructure.csv.PrognosedatenKitaPlbCsv;
+import de.muenchen.isi.infrastructure.csv.BerichtsdatenKitaPlbCsv;
 import de.muenchen.isi.infrastructure.csv.SobonOrientierungswertSozialeInfrastrukturCsv;
 import de.muenchen.isi.infrastructure.csv.StaedtebaulicheOrientierungswertCsv;
 import de.muenchen.isi.infrastructure.entity.enums.Altersklasse;
@@ -88,17 +88,17 @@ class CsvRepositoryTest {
     }
 
     @Test
-    void readAllPrognosedatenKitaPlbCsv() throws CsvRequiredFieldEmptyException, CsvDataTypeMismatchException {
-        final List<PrognosedatenKitaPlbCsv> resultList =
-            this.csvRepository.readAllPrognosedatenKitaPlbCsv(this.testFilePrognosedatenKitaPlb);
+    void readAllBerichtsdatenKitaPlbCsv() throws CsvRequiredFieldEmptyException, CsvDataTypeMismatchException {
+        final List<BerichtsdatenKitaPlbCsv> resultList =
+            this.csvRepository.readAllBerichtsdatenKitaPlbCsv(this.testFilePrognosedatenKitaPlb);
 
-        final var firstExpected = new PrognosedatenKitaPlbCsv();
+        final var firstExpected = new BerichtsdatenKitaPlbCsv();
         firstExpected.setBerichtsstand(LocalDate.parse("2023-12-01"));
         firstExpected.setKitaPlb(5L);
         firstExpected.setAnzahlNullBisZweiJaehrige(BigDecimal.valueOf(11111, 2));
         firstExpected.setAnzahlDreiBisFuenfJaehrigeUndFuenfzigProzentSechsJaehrige(BigDecimal.valueOf(22222, 2));
 
-        final var lastExpected = new PrognosedatenKitaPlbCsv();
+        final var lastExpected = new BerichtsdatenKitaPlbCsv();
         lastExpected.setBerichtsstand(LocalDate.parse("2023-12-01"));
         lastExpected.setKitaPlb(30L);
         lastExpected.setAnzahlNullBisZweiJaehrige(BigDecimal.valueOf(20));
@@ -109,18 +109,18 @@ class CsvRepositoryTest {
     }
 
     @Test
-    void readAllPrognosedatenKitaPlbCsvNotValid() {
+    void readAllBerichtsdatenKitaPlbCsvNotValid() {
         Assertions.assertThrows(
             CsvDataTypeMismatchException.class,
-            () -> this.csvRepository.readAllPrognosedatenKitaPlbCsv(this.testFilePrognosedatenKitaPlbNotValid)
+            () -> this.csvRepository.readAllBerichtsdatenKitaPlbCsv(this.testFilePrognosedatenKitaPlbNotValid)
         );
     }
 
     @Test
-    void readAllPrognosedatenKitaPlbCsvEmpty() {
+    void readAllBerichtsdatenKitaPlbCsvEmpty() {
         Assertions.assertThrows(
             CsvRequiredFieldEmptyException.class,
-            () -> this.csvRepository.readAllPrognosedatenKitaPlbCsv(this.testFilePrognosedatenKitaPlbEmpty)
+            () -> this.csvRepository.readAllBerichtsdatenKitaPlbCsv(this.testFilePrognosedatenKitaPlbEmpty)
         );
     }
 

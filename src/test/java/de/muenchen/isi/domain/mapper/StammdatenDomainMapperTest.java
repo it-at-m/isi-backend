@@ -3,9 +3,9 @@ package de.muenchen.isi.domain.mapper;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
-import de.muenchen.isi.infrastructure.csv.PrognosedatenKitaPlbCsv;
+import de.muenchen.isi.infrastructure.csv.BerichtsdatenKitaPlbCsv;
 import de.muenchen.isi.infrastructure.entity.enums.Altersgruppe;
-import de.muenchen.isi.infrastructure.entity.stammdaten.PrognoseKitaPlb;
+import de.muenchen.isi.infrastructure.entity.stammdaten.BerichtsdatenKitaPlb;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.stream.Stream;
@@ -23,7 +23,7 @@ class StammdatenDomainMapperTest {
 
     @Test
     void csv2EntityForEachAltersgruppe() {
-        final var prognosedatenKitaPlbCsv = new PrognosedatenKitaPlbCsv();
+        final var prognosedatenKitaPlbCsv = new BerichtsdatenKitaPlbCsv();
         prognosedatenKitaPlbCsv.setKitaPlb(99L);
         prognosedatenKitaPlbCsv.setBerichtsstand(LocalDate.of(2024, 5, 1));
         prognosedatenKitaPlbCsv.setAnzahlNullBisZweiJaehrige(BigDecimal.ONE);
@@ -31,12 +31,12 @@ class StammdatenDomainMapperTest {
 
         final var result = stammdatenDomainMapper.csv2EntityForEachAltersgruppe(prognosedatenKitaPlbCsv);
 
-        final var entity1 = new PrognoseKitaPlb();
+        final var entity1 = new BerichtsdatenKitaPlb();
         entity1.setKitaPlb(99L);
         entity1.setBerichtsstand(LocalDate.of(2024, 5, 1));
         entity1.setAltersgruppe(Altersgruppe.NULL_ZWEI_JAEHRIGE);
         entity1.setAnzahlKinder(BigDecimal.ONE);
-        final var entity2 = new PrognoseKitaPlb();
+        final var entity2 = new BerichtsdatenKitaPlb();
         entity2.setKitaPlb(99L);
         entity2.setBerichtsstand(LocalDate.of(2024, 5, 1));
         entity2.setAltersgruppe(Altersgruppe.DREI_FUENF_UND_FUENFZIG_PROZENT_SECHS_JAEHRIGE);

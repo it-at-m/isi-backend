@@ -6,12 +6,12 @@ import de.muenchen.isi.domain.model.stammdaten.SobonOrientierungswertSozialeInfr
 import de.muenchen.isi.domain.model.stammdaten.StaedtebaulicheOrientierungswertModel;
 import de.muenchen.isi.domain.model.stammdaten.UmlegungFoerderartenModel;
 import de.muenchen.isi.domain.model.stammdaten.VersorgungsquoteGruppenstaerkeModel;
-import de.muenchen.isi.infrastructure.csv.PrognosedatenKitaPlbCsv;
+import de.muenchen.isi.infrastructure.csv.BerichtsdatenKitaPlbCsv;
 import de.muenchen.isi.infrastructure.csv.SobonOrientierungswertSozialeInfrastrukturCsv;
 import de.muenchen.isi.infrastructure.csv.StaedtebaulicheOrientierungswertCsv;
 import de.muenchen.isi.infrastructure.entity.enums.Altersgruppe;
+import de.muenchen.isi.infrastructure.entity.stammdaten.BerichtsdatenKitaPlb;
 import de.muenchen.isi.infrastructure.entity.stammdaten.FoerdermixStamm;
-import de.muenchen.isi.infrastructure.entity.stammdaten.PrognoseKitaPlb;
 import de.muenchen.isi.infrastructure.entity.stammdaten.SobonOrientierungswertSozialeInfrastruktur;
 import de.muenchen.isi.infrastructure.entity.stammdaten.StaedtebaulicheOrientierungswert;
 import de.muenchen.isi.infrastructure.entity.stammdaten.UmlegungFoerderarten;
@@ -75,7 +75,7 @@ public interface StammdatenDomainMapper {
      * @param csv zur Erstellung der Entitäten.
      * @return die erstellten Entitäten.
      */
-    default Stream<PrognoseKitaPlb> csv2EntityForEachAltersgruppe(final PrognosedatenKitaPlbCsv csv) {
+    default Stream<BerichtsdatenKitaPlb> csv2EntityForEachAltersgruppe(final BerichtsdatenKitaPlbCsv csv) {
         return Stream.of(
             this.csv2EntityAnzahlNullBisZweiJaehrige(csv),
             this.csv2EntityAnzahlDreiBisFuenfJaehrigeUndFuenfzigProzentSechsJaehrige(csv)
@@ -92,7 +92,7 @@ public interface StammdatenDomainMapper {
             @Mapping(source = "anzahlNullBisZweiJaehrige", target = "anzahlKinder"),
         }
     )
-    PrognoseKitaPlb csv2EntityAnzahlNullBisZweiJaehrige(final PrognosedatenKitaPlbCsv csv);
+    BerichtsdatenKitaPlb csv2EntityAnzahlNullBisZweiJaehrige(final BerichtsdatenKitaPlbCsv csv);
 
     @Mappings(
         {
@@ -107,7 +107,7 @@ public interface StammdatenDomainMapper {
             @Mapping(source = "anzahlDreiBisFuenfJaehrigeUndFuenfzigProzentSechsJaehrige", target = "anzahlKinder"),
         }
     )
-    PrognoseKitaPlb csv2EntityAnzahlDreiBisFuenfJaehrigeUndFuenfzigProzentSechsJaehrige(
-        final PrognosedatenKitaPlbCsv csv
+    BerichtsdatenKitaPlb csv2EntityAnzahlDreiBisFuenfJaehrigeUndFuenfzigProzentSechsJaehrige(
+        final BerichtsdatenKitaPlbCsv csv
     );
 }
