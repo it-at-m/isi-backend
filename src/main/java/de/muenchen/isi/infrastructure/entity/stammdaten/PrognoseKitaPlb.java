@@ -17,7 +17,7 @@ import lombok.Data;
 @Table(
     uniqueConstraints = {
         @UniqueConstraint(
-            name = "prognose_kita_plb_altersgruppe_unique",
+            name = "prognose_kita_plb_unique",
             columnNames = { "kitaPlb", "berichtsstand", "altersgruppe" }
         ),
     },
