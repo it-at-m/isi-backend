@@ -68,7 +68,7 @@ public interface StammdatenDomainMapper {
     VersorgungsquoteGruppenstaerke model2entity(final VersorgungsquoteGruppenstaerkeModel model);
 
     /**
-     * Die Methode erstellt aus dem im Parameter gegebenen CSV eintrag jeweils eine
+     * Die Methode erstellt aus dem im Parameter gegebenen CSV-Eintrag jeweils eine
      * Entität für die Altersgruppe der {@link Altersgruppe#NULL_ZWEI_JAEHRIGE}
      * und {@link Altersgruppe#DREI_FUENF_UND_FUENFZIG_PROZENT_SECHS_JAEHRIGE}.
      *
