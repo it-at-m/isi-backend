@@ -5,6 +5,7 @@ import static org.hamcrest.Matchers.is;
 
 import com.opencsv.exceptions.CsvDataTypeMismatchException;
 import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
+import de.muenchen.isi.infrastructure.csv.PrognosedatenKitaPlbCsv;
 import de.muenchen.isi.infrastructure.csv.SobonOrientierungswertSozialeInfrastrukturCsv;
 import de.muenchen.isi.infrastructure.csv.StaedtebaulicheOrientierungswertCsv;
 import de.muenchen.isi.infrastructure.entity.enums.Altersklasse;
@@ -28,6 +29,8 @@ import org.springframework.core.io.Resource;
 @MockitoSettings(strictness = Strictness.LENIENT)
 class CsvRepositoryTest {
 
+    private static final String NAME_CSV_TESTFILE_PROGNOSEDATEN_KITA_PLB = "testfile_PrognosedatenKitaPlb.csv";
+
     private static final String NAME_CSV_TESTFILE_SOBON = "testfile_SoBoNOrientierungswerteSozialeInfrastruktur.csv";
 
     private static final String NAME_CSV_TESTFILE_SOBON_NOT_VALID =
@@ -43,6 +46,8 @@ class CsvRepositoryTest {
 
     private static final String NAME_CSV_TESTFILE_SO_EMPTY = "testfile_StaedtebaulicheOrientierungswerteEmpty.csv";
     private final CsvRepository csvRepository = new CsvRepository();
+
+    private InputStreamReader testFilePrognosedatenKitaPlb;
     private InputStreamReader testfileSobon;
     private InputStreamReader testfileSobonNotValid;
     private InputStreamReader testfileSobonEmpty;
@@ -52,7 +57,10 @@ class CsvRepositoryTest {
 
     @BeforeEach
     void beforeEach() throws IOException {
-        Resource resource = new ClassPathResource(NAME_CSV_TESTFILE_SOBON);
+        Resource resource = new ClassPathResource(NAME_CSV_TESTFILE_PROGNOSEDATEN_KITA_PLB);
+        this.testFilePrognosedatenKitaPlb = new InputStreamReader(resource.getInputStream());
+
+        resource = new ClassPathResource(NAME_CSV_TESTFILE_SOBON);
         this.testfileSobon = new InputStreamReader(resource.getInputStream());
         resource = new ClassPathResource(NAME_CSV_TESTFILE_SOBON_NOT_VALID);
         this.testfileSobonNotValid = new InputStreamReader(resource.getInputStream());
@@ -65,6 +73,27 @@ class CsvRepositoryTest {
         this.testfileSoNotValid = new InputStreamReader(resource.getInputStream());
         resource = new ClassPathResource(NAME_CSV_TESTFILE_SO_EMPTY);
         this.testfileSoEmpty = new InputStreamReader(resource.getInputStream());
+    }
+
+    @Test
+    void readAllPrognosedatenKitaPlbCsv() throws CsvRequiredFieldEmptyException, CsvDataTypeMismatchException {
+        final List<PrognosedatenKitaPlbCsv> resultList =
+            this.csvRepository.readAllPrognosedatenKitaPlbCsv(this.testFilePrognosedatenKitaPlb);
+
+        final var firstExpected = new PrognosedatenKitaPlbCsv();
+        firstExpected.setBerichtsstand(LocalDate.parse("2023-12-01"));
+        firstExpected.setKitaPlb(5L);
+        firstExpected.setAnzahlNullBisZweiJaehrige(BigDecimal.valueOf(11111, 2));
+        firstExpected.setAnzahlDreiBisFuenfJaehrigeUndFuenfzigProzentSechsJaehrige(BigDecimal.valueOf(22222, 2));
+
+        final var lastExpected = new PrognosedatenKitaPlbCsv();
+        lastExpected.setBerichtsstand(LocalDate.parse("2023-12-01"));
+        lastExpected.setKitaPlb(30L);
+        lastExpected.setAnzahlNullBisZweiJaehrige(BigDecimal.valueOf(20));
+        lastExpected.setAnzahlDreiBisFuenfJaehrigeUndFuenfzigProzentSechsJaehrige(BigDecimal.valueOf(1));
+
+        assertThat(resultList.size(), is(2));
+        assertThat(resultList, is(List.of(firstExpected, lastExpected)));
     }
 
     @Test
