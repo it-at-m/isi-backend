@@ -44,7 +44,7 @@ file:
 
 stammdaten:
   csv-locations:
-    prognosedaten-kita-plb: PrognosedatenKitaPlb_Berichtsstand_20231201.csv
+    prognosedaten-kita-plb: csv/PrognosedatenKitaPlb_Berichtsstand_20231201.csv
     sobon-orientierungswerte-sozialinfrastruktur: >
       csv/SoBoNOrientierungswerteSozialeInfrastruktur2014.csv,
       csv/SoBoNOrientierungswerteSozialeInfrastruktur2017.csv,
