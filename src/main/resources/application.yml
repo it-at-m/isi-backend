@@ -44,6 +44,7 @@ file:
 
 stammdaten:
   csv-locations:
+    import-files: true
     sobon-orientierungswerte-sozialinfrastruktur: >
       csv/SoBoNOrientierungswerteSozialeInfrastruktur2014.csv,
       csv/SoBoNOrientierungswerteSozialeInfrastruktur2017.csv,
