@@ -7,5 +7,5 @@ public class BedarfeForAbfragevarianteModel {
 
     private LangfristigerBedarfModel langfristigerPlanungsursaechlicherBedarf;
 
-    private LangfristigerBedarfModel langfristigerSobonursaechlicherBedarf;
+    private LangfristigerSobonBedarfModel langfristigerSobonursaechlicherBedarf;
 }

@@ -15,6 +15,7 @@ import de.muenchen.isi.domain.model.WeiteresVerfahrenModel;
 import de.muenchen.isi.domain.model.calculation.BedarfeForAbfragevarianteModel;
 import de.muenchen.isi.domain.model.calculation.InfrastrukturbedarfProJahrModel;
 import de.muenchen.isi.domain.model.calculation.LangfristigerBedarfModel;
+import de.muenchen.isi.domain.model.calculation.LangfristigerSobonBedarfModel;
 import de.muenchen.isi.domain.model.calculation.PersonenProJahrModel;
 import de.muenchen.isi.domain.model.calculation.WohneinheitenProFoerderartProJahrModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
@@ -274,7 +275,7 @@ class CalculationServiceTest {
             List.of(new WohneinheitenProFoerderartProJahrModel())
         );
 
-        final var langfristigerSobonursaechlicherBedarf = new LangfristigerBedarfModel();
+        final var langfristigerSobonursaechlicherBedarf = new LangfristigerSobonBedarfModel();
         langfristigerSobonursaechlicherBedarf.setWohneinheiten(List.of(new WohneinheitenProFoerderartProJahrModel()));
 
         Mockito
@@ -388,7 +389,7 @@ class CalculationServiceTest {
             List.of(new WohneinheitenProFoerderartProJahrModel())
         );
 
-        final var langfristigerSobonursaechlicherBedarf = new LangfristigerBedarfModel();
+        final var langfristigerSobonursaechlicherBedarf = new LangfristigerSobonBedarfModel();
         langfristigerSobonursaechlicherBedarf.setWohneinheiten(List.of(new WohneinheitenProFoerderartProJahrModel()));
 
         Mockito
@@ -670,6 +671,36 @@ class CalculationServiceTest {
             )
             .thenReturn(bedarfeProJahrKindergarten);
 
+        final var bedarfeProJahrGsNachmittagBetreuung = List.of(
+            new InfrastrukturbedarfProJahrModel(),
+            new InfrastrukturbedarfProJahrModel()
+        );
+
+        Mockito
+            .when(
+                this.infrastrukturbedarfService.calculateBedarfForGsNachmittagBetreuung(
+                        wohneinheiten,
+                        sobonOrientierungswertJahr,
+                        stammdatenGueltigAb
+                    )
+            )
+            .thenReturn(bedarfeProJahrGsNachmittagBetreuung);
+
+        final var bedarfeProJahrGrundschule = List.of(
+            new InfrastrukturbedarfProJahrModel(),
+            new InfrastrukturbedarfProJahrModel()
+        );
+
+        Mockito
+            .when(
+                this.infrastrukturbedarfService.calculateBedarfForGrundschule(
+                        wohneinheiten,
+                        sobonOrientierungswertJahr,
+                        stammdatenGueltigAb
+                    )
+            )
+            .thenReturn(bedarfeProJahrGrundschule);
+
         final var alleEinwohnerProJahr = List.of(new PersonenProJahrModel(), new PersonenProJahrModel());
 
         Mockito
@@ -683,11 +714,13 @@ class CalculationServiceTest {
             stammdatenGueltigAb
         );
 
-        final var expected = new LangfristigerBedarfModel();
+        final var expected = new LangfristigerSobonBedarfModel();
 
         expected.setWohneinheiten(wohneinheiten);
         expected.setBedarfKinderkrippe(bedarfeProJahrKinderkrippe);
         expected.setBedarfKindergarten(bedarfeProJahrKindergarten);
+        expected.setBedarfGsNachmittagBetreuung(bedarfeProJahrGsNachmittagBetreuung);
+        expected.setBedarfGrundschule(bedarfeProJahrGrundschule);
         expected.setAlleEinwohner(alleEinwohnerProJahr);
 
         assertThat(result, is(expected));
