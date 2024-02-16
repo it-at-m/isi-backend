@@ -23,4 +23,6 @@ public abstract class AbfrageModel extends BaseEntityModel {
     private UUID bauvorhaben;
 
     private String sub;
+
+    private String eAkte;
 }
