@@ -37,12 +37,15 @@ public class ImportStammdatenFromFile implements CommandLineRunner {
 
     private final String csvPrognosedatenKitaPlb;
 
+    private final String csvBevoelkerungsdatenKitaPlb;
+
     private final List<String> csvSobonOrientierungswertSozialeInfrastruktur;
 
     private final List<String> csvStaedtebaulicheOrientierungswerte;
 
     public ImportStammdatenFromFile(
         @Value("${stammdaten.csv-locations.import-files:false}") final Boolean importCsvFiles,
+        @Value("${stammdaten.csv-locations.bevoelkerungsdaten-kita-plb}") final String csvBevoelkerungsdatenKitaPlb,
         @Value("${stammdaten.csv-locations.prognosedaten-kita-plb}") final String csvPrognosedatenKitaPlb,
         @Value("${stammdaten.csv-locations.sobon-orientierungswerte-sozialinfrastruktur}") final List<
             String
@@ -59,6 +62,7 @@ public class ImportStammdatenFromFile implements CommandLineRunner {
         this.csvSobonOrientierungswertSozialeInfrastruktur =
             ListUtils.emptyIfNull(csvSobonOrientierungswertSozialeInfrastruktur);
         this.csvStaedtebaulicheOrientierungswerte = ListUtils.emptyIfNull(csvStaedtebaulicheOrientierungswerte);
+        this.csvBevoelkerungsdatenKitaPlb = csvBevoelkerungsdatenKitaPlb;
         this.csvPrognosedatenKitaPlb = csvPrognosedatenKitaPlb;
         this.stammdatenImportService = stammdatenImportService;
         this.prognoseKitaPlbRepository = prognoseKitaPlbRepository;

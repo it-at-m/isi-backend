@@ -45,6 +45,7 @@ file:
 stammdaten:
   csv-locations:
     import-files: true
+    bevoelkerungsdaten-kita-plb: csv/BevoelkerungsdatenKitaPlb_Berichtsstand_20231201.csv
     prognosedaten-kita-plb: csv/PrognosedatenKitaPlb_Berichtsstand_20231201.csv
     sobon-orientierungswerte-sozialinfrastruktur: >
       csv/SoBoNOrientierungswerteSozialeInfrastruktur2014.csv,
