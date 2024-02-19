@@ -33,7 +33,7 @@ public class ImportStammdatenFromFile implements CommandLineRunner {
 
     private final SobonOrientierungswertSozialeInfrastrukturRepository sobonOrientierungswertSozialeInfrastrukturRepository;
 
-    private final Boolean deferDatasourceInit;
+    private final Boolean importCsvFiles;
 
     private final String csvPrognosedatenKitaPlb;
 
@@ -42,7 +42,7 @@ public class ImportStammdatenFromFile implements CommandLineRunner {
     private final List<String> csvStaedtebaulicheOrientierungswerte;
 
     public ImportStammdatenFromFile(
-        @Value("${spring.jpa.defer-datasource-initialization:false}") final Boolean deferDatasourceInit,
+        @Value("${stammdaten.csv-locations.import-files:false}") final Boolean importCsvFiles,
         @Value("${stammdaten.csv-locations.prognosedaten-kita-plb}") final String csvPrognosedatenKitaPlb,
         @Value("${stammdaten.csv-locations.sobon-orientierungswerte-sozialinfrastruktur}") final List<
             String
@@ -55,7 +55,7 @@ public class ImportStammdatenFromFile implements CommandLineRunner {
         final SobonOrientierungswertSozialeInfrastrukturRepository sobonOrientierungswertSozialeInfrastrukturRepository,
         final StaedtebaulicheOrientierungswertRepository staedtebaulicheOrientierungswertRepository
     ) {
-        this.deferDatasourceInit = deferDatasourceInit;
+        this.importCsvFiles = importCsvFiles;
         this.csvSobonOrientierungswertSozialeInfrastruktur =
             ListUtils.emptyIfNull(csvSobonOrientierungswertSozialeInfrastruktur);
         this.csvStaedtebaulicheOrientierungswerte = ListUtils.emptyIfNull(csvStaedtebaulicheOrientierungswerte);
@@ -74,7 +74,7 @@ public class ImportStammdatenFromFile implements CommandLineRunner {
      */
     @Override
     public void run(String... args) throws CsvAttributeErrorException, FileImportFailedException, IOException {
-        if (BooleanUtils.isTrue(deferDatasourceInit)) {
+        if (BooleanUtils.isTrue(importCsvFiles)) {
             log.info("START IMPORT PROGNOSEDATEN KITA-PLB");
             prognoseKitaPlbRepository.deleteAll();
             this.addPrognosedatenKitaPlb(this.csvPrognosedatenKitaPlb);
