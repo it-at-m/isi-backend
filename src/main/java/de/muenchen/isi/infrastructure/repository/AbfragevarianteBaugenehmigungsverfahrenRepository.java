@@ -15,7 +15,7 @@ public interface AbfragevarianteBaugenehmigungsverfahrenRepository
     Optional<UUID> findAbfrageIdForAbfragevarianteById(final UUID id);
 
     @Query(
-        value = "select abfragevarianten_sachbearbeitung_baugenehmigungsverfahren_id from abfragevariante_baugenehmigungsverfahren where CAST(:id as uuid) = CAST(:id as uuid)",
+        value = "select abfragevarianten_sachbearbeitung_baugenehmigungsverfahren_id from abfragevariante_baugenehmigungsverfahren where CAST(id as uuid) = CAST(:id as uuid)",
         nativeQuery = true
     )
     Optional<UUID> findAbfrageIdForAbfragevarianteSachbearbeitungById(final UUID id);
