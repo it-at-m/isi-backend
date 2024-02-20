@@ -17,5 +17,5 @@ public abstract class AbfrageAngelegtModel {
 
     private UUID bauvorhaben;
 
-    private String eAkte;
+    private String linkEakte;
 }

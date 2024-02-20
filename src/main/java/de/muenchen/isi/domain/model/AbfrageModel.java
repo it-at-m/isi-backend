@@ -24,5 +24,5 @@ public abstract class AbfrageModel extends BaseEntityModel {
 
     private String sub;
 
-    private String eAkte;
+    private String linkEakte;
 }

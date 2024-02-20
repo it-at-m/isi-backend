@@ -83,5 +83,5 @@ public abstract class Abfrage extends BaseEntity {
     }
 
     @Column
-    private String eAkte;
+    private String linkEakte;
 }

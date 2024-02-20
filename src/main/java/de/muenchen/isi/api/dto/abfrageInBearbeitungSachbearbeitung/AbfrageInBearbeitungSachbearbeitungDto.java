@@ -61,5 +61,5 @@ public abstract class AbfrageInBearbeitungSachbearbeitungDto {
     private UUID bauvorhaben;
 
     @Size(max = 255, message = "Es sind maximal {max} Zeichen erlaubt")
-    private String eAkte;
+    private String linkEakte;
 }
