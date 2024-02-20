@@ -1,7 +1,6 @@
 --
 -- Entfernung des Attributes für die planungsursächliche Geschossfläche Wohnen
 --
-
 BEGIN;
 
 ALTER TABLE IF EXISTS isidbuser.abfragevariante_baugenehmigungsverfahren
