@@ -369,7 +369,7 @@ public class InfrastrukturbedarfService {
                 );
         } catch (final NoSuchElementException exception) {
             final var message =
-                "Für die planungsursächliche Bedarfsberechnung konnten die Stammdaten zu den Sobon-Orientierungswerten zur sozialen Infrastruktur nicht geladen werden.";
+                "Für die planungsursächliche Bedarfsberechnung konnten die Stammdaten zu den SoBoN-Orientierungswerten zur sozialen Infrastruktur nicht geladen werden.";
             log.error(message);
             throw new CalculationException(message, exception);
         }
