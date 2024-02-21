@@ -105,7 +105,7 @@ public class Bauvorhaben extends BaseEntity {
     @Column
     private String fisNummer;
 
-    @Column
+    @Column(length = 1000)
     private String anmerkung;
 
     @Enumerated(EnumType.STRING)
