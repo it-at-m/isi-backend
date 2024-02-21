@@ -73,7 +73,7 @@ public class SobonursaechlicheWohneinheitenService {
                 TAUSEND.divide(summeWe, CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP)
             );
             // Anzahl 1000er-Blöcke/Jahre = summeWe / 1000 = Ergebnis abrunden
-            BigDecimal anzahl = summeWe.divide(TAUSEND, 0, RoundingMode.HALF_DOWN);
+            BigDecimal anzahl = summeWe.divide(TAUSEND, 0, RoundingMode.FLOOR);
 
             int jahr = 0;
             for (BigDecimal i = BigDecimal.ZERO; i.compareTo(anzahl) < 0; i = i.add(BigDecimal.ONE)) {
