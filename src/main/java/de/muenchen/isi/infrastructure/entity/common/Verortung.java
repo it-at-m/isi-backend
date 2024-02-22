@@ -12,6 +12,8 @@ public abstract class Verortung {
 
     private Set<Bezirksteil> bezirksteile;
 
+    private Set<Viertel> viertel;
+
     @IndexedEmbedded
     private Set<Gemarkung> gemarkungen;
 

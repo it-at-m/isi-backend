@@ -15,6 +15,9 @@ public abstract class VerortungDto {
     private Set<@Valid BezirksteilDto> bezirksteile;
 
     @NotEmpty
+    private Set<@Valid ViertelDto> viertel;
+
+    @NotEmpty
     private Set<@Valid GemarkungDto> gemarkungen;
 
     @NotEmpty

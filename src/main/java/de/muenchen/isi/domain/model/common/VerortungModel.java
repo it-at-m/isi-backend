@@ -10,6 +10,8 @@ public abstract class VerortungModel {
 
     private Set<BezirksteilModel> bezirksteile;
 
+    private Set<ViertelModel> viertel;
+
     private Set<GemarkungModel> gemarkungen;
 
     private Set<KitaplanungsbereichModel> kitaplanungsbereiche;
