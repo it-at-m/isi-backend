@@ -44,8 +44,6 @@ public class AbfragevarianteBaugenehmigungsverfahrenDto extends AbfragevarianteD
 
     private BigDecimal gfWohnenWeiteresNichtInfrastrukturrelevantesWohnen;
 
-    private BigDecimal gfWohnenPlanungsursaechlich;
-
     // Anzahl Wohneinheiten
 
     private Integer weGesamt;
