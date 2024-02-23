@@ -65,6 +65,6 @@ public abstract class AbfrageAngelegtDto {
 
     private UUID bauvorhaben;
 
-    @Size(max = 255, message = "Es sind maximal {max} Zeichen erlaubt")
+    @Size(max = 8000, message = "Es sind maximal {max} Zeichen erlaubt")
     private String linkEakte;
 }
