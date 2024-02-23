@@ -1,6 +1,6 @@
 package de.muenchen.isi.api.dto.common;
 
-import de.muenchen.isi.infrastructure.entity.common.MultiPolygonGeometry;
+import de.muenchen.isi.domain.model.common.MultiPolygonGeometryModel;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -12,5 +12,5 @@ public class MittelschulsprengelDto {
 
     @Valid
     @NotNull
-    private MultiPolygonGeometry multiPolygon;
+    private MultiPolygonGeometryModel multiPolygon;
 }

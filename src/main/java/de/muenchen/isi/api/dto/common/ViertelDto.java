@@ -1,6 +1,5 @@
 package de.muenchen.isi.api.dto.common;
 
-import de.muenchen.isi.infrastructure.entity.common.MultiPolygonGeometry;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
@@ -15,5 +14,5 @@ public class ViertelDto {
 
     @Valid
     @NotNull
-    private MultiPolygonGeometry multiPolygon;
+    private MultiPolygonGeometryDto multiPolygon;
 }
