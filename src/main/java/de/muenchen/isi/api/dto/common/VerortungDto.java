@@ -1,31 +1,31 @@
 package de.muenchen.isi.api.dto.common;
 
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import java.util.Set;
 import lombok.Data;
 
 @Data
 public abstract class VerortungDto {
 
-    @NotEmpty
+    @NotNull
     private Set<@Valid StadtbezirkDto> stadtbezirke;
 
-    @NotEmpty
+    @NotNull
     private Set<@Valid BezirksteilDto> bezirksteile;
 
-    @NotEmpty
+    @NotNull
     private Set<@Valid ViertelDto> viertel;
 
-    @NotEmpty
+    @NotNull
     private Set<@Valid GemarkungDto> gemarkungen;
 
-    @NotEmpty
+    @NotNull
     private Set<@Valid KitaplanungsbereichDto> kitaplanungsbereiche;
 
-    @NotEmpty
+    @NotNull
     private Set<@Valid GrundschulsprengelDto> grundschulsprengel;
 
-    @NotEmpty
+    @NotNull
     private Set<@Valid MittelschulsprengelDto> mittelschulsprengel;
 }
