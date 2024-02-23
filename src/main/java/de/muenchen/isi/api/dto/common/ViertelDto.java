@@ -9,11 +9,7 @@ import lombok.Data;
 @Data
 public class ViertelDto {
 
-    private BigDecimal xCoordinate;
-
-    private BigDecimal yCoordinate;
-
-    private String viertelNummer;
+    private String nummer;
 
     private BigDecimal flaecheQm;
 
