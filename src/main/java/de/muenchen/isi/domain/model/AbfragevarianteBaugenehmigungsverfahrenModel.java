@@ -44,8 +44,6 @@ public class AbfragevarianteBaugenehmigungsverfahrenModel extends Abfragevariant
 
     private BigDecimal gfWohnenWeiteresNichtInfrastrukturrelevantesWohnen;
 
-    private BigDecimal gfWohnenPlanungsursaechlich;
-
     // Anzahl Wohneinheiten
 
     private Integer weGesamt;

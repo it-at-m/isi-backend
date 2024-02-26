@@ -77,7 +77,6 @@ import de.muenchen.isi.infrastructure.repository.AbfragevarianteWeiteresVerfahre
 import de.muenchen.isi.infrastructure.repository.BauvorhabenRepository;
 import de.muenchen.isi.security.AuthenticationUtils;
 import java.lang.reflect.Field;
-import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -550,7 +549,6 @@ class AbfrageServiceTest {
         abfragevarianteSachbearbeitung.setArtAbfragevariante(ArtAbfrage.BAULEITPLANVERFAHREN);
         abfragevarianteSachbearbeitung.setAbfragevariantenNr(1);
         abfragevarianteSachbearbeitung.setName("Abfragevariante 1");
-        abfragevarianteSachbearbeitung.setGfWohnenPlanungsursaechlich(BigDecimal.TEN);
         abfragevarianteSachbearbeitung.setSobonOrientierungswertJahr(SobonOrientierungswertJahr.JAHR_2017);
         abfragevarianteSachbearbeitung.setAnmerkung("Test Anmerkung");
         requestModel.setAbfragevariantenSachbearbeitungBauleitplanverfahren(List.of(abfragevarianteSachbearbeitung));
@@ -590,7 +588,6 @@ class AbfrageServiceTest {
         final var abfragevariante1ToSave = new AbfragevarianteBauleitplanverfahren();
         abfragevariante1ToSave.setAbfragevariantenNr(1);
         abfragevariante1ToSave.setName("Abfragevariante 1");
-        abfragevariante1ToSave.setGfWohnenPlanungsursaechlich(BigDecimal.TEN);
         abfragevariante1ToSave.setSobonOrientierungswertJahr(SobonOrientierungswertJahr.JAHR_2017);
         abfragevariante1ToSave.setAnmerkung("Test Anmerkung");
         entityToSave.setAbfragevariantenSachbearbeitungBauleitplanverfahren(List.of(abfragevariante1ToSave));
@@ -606,7 +603,6 @@ class AbfrageServiceTest {
         abfragevariante1Saved.setId(UUID.randomUUID());
         abfragevariante1Saved.setAbfragevariantenNr(1);
         abfragevariante1Saved.setName("Abfragevariante 1");
-        abfragevariante1Saved.setGfWohnenPlanungsursaechlich(BigDecimal.TEN);
         abfragevariante1Saved.setSobonOrientierungswertJahr(SobonOrientierungswertJahr.JAHR_2017);
         abfragevariante1Saved.setAnmerkung("Test Anmerkung");
         entitySaved.setAbfragevariantenSachbearbeitungBauleitplanverfahren(List.of(abfragevariante1Saved));
@@ -631,7 +627,6 @@ class AbfrageServiceTest {
         abfragevariante1Expected.setId(abfragevariante1Saved.getId());
         abfragevariante1Expected.setAbfragevariantenNr(1);
         abfragevariante1Expected.setName("Abfragevariante 1");
-        abfragevariante1Expected.setGfWohnenPlanungsursaechlich(BigDecimal.TEN);
         abfragevariante1Expected.setSobonOrientierungswertJahr(SobonOrientierungswertJahr.JAHR_2017);
         abfragevariante1Expected.setAnmerkung("Test Anmerkung");
         expected.setAbfragevariantenSachbearbeitungBauleitplanverfahren(List.of(abfragevariante1Expected));
@@ -670,7 +665,6 @@ class AbfrageServiceTest {
         abfragevarianteSachbearbeitung.setArtAbfragevariante(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN);
         abfragevarianteSachbearbeitung.setAbfragevariantenNr(1);
         abfragevarianteSachbearbeitung.setName("Abfragevariante 1");
-        abfragevarianteSachbearbeitung.setGfWohnenPlanungsursaechlich(BigDecimal.TEN);
         abfragevarianteSachbearbeitung.setAnmerkung("Test Anmerkung");
         requestModel.setAbfragevariantenSachbearbeitungBaugenehmigungsverfahren(
             List.of(abfragevarianteSachbearbeitung)
@@ -711,7 +705,6 @@ class AbfrageServiceTest {
         final var abfragevariante1ToSave = new AbfragevarianteBaugenehmigungsverfahren();
         abfragevariante1ToSave.setAbfragevariantenNr(1);
         abfragevariante1ToSave.setName("Abfragevariante 1");
-        abfragevariante1ToSave.setGfWohnenPlanungsursaechlich(BigDecimal.TEN);
         abfragevariante1ToSave.setAnmerkung("Test Anmerkung");
         entityToSave.setAbfragevariantenSachbearbeitungBaugenehmigungsverfahren(List.of(abfragevariante1ToSave));
 
@@ -726,7 +719,6 @@ class AbfrageServiceTest {
         abfragevariante1Saved.setId(UUID.randomUUID());
         abfragevariante1Saved.setAbfragevariantenNr(1);
         abfragevariante1Saved.setName("Abfragevariante 1");
-        abfragevariante1Saved.setGfWohnenPlanungsursaechlich(BigDecimal.TEN);
         abfragevariante1Saved.setAnmerkung("Test Anmerkung");
         entitySaved.setAbfragevariantenSachbearbeitungBaugenehmigungsverfahren(List.of(abfragevariante1Saved));
 
@@ -750,7 +742,6 @@ class AbfrageServiceTest {
         abfragevariante1Expected.setId(abfragevariante1Saved.getId());
         abfragevariante1Expected.setAbfragevariantenNr(1);
         abfragevariante1Expected.setName("Abfragevariante 1");
-        abfragevariante1Expected.setGfWohnenPlanungsursaechlich(BigDecimal.TEN);
         abfragevariante1Expected.setAnmerkung("Test Anmerkung");
         expected.setAbfragevariantenSachbearbeitungBaugenehmigungsverfahren(List.of(abfragevariante1Expected));
         expected.setBauvorhaben(bauvorhabenId);
@@ -788,7 +779,6 @@ class AbfrageServiceTest {
         abfragevarianteSachbearbeitung.setArtAbfragevariante(ArtAbfrage.WEITERES_VERFAHREN);
         abfragevarianteSachbearbeitung.setAbfragevariantenNr(1);
         abfragevarianteSachbearbeitung.setName("Abfragevariante 1");
-        abfragevarianteSachbearbeitung.setGfWohnenPlanungsursaechlich(BigDecimal.TEN);
         abfragevarianteSachbearbeitung.setAnmerkung("Test Anmerkung");
         requestModel.setAbfragevariantenSachbearbeitungWeiteresVerfahren(List.of(abfragevarianteSachbearbeitung));
 
@@ -827,7 +817,6 @@ class AbfrageServiceTest {
         final var abfragevariante1ToSave = new AbfragevarianteWeiteresVerfahren();
         abfragevariante1ToSave.setAbfragevariantenNr(1);
         abfragevariante1ToSave.setName("Abfragevariante 1");
-        abfragevariante1ToSave.setGfWohnenPlanungsursaechlich(BigDecimal.TEN);
         abfragevariante1ToSave.setAnmerkung("Test Anmerkung");
         entityToSave.setAbfragevariantenSachbearbeitungWeiteresVerfahren(List.of(abfragevariante1ToSave));
 
@@ -842,7 +831,6 @@ class AbfrageServiceTest {
         abfragevariante1Saved.setId(UUID.randomUUID());
         abfragevariante1Saved.setAbfragevariantenNr(1);
         abfragevariante1Saved.setName("Abfragevariante 1");
-        abfragevariante1Saved.setGfWohnenPlanungsursaechlich(BigDecimal.TEN);
         abfragevariante1Saved.setAnmerkung("Test Anmerkung");
         entitySaved.setAbfragevariantenSachbearbeitungWeiteresVerfahren(List.of(abfragevariante1Saved));
 
@@ -866,7 +854,6 @@ class AbfrageServiceTest {
         abfragevariante1Expected.setId(abfragevariante1Saved.getId());
         abfragevariante1Expected.setAbfragevariantenNr(1);
         abfragevariante1Expected.setName("Abfragevariante 1");
-        abfragevariante1Expected.setGfWohnenPlanungsursaechlich(BigDecimal.TEN);
         abfragevariante1Expected.setAnmerkung("Test Anmerkung");
         expected.setAbfragevariantenSachbearbeitungWeiteresVerfahren(List.of(abfragevariante1Expected));
         expected.setBauvorhaben(bauvorhabenId);

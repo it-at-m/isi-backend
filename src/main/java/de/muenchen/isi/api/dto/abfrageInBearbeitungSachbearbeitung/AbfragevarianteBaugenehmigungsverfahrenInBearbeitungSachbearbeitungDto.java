@@ -8,7 +8,6 @@ import de.muenchen.isi.api.dto.abfrageAngelegt.AbfragevarianteBaugenehmigungsver
 import de.muenchen.isi.api.validation.NotUnspecified;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
 import jakarta.validation.constraints.NotNull;
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -19,8 +18,6 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 public class AbfragevarianteBaugenehmigungsverfahrenInBearbeitungSachbearbeitungDto
     extends AbfragevarianteBaugenehmigungsverfahrenAngelegtDto {
-
-    private BigDecimal gfWohnenPlanungsursaechlich;
 
     @NotUnspecified
     @NotNull
