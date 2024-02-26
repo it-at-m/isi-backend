@@ -70,6 +70,10 @@ public class AbfragevarianteWeiteresVerfahrenModel extends AbfragevarianteModel 
 
     private SobonOrientierungswertJahr sobonOrientierungswertJahr;
 
+    private Boolean isASobonBerechnung;
+
+    private FoerdermixModel sobonFoerdermix;
+
     private LocalDate stammdatenGueltigAb;
 
     private String anmerkung;

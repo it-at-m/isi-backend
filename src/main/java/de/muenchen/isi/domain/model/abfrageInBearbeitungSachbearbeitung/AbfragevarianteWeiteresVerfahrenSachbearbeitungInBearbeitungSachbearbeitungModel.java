@@ -4,6 +4,7 @@
  */
 package de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung;
 
+import de.muenchen.isi.domain.model.FoerdermixModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
 import java.math.BigDecimal;
@@ -23,6 +24,10 @@ public class AbfragevarianteWeiteresVerfahrenSachbearbeitungInBearbeitungSachbea
     private BigDecimal gfWohnenPlanungsursaechlich;
 
     private SobonOrientierungswertJahr sobonOrientierungswertJahr;
+
+    private Boolean isASobonBerechnung;
+
+    private FoerdermixModel sobonFoerdermix;
 
     private LocalDate stammdatenGueltigAb;
 

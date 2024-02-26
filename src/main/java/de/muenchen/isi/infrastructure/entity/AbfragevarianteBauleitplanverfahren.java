@@ -136,6 +136,12 @@ public class AbfragevarianteBauleitplanverfahren extends Abfragevariante {
     private SobonOrientierungswertJahr sobonOrientierungswertJahr;
 
     @Column
+    private Boolean isASobonBerechnung;
+
+    @Column
+    private Foerdermix sobonFoerdermix;
+
+    @Column
     private LocalDate stammdatenGueltigAb;
 
     @Column

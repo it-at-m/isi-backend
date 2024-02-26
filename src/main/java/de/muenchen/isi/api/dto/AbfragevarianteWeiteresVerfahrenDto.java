@@ -70,6 +70,10 @@ public class AbfragevarianteWeiteresVerfahrenDto extends AbfragevarianteDto {
 
     private SobonOrientierungswertJahr sobonOrientierungswertJahr;
 
+    private Boolean isASobonBerechnung;
+
+    private FoerdermixDto sobonFoerdermix;
+
     private LocalDate stammdatenGueltigAb;
 
     private String anmerkung;
