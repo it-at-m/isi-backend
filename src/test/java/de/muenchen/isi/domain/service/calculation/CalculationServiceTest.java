@@ -5,8 +5,6 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 
 import de.muenchen.isi.domain.exception.CalculationException;
-import de.muenchen.isi.domain.exception.EntityNotFoundException;
-import de.muenchen.isi.domain.exception.UserRoleNotAllowedException;
 import de.muenchen.isi.domain.model.AbfragevarianteBaugenehmigungsverfahrenModel;
 import de.muenchen.isi.domain.model.AbfragevarianteBauleitplanverfahrenModel;
 import de.muenchen.isi.domain.model.AbfragevarianteWeiteresVerfahrenModel;
@@ -80,8 +78,7 @@ class CalculationServiceTest {
     }
 
     @Test
-    void calculateBedarfeForEachAbfragevarianteOfAbfrageWeiteresVerfahren()
-        throws CalculationException, UserRoleNotAllowedException, EntityNotFoundException {
+    void calculateBedarfeForEachAbfragevarianteOfAbfrageWeiteresVerfahren() throws CalculationException {
         final var abfrage = new WeiteresVerfahrenModel();
         abfrage.setArtAbfrage(ArtAbfrage.WEITERES_VERFAHREN);
         abfrage.setAbfragevariantenWeiteresVerfahren(null);
@@ -154,8 +151,7 @@ class CalculationServiceTest {
     }
 
     @Test
-    void calculateBedarfeForEachAbfragevarianteOfAbfrageBaugenehmigungsverfahren()
-        throws CalculationException, UserRoleNotAllowedException, EntityNotFoundException {
+    void calculateBedarfeForEachAbfragevarianteOfAbfrageBaugenehmigungsverfahren() throws CalculationException {
         final var abfrage = new BaugenehmigungsverfahrenModel();
         abfrage.setArtAbfrage(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN);
         abfrage.setAbfragevariantenBaugenehmigungsverfahren(null);
@@ -224,8 +220,7 @@ class CalculationServiceTest {
     }
 
     @Test
-    void calculateBedarfeForEachAbfragevarianteOfAbfrageBauleitplanverfahren()
-        throws CalculationException, UserRoleNotAllowedException, EntityNotFoundException {
+    void calculateBedarfeForEachAbfragevarianteOfAbfrageBauleitplanverfahren() throws CalculationException {
         final var abfrage = new BauleitplanverfahrenModel();
         abfrage.setId(UUID.randomUUID());
         abfrage.setArtAbfrage(ArtAbfrage.BAULEITPLANVERFAHREN);
@@ -313,8 +308,7 @@ class CalculationServiceTest {
     }
 
     @Test
-    void calculateBedarfeForAbfragevarianteWeiteresVerfahren()
-        throws CalculationException, UserRoleNotAllowedException, EntityNotFoundException {
+    void calculateBedarfeForAbfragevarianteWeiteresVerfahren() throws CalculationException {
         final var bauabschnitte = List.of(new BauabschnittModel());
         final var sobonOrientierungswertJahr = SobonOrientierungswertJahr.JAHR_2017;
         final var stammdatenGueltigAb = LocalDate.of(2020, 5, 30);
@@ -392,8 +386,7 @@ class CalculationServiceTest {
     }
 
     @Test
-    void calculateBedarfeForAbfragevarianteBaugenehmigungsverfahren()
-        throws CalculationException, UserRoleNotAllowedException, EntityNotFoundException {
+    void calculateBedarfeForAbfragevarianteBaugenehmigungsverfahren() throws CalculationException {
         final var bauabschnitte = List.of(new BauabschnittModel());
         final var sobonOrientierungswertJahr = SobonOrientierungswertJahr.JAHR_2017;
         final var stammdatenGueltigAb = LocalDate.of(2020, 5, 30);
@@ -422,16 +415,6 @@ class CalculationServiceTest {
                 stammdatenGueltigAb
             );
 
-        Mockito
-            .doReturn(langfristigerSobonursaechlicherBedarf)
-            .when(calculationService)
-            .calculateLangfristigerSobonursaechlicherBedarf(
-                sobonGf,
-                bauabschnitte,
-                sobonOrientierungswertJahr,
-                stammdatenGueltigAb
-            );
-
         final var bedarfeForAbfragevariante = calculationService.calculateBedarfeForAbfragevariante(
             abfragevarianteBaugenehmigungsverfahrenModel,
             UncertainBoolean.UNSPECIFIED
@@ -450,20 +433,10 @@ class CalculationServiceTest {
                 sobonOrientierungswertJahr,
                 stammdatenGueltigAb
             );
-
-        Mockito
-            .verify(calculationService, Mockito.times(1))
-            .calculateLangfristigerSobonursaechlicherBedarf(
-                sobonGf,
-                bauabschnitte,
-                sobonOrientierungswertJahr,
-                stammdatenGueltigAb
-            );
     }
 
     @Test
-    void calculateBedarfeForAbfragevarianteBauleitplanverfahren()
-        throws CalculationException, UserRoleNotAllowedException, EntityNotFoundException {
+    void calculateBedarfeForAbfragevarianteBauleitplanverfahren() throws CalculationException {
         final var bauabschnitte = List.of(new BauabschnittModel());
         final var sobonOrientierungswertJahr = SobonOrientierungswertJahr.JAHR_2017;
         final var stammdatenGueltigAb = LocalDate.of(2020, 5, 30);
@@ -835,8 +808,7 @@ class CalculationServiceTest {
     }
 
     @Test
-    void hasRightCoonditionsForLangfristigeSobonBerechnung()
-        throws UserRoleNotAllowedException, EntityNotFoundException {
+    void hasRightCoonditionsForLangfristigeSobonBerechnung() {
         var isAbfrageSobonRelevant = UncertainBoolean.TRUE;
         final var abfragevariante = new AbfragevarianteBauleitplanverfahrenModel();
         abfragevariante.setIsASobonBerechnung(true);
