@@ -397,6 +397,7 @@ class CalculationServiceTest {
         final var bauabschnitte = List.of(new BauabschnittModel());
         final var sobonOrientierungswertJahr = SobonOrientierungswertJahr.JAHR_2017;
         final var stammdatenGueltigAb = LocalDate.of(2020, 5, 30);
+        final var sobonGf = BigDecimal.ZERO;
 
         final var abfragevarianteBaugenehmigungsverfahrenModel = new AbfragevarianteBaugenehmigungsverfahrenModel();
         abfragevarianteBaugenehmigungsverfahrenModel.setArtAbfragevariante(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN);
@@ -409,10 +410,23 @@ class CalculationServiceTest {
             List.of(new WohneinheitenProFoerderartProJahrModel())
         );
 
+        final var langfristigerSobonursaechlicherBedarf = new LangfristigerSobonBedarfModel();
+        langfristigerSobonursaechlicherBedarf.setWohneinheiten(List.of(new WohneinheitenProFoerderartProJahrModel()));
+
         Mockito
             .doReturn(langfristigerPlanungsursaechlicherBedarf)
             .when(calculationService)
             .calculateLangfristigerPlanungsursaechlicherBedarf(
+                bauabschnitte,
+                sobonOrientierungswertJahr,
+                stammdatenGueltigAb
+            );
+
+        Mockito
+            .doReturn(langfristigerSobonursaechlicherBedarf)
+            .when(calculationService)
+            .calculateLangfristigerSobonursaechlicherBedarf(
+                sobonGf,
                 bauabschnitte,
                 sobonOrientierungswertJahr,
                 stammdatenGueltigAb
@@ -425,13 +439,22 @@ class CalculationServiceTest {
 
         final var expected = new BedarfeForAbfragevarianteModel();
         expected.setLangfristigerPlanungsursaechlicherBedarf(langfristigerPlanungsursaechlicherBedarf);
-        expected.setLangfristigerSobonursaechlicherBedarf(null);
+        expected.setLangfristigerSobonursaechlicherBedarf(langfristigerSobonursaechlicherBedarf);
 
         assertThat(bedarfeForAbfragevariante, is(expected));
 
         Mockito
             .verify(calculationService, Mockito.times(1))
             .calculateLangfristigerPlanungsursaechlicherBedarf(
+                bauabschnitte,
+                sobonOrientierungswertJahr,
+                stammdatenGueltigAb
+            );
+
+        Mockito
+            .verify(calculationService, Mockito.times(1))
+            .calculateLangfristigerSobonursaechlicherBedarf(
+                sobonGf,
                 bauabschnitte,
                 sobonOrientierungswertJahr,
                 stammdatenGueltigAb
