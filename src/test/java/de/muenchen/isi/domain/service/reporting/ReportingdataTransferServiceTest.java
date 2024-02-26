@@ -12,6 +12,7 @@ import de.muenchen.isi.domain.model.WeiteresVerfahrenModel;
 import de.muenchen.isi.domain.model.calculation.BedarfeForAbfragevarianteModel;
 import de.muenchen.isi.domain.model.calculation.InfrastrukturbedarfProJahrModel;
 import de.muenchen.isi.domain.model.calculation.LangfristigerBedarfModel;
+import de.muenchen.isi.domain.model.calculation.LangfristigerSobonBedarfModel;
 import de.muenchen.isi.domain.model.calculation.PersonenProJahrModel;
 import de.muenchen.isi.domain.model.calculation.WohneinheitenProFoerderartProJahrModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
@@ -24,6 +25,7 @@ import de.muenchen.isi.reporting.client.model.BaugenehmigungsverfahrenDto;
 import de.muenchen.isi.reporting.client.model.BauleitplanverfahrenDto;
 import de.muenchen.isi.reporting.client.model.InfrastrukturbedarfProJahrDto;
 import de.muenchen.isi.reporting.client.model.LangfristigerBedarfDto;
+import de.muenchen.isi.reporting.client.model.LangfristigerSobonBedarfDto;
 import de.muenchen.isi.reporting.client.model.PersonenProJahrDto;
 import de.muenchen.isi.reporting.client.model.WeiteresVerfahrenDto;
 import de.muenchen.isi.reporting.client.model.WohneinheitenProFoerderartProJahrDto;
@@ -312,7 +314,7 @@ class ReportingdataTransferServiceTest {
         planungsursaechlichBedarf.setAlleEinwohner(List.of(personen));
         bedarf.setLangfristigerPlanungsursaechlicherBedarf(planungsursaechlichBedarf);
 
-        var sobonursaechlichBedarf = new LangfristigerBedarfModel();
+        var sobonursaechlichBedarf = new LangfristigerSobonBedarfModel();
         wohneinheiten = new WohneinheitenProFoerderartProJahrModel();
         wohneinheiten.setJahr("2024");
         wohneinheiten.setFoerderart("forderart2");
@@ -330,9 +332,21 @@ class ReportingdataTransferServiceTest {
         infrastrukturbedarf.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(71));
         infrastrukturbedarf.setAnzahlGruppen(BigDecimal.valueOf(6));
         sobonursaechlichBedarf.setBedarfKindergarten(List.of(infrastrukturbedarf));
+        infrastrukturbedarf = new InfrastrukturbedarfProJahrModel();
+        infrastrukturbedarf.setJahr("2027");
+        infrastrukturbedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(202));
+        infrastrukturbedarf.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(72));
+        infrastrukturbedarf.setAnzahlGruppen(BigDecimal.valueOf(7));
+        sobonursaechlichBedarf.setBedarfGsNachmittagBetreuung(List.of(infrastrukturbedarf));
+        infrastrukturbedarf = new InfrastrukturbedarfProJahrModel();
+        infrastrukturbedarf.setJahr("2028");
+        infrastrukturbedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(203));
+        infrastrukturbedarf.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(73));
+        infrastrukturbedarf.setAnzahlGruppen(BigDecimal.valueOf(8));
+        sobonursaechlichBedarf.setBedarfGrundschule(List.of(infrastrukturbedarf));
         personen = new PersonenProJahrModel();
-        personen.setJahr("2027");
-        personen.setAnzahlPersonenGesamt(BigDecimal.valueOf(201));
+        personen.setJahr("2029");
+        personen.setAnzahlPersonenGesamt(BigDecimal.valueOf(204));
         sobonursaechlichBedarf.setAlleEinwohner(List.of(personen));
         bedarf.setLangfristigerSobonursaechlicherBedarf(sobonursaechlichBedarf);
 
@@ -364,7 +378,7 @@ class ReportingdataTransferServiceTest {
         planungsursaechlichBedarf.setAlleEinwohner(List.of(personen));
         bedarf.setLangfristigerPlanungsursaechlicherBedarf(planungsursaechlichBedarf);
 
-        sobonursaechlichBedarf = new LangfristigerBedarfModel();
+        sobonursaechlichBedarf = new LangfristigerSobonBedarfModel();
         wohneinheiten = new WohneinheitenProFoerderartProJahrModel();
         wohneinheiten.setJahr("1024");
         wohneinheiten.setFoerderart("forderart4");
@@ -382,8 +396,20 @@ class ReportingdataTransferServiceTest {
         infrastrukturbedarf.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(998));
         infrastrukturbedarf.setAnzahlGruppen(BigDecimal.valueOf(8));
         sobonursaechlichBedarf.setBedarfKindergarten(List.of(infrastrukturbedarf));
+        infrastrukturbedarf = new InfrastrukturbedarfProJahrModel();
+        infrastrukturbedarf.setJahr("1027");
+        infrastrukturbedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(333));
+        infrastrukturbedarf.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(997));
+        infrastrukturbedarf.setAnzahlGruppen(BigDecimal.valueOf(34));
+        sobonursaechlichBedarf.setBedarfGsNachmittagBetreuung(List.of(infrastrukturbedarf));
+        infrastrukturbedarf = new InfrastrukturbedarfProJahrModel();
+        infrastrukturbedarf.setJahr("1028");
+        infrastrukturbedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(444));
+        infrastrukturbedarf.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(996));
+        infrastrukturbedarf.setAnzahlGruppen(BigDecimal.valueOf(51));
+        sobonursaechlichBedarf.setBedarfGrundschule(List.of(infrastrukturbedarf));
         personen = new PersonenProJahrModel();
-        personen.setJahr("1027");
+        personen.setJahr("1029");
         personen.setAnzahlPersonenGesamt(BigDecimal.valueOf(235));
         sobonursaechlichBedarf.setAlleEinwohner(List.of(personen));
         bedarf.setLangfristigerSobonursaechlicherBedarf(sobonursaechlichBedarf);
@@ -433,7 +459,7 @@ class ReportingdataTransferServiceTest {
             .get(0)
             .setLangfristigerPlanungsursaechlicherBedarf(planungsursaechlichBedarfDto);
 
-        var sobonursaechlichBedarfDto = new LangfristigerBedarfDto();
+        var sobonursaechlichBedarfDto = new LangfristigerSobonBedarfDto();
         wohneinheitenDto = new WohneinheitenProFoerderartProJahrDto();
         wohneinheitenDto.setJahr("2024");
         wohneinheitenDto.setFoerderart("forderart2");
@@ -451,9 +477,21 @@ class ReportingdataTransferServiceTest {
         infrastrukturbedarfDto.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(71));
         infrastrukturbedarfDto.setAnzahlGruppen(BigDecimal.valueOf(6));
         sobonursaechlichBedarfDto.setBedarfKindergarten(List.of(infrastrukturbedarfDto));
+        infrastrukturbedarfDto = new InfrastrukturbedarfProJahrDto();
+        infrastrukturbedarfDto.setJahr("2027");
+        infrastrukturbedarfDto.setAnzahlPersonenGesamt(BigDecimal.valueOf(202));
+        infrastrukturbedarfDto.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(72));
+        infrastrukturbedarfDto.setAnzahlGruppen(BigDecimal.valueOf(7));
+        sobonursaechlichBedarfDto.setBedarfGsNachmittagBetreuung(List.of(infrastrukturbedarfDto));
+        infrastrukturbedarfDto = new InfrastrukturbedarfProJahrDto();
+        infrastrukturbedarfDto.setJahr("2028");
+        infrastrukturbedarfDto.setAnzahlPersonenGesamt(BigDecimal.valueOf(203));
+        infrastrukturbedarfDto.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(73));
+        infrastrukturbedarfDto.setAnzahlGruppen(BigDecimal.valueOf(8));
+        sobonursaechlichBedarfDto.setBedarfGrundschule(List.of(infrastrukturbedarfDto));
         personenDto = new PersonenProJahrDto();
-        personenDto.setJahr("2027");
-        personenDto.setAnzahlPersonenGesamt(BigDecimal.valueOf(201));
+        personenDto.setJahr("2029");
+        personenDto.setAnzahlPersonenGesamt(BigDecimal.valueOf(204));
         sobonursaechlichBedarfDto.setAlleEinwohner(List.of(personenDto));
         expected
             .getAbfragevariantenBauleitplanverfahren()
@@ -487,7 +525,7 @@ class ReportingdataTransferServiceTest {
             .get(0)
             .setLangfristigerPlanungsursaechlicherBedarf(planungsursaechlichBedarfDto);
 
-        sobonursaechlichBedarfDto = new LangfristigerBedarfDto();
+        sobonursaechlichBedarfDto = new LangfristigerSobonBedarfDto();
         wohneinheitenDto = new WohneinheitenProFoerderartProJahrDto();
         wohneinheitenDto.setJahr("1024");
         wohneinheitenDto.setFoerderart("forderart4");
@@ -505,8 +543,20 @@ class ReportingdataTransferServiceTest {
         infrastrukturbedarfDto.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(998));
         infrastrukturbedarfDto.setAnzahlGruppen(BigDecimal.valueOf(8));
         sobonursaechlichBedarfDto.setBedarfKindergarten(List.of(infrastrukturbedarfDto));
+        infrastrukturbedarfDto = new InfrastrukturbedarfProJahrDto();
+        infrastrukturbedarfDto.setJahr("1027");
+        infrastrukturbedarfDto.setAnzahlPersonenGesamt(BigDecimal.valueOf(333));
+        infrastrukturbedarfDto.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(997));
+        infrastrukturbedarfDto.setAnzahlGruppen(BigDecimal.valueOf(34));
+        sobonursaechlichBedarfDto.setBedarfGsNachmittagBetreuung(List.of(infrastrukturbedarfDto));
+        infrastrukturbedarfDto = new InfrastrukturbedarfProJahrDto();
+        infrastrukturbedarfDto.setJahr("1028");
+        infrastrukturbedarfDto.setAnzahlPersonenGesamt(BigDecimal.valueOf(444));
+        infrastrukturbedarfDto.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(996));
+        infrastrukturbedarfDto.setAnzahlGruppen(BigDecimal.valueOf(51));
+        sobonursaechlichBedarfDto.setBedarfGrundschule(List.of(infrastrukturbedarfDto));
         personenDto = new PersonenProJahrDto();
-        personenDto.setJahr("1027");
+        personenDto.setJahr("1029");
         personenDto.setAnzahlPersonenGesamt(BigDecimal.valueOf(235));
         sobonursaechlichBedarfDto.setAlleEinwohner(List.of(personenDto));
         expected
@@ -558,7 +608,7 @@ class ReportingdataTransferServiceTest {
         planungsursaechlichBedarf.setAlleEinwohner(List.of(personen));
         bedarf.setLangfristigerPlanungsursaechlicherBedarf(planungsursaechlichBedarf);
 
-        var sobonursaechlichBedarf = new LangfristigerBedarfModel();
+        var sobonursaechlichBedarf = new LangfristigerSobonBedarfModel();
         wohneinheiten = new WohneinheitenProFoerderartProJahrModel();
         wohneinheiten.setJahr("2024");
         wohneinheiten.setFoerderart("forderart2");
@@ -576,9 +626,21 @@ class ReportingdataTransferServiceTest {
         infrastrukturbedarf.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(71));
         infrastrukturbedarf.setAnzahlGruppen(BigDecimal.valueOf(6));
         sobonursaechlichBedarf.setBedarfKindergarten(List.of(infrastrukturbedarf));
+        infrastrukturbedarf = new InfrastrukturbedarfProJahrModel();
+        infrastrukturbedarf.setJahr("2027");
+        infrastrukturbedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(202));
+        infrastrukturbedarf.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(72));
+        infrastrukturbedarf.setAnzahlGruppen(BigDecimal.valueOf(7));
+        sobonursaechlichBedarf.setBedarfGsNachmittagBetreuung(List.of(infrastrukturbedarf));
+        infrastrukturbedarf = new InfrastrukturbedarfProJahrModel();
+        infrastrukturbedarf.setJahr("2028");
+        infrastrukturbedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(203));
+        infrastrukturbedarf.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(73));
+        infrastrukturbedarf.setAnzahlGruppen(BigDecimal.valueOf(8));
+        sobonursaechlichBedarf.setBedarfGrundschule(List.of(infrastrukturbedarf));
         personen = new PersonenProJahrModel();
-        personen.setJahr("2027");
-        personen.setAnzahlPersonenGesamt(BigDecimal.valueOf(201));
+        personen.setJahr("2029");
+        personen.setAnzahlPersonenGesamt(BigDecimal.valueOf(204));
         sobonursaechlichBedarf.setAlleEinwohner(List.of(personen));
         bedarf.setLangfristigerSobonursaechlicherBedarf(sobonursaechlichBedarf);
 
@@ -610,7 +672,7 @@ class ReportingdataTransferServiceTest {
         planungsursaechlichBedarf.setAlleEinwohner(List.of(personen));
         bedarf.setLangfristigerPlanungsursaechlicherBedarf(planungsursaechlichBedarf);
 
-        sobonursaechlichBedarf = new LangfristigerBedarfModel();
+        sobonursaechlichBedarf = new LangfristigerSobonBedarfModel();
         wohneinheiten = new WohneinheitenProFoerderartProJahrModel();
         wohneinheiten.setJahr("1024");
         wohneinheiten.setFoerderart("forderart4");
@@ -628,8 +690,20 @@ class ReportingdataTransferServiceTest {
         infrastrukturbedarf.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(998));
         infrastrukturbedarf.setAnzahlGruppen(BigDecimal.valueOf(8));
         sobonursaechlichBedarf.setBedarfKindergarten(List.of(infrastrukturbedarf));
+        infrastrukturbedarf = new InfrastrukturbedarfProJahrModel();
+        infrastrukturbedarf.setJahr("1027");
+        infrastrukturbedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(333));
+        infrastrukturbedarf.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(997));
+        infrastrukturbedarf.setAnzahlGruppen(BigDecimal.valueOf(34));
+        sobonursaechlichBedarf.setBedarfGsNachmittagBetreuung(List.of(infrastrukturbedarf));
+        infrastrukturbedarf = new InfrastrukturbedarfProJahrModel();
+        infrastrukturbedarf.setJahr("1028");
+        infrastrukturbedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(444));
+        infrastrukturbedarf.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(996));
+        infrastrukturbedarf.setAnzahlGruppen(BigDecimal.valueOf(51));
+        sobonursaechlichBedarf.setBedarfGrundschule(List.of(infrastrukturbedarf));
         personen = new PersonenProJahrModel();
-        personen.setJahr("1027");
+        personen.setJahr("1029");
         personen.setAnzahlPersonenGesamt(BigDecimal.valueOf(235));
         sobonursaechlichBedarf.setAlleEinwohner(List.of(personen));
         bedarf.setLangfristigerSobonursaechlicherBedarf(sobonursaechlichBedarf);
@@ -679,7 +753,7 @@ class ReportingdataTransferServiceTest {
             .get(0)
             .setLangfristigerPlanungsursaechlicherBedarf(planungsursaechlichBedarfDto);
 
-        var sobonursaechlichBedarfDto = new LangfristigerBedarfDto();
+        var sobonursaechlichBedarfDto = new LangfristigerSobonBedarfDto();
         wohneinheitenDto = new WohneinheitenProFoerderartProJahrDto();
         wohneinheitenDto.setJahr("2024");
         wohneinheitenDto.setFoerderart("forderart2");
@@ -697,9 +771,21 @@ class ReportingdataTransferServiceTest {
         infrastrukturbedarfDto.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(71));
         infrastrukturbedarfDto.setAnzahlGruppen(BigDecimal.valueOf(6));
         sobonursaechlichBedarfDto.setBedarfKindergarten(List.of(infrastrukturbedarfDto));
+        infrastrukturbedarfDto = new InfrastrukturbedarfProJahrDto();
+        infrastrukturbedarfDto.setJahr("2027");
+        infrastrukturbedarfDto.setAnzahlPersonenGesamt(BigDecimal.valueOf(202));
+        infrastrukturbedarfDto.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(72));
+        infrastrukturbedarfDto.setAnzahlGruppen(BigDecimal.valueOf(7));
+        sobonursaechlichBedarfDto.setBedarfGsNachmittagBetreuung(List.of(infrastrukturbedarfDto));
+        infrastrukturbedarfDto = new InfrastrukturbedarfProJahrDto();
+        infrastrukturbedarfDto.setJahr("2028");
+        infrastrukturbedarfDto.setAnzahlPersonenGesamt(BigDecimal.valueOf(203));
+        infrastrukturbedarfDto.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(73));
+        infrastrukturbedarfDto.setAnzahlGruppen(BigDecimal.valueOf(8));
+        sobonursaechlichBedarfDto.setBedarfGrundschule(List.of(infrastrukturbedarfDto));
         personenDto = new PersonenProJahrDto();
-        personenDto.setJahr("2027");
-        personenDto.setAnzahlPersonenGesamt(BigDecimal.valueOf(201));
+        personenDto.setJahr("2029");
+        personenDto.setAnzahlPersonenGesamt(BigDecimal.valueOf(204));
         sobonursaechlichBedarfDto.setAlleEinwohner(List.of(personenDto));
         expected
             .getAbfragevariantenBaugenehmigungsverfahren()
@@ -733,7 +819,7 @@ class ReportingdataTransferServiceTest {
             .get(0)
             .setLangfristigerPlanungsursaechlicherBedarf(planungsursaechlichBedarfDto);
 
-        sobonursaechlichBedarfDto = new LangfristigerBedarfDto();
+        sobonursaechlichBedarfDto = new LangfristigerSobonBedarfDto();
         wohneinheitenDto = new WohneinheitenProFoerderartProJahrDto();
         wohneinheitenDto.setJahr("1024");
         wohneinheitenDto.setFoerderart("forderart4");
@@ -751,8 +837,20 @@ class ReportingdataTransferServiceTest {
         infrastrukturbedarfDto.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(998));
         infrastrukturbedarfDto.setAnzahlGruppen(BigDecimal.valueOf(8));
         sobonursaechlichBedarfDto.setBedarfKindergarten(List.of(infrastrukturbedarfDto));
+        infrastrukturbedarfDto = new InfrastrukturbedarfProJahrDto();
+        infrastrukturbedarfDto.setJahr("1027");
+        infrastrukturbedarfDto.setAnzahlPersonenGesamt(BigDecimal.valueOf(333));
+        infrastrukturbedarfDto.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(997));
+        infrastrukturbedarfDto.setAnzahlGruppen(BigDecimal.valueOf(34));
+        sobonursaechlichBedarfDto.setBedarfGsNachmittagBetreuung(List.of(infrastrukturbedarfDto));
+        infrastrukturbedarfDto = new InfrastrukturbedarfProJahrDto();
+        infrastrukturbedarfDto.setJahr("1028");
+        infrastrukturbedarfDto.setAnzahlPersonenGesamt(BigDecimal.valueOf(444));
+        infrastrukturbedarfDto.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(996));
+        infrastrukturbedarfDto.setAnzahlGruppen(BigDecimal.valueOf(51));
+        sobonursaechlichBedarfDto.setBedarfGrundschule(List.of(infrastrukturbedarfDto));
         personenDto = new PersonenProJahrDto();
-        personenDto.setJahr("1027");
+        personenDto.setJahr("1029");
         personenDto.setAnzahlPersonenGesamt(BigDecimal.valueOf(235));
         sobonursaechlichBedarfDto.setAlleEinwohner(List.of(personenDto));
         expected
@@ -804,7 +902,7 @@ class ReportingdataTransferServiceTest {
         planungsursaechlichBedarf.setAlleEinwohner(List.of(personen));
         bedarf.setLangfristigerPlanungsursaechlicherBedarf(planungsursaechlichBedarf);
 
-        var sobonursaechlichBedarf = new LangfristigerBedarfModel();
+        var sobonursaechlichBedarf = new LangfristigerSobonBedarfModel();
         wohneinheiten = new WohneinheitenProFoerderartProJahrModel();
         wohneinheiten.setJahr("2024");
         wohneinheiten.setFoerderart("forderart2");
@@ -822,9 +920,21 @@ class ReportingdataTransferServiceTest {
         infrastrukturbedarf.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(71));
         infrastrukturbedarf.setAnzahlGruppen(BigDecimal.valueOf(6));
         sobonursaechlichBedarf.setBedarfKindergarten(List.of(infrastrukturbedarf));
+        infrastrukturbedarf = new InfrastrukturbedarfProJahrModel();
+        infrastrukturbedarf.setJahr("2027");
+        infrastrukturbedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(202));
+        infrastrukturbedarf.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(72));
+        infrastrukturbedarf.setAnzahlGruppen(BigDecimal.valueOf(7));
+        sobonursaechlichBedarf.setBedarfGsNachmittagBetreuung(List.of(infrastrukturbedarf));
+        infrastrukturbedarf = new InfrastrukturbedarfProJahrModel();
+        infrastrukturbedarf.setJahr("2028");
+        infrastrukturbedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(203));
+        infrastrukturbedarf.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(73));
+        infrastrukturbedarf.setAnzahlGruppen(BigDecimal.valueOf(8));
+        sobonursaechlichBedarf.setBedarfGrundschule(List.of(infrastrukturbedarf));
         personen = new PersonenProJahrModel();
-        personen.setJahr("2027");
-        personen.setAnzahlPersonenGesamt(BigDecimal.valueOf(201));
+        personen.setJahr("2029");
+        personen.setAnzahlPersonenGesamt(BigDecimal.valueOf(204));
         sobonursaechlichBedarf.setAlleEinwohner(List.of(personen));
         bedarf.setLangfristigerSobonursaechlicherBedarf(sobonursaechlichBedarf);
 
@@ -856,7 +966,7 @@ class ReportingdataTransferServiceTest {
         planungsursaechlichBedarf.setAlleEinwohner(List.of(personen));
         bedarf.setLangfristigerPlanungsursaechlicherBedarf(planungsursaechlichBedarf);
 
-        sobonursaechlichBedarf = new LangfristigerBedarfModel();
+        sobonursaechlichBedarf = new LangfristigerSobonBedarfModel();
         wohneinheiten = new WohneinheitenProFoerderartProJahrModel();
         wohneinheiten.setJahr("1024");
         wohneinheiten.setFoerderart("forderart4");
@@ -874,8 +984,20 @@ class ReportingdataTransferServiceTest {
         infrastrukturbedarf.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(998));
         infrastrukturbedarf.setAnzahlGruppen(BigDecimal.valueOf(8));
         sobonursaechlichBedarf.setBedarfKindergarten(List.of(infrastrukturbedarf));
+        infrastrukturbedarf = new InfrastrukturbedarfProJahrModel();
+        infrastrukturbedarf.setJahr("1027");
+        infrastrukturbedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(333));
+        infrastrukturbedarf.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(997));
+        infrastrukturbedarf.setAnzahlGruppen(BigDecimal.valueOf(34));
+        sobonursaechlichBedarf.setBedarfGsNachmittagBetreuung(List.of(infrastrukturbedarf));
+        infrastrukturbedarf = new InfrastrukturbedarfProJahrModel();
+        infrastrukturbedarf.setJahr("1028");
+        infrastrukturbedarf.setAnzahlPersonenGesamt(BigDecimal.valueOf(444));
+        infrastrukturbedarf.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(996));
+        infrastrukturbedarf.setAnzahlGruppen(BigDecimal.valueOf(51));
+        sobonursaechlichBedarf.setBedarfGrundschule(List.of(infrastrukturbedarf));
         personen = new PersonenProJahrModel();
-        personen.setJahr("1027");
+        personen.setJahr("1029");
         personen.setAnzahlPersonenGesamt(BigDecimal.valueOf(235));
         sobonursaechlichBedarf.setAlleEinwohner(List.of(personen));
         bedarf.setLangfristigerSobonursaechlicherBedarf(sobonursaechlichBedarf);
@@ -925,7 +1047,7 @@ class ReportingdataTransferServiceTest {
             .get(0)
             .setLangfristigerPlanungsursaechlicherBedarf(planungsursaechlichBedarfDto);
 
-        var sobonursaechlichBedarfDto = new LangfristigerBedarfDto();
+        var sobonursaechlichBedarfDto = new LangfristigerSobonBedarfDto();
         wohneinheitenDto = new WohneinheitenProFoerderartProJahrDto();
         wohneinheitenDto.setJahr("2024");
         wohneinheitenDto.setFoerderart("forderart2");
@@ -943,9 +1065,21 @@ class ReportingdataTransferServiceTest {
         infrastrukturbedarfDto.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(71));
         infrastrukturbedarfDto.setAnzahlGruppen(BigDecimal.valueOf(6));
         sobonursaechlichBedarfDto.setBedarfKindergarten(List.of(infrastrukturbedarfDto));
+        infrastrukturbedarfDto = new InfrastrukturbedarfProJahrDto();
+        infrastrukturbedarfDto.setJahr("2027");
+        infrastrukturbedarfDto.setAnzahlPersonenGesamt(BigDecimal.valueOf(202));
+        infrastrukturbedarfDto.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(72));
+        infrastrukturbedarfDto.setAnzahlGruppen(BigDecimal.valueOf(7));
+        sobonursaechlichBedarfDto.setBedarfGsNachmittagBetreuung(List.of(infrastrukturbedarfDto));
+        infrastrukturbedarfDto = new InfrastrukturbedarfProJahrDto();
+        infrastrukturbedarfDto.setJahr("2028");
+        infrastrukturbedarfDto.setAnzahlPersonenGesamt(BigDecimal.valueOf(203));
+        infrastrukturbedarfDto.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(73));
+        infrastrukturbedarfDto.setAnzahlGruppen(BigDecimal.valueOf(8));
+        sobonursaechlichBedarfDto.setBedarfGrundschule(List.of(infrastrukturbedarfDto));
         personenDto = new PersonenProJahrDto();
-        personenDto.setJahr("2027");
-        personenDto.setAnzahlPersonenGesamt(BigDecimal.valueOf(201));
+        personenDto.setJahr("2029");
+        personenDto.setAnzahlPersonenGesamt(BigDecimal.valueOf(204));
         sobonursaechlichBedarfDto.setAlleEinwohner(List.of(personenDto));
         expected
             .getAbfragevariantenWeiteresVerfahren()
@@ -979,7 +1113,7 @@ class ReportingdataTransferServiceTest {
             .get(0)
             .setLangfristigerPlanungsursaechlicherBedarf(planungsursaechlichBedarfDto);
 
-        sobonursaechlichBedarfDto = new LangfristigerBedarfDto();
+        sobonursaechlichBedarfDto = new LangfristigerSobonBedarfDto();
         wohneinheitenDto = new WohneinheitenProFoerderartProJahrDto();
         wohneinheitenDto.setJahr("1024");
         wohneinheitenDto.setFoerderart("forderart4");
@@ -997,8 +1131,20 @@ class ReportingdataTransferServiceTest {
         infrastrukturbedarfDto.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(998));
         infrastrukturbedarfDto.setAnzahlGruppen(BigDecimal.valueOf(8));
         sobonursaechlichBedarfDto.setBedarfKindergarten(List.of(infrastrukturbedarfDto));
+        infrastrukturbedarfDto = new InfrastrukturbedarfProJahrDto();
+        infrastrukturbedarfDto.setJahr("1027");
+        infrastrukturbedarfDto.setAnzahlPersonenGesamt(BigDecimal.valueOf(333));
+        infrastrukturbedarfDto.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(997));
+        infrastrukturbedarfDto.setAnzahlGruppen(BigDecimal.valueOf(34));
+        sobonursaechlichBedarfDto.setBedarfGsNachmittagBetreuung(List.of(infrastrukturbedarfDto));
+        infrastrukturbedarfDto = new InfrastrukturbedarfProJahrDto();
+        infrastrukturbedarfDto.setJahr("1028");
+        infrastrukturbedarfDto.setAnzahlPersonenGesamt(BigDecimal.valueOf(444));
+        infrastrukturbedarfDto.setAnzahlPersonenZuVersorgen(BigDecimal.valueOf(996));
+        infrastrukturbedarfDto.setAnzahlGruppen(BigDecimal.valueOf(51));
+        sobonursaechlichBedarfDto.setBedarfGrundschule(List.of(infrastrukturbedarfDto));
         personenDto = new PersonenProJahrDto();
-        personenDto.setJahr("1027");
+        personenDto.setJahr("1029");
         personenDto.setAnzahlPersonenGesamt(BigDecimal.valueOf(235));
         sobonursaechlichBedarfDto.setAlleEinwohner(List.of(personenDto));
         expected
