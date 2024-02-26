@@ -107,11 +107,6 @@ public class AbfrageController {
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
             ),
             @ApiResponse(
-                responseCode = "403",
-                description = "FORBIDDEN -> Keine Berechtigung um die Abfrage zu bearbeiten.",
-                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
-            ),
-            @ApiResponse(
                 responseCode = "404",
                 description = "NOT_FOUND -> Das referenzierte Bauvorhaben existiert nicht.",
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
@@ -130,7 +125,7 @@ public class AbfrageController {
     )
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_POST_ABFRAGE.name())")
     public ResponseEntity<AbfrageDto> save(@RequestBody @Valid @NotNull AbfrageAngelegtDto abfrage)
-        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, CalculationException, ReportingException, UserRoleNotAllowedException {
+        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, CalculationException, ReportingException {
         final var requestModel = abfrageApiMapper.dto2Model(abfrage);
         var model = abfrageDomainMapper.request2NewModel(requestModel);
         model = abfrageService.save(model);

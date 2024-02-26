@@ -1,6 +1,6 @@
 package de.muenchen.isi.api.validation;
 
-import de.muenchen.isi.api.dto.abfrageInBearbeitungSachbearbeitung.AbfragevarianteWeiteresVerfahrenSachbearbeitungInBearbeitungSachbearbeitungDto;
+import de.muenchen.isi.api.dto.abfrageInBearbeitungSachbearbeitung.AbfragevarianteBauleitplanverfahrenInBearbeitungSachbearbeitungDto;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import lombok.NoArgsConstructor;
@@ -9,16 +9,16 @@ import org.springframework.stereotype.Component;
 
 @Component
 @NoArgsConstructor
-public class SobonFoerdermixWeiteresverfahrenValidator
+public class SobonFoerdermixBauleitplanverfahrenAVValidator
     implements
         ConstraintValidator<
-            SobonFoerdermixWeiteresverfahrenValid,
-            AbfragevarianteWeiteresVerfahrenSachbearbeitungInBearbeitungSachbearbeitungDto
+            SobonFoerdermixBauleitplanverfahrenAVValid,
+            AbfragevarianteBauleitplanverfahrenInBearbeitungSachbearbeitungDto
         > {
 
     @Override
     public boolean isValid(
-        AbfragevarianteWeiteresVerfahrenSachbearbeitungInBearbeitungSachbearbeitungDto abfragevarianteDto,
+        final AbfragevarianteBauleitplanverfahrenInBearbeitungSachbearbeitungDto abfragevarianteDto,
         ConstraintValidatorContext constraintValidatorContext
     ) {
         boolean isBerechnung = abfragevarianteDto.getIsASobonBerechnung();

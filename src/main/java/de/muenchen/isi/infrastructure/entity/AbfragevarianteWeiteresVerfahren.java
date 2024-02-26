@@ -14,6 +14,7 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -148,7 +149,7 @@ public class AbfragevarianteWeiteresVerfahren extends Abfragevariante {
     @Column
     private Boolean isASobonBerechnung;
 
-    @Column
+    @Embedded
     private Foerdermix sobonFoerdermix;
 
     @Column

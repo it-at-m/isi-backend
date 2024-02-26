@@ -9,7 +9,8 @@ import org.junit.jupiter.api.Test;
 
 public class SobonFoerdermixWeiteresverfahrenValidatorTest {
 
-    private final SobonFoerdermixWeiteresverfahrenValidator validator = new SobonFoerdermixWeiteresverfahrenValidator();
+    private final SobonFoerdermixWeiteresverfahrenAVValidator validator =
+        new SobonFoerdermixWeiteresverfahrenAVValidator();
 
     @Test
     void isValid() {

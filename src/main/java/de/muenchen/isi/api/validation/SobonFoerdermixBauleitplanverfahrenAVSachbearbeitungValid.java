@@ -10,9 +10,9 @@ import java.lang.annotation.Target;
 
 @Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = SobonFoerdermixWeiteresverfahrenValidator.class)
+@Constraint(validatedBy = SobonFoerdermixBauleitplanverfahrenAVSachbearbeitungValidator.class)
 @Documented
-public @interface SobonFoerdermixWeiteresverfahrenValid {
+public @interface SobonFoerdermixBauleitplanverfahrenAVSachbearbeitungValid {
     String message() default "Bitte geben Sie einen Födermix für ihre SoBoN-Berechnung an.";
 
     Class<?>[] groups() default {};

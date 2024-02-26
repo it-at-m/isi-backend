@@ -6,7 +6,7 @@ package de.muenchen.isi.api.dto.abfrageInBearbeitungSachbearbeitung;
 
 import de.muenchen.isi.api.dto.FoerdermixDto;
 import de.muenchen.isi.api.validation.NotUnspecified;
-import de.muenchen.isi.api.validation.SobonFoerdermixBauleitplanverfahrenValid;
+import de.muenchen.isi.api.validation.SobonFoerdermixBauleitplanverfahrenAVValid;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
 import jakarta.validation.constraints.NotNull;
@@ -15,7 +15,7 @@ import java.util.UUID;
 import lombok.Data;
 
 @Data
-@SobonFoerdermixBauleitplanverfahrenValid
+@SobonFoerdermixBauleitplanverfahrenAVValid
 public class AbfragevarianteBauleitplanverfahrenSachbearbeitungInBearbeitungSachbearbeitungDto {
 
     private UUID id;
