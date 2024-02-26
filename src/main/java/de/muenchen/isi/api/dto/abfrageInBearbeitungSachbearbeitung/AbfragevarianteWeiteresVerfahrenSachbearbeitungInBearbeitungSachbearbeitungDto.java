@@ -10,7 +10,6 @@ import de.muenchen.isi.api.validation.SobonFoerdermixWeiteresverfahrenValid;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
 import jakarta.validation.constraints.NotNull;
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
 import lombok.Data;
@@ -25,8 +24,6 @@ public class AbfragevarianteWeiteresVerfahrenSachbearbeitungInBearbeitungSachbea
 
     @NotUnspecified
     private ArtAbfrage artAbfragevariante;
-
-    private BigDecimal gfWohnenPlanungsursaechlich;
 
     @NotUnspecified
     @NotNull

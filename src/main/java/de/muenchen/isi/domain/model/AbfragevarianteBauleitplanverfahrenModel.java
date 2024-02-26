@@ -44,8 +44,6 @@ public class AbfragevarianteBauleitplanverfahrenModel extends AbfragevarianteMod
 
     private BigDecimal gfWohnenWeiteresNichtInfrastrukturrelevantesWohnen;
 
-    private BigDecimal gfWohnenPlanungsursaechlich;
-
     // Anzahl Wohneinheiten
 
     private Integer weGesamt;
