@@ -12,8 +12,10 @@ import de.muenchen.isi.domain.model.BauleitplanverfahrenModel;
 import de.muenchen.isi.domain.model.WeiteresVerfahrenModel;
 import de.muenchen.isi.domain.model.calculation.BedarfeForAbfragevarianteModel;
 import de.muenchen.isi.domain.model.calculation.LangfristigerBedarfModel;
+import de.muenchen.isi.domain.model.calculation.LangfristigerSobonBedarfModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
@@ -37,11 +39,9 @@ public class CalculationService {
 
     public static final int DIVISION_SCALE = 15;
 
-    public static final String SUMMATION_PERIOD_NAME = "Summe erste %d J.";
-
-    public static final String SUMMATION_TOTAL_NAME = "Gesamt";
-
     private final PlanungsursaechlicheWohneinheitenService planungsursaechlicheWohneinheitenService;
+
+    private final SobonursaechlicheWohneinheitenService sobonursaechlicheWohneinheitenService;
 
     private final InfrastrukturbedarfService infrastrukturbedarfService;
 
@@ -113,7 +113,8 @@ public class CalculationService {
         final LocalDate stammdatenGueltigAb;
         final var bedarfeForAbfragevariante = new BedarfeForAbfragevarianteModel();
         final LangfristigerBedarfModel langfristigerPlanungsursaechlicherBedarf;
-        final LangfristigerBedarfModel langfristigerSobonursaechlicherBedarf;
+        final LangfristigerSobonBedarfModel langfristigerSobonursaechlicherBedarf;
+        final BigDecimal sobonGf;
         if (ArtAbfrage.BAULEITPLANVERFAHREN.equals(abfragevariante.getArtAbfragevariante())) {
             final var abfragevarianteBauleitplanverfahren = (AbfragevarianteBauleitplanverfahrenModel) abfragevariante;
             bauabschnitte = abfragevarianteBauleitplanverfahren.getBauabschnitte();
@@ -125,7 +126,14 @@ public class CalculationService {
                         sobonOrientierungswertJahr,
                         stammdatenGueltigAb
                     );
-            langfristigerSobonursaechlicherBedarf = null;
+            sobonGf = abfragevarianteBauleitplanverfahren.getGfWohnenSobonUrsaechlich();
+            langfristigerSobonursaechlicherBedarf =
+                this.calculateLangfristigerSobonursaechlicherBedarf(
+                        sobonGf,
+                        bauabschnitte,
+                        sobonOrientierungswertJahr,
+                        stammdatenGueltigAb
+                    );
         } else if (ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN.equals(abfragevariante.getArtAbfragevariante())) {
             final var abfragevarianteBaugenehmigungsverfahren =
                 (AbfragevarianteBaugenehmigungsverfahrenModel) abfragevariante;
@@ -150,7 +158,14 @@ public class CalculationService {
                         sobonOrientierungswertJahr,
                         stammdatenGueltigAb
                     );
-            langfristigerSobonursaechlicherBedarf = null;
+            sobonGf = abfragevarianteWeiteresVerfahren.getGfWohnenSobonUrsaechlich();
+            langfristigerSobonursaechlicherBedarf =
+                this.calculateLangfristigerSobonursaechlicherBedarf(
+                        sobonGf,
+                        bauabschnitte,
+                        sobonOrientierungswertJahr,
+                        stammdatenGueltigAb
+                    );
         } else {
             throw new CalculationException(
                 "Die Berechnung kann für diese Art von Abfragevariante nicht durchgeführt werden."
@@ -162,7 +177,7 @@ public class CalculationService {
     }
 
     /**
-     * Die Methode ermittelt den {@link LangfristigerBedarfModel} für die im Parameter gegebenen Werte.
+     * Die Methode ermittelt den planungsursächlichen {@link LangfristigerBedarfModel} für die im Parameter gegebenen Werte.
      *
      * Ist auf Basis der übergebenen Methodenparameter keine Berechnung möglich, so wird der Wert null zurückgegeben.
      *
@@ -212,6 +227,87 @@ public class CalculationService {
             stammdatenGueltigAb
         );
         bedarf.setBedarfKindergarten(bedarfKindergarten);
+
+        // Ermittlung aller Einwohner
+        final var alleEinwohner = infrastrukturbedarfService.calculateAlleEinwohner(
+            wohneinheiten,
+            sobonOrientierungswertJahr
+        );
+        bedarf.setAlleEinwohner(alleEinwohner);
+
+        return bedarf;
+    }
+
+    /**
+     * Die Methode ermittelt den SoBoN-ursächlichen {@link LangfristigerBedarfModel} für die im Parameter gegebenen Werte.
+     *
+     * Ist auf Basis der übergebenen Methodenparameter keine Berechnung möglich, so wird der Wert null zurückgegeben.
+     *
+     * @param sobonGf SoBoN-ursächliche Geschossfläche in der Abfragevariante.
+     * @param bauabschnitte zum Ermitteln der Bedarfe.
+     * @param sobonOrientierungswertJahr zur Extraktion der korrekten Sobon-Orientierungswerte.
+     * @param stammdatenGueltigAb zur Extraktion der Stammdaten welche sich nicht auf ein konkretes Jahr der Sobon-Orientierungswerte beziehen.
+     * @return den {@link LangfristigerBedarfModel} oder null falls auf Basis der übergebenen Methodenparameter keine Berechnung möglich ist.
+     * @throws CalculationException falls die Stammdaten zur Durchführung der Berechnung nicht geladen werden können.
+     */
+    public LangfristigerSobonBedarfModel calculateLangfristigerSobonursaechlicherBedarf(
+        final BigDecimal sobonGf,
+        final List<BauabschnittModel> bauabschnitte,
+        final SobonOrientierungswertJahr sobonOrientierungswertJahr,
+        final LocalDate stammdatenGueltigAb
+    ) throws CalculationException {
+        if (
+            CollectionUtils.isEmpty(bauabschnitte) ||
+            ObjectUtils.anyNull(sobonOrientierungswertJahr, stammdatenGueltigAb, sobonGf) ||
+            Objects.equals(sobonOrientierungswertJahr, SobonOrientierungswertJahr.STANDORTABFRAGE)
+        ) {
+            return null;
+        }
+
+        final var bedarf = new LangfristigerSobonBedarfModel();
+
+        // Ermittlung Wohneinheiten
+        final var wohneinheiten = sobonursaechlicheWohneinheitenService.calculateSobonursaechlicheWohneinheiten(
+            sobonGf,
+            bauabschnitte,
+            sobonOrientierungswertJahr,
+            stammdatenGueltigAb
+        );
+        bedarf.setWohneinheiten(wohneinheiten);
+
+        // Ermittlung Bedarf Kinderkrippe
+        final var bedarfKinderkrippe = infrastrukturbedarfService.calculateBedarfForKinderkrippe(
+            wohneinheiten,
+            sobonOrientierungswertJahr,
+            InfrastrukturbedarfService.ArtInfrastrukturbedarf.SOBON_URSAECHLICH,
+            stammdatenGueltigAb
+        );
+        bedarf.setBedarfKinderkrippe(bedarfKinderkrippe);
+
+        // Ermittlung Bedarf Kindergarten
+        final var bedarfKindergarten = infrastrukturbedarfService.calculateBedarfForKindergarten(
+            wohneinheiten,
+            sobonOrientierungswertJahr,
+            InfrastrukturbedarfService.ArtInfrastrukturbedarf.SOBON_URSAECHLICH,
+            stammdatenGueltigAb
+        );
+        bedarf.setBedarfKindergarten(bedarfKindergarten);
+
+        // Ermittlung Bedarf GS-Nachmittagsbetreuung
+        final var bedarfGsNachmittagBetreuung = infrastrukturbedarfService.calculateBedarfForGsNachmittagBetreuung(
+            wohneinheiten,
+            sobonOrientierungswertJahr,
+            stammdatenGueltigAb
+        );
+        bedarf.setBedarfGsNachmittagBetreuung(bedarfGsNachmittagBetreuung);
+
+        // Ermittlung Bedarf Grundschule
+        final var bedarfGrundschulen = infrastrukturbedarfService.calculateBedarfForGrundschule(
+            wohneinheiten,
+            sobonOrientierungswertJahr,
+            stammdatenGueltigAb
+        );
+        bedarf.setBedarfGrundschule(bedarfGrundschulen);
 
         // Ermittlung aller Einwohner
         final var alleEinwohner = infrastrukturbedarfService.calculateAlleEinwohner(
