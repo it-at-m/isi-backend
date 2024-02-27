@@ -48,8 +48,6 @@ public class AbfragevarianteWeiteresVerfahrenDto extends AbfragevarianteDto {
 
     private BigDecimal gfWohnenWeiteresNichtInfrastrukturrelevantesWohnen;
 
-    private BigDecimal gfWohnenPlanungsursaechlich;
-
     // Anzahl Wohneinheiten
 
     private Integer weGesamt;

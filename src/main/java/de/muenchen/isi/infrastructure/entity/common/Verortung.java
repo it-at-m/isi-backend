@@ -10,6 +10,16 @@ public abstract class Verortung {
     @IndexedEmbedded
     private Set<Stadtbezirk> stadtbezirke;
 
+    private Set<Bezirksteil> bezirksteile;
+
+    private Set<Viertel> viertel;
+
     @IndexedEmbedded
     private Set<Gemarkung> gemarkungen;
+
+    private Set<Kitaplanungsbereich> kitaplanungsbereiche;
+
+    private Set<Grundschulsprengel> grundschulsprengel;
+
+    private Set<Mittelschulsprengel> mittelschulsprengel;
 }

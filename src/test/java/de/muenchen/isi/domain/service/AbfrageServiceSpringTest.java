@@ -277,11 +277,6 @@ class AbfrageServiceSpringTest {
             ((BauleitplanverfahrenModel) abfrage).getAbfragevariantenBauleitplanverfahren().get(0).getVersion()
         );
         abfragevariantePatch.setArtAbfragevariante(ArtAbfrage.BAULEITPLANVERFAHREN);
-        abfragevariantePatch.setGfWohnenPlanungsursaechlich(
-            ((BauleitplanverfahrenModel) abfrage).getAbfragevariantenBauleitplanverfahren()
-                .get(0)
-                .getGfWohnenPlanungsursaechlich()
-        );
         abfragevariantePatch.setSobonOrientierungswertJahr(SobonOrientierungswertJahr.JAHR_2017);
         abfragevariantePatch.setAnmerkung("Die Anmerkung Bauleitplanverfahren Patch Sachbearbeitung");
         abfragePatch.setAbfragevariantenBauleitplanverfahren(List.of(abfragevariantePatch));
@@ -319,11 +314,6 @@ class AbfrageServiceSpringTest {
             ((BaugenehmigungsverfahrenModel) abfrage).getAbfragevariantenBaugenehmigungsverfahren().get(0).getVersion()
         );
         abfragevariantePatch.setArtAbfragevariante(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN);
-        abfragevariantePatch.setGfWohnenPlanungsursaechlich(
-            ((BaugenehmigungsverfahrenModel) abfrage).getAbfragevariantenBaugenehmigungsverfahren()
-                .get(0)
-                .getGfWohnenPlanungsursaechlich()
-        );
         abfragevariantePatch.setSobonOrientierungswertJahr(SobonOrientierungswertJahr.JAHR_2017);
         abfragevariantePatch.setAnmerkung("Die Anmerkung Baugenehmigungsverfahren Patch Sachbearbeitung");
         abfragePatch.setAbfragevariantenBaugenehmigungsverfahren(List.of(abfragevariantePatch));
@@ -363,11 +353,6 @@ class AbfrageServiceSpringTest {
             ((WeiteresVerfahrenModel) abfrage).getAbfragevariantenWeiteresVerfahren().get(0).getVersion()
         );
         abfragevariantePatch.setArtAbfragevariante(ArtAbfrage.WEITERES_VERFAHREN);
-        abfragevariantePatch.setGfWohnenPlanungsursaechlich(
-            ((WeiteresVerfahrenModel) abfrage).getAbfragevariantenWeiteresVerfahren()
-                .get(0)
-                .getGfWohnenPlanungsursaechlich()
-        );
         abfragevariantePatch.setSobonOrientierungswertJahr(SobonOrientierungswertJahr.JAHR_2017);
         abfragevariantePatch.setAnmerkung("Die Anmerkung WeiteresVerfahren Patch Sachbearbeitung");
         abfragePatch.setAbfragevariantenWeiteresVerfahren(List.of(abfragevariantePatch));

@@ -70,7 +70,7 @@ public class InfrastrukturbedarfService {
             )
             .orElseThrow(() -> {
                 final var message =
-                    "Für die planungsursächliche Bedarfsberechnung der Kinderkrippen konnten die Stammdaten zur Versorgungsquote und Gruppenstärke nicht geladen werden.";
+                    "Für die Bedarfsberechnung der Kinderkrippen konnten die Stammdaten zur Versorgungsquote und Gruppenstärke nicht geladen werden.";
                 log.error(message);
                 return new CalculationException(message);
             });
@@ -111,7 +111,7 @@ public class InfrastrukturbedarfService {
             )
             .orElseThrow(() -> {
                 final var message =
-                    "Für die planungsursächliche Bedarfsberechnung der Kindergärten konnten die Stammdaten zur Versorgungsquote und Gruppenstärke nicht geladen werden.";
+                    "Für die Bedarfsberechnung der Kindergärten konnten die Stammdaten zur Versorgungsquote und Gruppenstärke nicht geladen werden.";
                 log.error(message);
                 return new CalculationException(message);
             });
@@ -123,6 +123,86 @@ public class InfrastrukturbedarfService {
                         bedarf,
                         versorgungsquoteGruppenstaerke,
                         artInfrastrukturbedarf
+                    )
+            )
+            .toList();
+    }
+
+    /**
+     * Ermittlung die Bedarfe für den Zeitraum von 20 Jahren auf Basis der gegebenen Wohneinheiten für GS-Nachmittagsbetreuungen.
+     * Erfolgt nur für SoBoN-ursächliche Berechnungen.
+     *
+     * @param wohneinheiten zur Ermittlung der Bedarfe.
+     * @param sobonJahr zur Ermittlung der Sobon-Orientierungswerte der sozialen Infrastruktur.
+     * @param gueltigAb zur Ermittlung der korrekten Versorgungsquote und Gruppenstärke.
+     * @return die Bedarfe für den Zeitraum von 20 Jahren
+     * @throws CalculationException falls die Stammdaten zur Durchführung der Berechnung nicht geladen werden können.
+     */
+    public List<InfrastrukturbedarfProJahrModel> calculateBedarfForGsNachmittagBetreuung(
+        final List<WohneinheitenProFoerderartProJahrModel> wohneinheiten,
+        final SobonOrientierungswertJahr sobonJahr,
+        final LocalDate gueltigAb
+    ) throws CalculationException {
+        // Ermittlung der Versorgungsquote und Gruppenstärke für die Einrichtung.
+        final var versorgungsquoteGruppenstaerke = versorgungsquoteGruppenstaerkeRepository
+            .findFirstByInfrastruktureinrichtungTypAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
+                InfrastruktureinrichtungTyp.GS_NACHMITTAG_BETREUUNG,
+                gueltigAb
+            )
+            .orElseThrow(() -> {
+                final var message =
+                    "Für die Bedarfsberechnung der GS-Nachmittagsbetreuungen konnten die Stammdaten zur Versorgungsquote und Gruppenstärke nicht geladen werden.";
+                log.error(message);
+                return new CalculationException(message);
+            });
+
+        return this.calculatePersonen(InfrastruktureinrichtungTyp.GS_NACHMITTAG_BETREUUNG, wohneinheiten, sobonJahr)
+            // Ermitteln der Versorgungsquote und Gruppenstärke
+            .map(bedarf ->
+                this.getVersorgungsquoteAndGruppenstaerkeWithBedarf(
+                        bedarf,
+                        versorgungsquoteGruppenstaerke,
+                        ArtInfrastrukturbedarf.SOBON_URSAECHLICH
+                    )
+            )
+            .toList();
+    }
+
+    /**
+     * Ermittlung die Bedarfe für den Zeitraum von 20 Jahren auf Basis der gegebenen Wohneinheiten für Grundschulen.
+     * Erfolgt nur für SoBoN-ursächliche Berechnungen.
+     *
+     * @param wohneinheiten zur Ermittlung der Bedarfe.
+     * @param sobonJahr zur Ermittlung der Sobon-Orientierungswerte der sozialen Infrastruktur.
+     * @param gueltigAb zur Ermittlung der korrekten Versorgungsquote und Gruppenstärke.
+     * @return die Bedarfe für den Zeitraum von 20 Jahren
+     * @throws CalculationException falls die Stammdaten zur Durchführung der Berechnung nicht geladen werden können.
+     */
+    public List<InfrastrukturbedarfProJahrModel> calculateBedarfForGrundschule(
+        final List<WohneinheitenProFoerderartProJahrModel> wohneinheiten,
+        final SobonOrientierungswertJahr sobonJahr,
+        final LocalDate gueltigAb
+    ) throws CalculationException {
+        // Ermittlung der Versorgungsquote und Gruppenstärke für die Einrichtung.
+        final var versorgungsquoteGruppenstaerke = versorgungsquoteGruppenstaerkeRepository
+            .findFirstByInfrastruktureinrichtungTypAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
+                InfrastruktureinrichtungTyp.GRUNDSCHULE,
+                gueltigAb
+            )
+            .orElseThrow(() -> {
+                final var message =
+                    "Für die Bedarfsberechnung der Grundschulen konnten die Stammdaten zur Versorgungsquote und Gruppenstärke nicht geladen werden.";
+                log.error(message);
+                return new CalculationException(message);
+            });
+
+        return this.calculatePersonen(InfrastruktureinrichtungTyp.GRUNDSCHULE, wohneinheiten, sobonJahr)
+            // Ermitteln der Versorgungsquote und Gruppenstärke
+            .map(bedarf ->
+                this.getVersorgungsquoteAndGruppenstaerkeWithBedarf(
+                        bedarf,
+                        versorgungsquoteGruppenstaerke,
+                        ArtInfrastrukturbedarf.SOBON_URSAECHLICH
                     )
             )
             .toList();
@@ -289,7 +369,7 @@ public class InfrastrukturbedarfService {
                 );
         } catch (final NoSuchElementException exception) {
             final var message =
-                "Für die planungsursächliche Bedarfsberechnung konnten die Stammdaten zu den Sobon-Orientierungswerten zur sozialen Infrastruktur nicht geladen werden.";
+                "Für die planungsursächliche Bedarfsberechnung konnten die Stammdaten zu den SoBoN-Orientierungswerten zur sozialen Infrastruktur nicht geladen werden.";
             log.error(message);
             throw new CalculationException(message, exception);
         }
