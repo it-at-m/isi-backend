@@ -72,6 +72,12 @@ public class AbfragevarianteWeiteresVerfahrenModel extends AbfragevarianteModel 
 
     private String anmerkung;
 
+    private Boolean hasBauratenDateiInputs;
+
+    private String anmerkungBauratenDateiInputs;
+
+    private List<BauratendateiInputModel> bauratendateiInputs;
+
     private List<BedarfsmeldungModel> bedarfsmeldungFachreferate;
 
     private List<BedarfsmeldungModel> bedarfsmeldungAbfrageersteller;

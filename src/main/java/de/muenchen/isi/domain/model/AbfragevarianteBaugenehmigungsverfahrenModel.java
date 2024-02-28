@@ -68,6 +68,12 @@ public class AbfragevarianteBaugenehmigungsverfahrenModel extends Abfragevariant
 
     private String anmerkung;
 
+    private Boolean hasBauratenDateiInputs;
+
+    private String anmerkungBauratenDateiInputs;
+
+    private List<BauratendateiInputModel> bauratendateiInputs;
+
     private List<BedarfsmeldungModel> bedarfsmeldungFachreferate;
 
     private List<BedarfsmeldungModel> bedarfsmeldungAbfrageersteller;
