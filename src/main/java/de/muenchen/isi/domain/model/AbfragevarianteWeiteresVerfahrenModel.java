@@ -4,6 +4,7 @@
  */
 package de.muenchen.isi.domain.model;
 
+import de.muenchen.isi.domain.model.filehandling.DokumentModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.WesentlicheRechtsgrundlage;
 import java.math.BigDecimal;
@@ -99,4 +100,6 @@ public class AbfragevarianteWeiteresVerfahrenModel extends AbfragevarianteModel 
     private boolean ausgeloesterBedarfMitversorgungInBestEinrichtungenNachAusbauSchule;
 
     private String hinweisVersorgung;
+
+    private List<DokumentModel> dokumente;
 }
