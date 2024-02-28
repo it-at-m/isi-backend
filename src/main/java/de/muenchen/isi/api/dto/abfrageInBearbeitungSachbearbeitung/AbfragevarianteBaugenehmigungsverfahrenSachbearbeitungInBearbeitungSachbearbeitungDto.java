@@ -4,11 +4,15 @@
  */
 package de.muenchen.isi.api.dto.abfrageInBearbeitungSachbearbeitung;
 
+import de.muenchen.isi.api.dto.filehandling.DokumentDto;
+import de.muenchen.isi.api.validation.HasAllowedNumberOfDocuments;
 import de.muenchen.isi.api.validation.NotUnspecified;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 import lombok.Data;
 
@@ -30,4 +34,7 @@ public class AbfragevarianteBaugenehmigungsverfahrenSachbearbeitungInBearbeitung
     private LocalDate stammdatenGueltigAb;
 
     private String anmerkung;
+
+    @HasAllowedNumberOfDocuments
+    private List<@Valid DokumentDto> dokumente;
 }
