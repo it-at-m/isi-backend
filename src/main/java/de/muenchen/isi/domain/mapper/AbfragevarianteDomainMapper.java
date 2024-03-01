@@ -55,6 +55,9 @@ public interface AbfragevarianteDomainMapper {
             @Mapping(target = "sobonOrientierungswertJahr", ignore = true),
             @Mapping(target = "stammdatenGueltigAb", ignore = true),
             @Mapping(target = "anmerkung", ignore = true),
+            @Mapping(target = "hasBauratenDateiInputs", ignore = true),
+            @Mapping(target = "anmerkungBauratenDateiInputs", ignore = true),
+            @Mapping(target = "bauratendateiInputs", ignore = true),
             @Mapping(target = "bedarfsmeldungFachreferate", ignore = true),
             @Mapping(target = "ausgeloesterBedarfImBaugebietBeruecksichtigenKita", ignore = true),
             @Mapping(target = "ausgeloesterBedarfMitversorgungImBplanKita", ignore = true),
@@ -80,6 +83,9 @@ public interface AbfragevarianteDomainMapper {
             @Mapping(target = "sobonOrientierungswertJahr", ignore = true),
             @Mapping(target = "stammdatenGueltigAb", ignore = true),
             @Mapping(target = "anmerkung", ignore = true),
+            @Mapping(target = "hasBauratenDateiInputs", ignore = true),
+            @Mapping(target = "anmerkungBauratenDateiInputs", ignore = true),
+            @Mapping(target = "bauratendateiInputs", ignore = true),
             @Mapping(target = "bedarfsmeldungFachreferate", ignore = true),
             @Mapping(target = "ausgeloesterBedarfImBaugebietBeruecksichtigenKita", ignore = true),
             @Mapping(target = "ausgeloesterBedarfMitversorgungImBplanKita", ignore = true),
@@ -105,6 +111,9 @@ public interface AbfragevarianteDomainMapper {
             @Mapping(target = "sobonOrientierungswertJahr", ignore = true),
             @Mapping(target = "stammdatenGueltigAb", ignore = true),
             @Mapping(target = "anmerkung", ignore = true),
+            @Mapping(target = "hasBauratenDateiInputs", ignore = true),
+            @Mapping(target = "anmerkungBauratenDateiInputs", ignore = true),
+            @Mapping(target = "bauratendateiInputs", ignore = true),
             @Mapping(target = "bedarfsmeldungFachreferate", ignore = true),
             @Mapping(target = "ausgeloesterBedarfImBaugebietBeruecksichtigenKita", ignore = true),
             @Mapping(target = "ausgeloesterBedarfMitversorgungImBplanKita", ignore = true),
@@ -130,6 +139,9 @@ public interface AbfragevarianteDomainMapper {
             @Mapping(target = "sobonOrientierungswertJahr", ignore = false),
             @Mapping(target = "stammdatenGueltigAb", ignore = false),
             @Mapping(target = "anmerkung", ignore = false),
+            @Mapping(target = "hasBauratenDateiInputs", ignore = false),
+            @Mapping(target = "anmerkungBauratenDateiInputs", ignore = false),
+            @Mapping(target = "bauratendateiInputs", ignore = false),
         }
     )
     AbfragevarianteBauleitplanverfahrenModel request2Model(
@@ -144,6 +156,9 @@ public interface AbfragevarianteDomainMapper {
             @Mapping(target = "sobonOrientierungswertJahr", ignore = false),
             @Mapping(target = "stammdatenGueltigAb", ignore = false),
             @Mapping(target = "anmerkung", ignore = false),
+            @Mapping(target = "hasBauratenDateiInputs", ignore = false),
+            @Mapping(target = "anmerkungBauratenDateiInputs", ignore = false),
+            @Mapping(target = "bauratendateiInputs", ignore = false),
         }
     )
     AbfragevarianteBaugenehmigungsverfahrenModel request2Model(
@@ -158,6 +173,9 @@ public interface AbfragevarianteDomainMapper {
             @Mapping(target = "sobonOrientierungswertJahr", ignore = false),
             @Mapping(target = "stammdatenGueltigAb", ignore = false),
             @Mapping(target = "anmerkung", ignore = false),
+            @Mapping(target = "hasBauratenDateiInputs", ignore = false),
+            @Mapping(target = "anmerkungBauratenDateiInputs", ignore = false),
+            @Mapping(target = "bauratendateiInputs", ignore = false),
         }
     )
     AbfragevarianteWeiteresVerfahrenModel request2Model(
@@ -170,6 +188,9 @@ public interface AbfragevarianteDomainMapper {
             @Mapping(target = "id", ignore = true),
             @Mapping(target = "lastModifiedDateTime", ignore = true),
             @Mapping(target = "createdDateTime", ignore = true),
+            @Mapping(target = "hasBauratenDateiInputs", ignore = true),
+            @Mapping(target = "anmerkungBauratenDateiInputs", ignore = true),
+            @Mapping(target = "bauratendateiInputs", ignore = true),
             @Mapping(target = "bedarfsmeldungFachreferate", ignore = true),
             @Mapping(target = "ausgeloesterBedarfImBaugebietBeruecksichtigenKita", ignore = true),
             @Mapping(target = "ausgeloesterBedarfMitversorgungImBplanKita", ignore = true),
@@ -193,6 +214,9 @@ public interface AbfragevarianteDomainMapper {
             @Mapping(target = "id", ignore = true),
             @Mapping(target = "lastModifiedDateTime", ignore = true),
             @Mapping(target = "createdDateTime", ignore = true),
+            @Mapping(target = "hasBauratenDateiInputs", ignore = true),
+            @Mapping(target = "anmerkungBauratenDateiInputs", ignore = true),
+            @Mapping(target = "bauratendateiInputs", ignore = true),
             @Mapping(target = "bedarfsmeldungFachreferate", ignore = true),
             @Mapping(target = "ausgeloesterBedarfImBaugebietBeruecksichtigenKita", ignore = true),
             @Mapping(target = "ausgeloesterBedarfMitversorgungImBplanKita", ignore = true),
@@ -216,6 +240,9 @@ public interface AbfragevarianteDomainMapper {
             @Mapping(target = "id", ignore = true),
             @Mapping(target = "lastModifiedDateTime", ignore = true),
             @Mapping(target = "createdDateTime", ignore = true),
+            @Mapping(target = "hasBauratenDateiInputs", ignore = true),
+            @Mapping(target = "anmerkungBauratenDateiInputs", ignore = true),
+            @Mapping(target = "bauratendateiInputs", ignore = true),
             @Mapping(target = "bedarfsmeldungFachreferate", ignore = true),
             @Mapping(target = "ausgeloesterBedarfImBaugebietBeruecksichtigenKita", ignore = true),
             @Mapping(target = "ausgeloesterBedarfMitversorgungImBplanKita", ignore = true),

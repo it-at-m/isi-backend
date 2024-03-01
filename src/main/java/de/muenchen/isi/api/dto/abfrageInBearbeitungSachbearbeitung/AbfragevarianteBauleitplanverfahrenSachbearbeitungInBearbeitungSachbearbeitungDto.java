@@ -5,10 +5,12 @@
 package de.muenchen.isi.api.dto.abfrageInBearbeitungSachbearbeitung;
 
 import de.muenchen.isi.api.validation.NotUnspecified;
+import de.muenchen.isi.domain.model.BauratendateiInputModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 import lombok.Data;
 
@@ -30,4 +32,10 @@ public class AbfragevarianteBauleitplanverfahrenSachbearbeitungInBearbeitungSach
     private LocalDate stammdatenGueltigAb;
 
     private String anmerkung;
+
+    private Boolean hasBauratenDateiInputs;
+
+    private String anmerkungBauratenDateiInputs;
+
+    private List<BauratendateiInputModel> bauratendateiInputs;
 }
