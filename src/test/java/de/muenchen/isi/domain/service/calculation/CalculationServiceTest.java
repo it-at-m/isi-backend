@@ -403,9 +403,6 @@ class CalculationServiceTest {
             List.of(new WohneinheitenProFoerderartProJahrModel())
         );
 
-        final var langfristigerSobonursaechlicherBedarf = new LangfristigerSobonBedarfModel();
-        langfristigerSobonursaechlicherBedarf.setWohneinheiten(List.of(new WohneinheitenProFoerderartProJahrModel()));
-
         Mockito
             .doReturn(langfristigerPlanungsursaechlicherBedarf)
             .when(calculationService)
@@ -422,7 +419,6 @@ class CalculationServiceTest {
 
         final var expected = new BedarfeForAbfragevarianteModel();
         expected.setLangfristigerPlanungsursaechlicherBedarf(langfristigerPlanungsursaechlicherBedarf);
-        expected.setLangfristigerSobonursaechlicherBedarf(langfristigerSobonursaechlicherBedarf);
 
         assertThat(bedarfeForAbfragevariante, is(expected));
 

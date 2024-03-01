@@ -17,7 +17,7 @@ public class SobonFoerdermixWeiteresverfahrenValidatorTest {
         new SobonFoerdermixWeiteresVerfahrenAVSachbearbeitungValidator();
 
     @Test
-    void isValidAV() {
+    void isValidAVSachbearbeitung() {
         AbfragevarianteWeiteresVerfahrenSachbearbeitungInBearbeitungSachbearbeitungDto dto =
             new AbfragevarianteWeiteresVerfahrenSachbearbeitungInBearbeitungSachbearbeitungDto();
 
@@ -39,7 +39,7 @@ public class SobonFoerdermixWeiteresverfahrenValidatorTest {
     }
 
     @Test
-    void isValidAVSachbearbeitung() {
+    void isValidAV() {
         AbfragevarianteWeiteresVerfahrenInBearbeitungSachbearbeitungDto dto =
             new AbfragevarianteWeiteresVerfahrenInBearbeitungSachbearbeitungDto();
 

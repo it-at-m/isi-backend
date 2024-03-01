@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 public class SobonFoerdermixWeiteresVerfahrenAVSachbearbeitungValidator
     implements
         ConstraintValidator<
-            SobonFoerdermixWeiteresverfahrenAVValid,
+            SobonFoerdermixWeiteresVerfahrenAVSachbearbeitungValid,
             AbfragevarianteWeiteresVerfahrenSachbearbeitungInBearbeitungSachbearbeitungDto
         > {
 

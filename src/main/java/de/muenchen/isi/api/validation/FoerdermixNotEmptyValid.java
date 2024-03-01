@@ -8,12 +8,12 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Target({ ElementType.TYPE })
+@Target({ ElementType.FIELD })
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = SobonFoerdermixWeiteresVerfahrenAVSachbearbeitungValidator.class)
+@Constraint(validatedBy = FoerdermixNotEmptyValidator.class)
 @Documented
-public @interface SobonFoerdermixWeiteresVerfahrenAVSachbearbeitungValid {
-    String message() default "Bitte geben Sie einen Födermix für ihre SoBoN-Berechnung an.";
+public @interface FoerdermixNotEmptyValid {
+    String message() default "Es muss ein Fördermix ausgewählt werden.";
 
     Class<?>[] groups() default {};
 

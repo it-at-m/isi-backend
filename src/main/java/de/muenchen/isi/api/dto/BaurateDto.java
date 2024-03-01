@@ -4,6 +4,7 @@
  */
 package de.muenchen.isi.api.dto;
 
+import de.muenchen.isi.api.validation.FoerdermixNotEmptyValid;
 import de.muenchen.isi.api.validation.HasFoerdermixRequiredSum;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
@@ -30,6 +31,7 @@ public class BaurateDto extends BaseEntityDto {
 
     @Valid
     @NotNull
+    @FoerdermixNotEmptyValid
     @HasFoerdermixRequiredSum
     private FoerdermixDto foerdermix;
 }

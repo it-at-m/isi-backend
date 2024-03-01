@@ -207,7 +207,7 @@ public class CalculationService {
 
     /**
      * Die Methode ermittelt den planungsursächlichen {@link LangfristigerBedarfModel} für die im Parameter gegebenen Werte.
-     *
+     * <p>
      * Ist auf Basis der übergebenen Methodenparameter keine Berechnung möglich, so wird der Wert null zurückgegeben.
      *
      * @param bauabschnitte              zum Ermitteln der Bedarfe.
@@ -269,13 +269,13 @@ public class CalculationService {
 
     /**
      * Die Methode ermittelt den SoBoN-ursächlichen {@link LangfristigerBedarfModel} für die im Parameter gegebenen Werte.
-     *
+     * <p>
      * Ist auf Basis der übergebenen Methodenparameter keine Berechnung möglich, so wird der Wert null zurückgegeben.
      *
-     * @param sobonGf SoBoN-ursächliche Geschossfläche in der Abfragevariante.
-     * @param bauabschnitte zum Ermitteln der Bedarfe.
+     * @param sobonGf                    SoBoN-ursächliche Geschossfläche in der Abfragevariante.
+     * @param bauabschnitte              zum Ermitteln der Bedarfe.
      * @param sobonOrientierungswertJahr zur Extraktion der korrekten Sobon-Orientierungswerte.
-     * @param stammdatenGueltigAb zur Extraktion der Stammdaten welche sich nicht auf ein konkretes Jahr der Sobon-Orientierungswerte beziehen.
+     * @param stammdatenGueltigAb        zur Extraktion der Stammdaten welche sich nicht auf ein konkretes Jahr der Sobon-Orientierungswerte beziehen.
      * @return den {@link LangfristigerBedarfModel} oder null falls auf Basis der übergebenen Methodenparameter keine Berechnung möglich ist.
      * @throws CalculationException falls die Stammdaten zur Durchführung der Berechnung nicht geladen werden können.
      */
@@ -354,15 +354,13 @@ public class CalculationService {
         final AbfragevarianteBauleitplanverfahrenModel abfragevarianteBauleitplanverfahren,
         UncertainBoolean isSobonRelevant
     ) {
-        if (
+        return (
             isSobonRelevant == UncertainBoolean.TRUE &&
-            abfragevarianteBauleitplanverfahren.getIsASobonBerechnung() == true &&
+            ObjectUtils.isNotEmpty(abfragevarianteBauleitplanverfahren.getIsASobonBerechnung()) &&
+            abfragevarianteBauleitplanverfahren.getIsASobonBerechnung().booleanValue() == true &&
             ObjectUtils.isNotEmpty(abfragevarianteBauleitplanverfahren.getGfWohnenSobonUrsaechlich()) &&
             ObjectUtils.isNotEmpty(abfragevarianteBauleitplanverfahren.getSobonFoerdermix())
-        ) {
-            return true;
-        }
-        return false;
+        );
     }
 
     public boolean hasRightCoonditionsForLangfristigeSobonBerechnung(
@@ -371,7 +369,8 @@ public class CalculationService {
     ) {
         return (
             isSobonRelevant == UncertainBoolean.TRUE &&
-            abfragevarianteWeiteresVerfahrenModel.getIsASobonBerechnung() == true &&
+            ObjectUtils.isNotEmpty(abfragevarianteWeiteresVerfahrenModel.getIsASobonBerechnung()) &&
+            abfragevarianteWeiteresVerfahrenModel.getIsASobonBerechnung().booleanValue() == true &&
             ObjectUtils.isNotEmpty(abfragevarianteWeiteresVerfahrenModel.getSobonFoerdermix()) &&
             ObjectUtils.isNotEmpty(abfragevarianteWeiteresVerfahrenModel.getGfWohnenSobonUrsaechlich())
         );

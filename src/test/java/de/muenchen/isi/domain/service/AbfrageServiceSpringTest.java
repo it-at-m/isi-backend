@@ -197,6 +197,7 @@ class AbfrageServiceSpringTest {
     void patchAngelegtBauleitplanverfahren()
         throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, FileHandlingFailedException, FileHandlingWithS3FailedException, AbfrageStatusNotAllowedException, UserRoleNotAllowedException, CalculationException, ReportingException {
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
+
         abfrage = this.abfrageService.save(abfrage);
 
         AbfrageAngelegtModel abfrageAngelegt = TestData.createBauleitplanverfahrenAngelegtModel();
@@ -278,6 +279,8 @@ class AbfrageServiceSpringTest {
         );
         abfragevariantePatch.setArtAbfragevariante(ArtAbfrage.BAULEITPLANVERFAHREN);
         abfragevariantePatch.setSobonOrientierungswertJahr(SobonOrientierungswertJahr.JAHR_2017);
+        abfragevariantePatch.setIsASobonBerechnung(false);
+        abfragevariantePatch.setSobonFoerdermix(TestData.createFoerdermixModel());
         abfragevariantePatch.setAnmerkung("Die Anmerkung Bauleitplanverfahren Patch Sachbearbeitung");
         abfragePatch.setAbfragevariantenBauleitplanverfahren(List.of(abfragevariantePatch));
 
@@ -354,6 +357,8 @@ class AbfrageServiceSpringTest {
         );
         abfragevariantePatch.setArtAbfragevariante(ArtAbfrage.WEITERES_VERFAHREN);
         abfragevariantePatch.setSobonOrientierungswertJahr(SobonOrientierungswertJahr.JAHR_2017);
+        abfragevariantePatch.setIsASobonBerechnung(false);
+        abfragevariantePatch.setSobonFoerdermix(TestData.createFoerdermixModel());
         abfragevariantePatch.setAnmerkung("Die Anmerkung WeiteresVerfahren Patch Sachbearbeitung");
         abfragePatch.setAbfragevariantenWeiteresVerfahren(List.of(abfragevariantePatch));
 

@@ -4,7 +4,6 @@
  */
 package de.muenchen.isi.api.dto;
 
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import java.util.List;
 import lombok.Data;
@@ -13,11 +12,9 @@ import org.hibernate.validator.constraints.UniqueElements;
 @Data
 public class FoerdermixDto {
 
-    @NotEmpty
     @Size(max = 255, message = "Es sind maximal {max} Zeichen erlaubt")
     private String bezeichnungJahr;
 
-    @NotEmpty
     @Size(max = 80, message = "Es sind maximal {max} Zeichen erlaubt")
     private String bezeichnung;
 

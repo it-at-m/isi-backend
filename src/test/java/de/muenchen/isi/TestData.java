@@ -212,6 +212,8 @@ public class TestData {
             List.of(WesentlicheRechtsgrundlage.EINFACHER_BEBAUUNGSPLAN_PARAGRAPH_30)
         );
         abfragevariante.setGfWohnenSonderwohnformen(false);
+        abfragevariante.setIsASobonBerechnung(false);
+        abfragevariante.setSobonFoerdermix(createFoerdermixModel());
         abfragevariante.setGfWohnenGesamt(BigDecimal.valueOf(1234.56));
         abfragevariante.setWeSonderwohnformen(false);
         abfragevariante.setWeGesamt(31);
@@ -250,6 +252,8 @@ public class TestData {
             List.of(WesentlicheRechtsgrundlage.EINFACHER_BEBAUUNGSPLAN_PARAGRAPH_30)
         );
         abfragevariante.setGfWohnenSonderwohnformen(false);
+        abfragevariante.setIsASobonBerechnung(false);
+        abfragevariante.setSobonFoerdermix(createFoerdermixModel());
         abfragevariante.setGfWohnenGesamt(BigDecimal.valueOf(1234.56));
         abfragevariante.setWeSonderwohnformen(false);
         abfragevariante.setWeGesamt(31);
@@ -335,7 +339,7 @@ public class TestData {
         return baurate;
     }
 
-    private static FoerdermixModel createFoerdermixModel() {
+    public static FoerdermixModel createFoerdermixModel() {
         final FoerdermixModel foerdermix = new FoerdermixModel();
         FoerderartModel foerderart = new FoerderartModel();
         foerderart.setBezeichnung("AnteilFreifinanzierterGeschosswohnungsbau");
