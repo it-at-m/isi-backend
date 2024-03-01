@@ -264,6 +264,7 @@ public abstract class AbfrageDomainMapper {
             @Mapping(target = "version", ignore = false),
             @Mapping(target = "verortung", ignore = false),
             @Mapping(target = "bauvorhaben", ignore = false),
+            @Mapping(target = "linkEakte", ignore = false),
         }
     )
     public abstract BauleitplanverfahrenModel request2Model(
@@ -332,6 +333,7 @@ public abstract class AbfrageDomainMapper {
             @Mapping(target = "version", ignore = false),
             @Mapping(target = "verortung", ignore = false),
             @Mapping(target = "bauvorhaben", ignore = false),
+            @Mapping(target = "linkEakte", ignore = false),
         }
     )
     public abstract BaugenehmigungsverfahrenModel request2Model(
@@ -400,6 +402,7 @@ public abstract class AbfrageDomainMapper {
             @Mapping(target = "version", ignore = false),
             @Mapping(target = "verortung", ignore = false),
             @Mapping(target = "bauvorhaben", ignore = false),
+            @Mapping(target = "linkEakte", ignore = false),
         }
     )
     public abstract WeiteresVerfahrenModel request2Model(

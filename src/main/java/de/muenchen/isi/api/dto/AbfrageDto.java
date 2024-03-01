@@ -57,4 +57,6 @@ public abstract class AbfrageDto extends BaseEntityDto {
     private String sub;
 
     private String displayName;
+
+    private String linkEakte;
 }

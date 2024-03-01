@@ -81,4 +81,7 @@ public abstract class Abfrage extends BaseEntity {
             ? null
             : EnumUtils.getEnum(ArtAbfrage.class, discriminatorValue.value());
     }
+
+    @Column(length = 8000)
+    private String linkEakte;
 }

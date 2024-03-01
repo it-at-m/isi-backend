@@ -236,18 +236,21 @@ class AbfrageServiceTest {
         abfrage.setId(null);
         abfrage.setSub(null);
         abfrage.setName("hallo");
+        abfrage.setLinkEakte("https://eakte.muenchen.de?E12345");
         abfrage.setStatusAbfrage(StatusAbfrage.OFFEN);
 
         final Bauleitplanverfahren abfrageEntity = new Bauleitplanverfahren();
         abfrageEntity.setId(null);
         abfrageEntity.setSub(sub);
         abfrageEntity.setName("hallo");
+        abfrageEntity.setLinkEakte("https://eakte.muenchen.de?E12345");
         abfrageEntity.setStatusAbfrage(StatusAbfrage.ANGELEGT);
 
         final Bauleitplanverfahren saveResult = new Bauleitplanverfahren();
         saveResult.setId(uuid);
         saveResult.setSub(sub);
         saveResult.setName("hallo");
+        saveResult.setLinkEakte("https://eakte.muenchen.de?E12345");
         saveResult.setStatusAbfrage(StatusAbfrage.ANGELEGT);
 
         Mockito.when(this.authenticationUtils.getUserSub()).thenReturn(sub);
@@ -264,6 +267,7 @@ class AbfrageServiceTest {
         expected.setSub(saveResult.getSub());
         expected.setStatusAbfrage(abfrage.getStatusAbfrage());
         expected.setName(abfrage.getName());
+        expected.setLinkEakte("https://eakte.muenchen.de?E12345");
 
         assertThat(result, is(expected));
         Mockito.verify(this.abfrageRepository, Mockito.times(1)).saveAndFlush(abfrageEntity);
@@ -307,6 +311,7 @@ class AbfrageServiceTest {
         final BauleitplanverfahrenAngelegtModel requestModel = new BauleitplanverfahrenAngelegtModel();
         requestModel.setArtAbfrage(ArtAbfrage.BAULEITPLANVERFAHREN);
         requestModel.setName("hallo");
+        requestModel.setLinkEakte("https://eakte.muenchen.de?E12345");
 
         final AbfragevarianteBauleitplanverfahrenAngelegtModel abfragevarianteRequestModel =
             new AbfragevarianteBauleitplanverfahrenAngelegtModel();
@@ -349,6 +354,7 @@ class AbfrageServiceTest {
         final BaugenehmigungsverfahrenAngelegtModel requestModel = new BaugenehmigungsverfahrenAngelegtModel();
         requestModel.setArtAbfrage(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN);
         requestModel.setName("hallo");
+        requestModel.setLinkEakte("https://eakte.muenchen.de?E12345");
 
         final AbfragevarianteBaugenehmigungsverfahrenAngelegtModel abfragevarianteRequestModel =
             new AbfragevarianteBaugenehmigungsverfahrenAngelegtModel();
@@ -359,6 +365,7 @@ class AbfrageServiceTest {
         final BaugenehmigungsverfahrenModel model = new BaugenehmigungsverfahrenModel();
         model.setId(abfrageId);
         model.setStatusAbfrage(StatusAbfrage.ANGELEGT);
+        model.setLinkEakte("https://eakte.muenchen.de?E12345");
 
         final BaugenehmigungsverfahrenModel abfrageModelMapped =
             this.abfrageDomainMapper.request2Model(requestModel, model);
@@ -391,6 +398,7 @@ class AbfrageServiceTest {
         final WeiteresVerfahrenAngelegtModel requestModel = new WeiteresVerfahrenAngelegtModel();
         requestModel.setArtAbfrage(ArtAbfrage.WEITERES_VERFAHREN);
         requestModel.setName("hallo");
+        requestModel.setLinkEakte("https://eakte.muenchen.de?E12345");
 
         final AbfragevarianteWeiteresVerfahrenAngelegtModel abfragevarianteRequestModel =
             new AbfragevarianteWeiteresVerfahrenAngelegtModel();
@@ -542,6 +550,7 @@ class AbfrageServiceTest {
         final var requestModel = new BauleitplanverfahrenInBearbeitungSachbearbeitungModel();
         requestModel.setVersion(0L);
         requestModel.setArtAbfrage(ArtAbfrage.BAULEITPLANVERFAHREN);
+        requestModel.setLinkEakte("https://eakte.muenchen.de?E12345");
         requestModel.setVerortung(abfrageVerortung);
         requestModel.setBauvorhaben(bauvorhabenId);
         final var abfragevarianteSachbearbeitung =
@@ -558,6 +567,7 @@ class AbfrageServiceTest {
         entityInDb.setVersion(0L);
         entityInDb.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
         entityInDb.setName("hallo");
+        entityInDb.setLinkEakte("https://eakte.muenchen.de?E12345");
 
         Mockito.when(this.abfrageRepository.findById(entityInDb.getId())).thenReturn(Optional.of(entityInDb));
 
@@ -583,6 +593,7 @@ class AbfrageServiceTest {
         entityToSave.setVersion(0L);
         entityToSave.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
         entityToSave.setName("hallo");
+        entityToSave.setLinkEakte("https://eakte.muenchen.de?E12345");
         entityToSave.setVerortung(abfrageEntityVerortung);
         entityToSave.setBauvorhaben(bauvorhabenEntity);
         final var abfragevariante1ToSave = new AbfragevarianteBauleitplanverfahren();
@@ -597,6 +608,7 @@ class AbfrageServiceTest {
         entitySaved.setVersion(1L);
         entitySaved.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
         entitySaved.setName("hallo");
+        entitySaved.setLinkEakte("https://eakte.muenchen.de?E12345");
         entitySaved.setVerortung(abfrageEntityVerortung);
         entitySaved.setBauvorhaben(bauvorhabenEntity);
         final var abfragevariante1Saved = new AbfragevarianteBauleitplanverfahren();
@@ -621,6 +633,7 @@ class AbfrageServiceTest {
         expected.setVersion(1L);
         expected.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
         expected.setName("hallo");
+        expected.setLinkEakte("https://eakte.muenchen.de?E12345");
         expected.setVerortung(abfrageVerortung);
         final var abfragevariante1Expected = new AbfragevarianteBauleitplanverfahrenModel();
         abfragevariante1Expected.setArtAbfragevariante(ArtAbfrage.BAULEITPLANVERFAHREN);
@@ -658,6 +671,7 @@ class AbfrageServiceTest {
         final var requestModel = new BaugenehmigungsverfahrenInBearbeitungSachbearbeitungModel();
         requestModel.setVersion(0L);
         requestModel.setArtAbfrage(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN);
+        requestModel.setLinkEakte("https://eakte.muenchen.de?E12345");
         requestModel.setVerortung(abfrageVerortung);
         requestModel.setBauvorhaben(bauvorhabenId);
         final var abfragevarianteSachbearbeitung =
@@ -675,6 +689,7 @@ class AbfrageServiceTest {
         entityInDb.setVersion(0L);
         entityInDb.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
         entityInDb.setName("hallo");
+        entityInDb.setLinkEakte("https://eakte.muenchen.de?E12345");
 
         Mockito.when(this.abfrageRepository.findById(entityInDb.getId())).thenReturn(Optional.of(entityInDb));
 
@@ -700,6 +715,7 @@ class AbfrageServiceTest {
         entityToSave.setVersion(0L);
         entityToSave.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
         entityToSave.setName("hallo");
+        entityToSave.setLinkEakte("https://eakte.muenchen.de?E12345");
         entityToSave.setVerortung(abfrageEntityVerortung);
         entityToSave.setBauvorhaben(bauvorhabenEntity);
         final var abfragevariante1ToSave = new AbfragevarianteBaugenehmigungsverfahren();
@@ -713,6 +729,7 @@ class AbfrageServiceTest {
         entitySaved.setVersion(1L);
         entitySaved.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
         entitySaved.setName("hallo");
+        entitySaved.setLinkEakte("https://eakte.muenchen.de?E12345");
         entitySaved.setVerortung(abfrageEntityVerortung);
         entitySaved.setBauvorhaben(bauvorhabenEntity);
         final var abfragevariante1Saved = new AbfragevarianteBaugenehmigungsverfahren();
@@ -736,6 +753,7 @@ class AbfrageServiceTest {
         expected.setVersion(1L);
         expected.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
         expected.setName("hallo");
+        expected.setLinkEakte("https://eakte.muenchen.de?E12345");
         expected.setVerortung(abfrageVerortung);
         final var abfragevariante1Expected = new AbfragevarianteBaugenehmigungsverfahrenModel();
         abfragevariante1Expected.setArtAbfragevariante(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN);
@@ -772,6 +790,7 @@ class AbfrageServiceTest {
         final var requestModel = new WeiteresVerfahrenInBearbeitungSachbearbeitungModel();
         requestModel.setVersion(0L);
         requestModel.setArtAbfrage(ArtAbfrage.WEITERES_VERFAHREN);
+        requestModel.setLinkEakte("https://eakte.muenchen.de?E12345");
         requestModel.setVerortung(abfrageVerortung);
         requestModel.setBauvorhaben(bauvorhabenId);
         final var abfragevarianteSachbearbeitung =
@@ -787,6 +806,7 @@ class AbfrageServiceTest {
         entityInDb.setVersion(0L);
         entityInDb.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
         entityInDb.setName("hallo");
+        entityInDb.setLinkEakte("https://eakte.muenchen.de?E12345");
 
         Mockito.when(this.abfrageRepository.findById(entityInDb.getId())).thenReturn(Optional.of(entityInDb));
 
@@ -812,6 +832,7 @@ class AbfrageServiceTest {
         entityToSave.setVersion(0L);
         entityToSave.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
         entityToSave.setName("hallo");
+        entityToSave.setLinkEakte("https://eakte.muenchen.de?E12345");
         entityToSave.setVerortung(abfrageEntityVerortung);
         entityToSave.setBauvorhaben(bauvorhabenEntity);
         final var abfragevariante1ToSave = new AbfragevarianteWeiteresVerfahren();
@@ -825,6 +846,7 @@ class AbfrageServiceTest {
         entitySaved.setVersion(1L);
         entitySaved.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
         entitySaved.setName("hallo");
+        entitySaved.setLinkEakte("https://eakte.muenchen.de?E12345");
         entitySaved.setVerortung(abfrageEntityVerortung);
         entitySaved.setBauvorhaben(bauvorhabenEntity);
         final var abfragevariante1Saved = new AbfragevarianteWeiteresVerfahren();
@@ -848,6 +870,7 @@ class AbfrageServiceTest {
         expected.setVersion(1L);
         expected.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
         expected.setName("hallo");
+        expected.setLinkEakte("https://eakte.muenchen.de?E12345");
         expected.setVerortung(abfrageVerortung);
         final var abfragevariante1Expected = new AbfragevarianteWeiteresVerfahrenModel();
         abfragevariante1Expected.setArtAbfragevariante(ArtAbfrage.WEITERES_VERFAHREN);

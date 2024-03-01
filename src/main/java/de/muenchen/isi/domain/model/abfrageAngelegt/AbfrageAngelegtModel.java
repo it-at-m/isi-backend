@@ -16,4 +16,6 @@ public abstract class AbfrageAngelegtModel {
     private String anmerkung;
 
     private UUID bauvorhaben;
+
+    private String linkEakte;
 }
