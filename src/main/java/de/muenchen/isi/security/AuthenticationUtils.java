@@ -21,7 +21,6 @@ public class AuthenticationUtils {
 
     public static final String ROLE_ADMIN = "admin";
     public static final String ROLE_ABFRAGEERSTELLUNG = "abfrageerstellung";
-    public static final String ROLE_SACHBEARBEITUNG = "sachbearbeitung";
     public static final String ROLE_ANWENDER = "anwender";
     private static final String UNAUTHENTICATED_USER = "unauthenticated";
     private static final String TOKEN_USER_NAME = "username";
@@ -188,7 +187,7 @@ public class AuthenticationUtils {
         return roles;
     }
 
-    public boolean isRoleAnwender() {
+    public boolean isOnlyRoleAnwender() {
         return getUserRoles().stream().allMatch(s -> s.contains(ROLE_ANWENDER));
     }
 
