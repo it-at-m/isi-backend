@@ -1,5 +1,6 @@
 package de.muenchen.isi.security;
 
+import de.muenchen.isi.infrastructure.entity.common.BearbeitendePerson;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -22,8 +23,12 @@ public class AuthenticationUtils {
     public static final String ROLE_ABFRAGEERSTELLUNG = "abfrageerstellung";
     public static final String ROLE_SACHBEARBEITUNG = "sachbearbeitung";
     public static final String ROLE_ANWENDER = "anwender";
-    private static final String NAME_UNAUTHENTICATED_USER = "unauthenticated";
+    private static final String UNAUTHENTICATED_USER = "unauthenticated";
     private static final String TOKEN_USER_NAME = "username";
+    private static final String TOKEN_SURNAME = "surname";
+    private static final String TOKEN_GIVENNAME = "givenname";
+    private static final String TOKEN_EMAIL = "email";
+    private static final String TOKEN_DEPARTMENT = "department";
     private static final String TOKEN_USER_SUB = "sub";
     private static final String SUB_UNAUTHENTICATED_USER = "123456789";
     private static final String TOKEN_RESOURCE_ACCESS = "resource_access";
@@ -65,7 +70,79 @@ public class AuthenticationUtils {
                 username = jwt.getClaimAsString(TOKEN_USER_NAME);
             }
         }
-        return StringUtils.isNotBlank(username) ? username : NAME_UNAUTHENTICATED_USER;
+        return StringUtils.isNotBlank(username) ? username : UNAUTHENTICATED_USER;
+    }
+
+    /**
+     * Die Methode extrahiert den Nachnamen aus dem {@link Jwt} der {@link Authentication} des {@link SecurityContextHolder}.
+     *
+     * @return den Nachnamen oder einen Platzhalter fall kein {@link Jwt} verfügbar
+     */
+    public String getSurname() {
+        String surname = null;
+        final var authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (!ObjectUtils.isEmpty(authentication)) {
+            final var principal = authentication.getPrincipal();
+            if (Objects.equals(Jwt.class, principal.getClass())) {
+                final var jwt = (Jwt) principal;
+                surname = jwt.getClaimAsString(TOKEN_SURNAME);
+            }
+        }
+        return StringUtils.isNotBlank(surname) ? surname : UNAUTHENTICATED_USER;
+    }
+
+    /**
+     * Die Methode extrahiert den Vornamen aus dem {@link Jwt} der {@link Authentication} des {@link SecurityContextHolder}.
+     *
+     * @return die vorname oder einen Platzhalter fall kein {@link Jwt} verfügbar
+     */
+    public String getGivenname() {
+        String givenname = null;
+        final var authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (!ObjectUtils.isEmpty(authentication)) {
+            final var principal = authentication.getPrincipal();
+            if (Objects.equals(Jwt.class, principal.getClass())) {
+                final var jwt = (Jwt) principal;
+                givenname = jwt.getClaimAsString(TOKEN_GIVENNAME);
+            }
+        }
+        return StringUtils.isNotBlank(givenname) ? givenname : UNAUTHENTICATED_USER;
+    }
+
+    /**
+     * Die Methode extrahiert die Emailadresse aus dem {@link Jwt} der {@link Authentication} des {@link SecurityContextHolder}.
+     *
+     * @return die Emailadresse oder einen Platzhalter fall kein {@link Jwt} verfügbar
+     */
+    public String getEmail() {
+        String email = null;
+        final var authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (!ObjectUtils.isEmpty(authentication)) {
+            final var principal = authentication.getPrincipal();
+            if (Objects.equals(Jwt.class, principal.getClass())) {
+                final var jwt = (Jwt) principal;
+                email = jwt.getClaimAsString(TOKEN_EMAIL);
+            }
+        }
+        return StringUtils.isNotBlank(email) ? email : UNAUTHENTICATED_USER;
+    }
+
+    /**
+     * Die Methode extrahiert die Organisationseinheit aus dem {@link Jwt} der {@link Authentication} des {@link SecurityContextHolder}.
+     *
+     * @return die Organisationseinheit oder einen Platzhalter falls kein {@link Jwt} verfügbar
+     */
+    public String getOrganisationseinheit() {
+        String department = null;
+        final var authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (!ObjectUtils.isEmpty(authentication)) {
+            final var principal = authentication.getPrincipal();
+            if (Objects.equals(Jwt.class, principal.getClass())) {
+                final var jwt = (Jwt) principal;
+                department = jwt.getClaimAsString(TOKEN_DEPARTMENT);
+            }
+        }
+        return StringUtils.isNotBlank(department) ? department : UNAUTHENTICATED_USER;
     }
 
     /**
@@ -113,5 +190,23 @@ public class AuthenticationUtils {
 
     public boolean isRoleAnwender() {
         return getUserRoles().stream().allMatch(s -> s.contains(ROLE_ANWENDER));
+    }
+
+    /**
+     * Die Methode erstellt die zu {@link BearbeitendePerson} mit den aus dem {@link Jwt} der {@link Authentication}
+     * des {@link SecurityContextHolder} extrahierten Informationen.
+     *
+     * @return die zu {@link BearbeitendePerson} oder einen Platzhalter falls kein {@link Jwt} verfügbar
+     */
+    public BearbeitendePerson getBearbeitendePerson() {
+        final var bearbeitendePerson = new BearbeitendePerson();
+        final var surname = this.getSurname();
+        final var givenname = this.getGivenname();
+        bearbeitendePerson.setName(givenname + " " + surname);
+        final var email = this.getEmail();
+        bearbeitendePerson.setEmail(email);
+        final var organisationseinheit = this.getOrganisationseinheit();
+        bearbeitendePerson.setOrganisationseinheit(organisationseinheit);
+        return bearbeitendePerson;
     }
 }
