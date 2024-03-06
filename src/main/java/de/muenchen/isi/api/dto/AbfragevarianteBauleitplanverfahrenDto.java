@@ -4,7 +4,6 @@
  */
 package de.muenchen.isi.api.dto;
 
-import de.muenchen.isi.domain.model.BauratendateiInputModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.WesentlicheRechtsgrundlage;
 import java.math.BigDecimal;
@@ -69,7 +68,7 @@ public class AbfragevarianteBauleitplanverfahrenDto extends AbfragevarianteDto {
 
     private String anmerkungBauratenDateiInputs;
 
-    private List<BauratendateiInputModel> bauratendateiInputs;
+    private List<BauratendateiInputDto> bauratendateiInputs;
 
     private List<BedarfsmeldungDto> bedarfsmeldungFachreferate;
 

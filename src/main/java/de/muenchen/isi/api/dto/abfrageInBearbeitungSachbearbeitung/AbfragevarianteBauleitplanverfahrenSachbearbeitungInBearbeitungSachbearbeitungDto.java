@@ -4,8 +4,8 @@
  */
 package de.muenchen.isi.api.dto.abfrageInBearbeitungSachbearbeitung;
 
+import de.muenchen.isi.api.dto.BauratendateiInputDto;
 import de.muenchen.isi.api.validation.NotUnspecified;
-import de.muenchen.isi.domain.model.BauratendateiInputModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
 import jakarta.validation.constraints.NotNull;
@@ -33,9 +33,10 @@ public class AbfragevarianteBauleitplanverfahrenSachbearbeitungInBearbeitungSach
 
     private String anmerkung;
 
+    @NotNull
     private Boolean hasBauratenDateiInputs;
 
     private String anmerkungBauratenDateiInputs;
 
-    private List<BauratendateiInputModel> bauratendateiInputs;
+    private List<BauratendateiInputDto> bauratendateiInputs;
 }
