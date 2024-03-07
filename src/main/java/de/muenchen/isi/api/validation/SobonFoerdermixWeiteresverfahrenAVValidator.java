@@ -4,7 +4,6 @@ import de.muenchen.isi.api.dto.abfrageInBearbeitungSachbearbeitung.Abfragevarian
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import lombok.NoArgsConstructor;
-import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -21,10 +20,13 @@ public class SobonFoerdermixWeiteresverfahrenAVValidator
         AbfragevarianteWeiteresVerfahrenInBearbeitungSachbearbeitungDto abfragevarianteDto,
         ConstraintValidatorContext constraintValidatorContext
     ) {
-        boolean isBerechnung = abfragevarianteDto.getIsASobonBerechnung();
-        boolean isFoerdermixNotEmpty = ObjectUtils.isNotEmpty(abfragevarianteDto.getSobonFoerdermix());
-        boolean isFoerdermixEmpty = ObjectUtils.isEmpty(abfragevarianteDto.getSobonFoerdermix());
-
-        return (isBerechnung && isFoerdermixNotEmpty) || (!isBerechnung && isFoerdermixEmpty);
+        boolean isSobonBerechnung =
+            abfragevarianteDto.getIsASobonBerechnung() != null && abfragevarianteDto.getIsASobonBerechnung();
+        boolean isFoerdermixEmtpy = abfragevarianteDto.getSobonFoerdermix() == null;
+        if (isSobonBerechnung) {
+            return !isFoerdermixEmtpy;
+        } else {
+            return isFoerdermixEmtpy;
+        }
     }
 }
