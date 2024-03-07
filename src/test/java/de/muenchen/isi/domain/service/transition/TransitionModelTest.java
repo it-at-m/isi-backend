@@ -313,7 +313,7 @@ public class TransitionModelTest {
         thirdPossibleTransition.setIndex(5);
         thirdPossibleTransition.setButtonName("ABFRAGE SCHLIEßEN");
         thirdPossibleTransition.setUrl("erledigt-ohne-fachreferat");
-        thirdPossibleTransition.setDialogText("Die Abfrage wird abgeschlossen. Sie können eine Anmerkung hinzufügen.");
+        thirdPossibleTransition.setDialogText("Die Abfrage wird abgeschlossen.");
 
         expected.add(thirdPossibleTransition);
 
@@ -368,7 +368,7 @@ public class TransitionModelTest {
         thirdPossibleTransition.setIndex(5);
         thirdPossibleTransition.setButtonName("ABFRAGE SCHLIEßEN");
         thirdPossibleTransition.setUrl("erledigt-ohne-fachreferat");
-        thirdPossibleTransition.setDialogText("Die Abfrage wird abgeschlossen. Sie können eine Anmerkung hinzufügen.");
+        thirdPossibleTransition.setDialogText("Die Abfrage wird abgeschlossen.");
         expected.add(thirdPossibleTransition);
 
         TransitionModel fourthPossibleTransition = new TransitionModel();
