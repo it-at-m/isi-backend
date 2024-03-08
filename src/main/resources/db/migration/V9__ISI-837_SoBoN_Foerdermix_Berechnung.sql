@@ -36,8 +36,8 @@ ALTER TABLE isidbuser.abfragevariante_weiteres_verfahren_foerderarten
     OWNER TO isidbuser;
 
 ALTER TABLE ONLY isidbuser.abfragevariante_bauleitplanverfahren_foerderarten
-    ADD CONSTRAINT fks1ic7g4qf4kopwmn6562k4131 FOREIGN KEY (abfragevariante_bauleitplanverfahren_id) REFERENCES isidbuser.abfragevariante_bauleitplanverfahren (abfragevariante_bauleitplanverfahren_id);
+    ADD CONSTRAINT fks1ic7g4qf4kopwmn6562k4131 FOREIGN KEY (abfragevariante_bauleitplanverfahren_id) REFERENCES isidbuser.abfragevariante_bauleitplanverfahren (abfragevarianten_bauleitplanverfahren_id);
 
 ALTER TABLE ONLY isidbuser.abfragevariante_weiteres_verfahren_foerderarten
-    ADD CONSTRAINT fkh31llfapa4es52vrwzdl6w9ae FOREIGN KEY (abfragevariante_weiteres_verfahren_id) REFERENCES isidbuser.abfragevariante_weiteres_verfahren (abfragevariante_weiteres_verfahren_id);
+    ADD CONSTRAINT fkh31llfapa4es52vrwzdl6w9ae FOREIGN KEY (abfragevariante_weiteres_verfahren_id) REFERENCES isidbuser.abfragevariante_weiteres_verfahren (abfragevarianten_weiteres_verfahren_id);
 END;
