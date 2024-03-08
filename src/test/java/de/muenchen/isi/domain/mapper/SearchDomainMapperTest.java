@@ -419,4 +419,31 @@ public class SearchDomainMapperTest {
 
         Mockito.verify(this.koordinatenService, Mockito.times(0)).getMultiPolygonCentroid(Mockito.any());
     }
+
+    @Test
+    void getUmgriffFromVerortungNull() {
+        assertThat(searchDomainMapper.getUmgriffFromVerortung(null), is(nullValue()));
+    }
+
+    @Test
+    void getUmgriffFromVerortungMultipolygonNull() {
+        VerortungMultiPolygon verortung = new VerortungMultiPolygon();
+        verortung.setMultiPolygon(null);
+        assertThat(searchDomainMapper.getUmgriffFromVerortung(null), is(nullValue()));
+    }
+
+    @Test
+    void getUmgriffFromVerortung() {
+        VerortungMultiPolygon verortung = new VerortungMultiPolygon();
+        MultiPolygonGeometry multiPolygon = new MultiPolygonGeometry();
+        multiPolygon.setType("MultiPolygon");
+        multiPolygon.setCoordinates(List.of(List.of(List.of(List.of(BigDecimal.TEN, BigDecimal.ONE)))));
+        verortung.setMultiPolygon(multiPolygon);
+
+        MultiPolygonGeometryModel expected = new MultiPolygonGeometryModel();
+        expected.setType("MultiPolygon");
+        expected.setCoordinates(List.of(List.of(List.of(List.of(BigDecimal.TEN, BigDecimal.ONE)))));
+
+        assertThat(searchDomainMapper.getUmgriffFromVerortung(verortung), is(expected));
+    }
 }
