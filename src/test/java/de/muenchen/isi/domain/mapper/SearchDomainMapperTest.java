@@ -5,6 +5,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 
 import de.muenchen.isi.domain.exception.GeometryOperationFailedException;
+import de.muenchen.isi.domain.model.common.MultiPolygonGeometryModel;
 import de.muenchen.isi.domain.model.common.WGS84Model;
 import de.muenchen.isi.domain.model.search.response.AbfrageSearchResultModel;
 import de.muenchen.isi.domain.model.search.response.BauvorhabenSearchResultModel;
@@ -44,7 +45,7 @@ public class SearchDomainMapperTest {
     @Mock
     private KoordinatenService koordinatenService;
 
-    private SearchDomainMapper searchDomainMapper = new SearchDomainMapperImpl();
+    private final SearchDomainMapper searchDomainMapper = new SearchDomainMapperImpl();
 
     @BeforeEach
     public void beforeEach() throws NoSuchFieldException, IllegalAccessException {
@@ -57,7 +58,7 @@ public class SearchDomainMapperTest {
     }
 
     @Test
-    void testAfterEntity2BauvorhabenSearchResultModel() {
+    void afterEntity2BauvorhabenSearchResultModelAdresse() {
         // Mock-Coordinate erstellen
         Wgs84 mockCoordinate = new Wgs84();
         mockCoordinate.setLongitude(10.0);
@@ -89,6 +90,66 @@ public class SearchDomainMapperTest {
             .verify(this.koordinatenDomainMapper, Mockito.times(1))
             .entity2Model(bauvorhaben.getAdresse().getCoordinate());
         assertThat(model.getCoordinate(), is(mockCoordinateModel));
+    }
+
+    @Test
+    void afterEntity2BauvorhabenSearchResultModelVerortung() {
+        final var bauvorhaben = new Bauvorhaben();
+
+        VerortungMultiPolygon verortung = new VerortungMultiPolygon();
+        MultiPolygonGeometry multiPolygon = new MultiPolygonGeometry();
+        multiPolygon.setType("MultiPolygon");
+        multiPolygon.setCoordinates(List.of(List.of(List.of(List.of(BigDecimal.TEN, BigDecimal.ONE)))));
+        verortung.setMultiPolygon(multiPolygon);
+        bauvorhaben.setVerortung(verortung);
+
+        BauvorhabenSearchResultModel model = new BauvorhabenSearchResultModel();
+
+        BauvorhabenSearchResultModel expected = new BauvorhabenSearchResultModel();
+        MultiPolygonGeometryModel multiPolygonModel = new MultiPolygonGeometryModel();
+        multiPolygonModel.setType("MultiPolygon");
+        multiPolygonModel.setCoordinates(List.of(List.of(List.of(List.of(BigDecimal.TEN, BigDecimal.ONE)))));
+        expected.setUmgriff(multiPolygonModel);
+
+        searchDomainMapper.afterMappingEntity2SearchResultModel(bauvorhaben, model);
+
+        assertThat(expected, is(model));
+    }
+
+    @Test
+    void afterEntity2BauvorhabenSearchResultModelVerortungNull() {
+        final var bauvorhaben = new Bauvorhaben();
+        bauvorhaben.setId(UUID.randomUUID());
+
+        bauvorhaben.setVerortung(null);
+
+        BauvorhabenSearchResultModel model = new BauvorhabenSearchResultModel();
+        model.setId(bauvorhaben.getId());
+
+        BauvorhabenSearchResultModel expected = new BauvorhabenSearchResultModel();
+        expected.setUmgriff(null);
+
+        searchDomainMapper.afterMappingEntity2SearchResultModel(bauvorhaben, model);
+
+        assertThat(expected, is(model));
+    }
+
+    @Test
+    void afterEntity2BauvorhabenSearchResultModelMultiPolygonNull() {
+        final var bauvorhaben = new Bauvorhaben();
+
+        VerortungMultiPolygon verortung = new VerortungMultiPolygon();
+        verortung.setMultiPolygon(null);
+        bauvorhaben.setVerortung(verortung);
+
+        BauvorhabenSearchResultModel model = new BauvorhabenSearchResultModel();
+
+        BauvorhabenSearchResultModel expected = new BauvorhabenSearchResultModel();
+        expected.setUmgriff(null);
+
+        searchDomainMapper.afterMappingEntity2SearchResultModel(bauvorhaben, model);
+
+        assertThat(expected, is(model));
     }
 
     @Test
