@@ -2,7 +2,6 @@ package de.muenchen.isi.domain.mapper;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
 
 import de.muenchen.isi.domain.exception.GeometryOperationFailedException;
 import de.muenchen.isi.domain.model.common.MultiPolygonGeometryModel;
@@ -11,7 +10,6 @@ import de.muenchen.isi.domain.model.search.response.AbfrageSearchResultModel;
 import de.muenchen.isi.domain.model.search.response.BauvorhabenSearchResultModel;
 import de.muenchen.isi.domain.model.search.response.InfrastruktureinrichtungSearchResultModel;
 import de.muenchen.isi.domain.service.KoordinatenService;
-import de.muenchen.isi.infrastructure.entity.Baugenehmigungsverfahren;
 import de.muenchen.isi.infrastructure.entity.Bauleitplanverfahren;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
 import de.muenchen.isi.infrastructure.entity.common.Adresse;
@@ -25,7 +23,6 @@ import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -54,11 +51,11 @@ public class SearchDomainMapperTest {
         field = searchDomainMapper.getClass().getSuperclass().getDeclaredField("koordinatenService");
         field.setAccessible(true);
         field.set(searchDomainMapper, koordinatenService);
+        Mockito.reset(koordinatenService);
     }
 
     @Test
     void afterEntity2BauvorhabenSearchResultModelAdresse() throws GeometryOperationFailedException {
-        // Mock-Coordinate erstellen
         Wgs84 mockCoordinate = new Wgs84();
         mockCoordinate.setLongitude(10.0);
         mockCoordinate.setLatitude(20.0);
@@ -67,22 +64,23 @@ public class SearchDomainMapperTest {
         mockCoordinateModel.setLongitude(10.0);
         mockCoordinateModel.setLatitude(20.0);
 
-        // Mocks für Bauvorhaben und Adresse erstellen
         final var bauvorhaben = new Bauvorhaben();
-        bauvorhaben.setId(UUID.randomUUID());
 
         Adresse adresse = new Adresse();
         adresse.setCoordinate(mockCoordinate);
         bauvorhaben.setAdresse(adresse);
 
-        // Mock-Model erstellen
         BauvorhabenSearchResultModel model = new BauvorhabenSearchResultModel();
+
+        BauvorhabenSearchResultModel expected = new BauvorhabenSearchResultModel();
+        expected.setCoordinate(mockCoordinateModel);
+        expected.setUmgriff(null);
 
         // Test der Methode
         searchDomainMapper.afterMappingEntity2SearchResultModel(bauvorhaben, model);
 
         Mockito.verify(this.koordinatenService, Mockito.times(0)).getMultiPolygonCentroid(Mockito.any());
-        assertThat(model.getCoordinate(), is(mockCoordinateModel));
+        assertThat(model, is(expected));
     }
 
     @Test
@@ -118,7 +116,7 @@ public class SearchDomainMapperTest {
     }
 
     @Test
-    void afterEntity2BauvorhabenSearchResultModelVerortungNull() throws GeometryOperationFailedException {
+    void afterEntity2BauvorhabenSearchResultModelAdresseNullVerortungNull() throws GeometryOperationFailedException {
         final var bauvorhaben = new Bauvorhaben();
 
         bauvorhaben.setVerortung(null);
@@ -126,6 +124,7 @@ public class SearchDomainMapperTest {
         BauvorhabenSearchResultModel model = new BauvorhabenSearchResultModel();
 
         BauvorhabenSearchResultModel expected = new BauvorhabenSearchResultModel();
+        expected.setCoordinate(null);
         expected.setUmgriff(null);
 
         searchDomainMapper.afterMappingEntity2SearchResultModel(bauvorhaben, model);
@@ -159,25 +158,21 @@ public class SearchDomainMapperTest {
         mockCoordinate.setLongitude(10.0);
         mockCoordinate.setLatitude(20.0);
 
-        // Mock-Coordinate erstellen
         WGS84Model mockCoordinateModel = new WGS84Model();
         mockCoordinateModel.setLongitude(10.0);
         mockCoordinateModel.setLatitude(20.0);
 
-        // Mocks für Bauvorhaben und Adresse erstellen
         final var infrastruktureinrichtung = new Kinderkrippe();
 
         Adresse adresse = new Adresse();
         adresse.setCoordinate(mockCoordinate);
         infrastruktureinrichtung.setAdresse(adresse);
 
-        // Mock-Model erstellen
         InfrastruktureinrichtungSearchResultModel model = new InfrastruktureinrichtungSearchResultModel();
 
         InfrastruktureinrichtungSearchResultModel expected = new InfrastruktureinrichtungSearchResultModel();
         expected.setCoordinate(mockCoordinateModel);
 
-        // Test der Methode
         searchDomainMapper.afterMappingEntity2SearchResultModel(infrastruktureinrichtung, model);
 
         assertThat(model, is(expected));
@@ -190,7 +185,6 @@ public class SearchDomainMapperTest {
         mockCoordinateModel.setLongitude(10.0);
         mockCoordinateModel.setLatitude(20.0);
 
-        // Mocks für Bauvorhaben und Adresse erstellen
         final var infrastruktureinrichtung = new Kinderkrippe();
 
         VerortungPoint verortung = new VerortungPoint();
@@ -202,13 +196,11 @@ public class SearchDomainMapperTest {
         verortung.setPoint(pointGeometry);
         infrastruktureinrichtung.setVerortung(verortung);
 
-        // Mock-Model erstellen
         InfrastruktureinrichtungSearchResultModel model = new InfrastruktureinrichtungSearchResultModel();
 
         InfrastruktureinrichtungSearchResultModel expected = new InfrastruktureinrichtungSearchResultModel();
         expected.setCoordinate(mockCoordinateModel);
 
-        // Test der Methode
         searchDomainMapper.afterMappingEntity2SearchResultModel(infrastruktureinrichtung, model);
 
         assertThat(model, is(expected));
@@ -221,17 +213,14 @@ public class SearchDomainMapperTest {
         mockCoordinateModel.setLongitude(10.0);
         mockCoordinateModel.setLatitude(20.0);
 
-        // Mocks für Bauvorhaben und Adresse erstellen
         final var infrastruktureinrichtung = new Kinderkrippe();
         infrastruktureinrichtung.setVerortung(null);
 
-        // Mock-Model erstellen
         InfrastruktureinrichtungSearchResultModel model = new InfrastruktureinrichtungSearchResultModel();
 
         InfrastruktureinrichtungSearchResultModel expected = new InfrastruktureinrichtungSearchResultModel();
         expected.setCoordinate(null);
 
-        // Test der Methode
         searchDomainMapper.afterMappingEntity2SearchResultModel(infrastruktureinrichtung, model);
 
         assertThat(model, is(expected));
@@ -244,61 +233,23 @@ public class SearchDomainMapperTest {
         mockCoordinateModel.setLongitude(10.0);
         mockCoordinateModel.setLatitude(20.0);
 
-        // Mocks für Bauvorhaben und Adresse erstellen
         final var infrastruktureinrichtung = new Kinderkrippe();
         VerortungPoint verortung = new VerortungPoint();
         verortung.setPoint(null);
         infrastruktureinrichtung.setVerortung(verortung);
 
-        // Mock-Model erstellen
         InfrastruktureinrichtungSearchResultModel model = new InfrastruktureinrichtungSearchResultModel();
 
         InfrastruktureinrichtungSearchResultModel expected = new InfrastruktureinrichtungSearchResultModel();
         expected.setCoordinate(null);
 
-        // Test der Methode
         searchDomainMapper.afterMappingEntity2SearchResultModel(infrastruktureinrichtung, model);
 
         assertThat(model, is(expected));
     }
 
-    void testAfterEntity2AbfrageSearchResultModelVerortung() throws GeometryOperationFailedException {
-        // Mock-Coordinate erstellen
-        Wgs84 mockCoordinate = new Wgs84();
-        mockCoordinate.setLongitude(10.0);
-        mockCoordinate.setLatitude(20.0);
-
-        WGS84Model mockCoordinateModel = new WGS84Model();
-        mockCoordinateModel.setLongitude(10.0);
-        mockCoordinateModel.setLatitude(20.0);
-
-        // Mocks für Bauvorhaben und Adresse erstellen
-        final var abfrage = new Bauleitplanverfahren();
-
-        VerortungMultiPolygon verortungMultiPolygon = new VerortungMultiPolygon();
-        MultiPolygonGeometry multiPolygonGeometry = new MultiPolygonGeometry();
-        verortungMultiPolygon.setMultiPolygon(multiPolygonGeometry);
-        abfrage.setVerortung(verortungMultiPolygon);
-
-        // Mock-Model erstellen
-        AbfrageSearchResultModel model = new AbfrageSearchResultModel();
-
-        Mockito
-            .when(this.koordinatenService.getMultiPolygonCentroid(abfrage.getVerortung().getMultiPolygon()))
-            .thenReturn(mockCoordinateModel);
-
-        // Test der Methode
-        searchDomainMapper.afterMappingEntity2SearchResultModel(abfrage, model);
-
-        Mockito
-            .verify(this.koordinatenService, Mockito.times(1))
-            .getMultiPolygonCentroid(abfrage.getVerortung().getMultiPolygon());
-        assertThat(model.getCoordinate(), is(mockCoordinateModel));
-    }
-
     @Test
-    void testAfterEntity2AbfrageSearchResultModelAdresse() {
-        // Mock-Coordinate erstellen
+    void afterEntity2AbfrageSearchResultModelAdresse() throws GeometryOperationFailedException {
         Wgs84 mockCoordinate = new Wgs84();
         mockCoordinate.setLongitude(10.0);
         mockCoordinate.setLatitude(20.0);
@@ -307,33 +258,85 @@ public class SearchDomainMapperTest {
         mockCoordinateModel.setLongitude(10.0);
         mockCoordinateModel.setLatitude(20.0);
 
-        // Mocks für Bauvorhaben und Adresse erstellen
         final var abfrage = new Bauleitplanverfahren();
 
         Adresse adresse = new Adresse();
         adresse.setCoordinate(mockCoordinate);
         abfrage.setAdresse(adresse);
 
-        // Mock-Model erstellen
         AbfrageSearchResultModel model = new AbfrageSearchResultModel();
+
+        AbfrageSearchResultModel expected = new AbfrageSearchResultModel();
+        expected.setCoordinate(mockCoordinateModel);
 
         // Test der Methode
         searchDomainMapper.afterMappingEntity2SearchResultModel(abfrage, model);
 
-        assertThat(model.getCoordinate(), is(mockCoordinateModel));
+        Mockito.verify(this.koordinatenService, Mockito.times(0)).getMultiPolygonCentroid(Mockito.any());
+        assertThat(model, is(expected));
     }
 
     @Test
-    void testAfterEntity2AbfrageSearchResultModelNoAdresse() {
-        // Mocks für Bauvorhaben und Adresse erstellen
-        final var abfrage = new Baugenehmigungsverfahren();
+    void afterEntity2AbfrageSearchResultModelVerortung() throws GeometryOperationFailedException {
+        final var abfrage = new Bauleitplanverfahren();
 
-        // Mock-Model erstellen
+        VerortungMultiPolygon verortung = new VerortungMultiPolygon();
+        MultiPolygonGeometry multiPolygon = new MultiPolygonGeometry();
+        multiPolygon.setType("MultiPolygon");
+        multiPolygon.setCoordinates(List.of(List.of(List.of(List.of(BigDecimal.TEN, BigDecimal.ONE)))));
+        verortung.setMultiPolygon(multiPolygon);
+        abfrage.setVerortung(verortung);
+
         AbfrageSearchResultModel model = new AbfrageSearchResultModel();
 
-        // Test der Methode
+        WGS84Model mockCoordinateModel = new WGS84Model();
+        mockCoordinateModel.setLongitude(10.0);
+        mockCoordinateModel.setLatitude(20.0);
+
+        Mockito.when(this.koordinatenService.getMultiPolygonCentroid(multiPolygon)).thenReturn(mockCoordinateModel);
+
+        AbfrageSearchResultModel expected = new AbfrageSearchResultModel();
+        expected.setCoordinate(mockCoordinateModel);
+
         searchDomainMapper.afterMappingEntity2SearchResultModel(abfrage, model);
 
-        assertThat(model.getCoordinate(), is(nullValue()));
+        Mockito.verify(this.koordinatenService, Mockito.times(1)).getMultiPolygonCentroid(multiPolygon);
+        assertThat(expected, is(model));
+    }
+
+    @Test
+    void afterEntity2AbfrageSearchResultModelAdresseNullVerortungNull() throws GeometryOperationFailedException {
+        final var abfrage = new Bauleitplanverfahren();
+        abfrage.setVerortung(null);
+        abfrage.setAdresse(null);
+
+        AbfrageSearchResultModel model = new AbfrageSearchResultModel();
+
+        AbfrageSearchResultModel expected = new AbfrageSearchResultModel();
+        expected.setCoordinate(null);
+
+        searchDomainMapper.afterMappingEntity2SearchResultModel(abfrage, model);
+
+        Mockito.verify(this.koordinatenService, Mockito.times(0)).getMultiPolygonCentroid(Mockito.any());
+        assertThat(expected, is(model));
+    }
+
+    @Test
+    void afterEntity2AbfrageSearchResultModelVerortungMultiPolygonNull() throws GeometryOperationFailedException {
+        final var abfrage = new Bauleitplanverfahren();
+
+        VerortungMultiPolygon verortung = new VerortungMultiPolygon();
+        verortung.setMultiPolygon(null);
+        abfrage.setVerortung(verortung);
+
+        AbfrageSearchResultModel model = new AbfrageSearchResultModel();
+
+        AbfrageSearchResultModel expected = new AbfrageSearchResultModel();
+        expected.setCoordinate(null);
+
+        searchDomainMapper.afterMappingEntity2SearchResultModel(abfrage, model);
+
+        Mockito.verify(this.koordinatenService, Mockito.times(0)).getMultiPolygonCentroid(Mockito.any());
+        assertThat(expected, is(model));
     }
 }
