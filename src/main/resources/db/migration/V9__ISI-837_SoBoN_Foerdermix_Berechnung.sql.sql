@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS isidbuser.abfragevariante_bauleitplanverfahren_foerde
     anteil_prozent                          numeric(19, 2),
     bezeichnung                             character varying(255),
     CONSTRAINT fk_abfragevariante_bauleitplanverfahren_foerderarten FOREIGN KEY (abfragevariante_bauleitplanverfahren_id)
-        REFERENCES isidbuser.abfragevariante_bauleitplanverfahren (abfragevarianten_bauleitplanverfahren_id)
+        REFERENCES isidbuser.abfragevariante_bauleitplanverfahren(id)
 );
 
 ALTER TABLE isidbuser.abfragevariante_bauleitplanverfahren_foerderarten
@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS isidbuser.abfragevariante_weiteres_verfahren_foerdera
     anteil_prozent                        numeric(19, 2),
     bezeichnung                           character varying(255),
     CONSTRAINT fk_abfragevariante_weiteresverfahren_foerderarten FOREIGN KEY (abfragevariante_weiteres_verfahren_id)
-        REFERENCES isidbuser.abfragevariante_weiteres_verfahren (abfragevarianten_weiteres_verfahren_id)
+        REFERENCES isidbuser.abfragevariante_weiteres_verfahren(id)
 );
 
 ALTER TABLE isidbuser.abfragevariante_weiteres_verfahren_foerderarten
