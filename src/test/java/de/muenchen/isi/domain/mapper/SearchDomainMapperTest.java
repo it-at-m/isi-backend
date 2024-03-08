@@ -39,12 +39,12 @@ import org.mockito.quality.Strictness;
 @MockitoSettings(strictness = Strictness.LENIENT)
 public class SearchDomainMapperTest {
 
-    private KoordinatenDomainMapper koordinatenDomainMapper = new KoordinatenDomainMapperImpl();
+    private final KoordinatenDomainMapper koordinatenDomainMapper = new KoordinatenDomainMapperImpl();
+
+    private final SearchDomainMapper searchDomainMapper = new SearchDomainMapperImpl();
 
     @Mock
     private KoordinatenService koordinatenService;
-
-    private final SearchDomainMapper searchDomainMapper = new SearchDomainMapperImpl();
 
     @BeforeEach
     public void beforeEach() throws NoSuchFieldException, IllegalAccessException {
