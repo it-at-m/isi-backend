@@ -47,6 +47,7 @@ public abstract class SearchDomainMapper {
     private KoordinatenService koordinatenService;
 
     @Mapping(target = "type", ignore = true)
+    @Mapping(target = "coordinate", ignore = true)
     @SubclassMapping(source = Infrastruktureinrichtung.class, target = InfrastruktureinrichtungSearchResultModel.class)
     @SubclassMapping(source = Bauvorhaben.class, target = BauvorhabenSearchResultModel.class)
     @SubclassMapping(source = Bauleitplanverfahren.class, target = AbfrageSearchResultModel.class)
@@ -59,6 +60,7 @@ public abstract class SearchDomainMapper {
             @Mapping(target = "type", constant = SearchResultType.Values.BAUVORHABEN),
             @Mapping(source = "verortung.stadtbezirke", target = "stadtbezirke"),
             @Mapping(target = "coordinate", ignore = true),
+            @Mapping(target = "umgriff", ignore = true),
         }
     )
     public abstract BauvorhabenSearchResultModel entity2SearchResultModel(final Bauvorhaben entity);
