@@ -39,8 +39,7 @@ import org.mockito.quality.Strictness;
 @MockitoSettings(strictness = Strictness.LENIENT)
 public class SearchDomainMapperTest {
 
-    @Mock
-    private KoordinatenDomainMapper koordinatenDomainMapper;
+    private KoordinatenDomainMapper koordinatenDomainMapper = new KoordinatenDomainMapperImpl();
 
     @Mock
     private KoordinatenService koordinatenService;
@@ -79,16 +78,9 @@ public class SearchDomainMapperTest {
         // Mock-Model erstellen
         BauvorhabenSearchResultModel model = new BauvorhabenSearchResultModel();
 
-        Mockito
-            .when(this.koordinatenDomainMapper.entity2Model(bauvorhaben.getAdresse().getCoordinate()))
-            .thenReturn(mockCoordinateModel);
-
         // Test der Methode
         searchDomainMapper.afterMappingEntity2SearchResultModel(bauvorhaben, model);
 
-        Mockito
-            .verify(this.koordinatenDomainMapper, Mockito.times(1))
-            .entity2Model(bauvorhaben.getAdresse().getCoordinate());
         assertThat(model.getCoordinate(), is(mockCoordinateModel));
     }
 
@@ -119,12 +111,10 @@ public class SearchDomainMapperTest {
     @Test
     void afterEntity2BauvorhabenSearchResultModelVerortungNull() {
         final var bauvorhaben = new Bauvorhaben();
-        bauvorhaben.setId(UUID.randomUUID());
 
         bauvorhaben.setVerortung(null);
 
         BauvorhabenSearchResultModel model = new BauvorhabenSearchResultModel();
-        model.setId(bauvorhaben.getId());
 
         BauvorhabenSearchResultModel expected = new BauvorhabenSearchResultModel();
         expected.setUmgriff(null);
@@ -161,7 +151,6 @@ public class SearchDomainMapperTest {
 
         // Mocks für Bauvorhaben und Adresse erstellen
         final var infrastruktureinrichtung = new Kinderkrippe();
-        infrastruktureinrichtung.setId(UUID.randomUUID());
 
         VerortungPoint verortung = new VerortungPoint();
         PointGeometry pointGeometry = new PointGeometry();
@@ -194,7 +183,6 @@ public class SearchDomainMapperTest {
 
         // Mocks für Bauvorhaben und Adresse erstellen
         final var abfrage = new Bauleitplanverfahren();
-        abfrage.setId(UUID.randomUUID());
 
         VerortungMultiPolygon verortungMultiPolygon = new VerortungMultiPolygon();
         MultiPolygonGeometry multiPolygonGeometry = new MultiPolygonGeometry();
@@ -230,7 +218,6 @@ public class SearchDomainMapperTest {
 
         // Mocks für Bauvorhaben und Adresse erstellen
         final var abfrage = new Bauleitplanverfahren();
-        abfrage.setId(UUID.randomUUID());
 
         Adresse adresse = new Adresse();
         adresse.setCoordinate(mockCoordinate);
@@ -239,16 +226,9 @@ public class SearchDomainMapperTest {
         // Mock-Model erstellen
         AbfrageSearchResultModel model = new AbfrageSearchResultModel();
 
-        Mockito
-            .when(this.koordinatenDomainMapper.entity2Model(abfrage.getAdresse().getCoordinate()))
-            .thenReturn(mockCoordinateModel);
-
         // Test der Methode
         searchDomainMapper.afterMappingEntity2SearchResultModel(abfrage, model);
 
-        Mockito
-            .verify(this.koordinatenDomainMapper, Mockito.times(1))
-            .entity2Model(abfrage.getAdresse().getCoordinate());
         assertThat(model.getCoordinate(), is(mockCoordinateModel));
     }
 
@@ -258,7 +238,6 @@ public class SearchDomainMapperTest {
 
         // Mocks für Bauvorhaben und Adresse erstellen
         final var abfrage = new Baugenehmigungsverfahren();
-        abfrage.setId(UUID.randomUUID());
 
         // Mock-Model erstellen
         AbfrageSearchResultModel model = new AbfrageSearchResultModel();
