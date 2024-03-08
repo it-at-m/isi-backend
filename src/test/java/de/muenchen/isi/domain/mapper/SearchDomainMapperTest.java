@@ -57,7 +57,7 @@ public class SearchDomainMapperTest {
     }
 
     @Test
-    void testAfterEntity2BauvorhabenSearchResultModel() throws GeometryOperationFailedException {
+    void testAfterEntity2BauvorhabenSearchResultModel() {
         // Mock-Coordinate erstellen
         Wgs84 mockCoordinate = new Wgs84();
         mockCoordinate.setLongitude(10.0);
@@ -92,7 +92,7 @@ public class SearchDomainMapperTest {
     }
 
     @Test
-    void testAfterEntity2InfrastruktureinrichtungSearchResultModel() throws GeometryOperationFailedException {
+    void testAfterEntity2InfrastruktureinrichtungSearchResultModel() {
         // Mock-Coordinate erstellen
         WGS84Model mockCoordinateModel = new WGS84Model();
         mockCoordinateModel.setLongitude(10.0);
@@ -157,7 +157,7 @@ public class SearchDomainMapperTest {
     }
 
     @Test
-    void testAfterEntity2AbfrageSearchResultModelAdresse() throws GeometryOperationFailedException {
+    void testAfterEntity2AbfrageSearchResultModelAdresse() {
         // Mock-Coordinate erstellen
         Wgs84 mockCoordinate = new Wgs84();
         mockCoordinate.setLongitude(10.0);
@@ -192,7 +192,7 @@ public class SearchDomainMapperTest {
     }
 
     @Test
-    void testAfterEntity2AbfrageSearchResultModelNoAdresse() throws GeometryOperationFailedException {
+    void testAfterEntity2AbfrageSearchResultModelNoAdresse() {
         //
 
         // Mocks für Bauvorhaben und Adresse erstellen

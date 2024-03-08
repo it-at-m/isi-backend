@@ -2,6 +2,7 @@ package de.muenchen.isi.domain.mapper;
 
 import de.muenchen.isi.configuration.MapstructConfiguration;
 import de.muenchen.isi.domain.exception.GeometryOperationFailedException;
+import de.muenchen.isi.domain.model.common.MultiPolygonGeometryModel;
 import de.muenchen.isi.domain.model.common.WGS84Model;
 import de.muenchen.isi.domain.model.enums.SearchResultType;
 import de.muenchen.isi.domain.model.search.response.AbfrageSearchResultModel;
@@ -15,6 +16,7 @@ import de.muenchen.isi.infrastructure.entity.Bauleitplanverfahren;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
 import de.muenchen.isi.infrastructure.entity.WeiteresVerfahren;
 import de.muenchen.isi.infrastructure.entity.common.Adresse;
+import de.muenchen.isi.infrastructure.entity.common.MultiPolygonGeometry;
 import de.muenchen.isi.infrastructure.entity.common.VerortungMultiPolygon;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Infrastruktureinrichtung;
 import java.util.UUID;
@@ -71,6 +73,7 @@ public abstract class SearchDomainMapper {
         @MappingTarget final BauvorhabenSearchResultModel model
     ) {
         model.setCoordinate(this.getCoordinateFromAdresseOrVerortung(entity.getAdresse(), entity.getVerortung()));
+        model.setUmgriff(this.getUmgriffFromVerortung(entity.getVerortung()));
     }
 
     @Mappings(
@@ -202,4 +205,18 @@ public abstract class SearchDomainMapper {
         }
         return null;
     }
+
+    /**
+     * Gibt den Umgriff der im Parameter gegebenen Verortung zurück.
+     *
+     * @param verortungMultiPolygon als Umgriff der Verortung.
+     * @return den Umgriff als {@link VerortungMultiPolygon#getMultiPolygon()} oder null falls kein Umgriff existiert bzw. die Verortung im Parameter null ist.
+     */
+    public MultiPolygonGeometryModel getUmgriffFromVerortung(final VerortungMultiPolygon verortungMultiPolygon) {
+        return ObjectUtils.isNotEmpty(verortungMultiPolygon)
+            ? this.entity2Model(verortungMultiPolygon.getMultiPolygon())
+            : null;
+    }
+
+    public abstract MultiPolygonGeometryModel entity2Model(final MultiPolygonGeometry entity);
 }
