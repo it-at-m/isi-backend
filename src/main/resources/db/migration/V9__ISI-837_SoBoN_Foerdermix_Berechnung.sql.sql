@@ -19,7 +19,9 @@ CREATE TABLE IF NOT EXISTS isidbuser.abfragevariante_bauleitplanverfahren_foerde
 (
     abfragevariante_bauleitplanverfahren_id character varying(36) NOT NULL,
     anteil_prozent                          numeric(19, 2),
-    bezeichnung                             character varying(255)
+    bezeichnung                             character varying(255),
+    CONSTRAINT fk_abfragevariante_bauleitplanverfahren_foerderarten FOREIGN KEY (abfragevariante_bauleitplanverfahren_id)
+        REFERENCES isidbuser.abfragevariante_bauleitplanverfahren (abfragevarianten_bauleitplanverfahren_id)
 );
 
 ALTER TABLE isidbuser.abfragevariante_bauleitplanverfahren_foerderarten
@@ -29,15 +31,11 @@ CREATE TABLE IF NOT EXISTS isidbuser.abfragevariante_weiteres_verfahren_foerdera
 (
     abfragevariante_weiteres_verfahren_id character varying(36) NOT NULL,
     anteil_prozent                        numeric(19, 2),
-    bezeichnung                           character varying(255)
+    bezeichnung                           character varying(255),
+    CONSTRAINT fk_abfragevariante_weiteresverfahren_foerderarten FOREIGN KEY (abfragevariante_weiteres_verfahren_id)
+        REFERENCES isidbuser.abfragevariante_weiteres_verfahren (abfragevarianten_weiteres_verfahren_id)
 );
 
 ALTER TABLE isidbuser.abfragevariante_weiteres_verfahren_foerderarten
     OWNER TO isidbuser;
-
-ALTER TABLE ONLY isidbuser.abfragevariante_bauleitplanverfahren_foerderarten
-    ADD CONSTRAINT fke778u0biojuob8ucfx0cnh1is FOREIGN KEY (abfragevariante_bauleitplanverfahren_id) REFERENCES isidbuser.abfragevariante_bauleitplanverfahren(abfragevarianten_bauleitplanverfahren_id);
-
-ALTER TABLE ONLY isidbuser.abfragevariante_weiteres_verfahren_foerderarten
-    ADD CONSTRAINT fkqcvvypp9gxdpe330fqia5ejki FOREIGN KEY (abfragevariante_weiteres_verfahren_id) REFERENCES isidbuser.abfragevariante_weiteres_verfahren(abfragevarianten_weiteres_verfahren_id);
 END;
