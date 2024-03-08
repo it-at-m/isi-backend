@@ -141,13 +141,13 @@ public abstract class SearchDomainMapper {
     ) {
         if (hasAdressCoordinate(entity.getAdresse())) {
             model.setCoordinate(koordinatenDomainMapper.entity2Model(entity.getAdresse().getCoordinate()));
-        } else if (ObjectUtils.isNotEmpty(entity.getVerortung())) {
-            if (ObjectUtils.isNotEmpty(entity.getVerortung().getPoint())) {
-                WGS84Model wgs84Model = new WGS84Model();
-                wgs84Model.setLongitude(entity.getVerortung().getPoint().getCoordinates().get(0).doubleValue());
-                wgs84Model.setLatitude(entity.getVerortung().getPoint().getCoordinates().get(1).doubleValue());
-                model.setCoordinate(wgs84Model);
-            }
+        } else if (
+            ObjectUtils.isNotEmpty(entity.getVerortung()) && ObjectUtils.isNotEmpty(entity.getVerortung().getPoint())
+        ) {
+            final var wgs84Model = new WGS84Model();
+            wgs84Model.setLongitude(entity.getVerortung().getPoint().getCoordinates().get(0).doubleValue());
+            wgs84Model.setLatitude(entity.getVerortung().getPoint().getCoordinates().get(1).doubleValue());
+            model.setCoordinate(wgs84Model);
         } else {
             model.setCoordinate(null);
         }
@@ -164,12 +164,7 @@ public abstract class SearchDomainMapper {
      * @return {@code true}, wenn die Adresse eine Koordinate hat, ansonsten {@code false}.
      */
     public boolean hasAdressCoordinate(final Adresse adresse) {
-        if (ObjectUtils.isNotEmpty(adresse)) {
-            if (ObjectUtils.isNotEmpty(adresse.getCoordinate())) {
-                return true;
-            }
-        }
-        return false;
+        return ObjectUtils.isNotEmpty(adresse) && ObjectUtils.isNotEmpty(adresse.getCoordinate());
     }
 
     /**
@@ -179,12 +174,7 @@ public abstract class SearchDomainMapper {
      * @return {@code true}, wenn die Verortung Koordinaten hat, ansonsten {@code false}.
      */
     public boolean hasVerortungCoordinate(final VerortungMultiPolygon verortung) {
-        if (ObjectUtils.isNotEmpty(verortung)) {
-            if (ObjectUtils.isNotEmpty(verortung.getMultiPolygon())) {
-                return true;
-            }
-        }
-        return false;
+        return ObjectUtils.isNotEmpty(verortung) && ObjectUtils.isNotEmpty(verortung.getMultiPolygon());
     }
 
     /**
