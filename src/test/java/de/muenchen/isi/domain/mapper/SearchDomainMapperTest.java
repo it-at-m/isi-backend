@@ -234,8 +234,6 @@ public class SearchDomainMapperTest {
 
     @Test
     void testAfterEntity2AbfrageSearchResultModelNoAdresse() {
-        //
-
         // Mocks für Bauvorhaben und Adresse erstellen
         final var abfrage = new Baugenehmigungsverfahren();
 
