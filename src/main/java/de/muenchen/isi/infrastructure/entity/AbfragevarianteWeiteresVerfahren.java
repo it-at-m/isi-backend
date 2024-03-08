@@ -148,7 +148,7 @@ public class AbfragevarianteWeiteresVerfahren extends Abfragevariante {
     @Column
     private SobonOrientierungswertJahr sobonOrientierungswertJahr;
 
-    @Column
+    @Column(name = "is_a_sobon_berechnung")
     private Boolean isASobonBerechnung;
 
     @Embedded
