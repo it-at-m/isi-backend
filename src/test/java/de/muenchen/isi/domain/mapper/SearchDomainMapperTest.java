@@ -135,7 +135,7 @@ public class SearchDomainMapperTest {
     }
 
     @Test
-    void afterEntity2BauvorhabenSearchResultModelMultiPolygonNull() throws GeometryOperationFailedException {
+    void afterEntity2BauvorhabenSearchResultModelVerortungMultiPolygonNull() throws GeometryOperationFailedException {
         final var bauvorhaben = new Bauvorhaben();
 
         VerortungMultiPolygon verortung = new VerortungMultiPolygon();
@@ -154,7 +154,37 @@ public class SearchDomainMapperTest {
     }
 
     @Test
-    void testAfterEntity2InfrastruktureinrichtungSearchResultModel() {
+    void testAfterEntity2InfrastruktureinrichtungSearchResultModelAdresse() {
+        Wgs84 mockCoordinate = new Wgs84();
+        mockCoordinate.setLongitude(10.0);
+        mockCoordinate.setLatitude(20.0);
+
+        // Mock-Coordinate erstellen
+        WGS84Model mockCoordinateModel = new WGS84Model();
+        mockCoordinateModel.setLongitude(10.0);
+        mockCoordinateModel.setLatitude(20.0);
+
+        // Mocks für Bauvorhaben und Adresse erstellen
+        final var infrastruktureinrichtung = new Kinderkrippe();
+
+        Adresse adresse = new Adresse();
+        adresse.setCoordinate(mockCoordinate);
+        infrastruktureinrichtung.setAdresse(adresse);
+
+        // Mock-Model erstellen
+        InfrastruktureinrichtungSearchResultModel model = new InfrastruktureinrichtungSearchResultModel();
+
+        InfrastruktureinrichtungSearchResultModel expected = new InfrastruktureinrichtungSearchResultModel();
+        expected.setCoordinate(mockCoordinateModel);
+
+        // Test der Methode
+        searchDomainMapper.afterMappingEntity2SearchResultModel(infrastruktureinrichtung, model);
+
+        assertThat(model, is(expected));
+    }
+
+    @Test
+    void testAfterEntity2InfrastruktureinrichtungSearchResultModelVerortung() {
         // Mock-Coordinate erstellen
         WGS84Model mockCoordinateModel = new WGS84Model();
         mockCoordinateModel.setLongitude(10.0);
@@ -175,10 +205,13 @@ public class SearchDomainMapperTest {
         // Mock-Model erstellen
         InfrastruktureinrichtungSearchResultModel model = new InfrastruktureinrichtungSearchResultModel();
 
+        InfrastruktureinrichtungSearchResultModel expected = new InfrastruktureinrichtungSearchResultModel();
+        expected.setCoordinate(mockCoordinateModel);
+
         // Test der Methode
         searchDomainMapper.afterMappingEntity2SearchResultModel(infrastruktureinrichtung, model);
 
-        assertThat(model.getCoordinate(), is(mockCoordinateModel));
+        assertThat(model, is(expected));
     }
 
     @Test
