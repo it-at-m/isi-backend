@@ -2,6 +2,7 @@ package de.muenchen.isi.domain.mapper;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 
 import de.muenchen.isi.domain.exception.GeometryOperationFailedException;
 import de.muenchen.isi.domain.model.common.MultiPolygonGeometryModel;
@@ -23,6 +24,7 @@ import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -112,7 +114,7 @@ public class SearchDomainMapperTest {
         searchDomainMapper.afterMappingEntity2SearchResultModel(bauvorhaben, model);
 
         Mockito.verify(this.koordinatenService, Mockito.times(1)).getMultiPolygonCentroid(multiPolygon);
-        assertThat(expected, is(model));
+        assertThat(model, is(expected));
     }
 
     @Test
@@ -130,7 +132,7 @@ public class SearchDomainMapperTest {
         searchDomainMapper.afterMappingEntity2SearchResultModel(bauvorhaben, model);
 
         Mockito.verify(this.koordinatenService, Mockito.times(0)).getMultiPolygonCentroid(Mockito.any());
-        assertThat(expected, is(model));
+        assertThat(model, is(expected));
     }
 
     @Test
@@ -149,7 +151,7 @@ public class SearchDomainMapperTest {
         searchDomainMapper.afterMappingEntity2SearchResultModel(bauvorhaben, model);
 
         Mockito.verify(this.koordinatenService, Mockito.times(0)).getMultiPolygonCentroid(Mockito.any());
-        assertThat(expected, is(model));
+        assertThat(model, is(expected));
     }
 
     @Test
@@ -301,7 +303,7 @@ public class SearchDomainMapperTest {
         searchDomainMapper.afterMappingEntity2SearchResultModel(abfrage, model);
 
         Mockito.verify(this.koordinatenService, Mockito.times(1)).getMultiPolygonCentroid(multiPolygon);
-        assertThat(expected, is(model));
+        assertThat(model, is(expected));
     }
 
     @Test
@@ -318,7 +320,7 @@ public class SearchDomainMapperTest {
         searchDomainMapper.afterMappingEntity2SearchResultModel(abfrage, model);
 
         Mockito.verify(this.koordinatenService, Mockito.times(0)).getMultiPolygonCentroid(Mockito.any());
-        assertThat(expected, is(model));
+        assertThat(model, is(expected));
     }
 
     @Test
@@ -337,6 +339,27 @@ public class SearchDomainMapperTest {
         searchDomainMapper.afterMappingEntity2SearchResultModel(abfrage, model);
 
         Mockito.verify(this.koordinatenService, Mockito.times(0)).getMultiPolygonCentroid(Mockito.any());
-        assertThat(expected, is(model));
+        assertThat(model, is(expected));
+    }
+
+    @Test
+    void mapBauvorhabenToUuid() {
+        assertThat(searchDomainMapper.map(null), is(nullValue()));
+        final var bauvorhaben = new Bauvorhaben();
+        assertThat(searchDomainMapper.map(bauvorhaben), is(nullValue()));
+        bauvorhaben.setId(UUID.randomUUID());
+        assertThat(searchDomainMapper.map(bauvorhaben), is(bauvorhaben.getId()));
+    }
+
+    @Test
+    void hasAdressCoordinate() {
+        assertThat(searchDomainMapper.hasAdressCoordinate(null), is(false));
+        final var adresse = new Adresse();
+        assertThat(searchDomainMapper.hasAdressCoordinate(adresse), is(false));
+        Wgs84 coordinate = new Wgs84();
+        coordinate.setLongitude(10.0);
+        coordinate.setLatitude(20.0);
+        adresse.setCoordinate(coordinate);
+        assertThat(searchDomainMapper.hasAdressCoordinate(adresse), is(true));
     }
 }
