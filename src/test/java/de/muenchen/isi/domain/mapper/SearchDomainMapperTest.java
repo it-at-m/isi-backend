@@ -215,6 +215,53 @@ public class SearchDomainMapperTest {
     }
 
     @Test
+    void testAfterEntity2InfrastruktureinrichtungSearchResultModelVerortungNull() {
+        // Mock-Coordinate erstellen
+        WGS84Model mockCoordinateModel = new WGS84Model();
+        mockCoordinateModel.setLongitude(10.0);
+        mockCoordinateModel.setLatitude(20.0);
+
+        // Mocks für Bauvorhaben und Adresse erstellen
+        final var infrastruktureinrichtung = new Kinderkrippe();
+        infrastruktureinrichtung.setVerortung(null);
+
+        // Mock-Model erstellen
+        InfrastruktureinrichtungSearchResultModel model = new InfrastruktureinrichtungSearchResultModel();
+
+        InfrastruktureinrichtungSearchResultModel expected = new InfrastruktureinrichtungSearchResultModel();
+        expected.setCoordinate(null);
+
+        // Test der Methode
+        searchDomainMapper.afterMappingEntity2SearchResultModel(infrastruktureinrichtung, model);
+
+        assertThat(model, is(expected));
+    }
+
+    @Test
+    void testAfterEntity2InfrastruktureinrichtungSearchResultModelVerortungPointNull() {
+        // Mock-Coordinate erstellen
+        WGS84Model mockCoordinateModel = new WGS84Model();
+        mockCoordinateModel.setLongitude(10.0);
+        mockCoordinateModel.setLatitude(20.0);
+
+        // Mocks für Bauvorhaben und Adresse erstellen
+        final var infrastruktureinrichtung = new Kinderkrippe();
+        VerortungPoint verortung = new VerortungPoint();
+        verortung.setPoint(null);
+        infrastruktureinrichtung.setVerortung(verortung);
+
+        // Mock-Model erstellen
+        InfrastruktureinrichtungSearchResultModel model = new InfrastruktureinrichtungSearchResultModel();
+
+        InfrastruktureinrichtungSearchResultModel expected = new InfrastruktureinrichtungSearchResultModel();
+        expected.setCoordinate(null);
+
+        // Test der Methode
+        searchDomainMapper.afterMappingEntity2SearchResultModel(infrastruktureinrichtung, model);
+
+        assertThat(model, is(expected));
+    }
+
     void testAfterEntity2AbfrageSearchResultModelVerortung() throws GeometryOperationFailedException {
         // Mock-Coordinate erstellen
         Wgs84 mockCoordinate = new Wgs84();
