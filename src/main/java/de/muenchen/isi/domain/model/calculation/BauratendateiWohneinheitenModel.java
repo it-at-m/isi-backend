@@ -9,7 +9,7 @@ import lombok.*;
 @EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor
 @NoArgsConstructor
-public class BauratendateiWohneinheiten extends BaseEntityModel {
+public class BauratendateiWohneinheitenModel extends BaseEntityModel {
 
     private String foerderart;
 

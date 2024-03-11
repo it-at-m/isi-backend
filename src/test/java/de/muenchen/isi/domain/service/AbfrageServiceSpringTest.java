@@ -278,7 +278,6 @@ class AbfrageServiceSpringTest {
         );
         abfragevariantePatch.setArtAbfragevariante(ArtAbfrage.BAULEITPLANVERFAHREN);
         abfragevariantePatch.setSobonOrientierungswertJahr(SobonOrientierungswertJahr.JAHR_2017);
-        abfragevariantePatch.setHasBauratenDateiInputs(false);
         abfragevariantePatch.setAnmerkung("Die Anmerkung Bauleitplanverfahren Patch Sachbearbeitung");
         abfragePatch.setAbfragevariantenBauleitplanverfahren(List.of(abfragevariantePatch));
 
@@ -316,7 +315,6 @@ class AbfrageServiceSpringTest {
         );
         abfragevariantePatch.setArtAbfragevariante(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN);
         abfragevariantePatch.setSobonOrientierungswertJahr(SobonOrientierungswertJahr.JAHR_2017);
-        abfragevariantePatch.setHasBauratenDateiInputs(false);
         abfragevariantePatch.setAnmerkung("Die Anmerkung Baugenehmigungsverfahren Patch Sachbearbeitung");
         abfragePatch.setAbfragevariantenBaugenehmigungsverfahren(List.of(abfragevariantePatch));
 
@@ -356,7 +354,6 @@ class AbfrageServiceSpringTest {
         );
         abfragevariantePatch.setArtAbfragevariante(ArtAbfrage.WEITERES_VERFAHREN);
         abfragevariantePatch.setSobonOrientierungswertJahr(SobonOrientierungswertJahr.JAHR_2017);
-        abfragevariantePatch.setHasBauratenDateiInputs(false);
         abfragevariantePatch.setAnmerkung("Die Anmerkung WeiteresVerfahren Patch Sachbearbeitung");
         abfragePatch.setAbfragevariantenWeiteresVerfahren(List.of(abfragevariantePatch));
 

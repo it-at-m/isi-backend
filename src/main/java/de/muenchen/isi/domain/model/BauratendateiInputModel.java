@@ -1,6 +1,6 @@
 package de.muenchen.isi.domain.model;
 
-import de.muenchen.isi.domain.model.calculation.BauratendateiWohneinheiten;
+import de.muenchen.isi.domain.model.calculation.BauratendateiWohneinheitenModel;
 import java.util.List;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -17,5 +17,5 @@ public class BauratendateiInputModel extends BaseEntityModel {
 
     private String viertel;
 
-    private List<BauratendateiWohneinheiten> wohneinheiten;
+    private List<BauratendateiWohneinheitenModel> wohneinheiten;
 }
