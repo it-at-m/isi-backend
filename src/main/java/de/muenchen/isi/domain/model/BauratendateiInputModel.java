@@ -1,11 +1,15 @@
 package de.muenchen.isi.domain.model;
 
-import de.muenchen.isi.domain.model.calculation.WohneinheitenProFoerderartProJahrModel;
+import de.muenchen.isi.domain.model.calculation.BauratendateiWohneinheiten;
 import java.util.List;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 @Data
-public class BauratendateiInputModel {
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
+public class BauratendateiInputModel extends BaseEntityModel {
 
     private String grundschulsprengel;
 
@@ -13,5 +17,5 @@ public class BauratendateiInputModel {
 
     private String viertel;
 
-    private List<WohneinheitenProFoerderartProJahrModel> wohneinheiten;
+    private List<BauratendateiWohneinheiten> wohneinheiten;
 }

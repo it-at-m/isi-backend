@@ -151,7 +151,7 @@ public class AbfragevarianteWeiteresVerfahren extends Abfragevariante {
     @Column
     private String anmerkung;
 
-    @Column(nullable = false)
+    @Column
     private Boolean hasBauratenDateiInputs;
 
     @Column(length = 1000)
