@@ -8,14 +8,11 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface AbfragevarianteWeiteresVerfahrenRepository
     extends JpaRepository<AbfragevarianteWeiteresVerfahren, UUID> {
-    @Query(
-        value = "select abfragevarianten_weiteres_verfahren_id from abfragevariante_weiteres_verfahren where id = ?1",
-        nativeQuery = true
-    )
+    @Query(value = "select abfrgvar_weitrs_vrfhrn_id from abfrgvar_weitrs_vrfhrn where id = ?1", nativeQuery = true)
     Optional<UUID> findAbfrageIdForAbfragevarianteById(final UUID id);
 
     @Query(
-        value = "select abfragevarianten_sachbearbeitung_weiteres_verfahren_id from abfragevariante_weiteres_verfahren where id = ?1",
+        value = "select abfrgvar_schbrbtng_weitrs_vrfhrn_id from abfrgvar_weitrs_vrfhrn where id = ?1",
         nativeQuery = true
     )
     Optional<UUID> findAbfrageIdForAbfragevarianteSachbearbeitungById(final UUID id);

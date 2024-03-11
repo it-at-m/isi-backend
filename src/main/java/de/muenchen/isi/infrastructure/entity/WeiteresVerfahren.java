@@ -100,14 +100,14 @@ public class WeiteresVerfahren extends Abfrage {
     @IndexedEmbedded
     @IndexingDependency(reindexOnUpdate = ReindexOnUpdate.SHALLOW)
     @OneToMany(cascade = { CascadeType.ALL }, orphanRemoval = true)
-    @JoinColumn(name = "abfragevarianten_weiteres_verfahren_id", referencedColumnName = "id")
+    @JoinColumn(name = "abfrgvar_weitrs_vrfhrn_id", referencedColumnName = "id")
     @OrderBy("abfragevariantenNr asc")
     private List<AbfragevarianteWeiteresVerfahren> abfragevariantenWeiteresVerfahren;
 
     @IndexedEmbedded
     @IndexingDependency(reindexOnUpdate = ReindexOnUpdate.SHALLOW)
     @OneToMany(cascade = { CascadeType.ALL }, orphanRemoval = true)
-    @JoinColumn(name = "abfragevarianten_sachbearbeitung_weiteres_verfahren_id", referencedColumnName = "id")
+    @JoinColumn(name = "abfrgvar_schbrbtng_weitrs_vrfhrn_id", referencedColumnName = "id")
     @OrderBy("abfragevariantenNr asc")
     private List<AbfragevarianteWeiteresVerfahren> abfragevariantenSachbearbeitungWeiteresVerfahren;
 }

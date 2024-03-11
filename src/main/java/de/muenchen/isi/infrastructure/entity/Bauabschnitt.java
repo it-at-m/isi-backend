@@ -17,18 +17,9 @@ import lombok.ToString;
 @Entity
 @Table(
     indexes = {
-        @Index(
-            name = "bauabschnitt_abfragevariante_bauleitplanverfahren_id_index",
-            columnList = "abfragevariante_bauleitplanverfahren_id"
-        ),
-        @Index(
-            name = "bauabschnitt_abfragevariante_baugenehmigungsverfahren_id_index",
-            columnList = "abfragevariante_baugenehmigungsverfahren_id"
-        ),
-        @Index(
-            name = "bauabschnitt_abfragevariante_weiteres_verfahren_id_index",
-            columnList = "abfragevariante_weiteres_verfahren_id"
-        ),
+        @Index(name = "bauabschnitt_abfrgvar_bauleitplnvrfhrn_id_index", columnList = "abfrgvar_bauleitplnvrfhrn_id"),
+        @Index(name = "bauabschnitt_abfrgvar_baugnhmgsverfhrn_id_index", columnList = "abfrgvar_baugnhmgsverfhrn_id"),
+        @Index(name = "bauabschnitt_abfrgvar_weitrs_vrfhrn_id_index", columnList = "abfrgvar_weitrs_vrfhrn_id"),
     }
 )
 @Data

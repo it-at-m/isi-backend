@@ -1,0 +1,124 @@
+-- Alle Tabellen und Spaltennamen werden gekürzt, da PostgreSql eine Limitierung auf 64 bytes für namedatalen hat
+BEGIN;
+
+-- AbfragevarianteBaugenehmigungsverfahren
+ALTER TABLE IF EXISTS isidbuser.abfragevariante_baugenehmigungsverfahren_wesentliche_rechtsgrun
+    RENAME TO abfrgvar_baugnhmgsverfhrn_wesentliche_rechtsgrundlage;
+
+ALTER TABLE isidbuser.abfrgvar_baugnhmgsverfhrn_wesentliche_rechtsgrundlage
+    RENAME COLUMN abfragevariante_baugenehmigungsverfahren_id TO abfrgvar_baugnhmgsverfhrn_id;
+
+
+ALTER TABLE IF EXISTS isidbuser.abfragevariante_baugenehmigungsverfahren
+    RENAME TO abfrgvar_baugnhmgsverfhrn;
+
+ALTER TABLE isidbuser.abfrgvar_baugnhmgsverfhrn
+    RENAME COLUMN abfragevarianten_baugenehmigungsverfahren_id TO abfrgvar_baugnhmgsverfhrn_id;
+
+ALTER TABLE isidbuser.abfrgvar_baugnhmgsverfhrn
+    RENAME COLUMN abfragevarianten_sachbearbeitung_baugenehmigungsverfahren_id TO abfrgvar_schbrbtng_baugnhmgsverfhrn_id;
+
+
+ALTER INDEX IF EXISTS isidbuser.abfragevarianten_baugenehmigungsverfahren_id_index RENAME TO abfrgvar_baugnhmgsverfhrn_id_index;
+ALTER INDEX IF EXISTS isidbuser.abfragevarianten_sachbearbeitung_baugenehmigungsverfahren_id_in RENAME TO abfrgvar_schbrbtng_baugnhmgsverfhrn_id_index;
+
+
+-- AbfragevarianteBauleitplanverfahren
+ALTER TABLE IF EXISTS isidbuser.abfragevariante_bauleitplanverfahren_wesentliche_rechtsgrundlag
+    RENAME TO abfrgvar_bauleitplnvrfhrn_wesentliche_rechtsgrundlage;
+
+ALTER TABLE isidbuser.abfrgvar_bauleitplnvrfhrn_wesentliche_rechtsgrundlage
+    RENAME COLUMN abfragevariante_bauleitplanverfahren_id TO abfrgvar_bauleitplnvrfhrn_id;
+
+
+ALTER TABLE IF EXISTS isidbuser.abfragevariante_bauleitplanverfahren
+    RENAME TO abfrgvar_bauleitplnvrfhrn;
+
+ALTER TABLE isidbuser.abfrgvar_bauleitplnvrfhrn
+    RENAME COLUMN abfragevarianten_bauleitplanverfahren_id TO abfrgvar_bauleitplnvrfhrn_id;
+
+ALTER TABLE isidbuser.abfrgvar_bauleitplnvrfhrn
+    RENAME COLUMN abfragevarianten_sachbearbeitung_bauleitplanverfahren_id TO abfrgvar_schbrbtng_bauleitplnvrfhrn_id;
+
+
+ALTER INDEX IF EXISTS isidbuser.abfragevarianten_bauleitplanverfahren_id_index RENAME TO abfrgvar_bauleitplnvrfhrn_id_index;
+ALTER INDEX IF EXISTS isidbuser.abfragevarianten_sachbearbeitung_bauleitplanverfahren_id_index RENAME TO abfrgvar_schbrbtng_bauleitplnvrfhrn_id_index;
+
+
+-- AbfragevarianteWeiteresVerfahren
+ALTER TABLE IF EXISTS isidbuser.abfragevariante_weiteres_verfahren_wesentliche_rechtsgrundlage
+    RENAME TO abfrgvar_weitrs_vrfhrn_wesentliche_rechtsgrundlage;
+
+ALTER TABLE isidbuser.abfrgvar_weitrs_vrfhrn_wesentliche_rechtsgrundlage
+    RENAME COLUMN abfragevariante_weiteres_verfahren_id TO abfrgvar_weitrs_vrfhrn_id;
+
+
+ALTER TABLE IF EXISTS isidbuser.abfragevariante_weiteres_verfahren
+    RENAME TO abfrgvar_weitrs_vrfhrn;
+
+ALTER TABLE isidbuser.abfrgvar_weitrs_vrfhrn
+    RENAME COLUMN abfragevarianten_weiteres_verfahren_id TO abfrgvar_weitrs_vrfhrn_id;
+
+ALTER TABLE isidbuser.abfrgvar_weitrs_vrfhrn
+    RENAME COLUMN abfragevarianten_sachbearbeitung_weiteres_verfahren_id TO abfrgvar_schbrbtng_weitrs_vrfhrn_id;
+
+
+ALTER INDEX IF EXISTS isidbuser.abfragevarianten_weiteres_verfahren_id_index RENAME TO abfrgvar_weitrs_vrfhrn_id_index;
+ALTER INDEX IF EXISTS isidbuser.abfragevarianten_sachbearbeitung_weiteres_verfahren_id_index RENAME TO abfrgvar_schbrbtng_weitrs_vrfhrn_id_index;
+
+
+-- Bedarfsmeldung --
+ALTER TABLE isidbuser.bedarfsmeldung
+    RENAME COLUMN abfragevariante_baugenehmigungsverfahren_abfrageersteller_id TO abfrgvar_baugnhmgsverfhrn_abfrageersteller_id;
+
+ALTER TABLE isidbuser.bedarfsmeldung
+    RENAME COLUMN abfragevariante_bauleitplanverfahren_abfrageersteller_id TO abfrgvar_bauleitplnvrfhrn_abfrageersteller_id;
+
+ALTER TABLE isidbuser.bedarfsmeldung
+    RENAME COLUMN abfragevariante_weiteres_verfahren_abfrageersteller_id TO abfrgvar_weitrs_vrfhrn_abfrageersteller_id;
+
+
+ALTER TABLE isidbuser.bedarfsmeldung
+    RENAME COLUMN abfragevariante_baugenehmigungsverfahren_fachreferate_id TO abfrgvar_baugnhmgsverfhrn_fachreferate_id;
+
+ALTER TABLE isidbuser.bedarfsmeldung
+    RENAME COLUMN abfragevariante_bauleitplanverfahren_fachreferate_id TO abfrgvar_bauleitplnvrfhrn_fachreferate_id;
+
+ALTER TABLE isidbuser.bedarfsmeldung
+    RENAME COLUMN abfragevariante_weiteres_verfahren_fachreferate_id TO abfrgvar_weitrs_vrfhrn_fachreferate_id;
+
+
+ALTER INDEX IF EXISTS isidbuser.bedarfsmeldung_abfrageersteller_abfragevariante_baugenehmigungs RENAME TO bedarfsmeldung_abfrgerstlr_abfrgvar_baugnhmgsverfhrn_id_index;
+ALTER INDEX IF EXISTS isidbuser.bedarfsmeldung_abfrageersteller_abfragevariante_bauleitplanverf RENAME TO bedarfsmeldung_abfrgerstlr_abfrgvar_bauleitplnvrfhrn_id_index;
+ALTER INDEX IF EXISTS isidbuser.bedarfsmeldung_abfrageersteller_abfragevariante_weiteres_verfah RENAME TO bedarfsmeldung_abfrgerstlr_abfrgvar_weitrs_vrfhrn_id_index;
+
+CREATE INDEX IF NOT EXISTS bedarfsmeldung_fachreferate_abfrgvar_baugnhmgsverfhrn_id_index
+    ON isidbuser.bedarfsmeldung USING btree (abfrgvar_baugnhmgsverfhrn_fachreferate_id);
+
+CREATE INDEX IF NOT EXISTS bedarfsmeldung_fachreferate_abfrgvar_bauleitplnvrfhrn_id_index
+    ON isidbuser.bedarfsmeldung USING btree (abfrgvar_bauleitplnvrfhrn_fachreferate_id);
+
+CREATE INDEX IF NOT EXISTS bedarfsmeldung_fachreferate_abfrgvar_weitrs_vrfhrn_id_index
+    ON isidbuser.bedarfsmeldung USING btree (abfrgvar_weitrs_vrfhrn_fachreferate_id);
+
+
+-- Bauabschnitt --
+ALTER TABLE isidbuser.bauabschnitt
+    RENAME COLUMN abfragevariante_baugenehmigungsverfahren_id TO abfrgvar_baugnhmgsverfhrn_id;
+
+ALTER TABLE isidbuser.bauabschnitt
+    RENAME COLUMN abfragevariante_bauleitplanverfahren_id TO abfrgvar_bauleitplnvrfhrn_id;
+
+ALTER TABLE isidbuser.bauabschnitt
+    RENAME COLUMN abfragevariante_weiteres_verfahren_id TO abfrgvar_weitrs_vrfhrn_id;
+
+
+ALTER INDEX IF EXISTS isidbuser.bauabschnitt_abfragevariante_baugenehmigungsverfahren_id_index RENAME TO bauabschnitt_abfrgvar_baugnhmgsverfhrn_id_index;
+ALTER INDEX IF EXISTS isidbuser.bauabschnitt_abfragevariante_bauleitplanverfahren_id_index RENAME TO bauabschnitt_abfrgvar_bauleitplnvrfhrn_id_index;
+ALTER INDEX IF EXISTS isidbuser.bauabschnitt_abfragevariante_weiteres_verfahren_id_index RENAME TO bauabschnitt_abfrgvar_weitrs_vrfhrn_id_index;
+
+
+DROP TABLE isidbuser.bedarfsmeldung_fachreferate;
+
+
+END;
