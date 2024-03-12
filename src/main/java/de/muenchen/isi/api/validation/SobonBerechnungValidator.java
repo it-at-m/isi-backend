@@ -21,7 +21,7 @@ public class SobonBerechnungValidator implements ConstraintValidator<SobonBerech
             sobonBerechnung.getSobonFoerdermix() == null ||
             (sobonBerechnung.getSobonFoerdermix().getBezeichnungJahr() == null &&
                 sobonBerechnung.getSobonFoerdermix().getBezeichnung() == null &&
-                sobonBerechnung.getSobonFoerdermix().getFoerderarten().size() == 0);
+                sobonBerechnung.getSobonFoerdermix().getFoerderarten() == null);
         if (isSobonBerechnung) {
             return !isFoerdermixEmtpy;
         } else {

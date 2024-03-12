@@ -6,6 +6,7 @@ import static org.hamcrest.Matchers.is;
 import de.muenchen.isi.api.dto.AbfragevarianteBauleitplanverfahrenDto;
 import de.muenchen.isi.api.dto.FoerdermixDto;
 import de.muenchen.isi.api.dto.common.SobonBerechnungDto;
+import java.util.ArrayList;
 import org.junit.jupiter.api.Test;
 
 public class SobonBerechnungValidatorTest {
@@ -17,8 +18,13 @@ public class SobonBerechnungValidatorTest {
         AbfragevarianteBauleitplanverfahrenDto test = new AbfragevarianteBauleitplanverfahrenDto();
         SobonBerechnungDto dto = new SobonBerechnungDto();
 
+        FoerdermixDto foerdermixDto = new FoerdermixDto();
+        foerdermixDto.setBezeichnung("Bezeichnung");
+        foerdermixDto.setBezeichnungJahr("BezeichnungJahr");
+        foerdermixDto.setFoerderarten(new ArrayList<>());
+
         dto.setIsASobonBerechnung(true);
-        dto.setSobonFoerdermix(new FoerdermixDto());
+        dto.setSobonFoerdermix(foerdermixDto);
         assertThat(validator.isValid(dto, null), is(true));
 
         dto.setIsASobonBerechnung(true);
@@ -26,7 +32,7 @@ public class SobonBerechnungValidatorTest {
         assertThat(validator.isValid(dto, null), is(false));
 
         dto.setIsASobonBerechnung(false);
-        dto.setSobonFoerdermix(new FoerdermixDto());
+        dto.setSobonFoerdermix(foerdermixDto);
         assertThat(validator.isValid(dto, null), is(false));
 
         dto.setIsASobonBerechnung(false);
