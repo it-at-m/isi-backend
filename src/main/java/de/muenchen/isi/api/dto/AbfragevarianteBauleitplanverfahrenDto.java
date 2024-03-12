@@ -68,6 +68,8 @@ public class AbfragevarianteBauleitplanverfahrenDto extends AbfragevarianteDto {
 
     private String anmerkungBauratendateiInputs;
 
+    private BauratendateiInputDto bauratendateiInputBasis;
+
     private List<BauratendateiInputDto> bauratendateiInputs;
 
     private List<BedarfsmeldungDto> bedarfsmeldungFachreferate;

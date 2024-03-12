@@ -23,6 +23,8 @@ import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.Abfragev
 import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.AbfragevarianteBauleitplanverfahrenSachbearbeitungInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.AbfragevarianteWeiteresVerfahrenInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.AbfragevarianteWeiteresVerfahrenSachbearbeitungInBearbeitungSachbearbeitungModel;
+import de.muenchen.isi.domain.model.calculation.BauratendateiWohneinheitenModel;
+import de.muenchen.isi.domain.model.calculation.WohneinheitenProFoerderartProJahrModel;
 import de.muenchen.isi.infrastructure.entity.AbfragevarianteBaugenehmigungsverfahren;
 import de.muenchen.isi.infrastructure.entity.AbfragevarianteBauleitplanverfahren;
 import de.muenchen.isi.infrastructure.entity.AbfragevarianteWeiteresVerfahren;
@@ -57,6 +59,7 @@ public interface AbfragevarianteDomainMapper {
             @Mapping(target = "anmerkung", ignore = true),
             @Mapping(target = "hasBauratendateiInputs", ignore = true),
             @Mapping(target = "anmerkungBauratendateiInputs", ignore = true),
+            @Mapping(target = "bauratendateiInputBasis", ignore = true),
             @Mapping(target = "bauratendateiInputs", ignore = true),
             @Mapping(target = "bedarfsmeldungFachreferate", ignore = true),
             @Mapping(target = "ausgeloesterBedarfImBaugebietBeruecksichtigenKita", ignore = true),
@@ -85,6 +88,7 @@ public interface AbfragevarianteDomainMapper {
             @Mapping(target = "anmerkung", ignore = true),
             @Mapping(target = "hasBauratendateiInputs", ignore = true),
             @Mapping(target = "anmerkungBauratendateiInputs", ignore = true),
+            @Mapping(target = "bauratendateiInputBasis", ignore = true),
             @Mapping(target = "bauratendateiInputs", ignore = true),
             @Mapping(target = "bedarfsmeldungFachreferate", ignore = true),
             @Mapping(target = "ausgeloesterBedarfImBaugebietBeruecksichtigenKita", ignore = true),
@@ -113,6 +117,7 @@ public interface AbfragevarianteDomainMapper {
             @Mapping(target = "anmerkung", ignore = true),
             @Mapping(target = "hasBauratendateiInputs", ignore = true),
             @Mapping(target = "anmerkungBauratendateiInputs", ignore = true),
+            @Mapping(target = "bauratendateiInputBasis", ignore = true),
             @Mapping(target = "bauratendateiInputs", ignore = true),
             @Mapping(target = "bedarfsmeldungFachreferate", ignore = true),
             @Mapping(target = "ausgeloesterBedarfImBaugebietBeruecksichtigenKita", ignore = true),
@@ -141,6 +146,7 @@ public interface AbfragevarianteDomainMapper {
             @Mapping(target = "anmerkung", ignore = false),
             @Mapping(target = "hasBauratendateiInputs", ignore = false),
             @Mapping(target = "anmerkungBauratendateiInputs", ignore = false),
+            @Mapping(target = "bauratendateiInputBasis", ignore = false),
             @Mapping(target = "bauratendateiInputs", ignore = false),
         }
     )
@@ -158,6 +164,7 @@ public interface AbfragevarianteDomainMapper {
             @Mapping(target = "anmerkung", ignore = false),
             @Mapping(target = "hasBauratendateiInputs", ignore = false),
             @Mapping(target = "anmerkungBauratendateiInputs", ignore = false),
+            @Mapping(target = "bauratendateiInputBasis", ignore = false),
             @Mapping(target = "bauratendateiInputs", ignore = false),
         }
     )
@@ -175,6 +182,7 @@ public interface AbfragevarianteDomainMapper {
             @Mapping(target = "anmerkung", ignore = false),
             @Mapping(target = "hasBauratendateiInputs", ignore = false),
             @Mapping(target = "anmerkungBauratendateiInputs", ignore = false),
+            @Mapping(target = "bauratendateiInputBasis", ignore = false),
             @Mapping(target = "bauratendateiInputs", ignore = false),
         }
     )
@@ -190,6 +198,7 @@ public interface AbfragevarianteDomainMapper {
             @Mapping(target = "createdDateTime", ignore = true),
             @Mapping(target = "hasBauratendateiInputs", ignore = true),
             @Mapping(target = "anmerkungBauratendateiInputs", ignore = true),
+            @Mapping(target = "bauratendateiInputBasis", ignore = true),
             @Mapping(target = "bauratendateiInputs", ignore = true),
             @Mapping(target = "bedarfsmeldungFachreferate", ignore = true),
             @Mapping(target = "ausgeloesterBedarfImBaugebietBeruecksichtigenKita", ignore = true),
@@ -216,6 +225,7 @@ public interface AbfragevarianteDomainMapper {
             @Mapping(target = "createdDateTime", ignore = true),
             @Mapping(target = "hasBauratendateiInputs", ignore = true),
             @Mapping(target = "anmerkungBauratendateiInputs", ignore = true),
+            @Mapping(target = "bauratendateiInputBasis", ignore = true),
             @Mapping(target = "bauratendateiInputs", ignore = true),
             @Mapping(target = "bedarfsmeldungFachreferate", ignore = true),
             @Mapping(target = "ausgeloesterBedarfImBaugebietBeruecksichtigenKita", ignore = true),
@@ -242,6 +252,7 @@ public interface AbfragevarianteDomainMapper {
             @Mapping(target = "createdDateTime", ignore = true),
             @Mapping(target = "hasBauratendateiInputs", ignore = true),
             @Mapping(target = "anmerkungBauratendateiInputs", ignore = true),
+            @Mapping(target = "bauratendateiInputBasis", ignore = true),
             @Mapping(target = "bauratendateiInputs", ignore = true),
             @Mapping(target = "bedarfsmeldungFachreferate", ignore = true),
             @Mapping(target = "ausgeloesterBedarfImBaugebietBeruecksichtigenKita", ignore = true),

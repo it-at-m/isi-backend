@@ -31,5 +31,7 @@ public class AbfragevarianteWeiteresVerfahrenSachbearbeitungInBearbeitungSachbea
 
     private String anmerkungBauratendateiInputs;
 
+    private BauratendateiInputModel bauratendateiInputBasis;
+
     private List<BauratendateiInputModel> bauratendateiInputs;
 }

@@ -29,5 +29,7 @@ public class AbfragevarianteBauleitplanverfahrenInBearbeitungSachbearbeitungMode
 
     private String anmerkungBauratendateiInputs;
 
+    private BauratendateiInputModel bauratendateiInputBasis;
+
     private List<BauratendateiInputModel> bauratendateiInputs;
 }

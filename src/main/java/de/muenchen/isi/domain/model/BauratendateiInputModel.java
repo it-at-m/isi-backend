@@ -11,11 +11,11 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 public class BauratendateiInputModel extends BaseEntityModel {
 
-    private String grundschulsprengel;
+    private List<String> grundschulsprengel;
 
-    private String mittelschulsprengel;
+    private List<String> mittelschulsprengel;
 
-    private String viertel;
+    private List<String> viertel;
 
     private List<BauratendateiWohneinheitenModel> wohneinheiten;
 }

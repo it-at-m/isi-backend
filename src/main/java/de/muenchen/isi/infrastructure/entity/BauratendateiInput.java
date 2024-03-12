@@ -2,7 +2,7 @@ package de.muenchen.isi.infrastructure.entity;
 
 import de.muenchen.isi.infrastructure.entity.calculation.BauratendateiWohneinheiten;
 import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
@@ -17,14 +17,14 @@ import lombok.ToString;
 @Entity
 public class BauratendateiInput extends BaseEntity {
 
-    @Column
-    private String grundschulsprengel;
+    @ElementCollection
+    private List<String> grundschulsprengel;
 
-    @Column
-    private String mittelschulsprengel;
+    @ElementCollection
+    private List<String> mittelschulsprengel;
 
-    @Column
-    private String viertel;
+    @ElementCollection
+    private List<String> viertel;
 
     @OneToMany(cascade = { CascadeType.ALL }, orphanRemoval = true)
     @JoinColumn(name = "wohneinheiten_pro_jahr_pro_foerderart_id", referencedColumnName = "id")

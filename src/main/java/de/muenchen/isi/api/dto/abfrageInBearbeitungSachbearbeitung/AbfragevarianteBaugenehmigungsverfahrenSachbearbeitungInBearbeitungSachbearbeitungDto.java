@@ -38,5 +38,7 @@ public class AbfragevarianteBaugenehmigungsverfahrenSachbearbeitungInBearbeitung
 
     private String anmerkungBauratendateiInputs;
 
+    private BauratendateiInputDto bauratendateiInputBasis;
+
     private List<BauratendateiInputDto> bauratendateiInputs;
 }

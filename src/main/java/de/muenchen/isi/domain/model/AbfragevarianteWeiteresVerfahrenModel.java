@@ -76,6 +76,8 @@ public class AbfragevarianteWeiteresVerfahrenModel extends AbfragevarianteModel 
 
     private String anmerkungBauratendateiInputs;
 
+    private BauratendateiInputModel bauratendateiInputBasis;
+
     private List<BauratendateiInputModel> bauratendateiInputs;
 
     private List<BedarfsmeldungModel> bedarfsmeldungFachreferate;

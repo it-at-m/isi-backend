@@ -68,6 +68,8 @@ public class AbfragevarianteBauleitplanverfahrenModel extends AbfragevarianteMod
 
     private String anmerkungBauratendateiInputs;
 
+    private BauratendateiInputModel bauratendateiInputBasis;
+
     private List<BauratendateiInputModel> bauratendateiInputs;
 
     private List<BedarfsmeldungModel> bedarfsmeldungFachreferate;

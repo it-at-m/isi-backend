@@ -21,6 +21,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
@@ -144,8 +145,12 @@ public class AbfragevarianteBauleitplanverfahren extends Abfragevariante {
     @Column(length = 1000)
     private String anmerkungBauratendateiInputs;
 
+    @OneToOne(cascade = { CascadeType.ALL }, orphanRemoval = true)
+    @JoinColumn(name = "bauratendatei_basis_id", referencedColumnName = "id")
+    private BauratendateiInput bauratendateiInputBasis;
+
     @OneToMany(cascade = { CascadeType.ALL }, orphanRemoval = true)
-    @JoinColumn(name = "abfragevariante_baugenehmigungsverfahren_bauratendatei_id", referencedColumnName = "id")
+    @JoinColumn(name = "abfragevariante_bauleitplanverfahren_bauratendatei_id", referencedColumnName = "id")
     @OrderBy("createdDateTime asc")
     private List<BauratendateiInput> bauratendateiInputs;
 
