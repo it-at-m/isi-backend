@@ -6,6 +6,7 @@ package de.muenchen.isi.domain.model.infrastruktureinrichtung;
 
 import de.muenchen.isi.domain.model.BaseEntityModel;
 import de.muenchen.isi.domain.model.common.AdresseModel;
+import de.muenchen.isi.domain.model.common.BearbeitendePersonModel;
 import de.muenchen.isi.domain.model.common.VerortungPointModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusInfrastruktureinrichtung;
@@ -19,6 +20,8 @@ import lombok.ToString;
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 public abstract class InfrastruktureinrichtungModel extends BaseEntityModel {
+
+    private BearbeitendePersonModel bearbeitendePerson;
 
     private InfrastruktureinrichtungTyp infrastruktureinrichtungTyp;
 
