@@ -27,9 +27,9 @@ public class AbfragevarianteBauleitplanverfahrenSachbearbeitungInBearbeitungSach
 
     private String anmerkung;
 
-    private Boolean hasBauratenDateiInputs;
+    private Boolean hasBauratendateiInputs;
 
-    private String anmerkungBauratenDateiInputs;
+    private String anmerkungBauratendateiInputs;
 
     private List<BauratendateiInputModel> bauratendateiInputs;
 }

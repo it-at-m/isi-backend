@@ -145,10 +145,10 @@ public class AbfragevarianteBaugenehmigungsverfahren extends Abfragevariante {
     private String anmerkung;
 
     @Column
-    private Boolean hasBauratenDateiInputs;
+    private Boolean hasBauratendateiInputs;
 
     @Column(length = 1000)
-    private String anmerkungBauratenDateiInputs;
+    private String anmerkungBauratendateiInputs;
 
     @OneToMany(cascade = { CascadeType.ALL }, orphanRemoval = true)
     @JoinColumn(name = "abfragevariante_baugenehmigungsverfahren_bauratendatei_id", referencedColumnName = "id")

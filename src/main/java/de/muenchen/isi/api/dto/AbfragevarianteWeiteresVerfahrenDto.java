@@ -72,9 +72,9 @@ public class AbfragevarianteWeiteresVerfahrenDto extends AbfragevarianteDto {
 
     private String anmerkung;
 
-    private Boolean hasBauratenDateiInputs;
+    private Boolean hasBauratendateiInputs;
 
-    private String anmerkungBauratenDateiInputs;
+    private String anmerkungBauratendateiInputs;
 
     private List<BauratendateiInputDto> bauratendateiInputs;
 

@@ -31,9 +31,9 @@ public class AbfragevarianteWeiteresVerfahrenInBearbeitungSachbearbeitungDto
     private String anmerkung;
 
     @NotNull
-    private Boolean hasBauratenDateiInputs;
+    private Boolean hasBauratendateiInputs;
 
-    private String anmerkungBauratenDateiInputs;
+    private String anmerkungBauratendateiInputs;
 
     private List<BauratendateiInputDto> bauratendateiInputs;
 }

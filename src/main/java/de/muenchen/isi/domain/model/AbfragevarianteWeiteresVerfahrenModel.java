@@ -72,9 +72,9 @@ public class AbfragevarianteWeiteresVerfahrenModel extends AbfragevarianteModel 
 
     private String anmerkung;
 
-    private Boolean hasBauratenDateiInputs;
+    private Boolean hasBauratendateiInputs;
 
-    private String anmerkungBauratenDateiInputs;
+    private String anmerkungBauratendateiInputs;
 
     private List<BauratendateiInputModel> bauratendateiInputs;
 
