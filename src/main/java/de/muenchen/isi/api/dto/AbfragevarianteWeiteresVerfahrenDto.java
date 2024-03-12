@@ -4,6 +4,7 @@
  */
 package de.muenchen.isi.api.dto;
 
+import de.muenchen.isi.api.dto.common.SobonBerechnungDto;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.WesentlicheRechtsgrundlage;
 import java.math.BigDecimal;
@@ -68,9 +69,7 @@ public class AbfragevarianteWeiteresVerfahrenDto extends AbfragevarianteDto {
 
     private SobonOrientierungswertJahr sobonOrientierungswertJahr;
 
-    private Boolean isASobonBerechnung;
-
-    private FoerdermixDto sobonFoerdermix;
+    private SobonBerechnungDto sobonBerechnung;
 
     private LocalDate stammdatenGueltigAb;
 

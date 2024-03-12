@@ -19,6 +19,7 @@ import de.muenchen.isi.domain.model.AbfrageModel;
 import de.muenchen.isi.domain.model.BaugenehmigungsverfahrenModel;
 import de.muenchen.isi.domain.model.BauleitplanverfahrenModel;
 import de.muenchen.isi.domain.model.BedarfsmeldungModel;
+import de.muenchen.isi.domain.model.FoerdermixModel;
 import de.muenchen.isi.domain.model.WeiteresVerfahrenModel;
 import de.muenchen.isi.domain.model.abfrageAngelegt.AbfrageAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungFachreferat.AbfragevarianteBaugenehmigungsverfahrenInBearbeitungFachreferatModel;
@@ -33,6 +34,7 @@ import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.Abfragev
 import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.BaugenehmigungsverfahrenInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.BauleitplanverfahrenInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.WeiteresVerfahrenInBearbeitungSachbearbeitungModel;
+import de.muenchen.isi.domain.model.common.SobonBerechnungModel;
 import de.muenchen.isi.domain.service.calculation.CalculationService;
 import de.muenchen.isi.domain.service.reporting.ReportingdataTransferService;
 import de.muenchen.isi.domain.service.transition.MockCustomUser;
@@ -265,6 +267,10 @@ class AbfrageServiceSpringTest {
         abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
         abfrage = this.abfrageService.save(abfrage);
 
+        final var sobonBerechnung = new SobonBerechnungModel();
+        sobonBerechnung.setIsASobonBerechnung(true);
+        sobonBerechnung.setSobonFoerdermix(new FoerdermixModel());
+
         final var abfragePatch = new BauleitplanverfahrenInBearbeitungSachbearbeitungModel();
         abfragePatch.setArtAbfrage(ArtAbfrage.BAULEITPLANVERFAHREN);
         abfragePatch.setVersion(abfrage.getVersion());
@@ -279,8 +285,7 @@ class AbfrageServiceSpringTest {
         );
         abfragevariantePatch.setArtAbfragevariante(ArtAbfrage.BAULEITPLANVERFAHREN);
         abfragevariantePatch.setSobonOrientierungswertJahr(SobonOrientierungswertJahr.JAHR_2017);
-        abfragevariantePatch.setIsASobonBerechnung(false);
-        abfragevariantePatch.setSobonFoerdermix(TestData.createFoerdermixModel());
+        abfragevariantePatch.setSobonBerechnung(sobonBerechnung);
         abfragevariantePatch.setAnmerkung("Die Anmerkung Bauleitplanverfahren Patch Sachbearbeitung");
         abfragePatch.setAbfragevariantenBauleitplanverfahren(List.of(abfragevariantePatch));
 
@@ -342,6 +347,10 @@ class AbfrageServiceSpringTest {
         abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
         abfrage = this.abfrageService.save(abfrage);
 
+        final var sobonBerechnung = new SobonBerechnungModel();
+        sobonBerechnung.setIsASobonBerechnung(true);
+        sobonBerechnung.setSobonFoerdermix(new FoerdermixModel());
+
         final var abfragePatch = new WeiteresVerfahrenInBearbeitungSachbearbeitungModel();
         abfragePatch.setArtAbfrage(ArtAbfrage.WEITERES_VERFAHREN);
         abfragePatch.setVersion(abfrage.getVersion());
@@ -357,8 +366,7 @@ class AbfrageServiceSpringTest {
         );
         abfragevariantePatch.setArtAbfragevariante(ArtAbfrage.WEITERES_VERFAHREN);
         abfragevariantePatch.setSobonOrientierungswertJahr(SobonOrientierungswertJahr.JAHR_2017);
-        abfragevariantePatch.setIsASobonBerechnung(false);
-        abfragevariantePatch.setSobonFoerdermix(TestData.createFoerdermixModel());
+        abfragevariantePatch.setSobonBerechnung(sobonBerechnung);
         abfragevariantePatch.setAnmerkung("Die Anmerkung WeiteresVerfahren Patch Sachbearbeitung");
         abfragePatch.setAbfragevariantenWeiteresVerfahren(List.of(abfragevariantePatch));
 

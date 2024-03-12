@@ -53,8 +53,7 @@ public interface AbfragevarianteDomainMapper {
             @Mapping(target = "lastModifiedDateTime", ignore = true),
             @Mapping(target = "createdDateTime", ignore = true),
             @Mapping(target = "sobonOrientierungswertJahr", ignore = true),
-            @Mapping(target = "isASobonBerechnung", ignore = true),
-            @Mapping(target = "sobonFoerdermix", ignore = true),
+            @Mapping(target = "sobonBerechnung", ignore = true),
             @Mapping(target = "stammdatenGueltigAb", ignore = true),
             @Mapping(target = "anmerkung", ignore = true),
             @Mapping(target = "bedarfsmeldungFachreferate", ignore = true),
@@ -105,8 +104,7 @@ public interface AbfragevarianteDomainMapper {
             @Mapping(target = "lastModifiedDateTime", ignore = true),
             @Mapping(target = "createdDateTime", ignore = true),
             @Mapping(target = "sobonOrientierungswertJahr", ignore = true),
-            @Mapping(target = "isASobonBerechnung", ignore = true),
-            @Mapping(target = "sobonFoerdermix", ignore = true),
+            @Mapping(target = "sobonBerechnung", ignore = true),
             @Mapping(target = "stammdatenGueltigAb", ignore = true),
             @Mapping(target = "anmerkung", ignore = true),
             @Mapping(target = "bedarfsmeldungFachreferate", ignore = true),
@@ -132,8 +130,7 @@ public interface AbfragevarianteDomainMapper {
         {
             @Mapping(target = "version", ignore = false),
             @Mapping(target = "sobonOrientierungswertJahr", ignore = false),
-            @Mapping(target = "isASobonBerechnung", ignore = false),
-            @Mapping(target = "sobonFoerdermix", ignore = false),
+            @Mapping(target = "sobonBerechnung", ignore = false),
             @Mapping(target = "stammdatenGueltigAb", ignore = false),
             @Mapping(target = "anmerkung", ignore = false),
         }
@@ -162,8 +159,7 @@ public interface AbfragevarianteDomainMapper {
         {
             @Mapping(target = "version", ignore = false),
             @Mapping(target = "sobonOrientierungswertJahr", ignore = false),
-            @Mapping(target = "isASobonBerechnung", ignore = false),
-            @Mapping(target = "sobonFoerdermix", ignore = false),
+            @Mapping(target = "sobonBerechnung", ignore = false),
             @Mapping(target = "stammdatenGueltigAb", ignore = false),
             @Mapping(target = "anmerkung", ignore = false),
         }

@@ -6,7 +6,6 @@ package de.muenchen.isi.api.dto;
 
 import de.muenchen.isi.api.validation.FoerdermixNotEmptyValid;
 import de.muenchen.isi.api.validation.HasFoerdermixRequiredSum;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -29,7 +28,6 @@ public class BaurateDto extends BaseEntityDto {
 
     private BigDecimal gfWohnenGeplant;
 
-    @Valid
     @NotNull
     @FoerdermixNotEmptyValid
     @HasFoerdermixRequiredSum

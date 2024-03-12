@@ -19,6 +19,7 @@ import de.muenchen.isi.domain.model.calculation.LangfristigerBedarfModel;
 import de.muenchen.isi.domain.model.calculation.LangfristigerSobonBedarfModel;
 import de.muenchen.isi.domain.model.calculation.PersonenProJahrModel;
 import de.muenchen.isi.domain.model.calculation.WohneinheitenProFoerderartProJahrModel;
+import de.muenchen.isi.domain.model.common.SobonBerechnungModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
@@ -317,6 +318,10 @@ class CalculationServiceTest {
         final var abfrage = new WeiteresVerfahrenModel();
         abfrage.setSobonRelevant(UncertainBoolean.TRUE);
 
+        final var sobonBerechnung = new SobonBerechnungModel();
+        sobonBerechnung.setIsASobonBerechnung(true);
+        sobonBerechnung.setSobonFoerdermix(new FoerdermixModel());
+
         final var abfragevarianteWeiteresVerfahrenModel = new AbfragevarianteWeiteresVerfahrenModel();
         abfragevarianteWeiteresVerfahrenModel.setId(UUID.randomUUID());
         abfragevarianteWeiteresVerfahrenModel.setArtAbfragevariante(ArtAbfrage.WEITERES_VERFAHREN);
@@ -324,8 +329,7 @@ class CalculationServiceTest {
         abfragevarianteWeiteresVerfahrenModel.setSobonOrientierungswertJahr(sobonOrientierungswertJahr);
         abfragevarianteWeiteresVerfahrenModel.setStammdatenGueltigAb(stammdatenGueltigAb);
         abfragevarianteWeiteresVerfahrenModel.setGfWohnenSobonUrsaechlich(sobonGf);
-        abfragevarianteWeiteresVerfahrenModel.setIsASobonBerechnung(true);
-        abfragevarianteWeiteresVerfahrenModel.setSobonFoerdermix(new FoerdermixModel());
+        abfragevarianteWeiteresVerfahrenModel.setSobonBerechnung(sobonBerechnung);
 
         final var langfristigerPlanungsursaechlicherBedarf = new LangfristigerBedarfModel();
         langfristigerPlanungsursaechlicherBedarf.setWohneinheiten(
@@ -352,7 +356,7 @@ class CalculationServiceTest {
                 bauabschnitte,
                 sobonOrientierungswertJahr,
                 stammdatenGueltigAb,
-                abfragevarianteWeiteresVerfahrenModel.getSobonFoerdermix()
+                abfragevarianteWeiteresVerfahrenModel.getSobonBerechnung().getSobonFoerdermix()
             );
 
         final var bedarfeForAbfragevariante = calculationService.calculateBedarfeForAbfragevariante(
@@ -381,7 +385,7 @@ class CalculationServiceTest {
                 bauabschnitte,
                 sobonOrientierungswertJahr,
                 stammdatenGueltigAb,
-                abfragevarianteWeiteresVerfahrenModel.getSobonFoerdermix()
+                abfragevarianteWeiteresVerfahrenModel.getSobonBerechnung().getSobonFoerdermix()
             );
     }
 
@@ -441,14 +445,17 @@ class CalculationServiceTest {
         final var abfrage = new BauleitplanverfahrenModel();
         abfrage.setSobonRelevant(UncertainBoolean.TRUE);
 
+        final var sobonBerechnung = new SobonBerechnungModel();
+        sobonBerechnung.setIsASobonBerechnung(true);
+        sobonBerechnung.setSobonFoerdermix(new FoerdermixModel());
+
         final var abfragevarianteBauleitplanverfahren = new AbfragevarianteBauleitplanverfahrenModel();
         abfragevarianteBauleitplanverfahren.setArtAbfragevariante(ArtAbfrage.BAULEITPLANVERFAHREN);
         abfragevarianteBauleitplanverfahren.setBauabschnitte(bauabschnitte);
         abfragevarianteBauleitplanverfahren.setSobonOrientierungswertJahr(sobonOrientierungswertJahr);
         abfragevarianteBauleitplanverfahren.setStammdatenGueltigAb(stammdatenGueltigAb);
         abfragevarianteBauleitplanverfahren.setGfWohnenSobonUrsaechlich(sobonGf);
-        abfragevarianteBauleitplanverfahren.setIsASobonBerechnung(true);
-        abfragevarianteBauleitplanverfahren.setSobonFoerdermix(new FoerdermixModel());
+        abfragevarianteBauleitplanverfahren.setSobonBerechnung(sobonBerechnung);
 
         final var langfristigerPlanungsursaechlicherBedarf = new LangfristigerBedarfModel();
         langfristigerPlanungsursaechlicherBedarf.setWohneinheiten(
@@ -475,7 +482,7 @@ class CalculationServiceTest {
                 bauabschnitte,
                 sobonOrientierungswertJahr,
                 stammdatenGueltigAb,
-                abfragevarianteBauleitplanverfahren.getSobonFoerdermix()
+                abfragevarianteBauleitplanverfahren.getSobonBerechnung().getSobonFoerdermix()
             );
 
         final var bedarfeForAbfragevariante = calculationService.calculateBedarfeForAbfragevariante(
@@ -504,7 +511,7 @@ class CalculationServiceTest {
                 bauabschnitte,
                 sobonOrientierungswertJahr,
                 stammdatenGueltigAb,
-                abfragevarianteBauleitplanverfahren.getSobonFoerdermix()
+                abfragevarianteBauleitplanverfahren.getSobonBerechnung().getSobonFoerdermix()
             );
     }
 
@@ -804,76 +811,37 @@ class CalculationServiceTest {
     }
 
     @Test
-    void hasRightCoonditionsForLangfristigeSobonBerechnung() {
+    void doSobonberechung() {
         var isAbfrageSobonRelevant = UncertainBoolean.TRUE;
+        final var sobonBerechnung = new SobonBerechnungModel();
+        sobonBerechnung.setIsASobonBerechnung(true);
+        sobonBerechnung.setSobonFoerdermix(new FoerdermixModel());
         final var abfragevariante = new AbfragevarianteBauleitplanverfahrenModel();
-        abfragevariante.setIsASobonBerechnung(true);
-        abfragevariante.setGfWohnenSobonUrsaechlich(BigDecimal.ZERO);
-        abfragevariante.setSobonFoerdermix(new FoerdermixModel());
 
-        assertThat(
-            this.calculationService.hasRightCoonditionsForLangfristigeSobonBerechnung(
-                    abfragevariante,
-                    isAbfrageSobonRelevant
-                ),
-            is(true)
-        );
+        abfragevariante.setSobonBerechnung(sobonBerechnung);
+        abfragevariante.setGfWohnenSobonUrsaechlich(BigDecimal.ZERO);
+
+        assertThat(this.calculationService.doSobonberechung(abfragevariante, isAbfrageSobonRelevant), is(true));
 
         isAbfrageSobonRelevant = UncertainBoolean.FALSE;
-        assertThat(
-            this.calculationService.hasRightCoonditionsForLangfristigeSobonBerechnung(
-                    abfragevariante,
-                    isAbfrageSobonRelevant
-                ),
-            is(false)
-        );
+        assertThat(this.calculationService.doSobonberechung(abfragevariante, isAbfrageSobonRelevant), is(false));
 
         isAbfrageSobonRelevant = UncertainBoolean.UNSPECIFIED;
-        assertThat(
-            this.calculationService.hasRightCoonditionsForLangfristigeSobonBerechnung(
-                    abfragevariante,
-                    isAbfrageSobonRelevant
-                ),
-            is(false)
-        );
+        assertThat(this.calculationService.doSobonberechung(abfragevariante, isAbfrageSobonRelevant), is(false));
 
         isAbfrageSobonRelevant = UncertainBoolean.TRUE;
-        abfragevariante.setSobonFoerdermix(null);
-        assertThat(
-            this.calculationService.hasRightCoonditionsForLangfristigeSobonBerechnung(
-                    abfragevariante,
-                    isAbfrageSobonRelevant
-                ),
-            is(false)
-        );
-        abfragevariante.setSobonFoerdermix(new FoerdermixModel());
-        abfragevariante.setIsASobonBerechnung(false);
-        assertThat(
-            this.calculationService.hasRightCoonditionsForLangfristigeSobonBerechnung(
-                    abfragevariante,
-                    isAbfrageSobonRelevant
-                ),
-            is(false)
-        );
-        abfragevariante.setIsASobonBerechnung(true);
+        abfragevariante.getSobonBerechnung().setSobonFoerdermix(null);
+        assertThat(this.calculationService.doSobonberechung(abfragevariante, isAbfrageSobonRelevant), is(false));
+        abfragevariante.getSobonBerechnung().setSobonFoerdermix(new FoerdermixModel());
+        abfragevariante.getSobonBerechnung().setIsASobonBerechnung(false);
+        assertThat(this.calculationService.doSobonberechung(abfragevariante, isAbfrageSobonRelevant), is(false));
+        abfragevariante.getSobonBerechnung().setIsASobonBerechnung(true);
         abfragevariante.setGfWohnenSobonUrsaechlich(null);
-        assertThat(
-            this.calculationService.hasRightCoonditionsForLangfristigeSobonBerechnung(
-                    abfragevariante,
-                    isAbfrageSobonRelevant
-                ),
-            is(false)
-        );
+        assertThat(this.calculationService.doSobonberechung(abfragevariante, isAbfrageSobonRelevant), is(false));
 
         isAbfrageSobonRelevant = UncertainBoolean.FALSE;
-        abfragevariante.setIsASobonBerechnung(false);
+        abfragevariante.getSobonBerechnung().setIsASobonBerechnung(false);
         abfragevariante.setSobonOrientierungswertJahr(null);
-        assertThat(
-            this.calculationService.hasRightCoonditionsForLangfristigeSobonBerechnung(
-                    abfragevariante,
-                    isAbfrageSobonRelevant
-                ),
-            is(false)
-        );
+        assertThat(this.calculationService.doSobonberechung(abfragevariante, isAbfrageSobonRelevant), is(false));
     }
 }

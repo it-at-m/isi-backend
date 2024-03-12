@@ -28,6 +28,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.ListUtils;
+import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.stereotype.Service;
 
@@ -133,12 +134,7 @@ public class CalculationService {
                         sobonOrientierungswertJahr,
                         stammdatenGueltigAb
                     );
-            if (
-                this.hasRightCoonditionsForLangfristigeSobonBerechnung(
-                        abfragevarianteBauleitplanverfahren,
-                        isAbfrageSobonRelevant
-                    )
-            ) {
+            if (this.doSobonberechung(abfragevarianteBauleitplanverfahren, isAbfrageSobonRelevant)) {
                 sobonGf = abfragevarianteBauleitplanverfahren.getGfWohnenSobonUrsaechlich();
 
                 langfristigerSobonursaechlicherBedarf =
@@ -147,7 +143,7 @@ public class CalculationService {
                             bauabschnitte,
                             sobonOrientierungswertJahr,
                             stammdatenGueltigAb,
-                            abfragevarianteBauleitplanverfahren.getSobonFoerdermix()
+                            abfragevarianteBauleitplanverfahren.getSobonBerechnung().getSobonFoerdermix()
                         );
                 bedarfeForAbfragevariante.setLangfristigerSobonursaechlicherBedarf(
                     langfristigerSobonursaechlicherBedarf
@@ -177,12 +173,7 @@ public class CalculationService {
                         sobonOrientierungswertJahr,
                         stammdatenGueltigAb
                     );
-            if (
-                this.hasRightCoonditionsForLangfristigeSobonBerechnung(
-                        abfragevarianteWeiteresVerfahren,
-                        isAbfrageSobonRelevant
-                    )
-            ) {
+            if (this.doSobonberechung(abfragevarianteWeiteresVerfahren, isAbfrageSobonRelevant)) {
                 sobonGf = abfragevarianteWeiteresVerfahren.getGfWohnenSobonUrsaechlich();
                 langfristigerSobonursaechlicherBedarf =
                     this.calculateLangfristigerSobonursaechlicherBedarf(
@@ -190,7 +181,7 @@ public class CalculationService {
                             bauabschnitte,
                             sobonOrientierungswertJahr,
                             stammdatenGueltigAb,
-                            abfragevarianteWeiteresVerfahren.getSobonFoerdermix()
+                            abfragevarianteWeiteresVerfahren.getSobonBerechnung().getSobonFoerdermix()
                         );
                 bedarfeForAbfragevariante.setLangfristigerSobonursaechlicherBedarf(
                     langfristigerSobonursaechlicherBedarf
@@ -350,29 +341,29 @@ public class CalculationService {
         return bedarf;
     }
 
-    public boolean hasRightCoonditionsForLangfristigeSobonBerechnung(
+    public boolean doSobonberechung(
         final AbfragevarianteBauleitplanverfahrenModel abfragevarianteBauleitplanverfahren,
         UncertainBoolean isSobonRelevant
     ) {
         return (
             isSobonRelevant == UncertainBoolean.TRUE &&
-            ObjectUtils.isNotEmpty(abfragevarianteBauleitplanverfahren.getIsASobonBerechnung()) &&
-            abfragevarianteBauleitplanverfahren.getIsASobonBerechnung().booleanValue() == true &&
+            abfragevarianteBauleitplanverfahren.getSobonBerechnung() != null &&
+            BooleanUtils.isTrue(abfragevarianteBauleitplanverfahren.getSobonBerechnung().getIsASobonBerechnung()) &&
             ObjectUtils.isNotEmpty(abfragevarianteBauleitplanverfahren.getGfWohnenSobonUrsaechlich()) &&
-            ObjectUtils.isNotEmpty(abfragevarianteBauleitplanverfahren.getSobonFoerdermix())
+            ObjectUtils.isNotEmpty(abfragevarianteBauleitplanverfahren.getSobonBerechnung().getSobonFoerdermix())
         );
     }
 
-    public boolean hasRightCoonditionsForLangfristigeSobonBerechnung(
+    public boolean doSobonberechung(
         final AbfragevarianteWeiteresVerfahrenModel abfragevarianteWeiteresVerfahrenModel,
         UncertainBoolean isSobonRelevant
     ) {
         return (
             isSobonRelevant == UncertainBoolean.TRUE &&
-            ObjectUtils.isNotEmpty(abfragevarianteWeiteresVerfahrenModel.getIsASobonBerechnung()) &&
-            abfragevarianteWeiteresVerfahrenModel.getIsASobonBerechnung().booleanValue() == true &&
-            ObjectUtils.isNotEmpty(abfragevarianteWeiteresVerfahrenModel.getSobonFoerdermix()) &&
-            ObjectUtils.isNotEmpty(abfragevarianteWeiteresVerfahrenModel.getGfWohnenSobonUrsaechlich())
+            abfragevarianteWeiteresVerfahrenModel.getSobonBerechnung() != null &&
+            BooleanUtils.isTrue(abfragevarianteWeiteresVerfahrenModel.getSobonBerechnung().getIsASobonBerechnung()) &&
+            ObjectUtils.isNotEmpty(abfragevarianteWeiteresVerfahrenModel.getGfWohnenSobonUrsaechlich()) &&
+            ObjectUtils.isNotEmpty(abfragevarianteWeiteresVerfahrenModel.getSobonBerechnung().getSobonFoerdermix())
         );
     }
 }
