@@ -4,21 +4,26 @@
  */
 package de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung;
 
+import de.muenchen.isi.infrastructure.adapter.listener.InfrastruktureinrichtungListener;
 import de.muenchen.isi.infrastructure.adapter.search.StatusInfrastruktureinrichtungSuggestionBinder;
 import de.muenchen.isi.infrastructure.adapter.search.StatusInfrastruktureinrichtungValueBridge;
 import de.muenchen.isi.infrastructure.adapter.search.StringSuggestionBinder;
 import de.muenchen.isi.infrastructure.entity.BaseEntity;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
 import de.muenchen.isi.infrastructure.entity.common.Adresse;
+import de.muenchen.isi.infrastructure.entity.common.BearbeitendePerson;
 import de.muenchen.isi.infrastructure.entity.common.VerortungPoint;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusInfrastruktureinrichtung;
 import de.muenchen.isi.infrastructure.repository.search.SearchwordSuggesterRepository;
+import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.AttributeOverrides;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Inheritance;
@@ -44,12 +49,26 @@ import org.hibernate.search.mapper.pojo.mapping.definition.annotation.NonStandar
 import org.hibernate.type.SqlTypes;
 
 @Entity
+@EntityListeners({ InfrastruktureinrichtungListener.class })
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(name = "infrastruktureinrichtungTyp")
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 public abstract class Infrastruktureinrichtung extends BaseEntity {
+
+    @Embedded
+    @AttributeOverrides(
+        {
+            @AttributeOverride(name = "name", column = @Column(name = "bearbeitende_person_name")),
+            @AttributeOverride(name = "email", column = @Column(name = "bearbeitende_person_email")),
+            @AttributeOverride(
+                name = "organisationseinheit",
+                column = @Column(name = "bearbeitende_person_organisationseinheit")
+            ),
+        }
+    )
+    private BearbeitendePerson bearbeitendePerson;
 
     /**
      * Diese Methode gibt den Wert der {@link DiscriminatorColumn} zurück.

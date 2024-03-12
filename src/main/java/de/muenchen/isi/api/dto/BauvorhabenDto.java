@@ -1,6 +1,7 @@
 package de.muenchen.isi.api.dto;
 
 import de.muenchen.isi.api.dto.common.AdresseDto;
+import de.muenchen.isi.api.dto.common.BearbeitendePersonDto;
 import de.muenchen.isi.api.dto.common.VerortungMultiPolygonDto;
 import de.muenchen.isi.api.dto.filehandling.DokumentDto;
 import de.muenchen.isi.api.validation.HasAllowedNumberOfDocuments;
@@ -25,6 +26,8 @@ import lombok.ToString;
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 public class BauvorhabenDto extends BaseEntityDto {
+
+    private BearbeitendePersonDto bearbeitendePerson;
 
     @NotEmpty
     @Size(max = 255, message = "Es sind maximal {max} Zeichen erlaubt")
