@@ -60,7 +60,7 @@ public abstract class AbfrageAngelegtDto {
     @Size(max = 70, message = "Es sind maximal {max} Zeichen erlaubt")
     private String name;
 
-    @Size(max = 255, message = "Es sind maximal {max} Zeichen erlaubt")
+    @Size(max = 1000, message = "Es sind maximal {max} Zeichen erlaubt")
     private String anmerkung;
 
     private UUID bauvorhaben;
