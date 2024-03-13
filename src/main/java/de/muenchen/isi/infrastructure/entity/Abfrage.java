@@ -21,6 +21,7 @@ import jakarta.persistence.InheritanceType;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -93,5 +94,5 @@ public abstract class Abfrage extends BaseEntity {
     @CollectionTable(
         indexes = { @Index(name = "abfrage_bearbeitungshistorie_abfrage_id_index", columnList = "abfrage_id") }
     )
-    private List<Bearbeitungshistorie> bearbeitungshistorie;
+    private List<Bearbeitungshistorie> bearbeitungshistorie = new ArrayList<>();
 }

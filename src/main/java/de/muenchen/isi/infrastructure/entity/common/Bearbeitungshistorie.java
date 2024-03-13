@@ -8,6 +8,7 @@ import jakarta.persistence.Embeddable;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import java.time.LocalDateTime;
 import lombok.Data;
 
 @Embeddable
@@ -17,6 +18,9 @@ public class Bearbeitungshistorie {
     @Enumerated(EnumType.STRING)
     @Column
     private StatusAbfrage zielStatus;
+
+    @Column
+    private LocalDateTime zeitpunkt;
 
     @Embedded
     @AttributeOverrides(
