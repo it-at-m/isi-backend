@@ -67,7 +67,7 @@ ALTER INDEX IF EXISTS isidbuser.abfragevarianten_weiteres_verfahren_id_index REN
 ALTER INDEX IF EXISTS isidbuser.abfragevarianten_sachbearbeitung_weiteres_verfahren_id_index RENAME TO abfrgvar_schbrbtng_weitrs_vrfhrn_id_index;
 
 
--- Bedarfsmeldung --
+-- Bedarfsmeldung
 ALTER TABLE isidbuser.bedarfsmeldung
     RENAME COLUMN abfragevariante_baugenehmigungsverfahren_abfrageersteller_id TO abfrgvar_baugnhmgsverfhrn_abfrageersteller_id;
 
@@ -102,7 +102,7 @@ CREATE INDEX IF NOT EXISTS bedarfsmeldung_fachreferate_abfrgvar_weitrs_vrfhrn_id
     ON isidbuser.bedarfsmeldung USING btree (abfrgvar_weitrs_vrfhrn_fachreferate_id);
 
 
--- Bauabschnitt --
+-- Bauabschnitt
 ALTER TABLE isidbuser.bauabschnitt
     RENAME COLUMN abfragevariante_baugenehmigungsverfahren_id TO abfrgvar_baugnhmgsverfhrn_id;
 

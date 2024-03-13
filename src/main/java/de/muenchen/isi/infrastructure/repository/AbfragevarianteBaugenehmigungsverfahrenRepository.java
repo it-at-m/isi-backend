@@ -15,7 +15,7 @@ public interface AbfragevarianteBaugenehmigungsverfahrenRepository
     Optional<UUID> findAbfrageIdForAbfragevarianteById(final UUID id);
 
     @Query(
-        value = "select abfrgvar_schbrbtng_baugnhmgsverfhrn_id_index from abfrgvar_baugnhmgsverfhrn where id = ?1",
+        value = "select abfrgvar_schbrbtng_baugnhmgsverfhrn_id from abfrgvar_baugnhmgsverfhrn where id = ?1",
         nativeQuery = true
     )
     Optional<UUID> findAbfrageIdForAbfragevarianteSachbearbeitungById(final UUID id);
