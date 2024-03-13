@@ -16,16 +16,19 @@ public class SobonBerechnungValidator implements ConstraintValidator<SobonBerech
         final SobonBerechnungDto sobonBerechnung,
         ConstraintValidatorContext constraintValidatorContext
     ) {
-        boolean isSobonBerechnung = BooleanUtils.toBoolean(sobonBerechnung.getIsASobonBerechnung());
-        boolean isFoerdermixEmtpy =
-            sobonBerechnung.getSobonFoerdermix() == null ||
-            (sobonBerechnung.getSobonFoerdermix().getBezeichnungJahr() == null &&
-                sobonBerechnung.getSobonFoerdermix().getBezeichnung() == null &&
-                sobonBerechnung.getSobonFoerdermix().getFoerderarten() == null);
-        if (isSobonBerechnung) {
-            return !isFoerdermixEmtpy;
-        } else {
-            return isFoerdermixEmtpy;
+        if (sobonBerechnung != null) {
+            boolean isSobonBerechnung = BooleanUtils.toBoolean(sobonBerechnung.getIsASobonBerechnung());
+            boolean isFoerdermixEmtpy =
+                sobonBerechnung.getSobonFoerdermix() == null ||
+                (sobonBerechnung.getSobonFoerdermix().getBezeichnungJahr() == null &&
+                    sobonBerechnung.getSobonFoerdermix().getBezeichnung() == null &&
+                    sobonBerechnung.getSobonFoerdermix().getFoerderarten().isEmpty());
+            if (isSobonBerechnung) {
+                return !isFoerdermixEmtpy;
+            } else {
+                return isFoerdermixEmtpy;
+            }
         }
+        return true;
     }
 }
