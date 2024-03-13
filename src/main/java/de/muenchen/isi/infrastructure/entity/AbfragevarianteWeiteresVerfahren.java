@@ -153,15 +153,15 @@ public class AbfragevarianteWeiteresVerfahren extends Abfragevariante {
     @AttributeOverrides(
         {
             @AttributeOverride(
-                name = "sobonBerechnung.isASobonBerechnung",
+                name = "isASobonBerechnung",
                 column = @Column(name = "is_a_sobon_berechnung", nullable = true)
             ),
             @AttributeOverride(
-                name = "sobonBerechnung.bezeichnung",
+                name = "sobonFoerdermix.bezeichnung",
                 column = @Column(name = "sobon_foerdermix_bezeichnung", nullable = true)
             ),
             @AttributeOverride(
-                name = "sobonBerechnung.bezeichnungJahr",
+                name = "sobonFoerdermix.bezeichnungJahr",
                 column = @Column(name = "sobon_foerdermix_bezeichnung_jahr", nullable = true)
             ),
         }
