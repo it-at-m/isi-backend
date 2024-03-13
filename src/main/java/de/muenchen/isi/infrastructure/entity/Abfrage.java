@@ -3,12 +3,15 @@ package de.muenchen.isi.infrastructure.entity;
 import de.muenchen.isi.infrastructure.adapter.search.StatusAbfrageSuggestionBinder;
 import de.muenchen.isi.infrastructure.adapter.search.StatusAbfrageValueBridge;
 import de.muenchen.isi.infrastructure.adapter.search.StringSuggestionBinder;
+import de.muenchen.isi.infrastructure.entity.common.Bearbeitungshistorie;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.repository.search.SearchwordSuggesterRepository;
+import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -18,6 +21,7 @@ import jakarta.persistence.InheritanceType;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
+import java.util.List;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -84,4 +88,10 @@ public abstract class Abfrage extends BaseEntity {
 
     @Column(length = 8000)
     private String linkEakte;
+
+    @ElementCollection
+    @CollectionTable(
+        indexes = { @Index(name = "abfrage_bearbeitungshistorie_abfrage_id_index", columnList = "abfrage_id") }
+    )
+    private List<Bearbeitungshistorie> bearbeitungshistorie;
 }
