@@ -821,27 +821,48 @@ class CalculationServiceTest {
         abfragevariante.setSobonBerechnung(sobonBerechnung);
         abfragevariante.setGfWohnenSobonUrsaechlich(BigDecimal.ZERO);
 
-        assertThat(this.calculationService.doSobonberechung(abfragevariante, isAbfrageSobonRelevant), is(true));
+        assertThat(
+            this.calculationService.shouldSobonBerechnungBePerformed(abfragevariante, isAbfrageSobonRelevant),
+            is(true)
+        );
 
         isAbfrageSobonRelevant = UncertainBoolean.FALSE;
-        assertThat(this.calculationService.doSobonberechung(abfragevariante, isAbfrageSobonRelevant), is(false));
+        assertThat(
+            this.calculationService.shouldSobonBerechnungBePerformed(abfragevariante, isAbfrageSobonRelevant),
+            is(false)
+        );
 
         isAbfrageSobonRelevant = UncertainBoolean.UNSPECIFIED;
-        assertThat(this.calculationService.doSobonberechung(abfragevariante, isAbfrageSobonRelevant), is(false));
+        assertThat(
+            this.calculationService.shouldSobonBerechnungBePerformed(abfragevariante, isAbfrageSobonRelevant),
+            is(false)
+        );
 
         isAbfrageSobonRelevant = UncertainBoolean.TRUE;
         abfragevariante.getSobonBerechnung().setSobonFoerdermix(null);
-        assertThat(this.calculationService.doSobonberechung(abfragevariante, isAbfrageSobonRelevant), is(false));
+        assertThat(
+            this.calculationService.shouldSobonBerechnungBePerformed(abfragevariante, isAbfrageSobonRelevant),
+            is(false)
+        );
         abfragevariante.getSobonBerechnung().setSobonFoerdermix(new FoerdermixModel());
         abfragevariante.getSobonBerechnung().setIsASobonBerechnung(false);
-        assertThat(this.calculationService.doSobonberechung(abfragevariante, isAbfrageSobonRelevant), is(false));
+        assertThat(
+            this.calculationService.shouldSobonBerechnungBePerformed(abfragevariante, isAbfrageSobonRelevant),
+            is(false)
+        );
         abfragevariante.getSobonBerechnung().setIsASobonBerechnung(true);
         abfragevariante.setGfWohnenSobonUrsaechlich(null);
-        assertThat(this.calculationService.doSobonberechung(abfragevariante, isAbfrageSobonRelevant), is(false));
+        assertThat(
+            this.calculationService.shouldSobonBerechnungBePerformed(abfragevariante, isAbfrageSobonRelevant),
+            is(false)
+        );
 
         isAbfrageSobonRelevant = UncertainBoolean.FALSE;
         abfragevariante.getSobonBerechnung().setIsASobonBerechnung(false);
         abfragevariante.setSobonOrientierungswertJahr(null);
-        assertThat(this.calculationService.doSobonberechung(abfragevariante, isAbfrageSobonRelevant), is(false));
+        assertThat(
+            this.calculationService.shouldSobonBerechnungBePerformed(abfragevariante, isAbfrageSobonRelevant),
+            is(false)
+        );
     }
 }

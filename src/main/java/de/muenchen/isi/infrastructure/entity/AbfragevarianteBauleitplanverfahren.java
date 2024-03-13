@@ -11,6 +11,8 @@ import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.WesentlicheRechtsgrundlage;
 import de.muenchen.isi.infrastructure.repository.search.SearchwordSuggesterRepository;
+import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.AttributeOverrides;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
@@ -135,6 +137,14 @@ public class AbfragevarianteBauleitplanverfahren extends Abfragevariante {
     private SobonOrientierungswertJahr sobonOrientierungswertJahr;
 
     @Embedded
+    @AttributeOverrides(
+        {
+            @AttributeOverride(
+                name = "sobonBerechnung.isASobonBerechnung",
+                column = @Column(name = "is_a_sobon_berechnung", nullable = true)
+            ),
+        }
+    )
     private SobonBerechnung sobonBerechnung;
 
     @Column
