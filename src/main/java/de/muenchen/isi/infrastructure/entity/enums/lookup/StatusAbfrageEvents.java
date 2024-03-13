@@ -23,12 +23,7 @@ public enum StatusAbfrageEvents {
         "Die Abfrage wird an die Abfrageerstellung zurückgegeben."
     ),
 
-    KEINE_BEARBEITUNG_NOETIG(
-        "erledigt-ohne-fachreferat",
-        "ABFRAGE SCHLIEßEN",
-        5,
-        "Die Abfrage wird abgeschlossen. Sie können eine Anmerkung hinzufügen."
-    ),
+    KEINE_BEARBEITUNG_NOETIG("erledigt-ohne-fachreferat", "ABFRAGE SCHLIEßEN", 5, "Die Abfrage wird abgeschlossen."),
     VERSCHICKEN_DER_STELLUNGNAHME(
         "verschicken-der-stellungnahme",
         "AN FACHREFERATE",

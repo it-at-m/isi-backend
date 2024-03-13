@@ -1259,8 +1259,7 @@ class AbfrageStatusServiceTest {
 
     void addAbfrageAnmerkungStringLengthExceededExceptionTest(final AbfrageModel abfrageToTest)
         throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, CalculationException, ReportingException, UserRoleNotAllowedException {
-        final var anmerkung =
-            "TestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestI";
+        final var anmerkung = new String(new char[1000]).replace("\0", "A");
         AbfrageModel abfrage = abfrageToTest;
         abfrage = this.abfrageService.save(abfrage);
         abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
