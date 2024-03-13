@@ -1,7 +1,9 @@
 package de.muenchen.isi.domain.model;
 
+import de.muenchen.isi.domain.model.common.BearbeitungshistorieModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
+import java.util.List;
 import java.util.UUID;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -25,4 +27,6 @@ public abstract class AbfrageModel extends BaseEntityModel {
     private String sub;
 
     private String linkEakte;
+
+    private List<BearbeitungshistorieModel> bearbeitungshistorie;
 }

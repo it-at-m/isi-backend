@@ -108,6 +108,7 @@ public abstract class AbfrageDomainMapper {
             @Mapping(target = "lastModifiedDateTime", ignore = true),
             @Mapping(target = "abfragevariantenBauleitplanverfahren", ignore = true),
             @Mapping(target = "abfragevariantenSachbearbeitungBauleitplanverfahren", ignore = true),
+            @Mapping(target = "bearbeitungshistorie", ignore = true),
         }
     )
     public abstract BauleitplanverfahrenModel request2Model(
@@ -161,6 +162,7 @@ public abstract class AbfrageDomainMapper {
             @Mapping(target = "lastModifiedDateTime", ignore = true),
             @Mapping(target = "abfragevariantenBaugenehmigungsverfahren", ignore = true),
             @Mapping(target = "abfragevariantenSachbearbeitungBaugenehmigungsverfahren", ignore = true),
+            @Mapping(target = "bearbeitungshistorie", ignore = true),
         }
     )
     public abstract BaugenehmigungsverfahrenModel request2Model(
@@ -214,6 +216,7 @@ public abstract class AbfrageDomainMapper {
             @Mapping(target = "lastModifiedDateTime", ignore = true),
             @Mapping(target = "abfragevariantenWeiteresVerfahren", ignore = true),
             @Mapping(target = "abfragevariantenSachbearbeitungWeiteresVerfahren", ignore = true),
+            @Mapping(target = "bearbeitungshistorie", ignore = true),
         }
     )
     public abstract WeiteresVerfahrenModel request2Model(
