@@ -4,6 +4,7 @@ import de.muenchen.isi.api.dto.common.SobonBerechnungDto;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import lombok.NoArgsConstructor;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;
 import org.springframework.stereotype.Component;
 
@@ -22,12 +23,8 @@ public class SobonBerechnungValidator implements ConstraintValidator<SobonBerech
                 sobonBerechnung.getSobonFoerdermix() == null ||
                 (sobonBerechnung.getSobonFoerdermix().getBezeichnungJahr() == null &&
                     sobonBerechnung.getSobonFoerdermix().getBezeichnung() == null &&
-                    sobonBerechnung.getSobonFoerdermix().getFoerderarten().isEmpty());
-            if (isSobonBerechnung) {
-                return !isFoerdermixEmtpy;
-            } else {
-                return isFoerdermixEmtpy;
-            }
+                    CollectionUtils.isEmpty(sobonBerechnung.getSobonFoerdermix().getFoerderarten()));
+            return isSobonBerechnung != isFoerdermixEmtpy;
         }
         return true;
     }
