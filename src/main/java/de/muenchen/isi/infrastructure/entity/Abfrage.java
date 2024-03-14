@@ -19,6 +19,7 @@ import jakarta.persistence.Index;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import java.util.ArrayList;
@@ -94,5 +95,6 @@ public abstract class Abfrage extends BaseEntity {
     @CollectionTable(
         indexes = { @Index(name = "abfrage_bearbeitungshistorie_abfrage_id_index", columnList = "abfrage_id") }
     )
+    @OrderBy("zeitpunkt asc")
     private List<Bearbeitungshistorie> bearbeitungshistorie = new ArrayList<>();
 }
