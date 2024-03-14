@@ -14,7 +14,6 @@ import de.muenchen.isi.domain.mapper.AbfrageDomainMapper;
 import de.muenchen.isi.domain.model.AbfrageModel;
 import de.muenchen.isi.domain.model.BaugenehmigungsverfahrenModel;
 import de.muenchen.isi.domain.model.BauleitplanverfahrenModel;
-import de.muenchen.isi.domain.model.BauratendateiInputModel;
 import de.muenchen.isi.domain.model.BauvorhabenModel;
 import de.muenchen.isi.domain.model.WeiteresVerfahrenModel;
 import de.muenchen.isi.domain.model.abfrageAngelegt.AbfrageAngelegtModel;
@@ -33,7 +32,8 @@ import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.AbfrageI
 import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.BaugenehmigungsverfahrenInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.BauleitplanverfahrenInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.WeiteresVerfahrenInBearbeitungSachbearbeitungModel;
-import de.muenchen.isi.domain.model.calculation.BauratendateiWohneinheitenModel;
+import de.muenchen.isi.domain.model.bauratendatei.BauratendateiInputModel;
+import de.muenchen.isi.domain.model.bauratendatei.BauratendateiWohneinheitenModel;
 import de.muenchen.isi.domain.model.calculation.BedarfeForAbfragevarianteModel;
 import de.muenchen.isi.domain.model.calculation.LangfristigerBedarfModel;
 import de.muenchen.isi.domain.model.common.VerortungModel;
@@ -54,10 +54,10 @@ import de.muenchen.isi.security.AuthenticationUtils;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -655,25 +655,35 @@ public class AbfrageService {
         final UUID abfragevarianteId
     ) {
         final var bauratendateiInput = new BauratendateiInputModel();
+        var bauratendateiInputEmpty = true;
 
         if (verortung != null) {
-            bauratendateiInput.setGrundschulsprengel(
-                CollectionUtils
-                    .emptyIfNull(verortung.getGrundschulsprengel())
-                    .stream()
-                    .map(value -> value.getNummer().toString())
-                    .toList()
-            );
-            bauratendateiInput.setMittelschulsprengel(
-                CollectionUtils
-                    .emptyIfNull(verortung.getMittelschulsprengel())
-                    .stream()
-                    .map(value -> value.getNummer().toString())
-                    .toList()
-            );
-            bauratendateiInput.setViertel(
-                CollectionUtils.emptyIfNull(verortung.getViertel()).stream().map(ViertelModel::getNummer).toList()
-            );
+            if (verortung.getGrundschulsprengel() != null) {
+                bauratendateiInput.setGrundschulsprengel(
+                    verortung
+                        .getGrundschulsprengel()
+                        .stream()
+                        .map(value -> value.getNummer().toString())
+                        .collect(Collectors.toSet())
+                );
+                bauratendateiInputEmpty = false;
+            }
+            if (verortung.getMittelschulsprengel() != null) {
+                bauratendateiInput.setMittelschulsprengel(
+                    verortung
+                        .getMittelschulsprengel()
+                        .stream()
+                        .map(value -> value.getNummer().toString())
+                        .collect(Collectors.toSet())
+                );
+                bauratendateiInputEmpty = false;
+            }
+            if (verortung.getViertel() != null) {
+                bauratendateiInput.setViertel(
+                    verortung.getViertel().stream().map(ViertelModel::getNummer).collect(Collectors.toSet())
+                );
+                bauratendateiInputEmpty = false;
+            }
         }
 
         if (bedarfe.get(abfragevarianteId) != null) {
@@ -692,6 +702,11 @@ public class AbfrageService {
                     })
                     .toList()
             );
+            bauratendateiInputEmpty = false;
+        }
+
+        if (bauratendateiInputEmpty) {
+            return null;
         }
 
         return bauratendateiInput;

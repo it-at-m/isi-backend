@@ -221,7 +221,7 @@ class AbfrageServiceTest {
         Mockito.verify(this.bauvorhabenRepository, Mockito.times(0)).findById(UUID.randomUUID());
         Mockito
             .verify(this.calculationService, Mockito.times(1))
-            .calculateBedarfeForEachAbfragevarianteOfAbfrage(expected);
+            .calculateBedarfeForEachAbfragevarianteOfAbfrage(abfrage);
         Mockito
             .verify(this.reportingdataTransferService, Mockito.times(1))
             .transferAbfrageAndBedarfe(expected, new HashMap<>());
@@ -275,7 +275,7 @@ class AbfrageServiceTest {
         Mockito.verify(this.bauvorhabenRepository, Mockito.times(0)).findById(UUID.randomUUID());
         Mockito
             .verify(this.calculationService, Mockito.times(1))
-            .calculateBedarfeForEachAbfragevarianteOfAbfrage(expected);
+            .calculateBedarfeForEachAbfragevarianteOfAbfrage(abfrage);
         Mockito
             .verify(this.reportingdataTransferService, Mockito.times(1))
             .transferAbfrageAndBedarfe(expected, new HashMap<>());

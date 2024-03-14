@@ -1,4 +1,4 @@
-package de.muenchen.isi.domain.model.calculation;
+package de.muenchen.isi.domain.model.bauratendatei;
 
 import de.muenchen.isi.domain.model.BaseEntityModel;
 import java.math.BigDecimal;

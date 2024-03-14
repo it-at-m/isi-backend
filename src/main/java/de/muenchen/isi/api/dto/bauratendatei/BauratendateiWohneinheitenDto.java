@@ -1,4 +1,4 @@
-package de.muenchen.isi.api.dto.calculation;
+package de.muenchen.isi.api.dto.bauratendatei;
 
 import de.muenchen.isi.api.dto.BaseEntityDto;
 import java.math.BigDecimal;
@@ -9,7 +9,7 @@ import lombok.ToString;
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class BauratendateiWohneinheiten extends BaseEntityDto {
+public class BauratendateiWohneinheitenDto extends BaseEntityDto {
 
     private String foerderart;
 

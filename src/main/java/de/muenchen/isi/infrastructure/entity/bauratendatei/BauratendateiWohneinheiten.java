@@ -1,4 +1,4 @@
-package de.muenchen.isi.infrastructure.entity.calculation;
+package de.muenchen.isi.infrastructure.entity.bauratendatei;
 
 import de.muenchen.isi.infrastructure.entity.BaseEntity;
 import jakarta.persistence.Column;

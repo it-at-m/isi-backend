@@ -4,7 +4,7 @@
  */
 package de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung;
 
-import de.muenchen.isi.domain.model.BauratendateiInputModel;
+import de.muenchen.isi.domain.model.bauratendatei.BauratendateiInputModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
 import java.time.LocalDate;

@@ -4,8 +4,10 @@
  */
 package de.muenchen.isi.api.dto.abfrageInBearbeitungSachbearbeitung;
 
-import de.muenchen.isi.api.dto.BauratendateiInputDto;
 import de.muenchen.isi.api.dto.abfrageAngelegt.AbfragevarianteWeiteresVerfahrenAngelegtDto;
+import de.muenchen.isi.api.dto.bauratendatei.BauratendateiInputDto;
+import de.muenchen.isi.api.dto.bauratendatei.WithBauratendateiInputs;
+import de.muenchen.isi.api.validation.BauratendateiInputsValid;
 import de.muenchen.isi.api.validation.NotUnspecified;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
 import jakarta.validation.constraints.NotNull;
@@ -18,8 +20,10 @@ import lombok.ToString;
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
+@BauratendateiInputsValid
 public class AbfragevarianteWeiteresVerfahrenInBearbeitungSachbearbeitungDto
-    extends AbfragevarianteWeiteresVerfahrenAngelegtDto {
+    extends AbfragevarianteWeiteresVerfahrenAngelegtDto
+    implements WithBauratendateiInputs {
 
     @NotUnspecified
     @NotNull
