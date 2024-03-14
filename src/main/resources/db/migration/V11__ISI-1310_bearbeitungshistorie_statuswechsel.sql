@@ -7,7 +7,7 @@ CREATE TABLE isidbuser.abfrage_bearbeitungshistorie (
     bearbeitende_person_email character varying(255) COLLATE pg_catalog."default",
     bearbeitende_person_name character varying(255) COLLATE pg_catalog."default",
     bearbeitende_person_organisationseinheit character varying(255) COLLATE pg_catalog."default",
-    status_abfrage character varying(255) COLLATE pg_catalog."default",
+    ziel_status character varying(255) COLLATE pg_catalog."default",
     zeitpunkt timestamp without time zone
 );
 
