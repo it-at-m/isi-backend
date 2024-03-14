@@ -1,5 +1,5 @@
 --
--- TBD
+-- Tabelle für Bearbeitungshistorie bei Abfragen
 --
 
 CREATE TABLE isidbuser.abfrage_bearbeitungshistorie (
