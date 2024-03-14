@@ -29,7 +29,7 @@ public class BauratendateiInputsValidator
         }
 
         // Mapping von Förderart zu Jahr zu Summe Wohneinheiten
-        final var woheinheitenSum = new HashMap<String, HashMap<String, BigDecimal>>();
+        final var wohneinheitenSum = new HashMap<String, HashMap<String, BigDecimal>>();
 
         for (final var input : inputs) {
             // Vergleich räumlicher Daten
@@ -52,7 +52,7 @@ public class BauratendateiInputsValidator
             // Summieren der Wohneinheiten
             if (input.getWohneinheiten() != null) {
                 for (final var wohneinheiten : input.getWohneinheiten()) {
-                    woheinheitenSum.merge(
+                    wohneinheitenSum.merge(
                         wohneinheiten.getFoerderart(),
                         new HashMap<>(Map.of(wohneinheiten.getJahr(), wohneinheiten.getWohneinheiten())),
                         (present, current) -> {
@@ -68,9 +68,9 @@ public class BauratendateiInputsValidator
         if (inputBasis.getWohneinheiten() != null) {
             for (final var wohneinheiten : inputBasis.getWohneinheiten()) {
                 if (
-                    woheinheitenSum.get(wohneinheiten.getFoerderart()) == null ||
-                    woheinheitenSum.get(wohneinheiten.getFoerderart()).get(wohneinheiten.getJahr()) == null ||
-                    !woheinheitenSum
+                    !wohneinheitenSum.containsKey(wohneinheiten.getFoerderart()) ||
+                    !wohneinheitenSum.get(wohneinheiten.getFoerderart()).containsKey(wohneinheiten.getJahr()) ||
+                    !wohneinheitenSum
                         .get(wohneinheiten.getFoerderart())
                         .get(wohneinheiten.getJahr())
                         .equals(wohneinheiten.getWohneinheiten())
