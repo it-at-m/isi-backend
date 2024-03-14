@@ -1,6 +1,5 @@
 package de.muenchen.isi.infrastructure.entity;
 
-import de.muenchen.isi.infrastructure.adapter.listener.AbfrageListener;
 import de.muenchen.isi.infrastructure.adapter.search.StatusAbfrageSuggestionBinder;
 import de.muenchen.isi.infrastructure.adapter.search.StatusAbfrageValueBridge;
 import de.muenchen.isi.infrastructure.adapter.search.StringSuggestionBinder;
@@ -14,7 +13,6 @@ import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Index;
@@ -40,7 +38,6 @@ import org.hibernate.search.mapper.pojo.mapping.definition.annotation.KeywordFie
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.NonStandardField;
 
 @Entity
-@EntityListeners({ AbfrageListener.class })
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @DiscriminatorColumn(name = "artAbfrage")
 @Data

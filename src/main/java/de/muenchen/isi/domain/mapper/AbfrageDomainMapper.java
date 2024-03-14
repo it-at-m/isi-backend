@@ -26,10 +26,12 @@ import de.muenchen.isi.domain.model.abfrageInBearbeitungFachreferat.WeiteresVerf
 import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.BaugenehmigungsverfahrenInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.BauleitplanverfahrenInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.WeiteresVerfahrenInBearbeitungSachbearbeitungModel;
+import de.muenchen.isi.domain.model.common.BearbeitendePersonModel;
 import de.muenchen.isi.infrastructure.entity.Abfrage;
 import de.muenchen.isi.infrastructure.entity.Baugenehmigungsverfahren;
 import de.muenchen.isi.infrastructure.entity.Bauleitplanverfahren;
 import de.muenchen.isi.infrastructure.entity.WeiteresVerfahren;
+import de.muenchen.isi.infrastructure.entity.common.BearbeitendePerson;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.repository.BauvorhabenRepository;
 import java.util.ArrayList;
@@ -839,4 +841,6 @@ public abstract class AbfrageDomainMapper {
             });
         response.setAbfragevariantenSachbearbeitungWeiteresVerfahren(mappedAbfragevariantenSachbearbeitung);
     }
+
+    public abstract BearbeitendePersonModel entity2Model(BearbeitendePerson entity);
 }
