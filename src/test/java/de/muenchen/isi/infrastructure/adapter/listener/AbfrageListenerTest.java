@@ -12,6 +12,8 @@ import de.muenchen.isi.infrastructure.entity.common.Bearbeitungshistorie;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.repository.AbfrageRepository;
 import java.time.LocalDateTime;
+import java.util.Optional;
+import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
@@ -69,6 +71,70 @@ class AbfrageListenerTest {
             assertThat(abfrageToSave, is(expected));
 
             Mockito.verify(this.abfrageRepository, Mockito.times(0)).findById(Mockito.any());
+        }
+    }
+
+    @Test
+    @MockCustomUser(
+        givenname = "Neil",
+        surname = "Armstrong",
+        department = "NASA John F. Kennedy Space Center",
+        email = "neil.armstrong@nasa.gov"
+    )
+    void beforeSaveAbfrageIdNotNullAndAvailalbeInRepo() {
+        final var localDateTime1 = LocalDateTime.of(2024, 3, 14, 14, 1, 1, 1);
+        final var localDateTime2 = LocalDateTime.of(2024, 3, 15, 15, 2, 2, 2);
+
+        try (final MockedStatic<LocalDateTime> mockLocalDateTime = Mockito.mockStatic(LocalDateTime.class)) {
+            final var abfrageToSave = new Bauleitplanverfahren();
+            abfrageToSave.setId(UUID.randomUUID());
+            abfrageToSave.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+            final var bearbeitungshistorie = new Bearbeitungshistorie();
+            bearbeitungshistorie.setZielStatus(StatusAbfrage.ANGELEGT);
+            bearbeitungshistorie.setZeitpunkt(localDateTime1);
+            final var bearbeitendePerson = new BearbeitendePerson();
+            bearbeitendePerson.setName("Rob Winch");
+            bearbeitendePerson.setEmail("rob@example.com");
+            bearbeitendePerson.setOrganisationseinheit("IT");
+            bearbeitungshistorie.setBearbeitendePerson(bearbeitendePerson);
+            abfrageToSave.getBearbeitungshistorie().add(bearbeitungshistorie);
+
+            mockLocalDateTime.when(LocalDateTime::now).thenReturn(localDateTime2);
+
+            final var foundAbfrage = new Bauleitplanverfahren();
+            foundAbfrage.setId(abfrageToSave.getId());
+            foundAbfrage.setStatusAbfrage(StatusAbfrage.ANGELEGT);
+            Mockito.when(this.abfrageRepository.findById(abfrageToSave.getId())).thenReturn(Optional.of(foundAbfrage));
+
+            abfrageListener.beforeSave(abfrageToSave);
+
+            final var expected = new Bauleitplanverfahren();
+            expected.setId(abfrageToSave.getId());
+            expected.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+
+            var bearbeitungshistorieExpected = new Bearbeitungshistorie();
+            bearbeitungshistorieExpected.setZielStatus(StatusAbfrage.ANGELEGT);
+            bearbeitungshistorieExpected.setZeitpunkt(localDateTime1);
+            var bearbeitendePersonExpected = new BearbeitendePerson();
+            bearbeitendePersonExpected.setName("Rob Winch");
+            bearbeitendePersonExpected.setEmail("rob@example.com");
+            bearbeitendePersonExpected.setOrganisationseinheit("IT");
+            bearbeitungshistorieExpected.setBearbeitendePerson(bearbeitendePersonExpected);
+            expected.getBearbeitungshistorie().add(bearbeitungshistorieExpected);
+
+            bearbeitungshistorieExpected = new Bearbeitungshistorie();
+            bearbeitungshistorieExpected.setZielStatus(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+            bearbeitungshistorieExpected.setZeitpunkt(localDateTime2);
+            bearbeitendePersonExpected = new BearbeitendePerson();
+            bearbeitendePersonExpected.setName("Neil Armstrong");
+            bearbeitendePersonExpected.setEmail("neil.armstrong@nasa.gov");
+            bearbeitendePersonExpected.setOrganisationseinheit("NASA John F. Kennedy Space Center");
+            bearbeitungshistorieExpected.setBearbeitendePerson(bearbeitendePersonExpected);
+            expected.getBearbeitungshistorie().add(bearbeitungshistorieExpected);
+
+            assertThat(abfrageToSave, is(expected));
+
+            Mockito.verify(this.abfrageRepository, Mockito.times(1)).findById(abfrageToSave.getId());
         }
     }
 }
