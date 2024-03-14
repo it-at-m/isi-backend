@@ -12,6 +12,7 @@ import de.muenchen.isi.infrastructure.entity.common.Bearbeitungshistorie;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.repository.AbfrageRepository;
 import java.time.LocalDateTime;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
@@ -34,6 +35,11 @@ class AbfrageListenerTest {
 
     @MockBean
     private AbfrageRepository abfrageRepository;
+
+    @BeforeEach
+    public void beforeEach() {
+        Mockito.reset(abfrageRepository);
+    }
 
     @Test
     @MockCustomUser
