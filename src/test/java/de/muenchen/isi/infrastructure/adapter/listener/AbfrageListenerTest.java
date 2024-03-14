@@ -81,7 +81,7 @@ class AbfrageListenerTest {
         department = "NASA John F. Kennedy Space Center",
         email = "neil.armstrong@nasa.gov"
     )
-    void beforeSaveAbfrageIdNotNullAndAvailalbeInRepo() {
+    void beforeSaveAbfrageIdNotNullAndAvailableInRepoWithDifferentState() {
         final var localDateTime1 = LocalDateTime.of(2024, 3, 14, 14, 1, 1, 1);
         final var localDateTime2 = LocalDateTime.of(2024, 3, 15, 15, 2, 2, 2);
 
@@ -136,5 +136,100 @@ class AbfrageListenerTest {
 
             Mockito.verify(this.abfrageRepository, Mockito.times(1)).findById(abfrageToSave.getId());
         }
+    }
+
+    @Test
+    @MockCustomUser(
+        givenname = "Neil",
+        surname = "Armstrong",
+        department = "NASA John F. Kennedy Space Center",
+        email = "neil.armstrong@nasa.gov"
+    )
+    void beforeSaveAbfrageIdNotNullAndAvailableInRepoWithSameState() {
+        final var localDateTime1 = LocalDateTime.of(2024, 3, 14, 14, 1, 1, 1);
+
+        final var abfrageToSave = new Bauleitplanverfahren();
+        abfrageToSave.setId(UUID.randomUUID());
+        abfrageToSave.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+        final var bearbeitungshistorie = new Bearbeitungshistorie();
+        bearbeitungshistorie.setZielStatus(StatusAbfrage.ANGELEGT);
+        bearbeitungshistorie.setZeitpunkt(localDateTime1);
+        final var bearbeitendePerson = new BearbeitendePerson();
+        bearbeitendePerson.setName("Rob Winch");
+        bearbeitendePerson.setEmail("rob@example.com");
+        bearbeitendePerson.setOrganisationseinheit("IT");
+        bearbeitungshistorie.setBearbeitendePerson(bearbeitendePerson);
+        abfrageToSave.getBearbeitungshistorie().add(bearbeitungshistorie);
+
+        final var foundAbfrage = new Bauleitplanverfahren();
+        foundAbfrage.setId(abfrageToSave.getId());
+        foundAbfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+        Mockito.when(this.abfrageRepository.findById(abfrageToSave.getId())).thenReturn(Optional.of(foundAbfrage));
+
+        abfrageListener.beforeSave(abfrageToSave);
+
+        final var expected = new Bauleitplanverfahren();
+        expected.setId(abfrageToSave.getId());
+        expected.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+
+        var bearbeitungshistorieExpected = new Bearbeitungshistorie();
+        bearbeitungshistorieExpected.setZielStatus(StatusAbfrage.ANGELEGT);
+        bearbeitungshistorieExpected.setZeitpunkt(localDateTime1);
+        var bearbeitendePersonExpected = new BearbeitendePerson();
+        bearbeitendePersonExpected.setName("Rob Winch");
+        bearbeitendePersonExpected.setEmail("rob@example.com");
+        bearbeitendePersonExpected.setOrganisationseinheit("IT");
+        bearbeitungshistorieExpected.setBearbeitendePerson(bearbeitendePersonExpected);
+        expected.getBearbeitungshistorie().add(bearbeitungshistorieExpected);
+
+        assertThat(abfrageToSave, is(expected));
+
+        Mockito.verify(this.abfrageRepository, Mockito.times(1)).findById(abfrageToSave.getId());
+    }
+
+    @Test
+    @MockCustomUser(
+        givenname = "Neil",
+        surname = "Armstrong",
+        department = "NASA John F. Kennedy Space Center",
+        email = "neil.armstrong@nasa.gov"
+    )
+    void beforeSaveAbfrageIdNotNullAndNotAvailableInRepo() {
+        final var localDateTime1 = LocalDateTime.of(2024, 3, 14, 14, 1, 1, 1);
+
+        final var abfrageToSave = new Bauleitplanverfahren();
+        abfrageToSave.setId(UUID.randomUUID());
+        abfrageToSave.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+        final var bearbeitungshistorie = new Bearbeitungshistorie();
+        bearbeitungshistorie.setZielStatus(StatusAbfrage.ANGELEGT);
+        bearbeitungshistorie.setZeitpunkt(localDateTime1);
+        final var bearbeitendePerson = new BearbeitendePerson();
+        bearbeitendePerson.setName("Rob Winch");
+        bearbeitendePerson.setEmail("rob@example.com");
+        bearbeitendePerson.setOrganisationseinheit("IT");
+        bearbeitungshistorie.setBearbeitendePerson(bearbeitendePerson);
+        abfrageToSave.getBearbeitungshistorie().add(bearbeitungshistorie);
+
+        Mockito.when(this.abfrageRepository.findById(abfrageToSave.getId())).thenReturn(Optional.empty());
+
+        abfrageListener.beforeSave(abfrageToSave);
+
+        final var expected = new Bauleitplanverfahren();
+        expected.setId(abfrageToSave.getId());
+        expected.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+
+        var bearbeitungshistorieExpected = new Bearbeitungshistorie();
+        bearbeitungshistorieExpected.setZielStatus(StatusAbfrage.ANGELEGT);
+        bearbeitungshistorieExpected.setZeitpunkt(localDateTime1);
+        var bearbeitendePersonExpected = new BearbeitendePerson();
+        bearbeitendePersonExpected.setName("Rob Winch");
+        bearbeitendePersonExpected.setEmail("rob@example.com");
+        bearbeitendePersonExpected.setOrganisationseinheit("IT");
+        bearbeitungshistorieExpected.setBearbeitendePerson(bearbeitendePersonExpected);
+        expected.getBearbeitungshistorie().add(bearbeitungshistorieExpected);
+
+        assertThat(abfrageToSave, is(expected));
+
+        Mockito.verify(this.abfrageRepository, Mockito.times(1)).findById(abfrageToSave.getId());
     }
 }
