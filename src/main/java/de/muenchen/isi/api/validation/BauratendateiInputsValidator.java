@@ -33,40 +33,50 @@ public class BauratendateiInputsValidator
 
         for (final var input : inputs) {
             // Vergleich räumlicher Daten
-            if (!inputBasis.getGrundschulsprengel().containsAll(input.getGrundschulsprengel())) {
+            if (
+                inputBasis.getGrundschulsprengel() != null &&
+                !inputBasis.getGrundschulsprengel().containsAll(input.getGrundschulsprengel())
+            ) {
                 return false;
             }
-            if (!inputBasis.getMittelschulsprengel().containsAll(input.getMittelschulsprengel())) {
+            if (
+                inputBasis.getMittelschulsprengel() != null &&
+                !inputBasis.getMittelschulsprengel().containsAll(input.getMittelschulsprengel())
+            ) {
                 return false;
             }
-            if (!inputBasis.getViertel().containsAll(input.getViertel())) {
+            if (inputBasis.getViertel() != null && !inputBasis.getViertel().containsAll(input.getViertel())) {
                 return false;
             }
 
             // Summieren der Wohneinheiten
-            for (final var wohneinheiten : input.getWohneinheiten()) {
-                woheinheitenSum.merge(
-                    wohneinheiten.getFoerderart(),
-                    new HashMap<>(Map.of(wohneinheiten.getJahr(), wohneinheiten.getWohneinheiten())),
-                    (present, current) -> {
-                        present.merge(wohneinheiten.getJahr(), wohneinheiten.getWohneinheiten(), BigDecimal::add);
-                        return present;
-                    }
-                );
+            if (input.getWohneinheiten() != null) {
+                for (final var wohneinheiten : input.getWohneinheiten()) {
+                    woheinheitenSum.merge(
+                        wohneinheiten.getFoerderart(),
+                        new HashMap<>(Map.of(wohneinheiten.getJahr(), wohneinheiten.getWohneinheiten())),
+                        (present, current) -> {
+                            present.merge(wohneinheiten.getJahr(), wohneinheiten.getWohneinheiten(), BigDecimal::add);
+                            return present;
+                        }
+                    );
+                }
             }
         }
 
         // Vergleich Wohneinheiten
-        for (final var wohneinheiten : inputBasis.getWohneinheiten()) {
-            if (
-                woheinheitenSum.get(wohneinheiten.getFoerderart()) == null ||
-                woheinheitenSum.get(wohneinheiten.getFoerderart()).get(wohneinheiten.getJahr()) == null ||
-                !woheinheitenSum
-                    .get(wohneinheiten.getFoerderart())
-                    .get(wohneinheiten.getJahr())
-                    .equals(wohneinheiten.getWohneinheiten())
-            ) {
-                return false;
+        if (inputBasis.getWohneinheiten() != null) {
+            for (final var wohneinheiten : inputBasis.getWohneinheiten()) {
+                if (
+                    woheinheitenSum.get(wohneinheiten.getFoerderart()) == null ||
+                    woheinheitenSum.get(wohneinheiten.getFoerderart()).get(wohneinheiten.getJahr()) == null ||
+                    !woheinheitenSum
+                        .get(wohneinheiten.getFoerderart())
+                        .get(wohneinheiten.getJahr())
+                        .equals(wohneinheiten.getWohneinheiten())
+                ) {
+                    return false;
+                }
             }
         }
 
