@@ -15,10 +15,12 @@ import de.muenchen.isi.domain.model.WeiteresVerfahrenModel;
 import de.muenchen.isi.domain.model.calculation.BedarfeForAbfragevarianteModel;
 import de.muenchen.isi.domain.model.calculation.InfrastrukturbedarfProJahrModel;
 import de.muenchen.isi.domain.model.calculation.LangfristigerBedarfModel;
+import de.muenchen.isi.domain.model.calculation.LangfristigerSobonBedarfModel;
 import de.muenchen.isi.domain.model.calculation.PersonenProJahrModel;
 import de.muenchen.isi.domain.model.calculation.WohneinheitenProFoerderartProJahrModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,6 +45,9 @@ class CalculationServiceTest {
     private PlanungsursaechlicheWohneinheitenService planungsursaechlicheWohneinheitenService;
 
     @Mock
+    private SobonursaechlicheWohneinheitenService sobonursaechlicheWohneinheitenService;
+
+    @Mock
     private InfrastrukturbedarfService infrastrukturbedarfService;
 
     private CalculationService calculationService;
@@ -50,7 +55,13 @@ class CalculationServiceTest {
     @BeforeEach
     public void beforeEach() {
         this.calculationService =
-            Mockito.spy(new CalculationService(planungsursaechlicheWohneinheitenService, infrastrukturbedarfService));
+            Mockito.spy(
+                new CalculationService(
+                    planungsursaechlicheWohneinheitenService,
+                    sobonursaechlicheWohneinheitenService,
+                    infrastrukturbedarfService
+                )
+            );
         Mockito.reset(planungsursaechlicheWohneinheitenService, infrastrukturbedarfService, calculationService);
     }
 
@@ -250,17 +261,22 @@ class CalculationServiceTest {
         final var bauabschnitte = List.of(new BauabschnittModel());
         final var sobonOrientierungswertJahr = SobonOrientierungswertJahr.JAHR_2017;
         final var stammdatenGueltigAb = LocalDate.of(2020, 5, 30);
+        final var sobonGf = BigDecimal.ZERO;
 
-        final var abfragevarianteBauleitplanverfahren = new AbfragevarianteWeiteresVerfahrenModel();
-        abfragevarianteBauleitplanverfahren.setArtAbfragevariante(ArtAbfrage.WEITERES_VERFAHREN);
-        abfragevarianteBauleitplanverfahren.setBauabschnitte(bauabschnitte);
-        abfragevarianteBauleitplanverfahren.setSobonOrientierungswertJahr(sobonOrientierungswertJahr);
-        abfragevarianteBauleitplanverfahren.setStammdatenGueltigAb(stammdatenGueltigAb);
+        final var abfragevarianteWeiteresVerfahrenModel = new AbfragevarianteWeiteresVerfahrenModel();
+        abfragevarianteWeiteresVerfahrenModel.setArtAbfragevariante(ArtAbfrage.WEITERES_VERFAHREN);
+        abfragevarianteWeiteresVerfahrenModel.setBauabschnitte(bauabschnitte);
+        abfragevarianteWeiteresVerfahrenModel.setSobonOrientierungswertJahr(sobonOrientierungswertJahr);
+        abfragevarianteWeiteresVerfahrenModel.setStammdatenGueltigAb(stammdatenGueltigAb);
+        abfragevarianteWeiteresVerfahrenModel.setGfWohnenSobonUrsaechlich(sobonGf);
 
         final var langfristigerPlanungsursaechlicherBedarf = new LangfristigerBedarfModel();
         langfristigerPlanungsursaechlicherBedarf.setWohneinheiten(
             List.of(new WohneinheitenProFoerderartProJahrModel())
         );
+
+        final var langfristigerSobonursaechlicherBedarf = new LangfristigerSobonBedarfModel();
+        langfristigerSobonursaechlicherBedarf.setWohneinheiten(List.of(new WohneinheitenProFoerderartProJahrModel()));
 
         Mockito
             .doReturn(langfristigerPlanungsursaechlicherBedarf)
@@ -271,19 +287,38 @@ class CalculationServiceTest {
                 stammdatenGueltigAb
             );
 
+        Mockito
+            .doReturn(langfristigerSobonursaechlicherBedarf)
+            .when(calculationService)
+            .calculateLangfristigerSobonursaechlicherBedarf(
+                sobonGf,
+                bauabschnitte,
+                sobonOrientierungswertJahr,
+                stammdatenGueltigAb
+            );
+
         final var bedarfeForAbfragevariante = calculationService.calculateBedarfeForAbfragevariante(
-            abfragevarianteBauleitplanverfahren
+            abfragevarianteWeiteresVerfahrenModel
         );
 
         final var expected = new BedarfeForAbfragevarianteModel();
         expected.setLangfristigerPlanungsursaechlicherBedarf(langfristigerPlanungsursaechlicherBedarf);
-        expected.setLangfristigerSobonursaechlicherBedarf(null);
+        expected.setLangfristigerSobonursaechlicherBedarf(langfristigerSobonursaechlicherBedarf);
 
         assertThat(bedarfeForAbfragevariante, is(expected));
 
         Mockito
             .verify(calculationService, Mockito.times(1))
             .calculateLangfristigerPlanungsursaechlicherBedarf(
+                bauabschnitte,
+                sobonOrientierungswertJahr,
+                stammdatenGueltigAb
+            );
+
+        Mockito
+            .verify(calculationService, Mockito.times(1))
+            .calculateLangfristigerSobonursaechlicherBedarf(
+                sobonGf,
                 bauabschnitte,
                 sobonOrientierungswertJahr,
                 stammdatenGueltigAb
@@ -296,11 +331,11 @@ class CalculationServiceTest {
         final var sobonOrientierungswertJahr = SobonOrientierungswertJahr.JAHR_2017;
         final var stammdatenGueltigAb = LocalDate.of(2020, 5, 30);
 
-        final var abfragevarianteBauleitplanverfahren = new AbfragevarianteBaugenehmigungsverfahrenModel();
-        abfragevarianteBauleitplanverfahren.setArtAbfragevariante(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN);
-        abfragevarianteBauleitplanverfahren.setBauabschnitte(bauabschnitte);
-        abfragevarianteBauleitplanverfahren.setSobonOrientierungswertJahr(sobonOrientierungswertJahr);
-        abfragevarianteBauleitplanverfahren.setStammdatenGueltigAb(stammdatenGueltigAb);
+        final var abfragevarianteBaugenehmigungsverfahrenModel = new AbfragevarianteBaugenehmigungsverfahrenModel();
+        abfragevarianteBaugenehmigungsverfahrenModel.setArtAbfragevariante(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN);
+        abfragevarianteBaugenehmigungsverfahrenModel.setBauabschnitte(bauabschnitte);
+        abfragevarianteBaugenehmigungsverfahrenModel.setSobonOrientierungswertJahr(sobonOrientierungswertJahr);
+        abfragevarianteBaugenehmigungsverfahrenModel.setStammdatenGueltigAb(stammdatenGueltigAb);
 
         final var langfristigerPlanungsursaechlicherBedarf = new LangfristigerBedarfModel();
         langfristigerPlanungsursaechlicherBedarf.setWohneinheiten(
@@ -317,7 +352,7 @@ class CalculationServiceTest {
             );
 
         final var bedarfeForAbfragevariante = calculationService.calculateBedarfeForAbfragevariante(
-            abfragevarianteBauleitplanverfahren
+            abfragevarianteBaugenehmigungsverfahrenModel
         );
 
         final var expected = new BedarfeForAbfragevarianteModel();
@@ -340,22 +375,37 @@ class CalculationServiceTest {
         final var bauabschnitte = List.of(new BauabschnittModel());
         final var sobonOrientierungswertJahr = SobonOrientierungswertJahr.JAHR_2017;
         final var stammdatenGueltigAb = LocalDate.of(2020, 5, 30);
+        final var sobonGf = BigDecimal.ZERO;
 
         final var abfragevarianteBauleitplanverfahren = new AbfragevarianteBauleitplanverfahrenModel();
         abfragevarianteBauleitplanverfahren.setArtAbfragevariante(ArtAbfrage.BAULEITPLANVERFAHREN);
         abfragevarianteBauleitplanverfahren.setBauabschnitte(bauabschnitte);
         abfragevarianteBauleitplanverfahren.setSobonOrientierungswertJahr(sobonOrientierungswertJahr);
         abfragevarianteBauleitplanverfahren.setStammdatenGueltigAb(stammdatenGueltigAb);
+        abfragevarianteBauleitplanverfahren.setGfWohnenSobonUrsaechlich(sobonGf);
 
         final var langfristigerPlanungsursaechlicherBedarf = new LangfristigerBedarfModel();
         langfristigerPlanungsursaechlicherBedarf.setWohneinheiten(
             List.of(new WohneinheitenProFoerderartProJahrModel())
         );
 
+        final var langfristigerSobonursaechlicherBedarf = new LangfristigerSobonBedarfModel();
+        langfristigerSobonursaechlicherBedarf.setWohneinheiten(List.of(new WohneinheitenProFoerderartProJahrModel()));
+
         Mockito
             .doReturn(langfristigerPlanungsursaechlicherBedarf)
             .when(calculationService)
             .calculateLangfristigerPlanungsursaechlicherBedarf(
+                bauabschnitte,
+                sobonOrientierungswertJahr,
+                stammdatenGueltigAb
+            );
+
+        Mockito
+            .doReturn(langfristigerSobonursaechlicherBedarf)
+            .when(calculationService)
+            .calculateLangfristigerSobonursaechlicherBedarf(
+                sobonGf,
                 bauabschnitte,
                 sobonOrientierungswertJahr,
                 stammdatenGueltigAb
@@ -367,13 +417,22 @@ class CalculationServiceTest {
 
         final var expected = new BedarfeForAbfragevarianteModel();
         expected.setLangfristigerPlanungsursaechlicherBedarf(langfristigerPlanungsursaechlicherBedarf);
-        expected.setLangfristigerSobonursaechlicherBedarf(null);
+        expected.setLangfristigerSobonursaechlicherBedarf(langfristigerSobonursaechlicherBedarf);
 
         assertThat(bedarfeForAbfragevariante, is(expected));
 
         Mockito
             .verify(calculationService, Mockito.times(1))
             .calculateLangfristigerPlanungsursaechlicherBedarf(
+                bauabschnitte,
+                sobonOrientierungswertJahr,
+                stammdatenGueltigAb
+            );
+
+        Mockito
+            .verify(calculationService, Mockito.times(1))
+            .calculateLangfristigerSobonursaechlicherBedarf(
+                sobonGf,
                 bauabschnitte,
                 sobonOrientierungswertJahr,
                 stammdatenGueltigAb
@@ -498,6 +557,170 @@ class CalculationServiceTest {
         expected.setWohneinheiten(wohneinheiten);
         expected.setBedarfKinderkrippe(bedarfeProJahrKinderkrippe);
         expected.setBedarfKindergarten(bedarfeProJahrKindergarten);
+        expected.setAlleEinwohner(alleEinwohnerProJahr);
+
+        assertThat(result, is(expected));
+    }
+
+    @Test
+    void calculateLangfristigerSobonursaechlicherBedarfReturnNull() throws CalculationException {
+        var result = calculationService.calculateLangfristigerSobonursaechlicherBedarf(null, null, null, null);
+        assertThat(result, is(nullValue()));
+
+        result =
+            calculationService.calculateLangfristigerSobonursaechlicherBedarf(
+                null,
+                List.of(new BauabschnittModel()),
+                SobonOrientierungswertJahr.JAHR_2017,
+                LocalDate.now()
+            );
+        assertThat(result, is(nullValue()));
+
+        result =
+            calculationService.calculateLangfristigerSobonursaechlicherBedarf(
+                BigDecimal.ZERO,
+                null,
+                SobonOrientierungswertJahr.JAHR_2017,
+                LocalDate.now()
+            );
+        assertThat(result, is(nullValue()));
+
+        result =
+            calculationService.calculateLangfristigerSobonursaechlicherBedarf(
+                BigDecimal.ZERO,
+                List.of(new BauabschnittModel()),
+                null,
+                LocalDate.now()
+            );
+        assertThat(result, is(nullValue()));
+
+        result =
+            calculationService.calculateLangfristigerSobonursaechlicherBedarf(
+                BigDecimal.ZERO,
+                List.of(new BauabschnittModel()),
+                SobonOrientierungswertJahr.JAHR_2017,
+                null
+            );
+        assertThat(result, is(nullValue()));
+
+        result =
+            calculationService.calculateLangfristigerSobonursaechlicherBedarf(
+                BigDecimal.ZERO,
+                new ArrayList<>(),
+                SobonOrientierungswertJahr.JAHR_2017,
+                LocalDate.now()
+            );
+        assertThat(result, is(nullValue()));
+
+        result =
+            calculationService.calculateLangfristigerSobonursaechlicherBedarf(
+                BigDecimal.ZERO,
+                List.of(new BauabschnittModel()),
+                SobonOrientierungswertJahr.STANDORTABFRAGE,
+                LocalDate.now()
+            );
+        assertThat(result, is(nullValue()));
+    }
+
+    @Test
+    void calculateLangfristigerSobonursaechlicherBedarf() throws CalculationException {
+        final var sobonGf = BigDecimal.ZERO;
+        final var bauabschnitte = List.of(new BauabschnittModel());
+        final var sobonOrientierungswertJahr = SobonOrientierungswertJahr.JAHR_2017;
+        final var stammdatenGueltigAb = LocalDate.of(2020, 5, 30);
+
+        final var wohneinheiten = List.of(new WohneinheitenProFoerderartProJahrModel());
+
+        Mockito
+            .when(
+                this.sobonursaechlicheWohneinheitenService.calculateSobonursaechlicheWohneinheiten(
+                        sobonGf,
+                        bauabschnitte,
+                        sobonOrientierungswertJahr,
+                        stammdatenGueltigAb
+                    )
+            )
+            .thenReturn(wohneinheiten);
+
+        final var bedarfeProJahrKinderkrippe = List.of(new InfrastrukturbedarfProJahrModel());
+
+        Mockito
+            .when(
+                this.infrastrukturbedarfService.calculateBedarfForKinderkrippe(
+                        wohneinheiten,
+                        sobonOrientierungswertJahr,
+                        InfrastrukturbedarfService.ArtInfrastrukturbedarf.SOBON_URSAECHLICH,
+                        stammdatenGueltigAb
+                    )
+            )
+            .thenReturn(bedarfeProJahrKinderkrippe);
+
+        final var bedarfeProJahrKindergarten = List.of(
+            new InfrastrukturbedarfProJahrModel(),
+            new InfrastrukturbedarfProJahrModel()
+        );
+
+        Mockito
+            .when(
+                this.infrastrukturbedarfService.calculateBedarfForKindergarten(
+                        wohneinheiten,
+                        sobonOrientierungswertJahr,
+                        InfrastrukturbedarfService.ArtInfrastrukturbedarf.SOBON_URSAECHLICH,
+                        stammdatenGueltigAb
+                    )
+            )
+            .thenReturn(bedarfeProJahrKindergarten);
+
+        final var bedarfeProJahrGsNachmittagBetreuung = List.of(
+            new InfrastrukturbedarfProJahrModel(),
+            new InfrastrukturbedarfProJahrModel()
+        );
+
+        Mockito
+            .when(
+                this.infrastrukturbedarfService.calculateBedarfForGsNachmittagBetreuung(
+                        wohneinheiten,
+                        sobonOrientierungswertJahr,
+                        stammdatenGueltigAb
+                    )
+            )
+            .thenReturn(bedarfeProJahrGsNachmittagBetreuung);
+
+        final var bedarfeProJahrGrundschule = List.of(
+            new InfrastrukturbedarfProJahrModel(),
+            new InfrastrukturbedarfProJahrModel()
+        );
+
+        Mockito
+            .when(
+                this.infrastrukturbedarfService.calculateBedarfForGrundschule(
+                        wohneinheiten,
+                        sobonOrientierungswertJahr,
+                        stammdatenGueltigAb
+                    )
+            )
+            .thenReturn(bedarfeProJahrGrundschule);
+
+        final var alleEinwohnerProJahr = List.of(new PersonenProJahrModel(), new PersonenProJahrModel());
+
+        Mockito
+            .when(this.infrastrukturbedarfService.calculateAlleEinwohner(wohneinheiten, sobonOrientierungswertJahr))
+            .thenReturn(alleEinwohnerProJahr);
+
+        final var result = calculationService.calculateLangfristigerSobonursaechlicherBedarf(
+            sobonGf,
+            bauabschnitte,
+            sobonOrientierungswertJahr,
+            stammdatenGueltigAb
+        );
+
+        final var expected = new LangfristigerSobonBedarfModel();
+
+        expected.setWohneinheiten(wohneinheiten);
+        expected.setBedarfKinderkrippe(bedarfeProJahrKinderkrippe);
+        expected.setBedarfKindergarten(bedarfeProJahrKindergarten);
+        expected.setBedarfGsNachmittagBetreuung(bedarfeProJahrGsNachmittagBetreuung);
+        expected.setBedarfGrundschule(bedarfeProJahrGrundschule);
         expected.setAlleEinwohner(alleEinwohnerProJahr);
 
         assertThat(result, is(expected));

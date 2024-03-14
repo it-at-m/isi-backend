@@ -72,7 +72,7 @@ public class AbfragevarianteWeiteresVerfahren extends Abfragevariante {
     @ElementCollection
     private List<WesentlicheRechtsgrundlage> wesentlicheRechtsgrundlage;
 
-    @Column
+    @Column(length = 1000)
     private String wesentlicheRechtsgrundlageFreieEingabe;
 
     @KeywordField(valueBridge = @ValueBridgeRef(type = IntegerToStringValueBridge.class))
@@ -115,9 +115,6 @@ public class AbfragevarianteWeiteresVerfahren extends Abfragevariante {
     @Column(precision = 10, scale = 2)
     private BigDecimal gfWohnenWeiteresNichtInfrastrukturrelevantesWohnen;
 
-    @Column(precision = 10, scale = 2)
-    private BigDecimal gfWohnenPlanungsursaechlich;
-
     // Anzahl Wohneinheiten
 
     @Column
@@ -151,7 +148,7 @@ public class AbfragevarianteWeiteresVerfahren extends Abfragevariante {
     @Column
     private LocalDate stammdatenGueltigAb;
 
-    @Column
+    @Column(length = 1000)
     private String anmerkung;
 
     @OneToMany(cascade = { CascadeType.ALL }, orphanRemoval = true)

@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import de.muenchen.isi.api.dto.BaseEntityDto;
 import de.muenchen.isi.api.dto.common.AdresseDto;
+import de.muenchen.isi.api.dto.common.BearbeitendePersonDto;
 import de.muenchen.isi.api.dto.common.VerortungPointDto;
 import de.muenchen.isi.api.validation.EinrichtungstraegerValid;
 import de.muenchen.isi.api.validation.FertigstellungsjahrValid;
@@ -71,6 +72,8 @@ import lombok.ToString;
     }
 )
 public abstract class InfrastruktureinrichtungDto extends BaseEntityDto {
+
+    private BearbeitendePersonDto bearbeitendePerson;
 
     private InfrastruktureinrichtungTyp infrastruktureinrichtungTyp;
 

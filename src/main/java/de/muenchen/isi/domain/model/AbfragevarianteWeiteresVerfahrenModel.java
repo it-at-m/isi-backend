@@ -48,8 +48,6 @@ public class AbfragevarianteWeiteresVerfahrenModel extends AbfragevarianteModel 
 
     private BigDecimal gfWohnenWeiteresNichtInfrastrukturrelevantesWohnen;
 
-    private BigDecimal gfWohnenPlanungsursaechlich;
-
     // Anzahl Wohneinheiten
 
     private Integer weGesamt;

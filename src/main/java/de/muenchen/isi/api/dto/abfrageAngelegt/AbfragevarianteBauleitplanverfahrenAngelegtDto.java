@@ -53,7 +53,7 @@ public class AbfragevarianteBauleitplanverfahrenAngelegtDto {
         @WesentlicheRechtsgrundlageBauleitplanverfahrenValid @NotNull WesentlicheRechtsgrundlage
     > wesentlicheRechtsgrundlage;
 
-    @Size(max = 255, message = "Es sind maximal {max} Zeichen erlaubt")
+    @Size(max = 1000, message = "Es sind maximal {max} Zeichen erlaubt")
     private String wesentlicheRechtsgrundlageFreieEingabe;
 
     @NotNull

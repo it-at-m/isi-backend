@@ -8,7 +8,7 @@ import de.muenchen.isi.api.dto.abfrageAngelegt.AbfragevarianteWeiteresVerfahrenA
 import de.muenchen.isi.api.validation.NotUnspecified;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
 import jakarta.validation.constraints.NotNull;
-import java.math.BigDecimal;
+import jakarta.validation.constraints.Size;
 import java.time.LocalDate;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -20,8 +20,6 @@ import lombok.ToString;
 public class AbfragevarianteWeiteresVerfahrenInBearbeitungSachbearbeitungDto
     extends AbfragevarianteWeiteresVerfahrenAngelegtDto {
 
-    private BigDecimal gfWohnenPlanungsursaechlich;
-
     @NotUnspecified
     @NotNull
     private SobonOrientierungswertJahr sobonOrientierungswertJahr;
@@ -29,5 +27,6 @@ public class AbfragevarianteWeiteresVerfahrenInBearbeitungSachbearbeitungDto
     @NotNull
     private LocalDate stammdatenGueltigAb;
 
+    @Size(max = 1000, message = "Es sind maximal {max} Zeichen erlaubt")
     private String anmerkung;
 }

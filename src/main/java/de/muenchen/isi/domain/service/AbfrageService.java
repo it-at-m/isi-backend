@@ -576,7 +576,7 @@ public class AbfrageService {
      */
     public void throwUserRoleNotAllowedExceptionWhenRoleIsAnwenderAndAbfragestatusIsNotErledigt(Abfrage abfrage)
         throws UserRoleNotAllowedException {
-        if (authenticationUtils.isRoleAnwender()) {
+        if (authenticationUtils.isOnlyRoleAnwender()) {
             if (
                 abfrage.getStatusAbfrage() != StatusAbfrage.ERLEDIGT_OHNE_FACHREFERAT &&
                 abfrage.getStatusAbfrage() != StatusAbfrage.ERLEDIGT_MIT_FACHREFERAT
