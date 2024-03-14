@@ -10,6 +10,7 @@ import jakarta.persistence.PreUpdate;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.stereotype.Component;
 
 @Slf4j
@@ -24,17 +25,20 @@ public class AbfrageListener {
     @PrePersist
     @PreUpdate
     public void beforeSave(final Abfrage abfrage) {
-        final var optAbfrage = abfrageRepository.findById(abfrage.getId());
         final var statusAbfrageToSave = abfrage.getStatusAbfrage();
-        if (optAbfrage.isPresent()) {
-            final var statusSavedAbfrage = optAbfrage.get().getStatusAbfrage();
-            if (statusSavedAbfrage != statusAbfrageToSave) {
-                final var bearbeitungshistorie = createBearbeitungshistorieForStatus(statusAbfrageToSave);
-                abfrage.getBearbeitungshistorie().add(bearbeitungshistorie);
-            }
-        } else {
+        if (ObjectUtils.isEmpty(abfrage.getId())) {
             final var bearbeitungshistorie = createBearbeitungshistorieForStatus(statusAbfrageToSave);
             abfrage.getBearbeitungshistorie().add(bearbeitungshistorie);
+        } else {
+            abfrageRepository
+                .findById(abfrage.getId())
+                .ifPresent(savedAbfrage -> {
+                    final var statusSavedAbfrage = savedAbfrage.getStatusAbfrage();
+                    if (statusSavedAbfrage != statusAbfrageToSave) {
+                        final var bearbeitungshistorie = createBearbeitungshistorieForStatus(statusAbfrageToSave);
+                        abfrage.getBearbeitungshistorie().add(bearbeitungshistorie);
+                    }
+                });
         }
     }
 
