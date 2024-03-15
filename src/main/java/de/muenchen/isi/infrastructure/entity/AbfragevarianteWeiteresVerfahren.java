@@ -62,7 +62,7 @@ public class AbfragevarianteWeiteresVerfahren extends Abfragevariante {
     @ElementCollection
     private List<WesentlicheRechtsgrundlage> wesentlicheRechtsgrundlage;
 
-    @Column
+    @Column(length = 1000)
     private String wesentlicheRechtsgrundlageFreieEingabe;
 
     @KeywordField(valueBridge = @ValueBridgeRef(type = IntegerToStringValueBridge.class))
@@ -138,7 +138,7 @@ public class AbfragevarianteWeiteresVerfahren extends Abfragevariante {
     @Column
     private LocalDate stammdatenGueltigAb;
 
-    @Column
+    @Column(length = 1000)
     private String anmerkung;
 
     @OneToMany(cascade = { CascadeType.ALL }, orphanRemoval = true)

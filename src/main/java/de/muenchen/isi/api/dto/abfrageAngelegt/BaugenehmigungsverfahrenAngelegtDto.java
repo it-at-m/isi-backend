@@ -33,7 +33,7 @@ public class BaugenehmigungsverfahrenAngelegtDto extends AbfrageAngelegtDto {
     @StandVerfahrenBaugenehmigungsverfahrenValid
     private StandVerfahren standVerfahren;
 
-    @Size(max = 255, message = "Es sind maximal {max} Zeichen erlaubt")
+    @Size(max = 1000, message = "Es sind maximal {max} Zeichen erlaubt")
     private String standVerfahrenFreieEingabe;
 
     @Valid
