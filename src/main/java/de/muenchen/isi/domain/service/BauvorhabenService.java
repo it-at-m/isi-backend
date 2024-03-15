@@ -194,10 +194,6 @@ public class BauvorhabenService {
     public BauvorhabenModel changeRelevanteAbfragevariante(final UUID abfragevarianteId)
         throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, BauvorhabenNotReferencedException, EntityIsReferencedException, UserRoleNotAllowedException {
         final AbfrageModel abfrage = abfrageService.getByAbfragevarianteId(abfragevarianteId);
-        abfrageService.throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(
-            abfrage,
-            StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG
-        );
 
         final var bauvorhabenId = abfrage.getBauvorhaben();
         if (bauvorhabenId == null) {
@@ -211,6 +207,10 @@ public class BauvorhabenService {
         final var relevanteAbfragevarianteId = bauvorhaben.getRelevanteAbfragevariante();
         if (relevanteAbfragevarianteId != null) {
             if (!relevanteAbfragevarianteId.equals(abfragevarianteId)) {
+                abfrageService.throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(
+                    abfrage,
+                    StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG
+                );
                 final var relevanteAbfragevariante = abfragevarianteRepository
                     .findById(relevanteAbfragevarianteId)
                     .orElseThrow(() -> {
@@ -231,6 +231,10 @@ public class BauvorhabenService {
                 bauvorhaben.setRelevanteAbfragevariante(null);
             }
         } else {
+            abfrageService.throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(
+                abfrage,
+                StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG
+            );
             bauvorhaben.setRelevanteAbfragevariante(abfragevarianteId);
         }
 
