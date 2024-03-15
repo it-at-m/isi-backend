@@ -1,0 +1,206 @@
+-- Alle Tabellen und Spaltennamen werden gekürzt, da PostgreSql eine Limitierung auf 64 bytes für namedatalen hat
+BEGIN;
+
+-- AbfragevarianteBaugenehmigungsverfahren
+ALTER TABLE IF EXISTS isidbuser.abfragevariante_baugenehmigungsverfahren_wesentliche_rechtsgrun
+    RENAME TO abfrgvar_baugnhmgsverfhrn_wesentliche_rechtsgrundlage;
+
+ALTER TABLE isidbuser.abfrgvar_baugnhmgsverfhrn_wesentliche_rechtsgrundlage
+    RENAME COLUMN abfragevariante_baugenehmigungsverfahren_id TO abfrgvar_baugnhmgsverfhrn_id;
+
+
+ALTER TABLE IF EXISTS isidbuser.abfragevariante_baugenehmigungsverfahren
+    RENAME TO abfrgvar_baugnhmgsverfhrn;
+
+ALTER TABLE isidbuser.abfrgvar_baugnhmgsverfhrn
+    RENAME COLUMN abfragevarianten_baugenehmigungsverfahren_id TO abfrgvar_baugnhmgsverfhrn_id;
+
+ALTER TABLE isidbuser.abfrgvar_baugnhmgsverfhrn
+    RENAME COLUMN abfragevarianten_sachbearbeitung_baugenehmigungsverfahren_id TO abfrgvar_schbrbtng_baugnhmgsverfhrn_id;
+
+
+ALTER INDEX IF EXISTS isidbuser.abfragevarianten_baugenehmigungsverfahren_id_index RENAME TO abfrgvar_baugnhmgsverfhrn_id_index;
+ALTER INDEX IF EXISTS isidbuser.abfragevarianten_sachbearbeitung_baugenehmigungsverfahren_id_in RENAME TO abfrgvar_schbrbtng_baugnhmgsverfhrn_id_index;
+
+
+-- AbfragevarianteBauleitplanverfahren
+ALTER TABLE IF EXISTS isidbuser.abfragevariante_bauleitplanverfahren_wesentliche_rechtsgrundlag
+    RENAME TO abfrgvar_bauleitplnvrfhrn_wesentliche_rechtsgrundlage;
+
+ALTER TABLE isidbuser.abfrgvar_bauleitplnvrfhrn_wesentliche_rechtsgrundlage
+    RENAME COLUMN abfragevariante_bauleitplanverfahren_id TO abfrgvar_bauleitplnvrfhrn_id;
+
+
+ALTER TABLE IF EXISTS isidbuser.abfragevariante_bauleitplanverfahren
+    RENAME TO abfrgvar_bauleitplnvrfhrn;
+
+ALTER TABLE isidbuser.abfrgvar_bauleitplnvrfhrn
+    RENAME COLUMN abfragevarianten_bauleitplanverfahren_id TO abfrgvar_bauleitplnvrfhrn_id;
+
+ALTER TABLE isidbuser.abfrgvar_bauleitplnvrfhrn
+    RENAME COLUMN abfragevarianten_sachbearbeitung_bauleitplanverfahren_id TO abfrgvar_schbrbtng_bauleitplnvrfhrn_id;
+
+
+ALTER INDEX IF EXISTS isidbuser.abfragevarianten_bauleitplanverfahren_id_index RENAME TO abfrgvar_bauleitplnvrfhrn_id_index;
+ALTER INDEX IF EXISTS isidbuser.abfragevarianten_sachbearbeitung_bauleitplanverfahren_id_index RENAME TO abfrgvar_schbrbtng_bauleitplnvrfhrn_id_index;
+
+
+-- AbfragevarianteWeiteresVerfahren
+ALTER TABLE IF EXISTS isidbuser.abfragevariante_weiteres_verfahren_wesentliche_rechtsgrundlage
+    RENAME TO abfrgvar_weitrs_vrfhrn_wesentliche_rechtsgrundlage;
+
+ALTER TABLE isidbuser.abfrgvar_weitrs_vrfhrn_wesentliche_rechtsgrundlage
+    RENAME COLUMN abfragevariante_weiteres_verfahren_id TO abfrgvar_weitrs_vrfhrn_id;
+
+
+ALTER TABLE IF EXISTS isidbuser.abfragevariante_weiteres_verfahren
+    RENAME TO abfrgvar_weitrs_vrfhrn;
+
+ALTER TABLE isidbuser.abfrgvar_weitrs_vrfhrn
+    RENAME COLUMN abfragevarianten_weiteres_verfahren_id TO abfrgvar_weitrs_vrfhrn_id;
+
+ALTER TABLE isidbuser.abfrgvar_weitrs_vrfhrn
+    RENAME COLUMN abfragevarianten_sachbearbeitung_weiteres_verfahren_id TO abfrgvar_schbrbtng_weitrs_vrfhrn_id;
+
+
+ALTER INDEX IF EXISTS isidbuser.abfragevarianten_weiteres_verfahren_id_index RENAME TO abfrgvar_weitrs_vrfhrn_id_index;
+ALTER INDEX IF EXISTS isidbuser.abfragevarianten_sachbearbeitung_weiteres_verfahren_id_index RENAME TO abfrgvar_schbrbtng_weitrs_vrfhrn_id_index;
+
+
+-- Bedarfsmeldung
+ALTER TABLE isidbuser.bedarfsmeldung
+    RENAME COLUMN abfragevariante_baugenehmigungsverfahren_abfrageersteller_id TO abfrgvar_baugnhmgsverfhrn_abfrageersteller_id;
+
+ALTER TABLE isidbuser.bedarfsmeldung
+    RENAME COLUMN abfragevariante_bauleitplanverfahren_abfrageersteller_id TO abfrgvar_bauleitplnvrfhrn_abfrageersteller_id;
+
+ALTER TABLE isidbuser.bedarfsmeldung
+    RENAME COLUMN abfragevariante_weiteres_verfahren_abfrageersteller_id TO abfrgvar_weitrs_vrfhrn_abfrageersteller_id;
+
+
+ALTER TABLE isidbuser.bedarfsmeldung
+    RENAME COLUMN abfragevariante_baugenehmigungsverfahren_fachreferate_id TO abfrgvar_baugnhmgsverfhrn_fachreferate_id;
+
+ALTER TABLE isidbuser.bedarfsmeldung
+    RENAME COLUMN abfragevariante_bauleitplanverfahren_fachreferate_id TO abfrgvar_bauleitplnvrfhrn_fachreferate_id;
+
+ALTER TABLE isidbuser.bedarfsmeldung
+    RENAME COLUMN abfragevariante_weiteres_verfahren_fachreferate_id TO abfrgvar_weitrs_vrfhrn_fachreferate_id;
+
+
+ALTER INDEX IF EXISTS isidbuser.bedarfsmeldung_abfrageersteller_abfragevariante_baugenehmigungs RENAME TO bedarfsmeldung_abfrgerstlr_abfrgvar_baugnhmgsverfhrn_id_index;
+ALTER INDEX IF EXISTS isidbuser.bedarfsmeldung_abfrageersteller_abfragevariante_bauleitplanverf RENAME TO bedarfsmeldung_abfrgerstlr_abfrgvar_bauleitplnvrfhrn_id_index;
+ALTER INDEX IF EXISTS isidbuser.bedarfsmeldung_abfrageersteller_abfragevariante_weiteres_verfah RENAME TO bedarfsmeldung_abfrgerstlr_abfrgvar_weitrs_vrfhrn_id_index;
+
+CREATE INDEX IF NOT EXISTS bedarfsmeldung_fachreferate_abfrgvar_baugnhmgsverfhrn_id_index
+    ON isidbuser.bedarfsmeldung USING btree (abfrgvar_baugnhmgsverfhrn_fachreferate_id);
+
+CREATE INDEX IF NOT EXISTS bedarfsmeldung_fachreferate_abfrgvar_bauleitplnvrfhrn_id_index
+    ON isidbuser.bedarfsmeldung USING btree (abfrgvar_bauleitplnvrfhrn_fachreferate_id);
+
+CREATE INDEX IF NOT EXISTS bedarfsmeldung_fachreferate_abfrgvar_weitrs_vrfhrn_id_index
+    ON isidbuser.bedarfsmeldung USING btree (abfrgvar_weitrs_vrfhrn_fachreferate_id);
+
+
+-- Bauabschnitt
+ALTER TABLE isidbuser.bauabschnitt
+    RENAME COLUMN abfragevariante_baugenehmigungsverfahren_id TO abfrgvar_baugnhmgsverfhrn_id;
+
+ALTER TABLE isidbuser.bauabschnitt
+    RENAME COLUMN abfragevariante_bauleitplanverfahren_id TO abfrgvar_bauleitplnvrfhrn_id;
+
+ALTER TABLE isidbuser.bauabschnitt
+    RENAME COLUMN abfragevariante_weiteres_verfahren_id TO abfrgvar_weitrs_vrfhrn_id;
+
+
+ALTER INDEX IF EXISTS isidbuser.bauabschnitt_abfragevariante_baugenehmigungsverfahren_id_index RENAME TO bauabschnitt_abfrgvar_baugnhmgsverfhrn_id_index;
+ALTER INDEX IF EXISTS isidbuser.bauabschnitt_abfragevariante_bauleitplanverfahren_id_index RENAME TO bauabschnitt_abfrgvar_bauleitplnvrfhrn_id_index;
+ALTER INDEX IF EXISTS isidbuser.bauabschnitt_abfragevariante_weiteres_verfahren_id_index RENAME TO bauabschnitt_abfrgvar_weitrs_vrfhrn_id_index;
+
+ALTER INDEX IF EXISTS isidbuser.sobon_orientierungswert_soziale_infrastruktur_jahr_einrichtungstyp_altersklasse_foerderartBezeichnung_index RENAME TO sobon_orientwrt_soz_infra_jahr_einr_typ_altkl_frdrtBzchng_index;
+ALTER INDEX IF EXISTS isidbuser.staedtebaulicher_orientierungswert_gueltigAb_foerderartBezeichnung_index RENAME TO staedtebau_orientwrt_gltgAb_frdrtBzchng_index;
+
+-- Foreign Keys
+
+-- Rename syntax fk_childtablecolumn_parentable_column example in table baugebiet column bauabschnitt_id references to parentable bauabschnitt with the column id. So result fk_bauabschnitt_id_bauabschnitt_id
+
+ALTER TABLE IF EXISTS isidbuser.abfragevariante RENAME CONSTRAINT fk9rcewq7cmm0r0l1qcpgpoyrba TO fk_abfrage_abfrgvar_schbrbtng_id_infrastrukturabfrage_id;
+ALTER TABLE IF EXISTS isidbuser.abfragevariante RENAME CONSTRAINT fkctdgy29o7ql64rewjqbxp9ow2 TO fk_abfrage_abfragevarianten_id_infrastrukturabfrage_id;
+
+
+ALTER TABLE IF EXISTS isidbuser.abfrgvar_baugnhmgsverfhrn RENAME CONSTRAINT fk49c0wy3kjevklo5cbrjkrus48 TO fk_abfrgvar_baugnhmgsverfhrn_id_baugnhmgsverfhrn_id;
+ALTER TABLE IF EXISTS isidbuser.abfrgvar_baugnhmgsverfhrn RENAME CONSTRAINT fk76qfwbhrg88v1h2rkkbj27baj TO fk_abfrgvar_schbrbtng_baugnhmgsverfhrn_id_baugnhmgsverfhrn_id;
+
+
+ALTER TABLE IF EXISTS isidbuser.abfrgvar_baugnhmgsverfhrn_wesentliche_rechtsgrundlage RENAME CONSTRAINT fkp9tsqaxla68l3x7cr4p1re2np TO fk_abfrgvar_baugnhmgsverfhrn_id_abfrgvar_baugnhmgsverfhrn_id;
+
+ALTER TABLE IF EXISTS isidbuser.abfrgvar_bauleitplnvrfhrn RENAME CONSTRAINT fks1ic7g4qf4kopwmn64fm53m1f TO fk_abfrgvar_bauleitplnvrfhrn_id_bauleitplnvrfhrn_id;
+ALTER TABLE IF EXISTS isidbuser.abfrgvar_bauleitplnvrfhrn RENAME CONSTRAINT fksainhxpux6r02lm1gajxl79nt TO fk_abfrgvar_schbrbtng_bauleitplnvrfhrn_id_bauleitplnvrfhrn_id;
+
+
+ALTER TABLE IF EXISTS isidbuser.abfrgvar_bauleitplnvrfhrn_wesentliche_rechtsgrundlage RENAME CONSTRAINT fk69xibgnrhtrdr6s1i5i1fv8i1 TO fk_abfrgvar_bauleitplnvrfhrn_id_abfrgvar_bauleitplnvrfhrn_id;
+
+
+ALTER TABLE IF EXISTS isidbuser.abfrgvar_weitrs_vrfhrn RENAME CONSTRAINT fkq0xachmbv8lm87stwplym77qq TO fk_abfrgvar_weitrs_vrfhrn_id_weitrs_vrfhrn_id;
+ALTER TABLE IF EXISTS isidbuser.abfrgvar_weitrs_vrfhrn RENAME CONSTRAINT fkjmlbae1y4q3weo38yvlb5d1do TO fk_abfrgvar_schbrbtng_weitrs_vrfhrn_id_weitrs_vrfhrn_id;
+
+
+ALTER TABLE IF EXISTS isidbuser.abfrgvar_weitrs_vrfhrn_wesentliche_rechtsgrundlage RENAME CONSTRAINT fkbd5tmreht948r6mpa6xmgw8iq TO fk_abfrgvar_weitrs_vrfhrn_id_abfrgvar_weitrs_vrfhrn_id;
+
+
+ALTER TABLE IF EXISTS isidbuser.bauabschnitt RENAME CONSTRAINT fk44ecbhieyub1dss2q3c52e1ap TO fk_abfrgvar_baugnhmgsverfhrn_id_abfrgvar_baugnhmgsverfhrn_id;
+ALTER TABLE IF EXISTS isidbuser.bauabschnitt RENAME CONSTRAINT fkeukua3uyee46psn0jy48tuy1g TO fk_abfrgvar_bauleitplnvrfhrn_id_abfrgvar_bauleitplnvrfhrn_id;
+ALTER TABLE IF EXISTS isidbuser.bauabschnitt RENAME CONSTRAINT fkr2fp34gvhd13wgtrj40bwv7xm TO fk_abfrgvar_weitrs_vrfhrn_id_abfrgvar_weitrs_vrfhrn_id;
+
+ALTER TABLE IF EXISTS isidbuser.baugebiet RENAME CONSTRAINT fk43nuwbptaq4hshuv6lm6ilv6n TO fk_bauabschnitt_id_bauabschnitt_id;
+
+ALTER TABLE IF EXISTS isidbuser.baugenehmigungsverfahren RENAME CONSTRAINT fk_elnxjn7cmqroe7molk8b401i6 TO fk_bauvorhaben_id_bauvorhaben_id;
+
+ALTER TABLE IF EXISTS isidbuser.bauleitplanverfahren RENAME CONSTRAINT fk_euc56ml5cphea0v9sq3jw7ttb TO fk_bauvorhaben_id_bauvorhaben_id;
+
+ALTER TABLE IF EXISTS isidbuser.baurate RENAME CONSTRAINT fkib3s1x9l19xir110y9wrug1qp TO fk_baugebiet_id_baugebiet_id;
+
+ALTER TABLE IF EXISTS isidbuser.baurate_foerderarten RENAME CONSTRAINT fkh21llfapa4es22vrwrdl6w9qe TO fk_baurate_id_baurate_id;
+
+ALTER TABLE IF EXISTS isidbuser.bauvorhaben_art_fnp RENAME CONSTRAINT fkfewe3gv2mam520gk055dieg95 TO fk_bauvorhaben_id_bauvorhaben_id;
+
+ALTER TABLE IF EXISTS isidbuser.bauvorhaben_wesentliche_rechtsgrundlage RENAME CONSTRAINT fk30iwircdvex8fcbn8cegqx92e TO fk_bauvorhaben_id_bauvorhaben_id;
+
+ALTER TABLE IF EXISTS isidbuser.bedarfsmeldung RENAME CONSTRAINT fk5ot09g48mj8qf38s6bsjlkpbo TO fk_abfrgvar_bauleitplnvrfhrn_abfrageersteller_id;
+ALTER TABLE IF EXISTS isidbuser.bedarfsmeldung RENAME CONSTRAINT fk69cf65sqshohxarvm72oyf67q TO fk_abfrgvar_weitrs_vrfhrn_fachreferate_id;
+ALTER TABLE IF EXISTS isidbuser.bedarfsmeldung RENAME CONSTRAINT fk587ovhoo0122e788txb2hi6vt TO fk_abfrgvar_weitrs_vrfhrn_abfrageersteller_id;
+ALTER TABLE IF EXISTS isidbuser.bedarfsmeldung RENAME CONSTRAINT fkhm023faq7ilg21ksdmupi1rh3 TO fk_abfrgvar_baugnhmgsverfhrn_abfrageersteller_id;
+ALTER TABLE IF EXISTS isidbuser.bedarfsmeldung RENAME CONSTRAINT fki8ri601u2kpotcm0ritgno6dw TO fk_abfrgvar_baugnhmgsverfhrn_fachreferate_id;
+ALTER TABLE IF EXISTS isidbuser.bedarfsmeldung RENAME CONSTRAINT fknhbgsnsn17wsxuha7lkguaswt TO fk_abfrgvar_bauleitplnvrfhrn_fachreferate_id;
+
+ALTER TABLE IF EXISTS isidbuser.dokument RENAME CONSTRAINT fk1e7n3bdncu06saw2eyew3a8jt TO fk_bauvorhaben_id_bauvorhaben_id;
+ALTER TABLE IF EXISTS isidbuser.dokument RENAME CONSTRAINT fk2hfbju5538u0tn1cya5tnvtbq TO fk_baugenehmigungsverfahren_id_baugenehmigungsverfahren_id;
+ALTER TABLE IF EXISTS isidbuser.dokument RENAME CONSTRAINT fk6pyd1ysqilkq4psswakb8m1e6 TO fk_bauleitplanverfahren_id_bauleitplanverfahren_id;
+ALTER TABLE IF EXISTS isidbuser.dokument RENAME CONSTRAINT fk47liq4jx6eqybm2flvd1asdcd TO fk_weiteres_verfahren_id_weiteres_verfahren_id;
+ALTER TABLE IF EXISTS isidbuser.dokument RENAME CONSTRAINT fkgb30ot3q37f8l5ch5q79jx44b TO fk_kommentar_id_kommentar_id;
+
+ALTER TABLE IF EXISTS isidbuser.foerdermix_stamm_foerderarten RENAME CONSTRAINT fkrnj6wdw3auu5k4p02q56dskt2 TO fk_foerdermix_stamm_id_foerdermix_stamm_id;
+
+ALTER TABLE IF EXISTS isidbuser.grundschule RENAME CONSTRAINT fkdhtho0m5d89vlbqdxy81hxkvb TO fk_id_infrastruktureinrichtung_id;
+
+ALTER TABLE IF EXISTS isidbuser.gs_nachmittag_betreuung RENAME CONSTRAINT fk434vr3fow5arbvxkgrn7egsw2 TO fk_id_infrastruktureinrichtung_id;
+
+ALTER TABLE IF EXISTS isidbuser.haus_fuer_kinder RENAME CONSTRAINT fkjdesrw0yr150s4vt6u3bp42b3 TO fk_id_infrastruktureinrichtung_id;
+
+ALTER TABLE IF EXISTS isidbuser.infrastruktureinrichtung RENAME CONSTRAINT fkqpfrtp1svmrv7a250kmoybdp5 TO fk_bauvorhaben_id_bauvorhaben_id;
+
+ALTER TABLE IF EXISTS isidbuser.kindergarten RENAME CONSTRAINT fki2ofvj80ehsggy9e43he3se0x TO fk_id_infrastruktureinrichtung_id;
+
+ALTER TABLE IF EXISTS isidbuser.kinderkrippe RENAME CONSTRAINT fkffagi8keite5kl9m99s4sq3pm TO fk_id_infrastruktureinrichtung_id;
+
+ALTER TABLE IF EXISTS isidbuser.mittelschule RENAME CONSTRAINT fkj9noj0fd74gl939rwf7o69vy8 TO fk_id_infrastruktureinrichtung_id;
+
+ALTER TABLE IF EXISTS isidbuser.kommentar RENAME CONSTRAINT fk9jia9xb9ovr7e1ad49l866a03 TO fk_bauvorhaben_id_bauvorhaben_id;
+ALTER TABLE IF EXISTS isidbuser.kommentar RENAME CONSTRAINT fk45aq0h5o0qhl17ventkmpmpf3 TO fk_infrastruktureinrichtung_id_infrastruktureinrichtung_id;
+
+ALTER TABLE IF EXISTS isidbuser.weiteres_verfahren RENAME CONSTRAINT fk_b19uhd66b8hmhfelkk2fwey21 TO fk_bauvorhaben_id_bauvorhaben_id;
+
+-- Delete table Bedarfsmeldung Fachreferate
+DROP TABLE isidbuser.bedarfsmeldung_fachreferate;
+
+END;
