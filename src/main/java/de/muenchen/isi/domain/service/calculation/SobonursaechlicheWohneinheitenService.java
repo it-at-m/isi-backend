@@ -2,6 +2,7 @@ package de.muenchen.isi.domain.service.calculation;
 
 import de.muenchen.isi.domain.model.BauabschnittModel;
 import de.muenchen.isi.domain.model.BaurateModel;
+import de.muenchen.isi.domain.model.FoerdermixModel;
 import de.muenchen.isi.domain.model.calculation.WohneinheitenProFoerderartProJahrModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
 import de.muenchen.isi.infrastructure.repository.stammdaten.StaedtebaulicheOrientierungswertRepository;
@@ -46,7 +47,8 @@ public class SobonursaechlicheWohneinheitenService {
         final BigDecimal sobonGf,
         final List<BauabschnittModel> bauabschnitte,
         final SobonOrientierungswertJahr sobonJahr,
-        final LocalDate gueltigAb
+        final LocalDate gueltigAb,
+        final FoerdermixModel foerdermix
     ) {
         final var sobonsursachlicheWohneinheitenList = new ArrayList<WohneinheitenProFoerderartProJahrModel>();
 
@@ -54,7 +56,7 @@ public class SobonursaechlicheWohneinheitenService {
         final var baurate = bauabschnitte.get(0).getBaugebiete().get(0).getBauraten().get(0);
 
         // Umlegen von Förderarten
-        baurate.setFoerdermix(foerdermixUmlageService.legeFoerdermixUm(baurate.getFoerdermix(), gueltigAb));
+        baurate.setFoerdermix(foerdermixUmlageService.legeFoerdermixUm(foerdermix, gueltigAb));
 
         // Berechnen der Wohneinheiten pro Förderart und Jahr
         calculateWohneinheiten(baurate, 0, sobonGf, sobonJahr.getGueltigAb(), sobonsursachlicheWohneinheitenList);
