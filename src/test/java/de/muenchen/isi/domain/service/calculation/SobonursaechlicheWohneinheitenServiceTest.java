@@ -96,7 +96,8 @@ public class SobonursaechlicheWohneinheitenServiceTest {
             new BigDecimal(30000),
             bauabschnitte,
             SobonOrientierungswertJahr.JAHR_2022,
-            LocalDate.of(2013, 1, 1)
+            LocalDate.of(2013, 1, 1),
+            meinFoerdermix
         );
 
         System.out.println("----------------- TEST A ---------------------------------");
@@ -123,7 +124,8 @@ public class SobonursaechlicheWohneinheitenServiceTest {
             new BigDecimal(130000),
             bauabschnitte,
             SobonOrientierungswertJahr.JAHR_2022,
-            LocalDate.of(2013, 1, 1)
+            LocalDate.of(2013, 1, 1),
+            meinFoerdermix
         );
 
         System.out.println("----------------- TEST B ---------------------------------");
@@ -153,7 +155,8 @@ public class SobonursaechlicheWohneinheitenServiceTest {
             new BigDecimal(230000),
             bauabschnitte,
             SobonOrientierungswertJahr.JAHR_2022,
-            LocalDate.of(2013, 1, 1)
+            LocalDate.of(2013, 1, 1),
+            meinFoerdermix
         );
 
         System.out.println("----------------- TEST C ---------------------------------");

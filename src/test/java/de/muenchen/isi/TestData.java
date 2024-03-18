@@ -27,6 +27,7 @@ import de.muenchen.isi.domain.model.common.AdresseModel;
 import de.muenchen.isi.domain.model.common.FlurstueckModel;
 import de.muenchen.isi.domain.model.common.GemarkungModel;
 import de.muenchen.isi.domain.model.common.MultiPolygonGeometryModel;
+import de.muenchen.isi.domain.model.common.SobonBerechnungModel;
 import de.muenchen.isi.domain.model.common.StadtbezirkModel;
 import de.muenchen.isi.domain.model.common.VerortungMultiPolygonModel;
 import de.muenchen.isi.domain.model.common.WGS84Model;
@@ -212,6 +213,7 @@ public class TestData {
             List.of(WesentlicheRechtsgrundlage.EINFACHER_BEBAUUNGSPLAN_PARAGRAPH_30)
         );
         abfragevariante.setGfWohnenSonderwohnformen(false);
+        abfragevariante.setSobonBerechnung(createSobonBerechnungModel());
         abfragevariante.setGfWohnenGesamt(BigDecimal.valueOf(1234.56));
         abfragevariante.setWeSonderwohnformen(false);
         abfragevariante.setWeGesamt(31);
@@ -250,6 +252,7 @@ public class TestData {
             List.of(WesentlicheRechtsgrundlage.EINFACHER_BEBAUUNGSPLAN_PARAGRAPH_30)
         );
         abfragevariante.setGfWohnenSonderwohnformen(false);
+        abfragevariante.setSobonBerechnung(createSobonBerechnungModel());
         abfragevariante.setGfWohnenGesamt(BigDecimal.valueOf(1234.56));
         abfragevariante.setWeSonderwohnformen(false);
         abfragevariante.setWeGesamt(31);
@@ -335,7 +338,7 @@ public class TestData {
         return baurate;
     }
 
-    private static FoerdermixModel createFoerdermixModel() {
+    public static FoerdermixModel createFoerdermixModel() {
         final FoerdermixModel foerdermix = new FoerdermixModel();
         FoerderartModel foerderart = new FoerderartModel();
         foerderart.setBezeichnung("AnteilFreifinanzierterGeschosswohnungsbau");
@@ -416,5 +419,12 @@ public class TestData {
             "    ]\n" +
             "}";
         return new ObjectMapper().readValue(multipolygon, MultiPolygonGeometryModel.class);
+    }
+
+    public static SobonBerechnungModel createSobonBerechnungModel() {
+        SobonBerechnungModel sobonBerechnungModel = new SobonBerechnungModel();
+        sobonBerechnungModel.setIsASobonBerechnung(true);
+        sobonBerechnungModel.setSobonFoerdermix(createFoerdermixModel());
+        return sobonBerechnungModel;
     }
 }
