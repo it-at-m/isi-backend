@@ -4,6 +4,7 @@
  */
 package de.muenchen.isi.api.dto;
 
+import de.muenchen.isi.api.dto.common.SobonBerechnungDto;
 import de.muenchen.isi.api.dto.filehandling.DokumentDto;
 import de.muenchen.isi.api.validation.HasAllowedNumberOfDocuments;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
@@ -70,6 +71,8 @@ public class AbfragevarianteWeiteresVerfahrenDto extends AbfragevarianteDto {
     private Integer weWeiteresNichtInfrastrukturrelevantesWohnen;
 
     private SobonOrientierungswertJahr sobonOrientierungswertJahr;
+
+    private SobonBerechnungDto sobonBerechnung;
 
     private LocalDate stammdatenGueltigAb;
 

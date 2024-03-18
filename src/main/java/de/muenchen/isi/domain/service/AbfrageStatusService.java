@@ -481,7 +481,7 @@ public class AbfrageStatusService {
      *
      * @param id        vom Typ {@link UUID} um die Abfrage zu finden
      * @param anmerkung die zur Abfrage hinzugefügt werden soll.
-     * @throws StringLengthExceededException Wenn die Anmerkung die maximale Länge von 255 Zeichen überschreitet.
+     * @throws StringLengthExceededException Wenn die Anmerkung die maximale Länge von 1000 Zeichen überschreitet.
      * @throws EntityNotFoundException       Wenn die Abfrage nicht gefunden wird.
      */
     private void throwStringLengthExceededExceptionWhenAnmerkungExceedsLength(UUID id, String anmerkung)
@@ -494,8 +494,8 @@ public class AbfrageStatusService {
                 abfrage.setAnmerkung(abfrage.getAnmerkung().concat("\n").concat(anmerkung));
             }
 
-            if (abfrage.getAnmerkung().length() > 255) {
-                throw new StringLengthExceededException("Es sind maximal 255 Zeichen erlaubt");
+            if (abfrage.getAnmerkung().length() > 1000) {
+                throw new StringLengthExceededException("Es sind maximal 1000 Zeichen erlaubt");
             }
         }
     }

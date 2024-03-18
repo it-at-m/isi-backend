@@ -109,9 +109,9 @@ public class AbfrageService {
      * @return das gespeicherte {@link AbfrageModel}
      * @throws UniqueViolationException   falls der Name der Abfrage oder der Abfragevariante bereits vorhanden ist
      * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
-     * @throws EntityNotFoundException falls das referenzierte Bauvorhaben nicht existiert.
-     * @throws CalculationException falls bei den Berechnungen ein Fehler auftritt.
-     * @throws ReportingException falls bei der Übermittlung an die Reportingschnittstelle ein Fehler auftritt.
+     * @throws EntityNotFoundException    falls das referenzierte Bauvorhaben nicht existiert.
+     * @throws CalculationException       falls bei den Berechnungen ein Fehler auftritt.
+     * @throws ReportingException         falls bei der Übermittlung an die Reportingschnittstelle ein Fehler auftritt.
      */
     public AbfrageModel save(final AbfrageModel abfrage)
         throws EntityNotFoundException, OptimisticLockingException, UniqueViolationException, CalculationException, ReportingException {
@@ -161,8 +161,8 @@ public class AbfrageService {
      * @throws AbfrageStatusNotAllowedException  falls die zu aktualisierende Abfrage sich nicht im Status {@link StatusAbfrage#ANGELEGT} befindet.
      * @throws FileHandlingFailedException       falls es beim Dateihandling zu einem Fehler gekommen ist.
      * @throws FileHandlingWithS3FailedException falls es beim Dateihandling im S3-Storage zu einem Fehler gekommen ist.
-     * @throws CalculationException falls bei den Berechnungen ein Fehler auftritt.
-     * @throws ReportingException falls bei der Übermittlung an die Reportingschnittstelle ein Fehler auftritt.
+     * @throws CalculationException              falls bei den Berechnungen ein Fehler auftritt.
+     * @throws ReportingException                falls bei der Übermittlung an die Reportingschnittstelle ein Fehler auftritt.
      * @throws UserRoleNotAllowedException       falls der User keine Berechtigung für die Abfrage hat.
      */
     public AbfrageModel patchAngelegt(final AbfrageAngelegtModel abfrage, final UUID id)
@@ -269,8 +269,8 @@ public class AbfrageService {
      * @throws OptimisticLockingException       falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist.
      * @throws EntityNotFoundException          falls das referenzierte Bauvorhaben nicht existiert.
      * @throws AbfrageStatusNotAllowedException falls die zu aktualisierende Abfrage sich nicht im Status {@link StatusAbfrage#IN_BEARBEITUNG_SACHBEARBEITUNG} befindet.
-     * @throws CalculationException falls bei den Berechnungen ein Fehler auftritt.
-     * @throws ReportingException falls bei der Übermittlung an die Reportingschnittstelle ein Fehler auftritt.
+     * @throws CalculationException             falls bei den Berechnungen ein Fehler auftritt.
+     * @throws ReportingException               falls bei der Übermittlung an die Reportingschnittstelle ein Fehler auftritt.
      * @throws UserRoleNotAllowedException      falls der User keine Berechtigung für die Abfrage hat.
      */
     public AbfrageModel patchInBearbeitungSachbearbeitung(
@@ -323,8 +323,8 @@ public class AbfrageService {
      * @throws OptimisticLockingException       falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist.
      * @throws EntityNotFoundException          falls das referenzierte Bauvorhaben nicht existiert.
      * @throws AbfrageStatusNotAllowedException falls die zu aktualisierende Abfrage sich nicht im Status {@link StatusAbfrage#IN_BEARBEITUNG_FACHREFERATE} befindet.
-     * @throws CalculationException falls bei den Berechnungen ein Fehler auftritt.
-     * @throws ReportingException falls bei der Übermittlung an die Reportingschnittstelle ein Fehler auftritt.
+     * @throws CalculationException             falls bei den Berechnungen ein Fehler auftritt.
+     * @throws ReportingException               falls bei der Übermittlung an die Reportingschnittstelle ein Fehler auftritt.
      * @throws UserRoleNotAllowedException      falls der User keine Berechtigung für die Abfrage hat.
      */
     public AbfrageModel patchInBearbeitungFachreferat(
@@ -371,14 +371,14 @@ public class AbfrageService {
      * und samt mit der Abfrage an die Reportingschnittstelle übermittelt.
      *
      * @param abfrage zum Speichern
-     * @param id der Abfrage
+     * @param id      der Abfrage
      * @return das gespeicherte {@link AbfrageModel}
-     * @throws UniqueViolationException   falls der Name der Abfrage oder der Abfragevariante bereits vorhanden ist.
-     * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist.
-     * @throws EntityNotFoundException falls das referenzierte Bauvorhaben nicht existiert.
+     * @throws UniqueViolationException         falls der Name der Abfrage oder der Abfragevariante bereits vorhanden ist.
+     * @throws OptimisticLockingException       falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist.
+     * @throws EntityNotFoundException          falls das referenzierte Bauvorhaben nicht existiert.
      * @throws AbfrageStatusNotAllowedException falls die zu aktualisierende Abfrage sich nicht im Status {@link StatusAbfrage#IN_BEARBEITUNG_FACHREFERATE} befindet.
-     * @throws CalculationException falls bei den Berechnungen ein Fehler auftritt.
-     * @throws ReportingException falls bei der Übermittlung an die Reportingschnittstelle ein Fehler auftritt.
+     * @throws CalculationException             falls bei den Berechnungen ein Fehler auftritt.
+     * @throws ReportingException               falls bei der Übermittlung an die Reportingschnittstelle ein Fehler auftritt.
      */
     public AbfrageModel patchBedarfsmeldungErfolgt(final AbfrageBedarfsmeldungErfolgtModel abfrage, final UUID id)
         throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException, UserRoleNotAllowedException, CalculationException, ReportingException {
@@ -418,13 +418,12 @@ public class AbfrageService {
     /**
      * Diese Methode löscht ein {@link AbfrageModel} aus der Datenbank und über die Reportingschnittstelle.
      *
-     *
      * @param id zum Identifizieren des {@link AbfrageModel}.
      * @throws EntityNotFoundException          falls die Abfrage identifiziert durch die {@link AbfrageModel#getId()} nicht gefunden wird.
      * @throws EntityIsReferencedException      falls ein {@link BauvorhabenModel} in der Abfrage referenziert wird.
      * @throws UserRoleNotAllowedException      falls der Nutzer nicht die richtige Rolle hat.
      * @throws AbfrageStatusNotAllowedException falls die Abfrage den falschen Status hat.
-     * @throws ReportingException falls beim Löschen über die Reportingschnittstelle ein Fehler auftritt.
+     * @throws ReportingException               falls beim Löschen über die Reportingschnittstelle ein Fehler auftritt.
      * @throws UserRoleNotAllowedException      falls der User keine Berechtigung für die Abfrage hat.
      * @throws AbfrageStatusNotAllowedException falls die Abfrage den falschen Status hat.
      */
@@ -531,8 +530,6 @@ public class AbfrageService {
      */
     public AbfrageModel getByAbfragevarianteId(final UUID abfragevarianteId)
         throws EntityNotFoundException, UserRoleNotAllowedException {
-        final var id = abfragevarianteId.toString();
-
         final var abfrageIds = Stream
             .of(
                 abfragevarianteBauleitplanverfahrenRepository.findAbfrageIdForAbfragevarianteById(abfragevarianteId),
@@ -573,7 +570,7 @@ public class AbfrageService {
      */
     public void throwUserRoleNotAllowedExceptionWhenRoleIsAnwenderAndAbfragestatusIsNotErledigt(Abfrage abfrage)
         throws UserRoleNotAllowedException {
-        if (authenticationUtils.isRoleAnwender()) {
+        if (authenticationUtils.isOnlyRoleAnwender()) {
             if (
                 abfrage.getStatusAbfrage() != StatusAbfrage.ERLEDIGT_OHNE_FACHREFERAT &&
                 abfrage.getStatusAbfrage() != StatusAbfrage.ERLEDIGT_MIT_FACHREFERAT

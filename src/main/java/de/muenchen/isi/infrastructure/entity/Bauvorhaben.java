@@ -1,9 +1,11 @@
 package de.muenchen.isi.infrastructure.entity;
 
+import de.muenchen.isi.infrastructure.adapter.listener.BauvorhabenListener;
 import de.muenchen.isi.infrastructure.adapter.search.StandVerfahrenSuggestionBinder;
 import de.muenchen.isi.infrastructure.adapter.search.StandVerfahrenValueBridge;
 import de.muenchen.isi.infrastructure.adapter.search.StringSuggestionBinder;
 import de.muenchen.isi.infrastructure.entity.common.Adresse;
+import de.muenchen.isi.infrastructure.entity.common.BearbeitendePerson;
 import de.muenchen.isi.infrastructure.entity.common.VerortungMultiPolygon;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtBaulicheNutzung;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonVerfahrensgrundsaetzeJahr;
@@ -12,11 +14,14 @@ import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.WesentlicheRechtsgrundlage;
 import de.muenchen.isi.infrastructure.entity.filehandling.Dokument;
 import de.muenchen.isi.infrastructure.repository.search.SearchwordSuggesterRepository;
+import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.AttributeOverrides;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
@@ -42,12 +47,26 @@ import org.hibernate.search.mapper.pojo.mapping.definition.annotation.NonStandar
 import org.hibernate.type.SqlTypes;
 
 @Entity
+@EntityListeners({ BauvorhabenListener.class })
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @Table(indexes = { @Index(name = "bauvorhaben_name_index", columnList = "nameVorhaben") })
 @Indexed
 public class Bauvorhaben extends BaseEntity {
+
+    @Embedded
+    @AttributeOverrides(
+        {
+            @AttributeOverride(name = "name", column = @Column(name = "bearbeitende_person_name")),
+            @AttributeOverride(name = "email", column = @Column(name = "bearbeitende_person_email")),
+            @AttributeOverride(
+                name = "organisationseinheit",
+                column = @Column(name = "bearbeitende_person_organisationseinheit")
+            ),
+        }
+    )
+    private BearbeitendePerson bearbeitendePerson;
 
     /**
      * Einheitlicher indexiertes sortierbares Namensattributs
@@ -74,7 +93,7 @@ public class Bauvorhaben extends BaseEntity {
     @Column(nullable = false)
     private StandVerfahren standVerfahren;
 
-    @Column
+    @Column(length = 1000)
     private String standVerfahrenFreieEingabe;
 
     @FullTextField
@@ -105,7 +124,7 @@ public class Bauvorhaben extends BaseEntity {
     @Column
     private String fisNummer;
 
-    @Column
+    @Column(length = 1000)
     private String anmerkung;
 
     @Enumerated(EnumType.STRING)
@@ -120,7 +139,7 @@ public class Bauvorhaben extends BaseEntity {
     @ElementCollection
     private List<WesentlicheRechtsgrundlage> wesentlicheRechtsgrundlage;
 
-    @Column
+    @Column(length = 1000)
     private String wesentlicheRechtsgrundlageFreieEingabe;
 
     @Enumerated(EnumType.STRING)

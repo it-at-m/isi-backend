@@ -6,15 +6,19 @@ package de.muenchen.isi.infrastructure.entity;
 
 import de.muenchen.isi.infrastructure.adapter.search.IntegerSuggestionBinder;
 import de.muenchen.isi.infrastructure.adapter.search.IntegerToStringValueBridge;
+import de.muenchen.isi.infrastructure.entity.common.SobonBerechnung;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.WesentlicheRechtsgrundlage;
 import de.muenchen.isi.infrastructure.entity.filehandling.Dokument;
 import de.muenchen.isi.infrastructure.repository.search.SearchwordSuggesterRepository;
+import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.AttributeOverrides;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -72,7 +76,7 @@ public class AbfragevarianteBauleitplanverfahren extends Abfragevariante {
     @ElementCollection
     private List<WesentlicheRechtsgrundlage> wesentlicheRechtsgrundlage;
 
-    @Column
+    @Column(length = 1000)
     private String wesentlicheRechtsgrundlageFreieEingabe;
 
     @KeywordField(valueBridge = @ValueBridgeRef(type = IntegerToStringValueBridge.class))
@@ -133,10 +137,29 @@ public class AbfragevarianteBauleitplanverfahren extends Abfragevariante {
     @Column
     private SobonOrientierungswertJahr sobonOrientierungswertJahr;
 
+    @Embedded
+    @AttributeOverrides(
+        {
+            @AttributeOverride(
+                name = "isASobonBerechnung",
+                column = @Column(name = "is_a_sobon_berechnung", nullable = true)
+            ),
+            @AttributeOverride(
+                name = "sobonFoerdermix.bezeichnung",
+                column = @Column(name = "sobon_foerdermix_bezeichnung", nullable = true)
+            ),
+            @AttributeOverride(
+                name = "sobonFoerdermix.bezeichnungJahr",
+                column = @Column(name = "sobon_foerdermix_bezeichnung_jahr", nullable = true)
+            ),
+        }
+    )
+    private SobonBerechnung sobonBerechnung;
+
     @Column
     private LocalDate stammdatenGueltigAb;
 
-    @Column
+    @Column(length = 1000)
     private String anmerkung;
 
     @OneToMany(cascade = { CascadeType.ALL }, orphanRemoval = true)

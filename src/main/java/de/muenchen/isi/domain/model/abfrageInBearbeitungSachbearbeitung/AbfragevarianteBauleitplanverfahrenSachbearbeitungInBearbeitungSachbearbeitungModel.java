@@ -4,6 +4,7 @@
  */
 package de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung;
 
+import de.muenchen.isi.domain.model.common.SobonBerechnungModel;
 import de.muenchen.isi.domain.model.filehandling.DokumentModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
@@ -22,6 +23,8 @@ public class AbfragevarianteBauleitplanverfahrenSachbearbeitungInBearbeitungSach
     private ArtAbfrage artAbfragevariante;
 
     private SobonOrientierungswertJahr sobonOrientierungswertJahr;
+
+    private SobonBerechnungModel sobonBerechnung;
 
     private LocalDate stammdatenGueltigAb;
 

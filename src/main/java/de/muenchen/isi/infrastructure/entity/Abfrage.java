@@ -59,7 +59,7 @@ public abstract class Abfrage extends BaseEntity {
     @Column(nullable = false)
     private StatusAbfrage statusAbfrage;
 
-    @Column
+    @Column(length = 1000)
     private String anmerkung;
 
     @ManyToOne
@@ -81,4 +81,7 @@ public abstract class Abfrage extends BaseEntity {
             ? null
             : EnumUtils.getEnum(ArtAbfrage.class, discriminatorValue.value());
     }
+
+    @Column(length = 8000)
+    private String linkEakte;
 }

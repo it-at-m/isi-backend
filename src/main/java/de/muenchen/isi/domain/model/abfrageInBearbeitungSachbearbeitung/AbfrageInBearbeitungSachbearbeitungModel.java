@@ -12,4 +12,6 @@ public abstract class AbfrageInBearbeitungSachbearbeitungModel {
     private ArtAbfrage artAbfrage;
 
     private UUID bauvorhaben;
+
+    private String linkEakte;
 }
