@@ -169,7 +169,7 @@ public class AbfrageService {
         throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, FileHandlingFailedException, FileHandlingWithS3FailedException, UserRoleNotAllowedException, CalculationException, ReportingException {
         final var originalAbfrageDb = this.getById(id);
         this.throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(originalAbfrageDb, StatusAbfrage.ANGELEGT);
-
+        this.changeRelevantAbfragevarianteOnBauvorhabenChangeAbfrageAngelegtModel(abfrage, originalAbfrageDb);
         final AbfrageModel abfrageToSave;
         if (ArtAbfrage.BAULEITPLANVERFAHREN.equals(abfrage.getArtAbfrage())) {
             abfrageToSave =
@@ -284,6 +284,10 @@ public class AbfrageService {
                 StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG
             );
 
+        this.changeRelevantAbfragevarianteOnBauvorhabenChangeAbfrageInBearbeitungSachbearbeitung(
+                abfrage,
+                originalAbfrageDb
+            );
         final AbfrageModel abfrageToSave;
         if (ArtAbfrage.BAULEITPLANVERFAHREN.equals(abfrage.getArtAbfrage())) {
             abfrageToSave =
@@ -576,6 +580,36 @@ public class AbfrageService {
                 abfrage.getStatusAbfrage() != StatusAbfrage.ERLEDIGT_MIT_FACHREFERAT
             ) {
                 throw new UserRoleNotAllowedException("Fehlende Berechtigung für die Abfrage");
+            }
+        }
+    }
+
+    public void changeRelevantAbfragevarianteOnBauvorhabenChangeAbfrageAngelegtModel(
+        AbfrageAngelegtModel abfrage,
+        AbfrageModel originalAbfrageDb
+    ) {
+        if (originalAbfrageDb.getBauvorhaben() != null) {
+            if (
+                abfrage.getBauvorhaben() == null || !abfrage.getBauvorhaben().equals(originalAbfrageDb.getBauvorhaben())
+            ) {
+                var bauvorhaben = this.bauvorhabenRepository.getReferenceById(originalAbfrageDb.getBauvorhaben());
+                bauvorhaben.setRelevanteAbfragevariante(null);
+                this.bauvorhabenRepository.save(bauvorhaben);
+            }
+        }
+    }
+
+    public void changeRelevantAbfragevarianteOnBauvorhabenChangeAbfrageInBearbeitungSachbearbeitung(
+        AbfrageInBearbeitungSachbearbeitungModel abfrage,
+        AbfrageModel originalAbfrageDb
+    ) {
+        if (originalAbfrageDb.getBauvorhaben() != null) {
+            if (
+                abfrage.getBauvorhaben() == null || !abfrage.getBauvorhaben().equals(originalAbfrageDb.getBauvorhaben())
+            ) {
+                var bauvorhaben = this.bauvorhabenRepository.getReferenceById(originalAbfrageDb.getBauvorhaben());
+                bauvorhaben.setRelevanteAbfragevariante(null);
+                this.bauvorhabenRepository.save(bauvorhaben);
             }
         }
     }
