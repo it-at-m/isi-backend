@@ -1,7 +1,6 @@
 package de.muenchen.isi.api.dto.search.response;
 
 import de.muenchen.isi.api.dto.common.StadtbezirkDto;
-import de.muenchen.isi.api.dto.common.Wgs84Dto;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVerfahren;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
@@ -35,6 +34,4 @@ public class AbfrageSearchResultDto extends SearchResultDto {
     private LocalDateTime createdDateTime;
 
     private UUID bauvorhaben;
-
-    private Wgs84Dto coordinate;
 }

@@ -1,6 +1,5 @@
 package de.muenchen.isi.domain.model.search.response;
 
-import de.muenchen.isi.domain.model.common.WGS84Model;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
 import java.util.UUID;
 import lombok.Data;
@@ -17,6 +16,4 @@ public class InfrastruktureinrichtungSearchResultModel extends SearchResultModel
     private InfrastruktureinrichtungTyp infrastruktureinrichtungTyp;
 
     private String nameEinrichtung;
-
-    private WGS84Model coordinate;
 }

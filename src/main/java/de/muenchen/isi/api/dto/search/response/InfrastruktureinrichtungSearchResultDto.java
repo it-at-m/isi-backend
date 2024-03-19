@@ -1,6 +1,5 @@
 package de.muenchen.isi.api.dto.search.response;
 
-import de.muenchen.isi.api.dto.common.Wgs84Dto;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
 import java.util.UUID;
 import lombok.Data;
@@ -17,7 +16,4 @@ public class InfrastruktureinrichtungSearchResultDto extends SearchResultDto {
     private String nameEinrichtung;
 
     private InfrastruktureinrichtungTyp infrastruktureinrichtungTyp;
-    //TBD: StadtbezirkDto
-
-    private Wgs84Dto coordinate;
 }
