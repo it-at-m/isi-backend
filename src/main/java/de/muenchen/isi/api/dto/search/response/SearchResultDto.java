@@ -2,6 +2,7 @@ package de.muenchen.isi.api.dto.search.response;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import de.muenchen.isi.api.dto.common.Wgs84Dto;
 import de.muenchen.isi.domain.model.enums.SearchResultType;
 import io.swagger.v3.oas.annotations.media.DiscriminatorMapping;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -39,4 +40,6 @@ import lombok.Data;
 public abstract class SearchResultDto {
 
     private SearchResultType type;
+
+    private Wgs84Dto coordinate;
 }
