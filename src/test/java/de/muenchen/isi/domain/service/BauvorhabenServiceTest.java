@@ -777,12 +777,6 @@ public class BauvorhabenServiceTest {
         Mockito
             .verify(this.abfrageService, Mockito.times(1))
             .getByAbfragevarianteId(abfragevarianteBauleitplanverfahren.getId());
-        Mockito
-            .verify(this.abfrageService, Mockito.times(1))
-            .throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(
-                Mockito.any(AbfrageModel.class),
-                Mockito.any(StatusAbfrage.class)
-            );
     }
 
     @Test
@@ -804,6 +798,9 @@ public class BauvorhabenServiceTest {
 
         final UUID otherAbfragevariante = UUID.randomUUID();
         Mockito.when(this.abfrageService.getByAbfragevarianteId(otherAbfragevariante)).thenReturn(abfrageModel);
+        Mockito
+            .when(this.abfrageService.getByAbfragevarianteId(abfragevarianteBauleitplanverfahren.getId()))
+            .thenReturn(abfrageModel);
         Mockito
             .when(bauvorhabenRepository.findById(bauvorhabenEntity.getId()))
             .thenReturn(Optional.of(bauvorhabenEntity));
@@ -827,6 +824,9 @@ public class BauvorhabenServiceTest {
 
         Mockito.verify(this.bauvorhabenRepository, Mockito.times(0)).saveAndFlush(Mockito.any());
         Mockito.verify(this.abfrageService, Mockito.times(1)).getByAbfragevarianteId(otherAbfragevariante);
+        Mockito
+            .verify(this.abfrageService, Mockito.times(1))
+            .getByAbfragevarianteId(abfragevarianteBauleitplanverfahren.getId());
         Mockito
             .verify(this.abfrageService, Mockito.times(1))
             .throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(
@@ -911,12 +911,6 @@ public class BauvorhabenServiceTest {
         );
 
         Mockito.verify(this.abfrageService, Mockito.times(1)).getByAbfragevarianteId(abfragevarianteId);
-        Mockito
-            .verify(this.abfrageService, Mockito.times(1))
-            .throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(
-                Mockito.any(AbfrageModel.class),
-                Mockito.any(StatusAbfrage.class)
-            );
     }
 
     @Test
@@ -924,12 +918,24 @@ public class BauvorhabenServiceTest {
         throws EntityNotFoundException, AbfrageStatusNotAllowedException, UserRoleNotAllowedException {
         UUID abfragevarianteId = UUID.randomUUID();
 
+        UUID bauvorhabenId = UUID.randomUUID();
         final AbfrageModel abfrageModel = new BauleitplanverfahrenModel();
+
         abfrageModel.setId(UUID.randomUUID());
         abfrageModel.setName("test1");
         abfrageModel.setStatusAbfrage(StatusAbfrage.ANGELEGT);
+        abfrageModel.setBauvorhaben(bauvorhabenId);
+
+        var abfragevariante = new AbfragevarianteBauleitplanverfahren();
+        abfragevariante.setId(UUID.randomUUID());
+
+        var bauvorhaben = new Bauvorhaben();
+        bauvorhaben.setId(bauvorhabenId);
+        bauvorhaben.setRelevanteAbfragevariante(abfragevariante);
 
         Mockito.when(this.abfrageService.getByAbfragevarianteId(abfragevarianteId)).thenReturn(abfrageModel);
+        Mockito.when(this.bauvorhabenRepository.findById(bauvorhabenId)).thenReturn(Optional.of(bauvorhaben));
+
         Mockito
             .doCallRealMethod()
             .when(abfrageService)
