@@ -49,6 +49,13 @@ public class SobonBerechnungValidatorTest {
         dto.setSobonFoerdermix(foerdermixDto);
         assertThat(validator.isValid(dto, null), is(true));
 
+        foerdermixDto.setFoerderarten(List.of());
+        foerdermixDto.setBezeichnung("");
+        foerdermixDto.setBezeichnungJahr("");
+        dto.setIsASobonBerechnung(false);
+        dto.setSobonFoerdermix(foerdermixDto);
+        assertThat(validator.isValid(dto, null), is(true));
+
         foerdermixDto.setFoerderarten(null);
         foerdermixDto.setBezeichnung("Bezeichnung");
         foerdermixDto.setBezeichnungJahr(null);
@@ -80,6 +87,13 @@ public class SobonBerechnungValidatorTest {
         foerdermixDto.setFoerderarten(null);
         foerdermixDto.setBezeichnung(null);
         foerdermixDto.setBezeichnungJahr(null);
+        dto.setIsASobonBerechnung(true);
+        dto.setSobonFoerdermix(foerdermixDto);
+        assertThat(validator.isValid(dto, null), is(false));
+
+        foerdermixDto.setFoerderarten(List.of());
+        foerdermixDto.setBezeichnung("");
+        foerdermixDto.setBezeichnungJahr("");
         dto.setIsASobonBerechnung(true);
         dto.setSobonFoerdermix(foerdermixDto);
         assertThat(validator.isValid(dto, null), is(false));
