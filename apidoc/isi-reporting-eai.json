@@ -59,8 +59,7 @@
             "type": "string",
             "enum": ["UNSPECIFIED", "BAULEITPLANVERFAHREN", "BAUGENEHMIGUNGSVERFAHREN", "WEITERES_VERFAHREN"]
           },
-          "name": { "type": "string" },
-          "fristBearbeitung": { "type": "string", "format": "date" }
+          "name": { "type": "string" }
         },
         "description": "AbfrageDto",
         "discriminator": {
@@ -134,7 +133,8 @@
               "abfragevariantenSachbearbeitungBaugenehmigungsverfahren": {
                 "type": "array",
                 "items": { "$ref": "#/components/schemas/AbfragevarianteBaugenehmigungsverfahrenDto" }
-              }
+              },
+              "fristBearbeitung": { "type": "string", "format": "date" }
             }
           }
         ]
@@ -153,7 +153,8 @@
               "abfragevariantenSachbearbeitungBauleitplanverfahren": {
                 "type": "array",
                 "items": { "$ref": "#/components/schemas/AbfragevarianteBauleitplanverfahrenDto" }
-              }
+              },
+              "fristBearbeitung": { "type": "string", "format": "date" }
             }
           }
         ]
@@ -229,7 +230,8 @@
               "abfragevariantenSachbearbeitungWeiteresVerfahren": {
                 "type": "array",
                 "items": { "$ref": "#/components/schemas/AbfragevarianteWeiteresVerfahrenDto" }
-              }
+              },
+              "fristBearbeitung": { "type": "string", "format": "date" }
             }
           }
         ]
