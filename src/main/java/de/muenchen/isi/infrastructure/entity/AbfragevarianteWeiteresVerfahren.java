@@ -40,28 +40,18 @@ import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBridgeRef
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.KeywordField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.NonStandardField;
 
-@Entity
+@Entity(name = "abfrgvar_weitrs_vrfhrn")
 @DiscriminatorValue(ArtAbfrage.Values.WEITERES_VERFAHREN)
 @Table(
-    // weiteres_verfahren
+    name = "abfrgvar_weitrs_vrfhrn",
     indexes = {
-        @Index(
-            name = "abfragevarianten_weiteres_verfahren_id_index",
-            columnList = "abfragevarianten_weiteres_verfahren_id"
-        ),
-        @Index(
-            name = "abfragevarianten_sachbearbeitung_weiteres_verfahren_id_index",
-            columnList = "abfragevarianten_sachbearbeitung_weiteres_verfahren_id"
-        ),
+        @Index(name = "abfrgvar_weitrs_vrfhrn_id_index", columnList = "abfrgvar_weitrs_vrfhrn_id"),
+        @Index(name = "abfrgvar_schbrbtng_weitrs_vrfhrn_id_index", columnList = "abfrgvar_schbrbtng_weitrs_vrfhrn_id"),
     },
     uniqueConstraints = {
         @UniqueConstraint(
             name = "UniqueNameAbfragevariantePerWeiteresVerfahren",
-            columnNames = {
-                "abfragevarianten_weiteres_verfahren_id",
-                "abfragevarianten_sachbearbeitung_weiteres_verfahren_id",
-                "name",
-            }
+            columnNames = { "abfrgvar_weitrs_vrfhrn_id", "abfrgvar_schbrbtng_weitrs_vrfhrn_id", "name" }
         ),
     }
 )
@@ -176,17 +166,17 @@ public class AbfragevarianteWeiteresVerfahren extends Abfragevariante {
     private String anmerkung;
 
     @OneToMany(cascade = { CascadeType.ALL }, orphanRemoval = true)
-    @JoinColumn(name = "abfragevariante_weiteres_verfahren_fachreferate_id", referencedColumnName = "id")
+    @JoinColumn(name = "abfrgvar_weitrs_vrfhrn_fachreferate_id", referencedColumnName = "id")
     @OrderBy("createdDateTime asc")
     private List<Bedarfsmeldung> bedarfsmeldungFachreferate;
 
     @OneToMany(cascade = { CascadeType.ALL }, orphanRemoval = true)
-    @JoinColumn(name = "abfragevariante_weiteres_verfahren_abfrageersteller_id", referencedColumnName = "id")
+    @JoinColumn(name = "abfrgvar_weitrs_vrfhrn_abfrageersteller_id", referencedColumnName = "id")
     @OrderBy("createdDateTime asc")
     private List<Bedarfsmeldung> bedarfsmeldungAbfrageersteller;
 
     @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY, orphanRemoval = true)
-    @JoinColumn(name = "abfragevariante_weiteres_verfahren_id")
+    @JoinColumn(name = "abfrgvar_weitrs_vrfhrn_id")
     @OrderBy("createdDateTime asc")
     private List<Bauabschnitt> bauabschnitte;
 

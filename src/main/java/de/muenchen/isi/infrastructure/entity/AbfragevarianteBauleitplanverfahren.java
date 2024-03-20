@@ -40,27 +40,21 @@ import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBridgeRef
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.KeywordField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.NonStandardField;
 
-@Entity
+@Entity(name = "abfrgvar_bauleitplnvrfhrn")
 @DiscriminatorValue(ArtAbfrage.Values.BAULEITPLANVERFAHREN)
 @Table(
+    name = "abfrgvar_bauleitplnvrfhrn",
     indexes = {
+        @Index(name = "abfrgvar_bauleitplnvrfhrn_id_index", columnList = "abfrgvar_bauleitplnvrfhrn_id"),
         @Index(
-            name = "abfragevarianten_bauleitplanverfahren_id_index",
-            columnList = "abfragevarianten_bauleitplanverfahren_id"
-        ),
-        @Index(
-            name = "abfragevarianten_sachbearbeitung_bauleitplanverfahren_id_index",
-            columnList = "abfragevarianten_sachbearbeitung_bauleitplanverfahren_id"
+            name = "abfrgvar_schbrbtng_bauleitplnvrfhrn_id_index",
+            columnList = "abfrgvar_schbrbtng_bauleitplnvrfhrn_id"
         ),
     },
     uniqueConstraints = {
         @UniqueConstraint(
             name = "UniqueNameAbfragevariantePerBauleitplanverfahren",
-            columnNames = {
-                "abfragevarianten_bauleitplanverfahren_id",
-                "abfragevarianten_sachbearbeitung_bauleitplanverfahren_id",
-                "name",
-            }
+            columnNames = { "abfrgvar_bauleitplnvrfhrn_id", "abfrgvar_schbrbtng_bauleitplnvrfhrn_id", "name" }
         ),
     }
 )
@@ -163,17 +157,17 @@ public class AbfragevarianteBauleitplanverfahren extends Abfragevariante {
     private String anmerkung;
 
     @OneToMany(cascade = { CascadeType.ALL }, orphanRemoval = true)
-    @JoinColumn(name = "abfragevariante_bauleitplanverfahren_fachreferate_id", referencedColumnName = "id")
+    @JoinColumn(name = "abfrgvar_bauleitplnvrfhrn_fachreferate_id", referencedColumnName = "id")
     @OrderBy("createdDateTime asc")
     private List<Bedarfsmeldung> bedarfsmeldungFachreferate;
 
     @OneToMany(cascade = { CascadeType.ALL }, orphanRemoval = true)
-    @JoinColumn(name = "abfragevariante_bauleitplanverfahren_abfrageersteller_id", referencedColumnName = "id")
+    @JoinColumn(name = "abfrgvar_bauleitplnvrfhrn_abfrageersteller_id", referencedColumnName = "id")
     @OrderBy("createdDateTime asc")
     private List<Bedarfsmeldung> bedarfsmeldungAbfrageersteller;
 
     @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY, orphanRemoval = true)
-    @JoinColumn(name = "abfragevariante_bauleitplanverfahren_id")
+    @JoinColumn(name = "abfrgvar_bauleitplnvrfhrn_id")
     @OrderBy("createdDateTime asc")
     private List<Bauabschnitt> bauabschnitte;
 

@@ -6,6 +6,7 @@ import jakarta.validation.ConstraintValidatorContext;
 import lombok.NoArgsConstructor;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -21,8 +22,8 @@ public class SobonBerechnungValidator implements ConstraintValidator<SobonBerech
             boolean isSobonBerechnung = BooleanUtils.toBoolean(sobonBerechnung.getIsASobonBerechnung());
             boolean isFoerdermixEmtpy =
                 sobonBerechnung.getSobonFoerdermix() == null ||
-                (sobonBerechnung.getSobonFoerdermix().getBezeichnungJahr() == null &&
-                    sobonBerechnung.getSobonFoerdermix().getBezeichnung() == null &&
+                (StringUtils.isEmpty(sobonBerechnung.getSobonFoerdermix().getBezeichnungJahr()) &&
+                    StringUtils.isEmpty(sobonBerechnung.getSobonFoerdermix().getBezeichnung()) &&
                     CollectionUtils.isEmpty(sobonBerechnung.getSobonFoerdermix().getFoerderarten()));
             return isSobonBerechnung != isFoerdermixEmtpy;
         }

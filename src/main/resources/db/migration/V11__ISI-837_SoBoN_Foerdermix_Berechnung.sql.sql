@@ -15,8 +15,7 @@ ALTER TABLE IF EXISTS isidbuser.abfragevariante_weiteres_verfahren
     ADD COLUMN sobon_foerdermix_bezeichnung      VARCHAR(80)
 ;
 
-CREATE TABLE IF NOT EXISTS isidbuser.abfragevariante_bauleitplanverfahren_foerderarten
-(
+CREATE TABLE IF NOT EXISTS isidbuser.abfragevariante_bauleitplanverfahren_foerderarten (
     abfragevariante_bauleitplanverfahren_id character varying(36) NOT NULL,
     anteil_prozent                          numeric(19, 2),
     bezeichnung                             character varying(255),
@@ -24,11 +23,9 @@ CREATE TABLE IF NOT EXISTS isidbuser.abfragevariante_bauleitplanverfahren_foerde
         REFERENCES isidbuser.abfragevariante_bauleitplanverfahren(id)
 );
 
-ALTER TABLE isidbuser.abfragevariante_bauleitplanverfahren_foerderarten
-    OWNER TO isidbuser;
+ALTER TABLE isidbuser.abfragevariante_bauleitplanverfahren_foerderarten OWNER TO isidbuser;
 
-CREATE TABLE IF NOT EXISTS isidbuser.abfragevariante_weiteres_verfahren_foerderarten
-(
+CREATE TABLE IF NOT EXISTS isidbuser.abfragevariante_weiteres_verfahren_foerderarten (
     abfragevariante_weiteres_verfahren_id character varying(36) NOT NULL,
     anteil_prozent                        numeric(19, 2),
     bezeichnung                           character varying(255),
@@ -36,6 +33,6 @@ CREATE TABLE IF NOT EXISTS isidbuser.abfragevariante_weiteres_verfahren_foerdera
         REFERENCES isidbuser.abfragevariante_weiteres_verfahren(id)
 );
 
-ALTER TABLE isidbuser.abfragevariante_weiteres_verfahren_foerderarten
-    OWNER TO isidbuser;
+ALTER TABLE isidbuser.abfragevariante_weiteres_verfahren_foerderarten OWNER TO isidbuser;
+
 END;
