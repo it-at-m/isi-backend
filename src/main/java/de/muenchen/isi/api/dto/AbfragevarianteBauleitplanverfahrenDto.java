@@ -98,6 +98,5 @@ public class AbfragevarianteBauleitplanverfahrenDto extends AbfragevarianteDto {
 
     private String hinweisVersorgung;
 
-    @HasAllowedNumberOfDocuments
     private List<@Valid DokumentDto> dokumente;
 }
