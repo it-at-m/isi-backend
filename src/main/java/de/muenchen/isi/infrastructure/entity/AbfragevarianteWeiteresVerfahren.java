@@ -212,6 +212,6 @@ public class AbfragevarianteWeiteresVerfahren extends Abfragevariante {
     private String hinweisVersorgung;
 
     @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY, orphanRemoval = true)
-    @JoinColumn(name = "abfragevariante_weiteres_verfahren_id")
+    @JoinColumn(name = "abfrgvar_weitrs_vrfhrn_id")
     private List<Dokument> dokumente;
 }

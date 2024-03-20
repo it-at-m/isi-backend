@@ -203,6 +203,6 @@ public class AbfragevarianteBauleitplanverfahren extends Abfragevariante {
     private String hinweisVersorgung;
 
     @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY, orphanRemoval = true)
-    @JoinColumn(name = "abfragevariante_bauleitplanverfahren_id")
+    @JoinColumn(name = "abfrgvar_bauleitplnvrfhrn_id")
     private List<Dokument> dokumente;
 }
