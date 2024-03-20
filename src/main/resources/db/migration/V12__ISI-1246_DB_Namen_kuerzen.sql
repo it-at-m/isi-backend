@@ -203,4 +203,24 @@ ALTER TABLE IF EXISTS isidbuser.weiteres_verfahren RENAME CONSTRAINT fk_b19uhd66
 -- Delete table Bedarfsmeldung Fachreferate
 DROP TABLE isidbuser.bedarfsmeldung_fachreferate;
 
+
+ALTER TABLE IF EXISTS isidbuser.abfragevariante_bauleitplanverfahren_foerderarten
+    RENAME TO abfrgvar_bauleitplnvrfhrn_foerderarten;
+
+ALTER TABLE IF EXISTS isidbuser.abfrgvar_bauleitplnvrfhrn_foerderarten RENAME CONSTRAINT fk_abfragevariante_bauleitplanverfahren_foerderarten TO fk_abfrgvar_bauleitplnvrfhrn_id_abfrgvar_bauleitplnvrfhrn_id;
+
+
+ALTER TABLE IF EXISTS isidbuser.abfragevariante_weiteres_verfahren_foerderarten
+    RENAME TO abfrgvar_weitrs_vrfhrn_foerderarten;
+
+ALTER TABLE IF EXISTS isidbuser.abfrgvar_weitrs_vrfhrn_foerderarten RENAME CONSTRAINT fk_abfragevariante_weiteresverfahren_foerderarten TO fk_abfrgvar_weitrs_vrfhrn_id_abfrgvar_weitrs_vrfhrn_id;
+
+
+ALTER TABLE IF EXISTS isidbuser.abfrgvar_bauleitplnvrfhrn_foerderarten
+    RENAME COLUMN abfragevariante_bauleitplanverfahren_id TO abfrgvar_bauleitplnvrfhrn_id;
+
+ALTER TABLE IF EXISTS isidbuser.abfrgvar_weitrs_vrfhrn_foerderarten
+    RENAME COLUMN abfragevariante_weiteres_verfahren_id TO abfrgvar_weitrs_vrfhrn_id;
+
+
 END;
