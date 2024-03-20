@@ -5,8 +5,11 @@
 package de.muenchen.isi.api.dto;
 
 import de.muenchen.isi.api.dto.common.SobonBerechnungDto;
+import de.muenchen.isi.api.dto.filehandling.DokumentDto;
+import de.muenchen.isi.api.validation.HasAllowedNumberOfDocuments;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.WesentlicheRechtsgrundlage;
+import jakarta.validation.Valid;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
@@ -94,4 +97,6 @@ public class AbfragevarianteBauleitplanverfahrenDto extends AbfragevarianteDto {
     private boolean ausgeloesterBedarfMitversorgungInBestEinrichtungenNachAusbauSchule;
 
     private String hinweisVersorgung;
+
+    private List<@Valid DokumentDto> dokumente;
 }

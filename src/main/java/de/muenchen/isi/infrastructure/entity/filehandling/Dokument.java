@@ -21,6 +21,9 @@ import lombok.ToString;
         @Index(name = "dokument_weiteres_verfahren_id_index", columnList = "weiteres_verfahren_id"),
         @Index(name = "dokument_bauvorhaben_id_index", columnList = "bauvorhaben_id"),
         @Index(name = "dokument_kommentar_id_index", columnList = "kommentar_id"),
+        @Index(name = "dokument_abfrgvar_baugnhmgsverfhrn_id_index", columnList = "abfrgvar_baugnhmgsverfhrn_id"),
+        @Index(name = "dokument_abfrgvar_bauleitplnvrfhrn_id_index", columnList = "abfrgvar_bauleitplnvrfhrn_id"),
+        @Index(name = "dokument_abfrgvar_weitrs_vrfhrn_id_index", columnList = "abfrgvar_weitrs_vrfhrn_id"),
     }
 )
 @Data

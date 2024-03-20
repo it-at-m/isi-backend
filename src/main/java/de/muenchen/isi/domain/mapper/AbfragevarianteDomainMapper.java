@@ -67,6 +67,7 @@ public interface AbfragevarianteDomainMapper {
             @Mapping(target = "ausgeloesterBedarfMitversorgungInBestEinrichtungenNachAusbauSchule", ignore = true),
             @Mapping(target = "hinweisVersorgung", ignore = true),
             @Mapping(target = "bedarfsmeldungAbfrageersteller", ignore = true),
+            @Mapping(target = "dokumente", ignore = true),
         }
     )
     AbfragevarianteBauleitplanverfahrenModel request2Model(
@@ -92,6 +93,7 @@ public interface AbfragevarianteDomainMapper {
             @Mapping(target = "ausgeloesterBedarfMitversorgungInBestEinrichtungenNachAusbauSchule", ignore = true),
             @Mapping(target = "hinweisVersorgung", ignore = true),
             @Mapping(target = "bedarfsmeldungAbfrageersteller", ignore = true),
+            @Mapping(target = "dokumente", ignore = true),
         }
     )
     AbfragevarianteBaugenehmigungsverfahrenModel request2Model(
@@ -118,6 +120,7 @@ public interface AbfragevarianteDomainMapper {
             @Mapping(target = "ausgeloesterBedarfMitversorgungInBestEinrichtungenNachAusbauSchule", ignore = true),
             @Mapping(target = "hinweisVersorgung", ignore = true),
             @Mapping(target = "bedarfsmeldungAbfrageersteller", ignore = true),
+            @Mapping(target = "dokumente", ignore = true),
         }
     )
     AbfragevarianteWeiteresVerfahrenModel request2Model(
@@ -133,6 +136,7 @@ public interface AbfragevarianteDomainMapper {
             @Mapping(target = "sobonBerechnung", ignore = false),
             @Mapping(target = "stammdatenGueltigAb", ignore = false),
             @Mapping(target = "anmerkung", ignore = false),
+            @Mapping(target = "dokumente", ignore = false),
         }
     )
     AbfragevarianteBauleitplanverfahrenModel request2Model(
@@ -147,6 +151,7 @@ public interface AbfragevarianteDomainMapper {
             @Mapping(target = "sobonOrientierungswertJahr", ignore = false),
             @Mapping(target = "stammdatenGueltigAb", ignore = false),
             @Mapping(target = "anmerkung", ignore = false),
+            @Mapping(target = "dokumente", ignore = false),
         }
     )
     AbfragevarianteBaugenehmigungsverfahrenModel request2Model(
@@ -162,6 +167,7 @@ public interface AbfragevarianteDomainMapper {
             @Mapping(target = "sobonBerechnung", ignore = false),
             @Mapping(target = "stammdatenGueltigAb", ignore = false),
             @Mapping(target = "anmerkung", ignore = false),
+            @Mapping(target = "dokumente", ignore = false),
         }
     )
     AbfragevarianteWeiteresVerfahrenModel request2Model(

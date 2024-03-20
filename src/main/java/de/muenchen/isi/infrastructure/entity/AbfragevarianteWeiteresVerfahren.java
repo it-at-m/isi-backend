@@ -10,6 +10,7 @@ import de.muenchen.isi.infrastructure.entity.common.SobonBerechnung;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.WesentlicheRechtsgrundlage;
+import de.muenchen.isi.infrastructure.entity.filehandling.Dokument;
 import de.muenchen.isi.infrastructure.repository.search.SearchwordSuggesterRepository;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.AttributeOverrides;
@@ -209,4 +210,8 @@ public class AbfragevarianteWeiteresVerfahren extends Abfragevariante {
 
     @Column(length = 1000)
     private String hinweisVersorgung;
+
+    @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY, orphanRemoval = true)
+    @JoinColumn(name = "abfrgvar_weitrs_vrfhrn_id")
+    private List<Dokument> dokumente;
 }
