@@ -10,6 +10,7 @@ import de.muenchen.isi.domain.exception.UniqueViolationException;
 import de.muenchen.isi.domain.exception.UserRoleNotAllowedException;
 import de.muenchen.isi.domain.model.AbfrageModel;
 import de.muenchen.isi.domain.model.common.TransitionModel;
+import de.muenchen.isi.domain.service.common.BearbeitungshistorieService;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrageEvents;
 import de.muenchen.isi.security.AuthenticationUtils;
@@ -54,6 +55,8 @@ public class AbfrageStatusService {
     private final StateMachineFactory<StatusAbfrage, StatusAbfrageEvents> stateMachineFactory;
 
     private final AuthenticationUtils authenticationUtils;
+
+    private final BearbeitungshistorieService abfrageBearbeitungshistorieService;
 
     /**
      * Ändert den Status auf {@link StatusAbfrage#OFFEN}.
@@ -282,6 +285,8 @@ public class AbfrageStatusService {
                                     }
                                 }
                                 // Speichern der Abfrage
+                                abfrage =
+                                    abfrageBearbeitungshistorieService.appendBearbeitungshistorieToAbfrage(abfrage);
                                 AbfrageStatusService.this.abfrageService.save(abfrage);
                             } catch (
                                 final EntityNotFoundException

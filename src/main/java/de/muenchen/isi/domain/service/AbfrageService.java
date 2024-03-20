@@ -34,6 +34,7 @@ import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.Bauleitp
 import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.WeiteresVerfahrenInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.domain.model.calculation.LangfristigerBedarfModel;
 import de.muenchen.isi.domain.service.calculation.CalculationService;
+import de.muenchen.isi.domain.service.common.BearbeitungshistorieService;
 import de.muenchen.isi.domain.service.filehandling.DokumentService;
 import de.muenchen.isi.domain.service.reporting.ReportingdataTransferService;
 import de.muenchen.isi.infrastructure.entity.Abfrage;
@@ -81,6 +82,8 @@ public class AbfrageService {
 
     private final ReportingdataTransferService reportingdataTransferService;
 
+    private final BearbeitungshistorieService bearbeitungshistorieService;
+
     /**
      * Die Methode gibt ein {@link AbfrageModel} identifiziert durch die ID zurück.
      *
@@ -118,6 +121,7 @@ public class AbfrageService {
         if (abfrage.getId() == null) {
             abfrage.setStatusAbfrage(StatusAbfrage.ANGELEGT);
             abfrage.setSub(authenticationUtils.getUserSub());
+            bearbeitungshistorieService.appendBearbeitungshistorieToAbfrage(abfrage);
         }
         var entity = this.abfrageDomainMapper.model2Entity(abfrage);
         final var saved = this.abfrageRepository.findByNameIgnoreCase(abfrage.getName());
