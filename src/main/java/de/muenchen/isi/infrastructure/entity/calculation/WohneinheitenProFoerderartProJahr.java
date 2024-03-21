@@ -1,4 +1,4 @@
-package de.muenchen.isi.infrastructure.entity.bauratendatei;
+package de.muenchen.isi.infrastructure.entity.calculation;
 
 import de.muenchen.isi.infrastructure.entity.BaseEntity;
 import jakarta.persistence.Column;
@@ -12,7 +12,7 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 @Entity
-public class BauratendateiWohneinheiten extends BaseEntity {
+public class WohneinheitenProFoerderartProJahr extends BaseEntity {
 
     @Column
     private String foerderart;

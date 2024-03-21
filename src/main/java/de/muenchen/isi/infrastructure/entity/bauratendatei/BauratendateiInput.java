@@ -1,7 +1,7 @@
 package de.muenchen.isi.infrastructure.entity.bauratendatei;
 
 import de.muenchen.isi.infrastructure.entity.BaseEntity;
-import de.muenchen.isi.infrastructure.entity.bauratendatei.BauratendateiWohneinheiten;
+import de.muenchen.isi.infrastructure.entity.calculation.WohneinheitenProFoerderartProJahr;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
@@ -29,6 +29,6 @@ public class BauratendateiInput extends BaseEntity {
     private Set<String> viertel;
 
     @OneToMany(cascade = { CascadeType.ALL }, orphanRemoval = true)
-    @JoinColumn(name = "wohneinheiten_pro_jahr_pro_foerderart_id", referencedColumnName = "id")
-    private List<BauratendateiWohneinheiten> wohneinheiten;
+    @JoinColumn(name = "wohneinheiten_pro_foerderart_pro_jahr_id", referencedColumnName = "id")
+    private List<WohneinheitenProFoerderartProJahr> wohneinheiten;
 }

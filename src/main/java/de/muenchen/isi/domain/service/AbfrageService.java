@@ -32,12 +32,7 @@ import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.AbfrageI
 import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.BaugenehmigungsverfahrenInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.BauleitplanverfahrenInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.WeiteresVerfahrenInBearbeitungSachbearbeitungModel;
-import de.muenchen.isi.domain.model.bauratendatei.BauratendateiInputModel;
-import de.muenchen.isi.domain.model.bauratendatei.BauratendateiWohneinheitenModel;
-import de.muenchen.isi.domain.model.calculation.BedarfeForAbfragevarianteModel;
 import de.muenchen.isi.domain.model.calculation.LangfristigerBedarfModel;
-import de.muenchen.isi.domain.model.common.VerortungModel;
-import de.muenchen.isi.domain.model.common.ViertelModel;
 import de.muenchen.isi.domain.service.calculation.CalculationService;
 import de.muenchen.isi.domain.service.filehandling.DokumentService;
 import de.muenchen.isi.domain.service.reporting.ReportingdataTransferService;
@@ -51,14 +46,11 @@ import de.muenchen.isi.infrastructure.repository.AbfragevarianteBauleitplanverfa
 import de.muenchen.isi.infrastructure.repository.AbfragevarianteWeiteresVerfahrenRepository;
 import de.muenchen.isi.infrastructure.repository.BauvorhabenRepository;
 import de.muenchen.isi.security.AuthenticationUtils;
-import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
@@ -88,6 +80,8 @@ public class AbfrageService {
     private final CalculationService calculationService;
 
     private final ReportingdataTransferService reportingdataTransferService;
+
+    private final BauratendateiInputService bauratendateiInputService;
 
     /**
      * Die Methode gibt ein {@link AbfrageModel} identifiziert durch die ID zurück.
@@ -132,7 +126,7 @@ public class AbfrageService {
             abfrage
         );
         // Befüllen der bauratendateiInputBasis für jede Abfragevariante
-        setBauratendateiInputBasisForEachAbfragevariante(abfrage, bedarfeForAbfragevarianten);
+        bauratendateiInputService.setBauratendateiInputBasisForEachAbfragevariante(abfrage, bedarfeForAbfragevarianten);
         var entity = this.abfrageDomainMapper.model2Entity(abfrage);
         final var saved = this.abfrageRepository.findByNameIgnoreCase(abfrage.getName());
         if ((saved.isPresent() && saved.get().getId().equals(entity.getId())) || saved.isEmpty()) {
@@ -591,124 +585,5 @@ public class AbfrageService {
                 throw new UserRoleNotAllowedException("Fehlende Berechtigung für die Abfrage");
             }
         }
-    }
-
-    /**
-     * Setzt für jede Abfragevariante einer Abfrage die BauratendateiInputBasis.
-     *
-     * @param abfrage Die Abfrage, deren Abfragevarianten befüllt werden sollen.
-     * @param bedarfe Die Bedarfe der Abfrage, erstellt durch {@link CalculationService#calculateBedarfeForEachAbfragevarianteOfAbfrage(AbfrageModel)}.
-     */
-    public void setBauratendateiInputBasisForEachAbfragevariante(
-        final AbfrageModel abfrage,
-        final Map<UUID, BedarfeForAbfragevarianteModel> bedarfe
-    ) {
-        if (ArtAbfrage.BAULEITPLANVERFAHREN.equals(abfrage.getArtAbfrage())) {
-            final var bauleitplanverfahren = (BauleitplanverfahrenModel) abfrage;
-            final var abfragevarianten = ListUtils.union(
-                ListUtils.emptyIfNull(bauleitplanverfahren.getAbfragevariantenBauleitplanverfahren()),
-                ListUtils.emptyIfNull(bauleitplanverfahren.getAbfragevariantenSachbearbeitungBauleitplanverfahren())
-            );
-            for (final var abfragevariante : abfragevarianten) {
-                abfragevariante.setBauratendateiInputBasis(
-                    createBauratendateiInput(bauleitplanverfahren.getVerortung(), bedarfe, abfragevariante.getId())
-                );
-            }
-        } else if (ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN.equals(abfrage.getArtAbfrage())) {
-            final var baugenehmigungsverfahren = (BaugenehmigungsverfahrenModel) abfrage;
-            final var abfragevarianten = ListUtils.union(
-                ListUtils.emptyIfNull(baugenehmigungsverfahren.getAbfragevariantenBaugenehmigungsverfahren()),
-                ListUtils.emptyIfNull(
-                    baugenehmigungsverfahren.getAbfragevariantenSachbearbeitungBaugenehmigungsverfahren()
-                )
-            );
-            for (final var abfragevariante : abfragevarianten) {
-                abfragevariante.setBauratendateiInputBasis(
-                    createBauratendateiInput(baugenehmigungsverfahren.getVerortung(), bedarfe, abfragevariante.getId())
-                );
-            }
-        } else if (ArtAbfrage.WEITERES_VERFAHREN.equals(abfrage.getArtAbfrage())) {
-            final var weiteresVerfahren = (WeiteresVerfahrenModel) abfrage;
-            final var abfragevarianten = ListUtils.union(
-                ListUtils.emptyIfNull(weiteresVerfahren.getAbfragevariantenWeiteresVerfahren()),
-                ListUtils.emptyIfNull(weiteresVerfahren.getAbfragevariantenSachbearbeitungWeiteresVerfahren())
-            );
-            for (final var abfragevariante : abfragevarianten) {
-                abfragevariante.setBauratendateiInputBasis(
-                    createBauratendateiInput(weiteresVerfahren.getVerortung(), bedarfe, abfragevariante.getId())
-                );
-            }
-        }
-    }
-
-    /**
-     * Erstellt basierend auf bestimmten Daten ein {@link BauratendateiInputModel}.
-     *
-     * @param verortung Die Verortung der Abfrage.
-     * @param bedarfe Die Bedarfe der Abfrage, erstellt durch {@link CalculationService#calculateBedarfeForEachAbfragevarianteOfAbfrage(AbfrageModel)}.
-     * @param abfragevarianteId Die Id der Abfragevariante, auf die sich der BauratendateiInput bezieht.
-     * @return Einen neuen BauratendateiInput.
-     */
-    public BauratendateiInputModel createBauratendateiInput(
-        final VerortungModel verortung,
-        final Map<UUID, BedarfeForAbfragevarianteModel> bedarfe,
-        final UUID abfragevarianteId
-    ) {
-        final var bauratendateiInput = new BauratendateiInputModel();
-        var bauratendateiInputEmpty = true;
-
-        if (verortung != null) {
-            if (verortung.getGrundschulsprengel() != null) {
-                bauratendateiInput.setGrundschulsprengel(
-                    verortung
-                        .getGrundschulsprengel()
-                        .stream()
-                        .map(value -> value.getNummer().toString())
-                        .collect(Collectors.toSet())
-                );
-                bauratendateiInputEmpty = false;
-            }
-            if (verortung.getMittelschulsprengel() != null) {
-                bauratendateiInput.setMittelschulsprengel(
-                    verortung
-                        .getMittelschulsprengel()
-                        .stream()
-                        .map(value -> value.getNummer().toString())
-                        .collect(Collectors.toSet())
-                );
-                bauratendateiInputEmpty = false;
-            }
-            if (verortung.getViertel() != null) {
-                bauratendateiInput.setViertel(
-                    verortung.getViertel().stream().map(ViertelModel::getNummer).collect(Collectors.toSet())
-                );
-                bauratendateiInputEmpty = false;
-            }
-        }
-
-        if (bedarfe.get(abfragevarianteId) != null) {
-            bauratendateiInput.setWohneinheiten(
-                bedarfe
-                    .get(abfragevarianteId)
-                    .getLangfristigerPlanungsursaechlicherBedarf()
-                    .getWohneinheiten()
-                    .stream()
-                    .map(value -> {
-                        final var wohneinheiten = new BauratendateiWohneinheitenModel();
-                        wohneinheiten.setJahr(value.getJahr());
-                        wohneinheiten.setFoerderart(value.getFoerderart());
-                        wohneinheiten.setWohneinheiten(value.getWohneinheiten());
-                        return wohneinheiten;
-                    })
-                    .toList()
-            );
-            bauratendateiInputEmpty = false;
-        }
-
-        if (bauratendateiInputEmpty) {
-            return null;
-        }
-
-        return bauratendateiInput;
     }
 }
