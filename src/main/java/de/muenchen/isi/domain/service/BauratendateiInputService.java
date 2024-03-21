@@ -56,6 +56,7 @@ public class BauratendateiInputService {
                     abfragevariante.getId()
                 );
                 if (ObjectUtils.isNotEmpty(bauratendateiInput)) {
+                    abfragevariante.setBauratendateiInputBasis(bauratendateiInput);
                     final var bauratendateiInputs = ListUtils.emptyIfNull(abfragevariante.getBauratendateiInputs());
                     bauratendateiInputs.add(bauratendateiInput);
                     abfragevariante.setBauratendateiInputs(bauratendateiInputs);
@@ -76,6 +77,7 @@ public class BauratendateiInputService {
                     abfragevariante.getId()
                 );
                 if (ObjectUtils.isNotEmpty(bauratendateiInput)) {
+                    abfragevariante.setBauratendateiInputBasis(bauratendateiInput);
                     final var bauratendateiInputs = ListUtils.emptyIfNull(abfragevariante.getBauratendateiInputs());
                     bauratendateiInputs.add(bauratendateiInput);
                     abfragevariante.setBauratendateiInputs(bauratendateiInputs);
@@ -94,6 +96,7 @@ public class BauratendateiInputService {
                     abfragevariante.getId()
                 );
                 if (ObjectUtils.isNotEmpty(bauratendateiInput)) {
+                    abfragevariante.setBauratendateiInputBasis(bauratendateiInput);
                     final var bauratendateiInputs = ListUtils.emptyIfNull(abfragevariante.getBauratendateiInputs());
                     bauratendateiInputs.add(bauratendateiInput);
                     abfragevariante.setBauratendateiInputs(bauratendateiInputs);
