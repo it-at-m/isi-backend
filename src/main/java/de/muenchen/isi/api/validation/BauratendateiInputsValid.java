@@ -13,7 +13,7 @@ import java.lang.annotation.Target;
 @Constraint(validatedBy = BauratendateiInputsValidator.class)
 @Documented
 public @interface BauratendateiInputsValid {
-    String message() default "Bei den Daten für die Bauratendatei sind die räumlichen Daten oder die Summe der Wohneinheiten nicht korrekt.";
+    String message() default "Die Wohneinheiten der Bauratendatei stimmen nicht mit den errechneten Wohneinheiten überein.";
 
     Class<?>[] groups() default {};
 
