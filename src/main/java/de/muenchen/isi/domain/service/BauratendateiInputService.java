@@ -219,7 +219,7 @@ public class BauratendateiInputService {
         }
     }
 
-    public Map<String, BigDecimal> sumWohneinheitenOfBauratendateiInputs(Stream<BauratendateiInputModel> inputs) {
+    public Map<String, BigDecimal> sumWohneinheitenOfBauratendateiInputs(final Stream<BauratendateiInputModel> inputs) {
         return inputs
             .flatMap(bauratendateiInput -> bauratendateiInput.getWohneinheiten().stream())
             .collect(
