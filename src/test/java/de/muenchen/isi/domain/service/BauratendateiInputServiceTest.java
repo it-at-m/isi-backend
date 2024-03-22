@@ -244,7 +244,7 @@ class BauratendateiInputServiceTest {
         result = bauratendateiInputService.equals((BauratendateiInputModel) null, null);
         assertThat(result, is(true));
 
-        result = bauratendateiInputService.equals((BauratendateiInputModel) null, List.of());
+        result = bauratendateiInputService.equals(null, List.of());
         assertThat(result, is(true));
     }
 
