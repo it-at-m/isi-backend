@@ -1,6 +1,7 @@
 package de.muenchen.isi.api.dto.bauratendatei;
 
 import de.muenchen.isi.api.dto.BaseEntityDto;
+import de.muenchen.isi.reporting.client.model.WohneinheitenProFoerderartProJahrDto;
 import java.util.List;
 import java.util.Set;
 import lombok.Data;
@@ -18,5 +19,5 @@ public class BauratendateiInputDto extends BaseEntityDto {
 
     private Set<String> viertel;
 
-    private List<BauratendateiWohneinheitenDto> wohneinheiten;
+    private List<WohneinheitenProFoerderartProJahrDto> wohneinheiten;
 }

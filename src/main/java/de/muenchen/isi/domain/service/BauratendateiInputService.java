@@ -6,8 +6,8 @@ import de.muenchen.isi.domain.model.BaugenehmigungsverfahrenModel;
 import de.muenchen.isi.domain.model.BauleitplanverfahrenModel;
 import de.muenchen.isi.domain.model.WeiteresVerfahrenModel;
 import de.muenchen.isi.domain.model.bauratendatei.BauratendateiInputModel;
-import de.muenchen.isi.domain.model.bauratendatei.BauratendateiWohneinheitenModel;
 import de.muenchen.isi.domain.model.calculation.BedarfeForAbfragevarianteModel;
+import de.muenchen.isi.domain.model.calculation.WohneinheitenProFoerderartProJahrModel;
 import de.muenchen.isi.domain.model.common.GrundschulsprengelModel;
 import de.muenchen.isi.domain.model.common.MittelschulsprengelModel;
 import de.muenchen.isi.domain.model.common.VerortungModel;
@@ -202,7 +202,7 @@ public class BauratendateiInputService {
      * @param abfragevarianteId zur Extraktion der Wohneinheiten.
      * @return die Wohneinheiten der Abfragevariante identifiziert durch die ID ansonsten eine leere Liste.
      */
-    protected List<BauratendateiWohneinheitenModel> getWohneinheiten(
+    protected List<WohneinheitenProFoerderartProJahrModel> getWohneinheiten(
         final Map<UUID, BedarfeForAbfragevarianteModel> bedarfe,
         final UUID abfragevarianteId
     ) {
@@ -211,13 +211,9 @@ public class BauratendateiInputService {
             bedarfe.get(abfragevarianteId) != null &&
             bedarfe.get(abfragevarianteId).getLangfristigerPlanungsursaechlicherBedarf() != null
         ) {
-            final var wohneinheitenProFoerderartProJahr = ListUtils.emptyIfNull(
+            return ListUtils.emptyIfNull(
                 bedarfe.get(abfragevarianteId).getLangfristigerPlanungsursaechlicherBedarf().getWohneinheiten()
             );
-            return wohneinheitenProFoerderartProJahr
-                .stream()
-                .map(bauratendateiDomainMapper::map)
-                .collect(Collectors.toList());
         } else {
             return List.of();
         }
@@ -231,7 +227,7 @@ public class BauratendateiInputService {
                     this::concatJahrAndFoerderart,
                     Collectors.reducing(
                         BigDecimal.ZERO,
-                        BauratendateiWohneinheitenModel::getWohneinheiten,
+                        WohneinheitenProFoerderartProJahrModel::getWohneinheiten,
                         BigDecimal::add
                     )
                 )
@@ -261,7 +257,13 @@ public class BauratendateiInputService {
         return true;
     }
 
-    protected String concatJahrAndFoerderart(final BauratendateiWohneinheitenModel bauratendateiWohneinheiten) {
-        return String.join("", bauratendateiWohneinheiten.getJahr(), bauratendateiWohneinheiten.getFoerderart());
+    protected String concatJahrAndFoerderart(
+        final WohneinheitenProFoerderartProJahrModel wohneinheitenProFoerderartProJahr
+    ) {
+        return String.join(
+            "",
+            wohneinheitenProFoerderartProJahr.getJahr(),
+            wohneinheitenProFoerderartProJahr.getFoerderart()
+        );
     }
 }
