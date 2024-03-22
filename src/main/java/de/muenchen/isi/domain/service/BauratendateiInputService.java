@@ -1,12 +1,13 @@
 package de.muenchen.isi.domain.service;
 
+import de.muenchen.isi.domain.mapper.BauratendateiDomainMapper;
 import de.muenchen.isi.domain.model.AbfrageModel;
 import de.muenchen.isi.domain.model.BaugenehmigungsverfahrenModel;
 import de.muenchen.isi.domain.model.BauleitplanverfahrenModel;
 import de.muenchen.isi.domain.model.WeiteresVerfahrenModel;
 import de.muenchen.isi.domain.model.bauratendatei.BauratendateiInputModel;
+import de.muenchen.isi.domain.model.bauratendatei.BauratendateiWohneinheitenModel;
 import de.muenchen.isi.domain.model.calculation.BedarfeForAbfragevarianteModel;
-import de.muenchen.isi.domain.model.calculation.WohneinheitenProFoerderartProJahrModel;
 import de.muenchen.isi.domain.model.common.GrundschulsprengelModel;
 import de.muenchen.isi.domain.model.common.MittelschulsprengelModel;
 import de.muenchen.isi.domain.model.common.VerortungModel;
@@ -31,6 +32,8 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class BauratendateiInputService {
+
+    private final BauratendateiDomainMapper bauratendateiDomainMapper;
 
     /**
      * Setzt für jede Abfragevariante einer Abfrage die BauratendateiInput.
@@ -199,7 +202,7 @@ public class BauratendateiInputService {
      * @param abfragevarianteId zur Extraktion der Wohneinheiten.
      * @return die Wohneinheiten der Abfragevariante identifiziert durch die ID ansonsten eine leere Liste.
      */
-    protected List<WohneinheitenProFoerderartProJahrModel> getWohneinheiten(
+    protected List<BauratendateiWohneinheitenModel> getWohneinheiten(
         final Map<UUID, BedarfeForAbfragevarianteModel> bedarfe,
         final UUID abfragevarianteId
     ) {
@@ -208,9 +211,13 @@ public class BauratendateiInputService {
             bedarfe.get(abfragevarianteId) != null &&
             bedarfe.get(abfragevarianteId).getLangfristigerPlanungsursaechlicherBedarf() != null
         ) {
-            return ListUtils.emptyIfNull(
+            final var wohneinheitenProFoerderartProJahr = ListUtils.emptyIfNull(
                 bedarfe.get(abfragevarianteId).getLangfristigerPlanungsursaechlicherBedarf().getWohneinheiten()
             );
+            return wohneinheitenProFoerderartProJahr
+                .stream()
+                .map(bauratendateiDomainMapper::map)
+                .collect(Collectors.toList());
         } else {
             return List.of();
         }
@@ -224,7 +231,7 @@ public class BauratendateiInputService {
                     this::concatJahrAndFoerderart,
                     Collectors.reducing(
                         BigDecimal.ZERO,
-                        WohneinheitenProFoerderartProJahrModel::getWohneinheiten,
+                        BauratendateiWohneinheitenModel::getWohneinheiten,
                         BigDecimal::add
                     )
                 )
@@ -238,7 +245,7 @@ public class BauratendateiInputService {
         return this.equals(sumBasis, sumInputs);
     }
 
-    public boolean equals(final Map<String, BigDecimal> sumBasis, final Map<String, BigDecimal> sumInputs) {
+    protected boolean equals(final Map<String, BigDecimal> sumBasis, final Map<String, BigDecimal> sumInputs) {
         if (sumBasis.size() != sumInputs.size()) {
             return false;
         }
@@ -264,11 +271,7 @@ public class BauratendateiInputService {
         return true;
     }
 
-    protected String concatJahrAndFoerderart(
-        final WohneinheitenProFoerderartProJahrModel wohneinheitenProFoerderartProJahr
-    ) {
-        final var jahr = ObjectUtils.defaultIfNull(wohneinheitenProFoerderartProJahr.getJahr(), "");
-        final var foerderart = ObjectUtils.defaultIfNull(wohneinheitenProFoerderartProJahr.getFoerderart(), "");
-        return jahr + foerderart;
+    protected String concatJahrAndFoerderart(final BauratendateiWohneinheitenModel bauratendateiWohneinheiten) {
+        return String.join("", bauratendateiWohneinheiten.getJahr(), bauratendateiWohneinheiten.getFoerderart());
     }
 }

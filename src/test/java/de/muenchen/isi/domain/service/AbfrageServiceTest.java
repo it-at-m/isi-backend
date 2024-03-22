@@ -133,6 +133,9 @@ class AbfrageServiceTest {
     @Mock
     private BearbeitungshistorieService bearbeitungshistorieService;
 
+    @Mock
+    private BauratendateiInputService bauratendateiInputService;
+
     @BeforeEach
     public void beforeEach() throws NoSuchFieldException, IllegalAccessException {
         final var abfragevarianteDomainMapper = new AbfragevarianteDomainMapperImpl(new BauabschnittDomainMapperImpl());
@@ -156,6 +159,7 @@ class AbfrageServiceTest {
                 this.abfragevarianteWeiteresVerfahrenRepository,
                 this.calculationService,
                 this.reportingdataTransferService,
+                this.bauratendateiInputService,
                 this.bearbeitungshistorieService
             );
         Mockito.reset(
@@ -168,6 +172,7 @@ class AbfrageServiceTest {
             this.abfragevarianteWeiteresVerfahrenRepository,
             this.calculationService,
             this.reportingdataTransferService,
+            this.bauratendateiInputService,
             this.bearbeitungshistorieService
         );
     }
