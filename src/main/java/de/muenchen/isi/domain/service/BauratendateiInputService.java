@@ -239,9 +239,8 @@ public class BauratendateiInputService {
     }
 
     public boolean equals(final BauratendateiInputModel basis, final List<BauratendateiInputModel> inputs) {
-        final var sumBasis = sumWohneinheitenOfBauratendateiInputs(Stream.of(basis));
-        final var sumInputs = sumWohneinheitenOfBauratendateiInputs(inputs.stream());
-
+        final var sumBasis = sumWohneinheitenOfBauratendateiInputs(basis == null ? Stream.empty() : Stream.of(basis));
+        final var sumInputs = sumWohneinheitenOfBauratendateiInputs(ListUtils.emptyIfNull(inputs).stream());
         return this.equals(sumBasis, sumInputs);
     }
 
