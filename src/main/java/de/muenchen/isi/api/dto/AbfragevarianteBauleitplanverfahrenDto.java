@@ -5,7 +5,7 @@
 package de.muenchen.isi.api.dto;
 
 import de.muenchen.isi.api.dto.bauratendatei.BauratendateiInputDto;
-import de.muenchen.isi.api.dto.bauratendatei.WithBauratendateiInputs;
+import de.muenchen.isi.api.dto.bauratendatei.WithBauratendateiInputsDto;
 import de.muenchen.isi.api.dto.common.SobonBerechnungDto;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.WesentlicheRechtsgrundlage;
@@ -19,7 +19,7 @@ import lombok.ToString;
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class AbfragevarianteBauleitplanverfahrenDto extends AbfragevarianteDto implements WithBauratendateiInputs {
+public class AbfragevarianteBauleitplanverfahrenDto extends AbfragevarianteDto implements WithBauratendateiInputsDto {
 
     private LocalDate satzungsbeschluss;
 

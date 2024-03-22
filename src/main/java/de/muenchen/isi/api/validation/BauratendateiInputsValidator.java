@@ -1,6 +1,6 @@
 package de.muenchen.isi.api.validation;
 
-import de.muenchen.isi.api.dto.bauratendatei.WithBauratendateiInputs;
+import de.muenchen.isi.api.dto.bauratendatei.WithBauratendateiInputsDto;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import java.math.BigDecimal;
@@ -12,11 +12,11 @@ import org.springframework.stereotype.Component;
 @Component
 @NoArgsConstructor
 public class BauratendateiInputsValidator
-    implements ConstraintValidator<HasFoerdermixRequiredSum, WithBauratendateiInputs> {
+    implements ConstraintValidator<HasFoerdermixRequiredSum, WithBauratendateiInputsDto> {
 
     @Override
     public boolean isValid(
-        final WithBauratendateiInputs value,
+        final WithBauratendateiInputsDto value,
         final ConstraintValidatorContext constraintValidatorContext
     ) {
         final var hasInputs = value.getHasBauratendateiInputs();

@@ -5,7 +5,7 @@
 package de.muenchen.isi.api.dto.abfrageInBearbeitungSachbearbeitung;
 
 import de.muenchen.isi.api.dto.bauratendatei.BauratendateiInputDto;
-import de.muenchen.isi.api.dto.bauratendatei.WithBauratendateiInputs;
+import de.muenchen.isi.api.dto.bauratendatei.WithBauratendateiInputsDto;
 import de.muenchen.isi.api.dto.common.SobonBerechnungDto;
 import de.muenchen.isi.api.validation.BauratendateiInputsValid;
 import de.muenchen.isi.api.validation.NotUnspecified;
@@ -22,7 +22,7 @@ import lombok.Data;
 @Data
 @BauratendateiInputsValid
 public class AbfragevarianteWeiteresVerfahrenSachbearbeitungInBearbeitungSachbearbeitungDto
-    implements WithBauratendateiInputs {
+    implements WithBauratendateiInputsDto {
 
     private UUID id;
 

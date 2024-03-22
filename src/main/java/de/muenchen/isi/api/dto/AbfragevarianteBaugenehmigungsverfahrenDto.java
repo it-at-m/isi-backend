@@ -5,7 +5,7 @@
 package de.muenchen.isi.api.dto;
 
 import de.muenchen.isi.api.dto.bauratendatei.BauratendateiInputDto;
-import de.muenchen.isi.api.dto.bauratendatei.WithBauratendateiInputs;
+import de.muenchen.isi.api.dto.bauratendatei.WithBauratendateiInputsDto;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.WesentlicheRechtsgrundlage;
 import java.math.BigDecimal;
@@ -18,7 +18,9 @@ import lombok.ToString;
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class AbfragevarianteBaugenehmigungsverfahrenDto extends AbfragevarianteDto implements WithBauratendateiInputs {
+public class AbfragevarianteBaugenehmigungsverfahrenDto
+    extends AbfragevarianteDto
+    implements WithBauratendateiInputsDto {
 
     private List<WesentlicheRechtsgrundlage> wesentlicheRechtsgrundlage;
 

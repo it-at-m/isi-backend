@@ -14,7 +14,6 @@ import de.muenchen.isi.domain.model.common.ViertelModel;
 import de.muenchen.isi.domain.service.calculation.CalculationService;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import java.math.BigDecimal;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -217,23 +216,59 @@ public class BauratendateiInputService {
         }
     }
 
-    public Map<String, Map<String, BigDecimal>> sumWohneinheitenOfBauratendateiInputs(
-        Stream<BauratendateiInputModel> inputs
-    ) {
-        final var wohneinheitenSum = new HashMap<String, Map<String, BigDecimal>>();
-        inputs.forEach(input -> {
-            // Summieren der Wohneinheiten
-            for (final var wohneinheiten : CollectionUtils.emptyIfNull(input.getWohneinheiten())) {
-                wohneinheitenSum.merge(
-                    wohneinheiten.getFoerderart(),
-                    new HashMap<>(Map.of(wohneinheiten.getJahr(), wohneinheiten.getWohneinheiten())),
-                    (present, current) -> {
-                        present.merge(wohneinheiten.getJahr(), wohneinheiten.getWohneinheiten(), BigDecimal::add);
-                        return present;
-                    }
-                );
+    public Map<String, BigDecimal> sumWohneinheitenOfBauratendateiInputs(Stream<BauratendateiInputModel> inputs) {
+        return inputs
+            .flatMap(bauratendateiInput -> bauratendateiInput.getWohneinheiten().stream())
+            .collect(
+                Collectors.groupingBy(
+                    this::concatJahrAndFoerderart,
+                    Collectors.reducing(
+                        BigDecimal.ZERO,
+                        WohneinheitenProFoerderartProJahrModel::getWohneinheiten,
+                        BigDecimal::add
+                    )
+                )
+            );
+    }
+
+    public boolean equals(final BauratendateiInputModel basis, final List<BauratendateiInputModel> inputs) {
+        final var sumBasis = sumWohneinheitenOfBauratendateiInputs(Stream.of(basis));
+        final var sumInputs = sumWohneinheitenOfBauratendateiInputs(inputs.stream());
+
+        return this.equals(sumBasis, sumInputs);
+    }
+
+    public boolean equals(final Map<String, BigDecimal> sumBasis, final Map<String, BigDecimal> sumInputs) {
+        if (sumBasis.size() != sumInputs.size()) {
+            return false;
+        }
+
+        for (final var sumBasisEntry : sumBasis.entrySet()) {
+            final var numberOfWohneinheitenInputs = sumInputs.get(sumBasisEntry.getKey());
+            if (ObjectUtils.isEmpty(numberOfWohneinheitenInputs)) {
+                return false;
+            } else if (numberOfWohneinheitenInputs.compareTo(sumBasisEntry.getValue()) != 0) {
+                return false;
             }
-        });
-        return wohneinheitenSum;
+        }
+
+        for (final var sumInputsEntry : sumInputs.entrySet()) {
+            final var numberOfWohneinheitenBasis = sumInputs.get(sumInputsEntry.getKey());
+            if (ObjectUtils.isEmpty(numberOfWohneinheitenBasis)) {
+                return false;
+            } else if (numberOfWohneinheitenBasis.compareTo(sumInputsEntry.getValue()) != 0) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    protected String concatJahrAndFoerderart(
+        final WohneinheitenProFoerderartProJahrModel wohneinheitenProFoerderartProJahr
+    ) {
+        final var jahr = ObjectUtils.defaultIfNull(wohneinheitenProFoerderartProJahr.getJahr(), "");
+        final var foerderart = ObjectUtils.defaultIfNull(wohneinheitenProFoerderartProJahr.getFoerderart(), "");
+        return jahr + foerderart;
     }
 }
