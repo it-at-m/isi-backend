@@ -258,15 +258,6 @@ public class BauratendateiInputService {
             }
         }
 
-        for (final var sumInputsEntry : sumInputs.entrySet()) {
-            final var numberOfWohneinheitenBasis = sumInputs.get(sumInputsEntry.getKey());
-            if (ObjectUtils.isEmpty(numberOfWohneinheitenBasis)) {
-                return false;
-            } else if (numberOfWohneinheitenBasis.compareTo(sumInputsEntry.getValue()) != 0) {
-                return false;
-            }
-        }
-
         return true;
     }
 

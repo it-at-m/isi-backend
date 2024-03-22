@@ -286,6 +286,28 @@ class BauratendateiInputServiceTest {
         basis.clear();
         basis.put("1", BigDecimal.ONE.movePointRight(0));
         basis.put("2", BigDecimal.ONE.movePointRight(1));
+        basis.put("4", BigDecimal.ONE.movePointRight(2));
+        inputs.clear();
+        inputs.put("1", BigDecimal.valueOf(100, 2));
+        inputs.put("2", BigDecimal.valueOf(100, 1));
+        inputs.put("3", BigDecimal.valueOf(10000, 2));
+        result = bauratendateiInputService.equals(basis, inputs);
+        assertThat(result, is(false));
+
+        basis.clear();
+        basis.put("1", BigDecimal.ONE.movePointRight(0));
+        basis.put("2", BigDecimal.ONE.movePointRight(1));
+        basis.put("3", BigDecimal.ONE.movePointRight(2));
+        inputs.clear();
+        inputs.put("1", BigDecimal.valueOf(100, 2));
+        inputs.put("2", BigDecimal.valueOf(100, 1));
+        inputs.put("4", BigDecimal.valueOf(10000, 2));
+        result = bauratendateiInputService.equals(basis, inputs);
+        assertThat(result, is(false));
+
+        basis.clear();
+        basis.put("1", BigDecimal.ONE.movePointRight(0));
+        basis.put("2", BigDecimal.ONE.movePointRight(1));
         inputs.clear();
         inputs.put("1", BigDecimal.valueOf(100, 2));
         inputs.put("2", BigDecimal.valueOf(100, 1));
