@@ -6,6 +6,7 @@ package de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung;
 
 import de.muenchen.isi.domain.model.abfrageAngelegt.AbfragevarianteBauleitplanverfahrenAngelegtModel;
 import de.muenchen.isi.domain.model.bauratendatei.BauratendateiInputModel;
+import de.muenchen.isi.domain.model.common.SobonBerechnungModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
 import java.time.LocalDate;
 import java.util.List;
@@ -20,6 +21,8 @@ public class AbfragevarianteBauleitplanverfahrenInBearbeitungSachbearbeitungMode
     extends AbfragevarianteBauleitplanverfahrenAngelegtModel {
 
     private SobonOrientierungswertJahr sobonOrientierungswertJahr;
+
+    private SobonBerechnungModel sobonBerechnung;
 
     private LocalDate stammdatenGueltigAb;
 

@@ -7,14 +7,18 @@ package de.muenchen.isi.infrastructure.entity;
 import de.muenchen.isi.infrastructure.adapter.search.IntegerSuggestionBinder;
 import de.muenchen.isi.infrastructure.adapter.search.IntegerToStringValueBridge;
 import de.muenchen.isi.infrastructure.entity.bauratendatei.BauratendateiInput;
+import de.muenchen.isi.infrastructure.entity.common.SobonBerechnung;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.WesentlicheRechtsgrundlage;
 import de.muenchen.isi.infrastructure.repository.search.SearchwordSuggesterRepository;
+import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.AttributeOverrides;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -37,27 +41,21 @@ import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBridgeRef
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.KeywordField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.NonStandardField;
 
-@Entity
+@Entity(name = "abfrgvar_bauleitplnvrfhrn")
 @DiscriminatorValue(ArtAbfrage.Values.BAULEITPLANVERFAHREN)
 @Table(
+    name = "abfrgvar_bauleitplnvrfhrn",
     indexes = {
+        @Index(name = "abfrgvar_bauleitplnvrfhrn_id_index", columnList = "abfrgvar_bauleitplnvrfhrn_id"),
         @Index(
-            name = "abfragevarianten_bauleitplanverfahren_id_index",
-            columnList = "abfragevarianten_bauleitplanverfahren_id"
-        ),
-        @Index(
-            name = "abfragevarianten_sachbearbeitung_bauleitplanverfahren_id_index",
-            columnList = "abfragevarianten_sachbearbeitung_bauleitplanverfahren_id"
+            name = "abfrgvar_schbrbtng_bauleitplnvrfhrn_id_index",
+            columnList = "abfrgvar_schbrbtng_bauleitplnvrfhrn_id"
         ),
     },
     uniqueConstraints = {
         @UniqueConstraint(
             name = "UniqueNameAbfragevariantePerBauleitplanverfahren",
-            columnNames = {
-                "abfragevarianten_bauleitplanverfahren_id",
-                "abfragevarianten_sachbearbeitung_bauleitplanverfahren_id",
-                "name",
-            }
+            columnNames = { "abfrgvar_bauleitplnvrfhrn_id", "abfrgvar_schbrbtng_bauleitplnvrfhrn_id", "name" }
         ),
     }
 )
@@ -73,7 +71,7 @@ public class AbfragevarianteBauleitplanverfahren extends Abfragevariante {
     @ElementCollection
     private List<WesentlicheRechtsgrundlage> wesentlicheRechtsgrundlage;
 
-    @Column
+    @Column(length = 1000)
     private String wesentlicheRechtsgrundlageFreieEingabe;
 
     @KeywordField(valueBridge = @ValueBridgeRef(type = IntegerToStringValueBridge.class))
@@ -134,10 +132,29 @@ public class AbfragevarianteBauleitplanverfahren extends Abfragevariante {
     @Column
     private SobonOrientierungswertJahr sobonOrientierungswertJahr;
 
+    @Embedded
+    @AttributeOverrides(
+        {
+            @AttributeOverride(
+                name = "isASobonBerechnung",
+                column = @Column(name = "is_a_sobon_berechnung", nullable = true)
+            ),
+            @AttributeOverride(
+                name = "sobonFoerdermix.bezeichnung",
+                column = @Column(name = "sobon_foerdermix_bezeichnung", nullable = true)
+            ),
+            @AttributeOverride(
+                name = "sobonFoerdermix.bezeichnungJahr",
+                column = @Column(name = "sobon_foerdermix_bezeichnung_jahr", nullable = true)
+            ),
+        }
+    )
+    private SobonBerechnung sobonBerechnung;
+
     @Column
     private LocalDate stammdatenGueltigAb;
 
-    @Column
+    @Column(length = 1000)
     private String anmerkung;
 
     @Column
@@ -156,17 +173,17 @@ public class AbfragevarianteBauleitplanverfahren extends Abfragevariante {
     private List<BauratendateiInput> bauratendateiInputs;
 
     @OneToMany(cascade = { CascadeType.ALL }, orphanRemoval = true)
-    @JoinColumn(name = "abfragevariante_bauleitplanverfahren_fachreferate_id", referencedColumnName = "id")
+    @JoinColumn(name = "abfrgvar_bauleitplnvrfhrn_fachreferate_id", referencedColumnName = "id")
     @OrderBy("createdDateTime asc")
     private List<Bedarfsmeldung> bedarfsmeldungFachreferate;
 
     @OneToMany(cascade = { CascadeType.ALL }, orphanRemoval = true)
-    @JoinColumn(name = "abfragevariante_bauleitplanverfahren_abfrageersteller_id", referencedColumnName = "id")
+    @JoinColumn(name = "abfrgvar_bauleitplnvrfhrn_abfrageersteller_id", referencedColumnName = "id")
     @OrderBy("createdDateTime asc")
     private List<Bedarfsmeldung> bedarfsmeldungAbfrageersteller;
 
     @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY, orphanRemoval = true)
-    @JoinColumn(name = "abfragevariante_bauleitplanverfahren_id")
+    @JoinColumn(name = "abfrgvar_bauleitplnvrfhrn_id")
     @OrderBy("createdDateTime asc")
     private List<Bauabschnitt> bauabschnitte;
 

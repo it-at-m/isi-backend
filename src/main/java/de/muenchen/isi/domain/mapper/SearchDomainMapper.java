@@ -2,6 +2,7 @@ package de.muenchen.isi.domain.mapper;
 
 import de.muenchen.isi.configuration.MapstructConfiguration;
 import de.muenchen.isi.domain.exception.GeometryOperationFailedException;
+import de.muenchen.isi.domain.model.common.MultiPolygonGeometryModel;
 import de.muenchen.isi.domain.model.common.WGS84Model;
 import de.muenchen.isi.domain.model.enums.SearchResultType;
 import de.muenchen.isi.domain.model.search.response.AbfrageSearchResultModel;
@@ -15,6 +16,7 @@ import de.muenchen.isi.infrastructure.entity.Bauleitplanverfahren;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
 import de.muenchen.isi.infrastructure.entity.WeiteresVerfahren;
 import de.muenchen.isi.infrastructure.entity.common.Adresse;
+import de.muenchen.isi.infrastructure.entity.common.MultiPolygonGeometry;
 import de.muenchen.isi.infrastructure.entity.common.VerortungMultiPolygon;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Infrastruktureinrichtung;
 import java.util.UUID;
@@ -47,6 +49,7 @@ public abstract class SearchDomainMapper {
     private KoordinatenService koordinatenService;
 
     @Mapping(target = "type", ignore = true)
+    @Mapping(target = "coordinate", ignore = true)
     @SubclassMapping(source = Infrastruktureinrichtung.class, target = InfrastruktureinrichtungSearchResultModel.class)
     @SubclassMapping(source = Bauvorhaben.class, target = BauvorhabenSearchResultModel.class)
     @SubclassMapping(source = Bauleitplanverfahren.class, target = AbfrageSearchResultModel.class)
@@ -59,6 +62,7 @@ public abstract class SearchDomainMapper {
             @Mapping(target = "type", constant = SearchResultType.Values.BAUVORHABEN),
             @Mapping(source = "verortung.stadtbezirke", target = "stadtbezirke"),
             @Mapping(target = "coordinate", ignore = true),
+            @Mapping(target = "umgriff", ignore = true),
         }
     )
     public abstract BauvorhabenSearchResultModel entity2SearchResultModel(final Bauvorhaben entity);
@@ -69,6 +73,7 @@ public abstract class SearchDomainMapper {
         @MappingTarget final BauvorhabenSearchResultModel model
     ) {
         model.setCoordinate(this.getCoordinateFromAdresseOrVerortung(entity.getAdresse(), entity.getVerortung()));
+        model.setUmgriff(this.getUmgriffFromVerortung(entity.getVerortung()));
     }
 
     @Mappings(
@@ -139,13 +144,13 @@ public abstract class SearchDomainMapper {
     ) {
         if (hasAdressCoordinate(entity.getAdresse())) {
             model.setCoordinate(koordinatenDomainMapper.entity2Model(entity.getAdresse().getCoordinate()));
-        } else if (ObjectUtils.isNotEmpty(entity.getVerortung())) {
-            if (ObjectUtils.isNotEmpty(entity.getVerortung().getPoint())) {
-                WGS84Model wgs84Model = new WGS84Model();
-                wgs84Model.setLongitude(entity.getVerortung().getPoint().getCoordinates().get(0).doubleValue());
-                wgs84Model.setLatitude(entity.getVerortung().getPoint().getCoordinates().get(1).doubleValue());
-                model.setCoordinate(wgs84Model);
-            }
+        } else if (
+            ObjectUtils.isNotEmpty(entity.getVerortung()) && ObjectUtils.isNotEmpty(entity.getVerortung().getPoint())
+        ) {
+            final var wgs84Model = new WGS84Model();
+            wgs84Model.setLongitude(entity.getVerortung().getPoint().getCoordinates().get(0).doubleValue());
+            wgs84Model.setLatitude(entity.getVerortung().getPoint().getCoordinates().get(1).doubleValue());
+            model.setCoordinate(wgs84Model);
         } else {
             model.setCoordinate(null);
         }
@@ -162,12 +167,7 @@ public abstract class SearchDomainMapper {
      * @return {@code true}, wenn die Adresse eine Koordinate hat, ansonsten {@code false}.
      */
     public boolean hasAdressCoordinate(final Adresse adresse) {
-        if (ObjectUtils.isNotEmpty(adresse)) {
-            if (ObjectUtils.isNotEmpty(adresse.getCoordinate())) {
-                return true;
-            }
-        }
-        return false;
+        return ObjectUtils.isNotEmpty(adresse) && ObjectUtils.isNotEmpty(adresse.getCoordinate());
     }
 
     /**
@@ -177,12 +177,7 @@ public abstract class SearchDomainMapper {
      * @return {@code true}, wenn die Verortung Koordinaten hat, ansonsten {@code false}.
      */
     public boolean hasVerortungCoordinate(final VerortungMultiPolygon verortung) {
-        if (ObjectUtils.isNotEmpty(verortung)) {
-            if (ObjectUtils.isNotEmpty(verortung.getMultiPolygon())) {
-                return true;
-            }
-        }
-        return false;
+        return ObjectUtils.isNotEmpty(verortung) && ObjectUtils.isNotEmpty(verortung.getMultiPolygon());
     }
 
     /**
@@ -210,4 +205,18 @@ public abstract class SearchDomainMapper {
         }
         return null;
     }
+
+    /**
+     * Gibt den Umgriff der im Parameter gegebenen Verortung zurück.
+     *
+     * @param verortungMultiPolygon als Umgriff der Verortung.
+     * @return den Umgriff als {@link VerortungMultiPolygon#getMultiPolygon()} oder null falls kein Umgriff existiert bzw. die Verortung im Parameter null ist.
+     */
+    public MultiPolygonGeometryModel getUmgriffFromVerortung(final VerortungMultiPolygon verortungMultiPolygon) {
+        return ObjectUtils.isNotEmpty(verortungMultiPolygon)
+            ? this.entity2Model(verortungMultiPolygon.getMultiPolygon())
+            : null;
+    }
+
+    public abstract MultiPolygonGeometryModel entity2Model(final MultiPolygonGeometry entity);
 }

@@ -15,28 +15,28 @@ import org.hibernate.type.SqlTypes;
 @Table(
     indexes = {
         @Index(
-            name = "bedarfsmeldung_fachreferate_abfragevariante_bauleitplanverfahren_id_index",
-            columnList = "abfragevariante_bauleitplanverfahren_fachreferate_id"
+            name = "bedarfsmeldung_fachreferate_abfrgvar_bauleitplnvrfhrn_id_index",
+            columnList = "abfrgvar_bauleitplnvrfhrn_fachreferate_id"
         ),
         @Index(
-            name = "bedarfsmeldung_fachreferate_abfragevariante_baugenehmigungsverfahren_id_index",
-            columnList = "abfragevariante_baugenehmigungsverfahren_fachreferate_id"
+            name = "bedarfsmeldung_fachreferate_abfrgvar_baugnhmgsverfhrn_id_index",
+            columnList = "abfrgvar_baugnhmgsverfhrn_fachreferate_id"
         ),
         @Index(
-            name = "bedarfsmeldung_fachreferate_abfragevariante_weiteres_verfahren_id_index",
-            columnList = "abfragevariante_weiteres_verfahren_fachreferate_id"
+            name = "bedarfsmeldung_fachreferate_abfrgvar_weitrs_vrfhrn_id_index",
+            columnList = "abfrgvar_weitrs_vrfhrn_fachreferate_id"
         ),
         @Index(
-            name = "bedarfsmeldung_abfrageersteller_abfragevariante_bauleitplanverfahren_id_index",
-            columnList = "abfragevariante_bauleitplanverfahren_abfrageersteller_id"
+            name = "bedarfsmeldung_abfrgerstlr_abfrgvar_bauleitplnvrfhrn_id_index",
+            columnList = "abfrgvar_bauleitplnvrfhrn_abfrgerstlr_id"
         ),
         @Index(
-            name = "bedarfsmeldung_abfrageersteller_abfragevariante_baugenehmigungsverfahren_id_index",
-            columnList = "abfragevariante_baugenehmigungsverfahren_abfrageersteller_id"
+            name = "bedarfsmeldung_abfrgerstlr_abfrgvar_baugnhmgsverfhrn_id_index",
+            columnList = "abfrgvar_baugnhmgsverfhrn_abfrgerstlrr_id"
         ),
         @Index(
-            name = "bedarfsmeldung_abfrageersteller_abfragevariante_weiteres_verfahren_id_index",
-            columnList = "abfragevariante_weiteres_verfahren_abfrageersteller_id"
+            name = "bedarfsmeldung_abfrgerstlr_abfrgvar_weitrs_vrfhrn_id_index",
+            columnList = "abfrgvar_weitrs_vrfhrn_abfrgerstlr_id"
         ),
     }
 )

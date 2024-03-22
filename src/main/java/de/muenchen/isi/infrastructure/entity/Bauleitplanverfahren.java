@@ -71,7 +71,7 @@ public class Bauleitplanverfahren extends Abfrage {
     @Column(nullable = false)
     private StandVerfahren standVerfahren;
 
-    @Column
+    @Column(length = 1000)
     private String standVerfahrenFreieEingabe;
 
     @IndexedEmbedded
@@ -97,14 +97,14 @@ public class Bauleitplanverfahren extends Abfrage {
     @IndexedEmbedded
     @IndexingDependency(reindexOnUpdate = ReindexOnUpdate.SHALLOW)
     @OneToMany(cascade = { CascadeType.ALL }, orphanRemoval = true)
-    @JoinColumn(name = "abfragevarianten_bauleitplanverfahren_id", referencedColumnName = "id")
+    @JoinColumn(name = "abfrgvar_bauleitplnvrfhrn_id", referencedColumnName = "id")
     @OrderBy("abfragevariantenNr asc")
     private List<AbfragevarianteBauleitplanverfahren> abfragevariantenBauleitplanverfahren;
 
     @IndexedEmbedded
     @IndexingDependency(reindexOnUpdate = ReindexOnUpdate.SHALLOW)
     @OneToMany(cascade = { CascadeType.ALL }, orphanRemoval = true)
-    @JoinColumn(name = "abfragevarianten_sachbearbeitung_bauleitplanverfahren_id", referencedColumnName = "id")
+    @JoinColumn(name = "abfrgvar_schbrbtng_bauleitplnvrfhrn_id", referencedColumnName = "id")
     @OrderBy("abfragevariantenNr asc")
     private List<AbfragevarianteBauleitplanverfahren> abfragevariantenSachbearbeitungBauleitplanverfahren;
 }

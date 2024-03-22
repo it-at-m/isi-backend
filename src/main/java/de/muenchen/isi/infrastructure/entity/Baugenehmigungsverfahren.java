@@ -64,7 +64,7 @@ public class Baugenehmigungsverfahren extends Abfrage {
     @Column(nullable = false)
     private StandVerfahren standVerfahren;
 
-    @Column
+    @Column(length = 1000)
     private String standVerfahrenFreieEingabe;
 
     @IndexedEmbedded
@@ -86,14 +86,14 @@ public class Baugenehmigungsverfahren extends Abfrage {
     @IndexedEmbedded
     @IndexingDependency(reindexOnUpdate = ReindexOnUpdate.SHALLOW)
     @OneToMany(cascade = { CascadeType.ALL }, orphanRemoval = true)
-    @JoinColumn(name = "abfragevarianten_baugenehmigungsverfahren_id", referencedColumnName = "id")
+    @JoinColumn(name = "abfrgvar_baugnhmgsverfhrn_id", referencedColumnName = "id")
     @OrderBy("abfragevariantenNr asc")
     private List<AbfragevarianteBaugenehmigungsverfahren> abfragevariantenBaugenehmigungsverfahren;
 
     @IndexedEmbedded
     @IndexingDependency(reindexOnUpdate = ReindexOnUpdate.SHALLOW)
     @OneToMany(cascade = { CascadeType.ALL }, orphanRemoval = true)
-    @JoinColumn(name = "abfragevarianten_sachbearbeitung_baugenehmigungsverfahren_id", referencedColumnName = "id")
+    @JoinColumn(name = "abfrgvar_schbrbtng_baugnhmgsverfhrn_id", referencedColumnName = "id")
     @OrderBy("abfragevariantenNr asc")
     private List<AbfragevarianteBaugenehmigungsverfahren> abfragevariantenSachbearbeitungBaugenehmigungsverfahren;
 }

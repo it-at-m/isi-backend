@@ -1,7 +1,7 @@
 package de.muenchen.isi.domain.model.search.response;
 
+import de.muenchen.isi.domain.model.common.MultiPolygonGeometryModel;
 import de.muenchen.isi.domain.model.common.StadtbezirkModel;
-import de.muenchen.isi.domain.model.common.WGS84Model;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVerfahren;
 import java.math.BigDecimal;
 import java.util.Set;
@@ -25,5 +25,5 @@ public class BauvorhabenSearchResultModel extends SearchResultModel {
 
     private StandVerfahren standVerfahren;
 
-    private WGS84Model coordinate;
+    private MultiPolygonGeometryModel umgriff;
 }

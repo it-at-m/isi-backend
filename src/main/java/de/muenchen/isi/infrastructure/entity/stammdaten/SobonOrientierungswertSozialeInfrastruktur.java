@@ -23,7 +23,7 @@ import lombok.ToString;
     },
     indexes = {
         @Index(
-            name = "sobon_orientierungswert_soziale_infrastruktur_jahr_einrichtungstyp_altersklasse_foerderartBezeichnung_index",
+            name = "sobon_orientwrt_soz_infra_jahr_einr_typ_altkl_frdrtBzchng_index",
             columnList = "gueltigAb, einrichtungstyp, altersklasse, foerderartBezeichnung"
         ),
     }

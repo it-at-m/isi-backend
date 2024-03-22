@@ -93,7 +93,7 @@ public class Bauvorhaben extends BaseEntity {
     @Column(nullable = false)
     private StandVerfahren standVerfahren;
 
-    @Column
+    @Column(length = 1000)
     private String standVerfahrenFreieEingabe;
 
     @FullTextField
@@ -124,7 +124,7 @@ public class Bauvorhaben extends BaseEntity {
     @Column
     private String fisNummer;
 
-    @Column
+    @Column(length = 1000)
     private String anmerkung;
 
     @Enumerated(EnumType.STRING)
@@ -139,7 +139,7 @@ public class Bauvorhaben extends BaseEntity {
     @ElementCollection
     private List<WesentlicheRechtsgrundlage> wesentlicheRechtsgrundlage;
 
-    @Column
+    @Column(length = 1000)
     private String wesentlicheRechtsgrundlageFreieEingabe;
 
     @Enumerated(EnumType.STRING)

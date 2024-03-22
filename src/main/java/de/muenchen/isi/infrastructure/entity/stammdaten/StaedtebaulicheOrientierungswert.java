@@ -16,10 +16,7 @@ import lombok.ToString;
 @Table(
     uniqueConstraints = { @UniqueConstraint(columnNames = { "gueltigAb", "foerderartBezeichnung" }) },
     indexes = {
-        @Index(
-            name = "staedtebaulicher_orientierungswert_gueltigAb_foerderartBezeichnung_index",
-            columnList = "gueltigAb, foerderartBezeichnung"
-        ),
+        @Index(name = "staedtebau_orientwrt_gltgAb_frdrtBzchng_index", columnList = "gueltigAb, foerderartBezeichnung"),
     }
 )
 @Data

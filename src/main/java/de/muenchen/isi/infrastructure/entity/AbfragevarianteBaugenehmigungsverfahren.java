@@ -37,27 +37,21 @@ import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBridgeRef
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.KeywordField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.NonStandardField;
 
-@Entity
+@Entity(name = "abfrgvar_baugnhmgsverfhrn")
 @DiscriminatorValue(ArtAbfrage.Values.BAUGENEHMIGUNGSVERFAHREN)
 @Table(
+    name = "abfrgvar_baugnhmgsverfhrn",
     indexes = {
+        @Index(name = "abfrgvar_baugnhmgsverfhrn_id_index", columnList = "abfrgvar_baugnhmgsverfhrn_id"),
         @Index(
-            name = "abfragevarianten_baugenehmigungsverfahren_id_index",
-            columnList = "abfragevarianten_baugenehmigungsverfahren_id"
-        ),
-        @Index(
-            name = "abfragevarianten_sachbearbeitung_baugenehmigungsverfahren_id_index",
-            columnList = "abfragevarianten_sachbearbeitung_baugenehmigungsverfahren_id"
+            name = "abfrgvar_schbrbtng_baugnhmgsverfhrn_id_index",
+            columnList = "abfrgvar_schbrbtng_baugnhmgsverfhrn_id"
         ),
     },
     uniqueConstraints = {
         @UniqueConstraint(
             name = "UniqueNameAbfragevariantePerBaugenehmigungsverfahren",
-            columnNames = {
-                "abfragevarianten_baugenehmigungsverfahren_id",
-                "abfragevarianten_sachbearbeitung_baugenehmigungsverfahren_id",
-                "name",
-            }
+            columnNames = { "abfrgvar_baugnhmgsverfhrn_id", "abfrgvar_schbrbtng_baugnhmgsverfhrn_id", "name" }
         ),
     }
 )
@@ -70,7 +64,7 @@ public class AbfragevarianteBaugenehmigungsverfahren extends Abfragevariante {
     @ElementCollection
     private List<WesentlicheRechtsgrundlage> wesentlicheRechtsgrundlage;
 
-    @Column
+    @Column(length = 1000)
     private String wesentlicheRechtsgrundlageFreieEingabe;
 
     @KeywordField(valueBridge = @ValueBridgeRef(type = IntegerToStringValueBridge.class))
@@ -143,7 +137,7 @@ public class AbfragevarianteBaugenehmigungsverfahren extends Abfragevariante {
     @Column
     private LocalDate stammdatenGueltigAb;
 
-    @Column
+    @Column(length = 1000)
     private String anmerkung;
 
     @Column
@@ -162,17 +156,17 @@ public class AbfragevarianteBaugenehmigungsverfahren extends Abfragevariante {
     private List<BauratendateiInput> bauratendateiInputs;
 
     @OneToMany(cascade = { CascadeType.ALL }, orphanRemoval = true)
-    @JoinColumn(name = "abfragevariante_baugenehmigungsverfahren_fachreferate_id", referencedColumnName = "id")
+    @JoinColumn(name = "abfrgvar_baugnhmgsverfhrn_fachreferate_id", referencedColumnName = "id")
     @OrderBy("createdDateTime asc")
     private List<Bedarfsmeldung> bedarfsmeldungFachreferate;
 
     @OneToMany(cascade = { CascadeType.ALL }, orphanRemoval = true)
-    @JoinColumn(name = "abfragevariante_baugenehmigungsverfahren_abfrageersteller_id", referencedColumnName = "id")
+    @JoinColumn(name = "abfrgvar_baugnhmgsverfhrn_abfrageersteller_id", referencedColumnName = "id")
     @OrderBy("createdDateTime asc")
     private List<Bedarfsmeldung> bedarfsmeldungAbfrageersteller;
 
     @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY, orphanRemoval = true)
-    @JoinColumn(name = "abfragevariante_baugenehmigungsverfahren_id")
+    @JoinColumn(name = "abfrgvar_baugnhmgsverfhrn_id")
     @OrderBy("createdDateTime asc")
     private List<Bauabschnitt> bauabschnitte;
 

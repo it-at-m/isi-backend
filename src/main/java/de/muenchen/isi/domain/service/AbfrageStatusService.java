@@ -10,6 +10,7 @@ import de.muenchen.isi.domain.exception.UniqueViolationException;
 import de.muenchen.isi.domain.exception.UserRoleNotAllowedException;
 import de.muenchen.isi.domain.model.AbfrageModel;
 import de.muenchen.isi.domain.model.common.TransitionModel;
+import de.muenchen.isi.domain.service.common.BearbeitungshistorieService;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrageEvents;
 import de.muenchen.isi.security.AuthenticationUtils;
@@ -54,6 +55,8 @@ public class AbfrageStatusService {
     private final StateMachineFactory<StatusAbfrage, StatusAbfrageEvents> stateMachineFactory;
 
     private final AuthenticationUtils authenticationUtils;
+
+    private final BearbeitungshistorieService abfrageBearbeitungshistorieService;
 
     /**
      * Ändert den Status auf {@link StatusAbfrage#OFFEN}.
@@ -282,6 +285,8 @@ public class AbfrageStatusService {
                                     }
                                 }
                                 // Speichern der Abfrage
+                                abfrage =
+                                    abfrageBearbeitungshistorieService.appendBearbeitungshistorieToAbfrage(abfrage);
                                 AbfrageStatusService.this.abfrageService.save(abfrage);
                             } catch (
                                 final EntityNotFoundException
@@ -481,7 +486,7 @@ public class AbfrageStatusService {
      *
      * @param id        vom Typ {@link UUID} um die Abfrage zu finden
      * @param anmerkung die zur Abfrage hinzugefügt werden soll.
-     * @throws StringLengthExceededException Wenn die Anmerkung die maximale Länge von 255 Zeichen überschreitet.
+     * @throws StringLengthExceededException Wenn die Anmerkung die maximale Länge von 1000 Zeichen überschreitet.
      * @throws EntityNotFoundException       Wenn die Abfrage nicht gefunden wird.
      */
     private void throwStringLengthExceededExceptionWhenAnmerkungExceedsLength(UUID id, String anmerkung)
@@ -494,8 +499,8 @@ public class AbfrageStatusService {
                 abfrage.setAnmerkung(abfrage.getAnmerkung().concat("\n").concat(anmerkung));
             }
 
-            if (abfrage.getAnmerkung().length() > 255) {
-                throw new StringLengthExceededException("Es sind maximal 255 Zeichen erlaubt");
+            if (abfrage.getAnmerkung().length() > 1000) {
+                throw new StringLengthExceededException("Es sind maximal 1000 Zeichen erlaubt");
             }
         }
     }
