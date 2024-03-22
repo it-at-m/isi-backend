@@ -4,8 +4,10 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
 import de.muenchen.isi.domain.mapper.BauratendateiDomainMapperImpl;
+import de.muenchen.isi.domain.model.bauratendatei.BauratendateiInputModel;
 import de.muenchen.isi.domain.model.bauratendatei.BauratendateiWohneinheitenModel;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,6 +22,101 @@ class BauratendateiInputServiceTest {
     private BauratendateiInputService bauratendateiInputService = new BauratendateiInputService(
         new BauratendateiDomainMapperImpl()
     );
+
+    @Test
+    void sumWohneinheitenOfBauratendateiInputs() {
+        final var inputs = new ArrayList<BauratendateiInputModel>();
+
+        var bauratendateiInput = new BauratendateiInputModel();
+        bauratendateiInput.setWohneinheiten(new ArrayList<>());
+        var bauratendateiWohneinheiten = new BauratendateiWohneinheitenModel();
+        bauratendateiWohneinheiten.setJahr("2024");
+        bauratendateiWohneinheiten.setFoerderart("förderart1");
+        bauratendateiWohneinheiten.setWohneinheiten(BigDecimal.valueOf(100));
+        bauratendateiInput.getWohneinheiten().add(bauratendateiWohneinheiten);
+        bauratendateiWohneinheiten = new BauratendateiWohneinheitenModel();
+        bauratendateiWohneinheiten.setJahr("2024");
+        bauratendateiWohneinheiten.setFoerderart("förderart2");
+        bauratendateiWohneinheiten.setWohneinheiten(BigDecimal.valueOf(1000));
+        bauratendateiInput.getWohneinheiten().add(bauratendateiWohneinheiten);
+        bauratendateiWohneinheiten = new BauratendateiWohneinheitenModel();
+        bauratendateiWohneinheiten.setJahr("2025");
+        bauratendateiWohneinheiten.setFoerderart("förderart1");
+        bauratendateiWohneinheiten.setWohneinheiten(BigDecimal.valueOf(10000));
+        bauratendateiInput.getWohneinheiten().add(bauratendateiWohneinheiten);
+        bauratendateiWohneinheiten = new BauratendateiWohneinheitenModel();
+        bauratendateiWohneinheiten.setJahr("2025");
+        bauratendateiWohneinheiten.setFoerderart("förderart2");
+        bauratendateiWohneinheiten.setWohneinheiten(BigDecimal.valueOf(100000));
+        bauratendateiInput.getWohneinheiten().add(bauratendateiWohneinheiten);
+        bauratendateiWohneinheiten = new BauratendateiWohneinheitenModel();
+        bauratendateiWohneinheiten.setJahr("2026");
+        bauratendateiWohneinheiten.setFoerderart("förderart1");
+        bauratendateiWohneinheiten.setWohneinheiten(BigDecimal.valueOf(1000000));
+        bauratendateiInput.getWohneinheiten().add(bauratendateiWohneinheiten);
+        bauratendateiWohneinheiten = new BauratendateiWohneinheitenModel();
+        bauratendateiWohneinheiten.setJahr("2027");
+        bauratendateiWohneinheiten.setFoerderart("förderart3");
+        bauratendateiWohneinheiten.setWohneinheiten(BigDecimal.valueOf(10000000));
+        bauratendateiInput.getWohneinheiten().add(bauratendateiWohneinheiten);
+        inputs.add(bauratendateiInput);
+
+        bauratendateiInput = new BauratendateiInputModel();
+        bauratendateiInput.setWohneinheiten(new ArrayList<>());
+        bauratendateiWohneinheiten = new BauratendateiWohneinheitenModel();
+        bauratendateiWohneinheiten.setJahr("2024");
+        bauratendateiWohneinheiten.setFoerderart("förderart1");
+        bauratendateiWohneinheiten.setWohneinheiten(BigDecimal.valueOf(700));
+        bauratendateiInput.getWohneinheiten().add(bauratendateiWohneinheiten);
+        bauratendateiWohneinheiten = new BauratendateiWohneinheitenModel();
+        bauratendateiWohneinheiten.setJahr("2024");
+        bauratendateiWohneinheiten.setFoerderart("förderart2");
+        bauratendateiWohneinheiten.setWohneinheiten(BigDecimal.valueOf(7000));
+        bauratendateiInput.getWohneinheiten().add(bauratendateiWohneinheiten);
+        bauratendateiWohneinheiten = new BauratendateiWohneinheitenModel();
+        bauratendateiWohneinheiten.setJahr("2025");
+        bauratendateiWohneinheiten.setFoerderart("förderart1");
+        bauratendateiWohneinheiten.setWohneinheiten(BigDecimal.valueOf(70000));
+        bauratendateiInput.getWohneinheiten().add(bauratendateiWohneinheiten);
+        bauratendateiWohneinheiten = new BauratendateiWohneinheitenModel();
+        bauratendateiWohneinheiten.setJahr("2025");
+        bauratendateiWohneinheiten.setFoerderart("förderart2");
+        bauratendateiWohneinheiten.setWohneinheiten(BigDecimal.valueOf(700000));
+        bauratendateiInput.getWohneinheiten().add(bauratendateiWohneinheiten);
+        bauratendateiWohneinheiten = new BauratendateiWohneinheitenModel();
+        bauratendateiWohneinheiten.setJahr("2026");
+        bauratendateiWohneinheiten.setFoerderart("förderart1");
+        bauratendateiWohneinheiten.setWohneinheiten(BigDecimal.valueOf(7000000));
+        bauratendateiInput.getWohneinheiten().add(bauratendateiWohneinheiten);
+        bauratendateiWohneinheiten = new BauratendateiWohneinheitenModel();
+        bauratendateiWohneinheiten.setJahr("2028");
+        bauratendateiWohneinheiten.setFoerderart("förderart4");
+        bauratendateiWohneinheiten.setWohneinheiten(BigDecimal.valueOf(9));
+        bauratendateiInput.getWohneinheiten().add(bauratendateiWohneinheiten);
+        inputs.add(bauratendateiInput);
+
+        bauratendateiInput = new BauratendateiInputModel();
+        bauratendateiInput.setWohneinheiten(new ArrayList<>());
+        bauratendateiWohneinheiten = new BauratendateiWohneinheitenModel();
+        bauratendateiWohneinheiten.setJahr("2025");
+        bauratendateiWohneinheiten.setFoerderart("förderart2");
+        bauratendateiWohneinheiten.setWohneinheiten(BigDecimal.valueOf(888));
+        bauratendateiInput.getWohneinheiten().add(bauratendateiWohneinheiten);
+        inputs.add(bauratendateiInput);
+
+        final var result = bauratendateiInputService.sumWohneinheitenOfBauratendateiInputs(inputs.stream());
+
+        final var expected = new HashMap<String, BigDecimal>();
+        expected.put("2024förderart1", BigDecimal.valueOf(800));
+        expected.put("2024förderart2", BigDecimal.valueOf(8000));
+        expected.put("2025förderart1", BigDecimal.valueOf(80000));
+        expected.put("2025förderart2", BigDecimal.valueOf(800888));
+        expected.put("2026förderart1", BigDecimal.valueOf(8000000));
+        expected.put("2027förderart3", BigDecimal.valueOf(10000000));
+        expected.put("2028förderart4", BigDecimal.valueOf(9));
+
+        assertThat(result, is(expected));
+    }
 
     @Test
     void equals() {
