@@ -60,7 +60,7 @@ public class BauratendateiInputService {
                 if (ObjectUtils.isNotEmpty(bauratendateiInput)) {
                     abfragevariante.setBauratendateiInputBasis(bauratendateiInput);
                     final var bauratendateiInputs = ListUtils.emptyIfNull(abfragevariante.getBauratendateiInputs());
-                    bauratendateiInputs.add(bauratendateiInput);
+                    bauratendateiInputs.add(bauratendateiDomainMapper.cloneDeep(bauratendateiInput));
                     abfragevariante.setBauratendateiInputs(bauratendateiInputs);
                 }
             }
@@ -81,7 +81,7 @@ public class BauratendateiInputService {
                 if (ObjectUtils.isNotEmpty(bauratendateiInput)) {
                     abfragevariante.setBauratendateiInputBasis(bauratendateiInput);
                     final var bauratendateiInputs = ListUtils.emptyIfNull(abfragevariante.getBauratendateiInputs());
-                    bauratendateiInputs.add(bauratendateiInput);
+                    bauratendateiInputs.add(bauratendateiDomainMapper.cloneDeep(bauratendateiInput));
                     abfragevariante.setBauratendateiInputs(bauratendateiInputs);
                 }
             }
@@ -100,7 +100,7 @@ public class BauratendateiInputService {
                 if (ObjectUtils.isNotEmpty(bauratendateiInput)) {
                     abfragevariante.setBauratendateiInputBasis(bauratendateiInput);
                     final var bauratendateiInputs = ListUtils.emptyIfNull(abfragevariante.getBauratendateiInputs());
-                    bauratendateiInputs.add(bauratendateiInput);
+                    bauratendateiInputs.add(bauratendateiDomainMapper.cloneDeep(bauratendateiInput));
                     abfragevariante.setBauratendateiInputs(bauratendateiInputs);
                 }
             }
