@@ -38,7 +38,7 @@ class BauratendateiInputServiceTest {
     );
 
     @Test
-    void setBaurateninput() {
+    void setBaurateninputToAbfragevariante() {
         var uuid = UUID.randomUUID();
         final var abfragevariante = new AbfragevarianteWeiteresVerfahrenModel();
         abfragevariante.setId(uuid);
@@ -116,7 +116,11 @@ class BauratendateiInputServiceTest {
         viertel.add(theViertel);
         verortung.setViertel(viertel);
 
-        var result = bauratendateiInputService.setOrRemoveOrIgnoreBaurateninput(abfragevariante, verortung, bedarfe);
+        var result = bauratendateiInputService.setOrRemoveOrIgnoreBaurateninputToAbfragevariante(
+            abfragevariante,
+            verortung,
+            bedarfe
+        );
 
         var bauratendateiInputModel = new BauratendateiInputModel();
         bauratendateiInputModel.setMittelschulsprengel(Set.of("1", "2", "4"));
@@ -149,13 +153,17 @@ class BauratendateiInputServiceTest {
     }
 
     @Test
-    void removeBaurateninput() {
+    void removeBaurateninputToAbfragevariante() {
         final var abfragevariante = new AbfragevarianteBauleitplanverfahrenModel();
         abfragevariante.setBauratendateiInputBasis(new BauratendateiInputModel());
         abfragevariante.setBauratendateiInputs(List.of(new BauratendateiInputModel()));
         abfragevariante.setHasBauratendateiInputs(false);
 
-        var result = bauratendateiInputService.setOrRemoveOrIgnoreBaurateninput(abfragevariante, null, null);
+        var result = bauratendateiInputService.setOrRemoveOrIgnoreBaurateninputToAbfragevariante(
+            abfragevariante,
+            null,
+            null
+        );
         var expected = new AbfragevarianteBauleitplanverfahrenModel();
         expected.setBauratendateiInputBasis(null);
         expected.setBauratendateiInputs(List.of());
@@ -163,7 +171,8 @@ class BauratendateiInputServiceTest {
         assertThat(result, is(expected));
 
         abfragevariante.setHasBauratendateiInputs(null);
-        result = bauratendateiInputService.setOrRemoveOrIgnoreBaurateninput(abfragevariante, null, null);
+        result =
+            bauratendateiInputService.setOrRemoveOrIgnoreBaurateninputToAbfragevariante(abfragevariante, null, null);
         expected = new AbfragevarianteBauleitplanverfahrenModel();
         expected.setBauratendateiInputBasis(null);
         expected.setBauratendateiInputs(List.of());
@@ -172,7 +181,7 @@ class BauratendateiInputServiceTest {
     }
 
     @Test
-    void ignoreBaurateninput() {
+    void ignoreBaurateninputToAbfragevariante() {
         var uuid = UUID.randomUUID();
         final var abfragevariante = new AbfragevarianteWeiteresVerfahrenModel();
         abfragevariante.setId(uuid);
@@ -278,7 +287,11 @@ class BauratendateiInputServiceTest {
         viertel.add(theViertel);
         verortung.setViertel(viertel);
 
-        var result = bauratendateiInputService.setOrRemoveOrIgnoreBaurateninput(abfragevariante, verortung, bedarfe);
+        var result = bauratendateiInputService.setOrRemoveOrIgnoreBaurateninputToAbfragevariante(
+            abfragevariante,
+            verortung,
+            bedarfe
+        );
 
         bauratendateiInputModel = new BauratendateiInputModel();
         bauratendateiInputModel.setMittelschulsprengel(Set.of("1", "2", "4"));

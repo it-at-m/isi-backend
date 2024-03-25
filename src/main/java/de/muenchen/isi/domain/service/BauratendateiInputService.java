@@ -55,7 +55,11 @@ public class BauratendateiInputService {
                 ListUtils.emptyIfNull(bauleitplanverfahren.getAbfragevariantenSachbearbeitungBauleitplanverfahren())
             );
             for (final var abfragevariante : abfragevarianten) {
-                this.setOrRemoveOrIgnoreBaurateninput(abfragevariante, bauleitplanverfahren.getVerortung(), bedarfe);
+                this.setOrRemoveOrIgnoreBaurateninputToAbfragevariante(
+                        abfragevariante,
+                        bauleitplanverfahren.getVerortung(),
+                        bedarfe
+                    );
             }
         } else if (ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN.equals(abfrage.getArtAbfrage())) {
             final var baugenehmigungsverfahren = (BaugenehmigungsverfahrenModel) abfrage;
@@ -66,7 +70,7 @@ public class BauratendateiInputService {
                 )
             );
             for (final var abfragevariante : abfragevarianten) {
-                this.setOrRemoveOrIgnoreBaurateninput(
+                this.setOrRemoveOrIgnoreBaurateninputToAbfragevariante(
                         abfragevariante,
                         baugenehmigungsverfahren.getVerortung(),
                         bedarfe
@@ -79,7 +83,11 @@ public class BauratendateiInputService {
                 ListUtils.emptyIfNull(weiteresVerfahren.getAbfragevariantenSachbearbeitungWeiteresVerfahren())
             );
             for (final var abfragevariante : abfragevarianten) {
-                this.setOrRemoveOrIgnoreBaurateninput(abfragevariante, weiteresVerfahren.getVerortung(), bedarfe);
+                this.setOrRemoveOrIgnoreBaurateninputToAbfragevariante(
+                        abfragevariante,
+                        weiteresVerfahren.getVerortung(),
+                        bedarfe
+                    );
             }
         }
     }
@@ -92,7 +100,7 @@ public class BauratendateiInputService {
      * @param bedarfe
      * @return
      */
-    protected WithBauratendateiInputsModel setOrRemoveOrIgnoreBaurateninput(
+    protected WithBauratendateiInputsModel setOrRemoveOrIgnoreBaurateninputToAbfragevariante(
         final WithBauratendateiInputsModel withBauratendateiInputs,
         final VerortungModel verortung,
         final Map<UUID, BedarfeForAbfragevarianteModel> bedarfe
