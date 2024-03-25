@@ -20,11 +20,7 @@
         "summary": "Speichert Abfragen mit reportingrelevanten Informationen.",
         "operationId": "save",
         "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": { "$ref": "#/components/schemas/AbfrageDto" }
-            }
-          },
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/AbfrageDto" } } },
           "required": true
         },
         "responses": { "200": { "description": "OK -> Abfrage gespeichert." } }
@@ -36,12 +32,7 @@
         "summary": "Löscht eine Abfrage mitsamt aller reportingrelevanten Informationen.",
         "operationId": "delete",
         "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": { "type": "string", "format": "uuid" }
-          },
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } },
           {
             "name": "art-abfrage",
             "in": "query",
@@ -92,12 +83,8 @@
           },
           "abfragevariantenNr": { "type": "integer", "format": "int32" },
           "name": { "type": "string" },
-          "langfristigerPlanungsursaechlicherBedarf": {
-            "$ref": "#/components/schemas/LangfristigerBedarfDto"
-          },
-          "langfristigerSobonursaechlicherBedarf": {
-            "$ref": "#/components/schemas/LangfristigerSobonBedarfDto"
-          }
+          "langfristigerPlanungsursaechlicherBedarf": { "$ref": "#/components/schemas/LangfristigerBedarfDto" },
+          "langfristigerSobonursaechlicherBedarf": { "$ref": "#/components/schemas/LangfristigerSobonBedarfDto" }
         }
       },
       "AbfragevarianteBauleitplanverfahrenDto": {
@@ -112,12 +99,8 @@
           },
           "abfragevariantenNr": { "type": "integer", "format": "int32" },
           "name": { "type": "string" },
-          "langfristigerPlanungsursaechlicherBedarf": {
-            "$ref": "#/components/schemas/LangfristigerBedarfDto"
-          },
-          "langfristigerSobonursaechlicherBedarf": {
-            "$ref": "#/components/schemas/LangfristigerSobonBedarfDto"
-          }
+          "langfristigerPlanungsursaechlicherBedarf": { "$ref": "#/components/schemas/LangfristigerBedarfDto" },
+          "langfristigerSobonursaechlicherBedarf": { "$ref": "#/components/schemas/LangfristigerSobonBedarfDto" }
         }
       },
       "AbfragevarianteWeiteresVerfahrenDto": {
@@ -132,12 +115,8 @@
           },
           "abfragevariantenNr": { "type": "integer", "format": "int32" },
           "name": { "type": "string" },
-          "langfristigerPlanungsursaechlicherBedarf": {
-            "$ref": "#/components/schemas/LangfristigerBedarfDto"
-          },
-          "langfristigerSobonursaechlicherBedarf": {
-            "$ref": "#/components/schemas/LangfristigerSobonBedarfDto"
-          }
+          "langfristigerPlanungsursaechlicherBedarf": { "$ref": "#/components/schemas/LangfristigerBedarfDto" },
+          "langfristigerSobonursaechlicherBedarf": { "$ref": "#/components/schemas/LangfristigerSobonBedarfDto" }
         }
       },
       "BaugenehmigungsverfahrenDto": {
@@ -149,16 +128,13 @@
             "properties": {
               "abfragevariantenBaugenehmigungsverfahren": {
                 "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/AbfragevarianteBaugenehmigungsverfahrenDto"
-                }
+                "items": { "$ref": "#/components/schemas/AbfragevarianteBaugenehmigungsverfahrenDto" }
               },
               "abfragevariantenSachbearbeitungBaugenehmigungsverfahren": {
                 "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/AbfragevarianteBaugenehmigungsverfahrenDto"
-                }
-              }
+                "items": { "$ref": "#/components/schemas/AbfragevarianteBaugenehmigungsverfahrenDto" }
+              },
+              "fristBearbeitung": { "type": "string", "format": "date" }
             }
           }
         ]
@@ -172,16 +148,13 @@
             "properties": {
               "abfragevariantenBauleitplanverfahren": {
                 "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/AbfragevarianteBauleitplanverfahrenDto"
-                }
+                "items": { "$ref": "#/components/schemas/AbfragevarianteBauleitplanverfahrenDto" }
               },
               "abfragevariantenSachbearbeitungBauleitplanverfahren": {
                 "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/AbfragevarianteBauleitplanverfahrenDto"
-                }
-              }
+                "items": { "$ref": "#/components/schemas/AbfragevarianteBauleitplanverfahrenDto" }
+              },
+              "fristBearbeitung": { "type": "string", "format": "date" }
             }
           }
         ]
@@ -200,26 +173,17 @@
         "properties": {
           "wohneinheiten": {
             "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/WohneinheitenProFoerderartProJahrDto"
-            }
+            "items": { "$ref": "#/components/schemas/WohneinheitenProFoerderartProJahrDto" }
           },
           "bedarfKinderkrippe": {
             "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/InfrastrukturbedarfProJahrDto"
-            }
+            "items": { "$ref": "#/components/schemas/InfrastrukturbedarfProJahrDto" }
           },
           "bedarfKindergarten": {
             "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/InfrastrukturbedarfProJahrDto"
-            }
+            "items": { "$ref": "#/components/schemas/InfrastrukturbedarfProJahrDto" }
           },
-          "alleEinwohner": {
-            "type": "array",
-            "items": { "$ref": "#/components/schemas/PersonenProJahrDto" }
-          }
+          "alleEinwohner": { "type": "array", "items": { "$ref": "#/components/schemas/PersonenProJahrDto" } }
         }
       },
       "LangfristigerSobonBedarfDto": {
@@ -227,46 +191,30 @@
         "properties": {
           "wohneinheiten": {
             "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/WohneinheitenProFoerderartProJahrDto"
-            }
+            "items": { "$ref": "#/components/schemas/WohneinheitenProFoerderartProJahrDto" }
           },
           "bedarfKinderkrippe": {
             "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/InfrastrukturbedarfProJahrDto"
-            }
+            "items": { "$ref": "#/components/schemas/InfrastrukturbedarfProJahrDto" }
           },
           "bedarfKindergarten": {
             "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/InfrastrukturbedarfProJahrDto"
-            }
+            "items": { "$ref": "#/components/schemas/InfrastrukturbedarfProJahrDto" }
           },
-          "alleEinwohner": {
-            "type": "array",
-            "items": { "$ref": "#/components/schemas/PersonenProJahrDto" }
-          },
+          "alleEinwohner": { "type": "array", "items": { "$ref": "#/components/schemas/PersonenProJahrDto" } },
           "bedarfGsNachmittagBetreuung": {
             "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/InfrastrukturbedarfProJahrDto"
-            }
+            "items": { "$ref": "#/components/schemas/InfrastrukturbedarfProJahrDto" }
           },
           "bedarfGrundschule": {
             "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/InfrastrukturbedarfProJahrDto"
-            }
+            "items": { "$ref": "#/components/schemas/InfrastrukturbedarfProJahrDto" }
           }
         }
       },
       "PersonenProJahrDto": {
         "type": "object",
-        "properties": {
-          "jahr": { "type": "string" },
-          "anzahlPersonenGesamt": { "type": "number" }
-        }
+        "properties": { "jahr": { "type": "string" }, "anzahlPersonenGesamt": { "type": "number" } }
       },
       "WeiteresVerfahrenDto": {
         "type": "object",
@@ -277,16 +225,13 @@
             "properties": {
               "abfragevariantenWeiteresVerfahren": {
                 "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/AbfragevarianteWeiteresVerfahrenDto"
-                }
+                "items": { "$ref": "#/components/schemas/AbfragevarianteWeiteresVerfahrenDto" }
               },
               "abfragevariantenSachbearbeitungWeiteresVerfahren": {
                 "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/AbfragevarianteWeiteresVerfahrenDto"
-                }
-              }
+                "items": { "$ref": "#/components/schemas/AbfragevarianteWeiteresVerfahrenDto" }
+              },
+              "fristBearbeitung": { "type": "string", "format": "date" }
             }
           }
         ]
