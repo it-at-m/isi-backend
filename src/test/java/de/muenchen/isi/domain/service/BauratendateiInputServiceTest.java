@@ -5,11 +5,14 @@ import static org.hamcrest.Matchers.is;
 
 import de.muenchen.isi.domain.mapper.BauratendateiDomainMapperImpl;
 import de.muenchen.isi.domain.model.bauratendatei.BauratendateiInputModel;
+import de.muenchen.isi.domain.model.calculation.BedarfeForAbfragevarianteModel;
+import de.muenchen.isi.domain.model.calculation.LangfristigerBedarfModel;
 import de.muenchen.isi.domain.model.calculation.WohneinheitenProFoerderartProJahrModel;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -23,6 +26,58 @@ class BauratendateiInputServiceTest {
     private BauratendateiInputService bauratendateiInputService = new BauratendateiInputService(
         new BauratendateiDomainMapperImpl()
     );
+
+    @Test
+    void getWohneinheiten() {
+        var result = bauratendateiInputService.getWohneinheiten(null, UUID.randomUUID());
+        assertThat(result, is(List.of()));
+
+        final var bedarfe = new HashMap<UUID, BedarfeForAbfragevarianteModel>();
+        result = bauratendateiInputService.getWohneinheiten(bedarfe, UUID.randomUUID());
+        assertThat(result, is(List.of()));
+
+        var uuid = UUID.randomUUID();
+        bedarfe.put(uuid, null);
+        result = bauratendateiInputService.getWohneinheiten(bedarfe, uuid);
+        assertThat(result, is(List.of()));
+
+        var bedarfeForAbfragevariante = new BedarfeForAbfragevarianteModel();
+        bedarfe.clear();
+        bedarfe.put(uuid, bedarfeForAbfragevariante);
+        result = bauratendateiInputService.getWohneinheiten(bedarfe, uuid);
+        assertThat(result, is(List.of()));
+
+        bedarfeForAbfragevariante = new BedarfeForAbfragevarianteModel();
+        bedarfeForAbfragevariante.setLangfristigerPlanungsursaechlicherBedarf(new LangfristigerBedarfModel());
+        bedarfe.clear();
+        bedarfe.put(uuid, bedarfeForAbfragevariante);
+        result = bauratendateiInputService.getWohneinheiten(bedarfe, uuid);
+        assertThat(result, is(List.of()));
+
+        bedarfeForAbfragevariante = new BedarfeForAbfragevarianteModel();
+        var langfristigerBedarf = new LangfristigerBedarfModel();
+        langfristigerBedarf.setWohneinheiten(
+            List.of(
+                new WohneinheitenProFoerderartProJahrModel(),
+                new WohneinheitenProFoerderartProJahrModel(),
+                new WohneinheitenProFoerderartProJahrModel()
+            )
+        );
+        bedarfeForAbfragevariante.setLangfristigerPlanungsursaechlicherBedarf(langfristigerBedarf);
+        bedarfe.clear();
+        bedarfe.put(uuid, bedarfeForAbfragevariante);
+        result = bauratendateiInputService.getWohneinheiten(bedarfe, uuid);
+        assertThat(
+            result,
+            is(
+                List.of(
+                    new WohneinheitenProFoerderartProJahrModel(),
+                    new WohneinheitenProFoerderartProJahrModel(),
+                    new WohneinheitenProFoerderartProJahrModel()
+                )
+            )
+        );
+    }
 
     @Test
     void equalsBauratendateiInput() {
