@@ -206,17 +206,11 @@ public class BauratendateiInputService {
         final Map<UUID, BedarfeForAbfragevarianteModel> bedarfe,
         final UUID abfragevarianteId
     ) {
-        if (
-            bedarfe != null &&
-            bedarfe.get(abfragevarianteId) != null &&
-            bedarfe.get(abfragevarianteId).getLangfristigerPlanungsursaechlicherBedarf() != null
-        ) {
-            return ListUtils.emptyIfNull(
+        return bedarfe != null && bedarfe.get(abfragevarianteId) != null
+            ? ListUtils.emptyIfNull(
                 bedarfe.get(abfragevarianteId).getLangfristigerPlanungsursaechlicherBedarf().getWohneinheiten()
-            );
-        } else {
-            return List.of();
-        }
+            )
+            : List.of();
     }
 
     public Map<String, BigDecimal> sumWohneinheitenOfBauratendateiInputs(final Stream<BauratendateiInputModel> inputs) {
