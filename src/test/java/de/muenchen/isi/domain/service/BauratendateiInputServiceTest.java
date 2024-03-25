@@ -249,7 +249,7 @@ class BauratendateiInputServiceTest {
     }
 
     @Test
-    void equals() {
+    void equalsMapForWohneinheitenOfJahrFoerderart() {
         final var basis = new HashMap<String, BigDecimal>();
         basis.put("1", BigDecimal.ONE.movePointRight(0));
         basis.put("2", BigDecimal.ONE.movePointRight(1));
