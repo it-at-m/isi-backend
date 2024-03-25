@@ -23,8 +23,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
@@ -33,9 +35,14 @@ import org.mockito.quality.Strictness;
 @MockitoSettings(strictness = Strictness.LENIENT)
 class BauratendateiInputServiceTest {
 
-    private BauratendateiInputService bauratendateiInputService = new BauratendateiInputService(
-        new BauratendateiDomainMapperImpl()
-    );
+    private BauratendateiInputService bauratendateiInputService;
+
+    @BeforeEach
+    public void beforeEach() {
+        this.bauratendateiInputService =
+            Mockito.spy(new BauratendateiInputService(new BauratendateiDomainMapperImpl()));
+        Mockito.reset(bauratendateiInputService);
+    }
 
     @Test
     void setBaurateninputToAbfragevariante() {
