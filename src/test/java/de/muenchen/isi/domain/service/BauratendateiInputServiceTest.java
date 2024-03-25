@@ -5,6 +5,7 @@ import static org.hamcrest.Matchers.is;
 
 import de.muenchen.isi.domain.mapper.BauratendateiDomainMapperImpl;
 import de.muenchen.isi.domain.model.AbfragevarianteBauleitplanverfahrenModel;
+import de.muenchen.isi.domain.model.AbfragevarianteWeiteresVerfahrenModel;
 import de.muenchen.isi.domain.model.bauratendatei.BauratendateiInputModel;
 import de.muenchen.isi.domain.model.calculation.BedarfeForAbfragevarianteModel;
 import de.muenchen.isi.domain.model.calculation.LangfristigerBedarfModel;
@@ -35,6 +36,119 @@ class BauratendateiInputServiceTest {
     private BauratendateiInputService bauratendateiInputService = new BauratendateiInputService(
         new BauratendateiDomainMapperImpl()
     );
+
+    @Test
+    void setBaurateninput() {
+        var uuid = UUID.randomUUID();
+        final var abfragevariante = new AbfragevarianteWeiteresVerfahrenModel();
+        abfragevariante.setId(uuid);
+        abfragevariante.setBauratendateiInputBasis(null);
+        abfragevariante.setBauratendateiInputs(null);
+        abfragevariante.setHasBauratendateiInputs(true);
+
+        var bedarfeForAbfragevariante = new BedarfeForAbfragevarianteModel();
+        var langfristigerBedarf = new LangfristigerBedarfModel();
+        var bedarfWohneinheiten = new ArrayList<WohneinheitenProFoerderartProJahrModel>();
+        var wohneinheiten = new WohneinheitenProFoerderartProJahrModel();
+        wohneinheiten.setJahr("2024");
+        wohneinheiten.setFoerderart("Foerderart1");
+        wohneinheiten.setWohneinheiten(BigDecimal.valueOf(1000));
+        bedarfWohneinheiten.add(wohneinheiten);
+        wohneinheiten = new WohneinheitenProFoerderartProJahrModel();
+        wohneinheiten.setJahr("2024");
+        wohneinheiten.setFoerderart("Foerderart2");
+        wohneinheiten.setWohneinheiten(BigDecimal.valueOf(900));
+        bedarfWohneinheiten.add(wohneinheiten);
+        wohneinheiten = new WohneinheitenProFoerderartProJahrModel();
+        wohneinheiten.setJahr("2025");
+        wohneinheiten.setFoerderart("Foerderart1");
+        wohneinheiten.setWohneinheiten(BigDecimal.valueOf(80));
+        bedarfWohneinheiten.add(wohneinheiten);
+        langfristigerBedarf.setWohneinheiten(bedarfWohneinheiten);
+        bedarfeForAbfragevariante.setLangfristigerPlanungsursaechlicherBedarf(langfristigerBedarf);
+
+        Map<UUID, BedarfeForAbfragevarianteModel> bedarfe = new HashMap<>();
+        bedarfe.put(uuid, bedarfeForAbfragevariante);
+
+        var verortung = new VerortungMultiPolygonModel();
+        var mittelschulsprengel = new HashSet<MittelschulsprengelModel>();
+        var theMittelschulsprengel = new MittelschulsprengelModel();
+        theMittelschulsprengel.setNummer(1L);
+        mittelschulsprengel.add(theMittelschulsprengel);
+        theMittelschulsprengel = new MittelschulsprengelModel();
+        theMittelschulsprengel.setNummer(2L);
+        mittelschulsprengel.add(theMittelschulsprengel);
+        theMittelschulsprengel = new MittelschulsprengelModel();
+        theMittelschulsprengel.setNummer(null);
+        mittelschulsprengel.add(theMittelschulsprengel);
+        theMittelschulsprengel = new MittelschulsprengelModel();
+        theMittelschulsprengel.setNummer(4L);
+        mittelschulsprengel.add(theMittelschulsprengel);
+        verortung.setMittelschulsprengel(mittelschulsprengel);
+
+        var grundschulsprengel = new HashSet<GrundschulsprengelModel>();
+        var theGrundschulsprengel = new GrundschulsprengelModel();
+        theGrundschulsprengel.setNummer(5L);
+        grundschulsprengel.add(theGrundschulsprengel);
+        theGrundschulsprengel = new GrundschulsprengelModel();
+        theGrundschulsprengel.setNummer(6L);
+        grundschulsprengel.add(theGrundschulsprengel);
+        theGrundschulsprengel = new GrundschulsprengelModel();
+        theGrundschulsprengel.setNummer(null);
+        grundschulsprengel.add(theGrundschulsprengel);
+        theGrundschulsprengel = new GrundschulsprengelModel();
+        theGrundschulsprengel.setNummer(8L);
+        grundschulsprengel.add(theGrundschulsprengel);
+        verortung.setGrundschulsprengel(grundschulsprengel);
+
+        var viertel = new HashSet<ViertelModel>();
+        var theViertel = new ViertelModel();
+        theViertel.setNummer("9");
+        viertel.add(theViertel);
+        theViertel = new ViertelModel();
+        theViertel.setNummer("10");
+        viertel.add(theViertel);
+        theViertel = new ViertelModel();
+        theViertel.setNummer(null);
+        viertel.add(theViertel);
+        theViertel = new ViertelModel();
+        theViertel.setNummer("12");
+        viertel.add(theViertel);
+        verortung.setViertel(viertel);
+
+        var result = bauratendateiInputService.setOrRemoveOrIgnoreBaurateninput(abfragevariante, verortung, bedarfe);
+
+        var bauratendateiInputModel = new BauratendateiInputModel();
+        bauratendateiInputModel.setMittelschulsprengel(Set.of("1", "2", "4"));
+        bauratendateiInputModel.setGrundschulsprengel(Set.of("5", "6", "8"));
+        bauratendateiInputModel.setViertel(Set.of("9", "10", "12"));
+        bedarfWohneinheiten = new ArrayList<>();
+        wohneinheiten = new WohneinheitenProFoerderartProJahrModel();
+        wohneinheiten.setJahr("2024");
+        wohneinheiten.setFoerderart("Foerderart1");
+        wohneinheiten.setWohneinheiten(BigDecimal.valueOf(1000));
+        bedarfWohneinheiten.add(wohneinheiten);
+        wohneinheiten = new WohneinheitenProFoerderartProJahrModel();
+        wohneinheiten.setJahr("2024");
+        wohneinheiten.setFoerderart("Foerderart2");
+        wohneinheiten.setWohneinheiten(BigDecimal.valueOf(900));
+        bedarfWohneinheiten.add(wohneinheiten);
+        wohneinheiten = new WohneinheitenProFoerderartProJahrModel();
+        wohneinheiten.setJahr("2025");
+        wohneinheiten.setFoerderart("Foerderart1");
+        wohneinheiten.setWohneinheiten(BigDecimal.valueOf(80));
+        bedarfWohneinheiten.add(wohneinheiten);
+        bauratendateiInputModel.setWohneinheiten(bedarfWohneinheiten);
+
+        var expected = new AbfragevarianteWeiteresVerfahrenModel();
+        expected.setId(uuid);
+        expected.setBauratendateiInputBasis(bauratendateiInputModel);
+        expected.setBauratendateiInputs(List.of(bauratendateiInputModel));
+        expected.setHasBauratendateiInputs(true);
+        assertThat(result, is(expected));
+
+        assertThat(result, is(expected));
+    }
 
     @Test
     void removeBaurateninput() {

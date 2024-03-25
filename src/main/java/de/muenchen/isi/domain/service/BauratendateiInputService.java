@@ -90,6 +90,7 @@ public class BauratendateiInputService {
      * @param withBauratendateiInputs
      * @param verortung
      * @param bedarfe
+     * @return
      */
     protected WithBauratendateiInputsModel setOrRemoveOrIgnoreBaurateninput(
         final WithBauratendateiInputsModel withBauratendateiInputs,
