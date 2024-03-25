@@ -6,7 +6,7 @@ import de.muenchen.isi.domain.model.BaugenehmigungsverfahrenModel;
 import de.muenchen.isi.domain.model.BauleitplanverfahrenModel;
 import de.muenchen.isi.domain.model.WeiteresVerfahrenModel;
 import de.muenchen.isi.domain.model.bauratendatei.BauratendateiInputModel;
-import de.muenchen.isi.domain.model.bauratendatei.WithBauratendateiInputsModel;
+import de.muenchen.isi.domain.model.bauratendatei.WithBauratendateiInputModel;
 import de.muenchen.isi.domain.model.calculation.BedarfeForAbfragevarianteModel;
 import de.muenchen.isi.domain.model.calculation.WohneinheitenProFoerderartProJahrModel;
 import de.muenchen.isi.domain.model.common.GrundschulsprengelModel;
@@ -39,7 +39,7 @@ public class BauratendateiInputService {
     private final BauratendateiDomainMapper bauratendateiDomainMapper;
 
     /**
-     * Setzt für jede Abfragevariante einer Abfrage die BauratendateiInput.
+     * Setzt für jede Abfragevariante einer Abfrage die Inputinformationen zur Erstellung der Bauratendatei.
      *
      * @param abfrage Die Abfrage, deren Abfragevarianten befüllt werden sollen.
      * @param bedarfe Die Bedarfe der Abfrage, erstellt durch {@link CalculationService#calculateBedarfeForEachAbfragevarianteOfAbfrage(AbfrageModel)}.
@@ -95,34 +95,34 @@ public class BauratendateiInputService {
     /**
      *
      *
-     * @param withBauratendateiInputs
+     * @param abfragevariante
      * @param verortung
      * @param bedarfe
      * @return
      */
-    protected WithBauratendateiInputsModel setOrRemoveOrIgnoreBaurateninputToAbfragevariante(
-        final WithBauratendateiInputsModel withBauratendateiInputs,
+    protected WithBauratendateiInputModel setOrRemoveOrIgnoreBaurateninputToAbfragevariante(
+        final WithBauratendateiInputModel abfragevariante,
         final VerortungModel verortung,
         final Map<UUID, BedarfeForAbfragevarianteModel> bedarfe
     ) {
         // Zurücksetzen der Inputs für die Bauratendatei falls Checkbox nicht gewählt.
-        if (BooleanUtils.isNotTrue(withBauratendateiInputs.getHasBauratendateiInputs())) {
-            withBauratendateiInputs.setBauratendateiInputBasis(null);
-            withBauratendateiInputs.setBauratendateiInputs(List.of());
+        if (BooleanUtils.isNotTrue(abfragevariante.getHasBauratendateiInputs())) {
+            abfragevariante.setBauratendateiInputBasis(null);
+            abfragevariante.setBauratendateiInputs(List.of());
         }
 
         // Ermitteln der Inputs für die Bauratendatei auf Basis der Berechnung der langfristigen Bedarfe.
-        final var newBauratendateiInput = createBauratendateiInput(verortung, bedarfe, withBauratendateiInputs.getId());
+        final var newBauratendateiInput = createBauratendateiInput(verortung, bedarfe, abfragevariante.getId());
 
         // Neusetzen der Inputs für die Bauratendatei falls diese nicht mit den langfristigen Bedarfen übereinstimmen.
-        if (!equals(newBauratendateiInput, withBauratendateiInputs.getBauratendateiInputs())) {
-            withBauratendateiInputs.setBauratendateiInputBasis(newBauratendateiInput);
+        if (!equals(newBauratendateiInput, abfragevariante.getBauratendateiInputs())) {
+            abfragevariante.setBauratendateiInputBasis(newBauratendateiInput);
             final var bauratendateiInputs = new ArrayList<BauratendateiInputModel>();
             bauratendateiInputs.add(bauratendateiDomainMapper.cloneDeep(newBauratendateiInput));
-            withBauratendateiInputs.setBauratendateiInputs(bauratendateiInputs);
+            abfragevariante.setBauratendateiInputs(bauratendateiInputs);
         }
 
-        return withBauratendateiInputs;
+        return abfragevariante;
     }
 
     /**
