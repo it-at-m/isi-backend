@@ -4,6 +4,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
 import de.muenchen.isi.domain.mapper.BauratendateiDomainMapperImpl;
+import de.muenchen.isi.domain.model.AbfragevarianteBauleitplanverfahrenModel;
 import de.muenchen.isi.domain.model.bauratendatei.BauratendateiInputModel;
 import de.muenchen.isi.domain.model.calculation.BedarfeForAbfragevarianteModel;
 import de.muenchen.isi.domain.model.calculation.LangfristigerBedarfModel;
@@ -34,6 +35,29 @@ class BauratendateiInputServiceTest {
     private BauratendateiInputService bauratendateiInputService = new BauratendateiInputService(
         new BauratendateiDomainMapperImpl()
     );
+
+    @Test
+    void removeBaurateninput() {
+        final var abfragevariante = new AbfragevarianteBauleitplanverfahrenModel();
+        abfragevariante.setBauratendateiInputBasis(new BauratendateiInputModel());
+        abfragevariante.setBauratendateiInputs(List.of(new BauratendateiInputModel()));
+        abfragevariante.setHasBauratendateiInputs(false);
+
+        var result = bauratendateiInputService.setOrRemoveBaurateninput(abfragevariante, null, null);
+        var expected = new AbfragevarianteBauleitplanverfahrenModel();
+        expected.setBauratendateiInputBasis(null);
+        expected.setBauratendateiInputs(List.of());
+        expected.setHasBauratendateiInputs(false);
+        assertThat(result, is(expected));
+
+        abfragevariante.setHasBauratendateiInputs(null);
+        result = bauratendateiInputService.setOrRemoveBaurateninput(abfragevariante, null, null);
+        expected = new AbfragevarianteBauleitplanverfahrenModel();
+        expected.setBauratendateiInputBasis(null);
+        expected.setBauratendateiInputs(List.of());
+        expected.setHasBauratendateiInputs(null);
+        assertThat(result, is(expected));
+    }
 
     @Test
     void createBauratendateiInput() {

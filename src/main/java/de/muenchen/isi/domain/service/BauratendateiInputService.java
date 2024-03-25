@@ -87,7 +87,7 @@ public class BauratendateiInputService {
      * @param verortung
      * @param bedarfe
      */
-    protected void setOrRemoveBaurateninput(
+    protected WithBauratendateiInputsModel setOrRemoveBaurateninput(
         final WithBauratendateiInputsModel withBauratendateiInputs,
         final VerortungModel verortung,
         final Map<UUID, BedarfeForAbfragevarianteModel> bedarfe
@@ -108,6 +108,8 @@ public class BauratendateiInputService {
             bauratendateiInputs.add(bauratendateiDomainMapper.cloneDeep(newBauratendateiInput));
             withBauratendateiInputs.setBauratendateiInputs(bauratendateiInputs);
         }
+
+        return withBauratendateiInputs;
     }
 
     /**
