@@ -120,7 +120,7 @@ public class BauratendateiInputService {
      * @param abfragevarianteId Die Id der Abfragevariante, auf die sich der BauratendateiInput bezieht.
      * @return Einen neuen BauratendateiInput.
      */
-    public BauratendateiInputModel createBauratendateiInput(
+    protected BauratendateiInputModel createBauratendateiInput(
         final VerortungModel verortung,
         final Map<UUID, BedarfeForAbfragevarianteModel> bedarfe,
         final UUID abfragevarianteId
@@ -219,7 +219,9 @@ public class BauratendateiInputService {
      * @param inputs zum summieren je Jahr und Förderart.
      * @return eine Map mit Key konkateniert aus dem Jahr und der Förderart und dem Value als Summe der Wohneinheiten.
      */
-    public Map<String, BigDecimal> sumWohneinheitenOfBauratendateiInputs(final Stream<BauratendateiInputModel> inputs) {
+    protected Map<String, BigDecimal> sumWohneinheitenOfBauratendateiInputs(
+        final Stream<BauratendateiInputModel> inputs
+    ) {
         return inputs
             .flatMap(bauratendateiInput -> bauratendateiInput.getWohneinheiten().stream())
             .collect(
