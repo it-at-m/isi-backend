@@ -8,10 +8,15 @@ import de.muenchen.isi.domain.model.bauratendatei.BauratendateiInputModel;
 import de.muenchen.isi.domain.model.calculation.BedarfeForAbfragevarianteModel;
 import de.muenchen.isi.domain.model.calculation.LangfristigerBedarfModel;
 import de.muenchen.isi.domain.model.calculation.WohneinheitenProFoerderartProJahrModel;
+import de.muenchen.isi.domain.model.common.VerortungModel;
+import de.muenchen.isi.domain.model.common.VerortungMultiPolygonModel;
+import de.muenchen.isi.domain.model.common.ViertelModel;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,6 +31,41 @@ class BauratendateiInputServiceTest {
     private BauratendateiInputService bauratendateiInputService = new BauratendateiInputService(
         new BauratendateiDomainMapperImpl()
     );
+
+    @Test
+    void getViertel() {
+        VerortungModel verortung = null;
+        var result = bauratendateiInputService.getViertel(verortung);
+        assertThat(result, is(Set.of()));
+
+        verortung = new VerortungMultiPolygonModel();
+        result = bauratendateiInputService.getViertel(verortung);
+        assertThat(result, is(Set.of()));
+
+        verortung = new VerortungMultiPolygonModel();
+        var viertel = new HashSet<ViertelModel>();
+        verortung.setViertel(viertel);
+        result = bauratendateiInputService.getViertel(verortung);
+        assertThat(result, is(Set.of()));
+
+        verortung = new VerortungMultiPolygonModel();
+        viertel = new HashSet<>();
+        var theViertel = new ViertelModel();
+        theViertel.setNummer("1");
+        viertel.add(theViertel);
+        theViertel = new ViertelModel();
+        theViertel.setNummer("2");
+        viertel.add(theViertel);
+        theViertel = new ViertelModel();
+        theViertel.setNummer(null);
+        viertel.add(theViertel);
+        theViertel = new ViertelModel();
+        theViertel.setNummer("4");
+        viertel.add(theViertel);
+        verortung.setViertel(viertel);
+        result = bauratendateiInputService.getViertel(verortung);
+        assertThat(result, is(Set.of("1", "2", "4")));
+    }
 
     @Test
     void getWohneinheiten() {
