@@ -204,6 +204,12 @@ public class BauratendateiInputService {
             : List.of();
     }
 
+    /**
+     * Summiert die Wohneinheiten je Jahr und Förderart für die gegebenen {@link BauratendateiInputModel}.
+     *
+     * @param inputs zum summieren je Jahr und Förderart.
+     * @return eine Map mit Key konkateniert aus dem Jahr und der Förderart und dem Value als Summe der Wohneinheiten.
+     */
     public Map<String, BigDecimal> sumWohneinheitenOfBauratendateiInputs(final Stream<BauratendateiInputModel> inputs) {
         return inputs
             .flatMap(bauratendateiInput -> bauratendateiInput.getWohneinheiten().stream())
@@ -219,12 +225,28 @@ public class BauratendateiInputService {
             );
     }
 
+    /**
+     * Vergleicht die Summe der Wohneinheiten je Förderart und Jahr des Parameter "basis"
+     * mit der Summe der Wohneinheiten je Förderart und Jahr im Parameter "inputs".
+     *
+     * @param basis zum Vergleich mit Paramter "inputs".
+     * @param inputs zum Vergleich mit Paramter "basis".
+     * @return true falls die Summen der Wohneinheiten je Förderart und Jahr übereinstimmen, andernfalls false.
+     */
     public boolean equals(final BauratendateiInputModel basis, final List<BauratendateiInputModel> inputs) {
         final var sumBasis = sumWohneinheitenOfBauratendateiInputs(basis == null ? Stream.empty() : Stream.of(basis));
         final var sumInputs = sumWohneinheitenOfBauratendateiInputs(ListUtils.emptyIfNull(inputs).stream());
         return this.equals(sumBasis, sumInputs);
     }
 
+    /**
+     * Vergleicht die Summe der Wohneinheiten je Förderart und Jahr des Parameter "sumBasis"
+     * mit der Summe der Wohneinheiten je Förderart und Jahr im Parameter "sumInputs".
+     *
+     * @param sumBasis zum Vergleich mit Paramter "sumInputs".
+     * @param sumInputs zum Vergleich mit Paramter "sumBasis".
+     * @return true falls die Summen der Wohneinheiten je Förderart und Jahr übereinstimmen, andernfalls false.
+     */
     protected boolean equals(final Map<String, BigDecimal> sumBasis, final Map<String, BigDecimal> sumInputs) {
         if (sumBasis.size() != sumInputs.size()) {
             return false;
