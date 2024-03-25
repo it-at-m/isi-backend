@@ -6,6 +6,7 @@ import de.muenchen.isi.domain.model.BaugenehmigungsverfahrenModel;
 import de.muenchen.isi.domain.model.BauleitplanverfahrenModel;
 import de.muenchen.isi.domain.model.WeiteresVerfahrenModel;
 import de.muenchen.isi.domain.model.bauratendatei.BauratendateiInputModel;
+import de.muenchen.isi.domain.model.bauratendatei.WithBauratendateiInputsModel;
 import de.muenchen.isi.domain.model.calculation.BedarfeForAbfragevarianteModel;
 import de.muenchen.isi.domain.model.calculation.WohneinheitenProFoerderartProJahrModel;
 import de.muenchen.isi.domain.model.common.GrundschulsprengelModel;
@@ -15,6 +16,7 @@ import de.muenchen.isi.domain.model.common.ViertelModel;
 import de.muenchen.isi.domain.service.calculation.CalculationService;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -25,6 +27,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.ListUtils;
+import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.stereotype.Service;
 
@@ -52,17 +55,7 @@ public class BauratendateiInputService {
                 ListUtils.emptyIfNull(bauleitplanverfahren.getAbfragevariantenSachbearbeitungBauleitplanverfahren())
             );
             for (final var abfragevariante : abfragevarianten) {
-                final var bauratendateiInput = createBauratendateiInput(
-                    bauleitplanverfahren.getVerortung(),
-                    bedarfe,
-                    abfragevariante.getId()
-                );
-                if (ObjectUtils.isNotEmpty(bauratendateiInput)) {
-                    abfragevariante.setBauratendateiInputBasis(bauratendateiInput);
-                    final var bauratendateiInputs = ListUtils.emptyIfNull(abfragevariante.getBauratendateiInputs());
-                    bauratendateiInputs.add(bauratendateiDomainMapper.cloneDeep(bauratendateiInput));
-                    abfragevariante.setBauratendateiInputs(bauratendateiInputs);
-                }
+                this.setOrRemoveBaurateninput(abfragevariante, bauleitplanverfahren.getVerortung(), bedarfe);
             }
         } else if (ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN.equals(abfrage.getArtAbfrage())) {
             final var baugenehmigungsverfahren = (BaugenehmigungsverfahrenModel) abfrage;
@@ -73,17 +66,7 @@ public class BauratendateiInputService {
                 )
             );
             for (final var abfragevariante : abfragevarianten) {
-                final var bauratendateiInput = createBauratendateiInput(
-                    baugenehmigungsverfahren.getVerortung(),
-                    bedarfe,
-                    abfragevariante.getId()
-                );
-                if (ObjectUtils.isNotEmpty(bauratendateiInput)) {
-                    abfragevariante.setBauratendateiInputBasis(bauratendateiInput);
-                    final var bauratendateiInputs = ListUtils.emptyIfNull(abfragevariante.getBauratendateiInputs());
-                    bauratendateiInputs.add(bauratendateiDomainMapper.cloneDeep(bauratendateiInput));
-                    abfragevariante.setBauratendateiInputs(bauratendateiInputs);
-                }
+                this.setOrRemoveBaurateninput(abfragevariante, baugenehmigungsverfahren.getVerortung(), bedarfe);
             }
         } else if (ArtAbfrage.WEITERES_VERFAHREN.equals(abfrage.getArtAbfrage())) {
             final var weiteresVerfahren = (WeiteresVerfahrenModel) abfrage;
@@ -92,18 +75,31 @@ public class BauratendateiInputService {
                 ListUtils.emptyIfNull(weiteresVerfahren.getAbfragevariantenSachbearbeitungWeiteresVerfahren())
             );
             for (final var abfragevariante : abfragevarianten) {
-                final var bauratendateiInput = createBauratendateiInput(
-                    weiteresVerfahren.getVerortung(),
-                    bedarfe,
-                    abfragevariante.getId()
-                );
-                if (ObjectUtils.isNotEmpty(bauratendateiInput)) {
-                    abfragevariante.setBauratendateiInputBasis(bauratendateiInput);
-                    final var bauratendateiInputs = ListUtils.emptyIfNull(abfragevariante.getBauratendateiInputs());
-                    bauratendateiInputs.add(bauratendateiDomainMapper.cloneDeep(bauratendateiInput));
-                    abfragevariante.setBauratendateiInputs(bauratendateiInputs);
-                }
+                this.setOrRemoveBaurateninput(abfragevariante, weiteresVerfahren.getVerortung(), bedarfe);
             }
+        }
+    }
+
+    protected void setOrRemoveBaurateninput(
+        final WithBauratendateiInputsModel withBauratendateiInputs,
+        final VerortungModel verortung,
+        final Map<UUID, BedarfeForAbfragevarianteModel> bedarfe
+    ) {
+        // Zurücksetzen der Inputs für die Bauratendatei falls Checkbox nicht gewählt.
+        if (BooleanUtils.isNotTrue(withBauratendateiInputs.getHasBauratendateiInputs())) {
+            withBauratendateiInputs.setBauratendateiInputBasis(null);
+            withBauratendateiInputs.setBauratendateiInputs(List.of());
+        }
+
+        // Ermitteln der Inputs für die Bauratendatei auf Basis der Berechnung der langfristigen Bedarfe.
+        final var newBauratendateiInput = createBauratendateiInput(verortung, bedarfe, withBauratendateiInputs.getId());
+
+        // Neusetzen der Inputs für die Bauratendatei falls diese nicht mit den langfristigen Bedarfen übereinstimmen.
+        if (!equals(newBauratendateiInput, withBauratendateiInputs.getBauratendateiInputs())) {
+            withBauratendateiInputs.setBauratendateiInputBasis(newBauratendateiInput);
+            final var bauratendateiInputs = new ArrayList<BauratendateiInputModel>();
+            bauratendateiInputs.add(bauratendateiDomainMapper.cloneDeep(newBauratendateiInput));
+            withBauratendateiInputs.setBauratendateiInputs(bauratendateiInputs);
         }
     }
 
@@ -125,21 +121,12 @@ public class BauratendateiInputService {
         final var viertel = getViertel(verortung);
         final var wohneinheiten = getWohneinheiten(bedarfe, abfragevarianteId);
 
-        if (
-            CollectionUtils.isEmpty(grundschulsprengel) &&
-            CollectionUtils.isEmpty(mittelschulsprengel) &&
-            CollectionUtils.isEmpty(viertel) &&
-            CollectionUtils.isEmpty(wohneinheiten)
-        ) {
-            return null;
-        } else {
-            final var bauratendateiInput = new BauratendateiInputModel();
-            bauratendateiInput.setGrundschulsprengel(grundschulsprengel);
-            bauratendateiInput.setMittelschulsprengel(mittelschulsprengel);
-            bauratendateiInput.setViertel(viertel);
-            bauratendateiInput.setWohneinheiten(wohneinheiten);
-            return bauratendateiInput;
-        }
+        final var bauratendateiInput = new BauratendateiInputModel();
+        bauratendateiInput.setGrundschulsprengel(grundschulsprengel);
+        bauratendateiInput.setMittelschulsprengel(mittelschulsprengel);
+        bauratendateiInput.setViertel(viertel);
+        bauratendateiInput.setWohneinheiten(wohneinheiten);
+        return bauratendateiInput;
     }
 
     /**
