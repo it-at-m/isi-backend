@@ -43,7 +43,7 @@ class BauratendateiInputServiceTest {
         abfragevariante.setBauratendateiInputs(List.of(new BauratendateiInputModel()));
         abfragevariante.setHasBauratendateiInputs(false);
 
-        var result = bauratendateiInputService.setOrRemoveBaurateninput(abfragevariante, null, null);
+        var result = bauratendateiInputService.setOrRemoveOrIgnoreBaurateninput(abfragevariante, null, null);
         var expected = new AbfragevarianteBauleitplanverfahrenModel();
         expected.setBauratendateiInputBasis(null);
         expected.setBauratendateiInputs(List.of());
@@ -51,7 +51,7 @@ class BauratendateiInputServiceTest {
         assertThat(result, is(expected));
 
         abfragevariante.setHasBauratendateiInputs(null);
-        result = bauratendateiInputService.setOrRemoveBaurateninput(abfragevariante, null, null);
+        result = bauratendateiInputService.setOrRemoveOrIgnoreBaurateninput(abfragevariante, null, null);
         expected = new AbfragevarianteBauleitplanverfahrenModel();
         expected.setBauratendateiInputBasis(null);
         expected.setBauratendateiInputs(List.of());
