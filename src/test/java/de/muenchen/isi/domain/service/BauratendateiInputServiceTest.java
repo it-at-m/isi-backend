@@ -4,8 +4,12 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
 import de.muenchen.isi.domain.mapper.BauratendateiDomainMapperImpl;
+import de.muenchen.isi.domain.model.AbfragevarianteBaugenehmigungsverfahrenModel;
 import de.muenchen.isi.domain.model.AbfragevarianteBauleitplanverfahrenModel;
 import de.muenchen.isi.domain.model.AbfragevarianteWeiteresVerfahrenModel;
+import de.muenchen.isi.domain.model.BaugenehmigungsverfahrenModel;
+import de.muenchen.isi.domain.model.BauleitplanverfahrenModel;
+import de.muenchen.isi.domain.model.WeiteresVerfahrenModel;
 import de.muenchen.isi.domain.model.bauratendatei.BauratendateiInputModel;
 import de.muenchen.isi.domain.model.calculation.BedarfeForAbfragevarianteModel;
 import de.muenchen.isi.domain.model.calculation.LangfristigerBedarfModel;
@@ -15,6 +19,7 @@ import de.muenchen.isi.domain.model.common.MittelschulsprengelModel;
 import de.muenchen.isi.domain.model.common.VerortungModel;
 import de.muenchen.isi.domain.model.common.VerortungMultiPolygonModel;
 import de.muenchen.isi.domain.model.common.ViertelModel;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -42,6 +47,105 @@ class BauratendateiInputServiceTest {
         this.bauratendateiInputService =
             Mockito.spy(new BauratendateiInputService(new BauratendateiDomainMapperImpl()));
         Mockito.reset(bauratendateiInputService);
+    }
+
+    @Test
+    void setBauratendateiInputForEachAbfragevarianteBauleitplanverfahren() {
+        final var bedarfe = new HashMap<UUID, BedarfeForAbfragevarianteModel>();
+
+        final var abfrage = new BauleitplanverfahrenModel();
+        abfrage.setArtAbfrage(ArtAbfrage.BAULEITPLANVERFAHREN);
+        abfrage.setVerortung(new VerortungMultiPolygonModel());
+        final var variantenAbfrageerstellung = List.of(
+            new AbfragevarianteBauleitplanverfahrenModel(),
+            new AbfragevarianteBauleitplanverfahrenModel(),
+            new AbfragevarianteBauleitplanverfahrenModel(),
+            new AbfragevarianteBauleitplanverfahrenModel()
+        );
+        final var variantenSachbearbeitung = List.of(
+            new AbfragevarianteBauleitplanverfahrenModel(),
+            new AbfragevarianteBauleitplanverfahrenModel(),
+            new AbfragevarianteBauleitplanverfahrenModel()
+        );
+        abfrage.setAbfragevariantenBauleitplanverfahren(variantenAbfrageerstellung);
+        abfrage.setAbfragevariantenSachbearbeitungBauleitplanverfahren(variantenSachbearbeitung);
+
+        Mockito
+            .doReturn(null)
+            .when(bauratendateiInputService)
+            .setOrRemoveOrIgnoreBaurateninputToAbfragevariante(Mockito.any(), Mockito.any(), Mockito.any());
+
+        bauratendateiInputService.setBauratendateiInputForEachAbfragevariante(abfrage, bedarfe);
+
+        Mockito
+            .verify(bauratendateiInputService, Mockito.times(7))
+            .setOrRemoveOrIgnoreBaurateninputToAbfragevariante(Mockito.any(), Mockito.any(), Mockito.any());
+    }
+
+    @Test
+    void setBauratendateiInputForEachAbfragevarianteBaugenehmigungsverfahren() {
+        final var bedarfe = new HashMap<UUID, BedarfeForAbfragevarianteModel>();
+
+        final var abfrage = new BaugenehmigungsverfahrenModel();
+        abfrage.setArtAbfrage(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN);
+        abfrage.setVerortung(new VerortungMultiPolygonModel());
+        final var variantenAbfrageerstellung = List.of(
+            new AbfragevarianteBaugenehmigungsverfahrenModel(),
+            new AbfragevarianteBaugenehmigungsverfahrenModel(),
+            new AbfragevarianteBaugenehmigungsverfahrenModel(),
+            new AbfragevarianteBaugenehmigungsverfahrenModel()
+        );
+        final var variantenSachbearbeitung = List.of(
+            new AbfragevarianteBaugenehmigungsverfahrenModel(),
+            new AbfragevarianteBaugenehmigungsverfahrenModel(),
+            new AbfragevarianteBaugenehmigungsverfahrenModel()
+        );
+        abfrage.setAbfragevariantenBaugenehmigungsverfahren(variantenAbfrageerstellung);
+        abfrage.setAbfragevariantenSachbearbeitungBaugenehmigungsverfahren(variantenSachbearbeitung);
+
+        Mockito
+            .doReturn(null)
+            .when(bauratendateiInputService)
+            .setOrRemoveOrIgnoreBaurateninputToAbfragevariante(Mockito.any(), Mockito.any(), Mockito.any());
+
+        bauratendateiInputService.setBauratendateiInputForEachAbfragevariante(abfrage, bedarfe);
+
+        Mockito
+            .verify(bauratendateiInputService, Mockito.times(7))
+            .setOrRemoveOrIgnoreBaurateninputToAbfragevariante(Mockito.any(), Mockito.any(), Mockito.any());
+    }
+
+    @Test
+    void setBauratendateiInputForEachAbfragevarianteWeiteresVerfahren() {
+        final var bedarfe = new HashMap<UUID, BedarfeForAbfragevarianteModel>();
+
+        final var abfrage = new WeiteresVerfahrenModel();
+        abfrage.setArtAbfrage(ArtAbfrage.WEITERES_VERFAHREN);
+        abfrage.setVerortung(new VerortungMultiPolygonModel());
+        final var variantenAbfrageerstellung = List.of(
+            new AbfragevarianteWeiteresVerfahrenModel(),
+            new AbfragevarianteWeiteresVerfahrenModel(),
+            new AbfragevarianteWeiteresVerfahrenModel(),
+            new AbfragevarianteWeiteresVerfahrenModel()
+        );
+        final var variantenSachbearbeitung = List.of(
+            new AbfragevarianteWeiteresVerfahrenModel(),
+            new AbfragevarianteWeiteresVerfahrenModel(),
+            new AbfragevarianteWeiteresVerfahrenModel()
+        );
+        abfrage.setAbfragevariantenWeiteresVerfahren(variantenAbfrageerstellung);
+        abfrage.setAbfragevariantenSachbearbeitungWeiteresVerfahren(variantenSachbearbeitung);
+
+        Mockito
+            .doReturn(null)
+            .when(bauratendateiInputService)
+            .setOrRemoveOrIgnoreBaurateninputToAbfragevariante(Mockito.any(), Mockito.any(), Mockito.any());
+
+        bauratendateiInputService.setBauratendateiInputForEachAbfragevariante(abfrage, bedarfe);
+
+        Mockito
+            .verify(bauratendateiInputService, Mockito.times(7))
+            .setOrRemoveOrIgnoreBaurateninputToAbfragevariante(Mockito.any(), Mockito.any(), Mockito.any());
     }
 
     @Test

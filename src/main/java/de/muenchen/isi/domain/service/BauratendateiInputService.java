@@ -44,7 +44,7 @@ public class BauratendateiInputService {
      * @param abfrage Die Abfrage, deren Abfragevarianten befüllt werden sollen.
      * @param bedarfe Die Bedarfe der Abfrage, erstellt durch {@link CalculationService#calculateBedarfeForEachAbfragevarianteOfAbfrage(AbfrageModel)}.
      */
-    public void setBauratendateiInputBasisForEachAbfragevariante(
+    public void setBauratendateiInputForEachAbfragevariante(
         final AbfrageModel abfrage,
         final Map<UUID, BedarfeForAbfragevarianteModel> bedarfe
     ) {

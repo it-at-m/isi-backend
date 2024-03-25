@@ -130,7 +130,7 @@ public class AbfrageService {
             abfrage
         );
         // Befüllen der bauratendateiInputBasis für jede Abfragevariante
-        bauratendateiInputService.setBauratendateiInputBasisForEachAbfragevariante(abfrage, bedarfeForAbfragevarianten);
+        bauratendateiInputService.setBauratendateiInputForEachAbfragevariante(abfrage, bedarfeForAbfragevarianten);
         var entity = this.abfrageDomainMapper.model2Entity(abfrage);
         final var saved = this.abfrageRepository.findByNameIgnoreCase(abfrage.getName());
         if ((saved.isPresent() && saved.get().getId().equals(entity.getId())) || saved.isEmpty()) {
