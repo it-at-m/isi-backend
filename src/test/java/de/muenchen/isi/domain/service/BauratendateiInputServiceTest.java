@@ -8,6 +8,8 @@ import de.muenchen.isi.domain.model.bauratendatei.BauratendateiInputModel;
 import de.muenchen.isi.domain.model.calculation.BedarfeForAbfragevarianteModel;
 import de.muenchen.isi.domain.model.calculation.LangfristigerBedarfModel;
 import de.muenchen.isi.domain.model.calculation.WohneinheitenProFoerderartProJahrModel;
+import de.muenchen.isi.domain.model.common.GrundschulsprengelModel;
+import de.muenchen.isi.domain.model.common.MittelschulsprengelModel;
 import de.muenchen.isi.domain.model.common.VerortungModel;
 import de.muenchen.isi.domain.model.common.VerortungMultiPolygonModel;
 import de.muenchen.isi.domain.model.common.ViertelModel;
@@ -31,6 +33,76 @@ class BauratendateiInputServiceTest {
     private BauratendateiInputService bauratendateiInputService = new BauratendateiInputService(
         new BauratendateiDomainMapperImpl()
     );
+
+    @Test
+    void getGrundschulsprengel() {
+        VerortungModel verortung = null;
+        var result = bauratendateiInputService.getGrundschulsprengel(verortung);
+        assertThat(result, is(Set.of()));
+
+        verortung = new VerortungMultiPolygonModel();
+        result = bauratendateiInputService.getGrundschulsprengel(verortung);
+        assertThat(result, is(Set.of()));
+
+        verortung = new VerortungMultiPolygonModel();
+        var sprengel = new HashSet<GrundschulsprengelModel>();
+        verortung.setGrundschulsprengel(sprengel);
+        result = bauratendateiInputService.getGrundschulsprengel(verortung);
+        assertThat(result, is(Set.of()));
+
+        verortung = new VerortungMultiPolygonModel();
+        sprengel = new HashSet<>();
+        var theSprengel = new GrundschulsprengelModel();
+        theSprengel.setNummer(1L);
+        sprengel.add(theSprengel);
+        theSprengel = new GrundschulsprengelModel();
+        theSprengel.setNummer(2L);
+        sprengel.add(theSprengel);
+        theSprengel = new GrundschulsprengelModel();
+        theSprengel.setNummer(null);
+        sprengel.add(theSprengel);
+        theSprengel = new GrundschulsprengelModel();
+        theSprengel.setNummer(4L);
+        sprengel.add(theSprengel);
+        verortung.setGrundschulsprengel(sprengel);
+        result = bauratendateiInputService.getGrundschulsprengel(verortung);
+        assertThat(result, is(Set.of("1", "2", "4")));
+    }
+
+    @Test
+    void getMittelschulsprengel() {
+        VerortungModel verortung = null;
+        var result = bauratendateiInputService.getMittelschulsprengel(verortung);
+        assertThat(result, is(Set.of()));
+
+        verortung = new VerortungMultiPolygonModel();
+        result = bauratendateiInputService.getMittelschulsprengel(verortung);
+        assertThat(result, is(Set.of()));
+
+        verortung = new VerortungMultiPolygonModel();
+        var sprengel = new HashSet<MittelschulsprengelModel>();
+        verortung.setMittelschulsprengel(sprengel);
+        result = bauratendateiInputService.getMittelschulsprengel(verortung);
+        assertThat(result, is(Set.of()));
+
+        verortung = new VerortungMultiPolygonModel();
+        sprengel = new HashSet<>();
+        var theSprengel = new MittelschulsprengelModel();
+        theSprengel.setNummer(1L);
+        sprengel.add(theSprengel);
+        theSprengel = new MittelschulsprengelModel();
+        theSprengel.setNummer(2L);
+        sprengel.add(theSprengel);
+        theSprengel = new MittelschulsprengelModel();
+        theSprengel.setNummer(null);
+        sprengel.add(theSprengel);
+        theSprengel = new MittelschulsprengelModel();
+        theSprengel.setNummer(4L);
+        sprengel.add(theSprengel);
+        verortung.setMittelschulsprengel(sprengel);
+        result = bauratendateiInputService.getMittelschulsprengel(verortung);
+        assertThat(result, is(Set.of("1", "2", "4")));
+    }
 
     @Test
     void getViertel() {
