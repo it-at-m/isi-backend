@@ -219,12 +219,11 @@ public class BauratendateiInputService {
         return this.getWohneinheiten(bedarfe, abfragevarianteId)
             .stream()
             .map(bauratendateiDomainMapper::cloneDeep)
-            .map(wohneinheitenProFoerderartProJahr -> {
+            .peek(wohneinheitenProFoerderartProJahr -> {
                 final var rounded = wohneinheitenProFoerderartProJahr
                     .getWohneinheiten()
                     .setScale(2, RoundingMode.HALF_UP);
                 wohneinheitenProFoerderartProJahr.setWohneinheiten(rounded);
-                return wohneinheitenProFoerderartProJahr;
             })
             .collect(Collectors.toList());
     }
