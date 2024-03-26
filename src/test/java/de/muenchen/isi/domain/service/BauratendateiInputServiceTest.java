@@ -154,8 +154,8 @@ class BauratendateiInputServiceTest {
         final var abfragevariante = new AbfragevarianteWeiteresVerfahrenModel();
         abfragevariante.setId(uuid);
         abfragevariante.setBauratendateiInputBasis(null);
-        abfragevariante.setBauratendateiInputs(null);
-        abfragevariante.setHasBauratendateiInputs(true);
+        abfragevariante.setBauratendateiInput(null);
+        abfragevariante.setHasBauratendateiInput(true);
 
         var bedarfeForAbfragevariante = new BedarfeForAbfragevarianteModel();
         var langfristigerBedarf = new LangfristigerBedarfModel();
@@ -258,8 +258,8 @@ class BauratendateiInputServiceTest {
         var expected = new AbfragevarianteWeiteresVerfahrenModel();
         expected.setId(uuid);
         expected.setBauratendateiInputBasis(bauratendateiInputModel);
-        expected.setBauratendateiInputs(List.of(bauratendateiInputModel));
-        expected.setHasBauratendateiInputs(true);
+        expected.setBauratendateiInput(List.of(bauratendateiInputModel));
+        expected.setHasBauratendateiInput(true);
         assertThat(result, is(expected));
     }
 
@@ -267,8 +267,8 @@ class BauratendateiInputServiceTest {
     void removeBaurateninputToAbfragevariante() {
         final var abfragevariante = new AbfragevarianteBauleitplanverfahrenModel();
         abfragevariante.setBauratendateiInputBasis(new BauratendateiInputModel());
-        abfragevariante.setBauratendateiInputs(List.of(new BauratendateiInputModel()));
-        abfragevariante.setHasBauratendateiInputs(false);
+        abfragevariante.setBauratendateiInput(List.of(new BauratendateiInputModel()));
+        abfragevariante.setHasBauratendateiInput(false);
 
         var result = bauratendateiInputService.setOrRemoveOrIgnoreBaurateninputToAbfragevariante(
             abfragevariante,
@@ -277,17 +277,17 @@ class BauratendateiInputServiceTest {
         );
         var expected = new AbfragevarianteBauleitplanverfahrenModel();
         expected.setBauratendateiInputBasis(null);
-        expected.setBauratendateiInputs(List.of());
-        expected.setHasBauratendateiInputs(false);
+        expected.setBauratendateiInput(List.of());
+        expected.setHasBauratendateiInput(false);
         assertThat(result, is(expected));
 
-        abfragevariante.setHasBauratendateiInputs(null);
+        abfragevariante.setHasBauratendateiInput(null);
         result =
             bauratendateiInputService.setOrRemoveOrIgnoreBaurateninputToAbfragevariante(abfragevariante, null, null);
         expected = new AbfragevarianteBauleitplanverfahrenModel();
         expected.setBauratendateiInputBasis(null);
-        expected.setBauratendateiInputs(List.of());
-        expected.setHasBauratendateiInputs(null);
+        expected.setBauratendateiInput(List.of());
+        expected.setHasBauratendateiInput(null);
         assertThat(result, is(expected));
     }
 
@@ -325,8 +325,8 @@ class BauratendateiInputServiceTest {
         bauratendateiInputModel.setWohneinheiten(bedarfWohneinheiten);
         inputs.add(bauratendateiInputModel);
 
-        abfragevariante.setBauratendateiInputs(inputs);
-        abfragevariante.setHasBauratendateiInputs(true);
+        abfragevariante.setBauratendateiInput(inputs);
+        abfragevariante.setHasBauratendateiInput(true);
 
         var bedarfeForAbfragevariante = new BedarfeForAbfragevarianteModel();
         var langfristigerBedarf = new LangfristigerBedarfModel();
@@ -429,8 +429,8 @@ class BauratendateiInputServiceTest {
         var expected = new AbfragevarianteWeiteresVerfahrenModel();
         expected.setId(uuid);
         expected.setBauratendateiInputBasis(new BauratendateiInputModel());
-        expected.setBauratendateiInputs(inputs);
-        expected.setHasBauratendateiInputs(true);
+        expected.setBauratendateiInput(inputs);
+        expected.setHasBauratendateiInput(true);
         assertThat(result, is(expected));
     }
 
@@ -833,7 +833,7 @@ class BauratendateiInputServiceTest {
     }
 
     @Test
-    void sumWohneinheitenOfBauratendateiInputs() {
+    void sumWohneinheitenOfBauratendateiInput() {
         final var inputs = new ArrayList<BauratendateiInputModel>();
 
         var bauratendateiInput = new BauratendateiInputModel();
@@ -913,7 +913,7 @@ class BauratendateiInputServiceTest {
         bauratendateiInput.getWohneinheiten().add(wohneinheitenProFoerderartProJahr);
         inputs.add(bauratendateiInput);
 
-        final var result = bauratendateiInputService.sumWohneinheitenOfBauratendateiInputs(inputs.stream());
+        final var result = bauratendateiInputService.sumWohneinheitenOfBauratendateiInput(inputs.stream());
 
         final var expected = new HashMap<String, BigDecimal>();
         expected.put("2024förderart1", BigDecimal.valueOf(800));

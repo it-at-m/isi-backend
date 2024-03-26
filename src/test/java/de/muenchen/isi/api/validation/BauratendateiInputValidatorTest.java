@@ -37,9 +37,9 @@ class BauratendateiInputValidatorTest {
     @Test
     void isValidHasBauratendateiInputIsNull() {
         final var abfragevariante = new AbfragevarianteBaugenehmigungsverfahrenInBearbeitungSachbearbeitungDto();
-        abfragevariante.setHasBauratendateiInputs(null);
+        abfragevariante.setHasBauratendateiInput(null);
         abfragevariante.setBauratendateiInputBasis(null);
-        abfragevariante.setBauratendateiInputs(null);
+        abfragevariante.setBauratendateiInput(null);
 
         Mockito.when(bauratendateiInputService.equals(Mockito.any(), Mockito.any())).thenReturn(false);
 
@@ -52,9 +52,9 @@ class BauratendateiInputValidatorTest {
     @Test
     void isValidHasBauratendateiInputIsFalse() {
         final var abfragevariante = new AbfragevarianteBaugenehmigungsverfahrenInBearbeitungSachbearbeitungDto();
-        abfragevariante.setHasBauratendateiInputs(false);
+        abfragevariante.setHasBauratendateiInput(false);
         abfragevariante.setBauratendateiInputBasis(null);
-        abfragevariante.setBauratendateiInputs(null);
+        abfragevariante.setBauratendateiInput(null);
 
         Mockito.when(bauratendateiInputService.equals(Mockito.any(), Mockito.any())).thenReturn(false);
 
@@ -67,9 +67,9 @@ class BauratendateiInputValidatorTest {
     @Test
     void isValidHasBauratendateiInputIsTrueAndEqualsIsFalse() {
         final var abfragevariante = new AbfragevarianteBaugenehmigungsverfahrenInBearbeitungSachbearbeitungDto();
-        abfragevariante.setHasBauratendateiInputs(true);
+        abfragevariante.setHasBauratendateiInput(true);
         abfragevariante.setBauratendateiInputBasis(new BauratendateiInputDto());
-        abfragevariante.setBauratendateiInputs(List.of(new BauratendateiInputDto()));
+        abfragevariante.setBauratendateiInput(List.of(new BauratendateiInputDto()));
 
         Mockito
             .when(
@@ -88,9 +88,9 @@ class BauratendateiInputValidatorTest {
     @Test
     void isValidHasBauratendateiInputIsTrueAndEqualsIsTrue() {
         final var abfragevariante = new AbfragevarianteBaugenehmigungsverfahrenInBearbeitungSachbearbeitungDto();
-        abfragevariante.setHasBauratendateiInputs(true);
+        abfragevariante.setHasBauratendateiInput(true);
         abfragevariante.setBauratendateiInputBasis(new BauratendateiInputDto());
-        abfragevariante.setBauratendateiInputs(List.of(new BauratendateiInputDto()));
+        abfragevariante.setBauratendateiInput(List.of(new BauratendateiInputDto()));
 
         Mockito
             .when(

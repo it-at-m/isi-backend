@@ -3,19 +3,19 @@ package de.muenchen.isi.api.dto.bauratendatei;
 import java.util.List;
 
 public interface WithBauratendateiInputDto {
-    Boolean getHasBauratendateiInputs();
+    Boolean getHasBauratendateiInput();
 
-    void setHasBauratendateiInputs(final Boolean value);
+    void setHasBauratendateiInput(final Boolean value);
 
-    String getAnmerkungBauratendateiInputs();
+    String getAnmerkungBauratendateiInput();
 
-    void setAnmerkungBauratendateiInputs(final String value);
+    void setAnmerkungBauratendateiInput(final String value);
 
     BauratendateiInputDto getBauratendateiInputBasis();
 
     void setBauratendateiInputBasis(final BauratendateiInputDto value);
 
-    List<BauratendateiInputDto> getBauratendateiInputs();
+    List<BauratendateiInputDto> getBauratendateiInput();
 
-    void setBauratendateiInputs(final List<BauratendateiInputDto> value);
+    void setBauratendateiInput(final List<BauratendateiInputDto> value);
 }

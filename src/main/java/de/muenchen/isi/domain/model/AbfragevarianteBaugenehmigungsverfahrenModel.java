@@ -72,13 +72,13 @@ public class AbfragevarianteBaugenehmigungsverfahrenModel
 
     private String anmerkung;
 
-    private Boolean hasBauratendateiInputs;
+    private Boolean hasBauratendateiInput;
 
-    private String anmerkungBauratendateiInputs;
+    private String anmerkungBauratendateiInput;
 
     private BauratendateiInputModel bauratendateiInputBasis;
 
-    private List<BauratendateiInputModel> bauratendateiInputs;
+    private List<BauratendateiInputModel> bauratendateiInput;
 
     private List<BedarfsmeldungModel> bedarfsmeldungFachreferate;
 

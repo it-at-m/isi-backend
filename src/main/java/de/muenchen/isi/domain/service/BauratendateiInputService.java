@@ -106,20 +106,20 @@ public class BauratendateiInputService {
         final Map<UUID, BedarfeForAbfragevarianteModel> bedarfe
     ) {
         // Zurücksetzen der Inputs für die Bauratendatei falls Checkbox nicht gewählt.
-        if (BooleanUtils.isNotTrue(abfragevariante.getHasBauratendateiInputs())) {
+        if (BooleanUtils.isNotTrue(abfragevariante.getHasBauratendateiInput())) {
             abfragevariante.setBauratendateiInputBasis(null);
-            abfragevariante.setBauratendateiInputs(List.of());
+            abfragevariante.setBauratendateiInput(List.of());
         }
 
         // Ermitteln der Inputs für die Bauratendatei auf Basis der Berechnung der langfristigen Bedarfe.
         final var newBauratendateiInput = createBauratendateiInput(verortung, bedarfe, abfragevariante.getId());
 
         // Neusetzen der Inputs für die Bauratendatei falls diese nicht mit den langfristigen Bedarfen übereinstimmen.
-        if (!equals(newBauratendateiInput, abfragevariante.getBauratendateiInputs())) {
+        if (!equals(newBauratendateiInput, abfragevariante.getBauratendateiInput())) {
             abfragevariante.setBauratendateiInputBasis(newBauratendateiInput);
-            final var bauratendateiInputs = new ArrayList<BauratendateiInputModel>();
-            bauratendateiInputs.add(bauratendateiDomainMapper.cloneDeep(newBauratendateiInput));
-            abfragevariante.setBauratendateiInputs(bauratendateiInputs);
+            final var bauratendateiInput = new ArrayList<BauratendateiInputModel>();
+            bauratendateiInput.add(bauratendateiDomainMapper.cloneDeep(newBauratendateiInput));
+            abfragevariante.setBauratendateiInput(bauratendateiInput);
         }
 
         return abfragevariante;
@@ -232,7 +232,7 @@ public class BauratendateiInputService {
      * @param inputs zum summieren je Jahr und Förderart.
      * @return eine Map mit Key konkateniert aus dem Jahr und der Förderart und dem Value als Summe der Wohneinheiten.
      */
-    protected Map<String, BigDecimal> sumWohneinheitenOfBauratendateiInputs(
+    protected Map<String, BigDecimal> sumWohneinheitenOfBauratendateiInput(
         final Stream<BauratendateiInputModel> inputs
     ) {
         return inputs
@@ -258,8 +258,8 @@ public class BauratendateiInputService {
      * @return true falls die Summen der Wohneinheiten je Förderart und Jahr übereinstimmen, andernfalls false.
      */
     public boolean equals(final BauratendateiInputModel basis, final List<BauratendateiInputModel> inputs) {
-        final var sumBasis = sumWohneinheitenOfBauratendateiInputs(basis == null ? Stream.empty() : Stream.of(basis));
-        final var sumInputs = sumWohneinheitenOfBauratendateiInputs(ListUtils.emptyIfNull(inputs).stream());
+        final var sumBasis = sumWohneinheitenOfBauratendateiInput(basis == null ? Stream.empty() : Stream.of(basis));
+        final var sumInputs = sumWohneinheitenOfBauratendateiInput(ListUtils.emptyIfNull(inputs).stream());
         return this.equals(sumBasis, sumInputs);
     }
 

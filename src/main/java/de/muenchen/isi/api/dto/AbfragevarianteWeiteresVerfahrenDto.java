@@ -77,13 +77,13 @@ public class AbfragevarianteWeiteresVerfahrenDto extends AbfragevarianteDto impl
 
     private String anmerkung;
 
-    private Boolean hasBauratendateiInputs;
+    private Boolean hasBauratendateiInput;
 
-    private String anmerkungBauratendateiInputs;
+    private String anmerkungBauratendateiInput;
 
     private BauratendateiInputDto bauratendateiInputBasis;
 
-    private List<BauratendateiInputDto> bauratendateiInputs;
+    private List<BauratendateiInputDto> bauratendateiInput;
 
     private List<BedarfsmeldungDto> bedarfsmeldungFachreferate;
 

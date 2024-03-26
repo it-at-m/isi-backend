@@ -6,19 +6,19 @@ import java.util.UUID;
 public interface WithBauratendateiInputModel {
     UUID getId();
 
-    Boolean getHasBauratendateiInputs();
+    Boolean getHasBauratendateiInput();
 
-    void setHasBauratendateiInputs(final Boolean value);
+    void setHasBauratendateiInput(final Boolean value);
 
-    String getAnmerkungBauratendateiInputs();
+    String getAnmerkungBauratendateiInput();
 
-    void setAnmerkungBauratendateiInputs(final String value);
+    void setAnmerkungBauratendateiInput(final String value);
 
     BauratendateiInputModel getBauratendateiInputBasis();
 
     void setBauratendateiInputBasis(final BauratendateiInputModel value);
 
-    List<BauratendateiInputModel> getBauratendateiInputs();
+    List<BauratendateiInputModel> getBauratendateiInput();
 
-    void setBauratendateiInputs(final List<BauratendateiInputModel> value);
+    void setBauratendateiInput(final List<BauratendateiInputModel> value);
 }

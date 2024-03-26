@@ -37,11 +37,11 @@ public class AbfragevarianteBaugenehmigungsverfahrenInBearbeitungSachbearbeitung
     private String anmerkung;
 
     @NotNull
-    private Boolean hasBauratendateiInputs;
+    private Boolean hasBauratendateiInput;
 
-    private String anmerkungBauratendateiInputs;
+    private String anmerkungBauratendateiInput;
 
     private BauratendateiInputDto bauratendateiInputBasis;
 
-    private List<BauratendateiInputDto> bauratendateiInputs;
+    private List<BauratendateiInputDto> bauratendateiInput;
 }

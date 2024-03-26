@@ -24,10 +24,10 @@ public class BauratendateiInputValidator
         final ConstraintValidatorContext constraintValidatorContext
     ) {
         return (
-            BooleanUtils.isNotTrue(value.getHasBauratendateiInputs()) ||
+            BooleanUtils.isNotTrue(value.getHasBauratendateiInput()) ||
             bauratendateiInputService.equals(
                 bauratendateiApiMapper.dto2Model(value.getBauratendateiInputBasis()),
-                bauratendateiApiMapper.dto2Model(value.getBauratendateiInputs())
+                bauratendateiApiMapper.dto2Model(value.getBauratendateiInput())
             )
         );
     }
