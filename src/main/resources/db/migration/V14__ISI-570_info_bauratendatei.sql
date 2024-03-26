@@ -35,6 +35,16 @@ CREATE INDEX IF NOT EXISTS bauratendatei_input_abfrgvar_weitrs_vrfhrn_id
         (abfrgvar_weitrs_vrfhrn_id COLLATE pg_catalog."default" ASC NULLS LAST)
     TABLESPACE pg_default;
 
+CREATE TABLE IF NOT EXISTS isidbuser.bauratendatei_input_wohneinheiten (
+    bauratendatei_input_id character varying(36) COLLATE pg_catalog."default" NOT NULL,
+    wohneinheiten numeric(30,15),
+    foerderart character varying(255),
+    jahr character varying(255),
+    CONSTRAINT bauratendatei_input_id_fk FOREIGN KEY (bauratendatei_input_id) REFERENCES isidbuser.bauratendatei_input(id)
+);
+
+CREATE INDEX bauratendatei_input_wohneinheiten_id ON isidbuser.bauratendatei_input_wohneinheiten USING btree (bauratendatei_input_id);
+
 ALTER TABLE IF EXISTS isidbuser.abfrgvar_baugnhmgsverfhrn
     ADD COLUMN has_bauratendatei_input             boolean,
     ADD COLUMN anmerkung_bauratendatei_input character varying(1000) COLLATE pg_catalog."default",
