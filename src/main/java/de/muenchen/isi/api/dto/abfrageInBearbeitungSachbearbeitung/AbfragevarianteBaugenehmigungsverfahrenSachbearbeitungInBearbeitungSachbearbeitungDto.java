@@ -6,7 +6,7 @@ package de.muenchen.isi.api.dto.abfrageInBearbeitungSachbearbeitung;
 
 import de.muenchen.isi.api.dto.bauratendatei.BauratendateiInputDto;
 import de.muenchen.isi.api.dto.bauratendatei.WithBauratendateiInputDto;
-import de.muenchen.isi.api.validation.BauratendateiInputsValid;
+import de.muenchen.isi.api.validation.BauratendateiInputValid;
 import de.muenchen.isi.api.validation.NotUnspecified;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
@@ -18,7 +18,7 @@ import java.util.UUID;
 import lombok.Data;
 
 @Data
-@BauratendateiInputsValid
+@BauratendateiInputValid
 public class AbfragevarianteBaugenehmigungsverfahrenSachbearbeitungInBearbeitungSachbearbeitungDto
     implements WithBauratendateiInputDto {
 

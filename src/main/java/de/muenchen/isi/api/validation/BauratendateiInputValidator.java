@@ -11,8 +11,8 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class BauratendateiInputsValidator
-    implements ConstraintValidator<HasFoerdermixRequiredSum, WithBauratendateiInputDto> {
+public class BauratendateiInputValidator
+    implements ConstraintValidator<BauratendateiInputValid, WithBauratendateiInputDto> {
 
     private final BauratendateiInputService bauratendateiInputService;
 

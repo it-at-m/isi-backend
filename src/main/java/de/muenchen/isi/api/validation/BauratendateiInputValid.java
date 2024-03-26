@@ -10,9 +10,9 @@ import java.lang.annotation.Target;
 
 @Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = BauratendateiInputsValidator.class)
+@Constraint(validatedBy = BauratendateiInputValidator.class)
 @Documented
-public @interface BauratendateiInputsValid {
+public @interface BauratendateiInputValid {
     String message() default "Die Wohneinheiten der Bauratendatei stimmen nicht mit den errechneten Wohneinheiten überein.";
 
     Class<?>[] groups() default {};
