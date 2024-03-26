@@ -16,6 +16,7 @@ import de.muenchen.isi.domain.model.common.ViertelModel;
 import de.muenchen.isi.domain.service.calculation.CalculationService;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -141,7 +142,7 @@ public class BauratendateiInputService {
         final var grundschulsprengel = getGrundschulsprengel(verortung);
         final var mittelschulsprengel = getMittelschulsprengel(verortung);
         final var viertel = getViertel(verortung);
-        final var wohneinheiten = getWohneinheiten(bedarfe, abfragevarianteId);
+        final var wohneinheiten = getWohneinheitenRoundedToScaleTwo(bedarfe, abfragevarianteId);
 
         final var bauratendateiInput = new BauratendateiInputModel();
         bauratendateiInput.setGrundschulsprengel(grundschulsprengel);
@@ -202,6 +203,30 @@ public class BauratendateiInputService {
                 .filter(ObjectUtils::isNotEmpty)
                 .collect(Collectors.toSet())
             : Set.of();
+    }
+
+    /**
+     * Extrahiert die Wohneinheiten der Abfragevariante gerundet auf zwei Nachkommastellen.
+     *
+     * @param bedarfe zur Extraktion der Wohneinheiten.
+     * @param abfragevarianteId zur Extraktion der Wohneinheiten.
+     * @return die Wohneinheiten der Abfragevariante gerundet auf zwei Nachkommastellen identifiziert durch die ID ansonsten eine leere Liste.
+     */
+    protected List<WohneinheitenProFoerderartProJahrModel> getWohneinheitenRoundedToScaleTwo(
+        final Map<UUID, BedarfeForAbfragevarianteModel> bedarfe,
+        final UUID abfragevarianteId
+    ) {
+        return this.getWohneinheiten(bedarfe, abfragevarianteId)
+            .stream()
+            .map(bauratendateiDomainMapper::cloneDeep)
+            .map(wohneinheitenProFoerderartProJahr -> {
+                final var rounded = wohneinheitenProFoerderartProJahr
+                    .getWohneinheiten()
+                    .setScale(2, RoundingMode.HALF_UP);
+                wohneinheitenProFoerderartProJahr.setWohneinheiten(rounded);
+                return wohneinheitenProFoerderartProJahr;
+            })
+            .collect(Collectors.toList());
     }
 
     /**

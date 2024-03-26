@@ -652,6 +652,9 @@ class BauratendateiInputServiceTest {
     }
 
     @Test
+    void getWohneinheitenRoundedToScaleTwo() {}
+
+    @Test
     void getWohneinheiten() {
         var result = bauratendateiInputService.getWohneinheiten(null, UUID.randomUUID());
         assertThat(result, is(List.of()));
