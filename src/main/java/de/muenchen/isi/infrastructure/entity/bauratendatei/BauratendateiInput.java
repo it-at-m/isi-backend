@@ -36,7 +36,7 @@ public class BauratendateiInput extends BaseEntity {
 
     @ElementCollection
     @CollectionTable(
-        indexes = { @Index(name = "bauratendatei_input_wohneinheiten_id", columnList = "bauratendatei_input_id") }
+        indexes = { @Index(name = "bauratendatei_input_wohneinheiten_id_index", columnList = "bauratendatei_input_id") }
     )
     @OrderBy("jahr asc, foerderart asc")
     private List<WohneinheitenProFoerderartProJahr> wohneinheiten;

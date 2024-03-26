@@ -177,7 +177,7 @@ public class AbfragevarianteWeiteresVerfahren extends Abfragevariante {
     private BauratendateiInput bauratendateiInputBasis;
 
     @OneToMany(cascade = { CascadeType.ALL }, orphanRemoval = true)
-    @JoinColumn(name = "abfrgvar_weitrs_vrfhrn_bauratendatei_id", referencedColumnName = "id")
+    @JoinColumn(name = "abfrgvar_weitrs_vrfhrn_id", referencedColumnName = "id")
     @OrderBy("createdDateTime asc")
     private List<BauratendateiInput> bauratendateiInput;
 

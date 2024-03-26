@@ -151,7 +151,7 @@ public class AbfragevarianteBaugenehmigungsverfahren extends Abfragevariante {
     private BauratendateiInput bauratendateiInputBasis;
 
     @OneToMany(cascade = { CascadeType.ALL }, orphanRemoval = true)
-    @JoinColumn(name = "abfrgvar_baugnhmgsverfhrn_bauratendatei_id", referencedColumnName = "id")
+    @JoinColumn(name = "abfrgvar_baugnhmgsverfhrn_id", referencedColumnName = "id")
     @OrderBy("createdDateTime asc")
     private List<BauratendateiInput> bauratendateiInput;
 
