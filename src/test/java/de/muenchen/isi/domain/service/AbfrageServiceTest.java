@@ -133,6 +133,9 @@ class AbfrageServiceTest {
     @Mock
     private BearbeitungshistorieService bearbeitungshistorieService;
 
+    @Mock
+    private BauratendateiInputService bauratendateiInputService;
+
     @BeforeEach
     public void beforeEach() throws NoSuchFieldException, IllegalAccessException {
         final var abfragevarianteDomainMapper = new AbfragevarianteDomainMapperImpl(new BauabschnittDomainMapperImpl());
@@ -156,6 +159,7 @@ class AbfrageServiceTest {
                 this.abfragevarianteWeiteresVerfahrenRepository,
                 this.calculationService,
                 this.reportingdataTransferService,
+                this.bauratendateiInputService,
                 this.bearbeitungshistorieService
             );
         Mockito.reset(
@@ -168,6 +172,7 @@ class AbfrageServiceTest {
             this.abfragevarianteWeiteresVerfahrenRepository,
             this.calculationService,
             this.reportingdataTransferService,
+            this.bauratendateiInputService,
             this.bearbeitungshistorieService
         );
     }
@@ -228,7 +233,7 @@ class AbfrageServiceTest {
         Mockito.verify(this.bauvorhabenRepository, Mockito.times(0)).findById(UUID.randomUUID());
         Mockito
             .verify(this.calculationService, Mockito.times(1))
-            .calculateBedarfeForEachAbfragevarianteOfAbfrage(expected);
+            .calculateBedarfeForEachAbfragevarianteOfAbfrage(abfrage);
         Mockito
             .verify(this.reportingdataTransferService, Mockito.times(1))
             .transferAbfrageAndBedarfe(expected, new HashMap<>());
@@ -282,7 +287,7 @@ class AbfrageServiceTest {
         Mockito.verify(this.bauvorhabenRepository, Mockito.times(0)).findById(UUID.randomUUID());
         Mockito
             .verify(this.calculationService, Mockito.times(1))
-            .calculateBedarfeForEachAbfragevarianteOfAbfrage(expected);
+            .calculateBedarfeForEachAbfragevarianteOfAbfrage(abfrage);
         Mockito
             .verify(this.reportingdataTransferService, Mockito.times(1))
             .transferAbfrageAndBedarfe(expected, new HashMap<>());

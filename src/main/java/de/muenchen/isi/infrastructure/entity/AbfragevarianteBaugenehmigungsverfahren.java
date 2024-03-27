@@ -6,6 +6,7 @@ package de.muenchen.isi.infrastructure.entity;
 
 import de.muenchen.isi.infrastructure.adapter.search.IntegerSuggestionBinder;
 import de.muenchen.isi.infrastructure.adapter.search.IntegerToStringValueBridge;
+import de.muenchen.isi.infrastructure.entity.bauratendatei.BauratendateiInput;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.WesentlicheRechtsgrundlage;
@@ -21,6 +22,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
@@ -137,6 +139,21 @@ public class AbfragevarianteBaugenehmigungsverfahren extends Abfragevariante {
 
     @Column(length = 1000)
     private String anmerkung;
+
+    @Column
+    private Boolean hasBauratendateiInput;
+
+    @Column(length = 1000)
+    private String anmerkungBauratendateiInput;
+
+    @OneToOne(cascade = { CascadeType.ALL }, orphanRemoval = true)
+    @JoinColumn(name = "bauratendatei_basis_id", referencedColumnName = "id")
+    private BauratendateiInput bauratendateiInputBasis;
+
+    @OneToMany(cascade = { CascadeType.ALL }, orphanRemoval = true)
+    @JoinColumn(name = "abfrgvar_baugnhmgsverfhrn_id", referencedColumnName = "id")
+    @OrderBy("createdDateTime asc")
+    private List<BauratendateiInput> bauratendateiInput;
 
     @OneToMany(cascade = { CascadeType.ALL }, orphanRemoval = true)
     @JoinColumn(name = "abfrgvar_baugnhmgsverfhrn_fachreferate_id", referencedColumnName = "id")
