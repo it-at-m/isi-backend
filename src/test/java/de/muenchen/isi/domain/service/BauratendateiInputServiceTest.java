@@ -241,17 +241,17 @@ class BauratendateiInputServiceTest {
         wohneinheiten = new WohneinheitenProFoerderartProJahrModel();
         wohneinheiten.setJahr("2024");
         wohneinheiten.setFoerderart("Foerderart1");
-        wohneinheiten.setWohneinheiten(BigDecimal.valueOf(1000));
+        wohneinheiten.setWohneinheiten(BigDecimal.valueOf(100000, 2));
         bedarfWohneinheiten.add(wohneinheiten);
         wohneinheiten = new WohneinheitenProFoerderartProJahrModel();
         wohneinheiten.setJahr("2024");
         wohneinheiten.setFoerderart("Foerderart2");
-        wohneinheiten.setWohneinheiten(BigDecimal.valueOf(900));
+        wohneinheiten.setWohneinheiten(BigDecimal.valueOf(90000, 2));
         bedarfWohneinheiten.add(wohneinheiten);
         wohneinheiten = new WohneinheitenProFoerderartProJahrModel();
         wohneinheiten.setJahr("2025");
         wohneinheiten.setFoerderart("Foerderart1");
-        wohneinheiten.setWohneinheiten(BigDecimal.valueOf(80));
+        wohneinheiten.setWohneinheiten(BigDecimal.valueOf(8000, 2));
         bedarfWohneinheiten.add(wohneinheiten);
         bauratendateiInputModel.setWohneinheiten(bedarfWohneinheiten);
 
@@ -529,17 +529,17 @@ class BauratendateiInputServiceTest {
         wohneinheiten = new WohneinheitenProFoerderartProJahrModel();
         wohneinheiten.setJahr("2024");
         wohneinheiten.setFoerderart("Foerderart1");
-        wohneinheiten.setWohneinheiten(BigDecimal.valueOf(1000));
+        wohneinheiten.setWohneinheiten(BigDecimal.valueOf(100000, 2));
         bedarfWohneinheiten.add(wohneinheiten);
         wohneinheiten = new WohneinheitenProFoerderartProJahrModel();
         wohneinheiten.setJahr("2024");
         wohneinheiten.setFoerderart("Foerderart2");
-        wohneinheiten.setWohneinheiten(BigDecimal.valueOf(900));
+        wohneinheiten.setWohneinheiten(BigDecimal.valueOf(90000, 2));
         bedarfWohneinheiten.add(wohneinheiten);
         wohneinheiten = new WohneinheitenProFoerderartProJahrModel();
         wohneinheiten.setJahr("2025");
         wohneinheiten.setFoerderart("Foerderart1");
-        wohneinheiten.setWohneinheiten(BigDecimal.valueOf(80));
+        wohneinheiten.setWohneinheiten(BigDecimal.valueOf(8000, 2));
         bedarfWohneinheiten.add(wohneinheiten);
         expected.setWohneinheiten(bedarfWohneinheiten);
 
