@@ -652,7 +652,59 @@ class BauratendateiInputServiceTest {
     }
 
     @Test
-    void getWohneinheitenRoundedToScaleTwo() {}
+    void getWohneinheitenRoundedToScaleTwo() {
+        final var uuid = UUID.randomUUID();
+        final var bedarfe = new HashMap<UUID, BedarfeForAbfragevarianteModel>();
+        bedarfe.put(uuid, new BedarfeForAbfragevarianteModel());
+
+        final var wohneinheiten = new ArrayList<WohneinheitenProFoerderartProJahrModel>();
+        var wohneinheit = new WohneinheitenProFoerderartProJahrModel();
+        wohneinheit.setWohneinheiten(BigDecimal.valueOf(100L, 0));
+        wohneinheiten.add(wohneinheit);
+        wohneinheit = new WohneinheitenProFoerderartProJahrModel();
+        wohneinheit.setWohneinheiten(BigDecimal.valueOf(100345678L, 6));
+        wohneinheiten.add(wohneinheit);
+        wohneinheit = new WohneinheitenProFoerderartProJahrModel();
+        wohneinheit.setWohneinheiten(BigDecimal.valueOf(10012345678L, 8));
+        wohneinheiten.add(wohneinheit);
+        wohneinheit = new WohneinheitenProFoerderartProJahrModel();
+        wohneinheit.setWohneinheiten(BigDecimal.valueOf(10034445L, 5));
+        wohneinheiten.add(wohneinheit);
+        wohneinheit = new WohneinheitenProFoerderartProJahrModel();
+        wohneinheit.setWohneinheiten(BigDecimal.valueOf(10034444L, 5));
+        wohneinheiten.add(wohneinheit);
+        wohneinheit = new WohneinheitenProFoerderartProJahrModel();
+        wohneinheit.setWohneinheiten(BigDecimal.valueOf(10034545L, 5));
+        wohneinheiten.add(wohneinheit);
+
+        Mockito.doReturn(wohneinheiten).when(bauratendateiInputService).getWohneinheiten(bedarfe, uuid);
+
+        final var result = bauratendateiInputService.getWohneinheitenRoundedToScaleTwo(bedarfe, uuid);
+
+        final var expected = new ArrayList<WohneinheitenProFoerderartProJahrModel>();
+        wohneinheit = new WohneinheitenProFoerderartProJahrModel();
+        wohneinheit.setWohneinheiten(BigDecimal.valueOf(10000L, 2));
+        expected.add(wohneinheit);
+        wohneinheit = new WohneinheitenProFoerderartProJahrModel();
+        wohneinheit.setWohneinheiten(BigDecimal.valueOf(10035L, 2));
+        expected.add(wohneinheit);
+        wohneinheit = new WohneinheitenProFoerderartProJahrModel();
+        wohneinheit.setWohneinheiten(BigDecimal.valueOf(10012L, 2));
+        expected.add(wohneinheit);
+        wohneinheit = new WohneinheitenProFoerderartProJahrModel();
+        wohneinheit.setWohneinheiten(BigDecimal.valueOf(10034L, 2));
+        expected.add(wohneinheit);
+        wohneinheit = new WohneinheitenProFoerderartProJahrModel();
+        wohneinheit.setWohneinheiten(BigDecimal.valueOf(10034L, 2));
+        expected.add(wohneinheit);
+        wohneinheit = new WohneinheitenProFoerderartProJahrModel();
+        wohneinheit.setWohneinheiten(BigDecimal.valueOf(10035L, 2));
+        expected.add(wohneinheit);
+
+        assertThat(result, is(expected));
+
+        Mockito.verify(bauratendateiInputService, Mockito.times(1)).getWohneinheiten(bedarfe, uuid);
+    }
 
     @Test
     void getWohneinheiten() {
