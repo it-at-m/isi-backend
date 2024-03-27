@@ -64,3 +64,12 @@ file:
 stammdaten:
   csv-locations:
     import-files: false
+
+metabase:
+  reporting:
+    url: https://isi-metabase-test.muenchen.de
+    reports:
+      report.bedarfe: dashboard/45-dashboard-bedarfe
+      report.spitzenbedarfe.planungsursaechlich: dashboard/27-dashboard-spitzenbedarfe-planungsursachlich
+      report.spitzenbedarfe.sobon.ursaechlich: dashboard/30-dashboard-spitzenbedarfe-sobon-ursachlich
+      report.wohneinheiten: dashboard/33-dashboard-wohneinheiten
