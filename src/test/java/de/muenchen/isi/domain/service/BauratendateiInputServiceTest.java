@@ -267,6 +267,7 @@ class BauratendateiInputServiceTest {
     void removeBaurateninputToAbfragevariante() {
         final var abfragevariante = new AbfragevarianteBauleitplanverfahrenModel();
         abfragevariante.setBauratendateiInputBasis(new BauratendateiInputModel());
+        abfragevariante.setAnmerkungBauratendateiInput("Eine Anmerkung");
         abfragevariante.setBauratendateiInput(List.of(new BauratendateiInputModel()));
         abfragevariante.setHasBauratendateiInput(false);
 
@@ -286,6 +287,7 @@ class BauratendateiInputServiceTest {
             bauratendateiInputService.setOrRemoveOrIgnoreBaurateninputToAbfragevariante(abfragevariante, null, null);
         expected = new AbfragevarianteBauleitplanverfahrenModel();
         expected.setBauratendateiInputBasis(null);
+        expected.setAnmerkungBauratendateiInput(null);
         expected.setBauratendateiInput(List.of());
         expected.setHasBauratendateiInput(null);
         assertThat(result, is(expected));

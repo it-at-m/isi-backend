@@ -108,8 +108,10 @@ public class BauratendateiInputService {
     ) {
         // Zurücksetzen der Inputs für die Bauratendatei falls Checkbox nicht gewählt.
         if (BooleanUtils.isNotTrue(abfragevariante.getHasBauratendateiInput())) {
+            abfragevariante.setAnmerkungBauratendateiInput(null);
             abfragevariante.setBauratendateiInputBasis(null);
             abfragevariante.setBauratendateiInput(List.of());
+            return abfragevariante;
         }
 
         // Ermitteln der Inputs für die Bauratendatei auf Basis der Berechnung der langfristigen Bedarfe.
