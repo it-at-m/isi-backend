@@ -13,6 +13,10 @@ public class MetabaseReportingService {
 
     private String reportBedarfe;
 
+    private String reportErgebnissePlanungsursaechlich;
+
+    private String reportErgebnisseSobonUrsaechlich;
+
     private String reportSpitzenbedarfePlanungsursaechlich;
 
     private String reportSpitzenbedarfeSobonUrsaechlich;
@@ -22,6 +26,12 @@ public class MetabaseReportingService {
     public MetabaseReportingService(
         @Value("${metabase.reporting.url}") final String url,
         @Value("${metabase.reporting.reports.report.bedarfe}") final String reportBedarfe,
+        @Value(
+            "${metabase.reporting.reports.report.ergebnisse.planungsursaechlich}"
+        ) final String reportErgebnissePlanungsursaechlich,
+        @Value(
+            "${metabase.reporting.reports.report.ergebnisse.sobonursaechlich}"
+        ) final String reportErgebnisseSobonUrsaechlich,
         @Value(
             "${metabase.reporting.reports.report.spitzenbedarfe.planungsursaechlich}"
         ) final String reportSpitzenbedarfePlanungsursaechlich,
@@ -35,6 +45,8 @@ public class MetabaseReportingService {
         this.reportSpitzenbedarfePlanungsursaechlich = reportSpitzenbedarfePlanungsursaechlich;
         this.reportSpitzenbedarfeSobonUrsaechlich = reportSpitzenbedarfeSobonUrsaechlich;
         this.reportWohneinheiten = reportWohneinheiten;
+        this.reportErgebnissePlanungsursaechlich = reportErgebnissePlanungsursaechlich;
+        this.reportErgebnisseSobonUrsaechlich = reportErgebnisseSobonUrsaechlich;
     }
 
     /**
@@ -44,6 +56,8 @@ public class MetabaseReportingService {
         final var metabaseReportingModel = new MetabaseReportingModel();
         metabaseReportingModel.setUrl(this.url);
         metabaseReportingModel.setReportBedarfe(this.reportBedarfe);
+        metabaseReportingModel.setReportErgebnissePlanungsursaechlich(this.reportErgebnissePlanungsursaechlich);
+        metabaseReportingModel.setReportErgebnisseSobonUrsaechlich(this.reportErgebnisseSobonUrsaechlich);
         metabaseReportingModel.setReportSpitzenbedarfePlanungsursaechlich(this.reportSpitzenbedarfePlanungsursaechlich);
         metabaseReportingModel.setReportSpitzenbedarfeSobonUrsaechlich(this.reportSpitzenbedarfeSobonUrsaechlich);
         metabaseReportingModel.setReportWohneinheiten(this.reportWohneinheiten);

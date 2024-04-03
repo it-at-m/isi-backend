@@ -23,6 +23,8 @@ class MetabaseReportingServiceTest {
             new MetabaseReportingService(
                 "https://isi-metabase-test.muenchen.de",
                 "dashboard/45-dashboard-bedarfe",
+                " dashboard/36-ergebnisse-der-planungsursachlichen-bedarfsberechnung",
+                "dashboard/44-ergebnisse-der-sobon-bedarfsberechnung",
                 "dashboard/27-dashboard-spitzenbedarfe-planungsursachlich",
                 "dashboard/30-dashboard-spitzenbedarfe-sobon-ursachlich",
                 "dashboard/33-dashboard-wohneinheiten"
@@ -34,6 +36,10 @@ class MetabaseReportingServiceTest {
         final var expected = new MetabaseReportingModel();
         expected.setUrl("https://isi-metabase-test.muenchen.de");
         expected.setReportBedarfe("dashboard/45-dashboard-bedarfe");
+        expected.setReportErgebnissePlanungsursaechlich(
+            " dashboard/36-ergebnisse-der-planungsursachlichen-bedarfsberechnung"
+        );
+        expected.setReportErgebnisseSobonUrsaechlich("dashboard/44-ergebnisse-der-sobon-bedarfsberechnung");
         expected.setReportSpitzenbedarfePlanungsursaechlich("dashboard/27-dashboard-spitzenbedarfe-planungsursachlich");
         expected.setReportSpitzenbedarfeSobonUrsaechlich("dashboard/30-dashboard-spitzenbedarfe-sobon-ursachlich");
         expected.setReportWohneinheiten("dashboard/33-dashboard-wohneinheiten");

@@ -9,6 +9,10 @@ public class MetabaseReportingModel {
 
     private String reportBedarfe;
 
+    private String reportErgebnissePlanungsursaechlich;
+
+    private String reportErgebnisseSobonUrsaechlich;
+
     private String reportSpitzenbedarfePlanungsursaechlich;
 
     private String reportSpitzenbedarfeSobonUrsaechlich;

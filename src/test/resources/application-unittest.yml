@@ -35,7 +35,7 @@ spring:
             # Muss der Strategy bei spring.jpa.hibernate.ddl-auto entsprechen.
             strategy: drop-and-create
           backend:
-            hosts : localhost:9200
+            hosts: localhost:9200
             username: elastic
             password: changeme
 
@@ -70,6 +70,8 @@ metabase:
     url: https://isi-metabase-test.muenchen.de
     reports:
       report.bedarfe: dashboard/45-dashboard-bedarfe
+      report.ergebnisse.planungsursaechlich: dashboard/36-ergebnisse-der-planungsursachlichen-bedarfsberechnung
+      report.ergebnisse.sobonursaechlich: dashboard/44-ergebnisse-der-sobon-bedarfsberechnung
       report.spitzenbedarfe.planungsursaechlich: dashboard/27-dashboard-spitzenbedarfe-planungsursachlich
       report.spitzenbedarfe.sobon.ursaechlich: dashboard/30-dashboard-spitzenbedarfe-sobon-ursachlich
       report.wohneinheiten: dashboard/33-dashboard-wohneinheiten
