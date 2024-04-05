@@ -2,6 +2,7 @@ package de.muenchen.isi.configuration;
 
 import de.muenchen.isi.reporting.client.ApiClient;
 import de.muenchen.isi.reporting.client.api.AbfrageReportingEaiApi;
+import de.muenchen.isi.reporting.client.api.EtlInterfaceEaiApi;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,6 +18,18 @@ public class ServerToServerApiConfiguration {
 
     @Value("${isi.reporting.url}")
     private String isiReportingUrl;
+
+    @Bean
+    @Profile("!no-security")
+    public EtlInterfaceEaiApi securedEtlInterfaceEaiApi(
+        final ClientRegistrationRepository clientRegistrationRepository,
+        final OAuth2AuthorizedClientService authorizedClientService
+    ) {
+        final var webClient = webClient(clientRegistrationRepository, authorizedClientService);
+        final var apiClient = new ApiClient(webClient);
+        apiClient.setBasePath(isiReportingUrl);
+        return new EtlInterfaceEaiApi(apiClient);
+    }
 
     @Bean
     @Profile("!no-security")
@@ -37,6 +50,15 @@ public class ServerToServerApiConfiguration {
         final var apiClient = new ApiClient(webClient);
         apiClient.setBasePath(isiReportingUrl);
         return new AbfrageReportingEaiApi(apiClient);
+    }
+
+    @Bean
+    @Profile("no-security")
+    public EtlInterfaceEaiApi etlInterfaceEaiApi() {
+        final var webClient = WebClient.builder().build();
+        final var apiClient = new ApiClient(webClient);
+        apiClient.setBasePath(isiReportingUrl);
+        return new EtlInterfaceEaiApi(apiClient);
     }
 
     private WebClient webClient(

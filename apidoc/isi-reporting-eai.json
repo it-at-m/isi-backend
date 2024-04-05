@@ -8,12 +8,31 @@
   },
   "servers": [{ "url": "http://localhost:8088", "description": "Generated server url" }],
   "tags": [
+    { "name": "EtlInterfaceEai", "description": "API zum Aufruf von ETL-Kommandos." },
     {
       "name": "AbfrageReportingEai",
       "description": "API zum Speichern von Abfragen mit reportingrelevanten Informationen."
     }
   ],
   "paths": {
+    "/etl": {
+      "post": {
+        "tags": ["EtlInterfaceEai"],
+        "summary": "Triggert einen ETL-Job der ausgeführt werden soll",
+        "operationId": "triggerJob",
+        "requestBody": {
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/EtlTriggerJobDto" } } },
+          "required": true
+        },
+        "responses": {
+          "555": {
+            "description": "CUSTOM INTERNAL SERVER ERROR -> Bei der Ausführung des ETL-Interface-Requests ist ein serverseitiger Fehler aufgetreten.",
+            "content": { "*/*": { "schema": { "$ref": "#/components/schemas/InformationResponseDto" } } }
+          },
+          "200": { "description": "ETL-Interface Aufruf erfolgreich" }
+        }
+      }
+    },
     "/abfrage": {
       "post": {
         "tags": ["AbfrageReportingEai"],
@@ -49,6 +68,29 @@
   },
   "components": {
     "schemas": {
+      "EtlTriggerJobDto": {
+        "type": "object",
+        "properties": {
+          "jobname": { "type": "string" },
+          "parameters": { "type": "array", "items": { "$ref": "#/components/schemas/PairStringString" } }
+        }
+      },
+      "PairStringString": {
+        "type": "object",
+        "properties": { "first": { "type": "string" }, "second": { "type": "string" } }
+      },
+      "InformationResponseDto": {
+        "type": "object",
+        "properties": {
+          "type": { "type": "string", "enum": ["ERROR", "WARNING", "INFORMATION_SUCCESS", "INFORMATION_NEUTRAL"] },
+          "timestamp": { "type": "string", "format": "date-time" },
+          "traceId": { "type": "string" },
+          "spanId": { "type": "string" },
+          "httpStatus": { "type": "integer", "format": "int32" },
+          "originalException": { "type": "string" },
+          "messages": { "type": "array", "items": { "type": "string" } }
+        }
+      },
       "AbfrageDto": {
         "type": "object",
         "properties": {
@@ -133,8 +175,7 @@
               "abfragevariantenSachbearbeitungBaugenehmigungsverfahren": {
                 "type": "array",
                 "items": { "$ref": "#/components/schemas/AbfragevarianteBaugenehmigungsverfahrenDto" }
-              },
-              "fristBearbeitung": { "type": "string", "format": "date" }
+              }
             }
           }
         ]
@@ -153,8 +194,7 @@
               "abfragevariantenSachbearbeitungBauleitplanverfahren": {
                 "type": "array",
                 "items": { "$ref": "#/components/schemas/AbfragevarianteBauleitplanverfahrenDto" }
-              },
-              "fristBearbeitung": { "type": "string", "format": "date" }
+              }
             }
           }
         ]
@@ -230,8 +270,7 @@
               "abfragevariantenSachbearbeitungWeiteresVerfahren": {
                 "type": "array",
                 "items": { "$ref": "#/components/schemas/AbfragevarianteWeiteresVerfahrenDto" }
-              },
-              "fristBearbeitung": { "type": "string", "format": "date" }
+              }
             }
           }
         ]

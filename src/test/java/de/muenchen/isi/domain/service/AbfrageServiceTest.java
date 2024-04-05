@@ -55,6 +55,7 @@ import de.muenchen.isi.domain.model.common.StadtbezirkModel;
 import de.muenchen.isi.domain.model.common.VerortungMultiPolygonModel;
 import de.muenchen.isi.domain.service.calculation.CalculationService;
 import de.muenchen.isi.domain.service.common.BearbeitungshistorieService;
+import de.muenchen.isi.domain.service.etlInterface.EtlInterfaceService;
 import de.muenchen.isi.domain.service.filehandling.DokumentService;
 import de.muenchen.isi.domain.service.reporting.ReportingdataTransferService;
 import de.muenchen.isi.infrastructure.entity.Abfrage;
@@ -133,6 +134,9 @@ class AbfrageServiceTest {
     @Mock
     private BearbeitungshistorieService bearbeitungshistorieService;
 
+    @Mock
+    private EtlInterfaceService etlInterfaceService;
+
     @BeforeEach
     public void beforeEach() throws NoSuchFieldException, IllegalAccessException {
         final var abfragevarianteDomainMapper = new AbfragevarianteDomainMapperImpl(new BauabschnittDomainMapperImpl());
@@ -156,7 +160,8 @@ class AbfrageServiceTest {
                 this.abfragevarianteWeiteresVerfahrenRepository,
                 this.calculationService,
                 this.reportingdataTransferService,
-                this.bearbeitungshistorieService
+                this.bearbeitungshistorieService,
+                this.etlInterfaceService
             );
         Mockito.reset(
             this.abfrageRepository,
@@ -168,7 +173,8 @@ class AbfrageServiceTest {
             this.abfragevarianteWeiteresVerfahrenRepository,
             this.calculationService,
             this.reportingdataTransferService,
-            this.bearbeitungshistorieService
+            this.bearbeitungshistorieService,
+            this.etlInterfaceService
         );
     }
 
