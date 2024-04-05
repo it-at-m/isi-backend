@@ -149,6 +149,9 @@ public class AbfrageService {
             reportingdataTransferService.transferAbfrageAndBedarfe(model, bedarfeForAbfragevarianten);
             // Aufruf des ETL-Systems (Pentaho) zur Ausführung eines Jobs
             EtlTriggerJobDto etlTriggerJobDto = new EtlTriggerJobDto();
+            etlTriggerJobDto.setJobname(
+                "bevoelkerungsdatenFuerKitaPlBs/Job_Bevoelkerungsdaten_fuer_KitaPlanungsbereiche.kjb"
+            );
             etlInterfaceService.etlInterfaceTriggerJob(etlTriggerJobDto);
             return model;
         } else {

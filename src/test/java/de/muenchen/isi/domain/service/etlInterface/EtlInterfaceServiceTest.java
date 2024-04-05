@@ -50,7 +50,7 @@ class EtlInterfaceServiceTest {
     void triggerJob() throws ReportingException {
         var etlTriggerJobDto = new EtlTriggerJobDto();
         etlTriggerJobDto.setJobname(
-            "jobs/bevoelkerungsdatenFuerKitaPlBs/Job_Bevoelkerungsdaten_fuer_KitaPlanungsbereiche.kjb"
+            "bevoelkerungsdatenFuerKitaPlBs/Job_Bevoelkerungsdaten_fuer_KitaPlanungsbereiche.kjb"
         );
         etlInterfaceService.etlInterfaceTriggerJob(etlTriggerJobDto);
         Mockito.verify(etlInterfaceService, Mockito.times(1)).etlInterfaceTriggerJob(etlTriggerJobDto);
