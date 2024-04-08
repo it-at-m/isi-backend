@@ -39,7 +39,6 @@ public class AbfragevarianteBaugenehmigungsverfahrenSachbearbeitungInBearbeitung
     @Size(max = 1000, message = "Es sind maximal {max} Zeichen erlaubt")
     private String anmerkung;
 
-    @NotNull
     private Boolean hasBauratendateiInput;
 
     private String anmerkungBauratendateiInput;
