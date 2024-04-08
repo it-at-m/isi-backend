@@ -106,18 +106,18 @@ public class BauratendateiInputService {
         final VerortungModel verortung,
         final Map<UUID, BedarfeForAbfragevarianteModel> bedarfe
     ) {
-        // Zurücksetzen der Inputs für die Bauratendatei falls Checkbox nicht gewählt.
         if (BooleanUtils.isNotTrue(abfragevariante.getHasBauratendateiInput())) {
+            // Zurücksetzen der Inputs für die Bauratendatei falls Checkbox nicht gewählt.
             abfragevariante.setBauratendateiInputBasis(null);
             abfragevariante.setBauratendateiInput(List.of());
-            return abfragevariante;
-        }
-
-        // Ermitteln der Inputs für die Bauratendatei auf Basis der Berechnung der langfristigen Bedarfe.
-        final var newBauratendateiInput = createBauratendateiInput(verortung, bedarfe, abfragevariante.getId());
-
-        // Neusetzen der Inputs für die Bauratendatei falls diese nicht mit den langfristigen Bedarfen übereinstimmen.
-        if (!equals(newBauratendateiInput, abfragevariante.getBauratendateiInput())) {
+        } else if (
+            BooleanUtils.isTrue(abfragevariante.getHasBauratendateiInput()) &&
+            ObjectUtils.isEmpty(abfragevariante.getBauratendateiInputBasis()) &&
+            CollectionUtils.isEmpty(abfragevariante.getBauratendateiInput())
+        ) {
+            // Neusetzen der Inputs für die Bauratendatei falls diese nicht mit den langfristigen Bedarfen übereinstimmen.
+            // Ermitteln der Inputs für die Bauratendatei auf Basis der Berechnung der langfristigen Bedarfe.
+            final var newBauratendateiInput = createBauratendateiInput(verortung, bedarfe, abfragevariante.getId());
             abfragevariante.setBauratendateiInputBasis(newBauratendateiInput);
             final var bauratendateiInput = new ArrayList<BauratendateiInputModel>();
             bauratendateiInput.add(bauratendateiDomainMapper.cloneDeep(newBauratendateiInput));

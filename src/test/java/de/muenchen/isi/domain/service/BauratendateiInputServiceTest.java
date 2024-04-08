@@ -264,7 +264,7 @@ class BauratendateiInputServiceTest {
     }
 
     @Test
-    void removeBaurateninputToAbfragevariante() {
+    void removeBaurateninputFromAbfragevariante() {
         final var abfragevariante = new AbfragevarianteBauleitplanverfahrenModel();
         abfragevariante.setBauratendateiInputBasis(new BauratendateiInputModel());
         abfragevariante.setAnmerkungBauratendateiInput("Eine Anmerkung");
@@ -280,6 +280,7 @@ class BauratendateiInputServiceTest {
         expected.setBauratendateiInputBasis(null);
         expected.setBauratendateiInput(List.of());
         expected.setHasBauratendateiInput(false);
+        expected.setAnmerkungBauratendateiInput("Eine Anmerkung");
         assertThat(result, is(expected));
 
         abfragevariante.setHasBauratendateiInput(null);
@@ -287,14 +288,14 @@ class BauratendateiInputServiceTest {
             bauratendateiInputService.setOrRemoveOrIgnoreBaurateninputToAbfragevariante(abfragevariante, null, null);
         expected = new AbfragevarianteBauleitplanverfahrenModel();
         expected.setBauratendateiInputBasis(null);
-        expected.setAnmerkungBauratendateiInput(null);
         expected.setBauratendateiInput(List.of());
         expected.setHasBauratendateiInput(null);
+        expected.setAnmerkungBauratendateiInput("Eine Anmerkung");
         assertThat(result, is(expected));
     }
 
     @Test
-    void ignoreBaurateninputToAbfragevariante() {
+    void ignoreBaurateninputInAbfragevariante() {
         var uuid = UUID.randomUUID();
         final var abfragevariante = new AbfragevarianteWeiteresVerfahrenModel();
         abfragevariante.setId(uuid);
