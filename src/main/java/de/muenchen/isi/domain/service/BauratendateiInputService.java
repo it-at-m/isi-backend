@@ -30,6 +30,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -214,6 +215,8 @@ public class BauratendateiInputService {
     /**
      * Extrahiert die Wohneinheiten der Abfragevariante gerundet auf zwei Nachkommastellen.
      *
+     * Des Weiteren wird im Attribut zur Förderart die String "Anteil" durch "Anzahl" ersetzt
+     *
      * @param bedarfe zur Extraktion der Wohneinheiten.
      * @param abfragevarianteId zur Extraktion der Wohneinheiten.
      * @return die Wohneinheiten der Abfragevariante gerundet auf zwei Nachkommastellen identifiziert durch die ID ansonsten eine leere Liste.
@@ -226,6 +229,9 @@ public class BauratendateiInputService {
             .stream()
             .map(bauratendateiDomainMapper::cloneDeep)
             .peek(wohneinheitenProFoerderartProJahr -> {
+                var forderart = wohneinheitenProFoerderartProJahr.getFoerderart();
+                forderart = StringUtils.replace(forderart, "Anteil", "Anzahl");
+                wohneinheitenProFoerderartProJahr.setFoerderart(forderart);
                 final var rounded = wohneinheitenProFoerderartProJahr
                     .getWohneinheiten()
                     .setScale(2, RoundingMode.HALF_UP);

@@ -662,9 +662,11 @@ class BauratendateiInputServiceTest {
 
         final var wohneinheiten = new ArrayList<WohneinheitenProFoerderartProJahrModel>();
         var wohneinheit = new WohneinheitenProFoerderartProJahrModel();
+        wohneinheit.setFoerderart("Anteil an Foerderart1");
         wohneinheit.setWohneinheiten(BigDecimal.valueOf(100L, 0));
         wohneinheiten.add(wohneinheit);
         wohneinheit = new WohneinheitenProFoerderartProJahrModel();
+        wohneinheit.setFoerderart("Test Anteil an Foerderart1");
         wohneinheit.setWohneinheiten(BigDecimal.valueOf(100345678L, 6));
         wohneinheiten.add(wohneinheit);
         wohneinheit = new WohneinheitenProFoerderartProJahrModel();
@@ -686,9 +688,11 @@ class BauratendateiInputServiceTest {
 
         final var expected = new ArrayList<WohneinheitenProFoerderartProJahrModel>();
         wohneinheit = new WohneinheitenProFoerderartProJahrModel();
+        wohneinheit.setFoerderart("Anzahl an Foerderart1");
         wohneinheit.setWohneinheiten(BigDecimal.valueOf(10000L, 2));
         expected.add(wohneinheit);
         wohneinheit = new WohneinheitenProFoerderartProJahrModel();
+        wohneinheit.setFoerderart("Test Anzahl an Foerderart1");
         wohneinheit.setWohneinheiten(BigDecimal.valueOf(10035L, 2));
         expected.add(wohneinheit);
         wohneinheit = new WohneinheitenProFoerderartProJahrModel();
