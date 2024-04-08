@@ -94,12 +94,18 @@ public class BauratendateiInputService {
     }
 
     /**
+     * Falls {@link WithBauratendateiInputModel#getHasBauratendateiInput()} nicht gewählt, dann werden die Baurateninputs
+     * aus der Abfragevariante entfernt.
      *
+     * Falls {@link WithBauratendateiInputModel#getHasBauratendateiInput()} gewählt und bisher keine Bauranteinputs vorhanden sind,
+     * werden die Baurateninputs ermittelt und gesetzt.
      *
-     * @param abfragevariante
-     * @param verortung
-     * @param bedarfe
-     * @return
+     * In allen anderen fällen wird keine Änderung an den Baurateninputs vorgenommen.
+     *
+     * @param abfragevariante für die Ermittlung und Setzen der Baurateninputs.
+     * @param verortung zum anreichern der Baurateninputs mit Verortungsinformationen.
+     * @param bedarfe zum ermitteln der Baurateninputs.
+     * @return die Abfragevarianten mit den Informationen zu den Baurateninputs.
      */
     protected WithBauratendateiInputModel setOrRemoveOrIgnoreBaurateninputToAbfragevariante(
         final WithBauratendateiInputModel abfragevariante,
