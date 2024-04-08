@@ -121,7 +121,6 @@ public class BauratendateiInputService {
             ObjectUtils.isEmpty(abfragevariante.getBauratendateiInputBasis()) &&
             CollectionUtils.isEmpty(abfragevariante.getBauratendateiInput())
         ) {
-            // Neusetzen der Inputs für die Bauratendatei falls diese nicht mit den langfristigen Bedarfen übereinstimmen.
             // Ermitteln der Inputs für die Bauratendatei auf Basis der Berechnung der langfristigen Bedarfe.
             final var newBauratendateiInput = createBauratendateiInput(verortung, bedarfe, abfragevariante.getId());
             abfragevariante.setBauratendateiInputBasis(newBauratendateiInput);
