@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS isidbuser.bauratendatei_input (
    CONSTRAINT bauratendatei_input_pkey PRIMARY KEY (id),
    CONSTRAINT abfrgvar_baugnhmgsverfhrn_id_fk FOREIGN KEY (abfrgvar_baugnhmgsverfhrn_id) REFERENCES isidbuser.abfrgvar_baugnhmgsverfhrn(id),
    CONSTRAINT abfrgvar_bauleitplnvrfhrn_id_fk FOREIGN KEY (abfrgvar_bauleitplnvrfhrn_id) REFERENCES isidbuser.abfrgvar_bauleitplnvrfhrn(id),
-   CONSTRAINT abfrgvar_weitrs_vrfhrn_id_fk FOREIGN KEY (abfrgvar_weitrs_vrfhrn_id) REFERENCES isidbuser.abfrgvar_bauleitplnvrfhrn(id)
+   CONSTRAINT abfrgvar_weitrs_vrfhrn_id_fk FOREIGN KEY (abfrgvar_weitrs_vrfhrn_id) REFERENCES isidbuser.abfrgvar_weitrs_vrfhrn(id)
 );
 
 CREATE INDEX IF NOT EXISTS bauratendatei_input_abfrgvar_baugnhmgsverfhrn_id
