@@ -215,7 +215,7 @@ public class BauratendateiInputService {
     /**
      * Extrahiert die Wohneinheiten der Abfragevariante gerundet auf zwei Nachkommastellen.
      *
-     * Des Weiteren wird im Attribut zur Förderart die String "Anteil" durch "Anzahl" ersetzt
+     * Des Weiteren wird im Attribut zur Förderart der String "Anteil" durch "Anzahl" ersetzt.
      *
      * @param bedarfe zur Extraktion der Wohneinheiten.
      * @param abfragevarianteId zur Extraktion der Wohneinheiten.
