@@ -273,6 +273,13 @@ public class BauratendateiInputService {
     ) {
         return inputs
             .flatMap(bauratendateiInput -> bauratendateiInput.getWohneinheiten().stream())
+            .peek(wohneinheitenProFoerderartProJahr -> {
+                final var wohneinheiten = ObjectUtils.defaultIfNull(
+                    wohneinheitenProFoerderartProJahr.getWohneinheiten(),
+                    BigDecimal.ZERO
+                );
+                wohneinheitenProFoerderartProJahr.setWohneinheiten(wohneinheiten);
+            })
             .collect(
                 Collectors.groupingBy(
                     this::concatJahrAndFoerderart,
