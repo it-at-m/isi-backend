@@ -8,7 +8,7 @@ BEGIN;
 -- Anpassung Baugebiet
 --
 ALTER TABLE IF EXISTS isidbuser.baugebiet
-    ADD DROP CONSTRAINT baugebiet_art_bauliche_nutzung_check;
+    DROP CONSTRAINT baugebiet_art_bauliche_nutzung_check;
 
 -- Hinzufügen der Freien Eingabe am Ende der Enums sowie des Eingabefeldes
 ALTER TABLE IF EXISTS isidbuser.baugebiet
@@ -20,7 +20,7 @@ ALTER TABLE IF EXISTS isidbuser.baugebiet
 -- Anpassung Bauvorhaben
 --
 ALTER TABLE IF EXISTS isidbuser.bauvorhaben_art_fnp
-    ADD DROP CONSTRAINT bauvorhaben_art_fnp_art_fnp_check;
+    DROP CONSTRAINT bauvorhaben_art_fnp_art_fnp_check;
 
 ALTER TABLE IF EXISTS isidbuser.bauvorhaben_art_fnp
     ADD COLUMN art_fnp_freie_eingabe character varying(1000),
