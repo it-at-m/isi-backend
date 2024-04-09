@@ -973,6 +973,11 @@ class BauratendateiInputServiceTest {
         wohneinheitenProFoerderartProJahr.setFoerderart("förderart2");
         wohneinheitenProFoerderartProJahr.setWohneinheiten(BigDecimal.valueOf(888));
         bauratendateiInput.getWohneinheiten().add(wohneinheitenProFoerderartProJahr);
+        wohneinheitenProFoerderartProJahr = new WohneinheitenProFoerderartProJahrModel();
+        wohneinheitenProFoerderartProJahr.setJahr("2025");
+        wohneinheitenProFoerderartProJahr.setFoerderart("förderart2");
+        wohneinheitenProFoerderartProJahr.setWohneinheiten(null);
+        bauratendateiInput.getWohneinheiten().add(wohneinheitenProFoerderartProJahr);
         inputs.add(bauratendateiInput);
 
         final var result = bauratendateiInputService.sumWohneinheitenOfBauratendateiInput(inputs.stream());
