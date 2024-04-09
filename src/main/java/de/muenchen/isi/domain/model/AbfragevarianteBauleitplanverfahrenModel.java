@@ -7,6 +7,7 @@ package de.muenchen.isi.domain.model;
 import de.muenchen.isi.domain.model.bauratendatei.BauratendateiInputModel;
 import de.muenchen.isi.domain.model.bauratendatei.WithBauratendateiInputModel;
 import de.muenchen.isi.domain.model.common.SobonBerechnungModel;
+import de.muenchen.isi.domain.model.filehandling.DokumentModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.WesentlicheRechtsgrundlage;
 import java.math.BigDecimal;
@@ -106,4 +107,6 @@ public class AbfragevarianteBauleitplanverfahrenModel
     private boolean ausgeloesterBedarfMitversorgungInBestEinrichtungenNachAusbauSchule;
 
     private String hinweisVersorgung;
+
+    private List<DokumentModel> dokumente;
 }

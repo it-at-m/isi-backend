@@ -10,6 +10,7 @@ import de.muenchen.isi.infrastructure.entity.bauratendatei.BauratendateiInput;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.WesentlicheRechtsgrundlage;
+import de.muenchen.isi.infrastructure.entity.filehandling.Dokument;
 import de.muenchen.isi.infrastructure.repository.search.SearchwordSuggesterRepository;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -200,4 +201,8 @@ public class AbfragevarianteBaugenehmigungsverfahren extends Abfragevariante {
 
     @Column(length = 1000)
     private String hinweisVersorgung;
+
+    @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY, orphanRemoval = true)
+    @JoinColumn(name = "abfrgvar_baugnhmgsverfhrn_id")
+    private List<Dokument> dokumente;
 }

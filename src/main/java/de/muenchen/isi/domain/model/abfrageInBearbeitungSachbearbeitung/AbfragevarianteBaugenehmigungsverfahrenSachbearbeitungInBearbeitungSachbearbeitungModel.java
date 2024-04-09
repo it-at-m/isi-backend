@@ -5,6 +5,7 @@
 package de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung;
 
 import de.muenchen.isi.domain.model.bauratendatei.BauratendateiInputModel;
+import de.muenchen.isi.domain.model.filehandling.DokumentModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
 import java.time.LocalDate;
@@ -34,4 +35,6 @@ public class AbfragevarianteBaugenehmigungsverfahrenSachbearbeitungInBearbeitung
     private BauratendateiInputModel bauratendateiInputBasis;
 
     private List<BauratendateiInputModel> bauratendateiInput;
+
+    private List<DokumentModel> dokumente;
 }
