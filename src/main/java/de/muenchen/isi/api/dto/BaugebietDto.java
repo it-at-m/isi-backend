@@ -30,6 +30,8 @@ public class BaugebietDto extends BaseEntityDto {
     @NotUnspecified
     private ArtBaulicheNutzung artBaulicheNutzung;
 
+    private String artBaulicheNutzungFreieEingabe;
+
     @NotNull
     @Min(1900)
     @Max(2100)

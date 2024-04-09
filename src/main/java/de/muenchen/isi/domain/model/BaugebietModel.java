@@ -16,6 +16,8 @@ public class BaugebietModel extends BaseEntityModel {
 
     private ArtBaulicheNutzung artBaulicheNutzung;
 
+    private String artBaulicheNutzungFreieEingabe;
+
     private Integer realisierungVon;
 
     private BigDecimal gfWohnenGeplant;

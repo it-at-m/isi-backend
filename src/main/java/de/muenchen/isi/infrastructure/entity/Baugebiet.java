@@ -32,6 +32,9 @@ public class Baugebiet extends BaseEntity {
     @JdbcTypeCode(SqlTypes.INTEGER)
     private ArtBaulicheNutzung artBaulicheNutzung;
 
+    @Column(length = 1000)
+    private String artBaulicheNutzungFreieEingabe;
+
     @Column(nullable = false)
     private Integer realisierungVon; // JJJJ
 
