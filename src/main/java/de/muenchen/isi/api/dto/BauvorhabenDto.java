@@ -74,6 +74,7 @@ public class BauvorhabenDto extends BaseEntityDto {
     @NotEmpty
     private List<@NotUnspecified @NotNull ArtBaulicheNutzung> artFnp;
 
+    @Size(max = 1000, message = "Es sind maximal {max} Zeichen erlaubt")
     private String artFnpFreieEingabe;
 
     @HasAllowedNumberOfDocuments

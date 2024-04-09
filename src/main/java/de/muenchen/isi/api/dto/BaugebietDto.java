@@ -30,6 +30,7 @@ public class BaugebietDto extends BaseEntityDto {
     @NotUnspecified
     private ArtBaulicheNutzung artBaulicheNutzung;
 
+    @Size(max = 1000, message = "Es sind maximal {max} Zeichen erlaubt")
     private String artBaulicheNutzungFreieEingabe;
 
     @NotNull
