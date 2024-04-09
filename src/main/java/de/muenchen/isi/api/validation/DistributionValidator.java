@@ -50,6 +50,10 @@ public class DistributionValidator {
             bauratenFromAllTechnicalBaugebiete
         );
 
+        /*
+        Unterscheidung zwischen technischen und nicht-technischen Baugebieten, da technische Baugebiete keine Daten enthalten sollen.
+        Bei ihnen werden stattdessen die untergeordneten Bauraten als Datenquelle hergenommen.
+        */
         if (containsNonTechnicalBaugebiet) {
             final var sumVerteilteWohneinheitenBaugebiete = nonTechnicalBaugebiete
                 .stream()
@@ -135,6 +139,10 @@ public class DistributionValidator {
             bauratenFromAllTechnicalBaugebiete
         );
 
+        /*
+        Unterscheidung zwischen technischen und nicht-technischen Baugebieten, da technische Baugebiete keine Daten enthalten sollen.
+        Bei ihnen werden stattdessen die untergeordneten Bauraten als Datenquelle hergenommen.
+        */
         if (containsNonTechnicalBaugebiet) {
             final Optional<Integer> minJahrBaugebiete = nonTechnicalBaugebiete
                 .stream()
