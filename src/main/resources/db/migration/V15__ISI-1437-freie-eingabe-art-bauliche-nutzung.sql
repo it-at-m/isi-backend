@@ -24,6 +24,6 @@ ALTER TABLE IF EXISTS isidbuser.bauvorhaben_art_fnp
 
 ALTER TABLE IF EXISTS isidbuser.bauvorhaben_art_fnp
     ADD COLUMN art_fnp_freie_eingabe character varying(1000),
-    ADD CONSTRAINT bauvorhaben_art_fnp_art_fnp_check CHECK (art_fnp::text = ANY (ARRAY['UNSPECIFIED'::character varying, 'WR'::character varying, 'WA'::character varying, 'MU'::character varying, 'MK'::character varying, 'MI'::character varying, 'GE'::character varying, 'INFO_FEHLT'::character varying, 'FREIE_EINGABE'::character varying]::text[]));
+    ADD CONSTRAINT bauvorhaben_art_fnp_art_fnp_check CHECK (art_fnp::text = ANY (ARRAY['WR'::character varying, 'WA'::character varying, 'MU'::character varying, 'MK'::character varying, 'MI'::character varying, 'GE'::character varying, 'INFO_FEHLT'::character varying, 'FREIE_EINGABE'::character varying]::text[]));
 
 END;
