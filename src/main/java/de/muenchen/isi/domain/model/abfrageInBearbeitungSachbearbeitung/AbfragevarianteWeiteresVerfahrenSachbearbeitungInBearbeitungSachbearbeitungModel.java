@@ -5,9 +5,11 @@
 package de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung;
 
 import de.muenchen.isi.domain.model.common.SobonBerechnungModel;
+import de.muenchen.isi.domain.model.filehandling.DokumentModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 import lombok.Data;
 
@@ -27,4 +29,6 @@ public class AbfragevarianteWeiteresVerfahrenSachbearbeitungInBearbeitungSachbea
     private LocalDate stammdatenGueltigAb;
 
     private String anmerkung;
+
+    private List<DokumentModel> dokumente;
 }
