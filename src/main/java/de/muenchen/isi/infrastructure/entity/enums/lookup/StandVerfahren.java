@@ -34,7 +34,7 @@ public enum StandVerfahren implements ILookup {
     ),
 
     VORLIEGENDER_SATZUNGSBESCHLUSS(
-        "vorliegender Satzungsbeschluss",
+        "Vorliegender Satzungsbeschluss",
         new String[] { "vorliegender", "Satzungsbeschluss" }
     ),
 
