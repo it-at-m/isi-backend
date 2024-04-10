@@ -4,8 +4,9 @@
  */
 package de.muenchen.isi.api.dto;
 
+import de.muenchen.isi.api.dto.bauratendatei.BauratendateiInputDto;
+import de.muenchen.isi.api.dto.bauratendatei.WithBauratendateiInputDto;
 import de.muenchen.isi.api.dto.filehandling.DokumentDto;
-import de.muenchen.isi.api.validation.HasAllowedNumberOfDocuments;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.WesentlicheRechtsgrundlage;
 import jakarta.validation.Valid;
@@ -19,7 +20,9 @@ import lombok.ToString;
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class AbfragevarianteBaugenehmigungsverfahrenDto extends AbfragevarianteDto {
+public class AbfragevarianteBaugenehmigungsverfahrenDto
+    extends AbfragevarianteDto
+    implements WithBauratendateiInputDto {
 
     private List<WesentlicheRechtsgrundlage> wesentlicheRechtsgrundlage;
 
@@ -70,6 +73,14 @@ public class AbfragevarianteBaugenehmigungsverfahrenDto extends AbfragevarianteD
     private LocalDate stammdatenGueltigAb;
 
     private String anmerkung;
+
+    private Boolean hasBauratendateiInput;
+
+    private String anmerkungBauratendateiInput;
+
+    private BauratendateiInputDto bauratendateiInputBasis;
+
+    private List<BauratendateiInputDto> bauratendateiInput;
 
     private List<BedarfsmeldungDto> bedarfsmeldungFachreferate;
 

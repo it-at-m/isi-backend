@@ -4,6 +4,8 @@
  */
 package de.muenchen.isi.domain.model;
 
+import de.muenchen.isi.domain.model.bauratendatei.BauratendateiInputModel;
+import de.muenchen.isi.domain.model.bauratendatei.WithBauratendateiInputModel;
 import de.muenchen.isi.domain.model.common.SobonBerechnungModel;
 import de.muenchen.isi.domain.model.filehandling.DokumentModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
@@ -18,7 +20,7 @@ import lombok.ToString;
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class AbfragevarianteWeiteresVerfahrenModel extends AbfragevarianteModel {
+public class AbfragevarianteWeiteresVerfahrenModel extends AbfragevarianteModel implements WithBauratendateiInputModel {
 
     private LocalDate satzungsbeschluss;
 
@@ -75,6 +77,14 @@ public class AbfragevarianteWeiteresVerfahrenModel extends AbfragevarianteModel 
     private LocalDate stammdatenGueltigAb;
 
     private String anmerkung;
+
+    private Boolean hasBauratendateiInput;
+
+    private String anmerkungBauratendateiInput;
+
+    private BauratendateiInputModel bauratendateiInputBasis;
+
+    private List<BauratendateiInputModel> bauratendateiInput;
 
     private List<BedarfsmeldungModel> bedarfsmeldungFachreferate;
 

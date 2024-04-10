@@ -5,8 +5,11 @@
 package de.muenchen.isi.api.dto.abfrageInBearbeitungSachbearbeitung;
 
 import de.muenchen.isi.api.dto.abfrageAngelegt.AbfragevarianteBauleitplanverfahrenAngelegtDto;
+import de.muenchen.isi.api.dto.bauratendatei.BauratendateiInputDto;
+import de.muenchen.isi.api.dto.bauratendatei.WithBauratendateiInputDto;
 import de.muenchen.isi.api.dto.common.SobonBerechnungDto;
 import de.muenchen.isi.api.dto.filehandling.DokumentDto;
+import de.muenchen.isi.api.validation.BauratendateiInputValid;
 import de.muenchen.isi.api.validation.HasAllowedNumberOfDocuments;
 import de.muenchen.isi.api.validation.NotUnspecified;
 import de.muenchen.isi.api.validation.SobonBerechnungValid;
@@ -23,8 +26,10 @@ import lombok.ToString;
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
+@BauratendateiInputValid
 public class AbfragevarianteBauleitplanverfahrenInBearbeitungSachbearbeitungDto
-    extends AbfragevarianteBauleitplanverfahrenAngelegtDto {
+    extends AbfragevarianteBauleitplanverfahrenAngelegtDto
+    implements WithBauratendateiInputDto {
 
     @NotUnspecified
     @NotNull
@@ -38,6 +43,14 @@ public class AbfragevarianteBauleitplanverfahrenInBearbeitungSachbearbeitungDto
 
     @Size(max = 1000, message = "Es sind maximal {max} Zeichen erlaubt")
     private String anmerkung;
+
+    private Boolean hasBauratendateiInput;
+
+    private String anmerkungBauratendateiInput;
+
+    private BauratendateiInputDto bauratendateiInputBasis;
+
+    private List<BauratendateiInputDto> bauratendateiInput;
 
     @HasAllowedNumberOfDocuments
     private List<@Valid DokumentDto> dokumente;
