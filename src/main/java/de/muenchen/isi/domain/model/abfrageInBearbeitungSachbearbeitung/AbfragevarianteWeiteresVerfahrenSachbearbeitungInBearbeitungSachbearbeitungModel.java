@@ -4,6 +4,7 @@
  */
 package de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung;
 
+import de.muenchen.isi.domain.model.bauratendatei.BauratendateiInputModel;
 import de.muenchen.isi.domain.model.common.SobonBerechnungModel;
 import de.muenchen.isi.domain.model.filehandling.DokumentModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
@@ -29,6 +30,14 @@ public class AbfragevarianteWeiteresVerfahrenSachbearbeitungInBearbeitungSachbea
     private LocalDate stammdatenGueltigAb;
 
     private String anmerkung;
+
+    private Boolean hasBauratendateiInput;
+
+    private String anmerkungBauratendateiInput;
+
+    private BauratendateiInputModel bauratendateiInputBasis;
+
+    private List<BauratendateiInputModel> bauratendateiInput;
 
     private List<DokumentModel> dokumente;
 }
