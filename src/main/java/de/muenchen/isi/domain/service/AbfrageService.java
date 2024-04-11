@@ -84,6 +84,8 @@ public class AbfrageService {
 
     private final ReportingdataTransferService reportingdataTransferService;
 
+    private final BauratendateiInputService bauratendateiInputService;
+
     private final BearbeitungshistorieService bearbeitungshistorieService;
 
     private final EtlInterfaceService etlInterfaceService;
@@ -127,6 +129,12 @@ public class AbfrageService {
             abfrage.setSub(authenticationUtils.getUserSub());
             bearbeitungshistorieService.appendBearbeitungshistorieToAbfrage(abfrage);
         }
+        // Berechnen der langfristigen planungs- und sobonursächlichen Bedarfe
+        final var bedarfeForAbfragevarianten = calculationService.calculateBedarfeForEachAbfragevarianteOfAbfrage(
+            abfrage
+        );
+        // Befüllen der bauratendateiInputBasis für jede Abfragevariante
+        bauratendateiInputService.setBauratendateiInputForEachAbfragevariante(abfrage, bedarfeForAbfragevarianten);
         var entity = this.abfrageDomainMapper.model2Entity(abfrage);
         final var saved = this.abfrageRepository.findByNameIgnoreCase(abfrage.getName());
         if ((saved.isPresent() && saved.get().getId().equals(entity.getId())) || saved.isEmpty()) {
@@ -141,10 +149,6 @@ public class AbfrageService {
                 throw new UniqueViolationException(message, exception);
             }
             final var model = this.abfrageDomainMapper.entity2Model(entity);
-            // Berechnen der langfristigen planungs- und sobonursächlichen Bedarfe
-            final var bedarfeForAbfragevarianten = calculationService.calculateBedarfeForEachAbfragevarianteOfAbfrage(
-                model
-            );
             // Übermitteln der Abfrage samt der vorher berechneten Bedarfe an die Reportingschnittstelle
             reportingdataTransferService.transferAbfrageAndBedarfe(model, bedarfeForAbfragevarianten);
             // Aufruf des ETL-Systems (Pentaho) zur Ausführung eines Jobs

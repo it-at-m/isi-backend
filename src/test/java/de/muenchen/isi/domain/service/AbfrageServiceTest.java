@@ -135,6 +135,9 @@ class AbfrageServiceTest {
     private BearbeitungshistorieService bearbeitungshistorieService;
 
     @Mock
+    private BauratendateiInputService bauratendateiInputService;
+
+    @Mock
     private EtlInterfaceService etlInterfaceService;
 
     @BeforeEach
@@ -160,6 +163,7 @@ class AbfrageServiceTest {
                 this.abfragevarianteWeiteresVerfahrenRepository,
                 this.calculationService,
                 this.reportingdataTransferService,
+                this.bauratendateiInputService,
                 this.bearbeitungshistorieService,
                 this.etlInterfaceService
             );
@@ -173,6 +177,7 @@ class AbfrageServiceTest {
             this.abfragevarianteWeiteresVerfahrenRepository,
             this.calculationService,
             this.reportingdataTransferService,
+            this.bauratendateiInputService,
             this.bearbeitungshistorieService,
             this.etlInterfaceService
         );
@@ -234,7 +239,7 @@ class AbfrageServiceTest {
         Mockito.verify(this.bauvorhabenRepository, Mockito.times(0)).findById(UUID.randomUUID());
         Mockito
             .verify(this.calculationService, Mockito.times(1))
-            .calculateBedarfeForEachAbfragevarianteOfAbfrage(expected);
+            .calculateBedarfeForEachAbfragevarianteOfAbfrage(abfrage);
         Mockito
             .verify(this.reportingdataTransferService, Mockito.times(1))
             .transferAbfrageAndBedarfe(expected, new HashMap<>());
@@ -288,7 +293,7 @@ class AbfrageServiceTest {
         Mockito.verify(this.bauvorhabenRepository, Mockito.times(0)).findById(UUID.randomUUID());
         Mockito
             .verify(this.calculationService, Mockito.times(1))
-            .calculateBedarfeForEachAbfragevarianteOfAbfrage(expected);
+            .calculateBedarfeForEachAbfragevarianteOfAbfrage(abfrage);
         Mockito
             .verify(this.reportingdataTransferService, Mockito.times(1))
             .transferAbfrageAndBedarfe(expected, new HashMap<>());

@@ -4,6 +4,9 @@
  */
 package de.muenchen.isi.domain.model;
 
+import de.muenchen.isi.domain.model.bauratendatei.BauratendateiInputModel;
+import de.muenchen.isi.domain.model.bauratendatei.WithBauratendateiInputModel;
+import de.muenchen.isi.domain.model.filehandling.DokumentModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.WesentlicheRechtsgrundlage;
 import java.math.BigDecimal;
@@ -16,7 +19,9 @@ import lombok.ToString;
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class AbfragevarianteBaugenehmigungsverfahrenModel extends AbfragevarianteModel {
+public class AbfragevarianteBaugenehmigungsverfahrenModel
+    extends AbfragevarianteModel
+    implements WithBauratendateiInputModel {
 
     private List<WesentlicheRechtsgrundlage> wesentlicheRechtsgrundlage;
 
@@ -68,6 +73,14 @@ public class AbfragevarianteBaugenehmigungsverfahrenModel extends Abfragevariant
 
     private String anmerkung;
 
+    private Boolean hasBauratendateiInput;
+
+    private String anmerkungBauratendateiInput;
+
+    private BauratendateiInputModel bauratendateiInputBasis;
+
+    private List<BauratendateiInputModel> bauratendateiInput;
+
     private List<BedarfsmeldungModel> bedarfsmeldungFachreferate;
 
     private List<BedarfsmeldungModel> bedarfsmeldungAbfrageersteller;
@@ -95,4 +108,6 @@ public class AbfragevarianteBaugenehmigungsverfahrenModel extends Abfragevariant
     private boolean ausgeloesterBedarfMitversorgungInBestEinrichtungenNachAusbauSchule;
 
     private String hinweisVersorgung;
+
+    private List<DokumentModel> dokumente;
 }

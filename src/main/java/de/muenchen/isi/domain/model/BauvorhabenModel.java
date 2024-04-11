@@ -53,6 +53,8 @@ public class BauvorhabenModel extends BaseEntityModel {
 
     private List<ArtBaulicheNutzung> artFnp;
 
+    private String artFnpFreieEingabe;
+
     private List<DokumentModel> dokumente;
 
     private UUID relevanteAbfragevariante;
