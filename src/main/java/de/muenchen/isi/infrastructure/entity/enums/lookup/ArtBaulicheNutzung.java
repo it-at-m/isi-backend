@@ -20,7 +20,8 @@ public enum ArtBaulicheNutzung implements ILookup {
     MK("Kerngebiet (MK)"),
     MI("Mischgebiet (MI)"),
     GE("Gewerbegebiet (GE)"),
-    INFO_FEHLT("Info fehlt");
+    INFO_FEHLT("Info fehlt"),
+    FREIE_EINGABE("freie Eingabe");
 
     @Getter
     private final String bezeichnung;

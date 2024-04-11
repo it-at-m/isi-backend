@@ -146,6 +146,9 @@ public class Bauvorhaben extends BaseEntity {
     @ElementCollection
     private List<ArtBaulicheNutzung> artFnp;
 
+    @Column(length = 1000)
+    private String artFnpFreieEingabe;
+
     @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "bauvorhaben_id")
     private List<Dokument> dokumente;
