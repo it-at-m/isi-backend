@@ -4,8 +4,12 @@
  */
 package de.muenchen.isi.api.dto;
 
+import de.muenchen.isi.api.dto.bauratendatei.BauratendateiInputDto;
+import de.muenchen.isi.api.dto.bauratendatei.WithBauratendateiInputDto;
+import de.muenchen.isi.api.dto.filehandling.DokumentDto;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.WesentlicheRechtsgrundlage;
+import jakarta.validation.Valid;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
@@ -16,7 +20,9 @@ import lombok.ToString;
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class AbfragevarianteBaugenehmigungsverfahrenDto extends AbfragevarianteDto {
+public class AbfragevarianteBaugenehmigungsverfahrenDto
+    extends AbfragevarianteDto
+    implements WithBauratendateiInputDto {
 
     private List<WesentlicheRechtsgrundlage> wesentlicheRechtsgrundlage;
 
@@ -68,6 +74,14 @@ public class AbfragevarianteBaugenehmigungsverfahrenDto extends AbfragevarianteD
 
     private String anmerkung;
 
+    private Boolean hasBauratendateiInput;
+
+    private String anmerkungBauratendateiInput;
+
+    private BauratendateiInputDto bauratendateiInputBasis;
+
+    private List<BauratendateiInputDto> bauratendateiInput;
+
     private List<BedarfsmeldungDto> bedarfsmeldungFachreferate;
 
     private List<BedarfsmeldungDto> bedarfsmeldungAbfrageersteller;
@@ -95,4 +109,6 @@ public class AbfragevarianteBaugenehmigungsverfahrenDto extends AbfragevarianteD
     private boolean ausgeloesterBedarfMitversorgungInBestEinrichtungenNachAusbauSchule;
 
     private String hinweisVersorgung;
+
+    private List<@Valid DokumentDto> dokumente;
 }
