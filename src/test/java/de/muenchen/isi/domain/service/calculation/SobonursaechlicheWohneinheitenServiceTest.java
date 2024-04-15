@@ -6,6 +6,7 @@ import static de.muenchen.isi.TestConstants.MM;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 
+import de.muenchen.isi.domain.mapper.BaurateDomainMapper;
 import de.muenchen.isi.domain.model.BauabschnittModel;
 import de.muenchen.isi.domain.model.BaugebietModel;
 import de.muenchen.isi.domain.model.BaurateModel;
@@ -40,13 +41,17 @@ public class SobonursaechlicheWohneinheitenServiceTest {
     @Mock
     private StaedtebaulicheOrientierungswertRepository staedtebaulicheOrientierungswertRepository;
 
+    @Mock
+    private BaurateDomainMapper baurateDomainMapper;
+
     @BeforeEach
     public void beforeEach() {
         final var foerdermixUmlageService = new FoerdermixUmlageService(umlegungFoerderartenRepository);
         this.sobonursaechlicheWohneinheitenService =
             new SobonursaechlicheWohneinheitenService(
                 foerdermixUmlageService,
-                staedtebaulicheOrientierungswertRepository
+                staedtebaulicheOrientierungswertRepository,
+                baurateDomainMapper
             );
         Mockito.reset(umlegungFoerderartenRepository, staedtebaulicheOrientierungswertRepository);
     }
@@ -91,6 +96,8 @@ public class SobonursaechlicheWohneinheitenServiceTest {
             new WohneinheitenProFoerderartProJahrModel(EOF, "2024", new BigDecimal("66.666666666666667")),
             new WohneinheitenProFoerderartProJahrModel(MM, "2024", new BigDecimal("90.000000000000000"))
         );
+
+        Mockito.when(baurateDomainMapper.deepClone(baurate2024)).thenReturn(baurate2024);
 
         final var actual = sobonursaechlicheWohneinheitenService.calculateSobonursaechlicheWohneinheiten(
             new BigDecimal(30000),
