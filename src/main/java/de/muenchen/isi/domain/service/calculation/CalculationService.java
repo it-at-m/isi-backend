@@ -136,7 +136,7 @@ public class CalculationService {
                     );
             if (this.shouldSobonBerechnungBePerformed(abfragevarianteBauleitplanverfahren, isAbfrageSobonRelevant)) {
                 sobonGf = abfragevarianteBauleitplanverfahren.getGfWohnenSobonUrsaechlich();
-                var foerdermix = abfragevarianteBauleitplanverfahren.getSobonBerechnung().getSobonFoerdermix();
+                final var foerdermix = abfragevarianteBauleitplanverfahren.getSobonBerechnung().getSobonFoerdermix();
                 langfristigerSobonursaechlicherBedarf =
                     this.calculateLangfristigerSobonursaechlicherBedarf(
                             sobonGf,
@@ -175,7 +175,7 @@ public class CalculationService {
                     );
             if (this.shouldSobonBerechnungBePerformed(abfragevarianteWeiteresVerfahren, isAbfrageSobonRelevant)) {
                 sobonGf = abfragevarianteWeiteresVerfahren.getGfWohnenSobonUrsaechlich();
-                var foerdermix = abfragevarianteWeiteresVerfahren.getSobonBerechnung().getSobonFoerdermix();
+                final var foerdermix = abfragevarianteWeiteresVerfahren.getSobonBerechnung().getSobonFoerdermix();
                 langfristigerSobonursaechlicherBedarf =
                     this.calculateLangfristigerSobonursaechlicherBedarf(
                             sobonGf,
