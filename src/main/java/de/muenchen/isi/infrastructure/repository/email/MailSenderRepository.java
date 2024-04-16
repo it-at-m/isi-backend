@@ -28,10 +28,11 @@ public class MailSenderRepository {
     }
 
     /**
+     * Versendet eine Email mit den in den Parameter gegebenen Informationen.
      *
-     * @param receiver
-     * @param subject
-     * @param text
+     * @param receiver als Empfänger der Email.
+     * @param subject als Betreff der Email.
+     * @param text als Text der Email.
      */
     public void sendMail(final String receiver, final String subject, final String text) {
         final var mailMessage = new SimpleMailMessage();
