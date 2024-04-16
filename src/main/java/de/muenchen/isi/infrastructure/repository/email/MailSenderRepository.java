@@ -1,0 +1,68 @@
+package de.muenchen.isi.infrastructure.repository.email;
+
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.MailAuthenticationException;
+import org.springframework.mail.MailParseException;
+import org.springframework.mail.MailSendException;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.stereotype.Repository;
+
+@Repository
+@Slf4j
+public class MailSenderRepository {
+
+    private final JavaMailSender mailSender;
+
+    private final String fromEmailAddress;
+
+    public MailSenderRepository(
+        final JavaMailSender mailSender,
+        @Value("${spring.mail.username:}") final String fromEmailAddress
+    ) {
+        this.mailSender = mailSender;
+        this.fromEmailAddress = fromEmailAddress;
+    }
+
+    /**
+     *
+     * @param receiver
+     * @param subject
+     * @param text
+     */
+    public void sendMailAsync(final String receiver, final String subject, final String text) {
+        this.sendMail(receiver, subject, text);
+    }
+
+    /**
+     *
+     * @param receiver
+     * @param subject
+     * @param text
+     */
+    public void sendMail(final String receiver, final String subject, final String text) {
+        final var mailMessage = new SimpleMailMessage();
+        mailMessage.setFrom(fromEmailAddress);
+        mailMessage.setTo(receiver);
+        mailMessage.setSubject(subject);
+        mailMessage.setText(text);
+        try {
+            mailSender.send(mailMessage);
+        } catch (final MailSendException exception) {
+            final var message = StringUtils.replace(
+                "Die Email konnte nicht an den Empfänger %s versendet werden.",
+                "%s",
+                receiver
+            );
+            log.error(message, exception);
+        } catch (final MailAuthenticationException exception) {
+            final var message = "Die Email konnte wegen fehlerhafter Emailcredentials nicht versendet werden.";
+            log.error(message, exception);
+        } catch (final MailParseException exception) {
+            final var message = "Die Email konnte wegen fehlerhafter Email-Parameter nicht versendet werden.";
+            log.error(message, exception);
+        }
+    }
+}

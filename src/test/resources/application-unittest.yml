@@ -39,6 +39,17 @@ spring:
             username: elastic
             password: changeme
 
+  mail:
+    host: dummy.smtp.unittest.com
+    port: 587
+    username: no-reply@dummy.smtp.unittest.com
+    password: abcdef123456
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls.enable: true
+
   security:
     # possible values: none, all, changing (With changing, only changing requests such as POST, PUT, DELETE are logged)
     logging.requests: all
