@@ -1,22 +1,15 @@
 package de.muenchen.isi.domain.service.email;
 
 import de.muenchen.isi.domain.model.AbfrageModel;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrageEvents;
 import de.muenchen.isi.infrastructure.repository.email.MailSenderRepository;
 import de.muenchen.isi.security.AuthenticationUtils;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
-import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.collections4.IterableUtils;
-import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 @Service
-@RequiredArgsConstructor
 public class SendWorkAssignmentInformationService {
 
     private final MailSenderRepository mailSenderRepository;
@@ -41,15 +34,28 @@ public class SendWorkAssignmentInformationService {
 
     /**
      *
-     * @param abfrage
+     * @param nameAbfrage
      * @param stateMachineEvent
      */
-    public void sendWorkAssignmentInformation(final AbfrageModel abfrage, final StatusAbfrageEvents stateMachineEvent) {
+    @Async
+    public void sendWorkAssignmentInformationAsync(
+        final String nameAbfrage,
+        final StatusAbfrageEvents stateMachineEvent
+    ) {
+        this.sendWorkAssignmentInformation(nameAbfrage, stateMachineEvent);
+    }
+
+    /**
+     *
+     * @param nameAbfrage
+     * @param stateMachineEvent
+     */
+    public void sendWorkAssignmentInformation(final String nameAbfrage, final StatusAbfrageEvents stateMachineEvent) {
         final var reveiverEmailAddress = getReceiver(stateMachineEvent);
         if (StringUtils.isNotEmpty(reveiverEmailAddress)) {
-            final var subject = getSubject(stateMachineEvent);
-            final var text = getText(stateMachineEvent);
-            mailSenderRepository.sendMailAsync(reveiverEmailAddress, subject, text);
+            final var subject = getSubject(nameAbfrage, stateMachineEvent);
+            final var text = getText(nameAbfrage, stateMachineEvent);
+            mailSenderRepository.sendMail(reveiverEmailAddress, subject, text);
         }
     }
 
@@ -71,11 +77,32 @@ public class SendWorkAssignmentInformationService {
         return null;
     }
 
-    protected String getText(final StatusAbfrageEvents stateMachineEvent) {
-        return "";
+    /**
+     *
+     *
+     * @param nameAbfrage
+     * @param stateMachineEvent
+     * @return
+     */
+    protected String getText(final String nameAbfrage, final StatusAbfrageEvents stateMachineEvent) {
+        return stateMachineEvent
+            .getInformationText()
+            .concat("\n\n")
+            .concat("Abfrage: ")
+            .concat(StringUtils.defaultIfEmpty(nameAbfrage, ""));
     }
 
-    protected String getSubject(final StatusAbfrageEvents stateMachineEvent) {
-        return "";
+    /**
+     *
+     * @param nameAbfrage
+     * @param stateMachineEvent
+     * @return
+     */
+    protected String getSubject(final String nameAbfrage, final StatusAbfrageEvents stateMachineEvent) {
+        return stateMachineEvent
+            .getButtonName()
+            .concat(" - ")
+            .concat("Abfrage: ")
+            .concat(StringUtils.defaultIfEmpty(nameAbfrage, ""));
     }
 }

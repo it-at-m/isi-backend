@@ -33,17 +33,6 @@ public class MailSenderRepository {
      * @param subject
      * @param text
      */
-    @Async
-    public void sendMailAsync(final String receiver, final String subject, final String text) {
-        this.sendMail(receiver, subject, text);
-    }
-
-    /**
-     *
-     * @param receiver
-     * @param subject
-     * @param text
-     */
     public void sendMail(final String receiver, final String subject, final String text) {
         final var mailMessage = new SimpleMailMessage();
         mailMessage.setFrom(fromEmailAddress);
