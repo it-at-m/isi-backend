@@ -10,7 +10,7 @@ public enum StatusAbfrageEvents {
         "FREIGABE",
         1,
         "Die Abfrage wird zur weiteren Bearbeitung freigegeben.",
-        "Die Abfrage wird zur weiteren Bearbeitung freigegeben."
+        "Die Abfrage wurde zur weiteren Bearbeitung freigegeben."
     ),
 
     IN_BEARBEITUNG_SETZEN(
