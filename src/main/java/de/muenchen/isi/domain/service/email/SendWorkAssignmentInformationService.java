@@ -33,9 +33,10 @@ public class SendWorkAssignmentInformationService {
     }
 
     /**
+     * Asynchrone Ausführung der Methode {@link SendWorkAssignmentInformationService#sendWorkAssignmentInformation}.
      *
      * @param nameAbfrage
-     * @param stateMachineEvent
+     * @param stateMachineEvent als Statusübergangsinformation.
      */
     @Async
     public void sendWorkAssignmentInformationAsync(
