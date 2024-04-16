@@ -8,6 +8,7 @@ import org.springframework.mail.MailParseException;
 import org.springframework.mail.MailSendException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -32,6 +33,7 @@ public class MailSenderRepository {
      * @param subject
      * @param text
      */
+    @Async
     public void sendMailAsync(final String receiver, final String subject, final String text) {
         this.sendMail(receiver, subject, text);
     }
