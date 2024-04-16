@@ -136,14 +136,14 @@ public class CalculationService {
                     );
             if (this.shouldSobonBerechnungBePerformed(abfragevarianteBauleitplanverfahren, isAbfrageSobonRelevant)) {
                 sobonGf = abfragevarianteBauleitplanverfahren.getGfWohnenSobonUrsaechlich();
-
+                final var foerdermix = abfragevarianteBauleitplanverfahren.getSobonBerechnung().getSobonFoerdermix();
                 langfristigerSobonursaechlicherBedarf =
                     this.calculateLangfristigerSobonursaechlicherBedarf(
                             sobonGf,
                             bauabschnitte,
                             sobonOrientierungswertJahr,
                             stammdatenGueltigAb,
-                            abfragevarianteBauleitplanverfahren.getSobonBerechnung().getSobonFoerdermix()
+                            foerdermix
                         );
                 bedarfeForAbfragevariante.setLangfristigerSobonursaechlicherBedarf(
                     langfristigerSobonursaechlicherBedarf
@@ -175,13 +175,14 @@ public class CalculationService {
                     );
             if (this.shouldSobonBerechnungBePerformed(abfragevarianteWeiteresVerfahren, isAbfrageSobonRelevant)) {
                 sobonGf = abfragevarianteWeiteresVerfahren.getGfWohnenSobonUrsaechlich();
+                final var foerdermix = abfragevarianteWeiteresVerfahren.getSobonBerechnung().getSobonFoerdermix();
                 langfristigerSobonursaechlicherBedarf =
                     this.calculateLangfristigerSobonursaechlicherBedarf(
                             sobonGf,
                             bauabschnitte,
                             sobonOrientierungswertJahr,
                             stammdatenGueltigAb,
-                            abfragevarianteWeiteresVerfahren.getSobonBerechnung().getSobonFoerdermix()
+                            foerdermix
                         );
                 bedarfeForAbfragevariante.setLangfristigerSobonursaechlicherBedarf(
                     langfristigerSobonursaechlicherBedarf
