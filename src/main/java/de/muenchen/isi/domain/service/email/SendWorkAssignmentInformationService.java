@@ -21,8 +21,8 @@ public class SendWorkAssignmentInformationService {
     private final String receiverBedarfsmeldung;
 
     public SendWorkAssignmentInformationService(
-        @Value("${spring.mail.distribution-list.sachbearbeitung:}") final String receiverSachbearbeitung,
-        @Value("${spring.mail.distribution-list.bedarfsmeldung:}") final String receiverBedarfsmeldung,
+        @Value("${spring.mail.receiver.sachbearbeitung:}") final String receiverSachbearbeitung,
+        @Value("${spring.mail.receiver.bedarfsmeldung:}") final String receiverBedarfsmeldung,
         final MailSenderRepository mailSenderRepository,
         final AuthenticationUtils authenticationUtils
     ) {
@@ -46,9 +46,14 @@ public class SendWorkAssignmentInformationService {
     }
 
     /**
+     * Versendet die Email zur Bearbeitungsinformation.
+     *
+     * Anhand der gegebenen Statusübergangsinformation wird entweder eine Email versendet oder ein Emailversand unterlassen.
+     *
+     * Der Emailtext ergibt sich aus den in den Parametern gegebenen Informationen.
      *
      * @param nameAbfrage
-     * @param stateMachineEvent
+     * @param stateMachineEvent als Statusübergangsinformation.
      */
     public void sendWorkAssignmentInformation(final String nameAbfrage, final StatusAbfrageEvents stateMachineEvent) {
         final var reveiverEmailAddress = getReceiver(stateMachineEvent);
@@ -60,9 +65,10 @@ public class SendWorkAssignmentInformationService {
     }
 
     /**
+     * Ermittelt den Empfänger der Email auf Basis der Statusübergangsinformation.
      *
-     * @param stateMachineEvent
-     * @return
+     * @param stateMachineEvent als Statusübergangsinformation.
+     * @return der Emailempfäger auf Basis der Statusübergangsinformation oder null falls für den gegebenen Statusübergang kein Emailversand vorgesehen ist.
      */
     protected String getReceiver(final StatusAbfrageEvents stateMachineEvent) {
         if (StatusAbfrageEvents.FREIGABE.equals(stateMachineEvent)) {
@@ -78,11 +84,11 @@ public class SendWorkAssignmentInformationService {
     }
 
     /**
-     *
+     * Erstellt den Emailtext.
      *
      * @param nameAbfrage
      * @param stateMachineEvent
-     * @return
+     * @return der Emailtext zusammengesetzt aus dem {@link StatusAbfrageEvents#getInformationText()} und dem Namen der Abfrage.
      */
     protected String getText(final String nameAbfrage, final StatusAbfrageEvents stateMachineEvent) {
         return stateMachineEvent
@@ -93,10 +99,11 @@ public class SendWorkAssignmentInformationService {
     }
 
     /**
+     * Erstellt den Emailbetreff.
      *
      * @param nameAbfrage
      * @param stateMachineEvent
-     * @return
+     * @return der Betreff zusammengesetzt aus der Statusübergangsinformation und dem Namen der Abfrage.
      */
     protected String getSubject(final String nameAbfrage, final StatusAbfrageEvents stateMachineEvent) {
         return stateMachineEvent
