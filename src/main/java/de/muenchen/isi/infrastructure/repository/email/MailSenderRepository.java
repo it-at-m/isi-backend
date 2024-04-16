@@ -54,6 +54,9 @@ public class MailSenderRepository {
         } catch (final MailParseException exception) {
             final var message = "Die Email konnte wegen fehlerhafter Email-Parameter nicht versendet werden.";
             log.error(message, exception);
+        } catch (final Exception exception) {
+            final var message = "Beim Emailversand ist ein Fehler aufgetreten.";
+            log.error(message, exception);
         }
     }
 }
