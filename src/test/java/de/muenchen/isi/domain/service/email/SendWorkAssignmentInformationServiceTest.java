@@ -4,6 +4,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 
+import de.muenchen.isi.domain.model.BauleitplanverfahrenModel;
 import de.muenchen.isi.domain.model.common.BearbeitendePersonModel;
 import de.muenchen.isi.domain.model.common.BearbeitungshistorieModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
@@ -11,7 +12,6 @@ import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrageEvents;
 import de.muenchen.isi.infrastructure.repository.email.MailSenderRepository;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -39,6 +39,88 @@ class SendWorkAssignmentInformationServiceTest {
                 mailSenderRepository
             );
         Mockito.reset(mailSenderRepository);
+    }
+
+    @Test
+    void getReceiverFreigabe() {
+        var result = sendWorkAssignmentInformationService.getReceiver(null, StatusAbfrageEvents.FREIGABE);
+        assertThat(result, is("mailadress-receiver-sachbearbeitung"));
+    }
+
+    @Test
+    void getReceiverErneuteBearbeitung() {
+        var result = sendWorkAssignmentInformationService.getReceiver(null, StatusAbfrageEvents.ERNEUTE_BEARBEITUNG);
+        assertThat(result, is("mailadress-receiver-sachbearbeitung"));
+    }
+
+    @Test
+    void getReceiverVerschickenDerStellungsnahme() {
+        var result = sendWorkAssignmentInformationService.getReceiver(
+            null,
+            StatusAbfrageEvents.VERSCHICKEN_DER_STELLUNGNAHME
+        );
+        assertThat(result, is("mailadress-receiver-bedarfsmeldung"));
+    }
+
+    @Test
+    void getReceiverBedarfsmeldungErfolgte() {
+        final var abfrage = new BauleitplanverfahrenModel();
+
+        var bearbeitungshistorie = new ArrayList<BearbeitungshistorieModel>();
+        var bearbeitendePerson = new BearbeitendePersonModel();
+        bearbeitendePerson.setEmail("the-email-address-angelegt");
+        var historyElement = new BearbeitungshistorieModel();
+        historyElement.setBearbeitendePerson(bearbeitendePerson);
+        historyElement.setZielStatus(StatusAbfrage.ANGELEGT);
+        bearbeitungshistorie.add(historyElement);
+
+        bearbeitendePerson = new BearbeitendePersonModel();
+        bearbeitendePerson.setEmail("the-email-address-offen");
+        historyElement = new BearbeitungshistorieModel();
+        historyElement.setBearbeitendePerson(bearbeitendePerson);
+        historyElement.setZielStatus(StatusAbfrage.OFFEN);
+        bearbeitungshistorie.add(historyElement);
+
+        bearbeitendePerson = new BearbeitendePersonModel();
+        bearbeitendePerson.setEmail("the-email-address-in-bearbeitung-sachbearbeitung");
+        historyElement = new BearbeitungshistorieModel();
+        historyElement.setBearbeitendePerson(bearbeitendePerson);
+        historyElement.setZielStatus(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+        bearbeitungshistorie.add(historyElement);
+
+        abfrage.setBearbeitungshistorie(bearbeitungshistorie);
+
+        var result = sendWorkAssignmentInformationService.getReceiver(
+            abfrage,
+            StatusAbfrageEvents.BEDARFSMELDUNG_ERFOLGTE
+        );
+        assertThat(result, is("the-email-address-offen"));
+    }
+
+    @Test
+    void getReceiverOther() {
+        var result = sendWorkAssignmentInformationService.getReceiver(null, StatusAbfrageEvents.IN_BEARBEITUNG_SETZEN);
+        assertThat(result, is(nullValue()));
+
+        result = sendWorkAssignmentInformationService.getReceiver(null, StatusAbfrageEvents.ABBRECHEN);
+        assertThat(result, is(nullValue()));
+
+        result =
+            sendWorkAssignmentInformationService.getReceiver(null, StatusAbfrageEvents.ZURUECK_AN_ABFRAGEERSTELLUNG);
+        assertThat(result, is(nullValue()));
+
+        result = sendWorkAssignmentInformationService.getReceiver(null, StatusAbfrageEvents.KEINE_BEARBEITUNG_NOETIG);
+        assertThat(result, is(nullValue()));
+
+        result = sendWorkAssignmentInformationService.getReceiver(null, StatusAbfrageEvents.ZURUECK_AN_SACHBEARBEITUNG);
+        assertThat(result, is(nullValue()));
+
+        result =
+            sendWorkAssignmentInformationService.getReceiver(
+                null,
+                StatusAbfrageEvents.SPEICHERN_VON_SOZIALINFRASTRUKTUR_VERSORGUNG
+            );
+        assertThat(result, is(nullValue()));
     }
 
     @Test
