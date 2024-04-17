@@ -294,7 +294,7 @@ public class AbfrageStatusService {
                                 AbfrageStatusService.this.abfrageService.save(abfrage);
                                 // Asynchrones Versenden der Bearbeitungsinformation
                                 sendWorkAssignmentInformationService.sendWorkAssignmentInformationAsync(
-                                    abfrage.getName(),
+                                    abfrage,
                                     stateContext.getEvent()
                                 );
                             } catch (

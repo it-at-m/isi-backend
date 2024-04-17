@@ -1,9 +1,14 @@
 package de.muenchen.isi.domain.service.email;
 
 import de.muenchen.isi.domain.model.AbfrageModel;
+import de.muenchen.isi.domain.model.common.BearbeitendePersonModel;
+import de.muenchen.isi.domain.model.common.BearbeitungshistorieModel;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrageEvents;
 import de.muenchen.isi.infrastructure.repository.email.MailSenderRepository;
 import de.muenchen.isi.security.AuthenticationUtils;
+import java.util.List;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
@@ -13,8 +18,6 @@ import org.springframework.stereotype.Service;
 public class SendWorkAssignmentInformationService {
 
     private final MailSenderRepository mailSenderRepository;
-
-    private final AuthenticationUtils authenticationUtils;
 
     private final String receiverSachbearbeitung;
 
@@ -29,21 +32,20 @@ public class SendWorkAssignmentInformationService {
         this.receiverSachbearbeitung = receiverSachbearbeitung;
         this.receiverBedarfsmeldung = receiverBedarfsmeldung;
         this.mailSenderRepository = mailSenderRepository;
-        this.authenticationUtils = authenticationUtils;
     }
 
     /**
      * Asynchrone Ausführung der Methode {@link SendWorkAssignmentInformationService#sendWorkAssignmentInformation}.
      *
-     * @param nameAbfrage
+     * @param abfrage
      * @param stateMachineEvent als Statusübergangsinformation.
      */
     @Async
     public void sendWorkAssignmentInformationAsync(
-        final String nameAbfrage,
+        final AbfrageModel abfrage,
         final StatusAbfrageEvents stateMachineEvent
     ) {
-        this.sendWorkAssignmentInformation(nameAbfrage, stateMachineEvent);
+        this.sendWorkAssignmentInformation(abfrage, stateMachineEvent);
     }
 
     /**
@@ -53,25 +55,26 @@ public class SendWorkAssignmentInformationService {
      *
      * Der Emailtext ergibt sich aus den in den Parametern gegebenen Informationen.
      *
-     * @param nameAbfrage
+     * @param abfrage
      * @param stateMachineEvent als Statusübergangsinformation.
      */
-    public void sendWorkAssignmentInformation(final String nameAbfrage, final StatusAbfrageEvents stateMachineEvent) {
-        final var reveiverEmailAddress = getReceiver(stateMachineEvent);
+    public void sendWorkAssignmentInformation(final AbfrageModel abfrage, final StatusAbfrageEvents stateMachineEvent) {
+        final var reveiverEmailAddress = getReceiver(abfrage, stateMachineEvent);
         if (StringUtils.isNotEmpty(reveiverEmailAddress)) {
-            final var subject = getSubject(nameAbfrage, stateMachineEvent);
-            final var text = getText(nameAbfrage, stateMachineEvent);
+            final var subject = getSubject(abfrage.getName(), stateMachineEvent);
+            final var text = getText(abfrage.getName(), stateMachineEvent);
             mailSenderRepository.sendMail(reveiverEmailAddress, subject, text);
         }
     }
 
     /**
-     * Ermittelt den Empfänger der Email auf Basis der Statusübergangsinformation.
+     * Ermittelt den Empfänger der Email auf Basis der Statusübergangsinformation und der Abfrage.
      *
+     * @param abfrage
      * @param stateMachineEvent als Statusübergangsinformation.
      * @return der Emailempfäger auf Basis der Statusübergangsinformation oder null falls für den gegebenen Statusübergang kein Emailversand vorgesehen ist.
      */
-    protected String getReceiver(final StatusAbfrageEvents stateMachineEvent) {
+    protected String getReceiver(final AbfrageModel abfrage, final StatusAbfrageEvents stateMachineEvent) {
         if (StatusAbfrageEvents.FREIGABE.equals(stateMachineEvent)) {
             return receiverSachbearbeitung;
         } else if (StatusAbfrageEvents.ERNEUTE_BEARBEITUNG.equals(stateMachineEvent)) {
@@ -79,9 +82,30 @@ public class SendWorkAssignmentInformationService {
         } else if (StatusAbfrageEvents.VERSCHICKEN_DER_STELLUNGNAHME.equals(stateMachineEvent)) {
             return receiverBedarfsmeldung;
         } else if (StatusAbfrageEvents.BEDARFSMELDUNG_ERFOLGTE.equals(stateMachineEvent)) {
-            return authenticationUtils.getEmail();
+            final var bearbeitungshistorie = abfrage.getBearbeitungshistorie();
+            return getEmailAddressOfPersonWhichInitiallyCreatedTheAbfrage(bearbeitungshistorie);
         }
         return null;
+    }
+
+    /**
+     * Ermittelt die Emailadresse der {@link BearbeitendePersonModel} welche die Abfrage initial erstellt hat.
+     *
+     * @param bearbeitungshistorie zur Ermittlung der Emailadresse.
+     * @return die Emailadresse oder null falls keine Adresse ermittelt werden kann.
+     */
+    protected String getEmailAddressOfPersonWhichInitiallyCreatedTheAbfrage(
+        final List<BearbeitungshistorieModel> bearbeitungshistorie
+    ) {
+        return bearbeitungshistorie
+            .stream()
+            .filter(b -> StatusAbfrage.OFFEN.equals(b.getZielStatus()))
+            .map(BearbeitungshistorieModel::getBearbeitendePerson)
+            .filter(ObjectUtils::isNotEmpty)
+            .map(BearbeitendePersonModel::getEmail)
+            .filter(StringUtils::isNotEmpty)
+            .findFirst()
+            .orElse(null);
     }
 
     /**
