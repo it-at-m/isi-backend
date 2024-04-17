@@ -112,7 +112,7 @@ public class SendWorkAssignmentInformationService {
      * Erstellt den Emailtext.
      *
      * @param nameAbfrage
-     * @param stateMachineEvent
+     * @param stateMachineEvent als Statusübergangsinformation.
      * @return der Emailtext zusammengesetzt aus dem {@link StatusAbfrageEvents#getInformationText()} und dem Namen der Abfrage.
      */
     protected String getText(final String nameAbfrage, final StatusAbfrageEvents stateMachineEvent) {
@@ -127,7 +127,7 @@ public class SendWorkAssignmentInformationService {
      * Erstellt den Emailbetreff.
      *
      * @param nameAbfrage
-     * @param stateMachineEvent
+     * @param stateMachineEvent als Statusübergangsinformation.
      * @return der Betreff zusammengesetzt aus der Statusübergangsinformation und dem Namen der Abfrage.
      */
     protected String getSubject(final String nameAbfrage, final StatusAbfrageEvents stateMachineEvent) {
