@@ -292,7 +292,7 @@ public class AbfrageStatusService {
                                     abfrageBearbeitungshistorieService.appendBearbeitungshistorieToAbfrage(abfrage);
                                 // Speichern der Abfrage
                                 AbfrageStatusService.this.abfrageService.save(abfrage);
-                                // Asynchrones Versenden der Bearbeitungsinformation
+                                // Asynchrones Versenden der Information für anstehende Aufgabe
                                 sendWorkAssignmentInformationService.sendWorkAssignmentInformationAsync(
                                     abfrage,
                                     stateContext.getEvent()
