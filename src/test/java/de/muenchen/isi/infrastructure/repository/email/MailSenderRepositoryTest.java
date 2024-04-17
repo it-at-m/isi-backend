@@ -61,7 +61,7 @@ class MailSenderRepositoryTest {
 
         assertThat(
             output.getAll(),
-            containsString("MailSenderRepository -- Die Email konnte nicht an den Empfänger receiver versendet werden.")
+            containsString("Die Email konnte nicht an den Empfänger receiver versendet werden.")
         );
         Mockito.verify(javaMailSender, Mockito.times(1)).send(mailMessage);
     }
@@ -80,9 +80,7 @@ class MailSenderRepositoryTest {
 
         assertThat(
             output.getAll(),
-            containsString(
-                "MailSenderRepository -- Die Email konnte wegen fehlerhafter Emailcredentials nicht versendet werden."
-            )
+            containsString("Die Email konnte wegen fehlerhafter Emailcredentials nicht versendet werden.")
         );
         Mockito.verify(javaMailSender, Mockito.times(1)).send(mailMessage);
     }
@@ -101,9 +99,7 @@ class MailSenderRepositoryTest {
 
         assertThat(
             output.getAll(),
-            containsString(
-                "MailSenderRepository -- Die Email konnte wegen fehlerhafter Email-Parameter nicht versendet werden."
-            )
+            containsString("Die Email konnte wegen fehlerhafter Email-Parameter nicht versendet werden.")
         );
         Mockito.verify(javaMailSender, Mockito.times(1)).send(mailMessage);
     }
@@ -120,10 +116,7 @@ class MailSenderRepositoryTest {
 
         mailSenderRepository.sendMail("receiver", "subject", "text");
 
-        assertThat(
-            output.getAll(),
-            containsString("MailSenderRepository -- Beim Emailversand ist ein Fehler aufgetreten.")
-        );
+        assertThat(output.getAll(), containsString("Beim Emailversand ist ein Fehler aufgetreten."));
         Mockito.verify(javaMailSender, Mockito.times(1)).send(mailMessage);
     }
 }
