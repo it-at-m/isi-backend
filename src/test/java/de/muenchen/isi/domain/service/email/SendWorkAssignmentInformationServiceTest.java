@@ -42,6 +42,46 @@ class SendWorkAssignmentInformationServiceTest {
     }
 
     @Test
+    void sendWorkAssignmentInformationAsync() {
+        final var abfrage = new BauleitplanverfahrenModel();
+        abfrage.setName("Name der Abfrage");
+        final var subject = StatusAbfrageEvents.ERNEUTE_BEARBEITUNG
+            .getButtonName()
+            .concat(" - Abfrage: Name der Abfrage");
+        final var text = StatusAbfrageEvents.ERNEUTE_BEARBEITUNG
+            .getInformationText()
+            .concat("\n\nAbfrage: Name der Abfrage");
+        sendWorkAssignmentInformationService.sendWorkAssignmentInformationAsync(
+            abfrage,
+            StatusAbfrageEvents.ERNEUTE_BEARBEITUNG
+        );
+
+        Mockito
+            .verify(mailSenderRepository, Mockito.times(1))
+            .sendMail("mailadress-receiver-sachbearbeitung", subject, text);
+    }
+
+    @Test
+    void sendWorkAssignmentInformation() {
+        final var abfrage = new BauleitplanverfahrenModel();
+        abfrage.setName("Name der Abfrage");
+        final var subject = StatusAbfrageEvents.ERNEUTE_BEARBEITUNG
+            .getButtonName()
+            .concat(" - Abfrage: Name der Abfrage");
+        final var text = StatusAbfrageEvents.ERNEUTE_BEARBEITUNG
+            .getInformationText()
+            .concat("\n\nAbfrage: Name der Abfrage");
+        sendWorkAssignmentInformationService.sendWorkAssignmentInformation(
+            abfrage,
+            StatusAbfrageEvents.ERNEUTE_BEARBEITUNG
+        );
+
+        Mockito
+            .verify(mailSenderRepository, Mockito.times(1))
+            .sendMail("mailadress-receiver-sachbearbeitung", subject, text);
+    }
+
+    @Test
     void getReceiverFreigabe() {
         var result = sendWorkAssignmentInformationService.getReceiver(null, StatusAbfrageEvents.FREIGABE);
         assertThat(result, is("mailadress-receiver-sachbearbeitung"));
