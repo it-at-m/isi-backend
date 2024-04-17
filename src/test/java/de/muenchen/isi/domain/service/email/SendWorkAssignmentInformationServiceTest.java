@@ -1,0 +1,164 @@
+package de.muenchen.isi.domain.service.email;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
+
+import de.muenchen.isi.domain.model.common.BearbeitendePersonModel;
+import de.muenchen.isi.domain.model.common.BearbeitungshistorieModel;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrageEvents;
+import de.muenchen.isi.infrastructure.repository.email.MailSenderRepository;
+import java.util.ArrayList;
+import java.util.List;
+import org.apache.commons.lang3.StringUtils;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
+
+@ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
+class SendWorkAssignmentInformationServiceTest {
+
+    @Mock
+    private MailSenderRepository mailSenderRepository;
+
+    private SendWorkAssignmentInformationService sendWorkAssignmentInformationService;
+
+    @BeforeEach
+    public void beforeEach() throws NoSuchFieldException, IllegalAccessException {
+        this.sendWorkAssignmentInformationService =
+            new SendWorkAssignmentInformationService(
+                "mailadress-receiver-sachbearbeitung",
+                "mailadress-receiver-bedarfsmeldung",
+                mailSenderRepository
+            );
+        Mockito.reset(mailSenderRepository);
+    }
+
+    @Test
+    void getEmailAddressOfPersonWhichInitiallyCreatedTheAbfrage() {
+        var result = sendWorkAssignmentInformationService.getEmailAddressOfPersonWhichInitiallyCreatedTheAbfrage(null);
+        assertThat(result, is(nullValue()));
+
+        result = sendWorkAssignmentInformationService.getEmailAddressOfPersonWhichInitiallyCreatedTheAbfrage(List.of());
+        assertThat(result, is(nullValue()));
+
+        var bearbeitungshistorie = new ArrayList<BearbeitungshistorieModel>();
+        var historyElement = new BearbeitungshistorieModel();
+        historyElement.setZielStatus(StatusAbfrage.ANGELEGT);
+        bearbeitungshistorie.add(historyElement);
+        result =
+            sendWorkAssignmentInformationService.getEmailAddressOfPersonWhichInitiallyCreatedTheAbfrage(
+                bearbeitungshistorie
+            );
+        assertThat(result, is(nullValue()));
+
+        bearbeitungshistorie = new ArrayList<>();
+        historyElement = new BearbeitungshistorieModel();
+        historyElement.setZielStatus(StatusAbfrage.OFFEN);
+        bearbeitungshistorie.add(historyElement);
+        result =
+            sendWorkAssignmentInformationService.getEmailAddressOfPersonWhichInitiallyCreatedTheAbfrage(
+                bearbeitungshistorie
+            );
+        assertThat(result, is(nullValue()));
+
+        bearbeitungshistorie = new ArrayList<>();
+        var bearbeitendePerson = new BearbeitendePersonModel();
+        bearbeitendePerson.setEmail(null);
+        historyElement = new BearbeitungshistorieModel();
+        historyElement.setBearbeitendePerson(bearbeitendePerson);
+        historyElement.setZielStatus(StatusAbfrage.OFFEN);
+        bearbeitungshistorie.add(historyElement);
+        result =
+            sendWorkAssignmentInformationService.getEmailAddressOfPersonWhichInitiallyCreatedTheAbfrage(
+                bearbeitungshistorie
+            );
+        assertThat(result, is(nullValue()));
+
+        bearbeitungshistorie = new ArrayList<>();
+        bearbeitendePerson = new BearbeitendePersonModel();
+        bearbeitendePerson.setEmail("the-email-address-offen");
+        historyElement = new BearbeitungshistorieModel();
+        historyElement.setBearbeitendePerson(bearbeitendePerson);
+        historyElement.setZielStatus(StatusAbfrage.OFFEN);
+        bearbeitungshistorie.add(historyElement);
+        result =
+            sendWorkAssignmentInformationService.getEmailAddressOfPersonWhichInitiallyCreatedTheAbfrage(
+                bearbeitungshistorie
+            );
+        assertThat(result, is("the-email-address-offen"));
+
+        bearbeitungshistorie = new ArrayList<>();
+        bearbeitendePerson = new BearbeitendePersonModel();
+        bearbeitendePerson.setEmail("the-email-address-angelegt");
+        historyElement = new BearbeitungshistorieModel();
+        historyElement.setBearbeitendePerson(bearbeitendePerson);
+        historyElement.setZielStatus(StatusAbfrage.ANGELEGT);
+        bearbeitungshistorie.add(historyElement);
+
+        bearbeitendePerson = new BearbeitendePersonModel();
+        bearbeitendePerson.setEmail("the-email-address-offen");
+        historyElement = new BearbeitungshistorieModel();
+        historyElement.setBearbeitendePerson(bearbeitendePerson);
+        historyElement.setZielStatus(StatusAbfrage.OFFEN);
+        bearbeitungshistorie.add(historyElement);
+
+        bearbeitendePerson = new BearbeitendePersonModel();
+        bearbeitendePerson.setEmail("the-email-address-in-bearbeitung-sachbearbeitung");
+        historyElement = new BearbeitungshistorieModel();
+        historyElement.setBearbeitendePerson(bearbeitendePerson);
+        historyElement.setZielStatus(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+        bearbeitungshistorie.add(historyElement);
+
+        result =
+            sendWorkAssignmentInformationService.getEmailAddressOfPersonWhichInitiallyCreatedTheAbfrage(
+                bearbeitungshistorie
+            );
+        assertThat(result, is("the-email-address-offen"));
+    }
+
+    @Test
+    void getText() {
+        var result = sendWorkAssignmentInformationService.getText(
+            "Name der Abfrage",
+            StatusAbfrageEvents.ERNEUTE_BEARBEITUNG
+        );
+        var expected = StatusAbfrageEvents.ERNEUTE_BEARBEITUNG
+            .getInformationText()
+            .concat("\n\nAbfrage: Name der Abfrage");
+        assertThat(result, is(expected));
+
+        result = sendWorkAssignmentInformationService.getText("", StatusAbfrageEvents.ERNEUTE_BEARBEITUNG);
+        expected = StatusAbfrageEvents.ERNEUTE_BEARBEITUNG.getInformationText().concat("\n\nAbfrage: ");
+        assertThat(result, is(expected));
+
+        result = sendWorkAssignmentInformationService.getText(null, StatusAbfrageEvents.ERNEUTE_BEARBEITUNG);
+        expected = StatusAbfrageEvents.ERNEUTE_BEARBEITUNG.getInformationText().concat("\n\nAbfrage: ");
+        assertThat(result, is(expected));
+    }
+
+    @Test
+    void getSubject() {
+        var result = sendWorkAssignmentInformationService.getSubject(
+            "Name der Abfrage",
+            StatusAbfrageEvents.ERNEUTE_BEARBEITUNG
+        );
+        var expected = StatusAbfrageEvents.ERNEUTE_BEARBEITUNG.getButtonName().concat(" - Abfrage: Name der Abfrage");
+        assertThat(result, is(expected));
+
+        result = sendWorkAssignmentInformationService.getSubject("", StatusAbfrageEvents.ERNEUTE_BEARBEITUNG);
+        expected = StatusAbfrageEvents.ERNEUTE_BEARBEITUNG.getButtonName().concat(" - Abfrage: ");
+        assertThat(result, is(expected));
+
+        result = sendWorkAssignmentInformationService.getSubject(null, StatusAbfrageEvents.ERNEUTE_BEARBEITUNG);
+        expected = StatusAbfrageEvents.ERNEUTE_BEARBEITUNG.getButtonName().concat(" - Abfrage: ");
+        assertThat(result, is(expected));
+    }
+}

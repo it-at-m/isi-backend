@@ -8,6 +8,7 @@ import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrageEvents;
 import de.muenchen.isi.infrastructure.repository.email.MailSenderRepository;
 import de.muenchen.isi.security.AuthenticationUtils;
 import java.util.List;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,8 +27,7 @@ public class SendWorkAssignmentInformationService {
     public SendWorkAssignmentInformationService(
         @Value("${spring.mail.receiver.sachbearbeitung:}") final String receiverSachbearbeitung,
         @Value("${spring.mail.receiver.bedarfsmeldung:}") final String receiverBedarfsmeldung,
-        final MailSenderRepository mailSenderRepository,
-        final AuthenticationUtils authenticationUtils
+        final MailSenderRepository mailSenderRepository
     ) {
         this.receiverSachbearbeitung = receiverSachbearbeitung;
         this.receiverBedarfsmeldung = receiverBedarfsmeldung;
@@ -97,7 +97,8 @@ public class SendWorkAssignmentInformationService {
     protected String getEmailAddressOfPersonWhichInitiallyCreatedTheAbfrage(
         final List<BearbeitungshistorieModel> bearbeitungshistorie
     ) {
-        return bearbeitungshistorie
+        return CollectionUtils
+            .emptyIfNull(bearbeitungshistorie)
             .stream()
             .filter(b -> StatusAbfrage.OFFEN.equals(b.getZielStatus()))
             .map(BearbeitungshistorieModel::getBearbeitendePerson)
