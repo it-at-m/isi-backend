@@ -16,6 +16,7 @@ import de.muenchen.isi.domain.exception.UniqueViolationException;
 import de.muenchen.isi.domain.exception.UserRoleNotAllowedException;
 import de.muenchen.isi.domain.model.AbfrageModel;
 import de.muenchen.isi.domain.service.calculation.CalculationService;
+import de.muenchen.isi.domain.service.email.SendWorkAssignmentInformationService;
 import de.muenchen.isi.domain.service.reporting.ReportingdataTransferService;
 import de.muenchen.isi.domain.service.transition.MockCustomUser;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
@@ -52,6 +53,9 @@ class AbfrageStatusServiceTest {
 
     @MockBean
     private ReportingdataTransferService reportingdataTransferService;
+
+    @MockBean
+    private SendWorkAssignmentInformationService sendWorkAssignmentInformationService;
 
     @Test
     void getAbfrageIdHeaderSuccessfull() throws EntityNotFoundException {
