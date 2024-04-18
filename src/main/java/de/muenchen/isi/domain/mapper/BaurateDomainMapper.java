@@ -6,10 +6,13 @@ package de.muenchen.isi.domain.mapper;
 
 import de.muenchen.isi.configuration.MapstructConfiguration;
 import de.muenchen.isi.domain.model.BaurateModel;
+import de.muenchen.isi.domain.model.FoerderartModel;
+import de.muenchen.isi.domain.model.FoerdermixModel;
 import de.muenchen.isi.domain.model.stammdaten.baurate.IdealtypischeBaurateModel;
 import de.muenchen.isi.infrastructure.entity.Baurate;
 import de.muenchen.isi.infrastructure.entity.stammdaten.baurate.IdealtypischeBaurate;
 import org.mapstruct.Mapper;
+import org.mapstruct.control.DeepClone;
 
 @Mapper(config = MapstructConfiguration.class)
 public interface BaurateDomainMapper {
@@ -20,4 +23,13 @@ public interface BaurateDomainMapper {
     IdealtypischeBaurateModel entity2Model(final IdealtypischeBaurate entity);
 
     IdealtypischeBaurate model2Entity(final IdealtypischeBaurateModel model);
+
+    @DeepClone
+    BaurateModel deepClone(BaurateModel model);
+
+    @DeepClone
+    FoerdermixModel deepClone(FoerdermixModel model);
+
+    @DeepClone
+    FoerderartModel deepClone(FoerderartModel model);
 }
