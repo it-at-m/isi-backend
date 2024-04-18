@@ -131,10 +131,13 @@ public class SendWorkAssignmentInformationService {
      * @return der Betreff zusammengesetzt aus der Statusübergangsinformation und dem Namen der Abfrage.
      */
     protected String getSubject(final String nameAbfrage, final StatusAbfrageEvents stateMachineEvent) {
-        return stateMachineEvent
-            .getButtonName()
-            .concat(" - ")
-            .concat("Abfrage: ")
-            .concat(StringUtils.defaultIfEmpty(nameAbfrage, ""));
+        return (
+            "ISI - " +
+            stateMachineEvent
+                .getButtonName()
+                .concat(" - ")
+                .concat("Abfrage: ")
+                .concat(StringUtils.defaultIfEmpty(nameAbfrage, ""))
+        );
     }
 }
