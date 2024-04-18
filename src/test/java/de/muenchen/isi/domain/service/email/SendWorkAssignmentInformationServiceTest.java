@@ -45,9 +45,8 @@ class SendWorkAssignmentInformationServiceTest {
     void sendWorkAssignmentInformationAsync() {
         final var abfrage = new BauleitplanverfahrenModel();
         abfrage.setName("Name der Abfrage");
-        final var subject = StatusAbfrageEvents.ERNEUTE_BEARBEITUNG
-            .getButtonName()
-            .concat(" - Abfrage: Name der Abfrage");
+        final var subject =
+            "ISI - " + StatusAbfrageEvents.ERNEUTE_BEARBEITUNG.getButtonName().concat(" - Abfrage: Name der Abfrage");
         final var text = StatusAbfrageEvents.ERNEUTE_BEARBEITUNG
             .getInformationText()
             .concat("\n\nAbfrage: Name der Abfrage");
@@ -65,9 +64,8 @@ class SendWorkAssignmentInformationServiceTest {
     void sendWorkAssignmentInformation() {
         final var abfrage = new BauleitplanverfahrenModel();
         abfrage.setName("Name der Abfrage");
-        final var subject = StatusAbfrageEvents.ERNEUTE_BEARBEITUNG
-            .getButtonName()
-            .concat(" - Abfrage: Name der Abfrage");
+        final var subject =
+            "ISI - " + StatusAbfrageEvents.ERNEUTE_BEARBEITUNG.getButtonName().concat(" - Abfrage: Name der Abfrage");
         final var text = StatusAbfrageEvents.ERNEUTE_BEARBEITUNG
             .getInformationText()
             .concat("\n\nAbfrage: Name der Abfrage");
@@ -272,15 +270,16 @@ class SendWorkAssignmentInformationServiceTest {
             "Name der Abfrage",
             StatusAbfrageEvents.ERNEUTE_BEARBEITUNG
         );
-        var expected = StatusAbfrageEvents.ERNEUTE_BEARBEITUNG.getButtonName().concat(" - Abfrage: Name der Abfrage");
+        var expected =
+            "ISI - " + StatusAbfrageEvents.ERNEUTE_BEARBEITUNG.getButtonName().concat(" - Abfrage: Name der Abfrage");
         assertThat(result, is(expected));
 
         result = sendWorkAssignmentInformationService.getSubject("", StatusAbfrageEvents.ERNEUTE_BEARBEITUNG);
-        expected = StatusAbfrageEvents.ERNEUTE_BEARBEITUNG.getButtonName().concat(" - Abfrage: ");
+        expected = "ISI - " + StatusAbfrageEvents.ERNEUTE_BEARBEITUNG.getButtonName().concat(" - Abfrage: ");
         assertThat(result, is(expected));
 
         result = sendWorkAssignmentInformationService.getSubject(null, StatusAbfrageEvents.ERNEUTE_BEARBEITUNG);
-        expected = StatusAbfrageEvents.ERNEUTE_BEARBEITUNG.getButtonName().concat(" - Abfrage: ");
+        expected = "ISI - " + StatusAbfrageEvents.ERNEUTE_BEARBEITUNG.getButtonName().concat(" - Abfrage: ");
         assertThat(result, is(expected));
     }
 }
