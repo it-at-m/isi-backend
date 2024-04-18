@@ -226,7 +226,10 @@ public class AbfragevarianteWeiteresVerfahren extends Abfragevariante {
     private boolean ausgeloesterBedarfMitversorgungInBestEinrichtungenNachAusbauSchule;
 
     @Column(length = 1000)
-    private String hinweisVersorgung;
+    private String anmerkungFachreferate;
+
+    @Column(length = 1000)
+    private String anmerkungAbfrageersteller;
 
     @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "abfrgvar_weitrs_vrfhrn_id")
