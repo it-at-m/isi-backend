@@ -29,6 +29,8 @@ public class MailSenderRepository {
     /**
      * Versendet eine Email mit den in den Parameter gegebenen Informationen.
      *
+     * Tritt beim Emailversand ein Fehler auf, so wird dieser als "error" geloggt.
+     *
      * @param receiver als Empfänger der Email.
      * @param subject als Betreff der Email.
      * @param text als Text der Email.

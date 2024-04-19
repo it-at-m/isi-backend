@@ -129,7 +129,7 @@ public class SendWorkAssignmentInformationService {
      *
      * @param nameAbfrage
      * @param stateMachineEvent als Statusübergangsinformation.
-     * @return der Betreff zusammengesetzt aus der Statusübergangsinformation und dem Namen der Abfrage.
+     * @return der Betreff zusammengesetzt aus der {@link StatusAbfrageEvents#getPropertyWorkAssignmentInformationSubject()} und dem Namen der Abfrage.
      */
     protected String getSubject(final String nameAbfrage, final StatusAbfrageEvents stateMachineEvent) {
         return getSubject(stateMachineEvent).concat(StringUtils.defaultIfEmpty(nameAbfrage, StringUtils.EMPTY));
