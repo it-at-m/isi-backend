@@ -113,11 +113,11 @@ public class SendWorkAssignmentInformationService {
      *
      * @param nameAbfrage
      * @param stateMachineEvent als Statusübergangsinformation.
-     * @return der Emailtext zusammengesetzt aus dem {@link StatusAbfrageEvents#getInformationText()} und dem Namen der Abfrage.
+     * @return der Emailtext zusammengesetzt aus dem {@link StatusAbfrageEvents#getPropertyWorkAssignmentInformationText()} und dem Namen der Abfrage.
      */
     protected String getText(final String nameAbfrage, final StatusAbfrageEvents stateMachineEvent) {
         return stateMachineEvent
-            .getInformationText()
+            .getPropertyWorkAssignmentInformationText()
             .concat("\n\n")
             .concat("Abfrage: ")
             .concat(StringUtils.defaultIfEmpty(nameAbfrage, ""));

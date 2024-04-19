@@ -48,7 +48,7 @@ class SendWorkAssignmentInformationServiceTest {
         final var subject =
             "ISI - " + StatusAbfrageEvents.ERNEUTE_BEARBEITUNG.getButtonName().concat(" - Abfrage: Name der Abfrage");
         final var text = StatusAbfrageEvents.ERNEUTE_BEARBEITUNG
-            .getInformationText()
+            .getPropertyWorkAssignmentInformationText()
             .concat("\n\nAbfrage: Name der Abfrage");
         sendWorkAssignmentInformationService.sendWorkAssignmentInformationAsync(
             abfrage,
@@ -67,7 +67,7 @@ class SendWorkAssignmentInformationServiceTest {
         final var subject =
             "ISI - " + StatusAbfrageEvents.ERNEUTE_BEARBEITUNG.getButtonName().concat(" - Abfrage: Name der Abfrage");
         final var text = StatusAbfrageEvents.ERNEUTE_BEARBEITUNG
-            .getInformationText()
+            .getPropertyWorkAssignmentInformationText()
             .concat("\n\nAbfrage: Name der Abfrage");
         sendWorkAssignmentInformationService.sendWorkAssignmentInformation(
             abfrage,
@@ -251,16 +251,18 @@ class SendWorkAssignmentInformationServiceTest {
             StatusAbfrageEvents.ERNEUTE_BEARBEITUNG
         );
         var expected = StatusAbfrageEvents.ERNEUTE_BEARBEITUNG
-            .getInformationText()
+            .getPropertyWorkAssignmentInformationText()
             .concat("\n\nAbfrage: Name der Abfrage");
         assertThat(result, is(expected));
 
         result = sendWorkAssignmentInformationService.getText("", StatusAbfrageEvents.ERNEUTE_BEARBEITUNG);
-        expected = StatusAbfrageEvents.ERNEUTE_BEARBEITUNG.getInformationText().concat("\n\nAbfrage: ");
+        expected =
+            StatusAbfrageEvents.ERNEUTE_BEARBEITUNG.getPropertyWorkAssignmentInformationText().concat("\n\nAbfrage: ");
         assertThat(result, is(expected));
 
         result = sendWorkAssignmentInformationService.getText(null, StatusAbfrageEvents.ERNEUTE_BEARBEITUNG);
-        expected = StatusAbfrageEvents.ERNEUTE_BEARBEITUNG.getInformationText().concat("\n\nAbfrage: ");
+        expected =
+            StatusAbfrageEvents.ERNEUTE_BEARBEITUNG.getPropertyWorkAssignmentInformationText().concat("\n\nAbfrage: ");
         assertThat(result, is(expected));
     }
 

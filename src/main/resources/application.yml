@@ -54,6 +54,21 @@ stammdaten:
       csv/StaedteBaulicheOrientierungswerte2017.csv,
       csv/StaedteBaulicheOrientierungswerte2022.csv
 
+work-assignment-information:
+  message:
+    freigabe:
+      text: Die Abfrage wurde zur weiteren Bearbeitung freigegeben.
+      subject: Die Abfrage wurde zur weiteren Bearbeitung freigegeben.
+    erneute-bearbeitung:
+      text: Die Abfrage wurde an die Sachbearbeitung zur Bearbeitung zurückgesendet.
+      subject: Die Abfrage wurde an die Sachbearbeitung zur Bearbeitung zurückgesendet.
+    verschicken-der-stellungnahme:
+      text: Die Abfrage wurde zur weiteren Bearbeitung weitergeleitet.
+      subject: Die Abfrage wurde zur weiteren Bearbeitung weitergeleitet.
+    bedarfsmeldung-erfolgte:
+      text: Die Bedarfsmeldung der Abfrage ist erfolgt.
+      subject: Die Bedarfsmeldung der Abfrage ist erfolgt.
+
 io:
   muenchendigital:
     digiwf:

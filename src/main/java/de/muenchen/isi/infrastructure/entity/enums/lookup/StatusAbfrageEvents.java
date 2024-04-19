@@ -10,7 +10,8 @@ public enum StatusAbfrageEvents {
         "FREIGABE",
         1,
         "Die Abfrage wird zur weiteren Bearbeitung freigegeben.",
-        "Die Abfrage wurde zur weiteren Bearbeitung freigegeben."
+        "work-assignment-information.message.freigabe.text",
+        "work-assignment-information.message.freigabe.subject"
     ),
 
     IN_BEARBEITUNG_SETZEN(
@@ -18,7 +19,8 @@ public enum StatusAbfrageEvents {
         "IN BEARBEITUNG SETZEN",
         2,
         "Die Abfrage befindet sich in der Bearbeitung.",
-        "Die Abfrage befindet sich in der Bearbeitung."
+        null,
+        null
     ),
 
     ABBRECHEN(
@@ -26,7 +28,8 @@ public enum StatusAbfrageEvents {
         "STORNIEREN",
         3,
         "Die Abfrage wird widerrufen und dadurch die Bearbeitung beendet.",
-        "Die Abfrage wurde widerrufen und dadurch die Bearbeitung beendet."
+        null,
+        null
     ),
 
     ZURUECK_AN_ABFRAGEERSTELLUNG(
@@ -34,7 +37,8 @@ public enum StatusAbfrageEvents {
         "ZURÜCK AN ABFRAGEERSTELLUNG",
         4,
         "Die Abfrage wird an die Abfrageerstellung zurückgegeben.",
-        "Die Abfrage wurde an die Abfrageerstellung zurückgegeben."
+        null,
+        null
     ),
 
     KEINE_BEARBEITUNG_NOETIG(
@@ -42,7 +46,8 @@ public enum StatusAbfrageEvents {
         "ABFRAGE SCHLIEßEN",
         5,
         "Die Abfrage wird abgeschlossen.",
-        "Die Abfrage wurde abgeschlossen."
+        null,
+        null
     ),
 
     VERSCHICKEN_DER_STELLUNGNAHME(
@@ -50,7 +55,8 @@ public enum StatusAbfrageEvents {
         "AN FACHREFERATE",
         6,
         "Die Abfrage wird zur weiteren Bearbeitung weitergeleitet.",
-        "Die Abfrage wurde zur weiteren Bearbeitung weitergeleitet."
+        "work-assignment-information.message.verschicken-der-stellungnahme.text",
+        "work-assignment-information.message.verschicken-der-stellungnahme.subject"
     ),
 
     ZURUECK_AN_SACHBEARBEITUNG(
@@ -58,7 +64,8 @@ public enum StatusAbfrageEvents {
         "ZURÜCK AN SACHBEARBEITUNG",
         7,
         "Die Abfrage wird an die Sachbearbeitung zurückgegeben.",
-        "Die Abfrage wurde an die Sachbearbeitung zurückgegeben."
+        null,
+        null
     ),
 
     BEDARFSMELDUNG_ERFOLGTE(
@@ -66,7 +73,8 @@ public enum StatusAbfrageEvents {
         "BEDARF MELDEN",
         8,
         "Die Bedarfsmeldung der Abfrage ist erfolgt.",
-        "Die Bedarfsmeldung der Abfrage ist erfolgt."
+        "work-assignment-information.message.bedarfsmeldung-erfolgte.text",
+        "work-assignment-information.message.bedarfsmeldung-erfolgte.subject"
     ),
 
     SPEICHERN_VON_SOZIALINFRASTRUKTUR_VERSORGUNG(
@@ -74,7 +82,8 @@ public enum StatusAbfrageEvents {
         "ABFRAGE ABSCHLIESSEN",
         9,
         "Die Abfrage wird abgeschlossen.",
-        "Die Abfrage wurde abgeschlossen."
+        null,
+        null
     ),
 
     ERNEUTE_BEARBEITUNG(
@@ -82,7 +91,8 @@ public enum StatusAbfrageEvents {
         "ERNEUTE BEARBEITUNG",
         10,
         "Die Abfrage wird an die Sachbearbeitung zur Bearbeitung zurückgesendet.",
-        "Die Abfrage wurde an die Sachbearbeitung zur Bearbeitung zurückgesendet."
+        "work-assignment-information.message.erneute-bearbeitung.text",
+        "work-assignment-information.message.erneute-bearbeitung.subject"
     );
 
     @Getter
@@ -98,5 +108,8 @@ public enum StatusAbfrageEvents {
     private final String dialogText;
 
     @Getter
-    private final String informationText;
+    private final String propertyWorkAssignmentInformationText;
+
+    @Getter
+    private final String propertyWorkAssignmentInformationSubject;
 }
