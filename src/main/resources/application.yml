@@ -57,17 +57,17 @@ stammdaten:
 work-assignment-information:
   message:
     freigabe:
-      text: Die Abfrage wurde zur weiteren Bearbeitung freigegeben.
-      subject: Die Abfrage wurde zur weiteren Bearbeitung freigegeben.
+      text: "Die Abfrage wurde zur weiteren Bearbeitung freigegeben.\n\nAbfrage: "
+      subject: "ISI - Abfrage freigegeben - Abfrage: "
     erneute-bearbeitung:
-      text: Die Abfrage wurde an die Sachbearbeitung zur Bearbeitung zurückgesendet.
-      subject: Die Abfrage wurde an die Sachbearbeitung zur Bearbeitung zurückgesendet.
+      text: "Die Abfrage wurde an die Sachbearbeitung zur Bearbeitung zurückgesendet.\n\nAbfrage: "
+      subject: "ISI - Abfrage an Sachbearbeitung zurückgesendet - Abfrage: "
     verschicken-der-stellungnahme:
-      text: Die Abfrage wurde zur weiteren Bearbeitung weitergeleitet.
-      subject: Die Abfrage wurde zur weiteren Bearbeitung weitergeleitet.
+      text: "Die Abfrage wurde zur weiteren Bearbeitung weitergeleitet.\n\nAbfrage: "
+      subject: "ISI - Abfrage weitergeleitet - Abfrage: "
     bedarfsmeldung-erfolgte:
-      text: Die Bedarfsmeldung der Abfrage ist erfolgt.
-      subject: Die Bedarfsmeldung der Abfrage ist erfolgt.
+      text: "Die Bedarfsmeldung der Abfrage ist erfolgt.\n\nAbfrage: "
+      subject: "ISI - Bedarfsmeldung erfolgt - Abfrage: "
 
 io:
   muenchendigital:

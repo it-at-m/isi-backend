@@ -11,6 +11,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,8 @@ public class SendWorkAssignmentInformationService {
 
     private final MailSenderRepository mailSenderRepository;
 
+    private final Environment environment;
+
     private final String receiverSachbearbeitung;
 
     private final String receiverBedarfsmeldung;
@@ -26,11 +29,13 @@ public class SendWorkAssignmentInformationService {
     public SendWorkAssignmentInformationService(
         @Value("${spring.mail.receiver.sachbearbeitung:}") final String receiverSachbearbeitung,
         @Value("${spring.mail.receiver.bedarfsmeldung:}") final String receiverBedarfsmeldung,
-        final MailSenderRepository mailSenderRepository
+        final MailSenderRepository mailSenderRepository,
+        final Environment environment
     ) {
         this.receiverSachbearbeitung = receiverSachbearbeitung;
         this.receiverBedarfsmeldung = receiverBedarfsmeldung;
         this.mailSenderRepository = mailSenderRepository;
+        this.environment = environment;
     }
 
     /**
@@ -116,11 +121,7 @@ public class SendWorkAssignmentInformationService {
      * @return der Emailtext zusammengesetzt aus dem {@link StatusAbfrageEvents#getPropertyWorkAssignmentInformationText()} und dem Namen der Abfrage.
      */
     protected String getText(final String nameAbfrage, final StatusAbfrageEvents stateMachineEvent) {
-        return stateMachineEvent
-            .getPropertyWorkAssignmentInformationText()
-            .concat("\n\n")
-            .concat("Abfrage: ")
-            .concat(StringUtils.defaultIfEmpty(nameAbfrage, ""));
+        return getText(stateMachineEvent).concat(StringUtils.defaultIfEmpty(nameAbfrage, StringUtils.EMPTY));
     }
 
     /**
@@ -131,13 +132,17 @@ public class SendWorkAssignmentInformationService {
      * @return der Betreff zusammengesetzt aus der Statusübergangsinformation und dem Namen der Abfrage.
      */
     protected String getSubject(final String nameAbfrage, final StatusAbfrageEvents stateMachineEvent) {
-        return (
-            "ISI - " +
-            stateMachineEvent
-                .getButtonName()
-                .concat(" - ")
-                .concat("Abfrage: ")
-                .concat(StringUtils.defaultIfEmpty(nameAbfrage, ""))
+        return getSubject(stateMachineEvent).concat(StringUtils.defaultIfEmpty(nameAbfrage, StringUtils.EMPTY));
+    }
+
+    private String getText(final StatusAbfrageEvents stateMachineEvent) {
+        return environment.getProperty(stateMachineEvent.getPropertyWorkAssignmentInformationText(), StringUtils.EMPTY);
+    }
+
+    private String getSubject(final StatusAbfrageEvents stateMachineEvent) {
+        return environment.getProperty(
+            stateMachineEvent.getPropertyWorkAssignmentInformationSubject(),
+            StringUtils.EMPTY
         );
     }
 }

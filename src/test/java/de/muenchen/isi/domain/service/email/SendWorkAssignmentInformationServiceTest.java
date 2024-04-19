@@ -20,6 +20,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
+import org.springframework.core.env.Environment;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
@@ -27,6 +28,9 @@ class SendWorkAssignmentInformationServiceTest {
 
     @Mock
     private MailSenderRepository mailSenderRepository;
+
+    @Mock
+    private Environment environment;
 
     private SendWorkAssignmentInformationService sendWorkAssignmentInformationService;
 
@@ -36,20 +40,35 @@ class SendWorkAssignmentInformationServiceTest {
             new SendWorkAssignmentInformationService(
                 "mailadress-receiver-sachbearbeitung",
                 "mailadress-receiver-bedarfsmeldung",
-                mailSenderRepository
+                mailSenderRepository,
+                environment
             );
-        Mockito.reset(mailSenderRepository);
+        Mockito.reset(mailSenderRepository, environment);
     }
 
     @Test
     void sendWorkAssignmentInformationAsync() {
+        Mockito
+            .when(
+                environment.getProperty(
+                    StatusAbfrageEvents.ERNEUTE_BEARBEITUNG.getPropertyWorkAssignmentInformationText(),
+                    ""
+                )
+            )
+            .thenReturn("Der Text ");
+        Mockito
+            .when(
+                environment.getProperty(
+                    StatusAbfrageEvents.ERNEUTE_BEARBEITUNG.getPropertyWorkAssignmentInformationSubject(),
+                    ""
+                )
+            )
+            .thenReturn("Der Betreff ");
+
         final var abfrage = new BauleitplanverfahrenModel();
         abfrage.setName("Name der Abfrage");
-        final var subject =
-            "ISI - " + StatusAbfrageEvents.ERNEUTE_BEARBEITUNG.getButtonName().concat(" - Abfrage: Name der Abfrage");
-        final var text = StatusAbfrageEvents.ERNEUTE_BEARBEITUNG
-            .getPropertyWorkAssignmentInformationText()
-            .concat("\n\nAbfrage: Name der Abfrage");
+        final var subject = "Der Betreff Name der Abfrage";
+        final var text = "Der Text Name der Abfrage";
         sendWorkAssignmentInformationService.sendWorkAssignmentInformationAsync(
             abfrage,
             StatusAbfrageEvents.ERNEUTE_BEARBEITUNG
@@ -62,13 +81,27 @@ class SendWorkAssignmentInformationServiceTest {
 
     @Test
     void sendWorkAssignmentInformation() {
+        Mockito
+            .when(
+                environment.getProperty(
+                    StatusAbfrageEvents.ERNEUTE_BEARBEITUNG.getPropertyWorkAssignmentInformationText(),
+                    ""
+                )
+            )
+            .thenReturn("Der Text ");
+        Mockito
+            .when(
+                environment.getProperty(
+                    StatusAbfrageEvents.ERNEUTE_BEARBEITUNG.getPropertyWorkAssignmentInformationSubject(),
+                    ""
+                )
+            )
+            .thenReturn("Der Betreff ");
+
         final var abfrage = new BauleitplanverfahrenModel();
         abfrage.setName("Name der Abfrage");
-        final var subject =
-            "ISI - " + StatusAbfrageEvents.ERNEUTE_BEARBEITUNG.getButtonName().concat(" - Abfrage: Name der Abfrage");
-        final var text = StatusAbfrageEvents.ERNEUTE_BEARBEITUNG
-            .getPropertyWorkAssignmentInformationText()
-            .concat("\n\nAbfrage: Name der Abfrage");
+        final var subject = "Der Betreff Name der Abfrage";
+        final var text = "Der Text Name der Abfrage";
         sendWorkAssignmentInformationService.sendWorkAssignmentInformation(
             abfrage,
             StatusAbfrageEvents.ERNEUTE_BEARBEITUNG
@@ -246,42 +279,55 @@ class SendWorkAssignmentInformationServiceTest {
 
     @Test
     void getText() {
+        Mockito
+            .when(
+                environment.getProperty(
+                    StatusAbfrageEvents.ERNEUTE_BEARBEITUNG.getPropertyWorkAssignmentInformationText(),
+                    ""
+                )
+            )
+            .thenReturn("Der Text ");
+
         var result = sendWorkAssignmentInformationService.getText(
             "Name der Abfrage",
             StatusAbfrageEvents.ERNEUTE_BEARBEITUNG
         );
-        var expected = StatusAbfrageEvents.ERNEUTE_BEARBEITUNG
-            .getPropertyWorkAssignmentInformationText()
-            .concat("\n\nAbfrage: Name der Abfrage");
+        var expected = "Der Text Name der Abfrage";
         assertThat(result, is(expected));
 
         result = sendWorkAssignmentInformationService.getText("", StatusAbfrageEvents.ERNEUTE_BEARBEITUNG);
-        expected =
-            StatusAbfrageEvents.ERNEUTE_BEARBEITUNG.getPropertyWorkAssignmentInformationText().concat("\n\nAbfrage: ");
+        expected = "Der Text ";
         assertThat(result, is(expected));
 
         result = sendWorkAssignmentInformationService.getText(null, StatusAbfrageEvents.ERNEUTE_BEARBEITUNG);
-        expected =
-            StatusAbfrageEvents.ERNEUTE_BEARBEITUNG.getPropertyWorkAssignmentInformationText().concat("\n\nAbfrage: ");
+        expected = "Der Text ";
         assertThat(result, is(expected));
     }
 
     @Test
     void getSubject() {
+        Mockito
+            .when(
+                environment.getProperty(
+                    StatusAbfrageEvents.ERNEUTE_BEARBEITUNG.getPropertyWorkAssignmentInformationSubject(),
+                    ""
+                )
+            )
+            .thenReturn("Der Betreff ");
+
         var result = sendWorkAssignmentInformationService.getSubject(
             "Name der Abfrage",
             StatusAbfrageEvents.ERNEUTE_BEARBEITUNG
         );
-        var expected =
-            "ISI - " + StatusAbfrageEvents.ERNEUTE_BEARBEITUNG.getButtonName().concat(" - Abfrage: Name der Abfrage");
+        var expected = "Der Betreff Name der Abfrage";
         assertThat(result, is(expected));
 
         result = sendWorkAssignmentInformationService.getSubject("", StatusAbfrageEvents.ERNEUTE_BEARBEITUNG);
-        expected = "ISI - " + StatusAbfrageEvents.ERNEUTE_BEARBEITUNG.getButtonName().concat(" - Abfrage: ");
+        expected = "Der Betreff ";
         assertThat(result, is(expected));
 
         result = sendWorkAssignmentInformationService.getSubject(null, StatusAbfrageEvents.ERNEUTE_BEARBEITUNG);
-        expected = "ISI - " + StatusAbfrageEvents.ERNEUTE_BEARBEITUNG.getButtonName().concat(" - Abfrage: ");
+        expected = "Der Betreff ";
         assertThat(result, is(expected));
     }
 }
