@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;
@@ -16,15 +17,28 @@ import org.apache.commons.lang3.math.NumberUtils;
 public class DistributionValidator {
 
     /**
+     * Überprüft, ob die Verteilung der Wohneinheiten und Geschossfläche Wohnen auf Baugebiete bzw. Bauraten valide ist.
+     * WE bzw. GF gelten als "verteilt", wenn bei mindestens einem Baugebiet bzw. Baurate eine Angabe zu ihnen gemacht wurde.
+     * WE bzw. GF gelten als "korrekt verteilt", wenn zusätzlich ihre Summe in den Baugebieten bzw. Bauraten der Gesamtanzahl entspricht.
+     * Die Verteilung ist valide, wenn WE und GF korrekt verteilt wurden.
+     * Ebenso ist die Verteilung valide, wenn entweder WE oder GF korrekt verteilt wurde, aber der andere Wert nicht verteilt wurde.
+     *
      * @param bauabschnitte zur Validierung.
      * @param weGesamt zur Validierung
-     * @return true, falls die Anzahl der Wohneinheiten der Summe der Wohneinheiten in den nicht technischen Baugebieten entspricht.
-     * True, falls die Anzahl der Wohneinheiten der Summe der Wohneinheiten in den Bauraten für technische Baugebiete entspricht.
-     * True, falls keine Baugebiete vorhanden sind.
-     * Andernfalls false.
+     * @param gfWohnenGesamt zur Validierung
+     * @return ob die Verteilung entsprechend der Beschreibung valide ist.
      */
-    public boolean isWohneinheitenDistributionValid(final List<BauabschnittDto> bauabschnitte, final Integer weGesamt) {
-        boolean isValid = true;
+    public boolean isWeGfDistributionValid(
+        final List<BauabschnittDto> bauabschnitte,
+        final Integer weGesamt,
+        final BigDecimal gfWohnenGesamt
+    ) {
+        final var wohneinheiten = ObjectUtils.isEmpty(weGesamt) ? 0 : weGesamt;
+        var wohneinheitenEqual = true;
+        var allWohneinheitenEmpty = new AtomicBoolean(true);
+        final var geschossflaecheWohnen = ObjectUtils.isEmpty(gfWohnenGesamt) ? BigDecimal.ZERO : gfWohnenGesamt;
+        var geschossflaecheWohnenEqual = true;
+        var allGeschossflaecheWohnenEmpty = new AtomicBoolean(true);
 
         final List<BaugebietDto> nonTechnicalBaugebiete = getNonTechnicalBaugebiete(bauabschnitte);
         final List<BaurateDto> bauratenFromAllTechnicalBaugebiete = getBauratenFromAllTechnicalBaugebiete(
@@ -36,74 +50,72 @@ public class DistributionValidator {
             bauratenFromAllTechnicalBaugebiete
         );
 
-        final var wohneinheiten = ObjectUtils.isEmpty(weGesamt) ? 0 : weGesamt;
-
+        /*
+        Unterscheidung zwischen technischen und nicht-technischen Baugebieten, da technische Baugebiete keine Daten enthalten sollen.
+        Bei ihnen werden stattdessen die untergeordneten Bauraten als Datenquelle hergenommen.
+        */
         if (containsNonTechnicalBaugebiet) {
             final var sumVerteilteWohneinheitenBaugebiete = nonTechnicalBaugebiete
                 .stream()
-                .map(baugebiet -> ObjectUtils.isEmpty(baugebiet.getWeGeplant()) ? 0 : baugebiet.getWeGeplant())
+                .map(baugebiet -> {
+                    if (ObjectUtils.isNotEmpty(baugebiet.getWeGeplant())) {
+                        allWohneinheitenEmpty.set(false);
+                        return baugebiet.getWeGeplant();
+                    }
+                    return 0;
+                })
                 .reduce(0, Integer::sum);
+            wohneinheitenEqual = NumberUtils.compare(wohneinheiten, sumVerteilteWohneinheitenBaugebiete) == 0;
 
-            isValid = wohneinheiten == sumVerteilteWohneinheitenBaugebiete;
+            final var sumVerteilteGeschossflaecheWohnenBaugebiete = nonTechnicalBaugebiete
+                .stream()
+                .map(baugebiet -> {
+                    if (ObjectUtils.isNotEmpty(baugebiet.getGfWohnenGeplant())) {
+                        allGeschossflaecheWohnenEmpty.set(false);
+                        return baugebiet.getGfWohnenGeplant();
+                    }
+                    return BigDecimal.ZERO;
+                })
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+            geschossflaecheWohnenEqual =
+                sumVerteilteGeschossflaecheWohnenBaugebiete.compareTo(geschossflaecheWohnen) == 0;
         } else if (containsBauratenInTechnicalBaugebiet) {
             final var sumVerteilteWohneinheitenBauraten = bauratenFromAllTechnicalBaugebiete
                 .stream()
-                .map(baurate -> ObjectUtils.isEmpty(baurate.getWeGeplant()) ? 0 : baurate.getWeGeplant())
+                .map(baurate -> {
+                    if (ObjectUtils.isNotEmpty(baurate.getWeGeplant())) {
+                        allWohneinheitenEmpty.set(false);
+                        return baurate.getWeGeplant();
+                    }
+                    return 0;
+                })
                 .reduce(0, Integer::sum);
+            wohneinheitenEqual = NumberUtils.compare(wohneinheiten, sumVerteilteWohneinheitenBauraten) == 0;
 
-            isValid = NumberUtils.compare(wohneinheiten, sumVerteilteWohneinheitenBauraten) == 0;
-        }
-        return isValid;
-    }
-
-    /**
-     * @param bauabschnitte zur Validierung.
-     * @param gfWohnenGesamt zur Validierung
-     * @return true, falls die Geschossfläche Wohnen der Summe der Geschossfläche Wohnen in den nicht technischen Baugebieten entspricht.
-     * True, falls die Geschossfläche Wohnen der Summe der Geschossfläche Wohnen in den Bauraten für technische Baugebiete entspricht.
-     * True, falls keine Baugebiete vorhanden sind.
-     * Andernfalls false.
-     */
-    public boolean isGeschossflaecheWohnenDistributionValid(
-        final List<BauabschnittDto> bauabschnitte,
-        final BigDecimal gfWohnenGesamt
-    ) {
-        boolean isValid = true;
-
-        final List<BaugebietDto> nonTechnicalBaugebiete = getNonTechnicalBaugebiete(bauabschnitte);
-        final List<BaurateDto> bauratenFromAllTechnicalBaugebiete = getBauratenFromAllTechnicalBaugebiete(
-            bauabschnitte
-        );
-
-        final boolean containsNonTechnicalBaugebiet = CollectionUtils.isNotEmpty(nonTechnicalBaugebiete);
-        final boolean containsBauratenInTechnicalBaugebiet = CollectionUtils.isNotEmpty(
-            bauratenFromAllTechnicalBaugebiete
-        );
-
-        final var geschossflaecheWohnen = ObjectUtils.isEmpty(gfWohnenGesamt) ? BigDecimal.ZERO : gfWohnenGesamt;
-
-        if (containsNonTechnicalBaugebiet) {
-            final var sumVerteilteGeschossflaecheWohnenBaugebiete = nonTechnicalBaugebiete
-                .stream()
-                .map(baugebiet ->
-                    ObjectUtils.isEmpty(baugebiet.getGfWohnenGeplant())
-                        ? BigDecimal.ZERO
-                        : baugebiet.getGfWohnenGeplant()
-                )
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-
-            isValid = sumVerteilteGeschossflaecheWohnenBaugebiete.compareTo(geschossflaecheWohnen) == 0;
-        } else if (containsBauratenInTechnicalBaugebiet) {
             final var sumVerteilteGeschossflaecheWohnenBauraten = bauratenFromAllTechnicalBaugebiete
                 .stream()
-                .map(baurate ->
-                    ObjectUtils.isEmpty(baurate.getGfWohnenGeplant()) ? BigDecimal.ZERO : baurate.getGfWohnenGeplant()
-                )
+                .map(baurate -> {
+                    if (ObjectUtils.isNotEmpty(baurate.getGfWohnenGeplant())) {
+                        allGeschossflaecheWohnenEmpty.set(false);
+                        return baurate.getGfWohnenGeplant();
+                    }
+                    return BigDecimal.ZERO;
+                })
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
-
-            isValid = sumVerteilteGeschossflaecheWohnenBauraten.compareTo(geschossflaecheWohnen) == 0;
+            geschossflaecheWohnenEqual =
+                sumVerteilteGeschossflaecheWohnenBauraten.compareTo(geschossflaecheWohnen) == 0;
+        } else {
+            return true;
         }
-        return isValid;
+
+        final var wohneinheitenCorrect = wohneinheitenEqual && !allWohneinheitenEmpty.get();
+        final var geschossflaecheWohnenCorrect = geschossflaecheWohnenEqual && !allGeschossflaecheWohnenEmpty.get();
+
+        return (
+            (wohneinheitenCorrect && geschossflaecheWohnenCorrect) ||
+            (wohneinheitenCorrect && allGeschossflaecheWohnenEmpty.get()) ||
+            (allWohneinheitenEmpty.get() && geschossflaecheWohnenCorrect)
+        );
     }
 
     /**
@@ -127,6 +139,10 @@ public class DistributionValidator {
             bauratenFromAllTechnicalBaugebiete
         );
 
+        /*
+        Unterscheidung zwischen technischen und nicht-technischen Baugebieten, da technische Baugebiete keine Daten enthalten sollen.
+        Bei ihnen werden stattdessen die untergeordneten Bauraten als Datenquelle hergenommen.
+        */
         if (containsNonTechnicalBaugebiet) {
             final Optional<Integer> minJahrBaugebiete = nonTechnicalBaugebiete
                 .stream()
