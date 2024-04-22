@@ -20,4 +20,6 @@ public class AbfragevarianteWeiteresVerfahrenBedarfsmeldungErfolgtModel {
     private ArtAbfrage artAbfragevariante;
 
     private List<BedarfsmeldungModel> bedarfsmeldungAbfrageersteller;
+
+    private String anmerkungAbfrageersteller;
 }
