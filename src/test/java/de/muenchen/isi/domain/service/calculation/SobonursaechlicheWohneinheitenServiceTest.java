@@ -6,6 +6,8 @@ import static de.muenchen.isi.TestConstants.MM;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 
+import de.muenchen.isi.domain.mapper.BaurateDomainMapper;
+import de.muenchen.isi.domain.mapper.BaurateDomainMapperImpl;
 import de.muenchen.isi.domain.model.BauabschnittModel;
 import de.muenchen.isi.domain.model.BaugebietModel;
 import de.muenchen.isi.domain.model.BaurateModel;
@@ -40,13 +42,16 @@ public class SobonursaechlicheWohneinheitenServiceTest {
     @Mock
     private StaedtebaulicheOrientierungswertRepository staedtebaulicheOrientierungswertRepository;
 
+    private BaurateDomainMapper baurateDomainMapper = new BaurateDomainMapperImpl();
+
     @BeforeEach
     public void beforeEach() {
         final var foerdermixUmlageService = new FoerdermixUmlageService(umlegungFoerderartenRepository);
         this.sobonursaechlicheWohneinheitenService =
             new SobonursaechlicheWohneinheitenService(
                 foerdermixUmlageService,
-                staedtebaulicheOrientierungswertRepository
+                staedtebaulicheOrientierungswertRepository,
+                baurateDomainMapper
             );
         Mockito.reset(umlegungFoerderartenRepository, staedtebaulicheOrientierungswertRepository);
     }

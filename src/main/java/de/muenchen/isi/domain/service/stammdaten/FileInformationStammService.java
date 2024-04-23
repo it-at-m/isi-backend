@@ -17,7 +17,7 @@ public class FileInformationStammService {
     private final List<String> allowedMimeTypes;
 
     public FileInformationStammService(
-        @Value("${file.size.max:31457280}") final Long maxFileSizeBytes,
+        @Value("${file.size.max:52428800}") final Long maxFileSizeBytes,
         @Value("${file.number.max:20}") final Long maxNumberOfFiles,
         @Value("#{'${file.mimetypes.allowed}'.split(',')}") final List<String> allowedMimeTypes
     ) {
