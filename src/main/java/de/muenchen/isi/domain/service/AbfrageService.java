@@ -151,12 +151,15 @@ public class AbfrageService {
             final var model = this.abfrageDomainMapper.entity2Model(entity);
             // Übermitteln der Abfrage samt der vorher berechneten Bedarfe an die Reportingschnittstelle
             reportingdataTransferService.transferAbfrageAndBedarfe(model, bedarfeForAbfragevarianten);
-            // Aufruf des ETL-Systems (Pentaho) zur Ausführung eines Jobs
+
+            // Aufruf des ETL-Systems (Pentaho) zur Ausführung eines Jobs.
+
+            /* für Test der Story ISI-1439 Kommentar entfernen
             EtlTriggerJobDto etlTriggerJobDto = new EtlTriggerJobDto();
-            etlTriggerJobDto.setJobname(
-                "bevoelkerungsdatenFuerKitaPlBs/Job_Bevoelkerungsdaten_fuer_KitaPlanungsbereiche.kjb"
-            );
+            etlTriggerJobDto.setJobname("bevoelkerungsdatenFuerKitaPlBs/ve");
             etlInterfaceService.etlInterfaceTriggerJob(etlTriggerJobDto);
+             */
+
             return model;
         } else {
             throw new UniqueViolationException(
