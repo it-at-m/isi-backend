@@ -41,5 +41,5 @@ public class AbfragevarianteBaugenehmigungsverfahrenInBearbeitungFachreferatMode
 
     private boolean ausgeloesterBedarfMitversorgungInBestEinrichtungenNachAusbauSchule;
 
-    private String hinweisVersorgung;
+    private String anmerkungFachreferate;
 }

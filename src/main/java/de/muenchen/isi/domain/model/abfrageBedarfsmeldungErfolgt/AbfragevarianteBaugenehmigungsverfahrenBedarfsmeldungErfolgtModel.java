@@ -20,4 +20,6 @@ public class AbfragevarianteBaugenehmigungsverfahrenBedarfsmeldungErfolgtModel {
     private ArtAbfrage artAbfragevariante;
 
     private List<BedarfsmeldungModel> bedarfsmeldungAbfrageersteller;
+
+    private String anmerkungAbfrageersteller;
 }

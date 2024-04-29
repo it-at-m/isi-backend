@@ -44,5 +44,5 @@ public class AbfragevarianteBauleitplanverfahrenInBearbeitungFachreferatDto {
 
     private boolean ausgeloesterBedarfMitversorgungInBestEinrichtungenNachAusbauSchule;
 
-    private String hinweisVersorgung;
+    private String anmerkungFachreferate;
 }

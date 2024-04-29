@@ -44,5 +44,5 @@ public class AbfragevarianteWeiteresVerfahrenInBearbeitungFachreferatDto {
 
     private boolean ausgeloesterBedarfMitversorgungInBestEinrichtungenNachAusbauSchule;
 
-    private String hinweisVersorgung;
+    private String anmerkungFachreferate;
 }

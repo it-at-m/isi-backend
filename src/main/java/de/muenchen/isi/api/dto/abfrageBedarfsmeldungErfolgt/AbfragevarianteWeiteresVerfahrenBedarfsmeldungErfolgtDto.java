@@ -23,4 +23,6 @@ public class AbfragevarianteWeiteresVerfahrenBedarfsmeldungErfolgtDto {
     private ArtAbfrage artAbfragevariante;
 
     private List<@Valid BedarfsmeldungDto> bedarfsmeldungAbfrageersteller;
+
+    private String anmerkungAbfrageersteller;
 }

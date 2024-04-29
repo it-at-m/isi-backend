@@ -41,5 +41,5 @@ public class AbfragevarianteBauleitplanverfahrenInBearbeitungFachreferatModel {
 
     private boolean ausgeloesterBedarfMitversorgungInBestEinrichtungenNachAusbauSchule;
 
-    private String hinweisVersorgung;
+    private String anmerkungFachreferate;
 }
