@@ -156,7 +156,9 @@ public class AbfrageService {
 
             /* für Test der Story ISI-1439 Kommentar entfernen */
             EtlTriggerJobDto etlTriggerJobDto = new EtlTriggerJobDto();
-            etlTriggerJobDto.setJobname("bevoelkerungsdatenFuerKitaPlBs/ve");
+            etlTriggerJobDto.setJobname(
+                "bevoelkerungsdatenFuerKitaPlBs/Job_Bevoelkerungsdaten_fuer_KitaPlanungsbereiche.kjb"
+            );
             etlInterfaceService.etlInterfaceTriggerJob(etlTriggerJobDto);
             /**/
 
