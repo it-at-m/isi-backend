@@ -107,7 +107,9 @@ public class AbfragevarianteBaugenehmigungsverfahrenModel
 
     private boolean ausgeloesterBedarfMitversorgungInBestEinrichtungenNachAusbauSchule;
 
-    private String hinweisVersorgung;
+    private String anmerkungFachreferate;
+
+    private String anmerkungAbfrageersteller;
 
     private List<DokumentModel> dokumente;
 }

@@ -69,7 +69,8 @@ public interface AbfragevarianteDomainMapper {
             @Mapping(target = "ausgeloesterBedarfMitversorgungImBplanSchule", ignore = true),
             @Mapping(target = "ausgeloesterBedarfMitversorgungInBestEinrichtungenSchule", ignore = true),
             @Mapping(target = "ausgeloesterBedarfMitversorgungInBestEinrichtungenNachAusbauSchule", ignore = true),
-            @Mapping(target = "hinweisVersorgung", ignore = true),
+            @Mapping(target = "anmerkungFachreferate", ignore = true),
+            @Mapping(target = "anmerkungAbfrageersteller", ignore = true),
             @Mapping(target = "bedarfsmeldungAbfrageersteller", ignore = true),
             @Mapping(target = "dokumente", ignore = true),
         }
@@ -99,7 +100,8 @@ public interface AbfragevarianteDomainMapper {
             @Mapping(target = "ausgeloesterBedarfMitversorgungImBplanSchule", ignore = true),
             @Mapping(target = "ausgeloesterBedarfMitversorgungInBestEinrichtungenSchule", ignore = true),
             @Mapping(target = "ausgeloesterBedarfMitversorgungInBestEinrichtungenNachAusbauSchule", ignore = true),
-            @Mapping(target = "hinweisVersorgung", ignore = true),
+            @Mapping(target = "anmerkungFachreferate", ignore = true),
+            @Mapping(target = "anmerkungAbfrageersteller", ignore = true),
             @Mapping(target = "bedarfsmeldungAbfrageersteller", ignore = true),
             @Mapping(target = "dokumente", ignore = true),
         }
@@ -130,7 +132,8 @@ public interface AbfragevarianteDomainMapper {
             @Mapping(target = "ausgeloesterBedarfMitversorgungImBplanSchule", ignore = true),
             @Mapping(target = "ausgeloesterBedarfMitversorgungInBestEinrichtungenSchule", ignore = true),
             @Mapping(target = "ausgeloesterBedarfMitversorgungInBestEinrichtungenNachAusbauSchule", ignore = true),
-            @Mapping(target = "hinweisVersorgung", ignore = true),
+            @Mapping(target = "anmerkungFachreferate", ignore = true),
+            @Mapping(target = "anmerkungAbfrageersteller", ignore = true),
             @Mapping(target = "bedarfsmeldungAbfrageersteller", ignore = true),
             @Mapping(target = "dokumente", ignore = true),
         }
@@ -213,7 +216,8 @@ public interface AbfragevarianteDomainMapper {
             @Mapping(target = "ausgeloesterBedarfMitversorgungImBplanSchule", ignore = true),
             @Mapping(target = "ausgeloesterBedarfMitversorgungInBestEinrichtungenSchule", ignore = true),
             @Mapping(target = "ausgeloesterBedarfMitversorgungInBestEinrichtungenNachAusbauSchule", ignore = true),
-            @Mapping(target = "hinweisVersorgung", ignore = true),
+            @Mapping(target = "anmerkungFachreferate", ignore = true),
+            @Mapping(target = "anmerkungAbfrageersteller", ignore = true),
             @Mapping(target = "bedarfsmeldungAbfrageersteller", ignore = true),
         }
     )
@@ -236,7 +240,8 @@ public interface AbfragevarianteDomainMapper {
             @Mapping(target = "ausgeloesterBedarfMitversorgungImBplanSchule", ignore = true),
             @Mapping(target = "ausgeloesterBedarfMitversorgungInBestEinrichtungenSchule", ignore = true),
             @Mapping(target = "ausgeloesterBedarfMitversorgungInBestEinrichtungenNachAusbauSchule", ignore = true),
-            @Mapping(target = "hinweisVersorgung", ignore = true),
+            @Mapping(target = "anmerkungFachreferate", ignore = true),
+            @Mapping(target = "anmerkungAbfrageersteller", ignore = true),
             @Mapping(target = "bedarfsmeldungAbfrageersteller", ignore = true),
         }
     )
@@ -259,7 +264,8 @@ public interface AbfragevarianteDomainMapper {
             @Mapping(target = "ausgeloesterBedarfMitversorgungImBplanSchule", ignore = true),
             @Mapping(target = "ausgeloesterBedarfMitversorgungInBestEinrichtungenSchule", ignore = true),
             @Mapping(target = "ausgeloesterBedarfMitversorgungInBestEinrichtungenNachAusbauSchule", ignore = true),
-            @Mapping(target = "hinweisVersorgung", ignore = true),
+            @Mapping(target = "anmerkungFachreferate", ignore = true),
+            @Mapping(target = "anmerkungAbfrageersteller", ignore = true),
             @Mapping(target = "bedarfsmeldungAbfrageersteller", ignore = true),
         }
     )
@@ -281,7 +287,7 @@ public interface AbfragevarianteDomainMapper {
             @Mapping(target = "ausgeloesterBedarfMitversorgungImBplanSchule", ignore = false),
             @Mapping(target = "ausgeloesterBedarfMitversorgungInBestEinrichtungenSchule", ignore = false),
             @Mapping(target = "ausgeloesterBedarfMitversorgungInBestEinrichtungenNachAusbauSchule", ignore = false),
-            @Mapping(target = "hinweisVersorgung", ignore = false),
+            @Mapping(target = "anmerkungFachreferate", ignore = false),
         }
     )
     AbfragevarianteBauleitplanverfahrenModel request2Model(
@@ -302,7 +308,7 @@ public interface AbfragevarianteDomainMapper {
             @Mapping(target = "ausgeloesterBedarfMitversorgungImBplanSchule", ignore = false),
             @Mapping(target = "ausgeloesterBedarfMitversorgungInBestEinrichtungenSchule", ignore = false),
             @Mapping(target = "ausgeloesterBedarfMitversorgungInBestEinrichtungenNachAusbauSchule", ignore = false),
-            @Mapping(target = "hinweisVersorgung", ignore = false),
+            @Mapping(target = "anmerkungFachreferate", ignore = false),
         }
     )
     AbfragevarianteBaugenehmigungsverfahrenModel request2Model(
@@ -323,7 +329,7 @@ public interface AbfragevarianteDomainMapper {
             @Mapping(target = "ausgeloesterBedarfMitversorgungImBplanSchule", ignore = false),
             @Mapping(target = "ausgeloesterBedarfMitversorgungInBestEinrichtungenSchule", ignore = false),
             @Mapping(target = "ausgeloesterBedarfMitversorgungInBestEinrichtungenNachAusbauSchule", ignore = false),
-            @Mapping(target = "hinweisVersorgung", ignore = false),
+            @Mapping(target = "anmerkungFachreferate", ignore = false),
         }
     )
     AbfragevarianteWeiteresVerfahrenModel request2Model(
@@ -336,6 +342,7 @@ public interface AbfragevarianteDomainMapper {
         {
             @Mapping(target = "version", ignore = false),
             @Mapping(target = "bedarfsmeldungAbfrageersteller", ignore = false),
+            @Mapping(target = "anmerkungAbfrageersteller", ignore = false),
         }
     )
     AbfragevarianteBauleitplanverfahrenModel request2Model(
@@ -348,6 +355,7 @@ public interface AbfragevarianteDomainMapper {
         {
             @Mapping(target = "version", ignore = false),
             @Mapping(target = "bedarfsmeldungAbfrageersteller", ignore = false),
+            @Mapping(target = "anmerkungAbfrageersteller", ignore = false),
         }
     )
     AbfragevarianteBaugenehmigungsverfahrenModel request2Model(
@@ -360,6 +368,7 @@ public interface AbfragevarianteDomainMapper {
         {
             @Mapping(target = "version", ignore = false),
             @Mapping(target = "bedarfsmeldungAbfrageersteller", ignore = false),
+            @Mapping(target = "anmerkungAbfrageersteller", ignore = false),
         }
     )
     AbfragevarianteWeiteresVerfahrenModel request2Model(
