@@ -154,11 +154,11 @@ public class AbfrageService {
 
             // Aufruf des ETL-Systems (Pentaho) zur Ausführung eines Jobs.
 
-            /* für Test der Story ISI-1439 Kommentar entfernen
+            /* für Test der Story ISI-1439 Kommentar entfernen */
             EtlTriggerJobDto etlTriggerJobDto = new EtlTriggerJobDto();
             etlTriggerJobDto.setJobname("bevoelkerungsdatenFuerKitaPlBs/ve");
             etlInterfaceService.etlInterfaceTriggerJob(etlTriggerJobDto);
-             */
+            /**/
 
             return model;
         } else {
