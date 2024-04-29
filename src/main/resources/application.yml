@@ -54,6 +54,21 @@ stammdaten:
       csv/StaedteBaulicheOrientierungswerte2017.csv,
       csv/StaedteBaulicheOrientierungswerte2022.csv
 
+work-assignment-information:
+  message:
+    freigabe:
+      text: "Die Abfrage wurde freigegeben und liegt zur Bearbeitung vor.\n\nAbfrage: "
+      subject: "ISI - Abfrage freigegeben - Abfrage: "
+    erneute-bearbeitung:
+      text: "Die Abfrage wurde an die Sachbearbeitung zurückgesendet und liegt zur Bearbeitung vor.\n\nAbfrage: "
+      subject: "ISI - Abfrage an Sachbearbeitung zurückgesendet - Abfrage: "
+    verschicken-der-stellungnahme:
+      text: "Die Abfrage wurde weitergeleitet und liegt zur Bearbeitung vor.\n\nAbfrage: "
+      subject: "ISI - Abfrage weitergeleitet - Abfrage: "
+    bedarfsmeldung-erfolgte:
+      text: "Die Bedarfsmeldung der Abfrage ist erfolgt und liegt zur Bearbeitung vor.\n\nAbfrage: "
+      subject: "ISI - Bedarfsmeldung erfolgt - Abfrage: "
+
 io:
   muenchendigital:
     digiwf:

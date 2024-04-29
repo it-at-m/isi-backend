@@ -11,6 +11,7 @@ import de.muenchen.isi.domain.exception.UserRoleNotAllowedException;
 import de.muenchen.isi.domain.model.AbfrageModel;
 import de.muenchen.isi.domain.model.common.TransitionModel;
 import de.muenchen.isi.domain.service.common.BearbeitungshistorieService;
+import de.muenchen.isi.domain.service.email.SendWorkAssignmentInformationService;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrageEvents;
 import de.muenchen.isi.security.AuthenticationUtils;
@@ -57,6 +58,8 @@ public class AbfrageStatusService {
     private final AuthenticationUtils authenticationUtils;
 
     private final BearbeitungshistorieService abfrageBearbeitungshistorieService;
+
+    private final SendWorkAssignmentInformationService sendWorkAssignmentInformationService;
 
     /**
      * Ändert den Status auf {@link StatusAbfrage#OFFEN}.
@@ -284,10 +287,16 @@ public class AbfrageStatusService {
                                         abfrage.setAnmerkung(abfrage.getAnmerkung().concat("\n").concat(anmerkung));
                                     }
                                 }
-                                // Speichern der Abfrage
+                                // Erweitern der Bearbeitungshistorie
                                 abfrage =
                                     abfrageBearbeitungshistorieService.appendBearbeitungshistorieToAbfrage(abfrage);
+                                // Speichern der Abfrage
                                 AbfrageStatusService.this.abfrageService.save(abfrage);
+                                // Asynchrones Versenden der Information für anstehende Aufgabe
+                                sendWorkAssignmentInformationService.sendWorkAssignmentInformationAsync(
+                                    abfrage,
+                                    stateContext.getEvent()
+                                );
                             } catch (
                                 final EntityNotFoundException
                                 | OptimisticLockingException
