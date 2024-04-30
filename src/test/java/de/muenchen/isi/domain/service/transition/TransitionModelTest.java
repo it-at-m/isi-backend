@@ -17,6 +17,7 @@ import de.muenchen.isi.domain.model.common.TransitionModel;
 import de.muenchen.isi.domain.service.AbfrageService;
 import de.muenchen.isi.domain.service.AbfrageStatusService;
 import de.muenchen.isi.domain.service.calculation.CalculationService;
+import de.muenchen.isi.domain.service.etlInterface.EtlInterfaceService;
 import de.muenchen.isi.domain.service.reporting.ReportingdataTransferService;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.repository.AbfrageRepository;
@@ -55,6 +56,9 @@ public class TransitionModelTest {
 
     @MockBean
     private ReportingdataTransferService reportingdataTransferService;
+
+    @MockBean
+    private EtlInterfaceService etlInterfaceService;
 
     @BeforeEach
     public void beforeEach() {

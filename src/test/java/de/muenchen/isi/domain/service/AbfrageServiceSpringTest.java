@@ -36,6 +36,7 @@ import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.Bauleitp
 import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.WeiteresVerfahrenInBearbeitungSachbearbeitungModel;
 import de.muenchen.isi.domain.model.common.SobonBerechnungModel;
 import de.muenchen.isi.domain.service.calculation.CalculationService;
+import de.muenchen.isi.domain.service.etlInterface.EtlInterfaceService;
 import de.muenchen.isi.domain.service.reporting.ReportingdataTransferService;
 import de.muenchen.isi.domain.service.transition.MockCustomUser;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
@@ -74,6 +75,9 @@ class AbfrageServiceSpringTest {
 
     @MockBean
     private ReportingdataTransferService reportingdataTransferService;
+
+    @MockBean
+    private EtlInterfaceService etlInterfaceService;
 
     @Test
     @Transactional

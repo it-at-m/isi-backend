@@ -35,6 +35,7 @@ import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.Weiteres
 import de.muenchen.isi.domain.model.calculation.LangfristigerBedarfModel;
 import de.muenchen.isi.domain.service.calculation.CalculationService;
 import de.muenchen.isi.domain.service.common.BearbeitungshistorieService;
+import de.muenchen.isi.domain.service.etlInterface.EtlInterfaceService;
 import de.muenchen.isi.domain.service.filehandling.DokumentService;
 import de.muenchen.isi.domain.service.reporting.ReportingdataTransferService;
 import de.muenchen.isi.infrastructure.entity.Abfrage;
@@ -46,6 +47,7 @@ import de.muenchen.isi.infrastructure.repository.AbfragevarianteBaugenehmigungsv
 import de.muenchen.isi.infrastructure.repository.AbfragevarianteBauleitplanverfahrenRepository;
 import de.muenchen.isi.infrastructure.repository.AbfragevarianteWeiteresVerfahrenRepository;
 import de.muenchen.isi.infrastructure.repository.BauvorhabenRepository;
+import de.muenchen.isi.reporting.client.model.EtlTriggerJobDto;
 import de.muenchen.isi.security.AuthenticationUtils;
 import java.util.Optional;
 import java.util.UUID;
@@ -85,6 +87,8 @@ public class AbfrageService {
     private final BauratendateiInputService bauratendateiInputService;
 
     private final BearbeitungshistorieService bearbeitungshistorieService;
+
+    private final EtlInterfaceService etlInterfaceService;
 
     /**
      * Die Methode gibt ein {@link AbfrageModel} identifiziert durch die ID zurück.
@@ -147,6 +151,17 @@ public class AbfrageService {
             final var model = this.abfrageDomainMapper.entity2Model(entity);
             // Übermitteln der Abfrage samt der vorher berechneten Bedarfe an die Reportingschnittstelle
             reportingdataTransferService.transferAbfrageAndBedarfe(model, bedarfeForAbfragevarianten);
+
+            // Aufruf des ETL-Systems (Pentaho) zur Ausführung eines Jobs.
+
+            /* exemplarischer Aufruf
+            EtlTriggerJobDto etlTriggerJobDto = new EtlTriggerJobDto();
+            etlTriggerJobDto.setJobname(
+                "bevoelkerungsdatenFuerKitaPlBs/Job_Bevoelkerungsdaten_fuer_KitaPlanungsbereiche.kjb"
+            );
+            etlInterfaceService.etlInterfaceTriggerJob(etlTriggerJobDto);
+            */
+
             return model;
         } else {
             throw new UniqueViolationException(
