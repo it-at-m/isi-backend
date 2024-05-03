@@ -4,7 +4,7 @@
     "title": "ISI Reporting EAI",
     "description": "ISI Reporting EAI - Service zum Befüllen der Metabase-DB",
     "contact": { "name": "ISI Management", "email": "unbekannt@muenchen.de" },
-    "version": "1.1.0"
+    "version": "1.2.0"
   },
   "servers": [{ "url": "http://localhost:8088", "description": "Generated server url" }],
   "tags": [
@@ -175,7 +175,8 @@
               "abfragevariantenSachbearbeitungBaugenehmigungsverfahren": {
                 "type": "array",
                 "items": { "$ref": "#/components/schemas/AbfragevarianteBaugenehmigungsverfahrenDto" }
-              }
+              },
+              "fristBearbeitung": { "type": "string", "format": "date" }
             }
           }
         ]
@@ -194,7 +195,8 @@
               "abfragevariantenSachbearbeitungBauleitplanverfahren": {
                 "type": "array",
                 "items": { "$ref": "#/components/schemas/AbfragevarianteBauleitplanverfahrenDto" }
-              }
+              },
+              "fristBearbeitung": { "type": "string", "format": "date" }
             }
           }
         ]
@@ -270,7 +272,8 @@
               "abfragevariantenSachbearbeitungWeiteresVerfahren": {
                 "type": "array",
                 "items": { "$ref": "#/components/schemas/AbfragevarianteWeiteresVerfahrenDto" }
-              }
+              },
+              "fristBearbeitung": { "type": "string", "format": "date" }
             }
           }
         ]
