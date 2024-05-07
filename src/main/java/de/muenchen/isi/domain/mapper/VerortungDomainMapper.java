@@ -1,8 +1,6 @@
 package de.muenchen.isi.domain.mapper;
 
 import de.muenchen.isi.configuration.MapstructConfiguration;
-import de.muenchen.isi.domain.exception.GeometryOperationFailedException;
-import de.muenchen.isi.domain.exception.KoordinatenException;
 import de.muenchen.isi.domain.model.common.VerortungMultiPolygonModel;
 import de.muenchen.isi.domain.model.common.VerortungPointModel;
 import de.muenchen.isi.domain.service.KoordinatenService;
@@ -56,7 +54,7 @@ public abstract class VerortungDomainMapper {
                 final var centroidUtm = koordinatenDomainMapper.model2Entity(centroidUtmModel);
                 entity.setCentroidUtm(centroidUtm);
             }
-        } catch (final GeometryOperationFailedException | KoordinatenException exception) {
+        } catch (final Exception exception) {
             entity.setCentroid(null);
             entity.setCentroidUtm(null);
             log.error("Für die Verortung eines Multipolygons konnte kein Schwerpunkt ermittelt werden.", exception);
@@ -81,7 +79,7 @@ public abstract class VerortungDomainMapper {
                 final var pointUtm = koordinatenDomainMapper.model2Entity(pointUtmModel);
                 entity.setPointUtm(pointUtm);
             }
-        } catch (final KoordinatenException exception) {
+        } catch (final Exception exception) {
             entity.setPointUtm(null);
             log.error(
                 "Für die Verortung einer Punktkoordinate konnte keine UTM-Transformation durchgeführt werden.",

@@ -86,6 +86,48 @@ class VerortungDomainMapperTest {
     }
 
     @Test
+    void afterMappingModel2EntityVerortungMultiPolygonEmpty() {
+        final var model = new VerortungMultiPolygonModel();
+
+        final var result = verortungDomainMapper.model2Entity(model);
+
+        final var expected = new VerortungMultiPolygon();
+
+        assertThat(result, is(expected));
+    }
+
+    @Test
+    void afterMappingModel2EntityVerortungMultiPolygonException() {
+        final var polygon = List.of(
+            List.of(
+                List.of(
+                    List.of(BigDecimal.valueOf(999999999), BigDecimal.valueOf(999999999)),
+                    List.of(BigDecimal.valueOf(11.54322343181365), BigDecimal.valueOf(48.110148558353664)),
+                    List.of(BigDecimal.valueOf(11.543523839223319), BigDecimal.valueOf(48.10668123409517)),
+                    List.of(BigDecimal.valueOf(11.54090600322478), BigDecimal.valueOf(48.10648063793053)),
+                    List.of(BigDecimal.valueOf(11.5404768497824), BigDecimal.valueOf(48.11000528512523))
+                )
+            )
+        );
+        final var multiPolygonGeometryModel = new MultiPolygonGeometryModel();
+        multiPolygonGeometryModel.setType("MultiPolygon");
+        multiPolygonGeometryModel.setCoordinates(polygon);
+        final var model = new VerortungMultiPolygonModel();
+        model.setMultiPolygon(multiPolygonGeometryModel);
+
+        final var result = verortungDomainMapper.model2Entity(model);
+
+        final var expected = new VerortungMultiPolygon();
+
+        final var multiPolygonGeometry = new MultiPolygonGeometry();
+        multiPolygonGeometry.setType("MultiPolygon");
+        multiPolygonGeometry.setCoordinates(polygon);
+        expected.setMultiPolygon(multiPolygonGeometry);
+
+        assertThat(result, is(expected));
+    }
+
+    @Test
     void afterMappingModel2EntityVerortungPoint() {
         final var model = new VerortungPointModel();
         final var pointGeometryModel = new PointGeometryModel();
@@ -111,6 +153,37 @@ class VerortungDomainMapperTest {
         utm.setEast(689219.7547272056);
         utm.setNorth(5331467.745840158);
         expected.setPointUtm(utm);
+
+        assertThat(result, is(expected));
+    }
+
+    @Test
+    void afterMappingModel2EntityVerortungPointEmpty() {
+        final var model = new VerortungPointModel();
+
+        final var result = verortungDomainMapper.model2Entity(model);
+
+        final var expected = new VerortungPoint();
+
+        assertThat(result, is(expected));
+    }
+
+    @Test
+    void afterMappingModel2EntityVerortungPointException() {
+        final var model = new VerortungPointModel();
+        final var pointGeometryModel = new PointGeometryModel();
+        pointGeometryModel.setType("Point");
+        pointGeometryModel.setCoordinates(List.of(BigDecimal.valueOf(999999999), BigDecimal.valueOf(999999999)));
+        model.setPoint(pointGeometryModel);
+
+        final var result = verortungDomainMapper.model2Entity(model);
+
+        final var expected = new VerortungPoint();
+
+        final var pointGeometry = new PointGeometry();
+        pointGeometry.setType("Point");
+        pointGeometry.setCoordinates(List.of(BigDecimal.valueOf(999999999), BigDecimal.valueOf(999999999)));
+        expected.setPoint(pointGeometry);
 
         assertThat(result, is(expected));
     }
