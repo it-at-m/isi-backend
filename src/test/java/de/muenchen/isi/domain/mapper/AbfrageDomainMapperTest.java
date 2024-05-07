@@ -51,9 +51,14 @@ public class AbfrageDomainMapperTest {
         bauabschnittDomainMapper
     );
 
+    private VerortungDomainMapper verortungDomainMapper = new VerortungDomainMapperImpl(
+        new KoordinatenDomainMapperImpl()
+    );
+
     private AbfrageDomainMapper abfrageDomainMapper = new AbfrageDomainMapperImpl(
         abfragevarianteDomainMapper,
-        dokumentDomainMapper
+        dokumentDomainMapper,
+        verortungDomainMapper
     );
 
     @Mock

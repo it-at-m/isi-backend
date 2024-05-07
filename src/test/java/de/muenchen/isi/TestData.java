@@ -23,14 +23,8 @@ import de.muenchen.isi.domain.model.abfrageAngelegt.AbfragevarianteWeiteresVerfa
 import de.muenchen.isi.domain.model.abfrageAngelegt.BaugenehmigungsverfahrenAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageAngelegt.BauleitplanverfahrenAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageAngelegt.WeiteresVerfahrenAngelegtModel;
-import de.muenchen.isi.domain.model.common.AdresseModel;
-import de.muenchen.isi.domain.model.common.FlurstueckModel;
-import de.muenchen.isi.domain.model.common.GemarkungModel;
-import de.muenchen.isi.domain.model.common.MultiPolygonGeometryModel;
-import de.muenchen.isi.domain.model.common.SobonBerechnungModel;
-import de.muenchen.isi.domain.model.common.StadtbezirkModel;
-import de.muenchen.isi.domain.model.common.VerortungMultiPolygonModel;
-import de.muenchen.isi.domain.model.common.WGS84Model;
+import de.muenchen.isi.domain.model.common.*;
+import de.muenchen.isi.domain.model.common.Wgs84Model;
 import de.muenchen.isi.domain.model.filehandling.DokumentModel;
 import de.muenchen.isi.domain.model.filehandling.FilepathModel;
 import de.muenchen.isi.domain.model.stammdaten.SobonOrientierungswertSozialeInfrastrukturModel;
@@ -88,7 +82,7 @@ public class TestData {
         bauleitplanverfahren.setArtAbfrage(ArtAbfrage.BAULEITPLANVERFAHREN);
         bauleitplanverfahren.setName("Neubausiedlung in Musterort");
         bauleitplanverfahren.setStatusAbfrage(StatusAbfrage.ANGELEGT);
-        final WGS84Model coordinate = new WGS84Model();
+        final Wgs84Model coordinate = new Wgs84Model();
         coordinate.setLatitude(48.1556795465256);
         coordinate.setLongitude(11.5568456350688);
         bauleitplanverfahren.setAdresse(new AdresseModel("80331", "München", "Lothstraße", "7", coordinate, null));
@@ -111,7 +105,7 @@ public class TestData {
         baugenehmigungsverfahren.setArtAbfrage(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN);
         baugenehmigungsverfahren.setName("Altbausiedlung in Musterort");
         baugenehmigungsverfahren.setStatusAbfrage(StatusAbfrage.ANGELEGT);
-        final WGS84Model coordinate = new WGS84Model();
+        final Wgs84Model coordinate = new Wgs84Model();
         coordinate.setLatitude(48.1556795465256);
         coordinate.setLongitude(11.5568456350688);
         baugenehmigungsverfahren.setAdresse(new AdresseModel("80331", "München", "Lothstraße", "7", coordinate, null));
@@ -130,7 +124,7 @@ public class TestData {
         weiteresVerfahren.setArtAbfrage(ArtAbfrage.WEITERES_VERFAHREN);
         weiteresVerfahren.setName("Überbausiedlung in Musterort");
         weiteresVerfahren.setStatusAbfrage(StatusAbfrage.ANGELEGT);
-        final WGS84Model coordinate = new WGS84Model();
+        final Wgs84Model coordinate = new Wgs84Model();
         coordinate.setLatitude(48.1556795465256);
         coordinate.setLongitude(11.5568456350688);
         weiteresVerfahren.setAdresse(new AdresseModel("80331", "München", "Lothstraße", "7", coordinate, null));
@@ -150,7 +144,7 @@ public class TestData {
         final var bauleitplanverfahren = new BauleitplanverfahrenAngelegtModel();
         bauleitplanverfahren.setArtAbfrage(ArtAbfrage.BAULEITPLANVERFAHREN);
         bauleitplanverfahren.setName("Neubausiedlung in Musterort 2");
-        final WGS84Model coordinate = new WGS84Model();
+        final Wgs84Model coordinate = new Wgs84Model();
         coordinate.setLatitude(48.1556795465256);
         coordinate.setLongitude(11.5568456350688);
         bauleitplanverfahren.setAdresse(new AdresseModel("80331", "München", "Lothstraße", "7", coordinate, null));
@@ -170,7 +164,7 @@ public class TestData {
         final var baugenehmigungsverfahren = new BaugenehmigungsverfahrenAngelegtModel();
         baugenehmigungsverfahren.setArtAbfrage(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN);
         baugenehmigungsverfahren.setName("Altbausiedlung in Musterort 2");
-        final WGS84Model coordinate = new WGS84Model();
+        final Wgs84Model coordinate = new Wgs84Model();
         coordinate.setLatitude(48.1556795465256);
         coordinate.setLongitude(11.5568456350688);
         baugenehmigungsverfahren.setAdresse(new AdresseModel("80331", "München", "Lothstraße", "7", coordinate, null));
@@ -188,7 +182,7 @@ public class TestData {
         final var bauleitplanverfahren = new WeiteresVerfahrenAngelegtModel();
         bauleitplanverfahren.setArtAbfrage(ArtAbfrage.WEITERES_VERFAHREN);
         bauleitplanverfahren.setName("Überbausiedlung in Musterort 2");
-        final WGS84Model coordinate = new WGS84Model();
+        final Wgs84Model coordinate = new Wgs84Model();
         coordinate.setLatitude(48.1556795465256);
         coordinate.setLongitude(11.5568456350688);
         bauleitplanverfahren.setAdresse(new AdresseModel("80331", "München", "Lothstraße", "7", coordinate, null));

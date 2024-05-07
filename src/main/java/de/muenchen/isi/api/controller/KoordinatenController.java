@@ -3,6 +3,7 @@ package de.muenchen.isi.api.controller;
 import de.muenchen.isi.api.dto.common.UtmDto;
 import de.muenchen.isi.api.dto.common.Wgs84Dto;
 import de.muenchen.isi.api.dto.error.InformationResponseDto;
+import de.muenchen.isi.api.mapper.KoordinatenApiMapper;
 import de.muenchen.isi.domain.exception.KoordinatenException;
 import de.muenchen.isi.domain.service.KoordinatenService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -31,6 +32,8 @@ public class KoordinatenController {
 
     private final KoordinatenService koordinatenService;
 
+    private final KoordinatenApiMapper koordinatenApiMapper;
+
     @PostMapping("wgs-to-utm")
     @Operation(summary = "Umrechnung Wgs84 zu UTM")
     @ApiResponses(
@@ -49,7 +52,8 @@ public class KoordinatenController {
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_KOORDINATEN_TRANSFORM.name())")
     public ResponseEntity<UtmDto> wgs84toUtm32(@RequestBody @Valid @NotNull final Wgs84Dto wgs84Dto)
         throws KoordinatenException {
-        final UtmDto utmDto = this.koordinatenService.wgs84ToUtm32(wgs84Dto);
+        final var utmModel = this.koordinatenService.wgs84ToUtm32(koordinatenApiMapper.dto2Model(wgs84Dto));
+        final var utmDto = this.koordinatenApiMapper.model2Dto(utmModel);
         return ResponseEntity.ok(utmDto);
     }
 
@@ -71,7 +75,8 @@ public class KoordinatenController {
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_KOORDINATEN_TRANSFORM.name())")
     public ResponseEntity<Wgs84Dto> utm32ToWgs84(@RequestBody @Valid @NotNull final UtmDto utmDto)
         throws KoordinatenException {
-        final Wgs84Dto wgs84Dto = this.koordinatenService.utm32ToWgs84(utmDto);
+        final var wgs84Model = this.koordinatenService.utm32ToWgs84(koordinatenApiMapper.dto2Model(utmDto));
+        final var wgs84Dto = koordinatenApiMapper.model2Dto(wgs84Model);
         return ResponseEntity.ok(wgs84Dto);
     }
 }

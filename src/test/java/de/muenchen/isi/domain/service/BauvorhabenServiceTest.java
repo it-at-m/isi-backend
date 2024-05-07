@@ -18,8 +18,10 @@ import de.muenchen.isi.domain.exception.UserRoleNotAllowedException;
 import de.muenchen.isi.domain.mapper.BauvorhabenDomainMapper;
 import de.muenchen.isi.domain.mapper.BauvorhabenDomainMapperImpl;
 import de.muenchen.isi.domain.mapper.DokumentDomainMapperImpl;
+import de.muenchen.isi.domain.mapper.KoordinatenDomainMapperImpl;
 import de.muenchen.isi.domain.mapper.SearchDomainMapper;
 import de.muenchen.isi.domain.mapper.SearchDomainMapperImpl;
+import de.muenchen.isi.domain.mapper.VerortungDomainMapperImpl;
 import de.muenchen.isi.domain.model.AbfrageModel;
 import de.muenchen.isi.domain.model.BauleitplanverfahrenModel;
 import de.muenchen.isi.domain.model.BauvorhabenModel;
@@ -77,7 +79,8 @@ import org.mockito.quality.Strictness;
 public class BauvorhabenServiceTest {
 
     private final BauvorhabenDomainMapper bauvorhabenDomainMapper = new BauvorhabenDomainMapperImpl(
-        new DokumentDomainMapperImpl()
+        new DokumentDomainMapperImpl(),
+        new VerortungDomainMapperImpl(new KoordinatenDomainMapperImpl())
     );
 
     private final SearchDomainMapper searchDomainMapper = new SearchDomainMapperImpl();

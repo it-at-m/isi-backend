@@ -48,7 +48,10 @@ import org.mapstruct.SubclassMapping;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @Slf4j
-@Mapper(config = MapstructConfiguration.class, uses = { AbfragevarianteDomainMapper.class, DokumentDomainMapper.class })
+@Mapper(
+    config = MapstructConfiguration.class,
+    uses = { AbfragevarianteDomainMapper.class, DokumentDomainMapper.class, VerortungDomainMapper.class }
+)
 public abstract class AbfrageDomainMapper {
 
     @Autowired
