@@ -1,8 +1,6 @@
 package de.muenchen.isi.domain.mapper;
 
 import de.muenchen.isi.configuration.MapstructConfiguration;
-import de.muenchen.isi.domain.exception.GeometryOperationFailedException;
-import de.muenchen.isi.domain.exception.KoordinatenException;
 import de.muenchen.isi.domain.model.common.VerortungMultiPolygonModel;
 import de.muenchen.isi.domain.model.common.VerortungPointModel;
 import de.muenchen.isi.domain.service.KoordinatenService;
@@ -14,7 +12,6 @@ import java.math.BigDecimal;
 import java.util.List;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
