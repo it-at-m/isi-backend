@@ -32,10 +32,7 @@ public abstract class VerortungDomainMapper {
     public abstract VerortungMultiPolygon model2Entity(final VerortungMultiPolygonModel model);
 
     @AfterMapping
-    public void afterMappingModel2Entity(
-        final VerortungMultiPolygonModel model,
-        @MappingTarget final VerortungMultiPolygon entity
-    ) {
+    public void afterMappingModel2Entity(@MappingTarget final VerortungMultiPolygon entity) {
         try {
             if (ObjectUtils.isNotEmpty(entity.getMultiPolygon())) {
                 final var centroidWgs84 = koordinatenService.getMultiPolygonCentroid(entity.getMultiPolygon());
@@ -66,7 +63,7 @@ public abstract class VerortungDomainMapper {
     public abstract VerortungPoint model2Entity(final VerortungPointModel model);
 
     @AfterMapping
-    public void afterMappingModel2Entity(final VerortungPointModel model, @MappingTarget final VerortungPoint entity) {
+    public void afterMappingModel2Entity(@MappingTarget final VerortungPoint entity) {
         try {
             if (ObjectUtils.isNotEmpty(entity.getPoint())) {
                 final var longitude = entity.getPoint().getCoordinates().get(0).doubleValue();
