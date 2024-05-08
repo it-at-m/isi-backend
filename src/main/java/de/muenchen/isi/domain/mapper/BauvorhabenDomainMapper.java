@@ -14,7 +14,10 @@ import org.mapstruct.MappingTarget;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @Slf4j
-@Mapper(config = MapstructConfiguration.class, uses = { DokumentDomainMapper.class, VerortungDomainMapper.class })
+@Mapper(
+    config = MapstructConfiguration.class,
+    uses = { DokumentDomainMapper.class, VerortungDomainMapper.class, AdresseDomainMapper.class }
+)
 public abstract class BauvorhabenDomainMapper {
 
     @Autowired

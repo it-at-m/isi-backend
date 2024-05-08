@@ -42,7 +42,7 @@ class VerortungDomainMapperTest {
     }
 
     @Test
-    void afterMappingModel2EntityVerortungMultiPolygon() {
+    void model2EntityVerortungMultiPolygon() {
         final var polygon = List.of(
             List.of(
                 List.of(
@@ -86,7 +86,7 @@ class VerortungDomainMapperTest {
     }
 
     @Test
-    void afterMappingModel2EntityVerortungMultiPolygonEmpty() {
+    void model2EntityVerortungMultiPolygonEmpty() {
         final var model = new VerortungMultiPolygonModel();
 
         final var result = verortungDomainMapper.model2Entity(model);
@@ -97,7 +97,7 @@ class VerortungDomainMapperTest {
     }
 
     @Test
-    void afterMappingModel2EntityVerortungMultiPolygonException() {
+    void model2EntityVerortungMultiPolygonException() {
         final var polygon = List.of(
             List.of(
                 List.of(
@@ -128,7 +128,7 @@ class VerortungDomainMapperTest {
     }
 
     @Test
-    void afterMappingModel2EntityVerortungPoint() {
+    void model2EntityVerortungPoint() {
         final var model = new VerortungPointModel();
         final var pointGeometryModel = new PointGeometryModel();
         pointGeometryModel.setType("Point");
@@ -158,7 +158,7 @@ class VerortungDomainMapperTest {
     }
 
     @Test
-    void afterMappingModel2EntityVerortungPointEmpty() {
+    void model2EntityVerortungPointEmpty() {
         final var model = new VerortungPointModel();
 
         final var result = verortungDomainMapper.model2Entity(model);
@@ -169,7 +169,7 @@ class VerortungDomainMapperTest {
     }
 
     @Test
-    void afterMappingModel2EntityVerortungPointException() {
+    void model2EntityVerortungPointException() {
         final var model = new VerortungPointModel();
         final var pointGeometryModel = new PointGeometryModel();
         pointGeometryModel.setType("Point");

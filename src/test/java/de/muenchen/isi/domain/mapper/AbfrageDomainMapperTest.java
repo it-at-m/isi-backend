@@ -55,10 +55,13 @@ public class AbfrageDomainMapperTest {
         new KoordinatenDomainMapperImpl()
     );
 
+    private AdresseDomainMapper adresseDomainMapper = new AdresseDomainMapperImpl(new KoordinatenDomainMapperImpl());
+
     private AbfrageDomainMapper abfrageDomainMapper = new AbfrageDomainMapperImpl(
         abfragevarianteDomainMapper,
         dokumentDomainMapper,
-        verortungDomainMapper
+        verortungDomainMapper,
+        adresseDomainMapper
     );
 
     @Mock

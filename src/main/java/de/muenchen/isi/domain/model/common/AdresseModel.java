@@ -4,6 +4,7 @@
  */
 package de.muenchen.isi.domain.model.common;
 
+import de.muenchen.isi.api.dto.common.UtmDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,5 +19,6 @@ public class AdresseModel {
     private String strasse;
     private String hausnummer;
     private Wgs84Model coordinate;
+    private UtmModel coordinateUtm;
     private String angabeLageErgaenzendeAdressinformation;
 }

@@ -50,7 +50,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 @Slf4j
 @Mapper(
     config = MapstructConfiguration.class,
-    uses = { AbfragevarianteDomainMapper.class, DokumentDomainMapper.class, VerortungDomainMapper.class }
+    uses = {
+        AbfragevarianteDomainMapper.class,
+        DokumentDomainMapper.class,
+        VerortungDomainMapper.class,
+        AdresseDomainMapper.class,
+    }
 )
 public abstract class AbfrageDomainMapper {
 

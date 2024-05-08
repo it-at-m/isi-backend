@@ -15,6 +15,8 @@ import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.ReportingException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
 import de.muenchen.isi.domain.exception.UserRoleNotAllowedException;
+import de.muenchen.isi.domain.mapper.AdresseDomainMapper;
+import de.muenchen.isi.domain.mapper.AdresseDomainMapperImpl;
 import de.muenchen.isi.domain.mapper.BauvorhabenDomainMapper;
 import de.muenchen.isi.domain.mapper.BauvorhabenDomainMapperImpl;
 import de.muenchen.isi.domain.mapper.DokumentDomainMapperImpl;
@@ -80,7 +82,8 @@ public class BauvorhabenServiceTest {
 
     private final BauvorhabenDomainMapper bauvorhabenDomainMapper = new BauvorhabenDomainMapperImpl(
         new DokumentDomainMapperImpl(),
-        new VerortungDomainMapperImpl(new KoordinatenDomainMapperImpl())
+        new VerortungDomainMapperImpl(new KoordinatenDomainMapperImpl()),
+        new AdresseDomainMapperImpl(new KoordinatenDomainMapperImpl())
     );
 
     private final SearchDomainMapper searchDomainMapper = new SearchDomainMapperImpl();

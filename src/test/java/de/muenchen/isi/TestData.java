@@ -85,7 +85,9 @@ public class TestData {
         final Wgs84Model coordinate = new Wgs84Model();
         coordinate.setLatitude(48.1556795465256);
         coordinate.setLongitude(11.5568456350688);
-        bauleitplanverfahren.setAdresse(new AdresseModel("80331", "München", "Lothstraße", "7", coordinate, null));
+        bauleitplanverfahren.setAdresse(
+            new AdresseModel("80331", "München", "Lothstraße", "7", coordinate, null, null)
+        );
         bauleitplanverfahren.setFristBearbeitung(LocalDate.of(2022, 12, 31));
         bauleitplanverfahren.setAnmerkung("Bitte die Abfrage zeitnah behandeln");
         bauleitplanverfahren.setStandVerfahren(StandVerfahren.STRUKTURKONZEPT);
@@ -108,7 +110,9 @@ public class TestData {
         final Wgs84Model coordinate = new Wgs84Model();
         coordinate.setLatitude(48.1556795465256);
         coordinate.setLongitude(11.5568456350688);
-        baugenehmigungsverfahren.setAdresse(new AdresseModel("80331", "München", "Lothstraße", "7", coordinate, null));
+        baugenehmigungsverfahren.setAdresse(
+            new AdresseModel("80331", "München", "Lothstraße", "7", coordinate, null, null)
+        );
         baugenehmigungsverfahren.setFristBearbeitung(LocalDate.of(2022, 12, 31));
         baugenehmigungsverfahren.setAnmerkung("Bitte die Abfrage zeitnah behandeln");
         baugenehmigungsverfahren.setStandVerfahren(StandVerfahren.STRUKTURKONZEPT);
@@ -127,7 +131,7 @@ public class TestData {
         final Wgs84Model coordinate = new Wgs84Model();
         coordinate.setLatitude(48.1556795465256);
         coordinate.setLongitude(11.5568456350688);
-        weiteresVerfahren.setAdresse(new AdresseModel("80331", "München", "Lothstraße", "7", coordinate, null));
+        weiteresVerfahren.setAdresse(new AdresseModel("80331", "München", "Lothstraße", "7", coordinate, null, null));
         weiteresVerfahren.setFristBearbeitung(LocalDate.of(2022, 12, 31));
         weiteresVerfahren.setAnmerkung("Bitte die Abfrage zeitnah behandeln");
         weiteresVerfahren.setStandVerfahren(StandVerfahren.STRUKTURKONZEPT);
@@ -147,7 +151,9 @@ public class TestData {
         final Wgs84Model coordinate = new Wgs84Model();
         coordinate.setLatitude(48.1556795465256);
         coordinate.setLongitude(11.5568456350688);
-        bauleitplanverfahren.setAdresse(new AdresseModel("80331", "München", "Lothstraße", "7", coordinate, null));
+        bauleitplanverfahren.setAdresse(
+            new AdresseModel("80331", "München", "Lothstraße", "7", coordinate, null, null)
+        );
         bauleitplanverfahren.setFristBearbeitung(LocalDate.of(2022, 12, 31));
         bauleitplanverfahren.setAnmerkung("Bitte die Abfrage zeitnah behandeln");
         bauleitplanverfahren.setStandVerfahren(StandVerfahren.STRUKTURKONZEPT);
@@ -167,7 +173,9 @@ public class TestData {
         final Wgs84Model coordinate = new Wgs84Model();
         coordinate.setLatitude(48.1556795465256);
         coordinate.setLongitude(11.5568456350688);
-        baugenehmigungsverfahren.setAdresse(new AdresseModel("80331", "München", "Lothstraße", "7", coordinate, null));
+        baugenehmigungsverfahren.setAdresse(
+            new AdresseModel("80331", "München", "Lothstraße", "7", coordinate, null, null)
+        );
         baugenehmigungsverfahren.setFristBearbeitung(LocalDate.of(2022, 12, 31));
         baugenehmigungsverfahren.setAnmerkung("Bitte die Abfrage zeitnah behandeln");
         baugenehmigungsverfahren.setStandVerfahren(StandVerfahren.STRUKTURKONZEPT);
@@ -185,7 +193,9 @@ public class TestData {
         final Wgs84Model coordinate = new Wgs84Model();
         coordinate.setLatitude(48.1556795465256);
         coordinate.setLongitude(11.5568456350688);
-        bauleitplanverfahren.setAdresse(new AdresseModel("80331", "München", "Lothstraße", "7", coordinate, null));
+        bauleitplanverfahren.setAdresse(
+            new AdresseModel("80331", "München", "Lothstraße", "7", coordinate, null, null)
+        );
         bauleitplanverfahren.setFristBearbeitung(LocalDate.of(2022, 12, 31));
         bauleitplanverfahren.setAnmerkung("Bitte die Abfrage zeitnah behandeln");
         bauleitplanverfahren.setStandVerfahren(StandVerfahren.STRUKTURKONZEPT);
