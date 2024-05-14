@@ -19,6 +19,9 @@ import de.muenchen.isi.reporting.client.model.BaugenehmigungsverfahrenDto;
 import de.muenchen.isi.reporting.client.model.BauleitplanverfahrenDto;
 import de.muenchen.isi.reporting.client.model.LangfristigerBedarfDto;
 import de.muenchen.isi.reporting.client.model.WeiteresVerfahrenDto;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
@@ -57,34 +60,25 @@ public interface ReportingApiDomainMapper {
     @Mapping(target = "langfristigerSobonursaechlicherBedarf", ignore = true)
     AbfragevarianteWeiteresVerfahrenDto model2ReportingDto(final AbfragevarianteWeiteresVerfahrenModel model);
 
-    @Mapping(target = "id", ignore = true)
-    @Mapping(target = "createdDateTime", ignore = true)
-    @Mapping(target = "lastModifiedDateTime", ignore = true)
-    @Mapping(target = "artAbfragevariante", ignore = true)
-    @Mapping(target = "abfragevariantenNr", ignore = true)
-    @Mapping(target = "name", ignore = true)
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "langfristigerPlanungsursaechlicherBedarf", ignore = false)
+    @Mapping(target = "langfristigerSobonursaechlicherBedarf", ignore = false)
     AbfragevarianteBauleitplanverfahrenDto reportingDtoAndBedarfe2ReportingDto(
         @MappingTarget final AbfragevarianteBauleitplanverfahrenDto dto,
         final BedarfeForAbfragevarianteModel bedarfeForAbfragevariante
     );
 
-    @Mapping(target = "id", ignore = true)
-    @Mapping(target = "createdDateTime", ignore = true)
-    @Mapping(target = "lastModifiedDateTime", ignore = true)
-    @Mapping(target = "artAbfragevariante", ignore = true)
-    @Mapping(target = "abfragevariantenNr", ignore = true)
-    @Mapping(target = "name", ignore = true)
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "langfristigerPlanungsursaechlicherBedarf", ignore = false)
+    @Mapping(target = "langfristigerSobonursaechlicherBedarf", ignore = false)
     AbfragevarianteBaugenehmigungsverfahrenDto reportingDtoAndBedarfe2ReportingDto(
         @MappingTarget final AbfragevarianteBaugenehmigungsverfahrenDto dto,
         final BedarfeForAbfragevarianteModel bedarfeForAbfragevariante
     );
 
-    @Mapping(target = "id", ignore = true)
-    @Mapping(target = "createdDateTime", ignore = true)
-    @Mapping(target = "lastModifiedDateTime", ignore = true)
-    @Mapping(target = "artAbfragevariante", ignore = true)
-    @Mapping(target = "abfragevariantenNr", ignore = true)
-    @Mapping(target = "name", ignore = true)
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "langfristigerPlanungsursaechlicherBedarf", ignore = false)
+    @Mapping(target = "langfristigerSobonursaechlicherBedarf", ignore = false)
     AbfragevarianteWeiteresVerfahrenDto reportingDtoAndBedarfe2ReportingDto(
         @MappingTarget final AbfragevarianteWeiteresVerfahrenDto dto,
         final BedarfeForAbfragevarianteModel bedarfeForAbfragevariante
@@ -93,4 +87,8 @@ public interface ReportingApiDomainMapper {
     LangfristigerBedarfDto model2ReportingDto(final LangfristigerBedarfModel model);
 
     AbfrageDto.ArtAbfrageEnum artAbfrage2ArtAbfrageReporting(final ArtAbfrage artAbfrage);
+
+    default OffsetDateTime localDateTime2OffsetDateTime(final LocalDateTime localDateTime) {
+        return OffsetDateTime.from(localDateTime);
+    }
 }
