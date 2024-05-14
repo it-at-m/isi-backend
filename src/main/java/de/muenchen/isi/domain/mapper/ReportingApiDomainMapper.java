@@ -21,6 +21,8 @@ import de.muenchen.isi.reporting.client.model.LangfristigerBedarfDto;
 import de.muenchen.isi.reporting.client.model.WeiteresVerfahrenDto;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -87,8 +89,4 @@ public interface ReportingApiDomainMapper {
     LangfristigerBedarfDto model2ReportingDto(final LangfristigerBedarfModel model);
 
     AbfrageDto.ArtAbfrageEnum artAbfrage2ArtAbfrageReporting(final ArtAbfrage artAbfrage);
-
-    default OffsetDateTime localDateTime2OffsetDateTime(final LocalDateTime localDateTime) {
-        return OffsetDateTime.from(localDateTime);
-    }
 }
