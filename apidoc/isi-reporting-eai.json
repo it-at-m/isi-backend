@@ -104,7 +104,7 @@
           "name": { "type": "string" },
           "statusAbfrage": { "type": "string" },
           "anmerkung": { "type": "string" },
-          "bauvorhaben": { "type": "string", "format": "uuid" },
+          "bauvorhabenId": { "type": "string", "format": "uuid" },
           "sub": { "type": "string" },
           "linkEakte": { "type": "string" }
         },
