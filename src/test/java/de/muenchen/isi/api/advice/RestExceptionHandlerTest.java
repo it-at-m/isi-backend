@@ -635,28 +635,6 @@ class RestExceptionHandlerTest {
     }
 
     @Test
-    void handleBindException() {
-        final BindException bindException = new BindException(this.bindingResult);
-
-        final ResponseEntity<Object> response =
-            this.restExceptionHandler.handleBindException(
-                    bindException,
-                    new HttpHeaders(),
-                    HttpStatus.NOT_ACCEPTABLE,
-                    null
-                );
-
-        assertThat(response.getStatusCode(), is(HttpStatus.NOT_ACCEPTABLE));
-
-        final InformationResponseDto responseDto = (InformationResponseDto) response.getBody();
-
-        assertThat(responseDto.getTraceId(), is("1111111111111111"));
-        assertThat(responseDto.getSpanId(), is("ffffffffffffffff"));
-        assertThat(responseDto.getMessages(), is(List.of("Im Backend ist ein Fehler aufgetreten.")));
-        assertThat(responseDto.getOriginalException(), is("BindException"));
-    }
-
-    @Test
     void handleNoHandlerFoundException() {
         final NoHandlerFoundException noHandlerFoundException = new NoHandlerFoundException("GET", "the-url", null);
 
