@@ -90,7 +90,7 @@ public class PresignedUrlCreationService {
                 this.presignedUrlRepository.getPresignedUrlSaveFile(
                         filepath.getPathToFile(),
                         this.fileExpirationTime,
-                        LocalDate.now().plusYears(999)
+                        null
                     );
             log.debug("Presigned-URL save file: {}", presignedUrl);
             return new PresignedUrlModel(HttpMethod.PUT.name(), presignedUrl);
