@@ -3,19 +3,24 @@ package de.muenchen.isi.domain.service;
 import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
+import de.muenchen.isi.domain.exception.ReportingException;
 import de.muenchen.isi.domain.mapper.InfrastruktureinrichtungDomainMapper;
 import de.muenchen.isi.domain.model.BauvorhabenModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.InfrastruktureinrichtungModel;
+import de.muenchen.isi.domain.service.etlInterface.EtlInterfaceService;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Infrastruktureinrichtung;
 import de.muenchen.isi.infrastructure.repository.BauvorhabenRepository;
 import de.muenchen.isi.infrastructure.repository.InfrastruktureinrichtungRepository;
 import de.muenchen.isi.infrastructure.repository.common.KommentarRepository;
+import de.muenchen.isi.reporting.client.model.EtlTriggerJobDto;
+import java.util.ArrayList;
 import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
+import org.springframework.data.util.Pair;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 
@@ -31,6 +36,8 @@ public class InfrastruktureinrichtungService {
     private final KommentarRepository kommentarRepository;
 
     private final BauvorhabenRepository bauvorhabenRepository;
+
+    private final EtlInterfaceService etlInterfaceService;
 
     /**
      * Die Methode gibt ein {@link InfrastruktureinrichtungModel} identifiziert durch die ID zurück.
@@ -55,14 +62,25 @@ public class InfrastruktureinrichtungService {
      * @param infrastruktureinrichtung zum Speichern
      * @return das gespeicherte {@link InfrastruktureinrichtungModel}
      * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
+     * @throws ReportingException         falls bei der Übermittlung an die Reportingschnittstelle ein Fehler auftritt.
      */
     public InfrastruktureinrichtungModel saveInfrastruktureinrichtung(
         final InfrastruktureinrichtungModel infrastruktureinrichtung
-    ) throws OptimisticLockingException, EntityNotFoundException {
+    ) throws OptimisticLockingException, EntityNotFoundException, ReportingException {
+        final var etlTriggerJobParameter = new ArrayList<Pair<String, String>>();
         Infrastruktureinrichtung entity =
             this.infrastruktureinrichtungDomainMapper.model2Entity(infrastruktureinrichtung);
         try {
             entity = this.infrastruktureinrichtungRepository.saveAndFlush(entity);
+            /*
+            EtlTriggerJobDto etlTriggerJobDto = new EtlTriggerJobDto();
+            etlTriggerJobDto.setJobname(
+                "importFromBackend/infrastruktureinrichtung/Job_Import_Infrastruktureinrichtung.kjb"
+            );
+
+            etlTriggerJobDto.setParameters(null);
+            etlInterfaceService.etlInterfaceTriggerJob(etlTriggerJobDto);
+             */
         } catch (final ObjectOptimisticLockingFailureException exception) {
             final var message = "Die Daten wurden in der Zwischenzeit geändert. Bitte laden Sie die Seite neu!";
             throw new OptimisticLockingException(message, exception);
@@ -77,10 +95,11 @@ public class InfrastruktureinrichtungService {
      * @return das geupdatete {@link InfrastruktureinrichtungModel}
      * @throws EntityNotFoundException    falls die Infrastruktureinrichtung identifiziert durch die {@link InfrastruktureinrichtungModel#getId()} nicht gefunden wird
      * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
+     * @throws ReportingException         falls bei der Übermittlung an die Reportingschnittstelle ein Fehler auftritt.
      */
     public InfrastruktureinrichtungModel updateInfrastruktureinrichtung(
         final InfrastruktureinrichtungModel infrastruktureinrichtung
-    ) throws EntityNotFoundException, OptimisticLockingException {
+    ) throws EntityNotFoundException, OptimisticLockingException, ReportingException {
         this.getInfrastruktureinrichtungById(infrastruktureinrichtung.getId());
         return this.saveInfrastruktureinrichtung(infrastruktureinrichtung);
     }

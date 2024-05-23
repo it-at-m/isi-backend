@@ -9,6 +9,7 @@ import de.muenchen.isi.TestConstants;
 import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
+import de.muenchen.isi.domain.exception.ReportingException;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.InfrastruktureinrichtungModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.KindergartenModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.KinderkrippeModel;
@@ -119,7 +120,7 @@ class InfrastruktureinrichtungServiceTest {
 
     @Test
     @Transactional
-    void saveInfrastruktureinrichtung() throws OptimisticLockingException, EntityNotFoundException {
+    void saveInfrastruktureinrichtung() throws OptimisticLockingException, EntityNotFoundException, ReportingException {
         var bauvorhaben = new Bauvorhaben();
         bauvorhaben.setNameVorhaben("Bauvorhaben");
         bauvorhaben.setStandVerfahren(StandVerfahren.RAHMENPLANUNG);
@@ -157,7 +158,8 @@ class InfrastruktureinrichtungServiceTest {
 
     @Test
     @Transactional
-    void updateInfrastruktureinrichtung() throws OptimisticLockingException, EntityNotFoundException {
+    void updateInfrastruktureinrichtung()
+        throws OptimisticLockingException, EntityNotFoundException, ReportingException {
         var bauvorhaben = new Bauvorhaben();
         bauvorhaben.setNameVorhaben("Bauvorhaben");
         bauvorhaben.setStandVerfahren(StandVerfahren.RAHMENPLANUNG);
