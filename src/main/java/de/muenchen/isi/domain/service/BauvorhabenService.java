@@ -18,6 +18,7 @@ import de.muenchen.isi.domain.model.BauvorhabenModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.InfrastruktureinrichtungModel;
 import de.muenchen.isi.domain.model.search.response.AbfrageSearchResultModel;
 import de.muenchen.isi.domain.model.search.response.InfrastruktureinrichtungSearchResultModel;
+import de.muenchen.isi.domain.service.etlInterface.EtlInterfaceService;
 import de.muenchen.isi.domain.service.filehandling.DokumentService;
 import de.muenchen.isi.infrastructure.entity.Abfrage;
 import de.muenchen.isi.infrastructure.entity.common.GlobalCounter;
@@ -32,6 +33,9 @@ import de.muenchen.isi.infrastructure.repository.BauvorhabenRepository;
 import de.muenchen.isi.infrastructure.repository.InfrastruktureinrichtungRepository;
 import de.muenchen.isi.infrastructure.repository.common.GlobalCounterRepository;
 import de.muenchen.isi.infrastructure.repository.common.KommentarRepository;
+import de.muenchen.isi.reporting.client.model.EtlTriggerJobDto;
+import de.muenchen.isi.reporting.client.model.PairStringString;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
@@ -71,6 +75,8 @@ public class BauvorhabenService {
 
     private final KommentarRepository kommentarRepository;
 
+    private final EtlInterfaceService etlInterfaceService;
+
     /**
      * Die Methode gibt ein {@link BauvorhabenModel} identifiziert durch die ID zurück.
      *
@@ -98,9 +104,10 @@ public class BauvorhabenService {
      * @throws EntityNotFoundException     falls bei der Datenübernahme die ausgewählte Abfrage nicht mehr vorhanden ist
      * @throws EntityIsReferencedException falls bei der Datenübernahme die ausgewählte Abfrage bereits ein Bauvorhaben referenziert
      * @throws UserRoleNotAllowedException falls der User keine Berechtigung für die Abfrage hat.
+     * @throws ReportingException         falls bei der Übermittlung an die Reportingschnittstelle ein Fehler auftritt.
      */
     public BauvorhabenModel saveBauvorhaben(final BauvorhabenModel bauvorhaben, final UUID abfrageId)
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, EntityIsReferencedException, UserRoleNotAllowedException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, EntityIsReferencedException, UserRoleNotAllowedException, ReportingException {
         var bauvorhabenEntity = this.bauvorhabenDomainMapper.model2Entity(bauvorhaben);
         final var saved = this.bauvorhabenRepository.findByNameVorhabenIgnoreCase(bauvorhabenEntity.getNameVorhaben());
         if ((saved.isPresent() && saved.get().getId().equals(bauvorhabenEntity.getId())) || saved.isEmpty()) {
@@ -121,6 +128,15 @@ public class BauvorhabenService {
                     abfrageModel.setBauvorhaben(bauvorhabenEntity.getId());
                     abfrageService.save(abfrageModel);
                 }
+                final var listParameter = new ArrayList<PairStringString>();
+                EtlTriggerJobDto etlTriggerJobDto = new EtlTriggerJobDto();
+                etlTriggerJobDto.setJobname("importFromBackend/bauvorhaben/Job_Import_Bauvorhaben.kjb");
+                final var idParameter = new PairStringString();
+                idParameter.setFirst("id");
+                idParameter.setSecond(bauvorhabenEntity.getId().toString());
+                listParameter.add(idParameter);
+                etlTriggerJobDto.setParameters(listParameter);
+                etlInterfaceService.etlInterfaceTriggerJob(etlTriggerJobDto);
             } catch (final ObjectOptimisticLockingFailureException exception) {
                 final var message = "Die Daten wurden in der Zwischenzeit geändert. Bitte laden Sie die Seite neu!";
                 throw new OptimisticLockingException(message, exception);
@@ -150,9 +166,10 @@ public class BauvorhabenService {
      * @throws FileHandlingWithS3FailedException falls es beim Dateihandling im S3-Storage zu einem Fehler gekommen ist.
      * @throws EntityIsReferencedException       falls bei Neuanlage eines Bauvorhabens bei Datenübernahme einer Abfrage diese bereits ein Bauvorhaben referenziert
      * @throws UserRoleNotAllowedException       falls der User keine Berechtigung für die Abfrage hat.
+     * @throws ReportingException                falls bei der Übermittlung an die Reportingschnittstelle ein Fehler auftritt.
      */
     public BauvorhabenModel updateBauvorhaben(final BauvorhabenModel bauvorhaben)
-        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, FileHandlingFailedException, FileHandlingWithS3FailedException, EntityIsReferencedException, UserRoleNotAllowedException {
+        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, FileHandlingFailedException, FileHandlingWithS3FailedException, EntityIsReferencedException, UserRoleNotAllowedException, ReportingException {
         final var originalBauvorhabenDb = this.getBauvorhabenById(bauvorhaben.getId());
         dokumentService.deleteDokumenteFromOriginalDokumentenListWhichAreMissingInParameterAdaptedDokumentenListe(
             bauvorhaben.getDokumente(),
@@ -190,9 +207,10 @@ public class BauvorhabenService {
      * @throws AbfrageStatusNotAllowedException  falls die Abfrage den falschen Status hat
      * @throws BauvorhabenNotReferencedException falls die Abfrage zu keinem Bauvorhaben gehört
      * @throws UserRoleNotAllowedException       falls der User keine Berechtigung für die Abfrage hat.
+     * @throws ReportingException                falls bei der Übermittlung an die Reportingschnittstelle ein Fehler auftritt.
      */
     public BauvorhabenModel changeRelevanteAbfragevariante(final UUID abfragevarianteId)
-        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, BauvorhabenNotReferencedException, EntityIsReferencedException, UserRoleNotAllowedException {
+        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, BauvorhabenNotReferencedException, EntityIsReferencedException, UserRoleNotAllowedException, ReportingException {
         final AbfrageModel abfrage = abfrageService.getByAbfragevarianteId(abfragevarianteId);
 
         final var bauvorhabenId = abfrage.getBauvorhaben();
