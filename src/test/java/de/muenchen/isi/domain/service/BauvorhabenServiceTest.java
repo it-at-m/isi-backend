@@ -15,7 +15,6 @@ import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.ReportingException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
 import de.muenchen.isi.domain.exception.UserRoleNotAllowedException;
-import de.muenchen.isi.domain.mapper.AdresseDomainMapper;
 import de.muenchen.isi.domain.mapper.AdresseDomainMapperImpl;
 import de.muenchen.isi.domain.mapper.BauvorhabenDomainMapper;
 import de.muenchen.isi.domain.mapper.BauvorhabenDomainMapperImpl;
@@ -58,6 +57,8 @@ import de.muenchen.isi.infrastructure.repository.BauvorhabenRepository;
 import de.muenchen.isi.infrastructure.repository.InfrastruktureinrichtungRepository;
 import de.muenchen.isi.infrastructure.repository.common.GlobalCounterRepository;
 import de.muenchen.isi.infrastructure.repository.common.KommentarRepository;
+import de.muenchen.isi.reporting.client.model.EtlTriggerJobDto;
+import de.muenchen.isi.reporting.client.model.PairStringString;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -347,6 +348,14 @@ public class BauvorhabenServiceTest {
         final BauvorhabenModel bauvorhaben = new BauvorhabenModel();
         bauvorhaben.setId(null);
 
+        final var listParameter = new ArrayList<PairStringString>();
+        EtlTriggerJobDto etlTriggerJobDto = new EtlTriggerJobDto();
+        etlTriggerJobDto.setJobname("importFromBackend/bauvorhaben/Job_Import_Bauvorhaben.kjb");
+        final var idParameter = new PairStringString();
+        idParameter.setFirst("id");
+        listParameter.add(idParameter);
+        etlTriggerJobDto.setParameters(listParameter);
+
         final Bauvorhaben bauvorhabenEntity = new Bauvorhaben();
         bauvorhabenEntity.setId(bauvorhaben.getId());
 
@@ -359,10 +368,13 @@ public class BauvorhabenServiceTest {
 
         final BauvorhabenModel expected = new BauvorhabenModel();
         expected.setId(saveResult.getId());
+        idParameter.setSecond(expected.getId().toString());
 
         assertThat(result, is(expected));
 
         Mockito.verify(this.bauvorhabenRepository, Mockito.times(1)).saveAndFlush(bauvorhabenEntity);
+
+        Mockito.verify(this.etlInterfaceService, Mockito.times(1)).etlInterfaceTriggerJob(etlTriggerJobDto);
     }
 
     @Test
@@ -696,7 +708,9 @@ public class BauvorhabenServiceTest {
     void changeRelevanteAbfragevarianteSetNewRelevanteAbfragevarianteTest()
         throws AbfrageStatusNotAllowedException, EntityNotFoundException, BauvorhabenNotReferencedException, UniqueViolationException, OptimisticLockingException, EntityIsReferencedException, UserRoleNotAllowedException, ReportingException {
         final Bauvorhaben bauvorhabenEntity = new Bauvorhaben();
+        final Bauvorhaben bauvorhabenSaved = new Bauvorhaben();
         bauvorhabenEntity.setId(UUID.randomUUID());
+        bauvorhabenSaved.setId(bauvorhabenEntity.getId());
         final AbfragevarianteBauleitplanverfahren abfragevarianteBauleitplanverfahren =
             new AbfragevarianteBauleitplanverfahren();
         abfragevarianteBauleitplanverfahren.setId(UUID.randomUUID());
@@ -726,6 +740,9 @@ public class BauvorhabenServiceTest {
             .when(abfragevarianteRepository.findById(abfragevarianteBauleitplanverfahren.getId()))
             .thenReturn(Optional.of(abfragevarianteBauleitplanverfahren));
 
+        bauvorhabenSaved.setRelevanteAbfragevariante(abfragevarianteBauleitplanverfahren);
+        Mockito.when(this.bauvorhabenRepository.saveAndFlush(bauvorhabenSaved)).thenReturn(bauvorhabenSaved);
+
         this.bauvorhabenService.changeRelevanteAbfragevariante(abfragevarianteBauleitplanverfahren.getId());
 
         final Bauvorhaben bauvorhabenToVerify = new Bauvorhaben();
@@ -748,7 +765,9 @@ public class BauvorhabenServiceTest {
     void changeRelevanteAbfragevarianteUnsetRelevanteAbfragevarianteTest()
         throws AbfrageStatusNotAllowedException, EntityNotFoundException, BauvorhabenNotReferencedException, UniqueViolationException, OptimisticLockingException, EntityIsReferencedException, UserRoleNotAllowedException, ReportingException {
         final Bauvorhaben bauvorhabenEntity = new Bauvorhaben();
+        final Bauvorhaben bauvorhabenSaved = new Bauvorhaben();
         bauvorhabenEntity.setId(UUID.randomUUID());
+        bauvorhabenSaved.setId(bauvorhabenEntity.getId());
         final AbfragevarianteBauleitplanverfahren abfragevarianteBauleitplanverfahren =
             new AbfragevarianteBauleitplanverfahren();
         abfragevarianteBauleitplanverfahren.setId(UUID.randomUUID());
@@ -778,6 +797,8 @@ public class BauvorhabenServiceTest {
         Mockito
             .when(abfragevarianteRepository.findById(abfragevarianteBauleitplanverfahren.getId()))
             .thenReturn(Optional.of(abfragevarianteBauleitplanverfahren));
+
+        Mockito.when(this.bauvorhabenRepository.saveAndFlush(bauvorhabenSaved)).thenReturn(bauvorhabenSaved);
 
         this.bauvorhabenService.changeRelevanteAbfragevariante(abfragevarianteBauleitplanverfahren.getId());
 

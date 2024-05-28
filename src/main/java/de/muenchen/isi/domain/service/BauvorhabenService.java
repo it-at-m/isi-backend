@@ -143,7 +143,10 @@ public class BauvorhabenService {
             } catch (UserRoleNotAllowedException e) {
                 final var message = "Keine Berechtigung um die Abfrage zu bearbeiten!";
                 throw new UserRoleNotAllowedException(message);
-            } catch (CalculationException | ReportingException e) {
+            } catch (ReportingException e) {
+                final var message = "Reporting Beim Aufruf des ETL-Systems (Pentaho) ist ein Fehler aufgetreten";
+                throw new ReportingException(message, e);
+            } catch (CalculationException e) {
                 throw new RuntimeException(e);
             }
             return this.bauvorhabenDomainMapper.entity2Model(bauvorhabenEntity);

@@ -85,7 +85,11 @@ public class InfrastruktureinrichtungService {
         } catch (final ObjectOptimisticLockingFailureException exception) {
             final var message = "Die Daten wurden in der Zwischenzeit geändert. Bitte laden Sie die Seite neu!";
             throw new OptimisticLockingException(message, exception);
+        } catch (ReportingException e) {
+            final var message = "Reporting Beim Aufruf des ETL-Systems (Pentaho) ist ein Fehler aufgetreten";
+            throw new ReportingException(message, e);
         }
+
         return this.infrastruktureinrichtungDomainMapper.entity2Model(entity);
     }
 

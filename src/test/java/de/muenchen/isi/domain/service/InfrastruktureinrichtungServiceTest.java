@@ -15,6 +15,7 @@ import de.muenchen.isi.domain.model.infrastruktureinrichtung.KindergartenModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.KinderkrippeModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.MittelschuleModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.SchuleModel;
+import de.muenchen.isi.domain.service.etlInterface.EtlInterfaceService;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVerfahren;
@@ -27,17 +28,23 @@ import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Kinderkrip
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Schule;
 import de.muenchen.isi.infrastructure.repository.BauvorhabenRepository;
 import de.muenchen.isi.infrastructure.repository.InfrastruktureinrichtungRepository;
+import de.muenchen.isi.reporting.client.model.EtlTriggerJobDto;
+import de.muenchen.isi.reporting.client.model.PairStringString;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -55,6 +62,9 @@ class InfrastruktureinrichtungServiceTest {
 
     @Autowired
     private InfrastruktureinrichtungRepository infrastruktureinrichtungRepository;
+
+    @MockBean
+    private EtlInterfaceService etlInterfaceService;
 
     @BeforeEach
     public void beforeEach() {
@@ -154,6 +164,19 @@ class InfrastruktureinrichtungServiceTest {
             ((MittelschuleModel) savedMittelschule).getSchule().getAnzahlPlaetze(),
             is(mittelschule.getSchule().getAnzahlPlaetze())
         );
+
+        final var listParameter = new ArrayList<PairStringString>();
+        EtlTriggerJobDto etlTriggerJobDto = new EtlTriggerJobDto();
+        etlTriggerJobDto.setJobname(
+            "importFromBackend/infrastruktureinrichtung/Job_Import_Infrastruktureinrichtung.kjb"
+        );
+        final var idParameter = new PairStringString();
+        idParameter.setFirst("id");
+        idParameter.setSecond(savedMittelschule.getId().toString());
+        listParameter.add(idParameter);
+        etlTriggerJobDto.setParameters(listParameter);
+
+        Mockito.verify(this.etlInterfaceService, Mockito.times(1)).etlInterfaceTriggerJob(etlTriggerJobDto);
     }
 
     @Test
@@ -169,6 +192,16 @@ class InfrastruktureinrichtungServiceTest {
         bauvorhaben.setSobonRelevant(UncertainBoolean.FALSE);
         bauvorhaben = bauvorhabenRepository.saveAndFlush(bauvorhaben);
 
+        final var listParameter = new ArrayList<PairStringString>();
+        EtlTriggerJobDto etlTriggerJobDto = new EtlTriggerJobDto();
+        etlTriggerJobDto.setJobname(
+            "importFromBackend/infrastruktureinrichtung/Job_Import_Infrastruktureinrichtung.kjb"
+        );
+        final var idParameter = new PairStringString();
+        idParameter.setFirst("id");
+        listParameter.add(idParameter);
+        etlTriggerJobDto.setParameters(listParameter);
+
         MittelschuleModel mittelschule = new MittelschuleModel();
         mittelschule.setNameEinrichtung("Mittelschule");
         mittelschule.setStatus(StatusInfrastruktureinrichtung.UNGESICHERTE_PLANUNG_TF_KITA_STANDORT);
@@ -179,6 +212,10 @@ class InfrastruktureinrichtungServiceTest {
 
         final var savedMittelschule = this.infrastruktureinrichtungService.saveInfrastruktureinrichtung(mittelschule);
         assertThat(savedMittelschule.getVersion(), is(0L));
+
+        idParameter.setSecond(savedMittelschule.getId().toString());
+        Mockito.verify(this.etlInterfaceService, Mockito.times(1)).etlInterfaceTriggerJob(etlTriggerJobDto);
+        Mockito.reset(this.etlInterfaceService);
 
         savedMittelschule.setNameEinrichtung("Mittelschule XXX");
 
@@ -211,6 +248,9 @@ class InfrastruktureinrichtungServiceTest {
             EntityNotFoundException.class,
             () -> this.infrastruktureinrichtungService.updateInfrastruktureinrichtung(updatedMittelschule)
         );
+
+        idParameter.setSecond(savedMittelschule.getId().toString());
+        Mockito.verify(this.etlInterfaceService, Mockito.times(1)).etlInterfaceTriggerJob(etlTriggerJobDto);
     }
 
     @Test
