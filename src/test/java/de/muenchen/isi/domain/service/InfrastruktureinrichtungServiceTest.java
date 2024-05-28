@@ -165,18 +165,9 @@ class InfrastruktureinrichtungServiceTest {
             is(mittelschule.getSchule().getAnzahlPlaetze())
         );
 
-        final var listParameter = new ArrayList<PairStringString>();
-        EtlTriggerJobDto etlTriggerJobDto = new EtlTriggerJobDto();
-        etlTriggerJobDto.setJobname(
-            "importFromBackend/infrastruktureinrichtung/Job_Import_Infrastruktureinrichtung.kjb"
-        );
-        final var idParameter = new PairStringString();
-        idParameter.setFirst("id");
-        idParameter.setSecond(savedMittelschule.getId().toString());
-        listParameter.add(idParameter);
-        etlTriggerJobDto.setParameters(listParameter);
-
-        Mockito.verify(this.etlInterfaceService, Mockito.times(1)).etlInterfaceTriggerJob(etlTriggerJobDto);
+        Mockito
+            .verify(this.etlInterfaceService, Mockito.times(1))
+            .etlInterfaceTriggerInfrastruktureinrichtungJob(savedMittelschule.getId());
     }
 
     @Test
@@ -192,16 +183,6 @@ class InfrastruktureinrichtungServiceTest {
         bauvorhaben.setSobonRelevant(UncertainBoolean.FALSE);
         bauvorhaben = bauvorhabenRepository.saveAndFlush(bauvorhaben);
 
-        final var listParameter = new ArrayList<PairStringString>();
-        EtlTriggerJobDto etlTriggerJobDto = new EtlTriggerJobDto();
-        etlTriggerJobDto.setJobname(
-            "importFromBackend/infrastruktureinrichtung/Job_Import_Infrastruktureinrichtung.kjb"
-        );
-        final var idParameter = new PairStringString();
-        idParameter.setFirst("id");
-        listParameter.add(idParameter);
-        etlTriggerJobDto.setParameters(listParameter);
-
         MittelschuleModel mittelschule = new MittelschuleModel();
         mittelschule.setNameEinrichtung("Mittelschule");
         mittelschule.setStatus(StatusInfrastruktureinrichtung.UNGESICHERTE_PLANUNG_TF_KITA_STANDORT);
@@ -213,8 +194,9 @@ class InfrastruktureinrichtungServiceTest {
         final var savedMittelschule = this.infrastruktureinrichtungService.saveInfrastruktureinrichtung(mittelschule);
         assertThat(savedMittelschule.getVersion(), is(0L));
 
-        idParameter.setSecond(savedMittelschule.getId().toString());
-        Mockito.verify(this.etlInterfaceService, Mockito.times(1)).etlInterfaceTriggerJob(etlTriggerJobDto);
+        Mockito
+            .verify(this.etlInterfaceService, Mockito.times(1))
+            .etlInterfaceTriggerInfrastruktureinrichtungJob(savedMittelschule.getId());
         Mockito.reset(this.etlInterfaceService);
 
         savedMittelschule.setNameEinrichtung("Mittelschule XXX");
@@ -249,8 +231,9 @@ class InfrastruktureinrichtungServiceTest {
             () -> this.infrastruktureinrichtungService.updateInfrastruktureinrichtung(updatedMittelschule)
         );
 
-        idParameter.setSecond(savedMittelschule.getId().toString());
-        Mockito.verify(this.etlInterfaceService, Mockito.times(1)).etlInterfaceTriggerJob(etlTriggerJobDto);
+        Mockito
+            .verify(this.etlInterfaceService, Mockito.times(1))
+            .etlInterfaceTriggerInfrastruktureinrichtungJob(savedMittelschule.getId());
     }
 
     @Test

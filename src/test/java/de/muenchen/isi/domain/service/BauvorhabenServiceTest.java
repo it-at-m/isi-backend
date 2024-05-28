@@ -348,14 +348,6 @@ public class BauvorhabenServiceTest {
         final BauvorhabenModel bauvorhaben = new BauvorhabenModel();
         bauvorhaben.setId(null);
 
-        final var listParameter = new ArrayList<PairStringString>();
-        EtlTriggerJobDto etlTriggerJobDto = new EtlTriggerJobDto();
-        etlTriggerJobDto.setJobname("importFromBackend/bauvorhaben/Job_Import_Bauvorhaben.kjb");
-        final var idParameter = new PairStringString();
-        idParameter.setFirst("id");
-        listParameter.add(idParameter);
-        etlTriggerJobDto.setParameters(listParameter);
-
         final Bauvorhaben bauvorhabenEntity = new Bauvorhaben();
         bauvorhabenEntity.setId(bauvorhaben.getId());
 
@@ -368,13 +360,12 @@ public class BauvorhabenServiceTest {
 
         final BauvorhabenModel expected = new BauvorhabenModel();
         expected.setId(saveResult.getId());
-        idParameter.setSecond(expected.getId().toString());
 
         assertThat(result, is(expected));
 
         Mockito.verify(this.bauvorhabenRepository, Mockito.times(1)).saveAndFlush(bauvorhabenEntity);
 
-        Mockito.verify(this.etlInterfaceService, Mockito.times(1)).etlInterfaceTriggerJob(etlTriggerJobDto);
+        Mockito.verify(this.etlInterfaceService, Mockito.times(1)).etlInterfaceTriggerBauvorhabenJob(expected.getId());
     }
 
     @Test

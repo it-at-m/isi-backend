@@ -13,9 +13,6 @@ import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Infrastruk
 import de.muenchen.isi.infrastructure.repository.BauvorhabenRepository;
 import de.muenchen.isi.infrastructure.repository.InfrastruktureinrichtungRepository;
 import de.muenchen.isi.infrastructure.repository.common.KommentarRepository;
-import de.muenchen.isi.reporting.client.model.EtlTriggerJobDto;
-import de.muenchen.isi.reporting.client.model.PairStringString;
-import java.util.ArrayList;
 import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -67,27 +64,16 @@ public class InfrastruktureinrichtungService {
     public InfrastruktureinrichtungModel saveInfrastruktureinrichtung(
         final InfrastruktureinrichtungModel infrastruktureinrichtung
     ) throws OptimisticLockingException, EntityNotFoundException, ReportingException {
-        final var listParameter = new ArrayList<PairStringString>();
         Infrastruktureinrichtung entity =
             this.infrastruktureinrichtungDomainMapper.model2Entity(infrastruktureinrichtung);
         try {
             entity = this.infrastruktureinrichtungRepository.saveAndFlush(entity);
-            EtlTriggerJobDto etlTriggerJobDto = new EtlTriggerJobDto();
-            etlTriggerJobDto.setJobname(
-                "importFromBackend/infrastruktureinrichtung/Job_Import_Infrastruktureinrichtung.kjb"
-            );
-            final var idParameter = new PairStringString();
-            idParameter.setFirst("id");
-            idParameter.setSecond(entity.getId().toString());
-            listParameter.add(idParameter);
-            etlTriggerJobDto.setParameters(listParameter);
-            etlInterfaceService.etlInterfaceTriggerJob(etlTriggerJobDto);
+            etlInterfaceService.etlInterfaceTriggerInfrastruktureinrichtungJob(entity.getId());
         } catch (final ObjectOptimisticLockingFailureException exception) {
             final var message = "Die Daten wurden in der Zwischenzeit geändert. Bitte laden Sie die Seite neu!";
             throw new OptimisticLockingException(message, exception);
         } catch (ReportingException e) {
-            final var message = "Reporting Beim Aufruf des ETL-Systems (Pentaho) ist ein Fehler aufgetreten";
-            throw new ReportingException(message, e);
+            throw e;
         }
 
         return this.infrastruktureinrichtungDomainMapper.entity2Model(entity);

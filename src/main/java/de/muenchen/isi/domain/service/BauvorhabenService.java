@@ -33,9 +33,6 @@ import de.muenchen.isi.infrastructure.repository.BauvorhabenRepository;
 import de.muenchen.isi.infrastructure.repository.InfrastruktureinrichtungRepository;
 import de.muenchen.isi.infrastructure.repository.common.GlobalCounterRepository;
 import de.muenchen.isi.infrastructure.repository.common.KommentarRepository;
-import de.muenchen.isi.reporting.client.model.EtlTriggerJobDto;
-import de.muenchen.isi.reporting.client.model.PairStringString;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
@@ -128,24 +125,13 @@ public class BauvorhabenService {
                     abfrageModel.setBauvorhaben(bauvorhabenEntity.getId());
                     abfrageService.save(abfrageModel);
                 }
-                final var listParameter = new ArrayList<PairStringString>();
-                EtlTriggerJobDto etlTriggerJobDto = new EtlTriggerJobDto();
-                etlTriggerJobDto.setJobname("importFromBackend/bauvorhaben/Job_Import_Bauvorhaben.kjb");
-                final var idParameter = new PairStringString();
-                idParameter.setFirst("id");
-                idParameter.setSecond(bauvorhabenEntity.getId().toString());
-                listParameter.add(idParameter);
-                etlTriggerJobDto.setParameters(listParameter);
-                etlInterfaceService.etlInterfaceTriggerJob(etlTriggerJobDto);
+                etlInterfaceService.etlInterfaceTriggerBauvorhabenJob(bauvorhabenEntity.getId());
             } catch (final ObjectOptimisticLockingFailureException exception) {
                 final var message = "Die Daten wurden in der Zwischenzeit geändert. Bitte laden Sie die Seite neu!";
                 throw new OptimisticLockingException(message, exception);
             } catch (UserRoleNotAllowedException e) {
                 final var message = "Keine Berechtigung um die Abfrage zu bearbeiten!";
                 throw new UserRoleNotAllowedException(message);
-            } catch (ReportingException e) {
-                final var message = "Reporting Beim Aufruf des ETL-Systems (Pentaho) ist ein Fehler aufgetreten";
-                throw new ReportingException(message, e);
             } catch (CalculationException e) {
                 throw new RuntimeException(e);
             }
