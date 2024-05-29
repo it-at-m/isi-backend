@@ -12,6 +12,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -30,7 +31,7 @@ import org.springframework.web.client.RestTemplate;
  * "Authorities" extrahiert.
  */
 @Slf4j
-public class UserInfoAuthoritiesService {
+public class UserInfoDataService {
 
     @Data
     public static final class UserInfoData {
@@ -40,19 +41,19 @@ public class UserInfoAuthoritiesService {
         private Collection<SimpleGrantedAuthority> authorities;
     }
 
-    private static final String NAME_AUTHENTICATION_CACHE = "authentication_cache";
+    public static final String NAME_AUTHENTICATION_CACHE = "authentication_cache";
 
-    private static final String CLAIM_AUTHORITIES = "authorities";
+    public static final String CLAIM_AUTHORITIES = "authorities";
 
-    private static final String CLAIM_SURNAME = "surname";
+    public static final String CLAIM_SURNAME = "surname";
 
-    private static final String CLAIM_GIVENNAME = "givenname";
+    public static final String CLAIM_GIVENNAME = "givenname";
 
-    private static final String CLAIM_DEPARTMENT = "department";
+    public static final String CLAIM_DEPARTMENT = "department";
 
-    private static final String CLAIM_EMAIL = "email";
+    public static final String CLAIM_EMAIL = "email";
 
-    private static final String CLAIM_USERNAME = "username";
+    public static final String CLAIM_USERNAME = "username";
 
     private final String userInfoUri;
     private final RestTemplate restTemplate;
@@ -64,7 +65,7 @@ public class UserInfoAuthoritiesService {
      * @param userInfoUri userinfo Endpoint URI
      * @param restTemplate ein {@link RestTemplate}
      */
-    public UserInfoAuthoritiesService(final String userInfoUri, final RestTemplate restTemplate) {
+    public UserInfoDataService(final String userInfoUri, final RestTemplate restTemplate) {
         this.userInfoUri = userInfoUri;
         this.restTemplate = restTemplate;
         this.cache =
@@ -124,7 +125,7 @@ public class UserInfoAuthoritiesService {
         return userInfoData;
     }
 
-    protected static List<SimpleGrantedAuthority> getAuthoritiesFromUserInfoEndpointData(
+    protected List<SimpleGrantedAuthority> getAuthoritiesFromUserInfoEndpointData(
         final Map<String, Object> userInfoEndpointData
     ) {
         final var authorities = new ArrayList<SimpleGrantedAuthority>();
@@ -134,7 +135,7 @@ public class UserInfoAuthoritiesService {
         return authorities;
     }
 
-    protected static List<SimpleGrantedAuthority> asAuthorities(final Object object) {
+    protected List<SimpleGrantedAuthority> asAuthorities(final Object object) {
         final var authorities = new ArrayList<SimpleGrantedAuthority>();
         if (object instanceof Collection<?>) {
             authorities.addAll(
@@ -144,21 +145,19 @@ public class UserInfoAuthoritiesService {
         return authorities;
     }
 
-    protected static Map<String, Object> getClaimsFromUserInfoEndpointData(
-        final Map<String, Object> userInfoEndpointData
-    ) {
+    protected Map<String, Object> getClaimsFromUserInfoEndpointData(final Map<String, Object> userInfoEndpointData) {
         final var claims = new HashMap<String, Object>();
 
         final var surname = userInfoEndpointData.get(CLAIM_SURNAME);
-        claims.put(CLAIM_SURNAME, surname);
+        Optional.ofNullable(surname).ifPresent(claimValue -> claims.put(CLAIM_SURNAME, claimValue));
         final var givenname = userInfoEndpointData.get(CLAIM_GIVENNAME);
-        claims.put(CLAIM_GIVENNAME, givenname);
+        Optional.ofNullable(givenname).ifPresent(claimValue -> claims.put(CLAIM_GIVENNAME, claimValue));
         final var department = userInfoEndpointData.get(CLAIM_DEPARTMENT);
-        claims.put(CLAIM_DEPARTMENT, department);
+        Optional.ofNullable(department).ifPresent(claimValue -> claims.put(CLAIM_DEPARTMENT, claimValue));
         final var email = userInfoEndpointData.get(CLAIM_EMAIL);
-        claims.put(CLAIM_EMAIL, email);
+        Optional.ofNullable(email).ifPresent(claimValue -> claims.put(CLAIM_EMAIL, claimValue));
         final var username = userInfoEndpointData.get(CLAIM_USERNAME);
-        claims.put(CLAIM_USERNAME, username);
+        Optional.ofNullable(username).ifPresent(claimValue -> claims.put(CLAIM_USERNAME, claimValue));
 
         return claims;
     }

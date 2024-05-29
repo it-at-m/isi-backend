@@ -5,7 +5,7 @@
 package de.muenchen.isi.configuration;
 
 import de.muenchen.isi.security.CustomJwtAuthenticationConverter;
-import de.muenchen.isi.security.UserInfoAuthoritiesService;
+import de.muenchen.isi.security.UserInfoDataService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -64,7 +64,7 @@ public class SecurityEnabledBackendConfiguration {
                     // Verwenden eines CustomConverters um die Rechte vom UserInfoEndpunkt zu extrahieren.
                     jwt.jwtAuthenticationConverter(
                         new CustomJwtAuthenticationConverter(
-                            new UserInfoAuthoritiesService(userInfoUri, restTemplateBuilder.build())
+                            new UserInfoDataService(userInfoUri, restTemplateBuilder.build())
                         )
                     )
                 )
