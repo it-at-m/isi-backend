@@ -62,8 +62,8 @@ class CustomJwtAuthenticationConverterTest {
 
         var jwtExpected = new Jwt(
             "the-tokenvalue",
-            Instant.now().minusSeconds(10),
-            Instant.now().plusSeconds(10),
+            jwt.getIssuedAt(),
+            jwt.getExpiresAt(),
             Map.of("header1", "the-header-value"),
             Map.of(
                 "sub",
@@ -84,8 +84,14 @@ class CustomJwtAuthenticationConverterTest {
             jwtResultFromJwtAuthenticationToken.getTokenValue(),
             is(jwtExpectedFromJwtAuthenticationToken.getTokenValue())
         );
-        assertThat(jwtResultFromJwtAuthenticationToken.getIssuedAt(), isA(Instant.class));
-        assertThat(jwtResultFromJwtAuthenticationToken.getExpiresAt(), isA(Instant.class));
+        assertThat(
+            jwtResultFromJwtAuthenticationToken.getIssuedAt(),
+            is(jwtExpectedFromJwtAuthenticationToken.getIssuedAt())
+        );
+        assertThat(
+            jwtResultFromJwtAuthenticationToken.getExpiresAt(),
+            is(jwtExpectedFromJwtAuthenticationToken.getExpiresAt())
+        );
         assertThat(
             jwtResultFromJwtAuthenticationToken.getHeaders(),
             is(jwtExpectedFromJwtAuthenticationToken.getHeaders())
