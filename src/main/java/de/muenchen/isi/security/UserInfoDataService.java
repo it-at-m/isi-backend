@@ -28,7 +28,7 @@ import org.springframework.web.client.RestTemplate;
 
 /**
  * Service, der einen OIDC /userinfo Endpoint aufruft (mit JWT Bearer Auth) und dort die enthaltenen
- * "Authorities" extrahiert.
+ * "Authorities" und Nutzerinformationen extrahiert.
  */
 @Slf4j
 public class UserInfoDataService {
