@@ -40,6 +40,48 @@ class UserInfoDataServiceTest {
     }
 
     @Test
+    void getAuthoritiesFromUserInfoEndpointDataWithoutAutorities() {
+        var userInfoEndpointData = new HashMap<String, Object>();
+        userInfoEndpointData.put("other-claim", "other-value");
+
+        var result = userInfoDataService.getAuthoritiesFromUserInfoEndpointData(userInfoEndpointData);
+
+        assertThat(result, is(List.of()));
+    }
+
+    @Test
+    void getAuthoritiesFromUserInfoEndpointDataWithNullValueAutorities() {
+        var userInfoEndpointData = new HashMap<String, Object>();
+        userInfoEndpointData.put("other-claim", "other-value");
+        userInfoEndpointData.put(UserInfoDataService.CLAIM_AUTHORITIES, null);
+
+        var result = userInfoDataService.getAuthoritiesFromUserInfoEndpointData(userInfoEndpointData);
+
+        assertThat(result, is(List.of()));
+    }
+
+    @Test
+    void getAuthoritiesFromUserInfoEndpointDataWithAutorities() {
+        var userInfoEndpointData = new HashMap<String, Object>();
+        userInfoEndpointData.put("other-claim", "other-value");
+        userInfoEndpointData.put(
+            UserInfoDataService.CLAIM_AUTHORITIES,
+            List.of("authority-1", "authority-2", "authority-3", "authority-4")
+        );
+
+        var result = userInfoDataService.getAuthoritiesFromUserInfoEndpointData(userInfoEndpointData);
+
+        var expected = List.of(
+            new SimpleGrantedAuthority("authority-1"),
+            new SimpleGrantedAuthority("authority-2"),
+            new SimpleGrantedAuthority("authority-3"),
+            new SimpleGrantedAuthority("authority-4")
+        );
+
+        assertThat(result, is(expected));
+    }
+
+    @Test
     void asAuthoritiesWithNullValue() {
         var result = userInfoDataService.asAuthorities(null);
 
