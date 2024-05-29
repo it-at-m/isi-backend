@@ -124,7 +124,7 @@ public class UserInfoAuthoritiesService {
         return userInfoData;
     }
 
-    private static List<SimpleGrantedAuthority> getAuthoritiesFromUserInfoEndpointData(
+    protected static List<SimpleGrantedAuthority> getAuthoritiesFromUserInfoEndpointData(
         final Map<String, Object> userInfoEndpointData
     ) {
         final var authorities = new ArrayList<SimpleGrantedAuthority>();
@@ -134,7 +134,7 @@ public class UserInfoAuthoritiesService {
         return authorities;
     }
 
-    private static List<SimpleGrantedAuthority> asAuthorities(final Object object) {
+    protected static List<SimpleGrantedAuthority> asAuthorities(final Object object) {
         final var authorities = new ArrayList<SimpleGrantedAuthority>();
         if (object instanceof Collection<?>) {
             authorities.addAll(
@@ -144,7 +144,7 @@ public class UserInfoAuthoritiesService {
         return authorities;
     }
 
-    private static Map<String, Object> getClaimsFromUserInfoEndpointData(
+    protected static Map<String, Object> getClaimsFromUserInfoEndpointData(
         final Map<String, Object> userInfoEndpointData
     ) {
         final var claims = new HashMap<String, Object>();
@@ -163,7 +163,7 @@ public class UserInfoAuthoritiesService {
         return claims;
     }
 
-    private Map<String, Object> getDataFromUserInfoEndpoint(final Jwt jwt) {
+    protected Map<String, Object> getDataFromUserInfoEndpoint(final Jwt jwt) {
         log.debug("Fetching user-info for token subject: {}", jwt.getSubject());
         final var headers = new HttpHeaders();
         headers.set(HttpHeaders.AUTHORIZATION, "Bearer " + jwt.getTokenValue());
