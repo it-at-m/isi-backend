@@ -5,7 +5,9 @@ import static org.hamcrest.Matchers.is;
 
 import java.time.Instant;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,6 +20,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.client.RestTemplate;
 
@@ -37,7 +40,37 @@ class UserInfoDataServiceTest {
     }
 
     @Test
-    void getClaimsFromUserInfoEndpointDataEmptyInput() {
+    void asAuthoritiesWithNullValue() {
+        var result = userInfoDataService.asAuthorities(null);
+
+        assertThat(result, is(List.of()));
+    }
+
+    @Test
+    void asAuthoritiesWithNonCollection() {
+        var result = userInfoDataService.asAuthorities("not-a-collection");
+
+        assertThat(result, is(List.of()));
+    }
+
+    @Test
+    void asAuthoritiesWithCollection() {
+        var authorities = List.of("authority-1", "authority-2", "authority-3", "authority-4");
+
+        var result = userInfoDataService.asAuthorities(authorities);
+
+        var expected = List.of(
+            new SimpleGrantedAuthority("authority-1"),
+            new SimpleGrantedAuthority("authority-2"),
+            new SimpleGrantedAuthority("authority-3"),
+            new SimpleGrantedAuthority("authority-4")
+        );
+
+        assertThat(result, is(expected));
+    }
+
+    @Test
+    void getClaimsFromUserInfoEndpointDataWithEmptyInput() {
         var userInfoEndpointData = new HashMap<String, Object>();
 
         var result = userInfoDataService.getClaimsFromUserInfoEndpointData(userInfoEndpointData);
