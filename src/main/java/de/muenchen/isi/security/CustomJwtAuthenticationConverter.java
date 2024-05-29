@@ -27,7 +27,7 @@ public class CustomJwtAuthenticationConverter implements Converter<Jwt, Abstract
         final var expiresAt = source.getExpiresAt();
         final var headers = source.getHeaders();
         final var mergedClaims = MapUtils.merge(source.getClaims(), userInfoData.getClaims());
-        final var jwtWithUserInfoData = new Jwt(tokenValue, issuedAt, expiresAt, headers, mergedClaims);
-        return new JwtAuthenticationToken(jwtWithUserInfoData, userInfoData.getAuthorities());
+        final var jwtEnrichedWithUserInfoData = new Jwt(tokenValue, issuedAt, expiresAt, headers, mergedClaims);
+        return new JwtAuthenticationToken(jwtEnrichedWithUserInfoData, userInfoData.getAuthorities());
     }
 }
