@@ -94,5 +94,7 @@ class CustomJwtAuthenticationConverterTest {
             jwtResultFromJwtAuthenticationToken.getClaims(),
             is(jwtExpectedFromJwtAuthenticationToken.getClaims())
         );
+
+        Mockito.verify(userInfoDataService, Mockito.times(1)).loadUserInfoData(jwt);
     }
 }
