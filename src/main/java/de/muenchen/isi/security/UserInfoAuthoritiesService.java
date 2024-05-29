@@ -9,12 +9,15 @@ import com.github.benmanes.caffeine.cache.Ticker;
 import de.muenchen.isi.configuration.CachingConfiguration;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.MapUtils;
 import org.springframework.cache.Cache;
 import org.springframework.cache.Cache.ValueWrapper;
 import org.springframework.cache.caffeine.CaffeineCache;
@@ -34,9 +37,27 @@ import org.springframework.web.client.RestTemplate;
 @Slf4j
 public class UserInfoAuthoritiesService {
 
+    @Data
+    public final class UserInfoData {
+
+        private Map<String, Object> claims;
+
+        private Collection<SimpleGrantedAuthority> authorities;
+    }
+
     private static final String NAME_AUTHENTICATION_CACHE = "authentication_cache";
 
     private static final String CLAIM_AUTHORITIES = "authorities";
+
+    private static final String CLAIM_SURNAME = "surname";
+
+    private static final String CLAIM_GIVENNAME = "givenname";
+
+    private static final String CLAIM_DEPARTMENT = "department";
+
+    private static final String CLAIM_EMAIL = "email";
+
+    private static final String CLAIM_USERNAME = "username";
 
     private final String userInfoUri;
     private final RestTemplate restTemplate;
@@ -72,35 +93,29 @@ public class UserInfoAuthoritiesService {
      * @param jwt der JWT
      * @return die {@link GrantedAuthority}s gem. Claim "authorities" des /userinfo Endpoints
      */
-    public Collection<SimpleGrantedAuthority> loadAuthorities(Jwt jwt) {
-        ValueWrapper valueWrapper = this.cache.get(jwt.getSubject());
+    public UserInfoData loadUserInfoData(final Jwt jwt) {
+        final var valueWrapper = this.cache.get(jwt.getSubject());
         if (valueWrapper != null) {
             // value present in cache
             @SuppressWarnings("unchecked")
-            Collection<SimpleGrantedAuthority> authorities = (Collection<SimpleGrantedAuthority>) valueWrapper.get();
-            log.debug("Resolved authorities (from cache): {}", authorities);
-            return authorities;
+            final var userInfoData = (UserInfoData) valueWrapper.get();
+            log.debug("Resolved UserInfoData (from cache): {}", userInfoData);
+            return userInfoData;
         }
 
-        log.debug("Fetching user-info for token subject: {}", jwt.getSubject());
-        final HttpHeaders headers = new HttpHeaders();
-        headers.set(HttpHeaders.AUTHORIZATION, "Bearer " + jwt.getTokenValue());
-        final HttpEntity<String> entity = new HttpEntity<>(headers);
-
-        Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
+        final UserInfoData userInfoData = new UserInfoData();
         try {
-            @SuppressWarnings("unchecked")
-            Map<String, Object> map = restTemplate
-                .exchange(this.userInfoUri, HttpMethod.GET, entity, Map.class)
-                .getBody();
+            final Map<String, Object> userInfoEndpointData = this.getDataFromUserInfoEndpoint(jwt);
 
-            log.debug("Response from user-info Endpoint: {}", map);
-            if (map.containsKey(CLAIM_AUTHORITIES)) {
-                authorities = asAuthorities(map.get(CLAIM_AUTHORITIES));
-            }
-            log.debug("Resolved Authorities (from /userinfo Endpoint): {}", authorities);
-            // store
-            this.cache.put(jwt.getSubject(), authorities);
+            final var authorities = getAuthoritiesFromUserInfoEndpointData(userInfoEndpointData);
+            userInfoData.setAuthorities(authorities);
+            final var claims = getClaimsFromUserInfoEndpointData(userInfoEndpointData);
+            userInfoData.setClaims(claims);
+
+            log.debug("Resolved UserInfoData (from /userinfo Endpoint): {}", userInfoData);
+
+            // store to Cache
+            this.cache.put(jwt.getSubject(), userInfoData);
         } catch (Exception e) {
             log.error(
                 String.format(
@@ -111,23 +126,60 @@ public class UserInfoAuthoritiesService {
             );
         }
 
+        return userInfoData;
+    }
+
+    private static List<SimpleGrantedAuthority> getAuthoritiesFromUserInfoEndpointData(
+        final Map<String, Object> userInfoEndpointData
+    ) {
+        final var authorities = new ArrayList<SimpleGrantedAuthority>();
+        if (userInfoEndpointData.containsKey(CLAIM_AUTHORITIES)) {
+            authorities.addAll(asAuthorities(userInfoEndpointData.get(CLAIM_AUTHORITIES)));
+        }
         return authorities;
     }
 
-    private static List<SimpleGrantedAuthority> asAuthorities(Object object) {
+    private static List<SimpleGrantedAuthority> asAuthorities(final Object object) {
         final var authorities = new ArrayList<SimpleGrantedAuthority>();
-        if (object instanceof Collection<?> collection) {
-            object = collection.toArray(new Object[0]);
-        }
-        if (ObjectUtils.isArray(object)) {
+        if (object instanceof Collection<?>) {
             authorities.addAll(
-                Stream
-                    .of(((Object[]) object))
-                    .map(Object::toString)
-                    .map(SimpleGrantedAuthority::new)
-                    .collect(Collectors.toList())
+                ((Collection<?>) object).stream().map(Object::toString).map(SimpleGrantedAuthority::new).toList()
             );
         }
         return authorities;
+    }
+
+    private static Map<String, Object> getClaimsFromUserInfoEndpointData(
+        final Map<String, Object> userInfoEndpointData
+    ) {
+        final var claims = new HashMap<String, Object>();
+
+        final var surname = userInfoEndpointData.get(CLAIM_SURNAME);
+        claims.put(CLAIM_SURNAME, surname);
+        final var givenname = userInfoEndpointData.get(CLAIM_GIVENNAME);
+        claims.put(CLAIM_GIVENNAME, givenname);
+        final var department = userInfoEndpointData.get(CLAIM_DEPARTMENT);
+        claims.put(CLAIM_DEPARTMENT, department);
+        final var email = userInfoEndpointData.get(CLAIM_EMAIL);
+        claims.put(CLAIM_EMAIL, email);
+        final var username = userInfoEndpointData.get(CLAIM_USERNAME);
+        claims.put(CLAIM_USERNAME, username);
+
+        return claims;
+    }
+
+    private Map<String, Object> getDataFromUserInfoEndpoint(final Jwt jwt) {
+        log.debug("Fetching user-info for token subject: {}", jwt.getSubject());
+        final HttpHeaders headers = new HttpHeaders();
+        headers.set(HttpHeaders.AUTHORIZATION, "Bearer " + jwt.getTokenValue());
+        final HttpEntity<String> entity = new HttpEntity<>(headers);
+
+        @SuppressWarnings("unchecked")
+        final Map<String, Object> userInfoEndpointData = restTemplate
+            .exchange(this.userInfoUri, HttpMethod.GET, entity, Map.class)
+            .getBody();
+        log.debug("Response from user-info Endpoint: {}", userInfoEndpointData);
+
+        return userInfoEndpointData;
     }
 }

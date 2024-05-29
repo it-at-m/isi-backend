@@ -1,6 +1,7 @@
 package de.muenchen.isi.security;
 
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.exec.util.MapUtils;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
@@ -20,6 +21,13 @@ public class CustomJwtAuthenticationConverter implements Converter<Jwt, Abstract
 
     @Override
     public AbstractAuthenticationToken convert(final Jwt source) {
-        return new JwtAuthenticationToken(source, this.userInfoAuthoritiesService.loadAuthorities(source));
+        final var userInfoData = this.userInfoAuthoritiesService.loadUserInfoData(source);
+        final var tokenValue = source.getTokenValue();
+        final var issuedAt = source.getIssuedAt();
+        final var expiresAt = source.getExpiresAt();
+        final var headers = source.getHeaders();
+        final var mergedClaims = MapUtils.merge(source.getClaims(), userInfoData.getClaims());
+        final var jwtWithUserInfoData = new Jwt(tokenValue, issuedAt, expiresAt, headers, mergedClaims);
+        return new JwtAuthenticationToken(jwtWithUserInfoData, userInfoData.getAuthorities());
     }
 }
