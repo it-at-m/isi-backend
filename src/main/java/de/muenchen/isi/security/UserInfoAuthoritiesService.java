@@ -98,7 +98,7 @@ public class UserInfoAuthoritiesService {
             return userInfoData;
         }
 
-        final UserInfoData userInfoData = new UserInfoData();
+        final var userInfoData = new UserInfoData();
         try {
             final Map<String, Object> userInfoEndpointData = this.getDataFromUserInfoEndpoint(jwt);
 
@@ -165,9 +165,9 @@ public class UserInfoAuthoritiesService {
 
     private Map<String, Object> getDataFromUserInfoEndpoint(final Jwt jwt) {
         log.debug("Fetching user-info for token subject: {}", jwt.getSubject());
-        final HttpHeaders headers = new HttpHeaders();
+        final var headers = new HttpHeaders();
         headers.set(HttpHeaders.AUTHORIZATION, "Bearer " + jwt.getTokenValue());
-        final HttpEntity<String> entity = new HttpEntity<>(headers);
+        final var entity = new HttpEntity<String>(headers);
 
         @SuppressWarnings("unchecked")
         final Map<String, Object> userInfoEndpointData = restTemplate
