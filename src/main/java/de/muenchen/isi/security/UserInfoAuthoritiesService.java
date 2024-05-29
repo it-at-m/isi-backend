@@ -13,13 +13,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections4.MapUtils;
 import org.springframework.cache.Cache;
-import org.springframework.cache.Cache.ValueWrapper;
 import org.springframework.cache.caffeine.CaffeineCache;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -27,7 +23,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.util.ObjectUtils;
 import org.springframework.web.client.RestTemplate;
 
 /**
@@ -38,7 +33,7 @@ import org.springframework.web.client.RestTemplate;
 public class UserInfoAuthoritiesService {
 
     @Data
-    public final class UserInfoData {
+    public static final class UserInfoData {
 
         private Map<String, Object> claims;
 
@@ -116,13 +111,13 @@ public class UserInfoAuthoritiesService {
 
             // store to Cache
             this.cache.put(jwt.getSubject(), userInfoData);
-        } catch (Exception e) {
+        } catch (Exception exception) {
             log.error(
                 String.format(
                     "Could not fetch user details from %s - user is granted NO authorities",
                     this.userInfoUri
                 ),
-                e
+                exception
             );
         }
 
