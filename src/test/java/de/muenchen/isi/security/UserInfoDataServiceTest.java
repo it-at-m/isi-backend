@@ -40,6 +40,65 @@ class UserInfoDataServiceTest {
     }
 
     @Test
+    void loadUserInfoDataWithoutExistingCacheEntry() {
+        var userInfoEndpointData = new HashMap<String, Object>();
+        userInfoEndpointData.put("not returned claim", new Object());
+        userInfoEndpointData.put(UserInfoDataService.CLAIM_SURNAME, "the-surname");
+        userInfoEndpointData.put(UserInfoDataService.CLAIM_GIVENNAME, "the-givenname");
+        userInfoEndpointData.put(UserInfoDataService.CLAIM_DEPARTMENT, "the-department");
+        userInfoEndpointData.put(UserInfoDataService.CLAIM_EMAIL, "the-email");
+        userInfoEndpointData.put(UserInfoDataService.CLAIM_USERNAME, "the-username");
+        userInfoEndpointData.put(
+            UserInfoDataService.CLAIM_AUTHORITIES,
+            List.of("authority-1", "authority-2", "authority-3", "authority-4")
+        );
+
+        final var jwt = new Jwt(
+            "the-tokenvalue",
+            Instant.now().minusSeconds(10),
+            Instant.now().plusSeconds(10),
+            Map.of("header1", new Object()),
+            Map.of("sub", "123456789")
+        );
+
+        final var headers = new HttpHeaders();
+        headers.set(HttpHeaders.AUTHORIZATION, "Bearer the-tokenvalue");
+        final var entity = new HttpEntity<String>(headers);
+
+        Mockito
+            .when(restTemplate.exchange("userinfo-uri", HttpMethod.GET, entity, Map.class))
+            .thenReturn(ResponseEntity.ok(userInfoEndpointData));
+
+        var result = userInfoDataService.loadUserInfoData(jwt);
+
+        var expected = new UserInfoDataService.UserInfoData();
+        expected.setAuthorities(
+            List.of(
+                new SimpleGrantedAuthority("authority-1"),
+                new SimpleGrantedAuthority("authority-2"),
+                new SimpleGrantedAuthority("authority-3"),
+                new SimpleGrantedAuthority("authority-4")
+            )
+        );
+        expected.setClaims(
+            Map.of(
+                UserInfoDataService.CLAIM_SURNAME,
+                "the-surname",
+                UserInfoDataService.CLAIM_GIVENNAME,
+                "the-givenname",
+                UserInfoDataService.CLAIM_DEPARTMENT,
+                "the-department",
+                UserInfoDataService.CLAIM_EMAIL,
+                "the-email",
+                UserInfoDataService.CLAIM_USERNAME,
+                "the-username"
+            )
+        );
+
+        assertThat(result, is(expected));
+    }
+
+    @Test
     void getAuthoritiesFromUserInfoEndpointDataWithoutAutorities() {
         var userInfoEndpointData = new HashMap<String, Object>();
         userInfoEndpointData.put("other-claim", "other-value");
