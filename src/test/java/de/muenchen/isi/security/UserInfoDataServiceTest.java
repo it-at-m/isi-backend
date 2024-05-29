@@ -7,6 +7,7 @@ import java.time.Instant;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,6 +16,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
+import org.springframework.cache.Cache;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -36,6 +38,41 @@ class UserInfoDataServiceTest {
     public void beforeEach() {
         this.userInfoDataService = new UserInfoDataService("userinfo-uri", restTemplate);
         Mockito.reset(restTemplate);
+    }
+
+    @Test
+    void loadUserInfoDataWithExistingCacheEntry() throws IllegalAccessException {
+        final var jwt = new Jwt(
+            "the-tokenvalue",
+            Instant.now().minusSeconds(10),
+            Instant.now().plusSeconds(10),
+            Map.of("header1", new Object()),
+            Map.of("sub", "123456789")
+        );
+
+        final var cache = (Cache) FieldUtils.readField(userInfoDataService, "cache", true);
+
+        var cacheContent = new UserInfoDataService.UserInfoData();
+        cacheContent.setAuthorities(List.of(new SimpleGrantedAuthority("authority-1")));
+        cacheContent.setClaims(Map.of(UserInfoDataService.CLAIM_SURNAME, "the-surname"));
+
+        cache.put("123456789", cacheContent);
+
+        var result = userInfoDataService.loadUserInfoData(jwt);
+
+        var expected = new UserInfoDataService.UserInfoData();
+        expected.setAuthorities(List.of(new SimpleGrantedAuthority("authority-1")));
+        expected.setClaims(Map.of(UserInfoDataService.CLAIM_SURNAME, "the-surname"));
+
+        assertThat(result, is(expected));
+
+        // Call cache entry multiple times
+        result = userInfoDataService.loadUserInfoData(jwt);
+        assertThat(result, is(expected));
+        result = userInfoDataService.loadUserInfoData(jwt);
+        assertThat(result, is(expected));
+        result = userInfoDataService.loadUserInfoData(jwt);
+        assertThat(result, is(expected));
     }
 
     @Test
