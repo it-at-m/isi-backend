@@ -95,10 +95,10 @@ public class UserInfoDataService {
         // Rückgeben der UserInfoData aus Cache falls vorhanden.
         final var valueWrapper = this.cache.get(jwt.getTokenValue());
         if (
-            ObjectUtils.allNotNull(valueWrapper, valueWrapper.get()) &&
+            ObjectUtils.isNotEmpty(valueWrapper) &&
+            ObjectUtils.isNotEmpty(valueWrapper.get()) &&
             UserInfoData.class.equals(valueWrapper.get().getClass())
         ) {
-            @SuppressWarnings("unchecked")
             final var userInfoData = (UserInfoData) valueWrapper.get();
             log.debug("Resolved UserInfoData (from cache): {}", userInfoData);
             return userInfoData;
