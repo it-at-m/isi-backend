@@ -41,8 +41,6 @@ public class UserInfoDataService {
         private Collection<SimpleGrantedAuthority> authorities;
     }
 
-    public static final String NAME_AUTHENTICATION_CACHE = "authentication_cache";
-
     public static final String CLAIM_AUTHORITIES = "authorities";
 
     public static final String CLAIM_SURNAME = "surname";
@@ -72,7 +70,7 @@ public class UserInfoDataService {
         this.restTemplate = restTemplate;
         this.cache =
             new CaffeineCache(
-                NAME_AUTHENTICATION_CACHE,
+                CachingConfiguration.NAME_AUTHENTICATION_CACHE,
                 Caffeine
                     .newBuilder()
                     .expireAfterWrite(
