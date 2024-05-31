@@ -16,6 +16,7 @@ import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.cache.Cache;
 import org.springframework.cache.caffeine.CaffeineCache;
 import org.springframework.http.HttpEntity;
@@ -93,7 +94,10 @@ public class UserInfoDataService {
     public UserInfoData loadUserInfoData(final Jwt jwt) {
         // Rückgeben der UserInfoData aus Cache falls vorhanden.
         final var valueWrapper = this.cache.get(jwt.getTokenValue());
-        if (valueWrapper != null) {
+        if (
+            ObjectUtils.allNotNull(valueWrapper, valueWrapper.get()) &&
+            UserInfoData.class.equals(valueWrapper.get().getClass())
+        ) {
             @SuppressWarnings("unchecked")
             final var userInfoData = (UserInfoData) valueWrapper.get();
             log.debug("Resolved UserInfoData (from cache): {}", userInfoData);
