@@ -84,10 +84,11 @@ public class UserInfoDataService {
 
     /**
      * Ruft den /userinfo Endpoint und extrahiert {@link GrantedAuthority}s aus dem "authorities"
-     * Claim.
+     * Claim sowie weitere personalisierte Claims.
+     *
      *
      * @param jwt der JWT
-     * @return die {@link GrantedAuthority}s gem. Claim "authorities" des /userinfo Endpoints
+     * @return die {@link GrantedAuthority}s sowie weitere personalisierte Claims.
      */
     public UserInfoData loadUserInfoData(final Jwt jwt) {
         final var valueWrapper = this.cache.get(jwt.getSubject());
@@ -125,6 +126,12 @@ public class UserInfoDataService {
         return userInfoData;
     }
 
+    /**
+     * Extrahiert {@link GrantedAuthority}s aus dem "authorities" Claim.
+     *
+     * @param userInfoEndpointData
+     * @return die {@link GrantedAuthority}s gem. Claim "authorities" des /userinfo Endpoints sowie weitere personalisierte Claims.
+     */
     protected List<SimpleGrantedAuthority> getAuthoritiesFromUserInfoEndpointData(
         final Map<String, Object> userInfoEndpointData
     ) {
@@ -135,16 +142,31 @@ public class UserInfoDataService {
         return authorities;
     }
 
-    protected List<SimpleGrantedAuthority> asAuthorities(final Object object) {
+    /**
+     * Extrahiert aus dem Claim im Parameter die {@link SimpleGrantedAuthority}.
+     *
+     * @param authoritiesClaim mit den Authorities.
+     * @return die {@link GrantedAuthority}s des im Parameter gegebenen Claims.
+     */
+    protected List<SimpleGrantedAuthority> asAuthorities(final Object authoritiesClaim) {
         final var authorities = new ArrayList<SimpleGrantedAuthority>();
-        if (object instanceof Collection<?>) {
+        if (authoritiesClaim instanceof Collection<?>) {
             authorities.addAll(
-                ((Collection<?>) object).stream().map(Object::toString).map(SimpleGrantedAuthority::new).toList()
+                ((Collection<?>) authoritiesClaim).stream()
+                    .map(Object::toString)
+                    .map(SimpleGrantedAuthority::new)
+                    .toList()
             );
         }
         return authorities;
     }
 
+    /**
+     * Extrahiert die personalisierten Claims.
+     *
+     * @param userInfoEndpointData mit den personalisierten Claims.
+     * @return die gefundenen personalisierten Claims.
+     */
     protected Map<String, Object> getClaimsFromUserInfoEndpointData(final Map<String, Object> userInfoEndpointData) {
         final var claims = new HashMap<String, Object>();
 
@@ -162,6 +184,12 @@ public class UserInfoDataService {
         return claims;
     }
 
+    /**
+     * Holt mit dem im Parameter gegebenen Access-Token die Nutzerinformationen vom /userinfo Endpoint.
+     *
+     * @param jwt zum Holen der Nutzerinformationen.
+     * @return die Nutzerinformationen vom /userinfo Endpoint.
+     */
     protected Map<String, Object> getDataFromUserInfoEndpoint(final Jwt jwt) {
         log.debug("Fetching user-info for token subject: {}", jwt.getSubject());
         final var headers = new HttpHeaders();
