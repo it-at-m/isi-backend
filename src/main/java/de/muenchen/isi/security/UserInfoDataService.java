@@ -56,7 +56,9 @@ public class UserInfoDataService {
     public static final String CLAIM_USERNAME = "username";
 
     private final String userInfoUri;
+
     private final RestTemplate restTemplate;
+
     private final Cache cache;
 
     /**
