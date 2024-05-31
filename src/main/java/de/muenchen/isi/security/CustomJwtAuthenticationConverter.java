@@ -23,13 +23,13 @@ public class CustomJwtAuthenticationConverter implements Converter<Jwt, Abstract
     public AbstractAuthenticationToken convert(final Jwt source) {
         final var userInfoData = this.userInfoDataService.loadUserInfoData(source);
         final var mergedClaims = MapUtils.merge(source.getClaims(), userInfoData.getClaims());
-        final var jwtEnrichedWithUserInfoData = new Jwt(
+        final var jwtEnrichedWithClaimsFromUserInfoData = new Jwt(
             source.getTokenValue(),
             source.getIssuedAt(),
             source.getExpiresAt(),
             source.getHeaders(),
             mergedClaims
         );
-        return new JwtAuthenticationToken(jwtEnrichedWithUserInfoData, userInfoData.getAuthorities());
+        return new JwtAuthenticationToken(jwtEnrichedWithClaimsFromUserInfoData, userInfoData.getAuthorities());
     }
 }
