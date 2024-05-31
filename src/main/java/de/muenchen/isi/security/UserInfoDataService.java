@@ -134,7 +134,7 @@ public class UserInfoDataService {
     /**
      * Extrahiert {@link GrantedAuthority}s aus dem "authorities" Claim.
      *
-     * @param userInfoEndpointData
+     * @param userInfoEndpointData erhalten vom /userinfo Endpoint.
      * @return die {@link GrantedAuthority}s gem. Claim "authorities" des /userinfo Endpoints sowie weitere personalisierte Claims.
      */
     protected List<SimpleGrantedAuthority> getAuthoritiesFromUserInfoEndpointData(
@@ -169,7 +169,7 @@ public class UserInfoDataService {
     /**
      * Extrahiert die personalisierten Claims.
      *
-     * @param userInfoEndpointData mit den personalisierten Claims.
+     * @param userInfoEndpointData erhalten vom /userinfo Endpoint mit den personalisierten Claims.
      * @return die gefundenen personalisierten Claims.
      */
     protected Map<String, Object> getClaimsFromUserInfoEndpointData(final Map<String, Object> userInfoEndpointData) {
