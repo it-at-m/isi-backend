@@ -91,7 +91,7 @@ public class UserInfoDataService {
      * @return die {@link GrantedAuthority}s sowie weitere personalisierte Claims.
      */
     public UserInfoData loadUserInfoData(final Jwt jwt) {
-        final var valueWrapper = this.cache.get(jwt.getSubject());
+        final var valueWrapper = this.cache.get(jwt.getTokenValue());
         if (valueWrapper != null) {
             // value present in cache
             @SuppressWarnings("unchecked")
@@ -112,7 +112,7 @@ public class UserInfoDataService {
             log.debug("Resolved UserInfoData (from /userinfo Endpoint): {}", userInfoData);
 
             // store to Cache
-            this.cache.put(jwt.getSubject(), userInfoData);
+            this.cache.put(jwt.getTokenValue(), userInfoData);
         } catch (Exception exception) {
             log.error(
                 String.format(

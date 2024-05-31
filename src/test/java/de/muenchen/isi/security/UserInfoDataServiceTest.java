@@ -56,7 +56,7 @@ class UserInfoDataServiceTest {
         cacheContent.setAuthorities(List.of(new SimpleGrantedAuthority("authority-1")));
         cacheContent.setClaims(Map.of(UserInfoDataService.CLAIM_SURNAME, "the-surname"));
 
-        cache.put("123456789", cacheContent);
+        cache.put("the-tokenvalue", cacheContent);
 
         var result = userInfoDataService.loadUserInfoData(jwt);
 
@@ -76,7 +76,7 @@ class UserInfoDataServiceTest {
     }
 
     @Test
-    void loadUserInfoDataWithoutExistingCacheEntry() {
+    void loadUserInfoDataWithoutExistingCacheEntry() throws IllegalAccessException {
         var userInfoEndpointData = new HashMap<String, Object>();
         userInfoEndpointData.put("not returned claim", new Object());
         userInfoEndpointData.put(UserInfoDataService.CLAIM_SURNAME, "the-surname");
@@ -132,6 +132,10 @@ class UserInfoDataServiceTest {
         );
 
         assertThat(result, is(expected));
+
+        final var cache = (Cache) FieldUtils.readField(userInfoDataService, "cache", true);
+        var expectedCache = cache.get(jwt.getTokenValue()).get();
+        assertThat(result, is(expectedCache));
     }
 
     @Test
