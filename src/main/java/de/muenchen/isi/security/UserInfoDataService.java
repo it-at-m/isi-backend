@@ -109,9 +109,9 @@ public class UserInfoDataService {
         try {
             final Map<String, Object> userInfoEndpointData = this.getDataFromUserInfoEndpoint(jwt);
 
-            final var authorities = getAuthoritiesFromUserInfoEndpointData(userInfoEndpointData);
+            final var authorities = this.getAuthoritiesFromUserInfoEndpointData(userInfoEndpointData);
             userInfoData.setAuthorities(authorities);
-            final var claims = getClaimsFromUserInfoEndpointData(userInfoEndpointData);
+            final var claims = this.getClaimsFromUserInfoEndpointData(userInfoEndpointData);
             userInfoData.setClaims(claims);
 
             log.debug("Resolved UserInfoData (from /userinfo Endpoint): {}", userInfoData);
@@ -142,7 +142,7 @@ public class UserInfoDataService {
     ) {
         final var authorities = new ArrayList<SimpleGrantedAuthority>();
         if (userInfoEndpointData.containsKey(CLAIM_AUTHORITIES)) {
-            authorities.addAll(asAuthorities(userInfoEndpointData.get(CLAIM_AUTHORITIES)));
+            authorities.addAll(this.asAuthorities(userInfoEndpointData.get(CLAIM_AUTHORITIES)));
         }
         return authorities;
     }
