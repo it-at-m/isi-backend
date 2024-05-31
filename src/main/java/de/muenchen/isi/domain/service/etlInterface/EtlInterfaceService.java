@@ -25,12 +25,9 @@ public class EtlInterfaceService {
      * @throws ReportingException falls der Aufruf fehlgeschlagen ist.
      */
     public void etlInterfaceTriggerInfrastruktureinrichtungJob(final UUID id) throws ReportingException {
-        this.etlInterfaceTriggerJob(
-                this.prepareJob(
-                        "importFromBackend/infrastruktureinrichtung/Job_Import_Infrastruktureinrichtung.kjb",
-                        id
-                    )
-            );
+        final EtlTriggerJobDto etlTriggerJobDto =
+            this.prepareJob("importFromBackend/infrastruktureinrichtung/Job_Import_Infrastruktureinrichtung.kjb", id);
+        this.etlInterfaceTriggerJob(etlTriggerJobDto);
     }
 
     /**
@@ -41,7 +38,9 @@ public class EtlInterfaceService {
      * @throws ReportingException falls der Aufruf fehlgeschlagen ist.
      */
     public void etlInterfaceTriggerBauvorhabenJob(final UUID id) throws ReportingException {
-        this.etlInterfaceTriggerJob(this.prepareJob("importFromBackend/bauvorhaben/Job_Import_Bauvorhaben.kjb", id));
+        final EtlTriggerJobDto etlTriggerJobDto =
+            this.prepareJob("importFromBackend/bauvorhaben/Job_Import_Bauvorhaben.kjb", id);
+        this.etlInterfaceTriggerJob(etlTriggerJobDto);
     }
 
     private EtlTriggerJobDto prepareJob(final String jobname, final UUID id) {
