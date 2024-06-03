@@ -23,11 +23,11 @@ public class AuthenticationUtils {
     public static final String ROLE_ABFRAGEERSTELLUNG = "abfrageerstellung";
     public static final String ROLE_ANWENDER = "anwender";
     private static final String UNAUTHENTICATED_USER = "unauthenticated";
-    private static final String TOKEN_USER_NAME = "username";
-    private static final String TOKEN_SURNAME = "surname";
-    private static final String TOKEN_GIVENNAME = "givenname";
-    private static final String TOKEN_EMAIL = "email";
-    private static final String TOKEN_DEPARTMENT = "department";
+    private static final String TOKEN_USER_NAME = UserInfoDataService.CLAIM_USERNAME;
+    private static final String TOKEN_SURNAME = UserInfoDataService.CLAIM_SURNAME;
+    private static final String TOKEN_GIVENNAME = UserInfoDataService.CLAIM_GIVENNAME;
+    private static final String TOKEN_EMAIL = UserInfoDataService.CLAIM_EMAIL;
+    private static final String TOKEN_DEPARTMENT = UserInfoDataService.CLAIM_DEPARTMENT;
     private static final String TOKEN_USER_SUB = "sub";
     private static final String SUB_UNAUTHENTICATED_USER = "123456789";
     private static final String TOKEN_RESOURCE_ACCESS = "resource_access";
