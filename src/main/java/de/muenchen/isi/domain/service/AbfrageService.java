@@ -152,16 +152,6 @@ public class AbfrageService {
             // Übermitteln der Abfrage samt der vorher berechneten Bedarfe an die Reportingschnittstelle
             reportingdataTransferService.transferAbfrageAndBedarfe(model, bedarfeForAbfragevarianten);
 
-            // Aufruf des ETL-Systems (Pentaho) zur Ausführung eines Jobs.
-
-            /* exemplarischer Aufruf
-            EtlTriggerJobDto etlTriggerJobDto = new EtlTriggerJobDto();
-            etlTriggerJobDto.setJobname(
-                "bevoelkerungsdatenFuerKitaPlBs/Job_Bevoelkerungsdaten_fuer_KitaPlanungsbereiche.kjb"
-            );
-            etlInterfaceService.etlInterfaceTriggerJob(etlTriggerJobDto);
-            */
-
             return model;
         } else {
             throw new UniqueViolationException(
