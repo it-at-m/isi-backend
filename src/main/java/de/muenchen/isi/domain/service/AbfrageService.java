@@ -47,7 +47,6 @@ import de.muenchen.isi.infrastructure.repository.AbfragevarianteBaugenehmigungsv
 import de.muenchen.isi.infrastructure.repository.AbfragevarianteBauleitplanverfahrenRepository;
 import de.muenchen.isi.infrastructure.repository.AbfragevarianteWeiteresVerfahrenRepository;
 import de.muenchen.isi.infrastructure.repository.BauvorhabenRepository;
-import de.muenchen.isi.reporting.client.model.EtlTriggerJobDto;
 import de.muenchen.isi.security.AuthenticationUtils;
 import java.util.Optional;
 import java.util.UUID;
