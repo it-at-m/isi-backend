@@ -67,8 +67,8 @@ public class SendWorkAssignmentInformationService {
         if (verortung == null) {
             return StringUtils.EMPTY;
         }
-        return verortung
-            .getStadtbezirke()
+        return CollectionUtils
+            .emptyIfNull(verortung.getStadtbezirke())
             .stream()
             .map(stadtbezirk -> stadtbezirk.getNummer() + "/" + stadtbezirk.getName())
             .collect(Collectors.joining(", "));
