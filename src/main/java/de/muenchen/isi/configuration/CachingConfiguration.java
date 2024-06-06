@@ -16,5 +16,7 @@ import org.springframework.context.annotation.Configuration;
 @EnableCaching
 public class CachingConfiguration {
 
+    public static final String NAME_AUTHENTICATION_CACHE = "authentication_cache";
+
     public static final int AUTHENTICATION_CACHE_EXPIRATION_TIME_SECONDS = 60;
 }
