@@ -1,12 +1,18 @@
 package de.muenchen.isi.domain.service.email;
 
 import de.muenchen.isi.domain.model.AbfrageModel;
+import de.muenchen.isi.domain.model.BaugenehmigungsverfahrenModel;
+import de.muenchen.isi.domain.model.BauleitplanverfahrenModel;
+import de.muenchen.isi.domain.model.WeiteresVerfahrenModel;
 import de.muenchen.isi.domain.model.common.BearbeitendePersonModel;
 import de.muenchen.isi.domain.model.common.BearbeitungshistorieModel;
+import de.muenchen.isi.domain.model.common.VerortungModel;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrageEvents;
 import de.muenchen.isi.infrastructure.repository.email.MailSenderRepository;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -53,6 +59,46 @@ public class SendWorkAssignmentInformationService {
     }
 
     /**
+     * Erstellt den Stadtbezirktext.
+     * @param verortung
+     * @return Stadtbezirktext zusammengesetzt aus Nummer und Name
+     */
+    protected String getTextStadtbezirke(VerortungModel verortung) {
+        if (verortung == null) {
+            return StringUtils.EMPTY;
+        }
+        return verortung
+            .getStadtbezirke()
+            .stream()
+            .map(stadtbezirk -> stadtbezirk.getNummer() + "/" + stadtbezirk.getName())
+            .collect(Collectors.joining(", "));
+    }
+
+    /**
+     * Ermittelt die Stadtbezirke auf Basis der jeweiligen Abfrage.
+     *
+     * @param abfrage
+     * @return der Stadtbezirknummer und -name auf Basis der Abfrage oder leerer String falls keine Verortung angegeben worden ist.
+     */
+    public String getStadtbezirke(AbfrageModel abfrage) {
+        String stadtbezirke = "\n\nStadtbezirke: ";
+        if (abfrage.getArtAbfrage().equals(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN)) {
+            BaugenehmigungsverfahrenModel abfrageTyp = (BaugenehmigungsverfahrenModel) abfrage;
+            stadtbezirke += getTextStadtbezirke(abfrageTyp.getVerortung());
+        }
+        if (abfrage.getArtAbfrage().equals(ArtAbfrage.BAULEITPLANVERFAHREN)) {
+            BauleitplanverfahrenModel abfrageTyp = (BauleitplanverfahrenModel) abfrage;
+            stadtbezirke += getTextStadtbezirke(abfrageTyp.getVerortung());
+        }
+        if (abfrage.getArtAbfrage().equals(ArtAbfrage.WEITERES_VERFAHREN)) {
+            WeiteresVerfahrenModel abfrageTyp = (WeiteresVerfahrenModel) abfrage;
+            stadtbezirke += getTextStadtbezirke(abfrageTyp.getVerortung());
+        }
+
+        return stadtbezirke;
+    }
+
+    /**
      * Versendet die Email zur Bearbeitungsinformation.
      *
      * Anhand der gegebenen Statusübergangsinformation wird entweder eine Email versendet oder ein Emailversand unterlassen.
@@ -66,7 +112,8 @@ public class SendWorkAssignmentInformationService {
         final var reveiverEmailAddress = getReceiver(abfrage, stateMachineEvent);
         if (StringUtils.isNotEmpty(reveiverEmailAddress)) {
             final var subject = getSubject(abfrage.getName(), stateMachineEvent);
-            final var text = getText(abfrage.getName(), stateMachineEvent);
+            var text = getText(abfrage.getName(), stateMachineEvent)
+                .concat(StringUtils.defaultIfEmpty(getStadtbezirke(abfrage), StringUtils.EMPTY));
             mailSenderRepository.sendMail(reveiverEmailAddress, subject, text);
         }
     }
