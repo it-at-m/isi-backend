@@ -2,7 +2,10 @@ package de.muenchen.isi.domain.service.etlInterface;
 
 import de.muenchen.isi.domain.exception.ReportingException;
 import de.muenchen.isi.infrastructure.repository.etlInterface.EtlInterfaceRepository;
-import de.muenchen.isi.reporting.client.model.*;
+import de.muenchen.isi.reporting.client.model.EtlTriggerJobDto;
+import de.muenchen.isi.reporting.client.model.PairStringString;
+import java.util.ArrayList;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -13,6 +16,44 @@ import org.springframework.stereotype.Service;
 public class EtlInterfaceService {
 
     private final EtlInterfaceRepository etlInterfaceRepository;
+
+    /**
+     * Ruft die Reporting-EAI Schnittstelle auf, damit ein ETL-Job zur Übertragung einer Infrastruktureinrichtung
+     * vom Backend zur Reporting DB aufgerufen wird
+     *
+     * @param id ID derInfrastruktureinrichtung
+     * @throws ReportingException falls der Aufruf fehlgeschlagen ist.
+     */
+    public void etlInterfaceTriggerInfrastruktureinrichtungJob(final UUID id) throws ReportingException {
+        final EtlTriggerJobDto etlTriggerJobDto =
+            this.prepareJob("importFromBackend/infrastruktureinrichtung/Job_Import_Infrastruktureinrichtung.kjb", id);
+        this.etlInterfaceTriggerJob(etlTriggerJobDto);
+    }
+
+    /**
+     * Ruft die Reporting-EAI Schnittstelle auf, damit ein ETL-Job zur Übertragung eine Bauvorhabens
+     * vom Backend zur Reporting DB aufgerufen wird
+     *
+     * @param id ID derInfrastruktureinrichtung
+     * @throws ReportingException falls der Aufruf fehlgeschlagen ist.
+     */
+    public void etlInterfaceTriggerBauvorhabenJob(final UUID id) throws ReportingException {
+        final EtlTriggerJobDto etlTriggerJobDto =
+            this.prepareJob("importFromBackend/bauvorhaben/Job_Import_Bauvorhaben.kjb", id);
+        this.etlInterfaceTriggerJob(etlTriggerJobDto);
+    }
+
+    private EtlTriggerJobDto prepareJob(final String jobname, final UUID id) {
+        final EtlTriggerJobDto etlTriggerJobDto = new EtlTriggerJobDto();
+        etlTriggerJobDto.setJobname(jobname);
+        final var listParameter = new ArrayList<PairStringString>();
+        final var idParameter = new PairStringString();
+        idParameter.setFirst("id");
+        idParameter.setSecond(id.toString());
+        listParameter.add(idParameter);
+        etlTriggerJobDto.setParameters(listParameter);
+        return etlTriggerJobDto;
+    }
 
     /**
      * Ruft die Reporting-EAI Schnittstelle auf, damit diese einen Job im ETL-System (Pentaho) triggert

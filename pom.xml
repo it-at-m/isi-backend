@@ -553,6 +553,7 @@
                                 <generateClientAsBean>false</generateClientAsBean>
                                 <legacyDiscriminatorBehavior>false</legacyDiscriminatorBehavior>
                                 <useJakartaEe>true</useJakartaEe>
+                                <dateLibrary>java8-localdatetime</dateLibrary>
                             </configOptions>
 
                             <globalProperties>

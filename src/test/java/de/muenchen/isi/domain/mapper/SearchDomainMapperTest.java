@@ -6,7 +6,7 @@ import static org.hamcrest.Matchers.nullValue;
 
 import de.muenchen.isi.domain.exception.GeometryOperationFailedException;
 import de.muenchen.isi.domain.model.common.MultiPolygonGeometryModel;
-import de.muenchen.isi.domain.model.common.WGS84Model;
+import de.muenchen.isi.domain.model.common.Wgs84Model;
 import de.muenchen.isi.domain.model.search.response.AbfrageSearchResultModel;
 import de.muenchen.isi.domain.model.search.response.BauvorhabenSearchResultModel;
 import de.muenchen.isi.domain.model.search.response.InfrastruktureinrichtungSearchResultModel;
@@ -62,7 +62,7 @@ public class SearchDomainMapperTest {
         mockCoordinate.setLongitude(10.0);
         mockCoordinate.setLatitude(20.0);
 
-        WGS84Model mockCoordinateModel = new WGS84Model();
+        Wgs84Model mockCoordinateModel = new Wgs84Model();
         mockCoordinateModel.setLongitude(10.0);
         mockCoordinateModel.setLatitude(20.0);
 
@@ -98,11 +98,15 @@ public class SearchDomainMapperTest {
 
         BauvorhabenSearchResultModel model = new BauvorhabenSearchResultModel();
 
-        WGS84Model mockCoordinateModel = new WGS84Model();
+        Wgs84 mockCoordinate = new Wgs84();
+        mockCoordinate.setLongitude(10.0);
+        mockCoordinate.setLatitude(20.0);
+
+        Mockito.when(this.koordinatenService.getMultiPolygonCentroid(multiPolygon)).thenReturn(mockCoordinate);
+
+        Wgs84Model mockCoordinateModel = new Wgs84Model();
         mockCoordinateModel.setLongitude(10.0);
         mockCoordinateModel.setLatitude(20.0);
-
-        Mockito.when(this.koordinatenService.getMultiPolygonCentroid(multiPolygon)).thenReturn(mockCoordinateModel);
 
         BauvorhabenSearchResultModel expected = new BauvorhabenSearchResultModel();
         expected.setCoordinate(mockCoordinateModel);
@@ -160,7 +164,7 @@ public class SearchDomainMapperTest {
         mockCoordinate.setLongitude(10.0);
         mockCoordinate.setLatitude(20.0);
 
-        WGS84Model mockCoordinateModel = new WGS84Model();
+        Wgs84Model mockCoordinateModel = new Wgs84Model();
         mockCoordinateModel.setLongitude(10.0);
         mockCoordinateModel.setLatitude(20.0);
 
@@ -183,7 +187,7 @@ public class SearchDomainMapperTest {
     @Test
     void testAfterEntity2InfrastruktureinrichtungSearchResultModelVerortung() {
         // Mock-Coordinate erstellen
-        WGS84Model mockCoordinateModel = new WGS84Model();
+        Wgs84Model mockCoordinateModel = new Wgs84Model();
         mockCoordinateModel.setLongitude(10.0);
         mockCoordinateModel.setLatitude(20.0);
 
@@ -211,7 +215,7 @@ public class SearchDomainMapperTest {
     @Test
     void testAfterEntity2InfrastruktureinrichtungSearchResultModelVerortungNull() {
         // Mock-Coordinate erstellen
-        WGS84Model mockCoordinateModel = new WGS84Model();
+        Wgs84Model mockCoordinateModel = new Wgs84Model();
         mockCoordinateModel.setLongitude(10.0);
         mockCoordinateModel.setLatitude(20.0);
 
@@ -231,7 +235,7 @@ public class SearchDomainMapperTest {
     @Test
     void testAfterEntity2InfrastruktureinrichtungSearchResultModelVerortungPointNull() {
         // Mock-Coordinate erstellen
-        WGS84Model mockCoordinateModel = new WGS84Model();
+        Wgs84Model mockCoordinateModel = new Wgs84Model();
         mockCoordinateModel.setLongitude(10.0);
         mockCoordinateModel.setLatitude(20.0);
 
@@ -256,7 +260,7 @@ public class SearchDomainMapperTest {
         mockCoordinate.setLongitude(10.0);
         mockCoordinate.setLatitude(20.0);
 
-        WGS84Model mockCoordinateModel = new WGS84Model();
+        Wgs84Model mockCoordinateModel = new Wgs84Model();
         mockCoordinateModel.setLongitude(10.0);
         mockCoordinateModel.setLatitude(20.0);
 
@@ -291,11 +295,15 @@ public class SearchDomainMapperTest {
 
         AbfrageSearchResultModel model = new AbfrageSearchResultModel();
 
-        WGS84Model mockCoordinateModel = new WGS84Model();
+        Wgs84 mockCoordinate = new Wgs84();
+        mockCoordinate.setLongitude(10.0);
+        mockCoordinate.setLatitude(20.0);
+
+        Mockito.when(this.koordinatenService.getMultiPolygonCentroid(multiPolygon)).thenReturn(mockCoordinate);
+
+        Wgs84Model mockCoordinateModel = new Wgs84Model();
         mockCoordinateModel.setLongitude(10.0);
         mockCoordinateModel.setLatitude(20.0);
-
-        Mockito.when(this.koordinatenService.getMultiPolygonCentroid(multiPolygon)).thenReturn(mockCoordinateModel);
 
         AbfrageSearchResultModel expected = new AbfrageSearchResultModel();
         expected.setCoordinate(mockCoordinateModel);
@@ -378,7 +386,7 @@ public class SearchDomainMapperTest {
         Adresse adresse = new Adresse();
         adresse.setCoordinate(coordinate);
 
-        WGS84Model expected = new WGS84Model();
+        Wgs84Model expected = new Wgs84Model();
         expected.setLongitude(10.0);
         expected.setLatitude(20.0);
 
@@ -395,15 +403,15 @@ public class SearchDomainMapperTest {
         multiPolygon.setCoordinates(List.of(List.of(List.of(List.of(BigDecimal.TEN, BigDecimal.ONE)))));
         verortung.setMultiPolygon(multiPolygon);
 
-        WGS84Model mockCoordinateModel = new WGS84Model();
-        mockCoordinateModel.setLongitude(10.0);
-        mockCoordinateModel.setLatitude(20.0);
+        Wgs84 mockCoordinate = new Wgs84();
+        mockCoordinate.setLongitude(10.0);
+        mockCoordinate.setLatitude(20.0);
 
-        WGS84Model expected = new WGS84Model();
+        Wgs84Model expected = new Wgs84Model();
         expected.setLongitude(10.0);
         expected.setLatitude(20.0);
 
-        Mockito.when(this.koordinatenService.getMultiPolygonCentroid(multiPolygon)).thenReturn(mockCoordinateModel);
+        Mockito.when(this.koordinatenService.getMultiPolygonCentroid(multiPolygon)).thenReturn(mockCoordinate);
 
         assertThat(searchDomainMapper.getCoordinateFromAdresseOrVerortung(null, verortung), is(expected));
 

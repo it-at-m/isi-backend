@@ -3,9 +3,11 @@ package de.muenchen.isi.domain.service;
 import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
+import de.muenchen.isi.domain.exception.ReportingException;
 import de.muenchen.isi.domain.mapper.InfrastruktureinrichtungDomainMapper;
 import de.muenchen.isi.domain.model.BauvorhabenModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.InfrastruktureinrichtungModel;
+import de.muenchen.isi.domain.service.etlInterface.EtlInterfaceService;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Infrastruktureinrichtung;
 import de.muenchen.isi.infrastructure.repository.BauvorhabenRepository;
@@ -32,6 +34,8 @@ public class InfrastruktureinrichtungService {
 
     private final BauvorhabenRepository bauvorhabenRepository;
 
+    private final EtlInterfaceService etlInterfaceService;
+
     /**
      * Die Methode gibt ein {@link InfrastruktureinrichtungModel} identifiziert durch die ID zurück.
      *
@@ -55,18 +59,23 @@ public class InfrastruktureinrichtungService {
      * @param infrastruktureinrichtung zum Speichern
      * @return das gespeicherte {@link InfrastruktureinrichtungModel}
      * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
+     * @throws ReportingException         falls bei der Übermittlung an die Reportingschnittstelle ein Fehler auftritt.
      */
     public InfrastruktureinrichtungModel saveInfrastruktureinrichtung(
         final InfrastruktureinrichtungModel infrastruktureinrichtung
-    ) throws OptimisticLockingException, EntityNotFoundException {
+    ) throws OptimisticLockingException, EntityNotFoundException, ReportingException {
         Infrastruktureinrichtung entity =
             this.infrastruktureinrichtungDomainMapper.model2Entity(infrastruktureinrichtung);
         try {
             entity = this.infrastruktureinrichtungRepository.saveAndFlush(entity);
+            etlInterfaceService.etlInterfaceTriggerInfrastruktureinrichtungJob(entity.getId());
         } catch (final ObjectOptimisticLockingFailureException exception) {
             final var message = "Die Daten wurden in der Zwischenzeit geändert. Bitte laden Sie die Seite neu!";
             throw new OptimisticLockingException(message, exception);
+        } catch (ReportingException e) {
+            throw e;
         }
+
         return this.infrastruktureinrichtungDomainMapper.entity2Model(entity);
     }
 
@@ -77,10 +86,11 @@ public class InfrastruktureinrichtungService {
      * @return das geupdatete {@link InfrastruktureinrichtungModel}
      * @throws EntityNotFoundException    falls die Infrastruktureinrichtung identifiziert durch die {@link InfrastruktureinrichtungModel#getId()} nicht gefunden wird
      * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
+     * @throws ReportingException         falls bei der Übermittlung an die Reportingschnittstelle ein Fehler auftritt.
      */
     public InfrastruktureinrichtungModel updateInfrastruktureinrichtung(
         final InfrastruktureinrichtungModel infrastruktureinrichtung
-    ) throws EntityNotFoundException, OptimisticLockingException {
+    ) throws EntityNotFoundException, OptimisticLockingException, ReportingException {
         this.getInfrastruktureinrichtungById(infrastruktureinrichtung.getId());
         return this.saveInfrastruktureinrichtung(infrastruktureinrichtung);
     }

@@ -17,8 +17,11 @@ import de.muenchen.isi.domain.exception.UserRoleNotAllowedException;
 import de.muenchen.isi.domain.mapper.AbfrageDomainMapper;
 import de.muenchen.isi.domain.mapper.AbfrageDomainMapperImpl;
 import de.muenchen.isi.domain.mapper.AbfragevarianteDomainMapperImpl;
+import de.muenchen.isi.domain.mapper.AdresseDomainMapperImpl;
 import de.muenchen.isi.domain.mapper.BauabschnittDomainMapperImpl;
 import de.muenchen.isi.domain.mapper.DokumentDomainMapperImpl;
+import de.muenchen.isi.domain.mapper.KoordinatenDomainMapperImpl;
+import de.muenchen.isi.domain.mapper.VerortungDomainMapperImpl;
 import de.muenchen.isi.domain.model.AbfrageModel;
 import de.muenchen.isi.domain.model.AbfragevarianteBaugenehmigungsverfahrenModel;
 import de.muenchen.isi.domain.model.AbfragevarianteBauleitplanverfahrenModel;
@@ -144,7 +147,12 @@ class AbfrageServiceTest {
     public void beforeEach() throws NoSuchFieldException, IllegalAccessException {
         final var abfragevarianteDomainMapper = new AbfragevarianteDomainMapperImpl(new BauabschnittDomainMapperImpl());
         this.abfrageDomainMapper =
-            new AbfrageDomainMapperImpl(abfragevarianteDomainMapper, new DokumentDomainMapperImpl());
+            new AbfrageDomainMapperImpl(
+                abfragevarianteDomainMapper,
+                new DokumentDomainMapperImpl(),
+                new VerortungDomainMapperImpl(new KoordinatenDomainMapperImpl()),
+                new AdresseDomainMapperImpl(new KoordinatenDomainMapperImpl())
+            );
         Field field = abfrageDomainMapper.getClass().getSuperclass().getDeclaredField("abfragevarianteDomainMapper");
         field.setAccessible(true);
         field.set(abfrageDomainMapper, abfragevarianteDomainMapper);

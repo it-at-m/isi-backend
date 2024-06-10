@@ -6,6 +6,7 @@ import de.muenchen.isi.api.mapper.InfrastruktureinrichtungApiMapper;
 import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
+import de.muenchen.isi.domain.exception.ReportingException;
 import de.muenchen.isi.domain.service.BauvorhabenService;
 import de.muenchen.isi.domain.service.InfrastruktureinrichtungService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -95,7 +96,7 @@ public class InfrastruktureinrichtungController {
     )
     public ResponseEntity<InfrastruktureinrichtungDto> createInfrastruktureinrichtung(
         @RequestBody @Valid @NotNull final InfrastruktureinrichtungDto infrastruktureinrichtungDto
-    ) throws EntityNotFoundException, OptimisticLockingException {
+    ) throws EntityNotFoundException, OptimisticLockingException, ReportingException {
         var model = this.infrastruktureinrichtungApiMapper.dto2Model(infrastruktureinrichtungDto);
         model = this.infrastruktureinrichtungService.saveInfrastruktureinrichtung(model);
         final var saved = this.infrastruktureinrichtungApiMapper.model2Dto(model);
@@ -133,7 +134,7 @@ public class InfrastruktureinrichtungController {
     )
     public ResponseEntity<InfrastruktureinrichtungDto> updateInfrastruktureinrichtung(
         @RequestBody @Valid @NotNull final InfrastruktureinrichtungDto infrastruktureinrichtungDto
-    ) throws EntityNotFoundException, OptimisticLockingException {
+    ) throws EntityNotFoundException, OptimisticLockingException, ReportingException {
         var model = this.infrastruktureinrichtungApiMapper.dto2Model(infrastruktureinrichtungDto);
         model = this.infrastruktureinrichtungService.updateInfrastruktureinrichtung(model);
         final var saved = this.infrastruktureinrichtungApiMapper.model2Dto(model);
