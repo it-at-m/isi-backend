@@ -42,4 +42,7 @@ public class GsNachmittagBetreuung extends Infrastruktureinrichtung {
     @Enumerated(EnumType.STRING)
     @Column
     private Einrichtungstraeger einrichtungstraeger;
+
+    @Column(length = 255)
+    private String idKibigWeb;
 }

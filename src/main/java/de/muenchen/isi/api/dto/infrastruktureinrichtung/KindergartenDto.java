@@ -26,4 +26,6 @@ public class KindergartenDto extends InfrastruktureinrichtungDto {
     private Integer wohnungsnaheKindergartenPlaetze;
 
     private Einrichtungstraeger einrichtungstraeger;
+
+    private String idKibigWeb;
 }
