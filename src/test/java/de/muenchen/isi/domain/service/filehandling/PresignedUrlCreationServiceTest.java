@@ -164,9 +164,7 @@ class PresignedUrlCreationServiceTest {
         final var presigneUrl =
             "https://storage.de/The-Bucket/outerFolder/innerFolder/thefile.pdf?abc=abcdf4sfskhsdfsfddsghjve884545klnfgv";
 
-        Mockito
-            .when(this.presignedUrlRepository.getPresignedUrlSaveFile(pathToFile, 10, LocalDate.now().plusYears(999)))
-            .thenReturn(presigneUrl);
+        Mockito.when(this.presignedUrlRepository.getPresignedUrlSaveFile(pathToFile, 10, null)).thenReturn(presigneUrl);
 
         final var expected = new PresignedUrlModel();
         expected.setHttpMethodToUse("PUT");
@@ -186,7 +184,7 @@ class PresignedUrlCreationServiceTest {
         final var pathToFile = "outerFolder/innerFolder/thefile.pdf";
 
         Mockito
-            .when(this.presignedUrlRepository.getPresignedUrlSaveFile(pathToFile, 10, LocalDate.now().plusYears(999)))
+            .when(this.presignedUrlRepository.getPresignedUrlSaveFile(pathToFile, 10, null))
             .thenThrow(
                 new DocumentStorageClientErrorException(
                     "outermessage",
@@ -217,7 +215,7 @@ class PresignedUrlCreationServiceTest {
         Mockito.reset(this.presignedUrlRepository);
 
         Mockito
-            .when(this.presignedUrlRepository.getPresignedUrlSaveFile(pathToFile, 10, LocalDate.now().plusYears(999)))
+            .when(this.presignedUrlRepository.getPresignedUrlSaveFile(pathToFile, 10, null))
             .thenThrow(
                 new DocumentStorageServerErrorException(
                     "outermessage",
@@ -248,7 +246,7 @@ class PresignedUrlCreationServiceTest {
         Mockito.reset(this.presignedUrlRepository);
 
         Mockito
-            .when(this.presignedUrlRepository.getPresignedUrlSaveFile(pathToFile, 10, LocalDate.now().plusYears(999)))
+            .when(this.presignedUrlRepository.getPresignedUrlSaveFile(pathToFile, 10, null))
             .thenThrow(new DocumentStorageException("outermessage", new Exception("innermessage")));
         final var filePathModel3 = new FilepathModel();
         filePathModel3.setPathToFile(pathToFile);
@@ -259,7 +257,7 @@ class PresignedUrlCreationServiceTest {
         Mockito.reset(this.presignedUrlRepository);
 
         Mockito
-            .when(this.presignedUrlRepository.getPresignedUrlSaveFile(pathToFile, 10, LocalDate.now().plusYears(999)))
+            .when(this.presignedUrlRepository.getPresignedUrlSaveFile(pathToFile, 10, null))
             .thenThrow(new PropertyNotSetException("outermessage"));
         final var filePathModel4 = new FilepathModel();
         filePathModel4.setPathToFile(pathToFile);
