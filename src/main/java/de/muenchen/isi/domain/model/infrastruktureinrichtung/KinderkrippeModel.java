@@ -22,6 +22,4 @@ public class KinderkrippeModel extends InfrastruktureinrichtungModel {
     private Integer wohnungsnaheKinderkrippePlaetze;
 
     private Einrichtungstraeger einrichtungstraeger;
-
-    private String idKibigWeb;
 }

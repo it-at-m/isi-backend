@@ -130,4 +130,7 @@ public abstract class Infrastruktureinrichtung extends BaseEntity {
 
     @Column(precision = 10, scale = 2)
     private BigDecimal flaecheTeilgrundstueck;
+
+    @Column(length = 255)
+    private String idKibigWeb;
 }

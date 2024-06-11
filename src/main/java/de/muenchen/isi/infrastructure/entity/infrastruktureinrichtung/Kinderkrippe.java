@@ -36,7 +36,4 @@ public class Kinderkrippe extends Infrastruktureinrichtung {
     @Enumerated(EnumType.STRING)
     @Column
     private Einrichtungstraeger einrichtungstraeger;
-
-    @Column(length = 255)
-    private String idKibigWeb;
 }

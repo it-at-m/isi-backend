@@ -33,6 +33,4 @@ public class GsNachmittagBetreuungDto extends InfrastruktureinrichtungDto {
     private Integer wohnungsnaheHortPlaetze;
 
     private Einrichtungstraeger einrichtungstraeger;
-
-    private String idKibigWeb;
 }

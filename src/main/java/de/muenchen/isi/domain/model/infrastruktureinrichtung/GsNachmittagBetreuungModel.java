@@ -26,6 +26,4 @@ public class GsNachmittagBetreuungModel extends InfrastruktureinrichtungModel {
     private Integer wohnungsnaheHortPlaetze;
 
     private Einrichtungstraeger einrichtungstraeger;
-
-    private String idKibigWeb;
 }

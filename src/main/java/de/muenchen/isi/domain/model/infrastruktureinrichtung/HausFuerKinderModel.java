@@ -33,6 +33,4 @@ public class HausFuerKinderModel extends InfrastruktureinrichtungModel {
     private Integer wohnungsnaheHortPlaetze;
 
     private Einrichtungstraeger einrichtungstraeger;
-
-    private String idKibigWeb;
 }

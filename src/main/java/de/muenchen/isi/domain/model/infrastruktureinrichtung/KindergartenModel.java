@@ -21,6 +21,4 @@ public class KindergartenModel extends InfrastruktureinrichtungModel {
     private Integer wohnungsnaheKindergartenPlaetze;
 
     private Einrichtungstraeger einrichtungstraeger;
-
-    private String idKibigWeb;
 }

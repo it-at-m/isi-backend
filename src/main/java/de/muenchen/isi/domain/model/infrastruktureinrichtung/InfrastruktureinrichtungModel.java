@@ -42,4 +42,6 @@ public abstract class InfrastruktureinrichtungModel extends BaseEntityModel {
     private BigDecimal flaecheGesamtgrundstueck;
 
     private BigDecimal flaecheTeilgrundstueck;
+
+    private String idKibigWeb;
 }
