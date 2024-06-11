@@ -20,7 +20,6 @@ import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -165,7 +164,7 @@ public class BauratendateiInputService {
      * @param verortung zur Extraktion der Grundschulsprengel.
      * @return die Nummern der Grundschulsprengel ansonsten ein leeres Set.
      */
-    protected Set<String> getGrundschulsprengel(final VerortungModel verortung) {
+    protected List<String> getGrundschulsprengel(final VerortungModel verortung) {
         return ObjectUtils.isNotEmpty(verortung)
             ? CollectionUtils
                 .emptyIfNull(verortung.getGrundschulsprengel())
@@ -173,8 +172,8 @@ public class BauratendateiInputService {
                 .map(GrundschulsprengelModel::getNummer)
                 .filter(ObjectUtils::isNotEmpty)
                 .map(Object::toString)
-                .collect(Collectors.toSet())
-            : Set.of();
+                .toList()
+            : List.of();
     }
 
     /**
@@ -183,7 +182,7 @@ public class BauratendateiInputService {
      * @param verortung zur Extraktion der Mittelschulsprengel.
      * @return die Nummern der Mittelschulsprengel ansonsten ein leeres Set.
      */
-    protected Set<String> getMittelschulsprengel(final VerortungModel verortung) {
+    protected List<String> getMittelschulsprengel(final VerortungModel verortung) {
         return ObjectUtils.isNotEmpty(verortung)
             ? CollectionUtils
                 .emptyIfNull(verortung.getMittelschulsprengel())
@@ -191,8 +190,8 @@ public class BauratendateiInputService {
                 .map(MittelschulsprengelModel::getNummer)
                 .filter(ObjectUtils::isNotEmpty)
                 .map(Object::toString)
-                .collect(Collectors.toSet())
-            : Set.of();
+                .toList()
+            : List.of();
     }
 
     /**
@@ -201,15 +200,15 @@ public class BauratendateiInputService {
      * @param verortung zur Extraktion der Viertel.
      * @return die Nummern der Viertel ansonsten ein leeres Set.
      */
-    protected Set<String> getViertel(final VerortungModel verortung) {
+    protected List<String> getViertel(final VerortungModel verortung) {
         return ObjectUtils.isNotEmpty(verortung)
             ? CollectionUtils
                 .emptyIfNull(verortung.getViertel())
                 .stream()
                 .map(ViertelModel::getNummer)
                 .filter(ObjectUtils::isNotEmpty)
-                .collect(Collectors.toSet())
-            : Set.of();
+                .toList()
+            : List.of();
     }
 
     /**
