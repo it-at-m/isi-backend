@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @Embeddable
-public class WGS84Model {
+public class Wgs84Model {
 
     private Double latitude;
 

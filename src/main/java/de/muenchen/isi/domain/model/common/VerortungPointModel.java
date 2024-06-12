@@ -10,4 +10,6 @@ import lombok.ToString;
 public class VerortungPointModel extends VerortungModel {
 
     private PointGeometryModel point;
+
+    private UtmModel pointUtm;
 }

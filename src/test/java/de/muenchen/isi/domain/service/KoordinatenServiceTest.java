@@ -4,10 +4,10 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import de.muenchen.isi.api.dto.common.UtmDto;
-import de.muenchen.isi.api.dto.common.Wgs84Dto;
 import de.muenchen.isi.domain.exception.GeometryOperationFailedException;
 import de.muenchen.isi.domain.exception.KoordinatenException;
+import de.muenchen.isi.domain.model.common.UtmModel;
+import de.muenchen.isi.domain.model.common.Wgs84Model;
 import de.muenchen.isi.infrastructure.entity.common.MultiPolygonGeometry;
 import java.math.BigDecimal;
 import java.util.List;
@@ -37,25 +37,25 @@ public class KoordinatenServiceTest {
 
     @Test
     public void wgs84ToUtm32Test() throws KoordinatenException {
-        final Wgs84Dto wgs84Dto = new Wgs84Dto();
-        wgs84Dto.setLatitude(48.137237);
-        wgs84Dto.setLongitude(11.575524);
+        final Wgs84Model wgs84Model = new Wgs84Model();
+        wgs84Model.setLatitude(48.137237);
+        wgs84Model.setLongitude(11.575524);
 
-        final UtmDto utmDto = this.koordinatenService.wgs84ToUtm32(wgs84Dto);
+        final UtmModel utmModel = this.koordinatenService.wgs84ToUtm32(wgs84Model);
 
-        assertEquals(utmDto.getNorth(), 5334761.975490341);
-        assertEquals(utmDto.getEast(), 691605.42419006);
+        assertEquals(utmModel.getNorth(), 5334761.975490341);
+        assertEquals(utmModel.getEast(), 691605.42419006);
     }
 
     @Test
     public void utm32ToWgs84Test() throws KoordinatenException {
-        final UtmDto utmDto = new UtmDto();
-        utmDto.setNorth(5334530.596);
-        utmDto.setEast(689878.435);
-        final Wgs84Dto wgs84Dto = this.koordinatenService.utm32ToWgs84(utmDto);
+        final UtmModel utmModel = new UtmModel();
+        utmModel.setNorth(5334530.596);
+        utmModel.setEast(689878.435);
+        final Wgs84Model wgs84model = this.koordinatenService.utm32ToWgs84(utmModel);
 
-        assertEquals(wgs84Dto.getLatitude(), 48.13567500095738);
-        assertEquals(wgs84Dto.getLongitude(), 11.552230994968712);
+        assertEquals(wgs84model.getLatitude(), 48.13567500095738);
+        assertEquals(wgs84model.getLongitude(), 11.552230994968712);
     }
 
     @Test

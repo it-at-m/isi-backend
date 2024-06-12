@@ -10,11 +10,12 @@ import lombok.NoArgsConstructor;
 @Embeddable
 public class Utm {
 
+    @Column(length = 3)
     private String zone;
 
-    @Column(nullable = false)
+    @Column
     private Double east;
 
-    @Column(nullable = false)
+    @Column
     private Double north;
 }

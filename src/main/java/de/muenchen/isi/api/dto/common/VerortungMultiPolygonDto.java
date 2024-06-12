@@ -14,4 +14,8 @@ public class VerortungMultiPolygonDto extends VerortungDto {
     @Valid
     @NotNull
     private MultiPolygonGeometryDto multiPolygon;
+
+    private PointGeometryDto centroid;
+
+    private UtmDto centroidUtm;
 }

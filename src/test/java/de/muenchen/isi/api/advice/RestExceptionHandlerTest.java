@@ -40,7 +40,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.converter.HttpMessageNotWritableException;
-import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
@@ -632,28 +631,6 @@ class RestExceptionHandlerTest {
             is(List.of("Beim Hochladen der Datei requestPartName ist ein Fehler aufgetreten."))
         );
         assertThat(responseDto.getOriginalException(), is("MissingServletRequestPartException"));
-    }
-
-    @Test
-    void handleBindException() {
-        final BindException bindException = new BindException(this.bindingResult);
-
-        final ResponseEntity<Object> response =
-            this.restExceptionHandler.handleBindException(
-                    bindException,
-                    new HttpHeaders(),
-                    HttpStatus.NOT_ACCEPTABLE,
-                    null
-                );
-
-        assertThat(response.getStatusCode(), is(HttpStatus.NOT_ACCEPTABLE));
-
-        final InformationResponseDto responseDto = (InformationResponseDto) response.getBody();
-
-        assertThat(responseDto.getTraceId(), is("1111111111111111"));
-        assertThat(responseDto.getSpanId(), is("ffffffffffffffff"));
-        assertThat(responseDto.getMessages(), is(List.of("Im Backend ist ein Fehler aufgetreten.")));
-        assertThat(responseDto.getOriginalException(), is("BindException"));
     }
 
     @Test

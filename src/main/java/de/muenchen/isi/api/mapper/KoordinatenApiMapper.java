@@ -4,7 +4,7 @@ import de.muenchen.isi.api.dto.common.UtmDto;
 import de.muenchen.isi.api.dto.common.Wgs84Dto;
 import de.muenchen.isi.configuration.MapstructConfiguration;
 import de.muenchen.isi.domain.model.common.UtmModel;
-import de.muenchen.isi.domain.model.common.WGS84Model;
+import de.muenchen.isi.domain.model.common.Wgs84Model;
 import org.mapstruct.Mapper;
 
 @Mapper(config = MapstructConfiguration.class)
@@ -13,7 +13,7 @@ public interface KoordinatenApiMapper {
 
     UtmModel dto2Model(final UtmDto dto);
 
-    Wgs84Dto model2Dto(final WGS84Model model);
+    Wgs84Dto model2Dto(final Wgs84Model model);
 
-    WGS84Model dto2Model(final Wgs84Dto dto);
+    Wgs84Model dto2Model(final Wgs84Dto dto);
 }

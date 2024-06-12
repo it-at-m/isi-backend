@@ -3,7 +3,7 @@ package de.muenchen.isi.domain.mapper;
 import de.muenchen.isi.configuration.MapstructConfiguration;
 import de.muenchen.isi.domain.exception.GeometryOperationFailedException;
 import de.muenchen.isi.domain.model.common.MultiPolygonGeometryModel;
-import de.muenchen.isi.domain.model.common.WGS84Model;
+import de.muenchen.isi.domain.model.common.Wgs84Model;
 import de.muenchen.isi.domain.model.enums.SearchResultType;
 import de.muenchen.isi.domain.model.search.response.AbfrageSearchResultModel;
 import de.muenchen.isi.domain.model.search.response.BauvorhabenSearchResultModel;
@@ -147,7 +147,7 @@ public abstract class SearchDomainMapper {
         } else if (
             ObjectUtils.isNotEmpty(entity.getVerortung()) && ObjectUtils.isNotEmpty(entity.getVerortung().getPoint())
         ) {
-            final var wgs84Model = new WGS84Model();
+            final var wgs84Model = new Wgs84Model();
             wgs84Model.setLongitude(entity.getVerortung().getPoint().getCoordinates().get(0).doubleValue());
             wgs84Model.setLatitude(entity.getVerortung().getPoint().getCoordinates().get(1).doubleValue());
             model.setCoordinate(wgs84Model);
@@ -189,7 +189,7 @@ public abstract class SearchDomainMapper {
      * @param verortungMultiPolygon Die Verortung, deren Koordinate zurückgegeben werden soll.
      * @return Ein WGS84Model-Objekt mit den extrahierten Koordinaten oder {@code null}, wenn keine Koordinaten vorhanden sind.
      */
-    public WGS84Model getCoordinateFromAdresseOrVerortung(
+    public Wgs84Model getCoordinateFromAdresseOrVerortung(
         final Adresse adresse,
         final VerortungMultiPolygon verortungMultiPolygon
     ) {
@@ -197,7 +197,10 @@ public abstract class SearchDomainMapper {
             return this.koordinatenDomainMapper.entity2Model(adresse.getCoordinate());
         } else if (hasVerortungCoordinate(verortungMultiPolygon)) {
             try {
-                return koordinatenService.getMultiPolygonCentroid(verortungMultiPolygon.getMultiPolygon());
+                final var centroid = koordinatenService.getMultiPolygonCentroid(
+                    verortungMultiPolygon.getMultiPolygon()
+                );
+                return koordinatenDomainMapper.entity2Model(centroid);
             } catch (GeometryOperationFailedException exception) {
                 var message = "Ermitteln des Schwerpunktes ist fehlgeschlagen.";
                 log.error(message);
