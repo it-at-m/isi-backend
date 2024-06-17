@@ -196,13 +196,13 @@
           "required": true
         },
         "responses": {
-          "200": { "description": "ETL-Interface Aufruf erfolgreich" },
           "555": {
             "description": "CUSTOM INTERNAL SERVER ERROR -> Bei der Ausführung des ETL-Interface-Requests ist ein serverseitiger Fehler aufgetreten.",
             "content": {
               "application/hal+json": { "schema": { "$ref": "#/components/schemas/InformationResponseDto" } }
             }
-          }
+          },
+          "200": { "description": "ETL-Interface Aufruf erfolgreich" }
         }
       }
     },
@@ -293,35 +293,6 @@
         "properties": {
           "nummer": { "type": "string" },
           "multiPolygon": { "$ref": "#/components/schemas/MultiPolygonGeometry" }
-        }
-      },
-      "EntityModelAbfrage": {
-        "type": "object",
-        "properties": {
-          "createdDateTime": { "type": "string", "format": "date-time" },
-          "lastModifiedDateTime": { "type": "string", "format": "date-time" },
-          "abfrageId": { "type": "string", "format": "uuid" },
-          "artAbfrage": {
-            "type": "string",
-            "enum": ["UNSPECIFIED", "BAULEITPLANVERFAHREN", "BAUGENEHMIGUNGSVERFAHREN", "WEITERES_VERFAHREN"]
-          },
-          "name": { "type": "string" },
-          "statusAbfrage": { "type": "string" },
-          "anmerkung": { "type": "string" },
-          "bauvorhabenId": { "type": "string", "format": "uuid" },
-          "sub": { "type": "string" },
-          "linkEakte": { "type": "string" },
-          "aktenzeichenProLbk": { "type": "string" },
-          "bebauungsplannummer": { "type": "string" },
-          "sobonRelevant": { "type": "string" },
-          "sobonJahr": { "type": "string" },
-          "standVerfahren": { "type": "string" },
-          "standVerfahrenFreieEingabe": { "type": "string" },
-          "adresse": { "$ref": "#/components/schemas/Adresse" },
-          "verortung": { "$ref": "#/components/schemas/VerortungMultiPolygon" },
-          "fristBearbeitung": { "type": "string", "format": "date" },
-          "offizielleMitzeichnung": { "type": "string" },
-          "_links": { "$ref": "#/components/schemas/Links" }
         }
       },
       "Flurstueck": {
@@ -472,6 +443,35 @@
         "properties": {
           "latitude": { "type": "number", "format": "double" },
           "longitude": { "type": "number", "format": "double" }
+        }
+      },
+      "EntityModelAbfrage": {
+        "type": "object",
+        "properties": {
+          "createdDateTime": { "type": "string", "format": "date-time" },
+          "lastModifiedDateTime": { "type": "string", "format": "date-time" },
+          "abfrageId": { "type": "string", "format": "uuid" },
+          "artAbfrage": {
+            "type": "string",
+            "enum": ["UNSPECIFIED", "BAULEITPLANVERFAHREN", "BAUGENEHMIGUNGSVERFAHREN", "WEITERES_VERFAHREN"]
+          },
+          "name": { "type": "string" },
+          "statusAbfrage": { "type": "string" },
+          "anmerkung": { "type": "string" },
+          "bauvorhabenId": { "type": "string", "format": "uuid" },
+          "sub": { "type": "string" },
+          "linkEakte": { "type": "string" },
+          "aktenzeichenProLbk": { "type": "string" },
+          "bebauungsplannummer": { "type": "string" },
+          "sobonRelevant": { "type": "string" },
+          "sobonJahr": { "type": "string" },
+          "standVerfahren": { "type": "string" },
+          "standVerfahrenFreieEingabe": { "type": "string" },
+          "adresse": { "$ref": "#/components/schemas/Adresse" },
+          "verortung": { "$ref": "#/components/schemas/VerortungMultiPolygon" },
+          "fristBearbeitung": { "type": "string", "format": "date" },
+          "offizielleMitzeichnung": { "type": "string" },
+          "_links": { "$ref": "#/components/schemas/Links" }
         }
       },
       "PageMetadata": {
