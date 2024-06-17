@@ -5,7 +5,6 @@
 package de.muenchen.isi.domain.model.infrastruktureinrichtung;
 
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Einrichtungstraeger;
-import jakarta.persistence.Column;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
