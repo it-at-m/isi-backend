@@ -80,6 +80,7 @@ metabase:
   reporting:
     url: https://isi-metabase-test.muenchen.de
     reports:
+      global: collection/root
       report.bedarfe: dashboard/45-dashboard-bedarfe
       report.ergebnisse.planungsursaechlich: dashboard/36-ergebnisse-der-planungsursachlichen-bedarfsberechnung
       report.ergebnisse.sobonursaechlich: dashboard/44-ergebnisse-der-sobon-bedarfsberechnung
