@@ -27,10 +27,13 @@ class EntitySearchServiceTest {
     @Mock
     private AuthenticationUtils authenticationUtils;
 
+    private FilterPreparationService filterPreparationService = new FilterPreparationService();
+
     private EntitySearchService entitySearchService = new EntitySearchService(
         searchPreparationService,
         searchDomainMapper,
-        authenticationUtils
+        authenticationUtils,
+        filterPreparationService
     );
 
     @Test
