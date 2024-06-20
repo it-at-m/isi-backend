@@ -123,7 +123,7 @@ public class FilterPreparationService {
                     for (final var nummerStandbezirk : searchQueryAndSortingInformation.getFilterStadtbezirkNummer()) {
                         bool =
                             bool.should(f2 ->
-                                f2.match().field("verortung.stadtbezirke.name").matching(nummerStandbezirk)
+                                f2.match().field("verortung.stadtbezirke.nummer").matching(nummerStandbezirk)
                             );
                     }
                     return bool;

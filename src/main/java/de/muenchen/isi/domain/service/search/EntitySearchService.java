@@ -70,41 +70,34 @@ public class EntitySearchService {
         final var searchQueryOptions = Search
             .session(entityManager)
             .search(searchableEntities)
-            .where(function -> {
-                BooleanPredicateClausesStep<?> searchAndFilterConfig;
+            .where((function, root) -> {
+                // https://docs.jboss.org/hibernate/search/7.0/reference/en-US/html_single/#search-dsl-predicate-boolean-lambda
+                root.add(searchPredicateFactory -> {
+                    if (StringUtils.isNotEmpty(adaptedSearchQuery)) {
+                        // Suche entsprechend der gegebenen Query.
+                        return function
+                            // https://docs.jboss.org/hibernate/stable/search/reference/en-US/html_single/#search-dsl-predicate-simple-query-string
+                            .simpleQueryString()
+                            .fields(searchableAttributes)
+                            .matching(adaptedSearchQuery)
+                            // Es werden nur die Entitäten als Suchergebnis zurückgegeben, welche alle Suchwörter der Suchquery beinhalten.
+                            .defaultOperator(BooleanOperator.AND);
+                    } else {
+                        // Zurückgeben aller Entitäten.
+                        return function.matchAll();
+                    }
+                });
 
-                if (StringUtils.isNotEmpty(adaptedSearchQuery)) {
-                    // Suche entsprechend der gegebenen Query.
-                    searchAndFilterConfig =
-                        function
-                            .bool()
-                            .must(searchFunction ->
-                                searchFunction
-                                    .simpleQueryString()
-                                    // https://docs.jboss.org/hibernate/stable/search/reference/en-US/html_single/#search-dsl-predicate-simple-query-string
-
-                                    .fields(searchableAttributes)
-                                    .matching(adaptedSearchQuery)
-                                    // Es werden nur die Entitäten als Suchergebnis zurückgegeben, welche alle Suchwörter der Suchquery beinhalten.
-                                    .defaultOperator(BooleanOperator.AND)
-                            );
-                } else {
-                    // Zurückgeben aller Entitäten.
-                    searchAndFilterConfig = function.bool().must(SearchPredicateFactory::matchAll);
-                }
-
-                // Konfiguration der Filtereinstellungen
-                if (filterPreparationService.shouldBeFiltered(searchQueryAndSortingInformation)) {
-                    searchAndFilterConfig =
-                        searchAndFilterConfig.filter(filterDefinition ->
-                            filterPreparationService.createFilterFunction(
-                                filterDefinition,
-                                searchQueryAndSortingInformation
-                            )
-                        );
-                }
-
-                return searchAndFilterConfig;
+                // b.should( function.match().field( "verortung.stadtbezirke.name" ).matching("09"));
+                root.add(
+                    function
+                        .bool()
+                        .with(b -> {
+                            //b.should( function.match().field( "verortung.stadtbezirke.nummer" ).matching("09"));
+                            b.should(function.match().field("verortung.stadtbezirke.nummer").matching("13"));
+                            b.should(function.match().field("verortung.stadtbezirke.nummer").matching("09"));
+                        })
+                );
             })
             // Sortierung der Suchergebnisse.
             // https://docs.jboss.org/hibernate/stable/search/reference/en-US/html_single/#query-sorting
