@@ -120,10 +120,10 @@ public class FilterPreparationService {
             booleanPredicateSteps =
                 booleanPredicateSteps.must(f -> {
                     var bool = f.bool();
-                    for (final var nummerStandbezirk : searchQueryAndSortingInformation.getFilterStadtbezirkNummer()) {
+                    for (final var nummerStadtbezirk : searchQueryAndSortingInformation.getFilterStadtbezirkNummer()) {
                         bool =
                             bool.should(f2 ->
-                                f2.match().field("verortung.stadtbezirke.nummer").matching(nummerStandbezirk)
+                                f2.match().field("verortung.stadtbezirke.nummer").matching(nummerStadtbezirk)
                             );
                     }
                     return bool;
