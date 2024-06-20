@@ -59,42 +59,31 @@ public class FilterPreparationService {
     }
 
     protected static Set<String> getNamesOfFilterableAttributesForBauleitplanverfahren() {
-        final var filterableAttributes = new HashSet<String>();
-        filterableAttributes.add("verortung.stadtbezirke.name");
-        filterableAttributes.add("verortung.kitaplanungsbereiche.kitaPlbT");
-        filterableAttributes.add("verortung.grundschulsprengel.nummer");
-        filterableAttributes.add("verortung.mittelschulsprengel.nummer");
+        final var filterableAttributes = new HashSet<>(getNamesOfFilterableVerortungAttributes());
         return filterableAttributes;
     }
 
     protected static Set<String> getNamesOfFilterableAttributesForBaugenehmigungsverfahren() {
-        final var filterableAttributes = new HashSet<String>();
-        filterableAttributes.add("verortung.stadtbezirke.name");
-        filterableAttributes.add("verortung.kitaplanungsbereiche.kitaPlbT");
-        filterableAttributes.add("verortung.grundschulsprengel.nummer");
-        filterableAttributes.add("verortung.mittelschulsprengel.nummer");
+        final var filterableAttributes = new HashSet<>(getNamesOfFilterableVerortungAttributes());
         return filterableAttributes;
     }
 
     protected static Set<String> getNamesOfFilterableAttributesForWeiteresVerfahren() {
-        final var filterableAttributes = new HashSet<String>();
-        filterableAttributes.add("verortung.stadtbezirke.name");
-        filterableAttributes.add("verortung.kitaplanungsbereiche.kitaPlbT");
-        filterableAttributes.add("verortung.grundschulsprengel.nummer");
-        filterableAttributes.add("verortung.mittelschulsprengel.nummer");
+        final var filterableAttributes = new HashSet<>(getNamesOfFilterableVerortungAttributes());
         return filterableAttributes;
     }
 
     protected static Set<String> getNamesOfFilterableAttributesForBauvorhaben() {
-        final var filterableAttributes = new HashSet<String>();
-        filterableAttributes.add("verortung.stadtbezirke.name");
-        filterableAttributes.add("verortung.kitaplanungsbereiche.kitaPlbT");
-        filterableAttributes.add("verortung.grundschulsprengel.nummer");
-        filterableAttributes.add("verortung.mittelschulsprengel.nummer");
+        final var filterableAttributes = new HashSet<>(getNamesOfFilterableVerortungAttributes());
         return filterableAttributes;
     }
 
     protected static Set<String> getNamesOfFilterableAttributesForInfrastruktureinrichtung() {
+        final var filterableAttributes = new HashSet<>(getNamesOfFilterableVerortungAttributes());
+        return filterableAttributes;
+    }
+
+    protected static Set<String> getNamesOfFilterableVerortungAttributes() {
         final var filterableAttributes = new HashSet<String>();
         filterableAttributes.add("verortung.stadtbezirke.name");
         filterableAttributes.add("verortung.kitaplanungsbereiche.kitaPlbT");
