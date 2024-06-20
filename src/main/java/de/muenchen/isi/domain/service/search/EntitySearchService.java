@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.search.engine.search.common.BooleanOperator;
@@ -87,26 +88,84 @@ public class EntitySearchService {
                     }
                 });
 
-                // https://docs.jboss.org/hibernate/search/7.0/reference/en-US/html_single/#search-dsl-predicate-boolean-lambda
-                root.add(
-                    function
-                        .bool()
-                        // Verunden mit must
-                        .must(b ->
-                            // Verodern mit should
-                            b
-                                .bool()
-                                .should(function.match().field("verortung.stadtbezirke.nummer").matching("13"))
-                                .should(function.match().field("verortung.stadtbezirke.nummer").matching("09"))
-                        )
-                    // Verunden mit must
-                    //.must(b ->
-                    // Verodern mit should
-                    //b.bool()
-                    //.should(function.match().field("verortung.kitaplanungsbereiche.kitaPlbT").matching("13.1"))
-
-                    //)
-                );
+                if (CollectionUtils.isNotEmpty(searchQueryAndSortingInformation.getFilterStadtbezirkNummer())) {
+                    root.add(
+                        function
+                            .bool()
+                            .must(b -> {
+                                var thebool = b.bool();
+                                for (final var stadtbezirk : searchQueryAndSortingInformation.getFilterStadtbezirkNummer()) {
+                                    thebool =
+                                        thebool.should(
+                                            function
+                                                .match()
+                                                .field("verortung.stadtbezirke.nummer")
+                                                .matching(stadtbezirk)
+                                        );
+                                }
+                                return thebool;
+                            })
+                    );
+                }
+                if (
+                    CollectionUtils.isNotEmpty(searchQueryAndSortingInformation.getFilterKitaplanungsbereichKitaPlbT())
+                ) {
+                    root.add(
+                        function
+                            .bool()
+                            .must(b -> {
+                                var thebool = b.bool();
+                                for (final var kitaPlb : searchQueryAndSortingInformation.getFilterKitaplanungsbereichKitaPlbT()) {
+                                    thebool =
+                                        thebool.should(
+                                            function
+                                                .match()
+                                                .field("verortung.kitaplanungsbereiche.kitaPlbT")
+                                                .matching(kitaPlb)
+                                        );
+                                }
+                                return thebool;
+                            })
+                    );
+                }
+                if (CollectionUtils.isNotEmpty(searchQueryAndSortingInformation.getFilterGrundschulsprengelNummer())) {
+                    root.add(
+                        function
+                            .bool()
+                            .must(b -> {
+                                var thebool = b.bool();
+                                for (final var grundschulsprengel : searchQueryAndSortingInformation.getFilterGrundschulsprengelNummer()) {
+                                    thebool =
+                                        thebool.should(
+                                            function
+                                                .match()
+                                                .field("verortung.grundschulsprengel.nummer")
+                                                .matching(grundschulsprengel)
+                                        );
+                                }
+                                return thebool;
+                            })
+                    );
+                }
+                if (CollectionUtils.isNotEmpty(searchQueryAndSortingInformation.getFilterMittelschulsprengelNummer())) {
+                    root.add(
+                        function
+                            .bool()
+                            .must(b -> {
+                                var thebool = b.bool();
+                                for (final var grundschulsprengel : searchQueryAndSortingInformation.getFilterMittelschulsprengelNummer()) {
+                                    thebool =
+                                        thebool.should(
+                                            function
+                                                .match()
+                                                .field("verortung.mittelschulsprengel.nummer")
+                                                .matching(grundschulsprengel)
+                                        );
+                                }
+                                return thebool;
+                            })
+                    );
+                }
             })
             // Sortierung der Suchergebnisse.
             // https://docs.jboss.org/hibernate/stable/search/reference/en-US/html_single/#query-sorting
