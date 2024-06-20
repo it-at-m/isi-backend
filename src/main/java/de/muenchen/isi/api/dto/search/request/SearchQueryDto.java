@@ -47,7 +47,7 @@ public class SearchQueryDto {
     @Positive
     private Integer pageSize;
 
-    private List<String> filterStadtbezirkName;
+    private List<String> filterStadtbezirkNummer;
 
     private List<String> filterKitaplanungsbereichKitaPlbT;
 
