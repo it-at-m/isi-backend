@@ -41,12 +41,6 @@ public class SearchQueryDto {
     @NotNull
     private Boolean selectMittelschule;
 
-    @Positive
-    private Integer page;
-
-    @Positive
-    private Integer pageSize;
-
     private List<String> filterStadtbezirkNummer;
 
     private List<String> filterKitaplanungsbereichKitaPlbT;
@@ -54,4 +48,10 @@ public class SearchQueryDto {
     private List<String> filterGrundschulsprengelNummer;
 
     private List<String> filterMittelschulsprengelNummer;
+
+    @Positive
+    private Integer page;
+
+    @Positive
+    private Integer pageSize;
 }

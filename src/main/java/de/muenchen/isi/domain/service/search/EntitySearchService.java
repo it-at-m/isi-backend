@@ -18,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.search.engine.search.common.BooleanOperator;
+import org.hibernate.search.engine.search.predicate.dsl.BooleanPredicateClausesStep;
 import org.hibernate.search.engine.search.predicate.dsl.SearchPredicateFactory;
 import org.hibernate.search.engine.search.query.SearchResult;
 import org.hibernate.search.mapper.orm.Search;
@@ -30,8 +31,6 @@ public class EntitySearchService {
 
     private final SearchPreparationService searchPreparationService;
     private final SearchDomainMapper searchDomainMapper;
-    private final AuthenticationUtils authenticationUtils;
-
     private final FilterPreparationService filterPreparationService;
 
     @PersistenceContext
@@ -59,9 +58,6 @@ public class EntitySearchService {
         // Ermittlung der suchbaren Attribute je suchbarer Entität
         final var searchableAttributes = searchPreparationService.getNamesOfSearchableAttributes(searchableEntities);
 
-        // Ermittlung der zu filternden Attribute
-        final var filterAttributes = filterPreparationService.getNamesOfFilterableAttributes(searchableEntities);
-
         // Anpassen der Suchquery
         final var adaptedSearchQuery =
             this.createAdaptedSearchQueryForSimpleQueryStringSearch(searchQueryAndSortingInformation.getSearchQuery());
@@ -75,31 +71,40 @@ public class EntitySearchService {
             .session(entityManager)
             .search(searchableEntities)
             .where(function -> {
+                BooleanPredicateClausesStep<?> searchAndFilterConfig;
+
                 if (StringUtils.isNotEmpty(adaptedSearchQuery)) {
                     // Suche entsprechend der gegebenen Query.
-                    return function
-                        .bool()
-                        .must(searchFunction ->
-                            searchFunction
-                                .simpleQueryString()
-                                // https://docs.jboss.org/hibernate/stable/search/reference/en-US/html_single/#search-dsl-predicate-simple-query-string
+                    searchAndFilterConfig =
+                        function
+                            .bool()
+                            .must(searchFunction ->
+                                searchFunction
+                                    .simpleQueryString()
+                                    // https://docs.jboss.org/hibernate/stable/search/reference/en-US/html_single/#search-dsl-predicate-simple-query-string
 
-                                .fields(searchableAttributes)
-                                .matching(adaptedSearchQuery)
-                                // Es werden nur die Entitäten als Suchergebnis zurückgegeben, welche alle Suchwörter der Suchquery beinhalten.
-                                .defaultOperator(BooleanOperator.AND)
-                        )
-                        .filter(filterFunction -> filterFunction.match().field("attribute").matching("attribute-value")
-                        );
+                                    .fields(searchableAttributes)
+                                    .matching(adaptedSearchQuery)
+                                    // Es werden nur die Entitäten als Suchergebnis zurückgegeben, welche alle Suchwörter der Suchquery beinhalten.
+                                    .defaultOperator(BooleanOperator.AND)
+                            );
                 } else {
                     // Zurückgeben aller Entitäten.
-                    return function
-                        .bool()
-                        .must(SearchPredicateFactory::matchAll)
-                        .filter(filterFunction ->
-                            filterFunction.match().fields(filterAttributes).matching("Liste der Werte")
+                    searchAndFilterConfig = function.bool().must(SearchPredicateFactory::matchAll);
+                }
+
+                // Konfiguration der Filtereinstellungen
+                if (filterPreparationService.shouldBeFiltered(searchQueryAndSortingInformation)) {
+                    searchAndFilterConfig =
+                        searchAndFilterConfig.filter(filterDefinition ->
+                            filterPreparationService.createFilterFunction(
+                                filterDefinition,
+                                searchQueryAndSortingInformation
+                            )
                         );
                 }
+
+                return searchAndFilterConfig;
             })
             // Sortierung der Suchergebnisse.
             // https://docs.jboss.org/hibernate/stable/search/reference/en-US/html_single/#query-sorting
