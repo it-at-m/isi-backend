@@ -27,7 +27,7 @@ import org.mockito.quality.Strictness;
 @MockitoSettings(strictness = Strictness.LENIENT)
 class VerortungDomainMapperTest {
 
-    private VerortungDomainMapper verortungDomainMapper = new VerortungDomainMapperImpl(
+    private final VerortungDomainMapper verortungDomainMapper = new VerortungDomainMapperImpl(
         new KoordinatenDomainMapperImpl()
     );
 

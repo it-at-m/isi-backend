@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 
 class RangeIdealtypischeBaurateValidatorTest {
 
-    private RangeIdealtypischeBaurateValidator rangeIdealtypischeBaurateValidator =
+    private final RangeIdealtypischeBaurateValidator rangeIdealtypischeBaurateValidator =
         new RangeIdealtypischeBaurateValidator();
 
     @Test

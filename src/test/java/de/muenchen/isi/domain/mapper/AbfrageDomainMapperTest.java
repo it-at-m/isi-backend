@@ -43,21 +43,23 @@ import org.mockito.quality.Strictness;
 @MockitoSettings(strictness = Strictness.LENIENT)
 public class AbfrageDomainMapperTest {
 
-    private DokumentDomainMapper dokumentDomainMapper = new DokumentDomainMapperImpl();
+    private final DokumentDomainMapper dokumentDomainMapper = new DokumentDomainMapperImpl();
 
-    private BauabschnittDomainMapper bauabschnittDomainMapper = new BauabschnittDomainMapperImpl();
+    private final BauabschnittDomainMapper bauabschnittDomainMapper = new BauabschnittDomainMapperImpl();
 
-    private AbfragevarianteDomainMapper abfragevarianteDomainMapper = new AbfragevarianteDomainMapperImpl(
+    private final AbfragevarianteDomainMapper abfragevarianteDomainMapper = new AbfragevarianteDomainMapperImpl(
         bauabschnittDomainMapper
     );
 
-    private VerortungDomainMapper verortungDomainMapper = new VerortungDomainMapperImpl(
+    private final VerortungDomainMapper verortungDomainMapper = new VerortungDomainMapperImpl(
         new KoordinatenDomainMapperImpl()
     );
 
-    private AdresseDomainMapper adresseDomainMapper = new AdresseDomainMapperImpl(new KoordinatenDomainMapperImpl());
+    private final AdresseDomainMapper adresseDomainMapper = new AdresseDomainMapperImpl(
+        new KoordinatenDomainMapperImpl()
+    );
 
-    private AbfrageDomainMapper abfrageDomainMapper = new AbfrageDomainMapperImpl(
+    private final AbfrageDomainMapper abfrageDomainMapper = new AbfrageDomainMapperImpl(
         abfragevarianteDomainMapper,
         dokumentDomainMapper,
         verortungDomainMapper,

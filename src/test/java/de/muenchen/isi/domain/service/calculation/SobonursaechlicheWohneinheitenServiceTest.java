@@ -42,7 +42,7 @@ public class SobonursaechlicheWohneinheitenServiceTest {
     @Mock
     private StaedtebaulicheOrientierungswertRepository staedtebaulicheOrientierungswertRepository;
 
-    private BaurateDomainMapper baurateDomainMapper = new BaurateDomainMapperImpl();
+    private final BaurateDomainMapper baurateDomainMapper = new BaurateDomainMapperImpl();
 
     @BeforeEach
     public void beforeEach() {

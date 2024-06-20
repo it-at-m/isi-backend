@@ -9,19 +9,19 @@ import org.springframework.stereotype.Service;
 @Service
 public class MetabaseReportingService {
 
-    private String url;
+    private final String url;
 
-    private String reportBedarfe;
+    private final String reportBedarfe;
 
-    private String reportErgebnissePlanungsursaechlich;
+    private final String reportErgebnissePlanungsursaechlich;
 
-    private String reportErgebnisseSobonUrsaechlich;
+    private final String reportErgebnisseSobonUrsaechlich;
 
-    private String reportSpitzenbedarfePlanungsursaechlich;
+    private final String reportSpitzenbedarfePlanungsursaechlich;
 
-    private String reportSpitzenbedarfeSobonUrsaechlich;
+    private final String reportSpitzenbedarfeSobonUrsaechlich;
 
-    private String reportWohneinheiten;
+    private final String reportWohneinheiten;
 
     public MetabaseReportingService(
         @Value("${metabase.reporting.url}") final String url,

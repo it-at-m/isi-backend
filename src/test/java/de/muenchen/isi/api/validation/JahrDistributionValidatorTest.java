@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 
 class JahrDistributionValidatorTest {
 
-    private JahrDistributionValidator jahrDistributionValidator = new JahrDistributionValidator();
+    private final JahrDistributionValidator jahrDistributionValidator = new JahrDistributionValidator();
 
     @Test
     void isValid() {

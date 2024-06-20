@@ -2,7 +2,6 @@ package de.muenchen.isi.domain.service.stammdaten;
 
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
-import de.muenchen.isi.domain.exception.UniqueViolationException;
 import de.muenchen.isi.domain.mapper.StammdatenDomainMapper;
 import de.muenchen.isi.domain.model.stammdaten.FoerdermixStammModel;
 import de.muenchen.isi.infrastructure.repository.stammdaten.FoerdermixStammRepository;
@@ -55,10 +54,9 @@ public class FoerdermixStammService {
      *
      * @param foerdermixstamm zum Speichern
      * @return das gespeicherte {@link FoerdermixStammModel}
-     * @throws UniqueViolationException falls die Bezeichnung {@link FoerdermixStammModel#getFoerdermix()#ge} des Fördermixes bereits im gleichen Jahr {@link FoerdermixStammModel#getFoerdermix()#getBezeichnungJahr()} vorhanden ist
      */
     public FoerdermixStammModel saveFoerdermixStamm(final FoerdermixStammModel foerdermixstamm)
-        throws UniqueViolationException, OptimisticLockingException {
+        throws OptimisticLockingException {
         var entity = this.stammdatenDomainMapper.model2Entity(foerdermixstamm);
         try {
             entity = this.foerdermixStammRepository.saveAndFlush(entity);
@@ -78,7 +76,7 @@ public class FoerdermixStammService {
      * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
      */
     public FoerdermixStammModel updateFoerdermixStamm(final FoerdermixStammModel foerdermix)
-        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException {
+        throws EntityNotFoundException, OptimisticLockingException {
         this.getFoerdermixStammById(foerdermix.getId());
         return this.saveFoerdermixStamm(foerdermix);
     }

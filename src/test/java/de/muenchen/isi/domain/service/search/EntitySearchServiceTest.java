@@ -19,7 +19,7 @@ import org.mockito.quality.Strictness;
 @MockitoSettings(strictness = Strictness.LENIENT)
 class EntitySearchServiceTest {
 
-    private SearchPreparationService searchPreparationService = new SearchPreparationService();
+    private final SearchPreparationService searchPreparationService = new SearchPreparationService();
 
     @Mock
     private SearchDomainMapper searchDomainMapper;
@@ -27,7 +27,7 @@ class EntitySearchServiceTest {
     @Mock
     private AuthenticationUtils authenticationUtils;
 
-    private EntitySearchService entitySearchService = new EntitySearchService(
+    private final EntitySearchService entitySearchService = new EntitySearchService(
         searchPreparationService,
         searchDomainMapper,
         authenticationUtils

@@ -17,7 +17,7 @@ import org.mockito.quality.Strictness;
 @MockitoSettings(strictness = Strictness.LENIENT)
 class DistributionValidatorTest {
 
-    private DistributionValidator distributionValidator = new DistributionValidator();
+    private final DistributionValidator distributionValidator = new DistributionValidator();
 
     @Test
     void getNonTechnicalBaugebiete() {
