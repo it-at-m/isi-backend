@@ -32,7 +32,6 @@ class EntitySearchServiceTest {
     private EntitySearchService entitySearchService = new EntitySearchService(
         searchPreparationService,
         searchDomainMapper,
-        authenticationUtils,
         filterPreparationService
     );
 
