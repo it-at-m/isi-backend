@@ -106,41 +106,32 @@ public class BauvorhabenService {
     public BauvorhabenModel saveBauvorhaben(final BauvorhabenModel bauvorhaben, final UUID abfrageId)
         throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, EntityIsReferencedException, UserRoleNotAllowedException, ReportingException {
         var bauvorhabenEntity = this.bauvorhabenDomainMapper.model2Entity(bauvorhaben);
-        final var saved = this.bauvorhabenRepository.findByNameVorhabenIgnoreCase(bauvorhabenEntity.getNameVorhaben());
-        if ((saved.isPresent() && saved.get().getId().equals(bauvorhabenEntity.getId())) || saved.isEmpty()) {
-            try {
-                if (StringUtils.isEmpty(bauvorhaben.getBauvorhabenNummer())) {
-                    bauvorhabenEntity.setBauvorhabenNummer(
-                        this.buildBauvorhabennummer(bauvorhabenEntity.getVerortung())
-                    );
-                }
-                bauvorhabenEntity = this.bauvorhabenRepository.saveAndFlush(bauvorhabenEntity);
-                // falls bei Neuanlage eines Bauvorhabens eine Datenübernahme mit einer Abfrage durchgeführt wurde, dann wird diese mit dem Bauvorhaben verknüpft
-                if (bauvorhaben.getId() == null && abfrageId != null) {
-                    final var abfrageModel = this.abfrageService.getById(abfrageId);
-                    this.throwEntityIsReferencedExceptionWhenAbfrageIsReferencingBauvorhaben(
-                            abfrageModel,
-                            bauvorhabenEntity.getNameVorhaben()
-                        );
-                    abfrageModel.setBauvorhaben(bauvorhabenEntity.getId());
-                    abfrageService.save(abfrageModel);
-                }
-                etlInterfaceService.etlInterfaceTriggerBauvorhabenJob(bauvorhabenEntity.getId());
-            } catch (final ObjectOptimisticLockingFailureException exception) {
-                final var message = "Die Daten wurden in der Zwischenzeit geändert. Bitte laden Sie die Seite neu!";
-                throw new OptimisticLockingException(message, exception);
-            } catch (UserRoleNotAllowedException e) {
-                final var message = "Keine Berechtigung um die Abfrage zu bearbeiten!";
-                throw new UserRoleNotAllowedException(message);
-            } catch (CalculationException e) {
-                throw new RuntimeException(e);
+        try {
+            if (StringUtils.isEmpty(bauvorhaben.getBauvorhabenNummer())) {
+                bauvorhabenEntity.setBauvorhabenNummer(this.buildBauvorhabennummer(bauvorhabenEntity.getVerortung()));
             }
-            return this.bauvorhabenDomainMapper.entity2Model(bauvorhabenEntity);
-        } else {
-            throw new UniqueViolationException(
-                "Der angegebene Name des Bauvorhabens ist schon vorhanden, bitte wählen Sie daher einen anderen Namen und speichern Sie das Bauvorhaben erneut."
-            );
+            bauvorhabenEntity = this.bauvorhabenRepository.saveAndFlush(bauvorhabenEntity);
+            // falls bei Neuanlage eines Bauvorhabens eine Datenübernahme mit einer Abfrage durchgeführt wurde, dann wird diese mit dem Bauvorhaben verknüpft
+            if (bauvorhaben.getId() == null && abfrageId != null) {
+                final var abfrageModel = this.abfrageService.getById(abfrageId);
+                this.throwEntityIsReferencedExceptionWhenAbfrageIsReferencingBauvorhaben(
+                        abfrageModel,
+                        bauvorhabenEntity.getNameVorhaben()
+                    );
+                abfrageModel.setBauvorhaben(bauvorhabenEntity.getId());
+                abfrageService.save(abfrageModel);
+            }
+            etlInterfaceService.etlInterfaceTriggerBauvorhabenJob(bauvorhabenEntity.getId());
+        } catch (final ObjectOptimisticLockingFailureException exception) {
+            final var message = "Die Daten wurden in der Zwischenzeit geändert. Bitte laden Sie die Seite neu!";
+            throw new OptimisticLockingException(message, exception);
+        } catch (UserRoleNotAllowedException e) {
+            final var message = "Keine Berechtigung um die Abfrage zu bearbeiten!";
+            throw new UserRoleNotAllowedException(message);
+        } catch (CalculationException e) {
+            throw new RuntimeException(e);
         }
+        return this.bauvorhabenDomainMapper.entity2Model(bauvorhabenEntity);
     }
 
     /**

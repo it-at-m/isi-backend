@@ -57,8 +57,6 @@ import de.muenchen.isi.infrastructure.repository.BauvorhabenRepository;
 import de.muenchen.isi.infrastructure.repository.InfrastruktureinrichtungRepository;
 import de.muenchen.isi.infrastructure.repository.common.GlobalCounterRepository;
 import de.muenchen.isi.infrastructure.repository.common.KommentarRepository;
-import de.muenchen.isi.reporting.client.model.EtlTriggerJobDto;
-import de.muenchen.isi.reporting.client.model.PairStringString;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -467,37 +465,6 @@ public class BauvorhabenServiceTest {
     }
 
     @Test
-    void saveBauvorhabenUniqueViolationTest() throws UniqueViolationException {
-        final String nameVorhaben = "Test Bauvorhaben";
-        final BauvorhabenModel bauvorhabenModel = new BauvorhabenModel();
-        bauvorhabenModel.setId(UUID.randomUUID());
-        bauvorhabenModel.setNameVorhaben(nameVorhaben);
-
-        final BauvorhabenModel bauvorhabenModel2 = new BauvorhabenModel();
-        bauvorhabenModel2.setId(UUID.randomUUID());
-        bauvorhabenModel2.setNameVorhaben(nameVorhaben);
-
-        final Bauvorhaben entity = new Bauvorhaben();
-        entity.setId(bauvorhabenModel.getId());
-        entity.setNameVorhaben(bauvorhabenModel.getNameVorhaben());
-
-        Mockito
-            .when(this.bauvorhabenRepository.findByNameVorhabenIgnoreCase(entity.getNameVorhaben()))
-            .thenReturn(Optional.of(entity));
-        Mockito.when(this.bauvorhabenRepository.saveAndFlush(entity)).thenReturn(entity);
-
-        Assertions.assertThrows(
-            UniqueViolationException.class,
-            () -> this.bauvorhabenService.saveBauvorhaben(bauvorhabenModel2, null)
-        );
-
-        Mockito
-            .verify(this.bauvorhabenRepository, Mockito.times(1))
-            .findByNameVorhabenIgnoreCase(entity.getNameVorhaben());
-        Mockito.verify(this.bauvorhabenRepository, Mockito.times(0)).save(entity);
-    }
-
-    @Test
     void saveBauvorhabenReferencedByAbfrage()
         throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, EntityIsReferencedException, UserRoleNotAllowedException, CalculationException, ReportingException {
         final UUID abfrageId = UUID.randomUUID();
@@ -617,9 +584,6 @@ public class BauvorhabenServiceTest {
 
         Mockito.when(this.bauvorhabenRepository.findById(entity.getId())).thenReturn(Optional.of(entity));
         Mockito.when(this.bauvorhabenRepository.saveAndFlush(entity)).thenReturn(entity);
-        Mockito
-            .when(this.bauvorhabenRepository.findByNameVorhabenIgnoreCase("BauvorhabenTest"))
-            .thenReturn(Optional.empty());
 
         final BauvorhabenModel result = this.bauvorhabenService.updateBauvorhaben(bauvorhabenModel);
 
@@ -630,7 +594,6 @@ public class BauvorhabenServiceTest {
 
         Mockito.verify(this.bauvorhabenRepository, Mockito.times(1)).findById(entity.getId());
         Mockito.verify(this.bauvorhabenRepository, Mockito.times(1)).saveAndFlush(entity);
-        Mockito.verify(this.bauvorhabenRepository, Mockito.times(1)).findByNameVorhabenIgnoreCase("BauvorhabenTest");
         Mockito
             .verify(this.dokumentService, Mockito.times(1))
             .deleteDokumenteFromOriginalDokumentenListWhichAreMissingInParameterAdaptedDokumentenListe(

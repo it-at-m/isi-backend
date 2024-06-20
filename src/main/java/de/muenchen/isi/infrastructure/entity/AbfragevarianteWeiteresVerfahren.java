@@ -49,12 +49,6 @@ import org.hibernate.search.mapper.pojo.mapping.definition.annotation.NonStandar
     indexes = {
         @Index(name = "abfrgvar_weitrs_vrfhrn_id_index", columnList = "abfrgvar_weitrs_vrfhrn_id"),
         @Index(name = "abfrgvar_schbrbtng_weitrs_vrfhrn_id_index", columnList = "abfrgvar_schbrbtng_weitrs_vrfhrn_id"),
-    },
-    uniqueConstraints = {
-        @UniqueConstraint(
-            name = "UniqueNameAbfragevariantePerWeiteresVerfahren",
-            columnNames = { "abfrgvar_weitrs_vrfhrn_id", "abfrgvar_schbrbtng_weitrs_vrfhrn_id", "name" }
-        ),
     }
 )
 @Data

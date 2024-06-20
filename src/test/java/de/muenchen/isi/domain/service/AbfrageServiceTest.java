@@ -228,7 +228,6 @@ class AbfrageServiceTest {
 
         Mockito.when(this.authenticationUtils.getUserSub()).thenReturn(sub);
         Mockito.when(this.abfrageRepository.saveAndFlush(abfrageEntity)).thenReturn(saveResult);
-        Mockito.when(this.abfrageRepository.findByNameIgnoreCase("hallo")).thenReturn(Optional.empty());
 
         final AbfrageModel result = this.abfrageService.save(abfrage);
 
@@ -243,7 +242,6 @@ class AbfrageServiceTest {
         assertThat(result, is(expected));
 
         Mockito.verify(this.abfrageRepository, Mockito.times(1)).saveAndFlush(abfrageEntity);
-        Mockito.verify(this.abfrageRepository, Mockito.times(1)).findByNameIgnoreCase("hallo");
         Mockito.verify(this.bauvorhabenRepository, Mockito.times(0)).findById(UUID.randomUUID());
         Mockito
             .verify(this.calculationService, Mockito.times(1))
@@ -282,7 +280,6 @@ class AbfrageServiceTest {
         Mockito.when(this.authenticationUtils.getUserSub()).thenReturn(sub);
 
         Mockito.when(this.abfrageRepository.saveAndFlush(abfrageEntity)).thenReturn(saveResult);
-        Mockito.when(this.abfrageRepository.findByNameIgnoreCase("hallo")).thenReturn(Optional.empty());
 
         final AbfrageModel result = this.abfrageService.save(abfrage);
 
@@ -297,7 +294,6 @@ class AbfrageServiceTest {
 
         assertThat(result, is(expected));
         Mockito.verify(this.abfrageRepository, Mockito.times(1)).saveAndFlush(abfrageEntity);
-        Mockito.verify(this.abfrageRepository, Mockito.times(1)).findByNameIgnoreCase("hallo");
         Mockito.verify(this.bauvorhabenRepository, Mockito.times(0)).findById(UUID.randomUUID());
         Mockito
             .verify(this.calculationService, Mockito.times(1))
@@ -306,28 +302,6 @@ class AbfrageServiceTest {
             .verify(this.reportingdataTransferService, Mockito.times(1))
             .transferAbfrageAndBedarfe(expected, new HashMap<>());
         Mockito.verify(this.bearbeitungshistorieService, Mockito.times(1)).appendBearbeitungshistorieToAbfrage(abfrage);
-    }
-
-    @Test
-    void saveUniqueViolationTest() throws EntityNotFoundException {
-        final BauleitplanverfahrenModel abfrage = new BauleitplanverfahrenModel();
-        abfrage.setId(UUID.randomUUID());
-        abfrage.setName("hallo");
-
-        final BauleitplanverfahrenModel abfrage2 = new BauleitplanverfahrenModel();
-        abfrage2.setId(UUID.randomUUID());
-        abfrage2.setName("hallo");
-
-        final Abfrage abfrageEntity = this.abfrageDomainMapper.model2Entity(abfrage);
-
-        Mockito.when(this.abfrageRepository.saveAndFlush(abfrageEntity)).thenReturn(abfrageEntity);
-        Mockito.when(this.abfrageRepository.findByNameIgnoreCase("hallo")).thenReturn(Optional.of(abfrageEntity));
-
-        Assertions.assertThrows(UniqueViolationException.class, () -> this.abfrageService.save(abfrage2));
-
-        Mockito.verify(this.abfrageRepository, Mockito.times(0)).saveAndFlush(abfrageEntity);
-        Mockito.verify(this.abfrageRepository, Mockito.times(1)).findByNameIgnoreCase("hallo");
-        Mockito.verify(this.bauvorhabenRepository, Mockito.times(0)).findById(UUID.randomUUID());
     }
 
     @Test
@@ -356,7 +330,6 @@ class AbfrageServiceTest {
 
         Mockito.when(this.abfrageRepository.findById(entity.getId())).thenReturn(Optional.of(entity));
         Mockito.when(this.abfrageRepository.saveAndFlush(entity)).thenReturn(entity);
-        Mockito.when(this.abfrageRepository.findByNameIgnoreCase("hallo")).thenReturn(Optional.empty());
 
         final AbfrageModel result = this.abfrageService.patchAngelegt(requestModel, entity.getId());
 
@@ -364,7 +337,6 @@ class AbfrageServiceTest {
 
         Mockito.verify(this.abfrageRepository, Mockito.times(1)).findById(entity.getId());
         Mockito.verify(this.abfrageRepository, Mockito.times(1)).saveAndFlush(entity);
-        Mockito.verify(this.abfrageRepository, Mockito.times(1)).findByNameIgnoreCase("hallo");
         Mockito
             .verify(this.dokumentService, Mockito.times(1))
             .deleteDokumenteFromOriginalDokumentenListWhichAreMissingInParameterAdaptedDokumentenListe(
@@ -400,7 +372,6 @@ class AbfrageServiceTest {
 
         Mockito.when(this.abfrageRepository.findById(entity.getId())).thenReturn(Optional.of(entity));
         Mockito.when(this.abfrageRepository.saveAndFlush(entity)).thenReturn(entity);
-        Mockito.when(this.abfrageRepository.findByNameIgnoreCase("hallo")).thenReturn(Optional.empty());
 
         final AbfrageModel result = this.abfrageService.patchAngelegt(requestModel, entity.getId());
 
@@ -408,7 +379,6 @@ class AbfrageServiceTest {
 
         Mockito.verify(this.abfrageRepository, Mockito.times(1)).findById(entity.getId());
         Mockito.verify(this.abfrageRepository, Mockito.times(1)).saveAndFlush(entity);
-        Mockito.verify(this.abfrageRepository, Mockito.times(1)).findByNameIgnoreCase("hallo");
         Mockito
             .verify(this.dokumentService, Mockito.times(1))
             .deleteDokumenteFromOriginalDokumentenListWhichAreMissingInParameterAdaptedDokumentenListe(
@@ -442,7 +412,6 @@ class AbfrageServiceTest {
 
         Mockito.when(this.abfrageRepository.findById(entity.getId())).thenReturn(Optional.of(entity));
         Mockito.when(this.abfrageRepository.saveAndFlush(entity)).thenReturn(entity);
-        Mockito.when(this.abfrageRepository.findByNameIgnoreCase("hallo")).thenReturn(Optional.empty());
 
         final AbfrageModel result = this.abfrageService.patchAngelegt(requestModel, entity.getId());
 
@@ -450,7 +419,6 @@ class AbfrageServiceTest {
 
         Mockito.verify(this.abfrageRepository, Mockito.times(1)).findById(entity.getId());
         Mockito.verify(this.abfrageRepository, Mockito.times(1)).saveAndFlush(entity);
-        Mockito.verify(this.abfrageRepository, Mockito.times(1)).findByNameIgnoreCase("hallo");
         Mockito
             .verify(this.dokumentService, Mockito.times(1))
             .deleteDokumenteFromOriginalDokumentenListWhichAreMissingInParameterAdaptedDokumentenListe(
@@ -482,7 +450,6 @@ class AbfrageServiceTest {
 
         Mockito.when(this.abfrageRepository.findById(entity.getId())).thenReturn(Optional.of(entity));
         Mockito.when(this.abfrageRepository.saveAndFlush(entity)).thenReturn(entity);
-        Mockito.when(this.abfrageRepository.findByNameIgnoreCase("hallo")).thenReturn(Optional.empty());
 
         try {
             this.abfrageService.patchAngelegt(requestModel, entity.getId());
@@ -514,7 +481,6 @@ class AbfrageServiceTest {
 
         Mockito.when(this.abfrageRepository.findById(entity.getId())).thenReturn(Optional.of(entity));
         Mockito.when(this.abfrageRepository.saveAndFlush(entity)).thenReturn(entity);
-        Mockito.when(this.abfrageRepository.findByNameIgnoreCase("hallo")).thenReturn(Optional.empty());
 
         try {
             this.abfrageService.patchAngelegt(requestModel, entity.getId());
@@ -545,7 +511,6 @@ class AbfrageServiceTest {
 
         Mockito.when(this.abfrageRepository.findById(entity.getId())).thenReturn(Optional.of(entity));
         Mockito.when(this.abfrageRepository.saveAndFlush(entity)).thenReturn(entity);
-        Mockito.when(this.abfrageRepository.findByNameIgnoreCase("hallo")).thenReturn(Optional.empty());
 
         try {
             this.abfrageService.patchAngelegt(requestModel, entity.getId());
@@ -650,7 +615,6 @@ class AbfrageServiceTest {
             .when(this.bauvorhabenRepository.findById(bauleitplanverfahrenModel.getBauvorhaben()))
             .thenReturn(Optional.of(bauvorhabenEntity));
         Mockito.when(this.abfrageRepository.saveAndFlush(entityToSave)).thenReturn(entitySaved);
-        Mockito.when(this.abfrageRepository.findByNameIgnoreCase("hallo")).thenReturn(Optional.empty());
 
         final var result = this.abfrageService.patchInBearbeitungSachbearbeitung(requestModel, uuid);
 
@@ -770,7 +734,6 @@ class AbfrageServiceTest {
             .when(this.bauvorhabenRepository.findById(baugenehmigungsverfahrenModel.getBauvorhaben()))
             .thenReturn(Optional.of(bauvorhabenEntity));
         Mockito.when(this.abfrageRepository.saveAndFlush(entityToSave)).thenReturn(entitySaved);
-        Mockito.when(this.abfrageRepository.findByNameIgnoreCase("hallo")).thenReturn(Optional.empty());
 
         final var result = this.abfrageService.patchInBearbeitungSachbearbeitung(requestModel, uuid);
 
@@ -887,7 +850,6 @@ class AbfrageServiceTest {
             .when(this.bauvorhabenRepository.findById(weiteresVerfahrenModel.getBauvorhaben()))
             .thenReturn(Optional.of(bauvorhabenEntity));
         Mockito.when(this.abfrageRepository.saveAndFlush(entityToSave)).thenReturn(entitySaved);
-        Mockito.when(this.abfrageRepository.findByNameIgnoreCase("hallo")).thenReturn(Optional.empty());
 
         final var result = this.abfrageService.patchInBearbeitungSachbearbeitung(requestModel, uuid);
 
@@ -956,7 +918,6 @@ class AbfrageServiceTest {
         entitySaved.setAbfragevariantenSachbearbeitungBauleitplanverfahren(List.of(abfragevariante1Saved));
 
         Mockito.when(this.abfrageRepository.saveAndFlush(entityToSave)).thenReturn(entitySaved);
-        Mockito.when(this.abfrageRepository.findByNameIgnoreCase("hallo")).thenReturn(Optional.empty());
 
         try {
             this.abfrageService.patchInBearbeitungSachbearbeitung(requestModel, uuid);
@@ -1012,7 +973,6 @@ class AbfrageServiceTest {
         entitySaved.setAbfragevariantenSachbearbeitungBaugenehmigungsverfahren(List.of(abfragevariante1Saved));
 
         Mockito.when(this.abfrageRepository.saveAndFlush(entityToSave)).thenReturn(entitySaved);
-        Mockito.when(this.abfrageRepository.findByNameIgnoreCase("hallo")).thenReturn(Optional.empty());
 
         try {
             this.abfrageService.patchInBearbeitungSachbearbeitung(requestModel, uuid);
@@ -1066,7 +1026,6 @@ class AbfrageServiceTest {
         entitySaved.setAbfragevariantenSachbearbeitungWeiteresVerfahren(List.of(abfragevariante1Saved));
 
         Mockito.when(this.abfrageRepository.saveAndFlush(entityToSave)).thenReturn(entitySaved);
-        Mockito.when(this.abfrageRepository.findByNameIgnoreCase("hallo")).thenReturn(Optional.empty());
 
         try {
             this.abfrageService.patchInBearbeitungSachbearbeitung(requestModel, uuid);
@@ -1222,7 +1181,6 @@ class AbfrageServiceTest {
         );
 
         Mockito.when(this.abfrageRepository.saveAndFlush(entityToSave)).thenReturn(entitySaved);
-        Mockito.when(this.abfrageRepository.findByNameIgnoreCase("hallo")).thenReturn(Optional.empty());
 
         final var result = this.abfrageService.patchInBearbeitungFachreferat(requestModel, uuid);
 
@@ -1419,7 +1377,6 @@ class AbfrageServiceTest {
         );
 
         Mockito.when(this.abfrageRepository.saveAndFlush(entityToSave)).thenReturn(entitySaved);
-        Mockito.when(this.abfrageRepository.findByNameIgnoreCase("hallo")).thenReturn(Optional.empty());
 
         final var result = this.abfrageService.patchInBearbeitungFachreferat(requestModel, uuid);
 
@@ -1611,7 +1568,6 @@ class AbfrageServiceTest {
         entitySaved.setAbfragevariantenSachbearbeitungWeiteresVerfahren(List.of(abfragevarianteSachbearbeitungSaved));
 
         Mockito.when(this.abfrageRepository.saveAndFlush(entityToSave)).thenReturn(entitySaved);
-        Mockito.when(this.abfrageRepository.findByNameIgnoreCase("hallo")).thenReturn(Optional.empty());
 
         final var result = this.abfrageService.patchInBearbeitungFachreferat(requestModel, uuid);
 
@@ -1803,7 +1759,6 @@ class AbfrageServiceTest {
         );
 
         Mockito.when(this.abfrageRepository.saveAndFlush(entityToSave)).thenReturn(entitySaved);
-        Mockito.when(this.abfrageRepository.findByNameIgnoreCase("hallo")).thenReturn(Optional.empty());
 
         try {
             this.abfrageService.patchInBearbeitungFachreferat(requestModel, uuid);
@@ -1958,7 +1913,6 @@ class AbfrageServiceTest {
         );
 
         Mockito.when(this.abfrageRepository.saveAndFlush(entityToSave)).thenReturn(entitySaved);
-        Mockito.when(this.abfrageRepository.findByNameIgnoreCase("hallo")).thenReturn(Optional.empty());
 
         try {
             this.abfrageService.patchInBearbeitungFachreferat(requestModel, uuid);
@@ -2108,7 +2062,6 @@ class AbfrageServiceTest {
         entitySaved.setAbfragevariantenSachbearbeitungWeiteresVerfahren(List.of(abfragevarianteSachbearbeitungSaved));
 
         Mockito.when(this.abfrageRepository.saveAndFlush(entityToSave)).thenReturn(entitySaved);
-        Mockito.when(this.abfrageRepository.findByNameIgnoreCase("hallo")).thenReturn(Optional.empty());
 
         try {
             this.abfrageService.patchInBearbeitungFachreferat(requestModel, uuid);
@@ -2264,7 +2217,6 @@ class AbfrageServiceTest {
         );
 
         Mockito.when(this.abfrageRepository.saveAndFlush(entityToSave)).thenReturn(entitySaved);
-        Mockito.when(this.abfrageRepository.findByNameIgnoreCase("hallo")).thenReturn(Optional.empty());
 
         final var result = this.abfrageService.patchBedarfsmeldungErfolgt(requestModel, uuid);
 
@@ -2460,7 +2412,6 @@ class AbfrageServiceTest {
         );
 
         Mockito.when(this.abfrageRepository.saveAndFlush(entityToSave)).thenReturn(entitySaved);
-        Mockito.when(this.abfrageRepository.findByNameIgnoreCase("hallo")).thenReturn(Optional.empty());
 
         final var result = this.abfrageService.patchBedarfsmeldungErfolgt(requestModel, uuid);
 
@@ -2652,7 +2603,6 @@ class AbfrageServiceTest {
         entitySaved.setAbfragevariantenSachbearbeitungWeiteresVerfahren(List.of(abfragevarianteSachbearbeitungSaved));
 
         Mockito.when(this.abfrageRepository.saveAndFlush(entityToSave)).thenReturn(entitySaved);
-        Mockito.when(this.abfrageRepository.findByNameIgnoreCase("hallo")).thenReturn(Optional.empty());
 
         final var result = this.abfrageService.patchBedarfsmeldungErfolgt(requestModel, uuid);
 
@@ -2844,7 +2794,6 @@ class AbfrageServiceTest {
         );
 
         Mockito.when(this.abfrageRepository.saveAndFlush(entityToSave)).thenReturn(entitySaved);
-        Mockito.when(this.abfrageRepository.findByNameIgnoreCase("hallo")).thenReturn(Optional.empty());
 
         try {
             this.abfrageService.patchBedarfsmeldungErfolgt(requestModel, uuid);
@@ -3000,7 +2949,6 @@ class AbfrageServiceTest {
         );
 
         Mockito.when(this.abfrageRepository.saveAndFlush(entityToSave)).thenReturn(entitySaved);
-        Mockito.when(this.abfrageRepository.findByNameIgnoreCase("hallo")).thenReturn(Optional.empty());
 
         try {
             this.abfrageService.patchBedarfsmeldungErfolgt(requestModel, uuid);
@@ -3152,7 +3100,6 @@ class AbfrageServiceTest {
         entitySaved.setAbfragevariantenSachbearbeitungWeiteresVerfahren(List.of(abfragevarianteSachbearbeitungSaved));
 
         Mockito.when(this.abfrageRepository.saveAndFlush(entityToSave)).thenReturn(entitySaved);
-        Mockito.when(this.abfrageRepository.findByNameIgnoreCase("hallo")).thenReturn(Optional.empty());
 
         try {
             this.abfrageService.patchBedarfsmeldungErfolgt(requestModel, uuid);

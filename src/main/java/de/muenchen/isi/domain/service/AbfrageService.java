@@ -135,28 +135,21 @@ public class AbfrageService {
         // Befüllen der bauratendateiInputBasis für jede Abfragevariante
         bauratendateiInputService.setBauratendateiInputForEachAbfragevariante(abfrage, bedarfeForAbfragevarianten);
         var entity = this.abfrageDomainMapper.model2Entity(abfrage);
-        final var saved = this.abfrageRepository.findByNameIgnoreCase(abfrage.getName());
-        if ((saved.isPresent() && saved.get().getId().equals(entity.getId())) || saved.isEmpty()) {
-            try {
-                entity = this.abfrageRepository.saveAndFlush(entity);
-            } catch (final ObjectOptimisticLockingFailureException exception) {
-                final var message = "Die Daten wurden in der Zwischenzeit geändert. Bitte laden Sie die Seite neu!";
-                throw new OptimisticLockingException(message, exception);
-            } catch (final DataIntegrityViolationException exception) {
-                final var message =
-                    "Der angegebene Name der Abfragevariante ist schon vorhanden, bitte wählen Sie daher einen anderen Namen und speichern Sie die Abfrage erneut.";
-                throw new UniqueViolationException(message, exception);
-            }
-            final var model = this.abfrageDomainMapper.entity2Model(entity);
-            // Übermitteln der Abfrage samt der vorher berechneten Bedarfe an die Reportingschnittstelle
-            reportingdataTransferService.transferAbfrageAndBedarfe(model, bedarfeForAbfragevarianten);
-
-            return model;
-        } else {
-            throw new UniqueViolationException(
-                "Der angegebene Name der Abfrage ist schon vorhanden, bitte wählen Sie daher einen anderen Namen und speichern Sie die Abfrage erneut."
-            );
+        try {
+            entity = this.abfrageRepository.saveAndFlush(entity);
+        } catch (final ObjectOptimisticLockingFailureException exception) {
+            final var message = "Die Daten wurden in der Zwischenzeit geändert. Bitte laden Sie die Seite neu!";
+            throw new OptimisticLockingException(message, exception);
+        } catch (final DataIntegrityViolationException exception) {
+            final var message =
+                "Der angegebene Name der Abfragevariante ist schon vorhanden, bitte wählen Sie daher einen anderen Namen und speichern Sie die Abfrage erneut.";
+            throw new UniqueViolationException(message, exception);
         }
+        final var model = this.abfrageDomainMapper.entity2Model(entity);
+        // Übermitteln der Abfrage samt der vorher berechneten Bedarfe an die Reportingschnittstelle
+        reportingdataTransferService.transferAbfrageAndBedarfe(model, bedarfeForAbfragevarianten);
+
+        return model;
     }
 
     /**
