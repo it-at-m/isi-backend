@@ -7,6 +7,8 @@ public class MetabaseReportingModel {
 
     private String url;
 
+    private String reportsGlobal;
+
     private String reportBedarfe;
 
     private String reportErgebnissePlanungsursaechlich;

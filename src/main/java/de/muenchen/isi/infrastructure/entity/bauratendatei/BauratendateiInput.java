@@ -10,7 +10,6 @@ import jakarta.persistence.Index;
 import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
 import java.util.List;
-import java.util.Set;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -32,15 +31,15 @@ public class BauratendateiInput extends BaseEntity {
 
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(columnDefinition = "jsonb")
-    private Set<String> grundschulsprengel;
+    private List<String> grundschulsprengel;
 
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(columnDefinition = "jsonb")
-    private Set<String> mittelschulsprengel;
+    private List<String> mittelschulsprengel;
 
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(columnDefinition = "jsonb")
-    private Set<String> viertel;
+    private List<String> viertel;
 
     @ElementCollection
     @CollectionTable(
