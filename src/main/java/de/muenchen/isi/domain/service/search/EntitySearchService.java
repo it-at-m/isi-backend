@@ -59,8 +59,9 @@ public class EntitySearchService {
         // Ermittlung der suchbaren Attribute je suchbarer Entität
         final var searchableAttributes = searchPreparationService.getNamesOfSearchableAttributes(searchableEntities);
 
+        // Ermittlung der zu filternden Attribute
         final var filterAttributes = filterPreparationService.getNamesOfFilterableAttributes(searchableEntities);
-        System.out.println("Hallo " + filterAttributes.length);
+
         // Anpassen der Suchquery
         final var adaptedSearchQuery =
             this.createAdaptedSearchQueryForSimpleQueryStringSearch(searchQueryAndSortingInformation.getSearchQuery());
