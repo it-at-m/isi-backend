@@ -71,7 +71,6 @@ public class EntitySearchService {
             .session(entityManager)
             .search(searchableEntities)
             .where((function, root) -> {
-                // https://docs.jboss.org/hibernate/search/7.0/reference/en-US/html_single/#search-dsl-predicate-boolean-lambda
                 root.add(searchPredicateFactory -> {
                     if (StringUtils.isNotEmpty(adaptedSearchQuery)) {
                         // Suche entsprechend der gegebenen Query.
@@ -88,15 +87,25 @@ public class EntitySearchService {
                     }
                 });
 
-                // b.should( function.match().field( "verortung.stadtbezirke.name" ).matching("09"));
+                // https://docs.jboss.org/hibernate/search/7.0/reference/en-US/html_single/#search-dsl-predicate-boolean-lambda
                 root.add(
                     function
                         .bool()
-                        .with(b -> {
-                            //b.should( function.match().field( "verortung.stadtbezirke.nummer" ).matching("09"));
-                            b.should(function.match().field("verortung.stadtbezirke.nummer").matching("13"));
-                            b.should(function.match().field("verortung.stadtbezirke.nummer").matching("09"));
-                        })
+                        // Verunden mit must
+                        .must(b ->
+                            // Verodern mit should
+                            b
+                                .bool()
+                                .should(function.match().field("verortung.stadtbezirke.nummer").matching("13"))
+                                .should(function.match().field("verortung.stadtbezirke.nummer").matching("09"))
+                        )
+                    // Verunden mit must
+                    //.must(b ->
+                    // Verodern mit should
+                    //b.bool()
+                    //.should(function.match().field("verortung.kitaplanungsbereiche.kitaPlbT").matching("13.1"))
+
+                    //)
                 );
             })
             // Sortierung der Suchergebnisse.
