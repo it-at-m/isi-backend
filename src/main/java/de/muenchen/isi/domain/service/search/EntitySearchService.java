@@ -88,6 +88,8 @@ public class EntitySearchService {
                     }
                 });
 
+                // Filtereinstellungen
+                // https://docs.jboss.org/hibernate/search/7.0/reference/en-US/html_single/#search-dsl-predicate-boolean-lambda
                 if (CollectionUtils.isNotEmpty(searchQueryAndSortingInformation.getFilterStadtbezirkNummer())) {
                     root.add(
                         function
