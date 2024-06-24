@@ -32,9 +32,9 @@ public class SearchQueryModel {
 
     private List<String> filterKitaplanungsbereichKitaPlbT;
 
-    private List<String> filterGrundschulsprengelNummer;
+    private List<Long> filterGrundschulsprengelNummer;
 
-    private List<String> filterMittelschulsprengelNummer;
+    private List<Long> filterMittelschulsprengelNummer;
 
     private Integer page;
 

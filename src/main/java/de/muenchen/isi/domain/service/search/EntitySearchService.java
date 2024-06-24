@@ -12,6 +12,7 @@ import jakarta.persistence.PersistenceContext;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -65,20 +66,22 @@ public class EntitySearchService {
         final Integer paginationOffset = calculateOffsetOrNullIfNoPaginationRequired(searchQueryAndSortingInformation);
 
         // Erstellung der zu filternden Attribute
-        HashMap<String, List<String>> filterAttributesMap = new HashMap<>();
-        filterAttributesMap.put(
+        HashMap<String, List<?>> filterStringAttributeMap = new HashMap<>();
+        filterStringAttributeMap.put(
             "verortung.stadtbezirke.nummer",
             searchQueryAndSortingInformation.getFilterStadtbezirkNummer()
         );
-        filterAttributesMap.put(
+        filterStringAttributeMap.put(
             "verortung.kitaplanungsbereiche.kitaPlbT",
             searchQueryAndSortingInformation.getFilterKitaplanungsbereichKitaPlbT()
         );
-        filterAttributesMap.put(
+
+        HashMap<String, List<Long>> filterLongAttributeMap = new HashMap<>();
+        filterLongAttributeMap.put(
             "verortung.grundschulsprengel.nummer",
             searchQueryAndSortingInformation.getFilterGrundschulsprengelNummer()
         );
-        filterAttributesMap.put(
+        filterLongAttributeMap.put(
             "verortung.mittelschulsprengel.nummer",
             searchQueryAndSortingInformation.getFilterMittelschulsprengelNummer()
         );
@@ -106,7 +109,23 @@ public class EntitySearchService {
 
                 // Filtereinstellungen
                 // https://docs.jboss.org/hibernate/search/7.0/reference/en-US/html_single/#search-dsl-predicate-boolean-lambda
-                filterAttributesMap.forEach((keyAttribute, valueList) -> {
+                filterStringAttributeMap.forEach((keyAttribute, valueList) -> {
+                    if (CollectionUtils.isNotEmpty(valueList)) {
+                        root.add(
+                            function
+                                .bool()
+                                .must(b -> {
+                                    var theBool = b.bool();
+                                    for (final var value : valueList) {
+                                        theBool = theBool.should(function.match().field(keyAttribute).matching(value));
+                                    }
+                                    return theBool;
+                                })
+                        );
+                    }
+                });
+
+                filterLongAttributeMap.forEach((keyAttribute, valueList) -> {
                     if (CollectionUtils.isNotEmpty(valueList)) {
                         root.add(
                             function

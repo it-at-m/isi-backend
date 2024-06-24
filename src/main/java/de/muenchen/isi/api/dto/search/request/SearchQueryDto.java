@@ -45,9 +45,9 @@ public class SearchQueryDto {
 
     private List<String> filterKitaplanungsbereichKitaPlbT;
 
-    private List<String> filterGrundschulsprengelNummer;
+    private List<Long> filterGrundschulsprengelNummer;
 
-    private List<String> filterMittelschulsprengelNummer;
+    private List<Long> filterMittelschulsprengelNummer;
 
     @Positive
     private Integer page;
