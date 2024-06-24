@@ -7,10 +7,10 @@ import de.muenchen.isi.domain.model.enums.SortAttribute;
 import de.muenchen.isi.domain.model.search.request.SearchQueryAndSortingModel;
 import de.muenchen.isi.domain.model.search.response.SearchResultsModel;
 import de.muenchen.isi.infrastructure.entity.BaseEntity;
-import de.muenchen.isi.security.AuthenticationUtils;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -19,8 +19,6 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.search.engine.search.common.BooleanOperator;
-import org.hibernate.search.engine.search.predicate.dsl.BooleanPredicateClausesStep;
-import org.hibernate.search.engine.search.predicate.dsl.SearchPredicateFactory;
 import org.hibernate.search.engine.search.query.SearchResult;
 import org.hibernate.search.mapper.orm.Search;
 import org.springframework.stereotype.Service;
@@ -32,7 +30,6 @@ public class EntitySearchService {
 
     private final SearchPreparationService searchPreparationService;
     private final SearchDomainMapper searchDomainMapper;
-    private final FilterPreparationService filterPreparationService;
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -67,6 +64,25 @@ public class EntitySearchService {
         // Ist keine Offsetberechnung möglich, so wird auch keine paginierte Suche durchgeführt.
         final Integer paginationOffset = calculateOffsetOrNullIfNoPaginationRequired(searchQueryAndSortingInformation);
 
+        // Erstellung der zu filternden Attribute
+        HashMap<String, List<String>> filterAttributesMap = new HashMap<>();
+        filterAttributesMap.put(
+            "verortung.stadtbezirke.nummer",
+            searchQueryAndSortingInformation.getFilterStadtbezirkNummer()
+        );
+        filterAttributesMap.put(
+            "verortung.kitaplanungsbereiche.kitaPlbT",
+            searchQueryAndSortingInformation.getFilterKitaplanungsbereichKitaPlbT()
+        );
+        filterAttributesMap.put(
+            "verortung.grundschulsprengel.nummer",
+            searchQueryAndSortingInformation.getFilterGrundschulsprengelNummer()
+        );
+        filterAttributesMap.put(
+            "verortung.mittelschulsprengel.nummer",
+            searchQueryAndSortingInformation.getFilterMittelschulsprengelNummer()
+        );
+
         // Erstellen der Suchquery
         final var searchQueryOptions = Search
             .session(entityManager)
@@ -90,84 +106,21 @@ public class EntitySearchService {
 
                 // Filtereinstellungen
                 // https://docs.jboss.org/hibernate/search/7.0/reference/en-US/html_single/#search-dsl-predicate-boolean-lambda
-                if (CollectionUtils.isNotEmpty(searchQueryAndSortingInformation.getFilterStadtbezirkNummer())) {
-                    root.add(
-                        function
-                            .bool()
-                            .must(b -> {
-                                var thebool = b.bool();
-                                for (final var stadtbezirk : searchQueryAndSortingInformation.getFilterStadtbezirkNummer()) {
-                                    thebool =
-                                        thebool.should(
-                                            function
-                                                .match()
-                                                .field("verortung.stadtbezirke.nummer")
-                                                .matching(stadtbezirk)
-                                        );
-                                }
-                                return thebool;
-                            })
-                    );
-                }
-                if (
-                    CollectionUtils.isNotEmpty(searchQueryAndSortingInformation.getFilterKitaplanungsbereichKitaPlbT())
-                ) {
-                    root.add(
-                        function
-                            .bool()
-                            .must(b -> {
-                                var thebool = b.bool();
-                                for (final var kitaPlb : searchQueryAndSortingInformation.getFilterKitaplanungsbereichKitaPlbT()) {
-                                    thebool =
-                                        thebool.should(
-                                            function
-                                                .match()
-                                                .field("verortung.kitaplanungsbereiche.kitaPlbT")
-                                                .matching(kitaPlb)
-                                        );
-                                }
-                                return thebool;
-                            })
-                    );
-                }
-                if (CollectionUtils.isNotEmpty(searchQueryAndSortingInformation.getFilterGrundschulsprengelNummer())) {
-                    root.add(
-                        function
-                            .bool()
-                            .must(b -> {
-                                var thebool = b.bool();
-                                for (final var grundschulsprengel : searchQueryAndSortingInformation.getFilterGrundschulsprengelNummer()) {
-                                    thebool =
-                                        thebool.should(
-                                            function
-                                                .match()
-                                                .field("verortung.grundschulsprengel.nummer")
-                                                .matching(grundschulsprengel)
-                                        );
-                                }
-                                return thebool;
-                            })
-                    );
-                }
-                if (CollectionUtils.isNotEmpty(searchQueryAndSortingInformation.getFilterMittelschulsprengelNummer())) {
-                    root.add(
-                        function
-                            .bool()
-                            .must(b -> {
-                                var thebool = b.bool();
-                                for (final var grundschulsprengel : searchQueryAndSortingInformation.getFilterMittelschulsprengelNummer()) {
-                                    thebool =
-                                        thebool.should(
-                                            function
-                                                .match()
-                                                .field("verortung.mittelschulsprengel.nummer")
-                                                .matching(grundschulsprengel)
-                                        );
-                                }
-                                return thebool;
-                            })
-                    );
-                }
+                filterAttributesMap.forEach((keyAttribute, valueList) -> {
+                    if (CollectionUtils.isNotEmpty(valueList)) {
+                        root.add(
+                            function
+                                .bool()
+                                .must(b -> {
+                                    var theBool = b.bool();
+                                    for (final var value : valueList) {
+                                        theBool = theBool.should(function.match().field(keyAttribute).matching(value));
+                                    }
+                                    return theBool;
+                                })
+                        );
+                    }
+                });
             })
             // Sortierung der Suchergebnisse.
             // https://docs.jboss.org/hibernate/stable/search/reference/en-US/html_single/#query-sorting
