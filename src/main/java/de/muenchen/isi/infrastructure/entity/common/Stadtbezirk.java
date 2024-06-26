@@ -10,6 +10,7 @@ import org.hibernate.search.mapper.pojo.mapping.definition.annotation.NonStandar
 @Data
 public class Stadtbezirk {
 
+    @FullTextField
     private String nummer;
 
     @FullTextField

@@ -7,14 +7,15 @@ import de.muenchen.isi.domain.model.enums.SortAttribute;
 import de.muenchen.isi.domain.model.search.request.SearchQueryAndSortingModel;
 import de.muenchen.isi.domain.model.search.response.SearchResultsModel;
 import de.muenchen.isi.infrastructure.entity.BaseEntity;
-import de.muenchen.isi.security.AuthenticationUtils;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.search.engine.search.common.BooleanOperator;
@@ -29,7 +30,6 @@ public class EntitySearchService {
 
     private final SearchPreparationService searchPreparationService;
     private final SearchDomainMapper searchDomainMapper;
-    private final AuthenticationUtils authenticationUtils;
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -55,6 +55,7 @@ public class EntitySearchService {
         );
         // Ermittlung der suchbaren Attribute je suchbarer Entität
         final var searchableAttributes = searchPreparationService.getNamesOfSearchableAttributes(searchableEntities);
+
         // Anpassen der Suchquery
         final var adaptedSearchQuery =
             this.createAdaptedSearchQueryForSimpleQueryStringSearch(searchQueryAndSortingInformation.getSearchQuery());
@@ -63,24 +64,63 @@ public class EntitySearchService {
         // Ist keine Offsetberechnung möglich, so wird auch keine paginierte Suche durchgeführt.
         final Integer paginationOffset = calculateOffsetOrNullIfNoPaginationRequired(searchQueryAndSortingInformation);
 
+        // Erstellung der zu filternden Attribute
+        HashMap<String, List<?>> filterAttributeMap = new HashMap<>();
+        filterAttributeMap.put(
+            "verortung.stadtbezirke.nummer",
+            searchQueryAndSortingInformation.getFilterStadtbezirkNummer()
+        );
+        filterAttributeMap.put(
+            "verortung.kitaplanungsbereiche.kitaPlbT",
+            searchQueryAndSortingInformation.getFilterKitaplanungsbereichKitaPlbT()
+        );
+        filterAttributeMap.put(
+            "verortung.grundschulsprengel.nummer",
+            searchQueryAndSortingInformation.getFilterGrundschulsprengelNummer()
+        );
+        filterAttributeMap.put(
+            "verortung.mittelschulsprengel.nummer",
+            searchQueryAndSortingInformation.getFilterMittelschulsprengelNummer()
+        );
+
         // Erstellen der Suchquery
         final var searchQueryOptions = Search
             .session(entityManager)
             .search(searchableEntities)
-            .where(function -> {
-                if (StringUtils.isNotEmpty(adaptedSearchQuery)) {
-                    // Suche entsprechend der gegebenen Query.
-                    return function
-                        // https://docs.jboss.org/hibernate/stable/search/reference/en-US/html_single/#search-dsl-predicate-simple-query-string
-                        .simpleQueryString()
-                        .fields(searchableAttributes)
-                        .matching(adaptedSearchQuery)
-                        // Es werden nur die Entitäten als Suchergebnis zurückgegeben, welche alle Suchwörter der Suchquery beinhalten.
-                        .defaultOperator(BooleanOperator.AND);
-                } else {
-                    // Zurückgeben aller Entitäten.
-                    return function.matchAll();
-                }
+            .where((function, root) -> {
+                root.add(searchPredicateFactory -> {
+                    if (StringUtils.isNotEmpty(adaptedSearchQuery)) {
+                        // Suche entsprechend der gegebenen Query.
+                        return function
+                            // https://docs.jboss.org/hibernate/stable/search/reference/en-US/html_single/#search-dsl-predicate-simple-query-string
+                            .simpleQueryString()
+                            .fields(searchableAttributes)
+                            .matching(adaptedSearchQuery)
+                            // Es werden nur die Entitäten als Suchergebnis zurückgegeben, welche alle Suchwörter der Suchquery beinhalten.
+                            .defaultOperator(BooleanOperator.AND);
+                    } else {
+                        // Zurückgeben aller Entitäten.
+                        return function.matchAll();
+                    }
+                });
+
+                // Filtereinstellungen
+                // https://docs.jboss.org/hibernate/search/7.0/reference/en-US/html_single/#search-dsl-predicate-boolean-lambda
+                filterAttributeMap.forEach((keyAttribute, valueList) -> {
+                    if (CollectionUtils.isNotEmpty(valueList)) {
+                        root.add(
+                            function
+                                .bool()
+                                .must(b -> {
+                                    var theBool = b.bool();
+                                    for (final var value : valueList) {
+                                        theBool = theBool.should(function.match().field(keyAttribute).matching(value));
+                                    }
+                                    return theBool;
+                                })
+                        );
+                    }
+                });
             })
             // Sortierung der Suchergebnisse.
             // https://docs.jboss.org/hibernate/stable/search/reference/en-US/html_single/#query-sorting
