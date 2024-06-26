@@ -22,6 +22,7 @@ class MetabaseReportingServiceTest {
         this.metabaseReportingService =
             new MetabaseReportingService(
                 "https://isi-metabase-test.muenchen.de",
+                "collection/99-global-reports",
                 "dashboard/45-dashboard-bedarfe",
                 " dashboard/36-ergebnisse-der-planungsursachlichen-bedarfsberechnung",
                 "dashboard/44-ergebnisse-der-sobon-bedarfsberechnung",
@@ -35,6 +36,7 @@ class MetabaseReportingServiceTest {
     void getMetabaseReporting() {
         final var expected = new MetabaseReportingModel();
         expected.setUrl("https://isi-metabase-test.muenchen.de");
+        expected.setReportsGlobal("collection/99-global-reports");
         expected.setReportBedarfe("dashboard/45-dashboard-bedarfe");
         expected.setReportErgebnissePlanungsursaechlich(
             " dashboard/36-ergebnisse-der-planungsursachlichen-bedarfsberechnung"
