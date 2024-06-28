@@ -47,7 +47,6 @@ import de.muenchen.isi.infrastructure.repository.AbfragevarianteBaugenehmigungsv
 import de.muenchen.isi.infrastructure.repository.AbfragevarianteBauleitplanverfahrenRepository;
 import de.muenchen.isi.infrastructure.repository.AbfragevarianteWeiteresVerfahrenRepository;
 import de.muenchen.isi.infrastructure.repository.BauvorhabenRepository;
-import de.muenchen.isi.reporting.client.model.EtlTriggerJobDto;
 import de.muenchen.isi.security.AuthenticationUtils;
 import java.util.Optional;
 import java.util.UUID;
@@ -151,16 +150,6 @@ public class AbfrageService {
             final var model = this.abfrageDomainMapper.entity2Model(entity);
             // Übermitteln der Abfrage samt der vorher berechneten Bedarfe an die Reportingschnittstelle
             reportingdataTransferService.transferAbfrageAndBedarfe(model, bedarfeForAbfragevarianten);
-
-            // Aufruf des ETL-Systems (Pentaho) zur Ausführung eines Jobs.
-
-            /* exemplarischer Aufruf
-            EtlTriggerJobDto etlTriggerJobDto = new EtlTriggerJobDto();
-            etlTriggerJobDto.setJobname(
-                "bevoelkerungsdatenFuerKitaPlBs/Job_Bevoelkerungsdaten_fuer_KitaPlanungsbereiche.kjb"
-            );
-            etlInterfaceService.etlInterfaceTriggerJob(etlTriggerJobDto);
-            */
 
             return model;
         } else {

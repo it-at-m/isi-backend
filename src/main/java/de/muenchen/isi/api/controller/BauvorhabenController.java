@@ -13,6 +13,7 @@ import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.FileHandlingFailedException;
 import de.muenchen.isi.domain.exception.FileHandlingWithS3FailedException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
+import de.muenchen.isi.domain.exception.ReportingException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
 import de.muenchen.isi.domain.exception.UserRoleNotAllowedException;
 import de.muenchen.isi.domain.service.BauvorhabenService;
@@ -115,7 +116,7 @@ public class BauvorhabenController {
         @RequestBody @Valid @NotNull final BauvorhabenDto bauvorhabenDto,
         @RequestParam(required = false) final UUID abfrageId
     )
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, EntityIsReferencedException, UserRoleNotAllowedException {
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, EntityIsReferencedException, UserRoleNotAllowedException, ReportingException {
         var model = this.bauvorhabenApiMapper.dto2Model(bauvorhabenDto);
         model = this.bauvorhabenService.saveBauvorhaben(model, abfrageId);
         final var saved = this.bauvorhabenApiMapper.model2Dto(model);
@@ -131,6 +132,11 @@ public class BauvorhabenController {
             @ApiResponse(
                 responseCode = "403",
                 description = "FORBIDDEN -> Keine Berechtigung um die Abfrage mit dem Bauvorhaben zu verknüpfen.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+            @ApiResponse(
+                responseCode = "400",
+                description = "BAD_REQUEST -> Bauvorhaben konnte nicht erstellt werden, überprüfen sie die Eingabe.",
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
             ),
             @ApiResponse(
@@ -159,7 +165,7 @@ public class BauvorhabenController {
     public ResponseEntity<BauvorhabenDto> updateBauvorhaben(
         @RequestBody @Valid @NotNull final BauvorhabenDto bauvorhabenDto
     )
-        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, FileHandlingFailedException, FileHandlingWithS3FailedException, EntityIsReferencedException, UserRoleNotAllowedException {
+        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, FileHandlingFailedException, FileHandlingWithS3FailedException, EntityIsReferencedException, UserRoleNotAllowedException, ReportingException {
         var model = this.bauvorhabenApiMapper.dto2Model(bauvorhabenDto);
         model = this.bauvorhabenService.updateBauvorhaben(model);
         final var saved = this.bauvorhabenApiMapper.model2Dto(model);
@@ -211,7 +217,7 @@ public class BauvorhabenController {
     public ResponseEntity<BauvorhabenDto> putChangeRelevanteAbfragevariante(
         @RequestParam(value = "abfragevariante-id", defaultValue = "") @NotNull final UUID abfragevarianteId
     )
-        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, BauvorhabenNotReferencedException, EntityIsReferencedException, UserRoleNotAllowedException {
+        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, BauvorhabenNotReferencedException, EntityIsReferencedException, UserRoleNotAllowedException, ReportingException {
         final var bauvorhaben = bauvorhabenService.changeRelevanteAbfragevariante(abfragevarianteId);
         final var saved = bauvorhabenApiMapper.model2Dto(bauvorhaben);
         return ResponseEntity.ok(saved);

@@ -10,4 +10,8 @@ import lombok.ToString;
 public class VerortungMultiPolygon extends Verortung {
 
     private MultiPolygonGeometry multiPolygon;
+
+    private PointGeometry centroid;
+
+    private Utm centroidUtm;
 }

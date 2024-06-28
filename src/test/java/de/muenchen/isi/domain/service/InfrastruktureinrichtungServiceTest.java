@@ -9,11 +9,13 @@ import de.muenchen.isi.TestConstants;
 import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
+import de.muenchen.isi.domain.exception.ReportingException;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.InfrastruktureinrichtungModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.KindergartenModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.KinderkrippeModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.MittelschuleModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.SchuleModel;
+import de.muenchen.isi.domain.service.etlInterface.EtlInterfaceService;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVerfahren;
@@ -26,17 +28,23 @@ import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Kinderkrip
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Schule;
 import de.muenchen.isi.infrastructure.repository.BauvorhabenRepository;
 import de.muenchen.isi.infrastructure.repository.InfrastruktureinrichtungRepository;
+import de.muenchen.isi.reporting.client.model.EtlTriggerJobDto;
+import de.muenchen.isi.reporting.client.model.PairStringString;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -54,6 +62,9 @@ class InfrastruktureinrichtungServiceTest {
 
     @Autowired
     private InfrastruktureinrichtungRepository infrastruktureinrichtungRepository;
+
+    @MockBean
+    private EtlInterfaceService etlInterfaceService;
 
     @BeforeEach
     public void beforeEach() {
@@ -119,7 +130,7 @@ class InfrastruktureinrichtungServiceTest {
 
     @Test
     @Transactional
-    void saveInfrastruktureinrichtung() throws OptimisticLockingException, EntityNotFoundException {
+    void saveInfrastruktureinrichtung() throws OptimisticLockingException, EntityNotFoundException, ReportingException {
         var bauvorhaben = new Bauvorhaben();
         bauvorhaben.setNameVorhaben("Bauvorhaben");
         bauvorhaben.setStandVerfahren(StandVerfahren.RAHMENPLANUNG);
@@ -153,11 +164,16 @@ class InfrastruktureinrichtungServiceTest {
             ((MittelschuleModel) savedMittelschule).getSchule().getAnzahlPlaetze(),
             is(mittelschule.getSchule().getAnzahlPlaetze())
         );
+
+        Mockito
+            .verify(this.etlInterfaceService, Mockito.times(1))
+            .etlInterfaceTriggerInfrastruktureinrichtungJob(savedMittelschule.getId());
     }
 
     @Test
     @Transactional
-    void updateInfrastruktureinrichtung() throws OptimisticLockingException, EntityNotFoundException {
+    void updateInfrastruktureinrichtung()
+        throws OptimisticLockingException, EntityNotFoundException, ReportingException {
         var bauvorhaben = new Bauvorhaben();
         bauvorhaben.setNameVorhaben("Bauvorhaben");
         bauvorhaben.setStandVerfahren(StandVerfahren.RAHMENPLANUNG);
@@ -177,6 +193,11 @@ class InfrastruktureinrichtungServiceTest {
 
         final var savedMittelschule = this.infrastruktureinrichtungService.saveInfrastruktureinrichtung(mittelschule);
         assertThat(savedMittelschule.getVersion(), is(0L));
+
+        Mockito
+            .verify(this.etlInterfaceService, Mockito.times(1))
+            .etlInterfaceTriggerInfrastruktureinrichtungJob(savedMittelschule.getId());
+        Mockito.reset(this.etlInterfaceService);
 
         savedMittelschule.setNameEinrichtung("Mittelschule XXX");
 
@@ -209,6 +230,10 @@ class InfrastruktureinrichtungServiceTest {
             EntityNotFoundException.class,
             () -> this.infrastruktureinrichtungService.updateInfrastruktureinrichtung(updatedMittelschule)
         );
+
+        Mockito
+            .verify(this.etlInterfaceService, Mockito.times(1))
+            .etlInterfaceTriggerInfrastruktureinrichtungJob(savedMittelschule.getId());
     }
 
     @Test

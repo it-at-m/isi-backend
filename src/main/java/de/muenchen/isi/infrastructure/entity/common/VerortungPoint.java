@@ -10,4 +10,6 @@ import lombok.ToString;
 public class VerortungPoint extends Verortung {
 
     private PointGeometry point;
+
+    private Utm pointUtm;
 }

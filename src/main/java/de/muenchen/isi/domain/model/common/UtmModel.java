@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-@Embeddable
 public class UtmModel {
 
     private String zone;
