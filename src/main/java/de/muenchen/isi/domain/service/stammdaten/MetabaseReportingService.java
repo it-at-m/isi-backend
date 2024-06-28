@@ -11,6 +11,8 @@ public class MetabaseReportingService {
 
     private String url;
 
+    private String reportsGlobal;
+
     private String reportBedarfe;
 
     private String reportErgebnissePlanungsursaechlich;
@@ -25,6 +27,7 @@ public class MetabaseReportingService {
 
     public MetabaseReportingService(
         @Value("${metabase.reporting.url}") final String url,
+        @Value("${metabase.reporting.reports.global}") final String reportsGlobal,
         @Value("${metabase.reporting.reports.report.bedarfe}") final String reportBedarfe,
         @Value(
             "${metabase.reporting.reports.report.ergebnisse.planungsursaechlich}"
@@ -41,6 +44,7 @@ public class MetabaseReportingService {
         @Value("${metabase.reporting.reports.report.wohneinheiten}") final String reportWohneinheiten
     ) {
         this.url = url;
+        this.reportsGlobal = reportsGlobal;
         this.reportBedarfe = reportBedarfe;
         this.reportSpitzenbedarfePlanungsursaechlich = reportSpitzenbedarfePlanungsursaechlich;
         this.reportSpitzenbedarfeSobonUrsaechlich = reportSpitzenbedarfeSobonUrsaechlich;
@@ -55,6 +59,7 @@ public class MetabaseReportingService {
     public MetabaseReportingModel getMetabaseReporting() {
         final var metabaseReportingModel = new MetabaseReportingModel();
         metabaseReportingModel.setUrl(this.url);
+        metabaseReportingModel.setReportsGlobal(this.reportsGlobal);
         metabaseReportingModel.setReportBedarfe(this.reportBedarfe);
         metabaseReportingModel.setReportErgebnissePlanungsursaechlich(this.reportErgebnissePlanungsursaechlich);
         metabaseReportingModel.setReportErgebnisseSobonUrsaechlich(this.reportErgebnisseSobonUrsaechlich);

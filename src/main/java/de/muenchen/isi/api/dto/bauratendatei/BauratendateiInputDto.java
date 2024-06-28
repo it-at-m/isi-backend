@@ -3,7 +3,6 @@ package de.muenchen.isi.api.dto.bauratendatei;
 import de.muenchen.isi.api.dto.BaseEntityDto;
 import de.muenchen.isi.reporting.client.model.WohneinheitenProFoerderartProJahrDto;
 import java.util.List;
-import java.util.Set;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -13,11 +12,11 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 public class BauratendateiInputDto extends BaseEntityDto {
 
-    private Set<String> grundschulsprengel;
+    private List<String> grundschulsprengel;
 
-    private Set<String> mittelschulsprengel;
+    private List<String> mittelschulsprengel;
 
-    private Set<String> viertel;
+    private List<String> viertel;
 
     private List<WohneinheitenProFoerderartProJahrDto> wohneinheiten;
 }

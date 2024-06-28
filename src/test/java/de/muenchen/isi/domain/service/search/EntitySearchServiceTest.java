@@ -29,8 +29,7 @@ class EntitySearchServiceTest {
 
     private EntitySearchService entitySearchService = new EntitySearchService(
         searchPreparationService,
-        searchDomainMapper,
-        authenticationUtils
+        searchDomainMapper
     );
 
     @Test

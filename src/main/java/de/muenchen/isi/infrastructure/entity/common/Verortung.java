@@ -17,9 +17,12 @@ public abstract class Verortung {
     @IndexedEmbedded
     private Set<Gemarkung> gemarkungen;
 
+    @IndexedEmbedded
     private Set<Kitaplanungsbereich> kitaplanungsbereiche;
 
+    @IndexedEmbedded
     private Set<Grundschulsprengel> grundschulsprengel;
 
+    @IndexedEmbedded
     private Set<Mittelschulsprengel> mittelschulsprengel;
 }
