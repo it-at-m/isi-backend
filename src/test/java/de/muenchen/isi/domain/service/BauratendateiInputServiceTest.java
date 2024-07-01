@@ -26,7 +26,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -234,9 +233,9 @@ class BauratendateiInputServiceTest {
         );
 
         var bauratendateiInputModel = new BauratendateiInputModel();
-        bauratendateiInputModel.setMittelschulsprengel(Set.of("1", "2", "4"));
-        bauratendateiInputModel.setGrundschulsprengel(Set.of("5", "6", "8"));
-        bauratendateiInputModel.setViertel(Set.of("9", "10", "12"));
+        bauratendateiInputModel.setMittelschulsprengel(List.of("4", "2", "1"));
+        bauratendateiInputModel.setGrundschulsprengel(List.of("6", "5", "8"));
+        bauratendateiInputModel.setViertel(List.of("12", "10", "9"));
         bedarfWohneinheiten = new ArrayList<>();
         wohneinheiten = new WohneinheitenProFoerderartProJahrModel();
         wohneinheiten.setJahr("2024");
@@ -408,9 +407,9 @@ class BauratendateiInputServiceTest {
         );
 
         bauratendateiInputModel = new BauratendateiInputModel();
-        bauratendateiInputModel.setMittelschulsprengel(Set.of("1", "2", "4"));
-        bauratendateiInputModel.setGrundschulsprengel(Set.of("5", "6", "8"));
-        bauratendateiInputModel.setViertel(Set.of("9", "10", "12"));
+        bauratendateiInputModel.setMittelschulsprengel(List.of("1", "2", "4"));
+        bauratendateiInputModel.setGrundschulsprengel(List.of("5", "6", "8"));
+        bauratendateiInputModel.setViertel(List.of("9", "10", "12"));
         bedarfWohneinheiten = new ArrayList<>();
         wohneinheiten = new WohneinheitenProFoerderartProJahrModel();
         wohneinheiten.setJahr("2024");
@@ -441,9 +440,9 @@ class BauratendateiInputServiceTest {
     void createBauratendateiInput() {
         var result = bauratendateiInputService.createBauratendateiInput(null, null, null);
         var expected = new BauratendateiInputModel();
-        expected.setMittelschulsprengel(Set.of());
-        expected.setGrundschulsprengel(Set.of());
-        expected.setViertel(Set.of());
+        expected.setMittelschulsprengel(List.of());
+        expected.setGrundschulsprengel(List.of());
+        expected.setViertel(List.of());
         expected.setWohneinheiten(List.of());
         assertThat(result, is(expected));
 
@@ -525,9 +524,9 @@ class BauratendateiInputServiceTest {
         result = bauratendateiInputService.createBauratendateiInput(verortung, bedarfe, uuid);
 
         expected = new BauratendateiInputModel();
-        expected.setMittelschulsprengel(Set.of("1", "2", "4"));
-        expected.setGrundschulsprengel(Set.of("5", "6", "8"));
-        expected.setViertel(Set.of("9", "10", "12"));
+        expected.setMittelschulsprengel(List.of("4", "2", "1"));
+        expected.setGrundschulsprengel(List.of("6", "5", "8"));
+        expected.setViertel(List.of("12", "10", "9"));
         bedarfWohneinheiten = new ArrayList<>();
         wohneinheiten = new WohneinheitenProFoerderartProJahrModel();
         wohneinheiten.setJahr("2024");
@@ -553,17 +552,17 @@ class BauratendateiInputServiceTest {
     void getGrundschulsprengel() {
         VerortungModel verortung = null;
         var result = bauratendateiInputService.getGrundschulsprengel(verortung);
-        assertThat(result, is(Set.of()));
+        assertThat(result, is(List.of()));
 
         verortung = new VerortungMultiPolygonModel();
         result = bauratendateiInputService.getGrundschulsprengel(verortung);
-        assertThat(result, is(Set.of()));
+        assertThat(result, is(List.of()));
 
         verortung = new VerortungMultiPolygonModel();
         var sprengel = new HashSet<GrundschulsprengelModel>();
         verortung.setGrundschulsprengel(sprengel);
         result = bauratendateiInputService.getGrundschulsprengel(verortung);
-        assertThat(result, is(Set.of()));
+        assertThat(result, is(List.of()));
 
         verortung = new VerortungMultiPolygonModel();
         sprengel = new HashSet<>();
@@ -581,24 +580,24 @@ class BauratendateiInputServiceTest {
         sprengel.add(theSprengel);
         verortung.setGrundschulsprengel(sprengel);
         result = bauratendateiInputService.getGrundschulsprengel(verortung);
-        assertThat(result, is(Set.of("1", "2", "4")));
+        assertThat(result, is(List.of("4", "2", "1")));
     }
 
     @Test
     void getMittelschulsprengel() {
         VerortungModel verortung = null;
         var result = bauratendateiInputService.getMittelschulsprengel(verortung);
-        assertThat(result, is(Set.of()));
+        assertThat(result, is(List.of()));
 
         verortung = new VerortungMultiPolygonModel();
         result = bauratendateiInputService.getMittelschulsprengel(verortung);
-        assertThat(result, is(Set.of()));
+        assertThat(result, is(List.of()));
 
         verortung = new VerortungMultiPolygonModel();
         var sprengel = new HashSet<MittelschulsprengelModel>();
         verortung.setMittelschulsprengel(sprengel);
         result = bauratendateiInputService.getMittelschulsprengel(verortung);
-        assertThat(result, is(Set.of()));
+        assertThat(result, is(List.of()));
 
         verortung = new VerortungMultiPolygonModel();
         sprengel = new HashSet<>();
@@ -616,24 +615,24 @@ class BauratendateiInputServiceTest {
         sprengel.add(theSprengel);
         verortung.setMittelschulsprengel(sprengel);
         result = bauratendateiInputService.getMittelschulsprengel(verortung);
-        assertThat(result, is(Set.of("1", "2", "4")));
+        assertThat(result, is(List.of("4", "2", "1")));
     }
 
     @Test
     void getViertel() {
         VerortungModel verortung = null;
         var result = bauratendateiInputService.getViertel(verortung);
-        assertThat(result, is(Set.of()));
+        assertThat(result, is(List.of()));
 
         verortung = new VerortungMultiPolygonModel();
         result = bauratendateiInputService.getViertel(verortung);
-        assertThat(result, is(Set.of()));
+        assertThat(result, is(List.of()));
 
         verortung = new VerortungMultiPolygonModel();
         var viertel = new HashSet<ViertelModel>();
         verortung.setViertel(viertel);
         result = bauratendateiInputService.getViertel(verortung);
-        assertThat(result, is(Set.of()));
+        assertThat(result, is(List.of()));
 
         verortung = new VerortungMultiPolygonModel();
         viertel = new HashSet<>();
@@ -651,7 +650,7 @@ class BauratendateiInputServiceTest {
         viertel.add(theViertel);
         verortung.setViertel(viertel);
         result = bauratendateiInputService.getViertel(verortung);
-        assertThat(result, is(Set.of("1", "2", "4")));
+        assertThat(result, is(List.of("1", "2", "4")));
     }
 
     @Test

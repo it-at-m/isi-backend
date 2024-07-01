@@ -2,6 +2,7 @@ package de.muenchen.isi.api.dto.search.request;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import java.util.List;
 import lombok.Data;
 
 @Data
@@ -39,6 +40,14 @@ public class SearchQueryDto {
 
     @NotNull
     private Boolean selectMittelschule;
+
+    private List<String> filterStadtbezirkNummer;
+
+    private List<String> filterKitaplanungsbereichKitaPlbT;
+
+    private List<Long> filterGrundschulsprengelNummer;
+
+    private List<Long> filterMittelschulsprengelNummer;
 
     @Positive
     private Integer page;
