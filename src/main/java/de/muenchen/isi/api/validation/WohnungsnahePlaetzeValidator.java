@@ -27,8 +27,7 @@ public class WohnungsnahePlaetzeValidator
     @Override
     public boolean isValid(final InfrastruktureinrichtungDto value, final ConstraintValidatorContext context) {
         if (value != null) {
-            if (value instanceof HausFuerKinderDto) {
-                final var hausFuerKinder = ((HausFuerKinderDto) value);
+            if (value instanceof HausFuerKinderDto hausFuerKinder) {
                 return (
                     this.areWohnungsnahePlatzeValid(
                             hausFuerKinder.getAnzahlKinderkrippePlaetze(),
@@ -43,20 +42,17 @@ public class WohnungsnahePlaetzeValidator
                             hausFuerKinder.getWohnungsnaheHortPlaetze()
                         )
                 );
-            } else if (value instanceof KindergartenDto) {
-                final var kindergarten = ((KindergartenDto) value);
+            } else if (value instanceof KindergartenDto kindergarten) {
                 return this.areWohnungsnahePlatzeValid(
                         kindergarten.getAnzahlKindergartenPlaetze(),
                         kindergarten.getWohnungsnaheKindergartenPlaetze()
                     );
-            } else if (value instanceof KinderkrippeDto) {
-                final var kinderkrippe = ((KinderkrippeDto) value);
+            } else if (value instanceof KinderkrippeDto kinderkrippe) {
                 return this.areWohnungsnahePlatzeValid(
                         kinderkrippe.getAnzahlKinderkrippePlaetze(),
                         kinderkrippe.getWohnungsnaheKinderkrippePlaetze()
                     );
-            } else if (value instanceof GsNachmittagBetreuungDto) {
-                final var kinderkrippe = ((GsNachmittagBetreuungDto) value);
+            } else if (value instanceof GsNachmittagBetreuungDto kinderkrippe) {
                 return this.areWohnungsnahePlatzeValid(
                         kinderkrippe.getAnzahlHortPlaetze(),
                         kinderkrippe.getWohnungsnaheHortPlaetze()

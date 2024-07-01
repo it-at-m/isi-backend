@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 
 class RealisierungVonDistributionBauleitplanverfahrenValidatorTest {
 
-    private RealisierungVonDistributionBauleitplanverfahrenValidator realisierungVonDistributionValidator =
+    private final RealisierungVonDistributionBauleitplanverfahrenValidator realisierungVonDistributionValidator =
         new RealisierungVonDistributionBauleitplanverfahrenValidator();
 
     @Test

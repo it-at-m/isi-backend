@@ -21,7 +21,9 @@ import org.mockito.quality.Strictness;
 @MockitoSettings(strictness = Strictness.LENIENT)
 class AdresseDomainMapperTest {
 
-    private AdresseDomainMapper adresseDomainMapper = new AdresseDomainMapperImpl(new KoordinatenDomainMapperImpl());
+    private final AdresseDomainMapper adresseDomainMapper = new AdresseDomainMapperImpl(
+        new KoordinatenDomainMapperImpl()
+    );
 
     @BeforeEach
     public void beforeEach() throws NoSuchFieldException, IllegalAccessException {

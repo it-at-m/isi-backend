@@ -52,7 +52,7 @@ public abstract class Abfrage extends BaseEntity {
         name = "name" + SearchwordSuggesterRepository.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
         valueBinder = @ValueBinderRef(type = StringSuggestionBinder.class)
     )
-    @Column(nullable = false, unique = true, length = 70)
+    @Column(nullable = false, length = 70)
     private String name;
 
     @GenericField(name = "statusAbfrage_filter")

@@ -577,7 +577,7 @@ class RestExceptionHandlerTest {
                 )
             );
         final MethodArgumentNotValidException methodArgumentNotValidException = new MethodArgumentNotValidException(
-            (MethodParameter) null,
+            null,
             this.bindingResult
         );
 

@@ -111,43 +111,6 @@ class FoerdermixStammServiceTest {
     }
 
     @Test
-    void saveFoerdermixStammUniqueViolationTest() throws UniqueViolationException, OptimisticLockingException {
-        FoerdermixModel foerdermixModel = new FoerdermixModel();
-        foerdermixModel.setBezeichnungJahr("Test 2022");
-        foerdermixModel.setBezeichnung("Testfall 1");
-
-        final FoerdermixStammModel model = new FoerdermixStammModel();
-        model.setId(UUID.randomUUID());
-        model.setFoerdermix(foerdermixModel);
-
-        final FoerdermixStamm entity = this.stammdatenDomainMapper.model2Entity(model);
-        entity.setId(UUID.randomUUID());
-
-        final FoerdermixStamm saveResult = new FoerdermixStamm();
-        saveResult.setId(UUID.randomUUID());
-
-        Mockito.when(this.foerdermixStammRepository.saveAndFlush(entity)).thenReturn(saveResult);
-        Mockito
-            .when(
-                this.foerdermixStammRepository.findByFoerdermixBezeichnungJahrIgnoreCaseAndFoerdermixBezeichnungIgnoreCase(
-                        "Test 2022",
-                        "Testfall 1"
-                    )
-            )
-            .thenReturn(Optional.of(entity));
-
-        Assertions.assertThrows(
-            UniqueViolationException.class,
-            () -> this.foerdermixStammService.saveFoerdermixStamm(model)
-        );
-
-        Mockito.verify(this.foerdermixStammRepository, Mockito.times(0)).saveAndFlush(entity);
-        Mockito
-            .verify(this.foerdermixStammRepository, Mockito.times(1))
-            .findByFoerdermixBezeichnungJahrIgnoreCaseAndFoerdermixBezeichnungIgnoreCase("Test 2022", "Testfall 1");
-    }
-
-    @Test
     void updateFoerdermixStamm() throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException {
         FoerdermixModel foerdermixModel = new FoerdermixModel();
         foerdermixModel.setBezeichnungJahr("Test 2022");

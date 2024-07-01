@@ -52,12 +52,6 @@ import org.hibernate.search.mapper.pojo.mapping.definition.annotation.NonStandar
             name = "abfrgvar_schbrbtng_bauleitplnvrfhrn_id_index",
             columnList = "abfrgvar_schbrbtng_bauleitplnvrfhrn_id"
         ),
-    },
-    uniqueConstraints = {
-        @UniqueConstraint(
-            name = "UniqueNameAbfragevariantePerBauleitplanverfahren",
-            columnNames = { "abfrgvar_bauleitplnvrfhrn_id", "abfrgvar_schbrbtng_bauleitplnvrfhrn_id", "name" }
-        ),
     }
 )
 @Data

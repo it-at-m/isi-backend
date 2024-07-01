@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 
 class StandVerfahrenBaugenehmigungsverfahrenValidatorTest {
 
-    private StandVerfahrenBaugenehmigungsverfahrenValidator standVerfahrenValidator =
+    private final StandVerfahrenBaugenehmigungsverfahrenValidator standVerfahrenValidator =
         new StandVerfahrenBaugenehmigungsverfahrenValidator();
 
     @Test
