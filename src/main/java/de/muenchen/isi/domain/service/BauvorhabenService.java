@@ -96,7 +96,6 @@ public class BauvorhabenService {
      * @param bauvorhaben zum Speichern
      * @param abfrageId   ID der Abfrage bei einer Datenübernahme
      * @return das gespeicherte {@link BauvorhabenModel}
-     * @throws UniqueViolationException    falls der Name des Bauvorhabens {@link BauvorhabenModel#getNameVorhaben()} bereits vorhanden ist
      * @throws OptimisticLockingException  falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
      * @throws EntityNotFoundException     falls bei der Datenübernahme die ausgewählte Abfrage nicht mehr vorhanden ist
      * @throws EntityIsReferencedException falls bei der Datenübernahme die ausgewählte Abfrage bereits ein Bauvorhaben referenziert
@@ -104,43 +103,34 @@ public class BauvorhabenService {
      * @throws ReportingException         falls bei der Übermittlung an die Reportingschnittstelle ein Fehler auftritt.
      */
     public BauvorhabenModel saveBauvorhaben(final BauvorhabenModel bauvorhaben, final UUID abfrageId)
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, EntityIsReferencedException, UserRoleNotAllowedException, ReportingException {
+        throws OptimisticLockingException, EntityNotFoundException, EntityIsReferencedException, UserRoleNotAllowedException, ReportingException {
         var bauvorhabenEntity = this.bauvorhabenDomainMapper.model2Entity(bauvorhaben);
-        final var saved = this.bauvorhabenRepository.findByNameVorhabenIgnoreCase(bauvorhabenEntity.getNameVorhaben());
-        if ((saved.isPresent() && saved.get().getId().equals(bauvorhabenEntity.getId())) || saved.isEmpty()) {
-            try {
-                if (StringUtils.isEmpty(bauvorhaben.getBauvorhabenNummer())) {
-                    bauvorhabenEntity.setBauvorhabenNummer(
-                        this.buildBauvorhabennummer(bauvorhabenEntity.getVerortung())
-                    );
-                }
-                bauvorhabenEntity = this.bauvorhabenRepository.saveAndFlush(bauvorhabenEntity);
-                // falls bei Neuanlage eines Bauvorhabens eine Datenübernahme mit einer Abfrage durchgeführt wurde, dann wird diese mit dem Bauvorhaben verknüpft
-                if (bauvorhaben.getId() == null && abfrageId != null) {
-                    final var abfrageModel = this.abfrageService.getById(abfrageId);
-                    this.throwEntityIsReferencedExceptionWhenAbfrageIsReferencingBauvorhaben(
-                            abfrageModel,
-                            bauvorhabenEntity.getNameVorhaben()
-                        );
-                    abfrageModel.setBauvorhaben(bauvorhabenEntity.getId());
-                    abfrageService.save(abfrageModel);
-                }
-                etlInterfaceService.etlInterfaceTriggerBauvorhabenJob(bauvorhabenEntity.getId());
-            } catch (final ObjectOptimisticLockingFailureException exception) {
-                final var message = "Die Daten wurden in der Zwischenzeit geändert. Bitte laden Sie die Seite neu!";
-                throw new OptimisticLockingException(message, exception);
-            } catch (UserRoleNotAllowedException e) {
-                final var message = "Keine Berechtigung um die Abfrage zu bearbeiten!";
-                throw new UserRoleNotAllowedException(message);
-            } catch (CalculationException e) {
-                throw new RuntimeException(e);
+        try {
+            if (StringUtils.isEmpty(bauvorhaben.getBauvorhabenNummer())) {
+                bauvorhabenEntity.setBauvorhabenNummer(this.buildBauvorhabennummer(bauvorhabenEntity.getVerortung()));
             }
-            return this.bauvorhabenDomainMapper.entity2Model(bauvorhabenEntity);
-        } else {
-            throw new UniqueViolationException(
-                "Der angegebene Name des Bauvorhabens ist schon vorhanden, bitte wählen Sie daher einen anderen Namen und speichern Sie das Bauvorhaben erneut."
-            );
+            bauvorhabenEntity = this.bauvorhabenRepository.saveAndFlush(bauvorhabenEntity);
+            // falls bei Neuanlage eines Bauvorhabens eine Datenübernahme mit einer Abfrage durchgeführt wurde, dann wird diese mit dem Bauvorhaben verknüpft
+            if (bauvorhaben.getId() == null && abfrageId != null) {
+                final var abfrageModel = this.abfrageService.getById(abfrageId);
+                this.throwEntityIsReferencedExceptionWhenAbfrageIsReferencingBauvorhaben(
+                        abfrageModel,
+                        bauvorhabenEntity.getNameVorhaben()
+                    );
+                abfrageModel.setBauvorhaben(bauvorhabenEntity.getId());
+                abfrageService.save(abfrageModel);
+            }
+            etlInterfaceService.etlInterfaceTriggerBauvorhabenJob(bauvorhabenEntity.getId());
+        } catch (final ObjectOptimisticLockingFailureException exception) {
+            final var message = "Die Daten wurden in der Zwischenzeit geändert. Bitte laden Sie die Seite neu!";
+            throw new OptimisticLockingException(message, exception);
+        } catch (UserRoleNotAllowedException e) {
+            final var message = "Keine Berechtigung um die Abfrage zu bearbeiten!";
+            throw new UserRoleNotAllowedException(message);
+        } catch (CalculationException e) {
+            throw new RuntimeException(e);
         }
+        return this.bauvorhabenDomainMapper.entity2Model(bauvorhabenEntity);
     }
 
     /**
@@ -149,7 +139,6 @@ public class BauvorhabenService {
      * @param bauvorhaben zum Updaten
      * @return das geupdatete {@link BauvorhabenModel}
      * @throws EntityNotFoundException           falls das Bauvorhaben identifiziert durch die {@link BauvorhabenModel#getId()} nicht gefunden wird
-     * @throws UniqueViolationException          falls der Name des Bauvorhabens {@link BauvorhabenModel#getNameVorhaben()} bereits vorhanden ist
      * @throws OptimisticLockingException        falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
      * @throws FileHandlingFailedException       falls es beim Dateihandling zu einem Fehler gekommen ist.
      * @throws FileHandlingWithS3FailedException falls es beim Dateihandling im S3-Storage zu einem Fehler gekommen ist.
@@ -158,7 +147,7 @@ public class BauvorhabenService {
      * @throws ReportingException                falls bei der Übermittlung an die Reportingschnittstelle ein Fehler auftritt.
      */
     public BauvorhabenModel updateBauvorhaben(final BauvorhabenModel bauvorhaben)
-        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, FileHandlingFailedException, FileHandlingWithS3FailedException, EntityIsReferencedException, UserRoleNotAllowedException, ReportingException {
+        throws EntityNotFoundException, OptimisticLockingException, FileHandlingFailedException, FileHandlingWithS3FailedException, EntityIsReferencedException, UserRoleNotAllowedException, ReportingException {
         final var originalBauvorhabenDb = this.getBauvorhabenById(bauvorhaben.getId());
         dokumentService.deleteDokumenteFromOriginalDokumentenListWhichAreMissingInParameterAdaptedDokumentenListe(
             bauvorhaben.getDokumente(),
@@ -364,12 +353,11 @@ public class BauvorhabenService {
                 .map(Stadtbezirk::getNummer)
                 .filter(Objects::nonNull)
                 .min(String::compareTo);
-            if (!minStadtbezirkNummer.isEmpty()) {
+            if (minStadtbezirkNummer.isPresent()) {
                 final Optional<GlobalCounter> saved =
                     this.globalCounterRepository.findByCounterType(CounterType.NUMMER_BAUVORHABEN);
-                var bauvorhabennummerEntity = saved.isPresent()
-                    ? saved.get()
-                    : new GlobalCounter(CounterType.NUMMER_BAUVORHABEN, 0);
+                var bauvorhabennummerEntity = saved.orElseGet(() -> new GlobalCounter(CounterType.NUMMER_BAUVORHABEN, 0)
+                );
                 bauvorhabennummerEntity.setCounter(bauvorhabennummerEntity.getCounter() + 1);
                 try {
                     bauvorhabennummerEntity = this.globalCounterRepository.saveAndFlush(bauvorhabennummerEntity);

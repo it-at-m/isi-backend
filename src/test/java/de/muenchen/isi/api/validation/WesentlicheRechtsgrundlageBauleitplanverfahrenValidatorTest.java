@@ -14,7 +14,7 @@ import org.mockito.quality.Strictness;
 @MockitoSettings(strictness = Strictness.LENIENT)
 class WesentlicheRechtsgrundlageBauleitplanverfahrenValidatorTest {
 
-    private WesentlicheRechtsgrundlageBauleitplanverfahrenValidator wesentlicheRechtsgrundlageValidator =
+    private final WesentlicheRechtsgrundlageBauleitplanverfahrenValidator wesentlicheRechtsgrundlageValidator =
         new WesentlicheRechtsgrundlageBauleitplanverfahrenValidator();
 
     @Test

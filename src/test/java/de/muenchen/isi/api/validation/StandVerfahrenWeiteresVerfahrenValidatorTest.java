@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 
 class StandVerfahrenWeiteresVerfahrenValidatorTest {
 
-    private StandVerfahrenWeiteresVerfahrenValidator standVerfahrenValidator =
+    private final StandVerfahrenWeiteresVerfahrenValidator standVerfahrenValidator =
         new StandVerfahrenWeiteresVerfahrenValidator();
 
     @Test

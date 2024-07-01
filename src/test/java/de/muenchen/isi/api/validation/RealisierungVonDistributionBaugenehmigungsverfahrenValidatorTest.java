@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 
 class RealisierungVonDistributionBaugenehmigungsverfahrenValidatorTest {
 
-    private RealisierungVonDistributionBaugenehmigungsverfahrenValidator realisierungVonDistributionValidator =
+    private final RealisierungVonDistributionBaugenehmigungsverfahrenValidator realisierungVonDistributionValidator =
         new RealisierungVonDistributionBaugenehmigungsverfahrenValidator();
 
     @Test

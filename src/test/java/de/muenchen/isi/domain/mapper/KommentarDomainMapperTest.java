@@ -33,7 +33,7 @@ class KommentarDomainMapperTest {
     @Mock
     private InfrastruktureinrichtungRepository infrastruktureinrichtungRepository;
 
-    private KommentarDomainMapper kommentarDomainMapper = new KommentarDomainMapperImpl();
+    private final KommentarDomainMapper kommentarDomainMapper = new KommentarDomainMapperImpl();
 
     @BeforeEach
     public void beforeEach() throws NoSuchFieldException, IllegalAccessException {

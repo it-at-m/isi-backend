@@ -101,7 +101,7 @@ public class BauvorhabenController {
             ),
             @ApiResponse(
                 responseCode = "409",
-                description = "CONFLICT -> Bauvorhaben konnte nicht erstellt werden, da der Vorhabensname bereits existiert oder bei einer Datenübernahme die Abfrage bereits ein Bauvorhaben referenziert.",
+                description = "CONFLICT -> Bauvorhaben konnte nicht erstellt werden, da bei einer Datenübernahme die Abfrage bereits ein Bauvorhaben referenziert.",
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
             ),
             @ApiResponse(
@@ -116,7 +116,7 @@ public class BauvorhabenController {
         @RequestBody @Valid @NotNull final BauvorhabenDto bauvorhabenDto,
         @RequestParam(required = false) final UUID abfrageId
     )
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, EntityIsReferencedException, UserRoleNotAllowedException, ReportingException {
+        throws OptimisticLockingException, EntityNotFoundException, EntityIsReferencedException, UserRoleNotAllowedException, ReportingException {
         var model = this.bauvorhabenApiMapper.dto2Model(bauvorhabenDto);
         model = this.bauvorhabenService.saveBauvorhaben(model, abfrageId);
         final var saved = this.bauvorhabenApiMapper.model2Dto(model);
@@ -146,7 +146,7 @@ public class BauvorhabenController {
             ),
             @ApiResponse(
                 responseCode = "409",
-                description = "CONFLICT -> Bauvorhaben konnte nicht aktualisiert werden, da der Vorhabensname bereits existiert oder bei einer Datenübernahme die Abfrage bereits ein Bauvorhaben referenziert.",
+                description = "CONFLICT -> Bauvorhaben konnte nicht aktualisiert werden, da bei einer Datenübernahme die Abfrage bereits ein Bauvorhaben referenziert.",
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
             ),
             @ApiResponse(
@@ -165,7 +165,7 @@ public class BauvorhabenController {
     public ResponseEntity<BauvorhabenDto> updateBauvorhaben(
         @RequestBody @Valid @NotNull final BauvorhabenDto bauvorhabenDto
     )
-        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, FileHandlingFailedException, FileHandlingWithS3FailedException, EntityIsReferencedException, UserRoleNotAllowedException, ReportingException {
+        throws EntityNotFoundException, OptimisticLockingException, FileHandlingFailedException, FileHandlingWithS3FailedException, EntityIsReferencedException, UserRoleNotAllowedException, ReportingException {
         var model = this.bauvorhabenApiMapper.dto2Model(bauvorhabenDto);
         model = this.bauvorhabenService.updateBauvorhaben(model);
         final var saved = this.bauvorhabenApiMapper.model2Dto(model);

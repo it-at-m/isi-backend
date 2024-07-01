@@ -28,7 +28,7 @@ import org.mockito.quality.Strictness;
 @MockitoSettings(strictness = Strictness.LENIENT)
 class SearchPreparationServiceTest {
 
-    private SearchPreparationService searchPreparationService = new SearchPreparationService();
+    private final SearchPreparationService searchPreparationService = new SearchPreparationService();
 
     @Test
     void getNamesOfSearchableAttributesForSearchwordSuggestion() {

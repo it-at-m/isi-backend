@@ -297,11 +297,7 @@ public class AbfrageStatusService {
                                     abfrage,
                                     stateContext.getEvent()
                                 );
-                            } catch (
-                                final EntityNotFoundException
-                                | OptimisticLockingException
-                                | UniqueViolationException exception
-                            ) {
+                            } catch (final EntityNotFoundException | OptimisticLockingException exception) {
                                 log.error(exception.getMessage(), exception);
                                 return null;
                             } catch (final Exception exception) {

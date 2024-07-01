@@ -51,7 +51,7 @@ class ReportingdataTransferServiceTest {
 
     private ReportingdataTransferService reportingdataTransferService;
 
-    private ReportingApiDomainMapper reportingApiDomainMapper = new ReportingApiDomainMapperImpl();
+    private final ReportingApiDomainMapper reportingApiDomainMapper = new ReportingApiDomainMapperImpl();
 
     @Mock
     private ReportingdataTransferRepository reportingdataTransferRepository;

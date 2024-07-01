@@ -19,7 +19,6 @@ import de.muenchen.isi.domain.exception.FileHandlingFailedException;
 import de.muenchen.isi.domain.exception.FileHandlingWithS3FailedException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.ReportingException;
-import de.muenchen.isi.domain.exception.UniqueViolationException;
 import de.muenchen.isi.domain.exception.UserRoleNotAllowedException;
 import de.muenchen.isi.domain.mapper.AbfrageDomainMapper;
 import de.muenchen.isi.domain.service.AbfrageService;
@@ -90,12 +89,7 @@ public class AbfrageController {
 
     @PostMapping
     @Transactional(
-        rollbackFor = {
-            OptimisticLockingException.class,
-            UniqueViolationException.class,
-            CalculationException.class,
-            ReportingException.class,
-        }
+        rollbackFor = { OptimisticLockingException.class, CalculationException.class, ReportingException.class }
     )
     @Operation(summary = "Anlegen einer neuen Abfrage")
     @ApiResponses(
@@ -112,11 +106,6 @@ public class AbfrageController {
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
             ),
             @ApiResponse(
-                responseCode = "409",
-                description = "CONFLICT -> Abfrage konnte nicht erstellt werden, da der Name der Abfrage oder Abfragevariante bereits existiert.",
-                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
-            ),
-            @ApiResponse(
                 responseCode = "412",
                 description = "PRECONDITION_FAILED -> In der Anwendung ist bereits eine neuere Version der Entität gespeichert.",
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
@@ -125,7 +114,7 @@ public class AbfrageController {
     )
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_POST_ABFRAGE.name())")
     public ResponseEntity<AbfrageDto> save(@RequestBody @Valid @NotNull AbfrageAngelegtDto abfrage)
-        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, CalculationException, ReportingException {
+        throws EntityNotFoundException, OptimisticLockingException, CalculationException, ReportingException {
         final var requestModel = abfrageApiMapper.dto2Model(abfrage);
         var model = abfrageDomainMapper.request2NewModel(requestModel);
         model = abfrageService.save(model);
@@ -135,12 +124,7 @@ public class AbfrageController {
 
     @PatchMapping("/angelegt/{id}")
     @Transactional(
-        rollbackFor = {
-            OptimisticLockingException.class,
-            UniqueViolationException.class,
-            CalculationException.class,
-            ReportingException.class,
-        }
+        rollbackFor = { OptimisticLockingException.class, CalculationException.class, ReportingException.class }
     )
     @Operation(summary = "Aktualisierung einer Abfrage im Status ANGELEGT.")
     @ApiResponses(
@@ -163,7 +147,7 @@ public class AbfrageController {
             ),
             @ApiResponse(
                 responseCode = "409",
-                description = "CONFLICT -> Abfrage konnte nicht aktualisiert werden, da der Name der Abfrage oder Abfragevariante bereits existiert oder die Abfrage nicht im korrekten Status ist.",
+                description = "CONFLICT -> Abfrage konnte nicht aktualisiert werden, da die Abfrage nicht im korrekten Status ist.",
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
             ),
             @ApiResponse(
@@ -183,7 +167,7 @@ public class AbfrageController {
         @RequestBody @Valid @NotNull final AbfrageAngelegtDto abfrage,
         @PathVariable @NotNull final UUID id
     )
-        throws UniqueViolationException, FileHandlingFailedException, FileHandlingWithS3FailedException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, UserRoleNotAllowedException, CalculationException, ReportingException {
+        throws FileHandlingFailedException, FileHandlingWithS3FailedException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, UserRoleNotAllowedException, CalculationException, ReportingException {
         final var requestModel = abfrageApiMapper.dto2Model(abfrage);
         final var responseModel = abfrageService.patchAngelegt(requestModel, id);
         final var dto = abfrageApiMapper.model2Dto(responseModel);
@@ -192,12 +176,7 @@ public class AbfrageController {
 
     @PatchMapping("/in-bearbeitung-sachbearbeitung/{id}")
     @Transactional(
-        rollbackFor = {
-            OptimisticLockingException.class,
-            UniqueViolationException.class,
-            CalculationException.class,
-            ReportingException.class,
-        }
+        rollbackFor = { OptimisticLockingException.class, CalculationException.class, ReportingException.class }
     )
     @Operation(summary = "Aktualisierung einer Abfrage im Status IN_BEARBEITUNG_SACHBEARBEITUNG.")
     @ApiResponses(
@@ -220,7 +199,7 @@ public class AbfrageController {
             ),
             @ApiResponse(
                 responseCode = "409",
-                description = "CONFLICT -> Abfrage konnte nicht aktualisiert werden, da der Name der Abfrage oder Abfragevariante bereits existiert oder die Abfrage nicht im korrekten Status ist.",
+                description = "CONFLICT -> Abfrage konnte nicht aktualisiert werden, da die Abfrage nicht im korrekten Status ist.",
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
             ),
             @ApiResponse(
@@ -237,7 +216,7 @@ public class AbfrageController {
         @RequestBody @Valid @NotNull final AbfrageInBearbeitungSachbearbeitungDto abfrage,
         @PathVariable @NotNull final UUID id
     )
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException, UserRoleNotAllowedException, ReportingException {
+        throws OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException, UserRoleNotAllowedException, ReportingException {
         final var requestModel = abfrageApiMapper.dto2Model(abfrage);
         final var responseModel = abfrageService.patchInBearbeitungSachbearbeitung(requestModel, id);
         final var dto = abfrageApiMapper.model2Dto(responseModel);
@@ -246,12 +225,7 @@ public class AbfrageController {
 
     @PatchMapping("/in-bearbeitung-fachreferate/{id}")
     @Transactional(
-        rollbackFor = {
-            OptimisticLockingException.class,
-            UniqueViolationException.class,
-            CalculationException.class,
-            ReportingException.class,
-        }
+        rollbackFor = { OptimisticLockingException.class, CalculationException.class, ReportingException.class }
     )
     @Operation(summary = "Aktualisierung einer Abfrage im Status IN_BEARBEITUNG_FACHREFERATE.")
     @ApiResponses(
@@ -274,7 +248,7 @@ public class AbfrageController {
             ),
             @ApiResponse(
                 responseCode = "409",
-                description = "CONFLICT -> Abfrage konnte nicht aktualisiert werden, da der Name der Abfrage oder Abfragevariante bereits existiert oder die Abfrage nicht im korrekten Status ist.",
+                description = "CONFLICT -> Abfrage konnte nicht aktualisiert werden, da die Abfrage nicht im korrekten Status ist.",
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
             ),
             @ApiResponse(
@@ -291,7 +265,7 @@ public class AbfrageController {
         @RequestBody @Valid @NotNull final AbfrageInBearbeitungFachreferatDto abfrage,
         @PathVariable @NotNull final UUID id
     )
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException, UserRoleNotAllowedException, ReportingException {
+        throws OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException, UserRoleNotAllowedException, ReportingException {
         final var requestModel = abfrageApiMapper.dto2Model(abfrage);
         final var responseModel = abfrageService.patchInBearbeitungFachreferat(requestModel, id);
         final var dto = abfrageApiMapper.model2Dto(responseModel);
@@ -300,12 +274,7 @@ public class AbfrageController {
 
     @PatchMapping("/bedarfsmeldung-erfolgt/{id}")
     @Transactional(
-        rollbackFor = {
-            OptimisticLockingException.class,
-            UniqueViolationException.class,
-            CalculationException.class,
-            ReportingException.class,
-        }
+        rollbackFor = { OptimisticLockingException.class, CalculationException.class, ReportingException.class }
     )
     @Operation(summary = "Aktualisierung einer Abfrage im Status BEDARFSMELDUNG_ERFOLGT.")
     @ApiResponses(
@@ -323,7 +292,7 @@ public class AbfrageController {
             ),
             @ApiResponse(
                 responseCode = "409",
-                description = "CONFLICT -> Abfrage konnte nicht aktualisiert werden, da der Name der Abfrage oder Abfragevariante bereits existiert oder die Abfrage nicht im korrekten Status ist.",
+                description = "CONFLICT -> Abfrage konnte nicht aktualisiert werden, da die Abfrage nicht im korrekten Status ist.",
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
             ),
             @ApiResponse(
@@ -340,7 +309,7 @@ public class AbfrageController {
         @RequestBody @Valid @NotNull final AbfrageBedarfsmeldungErfolgtDto abfrage,
         @PathVariable @NotNull final UUID id
     )
-        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, UserRoleNotAllowedException, CalculationException, ReportingException {
+        throws OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, UserRoleNotAllowedException, CalculationException, ReportingException {
         final var requestModel = abfrageApiMapper.dto2Model(abfrage);
         final var responseModel = abfrageService.patchBedarfsmeldungErfolgt(requestModel, id);
         final var dto = abfrageApiMapper.model2Dto(responseModel);

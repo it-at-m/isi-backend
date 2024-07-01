@@ -8,7 +8,6 @@ import de.muenchen.isi.domain.exception.FileHandlingFailedException;
 import de.muenchen.isi.domain.exception.FileHandlingWithS3FailedException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.ReportingException;
-import de.muenchen.isi.domain.exception.UniqueViolationException;
 import de.muenchen.isi.domain.exception.UserRoleNotAllowedException;
 import de.muenchen.isi.domain.mapper.AbfrageDomainMapper;
 import de.muenchen.isi.domain.model.AbfrageModel;
@@ -54,7 +53,6 @@ import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 
@@ -115,14 +113,13 @@ public class AbfrageService {
      *
      * @param abfrage zum Speichern
      * @return das gespeicherte {@link AbfrageModel}
-     * @throws UniqueViolationException   falls der Name der Abfrage oder der Abfragevariante bereits vorhanden ist
      * @throws OptimisticLockingException falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
      * @throws EntityNotFoundException    falls das referenzierte Bauvorhaben nicht existiert.
      * @throws CalculationException       falls bei den Berechnungen ein Fehler auftritt.
      * @throws ReportingException         falls bei der Übermittlung an die Reportingschnittstelle ein Fehler auftritt.
      */
     public AbfrageModel save(final AbfrageModel abfrage)
-        throws EntityNotFoundException, OptimisticLockingException, UniqueViolationException, CalculationException, ReportingException {
+        throws EntityNotFoundException, OptimisticLockingException, CalculationException, ReportingException {
         if (abfrage.getId() == null) {
             abfrage.setStatusAbfrage(StatusAbfrage.ANGELEGT);
             abfrage.setSub(authenticationUtils.getUserSub());
@@ -135,28 +132,17 @@ public class AbfrageService {
         // Befüllen der bauratendateiInputBasis für jede Abfragevariante
         bauratendateiInputService.setBauratendateiInputForEachAbfragevariante(abfrage, bedarfeForAbfragevarianten);
         var entity = this.abfrageDomainMapper.model2Entity(abfrage);
-        final var saved = this.abfrageRepository.findByNameIgnoreCase(abfrage.getName());
-        if ((saved.isPresent() && saved.get().getId().equals(entity.getId())) || saved.isEmpty()) {
-            try {
-                entity = this.abfrageRepository.saveAndFlush(entity);
-            } catch (final ObjectOptimisticLockingFailureException exception) {
-                final var message = "Die Daten wurden in der Zwischenzeit geändert. Bitte laden Sie die Seite neu!";
-                throw new OptimisticLockingException(message, exception);
-            } catch (final DataIntegrityViolationException exception) {
-                final var message =
-                    "Der angegebene Name der Abfragevariante ist schon vorhanden, bitte wählen Sie daher einen anderen Namen und speichern Sie die Abfrage erneut.";
-                throw new UniqueViolationException(message, exception);
-            }
-            final var model = this.abfrageDomainMapper.entity2Model(entity);
-            // Übermitteln der Abfrage samt der vorher berechneten Bedarfe an die Reportingschnittstelle
-            reportingdataTransferService.transferAbfrageAndBedarfe(model, bedarfeForAbfragevarianten);
-
-            return model;
-        } else {
-            throw new UniqueViolationException(
-                "Der angegebene Name der Abfrage ist schon vorhanden, bitte wählen Sie daher einen anderen Namen und speichern Sie die Abfrage erneut."
-            );
+        try {
+            entity = this.abfrageRepository.saveAndFlush(entity);
+        } catch (final ObjectOptimisticLockingFailureException exception) {
+            final var message = "Die Daten wurden in der Zwischenzeit geändert. Bitte laden Sie die Seite neu!";
+            throw new OptimisticLockingException(message, exception);
         }
+        final var model = this.abfrageDomainMapper.entity2Model(entity);
+        // Übermitteln der Abfrage samt der vorher berechneten Bedarfe an die Reportingschnittstelle
+        reportingdataTransferService.transferAbfrageAndBedarfe(model, bedarfeForAbfragevarianten);
+
+        return model;
     }
 
     /**
@@ -167,7 +153,6 @@ public class AbfrageService {
      * @param abfrage zum Speichern
      * @param id      der Abfrage
      * @return das gespeicherte {@link AbfrageModel}
-     * @throws UniqueViolationException          falls der Name der Abfrage oder der Abfragevariante bereits vorhanden ist.
      * @throws OptimisticLockingException        falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist.
      * @throws EntityNotFoundException           falls die Abfrage oder das referenzierte Bauvorhaben nicht existiert.
      * @throws AbfrageStatusNotAllowedException  falls die zu aktualisierende Abfrage sich nicht im Status {@link StatusAbfrage#ANGELEGT} befindet.
@@ -178,7 +163,7 @@ public class AbfrageService {
      * @throws UserRoleNotAllowedException       falls der User keine Berechtigung für die Abfrage hat.
      */
     public AbfrageModel patchAngelegt(final AbfrageAngelegtModel abfrage, final UUID id)
-        throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, FileHandlingFailedException, FileHandlingWithS3FailedException, UserRoleNotAllowedException, CalculationException, ReportingException {
+        throws EntityNotFoundException, OptimisticLockingException, AbfrageStatusNotAllowedException, FileHandlingFailedException, FileHandlingWithS3FailedException, UserRoleNotAllowedException, CalculationException, ReportingException {
         final var originalAbfrageDb = this.getById(id);
         this.throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(originalAbfrageDb, StatusAbfrage.ANGELEGT);
         this.changeRelevantAbfragevarianteOnBauvorhabenChangeAbfrageAngelegtModel(abfrage, originalAbfrageDb);
@@ -277,7 +262,6 @@ public class AbfrageService {
      * @param abfrage zum Speichern
      * @param id      der Abfrage
      * @return das gespeicherte {@link AbfrageModel}
-     * @throws UniqueViolationException         falls der Name der Abfrage oder der Abfragevariante bereits vorhanden ist.
      * @throws OptimisticLockingException       falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist.
      * @throws EntityNotFoundException          falls das referenzierte Bauvorhaben nicht existiert.
      * @throws AbfrageStatusNotAllowedException falls die zu aktualisierende Abfrage sich nicht im Status {@link StatusAbfrage#IN_BEARBEITUNG_SACHBEARBEITUNG} befindet.
@@ -289,7 +273,7 @@ public class AbfrageService {
         final AbfrageInBearbeitungSachbearbeitungModel abfrage,
         final UUID id
     )
-        throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException, UserRoleNotAllowedException, CalculationException, ReportingException {
+        throws EntityNotFoundException, AbfrageStatusNotAllowedException, OptimisticLockingException, UserRoleNotAllowedException, CalculationException, ReportingException {
         final var originalAbfrageDb = this.getById(id);
         this.throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(
                 originalAbfrageDb,
@@ -335,7 +319,6 @@ public class AbfrageService {
      * @param abfrage zum Speichern
      * @param id      der Abfrage
      * @return das gespeicherte {@link AbfrageModel}
-     * @throws UniqueViolationException         falls der Name der Abfrage oder der Abfragevariante bereits vorhanden ist.
      * @throws OptimisticLockingException       falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist.
      * @throws EntityNotFoundException          falls das referenzierte Bauvorhaben nicht existiert.
      * @throws AbfrageStatusNotAllowedException falls die zu aktualisierende Abfrage sich nicht im Status {@link StatusAbfrage#IN_BEARBEITUNG_FACHREFERATE} befindet.
@@ -347,7 +330,7 @@ public class AbfrageService {
         final AbfrageInBearbeitungFachreferatModel abfrage,
         final UUID id
     )
-        throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException, UserRoleNotAllowedException, CalculationException, ReportingException {
+        throws EntityNotFoundException, AbfrageStatusNotAllowedException, OptimisticLockingException, UserRoleNotAllowedException, CalculationException, ReportingException {
         final var originalAbfrageDb = this.getById(id);
         this.throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(
                 originalAbfrageDb,
@@ -389,7 +372,6 @@ public class AbfrageService {
      * @param abfrage zum Speichern
      * @param id      der Abfrage
      * @return das gespeicherte {@link AbfrageModel}
-     * @throws UniqueViolationException         falls der Name der Abfrage oder der Abfragevariante bereits vorhanden ist.
      * @throws OptimisticLockingException       falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist.
      * @throws EntityNotFoundException          falls das referenzierte Bauvorhaben nicht existiert.
      * @throws AbfrageStatusNotAllowedException falls die zu aktualisierende Abfrage sich nicht im Status {@link StatusAbfrage#IN_BEARBEITUNG_FACHREFERATE} befindet.
@@ -397,7 +379,7 @@ public class AbfrageService {
      * @throws ReportingException               falls bei der Übermittlung an die Reportingschnittstelle ein Fehler auftritt.
      */
     public AbfrageModel patchBedarfsmeldungErfolgt(final AbfrageBedarfsmeldungErfolgtModel abfrage, final UUID id)
-        throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException, UserRoleNotAllowedException, CalculationException, ReportingException {
+        throws EntityNotFoundException, AbfrageStatusNotAllowedException, OptimisticLockingException, UserRoleNotAllowedException, CalculationException, ReportingException {
         final var originalAbfrageDb = this.getById(id);
         this.throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(
                 originalAbfrageDb,
