@@ -11,16 +11,16 @@ import de.muenchen.isi.infrastructure.entity.common.Wgs84;
 import java.io.IOException;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.geotools.api.referencing.FactoryException;
+import org.geotools.api.referencing.crs.CoordinateReferenceSystem;
+import org.geotools.api.referencing.operation.MathTransform;
+import org.geotools.api.referencing.operation.TransformException;
 import org.geotools.geojson.geom.GeometryJSON;
 import org.geotools.geometry.jts.JTS;
 import org.geotools.referencing.CRS;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.MultiPolygon;
 import org.locationtech.jts.geom.Point;
-import org.opengis.referencing.FactoryException;
-import org.opengis.referencing.crs.CoordinateReferenceSystem;
-import org.opengis.referencing.operation.MathTransform;
-import org.opengis.referencing.operation.TransformException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -29,6 +29,7 @@ import org.springframework.stereotype.Service;
 public class KoordinatenService {
 
     public static final CoordinateReferenceSystem WGS84;
+
     public static final CoordinateReferenceSystem UTM32;
 
     private static final int NUMBER_GEO_JSON_DECIMALS = 25;
