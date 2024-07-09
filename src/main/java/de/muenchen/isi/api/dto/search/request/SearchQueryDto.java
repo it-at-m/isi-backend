@@ -1,5 +1,6 @@
 package de.muenchen.isi.api.dto.search.request;
 
+import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusInfrastruktureinrichtung;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import java.util.List;
@@ -48,6 +49,8 @@ public class SearchQueryDto {
     private List<Long> filterGrundschulsprengelNummer;
 
     private List<Long> filterMittelschulsprengelNummer;
+
+    private List<StatusInfrastruktureinrichtung> filterInfrastruktureinrichtungStatus;
 
     @Positive
     private Integer page;

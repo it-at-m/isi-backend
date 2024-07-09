@@ -1,5 +1,6 @@
 package de.muenchen.isi.domain.model.search.request;
 
+import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusInfrastruktureinrichtung;
 import java.util.List;
 import lombok.Data;
 
@@ -35,6 +36,8 @@ public class SearchQueryModel {
     private List<Long> filterGrundschulsprengelNummer;
 
     private List<Long> filterMittelschulsprengelNummer;
+
+    private List<StatusInfrastruktureinrichtung> filterInfrastruktureinrichtungStatus;
 
     private Integer page;
 

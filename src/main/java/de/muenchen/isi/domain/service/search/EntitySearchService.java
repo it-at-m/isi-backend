@@ -82,6 +82,10 @@ public class EntitySearchService {
             "verortung.mittelschulsprengel.nummer",
             searchQueryAndSortingInformation.getFilterMittelschulsprengelNummer()
         );
+        filterAttributeMap.put(
+            "status_infrastruktureinrichtung_filter",
+            searchQueryAndSortingInformation.getFilterInfrastruktureinrichtungStatus()
+        );
 
         // Erstellen der Suchquery
         final var searchQueryOptions = Search
