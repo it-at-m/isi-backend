@@ -1,6 +1,8 @@
 package de.muenchen.isi.domain.model.search.request;
 
+import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVerfahren;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusInfrastruktureinrichtung;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
 import java.util.List;
 import lombok.Data;
 
@@ -38,6 +40,10 @@ public class SearchQueryModel {
     private List<Long> filterMittelschulsprengelNummer;
 
     private List<StatusInfrastruktureinrichtung> filterInfrastruktureinrichtungStatus;
+
+    private List<StandVerfahren> filterStandVerfahren;
+
+    private UncertainBoolean filterSobonRelevant;
 
     private Integer page;
 

@@ -7,9 +7,11 @@ import de.muenchen.isi.domain.model.enums.SortAttribute;
 import de.muenchen.isi.domain.model.search.request.SearchQueryAndSortingModel;
 import de.muenchen.isi.domain.model.search.response.SearchResultsModel;
 import de.muenchen.isi.infrastructure.entity.BaseEntity;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -82,6 +84,18 @@ public class EntitySearchService {
             "verortung.mittelschulsprengel.nummer",
             searchQueryAndSortingInformation.getFilterMittelschulsprengelNummer()
         );
+        if (
+            searchQueryAndSortingInformation.getFilterSobonRelevant() != null &&
+            searchQueryAndSortingInformation.getFilterSobonRelevant() != UncertainBoolean.UNSPECIFIED
+        ) {
+            filterAttributeMap.put(
+                "sobon_relevant_filter",
+                new ArrayList<UncertainBoolean>(
+                    Arrays.asList(searchQueryAndSortingInformation.getFilterSobonRelevant())
+                )
+            );
+        }
+        filterAttributeMap.put("stand_verfahren_filter", searchQueryAndSortingInformation.getFilterStandVerfahren());
         filterAttributeMap.put(
             "status_infrastruktureinrichtung_filter",
             searchQueryAndSortingInformation.getFilterInfrastruktureinrichtungStatus()
