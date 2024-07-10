@@ -291,6 +291,7 @@ public class BauvorhabenServiceTest {
         kinderkrippeListElementModel1.setId(kinderkrippe1.getId());
         kinderkrippeListElementModel1.setNameEinrichtung(kinderkrippe1.getNameEinrichtung());
         kinderkrippeListElementModel1.setInfrastruktureinrichtungTyp(kinderkrippe1.getInfrastruktureinrichtungTyp());
+        kinderkrippeListElementModel1.setZugehoerigesBauvorhaben(bauvorhaben.getNameVorhaben());
         expectedInfrastruktureinrichtungList.add(kinderkrippeListElementModel1);
 
         var kinderkrippeListElementModel2 = new InfrastruktureinrichtungSearchResultModel();
@@ -298,6 +299,7 @@ public class BauvorhabenServiceTest {
         kinderkrippeListElementModel2.setId(kinderkrippe2.getId());
         kinderkrippeListElementModel2.setNameEinrichtung(kinderkrippe2.getNameEinrichtung());
         kinderkrippeListElementModel2.setInfrastruktureinrichtungTyp(kinderkrippe2.getInfrastruktureinrichtungTyp());
+        kinderkrippeListElementModel2.setZugehoerigesBauvorhaben(bauvorhaben.getNameVorhaben());
         expectedInfrastruktureinrichtungList.add(kinderkrippeListElementModel2);
 
         var kindergartenListElementModel1 = new InfrastruktureinrichtungSearchResultModel();
@@ -305,6 +307,7 @@ public class BauvorhabenServiceTest {
         kindergartenListElementModel1.setId(kindergarten1.getId());
         kindergartenListElementModel1.setNameEinrichtung(kindergarten1.getNameEinrichtung());
         kindergartenListElementModel1.setInfrastruktureinrichtungTyp(kindergarten1.getInfrastruktureinrichtungTyp());
+        kindergartenListElementModel1.setZugehoerigesBauvorhaben(bauvorhaben.getNameVorhaben());
         expectedInfrastruktureinrichtungList.add(kindergartenListElementModel1);
 
         var kindergartenListElementModel2 = new InfrastruktureinrichtungSearchResultModel();
@@ -312,6 +315,7 @@ public class BauvorhabenServiceTest {
         kindergartenListElementModel2.setId(kindergarten2.getId());
         kindergartenListElementModel2.setNameEinrichtung(kindergarten2.getNameEinrichtung());
         kindergartenListElementModel2.setInfrastruktureinrichtungTyp(kindergarten2.getInfrastruktureinrichtungTyp());
+        kindergartenListElementModel2.setZugehoerigesBauvorhaben(bauvorhaben.getNameVorhaben());
         expectedInfrastruktureinrichtungList.add(kindergartenListElementModel2);
 
         Mockito
