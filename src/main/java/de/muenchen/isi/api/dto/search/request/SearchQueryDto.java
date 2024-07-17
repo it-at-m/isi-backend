@@ -1,6 +1,7 @@
 package de.muenchen.isi.api.dto.search.request;
 
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVerfahren;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusInfrastruktureinrichtung;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
 import jakarta.validation.constraints.NotNull;
@@ -52,9 +53,13 @@ public class SearchQueryDto {
 
     private List<Long> filterMittelschulsprengelNummer;
 
+    private List<StatusAbfrage> filterStatusAbfrage;
+
+    private List<StandVerfahren> filterStandVerfahrenAbfrage;
+
     private List<StatusInfrastruktureinrichtung> filterInfrastruktureinrichtungStatus;
 
-    private List<StandVerfahren> filterStandVerfahren;
+    private List<StandVerfahren> filterStandVerfahrenBauvorhaben;
 
     private UncertainBoolean filterSobonRelevant;
 

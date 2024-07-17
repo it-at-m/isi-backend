@@ -95,7 +95,15 @@ public class EntitySearchService {
                 )
             );
         }
-        filterAttributeMap.put("stand_verfahren_filter", searchQueryAndSortingInformation.getFilterStandVerfahren());
+        filterAttributeMap.put("statusAbfrage_filter", searchQueryAndSortingInformation.getFilterStatusAbfrage());
+        filterAttributeMap.put(
+            "stand_verfahren_abfrage_filter",
+            searchQueryAndSortingInformation.getFilterStandVerfahrenAbfrage()
+        );
+        filterAttributeMap.put(
+            "stand_verfahren_bauvorhaben_filter",
+            searchQueryAndSortingInformation.getFilterStandVerfahrenBauvorhaben()
+        );
         filterAttributeMap.put(
             "status_infrastruktureinrichtung_filter",
             searchQueryAndSortingInformation.getFilterInfrastruktureinrichtungStatus()

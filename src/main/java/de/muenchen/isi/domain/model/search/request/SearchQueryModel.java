@@ -1,6 +1,7 @@
 package de.muenchen.isi.domain.model.search.request;
 
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVerfahren;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusInfrastruktureinrichtung;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
 import java.util.List;
@@ -39,9 +40,13 @@ public class SearchQueryModel {
 
     private List<Long> filterMittelschulsprengelNummer;
 
+    private List<StatusAbfrage> filterStatusAbfrage;
+
+    private List<StandVerfahren> filterStandVerfahrenAbfrage;
+
     private List<StatusInfrastruktureinrichtung> filterInfrastruktureinrichtungStatus;
 
-    private List<StandVerfahren> filterStandVerfahren;
+    private List<StandVerfahren> filterStandVerfahrenBauvorhaben;
 
     private UncertainBoolean filterSobonRelevant;
 
