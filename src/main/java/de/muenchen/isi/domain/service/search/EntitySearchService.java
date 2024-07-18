@@ -85,13 +85,13 @@ public class EntitySearchService {
             searchQueryAndSortingInformation.getFilterMittelschulsprengelNummer()
         );
         if (
-            searchQueryAndSortingInformation.getFilterSobonRelevant() != null &&
-            searchQueryAndSortingInformation.getFilterSobonRelevant() != UncertainBoolean.UNSPECIFIED
+            searchQueryAndSortingInformation.getFilterSobonRelevantBauvorhaben() != null &&
+            searchQueryAndSortingInformation.getFilterSobonRelevantBauvorhaben() != UncertainBoolean.UNSPECIFIED
         ) {
             filterAttributeMap.put(
                 "sobon_relevant_filter",
                 new ArrayList<UncertainBoolean>(
-                    Arrays.asList(searchQueryAndSortingInformation.getFilterSobonRelevant())
+                    Arrays.asList(searchQueryAndSortingInformation.getFilterSobonRelevantBauvorhaben())
                 )
             );
         }
