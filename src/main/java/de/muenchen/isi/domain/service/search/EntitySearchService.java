@@ -147,6 +147,21 @@ public class EntitySearchService {
                         );
                     }
                 });
+
+                // Filter: Realisierung von - bis Filter
+                if (searchQueryAndSortingInformation.getFilterRealisierungVon() != null) {
+                    root.add(
+                        function
+                            .bool()
+                            .must(b ->
+                                function
+                                    .range()
+                                    .field("realisierungVon")
+                                    .atLeast(searchQueryAndSortingInformation.getFilterRealisierungVon())
+                            )
+                    );
+                }
+                // hier weitermachen...
             })
             // Sortierung der Suchergebnisse.
             // https://docs.jboss.org/hibernate/stable/search/reference/en-US/html_single/#query-sorting
