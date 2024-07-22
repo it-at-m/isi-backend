@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.search.engine.search.common.BooleanOperator;
@@ -148,20 +149,104 @@ public class EntitySearchService {
                     }
                 });
 
-                // Filter: Realisierung von - bis Filter
-                if (searchQueryAndSortingInformation.getFilterRealisierungVon() != null) {
+                // Filter: Bereich für Realisierung von auf Basis des Abfragevariantenattribut realisierungVon
+                // Nutzen von Between da der Filterwert "null" als Infinitybound gehandhabt wird.
+                if (
+                    ObjectUtils.isNotEmpty(searchQueryAndSortingInformation.getFilterRealisierungVon()) ||
+                    ObjectUtils.isNotEmpty(searchQueryAndSortingInformation.getFilterRealisierungBis())
+                ) {
                     root.add(
                         function
                             .bool()
-                            .must(b ->
-                                function
-                                    .range()
-                                    .field("realisierungVon")
-                                    .atLeast(searchQueryAndSortingInformation.getFilterRealisierungVon())
-                            )
+                            .must(b -> {
+                                var theBool = b.bool();
+                                if (
+                                    BooleanUtils.isTrue(
+                                        searchQueryAndSortingInformation.getSelectBauleitplanverfahren()
+                                    )
+                                ) {
+                                    theBool =
+                                        theBool.should(
+                                            function
+                                                .range()
+                                                .field("abfragevariantenBauleitplanverfahren.realisierungVon")
+                                                .between(
+                                                    searchQueryAndSortingInformation.getFilterRealisierungVon(),
+                                                    searchQueryAndSortingInformation.getFilterRealisierungBis()
+                                                )
+                                        );
+                                    theBool =
+                                        theBool.should(
+                                            function
+                                                .range()
+                                                .field(
+                                                    "abfragevariantenSachbearbeitungBauleitplanverfahren.realisierungVon"
+                                                )
+                                                .between(
+                                                    searchQueryAndSortingInformation.getFilterRealisierungVon(),
+                                                    searchQueryAndSortingInformation.getFilterRealisierungBis()
+                                                )
+                                        );
+                                }
+                                if (
+                                    BooleanUtils.isTrue(
+                                        searchQueryAndSortingInformation.getSelectBaugenehmigungsverfahren()
+                                    )
+                                ) {
+                                    theBool =
+                                        theBool.should(
+                                            function
+                                                .range()
+                                                .field("abfragevariantenBaugenehmigungsverfahren.realisierungVon")
+                                                .between(
+                                                    searchQueryAndSortingInformation.getFilterRealisierungVon(),
+                                                    searchQueryAndSortingInformation.getFilterRealisierungBis()
+                                                )
+                                        );
+                                    theBool =
+                                        theBool.should(
+                                            function
+                                                .range()
+                                                .field(
+                                                    "abfragevariantenSachbearbeitungBaugenehmigungsverfahren.realisierungVon"
+                                                )
+                                                .between(
+                                                    searchQueryAndSortingInformation.getFilterRealisierungVon(),
+                                                    searchQueryAndSortingInformation.getFilterRealisierungBis()
+                                                )
+                                        );
+                                }
+                                if (
+                                    BooleanUtils.isTrue(searchQueryAndSortingInformation.getSelectWeiteresVerfahren())
+                                ) {
+                                    theBool =
+                                        theBool.should(
+                                            function
+                                                .range()
+                                                .field("abfragevariantenWeiteresVerfahren.realisierungVon")
+                                                .between(
+                                                    searchQueryAndSortingInformation.getFilterRealisierungVon(),
+                                                    searchQueryAndSortingInformation.getFilterRealisierungBis()
+                                                )
+                                        );
+                                    theBool =
+                                        theBool.should(
+                                            function
+                                                .range()
+                                                .field(
+                                                    "abfragevariantenSachbearbeitungWeiteresVerfahren.realisierungVon"
+                                                )
+                                                .between(
+                                                    searchQueryAndSortingInformation.getFilterRealisierungVon(),
+                                                    searchQueryAndSortingInformation.getFilterRealisierungBis()
+                                                )
+                                        );
+                                }
+                                return theBool;
+                            })
                     );
                 }
-                // hier weitermachen...
+                // hier mit zusätzlichen Filter weitermachen ...
             })
             // Sortierung der Suchergebnisse.
             // https://docs.jboss.org/hibernate/stable/search/reference/en-US/html_single/#query-sorting
