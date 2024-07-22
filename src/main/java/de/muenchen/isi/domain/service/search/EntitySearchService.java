@@ -115,6 +115,7 @@ public class EntitySearchService {
             .session(entityManager)
             .search(searchableEntities)
             .where((function, root) -> {
+                // Verarbeitung der angepassten Suchquery
                 root.add(searchPredicateFactory -> {
                     if (StringUtils.isNotEmpty(adaptedSearchQuery)) {
                         // Suche entsprechend der gegebenen Query.
