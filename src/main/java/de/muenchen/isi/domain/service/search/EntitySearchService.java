@@ -110,7 +110,7 @@ public class EntitySearchService {
             searchQueryAndSortingInformation.getFilterInfrastruktureinrichtungStatus()
         );
 
-        // Erstellen der Suchquery
+        // Erstellen der Hibernate-Search-Suchquery
         final var searchQueryOptions = Search
             .session(entityManager)
             .search(searchableEntities)
