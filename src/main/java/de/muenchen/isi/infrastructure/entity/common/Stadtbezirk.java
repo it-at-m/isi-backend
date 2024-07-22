@@ -7,12 +7,13 @@ import lombok.Data;
 import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBinderRef;
 import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBridgeRef;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.GenericField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.NonStandardField;
 
 @Data
 public class Stadtbezirk {
 
-    @FullTextField(valueBridge = @ValueBridgeRef(type = StadtbezirkNummerValueBridge.class))
+    @GenericField(valueBridge = @ValueBridgeRef(type = StadtbezirkNummerValueBridge.class))
     private String nummer;
 
     @FullTextField
