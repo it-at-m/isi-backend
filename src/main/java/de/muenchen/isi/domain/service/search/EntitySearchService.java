@@ -69,13 +69,15 @@ public class EntitySearchService {
         HashMap<String, List<?>> filterAttributeMap = new HashMap<>();
         filterAttributeMap.put(
             "verortung.stadtbezirke.nummer",
-            searchQueryAndSortingInformation
-                .getFilterStadtbezirkNummer()
-                .stream()
-                .map(NumberUtils::toInt)
-                .filter(stadtbezirk -> stadtbezirk != 0)
-                .map(Object::toString)
-                .toList()
+            searchQueryAndSortingInformation.getFilterStadtbezirkNummer() != null
+                ? searchQueryAndSortingInformation
+                    .getFilterStadtbezirkNummer()
+                    .stream()
+                    .map(NumberUtils::toInt)
+                    .filter(stadtbezirk -> stadtbezirk != 0)
+                    .map(Object::toString)
+                    .toList()
+                : null
         );
         filterAttributeMap.put(
             "verortung.kitaplanungsbereiche.kitaPlbT",
