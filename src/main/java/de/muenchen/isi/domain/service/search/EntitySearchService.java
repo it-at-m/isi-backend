@@ -18,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.hibernate.search.engine.search.common.BooleanOperator;
 import org.hibernate.search.engine.search.query.SearchResult;
 import org.hibernate.search.mapper.orm.Search;
@@ -68,7 +69,13 @@ public class EntitySearchService {
         HashMap<String, List<?>> filterAttributeMap = new HashMap<>();
         filterAttributeMap.put(
             "verortung.stadtbezirke.nummer",
-            searchQueryAndSortingInformation.getFilterStadtbezirkNummer()
+            searchQueryAndSortingInformation
+                .getFilterStadtbezirkNummer()
+                .stream()
+                .map(NumberUtils::toInt)
+                .filter(stadtbezirk -> stadtbezirk != 0)
+                .map(Object::toString)
+                .toList()
         );
         filterAttributeMap.put(
             "verortung.kitaplanungsbereiche.kitaPlbT",
