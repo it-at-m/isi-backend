@@ -6,9 +6,7 @@ import org.hibernate.search.mapper.pojo.bridge.ValueBridge;
 import org.hibernate.search.mapper.pojo.bridge.runtime.ValueBridgeToIndexedValueContext;
 
 /**
- * ValueBridge um die Nummer des Stadtbezirks (z.B. 01 oder 12) für eine Volltextsuche indizieren zu können.
- *
- * Die ValueBridge entfernt die führenden "0" bei den zu indizierenden Stadtbezirken.
+ * ValueBridge um die Nummer des Stadtbezirks (z.B. 01 oder 12) ohne führende "0"en indizieren zu können.
  */
 public class StadtbezirkNummerValueBridge implements ValueBridge<String, String> {
 
