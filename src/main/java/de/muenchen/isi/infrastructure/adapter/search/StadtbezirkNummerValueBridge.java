@@ -35,6 +35,6 @@ public class StadtbezirkNummerValueBridge implements ValueBridge<String, String>
 
     @Override
     public boolean isCompatibleWith(final ValueBridge<?, ?> other) {
-        return other != null && (getClass().equals(other.getClass()));
+        return other != null && getClass().equals(other.getClass());
     }
 }
