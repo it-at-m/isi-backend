@@ -14,4 +14,9 @@ public class StadtbezirkNummerValueBridge implements ValueBridge<String, String>
     public String toIndexedValue(final String value, final ValueBridgeToIndexedValueContext context) {
         return StringUtils.isNotEmpty(value) ? Integer.valueOf(NumberUtils.toInt(value)).toString() : null;
     }
+
+    @Override
+    public boolean isCompatibleWith(final ValueBridge<?, ?> other) {
+        return other == this || getClass().equals(other.getClass());
+    }
 }

@@ -9,8 +9,10 @@ import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBridgeRef
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.GenericField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.NonStandardField;
+import org.springframework.stereotype.Component;
 
 @Data
+@Component
 public class Stadtbezirk {
 
     @GenericField(valueBridge = @ValueBridgeRef(type = StadtbezirkNummerValueBridge.class))
