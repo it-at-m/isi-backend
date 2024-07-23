@@ -6,19 +6,21 @@ import de.muenchen.isi.domain.mapper.SearchDomainMapper;
 import de.muenchen.isi.domain.model.enums.SortAttribute;
 import de.muenchen.isi.domain.model.search.request.SearchQueryAndSortingModel;
 import de.muenchen.isi.domain.model.search.response.SearchResultsModel;
+import de.muenchen.isi.infrastructure.adapter.search.StadtbezirkNummerValueBridge;
 import de.muenchen.isi.infrastructure.entity.BaseEntity;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.math.NumberUtils;
 import org.hibernate.search.engine.search.common.BooleanOperator;
 import org.hibernate.search.engine.search.query.SearchResult;
 import org.hibernate.search.mapper.orm.Search;
@@ -30,6 +32,7 @@ import org.springframework.stereotype.Service;
 public class EntitySearchService {
 
     private final SearchPreparationService searchPreparationService;
+
     private final SearchDomainMapper searchDomainMapper;
 
     @PersistenceContext
@@ -73,9 +76,8 @@ public class EntitySearchService {
                 ? searchQueryAndSortingInformation
                     .getFilterStadtbezirkNummer()
                     .stream()
-                    .map(NumberUtils::toInt)
-                    .filter(stadtbezirk -> stadtbezirk != 0)
-                    .map(Object::toString)
+                    .map(StadtbezirkNummerValueBridge::toNormalizedStadtbezirknummer)
+                    .filter(Predicate.not(Objects::isNull))
                     .toList()
                 : null
         );

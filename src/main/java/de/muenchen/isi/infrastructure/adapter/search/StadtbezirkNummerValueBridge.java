@@ -10,13 +10,31 @@ import org.hibernate.search.mapper.pojo.bridge.runtime.ValueBridgeToIndexedValue
  */
 public class StadtbezirkNummerValueBridge implements ValueBridge<String, String> {
 
+    /**
+     * @param value als mögliche Stringrepräsentation eines Integers.
+     * @param context wird nicht benötigt.
+     * @return Handelt es sich beim Parameter value um einen Integer so werden die führenden "0"en
+     * entfernt und als String zurückgegeben, andernfalls wird der String getrimmt zurückgegeben.
+     */
     @Override
     public String toIndexedValue(final String value, final ValueBridgeToIndexedValueContext context) {
-        return StringUtils.isNotEmpty(value) ? Integer.valueOf(NumberUtils.toInt(value)).toString() : null;
+        return toNormalizedStadtbezirknummer(value);
+    }
+
+    /**
+     * @param value als mögliche Stringrepräsentation eines Integers.
+     * @return Handelt es sich beim Parameter value um einen Integer so werden die führenden "0"en
+     * entfernt und als String zurückgegeben, andernfalls wird der String getrimmt zurückgegeben.
+     */
+    public static String toNormalizedStadtbezirknummer(final String value) {
+        final var trimmedValue = StringUtils.trimToNull(value);
+        return NumberUtils.isParsable(trimmedValue)
+            ? Integer.valueOf(NumberUtils.toInt(trimmedValue)).toString()
+            : trimmedValue;
     }
 
     @Override
     public boolean isCompatibleWith(final ValueBridge<?, ?> other) {
-        return other == this || getClass().equals(other.getClass());
+        return other != null && (getClass().equals(other.getClass()));
     }
 }
