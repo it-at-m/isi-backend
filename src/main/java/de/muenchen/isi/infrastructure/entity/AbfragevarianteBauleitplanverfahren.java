@@ -39,6 +39,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBinderRef;
 import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBridgeRef;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.GenericField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.KeywordField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.NonStandardField;
 
@@ -105,6 +106,7 @@ public class AbfragevarianteBauleitplanverfahren extends Abfragevariante {
 
     // Anzahl Wohneinheiten
 
+    @GenericField
     @Column
     private Integer weGesamt;
 
