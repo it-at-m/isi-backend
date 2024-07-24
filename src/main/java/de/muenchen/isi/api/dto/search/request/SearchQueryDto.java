@@ -72,11 +72,9 @@ public class SearchQueryDto {
 
     private BigDecimal filterGfWohnenGeplantBis;
 
-    private List<StandVerfahren> filterStandVerfahrenAbfrage;
+    private List<StandVerfahren> filterStandVerfahren;
 
     private List<StatusInfrastruktureinrichtung> filterInfrastruktureinrichtungStatus;
-
-    private List<StandVerfahren> filterStandVerfahrenBauvorhaben;
 
     @Positive
     private Integer page;

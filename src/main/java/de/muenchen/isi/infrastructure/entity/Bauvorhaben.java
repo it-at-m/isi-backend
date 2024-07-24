@@ -90,7 +90,7 @@ public class Bauvorhaben extends BaseEntity {
         name = "standVerfahren" + SearchwordSuggesterRepository.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
         valueBinder = @ValueBinderRef(type = StandVerfahrenSuggestionBinder.class)
     )
-    @GenericField(name = "stand_verfahren_bauvorhaben_filter")
+    @GenericField(name = "stand_verfahren_filter")
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private StandVerfahren standVerfahren;

@@ -59,11 +59,9 @@ public class SearchQueryModel {
 
     private BigDecimal filterGfWohnenGeplantBis;
 
-    private List<StandVerfahren> filterStandVerfahrenAbfrage;
+    private List<StandVerfahren> filterStandVerfahren;
 
     private List<StatusInfrastruktureinrichtung> filterInfrastruktureinrichtungStatus;
-
-    private List<StandVerfahren> filterStandVerfahrenBauvorhaben;
 
     private Integer page;
 

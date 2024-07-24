@@ -69,7 +69,7 @@ public class Bauleitplanverfahren extends Abfrage {
         name = "standVerfahren" + SearchwordSuggesterRepository.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
         valueBinder = @ValueBinderRef(type = StandVerfahrenSuggestionBinder.class)
     )
-    @GenericField(name = "stand_verfahren_abfrage_filter")
+    @GenericField(name = "stand_verfahren_filter")
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private StandVerfahren standVerfahren;
