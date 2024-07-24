@@ -332,6 +332,104 @@ public class EntitySearchService {
                             })
                     );
                 }
+
+                // Filter: Bereich für geplante Geschossfläche Wohnen auf Basis des Abfragevariantenattributs gfWohnenGesamt
+                // Nutzen von Between da der Filterwert "null" als Infinitybound gehandhabt wird.
+                if (
+                    ObjectUtils.isNotEmpty(searchQueryAndSortingInformation.getFilterGfWohnenGeplantVon()) ||
+                    ObjectUtils.isNotEmpty(searchQueryAndSortingInformation.getFilterGfWohnenGeplantBis())
+                ) {
+                    root.add(
+                        function
+                            .bool()
+                            .must(b -> {
+                                var theBool = b.bool();
+                                if (
+                                    BooleanUtils.isTrue(
+                                        searchQueryAndSortingInformation.getSelectBauleitplanverfahren()
+                                    )
+                                ) {
+                                    theBool =
+                                        theBool.should(
+                                            function
+                                                .range()
+                                                .field("abfragevariantenBauleitplanverfahren.gfWohnenGesamt")
+                                                .between(
+                                                    searchQueryAndSortingInformation.getFilterGfWohnenGeplantVon(),
+                                                    searchQueryAndSortingInformation.getFilterGfWohnenGeplantBis()
+                                                )
+                                        );
+                                    theBool =
+                                        theBool.should(
+                                            function
+                                                .range()
+                                                .field(
+                                                    "abfragevariantenSachbearbeitungBauleitplanverfahren.gfWohnenGesamt"
+                                                )
+                                                .between(
+                                                    searchQueryAndSortingInformation.getFilterGfWohnenGeplantVon(),
+                                                    searchQueryAndSortingInformation.getFilterGfWohnenGeplantBis()
+                                                )
+                                        );
+                                }
+                                if (
+                                    BooleanUtils.isTrue(
+                                        searchQueryAndSortingInformation.getSelectBaugenehmigungsverfahren()
+                                    )
+                                ) {
+                                    theBool =
+                                        theBool.should(
+                                            function
+                                                .range()
+                                                .field("abfragevariantenBaugenehmigungsverfahren.gfWohnenGesamt")
+                                                .between(
+                                                    searchQueryAndSortingInformation.getFilterGfWohnenGeplantVon(),
+                                                    searchQueryAndSortingInformation.getFilterGfWohnenGeplantBis()
+                                                )
+                                        );
+                                    theBool =
+                                        theBool.should(
+                                            function
+                                                .range()
+                                                .field(
+                                                    "abfragevariantenSachbearbeitungBaugenehmigungsverfahren.gfWohnenGesamt"
+                                                )
+                                                .between(
+                                                    searchQueryAndSortingInformation.getFilterGfWohnenGeplantVon(),
+                                                    searchQueryAndSortingInformation.getFilterGfWohnenGeplantBis()
+                                                )
+                                        );
+                                }
+                                if (
+                                    BooleanUtils.isTrue(searchQueryAndSortingInformation.getSelectWeiteresVerfahren())
+                                ) {
+                                    theBool =
+                                        theBool.should(
+                                            function
+                                                .range()
+                                                .field("abfragevariantenWeiteresVerfahren.gfWohnenGesamt")
+                                                .between(
+                                                    searchQueryAndSortingInformation.getFilterGfWohnenGeplantVon(),
+                                                    searchQueryAndSortingInformation.getFilterGfWohnenGeplantBis()
+                                                )
+                                        );
+                                    theBool =
+                                        theBool.should(
+                                            function
+                                                .range()
+                                                .field(
+                                                    "abfragevariantenSachbearbeitungWeiteresVerfahren.gfWohnenGesamt"
+                                                )
+                                                .between(
+                                                    searchQueryAndSortingInformation.getFilterGfWohnenGeplantVon(),
+                                                    searchQueryAndSortingInformation.getFilterGfWohnenGeplantBis()
+                                                )
+                                        );
+                                }
+                                return theBool;
+                            })
+                    );
+                }
                 // hier mit zusätzlichen Filter weitermachen ...
             })
             // Sortierung der Suchergebnisse.

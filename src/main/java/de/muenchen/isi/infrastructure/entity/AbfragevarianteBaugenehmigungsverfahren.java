@@ -73,6 +73,7 @@ public class AbfragevarianteBaugenehmigungsverfahren extends Abfragevariante {
 
     // Geschossfläche Wohnen
 
+    @GenericField
     @Column(precision = 10, scale = 2)
     private BigDecimal gfWohnenGesamt;
 
