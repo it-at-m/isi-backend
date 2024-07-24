@@ -49,7 +49,7 @@ public class SearchQueryModel {
 
     private List<StatusAbfrage> filterStatusAbfrage;
 
-    private UncertainBoolean filterSobonRelevantAbfrage;
+    private UncertainBoolean filterSobonRelevant;
 
     private Integer filterWeGesamtVon;
 
@@ -64,8 +64,6 @@ public class SearchQueryModel {
     private List<StatusInfrastruktureinrichtung> filterInfrastruktureinrichtungStatus;
 
     private List<StandVerfahren> filterStandVerfahrenBauvorhaben;
-
-    private UncertainBoolean filterSobonRelevantBauvorhaben;
 
     private Integer page;
 

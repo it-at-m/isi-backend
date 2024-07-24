@@ -62,7 +62,7 @@ public class SearchQueryDto {
 
     private List<StatusAbfrage> filterStatusAbfrage;
 
-    private UncertainBoolean filterSobonRelevantAbfrage;
+    private UncertainBoolean filterSobonRelevant;
 
     private Integer filterWeGesamtVon;
 
@@ -77,8 +77,6 @@ public class SearchQueryDto {
     private List<StatusInfrastruktureinrichtung> filterInfrastruktureinrichtungStatus;
 
     private List<StandVerfahren> filterStandVerfahrenBauvorhaben;
-
-    private UncertainBoolean filterSobonRelevantBauvorhaben;
 
     @Positive
     private Integer page;

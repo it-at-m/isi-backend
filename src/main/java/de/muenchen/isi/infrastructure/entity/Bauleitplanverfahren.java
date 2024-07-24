@@ -55,6 +55,7 @@ public class Bauleitplanverfahren extends Abfrage {
     @Column
     private String bebauungsplannummer;
 
+    @GenericField(name = "sobon_relevant_filter")
     @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "varchar(255) not null check (sobon_relevant != 'UNSPECIFIED')")
     private UncertainBoolean sobonRelevant;

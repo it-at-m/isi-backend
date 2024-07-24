@@ -86,12 +86,12 @@ public class EntitySearchService {
             searchQueryAndSortingInformation.getFilterMittelschulsprengelNummer()
         );
         if (
-            searchQueryAndSortingInformation.getFilterSobonRelevantBauvorhaben() != null &&
-            searchQueryAndSortingInformation.getFilterSobonRelevantBauvorhaben() != UncertainBoolean.UNSPECIFIED
+            searchQueryAndSortingInformation.getFilterSobonRelevant() != null &&
+            searchQueryAndSortingInformation.getFilterSobonRelevant() != UncertainBoolean.UNSPECIFIED
         ) {
             filterAttributeMap.put(
                 "sobon_relevant_filter",
-                List.of(searchQueryAndSortingInformation.getFilterSobonRelevantBauvorhaben())
+                List.of(searchQueryAndSortingInformation.getFilterSobonRelevant())
             );
         }
         filterAttributeMap.put("statusAbfrage_filter", searchQueryAndSortingInformation.getFilterStatusAbfrage());
