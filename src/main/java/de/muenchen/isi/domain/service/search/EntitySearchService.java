@@ -91,9 +91,7 @@ public class EntitySearchService {
         ) {
             filterAttributeMap.put(
                 "sobon_relevant_filter",
-                new ArrayList<UncertainBoolean>(
-                    Arrays.asList(searchQueryAndSortingInformation.getFilterSobonRelevantBauvorhaben())
-                )
+                List.of(searchQueryAndSortingInformation.getFilterSobonRelevantBauvorhaben())
             );
         }
         filterAttributeMap.put("statusAbfrage_filter", searchQueryAndSortingInformation.getFilterStatusAbfrage());
