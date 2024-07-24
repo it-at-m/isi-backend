@@ -1,7 +1,7 @@
 package de.muenchen.isi.api.validation;
 
 import de.muenchen.isi.api.dto.BaurateDto;
-import de.muenchen.isi.api.dto.WithRealisierungVonDto;
+import de.muenchen.isi.api.dto.abfrageAngelegt.AbfragevarianteAngelegtDto;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import java.util.Objects;
@@ -13,18 +13,18 @@ import org.springframework.stereotype.Component;
 @Component
 @NoArgsConstructor
 public class EarliestBaurateIsRealisierungVonValidator
-    implements ConstraintValidator<EarliestBaurateIsRealisierungVonValid, WithRealisierungVonDto> {
+    implements ConstraintValidator<EarliestBaurateIsRealisierungVonValid, AbfragevarianteAngelegtDto> {
 
     /**
-     * Prüft ob das Jahr der frühesten Baurate mit dem Attribut {@link WithRealisierungVonDto#getRealisierungVon()} übereinstimmt.
+     * Prüft ob das Jahr der frühesten Baurate mit dem Attribut {@link AbfragevarianteAngelegtDto#getRealisierungVon()} übereinstimmt.
      *
      * @param value object to validate
      * @param context context in which the constraint is evaluated
      *
-     * @return false falls das Attribut {@link WithRealisierungVonDto#getRealisierungVon()} nicht mit einer vorhandenen frühesten Baurate übereinstimmt, anderfalls true.
+     * @return false falls das Attribut {@link AbfragevarianteAngelegtDto#getRealisierungVon()} nicht mit einer vorhandenen frühesten Baurate übereinstimmt, anderfalls true.
      */
     @Override
-    public boolean isValid(final WithRealisierungVonDto value, final ConstraintValidatorContext context) {
+    public boolean isValid(final AbfragevarianteAngelegtDto value, final ConstraintValidatorContext context) {
         final var yearOfEarliestBaurate = CollectionUtils
             .emptyIfNull(value.getBauabschnitte())
             .stream()

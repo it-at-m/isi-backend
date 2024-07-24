@@ -5,7 +5,6 @@
 package de.muenchen.isi.api.dto.abfrageAngelegt;
 
 import de.muenchen.isi.api.dto.BauabschnittDto;
-import de.muenchen.isi.api.dto.WithRealisierungVonDto;
 import de.muenchen.isi.api.validation.EarliestBaurateIsRealisierungVonValid;
 import de.muenchen.isi.api.validation.NotUnspecified;
 import de.muenchen.isi.api.validation.RealisierungVonDistributionBaugenehmigungsverfahrenValid;
@@ -30,7 +29,7 @@ import lombok.Data;
 @EarliestBaurateIsRealisierungVonValid
 @WeGfDistributionBaugenehmigungsverfahrenValid
 @RealisierungVonDistributionBaugenehmigungsverfahrenValid
-public class AbfragevarianteBaugenehmigungsverfahrenAngelegtDto implements WithRealisierungVonDto {
+public class AbfragevarianteBaugenehmigungsverfahrenAngelegtDto implements AbfragevarianteAngelegtDto {
 
     private UUID id;
 
