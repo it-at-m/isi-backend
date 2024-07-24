@@ -141,7 +141,7 @@ public class EntitySearchService {
                     }
                 });
 
-                // Filter: Bereich für Realisierung von auf Basis des Abfragevariantenattribut realisierungVon
+                // Filter: Bereich für Realisierungsbeginn auf Basis des Abfragevariantenattributs realisierungVon
                 // Nutzen von Between da der Filterwert "null" als Infinitybound gehandhabt wird.
                 if (
                     ObjectUtils.isNotEmpty(searchQueryAndSortingInformation.getFilterRealisierungsbeginnVon()) ||
