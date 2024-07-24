@@ -238,6 +238,100 @@ public class EntitySearchService {
                             })
                     );
                 }
+
+                // Filter: Bereich für geplante Wohneinheiten auf Basis des Abfragevariantenattributs weGesamt
+                // Nutzen von Between da der Filterwert "null" als Infinitybound gehandhabt wird.
+                if (
+                    ObjectUtils.isNotEmpty(searchQueryAndSortingInformation.getFilterWeGesamtVon()) ||
+                    ObjectUtils.isNotEmpty(searchQueryAndSortingInformation.getFilterWeGesamtBis())
+                ) {
+                    root.add(
+                        function
+                            .bool()
+                            .must(b -> {
+                                var theBool = b.bool();
+                                if (
+                                    BooleanUtils.isTrue(
+                                        searchQueryAndSortingInformation.getSelectBauleitplanverfahren()
+                                    )
+                                ) {
+                                    theBool =
+                                        theBool.should(
+                                            function
+                                                .range()
+                                                .field("abfragevariantenBauleitplanverfahren.weGesamt")
+                                                .between(
+                                                    searchQueryAndSortingInformation.getFilterWeGesamtVon(),
+                                                    searchQueryAndSortingInformation.getFilterWeGesamtBis()
+                                                )
+                                        );
+                                    theBool =
+                                        theBool.should(
+                                            function
+                                                .range()
+                                                .field("abfragevariantenSachbearbeitungBauleitplanverfahren.weGesamt")
+                                                .between(
+                                                    searchQueryAndSortingInformation.getFilterWeGesamtVon(),
+                                                    searchQueryAndSortingInformation.getFilterWeGesamtBis()
+                                                )
+                                        );
+                                }
+                                if (
+                                    BooleanUtils.isTrue(
+                                        searchQueryAndSortingInformation.getSelectBaugenehmigungsverfahren()
+                                    )
+                                ) {
+                                    theBool =
+                                        theBool.should(
+                                            function
+                                                .range()
+                                                .field("abfragevariantenBaugenehmigungsverfahren.weGesamt")
+                                                .between(
+                                                    searchQueryAndSortingInformation.getFilterWeGesamtVon(),
+                                                    searchQueryAndSortingInformation.getFilterWeGesamtBis()
+                                                )
+                                        );
+                                    theBool =
+                                        theBool.should(
+                                            function
+                                                .range()
+                                                .field(
+                                                    "abfragevariantenSachbearbeitungBaugenehmigungsverfahren.weGesamt"
+                                                )
+                                                .between(
+                                                    searchQueryAndSortingInformation.getFilterWeGesamtVon(),
+                                                    searchQueryAndSortingInformation.getFilterWeGesamtBis()
+                                                )
+                                        );
+                                }
+                                if (
+                                    BooleanUtils.isTrue(searchQueryAndSortingInformation.getSelectWeiteresVerfahren())
+                                ) {
+                                    theBool =
+                                        theBool.should(
+                                            function
+                                                .range()
+                                                .field("abfragevariantenWeiteresVerfahren.weGesamt")
+                                                .between(
+                                                    searchQueryAndSortingInformation.getFilterWeGesamtVon(),
+                                                    searchQueryAndSortingInformation.getFilterWeGesamtBis()
+                                                )
+                                        );
+                                    theBool =
+                                        theBool.should(
+                                            function
+                                                .range()
+                                                .field("abfragevariantenSachbearbeitungWeiteresVerfahren.weGesamt")
+                                                .between(
+                                                    searchQueryAndSortingInformation.getFilterWeGesamtVon(),
+                                                    searchQueryAndSortingInformation.getFilterWeGesamtBis()
+                                                )
+                                        );
+                                }
+                                return theBool;
+                            })
+                    );
+                }
                 // hier mit zusätzlichen Filter weitermachen ...
             })
             // Sortierung der Suchergebnisse.
