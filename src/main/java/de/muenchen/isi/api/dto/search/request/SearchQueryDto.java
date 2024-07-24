@@ -54,9 +54,9 @@ public class SearchQueryDto {
 
     private List<Long> filterMittelschulsprengelNummer;
 
-    private Integer filterRealisierungVon;
+    private Integer filterRealisierungsbeginnVon;
 
-    private Integer filterRealisierungBis;
+    private Integer filterRealisierungsbeginnBis;
 
     private Boolean filterNurEigeneAbfragen;
 

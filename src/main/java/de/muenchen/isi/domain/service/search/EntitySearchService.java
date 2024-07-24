@@ -153,8 +153,8 @@ public class EntitySearchService {
                 // Filter: Bereich für Realisierung von auf Basis des Abfragevariantenattribut realisierungVon
                 // Nutzen von Between da der Filterwert "null" als Infinitybound gehandhabt wird.
                 if (
-                    ObjectUtils.isNotEmpty(searchQueryAndSortingInformation.getFilterRealisierungVon()) ||
-                    ObjectUtils.isNotEmpty(searchQueryAndSortingInformation.getFilterRealisierungBis())
+                    ObjectUtils.isNotEmpty(searchQueryAndSortingInformation.getFilterRealisierungsbeginnVon()) ||
+                    ObjectUtils.isNotEmpty(searchQueryAndSortingInformation.getFilterRealisierungsbeginnBis())
                 ) {
                     root.add(
                         function
@@ -172,8 +172,8 @@ public class EntitySearchService {
                                                 .range()
                                                 .field("abfragevariantenBauleitplanverfahren.realisierungVon")
                                                 .between(
-                                                    searchQueryAndSortingInformation.getFilterRealisierungVon(),
-                                                    searchQueryAndSortingInformation.getFilterRealisierungBis()
+                                                    searchQueryAndSortingInformation.getFilterRealisierungsbeginnVon(),
+                                                    searchQueryAndSortingInformation.getFilterRealisierungsbeginnBis()
                                                 )
                                         );
                                     theBool =
@@ -184,8 +184,8 @@ public class EntitySearchService {
                                                     "abfragevariantenSachbearbeitungBauleitplanverfahren.realisierungVon"
                                                 )
                                                 .between(
-                                                    searchQueryAndSortingInformation.getFilterRealisierungVon(),
-                                                    searchQueryAndSortingInformation.getFilterRealisierungBis()
+                                                    searchQueryAndSortingInformation.getFilterRealisierungsbeginnVon(),
+                                                    searchQueryAndSortingInformation.getFilterRealisierungsbeginnBis()
                                                 )
                                         );
                                 }
@@ -200,8 +200,8 @@ public class EntitySearchService {
                                                 .range()
                                                 .field("abfragevariantenBaugenehmigungsverfahren.realisierungVon")
                                                 .between(
-                                                    searchQueryAndSortingInformation.getFilterRealisierungVon(),
-                                                    searchQueryAndSortingInformation.getFilterRealisierungBis()
+                                                    searchQueryAndSortingInformation.getFilterRealisierungsbeginnVon(),
+                                                    searchQueryAndSortingInformation.getFilterRealisierungsbeginnBis()
                                                 )
                                         );
                                     theBool =
@@ -212,8 +212,8 @@ public class EntitySearchService {
                                                     "abfragevariantenSachbearbeitungBaugenehmigungsverfahren.realisierungVon"
                                                 )
                                                 .between(
-                                                    searchQueryAndSortingInformation.getFilterRealisierungVon(),
-                                                    searchQueryAndSortingInformation.getFilterRealisierungBis()
+                                                    searchQueryAndSortingInformation.getFilterRealisierungsbeginnVon(),
+                                                    searchQueryAndSortingInformation.getFilterRealisierungsbeginnBis()
                                                 )
                                         );
                                 }
@@ -226,8 +226,8 @@ public class EntitySearchService {
                                                 .range()
                                                 .field("abfragevariantenWeiteresVerfahren.realisierungVon")
                                                 .between(
-                                                    searchQueryAndSortingInformation.getFilterRealisierungVon(),
-                                                    searchQueryAndSortingInformation.getFilterRealisierungBis()
+                                                    searchQueryAndSortingInformation.getFilterRealisierungsbeginnVon(),
+                                                    searchQueryAndSortingInformation.getFilterRealisierungsbeginnBis()
                                                 )
                                         );
                                     theBool =
@@ -238,8 +238,8 @@ public class EntitySearchService {
                                                     "abfragevariantenSachbearbeitungWeiteresVerfahren.realisierungVon"
                                                 )
                                                 .between(
-                                                    searchQueryAndSortingInformation.getFilterRealisierungVon(),
-                                                    searchQueryAndSortingInformation.getFilterRealisierungBis()
+                                                    searchQueryAndSortingInformation.getFilterRealisierungsbeginnVon(),
+                                                    searchQueryAndSortingInformation.getFilterRealisierungsbeginnBis()
                                                 )
                                         );
                                 }
