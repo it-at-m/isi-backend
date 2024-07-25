@@ -93,6 +93,7 @@ public class AbfragevarianteBauleitplanverfahrenAngelegtDto {
 
     private Integer weWeiteresNichtInfrastrukturrelevantesWohnen;
 
+    @NotEmpty
     @TechnicalAttributesValid
     private List<@Valid @NotNull BauabschnittDto> bauabschnitte;
 }
