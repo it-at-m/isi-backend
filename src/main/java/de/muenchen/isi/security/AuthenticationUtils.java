@@ -145,9 +145,9 @@ public class AuthenticationUtils {
     }
 
     /**
-     * Die Methode extrahiert den Nutzernamen aus dem {@link Jwt} der {@link Authentication} des {@link SecurityContextHolder}.
+     * Die Methode extrahiert den eindeutigen Identifier (sub) aus dem {@link Jwt} der {@link Authentication} des {@link SecurityContextHolder}.
      *
-     * @return den Nutzernamen oder einen Platzhalter falls kein {@link Jwt} verfügbar
+     * @return den eindeutigen Identifier (sub) oder einen Platzhalter falls kein {@link Jwt} verfügbar
      */
     public String getUserSub() {
         String sub = null;
