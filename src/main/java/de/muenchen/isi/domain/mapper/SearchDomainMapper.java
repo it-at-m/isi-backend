@@ -131,6 +131,7 @@ public abstract class SearchDomainMapper {
         {
             @Mapping(target = "type", constant = SearchResultType.Values.INFRASTRUKTUREINRICHTUNG),
             @Mapping(target = "coordinate", ignore = true),
+            @Mapping(target = "zugehoerigesBauvorhaben", ignore = true),
         }
     )
     public abstract InfrastruktureinrichtungSearchResultModel entity2SearchResultModel(
@@ -142,6 +143,9 @@ public abstract class SearchDomainMapper {
         final Infrastruktureinrichtung entity,
         @MappingTarget final InfrastruktureinrichtungSearchResultModel model
     ) {
+        if (entity.getBauvorhaben() != null) {
+            model.setZugehoerigesBauvorhaben(entity.getBauvorhaben().getNameVorhaben());
+        }
         if (hasAdressCoordinate(entity.getAdresse())) {
             model.setCoordinate(koordinatenDomainMapper.entity2Model(entity.getAdresse().getCoordinate()));
         } else if (
