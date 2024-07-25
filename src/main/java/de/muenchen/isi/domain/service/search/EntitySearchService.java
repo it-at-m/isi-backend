@@ -70,7 +70,7 @@ public class EntitySearchService {
         final Integer paginationOffset = calculateOffsetOrNullIfNoPaginationRequired(searchQueryAndSortingInformation);
 
         // Erstellung der zu filternden Attribute
-        HashMap<String, List<?>> filterAttributeMap = new HashMap<>();
+        final var filterAttributeMap = new HashMap<String, List<?>>();
         filterAttributeMap.put(
             "verortung.stadtbezirke.nummer",
             searchQueryAndSortingInformation.getFilterStadtbezirkNummer()
