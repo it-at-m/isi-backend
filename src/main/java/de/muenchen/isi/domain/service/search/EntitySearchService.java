@@ -8,6 +8,7 @@ import de.muenchen.isi.domain.model.search.request.SearchQueryAndSortingModel;
 import de.muenchen.isi.domain.model.search.response.SearchResultsModel;
 import de.muenchen.isi.infrastructure.entity.BaseEntity;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
+import de.muenchen.isi.security.AuthenticationUtils;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import java.util.ArrayList;
@@ -33,6 +34,7 @@ public class EntitySearchService {
 
     private final SearchPreparationService searchPreparationService;
     private final SearchDomainMapper searchDomainMapper;
+    private final AuthenticationUtils authenticationUtils;
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -93,6 +95,9 @@ public class EntitySearchService {
                 "sobon_relevant_filter",
                 List.of(searchQueryAndSortingInformation.getFilterSobonRelevant())
             );
+        }
+        if (BooleanUtils.isTrue(searchQueryAndSortingInformation.getFilterNurEigeneAbfragen())) {
+            filterAttributeMap.put("sub", List.of(authenticationUtils.getUserSub()));
         }
         filterAttributeMap.put("statusAbfrage_filter", searchQueryAndSortingInformation.getFilterStatusAbfrage());
         filterAttributeMap.put("stand_verfahren_filter", searchQueryAndSortingInformation.getFilterStandVerfahren());
