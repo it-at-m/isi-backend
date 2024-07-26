@@ -16,4 +16,6 @@ public class InfrastruktureinrichtungSearchResultDto extends SearchResultDto {
     private String nameEinrichtung;
 
     private InfrastruktureinrichtungTyp infrastruktureinrichtungTyp;
+
+    private String zugehoerigesBauvorhaben;
 }
