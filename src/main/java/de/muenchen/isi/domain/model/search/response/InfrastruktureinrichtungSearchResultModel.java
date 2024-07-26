@@ -16,4 +16,6 @@ public class InfrastruktureinrichtungSearchResultModel extends SearchResultModel
     private InfrastruktureinrichtungTyp infrastruktureinrichtungTyp;
 
     private String nameEinrichtung;
+
+    private String zugehoerigesBauvorhaben;
 }
