@@ -35,7 +35,7 @@ public class Dokument extends BaseEntity {
     private Filepath filePath;
 
     @Enumerated(EnumType.STRING)
-    @Column
+    @Column(nullable = false)
     private ArtDokument artDokument;
 
     @Column(nullable = false)
