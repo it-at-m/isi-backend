@@ -95,9 +95,24 @@ public class KommentarController {
             ),
         }
     )
-    @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_WRITE_KOMMENTAR.name())")
-    public ResponseEntity<KommentarDto> createKommentar(@RequestBody @Valid @NotNull final KommentarDto kommentarDto)
-        throws EntityNotFoundException, OptimisticLockingException {
+    @PreAuthorize(
+        "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_WRITE_KOMMENTAR_BAUVORHABEN.name())"
+    )
+    public ResponseEntity<KommentarDto> createKommentarBauvorhaben(
+        @RequestBody @Valid @NotNull final KommentarDto kommentarDto
+    ) throws EntityNotFoundException, OptimisticLockingException {
+        var model = this.kommentarApiMapper.dto2Model(kommentarDto);
+        model = this.kommentarService.saveKommentar(model);
+        final var saved = this.kommentarApiMapper.model2Dto(model);
+        return new ResponseEntity<>(saved, HttpStatus.CREATED);
+    }
+
+    @PreAuthorize(
+        "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_WRITE_KOMMENTAR_INFRASTRUKTUREINRICHTUNG.name())"
+    )
+    public ResponseEntity<KommentarDto> createKommentarInfrastruktureinrichtung(
+        @RequestBody @Valid @NotNull final KommentarDto kommentarDto
+    ) throws EntityNotFoundException, OptimisticLockingException {
         var model = this.kommentarApiMapper.dto2Model(kommentarDto);
         model = this.kommentarService.saveKommentar(model);
         final var saved = this.kommentarApiMapper.model2Dto(model);
@@ -127,8 +142,48 @@ public class KommentarController {
             ),
         }
     )
-    @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_WRITE_KOMMENTAR.name())")
-    public ResponseEntity<KommentarDto> updateKommentar(@RequestBody @Valid @NotNull final KommentarDto kommentarDto)
+    @PreAuthorize(
+        "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_WRITE_KOMMENTAR_BAUVORHABEN.name())"
+    )
+    public ResponseEntity<KommentarDto> updateKommentarBauvorhaben(
+        @RequestBody @Valid @NotNull final KommentarDto kommentarDto
+    )
+        throws EntityNotFoundException, OptimisticLockingException, FileHandlingFailedException, FileHandlingWithS3FailedException {
+        var model = this.kommentarApiMapper.dto2Model(kommentarDto);
+        model = this.kommentarService.updateKommentar(model);
+        final var saved = this.kommentarApiMapper.model2Dto(model);
+        return ResponseEntity.ok(saved);
+    }
+
+    @PutMapping
+    @Transactional(rollbackFor = OptimisticLockingException.class)
+    @Operation(summary = "Aktualisierung eines Kommentars")
+    @ApiResponses(
+        value = {
+            @ApiResponse(responseCode = "200", description = "OK -> Kommentar wurde erfolgreich aktualisiert."),
+            @ApiResponse(
+                responseCode = "400",
+                description = "BAD_REQUEST -> Kommentar konnte nicht erstellt werden, überprüfen sie die Eingabe.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+            @ApiResponse(
+                responseCode = "404",
+                description = "NOT_FOUND -> Kommentar mit dieser ID nicht vorhanden.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+            @ApiResponse(
+                responseCode = "412",
+                description = "PRECONDITION_FAILED -> In der Anwendung ist bereits eine neuere Version der Entität gespeichert.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+        }
+    )
+    @PreAuthorize(
+        "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_WRITE_KOMMENTAR_INFRASTRUKTUREINRICHTUNG.name())"
+    )
+    public ResponseEntity<KommentarDto> updateKommentarInfrastruktureinrichtung(
+        @RequestBody @Valid @NotNull final KommentarDto kommentarDto
+    )
         throws EntityNotFoundException, OptimisticLockingException, FileHandlingFailedException, FileHandlingWithS3FailedException {
         var model = this.kommentarApiMapper.dto2Model(kommentarDto);
         model = this.kommentarService.updateKommentar(model);
@@ -140,8 +195,22 @@ public class KommentarController {
     @Transactional
     @Operation(summary = "Löschen eines Kommentars")
     @ApiResponses(value = { @ApiResponse(responseCode = "204", description = "NO CONTENT") })
-    @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_DELETE_KOMMENTAR.name())")
-    public ResponseEntity<Void> deleteKommentar(@PathVariable @NotNull final UUID id) {
+    @PreAuthorize(
+        "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_DELETE_KOMMENTAR_BAUVORHABEN.name())"
+    )
+    public ResponseEntity<Void> deleteKommentarBauvorhaben(@PathVariable @NotNull final UUID id) {
+        this.kommentarService.deleteKommentarById(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/{id}")
+    @Transactional
+    @Operation(summary = "Löschen eines Kommentars")
+    @ApiResponses(value = { @ApiResponse(responseCode = "204", description = "NO CONTENT") })
+    @PreAuthorize(
+        "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_DELETE_KOMMENTAR_INFRASTRUKTUREINRICHTUNG.name())"
+    )
+    public ResponseEntity<Void> deleteKommentarInfrastruktureinrichtung(@PathVariable @NotNull final UUID id) {
         this.kommentarService.deleteKommentarById(id);
         return ResponseEntity.noContent().build();
     }
