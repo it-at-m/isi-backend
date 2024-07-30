@@ -6,6 +6,7 @@ import de.muenchen.isi.domain.mapper.SearchDomainMapper;
 import de.muenchen.isi.domain.model.enums.SortAttribute;
 import de.muenchen.isi.domain.model.search.request.SearchQueryAndSortingModel;
 import de.muenchen.isi.domain.model.search.response.SearchResultsModel;
+import de.muenchen.isi.infrastructure.adapter.search.StadtbezirkNummerValueBridge;
 import de.muenchen.isi.infrastructure.entity.BaseEntity;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
 import de.muenchen.isi.security.AuthenticationUtils;
@@ -14,6 +15,8 @@ import jakarta.persistence.PersistenceContext;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,6 +38,7 @@ import org.springframework.stereotype.Service;
 public class EntitySearchService {
 
     private final SearchPreparationService searchPreparationService;
+
     private final SearchDomainMapper searchDomainMapper;
     private final AuthenticationUtils authenticationUtils;
 
@@ -129,7 +133,14 @@ public class EntitySearchService {
     ) {
         filterAttributeMap.put(
             "verortung.stadtbezirke.nummer",
-            searchQueryAndSortingInformation.getFilterStadtbezirkNummer()
+            searchQueryAndSortingInformation.getFilterStadtbezirkNummer() != null
+                ? searchQueryAndSortingInformation
+                    .getFilterStadtbezirkNummer()
+                    .stream()
+                    .map(StadtbezirkNummerValueBridge::toNormalizedStadtbezirknummer)
+                    .filter(Predicate.not(Objects::isNull))
+                    .toList()
+                : null
         );
         filterAttributeMap.put(
             "verortung.kitaplanungsbereiche.kitaPlbT",

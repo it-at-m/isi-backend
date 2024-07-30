@@ -1,16 +1,21 @@
 package de.muenchen.isi.infrastructure.entity.common;
 
+import de.muenchen.isi.infrastructure.adapter.search.StadtbezirkNummerValueBridge;
 import de.muenchen.isi.infrastructure.adapter.search.StringSuggestionBinder;
 import de.muenchen.isi.infrastructure.repository.search.SearchwordSuggesterRepository;
 import lombok.Data;
 import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBinderRef;
+import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBridgeRef;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.GenericField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.NonStandardField;
+import org.springframework.stereotype.Component;
 
 @Data
+@Component
 public class Stadtbezirk {
 
-    @FullTextField
+    @GenericField(valueBridge = @ValueBridgeRef(type = StadtbezirkNummerValueBridge.class))
     private String nummer;
 
     @FullTextField
