@@ -1,6 +1,7 @@
 package de.muenchen.isi.api.controller.common;
 
-import de.muenchen.isi.api.dto.common.KommentarDto;
+import de.muenchen.isi.api.dto.common.KommentarBauvorhabenDto;
+import de.muenchen.isi.api.dto.common.KommentarInfrastruktureinrichtungDto;
 import de.muenchen.isi.api.dto.error.InformationResponseDto;
 import de.muenchen.isi.api.mapper.KommentarApiMapper;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
@@ -54,7 +55,7 @@ public class KommentarController {
     @PreAuthorize(
         "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_READ_KOMMENTAR_BAUVORHABEN.name())"
     )
-    public ResponseEntity<List<KommentarDto>> getKommentareForBauvorhaben(
+    public ResponseEntity<List<KommentarBauvorhabenDto>> getKommentareForBauvorhaben(
         @PathVariable @NotNull final UUID bauvorhabenId
     ) {
         final var models = kommentarService.getKommentareForBauvorhaben(bauvorhabenId);
@@ -69,7 +70,7 @@ public class KommentarController {
     @PreAuthorize(
         "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_READ_KOMMENTAR_INFRASTRUKTUREINRICHTUNG.name())"
     )
-    public ResponseEntity<List<KommentarDto>> getKommentareForInfrastruktureinrichtung(
+    public ResponseEntity<List<KommentarInfrastruktureinrichtungDto>> getKommentareForInfrastruktureinrichtung(
         @PathVariable @NotNull final UUID infrastruktureinrichtungId
     ) {
         final var models = kommentarService.getKommentareForInfrastruktureinrichtung(infrastruktureinrichtungId);
@@ -77,9 +78,9 @@ public class KommentarController {
         return ResponseEntity.ok(dtos);
     }
 
-    @PostMapping
+    @PostMapping("bauvorhaben")
     @Transactional(rollbackFor = OptimisticLockingException.class)
-    @Operation(summary = "Anlegen eines neuen Kommentars")
+    @Operation(summary = "Anlegen eines neuen Kommentars für ein Bauvorhaben")
     @ApiResponses(
         value = {
             @ApiResponse(responseCode = "201", description = "CREATED -> Kommentar wurde erfolgreich erstellt."),
@@ -98,30 +99,48 @@ public class KommentarController {
     @PreAuthorize(
         "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_WRITE_KOMMENTAR_BAUVORHABEN.name())"
     )
-    public ResponseEntity<KommentarDto> createKommentarBauvorhaben(
-        @RequestBody @Valid @NotNull final KommentarDto kommentarDto
+    public ResponseEntity<KommentarBauvorhabenDto> createKommentarForBauvorhaben(
+        @RequestBody @Valid @NotNull final KommentarBauvorhabenDto kommentarDto
     ) throws EntityNotFoundException, OptimisticLockingException {
         var model = this.kommentarApiMapper.dto2Model(kommentarDto);
-        model = this.kommentarService.saveKommentar(model);
+        model = this.kommentarService.saveKommentarForBauvorhaben(model);
         final var saved = this.kommentarApiMapper.model2Dto(model);
         return new ResponseEntity<>(saved, HttpStatus.CREATED);
     }
 
+    @PostMapping("infrastruktureinrichtung")
+    @Transactional(rollbackFor = OptimisticLockingException.class)
+    @Operation(summary = "Anlegen eines neuen Kommentars für eine Infrastruktureinrichtung")
+    @ApiResponses(
+        value = {
+            @ApiResponse(responseCode = "201", description = "CREATED -> Kommentar wurde erfolgreich erstellt."),
+            @ApiResponse(
+                responseCode = "400",
+                description = "BAD_REQUEST -> Kommentar konnte nicht erstellt werden, überprüfen sie die Eingabe.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+            @ApiResponse(
+                responseCode = "412",
+                description = "PRECONDITION_FAILED -> In der Anwendung ist bereits eine neuere Version der Entität gespeichert.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+        }
+    )
     @PreAuthorize(
         "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_WRITE_KOMMENTAR_INFRASTRUKTUREINRICHTUNG.name())"
     )
-    public ResponseEntity<KommentarDto> createKommentarInfrastruktureinrichtung(
-        @RequestBody @Valid @NotNull final KommentarDto kommentarDto
+    public ResponseEntity<KommentarInfrastruktureinrichtungDto> createKommentarForInfrastruktureinrichtung(
+        @RequestBody @Valid @NotNull final KommentarInfrastruktureinrichtungDto kommentarDto
     ) throws EntityNotFoundException, OptimisticLockingException {
         var model = this.kommentarApiMapper.dto2Model(kommentarDto);
-        model = this.kommentarService.saveKommentar(model);
+        model = this.kommentarService.saveKommentarForInfrastruktureinrichtung(model);
         final var saved = this.kommentarApiMapper.model2Dto(model);
         return new ResponseEntity<>(saved, HttpStatus.CREATED);
     }
 
-    @PutMapping
+    @PutMapping("bauvorhaben")
     @Transactional(rollbackFor = OptimisticLockingException.class)
-    @Operation(summary = "Aktualisierung eines Kommentars")
+    @Operation(summary = "Aktualisierung eines Kommentars eines Bauvorhabens")
     @ApiResponses(
         value = {
             @ApiResponse(responseCode = "200", description = "OK -> Kommentar wurde erfolgreich aktualisiert."),
@@ -145,19 +164,19 @@ public class KommentarController {
     @PreAuthorize(
         "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_WRITE_KOMMENTAR_BAUVORHABEN.name())"
     )
-    public ResponseEntity<KommentarDto> updateKommentarBauvorhaben(
-        @RequestBody @Valid @NotNull final KommentarDto kommentarDto
+    public ResponseEntity<KommentarBauvorhabenDto> updateKommentarForBauvorhaben(
+        @RequestBody @Valid @NotNull final KommentarBauvorhabenDto kommentarDto
     )
         throws EntityNotFoundException, OptimisticLockingException, FileHandlingFailedException, FileHandlingWithS3FailedException {
         var model = this.kommentarApiMapper.dto2Model(kommentarDto);
-        model = this.kommentarService.updateKommentar(model);
+        model = this.kommentarService.updateKommentarForBauvorhaben(model);
         final var saved = this.kommentarApiMapper.model2Dto(model);
         return ResponseEntity.ok(saved);
     }
 
-    @PutMapping
+    @PutMapping("infrastruktureinrichtung")
     @Transactional(rollbackFor = OptimisticLockingException.class)
-    @Operation(summary = "Aktualisierung eines Kommentars")
+    @Operation(summary = "Aktualisierung eines Kommentars für eine Infrastruktureinrichtung")
     @ApiResponses(
         value = {
             @ApiResponse(responseCode = "200", description = "OK -> Kommentar wurde erfolgreich aktualisiert."),
@@ -181,36 +200,36 @@ public class KommentarController {
     @PreAuthorize(
         "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_WRITE_KOMMENTAR_INFRASTRUKTUREINRICHTUNG.name())"
     )
-    public ResponseEntity<KommentarDto> updateKommentarInfrastruktureinrichtung(
-        @RequestBody @Valid @NotNull final KommentarDto kommentarDto
+    public ResponseEntity<KommentarInfrastruktureinrichtungDto> updateKommentarForInfrastruktureinrichtung(
+        @RequestBody @Valid @NotNull final KommentarInfrastruktureinrichtungDto kommentarDto
     )
         throws EntityNotFoundException, OptimisticLockingException, FileHandlingFailedException, FileHandlingWithS3FailedException {
         var model = this.kommentarApiMapper.dto2Model(kommentarDto);
-        model = this.kommentarService.updateKommentar(model);
+        model = this.kommentarService.updateKommentarForInfrastruktureinrichtung(model);
         final var saved = this.kommentarApiMapper.model2Dto(model);
         return ResponseEntity.ok(saved);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("bauvorhaben/{id}")
     @Transactional
-    @Operation(summary = "Löschen eines Kommentars")
+    @Operation(summary = "Löschen eines Kommentars eines Bauvorhabens")
     @ApiResponses(value = { @ApiResponse(responseCode = "204", description = "NO CONTENT") })
     @PreAuthorize(
         "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_DELETE_KOMMENTAR_BAUVORHABEN.name())"
     )
-    public ResponseEntity<Void> deleteKommentarBauvorhaben(@PathVariable @NotNull final UUID id) {
+    public ResponseEntity<Void> deleteKommentarForBauvorhaben(@PathVariable @NotNull final UUID id) {
         this.kommentarService.deleteKommentarById(id);
         return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("infrastruktureinrichtung/{id}")
     @Transactional
-    @Operation(summary = "Löschen eines Kommentars")
+    @Operation(summary = "Löschen eines Kommentars einer Infrastruktureinrichtung")
     @ApiResponses(value = { @ApiResponse(responseCode = "204", description = "NO CONTENT") })
     @PreAuthorize(
         "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_DELETE_KOMMENTAR_INFRASTRUKTUREINRICHTUNG.name())"
     )
-    public ResponseEntity<Void> deleteKommentarInfrastruktureinrichtung(@PathVariable @NotNull final UUID id) {
+    public ResponseEntity<Void> deleteKommentar(@PathVariable @NotNull final UUID id) {
         this.kommentarService.deleteKommentarById(id);
         return ResponseEntity.noContent().build();
     }

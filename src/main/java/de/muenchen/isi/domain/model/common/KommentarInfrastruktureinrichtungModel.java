@@ -1,8 +1,7 @@
 package de.muenchen.isi.domain.model.common;
 
-import de.muenchen.isi.domain.model.BaseEntityModel;
 import de.muenchen.isi.domain.model.filehandling.DokumentModel;
-import java.util.List;
+import java.util.UUID;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -10,11 +9,7 @@ import lombok.ToString;
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public abstract class KommentarModel extends BaseEntityModel {
+public class KommentarInfrastruktureinrichtungModel extends KommentarModel {
 
-    private String datum;
-
-    private String text;
-
-    private List<DokumentModel> dokumente;
+    private UUID infrastruktureinrichtung;
 }
