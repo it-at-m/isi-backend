@@ -229,7 +229,7 @@ public class KommentarController {
     @PreAuthorize(
         "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_DELETE_KOMMENTAR_INFRASTRUKTUREINRICHTUNG.name())"
     )
-    public ResponseEntity<Void> deleteKommentar(@PathVariable @NotNull final UUID id) {
+    public ResponseEntity<Void> deleteKommentarForInfrastruktureinrichtung(@PathVariable @NotNull final UUID id) {
         this.kommentarService.deleteKommentarById(id);
         return ResponseEntity.noContent().build();
     }
