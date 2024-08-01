@@ -43,6 +43,7 @@ import org.hibernate.search.engine.backend.types.Sortable;
 import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBinderRef;
 import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBridgeRef;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.GenericField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.IndexedEmbedded;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.KeywordField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.NonStandardField;
@@ -121,6 +122,7 @@ public abstract class Infrastruktureinrichtung extends BaseEntity {
         name = "status" + SearchwordSuggesterRepository.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
         valueBinder = @ValueBinderRef(type = StatusInfrastruktureinrichtungSuggestionBinder.class)
     )
+    @GenericField(name = "status_infrastruktureinrichtung_filter")
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private StatusInfrastruktureinrichtung status;
