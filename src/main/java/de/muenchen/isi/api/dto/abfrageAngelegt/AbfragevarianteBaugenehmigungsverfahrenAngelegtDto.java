@@ -79,6 +79,7 @@ public class AbfragevarianteBaugenehmigungsverfahrenAngelegtDto implements Abfra
 
     private BigDecimal gfWohnenWeiteresNichtInfrastrukturrelevantesWohnen;
 
+    @Size(max = 200, message = "Es sind maximal {max} Zeichen erlaubt")
     private String gfAnmerkung;
 
     // Anzahl Wohneinheiten
