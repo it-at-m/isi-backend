@@ -83,8 +83,8 @@ public enum StatusAbfrageEvents {
         "ABFRAGE ABSCHLIESSEN",
         9,
         "Die Abfrage wird abgeschlossen.",
-        null,
-        null
+        "work-assignment-information.message.speichern-von-sozialinfrastruktur-versorgung.test",
+        "work-assignment-information.message.speichern-von-sozialinfrastruktur-versorgung.subject"
     ),
 
     ERNEUTE_BEARBEITUNG(
