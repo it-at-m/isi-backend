@@ -81,6 +81,7 @@ public class AbfragevarianteWeiteresVerfahrenAngelegtDto implements Abfragevaria
 
     private BigDecimal gfWohnenWeiteresNichtInfrastrukturrelevantesWohnen;
 
+    @Size(max = 200, message = "Es sind maximal {max} Zeichen erlaubt")
     private String gfAnmerkung;
 
     // Anzahl Wohneinheiten
@@ -102,6 +103,7 @@ public class AbfragevarianteWeiteresVerfahrenAngelegtDto implements Abfragevaria
 
     private Integer weWeiteresNichtInfrastrukturrelevantesWohnen;
 
+    @Size(max = 200, message = "Es sind maximal {max} Zeichen erlaubt")
     private String weAnmerkung;
 
     @TechnicalAttributesValid

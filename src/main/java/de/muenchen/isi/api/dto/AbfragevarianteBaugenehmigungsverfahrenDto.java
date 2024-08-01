@@ -10,6 +10,7 @@ import de.muenchen.isi.api.dto.filehandling.DokumentDto;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.WesentlicheRechtsgrundlage;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
@@ -50,6 +51,7 @@ public class AbfragevarianteBaugenehmigungsverfahrenDto
 
     private BigDecimal gfWohnenWeiteresNichtInfrastrukturrelevantesWohnen;
 
+    @Size(max = 200, message = "Es sind maximal {max} Zeichen erlaubt")
     private String gfAnmerkung;
 
     // Anzahl Wohneinheiten
@@ -70,6 +72,7 @@ public class AbfragevarianteBaugenehmigungsverfahrenDto
 
     private Integer weWeiteresNichtInfrastrukturrelevantesWohnen;
 
+    @Size(max = 200, message = "Es sind maximal {max} Zeichen erlaubt")
     private String weAnmerkung;
 
     private SobonOrientierungswertJahr sobonOrientierungswertJahr;

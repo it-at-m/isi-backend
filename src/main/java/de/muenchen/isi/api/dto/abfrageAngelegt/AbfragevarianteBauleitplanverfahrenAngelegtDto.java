@@ -80,6 +80,7 @@ public class AbfragevarianteBauleitplanverfahrenAngelegtDto implements Abfrageva
 
     private BigDecimal gfWohnenWeiteresNichtInfrastrukturrelevantesWohnen;
 
+    @Size(max = 200, message = "Es sind maximal {max} Zeichen erlaubt")
     private String gfAnmerkung;
 
     // Anzahl Wohneinheiten
@@ -97,6 +98,7 @@ public class AbfragevarianteBauleitplanverfahrenAngelegtDto implements Abfrageva
 
     private Integer weWeiteresNichtInfrastrukturrelevantesWohnen;
 
+    @Size(max = 200, message = "Es sind maximal {max} Zeichen erlaubt")
     private String weAnmerkung;
 
     @NotEmpty
