@@ -1,5 +1,10 @@
 package de.muenchen.isi.domain.model.search.request;
 
+import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVerfahren;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusInfrastruktureinrichtung;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
+import java.math.BigDecimal;
 import java.util.List;
 import lombok.Data;
 
@@ -35,6 +40,28 @@ public class SearchQueryModel {
     private List<Long> filterGrundschulsprengelNummer;
 
     private List<Long> filterMittelschulsprengelNummer;
+
+    private Integer filterRealisierungsbeginnVon;
+
+    private Integer filterRealisierungsbeginnBis;
+
+    private Boolean filterNurEigeneAbfragen;
+
+    private List<StatusAbfrage> filterStatusAbfrage;
+
+    private UncertainBoolean filterSobonRelevant;
+
+    private Integer filterWeGesamtVon;
+
+    private Integer filterWeGesamtBis;
+
+    private BigDecimal filterGfWohnenGeplantVon;
+
+    private BigDecimal filterGfWohnenGeplantBis;
+
+    private List<StandVerfahren> filterStandVerfahren;
+
+    private List<StatusInfrastruktureinrichtung> filterInfrastruktureinrichtungStatus;
 
     private Integer page;
 
