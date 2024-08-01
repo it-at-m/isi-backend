@@ -75,7 +75,6 @@ public class AbfragevarianteWeiteresVerfahrenDto extends AbfragevarianteDto impl
 
     private Integer weWeiteresNichtInfrastrukturrelevantesWohnen;
 
-    @Size(max = 200, message = "Es sind maximal {max} Zeichen erlaubt")
     private String weAnmerkung;
 
     private SobonOrientierungswertJahr sobonOrientierungswertJahr;
