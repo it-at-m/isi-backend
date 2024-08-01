@@ -109,12 +109,12 @@ public class SendWorkAssignmentInformationService {
      * @param stateMachineEvent als Statusübergangsinformation.
      */
     public void sendWorkAssignmentInformation(final AbfrageModel abfrage, final StatusAbfrageEvents stateMachineEvent) {
-        final var reveiverEmailAddress = getReceiver(abfrage, stateMachineEvent);
-        if (StringUtils.isNotEmpty(reveiverEmailAddress)) {
+        final var receiverEmailAddresses = getReceiver(abfrage, stateMachineEvent);
+        if (CollectionUtils.isNotEmpty(receiverEmailAddresses)) {
             final var subject = getSubject(abfrage.getName(), stateMachineEvent);
             var text = getText(abfrage.getName(), stateMachineEvent)
                 .concat(StringUtils.defaultIfEmpty(getStadtbezirke(abfrage), StringUtils.EMPTY));
-            mailSenderRepository.sendMail(reveiverEmailAddress, subject, text);
+            mailSenderRepository.sendMail(receiverEmailAddresses, subject, text);
         }
     }
 
@@ -125,16 +125,17 @@ public class SendWorkAssignmentInformationService {
      * @param stateMachineEvent als Statusübergangsinformation.
      * @return der Emailempfäger auf Basis der Statusübergangsinformation oder null falls für den gegebenen Statusübergang kein Emailversand vorgesehen ist.
      */
-    protected String getReceiver(final AbfrageModel abfrage, final StatusAbfrageEvents stateMachineEvent) {
+    protected List<String> getReceiver(final AbfrageModel abfrage, final StatusAbfrageEvents stateMachineEvent) {
         if (StatusAbfrageEvents.FREIGABE.equals(stateMachineEvent)) {
-            return receiverSachbearbeitung;
+            return List.of(receiverSachbearbeitung);
         } else if (StatusAbfrageEvents.ERNEUTE_BEARBEITUNG.equals(stateMachineEvent)) {
-            return receiverSachbearbeitung;
+            return List.of(receiverSachbearbeitung);
         } else if (StatusAbfrageEvents.VERSCHICKEN_DER_STELLUNGNAHME.equals(stateMachineEvent)) {
-            return receiverBedarfsmeldung;
+            return List.of(receiverBedarfsmeldung);
         } else if (StatusAbfrageEvents.BEDARFSMELDUNG_ERFOLGTE.equals(stateMachineEvent)) {
             final var bearbeitungshistorie = abfrage.getBearbeitungshistorie();
-            return getEmailAddressOfPersonWhichInitiallyCreatedTheAbfrage(bearbeitungshistorie);
+            final var mailOfPerson = getEmailAddressOfPersonWhichInitiallyCreatedTheAbfrage(bearbeitungshistorie);
+            return List.of(mailOfPerson);
         }
         return null;
     }

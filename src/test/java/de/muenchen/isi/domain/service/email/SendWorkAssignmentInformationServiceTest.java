@@ -82,7 +82,7 @@ class SendWorkAssignmentInformationServiceTest {
 
         Mockito
             .verify(mailSenderRepository, Mockito.times(1))
-            .sendMail("mailadress-receiver-sachbearbeitung", subject, text);
+            .sendMail(List.of("mailadress-receiver-sachbearbeitung"), subject, text);
     }
 
     @Test
@@ -116,7 +116,7 @@ class SendWorkAssignmentInformationServiceTest {
 
         Mockito
             .verify(mailSenderRepository, Mockito.times(1))
-            .sendMail("mailadress-receiver-sachbearbeitung", subject, text);
+            .sendMail(List.of("mailadress-receiver-sachbearbeitung"), subject, text);
     }
 
     @Test
@@ -161,7 +161,7 @@ class SendWorkAssignmentInformationServiceTest {
 
         Mockito
             .verify(mailSenderRepository, Mockito.times(1))
-            .sendMail("mailadress-receiver-sachbearbeitung", subject, text);
+            .sendMail(List.of("mailadress-receiver-sachbearbeitung"), subject, text);
     }
 
     @Test
