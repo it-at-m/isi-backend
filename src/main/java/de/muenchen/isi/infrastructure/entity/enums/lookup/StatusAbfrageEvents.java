@@ -2,7 +2,6 @@ package de.muenchen.isi.infrastructure.entity.enums.lookup;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.apache.commons.lang3.StringUtils;
 
 @AllArgsConstructor
 public enum StatusAbfrageEvents {
