@@ -136,6 +136,12 @@ public class SendWorkAssignmentInformationService {
             final var bearbeitungshistorie = abfrage.getBearbeitungshistorie();
             final var mailOfPerson = getEmailAddressOfPersonWhichInitiallyCreatedTheAbfrage(bearbeitungshistorie);
             return List.of(mailOfPerson);
+        } else if (StatusAbfrageEvents.KEINE_BEARBEITUNG_NOETIG.equals(stateMachineEvent)) {
+            // Erledigt durch Sachbearbeitung
+            return List.of(receiverSachbearbeitung);
+        } else if (StatusAbfrageEvents.SPEICHERN_VON_SOZIALINFRASTRUKTUR_VERSORGUNG.equals(stateMachineEvent)) {
+            // Erledigt durch Fachreferat
+            return List.of(receiverBedarfsmeldung);
         }
         return null;
     }
