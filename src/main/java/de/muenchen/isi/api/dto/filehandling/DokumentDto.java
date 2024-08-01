@@ -21,7 +21,6 @@ public class DokumentDto extends BaseEntityDto {
     private FilepathDto filePath;
 
     @NotNull
-    @NotUnspecified
     private ArtDokument artDokument;
 
     @NotNull

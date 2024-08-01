@@ -6,20 +6,29 @@ import de.muenchen.isi.domain.mapper.SearchDomainMapper;
 import de.muenchen.isi.domain.model.enums.SortAttribute;
 import de.muenchen.isi.domain.model.search.request.SearchQueryAndSortingModel;
 import de.muenchen.isi.domain.model.search.response.SearchResultsModel;
+import de.muenchen.isi.infrastructure.adapter.search.StadtbezirkNummerValueBridge;
 import de.muenchen.isi.infrastructure.entity.BaseEntity;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
+import de.muenchen.isi.security.AuthenticationUtils;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.search.engine.search.common.BooleanOperator;
+import org.hibernate.search.engine.search.predicate.dsl.SearchPredicateFactory;
+import org.hibernate.search.engine.search.predicate.dsl.SimpleBooleanPredicateClausesCollector;
 import org.hibernate.search.engine.search.query.SearchResult;
+import org.hibernate.search.engine.search.query.dsl.SearchQueryOptionsStep;
 import org.hibernate.search.mapper.orm.Search;
 import org.springframework.stereotype.Service;
 
@@ -29,7 +38,9 @@ import org.springframework.stereotype.Service;
 public class EntitySearchService {
 
     private final SearchPreparationService searchPreparationService;
+
     private final SearchDomainMapper searchDomainMapper;
+    private final AuthenticationUtils authenticationUtils;
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -60,34 +71,16 @@ public class EntitySearchService {
         final var adaptedSearchQuery =
             this.createAdaptedSearchQueryForSimpleQueryStringSearch(searchQueryAndSortingInformation.getSearchQuery());
 
-        // Der Offset oder null falls keine Offsetberechnung möglich ist.
-        // Ist keine Offsetberechnung möglich, so wird auch keine paginierte Suche durchgeführt.
-        final Integer paginationOffset = calculateOffsetOrNullIfNoPaginationRequired(searchQueryAndSortingInformation);
-
         // Erstellung der zu filternden Attribute
-        HashMap<String, List<?>> filterAttributeMap = new HashMap<>();
-        filterAttributeMap.put(
-            "verortung.stadtbezirke.nummer",
-            searchQueryAndSortingInformation.getFilterStadtbezirkNummer()
-        );
-        filterAttributeMap.put(
-            "verortung.kitaplanungsbereiche.kitaPlbT",
-            searchQueryAndSortingInformation.getFilterKitaplanungsbereichKitaPlbT()
-        );
-        filterAttributeMap.put(
-            "verortung.grundschulsprengel.nummer",
-            searchQueryAndSortingInformation.getFilterGrundschulsprengelNummer()
-        );
-        filterAttributeMap.put(
-            "verortung.mittelschulsprengel.nummer",
-            searchQueryAndSortingInformation.getFilterMittelschulsprengelNummer()
-        );
+        final var filterAttributeMap = new HashMap<String, List<?>>();
+        this.prepareFilterGemeinsameAttribute(filterAttributeMap, searchQueryAndSortingInformation);
 
-        // Erstellen der Suchquery
+        // Erstellen der Hibernate-Search-Suchquery
         final var searchQueryOptions = Search
             .session(entityManager)
             .search(searchableEntities)
             .where((function, root) -> {
+                // Verarbeitung der angepassten Suchquery
                 root.add(searchPredicateFactory -> {
                     if (StringUtils.isNotEmpty(adaptedSearchQuery)) {
                         // Suche entsprechend der gegebenen Query.
@@ -103,24 +96,14 @@ public class EntitySearchService {
                         return function.matchAll();
                     }
                 });
-
-                // Filtereinstellungen
-                // https://docs.jboss.org/hibernate/search/7.0/reference/en-US/html_single/#search-dsl-predicate-boolean-lambda
-                filterAttributeMap.forEach((keyAttribute, valueList) -> {
-                    if (CollectionUtils.isNotEmpty(valueList)) {
-                        root.add(
-                            function
-                                .bool()
-                                .must(b -> {
-                                    var theBool = b.bool();
-                                    for (final var value : valueList) {
-                                        theBool = theBool.should(function.match().field(keyAttribute).matching(value));
-                                    }
-                                    return theBool;
-                                })
-                        );
-                    }
-                });
+                this.createFilterGemeinsameAttribute(filterAttributeMap, root, function);
+                this.createFilterRealisierungVonBis(searchQueryAndSortingInformation, root, function);
+                this.createFilterGeplanteWohneinheitenGesamtVonBis(searchQueryAndSortingInformation, root, function);
+                this.createFilterGeplanteGeschossflaecheWohnenGesamtVonBis(
+                        searchQueryAndSortingInformation,
+                        root,
+                        function
+                    );
             })
             // Sortierung der Suchergebnisse.
             // https://docs.jboss.org/hibernate/stable/search/reference/en-US/html_single/#query-sorting
@@ -135,6 +118,394 @@ public class EntitySearchService {
                     return function.field("lastModifiedDateTime").order(sortOrder);
                 }
             });
+        return this.executeSearchQuery(searchQueryAndSortingInformation, searchQueryOptions);
+    }
+
+    /**
+     * Diese Methode bereitete die gemeinsamen Filterkriterien vor
+     * <p>
+     * @param filterAttributeMap Gemeinsame Attribute jeder Entität
+     * @param searchQueryAndSortingInformation mit der Suchquery, den Sortier- und Seiteninformationen und den zu durchsuchenden Entitäten.
+     */
+    protected void prepareFilterGemeinsameAttribute(
+        final HashMap<String, List<?>> filterAttributeMap,
+        final SearchQueryAndSortingModel searchQueryAndSortingInformation
+    ) {
+        filterAttributeMap.put(
+            "verortung.stadtbezirke.nummer",
+            searchQueryAndSortingInformation.getFilterStadtbezirkNummer() != null
+                ? searchQueryAndSortingInformation
+                    .getFilterStadtbezirkNummer()
+                    .stream()
+                    .map(StadtbezirkNummerValueBridge::toNormalizedStadtbezirknummer)
+                    .filter(Predicate.not(Objects::isNull))
+                    .toList()
+                : null
+        );
+        filterAttributeMap.put(
+            "verortung.kitaplanungsbereiche.kitaPlbT",
+            searchQueryAndSortingInformation.getFilterKitaplanungsbereichKitaPlbT()
+        );
+        filterAttributeMap.put(
+            "verortung.grundschulsprengel.nummer",
+            searchQueryAndSortingInformation.getFilterGrundschulsprengelNummer()
+        );
+        filterAttributeMap.put(
+            "verortung.mittelschulsprengel.nummer",
+            searchQueryAndSortingInformation.getFilterMittelschulsprengelNummer()
+        );
+        if (
+            searchQueryAndSortingInformation.getFilterSobonRelevant() != null &&
+            searchQueryAndSortingInformation.getFilterSobonRelevant() != UncertainBoolean.UNSPECIFIED
+        ) {
+            filterAttributeMap.put(
+                "sobon_relevant_filter",
+                List.of(searchQueryAndSortingInformation.getFilterSobonRelevant())
+            );
+        }
+        if (BooleanUtils.isTrue(searchQueryAndSortingInformation.getFilterNurEigeneAbfragen())) {
+            filterAttributeMap.put("sub", List.of(authenticationUtils.getUserSub()));
+        }
+        filterAttributeMap.put("statusAbfrage_filter", searchQueryAndSortingInformation.getFilterStatusAbfrage());
+        filterAttributeMap.put("stand_verfahren_filter", searchQueryAndSortingInformation.getFilterStandVerfahren());
+        filterAttributeMap.put(
+            "status_infrastruktureinrichtung_filter",
+            searchQueryAndSortingInformation.getFilterInfrastruktureinrichtungStatus()
+        );
+    }
+
+    /**
+     * Diese Methode erweitert die Filterung der Suche um die in jeder Entität vorkommenden Attribute
+     * <p>
+     * @param filterAttributeMap Gemeinsame Attribute jeder Entität
+     * @param root Startknoten für die Suche (WHERE-Clause)
+     * @param function Benutzerdefinierte Suchfunktion für die Ausführung
+     */
+    protected void createFilterGemeinsameAttribute(
+        final HashMap<String, List<?>> filterAttributeMap,
+        final SimpleBooleanPredicateClausesCollector root,
+        final SearchPredicateFactory function
+    ) {
+        // Filtereinstellungen
+        // https://docs.jboss.org/hibernate/search/7.0/reference/en-US/html_single/#search-dsl-predicate-boolean-lambda
+        filterAttributeMap.forEach((keyAttribute, valueList) -> {
+            if (CollectionUtils.isNotEmpty(valueList)) {
+                root.add(
+                    function
+                        .bool()
+                        .must(b -> {
+                            var theBool = b.bool();
+                            for (final var value : valueList) {
+                                theBool = theBool.should(function.match().field(keyAttribute).matching(value));
+                            }
+                            return theBool;
+                        })
+                );
+            }
+        });
+    }
+
+    /**
+     * Diese Methode erweitert die Filterung der Suche um die Filterattribute Realisierungsbeginn mit der Bereichsangabe von/bis für Abfragen
+     * <p>
+     * @param searchQueryAndSortingInformation mit der Suchquery, den Sortier- und Seiteninformationen und den zu durchsuchenden Entitäten.
+     * @param root Startknoten für die Suche (WHERE-Clause)
+     * @param function Benutzerdefinierte Suchfunktion für die Ausführung
+     */
+    protected void createFilterRealisierungVonBis(
+        final SearchQueryAndSortingModel searchQueryAndSortingInformation,
+        final SimpleBooleanPredicateClausesCollector root,
+        final SearchPredicateFactory function
+    ) {
+        // Filter: Bereich für Realisierungsbeginn auf Basis des Abfragevariantenattributs realisierungVon
+        // Nutzen von Between da der Filterwert "null" als Infinitybound gehandhabt wird.
+        if (
+            ObjectUtils.isNotEmpty(searchQueryAndSortingInformation.getFilterRealisierungsbeginnVon()) ||
+            ObjectUtils.isNotEmpty(searchQueryAndSortingInformation.getFilterRealisierungsbeginnBis())
+        ) {
+            root.add(
+                function
+                    .bool()
+                    .must(b -> {
+                        var theBool = b.bool();
+
+                        if (BooleanUtils.isTrue(searchQueryAndSortingInformation.getSelectBauleitplanverfahren())) {
+                            theBool =
+                                theBool.should(
+                                    function
+                                        .range()
+                                        .field("abfragevariantenBauleitplanverfahren.realisierungVon")
+                                        .between(
+                                            searchQueryAndSortingInformation.getFilterRealisierungsbeginnVon(),
+                                            searchQueryAndSortingInformation.getFilterRealisierungsbeginnBis()
+                                        )
+                                );
+                            theBool =
+                                theBool.should(
+                                    function
+                                        .range()
+                                        .field("abfragevariantenSachbearbeitungBauleitplanverfahren.realisierungVon")
+                                        .between(
+                                            searchQueryAndSortingInformation.getFilterRealisierungsbeginnVon(),
+                                            searchQueryAndSortingInformation.getFilterRealisierungsbeginnBis()
+                                        )
+                                );
+                        }
+                        if (BooleanUtils.isTrue(searchQueryAndSortingInformation.getSelectBaugenehmigungsverfahren())) {
+                            theBool =
+                                theBool.should(
+                                    function
+                                        .range()
+                                        .field("abfragevariantenBaugenehmigungsverfahren.realisierungVon")
+                                        .between(
+                                            searchQueryAndSortingInformation.getFilterRealisierungsbeginnVon(),
+                                            searchQueryAndSortingInformation.getFilterRealisierungsbeginnBis()
+                                        )
+                                );
+                            theBool =
+                                theBool.should(
+                                    function
+                                        .range()
+                                        .field(
+                                            "abfragevariantenSachbearbeitungBaugenehmigungsverfahren.realisierungVon"
+                                        )
+                                        .between(
+                                            searchQueryAndSortingInformation.getFilterRealisierungsbeginnVon(),
+                                            searchQueryAndSortingInformation.getFilterRealisierungsbeginnBis()
+                                        )
+                                );
+                        }
+                        if (BooleanUtils.isTrue(searchQueryAndSortingInformation.getSelectWeiteresVerfahren())) {
+                            theBool =
+                                theBool.should(
+                                    function
+                                        .range()
+                                        .field("abfragevariantenWeiteresVerfahren.realisierungVon")
+                                        .between(
+                                            searchQueryAndSortingInformation.getFilterRealisierungsbeginnVon(),
+                                            searchQueryAndSortingInformation.getFilterRealisierungsbeginnBis()
+                                        )
+                                );
+                            theBool =
+                                theBool.should(
+                                    function
+                                        .range()
+                                        .field("abfragevariantenSachbearbeitungWeiteresVerfahren.realisierungVon")
+                                        .between(
+                                            searchQueryAndSortingInformation.getFilterRealisierungsbeginnVon(),
+                                            searchQueryAndSortingInformation.getFilterRealisierungsbeginnBis()
+                                        )
+                                );
+                        }
+                        return theBool;
+                    })
+            );
+        }
+    }
+
+    /**
+     * Diese Methode erweitert die Filterung der Suche um die Filterattribute Geplante Wohneinheiten gesamt mit der Bereichsangabe von/bis für Abfragen
+     * <p>
+     * @param searchQueryAndSortingInformation mit der Suchquery, den Sortier- und Seiteninformationen und den zu durchsuchenden Entitäten.
+     * @param root Startknoten für die Suche (WHERE-Clause)
+     * @param function Benutzerdefinierte Suchfunktion für die Ausführung
+     */
+    protected void createFilterGeplanteWohneinheitenGesamtVonBis(
+        final SearchQueryAndSortingModel searchQueryAndSortingInformation,
+        final SimpleBooleanPredicateClausesCollector root,
+        final SearchPredicateFactory function
+    ) {
+        // Filter: Bereich für geplante Wohneinheiten auf Basis des Abfragevariantenattributs weGesamt
+        // Nutzen von Between da der Filterwert "null" als Infinitybound gehandhabt wird.
+        if (
+            ObjectUtils.isNotEmpty(searchQueryAndSortingInformation.getFilterWeGesamtVon()) ||
+            ObjectUtils.isNotEmpty(searchQueryAndSortingInformation.getFilterWeGesamtBis())
+        ) {
+            root.add(
+                function
+                    .bool()
+                    .must(b -> {
+                        var theBool = b.bool();
+                        if (BooleanUtils.isTrue(searchQueryAndSortingInformation.getSelectBauleitplanverfahren())) {
+                            theBool =
+                                theBool.should(
+                                    function
+                                        .range()
+                                        .field("abfragevariantenBauleitplanverfahren.weGesamt")
+                                        .between(
+                                            searchQueryAndSortingInformation.getFilterWeGesamtVon(),
+                                            searchQueryAndSortingInformation.getFilterWeGesamtBis()
+                                        )
+                                );
+                            theBool =
+                                theBool.should(
+                                    function
+                                        .range()
+                                        .field("abfragevariantenSachbearbeitungBauleitplanverfahren.weGesamt")
+                                        .between(
+                                            searchQueryAndSortingInformation.getFilterWeGesamtVon(),
+                                            searchQueryAndSortingInformation.getFilterWeGesamtBis()
+                                        )
+                                );
+                        }
+                        if (BooleanUtils.isTrue(searchQueryAndSortingInformation.getSelectBaugenehmigungsverfahren())) {
+                            theBool =
+                                theBool.should(
+                                    function
+                                        .range()
+                                        .field("abfragevariantenBaugenehmigungsverfahren.weGesamt")
+                                        .between(
+                                            searchQueryAndSortingInformation.getFilterWeGesamtVon(),
+                                            searchQueryAndSortingInformation.getFilterWeGesamtBis()
+                                        )
+                                );
+                            theBool =
+                                theBool.should(
+                                    function
+                                        .range()
+                                        .field("abfragevariantenSachbearbeitungBaugenehmigungsverfahren.weGesamt")
+                                        .between(
+                                            searchQueryAndSortingInformation.getFilterWeGesamtVon(),
+                                            searchQueryAndSortingInformation.getFilterWeGesamtBis()
+                                        )
+                                );
+                        }
+                        if (BooleanUtils.isTrue(searchQueryAndSortingInformation.getSelectWeiteresVerfahren())) {
+                            theBool =
+                                theBool.should(
+                                    function
+                                        .range()
+                                        .field("abfragevariantenWeiteresVerfahren.weGesamt")
+                                        .between(
+                                            searchQueryAndSortingInformation.getFilterWeGesamtVon(),
+                                            searchQueryAndSortingInformation.getFilterWeGesamtBis()
+                                        )
+                                );
+                            theBool =
+                                theBool.should(
+                                    function
+                                        .range()
+                                        .field("abfragevariantenSachbearbeitungWeiteresVerfahren.weGesamt")
+                                        .between(
+                                            searchQueryAndSortingInformation.getFilterWeGesamtVon(),
+                                            searchQueryAndSortingInformation.getFilterWeGesamtBis()
+                                        )
+                                );
+                        }
+                        return theBool;
+                    })
+            );
+        }
+    }
+
+    /**
+     * Diese Methode erweitert die Filterung der Suche um die Filterattribute geplante Geschossfläche Wohnen mit der Bereichsangabe von/bis für Abfragen
+     * <p>
+     * @param searchQueryAndSortingInformation mit der Suchquery, den Sortier- und Seiteninformationen und den zu durchsuchenden Entitäten.
+     * @param root Startknoten für die Suche (WHERE-Clause)
+     * @param function Benutzerdefinierte Suchfunktion für die Ausführung
+     */
+    protected void createFilterGeplanteGeschossflaecheWohnenGesamtVonBis(
+        final SearchQueryAndSortingModel searchQueryAndSortingInformation,
+        final SimpleBooleanPredicateClausesCollector root,
+        final SearchPredicateFactory function
+    ) {
+        // Filter: Bereich für geplante Geschossfläche Wohnen auf Basis des Abfragevariantenattributs gfWohnenGesamt
+        // Nutzen von Between da der Filterwert "null" als Infinitybound gehandhabt wird.
+        if (
+            ObjectUtils.isNotEmpty(searchQueryAndSortingInformation.getFilterGfWohnenGeplantVon()) ||
+            ObjectUtils.isNotEmpty(searchQueryAndSortingInformation.getFilterGfWohnenGeplantBis())
+        ) {
+            root.add(
+                function
+                    .bool()
+                    .must(b -> {
+                        var theBool = b.bool();
+                        if (BooleanUtils.isTrue(searchQueryAndSortingInformation.getSelectBauleitplanverfahren())) {
+                            theBool =
+                                theBool.should(
+                                    function
+                                        .range()
+                                        .field("abfragevariantenBauleitplanverfahren.gfWohnenGesamt")
+                                        .between(
+                                            searchQueryAndSortingInformation.getFilterGfWohnenGeplantVon(),
+                                            searchQueryAndSortingInformation.getFilterGfWohnenGeplantBis()
+                                        )
+                                );
+                            theBool =
+                                theBool.should(
+                                    function
+                                        .range()
+                                        .field("abfragevariantenSachbearbeitungBauleitplanverfahren.gfWohnenGesamt")
+                                        .between(
+                                            searchQueryAndSortingInformation.getFilterGfWohnenGeplantVon(),
+                                            searchQueryAndSortingInformation.getFilterGfWohnenGeplantBis()
+                                        )
+                                );
+                        }
+                        if (BooleanUtils.isTrue(searchQueryAndSortingInformation.getSelectBaugenehmigungsverfahren())) {
+                            theBool =
+                                theBool.should(
+                                    function
+                                        .range()
+                                        .field("abfragevariantenBaugenehmigungsverfahren.gfWohnenGesamt")
+                                        .between(
+                                            searchQueryAndSortingInformation.getFilterGfWohnenGeplantVon(),
+                                            searchQueryAndSortingInformation.getFilterGfWohnenGeplantBis()
+                                        )
+                                );
+                            theBool =
+                                theBool.should(
+                                    function
+                                        .range()
+                                        .field("abfragevariantenSachbearbeitungBaugenehmigungsverfahren.gfWohnenGesamt")
+                                        .between(
+                                            searchQueryAndSortingInformation.getFilterGfWohnenGeplantVon(),
+                                            searchQueryAndSortingInformation.getFilterGfWohnenGeplantBis()
+                                        )
+                                );
+                        }
+                        if (BooleanUtils.isTrue(searchQueryAndSortingInformation.getSelectWeiteresVerfahren())) {
+                            theBool =
+                                theBool.should(
+                                    function
+                                        .range()
+                                        .field("abfragevariantenWeiteresVerfahren.gfWohnenGesamt")
+                                        .between(
+                                            searchQueryAndSortingInformation.getFilterGfWohnenGeplantVon(),
+                                            searchQueryAndSortingInformation.getFilterGfWohnenGeplantBis()
+                                        )
+                                );
+                            theBool =
+                                theBool.should(
+                                    function
+                                        .range()
+                                        .field("abfragevariantenSachbearbeitungWeiteresVerfahren.gfWohnenGesamt")
+                                        .between(
+                                            searchQueryAndSortingInformation.getFilterGfWohnenGeplantVon(),
+                                            searchQueryAndSortingInformation.getFilterGfWohnenGeplantBis()
+                                        )
+                                );
+                        }
+                        return theBool;
+                    })
+            );
+        }
+    }
+
+    /**
+     * Diese Methode führt eine Suche aus
+     * <p>
+     * @param searchQueryAndSortingInformation mit der Suchquery, den Sortier- und Seiteninformationen und den zu durchsuchenden Entitäten.
+     * @param searchQueryOptions Suchoptionen für die Suche
+     */
+    protected SearchResultsModel executeSearchQuery(
+        final SearchQueryAndSortingModel searchQueryAndSortingInformation,
+        final SearchQueryOptionsStep searchQueryOptions
+    ) {
+        // Der Offset oder null falls keine Offsetberechnung möglich ist.
+        // Ist keine Offsetberechnung möglich, so wird auch keine paginierte Suche durchgeführt.
+        final Integer paginationOffset = calculateOffsetOrNullIfNoPaginationRequired(searchQueryAndSortingInformation);
 
         // Ausführen einer paginierten oder nicht-paginierten Suche.
         final SearchResult<BaseEntity> searchResult = ObjectUtils.isNotEmpty(paginationOffset)
