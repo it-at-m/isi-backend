@@ -49,6 +49,8 @@ public class AbfragevarianteBaugenehmigungsverfahrenModel
 
     private BigDecimal gfWohnenWeiteresNichtInfrastrukturrelevantesWohnen;
 
+    private String gfAnmerkung;
+
     // Anzahl Wohneinheiten
 
     private Integer weGesamt;
@@ -66,6 +68,8 @@ public class AbfragevarianteBaugenehmigungsverfahrenModel
     private Integer weGenossenschaftlichesWohnen;
 
     private Integer weWeiteresNichtInfrastrukturrelevantesWohnen;
+
+    private String weAnmerkung;
 
     private SobonOrientierungswertJahr sobonOrientierungswertJahr;
 

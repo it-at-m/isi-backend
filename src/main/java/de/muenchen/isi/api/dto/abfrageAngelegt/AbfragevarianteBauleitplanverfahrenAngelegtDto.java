@@ -80,6 +80,8 @@ public class AbfragevarianteBauleitplanverfahrenAngelegtDto implements Abfrageva
 
     private BigDecimal gfWohnenWeiteresNichtInfrastrukturrelevantesWohnen;
 
+    private String gfAnmerkung;
+
     // Anzahl Wohneinheiten
 
     private Integer weGesamt;
@@ -94,6 +96,8 @@ public class AbfragevarianteBauleitplanverfahrenAngelegtDto implements Abfrageva
     private Integer weGenossenschaftlichesWohnen;
 
     private Integer weWeiteresNichtInfrastrukturrelevantesWohnen;
+
+    private String weAnmerkung;
 
     @NotEmpty
     @TechnicalAttributesValid

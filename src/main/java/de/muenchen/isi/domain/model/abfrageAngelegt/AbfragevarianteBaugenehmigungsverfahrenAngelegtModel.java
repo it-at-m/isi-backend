@@ -51,6 +51,8 @@ public class AbfragevarianteBaugenehmigungsverfahrenAngelegtModel {
 
     private BigDecimal gfWohnenWeiteresNichtInfrastrukturrelevantesWohnen;
 
+    private String gfAnmerkung;
+
     // Anzahl Wohneinheiten
 
     private Integer weGesamt;
@@ -68,6 +70,8 @@ public class AbfragevarianteBaugenehmigungsverfahrenAngelegtModel {
     private Integer weGenossenschaftlichesWohnen;
 
     private Integer weWeiteresNichtInfrastrukturrelevantesWohnen;
+
+    private String weAnmerkung;
 
     private List<BauabschnittModel> bauabschnitte;
 }

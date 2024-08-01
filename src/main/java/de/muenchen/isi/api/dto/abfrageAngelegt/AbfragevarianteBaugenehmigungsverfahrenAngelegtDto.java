@@ -79,6 +79,8 @@ public class AbfragevarianteBaugenehmigungsverfahrenAngelegtDto implements Abfra
 
     private BigDecimal gfWohnenWeiteresNichtInfrastrukturrelevantesWohnen;
 
+    private String gfAnmerkung;
+
     // Anzahl Wohneinheiten
 
     private Integer weGesamt;
@@ -97,6 +99,8 @@ public class AbfragevarianteBaugenehmigungsverfahrenAngelegtDto implements Abfra
     private Integer weGenossenschaftlichesWohnen;
 
     private Integer weWeiteresNichtInfrastrukturrelevantesWohnen;
+
+    private String weAnmerkung;
 
     @NotEmpty
     @TechnicalAttributesValid

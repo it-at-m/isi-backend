@@ -81,6 +81,8 @@ public class AbfragevarianteWeiteresVerfahrenAngelegtDto implements Abfragevaria
 
     private BigDecimal gfWohnenWeiteresNichtInfrastrukturrelevantesWohnen;
 
+    private String gfAnmerkung;
+
     // Anzahl Wohneinheiten
 
     private Integer weGesamt;
@@ -99,6 +101,8 @@ public class AbfragevarianteWeiteresVerfahrenAngelegtDto implements Abfragevaria
     private Integer weGenossenschaftlichesWohnen;
 
     private Integer weWeiteresNichtInfrastrukturrelevantesWohnen;
+
+    private String weAnmerkung;
 
     @TechnicalAttributesValid
     private List<@Valid @NotNull BauabschnittDto> bauabschnitte;
