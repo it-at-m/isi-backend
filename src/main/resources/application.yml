@@ -69,7 +69,7 @@ work-assignment-information:
       text: "Die Bedarfsmeldung der Abfrage ist erfolgt und liegt zur Bearbeitung vor.\n\nAbfrage: "
       subject: "ISI - Bedarfsmeldung erfolgt - Abfrage: "
     speichern-von-sozialinfrastruktur-versorgung:
-      test: "Die Abfrage ist abgeschlossen.\n\nAbfrage: "
+      text: "Die Abfrage ist abgeschlossen.\n\nAbfrage: "
       subject: "ISI - Abfrage abgeschlossen. - Abfrage: "
 
 
