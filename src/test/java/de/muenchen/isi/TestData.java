@@ -94,8 +94,8 @@ public class TestData {
         bauleitplanverfahren.setVerortung(createVerortung());
         bauleitplanverfahren.setSobonRelevant(UncertainBoolean.TRUE);
         bauleitplanverfahren.setSobonJahr(SobonVerfahrensgrundsaetzeJahr.JAHR_2021);
-        bauleitplanverfahren.setOffizielleMitzeichnung(UncertainBoolean.TRUE);
-        bauleitplanverfahren.setOffizielleMitzeichnung(UncertainBoolean.FALSE);
+        bauleitplanverfahren.setMitzeichnungBeschlussentwurf(UncertainBoolean.TRUE);
+        bauleitplanverfahren.setMitzeichnungBeschlussentwurf(UncertainBoolean.FALSE);
         bauleitplanverfahren.setAbfragevariantenBauleitplanverfahren(
             List.of(createAbfragevarianteBauleitplanverfahrenModel())
         );
@@ -138,8 +138,8 @@ public class TestData {
         weiteresVerfahren.setVerortung(createVerortung());
         weiteresVerfahren.setSobonRelevant(UncertainBoolean.TRUE);
         weiteresVerfahren.setSobonJahr(SobonVerfahrensgrundsaetzeJahr.JAHR_2021);
-        weiteresVerfahren.setOffizielleMitzeichnung(UncertainBoolean.TRUE);
-        weiteresVerfahren.setOffizielleMitzeichnung(UncertainBoolean.FALSE);
+        weiteresVerfahren.setMitzeichnungBeschlussentwurf(UncertainBoolean.TRUE);
+        weiteresVerfahren.setMitzeichnungBeschlussentwurf(UncertainBoolean.FALSE);
         weiteresVerfahren.setAbfragevariantenWeiteresVerfahren(List.of(createAbfragevarianteWeiteresVerfahrenModel()));
         return weiteresVerfahren;
     }
@@ -159,7 +159,7 @@ public class TestData {
         bauleitplanverfahren.setStandVerfahren(StandVerfahren.STRUKTURKONZEPT);
         bauleitplanverfahren.setVerortung(createVerortung());
         bauleitplanverfahren.setSobonRelevant(UncertainBoolean.FALSE);
-        bauleitplanverfahren.setOffizielleMitzeichnung(UncertainBoolean.FALSE);
+        bauleitplanverfahren.setMitzeichnungBeschlussentwurf(UncertainBoolean.FALSE);
         bauleitplanverfahren.setAbfragevariantenBauleitplanverfahren(
             List.of(createAbfragevarianteBauleitplanverfahrenAngelegtModel())
         );
@@ -201,7 +201,7 @@ public class TestData {
         bauleitplanverfahren.setStandVerfahren(StandVerfahren.STRUKTURKONZEPT);
         bauleitplanverfahren.setVerortung(createVerortung());
         bauleitplanverfahren.setSobonRelevant(UncertainBoolean.FALSE);
-        bauleitplanverfahren.setOffizielleMitzeichnung(UncertainBoolean.FALSE);
+        bauleitplanverfahren.setMitzeichnungBeschlussentwurf(UncertainBoolean.FALSE);
         bauleitplanverfahren.setAbfragevariantenWeiteresVerfahren(
             List.of(createAbfragevarianteWeiteresVerfahrenAngelegtModel())
         );
