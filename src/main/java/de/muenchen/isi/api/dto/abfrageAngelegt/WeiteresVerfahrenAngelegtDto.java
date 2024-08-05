@@ -57,7 +57,7 @@ public class WeiteresVerfahrenAngelegtDto extends AbfrageAngelegtDto {
     private LocalDate fristBearbeitung;
 
     @NotNull
-    private UncertainBoolean offizielleMitzeichnung;
+    private UncertainBoolean mitzeichnungBeschlussentwurf;
 
     @NotEmpty
     @Size(min = 1, max = 5)

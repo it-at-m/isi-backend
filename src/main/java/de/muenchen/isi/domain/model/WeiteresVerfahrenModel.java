@@ -38,7 +38,7 @@ public class WeiteresVerfahrenModel extends AbfrageModel {
 
     private LocalDate fristBearbeitung;
 
-    private UncertainBoolean offizielleMitzeichnung;
+    private UncertainBoolean mitzeichnungBeschlussentwurf;
 
     private List<AbfragevarianteWeiteresVerfahrenModel> abfragevariantenWeiteresVerfahren;
 

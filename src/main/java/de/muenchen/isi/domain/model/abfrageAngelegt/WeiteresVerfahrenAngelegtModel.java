@@ -37,7 +37,7 @@ public class WeiteresVerfahrenAngelegtModel extends AbfrageAngelegtModel {
 
     private LocalDate fristBearbeitung;
 
-    private UncertainBoolean offizielleMitzeichnung;
+    private UncertainBoolean mitzeichnungBeschlussentwurf;
 
     private List<AbfragevarianteWeiteresVerfahrenAngelegtModel> abfragevariantenWeiteresVerfahren;
 }
