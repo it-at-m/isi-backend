@@ -82,7 +82,7 @@ class SendWorkAssignmentInformationServiceTest {
 
         Mockito
             .verify(mailSenderRepository, Mockito.times(1))
-            .sendMail("mailadress-receiver-sachbearbeitung", subject, text);
+            .sendMail(List.of("mailadress-receiver-sachbearbeitung"), subject, text);
     }
 
     @Test
@@ -116,7 +116,7 @@ class SendWorkAssignmentInformationServiceTest {
 
         Mockito
             .verify(mailSenderRepository, Mockito.times(1))
-            .sendMail("mailadress-receiver-sachbearbeitung", subject, text);
+            .sendMail(List.of("mailadress-receiver-sachbearbeitung"), subject, text);
     }
 
     @Test
@@ -161,19 +161,19 @@ class SendWorkAssignmentInformationServiceTest {
 
         Mockito
             .verify(mailSenderRepository, Mockito.times(1))
-            .sendMail("mailadress-receiver-sachbearbeitung", subject, text);
+            .sendMail(List.of("mailadress-receiver-sachbearbeitung"), subject, text);
     }
 
     @Test
     void getReceiverFreigabe() {
         var result = sendWorkAssignmentInformationService.getReceiver(null, StatusAbfrageEvents.FREIGABE);
-        assertThat(result, is("mailadress-receiver-sachbearbeitung"));
+        assertThat(result, is(List.of("mailadress-receiver-sachbearbeitung")));
     }
 
     @Test
     void getReceiverErneuteBearbeitung() {
         var result = sendWorkAssignmentInformationService.getReceiver(null, StatusAbfrageEvents.ERNEUTE_BEARBEITUNG);
-        assertThat(result, is("mailadress-receiver-sachbearbeitung"));
+        assertThat(result, is(List.of("mailadress-receiver-sachbearbeitung")));
     }
 
     @Test
@@ -182,7 +182,7 @@ class SendWorkAssignmentInformationServiceTest {
             null,
             StatusAbfrageEvents.VERSCHICKEN_DER_STELLUNGNAHME
         );
-        assertThat(result, is("mailadress-receiver-bedarfsmeldung"));
+        assertThat(result, is(List.of("mailadress-receiver-bedarfsmeldung")));
     }
 
     @Test
@@ -217,7 +217,16 @@ class SendWorkAssignmentInformationServiceTest {
             abfrage,
             StatusAbfrageEvents.BEDARFSMELDUNG_ERFOLGTE
         );
-        assertThat(result, is("the-email-address-offen"));
+        assertThat(result, is(List.of("the-email-address-offen")));
+    }
+
+    @Test
+    void getReceiverSpeichernVonSozialinfrastrukturVersorgung() {
+        var result = sendWorkAssignmentInformationService.getReceiver(
+            null,
+            StatusAbfrageEvents.SPEICHERN_VON_SOZIALINFRASTRUKTUR_VERSORGUNG
+        );
+        assertThat(result, is(List.of("mailadress-receiver-sachbearbeitung", "mailadress-receiver-bedarfsmeldung")));
     }
 
     @Test
@@ -236,13 +245,6 @@ class SendWorkAssignmentInformationServiceTest {
         assertThat(result, is(nullValue()));
 
         result = sendWorkAssignmentInformationService.getReceiver(null, StatusAbfrageEvents.ZURUECK_AN_SACHBEARBEITUNG);
-        assertThat(result, is(nullValue()));
-
-        result =
-            sendWorkAssignmentInformationService.getReceiver(
-                null,
-                StatusAbfrageEvents.SPEICHERN_VON_SOZIALINFRASTRUKTUR_VERSORGUNG
-            );
         assertThat(result, is(nullValue()));
     }
 
