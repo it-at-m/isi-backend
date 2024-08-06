@@ -105,6 +105,9 @@ public class AbfragevarianteBauleitplanverfahren extends Abfragevariante {
     @Column(precision = 10, scale = 2)
     private BigDecimal gfWohnenWeiteresNichtInfrastrukturrelevantesWohnen;
 
+    @Column(length = 200)
+    private String gfAnmerkung;
+
     // Anzahl Wohneinheiten
 
     @GenericField
@@ -125,6 +128,9 @@ public class AbfragevarianteBauleitplanverfahren extends Abfragevariante {
 
     @Column
     private Integer weWeiteresNichtInfrastrukturrelevantesWohnen;
+
+    @Column(length = 200)
+    private String weAnmerkung;
 
     @Enumerated(EnumType.STRING)
     @Column
