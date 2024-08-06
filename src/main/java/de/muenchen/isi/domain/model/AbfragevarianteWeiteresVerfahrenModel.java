@@ -52,6 +52,8 @@ public class AbfragevarianteWeiteresVerfahrenModel extends AbfragevarianteModel 
 
     private BigDecimal gfWohnenWeiteresNichtInfrastrukturrelevantesWohnen;
 
+    private String gfAnmerkung;
+
     // Anzahl Wohneinheiten
 
     private Integer weGesamt;
@@ -69,6 +71,8 @@ public class AbfragevarianteWeiteresVerfahrenModel extends AbfragevarianteModel 
     private Integer weGenossenschaftlichesWohnen;
 
     private Integer weWeiteresNichtInfrastrukturrelevantesWohnen;
+
+    private String weAnmerkung;
 
     private SobonOrientierungswertJahr sobonOrientierungswertJahr;
 

@@ -39,6 +39,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBinderRef;
 import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBridgeRef;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.GenericField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.KeywordField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.NonStandardField;
 
@@ -76,6 +77,7 @@ public class AbfragevarianteWeiteresVerfahren extends Abfragevariante {
 
     // Geschossfläche Wohnen
 
+    @GenericField
     @Column(precision = 10, scale = 2)
     private BigDecimal gfWohnenGesamt;
 
@@ -106,8 +108,12 @@ public class AbfragevarianteWeiteresVerfahren extends Abfragevariante {
     @Column(precision = 10, scale = 2)
     private BigDecimal gfWohnenWeiteresNichtInfrastrukturrelevantesWohnen;
 
+    @Column(length = 200)
+    private String gfAnmerkung;
+
     // Anzahl Wohneinheiten
 
+    @GenericField
     @Column
     private Integer weGesamt;
 
@@ -131,6 +137,9 @@ public class AbfragevarianteWeiteresVerfahren extends Abfragevariante {
 
     @Column
     private Integer weWeiteresNichtInfrastrukturrelevantesWohnen;
+
+    @Column(length = 200)
+    private String weAnmerkung;
 
     @Enumerated(EnumType.STRING)
     @Column

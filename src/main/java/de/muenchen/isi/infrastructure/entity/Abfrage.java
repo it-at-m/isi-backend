@@ -71,6 +71,7 @@ public abstract class Abfrage extends BaseEntity {
     @ManyToOne
     private Bauvorhaben bauvorhaben;
 
+    @GenericField
     @Column(nullable = false)
     private String sub;
 
