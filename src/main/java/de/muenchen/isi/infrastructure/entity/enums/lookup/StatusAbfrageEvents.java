@@ -2,7 +2,6 @@ package de.muenchen.isi.infrastructure.entity.enums.lookup;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.apache.commons.lang3.StringUtils;
 
 @AllArgsConstructor
 public enum StatusAbfrageEvents {
@@ -83,8 +82,8 @@ public enum StatusAbfrageEvents {
         "ABFRAGE ABSCHLIESSEN",
         9,
         "Die Abfrage wird abgeschlossen.",
-        null,
-        null
+        "work-assignment-information.message.speichern-von-sozialinfrastruktur-versorgung.text",
+        "work-assignment-information.message.speichern-von-sozialinfrastruktur-versorgung.subject"
     ),
 
     ERNEUTE_BEARBEITUNG(
