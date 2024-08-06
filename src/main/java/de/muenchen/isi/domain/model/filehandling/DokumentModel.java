@@ -14,8 +14,4 @@ public class DokumentModel extends BaseEntityModel {
     private FilepathModel filePath;
 
     private ArtDokument artDokument;
-
-    private Long sizeInBytes;
-
-    private String typDokument;
 }
