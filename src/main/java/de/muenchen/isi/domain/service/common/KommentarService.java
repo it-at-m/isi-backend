@@ -4,9 +4,12 @@ import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.FileHandlingFailedException;
 import de.muenchen.isi.domain.exception.FileHandlingWithS3FailedException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
-import de.muenchen.isi.domain.mapper.KommentarDomainMapper;
-import de.muenchen.isi.domain.model.common.KommentarModel;
+import de.muenchen.isi.domain.mapper.KommentarBauvorhabenDomainMapper;
+import de.muenchen.isi.domain.mapper.KommentarInfrastruktureinrichtungDomainMapper;
+import de.muenchen.isi.domain.model.common.KommentarBauvorhabenModel;
+import de.muenchen.isi.domain.model.common.KommentarInfrastruktureinrichtungModel;
 import de.muenchen.isi.domain.service.filehandling.DokumentService;
+import de.muenchen.isi.infrastructure.entity.common.Kommentar;
 import de.muenchen.isi.infrastructure.repository.common.KommentarRepository;
 import java.util.List;
 import java.util.UUID;
@@ -23,7 +26,9 @@ public class KommentarService {
 
     private final KommentarRepository kommentarRepository;
 
-    private final KommentarDomainMapper kommentarMapper;
+    private final KommentarBauvorhabenDomainMapper kommentarBauvorhabenMapper;
+
+    private final KommentarInfrastruktureinrichtungDomainMapper kommentarInfrastruktureinrichtungMapper;
 
     private final DokumentService dokumentService;
 
@@ -33,10 +38,10 @@ public class KommentarService {
      * @param bauvorhabenId als ID des Bauvorhabens.
      * @return die Kommentare sortiert nach absteigenden Erstellungsdatum.
      */
-    public List<KommentarModel> getKommentareForBauvorhaben(final UUID bauvorhabenId) {
+    public List<KommentarBauvorhabenModel> getKommentareForBauvorhaben(final UUID bauvorhabenId) {
         return kommentarRepository
             .findAllByBauvorhabenIdOrderByCreatedDateTimeDesc(bauvorhabenId)
-            .map(kommentarMapper::entity2Model)
+            .map(kommentarBauvorhabenMapper::entity2Model)
             .collect(Collectors.toList());
     }
 
@@ -46,11 +51,24 @@ public class KommentarService {
      * @param infrastruktureinrichtungId als ID der Infrastruktureinrichtung.
      * @return die Kommentare sortiert nach absteigenden Erstellungsdatum.
      */
-    public List<KommentarModel> getKommentareForInfrastruktureinrichtung(final UUID infrastruktureinrichtungId) {
+    public List<KommentarInfrastruktureinrichtungModel> getKommentareForInfrastruktureinrichtung(
+        final UUID infrastruktureinrichtungId
+    ) {
         return kommentarRepository
             .findAllByInfrastruktureinrichtungIdOrderByCreatedDateTimeDesc(infrastruktureinrichtungId)
-            .map(kommentarMapper::entity2Model)
+            .map(kommentarInfrastruktureinrichtungMapper::entity2Model)
             .collect(Collectors.toList());
+    }
+
+    /**
+     * Holt den Kommentar eines Bauvorhabens identifiziert durch die ID des Kommentars.
+     *
+     * @param id des Kommentars.
+     * @return den Kommentar.
+     * @throws EntityNotFoundException falls kein Kommentar mit der ID existiert.
+     */
+    public KommentarBauvorhabenModel getKommentarForBauvorhabenById(final UUID id) throws EntityNotFoundException {
+        return kommentarBauvorhabenMapper.entity2Model(this.getKommentarById(id));
     }
 
     /**
@@ -60,55 +78,98 @@ public class KommentarService {
      * @return den Kommentar.
      * @throws EntityNotFoundException falls kein Kommentar mit der ID existiert.
      */
-    public KommentarModel getKommentarById(final UUID id) throws EntityNotFoundException {
-        final var entity = kommentarRepository
+    public KommentarInfrastruktureinrichtungModel getKommentarForInfrastruktureinrichtungById(final UUID id)
+        throws EntityNotFoundException {
+        return kommentarInfrastruktureinrichtungMapper.entity2Model(this.getKommentarById(id));
+    }
+
+    private Kommentar getKommentarById(final UUID id) throws EntityNotFoundException {
+        return kommentarRepository
             .findById(id)
             .orElseThrow(() -> {
                 final var message = "Kommentar nicht gefunden.";
                 log.error(message);
                 return new EntityNotFoundException(message);
             });
-        return kommentarMapper.entity2Model(entity);
     }
 
     /**
-     * Speichert den Kommentar.
+     * Speichert den Kommentar eines Bauvorhabens.
      *
      * @param kommentar zum Speichern.
      * @return den gespeicherten Kommentar.
      * @throws EntityNotFoundException falls kein referenzierbares Bauvorhaben bzw. keine referenzierbare Infrastruktureinrichtung existiert.
      * @throws OptimisticLockingException falls der Kommentar in einer neueren Version gespeichert ist.
      */
-    public KommentarModel saveKommentar(final KommentarModel kommentar)
+    public KommentarBauvorhabenModel saveKommentarForBauvorhaben(final KommentarBauvorhabenModel kommentar)
         throws OptimisticLockingException, EntityNotFoundException {
-        var entity = kommentarMapper.model2Entity(kommentar);
+        var entity = kommentarBauvorhabenMapper.model2Entity(kommentar);
+        return kommentarBauvorhabenMapper.entity2Model(this.saveKommentar(entity));
+    }
+
+    /**
+     * Speichert den Kommentar einer Infrastruktureinrichtung.
+     *
+     * @param kommentar zum Speichern.
+     * @return den gespeicherten Kommentar.
+     * @throws EntityNotFoundException falls kein referenzierbares Bauvorhaben bzw. keine referenzierbare Infrastruktureinrichtung existiert.
+     * @throws OptimisticLockingException falls der Kommentar in einer neueren Version gespeichert ist.
+     */
+    public KommentarInfrastruktureinrichtungModel saveKommentarForInfrastruktureinrichtung(
+        final KommentarInfrastruktureinrichtungModel kommentar
+    ) throws OptimisticLockingException, EntityNotFoundException {
+        var entity = kommentarInfrastruktureinrichtungMapper.model2Entity(kommentar);
+        return kommentarInfrastruktureinrichtungMapper.entity2Model(this.saveKommentar(entity));
+    }
+
+    private Kommentar saveKommentar(final Kommentar entity) throws OptimisticLockingException {
         try {
-            entity = kommentarRepository.saveAndFlush(entity);
+            return kommentarRepository.saveAndFlush(entity);
         } catch (final ObjectOptimisticLockingFailureException exception) {
             final var message =
                 "Der Kommentar wurde in der Zwischenzeit geändert. Bitte öffnen Sie die Kommentare neu!";
             throw new OptimisticLockingException(message, exception);
         }
-        return kommentarMapper.entity2Model(entity);
     }
 
     /**
-     * Aktualisiert den bereits gespeicherten Kommentar.
+     * Aktualisiert den bereits gespeicherten Kommentar eines Bauvorhabens.
      *
      * @param kommentar zum Aktualisieren.
      * @return den aktualisierten Kommentar.
      * @throws EntityNotFoundException falls kein Kommentar mit der ID existiert oder kein referenzierbares Bauvorhaben bzw. keine referenzierbare Infrastruktureinrichtung existiert.
      * @throws OptimisticLockingException falls der Kommentar in einer neueren Version gespeichert ist.
      */
-    public KommentarModel updateKommentar(final KommentarModel kommentar)
+    public KommentarBauvorhabenModel updateKommentarForBauvorhaben(final KommentarBauvorhabenModel kommentar)
         throws EntityNotFoundException, OptimisticLockingException, FileHandlingFailedException, FileHandlingWithS3FailedException {
-        this.getKommentarById(kommentar.getId());
-        final var orignalKommentar = this.getKommentarById(kommentar.getId());
+        this.getKommentarForBauvorhabenById(kommentar.getId());
+        final var orignalKommentar = this.getKommentarForBauvorhabenById(kommentar.getId());
         dokumentService.deleteDokumenteFromOriginalDokumentenListWhichAreMissingInParameterAdaptedDokumentenListe(
             kommentar.getDokumente(),
             orignalKommentar.getDokumente()
         );
-        return this.saveKommentar(kommentar);
+        return this.saveKommentarForBauvorhaben(kommentar);
+    }
+
+    /**
+     * Aktualisiert den bereits gespeicherten Kommentar einer Infrastruktureinrichtung.
+     *
+     * @param kommentar zum Aktualisieren.
+     * @return den aktualisierten Kommentar.
+     * @throws EntityNotFoundException falls kein Kommentar mit der ID existiert oder kein referenzierbares Bauvorhaben bzw. keine referenzierbare Infrastruktureinrichtung existiert.
+     * @throws OptimisticLockingException falls der Kommentar in einer neueren Version gespeichert ist.
+     */
+    public KommentarInfrastruktureinrichtungModel updateKommentarForInfrastruktureinrichtung(
+        final KommentarInfrastruktureinrichtungModel kommentar
+    )
+        throws EntityNotFoundException, OptimisticLockingException, FileHandlingFailedException, FileHandlingWithS3FailedException {
+        this.getKommentarForInfrastruktureinrichtungById(kommentar.getId());
+        final var orignalKommentar = this.getKommentarForInfrastruktureinrichtungById(kommentar.getId());
+        dokumentService.deleteDokumenteFromOriginalDokumentenListWhichAreMissingInParameterAdaptedDokumentenListe(
+            kommentar.getDokumente(),
+            orignalKommentar.getDokumente()
+        );
+        return this.saveKommentarForInfrastruktureinrichtung(kommentar);
     }
 
     /**
