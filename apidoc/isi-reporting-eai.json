@@ -470,7 +470,7 @@
           "adresse": { "$ref": "#/components/schemas/Adresse" },
           "verortung": { "$ref": "#/components/schemas/VerortungMultiPolygon" },
           "fristBearbeitung": { "type": "string", "format": "date" },
-          "offizielleMitzeichnung": { "type": "string" },
+          "mitzeichnungBeschlussentwurf": { "type": "string" },
           "_links": { "$ref": "#/components/schemas/Links" }
         }
       },
@@ -522,7 +522,7 @@
           "adresse": { "$ref": "#/components/schemas/Adresse" },
           "verortung": { "$ref": "#/components/schemas/VerortungMultiPolygon" },
           "fristBearbeitung": { "type": "string", "format": "date" },
-          "offizielleMitzeichnung": { "type": "string" },
+          "mitzeichnungBeschlussentwurf": { "type": "string" },
           "abfragevarianten": { "type": "array", "items": { "type": "string" } }
         }
       },
@@ -794,7 +794,7 @@
               "adresse": { "$ref": "#/components/schemas/AdresseDto" },
               "verortung": { "$ref": "#/components/schemas/VerortungMultiPolygonDto" },
               "fristBearbeitung": { "type": "string", "format": "date" },
-              "offizielleMitzeichnung": { "type": "string" },
+              "mitzeichnungBeschlussentwurf": { "type": "string" },
               "abfragevariantenBauleitplanverfahren": {
                 "type": "array",
                 "items": { "$ref": "#/components/schemas/AbfragevarianteBauleitplanverfahrenDto" }
@@ -1052,7 +1052,7 @@
               "adresse": { "$ref": "#/components/schemas/AdresseDto" },
               "verortung": { "$ref": "#/components/schemas/VerortungMultiPolygonDto" },
               "fristBearbeitung": { "type": "string", "format": "date" },
-              "offizielleMitzeichnung": { "type": "string" },
+              "mitzeichnungBeschlussentwurf": { "type": "string" },
               "abfragevariantenWeiteresVerfahren": {
                 "type": "array",
                 "items": { "$ref": "#/components/schemas/AbfragevarianteWeiteresVerfahrenDto" }
