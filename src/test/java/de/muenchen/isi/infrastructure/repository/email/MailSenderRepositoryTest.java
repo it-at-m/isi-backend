@@ -3,6 +3,7 @@ package de.muenchen.isi.infrastructure.repository.email;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -38,11 +39,11 @@ class MailSenderRepositoryTest {
     void sendMail() {
         final var mailMessage = new SimpleMailMessage();
         mailMessage.setFrom("fromEmailAddress");
-        mailMessage.setTo("receiver");
+        mailMessage.setTo(new String[] { "receiver" });
         mailMessage.setSubject("subject");
         mailMessage.setText("text");
 
-        mailSenderRepository.sendMail("receiver", "subject", "text");
+        mailSenderRepository.sendMail(List.of("receiver"), "subject", "text");
 
         Mockito.verify(javaMailSender, Mockito.times(1)).send(mailMessage);
     }
@@ -51,17 +52,17 @@ class MailSenderRepositoryTest {
     void sendMailMailSendException(final CapturedOutput output) {
         final var mailMessage = new SimpleMailMessage();
         mailMessage.setFrom("fromEmailAddress");
-        mailMessage.setTo("receiver");
+        mailMessage.setTo(new String[] { "receiver" });
         mailMessage.setSubject("subject");
         mailMessage.setText("text");
 
         Mockito.doThrow(new MailSendException("test")).when(javaMailSender).send(mailMessage);
 
-        mailSenderRepository.sendMail("receiver", "subject", "text");
+        mailSenderRepository.sendMail(List.of("receiver"), "subject", "text");
 
         assertThat(
             output.getAll(),
-            containsString("Die Email konnte nicht an den Empfänger receiver versendet werden.")
+            containsString("Die Email konnte nicht an den Empfänger [receiver] versendet werden.")
         );
         Mockito.verify(javaMailSender, Mockito.times(1)).send(mailMessage);
     }
@@ -70,13 +71,13 @@ class MailSenderRepositoryTest {
     void sendMailMailAuthenticationException(final CapturedOutput output) {
         final var mailMessage = new SimpleMailMessage();
         mailMessage.setFrom("fromEmailAddress");
-        mailMessage.setTo("receiver");
+        mailMessage.setTo(new String[] { "receiver" });
         mailMessage.setSubject("subject");
         mailMessage.setText("text");
 
         Mockito.doThrow(new MailAuthenticationException("test")).when(javaMailSender).send(mailMessage);
 
-        mailSenderRepository.sendMail("receiver", "subject", "text");
+        mailSenderRepository.sendMail(List.of("receiver"), "subject", "text");
 
         assertThat(
             output.getAll(),
@@ -89,13 +90,13 @@ class MailSenderRepositoryTest {
     void sendMailMailParseException(final CapturedOutput output) {
         final var mailMessage = new SimpleMailMessage();
         mailMessage.setFrom("fromEmailAddress");
-        mailMessage.setTo("receiver");
+        mailMessage.setTo(new String[] { "receiver" });
         mailMessage.setSubject("subject");
         mailMessage.setText("text");
 
         Mockito.doThrow(new MailParseException("test")).when(javaMailSender).send(mailMessage);
 
-        mailSenderRepository.sendMail("receiver", "subject", "text");
+        mailSenderRepository.sendMail(List.of("receiver"), "subject", "text");
 
         assertThat(
             output.getAll(),
@@ -108,13 +109,13 @@ class MailSenderRepositoryTest {
     void sendMailException(final CapturedOutput output) {
         final var mailMessage = new SimpleMailMessage();
         mailMessage.setFrom("fromEmailAddress");
-        mailMessage.setTo("receiver");
+        mailMessage.setTo(new String[] { "receiver" });
         mailMessage.setSubject("subject");
         mailMessage.setText("text");
 
         Mockito.doThrow(new RuntimeException("test")).when(javaMailSender).send(mailMessage);
 
-        mailSenderRepository.sendMail("receiver", "subject", "text");
+        mailSenderRepository.sendMail(List.of("receiver"), "subject", "text");
 
         assertThat(output.getAll(), containsString("Beim Emailversand ist ein Fehler aufgetreten."));
         Mockito.verify(javaMailSender, Mockito.times(1)).send(mailMessage);

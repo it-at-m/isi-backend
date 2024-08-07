@@ -1,6 +1,8 @@
 package de.muenchen.isi.infrastructure.repository.email;
 
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.MailAuthenticationException;
@@ -35,10 +37,10 @@ public class MailSenderRepository {
      * @param subject als Betreff der Email.
      * @param text als Text der Email.
      */
-    public void sendMail(final String receiver, final String subject, final String text) {
+    public void sendMail(final List<String> receiver, final String subject, final String text) {
         final var mailMessage = new SimpleMailMessage();
         mailMessage.setFrom(fromEmailAddress);
-        mailMessage.setTo(receiver);
+        mailMessage.setTo(ArrayUtils.toStringArray(receiver.toArray()));
         mailMessage.setSubject(subject);
         mailMessage.setText(text);
         try {
@@ -47,7 +49,7 @@ public class MailSenderRepository {
             final var message = StringUtils.replace(
                 "Die Email konnte nicht an den Empfänger %s versendet werden.",
                 "%s",
-                receiver
+                receiver.toString()
             );
             log.error(message, exception);
         } catch (final MailAuthenticationException exception) {

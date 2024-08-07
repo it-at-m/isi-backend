@@ -68,6 +68,10 @@ work-assignment-information:
     bedarfsmeldung-erfolgte:
       text: "Die Bedarfsmeldung der Abfrage ist erfolgt und liegt zur Bearbeitung vor.\n\nAbfrage: "
       subject: "ISI - Bedarfsmeldung erfolgt - Abfrage: "
+    speichern-von-sozialinfrastruktur-versorgung:
+      text: "Die Abfrage ist abgeschlossen.\n\nAbfrage: "
+      subject: "ISI - Abfrage abgeschlossen. - Abfrage: "
+
 
 io:
   muenchendigital:

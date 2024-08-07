@@ -95,7 +95,7 @@ public class Bauleitplanverfahren extends Abfrage {
 
     @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "varchar(255) not null check (sobon_relevant != 'UNSPECIFIED')")
-    private UncertainBoolean offizielleMitzeichnung;
+    private UncertainBoolean mitzeichnungBeschlussentwurf;
 
     @IndexedEmbedded
     @IndexingDependency(reindexOnUpdate = ReindexOnUpdate.SHALLOW)

@@ -37,7 +37,7 @@ public class WeiteresVerfahrenDto extends AbfrageDto {
 
     private LocalDate fristBearbeitung;
 
-    private UncertainBoolean offizielleMitzeichnung;
+    private UncertainBoolean mitzeichnungBeschlussentwurf;
 
     private List<AbfragevarianteWeiteresVerfahrenDto> abfragevariantenWeiteresVerfahren;
 

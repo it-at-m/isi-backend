@@ -35,7 +35,7 @@ public class BauleitplanverfahrenDto extends AbfrageDto {
 
     private LocalDate fristBearbeitung;
 
-    private UncertainBoolean offizielleMitzeichnung;
+    private UncertainBoolean mitzeichnungBeschlussentwurf;
 
     private List<AbfragevarianteBauleitplanverfahrenDto> abfragevariantenBauleitplanverfahren;
 
