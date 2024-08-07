@@ -22,12 +22,4 @@ public class DokumentDto extends BaseEntityDto {
 
     @NotNull
     private ArtDokument artDokument;
-
-    @NotNull
-    @Min(0)
-    private Long sizeInBytes;
-
-    @NotNull
-    @Size(max = 255, message = "Es sind maximal {max} Zeichen erlaubt")
-    private String typDokument;
 }
