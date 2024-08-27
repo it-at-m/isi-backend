@@ -4,7 +4,7 @@
     "title": "ISI Reporting EAI",
     "description": "ISI Reporting EAI - Service zum Befüllen der Metabase-DB",
     "contact": { "name": "ISI Management", "email": "unbekannt@muenchen.de" },
-    "version": "1.3.0"
+    "version": "1.4.0"
   },
   "servers": [{ "url": "http://localhost:8088", "description": "Generated server url" }],
   "tags": [
@@ -196,13 +196,13 @@
           "required": true
         },
         "responses": {
+          "200": { "description": "ETL-Interface Aufruf erfolgreich" },
           "555": {
             "description": "CUSTOM INTERNAL SERVER ERROR -> Bei der Ausführung des ETL-Interface-Requests ist ein serverseitiger Fehler aufgetreten.",
             "content": {
               "application/hal+json": { "schema": { "$ref": "#/components/schemas/InformationResponseDto" } }
             }
-          },
-          "200": { "description": "ETL-Interface Aufruf erfolgreich" }
+          }
         }
       }
     },
