@@ -77,6 +77,8 @@ refarch:
     client:
       enableSecurity: true
 
+# siehe: https://github.com/it-at-m/refarch/tree/main/refarch-integrations/refarch-s3-integration
+
 SSO_ISSUER_URL: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}
 SSO_S3_CLIENT_ID: ${spring.security.oauth2.client.registration.server-to-server.client-id}
 SSO_S3_CLIENT_SECRET: ${spring.security.oauth2.client.registration.server-to-server.client-secret}
