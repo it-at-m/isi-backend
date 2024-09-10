@@ -7,11 +7,10 @@ import de.muenchen.isi.domain.exception.MimeTypeExtractionFailedException;
 import de.muenchen.isi.domain.exception.MimeTypeNotAllowedException;
 import de.muenchen.isi.domain.model.filehandling.FilepathModel;
 import de.muenchen.isi.domain.model.filehandling.MimeTypeInformationModel;
-import de.muenchen.oss.digiwf.s3.integration.client.exception.DocumentStorageClientErrorException;
-import de.muenchen.oss.digiwf.s3.integration.client.exception.DocumentStorageException;
-import de.muenchen.oss.digiwf.s3.integration.client.exception.DocumentStorageServerErrorException;
-import de.muenchen.oss.digiwf.s3.integration.client.exception.PropertyNotSetException;
-import de.muenchen.oss.digiwf.s3.integration.client.repository.DocumentStorageFileRepository;
+import de.muenchen.refarch.integration.s3.client.exception.DocumentStorageClientErrorException;
+import de.muenchen.refarch.integration.s3.client.exception.DocumentStorageException;
+import de.muenchen.refarch.integration.s3.client.exception.DocumentStorageServerErrorException;
+import de.muenchen.refarch.integration.s3.client.repository.DocumentStorageFileRepository;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashSet;
@@ -43,7 +42,7 @@ public class MimeTypeService {
 
     public MimeTypeService(
         final DocumentStorageFileRepository documentStorageFileRepository,
-        @Value("${io.muenchendigital.digiwf.s3.client.file-expiration-time}") final Integer fileExpirationTime,
+        @Value("${refarch.s3.client.file-expiration-time}") final Integer fileExpirationTime,
         @Value("#{'${file.mimetypes.allowed}'.split(',')}") final List<String> allowedMimeTypes
     ) {
         this.documentStorageFileRepository = documentStorageFileRepository;
@@ -112,7 +111,6 @@ public class MimeTypeService {
             final DocumentStorageClientErrorException
             | DocumentStorageServerErrorException
             | DocumentStorageException
-            | PropertyNotSetException
             | WebClientException exception
         ) {
             final var message =
@@ -141,8 +139,7 @@ public class MimeTypeService {
         } catch (
             final DocumentStorageClientErrorException
             | DocumentStorageServerErrorException
-            | DocumentStorageException
-            | PropertyNotSetException exception
+            | DocumentStorageException exception
         ) {
             final var message =
                 "Beim Herunterladen zur Dateiprüfung vom ISI-Dokumentenverwaltungssystem ist ein Fehler aufgetreten.";

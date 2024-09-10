@@ -72,10 +72,11 @@ work-assignment-information:
       text: "Die Abfrage ist abgeschlossen.\n\nAbfrage: "
       subject: "ISI - Abfrage abgeschlossen. - Abfrage: "
 
+refarch:
+  s3:
+    client:
+      enableSecurity: true
 
-io:
-  muenchendigital:
-    digiwf:
-      s3:
-        client:
-          securityEnabled: true
+SSO_ISSUER_URL: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}
+SSO_S3_CLIENT_ID: ${spring.security.oauth2.client.registration.server-to-server.client-id}
+SSO_S3_CLIENT_SECRET: ${spring.security.oauth2.client.registration.server-to-server.client-secret}

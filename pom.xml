@@ -391,9 +391,9 @@
         </dependency>
 
         <dependency>
-            <groupId>de.muenchen.oss.digiwf</groupId>
-            <artifactId>digiwf-s3-integration-client-starter</artifactId>
-            <version>${s3.integration}</version>
+            <groupId>de.muenchen.refarch</groupId>
+            <artifactId>refarch-s3-integration-rest-client-starter</artifactId>
+            <version>1.0.0</version>
         </dependency>
 
     </dependencies>

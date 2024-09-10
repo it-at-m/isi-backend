@@ -4,12 +4,10 @@ import de.muenchen.isi.domain.exception.FileHandlingFailedException;
 import de.muenchen.isi.domain.exception.FileHandlingWithS3FailedException;
 import de.muenchen.isi.domain.model.filehandling.FilepathModel;
 import de.muenchen.isi.domain.model.filehandling.PresignedUrlModel;
-import de.muenchen.oss.digiwf.s3.integration.client.exception.DocumentStorageClientErrorException;
-import de.muenchen.oss.digiwf.s3.integration.client.exception.DocumentStorageException;
-import de.muenchen.oss.digiwf.s3.integration.client.exception.DocumentStorageServerErrorException;
-import de.muenchen.oss.digiwf.s3.integration.client.exception.PropertyNotSetException;
-import de.muenchen.oss.digiwf.s3.integration.client.repository.presignedurl.PresignedUrlRepository;
-import java.time.LocalDate;
+import de.muenchen.refarch.integration.s3.client.exception.DocumentStorageClientErrorException;
+import de.muenchen.refarch.integration.s3.client.exception.DocumentStorageException;
+import de.muenchen.refarch.integration.s3.client.exception.DocumentStorageServerErrorException;
+import de.muenchen.refarch.integration.s3.client.repository.presignedurl.PresignedUrlRestRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
@@ -22,13 +20,13 @@ import org.springframework.web.reactive.function.client.WebClientException;
 @Slf4j
 public class PresignedUrlCreationService {
 
-    private final PresignedUrlRepository presignedUrlRepository;
+    private final PresignedUrlRestRepository presignedUrlRepository;
 
     private final Integer fileExpirationTime;
 
     public PresignedUrlCreationService(
-        final PresignedUrlRepository presignedUrlRepository,
-        @Value("${io.muenchendigital.digiwf.s3.client.file-expiration-time}") final Integer fileExpirationTime
+        final PresignedUrlRestRepository presignedUrlRepository,
+        @Value("${refarch.s3.client.file-expiration-time}") final Integer fileExpirationTime
     ) {
         this.presignedUrlRepository = presignedUrlRepository;
         this.fileExpirationTime = fileExpirationTime;
@@ -48,12 +46,11 @@ public class PresignedUrlCreationService {
             final var presignedUrl =
                 this.presignedUrlRepository.getPresignedUrlGetFile(filepath.getPathToFile(), this.fileExpirationTime);
             log.debug("Presigned-URL get file: {}", presignedUrl);
-            return new PresignedUrlModel(HttpMethod.GET.name(), presignedUrl.block());
+            return new PresignedUrlModel(HttpMethod.GET.name(), presignedUrl);
         } catch (
             final DocumentStorageClientErrorException
             | DocumentStorageServerErrorException
             | DocumentStorageException
-            | PropertyNotSetException
             | WebClientException exception
         ) {
             final var message =
@@ -87,18 +84,13 @@ public class PresignedUrlCreationService {
         throws FileHandlingWithS3FailedException, FileHandlingFailedException {
         try {
             final var presignedUrl =
-                this.presignedUrlRepository.getPresignedUrlSaveFile(
-                        filepath.getPathToFile(),
-                        this.fileExpirationTime,
-                        null
-                    );
+                this.presignedUrlRepository.getPresignedUrlSaveFile(filepath.getPathToFile(), this.fileExpirationTime);
             log.debug("Presigned-URL save file: {}", presignedUrl);
             return new PresignedUrlModel(HttpMethod.PUT.name(), presignedUrl);
         } catch (
             final DocumentStorageClientErrorException
             | DocumentStorageServerErrorException
             | DocumentStorageException
-            | PropertyNotSetException
             | WebClientException exception
         ) {
             final var message =
@@ -142,7 +134,6 @@ public class PresignedUrlCreationService {
             final DocumentStorageClientErrorException
             | DocumentStorageServerErrorException
             | DocumentStorageException
-            | PropertyNotSetException
             | WebClientException exception
         ) {
             final var message = "Beim Löschen der Datei im ISI-Dokumentenverwaltungssystem ist ein Fehler aufgetreten.";
