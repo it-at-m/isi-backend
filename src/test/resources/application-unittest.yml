@@ -54,14 +54,16 @@ spring:
     # possible values: none, all, changing (With changing, only changing requests such as POST, PUT, DELETE are logged)
     logging.requests: all
 
-io:
-  muenchendigital:
-    digiwf:
-      s3:
-        client:
-          document-storage-url: localhost:8080
-          file-expiration-time: 5 #minutes
-          securityEnabled: false
+refarch:
+  s3:
+    client:
+      document-storage-url: http://localhost:8080
+      file-expiration-time: 5 #minutes
+      enable-security: false
+
+SSO_ISSUER_URL: http://localhost:8080
+SSO_S3_CLIENT_ID: DUMMY
+SSO_S3_CLIENT_SECRET: DUMMY
 
 isi:
   reporting:
