@@ -143,7 +143,7 @@ class PresignedUrlCreationServiceTest {
 
         Mockito
             .when(this.presignedUrlRepository.getPresignedUrlGetFile(pathToFile, 10))
-            .thenThrow(new PropertyNotSetException("outermessage"));
+            .thenThrow(new DocumentStorageException("outermessage", new Exception("innermessage")));
         final var filePathModel4 = new FilepathModel();
         filePathModel4.setPathToFile(pathToFile);
         Assertions.assertThrows(
@@ -255,7 +255,7 @@ class PresignedUrlCreationServiceTest {
 
         Mockito
             .when(this.presignedUrlRepository.getPresignedUrlSaveFile(pathToFile, 10))
-            .thenThrow(new PropertyNotSetException("outermessage"));
+            .thenThrow(new DocumentStorageException("outermessage", new Exception("innermessage")));
         final var filePathModel4 = new FilepathModel();
         filePathModel4.setPathToFile(pathToFile);
         Assertions.assertThrows(
@@ -367,7 +367,7 @@ class PresignedUrlCreationServiceTest {
 
         Mockito
             .when(this.presignedUrlRepository.getPresignedUrlDeleteFile(pathToFile, 10))
-            .thenThrow(new PropertyNotSetException("outermessage"));
+            .thenThrow(new DocumentStorageException("outermessage", new Exception("innermessage")));
         final var filePathModel4 = new FilepathModel();
         filePathModel4.setPathToFile(pathToFile);
         Assertions.assertThrows(

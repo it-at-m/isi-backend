@@ -230,7 +230,7 @@ class MimeTypeServiceTest {
 
         Mockito
             .when(this.documentStorageFileRepository.getFileInputStream("pathToFile/pdf_for_test.pdf", 5))
-            .thenThrow(new PropertyNotSetException("outermessage"));
+            .thenThrow(new DocumentStorageException("outermessage", new Exception("innermessage")));
         Assertions.assertThrows(
             FileHandlingFailedException.class,
             () -> this.mimeTypeService.getInputStream(filePathModel)
@@ -307,7 +307,7 @@ class MimeTypeServiceTest {
         Mockito.reset(this.documentStorageFileRepository);
 
         Mockito
-            .doThrow(new PropertyNotSetException("outermessage"))
+            .doThrow(new DocumentStorageException("outermessage", new Exception("innermessage")))
             .when(this.documentStorageFileRepository)
             .deleteFile("pathToFile/pdf_for_test.pdf", 5);
         Assertions.assertThrows(
