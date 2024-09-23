@@ -77,7 +77,6 @@ refarch:
     client:
       enable-security: true
 
-
 # siehe: https://github.com/it-at-m/refarch/tree/main/refarch-integrations/refarch-s3-integration
 
 
