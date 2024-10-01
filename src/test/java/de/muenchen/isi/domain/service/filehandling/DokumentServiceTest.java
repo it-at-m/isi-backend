@@ -16,7 +16,6 @@ import de.muenchen.isi.infrastructure.repository.filehandling.DokumentRepository
 import de.muenchen.refarch.integration.s3.client.exception.DocumentStorageClientErrorException;
 import de.muenchen.refarch.integration.s3.client.exception.DocumentStorageException;
 import de.muenchen.refarch.integration.s3.client.exception.DocumentStorageServerErrorException;
-import de.muenchen.refarch.integration.s3.client.exception.PropertyNotSetException;
 import de.muenchen.refarch.integration.s3.client.repository.DocumentStorageFileRepository;
 import java.util.ArrayList;
 import java.util.List;
@@ -86,7 +85,7 @@ class DokumentServiceTest {
 
     @Test
     void deleteDokumenteFromOriginalDokumentenListWhichAreMissingInParameterAdaptedDokumentenListe()
-        throws FileHandlingFailedException, FileHandlingWithS3FailedException, DocumentStorageException, PropertyNotSetException, DocumentStorageClientErrorException, DocumentStorageServerErrorException {
+        throws FileHandlingFailedException, FileHandlingWithS3FailedException, DocumentStorageException, DocumentStorageClientErrorException, DocumentStorageServerErrorException {
         final var originalDokument1 = new DokumentModel();
         originalDokument1.setFilePath(new FilepathModel("test/file1.txt"));
         originalDokument1.setId(UUID.randomUUID());

@@ -10,9 +10,7 @@ import de.muenchen.isi.domain.model.filehandling.PresignedUrlModel;
 import de.muenchen.refarch.integration.s3.client.exception.DocumentStorageClientErrorException;
 import de.muenchen.refarch.integration.s3.client.exception.DocumentStorageException;
 import de.muenchen.refarch.integration.s3.client.exception.DocumentStorageServerErrorException;
-import de.muenchen.refarch.integration.s3.client.exception.PropertyNotSetException;
 import de.muenchen.refarch.integration.s3.client.repository.presignedurl.PresignedUrlRestRepository;
-import java.time.LocalDate;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -43,7 +41,7 @@ class PresignedUrlCreationServiceTest {
 
     @Test
     void getFile()
-        throws DocumentStorageException, PropertyNotSetException, DocumentStorageClientErrorException, DocumentStorageServerErrorException, FileHandlingWithS3FailedException, FileHandlingFailedException {
+        throws DocumentStorageException, DocumentStorageClientErrorException, DocumentStorageServerErrorException, FileHandlingWithS3FailedException, FileHandlingFailedException {
         final var pathToFile = "outerFolder/innerFolder/thefile.pdf";
 
         final var presignedUrl =
@@ -65,7 +63,7 @@ class PresignedUrlCreationServiceTest {
 
     @Test
     void getFileException()
-        throws DocumentStorageException, PropertyNotSetException, DocumentStorageClientErrorException, DocumentStorageServerErrorException, FileHandlingWithS3FailedException, FileHandlingFailedException {
+        throws DocumentStorageException, DocumentStorageClientErrorException, DocumentStorageServerErrorException, FileHandlingFailedException {
         final var pathToFile = "outerFolder/innerFolder/thefile.pdf";
 
         Mockito
@@ -155,7 +153,7 @@ class PresignedUrlCreationServiceTest {
 
     @Test
     void saveFile()
-        throws DocumentStorageException, PropertyNotSetException, DocumentStorageClientErrorException, DocumentStorageServerErrorException, FileHandlingWithS3FailedException, FileHandlingFailedException {
+        throws DocumentStorageException, DocumentStorageClientErrorException, DocumentStorageServerErrorException, FileHandlingWithS3FailedException, FileHandlingFailedException {
         final var pathToFile = "outerFolder/innerFolder/thefile.pdf";
 
         final var presigneUrl =
@@ -177,7 +175,7 @@ class PresignedUrlCreationServiceTest {
 
     @Test
     void saveFileException()
-        throws DocumentStorageException, PropertyNotSetException, DocumentStorageClientErrorException, DocumentStorageServerErrorException, FileHandlingWithS3FailedException, FileHandlingFailedException {
+        throws DocumentStorageException, DocumentStorageClientErrorException, DocumentStorageServerErrorException, FileHandlingFailedException {
         final var pathToFile = "outerFolder/innerFolder/thefile.pdf";
 
         Mockito
@@ -267,7 +265,7 @@ class PresignedUrlCreationServiceTest {
 
     @Test
     void deleteFile()
-        throws DocumentStorageException, PropertyNotSetException, DocumentStorageClientErrorException, DocumentStorageServerErrorException, FileHandlingWithS3FailedException, FileHandlingFailedException {
+        throws DocumentStorageException, DocumentStorageClientErrorException, DocumentStorageServerErrorException, FileHandlingWithS3FailedException, FileHandlingFailedException {
         final var pathToFile = "outerFolder/innerFolder/thefile.pdf";
 
         final var presigneUrl =
@@ -289,7 +287,7 @@ class PresignedUrlCreationServiceTest {
 
     @Test
     void deleteFileException()
-        throws DocumentStorageException, PropertyNotSetException, DocumentStorageClientErrorException, DocumentStorageServerErrorException, FileHandlingWithS3FailedException, FileHandlingFailedException {
+        throws DocumentStorageException, DocumentStorageClientErrorException, DocumentStorageServerErrorException, FileHandlingFailedException {
         final var pathToFile = "outerFolder/innerFolder/thefile.pdf";
 
         Mockito

@@ -21,7 +21,7 @@
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <maven.compiler.release>${java.version}</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <spring.boot.version>3.2.8</spring.boot.version>
+        <spring.boot.version>3.3.4</spring.boot.version>
         <spring.cloud.version>2023.0.3</spring.cloud.version>
         <logstash.encoder>7.4</logstash.encoder>
         <apache.commons.collections4>4.4</apache.commons.collections4>
@@ -36,7 +36,7 @@
         <!-- TestCoverage -->
         <jacoco.version>0.8.7</jacoco.version>
         <!-- Plugins -->
-        <maven-scm-plugin.version>1.10.0</maven-scm-plugin.version>
+        <maven-scm-plugin.version>1.13.0</maven-scm-plugin.version>
         <maven-surefire-plugin.version>3.2.2</maven-surefire-plugin.version>
         <maven.compiler.plugin.version>3.13.0</maven.compiler.plugin.version>
         <!-- Version muss mit der in den spring-boot-dependencies bereitgestellten Lombok-Version
@@ -172,6 +172,10 @@
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-database-postgresql</artifactId>
         </dependency>
 
         <!-- Other -->
