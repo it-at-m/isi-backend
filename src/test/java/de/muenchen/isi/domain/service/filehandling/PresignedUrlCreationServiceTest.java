@@ -7,12 +7,10 @@ import de.muenchen.isi.domain.exception.FileHandlingFailedException;
 import de.muenchen.isi.domain.exception.FileHandlingWithS3FailedException;
 import de.muenchen.isi.domain.model.filehandling.FilepathModel;
 import de.muenchen.isi.domain.model.filehandling.PresignedUrlModel;
-import de.muenchen.oss.digiwf.s3.integration.client.exception.DocumentStorageClientErrorException;
-import de.muenchen.oss.digiwf.s3.integration.client.exception.DocumentStorageException;
-import de.muenchen.oss.digiwf.s3.integration.client.exception.DocumentStorageServerErrorException;
-import de.muenchen.oss.digiwf.s3.integration.client.exception.PropertyNotSetException;
-import de.muenchen.oss.digiwf.s3.integration.client.repository.presignedurl.PresignedUrlRepository;
-import java.time.LocalDate;
+import de.muenchen.refarch.integration.s3.client.exception.DocumentStorageClientErrorException;
+import de.muenchen.refarch.integration.s3.client.exception.DocumentStorageException;
+import de.muenchen.refarch.integration.s3.client.exception.DocumentStorageServerErrorException;
+import de.muenchen.refarch.integration.s3.client.repository.presignedurl.PresignedUrlRestRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,14 +23,13 @@ import org.mockito.quality.Strictness;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
-import reactor.core.publisher.Mono;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
 class PresignedUrlCreationServiceTest {
 
     @Mock
-    private PresignedUrlRepository presignedUrlRepository;
+    private PresignedUrlRestRepository presignedUrlRepository;
 
     private PresignedUrlCreationService presignedUrlCreationService;
 
@@ -44,15 +41,13 @@ class PresignedUrlCreationServiceTest {
 
     @Test
     void getFile()
-        throws DocumentStorageException, PropertyNotSetException, DocumentStorageClientErrorException, DocumentStorageServerErrorException, FileHandlingWithS3FailedException, FileHandlingFailedException {
+        throws DocumentStorageException, DocumentStorageClientErrorException, DocumentStorageServerErrorException, FileHandlingWithS3FailedException, FileHandlingFailedException {
         final var pathToFile = "outerFolder/innerFolder/thefile.pdf";
 
         final var presignedUrl =
             "https://storage.de/The-Bucket/outerFolder/innerFolder/thefile.pdf?abc=abcdf4sfskhsdfsfddsghjve884545klnfgv";
 
-        Mockito
-            .when(this.presignedUrlRepository.getPresignedUrlGetFile(pathToFile, 10))
-            .thenReturn(Mono.just(presignedUrl));
+        Mockito.when(this.presignedUrlRepository.getPresignedUrlGetFile(pathToFile, 10)).thenReturn(presignedUrl);
 
         final var expected = new PresignedUrlModel();
         expected.setHttpMethodToUse("GET");
@@ -68,7 +63,7 @@ class PresignedUrlCreationServiceTest {
 
     @Test
     void getFileException()
-        throws DocumentStorageException, PropertyNotSetException, DocumentStorageClientErrorException, DocumentStorageServerErrorException, FileHandlingWithS3FailedException, FileHandlingFailedException {
+        throws DocumentStorageException, DocumentStorageClientErrorException, DocumentStorageServerErrorException, FileHandlingFailedException {
         final var pathToFile = "outerFolder/innerFolder/thefile.pdf";
 
         Mockito
@@ -146,7 +141,7 @@ class PresignedUrlCreationServiceTest {
 
         Mockito
             .when(this.presignedUrlRepository.getPresignedUrlGetFile(pathToFile, 10))
-            .thenThrow(new PropertyNotSetException("outermessage"));
+            .thenThrow(new DocumentStorageException("outermessage", new Exception("innermessage")));
         final var filePathModel4 = new FilepathModel();
         filePathModel4.setPathToFile(pathToFile);
         Assertions.assertThrows(
@@ -158,13 +153,13 @@ class PresignedUrlCreationServiceTest {
 
     @Test
     void saveFile()
-        throws DocumentStorageException, PropertyNotSetException, DocumentStorageClientErrorException, DocumentStorageServerErrorException, FileHandlingWithS3FailedException, FileHandlingFailedException {
+        throws DocumentStorageException, DocumentStorageClientErrorException, DocumentStorageServerErrorException, FileHandlingWithS3FailedException, FileHandlingFailedException {
         final var pathToFile = "outerFolder/innerFolder/thefile.pdf";
 
         final var presigneUrl =
             "https://storage.de/The-Bucket/outerFolder/innerFolder/thefile.pdf?abc=abcdf4sfskhsdfsfddsghjve884545klnfgv";
 
-        Mockito.when(this.presignedUrlRepository.getPresignedUrlSaveFile(pathToFile, 10, null)).thenReturn(presigneUrl);
+        Mockito.when(this.presignedUrlRepository.getPresignedUrlSaveFile(pathToFile, 10)).thenReturn(presigneUrl);
 
         final var expected = new PresignedUrlModel();
         expected.setHttpMethodToUse("PUT");
@@ -180,11 +175,11 @@ class PresignedUrlCreationServiceTest {
 
     @Test
     void saveFileException()
-        throws DocumentStorageException, PropertyNotSetException, DocumentStorageClientErrorException, DocumentStorageServerErrorException, FileHandlingWithS3FailedException, FileHandlingFailedException {
+        throws DocumentStorageException, DocumentStorageClientErrorException, DocumentStorageServerErrorException, FileHandlingFailedException {
         final var pathToFile = "outerFolder/innerFolder/thefile.pdf";
 
         Mockito
-            .when(this.presignedUrlRepository.getPresignedUrlSaveFile(pathToFile, 10, null))
+            .when(this.presignedUrlRepository.getPresignedUrlSaveFile(pathToFile, 10))
             .thenThrow(
                 new DocumentStorageClientErrorException(
                     "outermessage",
@@ -215,7 +210,7 @@ class PresignedUrlCreationServiceTest {
         Mockito.reset(this.presignedUrlRepository);
 
         Mockito
-            .when(this.presignedUrlRepository.getPresignedUrlSaveFile(pathToFile, 10, null))
+            .when(this.presignedUrlRepository.getPresignedUrlSaveFile(pathToFile, 10))
             .thenThrow(
                 new DocumentStorageServerErrorException(
                     "outermessage",
@@ -246,7 +241,7 @@ class PresignedUrlCreationServiceTest {
         Mockito.reset(this.presignedUrlRepository);
 
         Mockito
-            .when(this.presignedUrlRepository.getPresignedUrlSaveFile(pathToFile, 10, null))
+            .when(this.presignedUrlRepository.getPresignedUrlSaveFile(pathToFile, 10))
             .thenThrow(new DocumentStorageException("outermessage", new Exception("innermessage")));
         final var filePathModel3 = new FilepathModel();
         filePathModel3.setPathToFile(pathToFile);
@@ -257,8 +252,8 @@ class PresignedUrlCreationServiceTest {
         Mockito.reset(this.presignedUrlRepository);
 
         Mockito
-            .when(this.presignedUrlRepository.getPresignedUrlSaveFile(pathToFile, 10, null))
-            .thenThrow(new PropertyNotSetException("outermessage"));
+            .when(this.presignedUrlRepository.getPresignedUrlSaveFile(pathToFile, 10))
+            .thenThrow(new DocumentStorageException("outermessage", new Exception("innermessage")));
         final var filePathModel4 = new FilepathModel();
         filePathModel4.setPathToFile(pathToFile);
         Assertions.assertThrows(
@@ -270,7 +265,7 @@ class PresignedUrlCreationServiceTest {
 
     @Test
     void deleteFile()
-        throws DocumentStorageException, PropertyNotSetException, DocumentStorageClientErrorException, DocumentStorageServerErrorException, FileHandlingWithS3FailedException, FileHandlingFailedException {
+        throws DocumentStorageException, DocumentStorageClientErrorException, DocumentStorageServerErrorException, FileHandlingWithS3FailedException, FileHandlingFailedException {
         final var pathToFile = "outerFolder/innerFolder/thefile.pdf";
 
         final var presigneUrl =
@@ -292,7 +287,7 @@ class PresignedUrlCreationServiceTest {
 
     @Test
     void deleteFileException()
-        throws DocumentStorageException, PropertyNotSetException, DocumentStorageClientErrorException, DocumentStorageServerErrorException, FileHandlingWithS3FailedException, FileHandlingFailedException {
+        throws DocumentStorageException, DocumentStorageClientErrorException, DocumentStorageServerErrorException, FileHandlingFailedException {
         final var pathToFile = "outerFolder/innerFolder/thefile.pdf";
 
         Mockito
@@ -370,7 +365,7 @@ class PresignedUrlCreationServiceTest {
 
         Mockito
             .when(this.presignedUrlRepository.getPresignedUrlDeleteFile(pathToFile, 10))
-            .thenThrow(new PropertyNotSetException("outermessage"));
+            .thenThrow(new DocumentStorageException("outermessage", new Exception("innermessage")));
         final var filePathModel4 = new FilepathModel();
         filePathModel4.setPathToFile(pathToFile);
         Assertions.assertThrows(

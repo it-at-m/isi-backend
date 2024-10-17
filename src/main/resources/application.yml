@@ -72,10 +72,11 @@ work-assignment-information:
       text: "Die Abfrage ist abgeschlossen.\n\nAbfrage: "
       subject: "ISI - Abfrage abgeschlossen. - Abfrage: "
 
+refarch:
+  s3:
+    client:
+      enable-security: true
 
-io:
-  muenchendigital:
-    digiwf:
-      s3:
-        client:
-          securityEnabled: true
+# siehe: https://github.com/it-at-m/refarch/tree/main/refarch-integrations/refarch-s3-integration
+
+

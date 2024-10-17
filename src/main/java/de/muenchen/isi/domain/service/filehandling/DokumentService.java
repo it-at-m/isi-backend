@@ -7,11 +7,10 @@ import de.muenchen.isi.domain.model.filehandling.DokumentModel;
 import de.muenchen.isi.domain.model.filehandling.DokumenteModel;
 import de.muenchen.isi.domain.model.filehandling.FilepathModel;
 import de.muenchen.isi.infrastructure.repository.filehandling.DokumentRepository;
-import de.muenchen.oss.digiwf.s3.integration.client.exception.DocumentStorageClientErrorException;
-import de.muenchen.oss.digiwf.s3.integration.client.exception.DocumentStorageException;
-import de.muenchen.oss.digiwf.s3.integration.client.exception.DocumentStorageServerErrorException;
-import de.muenchen.oss.digiwf.s3.integration.client.exception.PropertyNotSetException;
-import de.muenchen.oss.digiwf.s3.integration.client.repository.DocumentStorageFileRepository;
+import de.muenchen.refarch.integration.s3.client.exception.DocumentStorageClientErrorException;
+import de.muenchen.refarch.integration.s3.client.exception.DocumentStorageException;
+import de.muenchen.refarch.integration.s3.client.exception.DocumentStorageServerErrorException;
+import de.muenchen.refarch.integration.s3.client.repository.DocumentStorageFileRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -41,7 +40,7 @@ public class DokumentService {
         final DokumentRepository dokumentRepository,
         final DokumentDomainMapper dokumentDomainMapper,
         final DocumentStorageFileRepository documentStorageFileRepository,
-        @Value("${io.muenchendigital.digiwf.s3.client.file-expiration-time}") final Integer fileExpirationTime
+        @Value("${refarch.s3.client.file-expiration-time}") final Integer fileExpirationTime
     ) {
         this.dokumentRepository = dokumentRepository;
         this.dokumentDomainMapper = dokumentDomainMapper;
@@ -141,7 +140,6 @@ public class DokumentService {
                 final DocumentStorageClientErrorException
                 | DocumentStorageServerErrorException
                 | DocumentStorageException
-                | PropertyNotSetException
                 | WebClientException exception
             ) {
                 final var message =
