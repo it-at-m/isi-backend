@@ -1,6 +1,8 @@
 package de.muenchen.isi.domain.service.email;
 
 import de.muenchen.isi.domain.model.AbfrageModel;
+import de.muenchen.isi.domain.model.AbfragevarianteBauleitplanverfahrenModel;
+import de.muenchen.isi.domain.model.AbfragevarianteWeiteresVerfahrenModel;
 import de.muenchen.isi.domain.model.BaugenehmigungsverfahrenModel;
 import de.muenchen.isi.domain.model.BauleitplanverfahrenModel;
 import de.muenchen.isi.domain.model.WeiteresVerfahrenModel;
@@ -11,8 +13,11 @@ import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrageEvents;
 import de.muenchen.isi.infrastructure.repository.email.MailSenderRepository;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -32,14 +37,18 @@ public class SendWorkAssignmentInformationService {
 
     private final String receiverBedarfsmeldung;
 
+    private final String receiverSobon;
+
     public SendWorkAssignmentInformationService(
         @Value("${spring.mail.receiver.sachbearbeitung:}") final String receiverSachbearbeitung,
         @Value("${spring.mail.receiver.bedarfsmeldung:}") final String receiverBedarfsmeldung,
+        @Value("${spring.mail.receiver.sobon:}") final String receiverSobon,
         final MailSenderRepository mailSenderRepository,
         final Environment environment
     ) {
         this.receiverSachbearbeitung = receiverSachbearbeitung;
         this.receiverBedarfsmeldung = receiverBedarfsmeldung;
+        this.receiverSobon = receiverSobon;
         this.mailSenderRepository = mailSenderRepository;
         this.environment = environment;
     }
@@ -126,19 +135,50 @@ public class SendWorkAssignmentInformationService {
      * @return der Emailempfäger auf Basis der Statusübergangsinformation oder null falls für den gegebenen Statusübergang kein Emailversand vorgesehen ist.
      */
     protected List<String> getReceiver(final AbfrageModel abfrage, final StatusAbfrageEvents stateMachineEvent) {
+        var isSobon = false;
+        if (abfrage.getArtAbfrage() == ArtAbfrage.BAULEITPLANVERFAHREN) {
+            final var abfragevarianten = Objects.requireNonNullElse(
+                ((BauleitplanverfahrenModel) abfrage).getAbfragevariantenBauleitplanverfahren(),
+                new ArrayList<AbfragevarianteBauleitplanverfahrenModel>()
+            );
+            final var abfragevariantenSachbearbeitung = Objects.requireNonNullElse(
+                ((BauleitplanverfahrenModel) abfrage).getAbfragevariantenSachbearbeitungBauleitplanverfahren(),
+                new ArrayList<AbfragevarianteBauleitplanverfahrenModel>()
+            );
+            isSobon =
+                Stream
+                    .concat(abfragevarianten.stream(), abfragevariantenSachbearbeitung.stream())
+                    .anyMatch(a -> a.getSobonBerechnung() != null && a.getSobonBerechnung().getIsASobonBerechnung());
+        } else if (abfrage.getArtAbfrage() == ArtAbfrage.WEITERES_VERFAHREN) {
+            final var abfragevarianten = Objects.requireNonNullElse(
+                ((WeiteresVerfahrenModel) abfrage).getAbfragevariantenWeiteresVerfahren(),
+                new ArrayList<AbfragevarianteWeiteresVerfahrenModel>()
+            );
+            final var abfragevariantenSachbearbeitung = Objects.requireNonNullElse(
+                ((WeiteresVerfahrenModel) abfrage).getAbfragevariantenSachbearbeitungWeiteresVerfahren(),
+                new ArrayList<AbfragevarianteWeiteresVerfahrenModel>()
+            );
+            isSobon =
+                Stream
+                    .concat(abfragevarianten.stream(), abfragevariantenSachbearbeitung.stream())
+                    .anyMatch(a -> a.getSobonBerechnung() != null && a.getSobonBerechnung().getIsASobonBerechnung());
+        }
+
         if (StatusAbfrageEvents.FREIGABE.equals(stateMachineEvent)) {
             return List.of(receiverSachbearbeitung);
         } else if (StatusAbfrageEvents.ERNEUTE_BEARBEITUNG.equals(stateMachineEvent)) {
             return List.of(receiverSachbearbeitung);
         } else if (StatusAbfrageEvents.VERSCHICKEN_DER_STELLUNGNAHME.equals(stateMachineEvent)) {
-            return List.of(receiverBedarfsmeldung);
+            return isSobon ? List.of(receiverBedarfsmeldung, receiverSobon) : List.of(receiverBedarfsmeldung);
         } else if (StatusAbfrageEvents.BEDARFSMELDUNG_ERFOLGTE.equals(stateMachineEvent)) {
             final var bearbeitungshistorie = abfrage.getBearbeitungshistorie();
             final var mailOfPerson = getEmailAddressOfPersonWhichInitiallyCreatedTheAbfrage(bearbeitungshistorie);
             return List.of(mailOfPerson);
         } else if (StatusAbfrageEvents.SPEICHERN_VON_SOZIALINFRASTRUKTUR_VERSORGUNG.equals(stateMachineEvent)) {
             // Erledigt durch Fachreferat
-            return List.of(receiverSachbearbeitung, receiverBedarfsmeldung);
+            return isSobon
+                ? List.of(receiverSachbearbeitung, receiverBedarfsmeldung, receiverSobon)
+                : List.of(receiverSachbearbeitung, receiverBedarfsmeldung);
         }
         return null;
     }
