@@ -15,15 +15,15 @@ import de.muenchen.isi.domain.model.abfrageAngelegt.AbfragevarianteWeiteresVerfa
 import de.muenchen.isi.domain.model.abfrageAngelegt.BaugenehmigungsverfahrenAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageAngelegt.BauleitplanverfahrenAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageAngelegt.WeiteresVerfahrenAngelegtModel;
-import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.AbfragevarianteBaugenehmigungsverfahrenInBearbeitungSachbearbeitungModel;
-import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.AbfragevarianteBaugenehmigungsverfahrenSachbearbeitungInBearbeitungSachbearbeitungModel;
-import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.AbfragevarianteBauleitplanverfahrenInBearbeitungSachbearbeitungModel;
-import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.AbfragevarianteBauleitplanverfahrenSachbearbeitungInBearbeitungSachbearbeitungModel;
-import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.AbfragevarianteWeiteresVerfahrenInBearbeitungSachbearbeitungModel;
-import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.AbfragevarianteWeiteresVerfahrenSachbearbeitungInBearbeitungSachbearbeitungModel;
-import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.BaugenehmigungsverfahrenInBearbeitungSachbearbeitungModel;
-import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.BauleitplanverfahrenInBearbeitungSachbearbeitungModel;
-import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.WeiteresVerfahrenInBearbeitungSachbearbeitungModel;
+import de.muenchen.isi.domain.model.abfrageStartBearbeitung.AbfragevarianteBaugenehmigungsverfahrenSachbearbeitungStartBearbeitungModel;
+import de.muenchen.isi.domain.model.abfrageStartBearbeitung.AbfragevarianteBaugenehmigungsverfahrenStartBearbeitungModel;
+import de.muenchen.isi.domain.model.abfrageStartBearbeitung.AbfragevarianteBauleitplanverfahrenSachbearbeitungStartBearbeitungModel;
+import de.muenchen.isi.domain.model.abfrageStartBearbeitung.AbfragevarianteBauleitplanverfahrenStartBearbeitungModel;
+import de.muenchen.isi.domain.model.abfrageStartBearbeitung.AbfragevarianteWeiteresVerfahrenSachbearbeitungStartBearbeitungModel;
+import de.muenchen.isi.domain.model.abfrageStartBearbeitung.AbfragevarianteWeiteresVerfahrenStartBearbeitungModel;
+import de.muenchen.isi.domain.model.abfrageStartBearbeitung.BaugenehmigungsverfahrenStartBearbeitungModel;
+import de.muenchen.isi.domain.model.abfrageStartBearbeitung.BauleitplanverfahrenStartBearbeitungModel;
+import de.muenchen.isi.domain.model.abfrageStartBearbeitung.WeiteresVerfahrenStartBearbeitungModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.repository.BauvorhabenRepository;
 import java.lang.reflect.Field;
@@ -339,17 +339,17 @@ public class AbfrageDomainMapperTest {
 
     @Test
     void sachbearbeitungAbfrageToAbfrageNonExistingAbfragevarianteBauleitplanverfahren() {
-        var bauleitplanverfahren = new BauleitplanverfahrenInBearbeitungSachbearbeitungModel();
+        var bauleitplanverfahren = new BauleitplanverfahrenStartBearbeitungModel();
         bauleitplanverfahren.setVersion(99L);
         bauleitplanverfahren.setAbfragevariantenBauleitplanverfahren(List.of());
 
         var abfragevarianteSachbearbeitung1 =
-            new AbfragevarianteBauleitplanverfahrenInBearbeitungSachbearbeitungModel();
+            new AbfragevarianteBauleitplanverfahrenStartBearbeitungModel();
         abfragevarianteSachbearbeitung1.setAbfragevariantenNr(1);
         abfragevarianteSachbearbeitung1.setName("Abfragevariante 1");
 
         var abfragevarianteSachbearbeitung2 =
-            new AbfragevarianteBauleitplanverfahrenInBearbeitungSachbearbeitungModel();
+            new AbfragevarianteBauleitplanverfahrenStartBearbeitungModel();
         abfragevarianteSachbearbeitung2.setAbfragevariantenNr(2);
         abfragevarianteSachbearbeitung2.setName("Abfragevariante 2");
 
@@ -380,17 +380,17 @@ public class AbfrageDomainMapperTest {
 
     @Test
     void sachbearbeitungAbfrageToAbfrageNonExistingAbfragevarianteBaugenehmigungsverfahren() {
-        var baugenehmigungsverfahren = new BaugenehmigungsverfahrenInBearbeitungSachbearbeitungModel();
+        var baugenehmigungsverfahren = new BaugenehmigungsverfahrenStartBearbeitungModel();
         baugenehmigungsverfahren.setVersion(99L);
         baugenehmigungsverfahren.setAbfragevariantenBaugenehmigungsverfahren(List.of());
 
         var abfragevarianteSachbearbeitung1 =
-            new AbfragevarianteBaugenehmigungsverfahrenInBearbeitungSachbearbeitungModel();
+            new AbfragevarianteBaugenehmigungsverfahrenStartBearbeitungModel();
         abfragevarianteSachbearbeitung1.setAbfragevariantenNr(1);
         abfragevarianteSachbearbeitung1.setName("Abfragevariante 1");
 
         var abfragevarianteSachbearbeitung2 =
-            new AbfragevarianteBaugenehmigungsverfahrenInBearbeitungSachbearbeitungModel();
+            new AbfragevarianteBaugenehmigungsverfahrenStartBearbeitungModel();
         abfragevarianteSachbearbeitung2.setAbfragevariantenNr(2);
         abfragevarianteSachbearbeitung2.setName("Abfragevariante 2");
 
@@ -426,15 +426,15 @@ public class AbfrageDomainMapperTest {
 
     @Test
     void sachbearbeitungAbfrageToAbfrageNonExistingAbfragevarianteWeiteresVerfahren() {
-        var weiteresVerfahren = new WeiteresVerfahrenInBearbeitungSachbearbeitungModel();
+        var weiteresVerfahren = new WeiteresVerfahrenStartBearbeitungModel();
         weiteresVerfahren.setVersion(99L);
         weiteresVerfahren.setAbfragevariantenWeiteresVerfahren(List.of());
 
-        var abfragevarianteSachbearbeitung1 = new AbfragevarianteWeiteresVerfahrenInBearbeitungSachbearbeitungModel();
+        var abfragevarianteSachbearbeitung1 = new AbfragevarianteWeiteresVerfahrenStartBearbeitungModel();
         abfragevarianteSachbearbeitung1.setAbfragevariantenNr(1);
         abfragevarianteSachbearbeitung1.setName("Abfragevariante 1");
 
-        var abfragevarianteSachbearbeitung2 = new AbfragevarianteWeiteresVerfahrenInBearbeitungSachbearbeitungModel();
+        var abfragevarianteSachbearbeitung2 = new AbfragevarianteWeiteresVerfahrenStartBearbeitungModel();
         abfragevarianteSachbearbeitung2.setAbfragevariantenNr(2);
         abfragevarianteSachbearbeitung2.setName("Abfragevariante 2");
 
@@ -465,18 +465,18 @@ public class AbfrageDomainMapperTest {
 
     @Test
     void sachbearbeitungAbfrageToAbfrageExistingAbfragevarianteBauleitplanverfahren() {
-        var bauleitplanverfahren = new BauleitplanverfahrenInBearbeitungSachbearbeitungModel();
+        var bauleitplanverfahren = new BauleitplanverfahrenStartBearbeitungModel();
         bauleitplanverfahren.setVersion(99L);
         bauleitplanverfahren.setAbfragevariantenBauleitplanverfahren(List.of());
 
         var abfragevarianteSachbearbeitung1 =
-            new AbfragevarianteBauleitplanverfahrenInBearbeitungSachbearbeitungModel();
+            new AbfragevarianteBauleitplanverfahrenStartBearbeitungModel();
         abfragevarianteSachbearbeitung1.setId(UUID.randomUUID());
         abfragevarianteSachbearbeitung1.setAbfragevariantenNr(1);
         abfragevarianteSachbearbeitung1.setName("New Name Abfragevariante 1");
 
         var abfragevarianteSachbearbeitung2 =
-            new AbfragevarianteBauleitplanverfahrenInBearbeitungSachbearbeitungModel();
+            new AbfragevarianteBauleitplanverfahrenStartBearbeitungModel();
         abfragevarianteSachbearbeitung2.setId(UUID.randomUUID());
         abfragevarianteSachbearbeitung2.setAbfragevariantenNr(2);
         abfragevarianteSachbearbeitung2.setName("New Name Abfragevariante 2");
@@ -528,18 +528,18 @@ public class AbfrageDomainMapperTest {
 
     @Test
     void sachbearbeitungAbfrageToAbfrageExistingAbfragevarianteBaugenehmigungsverfahren() {
-        var baugenehmigungsverfahren = new BaugenehmigungsverfahrenInBearbeitungSachbearbeitungModel();
+        var baugenehmigungsverfahren = new BaugenehmigungsverfahrenStartBearbeitungModel();
         baugenehmigungsverfahren.setVersion(99L);
         baugenehmigungsverfahren.setAbfragevariantenBaugenehmigungsverfahren(List.of());
 
         var abfragevarianteSachbearbeitung1 =
-            new AbfragevarianteBaugenehmigungsverfahrenInBearbeitungSachbearbeitungModel();
+            new AbfragevarianteBaugenehmigungsverfahrenStartBearbeitungModel();
         abfragevarianteSachbearbeitung1.setId(UUID.randomUUID());
         abfragevarianteSachbearbeitung1.setAbfragevariantenNr(1);
         abfragevarianteSachbearbeitung1.setName("New Name Abfragevariante 1");
 
         var abfragevarianteSachbearbeitung2 =
-            new AbfragevarianteBaugenehmigungsverfahrenInBearbeitungSachbearbeitungModel();
+            new AbfragevarianteBaugenehmigungsverfahrenStartBearbeitungModel();
         abfragevarianteSachbearbeitung2.setId(UUID.randomUUID());
         abfragevarianteSachbearbeitung2.setAbfragevariantenNr(2);
         abfragevarianteSachbearbeitung2.setName("New Name Abfragevariante 2");
@@ -593,16 +593,16 @@ public class AbfrageDomainMapperTest {
 
     @Test
     void sachbearbeitungAbfrageToAbfrageExistingAbfragevarianteWeiteresVerfahren() {
-        var weiteresVerfahren = new WeiteresVerfahrenInBearbeitungSachbearbeitungModel();
+        var weiteresVerfahren = new WeiteresVerfahrenStartBearbeitungModel();
         weiteresVerfahren.setVersion(99L);
         weiteresVerfahren.setAbfragevariantenWeiteresVerfahren(List.of());
 
-        var abfragevarianteSachbearbeitung1 = new AbfragevarianteWeiteresVerfahrenInBearbeitungSachbearbeitungModel();
+        var abfragevarianteSachbearbeitung1 = new AbfragevarianteWeiteresVerfahrenStartBearbeitungModel();
         abfragevarianteSachbearbeitung1.setId(UUID.randomUUID());
         abfragevarianteSachbearbeitung1.setAbfragevariantenNr(1);
         abfragevarianteSachbearbeitung1.setName("New Name Abfragevariante 1");
 
-        var abfragevarianteSachbearbeitung2 = new AbfragevarianteWeiteresVerfahrenInBearbeitungSachbearbeitungModel();
+        var abfragevarianteSachbearbeitung2 = new AbfragevarianteWeiteresVerfahrenStartBearbeitungModel();
         abfragevarianteSachbearbeitung2.setId(UUID.randomUUID());
         abfragevarianteSachbearbeitung2.setAbfragevariantenNr(2);
         abfragevarianteSachbearbeitung2.setName("New Name Abfragevariante 2");
@@ -654,18 +654,18 @@ public class AbfrageDomainMapperTest {
 
     @Test
     void sachbearbeitungAbfrageToAbfrageNonExistingAbfragevarianteForAbfragevarianteSachbearbeitungBauleitplanverfahren() {
-        var bauleitplanverfahren = new BauleitplanverfahrenInBearbeitungSachbearbeitungModel();
+        var bauleitplanverfahren = new BauleitplanverfahrenStartBearbeitungModel();
         bauleitplanverfahren.setVersion(99L);
         bauleitplanverfahren.setAbfragevariantenSachbearbeitungBauleitplanverfahren(List.of());
 
         var abfragevarianteSachbearbeitung1 =
-            new AbfragevarianteBauleitplanverfahrenSachbearbeitungInBearbeitungSachbearbeitungModel();
+            new AbfragevarianteBauleitplanverfahrenSachbearbeitungStartBearbeitungModel();
         abfragevarianteSachbearbeitung1.setId(UUID.randomUUID());
         abfragevarianteSachbearbeitung1.setVersion(1L);
         abfragevarianteSachbearbeitung1.setAnmerkung("Test1");
 
         var abfragevarianteSachbearbeitung2 =
-            new AbfragevarianteBauleitplanverfahrenSachbearbeitungInBearbeitungSachbearbeitungModel();
+            new AbfragevarianteBauleitplanverfahrenSachbearbeitungStartBearbeitungModel();
         abfragevarianteSachbearbeitung2.setId(UUID.randomUUID());
         abfragevarianteSachbearbeitung2.setVersion(2L);
         abfragevarianteSachbearbeitung2.setAnmerkung("Test2");
@@ -715,18 +715,18 @@ public class AbfrageDomainMapperTest {
 
     @Test
     void sachbearbeitungAbfrageToAbfrageNonExistingAbfragevarianteForAbfragevarianteSachbearbeitungBaugenehmigungsverfahren() {
-        var baugenehmigungsverfahren = new BaugenehmigungsverfahrenInBearbeitungSachbearbeitungModel();
+        var baugenehmigungsverfahren = new BaugenehmigungsverfahrenStartBearbeitungModel();
         baugenehmigungsverfahren.setVersion(99L);
         baugenehmigungsverfahren.setAbfragevariantenSachbearbeitungBaugenehmigungsverfahren(List.of());
 
         var abfragevarianteSachbearbeitung1 =
-            new AbfragevarianteBaugenehmigungsverfahrenSachbearbeitungInBearbeitungSachbearbeitungModel();
+            new AbfragevarianteBaugenehmigungsverfahrenSachbearbeitungStartBearbeitungModel();
         abfragevarianteSachbearbeitung1.setId(UUID.randomUUID());
         abfragevarianteSachbearbeitung1.setVersion(1L);
         abfragevarianteSachbearbeitung1.setAnmerkung("Test1");
 
         var abfragevarianteSachbearbeitung2 =
-            new AbfragevarianteBaugenehmigungsverfahrenSachbearbeitungInBearbeitungSachbearbeitungModel();
+            new AbfragevarianteBaugenehmigungsverfahrenSachbearbeitungStartBearbeitungModel();
         abfragevarianteSachbearbeitung2.setId(UUID.randomUUID());
         abfragevarianteSachbearbeitung2.setVersion(2L);
         abfragevarianteSachbearbeitung2.setAnmerkung("Test2");
@@ -778,18 +778,18 @@ public class AbfrageDomainMapperTest {
 
     @Test
     void sachbearbeitungAbfrageToAbfrageNonExistingAbfragevarianteForAbfragevarianteSachbearbeitungWeiteresVerfahren() {
-        var weiteresVerfahren = new WeiteresVerfahrenInBearbeitungSachbearbeitungModel();
+        var weiteresVerfahren = new WeiteresVerfahrenStartBearbeitungModel();
         weiteresVerfahren.setVersion(99L);
         weiteresVerfahren.setAbfragevariantenSachbearbeitungWeiteresVerfahren(List.of());
 
         var abfragevarianteSachbearbeitung1 =
-            new AbfragevarianteWeiteresVerfahrenSachbearbeitungInBearbeitungSachbearbeitungModel();
+            new AbfragevarianteWeiteresVerfahrenSachbearbeitungStartBearbeitungModel();
         abfragevarianteSachbearbeitung1.setId(UUID.randomUUID());
         abfragevarianteSachbearbeitung1.setVersion(1L);
         abfragevarianteSachbearbeitung1.setAnmerkung("Test1");
 
         var abfragevarianteSachbearbeitung2 =
-            new AbfragevarianteWeiteresVerfahrenSachbearbeitungInBearbeitungSachbearbeitungModel();
+            new AbfragevarianteWeiteresVerfahrenSachbearbeitungStartBearbeitungModel();
         abfragevarianteSachbearbeitung2.setId(UUID.randomUUID());
         abfragevarianteSachbearbeitung2.setVersion(2L);
         abfragevarianteSachbearbeitung2.setAnmerkung("Test2");

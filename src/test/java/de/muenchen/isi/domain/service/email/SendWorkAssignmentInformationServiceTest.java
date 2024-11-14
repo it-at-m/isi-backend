@@ -198,17 +198,17 @@ class SendWorkAssignmentInformationServiceTest {
         bearbeitungshistorie.add(historyElement);
 
         bearbeitendePerson = new BearbeitendePersonModel();
-        bearbeitendePerson.setEmail("the-email-address-offen");
+        bearbeitendePerson.setEmail("the-email-address-uebermittelt-zur-bearbeitung");
         historyElement = new BearbeitungshistorieModel();
         historyElement.setBearbeitendePerson(bearbeitendePerson);
-        historyElement.setZielStatus(StatusAbfrage.OFFEN);
+        historyElement.setZielStatus(StatusAbfrage.UEBERMITTELT_ZUR_BEARBEITUNG);
         bearbeitungshistorie.add(historyElement);
 
         bearbeitendePerson = new BearbeitendePersonModel();
-        bearbeitendePerson.setEmail("the-email-address-in-bearbeitung-sachbearbeitung");
+        bearbeitendePerson.setEmail("the-email-address-start-bearbeitung");
         historyElement = new BearbeitungshistorieModel();
         historyElement.setBearbeitendePerson(bearbeitendePerson);
-        historyElement.setZielStatus(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+        historyElement.setZielStatus(StatusAbfrage.START_BEARBEITUNG);
         bearbeitungshistorie.add(historyElement);
 
         abfrage.setBearbeitungshistorie(bearbeitungshistorie);
@@ -217,7 +217,7 @@ class SendWorkAssignmentInformationServiceTest {
             abfrage,
             StatusAbfrageEvents.BEDARFSMELDUNG_ERFOLGTE
         );
-        assertThat(result, is(List.of("the-email-address-offen")));
+        assertThat(result, is(List.of("the-email-address-uebermittelt-zur-bearbeitung")));
     }
 
     @Test
@@ -268,7 +268,7 @@ class SendWorkAssignmentInformationServiceTest {
 
         bearbeitungshistorie = new ArrayList<>();
         historyElement = new BearbeitungshistorieModel();
-        historyElement.setZielStatus(StatusAbfrage.OFFEN);
+        historyElement.setZielStatus(StatusAbfrage.UEBERMITTELT_ZUR_BEARBEITUNG);
         bearbeitungshistorie.add(historyElement);
         result =
             sendWorkAssignmentInformationService.getEmailAddressOfPersonWhichInitiallyCreatedTheAbfrage(
@@ -281,7 +281,7 @@ class SendWorkAssignmentInformationServiceTest {
         bearbeitendePerson.setEmail(null);
         historyElement = new BearbeitungshistorieModel();
         historyElement.setBearbeitendePerson(bearbeitendePerson);
-        historyElement.setZielStatus(StatusAbfrage.OFFEN);
+        historyElement.setZielStatus(StatusAbfrage.UEBERMITTELT_ZUR_BEARBEITUNG);
         bearbeitungshistorie.add(historyElement);
         result =
             sendWorkAssignmentInformationService.getEmailAddressOfPersonWhichInitiallyCreatedTheAbfrage(
@@ -291,16 +291,16 @@ class SendWorkAssignmentInformationServiceTest {
 
         bearbeitungshistorie = new ArrayList<>();
         bearbeitendePerson = new BearbeitendePersonModel();
-        bearbeitendePerson.setEmail("the-email-address-offen");
+        bearbeitendePerson.setEmail("the-email-address-uebermittelt-zur-bearbeitung");
         historyElement = new BearbeitungshistorieModel();
         historyElement.setBearbeitendePerson(bearbeitendePerson);
-        historyElement.setZielStatus(StatusAbfrage.OFFEN);
+        historyElement.setZielStatus(StatusAbfrage.UEBERMITTELT_ZUR_BEARBEITUNG);
         bearbeitungshistorie.add(historyElement);
         result =
             sendWorkAssignmentInformationService.getEmailAddressOfPersonWhichInitiallyCreatedTheAbfrage(
                 bearbeitungshistorie
             );
-        assertThat(result, is("the-email-address-offen"));
+        assertThat(result, is("the-email-address-uebermittelt-zur-bearbeitung"));
 
         bearbeitungshistorie = new ArrayList<>();
         bearbeitendePerson = new BearbeitendePersonModel();
@@ -311,24 +311,24 @@ class SendWorkAssignmentInformationServiceTest {
         bearbeitungshistorie.add(historyElement);
 
         bearbeitendePerson = new BearbeitendePersonModel();
-        bearbeitendePerson.setEmail("the-email-address-offen");
+        bearbeitendePerson.setEmail("the-email-address-uebermittelt-zur-bearbeitung");
         historyElement = new BearbeitungshistorieModel();
         historyElement.setBearbeitendePerson(bearbeitendePerson);
-        historyElement.setZielStatus(StatusAbfrage.OFFEN);
+        historyElement.setZielStatus(StatusAbfrage.UEBERMITTELT_ZUR_BEARBEITUNG);
         bearbeitungshistorie.add(historyElement);
 
         bearbeitendePerson = new BearbeitendePersonModel();
-        bearbeitendePerson.setEmail("the-email-address-in-bearbeitung-sachbearbeitung");
+        bearbeitendePerson.setEmail("the-email-address-start-bearbeitung");
         historyElement = new BearbeitungshistorieModel();
         historyElement.setBearbeitendePerson(bearbeitendePerson);
-        historyElement.setZielStatus(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+        historyElement.setZielStatus(StatusAbfrage.START_BEARBEITUNG);
         bearbeitungshistorie.add(historyElement);
 
         result =
             sendWorkAssignmentInformationService.getEmailAddressOfPersonWhichInitiallyCreatedTheAbfrage(
                 bearbeitungshistorie
             );
-        assertThat(result, is("the-email-address-offen"));
+        assertThat(result, is("the-email-address-uebermittelt-zur-bearbeitung"));
     }
 
     @Test

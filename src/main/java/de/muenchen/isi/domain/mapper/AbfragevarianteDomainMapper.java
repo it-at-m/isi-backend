@@ -11,18 +11,18 @@ import de.muenchen.isi.domain.model.AbfragevarianteWeiteresVerfahrenModel;
 import de.muenchen.isi.domain.model.abfrageAngelegt.AbfragevarianteBaugenehmigungsverfahrenAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageAngelegt.AbfragevarianteBauleitplanverfahrenAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageAngelegt.AbfragevarianteWeiteresVerfahrenAngelegtModel;
-import de.muenchen.isi.domain.model.abfrageBedarfsmeldungErfolgt.AbfragevarianteBaugenehmigungsverfahrenBedarfsmeldungErfolgtModel;
-import de.muenchen.isi.domain.model.abfrageBedarfsmeldungErfolgt.AbfragevarianteBauleitplanverfahrenBedarfsmeldungErfolgtModel;
-import de.muenchen.isi.domain.model.abfrageBedarfsmeldungErfolgt.AbfragevarianteWeiteresVerfahrenBedarfsmeldungErfolgtModel;
-import de.muenchen.isi.domain.model.abfrageInBearbeitungFachreferat.AbfragevarianteBaugenehmigungsverfahrenInBearbeitungFachreferatModel;
-import de.muenchen.isi.domain.model.abfrageInBearbeitungFachreferat.AbfragevarianteBauleitplanverfahrenInBearbeitungFachreferatModel;
-import de.muenchen.isi.domain.model.abfrageInBearbeitungFachreferat.AbfragevarianteWeiteresVerfahrenInBearbeitungFachreferatModel;
-import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.AbfragevarianteBaugenehmigungsverfahrenInBearbeitungSachbearbeitungModel;
-import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.AbfragevarianteBaugenehmigungsverfahrenSachbearbeitungInBearbeitungSachbearbeitungModel;
-import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.AbfragevarianteBauleitplanverfahrenInBearbeitungSachbearbeitungModel;
-import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.AbfragevarianteBauleitplanverfahrenSachbearbeitungInBearbeitungSachbearbeitungModel;
-import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.AbfragevarianteWeiteresVerfahrenInBearbeitungSachbearbeitungModel;
-import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.AbfragevarianteWeiteresVerfahrenSachbearbeitungInBearbeitungSachbearbeitungModel;
+import de.muenchen.isi.domain.model.abfrageEinpflegenBedarfsmeldung.AbfragevarianteBauleitplanverfahrenEinpflegenBedarfsmeldungModel;
+import de.muenchen.isi.domain.model.abfrageEinpflegenBedarfsmeldung.AbfragevarianteWeiteresVerfahrenEinpflegenBedarfsmeldungModel;
+import de.muenchen.isi.domain.model.abfrageEinplanungBedarfe.AbfragevarianteBaugenehmigungsverfahrenEinplanungBedarfeModel;
+import de.muenchen.isi.domain.model.abfrageEinplanungBedarfe.AbfragevarianteBauleitplanverfahrenEinplanungBedarfeModel;
+import de.muenchen.isi.domain.model.abfrageEinplanungBedarfe.AbfragevarianteWeiteresVerfahrenEinplanungBedarfeModel;
+import de.muenchen.isi.domain.model.abfrageEinpflegenBedarfsmeldung.AbfragevarianteBaugenehmigungsverfahrenEinpflegenBedarfsmeldungModel;
+import de.muenchen.isi.domain.model.abfrageStartBearbeitung.AbfragevarianteBaugenehmigungsverfahrenStartBearbeitungModel;
+import de.muenchen.isi.domain.model.abfrageStartBearbeitung.AbfragevarianteBaugenehmigungsverfahrenSachbearbeitungStartBearbeitungModel;
+import de.muenchen.isi.domain.model.abfrageStartBearbeitung.AbfragevarianteBauleitplanverfahrenStartBearbeitungModel;
+import de.muenchen.isi.domain.model.abfrageStartBearbeitung.AbfragevarianteBauleitplanverfahrenSachbearbeitungStartBearbeitungModel;
+import de.muenchen.isi.domain.model.abfrageStartBearbeitung.AbfragevarianteWeiteresVerfahrenSachbearbeitungStartBearbeitungModel;
+import de.muenchen.isi.domain.model.abfrageStartBearbeitung.AbfragevarianteWeiteresVerfahrenStartBearbeitungModel;
 import de.muenchen.isi.infrastructure.entity.AbfragevarianteBaugenehmigungsverfahren;
 import de.muenchen.isi.infrastructure.entity.AbfragevarianteBauleitplanverfahren;
 import de.muenchen.isi.infrastructure.entity.AbfragevarianteWeiteresVerfahren;
@@ -159,7 +159,7 @@ public interface AbfragevarianteDomainMapper {
         }
     )
     AbfragevarianteBauleitplanverfahrenModel request2Model(
-        final AbfragevarianteBauleitplanverfahrenSachbearbeitungInBearbeitungSachbearbeitungModel request,
+        final AbfragevarianteBauleitplanverfahrenSachbearbeitungStartBearbeitungModel request,
         @MappingTarget final AbfragevarianteBauleitplanverfahrenModel model
     );
 
@@ -178,7 +178,7 @@ public interface AbfragevarianteDomainMapper {
         }
     )
     AbfragevarianteBaugenehmigungsverfahrenModel request2Model(
-        final AbfragevarianteBaugenehmigungsverfahrenSachbearbeitungInBearbeitungSachbearbeitungModel request,
+        final AbfragevarianteBaugenehmigungsverfahrenSachbearbeitungStartBearbeitungModel request,
         @MappingTarget final AbfragevarianteBaugenehmigungsverfahrenModel model
     );
 
@@ -198,7 +198,7 @@ public interface AbfragevarianteDomainMapper {
         }
     )
     AbfragevarianteWeiteresVerfahrenModel request2Model(
-        final AbfragevarianteWeiteresVerfahrenSachbearbeitungInBearbeitungSachbearbeitungModel request,
+        final AbfragevarianteWeiteresVerfahrenSachbearbeitungStartBearbeitungModel request,
         @MappingTarget final AbfragevarianteWeiteresVerfahrenModel model
     );
 
@@ -222,7 +222,7 @@ public interface AbfragevarianteDomainMapper {
         }
     )
     AbfragevarianteBauleitplanverfahrenModel request2Model(
-        final AbfragevarianteBauleitplanverfahrenInBearbeitungSachbearbeitungModel request,
+        final AbfragevarianteBauleitplanverfahrenStartBearbeitungModel request,
         @MappingTarget final AbfragevarianteBauleitplanverfahrenModel model
     );
 
@@ -246,7 +246,7 @@ public interface AbfragevarianteDomainMapper {
         }
     )
     AbfragevarianteBaugenehmigungsverfahrenModel request2Model(
-        final AbfragevarianteBaugenehmigungsverfahrenInBearbeitungSachbearbeitungModel request,
+        final AbfragevarianteBaugenehmigungsverfahrenStartBearbeitungModel request,
         @MappingTarget final AbfragevarianteBaugenehmigungsverfahrenModel model
     );
 
@@ -270,7 +270,7 @@ public interface AbfragevarianteDomainMapper {
         }
     )
     AbfragevarianteWeiteresVerfahrenModel request2Model(
-        final AbfragevarianteWeiteresVerfahrenInBearbeitungSachbearbeitungModel request,
+        final AbfragevarianteWeiteresVerfahrenStartBearbeitungModel request,
         @MappingTarget final AbfragevarianteWeiteresVerfahrenModel model
     );
 
@@ -291,7 +291,7 @@ public interface AbfragevarianteDomainMapper {
         }
     )
     AbfragevarianteBauleitplanverfahrenModel request2Model(
-        final AbfragevarianteBauleitplanverfahrenInBearbeitungFachreferatModel request,
+        final AbfragevarianteBauleitplanverfahrenEinpflegenBedarfsmeldungModel request,
         @MappingTarget final AbfragevarianteBauleitplanverfahrenModel model
     );
 
@@ -312,7 +312,7 @@ public interface AbfragevarianteDomainMapper {
         }
     )
     AbfragevarianteBaugenehmigungsverfahrenModel request2Model(
-        final AbfragevarianteBaugenehmigungsverfahrenInBearbeitungFachreferatModel request,
+        final AbfragevarianteBaugenehmigungsverfahrenEinpflegenBedarfsmeldungModel request,
         @MappingTarget final AbfragevarianteBaugenehmigungsverfahrenModel model
     );
 
@@ -333,7 +333,7 @@ public interface AbfragevarianteDomainMapper {
         }
     )
     AbfragevarianteWeiteresVerfahrenModel request2Model(
-        final AbfragevarianteWeiteresVerfahrenInBearbeitungFachreferatModel request,
+        final AbfragevarianteWeiteresVerfahrenEinpflegenBedarfsmeldungModel request,
         @MappingTarget final AbfragevarianteWeiteresVerfahrenModel model
     );
 
@@ -346,7 +346,7 @@ public interface AbfragevarianteDomainMapper {
         }
     )
     AbfragevarianteBauleitplanverfahrenModel request2Model(
-        final AbfragevarianteBauleitplanverfahrenBedarfsmeldungErfolgtModel request,
+        final AbfragevarianteBauleitplanverfahrenEinplanungBedarfeModel request,
         @MappingTarget final AbfragevarianteBauleitplanverfahrenModel model
     );
 
@@ -359,7 +359,7 @@ public interface AbfragevarianteDomainMapper {
         }
     )
     AbfragevarianteBaugenehmigungsverfahrenModel request2Model(
-        final AbfragevarianteBaugenehmigungsverfahrenBedarfsmeldungErfolgtModel request,
+        final AbfragevarianteBaugenehmigungsverfahrenEinplanungBedarfeModel request,
         @MappingTarget final AbfragevarianteBaugenehmigungsverfahrenModel model
     );
 
@@ -372,7 +372,7 @@ public interface AbfragevarianteDomainMapper {
         }
     )
     AbfragevarianteWeiteresVerfahrenModel request2Model(
-        final AbfragevarianteWeiteresVerfahrenBedarfsmeldungErfolgtModel request,
+        final AbfragevarianteWeiteresVerfahrenEinplanungBedarfeModel request,
         @MappingTarget final AbfragevarianteWeiteresVerfahrenModel model
     );
 

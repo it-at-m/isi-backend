@@ -69,11 +69,11 @@ class BearbeitungshistorieServiceTest {
         try (final MockedStatic<LocalDateTime> mockLocalDateTime = Mockito.mockStatic(LocalDateTime.class)) {
             mockLocalDateTime.when(LocalDateTime::now).thenReturn(zeitpunkt);
             result =
-                bearbeitungshistorieService.createBearbeitungshistorieForStatus(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT);
+                bearbeitungshistorieService.createBearbeitungshistorieForStatus(StatusAbfrage.EINPLANUNG_BEDARFE);
         }
 
         final var bearbeitungshistorieExpected = new BearbeitungshistorieModel();
-        bearbeitungshistorieExpected.setZielStatus(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT);
+        bearbeitungshistorieExpected.setZielStatus(StatusAbfrage.EINPLANUNG_BEDARFE);
         bearbeitungshistorieExpected.setZeitpunkt(zeitpunkt);
         final var bearbeitendePersonExpected = new BearbeitendePersonModel();
         bearbeitendePersonExpected.setName("Rob Winch");

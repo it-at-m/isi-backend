@@ -19,18 +19,18 @@ import de.muenchen.isi.domain.model.abfrageAngelegt.AbfrageAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageAngelegt.BaugenehmigungsverfahrenAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageAngelegt.BauleitplanverfahrenAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageAngelegt.WeiteresVerfahrenAngelegtModel;
-import de.muenchen.isi.domain.model.abfrageBedarfsmeldungErfolgt.AbfrageBedarfsmeldungErfolgtModel;
-import de.muenchen.isi.domain.model.abfrageBedarfsmeldungErfolgt.BaugenehmigungsverfahrenBedarfsmeldungErfolgtModel;
-import de.muenchen.isi.domain.model.abfrageBedarfsmeldungErfolgt.BauleitplanverfahrenBedarfsmeldungErfolgtModel;
-import de.muenchen.isi.domain.model.abfrageBedarfsmeldungErfolgt.WeiteresVerfahrenBedarfsmeldungErfolgtModel;
-import de.muenchen.isi.domain.model.abfrageInBearbeitungFachreferat.AbfrageInBearbeitungFachreferatModel;
-import de.muenchen.isi.domain.model.abfrageInBearbeitungFachreferat.BaugenehmigungsverfahrenInBearbeitungFachreferatModel;
-import de.muenchen.isi.domain.model.abfrageInBearbeitungFachreferat.BauleitplanverfahrenInBearbeitungFachreferatModel;
-import de.muenchen.isi.domain.model.abfrageInBearbeitungFachreferat.WeiteresVerfahrenInBearbeitungFachreferatModel;
-import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.AbfrageInBearbeitungSachbearbeitungModel;
-import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.BaugenehmigungsverfahrenInBearbeitungSachbearbeitungModel;
-import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.BauleitplanverfahrenInBearbeitungSachbearbeitungModel;
-import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.WeiteresVerfahrenInBearbeitungSachbearbeitungModel;
+import de.muenchen.isi.domain.model.abfrageEinpflegenBedarfsmeldung.BaugenehmigungsverfahrenEinpflegenBedarfsmeldungModel;
+import de.muenchen.isi.domain.model.abfrageEinpflegenBedarfsmeldung.WeiteresVerfahrenEinpflegenBedarfsmeldungModel;
+import de.muenchen.isi.domain.model.abfrageEinplanungBedarfe.AbfrageEinplanungBedarfeModel;
+import de.muenchen.isi.domain.model.abfrageEinplanungBedarfe.BaugenehmigungsverfahrenEinplanungBedarfeModel;
+import de.muenchen.isi.domain.model.abfrageEinplanungBedarfe.BauleitplanverfahrenEinplanungBedarfeModel;
+import de.muenchen.isi.domain.model.abfrageEinplanungBedarfe.WeiteresVerfahrenEinplanungBedarfeModel;
+import de.muenchen.isi.domain.model.abfrageEinpflegenBedarfsmeldung.AbfrageEinpflegenBedarfsmeldungModel;
+import de.muenchen.isi.domain.model.abfrageEinpflegenBedarfsmeldung.BauleitplanverfahrenEinpflegenBedarfsmeldungModel;
+import de.muenchen.isi.domain.model.abfrageStartBearbeitung.AbfrageStartBearbeitungModel;
+import de.muenchen.isi.domain.model.abfrageStartBearbeitung.BaugenehmigungsverfahrenStartBearbeitungModel;
+import de.muenchen.isi.domain.model.abfrageStartBearbeitung.BauleitplanverfahrenStartBearbeitungModel;
+import de.muenchen.isi.domain.model.abfrageStartBearbeitung.WeiteresVerfahrenStartBearbeitungModel;
 import de.muenchen.isi.domain.model.calculation.LangfristigerBedarfModel;
 import de.muenchen.isi.domain.service.calculation.CalculationService;
 import de.muenchen.isi.domain.service.common.BearbeitungshistorieService;
@@ -255,7 +255,7 @@ public class AbfrageService {
     }
 
     /**
-     * Diese Methode aktualisiert ein {@link AbfrageInBearbeitungSachbearbeitungModel}.
+     * Diese Methode aktualisiert ein {@link AbfrageStartBearbeitungModel}.
      * Des Weiteren werden je Abfragevariante die planungs- und sobonursächlichen {@link LangfristigerBedarfModel} ermittelt
      * und samt mit der Abfrage an die Reportingschnittstelle übermittelt.
      *
@@ -264,20 +264,20 @@ public class AbfrageService {
      * @return das gespeicherte {@link AbfrageModel}
      * @throws OptimisticLockingException       falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist.
      * @throws EntityNotFoundException          falls das referenzierte Bauvorhaben nicht existiert.
-     * @throws AbfrageStatusNotAllowedException falls die zu aktualisierende Abfrage sich nicht im Status {@link StatusAbfrage#IN_BEARBEITUNG_SACHBEARBEITUNG} befindet.
+     * @throws AbfrageStatusNotAllowedException falls die zu aktualisierende Abfrage sich nicht im Status {@link StatusAbfrage#START_BEARBEITUNG} befindet.
      * @throws CalculationException             falls bei den Berechnungen ein Fehler auftritt.
      * @throws ReportingException               falls bei der Übermittlung an die Reportingschnittstelle ein Fehler auftritt.
      * @throws UserRoleNotAllowedException      falls der User keine Berechtigung für die Abfrage hat.
      */
     public AbfrageModel patchInBearbeitungSachbearbeitung(
-        final AbfrageInBearbeitungSachbearbeitungModel abfrage,
+        final AbfrageStartBearbeitungModel abfrage,
         final UUID id
     )
         throws EntityNotFoundException, AbfrageStatusNotAllowedException, OptimisticLockingException, UserRoleNotAllowedException, CalculationException, ReportingException {
         final var originalAbfrageDb = this.getById(id);
         this.throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(
                 originalAbfrageDb,
-                StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG
+                StatusAbfrage.START_BEARBEITUNG
             );
 
         this.changeRelevantAbfragevarianteOnBauvorhabenChangeAbfrageInBearbeitungSachbearbeitung(
@@ -288,19 +288,19 @@ public class AbfrageService {
         if (ArtAbfrage.BAULEITPLANVERFAHREN.equals(abfrage.getArtAbfrage())) {
             abfrageToSave =
                 this.abfrageDomainMapper.request2Model(
-                        (BauleitplanverfahrenInBearbeitungSachbearbeitungModel) abfrage,
+                        (BauleitplanverfahrenStartBearbeitungModel) abfrage,
                         (BauleitplanverfahrenModel) originalAbfrageDb
                     );
         } else if (ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN.equals(abfrage.getArtAbfrage())) {
             abfrageToSave =
                 this.abfrageDomainMapper.request2Model(
-                        (BaugenehmigungsverfahrenInBearbeitungSachbearbeitungModel) abfrage,
+                        (BaugenehmigungsverfahrenStartBearbeitungModel) abfrage,
                         (BaugenehmigungsverfahrenModel) originalAbfrageDb
                     );
         } else if (ArtAbfrage.WEITERES_VERFAHREN.equals(abfrage.getArtAbfrage())) {
             abfrageToSave =
                 this.abfrageDomainMapper.request2Model(
-                        (WeiteresVerfahrenInBearbeitungSachbearbeitungModel) abfrage,
+                        (WeiteresVerfahrenStartBearbeitungModel) abfrage,
                         (WeiteresVerfahrenModel) originalAbfrageDb
                     );
         } else {
@@ -312,7 +312,7 @@ public class AbfrageService {
     }
 
     /**
-     * Diese Methode aktualisiert ein {@link AbfrageInBearbeitungFachreferatModel}.
+     * Diese Methode aktualisiert ein {@link AbfrageEinpflegenBedarfsmeldungModel}.
      * Des Weiteren werden je Abfragevariante die planungs- und sobonursächlichen {@link LangfristigerBedarfModel} ermittelt
      * und samt mit der Abfrage an die Reportingschnittstelle übermittelt.
      *
@@ -321,39 +321,39 @@ public class AbfrageService {
      * @return das gespeicherte {@link AbfrageModel}
      * @throws OptimisticLockingException       falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist.
      * @throws EntityNotFoundException          falls das referenzierte Bauvorhaben nicht existiert.
-     * @throws AbfrageStatusNotAllowedException falls die zu aktualisierende Abfrage sich nicht im Status {@link StatusAbfrage#IN_BEARBEITUNG_FACHREFERATE} befindet.
+     * @throws AbfrageStatusNotAllowedException falls die zu aktualisierende Abfrage sich nicht im Status {@link StatusAbfrage#EINPFLEGEN_BEDARFSMELDUNG} befindet.
      * @throws CalculationException             falls bei den Berechnungen ein Fehler auftritt.
      * @throws ReportingException               falls bei der Übermittlung an die Reportingschnittstelle ein Fehler auftritt.
      * @throws UserRoleNotAllowedException      falls der User keine Berechtigung für die Abfrage hat.
      */
     public AbfrageModel patchInBearbeitungFachreferat(
-        final AbfrageInBearbeitungFachreferatModel abfrage,
+        final AbfrageEinpflegenBedarfsmeldungModel abfrage,
         final UUID id
     )
         throws EntityNotFoundException, AbfrageStatusNotAllowedException, OptimisticLockingException, UserRoleNotAllowedException, CalculationException, ReportingException {
         final var originalAbfrageDb = this.getById(id);
         this.throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(
                 originalAbfrageDb,
-                StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE
+                StatusAbfrage.EINPFLEGEN_BEDARFSMELDUNG
             );
 
         final AbfrageModel abfrageToSave;
         if (ArtAbfrage.BAULEITPLANVERFAHREN.equals(abfrage.getArtAbfrage())) {
             abfrageToSave =
                 this.abfrageDomainMapper.request2Model(
-                        (BauleitplanverfahrenInBearbeitungFachreferatModel) abfrage,
+                        (BauleitplanverfahrenEinpflegenBedarfsmeldungModel) abfrage,
                         (BauleitplanverfahrenModel) originalAbfrageDb
                     );
         } else if (ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN.equals(abfrage.getArtAbfrage())) {
             abfrageToSave =
                 this.abfrageDomainMapper.request2Model(
-                        (BaugenehmigungsverfahrenInBearbeitungFachreferatModel) abfrage,
+                        (BaugenehmigungsverfahrenEinpflegenBedarfsmeldungModel) abfrage,
                         (BaugenehmigungsverfahrenModel) originalAbfrageDb
                     );
         } else if (ArtAbfrage.WEITERES_VERFAHREN.equals(abfrage.getArtAbfrage())) {
             abfrageToSave =
                 this.abfrageDomainMapper.request2Model(
-                        (WeiteresVerfahrenInBearbeitungFachreferatModel) abfrage,
+                        (WeiteresVerfahrenEinpflegenBedarfsmeldungModel) abfrage,
                         (WeiteresVerfahrenModel) originalAbfrageDb
                     );
         } else {
@@ -365,7 +365,7 @@ public class AbfrageService {
     }
 
     /**
-     * Diese Methode aktualisiert ein {@link AbfrageBedarfsmeldungErfolgtModel}.
+     * Diese Methode aktualisiert ein {@link AbfrageEinplanungBedarfeModel}.
      * Des Weiteren werden je Abfragevariante die planungs- und sobonursächlichen {@link LangfristigerBedarfModel} ermittelt
      * und samt mit der Abfrage an die Reportingschnittstelle übermittelt.
      *
@@ -374,35 +374,35 @@ public class AbfrageService {
      * @return das gespeicherte {@link AbfrageModel}
      * @throws OptimisticLockingException       falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist.
      * @throws EntityNotFoundException          falls das referenzierte Bauvorhaben nicht existiert.
-     * @throws AbfrageStatusNotAllowedException falls die zu aktualisierende Abfrage sich nicht im Status {@link StatusAbfrage#IN_BEARBEITUNG_FACHREFERATE} befindet.
+     * @throws AbfrageStatusNotAllowedException falls die zu aktualisierende Abfrage sich nicht im Status {@link StatusAbfrage#EINPFLEGEN_BEDARFSMELDUNG} befindet.
      * @throws CalculationException             falls bei den Berechnungen ein Fehler auftritt.
      * @throws ReportingException               falls bei der Übermittlung an die Reportingschnittstelle ein Fehler auftritt.
      */
-    public AbfrageModel patchBedarfsmeldungErfolgt(final AbfrageBedarfsmeldungErfolgtModel abfrage, final UUID id)
+    public AbfrageModel patchBedarfsmeldungErfolgt(final AbfrageEinplanungBedarfeModel abfrage, final UUID id)
         throws EntityNotFoundException, AbfrageStatusNotAllowedException, OptimisticLockingException, UserRoleNotAllowedException, CalculationException, ReportingException {
         final var originalAbfrageDb = this.getById(id);
         this.throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(
                 originalAbfrageDb,
-                StatusAbfrage.BEDARFSMELDUNG_ERFOLGT
+                StatusAbfrage.EINPLANUNG_BEDARFE
             );
 
         final AbfrageModel abfrageToSave;
         if (ArtAbfrage.BAULEITPLANVERFAHREN.equals(abfrage.getArtAbfrage())) {
             abfrageToSave =
                 this.abfrageDomainMapper.request2Model(
-                        (BauleitplanverfahrenBedarfsmeldungErfolgtModel) abfrage,
+                        (BauleitplanverfahrenEinplanungBedarfeModel) abfrage,
                         (BauleitplanverfahrenModel) originalAbfrageDb
                     );
         } else if (ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN.equals(abfrage.getArtAbfrage())) {
             abfrageToSave =
                 this.abfrageDomainMapper.request2Model(
-                        (BaugenehmigungsverfahrenBedarfsmeldungErfolgtModel) abfrage,
+                        (BaugenehmigungsverfahrenEinplanungBedarfeModel) abfrage,
                         (BaugenehmigungsverfahrenModel) originalAbfrageDb
                     );
         } else if (ArtAbfrage.WEITERES_VERFAHREN.equals(abfrage.getArtAbfrage())) {
             abfrageToSave =
                 this.abfrageDomainMapper.request2Model(
-                        (WeiteresVerfahrenBedarfsmeldungErfolgtModel) abfrage,
+                        (WeiteresVerfahrenEinplanungBedarfeModel) abfrage,
                         (WeiteresVerfahrenModel) originalAbfrageDb
                     );
         } else {
@@ -594,7 +594,7 @@ public class AbfrageService {
     }
 
     public void changeRelevantAbfragevarianteOnBauvorhabenChangeAbfrageInBearbeitungSachbearbeitung(
-        AbfrageInBearbeitungSachbearbeitungModel abfrage,
+        AbfrageStartBearbeitungModel abfrage,
         AbfrageModel originalAbfrageDb
     ) {
         if (originalAbfrageDb.getBauvorhaben() != null) {

@@ -17,15 +17,15 @@ import de.muenchen.isi.domain.model.abfrageAngelegt.AbfrageAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageAngelegt.BaugenehmigungsverfahrenAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageAngelegt.BauleitplanverfahrenAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageAngelegt.WeiteresVerfahrenAngelegtModel;
-import de.muenchen.isi.domain.model.abfrageBedarfsmeldungErfolgt.BaugenehmigungsverfahrenBedarfsmeldungErfolgtModel;
-import de.muenchen.isi.domain.model.abfrageBedarfsmeldungErfolgt.BauleitplanverfahrenBedarfsmeldungErfolgtModel;
-import de.muenchen.isi.domain.model.abfrageBedarfsmeldungErfolgt.WeiteresVerfahrenBedarfsmeldungErfolgtModel;
-import de.muenchen.isi.domain.model.abfrageInBearbeitungFachreferat.BaugenehmigungsverfahrenInBearbeitungFachreferatModel;
-import de.muenchen.isi.domain.model.abfrageInBearbeitungFachreferat.BauleitplanverfahrenInBearbeitungFachreferatModel;
-import de.muenchen.isi.domain.model.abfrageInBearbeitungFachreferat.WeiteresVerfahrenInBearbeitungFachreferatModel;
-import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.BaugenehmigungsverfahrenInBearbeitungSachbearbeitungModel;
-import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.BauleitplanverfahrenInBearbeitungSachbearbeitungModel;
-import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.WeiteresVerfahrenInBearbeitungSachbearbeitungModel;
+import de.muenchen.isi.domain.model.abfrageEinpflegenBedarfsmeldung.BaugenehmigungsverfahrenEinpflegenBedarfsmeldungModel;
+import de.muenchen.isi.domain.model.abfrageEinpflegenBedarfsmeldung.WeiteresVerfahrenEinpflegenBedarfsmeldungModel;
+import de.muenchen.isi.domain.model.abfrageEinplanungBedarfe.BaugenehmigungsverfahrenEinplanungBedarfeModel;
+import de.muenchen.isi.domain.model.abfrageEinplanungBedarfe.BauleitplanverfahrenEinplanungBedarfeModel;
+import de.muenchen.isi.domain.model.abfrageEinplanungBedarfe.WeiteresVerfahrenEinplanungBedarfeModel;
+import de.muenchen.isi.domain.model.abfrageEinpflegenBedarfsmeldung.BauleitplanverfahrenEinpflegenBedarfsmeldungModel;
+import de.muenchen.isi.domain.model.abfrageStartBearbeitung.BaugenehmigungsverfahrenStartBearbeitungModel;
+import de.muenchen.isi.domain.model.abfrageStartBearbeitung.BauleitplanverfahrenStartBearbeitungModel;
+import de.muenchen.isi.domain.model.abfrageStartBearbeitung.WeiteresVerfahrenStartBearbeitungModel;
 import de.muenchen.isi.domain.model.common.BearbeitendePersonModel;
 import de.muenchen.isi.infrastructure.entity.Abfrage;
 import de.muenchen.isi.infrastructure.entity.Baugenehmigungsverfahren;
@@ -281,7 +281,7 @@ public abstract class AbfrageDomainMapper {
         }
     )
     public abstract BauleitplanverfahrenModel request2Model(
-        final BauleitplanverfahrenInBearbeitungSachbearbeitungModel request,
+        final BauleitplanverfahrenStartBearbeitungModel request,
         @MappingTarget final BauleitplanverfahrenModel response
     );
 
@@ -293,7 +293,7 @@ public abstract class AbfrageDomainMapper {
      */
     @AfterMapping
     void afterMappingRequest2Model(
-        final BauleitplanverfahrenInBearbeitungSachbearbeitungModel request,
+        final BauleitplanverfahrenStartBearbeitungModel request,
         final @MappingTarget BauleitplanverfahrenModel response
     ) {
         // Mapping der zusätzlichen durch die Sachbearbeitung pflegbaren Attribute der Abfragevarianten
@@ -350,7 +350,7 @@ public abstract class AbfrageDomainMapper {
         }
     )
     public abstract BaugenehmigungsverfahrenModel request2Model(
-        final BaugenehmigungsverfahrenInBearbeitungSachbearbeitungModel request,
+        final BaugenehmigungsverfahrenStartBearbeitungModel request,
         @MappingTarget final BaugenehmigungsverfahrenModel response
     );
 
@@ -362,7 +362,7 @@ public abstract class AbfrageDomainMapper {
      */
     @AfterMapping
     void afterMappingRequest2Model(
-        final BaugenehmigungsverfahrenInBearbeitungSachbearbeitungModel request,
+        final BaugenehmigungsverfahrenStartBearbeitungModel request,
         final @MappingTarget BaugenehmigungsverfahrenModel response
     ) {
         // Mapping der zusätzlichen durch die Sachbearbeitung pflegbaren Attribute der Abfragevarianten
@@ -419,7 +419,7 @@ public abstract class AbfrageDomainMapper {
         }
     )
     public abstract WeiteresVerfahrenModel request2Model(
-        final WeiteresVerfahrenInBearbeitungSachbearbeitungModel request,
+        final WeiteresVerfahrenStartBearbeitungModel request,
         @MappingTarget final WeiteresVerfahrenModel response
     );
 
@@ -431,7 +431,7 @@ public abstract class AbfrageDomainMapper {
      */
     @AfterMapping
     void afterMappingRequest2Model(
-        final WeiteresVerfahrenInBearbeitungSachbearbeitungModel request,
+        final WeiteresVerfahrenStartBearbeitungModel request,
         final @MappingTarget WeiteresVerfahrenModel response
     ) {
         // Mapping der zusätzlichen durch die Sachbearbeitung pflegbaren Attribute der Abfragevarianten
@@ -481,7 +481,7 @@ public abstract class AbfrageDomainMapper {
     @BeanMapping(ignoreByDefault = true)
     @Mappings({ @Mapping(target = "version", ignore = false) })
     public abstract BauleitplanverfahrenModel request2Model(
-        final BauleitplanverfahrenInBearbeitungFachreferatModel request,
+        final BauleitplanverfahrenEinpflegenBedarfsmeldungModel request,
         @MappingTarget final BauleitplanverfahrenModel response
     );
 
@@ -493,7 +493,7 @@ public abstract class AbfrageDomainMapper {
      */
     @AfterMapping
     void afterMappingRequest2Model(
-        final BauleitplanverfahrenInBearbeitungFachreferatModel request,
+        final BauleitplanverfahrenEinpflegenBedarfsmeldungModel request,
         @MappingTarget final BauleitplanverfahrenModel response
     ) {
         // Mapping der Bedarfsmeldungen durch die Fachabteilungen der Abfragevarianten
@@ -543,7 +543,7 @@ public abstract class AbfrageDomainMapper {
     @BeanMapping(ignoreByDefault = true)
     @Mappings({ @Mapping(target = "version", ignore = false) })
     public abstract BaugenehmigungsverfahrenModel request2Model(
-        final BaugenehmigungsverfahrenInBearbeitungFachreferatModel request,
+        final BaugenehmigungsverfahrenEinpflegenBedarfsmeldungModel request,
         @MappingTarget final BaugenehmigungsverfahrenModel response
     );
 
@@ -555,7 +555,7 @@ public abstract class AbfrageDomainMapper {
      */
     @AfterMapping
     void afterMappingRequest2Model(
-        final BaugenehmigungsverfahrenInBearbeitungFachreferatModel request,
+        final BaugenehmigungsverfahrenEinpflegenBedarfsmeldungModel request,
         @MappingTarget final BaugenehmigungsverfahrenModel response
     ) {
         // Mapping der Bedarfsmeldungen durch die Fachabteilungen der Abfragevarianten
@@ -605,7 +605,7 @@ public abstract class AbfrageDomainMapper {
     @BeanMapping(ignoreByDefault = true)
     @Mappings({ @Mapping(target = "version", ignore = false) })
     public abstract WeiteresVerfahrenModel request2Model(
-        final WeiteresVerfahrenInBearbeitungFachreferatModel request,
+        final WeiteresVerfahrenEinpflegenBedarfsmeldungModel request,
         @MappingTarget final WeiteresVerfahrenModel response
     );
 
@@ -617,7 +617,7 @@ public abstract class AbfrageDomainMapper {
      */
     @AfterMapping
     void afterMappingRequest2Model(
-        final WeiteresVerfahrenInBearbeitungFachreferatModel request,
+        final WeiteresVerfahrenEinpflegenBedarfsmeldungModel request,
         @MappingTarget final WeiteresVerfahrenModel response
     ) {
         // Mapping der Bedarfsmeldungen durch die Fachabteilungen der Abfragevarianten
@@ -667,7 +667,7 @@ public abstract class AbfrageDomainMapper {
     @BeanMapping(ignoreByDefault = true)
     @Mappings({ @Mapping(target = "version", ignore = false) })
     public abstract BauleitplanverfahrenModel request2Model(
-        final BauleitplanverfahrenBedarfsmeldungErfolgtModel request,
+        final BauleitplanverfahrenEinplanungBedarfeModel request,
         @MappingTarget final BauleitplanverfahrenModel response
     );
 
@@ -679,7 +679,7 @@ public abstract class AbfrageDomainMapper {
      */
     @AfterMapping
     void afterMappingRequest2Model(
-        final BauleitplanverfahrenBedarfsmeldungErfolgtModel request,
+        final BauleitplanverfahrenEinplanungBedarfeModel request,
         @MappingTarget final BauleitplanverfahrenModel response
     ) {
         // Mapping der Bedarfsmeldungen durch die abfrageerstellende Person der Abfragevarianten
@@ -729,7 +729,7 @@ public abstract class AbfrageDomainMapper {
     @BeanMapping(ignoreByDefault = true)
     @Mappings({ @Mapping(target = "version", ignore = false) })
     public abstract BaugenehmigungsverfahrenModel request2Model(
-        final BaugenehmigungsverfahrenBedarfsmeldungErfolgtModel request,
+        final BaugenehmigungsverfahrenEinplanungBedarfeModel request,
         @MappingTarget final BaugenehmigungsverfahrenModel response
     );
 
@@ -741,7 +741,7 @@ public abstract class AbfrageDomainMapper {
      */
     @AfterMapping
     void afterMappingRequest2Model(
-        final BaugenehmigungsverfahrenBedarfsmeldungErfolgtModel request,
+        final BaugenehmigungsverfahrenEinplanungBedarfeModel request,
         @MappingTarget final BaugenehmigungsverfahrenModel response
     ) {
         // Mapping der Bedarfsmeldungen durch die abfrageerstellende Person der Abfragevarianten
@@ -791,7 +791,7 @@ public abstract class AbfrageDomainMapper {
     @BeanMapping(ignoreByDefault = true)
     @Mappings({ @Mapping(target = "version", ignore = false) })
     public abstract WeiteresVerfahrenModel request2Model(
-        final WeiteresVerfahrenBedarfsmeldungErfolgtModel request,
+        final WeiteresVerfahrenEinplanungBedarfeModel request,
         @MappingTarget final WeiteresVerfahrenModel response
     );
 
@@ -803,7 +803,7 @@ public abstract class AbfrageDomainMapper {
      */
     @AfterMapping
     void afterMappingRequest2Model(
-        final WeiteresVerfahrenBedarfsmeldungErfolgtModel request,
+        final WeiteresVerfahrenEinplanungBedarfeModel request,
         @MappingTarget final WeiteresVerfahrenModel response
     ) {
         // Mapping der Bedarfsmeldungen durch die abfrageerstellende Person der Abfragevarianten

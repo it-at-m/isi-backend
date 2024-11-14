@@ -22,18 +22,18 @@ import de.muenchen.isi.domain.model.BedarfsmeldungModel;
 import de.muenchen.isi.domain.model.FoerdermixModel;
 import de.muenchen.isi.domain.model.WeiteresVerfahrenModel;
 import de.muenchen.isi.domain.model.abfrageAngelegt.AbfrageAngelegtModel;
-import de.muenchen.isi.domain.model.abfrageInBearbeitungFachreferat.AbfragevarianteBaugenehmigungsverfahrenInBearbeitungFachreferatModel;
-import de.muenchen.isi.domain.model.abfrageInBearbeitungFachreferat.AbfragevarianteBauleitplanverfahrenInBearbeitungFachreferatModel;
-import de.muenchen.isi.domain.model.abfrageInBearbeitungFachreferat.AbfragevarianteWeiteresVerfahrenInBearbeitungFachreferatModel;
-import de.muenchen.isi.domain.model.abfrageInBearbeitungFachreferat.BaugenehmigungsverfahrenInBearbeitungFachreferatModel;
-import de.muenchen.isi.domain.model.abfrageInBearbeitungFachreferat.BauleitplanverfahrenInBearbeitungFachreferatModel;
-import de.muenchen.isi.domain.model.abfrageInBearbeitungFachreferat.WeiteresVerfahrenInBearbeitungFachreferatModel;
-import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.AbfragevarianteBaugenehmigungsverfahrenSachbearbeitungInBearbeitungSachbearbeitungModel;
-import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.AbfragevarianteBauleitplanverfahrenSachbearbeitungInBearbeitungSachbearbeitungModel;
-import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.AbfragevarianteWeiteresVerfahrenSachbearbeitungInBearbeitungSachbearbeitungModel;
-import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.BaugenehmigungsverfahrenInBearbeitungSachbearbeitungModel;
-import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.BauleitplanverfahrenInBearbeitungSachbearbeitungModel;
-import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.WeiteresVerfahrenInBearbeitungSachbearbeitungModel;
+import de.muenchen.isi.domain.model.abfrageEinpflegenBedarfsmeldung.AbfragevarianteBaugenehmigungsverfahrenEinpflegenBedarfsmeldungModel;
+import de.muenchen.isi.domain.model.abfrageEinpflegenBedarfsmeldung.AbfragevarianteBauleitplanverfahrenEinpflegenBedarfsmeldungModel;
+import de.muenchen.isi.domain.model.abfrageEinpflegenBedarfsmeldung.AbfragevarianteWeiteresVerfahrenEinpflegenBedarfsmeldungModel;
+import de.muenchen.isi.domain.model.abfrageEinpflegenBedarfsmeldung.BaugenehmigungsverfahrenEinpflegenBedarfsmeldungModel;
+import de.muenchen.isi.domain.model.abfrageEinpflegenBedarfsmeldung.BauleitplanverfahrenEinpflegenBedarfsmeldungModel;
+import de.muenchen.isi.domain.model.abfrageEinpflegenBedarfsmeldung.WeiteresVerfahrenEinpflegenBedarfsmeldungModel;
+import de.muenchen.isi.domain.model.abfrageStartBearbeitung.AbfragevarianteBaugenehmigungsverfahrenSachbearbeitungStartBearbeitungModel;
+import de.muenchen.isi.domain.model.abfrageStartBearbeitung.AbfragevarianteBauleitplanverfahrenSachbearbeitungStartBearbeitungModel;
+import de.muenchen.isi.domain.model.abfrageStartBearbeitung.AbfragevarianteWeiteresVerfahrenSachbearbeitungStartBearbeitungModel;
+import de.muenchen.isi.domain.model.abfrageStartBearbeitung.BaugenehmigungsverfahrenStartBearbeitungModel;
+import de.muenchen.isi.domain.model.abfrageStartBearbeitung.BauleitplanverfahrenStartBearbeitungModel;
+import de.muenchen.isi.domain.model.abfrageStartBearbeitung.WeiteresVerfahrenStartBearbeitungModel;
 import de.muenchen.isi.domain.model.common.SobonBerechnungModel;
 import de.muenchen.isi.domain.service.calculation.CalculationService;
 import de.muenchen.isi.domain.service.etlInterface.EtlInterfaceService;
@@ -133,19 +133,19 @@ class AbfrageServiceSpringTest {
         final var uuid = abfrageModel.getId();
         Assertions.assertThrows(UserRoleNotAllowedException.class, () -> this.abfrageService.getById(uuid));
 
-        abfrageModel.setStatusAbfrage(StatusAbfrage.OFFEN);
+        abfrageModel.setStatusAbfrage(StatusAbfrage.UEBERMITTELT_ZUR_BEARBEITUNG);
         abfrageModel = this.abfrageService.save(abfrageModel);
         Assertions.assertThrows(UserRoleNotAllowedException.class, () -> this.abfrageService.getById(uuid));
 
-        abfrageModel.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+        abfrageModel.setStatusAbfrage(StatusAbfrage.START_BEARBEITUNG);
         abfrageModel = this.abfrageService.save(abfrageModel);
         Assertions.assertThrows(UserRoleNotAllowedException.class, () -> this.abfrageService.getById(uuid));
 
-        abfrageModel.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
+        abfrageModel.setStatusAbfrage(StatusAbfrage.EINPFLEGEN_BEDARFSMELDUNG);
         abfrageModel = this.abfrageService.save(abfrageModel);
         Assertions.assertThrows(UserRoleNotAllowedException.class, () -> this.abfrageService.getById(uuid));
 
-        abfrageModel.setStatusAbfrage(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT);
+        abfrageModel.setStatusAbfrage(StatusAbfrage.EINPLANUNG_BEDARFE);
         abfrageModel = this.abfrageService.save(abfrageModel);
         Assertions.assertThrows(UserRoleNotAllowedException.class, () -> this.abfrageService.getById(uuid));
 
@@ -268,19 +268,19 @@ class AbfrageServiceSpringTest {
         throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException, ReportingException, UserRoleNotAllowedException {
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
         abfrage = this.abfrageService.save(abfrage);
-        abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+        abfrage.setStatusAbfrage(StatusAbfrage.START_BEARBEITUNG);
         abfrage = this.abfrageService.save(abfrage);
 
         final var sobonBerechnung = new SobonBerechnungModel();
         sobonBerechnung.setIsASobonBerechnung(true);
         sobonBerechnung.setSobonFoerdermix(new FoerdermixModel());
 
-        final var abfragePatch = new BauleitplanverfahrenInBearbeitungSachbearbeitungModel();
+        final var abfragePatch = new BauleitplanverfahrenStartBearbeitungModel();
         abfragePatch.setArtAbfrage(ArtAbfrage.BAULEITPLANVERFAHREN);
         abfragePatch.setVersion(abfrage.getVersion());
         abfragePatch.setAbfragevariantenSachbearbeitungBauleitplanverfahren(List.of());
         final var abfragevariantePatch =
-            new AbfragevarianteBauleitplanverfahrenSachbearbeitungInBearbeitungSachbearbeitungModel();
+            new AbfragevarianteBauleitplanverfahrenSachbearbeitungStartBearbeitungModel();
         abfragevariantePatch.setId(
             ((BauleitplanverfahrenModel) abfrage).getAbfragevariantenBauleitplanverfahren().get(0).getId()
         );
@@ -309,16 +309,16 @@ class AbfrageServiceSpringTest {
         throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException, ReportingException, UserRoleNotAllowedException {
         AbfrageModel abfrage = TestData.createBaugenehmigungsverfahrenModel();
         abfrage = this.abfrageService.save(abfrage);
-        abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+        abfrage.setStatusAbfrage(StatusAbfrage.START_BEARBEITUNG);
         abfrage = this.abfrageService.save(abfrage);
 
-        final var abfragePatch = new BaugenehmigungsverfahrenInBearbeitungSachbearbeitungModel();
+        final var abfragePatch = new BaugenehmigungsverfahrenStartBearbeitungModel();
         abfragePatch.setArtAbfrage(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN);
         abfragePatch.setVersion(abfrage.getVersion());
         abfragePatch.setVerortung(((BaugenehmigungsverfahrenModel) abfrage).getVerortung());
         abfragePatch.setAbfragevariantenSachbearbeitungBaugenehmigungsverfahren(List.of());
         final var abfragevariantePatch =
-            new AbfragevarianteBaugenehmigungsverfahrenSachbearbeitungInBearbeitungSachbearbeitungModel();
+            new AbfragevarianteBaugenehmigungsverfahrenSachbearbeitungStartBearbeitungModel();
         abfragevariantePatch.setId(
             ((BaugenehmigungsverfahrenModel) abfrage).getAbfragevariantenBaugenehmigungsverfahren().get(0).getId()
         );
@@ -348,20 +348,20 @@ class AbfrageServiceSpringTest {
         throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException, ReportingException, UserRoleNotAllowedException {
         AbfrageModel abfrage = TestData.createWeiteresVerfahrenModel();
         abfrage = this.abfrageService.save(abfrage);
-        abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+        abfrage.setStatusAbfrage(StatusAbfrage.START_BEARBEITUNG);
         abfrage = this.abfrageService.save(abfrage);
 
         final var sobonBerechnung = new SobonBerechnungModel();
         sobonBerechnung.setIsASobonBerechnung(true);
         sobonBerechnung.setSobonFoerdermix(new FoerdermixModel());
 
-        final var abfragePatch = new WeiteresVerfahrenInBearbeitungSachbearbeitungModel();
+        final var abfragePatch = new WeiteresVerfahrenStartBearbeitungModel();
         abfragePatch.setArtAbfrage(ArtAbfrage.WEITERES_VERFAHREN);
         abfragePatch.setVersion(abfrage.getVersion());
         abfragePatch.setVerortung(((WeiteresVerfahrenModel) abfrage).getVerortung());
         abfragePatch.setAbfragevariantenSachbearbeitungWeiteresVerfahren(List.of());
         final var abfragevariantePatch =
-            new AbfragevarianteWeiteresVerfahrenSachbearbeitungInBearbeitungSachbearbeitungModel();
+            new AbfragevarianteWeiteresVerfahrenSachbearbeitungStartBearbeitungModel();
         abfragevariantePatch.setId(
             ((WeiteresVerfahrenModel) abfrage).getAbfragevariantenWeiteresVerfahren().get(0).getId()
         );
@@ -386,18 +386,18 @@ class AbfrageServiceSpringTest {
     @Test
     @Transactional
     @MockCustomUser
-    void patchInBearbeitungFachreferatBauleitplanverfahren()
+    void patchEinpflegenBedarfsmeldungBauleitplanverfahren()
         throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException, ReportingException, UserRoleNotAllowedException {
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
         abfrage = this.abfrageService.save(abfrage);
-        abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
+        abfrage.setStatusAbfrage(StatusAbfrage.EINPFLEGEN_BEDARFSMELDUNG);
         abfrage = this.abfrageService.save(abfrage);
 
-        final var abfragePatch = new BauleitplanverfahrenInBearbeitungFachreferatModel();
+        final var abfragePatch = new BauleitplanverfahrenEinpflegenBedarfsmeldungModel();
         abfragePatch.setArtAbfrage(ArtAbfrage.BAULEITPLANVERFAHREN);
         abfragePatch.setVersion(abfrage.getVersion());
         abfragePatch.setAbfragevariantenSachbearbeitungBauleitplanverfahren(List.of());
-        final var abfragevariantePatch = new AbfragevarianteBauleitplanverfahrenInBearbeitungFachreferatModel();
+        final var abfragevariantePatch = new AbfragevarianteBauleitplanverfahrenEinpflegenBedarfsmeldungModel();
         abfragevariantePatch.setId(
             ((BauleitplanverfahrenModel) abfrage).getAbfragevariantenBauleitplanverfahren().get(0).getId()
         );
@@ -435,18 +435,18 @@ class AbfrageServiceSpringTest {
     @Test
     @Transactional
     @MockCustomUser
-    void patchInBearbeitungFachreferatBaugenehmigungsverfahren()
+    void patchEinpflegenBedarfsmeldungBaugenehmigungsverfahren()
         throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException, ReportingException, UserRoleNotAllowedException {
         AbfrageModel abfrage = TestData.createBaugenehmigungsverfahrenModel();
         abfrage = this.abfrageService.save(abfrage);
-        abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
+        abfrage.setStatusAbfrage(StatusAbfrage.EINPFLEGEN_BEDARFSMELDUNG);
         abfrage = this.abfrageService.save(abfrage);
 
-        final var abfragePatch = new BaugenehmigungsverfahrenInBearbeitungFachreferatModel();
+        final var abfragePatch = new BaugenehmigungsverfahrenEinpflegenBedarfsmeldungModel();
         abfragePatch.setArtAbfrage(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN);
         abfragePatch.setVersion(abfrage.getVersion());
         abfragePatch.setAbfragevariantenSachbearbeitungBaugenehmigungsverfahren(List.of());
-        final var abfragevariantePatch = new AbfragevarianteBaugenehmigungsverfahrenInBearbeitungFachreferatModel();
+        final var abfragevariantePatch = new AbfragevarianteBaugenehmigungsverfahrenEinpflegenBedarfsmeldungModel();
         abfragevariantePatch.setId(
             ((BaugenehmigungsverfahrenModel) abfrage).getAbfragevariantenBaugenehmigungsverfahren().get(0).getId()
         );
@@ -484,18 +484,18 @@ class AbfrageServiceSpringTest {
     @Test
     @Transactional
     @MockCustomUser
-    void patchInBearbeitungFachreferatWeiteresVerfahren()
+    void patchEinpflegenBedarfsmeldungWeiteresVerfahren()
         throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException, ReportingException, UserRoleNotAllowedException {
         AbfrageModel abfrage = TestData.createWeiteresVerfahrenModel();
         abfrage = this.abfrageService.save(abfrage);
-        abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
+        abfrage.setStatusAbfrage(StatusAbfrage.EINPFLEGEN_BEDARFSMELDUNG);
         abfrage = this.abfrageService.save(abfrage);
 
-        final var abfragePatch = new WeiteresVerfahrenInBearbeitungFachreferatModel();
+        final var abfragePatch = new WeiteresVerfahrenEinpflegenBedarfsmeldungModel();
         abfragePatch.setArtAbfrage(ArtAbfrage.WEITERES_VERFAHREN);
         abfragePatch.setVersion(abfrage.getVersion());
         abfragePatch.setAbfragevariantenSachbearbeitungWeiteresVerfahren(List.of());
-        final var abfragevariantePatch = new AbfragevarianteWeiteresVerfahrenInBearbeitungFachreferatModel();
+        final var abfragevariantePatch = new AbfragevarianteWeiteresVerfahrenEinpflegenBedarfsmeldungModel();
         abfragevariantePatch.setId(
             ((WeiteresVerfahrenModel) abfrage).getAbfragevariantenWeiteresVerfahren().get(0).getId()
         );
