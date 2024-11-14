@@ -14,10 +14,10 @@ public class WeiteresVerfahrenStartBearbeitungModel extends AbfrageStartBearbeit
     private VerortungMultiPolygonModel verortung;
 
     private List<
-            AbfragevarianteWeiteresVerfahrenSachbearbeitungStartBearbeitungModel
+        AbfragevarianteWeiteresVerfahrenSachbearbeitungStartBearbeitungModel
     > abfragevariantenWeiteresVerfahren;
 
     private List<
-            AbfragevarianteWeiteresVerfahrenStartBearbeitungModel
+        AbfragevarianteWeiteresVerfahrenStartBearbeitungModel
     > abfragevariantenSachbearbeitungWeiteresVerfahren;
 }

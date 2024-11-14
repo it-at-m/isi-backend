@@ -37,6 +37,8 @@ import de.muenchen.isi.domain.model.abfrageAngelegt.BaugenehmigungsverfahrenAnge
 import de.muenchen.isi.domain.model.abfrageAngelegt.BauleitplanverfahrenAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageAngelegt.WeiteresVerfahrenAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageEinpflegenBedarfsmeldung.AbfragevarianteBaugenehmigungsverfahrenEinpflegenBedarfsmeldungModel;
+import de.muenchen.isi.domain.model.abfrageEinpflegenBedarfsmeldung.AbfragevarianteBauleitplanverfahrenEinpflegenBedarfsmeldungModel;
+import de.muenchen.isi.domain.model.abfrageEinpflegenBedarfsmeldung.AbfragevarianteWeiteresVerfahrenEinpflegenBedarfsmeldungModel;
 import de.muenchen.isi.domain.model.abfrageEinpflegenBedarfsmeldung.BaugenehmigungsverfahrenEinpflegenBedarfsmeldungModel;
 import de.muenchen.isi.domain.model.abfrageEinpflegenBedarfsmeldung.BauleitplanverfahrenEinpflegenBedarfsmeldungModel;
 import de.muenchen.isi.domain.model.abfrageEinpflegenBedarfsmeldung.WeiteresVerfahrenEinpflegenBedarfsmeldungModel;
@@ -46,8 +48,6 @@ import de.muenchen.isi.domain.model.abfrageEinplanungBedarfe.AbfragevarianteWeit
 import de.muenchen.isi.domain.model.abfrageEinplanungBedarfe.BaugenehmigungsverfahrenEinplanungBedarfeModel;
 import de.muenchen.isi.domain.model.abfrageEinplanungBedarfe.BauleitplanverfahrenEinplanungBedarfeModel;
 import de.muenchen.isi.domain.model.abfrageEinplanungBedarfe.WeiteresVerfahrenEinplanungBedarfeModel;
-import de.muenchen.isi.domain.model.abfrageEinpflegenBedarfsmeldung.AbfragevarianteBauleitplanverfahrenEinpflegenBedarfsmeldungModel;
-import de.muenchen.isi.domain.model.abfrageEinpflegenBedarfsmeldung.AbfragevarianteWeiteresVerfahrenEinpflegenBedarfsmeldungModel;
 import de.muenchen.isi.domain.model.abfrageStartBearbeitung.AbfragevarianteBaugenehmigungsverfahrenStartBearbeitungModel;
 import de.muenchen.isi.domain.model.abfrageStartBearbeitung.AbfragevarianteBauleitplanverfahrenStartBearbeitungModel;
 import de.muenchen.isi.domain.model.abfrageStartBearbeitung.AbfragevarianteWeiteresVerfahrenStartBearbeitungModel;
@@ -545,8 +545,7 @@ class AbfrageServiceTest {
         requestModel.setLinkEakte("https://eakte.muenchen.de?E12345");
         requestModel.setVerortung(abfrageVerortung);
         requestModel.setBauvorhaben(bauvorhabenId);
-        final var abfragevarianteSachbearbeitung =
-            new AbfragevarianteBauleitplanverfahrenStartBearbeitungModel();
+        final var abfragevarianteSachbearbeitung = new AbfragevarianteBauleitplanverfahrenStartBearbeitungModel();
         abfragevarianteSachbearbeitung.setArtAbfragevariante(ArtAbfrage.BAULEITPLANVERFAHREN);
         abfragevarianteSachbearbeitung.setAbfragevariantenNr(1);
         abfragevarianteSachbearbeitung.setName("Abfragevariante 1");
@@ -665,8 +664,7 @@ class AbfrageServiceTest {
         requestModel.setLinkEakte("https://eakte.muenchen.de?E12345");
         requestModel.setVerortung(abfrageVerortung);
         requestModel.setBauvorhaben(bauvorhabenId);
-        final var abfragevarianteSachbearbeitung =
-            new AbfragevarianteBaugenehmigungsverfahrenStartBearbeitungModel();
+        final var abfragevarianteSachbearbeitung = new AbfragevarianteBaugenehmigungsverfahrenStartBearbeitungModel();
         abfragevarianteSachbearbeitung.setArtAbfragevariante(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN);
         abfragevarianteSachbearbeitung.setAbfragevariantenNr(1);
         abfragevarianteSachbearbeitung.setName("Abfragevariante 1");
@@ -783,8 +781,7 @@ class AbfrageServiceTest {
         requestModel.setLinkEakte("https://eakte.muenchen.de?E12345");
         requestModel.setVerortung(abfrageVerortung);
         requestModel.setBauvorhaben(bauvorhabenId);
-        final var abfragevarianteSachbearbeitung =
-            new AbfragevarianteWeiteresVerfahrenStartBearbeitungModel();
+        final var abfragevarianteSachbearbeitung = new AbfragevarianteWeiteresVerfahrenStartBearbeitungModel();
         abfragevarianteSachbearbeitung.setArtAbfragevariante(ArtAbfrage.WEITERES_VERFAHREN);
         abfragevarianteSachbearbeitung.setAbfragevariantenNr(1);
         abfragevarianteSachbearbeitung.setName("Abfragevariante 1");
@@ -881,8 +878,7 @@ class AbfrageServiceTest {
         final var requestModel = new BauleitplanverfahrenStartBearbeitungModel();
         requestModel.setVersion(0L);
         requestModel.setArtAbfrage(ArtAbfrage.BAULEITPLANVERFAHREN);
-        final var abfragevarianteSachbearbeitung =
-            new AbfragevarianteBauleitplanverfahrenStartBearbeitungModel();
+        final var abfragevarianteSachbearbeitung = new AbfragevarianteBauleitplanverfahrenStartBearbeitungModel();
         abfragevarianteSachbearbeitung.setAbfragevariantenNr(1);
         abfragevarianteSachbearbeitung.setName("Abfragevariante 1");
         requestModel.setAbfragevariantenSachbearbeitungBauleitplanverfahren(List.of(abfragevarianteSachbearbeitung));
@@ -934,8 +930,7 @@ class AbfrageServiceTest {
         final var requestModel = new BaugenehmigungsverfahrenStartBearbeitungModel();
         requestModel.setVersion(0L);
         requestModel.setArtAbfrage(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN);
-        final var abfragevarianteSachbearbeitung =
-            new AbfragevarianteBaugenehmigungsverfahrenStartBearbeitungModel();
+        final var abfragevarianteSachbearbeitung = new AbfragevarianteBaugenehmigungsverfahrenStartBearbeitungModel();
         abfragevarianteSachbearbeitung.setAbfragevariantenNr(1);
         abfragevarianteSachbearbeitung.setName("Abfragevariante 1");
         requestModel.setAbfragevariantenSachbearbeitungBaugenehmigungsverfahren(
@@ -989,8 +984,7 @@ class AbfrageServiceTest {
         final var requestModel = new WeiteresVerfahrenStartBearbeitungModel();
         requestModel.setVersion(0L);
         requestModel.setArtAbfrage(ArtAbfrage.WEITERES_VERFAHREN);
-        final var abfragevarianteSachbearbeitung =
-            new AbfragevarianteWeiteresVerfahrenStartBearbeitungModel();
+        final var abfragevarianteSachbearbeitung = new AbfragevarianteWeiteresVerfahrenStartBearbeitungModel();
         abfragevarianteSachbearbeitung.setAbfragevariantenNr(1);
         abfragevarianteSachbearbeitung.setName("Abfragevariante 1");
         requestModel.setAbfragevariantenSachbearbeitungWeiteresVerfahren(List.of(abfragevarianteSachbearbeitung));
@@ -1182,7 +1176,7 @@ class AbfrageServiceTest {
 
         Mockito.when(this.abfrageRepository.saveAndFlush(entityToSave)).thenReturn(entitySaved);
 
-        final var result = this.abfrageService.patchInBearbeitungFachreferat(requestModel, uuid);
+        final var result = this.abfrageService.patchEinpflegenBedarfsmeldung(requestModel, uuid);
 
         final var expected = new BauleitplanverfahrenModel();
         expected.setArtAbfrage(ArtAbfrage.BAULEITPLANVERFAHREN);
@@ -1378,7 +1372,7 @@ class AbfrageServiceTest {
 
         Mockito.when(this.abfrageRepository.saveAndFlush(entityToSave)).thenReturn(entitySaved);
 
-        final var result = this.abfrageService.patchInBearbeitungFachreferat(requestModel, uuid);
+        final var result = this.abfrageService.patchEinpflegenBedarfsmeldung(requestModel, uuid);
 
         final var expected = new BaugenehmigungsverfahrenModel();
         expected.setArtAbfrage(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN);
@@ -1569,7 +1563,7 @@ class AbfrageServiceTest {
 
         Mockito.when(this.abfrageRepository.saveAndFlush(entityToSave)).thenReturn(entitySaved);
 
-        final var result = this.abfrageService.patchInBearbeitungFachreferat(requestModel, uuid);
+        final var result = this.abfrageService.patchEinpflegenBedarfsmeldung(requestModel, uuid);
 
         final var expected = new WeiteresVerfahrenModel();
         expected.setArtAbfrage(ArtAbfrage.WEITERES_VERFAHREN);
@@ -1761,7 +1755,7 @@ class AbfrageServiceTest {
         Mockito.when(this.abfrageRepository.saveAndFlush(entityToSave)).thenReturn(entitySaved);
 
         try {
-            this.abfrageService.patchInBearbeitungFachreferat(requestModel, uuid);
+            this.abfrageService.patchEinpflegenBedarfsmeldung(requestModel, uuid);
         } catch (final EntityNotFoundException exception) {
             assertThat(exception.getMessage(), is("Die Art der Abfrage wird nicht unterstützt."));
         }
@@ -1915,7 +1909,7 @@ class AbfrageServiceTest {
         Mockito.when(this.abfrageRepository.saveAndFlush(entityToSave)).thenReturn(entitySaved);
 
         try {
-            this.abfrageService.patchInBearbeitungFachreferat(requestModel, uuid);
+            this.abfrageService.patchEinpflegenBedarfsmeldung(requestModel, uuid);
         } catch (final EntityNotFoundException exception) {
             assertThat(exception.getMessage(), is("Die Art der Abfrage wird nicht unterstützt."));
         }
@@ -2064,7 +2058,7 @@ class AbfrageServiceTest {
         Mockito.when(this.abfrageRepository.saveAndFlush(entityToSave)).thenReturn(entitySaved);
 
         try {
-            this.abfrageService.patchInBearbeitungFachreferat(requestModel, uuid);
+            this.abfrageService.patchEinpflegenBedarfsmeldung(requestModel, uuid);
         } catch (final EntityNotFoundException exception) {
             assertThat(exception.getMessage(), is("Die Art der Abfrage wird nicht unterstützt."));
         }

@@ -13,6 +13,6 @@ public class WeiteresVerfahrenEinpflegenBedarfsmeldungModel extends AbfrageEinpf
     private List<AbfragevarianteWeiteresVerfahrenEinpflegenBedarfsmeldungModel> abfragevariantenWeiteresVerfahren;
 
     private List<
-            AbfragevarianteWeiteresVerfahrenEinpflegenBedarfsmeldungModel
+        AbfragevarianteWeiteresVerfahrenEinpflegenBedarfsmeldungModel
     > abfragevariantenSachbearbeitungWeiteresVerfahren;
 }

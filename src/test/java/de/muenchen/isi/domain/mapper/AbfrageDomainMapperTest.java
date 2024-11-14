@@ -343,13 +343,11 @@ public class AbfrageDomainMapperTest {
         bauleitplanverfahren.setVersion(99L);
         bauleitplanverfahren.setAbfragevariantenBauleitplanverfahren(List.of());
 
-        var abfragevarianteSachbearbeitung1 =
-            new AbfragevarianteBauleitplanverfahrenStartBearbeitungModel();
+        var abfragevarianteSachbearbeitung1 = new AbfragevarianteBauleitplanverfahrenStartBearbeitungModel();
         abfragevarianteSachbearbeitung1.setAbfragevariantenNr(1);
         abfragevarianteSachbearbeitung1.setName("Abfragevariante 1");
 
-        var abfragevarianteSachbearbeitung2 =
-            new AbfragevarianteBauleitplanverfahrenStartBearbeitungModel();
+        var abfragevarianteSachbearbeitung2 = new AbfragevarianteBauleitplanverfahrenStartBearbeitungModel();
         abfragevarianteSachbearbeitung2.setAbfragevariantenNr(2);
         abfragevarianteSachbearbeitung2.setName("Abfragevariante 2");
 
@@ -384,13 +382,11 @@ public class AbfrageDomainMapperTest {
         baugenehmigungsverfahren.setVersion(99L);
         baugenehmigungsverfahren.setAbfragevariantenBaugenehmigungsverfahren(List.of());
 
-        var abfragevarianteSachbearbeitung1 =
-            new AbfragevarianteBaugenehmigungsverfahrenStartBearbeitungModel();
+        var abfragevarianteSachbearbeitung1 = new AbfragevarianteBaugenehmigungsverfahrenStartBearbeitungModel();
         abfragevarianteSachbearbeitung1.setAbfragevariantenNr(1);
         abfragevarianteSachbearbeitung1.setName("Abfragevariante 1");
 
-        var abfragevarianteSachbearbeitung2 =
-            new AbfragevarianteBaugenehmigungsverfahrenStartBearbeitungModel();
+        var abfragevarianteSachbearbeitung2 = new AbfragevarianteBaugenehmigungsverfahrenStartBearbeitungModel();
         abfragevarianteSachbearbeitung2.setAbfragevariantenNr(2);
         abfragevarianteSachbearbeitung2.setName("Abfragevariante 2");
 
@@ -469,14 +465,12 @@ public class AbfrageDomainMapperTest {
         bauleitplanverfahren.setVersion(99L);
         bauleitplanverfahren.setAbfragevariantenBauleitplanverfahren(List.of());
 
-        var abfragevarianteSachbearbeitung1 =
-            new AbfragevarianteBauleitplanverfahrenStartBearbeitungModel();
+        var abfragevarianteSachbearbeitung1 = new AbfragevarianteBauleitplanverfahrenStartBearbeitungModel();
         abfragevarianteSachbearbeitung1.setId(UUID.randomUUID());
         abfragevarianteSachbearbeitung1.setAbfragevariantenNr(1);
         abfragevarianteSachbearbeitung1.setName("New Name Abfragevariante 1");
 
-        var abfragevarianteSachbearbeitung2 =
-            new AbfragevarianteBauleitplanverfahrenStartBearbeitungModel();
+        var abfragevarianteSachbearbeitung2 = new AbfragevarianteBauleitplanverfahrenStartBearbeitungModel();
         abfragevarianteSachbearbeitung2.setId(UUID.randomUUID());
         abfragevarianteSachbearbeitung2.setAbfragevariantenNr(2);
         abfragevarianteSachbearbeitung2.setName("New Name Abfragevariante 2");
@@ -532,14 +526,12 @@ public class AbfrageDomainMapperTest {
         baugenehmigungsverfahren.setVersion(99L);
         baugenehmigungsverfahren.setAbfragevariantenBaugenehmigungsverfahren(List.of());
 
-        var abfragevarianteSachbearbeitung1 =
-            new AbfragevarianteBaugenehmigungsverfahrenStartBearbeitungModel();
+        var abfragevarianteSachbearbeitung1 = new AbfragevarianteBaugenehmigungsverfahrenStartBearbeitungModel();
         abfragevarianteSachbearbeitung1.setId(UUID.randomUUID());
         abfragevarianteSachbearbeitung1.setAbfragevariantenNr(1);
         abfragevarianteSachbearbeitung1.setName("New Name Abfragevariante 1");
 
-        var abfragevarianteSachbearbeitung2 =
-            new AbfragevarianteBaugenehmigungsverfahrenStartBearbeitungModel();
+        var abfragevarianteSachbearbeitung2 = new AbfragevarianteBaugenehmigungsverfahrenStartBearbeitungModel();
         abfragevarianteSachbearbeitung2.setId(UUID.randomUUID());
         abfragevarianteSachbearbeitung2.setAbfragevariantenNr(2);
         abfragevarianteSachbearbeitung2.setName("New Name Abfragevariante 2");

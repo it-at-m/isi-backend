@@ -261,13 +261,13 @@ public class AbfrageController {
     @PreAuthorize(
         "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_PATCH_ABFRAGE_EINPFLEGEN_BEDARFSMELDUNG.name())"
     )
-    public ResponseEntity<AbfrageDto> patchInBearbeitungFachreferat(
+    public ResponseEntity<AbfrageDto> patchEinpflegenBedarfsmeldung(
         @RequestBody @Valid @NotNull final AbfrageEinpflegenBedarfsmeldungDto abfrage,
         @PathVariable @NotNull final UUID id
     )
         throws OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException, UserRoleNotAllowedException, ReportingException {
         final var requestModel = abfrageApiMapper.dto2Model(abfrage);
-        final var responseModel = abfrageService.patchInBearbeitungFachreferat(requestModel, id);
+        final var responseModel = abfrageService.patchEinpflegenBedarfsmeldung(requestModel, id);
         final var dto = abfrageApiMapper.model2Dto(responseModel);
         return ResponseEntity.ok(dto);
     }

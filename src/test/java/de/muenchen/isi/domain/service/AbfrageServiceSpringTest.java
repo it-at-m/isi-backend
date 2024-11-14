@@ -279,8 +279,7 @@ class AbfrageServiceSpringTest {
         abfragePatch.setArtAbfrage(ArtAbfrage.BAULEITPLANVERFAHREN);
         abfragePatch.setVersion(abfrage.getVersion());
         abfragePatch.setAbfragevariantenSachbearbeitungBauleitplanverfahren(List.of());
-        final var abfragevariantePatch =
-            new AbfragevarianteBauleitplanverfahrenSachbearbeitungStartBearbeitungModel();
+        final var abfragevariantePatch = new AbfragevarianteBauleitplanverfahrenSachbearbeitungStartBearbeitungModel();
         abfragevariantePatch.setId(
             ((BauleitplanverfahrenModel) abfrage).getAbfragevariantenBauleitplanverfahren().get(0).getId()
         );
@@ -360,8 +359,7 @@ class AbfrageServiceSpringTest {
         abfragePatch.setVersion(abfrage.getVersion());
         abfragePatch.setVerortung(((WeiteresVerfahrenModel) abfrage).getVerortung());
         abfragePatch.setAbfragevariantenSachbearbeitungWeiteresVerfahren(List.of());
-        final var abfragevariantePatch =
-            new AbfragevarianteWeiteresVerfahrenSachbearbeitungStartBearbeitungModel();
+        final var abfragevariantePatch = new AbfragevarianteWeiteresVerfahrenSachbearbeitungStartBearbeitungModel();
         abfragevariantePatch.setId(
             ((WeiteresVerfahrenModel) abfrage).getAbfragevariantenWeiteresVerfahren().get(0).getId()
         );
@@ -411,7 +409,7 @@ class AbfrageServiceSpringTest {
         abfragevariantePatch.setBedarfsmeldungFachreferate(List.of(bedarfmeldungFachreferate));
         abfragePatch.setAbfragevariantenBauleitplanverfahren(List.of(abfragevariantePatch));
 
-        abfrage = this.abfrageService.patchInBearbeitungFachreferat(abfragePatch, abfrage.getId());
+        abfrage = this.abfrageService.patchEinpflegenBedarfsmeldung(abfragePatch, abfrage.getId());
         assertThat(
             ((BauleitplanverfahrenModel) abfrage).getAbfragevariantenBauleitplanverfahren()
                 .get(0)
@@ -460,7 +458,7 @@ class AbfrageServiceSpringTest {
         abfragevariantePatch.setBedarfsmeldungFachreferate(List.of(bedarfmeldungFachreferate));
         abfragePatch.setAbfragevariantenBaugenehmigungsverfahren(List.of(abfragevariantePatch));
 
-        abfrage = this.abfrageService.patchInBearbeitungFachreferat(abfragePatch, abfrage.getId());
+        abfrage = this.abfrageService.patchEinpflegenBedarfsmeldung(abfragePatch, abfrage.getId());
         assertThat(
             ((BaugenehmigungsverfahrenModel) abfrage).getAbfragevariantenBaugenehmigungsverfahren()
                 .get(0)
@@ -509,7 +507,7 @@ class AbfrageServiceSpringTest {
         abfragevariantePatch.setBedarfsmeldungFachreferate(List.of(bedarfmeldungFachreferate));
         abfragePatch.setAbfragevariantenWeiteresVerfahren(List.of(abfragevariantePatch));
 
-        abfrage = this.abfrageService.patchInBearbeitungFachreferat(abfragePatch, abfrage.getId());
+        abfrage = this.abfrageService.patchEinpflegenBedarfsmeldung(abfragePatch, abfrage.getId());
         assertThat(
             ((WeiteresVerfahrenModel) abfrage).getAbfragevariantenWeiteresVerfahren()
                 .get(0)

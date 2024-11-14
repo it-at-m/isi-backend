@@ -9,16 +9,15 @@ import lombok.ToString;
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class BaugenehmigungsverfahrenStartBearbeitungModel
-    extends AbfrageStartBearbeitungModel {
+public class BaugenehmigungsverfahrenStartBearbeitungModel extends AbfrageStartBearbeitungModel {
 
     private VerortungMultiPolygonModel verortung;
 
     private List<
-            AbfragevarianteBaugenehmigungsverfahrenSachbearbeitungStartBearbeitungModel
+        AbfragevarianteBaugenehmigungsverfahrenSachbearbeitungStartBearbeitungModel
     > abfragevariantenBaugenehmigungsverfahren;
 
     private List<
-            AbfragevarianteBaugenehmigungsverfahrenStartBearbeitungModel
+        AbfragevarianteBaugenehmigungsverfahrenStartBearbeitungModel
     > abfragevariantenSachbearbeitungBaugenehmigungsverfahren;
 }

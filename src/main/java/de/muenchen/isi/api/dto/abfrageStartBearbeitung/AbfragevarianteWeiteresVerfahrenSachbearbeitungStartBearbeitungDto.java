@@ -24,8 +24,7 @@ import lombok.Data;
 
 @Data
 @BauratendateiInputValid
-public class AbfragevarianteWeiteresVerfahrenSachbearbeitungStartBearbeitungDto
-    implements WithBauratendateiInputDto {
+public class AbfragevarianteWeiteresVerfahrenSachbearbeitungStartBearbeitungDto implements WithBauratendateiInputDto {
 
     private UUID id;
 

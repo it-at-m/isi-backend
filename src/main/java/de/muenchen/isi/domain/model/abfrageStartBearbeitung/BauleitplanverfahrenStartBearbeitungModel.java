@@ -14,10 +14,10 @@ public class BauleitplanverfahrenStartBearbeitungModel extends AbfrageStartBearb
     private VerortungMultiPolygonModel verortung;
 
     private List<
-            AbfragevarianteBauleitplanverfahrenSachbearbeitungStartBearbeitungModel
+        AbfragevarianteBauleitplanverfahrenSachbearbeitungStartBearbeitungModel
     > abfragevariantenBauleitplanverfahren;
 
     private List<
-            AbfragevarianteBauleitplanverfahrenStartBearbeitungModel
+        AbfragevarianteBauleitplanverfahrenStartBearbeitungModel
     > abfragevariantenSachbearbeitungBauleitplanverfahren;
 }

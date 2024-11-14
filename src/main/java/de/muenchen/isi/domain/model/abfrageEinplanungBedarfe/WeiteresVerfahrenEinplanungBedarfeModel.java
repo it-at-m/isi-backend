@@ -13,6 +13,6 @@ public class WeiteresVerfahrenEinplanungBedarfeModel extends AbfrageEinplanungBe
     private List<AbfragevarianteWeiteresVerfahrenEinplanungBedarfeModel> abfragevariantenWeiteresVerfahren;
 
     private List<
-            AbfragevarianteWeiteresVerfahrenEinplanungBedarfeModel
+        AbfragevarianteWeiteresVerfahrenEinplanungBedarfeModel
     > abfragevariantenSachbearbeitungWeiteresVerfahren;
 }
