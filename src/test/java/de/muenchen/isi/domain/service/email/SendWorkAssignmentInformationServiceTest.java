@@ -186,7 +186,7 @@ class SendWorkAssignmentInformationServiceTest {
     }
 
     @Test
-    void getReceiverBedarfsmeldungErfolgte() {
+    void getReceiverEinplanungBedarfee() {
         final var abfrage = new BauleitplanverfahrenModel();
 
         var bearbeitungshistorie = new ArrayList<BearbeitungshistorieModel>();

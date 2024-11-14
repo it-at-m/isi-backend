@@ -552,7 +552,7 @@ public class TransitionModelTest {
     @Test
     @Transactional
     @MockCustomUser
-    void possibleTransitionsBedarfsmeldungErfolgtAndRoleAdmin()
+    void possibleTransitionsEinplanungBedarfeAndRoleAdmin()
         throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, CalculationException, ReportingException, UserRoleNotAllowedException {
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
         abfrage = this.abfrageService.save(abfrage);

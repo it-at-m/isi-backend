@@ -269,7 +269,7 @@ public class AbfrageService {
      * @throws ReportingException               falls bei der Übermittlung an die Reportingschnittstelle ein Fehler auftritt.
      * @throws UserRoleNotAllowedException      falls der User keine Berechtigung für die Abfrage hat.
      */
-    public AbfrageModel patchInBearbeitungSachbearbeitung(
+    public AbfrageModel patchStartBearbeitung(
         final AbfrageStartBearbeitungModel abfrage,
         final UUID id
     )
@@ -280,7 +280,7 @@ public class AbfrageService {
                 StatusAbfrage.START_BEARBEITUNG
             );
 
-        this.changeRelevantAbfragevarianteOnBauvorhabenChangeAbfrageInBearbeitungSachbearbeitung(
+        this.changeRelevantAbfragevarianteOnBauvorhabenChangeAbfrageStartBearbeitung(
                 abfrage,
                 originalAbfrageDb
             );
@@ -378,7 +378,7 @@ public class AbfrageService {
      * @throws CalculationException             falls bei den Berechnungen ein Fehler auftritt.
      * @throws ReportingException               falls bei der Übermittlung an die Reportingschnittstelle ein Fehler auftritt.
      */
-    public AbfrageModel patchBedarfsmeldungErfolgt(final AbfrageEinplanungBedarfeModel abfrage, final UUID id)
+    public AbfrageModel patchEinplanungBedarfe(final AbfrageEinplanungBedarfeModel abfrage, final UUID id)
         throws EntityNotFoundException, AbfrageStatusNotAllowedException, OptimisticLockingException, UserRoleNotAllowedException, CalculationException, ReportingException {
         final var originalAbfrageDb = this.getById(id);
         this.throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(
@@ -593,7 +593,7 @@ public class AbfrageService {
         }
     }
 
-    public void changeRelevantAbfragevarianteOnBauvorhabenChangeAbfrageInBearbeitungSachbearbeitung(
+    public void changeRelevantAbfragevarianteOnBauvorhabenChangeAbfrageStartBearbeitung(
         AbfrageStartBearbeitungModel abfrage,
         AbfrageModel originalAbfrageDb
     ) {

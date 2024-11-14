@@ -264,7 +264,7 @@ class AbfrageServiceSpringTest {
     @Test
     @Transactional
     @MockCustomUser
-    void patchInBearbeitungSachbearbeitungBauleitplanverfahren()
+    void patchStartBearbeitungBauleitplanverfahren()
         throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException, ReportingException, UserRoleNotAllowedException {
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
         abfrage = this.abfrageService.save(abfrage);
@@ -293,7 +293,7 @@ class AbfrageServiceSpringTest {
         abfragevariantePatch.setAnmerkung("Die Anmerkung Bauleitplanverfahren Patch Sachbearbeitung");
         abfragePatch.setAbfragevariantenBauleitplanverfahren(List.of(abfragevariantePatch));
 
-        abfrage = this.abfrageService.patchInBearbeitungSachbearbeitung(abfragePatch, abfrage.getId());
+        abfrage = this.abfrageService.patchStartBearbeitung(abfragePatch, abfrage.getId());
         assertThat(
             ((BauleitplanverfahrenModel) abfrage).getAbfragevariantenBauleitplanverfahren().get(0).getAnmerkung(),
             is("Die Anmerkung Bauleitplanverfahren Patch Sachbearbeitung")
@@ -305,7 +305,7 @@ class AbfrageServiceSpringTest {
     @Test
     @Transactional
     @MockCustomUser
-    void patchInBearbeitungSachbearbeitungBaugenehmigungsverfahren()
+    void patchStartBearbeitungBaugenehmigungsverfahren()
         throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException, ReportingException, UserRoleNotAllowedException {
         AbfrageModel abfrage = TestData.createBaugenehmigungsverfahrenModel();
         abfrage = this.abfrageService.save(abfrage);
@@ -330,7 +330,7 @@ class AbfrageServiceSpringTest {
         abfragevariantePatch.setAnmerkung("Die Anmerkung Baugenehmigungsverfahren Patch Sachbearbeitung");
         abfragePatch.setAbfragevariantenBaugenehmigungsverfahren(List.of(abfragevariantePatch));
 
-        abfrage = this.abfrageService.patchInBearbeitungSachbearbeitung(abfragePatch, abfrage.getId());
+        abfrage = this.abfrageService.patchStartBearbeitung(abfragePatch, abfrage.getId());
         assertThat(
             ((BaugenehmigungsverfahrenModel) abfrage).getAbfragevariantenBaugenehmigungsverfahren()
                 .get(0)
@@ -344,7 +344,7 @@ class AbfrageServiceSpringTest {
     @Test
     @Transactional
     @MockCustomUser
-    void patchInBearbeitungSachbearbeitungWeiteresVerfahren()
+    void patchStartBearbeitungWeiteresVerfahren()
         throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException, ReportingException, UserRoleNotAllowedException {
         AbfrageModel abfrage = TestData.createWeiteresVerfahrenModel();
         abfrage = this.abfrageService.save(abfrage);
@@ -374,7 +374,7 @@ class AbfrageServiceSpringTest {
         abfragevariantePatch.setAnmerkung("Die Anmerkung WeiteresVerfahren Patch Sachbearbeitung");
         abfragePatch.setAbfragevariantenWeiteresVerfahren(List.of(abfragevariantePatch));
 
-        abfrage = this.abfrageService.patchInBearbeitungSachbearbeitung(abfragePatch, abfrage.getId());
+        abfrage = this.abfrageService.patchStartBearbeitung(abfragePatch, abfrage.getId());
         assertThat(
             ((WeiteresVerfahrenModel) abfrage).getAbfragevariantenWeiteresVerfahren().get(0).getAnmerkung(),
             is("Die Anmerkung WeiteresVerfahren Patch Sachbearbeitung")

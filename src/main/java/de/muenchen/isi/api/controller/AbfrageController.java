@@ -212,13 +212,13 @@ public class AbfrageController {
     @PreAuthorize(
         "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_PATCH_ABFRAGE_START_BEARBEITUNG.name())"
     )
-    public ResponseEntity<AbfrageDto> patchInBearbeitungSachbearbeitung(
+    public ResponseEntity<AbfrageDto> patchStartBearbeitung(
         @RequestBody @Valid @NotNull final AbfrageStartBearbeitungDto abfrage,
         @PathVariable @NotNull final UUID id
     )
         throws OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException, UserRoleNotAllowedException, ReportingException {
         final var requestModel = abfrageApiMapper.dto2Model(abfrage);
-        final var responseModel = abfrageService.patchInBearbeitungSachbearbeitung(requestModel, id);
+        final var responseModel = abfrageService.patchStartBearbeitung(requestModel, id);
         final var dto = abfrageApiMapper.model2Dto(responseModel);
         return ResponseEntity.ok(dto);
     }
@@ -305,13 +305,13 @@ public class AbfrageController {
     @PreAuthorize(
         "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_PATCH_ABFRAGE_EINPLANUNG_BEDARFE.name())"
     )
-    public ResponseEntity<AbfrageDto> patchBedarfsmeldungErfolgt(
+    public ResponseEntity<AbfrageDto> patchEinplanungBedarfe(
         @RequestBody @Valid @NotNull final AbfrageEinplanungBedarfeDto abfrage,
         @PathVariable @NotNull final UUID id
     )
         throws OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, UserRoleNotAllowedException, CalculationException, ReportingException {
         final var requestModel = abfrageApiMapper.dto2Model(abfrage);
-        final var responseModel = abfrageService.patchBedarfsmeldungErfolgt(requestModel, id);
+        final var responseModel = abfrageService.patchEinplanungBedarfe(requestModel, id);
         final var dto = abfrageApiMapper.model2Dto(responseModel);
         return ResponseEntity.ok(dto);
     }

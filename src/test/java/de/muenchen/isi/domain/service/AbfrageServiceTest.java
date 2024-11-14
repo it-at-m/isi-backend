@@ -616,7 +616,7 @@ class AbfrageServiceTest {
             .thenReturn(Optional.of(bauvorhabenEntity));
         Mockito.when(this.abfrageRepository.saveAndFlush(entityToSave)).thenReturn(entitySaved);
 
-        final var result = this.abfrageService.patchInBearbeitungSachbearbeitung(requestModel, uuid);
+        final var result = this.abfrageService.patchStartBearbeitung(requestModel, uuid);
 
         final var expected = new BauleitplanverfahrenModel();
         expected.setArtAbfrage(ArtAbfrage.BAULEITPLANVERFAHREN);
@@ -735,7 +735,7 @@ class AbfrageServiceTest {
             .thenReturn(Optional.of(bauvorhabenEntity));
         Mockito.when(this.abfrageRepository.saveAndFlush(entityToSave)).thenReturn(entitySaved);
 
-        final var result = this.abfrageService.patchInBearbeitungSachbearbeitung(requestModel, uuid);
+        final var result = this.abfrageService.patchStartBearbeitung(requestModel, uuid);
 
         final var expected = new BaugenehmigungsverfahrenModel();
         expected.setArtAbfrage(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN);
@@ -851,7 +851,7 @@ class AbfrageServiceTest {
             .thenReturn(Optional.of(bauvorhabenEntity));
         Mockito.when(this.abfrageRepository.saveAndFlush(entityToSave)).thenReturn(entitySaved);
 
-        final var result = this.abfrageService.patchInBearbeitungSachbearbeitung(requestModel, uuid);
+        final var result = this.abfrageService.patchStartBearbeitung(requestModel, uuid);
 
         final var expected = new WeiteresVerfahrenModel();
         expected.setArtAbfrage(ArtAbfrage.WEITERES_VERFAHREN);
@@ -920,7 +920,7 @@ class AbfrageServiceTest {
         Mockito.when(this.abfrageRepository.saveAndFlush(entityToSave)).thenReturn(entitySaved);
 
         try {
-            this.abfrageService.patchInBearbeitungSachbearbeitung(requestModel, uuid);
+            this.abfrageService.patchStartBearbeitung(requestModel, uuid);
         } catch (final EntityNotFoundException exception) {
             assertThat(exception.getMessage(), is("Die Art der Abfrage wird nicht unterstützt."));
         }
@@ -975,7 +975,7 @@ class AbfrageServiceTest {
         Mockito.when(this.abfrageRepository.saveAndFlush(entityToSave)).thenReturn(entitySaved);
 
         try {
-            this.abfrageService.patchInBearbeitungSachbearbeitung(requestModel, uuid);
+            this.abfrageService.patchStartBearbeitung(requestModel, uuid);
         } catch (final EntityNotFoundException exception) {
             assertThat(exception.getMessage(), is("Die Art der Abfrage wird nicht unterstützt."));
         }
@@ -1028,7 +1028,7 @@ class AbfrageServiceTest {
         Mockito.when(this.abfrageRepository.saveAndFlush(entityToSave)).thenReturn(entitySaved);
 
         try {
-            this.abfrageService.patchInBearbeitungSachbearbeitung(requestModel, uuid);
+            this.abfrageService.patchStartBearbeitung(requestModel, uuid);
         } catch (final EntityNotFoundException exception) {
             assertThat(exception.getMessage(), is("Die Art der Abfrage wird nicht unterstützt."));
         }
@@ -2218,7 +2218,7 @@ class AbfrageServiceTest {
 
         Mockito.when(this.abfrageRepository.saveAndFlush(entityToSave)).thenReturn(entitySaved);
 
-        final var result = this.abfrageService.patchBedarfsmeldungErfolgt(requestModel, uuid);
+        final var result = this.abfrageService.patchEinplanungBedarfe(requestModel, uuid);
 
         final var expected = new BauleitplanverfahrenModel();
         expected.setArtAbfrage(ArtAbfrage.BAULEITPLANVERFAHREN);
@@ -2413,7 +2413,7 @@ class AbfrageServiceTest {
 
         Mockito.when(this.abfrageRepository.saveAndFlush(entityToSave)).thenReturn(entitySaved);
 
-        final var result = this.abfrageService.patchBedarfsmeldungErfolgt(requestModel, uuid);
+        final var result = this.abfrageService.patchEinplanungBedarfe(requestModel, uuid);
 
         final var expected = new BaugenehmigungsverfahrenModel();
         expected.setArtAbfrage(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN);
@@ -2604,7 +2604,7 @@ class AbfrageServiceTest {
 
         Mockito.when(this.abfrageRepository.saveAndFlush(entityToSave)).thenReturn(entitySaved);
 
-        final var result = this.abfrageService.patchBedarfsmeldungErfolgt(requestModel, uuid);
+        final var result = this.abfrageService.patchEinplanungBedarfe(requestModel, uuid);
 
         final var expected = new WeiteresVerfahrenModel();
         expected.setArtAbfrage(ArtAbfrage.WEITERES_VERFAHREN);
@@ -2796,7 +2796,7 @@ class AbfrageServiceTest {
         Mockito.when(this.abfrageRepository.saveAndFlush(entityToSave)).thenReturn(entitySaved);
 
         try {
-            this.abfrageService.patchBedarfsmeldungErfolgt(requestModel, uuid);
+            this.abfrageService.patchEinplanungBedarfe(requestModel, uuid);
         } catch (final EntityNotFoundException exception) {
             assertThat(exception.getMessage(), is("Die Art der Abfrage wird nicht unterstützt."));
         } catch (UserRoleNotAllowedException exception) {
@@ -2951,7 +2951,7 @@ class AbfrageServiceTest {
         Mockito.when(this.abfrageRepository.saveAndFlush(entityToSave)).thenReturn(entitySaved);
 
         try {
-            this.abfrageService.patchBedarfsmeldungErfolgt(requestModel, uuid);
+            this.abfrageService.patchEinplanungBedarfe(requestModel, uuid);
         } catch (final EntityNotFoundException exception) {
             assertThat(exception.getMessage(), is("Die Art der Abfrage wird nicht unterstützt."));
         } catch (UserRoleNotAllowedException exception) {
@@ -3102,7 +3102,7 @@ class AbfrageServiceTest {
         Mockito.when(this.abfrageRepository.saveAndFlush(entityToSave)).thenReturn(entitySaved);
 
         try {
-            this.abfrageService.patchBedarfsmeldungErfolgt(requestModel, uuid);
+            this.abfrageService.patchEinplanungBedarfe(requestModel, uuid);
         } catch (final EntityNotFoundException exception) {
             assertThat(exception.getMessage(), is("Die Art der Abfrage wird nicht unterstützt."));
         } catch (UserRoleNotAllowedException exception) {
@@ -3489,7 +3489,7 @@ class AbfrageServiceTest {
 
         Mockito.when(this.bauvorhabenRepository.save(bauvorhaben)).thenReturn(bauvorhaben);
 
-        this.abfrageService.changeRelevantAbfragevarianteOnBauvorhabenChangeAbfrageInBearbeitungSachbearbeitung(
+        this.abfrageService.changeRelevantAbfragevarianteOnBauvorhabenChangeAbfrageStartBearbeitung(
                 model,
                 originalAbfrage
             );
@@ -3517,7 +3517,7 @@ class AbfrageServiceTest {
 
         Mockito.when(this.bauvorhabenRepository.save(bauvorhaben)).thenReturn(bauvorhaben);
 
-        this.abfrageService.changeRelevantAbfragevarianteOnBauvorhabenChangeAbfrageInBearbeitungSachbearbeitung(
+        this.abfrageService.changeRelevantAbfragevarianteOnBauvorhabenChangeAbfrageStartBearbeitung(
                 model,
                 originalAbfrage
             );
@@ -3545,7 +3545,7 @@ class AbfrageServiceTest {
 
         Mockito.when(this.bauvorhabenRepository.save(bauvorhaben)).thenReturn(bauvorhaben);
 
-        this.abfrageService.changeRelevantAbfragevarianteOnBauvorhabenChangeAbfrageInBearbeitungSachbearbeitung(
+        this.abfrageService.changeRelevantAbfragevarianteOnBauvorhabenChangeAbfrageStartBearbeitung(
                 model,
                 originalAbfrage
             );
