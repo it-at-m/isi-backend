@@ -12,13 +12,13 @@ ALTER TABLE IF EXISTS isidbuser.baugenehmigungsverfahren
     DROP CONSTRAINT baugenehmigungsverfahren_status_abfrage_check;
 
 ALTER TABLE IF EXISTS isidbuser.bauleitplanverfahren
-    ADD CONSTRAINT bauleitplanverfahren_status_abfrage_check CHECK (status_abfrage::text = ANY (ARRAY['ANGELEGT'::character varying, ' UEBERMITTELT_ZUR_BEARBEITUNG'::character varying, 'START_BEARBEITUNG'::character varying, 'EINPFLEGEN_BEDARFSMELDUNG'::character varying, 'EINPLANUNG_BEDARFE'::character varying, 'ERLEDIGT_MIT_FACHREFERAT'::character varying, 'ERLEDIGT_OHNE_FACHREFERAT'::character varying, 'ABBRUCH'::character varying]::text[]));
+    ADD CONSTRAINT bauleitplanverfahren_status_abfrage_check CHECK (status_abfrage::text = ANY (ARRAY['ANGELEGT'::character varying, 'UEBERMITTELT_ZUR_BEARBEITUNG'::character varying, 'START_BEARBEITUNG'::character varying, 'EINPFLEGEN_BEDARFSMELDUNG'::character varying, 'EINPLANUNG_BEDARFE'::character varying, 'ERLEDIGT_MIT_FACHREFERAT'::character varying, 'ERLEDIGT_OHNE_FACHREFERAT'::character varying, 'ABBRUCH'::character varying]::text[]));
 
 ALTER TABLE IF EXISTS isidbuser.weiteres_verfahren
-    ADD CONSTRAINT weiteres_verfahren_status_abfrage_check CHECK (status_abfrage::text = ANY (ARRAY['ANGELEGT'::character varying, ' UEBERMITTELT_ZUR_BEARBEITUNG'::character varying, 'START_BEARBEITUNG'::character varying, 'EINPFLEGEN_BEDARFSMELDUNG'::character varying, 'EINPLANUNG_BEDARFE'::character varying, 'ERLEDIGT_MIT_FACHREFERAT'::character varying, 'ERLEDIGT_OHNE_FACHREFERAT'::character varying, 'ABBRUCH'::character varying]::text[]));
+    ADD CONSTRAINT weiteres_verfahren_status_abfrage_check CHECK (status_abfrage::text = ANY (ARRAY['ANGELEGT'::character varying, 'UEBERMITTELT_ZUR_BEARBEITUNG'::character varying, 'START_BEARBEITUNG'::character varying, 'EINPFLEGEN_BEDARFSMELDUNG'::character varying, 'EINPLANUNG_BEDARFE'::character varying, 'ERLEDIGT_MIT_FACHREFERAT'::character varying, 'ERLEDIGT_OHNE_FACHREFERAT'::character varying, 'ABBRUCH'::character varying]::text[]));
 
 ALTER TABLE IF EXISTS isidbuser.baugenehmigungsverfahren
-    ADD CONSTRAINT baugenehmigungsverfahren_status_abfrage_check CHECK (status_abfrage::text = ANY (ARRAY['ANGELEGT'::character varying, ' UEBERMITTELT_ZUR_BEARBEITUNG'::character varying, 'START_BEARBEITUNG'::character varying, 'EINPFLEGEN_BEDARFSMELDUNG'::character varying, 'EINPLANUNG_BEDARFE'::character varying, 'ERLEDIGT_MIT_FACHREFERAT'::character varying, 'ERLEDIGT_OHNE_FACHREFERAT'::character varying, 'ABBRUCH'::character varying]::text[]));
+    ADD CONSTRAINT baugenehmigungsverfahren_status_abfrage_check CHECK (status_abfrage::text = ANY (ARRAY['ANGELEGT'::character varying, 'UEBERMITTELT_ZUR_BEARBEITUNG'::character varying, 'START_BEARBEITUNG'::character varying, 'EINPFLEGEN_BEDARFSMELDUNG'::character varying, 'EINPLANUNG_BEDARFE'::character varying, 'ERLEDIGT_MIT_FACHREFERAT'::character varying, 'ERLEDIGT_OHNE_FACHREFERAT'::character varying, 'ABBRUCH'::character varying]::text[]));
 
 UPDATE isidbuser.bauleitplanverfahren
 SET status_abfrage = CASE
