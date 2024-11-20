@@ -11,7 +11,7 @@ ALTER TABLE IF EXISTS isidbuser.weiteres_verfahren
 ALTER TABLE IF EXISTS isidbuser.baugenehmigungsverfahren
     DROP CONSTRAINT baugenehmigungsverfahren_status_abfrage_check;
 
-ALTER TABLE IF EXISTS isidbusers.abfrage_bearbeitungshistorie
+ALTER TABLE IF EXISTS isidbuser.abfrage_bearbeitungshistorie
     DROP CONSTRAINT abfrage_bearbeitungshistorie_ziel_status_check;
 
 UPDATE isidbuser.bauleitplanverfahren
