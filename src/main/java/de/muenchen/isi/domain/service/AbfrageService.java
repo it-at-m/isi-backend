@@ -141,6 +141,7 @@ public class AbfrageService {
         final var model = this.abfrageDomainMapper.entity2Model(entity);
         // Übermitteln der Abfrage samt der vorher berechneten Bedarfe an die Reportingschnittstelle
         reportingdataTransferService.transferAbfrageAndBedarfe(model, bedarfeForAbfragevarianten);
+        etlInterfaceService.etlInterfaceTriggerAbfrageTransponierungJob(entity.getId());
 
         return model;
     }
