@@ -17,7 +17,7 @@ public enum StatusAbfrage implements ILookup {
     EINPFLEGEN_BEDARFSMELDUNG("Einpflegen Bedarfsmeldung"),
     EINPLANUNG_BEDARFE("Einplanung Bedarfe"),
     ERLEDIGT_MIT_FACHREFERAT("Erledigt"),
-    ERLEDIGT_OHNE_FACHREFERAT("Erledigt"),
+    ERLEDIGT_OHNE_FACHREFERAT("Erledigt ohne Einbindung Fachreferat"),
     ABBRUCH("Abbruch");
 
     @Getter
