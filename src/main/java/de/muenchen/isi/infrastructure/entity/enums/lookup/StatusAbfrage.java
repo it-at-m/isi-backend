@@ -11,14 +11,14 @@ import lombok.Getter;
 @Schema(enumAsRef = true)
 @AllArgsConstructor
 public enum StatusAbfrage implements ILookup {
-    ANGELEGT("angelegt"),
-    OFFEN("offen"),
-    IN_BEARBEITUNG_SACHBEARBEITUNG("in Bearbeitung bei Sachbearbeitung"),
-    IN_BEARBEITUNG_FACHREFERATE("in Bearbeitung bei den Fachreferaten"),
-    BEDARFSMELDUNG_ERFOLGT("Bedarfsmeldung der Fachreferate ist erfolgt"),
-    ERLEDIGT_MIT_FACHREFERAT("erledigt"),
-    ERLEDIGT_OHNE_FACHREFERAT("erledigt"),
-    ABBRUCH("abbruch");
+    ANGELEGT("Angelegt"),
+    UEBERMITTELT_ZUR_BEARBEITUNG("Übermittelt zur Bearbeitung"),
+    START_BEARBEITUNG("Start Bearbeitung"),
+    EINPFLEGEN_BEDARFSMELDUNG("Einpflegen Bedarfsmeldung"),
+    EINPLANUNG_BEDARFE("Einplanung Bedarfe"),
+    ERLEDIGT_MIT_FACHREFERAT("Erledigt"),
+    ERLEDIGT_OHNE_FACHREFERAT("Erledigt ohne Einbindung Fachreferat"),
+    ABBRUCH("Abbruch");
 
     @Getter
     private final String bezeichnung;

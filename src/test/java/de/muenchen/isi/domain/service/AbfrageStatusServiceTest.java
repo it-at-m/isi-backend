@@ -141,44 +141,44 @@ class AbfrageStatusServiceTest {
         this.abfrageStatusService.freigabeAbfrage(uuid, anmerkung);
 
         abfrage = this.abfrageService.getById(uuid);
-        assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.OFFEN));
+        assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.UEBERMITTELT_ZUR_BEARBEITUNG));
 
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
             () -> this.abfrageStatusService.freigabeAbfrage(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
-        assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.OFFEN));
+        assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.UEBERMITTELT_ZUR_BEARBEITUNG));
 
         abfrage = this.abfrageService.getById(uuid);
-        abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+        abfrage.setStatusAbfrage(StatusAbfrage.START_BEARBEITUNG);
         this.abfrageService.save(abfrage);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
             () -> this.abfrageStatusService.freigabeAbfrage(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
-        assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG));
+        assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.START_BEARBEITUNG));
 
         abfrage = this.abfrageService.getById(uuid);
-        abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
+        abfrage.setStatusAbfrage(StatusAbfrage.EINPFLEGEN_BEDARFSMELDUNG);
         this.abfrageService.save(abfrage);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
             () -> this.abfrageStatusService.freigabeAbfrage(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
-        assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE));
+        assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.EINPFLEGEN_BEDARFSMELDUNG));
 
         abfrage = this.abfrageService.getById(uuid);
-        abfrage.setStatusAbfrage(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT);
+        abfrage.setStatusAbfrage(StatusAbfrage.EINPLANUNG_BEDARFE);
         this.abfrageService.save(abfrage);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
             () -> this.abfrageStatusService.freigabeAbfrage(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
-        assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT));
+        assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.EINPLANUNG_BEDARFE));
 
         abfrage = this.abfrageService.getById(uuid);
         abfrage.setStatusAbfrage(StatusAbfrage.ERLEDIGT_MIT_FACHREFERAT);
@@ -214,18 +214,18 @@ class AbfrageStatusServiceTest {
     @Test
     @Transactional
     @MockCustomUser
-    void abbrechenAbfrageVonOffen()
+    void abbrechenAbfrageVonUebermitteltZurBearbeitung()
         throws UniqueViolationException, OptimisticLockingException, StringLengthExceededException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException, ReportingException, UserRoleNotAllowedException {
-        this.abbrechenAbfrageVonOffen(TestData.createBauleitplanverfahrenModel());
-        this.abbrechenAbfrageVonOffen(TestData.createBaugenehmigungsverfahrenModel());
+        this.abbrechenAbfrageVonUebermitteltZurBearbeitung(TestData.createBauleitplanverfahrenModel());
+        this.abbrechenAbfrageVonUebermitteltZurBearbeitung(TestData.createBaugenehmigungsverfahrenModel());
     }
 
-    void abbrechenAbfrageVonOffen(final AbfrageModel abfrageToTest)
+    void abbrechenAbfrageVonUebermitteltZurBearbeitung(final AbfrageModel abfrageToTest)
         throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException, StringLengthExceededException, CalculationException, ReportingException, UserRoleNotAllowedException {
         final var anmerkung = "";
         AbfrageModel abfrage = abfrageToTest;
         abfrage = this.abfrageService.save(abfrage);
-        abfrage.setStatusAbfrage(StatusAbfrage.OFFEN);
+        abfrage.setStatusAbfrage(StatusAbfrage.UEBERMITTELT_ZUR_BEARBEITUNG);
         abfrage = this.abfrageService.save(abfrage);
         final var uuid = abfrage.getId();
 
@@ -268,25 +268,25 @@ class AbfrageStatusServiceTest {
     @Test
     @Transactional
     @MockCustomUser
-    void inBearbeitungSetztVonOffen()
+    void inBearbeitungSetztVonUebermitteltZurBearbeitung()
         throws UniqueViolationException, OptimisticLockingException, StringLengthExceededException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException, ReportingException, UserRoleNotAllowedException {
-        this.inBearbeitungSetztVonOffen(TestData.createBauleitplanverfahrenModel());
-        this.inBearbeitungSetztVonOffen(TestData.createBaugenehmigungsverfahrenModel());
+        this.inBearbeitungSetztVonUebermitteltZurBearbeitung(TestData.createBauleitplanverfahrenModel());
+        this.inBearbeitungSetztVonUebermitteltZurBearbeitung(TestData.createBaugenehmigungsverfahrenModel());
     }
 
-    void inBearbeitungSetztVonOffen(final AbfrageModel abfrageToTest)
+    void inBearbeitungSetztVonUebermitteltZurBearbeitung(final AbfrageModel abfrageToTest)
         throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException, StringLengthExceededException, CalculationException, ReportingException, UserRoleNotAllowedException {
         final var anmerkung = "";
         AbfrageModel abfrage = abfrageToTest;
         abfrage = this.abfrageService.save(abfrage);
-        abfrage.setStatusAbfrage(StatusAbfrage.OFFEN);
+        abfrage.setStatusAbfrage(StatusAbfrage.UEBERMITTELT_ZUR_BEARBEITUNG);
         abfrage = this.abfrageService.save(abfrage);
         final var uuid = abfrage.getId();
 
         this.abfrageStatusService.inBearbeitungSetzenAbfrage(uuid, anmerkung);
 
         abfrage = this.abfrageService.getById(uuid);
-        assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG));
+        assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.START_BEARBEITUNG));
 
         abfrage = this.abfrageService.getById(uuid);
         abfrage.setStatusAbfrage(StatusAbfrage.ANGELEGT);
@@ -322,18 +322,18 @@ class AbfrageStatusServiceTest {
     @Test
     @Transactional
     @MockCustomUser
-    void abbrechenAbfrageVonInBearbeitungSachbearbeitung()
+    void abbrechenAbfrageVonStartBearbeitung()
         throws UniqueViolationException, OptimisticLockingException, StringLengthExceededException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException, ReportingException, UserRoleNotAllowedException {
-        this.abbrechenAbfrageVonInBearbeitungSachbearbeitung(TestData.createBauleitplanverfahrenModel());
-        this.abbrechenAbfrageVonInBearbeitungSachbearbeitung(TestData.createBaugenehmigungsverfahrenModel());
+        this.abbrechenAbfrageVonStartBearbeitung(TestData.createBauleitplanverfahrenModel());
+        this.abbrechenAbfrageVonStartBearbeitung(TestData.createBaugenehmigungsverfahrenModel());
     }
 
-    void abbrechenAbfrageVonInBearbeitungSachbearbeitung(final AbfrageModel abfrageToTest)
+    void abbrechenAbfrageVonStartBearbeitung(final AbfrageModel abfrageToTest)
         throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException, StringLengthExceededException, CalculationException, ReportingException, UserRoleNotAllowedException {
         final var anmerkung = "";
         AbfrageModel abfrage = abfrageToTest;
         abfrage = this.abfrageService.save(abfrage);
-        abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+        abfrage.setStatusAbfrage(StatusAbfrage.START_BEARBEITUNG);
         abfrage = this.abfrageService.save(abfrage);
         final var uuid = abfrage.getId();
 
@@ -376,18 +376,18 @@ class AbfrageStatusServiceTest {
     @Test
     @Transactional
     @MockCustomUser
-    void abbrechenAbfrageVonInBearbeitungFachreferate()
+    void abbrechenAbfrageVonEinpflegenBedarfsmeldung()
         throws UniqueViolationException, OptimisticLockingException, StringLengthExceededException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException, ReportingException, UserRoleNotAllowedException {
-        this.abbrechenAbfrageVonInBearbeitungFachreferate(TestData.createBauleitplanverfahrenModel());
-        this.abbrechenAbfrageVonInBearbeitungFachreferate(TestData.createBaugenehmigungsverfahrenModel());
+        this.abbrechenAbfrageVonEinpflegenBedarfsmeldung(TestData.createBauleitplanverfahrenModel());
+        this.abbrechenAbfrageVonEinpflegenBedarfsmeldung(TestData.createBaugenehmigungsverfahrenModel());
     }
 
-    void abbrechenAbfrageVonInBearbeitungFachreferate(final AbfrageModel abfrageToTest)
+    void abbrechenAbfrageVonEinpflegenBedarfsmeldung(final AbfrageModel abfrageToTest)
         throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException, StringLengthExceededException, CalculationException, ReportingException, UserRoleNotAllowedException {
         final var anmerkung = "";
         AbfrageModel abfrage = abfrageToTest;
         abfrage = this.abfrageService.save(abfrage);
-        abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
+        abfrage.setStatusAbfrage(StatusAbfrage.EINPFLEGEN_BEDARFSMELDUNG);
         abfrage = this.abfrageService.save(abfrage);
         final var uuid = abfrage.getId();
 
@@ -430,18 +430,18 @@ class AbfrageStatusServiceTest {
     @Test
     @Transactional
     @MockCustomUser
-    void abbrechenAbfrageVonBedarfsmeldungErfolgt()
+    void abbrechenAbfrageVonEinplanungBedarfe()
         throws UniqueViolationException, OptimisticLockingException, StringLengthExceededException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException, ReportingException, UserRoleNotAllowedException {
-        this.abbrechenAbfrageVonBedarfsmeldungErfolgt(TestData.createBauleitplanverfahrenModel());
-        this.abbrechenAbfrageVonBedarfsmeldungErfolgt(TestData.createBaugenehmigungsverfahrenModel());
+        this.abbrechenAbfrageVonEinplanungBedarfe(TestData.createBauleitplanverfahrenModel());
+        this.abbrechenAbfrageVonEinplanungBedarfe(TestData.createBaugenehmigungsverfahrenModel());
     }
 
-    void abbrechenAbfrageVonBedarfsmeldungErfolgt(final AbfrageModel abfrageToTest)
+    void abbrechenAbfrageVonEinplanungBedarfe(final AbfrageModel abfrageToTest)
         throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException, StringLengthExceededException, CalculationException, ReportingException, UserRoleNotAllowedException {
         final var anmerkung = "";
         AbfrageModel abfrage = abfrageToTest;
         abfrage = this.abfrageService.save(abfrage);
-        abfrage.setStatusAbfrage(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT);
+        abfrage.setStatusAbfrage(StatusAbfrage.EINPLANUNG_BEDARFE);
         abfrage = this.abfrageService.save(abfrage);
         final var uuid = abfrage.getId();
 
@@ -484,18 +484,18 @@ class AbfrageStatusServiceTest {
     @Test
     @Transactional
     @MockCustomUser
-    void zurueckAnAbfrageerstellungVonInBearbeitungSachbearbeitung()
+    void zurueckAnAbfrageerstellungVonStartBearbeitung()
         throws UniqueViolationException, OptimisticLockingException, StringLengthExceededException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException, ReportingException, UserRoleNotAllowedException {
-        this.zurueckAnAbfrageerstellungVonInBearbeitungSachbearbeitung(TestData.createBauleitplanverfahrenModel());
-        this.zurueckAnAbfrageerstellungVonInBearbeitungSachbearbeitung(TestData.createBaugenehmigungsverfahrenModel());
+        this.zurueckAnAbfrageerstellungVonStartBearbeitung(TestData.createBauleitplanverfahrenModel());
+        this.zurueckAnAbfrageerstellungVonStartBearbeitung(TestData.createBaugenehmigungsverfahrenModel());
     }
 
-    void zurueckAnAbfrageerstellungVonInBearbeitungSachbearbeitung(final AbfrageModel abfrageToTest)
+    void zurueckAnAbfrageerstellungVonStartBearbeitung(final AbfrageModel abfrageToTest)
         throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException, StringLengthExceededException, CalculationException, ReportingException, UserRoleNotAllowedException {
         final var anmerkung = "";
         AbfrageModel abfrage = abfrageToTest;
         abfrage = this.abfrageService.save(abfrage);
-        abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+        abfrage.setStatusAbfrage(StatusAbfrage.START_BEARBEITUNG);
         abfrage = this.abfrageService.save(abfrage);
         final var uuid = abfrage.getId();
 
@@ -505,24 +505,24 @@ class AbfrageStatusServiceTest {
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.ANGELEGT));
 
         abfrage = this.abfrageService.getById(uuid);
-        abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
+        abfrage.setStatusAbfrage(StatusAbfrage.EINPFLEGEN_BEDARFSMELDUNG);
         this.abfrageService.save(abfrage);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
             () -> this.abfrageStatusService.zurueckAnAbfrageerstellungAbfrage(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
-        assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE));
+        assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.EINPFLEGEN_BEDARFSMELDUNG));
 
         abfrage = this.abfrageService.getById(uuid);
-        abfrage.setStatusAbfrage(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT);
+        abfrage.setStatusAbfrage(StatusAbfrage.EINPLANUNG_BEDARFE);
         this.abfrageService.save(abfrage);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
             () -> this.abfrageStatusService.zurueckAnAbfrageerstellungAbfrage(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
-        assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT));
+        assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.EINPLANUNG_BEDARFE));
 
         abfrage = this.abfrageService.getById(uuid);
         abfrage.setStatusAbfrage(StatusAbfrage.ERLEDIGT_OHNE_FACHREFERAT);
@@ -558,18 +558,18 @@ class AbfrageStatusServiceTest {
     @Test
     @Transactional
     @MockCustomUser
-    void zurueckAnAbfrageerstellungVonOffen()
+    void zurueckAnAbfrageerstellungVonUebermitteltZurBearbeitung()
         throws UniqueViolationException, OptimisticLockingException, StringLengthExceededException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException, ReportingException, UserRoleNotAllowedException {
-        this.zurueckAnAbfrageerstellungVonOffen(TestData.createBauleitplanverfahrenModel());
-        this.zurueckAnAbfrageerstellungVonOffen(TestData.createBaugenehmigungsverfahrenModel());
+        this.zurueckAnAbfrageerstellungVonUebermitteltZurBearbeitung(TestData.createBauleitplanverfahrenModel());
+        this.zurueckAnAbfrageerstellungVonUebermitteltZurBearbeitung(TestData.createBaugenehmigungsverfahrenModel());
     }
 
-    void zurueckAnAbfrageerstellungVonOffen(final AbfrageModel abfrageToTest)
+    void zurueckAnAbfrageerstellungVonUebermitteltZurBearbeitung(final AbfrageModel abfrageToTest)
         throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException, StringLengthExceededException, CalculationException, ReportingException, UserRoleNotAllowedException {
         final var anmerkung = "";
         AbfrageModel abfrage = abfrageToTest;
         abfrage = this.abfrageService.save(abfrage);
-        abfrage.setStatusAbfrage(StatusAbfrage.OFFEN);
+        abfrage.setStatusAbfrage(StatusAbfrage.UEBERMITTELT_ZUR_BEARBEITUNG);
         abfrage = this.abfrageService.save(abfrage);
         final var uuid = abfrage.getId();
 
@@ -579,24 +579,24 @@ class AbfrageStatusServiceTest {
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.ANGELEGT));
 
         abfrage = this.abfrageService.getById(uuid);
-        abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
+        abfrage.setStatusAbfrage(StatusAbfrage.EINPFLEGEN_BEDARFSMELDUNG);
         this.abfrageService.save(abfrage);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
             () -> this.abfrageStatusService.zurueckAnAbfrageerstellungAbfrage(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
-        assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE));
+        assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.EINPFLEGEN_BEDARFSMELDUNG));
 
         abfrage = this.abfrageService.getById(uuid);
-        abfrage.setStatusAbfrage(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT);
+        abfrage.setStatusAbfrage(StatusAbfrage.EINPLANUNG_BEDARFE);
         this.abfrageService.save(abfrage);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
             () -> this.abfrageStatusService.zurueckAnAbfrageerstellungAbfrage(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
-        assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT));
+        assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.EINPLANUNG_BEDARFE));
 
         abfrage = this.abfrageService.getById(uuid);
         abfrage.setStatusAbfrage(StatusAbfrage.ERLEDIGT_OHNE_FACHREFERAT);
@@ -632,25 +632,25 @@ class AbfrageStatusServiceTest {
     @Test
     @Transactional
     @MockCustomUser
-    void zurueckAnSachbearbeitungVonInBearbeitungFachreferate()
+    void zurueckAnSachbearbeitungVonEinpflegenBedarfsmeldung()
         throws UniqueViolationException, OptimisticLockingException, StringLengthExceededException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException, ReportingException, UserRoleNotAllowedException {
-        this.zurueckAnSachbearbeitungVonInBearbeitungFachreferate(TestData.createBauleitplanverfahrenModel());
-        this.zurueckAnSachbearbeitungVonInBearbeitungFachreferate(TestData.createBaugenehmigungsverfahrenModel());
+        this.zurueckAnSachbearbeitungVonEinpflegenBedarfsmeldung(TestData.createBauleitplanverfahrenModel());
+        this.zurueckAnSachbearbeitungVonEinpflegenBedarfsmeldung(TestData.createBaugenehmigungsverfahrenModel());
     }
 
-    void zurueckAnSachbearbeitungVonInBearbeitungFachreferate(final AbfrageModel abfrageToTest)
+    void zurueckAnSachbearbeitungVonEinpflegenBedarfsmeldung(final AbfrageModel abfrageToTest)
         throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException, StringLengthExceededException, CalculationException, ReportingException, UserRoleNotAllowedException {
         final var anmerkung = "";
         AbfrageModel abfrage = abfrageToTest;
         abfrage = this.abfrageService.save(abfrage);
-        abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
+        abfrage.setStatusAbfrage(StatusAbfrage.EINPFLEGEN_BEDARFSMELDUNG);
         abfrage = this.abfrageService.save(abfrage);
         final var uuid = abfrage.getId();
 
         this.abfrageStatusService.zurueckAnSachbearbeitungAbfrage(uuid, anmerkung);
 
         abfrage = this.abfrageService.getById(uuid);
-        assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG));
+        assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.START_BEARBEITUNG));
 
         abfrage = this.abfrageService.getById(uuid);
         abfrage.setStatusAbfrage(StatusAbfrage.ERLEDIGT_OHNE_FACHREFERAT);
@@ -686,18 +686,18 @@ class AbfrageStatusServiceTest {
     @Test
     @Transactional
     @MockCustomUser
-    void erledigtOhneFachreferatVonInBearbeitungSachbearbeitung()
+    void erledigtOhneFachreferatVonStartBearbeitung()
         throws UniqueViolationException, OptimisticLockingException, StringLengthExceededException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException, ReportingException, UserRoleNotAllowedException {
-        this.erledigtOhneFachreferatVonInBearbeitungSachbearbeitung(TestData.createBauleitplanverfahrenModel());
-        this.erledigtOhneFachreferatVonInBearbeitungSachbearbeitung(TestData.createBaugenehmigungsverfahrenModel());
+        this.erledigtOhneFachreferatVonStartBearbeitung(TestData.createBauleitplanverfahrenModel());
+        this.erledigtOhneFachreferatVonStartBearbeitung(TestData.createBaugenehmigungsverfahrenModel());
     }
 
-    void erledigtOhneFachreferatVonInBearbeitungSachbearbeitung(final AbfrageModel abfrageToTest)
+    void erledigtOhneFachreferatVonStartBearbeitung(final AbfrageModel abfrageToTest)
         throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException, StringLengthExceededException, CalculationException, ReportingException, UserRoleNotAllowedException {
         final var anmerkung = "";
         AbfrageModel abfrage = abfrageToTest;
         abfrage = this.abfrageService.save(abfrage);
-        abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+        abfrage.setStatusAbfrage(StatusAbfrage.START_BEARBEITUNG);
         abfrage = this.abfrageService.save(abfrage);
         final var uuid = abfrage.getId();
 
@@ -717,34 +717,34 @@ class AbfrageStatusServiceTest {
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.ANGELEGT));
 
         abfrage = this.abfrageService.getById(uuid);
-        abfrage.setStatusAbfrage(StatusAbfrage.OFFEN);
+        abfrage.setStatusAbfrage(StatusAbfrage.UEBERMITTELT_ZUR_BEARBEITUNG);
         this.abfrageService.save(abfrage);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
             () -> this.abfrageStatusService.erledigtOhneFachreferat(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
-        assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.OFFEN));
+        assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.UEBERMITTELT_ZUR_BEARBEITUNG));
 
         abfrage = this.abfrageService.getById(uuid);
-        abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
+        abfrage.setStatusAbfrage(StatusAbfrage.EINPFLEGEN_BEDARFSMELDUNG);
         this.abfrageService.save(abfrage);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
             () -> this.abfrageStatusService.erledigtOhneFachreferat(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
-        assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE));
+        assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.EINPFLEGEN_BEDARFSMELDUNG));
 
         abfrage = this.abfrageService.getById(uuid);
-        abfrage.setStatusAbfrage(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT);
+        abfrage.setStatusAbfrage(StatusAbfrage.EINPLANUNG_BEDARFE);
         this.abfrageService.save(abfrage);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
             () -> this.abfrageStatusService.erledigtOhneFachreferat(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
-        assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT));
+        assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.EINPLANUNG_BEDARFE));
 
         abfrage = this.abfrageService.getById(uuid);
         abfrage.setStatusAbfrage(StatusAbfrage.ERLEDIGT_OHNE_FACHREFERAT);
@@ -780,25 +780,25 @@ class AbfrageStatusServiceTest {
     @Test
     @Transactional
     @MockCustomUser
-    void verschickenDerStellungnahmeVonInBearbeitungSachbearbeitung()
+    void verschickenDerStellungnahmeVonStartBearbeitung()
         throws UniqueViolationException, OptimisticLockingException, StringLengthExceededException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException, ReportingException, UserRoleNotAllowedException {
-        this.verschickenDerStellungnahmeVonInBearbeitungSachbearbeitung(TestData.createBauleitplanverfahrenModel());
-        this.verschickenDerStellungnahmeVonInBearbeitungSachbearbeitung(TestData.createBaugenehmigungsverfahrenModel());
+        this.verschickenDerStellungnahmeVonStartBearbeitung(TestData.createBauleitplanverfahrenModel());
+        this.verschickenDerStellungnahmeVonStartBearbeitung(TestData.createBaugenehmigungsverfahrenModel());
     }
 
-    void verschickenDerStellungnahmeVonInBearbeitungSachbearbeitung(final AbfrageModel abfrageToTest)
+    void verschickenDerStellungnahmeVonStartBearbeitung(final AbfrageModel abfrageToTest)
         throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException, StringLengthExceededException, CalculationException, ReportingException, UserRoleNotAllowedException {
         final var anmerkung = "";
         AbfrageModel abfrage = abfrageToTest;
         abfrage = this.abfrageService.save(abfrage);
-        abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+        abfrage.setStatusAbfrage(StatusAbfrage.START_BEARBEITUNG);
         abfrage = this.abfrageService.save(abfrage);
         final var uuid = abfrage.getId();
 
         this.abfrageStatusService.verschickenDerStellungnahme(uuid, anmerkung);
 
         abfrage = this.abfrageService.getById(uuid);
-        assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE));
+        assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.EINPFLEGEN_BEDARFSMELDUNG));
 
         abfrage = this.abfrageService.getById(uuid);
         abfrage.setStatusAbfrage(StatusAbfrage.ANGELEGT);
@@ -811,34 +811,34 @@ class AbfrageStatusServiceTest {
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.ANGELEGT));
 
         abfrage = this.abfrageService.getById(uuid);
-        abfrage.setStatusAbfrage(StatusAbfrage.OFFEN);
+        abfrage.setStatusAbfrage(StatusAbfrage.UEBERMITTELT_ZUR_BEARBEITUNG);
         this.abfrageService.save(abfrage);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
             () -> this.abfrageStatusService.verschickenDerStellungnahme(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
-        assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.OFFEN));
+        assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.UEBERMITTELT_ZUR_BEARBEITUNG));
 
         abfrage = this.abfrageService.getById(uuid);
-        abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
+        abfrage.setStatusAbfrage(StatusAbfrage.EINPFLEGEN_BEDARFSMELDUNG);
         this.abfrageService.save(abfrage);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
             () -> this.abfrageStatusService.verschickenDerStellungnahme(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
-        assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE));
+        assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.EINPFLEGEN_BEDARFSMELDUNG));
 
         abfrage = this.abfrageService.getById(uuid);
-        abfrage.setStatusAbfrage(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT);
+        abfrage.setStatusAbfrage(StatusAbfrage.EINPLANUNG_BEDARFE);
         this.abfrageService.save(abfrage);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
             () -> this.abfrageStatusService.verschickenDerStellungnahme(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
-        assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT));
+        assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.EINPLANUNG_BEDARFE));
 
         abfrage = this.abfrageService.getById(uuid);
         abfrage.setStatusAbfrage(StatusAbfrage.ERLEDIGT_OHNE_FACHREFERAT);
@@ -874,25 +874,25 @@ class AbfrageStatusServiceTest {
     @Test
     @Transactional
     @MockCustomUser
-    void bedarfsmeldungErfolgtVonInBearbeitungFachreferate()
+    void bedarfsmeldungErfolgtVonEinpflegenBedarfsmeldung()
         throws UniqueViolationException, OptimisticLockingException, StringLengthExceededException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException, ReportingException, UserRoleNotAllowedException {
-        this.bedarfsmeldungErfolgtVonInBearbeitungFachreferate(TestData.createBauleitplanverfahrenModel());
-        this.bedarfsmeldungErfolgtVonInBearbeitungFachreferate(TestData.createBaugenehmigungsverfahrenModel());
+        this.bedarfsmeldungErfolgtVonEinpflegenBedarfsmeldung(TestData.createBauleitplanverfahrenModel());
+        this.bedarfsmeldungErfolgtVonEinpflegenBedarfsmeldung(TestData.createBaugenehmigungsverfahrenModel());
     }
 
-    void bedarfsmeldungErfolgtVonInBearbeitungFachreferate(final AbfrageModel abfrageToTest)
+    void bedarfsmeldungErfolgtVonEinpflegenBedarfsmeldung(final AbfrageModel abfrageToTest)
         throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException, StringLengthExceededException, CalculationException, ReportingException, UserRoleNotAllowedException {
         final var anmerkung = "";
         AbfrageModel abfrage = abfrageToTest;
         abfrage = this.abfrageService.save(abfrage);
-        abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
+        abfrage.setStatusAbfrage(StatusAbfrage.EINPFLEGEN_BEDARFSMELDUNG);
         abfrage = this.abfrageService.save(abfrage);
         final var uuid = abfrage.getId();
 
         this.abfrageStatusService.bedarfsmeldungErfolgt(uuid, anmerkung);
 
         abfrage = this.abfrageService.getById(uuid);
-        assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT));
+        assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.EINPLANUNG_BEDARFE));
 
         abfrage = this.abfrageService.getById(uuid);
         abfrage.setStatusAbfrage(StatusAbfrage.ANGELEGT);
@@ -905,34 +905,34 @@ class AbfrageStatusServiceTest {
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.ANGELEGT));
 
         abfrage = this.abfrageService.getById(uuid);
-        abfrage.setStatusAbfrage(StatusAbfrage.OFFEN);
+        abfrage.setStatusAbfrage(StatusAbfrage.UEBERMITTELT_ZUR_BEARBEITUNG);
         this.abfrageService.save(abfrage);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
             () -> this.abfrageStatusService.bedarfsmeldungErfolgt(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
-        assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.OFFEN));
+        assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.UEBERMITTELT_ZUR_BEARBEITUNG));
 
         abfrage = this.abfrageService.getById(uuid);
-        abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+        abfrage.setStatusAbfrage(StatusAbfrage.START_BEARBEITUNG);
         this.abfrageService.save(abfrage);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
             () -> this.abfrageStatusService.bedarfsmeldungErfolgt(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
-        assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG));
+        assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.START_BEARBEITUNG));
 
         abfrage = this.abfrageService.getById(uuid);
-        abfrage.setStatusAbfrage(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT);
+        abfrage.setStatusAbfrage(StatusAbfrage.EINPLANUNG_BEDARFE);
         this.abfrageService.save(abfrage);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
             () -> this.abfrageStatusService.bedarfsmeldungErfolgt(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
-        assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT));
+        assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.EINPLANUNG_BEDARFE));
 
         abfrage = this.abfrageService.getById(uuid);
         abfrage.setStatusAbfrage(StatusAbfrage.ERLEDIGT_OHNE_FACHREFERAT);
@@ -968,18 +968,18 @@ class AbfrageStatusServiceTest {
     @Test
     @Transactional
     @MockCustomUser
-    void erledigtMitFachreferatVonBedarfsmeldungErfolgt()
+    void erledigtMitFachreferatVonEinplanungBedarfe()
         throws UniqueViolationException, OptimisticLockingException, StringLengthExceededException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException, ReportingException, UserRoleNotAllowedException {
-        this.erledigtMitFachreferatVonBedarfsmeldungErfolgt(TestData.createBauleitplanverfahrenModel());
-        this.erledigtMitFachreferatVonBedarfsmeldungErfolgt(TestData.createBaugenehmigungsverfahrenModel());
+        this.erledigtMitFachreferatVonEinplanungBedarfe(TestData.createBauleitplanverfahrenModel());
+        this.erledigtMitFachreferatVonEinplanungBedarfe(TestData.createBaugenehmigungsverfahrenModel());
     }
 
-    void erledigtMitFachreferatVonBedarfsmeldungErfolgt(final AbfrageModel abfrageToTest)
+    void erledigtMitFachreferatVonEinplanungBedarfe(final AbfrageModel abfrageToTest)
         throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException, StringLengthExceededException, CalculationException, ReportingException, UserRoleNotAllowedException {
         final var anmerkung = "";
         AbfrageModel abfrage = abfrageToTest;
         abfrage = this.abfrageService.save(abfrage);
-        abfrage.setStatusAbfrage(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT);
+        abfrage.setStatusAbfrage(StatusAbfrage.EINPLANUNG_BEDARFE);
         abfrage = this.abfrageService.save(abfrage);
         final var uuid = abfrage.getId();
 
@@ -999,34 +999,34 @@ class AbfrageStatusServiceTest {
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.ANGELEGT));
 
         abfrage = this.abfrageService.getById(uuid);
-        abfrage.setStatusAbfrage(StatusAbfrage.OFFEN);
+        abfrage.setStatusAbfrage(StatusAbfrage.UEBERMITTELT_ZUR_BEARBEITUNG);
         this.abfrageService.save(abfrage);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
             () -> this.abfrageStatusService.erledigtMitFachreferat(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
-        assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.OFFEN));
+        assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.UEBERMITTELT_ZUR_BEARBEITUNG));
 
         abfrage = this.abfrageService.getById(uuid);
-        abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+        abfrage.setStatusAbfrage(StatusAbfrage.START_BEARBEITUNG);
         this.abfrageService.save(abfrage);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
             () -> this.abfrageStatusService.erledigtMitFachreferat(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
-        assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG));
+        assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.START_BEARBEITUNG));
 
         abfrage = this.abfrageService.getById(uuid);
-        abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
+        abfrage.setStatusAbfrage(StatusAbfrage.EINPFLEGEN_BEDARFSMELDUNG);
         this.abfrageService.save(abfrage);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
             () -> this.abfrageStatusService.erledigtMitFachreferat(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
-        assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE));
+        assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.EINPFLEGEN_BEDARFSMELDUNG));
 
         abfrage = this.abfrageService.getById(uuid);
         abfrage.setStatusAbfrage(StatusAbfrage.ERLEDIGT_MIT_FACHREFERAT);
@@ -1082,7 +1082,7 @@ class AbfrageStatusServiceTest {
         this.abfrageStatusService.erneuteBearbeitungSachbearbeitung(uuid, anmerkung);
 
         abfrage = this.abfrageService.getById(uuid);
-        assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG));
+        assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.START_BEARBEITUNG));
 
         abfrage = this.abfrageService.getById(uuid);
         abfrage.setStatusAbfrage(StatusAbfrage.ANGELEGT);
@@ -1095,44 +1095,44 @@ class AbfrageStatusServiceTest {
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.ANGELEGT));
 
         abfrage = this.abfrageService.getById(uuid);
-        abfrage.setStatusAbfrage(StatusAbfrage.OFFEN);
+        abfrage.setStatusAbfrage(StatusAbfrage.UEBERMITTELT_ZUR_BEARBEITUNG);
         this.abfrageService.save(abfrage);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
             () -> this.abfrageStatusService.erneuteBearbeitungSachbearbeitung(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
-        assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.OFFEN));
+        assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.UEBERMITTELT_ZUR_BEARBEITUNG));
 
         abfrage = this.abfrageService.getById(uuid);
-        abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+        abfrage.setStatusAbfrage(StatusAbfrage.START_BEARBEITUNG);
         this.abfrageService.save(abfrage);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
             () -> this.abfrageStatusService.erledigtMitFachreferat(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
-        assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG));
+        assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.START_BEARBEITUNG));
 
         abfrage = this.abfrageService.getById(uuid);
-        abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
+        abfrage.setStatusAbfrage(StatusAbfrage.EINPFLEGEN_BEDARFSMELDUNG);
         this.abfrageService.save(abfrage);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
             () -> this.abfrageStatusService.erneuteBearbeitungSachbearbeitung(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
-        assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE));
+        assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.EINPFLEGEN_BEDARFSMELDUNG));
 
         abfrage = this.abfrageService.getById(uuid);
-        abfrage.setStatusAbfrage(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT);
+        abfrage.setStatusAbfrage(StatusAbfrage.EINPLANUNG_BEDARFE);
         this.abfrageService.save(abfrage);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
             () -> this.abfrageStatusService.erneuteBearbeitungSachbearbeitung(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
-        assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT));
+        assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.EINPLANUNG_BEDARFE));
 
         abfrage = this.abfrageService.getById(uuid);
         abfrage.setStatusAbfrage(StatusAbfrage.ABBRUCH);
@@ -1168,7 +1168,7 @@ class AbfrageStatusServiceTest {
         this.abfrageStatusService.erneuteBearbeitungSachbearbeitung(uuid, anmerkung);
 
         abfrage = this.abfrageService.getById(uuid);
-        assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG));
+        assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.START_BEARBEITUNG));
 
         abfrage = this.abfrageService.getById(uuid);
         abfrage.setStatusAbfrage(StatusAbfrage.ANGELEGT);
@@ -1181,44 +1181,44 @@ class AbfrageStatusServiceTest {
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.ANGELEGT));
 
         abfrage = this.abfrageService.getById(uuid);
-        abfrage.setStatusAbfrage(StatusAbfrage.OFFEN);
+        abfrage.setStatusAbfrage(StatusAbfrage.UEBERMITTELT_ZUR_BEARBEITUNG);
         this.abfrageService.save(abfrage);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
             () -> this.abfrageStatusService.erneuteBearbeitungSachbearbeitung(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
-        assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.OFFEN));
+        assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.UEBERMITTELT_ZUR_BEARBEITUNG));
 
         abfrage = this.abfrageService.getById(uuid);
-        abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+        abfrage.setStatusAbfrage(StatusAbfrage.START_BEARBEITUNG);
         this.abfrageService.save(abfrage);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
             () -> this.abfrageStatusService.erledigtMitFachreferat(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
-        assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG));
+        assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.START_BEARBEITUNG));
 
         abfrage = this.abfrageService.getById(uuid);
-        abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
+        abfrage.setStatusAbfrage(StatusAbfrage.EINPFLEGEN_BEDARFSMELDUNG);
         this.abfrageService.save(abfrage);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
             () -> this.abfrageStatusService.erneuteBearbeitungSachbearbeitung(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
-        assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE));
+        assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.EINPFLEGEN_BEDARFSMELDUNG));
 
         abfrage = this.abfrageService.getById(uuid);
-        abfrage.setStatusAbfrage(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT);
+        abfrage.setStatusAbfrage(StatusAbfrage.EINPLANUNG_BEDARFE);
         this.abfrageService.save(abfrage);
         Assertions.assertThrows(
             AbfrageStatusNotAllowedException.class,
             () -> this.abfrageStatusService.erneuteBearbeitungSachbearbeitung(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
-        assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT));
+        assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.EINPLANUNG_BEDARFE));
 
         abfrage = this.abfrageService.getById(uuid);
         abfrage.setStatusAbfrage(StatusAbfrage.ABBRUCH);
@@ -1245,7 +1245,7 @@ class AbfrageStatusServiceTest {
         final var anmerkung = "Test";
         AbfrageModel abfrage = abfrageToTest;
         abfrage = this.abfrageService.save(abfrage);
-        abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+        abfrage.setStatusAbfrage(StatusAbfrage.START_BEARBEITUNG);
         abfrage = this.abfrageService.save(abfrage);
         final var uuid = abfrage.getId();
 
@@ -1270,7 +1270,7 @@ class AbfrageStatusServiceTest {
         final var anmerkung = new String(new char[1000]).replace("\0", "A");
         AbfrageModel abfrage = abfrageToTest;
         abfrage = this.abfrageService.save(abfrage);
-        abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+        abfrage.setStatusAbfrage(StatusAbfrage.START_BEARBEITUNG);
         abfrage = this.abfrageService.save(abfrage);
         final var uuid = abfrage.getId();
 
@@ -1281,6 +1281,6 @@ class AbfrageStatusServiceTest {
 
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getAnmerkung(), is("Bitte die Abfrage zeitnah behandeln"));
-        assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG));
+        assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.START_BEARBEITUNG));
     }
 }
