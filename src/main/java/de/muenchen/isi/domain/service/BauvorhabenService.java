@@ -175,7 +175,7 @@ public class BauvorhabenService {
      * Diese Methode setzt in einem {@link BauvorhabenModel} eine neue relevante Abfragevariante.
      * Ist diese Abfragevariante bereits relevant, wird die relevante Abfragevariante des Bauvorhabens auf null gesetzt.
      * Ist eine andere Abfragevariante bereits relevant, wird eine Exception geworfen.
-     * Die Abfrage muss sich im Status {@link StatusAbfrage#IN_BEARBEITUNG_SACHBEARBEITUNG} befinden.
+     * Die Abfrage muss sich im Status {@link StatusAbfrage#START_BEARBEITUNG} befinden.
      *
      * @param abfragevarianteId als ID der neuen relevanten Abfragevariante
      * @return das aktualisierte {@link BauvorhabenModel}
@@ -205,7 +205,7 @@ public class BauvorhabenService {
             if (!relevanteAbfragevarianteId.equals(abfragevarianteId)) {
                 abfrageService.throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(
                     abfrage,
-                    StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG
+                    StatusAbfrage.START_BEARBEITUNG
                 );
                 final var relevanteAbfragevariante = abfragevarianteRepository
                     .findById(relevanteAbfragevarianteId)
@@ -229,7 +229,7 @@ public class BauvorhabenService {
         } else {
             abfrageService.throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(
                 abfrage,
-                StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG
+                StatusAbfrage.START_BEARBEITUNG
             );
             bauvorhaben.setRelevanteAbfragevariante(abfragevarianteId);
         }

@@ -36,24 +36,24 @@ import de.muenchen.isi.domain.model.abfrageAngelegt.AbfragevarianteWeiteresVerfa
 import de.muenchen.isi.domain.model.abfrageAngelegt.BaugenehmigungsverfahrenAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageAngelegt.BauleitplanverfahrenAngelegtModel;
 import de.muenchen.isi.domain.model.abfrageAngelegt.WeiteresVerfahrenAngelegtModel;
-import de.muenchen.isi.domain.model.abfrageBedarfsmeldungErfolgt.AbfragevarianteBaugenehmigungsverfahrenBedarfsmeldungErfolgtModel;
-import de.muenchen.isi.domain.model.abfrageBedarfsmeldungErfolgt.AbfragevarianteBauleitplanverfahrenBedarfsmeldungErfolgtModel;
-import de.muenchen.isi.domain.model.abfrageBedarfsmeldungErfolgt.AbfragevarianteWeiteresVerfahrenBedarfsmeldungErfolgtModel;
-import de.muenchen.isi.domain.model.abfrageBedarfsmeldungErfolgt.BaugenehmigungsverfahrenBedarfsmeldungErfolgtModel;
-import de.muenchen.isi.domain.model.abfrageBedarfsmeldungErfolgt.BauleitplanverfahrenBedarfsmeldungErfolgtModel;
-import de.muenchen.isi.domain.model.abfrageBedarfsmeldungErfolgt.WeiteresVerfahrenBedarfsmeldungErfolgtModel;
-import de.muenchen.isi.domain.model.abfrageInBearbeitungFachreferat.AbfragevarianteBaugenehmigungsverfahrenInBearbeitungFachreferatModel;
-import de.muenchen.isi.domain.model.abfrageInBearbeitungFachreferat.AbfragevarianteBauleitplanverfahrenInBearbeitungFachreferatModel;
-import de.muenchen.isi.domain.model.abfrageInBearbeitungFachreferat.AbfragevarianteWeiteresVerfahrenInBearbeitungFachreferatModel;
-import de.muenchen.isi.domain.model.abfrageInBearbeitungFachreferat.BaugenehmigungsverfahrenInBearbeitungFachreferatModel;
-import de.muenchen.isi.domain.model.abfrageInBearbeitungFachreferat.BauleitplanverfahrenInBearbeitungFachreferatModel;
-import de.muenchen.isi.domain.model.abfrageInBearbeitungFachreferat.WeiteresVerfahrenInBearbeitungFachreferatModel;
-import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.AbfragevarianteBaugenehmigungsverfahrenInBearbeitungSachbearbeitungModel;
-import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.AbfragevarianteBauleitplanverfahrenInBearbeitungSachbearbeitungModel;
-import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.AbfragevarianteWeiteresVerfahrenInBearbeitungSachbearbeitungModel;
-import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.BaugenehmigungsverfahrenInBearbeitungSachbearbeitungModel;
-import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.BauleitplanverfahrenInBearbeitungSachbearbeitungModel;
-import de.muenchen.isi.domain.model.abfrageInBearbeitungSachbearbeitung.WeiteresVerfahrenInBearbeitungSachbearbeitungModel;
+import de.muenchen.isi.domain.model.abfrageEinpflegenBedarfsmeldung.AbfragevarianteBaugenehmigungsverfahrenEinpflegenBedarfsmeldungModel;
+import de.muenchen.isi.domain.model.abfrageEinpflegenBedarfsmeldung.AbfragevarianteBauleitplanverfahrenEinpflegenBedarfsmeldungModel;
+import de.muenchen.isi.domain.model.abfrageEinpflegenBedarfsmeldung.AbfragevarianteWeiteresVerfahrenEinpflegenBedarfsmeldungModel;
+import de.muenchen.isi.domain.model.abfrageEinpflegenBedarfsmeldung.BaugenehmigungsverfahrenEinpflegenBedarfsmeldungModel;
+import de.muenchen.isi.domain.model.abfrageEinpflegenBedarfsmeldung.BauleitplanverfahrenEinpflegenBedarfsmeldungModel;
+import de.muenchen.isi.domain.model.abfrageEinpflegenBedarfsmeldung.WeiteresVerfahrenEinpflegenBedarfsmeldungModel;
+import de.muenchen.isi.domain.model.abfrageEinplanungBedarfe.AbfragevarianteBaugenehmigungsverfahrenEinplanungBedarfeModel;
+import de.muenchen.isi.domain.model.abfrageEinplanungBedarfe.AbfragevarianteBauleitplanverfahrenEinplanungBedarfeModel;
+import de.muenchen.isi.domain.model.abfrageEinplanungBedarfe.AbfragevarianteWeiteresVerfahrenEinplanungBedarfeModel;
+import de.muenchen.isi.domain.model.abfrageEinplanungBedarfe.BaugenehmigungsverfahrenEinplanungBedarfeModel;
+import de.muenchen.isi.domain.model.abfrageEinplanungBedarfe.BauleitplanverfahrenEinplanungBedarfeModel;
+import de.muenchen.isi.domain.model.abfrageEinplanungBedarfe.WeiteresVerfahrenEinplanungBedarfeModel;
+import de.muenchen.isi.domain.model.abfrageStartBearbeitung.AbfragevarianteBaugenehmigungsverfahrenStartBearbeitungModel;
+import de.muenchen.isi.domain.model.abfrageStartBearbeitung.AbfragevarianteBauleitplanverfahrenStartBearbeitungModel;
+import de.muenchen.isi.domain.model.abfrageStartBearbeitung.AbfragevarianteWeiteresVerfahrenStartBearbeitungModel;
+import de.muenchen.isi.domain.model.abfrageStartBearbeitung.BaugenehmigungsverfahrenStartBearbeitungModel;
+import de.muenchen.isi.domain.model.abfrageStartBearbeitung.BauleitplanverfahrenStartBearbeitungModel;
+import de.muenchen.isi.domain.model.abfrageStartBearbeitung.WeiteresVerfahrenStartBearbeitungModel;
 import de.muenchen.isi.domain.model.common.StadtbezirkModel;
 import de.muenchen.isi.domain.model.common.VerortungMultiPolygonModel;
 import de.muenchen.isi.domain.service.calculation.CalculationService;
@@ -216,7 +216,7 @@ class AbfrageServiceTest {
         final BauleitplanverfahrenModel abfrage = new BauleitplanverfahrenModel();
         abfrage.setId(uuid);
         abfrage.setName("hallo");
-        abfrage.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
+        abfrage.setStatusAbfrage(StatusAbfrage.EINPFLEGEN_BEDARFSMELDUNG);
 
         final Abfrage abfrageEntity = this.abfrageDomainMapper.model2Entity(abfrage);
 
@@ -224,7 +224,7 @@ class AbfrageServiceTest {
         saveResult.setId(uuid);
         saveResult.setSub(sub);
         saveResult.setName("hallo");
-        saveResult.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
+        saveResult.setStatusAbfrage(StatusAbfrage.EINPFLEGEN_BEDARFSMELDUNG);
 
         Mockito.when(this.authenticationUtils.getUserSub()).thenReturn(sub);
         Mockito.when(this.abfrageRepository.saveAndFlush(abfrageEntity)).thenReturn(saveResult);
@@ -261,7 +261,7 @@ class AbfrageServiceTest {
         abfrage.setSub(null);
         abfrage.setName("hallo");
         abfrage.setLinkEakte("https://eakte.muenchen.de?E12345");
-        abfrage.setStatusAbfrage(StatusAbfrage.OFFEN);
+        abfrage.setStatusAbfrage(StatusAbfrage.UEBERMITTELT_ZUR_BEARBEITUNG);
 
         final Bauleitplanverfahren abfrageEntity = new Bauleitplanverfahren();
         abfrageEntity.setId(null);
@@ -520,7 +520,7 @@ class AbfrageServiceTest {
     }
 
     @Test
-    void patchInBearbeitungSachbearbeitungBauleitplanverfahren()
+    void patchStartBearbeitungBauleitplanverfahren()
         throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException, ReportingException, UserRoleNotAllowedException {
         final var uuid = UUID.randomUUID();
 
@@ -539,14 +539,13 @@ class AbfrageServiceTest {
         BauleitplanverfahrenModel bauleitplanverfahrenModel = new BauleitplanverfahrenModel();
         bauleitplanverfahrenModel.setBauvorhaben(bauvorhabenId);
 
-        final var requestModel = new BauleitplanverfahrenInBearbeitungSachbearbeitungModel();
+        final var requestModel = new BauleitplanverfahrenStartBearbeitungModel();
         requestModel.setVersion(0L);
         requestModel.setArtAbfrage(ArtAbfrage.BAULEITPLANVERFAHREN);
         requestModel.setLinkEakte("https://eakte.muenchen.de?E12345");
         requestModel.setVerortung(abfrageVerortung);
         requestModel.setBauvorhaben(bauvorhabenId);
-        final var abfragevarianteSachbearbeitung =
-            new AbfragevarianteBauleitplanverfahrenInBearbeitungSachbearbeitungModel();
+        final var abfragevarianteSachbearbeitung = new AbfragevarianteBauleitplanverfahrenStartBearbeitungModel();
         abfragevarianteSachbearbeitung.setArtAbfragevariante(ArtAbfrage.BAULEITPLANVERFAHREN);
         abfragevarianteSachbearbeitung.setAbfragevariantenNr(1);
         abfragevarianteSachbearbeitung.setName("Abfragevariante 1");
@@ -557,7 +556,7 @@ class AbfrageServiceTest {
         final var entityInDb = new Bauleitplanverfahren();
         entityInDb.setId(uuid);
         entityInDb.setVersion(0L);
-        entityInDb.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+        entityInDb.setStatusAbfrage(StatusAbfrage.START_BEARBEITUNG);
         entityInDb.setName("hallo");
         entityInDb.setLinkEakte("https://eakte.muenchen.de?E12345");
 
@@ -583,7 +582,7 @@ class AbfrageServiceTest {
         entityToSave.setAbfragevariantenBauleitplanverfahren(List.of());
         entityToSave.setId(uuid);
         entityToSave.setVersion(0L);
-        entityToSave.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+        entityToSave.setStatusAbfrage(StatusAbfrage.START_BEARBEITUNG);
         entityToSave.setName("hallo");
         entityToSave.setLinkEakte("https://eakte.muenchen.de?E12345");
         entityToSave.setVerortung(abfrageEntityVerortung);
@@ -598,7 +597,7 @@ class AbfrageServiceTest {
         final var entitySaved = new Bauleitplanverfahren();
         entitySaved.setId(uuid);
         entitySaved.setVersion(1L);
-        entitySaved.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+        entitySaved.setStatusAbfrage(StatusAbfrage.START_BEARBEITUNG);
         entitySaved.setName("hallo");
         entitySaved.setLinkEakte("https://eakte.muenchen.de?E12345");
         entitySaved.setVerortung(abfrageEntityVerortung);
@@ -616,13 +615,13 @@ class AbfrageServiceTest {
             .thenReturn(Optional.of(bauvorhabenEntity));
         Mockito.when(this.abfrageRepository.saveAndFlush(entityToSave)).thenReturn(entitySaved);
 
-        final var result = this.abfrageService.patchInBearbeitungSachbearbeitung(requestModel, uuid);
+        final var result = this.abfrageService.patchStartBearbeitung(requestModel, uuid);
 
         final var expected = new BauleitplanverfahrenModel();
         expected.setArtAbfrage(ArtAbfrage.BAULEITPLANVERFAHREN);
         expected.setId(uuid);
         expected.setVersion(1L);
-        expected.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+        expected.setStatusAbfrage(StatusAbfrage.START_BEARBEITUNG);
         expected.setName("hallo");
         expected.setLinkEakte("https://eakte.muenchen.de?E12345");
         expected.setVerortung(abfrageVerortung);
@@ -640,7 +639,7 @@ class AbfrageServiceTest {
     }
 
     @Test
-    void patchInBearbeitungSachbearbeitungBaugenehmigungsverfahren()
+    void patchStartBearbeitungBaugenehmigungsverfahren()
         throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException, ReportingException, UserRoleNotAllowedException {
         final var uuid = UUID.randomUUID();
 
@@ -659,14 +658,13 @@ class AbfrageServiceTest {
         BaugenehmigungsverfahrenModel baugenehmigungsverfahrenModel = new BaugenehmigungsverfahrenModel();
         baugenehmigungsverfahrenModel.setBauvorhaben(bauvorhabenId);
 
-        final var requestModel = new BaugenehmigungsverfahrenInBearbeitungSachbearbeitungModel();
+        final var requestModel = new BaugenehmigungsverfahrenStartBearbeitungModel();
         requestModel.setVersion(0L);
         requestModel.setArtAbfrage(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN);
         requestModel.setLinkEakte("https://eakte.muenchen.de?E12345");
         requestModel.setVerortung(abfrageVerortung);
         requestModel.setBauvorhaben(bauvorhabenId);
-        final var abfragevarianteSachbearbeitung =
-            new AbfragevarianteBaugenehmigungsverfahrenInBearbeitungSachbearbeitungModel();
+        final var abfragevarianteSachbearbeitung = new AbfragevarianteBaugenehmigungsverfahrenStartBearbeitungModel();
         abfragevarianteSachbearbeitung.setArtAbfragevariante(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN);
         abfragevarianteSachbearbeitung.setAbfragevariantenNr(1);
         abfragevarianteSachbearbeitung.setName("Abfragevariante 1");
@@ -678,7 +676,7 @@ class AbfrageServiceTest {
         final var entityInDb = new Baugenehmigungsverfahren();
         entityInDb.setId(uuid);
         entityInDb.setVersion(0L);
-        entityInDb.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+        entityInDb.setStatusAbfrage(StatusAbfrage.START_BEARBEITUNG);
         entityInDb.setName("hallo");
         entityInDb.setLinkEakte("https://eakte.muenchen.de?E12345");
 
@@ -704,7 +702,7 @@ class AbfrageServiceTest {
         entityToSave.setAbfragevariantenBaugenehmigungsverfahren(List.of());
         entityToSave.setId(uuid);
         entityToSave.setVersion(0L);
-        entityToSave.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+        entityToSave.setStatusAbfrage(StatusAbfrage.START_BEARBEITUNG);
         entityToSave.setName("hallo");
         entityToSave.setLinkEakte("https://eakte.muenchen.de?E12345");
         entityToSave.setVerortung(abfrageEntityVerortung);
@@ -718,7 +716,7 @@ class AbfrageServiceTest {
         final var entitySaved = new Baugenehmigungsverfahren();
         entitySaved.setId(uuid);
         entitySaved.setVersion(1L);
-        entitySaved.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+        entitySaved.setStatusAbfrage(StatusAbfrage.START_BEARBEITUNG);
         entitySaved.setName("hallo");
         entitySaved.setLinkEakte("https://eakte.muenchen.de?E12345");
         entitySaved.setVerortung(abfrageEntityVerortung);
@@ -735,13 +733,13 @@ class AbfrageServiceTest {
             .thenReturn(Optional.of(bauvorhabenEntity));
         Mockito.when(this.abfrageRepository.saveAndFlush(entityToSave)).thenReturn(entitySaved);
 
-        final var result = this.abfrageService.patchInBearbeitungSachbearbeitung(requestModel, uuid);
+        final var result = this.abfrageService.patchStartBearbeitung(requestModel, uuid);
 
         final var expected = new BaugenehmigungsverfahrenModel();
         expected.setArtAbfrage(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN);
         expected.setId(uuid);
         expected.setVersion(1L);
-        expected.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+        expected.setStatusAbfrage(StatusAbfrage.START_BEARBEITUNG);
         expected.setName("hallo");
         expected.setLinkEakte("https://eakte.muenchen.de?E12345");
         expected.setVerortung(abfrageVerortung);
@@ -758,7 +756,7 @@ class AbfrageServiceTest {
     }
 
     @Test
-    void patchInBearbeitungSachbearbeitungWeiteresVerfahren()
+    void patchStartBearbeitungWeiteresVerfahren()
         throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException, ReportingException, UserRoleNotAllowedException {
         final var uuid = UUID.randomUUID();
 
@@ -777,14 +775,13 @@ class AbfrageServiceTest {
         WeiteresVerfahrenModel weiteresVerfahrenModel = new WeiteresVerfahrenModel();
         weiteresVerfahrenModel.setBauvorhaben(bauvorhabenId);
 
-        final var requestModel = new WeiteresVerfahrenInBearbeitungSachbearbeitungModel();
+        final var requestModel = new WeiteresVerfahrenStartBearbeitungModel();
         requestModel.setVersion(0L);
         requestModel.setArtAbfrage(ArtAbfrage.WEITERES_VERFAHREN);
         requestModel.setLinkEakte("https://eakte.muenchen.de?E12345");
         requestModel.setVerortung(abfrageVerortung);
         requestModel.setBauvorhaben(bauvorhabenId);
-        final var abfragevarianteSachbearbeitung =
-            new AbfragevarianteWeiteresVerfahrenInBearbeitungSachbearbeitungModel();
+        final var abfragevarianteSachbearbeitung = new AbfragevarianteWeiteresVerfahrenStartBearbeitungModel();
         abfragevarianteSachbearbeitung.setArtAbfragevariante(ArtAbfrage.WEITERES_VERFAHREN);
         abfragevarianteSachbearbeitung.setAbfragevariantenNr(1);
         abfragevarianteSachbearbeitung.setName("Abfragevariante 1");
@@ -794,7 +791,7 @@ class AbfrageServiceTest {
         final var entityInDb = new WeiteresVerfahren();
         entityInDb.setId(uuid);
         entityInDb.setVersion(0L);
-        entityInDb.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+        entityInDb.setStatusAbfrage(StatusAbfrage.START_BEARBEITUNG);
         entityInDb.setName("hallo");
         entityInDb.setLinkEakte("https://eakte.muenchen.de?E12345");
 
@@ -820,7 +817,7 @@ class AbfrageServiceTest {
         entityToSave.setAbfragevariantenWeiteresVerfahren(List.of());
         entityToSave.setId(uuid);
         entityToSave.setVersion(0L);
-        entityToSave.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+        entityToSave.setStatusAbfrage(StatusAbfrage.START_BEARBEITUNG);
         entityToSave.setName("hallo");
         entityToSave.setLinkEakte("https://eakte.muenchen.de?E12345");
         entityToSave.setVerortung(abfrageEntityVerortung);
@@ -834,7 +831,7 @@ class AbfrageServiceTest {
         final var entitySaved = new WeiteresVerfahren();
         entitySaved.setId(uuid);
         entitySaved.setVersion(1L);
-        entitySaved.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+        entitySaved.setStatusAbfrage(StatusAbfrage.START_BEARBEITUNG);
         entitySaved.setName("hallo");
         entitySaved.setLinkEakte("https://eakte.muenchen.de?E12345");
         entitySaved.setVerortung(abfrageEntityVerortung);
@@ -851,13 +848,13 @@ class AbfrageServiceTest {
             .thenReturn(Optional.of(bauvorhabenEntity));
         Mockito.when(this.abfrageRepository.saveAndFlush(entityToSave)).thenReturn(entitySaved);
 
-        final var result = this.abfrageService.patchInBearbeitungSachbearbeitung(requestModel, uuid);
+        final var result = this.abfrageService.patchStartBearbeitung(requestModel, uuid);
 
         final var expected = new WeiteresVerfahrenModel();
         expected.setArtAbfrage(ArtAbfrage.WEITERES_VERFAHREN);
         expected.setId(uuid);
         expected.setVersion(1L);
-        expected.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+        expected.setStatusAbfrage(StatusAbfrage.START_BEARBEITUNG);
         expected.setName("hallo");
         expected.setLinkEakte("https://eakte.muenchen.de?E12345");
         expected.setVerortung(abfrageVerortung);
@@ -874,15 +871,14 @@ class AbfrageServiceTest {
     }
 
     @Test
-    void patchInBearbeitungSachbearbeitungAbfrageNotSupportedBauleitplanverfahren()
+    void patchStartBearbeitungAbfrageNotSupportedBauleitplanverfahren()
         throws UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, CalculationException, ReportingException, UserRoleNotAllowedException {
         final var uuid = UUID.randomUUID();
 
-        final var requestModel = new BauleitplanverfahrenInBearbeitungSachbearbeitungModel();
+        final var requestModel = new BauleitplanverfahrenStartBearbeitungModel();
         requestModel.setVersion(0L);
         requestModel.setArtAbfrage(ArtAbfrage.BAULEITPLANVERFAHREN);
-        final var abfragevarianteSachbearbeitung =
-            new AbfragevarianteBauleitplanverfahrenInBearbeitungSachbearbeitungModel();
+        final var abfragevarianteSachbearbeitung = new AbfragevarianteBauleitplanverfahrenStartBearbeitungModel();
         abfragevarianteSachbearbeitung.setAbfragevariantenNr(1);
         abfragevarianteSachbearbeitung.setName("Abfragevariante 1");
         requestModel.setAbfragevariantenSachbearbeitungBauleitplanverfahren(List.of(abfragevarianteSachbearbeitung));
@@ -890,7 +886,7 @@ class AbfrageServiceTest {
         final var entityInDb = new Bauleitplanverfahren();
         entityInDb.setId(uuid);
         entityInDb.setVersion(0L);
-        entityInDb.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+        entityInDb.setStatusAbfrage(StatusAbfrage.START_BEARBEITUNG);
         entityInDb.setName("hallo");
 
         Mockito.when(this.abfrageRepository.findById(entityInDb.getId())).thenReturn(Optional.of(entityInDb));
@@ -899,7 +895,7 @@ class AbfrageServiceTest {
         entityToSave.setAbfragevariantenBauleitplanverfahren(List.of());
         entityToSave.setId(uuid);
         entityToSave.setVersion(0L);
-        entityToSave.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+        entityToSave.setStatusAbfrage(StatusAbfrage.START_BEARBEITUNG);
         entityToSave.setName("hallo");
         final var abfragevariante1ToSave = new AbfragevarianteBauleitplanverfahren();
         abfragevariante1ToSave.setAbfragevariantenNr(1);
@@ -909,7 +905,7 @@ class AbfrageServiceTest {
         final var entitySaved = new Bauleitplanverfahren();
         entitySaved.setId(uuid);
         entitySaved.setVersion(1L);
-        entitySaved.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+        entitySaved.setStatusAbfrage(StatusAbfrage.START_BEARBEITUNG);
         entitySaved.setName("hallo");
         final var abfragevariante1Saved = new AbfragevarianteBauleitplanverfahren();
         abfragevariante1Saved.setId(UUID.randomUUID());
@@ -920,22 +916,21 @@ class AbfrageServiceTest {
         Mockito.when(this.abfrageRepository.saveAndFlush(entityToSave)).thenReturn(entitySaved);
 
         try {
-            this.abfrageService.patchInBearbeitungSachbearbeitung(requestModel, uuid);
+            this.abfrageService.patchStartBearbeitung(requestModel, uuid);
         } catch (final EntityNotFoundException exception) {
             assertThat(exception.getMessage(), is("Die Art der Abfrage wird nicht unterstützt."));
         }
     }
 
     @Test
-    void patchInBearbeitungSachbearbeitungAbfrageNotSupportedBaugenehmigungsverfahren()
+    void patchStartBearbeitungAbfrageNotSupportedBaugenehmigungsverfahren()
         throws UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, CalculationException, ReportingException, UserRoleNotAllowedException {
         final var uuid = UUID.randomUUID();
 
-        final var requestModel = new BaugenehmigungsverfahrenInBearbeitungSachbearbeitungModel();
+        final var requestModel = new BaugenehmigungsverfahrenStartBearbeitungModel();
         requestModel.setVersion(0L);
         requestModel.setArtAbfrage(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN);
-        final var abfragevarianteSachbearbeitung =
-            new AbfragevarianteBaugenehmigungsverfahrenInBearbeitungSachbearbeitungModel();
+        final var abfragevarianteSachbearbeitung = new AbfragevarianteBaugenehmigungsverfahrenStartBearbeitungModel();
         abfragevarianteSachbearbeitung.setAbfragevariantenNr(1);
         abfragevarianteSachbearbeitung.setName("Abfragevariante 1");
         requestModel.setAbfragevariantenSachbearbeitungBaugenehmigungsverfahren(
@@ -945,7 +940,7 @@ class AbfrageServiceTest {
         final var entityInDb = new Baugenehmigungsverfahren();
         entityInDb.setId(uuid);
         entityInDb.setVersion(0L);
-        entityInDb.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+        entityInDb.setStatusAbfrage(StatusAbfrage.START_BEARBEITUNG);
         entityInDb.setName("hallo");
 
         Mockito.when(this.abfrageRepository.findById(entityInDb.getId())).thenReturn(Optional.of(entityInDb));
@@ -954,7 +949,7 @@ class AbfrageServiceTest {
         entityToSave.setAbfragevariantenBaugenehmigungsverfahren(List.of());
         entityToSave.setId(uuid);
         entityToSave.setVersion(0L);
-        entityToSave.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+        entityToSave.setStatusAbfrage(StatusAbfrage.START_BEARBEITUNG);
         entityToSave.setName("hallo");
         final var abfragevariante1ToSave = new AbfragevarianteBaugenehmigungsverfahren();
         abfragevariante1ToSave.setAbfragevariantenNr(1);
@@ -964,7 +959,7 @@ class AbfrageServiceTest {
         final var entitySaved = new Baugenehmigungsverfahren();
         entitySaved.setId(uuid);
         entitySaved.setVersion(1L);
-        entitySaved.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+        entitySaved.setStatusAbfrage(StatusAbfrage.START_BEARBEITUNG);
         entitySaved.setName("hallo");
         final var abfragevariante1Saved = new AbfragevarianteBaugenehmigungsverfahren();
         abfragevariante1Saved.setId(UUID.randomUUID());
@@ -975,22 +970,21 @@ class AbfrageServiceTest {
         Mockito.when(this.abfrageRepository.saveAndFlush(entityToSave)).thenReturn(entitySaved);
 
         try {
-            this.abfrageService.patchInBearbeitungSachbearbeitung(requestModel, uuid);
+            this.abfrageService.patchStartBearbeitung(requestModel, uuid);
         } catch (final EntityNotFoundException exception) {
             assertThat(exception.getMessage(), is("Die Art der Abfrage wird nicht unterstützt."));
         }
     }
 
     @Test
-    void patchInBearbeitungSachbearbeitungAbfrageNotSupportedWeiteresVerfahren()
+    void patchStartBearbeitungAbfrageNotSupportedWeiteresVerfahren()
         throws UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, CalculationException, ReportingException, UserRoleNotAllowedException {
         final var uuid = UUID.randomUUID();
 
-        final var requestModel = new WeiteresVerfahrenInBearbeitungSachbearbeitungModel();
+        final var requestModel = new WeiteresVerfahrenStartBearbeitungModel();
         requestModel.setVersion(0L);
         requestModel.setArtAbfrage(ArtAbfrage.WEITERES_VERFAHREN);
-        final var abfragevarianteSachbearbeitung =
-            new AbfragevarianteWeiteresVerfahrenInBearbeitungSachbearbeitungModel();
+        final var abfragevarianteSachbearbeitung = new AbfragevarianteWeiteresVerfahrenStartBearbeitungModel();
         abfragevarianteSachbearbeitung.setAbfragevariantenNr(1);
         abfragevarianteSachbearbeitung.setName("Abfragevariante 1");
         requestModel.setAbfragevariantenSachbearbeitungWeiteresVerfahren(List.of(abfragevarianteSachbearbeitung));
@@ -998,7 +992,7 @@ class AbfrageServiceTest {
         final var entityInDb = new WeiteresVerfahren();
         entityInDb.setId(uuid);
         entityInDb.setVersion(0L);
-        entityInDb.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+        entityInDb.setStatusAbfrage(StatusAbfrage.START_BEARBEITUNG);
         entityInDb.setName("hallo");
 
         Mockito.when(this.abfrageRepository.findById(entityInDb.getId())).thenReturn(Optional.of(entityInDb));
@@ -1007,7 +1001,7 @@ class AbfrageServiceTest {
         entityToSave.setAbfragevariantenWeiteresVerfahren(List.of());
         entityToSave.setId(uuid);
         entityToSave.setVersion(0L);
-        entityToSave.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+        entityToSave.setStatusAbfrage(StatusAbfrage.START_BEARBEITUNG);
         entityToSave.setName("hallo");
         final var abfragevariante1ToSave = new AbfragevarianteWeiteresVerfahren();
         abfragevariante1ToSave.setAbfragevariantenNr(1);
@@ -1017,7 +1011,7 @@ class AbfrageServiceTest {
         final var entitySaved = new WeiteresVerfahren();
         entitySaved.setId(uuid);
         entitySaved.setVersion(1L);
-        entitySaved.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+        entitySaved.setStatusAbfrage(StatusAbfrage.START_BEARBEITUNG);
         entitySaved.setName("hallo");
         final var abfragevariante1Saved = new AbfragevarianteWeiteresVerfahren();
         abfragevariante1Saved.setId(UUID.randomUUID());
@@ -1028,24 +1022,24 @@ class AbfrageServiceTest {
         Mockito.when(this.abfrageRepository.saveAndFlush(entityToSave)).thenReturn(entitySaved);
 
         try {
-            this.abfrageService.patchInBearbeitungSachbearbeitung(requestModel, uuid);
+            this.abfrageService.patchStartBearbeitung(requestModel, uuid);
         } catch (final EntityNotFoundException exception) {
             assertThat(exception.getMessage(), is("Die Art der Abfrage wird nicht unterstützt."));
         }
     }
 
     @Test
-    void patchInBearbeitungFachreferatBauleitplanverfahren()
+    void patchEinpflegenBedarfsmeldungBauleitplanverfahren()
         throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException, ReportingException, UserRoleNotAllowedException {
         final var uuid = UUID.randomUUID();
         final var uuidAbfragevariante = UUID.randomUUID();
         final var uuidAbfragevarianteSachbearbeitung = UUID.randomUUID();
 
-        final var requestModel = new BauleitplanverfahrenInBearbeitungFachreferatModel();
+        final var requestModel = new BauleitplanverfahrenEinpflegenBedarfsmeldungModel();
         requestModel.setArtAbfrage(ArtAbfrage.BAULEITPLANVERFAHREN);
         requestModel.setVersion(0L);
 
-        final var abfragevarianteRequestModel = new AbfragevarianteBauleitplanverfahrenInBearbeitungFachreferatModel();
+        final var abfragevarianteRequestModel = new AbfragevarianteBauleitplanverfahrenEinpflegenBedarfsmeldungModel();
         abfragevarianteRequestModel.setArtAbfragevariante(ArtAbfrage.BAULEITPLANVERFAHREN);
         abfragevarianteRequestModel.setId(uuidAbfragevariante);
         abfragevarianteRequestModel.setVersion(0L);
@@ -1059,7 +1053,7 @@ class AbfrageServiceTest {
         abfragevarianteRequestModel.setBedarfsmeldungFachreferate(List.of(abfragevarianteBedarfsmeldung));
 
         final var abfragevarianteSachbearbeitungRequestModel =
-            new AbfragevarianteBauleitplanverfahrenInBearbeitungFachreferatModel();
+            new AbfragevarianteBauleitplanverfahrenEinpflegenBedarfsmeldungModel();
         abfragevarianteSachbearbeitungRequestModel.setArtAbfragevariante(ArtAbfrage.BAULEITPLANVERFAHREN);
         abfragevarianteSachbearbeitungRequestModel.setId(uuidAbfragevarianteSachbearbeitung);
         abfragevarianteSachbearbeitungRequestModel.setVersion(0L);
@@ -1085,7 +1079,7 @@ class AbfrageServiceTest {
         entityInDb.setId(uuid);
         entityInDb.setVersion(0L);
         entityInDb.setName("hallo");
-        entityInDb.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
+        entityInDb.setStatusAbfrage(StatusAbfrage.EINPFLEGEN_BEDARFSMELDUNG);
 
         final var entityInDbAbfragevariante = new AbfragevarianteBauleitplanverfahren();
         entityInDbAbfragevariante.setId(uuidAbfragevariante);
@@ -1105,7 +1099,7 @@ class AbfrageServiceTest {
         entityToSave.setId(uuid);
         entityToSave.setVersion(0L);
         entityToSave.setName("hallo");
-        entityToSave.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
+        entityToSave.setStatusAbfrage(StatusAbfrage.EINPFLEGEN_BEDARFSMELDUNG);
 
         final var abfragevarianteToSaveSave = new AbfragevarianteBauleitplanverfahren();
         abfragevarianteToSaveSave.setId(uuidAbfragevariante);
@@ -1144,7 +1138,7 @@ class AbfrageServiceTest {
 
         entitySaved.setId(uuid);
         entitySaved.setVersion(1L);
-        entitySaved.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
+        entitySaved.setStatusAbfrage(StatusAbfrage.EINPFLEGEN_BEDARFSMELDUNG);
         entitySaved.setName("hallo");
 
         final var abfragevarianteSaved = new AbfragevarianteBauleitplanverfahren();
@@ -1182,13 +1176,13 @@ class AbfrageServiceTest {
 
         Mockito.when(this.abfrageRepository.saveAndFlush(entityToSave)).thenReturn(entitySaved);
 
-        final var result = this.abfrageService.patchInBearbeitungFachreferat(requestModel, uuid);
+        final var result = this.abfrageService.patchEinpflegenBedarfsmeldung(requestModel, uuid);
 
         final var expected = new BauleitplanverfahrenModel();
         expected.setArtAbfrage(ArtAbfrage.BAULEITPLANVERFAHREN);
         expected.setId(uuid);
         expected.setVersion(1L);
-        expected.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
+        expected.setStatusAbfrage(StatusAbfrage.EINPFLEGEN_BEDARFSMELDUNG);
         expected.setName("hallo");
 
         final var abfragevarianteExpected = new AbfragevarianteBauleitplanverfahrenModel();
@@ -1230,18 +1224,18 @@ class AbfrageServiceTest {
     }
 
     @Test
-    void patchInBearbeitungFachreferatBaugenehmigungsverfahren()
+    void patchEinpflegenBedarfsmeldungBaugenehmigungsverfahren()
         throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException, ReportingException, UserRoleNotAllowedException {
         final var uuid = UUID.randomUUID();
         final var uuidAbfragevariante = UUID.randomUUID();
         final var uuidAbfragevarianteSachbearbeitung = UUID.randomUUID();
 
-        final var requestModel = new BaugenehmigungsverfahrenInBearbeitungFachreferatModel();
+        final var requestModel = new BaugenehmigungsverfahrenEinpflegenBedarfsmeldungModel();
         requestModel.setArtAbfrage(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN);
         requestModel.setVersion(0L);
 
         final var abfragevarianteRequestModel =
-            new AbfragevarianteBaugenehmigungsverfahrenInBearbeitungFachreferatModel();
+            new AbfragevarianteBaugenehmigungsverfahrenEinpflegenBedarfsmeldungModel();
         abfragevarianteRequestModel.setArtAbfragevariante(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN);
         abfragevarianteRequestModel.setId(uuidAbfragevariante);
         abfragevarianteRequestModel.setVersion(0L);
@@ -1255,7 +1249,7 @@ class AbfrageServiceTest {
         abfragevarianteRequestModel.setBedarfsmeldungFachreferate(List.of(abfragevarianteBedarfsmeldung));
 
         final var abfragevarianteSachbearbeitungRequestModel =
-            new AbfragevarianteBaugenehmigungsverfahrenInBearbeitungFachreferatModel();
+            new AbfragevarianteBaugenehmigungsverfahrenEinpflegenBedarfsmeldungModel();
         abfragevarianteSachbearbeitungRequestModel.setArtAbfragevariante(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN);
         abfragevarianteSachbearbeitungRequestModel.setId(uuidAbfragevarianteSachbearbeitung);
         abfragevarianteSachbearbeitungRequestModel.setVersion(0L);
@@ -1281,7 +1275,7 @@ class AbfrageServiceTest {
         entityInDb.setId(uuid);
         entityInDb.setVersion(0L);
         entityInDb.setName("hallo");
-        entityInDb.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
+        entityInDb.setStatusAbfrage(StatusAbfrage.EINPFLEGEN_BEDARFSMELDUNG);
 
         final var entityInDbAbfragevariante = new AbfragevarianteBaugenehmigungsverfahren();
         entityInDbAbfragevariante.setId(uuidAbfragevariante);
@@ -1301,7 +1295,7 @@ class AbfrageServiceTest {
         entityToSave.setId(uuid);
         entityToSave.setVersion(0L);
         entityToSave.setName("hallo");
-        entityToSave.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
+        entityToSave.setStatusAbfrage(StatusAbfrage.EINPFLEGEN_BEDARFSMELDUNG);
 
         final var abfragevarianteToSaveSave = new AbfragevarianteBaugenehmigungsverfahren();
         abfragevarianteToSaveSave.setId(uuidAbfragevariante);
@@ -1340,7 +1334,7 @@ class AbfrageServiceTest {
 
         entitySaved.setId(uuid);
         entitySaved.setVersion(1L);
-        entitySaved.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
+        entitySaved.setStatusAbfrage(StatusAbfrage.EINPFLEGEN_BEDARFSMELDUNG);
         entitySaved.setName("hallo");
 
         final var abfragevarianteSaved = new AbfragevarianteBaugenehmigungsverfahren();
@@ -1378,13 +1372,13 @@ class AbfrageServiceTest {
 
         Mockito.when(this.abfrageRepository.saveAndFlush(entityToSave)).thenReturn(entitySaved);
 
-        final var result = this.abfrageService.patchInBearbeitungFachreferat(requestModel, uuid);
+        final var result = this.abfrageService.patchEinpflegenBedarfsmeldung(requestModel, uuid);
 
         final var expected = new BaugenehmigungsverfahrenModel();
         expected.setArtAbfrage(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN);
         expected.setId(uuid);
         expected.setVersion(1L);
-        expected.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
+        expected.setStatusAbfrage(StatusAbfrage.EINPFLEGEN_BEDARFSMELDUNG);
         expected.setName("hallo");
 
         final var abfragevarianteExpected = new AbfragevarianteBaugenehmigungsverfahrenModel();
@@ -1426,17 +1420,17 @@ class AbfrageServiceTest {
     }
 
     @Test
-    void patchInBearbeitungFachreferatWeiteresVerfahren()
+    void patchEinpflegenBedarfsmeldungWeiteresVerfahren()
         throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException, ReportingException, UserRoleNotAllowedException {
         final var uuid = UUID.randomUUID();
         final var uuidAbfragevariante = UUID.randomUUID();
         final var uuidAbfragevarianteSachbearbeitung = UUID.randomUUID();
 
-        final var requestModel = new WeiteresVerfahrenInBearbeitungFachreferatModel();
+        final var requestModel = new WeiteresVerfahrenEinpflegenBedarfsmeldungModel();
         requestModel.setArtAbfrage(ArtAbfrage.WEITERES_VERFAHREN);
         requestModel.setVersion(0L);
 
-        final var abfragevarianteRequestModel = new AbfragevarianteWeiteresVerfahrenInBearbeitungFachreferatModel();
+        final var abfragevarianteRequestModel = new AbfragevarianteWeiteresVerfahrenEinpflegenBedarfsmeldungModel();
         abfragevarianteRequestModel.setArtAbfragevariante(ArtAbfrage.WEITERES_VERFAHREN);
         abfragevarianteRequestModel.setId(uuidAbfragevariante);
         abfragevarianteRequestModel.setVersion(0L);
@@ -1450,7 +1444,7 @@ class AbfrageServiceTest {
         abfragevarianteRequestModel.setBedarfsmeldungFachreferate(List.of(abfragevarianteBedarfsmeldung));
 
         final var abfragevarianteSachbearbeitungRequestModel =
-            new AbfragevarianteWeiteresVerfahrenInBearbeitungFachreferatModel();
+            new AbfragevarianteWeiteresVerfahrenEinpflegenBedarfsmeldungModel();
         abfragevarianteSachbearbeitungRequestModel.setArtAbfragevariante(ArtAbfrage.WEITERES_VERFAHREN);
         abfragevarianteSachbearbeitungRequestModel.setId(uuidAbfragevarianteSachbearbeitung);
         abfragevarianteSachbearbeitungRequestModel.setVersion(0L);
@@ -1476,7 +1470,7 @@ class AbfrageServiceTest {
         entityInDb.setId(uuid);
         entityInDb.setVersion(0L);
         entityInDb.setName("hallo");
-        entityInDb.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
+        entityInDb.setStatusAbfrage(StatusAbfrage.EINPFLEGEN_BEDARFSMELDUNG);
 
         final var entityInDbAbfragevariante = new AbfragevarianteWeiteresVerfahren();
         entityInDbAbfragevariante.setId(uuidAbfragevariante);
@@ -1496,7 +1490,7 @@ class AbfrageServiceTest {
         entityToSave.setId(uuid);
         entityToSave.setVersion(0L);
         entityToSave.setName("hallo");
-        entityToSave.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
+        entityToSave.setStatusAbfrage(StatusAbfrage.EINPFLEGEN_BEDARFSMELDUNG);
 
         final var abfragevarianteToSaveSave = new AbfragevarianteWeiteresVerfahren();
         abfragevarianteToSaveSave.setId(uuidAbfragevariante);
@@ -1533,7 +1527,7 @@ class AbfrageServiceTest {
 
         entitySaved.setId(uuid);
         entitySaved.setVersion(1L);
-        entitySaved.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
+        entitySaved.setStatusAbfrage(StatusAbfrage.EINPFLEGEN_BEDARFSMELDUNG);
         entitySaved.setName("hallo");
 
         final var abfragevarianteSaved = new AbfragevarianteWeiteresVerfahren();
@@ -1569,13 +1563,13 @@ class AbfrageServiceTest {
 
         Mockito.when(this.abfrageRepository.saveAndFlush(entityToSave)).thenReturn(entitySaved);
 
-        final var result = this.abfrageService.patchInBearbeitungFachreferat(requestModel, uuid);
+        final var result = this.abfrageService.patchEinpflegenBedarfsmeldung(requestModel, uuid);
 
         final var expected = new WeiteresVerfahrenModel();
         expected.setArtAbfrage(ArtAbfrage.WEITERES_VERFAHREN);
         expected.setId(uuid);
         expected.setVersion(1L);
-        expected.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
+        expected.setStatusAbfrage(StatusAbfrage.EINPFLEGEN_BEDARFSMELDUNG);
         expected.setName("hallo");
 
         final var abfragevarianteExpected = new AbfragevarianteWeiteresVerfahrenModel();
@@ -1615,17 +1609,17 @@ class AbfrageServiceTest {
     }
 
     @Test
-    void patchInBearbeitungFachreferatAbfrageNotSupportedBauleitplanverfahren()
+    void patchEinpflegenBedarfsmeldungAbfrageNotSupportedBauleitplanverfahren()
         throws UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, CalculationException, ReportingException, UserRoleNotAllowedException {
         final var uuid = UUID.randomUUID();
         final var uuidAbfragevariante = UUID.randomUUID();
         final var uuidAbfragevarianteSachbearbeitung = UUID.randomUUID();
 
-        final var requestModel = new BauleitplanverfahrenInBearbeitungFachreferatModel();
+        final var requestModel = new BauleitplanverfahrenEinpflegenBedarfsmeldungModel();
         requestModel.setArtAbfrage(ArtAbfrage.BAULEITPLANVERFAHREN);
         requestModel.setVersion(0L);
 
-        final var abfragevarianteRequestModel = new AbfragevarianteBauleitplanverfahrenInBearbeitungFachreferatModel();
+        final var abfragevarianteRequestModel = new AbfragevarianteBauleitplanverfahrenEinpflegenBedarfsmeldungModel();
         abfragevarianteRequestModel.setId(uuidAbfragevariante);
         abfragevarianteRequestModel.setVersion(0L);
         final var abfragevarianteBedarfsmeldung = new BedarfsmeldungModel();
@@ -1638,7 +1632,7 @@ class AbfrageServiceTest {
         abfragevarianteRequestModel.setBedarfsmeldungFachreferate(List.of(abfragevarianteBedarfsmeldung));
 
         final var abfragevarianteSachbearbeitungRequestModel =
-            new AbfragevarianteBauleitplanverfahrenInBearbeitungFachreferatModel();
+            new AbfragevarianteBauleitplanverfahrenEinpflegenBedarfsmeldungModel();
         abfragevarianteSachbearbeitungRequestModel.setId(uuidAbfragevarianteSachbearbeitung);
         abfragevarianteSachbearbeitungRequestModel.setVersion(0L);
         final var abfragevarianteSachbearbeitungBedarfsmeldung = new BedarfsmeldungModel();
@@ -1663,7 +1657,7 @@ class AbfrageServiceTest {
         entityInDb.setId(uuid);
         entityInDb.setVersion(0L);
         entityInDb.setName("hallo");
-        entityInDb.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
+        entityInDb.setStatusAbfrage(StatusAbfrage.EINPFLEGEN_BEDARFSMELDUNG);
 
         final var entityInDbAbfragevariante = new AbfragevarianteBauleitplanverfahren();
         entityInDbAbfragevariante.setId(uuidAbfragevariante);
@@ -1683,7 +1677,7 @@ class AbfrageServiceTest {
         entityToSave.setId(uuid);
         entityToSave.setVersion(0L);
         entityToSave.setName("hallo");
-        entityToSave.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
+        entityToSave.setStatusAbfrage(StatusAbfrage.EINPFLEGEN_BEDARFSMELDUNG);
 
         final var abfragevarianteToSaveSave = new AbfragevarianteBauleitplanverfahren();
         abfragevarianteToSaveSave.setId(uuidAbfragevariante);
@@ -1722,7 +1716,7 @@ class AbfrageServiceTest {
 
         entitySaved.setId(uuid);
         entitySaved.setVersion(1L);
-        entitySaved.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
+        entitySaved.setStatusAbfrage(StatusAbfrage.EINPFLEGEN_BEDARFSMELDUNG);
         entitySaved.setName("hallo");
 
         final var abfragevarianteSaved = new AbfragevarianteBauleitplanverfahren();
@@ -1761,25 +1755,25 @@ class AbfrageServiceTest {
         Mockito.when(this.abfrageRepository.saveAndFlush(entityToSave)).thenReturn(entitySaved);
 
         try {
-            this.abfrageService.patchInBearbeitungFachreferat(requestModel, uuid);
+            this.abfrageService.patchEinpflegenBedarfsmeldung(requestModel, uuid);
         } catch (final EntityNotFoundException exception) {
             assertThat(exception.getMessage(), is("Die Art der Abfrage wird nicht unterstützt."));
         }
     }
 
     @Test
-    void patchInBearbeitungFachreferatAbfrageNotSupportedBaugenehmigungsverfahren()
+    void patchEinpflegenBedarfsmeldungAbfrageNotSupportedBaugenehmigungsverfahren()
         throws UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, CalculationException, ReportingException, UserRoleNotAllowedException {
         final var uuid = UUID.randomUUID();
         final var uuidAbfragevariante = UUID.randomUUID();
         final var uuidAbfragevarianteSachbearbeitung = UUID.randomUUID();
 
-        final var requestModel = new BaugenehmigungsverfahrenInBearbeitungFachreferatModel();
+        final var requestModel = new BaugenehmigungsverfahrenEinpflegenBedarfsmeldungModel();
         requestModel.setArtAbfrage(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN);
         requestModel.setVersion(0L);
 
         final var abfragevarianteRequestModel =
-            new AbfragevarianteBaugenehmigungsverfahrenInBearbeitungFachreferatModel();
+            new AbfragevarianteBaugenehmigungsverfahrenEinpflegenBedarfsmeldungModel();
         abfragevarianteRequestModel.setId(uuidAbfragevariante);
         abfragevarianteRequestModel.setVersion(0L);
         final var abfragevarianteBedarfsmeldung = new BedarfsmeldungModel();
@@ -1792,7 +1786,7 @@ class AbfrageServiceTest {
         abfragevarianteRequestModel.setBedarfsmeldungFachreferate(List.of(abfragevarianteBedarfsmeldung));
 
         final var abfragevarianteSachbearbeitungRequestModel =
-            new AbfragevarianteBaugenehmigungsverfahrenInBearbeitungFachreferatModel();
+            new AbfragevarianteBaugenehmigungsverfahrenEinpflegenBedarfsmeldungModel();
         abfragevarianteSachbearbeitungRequestModel.setId(uuidAbfragevarianteSachbearbeitung);
         abfragevarianteSachbearbeitungRequestModel.setVersion(0L);
         final var abfragevarianteSachbearbeitungBedarfsmeldung = new BedarfsmeldungModel();
@@ -1817,7 +1811,7 @@ class AbfrageServiceTest {
         entityInDb.setId(uuid);
         entityInDb.setVersion(0L);
         entityInDb.setName("hallo");
-        entityInDb.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
+        entityInDb.setStatusAbfrage(StatusAbfrage.EINPFLEGEN_BEDARFSMELDUNG);
 
         final var entityInDbAbfragevariante = new AbfragevarianteBaugenehmigungsverfahren();
         entityInDbAbfragevariante.setId(uuidAbfragevariante);
@@ -1837,7 +1831,7 @@ class AbfrageServiceTest {
         entityToSave.setId(uuid);
         entityToSave.setVersion(0L);
         entityToSave.setName("hallo");
-        entityToSave.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
+        entityToSave.setStatusAbfrage(StatusAbfrage.EINPFLEGEN_BEDARFSMELDUNG);
 
         final var abfragevarianteToSaveSave = new AbfragevarianteBaugenehmigungsverfahren();
         abfragevarianteToSaveSave.setId(uuidAbfragevariante);
@@ -1876,7 +1870,7 @@ class AbfrageServiceTest {
 
         entitySaved.setId(uuid);
         entitySaved.setVersion(1L);
-        entitySaved.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
+        entitySaved.setStatusAbfrage(StatusAbfrage.EINPFLEGEN_BEDARFSMELDUNG);
         entitySaved.setName("hallo");
 
         final var abfragevarianteSaved = new AbfragevarianteBaugenehmigungsverfahren();
@@ -1915,24 +1909,24 @@ class AbfrageServiceTest {
         Mockito.when(this.abfrageRepository.saveAndFlush(entityToSave)).thenReturn(entitySaved);
 
         try {
-            this.abfrageService.patchInBearbeitungFachreferat(requestModel, uuid);
+            this.abfrageService.patchEinpflegenBedarfsmeldung(requestModel, uuid);
         } catch (final EntityNotFoundException exception) {
             assertThat(exception.getMessage(), is("Die Art der Abfrage wird nicht unterstützt."));
         }
     }
 
     @Test
-    void patchInBearbeitungFachreferatAbfrageNotSupportedWeiteresVerfahren()
+    void patchEinpflegenBedarfsmeldungAbfrageNotSupportedWeiteresVerfahren()
         throws UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, CalculationException, ReportingException, UserRoleNotAllowedException {
         final var uuid = UUID.randomUUID();
         final var uuidAbfragevariante = UUID.randomUUID();
         final var uuidAbfragevarianteSachbearbeitung = UUID.randomUUID();
 
-        final var requestModel = new WeiteresVerfahrenInBearbeitungFachreferatModel();
+        final var requestModel = new WeiteresVerfahrenEinpflegenBedarfsmeldungModel();
         requestModel.setArtAbfrage(ArtAbfrage.WEITERES_VERFAHREN);
         requestModel.setVersion(0L);
 
-        final var abfragevarianteRequestModel = new AbfragevarianteWeiteresVerfahrenInBearbeitungFachreferatModel();
+        final var abfragevarianteRequestModel = new AbfragevarianteWeiteresVerfahrenEinpflegenBedarfsmeldungModel();
         abfragevarianteRequestModel.setId(uuidAbfragevariante);
         abfragevarianteRequestModel.setVersion(0L);
         final var abfragevarianteBedarfsmeldung = new BedarfsmeldungModel();
@@ -1945,7 +1939,7 @@ class AbfrageServiceTest {
         abfragevarianteRequestModel.setBedarfsmeldungFachreferate(List.of(abfragevarianteBedarfsmeldung));
 
         final var abfragevarianteSachbearbeitungRequestModel =
-            new AbfragevarianteWeiteresVerfahrenInBearbeitungFachreferatModel();
+            new AbfragevarianteWeiteresVerfahrenEinpflegenBedarfsmeldungModel();
         abfragevarianteSachbearbeitungRequestModel.setId(uuidAbfragevarianteSachbearbeitung);
         abfragevarianteSachbearbeitungRequestModel.setVersion(0L);
         final var abfragevarianteSachbearbeitungBedarfsmeldung = new BedarfsmeldungModel();
@@ -1970,7 +1964,7 @@ class AbfrageServiceTest {
         entityInDb.setId(uuid);
         entityInDb.setVersion(0L);
         entityInDb.setName("hallo");
-        entityInDb.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
+        entityInDb.setStatusAbfrage(StatusAbfrage.EINPFLEGEN_BEDARFSMELDUNG);
 
         final var entityInDbAbfragevariante = new AbfragevarianteWeiteresVerfahren();
         entityInDbAbfragevariante.setId(uuidAbfragevariante);
@@ -1990,7 +1984,7 @@ class AbfrageServiceTest {
         entityToSave.setId(uuid);
         entityToSave.setVersion(0L);
         entityToSave.setName("hallo");
-        entityToSave.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
+        entityToSave.setStatusAbfrage(StatusAbfrage.EINPFLEGEN_BEDARFSMELDUNG);
 
         final var abfragevarianteToSaveSave = new AbfragevarianteWeiteresVerfahren();
         abfragevarianteToSaveSave.setId(uuidAbfragevariante);
@@ -2027,7 +2021,7 @@ class AbfrageServiceTest {
 
         entitySaved.setId(uuid);
         entitySaved.setVersion(1L);
-        entitySaved.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
+        entitySaved.setStatusAbfrage(StatusAbfrage.EINPFLEGEN_BEDARFSMELDUNG);
         entitySaved.setName("hallo");
 
         final var abfragevarianteSaved = new AbfragevarianteWeiteresVerfahren();
@@ -2064,24 +2058,24 @@ class AbfrageServiceTest {
         Mockito.when(this.abfrageRepository.saveAndFlush(entityToSave)).thenReturn(entitySaved);
 
         try {
-            this.abfrageService.patchInBearbeitungFachreferat(requestModel, uuid);
+            this.abfrageService.patchEinpflegenBedarfsmeldung(requestModel, uuid);
         } catch (final EntityNotFoundException exception) {
             assertThat(exception.getMessage(), is("Die Art der Abfrage wird nicht unterstützt."));
         }
     }
 
     @Test
-    void patchBedarfsmeldungErfolgtBauleitplanverfahren()
+    void patchEinplanungBedarfeBauleitplanverfahren()
         throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException, ReportingException, UserRoleNotAllowedException {
         final var uuid = UUID.randomUUID();
         final var uuidAbfragevariante = UUID.randomUUID();
         final var uuidAbfragevarianteSachbearbeitung = UUID.randomUUID();
 
-        final var requestModel = new BauleitplanverfahrenBedarfsmeldungErfolgtModel();
+        final var requestModel = new BauleitplanverfahrenEinplanungBedarfeModel();
         requestModel.setArtAbfrage(ArtAbfrage.BAULEITPLANVERFAHREN);
         requestModel.setVersion(0L);
 
-        final var abfragevarianteRequestModel = new AbfragevarianteBauleitplanverfahrenBedarfsmeldungErfolgtModel();
+        final var abfragevarianteRequestModel = new AbfragevarianteBauleitplanverfahrenEinplanungBedarfeModel();
         abfragevarianteRequestModel.setArtAbfragevariante(ArtAbfrage.BAULEITPLANVERFAHREN);
         abfragevarianteRequestModel.setId(uuidAbfragevariante);
         abfragevarianteRequestModel.setVersion(0L);
@@ -2095,7 +2089,7 @@ class AbfrageServiceTest {
         abfragevarianteRequestModel.setBedarfsmeldungAbfrageersteller(List.of(abfragevarianteBedarfsmeldung));
 
         final var abfragevarianteSachbearbeitungRequestModel =
-            new AbfragevarianteBauleitplanverfahrenBedarfsmeldungErfolgtModel();
+            new AbfragevarianteBauleitplanverfahrenEinplanungBedarfeModel();
         abfragevarianteSachbearbeitungRequestModel.setArtAbfragevariante(ArtAbfrage.BAULEITPLANVERFAHREN);
         abfragevarianteSachbearbeitungRequestModel.setId(uuidAbfragevarianteSachbearbeitung);
         abfragevarianteSachbearbeitungRequestModel.setVersion(0L);
@@ -2121,7 +2115,7 @@ class AbfrageServiceTest {
         entityInDb.setId(uuid);
         entityInDb.setVersion(0L);
         entityInDb.setName("hallo");
-        entityInDb.setStatusAbfrage(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT);
+        entityInDb.setStatusAbfrage(StatusAbfrage.EINPLANUNG_BEDARFE);
 
         final var entityInDbAbfragevariante = new AbfragevarianteBauleitplanverfahren();
         entityInDbAbfragevariante.setId(uuidAbfragevariante);
@@ -2141,7 +2135,7 @@ class AbfrageServiceTest {
         entityToSave.setId(uuid);
         entityToSave.setVersion(0L);
         entityToSave.setName("hallo");
-        entityToSave.setStatusAbfrage(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT);
+        entityToSave.setStatusAbfrage(StatusAbfrage.EINPLANUNG_BEDARFE);
 
         final var abfragevarianteToSaveSave = new AbfragevarianteBauleitplanverfahren();
         abfragevarianteToSaveSave.setId(uuidAbfragevariante);
@@ -2180,7 +2174,7 @@ class AbfrageServiceTest {
 
         entitySaved.setId(uuid);
         entitySaved.setVersion(1L);
-        entitySaved.setStatusAbfrage(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT);
+        entitySaved.setStatusAbfrage(StatusAbfrage.EINPLANUNG_BEDARFE);
         entitySaved.setName("hallo");
 
         final var abfragevarianteSaved = new AbfragevarianteBauleitplanverfahren();
@@ -2218,13 +2212,13 @@ class AbfrageServiceTest {
 
         Mockito.when(this.abfrageRepository.saveAndFlush(entityToSave)).thenReturn(entitySaved);
 
-        final var result = this.abfrageService.patchBedarfsmeldungErfolgt(requestModel, uuid);
+        final var result = this.abfrageService.patchEinplanungBedarfe(requestModel, uuid);
 
         final var expected = new BauleitplanverfahrenModel();
         expected.setArtAbfrage(ArtAbfrage.BAULEITPLANVERFAHREN);
         expected.setId(uuid);
         expected.setVersion(1L);
-        expected.setStatusAbfrage(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT);
+        expected.setStatusAbfrage(StatusAbfrage.EINPLANUNG_BEDARFE);
         expected.setName("hallo");
 
         final var abfragevarianteExpected = new AbfragevarianteBauleitplanverfahrenModel();
@@ -2266,17 +2260,17 @@ class AbfrageServiceTest {
     }
 
     @Test
-    void patchBedarfsmeldungErfolgtBaugenehmigungsverfahren()
+    void patchEinplanungBedarfeBaugenehmigungsverfahren()
         throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException, ReportingException, UserRoleNotAllowedException {
         final var uuid = UUID.randomUUID();
         final var uuidAbfragevariante = UUID.randomUUID();
         final var uuidAbfragevarianteSachbearbeitung = UUID.randomUUID();
 
-        final var requestModel = new BaugenehmigungsverfahrenBedarfsmeldungErfolgtModel();
+        final var requestModel = new BaugenehmigungsverfahrenEinplanungBedarfeModel();
         requestModel.setArtAbfrage(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN);
         requestModel.setVersion(0L);
 
-        final var abfragevarianteRequestModel = new AbfragevarianteBaugenehmigungsverfahrenBedarfsmeldungErfolgtModel();
+        final var abfragevarianteRequestModel = new AbfragevarianteBaugenehmigungsverfahrenEinplanungBedarfeModel();
         abfragevarianteRequestModel.setArtAbfragevariante(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN);
         abfragevarianteRequestModel.setId(uuidAbfragevariante);
         abfragevarianteRequestModel.setVersion(0L);
@@ -2290,7 +2284,7 @@ class AbfrageServiceTest {
         abfragevarianteRequestModel.setBedarfsmeldungAbfrageersteller(List.of(abfragevarianteBedarfsmeldung));
 
         final var abfragevarianteSachbearbeitungRequestModel =
-            new AbfragevarianteBaugenehmigungsverfahrenBedarfsmeldungErfolgtModel();
+            new AbfragevarianteBaugenehmigungsverfahrenEinplanungBedarfeModel();
         abfragevarianteSachbearbeitungRequestModel.setArtAbfragevariante(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN);
         abfragevarianteSachbearbeitungRequestModel.setId(uuidAbfragevarianteSachbearbeitung);
         abfragevarianteSachbearbeitungRequestModel.setVersion(0L);
@@ -2316,7 +2310,7 @@ class AbfrageServiceTest {
         entityInDb.setId(uuid);
         entityInDb.setVersion(0L);
         entityInDb.setName("hallo");
-        entityInDb.setStatusAbfrage(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT);
+        entityInDb.setStatusAbfrage(StatusAbfrage.EINPLANUNG_BEDARFE);
 
         final var entityInDbAbfragevariante = new AbfragevarianteBaugenehmigungsverfahren();
         entityInDbAbfragevariante.setId(uuidAbfragevariante);
@@ -2336,7 +2330,7 @@ class AbfrageServiceTest {
         entityToSave.setId(uuid);
         entityToSave.setVersion(0L);
         entityToSave.setName("hallo");
-        entityToSave.setStatusAbfrage(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT);
+        entityToSave.setStatusAbfrage(StatusAbfrage.EINPLANUNG_BEDARFE);
 
         final var abfragevarianteToSaveSave = new AbfragevarianteBaugenehmigungsverfahren();
         abfragevarianteToSaveSave.setId(uuidAbfragevariante);
@@ -2375,7 +2369,7 @@ class AbfrageServiceTest {
 
         entitySaved.setId(uuid);
         entitySaved.setVersion(1L);
-        entitySaved.setStatusAbfrage(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT);
+        entitySaved.setStatusAbfrage(StatusAbfrage.EINPLANUNG_BEDARFE);
         entitySaved.setName("hallo");
 
         final var abfragevarianteSaved = new AbfragevarianteBaugenehmigungsverfahren();
@@ -2413,13 +2407,13 @@ class AbfrageServiceTest {
 
         Mockito.when(this.abfrageRepository.saveAndFlush(entityToSave)).thenReturn(entitySaved);
 
-        final var result = this.abfrageService.patchBedarfsmeldungErfolgt(requestModel, uuid);
+        final var result = this.abfrageService.patchEinplanungBedarfe(requestModel, uuid);
 
         final var expected = new BaugenehmigungsverfahrenModel();
         expected.setArtAbfrage(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN);
         expected.setId(uuid);
         expected.setVersion(1L);
-        expected.setStatusAbfrage(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT);
+        expected.setStatusAbfrage(StatusAbfrage.EINPLANUNG_BEDARFE);
         expected.setName("hallo");
 
         final var abfragevarianteExpected = new AbfragevarianteBaugenehmigungsverfahrenModel();
@@ -2461,17 +2455,17 @@ class AbfrageServiceTest {
     }
 
     @Test
-    void patchBedarfsmeldungErfolgtWeiteresVerfahren()
+    void patchEinplanungBedarfeWeiteresVerfahren()
         throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException, ReportingException, UserRoleNotAllowedException {
         final var uuid = UUID.randomUUID();
         final var uuidAbfragevariante = UUID.randomUUID();
         final var uuidAbfragevarianteSachbearbeitung = UUID.randomUUID();
 
-        final var requestModel = new WeiteresVerfahrenBedarfsmeldungErfolgtModel();
+        final var requestModel = new WeiteresVerfahrenEinplanungBedarfeModel();
         requestModel.setArtAbfrage(ArtAbfrage.WEITERES_VERFAHREN);
         requestModel.setVersion(0L);
 
-        final var abfragevarianteRequestModel = new AbfragevarianteWeiteresVerfahrenBedarfsmeldungErfolgtModel();
+        final var abfragevarianteRequestModel = new AbfragevarianteWeiteresVerfahrenEinplanungBedarfeModel();
         abfragevarianteRequestModel.setArtAbfragevariante(ArtAbfrage.WEITERES_VERFAHREN);
         abfragevarianteRequestModel.setId(uuidAbfragevariante);
         abfragevarianteRequestModel.setVersion(0L);
@@ -2485,7 +2479,7 @@ class AbfrageServiceTest {
         abfragevarianteRequestModel.setBedarfsmeldungAbfrageersteller(List.of(abfragevarianteBedarfsmeldung));
 
         final var abfragevarianteSachbearbeitungRequestModel =
-            new AbfragevarianteWeiteresVerfahrenBedarfsmeldungErfolgtModel();
+            new AbfragevarianteWeiteresVerfahrenEinplanungBedarfeModel();
         abfragevarianteSachbearbeitungRequestModel.setArtAbfragevariante(ArtAbfrage.WEITERES_VERFAHREN);
         abfragevarianteSachbearbeitungRequestModel.setId(uuidAbfragevarianteSachbearbeitung);
         abfragevarianteSachbearbeitungRequestModel.setVersion(0L);
@@ -2511,7 +2505,7 @@ class AbfrageServiceTest {
         entityInDb.setId(uuid);
         entityInDb.setVersion(0L);
         entityInDb.setName("hallo");
-        entityInDb.setStatusAbfrage(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT);
+        entityInDb.setStatusAbfrage(StatusAbfrage.EINPLANUNG_BEDARFE);
 
         final var entityInDbAbfragevariante = new AbfragevarianteWeiteresVerfahren();
         entityInDbAbfragevariante.setId(uuidAbfragevariante);
@@ -2531,7 +2525,7 @@ class AbfrageServiceTest {
         entityToSave.setId(uuid);
         entityToSave.setVersion(0L);
         entityToSave.setName("hallo");
-        entityToSave.setStatusAbfrage(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT);
+        entityToSave.setStatusAbfrage(StatusAbfrage.EINPLANUNG_BEDARFE);
 
         final var abfragevarianteToSaveSave = new AbfragevarianteWeiteresVerfahren();
         abfragevarianteToSaveSave.setId(uuidAbfragevariante);
@@ -2568,7 +2562,7 @@ class AbfrageServiceTest {
 
         entitySaved.setId(uuid);
         entitySaved.setVersion(1L);
-        entitySaved.setStatusAbfrage(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT);
+        entitySaved.setStatusAbfrage(StatusAbfrage.EINPLANUNG_BEDARFE);
         entitySaved.setName("hallo");
 
         final var abfragevarianteSaved = new AbfragevarianteWeiteresVerfahren();
@@ -2604,13 +2598,13 @@ class AbfrageServiceTest {
 
         Mockito.when(this.abfrageRepository.saveAndFlush(entityToSave)).thenReturn(entitySaved);
 
-        final var result = this.abfrageService.patchBedarfsmeldungErfolgt(requestModel, uuid);
+        final var result = this.abfrageService.patchEinplanungBedarfe(requestModel, uuid);
 
         final var expected = new WeiteresVerfahrenModel();
         expected.setArtAbfrage(ArtAbfrage.WEITERES_VERFAHREN);
         expected.setId(uuid);
         expected.setVersion(1L);
-        expected.setStatusAbfrage(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT);
+        expected.setStatusAbfrage(StatusAbfrage.EINPLANUNG_BEDARFE);
         expected.setName("hallo");
 
         final var abfragevarianteExpected = new AbfragevarianteWeiteresVerfahrenModel();
@@ -2650,17 +2644,17 @@ class AbfrageServiceTest {
     }
 
     @Test
-    void patchBedarfsmeldungErfolgtAbfrageNotSupportedBauleitplanverfahren()
+    void patchEinplanungBedarfeAbfrageNotSupportedBauleitplanverfahren()
         throws UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, CalculationException, ReportingException {
         final var uuid = UUID.randomUUID();
         final var uuidAbfragevariante = UUID.randomUUID();
         final var uuidAbfragevarianteSachbearbeitung = UUID.randomUUID();
 
-        final var requestModel = new BauleitplanverfahrenBedarfsmeldungErfolgtModel();
+        final var requestModel = new BauleitplanverfahrenEinplanungBedarfeModel();
         requestModel.setArtAbfrage(ArtAbfrage.BAULEITPLANVERFAHREN);
         requestModel.setVersion(0L);
 
-        final var abfragevarianteRequestModel = new AbfragevarianteBauleitplanverfahrenBedarfsmeldungErfolgtModel();
+        final var abfragevarianteRequestModel = new AbfragevarianteBauleitplanverfahrenEinplanungBedarfeModel();
         abfragevarianteRequestModel.setId(uuidAbfragevariante);
         abfragevarianteRequestModel.setVersion(0L);
         final var abfragevarianteBedarfsmeldung = new BedarfsmeldungModel();
@@ -2673,7 +2667,7 @@ class AbfrageServiceTest {
         abfragevarianteRequestModel.setBedarfsmeldungAbfrageersteller(List.of(abfragevarianteBedarfsmeldung));
 
         final var abfragevarianteSachbearbeitungRequestModel =
-            new AbfragevarianteBauleitplanverfahrenBedarfsmeldungErfolgtModel();
+            new AbfragevarianteBauleitplanverfahrenEinplanungBedarfeModel();
         abfragevarianteSachbearbeitungRequestModel.setId(uuidAbfragevarianteSachbearbeitung);
         abfragevarianteSachbearbeitungRequestModel.setVersion(0L);
         final var abfragevarianteSachbearbeitungBedarfsmeldung = new BedarfsmeldungModel();
@@ -2698,7 +2692,7 @@ class AbfrageServiceTest {
         entityInDb.setId(uuid);
         entityInDb.setVersion(0L);
         entityInDb.setName("hallo");
-        entityInDb.setStatusAbfrage(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT);
+        entityInDb.setStatusAbfrage(StatusAbfrage.EINPLANUNG_BEDARFE);
 
         final var entityInDbAbfragevariante = new AbfragevarianteBauleitplanverfahren();
         entityInDbAbfragevariante.setId(uuidAbfragevariante);
@@ -2718,7 +2712,7 @@ class AbfrageServiceTest {
         entityToSave.setId(uuid);
         entityToSave.setVersion(0L);
         entityToSave.setName("hallo");
-        entityToSave.setStatusAbfrage(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT);
+        entityToSave.setStatusAbfrage(StatusAbfrage.EINPLANUNG_BEDARFE);
 
         final var abfragevarianteToSaveSave = new AbfragevarianteBauleitplanverfahren();
         abfragevarianteToSaveSave.setId(uuidAbfragevariante);
@@ -2757,7 +2751,7 @@ class AbfrageServiceTest {
 
         entitySaved.setId(uuid);
         entitySaved.setVersion(1L);
-        entitySaved.setStatusAbfrage(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT);
+        entitySaved.setStatusAbfrage(StatusAbfrage.EINPLANUNG_BEDARFE);
         entitySaved.setName("hallo");
 
         final var abfragevarianteSaved = new AbfragevarianteBauleitplanverfahren();
@@ -2796,7 +2790,7 @@ class AbfrageServiceTest {
         Mockito.when(this.abfrageRepository.saveAndFlush(entityToSave)).thenReturn(entitySaved);
 
         try {
-            this.abfrageService.patchBedarfsmeldungErfolgt(requestModel, uuid);
+            this.abfrageService.patchEinplanungBedarfe(requestModel, uuid);
         } catch (final EntityNotFoundException exception) {
             assertThat(exception.getMessage(), is("Die Art der Abfrage wird nicht unterstützt."));
         } catch (UserRoleNotAllowedException exception) {
@@ -2805,17 +2799,17 @@ class AbfrageServiceTest {
     }
 
     @Test
-    void patchBedarfsmeldungErfolgtAbfrageNotSupportedBaugenehmigungsverfahren()
+    void patchEinplanungBedarfeAbfrageNotSupportedBaugenehmigungsverfahren()
         throws UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, CalculationException, ReportingException {
         final var uuid = UUID.randomUUID();
         final var uuidAbfragevariante = UUID.randomUUID();
         final var uuidAbfragevarianteSachbearbeitung = UUID.randomUUID();
 
-        final var requestModel = new BaugenehmigungsverfahrenBedarfsmeldungErfolgtModel();
+        final var requestModel = new BaugenehmigungsverfahrenEinplanungBedarfeModel();
         requestModel.setArtAbfrage(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN);
         requestModel.setVersion(0L);
 
-        final var abfragevarianteRequestModel = new AbfragevarianteBaugenehmigungsverfahrenBedarfsmeldungErfolgtModel();
+        final var abfragevarianteRequestModel = new AbfragevarianteBaugenehmigungsverfahrenEinplanungBedarfeModel();
         abfragevarianteRequestModel.setId(uuidAbfragevariante);
         abfragevarianteRequestModel.setVersion(0L);
         final var abfragevarianteBedarfsmeldung = new BedarfsmeldungModel();
@@ -2828,7 +2822,7 @@ class AbfrageServiceTest {
         abfragevarianteRequestModel.setBedarfsmeldungAbfrageersteller(List.of(abfragevarianteBedarfsmeldung));
 
         final var abfragevarianteSachbearbeitungRequestModel =
-            new AbfragevarianteBaugenehmigungsverfahrenBedarfsmeldungErfolgtModel();
+            new AbfragevarianteBaugenehmigungsverfahrenEinplanungBedarfeModel();
         abfragevarianteSachbearbeitungRequestModel.setId(uuidAbfragevarianteSachbearbeitung);
         abfragevarianteSachbearbeitungRequestModel.setVersion(0L);
         final var abfragevarianteSachbearbeitungBedarfsmeldung = new BedarfsmeldungModel();
@@ -2853,7 +2847,7 @@ class AbfrageServiceTest {
         entityInDb.setId(uuid);
         entityInDb.setVersion(0L);
         entityInDb.setName("hallo");
-        entityInDb.setStatusAbfrage(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT);
+        entityInDb.setStatusAbfrage(StatusAbfrage.EINPLANUNG_BEDARFE);
 
         final var entityInDbAbfragevariante = new AbfragevarianteBaugenehmigungsverfahren();
         entityInDbAbfragevariante.setId(uuidAbfragevariante);
@@ -2873,7 +2867,7 @@ class AbfrageServiceTest {
         entityToSave.setId(uuid);
         entityToSave.setVersion(0L);
         entityToSave.setName("hallo");
-        entityToSave.setStatusAbfrage(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT);
+        entityToSave.setStatusAbfrage(StatusAbfrage.EINPLANUNG_BEDARFE);
 
         final var abfragevarianteToSaveSave = new AbfragevarianteBaugenehmigungsverfahren();
         abfragevarianteToSaveSave.setId(uuidAbfragevariante);
@@ -2912,7 +2906,7 @@ class AbfrageServiceTest {
 
         entitySaved.setId(uuid);
         entitySaved.setVersion(1L);
-        entitySaved.setStatusAbfrage(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT);
+        entitySaved.setStatusAbfrage(StatusAbfrage.EINPLANUNG_BEDARFE);
         entitySaved.setName("hallo");
 
         final var abfragevarianteSaved = new AbfragevarianteBaugenehmigungsverfahren();
@@ -2951,7 +2945,7 @@ class AbfrageServiceTest {
         Mockito.when(this.abfrageRepository.saveAndFlush(entityToSave)).thenReturn(entitySaved);
 
         try {
-            this.abfrageService.patchBedarfsmeldungErfolgt(requestModel, uuid);
+            this.abfrageService.patchEinplanungBedarfe(requestModel, uuid);
         } catch (final EntityNotFoundException exception) {
             assertThat(exception.getMessage(), is("Die Art der Abfrage wird nicht unterstützt."));
         } catch (UserRoleNotAllowedException exception) {
@@ -2960,17 +2954,17 @@ class AbfrageServiceTest {
     }
 
     @Test
-    void patchBedarfsmeldungErfolgtAbfrageNotSupportedWeiteresVerfahren()
+    void patchEinplanungBedarfeAbfrageNotSupportedWeiteresVerfahren()
         throws UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, CalculationException, ReportingException {
         final var uuid = UUID.randomUUID();
         final var uuidAbfragevariante = UUID.randomUUID();
         final var uuidAbfragevarianteSachbearbeitung = UUID.randomUUID();
 
-        final var requestModel = new WeiteresVerfahrenBedarfsmeldungErfolgtModel();
+        final var requestModel = new WeiteresVerfahrenEinplanungBedarfeModel();
         requestModel.setArtAbfrage(ArtAbfrage.WEITERES_VERFAHREN);
         requestModel.setVersion(0L);
 
-        final var abfragevarianteRequestModel = new AbfragevarianteWeiteresVerfahrenBedarfsmeldungErfolgtModel();
+        final var abfragevarianteRequestModel = new AbfragevarianteWeiteresVerfahrenEinplanungBedarfeModel();
         abfragevarianteRequestModel.setId(uuidAbfragevariante);
         abfragevarianteRequestModel.setVersion(0L);
         final var abfragevarianteBedarfsmeldung = new BedarfsmeldungModel();
@@ -2983,7 +2977,7 @@ class AbfrageServiceTest {
         abfragevarianteRequestModel.setBedarfsmeldungAbfrageersteller(List.of(abfragevarianteBedarfsmeldung));
 
         final var abfragevarianteSachbearbeitungRequestModel =
-            new AbfragevarianteWeiteresVerfahrenBedarfsmeldungErfolgtModel();
+            new AbfragevarianteWeiteresVerfahrenEinplanungBedarfeModel();
         abfragevarianteSachbearbeitungRequestModel.setId(uuidAbfragevarianteSachbearbeitung);
         abfragevarianteSachbearbeitungRequestModel.setVersion(0L);
         final var abfragevarianteSachbearbeitungBedarfsmeldung = new BedarfsmeldungModel();
@@ -3008,7 +3002,7 @@ class AbfrageServiceTest {
         entityInDb.setId(uuid);
         entityInDb.setVersion(0L);
         entityInDb.setName("hallo");
-        entityInDb.setStatusAbfrage(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT);
+        entityInDb.setStatusAbfrage(StatusAbfrage.EINPLANUNG_BEDARFE);
 
         final var entityInDbAbfragevariante = new AbfragevarianteWeiteresVerfahren();
         entityInDbAbfragevariante.setId(uuidAbfragevariante);
@@ -3028,7 +3022,7 @@ class AbfrageServiceTest {
         entityToSave.setId(uuid);
         entityToSave.setVersion(0L);
         entityToSave.setName("hallo");
-        entityToSave.setStatusAbfrage(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT);
+        entityToSave.setStatusAbfrage(StatusAbfrage.EINPLANUNG_BEDARFE);
 
         final var abfragevarianteToSaveSave = new AbfragevarianteWeiteresVerfahren();
         abfragevarianteToSaveSave.setId(uuidAbfragevariante);
@@ -3065,7 +3059,7 @@ class AbfrageServiceTest {
 
         entitySaved.setId(uuid);
         entitySaved.setVersion(1L);
-        entitySaved.setStatusAbfrage(StatusAbfrage.BEDARFSMELDUNG_ERFOLGT);
+        entitySaved.setStatusAbfrage(StatusAbfrage.EINPLANUNG_BEDARFE);
         entitySaved.setName("hallo");
 
         final var abfragevarianteSaved = new AbfragevarianteWeiteresVerfahren();
@@ -3102,7 +3096,7 @@ class AbfrageServiceTest {
         Mockito.when(this.abfrageRepository.saveAndFlush(entityToSave)).thenReturn(entitySaved);
 
         try {
-            this.abfrageService.patchBedarfsmeldungErfolgt(requestModel, uuid);
+            this.abfrageService.patchEinplanungBedarfe(requestModel, uuid);
         } catch (final EntityNotFoundException exception) {
             assertThat(exception.getMessage(), is("Die Art der Abfrage wird nicht unterstützt."));
         } catch (UserRoleNotAllowedException exception) {
@@ -3146,7 +3140,7 @@ class AbfrageServiceTest {
         final Bauleitplanverfahren entity = new Bauleitplanverfahren();
         entity.setId(id);
         entity.setSub(sub);
-        entity.setStatusAbfrage(StatusAbfrage.OFFEN);
+        entity.setStatusAbfrage(StatusAbfrage.UEBERMITTELT_ZUR_BEARBEITUNG);
 
         Mockito.when(this.abfrageRepository.findById(entity.getId())).thenReturn(Optional.of(entity));
 
@@ -3172,7 +3166,7 @@ class AbfrageServiceTest {
         final Bauleitplanverfahren entity = new Bauleitplanverfahren();
         entity.setId(id);
         entity.setSub(sub);
-        entity.setStatusAbfrage(StatusAbfrage.OFFEN);
+        entity.setStatusAbfrage(StatusAbfrage.UEBERMITTELT_ZUR_BEARBEITUNG);
 
         Mockito.when(this.abfrageRepository.findById(entity.getId())).thenReturn(Optional.of(entity));
 
@@ -3244,7 +3238,7 @@ class AbfrageServiceTest {
         final Bauleitplanverfahren entity = new Bauleitplanverfahren();
         entity.setId(id);
         entity.setSub(sub);
-        entity.setStatusAbfrage(StatusAbfrage.OFFEN);
+        entity.setStatusAbfrage(StatusAbfrage.UEBERMITTELT_ZUR_BEARBEITUNG);
 
         Mockito.when(this.abfrageRepository.findById(entity.getId())).thenReturn(Optional.of(entity));
         Mockito.when(this.authenticationUtils.getUserRoles()).thenReturn(List.of(roles));
@@ -3287,7 +3281,7 @@ class AbfrageServiceTest {
         final var model = new BauleitplanverfahrenModel();
         model.setId(id);
         model.setSub(sub);
-        model.setStatusAbfrage(StatusAbfrage.OFFEN);
+        model.setStatusAbfrage(StatusAbfrage.UEBERMITTELT_ZUR_BEARBEITUNG);
         this.abfrageService.throwUserRoleNotAllowedOrAbfrageStatusNotAllowedExceptionWhenNotTheCorrectUserWithTheCorrectRole(
                 model
             );
@@ -3295,7 +3289,7 @@ class AbfrageServiceTest {
         roles = new String[] { "fachreferat" };
         model.setId(id);
         model.setSub(sub);
-        model.setStatusAbfrage(StatusAbfrage.OFFEN);
+        model.setStatusAbfrage(StatusAbfrage.UEBERMITTELT_ZUR_BEARBEITUNG);
         Mockito.when(this.authenticationUtils.getUserRoles()).thenReturn(List.of(roles));
         try {
             this.abfrageService.throwUserRoleNotAllowedOrAbfrageStatusNotAllowedExceptionWhenNotTheCorrectUserWithTheCorrectRole(
@@ -3308,7 +3302,7 @@ class AbfrageServiceTest {
         roles = new String[] { "abfrageerstellung" };
         model.setId(id);
         model.setSub("321");
-        model.setStatusAbfrage(StatusAbfrage.OFFEN);
+        model.setStatusAbfrage(StatusAbfrage.UEBERMITTELT_ZUR_BEARBEITUNG);
         Mockito.when(this.authenticationUtils.getUserRoles()).thenReturn(List.of(roles));
         try {
             this.abfrageService.throwUserRoleNotAllowedOrAbfrageStatusNotAllowedExceptionWhenNotTheCorrectUserWithTheCorrectRole(
@@ -3324,7 +3318,7 @@ class AbfrageServiceTest {
         roles = new String[] { "abfrageerstellung" };
         model.setId(id);
         model.setSub(sub);
-        model.setStatusAbfrage(StatusAbfrage.OFFEN);
+        model.setStatusAbfrage(StatusAbfrage.UEBERMITTELT_ZUR_BEARBEITUNG);
         Mockito.when(this.authenticationUtils.getUserRoles()).thenReturn(List.of(roles));
         try {
             this.abfrageService.throwUserRoleNotAllowedOrAbfrageStatusNotAllowedExceptionWhenNotTheCorrectUserWithTheCorrectRole(
@@ -3369,11 +3363,11 @@ class AbfrageServiceTest {
     @Test
     void throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid() throws AbfrageStatusNotAllowedException {
         final var model = new BauleitplanverfahrenModel();
-        model.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE);
+        model.setStatusAbfrage(StatusAbfrage.EINPFLEGEN_BEDARFSMELDUNG);
 
         this.abfrageService.throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(
                 model,
-                StatusAbfrage.IN_BEARBEITUNG_FACHREFERATE
+                StatusAbfrage.EINPFLEGEN_BEDARFSMELDUNG
             );
 
         Assertions.assertThrows(
@@ -3472,10 +3466,10 @@ class AbfrageServiceTest {
     }
 
     @Test
-    void changeRelevanteAbfragevarianteWhenNewBauvorhabenAbfrageInBearbeitungSachbearbeitung() {
+    void changeRelevanteAbfragevarianteWhenNewBauvorhabenAbfrageStartBearbeitung() {
         var bauvorhabenOriginal = UUID.randomUUID();
         var bauvorhabenNeu = UUID.randomUUID();
-        final var model = new BauleitplanverfahrenInBearbeitungSachbearbeitungModel();
+        final var model = new BauleitplanverfahrenStartBearbeitungModel();
         model.setBauvorhaben(bauvorhabenNeu);
         final var originalAbfrage = new BauleitplanverfahrenModel();
         originalAbfrage.setBauvorhaben(bauvorhabenOriginal);
@@ -3489,7 +3483,7 @@ class AbfrageServiceTest {
 
         Mockito.when(this.bauvorhabenRepository.save(bauvorhaben)).thenReturn(bauvorhaben);
 
-        this.abfrageService.changeRelevantAbfragevarianteOnBauvorhabenChangeAbfrageInBearbeitungSachbearbeitung(
+        this.abfrageService.changeRelevantAbfragevarianteOnBauvorhabenChangeAbfrageStartBearbeitung(
                 model,
                 originalAbfrage
             );
@@ -3501,9 +3495,9 @@ class AbfrageServiceTest {
     }
 
     @Test
-    void changeRelevanteAbfragevarianteWhenBauvorhabenIsRemovedAbfrageInBearbeitungSachbearbeitung() {
+    void changeRelevanteAbfragevarianteWhenBauvorhabenIsRemovedAbfrageStartBearbeitung() {
         var bauvorhabenOriginal = UUID.randomUUID();
-        final var model = new BauleitplanverfahrenInBearbeitungSachbearbeitungModel();
+        final var model = new BauleitplanverfahrenStartBearbeitungModel();
         model.setBauvorhaben(null);
         final var originalAbfrage = new BauleitplanverfahrenModel();
         originalAbfrage.setBauvorhaben(bauvorhabenOriginal);
@@ -3517,7 +3511,7 @@ class AbfrageServiceTest {
 
         Mockito.when(this.bauvorhabenRepository.save(bauvorhaben)).thenReturn(bauvorhaben);
 
-        this.abfrageService.changeRelevantAbfragevarianteOnBauvorhabenChangeAbfrageInBearbeitungSachbearbeitung(
+        this.abfrageService.changeRelevantAbfragevarianteOnBauvorhabenChangeAbfrageStartBearbeitung(
                 model,
                 originalAbfrage
             );
@@ -3529,9 +3523,9 @@ class AbfrageServiceTest {
     }
 
     @Test
-    void notChangeRelevanteAbfragevarianteInBearbeitungSachbearbeitung() {
+    void notChangeRelevanteAbfragevarianteStartBearbeitung() {
         var bauvorhabenOriginal = UUID.randomUUID();
-        final var model = new BauleitplanverfahrenInBearbeitungSachbearbeitungModel();
+        final var model = new BauleitplanverfahrenStartBearbeitungModel();
         model.setBauvorhaben(bauvorhabenOriginal);
         final var originalAbfrage = new BauleitplanverfahrenModel();
         originalAbfrage.setBauvorhaben(bauvorhabenOriginal);
@@ -3545,7 +3539,7 @@ class AbfrageServiceTest {
 
         Mockito.when(this.bauvorhabenRepository.save(bauvorhaben)).thenReturn(bauvorhaben);
 
-        this.abfrageService.changeRelevantAbfragevarianteOnBauvorhabenChangeAbfrageInBearbeitungSachbearbeitung(
+        this.abfrageService.changeRelevantAbfragevarianteOnBauvorhabenChangeAbfrageStartBearbeitung(
                 model,
                 originalAbfrage
             );
