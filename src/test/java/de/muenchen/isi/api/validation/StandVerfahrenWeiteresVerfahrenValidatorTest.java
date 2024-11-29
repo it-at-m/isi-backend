@@ -30,7 +30,6 @@ class StandVerfahrenWeiteresVerfahrenValidatorTest {
             this.standVerfahrenValidator.isValid(StandVerfahren.STAEDTEBAULICHE_ENTWICKLUNGSMASSNAHME, null),
             is(true)
         );
-        assertThat(this.standVerfahrenValidator.isValid(StandVerfahren.INFO_FEHLT, null), is(true));
         assertThat(this.standVerfahrenValidator.isValid(StandVerfahren.FREIE_EINGABE, null), is(true));
         assertThat(this.standVerfahrenValidator.isValid(StandVerfahren.VORBEREITUNG_BAUGENEHMIGUNG, null), is(false));
     }

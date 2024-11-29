@@ -159,7 +159,7 @@ public class BauvorhabenServiceTest {
         bauvorhaben.setNameVorhaben("Name");
         bauvorhaben.setWesentlicheRechtsgrundlage(List.of(WesentlicheRechtsgrundlage.AUSSENBEREICH));
         bauvorhaben.setSobonRelevant(UncertainBoolean.FALSE);
-        bauvorhaben.setStandVerfahren(StandVerfahren.INFO_FEHLT);
+        bauvorhaben.setStandVerfahren(StandVerfahren.FREIE_EINGABE);
         bauvorhaben.setId(bauvorhabenId);
 
         final Bauleitplanverfahren abfrage1 = new Bauleitplanverfahren();
