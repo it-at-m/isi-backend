@@ -41,7 +41,7 @@ UPDATE isidbuser.abfrgvar_baugnhmgsverfhrn_wesentliche_rechtsgrundlage SET wesen
 UPDATE isidbuser.abfrgvar_bauleitplnvrfhrn_wesentliche_rechtsgrundlage SET wesentliche_rechtsgrundlage = 'FREIE_EINGABE' WHERE wesentliche_rechtsgrundlage = 'INFO_FEHLT';
 UPDATE isidbuser.abfrgvar_weitrs_vrfhrn_wesentliche_rechtsgrundlage SET wesentliche_rechtsgrundlage = 'FREIE_EINGABE' WHERE wesentliche_rechtsgrundlage = 'INFO_FEHLT';
 UPDATE isidbuser.bauvorhaben_wesentliche_rechtsgrundlage SET wesentliche_rechtsgrundlage = 'FREIE_EINGABE' WHERE wesentliche_rechtsgrundlage = 'INFO_FEHLT';
-UPDATE isidbuser.baugebiet SET art_bauliche_nutzung = 'FREIE_EINGABE' WHERE art_bauliche_nutzung = 'INFO_FEHLT';
+UPDATE isidbuser.baugebiet SET art_bauliche_nutzung = 7 WHERE art_bauliche_nutzung = 8;
 UPDATE isidbuser.bauvorhaben_art_fnp SET art_fnp = 'FREIE_EINGABE' WHERE art_fnp = 'INFO_FEHLT';
 
 ALTER TABLE IF EXISTS isidbuser.baugenehmigungsverfahren
@@ -69,7 +69,7 @@ ALTER TABLE IF EXISTS isidbuser.bauvorhaben_wesentliche_rechtsgrundlage
     ADD CONSTRAINT bauvorhaben_wesentliche_recht_wesentliche_rechtsgrundlage_check CHECK (wesentliche_rechtsgrundlage::text = ANY (ARRAY['QUALIFIZIERTER_BEBAUUNGSPLAN'::character varying::text, 'VORHABENSBEZOGENER_BEBAUUNGSPLAN'::character varying::text, 'EINFACHER_BEBAUUNGSPLAN_PARAGRAPH_30'::character varying::text, 'EINFACHER_BEBAUUNGSPLAN_PARAGRAPH_30_IVM_34_35'::character varying::text, 'SEKTORALER_BEBAUUNGSPLAN_PARAGRAPH_9'::character varying::text, 'SEKTORALER_BEBAUUNGSPLAN_PARAGRAPH_30_IVM_34_35'::character varying::text, 'INNENBEREICH'::character varying::text, 'AUSSENBEREICH'::character varying::text, 'BEFREIUNG'::character varying::text, 'FREIE_EINGABE'::character varying::text]));
 
 ALTER TABLE IF EXISTS isidbuser.baugebiet
-    ADD CONSTRAINT baugebiet_art_bauliche_nutzung_check CHECK (art_bauliche_nutzung::text = ANY (ARRAY['WR'::character varying::text, 'WA'::character varying::text, 'MU'::character varying::text, 'MK'::character varying::text, 'MI'::character varying::text, 'GE'::character varying::text, 'FREIE_EINGABE'::character varying::text]));
+    ADD CONSTRAINT baugebiet_art_bauliche_nutzung_check CHECK (art_bauliche_nutzung >= 0 AND art_bauliche_nutzung <= 7);
 
 ALTER TABLE IF EXISTS isidbuser.bauvorhaben_art_fnp
     ADD CONSTRAINT bauvorhaben_art_fnp_art_fnp_check CHECK (art_fnp::text = ANY (ARRAY['WR'::character varying::text, 'WA'::character varying::text, 'MU'::character varying::text, 'MK'::character varying::text, 'MI'::character varying::text, 'GE'::character varying::text, 'FREIE_EINGABE'::character varying::text]));

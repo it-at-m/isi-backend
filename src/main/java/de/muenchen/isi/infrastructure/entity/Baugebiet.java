@@ -31,7 +31,7 @@ public class Baugebiet extends BaseEntity {
     private String bezeichnung;
 
     @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
+    @JdbcTypeCode(SqlTypes.INTEGER)
     private ArtBaulicheNutzung artBaulicheNutzung;
 
     @Column(length = 1000)
