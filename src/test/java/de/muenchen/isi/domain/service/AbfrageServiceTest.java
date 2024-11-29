@@ -549,7 +549,9 @@ class AbfrageServiceTest {
         abfragevarianteSachbearbeitung.setArtAbfragevariante(ArtAbfrage.BAULEITPLANVERFAHREN);
         abfragevarianteSachbearbeitung.setAbfragevariantenNr(1);
         abfragevarianteSachbearbeitung.setName("Abfragevariante 1");
-        abfragevarianteSachbearbeitung.setSobonOrientierungswertJahr(SobonOrientierungswertJahr.JAHR_2017);
+        abfragevarianteSachbearbeitung.setSobonOrientierungswertJahrPlanungsursaechlich(
+            SobonOrientierungswertJahr.JAHR_2017
+        );
         abfragevarianteSachbearbeitung.setAnmerkung("Test Anmerkung");
         requestModel.setAbfragevariantenSachbearbeitungBauleitplanverfahren(List.of(abfragevarianteSachbearbeitung));
 
@@ -590,7 +592,7 @@ class AbfrageServiceTest {
         final var abfragevariante1ToSave = new AbfragevarianteBauleitplanverfahren();
         abfragevariante1ToSave.setAbfragevariantenNr(1);
         abfragevariante1ToSave.setName("Abfragevariante 1");
-        abfragevariante1ToSave.setSobonOrientierungswertJahr(SobonOrientierungswertJahr.JAHR_2017);
+        abfragevariante1ToSave.setSobonOrientierungswertJahrPlanungsursaechlich(SobonOrientierungswertJahr.JAHR_2017);
         abfragevariante1ToSave.setAnmerkung("Test Anmerkung");
         entityToSave.setAbfragevariantenSachbearbeitungBauleitplanverfahren(List.of(abfragevariante1ToSave));
 
@@ -606,7 +608,7 @@ class AbfrageServiceTest {
         abfragevariante1Saved.setId(UUID.randomUUID());
         abfragevariante1Saved.setAbfragevariantenNr(1);
         abfragevariante1Saved.setName("Abfragevariante 1");
-        abfragevariante1Saved.setSobonOrientierungswertJahr(SobonOrientierungswertJahr.JAHR_2017);
+        abfragevariante1Saved.setSobonOrientierungswertJahrPlanungsursaechlich(SobonOrientierungswertJahr.JAHR_2017);
         abfragevariante1Saved.setAnmerkung("Test Anmerkung");
         entitySaved.setAbfragevariantenSachbearbeitungBauleitplanverfahren(List.of(abfragevariante1Saved));
 
@@ -630,7 +632,7 @@ class AbfrageServiceTest {
         abfragevariante1Expected.setId(abfragevariante1Saved.getId());
         abfragevariante1Expected.setAbfragevariantenNr(1);
         abfragevariante1Expected.setName("Abfragevariante 1");
-        abfragevariante1Expected.setSobonOrientierungswertJahr(SobonOrientierungswertJahr.JAHR_2017);
+        abfragevariante1Expected.setSobonOrientierungswertJahrPlanungsursaechlich(SobonOrientierungswertJahr.JAHR_2017);
         abfragevariante1Expected.setAnmerkung("Test Anmerkung");
         expected.setAbfragevariantenSachbearbeitungBauleitplanverfahren(List.of(abfragevariante1Expected));
         expected.setBauvorhaben(bauvorhabenId);

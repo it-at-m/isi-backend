@@ -10,7 +10,6 @@ import de.muenchen.isi.api.dto.filehandling.DokumentDto;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.WesentlicheRechtsgrundlage;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
@@ -73,7 +72,7 @@ public class AbfragevarianteBaugenehmigungsverfahrenDto
 
     private String weAnmerkung;
 
-    private SobonOrientierungswertJahr sobonOrientierungswertJahr;
+    private SobonOrientierungswertJahr sobonOrientierungswertJahrPlanungsursaechlich;
 
     private LocalDate stammdatenGueltigAb;
 

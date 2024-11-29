@@ -22,7 +22,7 @@ public class AbfragevarianteBaugenehmigungsverfahrenSachbearbeitungStartBearbeit
 
     private ArtAbfrage artAbfragevariante;
 
-    private SobonOrientierungswertJahr sobonOrientierungswertJahr;
+    private SobonOrientierungswertJahr sobonOrientierungswertJahrPlanungsursaechlich;
 
     private LocalDate stammdatenGueltigAb;
 
