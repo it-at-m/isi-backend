@@ -18,6 +18,22 @@ public class EtlInterfaceService {
     private final EtlInterfaceRepository etlInterfaceRepository;
 
     /**
+     * Ruft die Reporting-EAI Schnittstelle auf. Dieser Job löscht vor der Transponierung der Tabelle
+     * wohneinheiten_pro_foerderart_pro_jahr_transponiert alle Einträge zu einer Abfrage.
+     *
+     * @param id ID der Abfrage
+     * @throws ReportingException falls der Aufruf fehlgeschlagen ist.
+     */
+    public void etlInterfaceTriggerDeleteAbfrageTransponierungItemsJob(final UUID id) throws ReportingException {
+        final EtlTriggerJobDto etlTriggerJobDto =
+            this.prepareJob(
+                    "transponierung/wohneinheiten_pro_foerderart_pro_jahr/JobDeleteAll_wohneinheiten_pro_foerderart_pro_jahr_transponiert_OfAbfrage.kjb",
+                    id
+                );
+        this.etlInterfaceTriggerJob(etlTriggerJobDto);
+    }
+
+    /**
      * Ruft die Reporting-EAI Schnittstelle auf. Dieser Job führt eine Transponierung der Tabelle
      * wohneinheiten_pro_foerderart_pro_jahr zu wohneinheiten_pro_foerderart_pro_jahr_transponiert für eine Abfrage durch
      *

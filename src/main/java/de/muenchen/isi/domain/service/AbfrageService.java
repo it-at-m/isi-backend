@@ -139,8 +139,11 @@ public class AbfrageService {
             throw new OptimisticLockingException(message, exception);
         }
         final var model = this.abfrageDomainMapper.entity2Model(entity);
+        // Items der vorhergehenden Transponierung löschen. Dies ist nötig, da sich die ID's in der Reporting Tabelle bei der folgenden Übermittlung ändern
+        etlInterfaceService.etlInterfaceTriggerDeleteAbfrageTransponierungItemsJob(entity.getId());
         // Übermitteln der Abfrage samt der vorher berechneten Bedarfe an die Reportingschnittstelle
         reportingdataTransferService.transferAbfrageAndBedarfe(model, bedarfeForAbfragevarianten);
+        // Transponierung der Tabelle wohneinheiten_pro_foerderart_pro_jahr -> wohneinheiten_pro_foerderart_pro_jahr_transponiert durchführen
         etlInterfaceService.etlInterfaceTriggerAbfrageTransponierungJob(entity.getId());
 
         return model;
