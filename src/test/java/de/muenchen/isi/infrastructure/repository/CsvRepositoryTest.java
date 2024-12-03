@@ -92,17 +92,15 @@ class CsvRepositoryTest {
 
     @Test
     void readAllStaedtebaulicheOrientierungswertCsvNotValid() {
-        Assertions.assertThrows(
-            CsvDataTypeMismatchException.class,
-            () -> this.csvRepository.readAllStaedtebaulicheOrientierungswertCsv(this.testfileSoNotValid)
+        Assertions.assertThrows(CsvDataTypeMismatchException.class, () ->
+            this.csvRepository.readAllStaedtebaulicheOrientierungswertCsv(this.testfileSoNotValid)
         );
     }
 
     @Test
     void readAllStaedtebaulicheOrientierungswertCsvEmpty() {
-        Assertions.assertThrows(
-            CsvRequiredFieldEmptyException.class,
-            () -> this.csvRepository.readAllStaedtebaulicheOrientierungswertCsv(this.testfileSoEmpty)
+        Assertions.assertThrows(CsvRequiredFieldEmptyException.class, () ->
+            this.csvRepository.readAllStaedtebaulicheOrientierungswertCsv(this.testfileSoEmpty)
         );
     }
 
@@ -152,17 +150,15 @@ class CsvRepositoryTest {
 
     @Test
     void readAllSobonOrientierungswertSozialeInfrastrukturCsvEmpty() {
-        Assertions.assertThrows(
-            CsvRequiredFieldEmptyException.class,
-            () -> this.csvRepository.readAllSobonOrientierungswertSozialeInfrastrukturCsv(this.testfileSobonEmpty)
+        Assertions.assertThrows(CsvRequiredFieldEmptyException.class, () ->
+            this.csvRepository.readAllSobonOrientierungswertSozialeInfrastrukturCsv(this.testfileSobonEmpty)
         );
     }
 
     @Test
     void readAllSobonOrientierungswertSozialeInfrastrukturCsvNotValid() {
-        Assertions.assertThrows(
-            CsvDataTypeMismatchException.class,
-            () -> this.csvRepository.readAllSobonOrientierungswertSozialeInfrastrukturCsv(this.testfileSobonNotValid)
+        Assertions.assertThrows(CsvDataTypeMismatchException.class, () ->
+            this.csvRepository.readAllSobonOrientierungswertSozialeInfrastrukturCsv(this.testfileSobonNotValid)
         );
     }
 }

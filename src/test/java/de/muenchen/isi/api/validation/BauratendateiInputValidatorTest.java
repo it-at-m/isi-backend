@@ -29,8 +29,10 @@ class BauratendateiInputValidatorTest {
 
     @BeforeEach
     public void beforeEach() {
-        bauratendateiInputValidator =
-            new BauratendateiInputValidator(bauratendateiInputService, new BauratendateiApiMapperImpl());
+        bauratendateiInputValidator = new BauratendateiInputValidator(
+            bauratendateiInputService,
+            new BauratendateiApiMapperImpl()
+        );
         Mockito.reset(bauratendateiInputService);
     }
 
@@ -71,18 +73,17 @@ class BauratendateiInputValidatorTest {
         abfragevariante.setBauratendateiInputBasis(new BauratendateiInputDto());
         abfragevariante.setBauratendateiInput(List.of(new BauratendateiInputDto()));
 
-        Mockito
-            .when(
-                bauratendateiInputService.equals(new BauratendateiInputModel(), List.of(new BauratendateiInputModel()))
-            )
-            .thenReturn(false);
+        Mockito.when(
+            bauratendateiInputService.equals(new BauratendateiInputModel(), List.of(new BauratendateiInputModel()))
+        ).thenReturn(false);
 
         var result = bauratendateiInputValidator.isValid(abfragevariante, null);
         assertThat(result, is(false));
 
-        Mockito
-            .verify(bauratendateiInputService, Mockito.times(1))
-            .equals(new BauratendateiInputModel(), List.of(new BauratendateiInputModel()));
+        Mockito.verify(bauratendateiInputService, Mockito.times(1)).equals(
+            new BauratendateiInputModel(),
+            List.of(new BauratendateiInputModel())
+        );
     }
 
     @Test
@@ -92,17 +93,16 @@ class BauratendateiInputValidatorTest {
         abfragevariante.setBauratendateiInputBasis(new BauratendateiInputDto());
         abfragevariante.setBauratendateiInput(List.of(new BauratendateiInputDto()));
 
-        Mockito
-            .when(
-                bauratendateiInputService.equals(new BauratendateiInputModel(), List.of(new BauratendateiInputModel()))
-            )
-            .thenReturn(true);
+        Mockito.when(
+            bauratendateiInputService.equals(new BauratendateiInputModel(), List.of(new BauratendateiInputModel()))
+        ).thenReturn(true);
 
         var result = bauratendateiInputValidator.isValid(abfragevariante, null);
         assertThat(result, is(true));
 
-        Mockito
-            .verify(bauratendateiInputService, Mockito.times(1))
-            .equals(new BauratendateiInputModel(), List.of(new BauratendateiInputModel()));
+        Mockito.verify(bauratendateiInputService, Mockito.times(1)).equals(
+            new BauratendateiInputModel(),
+            List.of(new BauratendateiInputModel())
+        );
     }
 }

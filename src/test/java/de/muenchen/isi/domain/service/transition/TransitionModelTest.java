@@ -68,9 +68,8 @@ public class TransitionModelTest {
     @Test
     void statusAenderungEntityNotFoundExcpetion() {
         final var uuid = UUID.randomUUID();
-        Assertions.assertThrows(
-            EntityNotFoundException.class,
-            () -> this.abfrageStatusService.getStatusAbfrageEventsBasedOnStateAndAuthorities(uuid)
+        Assertions.assertThrows(EntityNotFoundException.class, () ->
+            this.abfrageStatusService.getStatusAbfrageEventsBasedOnStateAndAuthorities(uuid)
         );
     }
 
@@ -150,9 +149,8 @@ public class TransitionModelTest {
         abfrage = this.abfrageService.save(abfrage);
 
         final var uuid = abfrage.getId();
-        Assertions.assertThrows(
-            UserRoleNotAllowedException.class,
-            () -> this.abfrageStatusService.getStatusAbfrageEventsBasedOnStateAndAuthorities(uuid)
+        Assertions.assertThrows(UserRoleNotAllowedException.class, () ->
+            this.abfrageStatusService.getStatusAbfrageEventsBasedOnStateAndAuthorities(uuid)
         );
     }
 
@@ -275,9 +273,8 @@ public class TransitionModelTest {
         abfrage = this.abfrageService.save(abfrage);
 
         final var uuid = abfrage.getId();
-        Assertions.assertThrows(
-            UserRoleNotAllowedException.class,
-            () -> this.abfrageStatusService.getStatusAbfrageEventsBasedOnStateAndAuthorities(uuid)
+        Assertions.assertThrows(UserRoleNotAllowedException.class, () ->
+            this.abfrageStatusService.getStatusAbfrageEventsBasedOnStateAndAuthorities(uuid)
         );
     }
 
@@ -418,9 +415,8 @@ public class TransitionModelTest {
         abfrage = this.abfrageService.save(abfrage);
 
         final var uuid = abfrage.getId();
-        Assertions.assertThrows(
-            UserRoleNotAllowedException.class,
-            () -> this.abfrageStatusService.getStatusAbfrageEventsBasedOnStateAndAuthorities(uuid)
+        Assertions.assertThrows(UserRoleNotAllowedException.class, () ->
+            this.abfrageStatusService.getStatusAbfrageEventsBasedOnStateAndAuthorities(uuid)
         );
     }
 
@@ -543,9 +539,8 @@ public class TransitionModelTest {
         abfrage = this.abfrageService.save(abfrage);
 
         final var uuid = abfrage.getId();
-        Assertions.assertThrows(
-            UserRoleNotAllowedException.class,
-            () -> this.abfrageStatusService.getStatusAbfrageEventsBasedOnStateAndAuthorities(uuid)
+        Assertions.assertThrows(UserRoleNotAllowedException.class, () ->
+            this.abfrageStatusService.getStatusAbfrageEventsBasedOnStateAndAuthorities(uuid)
         );
     }
 
@@ -653,9 +648,8 @@ public class TransitionModelTest {
         abfrage = this.abfrageService.save(abfrage);
 
         final var uuid = abfrage.getId();
-        Assertions.assertThrows(
-            UserRoleNotAllowedException.class,
-            () -> this.abfrageStatusService.getStatusAbfrageEventsBasedOnStateAndAuthorities(uuid)
+        Assertions.assertThrows(UserRoleNotAllowedException.class, () ->
+            this.abfrageStatusService.getStatusAbfrageEventsBasedOnStateAndAuthorities(uuid)
         );
     }
 

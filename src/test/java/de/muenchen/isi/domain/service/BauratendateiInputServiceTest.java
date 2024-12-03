@@ -43,8 +43,9 @@ class BauratendateiInputServiceTest {
 
     @BeforeEach
     public void beforeEach() {
-        this.bauratendateiInputService =
-            Mockito.spy(new BauratendateiInputService(new BauratendateiDomainMapperImpl()));
+        this.bauratendateiInputService = Mockito.spy(
+            new BauratendateiInputService(new BauratendateiDomainMapperImpl())
+        );
         Mockito.reset(bauratendateiInputService);
     }
 
@@ -69,16 +70,17 @@ class BauratendateiInputServiceTest {
         abfrage.setAbfragevariantenBauleitplanverfahren(variantenAbfrageerstellung);
         abfrage.setAbfragevariantenSachbearbeitungBauleitplanverfahren(variantenSachbearbeitung);
 
-        Mockito
-            .doReturn(null)
+        Mockito.doReturn(null)
             .when(bauratendateiInputService)
             .setOrRemoveOrIgnoreBaurateninputToAbfragevariante(Mockito.any(), Mockito.any(), Mockito.any());
 
         bauratendateiInputService.setBauratendateiInputForEachAbfragevariante(abfrage, bedarfe);
 
-        Mockito
-            .verify(bauratendateiInputService, Mockito.times(7))
-            .setOrRemoveOrIgnoreBaurateninputToAbfragevariante(Mockito.any(), Mockito.any(), Mockito.any());
+        Mockito.verify(bauratendateiInputService, Mockito.times(7)).setOrRemoveOrIgnoreBaurateninputToAbfragevariante(
+            Mockito.any(),
+            Mockito.any(),
+            Mockito.any()
+        );
     }
 
     @Test
@@ -102,16 +104,17 @@ class BauratendateiInputServiceTest {
         abfrage.setAbfragevariantenBaugenehmigungsverfahren(variantenAbfrageerstellung);
         abfrage.setAbfragevariantenSachbearbeitungBaugenehmigungsverfahren(variantenSachbearbeitung);
 
-        Mockito
-            .doReturn(null)
+        Mockito.doReturn(null)
             .when(bauratendateiInputService)
             .setOrRemoveOrIgnoreBaurateninputToAbfragevariante(Mockito.any(), Mockito.any(), Mockito.any());
 
         bauratendateiInputService.setBauratendateiInputForEachAbfragevariante(abfrage, bedarfe);
 
-        Mockito
-            .verify(bauratendateiInputService, Mockito.times(7))
-            .setOrRemoveOrIgnoreBaurateninputToAbfragevariante(Mockito.any(), Mockito.any(), Mockito.any());
+        Mockito.verify(bauratendateiInputService, Mockito.times(7)).setOrRemoveOrIgnoreBaurateninputToAbfragevariante(
+            Mockito.any(),
+            Mockito.any(),
+            Mockito.any()
+        );
     }
 
     @Test
@@ -135,16 +138,17 @@ class BauratendateiInputServiceTest {
         abfrage.setAbfragevariantenWeiteresVerfahren(variantenAbfrageerstellung);
         abfrage.setAbfragevariantenSachbearbeitungWeiteresVerfahren(variantenSachbearbeitung);
 
-        Mockito
-            .doReturn(null)
+        Mockito.doReturn(null)
             .when(bauratendateiInputService)
             .setOrRemoveOrIgnoreBaurateninputToAbfragevariante(Mockito.any(), Mockito.any(), Mockito.any());
 
         bauratendateiInputService.setBauratendateiInputForEachAbfragevariante(abfrage, bedarfe);
 
-        Mockito
-            .verify(bauratendateiInputService, Mockito.times(7))
-            .setOrRemoveOrIgnoreBaurateninputToAbfragevariante(Mockito.any(), Mockito.any(), Mockito.any());
+        Mockito.verify(bauratendateiInputService, Mockito.times(7)).setOrRemoveOrIgnoreBaurateninputToAbfragevariante(
+            Mockito.any(),
+            Mockito.any(),
+            Mockito.any()
+        );
     }
 
     @Test
@@ -283,8 +287,11 @@ class BauratendateiInputServiceTest {
         assertThat(result, is(expected));
 
         abfragevariante.setHasBauratendateiInput(null);
-        result =
-            bauratendateiInputService.setOrRemoveOrIgnoreBaurateninputToAbfragevariante(abfragevariante, null, null);
+        result = bauratendateiInputService.setOrRemoveOrIgnoreBaurateninputToAbfragevariante(
+            abfragevariante,
+            null,
+            null
+        );
         expected = new AbfragevarianteBauleitplanverfahrenModel();
         expected.setBauratendateiInputBasis(null);
         expected.setBauratendateiInput(List.of());
@@ -447,8 +454,11 @@ class BauratendateiInputServiceTest {
         assertThat(result, is(expected));
 
         var uuid = UUID.randomUUID();
-        result =
-            bauratendateiInputService.createBauratendateiInput(new VerortungMultiPolygonModel(), new HashMap<>(), uuid);
+        result = bauratendateiInputService.createBauratendateiInput(
+            new VerortungMultiPolygonModel(),
+            new HashMap<>(),
+            uuid
+        );
         assertThat(result, is(expected));
 
         var bedarfeForAbfragevariante = new BedarfeForAbfragevarianteModel();

@@ -69,18 +69,13 @@ public class UserInfoDataService {
     public UserInfoDataService(final String userInfoUri, final RestTemplate restTemplate) {
         this.userInfoUri = userInfoUri;
         this.restTemplate = restTemplate;
-        this.cache =
-            new CaffeineCache(
-                CachingConfiguration.NAME_AUTHENTICATION_CACHE,
-                Caffeine
-                    .newBuilder()
-                    .expireAfterWrite(
-                        CachingConfiguration.AUTHENTICATION_CACHE_EXPIRATION_TIME_SECONDS,
-                        TimeUnit.SECONDS
-                    )
-                    .ticker(Ticker.systemTicker())
-                    .build()
-            );
+        this.cache = new CaffeineCache(
+            CachingConfiguration.NAME_AUTHENTICATION_CACHE,
+            Caffeine.newBuilder()
+                .expireAfterWrite(CachingConfiguration.AUTHENTICATION_CACHE_EXPIRATION_TIME_SECONDS, TimeUnit.SECONDS)
+                .ticker(Ticker.systemTicker())
+                .build()
+        );
     }
 
     /**

@@ -134,17 +134,14 @@ public class NfcHelper {
         final HttpServletRequest originalRequest
     ) {
         final Map<String, List<String>> converted = new CaseInsensitiveMap<>();
-        Collections
-            .list(originalRequest.getHeaderNames())
-            .forEach(nfdHeaderName -> {
-                final String nfcHeaderName = NfcHelper.nfcConverter(nfdHeaderName);
-                final List<String> nfcHeaderEntries = Collections
-                    .list(originalRequest.getHeaders(nfdHeaderName))
-                    .stream()
-                    .map(NfcHelper::nfcConverter)
-                    .collect(Collectors.toList());
-                converted.put(nfcHeaderName, nfcHeaderEntries);
-            });
+        Collections.list(originalRequest.getHeaderNames()).forEach(nfdHeaderName -> {
+            final String nfcHeaderName = NfcHelper.nfcConverter(nfdHeaderName);
+            final List<String> nfcHeaderEntries = Collections.list(originalRequest.getHeaders(nfdHeaderName))
+                .stream()
+                .map(NfcHelper::nfcConverter)
+                .collect(Collectors.toList());
+            converted.put(nfcHeaderName, nfcHeaderEntries);
+        });
         return converted;
     }
 }

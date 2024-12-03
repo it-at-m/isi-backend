@@ -568,14 +568,12 @@ class RestExceptionHandlerTest {
 
     @Test
     void handleMethodArgumentNotValid() {
-        Mockito
-            .when(this.bindingResult.getAllErrors())
-            .thenReturn(
-                List.of(
-                    new FieldError("theObjectName1", "theFieldError1", "theDefaultMessage1"),
-                    new FieldError("theObjectName2", "theFieldError2", "theDefaultMessage2")
-                )
-            );
+        Mockito.when(this.bindingResult.getAllErrors()).thenReturn(
+            List.of(
+                new FieldError("theObjectName1", "theFieldError1", "theDefaultMessage1"),
+                new FieldError("theObjectName2", "theFieldError2", "theDefaultMessage2")
+            )
+        );
         final MethodArgumentNotValidException methodArgumentNotValidException = new MethodArgumentNotValidException(
             null,
             this.bindingResult
