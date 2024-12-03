@@ -27,8 +27,7 @@ public enum SobonOrientierungswertJahr implements ILookup {
     private final LocalDate gueltigAb;
 
     public static Optional<SobonOrientierungswertJahr> findByBezeichnung(final String bezeichnung) {
-        return EnumUtils
-            .getEnumList(SobonOrientierungswertJahr.class)
+        return EnumUtils.getEnumList(SobonOrientierungswertJahr.class)
             .stream()
             .filter(sobonOrientierungswertJahr ->
                 StringUtils.equals(sobonOrientierungswertJahr.getBezeichnung(), bezeichnung)

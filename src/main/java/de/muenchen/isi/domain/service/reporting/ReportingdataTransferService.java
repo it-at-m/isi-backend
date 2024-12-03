@@ -74,47 +74,35 @@ public class ReportingdataTransferService {
     ) throws ReportingException {
         if (AbfrageDto.ArtAbfrageEnum.BAULEITPLANVERFAHREN.equals(abfrage.getArtAbfrage())) {
             final var bauleitplanverfahren = (BauleitplanverfahrenDto) abfrage;
-            Stream
-                .concat(
-                    ListUtils.emptyIfNull(bauleitplanverfahren.getAbfragevariantenBauleitplanverfahren()).stream(),
-                    ListUtils
-                        .emptyIfNull(bauleitplanverfahren.getAbfragevariantenSachbearbeitungBauleitplanverfahren())
-                        .stream()
-                )
-                .forEach(abfragevariante -> {
-                    final var bedarfModel = bedarfForEachAbfragevariante.get(abfragevariante.getId());
-                    reportingApiDomainMapper.reportingDtoAndBedarfe2ReportingDto(abfragevariante, bedarfModel);
-                });
+            Stream.concat(
+                ListUtils.emptyIfNull(bauleitplanverfahren.getAbfragevariantenBauleitplanverfahren()).stream(),
+                ListUtils.emptyIfNull(
+                    bauleitplanverfahren.getAbfragevariantenSachbearbeitungBauleitplanverfahren()
+                ).stream()
+            ).forEach(abfragevariante -> {
+                final var bedarfModel = bedarfForEachAbfragevariante.get(abfragevariante.getId());
+                reportingApiDomainMapper.reportingDtoAndBedarfe2ReportingDto(abfragevariante, bedarfModel);
+            });
         } else if (AbfrageDto.ArtAbfrageEnum.BAUGENEHMIGUNGSVERFAHREN.equals(abfrage.getArtAbfrage())) {
             final var baugenehmigungsverfahren = (BaugenehmigungsverfahrenDto) abfrage;
-            Stream
-                .concat(
-                    ListUtils
-                        .emptyIfNull(baugenehmigungsverfahren.getAbfragevariantenBaugenehmigungsverfahren())
-                        .stream(),
-                    ListUtils
-                        .emptyIfNull(
-                            baugenehmigungsverfahren.getAbfragevariantenSachbearbeitungBaugenehmigungsverfahren()
-                        )
-                        .stream()
-                )
-                .forEach(abfragevariante -> {
-                    final var bedarfModel = bedarfForEachAbfragevariante.get(abfragevariante.getId());
-                    reportingApiDomainMapper.reportingDtoAndBedarfe2ReportingDto(abfragevariante, bedarfModel);
-                });
+            Stream.concat(
+                ListUtils.emptyIfNull(baugenehmigungsverfahren.getAbfragevariantenBaugenehmigungsverfahren()).stream(),
+                ListUtils.emptyIfNull(
+                    baugenehmigungsverfahren.getAbfragevariantenSachbearbeitungBaugenehmigungsverfahren()
+                ).stream()
+            ).forEach(abfragevariante -> {
+                final var bedarfModel = bedarfForEachAbfragevariante.get(abfragevariante.getId());
+                reportingApiDomainMapper.reportingDtoAndBedarfe2ReportingDto(abfragevariante, bedarfModel);
+            });
         } else if (AbfrageDto.ArtAbfrageEnum.WEITERES_VERFAHREN.equals(abfrage.getArtAbfrage())) {
             final var weiteresVerfahren = (WeiteresVerfahrenDto) abfrage;
-            Stream
-                .concat(
-                    ListUtils.emptyIfNull(weiteresVerfahren.getAbfragevariantenWeiteresVerfahren()).stream(),
-                    ListUtils
-                        .emptyIfNull(weiteresVerfahren.getAbfragevariantenSachbearbeitungWeiteresVerfahren())
-                        .stream()
-                )
-                .forEach(abfragevariante -> {
-                    final var bedarfModel = bedarfForEachAbfragevariante.get(abfragevariante.getId());
-                    reportingApiDomainMapper.reportingDtoAndBedarfe2ReportingDto(abfragevariante, bedarfModel);
-                });
+            Stream.concat(
+                ListUtils.emptyIfNull(weiteresVerfahren.getAbfragevariantenWeiteresVerfahren()).stream(),
+                ListUtils.emptyIfNull(weiteresVerfahren.getAbfragevariantenSachbearbeitungWeiteresVerfahren()).stream()
+            ).forEach(abfragevariante -> {
+                final var bedarfModel = bedarfForEachAbfragevariante.get(abfragevariante.getId());
+                reportingApiDomainMapper.reportingDtoAndBedarfe2ReportingDto(abfragevariante, bedarfModel);
+            });
         } else {
             throw new ReportingException("Für diese Art der Abfrage kann kein Reporting durchgeführt werden.");
         }

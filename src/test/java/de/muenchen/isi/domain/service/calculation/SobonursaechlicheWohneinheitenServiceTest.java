@@ -47,12 +47,11 @@ public class SobonursaechlicheWohneinheitenServiceTest {
     @BeforeEach
     public void beforeEach() {
         final var foerdermixUmlageService = new FoerdermixUmlageService(umlegungFoerderartenRepository);
-        this.sobonursaechlicheWohneinheitenService =
-            new SobonursaechlicheWohneinheitenService(
-                foerdermixUmlageService,
-                staedtebaulicheOrientierungswertRepository,
-                baurateDomainMapper
-            );
+        this.sobonursaechlicheWohneinheitenService = new SobonursaechlicheWohneinheitenService(
+            foerdermixUmlageService,
+            staedtebaulicheOrientierungswertRepository,
+            baurateDomainMapper
+        );
         Mockito.reset(umlegungFoerderartenRepository, staedtebaulicheOrientierungswertRepository);
     }
 

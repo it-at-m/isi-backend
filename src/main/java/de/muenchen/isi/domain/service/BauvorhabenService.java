@@ -250,9 +250,9 @@ public class BauvorhabenService {
         return this.infrastruktureinrichtungRepository.findAllByBauvorhabenId(bauvorhabenId)
             .map(this.searchDomainMapper::entity2SearchResultModel)
             .sorted(
-                Comparator
-                    .comparing(InfrastruktureinrichtungSearchResultModel::getInfrastruktureinrichtungTyp)
-                    .thenComparing(InfrastruktureinrichtungSearchResultModel::getNameEinrichtung)
+                Comparator.comparing(
+                    InfrastruktureinrichtungSearchResultModel::getInfrastruktureinrichtungTyp
+                ).thenComparing(InfrastruktureinrichtungSearchResultModel::getNameEinrichtung)
             )
             .collect(Collectors.toList());
     }
@@ -347,8 +347,7 @@ public class BauvorhabenService {
      */
     private String buildBauvorhabennummer(Verortung verortung) throws OptimisticLockingException {
         if (verortung != null) {
-            final Optional<String> minStadtbezirkNummer = CollectionUtils
-                .emptyIfNull(verortung.getStadtbezirke())
+            final Optional<String> minStadtbezirkNummer = CollectionUtils.emptyIfNull(verortung.getStadtbezirke())
                 .stream()
                 .map(Stadtbezirk::getNummer)
                 .filter(Objects::nonNull)

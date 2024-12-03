@@ -41,10 +41,10 @@ public class SearchPreparationService {
     public Set<String> getNamesOfSearchableAttributesForSearchwordSuggestion(
         final Class<? extends BaseEntity> searchableEntity
     ) {
-        return Arrays
-            .stream(getNamesOfSearchableAttributes(List.of(searchableEntity)))
-            .map(searchableAttribute ->
-                searchableAttribute + SearchwordSuggesterRepository.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION
+        return Arrays.stream(getNamesOfSearchableAttributes(List.of(searchableEntity)))
+            .map(
+                searchableAttribute ->
+                    searchableAttribute + SearchwordSuggesterRepository.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION
             )
             .collect(Collectors.toSet());
     }

@@ -288,8 +288,9 @@ public class AbfrageStatusService {
                                     }
                                 }
                                 // Erweitern der Bearbeitungshistorie
-                                abfrage =
-                                    abfrageBearbeitungshistorieService.appendBearbeitungshistorieToAbfrage(abfrage);
+                                abfrage = abfrageBearbeitungshistorieService.appendBearbeitungshistorieToAbfrage(
+                                    abfrage
+                                );
                                 // Speichern der Abfrage
                                 AbfrageStatusService.this.abfrageService.save(abfrage);
                                 // Asynchrones Versenden der Information für anstehende Aufgabe

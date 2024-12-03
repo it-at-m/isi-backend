@@ -45,13 +45,12 @@ class DokumentServiceTest {
 
     @BeforeEach
     public void beforeEach() {
-        this.dokumentService =
-            new DokumentService(
-                this.dokumentRepository,
-                new DokumentDomainMapperImpl(),
-                documentStorageFileRepository,
-                1
-            );
+        this.dokumentService = new DokumentService(
+            this.dokumentRepository,
+            new DokumentDomainMapperImpl(),
+            documentStorageFileRepository,
+            1
+        );
         Mockito.reset(this.dokumentRepository, documentStorageFileRepository);
     }
 
@@ -121,15 +120,18 @@ class DokumentServiceTest {
             originalDokumentModels
         );
 
-        Mockito
-            .verify(this.documentStorageFileRepository, Mockito.times(1))
-            .deleteFile(originalDokument2.getFilePath().getPathToFile(), 1);
-        Mockito
-            .verify(this.documentStorageFileRepository, Mockito.times(1))
-            .deleteFile(originalDokument4.getFilePath().getPathToFile(), 1);
-        Mockito
-            .verify(this.documentStorageFileRepository, Mockito.times(2))
-            .deleteFile(Mockito.anyString(), Mockito.anyInt());
+        Mockito.verify(this.documentStorageFileRepository, Mockito.times(1)).deleteFile(
+            originalDokument2.getFilePath().getPathToFile(),
+            1
+        );
+        Mockito.verify(this.documentStorageFileRepository, Mockito.times(1)).deleteFile(
+            originalDokument4.getFilePath().getPathToFile(),
+            1
+        );
+        Mockito.verify(this.documentStorageFileRepository, Mockito.times(2)).deleteFile(
+            Mockito.anyString(),
+            Mockito.anyInt()
+        );
 
         Mockito.reset(this.dokumentRepository, documentStorageFileRepository);
 
@@ -137,9 +139,10 @@ class DokumentServiceTest {
             null,
             null
         );
-        Mockito
-            .verify(this.documentStorageFileRepository, Mockito.times(0))
-            .deleteFile(Mockito.anyString(), Mockito.anyInt());
+        Mockito.verify(this.documentStorageFileRepository, Mockito.times(0)).deleteFile(
+            Mockito.anyString(),
+            Mockito.anyInt()
+        );
     }
 
     @Test
@@ -184,31 +187,28 @@ class DokumentServiceTest {
 
         assertThat(result, is(expected));
 
-        result =
-            dokumentService.getDokumenteInOriginalDokumentenListWhichAreMissingInAdaptedDokumentenListe(
-                new ArrayList<>(),
-                originalDokumentModels
-            );
+        result = dokumentService.getDokumenteInOriginalDokumentenListWhichAreMissingInAdaptedDokumentenListe(
+            new ArrayList<>(),
+            originalDokumentModels
+        );
 
         expected = List.of(originalDokument4, originalDokument2, originalDokument1, originalDokument3);
 
         assertThat(result, is(expected));
 
-        result =
-            dokumentService.getDokumenteInOriginalDokumentenListWhichAreMissingInAdaptedDokumentenListe(
-                adaptedDokumentModels,
-                new ArrayList<>()
-            );
+        result = dokumentService.getDokumenteInOriginalDokumentenListWhichAreMissingInAdaptedDokumentenListe(
+            adaptedDokumentModels,
+            new ArrayList<>()
+        );
 
         expected = List.of();
 
         assertThat(result, is(expected));
 
-        result =
-            dokumentService.getDokumenteInOriginalDokumentenListWhichAreMissingInAdaptedDokumentenListe(
-                new ArrayList<>(),
-                new ArrayList<>()
-            );
+        result = dokumentService.getDokumenteInOriginalDokumentenListWhichAreMissingInAdaptedDokumentenListe(
+            new ArrayList<>(),
+            new ArrayList<>()
+        );
 
         expected = List.of();
 

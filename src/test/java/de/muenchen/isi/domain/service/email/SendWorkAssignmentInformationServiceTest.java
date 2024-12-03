@@ -41,34 +41,29 @@ class SendWorkAssignmentInformationServiceTest {
 
     @BeforeEach
     public void beforeEach() throws NoSuchFieldException, IllegalAccessException {
-        this.sendWorkAssignmentInformationService =
-            new SendWorkAssignmentInformationService(
-                "mailadress-receiver-sachbearbeitung",
-                "mailadress-receiver-bedarfsmeldung",
-                mailSenderRepository,
-                environment
-            );
+        this.sendWorkAssignmentInformationService = new SendWorkAssignmentInformationService(
+            "mailadress-receiver-sachbearbeitung",
+            "mailadress-receiver-bedarfsmeldung",
+            mailSenderRepository,
+            environment
+        );
         Mockito.reset(mailSenderRepository, environment);
     }
 
     @Test
     void sendWorkAssignmentInformationAsync() {
-        Mockito
-            .when(
-                environment.getProperty(
-                    StatusAbfrageEvents.ERNEUTE_BEARBEITUNG.getPropertyWorkAssignmentInformationText(),
-                    ""
-                )
+        Mockito.when(
+            environment.getProperty(
+                StatusAbfrageEvents.ERNEUTE_BEARBEITUNG.getPropertyWorkAssignmentInformationText(),
+                ""
             )
-            .thenReturn("Der Text ");
-        Mockito
-            .when(
-                environment.getProperty(
-                    StatusAbfrageEvents.ERNEUTE_BEARBEITUNG.getPropertyWorkAssignmentInformationSubject(),
-                    ""
-                )
+        ).thenReturn("Der Text ");
+        Mockito.when(
+            environment.getProperty(
+                StatusAbfrageEvents.ERNEUTE_BEARBEITUNG.getPropertyWorkAssignmentInformationSubject(),
+                ""
             )
-            .thenReturn("Der Betreff ");
+        ).thenReturn("Der Betreff ");
 
         final var abfrage = new BauleitplanverfahrenModel();
         abfrage.setName("Name der Abfrage");
@@ -80,29 +75,27 @@ class SendWorkAssignmentInformationServiceTest {
             StatusAbfrageEvents.ERNEUTE_BEARBEITUNG
         );
 
-        Mockito
-            .verify(mailSenderRepository, Mockito.times(1))
-            .sendMail(List.of("mailadress-receiver-sachbearbeitung"), subject, text);
+        Mockito.verify(mailSenderRepository, Mockito.times(1)).sendMail(
+            List.of("mailadress-receiver-sachbearbeitung"),
+            subject,
+            text
+        );
     }
 
     @Test
     void sendWorkAssignmentInformation() {
-        Mockito
-            .when(
-                environment.getProperty(
-                    StatusAbfrageEvents.ERNEUTE_BEARBEITUNG.getPropertyWorkAssignmentInformationText(),
-                    ""
-                )
+        Mockito.when(
+            environment.getProperty(
+                StatusAbfrageEvents.ERNEUTE_BEARBEITUNG.getPropertyWorkAssignmentInformationText(),
+                ""
             )
-            .thenReturn("Der Text ");
-        Mockito
-            .when(
-                environment.getProperty(
-                    StatusAbfrageEvents.ERNEUTE_BEARBEITUNG.getPropertyWorkAssignmentInformationSubject(),
-                    ""
-                )
+        ).thenReturn("Der Text ");
+        Mockito.when(
+            environment.getProperty(
+                StatusAbfrageEvents.ERNEUTE_BEARBEITUNG.getPropertyWorkAssignmentInformationSubject(),
+                ""
             )
-            .thenReturn("Der Betreff ");
+        ).thenReturn("Der Betreff ");
 
         final var abfrage = new BauleitplanverfahrenModel();
         abfrage.setName("Name der Abfrage");
@@ -114,29 +107,27 @@ class SendWorkAssignmentInformationServiceTest {
             StatusAbfrageEvents.ERNEUTE_BEARBEITUNG
         );
 
-        Mockito
-            .verify(mailSenderRepository, Mockito.times(1))
-            .sendMail(List.of("mailadress-receiver-sachbearbeitung"), subject, text);
+        Mockito.verify(mailSenderRepository, Mockito.times(1)).sendMail(
+            List.of("mailadress-receiver-sachbearbeitung"),
+            subject,
+            text
+        );
     }
 
     @Test
     void sendWorkAssignmentInformationWithStadtbezirk() {
-        Mockito
-            .when(
-                environment.getProperty(
-                    StatusAbfrageEvents.ERNEUTE_BEARBEITUNG.getPropertyWorkAssignmentInformationText(),
-                    ""
-                )
+        Mockito.when(
+            environment.getProperty(
+                StatusAbfrageEvents.ERNEUTE_BEARBEITUNG.getPropertyWorkAssignmentInformationText(),
+                ""
             )
-            .thenReturn("Der Text ");
-        Mockito
-            .when(
-                environment.getProperty(
-                    StatusAbfrageEvents.ERNEUTE_BEARBEITUNG.getPropertyWorkAssignmentInformationSubject(),
-                    ""
-                )
+        ).thenReturn("Der Text ");
+        Mockito.when(
+            environment.getProperty(
+                StatusAbfrageEvents.ERNEUTE_BEARBEITUNG.getPropertyWorkAssignmentInformationSubject(),
+                ""
             )
-            .thenReturn("Der Betreff ");
+        ).thenReturn("Der Betreff ");
 
         final var abfrage = new BauleitplanverfahrenModel();
         abfrage.setName("Name der Abfrage");
@@ -159,9 +150,11 @@ class SendWorkAssignmentInformationServiceTest {
             StatusAbfrageEvents.ERNEUTE_BEARBEITUNG
         );
 
-        Mockito
-            .verify(mailSenderRepository, Mockito.times(1))
-            .sendMail(List.of("mailadress-receiver-sachbearbeitung"), subject, text);
+        Mockito.verify(mailSenderRepository, Mockito.times(1)).sendMail(
+            List.of("mailadress-receiver-sachbearbeitung"),
+            subject,
+            text
+        );
     }
 
     @Test
@@ -237,8 +230,10 @@ class SendWorkAssignmentInformationServiceTest {
         result = sendWorkAssignmentInformationService.getReceiver(null, StatusAbfrageEvents.ABBRECHEN);
         assertThat(result, is(nullValue()));
 
-        result =
-            sendWorkAssignmentInformationService.getReceiver(null, StatusAbfrageEvents.ZURUECK_AN_ABFRAGEERSTELLUNG);
+        result = sendWorkAssignmentInformationService.getReceiver(
+            null,
+            StatusAbfrageEvents.ZURUECK_AN_ABFRAGEERSTELLUNG
+        );
         assertThat(result, is(nullValue()));
 
         result = sendWorkAssignmentInformationService.getReceiver(null, StatusAbfrageEvents.KEINE_BEARBEITUNG_NOETIG);
@@ -260,20 +255,18 @@ class SendWorkAssignmentInformationServiceTest {
         var historyElement = new BearbeitungshistorieModel();
         historyElement.setZielStatus(StatusAbfrage.ANGELEGT);
         bearbeitungshistorie.add(historyElement);
-        result =
-            sendWorkAssignmentInformationService.getEmailAddressOfPersonWhichInitiallyCreatedTheAbfrage(
-                bearbeitungshistorie
-            );
+        result = sendWorkAssignmentInformationService.getEmailAddressOfPersonWhichInitiallyCreatedTheAbfrage(
+            bearbeitungshistorie
+        );
         assertThat(result, is(nullValue()));
 
         bearbeitungshistorie = new ArrayList<>();
         historyElement = new BearbeitungshistorieModel();
         historyElement.setZielStatus(StatusAbfrage.UEBERMITTELT_ZUR_BEARBEITUNG);
         bearbeitungshistorie.add(historyElement);
-        result =
-            sendWorkAssignmentInformationService.getEmailAddressOfPersonWhichInitiallyCreatedTheAbfrage(
-                bearbeitungshistorie
-            );
+        result = sendWorkAssignmentInformationService.getEmailAddressOfPersonWhichInitiallyCreatedTheAbfrage(
+            bearbeitungshistorie
+        );
         assertThat(result, is(nullValue()));
 
         bearbeitungshistorie = new ArrayList<>();
@@ -283,10 +276,9 @@ class SendWorkAssignmentInformationServiceTest {
         historyElement.setBearbeitendePerson(bearbeitendePerson);
         historyElement.setZielStatus(StatusAbfrage.UEBERMITTELT_ZUR_BEARBEITUNG);
         bearbeitungshistorie.add(historyElement);
-        result =
-            sendWorkAssignmentInformationService.getEmailAddressOfPersonWhichInitiallyCreatedTheAbfrage(
-                bearbeitungshistorie
-            );
+        result = sendWorkAssignmentInformationService.getEmailAddressOfPersonWhichInitiallyCreatedTheAbfrage(
+            bearbeitungshistorie
+        );
         assertThat(result, is(nullValue()));
 
         bearbeitungshistorie = new ArrayList<>();
@@ -296,10 +288,9 @@ class SendWorkAssignmentInformationServiceTest {
         historyElement.setBearbeitendePerson(bearbeitendePerson);
         historyElement.setZielStatus(StatusAbfrage.UEBERMITTELT_ZUR_BEARBEITUNG);
         bearbeitungshistorie.add(historyElement);
-        result =
-            sendWorkAssignmentInformationService.getEmailAddressOfPersonWhichInitiallyCreatedTheAbfrage(
-                bearbeitungshistorie
-            );
+        result = sendWorkAssignmentInformationService.getEmailAddressOfPersonWhichInitiallyCreatedTheAbfrage(
+            bearbeitungshistorie
+        );
         assertThat(result, is("the-email-address-uebermittelt-zur-bearbeitung"));
 
         bearbeitungshistorie = new ArrayList<>();
@@ -324,23 +315,20 @@ class SendWorkAssignmentInformationServiceTest {
         historyElement.setZielStatus(StatusAbfrage.START_BEARBEITUNG);
         bearbeitungshistorie.add(historyElement);
 
-        result =
-            sendWorkAssignmentInformationService.getEmailAddressOfPersonWhichInitiallyCreatedTheAbfrage(
-                bearbeitungshistorie
-            );
+        result = sendWorkAssignmentInformationService.getEmailAddressOfPersonWhichInitiallyCreatedTheAbfrage(
+            bearbeitungshistorie
+        );
         assertThat(result, is("the-email-address-uebermittelt-zur-bearbeitung"));
     }
 
     @Test
     void getText() {
-        Mockito
-            .when(
-                environment.getProperty(
-                    StatusAbfrageEvents.ERNEUTE_BEARBEITUNG.getPropertyWorkAssignmentInformationText(),
-                    ""
-                )
+        Mockito.when(
+            environment.getProperty(
+                StatusAbfrageEvents.ERNEUTE_BEARBEITUNG.getPropertyWorkAssignmentInformationText(),
+                ""
             )
-            .thenReturn("Der Text ");
+        ).thenReturn("Der Text ");
 
         var result = sendWorkAssignmentInformationService.getText(
             "Name der Abfrage",
@@ -360,14 +348,12 @@ class SendWorkAssignmentInformationServiceTest {
 
     @Test
     void getSubject() {
-        Mockito
-            .when(
-                environment.getProperty(
-                    StatusAbfrageEvents.ERNEUTE_BEARBEITUNG.getPropertyWorkAssignmentInformationSubject(),
-                    ""
-                )
+        Mockito.when(
+            environment.getProperty(
+                StatusAbfrageEvents.ERNEUTE_BEARBEITUNG.getPropertyWorkAssignmentInformationSubject(),
+                ""
             )
-            .thenReturn("Der Betreff ");
+        ).thenReturn("Der Betreff ");
 
         var result = sendWorkAssignmentInformationService.getSubject(
             "Name der Abfrage",
