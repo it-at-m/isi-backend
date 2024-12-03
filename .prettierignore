@@ -6,3 +6,6 @@ target
 
 # Interne Dateien
 src/**/DatabaseFiller.java
+
+# MD Dateien
+*.md
