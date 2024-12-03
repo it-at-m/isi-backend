@@ -68,8 +68,7 @@ public class NfcRequestFilter extends OncePerRequestFilter {
         if (StringUtils.isEmpty(contentTypes)) {
             log.info("Disabling context-type filter.");
         } else {
-            final Set<String> newContentTypes = Arrays
-                .stream(contentTypes.split(";"))
+            final Set<String> newContentTypes = Arrays.stream(contentTypes.split(";"))
                 .map(String::trim)
                 .collect(Collectors.toSet());
             this.contentTypes.addAll(newContentTypes);

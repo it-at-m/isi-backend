@@ -168,8 +168,9 @@ class AbfrageServiceSpringTest {
 
         abfrage = TestData.createBaugenehmigungsverfahrenModel();
         abfrage = this.abfrageService.save(abfrage);
-        abfragevarianteId =
-            ((BaugenehmigungsverfahrenModel) abfrage).getAbfragevariantenBaugenehmigungsverfahren().get(0).getId();
+        abfragevarianteId = ((BaugenehmigungsverfahrenModel) abfrage).getAbfragevariantenBaugenehmigungsverfahren()
+            .get(0)
+            .getId();
         foundAbfrage = abfrageService.getByAbfragevarianteId(abfragevarianteId);
         assertThat(foundAbfrage, is(abfrage));
 
@@ -190,9 +191,8 @@ class AbfrageServiceSpringTest {
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
         this.abfrageService.save(abfrage);
 
-        Assertions.assertThrows(
-            EntityNotFoundException.class,
-            () -> this.abfrageService.getByAbfragevarianteId(UUID.randomUUID())
+        Assertions.assertThrows(EntityNotFoundException.class, () ->
+            this.abfrageService.getByAbfragevarianteId(UUID.randomUUID())
         );
         abfrageRepository.deleteAll();
     }

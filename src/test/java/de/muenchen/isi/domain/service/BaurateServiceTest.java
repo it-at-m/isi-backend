@@ -56,14 +56,12 @@ class BaurateServiceTest {
         idealtypischeBaurate.setJahresraten(List.of(jahresrate1, jahresrate2, jahresrate3));
 
         // Mit Wohneinheiten
-        Mockito
-            .when(
-                this.idealtypischeBaurateRepository.findByTypAndVonLessThanEqualAndBisExklusivGreaterThan(
-                        IdealtypischeBaurateTyp.ANZAHL_WOHNEINHEITEN_GESAMT,
-                        BigDecimal.valueOf(132L)
-                    )
-            )
-            .thenReturn(Optional.of(idealtypischeBaurate));
+        Mockito.when(
+            this.idealtypischeBaurateRepository.findByTypAndVonLessThanEqualAndBisExklusivGreaterThan(
+                    IdealtypischeBaurateTyp.ANZAHL_WOHNEINHEITEN_GESAMT,
+                    BigDecimal.valueOf(132L)
+                )
+        ).thenReturn(Optional.of(idealtypischeBaurate));
 
         var result = this.baurateService.determineBauraten(2000, 132L, BigDecimal.valueOf(1320.53));
 
@@ -87,14 +85,12 @@ class BaurateServiceTest {
 
         // Ohne Wohneinheiten
         idealtypischeBaurate.setTyp(IdealtypischeBaurateTyp.GESCHOSSFLAECHE_WOHNEN_GESAMT);
-        Mockito
-            .when(
-                this.idealtypischeBaurateRepository.findByTypAndVonLessThanEqualAndBisExklusivGreaterThan(
-                        IdealtypischeBaurateTyp.GESCHOSSFLAECHE_WOHNEN_GESAMT,
-                        BigDecimal.valueOf(1320.53)
-                    )
-            )
-            .thenReturn(Optional.of(idealtypischeBaurate));
+        Mockito.when(
+            this.idealtypischeBaurateRepository.findByTypAndVonLessThanEqualAndBisExklusivGreaterThan(
+                    IdealtypischeBaurateTyp.GESCHOSSFLAECHE_WOHNEN_GESAMT,
+                    BigDecimal.valueOf(1320.53)
+                )
+        ).thenReturn(Optional.of(idealtypischeBaurate));
 
         result = this.baurateService.determineBauraten(2000, null, BigDecimal.valueOf(1320.53));
 
@@ -117,60 +113,53 @@ class BaurateServiceTest {
         Mockito.reset(this.idealtypischeBaurateRepository);
 
         // Keine idealtypische Bauraten für Wohneinheiten
-        Mockito
-            .when(
-                this.idealtypischeBaurateRepository.findByTypAndVonLessThanEqualAndBisExklusivGreaterThan(
-                        IdealtypischeBaurateTyp.ANZAHL_WOHNEINHEITEN_GESAMT,
-                        BigDecimal.valueOf(100L)
-                    )
-            )
-            .thenReturn(Optional.empty());
-        EntityNotFoundException resultingException = Assertions.assertThrows(
-            EntityNotFoundException.class,
-            () -> this.baurateService.determineBauraten(2000, 100L, null)
+        Mockito.when(
+            this.idealtypischeBaurateRepository.findByTypAndVonLessThanEqualAndBisExklusivGreaterThan(
+                    IdealtypischeBaurateTyp.ANZAHL_WOHNEINHEITEN_GESAMT,
+                    BigDecimal.valueOf(100L)
+                )
+        ).thenReturn(Optional.empty());
+        EntityNotFoundException resultingException = Assertions.assertThrows(EntityNotFoundException.class, () ->
+            this.baurateService.determineBauraten(2000, 100L, null)
         );
         assertThat(
             resultingException.getMessage(),
             is("Für den Wert von 100 des Typs Wohneinheiten konnte keine idealtypische Baurate ermittelt werden.")
         );
-        Mockito
-            .verify(this.idealtypischeBaurateRepository, Mockito.times(1))
-            .findByTypAndVonLessThanEqualAndBisExklusivGreaterThan(
-                IdealtypischeBaurateTyp.ANZAHL_WOHNEINHEITEN_GESAMT,
-                BigDecimal.valueOf(100L)
-            );
+        Mockito.verify(
+            this.idealtypischeBaurateRepository,
+            Mockito.times(1)
+        ).findByTypAndVonLessThanEqualAndBisExklusivGreaterThan(
+            IdealtypischeBaurateTyp.ANZAHL_WOHNEINHEITEN_GESAMT,
+            BigDecimal.valueOf(100L)
+        );
 
         // Keine idealtypische Bauraten für Geschossfläche Wohnen
-        Mockito
-            .when(
-                this.idealtypischeBaurateRepository.findByTypAndVonLessThanEqualAndBisExklusivGreaterThan(
-                        IdealtypischeBaurateTyp.GESCHOSSFLAECHE_WOHNEN_GESAMT,
-                        BigDecimal.TEN
-                    )
-            )
-            .thenReturn(Optional.empty());
-        resultingException =
-            Assertions.assertThrows(
-                EntityNotFoundException.class,
-                () -> this.baurateService.determineBauraten(2000, null, BigDecimal.TEN)
-            );
+        Mockito.when(
+            this.idealtypischeBaurateRepository.findByTypAndVonLessThanEqualAndBisExklusivGreaterThan(
+                    IdealtypischeBaurateTyp.GESCHOSSFLAECHE_WOHNEN_GESAMT,
+                    BigDecimal.TEN
+                )
+        ).thenReturn(Optional.empty());
+        resultingException = Assertions.assertThrows(EntityNotFoundException.class, () ->
+            this.baurateService.determineBauraten(2000, null, BigDecimal.TEN)
+        );
         assertThat(
             resultingException.getMessage(),
             is("Für den Wert von 10 des Typs Geschoßfläche Wohnen konnte keine idealtypische Baurate ermittelt werden.")
         );
-        Mockito
-            .verify(this.idealtypischeBaurateRepository, Mockito.times(1))
-            .findByTypAndVonLessThanEqualAndBisExklusivGreaterThan(
-                IdealtypischeBaurateTyp.GESCHOSSFLAECHE_WOHNEN_GESAMT,
-                BigDecimal.TEN
-            );
+        Mockito.verify(
+            this.idealtypischeBaurateRepository,
+            Mockito.times(1)
+        ).findByTypAndVonLessThanEqualAndBisExklusivGreaterThan(
+            IdealtypischeBaurateTyp.GESCHOSSFLAECHE_WOHNEN_GESAMT,
+            BigDecimal.TEN
+        );
 
         // Ohne Wohneinheiten und ohne Geschossfläche Wohnen
-        resultingException =
-            Assertions.assertThrows(
-                EntityNotFoundException.class,
-                () -> this.baurateService.determineBauraten(2000, null, null)
-            );
+        resultingException = Assertions.assertThrows(EntityNotFoundException.class, () ->
+            this.baurateService.determineBauraten(2000, null, null)
+        );
         assertThat(
             resultingException.getMessage(),
             is(
@@ -183,55 +172,50 @@ class BaurateServiceTest {
     void determineIdealtypischeBaurate() throws EntityNotFoundException {
         final var idealtypischeBaurate = new IdealtypischeBaurate();
 
-        Mockito
-            .when(
-                this.idealtypischeBaurateRepository.findByTypAndVonLessThanEqualAndBisExklusivGreaterThan(
-                        IdealtypischeBaurateTyp.ANZAHL_WOHNEINHEITEN_GESAMT,
-                        BigDecimal.valueOf(132L)
-                    )
-            )
-            .thenReturn(Optional.of(idealtypischeBaurate));
+        Mockito.when(
+            this.idealtypischeBaurateRepository.findByTypAndVonLessThanEqualAndBisExklusivGreaterThan(
+                    IdealtypischeBaurateTyp.ANZAHL_WOHNEINHEITEN_GESAMT,
+                    BigDecimal.valueOf(132L)
+                )
+        ).thenReturn(Optional.of(idealtypischeBaurate));
 
         var result = this.baurateService.determineIdealtypischeBaurate(132L, BigDecimal.valueOf(1320.53));
         assertThat(result, is(idealtypischeBaurate));
-        Mockito
-            .verify(this.idealtypischeBaurateRepository, Mockito.times(1))
-            .findByTypAndVonLessThanEqualAndBisExklusivGreaterThan(
-                IdealtypischeBaurateTyp.ANZAHL_WOHNEINHEITEN_GESAMT,
-                BigDecimal.valueOf(132L)
-            );
+        Mockito.verify(
+            this.idealtypischeBaurateRepository,
+            Mockito.times(1)
+        ).findByTypAndVonLessThanEqualAndBisExklusivGreaterThan(
+            IdealtypischeBaurateTyp.ANZAHL_WOHNEINHEITEN_GESAMT,
+            BigDecimal.valueOf(132L)
+        );
         Mockito.reset(this.idealtypischeBaurateRepository);
 
-        Mockito
-            .when(
-                this.idealtypischeBaurateRepository.findByTypAndVonLessThanEqualAndBisExklusivGreaterThan(
-                        IdealtypischeBaurateTyp.GESCHOSSFLAECHE_WOHNEN_GESAMT,
-                        BigDecimal.valueOf(1320.53)
-                    )
-            )
-            .thenReturn(Optional.of(idealtypischeBaurate));
+        Mockito.when(
+            this.idealtypischeBaurateRepository.findByTypAndVonLessThanEqualAndBisExklusivGreaterThan(
+                    IdealtypischeBaurateTyp.GESCHOSSFLAECHE_WOHNEN_GESAMT,
+                    BigDecimal.valueOf(1320.53)
+                )
+        ).thenReturn(Optional.of(idealtypischeBaurate));
 
         result = this.baurateService.determineIdealtypischeBaurate(null, BigDecimal.valueOf(1320.53));
         assertThat(result, is(idealtypischeBaurate));
-        Mockito
-            .verify(this.idealtypischeBaurateRepository, Mockito.times(1))
-            .findByTypAndVonLessThanEqualAndBisExklusivGreaterThan(
-                IdealtypischeBaurateTyp.GESCHOSSFLAECHE_WOHNEN_GESAMT,
-                BigDecimal.valueOf(1320.53)
-            );
+        Mockito.verify(
+            this.idealtypischeBaurateRepository,
+            Mockito.times(1)
+        ).findByTypAndVonLessThanEqualAndBisExklusivGreaterThan(
+            IdealtypischeBaurateTyp.GESCHOSSFLAECHE_WOHNEN_GESAMT,
+            BigDecimal.valueOf(1320.53)
+        );
         Mockito.reset(this.idealtypischeBaurateRepository);
 
-        Mockito
-            .when(
-                this.idealtypischeBaurateRepository.findByTypAndVonLessThanEqualAndBisExklusivGreaterThan(
-                        IdealtypischeBaurateTyp.GESCHOSSFLAECHE_WOHNEN_GESAMT,
-                        null
-                    )
-            )
-            .thenReturn(Optional.empty());
-        final EntityNotFoundException resultingException = Assertions.assertThrows(
-            EntityNotFoundException.class,
-            () -> this.baurateService.determineIdealtypischeBaurate(null, null)
+        Mockito.when(
+            this.idealtypischeBaurateRepository.findByTypAndVonLessThanEqualAndBisExklusivGreaterThan(
+                    IdealtypischeBaurateTyp.GESCHOSSFLAECHE_WOHNEN_GESAMT,
+                    null
+                )
+        ).thenReturn(Optional.empty());
+        final EntityNotFoundException resultingException = Assertions.assertThrows(EntityNotFoundException.class, () ->
+            this.baurateService.determineIdealtypischeBaurate(null, null)
         );
         assertThat(
             resultingException.getMessage(),
@@ -243,24 +227,23 @@ class BaurateServiceTest {
 
     @Test
     void determineIdealtypischeBaurateForWertAndTyp() {
-        EntityNotFoundException resultingException = Assertions.assertThrows(
-            EntityNotFoundException.class,
-            () ->
-                this.baurateService.determineIdealtypischeBaurateForWertAndTyp(
-                        BigDecimal.valueOf(100),
-                        IdealtypischeBaurateTyp.ANZAHL_WOHNEINHEITEN_GESAMT
-                    )
+        EntityNotFoundException resultingException = Assertions.assertThrows(EntityNotFoundException.class, () ->
+            this.baurateService.determineIdealtypischeBaurateForWertAndTyp(
+                    BigDecimal.valueOf(100),
+                    IdealtypischeBaurateTyp.ANZAHL_WOHNEINHEITEN_GESAMT
+                )
         );
         assertThat(
             resultingException.getMessage(),
             is("Für den Wert von 100 des Typs Wohneinheiten konnte keine idealtypische Baurate ermittelt werden.")
         );
-        Mockito
-            .verify(this.idealtypischeBaurateRepository, Mockito.times(1))
-            .findByTypAndVonLessThanEqualAndBisExklusivGreaterThan(
-                IdealtypischeBaurateTyp.ANZAHL_WOHNEINHEITEN_GESAMT,
-                BigDecimal.valueOf(100L)
-            );
+        Mockito.verify(
+            this.idealtypischeBaurateRepository,
+            Mockito.times(1)
+        ).findByTypAndVonLessThanEqualAndBisExklusivGreaterThan(
+            IdealtypischeBaurateTyp.ANZAHL_WOHNEINHEITEN_GESAMT,
+            BigDecimal.valueOf(100L)
+        );
     }
 
     @Test
@@ -270,23 +253,35 @@ class BaurateServiceTest {
             BigDecimal.valueOf(0.053)
         );
         assertThat(result, is(BigDecimal.valueOf(0)));
-        result =
-            baurateService.calculateRoundedDownRatenwertForGesamtwertAndRate(BigDecimal.TEN, BigDecimal.valueOf(0.153));
+        result = baurateService.calculateRoundedDownRatenwertForGesamtwertAndRate(
+            BigDecimal.TEN,
+            BigDecimal.valueOf(0.153)
+        );
         assertThat(result, is(BigDecimal.valueOf(1)));
-        result =
-            baurateService.calculateRoundedDownRatenwertForGesamtwertAndRate(BigDecimal.TEN, BigDecimal.valueOf(0.353));
+        result = baurateService.calculateRoundedDownRatenwertForGesamtwertAndRate(
+            BigDecimal.TEN,
+            BigDecimal.valueOf(0.353)
+        );
         assertThat(result, is(BigDecimal.valueOf(3)));
-        result =
-            baurateService.calculateRoundedDownRatenwertForGesamtwertAndRate(BigDecimal.TEN, BigDecimal.valueOf(0.453));
+        result = baurateService.calculateRoundedDownRatenwertForGesamtwertAndRate(
+            BigDecimal.TEN,
+            BigDecimal.valueOf(0.453)
+        );
         assertThat(result, is(BigDecimal.valueOf(4)));
-        result =
-            baurateService.calculateRoundedDownRatenwertForGesamtwertAndRate(BigDecimal.TEN, BigDecimal.valueOf(0.553));
+        result = baurateService.calculateRoundedDownRatenwertForGesamtwertAndRate(
+            BigDecimal.TEN,
+            BigDecimal.valueOf(0.553)
+        );
         assertThat(result, is(BigDecimal.valueOf(5)));
-        result =
-            baurateService.calculateRoundedDownRatenwertForGesamtwertAndRate(BigDecimal.TEN, BigDecimal.valueOf(0.953));
+        result = baurateService.calculateRoundedDownRatenwertForGesamtwertAndRate(
+            BigDecimal.TEN,
+            BigDecimal.valueOf(0.953)
+        );
         assertThat(result, is(BigDecimal.valueOf(9)));
-        result =
-            baurateService.calculateRoundedDownRatenwertForGesamtwertAndRate(BigDecimal.TEN, BigDecimal.valueOf(1));
+        result = baurateService.calculateRoundedDownRatenwertForGesamtwertAndRate(
+            BigDecimal.TEN,
+            BigDecimal.valueOf(1)
+        );
         assertThat(result, is(BigDecimal.TEN));
     }
 }

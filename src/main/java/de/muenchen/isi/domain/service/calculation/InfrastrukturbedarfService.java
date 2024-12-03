@@ -325,9 +325,10 @@ public class InfrastrukturbedarfService {
     protected PersonenProJahrModel add(final PersonenProJahrModel o1, final PersonenProJahrModel o2) {
         final var bedarf = new PersonenProJahrModel();
         final var jahr = ObjectUtils.defaultIfNull(o1.getJahr(), o2.getJahr());
-        final var sumAnzahlPersonenGesamt = ObjectUtils
-            .defaultIfNull(o1.getAnzahlPersonenGesamt(), BigDecimal.ZERO)
-            .add(ObjectUtils.defaultIfNull(o2.getAnzahlPersonenGesamt(), BigDecimal.ZERO));
+        final var sumAnzahlPersonenGesamt = ObjectUtils.defaultIfNull(
+            o1.getAnzahlPersonenGesamt(),
+            BigDecimal.ZERO
+        ).add(ObjectUtils.defaultIfNull(o2.getAnzahlPersonenGesamt(), BigDecimal.ZERO));
         bedarf.setJahr(jahr);
         bedarf.setAnzahlPersonenGesamt(sumAnzahlPersonenGesamt);
         return bedarf;
@@ -397,11 +398,10 @@ public class InfrastrukturbedarfService {
         BigDecimal anzahlPersonenGesamt;
         final var obererRichtwerteByYear = getObererRichtwerteByYear(sobonOrientierungswertSozialeInfrastruktur);
         for (var yearToCalculate = 1; yearToCalculate <= numberOfYearsToCalculate; yearToCalculate++) {
-            anzahlPersonenGesamt =
-                wohneinheiten
-                    .getWohneinheiten()
-                    .multiply(obererRichtwerteByYear.get(yearToCalculate))
-                    .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
+            anzahlPersonenGesamt = wohneinheiten
+                .getWohneinheiten()
+                .multiply(obererRichtwerteByYear.get(yearToCalculate))
+                .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
             personen.add(
                 createPersonenProJahr(
                     Integer.parseInt(wohneinheiten.getJahr()) + yearToCalculate - 1,

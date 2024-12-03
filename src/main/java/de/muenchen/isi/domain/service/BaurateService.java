@@ -53,15 +53,16 @@ public class BaurateService {
             if (index < jahresraten.size() - 1) {
                 // Abrunden der Raten.
                 if (ObjectUtils.isNotEmpty(wohneinheiten)) {
-                    rate =
-                        calculateRoundedDownRatenwertForGesamtwertAndRate(
-                            BigDecimal.valueOf(wohneinheiten),
-                            jahresrate.getRate()
-                        );
+                    rate = calculateRoundedDownRatenwertForGesamtwertAndRate(
+                        BigDecimal.valueOf(wohneinheiten),
+                        jahresrate.getRate()
+                    );
                     baurate.setWeGeplant(rate.intValue());
                 } else {
-                    rate =
-                        calculateRoundedDownRatenwertForGesamtwertAndRate(geschossflaecheWohnen, jahresrate.getRate());
+                    rate = calculateRoundedDownRatenwertForGesamtwertAndRate(
+                        geschossflaecheWohnen,
+                        jahresrate.getRate()
+                    );
                     baurate.setGfWohnenGeplant(rate);
                 }
                 partialSum = partialSum.add(rate);
@@ -96,17 +97,15 @@ public class BaurateService {
     ) throws EntityNotFoundException {
         final IdealtypischeBaurate idealtypischeBaurate;
         if (ObjectUtils.isNotEmpty(wohneinheiten)) {
-            idealtypischeBaurate =
-                determineIdealtypischeBaurateForWertAndTyp(
-                    BigDecimal.valueOf(wohneinheiten),
-                    IdealtypischeBaurateTyp.ANZAHL_WOHNEINHEITEN_GESAMT
-                );
+            idealtypischeBaurate = determineIdealtypischeBaurateForWertAndTyp(
+                BigDecimal.valueOf(wohneinheiten),
+                IdealtypischeBaurateTyp.ANZAHL_WOHNEINHEITEN_GESAMT
+            );
         } else if (ObjectUtils.isNotEmpty(geschossflaecheWohnen)) {
-            idealtypischeBaurate =
-                determineIdealtypischeBaurateForWertAndTyp(
-                    geschossflaecheWohnen,
-                    IdealtypischeBaurateTyp.GESCHOSSFLAECHE_WOHNEN_GESAMT
-                );
+            idealtypischeBaurate = determineIdealtypischeBaurateForWertAndTyp(
+                geschossflaecheWohnen,
+                IdealtypischeBaurateTyp.GESCHOSSFLAECHE_WOHNEN_GESAMT
+            );
         } else {
             final String errorMessage =
                 "Es konnten keine idealtypischen Bauraten für Wohneinheiten oder für Geschoßfläche Wohnen ermittelt werden.";

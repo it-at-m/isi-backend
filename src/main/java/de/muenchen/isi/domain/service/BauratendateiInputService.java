@@ -166,8 +166,7 @@ public class BauratendateiInputService {
      */
     protected List<String> getGrundschulsprengel(final VerortungModel verortung) {
         return ObjectUtils.isNotEmpty(verortung)
-            ? CollectionUtils
-                .emptyIfNull(verortung.getGrundschulsprengel())
+            ? CollectionUtils.emptyIfNull(verortung.getGrundschulsprengel())
                 .stream()
                 .map(GrundschulsprengelModel::getNummer)
                 .filter(ObjectUtils::isNotEmpty)
@@ -184,8 +183,7 @@ public class BauratendateiInputService {
      */
     protected List<String> getMittelschulsprengel(final VerortungModel verortung) {
         return ObjectUtils.isNotEmpty(verortung)
-            ? CollectionUtils
-                .emptyIfNull(verortung.getMittelschulsprengel())
+            ? CollectionUtils.emptyIfNull(verortung.getMittelschulsprengel())
                 .stream()
                 .map(MittelschulsprengelModel::getNummer)
                 .filter(ObjectUtils::isNotEmpty)
@@ -202,8 +200,7 @@ public class BauratendateiInputService {
      */
     protected List<String> getViertel(final VerortungModel verortung) {
         return ObjectUtils.isNotEmpty(verortung)
-            ? CollectionUtils
-                .emptyIfNull(verortung.getViertel())
+            ? CollectionUtils.emptyIfNull(verortung.getViertel())
                 .stream()
                 .map(ViertelModel::getNummer)
                 .filter(ObjectUtils::isNotEmpty)

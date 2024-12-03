@@ -49,10 +49,9 @@ class SearchPreparationServiceTest {
         expected.add("abfragevariantenSachbearbeitungBauleitplanverfahren.realisierungVon_searchword_suggestion");
         assertThat(result, is(expected));
 
-        result =
-            searchPreparationService.getNamesOfSearchableAttributesForSearchwordSuggestion(
-                Baugenehmigungsverfahren.class
-            );
+        result = searchPreparationService.getNamesOfSearchableAttributesForSearchwordSuggestion(
+            Baugenehmigungsverfahren.class
+        );
         expected = new HashSet<>();
         expected.add("adresse.strasse_searchword_suggestion");
         expected.add("adresse.hausnummer_searchword_suggestion");
@@ -67,8 +66,9 @@ class SearchPreparationServiceTest {
         expected.add("abfragevariantenSachbearbeitungBaugenehmigungsverfahren.realisierungVon_searchword_suggestion");
         assertThat(result, is(expected));
 
-        result =
-            searchPreparationService.getNamesOfSearchableAttributesForSearchwordSuggestion(WeiteresVerfahren.class);
+        result = searchPreparationService.getNamesOfSearchableAttributesForSearchwordSuggestion(
+            WeiteresVerfahren.class
+        );
         expected = new HashSet<>();
         expected.add("adresse.strasse_searchword_suggestion");
         expected.add("adresse.hausnummer_searchword_suggestion");
@@ -104,8 +104,9 @@ class SearchPreparationServiceTest {
         expected.add("status_searchword_suggestion");
         assertThat(result, is(expected));
 
-        result =
-            searchPreparationService.getNamesOfSearchableAttributesForSearchwordSuggestion(GsNachmittagBetreuung.class);
+        result = searchPreparationService.getNamesOfSearchableAttributesForSearchwordSuggestion(
+            GsNachmittagBetreuung.class
+        );
         expected = new HashSet<>();
         expected.add("adresse.strasse_searchword_suggestion");
         expected.add("adresse.hausnummer_searchword_suggestion");
@@ -254,21 +255,20 @@ class SearchPreparationServiceTest {
         expected.add("status");
         assertThat(result, is(expected.toArray(String[]::new)));
 
-        result =
-            searchPreparationService.getNamesOfSearchableAttributes(
-                List.of(
-                    Bauleitplanverfahren.class,
-                    Baugenehmigungsverfahren.class,
-                    WeiteresVerfahren.class,
-                    Bauvorhaben.class,
-                    Grundschule.class,
-                    GsNachmittagBetreuung.class,
-                    HausFuerKinder.class,
-                    Kindergarten.class,
-                    Kinderkrippe.class,
-                    Mittelschule.class
-                )
-            );
+        result = searchPreparationService.getNamesOfSearchableAttributes(
+            List.of(
+                Bauleitplanverfahren.class,
+                Baugenehmigungsverfahren.class,
+                WeiteresVerfahren.class,
+                Bauvorhaben.class,
+                Grundschule.class,
+                GsNachmittagBetreuung.class,
+                HausFuerKinder.class,
+                Kindergarten.class,
+                Kinderkrippe.class,
+                Mittelschule.class
+            )
+        );
         expected = new HashSet<>();
         expected.add("adresse.strasse");
         expected.add("adresse.hausnummer");
@@ -486,9 +486,8 @@ class SearchPreparationServiceTest {
         searchQueryModel.setSelectKindergarten(false);
         searchQueryModel.setSelectKinderkrippe(false);
         searchQueryModel.setSelectMittelschule(false);
-        Assertions.assertThrows(
-            EntityNotFoundException.class,
-            () -> this.searchPreparationService.getSearchableEntities(searchQueryModel)
+        Assertions.assertThrows(EntityNotFoundException.class, () ->
+            this.searchPreparationService.getSearchableEntities(searchQueryModel)
         );
     }
 }
