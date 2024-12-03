@@ -75,7 +75,7 @@ public class AbfrageStatusController {
 
     @PutMapping("{id}/freigabe")
     @Transactional(rollbackFor = OptimisticLockingException.class)
-    @Operation(summary = "Setzt eine Abfrage auf den Status OFFEN")
+    @Operation(summary = "Setzt eine Abfrage auf den Status UEBERMITTELT_ZUR_BEARBEITUNG")
     @ApiResponses(
         value = {
             @ApiResponse(responseCode = "200", description = "OK -> Abfrage wurde erfolgreich freigegeben."),
@@ -179,7 +179,7 @@ public class AbfrageStatusController {
 
     @PutMapping("{id}/in-bearbeitung-setzen")
     @Transactional
-    @Operation(summary = "Setzt eine Abfrage auf den Status IN_BEARBEITUNG_SACHBEARBEITUNG")
+    @Operation(summary = "Setzt eine Abfrage auf den Status START_BEARBEITUNG")
     @ApiResponses(
         value = {
             @ApiResponse(
@@ -217,7 +217,7 @@ public class AbfrageStatusController {
 
     @PutMapping("{id}/zurueck-an-sachbearbeitung")
     @Transactional
-    @Operation(summary = "Setzt eine Abfrage auf den Status IN_BEARBEITUNG_SACHBEARBEITUNG")
+    @Operation(summary = "Setzt eine Abfrage auf den Status START_BEARBEITUNG")
     @ApiResponses(
         value = {
             @ApiResponse(
@@ -290,7 +290,7 @@ public class AbfrageStatusController {
 
     @PutMapping("{id}/verschicken-der-stellungnahme")
     @Transactional
-    @Operation(summary = "Setzt eine Abfrage auf den Status IN_BEARBEITUNG_FACHREFERATE")
+    @Operation(summary = "Setzt eine Abfrage auf den Status EINPFLEGEN_BEDARFSMELDUNG")
     @ApiResponses(
         value = {
             @ApiResponse(
@@ -328,7 +328,7 @@ public class AbfrageStatusController {
 
     @PutMapping("{id}/bedarfsmeldung-erfolgt")
     @Transactional
-    @Operation(summary = "Setzt eine Abfrage auf den Status BEDARFSMELDUNG_ERFOLGT")
+    @Operation(summary = "Setzt eine Abfrage auf den Status EINPLANUNG_BEDARFE")
     @ApiResponses(
         value = {
             @ApiResponse(responseCode = "200", description = "OK -> Die Bedarfsmeldung der Fachreferate ist erfolgt"),
@@ -398,7 +398,7 @@ public class AbfrageStatusController {
 
     @PutMapping("{id}/erneute-bearbeitung-sachbearbeitung")
     @Transactional
-    @Operation(summary = "Setzt eine Abfrage auf den Status IN_BEARBEITUNG_SACHBEARBEITUNG")
+    @Operation(summary = "Setzt eine Abfrage auf den Status START_BEARBEITUNG")
     @ApiResponses(
         value = {
             @ApiResponse(

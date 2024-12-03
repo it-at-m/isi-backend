@@ -3,7 +3,7 @@ package de.muenchen.isi.api.validation;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
-import de.muenchen.isi.api.dto.abfrageInBearbeitungSachbearbeitung.AbfragevarianteBaugenehmigungsverfahrenInBearbeitungSachbearbeitungDto;
+import de.muenchen.isi.api.dto.abfrageStartBearbeitung.AbfragevarianteBaugenehmigungsverfahrenStartBearbeitungDto;
 import de.muenchen.isi.api.dto.bauratendatei.BauratendateiInputDto;
 import de.muenchen.isi.api.mapper.BauratendateiApiMapperImpl;
 import de.muenchen.isi.domain.model.bauratendatei.BauratendateiInputModel;
@@ -36,7 +36,7 @@ class BauratendateiInputValidatorTest {
 
     @Test
     void isValidHasBauratendateiInputIsNull() {
-        final var abfragevariante = new AbfragevarianteBaugenehmigungsverfahrenInBearbeitungSachbearbeitungDto();
+        final var abfragevariante = new AbfragevarianteBaugenehmigungsverfahrenStartBearbeitungDto();
         abfragevariante.setHasBauratendateiInput(null);
         abfragevariante.setBauratendateiInputBasis(null);
         abfragevariante.setBauratendateiInput(null);
@@ -51,7 +51,7 @@ class BauratendateiInputValidatorTest {
 
     @Test
     void isValidHasBauratendateiInputIsFalse() {
-        final var abfragevariante = new AbfragevarianteBaugenehmigungsverfahrenInBearbeitungSachbearbeitungDto();
+        final var abfragevariante = new AbfragevarianteBaugenehmigungsverfahrenStartBearbeitungDto();
         abfragevariante.setHasBauratendateiInput(false);
         abfragevariante.setBauratendateiInputBasis(null);
         abfragevariante.setBauratendateiInput(null);
@@ -66,7 +66,7 @@ class BauratendateiInputValidatorTest {
 
     @Test
     void isValidHasBauratendateiInputIsTrueAndEqualsIsFalse() {
-        final var abfragevariante = new AbfragevarianteBaugenehmigungsverfahrenInBearbeitungSachbearbeitungDto();
+        final var abfragevariante = new AbfragevarianteBaugenehmigungsverfahrenStartBearbeitungDto();
         abfragevariante.setHasBauratendateiInput(true);
         abfragevariante.setBauratendateiInputBasis(new BauratendateiInputDto());
         abfragevariante.setBauratendateiInput(List.of(new BauratendateiInputDto()));
@@ -87,7 +87,7 @@ class BauratendateiInputValidatorTest {
 
     @Test
     void isValidHasBauratendateiInputIsTrueAndEqualsIsTrue() {
-        final var abfragevariante = new AbfragevarianteBaugenehmigungsverfahrenInBearbeitungSachbearbeitungDto();
+        final var abfragevariante = new AbfragevarianteBaugenehmigungsverfahrenStartBearbeitungDto();
         abfragevariante.setHasBauratendateiInput(true);
         abfragevariante.setBauratendateiInputBasis(new BauratendateiInputDto());
         abfragevariante.setBauratendateiInput(List.of(new BauratendateiInputDto()));

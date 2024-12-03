@@ -6,9 +6,9 @@ package de.muenchen.isi.api.controller;
 
 import de.muenchen.isi.api.dto.AbfrageDto;
 import de.muenchen.isi.api.dto.abfrageAngelegt.AbfrageAngelegtDto;
-import de.muenchen.isi.api.dto.abfrageBedarfsmeldungErfolgt.AbfrageBedarfsmeldungErfolgtDto;
-import de.muenchen.isi.api.dto.abfrageInBearbeitungFachreferat.AbfrageInBearbeitungFachreferatDto;
-import de.muenchen.isi.api.dto.abfrageInBearbeitungSachbearbeitung.AbfrageInBearbeitungSachbearbeitungDto;
+import de.muenchen.isi.api.dto.abfrageEinpflegenBedarfsmeldung.AbfrageEinpflegenBedarfsmeldungDto;
+import de.muenchen.isi.api.dto.abfrageEinplanungBedarfe.AbfrageEinplanungBedarfeDto;
+import de.muenchen.isi.api.dto.abfrageStartBearbeitung.AbfrageStartBearbeitungDto;
 import de.muenchen.isi.api.dto.error.InformationResponseDto;
 import de.muenchen.isi.api.mapper.AbfrageApiMapper;
 import de.muenchen.isi.domain.exception.AbfrageStatusNotAllowedException;
@@ -178,7 +178,7 @@ public class AbfrageController {
     @Transactional(
         rollbackFor = { OptimisticLockingException.class, CalculationException.class, ReportingException.class }
     )
-    @Operation(summary = "Aktualisierung einer Abfrage im Status IN_BEARBEITUNG_SACHBEARBEITUNG.")
+    @Operation(summary = "Aktualisierung einer Abfrage im Status START_BEARBEITUNG.")
     @ApiResponses(
         value = {
             @ApiResponse(responseCode = "200", description = "OK -> Abfrage wurde erfolgreich aktualisiert."),
@@ -210,15 +210,15 @@ public class AbfrageController {
         }
     )
     @PreAuthorize(
-        "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_PATCH_ABFRAGE_IN_BEARBEITUNG_SACHBEARBEITUNG.name())"
+        "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_PATCH_ABFRAGE_START_BEARBEITUNG.name())"
     )
-    public ResponseEntity<AbfrageDto> patchInBearbeitungSachbearbeitung(
-        @RequestBody @Valid @NotNull final AbfrageInBearbeitungSachbearbeitungDto abfrage,
+    public ResponseEntity<AbfrageDto> patchStartBearbeitung(
+        @RequestBody @Valid @NotNull final AbfrageStartBearbeitungDto abfrage,
         @PathVariable @NotNull final UUID id
     )
         throws OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException, UserRoleNotAllowedException, ReportingException {
         final var requestModel = abfrageApiMapper.dto2Model(abfrage);
-        final var responseModel = abfrageService.patchInBearbeitungSachbearbeitung(requestModel, id);
+        final var responseModel = abfrageService.patchStartBearbeitung(requestModel, id);
         final var dto = abfrageApiMapper.model2Dto(responseModel);
         return ResponseEntity.ok(dto);
     }
@@ -227,7 +227,7 @@ public class AbfrageController {
     @Transactional(
         rollbackFor = { OptimisticLockingException.class, CalculationException.class, ReportingException.class }
     )
-    @Operation(summary = "Aktualisierung einer Abfrage im Status IN_BEARBEITUNG_FACHREFERATE.")
+    @Operation(summary = "Aktualisierung einer Abfrage im Status EINPFLEGEN_BEDARFSMELDUNG.")
     @ApiResponses(
         value = {
             @ApiResponse(responseCode = "200", description = "OK -> Abfrage wurde erfolgreich aktualisiert."),
@@ -259,15 +259,15 @@ public class AbfrageController {
         }
     )
     @PreAuthorize(
-        "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_PATCH_ABFRAGE_IN_BEARBEITUNG_FACHREFERATE.name())"
+        "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_PATCH_ABFRAGE_EINPFLEGEN_BEDARFSMELDUNG.name())"
     )
-    public ResponseEntity<AbfrageDto> patchInBearbeitungFachreferat(
-        @RequestBody @Valid @NotNull final AbfrageInBearbeitungFachreferatDto abfrage,
+    public ResponseEntity<AbfrageDto> patchEinpflegenBedarfsmeldung(
+        @RequestBody @Valid @NotNull final AbfrageEinpflegenBedarfsmeldungDto abfrage,
         @PathVariable @NotNull final UUID id
     )
         throws OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException, UserRoleNotAllowedException, ReportingException {
         final var requestModel = abfrageApiMapper.dto2Model(abfrage);
-        final var responseModel = abfrageService.patchInBearbeitungFachreferat(requestModel, id);
+        final var responseModel = abfrageService.patchEinpflegenBedarfsmeldung(requestModel, id);
         final var dto = abfrageApiMapper.model2Dto(responseModel);
         return ResponseEntity.ok(dto);
     }
@@ -276,7 +276,7 @@ public class AbfrageController {
     @Transactional(
         rollbackFor = { OptimisticLockingException.class, CalculationException.class, ReportingException.class }
     )
-    @Operation(summary = "Aktualisierung einer Abfrage im Status BEDARFSMELDUNG_ERFOLGT.")
+    @Operation(summary = "Aktualisierung einer Abfrage im Status EINPLANUNG_BEDARFE.")
     @ApiResponses(
         value = {
             @ApiResponse(responseCode = "200", description = "OK -> Abfrage wurde erfolgreich aktualisiert."),
@@ -303,15 +303,15 @@ public class AbfrageController {
         }
     )
     @PreAuthorize(
-        "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_PATCH_ABFRAGE_BEDARFSMELDUNG_ERFOLGT.name())"
+        "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_PATCH_ABFRAGE_EINPLANUNG_BEDARFE.name())"
     )
-    public ResponseEntity<AbfrageDto> patchBedarfsmeldungErfolgt(
-        @RequestBody @Valid @NotNull final AbfrageBedarfsmeldungErfolgtDto abfrage,
+    public ResponseEntity<AbfrageDto> patchEinplanungBedarfe(
+        @RequestBody @Valid @NotNull final AbfrageEinplanungBedarfeDto abfrage,
         @PathVariable @NotNull final UUID id
     )
         throws OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, UserRoleNotAllowedException, CalculationException, ReportingException {
         final var requestModel = abfrageApiMapper.dto2Model(abfrage);
-        final var responseModel = abfrageService.patchBedarfsmeldungErfolgt(requestModel, id);
+        final var responseModel = abfrageService.patchEinplanungBedarfe(requestModel, id);
         final var dto = abfrageApiMapper.model2Dto(responseModel);
         return ResponseEntity.ok(dto);
     }

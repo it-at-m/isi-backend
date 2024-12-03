@@ -43,3 +43,6 @@ src/**/logback-spring.xml
 
 node_modules/
 package-lock.json
+
+isi-backend
+isi-reporting
