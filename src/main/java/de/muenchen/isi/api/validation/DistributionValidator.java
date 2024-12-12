@@ -172,8 +172,7 @@ public class DistributionValidator {
      * @return die Liste an nichttechnischen Baugebieten identifiziert über {@link BaugebietDto#getTechnical()}.
      */
     public List<BaugebietDto> getNonTechnicalBaugebiete(final List<BauabschnittDto> bauabschnitte) {
-        return CollectionUtils
-            .emptyIfNull(bauabschnitte)
+        return CollectionUtils.emptyIfNull(bauabschnitte)
             .stream()
             .flatMap(bauabschnitt -> CollectionUtils.emptyIfNull(bauabschnitt.getBaugebiete()).stream())
             .filter(baugebiet -> BooleanUtils.isFalse(baugebiet.getTechnical()))
@@ -189,8 +188,7 @@ public class DistributionValidator {
      * @return die Liste an Bauraten aller technischen Baugebiete identifiziert über {@link BaugebietDto#getTechnical()}.
      */
     public List<BaurateDto> getBauratenFromAllTechnicalBaugebiete(final List<BauabschnittDto> bauabschnitte) {
-        return CollectionUtils
-            .emptyIfNull(bauabschnitte)
+        return CollectionUtils.emptyIfNull(bauabschnitte)
             .stream()
             .flatMap(bauabschnitt -> CollectionUtils.emptyIfNull(bauabschnitt.getBaugebiete()).stream())
             .filter(baugebiet -> BooleanUtils.isTrue(baugebiet.getTechnical()))

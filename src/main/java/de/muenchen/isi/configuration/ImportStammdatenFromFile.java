@@ -49,8 +49,9 @@ public class ImportStammdatenFromFile implements CommandLineRunner {
         final StaedtebaulicheOrientierungswertRepository staedtebaulicheOrientierungswertRepository
     ) {
         this.importCsvFiles = importCsvFiles;
-        this.csvSobonOrientierungswertSozialeInfrastruktur =
-            ListUtils.emptyIfNull(csvSobonOrientierungswertSozialeInfrastruktur);
+        this.csvSobonOrientierungswertSozialeInfrastruktur = ListUtils.emptyIfNull(
+            csvSobonOrientierungswertSozialeInfrastruktur
+        );
         this.csvStaedtebaulicheOrientierungswerte = ListUtils.emptyIfNull(csvStaedtebaulicheOrientierungswerte);
         this.stammdatenImportService = stammdatenImportService;
         this.sobonOrientierungswertSozialeInfrastrukturRepository =

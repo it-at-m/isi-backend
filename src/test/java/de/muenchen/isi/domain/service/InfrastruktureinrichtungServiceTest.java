@@ -122,9 +122,8 @@ class InfrastruktureinrichtungServiceTest {
         assertThat(model.getInfrastruktureinrichtungTyp(), is(entity.getInfrastruktureinrichtungTyp()));
         assertThat(model.getId(), is(entity.getId()));
 
-        Assertions.assertThrows(
-            EntityNotFoundException.class,
-            () -> this.infrastruktureinrichtungService.getInfrastruktureinrichtungById(UUID.randomUUID())
+        Assertions.assertThrows(EntityNotFoundException.class, () ->
+            this.infrastruktureinrichtungService.getInfrastruktureinrichtungById(UUID.randomUUID())
         );
     }
 
@@ -165,9 +164,9 @@ class InfrastruktureinrichtungServiceTest {
             is(mittelschule.getSchule().getAnzahlPlaetze())
         );
 
-        Mockito
-            .verify(this.etlInterfaceService, Mockito.times(1))
-            .etlInterfaceTriggerInfrastruktureinrichtungJob(savedMittelschule.getId());
+        Mockito.verify(this.etlInterfaceService, Mockito.times(1)).etlInterfaceTriggerInfrastruktureinrichtungJob(
+            savedMittelschule.getId()
+        );
     }
 
     @Test
@@ -194,9 +193,9 @@ class InfrastruktureinrichtungServiceTest {
         final var savedMittelschule = this.infrastruktureinrichtungService.saveInfrastruktureinrichtung(mittelschule);
         assertThat(savedMittelschule.getVersion(), is(0L));
 
-        Mockito
-            .verify(this.etlInterfaceService, Mockito.times(1))
-            .etlInterfaceTriggerInfrastruktureinrichtungJob(savedMittelschule.getId());
+        Mockito.verify(this.etlInterfaceService, Mockito.times(1)).etlInterfaceTriggerInfrastruktureinrichtungJob(
+            savedMittelschule.getId()
+        );
         Mockito.reset(this.etlInterfaceService);
 
         savedMittelschule.setNameEinrichtung("Mittelschule XXX");
@@ -220,20 +219,18 @@ class InfrastruktureinrichtungServiceTest {
         );
 
         updatedMittelschule.setVersion(0L);
-        Assertions.assertThrows(
-            OptimisticLockingException.class,
-            () -> this.infrastruktureinrichtungService.updateInfrastruktureinrichtung(updatedMittelschule)
+        Assertions.assertThrows(OptimisticLockingException.class, () ->
+            this.infrastruktureinrichtungService.updateInfrastruktureinrichtung(updatedMittelschule)
         );
 
         updatedMittelschule.setId(UUID.randomUUID());
-        Assertions.assertThrows(
-            EntityNotFoundException.class,
-            () -> this.infrastruktureinrichtungService.updateInfrastruktureinrichtung(updatedMittelschule)
+        Assertions.assertThrows(EntityNotFoundException.class, () ->
+            this.infrastruktureinrichtungService.updateInfrastruktureinrichtung(updatedMittelschule)
         );
 
-        Mockito
-            .verify(this.etlInterfaceService, Mockito.times(1))
-            .etlInterfaceTriggerInfrastruktureinrichtungJob(savedMittelschule.getId());
+        Mockito.verify(this.etlInterfaceService, Mockito.times(1)).etlInterfaceTriggerInfrastruktureinrichtungJob(
+            savedMittelschule.getId()
+        );
     }
 
     @Test
@@ -243,9 +240,8 @@ class InfrastruktureinrichtungServiceTest {
 
         this.infrastruktureinrichtungService.deleteInfrastruktureinrichtungById(entity.getId());
 
-        Assertions.assertThrows(
-            EntityNotFoundException.class,
-            () -> this.infrastruktureinrichtungService.deleteInfrastruktureinrichtungById(entity.getId())
+        Assertions.assertThrows(EntityNotFoundException.class, () ->
+            this.infrastruktureinrichtungService.deleteInfrastruktureinrichtungById(entity.getId())
         );
     }
 
@@ -268,12 +264,10 @@ class InfrastruktureinrichtungServiceTest {
 
         final InfrastruktureinrichtungModel infrastruktureinrichtung = new KindergartenModel();
         infrastruktureinrichtung.setBauvorhaben(bauvorhaben.getId());
-        Assertions.assertThrows(
-            EntityIsReferencedException.class,
-            () ->
-                this.infrastruktureinrichtungService.throwEntityIsReferencedExceptionWhenInfrastruktureinrichtungIsReferencingBauvorhaben(
-                        infrastruktureinrichtung
-                    )
+        Assertions.assertThrows(EntityIsReferencedException.class, () ->
+            this.infrastruktureinrichtungService.throwEntityIsReferencedExceptionWhenInfrastruktureinrichtungIsReferencingBauvorhaben(
+                    infrastruktureinrichtung
+                )
         );
     }
 }

@@ -59,21 +59,19 @@ class KommentarServiceTest {
         field.set(kommentarBauvorhabenMapper, bauvorhabenRepository);
 
         final var kommentarInfrasturktureinrichtungMapper = new KommentarInfrastruktureinrichtungDomainMapperImpl();
-        field =
-            kommentarInfrasturktureinrichtungMapper
-                .getClass()
-                .getSuperclass()
-                .getDeclaredField("infrastruktureinrichtungRepository");
+        field = kommentarInfrasturktureinrichtungMapper
+            .getClass()
+            .getSuperclass()
+            .getDeclaredField("infrastruktureinrichtungRepository");
         field.setAccessible(true);
         field.set(kommentarInfrasturktureinrichtungMapper, infrastruktureinrichtungRepository);
 
-        this.kommentarService =
-            new KommentarService(
-                this.kommentarRepository,
-                kommentarBauvorhabenMapper,
-                kommentarInfrasturktureinrichtungMapper,
-                dokumentService
-            );
+        this.kommentarService = new KommentarService(
+            this.kommentarRepository,
+            kommentarBauvorhabenMapper,
+            kommentarInfrasturktureinrichtungMapper,
+            dokumentService
+        );
         Mockito.reset(this.infrastruktureinrichtungRepository, this.bauvorhabenRepository, this.kommentarRepository);
     }
 
@@ -94,9 +92,9 @@ class KommentarServiceTest {
         kommentar2.setText("text 2");
         kommentar2.setBauvorhaben(bauvorhaben);
 
-        Mockito
-            .when(this.kommentarRepository.findAllByBauvorhabenIdOrderByCreatedDateTimeDesc(uuidBauvorhaben))
-            .thenReturn(Stream.of(kommentar2, kommentar1));
+        Mockito.when(
+            this.kommentarRepository.findAllByBauvorhabenIdOrderByCreatedDateTimeDesc(uuidBauvorhaben)
+        ).thenReturn(Stream.of(kommentar2, kommentar1));
 
         final var result = kommentarService.getKommentareForBauvorhaben(uuidBauvorhaben);
 
@@ -114,9 +112,9 @@ class KommentarServiceTest {
 
         assertThat(List.of(kommentar2Model, kommentar1Model), is(result));
 
-        Mockito
-            .verify(this.kommentarRepository, Mockito.times(1))
-            .findAllByBauvorhabenIdOrderByCreatedDateTimeDesc(uuidBauvorhaben);
+        Mockito.verify(this.kommentarRepository, Mockito.times(1)).findAllByBauvorhabenIdOrderByCreatedDateTimeDesc(
+            uuidBauvorhaben
+        );
     }
 
     @Test
@@ -136,13 +134,11 @@ class KommentarServiceTest {
         kommentar2.setText("text 2");
         kommentar2.setInfrastruktureinrichtung(infrastruktureinrichtung);
 
-        Mockito
-            .when(
-                this.kommentarRepository.findAllByInfrastruktureinrichtungIdOrderByCreatedDateTimeDesc(
-                        uuidInfrastruktureinrichtung
-                    )
-            )
-            .thenReturn(Stream.of(kommentar2, kommentar1));
+        Mockito.when(
+            this.kommentarRepository.findAllByInfrastruktureinrichtungIdOrderByCreatedDateTimeDesc(
+                    uuidInfrastruktureinrichtung
+                )
+        ).thenReturn(Stream.of(kommentar2, kommentar1));
 
         final var result = kommentarService.getKommentareForInfrastruktureinrichtung(uuidInfrastruktureinrichtung);
 
@@ -160,9 +156,10 @@ class KommentarServiceTest {
 
         assertThat(List.of(kommentar2Model, kommentar1Model), is(result));
 
-        Mockito
-            .verify(this.kommentarRepository, Mockito.times(1))
-            .findAllByInfrastruktureinrichtungIdOrderByCreatedDateTimeDesc(uuidInfrastruktureinrichtung);
+        Mockito.verify(
+            this.kommentarRepository,
+            Mockito.times(1)
+        ).findAllByInfrastruktureinrichtungIdOrderByCreatedDateTimeDesc(uuidInfrastruktureinrichtung);
     }
 
     @Test
@@ -191,9 +188,8 @@ class KommentarServiceTest {
         Mockito.reset(this.kommentarRepository);
 
         Mockito.when(this.kommentarRepository.findById(kommentar1.getId())).thenReturn(Optional.empty());
-        assertThrows(
-            EntityNotFoundException.class,
-            () -> this.kommentarService.getKommentarForBauvorhabenById(kommentar1.getId())
+        assertThrows(EntityNotFoundException.class, () ->
+            this.kommentarService.getKommentarForBauvorhabenById(kommentar1.getId())
         );
         Mockito.verify(this.kommentarRepository, Mockito.times(1)).findById(kommentar1.getId());
     }
@@ -232,9 +228,8 @@ class KommentarServiceTest {
         kommentar1.setText("text 1");
         kommentar1.setBauvorhaben(null);
         kommentar1.setInfrastruktureinrichtung(null);
-        assertThrows(
-            EntityNotFoundException.class,
-            () -> this.kommentarService.updateKommentarForBauvorhaben(kommentar1Model)
+        assertThrows(EntityNotFoundException.class, () ->
+            this.kommentarService.updateKommentarForBauvorhaben(kommentar1Model)
         );
         Mockito.verify(this.kommentarRepository, Mockito.times(0)).saveAndFlush(kommentar1);
         Mockito.verify(this.bauvorhabenRepository, Mockito.times(0)).findById(uuidBauvorhaben);
@@ -274,9 +269,8 @@ class KommentarServiceTest {
         Mockito.reset(this.infrastruktureinrichtungRepository, this.bauvorhabenRepository, this.kommentarRepository);
 
         Mockito.when(this.kommentarRepository.findById(kommentar1.getId())).thenReturn(Optional.empty());
-        assertThrows(
-            EntityNotFoundException.class,
-            () -> this.kommentarService.updateKommentarForBauvorhaben(kommentar1Model)
+        assertThrows(EntityNotFoundException.class, () ->
+            this.kommentarService.updateKommentarForBauvorhaben(kommentar1Model)
         );
         Mockito.verify(this.kommentarRepository, Mockito.times(1)).findById(kommentar1.getId());
         Mockito.verify(this.kommentarRepository, Mockito.times(0)).saveAndFlush(kommentar1);

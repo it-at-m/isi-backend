@@ -194,49 +194,43 @@ public class VersorgungsquoteGruppenstaerkeRepositoryTest {
             new BigDecimal("1.01"),
             LocalDate.parse("2009-01-01")
         );
-        Assertions.assertThrows(
-            DataIntegrityViolationException.class,
-            () -> this.versorgungsquoteGruppenstaerkeRepository.save(value9)
+        Assertions.assertThrows(DataIntegrityViolationException.class, () ->
+            this.versorgungsquoteGruppenstaerkeRepository.save(value9)
         );
         VersorgungsquoteGruppenstaerke value10 = createBildungseinrichtung(
             new BigDecimal("1.1"),
             LocalDate.parse("2010-01-01")
         );
-        Assertions.assertThrows(
-            DataIntegrityViolationException.class,
-            () -> this.versorgungsquoteGruppenstaerkeRepository.save(value10)
+        Assertions.assertThrows(DataIntegrityViolationException.class, () ->
+            this.versorgungsquoteGruppenstaerkeRepository.save(value10)
         );
         VersorgungsquoteGruppenstaerke value11 = createBildungseinrichtung(
             new BigDecimal("1.001"),
             LocalDate.parse("2011-01-01")
         );
-        Assertions.assertThrows(
-            DataIntegrityViolationException.class,
-            () -> this.versorgungsquoteGruppenstaerkeRepository.save(value11)
+        Assertions.assertThrows(DataIntegrityViolationException.class, () ->
+            this.versorgungsquoteGruppenstaerkeRepository.save(value11)
         );
         VersorgungsquoteGruppenstaerke value12 = createBildungseinrichtung(
             new BigDecimal("-0.001"),
             LocalDate.parse("2012-01-01")
         );
-        Assertions.assertThrows(
-            DataIntegrityViolationException.class,
-            () -> this.versorgungsquoteGruppenstaerkeRepository.save(value12)
+        Assertions.assertThrows(DataIntegrityViolationException.class, () ->
+            this.versorgungsquoteGruppenstaerkeRepository.save(value12)
         );
         VersorgungsquoteGruppenstaerke value13 = createBildungseinrichtung(
             new BigDecimal("-0.01"),
             LocalDate.parse("2013-01-01")
         );
-        Assertions.assertThrows(
-            DataIntegrityViolationException.class,
-            () -> this.versorgungsquoteGruppenstaerkeRepository.save(value13)
+        Assertions.assertThrows(DataIntegrityViolationException.class, () ->
+            this.versorgungsquoteGruppenstaerkeRepository.save(value13)
         );
         VersorgungsquoteGruppenstaerke value14 = createBildungseinrichtung(
             new BigDecimal("-0.1"),
             LocalDate.parse("2014-01-01")
         );
-        Assertions.assertThrows(
-            DataIntegrityViolationException.class,
-            () -> this.versorgungsquoteGruppenstaerkeRepository.save(value14)
+        Assertions.assertThrows(DataIntegrityViolationException.class, () ->
+            this.versorgungsquoteGruppenstaerkeRepository.save(value14)
         );
     }
 

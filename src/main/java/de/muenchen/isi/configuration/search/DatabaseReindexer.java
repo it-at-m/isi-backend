@@ -51,8 +51,7 @@ public class DatabaseReindexer implements CommandLineRunner {
             log.info("Neuindexierung des Suchindex für die Datenbank gestartet.");
             final var searchQueryModel = getSearchQueryModelForAllEntities();
             final var searchableEntities = searchPreparationService.getSearchableEntities(searchQueryModel);
-            Search
-                .mapping(entityManager.getEntityManagerFactory())
+            Search.mapping(entityManager.getEntityManagerFactory())
                 .scope(searchableEntities)
                 .massIndexer()
                 .startAndWait();

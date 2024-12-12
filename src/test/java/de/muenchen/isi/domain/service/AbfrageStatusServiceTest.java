@@ -64,8 +64,7 @@ class AbfrageStatusServiceTest {
     @Test
     void getAbfrageIdHeaderSuccessfull() throws EntityNotFoundException {
         final var uuid = UUID.randomUUID();
-        final Message<StatusAbfrageEvents> message = MessageBuilder
-            .withPayload(StatusAbfrageEvents.FREIGABE)
+        final Message<StatusAbfrageEvents> message = MessageBuilder.withPayload(StatusAbfrageEvents.FREIGABE)
             .setHeader("abfrage_id", uuid)
             .build();
 
@@ -77,13 +76,11 @@ class AbfrageStatusServiceTest {
     @Test
     void getAbfrageIdHeaderEntityNotFoundException() {
         final var uuid = UUID.randomUUID();
-        final Message<StatusAbfrageEvents> message = MessageBuilder
-            .withPayload(StatusAbfrageEvents.FREIGABE)
+        final Message<StatusAbfrageEvents> message = MessageBuilder.withPayload(StatusAbfrageEvents.FREIGABE)
             .setHeader("abfrageid", uuid)
             .build();
-        Assertions.assertThrows(
-            EntityNotFoundException.class,
-            () -> this.abfrageStatusService.getAbfrageId(message.getHeaders())
+        Assertions.assertThrows(EntityNotFoundException.class, () ->
+            this.abfrageStatusService.getAbfrageId(message.getHeaders())
         );
     }
 
@@ -91,33 +88,26 @@ class AbfrageStatusServiceTest {
     void statusAenderungEntityNotFoundExcpetion() {
         final var uuid = UUID.randomUUID();
         final var anmerkung = "";
-        Assertions.assertThrows(
-            EntityNotFoundException.class,
-            () -> this.abfrageStatusService.freigabeAbfrage(uuid, anmerkung)
+        Assertions.assertThrows(EntityNotFoundException.class, () ->
+            this.abfrageStatusService.freigabeAbfrage(uuid, anmerkung)
         );
-        Assertions.assertThrows(
-            EntityNotFoundException.class,
-            () -> this.abfrageStatusService.abbrechenAbfrage(uuid, anmerkung)
+        Assertions.assertThrows(EntityNotFoundException.class, () ->
+            this.abfrageStatusService.abbrechenAbfrage(uuid, anmerkung)
         );
-        Assertions.assertThrows(
-            EntityNotFoundException.class,
-            () -> this.abfrageStatusService.zurueckAnAbfrageerstellungAbfrage(uuid, anmerkung)
+        Assertions.assertThrows(EntityNotFoundException.class, () ->
+            this.abfrageStatusService.zurueckAnAbfrageerstellungAbfrage(uuid, anmerkung)
         );
-        Assertions.assertThrows(
-            EntityNotFoundException.class,
-            () -> this.abfrageStatusService.erledigtOhneFachreferat(uuid, anmerkung)
+        Assertions.assertThrows(EntityNotFoundException.class, () ->
+            this.abfrageStatusService.erledigtOhneFachreferat(uuid, anmerkung)
         );
-        Assertions.assertThrows(
-            EntityNotFoundException.class,
-            () -> this.abfrageStatusService.verschickenDerStellungnahme(uuid, anmerkung)
+        Assertions.assertThrows(EntityNotFoundException.class, () ->
+            this.abfrageStatusService.verschickenDerStellungnahme(uuid, anmerkung)
         );
-        Assertions.assertThrows(
-            EntityNotFoundException.class,
-            () -> this.abfrageStatusService.bedarfsmeldungErfolgt(uuid, anmerkung)
+        Assertions.assertThrows(EntityNotFoundException.class, () ->
+            this.abfrageStatusService.bedarfsmeldungErfolgt(uuid, anmerkung)
         );
-        Assertions.assertThrows(
-            EntityNotFoundException.class,
-            () -> this.abfrageStatusService.erledigtMitFachreferat(uuid, anmerkung)
+        Assertions.assertThrows(EntityNotFoundException.class, () ->
+            this.abfrageStatusService.erledigtMitFachreferat(uuid, anmerkung)
         );
     }
 
@@ -143,9 +133,8 @@ class AbfrageStatusServiceTest {
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.UEBERMITTELT_ZUR_BEARBEITUNG));
 
-        Assertions.assertThrows(
-            AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.freigabeAbfrage(uuid, anmerkung)
+        Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () ->
+            this.abfrageStatusService.freigabeAbfrage(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.UEBERMITTELT_ZUR_BEARBEITUNG));
@@ -153,9 +142,8 @@ class AbfrageStatusServiceTest {
         abfrage = this.abfrageService.getById(uuid);
         abfrage.setStatusAbfrage(StatusAbfrage.START_BEARBEITUNG);
         this.abfrageService.save(abfrage);
-        Assertions.assertThrows(
-            AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.freigabeAbfrage(uuid, anmerkung)
+        Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () ->
+            this.abfrageStatusService.freigabeAbfrage(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.START_BEARBEITUNG));
@@ -163,9 +151,8 @@ class AbfrageStatusServiceTest {
         abfrage = this.abfrageService.getById(uuid);
         abfrage.setStatusAbfrage(StatusAbfrage.EINPFLEGEN_BEDARFSMELDUNG);
         this.abfrageService.save(abfrage);
-        Assertions.assertThrows(
-            AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.freigabeAbfrage(uuid, anmerkung)
+        Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () ->
+            this.abfrageStatusService.freigabeAbfrage(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.EINPFLEGEN_BEDARFSMELDUNG));
@@ -173,9 +160,8 @@ class AbfrageStatusServiceTest {
         abfrage = this.abfrageService.getById(uuid);
         abfrage.setStatusAbfrage(StatusAbfrage.EINPLANUNG_BEDARFE);
         this.abfrageService.save(abfrage);
-        Assertions.assertThrows(
-            AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.freigabeAbfrage(uuid, anmerkung)
+        Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () ->
+            this.abfrageStatusService.freigabeAbfrage(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.EINPLANUNG_BEDARFE));
@@ -183,9 +169,8 @@ class AbfrageStatusServiceTest {
         abfrage = this.abfrageService.getById(uuid);
         abfrage.setStatusAbfrage(StatusAbfrage.ERLEDIGT_MIT_FACHREFERAT);
         this.abfrageService.save(abfrage);
-        Assertions.assertThrows(
-            AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.freigabeAbfrage(uuid, anmerkung)
+        Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () ->
+            this.abfrageStatusService.freigabeAbfrage(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.ERLEDIGT_MIT_FACHREFERAT));
@@ -193,9 +178,8 @@ class AbfrageStatusServiceTest {
         abfrage = this.abfrageService.getById(uuid);
         abfrage.setStatusAbfrage(StatusAbfrage.ERLEDIGT_OHNE_FACHREFERAT);
         this.abfrageService.save(abfrage);
-        Assertions.assertThrows(
-            AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.freigabeAbfrage(uuid, anmerkung)
+        Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () ->
+            this.abfrageStatusService.freigabeAbfrage(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.ERLEDIGT_OHNE_FACHREFERAT));
@@ -203,9 +187,8 @@ class AbfrageStatusServiceTest {
         abfrage = this.abfrageService.getById(uuid);
         abfrage.setStatusAbfrage(StatusAbfrage.ABBRUCH);
         this.abfrageService.save(abfrage);
-        Assertions.assertThrows(
-            AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.freigabeAbfrage(uuid, anmerkung)
+        Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () ->
+            this.abfrageStatusService.freigabeAbfrage(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.ABBRUCH));
@@ -237,9 +220,8 @@ class AbfrageStatusServiceTest {
         abfrage = this.abfrageService.getById(uuid);
         abfrage.setStatusAbfrage(StatusAbfrage.ANGELEGT);
         this.abfrageService.save(abfrage);
-        Assertions.assertThrows(
-            AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.abbrechenAbfrage(uuid, anmerkung)
+        Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () ->
+            this.abfrageStatusService.abbrechenAbfrage(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.ANGELEGT));
@@ -247,9 +229,8 @@ class AbfrageStatusServiceTest {
         abfrage = this.abfrageService.getById(uuid);
         abfrage.setStatusAbfrage(StatusAbfrage.ERLEDIGT_MIT_FACHREFERAT);
         this.abfrageService.save(abfrage);
-        Assertions.assertThrows(
-            AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.abbrechenAbfrage(uuid, anmerkung)
+        Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () ->
+            this.abfrageStatusService.abbrechenAbfrage(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.ERLEDIGT_MIT_FACHREFERAT));
@@ -257,9 +238,8 @@ class AbfrageStatusServiceTest {
         abfrage = this.abfrageService.getById(uuid);
         abfrage.setStatusAbfrage(StatusAbfrage.ERLEDIGT_OHNE_FACHREFERAT);
         this.abfrageService.save(abfrage);
-        Assertions.assertThrows(
-            AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.abbrechenAbfrage(uuid, anmerkung)
+        Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () ->
+            this.abfrageStatusService.abbrechenAbfrage(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.ERLEDIGT_OHNE_FACHREFERAT));
@@ -291,9 +271,8 @@ class AbfrageStatusServiceTest {
         abfrage = this.abfrageService.getById(uuid);
         abfrage.setStatusAbfrage(StatusAbfrage.ANGELEGT);
         this.abfrageService.save(abfrage);
-        Assertions.assertThrows(
-            AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.inBearbeitungSetzenAbfrage(uuid, anmerkung)
+        Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () ->
+            this.abfrageStatusService.inBearbeitungSetzenAbfrage(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.ANGELEGT));
@@ -301,9 +280,8 @@ class AbfrageStatusServiceTest {
         abfrage = this.abfrageService.getById(uuid);
         abfrage.setStatusAbfrage(StatusAbfrage.ERLEDIGT_OHNE_FACHREFERAT);
         this.abfrageService.save(abfrage);
-        Assertions.assertThrows(
-            AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.inBearbeitungSetzenAbfrage(uuid, anmerkung)
+        Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () ->
+            this.abfrageStatusService.inBearbeitungSetzenAbfrage(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.ERLEDIGT_OHNE_FACHREFERAT));
@@ -311,9 +289,8 @@ class AbfrageStatusServiceTest {
         abfrage = this.abfrageService.getById(uuid);
         abfrage.setStatusAbfrage(StatusAbfrage.ERLEDIGT_MIT_FACHREFERAT);
         this.abfrageService.save(abfrage);
-        Assertions.assertThrows(
-            AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.inBearbeitungSetzenAbfrage(uuid, anmerkung)
+        Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () ->
+            this.abfrageStatusService.inBearbeitungSetzenAbfrage(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.ERLEDIGT_MIT_FACHREFERAT));
@@ -345,9 +322,8 @@ class AbfrageStatusServiceTest {
         abfrage = this.abfrageService.getById(uuid);
         abfrage.setStatusAbfrage(StatusAbfrage.ANGELEGT);
         this.abfrageService.save(abfrage);
-        Assertions.assertThrows(
-            AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.abbrechenAbfrage(uuid, anmerkung)
+        Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () ->
+            this.abfrageStatusService.abbrechenAbfrage(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.ANGELEGT));
@@ -355,9 +331,8 @@ class AbfrageStatusServiceTest {
         abfrage = this.abfrageService.getById(uuid);
         abfrage.setStatusAbfrage(StatusAbfrage.ERLEDIGT_OHNE_FACHREFERAT);
         this.abfrageService.save(abfrage);
-        Assertions.assertThrows(
-            AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.abbrechenAbfrage(uuid, anmerkung)
+        Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () ->
+            this.abfrageStatusService.abbrechenAbfrage(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.ERLEDIGT_OHNE_FACHREFERAT));
@@ -365,9 +340,8 @@ class AbfrageStatusServiceTest {
         abfrage = this.abfrageService.getById(uuid);
         abfrage.setStatusAbfrage(StatusAbfrage.ERLEDIGT_MIT_FACHREFERAT);
         this.abfrageService.save(abfrage);
-        Assertions.assertThrows(
-            AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.abbrechenAbfrage(uuid, anmerkung)
+        Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () ->
+            this.abfrageStatusService.abbrechenAbfrage(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.ERLEDIGT_MIT_FACHREFERAT));
@@ -399,9 +373,8 @@ class AbfrageStatusServiceTest {
         abfrage = this.abfrageService.getById(uuid);
         abfrage.setStatusAbfrage(StatusAbfrage.ANGELEGT);
         this.abfrageService.save(abfrage);
-        Assertions.assertThrows(
-            AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.abbrechenAbfrage(uuid, anmerkung)
+        Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () ->
+            this.abfrageStatusService.abbrechenAbfrage(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.ANGELEGT));
@@ -409,9 +382,8 @@ class AbfrageStatusServiceTest {
         abfrage = this.abfrageService.getById(uuid);
         abfrage.setStatusAbfrage(StatusAbfrage.ERLEDIGT_OHNE_FACHREFERAT);
         this.abfrageService.save(abfrage);
-        Assertions.assertThrows(
-            AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.abbrechenAbfrage(uuid, anmerkung)
+        Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () ->
+            this.abfrageStatusService.abbrechenAbfrage(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.ERLEDIGT_OHNE_FACHREFERAT));
@@ -419,9 +391,8 @@ class AbfrageStatusServiceTest {
         abfrage = this.abfrageService.getById(uuid);
         abfrage.setStatusAbfrage(StatusAbfrage.ERLEDIGT_MIT_FACHREFERAT);
         this.abfrageService.save(abfrage);
-        Assertions.assertThrows(
-            AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.abbrechenAbfrage(uuid, anmerkung)
+        Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () ->
+            this.abfrageStatusService.abbrechenAbfrage(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.ERLEDIGT_MIT_FACHREFERAT));
@@ -453,9 +424,8 @@ class AbfrageStatusServiceTest {
         abfrage = this.abfrageService.getById(uuid);
         abfrage.setStatusAbfrage(StatusAbfrage.ANGELEGT);
         this.abfrageService.save(abfrage);
-        Assertions.assertThrows(
-            AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.abbrechenAbfrage(uuid, anmerkung)
+        Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () ->
+            this.abfrageStatusService.abbrechenAbfrage(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.ANGELEGT));
@@ -463,9 +433,8 @@ class AbfrageStatusServiceTest {
         abfrage = this.abfrageService.getById(uuid);
         abfrage.setStatusAbfrage(StatusAbfrage.ERLEDIGT_OHNE_FACHREFERAT);
         this.abfrageService.save(abfrage);
-        Assertions.assertThrows(
-            AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.abbrechenAbfrage(uuid, anmerkung)
+        Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () ->
+            this.abfrageStatusService.abbrechenAbfrage(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.ERLEDIGT_OHNE_FACHREFERAT));
@@ -473,9 +442,8 @@ class AbfrageStatusServiceTest {
         abfrage = this.abfrageService.getById(uuid);
         abfrage.setStatusAbfrage(StatusAbfrage.ERLEDIGT_MIT_FACHREFERAT);
         this.abfrageService.save(abfrage);
-        Assertions.assertThrows(
-            AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.abbrechenAbfrage(uuid, anmerkung)
+        Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () ->
+            this.abfrageStatusService.abbrechenAbfrage(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.ERLEDIGT_MIT_FACHREFERAT));
@@ -507,9 +475,8 @@ class AbfrageStatusServiceTest {
         abfrage = this.abfrageService.getById(uuid);
         abfrage.setStatusAbfrage(StatusAbfrage.EINPFLEGEN_BEDARFSMELDUNG);
         this.abfrageService.save(abfrage);
-        Assertions.assertThrows(
-            AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.zurueckAnAbfrageerstellungAbfrage(uuid, anmerkung)
+        Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () ->
+            this.abfrageStatusService.zurueckAnAbfrageerstellungAbfrage(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.EINPFLEGEN_BEDARFSMELDUNG));
@@ -517,9 +484,8 @@ class AbfrageStatusServiceTest {
         abfrage = this.abfrageService.getById(uuid);
         abfrage.setStatusAbfrage(StatusAbfrage.EINPLANUNG_BEDARFE);
         this.abfrageService.save(abfrage);
-        Assertions.assertThrows(
-            AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.zurueckAnAbfrageerstellungAbfrage(uuid, anmerkung)
+        Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () ->
+            this.abfrageStatusService.zurueckAnAbfrageerstellungAbfrage(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.EINPLANUNG_BEDARFE));
@@ -527,9 +493,8 @@ class AbfrageStatusServiceTest {
         abfrage = this.abfrageService.getById(uuid);
         abfrage.setStatusAbfrage(StatusAbfrage.ERLEDIGT_OHNE_FACHREFERAT);
         this.abfrageService.save(abfrage);
-        Assertions.assertThrows(
-            AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.zurueckAnAbfrageerstellungAbfrage(uuid, anmerkung)
+        Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () ->
+            this.abfrageStatusService.zurueckAnAbfrageerstellungAbfrage(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.ERLEDIGT_OHNE_FACHREFERAT));
@@ -537,9 +502,8 @@ class AbfrageStatusServiceTest {
         abfrage = this.abfrageService.getById(uuid);
         abfrage.setStatusAbfrage(StatusAbfrage.ERLEDIGT_MIT_FACHREFERAT);
         this.abfrageService.save(abfrage);
-        Assertions.assertThrows(
-            AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.zurueckAnAbfrageerstellungAbfrage(uuid, anmerkung)
+        Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () ->
+            this.abfrageStatusService.zurueckAnAbfrageerstellungAbfrage(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.ERLEDIGT_MIT_FACHREFERAT));
@@ -547,9 +511,8 @@ class AbfrageStatusServiceTest {
         abfrage = this.abfrageService.getById(uuid);
         abfrage.setStatusAbfrage(StatusAbfrage.ABBRUCH);
         this.abfrageService.save(abfrage);
-        Assertions.assertThrows(
-            AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.zurueckAnAbfrageerstellungAbfrage(uuid, anmerkung)
+        Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () ->
+            this.abfrageStatusService.zurueckAnAbfrageerstellungAbfrage(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.ABBRUCH));
@@ -581,9 +544,8 @@ class AbfrageStatusServiceTest {
         abfrage = this.abfrageService.getById(uuid);
         abfrage.setStatusAbfrage(StatusAbfrage.EINPFLEGEN_BEDARFSMELDUNG);
         this.abfrageService.save(abfrage);
-        Assertions.assertThrows(
-            AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.zurueckAnAbfrageerstellungAbfrage(uuid, anmerkung)
+        Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () ->
+            this.abfrageStatusService.zurueckAnAbfrageerstellungAbfrage(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.EINPFLEGEN_BEDARFSMELDUNG));
@@ -591,9 +553,8 @@ class AbfrageStatusServiceTest {
         abfrage = this.abfrageService.getById(uuid);
         abfrage.setStatusAbfrage(StatusAbfrage.EINPLANUNG_BEDARFE);
         this.abfrageService.save(abfrage);
-        Assertions.assertThrows(
-            AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.zurueckAnAbfrageerstellungAbfrage(uuid, anmerkung)
+        Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () ->
+            this.abfrageStatusService.zurueckAnAbfrageerstellungAbfrage(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.EINPLANUNG_BEDARFE));
@@ -601,9 +562,8 @@ class AbfrageStatusServiceTest {
         abfrage = this.abfrageService.getById(uuid);
         abfrage.setStatusAbfrage(StatusAbfrage.ERLEDIGT_OHNE_FACHREFERAT);
         this.abfrageService.save(abfrage);
-        Assertions.assertThrows(
-            AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.zurueckAnAbfrageerstellungAbfrage(uuid, anmerkung)
+        Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () ->
+            this.abfrageStatusService.zurueckAnAbfrageerstellungAbfrage(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.ERLEDIGT_OHNE_FACHREFERAT));
@@ -611,9 +571,8 @@ class AbfrageStatusServiceTest {
         abfrage = this.abfrageService.getById(uuid);
         abfrage.setStatusAbfrage(StatusAbfrage.ERLEDIGT_MIT_FACHREFERAT);
         this.abfrageService.save(abfrage);
-        Assertions.assertThrows(
-            AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.zurueckAnAbfrageerstellungAbfrage(uuid, anmerkung)
+        Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () ->
+            this.abfrageStatusService.zurueckAnAbfrageerstellungAbfrage(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.ERLEDIGT_MIT_FACHREFERAT));
@@ -621,9 +580,8 @@ class AbfrageStatusServiceTest {
         abfrage = this.abfrageService.getById(uuid);
         abfrage.setStatusAbfrage(StatusAbfrage.ABBRUCH);
         this.abfrageService.save(abfrage);
-        Assertions.assertThrows(
-            AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.zurueckAnAbfrageerstellungAbfrage(uuid, anmerkung)
+        Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () ->
+            this.abfrageStatusService.zurueckAnAbfrageerstellungAbfrage(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.ABBRUCH));
@@ -655,9 +613,8 @@ class AbfrageStatusServiceTest {
         abfrage = this.abfrageService.getById(uuid);
         abfrage.setStatusAbfrage(StatusAbfrage.ERLEDIGT_OHNE_FACHREFERAT);
         this.abfrageService.save(abfrage);
-        Assertions.assertThrows(
-            AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.zurueckAnSachbearbeitungAbfrage(uuid, anmerkung)
+        Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () ->
+            this.abfrageStatusService.zurueckAnSachbearbeitungAbfrage(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.ERLEDIGT_OHNE_FACHREFERAT));
@@ -665,9 +622,8 @@ class AbfrageStatusServiceTest {
         abfrage = this.abfrageService.getById(uuid);
         abfrage.setStatusAbfrage(StatusAbfrage.ERLEDIGT_MIT_FACHREFERAT);
         this.abfrageService.save(abfrage);
-        Assertions.assertThrows(
-            AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.zurueckAnSachbearbeitungAbfrage(uuid, anmerkung)
+        Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () ->
+            this.abfrageStatusService.zurueckAnSachbearbeitungAbfrage(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.ERLEDIGT_MIT_FACHREFERAT));
@@ -675,9 +631,8 @@ class AbfrageStatusServiceTest {
         abfrage = this.abfrageService.getById(uuid);
         abfrage.setStatusAbfrage(StatusAbfrage.ABBRUCH);
         this.abfrageService.save(abfrage);
-        Assertions.assertThrows(
-            AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.zurueckAnSachbearbeitungAbfrage(uuid, anmerkung)
+        Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () ->
+            this.abfrageStatusService.zurueckAnSachbearbeitungAbfrage(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.ABBRUCH));
@@ -709,9 +664,8 @@ class AbfrageStatusServiceTest {
         abfrage = this.abfrageService.getById(uuid);
         abfrage.setStatusAbfrage(StatusAbfrage.ANGELEGT);
         this.abfrageService.save(abfrage);
-        Assertions.assertThrows(
-            AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.erledigtOhneFachreferat(uuid, anmerkung)
+        Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () ->
+            this.abfrageStatusService.erledigtOhneFachreferat(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.ANGELEGT));
@@ -719,9 +673,8 @@ class AbfrageStatusServiceTest {
         abfrage = this.abfrageService.getById(uuid);
         abfrage.setStatusAbfrage(StatusAbfrage.UEBERMITTELT_ZUR_BEARBEITUNG);
         this.abfrageService.save(abfrage);
-        Assertions.assertThrows(
-            AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.erledigtOhneFachreferat(uuid, anmerkung)
+        Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () ->
+            this.abfrageStatusService.erledigtOhneFachreferat(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.UEBERMITTELT_ZUR_BEARBEITUNG));
@@ -729,9 +682,8 @@ class AbfrageStatusServiceTest {
         abfrage = this.abfrageService.getById(uuid);
         abfrage.setStatusAbfrage(StatusAbfrage.EINPFLEGEN_BEDARFSMELDUNG);
         this.abfrageService.save(abfrage);
-        Assertions.assertThrows(
-            AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.erledigtOhneFachreferat(uuid, anmerkung)
+        Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () ->
+            this.abfrageStatusService.erledigtOhneFachreferat(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.EINPFLEGEN_BEDARFSMELDUNG));
@@ -739,9 +691,8 @@ class AbfrageStatusServiceTest {
         abfrage = this.abfrageService.getById(uuid);
         abfrage.setStatusAbfrage(StatusAbfrage.EINPLANUNG_BEDARFE);
         this.abfrageService.save(abfrage);
-        Assertions.assertThrows(
-            AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.erledigtOhneFachreferat(uuid, anmerkung)
+        Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () ->
+            this.abfrageStatusService.erledigtOhneFachreferat(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.EINPLANUNG_BEDARFE));
@@ -749,9 +700,8 @@ class AbfrageStatusServiceTest {
         abfrage = this.abfrageService.getById(uuid);
         abfrage.setStatusAbfrage(StatusAbfrage.ERLEDIGT_OHNE_FACHREFERAT);
         this.abfrageService.save(abfrage);
-        Assertions.assertThrows(
-            AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.erledigtOhneFachreferat(uuid, anmerkung)
+        Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () ->
+            this.abfrageStatusService.erledigtOhneFachreferat(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.ERLEDIGT_OHNE_FACHREFERAT));
@@ -759,9 +709,8 @@ class AbfrageStatusServiceTest {
         abfrage = this.abfrageService.getById(uuid);
         abfrage.setStatusAbfrage(StatusAbfrage.ERLEDIGT_MIT_FACHREFERAT);
         this.abfrageService.save(abfrage);
-        Assertions.assertThrows(
-            AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.erledigtOhneFachreferat(uuid, anmerkung)
+        Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () ->
+            this.abfrageStatusService.erledigtOhneFachreferat(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.ERLEDIGT_MIT_FACHREFERAT));
@@ -769,9 +718,8 @@ class AbfrageStatusServiceTest {
         abfrage = this.abfrageService.getById(uuid);
         abfrage.setStatusAbfrage(StatusAbfrage.ABBRUCH);
         this.abfrageService.save(abfrage);
-        Assertions.assertThrows(
-            AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.erledigtOhneFachreferat(uuid, anmerkung)
+        Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () ->
+            this.abfrageStatusService.erledigtOhneFachreferat(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.ABBRUCH));
@@ -803,9 +751,8 @@ class AbfrageStatusServiceTest {
         abfrage = this.abfrageService.getById(uuid);
         abfrage.setStatusAbfrage(StatusAbfrage.ANGELEGT);
         this.abfrageService.save(abfrage);
-        Assertions.assertThrows(
-            AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.verschickenDerStellungnahme(uuid, anmerkung)
+        Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () ->
+            this.abfrageStatusService.verschickenDerStellungnahme(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.ANGELEGT));
@@ -813,9 +760,8 @@ class AbfrageStatusServiceTest {
         abfrage = this.abfrageService.getById(uuid);
         abfrage.setStatusAbfrage(StatusAbfrage.UEBERMITTELT_ZUR_BEARBEITUNG);
         this.abfrageService.save(abfrage);
-        Assertions.assertThrows(
-            AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.verschickenDerStellungnahme(uuid, anmerkung)
+        Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () ->
+            this.abfrageStatusService.verschickenDerStellungnahme(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.UEBERMITTELT_ZUR_BEARBEITUNG));
@@ -823,9 +769,8 @@ class AbfrageStatusServiceTest {
         abfrage = this.abfrageService.getById(uuid);
         abfrage.setStatusAbfrage(StatusAbfrage.EINPFLEGEN_BEDARFSMELDUNG);
         this.abfrageService.save(abfrage);
-        Assertions.assertThrows(
-            AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.verschickenDerStellungnahme(uuid, anmerkung)
+        Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () ->
+            this.abfrageStatusService.verschickenDerStellungnahme(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.EINPFLEGEN_BEDARFSMELDUNG));
@@ -833,9 +778,8 @@ class AbfrageStatusServiceTest {
         abfrage = this.abfrageService.getById(uuid);
         abfrage.setStatusAbfrage(StatusAbfrage.EINPLANUNG_BEDARFE);
         this.abfrageService.save(abfrage);
-        Assertions.assertThrows(
-            AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.verschickenDerStellungnahme(uuid, anmerkung)
+        Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () ->
+            this.abfrageStatusService.verschickenDerStellungnahme(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.EINPLANUNG_BEDARFE));
@@ -843,9 +787,8 @@ class AbfrageStatusServiceTest {
         abfrage = this.abfrageService.getById(uuid);
         abfrage.setStatusAbfrage(StatusAbfrage.ERLEDIGT_OHNE_FACHREFERAT);
         this.abfrageService.save(abfrage);
-        Assertions.assertThrows(
-            AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.verschickenDerStellungnahme(uuid, anmerkung)
+        Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () ->
+            this.abfrageStatusService.verschickenDerStellungnahme(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.ERLEDIGT_OHNE_FACHREFERAT));
@@ -853,9 +796,8 @@ class AbfrageStatusServiceTest {
         abfrage = this.abfrageService.getById(uuid);
         abfrage.setStatusAbfrage(StatusAbfrage.ERLEDIGT_MIT_FACHREFERAT);
         this.abfrageService.save(abfrage);
-        Assertions.assertThrows(
-            AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.verschickenDerStellungnahme(uuid, anmerkung)
+        Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () ->
+            this.abfrageStatusService.verschickenDerStellungnahme(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.ERLEDIGT_MIT_FACHREFERAT));
@@ -863,9 +805,8 @@ class AbfrageStatusServiceTest {
         abfrage = this.abfrageService.getById(uuid);
         abfrage.setStatusAbfrage(StatusAbfrage.ABBRUCH);
         this.abfrageService.save(abfrage);
-        Assertions.assertThrows(
-            AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.verschickenDerStellungnahme(uuid, anmerkung)
+        Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () ->
+            this.abfrageStatusService.verschickenDerStellungnahme(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.ABBRUCH));
@@ -897,9 +838,8 @@ class AbfrageStatusServiceTest {
         abfrage = this.abfrageService.getById(uuid);
         abfrage.setStatusAbfrage(StatusAbfrage.ANGELEGT);
         this.abfrageService.save(abfrage);
-        Assertions.assertThrows(
-            AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.bedarfsmeldungErfolgt(uuid, anmerkung)
+        Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () ->
+            this.abfrageStatusService.bedarfsmeldungErfolgt(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.ANGELEGT));
@@ -907,9 +847,8 @@ class AbfrageStatusServiceTest {
         abfrage = this.abfrageService.getById(uuid);
         abfrage.setStatusAbfrage(StatusAbfrage.UEBERMITTELT_ZUR_BEARBEITUNG);
         this.abfrageService.save(abfrage);
-        Assertions.assertThrows(
-            AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.bedarfsmeldungErfolgt(uuid, anmerkung)
+        Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () ->
+            this.abfrageStatusService.bedarfsmeldungErfolgt(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.UEBERMITTELT_ZUR_BEARBEITUNG));
@@ -917,9 +856,8 @@ class AbfrageStatusServiceTest {
         abfrage = this.abfrageService.getById(uuid);
         abfrage.setStatusAbfrage(StatusAbfrage.START_BEARBEITUNG);
         this.abfrageService.save(abfrage);
-        Assertions.assertThrows(
-            AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.bedarfsmeldungErfolgt(uuid, anmerkung)
+        Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () ->
+            this.abfrageStatusService.bedarfsmeldungErfolgt(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.START_BEARBEITUNG));
@@ -927,9 +865,8 @@ class AbfrageStatusServiceTest {
         abfrage = this.abfrageService.getById(uuid);
         abfrage.setStatusAbfrage(StatusAbfrage.EINPLANUNG_BEDARFE);
         this.abfrageService.save(abfrage);
-        Assertions.assertThrows(
-            AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.bedarfsmeldungErfolgt(uuid, anmerkung)
+        Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () ->
+            this.abfrageStatusService.bedarfsmeldungErfolgt(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.EINPLANUNG_BEDARFE));
@@ -937,9 +874,8 @@ class AbfrageStatusServiceTest {
         abfrage = this.abfrageService.getById(uuid);
         abfrage.setStatusAbfrage(StatusAbfrage.ERLEDIGT_OHNE_FACHREFERAT);
         this.abfrageService.save(abfrage);
-        Assertions.assertThrows(
-            AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.bedarfsmeldungErfolgt(uuid, anmerkung)
+        Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () ->
+            this.abfrageStatusService.bedarfsmeldungErfolgt(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.ERLEDIGT_OHNE_FACHREFERAT));
@@ -947,9 +883,8 @@ class AbfrageStatusServiceTest {
         abfrage = this.abfrageService.getById(uuid);
         abfrage.setStatusAbfrage(StatusAbfrage.ERLEDIGT_MIT_FACHREFERAT);
         this.abfrageService.save(abfrage);
-        Assertions.assertThrows(
-            AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.bedarfsmeldungErfolgt(uuid, anmerkung)
+        Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () ->
+            this.abfrageStatusService.bedarfsmeldungErfolgt(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.ERLEDIGT_MIT_FACHREFERAT));
@@ -957,9 +892,8 @@ class AbfrageStatusServiceTest {
         abfrage = this.abfrageService.getById(uuid);
         abfrage.setStatusAbfrage(StatusAbfrage.ABBRUCH);
         this.abfrageService.save(abfrage);
-        Assertions.assertThrows(
-            AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.bedarfsmeldungErfolgt(uuid, anmerkung)
+        Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () ->
+            this.abfrageStatusService.bedarfsmeldungErfolgt(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.ABBRUCH));
@@ -991,9 +925,8 @@ class AbfrageStatusServiceTest {
         abfrage = this.abfrageService.getById(uuid);
         abfrage.setStatusAbfrage(StatusAbfrage.ANGELEGT);
         this.abfrageService.save(abfrage);
-        Assertions.assertThrows(
-            AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.erledigtMitFachreferat(uuid, anmerkung)
+        Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () ->
+            this.abfrageStatusService.erledigtMitFachreferat(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.ANGELEGT));
@@ -1001,9 +934,8 @@ class AbfrageStatusServiceTest {
         abfrage = this.abfrageService.getById(uuid);
         abfrage.setStatusAbfrage(StatusAbfrage.UEBERMITTELT_ZUR_BEARBEITUNG);
         this.abfrageService.save(abfrage);
-        Assertions.assertThrows(
-            AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.erledigtMitFachreferat(uuid, anmerkung)
+        Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () ->
+            this.abfrageStatusService.erledigtMitFachreferat(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.UEBERMITTELT_ZUR_BEARBEITUNG));
@@ -1011,9 +943,8 @@ class AbfrageStatusServiceTest {
         abfrage = this.abfrageService.getById(uuid);
         abfrage.setStatusAbfrage(StatusAbfrage.START_BEARBEITUNG);
         this.abfrageService.save(abfrage);
-        Assertions.assertThrows(
-            AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.erledigtMitFachreferat(uuid, anmerkung)
+        Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () ->
+            this.abfrageStatusService.erledigtMitFachreferat(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.START_BEARBEITUNG));
@@ -1021,9 +952,8 @@ class AbfrageStatusServiceTest {
         abfrage = this.abfrageService.getById(uuid);
         abfrage.setStatusAbfrage(StatusAbfrage.EINPFLEGEN_BEDARFSMELDUNG);
         this.abfrageService.save(abfrage);
-        Assertions.assertThrows(
-            AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.erledigtMitFachreferat(uuid, anmerkung)
+        Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () ->
+            this.abfrageStatusService.erledigtMitFachreferat(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.EINPFLEGEN_BEDARFSMELDUNG));
@@ -1031,9 +961,8 @@ class AbfrageStatusServiceTest {
         abfrage = this.abfrageService.getById(uuid);
         abfrage.setStatusAbfrage(StatusAbfrage.ERLEDIGT_MIT_FACHREFERAT);
         this.abfrageService.save(abfrage);
-        Assertions.assertThrows(
-            AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.erledigtMitFachreferat(uuid, anmerkung)
+        Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () ->
+            this.abfrageStatusService.erledigtMitFachreferat(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.ERLEDIGT_MIT_FACHREFERAT));
@@ -1041,9 +970,8 @@ class AbfrageStatusServiceTest {
         abfrage = this.abfrageService.getById(uuid);
         abfrage.setStatusAbfrage(StatusAbfrage.ERLEDIGT_OHNE_FACHREFERAT);
         this.abfrageService.save(abfrage);
-        Assertions.assertThrows(
-            AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.erledigtMitFachreferat(uuid, anmerkung)
+        Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () ->
+            this.abfrageStatusService.erledigtMitFachreferat(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.ERLEDIGT_OHNE_FACHREFERAT));
@@ -1051,9 +979,8 @@ class AbfrageStatusServiceTest {
         abfrage = this.abfrageService.getById(uuid);
         abfrage.setStatusAbfrage(StatusAbfrage.ABBRUCH);
         this.abfrageService.save(abfrage);
-        Assertions.assertThrows(
-            AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.erledigtMitFachreferat(uuid, anmerkung)
+        Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () ->
+            this.abfrageStatusService.erledigtMitFachreferat(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.ABBRUCH));
@@ -1087,9 +1014,8 @@ class AbfrageStatusServiceTest {
         abfrage = this.abfrageService.getById(uuid);
         abfrage.setStatusAbfrage(StatusAbfrage.ANGELEGT);
         this.abfrageService.save(abfrage);
-        Assertions.assertThrows(
-            AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.erneuteBearbeitungSachbearbeitung(uuid, anmerkung)
+        Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () ->
+            this.abfrageStatusService.erneuteBearbeitungSachbearbeitung(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.ANGELEGT));
@@ -1097,9 +1023,8 @@ class AbfrageStatusServiceTest {
         abfrage = this.abfrageService.getById(uuid);
         abfrage.setStatusAbfrage(StatusAbfrage.UEBERMITTELT_ZUR_BEARBEITUNG);
         this.abfrageService.save(abfrage);
-        Assertions.assertThrows(
-            AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.erneuteBearbeitungSachbearbeitung(uuid, anmerkung)
+        Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () ->
+            this.abfrageStatusService.erneuteBearbeitungSachbearbeitung(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.UEBERMITTELT_ZUR_BEARBEITUNG));
@@ -1107,9 +1032,8 @@ class AbfrageStatusServiceTest {
         abfrage = this.abfrageService.getById(uuid);
         abfrage.setStatusAbfrage(StatusAbfrage.START_BEARBEITUNG);
         this.abfrageService.save(abfrage);
-        Assertions.assertThrows(
-            AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.erledigtMitFachreferat(uuid, anmerkung)
+        Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () ->
+            this.abfrageStatusService.erledigtMitFachreferat(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.START_BEARBEITUNG));
@@ -1117,9 +1041,8 @@ class AbfrageStatusServiceTest {
         abfrage = this.abfrageService.getById(uuid);
         abfrage.setStatusAbfrage(StatusAbfrage.EINPFLEGEN_BEDARFSMELDUNG);
         this.abfrageService.save(abfrage);
-        Assertions.assertThrows(
-            AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.erneuteBearbeitungSachbearbeitung(uuid, anmerkung)
+        Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () ->
+            this.abfrageStatusService.erneuteBearbeitungSachbearbeitung(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.EINPFLEGEN_BEDARFSMELDUNG));
@@ -1127,9 +1050,8 @@ class AbfrageStatusServiceTest {
         abfrage = this.abfrageService.getById(uuid);
         abfrage.setStatusAbfrage(StatusAbfrage.EINPLANUNG_BEDARFE);
         this.abfrageService.save(abfrage);
-        Assertions.assertThrows(
-            AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.erneuteBearbeitungSachbearbeitung(uuid, anmerkung)
+        Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () ->
+            this.abfrageStatusService.erneuteBearbeitungSachbearbeitung(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.EINPLANUNG_BEDARFE));
@@ -1137,9 +1059,8 @@ class AbfrageStatusServiceTest {
         abfrage = this.abfrageService.getById(uuid);
         abfrage.setStatusAbfrage(StatusAbfrage.ABBRUCH);
         this.abfrageService.save(abfrage);
-        Assertions.assertThrows(
-            AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.erneuteBearbeitungSachbearbeitung(uuid, anmerkung)
+        Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () ->
+            this.abfrageStatusService.erneuteBearbeitungSachbearbeitung(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.ABBRUCH));
@@ -1173,9 +1094,8 @@ class AbfrageStatusServiceTest {
         abfrage = this.abfrageService.getById(uuid);
         abfrage.setStatusAbfrage(StatusAbfrage.ANGELEGT);
         this.abfrageService.save(abfrage);
-        Assertions.assertThrows(
-            AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.erneuteBearbeitungSachbearbeitung(uuid, anmerkung)
+        Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () ->
+            this.abfrageStatusService.erneuteBearbeitungSachbearbeitung(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.ANGELEGT));
@@ -1183,9 +1103,8 @@ class AbfrageStatusServiceTest {
         abfrage = this.abfrageService.getById(uuid);
         abfrage.setStatusAbfrage(StatusAbfrage.UEBERMITTELT_ZUR_BEARBEITUNG);
         this.abfrageService.save(abfrage);
-        Assertions.assertThrows(
-            AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.erneuteBearbeitungSachbearbeitung(uuid, anmerkung)
+        Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () ->
+            this.abfrageStatusService.erneuteBearbeitungSachbearbeitung(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.UEBERMITTELT_ZUR_BEARBEITUNG));
@@ -1193,9 +1112,8 @@ class AbfrageStatusServiceTest {
         abfrage = this.abfrageService.getById(uuid);
         abfrage.setStatusAbfrage(StatusAbfrage.START_BEARBEITUNG);
         this.abfrageService.save(abfrage);
-        Assertions.assertThrows(
-            AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.erledigtMitFachreferat(uuid, anmerkung)
+        Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () ->
+            this.abfrageStatusService.erledigtMitFachreferat(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.START_BEARBEITUNG));
@@ -1203,9 +1121,8 @@ class AbfrageStatusServiceTest {
         abfrage = this.abfrageService.getById(uuid);
         abfrage.setStatusAbfrage(StatusAbfrage.EINPFLEGEN_BEDARFSMELDUNG);
         this.abfrageService.save(abfrage);
-        Assertions.assertThrows(
-            AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.erneuteBearbeitungSachbearbeitung(uuid, anmerkung)
+        Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () ->
+            this.abfrageStatusService.erneuteBearbeitungSachbearbeitung(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.EINPFLEGEN_BEDARFSMELDUNG));
@@ -1213,9 +1130,8 @@ class AbfrageStatusServiceTest {
         abfrage = this.abfrageService.getById(uuid);
         abfrage.setStatusAbfrage(StatusAbfrage.EINPLANUNG_BEDARFE);
         this.abfrageService.save(abfrage);
-        Assertions.assertThrows(
-            AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.erneuteBearbeitungSachbearbeitung(uuid, anmerkung)
+        Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () ->
+            this.abfrageStatusService.erneuteBearbeitungSachbearbeitung(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.EINPLANUNG_BEDARFE));
@@ -1223,9 +1139,8 @@ class AbfrageStatusServiceTest {
         abfrage = this.abfrageService.getById(uuid);
         abfrage.setStatusAbfrage(StatusAbfrage.ABBRUCH);
         this.abfrageService.save(abfrage);
-        Assertions.assertThrows(
-            AbfrageStatusNotAllowedException.class,
-            () -> this.abfrageStatusService.erneuteBearbeitungSachbearbeitung(uuid, anmerkung)
+        Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () ->
+            this.abfrageStatusService.erneuteBearbeitungSachbearbeitung(uuid, anmerkung)
         );
         abfrage = this.abfrageService.getById(uuid);
         assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.ABBRUCH));
@@ -1274,9 +1189,8 @@ class AbfrageStatusServiceTest {
         abfrage = this.abfrageService.save(abfrage);
         final var uuid = abfrage.getId();
 
-        Assertions.assertThrows(
-            StringLengthExceededException.class,
-            () -> this.abfrageStatusService.erledigtOhneFachreferat(uuid, anmerkung)
+        Assertions.assertThrows(StringLengthExceededException.class, () ->
+            this.abfrageStatusService.erledigtOhneFachreferat(uuid, anmerkung)
         );
 
         abfrage = this.abfrageService.getById(uuid);

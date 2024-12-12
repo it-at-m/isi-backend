@@ -25,8 +25,7 @@ public enum SobonVerfahrensgrundsaetzeJahr implements ILookup {
     private final String bezeichnung;
 
     public static Optional<SobonVerfahrensgrundsaetzeJahr> findByBezeichnung(final String bezeichnung) {
-        return EnumUtils
-            .getEnumList(SobonVerfahrensgrundsaetzeJahr.class)
+        return EnumUtils.getEnumList(SobonVerfahrensgrundsaetzeJahr.class)
             .stream()
             .filter(sobonVerfahrensgrundsaetzeJahr ->
                 StringUtils.equals(sobonVerfahrensgrundsaetzeJahr.getBezeichnung(), bezeichnung)

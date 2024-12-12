@@ -50,11 +50,10 @@ public class PlanungsursaechlicheWohneinheitenServiceTest {
     @BeforeEach
     public void beforeEach() {
         final var foerdermixUmlageService = new FoerdermixUmlageService(umlegungFoerderartenRepository);
-        this.planungsursaechlicheWohneinheitenService =
-            new PlanungsursaechlicheWohneinheitenService(
-                foerdermixUmlageService,
-                staedtebaulicheOrientierungswertRepository
-            );
+        this.planungsursaechlicheWohneinheitenService = new PlanungsursaechlicheWohneinheitenService(
+            foerdermixUmlageService,
+            staedtebaulicheOrientierungswertRepository
+        );
         Mockito.reset(umlegungFoerderartenRepository, staedtebaulicheOrientierungswertRepository);
     }
 
@@ -289,37 +288,29 @@ public class PlanungsursaechlicheWohneinheitenServiceTest {
         orientierungswertFH2022.setGueltigAb(SobonOrientierungswertJahr.JAHR_2022.getGueltigAb());
         orientierungswertFH2022.setDurchschnittlicheGrundflaeche(160L);
 
-        Mockito
-            .when(
-                repository.findFirstByFoerderartBezeichnungAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
-                    FF,
-                    SobonOrientierungswertJahr.JAHR_2022.getGueltigAb()
-                )
+        Mockito.when(
+            repository.findFirstByFoerderartBezeichnungAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
+                FF,
+                SobonOrientierungswertJahr.JAHR_2022.getGueltigAb()
             )
-            .thenReturn(Optional.of(orientierungswertFF2022));
-        Mockito
-            .when(
-                repository.findFirstByFoerderartBezeichnungAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
-                    EOF,
-                    SobonOrientierungswertJahr.JAHR_2022.getGueltigAb()
-                )
+        ).thenReturn(Optional.of(orientierungswertFF2022));
+        Mockito.when(
+            repository.findFirstByFoerderartBezeichnungAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
+                EOF,
+                SobonOrientierungswertJahr.JAHR_2022.getGueltigAb()
             )
-            .thenReturn(Optional.of(orientierungswertEOF2022));
-        Mockito
-            .when(
-                repository.findFirstByFoerderartBezeichnungAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
-                    MM,
-                    SobonOrientierungswertJahr.JAHR_2022.getGueltigAb()
-                )
+        ).thenReturn(Optional.of(orientierungswertEOF2022));
+        Mockito.when(
+            repository.findFirstByFoerderartBezeichnungAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
+                MM,
+                SobonOrientierungswertJahr.JAHR_2022.getGueltigAb()
             )
-            .thenReturn(Optional.of(orientierungswertMM2022));
-        Mockito
-            .when(
-                repository.findFirstByFoerderartBezeichnungAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
-                    FH,
-                    SobonOrientierungswertJahr.JAHR_2022.getGueltigAb()
-                )
+        ).thenReturn(Optional.of(orientierungswertMM2022));
+        Mockito.when(
+            repository.findFirstByFoerderartBezeichnungAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
+                FH,
+                SobonOrientierungswertJahr.JAHR_2022.getGueltigAb()
             )
-            .thenReturn(Optional.of(orientierungswertFH2022));
+        ).thenReturn(Optional.of(orientierungswertFH2022));
     }
 }
