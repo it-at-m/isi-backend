@@ -27,7 +27,7 @@
         <apache.commons.collections4>4.4</apache.commons.collections4>
         <apache.commons.io>2.16.1</apache.commons.io>
         <apache.commons.lang3>3.14.0</apache.commons.lang3>
-        <apache.commons.text>1.11.0</apache.commons.text>
+        <apache.commons.text>1.13.0</apache.commons.text>
         <apache.commons.fileupload>1.5</apache.commons.fileupload>
         <opencsv.version>5.9</opencsv.version>
         <springdoc.version>2.3.0</springdoc.version>
