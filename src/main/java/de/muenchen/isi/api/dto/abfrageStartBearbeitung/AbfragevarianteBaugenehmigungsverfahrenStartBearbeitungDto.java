@@ -31,7 +31,7 @@ public class AbfragevarianteBaugenehmigungsverfahrenStartBearbeitungDto
 
     @NotUnspecified
     @NotNull
-    private SobonOrientierungswertJahr sobonOrientierungswertJahr;
+    private SobonOrientierungswertJahr sobonOrientierungswertJahrPlanungsursaechlich;
 
     @NotNull
     private LocalDate stammdatenGueltigAb;

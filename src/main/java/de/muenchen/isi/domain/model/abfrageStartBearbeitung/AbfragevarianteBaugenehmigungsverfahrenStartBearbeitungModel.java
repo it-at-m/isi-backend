@@ -20,7 +20,7 @@ import lombok.ToString;
 public class AbfragevarianteBaugenehmigungsverfahrenStartBearbeitungModel
     extends AbfragevarianteBaugenehmigungsverfahrenAngelegtModel {
 
-    private SobonOrientierungswertJahr sobonOrientierungswertJahr;
+    private SobonOrientierungswertJahr sobonOrientierungswertJahrPlanungsursaechlich;
 
     private LocalDate stammdatenGueltigAb;
 

@@ -23,7 +23,7 @@ public class AbfragevarianteBauleitplanverfahrenSachbearbeitungStartBearbeitungM
 
     private ArtAbfrage artAbfragevariante;
 
-    private SobonOrientierungswertJahr sobonOrientierungswertJahr;
+    private SobonOrientierungswertJahr sobonOrientierungswertJahrPlanungsursaechlich;
 
     private SobonBerechnungModel sobonBerechnung;
 

@@ -26,7 +26,6 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
@@ -136,7 +135,7 @@ public class AbfragevarianteBaugenehmigungsverfahren extends Abfragevariante {
 
     @Enumerated(EnumType.STRING)
     @Column
-    private SobonOrientierungswertJahr sobonOrientierungswertJahr;
+    private SobonOrientierungswertJahr sobonOrientierungswertJahrPlanungsursaechlich;
 
     @Column
     private LocalDate stammdatenGueltigAb;

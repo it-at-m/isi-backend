@@ -6,6 +6,7 @@ import jakarta.validation.ConstraintValidatorContext;
 import lombok.NoArgsConstructor;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
@@ -25,7 +26,14 @@ public class SobonBerechnungValidator implements ConstraintValidator<SobonBerech
                 (StringUtils.isEmpty(sobonBerechnung.getSobonFoerdermix().getBezeichnungJahr()) &&
                     StringUtils.isEmpty(sobonBerechnung.getSobonFoerdermix().getBezeichnung()) &&
                     CollectionUtils.isEmpty(sobonBerechnung.getSobonFoerdermix().getFoerderarten()));
-            return isSobonBerechnung != isFoerdermixEmtpy;
+            boolean isSobonOrientierungswertJahrSobonUrsaechlichEmpty = ObjectUtils.isEmpty(
+                sobonBerechnung.getSobonOrientierungswertJahrSobonUrsaechlich()
+            );
+
+            return (
+                (isSobonBerechnung != isFoerdermixEmtpy) &&
+                (isSobonBerechnung != isSobonOrientierungswertJahrSobonUrsaechlichEmpty)
+            );
         }
         return true;
     }

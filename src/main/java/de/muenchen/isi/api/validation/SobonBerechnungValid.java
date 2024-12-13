@@ -13,7 +13,7 @@ import java.lang.annotation.Target;
 @Constraint(validatedBy = SobonBerechnungValidator.class)
 @Documented
 public @interface SobonBerechnungValid {
-    String message() default "Bitte geben Sie einen Födermix für ihre SoBoN-Berechnung an.";
+    String message() default "Bitte geben Sie einen Födermix oder das Jahr für Sobon-Orientierungswerte (SoBoN-ursächlich) für ihre SoBoN-Berechnung an.";
 
     Class<?>[] groups() default {};
 

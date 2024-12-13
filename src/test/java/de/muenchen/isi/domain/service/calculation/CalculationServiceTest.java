@@ -335,12 +335,15 @@ class CalculationServiceTest {
         final var sobonBerechnung = new SobonBerechnungModel();
         sobonBerechnung.setIsASobonBerechnung(true);
         sobonBerechnung.setSobonFoerdermix(new FoerdermixModel());
+        sobonBerechnung.setSobonOrientierungswertJahrSobonUrsaechlich(sobonOrientierungswertJahr);
 
         final var abfragevarianteWeiteresVerfahrenModel = new AbfragevarianteWeiteresVerfahrenModel();
         abfragevarianteWeiteresVerfahrenModel.setId(UUID.randomUUID());
         abfragevarianteWeiteresVerfahrenModel.setArtAbfragevariante(ArtAbfrage.WEITERES_VERFAHREN);
         abfragevarianteWeiteresVerfahrenModel.setBauabschnitte(bauabschnitte);
-        abfragevarianteWeiteresVerfahrenModel.setSobonOrientierungswertJahr(sobonOrientierungswertJahr);
+        abfragevarianteWeiteresVerfahrenModel.setSobonOrientierungswertJahrPlanungsursaechlich(
+            sobonOrientierungswertJahr
+        );
         abfragevarianteWeiteresVerfahrenModel.setStammdatenGueltigAb(stammdatenGueltigAb);
         abfragevarianteWeiteresVerfahrenModel.setGfWohnenSobonUrsaechlich(sobonGf);
         abfragevarianteWeiteresVerfahrenModel.setSobonBerechnung(sobonBerechnung);
@@ -407,7 +410,9 @@ class CalculationServiceTest {
         final var abfragevarianteBaugenehmigungsverfahrenModel = new AbfragevarianteBaugenehmigungsverfahrenModel();
         abfragevarianteBaugenehmigungsverfahrenModel.setArtAbfragevariante(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN);
         abfragevarianteBaugenehmigungsverfahrenModel.setBauabschnitte(bauabschnitte);
-        abfragevarianteBaugenehmigungsverfahrenModel.setSobonOrientierungswertJahr(sobonOrientierungswertJahr);
+        abfragevarianteBaugenehmigungsverfahrenModel.setSobonOrientierungswertJahrPlanungsursaechlich(
+            sobonOrientierungswertJahr
+        );
         abfragevarianteBaugenehmigungsverfahrenModel.setStammdatenGueltigAb(stammdatenGueltigAb);
 
         final var langfristigerPlanungsursaechlicherBedarf = new LangfristigerBedarfModel();
@@ -453,11 +458,14 @@ class CalculationServiceTest {
         final var sobonBerechnung = new SobonBerechnungModel();
         sobonBerechnung.setIsASobonBerechnung(true);
         sobonBerechnung.setSobonFoerdermix(new FoerdermixModel());
+        sobonBerechnung.setSobonOrientierungswertJahrSobonUrsaechlich(sobonOrientierungswertJahr);
 
         final var abfragevarianteBauleitplanverfahren = new AbfragevarianteBauleitplanverfahrenModel();
         abfragevarianteBauleitplanverfahren.setArtAbfragevariante(ArtAbfrage.BAULEITPLANVERFAHREN);
         abfragevarianteBauleitplanverfahren.setBauabschnitte(bauabschnitte);
-        abfragevarianteBauleitplanverfahren.setSobonOrientierungswertJahr(sobonOrientierungswertJahr);
+        abfragevarianteBauleitplanverfahren.setSobonOrientierungswertJahrPlanungsursaechlich(
+            sobonOrientierungswertJahr
+        );
         abfragevarianteBauleitplanverfahren.setStammdatenGueltigAb(stammdatenGueltigAb);
         abfragevarianteBauleitplanverfahren.setGfWohnenSobonUrsaechlich(sobonGf);
         abfragevarianteBauleitplanverfahren.setSobonBerechnung(sobonBerechnung);
@@ -783,10 +791,13 @@ class CalculationServiceTest {
 
     @Test
     void doSobonberechung() {
+        final var sobonOrientierungswertJahr = SobonOrientierungswertJahr.JAHR_2017;
         var isAbfrageSobonRelevant = UncertainBoolean.TRUE;
         final var sobonBerechnung = new SobonBerechnungModel();
         sobonBerechnung.setIsASobonBerechnung(true);
         sobonBerechnung.setSobonFoerdermix(new FoerdermixModel());
+        sobonBerechnung.setSobonOrientierungswertJahrSobonUrsaechlich(sobonOrientierungswertJahr);
+
         final var abfragevariante = new AbfragevarianteBauleitplanverfahrenModel();
 
         abfragevariante.setSobonBerechnung(sobonBerechnung);
@@ -830,7 +841,7 @@ class CalculationServiceTest {
 
         isAbfrageSobonRelevant = UncertainBoolean.FALSE;
         abfragevariante.getSobonBerechnung().setIsASobonBerechnung(false);
-        abfragevariante.setSobonOrientierungswertJahr(null);
+        abfragevariante.setSobonOrientierungswertJahrPlanungsursaechlich(null);
         assertThat(
             this.calculationService.shouldSobonBerechnungBePerformed(abfragevariante, isAbfrageSobonRelevant),
             is(false)

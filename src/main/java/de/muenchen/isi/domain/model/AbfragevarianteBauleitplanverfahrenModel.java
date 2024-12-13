@@ -68,7 +68,7 @@ public class AbfragevarianteBauleitplanverfahrenModel
 
     private String weAnmerkung;
 
-    private SobonOrientierungswertJahr sobonOrientierungswertJahr;
+    private SobonOrientierungswertJahr sobonOrientierungswertJahrPlanungsursaechlich;
 
     private SobonBerechnungModel sobonBerechnung;
 
