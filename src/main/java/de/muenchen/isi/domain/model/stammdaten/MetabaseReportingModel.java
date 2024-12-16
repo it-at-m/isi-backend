@@ -7,11 +7,17 @@ public class MetabaseReportingModel {
 
     private String url;
 
-    private String reportsGlobal;
-
     private String reportErgebnissePlanungsursaechlich;
 
     private String reportErgebnisseSobonUrsaechlich;
 
     private String reportWohneinheiten;
+
+    private String reportBauratendatei;
+
+    private String reportKitaplanungsbereichKrippe;
+
+    private String reportKitaplanungsbereichKiga;
+
+    private String reportAndere;
 }

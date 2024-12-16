@@ -82,3 +82,7 @@ metabase:
       report.ergebnisse.planungsursaechlich: dashboard/36-ergebnisse-der-planungsursachlichen-bedarfsberechnung
       report.ergebnisse.sobonursaechlich: dashboard/44-ergebnisse-der-sobon-bedarfsberechnung
       report.wohneinheiten: dashboard/33-dashboard-wohneinheiten
+      report.bauratendatei: collection/39-dashboards
+      report.kitaplanungsbereichKrippe: collection/39-dashboards
+      report.kitaplanungsbereichKiga: collection/39-dashboards
+      report.andere: collection/39-dashboards

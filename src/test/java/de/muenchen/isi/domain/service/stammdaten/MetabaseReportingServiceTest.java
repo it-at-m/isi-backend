@@ -21,10 +21,13 @@ class MetabaseReportingServiceTest {
     public void beforeEach() {
         this.metabaseReportingService = new MetabaseReportingService(
             "https://isi-metabase-test.muenchen.de",
-            "collection/99-global-reports",
             " dashboard/36-ergebnisse-der-planungsursachlichen-bedarfsberechnung",
             "dashboard/44-ergebnisse-der-sobon-bedarfsberechnung",
-            "dashboard/33-dashboard-wohneinheiten"
+            "dashboard/33-dashboard-wohneinheiten",
+            "collection/39-dashboards",
+            "collection/39-dashboards",
+            "collection/39-dashboards",
+            "collection/39-dashboards"
         );
     }
 
@@ -32,12 +35,15 @@ class MetabaseReportingServiceTest {
     void getMetabaseReporting() {
         final var expected = new MetabaseReportingModel();
         expected.setUrl("https://isi-metabase-test.muenchen.de");
-        expected.setReportsGlobal("collection/99-global-reports");
         expected.setReportErgebnissePlanungsursaechlich(
             " dashboard/36-ergebnisse-der-planungsursachlichen-bedarfsberechnung"
         );
         expected.setReportErgebnisseSobonUrsaechlich("dashboard/44-ergebnisse-der-sobon-bedarfsberechnung");
         expected.setReportWohneinheiten("dashboard/33-dashboard-wohneinheiten");
+        expected.setReportBauratendatei("collection/39-dashboards");
+        expected.setReportKitaplanungsbereichKrippe("collection/39-dashboards");
+        expected.setReportKitaplanungsbereichKiga("collection/39-dashboards");
+        expected.setReportAndere("collection/39-dashboards");
         assertThat(this.metabaseReportingService.getMetabaseReporting(), is(expected));
     }
 }
