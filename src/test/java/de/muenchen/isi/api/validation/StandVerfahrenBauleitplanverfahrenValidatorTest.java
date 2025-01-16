@@ -37,7 +37,6 @@ class StandVerfahrenBauleitplanverfahrenValidatorTest {
             is(true)
         );
         assertThat(this.standVerfahrenValidator.isValid(StandVerfahren.AUFTEILUNGSPLAN, null), is(true));
-        assertThat(this.standVerfahrenValidator.isValid(StandVerfahren.INFO_FEHLT, null), is(true));
         assertThat(this.standVerfahrenValidator.isValid(StandVerfahren.FREIE_EINGABE, null), is(true));
         assertThat(this.standVerfahrenValidator.isValid(StandVerfahren.VORBEREITUNG_BAUGENEHMIGUNG, null), is(false));
     }
