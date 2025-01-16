@@ -17,7 +17,6 @@ class StandVerfahrenBaugenehmigungsverfahrenValidatorTest {
         assertThat(this.standVerfahrenValidator.isValid(StandVerfahren.UNSPECIFIED, null), is(true));
         assertThat(this.standVerfahrenValidator.isValid(StandVerfahren.VORBEREITUNG_VORBESCHEID, null), is(true));
         assertThat(this.standVerfahrenValidator.isValid(StandVerfahren.VORBEREITUNG_BAUGENEHMIGUNG, null), is(true));
-        assertThat(this.standVerfahrenValidator.isValid(StandVerfahren.INFO_FEHLT, null), is(true));
         assertThat(this.standVerfahrenValidator.isValid(StandVerfahren.FREIE_EINGABE, null), is(true));
         assertThat(
             this.standVerfahrenValidator.isValid(StandVerfahren.RECHTSVERBINDLICHKEIT_AMTSBLATT, null),

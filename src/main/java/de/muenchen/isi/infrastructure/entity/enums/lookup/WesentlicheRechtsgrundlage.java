@@ -27,8 +27,6 @@ public enum WesentlicheRechtsgrundlage implements ILookup {
 
     BEFREIUNG("Befreiung (§ 31 BauGB)"),
 
-    INFO_FEHLT("Info fehlt"),
-
     FREIE_EINGABE("freie Eingabe");
 
     @Getter
@@ -40,7 +38,6 @@ public enum WesentlicheRechtsgrundlage implements ILookup {
             VORHABENSBEZOGENER_BEBAUUNGSPLAN,
             EINFACHER_BEBAUUNGSPLAN_PARAGRAPH_30,
             SEKTORALER_BEBAUUNGSPLAN_PARAGRAPH_9,
-            INFO_FEHLT,
             FREIE_EINGABE
         );
     }
@@ -54,7 +51,6 @@ public enum WesentlicheRechtsgrundlage implements ILookup {
             INNENBEREICH,
             AUSSENBEREICH,
             BEFREIUNG,
-            INFO_FEHLT,
             FREIE_EINGABE
         );
     }

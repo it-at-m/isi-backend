@@ -70,8 +70,6 @@ public enum StandVerfahren implements ILookup {
         new String[] { "Städtebauliche", "Entwicklungsmaßnahme", "Entwicklungsgebiet" }
     ),
 
-    INFO_FEHLT("Info fehlt", new String[] { "Info", "fehlt" }),
-
     FREIE_EINGABE("freie Eingabe", new String[] { "freie", "Eingabe" }),
 
     STANDORTABFRAGE("Standortabfrage", new String[] { "Standortabfrage" });
@@ -93,13 +91,12 @@ public enum StandVerfahren implements ILookup {
             VORLIEGENDER_SATZUNGSBESCHLUSS,
             RECHTSVERBINDLICHKEIT_AMTSBLATT,
             AUFTEILUNGSPLAN,
-            INFO_FEHLT,
             FREIE_EINGABE
         );
     }
 
     public static List<StandVerfahren> getStandVerfahrenForBaugenehmigungsverfahren() {
-        return List.of(UNSPECIFIED, VORBEREITUNG_VORBESCHEID, VORBEREITUNG_BAUGENEHMIGUNG, INFO_FEHLT, FREIE_EINGABE);
+        return List.of(UNSPECIFIED, VORBEREITUNG_VORBESCHEID, VORBEREITUNG_BAUGENEHMIGUNG, FREIE_EINGABE);
     }
 
     public static List<StandVerfahren> getStandVerfahrenForWeiteresVerfahren() {
@@ -111,7 +108,6 @@ public enum StandVerfahren implements ILookup {
             POTENTIALUNTERSUCHUNG,
             STAEDTEBAULICHE_SANIERUNGSMASSNAHME,
             STAEDTEBAULICHE_ENTWICKLUNGSMASSNAHME,
-            INFO_FEHLT,
             FREIE_EINGABE,
             STANDORTABFRAGE
         );
