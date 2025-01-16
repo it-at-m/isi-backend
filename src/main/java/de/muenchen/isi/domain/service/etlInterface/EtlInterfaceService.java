@@ -95,7 +95,10 @@ public class EtlInterfaceService {
             try {
                 etlInterfaceRepository.etlTriggerJob(etlTriggerJobDto);
             } catch (final Exception exception) {
-                final var error = "Beim Aufruf des ETL-Systems (Pentaho) ist ein Fehler aufgetreten.";
+                final var error =
+                    "Beim Aufruf des ETL-Systems (Pentaho), Job: " +
+                    etlTriggerJobDto.getJobname() +
+                    ", ist ein Fehler aufgetreten";
                 log.error(error, exception);
                 throw new ReportingException(error, exception);
             }
