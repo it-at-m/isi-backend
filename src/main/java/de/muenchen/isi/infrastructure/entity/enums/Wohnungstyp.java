@@ -18,8 +18,7 @@ public enum Wohnungstyp {
     private final String bezeichnung;
 
     public static Optional<Wohnungstyp> findByBezeichnung(final String bezeichnung) {
-        return EnumUtils
-            .getEnumList(Wohnungstyp.class)
+        return EnumUtils.getEnumList(Wohnungstyp.class)
             .stream()
             .filter(wohnungstyp -> StringUtils.equals(wohnungstyp.getBezeichnung(), bezeichnung))
             .findFirst();

@@ -36,7 +36,7 @@ public class AbfragevarianteBauleitplanverfahrenSachbearbeitungStartBearbeitungD
 
     @NotUnspecified
     @NotNull
-    private SobonOrientierungswertJahr sobonOrientierungswertJahr;
+    private SobonOrientierungswertJahr sobonOrientierungswertJahrPlanungsursaechlich;
 
     @SobonBerechnungValid
     private SobonBerechnungDto sobonBerechnung;

@@ -30,8 +30,7 @@ public class StatusAbfrageSuggestionBinder implements CompletionSuggestionBinder
             final var jsonObject = new JsonObject();
             final var jsonArray = new JsonArray();
             if (ObjectUtils.isNotEmpty(value)) {
-                Arrays
-                    .stream(StringUtils.split(value.getBezeichnung()))
+                Arrays.stream(StringUtils.split(value.getBezeichnung()))
                     .map(JsonPrimitive::new)
                     .forEach(jsonArray::add);
             }

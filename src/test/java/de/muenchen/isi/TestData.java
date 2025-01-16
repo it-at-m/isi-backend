@@ -222,7 +222,7 @@ public class TestData {
         abfragevariante.setWeSonderwohnformen(false);
         abfragevariante.setWeGesamt(31);
         abfragevariante.setRealisierungVon(2023);
-        abfragevariante.setSobonOrientierungswertJahr(SobonOrientierungswertJahr.JAHR_2022);
+        abfragevariante.setSobonOrientierungswertJahrPlanungsursaechlich(SobonOrientierungswertJahr.JAHR_2022);
         abfragevariante.setStammdatenGueltigAb(LocalDate.of(2023, 1, 1));
         abfragevariante.setBauabschnitte(List.of(createBauabschnittModel()));
         return abfragevariante;
@@ -241,7 +241,7 @@ public class TestData {
         abfragevariante.setWeSonderwohnformen(false);
         abfragevariante.setWeGesamt(31);
         abfragevariante.setRealisierungVon(2023);
-        abfragevariante.setSobonOrientierungswertJahr(SobonOrientierungswertJahr.JAHR_2014);
+        abfragevariante.setSobonOrientierungswertJahrPlanungsursaechlich(SobonOrientierungswertJahr.JAHR_2014);
         abfragevariante.setStammdatenGueltigAb(LocalDate.of(2023, 1, 1));
         abfragevariante.setBauabschnitte(List.of(createBauabschnittModel()));
         return abfragevariante;
@@ -261,7 +261,7 @@ public class TestData {
         abfragevariante.setWeSonderwohnformen(false);
         abfragevariante.setWeGesamt(31);
         abfragevariante.setRealisierungVon(2023);
-        abfragevariante.setSobonOrientierungswertJahr(SobonOrientierungswertJahr.JAHR_2022);
+        abfragevariante.setSobonOrientierungswertJahrPlanungsursaechlich(SobonOrientierungswertJahr.JAHR_2022);
         abfragevariante.setStammdatenGueltigAb(LocalDate.of(2023, 1, 1));
         abfragevariante.setBauabschnitte(List.of(createBauabschnittModel()));
         return abfragevariante;

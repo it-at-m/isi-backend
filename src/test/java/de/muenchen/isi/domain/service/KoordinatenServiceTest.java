@@ -84,8 +84,7 @@ public class KoordinatenServiceTest {
             .map(this::createCoordinate)
             .collect(Collectors.toList())
             .toArray(new Coordinate[polygon.size()]);
-        final var coordinateSequence = JTSFactoryFinder
-            .getGeometryFactory()
+        final var coordinateSequence = JTSFactoryFinder.getGeometryFactory()
             .getCoordinateSequenceFactory()
             .create(coordiantes);
         final var linearRing = new LinearRing(coordinateSequence, JTSFactoryFinder.getGeometryFactory());

@@ -62,17 +62,17 @@ class KommentarInfrastruktureinrichtungDomainMapperTest {
         kommentarModel = new KommentarInfrastruktureinrichtungModel();
         kommentarModel.setInfrastruktureinrichtung(uuidInfrastruktureinrichtung);
 
-        Mockito
-            .when(this.infrastruktureinrichtungRepository.findById(uuidInfrastruktureinrichtung))
-            .thenReturn(Optional.of(infrastruktureinrichtung));
+        Mockito.when(this.infrastruktureinrichtungRepository.findById(uuidInfrastruktureinrichtung)).thenReturn(
+            Optional.of(infrastruktureinrichtung)
+        );
 
         kommentarInfrastruktureinrichtungDomainMapper.afterMappingModel2Entity(kommentarModel, kommentar);
 
         assertThat(kommentar.getBauvorhaben(), is(nullValue()));
         assertThat(kommentar.getInfrastruktureinrichtung(), is(infrastruktureinrichtung));
 
-        Mockito
-            .verify(this.infrastruktureinrichtungRepository, Mockito.times(1))
-            .findById(uuidInfrastruktureinrichtung);
+        Mockito.verify(this.infrastruktureinrichtungRepository, Mockito.times(1)).findById(
+            uuidInfrastruktureinrichtung
+        );
     }
 }

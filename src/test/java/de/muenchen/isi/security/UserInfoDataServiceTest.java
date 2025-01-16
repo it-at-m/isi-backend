@@ -101,9 +101,9 @@ class UserInfoDataServiceTest {
         headers.set(HttpHeaders.AUTHORIZATION, "Bearer the-tokenvalue");
         final var entity = new HttpEntity<String>(headers);
 
-        Mockito
-            .when(restTemplate.exchange("userinfo-uri", HttpMethod.GET, entity, Map.class))
-            .thenReturn(ResponseEntity.ok(userInfoEndpointData));
+        Mockito.when(restTemplate.exchange("userinfo-uri", HttpMethod.GET, entity, Map.class)).thenReturn(
+            ResponseEntity.ok(userInfoEndpointData)
+        );
 
         var result = userInfoDataService.loadUserInfoData(jwt);
 
@@ -278,9 +278,9 @@ class UserInfoDataServiceTest {
 
         final var response = new HashMap<String, Object>();
         response.put("response-key", "response-value");
-        Mockito
-            .when(restTemplate.exchange("userinfo-uri", HttpMethod.GET, entity, Map.class))
-            .thenReturn(ResponseEntity.ok(response));
+        Mockito.when(restTemplate.exchange("userinfo-uri", HttpMethod.GET, entity, Map.class)).thenReturn(
+            ResponseEntity.ok(response)
+        );
 
         final var result = this.userInfoDataService.getDataFromUserInfoEndpoint(jwt);
 

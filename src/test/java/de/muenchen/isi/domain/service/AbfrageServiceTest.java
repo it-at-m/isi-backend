@@ -146,35 +146,33 @@ class AbfrageServiceTest {
     @BeforeEach
     public void beforeEach() throws NoSuchFieldException, IllegalAccessException {
         final var abfragevarianteDomainMapper = new AbfragevarianteDomainMapperImpl(new BauabschnittDomainMapperImpl());
-        this.abfrageDomainMapper =
-            new AbfrageDomainMapperImpl(
-                abfragevarianteDomainMapper,
-                new DokumentDomainMapperImpl(),
-                new VerortungDomainMapperImpl(new KoordinatenDomainMapperImpl()),
-                new AdresseDomainMapperImpl(new KoordinatenDomainMapperImpl())
-            );
+        this.abfrageDomainMapper = new AbfrageDomainMapperImpl(
+            abfragevarianteDomainMapper,
+            new DokumentDomainMapperImpl(),
+            new VerortungDomainMapperImpl(new KoordinatenDomainMapperImpl()),
+            new AdresseDomainMapperImpl(new KoordinatenDomainMapperImpl())
+        );
         Field field = abfrageDomainMapper.getClass().getSuperclass().getDeclaredField("abfragevarianteDomainMapper");
         field.setAccessible(true);
         field.set(abfrageDomainMapper, abfragevarianteDomainMapper);
         field = abfrageDomainMapper.getClass().getSuperclass().getDeclaredField("bauvorhabenRepository");
         field.setAccessible(true);
         field.set(abfrageDomainMapper, bauvorhabenRepository);
-        this.abfrageService =
-            new AbfrageService(
-                this.abfrageRepository,
-                this.abfrageDomainMapper,
-                this.bauvorhabenRepository,
-                this.dokumentService,
-                this.authenticationUtils,
-                this.abfragevarianteBauleitplanverfahrenRepository,
-                this.abfragevarianteBaugenehmigungsverfahrenRepository,
-                this.abfragevarianteWeiteresVerfahrenRepository,
-                this.calculationService,
-                this.reportingdataTransferService,
-                this.bauratendateiInputService,
-                this.bearbeitungshistorieService,
-                this.etlInterfaceService
-            );
+        this.abfrageService = new AbfrageService(
+            this.abfrageRepository,
+            this.abfrageDomainMapper,
+            this.bauvorhabenRepository,
+            this.dokumentService,
+            this.authenticationUtils,
+            this.abfragevarianteBauleitplanverfahrenRepository,
+            this.abfragevarianteBaugenehmigungsverfahrenRepository,
+            this.abfragevarianteWeiteresVerfahrenRepository,
+            this.calculationService,
+            this.reportingdataTransferService,
+            this.bauratendateiInputService,
+            this.bearbeitungshistorieService,
+            this.etlInterfaceService
+        );
         Mockito.reset(
             this.abfrageRepository,
             this.bauvorhabenRepository,
@@ -243,12 +241,13 @@ class AbfrageServiceTest {
 
         Mockito.verify(this.abfrageRepository, Mockito.times(1)).saveAndFlush(abfrageEntity);
         Mockito.verify(this.bauvorhabenRepository, Mockito.times(0)).findById(UUID.randomUUID());
-        Mockito
-            .verify(this.calculationService, Mockito.times(1))
-            .calculateBedarfeForEachAbfragevarianteOfAbfrage(abfrage);
-        Mockito
-            .verify(this.reportingdataTransferService, Mockito.times(1))
-            .transferAbfrageAndBedarfe(expected, new HashMap<>());
+        Mockito.verify(this.calculationService, Mockito.times(1)).calculateBedarfeForEachAbfragevarianteOfAbfrage(
+            abfrage
+        );
+        Mockito.verify(this.reportingdataTransferService, Mockito.times(1)).transferAbfrageAndBedarfe(
+            expected,
+            new HashMap<>()
+        );
     }
 
     @Test
@@ -295,12 +294,13 @@ class AbfrageServiceTest {
         assertThat(result, is(expected));
         Mockito.verify(this.abfrageRepository, Mockito.times(1)).saveAndFlush(abfrageEntity);
         Mockito.verify(this.bauvorhabenRepository, Mockito.times(0)).findById(UUID.randomUUID());
-        Mockito
-            .verify(this.calculationService, Mockito.times(1))
-            .calculateBedarfeForEachAbfragevarianteOfAbfrage(abfrage);
-        Mockito
-            .verify(this.reportingdataTransferService, Mockito.times(1))
-            .transferAbfrageAndBedarfe(expected, new HashMap<>());
+        Mockito.verify(this.calculationService, Mockito.times(1)).calculateBedarfeForEachAbfragevarianteOfAbfrage(
+            abfrage
+        );
+        Mockito.verify(this.reportingdataTransferService, Mockito.times(1)).transferAbfrageAndBedarfe(
+            expected,
+            new HashMap<>()
+        );
         Mockito.verify(this.bearbeitungshistorieService, Mockito.times(1)).appendBearbeitungshistorieToAbfrage(abfrage);
     }
 
@@ -337,12 +337,13 @@ class AbfrageServiceTest {
 
         Mockito.verify(this.abfrageRepository, Mockito.times(1)).findById(entity.getId());
         Mockito.verify(this.abfrageRepository, Mockito.times(1)).saveAndFlush(entity);
-        Mockito
-            .verify(this.dokumentService, Mockito.times(1))
-            .deleteDokumenteFromOriginalDokumentenListWhichAreMissingInParameterAdaptedDokumentenListe(
-                Mockito.isNull(),
-                Mockito.isNull()
-            );
+        Mockito.verify(
+            this.dokumentService,
+            Mockito.times(1)
+        ).deleteDokumenteFromOriginalDokumentenListWhichAreMissingInParameterAdaptedDokumentenListe(
+            Mockito.isNull(),
+            Mockito.isNull()
+        );
     }
 
     @Test
@@ -379,12 +380,13 @@ class AbfrageServiceTest {
 
         Mockito.verify(this.abfrageRepository, Mockito.times(1)).findById(entity.getId());
         Mockito.verify(this.abfrageRepository, Mockito.times(1)).saveAndFlush(entity);
-        Mockito
-            .verify(this.dokumentService, Mockito.times(1))
-            .deleteDokumenteFromOriginalDokumentenListWhichAreMissingInParameterAdaptedDokumentenListe(
-                Mockito.isNull(),
-                Mockito.isNull()
-            );
+        Mockito.verify(
+            this.dokumentService,
+            Mockito.times(1)
+        ).deleteDokumenteFromOriginalDokumentenListWhichAreMissingInParameterAdaptedDokumentenListe(
+            Mockito.isNull(),
+            Mockito.isNull()
+        );
     }
 
     @Test
@@ -419,12 +421,13 @@ class AbfrageServiceTest {
 
         Mockito.verify(this.abfrageRepository, Mockito.times(1)).findById(entity.getId());
         Mockito.verify(this.abfrageRepository, Mockito.times(1)).saveAndFlush(entity);
-        Mockito
-            .verify(this.dokumentService, Mockito.times(1))
-            .deleteDokumenteFromOriginalDokumentenListWhichAreMissingInParameterAdaptedDokumentenListe(
-                Mockito.isNull(),
-                Mockito.isNull()
-            );
+        Mockito.verify(
+            this.dokumentService,
+            Mockito.times(1)
+        ).deleteDokumenteFromOriginalDokumentenListWhichAreMissingInParameterAdaptedDokumentenListe(
+            Mockito.isNull(),
+            Mockito.isNull()
+        );
     }
 
     @Test
@@ -549,7 +552,9 @@ class AbfrageServiceTest {
         abfragevarianteSachbearbeitung.setArtAbfragevariante(ArtAbfrage.BAULEITPLANVERFAHREN);
         abfragevarianteSachbearbeitung.setAbfragevariantenNr(1);
         abfragevarianteSachbearbeitung.setName("Abfragevariante 1");
-        abfragevarianteSachbearbeitung.setSobonOrientierungswertJahr(SobonOrientierungswertJahr.JAHR_2017);
+        abfragevarianteSachbearbeitung.setSobonOrientierungswertJahrPlanungsursaechlich(
+            SobonOrientierungswertJahr.JAHR_2017
+        );
         abfragevarianteSachbearbeitung.setAnmerkung("Test Anmerkung");
         requestModel.setAbfragevariantenSachbearbeitungBauleitplanverfahren(List.of(abfragevarianteSachbearbeitung));
 
@@ -590,7 +595,7 @@ class AbfrageServiceTest {
         final var abfragevariante1ToSave = new AbfragevarianteBauleitplanverfahren();
         abfragevariante1ToSave.setAbfragevariantenNr(1);
         abfragevariante1ToSave.setName("Abfragevariante 1");
-        abfragevariante1ToSave.setSobonOrientierungswertJahr(SobonOrientierungswertJahr.JAHR_2017);
+        abfragevariante1ToSave.setSobonOrientierungswertJahrPlanungsursaechlich(SobonOrientierungswertJahr.JAHR_2017);
         abfragevariante1ToSave.setAnmerkung("Test Anmerkung");
         entityToSave.setAbfragevariantenSachbearbeitungBauleitplanverfahren(List.of(abfragevariante1ToSave));
 
@@ -606,13 +611,13 @@ class AbfrageServiceTest {
         abfragevariante1Saved.setId(UUID.randomUUID());
         abfragevariante1Saved.setAbfragevariantenNr(1);
         abfragevariante1Saved.setName("Abfragevariante 1");
-        abfragevariante1Saved.setSobonOrientierungswertJahr(SobonOrientierungswertJahr.JAHR_2017);
+        abfragevariante1Saved.setSobonOrientierungswertJahrPlanungsursaechlich(SobonOrientierungswertJahr.JAHR_2017);
         abfragevariante1Saved.setAnmerkung("Test Anmerkung");
         entitySaved.setAbfragevariantenSachbearbeitungBauleitplanverfahren(List.of(abfragevariante1Saved));
 
-        Mockito
-            .when(this.bauvorhabenRepository.findById(bauleitplanverfahrenModel.getBauvorhaben()))
-            .thenReturn(Optional.of(bauvorhabenEntity));
+        Mockito.when(this.bauvorhabenRepository.findById(bauleitplanverfahrenModel.getBauvorhaben())).thenReturn(
+            Optional.of(bauvorhabenEntity)
+        );
         Mockito.when(this.abfrageRepository.saveAndFlush(entityToSave)).thenReturn(entitySaved);
 
         final var result = this.abfrageService.patchStartBearbeitung(requestModel, uuid);
@@ -630,7 +635,7 @@ class AbfrageServiceTest {
         abfragevariante1Expected.setId(abfragevariante1Saved.getId());
         abfragevariante1Expected.setAbfragevariantenNr(1);
         abfragevariante1Expected.setName("Abfragevariante 1");
-        abfragevariante1Expected.setSobonOrientierungswertJahr(SobonOrientierungswertJahr.JAHR_2017);
+        abfragevariante1Expected.setSobonOrientierungswertJahrPlanungsursaechlich(SobonOrientierungswertJahr.JAHR_2017);
         abfragevariante1Expected.setAnmerkung("Test Anmerkung");
         expected.setAbfragevariantenSachbearbeitungBauleitplanverfahren(List.of(abfragevariante1Expected));
         expected.setBauvorhaben(bauvorhabenId);
@@ -728,9 +733,9 @@ class AbfrageServiceTest {
         abfragevariante1Saved.setAnmerkung("Test Anmerkung");
         entitySaved.setAbfragevariantenSachbearbeitungBaugenehmigungsverfahren(List.of(abfragevariante1Saved));
 
-        Mockito
-            .when(this.bauvorhabenRepository.findById(baugenehmigungsverfahrenModel.getBauvorhaben()))
-            .thenReturn(Optional.of(bauvorhabenEntity));
+        Mockito.when(this.bauvorhabenRepository.findById(baugenehmigungsverfahrenModel.getBauvorhaben())).thenReturn(
+            Optional.of(bauvorhabenEntity)
+        );
         Mockito.when(this.abfrageRepository.saveAndFlush(entityToSave)).thenReturn(entitySaved);
 
         final var result = this.abfrageService.patchStartBearbeitung(requestModel, uuid);
@@ -843,9 +848,9 @@ class AbfrageServiceTest {
         abfragevariante1Saved.setAnmerkung("Test Anmerkung");
         entitySaved.setAbfragevariantenSachbearbeitungWeiteresVerfahren(List.of(abfragevariante1Saved));
 
-        Mockito
-            .when(this.bauvorhabenRepository.findById(weiteresVerfahrenModel.getBauvorhaben()))
-            .thenReturn(Optional.of(bauvorhabenEntity));
+        Mockito.when(this.bauvorhabenRepository.findById(weiteresVerfahrenModel.getBauvorhaben())).thenReturn(
+            Optional.of(bauvorhabenEntity)
+        );
         Mockito.when(this.abfrageRepository.saveAndFlush(entityToSave)).thenReturn(entitySaved);
 
         final var result = this.abfrageService.patchStartBearbeitung(requestModel, uuid);
@@ -3217,9 +3222,9 @@ class AbfrageServiceTest {
         bauvorhabenEntity.setId(bauvorhaben.getId());
 
         Mockito.when(this.abfrageRepository.findById(entity.getId())).thenReturn(Optional.of(entity));
-        Mockito
-            .when(this.bauvorhabenRepository.findById(bauvorhaben.getId()))
-            .thenReturn(Optional.of(bauvorhabenEntity));
+        Mockito.when(this.bauvorhabenRepository.findById(bauvorhaben.getId())).thenReturn(
+            Optional.of(bauvorhabenEntity)
+        );
         Mockito.when(this.authenticationUtils.getUserRoles()).thenReturn(List.of(roles));
         Mockito.when(this.authenticationUtils.getUserSub()).thenReturn(sub);
 
@@ -3351,12 +3356,11 @@ class AbfrageServiceTest {
         final var bauvorhabenEntity = new Bauvorhaben();
         bauvorhabenEntity.setId(abfrage.getBauvorhaben());
 
-        Mockito
-            .when(this.bauvorhabenRepository.findById(bauvorhabenEntity.getId()))
-            .thenReturn(Optional.of(bauvorhabenEntity));
-        Assertions.assertThrows(
-            EntityIsReferencedException.class,
-            () -> this.abfrageService.throwEntityIsReferencedExceptionWhenAbfrageIsReferencingBauvorhaben(abfrage)
+        Mockito.when(this.bauvorhabenRepository.findById(bauvorhabenEntity.getId())).thenReturn(
+            Optional.of(bauvorhabenEntity)
+        );
+        Assertions.assertThrows(EntityIsReferencedException.class, () ->
+            this.abfrageService.throwEntityIsReferencedExceptionWhenAbfrageIsReferencingBauvorhaben(abfrage)
         );
     }
 
@@ -3370,13 +3374,11 @@ class AbfrageServiceTest {
                 StatusAbfrage.EINPFLEGEN_BEDARFSMELDUNG
             );
 
-        Assertions.assertThrows(
-            AbfrageStatusNotAllowedException.class,
-            () ->
-                this.abfrageService.throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(
-                        model,
-                        StatusAbfrage.ANGELEGT
-                    )
+        Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () ->
+            this.abfrageService.throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(
+                    model,
+                    StatusAbfrage.ANGELEGT
+                )
         );
     }
 

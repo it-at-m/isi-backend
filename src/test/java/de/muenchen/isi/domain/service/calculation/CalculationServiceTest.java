@@ -57,14 +57,13 @@ class CalculationServiceTest {
 
     @BeforeEach
     public void beforeEach() {
-        this.calculationService =
-            Mockito.spy(
-                new CalculationService(
-                    planungsursaechlicheWohneinheitenService,
-                    sobonursaechlicheWohneinheitenService,
-                    infrastrukturbedarfService
-                )
-            );
+        this.calculationService = Mockito.spy(
+            new CalculationService(
+                planungsursaechlicheWohneinheitenService,
+                sobonursaechlicheWohneinheitenService,
+                infrastrukturbedarfService
+            )
+        );
         Mockito.reset(planungsursaechlicheWohneinheitenService, infrastrukturbedarfService, calculationService);
     }
 
@@ -72,9 +71,8 @@ class CalculationServiceTest {
     void calculateBedarfeForEachAbfragevarianteOfAbfrageUnspecified() {
         final var abfrage = new WeiteresVerfahrenModel();
         abfrage.setArtAbfrage(ArtAbfrage.UNSPECIFIED);
-        Assertions.assertThrows(
-            CalculationException.class,
-            () -> this.calculationService.calculateBedarfeForEachAbfragevarianteOfAbfrage(abfrage)
+        Assertions.assertThrows(CalculationException.class, () ->
+            this.calculationService.calculateBedarfeForEachAbfragevarianteOfAbfrage(abfrage)
         );
     }
 
@@ -87,18 +85,20 @@ class CalculationServiceTest {
         abfrage.setSobonRelevant(UncertainBoolean.UNSPECIFIED);
         var result = calculationService.calculateBedarfeForEachAbfragevarianteOfAbfrage(abfrage);
         assertThat(result, is(new HashMap<UUID, BedarfeForAbfragevarianteModel>()));
-        Mockito
-            .verify(calculationService, Mockito.times(0))
-            .calculateBedarfeForAbfragevariante(Mockito.any(), Mockito.any());
+        Mockito.verify(calculationService, Mockito.times(0)).calculateBedarfeForAbfragevariante(
+            Mockito.any(),
+            Mockito.any()
+        );
 
         Mockito.reset(calculationService);
         abfrage.setAbfragevariantenWeiteresVerfahren(List.of());
         abfrage.setAbfragevariantenSachbearbeitungWeiteresVerfahren(List.of());
         result = calculationService.calculateBedarfeForEachAbfragevarianteOfAbfrage(abfrage);
         assertThat(result, is(new HashMap<UUID, BedarfeForAbfragevarianteModel>()));
-        Mockito
-            .verify(calculationService, Mockito.times(0))
-            .calculateBedarfeForAbfragevariante(Mockito.any(), Mockito.any());
+        Mockito.verify(calculationService, Mockito.times(0)).calculateBedarfeForAbfragevariante(
+            Mockito.any(),
+            Mockito.any()
+        );
 
         Mockito.reset(calculationService);
         abfrage.setAbfragevariantenWeiteresVerfahren(null);
@@ -110,9 +110,10 @@ class CalculationServiceTest {
         var expected = Map.of(abfragevariante.getId(), new BedarfeForAbfragevarianteModel());
         result = calculationService.calculateBedarfeForEachAbfragevarianteOfAbfrage(abfrage);
         assertThat(result, is(expected));
-        Mockito
-            .verify(calculationService, Mockito.times(1))
-            .calculateBedarfeForAbfragevariante(abfragevariante, UncertainBoolean.UNSPECIFIED);
+        Mockito.verify(calculationService, Mockito.times(1)).calculateBedarfeForAbfragevariante(
+            abfragevariante,
+            UncertainBoolean.UNSPECIFIED
+        );
 
         Mockito.reset(calculationService);
         abfrage.setAbfragevariantenSachbearbeitungWeiteresVerfahren(null);
@@ -124,9 +125,10 @@ class CalculationServiceTest {
         expected = Map.of(abfragevariante.getId(), new BedarfeForAbfragevarianteModel());
         result = calculationService.calculateBedarfeForEachAbfragevarianteOfAbfrage(abfrage);
         assertThat(result, is(expected));
-        Mockito
-            .verify(calculationService, Mockito.times(1))
-            .calculateBedarfeForAbfragevariante(abfragevariante, UncertainBoolean.UNSPECIFIED);
+        Mockito.verify(calculationService, Mockito.times(1)).calculateBedarfeForAbfragevariante(
+            abfragevariante,
+            UncertainBoolean.UNSPECIFIED
+        );
 
         Mockito.reset(calculationService);
         var abfragevariante1 = new AbfragevarianteWeiteresVerfahrenModel();
@@ -143,12 +145,14 @@ class CalculationServiceTest {
         expected.put(abfragevariante2.getId(), new BedarfeForAbfragevarianteModel());
         result = calculationService.calculateBedarfeForEachAbfragevarianteOfAbfrage(abfrage);
         assertThat(result, is(expected));
-        Mockito
-            .verify(calculationService, Mockito.times(1))
-            .calculateBedarfeForAbfragevariante(abfragevariante1, UncertainBoolean.UNSPECIFIED);
-        Mockito
-            .verify(calculationService, Mockito.times(1))
-            .calculateBedarfeForAbfragevariante(abfragevariante2, UncertainBoolean.UNSPECIFIED);
+        Mockito.verify(calculationService, Mockito.times(1)).calculateBedarfeForAbfragevariante(
+            abfragevariante1,
+            UncertainBoolean.UNSPECIFIED
+        );
+        Mockito.verify(calculationService, Mockito.times(1)).calculateBedarfeForAbfragevariante(
+            abfragevariante2,
+            UncertainBoolean.UNSPECIFIED
+        );
     }
 
     @Test
@@ -159,18 +163,20 @@ class CalculationServiceTest {
         abfrage.setAbfragevariantenSachbearbeitungBaugenehmigungsverfahren(null);
         var result = calculationService.calculateBedarfeForEachAbfragevarianteOfAbfrage(abfrage);
         assertThat(result, is(new HashMap<UUID, BedarfeForAbfragevarianteModel>()));
-        Mockito
-            .verify(calculationService, Mockito.times(0))
-            .calculateBedarfeForAbfragevariante(Mockito.any(), Mockito.any());
+        Mockito.verify(calculationService, Mockito.times(0)).calculateBedarfeForAbfragevariante(
+            Mockito.any(),
+            Mockito.any()
+        );
 
         Mockito.reset(calculationService);
         abfrage.setAbfragevariantenBaugenehmigungsverfahren(List.of());
         abfrage.setAbfragevariantenSachbearbeitungBaugenehmigungsverfahren(List.of());
         result = calculationService.calculateBedarfeForEachAbfragevarianteOfAbfrage(abfrage);
         assertThat(result, is(new HashMap<UUID, BedarfeForAbfragevarianteModel>()));
-        Mockito
-            .verify(calculationService, Mockito.times(0))
-            .calculateBedarfeForAbfragevariante(Mockito.any(), Mockito.any());
+        Mockito.verify(calculationService, Mockito.times(0)).calculateBedarfeForAbfragevariante(
+            Mockito.any(),
+            Mockito.any()
+        );
 
         Mockito.reset(calculationService);
         var abfragevariante = new AbfragevarianteBaugenehmigungsverfahrenModel();
@@ -181,9 +187,10 @@ class CalculationServiceTest {
         var expected = Map.of(abfragevariante.getId(), new BedarfeForAbfragevarianteModel());
         result = calculationService.calculateBedarfeForEachAbfragevarianteOfAbfrage(abfrage);
         assertThat(result, is(expected));
-        Mockito
-            .verify(calculationService, Mockito.times(1))
-            .calculateBedarfeForAbfragevariante(abfragevariante, UncertainBoolean.UNSPECIFIED);
+        Mockito.verify(calculationService, Mockito.times(1)).calculateBedarfeForAbfragevariante(
+            abfragevariante,
+            UncertainBoolean.UNSPECIFIED
+        );
 
         Mockito.reset(calculationService);
         abfrage.setAbfragevariantenSachbearbeitungBaugenehmigungsverfahren(null);
@@ -194,9 +201,10 @@ class CalculationServiceTest {
         expected = Map.of(abfragevariante.getId(), new BedarfeForAbfragevarianteModel());
         result = calculationService.calculateBedarfeForEachAbfragevarianteOfAbfrage(abfrage);
         assertThat(result, is(expected));
-        Mockito
-            .verify(calculationService, Mockito.times(1))
-            .calculateBedarfeForAbfragevariante(abfragevariante, UncertainBoolean.UNSPECIFIED);
+        Mockito.verify(calculationService, Mockito.times(1)).calculateBedarfeForAbfragevariante(
+            abfragevariante,
+            UncertainBoolean.UNSPECIFIED
+        );
 
         Mockito.reset(calculationService);
         var abfragevariante1 = new AbfragevarianteBaugenehmigungsverfahrenModel();
@@ -212,12 +220,14 @@ class CalculationServiceTest {
         expected.put(abfragevariante2.getId(), new BedarfeForAbfragevarianteModel());
         result = calculationService.calculateBedarfeForEachAbfragevarianteOfAbfrage(abfrage);
         assertThat(result, is(expected));
-        Mockito
-            .verify(calculationService, Mockito.times(1))
-            .calculateBedarfeForAbfragevariante(abfragevariante1, UncertainBoolean.UNSPECIFIED);
-        Mockito
-            .verify(calculationService, Mockito.times(1))
-            .calculateBedarfeForAbfragevariante(abfragevariante2, UncertainBoolean.UNSPECIFIED);
+        Mockito.verify(calculationService, Mockito.times(1)).calculateBedarfeForAbfragevariante(
+            abfragevariante1,
+            UncertainBoolean.UNSPECIFIED
+        );
+        Mockito.verify(calculationService, Mockito.times(1)).calculateBedarfeForAbfragevariante(
+            abfragevariante2,
+            UncertainBoolean.UNSPECIFIED
+        );
     }
 
     @Test
@@ -230,18 +240,20 @@ class CalculationServiceTest {
         abfrage.setSobonRelevant(UncertainBoolean.UNSPECIFIED);
         var result = calculationService.calculateBedarfeForEachAbfragevarianteOfAbfrage(abfrage);
         assertThat(result, is(new HashMap<UUID, BedarfeForAbfragevarianteModel>()));
-        Mockito
-            .verify(calculationService, Mockito.times(0))
-            .calculateBedarfeForAbfragevariante(Mockito.any(), Mockito.any());
+        Mockito.verify(calculationService, Mockito.times(0)).calculateBedarfeForAbfragevariante(
+            Mockito.any(),
+            Mockito.any()
+        );
 
         Mockito.reset(calculationService);
         abfrage.setAbfragevariantenBauleitplanverfahren(List.of());
         abfrage.setAbfragevariantenSachbearbeitungBauleitplanverfahren(List.of());
         result = calculationService.calculateBedarfeForEachAbfragevarianteOfAbfrage(abfrage);
         assertThat(result, is(new HashMap<UUID, BedarfeForAbfragevarianteModel>()));
-        Mockito
-            .verify(calculationService, Mockito.times(0))
-            .calculateBedarfeForAbfragevariante(Mockito.any(), Mockito.any());
+        Mockito.verify(calculationService, Mockito.times(0)).calculateBedarfeForAbfragevariante(
+            Mockito.any(),
+            Mockito.any()
+        );
 
         Mockito.reset(calculationService);
         abfrage.setAbfragevariantenBauleitplanverfahren(null);
@@ -253,9 +265,10 @@ class CalculationServiceTest {
         var expected = Map.of(abfragevariante.getId(), new BedarfeForAbfragevarianteModel());
         result = calculationService.calculateBedarfeForEachAbfragevarianteOfAbfrage(abfrage);
         assertThat(result, is(expected));
-        Mockito
-            .verify(calculationService, Mockito.times(1))
-            .calculateBedarfeForAbfragevariante(abfragevariante, UncertainBoolean.UNSPECIFIED);
+        Mockito.verify(calculationService, Mockito.times(1)).calculateBedarfeForAbfragevariante(
+            abfragevariante,
+            UncertainBoolean.UNSPECIFIED
+        );
 
         Mockito.reset(calculationService);
         abfrage.setAbfragevariantenSachbearbeitungBauleitplanverfahren(null);
@@ -267,9 +280,10 @@ class CalculationServiceTest {
         expected = Map.of(abfragevariante.getId(), new BedarfeForAbfragevarianteModel());
         result = calculationService.calculateBedarfeForEachAbfragevarianteOfAbfrage(abfrage);
         assertThat(result, is(expected));
-        Mockito
-            .verify(calculationService, Mockito.times(1))
-            .calculateBedarfeForAbfragevariante(abfragevariante, UncertainBoolean.UNSPECIFIED);
+        Mockito.verify(calculationService, Mockito.times(1)).calculateBedarfeForAbfragevariante(
+            abfragevariante,
+            UncertainBoolean.UNSPECIFIED
+        );
 
         Mockito.reset(calculationService);
         var abfragevariante1 = new AbfragevarianteBauleitplanverfahrenModel();
@@ -286,25 +300,25 @@ class CalculationServiceTest {
         expected.put(abfragevariante2.getId(), new BedarfeForAbfragevarianteModel());
         result = calculationService.calculateBedarfeForEachAbfragevarianteOfAbfrage(abfrage);
         assertThat(result, is(expected));
-        Mockito
-            .verify(calculationService, Mockito.times(1))
-            .calculateBedarfeForAbfragevariante(abfragevariante1, UncertainBoolean.UNSPECIFIED);
-        Mockito
-            .verify(calculationService, Mockito.times(1))
-            .calculateBedarfeForAbfragevariante(abfragevariante2, UncertainBoolean.UNSPECIFIED);
+        Mockito.verify(calculationService, Mockito.times(1)).calculateBedarfeForAbfragevariante(
+            abfragevariante1,
+            UncertainBoolean.UNSPECIFIED
+        );
+        Mockito.verify(calculationService, Mockito.times(1)).calculateBedarfeForAbfragevariante(
+            abfragevariante2,
+            UncertainBoolean.UNSPECIFIED
+        );
     }
 
     @Test
     void calculateBedarfeForAbfragevarianteUnspecified() {
         final var abfragevarianteBauleitplanverfahren = new AbfragevarianteWeiteresVerfahrenModel();
         abfragevarianteBauleitplanverfahren.setArtAbfragevariante(ArtAbfrage.UNSPECIFIED);
-        Assertions.assertThrows(
-            CalculationException.class,
-            () ->
-                this.calculationService.calculateBedarfeForAbfragevariante(
-                        abfragevarianteBauleitplanverfahren,
-                        UncertainBoolean.UNSPECIFIED
-                    )
+        Assertions.assertThrows(CalculationException.class, () ->
+            this.calculationService.calculateBedarfeForAbfragevariante(
+                    abfragevarianteBauleitplanverfahren,
+                    UncertainBoolean.UNSPECIFIED
+                )
         );
     }
 
@@ -321,12 +335,15 @@ class CalculationServiceTest {
         final var sobonBerechnung = new SobonBerechnungModel();
         sobonBerechnung.setIsASobonBerechnung(true);
         sobonBerechnung.setSobonFoerdermix(new FoerdermixModel());
+        sobonBerechnung.setSobonOrientierungswertJahrSobonUrsaechlich(sobonOrientierungswertJahr);
 
         final var abfragevarianteWeiteresVerfahrenModel = new AbfragevarianteWeiteresVerfahrenModel();
         abfragevarianteWeiteresVerfahrenModel.setId(UUID.randomUUID());
         abfragevarianteWeiteresVerfahrenModel.setArtAbfragevariante(ArtAbfrage.WEITERES_VERFAHREN);
         abfragevarianteWeiteresVerfahrenModel.setBauabschnitte(bauabschnitte);
-        abfragevarianteWeiteresVerfahrenModel.setSobonOrientierungswertJahr(sobonOrientierungswertJahr);
+        abfragevarianteWeiteresVerfahrenModel.setSobonOrientierungswertJahrPlanungsursaechlich(
+            sobonOrientierungswertJahr
+        );
         abfragevarianteWeiteresVerfahrenModel.setStammdatenGueltigAb(stammdatenGueltigAb);
         abfragevarianteWeiteresVerfahrenModel.setGfWohnenSobonUrsaechlich(sobonGf);
         abfragevarianteWeiteresVerfahrenModel.setSobonBerechnung(sobonBerechnung);
@@ -339,8 +356,7 @@ class CalculationServiceTest {
         final var langfristigerSobonursaechlicherBedarf = new LangfristigerSobonBedarfModel();
         langfristigerSobonursaechlicherBedarf.setWohneinheiten(List.of(new WohneinheitenProFoerderartProJahrModel()));
 
-        Mockito
-            .doReturn(langfristigerPlanungsursaechlicherBedarf)
+        Mockito.doReturn(langfristigerPlanungsursaechlicherBedarf)
             .when(calculationService)
             .calculateLangfristigerPlanungsursaechlicherBedarf(
                 bauabschnitte,
@@ -348,8 +364,7 @@ class CalculationServiceTest {
                 stammdatenGueltigAb
             );
 
-        Mockito
-            .doReturn(langfristigerSobonursaechlicherBedarf)
+        Mockito.doReturn(langfristigerSobonursaechlicherBedarf)
             .when(calculationService)
             .calculateLangfristigerSobonursaechlicherBedarf(
                 sobonGf,
@@ -370,23 +385,19 @@ class CalculationServiceTest {
 
         assertThat(bedarfeForAbfragevariante, is(expected));
 
-        Mockito
-            .verify(calculationService, Mockito.times(1))
-            .calculateLangfristigerPlanungsursaechlicherBedarf(
-                bauabschnitte,
-                sobonOrientierungswertJahr,
-                stammdatenGueltigAb
-            );
+        Mockito.verify(calculationService, Mockito.times(1)).calculateLangfristigerPlanungsursaechlicherBedarf(
+            bauabschnitte,
+            sobonOrientierungswertJahr,
+            stammdatenGueltigAb
+        );
 
-        Mockito
-            .verify(calculationService, Mockito.times(1))
-            .calculateLangfristigerSobonursaechlicherBedarf(
-                sobonGf,
-                bauabschnitte,
-                sobonOrientierungswertJahr,
-                stammdatenGueltigAb,
-                abfragevarianteWeiteresVerfahrenModel.getSobonBerechnung().getSobonFoerdermix()
-            );
+        Mockito.verify(calculationService, Mockito.times(1)).calculateLangfristigerSobonursaechlicherBedarf(
+            sobonGf,
+            bauabschnitte,
+            sobonOrientierungswertJahr,
+            stammdatenGueltigAb,
+            abfragevarianteWeiteresVerfahrenModel.getSobonBerechnung().getSobonFoerdermix()
+        );
     }
 
     @Test
@@ -399,7 +410,9 @@ class CalculationServiceTest {
         final var abfragevarianteBaugenehmigungsverfahrenModel = new AbfragevarianteBaugenehmigungsverfahrenModel();
         abfragevarianteBaugenehmigungsverfahrenModel.setArtAbfragevariante(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN);
         abfragevarianteBaugenehmigungsverfahrenModel.setBauabschnitte(bauabschnitte);
-        abfragevarianteBaugenehmigungsverfahrenModel.setSobonOrientierungswertJahr(sobonOrientierungswertJahr);
+        abfragevarianteBaugenehmigungsverfahrenModel.setSobonOrientierungswertJahrPlanungsursaechlich(
+            sobonOrientierungswertJahr
+        );
         abfragevarianteBaugenehmigungsverfahrenModel.setStammdatenGueltigAb(stammdatenGueltigAb);
 
         final var langfristigerPlanungsursaechlicherBedarf = new LangfristigerBedarfModel();
@@ -407,8 +420,7 @@ class CalculationServiceTest {
             List.of(new WohneinheitenProFoerderartProJahrModel())
         );
 
-        Mockito
-            .doReturn(langfristigerPlanungsursaechlicherBedarf)
+        Mockito.doReturn(langfristigerPlanungsursaechlicherBedarf)
             .when(calculationService)
             .calculateLangfristigerPlanungsursaechlicherBedarf(
                 bauabschnitte,
@@ -426,13 +438,11 @@ class CalculationServiceTest {
 
         assertThat(bedarfeForAbfragevariante, is(expected));
 
-        Mockito
-            .verify(calculationService, Mockito.times(1))
-            .calculateLangfristigerPlanungsursaechlicherBedarf(
-                bauabschnitte,
-                sobonOrientierungswertJahr,
-                stammdatenGueltigAb
-            );
+        Mockito.verify(calculationService, Mockito.times(1)).calculateLangfristigerPlanungsursaechlicherBedarf(
+            bauabschnitte,
+            sobonOrientierungswertJahr,
+            stammdatenGueltigAb
+        );
     }
 
     @Test
@@ -448,11 +458,14 @@ class CalculationServiceTest {
         final var sobonBerechnung = new SobonBerechnungModel();
         sobonBerechnung.setIsASobonBerechnung(true);
         sobonBerechnung.setSobonFoerdermix(new FoerdermixModel());
+        sobonBerechnung.setSobonOrientierungswertJahrSobonUrsaechlich(sobonOrientierungswertJahr);
 
         final var abfragevarianteBauleitplanverfahren = new AbfragevarianteBauleitplanverfahrenModel();
         abfragevarianteBauleitplanverfahren.setArtAbfragevariante(ArtAbfrage.BAULEITPLANVERFAHREN);
         abfragevarianteBauleitplanverfahren.setBauabschnitte(bauabschnitte);
-        abfragevarianteBauleitplanverfahren.setSobonOrientierungswertJahr(sobonOrientierungswertJahr);
+        abfragevarianteBauleitplanverfahren.setSobonOrientierungswertJahrPlanungsursaechlich(
+            sobonOrientierungswertJahr
+        );
         abfragevarianteBauleitplanverfahren.setStammdatenGueltigAb(stammdatenGueltigAb);
         abfragevarianteBauleitplanverfahren.setGfWohnenSobonUrsaechlich(sobonGf);
         abfragevarianteBauleitplanverfahren.setSobonBerechnung(sobonBerechnung);
@@ -465,8 +478,7 @@ class CalculationServiceTest {
         final var langfristigerSobonursaechlicherBedarf = new LangfristigerSobonBedarfModel();
         langfristigerSobonursaechlicherBedarf.setWohneinheiten(List.of(new WohneinheitenProFoerderartProJahrModel()));
 
-        Mockito
-            .doReturn(langfristigerPlanungsursaechlicherBedarf)
+        Mockito.doReturn(langfristigerPlanungsursaechlicherBedarf)
             .when(calculationService)
             .calculateLangfristigerPlanungsursaechlicherBedarf(
                 bauabschnitte,
@@ -474,8 +486,7 @@ class CalculationServiceTest {
                 stammdatenGueltigAb
             );
 
-        Mockito
-            .doReturn(langfristigerSobonursaechlicherBedarf)
+        Mockito.doReturn(langfristigerSobonursaechlicherBedarf)
             .when(calculationService)
             .calculateLangfristigerSobonursaechlicherBedarf(
                 sobonGf,
@@ -496,23 +507,19 @@ class CalculationServiceTest {
 
         assertThat(bedarfeForAbfragevariante, is(expected));
 
-        Mockito
-            .verify(calculationService, Mockito.times(1))
-            .calculateLangfristigerPlanungsursaechlicherBedarf(
-                bauabschnitte,
-                sobonOrientierungswertJahr,
-                stammdatenGueltigAb
-            );
+        Mockito.verify(calculationService, Mockito.times(1)).calculateLangfristigerPlanungsursaechlicherBedarf(
+            bauabschnitte,
+            sobonOrientierungswertJahr,
+            stammdatenGueltigAb
+        );
 
-        Mockito
-            .verify(calculationService, Mockito.times(1))
-            .calculateLangfristigerSobonursaechlicherBedarf(
-                sobonGf,
-                bauabschnitte,
-                sobonOrientierungswertJahr,
-                stammdatenGueltigAb,
-                abfragevarianteBauleitplanverfahren.getSobonBerechnung().getSobonFoerdermix()
-            );
+        Mockito.verify(calculationService, Mockito.times(1)).calculateLangfristigerSobonursaechlicherBedarf(
+            sobonGf,
+            bauabschnitte,
+            sobonOrientierungswertJahr,
+            stammdatenGueltigAb,
+            abfragevarianteBauleitplanverfahren.getSobonBerechnung().getSobonFoerdermix()
+        );
     }
 
     @Test
@@ -520,52 +527,46 @@ class CalculationServiceTest {
         var result = calculationService.calculateLangfristigerPlanungsursaechlicherBedarf(null, null, null);
         assertThat(result, is(nullValue()));
 
-        result =
-            calculationService.calculateLangfristigerPlanungsursaechlicherBedarf(
-                null,
-                SobonOrientierungswertJahr.JAHR_2017,
-                LocalDate.now()
-            );
+        result = calculationService.calculateLangfristigerPlanungsursaechlicherBedarf(
+            null,
+            SobonOrientierungswertJahr.JAHR_2017,
+            LocalDate.now()
+        );
         assertThat(result, is(nullValue()));
 
-        result =
-            calculationService.calculateLangfristigerPlanungsursaechlicherBedarf(
-                new ArrayList<>(),
-                SobonOrientierungswertJahr.JAHR_2017,
-                LocalDate.now()
-            );
+        result = calculationService.calculateLangfristigerPlanungsursaechlicherBedarf(
+            new ArrayList<>(),
+            SobonOrientierungswertJahr.JAHR_2017,
+            LocalDate.now()
+        );
         assertThat(result, is(nullValue()));
 
-        result =
-            calculationService.calculateLangfristigerPlanungsursaechlicherBedarf(
-                List.of(new BauabschnittModel()),
-                null,
-                null
-            );
+        result = calculationService.calculateLangfristigerPlanungsursaechlicherBedarf(
+            List.of(new BauabschnittModel()),
+            null,
+            null
+        );
         assertThat(result, is(nullValue()));
 
-        result =
-            calculationService.calculateLangfristigerPlanungsursaechlicherBedarf(
-                List.of(new BauabschnittModel()),
-                SobonOrientierungswertJahr.JAHR_2017,
-                null
-            );
+        result = calculationService.calculateLangfristigerPlanungsursaechlicherBedarf(
+            List.of(new BauabschnittModel()),
+            SobonOrientierungswertJahr.JAHR_2017,
+            null
+        );
         assertThat(result, is(nullValue()));
 
-        result =
-            calculationService.calculateLangfristigerPlanungsursaechlicherBedarf(
-                List.of(new BauabschnittModel()),
-                null,
-                LocalDate.now()
-            );
+        result = calculationService.calculateLangfristigerPlanungsursaechlicherBedarf(
+            List.of(new BauabschnittModel()),
+            null,
+            LocalDate.now()
+        );
         assertThat(result, is(nullValue()));
 
-        result =
-            calculationService.calculateLangfristigerPlanungsursaechlicherBedarf(
-                List.of(new BauabschnittModel()),
-                SobonOrientierungswertJahr.STANDORTABFRAGE,
-                LocalDate.now()
-            );
+        result = calculationService.calculateLangfristigerPlanungsursaechlicherBedarf(
+            List.of(new BauabschnittModel()),
+            SobonOrientierungswertJahr.STANDORTABFRAGE,
+            LocalDate.now()
+        );
         assertThat(result, is(nullValue()));
     }
 
@@ -577,50 +578,44 @@ class CalculationServiceTest {
 
         final var wohneinheiten = List.of(new WohneinheitenProFoerderartProJahrModel());
 
-        Mockito
-            .when(
-                this.planungsursaechlicheWohneinheitenService.calculatePlanungsursaechlicheWohneinheiten(
-                        bauabschnitte,
-                        sobonOrientierungswertJahr,
-                        stammdatenGueltigAb
-                    )
-            )
-            .thenReturn(wohneinheiten);
+        Mockito.when(
+            this.planungsursaechlicheWohneinheitenService.calculatePlanungsursaechlicheWohneinheiten(
+                    bauabschnitte,
+                    sobonOrientierungswertJahr,
+                    stammdatenGueltigAb
+                )
+        ).thenReturn(wohneinheiten);
 
         final var bedarfeProJahrKinderkrippe = List.of(new InfrastrukturbedarfProJahrModel());
 
-        Mockito
-            .when(
-                this.infrastrukturbedarfService.calculateBedarfForKinderkrippe(
-                        wohneinheiten,
-                        sobonOrientierungswertJahr,
-                        InfrastrukturbedarfService.ArtInfrastrukturbedarf.PLANUNGSURSAECHLICH,
-                        stammdatenGueltigAb
-                    )
-            )
-            .thenReturn(bedarfeProJahrKinderkrippe);
+        Mockito.when(
+            this.infrastrukturbedarfService.calculateBedarfForKinderkrippe(
+                    wohneinheiten,
+                    sobonOrientierungswertJahr,
+                    InfrastrukturbedarfService.ArtInfrastrukturbedarf.PLANUNGSURSAECHLICH,
+                    stammdatenGueltigAb
+                )
+        ).thenReturn(bedarfeProJahrKinderkrippe);
 
         final var bedarfeProJahrKindergarten = List.of(
             new InfrastrukturbedarfProJahrModel(),
             new InfrastrukturbedarfProJahrModel()
         );
 
-        Mockito
-            .when(
-                this.infrastrukturbedarfService.calculateBedarfForKindergarten(
-                        wohneinheiten,
-                        sobonOrientierungswertJahr,
-                        InfrastrukturbedarfService.ArtInfrastrukturbedarf.PLANUNGSURSAECHLICH,
-                        stammdatenGueltigAb
-                    )
-            )
-            .thenReturn(bedarfeProJahrKindergarten);
+        Mockito.when(
+            this.infrastrukturbedarfService.calculateBedarfForKindergarten(
+                    wohneinheiten,
+                    sobonOrientierungswertJahr,
+                    InfrastrukturbedarfService.ArtInfrastrukturbedarf.PLANUNGSURSAECHLICH,
+                    stammdatenGueltigAb
+                )
+        ).thenReturn(bedarfeProJahrKindergarten);
 
         final var alleEinwohnerProJahr = List.of(new PersonenProJahrModel(), new PersonenProJahrModel());
 
-        Mockito
-            .when(this.infrastrukturbedarfService.calculateAlleEinwohner(wohneinheiten, sobonOrientierungswertJahr))
-            .thenReturn(alleEinwohnerProJahr);
+        Mockito.when(
+            this.infrastrukturbedarfService.calculateAlleEinwohner(wohneinheiten, sobonOrientierungswertJahr)
+        ).thenReturn(alleEinwohnerProJahr);
 
         final var result = calculationService.calculateLangfristigerPlanungsursaechlicherBedarf(
             bauabschnitte,
@@ -643,64 +638,58 @@ class CalculationServiceTest {
         var result = calculationService.calculateLangfristigerSobonursaechlicherBedarf(null, null, null, null, null);
         assertThat(result, is(nullValue()));
 
-        result =
-            calculationService.calculateLangfristigerSobonursaechlicherBedarf(
-                null,
-                List.of(new BauabschnittModel()),
-                SobonOrientierungswertJahr.JAHR_2017,
-                LocalDate.now(),
-                new FoerdermixModel()
-            );
+        result = calculationService.calculateLangfristigerSobonursaechlicherBedarf(
+            null,
+            List.of(new BauabschnittModel()),
+            SobonOrientierungswertJahr.JAHR_2017,
+            LocalDate.now(),
+            new FoerdermixModel()
+        );
         assertThat(result, is(nullValue()));
 
-        result =
-            calculationService.calculateLangfristigerSobonursaechlicherBedarf(
-                BigDecimal.ZERO,
-                null,
-                SobonOrientierungswertJahr.JAHR_2017,
-                LocalDate.now(),
-                new FoerdermixModel()
-            );
+        result = calculationService.calculateLangfristigerSobonursaechlicherBedarf(
+            BigDecimal.ZERO,
+            null,
+            SobonOrientierungswertJahr.JAHR_2017,
+            LocalDate.now(),
+            new FoerdermixModel()
+        );
         assertThat(result, is(nullValue()));
 
-        result =
-            calculationService.calculateLangfristigerSobonursaechlicherBedarf(
-                BigDecimal.ZERO,
-                List.of(new BauabschnittModel()),
-                null,
-                LocalDate.now(),
-                new FoerdermixModel()
-            );
+        result = calculationService.calculateLangfristigerSobonursaechlicherBedarf(
+            BigDecimal.ZERO,
+            List.of(new BauabschnittModel()),
+            null,
+            LocalDate.now(),
+            new FoerdermixModel()
+        );
         assertThat(result, is(nullValue()));
 
-        result =
-            calculationService.calculateLangfristigerSobonursaechlicherBedarf(
-                BigDecimal.ZERO,
-                List.of(new BauabschnittModel()),
-                SobonOrientierungswertJahr.JAHR_2017,
-                null,
-                new FoerdermixModel()
-            );
+        result = calculationService.calculateLangfristigerSobonursaechlicherBedarf(
+            BigDecimal.ZERO,
+            List.of(new BauabschnittModel()),
+            SobonOrientierungswertJahr.JAHR_2017,
+            null,
+            new FoerdermixModel()
+        );
         assertThat(result, is(nullValue()));
 
-        result =
-            calculationService.calculateLangfristigerSobonursaechlicherBedarf(
-                BigDecimal.ZERO,
-                new ArrayList<>(),
-                SobonOrientierungswertJahr.JAHR_2017,
-                LocalDate.now(),
-                new FoerdermixModel()
-            );
+        result = calculationService.calculateLangfristigerSobonursaechlicherBedarf(
+            BigDecimal.ZERO,
+            new ArrayList<>(),
+            SobonOrientierungswertJahr.JAHR_2017,
+            LocalDate.now(),
+            new FoerdermixModel()
+        );
         assertThat(result, is(nullValue()));
 
-        result =
-            calculationService.calculateLangfristigerSobonursaechlicherBedarf(
-                BigDecimal.ZERO,
-                List.of(new BauabschnittModel()),
-                SobonOrientierungswertJahr.STANDORTABFRAGE,
-                LocalDate.now(),
-                new FoerdermixModel()
-            );
+        result = calculationService.calculateLangfristigerSobonursaechlicherBedarf(
+            BigDecimal.ZERO,
+            List.of(new BauabschnittModel()),
+            SobonOrientierungswertJahr.STANDORTABFRAGE,
+            LocalDate.now(),
+            new FoerdermixModel()
+        );
         assertThat(result, is(nullValue()));
     }
 
@@ -713,82 +702,72 @@ class CalculationServiceTest {
         final var foerdermix = new FoerdermixModel();
         final var wohneinheiten = List.of(new WohneinheitenProFoerderartProJahrModel());
 
-        Mockito
-            .when(
-                this.sobonursaechlicheWohneinheitenService.calculateSobonursaechlicheWohneinheiten(
-                        sobonGf,
-                        bauabschnitte,
-                        sobonOrientierungswertJahr,
-                        stammdatenGueltigAb,
-                        foerdermix
-                    )
-            )
-            .thenReturn(wohneinheiten);
+        Mockito.when(
+            this.sobonursaechlicheWohneinheitenService.calculateSobonursaechlicheWohneinheiten(
+                    sobonGf,
+                    bauabschnitte,
+                    sobonOrientierungswertJahr,
+                    stammdatenGueltigAb,
+                    foerdermix
+                )
+        ).thenReturn(wohneinheiten);
 
         final var bedarfeProJahrKinderkrippe = List.of(new InfrastrukturbedarfProJahrModel());
 
-        Mockito
-            .when(
-                this.infrastrukturbedarfService.calculateBedarfForKinderkrippe(
-                        wohneinheiten,
-                        sobonOrientierungswertJahr,
-                        InfrastrukturbedarfService.ArtInfrastrukturbedarf.SOBON_URSAECHLICH,
-                        stammdatenGueltigAb
-                    )
-            )
-            .thenReturn(bedarfeProJahrKinderkrippe);
+        Mockito.when(
+            this.infrastrukturbedarfService.calculateBedarfForKinderkrippe(
+                    wohneinheiten,
+                    sobonOrientierungswertJahr,
+                    InfrastrukturbedarfService.ArtInfrastrukturbedarf.SOBON_URSAECHLICH,
+                    stammdatenGueltigAb
+                )
+        ).thenReturn(bedarfeProJahrKinderkrippe);
 
         final var bedarfeProJahrKindergarten = List.of(
             new InfrastrukturbedarfProJahrModel(),
             new InfrastrukturbedarfProJahrModel()
         );
 
-        Mockito
-            .when(
-                this.infrastrukturbedarfService.calculateBedarfForKindergarten(
-                        wohneinheiten,
-                        sobonOrientierungswertJahr,
-                        InfrastrukturbedarfService.ArtInfrastrukturbedarf.SOBON_URSAECHLICH,
-                        stammdatenGueltigAb
-                    )
-            )
-            .thenReturn(bedarfeProJahrKindergarten);
+        Mockito.when(
+            this.infrastrukturbedarfService.calculateBedarfForKindergarten(
+                    wohneinheiten,
+                    sobonOrientierungswertJahr,
+                    InfrastrukturbedarfService.ArtInfrastrukturbedarf.SOBON_URSAECHLICH,
+                    stammdatenGueltigAb
+                )
+        ).thenReturn(bedarfeProJahrKindergarten);
 
         final var bedarfeProJahrGsNachmittagBetreuung = List.of(
             new InfrastrukturbedarfProJahrModel(),
             new InfrastrukturbedarfProJahrModel()
         );
 
-        Mockito
-            .when(
-                this.infrastrukturbedarfService.calculateBedarfForGsNachmittagBetreuung(
-                        wohneinheiten,
-                        sobonOrientierungswertJahr,
-                        stammdatenGueltigAb
-                    )
-            )
-            .thenReturn(bedarfeProJahrGsNachmittagBetreuung);
+        Mockito.when(
+            this.infrastrukturbedarfService.calculateBedarfForGsNachmittagBetreuung(
+                    wohneinheiten,
+                    sobonOrientierungswertJahr,
+                    stammdatenGueltigAb
+                )
+        ).thenReturn(bedarfeProJahrGsNachmittagBetreuung);
 
         final var bedarfeProJahrGrundschule = List.of(
             new InfrastrukturbedarfProJahrModel(),
             new InfrastrukturbedarfProJahrModel()
         );
 
-        Mockito
-            .when(
-                this.infrastrukturbedarfService.calculateBedarfForGrundschule(
-                        wohneinheiten,
-                        sobonOrientierungswertJahr,
-                        stammdatenGueltigAb
-                    )
-            )
-            .thenReturn(bedarfeProJahrGrundschule);
+        Mockito.when(
+            this.infrastrukturbedarfService.calculateBedarfForGrundschule(
+                    wohneinheiten,
+                    sobonOrientierungswertJahr,
+                    stammdatenGueltigAb
+                )
+        ).thenReturn(bedarfeProJahrGrundschule);
 
         final var alleEinwohnerProJahr = List.of(new PersonenProJahrModel(), new PersonenProJahrModel());
 
-        Mockito
-            .when(this.infrastrukturbedarfService.calculateAlleEinwohner(wohneinheiten, sobonOrientierungswertJahr))
-            .thenReturn(alleEinwohnerProJahr);
+        Mockito.when(
+            this.infrastrukturbedarfService.calculateAlleEinwohner(wohneinheiten, sobonOrientierungswertJahr)
+        ).thenReturn(alleEinwohnerProJahr);
 
         final var result = calculationService.calculateLangfristigerSobonursaechlicherBedarf(
             sobonGf,
@@ -812,10 +791,13 @@ class CalculationServiceTest {
 
     @Test
     void doSobonberechung() {
+        final var sobonOrientierungswertJahr = SobonOrientierungswertJahr.JAHR_2017;
         var isAbfrageSobonRelevant = UncertainBoolean.TRUE;
         final var sobonBerechnung = new SobonBerechnungModel();
         sobonBerechnung.setIsASobonBerechnung(true);
         sobonBerechnung.setSobonFoerdermix(new FoerdermixModel());
+        sobonBerechnung.setSobonOrientierungswertJahrSobonUrsaechlich(sobonOrientierungswertJahr);
+
         final var abfragevariante = new AbfragevarianteBauleitplanverfahrenModel();
 
         abfragevariante.setSobonBerechnung(sobonBerechnung);
@@ -859,7 +841,7 @@ class CalculationServiceTest {
 
         isAbfrageSobonRelevant = UncertainBoolean.FALSE;
         abfragevariante.getSobonBerechnung().setIsASobonBerechnung(false);
-        abfragevariante.setSobonOrientierungswertJahr(null);
+        abfragevariante.setSobonOrientierungswertJahrPlanungsursaechlich(null);
         assertThat(
             this.calculationService.shouldSobonBerechnungBePerformed(abfragevariante, isAbfrageSobonRelevant),
             is(false)

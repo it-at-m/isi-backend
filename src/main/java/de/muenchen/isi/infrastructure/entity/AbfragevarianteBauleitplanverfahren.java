@@ -30,7 +30,6 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
@@ -134,7 +133,7 @@ public class AbfragevarianteBauleitplanverfahren extends Abfragevariante {
 
     @Enumerated(EnumType.STRING)
     @Column
-    private SobonOrientierungswertJahr sobonOrientierungswertJahr;
+    private SobonOrientierungswertJahr sobonOrientierungswertJahrPlanungsursaechlich;
 
     @Embedded
     @AttributeOverrides(
@@ -150,6 +149,10 @@ public class AbfragevarianteBauleitplanverfahren extends Abfragevariante {
             @AttributeOverride(
                 name = "sobonFoerdermix.bezeichnungJahr",
                 column = @Column(name = "sobon_foerdermix_bezeichnung_jahr", nullable = true)
+            ),
+            @AttributeOverride(
+                name = "sobonFoerdermix.sobonOrientierungswertJahrSobonUrsaechlich",
+                column = @Column(name = "sobon_orientierungswert_jahr_sobon_ursaechlich", nullable = true)
             ),
         }
     )

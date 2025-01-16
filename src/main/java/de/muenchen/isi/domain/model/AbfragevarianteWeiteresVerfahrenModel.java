@@ -74,7 +74,7 @@ public class AbfragevarianteWeiteresVerfahrenModel extends AbfragevarianteModel 
 
     private String weAnmerkung;
 
-    private SobonOrientierungswertJahr sobonOrientierungswertJahr;
+    private SobonOrientierungswertJahr sobonOrientierungswertJahrPlanungsursaechlich;
 
     private SobonBerechnungModel sobonBerechnung;
 

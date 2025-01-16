@@ -610,7 +610,7 @@
           "weSeniorinnenWohnen": { "type": "integer", "format": "int32" },
           "weGenossenschaftlichesWohnen": { "type": "integer", "format": "int32" },
           "weWeiteresNichtInfrastrukturrelevantesWohnen": { "type": "integer", "format": "int32" },
-          "sobonOrientierungswertJahr": { "type": "string" },
+          "sobonOrientierungswertJahrPlanungsursaechlich": { "type": "string" },
           "stammdatenGueltigAb": { "type": "string", "format": "date" },
           "anmerkung": { "type": "string" },
           "hasBauratendateiInput": { "type": "boolean" },
@@ -652,7 +652,7 @@
           "weSeniorinnenWohnen": { "type": "integer", "format": "int32" },
           "weGenossenschaftlichesWohnen": { "type": "integer", "format": "int32" },
           "weWeiteresNichtInfrastrukturrelevantesWohnen": { "type": "integer", "format": "int32" },
-          "sobonOrientierungswertJahr": { "type": "string" },
+          "sobonOrientierungswertJahrPlanungsursaechlich": { "type": "string" },
           "sobonBerechnung": { "$ref": "#/components/schemas/SobonBerechnungDto" },
           "stammdatenGueltigAb": { "type": "string", "format": "date" },
           "anmerkung": { "type": "string" },
@@ -699,7 +699,7 @@
           "weSeniorinnenWohnen": { "type": "integer", "format": "int32" },
           "weGenossenschaftlichesWohnen": { "type": "integer", "format": "int32" },
           "weWeiteresNichtInfrastrukturrelevantesWohnen": { "type": "integer", "format": "int32" },
-          "sobonOrientierungswertJahr": { "type": "string" },
+          "sobonOrientierungswertJahrPlanungsursaechlich": { "type": "string" },
           "sobonBerechnung": { "$ref": "#/components/schemas/SobonBerechnungDto" },
           "stammdatenGueltigAb": { "type": "string", "format": "date" },
           "anmerkung": { "type": "string" },
@@ -970,7 +970,8 @@
         "type": "object",
         "properties": {
           "isASobonBerechnung": { "type": "boolean" },
-          "sobonFoerdermix": { "$ref": "#/components/schemas/FoerdermixDto" }
+          "sobonFoerdermix": { "$ref": "#/components/schemas/FoerdermixDto" },
+          "sobonOrientierungswertJahrSobonUrsaechlich": { "type": "string" }
         }
       },
       "StadtbezirkDto": {

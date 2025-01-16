@@ -156,20 +156,14 @@ public class FoerdermixUmlageServiceTest {
         umlegungsschluesselBAU.setFoerderarten(Set.of(FH50, MM50));
         umlegungBAU.setUmlegungsschluessel(umlegungsschluesselBAU);
 
-        Mockito
-            .when(
-                repository.findFirstByBezeichnungAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(PMB, LocalDate.EPOCH)
-            )
-            .thenReturn(Optional.of(umlegungPMB));
-        Mockito
-            .when(
-                repository.findFirstByBezeichnungAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(KMB, LocalDate.EPOCH)
-            )
-            .thenReturn(Optional.of(umlegungKMB));
-        Mockito
-            .when(
-                repository.findFirstByBezeichnungAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(BAU, LocalDate.EPOCH)
-            )
-            .thenReturn(Optional.of(umlegungBAU));
+        Mockito.when(
+            repository.findFirstByBezeichnungAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(PMB, LocalDate.EPOCH)
+        ).thenReturn(Optional.of(umlegungPMB));
+        Mockito.when(
+            repository.findFirstByBezeichnungAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(KMB, LocalDate.EPOCH)
+        ).thenReturn(Optional.of(umlegungKMB));
+        Mockito.when(
+            repository.findFirstByBezeichnungAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(BAU, LocalDate.EPOCH)
+        ).thenReturn(Optional.of(umlegungBAU));
     }
 }

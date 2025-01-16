@@ -19,8 +19,7 @@ public enum Altersklasse {
     private final String bezeichnung;
 
     public static Optional<Altersklasse> findByBezeichnung(final String bezeichnung) {
-        return EnumUtils
-            .getEnumList(Altersklasse.class)
+        return EnumUtils.getEnumList(Altersklasse.class)
             .stream()
             .filter(altersklasse -> StringUtils.equals(altersklasse.getBezeichnung(), bezeichnung))
             .findFirst();

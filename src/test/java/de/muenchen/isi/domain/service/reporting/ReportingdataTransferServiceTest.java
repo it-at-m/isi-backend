@@ -58,8 +58,9 @@ class ReportingdataTransferServiceTest {
 
     @BeforeEach
     public void beforeEach() {
-        this.reportingdataTransferService =
-            Mockito.spy(new ReportingdataTransferService(reportingApiDomainMapper, reportingdataTransferRepository));
+        this.reportingdataTransferService = Mockito.spy(
+            new ReportingdataTransferService(reportingApiDomainMapper, reportingdataTransferRepository)
+        );
         Mockito.reset(reportingdataTransferRepository);
     }
 
@@ -73,13 +74,14 @@ class ReportingdataTransferServiceTest {
         abfrageReportingDto.setAbfragevariantenBauleitplanverfahren(List.of());
         abfrageReportingDto.setAbfragevariantenSachbearbeitungBauleitplanverfahren(List.of());
         abfrageReportingDto.setArtAbfrage(AbfrageDto.ArtAbfrageEnum.BAULEITPLANVERFAHREN);
-        Mockito
-            .when(reportingdataTransferService.addBedarfeToAbfrage(abfrageReportingDto, bedarfForEachAbfragevariante))
-            .thenReturn(abfrageReportingDto);
+        Mockito.when(
+            reportingdataTransferService.addBedarfeToAbfrage(abfrageReportingDto, bedarfForEachAbfragevariante)
+        ).thenReturn(abfrageReportingDto);
         reportingdataTransferService.transferAbfrageAndBedarfe(abfrageModel, bedarfForEachAbfragevariante);
-        Mockito
-            .verify(reportingdataTransferService, Mockito.times(1))
-            .addBedarfeToAbfrage(abfrageReportingDto, bedarfForEachAbfragevariante);
+        Mockito.verify(reportingdataTransferService, Mockito.times(1)).addBedarfeToAbfrage(
+            abfrageReportingDto,
+            bedarfForEachAbfragevariante
+        );
         Mockito.verify(reportingdataTransferService, Mockito.times(1)).transferAbfrage(abfrageReportingDto);
     }
 
@@ -93,16 +95,16 @@ class ReportingdataTransferServiceTest {
         abfrageReportingDto.setAbfragevariantenBauleitplanverfahren(List.of());
         abfrageReportingDto.setAbfragevariantenSachbearbeitungBauleitplanverfahren(List.of());
         abfrageReportingDto.setArtAbfrage(AbfrageDto.ArtAbfrageEnum.BAULEITPLANVERFAHREN);
-        Mockito
-            .when(reportingdataTransferService.addBedarfeToAbfrage(abfrageReportingDto, bedarfForEachAbfragevariante))
-            .thenThrow(new ReportingException("test"));
-        Assertions.assertThrows(
-            ReportingException.class,
-            () -> reportingdataTransferService.transferAbfrageAndBedarfe(abfrageModel, bedarfForEachAbfragevariante)
+        Mockito.when(
+            reportingdataTransferService.addBedarfeToAbfrage(abfrageReportingDto, bedarfForEachAbfragevariante)
+        ).thenThrow(new ReportingException("test"));
+        Assertions.assertThrows(ReportingException.class, () ->
+            reportingdataTransferService.transferAbfrageAndBedarfe(abfrageModel, bedarfForEachAbfragevariante)
         );
-        Mockito
-            .verify(reportingdataTransferService, Mockito.times(1))
-            .addBedarfeToAbfrage(abfrageReportingDto, bedarfForEachAbfragevariante);
+        Mockito.verify(reportingdataTransferService, Mockito.times(1)).addBedarfeToAbfrage(
+            abfrageReportingDto,
+            bedarfForEachAbfragevariante
+        );
         Mockito.verify(reportingdataTransferService, Mockito.times(0)).transferAbfrage(Mockito.any());
     }
 
@@ -116,20 +118,19 @@ class ReportingdataTransferServiceTest {
         abfrageReportingDto.setAbfragevariantenBauleitplanverfahren(List.of());
         abfrageReportingDto.setAbfragevariantenSachbearbeitungBauleitplanverfahren(List.of());
         abfrageReportingDto.setArtAbfrage(AbfrageDto.ArtAbfrageEnum.BAULEITPLANVERFAHREN);
-        Mockito
-            .when(reportingdataTransferService.addBedarfeToAbfrage(abfrageReportingDto, bedarfForEachAbfragevariante))
-            .thenReturn(abfrageReportingDto);
-        Mockito
-            .doThrow(new ReportingException("test"))
+        Mockito.when(
+            reportingdataTransferService.addBedarfeToAbfrage(abfrageReportingDto, bedarfForEachAbfragevariante)
+        ).thenReturn(abfrageReportingDto);
+        Mockito.doThrow(new ReportingException("test"))
             .when(reportingdataTransferService)
             .transferAbfrage(abfrageReportingDto);
-        Assertions.assertThrows(
-            ReportingException.class,
-            () -> reportingdataTransferService.transferAbfrageAndBedarfe(abfrageModel, bedarfForEachAbfragevariante)
+        Assertions.assertThrows(ReportingException.class, () ->
+            reportingdataTransferService.transferAbfrageAndBedarfe(abfrageModel, bedarfForEachAbfragevariante)
         );
-        Mockito
-            .verify(reportingdataTransferService, Mockito.times(1))
-            .addBedarfeToAbfrage(abfrageReportingDto, bedarfForEachAbfragevariante);
+        Mockito.verify(reportingdataTransferService, Mockito.times(1)).addBedarfeToAbfrage(
+            abfrageReportingDto,
+            bedarfForEachAbfragevariante
+        );
         Mockito.verify(reportingdataTransferService, Mockito.times(1)).transferAbfrage(abfrageReportingDto);
     }
 
@@ -143,13 +144,14 @@ class ReportingdataTransferServiceTest {
         abfrageReportingDto.setAbfragevariantenBaugenehmigungsverfahren(List.of());
         abfrageReportingDto.setAbfragevariantenSachbearbeitungBaugenehmigungsverfahren(List.of());
         abfrageReportingDto.setArtAbfrage(AbfrageDto.ArtAbfrageEnum.BAUGENEHMIGUNGSVERFAHREN);
-        Mockito
-            .when(reportingdataTransferService.addBedarfeToAbfrage(abfrageReportingDto, bedarfForEachAbfragevariante))
-            .thenReturn(abfrageReportingDto);
+        Mockito.when(
+            reportingdataTransferService.addBedarfeToAbfrage(abfrageReportingDto, bedarfForEachAbfragevariante)
+        ).thenReturn(abfrageReportingDto);
         reportingdataTransferService.transferAbfrageAndBedarfe(abfrageModel, bedarfForEachAbfragevariante);
-        Mockito
-            .verify(reportingdataTransferService, Mockito.times(1))
-            .addBedarfeToAbfrage(abfrageReportingDto, bedarfForEachAbfragevariante);
+        Mockito.verify(reportingdataTransferService, Mockito.times(1)).addBedarfeToAbfrage(
+            abfrageReportingDto,
+            bedarfForEachAbfragevariante
+        );
         Mockito.verify(reportingdataTransferService, Mockito.times(1)).transferAbfrage(abfrageReportingDto);
     }
 
@@ -163,16 +165,16 @@ class ReportingdataTransferServiceTest {
         abfrageReportingDto.setAbfragevariantenBaugenehmigungsverfahren(List.of());
         abfrageReportingDto.setAbfragevariantenSachbearbeitungBaugenehmigungsverfahren(List.of());
         abfrageReportingDto.setArtAbfrage(AbfrageDto.ArtAbfrageEnum.BAUGENEHMIGUNGSVERFAHREN);
-        Mockito
-            .when(reportingdataTransferService.addBedarfeToAbfrage(abfrageReportingDto, bedarfForEachAbfragevariante))
-            .thenThrow(new ReportingException("test"));
-        Assertions.assertThrows(
-            ReportingException.class,
-            () -> reportingdataTransferService.transferAbfrageAndBedarfe(abfrageModel, bedarfForEachAbfragevariante)
+        Mockito.when(
+            reportingdataTransferService.addBedarfeToAbfrage(abfrageReportingDto, bedarfForEachAbfragevariante)
+        ).thenThrow(new ReportingException("test"));
+        Assertions.assertThrows(ReportingException.class, () ->
+            reportingdataTransferService.transferAbfrageAndBedarfe(abfrageModel, bedarfForEachAbfragevariante)
         );
-        Mockito
-            .verify(reportingdataTransferService, Mockito.times(1))
-            .addBedarfeToAbfrage(abfrageReportingDto, bedarfForEachAbfragevariante);
+        Mockito.verify(reportingdataTransferService, Mockito.times(1)).addBedarfeToAbfrage(
+            abfrageReportingDto,
+            bedarfForEachAbfragevariante
+        );
         Mockito.verify(reportingdataTransferService, Mockito.times(0)).transferAbfrage(Mockito.any());
     }
 
@@ -186,20 +188,19 @@ class ReportingdataTransferServiceTest {
         abfrageReportingDto.setAbfragevariantenBaugenehmigungsverfahren(List.of());
         abfrageReportingDto.setAbfragevariantenSachbearbeitungBaugenehmigungsverfahren(List.of());
         abfrageReportingDto.setArtAbfrage(AbfrageDto.ArtAbfrageEnum.BAUGENEHMIGUNGSVERFAHREN);
-        Mockito
-            .when(reportingdataTransferService.addBedarfeToAbfrage(abfrageReportingDto, bedarfForEachAbfragevariante))
-            .thenReturn(abfrageReportingDto);
-        Mockito
-            .doThrow(new ReportingException("test"))
+        Mockito.when(
+            reportingdataTransferService.addBedarfeToAbfrage(abfrageReportingDto, bedarfForEachAbfragevariante)
+        ).thenReturn(abfrageReportingDto);
+        Mockito.doThrow(new ReportingException("test"))
             .when(reportingdataTransferService)
             .transferAbfrage(abfrageReportingDto);
-        Assertions.assertThrows(
-            ReportingException.class,
-            () -> reportingdataTransferService.transferAbfrageAndBedarfe(abfrageModel, bedarfForEachAbfragevariante)
+        Assertions.assertThrows(ReportingException.class, () ->
+            reportingdataTransferService.transferAbfrageAndBedarfe(abfrageModel, bedarfForEachAbfragevariante)
         );
-        Mockito
-            .verify(reportingdataTransferService, Mockito.times(1))
-            .addBedarfeToAbfrage(abfrageReportingDto, bedarfForEachAbfragevariante);
+        Mockito.verify(reportingdataTransferService, Mockito.times(1)).addBedarfeToAbfrage(
+            abfrageReportingDto,
+            bedarfForEachAbfragevariante
+        );
         Mockito.verify(reportingdataTransferService, Mockito.times(1)).transferAbfrage(abfrageReportingDto);
     }
 
@@ -213,13 +214,14 @@ class ReportingdataTransferServiceTest {
         abfrageReportingDto.setAbfragevariantenWeiteresVerfahren(List.of());
         abfrageReportingDto.setAbfragevariantenSachbearbeitungWeiteresVerfahren(List.of());
         abfrageReportingDto.setArtAbfrage(AbfrageDto.ArtAbfrageEnum.WEITERES_VERFAHREN);
-        Mockito
-            .when(reportingdataTransferService.addBedarfeToAbfrage(abfrageReportingDto, bedarfForEachAbfragevariante))
-            .thenReturn(abfrageReportingDto);
+        Mockito.when(
+            reportingdataTransferService.addBedarfeToAbfrage(abfrageReportingDto, bedarfForEachAbfragevariante)
+        ).thenReturn(abfrageReportingDto);
         reportingdataTransferService.transferAbfrageAndBedarfe(abfrageModel, bedarfForEachAbfragevariante);
-        Mockito
-            .verify(reportingdataTransferService, Mockito.times(1))
-            .addBedarfeToAbfrage(abfrageReportingDto, bedarfForEachAbfragevariante);
+        Mockito.verify(reportingdataTransferService, Mockito.times(1)).addBedarfeToAbfrage(
+            abfrageReportingDto,
+            bedarfForEachAbfragevariante
+        );
         Mockito.verify(reportingdataTransferService, Mockito.times(1)).transferAbfrage(abfrageReportingDto);
     }
 
@@ -233,16 +235,16 @@ class ReportingdataTransferServiceTest {
         abfrageReportingDto.setAbfragevariantenWeiteresVerfahren(List.of());
         abfrageReportingDto.setAbfragevariantenSachbearbeitungWeiteresVerfahren(List.of());
         abfrageReportingDto.setArtAbfrage(AbfrageDto.ArtAbfrageEnum.WEITERES_VERFAHREN);
-        Mockito
-            .when(reportingdataTransferService.addBedarfeToAbfrage(abfrageReportingDto, bedarfForEachAbfragevariante))
-            .thenThrow(new ReportingException("test"));
-        Assertions.assertThrows(
-            ReportingException.class,
-            () -> reportingdataTransferService.transferAbfrageAndBedarfe(abfrageModel, bedarfForEachAbfragevariante)
+        Mockito.when(
+            reportingdataTransferService.addBedarfeToAbfrage(abfrageReportingDto, bedarfForEachAbfragevariante)
+        ).thenThrow(new ReportingException("test"));
+        Assertions.assertThrows(ReportingException.class, () ->
+            reportingdataTransferService.transferAbfrageAndBedarfe(abfrageModel, bedarfForEachAbfragevariante)
         );
-        Mockito
-            .verify(reportingdataTransferService, Mockito.times(1))
-            .addBedarfeToAbfrage(abfrageReportingDto, bedarfForEachAbfragevariante);
+        Mockito.verify(reportingdataTransferService, Mockito.times(1)).addBedarfeToAbfrage(
+            abfrageReportingDto,
+            bedarfForEachAbfragevariante
+        );
         Mockito.verify(reportingdataTransferService, Mockito.times(0)).transferAbfrage(Mockito.any());
     }
 
@@ -256,20 +258,19 @@ class ReportingdataTransferServiceTest {
         abfrageReportingDto.setAbfragevariantenWeiteresVerfahren(List.of());
         abfrageReportingDto.setAbfragevariantenSachbearbeitungWeiteresVerfahren(List.of());
         abfrageReportingDto.setArtAbfrage(AbfrageDto.ArtAbfrageEnum.WEITERES_VERFAHREN);
-        Mockito
-            .when(reportingdataTransferService.addBedarfeToAbfrage(abfrageReportingDto, bedarfForEachAbfragevariante))
-            .thenReturn(abfrageReportingDto);
-        Mockito
-            .doThrow(new ReportingException("test"))
+        Mockito.when(
+            reportingdataTransferService.addBedarfeToAbfrage(abfrageReportingDto, bedarfForEachAbfragevariante)
+        ).thenReturn(abfrageReportingDto);
+        Mockito.doThrow(new ReportingException("test"))
             .when(reportingdataTransferService)
             .transferAbfrage(abfrageReportingDto);
-        Assertions.assertThrows(
-            ReportingException.class,
-            () -> reportingdataTransferService.transferAbfrageAndBedarfe(abfrageModel, bedarfForEachAbfragevariante)
+        Assertions.assertThrows(ReportingException.class, () ->
+            reportingdataTransferService.transferAbfrageAndBedarfe(abfrageModel, bedarfForEachAbfragevariante)
         );
-        Mockito
-            .verify(reportingdataTransferService, Mockito.times(1))
-            .addBedarfeToAbfrage(abfrageReportingDto, bedarfForEachAbfragevariante);
+        Mockito.verify(reportingdataTransferService, Mockito.times(1)).addBedarfeToAbfrage(
+            abfrageReportingDto,
+            bedarfForEachAbfragevariante
+        );
         Mockito.verify(reportingdataTransferService, Mockito.times(1)).transferAbfrage(abfrageReportingDto);
     }
 
@@ -1158,9 +1159,8 @@ class ReportingdataTransferServiceTest {
     @Test
     void addBedarfeToAbfrageException() {
         var abfrage = new AbfrageDto();
-        Assertions.assertThrows(
-            ReportingException.class,
-            () -> reportingdataTransferService.addBedarfeToAbfrage(abfrage, null)
+        Assertions.assertThrows(ReportingException.class, () ->
+            reportingdataTransferService.addBedarfeToAbfrage(abfrage, null)
         );
     }
 
@@ -1174,8 +1174,7 @@ class ReportingdataTransferServiceTest {
     @Test
     void transferAbfrageException() throws ReportingException {
         final var abfrage = new AbfrageDto();
-        Mockito
-            .doThrow(new WebClientResponseException(500, "An error", null, null, null))
+        Mockito.doThrow(new WebClientResponseException(500, "An error", null, null, null))
             .when(reportingdataTransferRepository)
             .save(abfrage);
         Assertions.assertThrows(ReportingException.class, () -> reportingdataTransferService.transferAbfrage(abfrage));
@@ -1188,9 +1187,10 @@ class ReportingdataTransferServiceTest {
         abfrage.setId(UUID.randomUUID());
         abfrage.setArtAbfrage(ArtAbfrage.BAULEITPLANVERFAHREN);
         reportingdataTransferService.deleteTransferedAbfrage(abfrage);
-        Mockito
-            .verify(reportingdataTransferRepository, Mockito.times(1))
-            .deleteByIdAndArtAbfrage(abfrage.getId(), AbfrageDto.ArtAbfrageEnum.BAULEITPLANVERFAHREN);
+        Mockito.verify(reportingdataTransferRepository, Mockito.times(1)).deleteByIdAndArtAbfrage(
+            abfrage.getId(),
+            AbfrageDto.ArtAbfrageEnum.BAULEITPLANVERFAHREN
+        );
     }
 
     @Test
@@ -1198,16 +1198,15 @@ class ReportingdataTransferServiceTest {
         final var abfrage = new BauleitplanverfahrenModel();
         abfrage.setId(UUID.randomUUID());
         abfrage.setArtAbfrage(ArtAbfrage.BAULEITPLANVERFAHREN);
-        Mockito
-            .doThrow(new WebClientResponseException(500, "An error", null, null, null))
+        Mockito.doThrow(new WebClientResponseException(500, "An error", null, null, null))
             .when(reportingdataTransferRepository)
             .deleteByIdAndArtAbfrage(abfrage.getId(), AbfrageDto.ArtAbfrageEnum.BAULEITPLANVERFAHREN);
-        Assertions.assertThrows(
-            ReportingException.class,
-            () -> reportingdataTransferService.deleteTransferedAbfrage(abfrage)
+        Assertions.assertThrows(ReportingException.class, () ->
+            reportingdataTransferService.deleteTransferedAbfrage(abfrage)
         );
-        Mockito
-            .verify(reportingdataTransferRepository, Mockito.times(1))
-            .deleteByIdAndArtAbfrage(abfrage.getId(), AbfrageDto.ArtAbfrageEnum.BAULEITPLANVERFAHREN);
+        Mockito.verify(reportingdataTransferRepository, Mockito.times(1)).deleteByIdAndArtAbfrage(
+            abfrage.getId(),
+            AbfrageDto.ArtAbfrageEnum.BAULEITPLANVERFAHREN
+        );
     }
 }

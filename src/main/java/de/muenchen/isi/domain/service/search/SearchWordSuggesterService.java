@@ -37,8 +37,9 @@ public class SearchWordSuggesterService {
             searchQueryInformation
         );
         final var foundSuchwortSuggestions =
-            this.doSearchForSearchwordSuggestion(searchableEntities, searchQueryInformation.getSearchQuery())
-                .collect(Collectors.toList());
+            this.doSearchForSearchwordSuggestion(searchableEntities, searchQueryInformation.getSearchQuery()).collect(
+                    Collectors.toList()
+                );
         final var model = new SuchwortSuggestionsModel();
         model.setSuchwortSuggestions(foundSuchwortSuggestions);
         return model;

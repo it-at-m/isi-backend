@@ -87,9 +87,9 @@ public class PlanungsursaechlicheWohneinheitenService {
         final SobonOrientierungswertJahr sobonJahr
     ) {
         if (baurate.getWeGeplant() != null) {
-            return BigDecimal
-                .valueOf(baurate.getWeGeplant())
-                .multiply(foerderart.getAnteilProzent().scaleByPowerOfTen(-2));
+            return BigDecimal.valueOf(baurate.getWeGeplant()).multiply(
+                foerderart.getAnteilProzent().scaleByPowerOfTen(-2)
+            );
         } else if (baurate.getGfWohnenGeplant() != null) {
             final var orientierungswert =
                 staedtebaulicheOrientierungswertRepository.findFirstByFoerderartBezeichnungAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
@@ -116,9 +116,10 @@ public class PlanungsursaechlicheWohneinheitenService {
     ) {
         final var wohneinheitenProFoerderartProJahrOptional = wohneinheitenProFoerderartProJahrList
             .stream()
-            .filter(wohneinheitenProFoerderartProJahr ->
-                wohneinheitenProFoerderartProJahr.getFoerderart().equals(foerderart) &&
-                wohneinheitenProFoerderartProJahr.getJahr().equals(jahr)
+            .filter(
+                wohneinheitenProFoerderartProJahr ->
+                    wohneinheitenProFoerderartProJahr.getFoerderart().equals(foerderart) &&
+                    wohneinheitenProFoerderartProJahr.getJahr().equals(jahr)
             )
             .findAny();
 

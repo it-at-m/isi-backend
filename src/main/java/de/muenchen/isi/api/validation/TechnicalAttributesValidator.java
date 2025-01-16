@@ -24,17 +24,19 @@ public class TechnicalAttributesValidator
         return (
             (bauabschnitte
                     .stream()
-                    .anyMatch(bauabschnitt ->
-                        !bauabschnitt.getTechnical() &&
-                        bauabschnitt.getBaugebiete() != null &&
-                        bauabschnitt
-                            .getBaugebiete()
-                            .stream()
-                            .anyMatch(baugebiet ->
-                                !baugebiet.getTechnical() &&
-                                baugebiet.getBauraten() != null &&
-                                !baugebiet.getBauraten().isEmpty()
-                            )
+                    .anyMatch(
+                        bauabschnitt ->
+                            !bauabschnitt.getTechnical() &&
+                            bauabschnitt.getBaugebiete() != null &&
+                            bauabschnitt
+                                .getBaugebiete()
+                                .stream()
+                                .anyMatch(
+                                    baugebiet ->
+                                        !baugebiet.getTechnical() &&
+                                        baugebiet.getBauraten() != null &&
+                                        !baugebiet.getBauraten().isEmpty()
+                                )
                     )) &&
             hasBauraten(bauabschnitte)
         );
@@ -44,17 +46,19 @@ public class TechnicalAttributesValidator
         return (
             (bauabschnitte
                     .stream()
-                    .anyMatch(bauabschnitt ->
-                        bauabschnitt.getTechnical() &&
-                        bauabschnitt.getBaugebiete() != null &&
-                        bauabschnitt
-                            .getBaugebiete()
-                            .stream()
-                            .anyMatch(baugebiet ->
-                                !baugebiet.getTechnical() &&
-                                baugebiet.getBauraten() != null &&
-                                !baugebiet.getBauraten().isEmpty()
-                            )
+                    .anyMatch(
+                        bauabschnitt ->
+                            bauabschnitt.getTechnical() &&
+                            bauabschnitt.getBaugebiete() != null &&
+                            bauabschnitt
+                                .getBaugebiete()
+                                .stream()
+                                .anyMatch(
+                                    baugebiet ->
+                                        !baugebiet.getTechnical() &&
+                                        baugebiet.getBauraten() != null &&
+                                        !baugebiet.getBauraten().isEmpty()
+                                )
                     )) &&
             hasBauraten(bauabschnitte)
         );
@@ -64,17 +68,19 @@ public class TechnicalAttributesValidator
         return (
             (bauabschnitte
                     .stream()
-                    .allMatch(bauabschnitt ->
-                        bauabschnitt.getTechnical() &&
-                        bauabschnitt.getBaugebiete() != null &&
-                        bauabschnitt
-                            .getBaugebiete()
-                            .stream()
-                            .allMatch(baugebiet ->
-                                baugebiet.getTechnical() &&
-                                baugebiet.getBauraten() != null &&
-                                !baugebiet.getBauraten().isEmpty()
-                            )
+                    .allMatch(
+                        bauabschnitt ->
+                            bauabschnitt.getTechnical() &&
+                            bauabschnitt.getBaugebiete() != null &&
+                            bauabschnitt
+                                .getBaugebiete()
+                                .stream()
+                                .allMatch(
+                                    baugebiet ->
+                                        baugebiet.getTechnical() &&
+                                        baugebiet.getBauraten() != null &&
+                                        !baugebiet.getBauraten().isEmpty()
+                                )
                     )) &&
             hasBauraten(bauabschnitte)
         );

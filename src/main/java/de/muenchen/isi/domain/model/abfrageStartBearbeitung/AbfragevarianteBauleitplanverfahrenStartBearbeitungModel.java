@@ -21,7 +21,7 @@ import lombok.ToString;
 public class AbfragevarianteBauleitplanverfahrenStartBearbeitungModel
     extends AbfragevarianteBauleitplanverfahrenAngelegtModel {
 
-    private SobonOrientierungswertJahr sobonOrientierungswertJahr;
+    private SobonOrientierungswertJahr sobonOrientierungswertJahrPlanungsursaechlich;
 
     private SobonBerechnungModel sobonBerechnung;
 

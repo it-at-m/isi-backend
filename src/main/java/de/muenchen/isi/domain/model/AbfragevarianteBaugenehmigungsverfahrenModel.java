@@ -71,7 +71,7 @@ public class AbfragevarianteBaugenehmigungsverfahrenModel
 
     private String weAnmerkung;
 
-    private SobonOrientierungswertJahr sobonOrientierungswertJahr;
+    private SobonOrientierungswertJahr sobonOrientierungswertJahrPlanungsursaechlich;
 
     private LocalDate stammdatenGueltigAb;
 
