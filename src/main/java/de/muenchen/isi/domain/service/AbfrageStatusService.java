@@ -62,7 +62,7 @@ public class AbfrageStatusService {
     private final SendWorkAssignmentInformationService sendWorkAssignmentInformationService;
 
     /**
-     * Ändert den Status auf {@link StatusAbfrage#OFFEN}.
+     * Ändert den Status auf {@link StatusAbfrage#UEBERMITTELT_ZUR_BEARBEITUNG}.
      *
      * @param id        vom Typ {@link UUID} um die Abfrage zu finden
      * @param anmerkung falls ein Nutzer eine Anmerkung bei einem Statusübergang macht wird diese an die Abfrage Anmerkung angehängt
@@ -79,7 +79,7 @@ public class AbfrageStatusService {
     }
 
     /**
-     * Ändert den Status auf {@link StatusAbfrage#IN_BEARBEITUNG_SACHBEARBEITUNG}.
+     * Ändert den Status auf {@link StatusAbfrage#START_BEARBEITUNG}.
      *
      * @param id        vom Typ {@link UUID} um die Abfrage zu finden
      * @param anmerkung falls ein Nutzer eine Anmerkung bei einem Statusübergang macht wird diese an die Abfrage Anmerkung angehängt
@@ -130,7 +130,7 @@ public class AbfrageStatusService {
     }
 
     /**
-     * Ändert den Status auf {@link StatusAbfrage#IN_BEARBEITUNG_SACHBEARBEITUNG}.
+     * Ändert den Status auf {@link StatusAbfrage#START_BEARBEITUNG}.
      *
      * @param id        vom Typ {@link UUID} um die Abfrage zu finden
      * @param anmerkung falls ein Nutzer eine Anmerkung bei einem Statusübergang macht wird diese an die Abfrage Anmerkung angehängt
@@ -164,7 +164,7 @@ public class AbfrageStatusService {
     }
 
     /**
-     * Ändert den Status auf {@link StatusAbfrage#IN_BEARBEITUNG_FACHREFERATE}.
+     * Ändert den Status auf {@link StatusAbfrage#EINPFLEGEN_BEDARFSMELDUNG}.
      *
      * @param id        vom Typ {@link UUID} um die Abfrage zu finden
      * @param anmerkung falls ein Nutzer eine Anmerkung bei einem Statusübergang macht wird diese an die Abfrage Anmerkung angehängt
@@ -181,7 +181,7 @@ public class AbfrageStatusService {
     }
 
     /**
-     * Ändert den Status auf {@link StatusAbfrage#BEDARFSMELDUNG_ERFOLGT}.
+     * Ändert den Status auf {@link StatusAbfrage#EINPLANUNG_BEDARFE}.
      *
      * @param id        vom Typ {@link UUID} um die Abfrage zu finden
      * @param anmerkung falls ein Nutzer eine Anmerkung bei einem Statusübergang macht wird diese an die Abfrage Anmerkung angehängt
@@ -215,7 +215,7 @@ public class AbfrageStatusService {
     }
 
     /**
-     * Ändert den Status auf {@link StatusAbfrage#IN_BEARBEITUNG_SACHBEARBEITUNG}.
+     * Ändert den Status auf {@link StatusAbfrage#START_BEARBEITUNG}.
      *
      * @param id        vom Typ {@link UUID} um die Abfrage zu finden
      * @param anmerkung falls ein Nutzer eine Anmerkung bei einem Statusübergang macht wird diese an die Abfrage Anmerkung angehängt

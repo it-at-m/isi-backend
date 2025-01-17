@@ -159,13 +159,13 @@ public class BauvorhabenServiceTest {
         bauvorhaben.setNameVorhaben("Name");
         bauvorhaben.setWesentlicheRechtsgrundlage(List.of(WesentlicheRechtsgrundlage.AUSSENBEREICH));
         bauvorhaben.setSobonRelevant(UncertainBoolean.FALSE);
-        bauvorhaben.setStandVerfahren(StandVerfahren.INFO_FEHLT);
+        bauvorhaben.setStandVerfahren(StandVerfahren.FREIE_EINGABE);
         bauvorhaben.setId(bauvorhabenId);
 
         final Bauleitplanverfahren abfrage1 = new Bauleitplanverfahren();
         abfrage1.setId(UUID.randomUUID());
         abfrage1.setName("NameAbfrage1");
-        abfrage1.setStatusAbfrage(StatusAbfrage.OFFEN);
+        abfrage1.setStatusAbfrage(StatusAbfrage.UEBERMITTELT_ZUR_BEARBEITUNG);
         abfrage1.setFristBearbeitung(LocalDate.of(2022, 11, 1));
         abfrage1.setBauvorhaben(bauvorhaben);
 
@@ -179,7 +179,7 @@ public class BauvorhabenServiceTest {
         final Baugenehmigungsverfahren abfrage3 = new Baugenehmigungsverfahren();
         abfrage3.setId(UUID.randomUUID());
         abfrage3.setName("NameAbfrage3");
-        abfrage3.setStatusAbfrage(StatusAbfrage.OFFEN);
+        abfrage3.setStatusAbfrage(StatusAbfrage.UEBERMITTELT_ZUR_BEARBEITUNG);
         abfrage3.setFristBearbeitung(LocalDate.of(2022, 12, 1));
         abfrage3.setBauvorhaben(bauvorhaben);
 
@@ -676,7 +676,7 @@ public class BauvorhabenServiceTest {
         final AbfrageModel abfrageModel = new BauleitplanverfahrenModel();
         abfrageModel.setId(UUID.randomUUID());
         abfrageModel.setName("test1");
-        abfrageModel.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+        abfrageModel.setStatusAbfrage(StatusAbfrage.START_BEARBEITUNG);
         abfrageModel.setBauvorhaben(bauvorhabenEntity.getId());
 
         Mockito
@@ -734,7 +734,7 @@ public class BauvorhabenServiceTest {
         final AbfrageModel abfrageModel = new BauleitplanverfahrenModel();
         abfrageModel.setId(UUID.randomUUID());
         abfrageModel.setName("test1");
-        abfrageModel.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+        abfrageModel.setStatusAbfrage(StatusAbfrage.START_BEARBEITUNG);
         abfrageModel.setBauvorhaben(bauvorhabenEntity.getId());
 
         Mockito
@@ -784,7 +784,7 @@ public class BauvorhabenServiceTest {
         final AbfrageModel abfrageModel = new BauleitplanverfahrenModel();
         abfrageModel.setId(UUID.randomUUID());
         abfrageModel.setName("test1");
-        abfrageModel.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+        abfrageModel.setStatusAbfrage(StatusAbfrage.START_BEARBEITUNG);
         abfrageModel.setBauvorhaben(bauvorhabenEntity.getId());
 
         final UUID otherAbfragevariante = UUID.randomUUID();
@@ -838,7 +838,7 @@ public class BauvorhabenServiceTest {
         final AbfrageModel abfrageModel = new BauleitplanverfahrenModel();
         abfrageModel.setId(UUID.randomUUID());
         abfrageModel.setName("test1");
-        abfrageModel.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+        abfrageModel.setStatusAbfrage(StatusAbfrage.START_BEARBEITUNG);
         abfrageModel.setBauvorhaben(bauvorhabenEntity.getId());
 
         Mockito
@@ -885,7 +885,7 @@ public class BauvorhabenServiceTest {
         final AbfrageModel abfrageModel = new BauleitplanverfahrenModel();
         abfrageModel.setId(UUID.randomUUID());
         abfrageModel.setName("test1");
-        abfrageModel.setStatusAbfrage(StatusAbfrage.IN_BEARBEITUNG_SACHBEARBEITUNG);
+        abfrageModel.setStatusAbfrage(StatusAbfrage.START_BEARBEITUNG);
 
         Mockito.when(this.abfrageService.getByAbfragevarianteId(abfragevarianteId)).thenReturn(abfrageModel);
         Mockito

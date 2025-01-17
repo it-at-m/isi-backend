@@ -195,7 +195,7 @@ public class SendWorkAssignmentInformationService {
         return CollectionUtils
             .emptyIfNull(bearbeitungshistorie)
             .stream()
-            .filter(b -> StatusAbfrage.OFFEN.equals(b.getZielStatus()))
+            .filter(b -> StatusAbfrage.UEBERMITTELT_ZUR_BEARBEITUNG.equals(b.getZielStatus()))
             .map(BearbeitungshistorieModel::getBearbeitendePerson)
             .filter(ObjectUtils::isNotEmpty)
             .map(BearbeitendePersonModel::getEmail)

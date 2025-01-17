@@ -178,7 +178,7 @@ public class BauvorhabenController {
         summary = "Setzt die übergebene Abfragevariante als relevante Abfrage beim Bauvorhaben, welches mit der Abfrage der Abfragevariante verknüpft ist." +
         "Ist die Abfragevariante bereits als relevant markiert, wird die relevante Abfragevariante des Bauvorhabens entfernt." +
         "Eine Relevantsetzung kann nur vorgenommen werden, wenn die Abfrage ein Bauvorhaben referenziert," +
-        "die Abfrage im Status {@link StatusAbfrage#IN_BEARBEITUNG_SACHBEARBEITUNG} ist" +
+        "die Abfrage im Status {@link StatusAbfrage#START_BEARBEITUNG} ist" +
         "und noch keine andere Abfrage als relevant markiert wurde."
     )
     @ApiResponses(
