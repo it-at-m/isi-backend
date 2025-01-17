@@ -25,8 +25,7 @@ public class EarliestBaurateIsRealisierungVonValidator
      */
     @Override
     public boolean isValid(final AbfragevarianteAngelegtDto value, final ConstraintValidatorContext context) {
-        final var yearOfEarliestBaurate = CollectionUtils
-            .emptyIfNull(value.getBauabschnitte())
+        final var yearOfEarliestBaurate = CollectionUtils.emptyIfNull(value.getBauabschnitte())
             .stream()
             .flatMap(bauabschnitt -> CollectionUtils.emptyIfNull(bauabschnitt.getBaugebiete()).stream())
             .flatMap(baugebiet -> CollectionUtils.emptyIfNull(baugebiet.getBauraten()).stream())

@@ -47,9 +47,8 @@ public class OptimisticLockingTest {
 
         this.dokumentRepository.saveAndFlush(dokument1);
 
-        Assertions.assertThrows(
-            ObjectOptimisticLockingFailureException.class,
-            () -> this.dokumentRepository.saveAndFlush(dokument2)
+        Assertions.assertThrows(ObjectOptimisticLockingFailureException.class, () ->
+            this.dokumentRepository.saveAndFlush(dokument2)
         );
 
         final var newLoadedDokument2 = this.dokumentRepository.findById(id).get();

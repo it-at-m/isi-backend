@@ -19,14 +19,13 @@ class MetabaseReportingServiceTest {
 
     @BeforeEach
     public void beforeEach() {
-        this.metabaseReportingService =
-            new MetabaseReportingService(
-                "https://isi-metabase-test.muenchen.de",
-                "collection/99-global-reports",
-                " dashboard/36-ergebnisse-der-planungsursachlichen-bedarfsberechnung",
-                "dashboard/44-ergebnisse-der-sobon-bedarfsberechnung",
-                "dashboard/33-dashboard-wohneinheiten"
-            );
+        this.metabaseReportingService = new MetabaseReportingService(
+            "https://isi-metabase-test.muenchen.de",
+            "collection/99-global-reports",
+            " dashboard/36-ergebnisse-der-planungsursachlichen-bedarfsberechnung",
+            "dashboard/44-ergebnisse-der-sobon-bedarfsberechnung",
+            "dashboard/33-dashboard-wohneinheiten"
+        );
     }
 
     @Test

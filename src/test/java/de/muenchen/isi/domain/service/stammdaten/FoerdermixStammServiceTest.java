@@ -39,8 +39,10 @@ class FoerdermixStammServiceTest {
 
     @BeforeEach
     public void beforeEach() {
-        this.foerdermixStammService =
-            new FoerdermixStammService(this.stammdatenDomainMapper, this.foerdermixStammRepository);
+        this.foerdermixStammService = new FoerdermixStammService(
+            this.stammdatenDomainMapper,
+            this.foerdermixStammRepository
+        );
         Mockito.reset(this.foerdermixStammRepository);
     }
 
@@ -51,9 +53,9 @@ class FoerdermixStammServiceTest {
         final FoerdermixStamm entity2 = new FoerdermixStamm();
         entity2.setId(UUID.randomUUID());
 
-        Mockito
-            .when(this.foerdermixStammRepository.findAllByOrderByFoerdermixBezeichnungAsc())
-            .thenReturn(Stream.of(entity1, entity2));
+        Mockito.when(this.foerdermixStammRepository.findAllByOrderByFoerdermixBezeichnungAsc()).thenReturn(
+            Stream.of(entity1, entity2)
+        );
 
         final List<FoerdermixStammModel> result = this.foerdermixStammService.getFoerdermixStaemme();
 
@@ -76,9 +78,8 @@ class FoerdermixStammServiceTest {
         Mockito.reset(this.foerdermixStammRepository);
 
         Mockito.when(this.foerdermixStammRepository.findById(id)).thenReturn(Optional.empty());
-        Assertions.assertThrows(
-            EntityNotFoundException.class,
-            () -> this.foerdermixStammService.getFoerdermixStammById(id)
+        Assertions.assertThrows(EntityNotFoundException.class, () ->
+            this.foerdermixStammService.getFoerdermixStammById(id)
         );
         Mockito.verify(this.foerdermixStammRepository, Mockito.times(1)).findById(id);
     }

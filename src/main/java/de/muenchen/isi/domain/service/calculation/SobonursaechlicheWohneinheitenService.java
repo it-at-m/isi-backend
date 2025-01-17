@@ -138,10 +138,9 @@ public class SobonursaechlicheWohneinheitenService {
                 );
             if (orientierungswert.isPresent()) {
                 final var average = BigDecimal.valueOf(orientierungswert.get().getDurchschnittlicheGrundflaeche());
-                wohneinheiten =
-                    sobonGf
-                        .multiply(foerderart.getAnteilProzent().scaleByPowerOfTen(-2))
-                        .divide(average, CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
+                wohneinheiten = sobonGf
+                    .multiply(foerderart.getAnteilProzent().scaleByPowerOfTen(-2))
+                    .divide(average, CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
             }
 
             sobonsursachlicheWohneinheitenList.add(

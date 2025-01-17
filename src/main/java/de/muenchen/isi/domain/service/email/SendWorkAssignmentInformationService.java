@@ -76,8 +76,7 @@ public class SendWorkAssignmentInformationService {
         if (verortung == null) {
             return StringUtils.EMPTY;
         }
-        return CollectionUtils
-            .emptyIfNull(verortung.getStadtbezirke())
+        return CollectionUtils.emptyIfNull(verortung.getStadtbezirke())
             .stream()
             .map(stadtbezirk -> stadtbezirk.getNummer() + "/" + stadtbezirk.getName())
             .collect(Collectors.joining(", "));
@@ -121,8 +120,9 @@ public class SendWorkAssignmentInformationService {
         final var receiverEmailAddresses = getReceiver(abfrage, stateMachineEvent);
         if (CollectionUtils.isNotEmpty(receiverEmailAddresses)) {
             final var subject = getSubject(abfrage.getName(), stateMachineEvent);
-            var text = getText(abfrage.getName(), stateMachineEvent)
-                .concat(StringUtils.defaultIfEmpty(getStadtbezirke(abfrage), StringUtils.EMPTY));
+            var text = getText(abfrage.getName(), stateMachineEvent).concat(
+                StringUtils.defaultIfEmpty(getStadtbezirke(abfrage), StringUtils.EMPTY)
+            );
             mailSenderRepository.sendMail(receiverEmailAddresses, subject, text);
         }
     }
@@ -145,10 +145,9 @@ public class SendWorkAssignmentInformationService {
                 ((BauleitplanverfahrenModel) abfrage).getAbfragevariantenSachbearbeitungBauleitplanverfahren(),
                 new ArrayList<AbfragevarianteBauleitplanverfahrenModel>()
             );
-            isSobon =
-                Stream
-                    .concat(abfragevarianten.stream(), abfragevariantenSachbearbeitung.stream())
-                    .anyMatch(a -> a.getSobonBerechnung() != null && a.getSobonBerechnung().getIsASobonBerechnung());
+            isSobon = Stream.concat(abfragevarianten.stream(), abfragevariantenSachbearbeitung.stream()).anyMatch(
+                a -> a.getSobonBerechnung() != null && a.getSobonBerechnung().getIsASobonBerechnung()
+            );
         } else if (abfrage.getArtAbfrage() == ArtAbfrage.WEITERES_VERFAHREN) {
             final var abfragevarianten = Objects.requireNonNullElse(
                 ((WeiteresVerfahrenModel) abfrage).getAbfragevariantenWeiteresVerfahren(),
@@ -158,10 +157,9 @@ public class SendWorkAssignmentInformationService {
                 ((WeiteresVerfahrenModel) abfrage).getAbfragevariantenSachbearbeitungWeiteresVerfahren(),
                 new ArrayList<AbfragevarianteWeiteresVerfahrenModel>()
             );
-            isSobon =
-                Stream
-                    .concat(abfragevarianten.stream(), abfragevariantenSachbearbeitung.stream())
-                    .anyMatch(a -> a.getSobonBerechnung() != null && a.getSobonBerechnung().getIsASobonBerechnung());
+            isSobon = Stream.concat(abfragevarianten.stream(), abfragevariantenSachbearbeitung.stream()).anyMatch(
+                a -> a.getSobonBerechnung() != null && a.getSobonBerechnung().getIsASobonBerechnung()
+            );
         }
 
         if (StatusAbfrageEvents.FREIGABE.equals(stateMachineEvent)) {
@@ -192,8 +190,7 @@ public class SendWorkAssignmentInformationService {
     protected String getEmailAddressOfPersonWhichInitiallyCreatedTheAbfrage(
         final List<BearbeitungshistorieModel> bearbeitungshistorie
     ) {
-        return CollectionUtils
-            .emptyIfNull(bearbeitungshistorie)
+        return CollectionUtils.emptyIfNull(bearbeitungshistorie)
             .stream()
             .filter(b -> StatusAbfrage.UEBERMITTELT_ZUR_BEARBEITUNG.equals(b.getZielStatus()))
             .map(BearbeitungshistorieModel::getBearbeitendePerson)

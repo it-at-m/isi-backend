@@ -18,8 +18,7 @@ public class SecurityEnabledServerToServerConfiguration {
         final ClientRegistrationRepository clientRegistrationRepository,
         final OAuth2AuthorizedClientService authorizedClientService
     ) {
-        final OAuth2AuthorizedClientProvider authorizedClientProvider = OAuth2AuthorizedClientProviderBuilder
-            .builder()
+        final OAuth2AuthorizedClientProvider authorizedClientProvider = OAuth2AuthorizedClientProviderBuilder.builder()
             .clientCredentials()
             .build();
 

@@ -54,8 +54,7 @@ public class SearchwordSuggesterRepository {
     ) {
         // Verwendung des Elasticsearch-RestClients für direkten Indexzugriff.
         // https://docs.jboss.org/hibernate/stable/search/reference/en-US/html_single/#elasticsearch-client-access
-        final var elasticsearchBackend = Search
-            .mapping(entityManager.getEntityManagerFactory())
+        final var elasticsearchBackend = Search.mapping(entityManager.getEntityManagerFactory())
             .backend()
             .unwrap(ElasticsearchBackend.class);
         final var restClient = elasticsearchBackend.client(RestClient.class);

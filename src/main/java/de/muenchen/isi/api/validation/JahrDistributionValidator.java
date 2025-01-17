@@ -26,8 +26,7 @@ public class JahrDistributionValidator implements ConstraintValidator<JahrDistri
         boolean isValid = true;
 
         if (BooleanUtils.isNotTrue(value.getTechnical())) {
-            final Optional<Integer> minJahrBauraten = CollectionUtils
-                .emptyIfNull(value.getBauraten())
+            final Optional<Integer> minJahrBauraten = CollectionUtils.emptyIfNull(value.getBauraten())
                 .stream()
                 .map(BaurateDto::getJahr)
                 .filter(Objects::nonNull)
