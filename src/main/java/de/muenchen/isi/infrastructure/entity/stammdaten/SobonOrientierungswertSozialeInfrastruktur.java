@@ -19,12 +19,14 @@ import lombok.ToString;
 @Entity
 @Table(
     uniqueConstraints = {
-        @UniqueConstraint(columnNames = { "gueltigAb", "einrichtungstyp", "altersklasse", "foerderartBezeichnung" }),
+        @UniqueConstraint(
+            columnNames = { "gueltigAb", "jahrBezeichnung", "einrichtungstyp", "altersklasse", "foerderartBezeichnung" }
+        ),
     },
     indexes = {
         @Index(
             name = "sobon_orientwrt_soz_infra_jahr_einr_typ_altkl_frdrtBzchng_index",
-            columnList = "gueltigAb, einrichtungstyp, altersklasse, foerderartBezeichnung"
+            columnList = "gueltigAb, jahrBezeichnung, einrichtungstyp, altersklasse, foerderartBezeichnung"
         ),
     }
 )
