@@ -50,36 +50,36 @@ public class SobonOrientierungswertSozialeInfrastruktur extends BaseEntity {
     @Column(nullable = false)
     private String foerderartBezeichnung;
 
-    @Column(precision = 20, scale = 15, nullable = false)
+    @Column(precision = 20, scale = 15)
     private BigDecimal einwohnerJahr1NachErsterstellung;
 
-    @Column(precision = 20, scale = 15, nullable = false)
+    @Column(precision = 20, scale = 15)
     private BigDecimal einwohnerJahr2NachErsterstellung;
 
-    @Column(precision = 20, scale = 15, nullable = false)
+    @Column(precision = 20, scale = 15)
     private BigDecimal einwohnerJahr3NachErsterstellung;
 
-    @Column(precision = 20, scale = 15, nullable = false)
+    @Column(precision = 20, scale = 15)
     private BigDecimal einwohnerJahr4NachErsterstellung;
 
-    @Column(precision = 20, scale = 15, nullable = false)
+    @Column(precision = 20, scale = 15)
     private BigDecimal einwohnerJahr5NachErsterstellung;
 
-    @Column(precision = 20, scale = 15, nullable = false)
+    @Column(precision = 20, scale = 15)
     private BigDecimal einwohnerJahr6NachErsterstellung;
 
-    @Column(precision = 20, scale = 15, nullable = false)
+    @Column(precision = 20, scale = 15)
     private BigDecimal einwohnerJahr7NachErsterstellung;
 
-    @Column(precision = 20, scale = 15, nullable = false)
+    @Column(precision = 20, scale = 15)
     private BigDecimal einwohnerJahr8NachErsterstellung;
 
-    @Column(precision = 20, scale = 15, nullable = false)
+    @Column(precision = 20, scale = 15)
     private BigDecimal einwohnerJahr9NachErsterstellung;
 
-    @Column(precision = 20, scale = 15, nullable = false)
+    @Column(precision = 20, scale = 15)
     private BigDecimal einwohnerJahr10NachErsterstellung;
 
-    @Column(precision = 20, scale = 15, nullable = false)
+    @Column(precision = 20, scale = 15)
     private BigDecimal stammwertArbeitsgruppe;
 }

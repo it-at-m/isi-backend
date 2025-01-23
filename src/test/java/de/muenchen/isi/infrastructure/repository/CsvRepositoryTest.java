@@ -112,6 +112,7 @@ class CsvRepositoryTest {
 
         final var firstExpected = new SobonOrientierungswertSozialeInfrastrukturCsv();
         firstExpected.setGueltigAb(LocalDate.parse("2021-01-01"));
+        firstExpected.setJahrBezeichnung("2021");
         firstExpected.setEinrichtungstyp(InfrastruktureinrichtungTyp.KINDERKRIPPE);
         firstExpected.setAltersklasse(Altersklasse.NULL_ZWEI);
         firstExpected.setFoerderartBezeichnung("1-2-FH");
@@ -128,6 +129,7 @@ class CsvRepositoryTest {
         firstExpected.setStammwertArbeitsgruppe(BigDecimal.valueOf(716, 4));
         final var lastExpected = new SobonOrientierungswertSozialeInfrastrukturCsv();
         lastExpected.setGueltigAb(LocalDate.parse("2021-01-01"));
+        lastExpected.setJahrBezeichnung("2021");
         lastExpected.setEinrichtungstyp(InfrastruktureinrichtungTyp.UNSPECIFIED);
         lastExpected.setAltersklasse(Altersklasse.ALLE_EWO);
         lastExpected.setFoerderartBezeichnung("GW-freifinanziert");

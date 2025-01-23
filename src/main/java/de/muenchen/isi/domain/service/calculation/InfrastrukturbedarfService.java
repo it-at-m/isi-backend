@@ -354,10 +354,10 @@ public class InfrastrukturbedarfService {
                 .map(WohneinheitenProFoerderartProJahrModel::getFoerderart)
                 .distinct()
                 .map(foerderart ->
-                    sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndFoerderartBezeichnungAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
+                    sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndFoerderartBezeichnungAndJahrBezeichnung(
                         einrichtungstyp,
                         foerderart,
-                        sobonJahr.getGueltigAb()
+                        sobonJahr.getBezeichnung()
                     )
                 )
                 .map(Optional::get)
