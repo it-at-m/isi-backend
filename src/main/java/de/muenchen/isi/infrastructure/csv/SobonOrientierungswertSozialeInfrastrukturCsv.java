@@ -15,6 +15,9 @@ public class SobonOrientierungswertSozialeInfrastrukturCsv {
     @CsvCustomBindByName(column = "JAHR", converter = JahrConverter.class, required = true)
     private LocalDate gueltigAb;
 
+    @CsvBindByName(column = "JAHR_BEZEICHNUNG", required = true)
+    private String jahrBezeichnung;
+
     @CsvBindByName(column = "EINRICHTUNGSTYP", required = true)
     private InfrastruktureinrichtungTyp einrichtungstyp;
 

@@ -27,6 +27,8 @@ public class SobonOrientierungswertSozialeInfrastrukturModel extends BaseEntityM
 
     private LocalDate gueltigAb;
 
+    private String jahrBezeichnung;
+
     private InfrastruktureinrichtungTyp einrichtungstyp;
 
     private Altersklasse altersklasse;

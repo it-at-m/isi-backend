@@ -18,6 +18,8 @@ public enum SobonOrientierungswertJahr implements ILookup {
     JAHR_2014("2014", LocalDate.of(2014, 1, 1)),
     JAHR_2017("2017", LocalDate.of(2017, 1, 1)),
     JAHR_2022("2022", LocalDate.of(2022, 1, 1)),
+    JAHR_2024("2024", LocalDate.of(2024, 1, 1)),
+    JAHR_2024_34("2024 §34", LocalDate.of(2024, 1, 1)),
     STANDORTABFRAGE("Standortabfrage", null);
 
     @Getter

@@ -36,6 +36,9 @@ public class SobonOrientierungswertSozialeInfrastruktur extends BaseEntity {
     @Column(nullable = false)
     private LocalDate gueltigAb;
 
+    @Column(nullable = false)
+    private String jahrBezeichnung;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private InfrastruktureinrichtungTyp einrichtungstyp;
