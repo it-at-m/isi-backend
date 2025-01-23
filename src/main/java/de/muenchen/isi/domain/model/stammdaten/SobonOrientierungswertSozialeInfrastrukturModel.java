@@ -78,6 +78,9 @@ public class SobonOrientierungswertSozialeInfrastrukturModel extends BaseEntityM
      * @return das Verhältnis des 10-Jährigen-Mittelwertes zum Attribut Stammwert-Arbeitsgruppe als Faktor zur Ermittlung der oberen Richtwerte.
      */
     public BigDecimal getRatioOfMittelwertEinwohner10JahreToStammwertArbeitsgruppe() {
+        if (stammwertArbeitsgruppe == null) {
+            return BigDecimal.ZERO;
+        }
         return stammwertArbeitsgruppe.divide(
             getMittelwertEinwohnerNachErsterstellung10Jahre(),
             CalculationService.DIVISION_SCALE,
