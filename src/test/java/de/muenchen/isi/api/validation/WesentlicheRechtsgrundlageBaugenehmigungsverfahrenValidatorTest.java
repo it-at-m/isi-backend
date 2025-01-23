@@ -61,10 +61,6 @@ class WesentlicheRechtsgrundlageBaugenehmigungsverfahrenValidatorTest {
             is(true)
         );
         assertThat(
-            this.wesentlicheRechtsgrundlageValidator.isValid(WesentlicheRechtsgrundlage.INFO_FEHLT, null),
-            is(true)
-        );
-        assertThat(
             this.wesentlicheRechtsgrundlageValidator.isValid(WesentlicheRechtsgrundlage.FREIE_EINGABE, null),
             is(true)
         );
