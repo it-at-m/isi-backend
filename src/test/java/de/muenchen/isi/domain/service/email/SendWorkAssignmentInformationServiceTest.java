@@ -4,9 +4,11 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 
+import de.muenchen.isi.domain.model.AbfragevarianteBauleitplanverfahrenModel;
 import de.muenchen.isi.domain.model.BauleitplanverfahrenModel;
 import de.muenchen.isi.domain.model.common.BearbeitendePersonModel;
 import de.muenchen.isi.domain.model.common.BearbeitungshistorieModel;
+import de.muenchen.isi.domain.model.common.SobonBerechnungModel;
 import de.muenchen.isi.domain.model.common.StadtbezirkModel;
 import de.muenchen.isi.domain.model.common.VerortungMultiPolygonModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
@@ -44,6 +46,7 @@ class SendWorkAssignmentInformationServiceTest {
         this.sendWorkAssignmentInformationService = new SendWorkAssignmentInformationService(
             "mailadress-receiver-sachbearbeitung",
             "mailadress-receiver-bedarfsmeldung",
+            "mailadress-receiver-sobon",
             mailSenderRepository,
             environment
         );
@@ -159,23 +162,40 @@ class SendWorkAssignmentInformationServiceTest {
 
     @Test
     void getReceiverFreigabe() {
-        var result = sendWorkAssignmentInformationService.getReceiver(null, StatusAbfrageEvents.FREIGABE);
+        final var abfrage = new BauleitplanverfahrenModel();
+        var result = sendWorkAssignmentInformationService.getReceiver(abfrage, StatusAbfrageEvents.FREIGABE);
         assertThat(result, is(List.of("mailadress-receiver-sachbearbeitung")));
     }
 
     @Test
     void getReceiverErneuteBearbeitung() {
-        var result = sendWorkAssignmentInformationService.getReceiver(null, StatusAbfrageEvents.ERNEUTE_BEARBEITUNG);
+        final var abfrage = new BauleitplanverfahrenModel();
+        var result = sendWorkAssignmentInformationService.getReceiver(abfrage, StatusAbfrageEvents.ERNEUTE_BEARBEITUNG);
         assertThat(result, is(List.of("mailadress-receiver-sachbearbeitung")));
     }
 
     @Test
     void getReceiverVerschickenDerStellungsnahme() {
+        // Ohne SoBoN
+        final var abfrage = new BauleitplanverfahrenModel();
         var result = sendWorkAssignmentInformationService.getReceiver(
-            null,
+            abfrage,
             StatusAbfrageEvents.VERSCHICKEN_DER_STELLUNGNAHME
         );
         assertThat(result, is(List.of("mailadress-receiver-bedarfsmeldung")));
+
+        // Mit SoBoN
+        final var sobonBerechnung = new SobonBerechnungModel();
+        sobonBerechnung.setIsASobonBerechnung(true);
+        final var abfragevariante = new AbfragevarianteBauleitplanverfahrenModel();
+        abfragevariante.setSobonBerechnung(sobonBerechnung);
+        abfrage.setAbfragevariantenBauleitplanverfahren(List.of(abfragevariante));
+        abfrage.setArtAbfrage(ArtAbfrage.BAULEITPLANVERFAHREN);
+        result = sendWorkAssignmentInformationService.getReceiver(
+            abfrage,
+            StatusAbfrageEvents.VERSCHICKEN_DER_STELLUNGNAHME
+        );
+        assertThat(result, is(List.of("mailadress-receiver-bedarfsmeldung", "mailadress-receiver-sobon")));
     }
 
     @Test
@@ -215,31 +235,66 @@ class SendWorkAssignmentInformationServiceTest {
 
     @Test
     void getReceiverSpeichernVonSozialinfrastrukturVersorgung() {
+        // Ohne SoBoN
+        final var abfrage = new BauleitplanverfahrenModel();
         var result = sendWorkAssignmentInformationService.getReceiver(
-            null,
+            abfrage,
             StatusAbfrageEvents.SPEICHERN_VON_SOZIALINFRASTRUKTUR_VERSORGUNG
         );
         assertThat(result, is(List.of("mailadress-receiver-sachbearbeitung", "mailadress-receiver-bedarfsmeldung")));
+
+        // Mit SoBoN
+        final var sobonBerechnung = new SobonBerechnungModel();
+        sobonBerechnung.setIsASobonBerechnung(true);
+        final var abfragevariante = new AbfragevarianteBauleitplanverfahrenModel();
+        abfragevariante.setSobonBerechnung(sobonBerechnung);
+        abfrage.setAbfragevariantenBauleitplanverfahren(List.of(abfragevariante));
+        abfrage.setArtAbfrage(ArtAbfrage.BAULEITPLANVERFAHREN);
+        result = sendWorkAssignmentInformationService.getReceiver(
+            abfrage,
+            StatusAbfrageEvents.SPEICHERN_VON_SOZIALINFRASTRUKTUR_VERSORGUNG
+        );
+        assertThat(
+            result,
+            is(
+                List.of(
+                    "mailadress-receiver-sachbearbeitung",
+                    "mailadress-receiver-bedarfsmeldung",
+                    "mailadress-receiver-sobon"
+                )
+            )
+        );
     }
 
     @Test
     void getReceiverOther() {
-        var result = sendWorkAssignmentInformationService.getReceiver(null, StatusAbfrageEvents.IN_BEARBEITUNG_SETZEN);
+        final var abfrage = new BauleitplanverfahrenModel();
+
+        var result = sendWorkAssignmentInformationService.getReceiver(
+            abfrage,
+            StatusAbfrageEvents.IN_BEARBEITUNG_SETZEN
+        );
         assertThat(result, is(nullValue()));
 
-        result = sendWorkAssignmentInformationService.getReceiver(null, StatusAbfrageEvents.ABBRECHEN);
+        result = sendWorkAssignmentInformationService.getReceiver(abfrage, StatusAbfrageEvents.ABBRECHEN);
         assertThat(result, is(nullValue()));
 
         result = sendWorkAssignmentInformationService.getReceiver(
-            null,
+            abfrage,
             StatusAbfrageEvents.ZURUECK_AN_ABFRAGEERSTELLUNG
         );
         assertThat(result, is(nullValue()));
 
-        result = sendWorkAssignmentInformationService.getReceiver(null, StatusAbfrageEvents.KEINE_BEARBEITUNG_NOETIG);
+        result = sendWorkAssignmentInformationService.getReceiver(
+            abfrage,
+            StatusAbfrageEvents.KEINE_BEARBEITUNG_NOETIG
+        );
         assertThat(result, is(nullValue()));
 
-        result = sendWorkAssignmentInformationService.getReceiver(null, StatusAbfrageEvents.ZURUECK_AN_SACHBEARBEITUNG);
+        result = sendWorkAssignmentInformationService.getReceiver(
+            abfrage,
+            StatusAbfrageEvents.ZURUECK_AN_SACHBEARBEITUNG
+        );
         assertThat(result, is(nullValue()));
     }
 
