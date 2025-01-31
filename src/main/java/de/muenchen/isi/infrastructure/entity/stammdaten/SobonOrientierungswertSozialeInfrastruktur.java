@@ -19,12 +19,14 @@ import lombok.ToString;
 @Entity
 @Table(
     uniqueConstraints = {
-        @UniqueConstraint(columnNames = { "gueltigAb", "einrichtungstyp", "altersklasse", "foerderartBezeichnung" }),
+        @UniqueConstraint(
+            columnNames = { "gueltigAb", "jahrBezeichnung", "einrichtungstyp", "altersklasse", "foerderartBezeichnung" }
+        ),
     },
     indexes = {
         @Index(
             name = "sobon_orientwrt_soz_infra_jahr_einr_typ_altkl_frdrtBzchng_index",
-            columnList = "gueltigAb, einrichtungstyp, altersklasse, foerderartBezeichnung"
+            columnList = "gueltigAb, jahrBezeichnung, einrichtungstyp, altersklasse, foerderartBezeichnung"
         ),
     }
 )
@@ -35,6 +37,9 @@ public class SobonOrientierungswertSozialeInfrastruktur extends BaseEntity {
 
     @Column(nullable = false)
     private LocalDate gueltigAb;
+
+    @Column(nullable = false)
+    private String jahrBezeichnung;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -47,36 +52,36 @@ public class SobonOrientierungswertSozialeInfrastruktur extends BaseEntity {
     @Column(nullable = false)
     private String foerderartBezeichnung;
 
-    @Column(precision = 20, scale = 15, nullable = false)
+    @Column(precision = 20, scale = 15)
     private BigDecimal einwohnerJahr1NachErsterstellung;
 
-    @Column(precision = 20, scale = 15, nullable = false)
+    @Column(precision = 20, scale = 15)
     private BigDecimal einwohnerJahr2NachErsterstellung;
 
-    @Column(precision = 20, scale = 15, nullable = false)
+    @Column(precision = 20, scale = 15)
     private BigDecimal einwohnerJahr3NachErsterstellung;
 
-    @Column(precision = 20, scale = 15, nullable = false)
+    @Column(precision = 20, scale = 15)
     private BigDecimal einwohnerJahr4NachErsterstellung;
 
-    @Column(precision = 20, scale = 15, nullable = false)
+    @Column(precision = 20, scale = 15)
     private BigDecimal einwohnerJahr5NachErsterstellung;
 
-    @Column(precision = 20, scale = 15, nullable = false)
+    @Column(precision = 20, scale = 15)
     private BigDecimal einwohnerJahr6NachErsterstellung;
 
-    @Column(precision = 20, scale = 15, nullable = false)
+    @Column(precision = 20, scale = 15)
     private BigDecimal einwohnerJahr7NachErsterstellung;
 
-    @Column(precision = 20, scale = 15, nullable = false)
+    @Column(precision = 20, scale = 15)
     private BigDecimal einwohnerJahr8NachErsterstellung;
 
-    @Column(precision = 20, scale = 15, nullable = false)
+    @Column(precision = 20, scale = 15)
     private BigDecimal einwohnerJahr9NachErsterstellung;
 
-    @Column(precision = 20, scale = 15, nullable = false)
+    @Column(precision = 20, scale = 15)
     private BigDecimal einwohnerJahr10NachErsterstellung;
 
-    @Column(precision = 20, scale = 15, nullable = false)
+    @Column(precision = 20, scale = 15)
     private BigDecimal stammwertArbeitsgruppe;
 }

@@ -26,4 +26,22 @@ public interface SobonOrientierungswertSozialeInfrastrukturRepository
         final String foerderartBezeichnung,
         final LocalDate gueltigAb
     );
+
+    /**
+     * Findet den Eintrag mit einem bestimmten Einrichtungstyp, Altersklasse und Förderart-Bezeichnung,
+     * bei dem das Gültigkeitsdatum vor oder am angegebenen Datum liegt, und sortiert die Ergebnisse nach dem
+     * Gültigkeitsdatum absteigend.
+     *
+     * @param jahrBezeichnung       Das Gültigkeitsdatum, vor oder am dem gesucht werden soll (einschließlich).
+     * @param einrichtungstyp       Der Einrichtungstyp, nach dem gesucht werden soll.
+     * @param foerderartBezeichnung Die Bezeichnung der Förderart, nach der gesucht werden soll.
+     * @return Ein {@link Optional} mit dem gefundenen Eintrag, oder ein leeres {@link Optional}, falls kein Eintrag gefunden wurde.
+     */
+    Optional<
+        SobonOrientierungswertSozialeInfrastruktur
+    > findFirstByEinrichtungstypAndFoerderartBezeichnungAndJahrBezeichnung(
+        InfrastruktureinrichtungTyp einrichtungstyp,
+        String foerderartBezeichnung,
+        String jahrBezeichnung
+    );
 }

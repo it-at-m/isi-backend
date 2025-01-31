@@ -15,6 +15,9 @@ public class SobonOrientierungswertSozialeInfrastrukturCsv {
     @CsvCustomBindByName(column = "JAHR", converter = JahrConverter.class, required = true)
     private LocalDate gueltigAb;
 
+    @CsvBindByName(column = "JAHR_BEZEICHNUNG", required = true)
+    private String jahrBezeichnung;
+
     @CsvBindByName(column = "EINRICHTUNGSTYP", required = true)
     private InfrastruktureinrichtungTyp einrichtungstyp;
 
@@ -24,36 +27,36 @@ public class SobonOrientierungswertSozialeInfrastrukturCsv {
     @CsvBindByName(column = "FOERDERART_BEZEICHNUNG", required = true)
     private String foerderartBezeichnung;
 
-    @CsvBindByName(column = "JAHR_1_NACH_ERSTELLUNG", required = true)
+    @CsvBindByName(column = "JAHR_1_NACH_ERSTELLUNG", required = false)
     private BigDecimal einwohnerJahr1NachErsterstellung;
 
-    @CsvBindByName(column = "JAHR_2_NACH_ERSTELLUNG", required = true)
+    @CsvBindByName(column = "JAHR_2_NACH_ERSTELLUNG", required = false)
     private BigDecimal einwohnerJahr2NachErsterstellung;
 
-    @CsvBindByName(column = "JAHR_3_NACH_ERSTELLUNG", required = true)
+    @CsvBindByName(column = "JAHR_3_NACH_ERSTELLUNG", required = false)
     private BigDecimal einwohnerJahr3NachErsterstellung;
 
-    @CsvBindByName(column = "JAHR_4_NACH_ERSTELLUNG", required = true)
+    @CsvBindByName(column = "JAHR_4_NACH_ERSTELLUNG", required = false)
     private BigDecimal einwohnerJahr4NachErsterstellung;
 
-    @CsvBindByName(column = "JAHR_5_NACH_ERSTELLUNG", required = true)
+    @CsvBindByName(column = "JAHR_5_NACH_ERSTELLUNG", required = false)
     private BigDecimal einwohnerJahr5NachErsterstellung;
 
-    @CsvBindByName(column = "JAHR_6_NACH_ERSTELLUNG", required = true)
+    @CsvBindByName(column = "JAHR_6_NACH_ERSTELLUNG", required = false)
     private BigDecimal einwohnerJahr6NachErsterstellung;
 
-    @CsvBindByName(column = "JAHR_7_NACH_ERSTELLUNG", required = true)
+    @CsvBindByName(column = "JAHR_7_NACH_ERSTELLUNG", required = false)
     private BigDecimal einwohnerJahr7NachErsterstellung;
 
-    @CsvBindByName(column = "JAHR_8_NACH_ERSTELLUNG", required = true)
+    @CsvBindByName(column = "JAHR_8_NACH_ERSTELLUNG", required = false)
     private BigDecimal einwohnerJahr8NachErsterstellung;
 
-    @CsvBindByName(column = "JAHR_9_NACH_ERSTELLUNG", required = true)
+    @CsvBindByName(column = "JAHR_9_NACH_ERSTELLUNG", required = false)
     private BigDecimal einwohnerJahr9NachErsterstellung;
 
-    @CsvBindByName(column = "JAHR_10_NACH_ERSTELLUNG", required = true)
+    @CsvBindByName(column = "JAHR_10_NACH_ERSTELLUNG", required = false)
     private BigDecimal einwohnerJahr10NachErsterstellung;
 
-    @CsvBindByName(column = "STAMMWERT_ARBEITSGRUPPE", required = true)
+    @CsvBindByName(column = "STAMMWERT_ARBEITSGRUPPE", required = false)
     private BigDecimal stammwertArbeitsgruppe;
 }
