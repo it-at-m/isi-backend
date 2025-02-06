@@ -32,6 +32,9 @@ public class SobonBerechnungValidatorTest {
         dto.setSobonOrientierungswertJahrSobonUrsaechlich(null);
         assertThat(validator.isValid(dto, null), is(false));
 
+        dto.setSobonOrientierungswertJahrSobonUrsaechlich(SobonOrientierungswertJahr.UNSPECIFIED);
+        assertThat(validator.isValid(dto, null), is(false));
+
         dto.setIsASobonBerechnung(false);
         dto.setSobonFoerdermix(null);
         dto.setSobonOrientierungswertJahrSobonUrsaechlich(null);
