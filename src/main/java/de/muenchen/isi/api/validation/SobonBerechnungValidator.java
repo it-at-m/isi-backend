@@ -1,6 +1,7 @@
 package de.muenchen.isi.api.validation;
 
 import de.muenchen.isi.api.dto.common.SobonBerechnungDto;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import lombok.NoArgsConstructor;
@@ -26,9 +27,11 @@ public class SobonBerechnungValidator implements ConstraintValidator<SobonBerech
                 (StringUtils.isEmpty(sobonBerechnung.getSobonFoerdermix().getBezeichnungJahr()) &&
                     StringUtils.isEmpty(sobonBerechnung.getSobonFoerdermix().getBezeichnung()) &&
                     CollectionUtils.isEmpty(sobonBerechnung.getSobonFoerdermix().getFoerderarten()));
-            boolean isSobonOrientierungswertJahrSobonUrsaechlichEmpty = ObjectUtils.isEmpty(
-                sobonBerechnung.getSobonOrientierungswertJahrSobonUrsaechlich()
-            );
+            boolean isSobonOrientierungswertJahrSobonUrsaechlichEmpty =
+                ObjectUtils.isEmpty(sobonBerechnung.getSobonOrientierungswertJahrSobonUrsaechlich()) ||
+                sobonBerechnung
+                    .getSobonOrientierungswertJahrSobonUrsaechlich()
+                    .equals(SobonOrientierungswertJahr.UNSPECIFIED);
 
             return (
                 (isSobonBerechnung != isFoerdermixEmtpy) &&
