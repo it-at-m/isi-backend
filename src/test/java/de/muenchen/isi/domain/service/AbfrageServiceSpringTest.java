@@ -55,8 +55,8 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 @ExtendWith(MockitoExtension.class)
 @SpringBootTest(classes = { IsiBackendApplication.class }, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -70,13 +70,13 @@ class AbfrageServiceSpringTest {
     @Autowired
     private AbfrageRepository abfrageRepository;
 
-    @MockBean
+    @MockitoBean
     private CalculationService calculationService;
 
-    @MockBean
+    @MockitoBean
     private ReportingdataTransferService reportingdataTransferService;
 
-    @MockBean
+    @MockitoBean
     private EtlInterfaceService etlInterfaceService;
 
     @Test

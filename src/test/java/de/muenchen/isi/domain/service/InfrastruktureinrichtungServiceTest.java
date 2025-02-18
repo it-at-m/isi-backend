@@ -44,8 +44,8 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.transaction.annotation.Transactional;
 
 @ExtendWith(MockitoExtension.class)
@@ -63,7 +63,7 @@ class InfrastruktureinrichtungServiceTest {
     @Autowired
     private InfrastruktureinrichtungRepository infrastruktureinrichtungRepository;
 
-    @MockBean
+    @MockitoBean
     private EtlInterfaceService etlInterfaceService;
 
     @BeforeEach

@@ -17,7 +17,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.UuidGenerator;
 import org.hibernate.search.engine.backend.types.Sortable;
@@ -39,7 +38,6 @@ public abstract class BaseEntity {
     @Column(length = 36)
     @Id
     @GeneratedValue(generator = "uuid")
-    @GenericGenerator(name = "uuid", type = org.hibernate.id.uuid.UuidGenerator.class)
     @UuidGenerator(style = UuidGenerator.Style.RANDOM)
     @JdbcTypeCode(SqlTypes.VARCHAR)
     private UUID id;
