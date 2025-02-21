@@ -5,6 +5,8 @@ spring:
     uris: ${spring.jpa.properties.hibernate.search.backend.hosts}
     username: ${spring.jpa.properties.hibernate.search.backend.username}
     password: ${spring.jpa.properties.hibernate.search.backend.password}
+    connction-timeout: ${spring.jpa.properties.hibernate.search.backend.connection_timeout = 1000}
+    read-timeout: ${spring.jpa.properties.hibernate.search.backend.read_timeout = 30000}
 
 server:
   shutdown: "graceful"
