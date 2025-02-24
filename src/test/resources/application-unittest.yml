@@ -38,6 +38,8 @@ spring:
             hosts: localhost:9200
             username: elastic
             password: changeme
+            connection-timeout: 10
+            socket-timeout: 30
 
   mail:
     host: dummy.smtp.unittest.com
