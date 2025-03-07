@@ -7,6 +7,7 @@ import de.muenchen.isi.infrastructure.adapter.search.StringSuggestionBinder;
 import de.muenchen.isi.infrastructure.entity.common.Adresse;
 import de.muenchen.isi.infrastructure.entity.common.BearbeitendePerson;
 import de.muenchen.isi.infrastructure.entity.common.VerortungMultiPolygon;
+import de.muenchen.isi.infrastructure.entity.enums.EntityType;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtBaulicheNutzung;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonVerfahrensgrundsaetzeJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVerfahren;
@@ -56,6 +57,10 @@ import org.hibernate.type.SqlTypes;
 @Indexed
 public class Bauvorhaben extends BaseEntity {
 
+    @GenericField
+    @Enumerated(EnumType.STRING)
+    private EntityType entityType = EntityType.BAUVORHABEN;
+
     @Embedded
     @AttributeOverrides(
         {
@@ -103,6 +108,7 @@ public class Bauvorhaben extends BaseEntity {
         name = "bauvorhabenNummer" + SearchwordSuggesterRepository.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
         valueBinder = @ValueBinderRef(type = StringSuggestionBinder.class)
     )
+    @GenericField
     @Column
     private String bauvorhabenNummer;
 
@@ -120,6 +126,7 @@ public class Bauvorhaben extends BaseEntity {
         name = "bebauungsplannummer" + SearchwordSuggesterRepository.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
         valueBinder = @ValueBinderRef(type = StringSuggestionBinder.class)
     )
+    @GenericField
     @Column
     private String bebauungsplannummer;
 

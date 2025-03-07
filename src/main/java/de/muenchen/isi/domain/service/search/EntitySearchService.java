@@ -4,18 +4,25 @@ import com.ibm.icu.text.BreakIterator;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.mapper.SearchDomainMapper;
 import de.muenchen.isi.domain.model.enums.SortAttribute;
+import de.muenchen.isi.domain.model.search.request.CompositeEntityProjection;
 import de.muenchen.isi.domain.model.search.request.SearchQueryAndSortingModel;
 import de.muenchen.isi.domain.model.search.response.SearchResultsModel;
 import de.muenchen.isi.infrastructure.adapter.search.StadtbezirkNummerValueBridge;
 import de.muenchen.isi.infrastructure.entity.BaseEntity;
+import de.muenchen.isi.infrastructure.entity.enums.EntityType;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVerfahren;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusInfrastruktureinrichtung;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
 import de.muenchen.isi.security.AuthenticationUtils;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -75,23 +82,20 @@ public class EntitySearchService {
         final var filterAttributeMap = new HashMap<String, List<?>>();
         this.prepareFilterGemeinsameAttribute(filterAttributeMap, searchQueryAndSortingInformation);
 
-        // Erstellen der Hibernate-Search-Suchquery
+        // Erstellung der Hibernate-Search-Suchquery mit Projection
         final var searchQueryOptions = Search.session(entityManager)
             .search(searchableEntities)
+            .select(f -> f.composite().as(CompositeEntityProjection.class))
             .where((function, root) -> {
                 // Verarbeitung der angepassten Suchquery
                 root.add(searchPredicateFactory -> {
                     if (StringUtils.isNotEmpty(adaptedSearchQuery)) {
-                        // Suche entsprechend der gegebenen Query.
                         return function
-                            // https://docs.jboss.org/hibernate/stable/search/reference/en-US/html_single/#search-dsl-predicate-simple-query-string
                             .simpleQueryString()
                             .fields(searchableAttributes)
                             .matching(adaptedSearchQuery)
-                            // Es werden nur die Entitäten als Suchergebnis zurückgegeben, welche alle Suchwörter der Suchquery beinhalten.
                             .defaultOperator(BooleanOperator.AND);
                     } else {
-                        // Zurückgeben aller Entitäten.
                         return function.matchAll();
                     }
                 });
@@ -104,8 +108,6 @@ public class EntitySearchService {
                         function
                     );
             })
-            // Sortierung der Suchergebnisse.
-            // https://docs.jboss.org/hibernate/stable/search/reference/en-US/html_single/#query-sorting
             .sort(function -> {
                 final var sortBy = searchQueryAndSortingInformation.getSortBy();
                 final var sortOrder = searchQueryAndSortingInformation.getSortOrder();
@@ -117,7 +119,42 @@ public class EntitySearchService {
                     return function.field("lastModifiedDateTime").order(sortOrder);
                 }
             });
-        return this.executeSearchQuery(searchQueryAndSortingInformation, searchQueryOptions);
+
+        return this.executeProjectionSearchQuery(searchQueryAndSortingInformation, searchQueryOptions);
+    }
+
+    protected SearchResultsModel executeProjectionSearchQuery(
+        final SearchQueryAndSortingModel searchQueryAndSortingInformation,
+        final SearchQueryOptionsStep searchQueryOptions
+    ) {
+        final Integer paginationOffset = calculateOffsetOrNullIfNoPaginationRequired(searchQueryAndSortingInformation);
+
+        final SearchResult<CompositeEntityProjection> searchResult = ObjectUtils.isNotEmpty(paginationOffset)
+            ? searchQueryOptions.fetch(paginationOffset, searchQueryAndSortingInformation.getPageSize())
+            : searchQueryOptions.fetchAll();
+
+        // Map the projection hits to your SearchResultsModel using a mapper method.
+        final var searchResults = searchResult
+            .hits()
+            .stream()
+            .map(searchDomainMapper::projectionToSearchResultModel)
+            .collect(Collectors.toList());
+
+        final var model = new SearchResultsModel();
+        model.setSearchResults(searchResults);
+        if (ObjectUtils.isNotEmpty(paginationOffset)) {
+            final long numberOfTotalHits = searchResult.total().hitCount();
+            final var numberOfPages = calculateNumberOfPages(
+                numberOfTotalHits,
+                searchQueryAndSortingInformation.getPageSize()
+            );
+            model.setNumberOfPages(numberOfPages);
+            final var currentPage = searchQueryAndSortingInformation.getPage() > numberOfPages
+                ? numberOfPages
+                : searchQueryAndSortingInformation.getPage();
+            model.setPage(currentPage);
+        }
+        return model;
     }
 
     /**

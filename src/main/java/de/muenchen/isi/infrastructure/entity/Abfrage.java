@@ -4,6 +4,7 @@ import de.muenchen.isi.infrastructure.adapter.search.StatusAbfrageSuggestionBind
 import de.muenchen.isi.infrastructure.adapter.search.StatusAbfrageValueBridge;
 import de.muenchen.isi.infrastructure.adapter.search.StringSuggestionBinder;
 import de.muenchen.isi.infrastructure.entity.common.Bearbeitungshistorie;
+import de.muenchen.isi.infrastructure.entity.enums.EntityType;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.repository.search.SearchwordSuggesterRepository;
@@ -45,6 +46,10 @@ import org.hibernate.search.mapper.pojo.mapping.definition.annotation.NonStandar
 @EqualsAndHashCode(callSuper = true)
 @Table(indexes = { @Index(name = "abfrage_name_index", columnList = "name") })
 public abstract class Abfrage extends BaseEntity {
+
+    @GenericField
+    @Enumerated(EnumType.STRING)
+    private EntityType entityType = EntityType.ABFRAGE;
 
     @KeywordField(name = "name_sort", sortable = Sortable.YES, normalizer = "lowercase")
     @FullTextField

@@ -5,6 +5,7 @@ import de.muenchen.isi.domain.exception.GeometryOperationFailedException;
 import de.muenchen.isi.domain.model.common.MultiPolygonGeometryModel;
 import de.muenchen.isi.domain.model.common.Wgs84Model;
 import de.muenchen.isi.domain.model.enums.SearchResultType;
+import de.muenchen.isi.domain.model.search.request.CompositeEntityProjection;
 import de.muenchen.isi.domain.model.search.response.AbfrageSearchResultModel;
 import de.muenchen.isi.domain.model.search.response.BauvorhabenSearchResultModel;
 import de.muenchen.isi.domain.model.search.response.InfrastruktureinrichtungSearchResultModel;
@@ -18,6 +19,7 @@ import de.muenchen.isi.infrastructure.entity.WeiteresVerfahren;
 import de.muenchen.isi.infrastructure.entity.common.Adresse;
 import de.muenchen.isi.infrastructure.entity.common.MultiPolygonGeometry;
 import de.muenchen.isi.infrastructure.entity.common.VerortungMultiPolygon;
+import de.muenchen.isi.infrastructure.entity.enums.EntityType;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Infrastruktureinrichtung;
 import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
@@ -226,4 +228,64 @@ public abstract class SearchDomainMapper {
     }
 
     public abstract MultiPolygonGeometryModel entity2Model(final MultiPolygonGeometry entity);
+
+    /**
+     * Dispatcher-Methode: Je nach EntityType der Projection wird das passende Mapping angewendet.
+     */
+    public SearchResultModel projectionToSearchResultModel(CompositeEntityProjection projection) {
+        if (projection.type() == EntityType.INFRASTRUKTUREINRICHTUNG) {
+            return projectionToInfrastruktureinrichtungSearchResultModel(projection);
+        } else if (projection.type() == EntityType.BAUVORHABEN) {
+            return projectionToBauvorhabenSearchResultModel(projection);
+        } else if (projection.type() == EntityType.ABFRAGE) {
+            return projectionToAbfrageSearchResultModel(projection);
+        } else {
+            throw new IllegalArgumentException("Unsupported entity type: " + projection.type());
+        }
+    }
+
+    /**
+     * Mapping für Infrastruktureinrichtung aus der Projection.
+     * Felder wie 'infrastruktureinrichtungTyp' oder 'zugehoerigesBauvorhaben' sind in der Projection nicht enthalten
+     * und werden hier daher nicht abgebildet.
+     */
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "nameEinrichtung", source = "nameEinrichtung")
+    @Mapping(target = "coordinate", ignore = true)
+    @Mapping(target = "zugehoerigesBauvorhaben", ignore = true)
+    public abstract InfrastruktureinrichtungSearchResultModel projectionToInfrastruktureinrichtungSearchResultModel(
+        CompositeEntityProjection projection
+    );
+
+    /**
+     * Mapping für Bauvorhaben aus der Projection.
+     * Felder wie 'stadtbezirke', 'grundstuecksgroesse' und 'umgriff' fehlen in der Projection und werden ignoriert.
+     */
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "nameVorhaben", source = "nameVorhaben")
+    @Mapping(target = "standVerfahren", source = "stand_verfahren_filter")
+    @Mapping(target = "coordinate", ignore = true)
+    @Mapping(target = "stadtbezirke", ignore = true)
+    @Mapping(target = "umgriff", ignore = true)
+    @Mapping(target = "grundstuecksgroesse", ignore = true)
+    public abstract BauvorhabenSearchResultModel projectionToBauvorhabenSearchResultModel(
+        CompositeEntityProjection projection
+    );
+
+    /**
+     * Mapping für Abfrage aus der Projection.
+     * Felder wie 'artAbfrage', 'stadtbezirke', 'fristBearbeitung' und 'bauvorhaben' sind in der Projection nicht enthalten
+     * und werden daher ignoriert.
+     */
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "name", source = "name")
+    @Mapping(target = "statusAbfrage", source = "statusAbfrage_filter")
+    @Mapping(target = "createdDateTime", source = "createdDateTime")
+    @Mapping(target = "standVerfahren", source = "stand_verfahren_filter")
+    @Mapping(target = "coordinate", ignore = true)
+    @Mapping(target = "stadtbezirke", ignore = true)
+    @Mapping(target = "artAbfrage", ignore = true)
+    @Mapping(target = "fristBearbeitung", ignore = true)
+    @Mapping(target = "bauvorhaben", ignore = true)
+    public abstract AbfrageSearchResultModel projectionToAbfrageSearchResultModel(CompositeEntityProjection projection);
 }
