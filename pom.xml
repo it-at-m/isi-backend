@@ -50,7 +50,7 @@
         <spring.statemachine>4.0.0</spring.statemachine>
         <apache.tika.version>3.1.0</apache.tika.version>
         <hibernate.search>7.2.2.Final</hibernate.search>
-        <icu4j.version>76.1</icu4j.version>
+        <icu4j.version>77.1</icu4j.version>
         <openapi-generator-version>7.11.0</openapi-generator-version>
     </properties>
 
