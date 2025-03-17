@@ -13,6 +13,7 @@ import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
 import de.muenchen.isi.infrastructure.entity.common.Adresse;
 import de.muenchen.isi.infrastructure.entity.common.BearbeitendePerson;
 import de.muenchen.isi.infrastructure.entity.common.VerortungPoint;
+import de.muenchen.isi.infrastructure.entity.common.Wgs84;
 import de.muenchen.isi.infrastructure.entity.enums.EntityType;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusInfrastruktureinrichtung;
@@ -58,10 +59,6 @@ import org.hibernate.type.SqlTypes;
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 public abstract class Infrastruktureinrichtung extends BaseEntity {
-
-    @GenericField
-    @Enumerated(EnumType.STRING)
-    private EntityType entityType = EntityType.INFRASTRUKTUREINRICHTUNG;
 
     @Embedded
     @AttributeOverrides(
@@ -131,6 +128,13 @@ public abstract class Infrastruktureinrichtung extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private StatusInfrastruktureinrichtung status;
+
+    @Column
+    private String zugehoerigesBauvorhaben;
+
+    @Column
+    @IndexedEmbedded
+    private Wgs84 infrastruktureinrichtungCoordinate;
 
     @Column(precision = 10, scale = 2)
     private BigDecimal flaecheGesamtgrundstueck;

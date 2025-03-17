@@ -4,6 +4,7 @@
  */
 package de.muenchen.isi.domain.model.infrastruktureinrichtung;
 
+import de.muenchen.isi.infrastructure.entity.enums.EntityType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -14,6 +15,7 @@ import lombok.ToString;
 public class GrundschuleModel extends InfrastruktureinrichtungModel {
 
     // TBD: Grundschulsprengel
+    private EntityType entityType = EntityType.GRUNDSCHULE;
 
     public SchuleModel schule;
 }

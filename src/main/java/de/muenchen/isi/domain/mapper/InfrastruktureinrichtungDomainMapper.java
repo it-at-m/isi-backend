@@ -6,6 +6,7 @@ package de.muenchen.isi.domain.mapper;
 
 import de.muenchen.isi.configuration.MapstructConfiguration;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
+import de.muenchen.isi.domain.model.enums.SearchResultType;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.GrundschuleModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.GsNachmittagBetreuungModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.HausFuerKinderModel;
@@ -13,6 +14,7 @@ import de.muenchen.isi.domain.model.infrastruktureinrichtung.Infrastruktureinric
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.KindergartenModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.KinderkrippeModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.MittelschuleModel;
+import de.muenchen.isi.infrastructure.entity.enums.EntityType;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Grundschule;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.GsNachmittagBetreuung;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.HausFuerKinder;
@@ -50,6 +52,8 @@ public abstract class InfrastruktureinrichtungDomainMapper {
     public abstract InfrastruktureinrichtungModel entity2Model(final Infrastruktureinrichtung entity);
 
     @Mapping(target = "bauvorhaben", ignore = true)
+    @Mapping(target = "zugehoerigesBauvorhaben", ignore = true)
+    @Mapping(target = "infrastruktureinrichtungCoordinate", ignore = true)
     @SubclassMapping(source = GrundschuleModel.class, target = Grundschule.class)
     @SubclassMapping(source = GsNachmittagBetreuungModel.class, target = GsNachmittagBetreuung.class)
     @SubclassMapping(source = HausFuerKinderModel.class, target = HausFuerKinder.class)

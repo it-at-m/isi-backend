@@ -4,6 +4,7 @@
  */
 package de.muenchen.isi.domain.model.infrastruktureinrichtung;
 
+import de.muenchen.isi.infrastructure.entity.enums.EntityType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -12,6 +13,8 @@ import lombok.ToString;
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 public class MittelschuleModel extends InfrastruktureinrichtungModel {
+
+    private EntityType entityType = EntityType.MITTELSCHULE;
 
     // TBD: Mittelschulsprengel
 

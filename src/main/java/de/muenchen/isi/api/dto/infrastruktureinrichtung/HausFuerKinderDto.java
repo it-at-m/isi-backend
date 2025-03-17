@@ -4,7 +4,9 @@
  */
 package de.muenchen.isi.api.dto.infrastruktureinrichtung;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import de.muenchen.isi.api.validation.WohnungsnahePlaetzeValid;
+import de.muenchen.isi.infrastructure.entity.enums.EntityType;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Einrichtungstraeger;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -15,6 +17,9 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 @WohnungsnahePlaetzeValid
 public class HausFuerKinderDto extends InfrastruktureinrichtungDto {
+
+    @JsonIgnore
+    private EntityType entityType = EntityType.HAUS_FUER_KINDER;
 
     private Integer anzahlKinderkrippePlaetze;
 

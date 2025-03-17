@@ -1,12 +1,15 @@
 package de.muenchen.isi.infrastructure.entity;
 
 import de.muenchen.isi.infrastructure.adapter.listener.BauvorhabenListener;
+import de.muenchen.isi.infrastructure.adapter.search.SobonRelevantValueBridge;
 import de.muenchen.isi.infrastructure.adapter.search.StandVerfahrenSuggestionBinder;
 import de.muenchen.isi.infrastructure.adapter.search.StandVerfahrenValueBridge;
 import de.muenchen.isi.infrastructure.adapter.search.StringSuggestionBinder;
 import de.muenchen.isi.infrastructure.entity.common.Adresse;
 import de.muenchen.isi.infrastructure.entity.common.BearbeitendePerson;
+import de.muenchen.isi.infrastructure.entity.common.MultiPolygonGeometry;
 import de.muenchen.isi.infrastructure.entity.common.VerortungMultiPolygon;
+import de.muenchen.isi.infrastructure.entity.common.Wgs84;
 import de.muenchen.isi.infrastructure.entity.enums.EntityType;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtBaulicheNutzung;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonVerfahrensgrundsaetzeJahr;
@@ -57,7 +60,6 @@ import org.hibernate.type.SqlTypes;
 @Indexed
 public class Bauvorhaben extends BaseEntity {
 
-    @GenericField
     @Enumerated(EnumType.STRING)
     private EntityType entityType = EntityType.BAUVORHABEN;
 
@@ -103,12 +105,20 @@ public class Bauvorhaben extends BaseEntity {
     @Column(length = 1000)
     private String standVerfahrenFreieEingabe;
 
+    @Column
+    @IndexedEmbedded
+    private Wgs84 bauvorhabenCoordinate;
+
+    @IndexedEmbedded
+    @Column(columnDefinition = "jsonb")
+    @JdbcTypeCode(SqlTypes.JSON)
+    private MultiPolygonGeometry umgriff;
+
     @FullTextField
     @NonStandardField(
         name = "bauvorhabenNummer" + SearchwordSuggesterRepository.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
         valueBinder = @ValueBinderRef(type = StringSuggestionBinder.class)
     )
-    @GenericField
     @Column
     private String bauvorhabenNummer;
 
@@ -126,7 +136,6 @@ public class Bauvorhaben extends BaseEntity {
         name = "bebauungsplannummer" + SearchwordSuggesterRepository.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
         valueBinder = @ValueBinderRef(type = StringSuggestionBinder.class)
     )
-    @GenericField
     @Column
     private String bebauungsplannummer;
 
@@ -136,6 +145,7 @@ public class Bauvorhaben extends BaseEntity {
     @Column(length = 1000)
     private String anmerkung;
 
+    @FullTextField(valueBridge = @ValueBridgeRef(type = SobonRelevantValueBridge.class))
     @GenericField(name = "sobon_relevant_filter")
     @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "varchar(255) not null check (sobon_relevant != 'UNSPECIFIED')")

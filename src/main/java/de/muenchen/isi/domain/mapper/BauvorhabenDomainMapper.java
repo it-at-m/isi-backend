@@ -4,6 +4,7 @@ import de.muenchen.isi.configuration.MapstructConfiguration;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.model.BauvorhabenModel;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
+import de.muenchen.isi.infrastructure.entity.enums.EntityType;
 import de.muenchen.isi.infrastructure.repository.AbfragevarianteRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
@@ -27,6 +28,9 @@ public abstract class BauvorhabenDomainMapper {
     public abstract BauvorhabenModel entity2Model(final Bauvorhaben bauvorhaben);
 
     @Mapping(target = "relevanteAbfragevariante", ignore = true)
+    @Mapping(target = "bauvorhabenCoordinate", ignore = true)
+    @Mapping(target = "umgriff", ignore = true)
+    @Mapping(target = "entityType", constant = EntityType.Values.BAUVORHABEN)
     public abstract Bauvorhaben model2Entity(final BauvorhabenModel bauvorhabenModel) throws EntityNotFoundException;
 
     @AfterMapping

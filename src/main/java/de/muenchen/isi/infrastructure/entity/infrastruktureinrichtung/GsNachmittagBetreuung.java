@@ -4,6 +4,7 @@
  */
 package de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung;
 
+import de.muenchen.isi.infrastructure.entity.enums.EntityType;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtGsNachmittagBetreuung;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Einrichtungstraeger;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
@@ -24,6 +25,9 @@ import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
 @EqualsAndHashCode(callSuper = true)
 @Indexed
 public class GsNachmittagBetreuung extends Infrastruktureinrichtung {
+
+    @Enumerated(EnumType.STRING)
+    private EntityType entityType = EntityType.GS_NACHMITTAG_BETREUUNG;
 
     // TBD: Grundschulsprengel
 

@@ -5,6 +5,8 @@ import de.muenchen.isi.infrastructure.adapter.search.StandVerfahrenValueBridge;
 import de.muenchen.isi.infrastructure.adapter.search.StringSuggestionBinder;
 import de.muenchen.isi.infrastructure.entity.common.Adresse;
 import de.muenchen.isi.infrastructure.entity.common.VerortungMultiPolygon;
+import de.muenchen.isi.infrastructure.entity.common.Wgs84;
+import de.muenchen.isi.infrastructure.entity.enums.EntityType;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonVerfahrensgrundsaetzeJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVerfahren;
@@ -47,6 +49,9 @@ import org.hibernate.type.SqlTypes;
 @Indexed
 public class Bauleitplanverfahren extends Abfrage {
 
+    @Enumerated(EnumType.STRING)
+    private EntityType entityType = EntityType.BAULEITPLANVERFAHREN;
+
     @FullTextField
     @NonStandardField(
         name = "bebauungsplannummer" + SearchwordSuggesterRepository.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
@@ -86,11 +91,16 @@ public class Bauleitplanverfahren extends Abfrage {
     @Column(columnDefinition = "jsonb")
     private VerortungMultiPolygon verortung;
 
+    @Column
+    @IndexedEmbedded
+    private Wgs84 abfrageCoordinate;
+
     @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "bauleitplanverfahren_id")
     private List<Dokument> dokumente;
 
     @Column(nullable = false)
+    @IndexedEmbedded
     private LocalDate fristBearbeitung;
 
     @Enumerated(EnumType.STRING)

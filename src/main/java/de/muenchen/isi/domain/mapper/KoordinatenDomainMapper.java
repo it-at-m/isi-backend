@@ -1,8 +1,10 @@
 package de.muenchen.isi.domain.mapper;
 
 import de.muenchen.isi.configuration.MapstructConfiguration;
+import de.muenchen.isi.domain.model.common.MultiPolygonGeometryModel;
 import de.muenchen.isi.domain.model.common.UtmModel;
 import de.muenchen.isi.domain.model.common.Wgs84Model;
+import de.muenchen.isi.infrastructure.entity.common.MultiPolygonGeometry;
 import de.muenchen.isi.infrastructure.entity.common.Utm;
 import de.muenchen.isi.infrastructure.entity.common.Wgs84;
 import org.mapstruct.Mapper;
@@ -16,4 +18,6 @@ public interface KoordinatenDomainMapper {
     UtmModel entity2Model(final Utm entity);
 
     Utm model2Entity(final UtmModel model);
+
+    MultiPolygonGeometry model2Entity(final MultiPolygonGeometryModel entity);
 }

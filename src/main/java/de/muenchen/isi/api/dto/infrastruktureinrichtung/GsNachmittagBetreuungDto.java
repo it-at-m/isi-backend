@@ -4,7 +4,9 @@
  */
 package de.muenchen.isi.api.dto.infrastruktureinrichtung;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import de.muenchen.isi.api.validation.WohnungsnahePlaetzeValid;
+import de.muenchen.isi.infrastructure.entity.enums.EntityType;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtGsNachmittagBetreuung;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Einrichtungstraeger;
 import jakarta.validation.constraints.Min;
@@ -18,6 +20,9 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 @WohnungsnahePlaetzeValid
 public class GsNachmittagBetreuungDto extends InfrastruktureinrichtungDto {
+
+    @JsonIgnore
+    private EntityType entityType = EntityType.GS_NACHMITTAG_BETREUUNG;
 
     private ArtGsNachmittagBetreuung artGsNachmittagBetreuung;
 

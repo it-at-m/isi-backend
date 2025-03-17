@@ -5,6 +5,8 @@ import de.muenchen.isi.infrastructure.adapter.search.StandVerfahrenValueBridge;
 import de.muenchen.isi.infrastructure.adapter.search.StringSuggestionBinder;
 import de.muenchen.isi.infrastructure.entity.common.Adresse;
 import de.muenchen.isi.infrastructure.entity.common.VerortungMultiPolygon;
+import de.muenchen.isi.infrastructure.entity.common.Wgs84;
+import de.muenchen.isi.infrastructure.entity.enums.EntityType;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonVerfahrensgrundsaetzeJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVerfahren;
@@ -46,6 +48,9 @@ import org.hibernate.type.SqlTypes;
 @EqualsAndHashCode(callSuper = true)
 @Indexed
 public class WeiteresVerfahren extends Abfrage {
+
+    @Enumerated(EnumType.STRING)
+    private EntityType entityType = EntityType.WEITERES_VERFAHREN;
 
     @Column
     private String aktenzeichenProLbk;
@@ -89,11 +94,16 @@ public class WeiteresVerfahren extends Abfrage {
     @Column(columnDefinition = "jsonb")
     private VerortungMultiPolygon verortung;
 
+    @Column
+    @IndexedEmbedded
+    private Wgs84 abfrageCoordinate;
+
     @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "weiteres_verfahren_id")
     private List<Dokument> dokumente;
 
     @Column(nullable = false)
+    @IndexedEmbedded
     private LocalDate fristBearbeitung;
 
     @Enumerated(EnumType.STRING)

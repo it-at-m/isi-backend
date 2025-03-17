@@ -32,6 +32,7 @@ import de.muenchen.isi.infrastructure.entity.Baugenehmigungsverfahren;
 import de.muenchen.isi.infrastructure.entity.Bauleitplanverfahren;
 import de.muenchen.isi.infrastructure.entity.WeiteresVerfahren;
 import de.muenchen.isi.infrastructure.entity.common.BearbeitendePerson;
+import de.muenchen.isi.infrastructure.entity.enums.EntityType;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.repository.BauvorhabenRepository;
 import java.util.ArrayList;
@@ -75,6 +76,7 @@ public abstract class AbfrageDomainMapper {
     @SubclassMapping(source = BaugenehmigungsverfahrenModel.class, target = Baugenehmigungsverfahren.class)
     @SubclassMapping(source = WeiteresVerfahrenModel.class, target = WeiteresVerfahren.class)
     @Mapping(target = "bauvorhaben", ignore = true)
+    @Mapping(target = "bauvorhabenId", ignore = true)
     public abstract Abfrage model2Entity(final AbfrageModel model) throws EntityNotFoundException;
 
     @AfterMapping
@@ -119,6 +121,8 @@ public abstract class AbfrageDomainMapper {
             @Mapping(target = "abfragevariantenBauleitplanverfahren", ignore = true),
             @Mapping(target = "abfragevariantenSachbearbeitungBauleitplanverfahren", ignore = true),
             @Mapping(target = "bearbeitungshistorie", ignore = true),
+            @Mapping(target = "abfrageCoordinate", ignore = true),
+            @Mapping(target = "entityType", ignore = true),
         }
     )
     public abstract BauleitplanverfahrenModel request2Model(
@@ -170,6 +174,8 @@ public abstract class AbfrageDomainMapper {
             @Mapping(target = "abfragevariantenBaugenehmigungsverfahren", ignore = true),
             @Mapping(target = "abfragevariantenSachbearbeitungBaugenehmigungsverfahren", ignore = true),
             @Mapping(target = "bearbeitungshistorie", ignore = true),
+            @Mapping(target = "abfrageCoordinate", ignore = true),
+            @Mapping(target = "entityType", ignore = true),
         }
     )
     public abstract BaugenehmigungsverfahrenModel request2Model(
@@ -221,6 +227,8 @@ public abstract class AbfrageDomainMapper {
             @Mapping(target = "abfragevariantenWeiteresVerfahren", ignore = true),
             @Mapping(target = "abfragevariantenSachbearbeitungWeiteresVerfahren", ignore = true),
             @Mapping(target = "bearbeitungshistorie", ignore = true),
+            @Mapping(target = "abfrageCoordinate", ignore = true),
+            @Mapping(target = "entityType", ignore = true),
         }
     )
     public abstract WeiteresVerfahrenModel request2Model(

@@ -6,10 +6,12 @@ import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.FileHandlingFailedException;
 import de.muenchen.isi.domain.exception.FileHandlingWithS3FailedException;
+import de.muenchen.isi.domain.exception.GeometryOperationFailedException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.ReportingException;
 import de.muenchen.isi.domain.exception.UserRoleNotAllowedException;
 import de.muenchen.isi.domain.mapper.AbfrageDomainMapper;
+import de.muenchen.isi.domain.mapper.KoordinatenDomainMapper;
 import de.muenchen.isi.domain.model.AbfrageModel;
 import de.muenchen.isi.domain.model.BaugenehmigungsverfahrenModel;
 import de.muenchen.isi.domain.model.BauleitplanverfahrenModel;
@@ -32,6 +34,9 @@ import de.muenchen.isi.domain.model.abfrageStartBearbeitung.Baugenehmigungsverfa
 import de.muenchen.isi.domain.model.abfrageStartBearbeitung.BauleitplanverfahrenStartBearbeitungModel;
 import de.muenchen.isi.domain.model.abfrageStartBearbeitung.WeiteresVerfahrenStartBearbeitungModel;
 import de.muenchen.isi.domain.model.calculation.LangfristigerBedarfModel;
+import de.muenchen.isi.domain.model.common.AdresseModel;
+import de.muenchen.isi.domain.model.common.VerortungMultiPolygonModel;
+import de.muenchen.isi.domain.model.common.Wgs84Model;
 import de.muenchen.isi.domain.service.calculation.CalculationService;
 import de.muenchen.isi.domain.service.common.BearbeitungshistorieService;
 import de.muenchen.isi.domain.service.etlInterface.EtlInterfaceService;
@@ -39,6 +44,7 @@ import de.muenchen.isi.domain.service.filehandling.DokumentService;
 import de.muenchen.isi.domain.service.reporting.ReportingdataTransferService;
 import de.muenchen.isi.infrastructure.entity.Abfrage;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
+import de.muenchen.isi.infrastructure.entity.common.Wgs84;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.repository.AbfrageRepository;
@@ -65,6 +71,8 @@ public class AbfrageService {
 
     private final AbfrageDomainMapper abfrageDomainMapper;
 
+    private final KoordinatenDomainMapper koordinatenDomainMapper;
+
     private final BauvorhabenRepository bauvorhabenRepository;
 
     private final DokumentService dokumentService;
@@ -84,6 +92,8 @@ public class AbfrageService {
     private final BauratendateiInputService bauratendateiInputService;
 
     private final BearbeitungshistorieService bearbeitungshistorieService;
+
+    private final KoordinatenService koordinatenService;
 
     private final EtlInterfaceService etlInterfaceService;
 
@@ -132,6 +142,9 @@ public class AbfrageService {
         // Befüllen der bauratendateiInputBasis für jede Abfragevariante
         bauratendateiInputService.setBauratendateiInputForEachAbfragevariante(abfrage, bedarfeForAbfragevarianten);
         var entity = this.abfrageDomainMapper.model2Entity(abfrage);
+        if (abfrage.getBauvorhaben() != null) {
+            entity.setBauvorhabenId(abfrage.getBauvorhaben());
+        }
         try {
             entity = this.abfrageRepository.saveAndFlush(entity);
         } catch (final ObjectOptimisticLockingFailureException exception) {
@@ -208,6 +221,11 @@ public class AbfrageService {
         BauleitplanverfahrenAngelegtModel abfrage,
         BauleitplanverfahrenModel originalAbfrageDb
     ) throws FileHandlingFailedException, FileHandlingWithS3FailedException {
+        if (hasAdressCoordinate(abfrage.getAdresse()) || hasVerortungCoordinate(abfrage.getVerortung())) {
+            originalAbfrageDb.setAbfrageCoordinate(
+                getCoordinateFromAdresseOrVerortung(abfrage.getAdresse(), abfrage.getVerortung())
+            );
+        }
         dokumentService.deleteDokumenteFromOriginalDokumentenListWhichAreMissingInParameterAdaptedDokumentenListe(
             abfrage.getDokumente(),
             originalAbfrageDb.getDokumente()
@@ -589,5 +607,55 @@ public class AbfrageService {
                 this.bauvorhabenRepository.save(bauvorhaben);
             }
         }
+    }
+
+    /**
+     * Gibt die Koordinaten einer Adresse oder Verortung zurück. Wenn die Adresse Koordinaten hat,
+     * wird die Koordinate mithilfe des {@link KoordinatenDomainMapper} extrahiert. Wenn die Verortung Koordinaten hat,
+     * wird der Schwerpunkt des Mehrfachpolygons mithilfe des {@link KoordinatenService} ermittelt.
+     *
+     * @param adresse               Die Adresse, deren Koordinate zurückgegeben werden soll.
+     * @param verortungMultiPolygon Die Verortung, deren Koordinate zurückgegeben werden soll.
+     * @return Ein WGS84Model-Objekt mit den extrahierten Koordinaten oder {@code null}, wenn keine Koordinaten vorhanden sind.
+     */
+    private Wgs84Model getCoordinateFromAdresseOrVerortung(
+        final AdresseModel adresse,
+        final VerortungMultiPolygonModel verortungMultiPolygon
+    ) {
+        if (hasAdressCoordinate(adresse)) {
+            return adresse.getCoordinate();
+        } else if (hasVerortungCoordinate(verortungMultiPolygon)) {
+            try {
+                return this.koordinatenDomainMapper.entity2Model(
+                        koordinatenService.getMultiPolygonCentroid(
+                            this.koordinatenDomainMapper.model2Entity(verortungMultiPolygon.getMultiPolygon())
+                        )
+                    );
+            } catch (GeometryOperationFailedException exception) {
+                var message = "Ermitteln des Schwerpunktes ist fehlgeschlagen.";
+                log.error(message);
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Überprüft, ob die übergebene Adresse eine Koordinate hat.
+     *
+     * @param adresse Die Adresse, deren Koordinate überprüft werden soll.
+     * @return {@code true}, wenn die Adresse eine Koordinate hat, ansonsten {@code false}.
+     */
+    public boolean hasAdressCoordinate(final AdresseModel adresse) {
+        return ObjectUtils.isNotEmpty(adresse) && ObjectUtils.isNotEmpty(adresse.getCoordinate());
+    }
+
+    /**
+     * Überprüft, ob die übergebene Verortung ein Mehrfachpolygon mit Koordinaten hat.
+     *
+     * @param verortung Die Verortung, deren Mehrfachpolygon-Koordinaten überprüft werden sollen.
+     * @return {@code true}, wenn die Verortung Koordinaten hat, ansonsten {@code false}.
+     */
+    private boolean hasVerortungCoordinate(final VerortungMultiPolygonModel verortung) {
+        return ObjectUtils.isNotEmpty(verortung) && ObjectUtils.isNotEmpty(verortung.getMultiPolygon());
     }
 }

@@ -5,10 +5,14 @@ import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.ReportingException;
 import de.muenchen.isi.domain.mapper.InfrastruktureinrichtungDomainMapper;
+import de.muenchen.isi.domain.mapper.KoordinatenDomainMapper;
 import de.muenchen.isi.domain.model.BauvorhabenModel;
+import de.muenchen.isi.domain.model.common.AdresseModel;
+import de.muenchen.isi.domain.model.common.Wgs84Model;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.InfrastruktureinrichtungModel;
 import de.muenchen.isi.domain.service.etlInterface.EtlInterfaceService;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
+import de.muenchen.isi.infrastructure.entity.common.Wgs84;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Infrastruktureinrichtung;
 import de.muenchen.isi.infrastructure.repository.BauvorhabenRepository;
 import de.muenchen.isi.infrastructure.repository.InfrastruktureinrichtungRepository;
@@ -29,6 +33,8 @@ public class InfrastruktureinrichtungService {
     private final InfrastruktureinrichtungRepository infrastruktureinrichtungRepository;
 
     private final InfrastruktureinrichtungDomainMapper infrastruktureinrichtungDomainMapper;
+
+    private final KoordinatenDomainMapper koordinatenDomainMapper;
 
     private final KommentarRepository kommentarRepository;
 
@@ -66,6 +72,29 @@ public class InfrastruktureinrichtungService {
     ) throws OptimisticLockingException, EntityNotFoundException, ReportingException {
         Infrastruktureinrichtung entity =
             this.infrastruktureinrichtungDomainMapper.model2Entity(infrastruktureinrichtung);
+        if (infrastruktureinrichtung.getBauvorhaben() != null) {
+            final var bauvorhaben = bauvorhabenRepository.findById(infrastruktureinrichtung.getBauvorhaben());
+            if (bauvorhaben.isPresent()) {
+                entity.setZugehoerigesBauvorhaben(bauvorhaben.get().getNameVorhaben());
+            }
+        }
+        if (hasAdressCoordinate(infrastruktureinrichtung.getAdresse())) {
+            entity.setInfrastruktureinrichtungCoordinate(
+                koordinatenDomainMapper.model2Entity(infrastruktureinrichtung.getAdresse().getCoordinate())
+            );
+        } else if (
+            ObjectUtils.isNotEmpty(infrastruktureinrichtung.getVerortung()) &&
+            ObjectUtils.isNotEmpty(infrastruktureinrichtung.getVerortung().getPoint())
+        ) {
+            final var wgs84 = new Wgs84();
+            wgs84.setLongitude(
+                infrastruktureinrichtung.getVerortung().getPoint().getCoordinates().get(0).doubleValue()
+            );
+            wgs84.setLatitude(infrastruktureinrichtung.getVerortung().getPoint().getCoordinates().get(1).doubleValue());
+            entity.setInfrastruktureinrichtungCoordinate(wgs84);
+        } else {
+            entity.setInfrastruktureinrichtungCoordinate(null);
+        }
         try {
             entity = this.infrastruktureinrichtungRepository.saveAndFlush(entity);
             etlInterfaceService.etlInterfaceTriggerInfrastruktureinrichtungJob(entity.getId());
@@ -136,5 +165,15 @@ public class InfrastruktureinrichtungService {
             log.error(message);
             throw new EntityIsReferencedException(message);
         }
+    }
+
+    /**
+     * Überprüft, ob die übergebene Adresse eine Koordinate hat.
+     *
+     * @param adresse Die Adresse, deren Koordinate überprüft werden soll.
+     * @return {@code true}, wenn die Adresse eine Koordinate hat, ansonsten {@code false}.
+     */
+    private boolean hasAdressCoordinate(final AdresseModel adresse) {
+        return ObjectUtils.isNotEmpty(adresse) && ObjectUtils.isNotEmpty(adresse.getCoordinate());
     }
 }

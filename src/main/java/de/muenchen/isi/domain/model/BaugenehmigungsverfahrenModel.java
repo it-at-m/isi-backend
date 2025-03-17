@@ -2,7 +2,9 @@ package de.muenchen.isi.domain.model;
 
 import de.muenchen.isi.domain.model.common.AdresseModel;
 import de.muenchen.isi.domain.model.common.VerortungMultiPolygonModel;
+import de.muenchen.isi.domain.model.common.Wgs84Model;
 import de.muenchen.isi.domain.model.filehandling.DokumentModel;
+import de.muenchen.isi.infrastructure.entity.enums.EntityType;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVerfahren;
 import java.time.LocalDate;
 import java.util.List;
@@ -16,6 +18,8 @@ import org.apache.commons.lang3.StringUtils;
 @EqualsAndHashCode(callSuper = true)
 public class BaugenehmigungsverfahrenModel extends AbfrageModel {
 
+    private EntityType entityType = EntityType.BAUGENEHMIGUNGSVERFAHREN;
+
     private String aktenzeichenProLbk;
 
     private String bebauungsplannummer;
@@ -27,6 +31,8 @@ public class BaugenehmigungsverfahrenModel extends AbfrageModel {
     private AdresseModel adresse;
 
     private VerortungMultiPolygonModel verortung;
+
+    private Wgs84Model abfrageCoordinate;
 
     private List<DokumentModel> dokumente;
 

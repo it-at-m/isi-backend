@@ -19,6 +19,7 @@ import de.muenchen.isi.domain.mapper.AdresseDomainMapperImpl;
 import de.muenchen.isi.domain.mapper.BauvorhabenDomainMapper;
 import de.muenchen.isi.domain.mapper.BauvorhabenDomainMapperImpl;
 import de.muenchen.isi.domain.mapper.DokumentDomainMapperImpl;
+import de.muenchen.isi.domain.mapper.KoordinatenDomainMapper;
 import de.muenchen.isi.domain.mapper.KoordinatenDomainMapperImpl;
 import de.muenchen.isi.domain.mapper.SearchDomainMapper;
 import de.muenchen.isi.domain.mapper.SearchDomainMapperImpl;
@@ -42,6 +43,7 @@ import de.muenchen.isi.infrastructure.entity.common.GlobalCounter;
 import de.muenchen.isi.infrastructure.entity.common.Stadtbezirk;
 import de.muenchen.isi.infrastructure.entity.common.VerortungMultiPolygon;
 import de.muenchen.isi.infrastructure.entity.enums.CounterType;
+import de.muenchen.isi.infrastructure.entity.enums.EntityType;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVerfahren;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
@@ -88,6 +90,8 @@ public class BauvorhabenServiceTest {
 
     private final SearchDomainMapper searchDomainMapper = new SearchDomainMapperImpl();
 
+    private KoordinatenDomainMapper koordinatenDomainMapper;
+
     private BauvorhabenService bauvorhabenService;
 
     @Mock
@@ -112,6 +116,9 @@ public class BauvorhabenServiceTest {
     private DokumentService dokumentService;
 
     @Mock
+    private KoordinatenService koordinatenService;
+
+    @Mock
     private KommentarRepository kommentarRepository;
 
     @Mock
@@ -124,6 +131,7 @@ public class BauvorhabenServiceTest {
         field.set(bauvorhabenDomainMapper, abfragevarianteRepository);
         this.bauvorhabenService = new BauvorhabenService(
             this.bauvorhabenDomainMapper,
+            this.koordinatenDomainMapper,
             this.searchDomainMapper,
             this.bauvorhabenRepository,
             this.abfrageRepository,
@@ -133,7 +141,8 @@ public class BauvorhabenServiceTest {
             this.abfrageService,
             this.dokumentService,
             this.kommentarRepository,
-            this.etlInterfaceService
+            this.etlInterfaceService,
+            this.koordinatenService
         );
 
         Mockito.reset(
@@ -187,35 +196,35 @@ public class BauvorhabenServiceTest {
         final List<AbfrageSearchResultModel> expectedAbfrageList = new ArrayList<>();
 
         var abfrageListElementModel1 = new AbfrageSearchResultModel();
-        abfrageListElementModel1.setType(SearchResultType.ABFRAGE);
+        abfrageListElementModel1.setType(EntityType.ABFRAGE);
         abfrageListElementModel1.setArtAbfrage(ArtAbfrage.BAULEITPLANVERFAHREN);
         abfrageListElementModel1.setId(abfrage1.getId());
         abfrageListElementModel1.setName(abfrage1.getName());
         abfrageListElementModel1.setStatusAbfrage(abfrage1.getStatusAbfrage());
         abfrageListElementModel1.setFristBearbeitung(abfrage1.getFristBearbeitung());
-        abfrageListElementModel1.setType(SearchResultType.ABFRAGE);
+        abfrageListElementModel1.setType(EntityType.ABFRAGE);
         abfrageListElementModel1.setBauvorhaben(bauvorhabenId);
         expectedAbfrageList.add(abfrageListElementModel1);
 
         var abfrageListElementModel2 = new AbfrageSearchResultModel();
-        abfrageListElementModel2.setType(SearchResultType.ABFRAGE);
+        abfrageListElementModel2.setType(EntityType.ABFRAGE);
         abfrageListElementModel2.setArtAbfrage(ArtAbfrage.BAULEITPLANVERFAHREN);
         abfrageListElementModel2.setId(abfrage2.getId());
         abfrageListElementModel2.setName(abfrage2.getName());
         abfrageListElementModel2.setStatusAbfrage(abfrage2.getStatusAbfrage());
         abfrageListElementModel2.setFristBearbeitung(abfrage2.getFristBearbeitung());
-        abfrageListElementModel2.setType(SearchResultType.ABFRAGE);
+        abfrageListElementModel2.setType(EntityType.ABFRAGE);
         abfrageListElementModel2.setBauvorhaben(bauvorhabenId);
         expectedAbfrageList.add(abfrageListElementModel2);
 
         var abfrageListElementModel3 = new AbfrageSearchResultModel();
-        abfrageListElementModel3.setType(SearchResultType.ABFRAGE);
+        abfrageListElementModel3.setType(EntityType.ABFRAGE);
         abfrageListElementModel3.setArtAbfrage(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN);
         abfrageListElementModel3.setId(abfrage3.getId());
         abfrageListElementModel3.setName(abfrage3.getName());
         abfrageListElementModel3.setStatusAbfrage(abfrage3.getStatusAbfrage());
         abfrageListElementModel3.setFristBearbeitung(abfrage3.getFristBearbeitung());
-        abfrageListElementModel3.setType(SearchResultType.ABFRAGE);
+        abfrageListElementModel3.setType(EntityType.ABFRAGE);
         abfrageListElementModel3.setBauvorhaben(bauvorhabenId);
         expectedAbfrageList.add(abfrageListElementModel3);
 
@@ -286,7 +295,7 @@ public class BauvorhabenServiceTest {
         final List<InfrastruktureinrichtungSearchResultModel> expectedInfrastruktureinrichtungList = new ArrayList<>();
 
         var kinderkrippeListElementModel1 = new InfrastruktureinrichtungSearchResultModel();
-        kinderkrippeListElementModel1.setType(SearchResultType.INFRASTRUKTUREINRICHTUNG);
+        kinderkrippeListElementModel1.setType(EntityType.INFRASTRUKTUREINRICHTUNG);
         kinderkrippeListElementModel1.setId(kinderkrippe1.getId());
         kinderkrippeListElementModel1.setNameEinrichtung(kinderkrippe1.getNameEinrichtung());
         kinderkrippeListElementModel1.setInfrastruktureinrichtungTyp(kinderkrippe1.getInfrastruktureinrichtungTyp());
@@ -294,7 +303,7 @@ public class BauvorhabenServiceTest {
         expectedInfrastruktureinrichtungList.add(kinderkrippeListElementModel1);
 
         var kinderkrippeListElementModel2 = new InfrastruktureinrichtungSearchResultModel();
-        kinderkrippeListElementModel2.setType(SearchResultType.INFRASTRUKTUREINRICHTUNG);
+        kinderkrippeListElementModel2.setType(EntityType.INFRASTRUKTUREINRICHTUNG);
         kinderkrippeListElementModel2.setId(kinderkrippe2.getId());
         kinderkrippeListElementModel2.setNameEinrichtung(kinderkrippe2.getNameEinrichtung());
         kinderkrippeListElementModel2.setInfrastruktureinrichtungTyp(kinderkrippe2.getInfrastruktureinrichtungTyp());
@@ -302,7 +311,7 @@ public class BauvorhabenServiceTest {
         expectedInfrastruktureinrichtungList.add(kinderkrippeListElementModel2);
 
         var kindergartenListElementModel1 = new InfrastruktureinrichtungSearchResultModel();
-        kindergartenListElementModel1.setType(SearchResultType.INFRASTRUKTUREINRICHTUNG);
+        kindergartenListElementModel1.setType(EntityType.INFRASTRUKTUREINRICHTUNG);
         kindergartenListElementModel1.setId(kindergarten1.getId());
         kindergartenListElementModel1.setNameEinrichtung(kindergarten1.getNameEinrichtung());
         kindergartenListElementModel1.setInfrastruktureinrichtungTyp(kindergarten1.getInfrastruktureinrichtungTyp());
@@ -310,7 +319,7 @@ public class BauvorhabenServiceTest {
         expectedInfrastruktureinrichtungList.add(kindergartenListElementModel1);
 
         var kindergartenListElementModel2 = new InfrastruktureinrichtungSearchResultModel();
-        kindergartenListElementModel2.setType(SearchResultType.INFRASTRUKTUREINRICHTUNG);
+        kindergartenListElementModel2.setType(EntityType.INFRASTRUKTUREINRICHTUNG);
         kindergartenListElementModel2.setId(kindergarten2.getId());
         kindergartenListElementModel2.setNameEinrichtung(kindergarten2.getNameEinrichtung());
         kindergartenListElementModel2.setInfrastruktureinrichtungTyp(kindergarten2.getInfrastruktureinrichtungTyp());

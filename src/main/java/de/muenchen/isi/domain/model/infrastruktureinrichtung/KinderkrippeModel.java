@@ -4,6 +4,7 @@
  */
 package de.muenchen.isi.domain.model.infrastruktureinrichtung;
 
+import de.muenchen.isi.infrastructure.entity.enums.EntityType;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Einrichtungstraeger;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -13,6 +14,8 @@ import lombok.ToString;
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 public class KinderkrippeModel extends InfrastruktureinrichtungModel {
+
+    private EntityType entityType = EntityType.KINDERKRIPPE;
 
     private Integer anzahlKinderkrippePlaetze;
 

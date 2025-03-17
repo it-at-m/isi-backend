@@ -20,6 +20,8 @@ import de.muenchen.isi.infrastructure.entity.common.Adresse;
 import de.muenchen.isi.infrastructure.entity.common.MultiPolygonGeometry;
 import de.muenchen.isi.infrastructure.entity.common.VerortungMultiPolygon;
 import de.muenchen.isi.infrastructure.entity.enums.EntityType;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Infrastruktureinrichtung;
 import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
@@ -149,7 +151,7 @@ public abstract class SearchDomainMapper {
             model.setZugehoerigesBauvorhaben(entity.getBauvorhaben().getNameVorhaben());
         }
         if (hasAdressCoordinate(entity.getAdresse())) {
-            model.setCoordinate(koordinatenDomainMapper.entity2Model(entity.getAdresse().getCoordinate()));
+            model.setCoordinate(this.koordinatenDomainMapper.entity2Model(entity.getAdresse().getCoordinate()));
         } else if (
             ObjectUtils.isNotEmpty(entity.getVerortung()) && ObjectUtils.isNotEmpty(entity.getVerortung().getPoint())
         ) {
@@ -161,6 +163,156 @@ public abstract class SearchDomainMapper {
             model.setCoordinate(null);
         }
     }
+
+    /*
+     * Dispatcher-Methode: Je nach EntityType der Projection wird das passende Mapping angewendet.
+     */
+    public SearchResultModel projectionToSearchResultModel(CompositeEntityProjection projection) {
+        switch (projection.type().name()) {
+            case EntityType.Values.GRUNDSCHULE:
+                return projectionGrundschuleToInfrastruktureinrichtungSearchResultModel(projection);
+            case EntityType.Values.MITTELSCHULE:
+                return projectionMittelschuleToInfrastruktureinrichtungSearchResultModel(projection);
+            case EntityType.Values.GS_NACHMITTAG_BETREUUNG:
+                return projectionGsNachmittagsToInfrastruktureinrichtungSearchResultModel(projection);
+            case EntityType.Values.HAUS_FUER_KINDER:
+                return projectionHausFuerKinderToInfrastruktureinrichtungSearchResultModel(projection);
+            case EntityType.Values.KINDERGARTEN:
+                return projectionKindergartenToInfrastruktureinrichtungSearchResultModel(projection);
+            case EntityType.Values.KINDERKRIPPE:
+                return projectionKinderkrippeToInfrastruktureinrichtungSearchResultModel(projection);
+            case EntityType.Values.BAUVORHABEN:
+                return projectionToBauvorhabenSearchResultModel(projection);
+            case EntityType.Values.BAULEITPLANVERFAHREN:
+                return projectionBauleitplanverfahrenToAbfrageSearchResultModel(projection);
+            case EntityType.Values.BAUGENEHMIGUNGSVERFAHREN:
+                return projectionBaugenehmigungsverfahrenToAbfrageSearchResultModel(projection);
+            case EntityType.Values.WEITERES_VERFAHREN:
+                return projectionWeiteresVerfahrenToAbfrageSearchResultModel(projection);
+            default:
+                throw new IllegalArgumentException("Unsupported entity type: " + projection.type());
+        }
+    }
+
+    /**
+     * Mapping für Infrastruktureinrichtung KINDERGARTEN aus der Projection.
+     */
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "infrastruktureinrichtungTyp", constant = InfrastruktureinrichtungTyp.Values.KINDERGARTEN)
+    @Mapping(target = "type", constant = SearchResultType.Values.INFRASTRUKTUREINRICHTUNG)
+    @Mapping(source = "infrastruktureinrichtungCoordinate", target = "coordinate")
+    public abstract InfrastruktureinrichtungSearchResultModel projectionKindergartenToInfrastruktureinrichtungSearchResultModel(
+        CompositeEntityProjection projection
+    );
+
+    /**
+     * Mapping für Infrastruktureinrichtung KINDERKRIPPE aus der Projection.
+     */
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "infrastruktureinrichtungTyp", constant = InfrastruktureinrichtungTyp.Values.KINDERKRIPPE)
+    @Mapping(target = "type", constant = SearchResultType.Values.INFRASTRUKTUREINRICHTUNG)
+    @Mapping(source = "infrastruktureinrichtungCoordinate", target = "coordinate")
+    public abstract InfrastruktureinrichtungSearchResultModel projectionKinderkrippeToInfrastruktureinrichtungSearchResultModel(
+        CompositeEntityProjection projection
+    );
+
+    /**
+     * Mapping für Infrastruktureinrichtung GS_NACHMITTAG_BETREUUNG aus der Projection.
+     */
+    @Mapping(target = "id", source = "id")
+    @Mapping(
+        target = "infrastruktureinrichtungTyp",
+        constant = InfrastruktureinrichtungTyp.Values.GS_NACHMITTAG_BETREUUNG
+    )
+    @Mapping(target = "type", constant = SearchResultType.Values.INFRASTRUKTUREINRICHTUNG)
+    @Mapping(target = "nameEinrichtung", source = "nameEinrichtung")
+    @Mapping(source = "infrastruktureinrichtungCoordinate", target = "coordinate")
+    public abstract InfrastruktureinrichtungSearchResultModel projectionGsNachmittagsToInfrastruktureinrichtungSearchResultModel(
+        CompositeEntityProjection projection
+    );
+
+    /**
+     * Mapping für Infrastruktureinrichtung GRUNDSCHULE aus der Projection.
+     */
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "infrastruktureinrichtungTyp", constant = InfrastruktureinrichtungTyp.Values.GRUNDSCHULE)
+    @Mapping(target = "type", constant = SearchResultType.Values.INFRASTRUKTUREINRICHTUNG)
+    @Mapping(target = "nameEinrichtung", source = "nameEinrichtung")
+    @Mapping(source = "infrastruktureinrichtungCoordinate", target = "coordinate")
+    public abstract InfrastruktureinrichtungSearchResultModel projectionGrundschuleToInfrastruktureinrichtungSearchResultModel(
+        CompositeEntityProjection projection
+    );
+
+    /**
+     * Mapping für Infrastruktureinrichtung MITTELSCHULE aus der Projection.
+     */
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "infrastruktureinrichtungTyp", constant = InfrastruktureinrichtungTyp.Values.MITTELSCHULE)
+    @Mapping(target = "type", constant = SearchResultType.Values.INFRASTRUKTUREINRICHTUNG)
+    @Mapping(target = "nameEinrichtung", source = "nameEinrichtung")
+    @Mapping(source = "infrastruktureinrichtungCoordinate", target = "coordinate")
+    public abstract InfrastruktureinrichtungSearchResultModel projectionMittelschuleToInfrastruktureinrichtungSearchResultModel(
+        CompositeEntityProjection projection
+    );
+
+    /**
+     * Mapping für Infrastruktureinrichtung HAUS_FUER_KINDER aus der Projection.
+     */
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "infrastruktureinrichtungTyp", constant = InfrastruktureinrichtungTyp.Values.HAUS_FUER_KINDER)
+    @Mapping(target = "type", constant = SearchResultType.Values.INFRASTRUKTUREINRICHTUNG)
+    @Mapping(target = "nameEinrichtung", source = "nameEinrichtung")
+    @Mapping(source = "infrastruktureinrichtungCoordinate", target = "coordinate")
+    public abstract InfrastruktureinrichtungSearchResultModel projectionHausFuerKinderToInfrastruktureinrichtungSearchResultModel(
+        CompositeEntityProjection projection
+    );
+
+    /**
+     * Mapping für Bauvorhaben aus der Projection.
+     */
+    @Mapping(target = "type", constant = SearchResultType.Values.BAUVORHABEN)
+    @Mapping(target = "standVerfahren", source = "standVerfahren")
+    @Mapping(source = "bauvorhabenCoordinate", target = "coordinate")
+    @Mapping(source = "verortung.stadtbezirke", target = "stadtbezirke")
+    public abstract BauvorhabenSearchResultModel projectionToBauvorhabenSearchResultModel(
+        CompositeEntityProjection projection
+    );
+
+    /**
+     * Mapping für Abfrage aus der Projection.
+     */
+    @Mapping(target = "type", constant = SearchResultType.Values.ABFRAGE)
+    @Mapping(target = "artAbfrage", constant = ArtAbfrage.Values.BAULEITPLANVERFAHREN)
+    @Mapping(source = "abfrageCoordinate", target = "coordinate")
+    @Mapping(source = "verortung.stadtbezirke", target = "stadtbezirke")
+    @Mapping(source = "bauvorhabenId", target = "bauvorhaben")
+    public abstract AbfrageSearchResultModel projectionBauleitplanverfahrenToAbfrageSearchResultModel(
+        CompositeEntityProjection projection
+    );
+
+    /**
+     * Mapping für Abfrage aus der Projection.
+     */
+    @Mapping(target = "type", constant = SearchResultType.Values.ABFRAGE)
+    @Mapping(target = "artAbfrage", constant = ArtAbfrage.Values.BAUGENEHMIGUNGSVERFAHREN)
+    @Mapping(source = "abfrageCoordinate", target = "coordinate")
+    @Mapping(source = "verortung.stadtbezirke", target = "stadtbezirke")
+    @Mapping(source = "bauvorhabenId", target = "bauvorhaben")
+    public abstract AbfrageSearchResultModel projectionBaugenehmigungsverfahrenToAbfrageSearchResultModel(
+        CompositeEntityProjection projection
+    );
+
+    /**
+     * Mapping für Abfrage aus der Projection.
+     */
+    @Mapping(target = "type", constant = SearchResultType.Values.ABFRAGE)
+    @Mapping(target = "artAbfrage", constant = ArtAbfrage.Values.WEITERES_VERFAHREN)
+    @Mapping(source = "abfrageCoordinate", target = "coordinate")
+    @Mapping(source = "verortung.stadtbezirke", target = "stadtbezirke")
+    @Mapping(source = "bauvorhabenId", target = "bauvorhaben")
+    public abstract AbfrageSearchResultModel projectionWeiteresVerfahrenToAbfrageSearchResultModel(
+        CompositeEntityProjection projection
+    );
 
     public UUID map(final Bauvorhaben bauvorhaben) {
         return ObjectUtils.isEmpty(bauvorhaben) ? null : bauvorhaben.getId();
@@ -228,64 +380,4 @@ public abstract class SearchDomainMapper {
     }
 
     public abstract MultiPolygonGeometryModel entity2Model(final MultiPolygonGeometry entity);
-
-    /**
-     * Dispatcher-Methode: Je nach EntityType der Projection wird das passende Mapping angewendet.
-     */
-    public SearchResultModel projectionToSearchResultModel(CompositeEntityProjection projection) {
-        if (projection.type() == EntityType.INFRASTRUKTUREINRICHTUNG) {
-            return projectionToInfrastruktureinrichtungSearchResultModel(projection);
-        } else if (projection.type() == EntityType.BAUVORHABEN) {
-            return projectionToBauvorhabenSearchResultModel(projection);
-        } else if (projection.type() == EntityType.ABFRAGE) {
-            return projectionToAbfrageSearchResultModel(projection);
-        } else {
-            throw new IllegalArgumentException("Unsupported entity type: " + projection.type());
-        }
-    }
-
-    /**
-     * Mapping für Infrastruktureinrichtung aus der Projection.
-     * Felder wie 'infrastruktureinrichtungTyp' oder 'zugehoerigesBauvorhaben' sind in der Projection nicht enthalten
-     * und werden hier daher nicht abgebildet.
-     */
-    @Mapping(target = "id", source = "id")
-    @Mapping(target = "nameEinrichtung", source = "nameEinrichtung")
-    @Mapping(target = "coordinate", ignore = true)
-    @Mapping(target = "zugehoerigesBauvorhaben", ignore = true)
-    public abstract InfrastruktureinrichtungSearchResultModel projectionToInfrastruktureinrichtungSearchResultModel(
-        CompositeEntityProjection projection
-    );
-
-    /**
-     * Mapping für Bauvorhaben aus der Projection.
-     * Felder wie 'stadtbezirke', 'grundstuecksgroesse' und 'umgriff' fehlen in der Projection und werden ignoriert.
-     */
-    @Mapping(target = "id", source = "id")
-    @Mapping(target = "nameVorhaben", source = "nameVorhaben")
-    @Mapping(target = "standVerfahren", source = "stand_verfahren_filter")
-    @Mapping(target = "coordinate", ignore = true)
-    @Mapping(target = "stadtbezirke", ignore = true)
-    @Mapping(target = "umgriff", ignore = true)
-    @Mapping(target = "grundstuecksgroesse", ignore = true)
-    public abstract BauvorhabenSearchResultModel projectionToBauvorhabenSearchResultModel(
-        CompositeEntityProjection projection
-    );
-
-    /**
-     * Mapping für Abfrage aus der Projection.
-     * Felder wie 'artAbfrage', 'stadtbezirke', 'fristBearbeitung' und 'bauvorhaben' sind in der Projection nicht enthalten
-     * und werden daher ignoriert.
-     */
-    @Mapping(target = "id", source = "id")
-    @Mapping(target = "name", source = "name")
-    @Mapping(target = "statusAbfrage", source = "statusAbfrage_filter")
-    @Mapping(target = "createdDateTime", source = "createdDateTime")
-    @Mapping(target = "standVerfahren", source = "stand_verfahren_filter")
-    @Mapping(target = "coordinate", ignore = true)
-    @Mapping(target = "stadtbezirke", ignore = true)
-    @Mapping(target = "artAbfrage", ignore = true)
-    @Mapping(target = "fristBearbeitung", ignore = true)
-    @Mapping(target = "bauvorhaben", ignore = true)
-    public abstract AbfrageSearchResultModel projectionToAbfrageSearchResultModel(CompositeEntityProjection projection);
 }

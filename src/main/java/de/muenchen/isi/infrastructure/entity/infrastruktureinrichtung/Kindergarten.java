@@ -4,6 +4,7 @@
  */
 package de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung;
 
+import de.muenchen.isi.infrastructure.entity.enums.EntityType;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Einrichtungstraeger;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
 import jakarta.persistence.Column;
@@ -23,6 +24,9 @@ import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
 @EqualsAndHashCode(callSuper = true)
 @Indexed
 public class Kindergarten extends Infrastruktureinrichtung {
+
+    @Enumerated(EnumType.STRING)
+    private EntityType entityType = EntityType.KINDERGARTEN;
 
     @Column(nullable = false)
     private Integer anzahlKindergartenPlaetze;

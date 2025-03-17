@@ -4,10 +4,13 @@
  */
 package de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung;
 
+import de.muenchen.isi.infrastructure.entity.enums.EntityType;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -20,6 +23,9 @@ import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
 @EqualsAndHashCode(callSuper = true)
 @Indexed
 public class Mittelschule extends Infrastruktureinrichtung {
+
+    @Enumerated(EnumType.STRING)
+    private EntityType entityType = EntityType.MITTELSCHULE;
 
     // TBD: Mittelschulsprengel
 

@@ -2,7 +2,9 @@ package de.muenchen.isi.domain.model;
 
 import de.muenchen.isi.domain.model.common.AdresseModel;
 import de.muenchen.isi.domain.model.common.VerortungMultiPolygonModel;
+import de.muenchen.isi.domain.model.common.Wgs84Model;
 import de.muenchen.isi.domain.model.filehandling.DokumentModel;
+import de.muenchen.isi.infrastructure.entity.enums.EntityType;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonVerfahrensgrundsaetzeJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVerfahren;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
@@ -17,6 +19,8 @@ import org.apache.commons.lang3.StringUtils;
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 public class WeiteresVerfahrenModel extends AbfrageModel {
+
+    private EntityType entityType = EntityType.WEITERES_VERFAHREN;
 
     private String aktenzeichenProLbk;
 
@@ -33,6 +37,8 @@ public class WeiteresVerfahrenModel extends AbfrageModel {
     private AdresseModel adresse;
 
     private VerortungMultiPolygonModel verortung;
+
+    private Wgs84Model abfrageCoordinate;
 
     private List<DokumentModel> dokumente;
 

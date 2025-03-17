@@ -20,6 +20,7 @@ import de.muenchen.isi.domain.mapper.AbfragevarianteDomainMapperImpl;
 import de.muenchen.isi.domain.mapper.AdresseDomainMapperImpl;
 import de.muenchen.isi.domain.mapper.BauabschnittDomainMapperImpl;
 import de.muenchen.isi.domain.mapper.DokumentDomainMapperImpl;
+import de.muenchen.isi.domain.mapper.KoordinatenDomainMapper;
 import de.muenchen.isi.domain.mapper.KoordinatenDomainMapperImpl;
 import de.muenchen.isi.domain.mapper.VerortungDomainMapperImpl;
 import de.muenchen.isi.domain.model.AbfrageModel;
@@ -119,6 +120,8 @@ class AbfrageServiceTest {
 
     private AbfrageDomainMapper abfrageDomainMapper;
 
+    private KoordinatenDomainMapper koordinatenDomainMapper;
+
     @Mock
     private BauvorhabenRepository bauvorhabenRepository;
 
@@ -141,6 +144,9 @@ class AbfrageServiceTest {
     private BauratendateiInputService bauratendateiInputService;
 
     @Mock
+    private KoordinatenService koordinatenService;
+
+    @Mock
     private EtlInterfaceService etlInterfaceService;
 
     @BeforeEach
@@ -161,6 +167,7 @@ class AbfrageServiceTest {
         this.abfrageService = new AbfrageService(
             this.abfrageRepository,
             this.abfrageDomainMapper,
+            this.koordinatenDomainMapper,
             this.bauvorhabenRepository,
             this.dokumentService,
             this.authenticationUtils,
@@ -171,6 +178,7 @@ class AbfrageServiceTest {
             this.reportingdataTransferService,
             this.bauratendateiInputService,
             this.bearbeitungshistorieService,
+            this.koordinatenService,
             this.etlInterfaceService
         );
         Mockito.reset(
@@ -185,6 +193,7 @@ class AbfrageServiceTest {
             this.reportingdataTransferService,
             this.bauratendateiInputService,
             this.bearbeitungshistorieService,
+            this.koordinatenService,
             this.etlInterfaceService
         );
     }
