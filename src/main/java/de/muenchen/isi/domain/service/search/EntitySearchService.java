@@ -12,10 +12,12 @@ import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
 import de.muenchen.isi.security.AuthenticationUtils;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -88,7 +90,6 @@ public class EntitySearchService {
                             .simpleQueryString()
                             .fields(searchableAttributes)
                             .matching(adaptedSearchQuery)
-                            // Es werden nur die Entitäten als Suchergebnis zurückgegeben, welche alle Suchwörter der Suchquery beinhalten.
                             .defaultOperator(BooleanOperator.AND);
                     } else {
                         // Zurückgeben aller Entitäten.
@@ -104,6 +105,8 @@ public class EntitySearchService {
                         function
                     );
             })
+            // Setze eine Begrenzung für `trackTotalHits`, um Performance zu verbessern
+            .totalHitCountThreshold(1000) // Zählt max. 1000 Treffer, vermeidet lange Berechnungen
             // Sortierung der Suchergebnisse.
             // https://docs.jboss.org/hibernate/stable/search/reference/en-US/html_single/#query-sorting
             .sort(function -> {
@@ -117,6 +120,7 @@ public class EntitySearchService {
                     return function.field("lastModifiedDateTime").order(sortOrder);
                 }
             });
+
         return this.executeSearchQuery(searchQueryAndSortingInformation, searchQueryOptions);
     }
 
@@ -192,7 +196,7 @@ public class EntitySearchService {
                 root.add(
                     function
                         .bool()
-                        .must(b -> {
+                        .filter(b -> {
                             var theBool = b.bool();
                             for (final var value : valueList) {
                                 theBool = theBool.should(function.match().field(keyAttribute).matching(value));
@@ -482,16 +486,18 @@ public class EntitySearchService {
         final SearchQueryAndSortingModel searchQueryAndSortingInformation,
         final SearchQueryOptionsStep searchQueryOptions
     ) {
-        // Der Offset oder null falls keine Offsetberechnung möglich ist.
-        // Ist keine Offsetberechnung möglich, so wird auch keine paginierte Suche durchgeführt.
         final Integer paginationOffset = calculateOffsetOrNullIfNoPaginationRequired(searchQueryAndSortingInformation);
 
-        // Ausführen einer paginierten oder nicht-paginierten Suche.
-        final SearchResult<BaseEntity> searchResult = ObjectUtils.isNotEmpty(paginationOffset)
-            ? searchQueryOptions.fetch(paginationOffset, searchQueryAndSortingInformation.getPageSize())
-            : searchQueryOptions.fetchAll();
+        // **Maximale Größe auf 500 setzen, falls keine Paginierung definiert ist**
+        final int pageSize = ObjectUtils.isNotEmpty(paginationOffset)
+            ? searchQueryAndSortingInformation.getPageSize()
+            : Math.min(500, searchQueryAndSortingInformation.getPageSize());
 
-        // Suchergebnisse extrahieren und zurückgeben.
+        // **Setze ein Timeout von 10 Sekunden**
+        final SearchResult<BaseEntity> searchResult = searchQueryOptions
+            .failAfter(Duration.ofSeconds(30).toSeconds(), TimeUnit.SECONDS) // Timeout setzen
+            .fetch(paginationOffset != null ? paginationOffset : 0, pageSize);
+
         final var searchResults = searchResult
             .hits()
             .stream()
@@ -500,18 +506,14 @@ public class EntitySearchService {
 
         final var model = new SearchResultsModel();
         model.setSearchResults(searchResults);
-        if (ObjectUtils.isNotEmpty(paginationOffset)) {
+
+        if (paginationOffset != null) {
             final long numberOfTotalHits = searchResult.total().hitCount();
-            final var numberOfPages = calculateNumberOfPages(
-                numberOfTotalHits,
-                searchQueryAndSortingInformation.getPageSize()
-            );
+            final var numberOfPages = calculateNumberOfPages(numberOfTotalHits, pageSize);
             model.setNumberOfPages(numberOfPages);
-            final var currentPage = searchQueryAndSortingInformation.getPage() > numberOfPages
-                ? numberOfPages
-                : searchQueryAndSortingInformation.getPage();
-            model.setPage(currentPage);
+            model.setPage(Math.min(searchQueryAndSortingInformation.getPage(), numberOfPages));
         }
+
         return model;
     }
 
