@@ -1,9 +1,9 @@
 package de.muenchen.isi.infrastructure.entity;
 
 import de.muenchen.isi.infrastructure.adapter.listener.BauvorhabenListener;
+import de.muenchen.isi.infrastructure.adapter.search.MultiPolygonGeometryValueBridge;
 import de.muenchen.isi.infrastructure.adapter.search.SobonRelevantValueBridge;
 import de.muenchen.isi.infrastructure.adapter.search.StandVerfahrenSuggestionBinder;
-import de.muenchen.isi.infrastructure.adapter.search.StandVerfahrenValueBridge;
 import de.muenchen.isi.infrastructure.adapter.search.StringSuggestionBinder;
 import de.muenchen.isi.infrastructure.entity.common.Adresse;
 import de.muenchen.isi.infrastructure.entity.common.BearbeitendePerson;
@@ -61,6 +61,7 @@ import org.hibernate.type.SqlTypes;
 public class Bauvorhaben extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
+    @GenericField
     private EntityType entityType = EntityType.BAUVORHABEN;
 
     @Embedded
@@ -90,11 +91,11 @@ public class Bauvorhaben extends BaseEntity {
     private String nameVorhaben;
 
     @Column(precision = 10, scale = 2)
+    @GenericField
     private BigDecimal grundstuecksgroesse;
 
-    @FullTextField(valueBridge = @ValueBridgeRef(type = StandVerfahrenValueBridge.class))
     @NonStandardField(
-        name = "standVerfahren" + SearchwordSuggesterRepository.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
+        name = "stand_verfahren_filter" + SearchwordSuggesterRepository.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
         valueBinder = @ValueBinderRef(type = StandVerfahrenSuggestionBinder.class)
     )
     @GenericField(name = "stand_verfahren_filter")
@@ -106,10 +107,16 @@ public class Bauvorhaben extends BaseEntity {
     private String standVerfahrenFreieEingabe;
 
     @Column
-    @IndexedEmbedded
+    @GenericField
+    @AttributeOverrides(
+        {
+            @AttributeOverride(name = "latitude", column = @Column(name = "search_result_latitude")),
+            @AttributeOverride(name = "longitude", column = @Column(name = "search_result_longitude")),
+        }
+    )
     private Wgs84 bauvorhabenCoordinate;
 
-    @IndexedEmbedded
+    @GenericField(valueBridge = @ValueBridgeRef(type = MultiPolygonGeometryValueBridge.class))
     @Column(columnDefinition = "jsonb")
     @JdbcTypeCode(SqlTypes.JSON)
     private MultiPolygonGeometry umgriff;

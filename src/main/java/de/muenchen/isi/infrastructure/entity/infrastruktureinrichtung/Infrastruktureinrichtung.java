@@ -14,7 +14,6 @@ import de.muenchen.isi.infrastructure.entity.common.Adresse;
 import de.muenchen.isi.infrastructure.entity.common.BearbeitendePerson;
 import de.muenchen.isi.infrastructure.entity.common.VerortungPoint;
 import de.muenchen.isi.infrastructure.entity.common.Wgs84;
-import de.muenchen.isi.infrastructure.entity.enums.EntityType;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusInfrastruktureinrichtung;
 import de.muenchen.isi.infrastructure.repository.search.SearchwordSuggesterRepository;
@@ -133,7 +132,13 @@ public abstract class Infrastruktureinrichtung extends BaseEntity {
     private String zugehoerigesBauvorhaben;
 
     @Column
-    @IndexedEmbedded
+    @GenericField
+    @AttributeOverrides(
+        {
+            @AttributeOverride(name = "latitude", column = @Column(name = "search_result_latitude")),
+            @AttributeOverride(name = "longitude", column = @Column(name = "search_result_longitude")),
+        }
+    )
     private Wgs84 infrastruktureinrichtungCoordinate;
 
     @Column(precision = 10, scale = 2)

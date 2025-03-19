@@ -168,7 +168,7 @@ public abstract class SearchDomainMapper {
      * Dispatcher-Methode: Je nach EntityType der Projection wird das passende Mapping angewendet.
      */
     public SearchResultModel projectionToSearchResultModel(CompositeEntityProjection projection) {
-        switch (projection.type().name()) {
+        switch (projection.entityType().name()) {
             case EntityType.Values.GRUNDSCHULE:
                 return projectionGrundschuleToInfrastruktureinrichtungSearchResultModel(projection);
             case EntityType.Values.MITTELSCHULE:
@@ -190,7 +190,7 @@ public abstract class SearchDomainMapper {
             case EntityType.Values.WEITERES_VERFAHREN:
                 return projectionWeiteresVerfahrenToAbfrageSearchResultModel(projection);
             default:
-                throw new IllegalArgumentException("Unsupported entity type: " + projection.type());
+                throw new IllegalArgumentException("Unsupported entity type: " + projection.entityType());
         }
     }
 
@@ -271,7 +271,7 @@ public abstract class SearchDomainMapper {
      * Mapping für Bauvorhaben aus der Projection.
      */
     @Mapping(target = "type", constant = SearchResultType.Values.BAUVORHABEN)
-    @Mapping(target = "standVerfahren", source = "standVerfahren")
+    @Mapping(source = "stand_verfahren_filter", target = "standVerfahren")
     @Mapping(source = "bauvorhabenCoordinate", target = "coordinate")
     @Mapping(source = "verortung.stadtbezirke", target = "stadtbezirke")
     public abstract BauvorhabenSearchResultModel projectionToBauvorhabenSearchResultModel(
@@ -285,6 +285,7 @@ public abstract class SearchDomainMapper {
     @Mapping(target = "artAbfrage", constant = ArtAbfrage.Values.BAULEITPLANVERFAHREN)
     @Mapping(source = "abfrageCoordinate", target = "coordinate")
     @Mapping(source = "verortung.stadtbezirke", target = "stadtbezirke")
+    @Mapping(source = "stand_verfahren_filter", target = "standVerfahren")
     @Mapping(source = "bauvorhabenId", target = "bauvorhaben")
     public abstract AbfrageSearchResultModel projectionBauleitplanverfahrenToAbfrageSearchResultModel(
         CompositeEntityProjection projection
@@ -297,6 +298,7 @@ public abstract class SearchDomainMapper {
     @Mapping(target = "artAbfrage", constant = ArtAbfrage.Values.BAUGENEHMIGUNGSVERFAHREN)
     @Mapping(source = "abfrageCoordinate", target = "coordinate")
     @Mapping(source = "verortung.stadtbezirke", target = "stadtbezirke")
+    @Mapping(source = "stand_verfahren_filter", target = "standVerfahren")
     @Mapping(source = "bauvorhabenId", target = "bauvorhaben")
     public abstract AbfrageSearchResultModel projectionBaugenehmigungsverfahrenToAbfrageSearchResultModel(
         CompositeEntityProjection projection
@@ -309,6 +311,7 @@ public abstract class SearchDomainMapper {
     @Mapping(target = "artAbfrage", constant = ArtAbfrage.Values.WEITERES_VERFAHREN)
     @Mapping(source = "abfrageCoordinate", target = "coordinate")
     @Mapping(source = "verortung.stadtbezirke", target = "stadtbezirke")
+    @Mapping(source = "stand_verfahren_filter", target = "standVerfahren")
     @Mapping(source = "bauvorhabenId", target = "bauvorhaben")
     public abstract AbfrageSearchResultModel projectionWeiteresVerfahrenToAbfrageSearchResultModel(
         CompositeEntityProjection projection

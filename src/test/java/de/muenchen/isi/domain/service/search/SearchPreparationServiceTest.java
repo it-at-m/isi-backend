@@ -157,7 +157,7 @@ class SearchPreparationServiceTest {
         expected.add("verortung.gemarkungen.name");
         expected.add("verortung.gemarkungen.flurstuecke.nummer");
         expected.add("statusAbfrage");
-        expected.add("standVerfahren");
+        expected.add("stand_verfahren_filter");
         expected.add("bebauungsplannummer");
         expected.add("name");
         expected.add("abfragevariantenBauleitplanverfahren.realisierungVon");
@@ -172,7 +172,7 @@ class SearchPreparationServiceTest {
         expected.add("verortung.gemarkungen.name");
         expected.add("verortung.gemarkungen.flurstuecke.nummer");
         expected.add("statusAbfrage");
-        expected.add("standVerfahren");
+        expected.add("stand_verfahren_filter");
         expected.add("bebauungsplannummer");
         expected.add("name");
         expected.add("abfragevariantenBaugenehmigungsverfahren.realisierungVon");
@@ -187,7 +187,7 @@ class SearchPreparationServiceTest {
         expected.add("verortung.gemarkungen.name");
         expected.add("verortung.gemarkungen.flurstuecke.nummer");
         expected.add("statusAbfrage");
-        expected.add("standVerfahren");
+        expected.add("stand_verfahren_filter");
         expected.add("bebauungsplannummer");
         expected.add("name");
         expected.add("abfragevariantenWeiteresVerfahren.realisierungVon");
@@ -197,7 +197,7 @@ class SearchPreparationServiceTest {
         result = searchPreparationService.getNamesOfSearchableAttributes(List.of(Bauvorhaben.class));
         expected = new HashSet<>();
         expected.add("nameVorhaben");
-        expected.add("standVerfahren");
+        expected.add("stand_verfahren_filter");
         expected.add("bauvorhabenNummer");
         expected.add("adresse.strasse");
         expected.add("adresse.hausnummer");
@@ -276,7 +276,7 @@ class SearchPreparationServiceTest {
         expected.add("verortung.gemarkungen.name");
         expected.add("verortung.gemarkungen.flurstuecke.nummer");
         expected.add("statusAbfrage");
-        expected.add("standVerfahren");
+        expected.add("stand_verfahren_filter");
         expected.add("bebauungsplannummer");
         expected.add("name");
         expected.add("abfragevariantenBauleitplanverfahren.realisierungVon");
@@ -286,7 +286,7 @@ class SearchPreparationServiceTest {
         expected.add("abfragevariantenWeiteresVerfahren.realisierungVon");
         expected.add("abfragevariantenSachbearbeitungWeiteresVerfahren.realisierungVon");
         expected.add("nameVorhaben");
-        expected.add("standVerfahren");
+        expected.add("stand_verfahren_filter");
         expected.add("bauvorhabenNummer");
         expected.add("adresse.strasse");
         expected.add("adresse.hausnummer");

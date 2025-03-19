@@ -40,7 +40,7 @@ public class SearchDomainMapperTest {
 
     private final KoordinatenDomainMapper koordinatenDomainMapper = new KoordinatenDomainMapperImpl();
 
-    private final SearchDomainMapper searchDomainMapper = new SearchDomainMapperImpl();
+    private final SearchDomainMapper searchDomainMapper = new SearchDomainMapperImpl(koordinatenDomainMapper);
 
     @Mock
     private KoordinatenService koordinatenService;

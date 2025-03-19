@@ -95,7 +95,7 @@ public class SearchPreparationService {
         searchableAttributes.add("verortung.gemarkungen.name");
         searchableAttributes.add("verortung.gemarkungen.flurstuecke.nummer");
         searchableAttributes.add("statusAbfrage");
-        searchableAttributes.add("standVerfahren");
+        searchableAttributes.add("stand_verfahren_filter");
         searchableAttributes.add("bebauungsplannummer");
         searchableAttributes.add("name");
         searchableAttributes.add("abfragevariantenBauleitplanverfahren.realisierungVon");
@@ -111,7 +111,7 @@ public class SearchPreparationService {
         searchableAttributes.add("verortung.gemarkungen.name");
         searchableAttributes.add("verortung.gemarkungen.flurstuecke.nummer");
         searchableAttributes.add("statusAbfrage");
-        searchableAttributes.add("standVerfahren");
+        searchableAttributes.add("stand_verfahren_filter");
         searchableAttributes.add("bebauungsplannummer");
         searchableAttributes.add("name");
         searchableAttributes.add("abfragevariantenBaugenehmigungsverfahren.realisierungVon");
@@ -127,7 +127,7 @@ public class SearchPreparationService {
         searchableAttributes.add("verortung.gemarkungen.name");
         searchableAttributes.add("verortung.gemarkungen.flurstuecke.nummer");
         searchableAttributes.add("statusAbfrage");
-        searchableAttributes.add("standVerfahren");
+        searchableAttributes.add("stand_verfahren_filter");
         searchableAttributes.add("bebauungsplannummer");
         searchableAttributes.add("name");
         searchableAttributes.add("abfragevariantenWeiteresVerfahren.realisierungVon");
@@ -138,7 +138,7 @@ public class SearchPreparationService {
     protected static Set<String> getNamesOfSearchableAttributesForBauvorhaben() {
         final var searchableAttributes = new HashSet<String>();
         searchableAttributes.add("nameVorhaben");
-        searchableAttributes.add("standVerfahren");
+        searchableAttributes.add("stand_verfahren_filter");
         searchableAttributes.add("bauvorhabenNummer");
         searchableAttributes.add("adresse.strasse");
         searchableAttributes.add("adresse.hausnummer");

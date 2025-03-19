@@ -76,7 +76,7 @@ public abstract class AbfrageDomainMapper {
     @SubclassMapping(source = BaugenehmigungsverfahrenModel.class, target = Baugenehmigungsverfahren.class)
     @SubclassMapping(source = WeiteresVerfahrenModel.class, target = WeiteresVerfahren.class)
     @Mapping(target = "bauvorhaben", ignore = true)
-    @Mapping(target = "bauvorhabenId", ignore = true)
+    @Mapping(target = "searchResultBauvorhabenId", ignore = true)
     public abstract Abfrage model2Entity(final AbfrageModel model) throws EntityNotFoundException;
 
     @AfterMapping

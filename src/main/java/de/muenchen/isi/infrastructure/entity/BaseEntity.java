@@ -38,7 +38,7 @@ public abstract class BaseEntity {
 
     @Column(length = 36)
     @Id
-    @IndexedEmbedded
+    @GenericField
     @GeneratedValue(generator = "uuid")
     @UuidGenerator(style = UuidGenerator.Style.RANDOM)
     @JdbcTypeCode(SqlTypes.VARCHAR)

@@ -4,7 +4,6 @@ import de.muenchen.isi.infrastructure.adapter.search.StatusAbfrageSuggestionBind
 import de.muenchen.isi.infrastructure.adapter.search.StatusAbfrageValueBridge;
 import de.muenchen.isi.infrastructure.adapter.search.StringSuggestionBinder;
 import de.muenchen.isi.infrastructure.entity.common.Bearbeitungshistorie;
-import de.muenchen.isi.infrastructure.entity.enums.EntityType;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.repository.search.SearchwordSuggesterRepository;
@@ -36,7 +35,6 @@ import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBinderRef
 import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBridgeRef;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.GenericField;
-import org.hibernate.search.mapper.pojo.mapping.definition.annotation.IndexedEmbedded;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.KeywordField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.NonStandardField;
 
@@ -74,9 +72,9 @@ public abstract class Abfrage extends BaseEntity {
     @ManyToOne
     private Bauvorhaben bauvorhaben;
 
-    @IndexedEmbedded
+    @GenericField
     @Column
-    private UUID bauvorhabenId;
+    private UUID searchResultBauvorhabenId;
 
     @GenericField
     @Column(nullable = false)

@@ -1,7 +1,6 @@
 package de.muenchen.isi.infrastructure.entity;
 
 import de.muenchen.isi.infrastructure.adapter.search.StandVerfahrenSuggestionBinder;
-import de.muenchen.isi.infrastructure.adapter.search.StandVerfahrenValueBridge;
 import de.muenchen.isi.infrastructure.adapter.search.StringSuggestionBinder;
 import de.muenchen.isi.infrastructure.entity.common.Adresse;
 import de.muenchen.isi.infrastructure.entity.common.VerortungMultiPolygon;
@@ -13,6 +12,8 @@ import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVerfahren;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
 import de.muenchen.isi.infrastructure.entity.filehandling.Dokument;
 import de.muenchen.isi.infrastructure.repository.search.SearchwordSuggesterRepository;
+import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.AttributeOverrides;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
@@ -32,7 +33,6 @@ import lombok.ToString;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.search.mapper.pojo.automaticindexing.ReindexOnUpdate;
 import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBinderRef;
-import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBridgeRef;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.GenericField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
@@ -50,6 +50,7 @@ import org.hibernate.type.SqlTypes;
 public class Bauleitplanverfahren extends Abfrage {
 
     @Enumerated(EnumType.STRING)
+    @GenericField
     private EntityType entityType = EntityType.BAULEITPLANVERFAHREN;
 
     @FullTextField
@@ -69,9 +70,8 @@ public class Bauleitplanverfahren extends Abfrage {
     @Column
     private SobonVerfahrensgrundsaetzeJahr sobonJahr;
 
-    @FullTextField(valueBridge = @ValueBridgeRef(type = StandVerfahrenValueBridge.class))
     @NonStandardField(
-        name = "standVerfahren" + SearchwordSuggesterRepository.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
+        name = "stand_verfahren_filter" + SearchwordSuggesterRepository.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
         valueBinder = @ValueBinderRef(type = StandVerfahrenSuggestionBinder.class)
     )
     @GenericField(name = "stand_verfahren_filter")
@@ -92,7 +92,13 @@ public class Bauleitplanverfahren extends Abfrage {
     private VerortungMultiPolygon verortung;
 
     @Column
-    @IndexedEmbedded
+    @GenericField
+    @AttributeOverrides(
+        {
+            @AttributeOverride(name = "latitude", column = @Column(name = "search_result_latitude")),
+            @AttributeOverride(name = "longitude", column = @Column(name = "search_result_longitude")),
+        }
+    )
     private Wgs84 abfrageCoordinate;
 
     @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY, orphanRemoval = true)
@@ -100,7 +106,7 @@ public class Bauleitplanverfahren extends Abfrage {
     private List<Dokument> dokumente;
 
     @Column(nullable = false)
-    @IndexedEmbedded
+    @GenericField
     private LocalDate fristBearbeitung;
 
     @Enumerated(EnumType.STRING)

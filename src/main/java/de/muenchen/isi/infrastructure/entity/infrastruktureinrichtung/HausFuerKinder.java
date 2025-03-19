@@ -15,6 +15,7 @@ import jakarta.persistence.Enumerated;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.GenericField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
 
 @Entity
@@ -26,6 +27,7 @@ import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
 public class HausFuerKinder extends Infrastruktureinrichtung {
 
     @Enumerated(EnumType.STRING)
+    @GenericField
     private EntityType entityType = EntityType.HAUS_FUER_KINDER;
 
     @Column

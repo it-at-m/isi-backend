@@ -44,7 +44,6 @@ import de.muenchen.isi.domain.service.filehandling.DokumentService;
 import de.muenchen.isi.domain.service.reporting.ReportingdataTransferService;
 import de.muenchen.isi.infrastructure.entity.Abfrage;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
-import de.muenchen.isi.infrastructure.entity.common.Wgs84;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.repository.AbfrageRepository;
@@ -143,7 +142,7 @@ public class AbfrageService {
         bauratendateiInputService.setBauratendateiInputForEachAbfragevariante(abfrage, bedarfeForAbfragevarianten);
         var entity = this.abfrageDomainMapper.model2Entity(abfrage);
         if (abfrage.getBauvorhaben() != null) {
-            entity.setBauvorhabenId(abfrage.getBauvorhaben());
+            entity.setSearchResultBauvorhabenId(abfrage.getBauvorhaben());
         }
         try {
             entity = this.abfrageRepository.saveAndFlush(entity);

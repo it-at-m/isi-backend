@@ -18,10 +18,10 @@ import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Projection
 @ProjectionConstructor
 public record CompositeEntityProjection(
     @IdProjection UUID id,
-    EntityType type,
+    EntityType entityType,
     String nameVorhaben,
     BigDecimal grundstuecksgroesse,
-    StandVerfahren standVerfahren,
+    StandVerfahren stand_verfahren_filter,
     Wgs84 bauvorhabenCoordinate,
     MultiPolygonGeometry umgriff,
     VerortungMultiPolygon verortung,
