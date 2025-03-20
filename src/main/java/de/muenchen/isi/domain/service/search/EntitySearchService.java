@@ -32,6 +32,7 @@ import org.hibernate.search.engine.search.predicate.dsl.SimpleBooleanPredicateCl
 import org.hibernate.search.engine.search.query.SearchResult;
 import org.hibernate.search.engine.search.query.dsl.SearchQueryOptionsStep;
 import org.hibernate.search.mapper.orm.Search;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -46,6 +47,9 @@ public class EntitySearchService {
 
     @PersistenceContext
     private EntityManager entityManager;
+
+    @Value("${spring.jpa.properties.hibernate.search.backend.read_timeout}")
+    private Long durationFetch;
 
     /**
      * Diese Methode führt die paginierte Entitätssuche für die im Methodenparameter gegebenen Informationen durch.
@@ -495,7 +499,7 @@ public class EntitySearchService {
 
         // **Setze ein Timeout von 10 Sekunden**
         final SearchResult<BaseEntity> searchResult = searchQueryOptions
-            .failAfter(Duration.ofSeconds(30).toSeconds(), TimeUnit.SECONDS) // Timeout setzen
+            .failAfter(Duration.ofMillis(durationFetch).toMillis(), TimeUnit.MILLISECONDS) // Timeout setzen
             .fetch(paginationOffset != null ? paginationOffset : 0, pageSize);
 
         final var searchResults = searchResult
@@ -507,7 +511,7 @@ public class EntitySearchService {
         final var model = new SearchResultsModel();
         model.setSearchResults(searchResults);
 
-        if (paginationOffset != null) {
+        if (ObjectUtils.isNotEmpty(paginationOffset)) {
             final long numberOfTotalHits = searchResult.total().hitCount();
             final var numberOfPages = calculateNumberOfPages(numberOfTotalHits, pageSize);
             model.setNumberOfPages(numberOfPages);
