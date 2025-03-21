@@ -49,10 +49,10 @@ public class EntitySearchService {
     private EntityManager entityManager;
 
     @Value("${search.durationFetch}")
-    final Long durationFetch = 60000L;
+    final Long durationFetch = 30000L;
 
     @Value("${search.totalHitCountThreshold}")
-    final int totalHitCountThreshold = 1000;
+    final int totalHitCountThreshold = 500;
 
     private static final int maximumPageSize = 500;
 
