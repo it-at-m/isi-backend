@@ -48,8 +48,13 @@ public class EntitySearchService {
     @PersistenceContext
     private EntityManager entityManager;
 
-    @Value("${spring.jpa.properties.hibernate.search.backend.read_timeout}")
-    private Long durationFetch;
+    @Value("${search.durationFetch}")
+    private Long durationFetch = 30000L;
+
+    @Value("${search.totalHitCountThreshold}")
+    private int totalHitCountThreshold = 1000;
+
+    private static final int maximumPageSize = 500;
 
     /**
      * Diese Methode führt die paginierte Entitätssuche für die im Methodenparameter gegebenen Informationen durch.
@@ -109,8 +114,8 @@ public class EntitySearchService {
                         function
                     );
             })
-            // Setze eine Begrenzung für `trackTotalHits`, um Performance zu verbessern
-            .totalHitCountThreshold(1000) // Zählt max. 1000 Treffer, vermeidet lange Berechnungen
+            // Setze eine Begrenzung für `trackTotalHits` mit totalHitCountThreshhold, um Performance zu verbessern
+            .totalHitCountThreshold(totalHitCountThreshold)
             // Sortierung der Suchergebnisse.
             // https://docs.jboss.org/hibernate/stable/search/reference/en-US/html_single/#query-sorting
             .sort(function -> {
@@ -492,12 +497,12 @@ public class EntitySearchService {
     ) {
         final Integer paginationOffset = calculateOffsetOrNullIfNoPaginationRequired(searchQueryAndSortingInformation);
 
-        // **Maximale Größe auf 500 setzen, falls keine Paginierung definiert ist**
+        // Maximale Größe auf maximumPageSize setzen, falls keine Paginierung definiert ist
         final int pageSize = ObjectUtils.isNotEmpty(paginationOffset)
             ? searchQueryAndSortingInformation.getPageSize()
-            : Math.min(500, searchQueryAndSortingInformation.getPageSize());
+            : Math.min(maximumPageSize, searchQueryAndSortingInformation.getPageSize());
 
-        // **Setze ein Timeout von 10 Sekunden**
+        // Setzt ein Timeout von durationFetch
         final SearchResult<BaseEntity> searchResult = searchQueryOptions
             .failAfter(Duration.ofMillis(durationFetch).toMillis(), TimeUnit.MILLISECONDS) // Timeout setzen
             .fetch(paginationOffset != null ? paginationOffset : 0, pageSize);

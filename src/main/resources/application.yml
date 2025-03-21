@@ -15,6 +15,10 @@ hibernate:
       connection_timeout : ${spring.jpa.properties.hibernate.search.backend.connection_timeout}
       read_timeout: ${spring.jpa.properties.hibernate.search.backend.read_timeout}
 
+search:
+  durationFetch: 30000
+  totalHitCountThreshold: 1000
+
 server:
   shutdown: "graceful"
   port: 8080
