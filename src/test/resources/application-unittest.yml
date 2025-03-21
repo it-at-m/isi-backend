@@ -1,3 +1,7 @@
+search:
+  durationFetch: 30000
+  totalHitCountThreshold: 1000
+
 spring:
 
   # Spring data rest
