@@ -496,16 +496,23 @@ public class EntitySearchService {
         final SearchQueryOptionsStep searchQueryOptions
     ) {
         final Integer paginationOffset = calculateOffsetOrNullIfNoPaginationRequired(searchQueryAndSortingInformation);
+        final Integer providedPageSize = searchQueryAndSortingInformation.getPageSize();
+        final SearchResult<BaseEntity> searchResult;
 
-        // Maximale Größe auf maximumPageSize setzen, falls keine Paginierung definiert ist
-        final int pageSize = ObjectUtils.isNotEmpty(paginationOffset)
-            ? searchQueryAndSortingInformation.getPageSize()
-            : Math.min(maximumPageSize, searchQueryAndSortingInformation.getPageSize());
-        log.debug(String.format("EntitySearchService.executeSearchQuery(), pageSize: %d", pageSize));
-        // Setzt ein Timeout von durationFetch
-        final SearchResult<BaseEntity> searchResult = searchQueryOptions
-            .failAfter(Duration.ofMillis(durationFetch).toMillis(), TimeUnit.MILLISECONDS) // Timeout setzen
-            .fetch(paginationOffset != null ? paginationOffset : 0, pageSize);
+        if (providedPageSize == null) {
+            log.debug("No pageSize provided, executing non-paginated search with fetchAll()");
+            searchResult = searchQueryOptions
+                .failAfter(Duration.ofMillis(durationFetch).toMillis(), TimeUnit.MILLISECONDS)
+                .fetchAll();
+        } else {
+            final int pageSize = (paginationOffset != null)
+                ? providedPageSize
+                : Math.min(maximumPageSize, providedPageSize);
+            log.debug("EntitySearchService.executeSearchQuery(), pageSize: {}", pageSize);
+            searchResult = searchQueryOptions
+                .failAfter(Duration.ofMillis(durationFetch).toMillis(), TimeUnit.MILLISECONDS)
+                .fetch(paginationOffset != null ? paginationOffset : 0, pageSize);
+        }
 
         final var searchResults = searchResult
             .hits()
@@ -516,27 +523,15 @@ public class EntitySearchService {
         final var model = new SearchResultsModel();
         model.setSearchResults(searchResults);
 
-        log.debug(
-            ObjectUtils.isNotEmpty(paginationOffset)
-                ? String.format(
-                    "EntitySearchService.executeSearchQuery(), paginationOffset: %d",
-                    model.getNumberOfPages()
-                )
-                : "EntitySearchService.executeSearchQuery(), paginationOffset: isEmpty"
-        );
-        if (ObjectUtils.isNotEmpty(paginationOffset)) {
+        if (providedPageSize != null && paginationOffset != null) {
             final long numberOfTotalHits = searchResult.total().hitCount();
-            final var numberOfPages = calculateNumberOfPages(numberOfTotalHits, pageSize);
+            final var numberOfPages = calculateNumberOfPages(numberOfTotalHits, providedPageSize);
             model.setNumberOfPages(numberOfPages);
             model.setPage(Math.min(searchQueryAndSortingInformation.getPage(), numberOfPages));
         }
-        log.debug(
-            String.format(
-                "EntitySearchService.executeSearchQuery(), model.getNumberOfPages(): %d",
-                model.getNumberOfPages()
-            )
-        );
-        log.debug(String.format("EntitySearchService.executeSearchQuery(), model.getPage(): %d", model.getPage()));
+        log.debug("EntitySearchService.executeSearchQuery(), model.getNumberOfPages(): {}", model.getNumberOfPages());
+        log.debug("EntitySearchService.executeSearchQuery(), model.getPage(): {}", model.getPage());
+
         return model;
     }
 
@@ -589,16 +584,12 @@ public class EntitySearchService {
     ) {
         final var page = searchQueryAndSortingModel.getPage();
         final var pageSize = searchQueryAndSortingModel.getPageSize();
-        log.debug(
-            String.format("EntitySearchService.calculateOffsetOrNullIfNoPaginationRequired, pageSize: %d", pageSize)
-        );
         final Integer offset;
         if (ObjectUtils.isNotEmpty(page) && ObjectUtils.isNotEmpty(pageSize)) {
             offset = (page - 1) * pageSize;
         } else {
             offset = null;
         }
-        log.debug(String.format("EntitySearchService.calculateOffsetOrNullIfNoPaginationRequired, offset: %d", offset));
         return offset;
     }
 
@@ -609,7 +600,6 @@ public class EntitySearchService {
         } else {
             numberOfPages = numberOfTotalHits / pageSize + 1;
         }
-        log.debug(String.format("EntitySearchService.calculateNumberOfPages, numberOfPages: %d", numberOfPages));
         return numberOfPages;
     }
 }
