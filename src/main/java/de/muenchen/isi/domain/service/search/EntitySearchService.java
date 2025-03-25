@@ -32,6 +32,7 @@ import org.hibernate.search.engine.search.predicate.dsl.SimpleBooleanPredicateCl
 import org.hibernate.search.engine.search.query.SearchResult;
 import org.hibernate.search.engine.search.query.dsl.SearchQueryOptionsStep;
 import org.hibernate.search.mapper.orm.Search;
+import org.hibernate.search.util.common.SearchTimeoutException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -53,8 +54,6 @@ public class EntitySearchService {
 
     @Value("${search.totalHitCountThreshold}")
     final int totalHitCountThreshold = 500;
-
-    private static final int maximumPageSize = 500;
 
     /**
      * Diese Methode führt die paginierte Entitätssuche für die im Methodenparameter gegebenen Informationen durch.
@@ -496,43 +495,45 @@ public class EntitySearchService {
         final SearchQueryOptionsStep searchQueryOptions
     ) {
         final Integer paginationOffset = calculateOffsetOrNullIfNoPaginationRequired(searchQueryAndSortingInformation);
-        final Integer providedPageSize = searchQueryAndSortingInformation.getPageSize();
-        final SearchResult<BaseEntity> searchResult;
+        try {
+            // Ausführen einer paginierten oder nicht-paginierten Suche.
+            final SearchResult<BaseEntity> searchResult = ObjectUtils.isNotEmpty(paginationOffset)
+                ? searchQueryOptions
+                    .failAfter(Duration.ofMillis(durationFetch).toMillis(), TimeUnit.MILLISECONDS)
+                    .fetch(paginationOffset, searchQueryAndSortingInformation.getPageSize())
+                : searchQueryOptions
+                    .failAfter(Duration.ofMillis(durationFetch).toMillis(), TimeUnit.MILLISECONDS)
+                    .fetchAll();
 
-        if (providedPageSize == null) {
-            log.debug("No pageSize provided, executing non-paginated search with fetchAll()");
-            searchResult = searchQueryOptions
-                .failAfter(Duration.ofMillis(durationFetch).toMillis(), TimeUnit.MILLISECONDS)
-                .fetchAll();
-        } else {
-            final int pageSize = (paginationOffset != null)
-                ? providedPageSize
-                : Math.min(maximumPageSize, providedPageSize);
-            log.debug("EntitySearchService.executeSearchQuery(), pageSize: {}", pageSize);
-            searchResult = searchQueryOptions
-                .failAfter(Duration.ofMillis(durationFetch).toMillis(), TimeUnit.MILLISECONDS)
-                .fetch(paginationOffset != null ? paginationOffset : 0, pageSize);
+            final var searchResults = searchResult
+                .hits()
+                .stream()
+                .map(searchDomainMapper::entity2SearchResultModel)
+                .collect(Collectors.toList());
+
+            final var model = new SearchResultsModel();
+            model.setSearchResults(searchResults);
+
+            if (searchQueryAndSortingInformation.getPageSize() != null && paginationOffset != null) {
+                final long numberOfTotalHits = searchResult.total().hitCount();
+                final var numberOfPages = calculateNumberOfPages(
+                    numberOfTotalHits,
+                    searchQueryAndSortingInformation.getPageSize()
+                );
+                model.setNumberOfPages(numberOfPages);
+                model.setPage(Math.min(searchQueryAndSortingInformation.getPage(), numberOfPages));
+            }
+            return model;
+        } catch (SearchTimeoutException exception) {
+            log.error(
+                "EntitySearchService.executeSearchQuery(), exception: {}, durationFetch: {}, paginationOffset: {}, pageSize: {}",
+                exception.getMessage(),
+                durationFetch,
+                paginationOffset,
+                searchQueryAndSortingInformation.getPageSize()
+            );
+            throw new SearchTimeoutException(exception.getMessage());
         }
-
-        final var searchResults = searchResult
-            .hits()
-            .stream()
-            .map(searchDomainMapper::entity2SearchResultModel)
-            .collect(Collectors.toList());
-
-        final var model = new SearchResultsModel();
-        model.setSearchResults(searchResults);
-
-        if (providedPageSize != null && paginationOffset != null) {
-            final long numberOfTotalHits = searchResult.total().hitCount();
-            final var numberOfPages = calculateNumberOfPages(numberOfTotalHits, providedPageSize);
-            model.setNumberOfPages(numberOfPages);
-            model.setPage(Math.min(searchQueryAndSortingInformation.getPage(), numberOfPages));
-        }
-        log.debug("EntitySearchService.executeSearchQuery(), model.getNumberOfPages(): {}", model.getNumberOfPages());
-        log.debug("EntitySearchService.executeSearchQuery(), model.getPage(): {}", model.getPage());
-
-        return model;
     }
 
     /**
