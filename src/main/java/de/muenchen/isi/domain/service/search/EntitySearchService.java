@@ -532,7 +532,7 @@ public class EntitySearchService {
                 paginationOffset,
                 searchQueryAndSortingInformation.getPageSize()
             );
-            throw new SearchTimeoutException(exception.getMessage());
+            throw exception;
         }
     }
 
