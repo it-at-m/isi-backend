@@ -1,3 +1,6 @@
+search:
+  totalHitCountThreshold: 1000
+
 spring:
 
   # Spring data rest

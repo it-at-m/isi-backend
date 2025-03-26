@@ -12,10 +12,12 @@ import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
 import de.muenchen.isi.security.AuthenticationUtils;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +32,8 @@ import org.hibernate.search.engine.search.predicate.dsl.SimpleBooleanPredicateCl
 import org.hibernate.search.engine.search.query.SearchResult;
 import org.hibernate.search.engine.search.query.dsl.SearchQueryOptionsStep;
 import org.hibernate.search.mapper.orm.Search;
+import org.hibernate.search.util.common.SearchTimeoutException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -44,6 +48,12 @@ public class EntitySearchService {
 
     @PersistenceContext
     private EntityManager entityManager;
+
+    @Value("${spring.jpa.properties.hibernate.search.backend.read_timeout}")
+    final Long durationFetch = 30000L;
+
+    @Value("${search.totalHitCountThreshold}")
+    final int totalHitCountThreshold = 500;
 
     /**
      * Diese Methode führt die paginierte Entitätssuche für die im Methodenparameter gegebenen Informationen durch.
@@ -88,7 +98,6 @@ public class EntitySearchService {
                             .simpleQueryString()
                             .fields(searchableAttributes)
                             .matching(adaptedSearchQuery)
-                            // Es werden nur die Entitäten als Suchergebnis zurückgegeben, welche alle Suchwörter der Suchquery beinhalten.
                             .defaultOperator(BooleanOperator.AND);
                     } else {
                         // Zurückgeben aller Entitäten.
@@ -104,6 +113,8 @@ public class EntitySearchService {
                         function
                     );
             })
+            // Setze eine Begrenzung für `trackTotalHits` mit totalHitCountThreshhold, um Performance zu verbessern
+            .totalHitCountThreshold(totalHitCountThreshold)
             // Sortierung der Suchergebnisse.
             // https://docs.jboss.org/hibernate/stable/search/reference/en-US/html_single/#query-sorting
             .sort(function -> {
@@ -117,6 +128,7 @@ public class EntitySearchService {
                     return function.field("lastModifiedDateTime").order(sortOrder);
                 }
             });
+
         return this.executeSearchQuery(searchQueryAndSortingInformation, searchQueryOptions);
     }
 
@@ -192,7 +204,7 @@ public class EntitySearchService {
                 root.add(
                     function
                         .bool()
-                        .must(b -> {
+                        .filter(b -> {
                             var theBool = b.bool();
                             for (final var value : valueList) {
                                 theBool = theBool.should(function.match().field(keyAttribute).matching(value));
@@ -482,37 +494,46 @@ public class EntitySearchService {
         final SearchQueryAndSortingModel searchQueryAndSortingInformation,
         final SearchQueryOptionsStep searchQueryOptions
     ) {
-        // Der Offset oder null falls keine Offsetberechnung möglich ist.
-        // Ist keine Offsetberechnung möglich, so wird auch keine paginierte Suche durchgeführt.
         final Integer paginationOffset = calculateOffsetOrNullIfNoPaginationRequired(searchQueryAndSortingInformation);
+        try {
+            // Ausführen einer paginierten oder nicht-paginierten Suche.
+            final SearchResult<BaseEntity> searchResult = ObjectUtils.isNotEmpty(paginationOffset)
+                ? searchQueryOptions
+                    .failAfter(Duration.ofMillis(durationFetch).toMillis(), TimeUnit.MILLISECONDS)
+                    .fetch(paginationOffset, searchQueryAndSortingInformation.getPageSize())
+                : searchQueryOptions
+                    .failAfter(Duration.ofMillis(durationFetch).toMillis(), TimeUnit.MILLISECONDS)
+                    .fetchAll();
 
-        // Ausführen einer paginierten oder nicht-paginierten Suche.
-        final SearchResult<BaseEntity> searchResult = ObjectUtils.isNotEmpty(paginationOffset)
-            ? searchQueryOptions.fetch(paginationOffset, searchQueryAndSortingInformation.getPageSize())
-            : searchQueryOptions.fetchAll();
+            final var searchResults = searchResult
+                .hits()
+                .stream()
+                .map(searchDomainMapper::entity2SearchResultModel)
+                .collect(Collectors.toList());
 
-        // Suchergebnisse extrahieren und zurückgeben.
-        final var searchResults = searchResult
-            .hits()
-            .stream()
-            .map(searchDomainMapper::entity2SearchResultModel)
-            .collect(Collectors.toList());
+            final var model = new SearchResultsModel();
+            model.setSearchResults(searchResults);
 
-        final var model = new SearchResultsModel();
-        model.setSearchResults(searchResults);
-        if (ObjectUtils.isNotEmpty(paginationOffset)) {
-            final long numberOfTotalHits = searchResult.total().hitCount();
-            final var numberOfPages = calculateNumberOfPages(
-                numberOfTotalHits,
+            if (searchQueryAndSortingInformation.getPageSize() != null && paginationOffset != null) {
+                final long numberOfTotalHits = searchResult.total().hitCount();
+                final var numberOfPages = calculateNumberOfPages(
+                    numberOfTotalHits,
+                    searchQueryAndSortingInformation.getPageSize()
+                );
+                model.setNumberOfPages(numberOfPages);
+                model.setPage(Math.min(searchQueryAndSortingInformation.getPage(), numberOfPages));
+            }
+            return model;
+        } catch (SearchTimeoutException exception) {
+            log.error(
+                "EntitySearchService.executeSearchQuery(), exception: {}, durationFetch: {}, paginationOffset: {}, pageSize: {}",
+                exception.getMessage(),
+                durationFetch,
+                paginationOffset,
                 searchQueryAndSortingInformation.getPageSize()
             );
-            model.setNumberOfPages(numberOfPages);
-            final var currentPage = searchQueryAndSortingInformation.getPage() > numberOfPages
-                ? numberOfPages
-                : searchQueryAndSortingInformation.getPage();
-            model.setPage(currentPage);
+            throw exception;
         }
-        return model;
     }
 
     /**
