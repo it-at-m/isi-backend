@@ -49,7 +49,7 @@ public class EntitySearchService {
     @PersistenceContext
     private EntityManager entityManager;
 
-    @Value("${search.durationFetch}")
+    @Value("${spring.jpa.properties.hibernate.search.backend.read_timeout}")
     final Long durationFetch = 30000L;
 
     @Value("${search.totalHitCountThreshold}")
