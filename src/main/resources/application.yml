@@ -7,6 +7,12 @@ spring:
     password: ${spring.jpa.properties.hibernate.search.backend.password}
     connection-timeout: 10s
     socket-timeout: 60s
+  jpa:
+    properties:
+      hibernate:
+        search:
+          backend:
+            client.configurer: class:de.muenchen.isi.configuration.search.ElasticsearchKeepAliveConfig
 
 server:
   shutdown: "graceful"
