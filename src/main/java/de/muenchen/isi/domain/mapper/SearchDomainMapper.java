@@ -5,6 +5,7 @@ import de.muenchen.isi.domain.exception.GeometryOperationFailedException;
 import de.muenchen.isi.domain.model.common.MultiPolygonGeometryModel;
 import de.muenchen.isi.domain.model.common.Wgs84Model;
 import de.muenchen.isi.domain.model.enums.SearchResultType;
+import de.muenchen.isi.domain.model.search.request.CompositeEntityProjection;
 import de.muenchen.isi.domain.model.search.response.AbfrageSearchResultModel;
 import de.muenchen.isi.domain.model.search.response.BauvorhabenSearchResultModel;
 import de.muenchen.isi.domain.model.search.response.InfrastruktureinrichtungSearchResultModel;
@@ -18,6 +19,8 @@ import de.muenchen.isi.infrastructure.entity.WeiteresVerfahren;
 import de.muenchen.isi.infrastructure.entity.common.Adresse;
 import de.muenchen.isi.infrastructure.entity.common.MultiPolygonGeometry;
 import de.muenchen.isi.infrastructure.entity.common.VerortungMultiPolygon;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Infrastruktureinrichtung;
 import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
@@ -226,4 +229,72 @@ public abstract class SearchDomainMapper {
     }
 
     public abstract MultiPolygonGeometryModel entity2Model(final MultiPolygonGeometry entity);
+
+    public SearchResultModel mapProjectionToSearchResultModel(CompositeEntityProjection projection) {
+        if ("BAUVORHABEN".equals(projection.resultType())) {
+            BauvorhabenSearchResultModel model = new BauvorhabenSearchResultModel();
+            model.setType(SearchResultType.BAUVORHABEN);
+            model.setId(projection.id());
+            model.setNameVorhaben(projection.nameVorhaben());
+            model.setGrundstuecksgroesse(projection.grundstuecksgroesse());
+            model.setUmgriff(entity2Model(projection.umgriff()));
+            model.setStandVerfahren(projection.stand_verfahren_filter());
+            return model;
+        } else if ("ABFRAGE".equals(projection.resultType())) {
+            AbfrageSearchResultModel model = new AbfrageSearchResultModel();
+            model.setType(SearchResultType.ABFRAGE);
+            model.setArtAbfrage(findOutArtAbfrage(projection.artAbfrage_test()));
+            model.setId(projection.id());
+            model.setName(projection.name());
+            model.setStatusAbfrage(projection.statusAbfrage());
+            model.setFristBearbeitung(projection.fristBearbeitung());
+            model.setCreatedDateTime(projection.createdDateTime());
+            model.setStandVerfahren(projection.stand_verfahren_filter());
+            model.setBauvorhaben(projection.bauvorhabenId());
+            return model;
+        } else if ("INFRASTRUKTUREINRICHTUNG".equals(projection.resultType())) {
+            InfrastruktureinrichtungSearchResultModel model = new InfrastruktureinrichtungSearchResultModel();
+            model.setType(SearchResultType.INFRASTRUKTUREINRICHTUNG);
+            model.setId(projection.id());
+            model.setInfrastruktureinrichtungTyp(
+                findOutInfrastruktureinrichtung(projection.infrastruktureinrichtungTyp())
+            );
+            model.setNameEinrichtung(projection.nameEinrichtung());
+            model.setZugehoerigesBauvorhaben(projection.bauvorhabenName());
+            return model;
+        }
+        throw new IllegalArgumentException("Unbekannter resultType: " + projection.resultType());
+    }
+
+    private ArtAbfrage findOutArtAbfrage(String projectionString) {
+        if ("BAULEITPLANVERFAHREN".equals(projectionString)) {
+            return ArtAbfrage.BAULEITPLANVERFAHREN;
+        }
+        if ("BAUGENEHMIGUNGSVERFAHREN".equals(projectionString)) {
+            return ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN;
+        }
+        if ("WEITERES_VERFAHREN".equals(projectionString)) {
+            return ArtAbfrage.WEITERES_VERFAHREN;
+        }
+        return ArtAbfrage.UNSPECIFIED;
+    }
+
+    private InfrastruktureinrichtungTyp findOutInfrastruktureinrichtung(String projectionString) {
+        switch (projectionString) {
+            case "KINDERKRIPPE":
+                return InfrastruktureinrichtungTyp.KINDERKRIPPE;
+            case "KINDERGARTEN":
+                return InfrastruktureinrichtungTyp.KINDERGARTEN;
+            case "GS_NACHMITTAG_BETREUUNG":
+                return InfrastruktureinrichtungTyp.GS_NACHMITTAG_BETREUUNG;
+            case "HAUS_FUER_KINDER":
+                return InfrastruktureinrichtungTyp.HAUS_FUER_KINDER;
+            case "GRUNDSCHULE":
+                return InfrastruktureinrichtungTyp.GRUNDSCHULE;
+            case "MITTELSCHULE":
+                return InfrastruktureinrichtungTyp.MITTELSCHULE;
+            default:
+                return InfrastruktureinrichtungTyp.UNSPECIFIED;
+        }
+    }
 }

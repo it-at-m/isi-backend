@@ -4,6 +4,7 @@ import com.ibm.icu.text.BreakIterator;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.mapper.SearchDomainMapper;
 import de.muenchen.isi.domain.model.enums.SortAttribute;
+import de.muenchen.isi.domain.model.search.request.CompositeEntityProjection;
 import de.muenchen.isi.domain.model.search.request.SearchQueryAndSortingModel;
 import de.muenchen.isi.domain.model.search.response.SearchResultsModel;
 import de.muenchen.isi.infrastructure.adapter.search.StadtbezirkNummerValueBridge;
@@ -88,6 +89,7 @@ public class EntitySearchService {
         // Erstellen der Hibernate-Search-Suchquery
         final var searchQueryOptions = Search.session(entityManager)
             .search(searchableEntities)
+            .select(f -> f.composite().as(CompositeEntityProjection.class))
             .where((function, root) -> {
                 // Verarbeitung der angepassten Suchquery
                 root.add(searchPredicateFactory -> {
@@ -497,7 +499,7 @@ public class EntitySearchService {
         final Integer paginationOffset = calculateOffsetOrNullIfNoPaginationRequired(searchQueryAndSortingInformation);
         try {
             // Ausführen einer paginierten oder nicht-paginierten Suche.
-            final SearchResult<BaseEntity> searchResult = ObjectUtils.isNotEmpty(paginationOffset)
+            final SearchResult<CompositeEntityProjection> searchResult = ObjectUtils.isNotEmpty(paginationOffset)
                 ? searchQueryOptions
                     .failAfter(Duration.ofMillis(durationFetch).toMillis(), TimeUnit.MILLISECONDS)
                     .fetch(paginationOffset, searchQueryAndSortingInformation.getPageSize())
@@ -505,14 +507,14 @@ public class EntitySearchService {
                     .failAfter(Duration.ofMillis(durationFetch).toMillis(), TimeUnit.MILLISECONDS)
                     .fetchAll();
 
-            final var searchResults = searchResult
+            final var results = searchResult
                 .hits()
                 .stream()
-                .map(searchDomainMapper::entity2SearchResultModel)
+                .map(projection -> searchDomainMapper.mapProjectionToSearchResultModel(projection))
                 .collect(Collectors.toList());
 
             final var model = new SearchResultsModel();
-            model.setSearchResults(searchResults);
+            model.setSearchResults(results);
 
             if (searchQueryAndSortingInformation.getPageSize() != null && paginationOffset != null) {
                 final long numberOfTotalHits = searchResult.total().hitCount();

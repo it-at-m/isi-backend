@@ -59,12 +59,12 @@ import org.hibernate.type.SqlTypes;
 @EqualsAndHashCode(callSuper = true)
 public abstract class Infrastruktureinrichtung extends BaseEntity {
 
-    @GenericField(projectable = Projectable.YES)
+    @GenericField(name = "resultType", projectable = Projectable.YES)
     public String getResultType() {
         return "INFRASTRUKTUREINRICHTUNG";
     }
 
-    @GenericField(projectable = Projectable.YES)
+    @GenericField(name = "bauvorhabenName", projectable = Projectable.YES)
     public String getBauvorhabenName() {
         return bauvorhaben != null ? bauvorhaben.getNameVorhaben() : null;
     }

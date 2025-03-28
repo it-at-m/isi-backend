@@ -60,7 +60,7 @@ import org.hibernate.type.SqlTypes;
 @Indexed
 public class Bauvorhaben extends BaseEntity {
 
-    @GenericField(projectable = Projectable.YES)
+    @GenericField(name = "resultType", projectable = Projectable.YES)
     public String getResultType() {
         return "BAUVORHABEN";
     }
