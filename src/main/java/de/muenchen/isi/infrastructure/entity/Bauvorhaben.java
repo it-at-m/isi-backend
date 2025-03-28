@@ -1,6 +1,7 @@
 package de.muenchen.isi.infrastructure.entity;
 
 import de.muenchen.isi.infrastructure.adapter.listener.BauvorhabenListener;
+import de.muenchen.isi.infrastructure.adapter.search.MultiPolygonGeometryValueBridge;
 import de.muenchen.isi.infrastructure.adapter.search.StandVerfahrenSuggestionBinder;
 import de.muenchen.isi.infrastructure.adapter.search.StandVerfahrenValueBridge;
 import de.muenchen.isi.infrastructure.adapter.search.StringSuggestionBinder;
@@ -95,7 +96,11 @@ public class Bauvorhaben extends BaseEntity {
     private BigDecimal grundstuecksgroesse;
 
     @Transient
-    @GenericField(name = "umgriff", projectable = Projectable.YES, valueBridge = @ValueBridgeRef(type = MultiPoly))
+    @GenericField(
+        name = "umgriff",
+        projectable = Projectable.YES,
+        valueBridge = @ValueBridgeRef(type = MultiPolygonGeometryValueBridge.class)
+    )
     public MultiPolygonGeometry getUmgriff() {
         return verortung != null ? verortung.getMultiPolygon() : null;
     }
