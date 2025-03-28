@@ -24,11 +24,13 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.apache.commons.lang3.EnumUtils;
 import org.apache.commons.lang3.ObjectUtils;
+import org.hibernate.search.engine.backend.types.Projectable;
 import org.hibernate.search.engine.backend.types.Sortable;
 import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBinderRef;
 import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBridgeRef;
@@ -45,6 +47,11 @@ import org.hibernate.search.mapper.pojo.mapping.definition.annotation.NonStandar
 @EqualsAndHashCode(callSuper = true)
 @Table(indexes = { @Index(name = "abfrage_name_index", columnList = "name") })
 public abstract class Abfrage extends BaseEntity {
+
+    @GenericField(projectable = Projectable.YES)
+    public String getResultType() {
+        return "ABFRAGE";
+    }
 
     @KeywordField(name = "name_sort", sortable = Sortable.YES, normalizer = "lowercase")
     @FullTextField
@@ -71,6 +78,11 @@ public abstract class Abfrage extends BaseEntity {
     @ManyToOne
     private Bauvorhaben bauvorhaben;
 
+    @GenericField(projectable = Projectable.YES)
+    public UUID getBauvorhabenUuid() {
+        return bauvorhaben != null ? bauvorhaben.getId() : null;
+    }
+
     @GenericField
     @Column(nullable = false)
     private String sub;
@@ -82,6 +94,7 @@ public abstract class Abfrage extends BaseEntity {
      * @return Wert der {@link DiscriminatorColumn}.
      */
     @Transient
+    @GenericField(projectable = Projectable.YES)
     public ArtAbfrage getArtAbfrage() {
         final var discriminatorValue = this.getClass().getAnnotation(DiscriminatorValue.class);
         return ObjectUtils.isEmpty(discriminatorValue)

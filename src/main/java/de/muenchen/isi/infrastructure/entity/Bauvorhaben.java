@@ -6,6 +6,7 @@ import de.muenchen.isi.infrastructure.adapter.search.StandVerfahrenValueBridge;
 import de.muenchen.isi.infrastructure.adapter.search.StringSuggestionBinder;
 import de.muenchen.isi.infrastructure.entity.common.Adresse;
 import de.muenchen.isi.infrastructure.entity.common.BearbeitendePerson;
+import de.muenchen.isi.infrastructure.entity.common.MultiPolygonGeometry;
 import de.muenchen.isi.infrastructure.entity.common.VerortungMultiPolygon;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtBaulicheNutzung;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonVerfahrensgrundsaetzeJahr;
@@ -30,12 +31,14 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import java.math.BigDecimal;
 import java.util.List;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.search.engine.backend.types.Projectable;
 import org.hibernate.search.engine.backend.types.Sortable;
 import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBinderRef;
 import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBridgeRef;
@@ -55,6 +58,11 @@ import org.hibernate.type.SqlTypes;
 @Table(indexes = { @Index(name = "bauvorhaben_name_index", columnList = "nameVorhaben") })
 @Indexed
 public class Bauvorhaben extends BaseEntity {
+
+    @GenericField(projectable = Projectable.YES)
+    public String getResultType() {
+        return "BAUVORHABEN";
+    }
 
     @Embedded
     @AttributeOverrides(
@@ -83,7 +91,14 @@ public class Bauvorhaben extends BaseEntity {
     private String nameVorhaben;
 
     @Column(precision = 10, scale = 2)
+    @GenericField(projectable = Projectable.YES)
     private BigDecimal grundstuecksgroesse;
+
+    @Transient
+    @GenericField(name = "umgriff", projectable = Projectable.YES, valueBridge = @ValueBridgeRef(type = MultiPoly))
+    public MultiPolygonGeometry getUmgriff() {
+        return verortung != null ? verortung.getMultiPolygon() : null;
+    }
 
     @FullTextField(valueBridge = @ValueBridgeRef(type = StandVerfahrenValueBridge.class))
     @NonStandardField(

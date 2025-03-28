@@ -39,6 +39,7 @@ import org.apache.commons.lang3.ObjectUtils;
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.generator.EventType;
+import org.hibernate.search.engine.backend.types.Projectable;
 import org.hibernate.search.engine.backend.types.Sortable;
 import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBinderRef;
 import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBridgeRef;
@@ -57,6 +58,16 @@ import org.hibernate.type.SqlTypes;
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 public abstract class Infrastruktureinrichtung extends BaseEntity {
+
+    @GenericField(projectable = Projectable.YES)
+    public String getResultType() {
+        return "INFRASTRUKTUREINRICHTUNG";
+    }
+
+    @GenericField(projectable = Projectable.YES)
+    public String getBauvorhabenName() {
+        return bauvorhaben != null ? bauvorhaben.getNameVorhaben() : null;
+    }
 
     @Embedded
     @AttributeOverrides(
