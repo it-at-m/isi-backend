@@ -12,12 +12,10 @@ import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
 import de.muenchen.isi.security.AuthenticationUtils;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -48,9 +46,6 @@ public class EntitySearchService {
 
     @PersistenceContext
     private EntityManager entityManager;
-
-    @Value("${spring.jpa.properties.hibernate.search.backend.read_timeout}")
-    final Long durationFetch = 30000L;
 
     @Value("${search.totalHitCountThreshold}")
     final int totalHitCountThreshold = 500;
@@ -498,12 +493,8 @@ public class EntitySearchService {
         try {
             // Ausführen einer paginierten oder nicht-paginierten Suche.
             final SearchResult<BaseEntity> searchResult = ObjectUtils.isNotEmpty(paginationOffset)
-                ? searchQueryOptions
-                    .failAfter(Duration.ofMillis(durationFetch).toMillis(), TimeUnit.MILLISECONDS)
-                    .fetch(paginationOffset, searchQueryAndSortingInformation.getPageSize())
-                : searchQueryOptions
-                    .failAfter(Duration.ofMillis(durationFetch).toMillis(), TimeUnit.MILLISECONDS)
-                    .fetchAll();
+                ? searchQueryOptions.fetch(paginationOffset, searchQueryAndSortingInformation.getPageSize())
+                : searchQueryOptions.fetchAll();
 
             final var searchResults = searchResult
                 .hits()
