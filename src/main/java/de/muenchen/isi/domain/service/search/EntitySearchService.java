@@ -517,9 +517,8 @@ public class EntitySearchService {
             return model;
         } catch (SearchTimeoutException exception) {
             log.error(
-                "EntitySearchService.executeSearchQuery(), exception: {}, durationFetch: {}, paginationOffset: {}, pageSize: {}",
+                "EntitySearchService.executeSearchQuery(), exception: {}, paginationOffset: {}, pageSize: {}",
                 exception.getMessage(),
-                durationFetch,
                 paginationOffset,
                 searchQueryAndSortingInformation.getPageSize()
             );
