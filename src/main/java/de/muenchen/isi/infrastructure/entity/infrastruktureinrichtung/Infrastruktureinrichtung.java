@@ -46,6 +46,7 @@ import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBridgeRef
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.GenericField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.IndexedEmbedded;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.IndexingDependency;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.KeywordField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.NonStandardField;
 import org.hibernate.type.SqlTypes;
@@ -65,6 +66,7 @@ public abstract class Infrastruktureinrichtung extends BaseEntity {
     }
 
     @GenericField(name = "bauvorhabenName", projectable = Projectable.YES)
+    @IndexingDependency(derivedFrom = {})
     public String getBauvorhabenName() {
         return bauvorhaben != null ? bauvorhaben.getNameVorhaben() : null;
     }

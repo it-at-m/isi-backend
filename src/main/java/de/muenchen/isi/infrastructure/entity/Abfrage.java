@@ -57,6 +57,7 @@ public abstract class Abfrage extends BaseEntity {
 
     @Transient
     @GenericField(name = "artAbfrage_test", projectable = Projectable.YES)
+    @IndexingDependency(derivedFrom = {})
     public String getArtAbfrageAsString() {
         return getArtAbfrage() != null ? getArtAbfrage().name() : null;
     }

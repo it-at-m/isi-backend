@@ -47,6 +47,7 @@ import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextFi
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.GenericField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.IndexedEmbedded;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.IndexingDependency;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.KeywordField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.NonStandardField;
 import org.hibernate.type.SqlTypes;
@@ -61,6 +62,7 @@ import org.hibernate.type.SqlTypes;
 public class Bauvorhaben extends BaseEntity {
 
     @GenericField(name = "resultType", projectable = Projectable.YES)
+    @IndexingDependency(derivedFrom = {})
     public String getResultType() {
         return "BAUVORHABEN";
     }
