@@ -31,7 +31,6 @@ import org.hibernate.search.engine.search.query.SearchResult;
 import org.hibernate.search.engine.search.query.dsl.SearchQueryOptionsStep;
 import org.hibernate.search.mapper.orm.Search;
 import org.hibernate.search.util.common.SearchTimeoutException;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -46,9 +45,6 @@ public class EntitySearchService {
 
     @PersistenceContext
     private EntityManager entityManager;
-
-    @Value("${search.totalHitCountThreshold}")
-    final int totalHitCountThreshold = 500;
 
     /**
      * Diese Methode führt die paginierte Entitätssuche für die im Methodenparameter gegebenen Informationen durch.
@@ -108,8 +104,6 @@ public class EntitySearchService {
                         function
                     );
             })
-            // Setze eine Begrenzung für `trackTotalHits` mit totalHitCountThreshhold, um Performance zu verbessern
-            .totalHitCountThreshold(totalHitCountThreshold)
             // Sortierung der Suchergebnisse.
             // https://docs.jboss.org/hibernate/stable/search/reference/en-US/html_single/#query-sorting
             .sort(function -> {
