@@ -26,14 +26,14 @@
             "in": "query",
             "description": "Zero-based page index (0..N)",
             "required": false,
-            "schema": { "type": "integer", "default": 0, "minimum": 0 }
+            "schema": { "minimum": 0, "type": "integer", "default": 0 }
           },
           {
             "name": "size",
             "in": "query",
             "description": "The size of the page to be returned",
             "required": false,
-            "schema": { "type": "integer", "default": 20, "minimum": 1 }
+            "schema": { "minimum": 1, "type": "integer", "default": 20 }
           },
           {
             "name": "sort",
@@ -387,9 +387,9 @@
           "id": { "type": "string", "format": "uuid" },
           "createdDateTime": { "type": "string", "format": "date-time" },
           "lastModifiedDateTime": { "type": "string", "format": "date-time" },
-          "grundschulsprengel": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
-          "mittelschulsprengel": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
-          "viertel": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+          "grundschulsprengel": { "uniqueItems": true, "type": "array", "items": { "type": "string" } },
+          "mittelschulsprengel": { "uniqueItems": true, "type": "array", "items": { "type": "string" } },
+          "viertel": { "uniqueItems": true, "type": "array", "items": { "type": "string" } },
           "wohneinheiten": {
             "type": "array",
             "items": { "$ref": "#/components/schemas/WohneinheitenProFoerderartProJahr" }
@@ -493,9 +493,9 @@
           "nummer": { "type": "number" },
           "name": { "type": "string" },
           "flurstuecke": {
+            "uniqueItems": true,
             "type": "array",
-            "items": { "$ref": "#/components/schemas/Flurstueck" },
-            "uniqueItems": true
+            "items": { "$ref": "#/components/schemas/Flurstueck" }
           },
           "multiPolygon": { "$ref": "#/components/schemas/MultiPolygonGeometry" }
         }
@@ -592,35 +592,35 @@
         "type": "object",
         "properties": {
           "stadtbezirke": {
+            "uniqueItems": true,
             "type": "array",
-            "items": { "$ref": "#/components/schemas/Stadtbezirk" },
-            "uniqueItems": true
+            "items": { "$ref": "#/components/schemas/Stadtbezirk" }
           },
           "bezirksteile": {
+            "uniqueItems": true,
             "type": "array",
-            "items": { "$ref": "#/components/schemas/Bezirksteil" },
-            "uniqueItems": true
+            "items": { "$ref": "#/components/schemas/Bezirksteil" }
           },
-          "viertel": { "type": "array", "items": { "$ref": "#/components/schemas/Viertel" }, "uniqueItems": true },
+          "viertel": { "uniqueItems": true, "type": "array", "items": { "$ref": "#/components/schemas/Viertel" } },
           "gemarkungen": {
+            "uniqueItems": true,
             "type": "array",
-            "items": { "$ref": "#/components/schemas/Gemarkung" },
-            "uniqueItems": true
+            "items": { "$ref": "#/components/schemas/Gemarkung" }
           },
           "kitaplanungsbereiche": {
+            "uniqueItems": true,
             "type": "array",
-            "items": { "$ref": "#/components/schemas/Kitaplanungsbereich" },
-            "uniqueItems": true
+            "items": { "$ref": "#/components/schemas/Kitaplanungsbereich" }
           },
           "grundschulsprengel": {
+            "uniqueItems": true,
             "type": "array",
-            "items": { "$ref": "#/components/schemas/Grundschulsprengel" },
-            "uniqueItems": true
+            "items": { "$ref": "#/components/schemas/Grundschulsprengel" }
           },
           "mittelschulsprengel": {
+            "uniqueItems": true,
             "type": "array",
-            "items": { "$ref": "#/components/schemas/Mittelschulsprengel" },
-            "uniqueItems": true
+            "items": { "$ref": "#/components/schemas/Mittelschulsprengel" }
           },
           "multiPolygon": { "$ref": "#/components/schemas/MultiPolygonGeometry" },
           "centroid": { "$ref": "#/components/schemas/PointGeometry" },
@@ -709,15 +709,6 @@
       },
       "AbfrageDto": {
         "type": "object",
-        "description": "AbfrageDto",
-        "discriminator": {
-          "propertyName": "artAbfrage",
-          "mapping": {
-            "BAULEITPLANVERFAHREN": "#/components/schemas/BauleitplanverfahrenDto",
-            "BAUGENEHMIGUNGSVERFAHREN": "#/components/schemas/BaugenehmigungsverfahrenDto",
-            "WEITERES_VERFAHREN": "#/components/schemas/WeiteresVerfahrenDto"
-          }
-        },
         "properties": {
           "id": { "type": "string", "format": "uuid" },
           "createdDateTime": { "type": "string", "format": "date-time" },
@@ -732,6 +723,15 @@
           "bauvorhabenId": { "type": "string", "format": "uuid" },
           "sub": { "type": "string" },
           "linkEakte": { "type": "string" }
+        },
+        "description": "AbfrageDto",
+        "discriminator": {
+          "propertyName": "artAbfrage",
+          "mapping": {
+            "BAULEITPLANVERFAHREN": "#/components/schemas/BauleitplanverfahrenDto",
+            "BAUGENEHMIGUNGSVERFAHREN": "#/components/schemas/BaugenehmigungsverfahrenDto",
+            "WEITERES_VERFAHREN": "#/components/schemas/WeiteresVerfahrenDto"
+          }
         }
       },
       "AbfragevarianteBaugenehmigungsverfahrenDto": {
@@ -912,6 +912,7 @@
         }
       },
       "BaugenehmigungsverfahrenDto": {
+        "type": "object",
         "allOf": [
           { "$ref": "#/components/schemas/AbfrageDto" },
           {
@@ -937,6 +938,7 @@
         ]
       },
       "BauleitplanverfahrenDto": {
+        "type": "object",
         "allOf": [
           { "$ref": "#/components/schemas/AbfrageDto" },
           {
@@ -981,9 +983,9 @@
           "id": { "type": "string", "format": "uuid" },
           "createdDateTime": { "type": "string", "format": "date-time" },
           "lastModifiedDateTime": { "type": "string", "format": "date-time" },
-          "grundschulsprengel": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
-          "mittelschulsprengel": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
-          "viertel": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+          "grundschulsprengel": { "uniqueItems": true, "type": "array", "items": { "type": "string" } },
+          "mittelschulsprengel": { "uniqueItems": true, "type": "array", "items": { "type": "string" } },
+          "viertel": { "uniqueItems": true, "type": "array", "items": { "type": "string" } },
           "wohneinheiten": {
             "type": "array",
             "items": { "$ref": "#/components/schemas/WohneinheitenProFoerderartProJahrDto" }
@@ -1016,9 +1018,9 @@
           "nummer": { "type": "number" },
           "name": { "type": "string" },
           "flurstuecke": {
+            "uniqueItems": true,
             "type": "array",
-            "items": { "$ref": "#/components/schemas/FlurstueckDto" },
-            "uniqueItems": true
+            "items": { "$ref": "#/components/schemas/FlurstueckDto" }
           },
           "multiPolygon": { "$ref": "#/components/schemas/MultiPolygonGeometryDto" }
         }
@@ -1150,35 +1152,35 @@
         "type": "object",
         "properties": {
           "stadtbezirke": {
+            "uniqueItems": true,
             "type": "array",
-            "items": { "$ref": "#/components/schemas/StadtbezirkDto" },
-            "uniqueItems": true
+            "items": { "$ref": "#/components/schemas/StadtbezirkDto" }
           },
           "bezirksteile": {
+            "uniqueItems": true,
             "type": "array",
-            "items": { "$ref": "#/components/schemas/BezirksteilDto" },
-            "uniqueItems": true
+            "items": { "$ref": "#/components/schemas/BezirksteilDto" }
           },
-          "viertel": { "type": "array", "items": { "$ref": "#/components/schemas/ViertelDto" }, "uniqueItems": true },
+          "viertel": { "uniqueItems": true, "type": "array", "items": { "$ref": "#/components/schemas/ViertelDto" } },
           "gemarkungen": {
+            "uniqueItems": true,
             "type": "array",
-            "items": { "$ref": "#/components/schemas/GemarkungDto" },
-            "uniqueItems": true
+            "items": { "$ref": "#/components/schemas/GemarkungDto" }
           },
           "kitaplanungsbereiche": {
+            "uniqueItems": true,
             "type": "array",
-            "items": { "$ref": "#/components/schemas/KitaplanungsbereichDto" },
-            "uniqueItems": true
+            "items": { "$ref": "#/components/schemas/KitaplanungsbereichDto" }
           },
           "grundschulsprengel": {
+            "uniqueItems": true,
             "type": "array",
-            "items": { "$ref": "#/components/schemas/GrundschulsprengelDto" },
-            "uniqueItems": true
+            "items": { "$ref": "#/components/schemas/GrundschulsprengelDto" }
           },
           "mittelschulsprengel": {
+            "uniqueItems": true,
             "type": "array",
-            "items": { "$ref": "#/components/schemas/MittelschulsprengelDto" },
-            "uniqueItems": true
+            "items": { "$ref": "#/components/schemas/MittelschulsprengelDto" }
           },
           "multiPolygon": { "$ref": "#/components/schemas/MultiPolygonGeometryDto" },
           "centroid": { "$ref": "#/components/schemas/PointGeometryDto" },
@@ -1194,6 +1196,7 @@
         }
       },
       "WeiteresVerfahrenDto": {
+        "type": "object",
         "allOf": [
           { "$ref": "#/components/schemas/AbfrageDto" },
           {
