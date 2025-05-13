@@ -19,6 +19,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -146,7 +147,9 @@ public class SendWorkAssignmentInformationService {
                 new ArrayList<AbfragevarianteBauleitplanverfahrenModel>()
             );
             isSobon = Stream.concat(abfragevarianten.stream(), abfragevariantenSachbearbeitung.stream()).anyMatch(
-                a -> a.getSobonBerechnung() != null && a.getSobonBerechnung().getIsASobonBerechnung()
+                a ->
+                    a.getSobonBerechnung() != null &&
+                    BooleanUtils.toBoolean(a.getSobonBerechnung().getIsASobonBerechnung())
             );
         } else if (abfrage.getArtAbfrage() == ArtAbfrage.WEITERES_VERFAHREN) {
             final var abfragevarianten = Objects.requireNonNullElse(
@@ -158,7 +161,9 @@ public class SendWorkAssignmentInformationService {
                 new ArrayList<AbfragevarianteWeiteresVerfahrenModel>()
             );
             isSobon = Stream.concat(abfragevarianten.stream(), abfragevariantenSachbearbeitung.stream()).anyMatch(
-                a -> a.getSobonBerechnung() != null && a.getSobonBerechnung().getIsASobonBerechnung()
+                a ->
+                    a.getSobonBerechnung() != null &&
+                    BooleanUtils.toBoolean(a.getSobonBerechnung().getIsASobonBerechnung())
             );
         }
 
