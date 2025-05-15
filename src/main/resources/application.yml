@@ -96,4 +96,6 @@ refarch:
 
 # siehe: https://github.com/it-at-m/refarch/tree/main/refarch-integrations/refarch-s3-integration
 
-
+springdoc:
+  api-docs:
+    version: OPENAPI_3_0
