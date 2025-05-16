@@ -43,6 +43,9 @@ management:
       access: read_only
     prometheus:
       access: read_only
+  health:
+    mail:
+      enabled: false
   info:
     env:
       enabled: true
