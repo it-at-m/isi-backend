@@ -32,13 +32,18 @@ import org.apache.commons.lang3.EnumUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.hibernate.search.engine.backend.types.Projectable;
 import org.hibernate.search.engine.backend.types.Sortable;
+import org.hibernate.search.mapper.pojo.automaticindexing.ReindexOnUpdate;
 import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBinderRef;
 import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBridgeRef;
+import org.hibernate.search.mapper.pojo.extractor.mapping.annotation.ContainerExtract;
+import org.hibernate.search.mapper.pojo.extractor.mapping.annotation.ContainerExtraction;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.GenericField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.IndexingDependency;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.KeywordField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.NonStandardField;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.ObjectPath;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.PropertyValue;
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
@@ -51,15 +56,12 @@ public abstract class Abfrage extends BaseEntity {
 
     @Transient
     @GenericField(name = "resultType", projectable = Projectable.YES)
+    @IndexingDependency(
+        reindexOnUpdate = ReindexOnUpdate.NO,
+        extraction = @ContainerExtraction(extract = ContainerExtract.NO)
+    )
     public String getResultType() {
         return "ABFRAGE";
-    }
-
-    @Transient
-    @GenericField(name = "artAbfrage_test", projectable = Projectable.YES)
-    @IndexingDependency(derivedFrom = {})
-    public String getArtAbfrageAsString() {
-        return getArtAbfrage() != null ? getArtAbfrage().name() : null;
     }
 
     @KeywordField(name = "name_sort", sortable = Sortable.YES, normalizer = "lowercase")
@@ -87,7 +89,9 @@ public abstract class Abfrage extends BaseEntity {
     @ManyToOne
     private Bauvorhaben bauvorhaben;
 
+    @Transient
     @GenericField(projectable = Projectable.YES)
+    @IndexingDependency(derivedFrom = @ObjectPath(@PropertyValue(propertyName = "bauvorhaben")))
     public UUID getBauvorhabenUuid() {
         return bauvorhaben != null ? bauvorhaben.getId() : null;
     }
@@ -104,7 +108,10 @@ public abstract class Abfrage extends BaseEntity {
      */
     @Transient
     @GenericField(projectable = Projectable.YES)
-    @IndexingDependency
+    @IndexingDependency(
+        reindexOnUpdate = ReindexOnUpdate.NO,
+        extraction = @ContainerExtraction(extract = ContainerExtract.NO)
+    )
     public ArtAbfrage getArtAbfrage() {
         final var discriminatorValue = this.getClass().getAnnotation(DiscriminatorValue.class);
         return ObjectUtils.isEmpty(discriminatorValue)

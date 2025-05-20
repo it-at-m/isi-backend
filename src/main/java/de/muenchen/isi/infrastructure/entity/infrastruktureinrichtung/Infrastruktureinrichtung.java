@@ -39,16 +39,22 @@ import org.apache.commons.lang3.ObjectUtils;
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.generator.EventType;
+import org.hibernate.search.engine.backend.types.ObjectStructure;
 import org.hibernate.search.engine.backend.types.Projectable;
 import org.hibernate.search.engine.backend.types.Sortable;
+import org.hibernate.search.mapper.pojo.automaticindexing.ReindexOnUpdate;
 import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBinderRef;
 import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBridgeRef;
+import org.hibernate.search.mapper.pojo.extractor.mapping.annotation.ContainerExtract;
+import org.hibernate.search.mapper.pojo.extractor.mapping.annotation.ContainerExtraction;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.GenericField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.IndexedEmbedded;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.IndexingDependency;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.KeywordField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.NonStandardField;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.ObjectPath;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.PropertyValue;
 import org.hibernate.type.SqlTypes;
 
 @Entity
@@ -60,13 +66,19 @@ import org.hibernate.type.SqlTypes;
 @EqualsAndHashCode(callSuper = true)
 public abstract class Infrastruktureinrichtung extends BaseEntity {
 
+    @Transient
     @GenericField(name = "resultType", projectable = Projectable.YES)
+    @IndexingDependency(
+        reindexOnUpdate = ReindexOnUpdate.NO,
+        extraction = @ContainerExtraction(extract = ContainerExtract.NO)
+    )
     public String getResultType() {
         return "INFRASTRUKTUREINRICHTUNG";
     }
 
+    @Transient
     @GenericField(name = "bauvorhabenName", projectable = Projectable.YES)
-    @IndexingDependency(derivedFrom = {})
+    @IndexingDependency(derivedFrom = @ObjectPath(@PropertyValue(propertyName = "bauvorhaben")))
     public String getBauvorhabenName() {
         return bauvorhaben != null ? bauvorhaben.getNameVorhaben() : null;
     }

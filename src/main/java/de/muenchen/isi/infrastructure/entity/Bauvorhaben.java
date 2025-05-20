@@ -5,10 +5,12 @@ import de.muenchen.isi.infrastructure.adapter.search.MultiPolygonGeometryValueBr
 import de.muenchen.isi.infrastructure.adapter.search.StandVerfahrenSuggestionBinder;
 import de.muenchen.isi.infrastructure.adapter.search.StandVerfahrenValueBridge;
 import de.muenchen.isi.infrastructure.adapter.search.StringSuggestionBinder;
+import de.muenchen.isi.infrastructure.adapter.search.Wgs84ValueBridge;
 import de.muenchen.isi.infrastructure.entity.common.Adresse;
 import de.muenchen.isi.infrastructure.entity.common.BearbeitendePerson;
 import de.muenchen.isi.infrastructure.entity.common.MultiPolygonGeometry;
 import de.muenchen.isi.infrastructure.entity.common.VerortungMultiPolygon;
+import de.muenchen.isi.infrastructure.entity.common.Wgs84;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtBaulicheNutzung;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonVerfahrensgrundsaetzeJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVerfahren;
@@ -39,10 +41,14 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.search.engine.backend.types.ObjectStructure;
 import org.hibernate.search.engine.backend.types.Projectable;
 import org.hibernate.search.engine.backend.types.Sortable;
+import org.hibernate.search.mapper.pojo.automaticindexing.ReindexOnUpdate;
 import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBinderRef;
 import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBridgeRef;
+import org.hibernate.search.mapper.pojo.extractor.mapping.annotation.ContainerExtract;
+import org.hibernate.search.mapper.pojo.extractor.mapping.annotation.ContainerExtraction;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.GenericField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
@@ -50,6 +56,8 @@ import org.hibernate.search.mapper.pojo.mapping.definition.annotation.IndexedEmb
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.IndexingDependency;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.KeywordField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.NonStandardField;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.ObjectPath;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.PropertyValue;
 import org.hibernate.type.SqlTypes;
 
 @Entity
@@ -61,8 +69,12 @@ import org.hibernate.type.SqlTypes;
 @Indexed
 public class Bauvorhaben extends BaseEntity {
 
+    @Transient
     @GenericField(name = "resultType", projectable = Projectable.YES)
-    @IndexingDependency(derivedFrom = {})
+    @IndexingDependency(
+        reindexOnUpdate = ReindexOnUpdate.NO,
+        extraction = @ContainerExtraction(extract = ContainerExtract.NO)
+    )
     public String getResultType() {
         return "BAUVORHABEN";
     }
@@ -103,8 +115,20 @@ public class Bauvorhaben extends BaseEntity {
         projectable = Projectable.YES,
         valueBridge = @ValueBridgeRef(type = MultiPolygonGeometryValueBridge.class)
     )
+    @IndexingDependency(derivedFrom = @ObjectPath(@PropertyValue(propertyName = "verortung")))
     public MultiPolygonGeometry getUmgriff() {
         return verortung != null ? verortung.getMultiPolygon() : null;
+    }
+
+    @Transient
+    @GenericField(
+        name = "bauvorhabenCoordinate",
+        projectable = Projectable.YES,
+        valueBridge = @ValueBridgeRef(type = Wgs84ValueBridge.class)
+    )
+    @IndexingDependency(derivedFrom = @ObjectPath(@PropertyValue(propertyName = "adresse")))
+    public Wgs84 getBauvorhabenCoordinate() {
+        return adresse.getCoordinate() != null ? adresse.getCoordinate() : null;
     }
 
     @FullTextField(valueBridge = @ValueBridgeRef(type = StandVerfahrenValueBridge.class))
@@ -132,7 +156,6 @@ public class Bauvorhaben extends BaseEntity {
     @Embedded
     private Adresse adresse;
 
-    @IndexedEmbedded
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(columnDefinition = "jsonb")
     private VerortungMultiPolygon verortung;

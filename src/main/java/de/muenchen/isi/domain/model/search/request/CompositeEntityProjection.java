@@ -1,12 +1,11 @@
 package de.muenchen.isi.domain.model.search.request;
 
 import de.muenchen.isi.infrastructure.entity.common.MultiPolygonGeometry;
-import de.muenchen.isi.infrastructure.entity.common.VerortungMultiPolygon;
 import de.muenchen.isi.infrastructure.entity.common.Wgs84;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVerfahren;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusInfrastruktureinrichtung;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -29,11 +28,9 @@ public record CompositeEntityProjection(
     StandVerfahren stand_verfahren_filter,
     Wgs84 bauvorhabenCoordinate,
     MultiPolygonGeometry umgriff,
-    VerortungMultiPolygon verortung,
-    UncertainBoolean sobon_relevant,
 
     // Abfrage-spezifisch
-    String artAbfrage_test,
+    ArtAbfrage artAbfrage,
     String name,
     StatusAbfrage statusAbfrage,
     UUID bauvorhabenId,

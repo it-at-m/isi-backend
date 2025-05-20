@@ -243,7 +243,7 @@ public abstract class SearchDomainMapper {
         } else if ("ABFRAGE".equals(projection.resultType())) {
             AbfrageSearchResultModel model = new AbfrageSearchResultModel();
             model.setType(SearchResultType.ABFRAGE);
-            model.setArtAbfrage(findOutArtAbfrage(projection.artAbfrage_test()));
+            model.setArtAbfrage(projection.artAbfrage());
             model.setId(projection.id());
             model.setName(projection.name());
             model.setStatusAbfrage(projection.statusAbfrage());
