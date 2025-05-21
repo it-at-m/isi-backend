@@ -90,7 +90,7 @@ public abstract class Abfrage extends BaseEntity {
     private Bauvorhaben bauvorhaben;
 
     @Transient
-    @GenericField(projectable = Projectable.YES)
+    @GenericField(name = "bauvorhabenId", projectable = Projectable.YES)
     @IndexingDependency(derivedFrom = @ObjectPath(@PropertyValue(propertyName = "bauvorhaben")))
     public UUID getBauvorhabenUuid() {
         return bauvorhaben != null ? bauvorhaben.getId() : null;
@@ -107,7 +107,7 @@ public abstract class Abfrage extends BaseEntity {
      * @return Wert der {@link DiscriminatorColumn}.
      */
     @Transient
-    @GenericField(projectable = Projectable.YES)
+    @GenericField(name = "artAbfrage", projectable = Projectable.YES)
     @IndexingDependency(
         reindexOnUpdate = ReindexOnUpdate.NO,
         extraction = @ContainerExtraction(extract = ContainerExtract.NO)

@@ -256,9 +256,7 @@ public abstract class SearchDomainMapper {
             InfrastruktureinrichtungSearchResultModel model = new InfrastruktureinrichtungSearchResultModel();
             model.setType(SearchResultType.INFRASTRUKTUREINRICHTUNG);
             model.setId(projection.id());
-            model.setInfrastruktureinrichtungTyp(
-                findOutInfrastruktureinrichtung(projection.infrastruktureinrichtungTyp())
-            );
+            model.setInfrastruktureinrichtungTyp(projection.infrastruktureinrichtungTyp());
             model.setNameEinrichtung(projection.nameEinrichtung());
             model.setZugehoerigesBauvorhaben(projection.bauvorhabenName());
             return model;

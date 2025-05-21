@@ -8,11 +8,13 @@ import de.muenchen.isi.infrastructure.adapter.listener.InfrastruktureinrichtungL
 import de.muenchen.isi.infrastructure.adapter.search.StatusInfrastruktureinrichtungSuggestionBinder;
 import de.muenchen.isi.infrastructure.adapter.search.StatusInfrastruktureinrichtungValueBridge;
 import de.muenchen.isi.infrastructure.adapter.search.StringSuggestionBinder;
+import de.muenchen.isi.infrastructure.adapter.search.Wgs84ValueBridge;
 import de.muenchen.isi.infrastructure.entity.BaseEntity;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
 import de.muenchen.isi.infrastructure.entity.common.Adresse;
 import de.muenchen.isi.infrastructure.entity.common.BearbeitendePerson;
 import de.muenchen.isi.infrastructure.entity.common.VerortungPoint;
+import de.muenchen.isi.infrastructure.entity.common.Wgs84;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusInfrastruktureinrichtung;
 import de.muenchen.isi.infrastructure.repository.search.SearchwordSuggesterRepository;
@@ -39,7 +41,6 @@ import org.apache.commons.lang3.ObjectUtils;
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.generator.EventType;
-import org.hibernate.search.engine.backend.types.ObjectStructure;
 import org.hibernate.search.engine.backend.types.Projectable;
 import org.hibernate.search.engine.backend.types.Sortable;
 import org.hibernate.search.mapper.pojo.automaticindexing.ReindexOnUpdate;
@@ -103,11 +104,27 @@ public abstract class Infrastruktureinrichtung extends BaseEntity {
      * @return Wert der {@link DiscriminatorColumn}.
      */
     @Transient
+    @GenericField(name = "infrastruktureinrichtungTyp", projectable = Projectable.YES)
+    @IndexingDependency(
+        reindexOnUpdate = ReindexOnUpdate.NO,
+        extraction = @ContainerExtraction(extract = ContainerExtract.NO)
+    )
     public InfrastruktureinrichtungTyp getInfrastruktureinrichtungTyp() {
         final var discriminatorValue = this.getClass().getAnnotation(DiscriminatorValue.class);
         return ObjectUtils.isEmpty(discriminatorValue)
             ? null
             : EnumUtils.getEnum(InfrastruktureinrichtungTyp.class, discriminatorValue.value());
+    }
+
+    @Transient
+    @GenericField(
+        name = "infrastruktureinrichtungCoordinate",
+        projectable = Projectable.YES,
+        valueBridge = @ValueBridgeRef(type = Wgs84ValueBridge.class)
+    )
+    @IndexingDependency(derivedFrom = @ObjectPath(@PropertyValue(propertyName = "adresse")))
+    public Wgs84 getInfrastruktureinrichtungCoordinate() {
+        return adresse.getCoordinate() != null ? adresse.getCoordinate() : null;
     }
 
     @Generated(event = EventType.INSERT)
