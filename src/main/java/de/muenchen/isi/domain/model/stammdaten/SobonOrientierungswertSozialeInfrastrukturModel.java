@@ -81,7 +81,6 @@ public class SobonOrientierungswertSozialeInfrastrukturModel extends BaseEntityM
         if (stammwertArbeitsgruppe == null) {
             return BigDecimal.ZERO;
         }
-
         return stammwertArbeitsgruppe.divide(
             getMittelwertEinwohnerNachErsterstellung10Jahre(),
             CalculationService.DIVISION_SCALE,
@@ -89,74 +88,84 @@ public class SobonOrientierungswertSozialeInfrastrukturModel extends BaseEntityM
         );
     }
 
-    /**
-     * @return das Verhältnis für die Berechnung abhängig von der Altersklasse
-     */
-    private BigDecimal getRatioForCalculation() {
-        if (Altersklasse.ALLE_EWO.equals(altersklasse)) {
-            return getMittelwertEinwohnerNachErsterstellung10Jahre();
-        }
-        return getRatioOfMittelwertEinwohner10JahreToStammwertArbeitsgruppe();
-    }
-
     public BigDecimal getObererRichtwertEinwohnerJahr1NachErsterstellung() {
-        return einwohnerJahr1NachErsterstellung
-            .multiply(this.getRatioForCalculation())
-            .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
+        return Altersklasse.ALLE_EWO.equals(altersklasse)
+            ? einwohnerJahr1NachErsterstellung
+            : einwohnerJahr1NachErsterstellung
+                .multiply(this.getRatioOfMittelwertEinwohner10JahreToStammwertArbeitsgruppe())
+                .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
     }
 
     public BigDecimal getObererRichtwertEinwohnerJahr2NachErsterstellung() {
-        return einwohnerJahr2NachErsterstellung
-            .multiply(this.getRatioForCalculation())
-            .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
+        return Altersklasse.ALLE_EWO.equals(altersklasse)
+            ? einwohnerJahr2NachErsterstellung
+            : einwohnerJahr2NachErsterstellung
+                .multiply(this.getRatioOfMittelwertEinwohner10JahreToStammwertArbeitsgruppe())
+                .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
     }
 
     public BigDecimal getObererRichtwertEinwohnerJahr3NachErsterstellung() {
-        return einwohnerJahr3NachErsterstellung
-            .multiply(this.getRatioForCalculation())
-            .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
+        return Altersklasse.ALLE_EWO.equals(altersklasse)
+            ? einwohnerJahr3NachErsterstellung
+            : einwohnerJahr3NachErsterstellung
+                .multiply(this.getRatioOfMittelwertEinwohner10JahreToStammwertArbeitsgruppe())
+                .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
     }
 
     public BigDecimal getObererRichtwertEinwohnerJahr4NachErsterstellung() {
-        return einwohnerJahr4NachErsterstellung
-            .multiply(this.getRatioForCalculation())
-            .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
+        return Altersklasse.ALLE_EWO.equals(altersklasse)
+            ? einwohnerJahr4NachErsterstellung
+            : einwohnerJahr4NachErsterstellung
+                .multiply(this.getRatioOfMittelwertEinwohner10JahreToStammwertArbeitsgruppe())
+                .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
     }
 
     public BigDecimal getObererRichtwertEinwohnerJahr5NachErsterstellung() {
-        return einwohnerJahr5NachErsterstellung
-            .multiply(this.getRatioForCalculation())
-            .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
+        return Altersklasse.ALLE_EWO.equals(altersklasse)
+            ? einwohnerJahr5NachErsterstellung
+            : einwohnerJahr5NachErsterstellung
+                .multiply(this.getRatioOfMittelwertEinwohner10JahreToStammwertArbeitsgruppe())
+                .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
     }
 
     public BigDecimal getObererRichtwertEinwohnerJahr6NachErsterstellung() {
-        return einwohnerJahr6NachErsterstellung
-            .multiply(this.getRatioForCalculation())
-            .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
+        return Altersklasse.ALLE_EWO.equals(altersklasse)
+            ? einwohnerJahr6NachErsterstellung
+            : einwohnerJahr6NachErsterstellung
+                .multiply(this.getRatioOfMittelwertEinwohner10JahreToStammwertArbeitsgruppe())
+                .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
     }
 
     public BigDecimal getObererRichtwertEinwohnerJahr7NachErsterstellung() {
-        return einwohnerJahr7NachErsterstellung
-            .multiply(this.getRatioForCalculation())
-            .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
+        return Altersklasse.ALLE_EWO.equals(altersklasse)
+            ? einwohnerJahr7NachErsterstellung
+            : einwohnerJahr7NachErsterstellung
+                .multiply(this.getRatioOfMittelwertEinwohner10JahreToStammwertArbeitsgruppe())
+                .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
     }
 
     public BigDecimal getObererRichtwertEinwohnerJahr8NachErsterstellung() {
-        return einwohnerJahr8NachErsterstellung
-            .multiply(this.getRatioForCalculation())
-            .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
+        return Altersklasse.ALLE_EWO.equals(altersklasse)
+            ? einwohnerJahr8NachErsterstellung
+            : einwohnerJahr8NachErsterstellung
+                .multiply(this.getRatioOfMittelwertEinwohner10JahreToStammwertArbeitsgruppe())
+                .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
     }
 
     public BigDecimal getObererRichtwertEinwohnerJahr9NachErsterstellung() {
-        return einwohnerJahr9NachErsterstellung
-            .multiply(this.getRatioForCalculation())
-            .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
+        return Altersklasse.ALLE_EWO.equals(altersklasse)
+            ? einwohnerJahr9NachErsterstellung
+            : einwohnerJahr9NachErsterstellung
+                .multiply(this.getRatioOfMittelwertEinwohner10JahreToStammwertArbeitsgruppe())
+                .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
     }
 
     public BigDecimal getObererRichtwertEinwohnerJahr10NachErsterstellung() {
-        return einwohnerJahr10NachErsterstellung
-            .multiply(this.getRatioForCalculation())
-            .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
+        return Altersklasse.ALLE_EWO.equals(altersklasse)
+            ? einwohnerJahr10NachErsterstellung
+            : einwohnerJahr10NachErsterstellung
+                .multiply(this.getRatioOfMittelwertEinwohner10JahreToStammwertArbeitsgruppe())
+                .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
     }
 
     public BigDecimal getObererRichtwertEinwohnerJahr11NachErsterstellung() {
