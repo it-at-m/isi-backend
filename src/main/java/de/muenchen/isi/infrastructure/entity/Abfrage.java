@@ -1,5 +1,6 @@
 package de.muenchen.isi.infrastructure.entity;
 
+import de.muenchen.isi.infrastructure.adapter.search.ArtAbfragePropertyBinder;
 import de.muenchen.isi.infrastructure.adapter.search.StatusAbfrageSuggestionBinder;
 import de.muenchen.isi.infrastructure.adapter.search.StatusAbfrageValueBridge;
 import de.muenchen.isi.infrastructure.adapter.search.StringSuggestionBinder;
@@ -33,6 +34,7 @@ import org.apache.commons.lang3.ObjectUtils;
 import org.hibernate.search.engine.backend.types.Projectable;
 import org.hibernate.search.engine.backend.types.Sortable;
 import org.hibernate.search.mapper.pojo.automaticindexing.ReindexOnUpdate;
+import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.PropertyBinderRef;
 import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBinderRef;
 import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBridgeRef;
 import org.hibernate.search.mapper.pojo.extractor.mapping.annotation.ContainerExtract;
@@ -43,6 +45,7 @@ import org.hibernate.search.mapper.pojo.mapping.definition.annotation.IndexingDe
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.KeywordField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.NonStandardField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.ObjectPath;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.PropertyBinding;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.PropertyValue;
 
 @Entity
@@ -107,11 +110,11 @@ public abstract class Abfrage extends BaseEntity {
      * @return Wert der {@link DiscriminatorColumn}.
      */
     @Transient
-    @GenericField(name = "artAbfrage", projectable = Projectable.YES)
     @IndexingDependency(
         reindexOnUpdate = ReindexOnUpdate.NO,
         extraction = @ContainerExtraction(extract = ContainerExtract.NO)
     )
+    @PropertyBinding(binder = @PropertyBinderRef(type = ArtAbfragePropertyBinder.class))
     public ArtAbfrage getArtAbfrage() {
         final var discriminatorValue = this.getClass().getAnnotation(DiscriminatorValue.class);
         return ObjectUtils.isEmpty(discriminatorValue)

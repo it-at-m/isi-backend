@@ -2,7 +2,6 @@ package de.muenchen.isi.domain.model.search.request;
 
 import de.muenchen.isi.infrastructure.entity.common.MultiPolygonGeometry;
 import de.muenchen.isi.infrastructure.entity.common.Wgs84;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVerfahren;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
@@ -31,7 +30,7 @@ public record CompositeEntityProjection(
     MultiPolygonGeometry umgriff,
 
     // Abfrage-spezifisch
-    ArtAbfrage artAbfrage,
+    String artAbfrage,
     String name,
     StatusAbfrage statusAbfrage,
     UUID bauvorhabenId,
