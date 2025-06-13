@@ -4,7 +4,10 @@ import com.ibm.icu.text.BreakIterator;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.mapper.SearchDomainMapper;
 import de.muenchen.isi.domain.model.enums.SortAttribute;
+import de.muenchen.isi.domain.model.search.request.AbfrageRecord;
+import de.muenchen.isi.domain.model.search.request.BauvorhabenRecord;
 import de.muenchen.isi.domain.model.search.request.CompositeEntityProjection;
+import de.muenchen.isi.domain.model.search.request.InfrastrukturRecord;
 import de.muenchen.isi.domain.model.search.request.SearchQueryAndSortingModel;
 import de.muenchen.isi.domain.model.search.response.SearchResultsModel;
 import de.muenchen.isi.infrastructure.adapter.search.StadtbezirkNummerValueBridge;
@@ -75,12 +78,15 @@ public class EntitySearchService {
 
         // Erstellung der zu filternden Attribute
         final var filterAttributeMap = new HashMap<String, List<?>>();
+
+        final var recordClass = determineRecordClass(searchQueryAndSortingInformation);
+
         this.prepareFilterGemeinsameAttribute(filterAttributeMap, searchQueryAndSortingInformation);
 
         // Erstellen der Hibernate-Search-Suchquery
         final var searchQueryOptions = Search.session(entityManager)
             .search(searchableEntities)
-            .select(f -> f.composite().as(CompositeEntityProjection.class))
+            .select(f -> f.composite().as(recordClass))
             .where((function, root) -> {
                 // Verarbeitung der angepassten Suchquery
                 root.add(searchPredicateFactory -> {
@@ -488,7 +494,7 @@ public class EntitySearchService {
         final Integer paginationOffset = calculateOffsetOrNullIfNoPaginationRequired(searchQueryAndSortingInformation);
         try {
             // Ausführen einer paginierten oder nicht-paginierten Suche.
-            final SearchResult<CompositeEntityProjection> searchResult = ObjectUtils.isNotEmpty(paginationOffset)
+            final SearchResult<?> searchResult = ObjectUtils.isNotEmpty(paginationOffset)
                 ? searchQueryOptions.fetch(paginationOffset, searchQueryAndSortingInformation.getPageSize())
                 : searchQueryOptions.fetchAll();
 
@@ -588,5 +594,50 @@ public class EntitySearchService {
             numberOfPages = numberOfTotalHits / pageSize + 1;
         }
         return numberOfPages;
+    }
+
+    private Class<?> determineRecordClass(SearchQueryAndSortingModel searchQueryAndSortingInformation) {
+        if (
+            searchQueryAndSortingInformation.getSelectBauleitplanverfahren() &&
+            searchQueryAndSortingInformation.getSelectBaugenehmigungsverfahren() &&
+            searchQueryAndSortingInformation.getSelectWeiteresVerfahren() &&
+            !searchQueryAndSortingInformation.getSelectBauvorhaben() &&
+            !searchQueryAndSortingInformation.getSelectGrundschule() &&
+            !searchQueryAndSortingInformation.getSelectGsNachmittagBetreuung() &&
+            !searchQueryAndSortingInformation.getSelectHausFuerKinder() &&
+            !searchQueryAndSortingInformation.getSelectKindergarten() &&
+            !searchQueryAndSortingInformation.getSelectKinderkrippe() &&
+            !searchQueryAndSortingInformation.getSelectMittelschule()
+        ) {
+            return AbfrageRecord.class;
+        }
+
+        if (
+            searchQueryAndSortingInformation.getSelectBauvorhaben() &&
+            !searchQueryAndSortingInformation.getSelectBauleitplanverfahren() &&
+            !searchQueryAndSortingInformation.getSelectBaugenehmigungsverfahren() &&
+            !searchQueryAndSortingInformation.getSelectWeiteresVerfahren() &&
+            !searchQueryAndSortingInformation.getSelectGrundschule() &&
+            !searchQueryAndSortingInformation.getSelectGsNachmittagBetreuung() &&
+            !searchQueryAndSortingInformation.getSelectHausFuerKinder() &&
+            !searchQueryAndSortingInformation.getSelectKindergarten() &&
+            !searchQueryAndSortingInformation.getSelectKinderkrippe() &&
+            !searchQueryAndSortingInformation.getSelectMittelschule()
+        ) {
+            return BauvorhabenRecord.class;
+        }
+
+        if (
+            searchQueryAndSortingInformation.getSelectGrundschule() ||
+            searchQueryAndSortingInformation.getSelectGsNachmittagBetreuung() ||
+            searchQueryAndSortingInformation.getSelectHausFuerKinder() ||
+            searchQueryAndSortingInformation.getSelectKindergarten() ||
+            searchQueryAndSortingInformation.getSelectKinderkrippe() ||
+            searchQueryAndSortingInformation.getSelectMittelschule()
+        ) {
+            return InfrastrukturRecord.class;
+        }
+
+        return CompositeEntityProjection.class;
     }
 }
