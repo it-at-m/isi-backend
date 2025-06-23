@@ -6,8 +6,10 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.IdProjection;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.ProjectionConstructor;
 
 // Record für Abfrage
+@ProjectionConstructor
 public record AbfrageRecord(
     @IdProjection UUID id,
 

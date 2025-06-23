@@ -628,12 +628,16 @@ public class EntitySearchService {
         }
 
         if (
-            searchQueryAndSortingInformation.getSelectGrundschule() ||
-            searchQueryAndSortingInformation.getSelectGsNachmittagBetreuung() ||
-            searchQueryAndSortingInformation.getSelectHausFuerKinder() ||
-            searchQueryAndSortingInformation.getSelectKindergarten() ||
-            searchQueryAndSortingInformation.getSelectKinderkrippe() ||
-            searchQueryAndSortingInformation.getSelectMittelschule()
+            (searchQueryAndSortingInformation.getSelectGrundschule() ||
+                searchQueryAndSortingInformation.getSelectGsNachmittagBetreuung() ||
+                searchQueryAndSortingInformation.getSelectHausFuerKinder() ||
+                searchQueryAndSortingInformation.getSelectKindergarten() ||
+                searchQueryAndSortingInformation.getSelectKinderkrippe() ||
+                searchQueryAndSortingInformation.getSelectMittelschule()) &&
+            (!searchQueryAndSortingInformation.getSelectBauvorhaben() &&
+                !searchQueryAndSortingInformation.getSelectBauleitplanverfahren() &&
+                !searchQueryAndSortingInformation.getSelectBaugenehmigungsverfahren() &&
+                !searchQueryAndSortingInformation.getSelectWeiteresVerfahren())
         ) {
             return InfrastrukturRecord.class;
         }

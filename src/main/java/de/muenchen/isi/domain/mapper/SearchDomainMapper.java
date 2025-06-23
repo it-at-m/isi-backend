@@ -5,7 +5,10 @@ import de.muenchen.isi.domain.exception.GeometryOperationFailedException;
 import de.muenchen.isi.domain.model.common.MultiPolygonGeometryModel;
 import de.muenchen.isi.domain.model.common.Wgs84Model;
 import de.muenchen.isi.domain.model.enums.SearchResultType;
+import de.muenchen.isi.domain.model.search.request.AbfrageRecord;
+import de.muenchen.isi.domain.model.search.request.BauvorhabenRecord;
 import de.muenchen.isi.domain.model.search.request.CompositeEntityProjection;
+import de.muenchen.isi.domain.model.search.request.InfrastrukturRecord;
 import de.muenchen.isi.domain.model.search.response.AbfrageSearchResultModel;
 import de.muenchen.isi.domain.model.search.response.BauvorhabenSearchResultModel;
 import de.muenchen.isi.domain.model.search.response.InfrastruktureinrichtungSearchResultModel;
@@ -230,21 +233,36 @@ public abstract class SearchDomainMapper {
 
     public abstract MultiPolygonGeometryModel entity2Model(final MultiPolygonGeometry entity);
 
-    public SearchResultModel mapProjectionToSearchResultModel(CompositeEntityProjection projection) {
-        if ("BAUVORHABEN".equals(projection.resultType())) {
-            return getBauvorhabenSearchResultModel(projection);
-        } else if ("ABFRAGE".equals(projection.resultType())) {
-            return getAbfrageSearchResultModel(projection);
-        } else if ("INFRASTRUKTUREINRICHTUNG".equals(projection.resultType())) {
-            return getInfrastruktureinrichtungSearchResultModel(projection);
+    public SearchResultModel mapProjectionToSearchResultModel(Object projection) {
+        if (projection instanceof CompositeEntityProjection) {
+            return mapCompositeEntityProjectionToSearchResultModel((CompositeEntityProjection) projection);
+        } else if (projection instanceof AbfrageRecord) {
+            return getAbfrageSearchResultModel((AbfrageRecord) projection);
+        } else if (projection instanceof InfrastrukturRecord) {
+            return getInfrastruktureinrichtungSearchResultModel((InfrastrukturRecord) projection);
+        } else if (projection instanceof BauvorhabenRecord) {
+            return getBauvorhabenSearchResultModel((BauvorhabenRecord) projection);
         }
-        throw new IllegalArgumentException("Unbekannter resultType: " + projection.resultType());
+        throw new IllegalArgumentException("Unbekannter Projektionstyp: " + projection.getClass().getName());
+    }
+
+    private SearchResultModel mapCompositeEntityProjectionToSearchResultModel(CompositeEntityProjection projection) {
+        switch (projection.resultType()) {
+            case "BAUVORHABEN":
+                return getBauvorhabenSearchResultModel(projection);
+            case "ABFRAGE":
+                return getAbfrageSearchResultModel(projection);
+            case "INFRASTRUKTUREINRICHTUNG":
+                return getInfrastruktureinrichtungSearchResultModel(projection);
+            default:
+                throw new IllegalArgumentException("Unbekannter resultType: " + projection.resultType());
+        }
     }
 
     private AbfrageSearchResultModel getAbfrageSearchResultModel(CompositeEntityProjection projection) {
         AbfrageSearchResultModel model = new AbfrageSearchResultModel();
         model.setType(SearchResultType.ABFRAGE);
-        model.setArtAbfrage(ArtAbfrage.valueOf(projection.abfrage().artAbfrage()));
+        model.setArtAbfrage(ArtAbfrage.valueOf(projection.artAbfrage()));
         model.setId(projection.id());
         model.setName(projection.name());
         model.setStatusAbfrage(projection.statusAbfrage());
@@ -252,6 +270,21 @@ public abstract class SearchDomainMapper {
         model.setCreatedDateTime(projection.createdDateTime());
         model.setStandVerfahren(projection.stand_verfahren_filter());
         model.setBauvorhaben(projection.bauvorhabenId());
+        model.setCoordinate(koordinatenDomainMapper.entity2Model(projection.abfrageCoordinate()));
+        return model;
+    }
+
+    private AbfrageSearchResultModel getAbfrageSearchResultModel(AbfrageRecord projection) {
+        AbfrageSearchResultModel model = new AbfrageSearchResultModel();
+        model.setType(SearchResultType.ABFRAGE);
+        model.setArtAbfrage(ArtAbfrage.valueOf(projection.artAbfrage()));
+        model.setId(projection.bauvorhabenId());
+        model.setName(projection.name());
+        model.setStatusAbfrage(projection.statusAbfrage());
+        model.setFristBearbeitung(projection.fristBearbeitung());
+        model.setCreatedDateTime(projection.createdDateTime());
+        model.setBauvorhaben(projection.bauvorhabenId());
+        model.setCoordinate(koordinatenDomainMapper.entity2Model(projection.abfrageCoordinate()));
         return model;
     }
 
@@ -264,10 +297,34 @@ public abstract class SearchDomainMapper {
         model.setInfrastruktureinrichtungTyp(projection.infrastruktureinrichtungTyp());
         model.setNameEinrichtung(projection.nameEinrichtung());
         model.setZugehoerigesBauvorhaben(projection.bauvorhabenName());
+        model.setCoordinate(koordinatenDomainMapper.entity2Model(projection.infrastruktureinrichtungCoordinate()));
+        return model;
+    }
+
+    private InfrastruktureinrichtungSearchResultModel getInfrastruktureinrichtungSearchResultModel(
+        InfrastrukturRecord projection
+    ) {
+        InfrastruktureinrichtungSearchResultModel model = new InfrastruktureinrichtungSearchResultModel();
+        model.setType(SearchResultType.INFRASTRUKTUREINRICHTUNG);
+        model.setId(projection.id());
+        model.setInfrastruktureinrichtungTyp(projection.infrastruktureinrichtungTyp());
+        model.setNameEinrichtung(projection.nameEinrichtung());
+        model.setZugehoerigesBauvorhaben(projection.bauvorhabenName());
         return model;
     }
 
     private BauvorhabenSearchResultModel getBauvorhabenSearchResultModel(CompositeEntityProjection projection) {
+        BauvorhabenSearchResultModel model = new BauvorhabenSearchResultModel();
+        model.setType(SearchResultType.BAUVORHABEN);
+        model.setId(projection.id());
+        model.setNameVorhaben(projection.nameVorhaben());
+        model.setGrundstuecksgroesse(projection.grundstuecksgroesse());
+        model.setUmgriff(entity2Model(projection.umgriff()));
+        model.setStandVerfahren(projection.stand_verfahren_filter());
+        return model;
+    }
+
+    private BauvorhabenSearchResultModel getBauvorhabenSearchResultModel(BauvorhabenRecord projection) {
         BauvorhabenSearchResultModel model = new BauvorhabenSearchResultModel();
         model.setType(SearchResultType.BAUVORHABEN);
         model.setId(projection.id());

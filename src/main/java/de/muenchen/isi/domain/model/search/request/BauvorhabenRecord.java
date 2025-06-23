@@ -7,11 +7,12 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.IdProjection;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.ProjectionConstructor;
 
 // Record für Bauvorhaben
+@ProjectionConstructor
 public record BauvorhabenRecord(
     @IdProjection UUID id,
-
     // BaseEntity-Felder
     String resultType,
     LocalDateTime createdDateTime,

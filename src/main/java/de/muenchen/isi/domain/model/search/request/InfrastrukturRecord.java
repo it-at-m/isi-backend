@@ -6,8 +6,10 @@ import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusInfrastrukturein
 import java.time.LocalDateTime;
 import java.util.UUID;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.IdProjection;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.ProjectionConstructor;
 
 // Record für Infrastruktur
+@ProjectionConstructor
 public record InfrastrukturRecord(
     @IdProjection UUID id,
 
