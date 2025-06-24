@@ -41,6 +41,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.search.engine.backend.types.ObjectStructure;
 import org.hibernate.search.engine.backend.types.Projectable;
 import org.hibernate.search.engine.backend.types.Sortable;
 import org.hibernate.search.mapper.pojo.automaticindexing.ReindexOnUpdate;
@@ -151,10 +152,11 @@ public class Bauvorhaben extends BaseEntity {
     @Column
     private String bauvorhabenNummer;
 
-    @IndexedEmbedded
+    @IndexedEmbedded(structure = ObjectStructure.NESTED)
     @Embedded
     private Adresse adresse;
 
+    @IndexedEmbedded(structure = ObjectStructure.NESTED)
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(columnDefinition = "jsonb")
     private VerortungMultiPolygon verortung;

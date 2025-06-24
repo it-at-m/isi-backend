@@ -13,8 +13,10 @@ import java.io.Serializable;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.search.engine.backend.types.ObjectStructure;
 import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBinderRef;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.IndexedEmbedded;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.NonStandardField;
 
 @Data
@@ -46,6 +48,7 @@ public class Adresse implements Cloneable, Serializable {
     private String ort;
 
     @Embedded
+    @IndexedEmbedded(structure = ObjectStructure.NESTED)
     private Wgs84 coordinate;
 
     @Embedded

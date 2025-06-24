@@ -1,5 +1,7 @@
 package de.muenchen.isi.domain.model.search.request;
 
+import de.muenchen.isi.infrastructure.entity.common.Adresse;
+import de.muenchen.isi.infrastructure.entity.common.VerortungMultiPolygon;
 import de.muenchen.isi.infrastructure.entity.common.Wgs84;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import java.time.LocalDate;
@@ -17,6 +19,8 @@ public record AbfrageRecord(
     String resultType,
     LocalDateTime createdDateTime,
     LocalDateTime lastModifiedDateTime,
+    Adresse adresse,
+    VerortungMultiPolygon verortungMultiPolygon,
     String artAbfrage,
     String name,
     StatusAbfrage statusAbfrage,

@@ -1,6 +1,8 @@
 package de.muenchen.isi.domain.model.search.request;
 
+import de.muenchen.isi.infrastructure.entity.common.Adresse;
 import de.muenchen.isi.infrastructure.entity.common.MultiPolygonGeometry;
+import de.muenchen.isi.infrastructure.entity.common.VerortungMultiPolygon;
 import de.muenchen.isi.infrastructure.entity.common.Wgs84;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVerfahren;
 import java.math.BigDecimal;
@@ -17,6 +19,8 @@ public record BauvorhabenRecord(
     String resultType,
     LocalDateTime createdDateTime,
     LocalDateTime lastModifiedDateTime,
+    Adresse adresse,
+    VerortungMultiPolygon verortungMultiPolygon,
     String nameVorhaben,
     BigDecimal grundstuecksgroesse,
     StandVerfahren stand_verfahren_filter,

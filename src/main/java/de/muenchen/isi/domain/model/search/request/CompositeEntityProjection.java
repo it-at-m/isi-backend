@@ -1,6 +1,9 @@
 package de.muenchen.isi.domain.model.search.request;
 
+import de.muenchen.isi.infrastructure.entity.common.Adresse;
 import de.muenchen.isi.infrastructure.entity.common.MultiPolygonGeometry;
+import de.muenchen.isi.infrastructure.entity.common.VerortungMultiPolygon;
+import de.muenchen.isi.infrastructure.entity.common.VerortungPoint;
 import de.muenchen.isi.infrastructure.entity.common.Wgs84;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVerfahren;
@@ -22,6 +25,9 @@ public record CompositeEntityProjection(
     LocalDateTime createdDateTime,
     LocalDateTime lastModifiedDateTime,
 
+    Adresse adresse,
+    VerortungMultiPolygon verortungMultiPolygon,
+
     // Bauvorhaben-spezifisch
     String nameVorhaben,
     BigDecimal grundstuecksgroesse,
@@ -42,5 +48,6 @@ public record CompositeEntityProjection(
     String nameEinrichtung,
     StatusInfrastruktureinrichtung status,
     String bauvorhabenName,
-    Wgs84 infrastruktureinrichtungCoordinate
+    Wgs84 infrastruktureinrichtungCoordinate,
+    VerortungPoint verortung
 ) {}

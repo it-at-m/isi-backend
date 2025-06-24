@@ -3,10 +3,8 @@ package de.muenchen.isi.infrastructure.entity;
 import de.muenchen.isi.infrastructure.adapter.search.StandVerfahrenSuggestionBinder;
 import de.muenchen.isi.infrastructure.adapter.search.StandVerfahrenValueBridge;
 import de.muenchen.isi.infrastructure.adapter.search.StringSuggestionBinder;
-import de.muenchen.isi.infrastructure.adapter.search.Wgs84ValueBridge;
 import de.muenchen.isi.infrastructure.entity.common.Adresse;
 import de.muenchen.isi.infrastructure.entity.common.VerortungMultiPolygon;
-import de.muenchen.isi.infrastructure.entity.common.Wgs84;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonVerfahrensgrundsaetzeJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVerfahren;
@@ -24,14 +22,13 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OrderBy;
-import jakarta.persistence.Transient;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.search.engine.backend.types.Projectable;
+import org.hibernate.search.engine.backend.types.ObjectStructure;
 import org.hibernate.search.mapper.pojo.automaticindexing.ReindexOnUpdate;
 import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBinderRef;
 import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBridgeRef;
@@ -41,8 +38,6 @@ import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.IndexedEmbedded;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.IndexingDependency;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.NonStandardField;
-import org.hibernate.search.mapper.pojo.mapping.definition.annotation.ObjectPath;
-import org.hibernate.search.mapper.pojo.mapping.definition.annotation.PropertyValue;
 import org.hibernate.type.SqlTypes;
 
 @Entity
@@ -86,22 +81,11 @@ public class WeiteresVerfahren extends Abfrage {
     @Column(length = 1000)
     private String standVerfahrenFreieEingabe;
 
-    @IndexedEmbedded
+    @IndexedEmbedded(structure = ObjectStructure.NESTED)
     @Embedded
     private Adresse adresse;
 
-    @Transient
-    @GenericField(
-        name = "abfrageCoordinate",
-        projectable = Projectable.YES,
-        valueBridge = @ValueBridgeRef(type = Wgs84ValueBridge.class)
-    )
-    @IndexingDependency(derivedFrom = @ObjectPath(@PropertyValue(propertyName = "adresse")))
-    public Wgs84 getAbfrageCoordinate() {
-        return adresse.getCoordinate() != null ? adresse.getCoordinate() : null;
-    }
-
-    @IndexedEmbedded
+    @IndexedEmbedded(structure = ObjectStructure.NESTED)
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(columnDefinition = "jsonb")
     private VerortungMultiPolygon verortung;

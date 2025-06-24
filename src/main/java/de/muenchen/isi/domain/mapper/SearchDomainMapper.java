@@ -23,7 +23,6 @@ import de.muenchen.isi.infrastructure.entity.common.Adresse;
 import de.muenchen.isi.infrastructure.entity.common.MultiPolygonGeometry;
 import de.muenchen.isi.infrastructure.entity.common.VerortungMultiPolygon;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Infrastruktureinrichtung;
 import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
@@ -270,7 +269,9 @@ public abstract class SearchDomainMapper {
         model.setCreatedDateTime(projection.createdDateTime());
         model.setStandVerfahren(projection.stand_verfahren_filter());
         model.setBauvorhaben(projection.bauvorhabenId());
-        model.setCoordinate(koordinatenDomainMapper.entity2Model(projection.abfrageCoordinate()));
+        model.setCoordinate(
+            getCoordinateFromAdresseOrVerortung(projection.adresse(), projection.verortungMultiPolygon())
+        );
         return model;
     }
 
@@ -284,7 +285,9 @@ public abstract class SearchDomainMapper {
         model.setFristBearbeitung(projection.fristBearbeitung());
         model.setCreatedDateTime(projection.createdDateTime());
         model.setBauvorhaben(projection.bauvorhabenId());
-        model.setCoordinate(koordinatenDomainMapper.entity2Model(projection.abfrageCoordinate()));
+        model.setCoordinate(
+            getCoordinateFromAdresseOrVerortung(projection.adresse(), projection.verortungMultiPolygon())
+        );
         return model;
     }
 
@@ -297,7 +300,21 @@ public abstract class SearchDomainMapper {
         model.setInfrastruktureinrichtungTyp(projection.infrastruktureinrichtungTyp());
         model.setNameEinrichtung(projection.nameEinrichtung());
         model.setZugehoerigesBauvorhaben(projection.bauvorhabenName());
-        model.setCoordinate(koordinatenDomainMapper.entity2Model(projection.infrastruktureinrichtungCoordinate()));
+        model.setCoordinate(
+            getCoordinateFromAdresseOrVerortung(projection.adresse(), projection.verortungMultiPolygon())
+        );
+        if (hasAdressCoordinate(projection.adresse())) {
+            model.setCoordinate(koordinatenDomainMapper.entity2Model(projection.adresse().getCoordinate()));
+        } else if (
+            ObjectUtils.isNotEmpty(projection.verortung()) && ObjectUtils.isNotEmpty(projection.verortung().getPoint())
+        ) {
+            final var wgs84Model = new Wgs84Model();
+            wgs84Model.setLongitude(projection.verortung().getPoint().getCoordinates().get(0).doubleValue());
+            wgs84Model.setLatitude(projection.verortung().getPoint().getCoordinates().get(1).doubleValue());
+            model.setCoordinate(wgs84Model);
+        } else {
+            model.setCoordinate(null);
+        }
         return model;
     }
 
@@ -310,6 +327,18 @@ public abstract class SearchDomainMapper {
         model.setInfrastruktureinrichtungTyp(projection.infrastruktureinrichtungTyp());
         model.setNameEinrichtung(projection.nameEinrichtung());
         model.setZugehoerigesBauvorhaben(projection.bauvorhabenName());
+        if (hasAdressCoordinate(projection.adresse())) {
+            model.setCoordinate(koordinatenDomainMapper.entity2Model(projection.adresse().getCoordinate()));
+        } else if (
+            ObjectUtils.isNotEmpty(projection.verortung()) && ObjectUtils.isNotEmpty(projection.verortung().getPoint())
+        ) {
+            final var wgs84Model = new Wgs84Model();
+            wgs84Model.setLongitude(projection.verortung().getPoint().getCoordinates().get(0).doubleValue());
+            wgs84Model.setLatitude(projection.verortung().getPoint().getCoordinates().get(1).doubleValue());
+            model.setCoordinate(wgs84Model);
+        } else {
+            model.setCoordinate(null);
+        }
         return model;
     }
 
@@ -321,6 +350,9 @@ public abstract class SearchDomainMapper {
         model.setGrundstuecksgroesse(projection.grundstuecksgroesse());
         model.setUmgriff(entity2Model(projection.umgriff()));
         model.setStandVerfahren(projection.stand_verfahren_filter());
+        model.setCoordinate(
+            getCoordinateFromAdresseOrVerortung(projection.adresse(), projection.verortungMultiPolygon())
+        );
         return model;
     }
 
@@ -332,38 +364,9 @@ public abstract class SearchDomainMapper {
         model.setGrundstuecksgroesse(projection.grundstuecksgroesse());
         model.setUmgriff(entity2Model(projection.umgriff()));
         model.setStandVerfahren(projection.stand_verfahren_filter());
+        model.setCoordinate(
+            getCoordinateFromAdresseOrVerortung(projection.adresse(), projection.verortungMultiPolygon())
+        );
         return model;
-    }
-
-    private ArtAbfrage findOutArtAbfrage(String projectionString) {
-        if ("BAULEITPLANVERFAHREN".equals(projectionString)) {
-            return ArtAbfrage.BAULEITPLANVERFAHREN;
-        }
-        if ("BAUGENEHMIGUNGSVERFAHREN".equals(projectionString)) {
-            return ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN;
-        }
-        if ("WEITERES_VERFAHREN".equals(projectionString)) {
-            return ArtAbfrage.WEITERES_VERFAHREN;
-        }
-        return ArtAbfrage.UNSPECIFIED;
-    }
-
-    private InfrastruktureinrichtungTyp findOutInfrastruktureinrichtung(String projectionString) {
-        switch (projectionString) {
-            case "KINDERKRIPPE":
-                return InfrastruktureinrichtungTyp.KINDERKRIPPE;
-            case "KINDERGARTEN":
-                return InfrastruktureinrichtungTyp.KINDERGARTEN;
-            case "GS_NACHMITTAG_BETREUUNG":
-                return InfrastruktureinrichtungTyp.GS_NACHMITTAG_BETREUUNG;
-            case "HAUS_FUER_KINDER":
-                return InfrastruktureinrichtungTyp.HAUS_FUER_KINDER;
-            case "GRUNDSCHULE":
-                return InfrastruktureinrichtungTyp.GRUNDSCHULE;
-            case "MITTELSCHULE":
-                return InfrastruktureinrichtungTyp.MITTELSCHULE;
-            default:
-                return InfrastruktureinrichtungTyp.UNSPECIFIED;
-        }
     }
 }
