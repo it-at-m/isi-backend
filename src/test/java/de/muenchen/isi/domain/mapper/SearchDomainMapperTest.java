@@ -361,7 +361,7 @@ public class SearchDomainMapperTest {
 
     @Test
     void hasAdressCoordinate() {
-        assertThat(searchDomainMapper.hasAdressCoordinate(null), is(false));
+        assertThat(searchDomainMapper.hasWgs84Coordinate(null), is(false));
         final var adresse = new Adresse();
         assertThat(searchDomainMapper.hasAdressCoordinate(adresse), is(false));
         Wgs84 coordinate = new Wgs84();
@@ -373,7 +373,7 @@ public class SearchDomainMapperTest {
 
     @Test
     void getCoordinateFromAdresseOrAdresseNullAndVerortungNull() throws GeometryOperationFailedException {
-        assertThat(searchDomainMapper.getCoordinateFromAdresseOrVerortung(null, null), is(nullValue()));
+        assertThat(searchDomainMapper.getCoordinateFromAdresseOrVerortung((Adresse) null, null), is(nullValue()));
         Mockito.verify(this.koordinatenService, Mockito.times(0)).getMultiPolygonCentroid(Mockito.any());
     }
 
@@ -413,7 +413,7 @@ public class SearchDomainMapperTest {
 
         Mockito.when(this.koordinatenService.getMultiPolygonCentroid(multiPolygon)).thenReturn(mockCoordinate);
 
-        assertThat(searchDomainMapper.getCoordinateFromAdresseOrVerortung(null, verortung), is(expected));
+        assertThat(searchDomainMapper.getCoordinateFromAdresseOrVerortung((Adresse) null, verortung), is(expected));
 
         Mockito.verify(this.koordinatenService, Mockito.times(1)).getMultiPolygonCentroid(multiPolygon);
     }
@@ -423,7 +423,7 @@ public class SearchDomainMapperTest {
         VerortungMultiPolygon verortung = new VerortungMultiPolygon();
         verortung.setMultiPolygon(null);
 
-        assertThat(searchDomainMapper.getCoordinateFromAdresseOrVerortung(null, verortung), is(nullValue()));
+        assertThat(searchDomainMapper.getCoordinateFromAdresseOrVerortung((Adresse) null, verortung), is(nullValue()));
 
         Mockito.verify(this.koordinatenService, Mockito.times(0)).getMultiPolygonCentroid(Mockito.any());
     }

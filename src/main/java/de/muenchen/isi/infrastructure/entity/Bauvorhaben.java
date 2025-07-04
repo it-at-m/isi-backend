@@ -152,7 +152,10 @@ public class Bauvorhaben extends BaseEntity {
     @Column
     private String bauvorhabenNummer;
 
-    @IndexedEmbedded(structure = ObjectStructure.NESTED)
+    @IndexedEmbedded(
+        structure = ObjectStructure.FLATTENED,
+        includePaths = { "coordinate.latitude", "coordinate.longitude" }
+    )
     @Embedded
     private Adresse adresse;
 

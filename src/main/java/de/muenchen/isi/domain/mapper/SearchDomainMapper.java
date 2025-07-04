@@ -22,8 +22,11 @@ import de.muenchen.isi.infrastructure.entity.WeiteresVerfahren;
 import de.muenchen.isi.infrastructure.entity.common.Adresse;
 import de.muenchen.isi.infrastructure.entity.common.MultiPolygonGeometry;
 import de.muenchen.isi.infrastructure.entity.common.VerortungMultiPolygon;
+import de.muenchen.isi.infrastructure.entity.common.Wgs84;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Infrastruktureinrichtung;
+import java.math.BigDecimal;
+import java.util.List;
 import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
@@ -172,6 +175,16 @@ public abstract class SearchDomainMapper {
     /**
      * Überprüft, ob die übergebene Adresse eine Koordinate hat.
      *
+     * @param coordinate Die Adresse, deren Koordinate überprüft werden soll.
+     * @return {@code true}, wenn die Adresse eine Koordinate hat, ansonsten {@code false}.
+     */
+    public boolean hasWgs84Coordinate(final Wgs84 coordinate) {
+        return ObjectUtils.isNotEmpty(coordinate) && ObjectUtils.isNotEmpty(coordinate);
+    }
+
+    /**
+     * Überprüft, ob die übergebene Adresse eine Koordinate hat.
+     *
      * @param adresse Die Adresse, deren Koordinate überprüft werden soll.
      * @return {@code true}, wenn die Adresse eine Koordinate hat, ansonsten {@code false}.
      */
@@ -194,10 +207,28 @@ public abstract class SearchDomainMapper {
      * wird die Koordinate mithilfe des {@link KoordinatenDomainMapper} extrahiert. Wenn die Verortung Koordinaten hat,
      * wird der Schwerpunkt des Mehrfachpolygons mithilfe des {@link KoordinatenService} ermittelt.
      *
-     * @param adresse               Die Adresse, deren Koordinate zurückgegeben werden soll.
-     * @param verortungMultiPolygon Die Verortung, deren Koordinate zurückgegeben werden soll.
+     * @param coordinate               Die Adresse, deren Koordinate zurückgegeben werden soll.
+     * @param multiPolygonGeometry Die Koordinaten der Verortung zurückgegeben werden soll.
      * @return Ein WGS84Model-Objekt mit den extrahierten Koordinaten oder {@code null}, wenn keine Koordinaten vorhanden sind.
      */
+    public Wgs84Model getCoordinateFromAdresseOrVerortung(
+        final Wgs84 coordinate,
+        final MultiPolygonGeometry multiPolygonGeometry
+    ) {
+        if (hasWgs84Coordinate(coordinate)) {
+            return this.koordinatenDomainMapper.entity2Model(coordinate);
+        } else if (ObjectUtils.isNotEmpty(multiPolygonGeometry)) {
+            try {
+                final var centroid = koordinatenService.getMultiPolygonCentroid(multiPolygonGeometry);
+                return koordinatenDomainMapper.entity2Model(centroid);
+            } catch (GeometryOperationFailedException exception) {
+                var message = "Ermitteln des Schwerpunktes ist fehlgeschlagen.";
+                log.error(message);
+            }
+        }
+        return null;
+    }
+
     public Wgs84Model getCoordinateFromAdresseOrVerortung(
         final Adresse adresse,
         final VerortungMultiPolygon verortungMultiPolygon
@@ -269,9 +300,10 @@ public abstract class SearchDomainMapper {
         model.setCreatedDateTime(projection.createdDateTime());
         model.setStandVerfahren(projection.stand_verfahren_filter());
         model.setBauvorhaben(projection.bauvorhabenId());
-        model.setCoordinate(
-            getCoordinateFromAdresseOrVerortung(projection.adresse(), projection.verortungMultiPolygon())
-        );
+        Wgs84 wgs84 = new Wgs84();
+        wgs84.setLatitude(projection.adresse_coordinate_latitude());
+        wgs84.setLongitude(projection.adresse_coordinate_longitude());
+        model.setCoordinate(getCoordinateFromAdresseOrVerortung(wgs84, projection.multiPolygonGeometry()));
         return model;
     }
 
@@ -285,9 +317,10 @@ public abstract class SearchDomainMapper {
         model.setFristBearbeitung(projection.fristBearbeitung());
         model.setCreatedDateTime(projection.createdDateTime());
         model.setBauvorhaben(projection.bauvorhabenId());
-        model.setCoordinate(
-            getCoordinateFromAdresseOrVerortung(projection.adresse(), projection.verortungMultiPolygon())
-        );
+        Wgs84 wgs84 = new Wgs84();
+        wgs84.setLatitude(projection.adresse_coordinate_latitude());
+        wgs84.setLongitude(projection.adresse_coordinate_longitude());
+        model.setCoordinate(getCoordinateFromAdresseOrVerortung(wgs84, projection.multiPolygonGeometry()));
         return model;
     }
 
@@ -300,11 +333,11 @@ public abstract class SearchDomainMapper {
         model.setInfrastruktureinrichtungTyp(projection.infrastruktureinrichtungTyp());
         model.setNameEinrichtung(projection.nameEinrichtung());
         model.setZugehoerigesBauvorhaben(projection.bauvorhabenName());
-        model.setCoordinate(
-            getCoordinateFromAdresseOrVerortung(projection.adresse(), projection.verortungMultiPolygon())
-        );
-        if (hasAdressCoordinate(projection.adresse())) {
-            model.setCoordinate(koordinatenDomainMapper.entity2Model(projection.adresse().getCoordinate()));
+        Wgs84 wgs84 = new Wgs84();
+        wgs84.setLatitude(projection.adresse_coordinate_latitude());
+        wgs84.setLongitude(projection.adresse_coordinate_longitude());
+        if (hasWgs84Coordinate(wgs84)) {
+            model.setCoordinate(koordinatenDomainMapper.entity2Model(wgs84));
         } else if (
             ObjectUtils.isNotEmpty(projection.verortung()) && ObjectUtils.isNotEmpty(projection.verortung().getPoint())
         ) {
@@ -327,14 +360,15 @@ public abstract class SearchDomainMapper {
         model.setInfrastruktureinrichtungTyp(projection.infrastruktureinrichtungTyp());
         model.setNameEinrichtung(projection.nameEinrichtung());
         model.setZugehoerigesBauvorhaben(projection.bauvorhabenName());
-        if (hasAdressCoordinate(projection.adresse())) {
-            model.setCoordinate(koordinatenDomainMapper.entity2Model(projection.adresse().getCoordinate()));
-        } else if (
-            ObjectUtils.isNotEmpty(projection.verortung()) && ObjectUtils.isNotEmpty(projection.verortung().getPoint())
-        ) {
+        Wgs84 wgs84 = new Wgs84();
+        wgs84.setLatitude(projection.adresse_coordinate_latitude());
+        wgs84.setLongitude(projection.adresse_coordinate_longitude());
+        if (hasWgs84Coordinate(wgs84)) {
+            model.setCoordinate(koordinatenDomainMapper.entity2Model(wgs84));
+        } else if (ObjectUtils.isNotEmpty(projection.pointGeometry())) {
             final var wgs84Model = new Wgs84Model();
-            wgs84Model.setLongitude(projection.verortung().getPoint().getCoordinates().get(0).doubleValue());
-            wgs84Model.setLatitude(projection.verortung().getPoint().getCoordinates().get(1).doubleValue());
+            wgs84Model.setLongitude(projection.pointGeometry().getCoordinates().get(0).doubleValue());
+            wgs84Model.setLatitude(projection.pointGeometry().getCoordinates().get(1).doubleValue());
             model.setCoordinate(wgs84Model);
         } else {
             model.setCoordinate(null);
@@ -350,9 +384,10 @@ public abstract class SearchDomainMapper {
         model.setGrundstuecksgroesse(projection.grundstuecksgroesse());
         model.setUmgriff(entity2Model(projection.umgriff()));
         model.setStandVerfahren(projection.stand_verfahren_filter());
-        model.setCoordinate(
-            getCoordinateFromAdresseOrVerortung(projection.adresse(), projection.verortungMultiPolygon())
-        );
+        Wgs84 wgs84 = new Wgs84();
+        wgs84.setLatitude(projection.adresse_coordinate_latitude());
+        wgs84.setLongitude(projection.adresse_coordinate_longitude());
+        model.setCoordinate(getCoordinateFromAdresseOrVerortung(wgs84, projection.multiPolygonGeometry()));
         return model;
     }
 
@@ -364,9 +399,10 @@ public abstract class SearchDomainMapper {
         model.setGrundstuecksgroesse(projection.grundstuecksgroesse());
         model.setUmgriff(entity2Model(projection.umgriff()));
         model.setStandVerfahren(projection.stand_verfahren_filter());
-        model.setCoordinate(
-            getCoordinateFromAdresseOrVerortung(projection.adresse(), projection.verortungMultiPolygon())
-        );
+        Wgs84 wgs84 = new Wgs84();
+        wgs84.setLatitude(projection.adresse_coordinate_latitude());
+        wgs84.setLongitude(projection.adresse_coordinate_longitude());
+        model.setCoordinate(getCoordinateFromAdresseOrVerortung(wgs84, projection.multiPolygonGeometry()));
         return model;
     }
 }

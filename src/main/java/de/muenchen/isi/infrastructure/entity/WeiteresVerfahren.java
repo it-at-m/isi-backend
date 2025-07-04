@@ -81,7 +81,10 @@ public class WeiteresVerfahren extends Abfrage {
     @Column(length = 1000)
     private String standVerfahrenFreieEingabe;
 
-    @IndexedEmbedded(structure = ObjectStructure.NESTED)
+    @IndexedEmbedded(
+        structure = ObjectStructure.FLATTENED,
+        includePaths = { "coordinate.latitude", "coordinate.longitude" }
+    )
     @Embedded
     private Adresse adresse;
 

@@ -4,6 +4,8 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.search.engine.backend.types.Projectable;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.GenericField;
 
 @Data
 @NoArgsConstructor
@@ -11,9 +13,11 @@ import lombok.NoArgsConstructor;
 public class Wgs84 {
 
     @Column
+    @GenericField(projectable = Projectable.YES)
     private Double latitude;
 
     @Column
+    @GenericField(projectable = Projectable.YES)
     private Double longitude;
 
     @Override

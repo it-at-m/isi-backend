@@ -122,7 +122,10 @@ public abstract class Infrastruktureinrichtung extends BaseEntity {
     @ManyToOne
     private Bauvorhaben bauvorhaben;
 
-    @IndexedEmbedded(structure = ObjectStructure.NESTED)
+    @IndexedEmbedded(
+        structure = ObjectStructure.FLATTENED,
+        includePaths = { "coordinate.latitude", "coordinate.longitude" }
+    )
     @Embedded
     private Adresse adresse;
 

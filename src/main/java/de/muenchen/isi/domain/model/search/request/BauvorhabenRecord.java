@@ -7,7 +7,9 @@ import de.muenchen.isi.infrastructure.entity.common.Wgs84;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVerfahren;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FieldProjection;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.IdProjection;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.ProjectionConstructor;
 
@@ -19,8 +21,10 @@ public record BauvorhabenRecord(
     String resultType,
     LocalDateTime createdDateTime,
     LocalDateTime lastModifiedDateTime,
-    Adresse adresse,
-    VerortungMultiPolygon verortungMultiPolygon,
+    @FieldProjection(path = "adresse.coordinate.latitude") Double adresse_coordinate_latitude,
+
+    @FieldProjection(path = "adresse.coordinate.longitude") Double adresse_coordinate_longitude,
+    MultiPolygonGeometry multiPolygonGeometry,
     String nameVorhaben,
     BigDecimal grundstuecksgroesse,
     StandVerfahren stand_verfahren_filter,
