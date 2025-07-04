@@ -4,6 +4,8 @@
  */
 package de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import de.muenchen.isi.infrastructure.adapter.listener.InfrastruktureinrichtungListener;
 import de.muenchen.isi.infrastructure.adapter.search.StatusInfrastruktureinrichtungSuggestionBinder;
 import de.muenchen.isi.infrastructure.adapter.search.StatusInfrastruktureinrichtungValueBridge;
@@ -41,6 +43,7 @@ import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.generator.EventType;
 import org.hibernate.search.engine.backend.types.ObjectStructure;
 import org.hibernate.search.engine.backend.types.Projectable;
+import org.hibernate.search.engine.backend.types.Searchable;
 import org.hibernate.search.engine.backend.types.Sortable;
 import org.hibernate.search.mapper.pojo.automaticindexing.ReindexOnUpdate;
 import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBinderRef;
@@ -56,6 +59,8 @@ import org.hibernate.search.mapper.pojo.mapping.definition.annotation.NonStandar
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.ObjectPath;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.PropertyValue;
 import org.hibernate.type.SqlTypes;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Entity
 @EntityListeners({ InfrastruktureinrichtungListener.class })
@@ -65,6 +70,8 @@ import org.hibernate.type.SqlTypes;
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 public abstract class Infrastruktureinrichtung extends BaseEntity {
+
+    private static final Logger log = LoggerFactory.getLogger(Infrastruktureinrichtung.class);
 
     @Transient
     @GenericField(name = "resultType", projectable = Projectable.YES)
@@ -133,6 +140,19 @@ public abstract class Infrastruktureinrichtung extends BaseEntity {
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(columnDefinition = "jsonb")
     private VerortungPoint verortung;
+
+    @Transient
+    @GenericField(name = "verortungPointJson", searchable = Searchable.NO)
+    @IndexingDependency(derivedFrom = { @ObjectPath(@PropertyValue(propertyName = "verortung")) })
+    public String getVerortungJson() {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            return mapper.writeValueAsString(this.verortung);
+        } catch (JsonProcessingException e) {
+            log.error("Verortung zu JSON Parse fehlgeschlagen");
+            return null;
+        }
+    }
 
     /**
      * Einheitlicher indexiertes sortierbares Namensattributs

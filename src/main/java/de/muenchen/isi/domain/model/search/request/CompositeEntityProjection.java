@@ -32,7 +32,7 @@ public record CompositeEntityProjection(
 
     @FieldProjection(path = "adresse.coordinate.longitude") Double adresse_coordinate_longitude,
 
-    MultiPolygonGeometry multiPolygonGeometry,
+    @FieldProjection(path = "verortungJson") String verortung,
 
     // Bauvorhaben-spezifisch
     String nameVorhaben,
@@ -55,5 +55,5 @@ public record CompositeEntityProjection(
     StatusInfrastruktureinrichtung status,
     String bauvorhabenName,
     Wgs84 infrastruktureinrichtungCoordinate,
-    VerortungPoint verortung
+    @FieldProjection(path = "verortungPointJson") String verortungPoint
 ) {}

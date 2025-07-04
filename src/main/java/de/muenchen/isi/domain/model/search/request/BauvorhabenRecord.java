@@ -22,9 +22,8 @@ public record BauvorhabenRecord(
     LocalDateTime createdDateTime,
     LocalDateTime lastModifiedDateTime,
     @FieldProjection(path = "adresse.coordinate.latitude") Double adresse_coordinate_latitude,
-
     @FieldProjection(path = "adresse.coordinate.longitude") Double adresse_coordinate_longitude,
-    MultiPolygonGeometry multiPolygonGeometry,
+    @FieldProjection(path = "verortungJson") String verortung,
     String nameVorhaben,
     BigDecimal grundstuecksgroesse,
     StandVerfahren stand_verfahren_filter,

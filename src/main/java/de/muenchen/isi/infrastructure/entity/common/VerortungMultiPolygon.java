@@ -13,7 +13,6 @@ import org.hibernate.search.mapper.pojo.mapping.definition.annotation.IndexedEmb
 @EqualsAndHashCode(callSuper = true)
 public class VerortungMultiPolygon extends Verortung {
 
-    @IndexedEmbedded(structure = ObjectStructure.NESTED)
     private MultiPolygonGeometry multiPolygon;
 
     private PointGeometry centroid;

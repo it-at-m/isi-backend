@@ -1,5 +1,8 @@
 package de.muenchen.isi.domain.mapper;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import de.muenchen.isi.configuration.MapstructConfiguration;
 import de.muenchen.isi.domain.exception.GeometryOperationFailedException;
 import de.muenchen.isi.domain.model.common.MultiPolygonGeometryModel;
@@ -22,6 +25,7 @@ import de.muenchen.isi.infrastructure.entity.WeiteresVerfahren;
 import de.muenchen.isi.infrastructure.entity.common.Adresse;
 import de.muenchen.isi.infrastructure.entity.common.MultiPolygonGeometry;
 import de.muenchen.isi.infrastructure.entity.common.VerortungMultiPolygon;
+import de.muenchen.isi.infrastructure.entity.common.VerortungPoint;
 import de.muenchen.isi.infrastructure.entity.common.Wgs84;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Infrastruktureinrichtung;
@@ -202,24 +206,61 @@ public abstract class SearchDomainMapper {
         return ObjectUtils.isNotEmpty(verortung) && ObjectUtils.isNotEmpty(verortung.getMultiPolygon());
     }
 
+    private VerortungMultiPolygon readVerortungFromJSON(final String verortungJson) {
+        VerortungMultiPolygon verortungMultiPolygon = new VerortungMultiPolygon();
+        if (verortungJson != null) {
+            try {
+                ObjectMapper objectMapper = new ObjectMapper();
+                verortungMultiPolygon = objectMapper.readValue(verortungJson, VerortungMultiPolygon.class);
+            } catch (JsonProcessingException e) {
+                log.error(e.getMessage());
+            }
+        }
+        return verortungMultiPolygon;
+    }
+
+    private VerortungPoint readVerortungPointFromJSON(final String verortungJson) {
+        VerortungPoint verortungPoint = new VerortungPoint();
+        if (verortungJson != null) {
+            try {
+                ObjectMapper objectMapper = new ObjectMapper();
+                verortungPoint = objectMapper.readValue(verortungJson, VerortungPoint.class);
+            } catch (JsonProcessingException e) {
+                log.error(e.getMessage());
+            }
+        }
+        return verortungPoint;
+    }
+
+    private Wgs84 readAdresse(final Double latitude, final Double longitude) {
+        Wgs84 wgs84 = new Wgs84();
+        if (latitude != null || longitude != null) {
+            wgs84.setLatitude(latitude);
+            wgs84.setLongitude(longitude);
+        }
+        return wgs84;
+    }
+
     /**
      * Gibt die Koordinaten einer Adresse oder Verortung zurück. Wenn die Adresse Koordinaten hat,
      * wird die Koordinate mithilfe des {@link KoordinatenDomainMapper} extrahiert. Wenn die Verortung Koordinaten hat,
      * wird der Schwerpunkt des Mehrfachpolygons mithilfe des {@link KoordinatenService} ermittelt.
      *
      * @param coordinate               Die Adresse, deren Koordinate zurückgegeben werden soll.
-     * @param multiPolygonGeometry Die Koordinaten der Verortung zurückgegeben werden soll.
+     * @param verortungMultiPolygon Die Koordinaten der Verortung zurückgegeben werden soll.
      * @return Ein WGS84Model-Objekt mit den extrahierten Koordinaten oder {@code null}, wenn keine Koordinaten vorhanden sind.
      */
     public Wgs84Model getCoordinateFromAdresseOrVerortung(
         final Wgs84 coordinate,
-        final MultiPolygonGeometry multiPolygonGeometry
+        final VerortungMultiPolygon verortungMultiPolygon
     ) {
         if (hasWgs84Coordinate(coordinate)) {
             return this.koordinatenDomainMapper.entity2Model(coordinate);
-        } else if (ObjectUtils.isNotEmpty(multiPolygonGeometry)) {
+        } else if (hasVerortungCoordinate(verortungMultiPolygon)) {
             try {
-                final var centroid = koordinatenService.getMultiPolygonCentroid(multiPolygonGeometry);
+                final var centroid = koordinatenService.getMultiPolygonCentroid(
+                    verortungMultiPolygon.getMultiPolygon()
+                );
                 return koordinatenDomainMapper.entity2Model(centroid);
             } catch (GeometryOperationFailedException exception) {
                 var message = "Ermitteln des Schwerpunktes ist fehlgeschlagen.";
@@ -300,10 +341,9 @@ public abstract class SearchDomainMapper {
         model.setCreatedDateTime(projection.createdDateTime());
         model.setStandVerfahren(projection.stand_verfahren_filter());
         model.setBauvorhaben(projection.bauvorhabenId());
-        Wgs84 wgs84 = new Wgs84();
-        wgs84.setLatitude(projection.adresse_coordinate_latitude());
-        wgs84.setLongitude(projection.adresse_coordinate_longitude());
-        model.setCoordinate(getCoordinateFromAdresseOrVerortung(wgs84, projection.multiPolygonGeometry()));
+        Wgs84 wgs84 = readAdresse(projection.adresse_coordinate_latitude(), projection.adresse_coordinate_longitude());
+        VerortungMultiPolygon verortungMultiPolygon = readVerortungFromJSON(projection.verortung());
+        model.setCoordinate(getCoordinateFromAdresseOrVerortung(wgs84, verortungMultiPolygon));
         return model;
     }
 
@@ -317,10 +357,9 @@ public abstract class SearchDomainMapper {
         model.setFristBearbeitung(projection.fristBearbeitung());
         model.setCreatedDateTime(projection.createdDateTime());
         model.setBauvorhaben(projection.bauvorhabenId());
-        Wgs84 wgs84 = new Wgs84();
-        wgs84.setLatitude(projection.adresse_coordinate_latitude());
-        wgs84.setLongitude(projection.adresse_coordinate_longitude());
-        model.setCoordinate(getCoordinateFromAdresseOrVerortung(wgs84, projection.multiPolygonGeometry()));
+        Wgs84 wgs84 = readAdresse(projection.adresse_coordinate_latitude(), projection.adresse_coordinate_longitude());
+        VerortungMultiPolygon verortungMultiPolygon = readVerortungFromJSON(projection.verortung());
+        model.setCoordinate(getCoordinateFromAdresseOrVerortung(wgs84, verortungMultiPolygon));
         return model;
     }
 
@@ -338,12 +377,11 @@ public abstract class SearchDomainMapper {
         wgs84.setLongitude(projection.adresse_coordinate_longitude());
         if (hasWgs84Coordinate(wgs84)) {
             model.setCoordinate(koordinatenDomainMapper.entity2Model(wgs84));
-        } else if (
-            ObjectUtils.isNotEmpty(projection.verortung()) && ObjectUtils.isNotEmpty(projection.verortung().getPoint())
-        ) {
+        } else if (ObjectUtils.isNotEmpty(projection.verortungPoint())) {
+            VerortungPoint verortungPoint = readVerortungPointFromJSON(projection.verortungPoint());
             final var wgs84Model = new Wgs84Model();
-            wgs84Model.setLongitude(projection.verortung().getPoint().getCoordinates().get(0).doubleValue());
-            wgs84Model.setLatitude(projection.verortung().getPoint().getCoordinates().get(1).doubleValue());
+            wgs84Model.setLongitude(verortungPoint.getPoint().getCoordinates().get(0).doubleValue());
+            wgs84Model.setLatitude(verortungPoint.getPoint().getCoordinates().get(1).doubleValue());
             model.setCoordinate(wgs84Model);
         } else {
             model.setCoordinate(null);
@@ -365,10 +403,11 @@ public abstract class SearchDomainMapper {
         wgs84.setLongitude(projection.adresse_coordinate_longitude());
         if (hasWgs84Coordinate(wgs84)) {
             model.setCoordinate(koordinatenDomainMapper.entity2Model(wgs84));
-        } else if (ObjectUtils.isNotEmpty(projection.pointGeometry())) {
+        } else if (ObjectUtils.isNotEmpty(projection.verortungPoint())) {
+            VerortungPoint verortungPoint = readVerortungPointFromJSON(projection.verortungPoint());
             final var wgs84Model = new Wgs84Model();
-            wgs84Model.setLongitude(projection.pointGeometry().getCoordinates().get(0).doubleValue());
-            wgs84Model.setLatitude(projection.pointGeometry().getCoordinates().get(1).doubleValue());
+            wgs84Model.setLongitude(verortungPoint.getPoint().getCoordinates().get(0).doubleValue());
+            wgs84Model.setLatitude(verortungPoint.getPoint().getCoordinates().get(1).doubleValue());
             model.setCoordinate(wgs84Model);
         } else {
             model.setCoordinate(null);
@@ -384,10 +423,9 @@ public abstract class SearchDomainMapper {
         model.setGrundstuecksgroesse(projection.grundstuecksgroesse());
         model.setUmgriff(entity2Model(projection.umgriff()));
         model.setStandVerfahren(projection.stand_verfahren_filter());
-        Wgs84 wgs84 = new Wgs84();
-        wgs84.setLatitude(projection.adresse_coordinate_latitude());
-        wgs84.setLongitude(projection.adresse_coordinate_longitude());
-        model.setCoordinate(getCoordinateFromAdresseOrVerortung(wgs84, projection.multiPolygonGeometry()));
+        Wgs84 wgs84 = readAdresse(projection.adresse_coordinate_latitude(), projection.adresse_coordinate_longitude());
+        VerortungMultiPolygon verortungMultiPolygon = readVerortungFromJSON(projection.verortung());
+        model.setCoordinate(getCoordinateFromAdresseOrVerortung(wgs84, verortungMultiPolygon));
         return model;
     }
 
@@ -399,10 +437,9 @@ public abstract class SearchDomainMapper {
         model.setGrundstuecksgroesse(projection.grundstuecksgroesse());
         model.setUmgriff(entity2Model(projection.umgriff()));
         model.setStandVerfahren(projection.stand_verfahren_filter());
-        Wgs84 wgs84 = new Wgs84();
-        wgs84.setLatitude(projection.adresse_coordinate_latitude());
-        wgs84.setLongitude(projection.adresse_coordinate_longitude());
-        model.setCoordinate(getCoordinateFromAdresseOrVerortung(wgs84, projection.multiPolygonGeometry()));
+        Wgs84 wgs84 = readAdresse(projection.adresse_coordinate_latitude(), projection.adresse_coordinate_longitude());
+        VerortungMultiPolygon verortungMultiPolygon = readVerortungFromJSON(projection.verortung());
+        model.setCoordinate(getCoordinateFromAdresseOrVerortung(wgs84, verortungMultiPolygon));
         return model;
     }
 }

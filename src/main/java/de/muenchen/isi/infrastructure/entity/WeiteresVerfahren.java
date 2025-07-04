@@ -1,5 +1,7 @@
 package de.muenchen.isi.infrastructure.entity;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import de.muenchen.isi.infrastructure.adapter.search.StandVerfahrenSuggestionBinder;
 import de.muenchen.isi.infrastructure.adapter.search.StandVerfahrenValueBridge;
 import de.muenchen.isi.infrastructure.adapter.search.StringSuggestionBinder;
@@ -22,6 +24,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OrderBy;
+import jakarta.persistence.Transient;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.Data;
@@ -29,6 +32,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.search.engine.backend.types.ObjectStructure;
+import org.hibernate.search.engine.backend.types.Searchable;
 import org.hibernate.search.mapper.pojo.automaticindexing.ReindexOnUpdate;
 import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBinderRef;
 import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBridgeRef;
@@ -38,7 +42,11 @@ import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.IndexedEmbedded;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.IndexingDependency;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.NonStandardField;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.ObjectPath;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.PropertyValue;
 import org.hibernate.type.SqlTypes;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Entity
 @DiscriminatorValue(ArtAbfrage.Values.WEITERES_VERFAHREN)
@@ -47,6 +55,8 @@ import org.hibernate.type.SqlTypes;
 @EqualsAndHashCode(callSuper = true)
 @Indexed
 public class WeiteresVerfahren extends Abfrage {
+
+    private static final Logger log = LoggerFactory.getLogger(WeiteresVerfahren.class);
 
     @Column
     private String aktenzeichenProLbk;
@@ -92,6 +102,19 @@ public class WeiteresVerfahren extends Abfrage {
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(columnDefinition = "jsonb")
     private VerortungMultiPolygon verortung;
+
+    @Transient
+    @GenericField(name = "verortungJson", searchable = Searchable.NO)
+    @IndexingDependency(derivedFrom = { @ObjectPath(@PropertyValue(propertyName = "verortung")) })
+    public String getVerortungJson() {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            return mapper.writeValueAsString(this.verortung);
+        } catch (JsonProcessingException e) {
+            log.error("Verortung zu JSON Parse fehlgeschlagen");
+            return null;
+        }
+    }
 
     @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "weiteres_verfahren_id")

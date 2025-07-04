@@ -24,10 +24,8 @@ public record InfrastrukturRecord(
     LocalDateTime createdDateTime,
     LocalDateTime lastModifiedDateTime,
     @FieldProjection(path = "adresse.coordinate.latitude") Double adresse_coordinate_latitude,
-
     @FieldProjection(path = "adresse.coordinate.longitude") Double adresse_coordinate_longitude,
-
-    PointGeometry pointGeometry,
+    @FieldProjection(path = "verortungPointJson") String verortungPoint,
     InfrastruktureinrichtungTyp infrastruktureinrichtungTyp,
     String nameEinrichtung,
     StatusInfrastruktureinrichtung status,

@@ -26,8 +26,7 @@ public record AbfrageRecord(
     @FieldProjection(path = "adresse.coordinate.latitude") Double adresse_coordinate_latitude,
 
     @FieldProjection(path = "adresse.coordinate.longitude") Double adresse_coordinate_longitude,
-
-    MultiPolygonGeometry multiPolygonGeometry,
+    @FieldProjection(path = "verortungJson") String verortung,
     String artAbfrage,
     String name,
     StatusAbfrage statusAbfrage,

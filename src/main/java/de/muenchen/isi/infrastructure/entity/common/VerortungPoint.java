@@ -11,7 +11,6 @@ import org.hibernate.search.mapper.pojo.mapping.definition.annotation.IndexedEmb
 @EqualsAndHashCode(callSuper = true)
 public class VerortungPoint extends Verortung {
 
-    @IndexedEmbedded(structure = ObjectStructure.NESTED)
     private PointGeometry point;
 
     private Utm pointUtm;

@@ -1,5 +1,7 @@
 package de.muenchen.isi.infrastructure.entity;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import de.muenchen.isi.infrastructure.adapter.listener.BauvorhabenListener;
 import de.muenchen.isi.infrastructure.adapter.search.MultiPolygonGeometryValueBridge;
 import de.muenchen.isi.infrastructure.adapter.search.StandVerfahrenSuggestionBinder;
@@ -40,9 +42,11 @@ import java.util.List;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.search.engine.backend.types.ObjectStructure;
 import org.hibernate.search.engine.backend.types.Projectable;
+import org.hibernate.search.engine.backend.types.Searchable;
 import org.hibernate.search.engine.backend.types.Sortable;
 import org.hibernate.search.mapper.pojo.automaticindexing.ReindexOnUpdate;
 import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBinderRef;
@@ -60,6 +64,7 @@ import org.hibernate.search.mapper.pojo.mapping.definition.annotation.ObjectPath
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.PropertyValue;
 import org.hibernate.type.SqlTypes;
 
+@Slf4j
 @Entity
 @EntityListeners({ BauvorhabenListener.class })
 @Data
@@ -163,6 +168,19 @@ public class Bauvorhaben extends BaseEntity {
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(columnDefinition = "jsonb")
     private VerortungMultiPolygon verortung;
+
+    @Transient
+    @GenericField(name = "verortungJson", searchable = Searchable.NO)
+    @IndexingDependency(derivedFrom = { @ObjectPath(@PropertyValue(propertyName = "verortung")) })
+    public String getVerortungJson() {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            return mapper.writeValueAsString(this.verortung);
+        } catch (JsonProcessingException e) {
+            log.error("Verortung zu JSON Parse fehlgeschlagen");
+            return null;
+        }
+    }
 
     @FullTextField
     @NonStandardField(
