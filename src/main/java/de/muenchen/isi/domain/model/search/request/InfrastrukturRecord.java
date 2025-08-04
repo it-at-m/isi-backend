@@ -29,6 +29,5 @@ public record InfrastrukturRecord(
     InfrastruktureinrichtungTyp infrastruktureinrichtungTyp,
     String nameEinrichtung,
     StatusInfrastruktureinrichtung status,
-    String bauvorhabenName,
-    Wgs84 infrastruktureinrichtungCoordinate
+    String bauvorhabenName
 ) {}

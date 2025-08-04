@@ -360,6 +360,9 @@ public abstract class SearchDomainMapper {
         Wgs84 wgs84 = readAdresse(projection.adresse_coordinate_latitude(), projection.adresse_coordinate_longitude());
         VerortungMultiPolygon verortungMultiPolygon = readVerortungFromJSON(projection.verortung());
         model.setCoordinate(getCoordinateFromAdresseOrVerortung(wgs84, verortungMultiPolygon));
+        if (projection.name().equals("HALLO")) {
+            log.info("HALLO", projection.verortung());
+        }
         return model;
     }
 

@@ -27,6 +27,5 @@ public record BauvorhabenRecord(
     String nameVorhaben,
     BigDecimal grundstuecksgroesse,
     StandVerfahren stand_verfahren_filter,
-    Wgs84 bauvorhabenCoordinate,
     MultiPolygonGeometry umgriff
 ) {}

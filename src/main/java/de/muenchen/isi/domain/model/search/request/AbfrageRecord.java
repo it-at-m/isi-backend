@@ -31,6 +31,5 @@ public record AbfrageRecord(
     String name,
     StatusAbfrage statusAbfrage,
     UUID bauvorhabenId,
-    Wgs84 abfrageCoordinate,
     LocalDate fristBearbeitung
 ) {}

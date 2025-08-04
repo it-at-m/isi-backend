@@ -38,7 +38,6 @@ public record CompositeEntityProjection(
     String nameVorhaben,
     BigDecimal grundstuecksgroesse,
     StandVerfahren stand_verfahren_filter,
-    Wgs84 bauvorhabenCoordinate,
     MultiPolygonGeometry umgriff,
 
     // Abfrage-spezifisch
@@ -46,7 +45,6 @@ public record CompositeEntityProjection(
     String name,
     StatusAbfrage statusAbfrage,
     UUID bauvorhabenId,
-    Wgs84 abfrageCoordinate,
     LocalDate fristBearbeitung,
 
     // Infrastruktureinrichtung-spezifisch
@@ -54,6 +52,5 @@ public record CompositeEntityProjection(
     String nameEinrichtung,
     StatusInfrastruktureinrichtung status,
     String bauvorhabenName,
-    Wgs84 infrastruktureinrichtungCoordinate,
     @FieldProjection(path = "verortungPointJson") String verortungPoint
 ) {}
