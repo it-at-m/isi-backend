@@ -361,7 +361,6 @@ public class SearchDomainMapperTest {
 
     @Test
     void hasAdressCoordinate() {
-        assertThat(searchDomainMapper.hasWgs84Coordinate(null), is(false));
         final var adresse = new Adresse();
         assertThat(searchDomainMapper.hasAdressCoordinate(adresse), is(false));
         Wgs84 coordinate = new Wgs84();

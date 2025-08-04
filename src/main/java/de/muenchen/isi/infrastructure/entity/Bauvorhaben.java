@@ -3,6 +3,7 @@ package de.muenchen.isi.infrastructure.entity;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.muenchen.isi.infrastructure.adapter.listener.BauvorhabenListener;
+import de.muenchen.isi.infrastructure.adapter.search.AdresseValueBridge;
 import de.muenchen.isi.infrastructure.adapter.search.MultiPolygonGeometryValueBridge;
 import de.muenchen.isi.infrastructure.adapter.search.StandVerfahrenSuggestionBinder;
 import de.muenchen.isi.infrastructure.adapter.search.StandVerfahrenValueBridge;
@@ -126,17 +127,6 @@ public class Bauvorhaben extends BaseEntity {
         return verortung != null ? verortung.getMultiPolygon() : null;
     }
 
-    @Transient
-    @GenericField(
-        name = "bauvorhabenCoordinate",
-        projectable = Projectable.YES,
-        valueBridge = @ValueBridgeRef(type = Wgs84ValueBridge.class)
-    )
-    @IndexingDependency(derivedFrom = @ObjectPath(@PropertyValue(propertyName = "adresse")))
-    public Wgs84 getBauvorhabenCoordinate() {
-        return adresse.getCoordinate() != null ? adresse.getCoordinate() : null;
-    }
-
     @FullTextField(valueBridge = @ValueBridgeRef(type = StandVerfahrenValueBridge.class))
     @NonStandardField(
         name = "standVerfahren" + SearchwordSuggesterRepository.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
@@ -158,12 +148,21 @@ public class Bauvorhaben extends BaseEntity {
     @Column
     private String bauvorhabenNummer;
 
-    @IndexedEmbedded(
-        structure = ObjectStructure.FLATTENED,
-        includePaths = { "coordinate.latitude", "coordinate.longitude" }
-    )
+    @IndexedEmbedded(structure = ObjectStructure.NESTED)
     @Embedded
     private Adresse adresse;
+
+    @Transient
+    @KeywordField(
+        name = "adresseJson",
+        projectable = Projectable.YES,
+        searchable = Searchable.NO,
+        valueBridge = @ValueBridgeRef(type = AdresseValueBridge.class)
+    )
+    @IndexingDependency(derivedFrom = { @ObjectPath(@PropertyValue(propertyName = "adresse")) })
+    public Adresse getAdresseJson() {
+        return this.adresse;
+    }
 
     @IndexedEmbedded(structure = ObjectStructure.NESTED)
     @JdbcTypeCode(SqlTypes.JSON)

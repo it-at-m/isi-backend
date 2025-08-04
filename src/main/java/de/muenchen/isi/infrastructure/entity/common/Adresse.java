@@ -49,7 +49,6 @@ public class Adresse implements Cloneable, Serializable {
     private String ort;
 
     @Embedded
-    @IndexedEmbedded(structure = ObjectStructure.FLATTENED, includePaths = { "latitude", "longitude" })
     private Wgs84 coordinate;
 
     @Embedded

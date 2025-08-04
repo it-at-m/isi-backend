@@ -28,8 +28,7 @@ public record CompositeEntityProjection(
     LocalDateTime createdDateTime,
     LocalDateTime lastModifiedDateTime,
 
-    @FieldProjection(path = "adresse.coordinate.latitude") Double adresse_coordinate_latitude,
-    @FieldProjection(path = "adresse.coordinate.longitude") Double adresse_coordinate_longitude,
+    @FieldProjection(path = "adresseJson") Adresse adresseJson,
     @FieldProjection(path = "verortungJson") VerortungMultiPolygon verortungJson,
 
     // Bauvorhaben-spezifisch

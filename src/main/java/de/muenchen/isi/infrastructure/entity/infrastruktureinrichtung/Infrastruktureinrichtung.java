@@ -7,6 +7,7 @@ package de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.muenchen.isi.infrastructure.adapter.listener.InfrastruktureinrichtungListener;
+import de.muenchen.isi.infrastructure.adapter.search.AdresseValueBridge;
 import de.muenchen.isi.infrastructure.adapter.search.StatusInfrastruktureinrichtungSuggestionBinder;
 import de.muenchen.isi.infrastructure.adapter.search.StatusInfrastruktureinrichtungValueBridge;
 import de.muenchen.isi.infrastructure.adapter.search.StringSuggestionBinder;
@@ -132,12 +133,21 @@ public abstract class Infrastruktureinrichtung extends BaseEntity {
     @ManyToOne
     private Bauvorhaben bauvorhaben;
 
-    @IndexedEmbedded(
-        structure = ObjectStructure.FLATTENED,
-        includePaths = { "coordinate.latitude", "coordinate.longitude" }
-    )
+    @IndexedEmbedded(structure = ObjectStructure.FLATTENED)
     @Embedded
     private Adresse adresse;
+
+    @Transient
+    @KeywordField(
+        name = "adresseJson",
+        projectable = Projectable.YES,
+        searchable = Searchable.NO,
+        valueBridge = @ValueBridgeRef(type = AdresseValueBridge.class)
+    )
+    @IndexingDependency(derivedFrom = { @ObjectPath(@PropertyValue(propertyName = "adresse")) })
+    public Adresse getAdresseJson() {
+        return this.adresse;
+    }
 
     @IndexedEmbedded(structure = ObjectStructure.NESTED)
     @JdbcTypeCode(SqlTypes.JSON)

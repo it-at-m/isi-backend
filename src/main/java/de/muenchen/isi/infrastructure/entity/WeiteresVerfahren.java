@@ -2,6 +2,7 @@ package de.muenchen.isi.infrastructure.entity;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import de.muenchen.isi.infrastructure.adapter.search.AdresseValueBridge;
 import de.muenchen.isi.infrastructure.adapter.search.StandVerfahrenSuggestionBinder;
 import de.muenchen.isi.infrastructure.adapter.search.StandVerfahrenValueBridge;
 import de.muenchen.isi.infrastructure.adapter.search.StringSuggestionBinder;
@@ -94,12 +95,21 @@ public class WeiteresVerfahren extends Abfrage {
     @Column(length = 1000)
     private String standVerfahrenFreieEingabe;
 
-    @IndexedEmbedded(
-        structure = ObjectStructure.FLATTENED,
-        includePaths = { "coordinate.latitude", "coordinate.longitude" }
-    )
+    @IndexedEmbedded(structure = ObjectStructure.FLATTENED)
     @Embedded
     private Adresse adresse;
+
+    @Transient
+    @KeywordField(
+        name = "adresseJson",
+        projectable = Projectable.YES,
+        searchable = Searchable.NO,
+        valueBridge = @ValueBridgeRef(type = AdresseValueBridge.class)
+    )
+    @IndexingDependency(derivedFrom = { @ObjectPath(@PropertyValue(propertyName = "adresse")) })
+    public Adresse getAdresseJson() {
+        return this.adresse;
+    }
 
     @IndexedEmbedded(structure = ObjectStructure.NESTED)
     @JdbcTypeCode(SqlTypes.JSON)
