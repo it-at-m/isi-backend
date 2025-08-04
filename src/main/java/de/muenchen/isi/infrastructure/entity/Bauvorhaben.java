@@ -7,6 +7,7 @@ import de.muenchen.isi.infrastructure.adapter.search.MultiPolygonGeometryValueBr
 import de.muenchen.isi.infrastructure.adapter.search.StandVerfahrenSuggestionBinder;
 import de.muenchen.isi.infrastructure.adapter.search.StandVerfahrenValueBridge;
 import de.muenchen.isi.infrastructure.adapter.search.StringSuggestionBinder;
+import de.muenchen.isi.infrastructure.adapter.search.VerortungMultiPolygonValueBridge;
 import de.muenchen.isi.infrastructure.adapter.search.Wgs84ValueBridge;
 import de.muenchen.isi.infrastructure.entity.common.Adresse;
 import de.muenchen.isi.infrastructure.entity.common.BearbeitendePerson;
@@ -170,16 +171,15 @@ public class Bauvorhaben extends BaseEntity {
     private VerortungMultiPolygon verortung;
 
     @Transient
-    @GenericField(name = "verortungJson", searchable = Searchable.NO)
+    @KeywordField(
+        name = "verortungJson",
+        projectable = Projectable.YES,
+        searchable = Searchable.NO,
+        valueBridge = @ValueBridgeRef(type = VerortungMultiPolygonValueBridge.class)
+    )
     @IndexingDependency(derivedFrom = { @ObjectPath(@PropertyValue(propertyName = "verortung")) })
-    public String getVerortungJson() {
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-            return mapper.writeValueAsString(this.verortung);
-        } catch (JsonProcessingException e) {
-            log.error("Verortung zu JSON Parse fehlgeschlagen");
-            return null;
-        }
+    public VerortungMultiPolygon getVerortungJson() {
+        return this.verortung;
     }
 
     @FullTextField

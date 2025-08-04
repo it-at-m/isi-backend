@@ -10,10 +10,13 @@ import de.muenchen.isi.infrastructure.adapter.listener.InfrastruktureinrichtungL
 import de.muenchen.isi.infrastructure.adapter.search.StatusInfrastruktureinrichtungSuggestionBinder;
 import de.muenchen.isi.infrastructure.adapter.search.StatusInfrastruktureinrichtungValueBridge;
 import de.muenchen.isi.infrastructure.adapter.search.StringSuggestionBinder;
+import de.muenchen.isi.infrastructure.adapter.search.VerortungMultiPolygonValueBridge;
+import de.muenchen.isi.infrastructure.adapter.search.VerortungPointValueBridge;
 import de.muenchen.isi.infrastructure.entity.BaseEntity;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
 import de.muenchen.isi.infrastructure.entity.common.Adresse;
 import de.muenchen.isi.infrastructure.entity.common.BearbeitendePerson;
+import de.muenchen.isi.infrastructure.entity.common.VerortungMultiPolygon;
 import de.muenchen.isi.infrastructure.entity.common.VerortungPoint;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusInfrastruktureinrichtung;
@@ -142,16 +145,15 @@ public abstract class Infrastruktureinrichtung extends BaseEntity {
     private VerortungPoint verortung;
 
     @Transient
-    @GenericField(name = "verortungPointJson", searchable = Searchable.NO)
+    @KeywordField(
+        name = "verortungPointJson",
+        projectable = Projectable.YES,
+        searchable = Searchable.NO,
+        valueBridge = @ValueBridgeRef(type = VerortungPointValueBridge.class)
+    )
     @IndexingDependency(derivedFrom = { @ObjectPath(@PropertyValue(propertyName = "verortung")) })
-    public String getVerortungJson() {
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-            return mapper.writeValueAsString(this.verortung);
-        } catch (JsonProcessingException e) {
-            log.error("Verortung zu JSON Parse fehlgeschlagen");
-            return null;
-        }
+    public VerortungPoint getVerortungPointJson() {
+        return this.verortung;
     }
 
     /**

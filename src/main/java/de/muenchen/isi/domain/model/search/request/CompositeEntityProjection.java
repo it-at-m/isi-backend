@@ -29,10 +29,8 @@ public record CompositeEntityProjection(
     LocalDateTime lastModifiedDateTime,
 
     @FieldProjection(path = "adresse.coordinate.latitude") Double adresse_coordinate_latitude,
-
     @FieldProjection(path = "adresse.coordinate.longitude") Double adresse_coordinate_longitude,
-
-    @FieldProjection(path = "verortungJson") String verortung,
+    @FieldProjection(path = "verortungJson") VerortungMultiPolygon verortungJson,
 
     // Bauvorhaben-spezifisch
     String nameVorhaben,
@@ -52,5 +50,5 @@ public record CompositeEntityProjection(
     String nameEinrichtung,
     StatusInfrastruktureinrichtung status,
     String bauvorhabenName,
-    @FieldProjection(path = "verortungPointJson") String verortungPoint
+    @FieldProjection(path = "verortungPointJson") VerortungPoint verortungPointJson
 ) {}

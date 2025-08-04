@@ -18,14 +18,12 @@ import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Projection
 @ProjectionConstructor
 public record InfrastrukturRecord(
     @IdProjection UUID id,
-
-    // BaseEntity-Felder
     String resultType,
     LocalDateTime createdDateTime,
     LocalDateTime lastModifiedDateTime,
     @FieldProjection(path = "adresse.coordinate.latitude") Double adresse_coordinate_latitude,
     @FieldProjection(path = "adresse.coordinate.longitude") Double adresse_coordinate_longitude,
-    @FieldProjection(path = "verortungPointJson") String verortungPoint,
+    @FieldProjection(path = "verortungPointJson") VerortungPoint verortungPointJson,
     InfrastruktureinrichtungTyp infrastruktureinrichtungTyp,
     String nameEinrichtung,
     StatusInfrastruktureinrichtung status,
