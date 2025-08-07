@@ -111,7 +111,7 @@ public class WeiteresVerfahren extends Abfrage {
         return this.adresse;
     }
 
-    @IndexedEmbedded(structure = ObjectStructure.NESTED)
+    @IndexedEmbedded
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(columnDefinition = "jsonb")
     private VerortungMultiPolygon verortung;

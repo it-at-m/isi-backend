@@ -149,7 +149,7 @@ public abstract class Infrastruktureinrichtung extends BaseEntity {
         return this.adresse;
     }
 
-    @IndexedEmbedded(structure = ObjectStructure.NESTED)
+    @IndexedEmbedded
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(columnDefinition = "jsonb")
     private VerortungPoint verortung;

@@ -598,16 +598,16 @@ public class EntitySearchService {
 
     private Class<?> determineRecordClass(SearchQueryAndSortingModel searchQueryAndSortingInformation) {
         if (
-            searchQueryAndSortingInformation.getSelectBauleitplanverfahren() &&
-            searchQueryAndSortingInformation.getSelectBaugenehmigungsverfahren() &&
-            searchQueryAndSortingInformation.getSelectWeiteresVerfahren() &&
-            !searchQueryAndSortingInformation.getSelectBauvorhaben() &&
-            !searchQueryAndSortingInformation.getSelectGrundschule() &&
-            !searchQueryAndSortingInformation.getSelectGsNachmittagBetreuung() &&
-            !searchQueryAndSortingInformation.getSelectHausFuerKinder() &&
-            !searchQueryAndSortingInformation.getSelectKindergarten() &&
-            !searchQueryAndSortingInformation.getSelectKinderkrippe() &&
-            !searchQueryAndSortingInformation.getSelectMittelschule()
+            searchQueryAndSortingInformation.getSelectBauleitplanverfahren() ||
+            searchQueryAndSortingInformation.getSelectBaugenehmigungsverfahren() ||
+            (searchQueryAndSortingInformation.getSelectWeiteresVerfahren() &&
+                !searchQueryAndSortingInformation.getSelectBauvorhaben() &&
+                !searchQueryAndSortingInformation.getSelectGrundschule() &&
+                !searchQueryAndSortingInformation.getSelectGsNachmittagBetreuung() &&
+                !searchQueryAndSortingInformation.getSelectHausFuerKinder() &&
+                !searchQueryAndSortingInformation.getSelectKindergarten() &&
+                !searchQueryAndSortingInformation.getSelectKinderkrippe() &&
+                !searchQueryAndSortingInformation.getSelectMittelschule())
         ) {
             return AbfrageRecord.class;
         }

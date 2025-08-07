@@ -146,7 +146,7 @@ public class Bauvorhaben extends BaseEntity {
     @Column
     private String bauvorhabenNummer;
 
-    @IndexedEmbedded(structure = ObjectStructure.NESTED)
+    @IndexedEmbedded
     @Embedded
     private Adresse adresse;
 
@@ -162,7 +162,7 @@ public class Bauvorhaben extends BaseEntity {
         return this.adresse;
     }
 
-    @IndexedEmbedded(structure = ObjectStructure.NESTED)
+    @IndexedEmbedded
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(columnDefinition = "jsonb")
     private VerortungMultiPolygon verortung;
