@@ -9,12 +9,10 @@ import de.muenchen.isi.infrastructure.adapter.search.StandVerfahrenSuggestionBin
 import de.muenchen.isi.infrastructure.adapter.search.StandVerfahrenValueBridge;
 import de.muenchen.isi.infrastructure.adapter.search.StringSuggestionBinder;
 import de.muenchen.isi.infrastructure.adapter.search.VerortungMultiPolygonValueBridge;
-import de.muenchen.isi.infrastructure.adapter.search.Wgs84ValueBridge;
 import de.muenchen.isi.infrastructure.entity.common.Adresse;
 import de.muenchen.isi.infrastructure.entity.common.BearbeitendePerson;
 import de.muenchen.isi.infrastructure.entity.common.MultiPolygonGeometry;
 import de.muenchen.isi.infrastructure.entity.common.VerortungMultiPolygon;
-import de.muenchen.isi.infrastructure.entity.common.Wgs84;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtBaulicheNutzung;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonVerfahrensgrundsaetzeJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVerfahren;

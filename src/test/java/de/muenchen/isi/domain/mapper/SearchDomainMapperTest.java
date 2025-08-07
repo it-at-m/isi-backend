@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import de.muenchen.isi.domain.exception.GeometryOperationFailedException;
 import de.muenchen.isi.domain.model.common.MultiPolygonGeometryModel;
 import de.muenchen.isi.domain.model.common.Wgs84Model;
+import de.muenchen.isi.domain.model.enums.SearchResultType;
 import de.muenchen.isi.domain.model.search.request.AbfrageRecord;
 import de.muenchen.isi.domain.model.search.request.CompositeEntityProjection;
 import de.muenchen.isi.domain.model.search.request.InfrastrukturRecord;
@@ -23,7 +24,6 @@ import de.muenchen.isi.infrastructure.entity.common.PointGeometry;
 import de.muenchen.isi.infrastructure.entity.common.VerortungMultiPolygon;
 import de.muenchen.isi.infrastructure.entity.common.VerortungPoint;
 import de.muenchen.isi.infrastructure.entity.common.Wgs84;
-import de.muenchen.isi.infrastructure.entity.enums.SearchResultType;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Kinderkrippe;
@@ -466,7 +466,7 @@ public class SearchDomainMapperTest {
     void testMapProjectionToSearchResultModelCompositeEntity() {
         UUID uuid = UUID.randomUUID();
         CompositeEntityProjection projection = Mockito.mock(CompositeEntityProjection.class);
-        Mockito.when(projection.resultType()).thenReturn(SearchResultType.BAUVORHABEN);
+        Mockito.when(projection.resultType()).thenReturn("BAUVORHABEN");
         Mockito.when(projection.id()).thenReturn(uuid);
         Mockito.when(projection.nameVorhaben()).thenReturn("Test Vorhaben");
 
@@ -482,7 +482,7 @@ public class SearchDomainMapperTest {
     void testMapProjectionToSearchResultModelAbfrage() {
         UUID uuid = UUID.randomUUID();
         AbfrageRecord projection = Mockito.mock(AbfrageRecord.class);
-        Mockito.when(projection.artAbfrage()).thenReturn(ArtAbfrage.BAULEITPLANVERFAHREN);
+        Mockito.when(projection.artAbfrage()).thenReturn("BAULEITPLANVERFAHREN");
         Mockito.when(projection.id()).thenReturn(uuid);
         Mockito.when(projection.name()).thenReturn("Test Abfrage");
 

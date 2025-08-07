@@ -13,7 +13,7 @@ public class ArtAbfragePropertyBinder implements PropertyBinder {
 
     @Override
     public void bind(PropertyBindingContext context) {
-        context.dependencies().useRootOnly(); // Keine echte Property-Abhängigkeit
+        context.dependencies().useRootOnly();
 
         IndexFieldType<String> fieldType = context.typeFactory().asString().toIndexFieldType();
 

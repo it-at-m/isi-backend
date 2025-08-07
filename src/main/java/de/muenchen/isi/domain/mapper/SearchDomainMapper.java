@@ -4,6 +4,7 @@ import de.muenchen.isi.configuration.MapstructConfiguration;
 import de.muenchen.isi.domain.exception.GeometryOperationFailedException;
 import de.muenchen.isi.domain.model.common.MultiPolygonGeometryModel;
 import de.muenchen.isi.domain.model.common.Wgs84Model;
+import de.muenchen.isi.domain.model.enums.SearchResultType;
 import de.muenchen.isi.domain.model.search.request.AbfrageRecord;
 import de.muenchen.isi.domain.model.search.request.BauvorhabenRecord;
 import de.muenchen.isi.domain.model.search.request.CompositeEntityProjection;
@@ -22,7 +23,7 @@ import de.muenchen.isi.infrastructure.entity.common.Adresse;
 import de.muenchen.isi.infrastructure.entity.common.MultiPolygonGeometry;
 import de.muenchen.isi.infrastructure.entity.common.VerortungMultiPolygon;
 import de.muenchen.isi.infrastructure.entity.common.VerortungPoint;
-import de.muenchen.isi.infrastructure.entity.enums.SearchResultType;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Infrastruktureinrichtung;
 import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
@@ -240,11 +241,11 @@ public abstract class SearchDomainMapper {
 
     private SearchResultModel mapCompositeEntityProjectionToSearchResultModel(CompositeEntityProjection projection) {
         switch (projection.resultType()) {
-            case SearchResultType.BAUVORHABEN:
+            case "BAUVORHABEN":
                 return getBauvorhabenSearchResultModel(projection);
-            case SearchResultType.ABFRAGE:
+            case "ABFRAGE":
                 return getAbfrageSearchResultModel(projection);
-            case SearchResultType.INFRASTRUKTUREINRICHTUNG:
+            case "INFRASTRUKTUREINRICHTUNG":
                 return getInfrastruktureinrichtungSearchResultModel(projection);
             default:
                 throw new IllegalArgumentException("Unbekannter resultType: " + projection.resultType());
@@ -254,7 +255,7 @@ public abstract class SearchDomainMapper {
     private AbfrageSearchResultModel getAbfrageSearchResultModel(CompositeEntityProjection projection) {
         AbfrageSearchResultModel model = new AbfrageSearchResultModel();
         model.setType(SearchResultType.ABFRAGE);
-        model.setArtAbfrage(projection.artAbfrage());
+        model.setArtAbfrage(ArtAbfrage.valueOf(projection.artAbfrage()));
         model.setId(projection.id());
         model.setName(projection.name());
         model.setStatusAbfrage(projection.statusAbfrage());
@@ -269,7 +270,7 @@ public abstract class SearchDomainMapper {
     private AbfrageSearchResultModel getAbfrageSearchResultModel(AbfrageRecord projection) {
         AbfrageSearchResultModel model = new AbfrageSearchResultModel();
         model.setType(SearchResultType.ABFRAGE);
-        model.setArtAbfrage(projection.artAbfrage());
+        model.setArtAbfrage(ArtAbfrage.valueOf(projection.artAbfrage()));
         model.setId(projection.id());
         model.setName(projection.name());
         model.setStatusAbfrage(projection.statusAbfrage());

@@ -133,7 +133,7 @@ public abstract class Infrastruktureinrichtung extends BaseEntity {
     @ManyToOne
     private Bauvorhaben bauvorhaben;
 
-    @IndexedEmbedded(structure = ObjectStructure.FLATTENED)
+    @IndexedEmbedded
     @Embedded
     private Adresse adresse;
 
