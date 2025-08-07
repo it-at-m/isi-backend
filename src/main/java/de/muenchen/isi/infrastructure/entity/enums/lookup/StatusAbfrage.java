@@ -5,7 +5,6 @@
 package de.muenchen.isi.infrastructure.entity.enums.lookup;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.util.Arrays;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -23,11 +22,4 @@ public enum StatusAbfrage implements ILookup {
 
     @Getter
     private final String bezeichnung;
-
-    public static StatusAbfrage fromString(String bezeichnung) {
-        return Arrays.stream(values())
-            .filter(status -> status.getBezeichnung().equalsIgnoreCase(bezeichnung))
-            .findFirst()
-            .orElse(ANGELEGT);
-    }
 }

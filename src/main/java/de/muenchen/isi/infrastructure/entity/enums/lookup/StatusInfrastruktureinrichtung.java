@@ -4,7 +4,6 @@
  */
 package de.muenchen.isi.infrastructure.entity.enums.lookup;
 
-import java.util.Arrays;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -43,11 +42,4 @@ public enum StatusInfrastruktureinrichtung implements ILookup {
 
     @Getter
     private final String[] suggestions;
-
-    public static StatusInfrastruktureinrichtung fromString(String bezeichnung) {
-        return Arrays.stream(values())
-            .filter(status -> status.getBezeichnung().equalsIgnoreCase(bezeichnung))
-            .findFirst()
-            .orElse(UNSPECIFIED);
-    }
 }

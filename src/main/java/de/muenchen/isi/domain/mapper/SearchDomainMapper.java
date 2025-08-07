@@ -1,13 +1,9 @@
 package de.muenchen.isi.domain.mapper;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import de.muenchen.isi.configuration.MapstructConfiguration;
 import de.muenchen.isi.domain.exception.GeometryOperationFailedException;
 import de.muenchen.isi.domain.model.common.MultiPolygonGeometryModel;
 import de.muenchen.isi.domain.model.common.Wgs84Model;
-import de.muenchen.isi.domain.model.enums.SearchResultType;
 import de.muenchen.isi.domain.model.search.request.AbfrageRecord;
 import de.muenchen.isi.domain.model.search.request.BauvorhabenRecord;
 import de.muenchen.isi.domain.model.search.request.CompositeEntityProjection;
@@ -26,11 +22,8 @@ import de.muenchen.isi.infrastructure.entity.common.Adresse;
 import de.muenchen.isi.infrastructure.entity.common.MultiPolygonGeometry;
 import de.muenchen.isi.infrastructure.entity.common.VerortungMultiPolygon;
 import de.muenchen.isi.infrastructure.entity.common.VerortungPoint;
-import de.muenchen.isi.infrastructure.entity.common.Wgs84;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
+import de.muenchen.isi.infrastructure.entity.enums.SearchResultType;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Infrastruktureinrichtung;
-import java.math.BigDecimal;
-import java.util.List;
 import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
@@ -193,7 +186,7 @@ public abstract class SearchDomainMapper {
      * @return {@code true}, wenn die Verortung Koordinaten hat, ansonsten {@code false}.
      */
     public boolean hasVerortungCoordinate(final VerortungMultiPolygon verortung) {
-        return verortung != null;
+        return ObjectUtils.isNotEmpty(verortung) && ObjectUtils.isNotEmpty(verortung.getMultiPolygon());
     }
 
     public Wgs84Model getCoordinateFromAdresseOrVerortung(
@@ -247,11 +240,11 @@ public abstract class SearchDomainMapper {
 
     private SearchResultModel mapCompositeEntityProjectionToSearchResultModel(CompositeEntityProjection projection) {
         switch (projection.resultType()) {
-            case "BAUVORHABEN":
+            case SearchResultType.BAUVORHABEN:
                 return getBauvorhabenSearchResultModel(projection);
-            case "ABFRAGE":
+            case SearchResultType.ABFRAGE:
                 return getAbfrageSearchResultModel(projection);
-            case "INFRASTRUKTUREINRICHTUNG":
+            case SearchResultType.INFRASTRUKTUREINRICHTUNG:
                 return getInfrastruktureinrichtungSearchResultModel(projection);
             default:
                 throw new IllegalArgumentException("Unbekannter resultType: " + projection.resultType());
@@ -261,7 +254,7 @@ public abstract class SearchDomainMapper {
     private AbfrageSearchResultModel getAbfrageSearchResultModel(CompositeEntityProjection projection) {
         AbfrageSearchResultModel model = new AbfrageSearchResultModel();
         model.setType(SearchResultType.ABFRAGE);
-        model.setArtAbfrage(ArtAbfrage.valueOf(projection.artAbfrage()));
+        model.setArtAbfrage(projection.artAbfrage());
         model.setId(projection.id());
         model.setName(projection.name());
         model.setStatusAbfrage(projection.statusAbfrage());
@@ -276,8 +269,8 @@ public abstract class SearchDomainMapper {
     private AbfrageSearchResultModel getAbfrageSearchResultModel(AbfrageRecord projection) {
         AbfrageSearchResultModel model = new AbfrageSearchResultModel();
         model.setType(SearchResultType.ABFRAGE);
-        model.setArtAbfrage(ArtAbfrage.valueOf(projection.artAbfrage()));
-        model.setId(projection.bauvorhabenId());
+        model.setArtAbfrage(projection.artAbfrage());
+        model.setId(projection.id());
         model.setName(projection.name());
         model.setStatusAbfrage(projection.statusAbfrage());
         model.setFristBearbeitung(projection.fristBearbeitung());

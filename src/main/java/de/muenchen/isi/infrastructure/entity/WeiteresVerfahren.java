@@ -95,7 +95,7 @@ public class WeiteresVerfahren extends Abfrage {
     @Column(length = 1000)
     private String standVerfahrenFreieEingabe;
 
-    @IndexedEmbedded(structure = ObjectStructure.FLATTENED)
+    @IndexedEmbedded
     @Embedded
     private Adresse adresse;
 

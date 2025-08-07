@@ -3,10 +3,14 @@ package de.muenchen.isi.domain.mapper;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import de.muenchen.isi.domain.exception.GeometryOperationFailedException;
 import de.muenchen.isi.domain.model.common.MultiPolygonGeometryModel;
 import de.muenchen.isi.domain.model.common.Wgs84Model;
+import de.muenchen.isi.domain.model.search.request.AbfrageRecord;
+import de.muenchen.isi.domain.model.search.request.CompositeEntityProjection;
+import de.muenchen.isi.domain.model.search.request.InfrastrukturRecord;
 import de.muenchen.isi.domain.model.search.response.AbfrageSearchResultModel;
 import de.muenchen.isi.domain.model.search.response.BauvorhabenSearchResultModel;
 import de.muenchen.isi.domain.model.search.response.InfrastruktureinrichtungSearchResultModel;
@@ -19,6 +23,9 @@ import de.muenchen.isi.infrastructure.entity.common.PointGeometry;
 import de.muenchen.isi.infrastructure.entity.common.VerortungMultiPolygon;
 import de.muenchen.isi.infrastructure.entity.common.VerortungPoint;
 import de.muenchen.isi.infrastructure.entity.common.Wgs84;
+import de.muenchen.isi.infrastructure.entity.enums.SearchResultType;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Kinderkrippe;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
@@ -361,6 +368,7 @@ public class SearchDomainMapperTest {
 
     @Test
     void hasAdressCoordinate() {
+        assertThat(searchDomainMapper.hasAdressCoordinate(null), is(false));
         final var adresse = new Adresse();
         assertThat(searchDomainMapper.hasAdressCoordinate(adresse), is(false));
         Wgs84 coordinate = new Wgs84();
@@ -372,7 +380,7 @@ public class SearchDomainMapperTest {
 
     @Test
     void getCoordinateFromAdresseOrAdresseNullAndVerortungNull() throws GeometryOperationFailedException {
-        assertThat(searchDomainMapper.getCoordinateFromAdresseOrVerortung((Adresse) null, null), is(nullValue()));
+        assertThat(searchDomainMapper.getCoordinateFromAdresseOrVerortung(null, null), is(nullValue()));
         Mockito.verify(this.koordinatenService, Mockito.times(0)).getMultiPolygonCentroid(Mockito.any());
     }
 
@@ -412,7 +420,7 @@ public class SearchDomainMapperTest {
 
         Mockito.when(this.koordinatenService.getMultiPolygonCentroid(multiPolygon)).thenReturn(mockCoordinate);
 
-        assertThat(searchDomainMapper.getCoordinateFromAdresseOrVerortung((Adresse) null, verortung), is(expected));
+        assertThat(searchDomainMapper.getCoordinateFromAdresseOrVerortung(null, verortung), is(expected));
 
         Mockito.verify(this.koordinatenService, Mockito.times(1)).getMultiPolygonCentroid(multiPolygon);
     }
@@ -422,7 +430,7 @@ public class SearchDomainMapperTest {
         VerortungMultiPolygon verortung = new VerortungMultiPolygon();
         verortung.setMultiPolygon(null);
 
-        assertThat(searchDomainMapper.getCoordinateFromAdresseOrVerortung((Adresse) null, verortung), is(nullValue()));
+        assertThat(searchDomainMapper.getCoordinateFromAdresseOrVerortung(null, verortung), is(nullValue()));
 
         Mockito.verify(this.koordinatenService, Mockito.times(0)).getMultiPolygonCentroid(Mockito.any());
     }
@@ -452,5 +460,66 @@ public class SearchDomainMapperTest {
         expected.setCoordinates(List.of(List.of(List.of(List.of(BigDecimal.TEN, BigDecimal.ONE)))));
 
         assertThat(searchDomainMapper.getUmgriffFromVerortung(verortung), is(expected));
+    }
+
+    @Test
+    void testMapProjectionToSearchResultModelCompositeEntity() {
+        UUID uuid = UUID.randomUUID();
+        CompositeEntityProjection projection = Mockito.mock(CompositeEntityProjection.class);
+        Mockito.when(projection.resultType()).thenReturn(SearchResultType.BAUVORHABEN);
+        Mockito.when(projection.id()).thenReturn(uuid);
+        Mockito.when(projection.nameVorhaben()).thenReturn("Test Vorhaben");
+
+        BauvorhabenSearchResultModel result =
+            (BauvorhabenSearchResultModel) searchDomainMapper.mapProjectionToSearchResultModel(projection);
+
+        assertThat(result.getType(), is(SearchResultType.BAUVORHABEN));
+        assertThat(result.getNameVorhaben(), is("Test Vorhaben"));
+        assertThat(result.getId(), is(uuid));
+    }
+
+    @Test
+    void testMapProjectionToSearchResultModelAbfrage() {
+        UUID uuid = UUID.randomUUID();
+        AbfrageRecord projection = Mockito.mock(AbfrageRecord.class);
+        Mockito.when(projection.artAbfrage()).thenReturn(ArtAbfrage.BAULEITPLANVERFAHREN);
+        Mockito.when(projection.id()).thenReturn(uuid);
+        Mockito.when(projection.name()).thenReturn("Test Abfrage");
+
+        AbfrageSearchResultModel result =
+            (AbfrageSearchResultModel) searchDomainMapper.mapProjectionToSearchResultModel(projection);
+
+        assertThat(result.getType(), is(SearchResultType.ABFRAGE));
+        assertThat(result.getName(), is("Test Abfrage"));
+        assertThat(result.getArtAbfrage(), is(ArtAbfrage.BAULEITPLANVERFAHREN));
+        assertThat(result.getId(), is(uuid));
+    }
+
+    @Test
+    void testMapProjectionToSearchResultModelInfrastruktur() {
+        UUID uuid = UUID.randomUUID();
+        InfrastrukturRecord projection = Mockito.mock(InfrastrukturRecord.class);
+        Mockito.when(projection.infrastruktureinrichtungTyp()).thenReturn(InfrastruktureinrichtungTyp.KINDERKRIPPE);
+        Mockito.when(projection.nameEinrichtung()).thenReturn("Test Einrichtung");
+        Mockito.when(projection.id()).thenReturn(uuid);
+
+        InfrastruktureinrichtungSearchResultModel result =
+            (InfrastruktureinrichtungSearchResultModel) searchDomainMapper.mapProjectionToSearchResultModel(projection);
+
+        assertThat(result.getType(), is(SearchResultType.INFRASTRUKTUREINRICHTUNG));
+        assertThat(result.getNameEinrichtung(), is("Test Einrichtung"));
+        assertThat(result.getInfrastruktureinrichtungTyp(), is(InfrastruktureinrichtungTyp.KINDERKRIPPE));
+        assertThat(result.getId(), is(uuid));
+    }
+
+    @Test
+    void testMapProjectionToSearchResultModelUnknownType() {
+        Object unknownProjection = new Object();
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            searchDomainMapper.mapProjectionToSearchResultModel(unknownProjection);
+        });
+
+        assertThat(exception.getMessage(), is("Unbekannter Projektionstyp: " + unknownProjection.getClass().getName()));
     }
 }

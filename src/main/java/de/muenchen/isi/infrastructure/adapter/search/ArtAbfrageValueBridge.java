@@ -16,4 +16,14 @@ public class ArtAbfrageValueBridge implements ValueBridge<ArtAbfrage, String> {
     public ArtAbfrage fromIndexedValue(String value, ValueBridgeFromIndexedValueContext context) {
         return value != null ? ArtAbfrage.valueOf(value) : null;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        return o != null && this.getClass() == o.getClass();
+    }
+
+    @Override
+    public int hashCode() {
+        return this.getClass().hashCode();
+    }
 }

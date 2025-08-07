@@ -1,7 +1,5 @@
 package de.muenchen.isi.infrastructure.entity;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import de.muenchen.isi.infrastructure.adapter.search.AdresseValueBridge;
 import de.muenchen.isi.infrastructure.adapter.search.StandVerfahrenSuggestionBinder;
 import de.muenchen.isi.infrastructure.adapter.search.StandVerfahrenValueBridge;
@@ -90,7 +88,7 @@ public class Bauleitplanverfahren extends Abfrage {
     @Column(length = 1000)
     private String standVerfahrenFreieEingabe;
 
-    @IndexedEmbedded(structure = ObjectStructure.FLATTENED)
+    @IndexedEmbedded
     @Embedded
     private Adresse adresse;
 
