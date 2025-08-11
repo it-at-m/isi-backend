@@ -195,11 +195,9 @@ public abstract class SearchDomainMapper {
         final VerortungMultiPolygon verortungMultiPolygon
     ) {
         if (hasAdressCoordinate(adresse)) {
-            log.info("ADRESSE: {}", adresse, verortungMultiPolygon);
             return this.koordinatenDomainMapper.entity2Model(adresse.getCoordinate());
         } else if (hasVerortungCoordinate(verortungMultiPolygon)) {
             try {
-                log.info("INNERHALB DER BERECHNUNG {}", verortungMultiPolygon);
                 final var centroid = koordinatenService.getMultiPolygonCentroid(
                     verortungMultiPolygon.getMultiPolygon()
                 );
