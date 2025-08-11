@@ -44,7 +44,7 @@ public record CompositeEntityProjection(
     LocalDate fristBearbeitung,
 
     // Infrastruktureinrichtung-spezifisch
-    @FieldProjection(path = "infrastruktureinrichtungTyp") InfrastruktureinrichtungTyp infrastruktureinrichtungTyp,
+    InfrastruktureinrichtungTyp infrastruktureinrichtungTyp,
     String nameEinrichtung,
     StatusInfrastruktureinrichtung status,
     String bauvorhabenName,

@@ -596,7 +596,7 @@ public class EntitySearchService {
         return numberOfPages;
     }
 
-    private Class<?> determineRecordClass(SearchQueryAndSortingModel s) {
+    protected Class<?> determineRecordClass(SearchQueryAndSortingModel s) {
         boolean anyInfra =
             s.getSelectGrundschule() ||
             s.getSelectGsNachmittagBetreuung() ||
