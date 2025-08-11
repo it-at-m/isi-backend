@@ -596,52 +596,27 @@ public class EntitySearchService {
         return numberOfPages;
     }
 
-    private Class<?> determineRecordClass(SearchQueryAndSortingModel searchQueryAndSortingInformation) {
-        if (
-            searchQueryAndSortingInformation.getSelectBauleitplanverfahren() ||
-            searchQueryAndSortingInformation.getSelectBaugenehmigungsverfahren() ||
-            searchQueryAndSortingInformation.getSelectWeiteresVerfahren() ||
-            (!searchQueryAndSortingInformation.getSelectBauvorhaben() &&
-                !searchQueryAndSortingInformation.getSelectGrundschule() &&
-                !searchQueryAndSortingInformation.getSelectGsNachmittagBetreuung() &&
-                !searchQueryAndSortingInformation.getSelectHausFuerKinder() &&
-                !searchQueryAndSortingInformation.getSelectKindergarten() &&
-                !searchQueryAndSortingInformation.getSelectKinderkrippe() &&
-                !searchQueryAndSortingInformation.getSelectMittelschule())
-        ) {
-            return AbfrageRecord.class;
-        }
+    private Class<?> determineRecordClass(SearchQueryAndSortingModel s) {
+        boolean anyInfra =
+            s.getSelectGrundschule() ||
+            s.getSelectGsNachmittagBetreuung() ||
+            s.getSelectHausFuerKinder() ||
+            s.getSelectKindergarten() ||
+            s.getSelectKinderkrippe() ||
+            s.getSelectMittelschule();
 
-        if (
-            searchQueryAndSortingInformation.getSelectBauvorhaben() &&
-            (!searchQueryAndSortingInformation.getSelectBauleitplanverfahren() &&
-                !searchQueryAndSortingInformation.getSelectBaugenehmigungsverfahren() &&
-                !searchQueryAndSortingInformation.getSelectWeiteresVerfahren() &&
-                !searchQueryAndSortingInformation.getSelectGrundschule() &&
-                !searchQueryAndSortingInformation.getSelectGsNachmittagBetreuung() &&
-                !searchQueryAndSortingInformation.getSelectHausFuerKinder() &&
-                !searchQueryAndSortingInformation.getSelectKindergarten() &&
-                !searchQueryAndSortingInformation.getSelectKinderkrippe() &&
-                !searchQueryAndSortingInformation.getSelectMittelschule())
-        ) {
-            return BauvorhabenRecord.class;
-        }
+        boolean anyAbfrage =
+            s.getSelectBauleitplanverfahren() ||
+            s.getSelectBaugenehmigungsverfahren() ||
+            s.getSelectWeiteresVerfahren();
 
-        if (
-            (searchQueryAndSortingInformation.getSelectGrundschule() ||
-                searchQueryAndSortingInformation.getSelectGsNachmittagBetreuung() ||
-                searchQueryAndSortingInformation.getSelectHausFuerKinder() ||
-                searchQueryAndSortingInformation.getSelectKindergarten() ||
-                searchQueryAndSortingInformation.getSelectKinderkrippe() ||
-                searchQueryAndSortingInformation.getSelectMittelschule()) &&
-            (!searchQueryAndSortingInformation.getSelectBauvorhaben() &&
-                !searchQueryAndSortingInformation.getSelectBauleitplanverfahren() &&
-                !searchQueryAndSortingInformation.getSelectBaugenehmigungsverfahren() &&
-                !searchQueryAndSortingInformation.getSelectWeiteresVerfahren())
-        ) {
-            return InfrastrukturRecord.class;
-        }
+        boolean onlyBauvorhaben = s.getSelectBauvorhaben() && !anyAbfrage && !anyInfra;
+        boolean onlyAbfrage = anyAbfrage && !s.getSelectBauvorhaben() && !anyInfra;
+        boolean onlyInfra = anyInfra && !s.getSelectBauvorhaben() && !anyAbfrage;
 
-        return CompositeEntityProjection.class;
+        if (onlyAbfrage) return AbfrageRecord.class;
+        if (onlyBauvorhaben) return BauvorhabenRecord.class;
+        if (onlyInfra) return InfrastrukturRecord.class;
+        return CompositeEntityProjection.class; // gemischt oder nichts explizit gewählt
     }
 }
