@@ -4,9 +4,12 @@ import com.ibm.icu.text.BreakIterator;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.mapper.SearchDomainMapper;
 import de.muenchen.isi.domain.model.enums.SortAttribute;
+import de.muenchen.isi.domain.model.search.request.AbfrageInfrastruktureinrichtungRecord;
 import de.muenchen.isi.domain.model.search.request.AbfrageRecord;
+import de.muenchen.isi.domain.model.search.request.AllObjectsRecord;
+import de.muenchen.isi.domain.model.search.request.BauvorhabenAbfrageRecord;
+import de.muenchen.isi.domain.model.search.request.BauvorhabenInfrastruktureinrichtungRecord;
 import de.muenchen.isi.domain.model.search.request.BauvorhabenRecord;
-import de.muenchen.isi.domain.model.search.request.CompositeEntityProjection;
 import de.muenchen.isi.domain.model.search.request.InfrastrukturRecord;
 import de.muenchen.isi.domain.model.search.request.SearchQueryAndSortingModel;
 import de.muenchen.isi.domain.model.search.response.SearchResultsModel;
@@ -610,13 +613,19 @@ public class EntitySearchService {
             s.getSelectBaugenehmigungsverfahren() ||
             s.getSelectWeiteresVerfahren();
 
-        boolean onlyBauvorhaben = s.getSelectBauvorhaben() && !anyAbfrage && !anyInfra;
-        boolean onlyAbfrage = anyAbfrage && !s.getSelectBauvorhaben() && !anyInfra;
-        boolean onlyInfra = anyInfra && !s.getSelectBauvorhaben() && !anyAbfrage;
+        boolean bau = s.getSelectBauvorhaben();
 
-        if (onlyAbfrage) return AbfrageRecord.class;
-        if (onlyBauvorhaben) return BauvorhabenRecord.class;
-        if (onlyInfra) return InfrastrukturRecord.class;
-        return CompositeEntityProjection.class; // gemischt oder nichts explizit gewählt
+        // --- reine Einzelauswahlen ---
+        if (anyAbfrage && !bau && !anyInfra) return AbfrageRecord.class;
+        if (bau && !anyAbfrage && !anyInfra) return BauvorhabenRecord.class;
+        if (anyInfra && !bau && !anyAbfrage) return InfrastrukturRecord.class;
+
+        // --- Kombis (2er-Schnittmengen) ---
+        if (bau && anyInfra && !anyAbfrage) return BauvorhabenInfrastruktureinrichtungRecord.class;
+        if (bau && anyAbfrage && !anyInfra) return BauvorhabenAbfrageRecord.class;
+        if (!bau && anyAbfrage && anyInfra) return AbfrageInfrastruktureinrichtungRecord.class;
+
+        // --- alles andere (z. B. alle drei, oder gar nichts explizit) ---
+        return AllObjectsRecord.class;
     }
 }

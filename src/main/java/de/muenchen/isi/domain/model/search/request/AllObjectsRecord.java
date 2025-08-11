@@ -4,7 +4,6 @@ import de.muenchen.isi.infrastructure.entity.common.Adresse;
 import de.muenchen.isi.infrastructure.entity.common.MultiPolygonGeometry;
 import de.muenchen.isi.infrastructure.entity.common.VerortungMultiPolygon;
 import de.muenchen.isi.infrastructure.entity.common.VerortungPoint;
-import de.muenchen.isi.infrastructure.entity.common.Wgs84;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVerfahren;
@@ -19,7 +18,7 @@ import org.hibernate.search.mapper.pojo.mapping.definition.annotation.IdProjecti
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.ProjectionConstructor;
 
 @ProjectionConstructor
-public record CompositeEntityProjection(
+public record AllObjectsRecord(
     @IdProjection UUID id,
 
     // BaseEntity-Felder

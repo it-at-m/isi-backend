@@ -10,7 +10,7 @@ import de.muenchen.isi.domain.model.common.MultiPolygonGeometryModel;
 import de.muenchen.isi.domain.model.common.Wgs84Model;
 import de.muenchen.isi.domain.model.enums.SearchResultType;
 import de.muenchen.isi.domain.model.search.request.AbfrageRecord;
-import de.muenchen.isi.domain.model.search.request.CompositeEntityProjection;
+import de.muenchen.isi.domain.model.search.request.AllObjectsRecord;
 import de.muenchen.isi.domain.model.search.request.InfrastrukturRecord;
 import de.muenchen.isi.domain.model.search.response.AbfrageSearchResultModel;
 import de.muenchen.isi.domain.model.search.response.BauvorhabenSearchResultModel;
@@ -465,7 +465,7 @@ public class SearchDomainMapperTest {
     @Test
     void testMapProjectionToSearchResultModelCompositeEntity() {
         UUID uuid = UUID.randomUUID();
-        CompositeEntityProjection projection = Mockito.mock(CompositeEntityProjection.class);
+        AllObjectsRecord projection = Mockito.mock(AllObjectsRecord.class);
         Mockito.when(projection.resultType()).thenReturn("BAUVORHABEN");
         Mockito.when(projection.id()).thenReturn(uuid);
         Mockito.when(projection.nameVorhaben()).thenReturn("Test Vorhaben");
