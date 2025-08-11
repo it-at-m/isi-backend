@@ -600,8 +600,8 @@ public class EntitySearchService {
         if (
             searchQueryAndSortingInformation.getSelectBauleitplanverfahren() ||
             searchQueryAndSortingInformation.getSelectBaugenehmigungsverfahren() ||
-            (searchQueryAndSortingInformation.getSelectWeiteresVerfahren() &&
-                !searchQueryAndSortingInformation.getSelectBauvorhaben() &&
+            searchQueryAndSortingInformation.getSelectWeiteresVerfahren() ||
+            (!searchQueryAndSortingInformation.getSelectBauvorhaben() &&
                 !searchQueryAndSortingInformation.getSelectGrundschule() &&
                 !searchQueryAndSortingInformation.getSelectGsNachmittagBetreuung() &&
                 !searchQueryAndSortingInformation.getSelectHausFuerKinder() &&
@@ -614,15 +614,15 @@ public class EntitySearchService {
 
         if (
             searchQueryAndSortingInformation.getSelectBauvorhaben() &&
-            !searchQueryAndSortingInformation.getSelectBauleitplanverfahren() &&
-            !searchQueryAndSortingInformation.getSelectBaugenehmigungsverfahren() &&
-            !searchQueryAndSortingInformation.getSelectWeiteresVerfahren() &&
-            !searchQueryAndSortingInformation.getSelectGrundschule() &&
-            !searchQueryAndSortingInformation.getSelectGsNachmittagBetreuung() &&
-            !searchQueryAndSortingInformation.getSelectHausFuerKinder() &&
-            !searchQueryAndSortingInformation.getSelectKindergarten() &&
-            !searchQueryAndSortingInformation.getSelectKinderkrippe() &&
-            !searchQueryAndSortingInformation.getSelectMittelschule()
+            (!searchQueryAndSortingInformation.getSelectBauleitplanverfahren() &&
+                !searchQueryAndSortingInformation.getSelectBaugenehmigungsverfahren() &&
+                !searchQueryAndSortingInformation.getSelectWeiteresVerfahren() &&
+                !searchQueryAndSortingInformation.getSelectGrundschule() &&
+                !searchQueryAndSortingInformation.getSelectGsNachmittagBetreuung() &&
+                !searchQueryAndSortingInformation.getSelectHausFuerKinder() &&
+                !searchQueryAndSortingInformation.getSelectKindergarten() &&
+                !searchQueryAndSortingInformation.getSelectKinderkrippe() &&
+                !searchQueryAndSortingInformation.getSelectMittelschule())
         ) {
             return BauvorhabenRecord.class;
         }

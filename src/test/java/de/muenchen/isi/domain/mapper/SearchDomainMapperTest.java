@@ -482,7 +482,7 @@ public class SearchDomainMapperTest {
     void testMapProjectionToSearchResultModelAbfrage() {
         UUID uuid = UUID.randomUUID();
         AbfrageRecord projection = Mockito.mock(AbfrageRecord.class);
-        Mockito.when(projection.artAbfrage()).thenReturn("BAULEITPLANVERFAHREN");
+        Mockito.when(projection.artAbfrage()).thenReturn(ArtAbfrage.BAULEITPLANVERFAHREN);
         Mockito.when(projection.id()).thenReturn(uuid);
         Mockito.when(projection.name()).thenReturn("Test Abfrage");
 

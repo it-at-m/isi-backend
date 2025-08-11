@@ -8,6 +8,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.muenchen.isi.infrastructure.adapter.listener.InfrastruktureinrichtungListener;
 import de.muenchen.isi.infrastructure.adapter.search.AdresseValueBridge;
+import de.muenchen.isi.infrastructure.adapter.search.ArtAbfrageValueBridge;
+import de.muenchen.isi.infrastructure.adapter.search.InfrastruktureinrichtungTypValueBridge;
 import de.muenchen.isi.infrastructure.adapter.search.StatusInfrastruktureinrichtungSuggestionBinder;
 import de.muenchen.isi.infrastructure.adapter.search.StatusInfrastruktureinrichtungValueBridge;
 import de.muenchen.isi.infrastructure.adapter.search.StringSuggestionBinder;
@@ -114,7 +116,12 @@ public abstract class Infrastruktureinrichtung extends BaseEntity {
      * @return Wert der {@link DiscriminatorColumn}.
      */
     @Transient
-    @GenericField(name = "infrastruktureinrichtungTyp", projectable = Projectable.YES)
+    @KeywordField(
+        name = "infrastruktureinrichtungTyp",
+        projectable = Projectable.YES,
+        searchable = Searchable.NO,
+        valueBridge = @ValueBridgeRef(type = InfrastruktureinrichtungTypValueBridge.class)
+    )
     @IndexingDependency(
         reindexOnUpdate = ReindexOnUpdate.NO,
         extraction = @ContainerExtraction(extract = ContainerExtract.NO)

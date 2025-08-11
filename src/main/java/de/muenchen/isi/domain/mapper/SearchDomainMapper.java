@@ -253,7 +253,7 @@ public abstract class SearchDomainMapper {
     private AbfrageSearchResultModel getAbfrageSearchResultModel(CompositeEntityProjection projection) {
         AbfrageSearchResultModel model = new AbfrageSearchResultModel();
         model.setType(SearchResultType.ABFRAGE);
-        model.setArtAbfrage(ArtAbfrage.valueOf(projection.artAbfrage()));
+        model.setArtAbfrage(projection.artAbfrage());
         model.setId(projection.id());
         model.setName(projection.name());
         model.setStatusAbfrage(projection.statusAbfrage());
@@ -268,7 +268,7 @@ public abstract class SearchDomainMapper {
     private AbfrageSearchResultModel getAbfrageSearchResultModel(AbfrageRecord projection) {
         AbfrageSearchResultModel model = new AbfrageSearchResultModel();
         model.setType(SearchResultType.ABFRAGE);
-        model.setArtAbfrage(ArtAbfrage.valueOf(projection.artAbfrage()));
+        model.setArtAbfrage(projection.artAbfrage());
         model.setId(projection.id());
         model.setName(projection.name());
         model.setStatusAbfrage(projection.statusAbfrage());

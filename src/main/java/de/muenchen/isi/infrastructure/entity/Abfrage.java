@@ -1,6 +1,8 @@
 package de.muenchen.isi.infrastructure.entity;
 
+import de.muenchen.isi.infrastructure.adapter.search.AdresseValueBridge;
 import de.muenchen.isi.infrastructure.adapter.search.ArtAbfragePropertyBinder;
+import de.muenchen.isi.infrastructure.adapter.search.ArtAbfrageValueBridge;
 import de.muenchen.isi.infrastructure.adapter.search.StatusAbfrageSuggestionBinder;
 import de.muenchen.isi.infrastructure.adapter.search.StatusAbfrageValueBridge;
 import de.muenchen.isi.infrastructure.adapter.search.StringSuggestionBinder;
@@ -32,6 +34,7 @@ import lombok.ToString;
 import org.apache.commons.lang3.EnumUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.hibernate.search.engine.backend.types.Projectable;
+import org.hibernate.search.engine.backend.types.Searchable;
 import org.hibernate.search.engine.backend.types.Sortable;
 import org.hibernate.search.mapper.pojo.automaticindexing.ReindexOnUpdate;
 import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.PropertyBinderRef;
@@ -110,11 +113,16 @@ public abstract class Abfrage extends BaseEntity {
      * @return Wert der {@link DiscriminatorColumn}.
      */
     @Transient
+    @KeywordField(
+        name = "artAbfrage",
+        projectable = Projectable.YES,
+        searchable = Searchable.NO,
+        valueBridge = @ValueBridgeRef(type = ArtAbfrageValueBridge.class)
+    )
     @IndexingDependency(
         reindexOnUpdate = ReindexOnUpdate.NO,
         extraction = @ContainerExtraction(extract = ContainerExtract.NO)
     )
-    @PropertyBinding(binder = @PropertyBinderRef(type = ArtAbfragePropertyBinder.class))
     public ArtAbfrage getArtAbfrage() {
         final var discriminatorValue = this.getClass().getAnnotation(DiscriminatorValue.class);
         return ObjectUtils.isEmpty(discriminatorValue)

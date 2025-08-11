@@ -4,6 +4,7 @@ import de.muenchen.isi.infrastructure.entity.common.Adresse;
 import de.muenchen.isi.infrastructure.entity.common.MultiPolygonGeometry;
 import de.muenchen.isi.infrastructure.entity.common.VerortungMultiPolygon;
 import de.muenchen.isi.infrastructure.entity.common.Wgs84;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -23,7 +24,7 @@ public record AbfrageRecord(
     LocalDateTime lastModifiedDateTime,
     @FieldProjection(path = "adresseJson") Adresse adresseJson,
     @FieldProjection(path = "verortungJson") VerortungMultiPolygon verortungJson,
-    String artAbfrage,
+    ArtAbfrage artAbfrage,
     String name,
     StatusAbfrage statusAbfrage,
     UUID bauvorhabenId,
