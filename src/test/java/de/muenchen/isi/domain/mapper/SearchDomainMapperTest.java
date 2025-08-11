@@ -9,8 +9,11 @@ import de.muenchen.isi.domain.exception.GeometryOperationFailedException;
 import de.muenchen.isi.domain.model.common.MultiPolygonGeometryModel;
 import de.muenchen.isi.domain.model.common.Wgs84Model;
 import de.muenchen.isi.domain.model.enums.SearchResultType;
+import de.muenchen.isi.domain.model.search.request.AbfrageInfrastruktureinrichtungRecord;
 import de.muenchen.isi.domain.model.search.request.AbfrageRecord;
 import de.muenchen.isi.domain.model.search.request.AllObjectsRecord;
+import de.muenchen.isi.domain.model.search.request.BauvorhabenAbfrageRecord;
+import de.muenchen.isi.domain.model.search.request.BauvorhabenInfrastruktureinrichtungRecord;
 import de.muenchen.isi.domain.model.search.request.InfrastrukturRecord;
 import de.muenchen.isi.domain.model.search.response.AbfrageSearchResultModel;
 import de.muenchen.isi.domain.model.search.response.BauvorhabenSearchResultModel;
@@ -521,5 +524,121 @@ public class SearchDomainMapperTest {
         });
 
         assertThat(exception.getMessage(), is("Unbekannter Projektionstyp: " + unknownProjection.getClass().getName()));
+    }
+
+    @Test
+    void testMapProjectionToSearchResultModel_BauvorhabenUndInfrastruktur_routesToBauvorhaben() {
+        UUID uuid = UUID.randomUUID();
+        BauvorhabenInfrastruktureinrichtungRecord projection = Mockito.mock(
+            BauvorhabenInfrastruktureinrichtungRecord.class
+        );
+
+        Mockito.when(projection.resultType()).thenReturn("BAUVORHABEN");
+        Mockito.when(projection.id()).thenReturn(uuid);
+        Mockito.when(projection.nameVorhaben()).thenReturn("BV+INF: Vorhaben A");
+
+        BauvorhabenSearchResultModel result =
+            (BauvorhabenSearchResultModel) searchDomainMapper.mapProjectionToSearchResultModel(projection);
+
+        assertThat(result.getType(), is(SearchResultType.BAUVORHABEN));
+        assertThat(result.getNameVorhaben(), is("BV+INF: Vorhaben A"));
+        assertThat(result.getId(), is(uuid));
+    }
+
+    @Test
+    void testMapProjectionToSearchResultModel_BauvorhabenUndInfrastruktur_routesToInfrastruktur() {
+        UUID uuid = UUID.randomUUID();
+        BauvorhabenInfrastruktureinrichtungRecord projection = Mockito.mock(
+            BauvorhabenInfrastruktureinrichtungRecord.class
+        );
+
+        Mockito.when(projection.resultType()).thenReturn("INFRASTRUKTUREINRICHTUNG");
+        Mockito.when(projection.id()).thenReturn(uuid);
+        Mockito.when(projection.nameEinrichtung()).thenReturn("BV+INF: Einrichtung X");
+        // Kombi-Record liefert hier i. d. R. String -> Mapper wandelt zu Enum
+        Mockito.when(projection.infrastruktureinrichtungTyp()).thenReturn(InfrastruktureinrichtungTyp.KINDERKRIPPE);
+
+        InfrastruktureinrichtungSearchResultModel result =
+            (InfrastruktureinrichtungSearchResultModel) searchDomainMapper.mapProjectionToSearchResultModel(projection);
+
+        assertThat(result.getType(), is(SearchResultType.INFRASTRUKTUREINRICHTUNG));
+        assertThat(result.getNameEinrichtung(), is("BV+INF: Einrichtung X"));
+        assertThat(result.getInfrastruktureinrichtungTyp(), is(InfrastruktureinrichtungTyp.KINDERKRIPPE));
+        assertThat(result.getId(), is(uuid));
+    }
+
+    @Test
+    void testMapProjectionToSearchResultModel_BauvorhabenUndAbfrage_routesToBauvorhaben() {
+        UUID uuid = UUID.randomUUID();
+        BauvorhabenAbfrageRecord projection = Mockito.mock(BauvorhabenAbfrageRecord.class);
+
+        Mockito.when(projection.resultType()).thenReturn("BAUVORHABEN");
+        Mockito.when(projection.id()).thenReturn(uuid);
+        Mockito.when(projection.nameVorhaben()).thenReturn("BV+ABF: Vorhaben B");
+
+        BauvorhabenSearchResultModel result =
+            (BauvorhabenSearchResultModel) searchDomainMapper.mapProjectionToSearchResultModel(projection);
+
+        assertThat(result.getType(), is(SearchResultType.BAUVORHABEN));
+        assertThat(result.getNameVorhaben(), is("BV+ABF: Vorhaben B"));
+        assertThat(result.getId(), is(uuid));
+    }
+
+    @Test
+    void testMapProjectionToSearchResultModel_BauvorhabenUndAbfrage_routesToAbfrage() {
+        UUID uuid = UUID.randomUUID();
+        BauvorhabenAbfrageRecord projection = Mockito.mock(BauvorhabenAbfrageRecord.class);
+
+        Mockito.when(projection.resultType()).thenReturn("ABFRAGE");
+        Mockito.when(projection.id()).thenReturn(uuid);
+        Mockito.when(projection.name()).thenReturn("BV+ABF: Abfrage Y");
+        // Kombi-Record: String -> Enum im Mapper
+        Mockito.when(projection.artAbfrage()).thenReturn(ArtAbfrage.BAULEITPLANVERFAHREN);
+
+        AbfrageSearchResultModel result =
+            (AbfrageSearchResultModel) searchDomainMapper.mapProjectionToSearchResultModel(projection);
+
+        assertThat(result.getType(), is(SearchResultType.ABFRAGE));
+        assertThat(result.getName(), is("BV+ABF: Abfrage Y"));
+        assertThat(result.getArtAbfrage(), is(ArtAbfrage.BAULEITPLANVERFAHREN));
+        assertThat(result.getId(), is(uuid));
+    }
+
+    @Test
+    void testMapProjectionToSearchResultModel_AbfrageUndInfrastruktur_routesToAbfrage() {
+        UUID uuid = UUID.randomUUID();
+        AbfrageInfrastruktureinrichtungRecord projection = Mockito.mock(AbfrageInfrastruktureinrichtungRecord.class);
+
+        Mockito.when(projection.resultType()).thenReturn("ABFRAGE");
+        Mockito.when(projection.id()).thenReturn(uuid);
+        Mockito.when(projection.name()).thenReturn("ABF+INF: Abfrage Z");
+        Mockito.when(projection.artAbfrage()).thenReturn(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN);
+
+        AbfrageSearchResultModel result =
+            (AbfrageSearchResultModel) searchDomainMapper.mapProjectionToSearchResultModel(projection);
+
+        assertThat(result.getType(), is(SearchResultType.ABFRAGE));
+        assertThat(result.getName(), is("ABF+INF: Abfrage Z"));
+        assertThat(result.getArtAbfrage(), is(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN));
+        assertThat(result.getId(), is(uuid));
+    }
+
+    @Test
+    void testMapProjectionToSearchResultModel_AbfrageUndInfrastruktur_routesToInfrastruktur() {
+        UUID uuid = UUID.randomUUID();
+        AbfrageInfrastruktureinrichtungRecord projection = Mockito.mock(AbfrageInfrastruktureinrichtungRecord.class);
+
+        Mockito.when(projection.resultType()).thenReturn("INFRASTRUKTUREINRICHTUNG");
+        Mockito.when(projection.id()).thenReturn(uuid);
+        Mockito.when(projection.nameEinrichtung()).thenReturn("ABF+INF: Einrichtung Q");
+        Mockito.when(projection.infrastruktureinrichtungTyp()).thenReturn(InfrastruktureinrichtungTyp.GRUNDSCHULE);
+
+        InfrastruktureinrichtungSearchResultModel result =
+            (InfrastruktureinrichtungSearchResultModel) searchDomainMapper.mapProjectionToSearchResultModel(projection);
+
+        assertThat(result.getType(), is(SearchResultType.INFRASTRUKTUREINRICHTUNG));
+        assertThat(result.getNameEinrichtung(), is("ABF+INF: Einrichtung Q"));
+        assertThat(result.getInfrastruktureinrichtungTyp(), is(InfrastruktureinrichtungTyp.GRUNDSCHULE));
+        assertThat(result.getId(), is(uuid));
     }
 }
