@@ -69,7 +69,6 @@ public abstract class AbfrageDomainMapper {
     @SubclassMapping(source = Baugenehmigungsverfahren.class, target = BaugenehmigungsverfahrenModel.class)
     @SubclassMapping(source = WeiteresVerfahren.class, target = WeiteresVerfahrenModel.class)
     @Mapping(source = "bauvorhaben.id", target = "bauvorhaben")
-    @Mapping(source = "artAbfrage", target = "artAbfrage")
     public abstract AbfrageModel entity2Model(final Abfrage entity);
 
     @SubclassMapping(source = BauleitplanverfahrenModel.class, target = Bauleitplanverfahren.class)
