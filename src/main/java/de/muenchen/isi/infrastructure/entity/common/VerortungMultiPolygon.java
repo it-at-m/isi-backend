@@ -3,9 +3,7 @@ package de.muenchen.isi.infrastructure.entity.common;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
 
-@Indexed
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
