@@ -5,15 +5,14 @@ spring:
     uris: ${spring.jpa.properties.hibernate.search.backend.hosts}
     username: ${spring.jpa.properties.hibernate.search.backend.username}
     password: ${spring.jpa.properties.hibernate.search.backend.password}
-    connection-timeout: ${spring.jpa.properties.elasticsearch.connection-timeout}
-    socket-timeout: ${spring.jpa.properties.elasticsearch.socket-timeout}
-
-hibernate:
-  search:
-    backend:
-      request_timeout: ${spring.jpa.properties.hibernate.search.backend.request_timeout}
-      connection_timeout : ${spring.jpa.properties.hibernate.search.backend.connection_timeout}
-      read_timeout: ${spring.jpa.properties.hibernate.search.backend.read_timeout}
+    connection-timeout: 10s
+    socket-timeout: 60s
+  jpa:
+    properties:
+      hibernate:
+        search:
+          backend:
+            client.configurer: class:de.muenchen.isi.configuration.search.ElasticsearchKeepAliveConfig
 
 server:
   shutdown: "graceful"
@@ -44,6 +43,9 @@ management:
       access: read_only
     prometheus:
       access: read_only
+  health:
+    mail:
+      enabled: false
   info:
     env:
       enabled: true
@@ -97,4 +99,6 @@ refarch:
 
 # siehe: https://github.com/it-at-m/refarch/tree/main/refarch-integrations/refarch-s3-integration
 
-
+springdoc:
+  api-docs:
+    version: OPENAPI_3_0

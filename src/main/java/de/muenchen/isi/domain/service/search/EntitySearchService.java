@@ -30,6 +30,7 @@ import org.hibernate.search.engine.search.predicate.dsl.SimpleBooleanPredicateCl
 import org.hibernate.search.engine.search.query.SearchResult;
 import org.hibernate.search.engine.search.query.dsl.SearchQueryOptionsStep;
 import org.hibernate.search.mapper.orm.Search;
+import org.hibernate.search.util.common.SearchTimeoutException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -88,7 +89,6 @@ public class EntitySearchService {
                             .simpleQueryString()
                             .fields(searchableAttributes)
                             .matching(adaptedSearchQuery)
-                            // Es werden nur die Entitäten als Suchergebnis zurückgegeben, welche alle Suchwörter der Suchquery beinhalten.
                             .defaultOperator(BooleanOperator.AND);
                     } else {
                         // Zurückgeben aller Entitäten.
@@ -117,6 +117,7 @@ public class EntitySearchService {
                     return function.field("lastModifiedDateTime").order(sortOrder);
                 }
             });
+
         return this.executeSearchQuery(searchQueryAndSortingInformation, searchQueryOptions);
     }
 
@@ -192,7 +193,7 @@ public class EntitySearchService {
                 root.add(
                     function
                         .bool()
-                        .must(b -> {
+                        .filter(b -> {
                             var theBool = b.bool();
                             for (final var value : valueList) {
                                 theBool = theBool.should(function.match().field(keyAttribute).matching(value));
@@ -482,37 +483,41 @@ public class EntitySearchService {
         final SearchQueryAndSortingModel searchQueryAndSortingInformation,
         final SearchQueryOptionsStep searchQueryOptions
     ) {
-        // Der Offset oder null falls keine Offsetberechnung möglich ist.
-        // Ist keine Offsetberechnung möglich, so wird auch keine paginierte Suche durchgeführt.
         final Integer paginationOffset = calculateOffsetOrNullIfNoPaginationRequired(searchQueryAndSortingInformation);
+        try {
+            // Ausführen einer paginierten oder nicht-paginierten Suche.
+            final SearchResult<BaseEntity> searchResult = ObjectUtils.isNotEmpty(paginationOffset)
+                ? searchQueryOptions.fetch(paginationOffset, searchQueryAndSortingInformation.getPageSize())
+                : searchQueryOptions.fetchAll();
 
-        // Ausführen einer paginierten oder nicht-paginierten Suche.
-        final SearchResult<BaseEntity> searchResult = ObjectUtils.isNotEmpty(paginationOffset)
-            ? searchQueryOptions.fetch(paginationOffset, searchQueryAndSortingInformation.getPageSize())
-            : searchQueryOptions.fetchAll();
+            final var searchResults = searchResult
+                .hits()
+                .stream()
+                .map(searchDomainMapper::entity2SearchResultModel)
+                .collect(Collectors.toList());
 
-        // Suchergebnisse extrahieren und zurückgeben.
-        final var searchResults = searchResult
-            .hits()
-            .stream()
-            .map(searchDomainMapper::entity2SearchResultModel)
-            .collect(Collectors.toList());
+            final var model = new SearchResultsModel();
+            model.setSearchResults(searchResults);
 
-        final var model = new SearchResultsModel();
-        model.setSearchResults(searchResults);
-        if (ObjectUtils.isNotEmpty(paginationOffset)) {
-            final long numberOfTotalHits = searchResult.total().hitCount();
-            final var numberOfPages = calculateNumberOfPages(
-                numberOfTotalHits,
+            if (searchQueryAndSortingInformation.getPageSize() != null && paginationOffset != null) {
+                final long numberOfTotalHits = searchResult.total().hitCount();
+                final var numberOfPages = calculateNumberOfPages(
+                    numberOfTotalHits,
+                    searchQueryAndSortingInformation.getPageSize()
+                );
+                model.setNumberOfPages(numberOfPages);
+                model.setPage(Math.min(searchQueryAndSortingInformation.getPage(), numberOfPages));
+            }
+            return model;
+        } catch (SearchTimeoutException exception) {
+            log.error(
+                "EntitySearchService.executeSearchQuery(), exception: {}, paginationOffset: {}, pageSize: {}",
+                exception.getMessage(),
+                paginationOffset,
                 searchQueryAndSortingInformation.getPageSize()
             );
-            model.setNumberOfPages(numberOfPages);
-            final var currentPage = searchQueryAndSortingInformation.getPage() > numberOfPages
-                ? numberOfPages
-                : searchQueryAndSortingInformation.getPage();
-            model.setPage(currentPage);
+            throw exception;
         }
-        return model;
     }
 
     /**
