@@ -22,36 +22,36 @@
         <maven.compiler.release>${java.version}</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spring.boot.version>3.4.3</spring.boot.version>
-        <spring.cloud.version>2024.0.0</spring.cloud.version>
-        <logstash.encoder>7.4</logstash.encoder>
+        <spring.cloud.version>2024.0.2</spring.cloud.version>
+        <logstash.encoder>8.1</logstash.encoder>
         <apache.commons.collections4>4.4</apache.commons.collections4>
         <apache.commons.io>2.18.0</apache.commons.io>
-        <apache.commons.lang3>3.17.0</apache.commons.lang3>
+        <apache.commons.lang3>3.18.0</apache.commons.lang3>
         <apache.commons.text>1.13.0</apache.commons.text>
         <apache.commons.fileupload>1.5</apache.commons.fileupload>
         <opencsv.version>5.12.0</opencsv.version>
-        <springdoc.version>2.8.5</springdoc.version>
+        <springdoc.version>2.8.11</springdoc.version>
         <!-- SonarQube -->
         <sonar.scanner.version>5.0.0.4389</sonar.scanner.version>
         <!-- TestCoverage -->
-        <jacoco.version>0.8.12</jacoco.version>
+        <jacoco.version>0.8.13</jacoco.version>
         <!-- Plugins -->
         <maven-scm-plugin.version>2.1.0</maven-scm-plugin.version>
-        <maven-surefire-plugin.version>3.5.2</maven-surefire-plugin.version>
+        <maven-surefire-plugin.version>3.5.3</maven-surefire-plugin.version>
         <maven.compiler.plugin.version>3.14.0</maven.compiler.plugin.version>
         <!-- Version muss mit der in den spring-boot-dependencies bereitgestellten Lombok-Version
         übereinstimmen -->
-        <org.projectlombok.lombok.version>1.18.36</org.projectlombok.lombok.version>
+        <org.projectlombok.lombok.version>1.18.38</org.projectlombok.lombok.version>
         <org.projectlombok.mapstructbinding.version>0.2.0</org.projectlombok.mapstructbinding.version>
         <mapstruct.version>1.5.5.Final</mapstruct.version>
-        <s3.integration>1.3.5</s3.integration>
+        <s3.integration>1.5.1</s3.integration>
         <!-- https://mvnrepository.com/artifact/org.geotools/gt-main?repo=geotools-releases (Register: GeoTools) -->
         <geotools.version>32.2</geotools.version>
-        <spring.statemachine>4.0.0</spring.statemachine>
+        <spring.statemachine>4.0.1</spring.statemachine>
         <apache.tika.version>3.1.0</apache.tika.version>
-        <hibernate.search>7.2.2.Final</hibernate.search>
-        <icu4j.version>76.1</icu4j.version>
-        <openapi-generator-version>7.11.0</openapi-generator-version>
+        <icu4j.version>77.1</icu4j.version>
+        <hibernate.search>7.2.4.Final</hibernate.search>
+        <openapi-generator-version>7.15.0</openapi-generator-version>
     </properties>
 
 
@@ -523,7 +523,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>buildnumber-maven-plugin</artifactId>
-                <version>1.4</version>
+                <version>3.2.1</version>
                 <executions>
                     <execution>
                         <phase>validate</phase>
