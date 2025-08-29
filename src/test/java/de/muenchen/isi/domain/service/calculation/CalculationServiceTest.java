@@ -316,9 +316,9 @@ class CalculationServiceTest {
         abfragevarianteBauleitplanverfahren.setArtAbfragevariante(ArtAbfrage.UNSPECIFIED);
         Assertions.assertThrows(CalculationException.class, () ->
             this.calculationService.calculateBedarfeForAbfragevariante(
-                    abfragevarianteBauleitplanverfahren,
-                    UncertainBoolean.UNSPECIFIED
-                )
+                abfragevarianteBauleitplanverfahren,
+                UncertainBoolean.UNSPECIFIED
+            )
         );
     }
 
@@ -580,21 +580,21 @@ class CalculationServiceTest {
 
         Mockito.when(
             this.planungsursaechlicheWohneinheitenService.calculatePlanungsursaechlicheWohneinheiten(
-                    bauabschnitte,
-                    sobonOrientierungswertJahr,
-                    stammdatenGueltigAb
-                )
+                bauabschnitte,
+                sobonOrientierungswertJahr,
+                stammdatenGueltigAb
+            )
         ).thenReturn(wohneinheiten);
 
         final var bedarfeProJahrKinderkrippe = List.of(new InfrastrukturbedarfProJahrModel());
 
         Mockito.when(
             this.infrastrukturbedarfService.calculateBedarfForKinderkrippe(
-                    wohneinheiten,
-                    sobonOrientierungswertJahr,
-                    InfrastrukturbedarfService.ArtInfrastrukturbedarf.PLANUNGSURSAECHLICH,
-                    stammdatenGueltigAb
-                )
+                wohneinheiten,
+                sobonOrientierungswertJahr,
+                InfrastrukturbedarfService.ArtInfrastrukturbedarf.PLANUNGSURSAECHLICH,
+                stammdatenGueltigAb
+            )
         ).thenReturn(bedarfeProJahrKinderkrippe);
 
         final var bedarfeProJahrKindergarten = List.of(
@@ -604,11 +604,11 @@ class CalculationServiceTest {
 
         Mockito.when(
             this.infrastrukturbedarfService.calculateBedarfForKindergarten(
-                    wohneinheiten,
-                    sobonOrientierungswertJahr,
-                    InfrastrukturbedarfService.ArtInfrastrukturbedarf.PLANUNGSURSAECHLICH,
-                    stammdatenGueltigAb
-                )
+                wohneinheiten,
+                sobonOrientierungswertJahr,
+                InfrastrukturbedarfService.ArtInfrastrukturbedarf.PLANUNGSURSAECHLICH,
+                stammdatenGueltigAb
+            )
         ).thenReturn(bedarfeProJahrKindergarten);
 
         final var alleEinwohnerProJahr = List.of(new PersonenProJahrModel(), new PersonenProJahrModel());
@@ -704,23 +704,23 @@ class CalculationServiceTest {
 
         Mockito.when(
             this.sobonursaechlicheWohneinheitenService.calculateSobonursaechlicheWohneinheiten(
-                    sobonGf,
-                    bauabschnitte,
-                    sobonOrientierungswertJahr,
-                    stammdatenGueltigAb,
-                    foerdermix
-                )
+                sobonGf,
+                bauabschnitte,
+                sobonOrientierungswertJahr,
+                stammdatenGueltigAb,
+                foerdermix
+            )
         ).thenReturn(wohneinheiten);
 
         final var bedarfeProJahrKinderkrippe = List.of(new InfrastrukturbedarfProJahrModel());
 
         Mockito.when(
             this.infrastrukturbedarfService.calculateBedarfForKinderkrippe(
-                    wohneinheiten,
-                    sobonOrientierungswertJahr,
-                    InfrastrukturbedarfService.ArtInfrastrukturbedarf.SOBON_URSAECHLICH,
-                    stammdatenGueltigAb
-                )
+                wohneinheiten,
+                sobonOrientierungswertJahr,
+                InfrastrukturbedarfService.ArtInfrastrukturbedarf.SOBON_URSAECHLICH,
+                stammdatenGueltigAb
+            )
         ).thenReturn(bedarfeProJahrKinderkrippe);
 
         final var bedarfeProJahrKindergarten = List.of(
@@ -730,11 +730,11 @@ class CalculationServiceTest {
 
         Mockito.when(
             this.infrastrukturbedarfService.calculateBedarfForKindergarten(
-                    wohneinheiten,
-                    sobonOrientierungswertJahr,
-                    InfrastrukturbedarfService.ArtInfrastrukturbedarf.SOBON_URSAECHLICH,
-                    stammdatenGueltigAb
-                )
+                wohneinheiten,
+                sobonOrientierungswertJahr,
+                InfrastrukturbedarfService.ArtInfrastrukturbedarf.SOBON_URSAECHLICH,
+                stammdatenGueltigAb
+            )
         ).thenReturn(bedarfeProJahrKindergarten);
 
         final var bedarfeProJahrGsNachmittagBetreuung = List.of(
@@ -744,10 +744,10 @@ class CalculationServiceTest {
 
         Mockito.when(
             this.infrastrukturbedarfService.calculateBedarfForGsNachmittagBetreuung(
-                    wohneinheiten,
-                    sobonOrientierungswertJahr,
-                    stammdatenGueltigAb
-                )
+                wohneinheiten,
+                sobonOrientierungswertJahr,
+                stammdatenGueltigAb
+            )
         ).thenReturn(bedarfeProJahrGsNachmittagBetreuung);
 
         final var bedarfeProJahrGrundschule = List.of(
@@ -757,10 +757,10 @@ class CalculationServiceTest {
 
         Mockito.when(
             this.infrastrukturbedarfService.calculateBedarfForGrundschule(
-                    wohneinheiten,
-                    sobonOrientierungswertJahr,
-                    stammdatenGueltigAb
-                )
+                wohneinheiten,
+                sobonOrientierungswertJahr,
+                stammdatenGueltigAb
+            )
         ).thenReturn(bedarfeProJahrGrundschule);
 
         final var alleEinwohnerProJahr = List.of(new PersonenProJahrModel(), new PersonenProJahrModel());

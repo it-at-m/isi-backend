@@ -153,8 +153,8 @@ class StammdatenImportServiceTest {
 
         Mockito.when(
             this.csvRepository.readAllSobonOrientierungswertSozialeInfrastrukturCsv(
-                    Mockito.any(InputStreamReader.class)
-                )
+                Mockito.any(InputStreamReader.class)
+            )
         ).thenReturn(List.of(csvEntry));
 
         final var entity = new SobonOrientierungswertSozialeInfrastruktur();

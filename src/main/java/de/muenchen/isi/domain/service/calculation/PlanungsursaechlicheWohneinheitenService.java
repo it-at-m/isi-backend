@@ -48,7 +48,10 @@ public class PlanungsursaechlicheWohneinheitenService {
         final var bauraten = bauabschnitte
             .stream()
             .flatMap(bauabschnitt ->
-                bauabschnitt.getBaugebiete().stream().flatMap(baugebiet -> baugebiet.getBauraten().stream())
+                bauabschnitt
+                    .getBaugebiete()
+                    .stream()
+                    .flatMap(baugebiet -> baugebiet.getBauraten().stream())
             )
             .collect(Collectors.toList());
 
