@@ -9,9 +9,9 @@
   },
   "devDependencies": {
     "husky": "9.1.7",
-    "lint-staged": "15.4.3",
-    "prettier": "3.5.2",
     "prettier-plugin-java": "2.7.4",
+    "lint-staged": "15.5.2",
+    "prettier": "3.6.2",
     "vite": "^6.1.1"
   },
   "lint-staged": {
