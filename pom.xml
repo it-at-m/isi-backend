@@ -32,7 +32,7 @@
         <opencsv.version>5.10</opencsv.version>
         <springdoc.version>2.8.5</springdoc.version>
         <!-- SonarQube -->
-        <sonar.scanner.version>5.0.0.4389</sonar.scanner.version>
+        <sonar.scanner.version>5.1.0.4751</sonar.scanner.version>
         <!-- TestCoverage -->
         <jacoco.version>0.8.12</jacoco.version>
         <!-- Plugins -->
