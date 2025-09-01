@@ -36,10 +36,10 @@ public class SearchWordSuggesterService {
         final List<Class<? extends BaseEntity>> searchableEntities = searchPreparationService.getSearchableEntities(
             searchQueryInformation
         );
-        final var foundSuchwortSuggestions =
-            this.doSearchForSearchwordSuggestion(searchableEntities, searchQueryInformation.getSearchQuery()).collect(
-                    Collectors.toList()
-                );
+        final var foundSuchwortSuggestions = this.doSearchForSearchwordSuggestion(
+            searchableEntities,
+            searchQueryInformation.getSearchQuery()
+        ).collect(Collectors.toList());
         final var model = new SuchwortSuggestionsModel();
         model.setSuchwortSuggestions(foundSuchwortSuggestions);
         return model;

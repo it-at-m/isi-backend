@@ -30,33 +30,33 @@ public class WohnungsnahePlaetzeValidator
             if (value instanceof HausFuerKinderDto hausFuerKinder) {
                 return (
                     this.areWohnungsnahePlatzeValid(
-                            hausFuerKinder.getAnzahlKinderkrippePlaetze(),
-                            hausFuerKinder.getWohnungsnaheKinderkrippePlaetze()
-                        ) &&
+                        hausFuerKinder.getAnzahlKinderkrippePlaetze(),
+                        hausFuerKinder.getWohnungsnaheKinderkrippePlaetze()
+                    ) &&
                     this.areWohnungsnahePlatzeValid(
-                            hausFuerKinder.getAnzahlKindergartenPlaetze(),
-                            hausFuerKinder.getWohnungsnaheKindergartenPlaetze()
-                        ) &&
+                        hausFuerKinder.getAnzahlKindergartenPlaetze(),
+                        hausFuerKinder.getWohnungsnaheKindergartenPlaetze()
+                    ) &&
                     this.areWohnungsnahePlatzeValid(
-                            hausFuerKinder.getAnzahlHortPlaetze(),
-                            hausFuerKinder.getWohnungsnaheHortPlaetze()
-                        )
+                        hausFuerKinder.getAnzahlHortPlaetze(),
+                        hausFuerKinder.getWohnungsnaheHortPlaetze()
+                    )
                 );
             } else if (value instanceof KindergartenDto kindergarten) {
                 return this.areWohnungsnahePlatzeValid(
-                        kindergarten.getAnzahlKindergartenPlaetze(),
-                        kindergarten.getWohnungsnaheKindergartenPlaetze()
-                    );
+                    kindergarten.getAnzahlKindergartenPlaetze(),
+                    kindergarten.getWohnungsnaheKindergartenPlaetze()
+                );
             } else if (value instanceof KinderkrippeDto kinderkrippe) {
                 return this.areWohnungsnahePlatzeValid(
-                        kinderkrippe.getAnzahlKinderkrippePlaetze(),
-                        kinderkrippe.getWohnungsnaheKinderkrippePlaetze()
-                    );
+                    kinderkrippe.getAnzahlKinderkrippePlaetze(),
+                    kinderkrippe.getWohnungsnaheKinderkrippePlaetze()
+                );
             } else if (value instanceof GsNachmittagBetreuungDto kinderkrippe) {
                 return this.areWohnungsnahePlatzeValid(
-                        kinderkrippe.getAnzahlHortPlaetze(),
-                        kinderkrippe.getWohnungsnaheHortPlaetze()
-                    );
+                    kinderkrippe.getAnzahlHortPlaetze(),
+                    kinderkrippe.getWohnungsnaheHortPlaetze()
+                );
             } else {
                 return true;
             }

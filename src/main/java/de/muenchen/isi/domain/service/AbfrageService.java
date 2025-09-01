@@ -174,19 +174,19 @@ public class AbfrageService {
         final AbfrageModel abfrageToSave;
         if (ArtAbfrage.BAULEITPLANVERFAHREN.equals(abfrage.getArtAbfrage())) {
             abfrageToSave = this.patchBauleitplanverfahrenAngelegt(
-                    (BauleitplanverfahrenAngelegtModel) abfrage,
-                    (BauleitplanverfahrenModel) originalAbfrageDb
-                );
+                (BauleitplanverfahrenAngelegtModel) abfrage,
+                (BauleitplanverfahrenModel) originalAbfrageDb
+            );
         } else if (ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN.equals(abfrage.getArtAbfrage())) {
             abfrageToSave = this.patchBaugenehmigungsverfahrenAngelegt(
-                    (BaugenehmigungsverfahrenAngelegtModel) abfrage,
-                    (BaugenehmigungsverfahrenModel) originalAbfrageDb
-                );
+                (BaugenehmigungsverfahrenAngelegtModel) abfrage,
+                (BaugenehmigungsverfahrenModel) originalAbfrageDb
+            );
         } else if (ArtAbfrage.WEITERES_VERFAHREN.equals(abfrage.getArtAbfrage())) {
             abfrageToSave = this.patchWeiteresVerfahrenAngelegt(
-                    (WeiteresVerfahrenAngelegtModel) abfrage,
-                    (WeiteresVerfahrenModel) originalAbfrageDb
-                );
+                (WeiteresVerfahrenAngelegtModel) abfrage,
+                (WeiteresVerfahrenModel) originalAbfrageDb
+            );
         } else {
             final var message = "Die Art der Abfrage wird nicht unterstützt.";
             log.error(message);
@@ -274,27 +274,27 @@ public class AbfrageService {
         throws EntityNotFoundException, AbfrageStatusNotAllowedException, OptimisticLockingException, UserRoleNotAllowedException, CalculationException, ReportingException {
         final var originalAbfrageDb = this.getById(id);
         this.throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(
-                originalAbfrageDb,
-                StatusAbfrage.START_BEARBEITUNG
-            );
+            originalAbfrageDb,
+            StatusAbfrage.START_BEARBEITUNG
+        );
 
         this.changeRelevantAbfragevarianteOnBauvorhabenChangeAbfrageStartBearbeitung(abfrage, originalAbfrageDb);
         final AbfrageModel abfrageToSave;
         if (ArtAbfrage.BAULEITPLANVERFAHREN.equals(abfrage.getArtAbfrage())) {
             abfrageToSave = this.abfrageDomainMapper.request2Model(
-                    (BauleitplanverfahrenStartBearbeitungModel) abfrage,
-                    (BauleitplanverfahrenModel) originalAbfrageDb
-                );
+                (BauleitplanverfahrenStartBearbeitungModel) abfrage,
+                (BauleitplanverfahrenModel) originalAbfrageDb
+            );
         } else if (ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN.equals(abfrage.getArtAbfrage())) {
             abfrageToSave = this.abfrageDomainMapper.request2Model(
-                    (BaugenehmigungsverfahrenStartBearbeitungModel) abfrage,
-                    (BaugenehmigungsverfahrenModel) originalAbfrageDb
-                );
+                (BaugenehmigungsverfahrenStartBearbeitungModel) abfrage,
+                (BaugenehmigungsverfahrenModel) originalAbfrageDb
+            );
         } else if (ArtAbfrage.WEITERES_VERFAHREN.equals(abfrage.getArtAbfrage())) {
             abfrageToSave = this.abfrageDomainMapper.request2Model(
-                    (WeiteresVerfahrenStartBearbeitungModel) abfrage,
-                    (WeiteresVerfahrenModel) originalAbfrageDb
-                );
+                (WeiteresVerfahrenStartBearbeitungModel) abfrage,
+                (WeiteresVerfahrenModel) originalAbfrageDb
+            );
         } else {
             final var message = "Die Art der Abfrage wird nicht unterstützt.";
             log.error(message);
@@ -318,33 +318,30 @@ public class AbfrageService {
      * @throws ReportingException               falls bei der Übermittlung an die Reportingschnittstelle ein Fehler auftritt.
      * @throws UserRoleNotAllowedException      falls der User keine Berechtigung für die Abfrage hat.
      */
-    public AbfrageModel patchEinpflegenBedarfsmeldung(
-        final AbfrageEinpflegenBedarfsmeldungModel abfrage,
-        final UUID id
-    )
+    public AbfrageModel patchEinpflegenBedarfsmeldung(final AbfrageEinpflegenBedarfsmeldungModel abfrage, final UUID id)
         throws EntityNotFoundException, AbfrageStatusNotAllowedException, OptimisticLockingException, UserRoleNotAllowedException, CalculationException, ReportingException {
         final var originalAbfrageDb = this.getById(id);
         this.throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(
-                originalAbfrageDb,
-                StatusAbfrage.EINPFLEGEN_BEDARFSMELDUNG
-            );
+            originalAbfrageDb,
+            StatusAbfrage.EINPFLEGEN_BEDARFSMELDUNG
+        );
 
         final AbfrageModel abfrageToSave;
         if (ArtAbfrage.BAULEITPLANVERFAHREN.equals(abfrage.getArtAbfrage())) {
             abfrageToSave = this.abfrageDomainMapper.request2Model(
-                    (BauleitplanverfahrenEinpflegenBedarfsmeldungModel) abfrage,
-                    (BauleitplanverfahrenModel) originalAbfrageDb
-                );
+                (BauleitplanverfahrenEinpflegenBedarfsmeldungModel) abfrage,
+                (BauleitplanverfahrenModel) originalAbfrageDb
+            );
         } else if (ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN.equals(abfrage.getArtAbfrage())) {
             abfrageToSave = this.abfrageDomainMapper.request2Model(
-                    (BaugenehmigungsverfahrenEinpflegenBedarfsmeldungModel) abfrage,
-                    (BaugenehmigungsverfahrenModel) originalAbfrageDb
-                );
+                (BaugenehmigungsverfahrenEinpflegenBedarfsmeldungModel) abfrage,
+                (BaugenehmigungsverfahrenModel) originalAbfrageDb
+            );
         } else if (ArtAbfrage.WEITERES_VERFAHREN.equals(abfrage.getArtAbfrage())) {
             abfrageToSave = this.abfrageDomainMapper.request2Model(
-                    (WeiteresVerfahrenEinpflegenBedarfsmeldungModel) abfrage,
-                    (WeiteresVerfahrenModel) originalAbfrageDb
-                );
+                (WeiteresVerfahrenEinpflegenBedarfsmeldungModel) abfrage,
+                (WeiteresVerfahrenModel) originalAbfrageDb
+            );
         } else {
             final var message = "Die Art der Abfrage wird nicht unterstützt.";
             log.error(message);
@@ -371,26 +368,26 @@ public class AbfrageService {
         throws EntityNotFoundException, AbfrageStatusNotAllowedException, OptimisticLockingException, UserRoleNotAllowedException, CalculationException, ReportingException {
         final var originalAbfrageDb = this.getById(id);
         this.throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(
-                originalAbfrageDb,
-                StatusAbfrage.EINPLANUNG_BEDARFE
-            );
+            originalAbfrageDb,
+            StatusAbfrage.EINPLANUNG_BEDARFE
+        );
 
         final AbfrageModel abfrageToSave;
         if (ArtAbfrage.BAULEITPLANVERFAHREN.equals(abfrage.getArtAbfrage())) {
             abfrageToSave = this.abfrageDomainMapper.request2Model(
-                    (BauleitplanverfahrenEinplanungBedarfeModel) abfrage,
-                    (BauleitplanverfahrenModel) originalAbfrageDb
-                );
+                (BauleitplanverfahrenEinplanungBedarfeModel) abfrage,
+                (BauleitplanverfahrenModel) originalAbfrageDb
+            );
         } else if (ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN.equals(abfrage.getArtAbfrage())) {
             abfrageToSave = this.abfrageDomainMapper.request2Model(
-                    (BaugenehmigungsverfahrenEinplanungBedarfeModel) abfrage,
-                    (BaugenehmigungsverfahrenModel) originalAbfrageDb
-                );
+                (BaugenehmigungsverfahrenEinplanungBedarfeModel) abfrage,
+                (BaugenehmigungsverfahrenModel) originalAbfrageDb
+            );
         } else if (ArtAbfrage.WEITERES_VERFAHREN.equals(abfrage.getArtAbfrage())) {
             abfrageToSave = this.abfrageDomainMapper.request2Model(
-                    (WeiteresVerfahrenEinplanungBedarfeModel) abfrage,
-                    (WeiteresVerfahrenModel) originalAbfrageDb
-                );
+                (WeiteresVerfahrenEinplanungBedarfeModel) abfrage,
+                (WeiteresVerfahrenModel) originalAbfrageDb
+            );
         } else {
             final var message = "Die Art der Abfrage wird nicht unterstützt.";
             log.error(message);

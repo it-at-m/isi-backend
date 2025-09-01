@@ -57,10 +57,10 @@ public class BauratendateiInputService {
             );
             for (final var abfragevariante : abfragevarianten) {
                 this.setOrRemoveOrIgnoreBaurateninputToAbfragevariante(
-                        abfragevariante,
-                        bauleitplanverfahren.getVerortung(),
-                        bedarfe
-                    );
+                    abfragevariante,
+                    bauleitplanverfahren.getVerortung(),
+                    bedarfe
+                );
             }
         } else if (ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN.equals(abfrage.getArtAbfrage())) {
             final var baugenehmigungsverfahren = (BaugenehmigungsverfahrenModel) abfrage;
@@ -72,10 +72,10 @@ public class BauratendateiInputService {
             );
             for (final var abfragevariante : abfragevarianten) {
                 this.setOrRemoveOrIgnoreBaurateninputToAbfragevariante(
-                        abfragevariante,
-                        baugenehmigungsverfahren.getVerortung(),
-                        bedarfe
-                    );
+                    abfragevariante,
+                    baugenehmigungsverfahren.getVerortung(),
+                    bedarfe
+                );
             }
         } else if (ArtAbfrage.WEITERES_VERFAHREN.equals(abfrage.getArtAbfrage())) {
             final var weiteresVerfahren = (WeiteresVerfahrenModel) abfrage;
@@ -85,10 +85,10 @@ public class BauratendateiInputService {
             );
             for (final var abfragevariante : abfragevarianten) {
                 this.setOrRemoveOrIgnoreBaurateninputToAbfragevariante(
-                        abfragevariante,
-                        weiteresVerfahren.getVerortung(),
-                        bedarfe
-                    );
+                    abfragevariante,
+                    weiteresVerfahren.getVerortung(),
+                    bedarfe
+                );
             }
         }
     }

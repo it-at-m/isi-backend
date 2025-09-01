@@ -188,7 +188,9 @@ public class AuthenticationUtils {
     }
 
     public boolean isOnlyRoleAnwender() {
-        return getUserRoles().stream().allMatch(s -> s.contains(ROLE_ANWENDER));
+        return getUserRoles()
+            .stream()
+            .allMatch(s -> s.contains(ROLE_ANWENDER));
     }
 
     /**

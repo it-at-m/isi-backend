@@ -243,8 +243,9 @@ public class AbfrageStatusService {
     private StateMachine<StatusAbfrage, StatusAbfrageEvents> build(final UUID id, final String anmerkung)
         throws EntityNotFoundException, UserRoleNotAllowedException {
         final var abfrage = this.abfrageService.getById(id);
-        final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine =
-            this.stateMachineFactory.getStateMachine(abfrage.getId());
+        final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.stateMachineFactory.getStateMachine(
+            abfrage.getId()
+        );
 
         stateMachine.stopReactively().block();
 
