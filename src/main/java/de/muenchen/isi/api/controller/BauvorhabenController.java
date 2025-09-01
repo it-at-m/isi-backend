@@ -257,12 +257,11 @@ public class BauvorhabenController {
     @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "OK") })
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_READ_BAUVORHABEN.name())")
     public ResponseEntity<List<AbfrageSearchResultDto>> getReferencedAbfrage(@PathVariable @NotNull final UUID id) {
-        final var abfragen =
-            this.bauvorhabenService.getReferencedAbfrage(id)
-                .stream()
-                .map(this.searchApiMapper::model2Dto)
-                .map(AbfrageSearchResultDto.class::cast)
-                .collect(Collectors.toList());
+        final var abfragen = this.bauvorhabenService.getReferencedAbfrage(id)
+            .stream()
+            .map(this.searchApiMapper::model2Dto)
+            .map(AbfrageSearchResultDto.class::cast)
+            .collect(Collectors.toList());
         return new ResponseEntity<>(abfragen, HttpStatus.OK);
     }
 
@@ -277,12 +276,11 @@ public class BauvorhabenController {
     public ResponseEntity<List<InfrastruktureinrichtungSearchResultDto>> getReferencedInfrastruktureinrichtung(
         @PathVariable @NotNull final UUID id
     ) {
-        final var infrastruktureinrichtungen =
-            this.bauvorhabenService.getReferencedInfrastruktureinrichtungen(id)
-                .stream()
-                .map(this.searchApiMapper::model2Dto)
-                .map(InfrastruktureinrichtungSearchResultDto.class::cast)
-                .collect(Collectors.toList());
+        final var infrastruktureinrichtungen = this.bauvorhabenService.getReferencedInfrastruktureinrichtungen(id)
+            .stream()
+            .map(this.searchApiMapper::model2Dto)
+            .map(InfrastruktureinrichtungSearchResultDto.class::cast)
+            .collect(Collectors.toList());
         return new ResponseEntity<>(infrastruktureinrichtungen, HttpStatus.OK);
     }
 }
