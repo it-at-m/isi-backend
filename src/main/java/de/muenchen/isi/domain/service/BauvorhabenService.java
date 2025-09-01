@@ -114,9 +114,9 @@ public class BauvorhabenService {
             if (bauvorhaben.getId() == null && abfrageId != null) {
                 final var abfrageModel = this.abfrageService.getById(abfrageId);
                 this.throwEntityIsReferencedExceptionWhenAbfrageIsReferencingBauvorhaben(
-                        abfrageModel,
-                        bauvorhabenEntity.getNameVorhaben()
-                    );
+                    abfrageModel,
+                    bauvorhabenEntity.getNameVorhaben()
+                );
                 abfrageModel.setBauvorhaben(bauvorhabenEntity.getId());
                 abfrageService.save(abfrageModel);
             }
@@ -281,10 +281,9 @@ public class BauvorhabenService {
     protected void throwEntityIsReferencedExceptionWhenAbfrageIsReferencingBauvorhaben(
         final BauvorhabenModel bauvorhaben
     ) throws EntityIsReferencedException {
-        final List<String> nameAbfragen =
-            this.abfrageRepository.findAllByBauvorhabenId(bauvorhaben.getId())
-                .map(Abfrage::getName)
-                .collect(Collectors.toList());
+        final List<String> nameAbfragen = this.abfrageRepository.findAllByBauvorhabenId(bauvorhaben.getId())
+            .map(Abfrage::getName)
+            .collect(Collectors.toList());
         if (!nameAbfragen.isEmpty()) {
             final var commaSeparatedNames = String.join(", ", nameAbfragen);
             final var message =
@@ -353,9 +352,11 @@ public class BauvorhabenService {
                 .filter(Objects::nonNull)
                 .min(String::compareTo);
             if (minStadtbezirkNummer.isPresent()) {
-                final Optional<GlobalCounter> saved =
-                    this.globalCounterRepository.findByCounterType(CounterType.NUMMER_BAUVORHABEN);
-                var bauvorhabennummerEntity = saved.orElseGet(() -> new GlobalCounter(CounterType.NUMMER_BAUVORHABEN, 0)
+                final Optional<GlobalCounter> saved = this.globalCounterRepository.findByCounterType(
+                    CounterType.NUMMER_BAUVORHABEN
+                );
+                var bauvorhabennummerEntity = saved.orElseGet(() ->
+                    new GlobalCounter(CounterType.NUMMER_BAUVORHABEN, 0)
                 );
                 bauvorhabennummerEntity.setCounter(bauvorhabennummerEntity.getCounter() + 1);
                 try {

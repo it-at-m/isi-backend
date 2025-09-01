@@ -60,11 +60,14 @@ public class BaurateController {
         @RequestParam(required = false) @Min(0) final Long wohneinheiten,
         @RequestParam(required = false) @Min(0) final BigDecimal geschossflaecheWohnen
     ) throws EntityNotFoundException {
-        final List<BaurateDto> baurateDtoList =
-            this.baurateService.determineBauraten(realisierungsbeginn, wohneinheiten, geschossflaecheWohnen)
-                .stream()
-                .map(this.baurateApiMapper::model2Dto)
-                .collect(Collectors.toList());
+        final List<BaurateDto> baurateDtoList = this.baurateService.determineBauraten(
+                realisierungsbeginn,
+                wohneinheiten,
+                geschossflaecheWohnen
+            )
+            .stream()
+            .map(this.baurateApiMapper::model2Dto)
+            .collect(Collectors.toList());
         return ResponseEntity.ok(baurateDtoList);
     }
 }
