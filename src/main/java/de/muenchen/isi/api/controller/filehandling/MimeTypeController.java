@@ -65,10 +65,9 @@ public class MimeTypeController {
         @RequestBody @NotNull @Valid final FilepathDto filepathDto
     )
         throws FileHandlingWithS3FailedException, FileHandlingFailedException, MimeTypeExtractionFailedException, MimeTypeNotAllowedException {
-        final MimeTypeInformationModel model =
-            this.mimeTypeService.extractMediaTypeInformationForAllowedMediaType(
-                    this.filehandlingApiMapper.dto2Model(filepathDto)
-                );
+        final MimeTypeInformationModel model = this.mimeTypeService.extractMediaTypeInformationForAllowedMediaType(
+            this.filehandlingApiMapper.dto2Model(filepathDto)
+        );
         final MimeTypeInformationDto dto = this.filehandlingApiMapper.model2Dto(model);
         return ResponseEntity.ok(dto);
     }

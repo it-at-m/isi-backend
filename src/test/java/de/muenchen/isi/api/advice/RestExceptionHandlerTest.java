@@ -85,8 +85,9 @@ class RestExceptionHandlerTest {
     void handleOptimisticLockingException() {
         final OptimisticLockingException optimisticLockingException = new OptimisticLockingException("test");
 
-        final ResponseEntity<Object> response =
-            this.restExceptionHandler.handleOptimisticLockingException(optimisticLockingException);
+        final ResponseEntity<Object> response = this.restExceptionHandler.handleOptimisticLockingException(
+            optimisticLockingException
+        );
 
         assertThat(response.getStatusCode(), is(HttpStatus.PRECONDITION_FAILED));
 
@@ -103,8 +104,9 @@ class RestExceptionHandlerTest {
     void handleEntityIsReferencedException() {
         final EntityIsReferencedException entityIsReferencedException = new EntityIsReferencedException("test");
 
-        final ResponseEntity<Object> response =
-            this.restExceptionHandler.handleEntityIsReferencedException(entityIsReferencedException);
+        final ResponseEntity<Object> response = this.restExceptionHandler.handleEntityIsReferencedException(
+            entityIsReferencedException
+        );
 
         assertThat(response.getStatusCode(), is(HttpStatus.CONFLICT));
 
@@ -120,8 +122,9 @@ class RestExceptionHandlerTest {
     void handleCsvAttributeErrorException() {
         final CsvAttributeErrorException csvAttributeErrorException = new CsvAttributeErrorException("test");
 
-        final ResponseEntity<Object> response =
-            this.restExceptionHandler.handleCsvAttributeErrorException(csvAttributeErrorException);
+        final ResponseEntity<Object> response = this.restExceptionHandler.handleCsvAttributeErrorException(
+            csvAttributeErrorException
+        );
 
         assertThat(response.getStatusCode(), is(HttpStatus.UNPROCESSABLE_ENTITY));
 
@@ -137,8 +140,9 @@ class RestExceptionHandlerTest {
     void testhandleFileImportFailedException() {
         final FileImportFailedException fileImportFailedException = new FileImportFailedException("test");
 
-        final ResponseEntity<Object> response =
-            this.restExceptionHandler.handleFileImportFailedException(fileImportFailedException);
+        final ResponseEntity<Object> response = this.restExceptionHandler.handleFileImportFailedException(
+            fileImportFailedException
+        );
 
         assertThat(response.getStatusCode().value(), is(555));
 
@@ -154,8 +158,9 @@ class RestExceptionHandlerTest {
     void handleMimeTypeNotAllowedException() {
         final MimeTypeNotAllowedException mimeTypeNotAllowedException = new MimeTypeNotAllowedException("test");
 
-        final ResponseEntity<Object> response =
-            this.restExceptionHandler.handleMimeTypeNotAllowedException(mimeTypeNotAllowedException);
+        final ResponseEntity<Object> response = this.restExceptionHandler.handleMimeTypeNotAllowedException(
+            mimeTypeNotAllowedException
+        );
 
         assertThat(response.getStatusCode().value(), is(406));
 
@@ -172,8 +177,9 @@ class RestExceptionHandlerTest {
         final MimeTypeExtractionFailedException mimeTypeExtractionFailedException =
             new MimeTypeExtractionFailedException("test");
 
-        final ResponseEntity<Object> response =
-            this.restExceptionHandler.handleMimeTypeExtractionFailedException(mimeTypeExtractionFailedException);
+        final ResponseEntity<Object> response = this.restExceptionHandler.handleMimeTypeExtractionFailedException(
+            mimeTypeExtractionFailedException
+        );
 
         assertThat(response.getStatusCode().value(), is(555));
 
@@ -189,8 +195,9 @@ class RestExceptionHandlerTest {
     void handleFileHandlingFailedException() {
         final FileHandlingFailedException fileImportFailedException = new FileHandlingFailedException("test");
 
-        final ResponseEntity<Object> response =
-            this.restExceptionHandler.handleFileHandlingFailedException(fileImportFailedException);
+        final ResponseEntity<Object> response = this.restExceptionHandler.handleFileHandlingFailedException(
+            fileImportFailedException
+        );
 
         assertThat(response.getStatusCode().value(), is(555));
 
@@ -208,8 +215,9 @@ class RestExceptionHandlerTest {
             "test",
             HttpStatus.NOT_FOUND
         );
-        ResponseEntity<Object> response =
-            this.restExceptionHandler.handleFileHandlingWithS3FailedException(fileHandlingWithS3FailedException);
+        ResponseEntity<Object> response = this.restExceptionHandler.handleFileHandlingWithS3FailedException(
+            fileHandlingWithS3FailedException
+        );
 
         assertThat(response.getStatusCode(), is(HttpStatus.NOT_FOUND));
 
@@ -249,8 +257,9 @@ class RestExceptionHandlerTest {
     void handleKoordinatenException() {
         final KoordinatenException koordinatenException = new KoordinatenException("test");
 
-        final ResponseEntity<Object> response =
-            this.restExceptionHandler.handleKoordinatenException(koordinatenException);
+        final ResponseEntity<Object> response = this.restExceptionHandler.handleKoordinatenException(
+            koordinatenException
+        );
 
         assertThat(response.getStatusCode().value(), is(555));
 
@@ -268,8 +277,9 @@ class RestExceptionHandlerTest {
             "test"
         );
 
-        final ResponseEntity<Object> response =
-            this.restExceptionHandler.handleAbfrageStatusNotAllowedException(abfrageStatusNotAllowedException);
+        final ResponseEntity<Object> response = this.restExceptionHandler.handleAbfrageStatusNotAllowedException(
+            abfrageStatusNotAllowedException
+        );
 
         assertThat(response.getStatusCode(), is(HttpStatus.CONFLICT));
 
@@ -285,8 +295,9 @@ class RestExceptionHandlerTest {
     void handleEntityNotFoundException() {
         final EntityNotFoundException entityNotFoundException = new EntityNotFoundException("test");
 
-        final ResponseEntity<Object> response =
-            this.restExceptionHandler.handleEntityNotFoundException(entityNotFoundException);
+        final ResponseEntity<Object> response = this.restExceptionHandler.handleEntityNotFoundException(
+            entityNotFoundException
+        );
 
         assertThat(response.getStatusCode(), is(HttpStatus.NOT_FOUND));
 
@@ -302,8 +313,9 @@ class RestExceptionHandlerTest {
     void handleUniqueViolationExceptionTest() {
         final UniqueViolationException uniqueViolationException = new UniqueViolationException("test");
 
-        final ResponseEntity<Object> response =
-            this.restExceptionHandler.handleUniqueViolationException(uniqueViolationException);
+        final ResponseEntity<Object> response = this.restExceptionHandler.handleUniqueViolationException(
+            uniqueViolationException
+        );
 
         assertThat(response.getStatusCode(), is(HttpStatus.CONFLICT));
 
@@ -321,13 +333,12 @@ class RestExceptionHandlerTest {
         final HttpRequestMethodNotSupportedException httpRequestMethodNotSupportedException =
             new HttpRequestMethodNotSupportedException("test");
 
-        final ResponseEntity<Object> response =
-            this.restExceptionHandler.handleHttpRequestMethodNotSupported(
-                    httpRequestMethodNotSupportedException,
-                    new HttpHeaders(),
-                    HttpStatus.NOT_FOUND,
-                    null
-                );
+        final ResponseEntity<Object> response = this.restExceptionHandler.handleHttpRequestMethodNotSupported(
+            httpRequestMethodNotSupportedException,
+            new HttpHeaders(),
+            HttpStatus.NOT_FOUND,
+            null
+        );
 
         assertThat(response.getStatusCode(), is(HttpStatus.NOT_FOUND));
 
@@ -344,13 +355,12 @@ class RestExceptionHandlerTest {
         final HttpMediaTypeNotSupportedException httpMediaTypeNotSupportedException =
             new HttpMediaTypeNotSupportedException(MediaType.APPLICATION_JSON, List.of(MediaType.ALL));
 
-        final ResponseEntity<Object> response =
-            this.restExceptionHandler.handleHttpMediaTypeNotSupported(
-                    httpMediaTypeNotSupportedException,
-                    new HttpHeaders(),
-                    HttpStatus.UNSUPPORTED_MEDIA_TYPE,
-                    null
-                );
+        final ResponseEntity<Object> response = this.restExceptionHandler.handleHttpMediaTypeNotSupported(
+            httpMediaTypeNotSupportedException,
+            new HttpHeaders(),
+            HttpStatus.UNSUPPORTED_MEDIA_TYPE,
+            null
+        );
 
         assertThat(response.getStatusCode(), is(HttpStatus.UNSUPPORTED_MEDIA_TYPE));
 
@@ -370,13 +380,12 @@ class RestExceptionHandlerTest {
         final HttpMediaTypeNotAcceptableException httpMediaTypeNotAcceptableException =
             new HttpMediaTypeNotAcceptableException(List.of(MediaType.ALL));
 
-        final ResponseEntity<Object> response =
-            this.restExceptionHandler.handleHttpMediaTypeNotAcceptable(
-                    httpMediaTypeNotAcceptableException,
-                    new HttpHeaders(),
-                    HttpStatus.NOT_ACCEPTABLE,
-                    null
-                );
+        final ResponseEntity<Object> response = this.restExceptionHandler.handleHttpMediaTypeNotAcceptable(
+            httpMediaTypeNotAcceptableException,
+            new HttpHeaders(),
+            HttpStatus.NOT_ACCEPTABLE,
+            null
+        );
 
         assertThat(response.getStatusCode(), is(HttpStatus.NOT_ACCEPTABLE));
 
@@ -395,13 +404,12 @@ class RestExceptionHandlerTest {
             null
         );
 
-        final ResponseEntity<Object> response =
-            this.restExceptionHandler.handleMissingPathVariable(
-                    missingPathVariableException,
-                    new HttpHeaders(),
-                    HttpStatus.NOT_ACCEPTABLE,
-                    null
-                );
+        final ResponseEntity<Object> response = this.restExceptionHandler.handleMissingPathVariable(
+            missingPathVariableException,
+            new HttpHeaders(),
+            HttpStatus.NOT_ACCEPTABLE,
+            null
+        );
 
         assertThat(response.getStatusCode(), is(HttpStatus.NOT_ACCEPTABLE));
 
@@ -418,13 +426,12 @@ class RestExceptionHandlerTest {
         final MissingServletRequestParameterException missingServletRequestParameterException =
             new MissingServletRequestParameterException("nameParameter", "typeParameter");
 
-        final ResponseEntity<Object> response =
-            this.restExceptionHandler.handleMissingServletRequestParameter(
-                    missingServletRequestParameterException,
-                    new HttpHeaders(),
-                    HttpStatus.NOT_ACCEPTABLE,
-                    null
-                );
+        final ResponseEntity<Object> response = this.restExceptionHandler.handleMissingServletRequestParameter(
+            missingServletRequestParameterException,
+            new HttpHeaders(),
+            HttpStatus.NOT_ACCEPTABLE,
+            null
+        );
 
         assertThat(response.getStatusCode(), is(HttpStatus.NOT_ACCEPTABLE));
 
@@ -442,13 +449,12 @@ class RestExceptionHandlerTest {
             "test"
         );
 
-        final ResponseEntity<Object> response =
-            this.restExceptionHandler.handleServletRequestBindingException(
-                    servletRequestBindingException,
-                    new HttpHeaders(),
-                    HttpStatus.NOT_ACCEPTABLE,
-                    null
-                );
+        final ResponseEntity<Object> response = this.restExceptionHandler.handleServletRequestBindingException(
+            servletRequestBindingException,
+            new HttpHeaders(),
+            HttpStatus.NOT_ACCEPTABLE,
+            null
+        );
 
         assertThat(response.getStatusCode(), is(HttpStatus.NOT_ACCEPTABLE));
 
@@ -468,13 +474,12 @@ class RestExceptionHandlerTest {
             null
         );
 
-        final ResponseEntity<Object> response =
-            this.restExceptionHandler.handleConversionNotSupported(
-                    conversionNotSupportedException,
-                    new HttpHeaders(),
-                    HttpStatus.NOT_ACCEPTABLE,
-                    null
-                );
+        final ResponseEntity<Object> response = this.restExceptionHandler.handleConversionNotSupported(
+            conversionNotSupportedException,
+            new HttpHeaders(),
+            HttpStatus.NOT_ACCEPTABLE,
+            null
+        );
 
         assertThat(response.getStatusCode(), is(HttpStatus.NOT_ACCEPTABLE));
 
@@ -491,13 +496,12 @@ class RestExceptionHandlerTest {
         final TypeMismatchException typeMismatchException = new TypeMismatchException(new Object(), Object.class);
         typeMismatchException.initPropertyName("thePropertyName");
 
-        final ResponseEntity<Object> response =
-            this.restExceptionHandler.handleTypeMismatch(
-                    typeMismatchException,
-                    new HttpHeaders(),
-                    HttpStatus.NOT_ACCEPTABLE,
-                    null
-                );
+        final ResponseEntity<Object> response = this.restExceptionHandler.handleTypeMismatch(
+            typeMismatchException,
+            new HttpHeaders(),
+            HttpStatus.NOT_ACCEPTABLE,
+            null
+        );
 
         assertThat(response.getStatusCode(), is(HttpStatus.NOT_ACCEPTABLE));
 
@@ -518,13 +522,12 @@ class RestExceptionHandlerTest {
             "test"
         );
 
-        final ResponseEntity<Object> response =
-            this.restExceptionHandler.handleHttpMessageNotReadable(
-                    httpMessageNotReadableException,
-                    new HttpHeaders(),
-                    HttpStatus.NOT_ACCEPTABLE,
-                    null
-                );
+        final ResponseEntity<Object> response = this.restExceptionHandler.handleHttpMessageNotReadable(
+            httpMessageNotReadableException,
+            new HttpHeaders(),
+            HttpStatus.NOT_ACCEPTABLE,
+            null
+        );
 
         assertThat(response.getStatusCode(), is(HttpStatus.NOT_ACCEPTABLE));
 
@@ -545,13 +548,12 @@ class RestExceptionHandlerTest {
             "test"
         );
 
-        final ResponseEntity<Object> response =
-            this.restExceptionHandler.handleHttpMessageNotWritable(
-                    httpMessageNotWritableException,
-                    new HttpHeaders(),
-                    HttpStatus.NOT_ACCEPTABLE,
-                    null
-                );
+        final ResponseEntity<Object> response = this.restExceptionHandler.handleHttpMessageNotWritable(
+            httpMessageNotWritableException,
+            new HttpHeaders(),
+            HttpStatus.NOT_ACCEPTABLE,
+            null
+        );
 
         assertThat(response.getStatusCode(), is(HttpStatus.NOT_ACCEPTABLE));
 
@@ -579,13 +581,12 @@ class RestExceptionHandlerTest {
             this.bindingResult
         );
 
-        final ResponseEntity<Object> response =
-            this.restExceptionHandler.handleMethodArgumentNotValid(
-                    methodArgumentNotValidException,
-                    new HttpHeaders(),
-                    HttpStatus.NOT_ACCEPTABLE,
-                    null
-                );
+        final ResponseEntity<Object> response = this.restExceptionHandler.handleMethodArgumentNotValid(
+            methodArgumentNotValidException,
+            new HttpHeaders(),
+            HttpStatus.NOT_ACCEPTABLE,
+            null
+        );
 
         assertThat(response.getStatusCode(), is(HttpStatus.NOT_ACCEPTABLE));
 
@@ -610,13 +611,12 @@ class RestExceptionHandlerTest {
         final MissingServletRequestPartException missingServletRequestPartException =
             new MissingServletRequestPartException("requestPartName");
 
-        final ResponseEntity<Object> response =
-            this.restExceptionHandler.handleMissingServletRequestPart(
-                    missingServletRequestPartException,
-                    new HttpHeaders(),
-                    HttpStatus.NOT_ACCEPTABLE,
-                    null
-                );
+        final ResponseEntity<Object> response = this.restExceptionHandler.handleMissingServletRequestPart(
+            missingServletRequestPartException,
+            new HttpHeaders(),
+            HttpStatus.NOT_ACCEPTABLE,
+            null
+        );
 
         assertThat(response.getStatusCode(), is(HttpStatus.NOT_ACCEPTABLE));
 
@@ -635,13 +635,12 @@ class RestExceptionHandlerTest {
     void handleNoHandlerFoundException() {
         final NoHandlerFoundException noHandlerFoundException = new NoHandlerFoundException("GET", "the-url", null);
 
-        final ResponseEntity<Object> response =
-            this.restExceptionHandler.handleNoHandlerFoundException(
-                    noHandlerFoundException,
-                    new HttpHeaders(),
-                    HttpStatus.NOT_ACCEPTABLE,
-                    null
-                );
+        final ResponseEntity<Object> response = this.restExceptionHandler.handleNoHandlerFoundException(
+            noHandlerFoundException,
+            new HttpHeaders(),
+            HttpStatus.NOT_ACCEPTABLE,
+            null
+        );
 
         assertThat(response.getStatusCode(), is(HttpStatus.NOT_ACCEPTABLE));
 
@@ -660,13 +659,12 @@ class RestExceptionHandlerTest {
     void handleAsyncRequestTimeoutException() {
         final AsyncRequestTimeoutException asyncRequestTimeoutException = new AsyncRequestTimeoutException();
 
-        final ResponseEntity<Object> response =
-            this.restExceptionHandler.handleAsyncRequestTimeoutException(
-                    asyncRequestTimeoutException,
-                    new HttpHeaders(),
-                    HttpStatus.NOT_ACCEPTABLE,
-                    null
-                );
+        final ResponseEntity<Object> response = this.restExceptionHandler.handleAsyncRequestTimeoutException(
+            asyncRequestTimeoutException,
+            new HttpHeaders(),
+            HttpStatus.NOT_ACCEPTABLE,
+            null
+        );
 
         assertThat(response.getStatusCode(), is(HttpStatus.NOT_ACCEPTABLE));
 
@@ -684,8 +682,9 @@ class RestExceptionHandlerTest {
             "test",
             null
         );
-        final ResponseEntity<Object> response =
-            this.restExceptionHandler.handleConstraintViolationException(constraintViolationException);
+        final ResponseEntity<Object> response = this.restExceptionHandler.handleConstraintViolationException(
+            constraintViolationException
+        );
         assertThat(response.getStatusCode(), is(HttpStatus.BAD_REQUEST));
         final InformationResponseDto responseDto = (InformationResponseDto) response.getBody();
         assertThat(responseDto.getTraceId(), is("1111111111111111"));
