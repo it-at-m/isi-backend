@@ -26,9 +26,9 @@ class StandVerfahrenBauleitplanverfahrenValidatorTest {
         );
         assertThat(
             this.standVerfahrenValidator.isValid(
-                    StandVerfahren.VORBEREITUNG_BILLIGUNGSBESCHLUSS_STAEDTEBAULICHER_VERTRAG,
-                    null
-                ),
+                StandVerfahren.VORBEREITUNG_BILLIGUNGSBESCHLUSS_STAEDTEBAULICHER_VERTRAG,
+                null
+            ),
             is(true)
         );
         assertThat(this.standVerfahrenValidator.isValid(StandVerfahren.VORLIEGENDER_SATZUNGSBESCHLUSS, null), is(true));

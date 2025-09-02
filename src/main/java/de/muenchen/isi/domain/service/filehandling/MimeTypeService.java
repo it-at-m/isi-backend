@@ -73,8 +73,9 @@ public class MimeTypeService {
                 filepath.getPathToFile(),
                 IsFilepathWithoutLeadingPathdividerValidator.PATH_SEPARATOR
             );
-            final String type =
-                this.getAcronymOrDescriptionWhenAcronymEmptyOrTypeWhenDescriptionEmpty(mimeTypeInformationModel);
+            final String type = this.getAcronymOrDescriptionWhenAcronymEmptyOrTypeWhenDescriptionEmpty(
+                mimeTypeInformationModel
+            );
             final var message = String.format(
                 "Das Hochladen der Datei %s des Typs %s ist nicht erlaubt.",
                 fileName,
@@ -104,9 +105,9 @@ public class MimeTypeService {
         throws FileHandlingWithS3FailedException, FileHandlingFailedException {
         try {
             return this.documentStorageFileRepository.getFileInputStream(
-                    filepath.getPathToFile(),
-                    this.fileExpirationTime
-                );
+                filepath.getPathToFile(),
+                this.fileExpirationTime
+            );
         } catch (
             final DocumentStorageClientErrorException
             | DocumentStorageServerErrorException

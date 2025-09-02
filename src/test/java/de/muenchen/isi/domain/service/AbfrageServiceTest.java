@@ -324,8 +324,10 @@ class AbfrageServiceTest {
         model.setId(abfrageId);
         model.setStatusAbfrage(StatusAbfrage.ANGELEGT);
 
-        final BauleitplanverfahrenModel abfrageModelMapped =
-            this.abfrageDomainMapper.request2Model(requestModel, model);
+        final BauleitplanverfahrenModel abfrageModelMapped = this.abfrageDomainMapper.request2Model(
+            requestModel,
+            model
+        );
         final Abfrage entity = this.abfrageDomainMapper.model2Entity(abfrageModelMapped);
 
         Mockito.when(this.abfrageRepository.findById(entity.getId())).thenReturn(Optional.of(entity));
@@ -367,8 +369,10 @@ class AbfrageServiceTest {
         model.setStatusAbfrage(StatusAbfrage.ANGELEGT);
         model.setLinkEakte("https://eakte.muenchen.de?E12345");
 
-        final BaugenehmigungsverfahrenModel abfrageModelMapped =
-            this.abfrageDomainMapper.request2Model(requestModel, model);
+        final BaugenehmigungsverfahrenModel abfrageModelMapped = this.abfrageDomainMapper.request2Model(
+            requestModel,
+            model
+        );
         final Abfrage entity = this.abfrageDomainMapper.model2Entity(abfrageModelMapped);
 
         Mockito.when(this.abfrageRepository.findById(entity.getId())).thenReturn(Optional.of(entity));
@@ -447,8 +451,10 @@ class AbfrageServiceTest {
         model.setId(abfrageId);
         model.setStatusAbfrage(StatusAbfrage.ANGELEGT);
 
-        final BauleitplanverfahrenModel abfrageModelMapped =
-            this.abfrageDomainMapper.request2Model(requestModel, model);
+        final BauleitplanverfahrenModel abfrageModelMapped = this.abfrageDomainMapper.request2Model(
+            requestModel,
+            model
+        );
         final Abfrage entity = this.abfrageDomainMapper.model2Entity(abfrageModelMapped);
 
         Mockito.when(this.abfrageRepository.findById(entity.getId())).thenReturn(Optional.of(entity));
@@ -478,8 +484,10 @@ class AbfrageServiceTest {
         model.setId(abfrageId);
         model.setStatusAbfrage(StatusAbfrage.ANGELEGT);
 
-        final BaugenehmigungsverfahrenModel abfrageModelMapped =
-            this.abfrageDomainMapper.request2Model(requestModel, model);
+        final BaugenehmigungsverfahrenModel abfrageModelMapped = this.abfrageDomainMapper.request2Model(
+            requestModel,
+            model
+        );
         final Abfrage entity = this.abfrageDomainMapper.model2Entity(abfrageModelMapped);
 
         Mockito.when(this.abfrageRepository.findById(entity.getId())).thenReturn(Optional.of(entity));
@@ -3288,8 +3296,8 @@ class AbfrageServiceTest {
         model.setSub(sub);
         model.setStatusAbfrage(StatusAbfrage.UEBERMITTELT_ZUR_BEARBEITUNG);
         this.abfrageService.throwUserRoleNotAllowedOrAbfrageStatusNotAllowedExceptionWhenNotTheCorrectUserWithTheCorrectRole(
-                model
-            );
+            model
+        );
 
         roles = new String[] { "fachreferat" };
         model.setId(id);
@@ -3298,8 +3306,8 @@ class AbfrageServiceTest {
         Mockito.when(this.authenticationUtils.getUserRoles()).thenReturn(List.of(roles));
         try {
             this.abfrageService.throwUserRoleNotAllowedOrAbfrageStatusNotAllowedExceptionWhenNotTheCorrectUserWithTheCorrectRole(
-                    model
-                );
+                model
+            );
         } catch (final UserRoleNotAllowedException exception) {
             assertThat(exception.getMessage(), is("Keine Berechtigung zum Löschen der Abfrage."));
         }
@@ -3311,8 +3319,8 @@ class AbfrageServiceTest {
         Mockito.when(this.authenticationUtils.getUserRoles()).thenReturn(List.of(roles));
         try {
             this.abfrageService.throwUserRoleNotAllowedOrAbfrageStatusNotAllowedExceptionWhenNotTheCorrectUserWithTheCorrectRole(
-                    model
-                );
+                model
+            );
         } catch (final UserRoleNotAllowedException exception) {
             assertThat(
                 exception.getMessage(),
@@ -3327,8 +3335,8 @@ class AbfrageServiceTest {
         Mockito.when(this.authenticationUtils.getUserRoles()).thenReturn(List.of(roles));
         try {
             this.abfrageService.throwUserRoleNotAllowedOrAbfrageStatusNotAllowedExceptionWhenNotTheCorrectUserWithTheCorrectRole(
-                    model
-                );
+                model
+            );
         } catch (final AbfrageStatusNotAllowedException exception) {
             assertThat(exception.getMessage(), is("Die Abfrage kann nur im Status 'angelegt' gelöscht werden."));
         }
@@ -3339,16 +3347,16 @@ class AbfrageServiceTest {
         model.setStatusAbfrage(StatusAbfrage.ANGELEGT);
         Mockito.when(this.authenticationUtils.getUserRoles()).thenReturn(List.of(roles));
         this.abfrageService.throwUserRoleNotAllowedOrAbfrageStatusNotAllowedExceptionWhenNotTheCorrectUserWithTheCorrectRole(
-                model
-            );
+            model
+        );
     }
 
     @Test
     void throwEntityIsReferencedExceptionWhenAbfrageIsReferencingBauvorhaben()
         throws EntityIsReferencedException, EntityNotFoundException {
         this.abfrageService.throwEntityIsReferencedExceptionWhenAbfrageIsReferencingBauvorhaben(
-                new BauleitplanverfahrenModel()
-            );
+            new BauleitplanverfahrenModel()
+        );
 
         final BauleitplanverfahrenModel abfrage = new BauleitplanverfahrenModel();
         abfrage.setBauvorhaben(UUID.randomUUID());
@@ -3370,15 +3378,15 @@ class AbfrageServiceTest {
         model.setStatusAbfrage(StatusAbfrage.EINPFLEGEN_BEDARFSMELDUNG);
 
         this.abfrageService.throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(
-                model,
-                StatusAbfrage.EINPFLEGEN_BEDARFSMELDUNG
-            );
+            model,
+            StatusAbfrage.EINPFLEGEN_BEDARFSMELDUNG
+        );
 
         Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () ->
             this.abfrageService.throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(
-                    model,
-                    StatusAbfrage.ANGELEGT
-                )
+                model,
+                StatusAbfrage.ANGELEGT
+            )
         );
     }
 
@@ -3401,9 +3409,9 @@ class AbfrageServiceTest {
         Mockito.when(this.bauvorhabenRepository.save(bauvorhaben)).thenReturn(bauvorhaben);
 
         this.abfrageService.changeRelevantAbfragevarianteOnBauvorhabenChangeAbfrageAngelegtModel(
-                model,
-                originalAbfrage
-            );
+            model,
+            originalAbfrage
+        );
 
         assertThat(bauvorhaben.getRelevanteAbfragevariante(), is(nullValue()));
 
@@ -3429,9 +3437,9 @@ class AbfrageServiceTest {
         Mockito.when(this.bauvorhabenRepository.save(bauvorhaben)).thenReturn(bauvorhaben);
 
         this.abfrageService.changeRelevantAbfragevarianteOnBauvorhabenChangeAbfrageAngelegtModel(
-                model,
-                originalAbfrage
-            );
+            model,
+            originalAbfrage
+        );
 
         assertThat(bauvorhaben.getRelevanteAbfragevariante(), is(nullValue()));
 
@@ -3457,9 +3465,9 @@ class AbfrageServiceTest {
         Mockito.when(this.bauvorhabenRepository.save(bauvorhaben)).thenReturn(bauvorhaben);
 
         this.abfrageService.changeRelevantAbfragevarianteOnBauvorhabenChangeAbfrageAngelegtModel(
-                model,
-                originalAbfrage
-            );
+            model,
+            originalAbfrage
+        );
 
         assertThat(bauvorhaben.getRelevanteAbfragevariante(), is(abfragevariante));
 
@@ -3486,9 +3494,9 @@ class AbfrageServiceTest {
         Mockito.when(this.bauvorhabenRepository.save(bauvorhaben)).thenReturn(bauvorhaben);
 
         this.abfrageService.changeRelevantAbfragevarianteOnBauvorhabenChangeAbfrageStartBearbeitung(
-                model,
-                originalAbfrage
-            );
+            model,
+            originalAbfrage
+        );
 
         assertThat(bauvorhaben.getRelevanteAbfragevariante(), is(nullValue()));
 
@@ -3514,9 +3522,9 @@ class AbfrageServiceTest {
         Mockito.when(this.bauvorhabenRepository.save(bauvorhaben)).thenReturn(bauvorhaben);
 
         this.abfrageService.changeRelevantAbfragevarianteOnBauvorhabenChangeAbfrageStartBearbeitung(
-                model,
-                originalAbfrage
-            );
+            model,
+            originalAbfrage
+        );
 
         assertThat(bauvorhaben.getRelevanteAbfragevariante(), is(nullValue()));
 
@@ -3542,9 +3550,9 @@ class AbfrageServiceTest {
         Mockito.when(this.bauvorhabenRepository.save(bauvorhaben)).thenReturn(bauvorhaben);
 
         this.abfrageService.changeRelevantAbfragevarianteOnBauvorhabenChangeAbfrageStartBearbeitung(
-                model,
-                originalAbfrage
-            );
+            model,
+            originalAbfrage
+        );
 
         assertThat(bauvorhaben.getRelevanteAbfragevariante(), is(abfragevariante));
         Mockito.verify(this.bauvorhabenRepository, Mockito.times(0)).save(bauvorhaben);

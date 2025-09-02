@@ -43,8 +43,10 @@ public class PresignedUrlCreationService {
     public PresignedUrlModel getFile(final FilepathModel filepath)
         throws FileHandlingWithS3FailedException, FileHandlingFailedException {
         try {
-            final var presignedUrl =
-                this.presignedUrlRepository.getPresignedUrlGetFile(filepath.getPathToFile(), this.fileExpirationTime);
+            final var presignedUrl = this.presignedUrlRepository.getPresignedUrlGetFile(
+                filepath.getPathToFile(),
+                this.fileExpirationTime
+            );
             log.debug("Presigned-URL get file: {}", presignedUrl);
             return new PresignedUrlModel(HttpMethod.GET.name(), presignedUrl);
         } catch (
@@ -83,8 +85,10 @@ public class PresignedUrlCreationService {
     public PresignedUrlModel saveFile(final FilepathModel filepath)
         throws FileHandlingWithS3FailedException, FileHandlingFailedException {
         try {
-            final var presignedUrl =
-                this.presignedUrlRepository.getPresignedUrlSaveFile(filepath.getPathToFile(), this.fileExpirationTime);
+            final var presignedUrl = this.presignedUrlRepository.getPresignedUrlSaveFile(
+                filepath.getPathToFile(),
+                this.fileExpirationTime
+            );
             log.debug("Presigned-URL save file: {}", presignedUrl);
             return new PresignedUrlModel(HttpMethod.PUT.name(), presignedUrl);
         } catch (
@@ -123,11 +127,10 @@ public class PresignedUrlCreationService {
     public PresignedUrlModel deleteFile(final FilepathModel filepath)
         throws FileHandlingWithS3FailedException, FileHandlingFailedException {
         try {
-            final var presignedUrl =
-                this.presignedUrlRepository.getPresignedUrlDeleteFile(
-                        filepath.getPathToFile(),
-                        this.fileExpirationTime
-                    );
+            final var presignedUrl = this.presignedUrlRepository.getPresignedUrlDeleteFile(
+                filepath.getPathToFile(),
+                this.fileExpirationTime
+            );
             log.debug("Presigned-URL delete file: {}", presignedUrl);
             return new PresignedUrlModel(HttpMethod.DELETE.name(), presignedUrl);
         } catch (

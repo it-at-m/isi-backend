@@ -20,10 +20,10 @@ public class StatusInfrastruktureinrichtungSuggestionBinder implements Completio
     @Override
     public void bind(final ValueBindingContext<?> context) {
         this.bind(
-                StatusInfrastruktureinrichtung.class,
-                new StatusInfrastruktureinrichtungValueCompletionBridge(),
-                context
-            );
+            StatusInfrastruktureinrichtung.class,
+            new StatusInfrastruktureinrichtungValueCompletionBridge(),
+            context
+        );
     }
 
     private static class StatusInfrastruktureinrichtungValueCompletionBridge

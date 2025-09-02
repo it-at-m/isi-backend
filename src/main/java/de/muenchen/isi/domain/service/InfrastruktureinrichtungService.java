@@ -64,8 +64,9 @@ public class InfrastruktureinrichtungService {
     public InfrastruktureinrichtungModel saveInfrastruktureinrichtung(
         final InfrastruktureinrichtungModel infrastruktureinrichtung
     ) throws OptimisticLockingException, EntityNotFoundException, ReportingException {
-        Infrastruktureinrichtung entity =
-            this.infrastruktureinrichtungDomainMapper.model2Entity(infrastruktureinrichtung);
+        Infrastruktureinrichtung entity = this.infrastruktureinrichtungDomainMapper.model2Entity(
+            infrastruktureinrichtung
+        );
         try {
             entity = this.infrastruktureinrichtungRepository.saveAndFlush(entity);
             etlInterfaceService.etlInterfaceTriggerInfrastruktureinrichtungJob(entity.getId());
@@ -106,8 +107,8 @@ public class InfrastruktureinrichtungService {
         throws EntityNotFoundException, EntityIsReferencedException {
         final var infrastruktureinrichtung = this.getInfrastruktureinrichtungById(id);
         this.throwEntityIsReferencedExceptionWhenInfrastruktureinrichtungIsReferencingBauvorhaben(
-                infrastruktureinrichtung
-            );
+            infrastruktureinrichtung
+        );
         this.kommentarRepository.deleteAllByInfrastruktureinrichtungId(id);
         this.infrastruktureinrichtungRepository.deleteById(id);
     }
