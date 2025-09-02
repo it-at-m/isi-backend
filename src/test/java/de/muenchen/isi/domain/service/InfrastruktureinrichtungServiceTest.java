@@ -200,8 +200,9 @@ class InfrastruktureinrichtungServiceTest {
 
         savedMittelschule.setNameEinrichtung("Mittelschule XXX");
 
-        final var updatedMittelschule =
-            this.infrastruktureinrichtungService.updateInfrastruktureinrichtung(savedMittelschule);
+        final var updatedMittelschule = this.infrastruktureinrichtungService.updateInfrastruktureinrichtung(
+            savedMittelschule
+        );
 
         assertThat(updatedMittelschule.getId(), is(savedMittelschule.getId()));
         assertThat(updatedMittelschule.getVersion(), is(1L));
@@ -250,8 +251,8 @@ class InfrastruktureinrichtungServiceTest {
     void throwEntityIsReferencedExceptionWhenInfrastruktureinrichtungIsReferencingBauvorhaben()
         throws EntityIsReferencedException {
         this.infrastruktureinrichtungService.throwEntityIsReferencedExceptionWhenInfrastruktureinrichtungIsReferencingBauvorhaben(
-                new KinderkrippeModel()
-            );
+            new KinderkrippeModel()
+        );
 
         var bauvorhaben = new Bauvorhaben();
         bauvorhaben.setNameVorhaben("Bauvorhaben");
@@ -266,8 +267,8 @@ class InfrastruktureinrichtungServiceTest {
         infrastruktureinrichtung.setBauvorhaben(bauvorhaben.getId());
         Assertions.assertThrows(EntityIsReferencedException.class, () ->
             this.infrastruktureinrichtungService.throwEntityIsReferencedExceptionWhenInfrastruktureinrichtungIsReferencingBauvorhaben(
-                    infrastruktureinrichtung
-                )
+                infrastruktureinrichtung
+            )
         );
     }
 }

@@ -64,44 +64,44 @@ public class UmlegungFoerderartenRepositoryTest {
         umlegungFoerderarten3.setGueltigAb(LocalDate.parse("2010-01-01"));
 
         this.umlegungFoerderartenRepository.saveAll(
-                List.of(umlegungFoerderarten1, umlegungFoerderarten2, umlegungFoerderarten3)
-            );
+            List.of(umlegungFoerderarten1, umlegungFoerderarten2, umlegungFoerderarten3)
+        );
 
         Optional<UmlegungFoerderarten> result1 =
             this.umlegungFoerderartenRepository.findFirstByBezeichnungAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
-                    umlegungFoerderarten1.getBezeichnung(),
-                    LocalDate.parse("2003-05-05")
-                );
+                umlegungFoerderarten1.getBezeichnung(),
+                LocalDate.parse("2003-05-05")
+            );
 
         Optional<UmlegungFoerderarten> result2 =
             this.umlegungFoerderartenRepository.findFirstByBezeichnungAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
-                    umlegungFoerderarten2.getBezeichnung(),
-                    LocalDate.parse("2005-05-05")
-                );
+                umlegungFoerderarten2.getBezeichnung(),
+                LocalDate.parse("2005-05-05")
+            );
 
         Optional<UmlegungFoerderarten> result3 =
             this.umlegungFoerderartenRepository.findFirstByBezeichnungAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
-                    umlegungFoerderarten2.getBezeichnung(),
-                    LocalDate.parse("2007-10-15")
-                );
+                umlegungFoerderarten2.getBezeichnung(),
+                LocalDate.parse("2007-10-15")
+            );
 
         Optional<UmlegungFoerderarten> result4 =
             this.umlegungFoerderartenRepository.findFirstByBezeichnungAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
-                    umlegungFoerderarten3.getBezeichnung(),
-                    LocalDate.parse("2011-06-14")
-                );
+                umlegungFoerderarten3.getBezeichnung(),
+                LocalDate.parse("2011-06-14")
+            );
 
         Optional<UmlegungFoerderarten> result5 =
             this.umlegungFoerderartenRepository.findFirstByBezeichnungAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
-                    umlegungFoerderarten1.getBezeichnung(),
-                    LocalDate.parse("2005-05-04")
-                );
+                umlegungFoerderarten1.getBezeichnung(),
+                LocalDate.parse("2005-05-04")
+            );
 
         Optional<UmlegungFoerderarten> result6 =
             this.umlegungFoerderartenRepository.findFirstByBezeichnungAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
-                    umlegungFoerderarten2.getBezeichnung(),
-                    LocalDate.parse("2005-05-06")
-                );
+                umlegungFoerderarten2.getBezeichnung(),
+                LocalDate.parse("2005-05-06")
+            );
 
         assertThat(result1.get(), is(umlegungFoerderarten1));
         assertThat(result2.get(), is(umlegungFoerderarten2));
@@ -126,32 +126,32 @@ public class UmlegungFoerderartenRepositoryTest {
         umlegungFoerderarten3.setGueltigAb(LocalDate.parse("2010-01-01"));
 
         this.umlegungFoerderartenRepository.saveAll(
-                List.of(umlegungFoerderarten1, umlegungFoerderarten2, umlegungFoerderarten3)
-            );
+            List.of(umlegungFoerderarten1, umlegungFoerderarten2, umlegungFoerderarten3)
+        );
 
         Optional<UmlegungFoerderarten> result1 =
             this.umlegungFoerderartenRepository.findFirstByBezeichnungAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
-                    umlegungFoerderarten1.getBezeichnung(),
-                    LocalDate.parse("1999-06-14")
-                );
+                umlegungFoerderarten1.getBezeichnung(),
+                LocalDate.parse("1999-06-14")
+            );
 
         Optional<UmlegungFoerderarten> result2 =
             this.umlegungFoerderartenRepository.findFirstByBezeichnungAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
-                    "Test4",
-                    LocalDate.parse("2003-05-05")
-                );
+                "Test4",
+                LocalDate.parse("2003-05-05")
+            );
 
         Optional<UmlegungFoerderarten> result3 =
             this.umlegungFoerderartenRepository.findFirstByBezeichnungAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
-                    "Test5",
-                    LocalDate.parse("1980-05-05")
-                );
+                "Test5",
+                LocalDate.parse("1980-05-05")
+            );
 
         Optional<UmlegungFoerderarten> result4 =
             this.umlegungFoerderartenRepository.findFirstByBezeichnungAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
-                    umlegungFoerderarten2.getBezeichnung(),
-                    LocalDate.parse("2005-05-04")
-                );
+                umlegungFoerderarten2.getBezeichnung(),
+                LocalDate.parse("2005-05-04")
+            );
 
         Assertions.assertThrows(NoSuchElementException.class, () -> result1.get());
         Assertions.assertThrows(NoSuchElementException.class, () -> result2.get());

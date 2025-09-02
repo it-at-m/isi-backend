@@ -57,44 +57,44 @@ public class StaedtebaulicheOrientierungswertRepositoryTest {
         orientierungswert3.setBelegungsdichte(new BigDecimal("1.80"));
 
         this.staedtebaulicheOrientierungswertRepository.saveAll(
-                List.of(orientierungswert1, orientierungswert2, orientierungswert3)
-            );
+            List.of(orientierungswert1, orientierungswert2, orientierungswert3)
+        );
 
         Optional<StaedtebaulicheOrientierungswert> result1 =
             this.staedtebaulicheOrientierungswertRepository.findFirstByFoerderartBezeichnungAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
-                    orientierungswert1.getFoerderartBezeichnung(),
-                    LocalDate.parse("2003-05-05")
-                );
+                orientierungswert1.getFoerderartBezeichnung(),
+                LocalDate.parse("2003-05-05")
+            );
 
         Optional<StaedtebaulicheOrientierungswert> result2 =
             this.staedtebaulicheOrientierungswertRepository.findFirstByFoerderartBezeichnungAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
-                    orientierungswert2.getFoerderartBezeichnung(),
-                    LocalDate.parse("2005-05-05")
-                );
+                orientierungswert2.getFoerderartBezeichnung(),
+                LocalDate.parse("2005-05-05")
+            );
 
         Optional<StaedtebaulicheOrientierungswert> result3 =
             this.staedtebaulicheOrientierungswertRepository.findFirstByFoerderartBezeichnungAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
-                    orientierungswert2.getFoerderartBezeichnung(),
-                    LocalDate.parse("2007-10-15")
-                );
+                orientierungswert2.getFoerderartBezeichnung(),
+                LocalDate.parse("2007-10-15")
+            );
 
         Optional<StaedtebaulicheOrientierungswert> result4 =
             this.staedtebaulicheOrientierungswertRepository.findFirstByFoerderartBezeichnungAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
-                    orientierungswert3.getFoerderartBezeichnung(),
-                    LocalDate.parse("2011-06-14")
-                );
+                orientierungswert3.getFoerderartBezeichnung(),
+                LocalDate.parse("2011-06-14")
+            );
 
         Optional<StaedtebaulicheOrientierungswert> result5 =
             this.staedtebaulicheOrientierungswertRepository.findFirstByFoerderartBezeichnungAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
-                    orientierungswert1.getFoerderartBezeichnung(),
-                    LocalDate.parse("2005-05-04")
-                );
+                orientierungswert1.getFoerderartBezeichnung(),
+                LocalDate.parse("2005-05-04")
+            );
 
         Optional<StaedtebaulicheOrientierungswert> result6 =
             this.staedtebaulicheOrientierungswertRepository.findFirstByFoerderartBezeichnungAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
-                    orientierungswert2.getFoerderartBezeichnung(),
-                    LocalDate.parse("2005-05-06")
-                );
+                orientierungswert2.getFoerderartBezeichnung(),
+                LocalDate.parse("2005-05-06")
+            );
 
         assertThat(result1.get(), is(orientierungswert1));
         assertThat(result2.get(), is(orientierungswert2));
@@ -122,27 +122,27 @@ public class StaedtebaulicheOrientierungswertRepositoryTest {
 
         Optional<StaedtebaulicheOrientierungswert> result1 =
             this.staedtebaulicheOrientierungswertRepository.findFirstByFoerderartBezeichnungAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
-                    orientierungswert1.getFoerderartBezeichnung(),
-                    LocalDate.parse("1999-06-14")
-                );
+                orientierungswert1.getFoerderartBezeichnung(),
+                LocalDate.parse("1999-06-14")
+            );
 
         Optional<StaedtebaulicheOrientierungswert> result2 =
             this.staedtebaulicheOrientierungswertRepository.findFirstByFoerderartBezeichnungAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
-                    "Test4",
-                    LocalDate.parse("2003-05-05")
-                );
+                "Test4",
+                LocalDate.parse("2003-05-05")
+            );
 
         Optional<StaedtebaulicheOrientierungswert> result3 =
             this.staedtebaulicheOrientierungswertRepository.findFirstByFoerderartBezeichnungAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
-                    "Test5",
-                    LocalDate.parse("1980-05-05")
-                );
+                "Test5",
+                LocalDate.parse("1980-05-05")
+            );
 
         Optional<StaedtebaulicheOrientierungswert> result4 =
             this.staedtebaulicheOrientierungswertRepository.findFirstByFoerderartBezeichnungAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
-                    orientierungswert2.getFoerderartBezeichnung(),
-                    LocalDate.parse("2005-05-04")
-                );
+                orientierungswert2.getFoerderartBezeichnung(),
+                LocalDate.parse("2005-05-04")
+            );
 
         Assertions.assertThrows(NoSuchElementException.class, () -> result1.get());
         Assertions.assertThrows(NoSuchElementException.class, () -> result2.get());

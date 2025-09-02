@@ -80,10 +80,10 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         final var httpStatus = HttpStatus.BAD_REQUEST;
         final var errorResponseDto =
             this.createInformationResponseDtoWithTraceInformationAndTimestampAndOriginalExceptionNameAndStatusAndMessage(
-                    ex,
-                    httpStatus.value(),
-                    List.of(ex.getMessage())
-                );
+                ex,
+                httpStatus.value(),
+                List.of(ex.getMessage())
+            );
         return ResponseEntity.status(httpStatus).body(errorResponseDto);
     }
 
@@ -92,10 +92,10 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         final var httpStatus = HttpStatus.CONFLICT;
         final var errorResponseDto =
             this.createInformationResponseDtoWithTraceInformationAndTimestampAndOriginalExceptionNameAndStatusAndMessage(
-                    ex,
-                    httpStatus.value(),
-                    List.of(ex.getMessage())
-                );
+                ex,
+                httpStatus.value(),
+                List.of(ex.getMessage())
+            );
         return ResponseEntity.status(httpStatus).body(errorResponseDto);
     }
 
@@ -104,10 +104,10 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         final var httpStatus = HttpStatus.CONFLICT;
         final var errorResponseDto =
             this.createInformationResponseDtoWithTraceInformationAndTimestampAndOriginalExceptionNameAndStatusAndMessage(
-                    ex,
-                    httpStatus.value(),
-                    List.of(ex.getMessage())
-                );
+                ex,
+                httpStatus.value(),
+                List.of(ex.getMessage())
+            );
         return ResponseEntity.status(httpStatus).body(errorResponseDto);
     }
 
@@ -116,10 +116,10 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         final var httpStatus = HttpStatus.UNPROCESSABLE_ENTITY;
         final var errorResponseDto =
             this.createInformationResponseDtoWithTraceInformationAndTimestampAndOriginalExceptionNameAndStatusAndMessage(
-                    ex,
-                    httpStatus.value(),
-                    List.of(ex.getMessage())
-                );
+                ex,
+                httpStatus.value(),
+                List.of(ex.getMessage())
+            );
         return ResponseEntity.status(httpStatus).body(errorResponseDto);
     }
 
@@ -128,10 +128,10 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         final var httpStatus = CUSTOM_INTERNAL_SERVER_ERROR;
         final var errorResponseDto =
             this.createInformationResponseDtoWithTraceInformationAndTimestampAndOriginalExceptionNameAndStatusAndMessage(
-                    ex,
-                    httpStatus,
-                    List.of(ex.getMessage())
-                );
+                ex,
+                httpStatus,
+                List.of(ex.getMessage())
+            );
         return ResponseEntity.status(httpStatus).body(errorResponseDto);
     }
 
@@ -150,10 +150,10 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         final var httpStatus = CUSTOM_INTERNAL_SERVER_ERROR;
         final var errorResponseDto =
             this.createInformationResponseDtoWithTraceInformationAndTimestampAndOriginalExceptionNameAndStatusAndMessage(
-                    ex,
-                    httpStatus,
-                    List.of(ex.getMessage())
-                );
+                ex,
+                httpStatus,
+                List.of(ex.getMessage())
+            );
         return ResponseEntity.status(httpStatus).body(errorResponseDto);
     }
 
@@ -162,10 +162,10 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         final var httpStatus = CUSTOM_INTERNAL_SERVER_ERROR;
         final var errorResponseDto =
             this.createInformationResponseDtoWithTraceInformationAndTimestampAndOriginalExceptionNameAndStatusAndMessage(
-                    ex,
-                    httpStatus,
-                    List.of(ex.getMessage())
-                );
+                ex,
+                httpStatus,
+                List.of(ex.getMessage())
+            );
         return ResponseEntity.status(httpStatus).body(errorResponseDto);
     }
 
@@ -179,10 +179,10 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
             : CUSTOM_INTERNAL_SERVER_ERROR;
         final var errorResponseDto =
             this.createInformationResponseDtoWithTraceInformationAndTimestampAndOriginalExceptionNameAndStatusAndMessage(
-                    ex,
-                    httpStatus,
-                    List.of(ex.getMessage())
-                );
+                ex,
+                httpStatus,
+                List.of(ex.getMessage())
+            );
         return ResponseEntity.status(httpStatus).body(errorResponseDto);
     }
 
@@ -191,10 +191,10 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         final var httpStatus = CUSTOM_INTERNAL_SERVER_ERROR;
         final var errorResponseDto =
             this.createInformationResponseDtoWithTraceInformationAndTimestampAndOriginalExceptionNameAndStatusAndMessage(
-                    ex,
-                    httpStatus,
-                    List.of(ex.getMessage())
-                );
+                ex,
+                httpStatus,
+                List.of(ex.getMessage())
+            );
         return ResponseEntity.status(httpStatus).body(errorResponseDto);
     }
 
@@ -203,10 +203,10 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         final var httpStatus = HttpStatus.CONFLICT;
         final var errorResponseDto =
             this.createInformationResponseDtoWithTraceInformationAndTimestampAndOriginalExceptionNameAndStatusAndMessage(
-                    ex,
-                    httpStatus.value(),
-                    List.of(ex.getMessage())
-                );
+                ex,
+                httpStatus.value(),
+                List.of(ex.getMessage())
+            );
         return ResponseEntity.status(httpStatus).body(errorResponseDto);
     }
 
@@ -215,10 +215,10 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         final var httpStatus = HttpStatus.FORBIDDEN;
         final var errorResponseDto =
             this.createInformationResponseDtoWithTraceInformationAndTimestampAndOriginalExceptionNameAndStatusAndMessage(
-                    ex,
-                    httpStatus.value(),
-                    List.of(ex.getMessage())
-                );
+                ex,
+                httpStatus.value(),
+                List.of(ex.getMessage())
+            );
         return ResponseEntity.status(httpStatus).body(errorResponseDto);
     }
 
@@ -227,10 +227,10 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         final var httpStatus = HttpStatus.NOT_FOUND;
         final var errorResponseDto =
             this.createInformationResponseDtoWithTraceInformationAndTimestampAndOriginalExceptionNameAndStatusAndMessage(
-                    ex,
-                    httpStatus.value(),
-                    List.of(ex.getMessage())
-                );
+                ex,
+                httpStatus.value(),
+                List.of(ex.getMessage())
+            );
         return ResponseEntity.status(httpStatus).body(errorResponseDto);
     }
 

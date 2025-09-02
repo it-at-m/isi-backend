@@ -109,8 +109,9 @@ public class PresignedUrlCreationController {
     )
     public ResponseEntity<PresignedUrlDto> saveFile(@RequestBody @NotNull @Valid final FilepathDto filepathDto)
         throws FileHandlingWithS3FailedException, FileHandlingFailedException {
-        final var presignedUrlModel =
-            this.presignedUrlCreationService.saveFile(this.filehandlingApiMapper.dto2Model(filepathDto));
+        final var presignedUrlModel = this.presignedUrlCreationService.saveFile(
+            this.filehandlingApiMapper.dto2Model(filepathDto)
+        );
         final var presignedUrlDto = this.filehandlingApiMapper.model2Dto(presignedUrlModel);
         return ResponseEntity.ok(presignedUrlDto);
     }
