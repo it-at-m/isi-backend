@@ -161,8 +161,9 @@ class AbfrageServiceSpringTest {
         throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, UserRoleNotAllowedException, CalculationException, ReportingException {
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
         abfrage = this.abfrageService.save(abfrage);
-        UUID abfragevarianteId =
-            ((BauleitplanverfahrenModel) abfrage).getAbfragevariantenBauleitplanverfahren().get(0).getId();
+        UUID abfragevarianteId = ((BauleitplanverfahrenModel) abfrage).getAbfragevariantenBauleitplanverfahren()
+            .get(0)
+            .getId();
         AbfrageModel foundAbfrage = abfrageService.getByAbfragevarianteId(abfragevarianteId);
         assertThat(foundAbfrage, is(abfrage));
 

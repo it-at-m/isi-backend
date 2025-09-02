@@ -79,10 +79,10 @@ public class InfrastrukturbedarfService {
             // Ermitteln der Versorgungsquote und Gruppenstärke
             .map(bedarf ->
                 this.getVersorgungsquoteAndGruppenstaerkeWithBedarf(
-                        bedarf,
-                        versorgungsquoteGruppenstaerke,
-                        artInfrastrukturbedarf
-                    )
+                    bedarf,
+                    versorgungsquoteGruppenstaerke,
+                    artInfrastrukturbedarf
+                )
             )
             .toList();
     }
@@ -120,10 +120,10 @@ public class InfrastrukturbedarfService {
             // Ermitteln der Versorgungsquote und Gruppenstärke
             .map(bedarf ->
                 this.getVersorgungsquoteAndGruppenstaerkeWithBedarf(
-                        bedarf,
-                        versorgungsquoteGruppenstaerke,
-                        artInfrastrukturbedarf
-                    )
+                    bedarf,
+                    versorgungsquoteGruppenstaerke,
+                    artInfrastrukturbedarf
+                )
             )
             .toList();
     }
@@ -160,10 +160,10 @@ public class InfrastrukturbedarfService {
             // Ermitteln der Versorgungsquote und Gruppenstärke
             .map(bedarf ->
                 this.getVersorgungsquoteAndGruppenstaerkeWithBedarf(
-                        bedarf,
-                        versorgungsquoteGruppenstaerke,
-                        ArtInfrastrukturbedarf.SOBON_URSAECHLICH
-                    )
+                    bedarf,
+                    versorgungsquoteGruppenstaerke,
+                    ArtInfrastrukturbedarf.SOBON_URSAECHLICH
+                )
             )
             .toList();
     }
@@ -200,10 +200,10 @@ public class InfrastrukturbedarfService {
             // Ermitteln der Versorgungsquote und Gruppenstärke
             .map(bedarf ->
                 this.getVersorgungsquoteAndGruppenstaerkeWithBedarf(
-                        bedarf,
-                        versorgungsquoteGruppenstaerke,
-                        ArtInfrastrukturbedarf.SOBON_URSAECHLICH
-                    )
+                    bedarf,
+                    versorgungsquoteGruppenstaerke,
+                    ArtInfrastrukturbedarf.SOBON_URSAECHLICH
+                )
             )
             .toList();
     }
@@ -243,8 +243,11 @@ public class InfrastrukturbedarfService {
             .toList();
 
         // Ermittlung und Gruppierung der SoBon-Orientierungswerte nach Förderart
-        final var sobonOrientierungswertForFoerderart =
-            this.getSobonOrientierungswertGroupedByFoerderart(wohneinheiten, sobonJahr, einrichtung);
+        final var sobonOrientierungswertForFoerderart = this.getSobonOrientierungswertGroupedByFoerderart(
+            wohneinheiten,
+            sobonJahr,
+            einrichtung
+        );
 
         final var earliestYear = wohneinheitenWithoutSum
             .stream()

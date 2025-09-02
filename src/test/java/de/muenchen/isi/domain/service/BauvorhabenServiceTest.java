@@ -973,8 +973,8 @@ public class BauvorhabenServiceTest {
         );
         assertThrows(EntityIsReferencedException.class, () ->
             this.bauvorhabenService.throwEntityIsReferencedExceptionWhenInfrastruktureinrichtungIsReferencingBauvorhaben(
-                    bauvorhaben
-                )
+                bauvorhaben
+            )
         );
     }
 }

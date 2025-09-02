@@ -136,8 +136,8 @@ class KommentarServiceTest {
 
         Mockito.when(
             this.kommentarRepository.findAllByInfrastruktureinrichtungIdOrderByCreatedDateTimeDesc(
-                    uuidInfrastruktureinrichtung
-                )
+                uuidInfrastruktureinrichtung
+            )
         ).thenReturn(Stream.of(kommentar2, kommentar1));
 
         final var result = kommentarService.getKommentareForInfrastruktureinrichtung(uuidInfrastruktureinrichtung);
@@ -174,8 +174,9 @@ class KommentarServiceTest {
         kommentar1.setBauvorhaben(bauvorhaben);
 
         Mockito.when(this.kommentarRepository.findById(kommentar1.getId())).thenReturn(Optional.of(kommentar1));
-        final KommentarBauvorhabenModel result =
-            this.kommentarService.getKommentarForBauvorhabenById(kommentar1.getId());
+        final KommentarBauvorhabenModel result = this.kommentarService.getKommentarForBauvorhabenById(
+            kommentar1.getId()
+        );
 
         final var kommentar1Model = new KommentarBauvorhabenModel();
         kommentar1Model.setId(kommentar1.getId());
