@@ -993,8 +993,8 @@ class AbfrageStatusServiceTest {
         throws UniqueViolationException, OptimisticLockingException, StringLengthExceededException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException, ReportingException, UserRoleNotAllowedException {
         this.erneuteBearbeitungSachbearbeitungVonErledigtMitFachereferat(TestData.createBauleitplanverfahrenModel());
         this.erneuteBearbeitungSachbearbeitungVonErledigtMitFachereferat(
-                TestData.createBaugenehmigungsverfahrenModel()
-            );
+            TestData.createBaugenehmigungsverfahrenModel()
+        );
     }
 
     void erneuteBearbeitungSachbearbeitungVonErledigtMitFachereferat(final AbfrageModel abfrageToTest)
@@ -1073,8 +1073,8 @@ class AbfrageStatusServiceTest {
         throws UniqueViolationException, OptimisticLockingException, StringLengthExceededException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException, ReportingException, UserRoleNotAllowedException {
         this.erneuteBearbeitungSachbearbeitungVonErledigtOhneFachereferat(TestData.createBauleitplanverfahrenModel());
         this.erneuteBearbeitungSachbearbeitungVonErledigtOhneFachereferat(
-                TestData.createBaugenehmigungsverfahrenModel()
-            );
+            TestData.createBaugenehmigungsverfahrenModel()
+        );
     }
 
     void erneuteBearbeitungSachbearbeitungVonErledigtOhneFachereferat(final AbfrageModel abfrageToTest)

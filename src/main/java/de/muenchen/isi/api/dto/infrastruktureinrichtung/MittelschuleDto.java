@@ -19,5 +19,4 @@ public class MittelschuleDto extends InfrastruktureinrichtungDto {
     @NotNull
     private SchuleDto schule;
     // TBD: Mittelschulsprengel
-
 }

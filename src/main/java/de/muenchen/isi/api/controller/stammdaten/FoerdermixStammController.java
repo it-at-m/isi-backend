@@ -56,11 +56,10 @@ public class FoerdermixStammController {
         "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_READ_STAMMDATEN_FOERDERMIX.name())"
     )
     public ResponseEntity<List<FoerdermixStammDto>> getFoerdermixStaemme() {
-        final List<FoerdermixStammDto> foerdermixStammList =
-            this.foerdermixStammService.getFoerdermixStaemme()
-                .stream()
-                .map(this.stammdatenApiMapper::model2Dto)
-                .collect(Collectors.toList());
+        final List<FoerdermixStammDto> foerdermixStammList = this.foerdermixStammService.getFoerdermixStaemme()
+            .stream()
+            .map(this.stammdatenApiMapper::model2Dto)
+            .collect(Collectors.toList());
         return new ResponseEntity<>(foerdermixStammList, HttpStatus.OK);
     }
 
