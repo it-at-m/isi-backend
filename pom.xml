@@ -41,7 +41,7 @@
         <maven.compiler.plugin.version>3.14.0</maven.compiler.plugin.version>
         <!-- Version muss mit der in den spring-boot-dependencies bereitgestellten Lombok-Version
         übereinstimmen -->
-        <org.projectlombok.lombok.version>1.18.36</org.projectlombok.lombok.version>
+        <org.projectlombok.lombok.version>1.18.40</org.projectlombok.lombok.version>
         <org.projectlombok.mapstructbinding.version>0.2.0</org.projectlombok.mapstructbinding.version>
         <mapstruct.version>1.5.5.Final</mapstruct.version>
         <s3.integration>1.3.5</s3.integration>
