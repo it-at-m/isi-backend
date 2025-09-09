@@ -32,7 +32,7 @@ public record AllObjectsRecord(
     // Bauvorhaben-spezifisch
     String nameVorhaben,
     BigDecimal grundstuecksgroesse,
-    StandVerfahren stand_verfahren_filter,
+    @FieldProjection(path = "stand_verfahren") StandVerfahren stand_verfahren,
     MultiPolygonGeometry umgriff,
 
     // Abfrage-spezifisch
