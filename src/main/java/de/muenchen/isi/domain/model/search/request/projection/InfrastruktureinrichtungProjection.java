@@ -4,6 +4,9 @@ import de.muenchen.isi.infrastructure.entity.common.VerortungPoint;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusInfrastruktureinrichtung;
 
+/**
+ * Enthält alle Felder die Infrastruktureinrichtung hat
+ */
 public interface InfrastruktureinrichtungProjection extends BaseProjection {
     VerortungPoint verortungPoint();
     InfrastruktureinrichtungTyp infrastruktureinrichtungTyp();

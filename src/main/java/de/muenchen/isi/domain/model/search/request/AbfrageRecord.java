@@ -16,6 +16,7 @@ import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Projection
 // Record für Abfrage
 @ProjectionConstructor
 public record AbfrageRecord(
+    // BaseEntity-Felder
     @IdProjection UUID id,
     String resultType,
     LocalDateTime createdDateTime,

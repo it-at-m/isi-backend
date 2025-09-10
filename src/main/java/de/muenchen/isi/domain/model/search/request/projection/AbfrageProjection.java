@@ -6,6 +6,9 @@ import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import java.time.LocalDate;
 import java.util.UUID;
 
+/**
+ * Enthält alle Felder die Abfrage hat
+ */
 public interface AbfrageProjection extends BaseProjection, AbfrageBauvorhabenProjection {
     ArtAbfrage artAbfrage();
     String name();

@@ -4,6 +4,9 @@ import de.muenchen.isi.infrastructure.entity.common.Adresse;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+/**
+ * Enthält alle Felder die Abfrage, Bauvorhaben und Infrastruktureinrichtung haben
+ */
 public interface BaseProjection {
     UUID id();
     LocalDateTime createdDateTime();
