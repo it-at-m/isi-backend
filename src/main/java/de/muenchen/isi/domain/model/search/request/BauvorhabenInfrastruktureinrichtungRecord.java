@@ -24,7 +24,7 @@ public record BauvorhabenInfrastruktureinrichtungRecord(
     LocalDateTime createdDateTime,
     LocalDateTime lastModifiedDateTime,
 
-    @FieldProjection(path = "adresse") Adresse adresse,
+    @FieldProjection(path = "adresseJson") Adresse adresse,
     @FieldProjection(path = "verortungJson") VerortungMultiPolygon verortung,
     @FieldProjection(path = "verortungPointJson") VerortungPoint verortungPoint,
     StandVerfahren standVerfahren,

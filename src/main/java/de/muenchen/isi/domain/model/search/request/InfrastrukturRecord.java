@@ -20,7 +20,7 @@ public record InfrastrukturRecord(
     LocalDateTime createdDateTime,
     LocalDateTime lastModifiedDateTime,
 
-    @FieldProjection(path = "adresse") Adresse adresse,
+    @FieldProjection(path = "adresseJson") Adresse adresse,
     @FieldProjection(path = "verortungPointJson") VerortungPoint verortungPoint,
     InfrastruktureinrichtungTyp infrastruktureinrichtungTyp,
     String nameEinrichtung,
