@@ -20,7 +20,7 @@ public record BauvorhabenRecord(
     String resultType,
     LocalDateTime createdDateTime,
     LocalDateTime lastModifiedDateTime,
-
+    // Bauvorhaben Felder
     @FieldProjection(path = "adresseJson") Adresse adresse,
     @FieldProjection(path = "verortungJson") VerortungMultiPolygon verortung,
     StandVerfahren standVerfahren,

@@ -71,6 +71,36 @@ import org.hibernate.type.SqlTypes;
 @Indexed
 public class Bauvorhaben extends BaseEntity {
 
+    /**
+     * Virtuelles Feld für Hibernate Search / Elasticsearch, das den "Typ" des
+     * indexierten Objekts festlegt.
+     *
+     * <p>
+     * Obwohl es keine persistierte Spalte in der Datenbank gibt
+     * ({@link Transient}), wird dieses Feld im Suchindex unter dem Namen
+     * {@code resultType} gespeichert und ist in Projektionen verfügbar
+     * ({@link GenericField} mit {@code projectable = YES}).
+     * </p>
+     *
+     * <p>
+     * Hintergrund: In einer gemeinsamen Index-Struktur werden unterschiedliche
+     * Objekttypen (z. B. Bauvorhaben, Abfrage, Infrastruktureinrichtung)
+     * zusammen gespeichert. Damit bei einer Suchanfrage bzw. einer Projection
+     * zur Laufzeit unterschieden werden kann, von welchem Typ ein Treffer ist,
+     * braucht Elasticsearch dieses Feld. In den Projection-Records (mit
+     * {@code @ProjectionConstructor}) gibt es deshalb ein Attribut
+     * {@code resultType}, das aus genau diesem Getter befüllt wird.
+     * </p>
+     *
+     * <p>
+     * {@link IndexingDependency} mit {@code reindexOnUpdate = NO} signalisiert,
+     * dass sich der Wert nie ändert (er ist hier fest auf "ABFRAGE" gesetzt),
+     * sodass Hibernate Search keine Neuindizierung bei Entity-Änderungen
+     * auslösen muss.
+     * </p>
+     *
+     * @return Der feste String "BAUVORHABEN", der diesen Objekttyp im Index markiert.
+     */
     @Transient
     @GenericField(name = "resultType", projectable = Projectable.YES)
     @IndexingDependency(

@@ -21,6 +21,7 @@ public record AbfrageRecord(
     String resultType,
     LocalDateTime createdDateTime,
     LocalDateTime lastModifiedDateTime,
+    // Abfrage Felder
     @FieldProjection(path = "adresseJson") Adresse adresse,
     @FieldProjection(path = "verortungJson") VerortungMultiPolygon verortung,
     StandVerfahren standVerfahren,

@@ -8,6 +8,23 @@ import org.hibernate.search.mapper.pojo.bridge.ValueBridge;
 import org.hibernate.search.mapper.pojo.bridge.runtime.ValueBridgeFromIndexedValueContext;
 import org.hibernate.search.mapper.pojo.bridge.runtime.ValueBridgeToIndexedValueContext;
 
+/**
+ * ValueBridge für Hibernate Search, um {@link VerortungPoint}-Objekte in den Suchindex
+ * und wieder zurück zu konvertieren.
+ *
+ * Hibernate Search kann in Lucene/Elasticsearch nur einfache Typen wie String
+ * oder Zahlen speichern. Komplexe Objekte wie {@link VerortungPoint} müssen daher
+ * serialisiert werden.
+ *
+ * Diese Bridge:
+ * - wandelt eine {@link VerortungPoint} beim Indexieren in einen JSON-String um
+ *   ({@code toIndexedValue}),
+ * - liest den JSON-String bei Projektionen wieder zurück in eine {@link VerortungPoint}
+ *   ({@code fromIndexedValue}).
+ *
+ * Damit können {@link VerortungPoint}-Felder auch in Hibernate Search Projections
+ * (z. B. @ProjectionConstructor-Records) korrekt befüllt werden.
+ */
 @Slf4j
 public class VerortungPointValueBridge implements ValueBridge<VerortungPoint, String> {
 

@@ -56,6 +56,36 @@ import org.hibernate.search.mapper.pojo.mapping.definition.annotation.PropertyVa
 @Table(indexes = { @Index(name = "abfrage_name_index", columnList = "name") })
 public abstract class Abfrage extends BaseEntity {
 
+    /**
+     * Virtuelles Feld für Hibernate Search / Elasticsearch, das den "Typ" des
+     * indexierten Objekts festlegt.
+     *
+     * <p>
+     * Obwohl es keine persistierte Spalte in der Datenbank gibt
+     * ({@link Transient}), wird dieses Feld im Suchindex unter dem Namen
+     * {@code resultType} gespeichert und ist in Projektionen verfügbar
+     * ({@link GenericField} mit {@code projectable = YES}).
+     * </p>
+     *
+     * <p>
+     * Hintergrund: In einer gemeinsamen Index-Struktur werden unterschiedliche
+     * Objekttypen (z. B. Bauvorhaben, Abfrage, Infrastruktureinrichtung)
+     * zusammen gespeichert. Damit bei einer Suchanfrage bzw. einer Projection
+     * zur Laufzeit unterschieden werden kann, von welchem Typ ein Treffer ist,
+     * braucht Elasticsearch dieses Feld. In den Projection-Records (mit
+     * {@code @ProjectionConstructor}) gibt es deshalb ein Attribut
+     * {@code resultType}, das aus genau diesem Getter befüllt wird.
+     * </p>
+     *
+     * <p>
+     * {@link IndexingDependency} mit {@code reindexOnUpdate = NO} signalisiert,
+     * dass sich der Wert nie ändert (er ist hier fest auf "ABFRAGE" gesetzt),
+     * sodass Hibernate Search keine Neuindizierung bei Entity-Änderungen
+     * auslösen muss.
+     * </p>
+     *
+     * @return Der feste String "ABFRAGE", der diesen Objekttyp im Index markiert.
+     */
     @Transient
     @GenericField(name = "resultType", projectable = Projectable.YES)
     @IndexingDependency(
@@ -91,6 +121,18 @@ public abstract class Abfrage extends BaseEntity {
     @ManyToOne
     private Bauvorhaben bauvorhaben;
 
+    /**
+     * Virtuelles Feld für Hibernate Search, das die UUID des verknüpften
+     * {@code Bauvorhaben} im Suchindex ablegt. Es ist {@link Transient}, da
+     * es nicht in der Datenbank gespeichert wird, sondern nur zur Indexierung
+     * und Projektion dient. Über {@link GenericField} wird es als
+     * {@code bauvorhabenId} im Index verfügbar gemacht und kann direkt in
+     * Suchergebnissen zurückgegeben werden.
+     *
+     * {@link IndexingDependency} weist Hibernate Search an, dieses Feld von der
+     * Beziehung {@code bauvorhaben} abzuleiten. Ändert sich das Bauvorhaben oder
+     * dessen ID, wird das abgeleitete Feld automatisch im Index aktualisiert.
+     */
     @Transient
     @GenericField(name = "bauvorhabenId", projectable = Projectable.YES)
     @IndexingDependency(derivedFrom = @ObjectPath(@PropertyValue(propertyName = "bauvorhaben")))

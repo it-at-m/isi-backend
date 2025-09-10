@@ -8,6 +8,23 @@ import org.hibernate.search.mapper.pojo.bridge.ValueBridge;
 import org.hibernate.search.mapper.pojo.bridge.runtime.ValueBridgeFromIndexedValueContext;
 import org.hibernate.search.mapper.pojo.bridge.runtime.ValueBridgeToIndexedValueContext;
 
+/**
+ * ValueBridge für Hibernate Search, um {@link InfrastruktureinrichtungTyp}-Objekte in den Suchindex
+ * und wieder zurück zu konvertieren.
+ *
+ * Hibernate Search kann in Lucene/Elasticsearch nur einfache Typen wie String
+ * oder Zahlen speichern. Komplexe Objekte wie {@link InfrastruktureinrichtungTyp} müssen daher
+ * serialisiert werden.
+ *
+ * Diese Bridge:
+ * - wandelt eine {@link InfrastruktureinrichtungTyp} beim Indexieren in einen JSON-String um
+ *   ({@code toIndexedValue}),
+ * - liest den JSON-String bei Projektionen wieder zurück in eine {@link InfrastruktureinrichtungTyp}
+ *   ({@code fromIndexedValue}).
+ *
+ * Damit können {@link InfrastruktureinrichtungTyp}-Felder auch in Hibernate Search Projections
+ * (z. B. @ProjectionConstructor-Records) korrekt befüllt werden.
+ */
 @Slf4j
 public class InfrastruktureinrichtungTypValueBridge implements ValueBridge<InfrastruktureinrichtungTyp, String> {
 
@@ -33,7 +50,7 @@ public class InfrastruktureinrichtungTypValueBridge implements ValueBridge<Infra
         try {
             return objectMapper.writeValueAsString(value);
         } catch (JsonProcessingException e) {
-            log.error("Fehler beim Serialisieren von ArtAbfrage: {}", e.getMessage());
+            log.error("Fehler beim Serialisieren von InfrastruktureinrichtungTypValueBridge: {}", e.getMessage());
             return null;
         }
     }
@@ -45,7 +62,7 @@ public class InfrastruktureinrichtungTypValueBridge implements ValueBridge<Infra
         try {
             return objectMapper.readValue(json, InfrastruktureinrichtungTyp.class);
         } catch (JsonProcessingException e) {
-            log.error("Fehler beim Deserialisieren von ArtAbfrage: {}", e.getMessage());
+            log.error("Fehler beim Deserialisieren von InfrastruktureinrichtungTypValueBridge: {}", e.getMessage());
             return null;
         }
     }

@@ -600,7 +600,7 @@ public class EntitySearchService {
     }
 
     protected Class<?> determineRecordClass(SearchQueryAndSortingModel s) {
-        boolean anyInfra =
+        boolean anyInfrastruktureinrichtung =
             s.getSelectGrundschule() ||
             s.getSelectGsNachmittagBetreuung() ||
             s.getSelectHausFuerKinder() ||
@@ -613,17 +613,21 @@ public class EntitySearchService {
             s.getSelectBaugenehmigungsverfahren() ||
             s.getSelectWeiteresVerfahren();
 
-        boolean bau = s.getSelectBauvorhaben();
+        boolean anyBauvorhaben = s.getSelectBauvorhaben();
 
         // --- reine Einzelauswahlen ---
-        if (anyAbfrage && !bau && !anyInfra) return AbfrageRecord.class;
-        if (bau && !anyAbfrage && !anyInfra) return BauvorhabenRecord.class;
-        if (anyInfra && !bau && !anyAbfrage) return InfrastrukturRecord.class;
+        if (anyAbfrage && !anyBauvorhaben && !anyInfrastruktureinrichtung) return AbfrageRecord.class;
+        if (anyBauvorhaben && !anyAbfrage && !anyInfrastruktureinrichtung) return BauvorhabenRecord.class;
+        if (anyInfrastruktureinrichtung && !anyBauvorhaben && !anyAbfrage) return InfrastrukturRecord.class;
 
         // --- Kombis (2er-Schnittmengen) ---
-        if (bau && anyInfra && !anyAbfrage) return BauvorhabenInfrastruktureinrichtungRecord.class;
-        if (bau && anyAbfrage && !anyInfra) return BauvorhabenAbfrageRecord.class;
-        if (!bau && anyAbfrage && anyInfra) return AbfrageInfrastruktureinrichtungRecord.class;
+        if (
+            anyBauvorhaben && anyInfrastruktureinrichtung && !anyAbfrage
+        ) return BauvorhabenInfrastruktureinrichtungRecord.class;
+        if (anyBauvorhaben && anyAbfrage && !anyInfrastruktureinrichtung) return BauvorhabenAbfrageRecord.class;
+        if (
+            !anyBauvorhaben && anyAbfrage && anyInfrastruktureinrichtung
+        ) return AbfrageInfrastruktureinrichtungRecord.class;
 
         // --- alles andere (z. B. alle drei, oder gar nichts explizit) ---
         return AllObjectsRecord.class;
