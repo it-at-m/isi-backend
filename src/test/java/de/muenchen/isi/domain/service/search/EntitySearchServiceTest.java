@@ -167,7 +167,7 @@ class EntitySearchServiceTest {
     }
 
     @Test
-    void test_determineRecordClass() {
+    void determineRecordClass() {
         var s1 = new SearchQueryAndSortingModel();
         s1.setSelectBauleitplanverfahren(true);
         s1.setSelectBaugenehmigungsverfahren(true);

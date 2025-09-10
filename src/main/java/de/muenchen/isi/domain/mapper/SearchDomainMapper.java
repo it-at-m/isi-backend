@@ -3,15 +3,16 @@ package de.muenchen.isi.domain.mapper;
 import de.muenchen.isi.configuration.MapstructConfiguration;
 import de.muenchen.isi.domain.exception.GeometryOperationFailedException;
 import de.muenchen.isi.domain.model.common.MultiPolygonGeometryModel;
+import de.muenchen.isi.domain.model.common.StadtbezirkModel;
 import de.muenchen.isi.domain.model.common.Wgs84Model;
 import de.muenchen.isi.domain.model.enums.SearchResultType;
 import de.muenchen.isi.domain.model.search.request.AbfrageInfrastruktureinrichtungRecord;
-import de.muenchen.isi.domain.model.search.request.AbfrageRecord;
 import de.muenchen.isi.domain.model.search.request.AllObjectsRecord;
 import de.muenchen.isi.domain.model.search.request.BauvorhabenAbfrageRecord;
 import de.muenchen.isi.domain.model.search.request.BauvorhabenInfrastruktureinrichtungRecord;
-import de.muenchen.isi.domain.model.search.request.BauvorhabenRecord;
-import de.muenchen.isi.domain.model.search.request.InfrastrukturRecord;
+import de.muenchen.isi.domain.model.search.request.projection.AbfrageProjection;
+import de.muenchen.isi.domain.model.search.request.projection.BauvorhabenProjection;
+import de.muenchen.isi.domain.model.search.request.projection.InfrastruktureinrichtungProjection;
 import de.muenchen.isi.domain.model.search.response.AbfrageSearchResultModel;
 import de.muenchen.isi.domain.model.search.response.BauvorhabenSearchResultModel;
 import de.muenchen.isi.domain.model.search.response.InfrastruktureinrichtungSearchResultModel;
@@ -24,9 +25,12 @@ import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
 import de.muenchen.isi.infrastructure.entity.WeiteresVerfahren;
 import de.muenchen.isi.infrastructure.entity.common.Adresse;
 import de.muenchen.isi.infrastructure.entity.common.MultiPolygonGeometry;
+import de.muenchen.isi.infrastructure.entity.common.Stadtbezirk;
 import de.muenchen.isi.infrastructure.entity.common.VerortungMultiPolygon;
 import de.muenchen.isi.infrastructure.entity.common.VerortungPoint;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Infrastruktureinrichtung;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
@@ -193,7 +197,7 @@ public abstract class SearchDomainMapper {
     }
 
     /**
-     * Ermittelt die Koordinaten einer Adresse oder – falls diese nicht vorhanden sind – 
+     * Ermittelt die Koordinaten einer Adresse oder – falls diese nicht vorhanden sind –
      * den Schwerpunkt (Centroid) einer übergebenen Verortung (Mehrfachpolygon).
      *
      * <p>
@@ -247,7 +251,9 @@ public abstract class SearchDomainMapper {
     }
 
     public abstract MultiPolygonGeometryModel entity2Model(final MultiPolygonGeometry entity);
-    
+
+    public abstract StadtbezirkModel entity2Model(final Stadtbezirk entity);
+
     /**
      * Mappt ein Projektion-Objekt (Record) auf ein {@link SearchResultModel}.
      * <p>
@@ -263,392 +269,137 @@ public abstract class SearchDomainMapper {
      */
     public SearchResultModel mapProjectionRecordToSearchResultModel(Object projection) {
         return switch (projection) {
-            case AllObjectsRecord allObjectsRecord ->
-                mapAllObjectsRecordToSearchResultModel(allObjectsRecord);
-            case AbfrageRecord abfrageRecord ->
-                getAbfrageSearchResultModel(abfrageRecord);
-            case InfrastrukturRecord infrastrukturRecord ->
-                getInfrastruktureinrichtungSearchResultModel(infrastrukturRecord);
-            case BauvorhabenRecord bauvorhabenRecord ->
-                getBauvorhabenSearchResultModel(bauvorhabenRecord);
-            case BauvorhabenInfrastruktureinrichtungRecord bauvorhabenInfrastruktureinrichtungRecord ->
-                mapBauvorhabenInfrastruktureinrichtungRecordToSearchResultModel(bauvorhabenInfrastruktureinrichtungRecord);
-            case BauvorhabenAbfrageRecord bauvorhabenAbfrageRecord ->
-                mapBauvorhabenAbfrageRecordToSearchResultModel(bauvorhabenAbfrageRecord);
-            case AbfrageInfrastruktureinrichtungRecord abfrageInfrastruktureinrichtungRecord ->
-                mapAbfrageInfrastruktureinrichtungRecordToSearchResultModel(abfrageInfrastruktureinrichtungRecord);
-            default -> throw new IllegalArgumentException(
-                "Projection type: " + projection.getClass().getName() + " nicht implementiert"
+            case AllObjectsRecord allObjectsRecord -> switch (allObjectsRecord.resultType()) {
+                case "BAUVORHABEN" -> toBauvorhabenModel(allObjectsRecord);
+                case "ABFRAGE" -> toAbfrageModel(allObjectsRecord);
+                case "INFRASTRUKTUREINRICHTUNG" -> toInfrastrukturModel(allObjectsRecord);
+                default -> throw new IllegalArgumentException(
+                    "Unbekannter resultType in AllObjectsRecord: " + allObjectsRecord.resultType()
+                );
+            };
+            case AbfrageInfrastruktureinrichtungRecord abfrageInfrastruktureinrichtungRecord -> switch (
+                abfrageInfrastruktureinrichtungRecord.resultType()
+            ) {
+                case "ABFRAGE" -> toAbfrageModel(abfrageInfrastruktureinrichtungRecord);
+                case "INFRASTRUKTUREINRICHTUNG" -> toInfrastrukturModel(abfrageInfrastruktureinrichtungRecord);
+                default -> throw new IllegalArgumentException(
+                    "Unbekannter resultType in AbfrageInfrastruktureinrichtungRecord: " +
+                    abfrageInfrastruktureinrichtungRecord.resultType()
+                );
+            };
+            case BauvorhabenInfrastruktureinrichtungRecord bauvorhabenInfrastruktureinrichtungRecord -> switch (
+                bauvorhabenInfrastruktureinrichtungRecord.resultType()
+            ) {
+                case "BAUVORHABEN" -> toBauvorhabenModel(bauvorhabenInfrastruktureinrichtungRecord);
+                case "INFRASTRUKTUREINRICHTUNG" -> toInfrastrukturModel(bauvorhabenInfrastruktureinrichtungRecord);
+                default -> throw new IllegalArgumentException(
+                    "Unbekannter resultType in BauvorhabenInfrastruktureinrichtungRecord: " +
+                    bauvorhabenInfrastruktureinrichtungRecord.resultType()
+                );
+            };
+            case BauvorhabenAbfrageRecord bauvorhabenAbfrageRecord -> switch (bauvorhabenAbfrageRecord.resultType()) {
+                case "BAUVORHABEN" -> toBauvorhabenModel(bauvorhabenAbfrageRecord);
+                case "ABFRAGE" -> toAbfrageModel(bauvorhabenAbfrageRecord);
+                default -> throw new IllegalArgumentException(
+                    "Unbekannter resultType in BauvorhabenInfrastruktureinrichtungRecord: " +
+                    bauvorhabenAbfrageRecord.resultType()
+                );
+            };
+            case AbfrageProjection abfrageProjection -> toAbfrageModel(abfrageProjection);
+            case BauvorhabenProjection bauvorhabenProjection -> toBauvorhabenModel(bauvorhabenProjection);
+            case InfrastruktureinrichtungProjection infrastruktureinrichtungProjection -> toInfrastrukturModel(
+                infrastruktureinrichtungProjection
             );
-    };
-}
-    
-    /**
-     * Mappt einen {@link AllObjectsRecord} abhängig vom enthaltenen {@code resultType}
-     * auf das passende {@link SearchResultModel}.
-     *
-     * @param projection Der gemischte Record mit {@code resultType}.
-     * @return Das spezifische {@link SearchResultModel}.
-     * @throws IllegalArgumentException wenn der {@code resultType} unbekannt ist.
-     */
-    private SearchResultModel mapAllObjectsRecordToSearchResultModel(AllObjectsRecord projection) {
-        switch (projection.resultType()) {
-            case "BAUVORHABEN":
-                return getBauvorhabenSearchResultModel(projection);
-            case "ABFRAGE":
-                return getAbfrageSearchResultModel(projection);
-            case "INFRASTRUKTUREINRICHTUNG":
-                return getInfrastruktureinrichtungSearchResultModel(projection);
-            default:
-                throw new IllegalArgumentException("Projection type: " + projection.getClass().getName() + " nicht implementiert");
+            default -> throw new IllegalArgumentException(
+                "Projection type: " + projection.getClass().getName() + " nicht unterstützt"
+            );
+        };
+    }
+
+    @Mappings(
+        {
+            @Mapping(target = "type", constant = SearchResultType.Values.ABFRAGE),
+            @Mapping(target = "coordinate", ignore = true),
+            @Mapping(target = "stadtbezirke", ignore = true),
+            @Mapping(target = "bauvorhaben", source = "bauvorhabenId"),
+        }
+    )
+    public abstract AbfrageSearchResultModel toAbfrageModel(AbfrageProjection projection);
+
+    @AfterMapping
+    protected void setAbfrageCoordinate(AbfrageProjection projection, @MappingTarget AbfrageSearchResultModel model) {
+        model.setCoordinate(getCoordinateFromAdresseOrVerortung(projection.getAdresse(), projection.getVerortung()));
+        if (projection.getVerortung() != null) {
+            Set<StadtbezirkModel> stadtbezirke = new HashSet<>();
+            projection
+                .getVerortung()
+                .getStadtbezirke()
+                .forEach(stadtbezirk -> {
+                    stadtbezirke.add(entity2Model(stadtbezirk));
+                });
+            model.setStadtbezirke(stadtbezirke);
         }
     }
-    
-    /**
-     * Mappt einen {@link BauvorhabenInfrastruktureinrichtungRecord} abhängig vom
-     * {@code resultType} auf das passende {@link SearchResultModel}.
-     *
-     * @param projection Record aus einer kombinierten Suche Bauvorhaben/Einrichtung.
-     * @return Das spezifische {@link SearchResultModel}.
-     * @throws IllegalArgumentException bei unbekanntem {@code resultType}.
-     */
-    private SearchResultModel mapBauvorhabenInfrastruktureinrichtungRecordToSearchResultModel(
-        BauvorhabenInfrastruktureinrichtungRecord projection
+
+    // -------- BAUVORHABEN --------
+    @Mappings(
+        {
+            @Mapping(target = "type", constant = SearchResultType.Values.BAUVORHABEN),
+            @Mapping(target = "coordinate", ignore = true),
+            @Mapping(target = "stadtbezirke", ignore = true),
+            @Mapping(target = "umgriff", ignore = true),
+        }
+    )
+    public abstract BauvorhabenSearchResultModel toBauvorhabenModel(BauvorhabenProjection projection);
+
+    @AfterMapping
+    protected void setBauvorhabenExtras(
+        BauvorhabenProjection projection,
+        @MappingTarget BauvorhabenSearchResultModel model
     ) {
-        switch (projection.resultType()) {
-            case "BAUVORHABEN":
-                return getBauvorhabenSearchResultModel(projection);
-            case "INFRASTRUKTUREINRICHTUNG":
-                return getInfrastruktureinrichtungSearchResultModel(projection);
-            default:
-                throw new IllegalArgumentException("Projection type: " + projection.getClass().getName() + " nicht implementiert");
+        model.setCoordinate(getCoordinateFromAdresseOrVerortung(projection.getAdresse(), projection.getVerortung()));
+        if (projection.getUmgriff() != null) {
+            model.setUmgriff(entity2Model(projection.getUmgriff()));
+        }
+        if (projection.getVerortung() != null) {
+            Set<StadtbezirkModel> stadtbezirke = new HashSet<>();
+            projection
+                .getVerortung()
+                .getStadtbezirke()
+                .forEach(stadtbezirk -> {
+                    stadtbezirke.add(entity2Model(stadtbezirk));
+                });
+            model.setStadtbezirke(stadtbezirke);
         }
     }
-    
-    /**
-     * Mappt einen {@link BauvorhabenAbfrageRecord} abhängig vom {@code resultType}
-     * auf das passende {@link SearchResultModel}.
-     *
-     * @param projection Record aus einer kombinierten Suche Bauvorhaben/Abfrage.
-     * @return Das spezifische {@link SearchResultModel}.
-     * @throws IllegalArgumentException bei unbekanntem {@code resultType}.
-     */
-    private SearchResultModel mapBauvorhabenAbfrageRecordToSearchResultModel(BauvorhabenAbfrageRecord projection) {
-        switch (projection.resultType()) {
-            case "BAUVORHABEN":
-                return getBauvorhabenSearchResultModel(projection);
-            case "ABFRAGE":
-                return getAbfrageSearchResultModel(projection);
-            default:
-                throw new IllegalArgumentException("Projection type: " + projection.getClass().getName() + " nicht implementiert");
+
+    // -------- INFRASTRUKTUR --------
+    @Mappings(
+        {
+            @Mapping(target = "type", constant = SearchResultType.Values.INFRASTRUKTUREINRICHTUNG),
+            @Mapping(target = "coordinate", ignore = true),
+            @Mapping(target = "zugehoerigesBauvorhaben", source = "bauvorhabenName"),
         }
-    }
-    
-    /**
-     * Mappt einen {@link AbfrageInfrastruktureinrichtungRecord} abhängig vom
-     * {@code resultType} auf das passende {@link SearchResultModel}.
-     *
-     * @param projection Record aus einer kombinierten Suche Abfrage/Einrichtung.
-     * @return Das spezifische {@link SearchResultModel}.
-     * @throws IllegalArgumentException bei unbekanntem {@code resultType}.
-     */
-    private SearchResultModel mapAbfrageInfrastruktureinrichtungRecordToSearchResultModel(
-        AbfrageInfrastruktureinrichtungRecord projection
+    )
+    public abstract InfrastruktureinrichtungSearchResultModel toInfrastrukturModel(
+        InfrastruktureinrichtungProjection projection
+    );
+
+    @AfterMapping
+    protected void setInfrastrukturCoordinate(
+        InfrastruktureinrichtungProjection projection,
+        @MappingTarget InfrastruktureinrichtungSearchResultModel model
     ) {
-        switch (projection.resultType()) {
-            case "ABFRAGE":
-                return getAbfrageSearchResultModel(projection);
-            case "INFRASTRUKTUREINRICHTUNG":
-                return getInfrastruktureinrichtungSearchResultModel(projection);
-            default:
-                throw new IllegalArgumentException("Projection type: " + projection.getClass().getName() + " nicht implementiert");
-        }
-    }
-    
-    /**
-     * Erstellt ein {@link AbfrageSearchResultModel} aus einem {@link AllObjectsRecord}.
-     * <p>
-     * Bevorzugt werden vorhandene Adresskoordinaten; andernfalls wird ggf. der Schwerpunkt
-     * einer Verortung verwendet (siehe {@code getCoordinateFromAdresseOrVerortung}).
-     * </p>
-     *
-     * @param projection Record mit Abfrage-bezogenen Feldern.
-     * @return Gefülltes {@link AbfrageSearchResultModel}.
-     */
-    private AbfrageSearchResultModel getAbfrageSearchResultModel(AllObjectsRecord projection) {
-        AbfrageSearchResultModel model = new AbfrageSearchResultModel();
-        model.setType(SearchResultType.ABFRAGE);
-        model.setArtAbfrage(projection.artAbfrage());
-        model.setId(projection.id());
-        model.setName(projection.name());
-        model.setStatusAbfrage(projection.statusAbfrage());
-        model.setFristBearbeitung(projection.fristBearbeitung());
-        model.setCreatedDateTime(projection.createdDateTime());
-        model.setStandVerfahren(projection.stand_verfahren_filter());
-        model.setBauvorhaben(projection.bauvorhabenId());
-        model.setCoordinate(getCoordinateFromAdresseOrVerortung(projection.adresseJson(), projection.verortungJson()));
-        return model;
-    }
-    
-    /**
-     * Erstellt ein {@link AbfrageSearchResultModel} aus einem {@link AbfrageRecord}.
-     *
-     * @param projection Abfrage-Record der gefilterten Ergebnismenge.
-     * @return Gefülltes {@link AbfrageSearchResultModel}.
-     */
-    private AbfrageSearchResultModel getAbfrageSearchResultModel(AbfrageRecord projection) {
-        AbfrageSearchResultModel model = new AbfrageSearchResultModel();
-        model.setType(SearchResultType.ABFRAGE);
-        model.setArtAbfrage(projection.artAbfrage());
-        model.setId(projection.id());
-        model.setName(projection.name());
-        model.setStatusAbfrage(projection.statusAbfrage());
-        model.setFristBearbeitung(projection.fristBearbeitung());
-        model.setCreatedDateTime(projection.createdDateTime());
-        model.setBauvorhaben(projection.bauvorhabenId());
-        model.setCoordinate(getCoordinateFromAdresseOrVerortung(projection.adresseJson(), projection.verortungJson()));
-        return model;
-    }
-    
-    /**
-     * Erstellt ein {@link AbfrageSearchResultModel} aus einem {@link BauvorhabenAbfrageRecord}.
-     *
-     * @param projection Kombinierter Record aus Bauvorhaben ↔ Abfrage.
-     * @return Gefülltes {@link AbfrageSearchResultModel}.
-     */
-    private AbfrageSearchResultModel getAbfrageSearchResultModel(BauvorhabenAbfrageRecord projection) {
-        AbfrageSearchResultModel model = new AbfrageSearchResultModel();
-        model.setType(SearchResultType.ABFRAGE);
-        model.setArtAbfrage(projection.artAbfrage());
-        model.setId(projection.id());
-        model.setName(projection.name());
-        model.setStatusAbfrage(projection.statusAbfrage());
-        model.setFristBearbeitung(projection.fristBearbeitung());
-        model.setCreatedDateTime(projection.createdDateTime());
-        model.setBauvorhaben(projection.bauvorhabenId());
-        model.setCoordinate(getCoordinateFromAdresseOrVerortung(projection.adresseJson(), projection.verortungJson()));
-        return model;
-    }
-    
-    /**
-     * Erstellt ein {@link AbfrageSearchResultModel} aus einem
-     * {@link AbfrageInfrastruktureinrichtungRecord}.
-     *
-     * @param projection Kombinierter Record aus Abfrage ↔ Infrastruktureinrichtung.
-     * @return Gefülltes {@link AbfrageSearchResultModel}.
-     */
-    private AbfrageSearchResultModel getAbfrageSearchResultModel(AbfrageInfrastruktureinrichtungRecord projection) {
-        AbfrageSearchResultModel model = new AbfrageSearchResultModel();
-        model.setType(SearchResultType.ABFRAGE);
-        model.setArtAbfrage(projection.artAbfrage());
-        model.setId(projection.id());
-        model.setName(projection.name());
-        model.setStatusAbfrage(projection.statusAbfrage());
-        model.setFristBearbeitung(projection.fristBearbeitung());
-        model.setCreatedDateTime(projection.createdDateTime());
-        model.setBauvorhaben(projection.bauvorhabenId());
-        model.setCoordinate(getCoordinateFromAdresseOrVerortung(projection.adresseJson(), projection.verortungJson()));
-        return model;
-    }
-    
-    /**
-     * Erstellt ein {@link InfrastruktureinrichtungSearchResultModel} aus einem
-     * {@link AllObjectsRecord}. Koordinaten werden aus Adresse, Verortungspunkt oder als
-     * {@code null} gesetzt.
-     *
-     * @param projection Gemischter Record mit Einrichtungsdaten.
-     * @return Gefülltes {@link InfrastruktureinrichtungSearchResultModel}.
-     */
-    private InfrastruktureinrichtungSearchResultModel getInfrastruktureinrichtungSearchResultModel(
-        AllObjectsRecord projection
-    ) {
-        InfrastruktureinrichtungSearchResultModel model = new InfrastruktureinrichtungSearchResultModel();
-        model.setType(SearchResultType.INFRASTRUKTUREINRICHTUNG);
-        model.setId(projection.id());
-        model.setInfrastruktureinrichtungTyp(projection.infrastruktureinrichtungTyp());
-        model.setNameEinrichtung(projection.nameEinrichtung());
-        model.setZugehoerigesBauvorhaben(projection.bauvorhabenName());
-        if (hasAdressCoordinate(projection.adresseJson())) {
-            model.setCoordinate(koordinatenDomainMapper.entity2Model(projection.adresseJson().getCoordinate()));
-        } else if (ObjectUtils.isNotEmpty(projection.verortungPointJson())) {
-            VerortungPoint verortungPoint = projection.verortungPointJson();
-            final var wgs84Model = new Wgs84Model();
-            wgs84Model.setLongitude(verortungPoint.getPoint().getCoordinates().get(0).doubleValue());
-            wgs84Model.setLatitude(verortungPoint.getPoint().getCoordinates().get(1).doubleValue());
-            model.setCoordinate(wgs84Model);
+        if (hasAdressCoordinate(projection.getAdresse())) {
+            model.setCoordinate(koordinatenDomainMapper.entity2Model(projection.getAdresse().getCoordinate()));
+        } else if (ObjectUtils.isNotEmpty(projection.getVerortungPoint())) {
+            VerortungPoint verortungPoint = projection.getVerortungPoint();
+            Wgs84Model wgs84 = new Wgs84Model();
+            wgs84.setLongitude(verortungPoint.getPoint().getCoordinates().get(0).doubleValue());
+            wgs84.setLatitude(verortungPoint.getPoint().getCoordinates().get(1).doubleValue());
+            model.setCoordinate(wgs84);
         } else {
             model.setCoordinate(null);
         }
-        return model;
-    }
-    
-    /**
-     * Erstellt ein {@link InfrastruktureinrichtungSearchResultModel} aus einem
-     * {@link InfrastrukturRecord}.
-     *
-     * @param projection Einrichtungs-Record der gefilterten Ergebnismenge.
-     * @return Gefülltes {@link InfrastruktureinrichtungSearchResultModel}.
-     */
-    private InfrastruktureinrichtungSearchResultModel getInfrastruktureinrichtungSearchResultModel(
-        InfrastrukturRecord projection
-    ) {
-        InfrastruktureinrichtungSearchResultModel model = new InfrastruktureinrichtungSearchResultModel();
-        model.setType(SearchResultType.INFRASTRUKTUREINRICHTUNG);
-        model.setId(projection.id());
-        model.setInfrastruktureinrichtungTyp(projection.infrastruktureinrichtungTyp());
-        model.setNameEinrichtung(projection.nameEinrichtung());
-        model.setZugehoerigesBauvorhaben(projection.bauvorhabenName());
-        if (hasAdressCoordinate(projection.adresseJson())) {
-            model.setCoordinate(koordinatenDomainMapper.entity2Model(projection.adresseJson().getCoordinate()));
-        } else if (ObjectUtils.isNotEmpty(projection.verortungPointJson())) {
-            VerortungPoint verortungPoint = projection.verortungPointJson();
-            final var wgs84Model = new Wgs84Model();
-            wgs84Model.setLongitude(verortungPoint.getPoint().getCoordinates().get(0).doubleValue());
-            wgs84Model.setLatitude(verortungPoint.getPoint().getCoordinates().get(1).doubleValue());
-            model.setCoordinate(wgs84Model);
-        } else {
-            model.setCoordinate(null);
-        }
-        return model;
-    }
-    
-    /**
-     * Erstellt ein {@link InfrastruktureinrichtungSearchResultModel} aus einem
-     * {@link BauvorhabenInfrastruktureinrichtungRecord}.
-     *
-     * @param projection Kombinierter Record aus Bauvorhaben ↔ Infrastruktureinrichtung.
-     * @return Gefülltes {@link InfrastruktureinrichtungSearchResultModel}.
-     */
-    private InfrastruktureinrichtungSearchResultModel getInfrastruktureinrichtungSearchResultModel(
-        BauvorhabenInfrastruktureinrichtungRecord projection
-    ) {
-        InfrastruktureinrichtungSearchResultModel model = new InfrastruktureinrichtungSearchResultModel();
-        model.setType(SearchResultType.INFRASTRUKTUREINRICHTUNG);
-        model.setId(projection.id());
-        model.setInfrastruktureinrichtungTyp(projection.infrastruktureinrichtungTyp());
-        model.setNameEinrichtung(projection.nameEinrichtung());
-        model.setZugehoerigesBauvorhaben(projection.bauvorhabenName());
-        if (hasAdressCoordinate(projection.adresseJson())) {
-            model.setCoordinate(koordinatenDomainMapper.entity2Model(projection.adresseJson().getCoordinate()));
-        } else if (ObjectUtils.isNotEmpty(projection.verortungPointJson())) {
-            VerortungPoint verortungPoint = projection.verortungPointJson();
-            final var wgs84Model = new Wgs84Model();
-            wgs84Model.setLongitude(verortungPoint.getPoint().getCoordinates().get(0).doubleValue());
-            wgs84Model.setLatitude(verortungPoint.getPoint().getCoordinates().get(1).doubleValue());
-            model.setCoordinate(wgs84Model);
-        } else {
-            model.setCoordinate(null);
-        }
-        return model;
-    }
-    
-    /**
-     * Erstellt ein {@link InfrastruktureinrichtungSearchResultModel} aus einem
-     * {@link AbfrageInfrastruktureinrichtungRecord}.
-     *
-     * @param projection Kombinierter Record aus Abfrage ↔ Infrastruktureinrichtung.
-     * @return Gefülltes {@link InfrastruktureinrichtungSearchResultModel}.
-     */
-    private InfrastruktureinrichtungSearchResultModel getInfrastruktureinrichtungSearchResultModel(
-        AbfrageInfrastruktureinrichtungRecord projection
-    ) {
-        InfrastruktureinrichtungSearchResultModel model = new InfrastruktureinrichtungSearchResultModel();
-        model.setType(SearchResultType.INFRASTRUKTUREINRICHTUNG);
-        model.setId(projection.id());
-        model.setInfrastruktureinrichtungTyp(projection.infrastruktureinrichtungTyp());
-        model.setNameEinrichtung(projection.nameEinrichtung());
-        model.setZugehoerigesBauvorhaben(projection.bauvorhabenName());
-        if (hasAdressCoordinate(projection.adresseJson())) {
-            model.setCoordinate(koordinatenDomainMapper.entity2Model(projection.adresseJson().getCoordinate()));
-        } else if (ObjectUtils.isNotEmpty(projection.verortungPointJson())) {
-            VerortungPoint verortungPoint = projection.verortungPointJson();
-            final var wgs84Model = new Wgs84Model();
-            wgs84Model.setLongitude(verortungPoint.getPoint().getCoordinates().get(0).doubleValue());
-            wgs84Model.setLatitude(verortungPoint.getPoint().getCoordinates().get(1).doubleValue());
-            model.setCoordinate(wgs84Model);
-        } else {
-            model.setCoordinate(null);
-        }
-        return model;
-    }
-    
-    /**
-     * Erstellt ein {@link BauvorhabenSearchResultModel} aus einem {@link AllObjectsRecord}.
-     * <p>
-     * Koordinaten werden (abhängig von Filtern und Datenlage) aus Adresse oder Verortung
-     * ermittelt. Weitere Metadaten (z. B. Umgriff, Verfahrensstand) werden direkt übertragen.
-     * </p>
-     *
-     * @param projection Gemischter Record mit Bauvorhaben-Daten.
-     * @return Gefülltes {@link BauvorhabenSearchResultModel}.
-     */
-    private BauvorhabenSearchResultModel getBauvorhabenSearchResultModel(AllObjectsRecord projection) {
-        BauvorhabenSearchResultModel model = new BauvorhabenSearchResultModel();
-        model.setType(SearchResultType.BAUVORHABEN);
-        model.setId(projection.id());
-        model.setNameVorhaben(projection.nameVorhaben());
-        model.setGrundstuecksgroesse(projection.grundstuecksgroesse());
-        model.setUmgriff(entity2Model(projection.umgriff()));
-        model.setStandVerfahren(projection.stand_verfahren_filter());
-        model.setCoordinate(getCoordinateFromAdresseOrVerortung(projection.adresseJson(), projection.verortungJson()));
-        return model;
-    }
-    
-    /**
-     * Erstellt ein {@link BauvorhabenSearchResultModel} aus einem {@link BauvorhabenRecord}.
-     *
-     * @param projection Bauvorhaben-Record der gefilterten Ergebnismenge.
-     * @return Gefülltes {@link BauvorhabenSearchResultModel}.
-     */
-    private BauvorhabenSearchResultModel getBauvorhabenSearchResultModel(BauvorhabenRecord projection) {
-        BauvorhabenSearchResultModel model = new BauvorhabenSearchResultModel();
-        model.setType(SearchResultType.BAUVORHABEN);
-        model.setId(projection.id());
-        model.setNameVorhaben(projection.nameVorhaben());
-        model.setGrundstuecksgroesse(projection.grundstuecksgroesse());
-        model.setUmgriff(entity2Model(projection.umgriff()));
-        model.setStandVerfahren(projection.stand_verfahren_filter());
-        model.setCoordinate(getCoordinateFromAdresseOrVerortung(projection.adresseJson(), projection.verortungJson()));
-        return model;
-    }
-    
-    /**
-     * Erstellt ein {@link BauvorhabenSearchResultModel} aus einem
-     * {@link BauvorhabenInfrastruktureinrichtungRecord}.
-     *
-     * @param projection Kombinierter Record aus Bauvorhaben ↔ Infrastruktureinrichtung.
-     * @return Gefülltes {@link BauvorhabenSearchResultModel}.
-     */
-    private BauvorhabenSearchResultModel getBauvorhabenSearchResultModel(
-        BauvorhabenInfrastruktureinrichtungRecord projection
-    ) {
-        BauvorhabenSearchResultModel model = new BauvorhabenSearchResultModel();
-        model.setType(SearchResultType.BAUVORHABEN);
-        model.setId(projection.id());
-        model.setNameVorhaben(projection.nameVorhaben());
-        model.setGrundstuecksgroesse(projection.grundstuecksgroesse());
-        model.setUmgriff(entity2Model(projection.umgriff()));
-        model.setStandVerfahren(projection.stand_verfahren_filter());
-        model.setCoordinate(getCoordinateFromAdresseOrVerortung(projection.adresseJson(), projection.verortungJson()));
-        return model;
-    }
-    
-    /**
-     * Erstellt ein {@link BauvorhabenSearchResultModel} aus einem {@link BauvorhabenAbfrageRecord}.
-     *
-     * @param projection Kombinierter Record aus Bauvorhaben ↔ Abfrage.
-     * @return Gefülltes {@link BauvorhabenSearchResultModel}.
-     */
-    private BauvorhabenSearchResultModel getBauvorhabenSearchResultModel(BauvorhabenAbfrageRecord projection) {
-        BauvorhabenSearchResultModel model = new BauvorhabenSearchResultModel();
-        model.setType(SearchResultType.BAUVORHABEN);
-        model.setId(projection.id());
-        model.setNameVorhaben(projection.nameVorhaben());
-        model.setGrundstuecksgroesse(projection.grundstuecksgroesse());
-        model.setUmgriff(entity2Model(projection.umgriff()));
-        model.setStandVerfahren(projection.stand_verfahren_filter());
-        model.setCoordinate(getCoordinateFromAdresseOrVerortung(projection.adresseJson(), projection.verortungJson()));
-        return model;
     }
 }
-    

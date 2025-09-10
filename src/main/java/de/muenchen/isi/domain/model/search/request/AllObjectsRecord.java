@@ -1,5 +1,8 @@
 package de.muenchen.isi.domain.model.search.request;
 
+import de.muenchen.isi.domain.model.search.request.projection.AbfrageProjection;
+import de.muenchen.isi.domain.model.search.request.projection.BauvorhabenProjection;
+import de.muenchen.isi.domain.model.search.request.projection.InfrastruktureinrichtungProjection;
 import de.muenchen.isi.infrastructure.entity.common.Adresse;
 import de.muenchen.isi.infrastructure.entity.common.MultiPolygonGeometry;
 import de.muenchen.isi.infrastructure.entity.common.VerortungMultiPolygon;
@@ -26,13 +29,12 @@ public record AllObjectsRecord(
     LocalDateTime createdDateTime,
     LocalDateTime lastModifiedDateTime,
 
-    @FieldProjection(path = "adresseJson") Adresse adresseJson,
-    @FieldProjection(path = "verortungJson") VerortungMultiPolygon verortungJson,
-
+    @FieldProjection(path = "adresse") Adresse adresse,
+    @FieldProjection(path = "verortungJson") VerortungMultiPolygon verortung,
+    StandVerfahren standVerfahren,
     // Bauvorhaben-spezifisch
     String nameVorhaben,
     BigDecimal grundstuecksgroesse,
-    @FieldProjection(path = "stand_verfahren") StandVerfahren stand_verfahren,
     MultiPolygonGeometry umgriff,
 
     // Abfrage-spezifisch
@@ -47,5 +49,6 @@ public record AllObjectsRecord(
     String nameEinrichtung,
     StatusInfrastruktureinrichtung status,
     String bauvorhabenName,
-    @FieldProjection(path = "verortungPointJson") VerortungPoint verortungPointJson
-) {}
+    @FieldProjection(path = "verortungPointJson") VerortungPoint verortungPoint
+)
+    implements AbfrageProjection, BauvorhabenProjection, InfrastruktureinrichtungProjection {}

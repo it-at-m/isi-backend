@@ -24,16 +24,22 @@ import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
 import de.muenchen.isi.infrastructure.entity.common.Adresse;
 import de.muenchen.isi.infrastructure.entity.common.MultiPolygonGeometry;
 import de.muenchen.isi.infrastructure.entity.common.PointGeometry;
+import de.muenchen.isi.infrastructure.entity.common.Stadtbezirk;
 import de.muenchen.isi.infrastructure.entity.common.VerortungMultiPolygon;
 import de.muenchen.isi.infrastructure.entity.common.VerortungPoint;
 import de.muenchen.isi.infrastructure.entity.common.Wgs84;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVerfahren;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Kinderkrippe;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -466,53 +472,127 @@ public class SearchDomainMapperTest {
     }
 
     @Test
-    void testMapProjectionToSearchResultModelCompositeEntity() {
+    void testMapAllObjectsRecordToBauvorhabenSearchResultModel() {
         UUID uuid = UUID.randomUUID();
+        Set<Stadtbezirk> stadtbezirke = new HashSet<>();
+        Stadtbezirk stadtbezirk = new Stadtbezirk();
+        stadtbezirk.setName("Schwanthaler");
+        stadtbezirk.setNummer("11110");
+        stadtbezirke.add(stadtbezirk);
+        VerortungMultiPolygon verortung = new VerortungMultiPolygon();
+        verortung.setStadtbezirke(stadtbezirke);
+        MultiPolygonGeometry umgriff = new MultiPolygonGeometry();
+        umgriff.setType("Umgriff");
+        umgriff.setCoordinates(List.of(List.of(List.of(List.of(BigDecimal.TEN, BigDecimal.ONE)))));
+        Adresse adresse = new Adresse();
+        Wgs84 wgs84 = new Wgs84();
+        wgs84.setLongitude(10.0);
+        wgs84.setLatitude(20.0);
+        adresse.setCoordinate(wgs84);
+
         AllObjectsRecord projection = Mockito.mock(AllObjectsRecord.class);
         Mockito.when(projection.resultType()).thenReturn("BAUVORHABEN");
-        Mockito.when(projection.id()).thenReturn(uuid);
-        Mockito.when(projection.nameVorhaben()).thenReturn("Test Vorhaben");
+        Mockito.when(projection.getId()).thenReturn(uuid);
+        Mockito.when(projection.getNameVorhaben()).thenReturn("Test Vorhaben");
+        Mockito.when(projection.getGrundstuecksgroesse()).thenReturn(BigDecimal.TEN);
+        Mockito.when(projection.getStandVerfahren()).thenReturn(StandVerfahren.STRUKTURKONZEPT);
+        Mockito.when(projection.getUmgriff()).thenReturn(umgriff);
+        Mockito.when(projection.getVerortung()).thenReturn(verortung);
+        Mockito.when(projection.getAdresse()).thenReturn(adresse);
 
         BauvorhabenSearchResultModel result =
-            (BauvorhabenSearchResultModel) searchDomainMapper.mapProjectionToSearchResultModel(projection);
+            (BauvorhabenSearchResultModel) searchDomainMapper.mapProjectionRecordToSearchResultModel(projection);
 
         assertThat(result.getType(), is(SearchResultType.BAUVORHABEN));
         assertThat(result.getNameVorhaben(), is("Test Vorhaben"));
         assertThat(result.getId(), is(uuid));
+        assertThat(result.getStadtbezirke().size(), is(1));
+        assertThat(result.getGrundstuecksgroesse(), is(BigDecimal.TEN));
+        assertThat(result.getStandVerfahren(), is(StandVerfahren.STRUKTURKONZEPT));
+        MultiPolygonGeometryModel multiPolygonGeometryModel = new MultiPolygonGeometryModel();
+        multiPolygonGeometryModel.setType("Umgriff");
+        multiPolygonGeometryModel.setCoordinates(List.of(List.of(List.of(List.of(BigDecimal.TEN, BigDecimal.ONE)))));
+        assertThat(result.getUmgriff(), is(multiPolygonGeometryModel));
+        Wgs84Model wgs84Model = new Wgs84Model();
+        wgs84Model.setLongitude(10.0);
+        wgs84Model.setLatitude(20.0);
+        assertThat(result.getCoordinate(), is(wgs84Model));
     }
 
     @Test
-    void testMapProjectionToSearchResultModelAbfrage() {
+    void testMapAbfrageRecordToAbfrageSearchResultModel() {
         UUID uuid = UUID.randomUUID();
-        AbfrageRecord projection = Mockito.mock(AbfrageRecord.class);
-        Mockito.when(projection.artAbfrage()).thenReturn(ArtAbfrage.BAULEITPLANVERFAHREN);
-        Mockito.when(projection.id()).thenReturn(uuid);
-        Mockito.when(projection.name()).thenReturn("Test Abfrage");
+        Set<Stadtbezirk> stadtbezirke = new HashSet<>();
+        Stadtbezirk stadtbezirk = new Stadtbezirk();
+        stadtbezirk.setName("Schwanthaler");
+        stadtbezirk.setNummer("11110");
+        stadtbezirke.add(stadtbezirk);
+        VerortungMultiPolygon verortung = new VerortungMultiPolygon();
+        verortung.setStadtbezirke(stadtbezirke);
+        Adresse adresse = new Adresse();
+        Wgs84 wgs84 = new Wgs84();
+        wgs84.setLongitude(10.0);
+        wgs84.setLatitude(20.0);
+        adresse.setCoordinate(wgs84);
 
+        AbfrageRecord projection = Mockito.mock(AbfrageRecord.class);
+        Mockito.when(projection.getArtAbfrage()).thenReturn(ArtAbfrage.BAULEITPLANVERFAHREN);
+        Mockito.when(projection.getId()).thenReturn(uuid);
+        Mockito.when(projection.getName()).thenReturn("Test Abfrage");
+        Mockito.when(projection.getStatusAbfrage()).thenReturn(StatusAbfrage.ANGELEGT);
+        Mockito.when(projection.getStandVerfahren()).thenReturn(StandVerfahren.STRUKTURKONZEPT);
+        Mockito.when(projection.getFristBearbeitung()).thenReturn(LocalDate.of(2025, 1, 1));
+        Mockito.when(projection.getBauvorhabenId()).thenReturn(uuid);
+        Mockito.when(projection.getAdresse()).thenReturn(adresse);
+        Mockito.when(projection.getVerortung()).thenReturn(verortung);
         AbfrageSearchResultModel result =
-            (AbfrageSearchResultModel) searchDomainMapper.mapProjectionToSearchResultModel(projection);
+            (AbfrageSearchResultModel) searchDomainMapper.mapProjectionRecordToSearchResultModel(projection);
 
         assertThat(result.getType(), is(SearchResultType.ABFRAGE));
         assertThat(result.getName(), is("Test Abfrage"));
         assertThat(result.getArtAbfrage(), is(ArtAbfrage.BAULEITPLANVERFAHREN));
         assertThat(result.getId(), is(uuid));
+        assertThat(result.getStatusAbfrage(), is(StatusAbfrage.ANGELEGT));
+        assertThat(result.getStandVerfahren(), is(StandVerfahren.STRUKTURKONZEPT));
+        assertThat(result.getFristBearbeitung(), is(LocalDate.of(2025, 1, 1)));
+        assertThat(result.getBauvorhaben(), is(uuid));
+        Wgs84Model wgs84Model = new Wgs84Model();
+        wgs84Model.setLongitude(10.0);
+        wgs84Model.setLatitude(20.0);
+        assertThat(result.getCoordinate(), is(wgs84Model));
+        assertThat(result.getStadtbezirke().size(), is(1));
     }
 
     @Test
-    void testMapProjectionToSearchResultModelInfrastruktur() {
+    void testMapInfrastrukturRecordToInfrastruktureinrichtungSearchResultModel() {
         UUID uuid = UUID.randomUUID();
+        final var point = new VerortungPoint();
+        final var pointGeometryModel = new PointGeometry();
+        pointGeometryModel.setType("Point");
+        pointGeometryModel.setCoordinates(
+            List.of(BigDecimal.valueOf(11.542026984158708), BigDecimal.valueOf(48.108341907595324))
+        );
+        point.setPoint(pointGeometryModel);
         InfrastrukturRecord projection = Mockito.mock(InfrastrukturRecord.class);
-        Mockito.when(projection.infrastruktureinrichtungTyp()).thenReturn(InfrastruktureinrichtungTyp.KINDERKRIPPE);
-        Mockito.when(projection.nameEinrichtung()).thenReturn("Test Einrichtung");
-        Mockito.when(projection.id()).thenReturn(uuid);
-
+        Mockito.when(projection.getInfrastruktureinrichtungTyp()).thenReturn(InfrastruktureinrichtungTyp.KINDERKRIPPE);
+        Mockito.when(projection.getNameEinrichtung()).thenReturn("Test Einrichtung");
+        Mockito.when(projection.getId()).thenReturn(uuid);
+        Mockito.when(projection.getBauvorhabenName()).thenReturn("Test Bauvorhaben");
+        Mockito.when(projection.getVerortungPoint()).thenReturn(point);
         InfrastruktureinrichtungSearchResultModel result =
-            (InfrastruktureinrichtungSearchResultModel) searchDomainMapper.mapProjectionToSearchResultModel(projection);
+            (InfrastruktureinrichtungSearchResultModel) searchDomainMapper.mapProjectionRecordToSearchResultModel(
+                projection
+            );
 
         assertThat(result.getType(), is(SearchResultType.INFRASTRUKTUREINRICHTUNG));
         assertThat(result.getNameEinrichtung(), is("Test Einrichtung"));
         assertThat(result.getInfrastruktureinrichtungTyp(), is(InfrastruktureinrichtungTyp.KINDERKRIPPE));
         assertThat(result.getId(), is(uuid));
+        Wgs84Model wgs84Model = new Wgs84Model();
+        wgs84Model.setLongitude(11.542026984158708);
+        wgs84Model.setLatitude(48.108341907595324);
+        assertThat(result.getCoordinate(), is(wgs84Model));
+        assertThat(result.getZugehoerigesBauvorhaben(), is("Test Bauvorhaben"));
     }
 
     @Test
@@ -520,125 +600,271 @@ public class SearchDomainMapperTest {
         Object unknownProjection = new Object();
 
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            searchDomainMapper.mapProjectionToSearchResultModel(unknownProjection);
+            searchDomainMapper.mapProjectionRecordToSearchResultModel(unknownProjection);
         });
 
-        assertThat(exception.getMessage(), is("Unbekannter Projektionstyp: " + unknownProjection.getClass().getName()));
+        assertThat(
+            exception.getMessage(),
+            is("Projection type: " + unknownProjection.getClass().getName() + " nicht unterstützt")
+        );
     }
 
     @Test
-    void testMapProjectionToSearchResultModel_BauvorhabenUndInfrastruktur_routesToBauvorhaben() {
+    void testBauvorhabenInfrastruktureinrichtungRecordRecordToBauvorhabenSearchResultModel() {
         UUID uuid = UUID.randomUUID();
+        Set<Stadtbezirk> stadtbezirke = new HashSet<>();
+        Stadtbezirk stadtbezirk = new Stadtbezirk();
+        stadtbezirk.setName("Schwanthaler");
+        stadtbezirk.setNummer("11110");
+        stadtbezirke.add(stadtbezirk);
+        VerortungMultiPolygon verortung = new VerortungMultiPolygon();
+        verortung.setStadtbezirke(stadtbezirke);
+        MultiPolygonGeometry umgriff = new MultiPolygonGeometry();
+        umgriff.setType("Umgriff");
+        umgriff.setCoordinates(List.of(List.of(List.of(List.of(BigDecimal.TEN, BigDecimal.ONE)))));
+        Adresse adresse = new Adresse();
+        Wgs84 wgs84 = new Wgs84();
+        wgs84.setLongitude(10.0);
+        wgs84.setLatitude(20.0);
+        adresse.setCoordinate(wgs84);
+
         BauvorhabenInfrastruktureinrichtungRecord projection = Mockito.mock(
             BauvorhabenInfrastruktureinrichtungRecord.class
         );
-
         Mockito.when(projection.resultType()).thenReturn("BAUVORHABEN");
-        Mockito.when(projection.id()).thenReturn(uuid);
-        Mockito.when(projection.nameVorhaben()).thenReturn("BV+INF: Vorhaben A");
+        Mockito.when(projection.getId()).thenReturn(uuid);
+        Mockito.when(projection.getNameVorhaben()).thenReturn("Test Vorhaben");
+        Mockito.when(projection.getGrundstuecksgroesse()).thenReturn(BigDecimal.TEN);
+        Mockito.when(projection.getStandVerfahren()).thenReturn(StandVerfahren.STRUKTURKONZEPT);
+        Mockito.when(projection.getUmgriff()).thenReturn(umgriff);
+        Mockito.when(projection.getVerortung()).thenReturn(verortung);
+        Mockito.when(projection.getAdresse()).thenReturn(adresse);
 
         BauvorhabenSearchResultModel result =
-            (BauvorhabenSearchResultModel) searchDomainMapper.mapProjectionToSearchResultModel(projection);
+            (BauvorhabenSearchResultModel) searchDomainMapper.mapProjectionRecordToSearchResultModel(projection);
 
         assertThat(result.getType(), is(SearchResultType.BAUVORHABEN));
-        assertThat(result.getNameVorhaben(), is("BV+INF: Vorhaben A"));
+        assertThat(result.getNameVorhaben(), is("Test Vorhaben"));
         assertThat(result.getId(), is(uuid));
+        assertThat(result.getStadtbezirke().size(), is(1));
+        assertThat(result.getGrundstuecksgroesse(), is(BigDecimal.TEN));
+        assertThat(result.getStandVerfahren(), is(StandVerfahren.STRUKTURKONZEPT));
+        MultiPolygonGeometryModel multiPolygonGeometryModel = new MultiPolygonGeometryModel();
+        multiPolygonGeometryModel.setType("Umgriff");
+        multiPolygonGeometryModel.setCoordinates(List.of(List.of(List.of(List.of(BigDecimal.TEN, BigDecimal.ONE)))));
+        assertThat(result.getUmgriff(), is(multiPolygonGeometryModel));
+        Wgs84Model wgs84Model = new Wgs84Model();
+        wgs84Model.setLongitude(10.0);
+        wgs84Model.setLatitude(20.0);
+        assertThat(result.getCoordinate(), is(wgs84Model));
     }
 
     @Test
-    void testMapProjectionToSearchResultModel_BauvorhabenUndInfrastruktur_routesToInfrastruktur() {
+    void testBauvorhabenInfrastruktureinrichtungRecordRecordToInfrastruktureinrichtungSearchResultModel() {
         UUID uuid = UUID.randomUUID();
+        final var point = new VerortungPoint();
+        final var pointGeometryModel = new PointGeometry();
+        pointGeometryModel.setType("Point");
+        pointGeometryModel.setCoordinates(
+            List.of(BigDecimal.valueOf(11.542026984158708), BigDecimal.valueOf(48.108341907595324))
+        );
+        point.setPoint(pointGeometryModel);
         BauvorhabenInfrastruktureinrichtungRecord projection = Mockito.mock(
             BauvorhabenInfrastruktureinrichtungRecord.class
         );
-
         Mockito.when(projection.resultType()).thenReturn("INFRASTRUKTUREINRICHTUNG");
-        Mockito.when(projection.id()).thenReturn(uuid);
-        Mockito.when(projection.nameEinrichtung()).thenReturn("BV+INF: Einrichtung X");
-        // Kombi-Record liefert hier i. d. R. String -> Mapper wandelt zu Enum
-        Mockito.when(projection.infrastruktureinrichtungTyp()).thenReturn(InfrastruktureinrichtungTyp.KINDERKRIPPE);
+        Mockito.when(projection.getInfrastruktureinrichtungTyp()).thenReturn(InfrastruktureinrichtungTyp.KINDERKRIPPE);
+        Mockito.when(projection.getNameEinrichtung()).thenReturn("Test Einrichtung");
+        Mockito.when(projection.getId()).thenReturn(uuid);
+        Mockito.when(projection.getBauvorhabenName()).thenReturn("Test Bauvorhaben");
+        Mockito.when(projection.getVerortungPoint()).thenReturn(point);
 
         InfrastruktureinrichtungSearchResultModel result =
-            (InfrastruktureinrichtungSearchResultModel) searchDomainMapper.mapProjectionToSearchResultModel(projection);
+            (InfrastruktureinrichtungSearchResultModel) searchDomainMapper.mapProjectionRecordToSearchResultModel(
+                projection
+            );
 
         assertThat(result.getType(), is(SearchResultType.INFRASTRUKTUREINRICHTUNG));
-        assertThat(result.getNameEinrichtung(), is("BV+INF: Einrichtung X"));
+        assertThat(result.getNameEinrichtung(), is("Test Einrichtung"));
         assertThat(result.getInfrastruktureinrichtungTyp(), is(InfrastruktureinrichtungTyp.KINDERKRIPPE));
         assertThat(result.getId(), is(uuid));
+        Wgs84Model wgs84Model = new Wgs84Model();
+        wgs84Model.setLongitude(11.542026984158708);
+        wgs84Model.setLatitude(48.108341907595324);
+        assertThat(result.getCoordinate(), is(wgs84Model));
+        assertThat(result.getZugehoerigesBauvorhaben(), is("Test Bauvorhaben"));
     }
 
     @Test
-    void testMapProjectionToSearchResultModel_BauvorhabenUndAbfrage_routesToBauvorhaben() {
+    void testBauvorhabenAbfrageRecordRecordToBauvorhabenSearchResultModel() {
         UUID uuid = UUID.randomUUID();
-        BauvorhabenAbfrageRecord projection = Mockito.mock(BauvorhabenAbfrageRecord.class);
+        Set<Stadtbezirk> stadtbezirke = new HashSet<>();
+        Stadtbezirk stadtbezirk = new Stadtbezirk();
+        stadtbezirk.setName("Schwanthaler");
+        stadtbezirk.setNummer("11110");
+        stadtbezirke.add(stadtbezirk);
+        VerortungMultiPolygon verortung = new VerortungMultiPolygon();
+        verortung.setStadtbezirke(stadtbezirke);
+        MultiPolygonGeometry umgriff = new MultiPolygonGeometry();
+        umgriff.setType("Umgriff");
+        umgriff.setCoordinates(List.of(List.of(List.of(List.of(BigDecimal.TEN, BigDecimal.ONE)))));
+        Adresse adresse = new Adresse();
+        Wgs84 wgs84 = new Wgs84();
+        wgs84.setLongitude(10.0);
+        wgs84.setLatitude(20.0);
+        adresse.setCoordinate(wgs84);
 
+        BauvorhabenAbfrageRecord projection = Mockito.mock(BauvorhabenAbfrageRecord.class);
         Mockito.when(projection.resultType()).thenReturn("BAUVORHABEN");
-        Mockito.when(projection.id()).thenReturn(uuid);
-        Mockito.when(projection.nameVorhaben()).thenReturn("BV+ABF: Vorhaben B");
+        Mockito.when(projection.getId()).thenReturn(uuid);
+        Mockito.when(projection.getNameVorhaben()).thenReturn("Test Vorhaben");
+        Mockito.when(projection.getGrundstuecksgroesse()).thenReturn(BigDecimal.TEN);
+        Mockito.when(projection.getStandVerfahren()).thenReturn(StandVerfahren.STRUKTURKONZEPT);
+        Mockito.when(projection.getUmgriff()).thenReturn(umgriff);
+        Mockito.when(projection.getVerortung()).thenReturn(verortung);
+        Mockito.when(projection.getAdresse()).thenReturn(adresse);
 
         BauvorhabenSearchResultModel result =
-            (BauvorhabenSearchResultModel) searchDomainMapper.mapProjectionToSearchResultModel(projection);
+            (BauvorhabenSearchResultModel) searchDomainMapper.mapProjectionRecordToSearchResultModel(projection);
 
         assertThat(result.getType(), is(SearchResultType.BAUVORHABEN));
-        assertThat(result.getNameVorhaben(), is("BV+ABF: Vorhaben B"));
+        assertThat(result.getNameVorhaben(), is("Test Vorhaben"));
         assertThat(result.getId(), is(uuid));
+        assertThat(result.getStadtbezirke().size(), is(1));
+        assertThat(result.getGrundstuecksgroesse(), is(BigDecimal.TEN));
+        assertThat(result.getStandVerfahren(), is(StandVerfahren.STRUKTURKONZEPT));
+        MultiPolygonGeometryModel multiPolygonGeometryModel = new MultiPolygonGeometryModel();
+        multiPolygonGeometryModel.setType("Umgriff");
+        multiPolygonGeometryModel.setCoordinates(List.of(List.of(List.of(List.of(BigDecimal.TEN, BigDecimal.ONE)))));
+        assertThat(result.getUmgriff(), is(multiPolygonGeometryModel));
+        Wgs84Model wgs84Model = new Wgs84Model();
+        wgs84Model.setLongitude(10.0);
+        wgs84Model.setLatitude(20.0);
+        assertThat(result.getCoordinate(), is(wgs84Model));
     }
 
     @Test
-    void testMapProjectionToSearchResultModel_BauvorhabenUndAbfrage_routesToAbfrage() {
+    void testBauvorhabenAbfrageRecordRecordToAbfrageSearchResultModel() {
         UUID uuid = UUID.randomUUID();
+        Set<Stadtbezirk> stadtbezirke = new HashSet<>();
+        Stadtbezirk stadtbezirk = new Stadtbezirk();
+        stadtbezirk.setName("Schwanthaler");
+        stadtbezirk.setNummer("11110");
+        stadtbezirke.add(stadtbezirk);
+        VerortungMultiPolygon verortung = new VerortungMultiPolygon();
+        verortung.setStadtbezirke(stadtbezirke);
+        Adresse adresse = new Adresse();
+        Wgs84 wgs84 = new Wgs84();
+        wgs84.setLongitude(10.0);
+        wgs84.setLatitude(20.0);
+        adresse.setCoordinate(wgs84);
+
         BauvorhabenAbfrageRecord projection = Mockito.mock(BauvorhabenAbfrageRecord.class);
-
         Mockito.when(projection.resultType()).thenReturn("ABFRAGE");
-        Mockito.when(projection.id()).thenReturn(uuid);
-        Mockito.when(projection.name()).thenReturn("BV+ABF: Abfrage Y");
-        // Kombi-Record: String -> Enum im Mapper
-        Mockito.when(projection.artAbfrage()).thenReturn(ArtAbfrage.BAULEITPLANVERFAHREN);
-
+        Mockito.when(projection.getArtAbfrage()).thenReturn(ArtAbfrage.BAULEITPLANVERFAHREN);
+        Mockito.when(projection.getId()).thenReturn(uuid);
+        Mockito.when(projection.getName()).thenReturn("Test Abfrage");
+        Mockito.when(projection.getStatusAbfrage()).thenReturn(StatusAbfrage.ANGELEGT);
+        Mockito.when(projection.getStandVerfahren()).thenReturn(StandVerfahren.STRUKTURKONZEPT);
+        Mockito.when(projection.getFristBearbeitung()).thenReturn(LocalDate.of(2025, 1, 1));
+        Mockito.when(projection.getBauvorhabenId()).thenReturn(uuid);
+        Mockito.when(projection.getAdresse()).thenReturn(adresse);
+        Mockito.when(projection.getVerortung()).thenReturn(verortung);
         AbfrageSearchResultModel result =
-            (AbfrageSearchResultModel) searchDomainMapper.mapProjectionToSearchResultModel(projection);
+            (AbfrageSearchResultModel) searchDomainMapper.mapProjectionRecordToSearchResultModel(projection);
 
         assertThat(result.getType(), is(SearchResultType.ABFRAGE));
-        assertThat(result.getName(), is("BV+ABF: Abfrage Y"));
+        assertThat(result.getName(), is("Test Abfrage"));
         assertThat(result.getArtAbfrage(), is(ArtAbfrage.BAULEITPLANVERFAHREN));
         assertThat(result.getId(), is(uuid));
+        assertThat(result.getStatusAbfrage(), is(StatusAbfrage.ANGELEGT));
+        assertThat(result.getStandVerfahren(), is(StandVerfahren.STRUKTURKONZEPT));
+        assertThat(result.getFristBearbeitung(), is(LocalDate.of(2025, 1, 1)));
+        assertThat(result.getBauvorhaben(), is(uuid));
+        Wgs84Model wgs84Model = new Wgs84Model();
+        wgs84Model.setLongitude(10.0);
+        wgs84Model.setLatitude(20.0);
+        assertThat(result.getCoordinate(), is(wgs84Model));
+        assertThat(result.getStadtbezirke().size(), is(1));
     }
 
     @Test
-    void testMapProjectionToSearchResultModel_AbfrageUndInfrastruktur_routesToAbfrage() {
+    void testAbfrageInfrastruktureinrichtungRecordToAbfrageSearchResultModel() {
         UUID uuid = UUID.randomUUID();
-        AbfrageInfrastruktureinrichtungRecord projection = Mockito.mock(AbfrageInfrastruktureinrichtungRecord.class);
+        Set<Stadtbezirk> stadtbezirke = new HashSet<>();
+        Stadtbezirk stadtbezirk = new Stadtbezirk();
+        stadtbezirk.setName("Schwanthaler");
+        stadtbezirk.setNummer("11110");
+        stadtbezirke.add(stadtbezirk);
+        VerortungMultiPolygon verortung = new VerortungMultiPolygon();
+        verortung.setStadtbezirke(stadtbezirke);
+        Adresse adresse = new Adresse();
+        Wgs84 wgs84 = new Wgs84();
+        wgs84.setLongitude(10.0);
+        wgs84.setLatitude(20.0);
+        adresse.setCoordinate(wgs84);
 
+        AbfrageInfrastruktureinrichtungRecord projection = Mockito.mock(AbfrageInfrastruktureinrichtungRecord.class);
         Mockito.when(projection.resultType()).thenReturn("ABFRAGE");
-        Mockito.when(projection.id()).thenReturn(uuid);
-        Mockito.when(projection.name()).thenReturn("ABF+INF: Abfrage Z");
-        Mockito.when(projection.artAbfrage()).thenReturn(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN);
+        Mockito.when(projection.getArtAbfrage()).thenReturn(ArtAbfrage.BAULEITPLANVERFAHREN);
+        Mockito.when(projection.getId()).thenReturn(uuid);
+        Mockito.when(projection.getName()).thenReturn("Test Abfrage");
+        Mockito.when(projection.getStatusAbfrage()).thenReturn(StatusAbfrage.ANGELEGT);
+        Mockito.when(projection.getStandVerfahren()).thenReturn(StandVerfahren.STRUKTURKONZEPT);
+        Mockito.when(projection.getFristBearbeitung()).thenReturn(LocalDate.of(2025, 1, 1));
+        Mockito.when(projection.getBauvorhabenId()).thenReturn(uuid);
+        Mockito.when(projection.getAdresse()).thenReturn(adresse);
+        Mockito.when(projection.getVerortung()).thenReturn(verortung);
 
         AbfrageSearchResultModel result =
-            (AbfrageSearchResultModel) searchDomainMapper.mapProjectionToSearchResultModel(projection);
+            (AbfrageSearchResultModel) searchDomainMapper.mapProjectionRecordToSearchResultModel(projection);
 
         assertThat(result.getType(), is(SearchResultType.ABFRAGE));
-        assertThat(result.getName(), is("ABF+INF: Abfrage Z"));
-        assertThat(result.getArtAbfrage(), is(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN));
+        assertThat(result.getName(), is("Test Abfrage"));
+        assertThat(result.getArtAbfrage(), is(ArtAbfrage.BAULEITPLANVERFAHREN));
         assertThat(result.getId(), is(uuid));
+        assertThat(result.getStatusAbfrage(), is(StatusAbfrage.ANGELEGT));
+        assertThat(result.getStandVerfahren(), is(StandVerfahren.STRUKTURKONZEPT));
+        assertThat(result.getFristBearbeitung(), is(LocalDate.of(2025, 1, 1)));
+        assertThat(result.getBauvorhaben(), is(uuid));
+        Wgs84Model wgs84Model = new Wgs84Model();
+        wgs84Model.setLongitude(10.0);
+        wgs84Model.setLatitude(20.0);
+        assertThat(result.getCoordinate(), is(wgs84Model));
+        assertThat(result.getStadtbezirke().size(), is(1));
     }
 
     @Test
-    void testMapProjectionToSearchResultModel_AbfrageUndInfrastruktur_routesToInfrastruktur() {
+    void testAbfrageInfrastruktureinrichtungRecordToInfrastruktureinrichtungSearchResultModel() {
         UUID uuid = UUID.randomUUID();
+        final var point = new VerortungPoint();
+        final var pointGeometryModel = new PointGeometry();
+        pointGeometryModel.setType("Point");
+        pointGeometryModel.setCoordinates(
+            List.of(BigDecimal.valueOf(11.542026984158708), BigDecimal.valueOf(48.108341907595324))
+        );
+        point.setPoint(pointGeometryModel);
         AbfrageInfrastruktureinrichtungRecord projection = Mockito.mock(AbfrageInfrastruktureinrichtungRecord.class);
-
         Mockito.when(projection.resultType()).thenReturn("INFRASTRUKTUREINRICHTUNG");
-        Mockito.when(projection.id()).thenReturn(uuid);
-        Mockito.when(projection.nameEinrichtung()).thenReturn("ABF+INF: Einrichtung Q");
-        Mockito.when(projection.infrastruktureinrichtungTyp()).thenReturn(InfrastruktureinrichtungTyp.GRUNDSCHULE);
+        Mockito.when(projection.getInfrastruktureinrichtungTyp()).thenReturn(InfrastruktureinrichtungTyp.KINDERKRIPPE);
+        Mockito.when(projection.getNameEinrichtung()).thenReturn("Test Einrichtung");
+        Mockito.when(projection.getId()).thenReturn(uuid);
+        Mockito.when(projection.getBauvorhabenName()).thenReturn("Test Bauvorhaben");
+        Mockito.when(projection.getVerortungPoint()).thenReturn(point);
 
         InfrastruktureinrichtungSearchResultModel result =
-            (InfrastruktureinrichtungSearchResultModel) searchDomainMapper.mapProjectionToSearchResultModel(projection);
+            (InfrastruktureinrichtungSearchResultModel) searchDomainMapper.mapProjectionRecordToSearchResultModel(
+                projection
+            );
 
         assertThat(result.getType(), is(SearchResultType.INFRASTRUKTUREINRICHTUNG));
-        assertThat(result.getNameEinrichtung(), is("ABF+INF: Einrichtung Q"));
-        assertThat(result.getInfrastruktureinrichtungTyp(), is(InfrastruktureinrichtungTyp.GRUNDSCHULE));
+        assertThat(result.getNameEinrichtung(), is("Test Einrichtung"));
+        assertThat(result.getInfrastruktureinrichtungTyp(), is(InfrastruktureinrichtungTyp.KINDERKRIPPE));
         assertThat(result.getId(), is(uuid));
+        Wgs84Model wgs84Model = new Wgs84Model();
+        wgs84Model.setLongitude(11.542026984158708);
+        wgs84Model.setLatitude(48.108341907595324);
+        assertThat(result.getCoordinate(), is(wgs84Model));
+        assertThat(result.getZugehoerigesBauvorhaben(), is("Test Bauvorhaben"));
     }
 }

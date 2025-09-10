@@ -57,4 +57,14 @@ public class VerortungPointValueBridge implements ValueBridge<VerortungPoint, St
     public boolean isCompatibleWith(ValueBridge<?, ?> other) {
         return other != null && getClass().equals(other.getClass());
     }
+
+    @Override
+    public boolean equals(Object o) {
+        return o != null && this.getClass() == o.getClass();
+    }
+
+    @Override
+    public int hashCode() {
+        return this.getClass().hashCode();
+    }
 }

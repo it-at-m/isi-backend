@@ -1,5 +1,7 @@
 package de.muenchen.isi.domain.model.search.request;
 
+import de.muenchen.isi.domain.model.search.request.projection.AbfrageProjection;
+import de.muenchen.isi.domain.model.search.request.projection.BauvorhabenProjection;
 import de.muenchen.isi.infrastructure.entity.common.Adresse;
 import de.muenchen.isi.infrastructure.entity.common.MultiPolygonGeometry;
 import de.muenchen.isi.infrastructure.entity.common.VerortungMultiPolygon;
@@ -10,7 +12,6 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
-import org.hibernate.search.engine.search.common.ValueModel;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FieldProjection;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.IdProjection;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.ProjectionConstructor;
@@ -23,13 +24,13 @@ public record BauvorhabenAbfrageRecord(
     LocalDateTime createdDateTime,
     LocalDateTime lastModifiedDateTime,
 
-    @FieldProjection(path = "adresseJson") Adresse adresseJson,
-    @FieldProjection(path = "verortungJson") VerortungMultiPolygon verortungJson,
+    @FieldProjection(path = "adresse") Adresse adresse,
+    @FieldProjection(path = "verortungJson") VerortungMultiPolygon verortung,
+    StandVerfahren standVerfahren,
 
     // Bauvorhaben-Felder
     String nameVorhaben,
     BigDecimal grundstuecksgroesse,
-    StandVerfahren stand_verfahren_filter,
     MultiPolygonGeometry umgriff,
 
     // Abfrage-Felder
@@ -38,4 +39,5 @@ public record BauvorhabenAbfrageRecord(
     StatusAbfrage statusAbfrage,
     UUID bauvorhabenId,
     LocalDate fristBearbeitung
-) {}
+)
+    implements AbfrageProjection, BauvorhabenProjection {}

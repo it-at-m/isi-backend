@@ -4,11 +4,8 @@
  */
 package de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import de.muenchen.isi.infrastructure.adapter.listener.InfrastruktureinrichtungListener;
 import de.muenchen.isi.infrastructure.adapter.search.AdresseValueBridge;
-import de.muenchen.isi.infrastructure.adapter.search.ArtAbfrageValueBridge;
 import de.muenchen.isi.infrastructure.adapter.search.InfrastruktureinrichtungTypValueBridge;
 import de.muenchen.isi.infrastructure.adapter.search.StatusInfrastruktureinrichtungSuggestionBinder;
 import de.muenchen.isi.infrastructure.adapter.search.StatusInfrastruktureinrichtungValueBridge;
@@ -47,7 +44,6 @@ import org.apache.commons.lang3.ObjectUtils;
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.generator.EventType;
-import org.hibernate.search.engine.backend.types.ObjectStructure;
 import org.hibernate.search.engine.backend.types.Projectable;
 import org.hibernate.search.engine.backend.types.Searchable;
 import org.hibernate.search.engine.backend.types.Sortable;
@@ -144,6 +140,21 @@ public abstract class Infrastruktureinrichtung extends BaseEntity {
     @Embedded
     private Adresse adresse;
 
+    /**
+     * Technisches, abgeleitetes Feld zur Indexierung der {@code verortung}-Eigenschaft.
+     * <p>
+     * Es wird nicht in der Datenbank gespeichert ({@link Transient}), sondern dient nur
+     * als Bridge, um die Geometrie {@link Adresse} über die
+     * {@link AdresseValueBridge} als JSON-String in das Suchindex-Feld
+     * {@code verortungJson} zu serialisieren.
+     * <p>
+     * Dadurch kann die Verortung im Index projiziert werden ({@code Projectable.YES}),
+     * ist aber nicht durchsuchbar ({@code Searchable.NO}).
+     * <p>
+     * Die Annotation {@link IndexingDependency} stellt sicher, dass dieses Feld
+     * automatisch neu berechnet und reindexiert wird, wenn sich die Eigenschaft
+     * {@code verortung} ändert.
+     */
     @Transient
     @KeywordField(
         name = "adresseJson",
@@ -161,6 +172,21 @@ public abstract class Infrastruktureinrichtung extends BaseEntity {
     @Column(columnDefinition = "jsonb")
     private VerortungPoint verortung;
 
+    /**
+     * Technisches, abgeleitetes Feld zur Indexierung der {@code verortung}-Eigenschaft.
+     * <p>
+     * Es wird nicht in der Datenbank gespeichert ({@link Transient}), sondern dient nur
+     * als Bridge, um die Geometrie {@link VerortungMultiPolygon} über die
+     * {@link VerortungMultiPolygonValueBridge} als JSON-String in das Suchindex-Feld
+     * {@code verortungJson} zu serialisieren.
+     * <p>
+     * Dadurch kann die Verortung im Index projiziert werden ({@code Projectable.YES}),
+     * ist aber nicht durchsuchbar ({@code Searchable.NO}).
+     * <p>
+     * Die Annotation {@link IndexingDependency} stellt sicher, dass dieses Feld
+     * automatisch neu berechnet und reindexiert wird, wenn sich die Eigenschaft
+     * {@code verortung} ändert.
+     */
     @Transient
     @KeywordField(
         name = "verortungPointJson",

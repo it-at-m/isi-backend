@@ -1,7 +1,5 @@
 package de.muenchen.isi.infrastructure.entity;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import de.muenchen.isi.infrastructure.adapter.search.AdresseValueBridge;
 import de.muenchen.isi.infrastructure.adapter.search.StandVerfahrenSuggestionBinder;
 import de.muenchen.isi.infrastructure.adapter.search.StandVerfahrenValueBridge;
@@ -33,7 +31,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.search.engine.backend.types.ObjectStructure;
 import org.hibernate.search.engine.backend.types.Projectable;
 import org.hibernate.search.engine.backend.types.Searchable;
 import org.hibernate.search.mapper.pojo.automaticindexing.ReindexOnUpdate;
@@ -99,6 +96,21 @@ public class WeiteresVerfahren extends Abfrage {
     @Embedded
     private Adresse adresse;
 
+    /**
+     * Technisches, abgeleitetes Feld zur Indexierung der {@code verortung}-Eigenschaft.
+     * <p>
+     * Es wird nicht in der Datenbank gespeichert ({@link Transient}), sondern dient nur
+     * als Bridge, um die Geometrie {@link Adresse} über die
+     * {@link AdresseValueBridge} als JSON-String in das Suchindex-Feld
+     * {@code verortungJson} zu serialisieren.
+     * <p>
+     * Dadurch kann die Verortung im Index projiziert werden ({@code Projectable.YES}),
+     * ist aber nicht durchsuchbar ({@code Searchable.NO}).
+     * <p>
+     * Die Annotation {@link IndexingDependency} stellt sicher, dass dieses Feld
+     * automatisch neu berechnet und reindexiert wird, wenn sich die Eigenschaft
+     * {@code verortung} ändert.
+     */
     @Transient
     @KeywordField(
         name = "adresseJson",
@@ -116,6 +128,21 @@ public class WeiteresVerfahren extends Abfrage {
     @Column(columnDefinition = "jsonb")
     private VerortungMultiPolygon verortung;
 
+    /**
+     * Technisches, abgeleitetes Feld zur Indexierung der {@code verortung}-Eigenschaft.
+     * <p>
+     * Es wird nicht in der Datenbank gespeichert ({@link Transient}), sondern dient nur
+     * als Bridge, um die Geometrie {@link VerortungMultiPolygon} über die
+     * {@link VerortungMultiPolygonValueBridge} als JSON-String in das Suchindex-Feld
+     * {@code verortungJson} zu serialisieren.
+     * <p>
+     * Dadurch kann die Verortung im Index projiziert werden ({@code Projectable.YES}),
+     * ist aber nicht durchsuchbar ({@code Searchable.NO}).
+     * <p>
+     * Die Annotation {@link IndexingDependency} stellt sicher, dass dieses Feld
+     * automatisch neu berechnet und reindexiert wird, wenn sich die Eigenschaft
+     * {@code verortung} ändert.
+     */
     @Transient
     @KeywordField(
         name = "verortungJson",

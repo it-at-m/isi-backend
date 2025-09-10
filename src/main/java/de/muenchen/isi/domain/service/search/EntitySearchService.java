@@ -504,7 +504,7 @@ public class EntitySearchService {
             final var results = searchResult
                 .hits()
                 .stream()
-                .map(projection -> searchDomainMapper.mapProjectionToSearchResultModel(projection))
+                .map(searchDomainMapper::mapProjectionRecordToSearchResultModel)
                 .collect(Collectors.toList());
 
             final var model = new SearchResultsModel();
