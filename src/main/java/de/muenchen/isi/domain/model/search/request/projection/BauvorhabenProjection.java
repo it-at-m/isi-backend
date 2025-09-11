@@ -9,7 +9,6 @@ import java.math.BigDecimal;
 public interface BauvorhabenProjection extends BaseProjection, AbfrageBauvorhabenProjection {
     String nameVorhaben();
     BigDecimal grundstuecksgroesse();
-    MultiPolygonGeometry umgriff();
 
     default String getNameVorhaben() {
         return nameVorhaben();
@@ -17,9 +16,5 @@ public interface BauvorhabenProjection extends BaseProjection, AbfrageBauvorhabe
 
     default BigDecimal getGrundstuecksgroesse() {
         return grundstuecksgroesse();
-    }
-
-    default MultiPolygonGeometry getUmgriff() {
-        return umgriff();
     }
 }

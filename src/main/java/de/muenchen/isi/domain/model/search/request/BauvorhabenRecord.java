@@ -26,7 +26,6 @@ public record BauvorhabenRecord(
     @FieldProjection(path = "verortungJson") VerortungMultiPolygon verortung,
     StandVerfahren standVerfahren,
     String nameVorhaben,
-    BigDecimal grundstuecksgroesse,
-    MultiPolygonGeometry umgriff
+    BigDecimal grundstuecksgroesse
 )
     implements BauvorhabenProjection {}

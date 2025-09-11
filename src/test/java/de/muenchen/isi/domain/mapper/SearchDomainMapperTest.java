@@ -497,7 +497,6 @@ public class SearchDomainMapperTest {
         Mockito.when(projection.getNameVorhaben()).thenReturn("Test Vorhaben");
         Mockito.when(projection.getGrundstuecksgroesse()).thenReturn(BigDecimal.TEN);
         Mockito.when(projection.getStandVerfahren()).thenReturn(StandVerfahren.STRUKTURKONZEPT);
-        Mockito.when(projection.getUmgriff()).thenReturn(umgriff);
         Mockito.when(projection.getVerortung()).thenReturn(verortung);
         Mockito.when(projection.getAdresse()).thenReturn(adresse);
 
@@ -637,7 +636,6 @@ public class SearchDomainMapperTest {
         Mockito.when(projection.getNameVorhaben()).thenReturn("Test Vorhaben");
         Mockito.when(projection.getGrundstuecksgroesse()).thenReturn(BigDecimal.TEN);
         Mockito.when(projection.getStandVerfahren()).thenReturn(StandVerfahren.STRUKTURKONZEPT);
-        Mockito.when(projection.getUmgriff()).thenReturn(umgriff);
         Mockito.when(projection.getVerortung()).thenReturn(verortung);
         Mockito.when(projection.getAdresse()).thenReturn(adresse);
 
@@ -721,7 +719,6 @@ public class SearchDomainMapperTest {
         Mockito.when(projection.getNameVorhaben()).thenReturn("Test Vorhaben");
         Mockito.when(projection.getGrundstuecksgroesse()).thenReturn(BigDecimal.TEN);
         Mockito.when(projection.getStandVerfahren()).thenReturn(StandVerfahren.STRUKTURKONZEPT);
-        Mockito.when(projection.getUmgriff()).thenReturn(umgriff);
         Mockito.when(projection.getVerortung()).thenReturn(verortung);
         Mockito.when(projection.getAdresse()).thenReturn(adresse);
 

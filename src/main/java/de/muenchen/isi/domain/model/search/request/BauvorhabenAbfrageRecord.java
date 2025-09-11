@@ -31,7 +31,6 @@ public record BauvorhabenAbfrageRecord(
     // Bauvorhaben-Attribute
     String nameVorhaben,
     BigDecimal grundstuecksgroesse,
-    MultiPolygonGeometry umgriff,
     // Abfrage-Attribute
     ArtAbfrage artAbfrage,
     String name,

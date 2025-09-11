@@ -147,17 +147,6 @@ public class Bauvorhaben extends BaseEntity {
     @GenericField(projectable = Projectable.YES)
     private BigDecimal grundstuecksgroesse;
 
-    @Transient
-    @GenericField(
-        name = "umgriff",
-        projectable = Projectable.YES,
-        valueBridge = @ValueBridgeRef(type = MultiPolygonGeometryValueBridge.class)
-    )
-    @IndexingDependency(derivedFrom = @ObjectPath(@PropertyValue(propertyName = "verortung")))
-    public MultiPolygonGeometry getUmgriff() {
-        return verortung != null ? verortung.getMultiPolygon() : null;
-    }
-
     @FullTextField(valueBridge = @ValueBridgeRef(type = StandVerfahrenValueBridge.class))
     @NonStandardField(
         name = "standVerfahren" + SearchwordSuggesterRepository.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,

@@ -361,9 +361,7 @@ public abstract class SearchDomainMapper {
         @MappingTarget BauvorhabenSearchResultModel model
     ) {
         model.setCoordinate(getCoordinateFromAdresseOrVerortung(projection.getAdresse(), projection.getVerortung()));
-        if (projection.getUmgriff() != null) {
-            model.setUmgriff(entity2Model(projection.getUmgriff()));
-        }
+
         if (projection.getVerortung() != null) {
             Set<StadtbezirkModel> stadtbezirke = new HashSet<>();
             projection
@@ -373,6 +371,7 @@ public abstract class SearchDomainMapper {
                     stadtbezirke.add(entity2Model(stadtbezirk));
                 });
             model.setStadtbezirke(stadtbezirke);
+            model.setUmgriff(entity2Model(projection.getVerortung().getMultiPolygon()));
         }
     }
 

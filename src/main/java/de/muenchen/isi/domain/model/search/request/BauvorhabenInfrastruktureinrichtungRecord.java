@@ -31,7 +31,6 @@ public record BauvorhabenInfrastruktureinrichtungRecord(
     // Bauvorhaben-Attribute
     String nameVorhaben,
     BigDecimal grundstuecksgroesse,
-    MultiPolygonGeometry umgriff,
     // Infrastruktureinrichtung-Attribute
     InfrastruktureinrichtungTyp infrastruktureinrichtungTyp,
     String nameEinrichtung,

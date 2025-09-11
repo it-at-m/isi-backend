@@ -34,7 +34,6 @@ public record AllObjectsRecord(
     // Bauvorhaben-spezifisch
     String nameVorhaben,
     BigDecimal grundstuecksgroesse,
-    MultiPolygonGeometry umgriff,
     // Abfrage-spezifisch
     ArtAbfrage artAbfrage,
     String name,
