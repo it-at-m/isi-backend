@@ -4,6 +4,7 @@ import de.muenchen.isi.domain.model.search.request.projection.AbfrageProjection;
 import de.muenchen.isi.infrastructure.entity.common.Adresse;
 import de.muenchen.isi.infrastructure.entity.common.VerortungMultiPolygon;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.ResultType;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVerfahren;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import java.time.LocalDate;
@@ -18,7 +19,7 @@ import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Projection
 public record AbfrageRecord(
     // BaseEntity-Attribute
     @IdProjection UUID id,
-    String resultType,
+    ResultType resultType,
     LocalDateTime createdDateTime,
     LocalDateTime lastModifiedDateTime,
     // Abfrage Attribute

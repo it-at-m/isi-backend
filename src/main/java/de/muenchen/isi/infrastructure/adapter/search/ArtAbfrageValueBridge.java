@@ -2,7 +2,6 @@ package de.muenchen.isi.infrastructure.adapter.search;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import de.muenchen.isi.infrastructure.entity.common.Adresse;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.search.mapper.pojo.bridge.ValueBridge;
@@ -18,7 +17,7 @@ import org.hibernate.search.mapper.pojo.bridge.runtime.ValueBridgeToIndexedValue
  * serialisiert werden.
  *
  * Diese Bridge:
- * - wandelt eine {@link ArtAbfrage} beim Indexieren in einen JSON-String um
+ * - wandelt eine {@link ArtAbfrage} beim Indizieren in einen JSON-String um
  *   ({@code toIndexedValue}),
  * - liest den JSON-String bei Projektionen wieder zurück in eine {@link ArtAbfrage}
  *   ({@code fromIndexedValue}).

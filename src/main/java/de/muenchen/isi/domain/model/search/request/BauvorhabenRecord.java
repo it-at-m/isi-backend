@@ -4,6 +4,7 @@ import de.muenchen.isi.domain.model.search.request.projection.BauvorhabenProject
 import de.muenchen.isi.infrastructure.entity.common.Adresse;
 import de.muenchen.isi.infrastructure.entity.common.MultiPolygonGeometry;
 import de.muenchen.isi.infrastructure.entity.common.VerortungMultiPolygon;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.ResultType;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVerfahren;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -17,7 +18,7 @@ import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Projection
 public record BauvorhabenRecord(
     // BaseEntity-Attribute
     @IdProjection UUID id,
-    String resultType,
+    ResultType resultType,
     LocalDateTime createdDateTime,
     LocalDateTime lastModifiedDateTime,
     // Bauvorhaben-Attribute

@@ -1,6 +1,7 @@
 package de.muenchen.isi.domain.model.search.request.projection;
 
 import de.muenchen.isi.infrastructure.entity.common.Adresse;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.ResultType;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -12,6 +13,7 @@ public interface BaseProjection {
     LocalDateTime createdDateTime();
     LocalDateTime lastModifiedDateTime();
     Adresse adresse();
+    ResultType resultType();
 
     default UUID getId() {
         return id();
@@ -27,5 +29,9 @@ public interface BaseProjection {
 
     default Adresse getAdresse() {
         return adresse();
+    }
+
+    default ResultType getResultType() {
+        return resultType();
     }
 }

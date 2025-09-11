@@ -1,11 +1,13 @@
 package de.muenchen.isi.infrastructure.entity;
 
 import de.muenchen.isi.infrastructure.adapter.search.ArtAbfrageValueBridge;
+import de.muenchen.isi.infrastructure.adapter.search.ResultTypeValueBridge;
 import de.muenchen.isi.infrastructure.adapter.search.StatusAbfrageSuggestionBinder;
 import de.muenchen.isi.infrastructure.adapter.search.StatusAbfrageValueBridge;
 import de.muenchen.isi.infrastructure.adapter.search.StringSuggestionBinder;
 import de.muenchen.isi.infrastructure.entity.common.Bearbeitungshistorie;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.ResultType;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.repository.search.SearchwordSuggesterRepository;
 import jakarta.persistence.CollectionTable;
@@ -87,13 +89,17 @@ public abstract class Abfrage extends BaseEntity {
      * @return Der feste String "ABFRAGE", der diesen Objekttyp im Index markiert.
      */
     @Transient
-    @GenericField(name = "resultType", projectable = Projectable.YES)
+    @GenericField(
+        name = "resultType",
+        projectable = Projectable.YES,
+        valueBridge = @ValueBridgeRef(type = ResultTypeValueBridge.class)
+    )
     @IndexingDependency(
         reindexOnUpdate = ReindexOnUpdate.NO,
         extraction = @ContainerExtraction(extract = ContainerExtract.NO)
     )
-    public String getResultType() {
-        return "ABFRAGE";
+    public ResultType getResultType() {
+        return ResultType.ABFRAGE;
     }
 
     @KeywordField(name = "name_sort", sortable = Sortable.YES, normalizer = "lowercase")

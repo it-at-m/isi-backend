@@ -28,6 +28,7 @@ import de.muenchen.isi.infrastructure.entity.common.MultiPolygonGeometry;
 import de.muenchen.isi.infrastructure.entity.common.Stadtbezirk;
 import de.muenchen.isi.infrastructure.entity.common.VerortungMultiPolygon;
 import de.muenchen.isi.infrastructure.entity.common.VerortungPoint;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.ResultType;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Infrastruktureinrichtung;
 import java.util.HashSet;
 import java.util.Set;
@@ -270,9 +271,9 @@ public abstract class SearchDomainMapper {
     public SearchResultModel mapProjectionRecordToSearchResultModel(Object projection) {
         return switch (projection) {
             case AllObjectsRecord allObjectsRecord -> switch (allObjectsRecord.resultType()) {
-                case "BAUVORHABEN" -> toBauvorhabenModel(allObjectsRecord);
-                case "ABFRAGE" -> toAbfrageModel(allObjectsRecord);
-                case "INFRASTRUKTUREINRICHTUNG" -> toInfrastrukturModel(allObjectsRecord);
+                case ResultType.BAUVORHABEN -> toBauvorhabenModel(allObjectsRecord);
+                case ResultType.ABFRAGE -> toAbfrageModel(allObjectsRecord);
+                case ResultType.INFRASTRUKTUREINRICHTUNG -> toInfrastrukturModel(allObjectsRecord);
                 default -> throw new IllegalArgumentException(
                     "Unbekannter resultType in AllObjectsRecord: " + allObjectsRecord.resultType()
                 );
@@ -280,8 +281,8 @@ public abstract class SearchDomainMapper {
             case AbfrageInfrastruktureinrichtungRecord abfrageInfrastruktureinrichtungRecord -> switch (
                 abfrageInfrastruktureinrichtungRecord.resultType()
             ) {
-                case "ABFRAGE" -> toAbfrageModel(abfrageInfrastruktureinrichtungRecord);
-                case "INFRASTRUKTUREINRICHTUNG" -> toInfrastrukturModel(abfrageInfrastruktureinrichtungRecord);
+                case ResultType.ABFRAGE -> toAbfrageModel(abfrageInfrastruktureinrichtungRecord);
+                case ResultType.INFRASTRUKTUREINRICHTUNG -> toInfrastrukturModel(abfrageInfrastruktureinrichtungRecord);
                 default -> throw new IllegalArgumentException(
                     "Unbekannter resultType in AbfrageInfrastruktureinrichtungRecord: " +
                     abfrageInfrastruktureinrichtungRecord.resultType()
@@ -290,16 +291,18 @@ public abstract class SearchDomainMapper {
             case BauvorhabenInfrastruktureinrichtungRecord bauvorhabenInfrastruktureinrichtungRecord -> switch (
                 bauvorhabenInfrastruktureinrichtungRecord.resultType()
             ) {
-                case "BAUVORHABEN" -> toBauvorhabenModel(bauvorhabenInfrastruktureinrichtungRecord);
-                case "INFRASTRUKTUREINRICHTUNG" -> toInfrastrukturModel(bauvorhabenInfrastruktureinrichtungRecord);
+                case ResultType.BAUVORHABEN -> toBauvorhabenModel(bauvorhabenInfrastruktureinrichtungRecord);
+                case ResultType.INFRASTRUKTUREINRICHTUNG -> toInfrastrukturModel(
+                    bauvorhabenInfrastruktureinrichtungRecord
+                );
                 default -> throw new IllegalArgumentException(
                     "Unbekannter resultType in BauvorhabenInfrastruktureinrichtungRecord: " +
                     bauvorhabenInfrastruktureinrichtungRecord.resultType()
                 );
             };
             case BauvorhabenAbfrageRecord bauvorhabenAbfrageRecord -> switch (bauvorhabenAbfrageRecord.resultType()) {
-                case "BAUVORHABEN" -> toBauvorhabenModel(bauvorhabenAbfrageRecord);
-                case "ABFRAGE" -> toAbfrageModel(bauvorhabenAbfrageRecord);
+                case ResultType.BAUVORHABEN -> toBauvorhabenModel(bauvorhabenAbfrageRecord);
+                case ResultType.ABFRAGE -> toAbfrageModel(bauvorhabenAbfrageRecord);
                 default -> throw new IllegalArgumentException(
                     "Unbekannter resultType in BauvorhabenInfrastruktureinrichtungRecord: " +
                     bauvorhabenAbfrageRecord.resultType()

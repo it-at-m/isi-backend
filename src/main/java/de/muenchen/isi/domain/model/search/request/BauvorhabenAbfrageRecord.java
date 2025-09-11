@@ -6,6 +6,7 @@ import de.muenchen.isi.infrastructure.entity.common.Adresse;
 import de.muenchen.isi.infrastructure.entity.common.MultiPolygonGeometry;
 import de.muenchen.isi.infrastructure.entity.common.VerortungMultiPolygon;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.ResultType;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVerfahren;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import java.math.BigDecimal;
@@ -21,7 +22,7 @@ import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Projection
 public record BauvorhabenAbfrageRecord(
     // BaseEntity-Attribute
     @IdProjection UUID id,
-    String resultType,
+    ResultType resultType,
     LocalDateTime createdDateTime,
     LocalDateTime lastModifiedDateTime,
     @FieldProjection(path = "adresseJson") Adresse adresse,

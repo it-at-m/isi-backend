@@ -17,7 +17,7 @@ import org.hibernate.search.mapper.pojo.bridge.runtime.ValueBridgeToIndexedValue
  * serialisiert werden.
  *
  * Diese Bridge:
- * - wandelt eine {@link MultiPolygonGeometry} beim Indexieren in einen JSON-String um
+ * - wandelt eine {@link MultiPolygonGeometry} beim Indizieren in einen JSON-String um
  *   ({@code toIndexedValue}),
  * - liest den JSON-String bei Projektionen wieder zurück in eine {@link MultiPolygonGeometry}
  *   ({@code fromIndexedValue}).

@@ -7,6 +7,7 @@ package de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung;
 import de.muenchen.isi.infrastructure.adapter.listener.InfrastruktureinrichtungListener;
 import de.muenchen.isi.infrastructure.adapter.search.AdresseValueBridge;
 import de.muenchen.isi.infrastructure.adapter.search.InfrastruktureinrichtungTypValueBridge;
+import de.muenchen.isi.infrastructure.adapter.search.ResultTypeValueBridge;
 import de.muenchen.isi.infrastructure.adapter.search.StatusInfrastruktureinrichtungSuggestionBinder;
 import de.muenchen.isi.infrastructure.adapter.search.StatusInfrastruktureinrichtungValueBridge;
 import de.muenchen.isi.infrastructure.adapter.search.StringSuggestionBinder;
@@ -19,6 +20,7 @@ import de.muenchen.isi.infrastructure.entity.common.BearbeitendePerson;
 import de.muenchen.isi.infrastructure.entity.common.VerortungMultiPolygon;
 import de.muenchen.isi.infrastructure.entity.common.VerortungPoint;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.ResultType;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusInfrastruktureinrichtung;
 import de.muenchen.isi.infrastructure.repository.search.SearchwordSuggesterRepository;
 import jakarta.persistence.AttributeOverride;
@@ -106,13 +108,17 @@ public abstract class Infrastruktureinrichtung extends BaseEntity {
      * @return Der feste String "INFRASTRUKTUREINRICHTUNG", der diesen Objekttyp im Index markiert.
      */
     @Transient
-    @GenericField(name = "resultType", projectable = Projectable.YES)
+    @GenericField(
+        name = "resultType",
+        projectable = Projectable.YES,
+        valueBridge = @ValueBridgeRef(type = ResultTypeValueBridge.class)
+    )
     @IndexingDependency(
         reindexOnUpdate = ReindexOnUpdate.NO,
         extraction = @ContainerExtraction(extract = ContainerExtract.NO)
     )
-    public String getResultType() {
-        return "INFRASTRUKTUREINRICHTUNG";
+    public ResultType getResultType() {
+        return ResultType.INFRASTRUKTUREINRICHTUNG;
     }
 
     @Transient

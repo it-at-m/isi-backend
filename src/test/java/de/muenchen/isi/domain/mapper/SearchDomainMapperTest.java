@@ -30,6 +30,7 @@ import de.muenchen.isi.infrastructure.entity.common.VerortungPoint;
 import de.muenchen.isi.infrastructure.entity.common.Wgs84;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.ResultType;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVerfahren;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Kinderkrippe;
@@ -491,7 +492,7 @@ public class SearchDomainMapperTest {
         adresse.setCoordinate(wgs84);
 
         AllObjectsRecord projection = Mockito.mock(AllObjectsRecord.class);
-        Mockito.when(projection.resultType()).thenReturn("BAUVORHABEN");
+        Mockito.when(projection.resultType()).thenReturn(ResultType.BAUVORHABEN);
         Mockito.when(projection.getId()).thenReturn(uuid);
         Mockito.when(projection.getNameVorhaben()).thenReturn("Test Vorhaben");
         Mockito.when(projection.getGrundstuecksgroesse()).thenReturn(BigDecimal.TEN);
@@ -631,7 +632,7 @@ public class SearchDomainMapperTest {
         BauvorhabenInfrastruktureinrichtungRecord projection = Mockito.mock(
             BauvorhabenInfrastruktureinrichtungRecord.class
         );
-        Mockito.when(projection.resultType()).thenReturn("BAUVORHABEN");
+        Mockito.when(projection.resultType()).thenReturn(ResultType.BAUVORHABEN);
         Mockito.when(projection.getId()).thenReturn(uuid);
         Mockito.when(projection.getNameVorhaben()).thenReturn("Test Vorhaben");
         Mockito.when(projection.getGrundstuecksgroesse()).thenReturn(BigDecimal.TEN);
@@ -672,7 +673,7 @@ public class SearchDomainMapperTest {
         BauvorhabenInfrastruktureinrichtungRecord projection = Mockito.mock(
             BauvorhabenInfrastruktureinrichtungRecord.class
         );
-        Mockito.when(projection.resultType()).thenReturn("INFRASTRUKTUREINRICHTUNG");
+        Mockito.when(projection.resultType()).thenReturn(ResultType.INFRASTRUKTUREINRICHTUNG);
         Mockito.when(projection.getInfrastruktureinrichtungTyp()).thenReturn(InfrastruktureinrichtungTyp.KINDERKRIPPE);
         Mockito.when(projection.getNameEinrichtung()).thenReturn("Test Einrichtung");
         Mockito.when(projection.getId()).thenReturn(uuid);
@@ -715,7 +716,7 @@ public class SearchDomainMapperTest {
         adresse.setCoordinate(wgs84);
 
         BauvorhabenAbfrageRecord projection = Mockito.mock(BauvorhabenAbfrageRecord.class);
-        Mockito.when(projection.resultType()).thenReturn("BAUVORHABEN");
+        Mockito.when(projection.resultType()).thenReturn(ResultType.BAUVORHABEN);
         Mockito.when(projection.getId()).thenReturn(uuid);
         Mockito.when(projection.getNameVorhaben()).thenReturn("Test Vorhaben");
         Mockito.when(projection.getGrundstuecksgroesse()).thenReturn(BigDecimal.TEN);
@@ -760,7 +761,7 @@ public class SearchDomainMapperTest {
         adresse.setCoordinate(wgs84);
 
         BauvorhabenAbfrageRecord projection = Mockito.mock(BauvorhabenAbfrageRecord.class);
-        Mockito.when(projection.resultType()).thenReturn("ABFRAGE");
+        Mockito.when(projection.resultType()).thenReturn(ResultType.ABFRAGE);
         Mockito.when(projection.getArtAbfrage()).thenReturn(ArtAbfrage.BAULEITPLANVERFAHREN);
         Mockito.when(projection.getId()).thenReturn(uuid);
         Mockito.when(projection.getName()).thenReturn("Test Abfrage");
@@ -805,7 +806,7 @@ public class SearchDomainMapperTest {
         adresse.setCoordinate(wgs84);
 
         AbfrageInfrastruktureinrichtungRecord projection = Mockito.mock(AbfrageInfrastruktureinrichtungRecord.class);
-        Mockito.when(projection.resultType()).thenReturn("ABFRAGE");
+        Mockito.when(projection.resultType()).thenReturn(ResultType.ABFRAGE);
         Mockito.when(projection.getArtAbfrage()).thenReturn(ArtAbfrage.BAULEITPLANVERFAHREN);
         Mockito.when(projection.getId()).thenReturn(uuid);
         Mockito.when(projection.getName()).thenReturn("Test Abfrage");
@@ -845,7 +846,7 @@ public class SearchDomainMapperTest {
         );
         point.setPoint(pointGeometryModel);
         AbfrageInfrastruktureinrichtungRecord projection = Mockito.mock(AbfrageInfrastruktureinrichtungRecord.class);
-        Mockito.when(projection.resultType()).thenReturn("INFRASTRUKTUREINRICHTUNG");
+        Mockito.when(projection.resultType()).thenReturn(ResultType.INFRASTRUKTUREINRICHTUNG);
         Mockito.when(projection.getInfrastruktureinrichtungTyp()).thenReturn(InfrastruktureinrichtungTyp.KINDERKRIPPE);
         Mockito.when(projection.getNameEinrichtung()).thenReturn("Test Einrichtung");
         Mockito.when(projection.getId()).thenReturn(uuid);

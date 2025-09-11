@@ -3,6 +3,7 @@ package de.muenchen.isi.infrastructure.entity;
 import de.muenchen.isi.infrastructure.adapter.listener.BauvorhabenListener;
 import de.muenchen.isi.infrastructure.adapter.search.AdresseValueBridge;
 import de.muenchen.isi.infrastructure.adapter.search.MultiPolygonGeometryValueBridge;
+import de.muenchen.isi.infrastructure.adapter.search.ResultTypeValueBridge;
 import de.muenchen.isi.infrastructure.adapter.search.StandVerfahrenSuggestionBinder;
 import de.muenchen.isi.infrastructure.adapter.search.StandVerfahrenValueBridge;
 import de.muenchen.isi.infrastructure.adapter.search.StringSuggestionBinder;
@@ -12,6 +13,7 @@ import de.muenchen.isi.infrastructure.entity.common.BearbeitendePerson;
 import de.muenchen.isi.infrastructure.entity.common.MultiPolygonGeometry;
 import de.muenchen.isi.infrastructure.entity.common.VerortungMultiPolygon;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtBaulicheNutzung;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.ResultType;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonVerfahrensgrundsaetzeJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVerfahren;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
@@ -102,13 +104,17 @@ public class Bauvorhaben extends BaseEntity {
      * @return Der feste String "BAUVORHABEN", der diesen Objekttyp im Index markiert.
      */
     @Transient
-    @GenericField(name = "resultType", projectable = Projectable.YES)
+    @GenericField(
+        name = "resultType",
+        projectable = Projectable.YES,
+        valueBridge = @ValueBridgeRef(type = ResultTypeValueBridge.class)
+    )
     @IndexingDependency(
         reindexOnUpdate = ReindexOnUpdate.NO,
         extraction = @ContainerExtraction(extract = ContainerExtract.NO)
     )
-    public String getResultType() {
-        return "BAUVORHABEN";
+    public ResultType getResultType() {
+        return ResultType.BAUVORHABEN;
     }
 
     @Embedded
