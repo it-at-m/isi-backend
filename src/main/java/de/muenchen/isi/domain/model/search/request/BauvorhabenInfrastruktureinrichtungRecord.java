@@ -18,22 +18,20 @@ import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Projection
 
 @ProjectionConstructor
 public record BauvorhabenInfrastruktureinrichtungRecord(
-    // BaseEntity-Felder
+    // BaseEntity-Attribute
     @IdProjection UUID id,
     String resultType,
     LocalDateTime createdDateTime,
     LocalDateTime lastModifiedDateTime,
-
     @FieldProjection(path = "adresseJson") Adresse adresse,
     @FieldProjection(path = "verortungJson") VerortungMultiPolygon verortung,
     @FieldProjection(path = "verortungPointJson") VerortungPoint verortungPoint,
     StandVerfahren standVerfahren,
-    // Bauvorhaben-Felder
+    // Bauvorhaben-Attribute
     String nameVorhaben,
     BigDecimal grundstuecksgroesse,
     MultiPolygonGeometry umgriff,
-
-    // Infrastruktureinrichtung-Felder
+    // Infrastruktureinrichtung-Attribute
     InfrastruktureinrichtungTyp infrastruktureinrichtungTyp,
     String nameEinrichtung,
     StatusInfrastruktureinrichtung status,
