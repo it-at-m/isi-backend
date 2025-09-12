@@ -485,6 +485,7 @@ public class SearchDomainMapperTest {
         MultiPolygonGeometry umgriff = new MultiPolygonGeometry();
         umgriff.setType("Umgriff");
         umgriff.setCoordinates(List.of(List.of(List.of(List.of(BigDecimal.TEN, BigDecimal.ONE)))));
+        verortung.setMultiPolygon(umgriff);
         Adresse adresse = new Adresse();
         Wgs84 wgs84 = new Wgs84();
         wgs84.setLongitude(10.0);
@@ -622,6 +623,7 @@ public class SearchDomainMapperTest {
         MultiPolygonGeometry umgriff = new MultiPolygonGeometry();
         umgriff.setType("Umgriff");
         umgriff.setCoordinates(List.of(List.of(List.of(List.of(BigDecimal.TEN, BigDecimal.ONE)))));
+        verortung.setMultiPolygon(umgriff);
         Adresse adresse = new Adresse();
         Wgs84 wgs84 = new Wgs84();
         wgs84.setLongitude(10.0);
@@ -707,6 +709,7 @@ public class SearchDomainMapperTest {
         MultiPolygonGeometry umgriff = new MultiPolygonGeometry();
         umgriff.setType("Umgriff");
         umgriff.setCoordinates(List.of(List.of(List.of(List.of(BigDecimal.TEN, BigDecimal.ONE)))));
+        verortung.setMultiPolygon(umgriff);
         Adresse adresse = new Adresse();
         Wgs84 wgs84 = new Wgs84();
         wgs84.setLongitude(10.0);
