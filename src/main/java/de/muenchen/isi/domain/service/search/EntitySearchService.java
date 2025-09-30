@@ -4,6 +4,13 @@ import com.ibm.icu.text.BreakIterator;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.mapper.SearchDomainMapper;
 import de.muenchen.isi.domain.model.enums.SortAttribute;
+import de.muenchen.isi.domain.model.search.request.AbfrageInfrastruktureinrichtungRecord;
+import de.muenchen.isi.domain.model.search.request.AbfrageRecord;
+import de.muenchen.isi.domain.model.search.request.AllObjectsRecord;
+import de.muenchen.isi.domain.model.search.request.BauvorhabenAbfrageRecord;
+import de.muenchen.isi.domain.model.search.request.BauvorhabenInfrastruktureinrichtungRecord;
+import de.muenchen.isi.domain.model.search.request.BauvorhabenRecord;
+import de.muenchen.isi.domain.model.search.request.InfrastrukturRecord;
 import de.muenchen.isi.domain.model.search.request.SearchQueryAndSortingModel;
 import de.muenchen.isi.domain.model.search.response.SearchResultsModel;
 import de.muenchen.isi.infrastructure.adapter.search.StadtbezirkNummerValueBridge;
@@ -74,11 +81,15 @@ public class EntitySearchService {
 
         // Erstellung der zu filternden Attribute
         final var filterAttributeMap = new HashMap<String, List<?>>();
+
+        final var recordClass = determineRecordClass(searchQueryAndSortingInformation);
+
         this.prepareFilterGemeinsameAttribute(filterAttributeMap, searchQueryAndSortingInformation);
 
         // Erstellen der Hibernate-Search-Suchquery
         final var searchQueryOptions = Search.session(entityManager)
             .search(searchableEntities)
+            .select(f -> f.composite().as(recordClass))
             .where((function, root) -> {
                 // Verarbeitung der angepassten Suchquery
                 root.add(searchPredicateFactory -> {
@@ -486,18 +497,18 @@ public class EntitySearchService {
         final Integer paginationOffset = calculateOffsetOrNullIfNoPaginationRequired(searchQueryAndSortingInformation);
         try {
             // Ausführen einer paginierten oder nicht-paginierten Suche.
-            final SearchResult<BaseEntity> searchResult = ObjectUtils.isNotEmpty(paginationOffset)
+            final SearchResult<?> searchResult = ObjectUtils.isNotEmpty(paginationOffset)
                 ? searchQueryOptions.fetch(paginationOffset, searchQueryAndSortingInformation.getPageSize())
                 : searchQueryOptions.fetchAll();
 
-            final var searchResults = searchResult
+            final var results = searchResult
                 .hits()
                 .stream()
-                .map(searchDomainMapper::entity2SearchResultModel)
+                .map(searchDomainMapper::mapProjectionRecordToSearchResultModel)
                 .collect(Collectors.toList());
 
             final var model = new SearchResultsModel();
-            model.setSearchResults(searchResults);
+            model.setSearchResults(results);
 
             if (searchQueryAndSortingInformation.getPageSize() != null && paginationOffset != null) {
                 final long numberOfTotalHits = searchResult.total().hitCount();
@@ -586,5 +597,39 @@ public class EntitySearchService {
             numberOfPages = numberOfTotalHits / pageSize + 1;
         }
         return numberOfPages;
+    }
+
+    protected Class<?> determineRecordClass(SearchQueryAndSortingModel s) {
+        boolean anyInfrastruktureinrichtung =
+            s.getSelectGrundschule() ||
+            s.getSelectGsNachmittagBetreuung() ||
+            s.getSelectHausFuerKinder() ||
+            s.getSelectKindergarten() ||
+            s.getSelectKinderkrippe() ||
+            s.getSelectMittelschule();
+
+        boolean anyAbfrage =
+            s.getSelectBauleitplanverfahren() ||
+            s.getSelectBaugenehmigungsverfahren() ||
+            s.getSelectWeiteresVerfahren();
+
+        boolean anyBauvorhaben = s.getSelectBauvorhaben();
+
+        // --- reine Einzelauswahlen ---
+        if (anyAbfrage && !anyBauvorhaben && !anyInfrastruktureinrichtung) return AbfrageRecord.class;
+        if (anyBauvorhaben && !anyAbfrage && !anyInfrastruktureinrichtung) return BauvorhabenRecord.class;
+        if (anyInfrastruktureinrichtung && !anyBauvorhaben && !anyAbfrage) return InfrastrukturRecord.class;
+
+        // --- Kombis (2er-Schnittmengen) ---
+        if (
+            anyBauvorhaben && anyInfrastruktureinrichtung && !anyAbfrage
+        ) return BauvorhabenInfrastruktureinrichtungRecord.class;
+        if (anyBauvorhaben && anyAbfrage && !anyInfrastruktureinrichtung) return BauvorhabenAbfrageRecord.class;
+        if (
+            !anyBauvorhaben && anyAbfrage && anyInfrastruktureinrichtung
+        ) return AbfrageInfrastruktureinrichtungRecord.class;
+
+        // --- alles andere (z. B. alle drei, oder gar nichts explizit) ---
+        return AllObjectsRecord.class;
     }
 }

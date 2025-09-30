@@ -1,13 +1,19 @@
 package de.muenchen.isi.infrastructure.entity;
 
 import de.muenchen.isi.infrastructure.adapter.listener.BauvorhabenListener;
+import de.muenchen.isi.infrastructure.adapter.search.AdresseValueBridge;
+import de.muenchen.isi.infrastructure.adapter.search.MultiPolygonGeometryValueBridge;
+import de.muenchen.isi.infrastructure.adapter.search.ResultTypeValueBridge;
 import de.muenchen.isi.infrastructure.adapter.search.StandVerfahrenSuggestionBinder;
 import de.muenchen.isi.infrastructure.adapter.search.StandVerfahrenValueBridge;
 import de.muenchen.isi.infrastructure.adapter.search.StringSuggestionBinder;
+import de.muenchen.isi.infrastructure.adapter.search.VerortungMultiPolygonValueBridge;
 import de.muenchen.isi.infrastructure.entity.common.Adresse;
 import de.muenchen.isi.infrastructure.entity.common.BearbeitendePerson;
+import de.muenchen.isi.infrastructure.entity.common.MultiPolygonGeometry;
 import de.muenchen.isi.infrastructure.entity.common.VerortungMultiPolygon;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtBaulicheNutzung;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.ResultType;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonVerfahrensgrundsaetzeJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVerfahren;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
@@ -30,23 +36,34 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import java.math.BigDecimal;
 import java.util.List;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.search.engine.backend.types.Projectable;
+import org.hibernate.search.engine.backend.types.Searchable;
 import org.hibernate.search.engine.backend.types.Sortable;
+import org.hibernate.search.mapper.pojo.automaticindexing.ReindexOnUpdate;
 import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBinderRef;
 import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBridgeRef;
+import org.hibernate.search.mapper.pojo.extractor.mapping.annotation.ContainerExtract;
+import org.hibernate.search.mapper.pojo.extractor.mapping.annotation.ContainerExtraction;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.GenericField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.IndexedEmbedded;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.IndexingDependency;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.KeywordField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.NonStandardField;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.ObjectPath;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.PropertyValue;
 import org.hibernate.type.SqlTypes;
 
+@Slf4j
 @Entity
 @EntityListeners({ BauvorhabenListener.class })
 @Data
@@ -55,6 +72,50 @@ import org.hibernate.type.SqlTypes;
 @Table(indexes = { @Index(name = "bauvorhaben_name_index", columnList = "nameVorhaben") })
 @Indexed
 public class Bauvorhaben extends BaseEntity {
+
+    /**
+     * Virtuelles Feld für Hibernate Search / Elasticsearch, das den "Typ" des
+     * indexierten Objekts festlegt.
+     *
+     * <p>
+     * Obwohl es keine persistierte Spalte in der Datenbank gibt
+     * ({@link Transient}), wird dieses Feld im Suchindex unter dem Namen
+     * {@code resultType} gespeichert und ist in Projektionen verfügbar
+     * ({@link GenericField} mit {@code projectable = YES}).
+     * </p>
+     *
+     * <p>
+     * Hintergrund: In einer gemeinsamen Index-Struktur werden unterschiedliche
+     * Objekttypen (z. B. Bauvorhaben, Abfrage, Infrastruktureinrichtung)
+     * zusammen gespeichert. Damit bei einer Suchanfrage bzw. einer Projection
+     * zur Laufzeit unterschieden werden kann, von welchem Typ ein Treffer ist,
+     * braucht Elasticsearch dieses Feld. In den Projection-Records (mit
+     * {@code @ProjectionConstructor}) gibt es deshalb ein Attribut
+     * {@code resultType}, das aus genau diesem Getter befüllt wird.
+     * </p>
+     *
+     * <p>
+     * {@link IndexingDependency} mit {@code reindexOnUpdate = NO} signalisiert,
+     * dass sich der Wert nie ändert (er ist hier fest auf "ABFRAGE" gesetzt),
+     * sodass Hibernate Search keine Neuindizierung bei Entity-Änderungen
+     * auslösen muss.
+     * </p>
+     *
+     * @return Der feste String "BAUVORHABEN", der diesen Objekttyp im Index markiert.
+     */
+    @Transient
+    @GenericField(
+        name = "resultType",
+        projectable = Projectable.YES,
+        valueBridge = @ValueBridgeRef(type = ResultTypeValueBridge.class)
+    )
+    @IndexingDependency(
+        reindexOnUpdate = ReindexOnUpdate.NO,
+        extraction = @ContainerExtraction(extract = ContainerExtract.NO)
+    )
+    public ResultType getResultType() {
+        return ResultType.BAUVORHABEN;
+    }
 
     @Embedded
     @AttributeOverrides(
@@ -83,6 +144,7 @@ public class Bauvorhaben extends BaseEntity {
     private String nameVorhaben;
 
     @Column(precision = 10, scale = 2)
+    @GenericField(projectable = Projectable.YES)
     private BigDecimal grundstuecksgroesse;
 
     @FullTextField(valueBridge = @ValueBridgeRef(type = StandVerfahrenValueBridge.class))
@@ -110,10 +172,64 @@ public class Bauvorhaben extends BaseEntity {
     @Embedded
     private Adresse adresse;
 
+    /**
+     * Technisches, abgeleitetes Feld zur Indexierung der {@code verortung}-Eigenschaft.
+     * <p>
+     * Es wird nicht in der Datenbank gespeichert ({@link Transient}), sondern dient nur
+     * als Bridge, um die Geometrie {@link Adresse} über die
+     * {@link AdresseValueBridge} als JSON-String in das Suchindex-Feld
+     * {@code verortungJson} zu serialisieren.
+     * <p>
+     * Dadurch kann die Verortung im Index projiziert werden ({@code Projectable.YES}),
+     * ist aber nicht durchsuchbar ({@code Searchable.NO}).
+     * <p>
+     * Die Annotation {@link IndexingDependency} stellt sicher, dass dieses Feld
+     * automatisch neu berechnet und reindexiert wird, wenn sich die Eigenschaft
+     * {@code verortung} ändert.
+     */
+    @Transient
+    @KeywordField(
+        name = "adresseJson",
+        projectable = Projectable.YES,
+        searchable = Searchable.NO,
+        valueBridge = @ValueBridgeRef(type = AdresseValueBridge.class)
+    )
+    @IndexingDependency(derivedFrom = { @ObjectPath(@PropertyValue(propertyName = "adresse")) })
+    public Adresse getAdresseJson() {
+        return this.adresse;
+    }
+
     @IndexedEmbedded
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(columnDefinition = "jsonb")
     private VerortungMultiPolygon verortung;
+
+    /**
+     * Technisches, abgeleitetes Feld zur Indexierung der {@code verortung}-Eigenschaft.
+     * <p>
+     * Es wird nicht in der Datenbank gespeichert ({@link Transient}), sondern dient nur
+     * als Bridge, um die Geometrie {@link VerortungMultiPolygon} über die
+     * {@link VerortungMultiPolygonValueBridge} als JSON-String in das Suchindex-Feld
+     * {@code verortungJson} zu serialisieren.
+     * <p>
+     * Dadurch kann die Verortung im Index projiziert werden ({@code Projectable.YES}),
+     * ist aber nicht durchsuchbar ({@code Searchable.NO}).
+     * <p>
+     * Die Annotation {@link IndexingDependency} stellt sicher, dass dieses Feld
+     * automatisch neu berechnet und reindexiert wird, wenn sich die Eigenschaft
+     * {@code verortung} ändert.
+     */
+    @Transient
+    @KeywordField(
+        name = "verortungJson",
+        projectable = Projectable.YES,
+        searchable = Searchable.NO,
+        valueBridge = @ValueBridgeRef(type = VerortungMultiPolygonValueBridge.class)
+    )
+    @IndexingDependency(derivedFrom = { @ObjectPath(@PropertyValue(propertyName = "verortung")) })
+    public VerortungMultiPolygon getVerortungJson() {
+        return this.verortung;
+    }
 
     @FullTextField
     @NonStandardField(

@@ -1,8 +1,10 @@
 package de.muenchen.isi.infrastructure.entity;
 
+import de.muenchen.isi.infrastructure.adapter.search.AdresseValueBridge;
 import de.muenchen.isi.infrastructure.adapter.search.StandVerfahrenSuggestionBinder;
 import de.muenchen.isi.infrastructure.adapter.search.StandVerfahrenValueBridge;
 import de.muenchen.isi.infrastructure.adapter.search.StringSuggestionBinder;
+import de.muenchen.isi.infrastructure.adapter.search.VerortungMultiPolygonValueBridge;
 import de.muenchen.isi.infrastructure.entity.common.Adresse;
 import de.muenchen.isi.infrastructure.entity.common.VerortungMultiPolygon;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
@@ -22,12 +24,16 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OrderBy;
+import jakarta.persistence.Transient;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.search.engine.backend.types.Projectable;
+import org.hibernate.search.engine.backend.types.Searchable;
 import org.hibernate.search.mapper.pojo.automaticindexing.ReindexOnUpdate;
 import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBinderRef;
 import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBridgeRef;
@@ -36,9 +42,13 @@ import org.hibernate.search.mapper.pojo.mapping.definition.annotation.GenericFie
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.IndexedEmbedded;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.IndexingDependency;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.KeywordField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.NonStandardField;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.ObjectPath;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.PropertyValue;
 import org.hibernate.type.SqlTypes;
 
+@Slf4j
 @Entity
 @DiscriminatorValue(ArtAbfrage.Values.BAULEITPLANVERFAHREN)
 @Data
@@ -81,16 +91,71 @@ public class Bauleitplanverfahren extends Abfrage {
     @Embedded
     private Adresse adresse;
 
+    /**
+     * Technisches, abgeleitetes Feld zur Indexierung der {@code verortung}-Eigenschaft.
+     * <p>
+     * Es wird nicht in der Datenbank gespeichert ({@link Transient}), sondern dient nur
+     * als Bridge, um die Geometrie {@link Adresse} über die
+     * {@link AdresseValueBridge} als JSON-String in das Suchindex-Feld
+     * {@code verortungJson} zu serialisieren.
+     * <p>
+     * Dadurch kann die Verortung im Index projiziert werden ({@code Projectable.YES}),
+     * ist aber nicht durchsuchbar ({@code Searchable.NO}).
+     * <p>
+     * Die Annotation {@link IndexingDependency} stellt sicher, dass dieses Feld
+     * automatisch neu berechnet und reindexiert wird, wenn sich die Eigenschaft
+     * {@code verortung} ändert.
+     */
+    @Transient
+    @KeywordField(
+        name = "adresseJson",
+        projectable = Projectable.YES,
+        searchable = Searchable.NO,
+        valueBridge = @ValueBridgeRef(type = AdresseValueBridge.class)
+    )
+    @IndexingDependency(derivedFrom = { @ObjectPath(@PropertyValue(propertyName = "adresse")) })
+    public Adresse getAdresseJson() {
+        return this.adresse;
+    }
+
     @IndexedEmbedded
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(columnDefinition = "jsonb")
     private VerortungMultiPolygon verortung;
+
+    /**
+     * Technisches, abgeleitetes Feld zur Indexierung der {@code verortung}-Eigenschaft.
+     * <p>
+     * Es wird nicht in der Datenbank gespeichert ({@link Transient}), sondern dient nur
+     * als Bridge, um die Geometrie {@link VerortungMultiPolygon} über die
+     * {@link VerortungMultiPolygonValueBridge} als JSON-String in das Suchindex-Feld
+     * {@code verortungJson} zu serialisieren.
+     * <p>
+     * Dadurch kann die Verortung im Index projiziert werden ({@code Projectable.YES}),
+     * ist aber nicht durchsuchbar ({@code Searchable.NO}).
+     * <p>
+     * Die Annotation {@link IndexingDependency} stellt sicher, dass dieses Feld
+     * automatisch neu berechnet und reindexiert wird, wenn sich die Eigenschaft
+     * {@code verortung} ändert.
+     */
+    @Transient
+    @KeywordField(
+        name = "verortungJson",
+        projectable = Projectable.YES,
+        searchable = Searchable.NO,
+        valueBridge = @ValueBridgeRef(type = VerortungMultiPolygonValueBridge.class)
+    )
+    @IndexingDependency(derivedFrom = { @ObjectPath(@PropertyValue(propertyName = "verortung")) })
+    public VerortungMultiPolygon getVerortungJson() {
+        return this.verortung;
+    }
 
     @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "bauleitplanverfahren_id")
     private List<Dokument> dokumente;
 
     @Column(nullable = false)
+    @GenericField(name = "fristBearbeitung")
     private LocalDate fristBearbeitung;
 
     @Enumerated(EnumType.STRING)

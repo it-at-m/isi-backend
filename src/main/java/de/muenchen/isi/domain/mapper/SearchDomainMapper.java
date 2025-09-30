@@ -3,8 +3,16 @@ package de.muenchen.isi.domain.mapper;
 import de.muenchen.isi.configuration.MapstructConfiguration;
 import de.muenchen.isi.domain.exception.GeometryOperationFailedException;
 import de.muenchen.isi.domain.model.common.MultiPolygonGeometryModel;
+import de.muenchen.isi.domain.model.common.StadtbezirkModel;
 import de.muenchen.isi.domain.model.common.Wgs84Model;
 import de.muenchen.isi.domain.model.enums.SearchResultType;
+import de.muenchen.isi.domain.model.search.request.AbfrageInfrastruktureinrichtungRecord;
+import de.muenchen.isi.domain.model.search.request.AllObjectsRecord;
+import de.muenchen.isi.domain.model.search.request.BauvorhabenAbfrageRecord;
+import de.muenchen.isi.domain.model.search.request.BauvorhabenInfrastruktureinrichtungRecord;
+import de.muenchen.isi.domain.model.search.request.projection.AbfrageProjection;
+import de.muenchen.isi.domain.model.search.request.projection.BauvorhabenProjection;
+import de.muenchen.isi.domain.model.search.request.projection.InfrastruktureinrichtungProjection;
 import de.muenchen.isi.domain.model.search.response.AbfrageSearchResultModel;
 import de.muenchen.isi.domain.model.search.response.BauvorhabenSearchResultModel;
 import de.muenchen.isi.domain.model.search.response.InfrastruktureinrichtungSearchResultModel;
@@ -17,8 +25,13 @@ import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
 import de.muenchen.isi.infrastructure.entity.WeiteresVerfahren;
 import de.muenchen.isi.infrastructure.entity.common.Adresse;
 import de.muenchen.isi.infrastructure.entity.common.MultiPolygonGeometry;
+import de.muenchen.isi.infrastructure.entity.common.Stadtbezirk;
 import de.muenchen.isi.infrastructure.entity.common.VerortungMultiPolygon;
+import de.muenchen.isi.infrastructure.entity.common.VerortungPoint;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.ResultType;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Infrastruktureinrichtung;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
@@ -185,13 +198,26 @@ public abstract class SearchDomainMapper {
     }
 
     /**
-     * Gibt die Koordinaten einer Adresse oder Verortung zurück. Wenn die Adresse Koordinaten hat,
-     * wird die Koordinate mithilfe des {@link KoordinatenDomainMapper} extrahiert. Wenn die Verortung Koordinaten hat,
-     * wird der Schwerpunkt des Mehrfachpolygons mithilfe des {@link KoordinatenService} ermittelt.
+     * Ermittelt die Koordinaten einer Adresse oder – falls diese nicht vorhanden sind –
+     * den Schwerpunkt (Centroid) einer übergebenen Verortung (Mehrfachpolygon).
      *
-     * @param adresse               Die Adresse, deren Koordinate zurückgegeben werden soll.
-     * @param verortungMultiPolygon Die Verortung, deren Koordinate zurückgegeben werden soll.
-     * @return Ein WGS84Model-Objekt mit den extrahierten Koordinaten oder {@code null}, wenn keine Koordinaten vorhanden sind.
+     * <p>
+     * Die Methode geht wie folgt vor:
+     * <ul>
+     *   <li>Falls die Adresse gültige Koordinaten enthält, werden diese zurückgegeben.</li>
+     *   <li>Falls die Adresse keine Koordinaten hat, aber die Verortung ein Mehrfachpolygon
+     *       mit Koordinaten enthält, wird der geometrische Schwerpunkt des Polygons berechnet
+     *       und zurückgegeben.</li>
+     *   <li>Falls keine Koordinaten ermittelt werden können oder die Schwerpunktberechnung
+     *       fehlschlägt, wird {@code null} zurückgegeben.</li>
+     * </ul>
+     * </p>
+     *
+     * @param adresse Die Adresse, deren Koordinaten bevorzugt zurückgegeben werden sollen.
+     * @param verortungMultiPolygon Die Verortung, deren Polygon-Schwerpunkt verwendet wird,
+     *                              falls die Adresse keine Koordinaten hat.
+     * @return Ein {@link Wgs84Model} mit den ermittelten Koordinaten oder {@code null},
+     *         wenn keine Koordinaten bestimmt werden können.
      */
     public Wgs84Model getCoordinateFromAdresseOrVerortung(
         final Adresse adresse,
@@ -226,4 +252,156 @@ public abstract class SearchDomainMapper {
     }
 
     public abstract MultiPolygonGeometryModel entity2Model(final MultiPolygonGeometry entity);
+
+    public abstract StadtbezirkModel entity2Model(final Stadtbezirk entity);
+
+    /**
+     * Mappt ein Projektion-Objekt (Record) auf ein {@link SearchResultModel}.
+     * <p>
+     * Abhängig von den gesetzten Filtern in der Suche werden nur bestimmte Objekttypen
+     * (z. B. Bauvorhaben, Abfrage, Infrastruktureinrichtung) zurückgeliefert. Diese
+     * Methode erkennt zur Laufzeit den konkreten Record-Typ und delegiert an die
+     * passende Mapping-Methode.
+     * </p>
+     *
+     * @param projection Das Projektion-Objekt (Record) eines unterstützten Typs.
+     * @return Ein {@link SearchResultModel} für den erkannten Typ.
+     * @throws IllegalArgumentException wenn der Record-Typ nicht unterstützt ist.
+     */
+    public SearchResultModel mapProjectionRecordToSearchResultModel(Object projection) {
+        return switch (projection) {
+            case AllObjectsRecord allObjectsRecord -> switch (allObjectsRecord.resultType()) {
+                case ResultType.BAUVORHABEN -> toBauvorhabenModel(allObjectsRecord);
+                case ResultType.ABFRAGE -> toAbfrageModel(allObjectsRecord);
+                case ResultType.INFRASTRUKTUREINRICHTUNG -> toInfrastrukturModel(allObjectsRecord);
+                default -> throw new IllegalArgumentException(
+                    "Unbekannter resultType in AllObjectsRecord: " + allObjectsRecord.resultType()
+                );
+            };
+            case AbfrageInfrastruktureinrichtungRecord abfrageInfrastruktureinrichtungRecord -> switch (
+                abfrageInfrastruktureinrichtungRecord.resultType()
+            ) {
+                case ResultType.ABFRAGE -> toAbfrageModel(abfrageInfrastruktureinrichtungRecord);
+                case ResultType.INFRASTRUKTUREINRICHTUNG -> toInfrastrukturModel(abfrageInfrastruktureinrichtungRecord);
+                default -> throw new IllegalArgumentException(
+                    "Unbekannter resultType in AbfrageInfrastruktureinrichtungRecord: " +
+                    abfrageInfrastruktureinrichtungRecord.resultType()
+                );
+            };
+            case BauvorhabenInfrastruktureinrichtungRecord bauvorhabenInfrastruktureinrichtungRecord -> switch (
+                bauvorhabenInfrastruktureinrichtungRecord.resultType()
+            ) {
+                case ResultType.BAUVORHABEN -> toBauvorhabenModel(bauvorhabenInfrastruktureinrichtungRecord);
+                case ResultType.INFRASTRUKTUREINRICHTUNG -> toInfrastrukturModel(
+                    bauvorhabenInfrastruktureinrichtungRecord
+                );
+                default -> throw new IllegalArgumentException(
+                    "Unbekannter resultType in BauvorhabenInfrastruktureinrichtungRecord: " +
+                    bauvorhabenInfrastruktureinrichtungRecord.resultType()
+                );
+            };
+            case BauvorhabenAbfrageRecord bauvorhabenAbfrageRecord -> switch (bauvorhabenAbfrageRecord.resultType()) {
+                case ResultType.BAUVORHABEN -> toBauvorhabenModel(bauvorhabenAbfrageRecord);
+                case ResultType.ABFRAGE -> toAbfrageModel(bauvorhabenAbfrageRecord);
+                default -> throw new IllegalArgumentException(
+                    "Unbekannter resultType in BauvorhabenInfrastruktureinrichtungRecord: " +
+                    bauvorhabenAbfrageRecord.resultType()
+                );
+            };
+            case AbfrageProjection abfrageProjection -> toAbfrageModel(abfrageProjection);
+            case BauvorhabenProjection bauvorhabenProjection -> toBauvorhabenModel(bauvorhabenProjection);
+            case InfrastruktureinrichtungProjection infrastruktureinrichtungProjection -> toInfrastrukturModel(
+                infrastruktureinrichtungProjection
+            );
+            default -> throw new IllegalArgumentException(
+                "Projection type: " + projection.getClass().getName() + " nicht unterstützt"
+            );
+        };
+    }
+
+    @Mappings(
+        {
+            @Mapping(target = "type", constant = SearchResultType.Values.ABFRAGE),
+            @Mapping(target = "coordinate", ignore = true),
+            @Mapping(target = "stadtbezirke", ignore = true),
+            @Mapping(target = "bauvorhaben", source = "bauvorhabenId"),
+        }
+    )
+    public abstract AbfrageSearchResultModel toAbfrageModel(AbfrageProjection projection);
+
+    @AfterMapping
+    protected void setAbfrageCoordinate(AbfrageProjection projection, @MappingTarget AbfrageSearchResultModel model) {
+        model.setCoordinate(getCoordinateFromAdresseOrVerortung(projection.getAdresse(), projection.getVerortung()));
+        if (projection.getVerortung() != null) {
+            Set<StadtbezirkModel> stadtbezirke = new HashSet<>();
+            projection
+                .getVerortung()
+                .getStadtbezirke()
+                .forEach(stadtbezirk -> {
+                    stadtbezirke.add(entity2Model(stadtbezirk));
+                });
+            model.setStadtbezirke(stadtbezirke);
+        }
+    }
+
+    // -------- BAUVORHABEN --------
+    @Mappings(
+        {
+            @Mapping(target = "type", constant = SearchResultType.Values.BAUVORHABEN),
+            @Mapping(target = "coordinate", ignore = true),
+            @Mapping(target = "stadtbezirke", ignore = true),
+            @Mapping(target = "umgriff", ignore = true),
+        }
+    )
+    public abstract BauvorhabenSearchResultModel toBauvorhabenModel(BauvorhabenProjection projection);
+
+    @AfterMapping
+    protected void setBauvorhabenExtras(
+        BauvorhabenProjection projection,
+        @MappingTarget BauvorhabenSearchResultModel model
+    ) {
+        model.setCoordinate(getCoordinateFromAdresseOrVerortung(projection.getAdresse(), projection.getVerortung()));
+
+        if (projection.getVerortung() != null) {
+            Set<StadtbezirkModel> stadtbezirke = new HashSet<>();
+            projection
+                .getVerortung()
+                .getStadtbezirke()
+                .forEach(stadtbezirk -> {
+                    stadtbezirke.add(entity2Model(stadtbezirk));
+                });
+            model.setStadtbezirke(stadtbezirke);
+            model.setUmgriff(entity2Model(projection.getVerortung().getMultiPolygon()));
+        }
+    }
+
+    // -------- INFRASTRUKTUR --------
+    @Mappings(
+        {
+            @Mapping(target = "type", constant = SearchResultType.Values.INFRASTRUKTUREINRICHTUNG),
+            @Mapping(target = "coordinate", ignore = true),
+            @Mapping(target = "zugehoerigesBauvorhaben", source = "bauvorhabenName"),
+        }
+    )
+    public abstract InfrastruktureinrichtungSearchResultModel toInfrastrukturModel(
+        InfrastruktureinrichtungProjection projection
+    );
+
+    @AfterMapping
+    protected void setInfrastrukturCoordinate(
+        InfrastruktureinrichtungProjection projection,
+        @MappingTarget InfrastruktureinrichtungSearchResultModel model
+    ) {
+        if (hasAdressCoordinate(projection.getAdresse())) {
+            model.setCoordinate(koordinatenDomainMapper.entity2Model(projection.getAdresse().getCoordinate()));
+        } else if (ObjectUtils.isNotEmpty(projection.getVerortungPoint())) {
+            VerortungPoint verortungPoint = projection.getVerortungPoint();
+            Wgs84Model wgs84 = new Wgs84Model();
+            wgs84.setLongitude(verortungPoint.getPoint().getCoordinates().get(0).doubleValue());
+            wgs84.setLatitude(verortungPoint.getPoint().getCoordinates().get(1).doubleValue());
+            model.setCoordinate(wgs84);
+        } else {
+            model.setCoordinate(null);
+        }
+    }
 }
