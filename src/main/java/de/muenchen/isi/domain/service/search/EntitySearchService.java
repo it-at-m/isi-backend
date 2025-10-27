@@ -76,8 +76,9 @@ public class EntitySearchService {
         final var searchableAttributes = searchPreparationService.getNamesOfSearchableAttributes(searchableEntities);
 
         // Anpassen der Suchquery
-        final var adaptedSearchQuery =
-            this.createAdaptedSearchQueryForSimpleQueryStringSearch(searchQueryAndSortingInformation.getSearchQuery());
+        final var adaptedSearchQuery = this.createAdaptedSearchQueryForSimpleQueryStringSearch(
+            searchQueryAndSortingInformation.getSearchQuery()
+        );
 
         // Erstellung der zu filternden Attribute
         final var filterAttributeMap = new HashMap<String, List<?>>();
@@ -110,10 +111,10 @@ public class EntitySearchService {
                 this.createFilterRealisierungVonBis(searchQueryAndSortingInformation, root, function);
                 this.createFilterGeplanteWohneinheitenGesamtVonBis(searchQueryAndSortingInformation, root, function);
                 this.createFilterGeplanteGeschossflaecheWohnenGesamtVonBis(
-                        searchQueryAndSortingInformation,
-                        root,
-                        function
-                    );
+                    searchQueryAndSortingInformation,
+                    root,
+                    function
+                );
             })
             // Sortierung der Suchergebnisse.
             // https://docs.jboss.org/hibernate/stable/search/reference/en-US/html_single/#query-sorting

@@ -82,7 +82,8 @@ public class NfcHelper {
      */
     public static Map<String, String[]> nfcConverter(final Map<String, String[]> original) {
         final HashMap<String, String[]> nfcConverted = new HashMap<>(original.size());
-        original.forEach((nfdKey, nfdValueArray) -> nfcConverted.put(nfcConverter(nfdKey), nfcConverter(nfdValueArray))
+        original.forEach((nfdKey, nfdValueArray) ->
+            nfcConverted.put(nfcConverter(nfdKey), nfcConverter(nfdValueArray))
         );
         return nfcConverted;
     }
@@ -135,13 +136,13 @@ public class NfcHelper {
     ) {
         final Map<String, List<String>> converted = new CaseInsensitiveMap<>();
         Collections.list(originalRequest.getHeaderNames()).forEach(nfdHeaderName -> {
-            final String nfcHeaderName = NfcHelper.nfcConverter(nfdHeaderName);
-            final List<String> nfcHeaderEntries = Collections.list(originalRequest.getHeaders(nfdHeaderName))
-                .stream()
-                .map(NfcHelper::nfcConverter)
-                .collect(Collectors.toList());
-            converted.put(nfcHeaderName, nfcHeaderEntries);
-        });
+                final String nfcHeaderName = NfcHelper.nfcConverter(nfdHeaderName);
+                final List<String> nfcHeaderEntries = Collections.list(originalRequest.getHeaders(nfdHeaderName))
+                    .stream()
+                    .map(NfcHelper::nfcConverter)
+                    .collect(Collectors.toList());
+                converted.put(nfcHeaderName, nfcHeaderEntries);
+            });
         return converted;
     }
 }

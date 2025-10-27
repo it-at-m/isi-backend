@@ -62,44 +62,44 @@ public class VersorgungsquoteGruppenstaerkeRepositoryTest {
         bildungseinrichtung3.setGueltigAb(LocalDate.parse("2010-01-01"));
 
         this.versorgungsquoteGruppenstaerkeRepository.saveAll(
-                List.of(bildungseinrichtung1, bildungseinrichtung2, bildungseinrichtung3)
-            );
+            List.of(bildungseinrichtung1, bildungseinrichtung2, bildungseinrichtung3)
+        );
 
         Optional<VersorgungsquoteGruppenstaerke> result1 =
             this.versorgungsquoteGruppenstaerkeRepository.findFirstByInfrastruktureinrichtungTypAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
-                    bildungseinrichtung1.getInfrastruktureinrichtungTyp(),
-                    LocalDate.parse("2003-05-05")
-                );
+                bildungseinrichtung1.getInfrastruktureinrichtungTyp(),
+                LocalDate.parse("2003-05-05")
+            );
 
         Optional<VersorgungsquoteGruppenstaerke> result2 =
             this.versorgungsquoteGruppenstaerkeRepository.findFirstByInfrastruktureinrichtungTypAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
-                    bildungseinrichtung2.getInfrastruktureinrichtungTyp(),
-                    LocalDate.parse("2005-06-10")
-                );
+                bildungseinrichtung2.getInfrastruktureinrichtungTyp(),
+                LocalDate.parse("2005-06-10")
+            );
 
         Optional<VersorgungsquoteGruppenstaerke> result3 =
             this.versorgungsquoteGruppenstaerkeRepository.findFirstByInfrastruktureinrichtungTypAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
-                    bildungseinrichtung2.getInfrastruktureinrichtungTyp(),
-                    LocalDate.parse("2007-10-15")
-                );
+                bildungseinrichtung2.getInfrastruktureinrichtungTyp(),
+                LocalDate.parse("2007-10-15")
+            );
 
         Optional<VersorgungsquoteGruppenstaerke> result4 =
             this.versorgungsquoteGruppenstaerkeRepository.findFirstByInfrastruktureinrichtungTypAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
-                    bildungseinrichtung3.getInfrastruktureinrichtungTyp(),
-                    LocalDate.parse("2011-06-14")
-                );
+                bildungseinrichtung3.getInfrastruktureinrichtungTyp(),
+                LocalDate.parse("2011-06-14")
+            );
 
         Optional<VersorgungsquoteGruppenstaerke> result5 =
             this.versorgungsquoteGruppenstaerkeRepository.findFirstByInfrastruktureinrichtungTypAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
-                    bildungseinrichtung1.getInfrastruktureinrichtungTyp(),
-                    LocalDate.parse("2005-06-10")
-                );
+                bildungseinrichtung1.getInfrastruktureinrichtungTyp(),
+                LocalDate.parse("2005-06-10")
+            );
 
         Optional<VersorgungsquoteGruppenstaerke> result6 =
             this.versorgungsquoteGruppenstaerkeRepository.findFirstByInfrastruktureinrichtungTypAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
-                    bildungseinrichtung2.getInfrastruktureinrichtungTyp(),
-                    LocalDate.parse("2005-06-11")
-                );
+                bildungseinrichtung2.getInfrastruktureinrichtungTyp(),
+                LocalDate.parse("2005-06-11")
+            );
 
         assertThat(result1.get(), is(bildungseinrichtung1));
         assertThat(result2.get(), is(bildungseinrichtung2));
@@ -129,15 +129,15 @@ public class VersorgungsquoteGruppenstaerkeRepositoryTest {
 
         Optional<VersorgungsquoteGruppenstaerke> result1 =
             this.versorgungsquoteGruppenstaerkeRepository.findFirstByInfrastruktureinrichtungTypAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
-                    bildungseinrichtung1.getInfrastruktureinrichtungTyp(),
-                    LocalDate.parse("1999-06-14")
-                );
+                bildungseinrichtung1.getInfrastruktureinrichtungTyp(),
+                LocalDate.parse("1999-06-14")
+            );
 
         Optional<VersorgungsquoteGruppenstaerke> result2 =
             this.versorgungsquoteGruppenstaerkeRepository.findFirstByInfrastruktureinrichtungTypAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
-                    bildungseinrichtung2.getInfrastruktureinrichtungTyp(),
-                    LocalDate.parse("2005-05-04")
-                );
+                bildungseinrichtung2.getInfrastruktureinrichtungTyp(),
+                LocalDate.parse("2005-05-04")
+            );
 
         Assertions.assertThrows(NoSuchElementException.class, () -> result1.get());
         Assertions.assertThrows(NoSuchElementException.class, () -> result2.get());

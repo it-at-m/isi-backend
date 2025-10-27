@@ -95,8 +95,10 @@ public class SearchwordSuggesterRepository {
             // https://www.elastic.co/guide/en/elasticsearch/reference/current/search-multi-search.html
             // Je entitätsbezogenen Suchindex wird die Suche basierend auf dem completion-suggester in die Multisearch-Suche aufgenommen.
             // https://www.elastic.co/guide/en/elasticsearch/reference/current/search-suggesters.html#completion-suggester
-            final var multisearchRequest =
-                this.createMultisearchResponseRequestBody(attributesForSearchableEntities, singleWordQuery);
+            final var multisearchRequest = this.createMultisearchResponseRequestBody(
+                attributesForSearchableEntities,
+                singleWordQuery
+            );
             final var request = new Request("POST", "_msearch");
             request.setJsonEntity(multisearchRequest.toMultiSearchRequestBody());
             try (final var inputstream = restClient.performRequest(request).getEntity().getContent()) {

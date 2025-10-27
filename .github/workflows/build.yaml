@@ -8,10 +8,10 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Set up JDK
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           java-version: "21"
           distribution: "temurin"
@@ -24,29 +24,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
-          node-version: "16"
+          node-version: "22"
 
       - name: Check with eslint
         run: |
           npm install
           npm run check
-
-  compliance:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Advance Security Policy as Code
-        uses: advanced-security/policy-as-code@v2.9.1
-        with:
-          policy: it-at-m/policy-as-code
-          policy-path: default.yaml
-          token: ${{ secrets.GITHUB_TOKEN }}
-          argvs: "--disable-dependabot --disable-secret-scanning --disable-code-scanning --display"
