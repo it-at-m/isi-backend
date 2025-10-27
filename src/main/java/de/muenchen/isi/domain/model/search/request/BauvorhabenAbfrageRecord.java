@@ -37,5 +37,4 @@ public record BauvorhabenAbfrageRecord(
     StatusAbfrage statusAbfrage,
     UUID bauvorhabenId,
     LocalDate fristBearbeitung
-)
-    implements AbfrageProjection, BauvorhabenProjection {}
+) implements AbfrageProjection, BauvorhabenProjection {}

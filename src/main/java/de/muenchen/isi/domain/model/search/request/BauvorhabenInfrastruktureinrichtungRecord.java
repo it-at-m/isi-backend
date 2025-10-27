@@ -36,5 +36,4 @@ public record BauvorhabenInfrastruktureinrichtungRecord(
     String nameEinrichtung,
     StatusInfrastruktureinrichtung status,
     String bauvorhabenName
-)
-    implements BauvorhabenProjection, InfrastruktureinrichtungProjection {}
+) implements BauvorhabenProjection, InfrastruktureinrichtungProjection {}

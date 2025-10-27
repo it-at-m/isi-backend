@@ -27,5 +27,4 @@ public record BauvorhabenRecord(
     StandVerfahren standVerfahren,
     String nameVorhaben,
     BigDecimal grundstuecksgroesse
-)
-    implements BauvorhabenProjection {}
+) implements BauvorhabenProjection {}

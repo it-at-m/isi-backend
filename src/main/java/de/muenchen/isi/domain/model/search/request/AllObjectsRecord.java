@@ -46,5 +46,4 @@ public record AllObjectsRecord(
     StatusInfrastruktureinrichtung status,
     String bauvorhabenName,
     @FieldProjection(path = "verortungPointJson") VerortungPoint verortungPoint
-)
-    implements AbfrageProjection, BauvorhabenProjection, InfrastruktureinrichtungProjection {}
+) implements AbfrageProjection, BauvorhabenProjection, InfrastruktureinrichtungProjection {}

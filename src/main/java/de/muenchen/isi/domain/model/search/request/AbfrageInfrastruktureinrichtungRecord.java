@@ -40,5 +40,4 @@ public record AbfrageInfrastruktureinrichtungRecord(
     String nameEinrichtung,
     StatusInfrastruktureinrichtung status,
     String bauvorhabenName
-)
-    implements AbfrageProjection, InfrastruktureinrichtungProjection {}
+) implements AbfrageProjection, InfrastruktureinrichtungProjection {}
