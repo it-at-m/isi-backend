@@ -63,10 +63,10 @@ public class EtlInterfaceService {
     }
 
     /**
-     * Ruft die Reporting-EAI Schnittstelle auf, damit ein ETL-Job zur Übertragung eine Bauvorhabens
+     * Ruft die Reporting-EAI Schnittstelle auf, damit ein ETL-Job zur Übertragung eines Bauvorhabens
      * vom Backend zur Reporting DB aufgerufen wird
      *
-     * @param id ID derInfrastruktureinrichtung
+     * @param id ID des Bauvorhabens
      * @throws ReportingException falls der Aufruf fehlgeschlagen ist.
      */
     public void etlInterfaceTriggerBauvorhabenJob(final UUID id) throws ReportingException {
@@ -74,6 +74,18 @@ public class EtlInterfaceService {
             "importFromBackend/bauvorhaben/Job_Import_Bauvorhaben.kjb",
             id
         );
+        this.etlInterfaceTriggerJob(etlTriggerJobDto);
+    }
+
+    /**
+     * Ruft die Reporting-EAI Schnittstelle auf, damit ein ETL-Job zur Löschung eines Bauvorhabens
+     * in der Reporting DB aufgerufen wird
+     *
+     * @param id ID des Bauvorhabens
+     * @throws ReportingException falls der Aufruf fehlgeschlagen ist.
+     */
+    public void etlInterfaceTriggerDeleteBauvorhabenJob(final UUID id) throws ReportingException {
+        final EtlTriggerJobDto etlTriggerJobDto = this.prepareJob("delete/bauvorhaben/Job_Delete_Bauvorhaben.kjb", id);
         this.etlInterfaceTriggerJob(etlTriggerJobDto);
     }
 
