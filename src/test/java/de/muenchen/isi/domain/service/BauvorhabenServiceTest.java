@@ -605,7 +605,7 @@ public class BauvorhabenServiceTest {
     }
 
     @Test
-    void deleteBauvorhaben() throws EntityNotFoundException, EntityIsReferencedException {
+    void deleteBauvorhaben() throws EntityNotFoundException, EntityIsReferencedException, ReportingException {
         final UUID id = UUID.randomUUID();
 
         final Bauvorhaben entity = new Bauvorhaben();

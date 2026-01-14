@@ -243,7 +243,7 @@ public class BauvorhabenController {
     )
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_DELETE_BAUVORHABEN.name())")
     public ResponseEntity<Void> deleteBauvorhaben(@PathVariable @NotNull final UUID id)
-        throws EntityNotFoundException, EntityIsReferencedException {
+        throws EntityNotFoundException, EntityIsReferencedException, ReportingException {
         this.bauvorhabenService.deleteBauvorhaben(id);
         return ResponseEntity.noContent().build();
     }

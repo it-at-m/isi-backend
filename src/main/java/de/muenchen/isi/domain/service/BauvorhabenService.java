@@ -162,13 +162,16 @@ public class BauvorhabenService {
      * @param id zum Identifizieren des {@link BauvorhabenModel}.
      * @throws EntityNotFoundException     falls das Bauvorhaben identifiziert durch die {@link BauvorhabenModel#getId()} nicht gefunden wird.
      * @throws EntityIsReferencedException falls das {@link BauvorhabenModel} in einer Abfrage referenziert wird.
+     * @throws ReportingException          falls bei der Übermittlung an die Reportingschnittstelle ein Fehler auftritt.
      */
-    public void deleteBauvorhaben(final UUID id) throws EntityNotFoundException, EntityIsReferencedException {
+    public void deleteBauvorhaben(final UUID id)
+        throws EntityNotFoundException, EntityIsReferencedException, ReportingException {
         final var bauvorhaben = this.getBauvorhabenById(id);
         this.throwEntityIsReferencedExceptionWhenAbfrageIsReferencingBauvorhaben(bauvorhaben);
         this.throwEntityIsReferencedExceptionWhenInfrastruktureinrichtungIsReferencingBauvorhaben(bauvorhaben);
         this.kommentarRepository.deleteAllByBauvorhabenId(id);
         this.bauvorhabenRepository.deleteById(id);
+        etlInterfaceService.etlInterfaceTriggerDeleteBauvorhabenJob(id);
     }
 
     /**
