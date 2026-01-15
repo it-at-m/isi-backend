@@ -550,6 +550,7 @@
                             <inputSpec>${project.basedir}/apidoc/isi-reporting-eai.json</inputSpec>
                             <generatorName>java</generatorName>
                             <library>webclient</library>
+                            <output>${project.build.directory}/generated-sources/openapi</output>
 
                             <apiPackage>de.muenchen.isi.reporting.client.api</apiPackage>
                             <modelPackage>de.muenchen.isi.reporting.client.model</modelPackage>
