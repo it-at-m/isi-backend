@@ -44,7 +44,7 @@
         übereinstimmen -->
         <org.projectlombok.lombok.version>1.18.42</org.projectlombok.lombok.version>
         <org.projectlombok.mapstructbinding.version>0.2.0</org.projectlombok.mapstructbinding.version>
-        <mapstruct.version>1.6.3</mapstruct.version>
+        <mapstruct.version>1.5.5.Final</mapstruct.version>
         <s3.integration>2.2.1</s3.integration>
         <!-- https://mvnrepository.com/artifact/org.geotools/gt-main?repo=geotools-releases
         (Register: GeoTools) -->
@@ -550,7 +550,6 @@
                             <inputSpec>${project.basedir}/apidoc/isi-reporting-eai.json</inputSpec>
                             <generatorName>java</generatorName>
                             <library>webclient</library>
-                            <output>${project.build.directory}/generated-sources/openapi</output>
 
                             <apiPackage>de.muenchen.isi.reporting.client.api</apiPackage>
                             <modelPackage>de.muenchen.isi.reporting.client.model</modelPackage>
