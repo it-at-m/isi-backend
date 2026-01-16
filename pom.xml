@@ -26,7 +26,7 @@
         <apache.commons.text>1.14.0</apache.commons.text>
         <apache.commons.collections4>4.5.0</apache.commons.collections4>
         <logstash.encoder>8.1</logstash.encoder>
-        <apache.commons.io>2.20.0</apache.commons.io>
+        <apache.commons.io>2.21.0</apache.commons.io>
         <apache.commons.lang3>3.18.0</apache.commons.lang3>
         <apache.commons.fileupload>1.5</apache.commons.fileupload>
         <springdoc.version>2.8.12</springdoc.version>
