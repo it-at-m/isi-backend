@@ -21,7 +21,7 @@
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <maven.compiler.release>${java.version}</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <spring.cloud.version>2025.0.0</spring.cloud.version>
+        <spring.cloud.version>2025.0.1</spring.cloud.version>
         <spring.boot.version>3.5.9</spring.boot.version>
         <spring.boot.test>3.5.9</spring.boot.test>
         <apache.commons.text>1.15.0</apache.commons.text>
@@ -37,7 +37,7 @@
         <!-- TestCoverage -->
         <jacoco.version>0.8.14</jacoco.version>
         <!-- Plugins -->
-        <maven-scm-plugin.version>2.1.1</maven-scm-plugin.version>
+        <maven-scm-plugin.version>2.2.1</maven-scm-plugin.version>
         <maven-surefire-plugin.version>3.5.4</maven-surefire-plugin.version>
         <maven.compiler.plugin.version>3.14.1</maven.compiler.plugin.version>
         <!-- Version muss mit der in den spring-boot-dependencies bereitgestellten Lombok-Version
@@ -48,12 +48,12 @@
         <s3.integration>2.2.1</s3.integration>
         <!-- https://mvnrepository.com/artifact/org.geotools/gt-main?repo=geotools-releases
         (Register: GeoTools) -->
-        <geotools.version>32.2</geotools.version>
+        <geotools.version>33.2</geotools.version>
         <apache.tika.version>3.2.3</apache.tika.version>
         <spring.statemachine>4.0.1</spring.statemachine>
-        <icu4j.version>78.1</icu4j.version>
+        <icu4j.version>78.2</icu4j.version>
         <hibernate.search>7.2.4.Final</hibernate.search>
-        <openapi-generator-version>7.15.0</openapi-generator-version>
+        <openapi-generator-version>7.19.0</openapi-generator-version>
     </properties>
 
 
