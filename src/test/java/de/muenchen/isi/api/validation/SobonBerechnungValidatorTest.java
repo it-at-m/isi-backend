@@ -8,6 +8,7 @@ import de.muenchen.isi.api.dto.FoerderartDto;
 import de.muenchen.isi.api.dto.FoerdermixDto;
 import de.muenchen.isi.api.dto.common.SobonBerechnungDto;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.VersorgungsquoteHortSobon;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,29 +31,41 @@ public class SobonBerechnungValidatorTest {
         dto.setIsASobonBerechnung(true);
         dto.setSobonFoerdermix(null);
         dto.setSobonOrientierungswertJahrSobonUrsaechlich(null);
+        dto.setVersorgungsquoteHortSobon(null);
         assertThat(validator.isValid(dto, null), is(false));
 
         dto.setSobonOrientierungswertJahrSobonUrsaechlich(SobonOrientierungswertJahr.UNSPECIFIED);
+        dto.setVersorgungsquoteHortSobon(null);
         assertThat(validator.isValid(dto, null), is(false));
 
         dto.setIsASobonBerechnung(false);
         dto.setSobonFoerdermix(null);
         dto.setSobonOrientierungswertJahrSobonUrsaechlich(null);
+        dto.setVersorgungsquoteHortSobon(null);
         assertThat(validator.isValid(dto, null), is(true));
 
         dto.setIsASobonBerechnung(true);
         dto.setSobonFoerdermix(foerdermixDto);
         dto.setSobonOrientierungswertJahrSobonUrsaechlich(null);
+        dto.setVersorgungsquoteHortSobon(null);
         assertThat(validator.isValid(dto, null), is(false));
 
         dto.setIsASobonBerechnung(true);
         dto.setSobonFoerdermix(foerdermixDto);
         dto.setSobonOrientierungswertJahrSobonUrsaechlich(sobonOrientierungswertJahr);
+        dto.setVersorgungsquoteHortSobon(null);
+        assertThat(validator.isValid(dto, null), is(false));
+
+        dto.setIsASobonBerechnung(true);
+        dto.setSobonFoerdermix(foerdermixDto);
+        dto.setSobonOrientierungswertJahrSobonUrsaechlich(sobonOrientierungswertJahr);
+        dto.setVersorgungsquoteHortSobon(VersorgungsquoteHortSobon.FUENFIZG_PROZENT);
         assertThat(validator.isValid(dto, null), is(true));
 
         dto.setIsASobonBerechnung(false);
         dto.setSobonFoerdermix(foerdermixDto);
         dto.setSobonOrientierungswertJahrSobonUrsaechlich(sobonOrientierungswertJahr);
+        dto.setVersorgungsquoteHortSobon(null);
         assertThat(validator.isValid(dto, null), is(false));
 
         foerdermixDto.setFoerderarten(null);
@@ -61,6 +74,7 @@ public class SobonBerechnungValidatorTest {
         dto.setIsASobonBerechnung(false);
         dto.setSobonFoerdermix(foerdermixDto);
         dto.setSobonOrientierungswertJahrSobonUrsaechlich(null);
+        dto.setVersorgungsquoteHortSobon(null);
         assertThat(validator.isValid(dto, null), is(true));
 
         foerdermixDto.setFoerderarten(List.of());
@@ -69,6 +83,7 @@ public class SobonBerechnungValidatorTest {
         dto.setIsASobonBerechnung(false);
         dto.setSobonFoerdermix(foerdermixDto);
         dto.setSobonOrientierungswertJahrSobonUrsaechlich(null);
+        dto.setVersorgungsquoteHortSobon(null);
         assertThat(validator.isValid(dto, null), is(true));
     }
 }

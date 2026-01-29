@@ -32,10 +32,13 @@ public class SobonBerechnungValidator implements ConstraintValidator<SobonBerech
                 sobonBerechnung
                     .getSobonOrientierungswertJahrSobonUrsaechlich()
                     .equals(SobonOrientierungswertJahr.UNSPECIFIED);
-
+            boolean isVersorgungsquoteHortSobonEmpty = ObjectUtils.isEmpty(
+                sobonBerechnung.getVersorgungsquoteHortSobon()
+            );
             return (
                 (isSobonBerechnung != isFoerdermixEmtpy) &&
-                (isSobonBerechnung != isSobonOrientierungswertJahrSobonUrsaechlichEmpty)
+                (isSobonBerechnung != isSobonOrientierungswertJahrSobonUrsaechlichEmpty) &&
+                (!isSobonBerechnung || !isVersorgungsquoteHortSobonEmpty)
             );
         }
         return true;

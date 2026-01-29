@@ -8,6 +8,7 @@ import de.muenchen.isi.domain.model.calculation.WohneinheitenProFoerderartProJah
 import de.muenchen.isi.domain.model.stammdaten.SobonOrientierungswertSozialeInfrastrukturModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.VersorgungsquoteHortSobon;
 import de.muenchen.isi.infrastructure.entity.stammdaten.VersorgungsquoteGruppenstaerke;
 import de.muenchen.isi.infrastructure.repository.stammdaten.SobonOrientierungswertSozialeInfrastrukturRepository;
 import de.muenchen.isi.infrastructure.repository.stammdaten.VersorgungsquoteGruppenstaerkeRepository;
@@ -141,7 +142,8 @@ public class InfrastrukturbedarfService {
     public List<InfrastrukturbedarfProJahrModel> calculateBedarfForGsNachmittagBetreuung(
         final List<WohneinheitenProFoerderartProJahrModel> wohneinheiten,
         final SobonOrientierungswertJahr sobonJahr,
-        final LocalDate gueltigAb
+        final LocalDate gueltigAb,
+        final VersorgungsquoteHortSobon versorgungsquoteHortSobon
     ) throws CalculationException {
         // Ermittlung der Versorgungsquote und Gruppenstärke für die Einrichtung.
         final var versorgungsquoteGruppenstaerke = versorgungsquoteGruppenstaerkeRepository
@@ -155,7 +157,9 @@ public class InfrastrukturbedarfService {
                 log.error(message);
                 return new CalculationException(message);
             });
-
+        versorgungsquoteGruppenstaerke.setVersorgungsquoteSobonUrsaechlich(
+            BigDecimal.valueOf(versorgungsquoteHortSobon.getWert())
+        );
         return this.calculatePersonen(InfrastruktureinrichtungTyp.GS_NACHMITTAG_BETREUUNG, wohneinheiten, sobonJahr)
             // Ermitteln der Versorgungsquote und Gruppenstärke
             .map(bedarf ->
