@@ -17,7 +17,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.servlet.util.matcher.PathPatternRequestMatcher;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 /**
  * The central class for configuration of all security aspects.
@@ -47,6 +46,10 @@ public class SecurityEnabledBackendConfiguration {
                     .requestMatchers(
                         // allow access to /v3/api-docs
                         pathMatcher.matcher("/v3/api-docs"),
+                        // allow access to /swagger-ui
+                        pathMatcher.matcher("/swagger-ui/**"),
+                        // allow access to /swagger-ui.html
+                        pathMatcher.matcher("/swagger-ui.html"),
                         // allow access to /actuator/info
                         pathMatcher.matcher("/actuator/info"),
                         // allow access to /actuator/health for OpenShift Health Check

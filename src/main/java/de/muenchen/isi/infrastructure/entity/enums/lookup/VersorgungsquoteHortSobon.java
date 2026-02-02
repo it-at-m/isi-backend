@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @AllArgsConstructor
 public enum VersorgungsquoteHortSobon implements ILookup {
-    FUENFIZG_PROZENT("55 %", 0.550),
+    FUENFUNDFUENFZIG_PROZENT("55 %", 0.550),
     NEUNZIG_PROZENT("90 %", 0.900);
 
     @Getter

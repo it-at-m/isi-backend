@@ -329,7 +329,7 @@ class CalculationServiceTest {
         final var sobonOrientierungswertJahr = SobonOrientierungswertJahr.JAHR_2017;
         final var stammdatenGueltigAb = LocalDate.of(2020, 5, 30);
         final var sobonGf = BigDecimal.ZERO;
-        final var versorgungsquoteHortSobon = VersorgungsquoteHortSobon.FUENFIZG_PROZENT;
+        final var versorgungsquoteHortSobon = VersorgungsquoteHortSobon.FUENFUNDFUENFZIG_PROZENT;
 
         final var abfrage = new WeiteresVerfahrenModel();
         abfrage.setSobonRelevant(UncertainBoolean.TRUE);
@@ -456,7 +456,7 @@ class CalculationServiceTest {
         final var sobonOrientierungswertJahr = SobonOrientierungswertJahr.JAHR_2017;
         final var stammdatenGueltigAb = LocalDate.of(2020, 5, 30);
         final var sobonGf = BigDecimal.ZERO;
-        final var versorgungsquoteHortSobon = VersorgungsquoteHortSobon.FUENFIZG_PROZENT;
+        final var versorgungsquoteHortSobon = VersorgungsquoteHortSobon.FUENFUNDFUENFZIG_PROZENT;
 
         final var abfrage = new BauleitplanverfahrenModel();
         abfrage.setSobonRelevant(UncertainBoolean.TRUE);
@@ -741,7 +741,7 @@ class CalculationServiceTest {
             SobonOrientierungswertJahr.JAHR_2017,
             LocalDate.now(),
             new FoerdermixModel(),
-            VersorgungsquoteHortSobon.FUENFIZG_PROZENT
+            VersorgungsquoteHortSobon.FUENFUNDFUENFZIG_PROZENT
         );
         assertThat(result, is(nullValue()));
 
@@ -751,7 +751,7 @@ class CalculationServiceTest {
             SobonOrientierungswertJahr.JAHR_2017,
             LocalDate.now(),
             new FoerdermixModel(),
-            VersorgungsquoteHortSobon.FUENFIZG_PROZENT
+            VersorgungsquoteHortSobon.FUENFUNDFUENFZIG_PROZENT
         );
         assertThat(result, is(nullValue()));
 
@@ -761,7 +761,7 @@ class CalculationServiceTest {
             null,
             LocalDate.now(),
             new FoerdermixModel(),
-            VersorgungsquoteHortSobon.FUENFIZG_PROZENT
+            VersorgungsquoteHortSobon.FUENFUNDFUENFZIG_PROZENT
         );
         assertThat(result, is(nullValue()));
 
@@ -771,7 +771,7 @@ class CalculationServiceTest {
             SobonOrientierungswertJahr.JAHR_2017,
             null,
             new FoerdermixModel(),
-            VersorgungsquoteHortSobon.FUENFIZG_PROZENT
+            VersorgungsquoteHortSobon.FUENFUNDFUENFZIG_PROZENT
         );
         assertThat(result, is(nullValue()));
 
@@ -791,7 +791,7 @@ class CalculationServiceTest {
             SobonOrientierungswertJahr.JAHR_2017,
             LocalDate.now(),
             new FoerdermixModel(),
-            VersorgungsquoteHortSobon.FUENFIZG_PROZENT
+            VersorgungsquoteHortSobon.FUENFUNDFUENFZIG_PROZENT
         );
         assertThat(result, is(nullValue()));
 
@@ -801,7 +801,7 @@ class CalculationServiceTest {
             SobonOrientierungswertJahr.STANDORTABFRAGE,
             LocalDate.now(),
             new FoerdermixModel(),
-            VersorgungsquoteHortSobon.FUENFIZG_PROZENT
+            VersorgungsquoteHortSobon.FUENFUNDFUENFZIG_PROZENT
         );
         assertThat(result, is(nullValue()));
     }
@@ -860,7 +860,7 @@ class CalculationServiceTest {
                 wohneinheiten,
                 sobonOrientierungswertJahr,
                 stammdatenGueltigAb,
-                VersorgungsquoteHortSobon.FUENFIZG_PROZENT
+                VersorgungsquoteHortSobon.FUENFUNDFUENFZIG_PROZENT
             )
         ).thenReturn(bedarfeProJahrGsNachmittagBetreuung);
 
@@ -889,7 +889,7 @@ class CalculationServiceTest {
             sobonOrientierungswertJahr,
             stammdatenGueltigAb,
             foerdermix,
-            VersorgungsquoteHortSobon.FUENFIZG_PROZENT
+            VersorgungsquoteHortSobon.FUENFUNDFUENFZIG_PROZENT
         );
 
         final var expected = new LangfristigerSobonBedarfModel();

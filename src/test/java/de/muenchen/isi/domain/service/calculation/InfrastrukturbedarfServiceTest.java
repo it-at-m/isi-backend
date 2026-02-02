@@ -591,7 +591,7 @@ class InfrastrukturbedarfServiceTest {
             wohneinheiten,
             sobonJahr,
             gueltigAb,
-            VersorgungsquoteHortSobon.FUENFIZG_PROZENT
+            VersorgungsquoteHortSobon.FUENFUNDFUENFZIG_PROZENT
         );
 
         final var expected = new ArrayList<InfrastrukturbedarfProJahrModel>();

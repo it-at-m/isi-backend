@@ -1,5 +1,5 @@
 --
--- Hinzufügen des Feldes versorgungsquoteHortSobon in Tabelle
+-- Hinzufügen des Feldes VersorgungsquoteHortSobon in Tabelle
 --
 BEGIN;
 
