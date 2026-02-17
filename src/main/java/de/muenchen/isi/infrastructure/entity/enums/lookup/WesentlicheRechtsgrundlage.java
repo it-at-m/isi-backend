@@ -32,7 +32,7 @@ public enum WesentlicheRechtsgrundlage implements ILookup {
     @Getter
     private final String bezeichnung;
 
-    public static List<WesentlicheRechtsgrundlage> getWesentlicheRechtsgrundlageForBauleitplanverfahren() {
+    public static List<WesentlicheRechtsgrundlage> getPlanart() {
         return List.of(
             QUALIFIZIERTER_BEBAUUNGSPLAN,
             VORHABENSBEZOGENER_BEBAUUNGSPLAN,

@@ -64,10 +64,10 @@ public class AbfragevarianteBauleitplanverfahren extends Abfragevariante {
 
     @Enumerated(EnumType.STRING)
     @ElementCollection
-    private List<WesentlicheRechtsgrundlage> wesentlicheRechtsgrundlage;
+    private List<WesentlicheRechtsgrundlage> planart;
 
     @Column(length = 1000)
-    private String wesentlicheRechtsgrundlageFreieEingabe;
+    private String planartFreieEingabe;
 
     @KeywordField(valueBridge = @ValueBridgeRef(type = IntegerToStringValueBridge.class))
     @NonStandardField(

@@ -25,9 +25,9 @@ public class AbfragevarianteBauleitplanverfahrenDto extends AbfragevarianteDto i
 
     private LocalDate satzungsbeschluss;
 
-    private List<WesentlicheRechtsgrundlage> wesentlicheRechtsgrundlage;
+    private List<WesentlicheRechtsgrundlage> planart;
 
-    private String wesentlicheRechtsgrundlageFreieEingabe;
+    private String planartFreieEingabe;
 
     private Integer realisierungVon;
 

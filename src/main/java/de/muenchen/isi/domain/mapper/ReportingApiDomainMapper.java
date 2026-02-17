@@ -1,6 +1,7 @@
 package de.muenchen.isi.domain.mapper;
 
 import de.muenchen.isi.configuration.MapstructConfiguration;
+import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.model.AbfrageModel;
 import de.muenchen.isi.domain.model.AbfragevarianteBaugenehmigungsverfahrenModel;
 import de.muenchen.isi.domain.model.AbfragevarianteBauleitplanverfahrenModel;
@@ -10,7 +11,9 @@ import de.muenchen.isi.domain.model.BauleitplanverfahrenModel;
 import de.muenchen.isi.domain.model.WeiteresVerfahrenModel;
 import de.muenchen.isi.domain.model.calculation.BedarfeForAbfragevarianteModel;
 import de.muenchen.isi.domain.model.calculation.LangfristigerBedarfModel;
+import de.muenchen.isi.infrastructure.entity.Abfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.WesentlicheRechtsgrundlage;
 import de.muenchen.isi.reporting.client.model.AbfrageDto;
 import de.muenchen.isi.reporting.client.model.AbfragevarianteBaugenehmigungsverfahrenDto;
 import de.muenchen.isi.reporting.client.model.AbfragevarianteBauleitplanverfahrenDto;
@@ -23,6 +26,9 @@ import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
+import java.util.stream.Collectors;
+import org.apache.commons.lang3.ObjectUtils;
+import org.mapstruct.AfterMapping;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -47,7 +53,20 @@ public interface ReportingApiDomainMapper {
     @Mapping(target = "lastModifiedDateTime", ignore = true)
     @Mapping(target = "langfristigerPlanungsursaechlicherBedarf", ignore = true)
     @Mapping(target = "langfristigerSobonursaechlicherBedarf", ignore = true)
+    @Mapping(target = "wesentlicheRechtsgrundlage", ignore = true)
+    @Mapping(target = "wesentlicheRechtsgrundlageFreieEingabe", ignore = true)
     AbfragevarianteBauleitplanverfahrenDto model2ReportingDto(final AbfragevarianteBauleitplanverfahrenModel model);
+
+    @AfterMapping
+    default void model2ReportingDto(
+        final AbfragevarianteBauleitplanverfahrenModel model,
+        @MappingTarget final AbfragevarianteBauleitplanverfahrenDto dto
+    ) {
+        dto.setWesentlicheRechtsgrundlage(
+            model.getPlanart().stream().map(WesentlicheRechtsgrundlage::getBezeichnung).collect(Collectors.toList())
+        );
+        dto.setWesentlicheRechtsgrundlageFreieEingabe((model.getPlanartFreieEingabe()));
+    }
 
     @Mapping(target = "createdDateTime", ignore = true)
     @Mapping(target = "lastModifiedDateTime", ignore = true)

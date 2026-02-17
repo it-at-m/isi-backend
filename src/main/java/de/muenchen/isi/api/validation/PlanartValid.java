@@ -10,10 +10,10 @@ import java.lang.annotation.Target;
 
 @Target({ ElementType.FIELD, ElementType.TYPE_USE })
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = WesentlicheRechtsgrundlageBauleitplanverfahrenValidator.class)
+@Constraint(validatedBy = PlanartValidator.class)
 @Documented
-public @interface WesentlicheRechtsgrundlageBauleitplanverfahrenValid {
-    String message() default "Die wesentliche Rechtsgrundlage ist für das Bauleitplanverfahren nicht gültig.";
+public @interface PlanartValid {
+    String message() default "Die Planart ist für das Bauleitplanverfahren nicht gültig.";
 
     Class<?>[] groups() default {};
 

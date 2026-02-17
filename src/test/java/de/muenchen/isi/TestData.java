@@ -213,9 +213,7 @@ public class TestData {
         abfragevariante.setArtAbfragevariante(ArtAbfrage.BAULEITPLANVERFAHREN);
         abfragevariante.setAbfragevariantenNr(1);
         abfragevariante.setName("Name Abfragevariante 10");
-        abfragevariante.setWesentlicheRechtsgrundlage(
-            List.of(WesentlicheRechtsgrundlage.EINFACHER_BEBAUUNGSPLAN_PARAGRAPH_30)
-        );
+        abfragevariante.setPlanart(List.of(WesentlicheRechtsgrundlage.EINFACHER_BEBAUUNGSPLAN_PARAGRAPH_30));
         abfragevariante.setGfWohnenSonderwohnformen(false);
         abfragevariante.setSobonBerechnung(createSobonBerechnungModel());
         abfragevariante.setGfWohnenGesamt(BigDecimal.valueOf(1234.56));
@@ -271,9 +269,7 @@ public class TestData {
         final var abfragevariante = new AbfragevarianteBauleitplanverfahrenAngelegtModel();
         abfragevariante.setAbfragevariantenNr(1);
         abfragevariante.setName("Name Abfragevariante 102");
-        abfragevariante.setWesentlicheRechtsgrundlage(
-            List.of(WesentlicheRechtsgrundlage.EINFACHER_BEBAUUNGSPLAN_PARAGRAPH_30)
-        );
+        abfragevariante.setPlanart(List.of(WesentlicheRechtsgrundlage.EINFACHER_BEBAUUNGSPLAN_PARAGRAPH_30));
         abfragevariante.setGfWohnenSonderwohnformen(false);
         abfragevariante.setGfWohnenGesamt(BigDecimal.valueOf(1234.56));
         abfragevariante.setWeSonderwohnformen(false);

@@ -23,7 +23,7 @@ public class LookupListsModel {
 
     private LookupListModel statusAbfrage;
 
-    private LookupListModel wesentlicheRechtsgrundlageBauleitplanverfahren;
+    private LookupListModel planart;
 
     private LookupListModel wesentlicheRechtsgrundlageBaugenehmigungsverfahren;
 
@@ -48,4 +48,6 @@ public class LookupListsModel {
     private LookupListModel sobonOrientierungswertJahr;
 
     private LookupListModel sobonOrientierungswertJahrWithoutStandortabfrage;
+
+    private LookupListModel verfahrensart;
 }

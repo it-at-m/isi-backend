@@ -15,6 +15,7 @@ import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVerfahren;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusInfrastruktureinrichtung;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.Verfahrensart;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.WesentlicheRechtsgrundlage;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -42,9 +43,7 @@ public class LookupService {
         model.setStandVerfahrenWeiteresVerfahren(this.getStandVerfahrenWeiteresVerfahrenList());
         model.setStandVerfahren(this.getStandVerfahrenList());
         model.setStatusAbfrage(this.getStatusAbfrageList());
-        model.setWesentlicheRechtsgrundlageBauleitplanverfahren(
-            this.getWesentlicheRechtsgrundlageBauleitplanverfahrenList()
-        );
+        model.setPlanart(this.getPlanartList());
         model.setWesentlicheRechtsgrundlageBaugenehmigungsverfahren(
             this.getWesentlicheRechtsgrundlageBaugenehmigungsverfahrenList()
         );
@@ -60,6 +59,7 @@ public class LookupService {
         model.setSobonOrientierungswertJahrWithoutStandortabfrage(
             this.getSobonOrientierungswertJahrWithoutStandortabfrage()
         );
+        model.setVerfahrensart(this.getVerfahrensart());
         return model;
     }
 
@@ -144,12 +144,11 @@ public class LookupService {
         return new LookupListModel(list);
     }
 
-    private LookupListModel getWesentlicheRechtsgrundlageBauleitplanverfahrenList() {
-        final List<LookupEntryModel> list =
-            WesentlicheRechtsgrundlage.getWesentlicheRechtsgrundlageForBauleitplanverfahren()
-                .stream()
-                .map(item -> new LookupEntryModel(item.toString(), item.getBezeichnung()))
-                .collect(Collectors.toList());
+    private LookupListModel getPlanartList() {
+        final List<LookupEntryModel> list = WesentlicheRechtsgrundlage.getPlanart()
+            .stream()
+            .map(item -> new LookupEntryModel(item.toString(), item.getBezeichnung()))
+            .collect(Collectors.toList());
 
         return new LookupListModel(list);
     }
@@ -251,6 +250,15 @@ public class LookupService {
                 .stream()
                 .map(item -> new LookupEntryModel(item.toString(), item.getBezeichnung()))
                 .collect(Collectors.toList());
+
+        return new LookupListModel(list);
+    }
+
+    private LookupListModel getVerfahrensart() {
+        final List<LookupEntryModel> list = EnumUtils.getEnumList(Verfahrensart.class)
+            .stream()
+            .map(item -> new LookupEntryModel(item.toString(), item.getBezeichnung()))
+            .collect(Collectors.toList());
 
         return new LookupListModel(list);
     }
