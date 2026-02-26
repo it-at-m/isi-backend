@@ -4,7 +4,7 @@
     "title": "ISI Reporting EAI",
     "description": "ISI Reporting EAI - Service zum Befüllen der Metabase-DB",
     "contact": { "name": "ISI Management", "email": "unbekannt@muenchen.de" },
-    "version": "1.5.0"
+    "version": "1.6.0"
   },
   "servers": [{ "url": "http://localhost:8088", "description": "Generated server url" }],
   "tags": [

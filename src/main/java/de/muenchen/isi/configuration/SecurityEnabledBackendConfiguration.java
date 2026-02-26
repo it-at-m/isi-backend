@@ -16,6 +16,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.servlet.util.matcher.PathPatternRequestMatcher;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 /**
@@ -38,25 +39,27 @@ public class SecurityEnabledBackendConfiguration {
      */
     @Bean
     public SecurityFilterChain securityFilterChain(final HttpSecurity http) throws Exception {
+        var pathMatcher = PathPatternRequestMatcher.withDefaults();
+
         http
             .authorizeHttpRequests(request ->
                 request
                     .requestMatchers(
                         // allow access to /v3/api-docs
-                        AntPathRequestMatcher.antMatcher("/v3/api-docs"),
+                        pathMatcher.matcher("/v3/api-docs"),
                         // allow access to /actuator/info
-                        AntPathRequestMatcher.antMatcher("/actuator/info"),
+                        pathMatcher.matcher("/actuator/info"),
                         // allow access to /actuator/health for OpenShift Health Check
-                        AntPathRequestMatcher.antMatcher("/actuator/health"),
+                        pathMatcher.matcher("/actuator/health"),
                         // allow access to /actuator/health/liveness for OpenShift Liveness Check
-                        AntPathRequestMatcher.antMatcher("/actuator/health/liveness"),
+                        pathMatcher.matcher("/actuator/health/liveness"),
                         // allow access to /actuator/health/readiness for OpenShift Readiness Check
-                        AntPathRequestMatcher.antMatcher("/actuator/health/readiness"),
+                        pathMatcher.matcher("/actuator/health/readiness"),
                         // allow access to /actuator/metrics for Prometheus monitoring in OpenShift
-                        AntPathRequestMatcher.antMatcher("/actuator/metrics")
+                        pathMatcher.matcher("/actuator/metrics")
                     )
                     .permitAll()
-                    .requestMatchers(AntPathRequestMatcher.antMatcher("/**"))
+                    .anyRequest()
                     .authenticated()
             )
             .oauth2ResourceServer(oauth2ResourceServer ->
