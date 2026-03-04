@@ -6,6 +6,7 @@ import de.muenchen.isi.domain.model.stammdaten.SobonOrientierungswertSozialeInfr
 import de.muenchen.isi.domain.model.stammdaten.StaedtebaulicheOrientierungswertModel;
 import de.muenchen.isi.domain.model.stammdaten.UmlegungFoerderartenModel;
 import de.muenchen.isi.domain.model.stammdaten.VersorgungsquoteGruppenstaerkeModel;
+import de.muenchen.isi.domain.model.stammdaten.VersorgungsquoteSobonHortModel;
 import de.muenchen.isi.infrastructure.csv.SobonOrientierungswertSozialeInfrastrukturCsv;
 import de.muenchen.isi.infrastructure.csv.StaedtebaulicheOrientierungswertCsv;
 import de.muenchen.isi.infrastructure.entity.stammdaten.FoerdermixStamm;
@@ -13,6 +14,7 @@ import de.muenchen.isi.infrastructure.entity.stammdaten.SobonOrientierungswertSo
 import de.muenchen.isi.infrastructure.entity.stammdaten.StaedtebaulicheOrientierungswert;
 import de.muenchen.isi.infrastructure.entity.stammdaten.UmlegungFoerderarten;
 import de.muenchen.isi.infrastructure.entity.stammdaten.VersorgungsquoteGruppenstaerke;
+import de.muenchen.isi.infrastructure.entity.stammdaten.VersorgungsquoteSobonHort;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
@@ -62,4 +64,8 @@ public interface StammdatenDomainMapper {
     VersorgungsquoteGruppenstaerkeModel entity2Model(final VersorgungsquoteGruppenstaerke entity);
 
     VersorgungsquoteGruppenstaerke model2entity(final VersorgungsquoteGruppenstaerkeModel model);
+
+    VersorgungsquoteSobonHortModel entity2Model(final VersorgungsquoteSobonHort entity);
+
+    VersorgungsquoteSobonHort model2Entity(final VersorgungsquoteSobonHortModel model);
 }

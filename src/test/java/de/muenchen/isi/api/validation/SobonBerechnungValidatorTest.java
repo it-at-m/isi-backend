@@ -6,7 +6,7 @@ import static org.hamcrest.Matchers.is;
 import de.muenchen.isi.api.dto.FoerdermixDto;
 import de.muenchen.isi.api.dto.common.SobonBerechnungDto;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.VersorgungsquoteHortSobon;
+import java.math.BigDecimal;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 
@@ -55,7 +55,7 @@ public class SobonBerechnungValidatorTest {
         dto.setIsASobonBerechnung(true);
         dto.setSobonFoerdermix(foerdermixDto);
         dto.setSobonOrientierungswertJahrSobonUrsaechlich(sobonOrientierungswertJahr);
-        dto.setVersorgungsquoteHortSobon(VersorgungsquoteHortSobon.FUENFUNDFUENFZIG_PROZENT);
+        dto.setVersorgungsquoteHortSobon(BigDecimal.valueOf(0.100));
         assertThat(validator.isValid(dto, null), is(true));
 
         dto.setIsASobonBerechnung(false);

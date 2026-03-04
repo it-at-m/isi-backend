@@ -12,7 +12,6 @@ import de.muenchen.isi.domain.model.calculation.WohneinheitenProFoerderartProJah
 import de.muenchen.isi.domain.model.stammdaten.SobonOrientierungswertSozialeInfrastrukturModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.VersorgungsquoteHortSobon;
 import de.muenchen.isi.infrastructure.entity.stammdaten.SobonOrientierungswertSozialeInfrastruktur;
 import de.muenchen.isi.infrastructure.entity.stammdaten.VersorgungsquoteGruppenstaerke;
 import de.muenchen.isi.infrastructure.repository.stammdaten.SobonOrientierungswertSozialeInfrastrukturRepository;
@@ -591,7 +590,7 @@ class InfrastrukturbedarfServiceTest {
             wohneinheiten,
             sobonJahr,
             gueltigAb,
-            VersorgungsquoteHortSobon.FUENFUNDFUENFZIG_PROZENT
+            BigDecimal.valueOf(0.550)
         );
 
         final var expected = new ArrayList<InfrastrukturbedarfProJahrModel>();
@@ -812,7 +811,7 @@ class InfrastrukturbedarfServiceTest {
             wohneinheiten,
             sobonJahr,
             gueltigAb,
-            VersorgungsquoteHortSobon.NEUNZIG_PROZENT
+            BigDecimal.valueOf(0.900)
         );
 
         final var expected = new ArrayList<InfrastrukturbedarfProJahrModel>();
