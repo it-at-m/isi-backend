@@ -58,6 +58,12 @@ public class SobonBerechnungValidatorTest {
         dto.setVersorgungsquoteHortSobon(BigDecimal.valueOf(0.100));
         assertThat(validator.isValid(dto, null), is(true));
 
+        dto.setIsASobonBerechnung(true);
+        dto.setSobonFoerdermix(foerdermixDto);
+        dto.setSobonOrientierungswertJahrSobonUrsaechlich(sobonOrientierungswertJahr);
+        dto.setVersorgungsquoteHortSobon(BigDecimal.valueOf(0.900));
+        assertThat(validator.isValid(dto, null), is(true));
+
         dto.setIsASobonBerechnung(false);
         dto.setSobonFoerdermix(foerdermixDto);
         dto.setSobonOrientierungswertJahrSobonUrsaechlich(sobonOrientierungswertJahr);
