@@ -4,12 +4,12 @@
 BEGIN;
 
 ALTER TABLE IF EXISTS isidbuser.abfrgvar_bauleitplnvrfhrn
-    ADD COLUMN versorgungsquote_hort_sobon numeric(4,3)
+    ADD COLUMN versorgungsquote_hort_sobon numeric(4,3),
     ADD CONSTRAINT abfrgvar_bauleitplnvrfhrn_vq_hort_sobon_check
     CHECK (versorgungsquote_hort_sobon >= 0 AND versorgungsquote_hort_sobon <= 1);
 
 ALTER TABLE IF EXISTS isidbuser.abfrgvar_weitrs_vrfhrn
-    ADD COLUMN versorgungsquote_hort_sobon numeric(4,3)
+    ADD COLUMN versorgungsquote_hort_sobon numeric(4,3),
     ADD CONSTRAINT abfrgvar_weitrs_vrfhrn_vq_hort_sobon_check
     CHECK (versorgungsquote_hort_sobon >= 0 AND versorgungsquote_hort_sobon <= 1);
 

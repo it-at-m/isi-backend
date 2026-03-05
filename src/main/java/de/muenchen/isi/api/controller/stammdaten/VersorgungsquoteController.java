@@ -30,7 +30,7 @@ public class VersorgungsquoteController {
 
     @Transactional(readOnly = true)
     @GetMapping("stammdaten/versorgungsquote")
-    @Operation(summary = "Lade alle SObon Versorgungsquoten für den Hort")
+    @Operation(summary = "Lade alle Sobon Versorgungsquoten für den Hort")
     @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "OK") })
     @PreAuthorize(
         "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_READ_STAMMDATEN_VERSORGUNGSQUOTE.name())"
