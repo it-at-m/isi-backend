@@ -46,6 +46,4 @@ public class LookupListsDto {
     private LookupListDto sobonOrientierungswertJahr;
 
     private LookupListDto sobonOrientierungswertJahrWithoutStandortabfrage;
-
-    private LookupListDto versorgungsquoteHortSobon;
 }

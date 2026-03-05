@@ -21,9 +21,9 @@ public class VersorungsquoteService {
     private final VersorgungsquoteSobonHortRepository versorgungsquoteSobonHortRepository;
 
     /**
-     * Die Methode gibt alle {@link FoerdermixStammModel} als Liste zurück.
+     * Die Methode gibt alle {@link VersorgungsquoteSobonHortModel} als Liste zurück.
      *
-     * @return Liste an {@link FoerdermixStammModel}
+     * @return Liste an {@link VersorgungsquoteSobonHortModel}
      */
     public List<VersorgungsquoteSobonHortModel> getVersorgungsquoteHortSobon() {
         return this.versorgungsquoteSobonHortRepository.findAll()

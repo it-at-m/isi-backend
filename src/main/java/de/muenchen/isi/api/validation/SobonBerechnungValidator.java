@@ -4,6 +4,7 @@ import de.muenchen.isi.api.dto.common.SobonBerechnungDto;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
+import java.math.BigDecimal;
 import lombok.NoArgsConstructor;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;
@@ -35,10 +36,16 @@ public class SobonBerechnungValidator implements ConstraintValidator<SobonBerech
             boolean isVersorgungsquoteHortSobonEmpty = ObjectUtils.isEmpty(
                 sobonBerechnung.getVersorgungsquoteHortSobon()
             );
+
+            boolean isVersorgungsquoteHortSobonValid =
+                !isVersorgungsquoteHortSobonEmpty &&
+                sobonBerechnung.getVersorgungsquoteHortSobon().compareTo(BigDecimal.ZERO) >= 0 &&
+                sobonBerechnung.getVersorgungsquoteHortSobon().compareTo(BigDecimal.ONE) <= 0;
+
             return (
                 (isSobonBerechnung != isFoerdermixEmtpy) &&
                 (isSobonBerechnung != isSobonOrientierungswertJahrSobonUrsaechlichEmpty) &&
-                (!isSobonBerechnung || !isVersorgungsquoteHortSobonEmpty)
+                (!isSobonBerechnung || (!isVersorgungsquoteHortSobonEmpty && isVersorgungsquoteHortSobonValid))
             );
         }
         return true;

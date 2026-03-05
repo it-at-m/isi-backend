@@ -29,11 +29,11 @@ public class VersorgungsquoteController {
     private final StammdatenApiMapper stammdatenApiMapper;
 
     @Transactional(readOnly = true)
-    @GetMapping("stammdaten/versorungsquote")
-    @Operation(summary = "Lade alle Versorungsquoten für den Hort")
+    @GetMapping("stammdaten/versorgungsquote")
+    @Operation(summary = "Lade alle SObon Versorgungsquoten für den Hort")
     @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "OK") })
     @PreAuthorize(
-        "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_READ_STAMMDATEN_FOERDERMIX.name())"
+        "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_READ_STAMMDATEN_VERSORGUNGSQUOTE.name())"
     )
     public ResponseEntity<List<VersorgungsquoteSobonHortDto>> getVersorungsquoteSobonHort() {
         final List<VersorgungsquoteSobonHortDto> versorgungsquoteSobonHortDtoList =

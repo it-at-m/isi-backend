@@ -44,8 +44,10 @@ public class SecurityEnabledBackendConfiguration {
             .authorizeHttpRequests(request ->
                 request
                     .requestMatchers(
-                        // allow access to /v3/api-docs
-                        pathMatcher.matcher("/v3/api-docs"),
+                        // allow access to /v3/api-docs/**
+                        pathMatcher.matcher("/v3/api-docs/**"),
+                        // allow access to /swagger-resources/**
+                        pathMatcher.matcher("/swagger-resources/**"),
                         // allow access to /swagger-ui
                         pathMatcher.matcher("/swagger-ui/**"),
                         // allow access to /swagger-ui.html

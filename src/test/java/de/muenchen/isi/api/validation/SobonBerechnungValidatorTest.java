@@ -55,6 +55,30 @@ public class SobonBerechnungValidatorTest {
         dto.setIsASobonBerechnung(true);
         dto.setSobonFoerdermix(foerdermixDto);
         dto.setSobonOrientierungswertJahrSobonUrsaechlich(sobonOrientierungswertJahr);
+        dto.setVersorgungsquoteHortSobon(BigDecimal.valueOf(-0.1));
+        assertThat(validator.isValid(dto, null), is(false));
+
+        dto.setIsASobonBerechnung(true);
+        dto.setSobonFoerdermix(foerdermixDto);
+        dto.setSobonOrientierungswertJahrSobonUrsaechlich(sobonOrientierungswertJahr);
+        dto.setVersorgungsquoteHortSobon(BigDecimal.valueOf(1.1));
+        assertThat(validator.isValid(dto, null), is(false));
+
+        dto.setIsASobonBerechnung(true);
+        dto.setSobonFoerdermix(foerdermixDto);
+        dto.setSobonOrientierungswertJahrSobonUrsaechlich(sobonOrientierungswertJahr);
+        dto.setVersorgungsquoteHortSobon(BigDecimal.ZERO);
+        assertThat(validator.isValid(dto, null), is(true));
+
+        dto.setIsASobonBerechnung(true);
+        dto.setSobonFoerdermix(foerdermixDto);
+        dto.setSobonOrientierungswertJahrSobonUrsaechlich(sobonOrientierungswertJahr);
+        dto.setVersorgungsquoteHortSobon(BigDecimal.ONE);
+        assertThat(validator.isValid(dto, null), is(true));
+
+        dto.setIsASobonBerechnung(true);
+        dto.setSobonFoerdermix(foerdermixDto);
+        dto.setSobonOrientierungswertJahrSobonUrsaechlich(sobonOrientierungswertJahr);
         dto.setVersorgungsquoteHortSobon(BigDecimal.valueOf(0.100));
         assertThat(validator.isValid(dto, null), is(true));
 
