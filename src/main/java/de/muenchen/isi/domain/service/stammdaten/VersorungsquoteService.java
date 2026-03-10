@@ -1,9 +1,7 @@
 package de.muenchen.isi.domain.service.stammdaten;
 
 import de.muenchen.isi.domain.mapper.StammdatenDomainMapper;
-import de.muenchen.isi.domain.model.stammdaten.FoerdermixStammModel;
 import de.muenchen.isi.domain.model.stammdaten.VersorgungsquoteSobonHortModel;
-import de.muenchen.isi.infrastructure.repository.stammdaten.FoerdermixStammRepository;
 import de.muenchen.isi.infrastructure.repository.stammdaten.VersorgungsquoteSobonHortRepository;
 import java.util.List;
 import java.util.stream.Collectors;

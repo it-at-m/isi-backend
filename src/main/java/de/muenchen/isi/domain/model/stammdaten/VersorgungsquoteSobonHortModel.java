@@ -1,7 +1,6 @@
 package de.muenchen.isi.domain.model.stammdaten;
 
 import de.muenchen.isi.domain.model.BaseEntityModel;
-import jakarta.persistence.Column;
 import java.math.BigDecimal;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
