@@ -19,5 +19,8 @@ public class VersorgungsquoteSobonHort extends BaseEntity {
     @Column(nullable = false, unique = true)
     private String beschreibung;
 
+    @Column(
+        columnDefinition = "numeric(4,3) not null check (versorgungsquote_sobon >= 0 AND versorgungsquote_sobon <= 1)"
+    )
     private BigDecimal versorgungsquoteSobon;
 }
