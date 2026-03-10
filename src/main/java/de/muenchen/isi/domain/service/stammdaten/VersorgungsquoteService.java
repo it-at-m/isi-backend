@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class VersorungsquoteService {
+public class VersorgungsquoteService {
 
     private final StammdatenDomainMapper stammdatenDomainMapper;
 

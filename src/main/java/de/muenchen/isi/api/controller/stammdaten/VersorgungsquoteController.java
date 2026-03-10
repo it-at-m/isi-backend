@@ -2,7 +2,7 @@ package de.muenchen.isi.api.controller.stammdaten;
 
 import de.muenchen.isi.api.dto.stammdaten.VersorgungsquoteSobonHortDto;
 import de.muenchen.isi.api.mapper.StammdatenApiMapper;
-import de.muenchen.isi.domain.service.stammdaten.VersorungsquoteService;
+import de.muenchen.isi.domain.service.stammdaten.VersorgungsquoteService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 public class VersorgungsquoteController {
 
-    private final VersorungsquoteService versorungsquoteService;
+    private final VersorgungsquoteService versorgungsquoteService;
 
     private final StammdatenApiMapper stammdatenApiMapper;
 
@@ -37,7 +37,7 @@ public class VersorgungsquoteController {
     )
     public ResponseEntity<List<VersorgungsquoteSobonHortDto>> getVersorungsquoteSobonHort() {
         final List<VersorgungsquoteSobonHortDto> versorgungsquoteSobonHortDtoList =
-            this.versorungsquoteService.getVersorgungsquoteHortSobon()
+            this.versorgungsquoteService.getVersorgungsquoteHortSobon()
                 .stream()
                 .map(this.stammdatenApiMapper::model2Dto)
                 .collect(Collectors.toList());
