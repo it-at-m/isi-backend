@@ -35,7 +35,7 @@ public class VersorgungsquoteController {
     @PreAuthorize(
         "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_READ_STAMMDATEN_VERSORGUNGSQUOTE.name())"
     )
-    public ResponseEntity<List<VersorgungsquoteSobonHortDto>> getVersorungsquoteSobonHort() {
+    public ResponseEntity<List<VersorgungsquoteSobonHortDto>> getVersorgungsquoteSobonHort() {
         final List<VersorgungsquoteSobonHortDto> versorgungsquoteSobonHortDtoList =
             this.versorgungsquoteService.getVersorgungsquoteHortSobon()
                 .stream()
