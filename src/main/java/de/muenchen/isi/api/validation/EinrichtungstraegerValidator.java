@@ -18,7 +18,8 @@ import org.springframework.stereotype.Component;
 @Component
 @NoArgsConstructor
 public class EinrichtungstraegerValidator
-    implements ConstraintValidator<EinrichtungstraegerValid, InfrastruktureinrichtungDto> {
+    implements ConstraintValidator<EinrichtungstraegerValid, InfrastruktureinrichtungDto>
+{
 
     /**
      * Prüft, ob das Feld einrichtungstraeger nicht null ist.

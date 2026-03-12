@@ -7,7 +7,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 public interface AbfragevarianteWeiteresVerfahrenRepository
-    extends JpaRepository<AbfragevarianteWeiteresVerfahren, UUID> {
+    extends JpaRepository<AbfragevarianteWeiteresVerfahren, UUID>
+{
     @Query(
         value = "select abfrgvar_weitrs_vrfhrn_id from abfrgvar_weitrs_vrfhrn where CAST(id as uuid) = CAST(:id as uuid)",
         nativeQuery = true

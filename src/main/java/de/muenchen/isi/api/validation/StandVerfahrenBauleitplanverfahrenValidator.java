@@ -10,7 +10,8 @@ import org.springframework.stereotype.Component;
 @Component
 @NoArgsConstructor
 public class StandVerfahrenBauleitplanverfahrenValidator
-    implements ConstraintValidator<StandVerfahrenBauleitplanverfahrenValid, StandVerfahren> {
+    implements ConstraintValidator<StandVerfahrenBauleitplanverfahrenValid, StandVerfahren>
+{
 
     @Override
     public boolean isValid(final StandVerfahren value, final ConstraintValidatorContext context) {

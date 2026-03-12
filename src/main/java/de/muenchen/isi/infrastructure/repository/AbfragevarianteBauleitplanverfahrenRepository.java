@@ -7,7 +7,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 public interface AbfragevarianteBauleitplanverfahrenRepository
-    extends JpaRepository<AbfragevarianteBauleitplanverfahren, UUID> {
+    extends JpaRepository<AbfragevarianteBauleitplanverfahren, UUID>
+{
     @Query(
         value = "select abfrgvar_bauleitplnvrfhrn_id from abfrgvar_bauleitplnvrfhrn where CAST(id as uuid) = CAST(:id as uuid)",
         nativeQuery = true

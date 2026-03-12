@@ -14,7 +14,8 @@ public class RealisierungVonDistributionBaugenehmigungsverfahrenValidator
         ConstraintValidator<
             RealisierungVonDistributionBaugenehmigungsverfahrenValid,
             AbfragevarianteBaugenehmigungsverfahrenAngelegtDto
-        > {
+        >
+{
 
     /**
      * @param value object to validate

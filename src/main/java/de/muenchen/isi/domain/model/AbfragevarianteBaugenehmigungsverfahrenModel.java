@@ -21,7 +21,8 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 public class AbfragevarianteBaugenehmigungsverfahrenModel
     extends AbfragevarianteModel
-    implements WithBauratendateiInputModel {
+    implements WithBauratendateiInputModel
+{
 
     private List<WesentlicheRechtsgrundlage> wesentlicheRechtsgrundlage;
 

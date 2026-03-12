@@ -13,7 +13,8 @@ import org.springframework.stereotype.Component;
 @Component
 @NoArgsConstructor
 public class EarliestBaurateIsRealisierungVonValidator
-    implements ConstraintValidator<EarliestBaurateIsRealisierungVonValid, AbfragevarianteAngelegtDto> {
+    implements ConstraintValidator<EarliestBaurateIsRealisierungVonValid, AbfragevarianteAngelegtDto>
+{
 
     /**
      * Prüft ob das Jahr der frühesten Baurate mit dem Attribut {@link AbfragevarianteAngelegtDto#getRealisierungVon()} übereinstimmt.

@@ -10,7 +10,8 @@ import org.springframework.util.ObjectUtils;
 @Component
 @NoArgsConstructor
 public class RangeIdealtypischeBaurateValidator
-    implements ConstraintValidator<RangeIdealtypischeBaurateValid, IdealtypischeBaurateDto> {
+    implements ConstraintValidator<RangeIdealtypischeBaurateValid, IdealtypischeBaurateDto>
+{
 
     /**
      * Prüft ob die Attribute {@link IdealtypischeBaurateDto#von} und {@link IdealtypischeBaurateDto#bisExklusiv}

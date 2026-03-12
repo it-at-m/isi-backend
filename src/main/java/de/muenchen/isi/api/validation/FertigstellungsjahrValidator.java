@@ -10,7 +10,8 @@ import org.springframework.stereotype.Component;
 @Component
 @NoArgsConstructor
 public class FertigstellungsjahrValidator
-    implements ConstraintValidator<FertigstellungsjahrValid, InfrastruktureinrichtungDto> {
+    implements ConstraintValidator<FertigstellungsjahrValid, InfrastruktureinrichtungDto>
+{
 
     /**
      * Prüft, ob das Feld {@link InfrastruktureinrichtungDto#getFertigstellungsjahr()} nicht null ist.

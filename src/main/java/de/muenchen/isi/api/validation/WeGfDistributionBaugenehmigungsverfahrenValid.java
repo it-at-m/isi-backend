@@ -10,7 +10,7 @@ import java.lang.annotation.*;
 @Documented
 public @interface WeGfDistributionBaugenehmigungsverfahrenValid {
     String message() default "Die Summe der über die Baugebiete verteilten Wohneinheiten oder Geschossfläche Wohnen" +
-    " entspricht nicht der Anzahl der Wohneinheiten oder Geschossfläche Wohnen in der Abfragevariante.";
+        " entspricht nicht der Anzahl der Wohneinheiten oder Geschossfläche Wohnen in der Abfragevariante.";
 
     Class<?>[] groups() default {};
 

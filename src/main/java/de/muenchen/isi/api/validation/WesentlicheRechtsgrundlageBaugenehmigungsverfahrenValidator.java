@@ -10,8 +10,8 @@ import org.springframework.stereotype.Component;
 @Component
 @NoArgsConstructor
 public class WesentlicheRechtsgrundlageBaugenehmigungsverfahrenValidator
-    implements
-        ConstraintValidator<WesentlicheRechtsgrundlageBaugenehmigungsverfahrenValid, WesentlicheRechtsgrundlage> {
+    implements ConstraintValidator<WesentlicheRechtsgrundlageBaugenehmigungsverfahrenValid, WesentlicheRechtsgrundlage>
+{
 
     @Override
     public boolean isValid(final WesentlicheRechtsgrundlage value, final ConstraintValidatorContext context) {
