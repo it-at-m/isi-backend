@@ -7,7 +7,8 @@ import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface StaedtebaulicheOrientierungswertRepository
-    extends JpaRepository<StaedtebaulicheOrientierungswert, UUID> {
+    extends JpaRepository<StaedtebaulicheOrientierungswert, UUID>
+{
     /**
      * Findet den Eintrag mit einer bestimmten Förderart-Bezeichnung, bei dem das Gültigkeitsdatum vor oder am
      * angegebenen Datum liegt, und sortiert die Ergebnisse nach dem Gültigkeitsdatum absteigend.

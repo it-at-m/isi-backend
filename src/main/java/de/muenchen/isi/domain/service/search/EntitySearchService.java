@@ -147,11 +147,11 @@ public class EntitySearchService {
             "verortung.stadtbezirke.nummer",
             searchQueryAndSortingInformation.getFilterStadtbezirkNummer() != null
                 ? searchQueryAndSortingInformation
-                    .getFilterStadtbezirkNummer()
-                    .stream()
-                    .map(StadtbezirkNummerValueBridge::toNormalizedStadtbezirknummer)
-                    .filter(Predicate.not(Objects::isNull))
-                    .toList()
+                      .getFilterStadtbezirkNummer()
+                      .stream()
+                      .map(StadtbezirkNummerValueBridge::toNormalizedStadtbezirknummer)
+                      .filter(Predicate.not(Objects::isNull))
+                      .toList()
                 : null
         );
         filterAttributeMap.put(

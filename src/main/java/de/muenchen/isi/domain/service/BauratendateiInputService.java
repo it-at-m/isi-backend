@@ -167,11 +167,11 @@ public class BauratendateiInputService {
     protected List<String> getGrundschulsprengel(final VerortungModel verortung) {
         return ObjectUtils.isNotEmpty(verortung)
             ? CollectionUtils.emptyIfNull(verortung.getGrundschulsprengel())
-                .stream()
-                .map(GrundschulsprengelModel::getNummer)
-                .filter(ObjectUtils::isNotEmpty)
-                .map(Object::toString)
-                .toList()
+                  .stream()
+                  .map(GrundschulsprengelModel::getNummer)
+                  .filter(ObjectUtils::isNotEmpty)
+                  .map(Object::toString)
+                  .toList()
             : List.of();
     }
 
@@ -184,11 +184,11 @@ public class BauratendateiInputService {
     protected List<String> getMittelschulsprengel(final VerortungModel verortung) {
         return ObjectUtils.isNotEmpty(verortung)
             ? CollectionUtils.emptyIfNull(verortung.getMittelschulsprengel())
-                .stream()
-                .map(MittelschulsprengelModel::getNummer)
-                .filter(ObjectUtils::isNotEmpty)
-                .map(Object::toString)
-                .toList()
+                  .stream()
+                  .map(MittelschulsprengelModel::getNummer)
+                  .filter(ObjectUtils::isNotEmpty)
+                  .map(Object::toString)
+                  .toList()
             : List.of();
     }
 
@@ -201,10 +201,10 @@ public class BauratendateiInputService {
     protected List<String> getViertel(final VerortungModel verortung) {
         return ObjectUtils.isNotEmpty(verortung)
             ? CollectionUtils.emptyIfNull(verortung.getViertel())
-                .stream()
-                .map(ViertelModel::getNummer)
-                .filter(ObjectUtils::isNotEmpty)
-                .toList()
+                  .stream()
+                  .map(ViertelModel::getNummer)
+                  .filter(ObjectUtils::isNotEmpty)
+                  .toList()
             : List.of();
     }
 
@@ -253,8 +253,8 @@ public class BauratendateiInputService {
                 bedarfe.get(abfragevarianteId).getLangfristigerPlanungsursaechlicherBedarf() != null
             )
             ? ListUtils.emptyIfNull(
-                bedarfe.get(abfragevarianteId).getLangfristigerPlanungsursaechlicherBedarf().getWohneinheiten()
-            )
+                  bedarfe.get(abfragevarianteId).getLangfristigerPlanungsursaechlicherBedarf().getWohneinheiten()
+              )
             : List.of();
     }
 

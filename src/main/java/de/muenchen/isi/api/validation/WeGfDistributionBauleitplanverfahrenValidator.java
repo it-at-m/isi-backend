@@ -11,7 +11,8 @@ import org.springframework.stereotype.Component;
 public class WeGfDistributionBauleitplanverfahrenValidator
     extends DistributionValidator
     implements
-        ConstraintValidator<WeGfDistributionBauleitplanverfahrenValid, AbfragevarianteBauleitplanverfahrenAngelegtDto> {
+        ConstraintValidator<WeGfDistributionBauleitplanverfahrenValid, AbfragevarianteBauleitplanverfahrenAngelegtDto>
+{
 
     /**
      * Siehe {@link DistributionValidator#isWeGfDistributionValid}.

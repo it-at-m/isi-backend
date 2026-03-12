@@ -22,7 +22,8 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 public class AbfragevarianteBauleitplanverfahrenModel
     extends AbfragevarianteModel
-    implements WithBauratendateiInputModel {
+    implements WithBauratendateiInputModel
+{
 
     private LocalDate satzungsbeschluss;
 

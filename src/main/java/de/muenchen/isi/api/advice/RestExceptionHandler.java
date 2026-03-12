@@ -174,9 +174,10 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         // 404/409 falls im S3-Storage ein gesuchtes Dokument nicht vorhanden ist oder beim initialen Speichern bereits existiert.
         // Ansonsten 555.
         final var exceptionStatus = ex.getStatusCode();
-        final var httpStatus = exceptionStatus == HttpStatus.NOT_FOUND || exceptionStatus == HttpStatus.CONFLICT
-            ? exceptionStatus.value()
-            : CUSTOM_INTERNAL_SERVER_ERROR;
+        final var httpStatus =
+            exceptionStatus == HttpStatus.NOT_FOUND || exceptionStatus == HttpStatus.CONFLICT
+                ? exceptionStatus.value()
+                : CUSTOM_INTERNAL_SERVER_ERROR;
         final var errorResponseDto =
             this.createInformationResponseDtoWithTraceInformationAndTimestampAndOriginalExceptionNameAndStatusAndMessage(
                 ex,
@@ -607,10 +608,10 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         errorResponseDto.setMessages(
             List.of(
                 "Die URL " +
-                ex.getRequestURL() +
-                " konnte nicht mit der HTTP-Methode " +
-                ex.getHttpMethod() +
-                " aufgerufen werden."
+                    ex.getRequestURL() +
+                    " konnte nicht mit der HTTP-Methode " +
+                    ex.getHttpMethod() +
+                    " aufgerufen werden."
             )
         );
         return ResponseEntity.status(errorResponseDto.getHttpStatus()).headers(headers).body(errorResponseDto);

@@ -18,7 +18,8 @@ import lombok.ToString;
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 public class AbfragevarianteBaugenehmigungsverfahrenStartBearbeitungModel
-    extends AbfragevarianteBaugenehmigungsverfahrenAngelegtModel {
+    extends AbfragevarianteBaugenehmigungsverfahrenAngelegtModel
+{
 
     private SobonOrientierungswertJahr sobonOrientierungswertJahrPlanungsursaechlich;
 

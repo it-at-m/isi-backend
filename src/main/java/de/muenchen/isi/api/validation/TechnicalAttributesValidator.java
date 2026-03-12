@@ -7,7 +7,8 @@ import java.util.List;
 import org.apache.commons.collections4.CollectionUtils;
 
 public class TechnicalAttributesValidator
-    implements ConstraintValidator<TechnicalAttributesValid, List<BauabschnittDto>> {
+    implements ConstraintValidator<TechnicalAttributesValid, List<BauabschnittDto>>
+{
 
     @Override
     public boolean isValid(List<BauabschnittDto> bauabschnitte, ConstraintValidatorContext context) {
