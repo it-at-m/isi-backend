@@ -25,7 +25,8 @@ import lombok.Data;
 @Data
 @BauratendateiInputValid
 public class AbfragevarianteBauleitplanverfahrenSachbearbeitungStartBearbeitungDto
-    implements WithBauratendateiInputDto {
+    implements WithBauratendateiInputDto
+{
 
     private UUID id;
 

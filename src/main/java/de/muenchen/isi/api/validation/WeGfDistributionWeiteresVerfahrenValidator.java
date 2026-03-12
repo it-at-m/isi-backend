@@ -10,8 +10,8 @@ import org.springframework.stereotype.Component;
 @NoArgsConstructor
 public class WeGfDistributionWeiteresVerfahrenValidator
     extends DistributionValidator
-    implements
-        ConstraintValidator<WeGfDistributionWeiteresVerfahrenValid, AbfragevarianteWeiteresVerfahrenAngelegtDto> {
+    implements ConstraintValidator<WeGfDistributionWeiteresVerfahrenValid, AbfragevarianteWeiteresVerfahrenAngelegtDto>
+{
 
     /**
      * Siehe {@link DistributionValidator#isWeGfDistributionValid}.

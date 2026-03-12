@@ -139,24 +139,24 @@ public abstract class AbfrageDomainMapper {
     ) {
         final var abfragevarianten = new ArrayList<AbfragevarianteBauleitplanverfahrenModel>();
         CollectionUtils.emptyIfNull(request.getAbfragevariantenBauleitplanverfahren()).forEach(abfragevariante -> {
-                if (abfragevariante.getId() == null) {
-                    final var mappedModel = abfragevarianteDomainMapper.request2Model(
-                        abfragevariante,
-                        new AbfragevarianteBauleitplanverfahrenModel()
+            if (abfragevariante.getId() == null) {
+                final var mappedModel = abfragevarianteDomainMapper.request2Model(
+                    abfragevariante,
+                    new AbfragevarianteBauleitplanverfahrenModel()
+                );
+                abfragevarianten.add(mappedModel);
+            } else {
+                CollectionUtils.emptyIfNull(model.getAbfragevariantenBauleitplanverfahren())
+                    .stream()
+                    .filter(abfragevarianteModel -> abfragevarianteModel.getId().equals(abfragevariante.getId()))
+                    .findFirst()
+                    .ifPresent(abfragevarianteModel ->
+                        abfragevarianten.add(
+                            abfragevarianteDomainMapper.request2Model(abfragevariante, abfragevarianteModel)
+                        )
                     );
-                    abfragevarianten.add(mappedModel);
-                } else {
-                    CollectionUtils.emptyIfNull(model.getAbfragevariantenBauleitplanverfahren())
-                        .stream()
-                        .filter(abfragevarianteModel -> abfragevarianteModel.getId().equals(abfragevariante.getId()))
-                        .findFirst()
-                        .ifPresent(abfragevarianteModel ->
-                            abfragevarianten.add(
-                                abfragevarianteDomainMapper.request2Model(abfragevariante, abfragevarianteModel)
-                            )
-                        );
-                }
-            });
+            }
+        });
         model.setAbfragevariantenBauleitplanverfahren(abfragevarianten);
     }
 
@@ -190,24 +190,24 @@ public abstract class AbfrageDomainMapper {
     ) {
         final var abfragevarianten = new ArrayList<AbfragevarianteBaugenehmigungsverfahrenModel>();
         CollectionUtils.emptyIfNull(request.getAbfragevariantenBaugenehmigungsverfahren()).forEach(abfragevariante -> {
-                if (abfragevariante.getId() == null) {
-                    final var mappedModel = abfragevarianteDomainMapper.request2Model(
-                        abfragevariante,
-                        new AbfragevarianteBaugenehmigungsverfahrenModel()
+            if (abfragevariante.getId() == null) {
+                final var mappedModel = abfragevarianteDomainMapper.request2Model(
+                    abfragevariante,
+                    new AbfragevarianteBaugenehmigungsverfahrenModel()
+                );
+                abfragevarianten.add(mappedModel);
+            } else {
+                CollectionUtils.emptyIfNull(model.getAbfragevariantenBaugenehmigungsverfahren())
+                    .stream()
+                    .filter(abfragevarianteModel -> abfragevarianteModel.getId().equals(abfragevariante.getId()))
+                    .findFirst()
+                    .ifPresent(abfragevarianteModel ->
+                        abfragevarianten.add(
+                            abfragevarianteDomainMapper.request2Model(abfragevariante, abfragevarianteModel)
+                        )
                     );
-                    abfragevarianten.add(mappedModel);
-                } else {
-                    CollectionUtils.emptyIfNull(model.getAbfragevariantenBaugenehmigungsverfahren())
-                        .stream()
-                        .filter(abfragevarianteModel -> abfragevarianteModel.getId().equals(abfragevariante.getId()))
-                        .findFirst()
-                        .ifPresent(abfragevarianteModel ->
-                            abfragevarianten.add(
-                                abfragevarianteDomainMapper.request2Model(abfragevariante, abfragevarianteModel)
-                            )
-                        );
-                }
-            });
+            }
+        });
         model.setAbfragevariantenBaugenehmigungsverfahren(abfragevarianten);
     }
 
@@ -241,24 +241,24 @@ public abstract class AbfrageDomainMapper {
     ) {
         final var abfragevarianten = new ArrayList<AbfragevarianteWeiteresVerfahrenModel>();
         CollectionUtils.emptyIfNull(request.getAbfragevariantenWeiteresVerfahren()).forEach(abfragevariante -> {
-                if (abfragevariante.getId() == null) {
-                    final var mappedModel = abfragevarianteDomainMapper.request2Model(
-                        abfragevariante,
-                        new AbfragevarianteWeiteresVerfahrenModel()
+            if (abfragevariante.getId() == null) {
+                final var mappedModel = abfragevarianteDomainMapper.request2Model(
+                    abfragevariante,
+                    new AbfragevarianteWeiteresVerfahrenModel()
+                );
+                abfragevarianten.add(mappedModel);
+            } else {
+                CollectionUtils.emptyIfNull(model.getAbfragevariantenWeiteresVerfahren())
+                    .stream()
+                    .filter(abfragevarianteModel -> abfragevarianteModel.getId().equals(abfragevariante.getId()))
+                    .findFirst()
+                    .ifPresent(abfragevarianteModel ->
+                        abfragevarianten.add(
+                            abfragevarianteDomainMapper.request2Model(abfragevariante, abfragevarianteModel)
+                        )
                     );
-                    abfragevarianten.add(mappedModel);
-                } else {
-                    CollectionUtils.emptyIfNull(model.getAbfragevariantenWeiteresVerfahren())
-                        .stream()
-                        .filter(abfragevarianteModel -> abfragevarianteModel.getId().equals(abfragevariante.getId()))
-                        .findFirst()
-                        .ifPresent(abfragevarianteModel ->
-                            abfragevarianten.add(
-                                abfragevarianteDomainMapper.request2Model(abfragevariante, abfragevarianteModel)
-                            )
-                        );
-                }
-            });
+            }
+        });
         model.setAbfragevariantenWeiteresVerfahren(abfragevarianten);
     }
 
@@ -290,42 +290,40 @@ public abstract class AbfrageDomainMapper {
         // Mapping der zusätzlichen durch die Sachbearbeitung pflegbaren Attribute der Abfragevarianten
         final var mappedAbfragevarianten = new ArrayList<AbfragevarianteBauleitplanverfahrenModel>();
         CollectionUtils.emptyIfNull(request.getAbfragevariantenBauleitplanverfahren()).forEach(abfragevariante -> {
-                CollectionUtils.emptyIfNull(response.getAbfragevariantenBauleitplanverfahren())
-                    .stream()
-                    .filter(abfragevarianteModel -> abfragevarianteModel.getId().equals(abfragevariante.getId()))
-                    .findFirst()
-                    .ifPresent(abfragevarianteModel ->
-                        mappedAbfragevarianten.add(
-                            abfragevarianteDomainMapper.request2Model(abfragevariante, abfragevarianteModel)
-                        )
-                    );
-            });
+            CollectionUtils.emptyIfNull(response.getAbfragevariantenBauleitplanverfahren())
+                .stream()
+                .filter(abfragevarianteModel -> abfragevarianteModel.getId().equals(abfragevariante.getId()))
+                .findFirst()
+                .ifPresent(abfragevarianteModel ->
+                    mappedAbfragevarianten.add(
+                        abfragevarianteDomainMapper.request2Model(abfragevariante, abfragevarianteModel)
+                    )
+                );
+        });
         response.setAbfragevariantenBauleitplanverfahren(mappedAbfragevarianten);
         // Mapping der Abfragevarianten welche ausschließlich durch die Sachbearbeitung gemappt werden.
         final var mappedAbfragevariantenSachbearbeitung = new ArrayList<AbfragevarianteBauleitplanverfahrenModel>();
         CollectionUtils.emptyIfNull(request.getAbfragevariantenSachbearbeitungBauleitplanverfahren()).forEach(
-                abfragevariante -> {
-                    if (abfragevariante.getId() == null) {
-                        final var mappedModel = abfragevarianteDomainMapper.request2Model(
-                            abfragevariante,
-                            new AbfragevarianteBauleitplanverfahrenModel()
-                        );
-                        mappedAbfragevariantenSachbearbeitung.add(mappedModel);
-                    } else {
-                        CollectionUtils.emptyIfNull(response.getAbfragevariantenSachbearbeitungBauleitplanverfahren())
-                            .stream()
-                            .filter(abfragevarianteModel ->
-                                abfragevarianteModel.getId().equals(abfragevariante.getId())
+            abfragevariante -> {
+                if (abfragevariante.getId() == null) {
+                    final var mappedModel = abfragevarianteDomainMapper.request2Model(
+                        abfragevariante,
+                        new AbfragevarianteBauleitplanverfahrenModel()
+                    );
+                    mappedAbfragevariantenSachbearbeitung.add(mappedModel);
+                } else {
+                    CollectionUtils.emptyIfNull(response.getAbfragevariantenSachbearbeitungBauleitplanverfahren())
+                        .stream()
+                        .filter(abfragevarianteModel -> abfragevarianteModel.getId().equals(abfragevariante.getId()))
+                        .findFirst()
+                        .ifPresent(abfragevarianteModel ->
+                            mappedAbfragevariantenSachbearbeitung.add(
+                                abfragevarianteDomainMapper.request2Model(abfragevariante, abfragevarianteModel)
                             )
-                            .findFirst()
-                            .ifPresent(abfragevarianteModel ->
-                                mappedAbfragevariantenSachbearbeitung.add(
-                                    abfragevarianteDomainMapper.request2Model(abfragevariante, abfragevarianteModel)
-                                )
-                            );
-                    }
+                        );
                 }
-            );
+            }
+        );
         response.setAbfragevariantenSachbearbeitungBauleitplanverfahren(mappedAbfragevariantenSachbearbeitung);
     }
 
@@ -357,44 +355,40 @@ public abstract class AbfrageDomainMapper {
         // Mapping der zusätzlichen durch die Sachbearbeitung pflegbaren Attribute der Abfragevarianten
         final var mappedAbfragevarianten = new ArrayList<AbfragevarianteBaugenehmigungsverfahrenModel>();
         CollectionUtils.emptyIfNull(request.getAbfragevariantenBaugenehmigungsverfahren()).forEach(abfragevariante -> {
-                CollectionUtils.emptyIfNull(response.getAbfragevariantenBaugenehmigungsverfahren())
-                    .stream()
-                    .filter(abfragevarianteModel -> abfragevarianteModel.getId().equals(abfragevariante.getId()))
-                    .findFirst()
-                    .ifPresent(abfragevarianteModel ->
-                        mappedAbfragevarianten.add(
-                            abfragevarianteDomainMapper.request2Model(abfragevariante, abfragevarianteModel)
-                        )
-                    );
-            });
+            CollectionUtils.emptyIfNull(response.getAbfragevariantenBaugenehmigungsverfahren())
+                .stream()
+                .filter(abfragevarianteModel -> abfragevarianteModel.getId().equals(abfragevariante.getId()))
+                .findFirst()
+                .ifPresent(abfragevarianteModel ->
+                    mappedAbfragevarianten.add(
+                        abfragevarianteDomainMapper.request2Model(abfragevariante, abfragevarianteModel)
+                    )
+                );
+        });
         response.setAbfragevariantenBaugenehmigungsverfahren(mappedAbfragevarianten);
         // Mapping der Abfragevarianten welche ausschließlich durch die Sachbearbeitung gemappt werden.
         final var mappedAbfragevariantenSachbearbeitung = new ArrayList<AbfragevarianteBaugenehmigungsverfahrenModel>();
         CollectionUtils.emptyIfNull(request.getAbfragevariantenSachbearbeitungBaugenehmigungsverfahren()).forEach(
-                abfragevariante -> {
-                    if (abfragevariante.getId() == null) {
-                        final var mappedModel = abfragevarianteDomainMapper.request2Model(
-                            abfragevariante,
-                            new AbfragevarianteBaugenehmigungsverfahrenModel()
-                        );
-                        mappedAbfragevariantenSachbearbeitung.add(mappedModel);
-                    } else {
-                        CollectionUtils.emptyIfNull(
-                            response.getAbfragevariantenSachbearbeitungBaugenehmigungsverfahren()
-                        )
-                            .stream()
-                            .filter(abfragevarianteModel ->
-                                abfragevarianteModel.getId().equals(abfragevariante.getId())
+            abfragevariante -> {
+                if (abfragevariante.getId() == null) {
+                    final var mappedModel = abfragevarianteDomainMapper.request2Model(
+                        abfragevariante,
+                        new AbfragevarianteBaugenehmigungsverfahrenModel()
+                    );
+                    mappedAbfragevariantenSachbearbeitung.add(mappedModel);
+                } else {
+                    CollectionUtils.emptyIfNull(response.getAbfragevariantenSachbearbeitungBaugenehmigungsverfahren())
+                        .stream()
+                        .filter(abfragevarianteModel -> abfragevarianteModel.getId().equals(abfragevariante.getId()))
+                        .findFirst()
+                        .ifPresent(abfragevarianteModel ->
+                            mappedAbfragevariantenSachbearbeitung.add(
+                                abfragevarianteDomainMapper.request2Model(abfragevariante, abfragevarianteModel)
                             )
-                            .findFirst()
-                            .ifPresent(abfragevarianteModel ->
-                                mappedAbfragevariantenSachbearbeitung.add(
-                                    abfragevarianteDomainMapper.request2Model(abfragevariante, abfragevarianteModel)
-                                )
-                            );
-                    }
+                        );
                 }
-            );
+            }
+        );
         response.setAbfragevariantenSachbearbeitungBaugenehmigungsverfahren(mappedAbfragevariantenSachbearbeitung);
     }
 
@@ -426,42 +420,40 @@ public abstract class AbfrageDomainMapper {
         // Mapping der zusätzlichen durch die Sachbearbeitung pflegbaren Attribute der Abfragevarianten
         final var mappedAbfragevarianten = new ArrayList<AbfragevarianteWeiteresVerfahrenModel>();
         CollectionUtils.emptyIfNull(request.getAbfragevariantenWeiteresVerfahren()).forEach(abfragevariante -> {
-                CollectionUtils.emptyIfNull(response.getAbfragevariantenWeiteresVerfahren())
-                    .stream()
-                    .filter(abfragevarianteModel -> abfragevarianteModel.getId().equals(abfragevariante.getId()))
-                    .findFirst()
-                    .ifPresent(abfragevarianteModel ->
-                        mappedAbfragevarianten.add(
-                            abfragevarianteDomainMapper.request2Model(abfragevariante, abfragevarianteModel)
-                        )
-                    );
-            });
+            CollectionUtils.emptyIfNull(response.getAbfragevariantenWeiteresVerfahren())
+                .stream()
+                .filter(abfragevarianteModel -> abfragevarianteModel.getId().equals(abfragevariante.getId()))
+                .findFirst()
+                .ifPresent(abfragevarianteModel ->
+                    mappedAbfragevarianten.add(
+                        abfragevarianteDomainMapper.request2Model(abfragevariante, abfragevarianteModel)
+                    )
+                );
+        });
         response.setAbfragevariantenWeiteresVerfahren(mappedAbfragevarianten);
         // Mapping der Abfragevarianten welche ausschließlich durch die Sachbearbeitung gemappt werden.
         final var mappedAbfragevariantenSachbearbeitung = new ArrayList<AbfragevarianteWeiteresVerfahrenModel>();
         CollectionUtils.emptyIfNull(request.getAbfragevariantenSachbearbeitungWeiteresVerfahren()).forEach(
-                abfragevariante -> {
-                    if (abfragevariante.getId() == null) {
-                        final var mappedModel = abfragevarianteDomainMapper.request2Model(
-                            abfragevariante,
-                            new AbfragevarianteWeiteresVerfahrenModel()
-                        );
-                        mappedAbfragevariantenSachbearbeitung.add(mappedModel);
-                    } else {
-                        CollectionUtils.emptyIfNull(response.getAbfragevariantenSachbearbeitungWeiteresVerfahren())
-                            .stream()
-                            .filter(abfragevarianteModel ->
-                                abfragevarianteModel.getId().equals(abfragevariante.getId())
+            abfragevariante -> {
+                if (abfragevariante.getId() == null) {
+                    final var mappedModel = abfragevarianteDomainMapper.request2Model(
+                        abfragevariante,
+                        new AbfragevarianteWeiteresVerfahrenModel()
+                    );
+                    mappedAbfragevariantenSachbearbeitung.add(mappedModel);
+                } else {
+                    CollectionUtils.emptyIfNull(response.getAbfragevariantenSachbearbeitungWeiteresVerfahren())
+                        .stream()
+                        .filter(abfragevarianteModel -> abfragevarianteModel.getId().equals(abfragevariante.getId()))
+                        .findFirst()
+                        .ifPresent(abfragevarianteModel ->
+                            mappedAbfragevariantenSachbearbeitung.add(
+                                abfragevarianteDomainMapper.request2Model(abfragevariante, abfragevarianteModel)
                             )
-                            .findFirst()
-                            .ifPresent(abfragevarianteModel ->
-                                mappedAbfragevariantenSachbearbeitung.add(
-                                    abfragevarianteDomainMapper.request2Model(abfragevariante, abfragevarianteModel)
-                                )
-                            );
-                    }
+                        );
                 }
-            );
+            }
+        );
         response.setAbfragevariantenSachbearbeitungWeiteresVerfahren(mappedAbfragevariantenSachbearbeitung);
     }
 
@@ -486,42 +478,40 @@ public abstract class AbfrageDomainMapper {
         // Mapping der Bedarfsmeldungen durch die Fachabteilungen der Abfragevarianten
         final var mappedAbfragevarianten = new ArrayList<AbfragevarianteBauleitplanverfahrenModel>();
         CollectionUtils.emptyIfNull(request.getAbfragevariantenBauleitplanverfahren()).forEach(abfragevariante -> {
-                CollectionUtils.emptyIfNull(response.getAbfragevariantenBauleitplanverfahren())
-                    .stream()
-                    .filter(abfragevarianteModel -> abfragevarianteModel.getId().equals(abfragevariante.getId()))
-                    .findFirst()
-                    .ifPresent(abfragevarianteModel ->
-                        mappedAbfragevarianten.add(
-                            abfragevarianteDomainMapper.request2Model(abfragevariante, abfragevarianteModel)
-                        )
-                    );
-            });
+            CollectionUtils.emptyIfNull(response.getAbfragevariantenBauleitplanverfahren())
+                .stream()
+                .filter(abfragevarianteModel -> abfragevarianteModel.getId().equals(abfragevariante.getId()))
+                .findFirst()
+                .ifPresent(abfragevarianteModel ->
+                    mappedAbfragevarianten.add(
+                        abfragevarianteDomainMapper.request2Model(abfragevariante, abfragevarianteModel)
+                    )
+                );
+        });
         response.setAbfragevariantenBauleitplanverfahren(mappedAbfragevarianten);
         // Mapping der Abfragevarianten welche ausschließlich durch die Sachbearbeitung gemappt werden.
         final var mappedAbfragevariantenSachbearbeitung = new ArrayList<AbfragevarianteBauleitplanverfahrenModel>();
         CollectionUtils.emptyIfNull(request.getAbfragevariantenSachbearbeitungBauleitplanverfahren()).forEach(
-                abfragevariante -> {
-                    if (abfragevariante.getId() == null) {
-                        final var mappedModel = abfragevarianteDomainMapper.request2Model(
-                            abfragevariante,
-                            new AbfragevarianteBauleitplanverfahrenModel()
-                        );
-                        mappedAbfragevariantenSachbearbeitung.add(mappedModel);
-                    } else {
-                        CollectionUtils.emptyIfNull(response.getAbfragevariantenSachbearbeitungBauleitplanverfahren())
-                            .stream()
-                            .filter(abfragevarianteModel ->
-                                abfragevarianteModel.getId().equals(abfragevariante.getId())
+            abfragevariante -> {
+                if (abfragevariante.getId() == null) {
+                    final var mappedModel = abfragevarianteDomainMapper.request2Model(
+                        abfragevariante,
+                        new AbfragevarianteBauleitplanverfahrenModel()
+                    );
+                    mappedAbfragevariantenSachbearbeitung.add(mappedModel);
+                } else {
+                    CollectionUtils.emptyIfNull(response.getAbfragevariantenSachbearbeitungBauleitplanverfahren())
+                        .stream()
+                        .filter(abfragevarianteModel -> abfragevarianteModel.getId().equals(abfragevariante.getId()))
+                        .findFirst()
+                        .ifPresent(abfragevarianteModel ->
+                            mappedAbfragevariantenSachbearbeitung.add(
+                                abfragevarianteDomainMapper.request2Model(abfragevariante, abfragevarianteModel)
                             )
-                            .findFirst()
-                            .ifPresent(abfragevarianteModel ->
-                                mappedAbfragevariantenSachbearbeitung.add(
-                                    abfragevarianteDomainMapper.request2Model(abfragevariante, abfragevarianteModel)
-                                )
-                            );
-                    }
+                        );
                 }
-            );
+            }
+        );
         response.setAbfragevariantenSachbearbeitungBauleitplanverfahren(mappedAbfragevariantenSachbearbeitung);
     }
 
@@ -546,44 +536,40 @@ public abstract class AbfrageDomainMapper {
         // Mapping der Bedarfsmeldungen durch die Fachabteilungen der Abfragevarianten
         final var mappedAbfragevarianten = new ArrayList<AbfragevarianteBaugenehmigungsverfahrenModel>();
         CollectionUtils.emptyIfNull(request.getAbfragevariantenBaugenehmigungsverfahren()).forEach(abfragevariante -> {
-                CollectionUtils.emptyIfNull(response.getAbfragevariantenBaugenehmigungsverfahren())
-                    .stream()
-                    .filter(abfragevarianteModel -> abfragevarianteModel.getId().equals(abfragevariante.getId()))
-                    .findFirst()
-                    .ifPresent(abfragevarianteModel ->
-                        mappedAbfragevarianten.add(
-                            abfragevarianteDomainMapper.request2Model(abfragevariante, abfragevarianteModel)
-                        )
-                    );
-            });
+            CollectionUtils.emptyIfNull(response.getAbfragevariantenBaugenehmigungsverfahren())
+                .stream()
+                .filter(abfragevarianteModel -> abfragevarianteModel.getId().equals(abfragevariante.getId()))
+                .findFirst()
+                .ifPresent(abfragevarianteModel ->
+                    mappedAbfragevarianten.add(
+                        abfragevarianteDomainMapper.request2Model(abfragevariante, abfragevarianteModel)
+                    )
+                );
+        });
         response.setAbfragevariantenBaugenehmigungsverfahren(mappedAbfragevarianten);
         // Mapping der Abfragevarianten welche ausschließlich durch die Sachbearbeitung gemappt werden.
         final var mappedAbfragevariantenSachbearbeitung = new ArrayList<AbfragevarianteBaugenehmigungsverfahrenModel>();
         CollectionUtils.emptyIfNull(request.getAbfragevariantenSachbearbeitungBaugenehmigungsverfahren()).forEach(
-                abfragevariante -> {
-                    if (abfragevariante.getId() == null) {
-                        final var mappedModel = abfragevarianteDomainMapper.request2Model(
-                            abfragevariante,
-                            new AbfragevarianteBaugenehmigungsverfahrenModel()
-                        );
-                        mappedAbfragevariantenSachbearbeitung.add(mappedModel);
-                    } else {
-                        CollectionUtils.emptyIfNull(
-                            response.getAbfragevariantenSachbearbeitungBaugenehmigungsverfahren()
-                        )
-                            .stream()
-                            .filter(abfragevarianteModel ->
-                                abfragevarianteModel.getId().equals(abfragevariante.getId())
+            abfragevariante -> {
+                if (abfragevariante.getId() == null) {
+                    final var mappedModel = abfragevarianteDomainMapper.request2Model(
+                        abfragevariante,
+                        new AbfragevarianteBaugenehmigungsverfahrenModel()
+                    );
+                    mappedAbfragevariantenSachbearbeitung.add(mappedModel);
+                } else {
+                    CollectionUtils.emptyIfNull(response.getAbfragevariantenSachbearbeitungBaugenehmigungsverfahren())
+                        .stream()
+                        .filter(abfragevarianteModel -> abfragevarianteModel.getId().equals(abfragevariante.getId()))
+                        .findFirst()
+                        .ifPresent(abfragevarianteModel ->
+                            mappedAbfragevariantenSachbearbeitung.add(
+                                abfragevarianteDomainMapper.request2Model(abfragevariante, abfragevarianteModel)
                             )
-                            .findFirst()
-                            .ifPresent(abfragevarianteModel ->
-                                mappedAbfragevariantenSachbearbeitung.add(
-                                    abfragevarianteDomainMapper.request2Model(abfragevariante, abfragevarianteModel)
-                                )
-                            );
-                    }
+                        );
                 }
-            );
+            }
+        );
         response.setAbfragevariantenSachbearbeitungBaugenehmigungsverfahren(mappedAbfragevariantenSachbearbeitung);
     }
 
@@ -608,42 +594,40 @@ public abstract class AbfrageDomainMapper {
         // Mapping der Bedarfsmeldungen durch die Fachabteilungen der Abfragevarianten
         final var mappedAbfragevarianten = new ArrayList<AbfragevarianteWeiteresVerfahrenModel>();
         CollectionUtils.emptyIfNull(request.getAbfragevariantenWeiteresVerfahren()).forEach(abfragevariante -> {
-                CollectionUtils.emptyIfNull(response.getAbfragevariantenWeiteresVerfahren())
-                    .stream()
-                    .filter(abfragevarianteModel -> abfragevarianteModel.getId().equals(abfragevariante.getId()))
-                    .findFirst()
-                    .ifPresent(abfragevarianteModel ->
-                        mappedAbfragevarianten.add(
-                            abfragevarianteDomainMapper.request2Model(abfragevariante, abfragevarianteModel)
-                        )
-                    );
-            });
+            CollectionUtils.emptyIfNull(response.getAbfragevariantenWeiteresVerfahren())
+                .stream()
+                .filter(abfragevarianteModel -> abfragevarianteModel.getId().equals(abfragevariante.getId()))
+                .findFirst()
+                .ifPresent(abfragevarianteModel ->
+                    mappedAbfragevarianten.add(
+                        abfragevarianteDomainMapper.request2Model(abfragevariante, abfragevarianteModel)
+                    )
+                );
+        });
         response.setAbfragevariantenWeiteresVerfahren(mappedAbfragevarianten);
         // Mapping der Abfragevarianten welche ausschließlich durch die Sachbearbeitung gemappt werden.
         final var mappedAbfragevariantenSachbearbeitung = new ArrayList<AbfragevarianteWeiteresVerfahrenModel>();
         CollectionUtils.emptyIfNull(request.getAbfragevariantenSachbearbeitungWeiteresVerfahren()).forEach(
-                abfragevariante -> {
-                    if (abfragevariante.getId() == null) {
-                        final var mappedModel = abfragevarianteDomainMapper.request2Model(
-                            abfragevariante,
-                            new AbfragevarianteWeiteresVerfahrenModel()
-                        );
-                        mappedAbfragevariantenSachbearbeitung.add(mappedModel);
-                    } else {
-                        CollectionUtils.emptyIfNull(response.getAbfragevariantenSachbearbeitungWeiteresVerfahren())
-                            .stream()
-                            .filter(abfragevarianteModel ->
-                                abfragevarianteModel.getId().equals(abfragevariante.getId())
+            abfragevariante -> {
+                if (abfragevariante.getId() == null) {
+                    final var mappedModel = abfragevarianteDomainMapper.request2Model(
+                        abfragevariante,
+                        new AbfragevarianteWeiteresVerfahrenModel()
+                    );
+                    mappedAbfragevariantenSachbearbeitung.add(mappedModel);
+                } else {
+                    CollectionUtils.emptyIfNull(response.getAbfragevariantenSachbearbeitungWeiteresVerfahren())
+                        .stream()
+                        .filter(abfragevarianteModel -> abfragevarianteModel.getId().equals(abfragevariante.getId()))
+                        .findFirst()
+                        .ifPresent(abfragevarianteModel ->
+                            mappedAbfragevariantenSachbearbeitung.add(
+                                abfragevarianteDomainMapper.request2Model(abfragevariante, abfragevarianteModel)
                             )
-                            .findFirst()
-                            .ifPresent(abfragevarianteModel ->
-                                mappedAbfragevariantenSachbearbeitung.add(
-                                    abfragevarianteDomainMapper.request2Model(abfragevariante, abfragevarianteModel)
-                                )
-                            );
-                    }
+                        );
                 }
-            );
+            }
+        );
         response.setAbfragevariantenSachbearbeitungWeiteresVerfahren(mappedAbfragevariantenSachbearbeitung);
     }
 
@@ -668,42 +652,40 @@ public abstract class AbfrageDomainMapper {
         // Mapping der Bedarfsmeldungen durch die abfrageerstellende Person der Abfragevarianten
         final var mappedAbfragevarianten = new ArrayList<AbfragevarianteBauleitplanverfahrenModel>();
         CollectionUtils.emptyIfNull(request.getAbfragevariantenBauleitplanverfahren()).forEach(abfragevariante -> {
-                CollectionUtils.emptyIfNull(response.getAbfragevariantenBauleitplanverfahren())
-                    .stream()
-                    .filter(abfragevarianteModel -> abfragevarianteModel.getId().equals(abfragevariante.getId()))
-                    .findFirst()
-                    .ifPresent(abfragevarianteModel ->
-                        mappedAbfragevarianten.add(
-                            abfragevarianteDomainMapper.request2Model(abfragevariante, abfragevarianteModel)
-                        )
-                    );
-            });
+            CollectionUtils.emptyIfNull(response.getAbfragevariantenBauleitplanverfahren())
+                .stream()
+                .filter(abfragevarianteModel -> abfragevarianteModel.getId().equals(abfragevariante.getId()))
+                .findFirst()
+                .ifPresent(abfragevarianteModel ->
+                    mappedAbfragevarianten.add(
+                        abfragevarianteDomainMapper.request2Model(abfragevariante, abfragevarianteModel)
+                    )
+                );
+        });
         response.setAbfragevariantenBauleitplanverfahren(mappedAbfragevarianten);
         // Mapping der Abfragevarianten welche ausschließlich durch die Sachbearbeitung gemappt werden.
         final var mappedAbfragevariantenSachbearbeitung = new ArrayList<AbfragevarianteBauleitplanverfahrenModel>();
         CollectionUtils.emptyIfNull(request.getAbfragevariantenSachbearbeitungBauleitplanverfahren()).forEach(
-                abfragevariante -> {
-                    if (abfragevariante.getId() == null) {
-                        final var mappedModel = abfragevarianteDomainMapper.request2Model(
-                            abfragevariante,
-                            new AbfragevarianteBauleitplanverfahrenModel()
-                        );
-                        mappedAbfragevariantenSachbearbeitung.add(mappedModel);
-                    } else {
-                        CollectionUtils.emptyIfNull(response.getAbfragevariantenSachbearbeitungBauleitplanverfahren())
-                            .stream()
-                            .filter(abfragevarianteModel ->
-                                abfragevarianteModel.getId().equals(abfragevariante.getId())
+            abfragevariante -> {
+                if (abfragevariante.getId() == null) {
+                    final var mappedModel = abfragevarianteDomainMapper.request2Model(
+                        abfragevariante,
+                        new AbfragevarianteBauleitplanverfahrenModel()
+                    );
+                    mappedAbfragevariantenSachbearbeitung.add(mappedModel);
+                } else {
+                    CollectionUtils.emptyIfNull(response.getAbfragevariantenSachbearbeitungBauleitplanverfahren())
+                        .stream()
+                        .filter(abfragevarianteModel -> abfragevarianteModel.getId().equals(abfragevariante.getId()))
+                        .findFirst()
+                        .ifPresent(abfragevarianteModel ->
+                            mappedAbfragevariantenSachbearbeitung.add(
+                                abfragevarianteDomainMapper.request2Model(abfragevariante, abfragevarianteModel)
                             )
-                            .findFirst()
-                            .ifPresent(abfragevarianteModel ->
-                                mappedAbfragevariantenSachbearbeitung.add(
-                                    abfragevarianteDomainMapper.request2Model(abfragevariante, abfragevarianteModel)
-                                )
-                            );
-                    }
+                        );
                 }
-            );
+            }
+        );
         response.setAbfragevariantenSachbearbeitungBauleitplanverfahren(mappedAbfragevariantenSachbearbeitung);
     }
 
@@ -728,44 +710,40 @@ public abstract class AbfrageDomainMapper {
         // Mapping der Bedarfsmeldungen durch die abfrageerstellende Person der Abfragevarianten
         final var mappedAbfragevarianten = new ArrayList<AbfragevarianteBaugenehmigungsverfahrenModel>();
         CollectionUtils.emptyIfNull(request.getAbfragevariantenBaugenehmigungsverfahren()).forEach(abfragevariante -> {
-                CollectionUtils.emptyIfNull(response.getAbfragevariantenBaugenehmigungsverfahren())
-                    .stream()
-                    .filter(abfragevarianteModel -> abfragevarianteModel.getId().equals(abfragevariante.getId()))
-                    .findFirst()
-                    .ifPresent(abfragevarianteModel ->
-                        mappedAbfragevarianten.add(
-                            abfragevarianteDomainMapper.request2Model(abfragevariante, abfragevarianteModel)
-                        )
-                    );
-            });
+            CollectionUtils.emptyIfNull(response.getAbfragevariantenBaugenehmigungsverfahren())
+                .stream()
+                .filter(abfragevarianteModel -> abfragevarianteModel.getId().equals(abfragevariante.getId()))
+                .findFirst()
+                .ifPresent(abfragevarianteModel ->
+                    mappedAbfragevarianten.add(
+                        abfragevarianteDomainMapper.request2Model(abfragevariante, abfragevarianteModel)
+                    )
+                );
+        });
         response.setAbfragevariantenBaugenehmigungsverfahren(mappedAbfragevarianten);
         // Mapping der Abfragevarianten welche ausschließlich durch die Sachbearbeitung gemappt werden.
         final var mappedAbfragevariantenSachbearbeitung = new ArrayList<AbfragevarianteBaugenehmigungsverfahrenModel>();
         CollectionUtils.emptyIfNull(request.getAbfragevariantenSachbearbeitungBaugenehmigungsverfahren()).forEach(
-                abfragevariante -> {
-                    if (abfragevariante.getId() == null) {
-                        final var mappedModel = abfragevarianteDomainMapper.request2Model(
-                            abfragevariante,
-                            new AbfragevarianteBaugenehmigungsverfahrenModel()
-                        );
-                        mappedAbfragevariantenSachbearbeitung.add(mappedModel);
-                    } else {
-                        CollectionUtils.emptyIfNull(
-                            response.getAbfragevariantenSachbearbeitungBaugenehmigungsverfahren()
-                        )
-                            .stream()
-                            .filter(abfragevarianteModel ->
-                                abfragevarianteModel.getId().equals(abfragevariante.getId())
+            abfragevariante -> {
+                if (abfragevariante.getId() == null) {
+                    final var mappedModel = abfragevarianteDomainMapper.request2Model(
+                        abfragevariante,
+                        new AbfragevarianteBaugenehmigungsverfahrenModel()
+                    );
+                    mappedAbfragevariantenSachbearbeitung.add(mappedModel);
+                } else {
+                    CollectionUtils.emptyIfNull(response.getAbfragevariantenSachbearbeitungBaugenehmigungsverfahren())
+                        .stream()
+                        .filter(abfragevarianteModel -> abfragevarianteModel.getId().equals(abfragevariante.getId()))
+                        .findFirst()
+                        .ifPresent(abfragevarianteModel ->
+                            mappedAbfragevariantenSachbearbeitung.add(
+                                abfragevarianteDomainMapper.request2Model(abfragevariante, abfragevarianteModel)
                             )
-                            .findFirst()
-                            .ifPresent(abfragevarianteModel ->
-                                mappedAbfragevariantenSachbearbeitung.add(
-                                    abfragevarianteDomainMapper.request2Model(abfragevariante, abfragevarianteModel)
-                                )
-                            );
-                    }
+                        );
                 }
-            );
+            }
+        );
         response.setAbfragevariantenSachbearbeitungBaugenehmigungsverfahren(mappedAbfragevariantenSachbearbeitung);
     }
 
@@ -790,42 +768,40 @@ public abstract class AbfrageDomainMapper {
         // Mapping der Bedarfsmeldungen durch die abfrageerstellende Person der Abfragevarianten
         final var mappedAbfragevarianten = new ArrayList<AbfragevarianteWeiteresVerfahrenModel>();
         CollectionUtils.emptyIfNull(request.getAbfragevariantenWeiteresVerfahren()).forEach(abfragevariante -> {
-                CollectionUtils.emptyIfNull(response.getAbfragevariantenWeiteresVerfahren())
-                    .stream()
-                    .filter(abfragevarianteModel -> abfragevarianteModel.getId().equals(abfragevariante.getId()))
-                    .findFirst()
-                    .ifPresent(abfragevarianteModel ->
-                        mappedAbfragevarianten.add(
-                            abfragevarianteDomainMapper.request2Model(abfragevariante, abfragevarianteModel)
-                        )
-                    );
-            });
+            CollectionUtils.emptyIfNull(response.getAbfragevariantenWeiteresVerfahren())
+                .stream()
+                .filter(abfragevarianteModel -> abfragevarianteModel.getId().equals(abfragevariante.getId()))
+                .findFirst()
+                .ifPresent(abfragevarianteModel ->
+                    mappedAbfragevarianten.add(
+                        abfragevarianteDomainMapper.request2Model(abfragevariante, abfragevarianteModel)
+                    )
+                );
+        });
         response.setAbfragevariantenWeiteresVerfahren(mappedAbfragevarianten);
         // Mapping der Abfragevarianten welche ausschließlich durch die Sachbearbeitung gemappt werden.
         final var mappedAbfragevariantenSachbearbeitung = new ArrayList<AbfragevarianteWeiteresVerfahrenModel>();
         CollectionUtils.emptyIfNull(request.getAbfragevariantenSachbearbeitungWeiteresVerfahren()).forEach(
-                abfragevariante -> {
-                    if (abfragevariante.getId() == null) {
-                        final var mappedModel = abfragevarianteDomainMapper.request2Model(
-                            abfragevariante,
-                            new AbfragevarianteWeiteresVerfahrenModel()
-                        );
-                        mappedAbfragevariantenSachbearbeitung.add(mappedModel);
-                    } else {
-                        CollectionUtils.emptyIfNull(response.getAbfragevariantenSachbearbeitungWeiteresVerfahren())
-                            .stream()
-                            .filter(abfragevarianteModel ->
-                                abfragevarianteModel.getId().equals(abfragevariante.getId())
+            abfragevariante -> {
+                if (abfragevariante.getId() == null) {
+                    final var mappedModel = abfragevarianteDomainMapper.request2Model(
+                        abfragevariante,
+                        new AbfragevarianteWeiteresVerfahrenModel()
+                    );
+                    mappedAbfragevariantenSachbearbeitung.add(mappedModel);
+                } else {
+                    CollectionUtils.emptyIfNull(response.getAbfragevariantenSachbearbeitungWeiteresVerfahren())
+                        .stream()
+                        .filter(abfragevarianteModel -> abfragevarianteModel.getId().equals(abfragevariante.getId()))
+                        .findFirst()
+                        .ifPresent(abfragevarianteModel ->
+                            mappedAbfragevariantenSachbearbeitung.add(
+                                abfragevarianteDomainMapper.request2Model(abfragevariante, abfragevarianteModel)
                             )
-                            .findFirst()
-                            .ifPresent(abfragevarianteModel ->
-                                mappedAbfragevariantenSachbearbeitung.add(
-                                    abfragevarianteDomainMapper.request2Model(abfragevariante, abfragevarianteModel)
-                                )
-                            );
-                    }
+                        );
                 }
-            );
+            }
+        );
         response.setAbfragevariantenSachbearbeitungWeiteresVerfahren(mappedAbfragevariantenSachbearbeitung);
     }
 

@@ -14,7 +14,8 @@ public class RealisierungVonDistributionWeiteresVerfahrenValidator
         ConstraintValidator<
             RealisierungVonDistributionWeiteresVerfahrenValid,
             AbfragevarianteWeiteresVerfahrenAngelegtDto
-        > {
+        >
+{
 
     /**
      * @param value object to validate

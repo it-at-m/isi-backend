@@ -10,7 +10,8 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class HasAllowedNumberOfDocumentsValidator
-    implements ConstraintValidator<HasAllowedNumberOfDocuments, List<DokumentDto>> {
+    implements ConstraintValidator<HasAllowedNumberOfDocuments, List<DokumentDto>>
+{
 
     private final Long maxNumberOfFiles;
 

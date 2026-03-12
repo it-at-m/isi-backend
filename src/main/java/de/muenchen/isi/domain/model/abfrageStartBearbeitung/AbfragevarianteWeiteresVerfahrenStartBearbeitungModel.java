@@ -19,7 +19,8 @@ import lombok.ToString;
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 public class AbfragevarianteWeiteresVerfahrenStartBearbeitungModel
-    extends AbfragevarianteWeiteresVerfahrenAngelegtModel {
+    extends AbfragevarianteWeiteresVerfahrenAngelegtModel
+{
 
     private SobonOrientierungswertJahr sobonOrientierungswertJahrPlanungsursaechlich;
 

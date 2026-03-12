@@ -14,7 +14,8 @@ import org.springframework.stereotype.Component;
 @Component
 @NoArgsConstructor
 public class WohnungsnahePlaetzeValidator
-    implements ConstraintValidator<WohnungsnahePlaetzeValid, InfrastruktureinrichtungDto> {
+    implements ConstraintValidator<WohnungsnahePlaetzeValid, InfrastruktureinrichtungDto>
+{
 
     /**
      * Prüft, ob die Anzahl der wohungsnahen Plätze die Anzahl der insgesamt zur Verfügung stehenden Plätze der Kinderkrippe,

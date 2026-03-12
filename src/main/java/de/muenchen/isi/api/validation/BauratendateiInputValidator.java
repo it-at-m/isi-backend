@@ -12,7 +12,8 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class BauratendateiInputValidator
-    implements ConstraintValidator<BauratendateiInputValid, WithBauratendateiInputDto> {
+    implements ConstraintValidator<BauratendateiInputValid, WithBauratendateiInputDto>
+{
 
     private final BauratendateiInputService bauratendateiInputService;
 

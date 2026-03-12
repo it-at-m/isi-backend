@@ -14,7 +14,8 @@ public class WeGfDistributionBaugenehmigungsverfahrenValidator
         ConstraintValidator<
             WeGfDistributionBaugenehmigungsverfahrenValid,
             AbfragevarianteBaugenehmigungsverfahrenAngelegtDto
-        > {
+        >
+{
 
     /**
      * Siehe {@link DistributionValidator#isWeGfDistributionValid}.

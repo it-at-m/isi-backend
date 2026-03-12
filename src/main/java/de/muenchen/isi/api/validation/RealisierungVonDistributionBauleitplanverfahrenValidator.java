@@ -14,7 +14,8 @@ public class RealisierungVonDistributionBauleitplanverfahrenValidator
         ConstraintValidator<
             RealisierungVonDistributionBauleitplanverfahrenValid,
             AbfragevarianteBauleitplanverfahrenAngelegtDto
-        > {
+        >
+{
 
     /**
      * @param value object to validate
