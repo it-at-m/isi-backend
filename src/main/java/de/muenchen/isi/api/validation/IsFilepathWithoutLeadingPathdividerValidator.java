@@ -9,7 +9,8 @@ import org.springframework.stereotype.Component;
 @Component
 @NoArgsConstructor
 public class IsFilepathWithoutLeadingPathdividerValidator
-    implements ConstraintValidator<IsFilepathWithoutLeadingPathdivider, String> {
+    implements ConstraintValidator<IsFilepathWithoutLeadingPathdivider, String>
+{
 
     public static final String PATH_SEPARATOR = "/";
 

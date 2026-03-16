@@ -29,7 +29,8 @@ import lombok.ToString;
 @BauratendateiInputValid
 public class AbfragevarianteWeiteresVerfahrenStartBearbeitungDto
     extends AbfragevarianteWeiteresVerfahrenAngelegtDto
-    implements WithBauratendateiInputDto {
+    implements WithBauratendateiInputDto
+{
 
     @NotUnspecified
     @NotNull

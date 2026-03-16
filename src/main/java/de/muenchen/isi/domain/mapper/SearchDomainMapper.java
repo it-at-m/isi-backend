@@ -285,7 +285,7 @@ public abstract class SearchDomainMapper {
                 case ResultType.INFRASTRUKTUREINRICHTUNG -> toInfrastrukturModel(abfrageInfrastruktureinrichtungRecord);
                 default -> throw new IllegalArgumentException(
                     "Unbekannter resultType in AbfrageInfrastruktureinrichtungRecord: " +
-                    abfrageInfrastruktureinrichtungRecord.resultType()
+                        abfrageInfrastruktureinrichtungRecord.resultType()
                 );
             };
             case BauvorhabenInfrastruktureinrichtungRecord bauvorhabenInfrastruktureinrichtungRecord -> switch (
@@ -297,7 +297,7 @@ public abstract class SearchDomainMapper {
                 );
                 default -> throw new IllegalArgumentException(
                     "Unbekannter resultType in BauvorhabenInfrastruktureinrichtungRecord: " +
-                    bauvorhabenInfrastruktureinrichtungRecord.resultType()
+                        bauvorhabenInfrastruktureinrichtungRecord.resultType()
                 );
             };
             case BauvorhabenAbfrageRecord bauvorhabenAbfrageRecord -> switch (bauvorhabenAbfrageRecord.resultType()) {
@@ -305,7 +305,7 @@ public abstract class SearchDomainMapper {
                 case ResultType.ABFRAGE -> toAbfrageModel(bauvorhabenAbfrageRecord);
                 default -> throw new IllegalArgumentException(
                     "Unbekannter resultType in BauvorhabenInfrastruktureinrichtungRecord: " +
-                    bauvorhabenAbfrageRecord.resultType()
+                        bauvorhabenAbfrageRecord.resultType()
                 );
             };
             case AbfrageProjection abfrageProjection -> toAbfrageModel(abfrageProjection);

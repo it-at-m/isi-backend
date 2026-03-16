@@ -27,7 +27,8 @@ public class StatusInfrastruktureinrichtungSuggestionBinder implements Completio
     }
 
     private static class StatusInfrastruktureinrichtungValueCompletionBridge
-        implements ValueBridge<StatusInfrastruktureinrichtung, JsonElement> {
+        implements ValueBridge<StatusInfrastruktureinrichtung, JsonElement>
+    {
 
         @Override
         public JsonElement toIndexedValue(

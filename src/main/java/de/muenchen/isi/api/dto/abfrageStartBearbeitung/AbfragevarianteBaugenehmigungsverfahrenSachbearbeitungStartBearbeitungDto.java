@@ -23,7 +23,8 @@ import lombok.Data;
 @Data
 @BauratendateiInputValid
 public class AbfragevarianteBaugenehmigungsverfahrenSachbearbeitungStartBearbeitungDto
-    implements WithBauratendateiInputDto {
+    implements WithBauratendateiInputDto
+{
 
     private UUID id;
 

@@ -22,7 +22,8 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 public class AbfragevarianteBaugenehmigungsverfahrenDto
     extends AbfragevarianteDto
-    implements WithBauratendateiInputDto {
+    implements WithBauratendateiInputDto
+{
 
     private List<WesentlicheRechtsgrundlage> wesentlicheRechtsgrundlage;
 

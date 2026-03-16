@@ -10,6 +10,7 @@ import de.muenchen.isi.domain.model.BauleitplanverfahrenModel;
 import de.muenchen.isi.domain.model.WeiteresVerfahrenModel;
 import de.muenchen.isi.domain.model.calculation.BedarfeForAbfragevarianteModel;
 import de.muenchen.isi.domain.model.calculation.LangfristigerBedarfModel;
+import de.muenchen.isi.domain.model.calculation.LangfristigerSobonBedarfModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.reporting.client.model.AbfrageDto;
 import de.muenchen.isi.reporting.client.model.AbfragevarianteBaugenehmigungsverfahrenDto;
@@ -18,6 +19,7 @@ import de.muenchen.isi.reporting.client.model.AbfragevarianteWeiteresVerfahrenDt
 import de.muenchen.isi.reporting.client.model.BaugenehmigungsverfahrenDto;
 import de.muenchen.isi.reporting.client.model.BauleitplanverfahrenDto;
 import de.muenchen.isi.reporting.client.model.LangfristigerBedarfDto;
+import de.muenchen.isi.reporting.client.model.LangfristigerSobonBedarfDto;
 import de.muenchen.isi.reporting.client.model.WeiteresVerfahrenDto;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
@@ -88,6 +90,8 @@ public interface ReportingApiDomainMapper {
     );
 
     LangfristigerBedarfDto model2ReportingDto(final LangfristigerBedarfModel model);
+
+    LangfristigerSobonBedarfDto model2ReportingDto(final LangfristigerSobonBedarfModel model);
 
     AbfrageDto.ArtAbfrageEnum artAbfrage2ArtAbfrageReporting(final ArtAbfrage artAbfrage);
 }

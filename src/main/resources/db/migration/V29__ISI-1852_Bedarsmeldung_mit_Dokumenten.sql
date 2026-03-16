@@ -3,7 +3,6 @@ BEGIN;
 ---
 -- Hinzufügen der Dokumente zu den Bedarfsmeldungen
 ---
-
 ALTER TABLE IF EXISTS isidbuser.dokument
     ADD COLUMN bedarfsmeldung_id character varying(36);
 

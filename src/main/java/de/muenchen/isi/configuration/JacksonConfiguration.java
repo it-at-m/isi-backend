@@ -16,11 +16,11 @@ public class JacksonConfiguration {
     @PostConstruct
     public void objectMapper() {
         this.objectMapper.enable(
-                /**
-                 * Beim deserialisieren werden Attributduplikationen erkannt.
-                 * Bei einer vorhandenen Attributduplikation wird durch den Parser eine {@link JsonParseException} geworfen.
-                 */
-                JsonParser.Feature.STRICT_DUPLICATE_DETECTION
-            );
+            /**
+             * Beim deserialisieren werden Attributduplikationen erkannt.
+             * Bei einer vorhandenen Attributduplikation wird durch den Parser eine {@link JsonParseException} geworfen.
+             */
+            JsonParser.Feature.STRICT_DUPLICATE_DETECTION
+        );
     }
 }
