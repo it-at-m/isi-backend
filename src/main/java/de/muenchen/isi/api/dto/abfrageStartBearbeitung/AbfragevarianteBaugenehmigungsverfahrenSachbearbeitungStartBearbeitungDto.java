@@ -39,7 +39,7 @@ public class AbfragevarianteBaugenehmigungsverfahrenSachbearbeitungStartBearbeit
     @NotNull
     private LocalDate stammdatenGueltigAb;
 
-    @Size(max = 1000, message = "Es sind maximal {max} Zeichen erlaubt")
+    @Size(max = 2000, message = "Es sind maximal {max} Zeichen erlaubt")
     private String anmerkung;
 
     private Boolean hasBauratendateiInput;
