@@ -5,6 +5,8 @@
 package de.muenchen.isi.api.dto.abfrageEinpflegenBedarfsmeldung;
 
 import de.muenchen.isi.api.dto.BedarfsmeldungDto;
+import de.muenchen.isi.api.dto.filehandling.DokumentDto;
+import de.muenchen.isi.api.validation.HasAllowedNumberOfDocuments;
 import de.muenchen.isi.api.validation.NotUnspecified;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import jakarta.validation.Valid;
@@ -23,6 +25,9 @@ public class AbfragevarianteBauleitplanverfahrenEinpflegenBedarfsmeldungDto {
     private ArtAbfrage artAbfragevariante;
 
     private List<@Valid BedarfsmeldungDto> bedarfsmeldungFachreferate;
+
+    @HasAllowedNumberOfDocuments
+    private List<@Valid DokumentDto> bedarfsmeldungDokumenteFachreferate;
 
     // Kindertagesbetreuung
 

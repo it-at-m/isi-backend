@@ -4,6 +4,7 @@
  */
 package de.muenchen.isi.domain.model.abfrageEinplanungBedarfe;
 
+import de.muenchen.isi.api.dto.filehandling.DokumentDto;
 import de.muenchen.isi.domain.model.BedarfsmeldungModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import java.util.List;
@@ -20,6 +21,8 @@ public class AbfragevarianteWeiteresVerfahrenEinplanungBedarfeModel {
     private ArtAbfrage artAbfragevariante;
 
     private List<BedarfsmeldungModel> bedarfsmeldungAbfrageersteller;
+
+    private List<DokumentDto> bedarfsmeldungDokumenteAbfrageersteller;
 
     private String anmerkungAbfrageersteller;
 }

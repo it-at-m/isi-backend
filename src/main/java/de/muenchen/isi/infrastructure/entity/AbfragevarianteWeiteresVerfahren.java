@@ -193,10 +193,18 @@ public class AbfragevarianteWeiteresVerfahren extends Abfragevariante {
     @OrderBy("createdDateTime asc")
     private List<Bedarfsmeldung> bedarfsmeldungFachreferate;
 
+    @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY, orphanRemoval = true)
+    @JoinColumn(name = "bedmeld_fachref_abfrgvar_weitrs_vrfhrn_id")
+    private List<Dokument> bedarfsmeldungDokumenteFachreferate;
+
     @OneToMany(cascade = { CascadeType.ALL }, orphanRemoval = true)
     @JoinColumn(name = "abfrgvar_weitrs_vrfhrn_abfrageersteller_id", referencedColumnName = "id")
     @OrderBy("createdDateTime asc")
     private List<Bedarfsmeldung> bedarfsmeldungAbfrageersteller;
+
+    @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY, orphanRemoval = true)
+    @JoinColumn(name = "bedmeld_abfrerst_abfrgvar_weitrs_vrfhrn_id")
+    private List<Dokument> bedarfsmeldungDokumenteAbfrageersteller;
 
     @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "abfrgvar_weitrs_vrfhrn_id")

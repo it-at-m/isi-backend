@@ -1,9 +1,6 @@
 package de.muenchen.isi.api.dto;
 
-import de.muenchen.isi.api.dto.filehandling.DokumentDto;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
-import jakarta.validation.Valid;
-import java.util.List;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -24,6 +21,4 @@ public class BedarfsmeldungDto extends BaseEntityDto {
     private Integer anzahlHortgruppen;
 
     private Integer anzahlGrundschulzuege;
-
-    private List<@Valid DokumentDto> dokumente;
 }

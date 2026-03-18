@@ -4,9 +4,7 @@
  */
 package de.muenchen.isi.domain.model;
 
-import de.muenchen.isi.domain.model.filehandling.DokumentModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
-import java.util.List;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -27,6 +25,4 @@ public class BedarfsmeldungModel extends BaseEntityModel {
     private Integer anzahlHortgruppen;
 
     private Integer anzahlGrundschulzuege;
-
-    private List<DokumentModel> dokumente;
 }
