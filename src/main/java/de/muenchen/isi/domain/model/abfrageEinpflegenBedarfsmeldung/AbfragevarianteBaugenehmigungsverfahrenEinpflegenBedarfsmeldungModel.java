@@ -7,7 +7,6 @@ package de.muenchen.isi.domain.model.abfrageEinpflegenBedarfsmeldung;
 import de.muenchen.isi.api.dto.filehandling.DokumentDto;
 import de.muenchen.isi.domain.model.BedarfsmeldungModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
-import jakarta.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 import lombok.Data;
