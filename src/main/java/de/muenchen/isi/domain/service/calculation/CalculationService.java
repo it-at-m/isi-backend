@@ -137,6 +137,9 @@ public class CalculationService {
             if (this.shouldSobonBerechnungBePerformed(abfragevarianteBauleitplanverfahren, isAbfrageSobonRelevant)) {
                 sobonGf = abfragevarianteBauleitplanverfahren.getGfWohnenSobonUrsaechlich();
                 final var foerdermix = abfragevarianteBauleitplanverfahren.getSobonBerechnung().getSobonFoerdermix();
+                final var versorgungsquoteHortSobon = abfragevarianteBauleitplanverfahren
+                    .getSobonBerechnung()
+                    .getVersorgungsquoteHortSobon();
                 sobonOrientierungswertJahrSobonUrsaechlich = abfragevarianteBauleitplanverfahren
                     .getSobonBerechnung()
                     .getSobonOrientierungswertJahrSobonUrsaechlich();
@@ -145,7 +148,8 @@ public class CalculationService {
                     bauabschnitte,
                     sobonOrientierungswertJahrSobonUrsaechlich,
                     stammdatenGueltigAb,
-                    foerdermix
+                    foerdermix,
+                    versorgungsquoteHortSobon
                 );
                 bedarfeForAbfragevariante.setLangfristigerSobonursaechlicherBedarf(
                     langfristigerSobonursaechlicherBedarf
@@ -178,6 +182,9 @@ public class CalculationService {
             if (this.shouldSobonBerechnungBePerformed(abfragevarianteWeiteresVerfahren, isAbfrageSobonRelevant)) {
                 sobonGf = abfragevarianteWeiteresVerfahren.getGfWohnenSobonUrsaechlich();
                 final var foerdermix = abfragevarianteWeiteresVerfahren.getSobonBerechnung().getSobonFoerdermix();
+                final var versorgungsquoteHortSobon = abfragevarianteWeiteresVerfahren
+                    .getSobonBerechnung()
+                    .getVersorgungsquoteHortSobon();
                 sobonOrientierungswertJahrSobonUrsaechlich = abfragevarianteWeiteresVerfahren
                     .getSobonBerechnung()
                     .getSobonOrientierungswertJahrSobonUrsaechlich();
@@ -186,7 +193,8 @@ public class CalculationService {
                     bauabschnitte,
                     sobonOrientierungswertJahrSobonUrsaechlich,
                     stammdatenGueltigAb,
-                    foerdermix
+                    foerdermix,
+                    versorgungsquoteHortSobon
                 );
                 bedarfeForAbfragevariante.setLangfristigerSobonursaechlicherBedarf(
                     langfristigerSobonursaechlicherBedarf
@@ -280,7 +288,8 @@ public class CalculationService {
         final List<BauabschnittModel> bauabschnitte,
         final SobonOrientierungswertJahr sobonOrientierungswertJahr,
         final LocalDate stammdatenGueltigAb,
-        final FoerdermixModel foerdermix
+        final FoerdermixModel foerdermix,
+        final BigDecimal versorgungsquoteHortSobon
     ) throws CalculationException {
         if (
             CollectionUtils.isEmpty(bauabschnitte) ||
@@ -324,7 +333,8 @@ public class CalculationService {
         final var bedarfGsNachmittagBetreuung = infrastrukturbedarfService.calculateBedarfForGsNachmittagBetreuung(
             wohneinheiten,
             sobonOrientierungswertJahr,
-            stammdatenGueltigAb
+            stammdatenGueltigAb,
+            versorgungsquoteHortSobon
         );
         bedarf.setBedarfGsNachmittagBetreuung(bedarfGsNachmittagBetreuung);
 

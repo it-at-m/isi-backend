@@ -141,7 +141,8 @@ public class InfrastrukturbedarfService {
     public List<InfrastrukturbedarfProJahrModel> calculateBedarfForGsNachmittagBetreuung(
         final List<WohneinheitenProFoerderartProJahrModel> wohneinheiten,
         final SobonOrientierungswertJahr sobonJahr,
-        final LocalDate gueltigAb
+        final LocalDate gueltigAb,
+        final BigDecimal versorgungsquoteHortSobon
     ) throws CalculationException {
         // Ermittlung der Versorgungsquote und Gruppenstärke für die Einrichtung.
         final var versorgungsquoteGruppenstaerke = versorgungsquoteGruppenstaerkeRepository
@@ -155,7 +156,7 @@ public class InfrastrukturbedarfService {
                 log.error(message);
                 return new CalculationException(message);
             });
-
+        versorgungsquoteGruppenstaerke.setVersorgungsquoteSobonUrsaechlich(versorgungsquoteHortSobon);
         return this.calculatePersonen(InfrastruktureinrichtungTyp.GS_NACHMITTAG_BETREUUNG, wohneinheiten, sobonJahr)
             // Ermitteln der Versorgungsquote und Gruppenstärke
             .map(bedarf ->
