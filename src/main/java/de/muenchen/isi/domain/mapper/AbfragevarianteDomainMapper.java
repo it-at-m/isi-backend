@@ -358,6 +358,7 @@ public interface AbfragevarianteDomainMapper {
             @Mapping(target = "version", ignore = false),
             @Mapping(target = "bedarfsmeldungAbfrageersteller", ignore = false),
             @Mapping(target = "anmerkungAbfrageersteller", ignore = false),
+            @Mapping(target = "bedarfsmeldungDokumenteAbfrageersteller", ignore = false),
         }
     )
     AbfragevarianteBauleitplanverfahrenModel request2Model(
@@ -371,6 +372,7 @@ public interface AbfragevarianteDomainMapper {
             @Mapping(target = "version", ignore = false),
             @Mapping(target = "bedarfsmeldungAbfrageersteller", ignore = false),
             @Mapping(target = "anmerkungAbfrageersteller", ignore = false),
+            @Mapping(target = "bedarfsmeldungDokumenteAbfrageersteller", ignore = false),
         }
     )
     AbfragevarianteBaugenehmigungsverfahrenModel request2Model(
@@ -384,6 +386,7 @@ public interface AbfragevarianteDomainMapper {
             @Mapping(target = "version", ignore = false),
             @Mapping(target = "bedarfsmeldungAbfrageersteller", ignore = false),
             @Mapping(target = "anmerkungAbfrageersteller", ignore = false),
+            @Mapping(target = "bedarfsmeldungDokumenteAbfrageersteller", ignore = false),
         }
     )
     AbfragevarianteWeiteresVerfahrenModel request2Model(
