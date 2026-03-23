@@ -2,6 +2,7 @@ package de.muenchen.isi.domain.model.common;
 
 import de.muenchen.isi.domain.model.FoerdermixModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
+import java.math.BigDecimal;
 import lombok.Data;
 
 @Data
@@ -12,4 +13,6 @@ public class SobonBerechnungModel {
     private FoerdermixModel sobonFoerdermix;
 
     private SobonOrientierungswertJahr sobonOrientierungswertJahrSobonUrsaechlich;
+
+    private BigDecimal versorgungsquoteHortSobon;
 }
