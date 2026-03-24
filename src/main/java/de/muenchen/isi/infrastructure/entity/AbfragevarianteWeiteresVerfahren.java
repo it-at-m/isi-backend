@@ -63,7 +63,7 @@ public class AbfragevarianteWeiteresVerfahren extends Abfragevariante {
     @ElementCollection
     private List<WesentlicheRechtsgrundlage> wesentlicheRechtsgrundlage;
 
-    @Column(length = 2000)
+    @Column(length = 1000)
     private String wesentlicheRechtsgrundlageFreieEingabe;
 
     @KeywordField(valueBridge = @ValueBridgeRef(type = IntegerToStringValueBridge.class))

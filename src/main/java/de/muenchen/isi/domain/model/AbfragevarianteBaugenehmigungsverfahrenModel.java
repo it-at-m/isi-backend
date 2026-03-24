@@ -4,7 +4,6 @@
  */
 package de.muenchen.isi.domain.model;
 
-import de.muenchen.isi.api.dto.filehandling.DokumentDto;
 import de.muenchen.isi.domain.model.bauratendatei.BauratendateiInputModel;
 import de.muenchen.isi.domain.model.bauratendatei.WithBauratendateiInputModel;
 import de.muenchen.isi.domain.model.filehandling.DokumentModel;
@@ -90,11 +89,11 @@ public class AbfragevarianteBaugenehmigungsverfahrenModel
 
     private List<BedarfsmeldungModel> bedarfsmeldungFachreferate;
 
-    private List<@Valid DokumentDto> bedarfsmeldungDokumenteFachreferate;
+    private List<@Valid DokumentModel> bedarfsmeldungDokumenteFachreferate;
 
     private List<BedarfsmeldungModel> bedarfsmeldungAbfrageersteller;
 
-    private List<@Valid DokumentDto> bedarfsmeldungDokumenteAbfrageersteller;
+    private List<@Valid DokumentModel> bedarfsmeldungDokumenteAbfrageersteller;
 
     private List<BauabschnittModel> bauabschnitte;
 

@@ -4,8 +4,8 @@
  */
 package de.muenchen.isi.domain.model.abfrageEinplanungBedarfe;
 
-import de.muenchen.isi.api.dto.filehandling.DokumentDto;
 import de.muenchen.isi.domain.model.BedarfsmeldungModel;
+import de.muenchen.isi.domain.model.filehandling.DokumentModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import java.util.List;
 import java.util.UUID;
@@ -22,7 +22,7 @@ public class AbfragevarianteBaugenehmigungsverfahrenEinplanungBedarfeModel {
 
     private List<BedarfsmeldungModel> bedarfsmeldungAbfrageersteller;
 
-    private List<DokumentDto> bedarfsmeldungDokumenteAbfrageersteller;
+    private List<DokumentModel> bedarfsmeldungDokumenteAbfrageersteller;
 
     private String anmerkungAbfrageersteller;
 }
