@@ -89,11 +89,11 @@ public class AbfragevarianteBaugenehmigungsverfahrenDto
 
     private List<BedarfsmeldungDto> bedarfsmeldungFachreferate;
 
-    private List<DokumentDto> bedarfsmeldungDokumenteFachreferate;
+    private List<@Valid DokumentDto> bedarfsmeldungDokumenteFachreferate;
 
     private List<BedarfsmeldungDto> bedarfsmeldungAbfrageersteller;
 
-    private List<DokumentDto> bedarfsmeldungDokumenteAbfrageersteller;
+    private List<@Valid DokumentDto> bedarfsmeldungDokumenteAbfrageersteller;
 
     private List<BauabschnittDto> bauabschnitte;
 
