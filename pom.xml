@@ -22,8 +22,8 @@
         <maven.compiler.release>${java.version}</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spring.cloud.version>2025.1.1</spring.cloud.version>
-        <spring.boot.version>3.5.11</spring.boot.version>
-        <spring.boot.test>3.5.11</spring.boot.test>
+        <spring.boot.version>3.5.13</spring.boot.version>
+        <spring.boot.test>3.5.13</spring.boot.test>
         <apache.commons.text>1.15.0</apache.commons.text>
         <apache.commons.collections4>4.5.0</apache.commons.collections4>
         <logstash.encoder>9.0</logstash.encoder>
@@ -51,7 +51,7 @@
         <geotools.version>33.2</geotools.version>
         <apache.tika.version>3.2.3</apache.tika.version>
         <spring.statemachine>4.0.1</spring.statemachine>
-        <icu4j.version>78.2</icu4j.version>
+        <icu4j.version>78.3</icu4j.version>
         <hibernate.search>7.2.6.Final</hibernate.search>
         <openapi-generator-version>7.20.0</openapi-generator-version>
     </properties>
