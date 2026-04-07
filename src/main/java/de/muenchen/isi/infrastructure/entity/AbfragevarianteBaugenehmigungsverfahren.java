@@ -140,13 +140,13 @@ public class AbfragevarianteBaugenehmigungsverfahren extends Abfragevariante {
     @Column
     private LocalDate stammdatenGueltigAb;
 
-    @Column(length = 1000)
+    @Column(length = 2000)
     private String anmerkung;
 
     @Column
     private Boolean hasBauratendateiInput;
 
-    @Column(length = 1000)
+    @Column(length = 2000)
     private String anmerkungBauratendateiInput;
 
     @OneToOne(cascade = { CascadeType.ALL }, orphanRemoval = true)
@@ -163,10 +163,18 @@ public class AbfragevarianteBaugenehmigungsverfahren extends Abfragevariante {
     @OrderBy("createdDateTime asc")
     private List<Bedarfsmeldung> bedarfsmeldungFachreferate;
 
+    @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY, orphanRemoval = true)
+    @JoinColumn(name = "bedmeld_fachref_abfrgvar_baugnhmgsverfhrn_id")
+    private List<Dokument> bedarfsmeldungDokumenteFachreferate;
+
     @OneToMany(cascade = { CascadeType.ALL }, orphanRemoval = true)
     @JoinColumn(name = "abfrgvar_baugnhmgsverfhrn_abfrageersteller_id", referencedColumnName = "id")
     @OrderBy("createdDateTime asc")
     private List<Bedarfsmeldung> bedarfsmeldungAbfrageersteller;
+
+    @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY, orphanRemoval = true)
+    @JoinColumn(name = "bedmeld_abfrerst_abfrgvar_baugnhmgsverfhrn_id")
+    private List<Dokument> bedarfsmeldungDokumenteAbfrageersteller;
 
     @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "abfrgvar_baugnhmgsverfhrn_id")
@@ -201,10 +209,10 @@ public class AbfragevarianteBaugenehmigungsverfahren extends Abfragevariante {
     @Column(name = "ausglstr_bdrf_mtvrsrg_in_bsthnd_einr_nch_asbau_schule")
     private boolean ausgeloesterBedarfMitversorgungInBestEinrichtungenNachAusbauSchule;
 
-    @Column(length = 1000)
+    @Column(length = 2000)
     private String anmerkungFachreferate;
 
-    @Column(length = 1000)
+    @Column(length = 2000)
     private String anmerkungAbfrageersteller;
 
     @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY, orphanRemoval = true)

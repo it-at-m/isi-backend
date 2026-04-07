@@ -73,6 +73,8 @@ public interface AbfragevarianteDomainMapper {
             @Mapping(target = "anmerkungAbfrageersteller", ignore = true),
             @Mapping(target = "bedarfsmeldungAbfrageersteller", ignore = true),
             @Mapping(target = "dokumente", ignore = true),
+            @Mapping(target = "bedarfsmeldungDokumenteFachreferate", ignore = true),
+            @Mapping(target = "bedarfsmeldungDokumenteAbfrageersteller", ignore = true),
         }
     )
     AbfragevarianteBauleitplanverfahrenModel request2Model(
@@ -104,6 +106,8 @@ public interface AbfragevarianteDomainMapper {
             @Mapping(target = "anmerkungAbfrageersteller", ignore = true),
             @Mapping(target = "bedarfsmeldungAbfrageersteller", ignore = true),
             @Mapping(target = "dokumente", ignore = true),
+            @Mapping(target = "bedarfsmeldungDokumenteFachreferate", ignore = true),
+            @Mapping(target = "bedarfsmeldungDokumenteAbfrageersteller", ignore = true),
         }
     )
     AbfragevarianteBaugenehmigungsverfahrenModel request2Model(
@@ -136,6 +140,8 @@ public interface AbfragevarianteDomainMapper {
             @Mapping(target = "anmerkungAbfrageersteller", ignore = true),
             @Mapping(target = "bedarfsmeldungAbfrageersteller", ignore = true),
             @Mapping(target = "dokumente", ignore = true),
+            @Mapping(target = "bedarfsmeldungDokumenteFachreferate", ignore = true),
+            @Mapping(target = "bedarfsmeldungDokumenteAbfrageersteller", ignore = true),
         }
     )
     AbfragevarianteWeiteresVerfahrenModel request2Model(
@@ -219,6 +225,8 @@ public interface AbfragevarianteDomainMapper {
             @Mapping(target = "anmerkungFachreferate", ignore = true),
             @Mapping(target = "anmerkungAbfrageersteller", ignore = true),
             @Mapping(target = "bedarfsmeldungAbfrageersteller", ignore = true),
+            @Mapping(target = "bedarfsmeldungDokumenteFachreferate", ignore = true),
+            @Mapping(target = "bedarfsmeldungDokumenteAbfrageersteller", ignore = true),
         }
     )
     AbfragevarianteBauleitplanverfahrenModel request2Model(
@@ -243,6 +251,8 @@ public interface AbfragevarianteDomainMapper {
             @Mapping(target = "anmerkungFachreferate", ignore = true),
             @Mapping(target = "anmerkungAbfrageersteller", ignore = true),
             @Mapping(target = "bedarfsmeldungAbfrageersteller", ignore = true),
+            @Mapping(target = "bedarfsmeldungDokumenteFachreferate", ignore = true),
+            @Mapping(target = "bedarfsmeldungDokumenteAbfrageersteller", ignore = true),
         }
     )
     AbfragevarianteBaugenehmigungsverfahrenModel request2Model(
@@ -267,6 +277,8 @@ public interface AbfragevarianteDomainMapper {
             @Mapping(target = "anmerkungFachreferate", ignore = true),
             @Mapping(target = "anmerkungAbfrageersteller", ignore = true),
             @Mapping(target = "bedarfsmeldungAbfrageersteller", ignore = true),
+            @Mapping(target = "bedarfsmeldungDokumenteFachreferate", ignore = true),
+            @Mapping(target = "bedarfsmeldungDokumenteAbfrageersteller", ignore = true),
         }
     )
     AbfragevarianteWeiteresVerfahrenModel request2Model(
@@ -288,6 +300,7 @@ public interface AbfragevarianteDomainMapper {
             @Mapping(target = "ausgeloesterBedarfMitversorgungInBestEinrichtungenSchule", ignore = false),
             @Mapping(target = "ausgeloesterBedarfMitversorgungInBestEinrichtungenNachAusbauSchule", ignore = false),
             @Mapping(target = "anmerkungFachreferate", ignore = false),
+            @Mapping(target = "bedarfsmeldungDokumenteFachreferate", ignore = false),
         }
     )
     AbfragevarianteBauleitplanverfahrenModel request2Model(
@@ -309,6 +322,7 @@ public interface AbfragevarianteDomainMapper {
             @Mapping(target = "ausgeloesterBedarfMitversorgungInBestEinrichtungenSchule", ignore = false),
             @Mapping(target = "ausgeloesterBedarfMitversorgungInBestEinrichtungenNachAusbauSchule", ignore = false),
             @Mapping(target = "anmerkungFachreferate", ignore = false),
+            @Mapping(target = "bedarfsmeldungDokumenteFachreferate", ignore = false),
         }
     )
     AbfragevarianteBaugenehmigungsverfahrenModel request2Model(
@@ -330,6 +344,7 @@ public interface AbfragevarianteDomainMapper {
             @Mapping(target = "ausgeloesterBedarfMitversorgungInBestEinrichtungenSchule", ignore = false),
             @Mapping(target = "ausgeloesterBedarfMitversorgungInBestEinrichtungenNachAusbauSchule", ignore = false),
             @Mapping(target = "anmerkungFachreferate", ignore = false),
+            @Mapping(target = "bedarfsmeldungDokumenteFachreferate", ignore = false),
         }
     )
     AbfragevarianteWeiteresVerfahrenModel request2Model(
@@ -343,6 +358,7 @@ public interface AbfragevarianteDomainMapper {
             @Mapping(target = "version", ignore = false),
             @Mapping(target = "bedarfsmeldungAbfrageersteller", ignore = false),
             @Mapping(target = "anmerkungAbfrageersteller", ignore = false),
+            @Mapping(target = "bedarfsmeldungDokumenteAbfrageersteller", ignore = false),
         }
     )
     AbfragevarianteBauleitplanverfahrenModel request2Model(
@@ -356,6 +372,7 @@ public interface AbfragevarianteDomainMapper {
             @Mapping(target = "version", ignore = false),
             @Mapping(target = "bedarfsmeldungAbfrageersteller", ignore = false),
             @Mapping(target = "anmerkungAbfrageersteller", ignore = false),
+            @Mapping(target = "bedarfsmeldungDokumenteAbfrageersteller", ignore = false),
         }
     )
     AbfragevarianteBaugenehmigungsverfahrenModel request2Model(
@@ -369,6 +386,7 @@ public interface AbfragevarianteDomainMapper {
             @Mapping(target = "version", ignore = false),
             @Mapping(target = "bedarfsmeldungAbfrageersteller", ignore = false),
             @Mapping(target = "anmerkungAbfrageersteller", ignore = false),
+            @Mapping(target = "bedarfsmeldungDokumenteAbfrageersteller", ignore = false),
         }
     )
     AbfragevarianteWeiteresVerfahrenModel request2Model(

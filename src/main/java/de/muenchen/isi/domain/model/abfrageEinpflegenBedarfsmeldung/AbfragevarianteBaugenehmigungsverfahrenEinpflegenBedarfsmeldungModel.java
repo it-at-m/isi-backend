@@ -5,6 +5,7 @@
 package de.muenchen.isi.domain.model.abfrageEinpflegenBedarfsmeldung;
 
 import de.muenchen.isi.domain.model.BedarfsmeldungModel;
+import de.muenchen.isi.domain.model.filehandling.DokumentModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import java.util.List;
 import java.util.UUID;
@@ -20,6 +21,8 @@ public class AbfragevarianteBaugenehmigungsverfahrenEinpflegenBedarfsmeldungMode
     private ArtAbfrage artAbfragevariante;
 
     private List<BedarfsmeldungModel> bedarfsmeldungFachreferate;
+
+    private List<DokumentModel> bedarfsmeldungDokumenteFachreferate;
 
     // Kindertagesbetreuung
 

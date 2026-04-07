@@ -10,6 +10,7 @@ import de.muenchen.isi.domain.model.common.SobonBerechnungModel;
 import de.muenchen.isi.domain.model.filehandling.DokumentModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.WesentlicheRechtsgrundlage;
+import jakarta.validation.Valid;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
@@ -87,7 +88,11 @@ public class AbfragevarianteBauleitplanverfahrenModel
 
     private List<BedarfsmeldungModel> bedarfsmeldungFachreferate;
 
+    private List<@Valid DokumentModel> bedarfsmeldungDokumenteFachreferate;
+
     private List<BedarfsmeldungModel> bedarfsmeldungAbfrageersteller;
+
+    private List<@Valid DokumentModel> bedarfsmeldungDokumenteAbfrageersteller;
 
     private List<BauabschnittModel> bauabschnitte;
 

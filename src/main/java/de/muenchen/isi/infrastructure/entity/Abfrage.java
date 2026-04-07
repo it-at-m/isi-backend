@@ -121,7 +121,7 @@ public abstract class Abfrage extends BaseEntity {
     @Column(nullable = false)
     private StatusAbfrage statusAbfrage;
 
-    @Column(length = 1000)
+    @Column(length = 2000)
     private String anmerkung;
 
     @ManyToOne
