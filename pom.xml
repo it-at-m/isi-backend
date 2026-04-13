@@ -49,7 +49,7 @@
         <!-- https://mvnrepository.com/artifact/org.geotools/gt-main?repo=geotools-releases
         (Register: GeoTools) -->
         <geotools.version>33.2</geotools.version>
-        <apache.tika.version>3.2.3</apache.tika.version>
+        <apache.tika.version>3.3.0</apache.tika.version>
         <spring.statemachine>4.0.1</spring.statemachine>
         <icu4j.version>78.3</icu4j.version>
         <hibernate.search>7.2.6.Final</hibernate.search>
