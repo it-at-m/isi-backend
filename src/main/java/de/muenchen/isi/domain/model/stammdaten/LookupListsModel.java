@@ -29,7 +29,7 @@ public class LookupListsModel {
 
     private LookupListModel wesentlicheRechtsgrundlage;
 
-    private LookupListModel planungsrecht;
+    private LookupListModel planart;
 
     private LookupListModel artBaulicheNutzung;
 

@@ -10,9 +10,8 @@ import de.muenchen.isi.api.validation.NotUnspecified;
 import de.muenchen.isi.api.validation.RealisierungVonDistributionBauleitplanverfahrenValid;
 import de.muenchen.isi.api.validation.TechnicalAttributesValid;
 import de.muenchen.isi.api.validation.WeGfDistributionBauleitplanverfahrenValid;
-import de.muenchen.isi.api.validation.WesentlicheRechtsgrundlageBauleitplanverfahrenValid;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.WesentlicheRechtsgrundlage;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.Planart;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -49,12 +48,10 @@ public class AbfragevarianteBauleitplanverfahrenAngelegtDto implements Abfrageva
     private LocalDate satzungsbeschluss;
 
     @NotEmpty
-    private List<
-        @WesentlicheRechtsgrundlageBauleitplanverfahrenValid @NotNull WesentlicheRechtsgrundlage
-    > wesentlicheRechtsgrundlage;
+    private List<@NotNull Planart> planart;
 
     @Size(max = 1000, message = "Es sind maximal {max} Zeichen erlaubt")
-    private String wesentlicheRechtsgrundlageFreieEingabe;
+    private String planartFreieEingabe;
 
     @NotNull
     @Min(1900)

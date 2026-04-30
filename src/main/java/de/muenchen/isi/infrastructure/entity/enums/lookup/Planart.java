@@ -1,6 +1,5 @@
 package de.muenchen.isi.infrastructure.entity.enums.lookup;
 
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -18,14 +17,4 @@ public enum Planart implements ILookup {
 
     @Getter
     private final String bezeichnung;
-
-    public static List<Planart> getPlanart() {
-        return List.of(
-            EINFACHER_BEBAUUNGSPLAN,
-            QUALIFIZIERTER_BEBAUUNGSPLAN,
-            VORHABENSBEZOGENER_BEBAUUNGSPLAN,
-            BEBAUUNGSPLAN_ZUR_WOHNRAUMVERSORGUNG,
-            FREIE_EINGABE
-        );
-    }
 }

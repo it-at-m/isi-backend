@@ -9,6 +9,7 @@ import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtDokument;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtGsNachmittagBetreuung;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Einrichtungstraeger;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.Planart;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonVerfahrensgrundsaetzeJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVerfahren;
@@ -42,9 +43,7 @@ public class LookupService {
         model.setStandVerfahrenWeiteresVerfahren(this.getStandVerfahrenWeiteresVerfahrenList());
         model.setStandVerfahren(this.getStandVerfahrenList());
         model.setStatusAbfrage(this.getStatusAbfrageList());
-        model.setWesentlicheRechtsgrundlageBauleitplanverfahren(
-            this.getWesentlicheRechtsgrundlageBauleitplanverfahrenList()
-        );
+        model.setPlanart(this.getPlanartList());
         model.setWesentlicheRechtsgrundlageBaugenehmigungsverfahren(
             this.getWesentlicheRechtsgrundlageBaugenehmigungsverfahrenList()
         );
@@ -144,12 +143,11 @@ public class LookupService {
         return new LookupListModel(list);
     }
 
-    private LookupListModel getWesentlicheRechtsgrundlageBauleitplanverfahrenList() {
-        final List<LookupEntryModel> list =
-            WesentlicheRechtsgrundlage.getWesentlicheRechtsgrundlageForBauleitplanverfahren()
-                .stream()
-                .map(item -> new LookupEntryModel(item.toString(), item.getBezeichnung()))
-                .collect(Collectors.toList());
+    private LookupListModel getPlanartList() {
+        final List<LookupEntryModel> list = EnumUtils.getEnumList(Planart.class)
+            .stream()
+            .map(item -> new LookupEntryModel(item.toString(), item.getBezeichnung()))
+            .collect(Collectors.toList());
 
         return new LookupListModel(list);
     }

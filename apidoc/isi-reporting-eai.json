@@ -289,6 +289,8 @@
           "abfragevariantenNr": { "type": "integer", "format": "int32" },
           "name": { "type": "string" },
           "satzungsbeschluss": { "type": "string", "format": "date" },
+          "planart": { "type": "array", "items": { "type": "string" } },
+          "planartFreieEingabe": { "type": "string" },
           "wesentlicheRechtsgrundlage": { "type": "array", "items": { "type": "string" } },
           "wesentlicheRechtsgrundlageFreieEingabe": { "type": "string" },
           "realisierungVon": { "type": "integer", "format": "int32" },
@@ -420,36 +422,6 @@
           "multiPolygon": { "$ref": "#/components/schemas/MultiPolygonGeometry" }
         }
       },
-      "EntityModelAbfrage": {
-        "type": "object",
-        "properties": {
-          "createdDateTime": { "type": "string", "format": "date-time" },
-          "lastModifiedDateTime": { "type": "string", "format": "date-time" },
-          "abfrageId": { "type": "string", "format": "uuid" },
-          "artAbfrage": {
-            "type": "string",
-            "enum": ["UNSPECIFIED", "BAULEITPLANVERFAHREN", "BAUGENEHMIGUNGSVERFAHREN", "WEITERES_VERFAHREN"]
-          },
-          "name": { "type": "string" },
-          "statusAbfrage": { "type": "string" },
-          "anmerkung": { "type": "string" },
-          "bauvorhabenId": { "type": "string", "format": "uuid" },
-          "sub": { "type": "string" },
-          "linkEakte": { "type": "string" },
-          "aktenzeichenProLbk": { "type": "string" },
-          "bebauungsplannummer": { "type": "string" },
-          "sobonRelevant": { "type": "string" },
-          "sobonJahr": { "type": "string" },
-          "standVerfahren": { "type": "string" },
-          "standVerfahrenFreieEingabe": { "type": "string" },
-          "adresse": { "$ref": "#/components/schemas/Adresse" },
-          "verortung": { "$ref": "#/components/schemas/VerortungMultiPolygon" },
-          "fristBearbeitung": { "type": "string", "format": "date" },
-          "mitzeichnungBeschlussentwurf": { "type": "string" },
-          "abfragevarianten": { "type": "array", "items": { "$ref": "#/components/schemas/Abfragevariante" } },
-          "_links": { "$ref": "#/components/schemas/Links" }
-        }
-      },
       "Flurstueck": {
         "type": "object",
         "properties": {
@@ -533,28 +505,6 @@
               "items": { "type": "array", "items": { "type": "array", "items": { "type": "number" } } }
             }
           }
-        }
-      },
-      "PageMetadata": {
-        "type": "object",
-        "properties": {
-          "size": { "type": "integer", "format": "int64" },
-          "totalElements": { "type": "integer", "format": "int64" },
-          "totalPages": { "type": "integer", "format": "int64" },
-          "number": { "type": "integer", "format": "int64" }
-        }
-      },
-      "PagedModelEntityModelAbfrage": {
-        "type": "object",
-        "properties": {
-          "_embedded": {
-            "type": "object",
-            "properties": {
-              "abfrages": { "type": "array", "items": { "$ref": "#/components/schemas/EntityModelAbfrage" } }
-            }
-          },
-          "_links": { "$ref": "#/components/schemas/Links" },
-          "page": { "$ref": "#/components/schemas/PageMetadata" }
         }
       },
       "PointGeometry": {
@@ -652,6 +602,58 @@
           "foerderart": { "type": "string" },
           "jahr": { "type": "string" },
           "wohneinheiten": { "type": "number" }
+        }
+      },
+      "EntityModelAbfrage": {
+        "type": "object",
+        "properties": {
+          "createdDateTime": { "type": "string", "format": "date-time" },
+          "lastModifiedDateTime": { "type": "string", "format": "date-time" },
+          "abfrageId": { "type": "string", "format": "uuid" },
+          "artAbfrage": {
+            "type": "string",
+            "enum": ["UNSPECIFIED", "BAULEITPLANVERFAHREN", "BAUGENEHMIGUNGSVERFAHREN", "WEITERES_VERFAHREN"]
+          },
+          "name": { "type": "string" },
+          "statusAbfrage": { "type": "string" },
+          "anmerkung": { "type": "string" },
+          "bauvorhabenId": { "type": "string", "format": "uuid" },
+          "sub": { "type": "string" },
+          "linkEakte": { "type": "string" },
+          "aktenzeichenProLbk": { "type": "string" },
+          "bebauungsplannummer": { "type": "string" },
+          "sobonRelevant": { "type": "string" },
+          "sobonJahr": { "type": "string" },
+          "standVerfahren": { "type": "string" },
+          "standVerfahrenFreieEingabe": { "type": "string" },
+          "adresse": { "$ref": "#/components/schemas/Adresse" },
+          "verortung": { "$ref": "#/components/schemas/VerortungMultiPolygon" },
+          "fristBearbeitung": { "type": "string", "format": "date" },
+          "mitzeichnungBeschlussentwurf": { "type": "string" },
+          "abfragevarianten": { "type": "array", "items": { "$ref": "#/components/schemas/Abfragevariante" } },
+          "_links": { "$ref": "#/components/schemas/Links" }
+        }
+      },
+      "PageMetadata": {
+        "type": "object",
+        "properties": {
+          "size": { "type": "integer", "format": "int64" },
+          "totalElements": { "type": "integer", "format": "int64" },
+          "totalPages": { "type": "integer", "format": "int64" },
+          "number": { "type": "integer", "format": "int64" }
+        }
+      },
+      "PagedModelEntityModelAbfrage": {
+        "type": "object",
+        "properties": {
+          "_embedded": {
+            "type": "object",
+            "properties": {
+              "abfrages": { "type": "array", "items": { "$ref": "#/components/schemas/EntityModelAbfrage" } }
+            }
+          },
+          "_links": { "$ref": "#/components/schemas/Links" },
+          "page": { "$ref": "#/components/schemas/PageMetadata" }
         }
       },
       "AbfrageRequestBody": {
@@ -793,8 +795,7 @@
           "langfristigerPlanungsursaechlicherBedarf": { "$ref": "#/components/schemas/LangfristigerBedarfDto" },
           "langfristigerSobonursaechlicherBedarf": { "$ref": "#/components/schemas/LangfristigerSobonBedarfDto" },
           "satzungsbeschluss": { "type": "string", "format": "date" },
-          "wesentlicheRechtsgrundlage": { "type": "array", "items": { "type": "string" } },
-          "wesentlicheRechtsgrundlageFreieEingabe": { "type": "string" },
+          "planartFreieEingabe": { "type": "string" },
           "realisierungVon": { "type": "integer", "format": "int32" },
           "gfWohnenGesamt": { "type": "number" },
           "gfWohnenSobonUrsaechlich": { "type": "number" },
@@ -818,7 +819,8 @@
           "anmerkungBauratendateiInput": { "type": "string" },
           "anmerkungFachreferate": { "type": "string" },
           "bauratendateiInput": { "type": "array", "items": { "$ref": "#/components/schemas/BauratendateiInputDto" } },
-          "bauabschnitte": { "type": "array", "items": { "$ref": "#/components/schemas/BauabschnittDto" } }
+          "bauabschnitte": { "type": "array", "items": { "$ref": "#/components/schemas/BauabschnittDto" } },
+          "planart": { "type": "array", "items": { "type": "string" } }
         }
       },
       "AbfragevarianteWeiteresVerfahrenDto": {

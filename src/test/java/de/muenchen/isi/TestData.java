@@ -33,6 +33,7 @@ import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtBaulicheNutzung;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtDokument;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.Planart;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonVerfahrensgrundsaetzeJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVerfahren;
@@ -213,9 +214,7 @@ public class TestData {
         abfragevariante.setArtAbfragevariante(ArtAbfrage.BAULEITPLANVERFAHREN);
         abfragevariante.setAbfragevariantenNr(1);
         abfragevariante.setName("Name Abfragevariante 10");
-        abfragevariante.setWesentlicheRechtsgrundlage(
-            List.of(WesentlicheRechtsgrundlage.EINFACHER_BEBAUUNGSPLAN_PARAGRAPH_30)
-        );
+        abfragevariante.setPlanart(List.of(Planart.EINFACHER_BEBAUUNGSPLAN));
         abfragevariante.setGfWohnenSonderwohnformen(false);
         abfragevariante.setSobonBerechnung(createSobonBerechnungModel());
         abfragevariante.setGfWohnenGesamt(BigDecimal.valueOf(1234.56));
@@ -271,9 +270,7 @@ public class TestData {
         final var abfragevariante = new AbfragevarianteBauleitplanverfahrenAngelegtModel();
         abfragevariante.setAbfragevariantenNr(1);
         abfragevariante.setName("Name Abfragevariante 102");
-        abfragevariante.setWesentlicheRechtsgrundlage(
-            List.of(WesentlicheRechtsgrundlage.EINFACHER_BEBAUUNGSPLAN_PARAGRAPH_30)
-        );
+        abfragevariante.setPlanart(List.of(Planart.EINFACHER_BEBAUUNGSPLAN));
         abfragevariante.setGfWohnenSonderwohnformen(false);
         abfragevariante.setGfWohnenGesamt(BigDecimal.valueOf(1234.56));
         abfragevariante.setWeSonderwohnformen(false);

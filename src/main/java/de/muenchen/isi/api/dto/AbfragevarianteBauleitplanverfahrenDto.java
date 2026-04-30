@@ -8,8 +8,8 @@ import de.muenchen.isi.api.dto.bauratendatei.BauratendateiInputDto;
 import de.muenchen.isi.api.dto.bauratendatei.WithBauratendateiInputDto;
 import de.muenchen.isi.api.dto.common.SobonBerechnungDto;
 import de.muenchen.isi.api.dto.filehandling.DokumentDto;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.Planart;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.WesentlicheRechtsgrundlage;
 import jakarta.validation.Valid;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -25,9 +25,9 @@ public class AbfragevarianteBauleitplanverfahrenDto extends AbfragevarianteDto i
 
     private LocalDate satzungsbeschluss;
 
-    private List<WesentlicheRechtsgrundlage> wesentlicheRechtsgrundlage;
+    private List<Planart> planart;
 
-    private String wesentlicheRechtsgrundlageFreieEingabe;
+    private String planartFreieEingabe;
 
     private Integer realisierungVon;
 
