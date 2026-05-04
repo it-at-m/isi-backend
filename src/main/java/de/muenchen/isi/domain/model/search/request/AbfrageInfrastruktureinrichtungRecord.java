@@ -8,9 +8,9 @@ import de.muenchen.isi.infrastructure.entity.common.VerortungPoint;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ResultType;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVerfahren;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusInfrastruktureinrichtung;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.Verfahrensstand;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -28,7 +28,7 @@ public record AbfrageInfrastruktureinrichtungRecord(
     @FieldProjection(path = "adresseJson") Adresse adresse,
     @FieldProjection(path = "verortungJson") VerortungMultiPolygon verortung,
     @FieldProjection(path = "verortungPointJson") VerortungPoint verortungPoint,
-    StandVerfahren standVerfahren,
+    Verfahrensstand verfahrensstand,
     // Abfrage-Attribute
     ArtAbfrage artAbfrage,
     String name,

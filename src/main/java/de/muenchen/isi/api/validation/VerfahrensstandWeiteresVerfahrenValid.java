@@ -10,9 +10,9 @@ import java.lang.annotation.Target;
 
 @Target({ ElementType.FIELD, ElementType.TYPE_USE })
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = StandVerfahrenWeiteresVerfahrenValidator.class)
+@Constraint(validatedBy = VerfahrensstandWeiteresVerfahrenValidator.class)
 @Documented
-public @interface StandVerfahrenWeiteresVerfahrenValid {
+public @interface VerfahrensstandWeiteresVerfahrenValid {
     String message() default "Der Verfahrensstand ist für das Bauleitplanverfahren nicht gültig.";
 
     Class<?>[] groups() default {};

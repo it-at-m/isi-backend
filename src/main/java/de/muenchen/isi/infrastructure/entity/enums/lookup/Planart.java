@@ -9,7 +9,7 @@ public enum Planart implements ILookup {
 
     QUALIFIZIERTER_BEBAUUNGSPLAN("Qualifizierter Bebauungsplan"),
 
-    VORHABENBEZOGENER_BEBAUUNGSPLAN("Vorhabenbezogener Bebauungsplan"),
+    VORHABENSBEZOGENER_BEBAUUNGSPLAN("Vorhabenbezogener Bebauungsplan"),
 
     BEBAUUNGSPLAN_ZUR_WOHNRAUMVERSORGUNG("Bebauungsplan zur Wohnraumversorgung"),
 

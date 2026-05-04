@@ -8,8 +8,8 @@ import de.muenchen.isi.infrastructure.entity.common.VerortungMultiPolygon;
 import de.muenchen.isi.infrastructure.entity.common.VerortungPoint;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ResultType;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVerfahren;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusInfrastruktureinrichtung;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.Verfahrensstand;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -27,7 +27,7 @@ public record BauvorhabenInfrastruktureinrichtungRecord(
     @FieldProjection(path = "adresseJson") Adresse adresse,
     @FieldProjection(path = "verortungJson") VerortungMultiPolygon verortung,
     @FieldProjection(path = "verortungPointJson") VerortungPoint verortungPoint,
-    StandVerfahren standVerfahren,
+    Verfahrensstand verfahrensstand,
     // Bauvorhaben-Attribute
     String nameVorhaben,
     BigDecimal grundstuecksgroesse,

@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @AllArgsConstructor
-public enum StandVerfahren implements ILookup {
+public enum Verfahrensstand implements ILookup {
     UNSPECIFIED(ILookup.UNSPECIFIED, new String[] {}),
 
     VORBEREITUNG_ECKDATENBESCHLUSS(
@@ -80,7 +80,7 @@ public enum StandVerfahren implements ILookup {
     @Getter
     private final String[] suggestions;
 
-    public static List<StandVerfahren> getStandVerfahrenForBauleitplanverfahren() {
+    public static List<Verfahrensstand> getVerfahrensstandForBauleitplanverfahren() {
         return List.of(
             UNSPECIFIED,
             VORBEREITUNG_ECKDATENBESCHLUSS,
@@ -95,11 +95,11 @@ public enum StandVerfahren implements ILookup {
         );
     }
 
-    public static List<StandVerfahren> getStandVerfahrenForBaugenehmigungsverfahren() {
+    public static List<Verfahrensstand> getVerfahrensstandForBaugenehmigungsverfahren() {
         return List.of(UNSPECIFIED, VORBEREITUNG_VORBESCHEID, VORBEREITUNG_BAUGENEHMIGUNG, FREIE_EINGABE);
     }
 
-    public static List<StandVerfahren> getStandVerfahrenForWeiteresVerfahren() {
+    public static List<Verfahrensstand> getVerfahrensstandForWeiteresVerfahren() {
         return List.of(
             UNSPECIFIED,
             VORABFRAGE_OHNE_KONKRETEN_STAND,

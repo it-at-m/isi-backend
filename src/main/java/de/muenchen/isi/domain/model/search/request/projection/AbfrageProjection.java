@@ -1,8 +1,8 @@
 package de.muenchen.isi.domain.model.search.request.projection;
 
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVerfahren;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.Verfahrensstand;
 import java.time.LocalDate;
 import java.util.UUID;
 
@@ -16,8 +16,8 @@ public interface AbfrageProjection extends BaseProjection, AbfrageBauvorhabenPro
     UUID bauvorhabenId();
     LocalDate fristBearbeitung();
 
-    default StandVerfahren getStandVerfahren() {
-        return standVerfahren();
+    default Verfahrensstand getVerfahrensstand() {
+        return verfahrensstand();
     }
 
     default ArtAbfrage getArtAbfrage() {

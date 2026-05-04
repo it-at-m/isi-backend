@@ -8,8 +8,8 @@ import de.muenchen.isi.api.validation.HasAllowedNumberOfDocuments;
 import de.muenchen.isi.api.validation.NotUnspecified;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtBaulicheNutzung;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonVerfahrensgrundsaetzeJahr;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVerfahren;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.Verfahrensstand;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.WesentlicheRechtsgrundlage;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
@@ -37,10 +37,10 @@ public class BauvorhabenDto extends BaseEntityDto {
 
     @NotNull
     @NotUnspecified
-    private StandVerfahren standVerfahren;
+    private Verfahrensstand verfahrensstand;
 
     @Size(max = 1000, message = "Es sind maximal {max} Zeichen erlaubt")
-    private String standVerfahrenFreieEingabe;
+    private String verfahrensstandFreieEingabe;
 
     private String bauvorhabenNummer;
 

@@ -12,10 +12,10 @@ import de.muenchen.isi.infrastructure.entity.enums.lookup.Infrastruktureinrichtu
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Planart;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonVerfahrensgrundsaetzeJahr;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVerfahren;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusInfrastruktureinrichtung;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.Verfahrensstand;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.WesentlicheRechtsgrundlage;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -38,10 +38,10 @@ public class LookupService {
         model.setArtAbfrage(this.getArtAbfrageList());
         model.setUncertainBoolean(this.getUncertainBooleanList());
         model.setSobonVerfahrensgrundsaetzeJahr(this.getSobonVerfahrensgrundsaetzeJahrList());
-        model.setStandVerfahrenBauleitplanverfahren(this.getStandVerfahrenBauleitplanverfahrenList());
-        model.setStandVerfahrenBaugenehmigungsverfahren(this.getStandVerfahrenBaugenehmigungsverfahrenList());
-        model.setStandVerfahrenWeiteresVerfahren(this.getStandVerfahrenWeiteresVerfahrenList());
-        model.setStandVerfahren(this.getStandVerfahrenList());
+        model.setVerfahrensstandBauleitplanverfahren(this.getVerfahrensstandBauleitplanverfahrenList());
+        model.setVerfahrensstandBaugenehmigungsverfahren(this.getVerfahrensstandBaugenehmigungsverfahrenList());
+        model.setVerfahrensstandWeiteresVerfahren(this.getVerfahrensstandWeiteresVerfahrenList());
+        model.setVerfahrensstand(this.getVerfahrensstandList());
         model.setStatusAbfrage(this.getStatusAbfrageList());
         model.setPlanart(this.getPlanartList());
         model.setWesentlicheRechtsgrundlageBaugenehmigungsverfahren(
@@ -98,8 +98,8 @@ public class LookupService {
         return new LookupListModel(list);
     }
 
-    private LookupListModel getStandVerfahrenBauleitplanverfahrenList() {
-        final List<LookupEntryModel> list = StandVerfahren.getStandVerfahrenForBauleitplanverfahren()
+    private LookupListModel getVerfahrensstandBauleitplanverfahrenList() {
+        final List<LookupEntryModel> list = Verfahrensstand.getVerfahrensstandForBauleitplanverfahren()
             .stream()
             .map(item -> new LookupEntryModel(item.toString(), item.getBezeichnung()))
             .collect(Collectors.toList());
@@ -107,8 +107,8 @@ public class LookupService {
         return new LookupListModel(list);
     }
 
-    private LookupListModel getStandVerfahrenBaugenehmigungsverfahrenList() {
-        final List<LookupEntryModel> list = StandVerfahren.getStandVerfahrenForBaugenehmigungsverfahren()
+    private LookupListModel getVerfahrensstandBaugenehmigungsverfahrenList() {
+        final List<LookupEntryModel> list = Verfahrensstand.getVerfahrensstandForBaugenehmigungsverfahren()
             .stream()
             .map(item -> new LookupEntryModel(item.toString(), item.getBezeichnung()))
             .collect(Collectors.toList());
@@ -116,8 +116,8 @@ public class LookupService {
         return new LookupListModel(list);
     }
 
-    private LookupListModel getStandVerfahrenWeiteresVerfahrenList() {
-        final List<LookupEntryModel> list = StandVerfahren.getStandVerfahrenForWeiteresVerfahren()
+    private LookupListModel getVerfahrensstandWeiteresVerfahrenList() {
+        final List<LookupEntryModel> list = Verfahrensstand.getVerfahrensstandForWeiteresVerfahren()
             .stream()
             .map(item -> new LookupEntryModel(item.toString(), item.getBezeichnung()))
             .collect(Collectors.toList());
@@ -125,8 +125,8 @@ public class LookupService {
         return new LookupListModel(list);
     }
 
-    private LookupListModel getStandVerfahrenList() {
-        final List<LookupEntryModel> list = EnumUtils.getEnumList(StandVerfahren.class)
+    private LookupListModel getVerfahrensstandList() {
+        final List<LookupEntryModel> list = EnumUtils.getEnumList(Verfahrensstand.class)
             .stream()
             .map(item -> new LookupEntryModel(item.toString(), item.getBezeichnung()))
             .collect(Collectors.toList());

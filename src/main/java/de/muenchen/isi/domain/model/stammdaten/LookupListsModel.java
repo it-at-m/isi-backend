@@ -13,13 +13,13 @@ public class LookupListsModel {
 
     private LookupListModel sobonVerfahrensgrundsaetzeJahr;
 
-    private LookupListModel standVerfahrenBauleitplanverfahren;
+    private LookupListModel verfahrensstandBauleitplanverfahren;
 
-    private LookupListModel standVerfahrenBaugenehmigungsverfahren;
+    private LookupListModel verfahrensstandBaugenehmigungsverfahren;
 
-    private LookupListModel standVerfahrenWeiteresVerfahren;
+    private LookupListModel verfahrensstandWeiteresVerfahren;
 
-    private LookupListModel standVerfahren;
+    private LookupListModel verfahrensstand;
 
     private LookupListModel statusAbfrage;
 
