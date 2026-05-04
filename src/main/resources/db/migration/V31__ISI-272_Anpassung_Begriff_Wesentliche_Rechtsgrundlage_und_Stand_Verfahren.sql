@@ -29,4 +29,26 @@ SET planart = CASE
 ALTER TABLE IF EXISTS isidbuser.abfrgvar_bauleitplnvrfhrn_planart
     ADD CONSTRAINT abfragevariante_bauleitplanve_planart_check CHECK (planart::text = ANY (ARRAY['EINFACHER_BEBAUUNGSPLAN'::character varying::text, 'QUALIFIZIERTER_BEBAUUNGSPLAN'::character varying::text, 'VORHABENSBEZOGENER_BEBAUUNGSPLAN'::character varying::text, 'BEBAUUNGSPLAN_ZUR_WOHNRAUMVERSORGUNG'::character varying::text, 'FREIE_EINGABE'::character varying::text]));
 
+---
+-- Ändern Stand Verfahren -> Verfahrensstand
+---
+
+ALTER TABLE IF EXISTS isidbuser.baugenehmigungsverfahren
+    RENAME COLUMN stand_verfahren TO verfahrensstand;
+
+ALTER TABLE IF EXISTS isidbuser.baugenehmigungsverfahren
+    RENAME COLUMN stand_verfahren_freie_eingabe TO verfahrensstand_freie_eingabe;
+
+ALTER TABLE IF EXISTS isidbuser.bauleitplanverfahren
+    RENAME COLUMN stand_verfahren TO verfahrensstand;
+
+ALTER TABLE IF EXISTS isidbuser.bauleitplanverfahren
+    RENAME COLUMN stand_verfahren_freie_eingabe TO verfahrensstand_freie_eingabe;
+
+ALTER TABLE IF EXISTS isidbuser.weiteres_verfahren
+    RENAME COLUMN stand_verfahren TO verfahrensstand;
+
+ALTER TABLE IF EXISTS isidbuser.weiteres_verfahren
+    RENAME COLUMN stand_verfahren_freie_eingabe TO verfahrensstand_freie_eingabe;
+
 END;
