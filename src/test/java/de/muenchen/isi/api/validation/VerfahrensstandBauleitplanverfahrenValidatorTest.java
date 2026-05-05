@@ -16,15 +16,15 @@ class VerfahrensstandBauleitplanverfahrenValidatorTest {
         assertThat(this.verfahrensstandValidator.isValid(null, null), is(true));
         assertThat(this.verfahrensstandValidator.isValid(Verfahrensstand.UNSPECIFIED, null), is(true));
         assertThat(
-            this.verfahrensstandValidator.isValid(Verfahrensstand.VORBEREITUNG_ECKDATENBESCHLUSS, null),
+            this.verfahrensstandValidator.isValid(Verfahrensstand.SIMULIERT_VORBEREITUNG_AUFSTELLUNGSBESCHLUSS, null),
             is(true)
         );
         assertThat(
-            this.verfahrensstandValidator.isValid(Verfahrensstand.VORBEREITUNG_WETTBEWERBAUSLOBUNG, null),
+            this.verfahrensstandValidator.isValid(Verfahrensstand.SIMULIERT_VORBEREITUNG_WETTBEWERBAUSLOBUNG, null),
             is(true)
         );
         assertThat(
-            this.verfahrensstandValidator.isValid(Verfahrensstand.VORBEREITUNG_AUFSTELLUNGSBESCHLUSS, null),
+            this.verfahrensstandValidator.isValid(Verfahrensstand.VORBEREITUNG_FRUEHZEITIGE_BETEILIGUNG, null),
             is(true)
         );
         assertThat(
@@ -35,15 +35,17 @@ class VerfahrensstandBauleitplanverfahrenValidatorTest {
             is(true)
         );
         assertThat(
-            this.verfahrensstandValidator.isValid(Verfahrensstand.VORLIEGENDER_SATZUNGSBESCHLUSS, null),
+            this.verfahrensstandValidator.isValid(Verfahrensstand.VORBEREITUNG_SATZUNGSBESCHLUSS, null),
             is(true)
         );
         assertThat(
-            this.verfahrensstandValidator.isValid(Verfahrensstand.RECHTSVERBINDLICHKEIT_AMTSBLATT, null),
+            this.verfahrensstandValidator.isValid(Verfahrensstand.INKRAFTGETRETEN_VEROEFFENTLICHUNG_AMTSBLATT, null),
             is(true)
         );
-        assertThat(this.verfahrensstandValidator.isValid(Verfahrensstand.AUFTEILUNGSPLAN, null), is(true));
+        assertThat(
+            this.verfahrensstandValidator.isValid(Verfahrensstand.INKRAFTGETRETEN_FOERDERMIXPLAN, null),
+            is(true)
+        );
         assertThat(this.verfahrensstandValidator.isValid(Verfahrensstand.FREIE_EINGABE, null), is(true));
-        assertThat(this.verfahrensstandValidator.isValid(Verfahrensstand.VORBEREITUNG_BAUGENEHMIGUNG, null), is(false));
     }
 }

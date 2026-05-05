@@ -8,6 +8,40 @@ import lombok.Getter;
 public enum Verfahrensstand implements ILookup {
     UNSPECIFIED(ILookup.UNSPECIFIED, new String[] {}),
 
+    SIMULIERT_VORBEREITUNG_AUFSTELLUNGSBESCHLUSS(
+        "Simuliert (Vorbereitung Aufstellungsbeschluss)",
+        new String[] { "Vorbereitung", "Aufstellungsbeschluss" }
+    ),
+
+    SIMULIERT_VORBEREITUNG_WETTBEWERBAUSLOBUNG(
+        "Simuliert (Aufstellungsbeschluss / Vorbereitung Auslobung Wettbewerb)",
+        new String[] { "Vorbereitung", "Auslobung", "Wettbewerb" }
+    ),
+
+    VORBEREITUNG_FRUEHZEITIGE_BETEILIGUNG(
+        "Im Verfahren (Vorentwurf / Vorbereitung frühzeitige Beteiligung)",
+        new String[] { "Vorbereitung", "Beteiligung" }
+    ),
+
+    VORBEREITUNG_BILLIGUNGSBESCHLUSS_STAEDTEBAULICHER_VERTRAG(
+        "Im Verfahren (Entwurf / Vorbereitung Billigungsbeschluss)",
+        new String[] { "Vorbereitung", "Billigungsbeschluss" }
+    ),
+
+    VORBEREITUNG_SATZUNGSBESCHLUSS(
+        " Im Verfahren (Vorbereitung Plan für Beschlussfassung / Vorbereitung Satzungsbeschluss)",
+        new String[] { "Vorbereitung", "Satzungsbeschluss" }
+    ),
+
+    INKRAFTGETRETEN_VEROEFFENTLICHUNG_AMTSBLATT(
+        " Inkraftgetreten (Veröffentlichung Amtsblatt)",
+        new String[] { "Inkrafttreten", "Amtsblatt" }
+    ),
+
+    INKRAFTGETRETEN_FOERDERMIXPLAN("Fördermixplan", new String[] { "Fördermixplan" }),
+
+    /* ab hier To-Do: ISI-273, ISI-273 */
+
     VORBEREITUNG_ECKDATENBESCHLUSS(
         "Vorbereitung Eckdatenbeschluss",
         new String[] { "Vorbereitung", "Eckdatenbeschluss" }
@@ -18,24 +52,14 @@ public enum Verfahrensstand implements ILookup {
         new String[] { "Vorbereitung", "Wettbewerbsauslobung" }
     ),
 
-    VORBEREITUNG_AUFSTELLUNGSBESCHLUSS(
-        "Vorbereitung Aufstellungsbeschluss (ggf. + Eckdatenbeschluss)",
-        new String[] { "Vorbereitung", "Aufstellungsbeschluss", "Eckdatenbeschluss" }
-    ),
-
-    VORBEREITUNG_BILLIGUNGSBESCHLUSS_STAEDTEBAULICHER_VERTRAG(
-        "Vorbereitung Billigungsbeschluss / Städtebaulicher Vertrag",
-        new String[] { "Vorbereitung", "Billigungsbeschluss", "Städtebaulicher", "Vertrag" }
-    ),
-
-    VORBEREITUNG_SATZUNGSBESCHLUSS(
-        "Vorbereitung Satzungsbeschluss",
-        new String[] { "Vorbereitung", "Satzungsbeschluss" }
-    ),
-
     VORLIEGENDER_SATZUNGSBESCHLUSS(
         "Vorliegender Satzungsbeschluss",
         new String[] { "vorliegender", "Satzungsbeschluss" }
+    ),
+
+    VORBEREITUNG_AUFSTELLUNGSBESCHLUSS(
+        "Vorbereitung Aufstellungsbeschluss (ggf. + Eckdatenbeschluss)",
+        new String[] { "Vorbereitung", "Aufstellungsbeschluss", "Eckdatenbeschluss" }
     ),
 
     RECHTSVERBINDLICHKEIT_AMTSBLATT(
@@ -83,14 +107,13 @@ public enum Verfahrensstand implements ILookup {
     public static List<Verfahrensstand> getVerfahrensstandForBauleitplanverfahren() {
         return List.of(
             UNSPECIFIED,
-            VORBEREITUNG_ECKDATENBESCHLUSS,
-            VORBEREITUNG_WETTBEWERBAUSLOBUNG,
-            VORBEREITUNG_AUFSTELLUNGSBESCHLUSS,
+            SIMULIERT_VORBEREITUNG_AUFSTELLUNGSBESCHLUSS,
+            SIMULIERT_VORBEREITUNG_WETTBEWERBAUSLOBUNG,
+            VORBEREITUNG_FRUEHZEITIGE_BETEILIGUNG,
             VORBEREITUNG_BILLIGUNGSBESCHLUSS_STAEDTEBAULICHER_VERTRAG,
             VORBEREITUNG_SATZUNGSBESCHLUSS,
-            VORLIEGENDER_SATZUNGSBESCHLUSS,
-            RECHTSVERBINDLICHKEIT_AMTSBLATT,
-            AUFTEILUNGSPLAN,
+            INKRAFTGETRETEN_VEROEFFENTLICHUNG_AMTSBLATT,
+            INKRAFTGETRETEN_FOERDERMIXPLAN,
             FREIE_EINGABE
         );
     }
