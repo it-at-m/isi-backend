@@ -3,6 +3,9 @@ BEGIN;
 ---
 -- Ändern Wesentliche Rechtsgrundlage -> Planart
 ---
+ALTER TABLE IF EXISTS isidbuser.abfrgvar_bauleitplnvrfhrn
+    RENAME COLUMN wesentliche_rechtsgrundlage_freie_eingabe TO planart_freie_eingabe;
+
 ALTER TABLE IF EXISTS isidbuser.abfrgvar_bauleitplnvrfhrn_wesentliche_rechtsgrundlage
 DROP CONSTRAINT abfragevariante_bauleitplanve_wesentliche_rechtsgrundlage_check;
 
@@ -86,5 +89,12 @@ ALTER TABLE IF EXISTS isidbuser.weiteres_verfahren
 ALTER TABLE IF EXISTS isidbuser.weiteres_verfahren
     ADD CONSTRAINT weiteres_verfahren_verfahrensstand_check CHECK (verfahrensstand::text = ANY (ARRAY['UNSPECIFIED'::character varying::text, 'VORBEREITUNG_ECKDATENBESCHLUSS'::character varying::text, 'VORBEREITUNG_WETTBEWERBAUSLOBUNG'::character varying::text, 'VORBEREITUNG_AUFSTELLUNGSBESCHLUSS'::character varying::text, 'VORBEREITUNG_BILLIGUNGSBESCHLUSS_STAEDTEBAULICHER_VERTRAG'::character varying::text, 'VORLIEGENDER_SATZUNGSBESCHLUSS'::character varying::text, 'RECHTSVERBINDLICHKEIT_AMTSBLATT'::character varying::text, 'AUFTEILUNGSPLAN'::character varying::text, 'VORBEREITUNG_VORBESCHEID'::character varying::text, 'VORBEREITUNG_BAUGENEHMIGUNG'::character varying::text, 'VORABFRAGE_OHNE_KONKRETEN_STAND'::character varying::text, 'STRUKTURKONZEPT'::character varying::text, 'RAHMENPLANUNG'::character varying::text, 'POTENTIALUNTERSUCHUNG'::character varying::text, 'STAEDTEBAULICHE_SANIERUNGSMASSNAHME'::character varying::text, 'STAEDTEBAULICHE_ENTWICKLUNGSMASSNAHME'::character varying::text, 'FREIE_EINGABE'::character varying::text, 'STANDORTABFRAGE'::character varying::text]));
 
+--- Bauvorhaben
+
+ALTER TABLE IF EXISTS isidbuser.bauvorhaben
+    RENAME COLUMN stand_verfahren TO verfahrensstand;
+
+ALTER TABLE IF EXISTS isidbuser.bauvorhaben
+    RENAME COLUMN stand_verfahren_freie_eingabe TO verfahrensstand_freie_eingabe;
 
 END;
