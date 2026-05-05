@@ -52,8 +52,6 @@ public class AbfragevarianteWeiteresVerfahrenAngelegtModel {
 
     private BigDecimal gfWohnenSeniorinnenWohnen;
 
-    private BigDecimal gfWohnenGenossenschaftlichesWohnen;
-
     private BigDecimal gfWohnenWeiteresNichtInfrastrukturrelevantesWohnen;
 
     private String gfAnmerkung;
@@ -71,8 +69,6 @@ public class AbfragevarianteWeiteresVerfahrenAngelegtModel {
     private Integer weStudentischesWohnen;
 
     private Integer weSeniorinnenWohnen;
-
-    private Integer weGenossenschaftlichesWohnen;
 
     private Integer weWeiteresNichtInfrastrukturrelevantesWohnen;
 

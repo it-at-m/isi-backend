@@ -45,8 +45,6 @@ public class AbfragevarianteBauleitplanverfahrenDto extends AbfragevarianteDto i
 
     private BigDecimal gfWohnenSeniorinnenWohnen;
 
-    private BigDecimal gfWohnenGenossenschaftlichesWohnen;
-
     private BigDecimal gfWohnenWeiteresNichtInfrastrukturrelevantesWohnen;
 
     private String gfAnmerkung;
@@ -60,8 +58,6 @@ public class AbfragevarianteBauleitplanverfahrenDto extends AbfragevarianteDto i
     private Integer weStudentischesWohnen;
 
     private Integer weSeniorinnenWohnen;
-
-    private Integer weGenossenschaftlichesWohnen;
 
     private Integer weWeiteresNichtInfrastrukturrelevantesWohnen;
 

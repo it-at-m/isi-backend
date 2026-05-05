@@ -48,8 +48,6 @@ public class AbfragevarianteBauleitplanverfahrenModel
 
     private BigDecimal gfWohnenSeniorinnenWohnen;
 
-    private BigDecimal gfWohnenGenossenschaftlichesWohnen;
-
     private BigDecimal gfWohnenWeiteresNichtInfrastrukturrelevantesWohnen;
 
     private String gfAnmerkung;
@@ -63,8 +61,6 @@ public class AbfragevarianteBauleitplanverfahrenModel
     private Integer weStudentischesWohnen;
 
     private Integer weSeniorinnenWohnen;
-
-    private Integer weGenossenschaftlichesWohnen;
 
     private Integer weWeiteresNichtInfrastrukturrelevantesWohnen;
 
