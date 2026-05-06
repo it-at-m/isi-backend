@@ -23,7 +23,7 @@ public class LookupListsDto {
 
     private LookupListDto statusAbfrage;
 
-    private LookupListDto wesentlicheRechtsgrundlageBauleitplanverfahren;
+    private LookupListDto planart;
 
     private LookupListDto wesentlicheRechtsgrundlageBaugenehmigungsverfahren;
 
