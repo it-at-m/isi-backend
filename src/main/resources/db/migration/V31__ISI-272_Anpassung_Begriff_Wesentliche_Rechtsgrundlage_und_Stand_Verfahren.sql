@@ -1,7 +1,7 @@
 BEGIN;
 
 ---
--- Ändern Wesentliche Rechtsgrundlage -> Planart
+-- Bauleitplanverfahren: Wesentliche Rechtsgrundlage -> Planart
 ---
 ALTER TABLE IF EXISTS isidbuser.abfrgvar_bauleitplnvrfhrn
     RENAME COLUMN wesentliche_rechtsgrundlage_freie_eingabe TO planart_freie_eingabe;
@@ -53,8 +53,8 @@ SET verfahrensstand = CASE
                           WHEN verfahrensstand = 'VORBEREITUNG_WETTBEWERBAUSLOBUNG' THEN 'SIMULIERT_VORBEREITUNG_WETTBEWERBAUSLOBUNG'
                           WHEN verfahrensstand = 'RECHTSVERBINDLICHKEIT_AMTSBLATT' THEN 'INKRAFTGETRETEN_VEROEFFENTLICHUNG_AMTSBLATT'
                           WHEN verfahrensstand = 'AUFTEILUNGSPLAN' THEN 'INKRAFTGETRETEN_FOERDERMIXPLAN'
-                          WHEN verfahrensstand = 'VORLIEGENDER_SATZUNGSBESCHLUSS' THEN NULL
-                          WHEN verfahrensstand = 'VORBEREITUNG_ECKDATENBESCHLUSS' THEN NULL
+                          WHEN verfahrensstand = 'VORLIEGENDER_SATZUNGSBESCHLUSS' THEN 'FREIE_EINGABE'
+                          WHEN verfahrensstand = 'VORBEREITUNG_ECKDATENBESCHLUSS' THEN 'FREIE_EINGABE'
                           ELSE verfahrensstand
     END;
 
@@ -92,9 +92,15 @@ ALTER TABLE IF EXISTS isidbuser.weiteres_verfahren
 --- Bauvorhaben
 
 ALTER TABLE IF EXISTS isidbuser.bauvorhaben
+DROP CONSTRAINT bauvorhaben_stand_verfahren_check;
+
+ALTER TABLE IF EXISTS isidbuser.bauvorhaben
     RENAME COLUMN stand_verfahren TO verfahrensstand;
 
 ALTER TABLE IF EXISTS isidbuser.bauvorhaben
     RENAME COLUMN stand_verfahren_freie_eingabe TO verfahrensstand_freie_eingabe;
+
+ALTER TABLE IF EXISTS isidbuser.bauvorhaben
+    ADD CONSTRAINT bauvorhaben_verfahrensstand_check CHECK (verfahrensstand::text = ANY (ARRAY['UNSPECIFIED'::character varying::text, 'VORBEREITUNG_ECKDATENBESCHLUSS'::character varying::text, 'VORBEREITUNG_WETTBEWERBAUSLOBUNG'::character varying::text, 'VORBEREITUNG_AUFSTELLUNGSBESCHLUSS'::character varying::text, 'VORBEREITUNG_BILLIGUNGSBESCHLUSS_STAEDTEBAULICHER_VERTRAG'::character varying::text, 'VORBEREITUNG_SATZUNGSBESCHLUSS'::character varying::text, 'VORLIEGENDER_SATZUNGSBESCHLUSS'::character varying::text, 'RECHTSVERBINDLICHKEIT_AMTSBLATT'::character varying::text, 'AUFTEILUNGSPLAN'::character varying::text, 'VORBEREITUNG_VORBESCHEID'::character varying::text, 'VORBEREITUNG_BAUGENEHMIGUNG'::character varying::text, 'VORABFRAGE_OHNE_KONKRETEN_STAND'::character varying::text, 'STRUKTURKONZEPT'::character varying::text, 'RAHMENPLANUNG'::character varying::text, 'POTENTIALUNTERSUCHUNG'::character varying::text, 'STAEDTEBAULICHE_SANIERUNGSMASSNAHME'::character varying::text, 'STAEDTEBAULICHE_ENTWICKLUNGSMASSNAHME'::character varying::text, 'FREIE_EINGABE'::character varying::text, 'STANDORTABFRAGE'::character varying::text]));
 
 END;
