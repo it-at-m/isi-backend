@@ -38,7 +38,7 @@ public class BauleitplanverfahrenAngelegtDto extends AbfrageAngelegtDto {
     @VerfahrensstandBauleitplanverfahrenValid
     private Verfahrensstand verfahrensstand;
 
-    @Size(max = 2000, message = "Es sind maximal {max} Zeichen erlaubt")
+    @Size(max = 1000, message = "Es sind maximal {max} Zeichen erlaubt")
     private String verfahrensstandFreieEingabe;
 
     @Valid

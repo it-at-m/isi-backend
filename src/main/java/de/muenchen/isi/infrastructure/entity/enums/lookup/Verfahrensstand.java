@@ -29,12 +29,12 @@ public enum Verfahrensstand implements ILookup {
     ),
 
     VORBEREITUNG_SATZUNGSBESCHLUSS(
-        " Im Verfahren (Vorbereitung Plan für Beschlussfassung / Vorbereitung Satzungsbeschluss)",
+        "Im Verfahren (Vorbereitung Plan für Beschlussfassung / Vorbereitung Satzungsbeschluss)",
         new String[] { "Vorbereitung", "Satzungsbeschluss" }
     ),
 
     INKRAFTGETRETEN_VEROEFFENTLICHUNG_AMTSBLATT(
-        " Inkraftgetreten (Veröffentlichung Amtsblatt)",
+        "Inkraftgetreten (Veröffentlichung Amtsblatt)",
         new String[] { "Inkrafttreten", "Amtsblatt" }
     ),
 

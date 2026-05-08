@@ -2,6 +2,7 @@ package de.muenchen.isi.infrastructure.adapter.search;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Verfahrensstand;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.search.mapper.pojo.bridge.ValueBridge;

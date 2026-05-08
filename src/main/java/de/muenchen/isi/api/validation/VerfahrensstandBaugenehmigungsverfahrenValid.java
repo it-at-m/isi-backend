@@ -13,7 +13,7 @@ import java.lang.annotation.Target;
 @Constraint(validatedBy = VerfahrensstandBaugenehmigungsverfahrenValidator.class)
 @Documented
 public @interface VerfahrensstandBaugenehmigungsverfahrenValid {
-    String message() default "Der Verfahrensstand ist für das Bauleitplanverfahren nicht gültig.";
+    String message() default "Der Verfahrensstand ist für das Baugenehmigungsverfahren nicht gültig.";
 
     Class<?>[] groups() default {};
 
