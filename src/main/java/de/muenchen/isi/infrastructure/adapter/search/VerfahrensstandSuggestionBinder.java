@@ -28,7 +28,8 @@ public class VerfahrensstandSuggestionBinder implements CompletionSuggestionBind
         public JsonElement toIndexedValue(final Verfahrensstand value, final ValueBridgeToIndexedValueContext context) {
             final var jsonObject = new JsonObject();
             final var jsonArray = new JsonArray();
-            if (!Objects.equals(Verfahrensstand.UNSPECIFIED, value)) {
+
+            if (value != null && value != Verfahrensstand.UNSPECIFIED) {
                 Arrays.stream(value.getSuggestions()).map(JsonPrimitive::new).forEach(jsonArray::add);
             }
             jsonObject.add("input", jsonArray);
