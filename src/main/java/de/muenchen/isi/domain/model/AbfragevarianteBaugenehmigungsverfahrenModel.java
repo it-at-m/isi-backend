@@ -29,6 +29,8 @@ public class AbfragevarianteBaugenehmigungsverfahrenModel
 
     private String wesentlicheRechtsgrundlageFreieEingabe;
 
+    private String wesentlicheRechtsgrundlageAngabenZurBefreiung;
+
     private Integer realisierungVon;
 
     // Geschossfläche Wohnen
