@@ -125,7 +125,7 @@ public enum Verfahrensstand implements ILookup {
     }
 
     public static List<Verfahrensstand> getVerfahrensstandForBaugenehmigungsverfahren() {
-        return List.of(UNSPECIFIED, VORBEREITUNG_VORBESCHEID, VORBEREITUNG_BAUGENEHMIGUNG, FREIE_EINGABE);
+        return List.of(UNSPECIFIED, VORBEREITUNG_BAUGENEHMIGUNG, VORBEREITUNG_VORBESCHEID, FREIE_EINGABE);
     }
 
     public static List<Verfahrensstand> getVerfahrensstandForWeiteresVerfahren() {
