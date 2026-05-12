@@ -15,7 +15,7 @@ public class VerfahrensstandWeiteresVerfahrenValidator
 
     @Override
     public boolean isValid(final Verfahrensstand value, final ConstraintValidatorContext context) {
-        if (ObjectUtils.isEmpty(value)) {
+        if (value == null) {
             return true;
         }
         return Verfahrensstand.getVerfahrensstandForWeiteresVerfahren().contains(value);

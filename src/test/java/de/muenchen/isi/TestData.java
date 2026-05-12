@@ -91,7 +91,7 @@ public class TestData {
         );
         bauleitplanverfahren.setFristBearbeitung(LocalDate.of(2022, 12, 31));
         bauleitplanverfahren.setAnmerkung("Bitte die Abfrage zeitnah behandeln");
-        bauleitplanverfahren.setVerfahrensstand(Verfahrensstand.STRUKTURKONZEPT);
+        bauleitplanverfahren.setVerfahrensstand(Verfahrensstand.SIMULIERT_VORBEREITUNG_AUFSTELLUNGSBESCHLUSS);
         bauleitplanverfahren.setVerortung(createVerortung());
         bauleitplanverfahren.setSobonRelevant(UncertainBoolean.TRUE);
         bauleitplanverfahren.setSobonJahr(SobonVerfahrensgrundsaetzeJahr.JAHR_2021);
