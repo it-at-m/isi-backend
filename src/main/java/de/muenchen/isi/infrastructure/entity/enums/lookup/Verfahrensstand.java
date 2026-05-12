@@ -38,7 +38,7 @@ public enum Verfahrensstand implements ILookup {
         new String[] { "Inkrafttreten", "Amtsblatt" }
     ),
 
-    INKRAFTGETRETEN_FOERDERMIXPLAN("Fördermixplan", new String[] { "Fördermixplan" }),
+    INKRAFTGETRETEN_FOERDERMIXPLAN("Inkraftgetreten (Fördermixplan)", new String[] { "Fördermixplan" }),
 
     VORBEREITUNG_VORBESCHEID(
         "Bauvoranfrage, Art. 71 BayBO (Vorbereitung Vorbescheid)",
