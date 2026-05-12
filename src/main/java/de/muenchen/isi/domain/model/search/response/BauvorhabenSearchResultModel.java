@@ -2,7 +2,7 @@ package de.muenchen.isi.domain.model.search.response;
 
 import de.muenchen.isi.domain.model.common.MultiPolygonGeometryModel;
 import de.muenchen.isi.domain.model.common.StadtbezirkModel;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVerfahren;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.Verfahrensstand;
 import java.math.BigDecimal;
 import java.util.Set;
 import java.util.UUID;
@@ -23,7 +23,7 @@ public class BauvorhabenSearchResultModel extends SearchResultModel {
 
     private BigDecimal grundstuecksgroesse;
 
-    private StandVerfahren standVerfahren;
+    private Verfahrensstand verfahrensstand;
 
     private MultiPolygonGeometryModel umgriff;
 }

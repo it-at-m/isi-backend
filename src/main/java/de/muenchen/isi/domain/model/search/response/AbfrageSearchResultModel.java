@@ -2,8 +2,8 @@ package de.muenchen.isi.domain.model.search.response;
 
 import de.muenchen.isi.domain.model.common.StadtbezirkModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVerfahren;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.Verfahrensstand;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -29,7 +29,7 @@ public class AbfrageSearchResultModel extends SearchResultModel {
 
     private LocalDate fristBearbeitung;
 
-    private StandVerfahren standVerfahren;
+    private Verfahrensstand verfahrensstand;
 
     private LocalDateTime createdDateTime;
 

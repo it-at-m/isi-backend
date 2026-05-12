@@ -42,7 +42,7 @@ class SearchPreparationServiceTest {
         expected.add("verortung.gemarkungen.name_searchword_suggestion");
         expected.add("verortung.gemarkungen.flurstuecke.nummer_searchword_suggestion");
         expected.add("statusAbfrage_searchword_suggestion");
-        expected.add("standVerfahren_searchword_suggestion");
+        expected.add("verfahrensstand_searchword_suggestion");
         expected.add("bebauungsplannummer_searchword_suggestion");
         expected.add("name_searchword_suggestion");
         expected.add("abfragevariantenBauleitplanverfahren.realisierungVon_searchword_suggestion");
@@ -59,7 +59,7 @@ class SearchPreparationServiceTest {
         expected.add("verortung.gemarkungen.name_searchword_suggestion");
         expected.add("verortung.gemarkungen.flurstuecke.nummer_searchword_suggestion");
         expected.add("statusAbfrage_searchword_suggestion");
-        expected.add("standVerfahren_searchword_suggestion");
+        expected.add("verfahrensstand_searchword_suggestion");
         expected.add("bebauungsplannummer_searchword_suggestion");
         expected.add("name_searchword_suggestion");
         expected.add("abfragevariantenBaugenehmigungsverfahren.realisierungVon_searchword_suggestion");
@@ -76,7 +76,7 @@ class SearchPreparationServiceTest {
         expected.add("verortung.gemarkungen.name_searchword_suggestion");
         expected.add("verortung.gemarkungen.flurstuecke.nummer_searchword_suggestion");
         expected.add("statusAbfrage_searchword_suggestion");
-        expected.add("standVerfahren_searchword_suggestion");
+        expected.add("verfahrensstand_searchword_suggestion");
         expected.add("bebauungsplannummer_searchword_suggestion");
         expected.add("name_searchword_suggestion");
         expected.add("abfragevariantenWeiteresVerfahren.realisierungVon_searchword_suggestion");
@@ -86,7 +86,7 @@ class SearchPreparationServiceTest {
         result = searchPreparationService.getNamesOfSearchableAttributesForSearchwordSuggestion(Bauvorhaben.class);
         expected = new HashSet<>();
         expected.add("nameVorhaben_searchword_suggestion");
-        expected.add("standVerfahren_searchword_suggestion");
+        expected.add("verfahrensstand_searchword_suggestion");
         expected.add("bauvorhabenNummer_searchword_suggestion");
         expected.add("adresse.strasse_searchword_suggestion");
         expected.add("adresse.hausnummer_searchword_suggestion");
@@ -157,7 +157,7 @@ class SearchPreparationServiceTest {
         expected.add("verortung.gemarkungen.name");
         expected.add("verortung.gemarkungen.flurstuecke.nummer");
         expected.add("statusAbfrage");
-        expected.add("standVerfahren");
+        expected.add("verfahrensstand");
         expected.add("bebauungsplannummer");
         expected.add("name");
         expected.add("abfragevariantenBauleitplanverfahren.realisierungVon");
@@ -172,7 +172,7 @@ class SearchPreparationServiceTest {
         expected.add("verortung.gemarkungen.name");
         expected.add("verortung.gemarkungen.flurstuecke.nummer");
         expected.add("statusAbfrage");
-        expected.add("standVerfahren");
+        expected.add("verfahrensstand");
         expected.add("bebauungsplannummer");
         expected.add("name");
         expected.add("abfragevariantenBaugenehmigungsverfahren.realisierungVon");
@@ -187,7 +187,7 @@ class SearchPreparationServiceTest {
         expected.add("verortung.gemarkungen.name");
         expected.add("verortung.gemarkungen.flurstuecke.nummer");
         expected.add("statusAbfrage");
-        expected.add("standVerfahren");
+        expected.add("verfahrensstand");
         expected.add("bebauungsplannummer");
         expected.add("name");
         expected.add("abfragevariantenWeiteresVerfahren.realisierungVon");
@@ -197,7 +197,7 @@ class SearchPreparationServiceTest {
         result = searchPreparationService.getNamesOfSearchableAttributes(List.of(Bauvorhaben.class));
         expected = new HashSet<>();
         expected.add("nameVorhaben");
-        expected.add("standVerfahren");
+        expected.add("verfahrensstand");
         expected.add("bauvorhabenNummer");
         expected.add("adresse.strasse");
         expected.add("adresse.hausnummer");
@@ -276,7 +276,7 @@ class SearchPreparationServiceTest {
         expected.add("verortung.gemarkungen.name");
         expected.add("verortung.gemarkungen.flurstuecke.nummer");
         expected.add("statusAbfrage");
-        expected.add("standVerfahren");
+        expected.add("verfahrensstand");
         expected.add("bebauungsplannummer");
         expected.add("name");
         expected.add("abfragevariantenBauleitplanverfahren.realisierungVon");
@@ -286,7 +286,7 @@ class SearchPreparationServiceTest {
         expected.add("abfragevariantenWeiteresVerfahren.realisierungVon");
         expected.add("abfragevariantenSachbearbeitungWeiteresVerfahren.realisierungVon");
         expected.add("nameVorhaben");
-        expected.add("standVerfahren");
+        expected.add("verfahrensstand");
         expected.add("bauvorhabenNummer");
         expected.add("adresse.strasse");
         expected.add("adresse.hausnummer");

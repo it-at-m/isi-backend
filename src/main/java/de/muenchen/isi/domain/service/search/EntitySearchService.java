@@ -179,7 +179,7 @@ public class EntitySearchService {
             filterAttributeMap.put("sub", List.of(authenticationUtils.getUserSub()));
         }
         filterAttributeMap.put("statusAbfrage_filter", searchQueryAndSortingInformation.getFilterStatusAbfrage());
-        filterAttributeMap.put("stand_verfahren_filter", searchQueryAndSortingInformation.getFilterStandVerfahren());
+        filterAttributeMap.put("verfahrensstand_filter", searchQueryAndSortingInformation.getFilterVerfahrensstand());
         filterAttributeMap.put(
             "status_infrastruktureinrichtung_filter",
             searchQueryAndSortingInformation.getFilterInfrastruktureinrichtungStatus()

@@ -6,8 +6,8 @@ import de.muenchen.isi.domain.model.common.VerortungMultiPolygonModel;
 import de.muenchen.isi.domain.model.filehandling.DokumentModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtBaulicheNutzung;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonVerfahrensgrundsaetzeJahr;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVerfahren;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.Verfahrensstand;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.WesentlicheRechtsgrundlage;
 import java.math.BigDecimal;
 import java.util.List;
@@ -27,9 +27,9 @@ public class BauvorhabenModel extends BaseEntityModel {
 
     private BigDecimal grundstuecksgroesse;
 
-    private StandVerfahren standVerfahren;
+    private Verfahrensstand verfahrensstand;
 
-    private String standVerfahrenFreieEingabe;
+    private String verfahrensstandFreieEingabe;
 
     private String bauvorhabenNummer;
 

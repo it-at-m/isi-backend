@@ -9,8 +9,8 @@ import de.muenchen.isi.infrastructure.adapter.search.IntegerToStringValueBridge;
 import de.muenchen.isi.infrastructure.entity.bauratendatei.BauratendateiInput;
 import de.muenchen.isi.infrastructure.entity.common.SobonBerechnung;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.Planart;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.WesentlicheRechtsgrundlage;
 import de.muenchen.isi.infrastructure.entity.filehandling.Dokument;
 import de.muenchen.isi.infrastructure.repository.search.SearchwordSuggesterRepository;
 import jakarta.persistence.AttributeOverride;
@@ -64,10 +64,10 @@ public class AbfragevarianteBauleitplanverfahren extends Abfragevariante {
 
     @Enumerated(EnumType.STRING)
     @ElementCollection
-    private List<WesentlicheRechtsgrundlage> wesentlicheRechtsgrundlage;
+    private List<Planart> planart;
 
     @Column(length = 1000)
-    private String wesentlicheRechtsgrundlageFreieEingabe;
+    private String planartFreieEingabe;
 
     @KeywordField(valueBridge = @ValueBridgeRef(type = IntegerToStringValueBridge.class))
     @NonStandardField(

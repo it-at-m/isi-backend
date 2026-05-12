@@ -43,10 +43,10 @@ import de.muenchen.isi.infrastructure.entity.common.Stadtbezirk;
 import de.muenchen.isi.infrastructure.entity.common.VerortungMultiPolygon;
 import de.muenchen.isi.infrastructure.entity.enums.CounterType;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVerfahren;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusInfrastruktureinrichtung;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.Verfahrensstand;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.WesentlicheRechtsgrundlage;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Infrastruktureinrichtung;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Kindergarten;
@@ -158,7 +158,7 @@ public class BauvorhabenServiceTest {
         bauvorhaben.setNameVorhaben("Name");
         bauvorhaben.setWesentlicheRechtsgrundlage(List.of(WesentlicheRechtsgrundlage.AUSSENBEREICH));
         bauvorhaben.setSobonRelevant(UncertainBoolean.FALSE);
-        bauvorhaben.setStandVerfahren(StandVerfahren.FREIE_EINGABE);
+        bauvorhaben.setVerfahrensstand(Verfahrensstand.FREIE_EINGABE);
         bauvorhaben.setId(bauvorhabenId);
 
         final Bauleitplanverfahren abfrage1 = new Bauleitplanverfahren();
@@ -243,7 +243,7 @@ public class BauvorhabenServiceTest {
             List.of(WesentlicheRechtsgrundlage.EINFACHER_BEBAUUNGSPLAN_PARAGRAPH_30)
         );
         bauvorhaben.setSobonRelevant(UncertainBoolean.FALSE);
-        bauvorhaben.setStandVerfahren(StandVerfahren.RAHMENPLANUNG);
+        bauvorhaben.setVerfahrensstand(Verfahrensstand.RAHMENPLANUNG);
         bauvorhaben.setId(bauvorhabenId);
 
         final Kinderkrippe kinderkrippe1 = new Kinderkrippe();
