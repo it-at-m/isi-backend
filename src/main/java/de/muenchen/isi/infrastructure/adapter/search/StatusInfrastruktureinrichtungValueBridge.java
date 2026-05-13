@@ -10,7 +10,10 @@ import org.hibernate.search.mapper.pojo.bridge.runtime.ValueBridgeToIndexedValue
 
 /**
  * ValueBridge um Entitätsattribute vom Typ {@link StatusInfrastruktureinrichtung} für eine Volltextsuche indizieren zu können.
- * Die zu indizierenden Werte werden aus dem Typattribut {@link StatusInfrastruktureinrichtung#getBezeichnung()} entnommen.
+ * Die zu indizierenden Werte werden durch vollständige JSON-Serialisierung des {@link StatusInfrastruktureinrichtung}-Enum-Objekts
+ * mittels {@code objectMapper.writeValueAsString(StatusInfrastruktureinrichtung)} erzeugt, da
+ * {@link StatusInfrastruktureinrichtung#getBezeichnung()} nicht mit {@code @JsonValue} annotiert ist. Dadurch werden
+ * alle Felder des Enums (u.a. {@code bezeichnung} und {@code suggestions}) indiziert.
  */
 @Slf4j
 public class StatusInfrastruktureinrichtungValueBridge implements ValueBridge<StatusInfrastruktureinrichtung, String> {

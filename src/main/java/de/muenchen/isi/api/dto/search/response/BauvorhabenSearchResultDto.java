@@ -2,7 +2,7 @@ package de.muenchen.isi.api.dto.search.response;
 
 import de.muenchen.isi.api.dto.common.MultiPolygonGeometryDto;
 import de.muenchen.isi.api.dto.common.StadtbezirkDto;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVerfahren;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.Verfahrensstand;
 import java.math.BigDecimal;
 import java.util.Set;
 import java.util.UUID;
@@ -23,7 +23,7 @@ public class BauvorhabenSearchResultDto extends SearchResultDto {
 
     private BigDecimal grundstuecksgroesse;
 
-    private StandVerfahren standVerfahren;
+    private Verfahrensstand verfahrensstand;
 
     private MultiPolygonGeometryDto umgriff;
 }

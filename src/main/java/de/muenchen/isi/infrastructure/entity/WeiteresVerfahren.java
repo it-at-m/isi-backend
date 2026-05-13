@@ -1,16 +1,16 @@
 package de.muenchen.isi.infrastructure.entity;
 
 import de.muenchen.isi.infrastructure.adapter.search.AdresseValueBridge;
-import de.muenchen.isi.infrastructure.adapter.search.StandVerfahrenSuggestionBinder;
-import de.muenchen.isi.infrastructure.adapter.search.StandVerfahrenValueBridge;
 import de.muenchen.isi.infrastructure.adapter.search.StringSuggestionBinder;
+import de.muenchen.isi.infrastructure.adapter.search.VerfahrensstandSuggestionBinder;
+import de.muenchen.isi.infrastructure.adapter.search.VerfahrensstandValueBridge;
 import de.muenchen.isi.infrastructure.adapter.search.VerortungMultiPolygonValueBridge;
 import de.muenchen.isi.infrastructure.entity.common.Adresse;
 import de.muenchen.isi.infrastructure.entity.common.VerortungMultiPolygon;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonVerfahrensgrundsaetzeJahr;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVerfahren;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.Verfahrensstand;
 import de.muenchen.isi.infrastructure.entity.filehandling.Dokument;
 import de.muenchen.isi.infrastructure.repository.search.SearchwordSuggesterRepository;
 import jakarta.persistence.CascadeType;
@@ -79,18 +79,18 @@ public class WeiteresVerfahren extends Abfrage {
     @Column
     private SobonVerfahrensgrundsaetzeJahr sobonJahr;
 
-    @FullTextField(valueBridge = @ValueBridgeRef(type = StandVerfahrenValueBridge.class))
+    @FullTextField(valueBridge = @ValueBridgeRef(type = VerfahrensstandValueBridge.class))
     @NonStandardField(
-        name = "standVerfahren" + SearchwordSuggesterRepository.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
-        valueBinder = @ValueBinderRef(type = StandVerfahrenSuggestionBinder.class)
+        name = "verfahrensstand" + SearchwordSuggesterRepository.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
+        valueBinder = @ValueBinderRef(type = VerfahrensstandSuggestionBinder.class)
     )
-    @GenericField(name = "stand_verfahren_filter")
+    @GenericField(name = "verfahrensstand_filter")
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private StandVerfahren standVerfahren;
+    private Verfahrensstand verfahrensstand;
 
     @Column(length = 1000)
-    private String standVerfahrenFreieEingabe;
+    private String verfahrensstandFreieEingabe;
 
     @IndexedEmbedded
     @Embedded

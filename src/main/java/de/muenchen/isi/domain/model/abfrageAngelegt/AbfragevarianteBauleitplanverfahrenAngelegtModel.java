@@ -6,7 +6,7 @@ package de.muenchen.isi.domain.model.abfrageAngelegt;
 
 import de.muenchen.isi.domain.model.BauabschnittModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.WesentlicheRechtsgrundlage;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.Planart;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
@@ -28,9 +28,9 @@ public class AbfragevarianteBauleitplanverfahrenAngelegtModel {
 
     private LocalDate satzungsbeschluss;
 
-    private List<WesentlicheRechtsgrundlage> wesentlicheRechtsgrundlage;
+    private List<Planart> planart;
 
-    private String wesentlicheRechtsgrundlageFreieEingabe;
+    private String planartFreieEingabe;
 
     private Integer realisierungVon;
 

@@ -5,10 +5,10 @@ import de.muenchen.isi.api.dto.common.VerortungMultiPolygonDto;
 import de.muenchen.isi.api.dto.filehandling.DokumentDto;
 import de.muenchen.isi.api.validation.HasAllowedNumberOfDocuments;
 import de.muenchen.isi.api.validation.NotUnspecified;
-import de.muenchen.isi.api.validation.StandVerfahrenWeiteresVerfahrenValid;
+import de.muenchen.isi.api.validation.VerfahrensstandWeiteresVerfahrenValid;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonVerfahrensgrundsaetzeJahr;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVerfahren;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.Verfahrensstand;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -38,11 +38,11 @@ public class WeiteresVerfahrenAngelegtDto extends AbfrageAngelegtDto {
 
     @NotNull
     @NotUnspecified
-    @StandVerfahrenWeiteresVerfahrenValid
-    private StandVerfahren standVerfahren;
+    @VerfahrensstandWeiteresVerfahrenValid
+    private Verfahrensstand verfahrensstand;
 
-    @Size(max = 2000, message = "Es sind maximal {max} Zeichen erlaubt")
-    private String standVerfahrenFreieEingabe;
+    @Size(max = 1000, message = "Es sind maximal {max} Zeichen erlaubt")
+    private String verfahrensstandFreieEingabe;
 
     @Valid
     private AdresseDto adresse;

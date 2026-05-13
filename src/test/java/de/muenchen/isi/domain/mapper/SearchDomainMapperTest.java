@@ -31,8 +31,8 @@ import de.muenchen.isi.infrastructure.entity.common.Wgs84;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ResultType;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVerfahren;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.Verfahrensstand;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Kinderkrippe;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
@@ -497,7 +497,7 @@ public class SearchDomainMapperTest {
         Mockito.when(projection.getId()).thenReturn(uuid);
         Mockito.when(projection.getNameVorhaben()).thenReturn("Test Vorhaben");
         Mockito.when(projection.getGrundstuecksgroesse()).thenReturn(BigDecimal.TEN);
-        Mockito.when(projection.getStandVerfahren()).thenReturn(StandVerfahren.STRUKTURKONZEPT);
+        Mockito.when(projection.getVerfahrensstand()).thenReturn(Verfahrensstand.STRUKTURKONZEPT);
         Mockito.when(projection.getVerortung()).thenReturn(verortung);
         Mockito.when(projection.getAdresse()).thenReturn(adresse);
 
@@ -509,7 +509,7 @@ public class SearchDomainMapperTest {
         assertThat(result.getId(), is(uuid));
         assertThat(result.getStadtbezirke().size(), is(1));
         assertThat(result.getGrundstuecksgroesse(), is(BigDecimal.TEN));
-        assertThat(result.getStandVerfahren(), is(StandVerfahren.STRUKTURKONZEPT));
+        assertThat(result.getVerfahrensstand(), is(Verfahrensstand.STRUKTURKONZEPT));
         MultiPolygonGeometryModel multiPolygonGeometryModel = new MultiPolygonGeometryModel();
         multiPolygonGeometryModel.setType("Umgriff");
         multiPolygonGeometryModel.setCoordinates(List.of(List.of(List.of(List.of(BigDecimal.TEN, BigDecimal.ONE)))));
@@ -541,7 +541,7 @@ public class SearchDomainMapperTest {
         Mockito.when(projection.getId()).thenReturn(uuid);
         Mockito.when(projection.getName()).thenReturn("Test Abfrage");
         Mockito.when(projection.getStatusAbfrage()).thenReturn(StatusAbfrage.ANGELEGT);
-        Mockito.when(projection.getStandVerfahren()).thenReturn(StandVerfahren.STRUKTURKONZEPT);
+        Mockito.when(projection.getVerfahrensstand()).thenReturn(Verfahrensstand.STRUKTURKONZEPT);
         Mockito.when(projection.getFristBearbeitung()).thenReturn(LocalDate.of(2025, 1, 1));
         Mockito.when(projection.getBauvorhabenId()).thenReturn(uuid);
         Mockito.when(projection.getAdresse()).thenReturn(adresse);
@@ -554,7 +554,7 @@ public class SearchDomainMapperTest {
         assertThat(result.getArtAbfrage(), is(ArtAbfrage.BAULEITPLANVERFAHREN));
         assertThat(result.getId(), is(uuid));
         assertThat(result.getStatusAbfrage(), is(StatusAbfrage.ANGELEGT));
-        assertThat(result.getStandVerfahren(), is(StandVerfahren.STRUKTURKONZEPT));
+        assertThat(result.getVerfahrensstand(), is(Verfahrensstand.STRUKTURKONZEPT));
         assertThat(result.getFristBearbeitung(), is(LocalDate.of(2025, 1, 1)));
         assertThat(result.getBauvorhaben(), is(uuid));
         Wgs84Model wgs84Model = new Wgs84Model();
@@ -637,7 +637,7 @@ public class SearchDomainMapperTest {
         Mockito.when(projection.getId()).thenReturn(uuid);
         Mockito.when(projection.getNameVorhaben()).thenReturn("Test Vorhaben");
         Mockito.when(projection.getGrundstuecksgroesse()).thenReturn(BigDecimal.TEN);
-        Mockito.when(projection.getStandVerfahren()).thenReturn(StandVerfahren.STRUKTURKONZEPT);
+        Mockito.when(projection.getVerfahrensstand()).thenReturn(Verfahrensstand.STRUKTURKONZEPT);
         Mockito.when(projection.getVerortung()).thenReturn(verortung);
         Mockito.when(projection.getAdresse()).thenReturn(adresse);
 
@@ -649,7 +649,7 @@ public class SearchDomainMapperTest {
         assertThat(result.getId(), is(uuid));
         assertThat(result.getStadtbezirke().size(), is(1));
         assertThat(result.getGrundstuecksgroesse(), is(BigDecimal.TEN));
-        assertThat(result.getStandVerfahren(), is(StandVerfahren.STRUKTURKONZEPT));
+        assertThat(result.getVerfahrensstand(), is(Verfahrensstand.STRUKTURKONZEPT));
         MultiPolygonGeometryModel multiPolygonGeometryModel = new MultiPolygonGeometryModel();
         multiPolygonGeometryModel.setType("Umgriff");
         multiPolygonGeometryModel.setCoordinates(List.of(List.of(List.of(List.of(BigDecimal.TEN, BigDecimal.ONE)))));
@@ -721,7 +721,7 @@ public class SearchDomainMapperTest {
         Mockito.when(projection.getId()).thenReturn(uuid);
         Mockito.when(projection.getNameVorhaben()).thenReturn("Test Vorhaben");
         Mockito.when(projection.getGrundstuecksgroesse()).thenReturn(BigDecimal.TEN);
-        Mockito.when(projection.getStandVerfahren()).thenReturn(StandVerfahren.STRUKTURKONZEPT);
+        Mockito.when(projection.getVerfahrensstand()).thenReturn(Verfahrensstand.STRUKTURKONZEPT);
         Mockito.when(projection.getVerortung()).thenReturn(verortung);
         Mockito.when(projection.getAdresse()).thenReturn(adresse);
 
@@ -733,7 +733,7 @@ public class SearchDomainMapperTest {
         assertThat(result.getId(), is(uuid));
         assertThat(result.getStadtbezirke().size(), is(1));
         assertThat(result.getGrundstuecksgroesse(), is(BigDecimal.TEN));
-        assertThat(result.getStandVerfahren(), is(StandVerfahren.STRUKTURKONZEPT));
+        assertThat(result.getVerfahrensstand(), is(Verfahrensstand.STRUKTURKONZEPT));
         MultiPolygonGeometryModel multiPolygonGeometryModel = new MultiPolygonGeometryModel();
         multiPolygonGeometryModel.setType("Umgriff");
         multiPolygonGeometryModel.setCoordinates(List.of(List.of(List.of(List.of(BigDecimal.TEN, BigDecimal.ONE)))));
@@ -766,7 +766,7 @@ public class SearchDomainMapperTest {
         Mockito.when(projection.getId()).thenReturn(uuid);
         Mockito.when(projection.getName()).thenReturn("Test Abfrage");
         Mockito.when(projection.getStatusAbfrage()).thenReturn(StatusAbfrage.ANGELEGT);
-        Mockito.when(projection.getStandVerfahren()).thenReturn(StandVerfahren.STRUKTURKONZEPT);
+        Mockito.when(projection.getVerfahrensstand()).thenReturn(Verfahrensstand.STRUKTURKONZEPT);
         Mockito.when(projection.getFristBearbeitung()).thenReturn(LocalDate.of(2025, 1, 1));
         Mockito.when(projection.getBauvorhabenId()).thenReturn(uuid);
         Mockito.when(projection.getAdresse()).thenReturn(adresse);
@@ -779,7 +779,7 @@ public class SearchDomainMapperTest {
         assertThat(result.getArtAbfrage(), is(ArtAbfrage.BAULEITPLANVERFAHREN));
         assertThat(result.getId(), is(uuid));
         assertThat(result.getStatusAbfrage(), is(StatusAbfrage.ANGELEGT));
-        assertThat(result.getStandVerfahren(), is(StandVerfahren.STRUKTURKONZEPT));
+        assertThat(result.getVerfahrensstand(), is(Verfahrensstand.STRUKTURKONZEPT));
         assertThat(result.getFristBearbeitung(), is(LocalDate.of(2025, 1, 1)));
         assertThat(result.getBauvorhaben(), is(uuid));
         Wgs84Model wgs84Model = new Wgs84Model();
@@ -811,7 +811,7 @@ public class SearchDomainMapperTest {
         Mockito.when(projection.getId()).thenReturn(uuid);
         Mockito.when(projection.getName()).thenReturn("Test Abfrage");
         Mockito.when(projection.getStatusAbfrage()).thenReturn(StatusAbfrage.ANGELEGT);
-        Mockito.when(projection.getStandVerfahren()).thenReturn(StandVerfahren.STRUKTURKONZEPT);
+        Mockito.when(projection.getVerfahrensstand()).thenReturn(Verfahrensstand.STRUKTURKONZEPT);
         Mockito.when(projection.getFristBearbeitung()).thenReturn(LocalDate.of(2025, 1, 1));
         Mockito.when(projection.getBauvorhabenId()).thenReturn(uuid);
         Mockito.when(projection.getAdresse()).thenReturn(adresse);
@@ -825,7 +825,7 @@ public class SearchDomainMapperTest {
         assertThat(result.getArtAbfrage(), is(ArtAbfrage.BAULEITPLANVERFAHREN));
         assertThat(result.getId(), is(uuid));
         assertThat(result.getStatusAbfrage(), is(StatusAbfrage.ANGELEGT));
-        assertThat(result.getStandVerfahren(), is(StandVerfahren.STRUKTURKONZEPT));
+        assertThat(result.getVerfahrensstand(), is(Verfahrensstand.STRUKTURKONZEPT));
         assertThat(result.getFristBearbeitung(), is(LocalDate.of(2025, 1, 1)));
         assertThat(result.getBauvorhaben(), is(uuid));
         Wgs84Model wgs84Model = new Wgs84Model();

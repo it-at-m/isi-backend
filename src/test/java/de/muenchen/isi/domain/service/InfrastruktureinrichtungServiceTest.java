@@ -18,9 +18,9 @@ import de.muenchen.isi.domain.model.infrastruktureinrichtung.SchuleModel;
 import de.muenchen.isi.domain.service.etlInterface.EtlInterfaceService;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.StandVerfahren;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusInfrastruktureinrichtung;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.Verfahrensstand;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.WesentlicheRechtsgrundlage;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Grundschule;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Kindergarten;
@@ -106,7 +106,7 @@ class InfrastruktureinrichtungServiceTest {
 
         var bauvorhaben = new Bauvorhaben();
         bauvorhaben.setNameVorhaben("Bauvorhaben");
-        bauvorhaben.setStandVerfahren(StandVerfahren.RAHMENPLANUNG);
+        bauvorhaben.setVerfahrensstand(Verfahrensstand.RAHMENPLANUNG);
         bauvorhaben.setWesentlicheRechtsgrundlage(
             List.of(WesentlicheRechtsgrundlage.EINFACHER_BEBAUUNGSPLAN_PARAGRAPH_30)
         );
@@ -132,7 +132,7 @@ class InfrastruktureinrichtungServiceTest {
     void saveInfrastruktureinrichtung() throws OptimisticLockingException, EntityNotFoundException, ReportingException {
         var bauvorhaben = new Bauvorhaben();
         bauvorhaben.setNameVorhaben("Bauvorhaben");
-        bauvorhaben.setStandVerfahren(StandVerfahren.RAHMENPLANUNG);
+        bauvorhaben.setVerfahrensstand(Verfahrensstand.RAHMENPLANUNG);
         bauvorhaben.setWesentlicheRechtsgrundlage(
             List.of(WesentlicheRechtsgrundlage.EINFACHER_BEBAUUNGSPLAN_PARAGRAPH_30)
         );
@@ -175,7 +175,7 @@ class InfrastruktureinrichtungServiceTest {
         throws OptimisticLockingException, EntityNotFoundException, ReportingException {
         var bauvorhaben = new Bauvorhaben();
         bauvorhaben.setNameVorhaben("Bauvorhaben");
-        bauvorhaben.setStandVerfahren(StandVerfahren.RAHMENPLANUNG);
+        bauvorhaben.setVerfahrensstand(Verfahrensstand.RAHMENPLANUNG);
         bauvorhaben.setWesentlicheRechtsgrundlage(
             List.of(WesentlicheRechtsgrundlage.EINFACHER_BEBAUUNGSPLAN_PARAGRAPH_30)
         );
@@ -256,7 +256,7 @@ class InfrastruktureinrichtungServiceTest {
 
         var bauvorhaben = new Bauvorhaben();
         bauvorhaben.setNameVorhaben("Bauvorhaben");
-        bauvorhaben.setStandVerfahren(StandVerfahren.RAHMENPLANUNG);
+        bauvorhaben.setVerfahrensstand(Verfahrensstand.RAHMENPLANUNG);
         bauvorhaben.setWesentlicheRechtsgrundlage(
             List.of(WesentlicheRechtsgrundlage.EINFACHER_BEBAUUNGSPLAN_PARAGRAPH_30)
         );
