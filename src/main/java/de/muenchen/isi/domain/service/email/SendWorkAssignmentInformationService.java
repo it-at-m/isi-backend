@@ -13,6 +13,8 @@ import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrageEvents;
 import de.muenchen.isi.infrastructure.repository.email.MailSenderRepository;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -40,16 +42,20 @@ public class SendWorkAssignmentInformationService {
 
     private final String receiverSobon;
 
+    private final String isiEnvironmentUrl;
+
     public SendWorkAssignmentInformationService(
         @Value("${spring.mail.receiver.sachbearbeitung:}") final String receiverSachbearbeitung,
         @Value("${spring.mail.receiver.bedarfsmeldung:}") final String receiverBedarfsmeldung,
         @Value("${spring.mail.receiver.sobon:}") final String receiverSobon,
+        @Value("${isi.environment.url:}") final String isiEnvironmentUrl,
         final MailSenderRepository mailSenderRepository,
         final Environment environment
     ) {
         this.receiverSachbearbeitung = receiverSachbearbeitung;
         this.receiverBedarfsmeldung = receiverBedarfsmeldung;
         this.receiverSobon = receiverSobon;
+        this.isiEnvironmentUrl = isiEnvironmentUrl;
         this.mailSenderRepository = mailSenderRepository;
         this.environment = environment;
     }
@@ -108,6 +114,40 @@ public class SendWorkAssignmentInformationService {
     }
 
     /**
+     * Ermittelt die Bearbeitungsfrist auf Basis der jeweiligen Abfrage.
+     *
+     * @param abfrage
+     * @return formatierter Bearbeitungsfrist-Text oder leerer String falls keine Frist gesetzt ist.
+     */
+    protected String getBearbeitungsfrist(AbfrageModel abfrage) {
+        LocalDate fristBearbeitung = null;
+        if (abfrage.getArtAbfrage() == ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN) {
+            fristBearbeitung = ((BaugenehmigungsverfahrenModel) abfrage).getFristBearbeitung();
+        } else if (abfrage.getArtAbfrage() == ArtAbfrage.BAULEITPLANVERFAHREN) {
+            fristBearbeitung = ((BauleitplanverfahrenModel) abfrage).getFristBearbeitung();
+        } else if (abfrage.getArtAbfrage() == ArtAbfrage.WEITERES_VERFAHREN) {
+            fristBearbeitung = ((WeiteresVerfahrenModel) abfrage).getFristBearbeitung();
+        }
+        if (fristBearbeitung == null) {
+            return StringUtils.EMPTY;
+        }
+        return "\nBearbeitungsfrist: " + fristBearbeitung.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+    }
+
+    /**
+     * Erstellt den Link zur Detailansicht der Abfrage.
+     *
+     * @param abfrage
+     * @return Link-Text oder leerer String falls keine URL konfiguriert oder keine ID vorhanden ist.
+     */
+    protected String getLinkToAbfrage(AbfrageModel abfrage) {
+        if (StringUtils.isEmpty(isiEnvironmentUrl) || abfrage.getId() == null) {
+            return StringUtils.EMPTY;
+        }
+        return "\nLink zur Abfrage: " + isiEnvironmentUrl + "/#/abfrage/" + abfrage.getId();
+    }
+
+    /**
      * Versendet die Email zur Bearbeitungsinformation.
      *
      * Anhand der gegebenen Statusübergangsinformation wird entweder eine Email versendet oder ein Emailversand unterlassen.
@@ -121,9 +161,10 @@ public class SendWorkAssignmentInformationService {
         final var receiverEmailAddresses = getReceiver(abfrage, stateMachineEvent);
         if (CollectionUtils.isNotEmpty(receiverEmailAddresses)) {
             final var subject = getSubject(abfrage.getName(), stateMachineEvent);
-            var text = getText(abfrage.getName(), stateMachineEvent).concat(
-                StringUtils.defaultIfEmpty(getStadtbezirke(abfrage), StringUtils.EMPTY)
-            );
+            var text = getText(abfrage.getName(), stateMachineEvent)
+                .concat(StringUtils.defaultIfEmpty(getStadtbezirke(abfrage), StringUtils.EMPTY))
+                .concat(getBearbeitungsfrist(abfrage))
+                .concat(getLinkToAbfrage(abfrage));
             mailSenderRepository.sendMail(receiverEmailAddresses, subject, text);
         }
     }
