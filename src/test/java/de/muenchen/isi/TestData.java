@@ -233,7 +233,7 @@ public class TestData {
         abfragevariante.setAbfragevariantenNr(1);
         abfragevariante.setName("Name Abfragevariante 11");
         abfragevariante.setWesentlicheRechtsgrundlage(
-            List.of(WesentlicheRechtsgrundlage.EINFACHER_BEBAUUNGSPLAN_PARAGRAPH_30)
+            List.of(WesentlicheRechtsgrundlage.BEBAUUNGSPLAN_ZUR_WOHNRAUMVERSORGUNG_PARAGRAPH_9_IVM_34)
         );
         abfragevariante.setGfWohnenSonderwohnformen(false);
         abfragevariante.setGfWohnenGesamt(BigDecimal.valueOf(1234.56));
@@ -251,9 +251,7 @@ public class TestData {
         abfragevariante.setArtAbfragevariante(ArtAbfrage.WEITERES_VERFAHREN);
         abfragevariante.setAbfragevariantenNr(1);
         abfragevariante.setName("Name Abfragevariante 9");
-        abfragevariante.setWesentlicheRechtsgrundlage(
-            List.of(WesentlicheRechtsgrundlage.EINFACHER_BEBAUUNGSPLAN_PARAGRAPH_30)
-        );
+        abfragevariante.setWesentlicheRechtsgrundlage(List.of(WesentlicheRechtsgrundlage.QUALIFIZIERTER_BEBAUUNGSPLAN));
         abfragevariante.setGfWohnenSonderwohnformen(false);
         abfragevariante.setSobonBerechnung(createSobonBerechnungModel());
         abfragevariante.setGfWohnenGesamt(BigDecimal.valueOf(1234.56));
@@ -285,7 +283,7 @@ public class TestData {
         abfragevariante.setAbfragevariantenNr(1);
         abfragevariante.setName("Name Abfragevariante 112");
         abfragevariante.setWesentlicheRechtsgrundlage(
-            List.of(WesentlicheRechtsgrundlage.EINFACHER_BEBAUUNGSPLAN_PARAGRAPH_30)
+            List.of(WesentlicheRechtsgrundlage.BEPLANTER_BEREICH_PARAGRAPH_30_MIT_BEFREIUNG_PARAGRAPH_31)
         );
         abfragevariante.setGfWohnenSonderwohnformen(false);
         abfragevariante.setGfWohnenGesamt(BigDecimal.valueOf(1234.56));
@@ -301,7 +299,7 @@ public class TestData {
         abfragevariante.setAbfragevariantenNr(1);
         abfragevariante.setName("Name Abfragevariante 92");
         abfragevariante.setWesentlicheRechtsgrundlage(
-            List.of(WesentlicheRechtsgrundlage.EINFACHER_BEBAUUNGSPLAN_PARAGRAPH_30)
+            List.of(WesentlicheRechtsgrundlage.BEBAUUNGSPLAN_ZUR_WOHNRAUMVERSORGUNG)
         );
         abfragevariante.setGfWohnenSonderwohnformen(false);
         abfragevariante.setGfWohnenGesamt(BigDecimal.valueOf(1234.56));
