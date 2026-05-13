@@ -20,7 +20,7 @@ SET wesentliche_rechtsgrundlage =
 ALTER TABLE IF EXISTS isidbuser.abfrgvar_baugnhmgsverfhrn_wesentliche_rechtsgrundlage
     ADD CONSTRAINT abfragevariante_baugenehmigun_wesentliche_rechtsgrundlage_check CHECK (wesentliche_rechtsgrundlage::text = ANY (ARRAY['BEPLANTER_BEREICH_PARAGRAPH_30'::character varying::text, 'INNENBEREICH'::character varying::text, 'AUSSENBEREICH'::character varying::text, 'BEBAUUNGSPLAN_ZUR_WOHNRAUMVERSORGUNG_PARAGRAPH_9_IVM_34'::character varying::text, 'BEPLANTER_BEREICH_PARAGRAPH_30_MIT_BEFREIUNG_PARAGRAPH_31'::character varying::text, 'FREIE_EINGABE'::character varying::text]));
 
-ALTER TABLE IF EXISTS isidbuser.abfrgvar_baugnhmgsverfhrn
+ALTER TABLE IF EXISTS isidbuser.abfrgvar_baugnhmgsverfhrn_wesentliche_rechtsgrundlage
     ADD COLUMN wesentliche_rechtsgrundlage_angaben_zur_befreiung character varying(1000);
 
 END;
