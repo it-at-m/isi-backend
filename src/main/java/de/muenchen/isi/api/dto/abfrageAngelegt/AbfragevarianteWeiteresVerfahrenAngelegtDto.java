@@ -53,6 +53,9 @@ public class AbfragevarianteWeiteresVerfahrenAngelegtDto implements Abfragevaria
     @Size(max = 1000, message = "Es sind maximal {max} Zeichen erlaubt")
     private String wesentlicheRechtsgrundlageFreieEingabe;
 
+    @Size(max = 1000, message = "Es sind maximal {max} Zeichen erlaubt")
+    private String wesentlicheRechtsgrundlageAngabenZurBefreiung;
+
     @NotNull
     @Min(1900)
     @Max(2100)

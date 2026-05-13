@@ -842,6 +842,7 @@
           "satzungsbeschluss": { "type": "string", "format": "date" },
           "wesentlicheRechtsgrundlage": { "type": "array", "items": { "type": "string" } },
           "wesentlicheRechtsgrundlageFreieEingabe": { "type": "string" },
+          "wesentlicheRechtsgrundlageAngabenZurBefreiung": { "type": "string" },
           "realisierungVon": { "type": "integer", "format": "int32" },
           "gfWohnenGesamt": { "type": "number" },
           "gfWohnenBaurechtlichGenehmigt": { "type": "number" },
