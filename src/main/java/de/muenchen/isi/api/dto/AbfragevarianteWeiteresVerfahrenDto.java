@@ -49,8 +49,6 @@ public class AbfragevarianteWeiteresVerfahrenDto extends AbfragevarianteDto impl
 
     private BigDecimal gfWohnenSeniorinnenWohnen;
 
-    private BigDecimal gfWohnenGenossenschaftlichesWohnen;
-
     private BigDecimal gfWohnenWeiteresNichtInfrastrukturrelevantesWohnen;
 
     private String gfAnmerkung;
@@ -68,8 +66,6 @@ public class AbfragevarianteWeiteresVerfahrenDto extends AbfragevarianteDto impl
     private Integer weStudentischesWohnen;
 
     private Integer weSeniorinnenWohnen;
-
-    private Integer weGenossenschaftlichesWohnen;
 
     private Integer weWeiteresNichtInfrastrukturrelevantesWohnen;
 

@@ -78,8 +78,6 @@ public class AbfragevarianteBaugenehmigungsverfahrenAngelegtDto implements Abfra
 
     private BigDecimal gfWohnenSeniorinnenWohnen;
 
-    private BigDecimal gfWohnenGenossenschaftlichesWohnen;
-
     private BigDecimal gfWohnenWeiteresNichtInfrastrukturrelevantesWohnen;
 
     @Size(max = 200, message = "Es sind maximal {max} Zeichen erlaubt")
@@ -99,8 +97,6 @@ public class AbfragevarianteBaugenehmigungsverfahrenAngelegtDto implements Abfra
     private Integer weStudentischesWohnen;
 
     private Integer weSeniorinnenWohnen;
-
-    private Integer weGenossenschaftlichesWohnen;
 
     private Integer weWeiteresNichtInfrastrukturrelevantesWohnen;
 
