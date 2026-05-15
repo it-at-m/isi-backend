@@ -47,8 +47,6 @@ public class AbfragevarianteBaugenehmigungsverfahrenModel
 
     private BigDecimal gfWohnenSeniorinnenWohnen;
 
-    private BigDecimal gfWohnenGenossenschaftlichesWohnen;
-
     private BigDecimal gfWohnenWeiteresNichtInfrastrukturrelevantesWohnen;
 
     private String gfAnmerkung;
@@ -66,8 +64,6 @@ public class AbfragevarianteBaugenehmigungsverfahrenModel
     private Integer weStudentischesWohnen;
 
     private Integer weSeniorinnenWohnen;
-
-    private Integer weGenossenschaftlichesWohnen;
 
     private Integer weWeiteresNichtInfrastrukturrelevantesWohnen;
 
