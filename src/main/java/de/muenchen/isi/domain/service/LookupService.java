@@ -162,6 +162,16 @@ public class LookupService {
         return new LookupListModel(list);
     }
 
+    private LookupListModel getWesentlicheRechtsgrundlageWeiteresVerfahrenList() {
+        final List<LookupEntryModel> list =
+            WesentlicheRechtsgrundlage.getWesentlicheRechtsgrundlageForWeiteresVerfahren()
+                .stream()
+                .map(item -> new LookupEntryModel(item.toString(), item.getBezeichnung()))
+                .collect(Collectors.toList());
+
+        return new LookupListModel(list);
+    }
+
     private LookupListModel getWesentlicheRechtsgrundlageList() {
         final List<LookupEntryModel> list = EnumUtils.getEnumList(WesentlicheRechtsgrundlage.class)
             .stream()
