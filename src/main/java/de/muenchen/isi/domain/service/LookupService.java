@@ -47,6 +47,7 @@ public class LookupService {
         model.setWesentlicheRechtsgrundlageBaugenehmigungsverfahren(
             this.getWesentlicheRechtsgrundlageBaugenehmigungsverfahrenList()
         );
+        model.setWesentlicheRechtsgrundlageWeiteresVerfahren(this.getWesentlicheRechtsgrundlageWeiteresVerfahrenList());
         model.setWesentlicheRechtsgrundlage(this.getWesentlicheRechtsgrundlageList());
         model.setArtBaulicheNutzung(this.getArtBaulicheNutzungList());
         model.setArtBaulicheNutzungBauvorhaben(this.getArtBaulicheNutzungBauvorhabenList());
