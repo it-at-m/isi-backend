@@ -105,9 +105,6 @@ public class AbfragevarianteWeiteresVerfahren extends Abfragevariante {
     private BigDecimal gfWohnenSeniorinnenWohnen;
 
     @Column(precision = 10, scale = 2)
-    private BigDecimal gfWohnenGenossenschaftlichesWohnen;
-
-    @Column(precision = 10, scale = 2)
     private BigDecimal gfWohnenWeiteresNichtInfrastrukturrelevantesWohnen;
 
     @Column(length = 200)
@@ -133,9 +130,6 @@ public class AbfragevarianteWeiteresVerfahren extends Abfragevariante {
 
     @Column
     private Integer weSeniorinnenWohnen;
-
-    @Column
-    private Integer weGenossenschaftlichesWohnen;
 
     @Column
     private Integer weWeiteresNichtInfrastrukturrelevantesWohnen;

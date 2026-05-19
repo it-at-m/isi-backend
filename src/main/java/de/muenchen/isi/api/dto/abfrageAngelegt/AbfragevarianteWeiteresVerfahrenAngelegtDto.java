@@ -83,8 +83,6 @@ public class AbfragevarianteWeiteresVerfahrenAngelegtDto implements Abfragevaria
 
     private BigDecimal gfWohnenSeniorinnenWohnen;
 
-    private BigDecimal gfWohnenGenossenschaftlichesWohnen;
-
     private BigDecimal gfWohnenWeiteresNichtInfrastrukturrelevantesWohnen;
 
     @Size(max = 200, message = "Es sind maximal {max} Zeichen erlaubt")
@@ -104,8 +102,6 @@ public class AbfragevarianteWeiteresVerfahrenAngelegtDto implements Abfragevaria
     private Integer weStudentischesWohnen;
 
     private Integer weSeniorinnenWohnen;
-
-    private Integer weGenossenschaftlichesWohnen;
 
     private Integer weWeiteresNichtInfrastrukturrelevantesWohnen;
 
