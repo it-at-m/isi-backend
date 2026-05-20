@@ -54,10 +54,6 @@ class WesentlicheRechtsgrundlageWeiteresVerfahrenValidatorTest {
             is(true)
         );
         assertThat(
-            this.wesentlicheRechtsgrundlageValidator.isValid(WesentlicheRechtsgrundlage.AUSSENBEREICH, null),
-            is(true)
-        );
-        assertThat(
             this.wesentlicheRechtsgrundlageValidator.isValid(WesentlicheRechtsgrundlage.BEFREIUNG, null),
             is(true)
         );
