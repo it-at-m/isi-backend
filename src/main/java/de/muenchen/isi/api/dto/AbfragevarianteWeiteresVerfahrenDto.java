@@ -29,6 +29,8 @@ public class AbfragevarianteWeiteresVerfahrenDto extends AbfragevarianteDto impl
 
     private String wesentlicheRechtsgrundlageFreieEingabe;
 
+    private String wesentlicheRechtsgrundlageAngabenZurBefreiung;
+
     private Integer realisierungVon;
 
     // Geschossfläche Wohnen

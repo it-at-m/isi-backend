@@ -66,6 +66,9 @@ public class AbfragevarianteWeiteresVerfahren extends Abfragevariante {
     @Column(length = 1000)
     private String wesentlicheRechtsgrundlageFreieEingabe;
 
+    @Column(length = 1000)
+    private String wesentlicheRechtsgrundlageAngabenZurBefreiung;
+
     @KeywordField(valueBridge = @ValueBridgeRef(type = IntegerToStringValueBridge.class))
     @NonStandardField(
         name = "realisierungVon" + SearchwordSuggesterRepository.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,

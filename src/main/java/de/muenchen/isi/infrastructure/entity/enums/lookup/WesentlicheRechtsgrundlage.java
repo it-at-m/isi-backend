@@ -22,24 +22,19 @@ public enum WesentlicheRechtsgrundlage implements ILookup {
 
     FREIE_EINGABE("freie Eingabe"),
 
-    /* ab hier ISI-280) */
+    EINFACHER_BEBAUUNGSPLAN("Einfacher Bebauungsplan"),
 
-    QUALIFIZIERTER_BEBAUUNGSPLAN("Qualifizierter Bebauungsplan (§30 Abs. 1 BauGB)"),
+    QUALIFIZIERTER_BEBAUUNGSPLAN("Qualifizierter Bebauungsplan"),
 
-    VORHABENSBEZOGENER_BEBAUUNGSPLAN("Vorhabenbezogener Bebauungsplan (§12 BauGB, § 30 Abs. 2 BauGB)"),
+    VORHABENSBEZOGENER_BEBAUUNGSPLAN("Vorhabenbezogener Bebauungsplan"),
 
-    EINFACHER_BEBAUUNGSPLAN_PARAGRAPH_30("Einfacher Bebauungsplan (§30 Abs. 3 BauGB)"),
-    EINFACHER_BEBAUUNGSPLAN_PARAGRAPH_30_IVM_34_35(
-        "Einfacher Bebauungsplan (§30 Abs. 3 BauGB i.V.m. §34 BauGB oder i.V.m. §35 BauGB)"
-    ),
+    BEBAUUNGSPLAN_ZUR_WOHNRAUMVERSORGUNG("Bebauungsplan zur Wohnraumversorgung"),
 
-    SEKTORALER_BEBAUUNGSPLAN_PARAGRAPH_9("Sektoraler Bebauungsplan (§9 Abs. 2a-d BauGB)"),
+    BEFREIUNG("Befreiung (§ 31 BauGB)"),
 
-    SEKTORALER_BEBAUUNGSPLAN_PARAGRAPH_30_IVM_34_35(
-        "Sektoraler Bebauungsplan (§30 Abs. 3 BauGB i.V.m. §34 BauGB oder i.V.m. §35 BauGB)"
-    ),
+    /* ab hier ISI-278 */
 
-    BEFREIUNG("Befreiung (§ 31 BauGB)");
+    EINFACHER_BEBAUUNGSPLAN_PARAGRAPH_30("Einfacher Bebauungsplan (§30 Abs. 3 BauGB)");
 
     @Getter
     private final String bezeichnung;
@@ -51,6 +46,19 @@ public enum WesentlicheRechtsgrundlage implements ILookup {
             AUSSENBEREICH,
             BEBAUUNGSPLAN_ZUR_WOHNRAUMVERSORGUNG_PARAGRAPH_9_IVM_34,
             BEPLANTER_BEREICH_PARAGRAPH_30_MIT_BEFREIUNG_PARAGRAPH_31,
+            FREIE_EINGABE
+        );
+    }
+
+    public static List<WesentlicheRechtsgrundlage> getWesentlicheRechtsgrundlageForWeiteresVerfahren() {
+        return List.of(
+            EINFACHER_BEBAUUNGSPLAN,
+            QUALIFIZIERTER_BEBAUUNGSPLAN,
+            VORHABENSBEZOGENER_BEBAUUNGSPLAN,
+            BEBAUUNGSPLAN_ZUR_WOHNRAUMVERSORGUNG,
+            INNENBEREICH,
+            AUSSENBEREICH,
+            BEFREIUNG,
             FREIE_EINGABE
         );
     }
