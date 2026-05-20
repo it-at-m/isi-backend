@@ -40,7 +40,17 @@ public enum Verfahrensstand implements ILookup {
 
     INKRAFTGETRETEN_FOERDERMIXPLAN("Inkraftgetreten (Fördermixplan)", new String[] { "Fördermixplan" }),
 
-    /* ab hier To-Do: ISI-273, ISI-273 */
+    VORBEREITUNG_VORBESCHEID(
+        "Bauvoranfrage, Art. 71 BayBO (Vorbereitung Vorbescheid)",
+        new String[] { "Bauvoranfrage", "Vorbereitung", "Vorbescheid" }
+    ),
+
+    VORBEREITUNG_BAUGENEHMIGUNG(
+        "Genehmigungsverfahren, Art. 59 / Art. 60 BayBO (Vorbereitung Baugenehmigung)",
+        new String[] { "Genehmigungsverfahren", "Vorbereitung", "Baugenehmigung" }
+    ),
+
+    /* ab hier To-Do: ISI-280 */
 
     VORBEREITUNG_ECKDATENBESCHLUSS(
         "Vorbereitung Eckdatenbeschluss",
@@ -68,10 +78,6 @@ public enum Verfahrensstand implements ILookup {
     ),
 
     AUFTEILUNGSPLAN("Aufteilungsplan", new String[] { "Aufteilungsplan" }),
-
-    VORBEREITUNG_VORBESCHEID("Vorbereitung Vorbescheid", new String[] { "Vorbereitung", "Vorbescheid" }),
-
-    VORBEREITUNG_BAUGENEHMIGUNG("Vorbereitung Baugenehmigung", new String[] { "Vorbereitung", "Baugenehmigung" }),
 
     VORABFRAGE_OHNE_KONKRETEN_STAND(
         "Vorabfrage ohne konkreten Stand",
@@ -119,7 +125,7 @@ public enum Verfahrensstand implements ILookup {
     }
 
     public static List<Verfahrensstand> getVerfahrensstandForBaugenehmigungsverfahren() {
-        return List.of(UNSPECIFIED, VORBEREITUNG_VORBESCHEID, VORBEREITUNG_BAUGENEHMIGUNG, FREIE_EINGABE);
+        return List.of(UNSPECIFIED, VORBEREITUNG_BAUGENEHMIGUNG, VORBEREITUNG_VORBESCHEID, FREIE_EINGABE);
     }
 
     public static List<Verfahrensstand> getVerfahrensstandForWeiteresVerfahren() {

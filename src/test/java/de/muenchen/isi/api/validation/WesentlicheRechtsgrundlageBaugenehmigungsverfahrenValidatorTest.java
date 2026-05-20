@@ -22,28 +22,7 @@ class WesentlicheRechtsgrundlageBaugenehmigungsverfahrenValidatorTest {
         assertThat(this.wesentlicheRechtsgrundlageValidator.isValid(null, null), is(true));
         assertThat(
             this.wesentlicheRechtsgrundlageValidator.isValid(
-                WesentlicheRechtsgrundlage.QUALIFIZIERTER_BEBAUUNGSPLAN,
-                null
-            ),
-            is(true)
-        );
-        assertThat(
-            this.wesentlicheRechtsgrundlageValidator.isValid(
-                WesentlicheRechtsgrundlage.VORHABENSBEZOGENER_BEBAUUNGSPLAN,
-                null
-            ),
-            is(true)
-        );
-        assertThat(
-            this.wesentlicheRechtsgrundlageValidator.isValid(
-                WesentlicheRechtsgrundlage.EINFACHER_BEBAUUNGSPLAN_PARAGRAPH_30_IVM_34_35,
-                null
-            ),
-            is(true)
-        );
-        assertThat(
-            this.wesentlicheRechtsgrundlageValidator.isValid(
-                WesentlicheRechtsgrundlage.SEKTORALER_BEBAUUNGSPLAN_PARAGRAPH_30_IVM_34_35,
+                WesentlicheRechtsgrundlage.BEPLANTER_BEREICH_PARAGRAPH_30,
                 null
             ),
             is(true)
@@ -57,26 +36,22 @@ class WesentlicheRechtsgrundlageBaugenehmigungsverfahrenValidatorTest {
             is(true)
         );
         assertThat(
-            this.wesentlicheRechtsgrundlageValidator.isValid(WesentlicheRechtsgrundlage.BEFREIUNG, null),
+            this.wesentlicheRechtsgrundlageValidator.isValid(
+                WesentlicheRechtsgrundlage.BEBAUUNGSPLAN_ZUR_WOHNRAUMVERSORGUNG_PARAGRAPH_9_IVM_34,
+                null
+            ),
+            is(true)
+        );
+        assertThat(
+            this.wesentlicheRechtsgrundlageValidator.isValid(
+                WesentlicheRechtsgrundlage.BEPLANTER_BEREICH_PARAGRAPH_30_MIT_BEFREIUNG_PARAGRAPH_31,
+                null
+            ),
             is(true)
         );
         assertThat(
             this.wesentlicheRechtsgrundlageValidator.isValid(WesentlicheRechtsgrundlage.FREIE_EINGABE, null),
             is(true)
-        );
-        assertThat(
-            this.wesentlicheRechtsgrundlageValidator.isValid(
-                WesentlicheRechtsgrundlage.EINFACHER_BEBAUUNGSPLAN_PARAGRAPH_30,
-                null
-            ),
-            is(false)
-        );
-        assertThat(
-            this.wesentlicheRechtsgrundlageValidator.isValid(
-                WesentlicheRechtsgrundlage.SEKTORALER_BEBAUUNGSPLAN_PARAGRAPH_9,
-                null
-            ),
-            is(false)
         );
     }
 }

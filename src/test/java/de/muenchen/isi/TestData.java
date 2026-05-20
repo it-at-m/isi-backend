@@ -91,7 +91,7 @@ public class TestData {
         );
         bauleitplanverfahren.setFristBearbeitung(LocalDate.of(2022, 12, 31));
         bauleitplanverfahren.setAnmerkung("Bitte die Abfrage zeitnah behandeln");
-        bauleitplanverfahren.setVerfahrensstand(Verfahrensstand.STRUKTURKONZEPT);
+        bauleitplanverfahren.setVerfahrensstand(Verfahrensstand.VORBEREITUNG_FRUEHZEITIGE_BETEILIGUNG);
         bauleitplanverfahren.setVerortung(createVerortung());
         bauleitplanverfahren.setSobonRelevant(UncertainBoolean.TRUE);
         bauleitplanverfahren.setSobonJahr(SobonVerfahrensgrundsaetzeJahr.JAHR_2021);
@@ -116,7 +116,7 @@ public class TestData {
         );
         baugenehmigungsverfahren.setFristBearbeitung(LocalDate.of(2022, 12, 31));
         baugenehmigungsverfahren.setAnmerkung("Bitte die Abfrage zeitnah behandeln");
-        baugenehmigungsverfahren.setVerfahrensstand(Verfahrensstand.STRUKTURKONZEPT);
+        baugenehmigungsverfahren.setVerfahrensstand(Verfahrensstand.STAEDTEBAULICHE_SANIERUNGSMASSNAHME);
         baugenehmigungsverfahren.setVerortung(createVerortung());
         baugenehmigungsverfahren.setAbfragevariantenBaugenehmigungsverfahren(
             List.of(createAbfragevarianteBaugenehmigungsverfahrenModel())
@@ -157,7 +157,7 @@ public class TestData {
         );
         bauleitplanverfahren.setFristBearbeitung(LocalDate.of(2022, 12, 31));
         bauleitplanverfahren.setAnmerkung("Bitte die Abfrage zeitnah behandeln");
-        bauleitplanverfahren.setVerfahrensstand(Verfahrensstand.STRUKTURKONZEPT);
+        bauleitplanverfahren.setVerfahrensstand(Verfahrensstand.SIMULIERT_VORBEREITUNG_WETTBEWERBAUSLOBUNG);
         bauleitplanverfahren.setVerortung(createVerortung());
         bauleitplanverfahren.setSobonRelevant(UncertainBoolean.FALSE);
         bauleitplanverfahren.setMitzeichnungBeschlussentwurf(UncertainBoolean.FALSE);
@@ -179,7 +179,7 @@ public class TestData {
         );
         baugenehmigungsverfahren.setFristBearbeitung(LocalDate.of(2022, 12, 31));
         baugenehmigungsverfahren.setAnmerkung("Bitte die Abfrage zeitnah behandeln");
-        baugenehmigungsverfahren.setVerfahrensstand(Verfahrensstand.STRUKTURKONZEPT);
+        baugenehmigungsverfahren.setVerfahrensstand(Verfahrensstand.POTENTIALUNTERSUCHUNG);
         baugenehmigungsverfahren.setVerortung(createVerortung());
         baugenehmigungsverfahren.setAbfragevariantenBaugenehmigungsverfahren(
             List.of(createAbfragevarianteBaugenehmigungsverfahrenAngelegtModel())
@@ -199,7 +199,7 @@ public class TestData {
         );
         bauleitplanverfahren.setFristBearbeitung(LocalDate.of(2022, 12, 31));
         bauleitplanverfahren.setAnmerkung("Bitte die Abfrage zeitnah behandeln");
-        bauleitplanverfahren.setVerfahrensstand(Verfahrensstand.STRUKTURKONZEPT);
+        bauleitplanverfahren.setVerfahrensstand(Verfahrensstand.INKRAFTGETRETEN_VEROEFFENTLICHUNG_AMTSBLATT);
         bauleitplanverfahren.setVerortung(createVerortung());
         bauleitplanverfahren.setSobonRelevant(UncertainBoolean.FALSE);
         bauleitplanverfahren.setMitzeichnungBeschlussentwurf(UncertainBoolean.FALSE);
