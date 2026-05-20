@@ -61,5 +61,12 @@ class WesentlicheRechtsgrundlageWeiteresVerfahrenValidatorTest {
             this.wesentlicheRechtsgrundlageValidator.isValid(WesentlicheRechtsgrundlage.FREIE_EINGABE, null),
             is(true)
         );
+        assertThat(
+            this.wesentlicheRechtsgrundlageValidator.isValid(
+                WesentlicheRechtsgrundlage.BEBAUUNGSPLAN_ZUR_WOHNRAUMVERSORGUNG_PARAGRAPH_9_IVM_34,
+                null
+            ),
+            is(false)
+        );
     }
 }
