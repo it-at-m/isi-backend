@@ -107,9 +107,7 @@ class InfrastruktureinrichtungServiceTest {
         var bauvorhaben = new Bauvorhaben();
         bauvorhaben.setNameVorhaben("Bauvorhaben");
         bauvorhaben.setVerfahrensstand(Verfahrensstand.RAHMENPLANUNG);
-        bauvorhaben.setWesentlicheRechtsgrundlage(
-            List.of(WesentlicheRechtsgrundlage.EINFACHER_BEBAUUNGSPLAN_PARAGRAPH_30)
-        );
+        bauvorhaben.setWesentlicheRechtsgrundlage(List.of(WesentlicheRechtsgrundlage.EINFACHER_BEBAUUNGSPLAN));
         bauvorhaben.setSobonRelevant(UncertainBoolean.FALSE);
         bauvorhaben = bauvorhabenRepository.saveAndFlush(bauvorhaben);
         entity.setBauvorhaben(bauvorhaben);
@@ -133,9 +131,7 @@ class InfrastruktureinrichtungServiceTest {
         var bauvorhaben = new Bauvorhaben();
         bauvorhaben.setNameVorhaben("Bauvorhaben");
         bauvorhaben.setVerfahrensstand(Verfahrensstand.RAHMENPLANUNG);
-        bauvorhaben.setWesentlicheRechtsgrundlage(
-            List.of(WesentlicheRechtsgrundlage.EINFACHER_BEBAUUNGSPLAN_PARAGRAPH_30)
-        );
+        bauvorhaben.setWesentlicheRechtsgrundlage(List.of(WesentlicheRechtsgrundlage.EINFACHER_BEBAUUNGSPLAN));
         bauvorhaben.setSobonRelevant(UncertainBoolean.FALSE);
         bauvorhaben = bauvorhabenRepository.saveAndFlush(bauvorhaben);
 
@@ -176,9 +172,7 @@ class InfrastruktureinrichtungServiceTest {
         var bauvorhaben = new Bauvorhaben();
         bauvorhaben.setNameVorhaben("Bauvorhaben");
         bauvorhaben.setVerfahrensstand(Verfahrensstand.RAHMENPLANUNG);
-        bauvorhaben.setWesentlicheRechtsgrundlage(
-            List.of(WesentlicheRechtsgrundlage.EINFACHER_BEBAUUNGSPLAN_PARAGRAPH_30)
-        );
+        bauvorhaben.setWesentlicheRechtsgrundlage(List.of(WesentlicheRechtsgrundlage.EINFACHER_BEBAUUNGSPLAN));
         bauvorhaben.setSobonRelevant(UncertainBoolean.FALSE);
         bauvorhaben = bauvorhabenRepository.saveAndFlush(bauvorhaben);
 
@@ -257,9 +251,7 @@ class InfrastruktureinrichtungServiceTest {
         var bauvorhaben = new Bauvorhaben();
         bauvorhaben.setNameVorhaben("Bauvorhaben");
         bauvorhaben.setVerfahrensstand(Verfahrensstand.RAHMENPLANUNG);
-        bauvorhaben.setWesentlicheRechtsgrundlage(
-            List.of(WesentlicheRechtsgrundlage.EINFACHER_BEBAUUNGSPLAN_PARAGRAPH_30)
-        );
+        bauvorhaben.setWesentlicheRechtsgrundlage(List.of(WesentlicheRechtsgrundlage.EINFACHER_BEBAUUNGSPLAN));
         bauvorhaben.setSobonRelevant(UncertainBoolean.FALSE);
         bauvorhaben = bauvorhabenRepository.saveAndFlush(bauvorhaben);
 
