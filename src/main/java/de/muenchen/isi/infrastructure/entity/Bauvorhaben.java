@@ -261,6 +261,9 @@ public class Bauvorhaben extends BaseEntity {
     @Column(length = 1000)
     private String wesentlicheRechtsgrundlageFreieEingabe;
 
+    @Column(length = 1000)
+    private String wesentlicheRechtsgrundlageAngabenZurBefreiung;
+
     @Enumerated(EnumType.STRING)
     @ElementCollection
     private List<ArtBaulicheNutzung> artFnp;
