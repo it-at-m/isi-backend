@@ -5,7 +5,7 @@ BEGIN;
 --
 
 ALTER TABLE IF EXISTS isidbuser.bauvorhaben
-DROP CONSTRAINT bauvorhaben_verfahrensstand_check
+DROP CONSTRAINT bauvorhaben_verfahrensstand_check;
 
 UPDATE isidbuser.bauvorhaben
 SET verfahrensstand = CASE
