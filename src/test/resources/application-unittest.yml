@@ -72,6 +72,8 @@ refarch:
 isi:
   reporting:
     url: http://localhost:8088
+  environment:
+    url: http://localhost:8081
 
 file:
   number.max: 20

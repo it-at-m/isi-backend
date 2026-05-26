@@ -5,7 +5,9 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 
 import de.muenchen.isi.domain.model.AbfragevarianteBauleitplanverfahrenModel;
+import de.muenchen.isi.domain.model.BaugenehmigungsverfahrenModel;
 import de.muenchen.isi.domain.model.BauleitplanverfahrenModel;
+import de.muenchen.isi.domain.model.WeiteresVerfahrenModel;
 import de.muenchen.isi.domain.model.common.BearbeitendePersonModel;
 import de.muenchen.isi.domain.model.common.BearbeitungshistorieModel;
 import de.muenchen.isi.domain.model.common.SobonBerechnungModel;
@@ -15,10 +17,12 @@ import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrageEvents;
 import de.muenchen.isi.infrastructure.repository.email.MailSenderRepository;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -47,6 +51,7 @@ class SendWorkAssignmentInformationServiceTest {
             "mailadress-receiver-sachbearbeitung",
             "mailadress-receiver-bedarfsmeldung",
             "mailadress-receiver-sobon",
+            "https://isi-dev.test.de",
             mailSenderRepository,
             environment
         );
@@ -424,5 +429,54 @@ class SendWorkAssignmentInformationServiceTest {
         result = sendWorkAssignmentInformationService.getSubject(null, StatusAbfrageEvents.ERNEUTE_BEARBEITUNG);
         expected = "Der Betreff ";
         assertThat(result, is(expected));
+    }
+
+    @Test
+    void getBearbeitungsfrist() {
+        // Ohne Frist
+        final var abfrage = new BauleitplanverfahrenModel();
+        abfrage.setArtAbfrage(ArtAbfrage.BAULEITPLANVERFAHREN);
+        assertThat(sendWorkAssignmentInformationService.getBearbeitungsfrist(abfrage), is(""));
+
+        // Mit Frist - Bauleitplanverfahren
+        abfrage.setFristBearbeitung(LocalDate.of(2025, 12, 31));
+        assertThat(
+            sendWorkAssignmentInformationService.getBearbeitungsfrist(abfrage),
+            is("\nBearbeitungsfrist: 31.12.2025")
+        );
+
+        // Mit Frist - Baugenehmigungsverfahren
+        final var abfrageBaugenehmigung = new BaugenehmigungsverfahrenModel();
+        abfrageBaugenehmigung.setArtAbfrage(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN);
+        abfrageBaugenehmigung.setFristBearbeitung(LocalDate.of(2025, 6, 1));
+        assertThat(
+            sendWorkAssignmentInformationService.getBearbeitungsfrist(abfrageBaugenehmigung),
+            is("\nBearbeitungsfrist: 01.06.2025")
+        );
+
+        // Mit Frist - WeiteresVerfahren
+        final var abfrageWeiteres = new WeiteresVerfahrenModel();
+        abfrageWeiteres.setArtAbfrage(ArtAbfrage.WEITERES_VERFAHREN);
+        abfrageWeiteres.setFristBearbeitung(LocalDate.of(2026, 3, 15));
+        assertThat(
+            sendWorkAssignmentInformationService.getBearbeitungsfrist(abfrageWeiteres),
+            is("\nBearbeitungsfrist: 15.03.2026")
+        );
+    }
+
+    @Test
+    void getLinkToAbfrage() {
+        final var abfrage = new BauleitplanverfahrenModel();
+
+        // Ohne ID
+        assertThat(sendWorkAssignmentInformationService.getLinkToAbfrage(abfrage), is(""));
+
+        // Mit ID
+        final var id = UUID.randomUUID();
+        abfrage.setId(id);
+        assertThat(
+            sendWorkAssignmentInformationService.getLinkToAbfrage(abfrage),
+            is("\nLink zur Abfrage: https://isi-dev.test.de/#/abfrage/" + id)
+        );
     }
 }
