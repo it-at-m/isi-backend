@@ -25,6 +25,8 @@ public class LookupListsModel {
 
     private LookupListModel wesentlicheRechtsgrundlageBaugenehmigungsverfahren;
 
+    private LookupListModel wesentlicheRechtsgrundlageWeiteresVerfahren;
+
     private LookupListModel wesentlicheRechtsgrundlage;
 
     private LookupListModel planart;

@@ -47,6 +47,7 @@ public class LookupService {
         model.setWesentlicheRechtsgrundlageBaugenehmigungsverfahren(
             this.getWesentlicheRechtsgrundlageBaugenehmigungsverfahrenList()
         );
+        model.setWesentlicheRechtsgrundlageWeiteresVerfahren(this.getWesentlicheRechtsgrundlageWeiteresVerfahrenList());
         model.setWesentlicheRechtsgrundlage(this.getWesentlicheRechtsgrundlageList());
         model.setArtBaulicheNutzung(this.getArtBaulicheNutzungList());
         model.setArtBaulicheNutzungBauvorhaben(this.getArtBaulicheNutzungBauvorhabenList());
@@ -155,6 +156,16 @@ public class LookupService {
     private LookupListModel getWesentlicheRechtsgrundlageBaugenehmigungsverfahrenList() {
         final List<LookupEntryModel> list =
             WesentlicheRechtsgrundlage.getWesentlicheRechtsgrundlageForBaugenehmigungsverfahren()
+                .stream()
+                .map(item -> new LookupEntryModel(item.toString(), item.getBezeichnung()))
+                .collect(Collectors.toList());
+
+        return new LookupListModel(list);
+    }
+
+    private LookupListModel getWesentlicheRechtsgrundlageWeiteresVerfahrenList() {
+        final List<LookupEntryModel> list =
+            WesentlicheRechtsgrundlage.getWesentlicheRechtsgrundlageForWeiteresVerfahren()
                 .stream()
                 .map(item -> new LookupEntryModel(item.toString(), item.getBezeichnung()))
                 .collect(Collectors.toList());
