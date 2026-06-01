@@ -12,6 +12,7 @@ import de.muenchen.isi.domain.mapper.KommentarBauvorhabenDomainMapperImpl;
 import de.muenchen.isi.domain.mapper.KommentarInfrastruktureinrichtungDomainMapperImpl;
 import de.muenchen.isi.domain.model.common.KommentarBauvorhabenModel;
 import de.muenchen.isi.domain.model.common.KommentarInfrastruktureinrichtungModel;
+import de.muenchen.isi.domain.service.email.SendKommentarBauvorhabenNotificationService;
 import de.muenchen.isi.domain.service.filehandling.DokumentService;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
 import de.muenchen.isi.infrastructure.entity.common.Kommentar;
@@ -51,6 +52,9 @@ class KommentarServiceTest {
     @Mock
     private DokumentService dokumentService;
 
+    @Mock
+    private SendKommentarBauvorhabenNotificationService sendKommentarBauvorhabenNotificationService;
+
     @BeforeEach
     public void beforeEach() throws NoSuchFieldException, IllegalAccessException {
         final var kommentarBauvorhabenMapper = new KommentarBauvorhabenDomainMapperImpl();
@@ -70,7 +74,8 @@ class KommentarServiceTest {
             this.kommentarRepository,
             kommentarBauvorhabenMapper,
             kommentarInfrasturktureinrichtungMapper,
-            dokumentService
+            dokumentService,
+            sendKommentarBauvorhabenNotificationService
         );
         Mockito.reset(this.infrastruktureinrichtungRepository, this.bauvorhabenRepository, this.kommentarRepository);
     }
