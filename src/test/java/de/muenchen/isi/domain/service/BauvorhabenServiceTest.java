@@ -239,9 +239,7 @@ public class BauvorhabenServiceTest {
         bauvorhaben.setBauvorhabenNummer("12345");
         bauvorhaben.setGrundstuecksgroesse(BigDecimal.valueOf(1));
         bauvorhaben.setNameVorhaben("Name");
-        bauvorhaben.setWesentlicheRechtsgrundlage(
-            List.of(WesentlicheRechtsgrundlage.EINFACHER_BEBAUUNGSPLAN_PARAGRAPH_30)
-        );
+        bauvorhaben.setWesentlicheRechtsgrundlage(List.of(WesentlicheRechtsgrundlage.EINFACHER_BEBAUUNGSPLAN));
         bauvorhaben.setSobonRelevant(UncertainBoolean.FALSE);
         bauvorhaben.setVerfahrensstand(Verfahrensstand.RAHMENPLANUNG);
         bauvorhaben.setId(bauvorhabenId);

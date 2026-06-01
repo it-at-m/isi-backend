@@ -6,6 +6,8 @@ import de.muenchen.isi.api.dto.common.VerortungMultiPolygonDto;
 import de.muenchen.isi.api.dto.filehandling.DokumentDto;
 import de.muenchen.isi.api.validation.HasAllowedNumberOfDocuments;
 import de.muenchen.isi.api.validation.NotUnspecified;
+import de.muenchen.isi.api.validation.WesentlicheRechtsgrundlageBauvorhabenValid;
+import de.muenchen.isi.api.validation.WesentlicheRechtsgrundlageWeiteresVerfahrenValid;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtBaulicheNutzung;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonVerfahrensgrundsaetzeJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
@@ -66,10 +68,15 @@ public class BauvorhabenDto extends BaseEntityDto {
     private SobonVerfahrensgrundsaetzeJahr sobonJahr;
 
     @NotEmpty
-    private List<@NotUnspecified @NotNull WesentlicheRechtsgrundlage> wesentlicheRechtsgrundlage;
+    private List<
+        @NotUnspecified @WesentlicheRechtsgrundlageBauvorhabenValid @NotNull WesentlicheRechtsgrundlage
+    > wesentlicheRechtsgrundlage;
 
     @Size(max = 1000, message = "Es sind maximal {max} Zeichen erlaubt")
     private String wesentlicheRechtsgrundlageFreieEingabe;
+
+    @Size(max = 1000, message = "Es sind maximal {max} Zeichen erlaubt")
+    private String wesentlicheRechtsgrundlageAngabenZurBefreiung;
 
     @NotEmpty
     private List<@NotUnspecified @NotNull ArtBaulicheNutzung> artFnp;

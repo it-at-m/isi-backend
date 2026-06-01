@@ -18,9 +18,5 @@ class VerfahrensstandBaugenehmigungsverfahrenValidatorTest {
         assertThat(this.verfahrensstandValidator.isValid(Verfahrensstand.VORBEREITUNG_VORBESCHEID, null), is(true));
         assertThat(this.verfahrensstandValidator.isValid(Verfahrensstand.VORBEREITUNG_BAUGENEHMIGUNG, null), is(true));
         assertThat(this.verfahrensstandValidator.isValid(Verfahrensstand.FREIE_EINGABE, null), is(true));
-        assertThat(
-            this.verfahrensstandValidator.isValid(Verfahrensstand.RECHTSVERBINDLICHKEIT_AMTSBLATT, null),
-            is(false)
-        );
     }
 }

@@ -22,8 +22,6 @@ public enum WesentlicheRechtsgrundlage implements ILookup {
 
     FREIE_EINGABE("freie Eingabe"),
 
-    /* ab hier ISI-280) */
-
     EINFACHER_BEBAUUNGSPLAN("Einfacher Bebauungsplan"),
 
     QUALIFIZIERTER_BEBAUUNGSPLAN("Qualifizierter Bebauungsplan"),
@@ -32,11 +30,7 @@ public enum WesentlicheRechtsgrundlage implements ILookup {
 
     BEBAUUNGSPLAN_ZUR_WOHNRAUMVERSORGUNG("Bebauungsplan zur Wohnraumversorgung"),
 
-    BEFREIUNG("Befreiung (§ 31 BauGB)"),
-
-    /* ab hier ISI-278 */
-
-    EINFACHER_BEBAUUNGSPLAN_PARAGRAPH_30("Einfacher Bebauungsplan (§30 Abs. 3 BauGB)");
+    BEFREIUNG("Befreiung (§ 31 BauGB)");
 
     @Getter
     private final String bezeichnung;
@@ -58,6 +52,20 @@ public enum WesentlicheRechtsgrundlage implements ILookup {
             QUALIFIZIERTER_BEBAUUNGSPLAN,
             VORHABENSBEZOGENER_BEBAUUNGSPLAN,
             BEBAUUNGSPLAN_ZUR_WOHNRAUMVERSORGUNG,
+            INNENBEREICH,
+            AUSSENBEREICH,
+            BEFREIUNG,
+            FREIE_EINGABE
+        );
+    }
+
+    public static List<WesentlicheRechtsgrundlage> getWesentlicheRechtsgrundlageForBauvorhaben() {
+        return List.of(
+            EINFACHER_BEBAUUNGSPLAN,
+            QUALIFIZIERTER_BEBAUUNGSPLAN,
+            VORHABENSBEZOGENER_BEBAUUNGSPLAN,
+            BEBAUUNGSPLAN_ZUR_WOHNRAUMVERSORGUNG,
+            BEPLANTER_BEREICH_PARAGRAPH_30,
             INNENBEREICH,
             AUSSENBEREICH,
             BEFREIUNG,
