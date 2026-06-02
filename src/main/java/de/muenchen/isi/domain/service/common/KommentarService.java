@@ -106,9 +106,10 @@ public class KommentarService {
      */
     public KommentarBauvorhabenModel saveKommentarForBauvorhaben(final KommentarBauvorhabenModel kommentar)
         throws OptimisticLockingException, EntityNotFoundException {
+        final var isNew = kommentar.getId() == null;
         var entity = kommentarBauvorhabenMapper.model2Entity(kommentar);
         final var savedEntity = this.saveKommentar(entity);
-        if (savedEntity.getBauvorhaben() != null) {
+        if (isNew && savedEntity.getBauvorhaben() != null) {
             sendKommentarBauvorhabenNotificationService.sendKommentarBauvorhabenNotificationAsync(
                 savedEntity.getBauvorhaben().getId(),
                 savedEntity.getBauvorhaben().getNameVorhaben(),

@@ -41,16 +41,12 @@ public class MailSenderRepository {
         final var mailMessage = new SimpleMailMessage();
         mailMessage.setFrom(fromEmailAddress);
         mailMessage.setTo(ArrayUtils.toStringArray(receiver.toArray()));
-        mailMessage.setSubject(subject);
+        mailMessage.setSubject(sanitizeHeaderValue(subject));
         mailMessage.setText(text);
         try {
             mailSender.send(mailMessage);
         } catch (final MailSendException exception) {
-            final var message = StringUtils.replace(
-                "Die Email konnte nicht an den Empfänger %s versendet werden.",
-                "%s",
-                receiver.toString()
-            );
+            final var message = "Die Email konnte nicht an den Empfänger %s versendet werden.".formatted(receiver);
             log.error(message, exception);
         } catch (final MailAuthenticationException exception) {
             final var message = "Die Email konnte wegen fehlerhafter Emailcredentials nicht versendet werden.";
@@ -62,5 +58,9 @@ public class MailSenderRepository {
             final var message = "Beim Emailversand ist ein Fehler aufgetreten.";
             log.error(message, exception);
         }
+    }
+
+    private String sanitizeHeaderValue(final String value) {
+        return StringUtils.defaultString(value).replaceAll("[\\r\\n]", " ");
     }
 }
