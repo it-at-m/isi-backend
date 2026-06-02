@@ -46,7 +46,9 @@ public class MailSenderRepository {
         try {
             mailSender.send(mailMessage);
         } catch (final MailSendException exception) {
-            final var message = "Die Email konnte nicht an den Empfänger %s versendet werden.".formatted(receiver);
+            final var message = "Die Email konnte nicht versendet werden. Anzahl Empfänger: %d".formatted(
+                receiver.size()
+            );
             log.error(message, exception);
         } catch (final MailAuthenticationException exception) {
             final var message = "Die Email konnte wegen fehlerhafter Emailcredentials nicht versendet werden.";
