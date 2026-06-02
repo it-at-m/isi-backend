@@ -74,7 +74,7 @@ class SendKommentarBauvorhabenNotificationServiceTest {
             "/#/bauvorhaben/" +
             bauvorhabenId +
             "\n\nDatum des Kommentars: 01.06.2026" +
-            "\nText des Kommentars:\nEin Kommentar";
+            "\nText des Kommentars: Ein Kommentar";
 
         Mockito.verify(mailSenderRepository, Mockito.times(1)).sendMail(
             List.of(RECEIVER),
