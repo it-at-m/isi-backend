@@ -57,7 +57,7 @@ SET wesentliche_rechtsgrundlage =
     END;
 
 ALTER TABLE IF EXISTS isidbuser.bauvorhaben_wesentliche_rechtsgrundlage
-    ADD CONSTRAINT bauvorhaben_wesentliche_recht_wesentliche_rechtsgrundlage_check CHECK (wesentliche_rechtsgrundlage::text = ANY (ARRAY['EINFACHER_BEBAUUNGSPLAN'::character varying::text, 'QUALIFIZIERTER_BEBAUUNGSPLAN'::character varying::text, 'VORHABENSBEZOGENER_BEBAUUNGSPLAN'::character varying::text, 'BEBAUUNGSPLAN_ZUR_WOHNRAUMVERSORGUNG'::character varying::text, 'INNENBEREICH'::character varying::text, 'AUSSENBEREICH'::character varying::text, 'BEFREIUNG'::character varying::text, 'FREIE_EINGABE'::character varying::text]));
+    ADD CONSTRAINT bauvorhaben_wesentliche_recht_wesentliche_rechtsgrundlage_check CHECK (wesentliche_rechtsgrundlage::text = ANY (ARRAY['EINFACHER_BEBAUUNGSPLAN'::character varying::text, 'QUALIFIZIERTER_BEBAUUNGSPLAN'::character varying::text, 'VORHABENSBEZOGENER_BEBAUUNGSPLAN'::character varying::text, 'BEBAUUNGSPLAN_ZUR_WOHNRAUMVERSORGUNG'::character varying::text, 'BEPLANTER_BEREICH_PARAGRAPH_30'::character varying::text, 'INNENBEREICH'::character varying::text, 'AUSSENBEREICH'::character varying::text, 'BEFREIUNG'::character varying::text, 'FREIE_EINGABE'::character varying::text]));
 
 ALTER TABLE IF EXISTS isidbuser.bauvorhaben
     ADD COLUMN wesentliche_rechtsgrundlage_angaben_zur_befreiung character varying(1000);
