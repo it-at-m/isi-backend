@@ -136,7 +136,7 @@ class SendKommentarBauvorhabenNotificationServiceTest {
             "/#/abfrage/" +
             abfrageId2 +
             "\n\nDatum des Kommentars: 01.06.2026" +
-            "\nText des Kommentars:\nEin Kommentar";
+            "\nText des Kommentars: Ein Kommentar";
 
         Mockito.verify(mailSenderRepository, Mockito.times(1)).sendMail(
             List.of(RECEIVER),
@@ -161,7 +161,7 @@ class SendKommentarBauvorhabenNotificationServiceTest {
             "Im Bauvorhaben wurde ein Kommentar gespeichert." +
             "\n\nBauvorhaben: Mein Bauvorhaben" +
             "\n\nDatum des Kommentars: 01.06.2026" +
-            "\nText des Kommentars:\nEin Kommentar";
+            "\nText des Kommentars: Ein Kommentar";
 
         assertThat(result, is(expected));
     }
@@ -181,7 +181,7 @@ class SendKommentarBauvorhabenNotificationServiceTest {
             "/#/bauvorhaben/" +
             bauvorhabenId +
             "\n\nDatum des Kommentars: " +
-            "\nText des Kommentars:\n";
+            "\nText des Kommentars: ";
 
         assertThat(result, is(expected));
     }
