@@ -76,9 +76,9 @@ public class SendKommentarBauvorhabenNotificationService {
                 .append("/#/bauvorhaben/")
                 .append(bauvorhabenId);
         }
-        sb.append("\n\nDatum des Kommentars: ").append(StringUtils.defaultIfEmpty(kommentarDatum, ""));
-        sb.append("\n\nText des Kommentars:\n").append(StringUtils.defaultIfEmpty(kommentarText, ""));
         sb.append(buildAbfragenText(bauvorhabenId));
+        sb.append("\n\nDatum des Kommentars: ").append(StringUtils.defaultIfEmpty(kommentarDatum, ""));
+        sb.append("\nText des Kommentars:\n").append(StringUtils.defaultIfEmpty(kommentarText, ""));
         return sb.toString();
     }
 

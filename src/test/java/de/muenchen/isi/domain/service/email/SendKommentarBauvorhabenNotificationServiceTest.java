@@ -74,7 +74,7 @@ class SendKommentarBauvorhabenNotificationServiceTest {
             "/#/bauvorhaben/" +
             bauvorhabenId +
             "\n\nDatum des Kommentars: 01.06.2026" +
-            "\n\nText des Kommentars:\nEin Kommentar";
+            "\nText des Kommentars:\nEin Kommentar";
 
         Mockito.verify(mailSenderRepository, Mockito.times(1)).sendMail(
             List.of(RECEIVER),
@@ -126,8 +126,6 @@ class SendKommentarBauvorhabenNotificationServiceTest {
             BASE_URL +
             "/#/bauvorhaben/" +
             bauvorhabenId +
-            "\n\nDatum des Kommentars: 01.06.2026" +
-            "\n\nText des Kommentars:\nEin Kommentar" +
             "\n\nVerknüpfte Abfragen:" +
             "\nAbfrage Alpha: " +
             BASE_URL +
@@ -136,7 +134,9 @@ class SendKommentarBauvorhabenNotificationServiceTest {
             "\nAbfrage Beta: " +
             BASE_URL +
             "/#/abfrage/" +
-            abfrageId2;
+            abfrageId2 +
+            "\n\nDatum des Kommentars: 01.06.2026" +
+            "\nText des Kommentars:\nEin Kommentar";
 
         Mockito.verify(mailSenderRepository, Mockito.times(1)).sendMail(
             List.of(RECEIVER),
@@ -161,7 +161,7 @@ class SendKommentarBauvorhabenNotificationServiceTest {
             "Im Bauvorhaben wurde ein Kommentar gespeichert." +
             "\n\nBauvorhaben: Mein Bauvorhaben" +
             "\n\nDatum des Kommentars: 01.06.2026" +
-            "\n\nText des Kommentars:\nEin Kommentar";
+            "\nText des Kommentars:\nEin Kommentar";
 
         assertThat(result, is(expected));
     }
@@ -181,7 +181,7 @@ class SendKommentarBauvorhabenNotificationServiceTest {
             "/#/bauvorhaben/" +
             bauvorhabenId +
             "\n\nDatum des Kommentars: " +
-            "\n\nText des Kommentars:\n";
+            "\nText des Kommentars:\n";
 
         assertThat(result, is(expected));
     }
