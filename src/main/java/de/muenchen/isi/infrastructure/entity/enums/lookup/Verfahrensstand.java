@@ -62,18 +62,18 @@ public enum Verfahrensstand implements ILookup {
     POTENTIALUNTERSUCHUNG("Potentialuntersuchung", new String[] { "Potentialuntersuchung" }),
 
     STAEDTEBAULICHE_SANIERUNGSMASSNAHME(
-        "Städtebauliche Sanierungsmaßnahme (Sanierungsgebiet)",
+        "Städtebauliche Sanierungsmaßnahme Sanierungsgebiet",
         new String[] { "Städtebauliche", "Sanierungsmaßnahme", "Sanierungsgebiet" }
     ),
 
     STAEDTEBAULICHE_ENTWICKLUNGSMASSNAHME(
-        "Städtebauliche Entwicklungsmaßnahme (Entwicklungsgebiet)",
+        "Städtebauliche Entwicklungsmaßnahme Entwicklungsgebiet",
         new String[] { "Städtebauliche", "Entwicklungsmaßnahme", "Entwicklungsgebiet" }
     ),
 
     STANDORTABFRAGE("Standortabfrage", new String[] { "Standortabfrage" }),
 
-    FREIE_EINGABE("freie Eingabe", new String[] { "freie", "Eingabe" });
+    FREIE_EINGABE("Freie Eingabe", new String[] { "freie", "Eingabe" });
 
     @Getter
     private final String bezeichnung;
