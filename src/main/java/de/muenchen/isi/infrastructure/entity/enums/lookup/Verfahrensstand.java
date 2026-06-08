@@ -40,44 +40,15 @@ public enum Verfahrensstand implements ILookup {
 
     INKRAFTGETRETEN_FOERDERMIXPLAN("Inkraftgetreten (Fördermixplan)", new String[] { "Fördermixplan" }),
 
-    VORBEREITUNG_VORBESCHEID(
-        "Bauvoranfrage, Art. 71 BayBO (Vorbereitung Vorbescheid)",
-        new String[] { "Bauvoranfrage", "Vorbereitung", "Vorbescheid" }
-    ),
-
     VORBEREITUNG_BAUGENEHMIGUNG(
         "Genehmigungsverfahren, Art. 59 / Art. 60 BayBO (Vorbereitung Baugenehmigung)",
         new String[] { "Genehmigungsverfahren", "Vorbereitung", "Baugenehmigung" }
     ),
 
-    /* ab hier To-Do: ISI-280 */
-
-    VORBEREITUNG_ECKDATENBESCHLUSS(
-        "Vorbereitung Eckdatenbeschluss",
-        new String[] { "Vorbereitung", "Eckdatenbeschluss" }
+    VORBEREITUNG_VORBESCHEID(
+        "Bauvoranfrage, Art. 71 BayBO (Vorbereitung Vorbescheid)",
+        new String[] { "Bauvoranfrage", "Vorbereitung", "Vorbescheid" }
     ),
-
-    VORBEREITUNG_WETTBEWERBAUSLOBUNG(
-        "Vorbereitung Wettbewerbsauslobung",
-        new String[] { "Vorbereitung", "Wettbewerbsauslobung" }
-    ),
-
-    VORLIEGENDER_SATZUNGSBESCHLUSS(
-        "Vorliegender Satzungsbeschluss",
-        new String[] { "vorliegender", "Satzungsbeschluss" }
-    ),
-
-    VORBEREITUNG_AUFSTELLUNGSBESCHLUSS(
-        "Vorbereitung Aufstellungsbeschluss (ggf. + Eckdatenbeschluss)",
-        new String[] { "Vorbereitung", "Aufstellungsbeschluss", "Eckdatenbeschluss" }
-    ),
-
-    RECHTSVERBINDLICHKEIT_AMTSBLATT(
-        "Rechtsverbindlichkeit (Amtsblatt)",
-        new String[] { "Rechtsverbindlichkeit", "Amtsblatt" }
-    ),
-
-    AUFTEILUNGSPLAN("Aufteilungsplan", new String[] { "Aufteilungsplan" }),
 
     VORABFRAGE_OHNE_KONKRETEN_STAND(
         "Vorabfrage ohne konkreten Stand",
@@ -91,18 +62,18 @@ public enum Verfahrensstand implements ILookup {
     POTENTIALUNTERSUCHUNG("Potentialuntersuchung", new String[] { "Potentialuntersuchung" }),
 
     STAEDTEBAULICHE_SANIERUNGSMASSNAHME(
-        "Städtebauliche Sanierungsmaßnahme (Sanierungsgebiet)",
-        new String[] { "Städtebauliche", "Sanierungsmaßnahme", "Sanierungsgebiet" }
+        "Städtebauliche Sanierungsmaßnahme",
+        new String[] { "Städtebauliche", "Sanierungsmaßnahme" }
     ),
 
     STAEDTEBAULICHE_ENTWICKLUNGSMASSNAHME(
-        "Städtebauliche Entwicklungsmaßnahme (Entwicklungsgebiet)",
-        new String[] { "Städtebauliche", "Entwicklungsmaßnahme", "Entwicklungsgebiet" }
+        "Städtebauliche Entwicklungsmaßnahme",
+        new String[] { "Städtebauliche", "Entwicklungsmaßnahme" }
     ),
 
-    FREIE_EINGABE("freie Eingabe", new String[] { "freie", "Eingabe" }),
+    STANDORTABFRAGE("Standortabfrage", new String[] { "Standortabfrage" }),
 
-    STANDORTABFRAGE("Standortabfrage", new String[] { "Standortabfrage" });
+    FREIE_EINGABE("Freie Eingabe", new String[] { "freie", "Eingabe" });
 
     @Getter
     private final String bezeichnung;
