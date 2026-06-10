@@ -41,22 +41,26 @@ public class SendKommentarBauvorhabenNotificationService {
         final UUID bauvorhabenId,
         final String bauvorhabenName,
         final String kommentarText,
-        final String kommentarDatum
+        final String kommentarDatum,
+        final boolean isNew
     ) {
-        sendKommentarBauvorhabenNotification(bauvorhabenId, bauvorhabenName, kommentarText, kommentarDatum);
+        sendKommentarBauvorhabenNotification(bauvorhabenId, bauvorhabenName, kommentarText, kommentarDatum, isNew);
     }
 
     public void sendKommentarBauvorhabenNotification(
         final UUID bauvorhabenId,
         final String bauvorhabenName,
         final String kommentarText,
-        final String kommentarDatum
+        final String kommentarDatum,
+        final boolean isNew
     ) {
         if (StringUtils.isEmpty(receiverKommentarBauvorhaben)) {
             return;
         }
-        final var subject = "ISI - Neuer Kommentar zum Bauvorhaben: " + StringUtils.defaultIfEmpty(bauvorhabenName, "");
-        final var text = buildEmailText(bauvorhabenId, bauvorhabenName, kommentarText, kommentarDatum);
+        final var subjectAction = isNew ? "Neuer" : "Aktualisierter";
+        final var subject =
+            "ISI - " + subjectAction + " Kommentar zum Bauvorhaben: " + StringUtils.defaultIfEmpty(bauvorhabenName, "");
+        final var text = buildEmailText(bauvorhabenId, bauvorhabenName, kommentarText, kommentarDatum, isNew);
         mailSenderRepository.sendMail(List.of(receiverKommentarBauvorhaben), subject, text);
     }
 
@@ -64,10 +68,12 @@ public class SendKommentarBauvorhabenNotificationService {
         final UUID bauvorhabenId,
         final String bauvorhabenName,
         final String kommentarText,
-        final String kommentarDatum
+        final String kommentarDatum,
+        final boolean isNew
     ) {
         final var sb = new StringBuilder();
-        sb.append("Im Bauvorhaben wurde ein Kommentar gespeichert.");
+        final var bodyAction = isNew ? "gespeichert" : "aktualisiert";
+        sb.append("Im Bauvorhaben wurde ein Kommentar ").append(bodyAction).append(".");
         sb.append("\n\nBauvorhaben: ").append(StringUtils.defaultIfEmpty(bauvorhabenName, ""));
         if (StringUtils.isNotEmpty(isiEnvironmentUrl) && bauvorhabenId != null) {
             sb
@@ -78,7 +84,7 @@ public class SendKommentarBauvorhabenNotificationService {
         }
         sb.append(buildAbfragenText(bauvorhabenId));
         sb.append("\n\nDatum des Kommentars: ").append(StringUtils.defaultIfEmpty(kommentarDatum, ""));
-        sb.append("\nText des Kommentars: ").append(StringUtils.defaultIfEmpty(kommentarText, ""));
+        sb.append("\nText des Kommentars:\n").append(StringUtils.defaultIfEmpty(kommentarText, ""));
         return sb.toString();
     }
 

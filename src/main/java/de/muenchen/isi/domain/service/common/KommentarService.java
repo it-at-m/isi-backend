@@ -109,12 +109,13 @@ public class KommentarService {
         final var isNew = kommentar.getId() == null;
         var entity = kommentarBauvorhabenMapper.model2Entity(kommentar);
         final var savedEntity = this.saveKommentar(entity);
-        if (isNew && savedEntity.getBauvorhaben() != null) {
+        if (savedEntity.getBauvorhaben() != null) {
             sendKommentarBauvorhabenNotificationService.sendKommentarBauvorhabenNotificationAsync(
                 savedEntity.getBauvorhaben().getId(),
                 savedEntity.getBauvorhaben().getNameVorhaben(),
                 savedEntity.getText(),
-                savedEntity.getDatum()
+                savedEntity.getDatum(),
+                isNew
             );
         }
         return kommentarBauvorhabenMapper.entity2Model(savedEntity);

@@ -63,7 +63,13 @@ class SendKommentarBauvorhabenNotificationServiceTest {
         final var bauvorhabenId = UUID.randomUUID();
         Mockito.when(abfrageRepository.findAllByBauvorhabenId(bauvorhabenId)).thenReturn(Stream.empty());
 
-        service.sendKommentarBauvorhabenNotification(bauvorhabenId, "Mein Bauvorhaben", "Ein Kommentar", "01.06.2026");
+        service.sendKommentarBauvorhabenNotification(
+            bauvorhabenId,
+            "Mein Bauvorhaben",
+            "Ein Kommentar",
+            "01.06.2026",
+            true
+        );
 
         final var expectedSubject = "ISI - Neuer Kommentar zum Bauvorhaben: Mein Bauvorhaben";
         final var expectedText =
@@ -74,7 +80,38 @@ class SendKommentarBauvorhabenNotificationServiceTest {
             "/#/bauvorhaben/" +
             bauvorhabenId +
             "\n\nDatum des Kommentars: 01.06.2026" +
-            "\nText des Kommentars: Ein Kommentar";
+            "\nText des Kommentars:\nEin Kommentar";
+
+        Mockito.verify(mailSenderRepository, Mockito.times(1)).sendMail(
+            List.of(RECEIVER),
+            expectedSubject,
+            expectedText
+        );
+    }
+
+    @Test
+    void sendKommentarBauvorhabenNotification_versendetEmailBeiAktualisierung() {
+        final var bauvorhabenId = UUID.randomUUID();
+        Mockito.when(abfrageRepository.findAllByBauvorhabenId(bauvorhabenId)).thenReturn(Stream.empty());
+
+        service.sendKommentarBauvorhabenNotification(
+            bauvorhabenId,
+            "Mein Bauvorhaben",
+            "Ein Kommentar",
+            "01.06.2026",
+            false
+        );
+
+        final var expectedSubject = "ISI - Aktualisierter Kommentar zum Bauvorhaben: Mein Bauvorhaben";
+        final var expectedText =
+            "Im Bauvorhaben wurde ein Kommentar aktualisiert." +
+            "\n\nBauvorhaben: Mein Bauvorhaben" +
+            "\nLink zum Bauvorhaben: " +
+            BASE_URL +
+            "/#/bauvorhaben/" +
+            bauvorhabenId +
+            "\n\nDatum des Kommentars: 01.06.2026" +
+            "\nText des Kommentars:\nEin Kommentar";
 
         Mockito.verify(mailSenderRepository, Mockito.times(1)).sendMail(
             List.of(RECEIVER),
@@ -91,7 +128,8 @@ class SendKommentarBauvorhabenNotificationServiceTest {
             bauvorhabenId,
             "Mein Bauvorhaben",
             "Ein Kommentar",
-            "01.06.2026"
+            "01.06.2026",
+            true
         );
 
         Mockito.verify(mailSenderRepository, Mockito.never()).sendMail(
@@ -117,7 +155,13 @@ class SendKommentarBauvorhabenNotificationServiceTest {
 
         Mockito.when(abfrageRepository.findAllByBauvorhabenId(bauvorhabenId)).thenReturn(Stream.of(abfrage1, abfrage2));
 
-        service.sendKommentarBauvorhabenNotification(bauvorhabenId, "Mein Bauvorhaben", "Ein Kommentar", "01.06.2026");
+        service.sendKommentarBauvorhabenNotification(
+            bauvorhabenId,
+            "Mein Bauvorhaben",
+            "Ein Kommentar",
+            "01.06.2026",
+            true
+        );
 
         final var expectedText =
             "Im Bauvorhaben wurde ein Kommentar gespeichert." +
@@ -136,7 +180,7 @@ class SendKommentarBauvorhabenNotificationServiceTest {
             "/#/abfrage/" +
             abfrageId2 +
             "\n\nDatum des Kommentars: 01.06.2026" +
-            "\nText des Kommentars: Ein Kommentar";
+            "\nText des Kommentars:\nEin Kommentar";
 
         Mockito.verify(mailSenderRepository, Mockito.times(1)).sendMail(
             List.of(RECEIVER),
@@ -154,14 +198,15 @@ class SendKommentarBauvorhabenNotificationServiceTest {
             bauvorhabenId,
             "Mein Bauvorhaben",
             "Ein Kommentar",
-            "01.06.2026"
+            "01.06.2026",
+            true
         );
 
         final var expected =
             "Im Bauvorhaben wurde ein Kommentar gespeichert." +
             "\n\nBauvorhaben: Mein Bauvorhaben" +
             "\n\nDatum des Kommentars: 01.06.2026" +
-            "\nText des Kommentars: Ein Kommentar";
+            "\nText des Kommentars:\nEin Kommentar";
 
         assertThat(result, is(expected));
     }
@@ -171,7 +216,7 @@ class SendKommentarBauvorhabenNotificationServiceTest {
         final var bauvorhabenId = UUID.randomUUID();
         Mockito.when(abfrageRepository.findAllByBauvorhabenId(bauvorhabenId)).thenReturn(Stream.empty());
 
-        final var result = service.buildEmailText(bauvorhabenId, null, null, null);
+        final var result = service.buildEmailText(bauvorhabenId, null, null, null, true);
 
         final var expected =
             "Im Bauvorhaben wurde ein Kommentar gespeichert." +
@@ -181,7 +226,33 @@ class SendKommentarBauvorhabenNotificationServiceTest {
             "/#/bauvorhaben/" +
             bauvorhabenId +
             "\n\nDatum des Kommentars: " +
-            "\nText des Kommentars: ";
+            "\nText des Kommentars:\n";
+
+        assertThat(result, is(expected));
+    }
+
+    @Test
+    void buildEmailText_beiAktualisierung() {
+        final var bauvorhabenId = UUID.randomUUID();
+        Mockito.when(abfrageRepository.findAllByBauvorhabenId(bauvorhabenId)).thenReturn(Stream.empty());
+
+        final var result = service.buildEmailText(
+            bauvorhabenId,
+            "Mein Bauvorhaben",
+            "Geänderter Kommentar",
+            "01.06.2026",
+            false
+        );
+
+        final var expected =
+            "Im Bauvorhaben wurde ein Kommentar aktualisiert." +
+            "\n\nBauvorhaben: Mein Bauvorhaben" +
+            "\nLink zum Bauvorhaben: " +
+            BASE_URL +
+            "/#/bauvorhaben/" +
+            bauvorhabenId +
+            "\n\nDatum des Kommentars: 01.06.2026" +
+            "\nText des Kommentars:\nGeänderter Kommentar";
 
         assertThat(result, is(expected));
     }
