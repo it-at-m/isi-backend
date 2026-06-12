@@ -60,10 +60,7 @@ class MailSenderRepositoryTest {
 
         mailSenderRepository.sendMail(List.of("receiver"), "subject", "text");
 
-        assertThat(
-            output.getAll(),
-            containsString("Die Email konnte nicht an den Empfänger [receiver] versendet werden.")
-        );
+        assertThat(output.getAll(), containsString("Die Email konnte nicht versendet werden. Anzahl Empfänger: 1"));
         Mockito.verify(javaMailSender, Mockito.times(1)).send(mailMessage);
     }
 

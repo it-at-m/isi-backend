@@ -8,6 +8,7 @@ import de.muenchen.isi.domain.mapper.KommentarBauvorhabenDomainMapper;
 import de.muenchen.isi.domain.mapper.KommentarInfrastruktureinrichtungDomainMapper;
 import de.muenchen.isi.domain.model.common.KommentarBauvorhabenModel;
 import de.muenchen.isi.domain.model.common.KommentarInfrastruktureinrichtungModel;
+import de.muenchen.isi.domain.service.email.SendKommentarBauvorhabenNotificationService;
 import de.muenchen.isi.domain.service.filehandling.DokumentService;
 import de.muenchen.isi.infrastructure.entity.common.Kommentar;
 import de.muenchen.isi.infrastructure.repository.common.KommentarRepository;
@@ -31,6 +32,8 @@ public class KommentarService {
     private final KommentarInfrastruktureinrichtungDomainMapper kommentarInfrastruktureinrichtungMapper;
 
     private final DokumentService dokumentService;
+
+    private final SendKommentarBauvorhabenNotificationService sendKommentarBauvorhabenNotificationService;
 
     /**
      * Die Methode holt alle für ein Bauvorhaben hinterlegten Kommentare.
@@ -103,8 +106,19 @@ public class KommentarService {
      */
     public KommentarBauvorhabenModel saveKommentarForBauvorhaben(final KommentarBauvorhabenModel kommentar)
         throws OptimisticLockingException, EntityNotFoundException {
+        final var isNew = kommentar.getId() == null;
         var entity = kommentarBauvorhabenMapper.model2Entity(kommentar);
-        return kommentarBauvorhabenMapper.entity2Model(this.saveKommentar(entity));
+        final var savedEntity = this.saveKommentar(entity);
+        if (savedEntity.getBauvorhaben() != null) {
+            sendKommentarBauvorhabenNotificationService.sendKommentarBauvorhabenNotificationAsync(
+                savedEntity.getBauvorhaben().getId(),
+                savedEntity.getBauvorhaben().getNameVorhaben(),
+                savedEntity.getText(),
+                savedEntity.getDatum(),
+                isNew
+            );
+        }
+        return kommentarBauvorhabenMapper.entity2Model(savedEntity);
     }
 
     /**
