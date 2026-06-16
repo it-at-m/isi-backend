@@ -17,7 +17,7 @@ public class StaedtebaulicheOrientierungswertCsv {
     private String foerderartBezeichnung;
 
     @CsvBindByName(column = "DURCHSCHNITTLICHE_GRUNDFLAECHE", required = true)
-    private Long durchschnittlicheGrundflaeche;
+    private BigDecimal durchschnittlicheGrundflaeche;
 
     @CsvBindByName(column = "BELEGUNGSDICHTE", required = true)
     private BigDecimal belegungsdichte;

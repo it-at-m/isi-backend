@@ -271,22 +271,22 @@ public class PlanungsursaechlicheWohneinheitenServiceTest {
         final var orientierungswertFF2022 = new StaedtebaulicheOrientierungswert();
         orientierungswertFF2022.setFoerderartBezeichnung(FF);
         orientierungswertFF2022.setGueltigAb(SobonOrientierungswertJahr.JAHR_2022.getGueltigAb());
-        orientierungswertFF2022.setDurchschnittlicheGrundflaeche(95L);
+        orientierungswertFF2022.setDurchschnittlicheGrundflaeche(BigDecimal.valueOf(95));
 
         final var orientierungswertEOF2022 = new StaedtebaulicheOrientierungswert();
         orientierungswertEOF2022.setFoerderartBezeichnung(EOF);
         orientierungswertEOF2022.setGueltigAb(SobonOrientierungswertJahr.JAHR_2022.getGueltigAb());
-        orientierungswertEOF2022.setDurchschnittlicheGrundflaeche(90L);
+        orientierungswertEOF2022.setDurchschnittlicheGrundflaeche(BigDecimal.valueOf(90));
 
         final var orientierungswertMM2022 = new StaedtebaulicheOrientierungswert();
         orientierungswertMM2022.setFoerderartBezeichnung(MM);
         orientierungswertMM2022.setGueltigAb(SobonOrientierungswertJahr.JAHR_2022.getGueltigAb());
-        orientierungswertMM2022.setDurchschnittlicheGrundflaeche(100L);
+        orientierungswertMM2022.setDurchschnittlicheGrundflaeche(BigDecimal.valueOf(100));
 
         final var orientierungswertFH2022 = new StaedtebaulicheOrientierungswert();
         orientierungswertFH2022.setFoerderartBezeichnung(FH);
         orientierungswertFH2022.setGueltigAb(SobonOrientierungswertJahr.JAHR_2022.getGueltigAb());
-        orientierungswertFH2022.setDurchschnittlicheGrundflaeche(160L);
+        orientierungswertFH2022.setDurchschnittlicheGrundflaeche(BigDecimal.valueOf(160));
 
         Mockito.when(
             repository.findFirstByFoerderartBezeichnungAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(

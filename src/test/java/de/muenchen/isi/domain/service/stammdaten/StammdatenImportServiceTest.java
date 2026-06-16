@@ -78,7 +78,7 @@ class StammdatenImportServiceTest {
         final var csvEntry = new StaedtebaulicheOrientierungswertCsv();
         csvEntry.setGueltigAb(LocalDate.parse("2021-01-01"));
         csvEntry.setFoerderartBezeichnung("freifinanzierte Geschosswohnungsbau");
-        csvEntry.setDurchschnittlicheGrundflaeche(90L);
+        csvEntry.setDurchschnittlicheGrundflaeche(new BigDecimal("90"));
         csvEntry.setBelegungsdichte(BigDecimal.valueOf(210, 2));
 
         Mockito.when(
@@ -88,7 +88,7 @@ class StammdatenImportServiceTest {
         final var entity = new StaedtebaulicheOrientierungswert();
         entity.setGueltigAb(LocalDate.parse("2021-01-01"));
         entity.setFoerderartBezeichnung("freifinanzierte Geschosswohnungsbau");
-        entity.setDurchschnittlicheGrundflaeche(90L);
+        entity.setDurchschnittlicheGrundflaeche(new BigDecimal("90"));
         entity.setBelegungsdichte(BigDecimal.valueOf(210, 2));
         final List<StaedtebaulicheOrientierungswert> entities = List.of(entity);
 
