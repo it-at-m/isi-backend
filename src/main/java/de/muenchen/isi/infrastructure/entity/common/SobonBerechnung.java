@@ -1,6 +1,7 @@
 package de.muenchen.isi.infrastructure.entity.common;
 
 import de.muenchen.isi.infrastructure.entity.Foerdermix;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.Bauratenmethodik;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.Embedded;
@@ -22,4 +23,7 @@ public class SobonBerechnung {
     private SobonOrientierungswertJahr sobonOrientierungswertJahrSobonUrsaechlich;
 
     private BigDecimal versorgungsquoteHortSobon;
+
+    @Enumerated(EnumType.STRING)
+    private Bauratenmethodik bauratenmethodik;
 }

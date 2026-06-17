@@ -8,6 +8,7 @@ import de.muenchen.isi.infrastructure.adapter.search.VerortungMultiPolygonValueB
 import de.muenchen.isi.infrastructure.entity.common.Adresse;
 import de.muenchen.isi.infrastructure.entity.common.VerortungMultiPolygon;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.Bauratenmethodik;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonVerfahrensgrundsaetzeJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Verfahrensstand;
@@ -161,6 +162,16 @@ public class Bauleitplanverfahren extends Abfrage {
     @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "varchar(255) not null check (sobon_relevant != 'UNSPECIFIED')")
     private UncertainBoolean mitzeichnungBeschlussentwurf;
+
+    @Column
+    private LocalDate start42Verfahren;
+
+    @Column(nullable = false)
+    private Boolean start42VerfahrenDatumUnbekannt = false;
+
+    @Enumerated(EnumType.STRING)
+    @Column
+    private Bauratenmethodik bauratenmethodikVorbelegung;
 
     @IndexedEmbedded
     @IndexingDependency(reindexOnUpdate = ReindexOnUpdate.SHALLOW)

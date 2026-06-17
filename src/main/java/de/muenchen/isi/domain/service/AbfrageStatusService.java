@@ -2,13 +2,16 @@ package de.muenchen.isi.domain.service;
 
 import de.muenchen.isi.configuration.StateMachineConfiguration;
 import de.muenchen.isi.domain.exception.AbfrageStatusNotAllowedException;
+import de.muenchen.isi.domain.exception.CalculationException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
+import de.muenchen.isi.domain.exception.ReportingException;
 import de.muenchen.isi.domain.exception.StateMachineTransitionFailedException;
 import de.muenchen.isi.domain.exception.StringLengthExceededException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
 import de.muenchen.isi.domain.exception.UserRoleNotAllowedException;
 import de.muenchen.isi.domain.model.AbfrageModel;
+import de.muenchen.isi.domain.model.BauleitplanverfahrenModel;
 import de.muenchen.isi.domain.model.common.TransitionModel;
 import de.muenchen.isi.domain.service.common.BearbeitungshistorieService;
 import de.muenchen.isi.domain.service.email.SendWorkAssignmentInformationService;
@@ -61,6 +64,8 @@ public class AbfrageStatusService {
 
     private final SendWorkAssignmentInformationService sendWorkAssignmentInformationService;
 
+    private final BauratenmethodikDefaultingService bauratenmethodikDefaultingService;
+
     /**
      * Ändert den Status auf {@link StatusAbfrage#UEBERMITTELT_ZUR_BEARBEITUNG}.
      *
@@ -89,10 +94,34 @@ public class AbfrageStatusService {
      * @throws UserRoleNotAllowedException      falls der User keine Berechtigung für die Abfrage hat.
      */
     public void inBearbeitungSetzenAbfrage(final UUID id, String anmerkung)
-        throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException, UserRoleNotAllowedException {
+        throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException, UserRoleNotAllowedException, OptimisticLockingException, CalculationException, ReportingException {
         this.throwStringLengthExceededExceptionWhenAnmerkungExceedsLength(id, anmerkung);
+        this.setBauratenmethodikVorbelegungIfBauleitplanverfahren(id);
         final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id, anmerkung);
         this.sendEvent(id, StatusAbfrageEvents.IN_BEARBEITUNG_SETZEN, stateMachine);
+    }
+
+    /**
+     * Ermittelt für ein {@link BauleitplanverfahrenModel} die Vorbelegung für Bauratenmethodik
+     * anhand des Feldes {@code start42Verfahren} und speichert diese auf der Abfrage. Für andere
+     * Abfragearten passiert nichts.
+     *
+     * @param id vom Typ {@link UUID} um die Abfrage zu finden
+     * @throws EntityNotFoundException     falls die Abfrage nicht gefunden wird
+     * @throws UserRoleNotAllowedException falls der User keine Berechtigung für die Abfrage hat.
+     */
+    private void setBauratenmethodikVorbelegungIfBauleitplanverfahren(final UUID id)
+        throws EntityNotFoundException, UserRoleNotAllowedException, OptimisticLockingException, CalculationException, ReportingException {
+        final AbfrageModel abfrage = this.abfrageService.getById(id);
+        if (abfrage instanceof BauleitplanverfahrenModel bauleitplanverfahren) {
+            bauleitplanverfahren.setBauratenmethodikVorbelegung(
+                this.bauratenmethodikDefaultingService.determineDefault(
+                    bauleitplanverfahren.getStart42Verfahren(),
+                    Boolean.TRUE.equals(bauleitplanverfahren.getStart42VerfahrenDatumUnbekannt())
+                )
+            );
+            this.abfrageService.save(bauleitplanverfahren);
+        }
     }
 
     /**

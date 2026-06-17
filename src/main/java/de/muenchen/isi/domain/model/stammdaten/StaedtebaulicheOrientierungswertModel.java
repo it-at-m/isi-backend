@@ -16,7 +16,7 @@ public class StaedtebaulicheOrientierungswertModel extends BaseEntityModel {
 
     private String foerderartBezeichnung;
 
-    private BigDecimal durchschnittlicheGrundflaeche;
+    private Long durchschnittlicheGrundflaeche;
 
     private BigDecimal belegungsdichte;
 }

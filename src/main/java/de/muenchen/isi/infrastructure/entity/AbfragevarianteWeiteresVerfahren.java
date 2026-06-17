@@ -160,6 +160,7 @@ public class AbfragevarianteWeiteresVerfahren extends Abfragevariante {
                 name = "sobonFoerdermix.sobonOrientierungswertJahrSobonUrsaechlich",
                 column = @Column(name = "sobon_orientierungswert_jahr_sobon_ursaechlich", nullable = true)
             ),
+            @AttributeOverride(name = "bauratenmethodik", column = @Column(name = "bauratenmethodik", nullable = true)),
         }
     )
     private SobonBerechnung sobonBerechnung;
