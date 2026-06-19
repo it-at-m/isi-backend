@@ -30,9 +30,9 @@ public class StaedtebaulicheOrientierungswert extends BaseEntity {
     @Column(nullable = false)
     private String foerderartBezeichnung;
 
-    @Column(nullable = false)
-    private Long durchschnittlicheGrundflaeche;
+    @Column(precision = 20, scale = 13, nullable = false)
+    private BigDecimal durchschnittlicheGrundflaeche;
 
-    @Column(precision = 10, scale = 2, nullable = false)
+    @Column(precision = 20, scale = 13, nullable = false)
     private BigDecimal belegungsdichte;
 }

@@ -41,20 +41,20 @@ public class StaedtebaulicheOrientierungswertRepositoryTest {
         StaedtebaulicheOrientierungswert orientierungswert1 = new StaedtebaulicheOrientierungswert();
         orientierungswert1.setFoerderartBezeichnung("Test1");
         orientierungswert1.setGueltigAb(LocalDate.parse("2000-01-01"));
-        orientierungswert1.setDurchschnittlicheGrundflaeche(100L);
-        orientierungswert1.setBelegungsdichte(new BigDecimal("1.50"));
+        orientierungswert1.setDurchschnittlicheGrundflaeche(new BigDecimal("100.0000000000000"));
+        orientierungswert1.setBelegungsdichte(new BigDecimal("1.5000000000000"));
 
         StaedtebaulicheOrientierungswert orientierungswert2 = new StaedtebaulicheOrientierungswert();
         orientierungswert2.setFoerderartBezeichnung("Test2");
         orientierungswert2.setGueltigAb(LocalDate.parse("2005-05-05"));
-        orientierungswert2.setDurchschnittlicheGrundflaeche(150L);
-        orientierungswert2.setBelegungsdichte(new BigDecimal("2.00"));
+        orientierungswert2.setDurchschnittlicheGrundflaeche(new BigDecimal("150.0000000000000"));
+        orientierungswert2.setBelegungsdichte(new BigDecimal("2.0000000000000"));
 
         StaedtebaulicheOrientierungswert orientierungswert3 = new StaedtebaulicheOrientierungswert();
         orientierungswert3.setFoerderartBezeichnung("Test3");
         orientierungswert3.setGueltigAb(LocalDate.parse("2010-01-01"));
-        orientierungswert3.setDurchschnittlicheGrundflaeche(120L);
-        orientierungswert3.setBelegungsdichte(new BigDecimal("1.80"));
+        orientierungswert3.setDurchschnittlicheGrundflaeche(new BigDecimal("120.0000000000000"));
+        orientierungswert3.setBelegungsdichte(new BigDecimal("1.8000000000000"));
 
         this.staedtebaulicheOrientierungswertRepository.saveAll(
             List.of(orientierungswert1, orientierungswert2, orientierungswert3)
@@ -109,14 +109,14 @@ public class StaedtebaulicheOrientierungswertRepositoryTest {
         StaedtebaulicheOrientierungswert orientierungswert1 = new StaedtebaulicheOrientierungswert();
         orientierungswert1.setFoerderartBezeichnung("Test1");
         orientierungswert1.setGueltigAb(LocalDate.parse("2000-01-01"));
-        orientierungswert1.setDurchschnittlicheGrundflaeche(100L);
-        orientierungswert1.setBelegungsdichte(new BigDecimal("1.50"));
+        orientierungswert1.setDurchschnittlicheGrundflaeche(new BigDecimal("100.0000000000000"));
+        orientierungswert1.setBelegungsdichte(new BigDecimal("1.5000000000000"));
 
         StaedtebaulicheOrientierungswert orientierungswert2 = new StaedtebaulicheOrientierungswert();
         orientierungswert2.setFoerderartBezeichnung("Test2");
         orientierungswert2.setGueltigAb(LocalDate.parse("2005-05-05"));
-        orientierungswert2.setDurchschnittlicheGrundflaeche(150L);
-        orientierungswert2.setBelegungsdichte(new BigDecimal("2.00"));
+        orientierungswert2.setDurchschnittlicheGrundflaeche(new BigDecimal("150.0000000000000"));
+        orientierungswert2.setBelegungsdichte(new BigDecimal("2.0000000000000"));
 
         this.staedtebaulicheOrientierungswertRepository.saveAll(List.of(orientierungswert1, orientierungswert2));
 

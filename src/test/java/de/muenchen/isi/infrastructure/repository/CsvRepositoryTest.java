@@ -76,13 +76,13 @@ class CsvRepositoryTest {
         final var firstExpected = new StaedtebaulicheOrientierungswertCsv();
         firstExpected.setGueltigAb(LocalDate.parse("2021-01-01"));
         firstExpected.setFoerderartBezeichnung("GW-freifinanziert");
-        firstExpected.setDurchschnittlicheGrundflaeche(90L);
+        firstExpected.setDurchschnittlicheGrundflaeche(new BigDecimal("90"));
         firstExpected.setBelegungsdichte(BigDecimal.valueOf(210, 2));
 
         final var lastExpected = new StaedtebaulicheOrientierungswertCsv();
         lastExpected.setGueltigAb(LocalDate.parse("2021-01-01"));
         lastExpected.setFoerderartBezeichnung("1-2-FH");
-        lastExpected.setDurchschnittlicheGrundflaeche(150L);
+        lastExpected.setDurchschnittlicheGrundflaeche(new BigDecimal("150"));
         lastExpected.setBelegungsdichte(BigDecimal.valueOf(348, 2));
 
         assertThat(resultList.size(), is(5));
