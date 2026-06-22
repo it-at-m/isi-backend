@@ -23,6 +23,9 @@ public class Start42VerfahrenValidator
      */
     @Override
     public boolean isValid(final BauleitplanverfahrenAngelegtDto value, final ConstraintValidatorContext context) {
+        if (value == null) {
+            return true;
+        }
         final boolean hasDatum = value.getStart42Verfahren() != null;
         final boolean datumUnbekannt = Boolean.TRUE.equals(value.getStart42VerfahrenDatumUnbekannt());
         return hasDatum ^ datumUnbekannt;

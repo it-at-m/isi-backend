@@ -170,7 +170,7 @@ public class Bauleitplanverfahren extends Abfrage {
     private Boolean start42VerfahrenDatumUnbekannt;
 
     @Enumerated(EnumType.STRING)
-    @Column
+    @Column(name = "bauratenmethodik_vorbelegung")
     private Bauratenmethodik bauratenmethodikVorbelegung;
 
     @IndexedEmbedded

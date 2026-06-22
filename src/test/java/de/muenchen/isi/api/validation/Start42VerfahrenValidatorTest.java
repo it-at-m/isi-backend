@@ -56,4 +56,9 @@ class Start42VerfahrenValidatorTest {
         abfrage.setStart42VerfahrenDatumUnbekannt(null);
         assertThat(validator.isValid(abfrage, null), is(false));
     }
+
+    @Test
+    void isValidValueNull() {
+        assertThat(validator.isValid(null, null), is(true));
+    }
 }

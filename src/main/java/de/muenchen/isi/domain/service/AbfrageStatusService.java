@@ -96,9 +96,9 @@ public class AbfrageStatusService {
     public void inBearbeitungSetzenAbfrage(final UUID id, String anmerkung)
         throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException, UserRoleNotAllowedException, OptimisticLockingException, CalculationException, ReportingException {
         this.throwStringLengthExceededExceptionWhenAnmerkungExceedsLength(id, anmerkung);
-        this.setBauratenmethodikVorbelegungIfBauleitplanverfahren(id);
         final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id, anmerkung);
         this.sendEvent(id, StatusAbfrageEvents.IN_BEARBEITUNG_SETZEN, stateMachine);
+        this.setBauratenmethodikVorbelegungIfBauleitplanverfahren(id);
     }
 
     /**

@@ -96,8 +96,8 @@ public class TestData {
         bauleitplanverfahren.setSobonRelevant(UncertainBoolean.TRUE);
         bauleitplanverfahren.setSobonJahr(SobonVerfahrensgrundsaetzeJahr.JAHR_2021);
         bauleitplanverfahren.setMitzeichnungBeschlussentwurf(UncertainBoolean.TRUE);
-        bauleitplanverfahren.setStart42VerfahrenDatumUnbekannt(true);
         bauleitplanverfahren.setMitzeichnungBeschlussentwurf(UncertainBoolean.FALSE);
+        bauleitplanverfahren.setStart42VerfahrenDatumUnbekannt(true);
         bauleitplanverfahren.setAbfragevariantenBauleitplanverfahren(
             List.of(createAbfragevarianteBauleitplanverfahrenModel())
         );
@@ -162,10 +162,10 @@ public class TestData {
         bauleitplanverfahren.setVerortung(createVerortung());
         bauleitplanverfahren.setSobonRelevant(UncertainBoolean.FALSE);
         bauleitplanverfahren.setMitzeichnungBeschlussentwurf(UncertainBoolean.FALSE);
+        bauleitplanverfahren.setStart42VerfahrenDatumUnbekannt(true);
         bauleitplanverfahren.setAbfragevariantenBauleitplanverfahren(
             List.of(createAbfragevarianteBauleitplanverfahrenAngelegtModel())
         );
-        bauleitplanverfahren.setStart42VerfahrenDatumUnbekannt(true);
         return bauleitplanverfahren;
     }
 

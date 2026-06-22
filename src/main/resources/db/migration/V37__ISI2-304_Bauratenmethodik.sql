@@ -9,12 +9,20 @@ BEGIN;
 ALTER TABLE IF EXISTS isidbuser.bauleitplanverfahren
     ADD COLUMN start_42_verfahren timestamp without time zone,
     ADD COLUMN start_42_verfahren_datum_unbekannt boolean NOT NULL DEFAULT true,
-    ADD COLUMN bauratenmethodik_vorbelegung varchar(255);
+    ADD COLUMN bauratenmethodik_vorbelegung varchar(255),
+    ADD CONSTRAINT bauleitplanverfahren_start_42_verfahren_xor_check
+    CHECK ((start_42_verfahren IS NOT NULL) != start_42_verfahren_datum_unbekannt),
+    ADD CONSTRAINT bauleitplanverfahren_bauratenmethodik_vorbelegung_check
+    CHECK (bauratenmethodik_vorbelegung IS NULL OR bauratenmethodik_vorbelegung IN ('ALTE_BAURATENMETHODIK', 'NEUE_BAURATENMETHODIK'));
 
 ALTER TABLE IF EXISTS isidbuser.abfrgvar_bauleitplnvrfhrn
-    ADD COLUMN bauratenmethodik varchar(255);
+    ADD COLUMN bauratenmethodik varchar(255),
+    ADD CONSTRAINT abfrgvar_bauleitplnvrfhrn_bauratenmethodik_check
+    CHECK (bauratenmethodik IS NULL OR bauratenmethodik IN ('ALTE_BAURATENMETHODIK', 'NEUE_BAURATENMETHODIK'));
 
 ALTER TABLE IF EXISTS isidbuser.abfrgvar_weitrs_vrfhrn
-    ADD COLUMN bauratenmethodik varchar(255);
+    ADD COLUMN bauratenmethodik varchar(255),
+    ADD CONSTRAINT abfrgvar_weitrs_vrfhrn_bauratenmethodik_check
+    CHECK (bauratenmethodik IS NULL OR bauratenmethodik IN ('ALTE_BAURATENMETHODIK', 'NEUE_BAURATENMETHODIK'));
 
 END;
