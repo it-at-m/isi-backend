@@ -318,6 +318,14 @@ class AbfrageStatusServiceTest {
 
         bauleitplanverfahren = (BauleitplanverfahrenModel) this.abfrageService.getById(uuid);
         assertThat(bauleitplanverfahren.getBauratenmethodikVorbelegung(), is(Bauratenmethodik.ALTE_BAURATENMETHODIK));
+        assertThat(
+            bauleitplanverfahren
+                .getAbfragevariantenBauleitplanverfahren()
+                .get(0)
+                .getSobonBerechnung()
+                .getBauratenmethodik(),
+            is(Bauratenmethodik.ALTE_BAURATENMETHODIK)
+        );
 
         // Datum ab dem Stichtag 07/2026 -> neue Bauratenmethodik
         bauleitplanverfahren = TestData.createBauleitplanverfahrenModel();
@@ -332,6 +340,14 @@ class AbfrageStatusServiceTest {
 
         bauleitplanverfahren = (BauleitplanverfahrenModel) this.abfrageService.getById(uuid);
         assertThat(bauleitplanverfahren.getBauratenmethodikVorbelegung(), is(Bauratenmethodik.NEUE_BAURATENMETHODIK));
+        assertThat(
+            bauleitplanverfahren
+                .getAbfragevariantenBauleitplanverfahren()
+                .get(0)
+                .getSobonBerechnung()
+                .getBauratenmethodik(),
+            is(Bauratenmethodik.NEUE_BAURATENMETHODIK)
+        );
 
         // Datum unbekannt -> keine Vorbelegung, manuelle Auswahl durch Sachbearbeitung notwendig
         bauleitplanverfahren = TestData.createBauleitplanverfahrenModel();
@@ -346,6 +362,14 @@ class AbfrageStatusServiceTest {
 
         bauleitplanverfahren = (BauleitplanverfahrenModel) this.abfrageService.getById(uuid);
         assertThat(bauleitplanverfahren.getBauratenmethodikVorbelegung(), is(nullValue()));
+        assertThat(
+            bauleitplanverfahren
+                .getAbfragevariantenBauleitplanverfahren()
+                .get(0)
+                .getSobonBerechnung()
+                .getBauratenmethodik(),
+            is(nullValue())
+        );
     }
 
     @Test
