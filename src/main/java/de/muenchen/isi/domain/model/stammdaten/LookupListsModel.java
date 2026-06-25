@@ -50,4 +50,6 @@ public class LookupListsModel {
     private LookupListModel sobonOrientierungswertJahr;
 
     private LookupListModel sobonOrientierungswertJahrWithoutStandortabfrage;
+
+    private LookupListModel bauratenmethodik;
 }

@@ -2,13 +2,17 @@ package de.muenchen.isi.domain.service;
 
 import de.muenchen.isi.configuration.StateMachineConfiguration;
 import de.muenchen.isi.domain.exception.AbfrageStatusNotAllowedException;
+import de.muenchen.isi.domain.exception.CalculationException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
+import de.muenchen.isi.domain.exception.ReportingException;
 import de.muenchen.isi.domain.exception.StateMachineTransitionFailedException;
 import de.muenchen.isi.domain.exception.StringLengthExceededException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
 import de.muenchen.isi.domain.exception.UserRoleNotAllowedException;
 import de.muenchen.isi.domain.model.AbfrageModel;
+import de.muenchen.isi.domain.model.AbfragevarianteBauleitplanverfahrenModel;
+import de.muenchen.isi.domain.model.BauleitplanverfahrenModel;
 import de.muenchen.isi.domain.model.common.TransitionModel;
 import de.muenchen.isi.domain.service.common.BearbeitungshistorieService;
 import de.muenchen.isi.domain.service.email.SendWorkAssignmentInformationService;
@@ -25,6 +29,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageHeaders;
@@ -61,6 +66,8 @@ public class AbfrageStatusService {
 
     private final SendWorkAssignmentInformationService sendWorkAssignmentInformationService;
 
+    private final BauratenmethodikDefaultingService bauratenmethodikDefaultingService;
+
     /**
      * Ändert den Status auf {@link StatusAbfrage#UEBERMITTELT_ZUR_BEARBEITUNG}.
      *
@@ -89,10 +96,41 @@ public class AbfrageStatusService {
      * @throws UserRoleNotAllowedException      falls der User keine Berechtigung für die Abfrage hat.
      */
     public void inBearbeitungSetzenAbfrage(final UUID id, String anmerkung)
-        throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException, UserRoleNotAllowedException {
+        throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException, UserRoleNotAllowedException, OptimisticLockingException, CalculationException, ReportingException {
         this.throwStringLengthExceededExceptionWhenAnmerkungExceedsLength(id, anmerkung);
         final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id, anmerkung);
         this.sendEvent(id, StatusAbfrageEvents.IN_BEARBEITUNG_SETZEN, stateMachine);
+        this.setBauratenmethodikVorbelegungIfBauleitplanverfahren(id);
+    }
+
+    /**
+     * Ermittelt für ein {@link BauleitplanverfahrenModel} die Vorbelegung für Bauratenmethodik
+     * anhand des Feldes {@code start42Verfahren}, speichert diese auf der Abfrage (zur späteren
+     * Vorbelegung neu angelegter Sachbearbeitungs-Abfragevarianten durch das Frontend) und setzt
+     * sie zusätzlich direkt auf der SoBoN-Berechnung jeder bereits durch die Abfrageerstellung
+     * angelegten Abfragevariante, sofern dort noch keine Bauratenmethodik gesetzt ist. Für andere
+     * Abfragearten passiert nichts.
+     *
+     * @param id vom Typ {@link UUID} um die Abfrage zu finden
+     * @throws EntityNotFoundException     falls die Abfrage nicht gefunden wird
+     * @throws UserRoleNotAllowedException falls der User keine Berechtigung für die Abfrage hat.
+     */
+    private void setBauratenmethodikVorbelegungIfBauleitplanverfahren(final UUID id)
+        throws EntityNotFoundException, UserRoleNotAllowedException, OptimisticLockingException, CalculationException, ReportingException {
+        final AbfrageModel abfrage = this.abfrageService.getById(id);
+        if (abfrage instanceof BauleitplanverfahrenModel bauleitplanverfahren) {
+            final var vorbelegung = this.bauratenmethodikDefaultingService.determineDefault(
+                bauleitplanverfahren.getStart42Verfahren(),
+                Boolean.TRUE.equals(bauleitplanverfahren.getStart42VerfahrenDatumUnbekannt())
+            );
+            bauleitplanverfahren.setBauratenmethodikVorbelegung(vorbelegung);
+            CollectionUtils.emptyIfNull(bauleitplanverfahren.getAbfragevariantenBauleitplanverfahren())
+                .stream()
+                .map(AbfragevarianteBauleitplanverfahrenModel::getSobonBerechnung)
+                .filter(sobonBerechnung -> sobonBerechnung != null && sobonBerechnung.getBauratenmethodik() == null)
+                .forEach(sobonBerechnung -> sobonBerechnung.setBauratenmethodik(vorbelegung));
+            this.abfrageService.save(bauleitplanverfahren);
+        }
     }
 
     /**

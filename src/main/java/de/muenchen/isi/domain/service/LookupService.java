@@ -7,6 +7,7 @@ import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtBaulicheNutzung;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtDokument;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtGsNachmittagBetreuung;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.Bauratenmethodik;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Einrichtungstraeger;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Planart;
@@ -61,6 +62,7 @@ public class LookupService {
         model.setSobonOrientierungswertJahrWithoutStandortabfrage(
             this.getSobonOrientierungswertJahrWithoutStandortabfrage()
         );
+        model.setBauratenmethodik(this.getBauratenmethodikList());
         return model;
     }
 
@@ -270,6 +272,15 @@ public class LookupService {
                 .stream()
                 .map(item -> new LookupEntryModel(item.toString(), item.getBezeichnung()))
                 .collect(Collectors.toList());
+
+        return new LookupListModel(list);
+    }
+
+    private LookupListModel getBauratenmethodikList() {
+        final List<LookupEntryModel> list = EnumUtils.getEnumList(Bauratenmethodik.class)
+            .stream()
+            .map(item -> new LookupEntryModel(item.toString(), item.getBezeichnung()))
+            .collect(Collectors.toList());
 
         return new LookupListModel(list);
     }

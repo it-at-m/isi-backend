@@ -214,7 +214,7 @@ public class SobonursaechlicheWohneinheitenService {
                     sobonJahr
                 );
             if (orientierungswert.isPresent()) {
-                final var average = BigDecimal.valueOf(orientierungswert.get().getDurchschnittlicheGrundflaeche());
+                final var average = orientierungswert.get().getDurchschnittlicheGrundflaeche();
                 wohneinheiten = sobonGf
                     .multiply(foerderart.getAnteilProzent().scaleByPowerOfTen(-2))
                     .divide(average, CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);

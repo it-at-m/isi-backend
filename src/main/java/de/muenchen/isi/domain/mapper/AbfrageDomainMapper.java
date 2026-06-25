@@ -119,6 +119,7 @@ public abstract class AbfrageDomainMapper {
             @Mapping(target = "abfragevariantenBauleitplanverfahren", ignore = true),
             @Mapping(target = "abfragevariantenSachbearbeitungBauleitplanverfahren", ignore = true),
             @Mapping(target = "bearbeitungshistorie", ignore = true),
+            @Mapping(target = "bauratenmethodikVorbelegung", ignore = true),
         }
     )
     public abstract BauleitplanverfahrenModel request2Model(

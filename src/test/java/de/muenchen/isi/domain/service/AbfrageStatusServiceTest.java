@@ -2,6 +2,7 @@ package de.muenchen.isi.domain.service;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 
 import de.muenchen.isi.IsiBackendApplication;
 import de.muenchen.isi.TestConstants;
@@ -15,13 +16,16 @@ import de.muenchen.isi.domain.exception.StringLengthExceededException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
 import de.muenchen.isi.domain.exception.UserRoleNotAllowedException;
 import de.muenchen.isi.domain.model.AbfrageModel;
+import de.muenchen.isi.domain.model.BauleitplanverfahrenModel;
 import de.muenchen.isi.domain.service.calculation.CalculationService;
 import de.muenchen.isi.domain.service.email.SendWorkAssignmentInformationService;
 import de.muenchen.isi.domain.service.etlInterface.EtlInterfaceService;
 import de.muenchen.isi.domain.service.reporting.ReportingdataTransferService;
 import de.muenchen.isi.domain.service.transition.MockCustomUser;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.Bauratenmethodik;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrageEvents;
+import java.time.LocalDate;
 import java.util.UUID;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

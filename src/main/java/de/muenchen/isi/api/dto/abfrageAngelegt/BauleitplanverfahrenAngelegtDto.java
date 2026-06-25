@@ -5,6 +5,7 @@ import de.muenchen.isi.api.dto.common.VerortungMultiPolygonDto;
 import de.muenchen.isi.api.dto.filehandling.DokumentDto;
 import de.muenchen.isi.api.validation.HasAllowedNumberOfDocuments;
 import de.muenchen.isi.api.validation.NotUnspecified;
+import de.muenchen.isi.api.validation.Start42VerfahrenValid;
 import de.muenchen.isi.api.validation.VerfahrensstandBauleitplanverfahrenValid;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonVerfahrensgrundsaetzeJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
@@ -22,6 +23,7 @@ import lombok.ToString;
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
+@Start42VerfahrenValid
 public class BauleitplanverfahrenAngelegtDto extends AbfrageAngelegtDto {
 
     @Size(max = 255, message = "Es sind maximal {max} Zeichen erlaubt")
@@ -55,6 +57,11 @@ public class BauleitplanverfahrenAngelegtDto extends AbfrageAngelegtDto {
 
     @NotNull
     private UncertainBoolean mitzeichnungBeschlussentwurf;
+
+    private LocalDate start42Verfahren;
+
+    @NotNull
+    private Boolean start42VerfahrenDatumUnbekannt;
 
     @NotEmpty
     @Size(min = 1, max = 5)

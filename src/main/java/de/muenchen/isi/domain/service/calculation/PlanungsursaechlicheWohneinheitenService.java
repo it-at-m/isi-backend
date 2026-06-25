@@ -100,7 +100,7 @@ public class PlanungsursaechlicheWohneinheitenService {
                     sobonJahr.getGueltigAb()
                 );
             if (orientierungswert.isPresent()) {
-                final var average = BigDecimal.valueOf(orientierungswert.get().getDurchschnittlicheGrundflaeche());
+                final var average = orientierungswert.get().getDurchschnittlicheGrundflaeche();
                 return baurate
                     .getGfWohnenGeplant()
                     .multiply(foerderart.getAnteilProzent().scaleByPowerOfTen(-2))

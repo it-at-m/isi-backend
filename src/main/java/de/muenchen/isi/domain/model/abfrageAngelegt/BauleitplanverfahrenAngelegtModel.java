@@ -37,5 +37,9 @@ public class BauleitplanverfahrenAngelegtModel extends AbfrageAngelegtModel {
 
     private UncertainBoolean mitzeichnungBeschlussentwurf;
 
+    private LocalDate start42Verfahren;
+
+    private Boolean start42VerfahrenDatumUnbekannt;
+
     private List<AbfragevarianteBauleitplanverfahrenAngelegtModel> abfragevariantenBauleitplanverfahren;
 }
