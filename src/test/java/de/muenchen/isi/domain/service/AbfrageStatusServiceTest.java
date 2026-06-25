@@ -299,6 +299,78 @@ class AbfrageStatusServiceTest {
     @Test
     @Transactional
     @MockCustomUser
+    void inBearbeitungSetzenSetztBauratenmethodikVorbelegungAnhandStart42VerfahrenFuerBauleitplanverfahren()
+        throws UniqueViolationException, OptimisticLockingException, StringLengthExceededException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException, ReportingException, UserRoleNotAllowedException {
+        // Datum vor dem Stichtag 07/2026 -> alte Bauratenmethodik
+        BauleitplanverfahrenModel bauleitplanverfahren = TestData.createBauleitplanverfahrenModel();
+        bauleitplanverfahren.setStart42Verfahren(LocalDate.of(2026, 3, 1));
+        bauleitplanverfahren.setStart42VerfahrenDatumUnbekannt(false);
+        AbfrageModel abfrage = this.abfrageService.save(bauleitplanverfahren);
+        abfrage.setStatusAbfrage(StatusAbfrage.UEBERMITTELT_ZUR_BEARBEITUNG);
+        abfrage = this.abfrageService.save(abfrage);
+        var uuid = abfrage.getId();
+
+        this.abfrageStatusService.inBearbeitungSetzenAbfrage(uuid, "");
+
+        bauleitplanverfahren = (BauleitplanverfahrenModel) this.abfrageService.getById(uuid);
+        assertThat(bauleitplanverfahren.getBauratenmethodikVorbelegung(), is(Bauratenmethodik.ALTE_BAURATENMETHODIK));
+        assertThat(
+            bauleitplanverfahren
+                .getAbfragevariantenBauleitplanverfahren()
+                .get(0)
+                .getSobonBerechnung()
+                .getBauratenmethodik(),
+            is(Bauratenmethodik.ALTE_BAURATENMETHODIK)
+        );
+
+        // Datum ab dem Stichtag 07/2026 -> neue Bauratenmethodik
+        bauleitplanverfahren = TestData.createBauleitplanverfahrenModel();
+        bauleitplanverfahren.setStart42Verfahren(LocalDate.of(2026, 7, 1));
+        bauleitplanverfahren.setStart42VerfahrenDatumUnbekannt(false);
+        abfrage = this.abfrageService.save(bauleitplanverfahren);
+        abfrage.setStatusAbfrage(StatusAbfrage.UEBERMITTELT_ZUR_BEARBEITUNG);
+        abfrage = this.abfrageService.save(abfrage);
+        uuid = abfrage.getId();
+
+        this.abfrageStatusService.inBearbeitungSetzenAbfrage(uuid, "");
+
+        bauleitplanverfahren = (BauleitplanverfahrenModel) this.abfrageService.getById(uuid);
+        assertThat(bauleitplanverfahren.getBauratenmethodikVorbelegung(), is(Bauratenmethodik.NEUE_BAURATENMETHODIK));
+        assertThat(
+            bauleitplanverfahren
+                .getAbfragevariantenBauleitplanverfahren()
+                .get(0)
+                .getSobonBerechnung()
+                .getBauratenmethodik(),
+            is(Bauratenmethodik.NEUE_BAURATENMETHODIK)
+        );
+
+        // Datum unbekannt -> keine Vorbelegung, manuelle Auswahl durch Sachbearbeitung notwendig
+        bauleitplanverfahren = TestData.createBauleitplanverfahrenModel();
+        bauleitplanverfahren.setStart42Verfahren(null);
+        bauleitplanverfahren.setStart42VerfahrenDatumUnbekannt(true);
+        abfrage = this.abfrageService.save(bauleitplanverfahren);
+        abfrage.setStatusAbfrage(StatusAbfrage.UEBERMITTELT_ZUR_BEARBEITUNG);
+        abfrage = this.abfrageService.save(abfrage);
+        uuid = abfrage.getId();
+
+        this.abfrageStatusService.inBearbeitungSetzenAbfrage(uuid, "");
+
+        bauleitplanverfahren = (BauleitplanverfahrenModel) this.abfrageService.getById(uuid);
+        assertThat(bauleitplanverfahren.getBauratenmethodikVorbelegung(), is(nullValue()));
+        assertThat(
+            bauleitplanverfahren
+                .getAbfragevariantenBauleitplanverfahren()
+                .get(0)
+                .getSobonBerechnung()
+                .getBauratenmethodik(),
+            is(nullValue())
+        );
+    }
+
+    @Test
+    @Transactional
+    @MockCustomUser
     void abbrechenAbfrageVonStartBearbeitung()
         throws UniqueViolationException, OptimisticLockingException, StringLengthExceededException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException, ReportingException, UserRoleNotAllowedException {
         this.abbrechenAbfrageVonStartBearbeitung(TestData.createBauleitplanverfahrenModel());
