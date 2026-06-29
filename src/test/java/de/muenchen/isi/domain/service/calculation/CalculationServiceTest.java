@@ -539,6 +539,85 @@ class CalculationServiceTest {
     }
 
     @Test
+    void calculateBedarfeForAbfragevarianteBauleitplanverfahrenNeueBauratenmethodik() throws CalculationException {
+        final var bauabschnitte = List.of(new BauabschnittModel());
+        final var sobonOrientierungswertJahr = SobonOrientierungswertJahr.JAHR_2017;
+        final var stammdatenGueltigAb = LocalDate.of(2020, 5, 30);
+        final var sobonGf = BigDecimal.ZERO;
+        final var versorgungsquoteHortSobon = new VersorgungsquoteSobonHort();
+        versorgungsquoteHortSobon.setVersorgungsquoteSobon(BigDecimal.valueOf(0.550));
+
+        final var abfrage = new BauleitplanverfahrenModel();
+        abfrage.setSobonRelevant(UncertainBoolean.TRUE);
+
+        final var sobonBerechnung = new SobonBerechnungModel();
+        sobonBerechnung.setIsASobonBerechnung(true);
+        sobonBerechnung.setSobonFoerdermix(new FoerdermixModel());
+        sobonBerechnung.setSobonOrientierungswertJahrSobonUrsaechlich(sobonOrientierungswertJahr);
+        sobonBerechnung.setVersorgungsquoteHortSobon(versorgungsquoteHortSobon.getVersorgungsquoteSobon());
+        sobonBerechnung.setBauratenmethodik(Bauratenmethodik.NEUE_BAURATENMETHODIK);
+
+        final var abfragevarianteBauleitplanverfahren = new AbfragevarianteBauleitplanverfahrenModel();
+        abfragevarianteBauleitplanverfahren.setArtAbfragevariante(ArtAbfrage.BAULEITPLANVERFAHREN);
+        abfragevarianteBauleitplanverfahren.setBauabschnitte(bauabschnitte);
+        abfragevarianteBauleitplanverfahren.setSobonOrientierungswertJahrPlanungsursaechlich(
+            sobonOrientierungswertJahr
+        );
+        abfragevarianteBauleitplanverfahren.setStammdatenGueltigAb(stammdatenGueltigAb);
+        abfragevarianteBauleitplanverfahren.setGfWohnenSobonUrsaechlich(sobonGf);
+        abfragevarianteBauleitplanverfahren.setSobonBerechnung(sobonBerechnung);
+
+        final var langfristigerPlanungsursaechlicherBedarf = new LangfristigerBedarfModel();
+        langfristigerPlanungsursaechlicherBedarf.setWohneinheiten(
+            List.of(new WohneinheitenProFoerderartProJahrModel())
+        );
+
+        final var langfristigerSobonursaechlicherBedarf = new LangfristigerSobonBedarfModel();
+        langfristigerSobonursaechlicherBedarf.setWohneinheiten(List.of(new WohneinheitenProFoerderartProJahrModel()));
+
+        Mockito.doReturn(langfristigerPlanungsursaechlicherBedarf)
+            .when(calculationService)
+            .calculateLangfristigerPlanungsursaechlicherBedarf(
+                bauabschnitte,
+                sobonOrientierungswertJahr,
+                stammdatenGueltigAb
+            );
+
+        Mockito.doReturn(langfristigerSobonursaechlicherBedarf)
+            .when(calculationService)
+            .calculateLangfristigerSobonursaechlicherBedarf(
+                sobonGf,
+                bauabschnitte,
+                sobonOrientierungswertJahr,
+                stammdatenGueltigAb,
+                abfragevarianteBauleitplanverfahren.getSobonBerechnung().getSobonFoerdermix(),
+                versorgungsquoteHortSobon.getVersorgungsquoteSobon(),
+                Bauratenmethodik.NEUE_BAURATENMETHODIK
+            );
+
+        final var bedarfeForAbfragevariante = calculationService.calculateBedarfeForAbfragevariante(
+            abfragevarianteBauleitplanverfahren,
+            UncertainBoolean.TRUE
+        );
+
+        final var expected = new BedarfeForAbfragevarianteModel();
+        expected.setLangfristigerPlanungsursaechlicherBedarf(langfristigerPlanungsursaechlicherBedarf);
+        expected.setLangfristigerSobonursaechlicherBedarf(langfristigerSobonursaechlicherBedarf);
+
+        assertThat(bedarfeForAbfragevariante, is(expected));
+
+        Mockito.verify(calculationService, Mockito.times(1)).calculateLangfristigerSobonursaechlicherBedarf(
+            sobonGf,
+            bauabschnitte,
+            sobonOrientierungswertJahr,
+            stammdatenGueltigAb,
+            abfragevarianteBauleitplanverfahren.getSobonBerechnung().getSobonFoerdermix(),
+            versorgungsquoteHortSobon.getVersorgungsquoteSobon(),
+            Bauratenmethodik.NEUE_BAURATENMETHODIK
+        );
+    }
+
+    @Test
     void calculateBedarfeForAbfragevarianteBauleitplanverfahren90ProzentVersorgungsquote() throws CalculationException {
         final var bauabschnitte = List.of(new BauabschnittModel());
         final var sobonOrientierungswertJahr = SobonOrientierungswertJahr.JAHR_2017;

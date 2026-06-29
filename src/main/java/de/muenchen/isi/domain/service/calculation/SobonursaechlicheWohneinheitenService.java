@@ -58,9 +58,18 @@ public class SobonursaechlicheWohneinheitenService {
         final FoerdermixModel foerdermix,
         final Bauratenmethodik bauratenmethodik
     ) throws CalculationException {
-        final var baurateClone = baurateDomainMapper.deepClone(
-            bauabschnitte.get(0).getBaugebiete().get(0).getBauraten().get(0)
-        );
+        if (bauabschnitte == null || bauabschnitte.isEmpty()) {
+            throw new CalculationException("Keine Bauabschnitte vorhanden.");
+        }
+        final var ersteBaugebiete = bauabschnitte.get(0).getBaugebiete();
+        if (ersteBaugebiete == null || ersteBaugebiete.isEmpty()) {
+            throw new CalculationException("Keine Baugebiete im ersten Bauabschnitt vorhanden.");
+        }
+        final var ersteBauraten = ersteBaugebiete.get(0).getBauraten();
+        if (ersteBauraten == null || ersteBauraten.isEmpty()) {
+            throw new CalculationException("Keine Bauraten im ersten Baugebiet vorhanden.");
+        }
+        final var baurateClone = baurateDomainMapper.deepClone(ersteBauraten.get(0));
         baurateClone.setFoerdermix(foerdermixUmlageService.legeFoerdermixUm(foerdermix, gueltigAb));
 
         if (Bauratenmethodik.NEUE_BAURATENMETHODIK.equals(bauratenmethodik)) {
