@@ -4,8 +4,10 @@ import de.muenchen.isi.api.dto.common.TransitionDto;
 import de.muenchen.isi.api.dto.error.InformationResponseDto;
 import de.muenchen.isi.api.mapper.TransitionApiMapper;
 import de.muenchen.isi.domain.exception.AbfrageStatusNotAllowedException;
+import de.muenchen.isi.domain.exception.CalculationException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
+import de.muenchen.isi.domain.exception.ReportingException;
 import de.muenchen.isi.domain.exception.StringLengthExceededException;
 import de.muenchen.isi.domain.exception.UserRoleNotAllowedException;
 import de.muenchen.isi.domain.service.AbfrageStatusService;
@@ -210,7 +212,7 @@ public class AbfrageStatusController {
         @PathVariable @NotNull final UUID id,
         @RequestParam(value = "anmerkung", required = false, defaultValue = "") String anmerkung
     )
-        throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException, UserRoleNotAllowedException {
+        throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException, UserRoleNotAllowedException, OptimisticLockingException, CalculationException, ReportingException {
         this.abfrageStatusService.inBearbeitungSetzenAbfrage(id, anmerkung);
         return ResponseEntity.ok().build();
     }
