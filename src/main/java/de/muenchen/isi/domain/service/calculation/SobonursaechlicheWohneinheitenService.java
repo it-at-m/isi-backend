@@ -114,16 +114,19 @@ public class SobonursaechlicheWohneinheitenService {
                 jahr++;
             }
 
-            BigDecimal gfWohnenRest = sobonGf.multiply(
-                summeWe.remainder(TAUSEND).divide(summeWe, CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP)
-            );
-            calculateWohneinheiten(
-                baurateClone,
-                anzahl.intValue(),
-                gfWohnenRest,
-                sobonJahr.getGueltigAb(),
-                sobonsursachlicheWohneinheitenList
-            );
+            final BigDecimal weRemainder = summeWe.remainder(TAUSEND);
+            if (weRemainder.compareTo(BigDecimal.ZERO) != 0) {
+                BigDecimal gfWohnenRest = sobonGf.multiply(
+                    weRemainder.divide(summeWe, CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP)
+                );
+                calculateWohneinheiten(
+                    baurateClone,
+                    anzahl.intValue(),
+                    gfWohnenRest,
+                    sobonJahr.getGueltigAb(),
+                    sobonsursachlicheWohneinheitenList
+                );
+            }
         }
 
         return sobonsursachlicheWohneinheitenList;

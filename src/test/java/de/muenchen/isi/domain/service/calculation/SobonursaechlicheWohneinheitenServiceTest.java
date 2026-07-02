@@ -187,6 +187,48 @@ public class SobonursaechlicheWohneinheitenServiceTest {
     }
 
     @Test
+    void calculateSobonursaechlicheWohneinheiten_exakt2000WE_keinSpuriousRestjahr() throws CalculationException {
+        // Regression test: when total WE is an exact multiple of 1000 the remainder block must NOT be emitted.
+        // Setup: no umlegung (mocks return empty), FF anteil=100%, orientation=95 → 190000 GF → exactly 2000 WE.
+        PlanungsursaechlicheWohneinheitenServiceTest.fillStaedtebaulicheOrientierungswertRepository(
+            staedtebaulicheOrientierungswertRepository
+        );
+
+        final var ff100 = new FoerderartModel();
+        ff100.setBezeichnung(FF);
+        ff100.setAnteilProzent(new BigDecimal("100"));
+
+        final var foerdermix = new FoerdermixModel();
+        foerdermix.setFoerderarten(List.of(ff100));
+
+        final var baurate = new BaurateModel();
+        baurate.setJahr(2024);
+        baurate.setFoerdermix(foerdermix);
+
+        final var baugebiet = new BaugebietModel();
+        baugebiet.setBauraten(Collections.singletonList(baurate));
+
+        final var bauabschnitt = new BauabschnittModel();
+        bauabschnitt.setBaugebiete(Collections.singletonList(baugebiet));
+
+        // sobonGf=190000, orientation=95, anteil=100% → WE = 190000/95 = 2000 exactly (2 blocks of 1000, no rest)
+        final var actual = sobonursaechlicheWohneinheitenService.calculateSobonursaechlicheWohneinheiten(
+            new BigDecimal(190000),
+            Collections.singletonList(bauabschnitt),
+            SobonOrientierungswertJahr.JAHR_2022,
+            LocalDate.of(2013, 1, 1),
+            foerdermix,
+            Bauratenmethodik.ALTE_BAURATENMETHODIK
+        );
+
+        final var expected = List.of(
+            new WohneinheitenProFoerderartProJahrModel(FF, "2024", new BigDecimal("1000.000000000000000")),
+            new WohneinheitenProFoerderartProJahrModel(FF, "2025", new BigDecimal("1000.000000000000000"))
+        );
+        assertThat(actual, containsInAnyOrder(expected.toArray()));
+    }
+
+    @Test
     void calculateSobonursaechlicheWohneinheitenNeueBauratenmethodik() throws CalculationException {
         FoerdermixUmlageServiceTest.fillUmlegungFoerderartenRepository(umlegungFoerderartenRepository);
         PlanungsursaechlicheWohneinheitenServiceTest.fillStaedtebaulicheOrientierungswertRepository(
