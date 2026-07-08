@@ -72,7 +72,7 @@ public class SobonursaechlicheWohneinheitenService {
         final var baurateClone = baurateDomainMapper.deepClone(ersteBauraten.get(0));
         baurateClone.setFoerdermix(foerdermixUmlageService.legeFoerdermixUm(foerdermix, gueltigAb));
 
-        if (Bauratenmethodik.NEUE_BAURATENMETHODIK.equals(bauratenmethodik)) {
+        if (Bauratenmethodik.NEUE_BAURATENMETHODIK == bauratenmethodik) {
             return calculateNeueBauratenmethodik(baurateClone, sobonGf, sobonJahr);
         }
         return calculateAlteBauratenmethodik(baurateClone, sobonGf, sobonJahr);
@@ -89,10 +89,7 @@ public class SobonursaechlicheWohneinheitenService {
         final var sobonsursachlicheWohneinheitenList = new ArrayList<WohneinheitenProFoerderartProJahrModel>();
         calculateWohneinheiten(baurateClone, 0, sobonGf, sobonJahr.getGueltigAb(), sobonsursachlicheWohneinheitenList);
 
-        BigDecimal summeWe = BigDecimal.ZERO;
-        for (WohneinheitenProFoerderartProJahrModel sobonursaechlicheWe : sobonsursachlicheWohneinheitenList) {
-            summeWe = summeWe.add(sobonursaechlicheWe.getWohneinheiten());
-        }
+        BigDecimal summeWe = summiereWohneinheiten(sobonsursachlicheWohneinheitenList);
 
         if (1 == summeWe.compareTo(TAUSEND)) {
             sobonsursachlicheWohneinheitenList.clear();
@@ -144,11 +141,7 @@ public class SobonursaechlicheWohneinheitenService {
         final var weProFoerderart = new ArrayList<WohneinheitenProFoerderartProJahrModel>();
         calculateWohneinheiten(baurateClone, 0, sobonGf, sobonJahr.getGueltigAb(), weProFoerderart);
 
-        BigDecimal summeWe = BigDecimal.ZERO;
-        for (WohneinheitenProFoerderartProJahrModel we : weProFoerderart) {
-            summeWe = summeWe.add(we.getWohneinheiten());
-        }
-        final BigDecimal totalWe = summeWe;
+        final BigDecimal totalWe = summiereWohneinheiten(weProFoerderart);
 
         final var idealtypischeBaurate = idealtypischeBaurateRepository
             .findByTypAndVonLessThanEqualAndBisExklusivGreaterThan(
@@ -210,6 +203,14 @@ public class SobonursaechlicheWohneinheitenService {
      * @param sobonJahr                          Das SoBoN-Jahr, welches die städtebaulichen Orientierungswerte diktiert.
      * @param sobonsursachlicheWohneinheitenList Eine Liste von {@link WohneinheitenProFoerderartProJahrModel}, welche alle Wohneinheiten pro Förderart und Jahr darstellt.
      */
+    private BigDecimal summiereWohneinheiten(final List<WohneinheitenProFoerderartProJahrModel> wohneinheitenList) {
+        BigDecimal summe = BigDecimal.ZERO;
+        for (final WohneinheitenProFoerderartProJahrModel we : wohneinheitenList) {
+            summe = summe.add(we.getWohneinheiten());
+        }
+        return summe;
+    }
+
     protected void calculateWohneinheiten(
         final BaurateModel baurate,
         final int jahr,
