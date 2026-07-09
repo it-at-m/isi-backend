@@ -15,6 +15,7 @@ import de.muenchen.isi.domain.model.calculation.BedarfeForAbfragevarianteModel;
 import de.muenchen.isi.domain.model.calculation.LangfristigerBedarfModel;
 import de.muenchen.isi.domain.model.calculation.LangfristigerSobonBedarfModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.Bauratenmethodik;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
 import java.math.BigDecimal;
@@ -143,13 +144,18 @@ public class CalculationService {
                 sobonOrientierungswertJahrSobonUrsaechlich = abfragevarianteBauleitplanverfahren
                     .getSobonBerechnung()
                     .getSobonOrientierungswertJahrSobonUrsaechlich();
+                final var bauratenmethodik =
+                    abfragevarianteBauleitplanverfahren.getSobonBerechnung().getBauratenmethodik() != null
+                        ? abfragevarianteBauleitplanverfahren.getSobonBerechnung().getBauratenmethodik()
+                        : Bauratenmethodik.ALTE_BAURATENMETHODIK;
                 langfristigerSobonursaechlicherBedarf = this.calculateLangfristigerSobonursaechlicherBedarf(
                     sobonGf,
                     bauabschnitte,
                     sobonOrientierungswertJahrSobonUrsaechlich,
                     stammdatenGueltigAb,
                     foerdermix,
-                    versorgungsquoteHortSobon
+                    versorgungsquoteHortSobon,
+                    bauratenmethodik
                 );
                 bedarfeForAbfragevariante.setLangfristigerSobonursaechlicherBedarf(
                     langfristigerSobonursaechlicherBedarf
@@ -194,7 +200,8 @@ public class CalculationService {
                     sobonOrientierungswertJahrSobonUrsaechlich,
                     stammdatenGueltigAb,
                     foerdermix,
-                    versorgungsquoteHortSobon
+                    versorgungsquoteHortSobon,
+                    Bauratenmethodik.NEUE_BAURATENMETHODIK
                 );
                 bedarfeForAbfragevariante.setLangfristigerSobonursaechlicherBedarf(
                     langfristigerSobonursaechlicherBedarf
@@ -289,7 +296,8 @@ public class CalculationService {
         final SobonOrientierungswertJahr sobonOrientierungswertJahr,
         final LocalDate stammdatenGueltigAb,
         final FoerdermixModel foerdermix,
-        final BigDecimal versorgungsquoteHortSobon
+        final BigDecimal versorgungsquoteHortSobon,
+        final Bauratenmethodik bauratenmethodik
     ) throws CalculationException {
         if (
             CollectionUtils.isEmpty(bauabschnitte) ||
@@ -307,7 +315,8 @@ public class CalculationService {
             bauabschnitte,
             sobonOrientierungswertJahr,
             stammdatenGueltigAb,
-            foerdermix
+            foerdermix,
+            bauratenmethodik
         );
         bedarf.setWohneinheiten(wohneinheiten);
 

@@ -21,6 +21,7 @@ import de.muenchen.isi.domain.model.calculation.PersonenProJahrModel;
 import de.muenchen.isi.domain.model.calculation.WohneinheitenProFoerderartProJahrModel;
 import de.muenchen.isi.domain.model.common.SobonBerechnungModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.Bauratenmethodik;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
 import de.muenchen.isi.infrastructure.entity.stammdaten.VersorgungsquoteSobonHort;
@@ -376,7 +377,8 @@ class CalculationServiceTest {
                 sobonOrientierungswertJahr,
                 stammdatenGueltigAb,
                 abfragevarianteWeiteresVerfahrenModel.getSobonBerechnung().getSobonFoerdermix(),
-                versorgungsquoteHortSobon.getVersorgungsquoteSobon()
+                versorgungsquoteHortSobon.getVersorgungsquoteSobon(),
+                Bauratenmethodik.NEUE_BAURATENMETHODIK
             );
 
         final var bedarfeForAbfragevariante = calculationService.calculateBedarfeForAbfragevariante(
@@ -402,7 +404,8 @@ class CalculationServiceTest {
             sobonOrientierungswertJahr,
             stammdatenGueltigAb,
             abfragevarianteWeiteresVerfahrenModel.getSobonBerechnung().getSobonFoerdermix(),
-            versorgungsquoteHortSobon.getVersorgungsquoteSobon()
+            versorgungsquoteHortSobon.getVersorgungsquoteSobon(),
+            Bauratenmethodik.NEUE_BAURATENMETHODIK
         );
     }
 
@@ -503,7 +506,8 @@ class CalculationServiceTest {
                 sobonOrientierungswertJahr,
                 stammdatenGueltigAb,
                 abfragevarianteBauleitplanverfahren.getSobonBerechnung().getSobonFoerdermix(),
-                versorgungsquoteHortSobon.getVersorgungsquoteSobon()
+                versorgungsquoteHortSobon.getVersorgungsquoteSobon(),
+                Bauratenmethodik.ALTE_BAURATENMETHODIK
             );
 
         final var bedarfeForAbfragevariante = calculationService.calculateBedarfeForAbfragevariante(
@@ -529,7 +533,87 @@ class CalculationServiceTest {
             sobonOrientierungswertJahr,
             stammdatenGueltigAb,
             abfragevarianteBauleitplanverfahren.getSobonBerechnung().getSobonFoerdermix(),
-            versorgungsquoteHortSobon.getVersorgungsquoteSobon()
+            versorgungsquoteHortSobon.getVersorgungsquoteSobon(),
+            Bauratenmethodik.ALTE_BAURATENMETHODIK
+        );
+    }
+
+    @Test
+    void calculateBedarfeForAbfragevarianteBauleitplanverfahrenNeueBauratenmethodik() throws CalculationException {
+        final var bauabschnitte = List.of(new BauabschnittModel());
+        final var sobonOrientierungswertJahr = SobonOrientierungswertJahr.JAHR_2017;
+        final var stammdatenGueltigAb = LocalDate.of(2020, 5, 30);
+        final var sobonGf = BigDecimal.ZERO;
+        final var versorgungsquoteHortSobon = new VersorgungsquoteSobonHort();
+        versorgungsquoteHortSobon.setVersorgungsquoteSobon(BigDecimal.valueOf(0.550));
+
+        final var abfrage = new BauleitplanverfahrenModel();
+        abfrage.setSobonRelevant(UncertainBoolean.TRUE);
+
+        final var sobonBerechnung = new SobonBerechnungModel();
+        sobonBerechnung.setIsASobonBerechnung(true);
+        sobonBerechnung.setSobonFoerdermix(new FoerdermixModel());
+        sobonBerechnung.setSobonOrientierungswertJahrSobonUrsaechlich(sobonOrientierungswertJahr);
+        sobonBerechnung.setVersorgungsquoteHortSobon(versorgungsquoteHortSobon.getVersorgungsquoteSobon());
+        sobonBerechnung.setBauratenmethodik(Bauratenmethodik.NEUE_BAURATENMETHODIK);
+
+        final var abfragevarianteBauleitplanverfahren = new AbfragevarianteBauleitplanverfahrenModel();
+        abfragevarianteBauleitplanverfahren.setArtAbfragevariante(ArtAbfrage.BAULEITPLANVERFAHREN);
+        abfragevarianteBauleitplanverfahren.setBauabschnitte(bauabschnitte);
+        abfragevarianteBauleitplanverfahren.setSobonOrientierungswertJahrPlanungsursaechlich(
+            sobonOrientierungswertJahr
+        );
+        abfragevarianteBauleitplanverfahren.setStammdatenGueltigAb(stammdatenGueltigAb);
+        abfragevarianteBauleitplanverfahren.setGfWohnenSobonUrsaechlich(sobonGf);
+        abfragevarianteBauleitplanverfahren.setSobonBerechnung(sobonBerechnung);
+
+        final var langfristigerPlanungsursaechlicherBedarf = new LangfristigerBedarfModel();
+        langfristigerPlanungsursaechlicherBedarf.setWohneinheiten(
+            List.of(new WohneinheitenProFoerderartProJahrModel())
+        );
+
+        final var langfristigerSobonursaechlicherBedarf = new LangfristigerSobonBedarfModel();
+        langfristigerSobonursaechlicherBedarf.setWohneinheiten(List.of(new WohneinheitenProFoerderartProJahrModel()));
+
+        Mockito.doReturn(langfristigerPlanungsursaechlicherBedarf)
+            .when(calculationService)
+            .calculateLangfristigerPlanungsursaechlicherBedarf(
+                bauabschnitte,
+                sobonOrientierungswertJahr,
+                stammdatenGueltigAb
+            );
+
+        Mockito.doReturn(langfristigerSobonursaechlicherBedarf)
+            .when(calculationService)
+            .calculateLangfristigerSobonursaechlicherBedarf(
+                sobonGf,
+                bauabschnitte,
+                sobonOrientierungswertJahr,
+                stammdatenGueltigAb,
+                abfragevarianteBauleitplanverfahren.getSobonBerechnung().getSobonFoerdermix(),
+                versorgungsquoteHortSobon.getVersorgungsquoteSobon(),
+                Bauratenmethodik.NEUE_BAURATENMETHODIK
+            );
+
+        final var bedarfeForAbfragevariante = calculationService.calculateBedarfeForAbfragevariante(
+            abfragevarianteBauleitplanverfahren,
+            UncertainBoolean.TRUE
+        );
+
+        final var expected = new BedarfeForAbfragevarianteModel();
+        expected.setLangfristigerPlanungsursaechlicherBedarf(langfristigerPlanungsursaechlicherBedarf);
+        expected.setLangfristigerSobonursaechlicherBedarf(langfristigerSobonursaechlicherBedarf);
+
+        assertThat(bedarfeForAbfragevariante, is(expected));
+
+        Mockito.verify(calculationService, Mockito.times(1)).calculateLangfristigerSobonursaechlicherBedarf(
+            sobonGf,
+            bauabschnitte,
+            sobonOrientierungswertJahr,
+            stammdatenGueltigAb,
+            abfragevarianteBauleitplanverfahren.getSobonBerechnung().getSobonFoerdermix(),
+            versorgungsquoteHortSobon.getVersorgungsquoteSobon(),
+            Bauratenmethodik.NEUE_BAURATENMETHODIK
         );
     }
 
@@ -585,7 +669,8 @@ class CalculationServiceTest {
                 sobonOrientierungswertJahr,
                 stammdatenGueltigAb,
                 abfragevarianteBauleitplanverfahren.getSobonBerechnung().getSobonFoerdermix(),
-                versorgungsquoteHortSobon.getVersorgungsquoteSobon()
+                versorgungsquoteHortSobon.getVersorgungsquoteSobon(),
+                Bauratenmethodik.ALTE_BAURATENMETHODIK
             );
 
         final var bedarfeForAbfragevariante = calculationService.calculateBedarfeForAbfragevariante(
@@ -611,7 +696,8 @@ class CalculationServiceTest {
             sobonOrientierungswertJahr,
             stammdatenGueltigAb,
             abfragevarianteBauleitplanverfahren.getSobonBerechnung().getSobonFoerdermix(),
-            versorgungsquoteHortSobon.getVersorgungsquoteSobon()
+            versorgungsquoteHortSobon.getVersorgungsquoteSobon(),
+            Bauratenmethodik.ALTE_BAURATENMETHODIK
         );
     }
 
@@ -734,7 +820,8 @@ class CalculationServiceTest {
             null,
             null,
             null,
-            null
+            null,
+            Bauratenmethodik.ALTE_BAURATENMETHODIK
         );
         assertThat(result, is(nullValue()));
 
@@ -744,7 +831,8 @@ class CalculationServiceTest {
             SobonOrientierungswertJahr.JAHR_2017,
             LocalDate.now(),
             new FoerdermixModel(),
-            BigDecimal.valueOf(0.75)
+            BigDecimal.valueOf(0.75),
+            Bauratenmethodik.ALTE_BAURATENMETHODIK
         );
         assertThat(result, is(nullValue()));
 
@@ -754,7 +842,8 @@ class CalculationServiceTest {
             SobonOrientierungswertJahr.JAHR_2017,
             LocalDate.now(),
             new FoerdermixModel(),
-            BigDecimal.valueOf(0.75)
+            BigDecimal.valueOf(0.75),
+            Bauratenmethodik.ALTE_BAURATENMETHODIK
         );
         assertThat(result, is(nullValue()));
 
@@ -764,7 +853,8 @@ class CalculationServiceTest {
             null,
             LocalDate.now(),
             new FoerdermixModel(),
-            BigDecimal.valueOf(0.75)
+            BigDecimal.valueOf(0.75),
+            Bauratenmethodik.ALTE_BAURATENMETHODIK
         );
         assertThat(result, is(nullValue()));
 
@@ -774,7 +864,8 @@ class CalculationServiceTest {
             SobonOrientierungswertJahr.JAHR_2017,
             null,
             new FoerdermixModel(),
-            BigDecimal.valueOf(0.75)
+            BigDecimal.valueOf(0.75),
+            Bauratenmethodik.ALTE_BAURATENMETHODIK
         );
         assertThat(result, is(nullValue()));
 
@@ -784,7 +875,8 @@ class CalculationServiceTest {
             SobonOrientierungswertJahr.STANDORTABFRAGE,
             LocalDate.now(),
             new FoerdermixModel(),
-            null
+            null,
+            Bauratenmethodik.ALTE_BAURATENMETHODIK
         );
         assertThat(result, is(nullValue()));
 
@@ -794,7 +886,8 @@ class CalculationServiceTest {
             SobonOrientierungswertJahr.JAHR_2017,
             LocalDate.now(),
             new FoerdermixModel(),
-            BigDecimal.valueOf(0.75)
+            BigDecimal.valueOf(0.75),
+            Bauratenmethodik.ALTE_BAURATENMETHODIK
         );
         assertThat(result, is(nullValue()));
 
@@ -804,7 +897,8 @@ class CalculationServiceTest {
             SobonOrientierungswertJahr.STANDORTABFRAGE,
             LocalDate.now(),
             new FoerdermixModel(),
-            BigDecimal.valueOf(0.75)
+            BigDecimal.valueOf(0.75),
+            Bauratenmethodik.ALTE_BAURATENMETHODIK
         );
         assertThat(result, is(nullValue()));
     }
@@ -824,7 +918,8 @@ class CalculationServiceTest {
                 bauabschnitte,
                 sobonOrientierungswertJahr,
                 stammdatenGueltigAb,
-                foerdermix
+                foerdermix,
+                Bauratenmethodik.ALTE_BAURATENMETHODIK
             )
         ).thenReturn(wohneinheiten);
 
@@ -892,7 +987,8 @@ class CalculationServiceTest {
             sobonOrientierungswertJahr,
             stammdatenGueltigAb,
             foerdermix,
-            BigDecimal.valueOf(0.550)
+            BigDecimal.valueOf(0.550),
+            Bauratenmethodik.ALTE_BAURATENMETHODIK
         );
 
         final var expected = new LangfristigerSobonBedarfModel();
