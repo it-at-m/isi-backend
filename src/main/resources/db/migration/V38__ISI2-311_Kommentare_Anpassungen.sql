@@ -9,7 +9,7 @@
 BEGIN;
 
 ALTER TABLE IF EXISTS isidbuser.kommentar
-    ADD COLUMN erstellungsdatum date,
+    ADD COLUMN erstellungsdatum timestamp without time zone,
     ADD COLUMN bearbeitende_person_email character varying(255),
     ADD COLUMN bearbeitende_person_name character varying(255),
     ADD COLUMN bearbeitende_person_organisationseinheit character varying(255);
