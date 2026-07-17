@@ -66,7 +66,7 @@ public class SendKommentarBauvorhabenNotificationService {
             bauvorhabenId,
             bauvorhabenName,
             kommentarText,
-            kommentarDatum.format(DateTimeFormatter.ofPattern("dd.MM.yyyy")),
+            kommentarDatum != null ? kommentarDatum.format(DateTimeFormatter.ofPattern("dd.MM.yyyy")) : null,
             isNew
         );
         mailSenderRepository.sendMail(List.of(receiverKommentarBauvorhaben), subject, text);

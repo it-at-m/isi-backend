@@ -32,6 +32,7 @@ class KommentarListenerTest {
         kommentarListener.beforeSave(entityToSave);
 
         final var expected = new Kommentar();
+        expected.setErstellungsdatum(java.time.LocalDate.now());
         final var bearbeitendePerson = new BearbeitendePerson();
         bearbeitendePerson.setName("Rob Winch");
         bearbeitendePerson.setEmail("rob@example.com");

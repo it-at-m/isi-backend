@@ -37,6 +37,7 @@ import lombok.ToString;
 )
 public class Kommentar extends BaseEntity {
 
+    @Column(updatable = false)
     private LocalDate erstellungsdatum;
 
     @Column(columnDefinition = "text")

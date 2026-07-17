@@ -4,6 +4,7 @@ import de.muenchen.isi.infrastructure.entity.common.Kommentar;
 import de.muenchen.isi.security.AuthenticationUtils;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
+import java.time.LocalDate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -19,6 +20,9 @@ public class KommentarListener {
     @PreUpdate
     public void beforeSave(final Kommentar kommentar) {
         final var bearbeitendePerson = authenticationUtils.getBearbeitendePerson();
+        if (kommentar.getErstellungsdatum() == null) {
+            kommentar.setErstellungsdatum(LocalDate.now());
+        }
         kommentar.setBearbeitendePerson(bearbeitendePerson);
     }
 }
