@@ -1,6 +1,8 @@
 package de.muenchen.isi.api.dto.search.response;
 
 import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusInfrastruktureinrichtung;
+
 import java.util.UUID;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -16,6 +18,8 @@ public class InfrastruktureinrichtungSearchResultDto extends SearchResultDto {
     private String nameEinrichtung;
 
     private InfrastruktureinrichtungTyp infrastruktureinrichtungTyp;
+
+    private StatusInfrastruktureinrichtung status;
 
     private String zugehoerigesBauvorhaben;
 }
