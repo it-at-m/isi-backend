@@ -114,7 +114,7 @@ public class KommentarService {
                 savedEntity.getBauvorhaben().getId(),
                 savedEntity.getBauvorhaben().getNameVorhaben(),
                 savedEntity.getText(),
-                savedEntity.getDatum(),
+                savedEntity.getErstellungsdatum(),
                 isNew
             );
         }

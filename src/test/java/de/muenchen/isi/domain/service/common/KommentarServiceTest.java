@@ -21,6 +21,7 @@ import de.muenchen.isi.infrastructure.repository.BauvorhabenRepository;
 import de.muenchen.isi.infrastructure.repository.InfrastruktureinrichtungRepository;
 import de.muenchen.isi.infrastructure.repository.common.KommentarRepository;
 import java.lang.reflect.Field;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -87,13 +88,13 @@ class KommentarServiceTest {
         final var bauvorhaben = new Bauvorhaben();
         bauvorhaben.setId(uuidBauvorhaben);
         kommentar1.setId(UUID.randomUUID());
-        kommentar1.setDatum("datum 1");
+        kommentar1.setErstellungsdatum(LocalDate.of(2026, 7, 14));
         kommentar1.setText("text 1");
         kommentar1.setBauvorhaben(bauvorhaben);
 
         final var kommentar2 = new Kommentar();
         kommentar2.setId(UUID.randomUUID());
-        kommentar2.setDatum("datum 2");
+        kommentar2.setErstellungsdatum(LocalDate.of(2026, 8, 1));
         kommentar2.setText("text 2");
         kommentar2.setBauvorhaben(bauvorhaben);
 
@@ -105,13 +106,13 @@ class KommentarServiceTest {
 
         final var kommentar1Model = new KommentarBauvorhabenModel();
         kommentar1Model.setId(kommentar1.getId());
-        kommentar1Model.setDatum("datum 1");
+        kommentar1Model.setErstellungsdatum(LocalDate.of(2026, 7, 14));
         kommentar1Model.setText("text 1");
         kommentar1Model.setBauvorhaben(uuidBauvorhaben);
 
         final var kommentar2Model = new KommentarBauvorhabenModel();
         kommentar2Model.setId(kommentar2.getId());
-        kommentar2Model.setDatum("datum 2");
+        kommentar2Model.setErstellungsdatum(LocalDate.of(2026, 8, 1));
         kommentar2Model.setText("text 2");
         kommentar2Model.setBauvorhaben(uuidBauvorhaben);
 
@@ -129,13 +130,13 @@ class KommentarServiceTest {
         final var infrastruktureinrichtung = new Kinderkrippe();
         infrastruktureinrichtung.setId(uuidInfrastruktureinrichtung);
         kommentar1.setId(UUID.randomUUID());
-        kommentar1.setDatum("datum 1");
+        kommentar1.setErstellungsdatum(LocalDate.of(2026, 7, 14));
         kommentar1.setText("text 1");
         kommentar1.setInfrastruktureinrichtung(infrastruktureinrichtung);
 
         final var kommentar2 = new Kommentar();
         kommentar2.setId(UUID.randomUUID());
-        kommentar2.setDatum("datum 2");
+        kommentar2.setErstellungsdatum(LocalDate.of(2026, 8, 1));
         kommentar2.setText("text 2");
         kommentar2.setInfrastruktureinrichtung(infrastruktureinrichtung);
 
@@ -149,13 +150,13 @@ class KommentarServiceTest {
 
         final var kommentar1Model = new KommentarInfrastruktureinrichtungModel();
         kommentar1Model.setId(kommentar1.getId());
-        kommentar1Model.setDatum("datum 1");
+        kommentar1Model.setErstellungsdatum(LocalDate.of(2026, 7, 14));
         kommentar1Model.setText("text 1");
         kommentar1Model.setInfrastruktureinrichtung(uuidInfrastruktureinrichtung);
 
         final var kommentar2Model = new KommentarInfrastruktureinrichtungModel();
         kommentar2Model.setId(kommentar2.getId());
-        kommentar2Model.setDatum("datum 2");
+        kommentar2Model.setErstellungsdatum(LocalDate.of(2026, 8, 1));
         kommentar2Model.setText("text 2");
         kommentar2Model.setInfrastruktureinrichtung(uuidInfrastruktureinrichtung);
 
@@ -174,7 +175,7 @@ class KommentarServiceTest {
         final var bauvorhaben = new Bauvorhaben();
         bauvorhaben.setId(uuidBauvorhaben);
         kommentar1.setId(UUID.randomUUID());
-        kommentar1.setDatum("datum 1");
+        kommentar1.setErstellungsdatum(LocalDate.of(2026, 7, 14));
         kommentar1.setText("text 1");
         kommentar1.setBauvorhaben(bauvorhaben);
 
@@ -185,7 +186,7 @@ class KommentarServiceTest {
 
         final var kommentar1Model = new KommentarBauvorhabenModel();
         kommentar1Model.setId(kommentar1.getId());
-        kommentar1Model.setDatum("datum 1");
+        kommentar1Model.setErstellungsdatum(LocalDate.of(2026, 7, 14));
         kommentar1Model.setText("text 1");
         kommentar1Model.setBauvorhaben(uuidBauvorhaben);
         assertThat(kommentar1Model, is(result));
@@ -207,13 +208,13 @@ class KommentarServiceTest {
         final var bauvorhaben = new Bauvorhaben();
         bauvorhaben.setId(uuidBauvorhaben);
         kommentar1.setId(UUID.randomUUID());
-        kommentar1.setDatum("datum 1");
+        kommentar1.setErstellungsdatum(LocalDate.of(2026, 7, 14));
         kommentar1.setText("text 1");
         kommentar1.setBauvorhaben(bauvorhaben);
 
         final var kommentar1Model = new KommentarBauvorhabenModel();
         kommentar1Model.setId(kommentar1.getId());
-        kommentar1Model.setDatum("datum 1");
+        kommentar1Model.setErstellungsdatum(LocalDate.of(2026, 7, 14));
         kommentar1Model.setText("text 1");
         kommentar1Model.setBauvorhaben(uuidBauvorhaben);
 
@@ -230,7 +231,7 @@ class KommentarServiceTest {
         Mockito.reset(this.infrastruktureinrichtungRepository, this.bauvorhabenRepository, this.kommentarRepository);
 
         kommentar1 = new Kommentar();
-        kommentar1.setDatum("datum 1");
+        kommentar1.setErstellungsdatum(LocalDate.of(2026, 7, 14));
         kommentar1.setText("text 1");
         kommentar1.setBauvorhaben(null);
         kommentar1.setInfrastruktureinrichtung(null);
@@ -250,13 +251,13 @@ class KommentarServiceTest {
         final var bauvorhaben = new Bauvorhaben();
         bauvorhaben.setId(uuidBauvorhaben);
         kommentar1.setId(UUID.randomUUID());
-        kommentar1.setDatum("datum 1");
+        kommentar1.setErstellungsdatum(LocalDate.of(2026, 7, 14));
         kommentar1.setText("text 1");
         kommentar1.setBauvorhaben(bauvorhaben);
 
         final var kommentar1Model = new KommentarBauvorhabenModel();
         kommentar1Model.setId(kommentar1.getId());
-        kommentar1Model.setDatum("datum 1");
+        kommentar1Model.setErstellungsdatum(LocalDate.of(2026, 7, 14));
         kommentar1Model.setText("text 1");
         kommentar1Model.setBauvorhaben(uuidBauvorhaben);
 
