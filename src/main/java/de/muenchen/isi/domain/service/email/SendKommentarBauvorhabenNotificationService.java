@@ -3,6 +3,8 @@ package de.muenchen.isi.domain.service.email;
 import de.muenchen.isi.infrastructure.entity.Abfrage;
 import de.muenchen.isi.infrastructure.repository.AbfrageRepository;
 import de.muenchen.isi.infrastructure.repository.email.MailSenderRepository;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -41,7 +43,7 @@ public class SendKommentarBauvorhabenNotificationService {
         final UUID bauvorhabenId,
         final String bauvorhabenName,
         final String kommentarText,
-        final String kommentarDatum,
+        final LocalDate kommentarDatum,
         final boolean isNew
     ) {
         sendKommentarBauvorhabenNotification(bauvorhabenId, bauvorhabenName, kommentarText, kommentarDatum, isNew);
@@ -51,7 +53,7 @@ public class SendKommentarBauvorhabenNotificationService {
         final UUID bauvorhabenId,
         final String bauvorhabenName,
         final String kommentarText,
-        final String kommentarDatum,
+        final LocalDate kommentarDatum,
         final boolean isNew
     ) {
         if (StringUtils.isEmpty(receiverKommentarBauvorhaben)) {
@@ -60,7 +62,13 @@ public class SendKommentarBauvorhabenNotificationService {
         final var subjectAction = isNew ? "Neuer" : "Aktualisierter";
         final var subject =
             "ISI - " + subjectAction + " Kommentar zum Bauvorhaben: " + StringUtils.defaultIfEmpty(bauvorhabenName, "");
-        final var text = buildEmailText(bauvorhabenId, bauvorhabenName, kommentarText, kommentarDatum, isNew);
+        final var text = buildEmailText(
+            bauvorhabenId,
+            bauvorhabenName,
+            kommentarText,
+            kommentarDatum != null ? kommentarDatum.format(DateTimeFormatter.ofPattern("dd.MM.yyyy")) : null,
+            isNew
+        );
         mailSenderRepository.sendMail(List.of(receiverKommentarBauvorhaben), subject, text);
     }
 

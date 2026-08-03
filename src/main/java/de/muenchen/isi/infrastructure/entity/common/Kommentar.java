@@ -1,24 +1,31 @@
 package de.muenchen.isi.infrastructure.entity.common;
 
+import de.muenchen.isi.infrastructure.adapter.listener.KommentarListener;
 import de.muenchen.isi.infrastructure.entity.BaseEntity;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
 import de.muenchen.isi.infrastructure.entity.filehandling.Dokument;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Infrastruktureinrichtung;
+import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.AttributeOverrides;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import java.time.LocalDate;
 import java.util.List;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 @Entity
+@EntityListeners({ KommentarListener.class })
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
@@ -30,8 +37,8 @@ import lombok.ToString;
 )
 public class Kommentar extends BaseEntity {
 
-    @Column(length = 32)
-    private String datum;
+    @Column(updatable = false)
+    private LocalDate erstellungsdatum;
 
     @Column(columnDefinition = "text")
     private String text;
@@ -47,4 +54,17 @@ public class Kommentar extends BaseEntity {
     @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "kommentar_id")
     private List<Dokument> dokumente;
+
+    @Embedded
+    @AttributeOverrides(
+        {
+            @AttributeOverride(name = "name", column = @Column(name = "bearbeitende_person_name")),
+            @AttributeOverride(name = "email", column = @Column(name = "bearbeitende_person_email")),
+            @AttributeOverride(
+                name = "organisationseinheit",
+                column = @Column(name = "bearbeitende_person_organisationseinheit")
+            ),
+        }
+    )
+    private BearbeitendePerson bearbeitendePerson;
 }
