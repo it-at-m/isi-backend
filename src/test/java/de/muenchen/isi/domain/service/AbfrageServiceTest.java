@@ -22,6 +22,7 @@ import de.muenchen.isi.domain.mapper.BauabschnittDomainMapperImpl;
 import de.muenchen.isi.domain.mapper.DokumentDomainMapperImpl;
 import de.muenchen.isi.domain.mapper.KoordinatenDomainMapperImpl;
 import de.muenchen.isi.domain.mapper.VerortungDomainMapperImpl;
+import de.muenchen.isi.domain.mapper.converter.AbfrageConverterDomainMapper;
 import de.muenchen.isi.domain.model.AbfrageModel;
 import de.muenchen.isi.domain.model.AbfragevarianteBaugenehmigungsverfahrenModel;
 import de.muenchen.isi.domain.model.AbfragevarianteBauleitplanverfahrenModel;
@@ -119,6 +120,8 @@ class AbfrageServiceTest {
 
     private AbfrageDomainMapper abfrageDomainMapper;
 
+    private AbfrageConverterDomainMapper abfrageConverterDomainMapper;
+
     @Mock
     private BauvorhabenRepository bauvorhabenRepository;
 
@@ -161,6 +164,7 @@ class AbfrageServiceTest {
         this.abfrageService = new AbfrageService(
             this.abfrageRepository,
             this.abfrageDomainMapper,
+            this.abfrageConverterDomainMapper,
             this.bauvorhabenRepository,
             this.dokumentService,
             this.authenticationUtils,

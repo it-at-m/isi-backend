@@ -21,6 +21,7 @@ import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.ReportingException;
 import de.muenchen.isi.domain.exception.UserRoleNotAllowedException;
 import de.muenchen.isi.domain.mapper.AbfrageDomainMapper;
+import de.muenchen.isi.domain.model.WeiteresVerfahrenModel;
 import de.muenchen.isi.domain.service.AbfrageService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -344,5 +345,31 @@ public class AbfrageController {
         throws UserRoleNotAllowedException, EntityIsReferencedException, EntityNotFoundException, AbfrageStatusNotAllowedException, ReportingException {
         this.abfrageService.deleteById(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/wv-in-blv-uebernehmen{id}")
+    @Transactional(readOnly = true)
+    @Operation(summary = "Datenübernahme von Weiteres Verfahren (WV) in Bauleitplanverfahren (BLV).")
+    @ApiResponses(
+        value = {
+            @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(
+                responseCode = "403",
+                description = "FORBIDDEN -> Keine Berechtigung um die Abfrage zu öffnen.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+            @ApiResponse(
+                responseCode = "404",
+                description = "NOT FOUND -> Abfrage mit dieser ID nicht vorhanden.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+        }
+    )
+    @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_READ_ABFRAGE.name())")
+    public ResponseEntity<AbfrageDto> wvInBlvUebernehmenById(@PathVariable @NotNull final UUID id)
+        throws EntityNotFoundException, UserRoleNotAllowedException {
+        final var model = abfrageService.wvInBlvUebernehmen(id);
+        final var dto = abfrageApiMapper.model2Dto(model);
+        return ResponseEntity.ok(dto);
     }
 }

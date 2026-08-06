@@ -10,6 +10,7 @@ import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.ReportingException;
 import de.muenchen.isi.domain.exception.UserRoleNotAllowedException;
 import de.muenchen.isi.domain.mapper.AbfrageDomainMapper;
+import de.muenchen.isi.domain.mapper.converter.AbfrageConverterDomainMapper;
 import de.muenchen.isi.domain.model.AbfrageModel;
 import de.muenchen.isi.domain.model.BaugenehmigungsverfahrenModel;
 import de.muenchen.isi.domain.model.BauleitplanverfahrenModel;
@@ -64,6 +65,8 @@ public class AbfrageService {
     private final AbfrageRepository abfrageRepository;
 
     private final AbfrageDomainMapper abfrageDomainMapper;
+
+    private final AbfrageConverterDomainMapper abfrageConverterDomainMapper;
 
     private final BauvorhabenRepository bauvorhabenRepository;
 
@@ -586,5 +589,28 @@ public class AbfrageService {
                 this.bauvorhabenRepository.save(bauvorhaben);
             }
         }
+    }
+
+    /**
+     * Die Methode gibt ein {@link BauleitplanverfahrenModel} zurück.
+     *
+     * @param id zum Identifizieren des {@link WeiteresVerfahrenModel}.
+     * @return {@link BauleitplanverfahrenModel}.
+     * @throws EntityNotFoundException     falls die Abfrage identifiziert durch die {@link WeiteresVerfahrenModel#getId()} nicht gefunden wird.
+     * @throws UserRoleNotAllowedException falls der User keine Berechtigung für die Abfrage hat.
+     */
+    public BauleitplanverfahrenModel wvInBlvUebernehmen(final UUID id)
+        throws EntityNotFoundException, UserRoleNotAllowedException {
+        final var abfrage = this.getById(id);
+        if (abfrage.getArtAbfrage() != ArtAbfrage.WEITERES_VERFAHREN) {
+            final var message = "Die Art der Abfrage wird nicht unterstützt.";
+            log.error(message);
+            throw new EntityNotFoundException(message);
+        }
+        final var bauleitplanverfahrenModel = this.abfrageConverterDomainMapper.convertModel(
+            (WeiteresVerfahrenModel) abfrage
+        );
+
+        return bauleitplanverfahrenModel;
     }
 }
