@@ -8,6 +8,8 @@ import de.muenchen.isi.configuration.MapstructConfiguration;
 import de.muenchen.isi.domain.mapper.BauabschnittDomainMapper;
 import de.muenchen.isi.domain.model.AbfragevarianteBauleitplanverfahrenModel;
 import de.muenchen.isi.domain.model.AbfragevarianteWeiteresVerfahrenModel;
+import de.muenchen.isi.domain.model.BauleitplanverfahrenModel;
+import de.muenchen.isi.domain.model.WeiteresVerfahrenModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import org.mapstruct.*;
 
@@ -43,6 +45,12 @@ public interface AbfragevarianteConverterDomainMapper {
         final AbfragevarianteWeiteresVerfahrenModel abfragevarianteWeiteresVerfahrenModel
     );
 
+    /**
+     * Die Methode führt die Konvertierung der {@link AbfragevarianteWeiteresVerfahrenModel} Abfragevarianten in {@link AbfragevarianteBauleitplanverfahrenModel} Abfragevarianten durch
+     *
+     * @param abfragevarianteWeiteresVerfahrenModel {@link AbfragevarianteWeiteresVerfahrenModel}.
+     * @param abfragevarianteBauleitplanverfahrenModel {@link AbfragevarianteBauleitplanverfahrenModel}.
+     */
     @AfterMapping
     default void afterMapping(
         final AbfragevarianteWeiteresVerfahrenModel abfragevarianteWeiteresVerfahrenModel,

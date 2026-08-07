@@ -6,7 +6,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
 @MapperConfig
-public interface AbfrageMapperConfig {
+public interface AbfrageConverterMapperConfig {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "version", ignore = true)
     @Mapping(target = "createdDateTime", ignore = true)

@@ -4,10 +4,8 @@
  */
 package de.muenchen.isi.domain.mapper.converter;
 
-import de.muenchen.isi.configuration.MapstructConfiguration;
 import de.muenchen.isi.domain.model.*;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import java.util.ArrayList;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
@@ -17,10 +15,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 @Slf4j
 @Mapper(
     componentModel = "spring",
-    uses = { AbfragevarianteConverterDomainMapper.class },
-    config = AbfrageMapperConfig.class
+    uses = { AbfrageConverterCommonMapper.class, AbfragevarianteConverterDomainMapper.class },
+    config = AbfrageConverterMapperConfig.class
 )
 public abstract class AbfrageConverterDomainMapper {
+
+    @Autowired
+    private AbfrageConverterCommonMapper abfrageConverterCommonMapper;
 
     @Autowired
     private AbfragevarianteConverterDomainMapper abfragevarianteConverterDomainMapper;
@@ -38,13 +39,21 @@ public abstract class AbfrageConverterDomainMapper {
     @InheritConfiguration(name = "ignoreCommonFields") // MapStruct generiert keinen Code für die AbfrageDto Attribute in diesem Mapper
     public abstract BauleitplanverfahrenModel convertModel(final WeiteresVerfahrenModel weiteresVerfahrenModel);
 
+    /**
+     * Die Methode führt die Konvertierung einer {@link WeiteresVerfahrenModel} Abfrage in eine {@link BauleitplanverfahrenModel} Abfrage durch
+     *
+     * @param weiteresVerfahrenModel {@link WeiteresVerfahrenModel}.
+     * @param bauleitplanverfahrenModel {@link BauleitplanverfahrenModel}.
+     */
     @AfterMapping
     void afterMapping(
         final WeiteresVerfahrenModel weiteresVerfahrenModel,
         @MappingTarget final BauleitplanverfahrenModel bauleitplanverfahrenModel
     ) {
         bauleitplanverfahrenModel.setArtAbfrage(ArtAbfrage.BAULEITPLANVERFAHREN);
+        bauleitplanverfahrenModel.setStart42VerfahrenDatumUnbekannt(false);
 
+        // Abfragevarianten
         final var abfragevarianten = new ArrayList<AbfragevarianteBauleitplanverfahrenModel>();
         CollectionUtils.emptyIfNull(weiteresVerfahrenModel.getAbfragevariantenWeiteresVerfahren()).forEach(
             abfragevariante -> {
@@ -56,5 +65,20 @@ public abstract class AbfrageConverterDomainMapper {
             }
         );
         bauleitplanverfahrenModel.setAbfragevariantenBauleitplanverfahren(abfragevarianten);
+
+        // Abfragevarianten Sachbearbeitung
+        final var abfragevariantenSachbearbeitung = new ArrayList<AbfragevarianteBauleitplanverfahrenModel>();
+        CollectionUtils.emptyIfNull(
+            weiteresVerfahrenModel.getAbfragevariantenSachbearbeitungWeiteresVerfahren()
+        ).forEach(abfragevariante -> {
+            final var mappedBauleitplanverfahrenVarianteModel =
+                abfragevarianteConverterDomainMapper.convertAbfragevarianteWeiteresVerfahrenModel2AbfragevarianteBauleitplanverfahrenModel(
+                    abfragevariante
+                );
+            abfragevariantenSachbearbeitung.add(mappedBauleitplanverfahrenVarianteModel);
+        });
+        bauleitplanverfahrenModel.setAbfragevariantenSachbearbeitungBauleitplanverfahren(
+            abfragevariantenSachbearbeitung
+        );
     }
 }
