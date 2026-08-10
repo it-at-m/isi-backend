@@ -372,4 +372,30 @@ public class AbfrageController {
         final var dto = abfrageApiMapper.model2Dto(model);
         return ResponseEntity.ok(dto);
     }
+
+    @GetMapping("/wv-in-bgv-uebernehmen{id}")
+    @Transactional(readOnly = true)
+    @Operation(summary = "Datenübernahme von Weiteres Verfahren (WV) in Baugenehmigungsverfahren (BGV).")
+    @ApiResponses(
+        value = {
+            @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(
+                responseCode = "403",
+                description = "FORBIDDEN -> Keine Berechtigung um die Abfrage zu öffnen.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+            @ApiResponse(
+                responseCode = "404",
+                description = "NOT FOUND -> Abfrage mit dieser ID nicht vorhanden.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+        }
+    )
+    @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_READ_ABFRAGE.name())")
+    public ResponseEntity<AbfrageDto> wvInBgvUebernehmenById(@PathVariable @NotNull final UUID id)
+        throws EntityNotFoundException, UserRoleNotAllowedException {
+        final var model = abfrageService.wvInBgvUebernehmen(id);
+        final var dto = abfrageApiMapper.model2Dto(model);
+        return ResponseEntity.ok(dto);
+    }
 }

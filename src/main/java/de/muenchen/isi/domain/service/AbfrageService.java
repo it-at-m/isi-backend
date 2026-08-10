@@ -607,10 +607,33 @@ public class AbfrageService {
             log.error(message);
             throw new EntityNotFoundException(message);
         }
-        final var bauleitplanverfahrenModel = this.abfrageConverterDomainMapper.convertModel(
+        final var bauleitplanverfahrenModel = this.abfrageConverterDomainMapper.convertWv2BlvModel(
             (WeiteresVerfahrenModel) abfrage
         );
 
         return bauleitplanverfahrenModel;
+    }
+
+    /**
+     * Die Methode gibt ein {@link BaugenehmigungsverfahrenModel} zurück.
+     *
+     * @param id zum Identifizieren des {@link WeiteresVerfahrenModel}.
+     * @return {@link BaugenehmigungsverfahrenModel}.
+     * @throws EntityNotFoundException     falls die Abfrage identifiziert durch die {@link WeiteresVerfahrenModel#getId()} nicht gefunden wird.
+     * @throws UserRoleNotAllowedException falls der User keine Berechtigung für die Abfrage hat.
+     */
+    public BaugenehmigungsverfahrenModel wvInBgvUebernehmen(final UUID id)
+        throws EntityNotFoundException, UserRoleNotAllowedException {
+        final var abfrage = this.getById(id);
+        if (abfrage.getArtAbfrage() != ArtAbfrage.WEITERES_VERFAHREN) {
+            final var message = "Die Art der Abfrage wird nicht unterstützt.";
+            log.error(message);
+            throw new EntityNotFoundException(message);
+        }
+        final var baugenehmigungsverfahrenModel = this.abfrageConverterDomainMapper.convertWv2BgvModel(
+            (WeiteresVerfahrenModel) abfrage
+        );
+
+        return baugenehmigungsverfahrenModel;
     }
 }

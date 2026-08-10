@@ -6,6 +6,7 @@ package de.muenchen.isi.domain.mapper.converter;
 
 import de.muenchen.isi.configuration.MapstructConfiguration;
 import de.muenchen.isi.domain.mapper.BauabschnittDomainMapper;
+import de.muenchen.isi.domain.model.AbfragevarianteBaugenehmigungsverfahrenModel;
 import de.muenchen.isi.domain.model.AbfragevarianteBauleitplanverfahrenModel;
 import de.muenchen.isi.domain.model.AbfragevarianteWeiteresVerfahrenModel;
 import de.muenchen.isi.domain.model.BauleitplanverfahrenModel;
@@ -57,5 +58,46 @@ public interface AbfragevarianteConverterDomainMapper {
         @MappingTarget final AbfragevarianteBauleitplanverfahrenModel abfragevarianteBauleitplanverfahrenModel
     ) {
         abfragevarianteBauleitplanverfahrenModel.setArtAbfragevariante(ArtAbfrage.BAULEITPLANVERFAHREN);
+    }
+
+    @Mappings(
+        {
+            @Mapping(target = "stammdatenGueltigAb", ignore = true),
+            @Mapping(target = "hasBauratendateiInput", ignore = true),
+            @Mapping(target = "anmerkungBauratendateiInput", ignore = true),
+            @Mapping(target = "bauratendateiInputBasis", ignore = true),
+            @Mapping(target = "bauratendateiInput", ignore = true),
+            @Mapping(target = "bedarfsmeldungFachreferate", ignore = true),
+            @Mapping(target = "bedarfsmeldungDokumenteFachreferate", ignore = true),
+            @Mapping(target = "bedarfsmeldungAbfrageersteller", ignore = true),
+            @Mapping(target = "bedarfsmeldungDokumenteAbfrageersteller", ignore = true),
+            @Mapping(target = "anmerkungFachreferate", ignore = true),
+            @Mapping(target = "anmerkungAbfrageersteller", ignore = true),
+            @Mapping(target = "ausgeloesterBedarfImBaugebietBeruecksichtigenKita", ignore = true),
+            @Mapping(target = "ausgeloesterBedarfMitversorgungImBplanKita", ignore = true),
+            @Mapping(target = "ausgeloesterBedarfMitversorgungInBestEinrichtungenKita", ignore = true),
+            @Mapping(target = "ausgeloesterBedarfMitversorgungInBestEinrichtungenNachAusbauKita", ignore = true),
+            @Mapping(target = "ausgeloesterBedarfImBaugebietBeruecksichtigenSchule", ignore = true),
+            @Mapping(target = "ausgeloesterBedarfMitversorgungImBplanSchule", ignore = true),
+            @Mapping(target = "ausgeloesterBedarfMitversorgungInBestEinrichtungenSchule", ignore = true),
+            @Mapping(target = "ausgeloesterBedarfMitversorgungInBestEinrichtungenNachAusbauSchule", ignore = true),
+        }
+    )
+    AbfragevarianteBaugenehmigungsverfahrenModel convertAbfragevarianteWeiteresVerfahrenModel2AbfragevarianteBaugenehmigungsverfahrenModel(
+        final AbfragevarianteWeiteresVerfahrenModel abfragevarianteWeiteresVerfahrenModel
+    );
+
+    /**
+     * Die Methode führt die Konvertierung der {@link AbfragevarianteWeiteresVerfahrenModel} Abfragevarianten in {@link AbfragevarianteBaugenehmigungsverfahrenModel} Abfragevarianten durch
+     *
+     * @param abfragevarianteWeiteresVerfahrenModel {@link AbfragevarianteWeiteresVerfahrenModel}.
+     * @param abfragevarianteBaugenehmigungsverfahrenModel {@link AbfragevarianteBaugenehmigungsverfahrenModel}.
+     */
+    @AfterMapping
+    default void afterMapping(
+        final AbfragevarianteWeiteresVerfahrenModel abfragevarianteWeiteresVerfahrenModel,
+        @MappingTarget final AbfragevarianteBaugenehmigungsverfahrenModel abfragevarianteBaugenehmigungsverfahrenModel
+    ) {
+        abfragevarianteBaugenehmigungsverfahrenModel.setArtAbfragevariante(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN);
     }
 }

@@ -35,7 +35,7 @@ public abstract class AbfrageConverterDomainMapper {
     @Mapping(target = "abfragevariantenBauleitplanverfahren", ignore = true)
     @Mapping(target = "abfragevariantenSachbearbeitungBauleitplanverfahren", ignore = true)
     @InheritConfiguration(name = "ignoreCommonFields") // MapStruct generiert keinen Code für die AbfrageDto Attribute in diesem Mapper
-    public abstract BauleitplanverfahrenModel convertModel(final WeiteresVerfahrenModel weiteresVerfahrenModel);
+    public abstract BauleitplanverfahrenModel convertWv2BlvModel(final WeiteresVerfahrenModel weiteresVerfahrenModel);
 
     /**
      * Die Methode führt die Konvertierung einer {@link WeiteresVerfahrenModel} Abfrage in eine {@link BauleitplanverfahrenModel} Abfrage durch
@@ -76,6 +76,60 @@ public abstract class AbfrageConverterDomainMapper {
             abfragevariantenSachbearbeitung.add(mappedBauleitplanverfahrenVarianteModel);
         });
         bauleitplanverfahrenModel.setAbfragevariantenSachbearbeitungBauleitplanverfahren(
+            abfragevariantenSachbearbeitung
+        );
+    }
+
+    // BaugenehmigungsverfahrenDto
+    @Mapping(target = "fristBearbeitung", ignore = true)
+    @Mapping(target = "verfahrensstand", ignore = true)
+    @Mapping(target = "verfahrensstandFreieEingabe", ignore = true)
+    @Mapping(target = "dokumente", ignore = true)
+    @Mapping(target = "abfragevariantenBaugenehmigungsverfahren", ignore = true)
+    @Mapping(target = "abfragevariantenSachbearbeitungBaugenehmigungsverfahren", ignore = true)
+    @InheritConfiguration(name = "ignoreCommonFields") // MapStruct generiert keinen Code für die AbfrageDto Attribute in diesem Mapper
+    public abstract BaugenehmigungsverfahrenModel convertWv2BgvModel(
+        final WeiteresVerfahrenModel weiteresVerfahrenModel
+    );
+
+    /**
+     * Die Methode führt die Konvertierung einer {@link WeiteresVerfahrenModel} Abfrage in eine {@link BaugenehmigungsverfahrenModel} Abfrage durch
+     *
+     * @param weiteresVerfahrenModel {@link WeiteresVerfahrenModel}.
+     * @param baugenehmigungsverfahrenModel {@link BaugenehmigungsverfahrenModel}.
+     */
+    @AfterMapping
+    public void afterMapping(
+        final WeiteresVerfahrenModel weiteresVerfahrenModel,
+        @MappingTarget final BaugenehmigungsverfahrenModel baugenehmigungsverfahrenModel
+    ) {
+        baugenehmigungsverfahrenModel.setArtAbfrage(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN);
+
+        // Abfragevarianten
+        final var abfragevarianten = new ArrayList<AbfragevarianteBaugenehmigungsverfahrenModel>();
+        CollectionUtils.emptyIfNull(weiteresVerfahrenModel.getAbfragevariantenWeiteresVerfahren()).forEach(
+            abfragevariante -> {
+                final var mappedBaugenehmigungsverfahrenVarianteModel =
+                    abfragevarianteConverterDomainMapper.convertAbfragevarianteWeiteresVerfahrenModel2AbfragevarianteBaugenehmigungsverfahrenModel(
+                        abfragevariante
+                    );
+                abfragevarianten.add(mappedBaugenehmigungsverfahrenVarianteModel);
+            }
+        );
+        baugenehmigungsverfahrenModel.setAbfragevariantenBaugenehmigungsverfahren(abfragevarianten);
+
+        // Abfragevarianten Sachbearbeitung
+        final var abfragevariantenSachbearbeitung = new ArrayList<AbfragevarianteBaugenehmigungsverfahrenModel>();
+        CollectionUtils.emptyIfNull(
+            weiteresVerfahrenModel.getAbfragevariantenSachbearbeitungWeiteresVerfahren()
+        ).forEach(abfragevariante -> {
+            final var mappedBaugenehmigungsverfahrenVarianteModel =
+                abfragevarianteConverterDomainMapper.convertAbfragevarianteWeiteresVerfahrenModel2AbfragevarianteBaugenehmigungsverfahrenModel(
+                    abfragevariante
+                );
+            abfragevariantenSachbearbeitung.add(mappedBaugenehmigungsverfahrenVarianteModel);
+        });
+        baugenehmigungsverfahrenModel.setAbfragevariantenSachbearbeitungBaugenehmigungsverfahren(
             abfragevariantenSachbearbeitung
         );
     }

@@ -59,10 +59,12 @@ public class AbfrageConverterDomainMapperTest {
         AbfragevarianteWeiteresVerfahrenModel abfragevarianteWeiteresVerfahrenModel1 =
             new AbfragevarianteWeiteresVerfahrenModel();
         abfragevarianteWeiteresVerfahrenModel1.setName("Abfragevariante 1");
+        abfragevarianteWeiteresVerfahrenModel1.setArtAbfragevariante(ArtAbfrage.WEITERES_VERFAHREN);
 
         AbfragevarianteWeiteresVerfahrenModel abfragevarianteWeiteresVerfahrenModel2 =
             new AbfragevarianteWeiteresVerfahrenModel();
         abfragevarianteWeiteresVerfahrenModel2.setName("Abfragevariante 2");
+        abfragevarianteWeiteresVerfahrenModel2.setArtAbfragevariante(ArtAbfrage.WEITERES_VERFAHREN);
 
         List<AbfragevarianteWeiteresVerfahrenModel> abfragevarianten = new ArrayList<>();
         List<AbfragevarianteWeiteresVerfahrenModel> abfragevariantenSachbearbeitung = new ArrayList<>();
@@ -72,18 +74,79 @@ public class AbfrageConverterDomainMapperTest {
         wvModel.setAbfragevariantenWeiteresVerfahren(abfragevarianten);
         wvModel.setAbfragevariantenSachbearbeitungWeiteresVerfahren(abfragevariantenSachbearbeitung);
 
-        var blvModel = abfrageConverterDomainMapper.convertModel(wvModel);
+        var blvModel = abfrageConverterDomainMapper.convertWv2BlvModel(wvModel);
 
         assertThat(blvModel.getId(), is(nullValue()));
         assertThat(blvModel.getVersion(), is(nullValue()));
+        assertThat(blvModel.getArtAbfrage(), is(ArtAbfrage.BAULEITPLANVERFAHREN));
         assertThat(blvModel.getName(), is(wvModel.getName()));
         assertThat(
             blvModel.getAbfragevariantenBauleitplanverfahren().get(0).getName(),
             is(wvModel.getAbfragevariantenWeiteresVerfahren().get(0).getName())
         );
         assertThat(
+            blvModel.getAbfragevariantenBauleitplanverfahren().get(0).getArtAbfragevariante(),
+            is(ArtAbfrage.BAULEITPLANVERFAHREN)
+        );
+        assertThat(
             blvModel.getAbfragevariantenSachbearbeitungBauleitplanverfahren().get(0).getName(),
             is(wvModel.getAbfragevariantenSachbearbeitungWeiteresVerfahren().get(0).getName())
+        );
+        assertThat(
+            blvModel.getAbfragevariantenSachbearbeitungBauleitplanverfahren().get(0).getArtAbfragevariante(),
+            is(ArtAbfrage.BAULEITPLANVERFAHREN)
+        );
+    }
+
+    @Test
+    public void convertWvModel2BgvModel() {
+        WeiteresVerfahrenModel wvModel = new WeiteresVerfahrenModel();
+        wvModel.setId(UUID.randomUUID());
+        wvModel.setVersion(1L);
+        wvModel.setSub("Testuser");
+        wvModel.setName("Abfrage");
+        wvModel.setArtAbfrage(ArtAbfrage.WEITERES_VERFAHREN);
+        wvModel.setStatusAbfrage(StatusAbfrage.START_BEARBEITUNG);
+
+        AbfragevarianteWeiteresVerfahrenModel abfragevarianteWeiteresVerfahrenModel1 =
+            new AbfragevarianteWeiteresVerfahrenModel();
+        abfragevarianteWeiteresVerfahrenModel1.setName("Abfragevariante 1");
+        abfragevarianteWeiteresVerfahrenModel1.setArtAbfragevariante(ArtAbfrage.WEITERES_VERFAHREN);
+
+        AbfragevarianteWeiteresVerfahrenModel abfragevarianteWeiteresVerfahrenModel2 =
+            new AbfragevarianteWeiteresVerfahrenModel();
+        abfragevarianteWeiteresVerfahrenModel2.setName("Abfragevariante 2");
+        abfragevarianteWeiteresVerfahrenModel2.setArtAbfragevariante(ArtAbfrage.WEITERES_VERFAHREN);
+
+        List<AbfragevarianteWeiteresVerfahrenModel> abfragevarianten = new ArrayList<>();
+        List<AbfragevarianteWeiteresVerfahrenModel> abfragevariantenSachbearbeitung = new ArrayList<>();
+
+        abfragevarianten.add(abfragevarianteWeiteresVerfahrenModel1);
+        abfragevariantenSachbearbeitung.add(abfragevarianteWeiteresVerfahrenModel2);
+        wvModel.setAbfragevariantenWeiteresVerfahren(abfragevarianten);
+        wvModel.setAbfragevariantenSachbearbeitungWeiteresVerfahren(abfragevariantenSachbearbeitung);
+
+        var bgvModel = abfrageConverterDomainMapper.convertWv2BgvModel(wvModel);
+
+        assertThat(bgvModel.getId(), is(nullValue()));
+        assertThat(bgvModel.getVersion(), is(nullValue()));
+        assertThat(bgvModel.getArtAbfrage(), is(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN));
+        assertThat(bgvModel.getName(), is(wvModel.getName()));
+        assertThat(
+            bgvModel.getAbfragevariantenBaugenehmigungsverfahren().get(0).getName(),
+            is(wvModel.getAbfragevariantenWeiteresVerfahren().get(0).getName())
+        );
+        assertThat(
+            bgvModel.getAbfragevariantenBaugenehmigungsverfahren().get(0).getArtAbfragevariante(),
+            is(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN)
+        );
+        assertThat(
+            bgvModel.getAbfragevariantenSachbearbeitungBaugenehmigungsverfahren().get(0).getName(),
+            is(wvModel.getAbfragevariantenSachbearbeitungWeiteresVerfahren().get(0).getName())
+        );
+        assertThat(
+            bgvModel.getAbfragevariantenSachbearbeitungBaugenehmigungsverfahren().get(0).getArtAbfragevariante(),
+            is(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN)
         );
     }
 }
