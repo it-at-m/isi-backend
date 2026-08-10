@@ -1,11 +1,18 @@
 package de.muenchen.isi.domain.mapper.converter;
 
 import de.muenchen.isi.domain.model.AbfrageModel;
+import org.mapstruct.InjectionStrategy;
 import org.mapstruct.MapperConfig;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingConstants;
 import org.mapstruct.MappingTarget;
+import org.mapstruct.ReportingPolicy;
 
-@MapperConfig
+@MapperConfig(
+    injectionStrategy = InjectionStrategy.CONSTRUCTOR,
+    unmappedTargetPolicy = ReportingPolicy.ERROR,
+    componentModel = MappingConstants.ComponentModel.SPRING
+)
 public interface AbfrageConverterMapperConfig {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "version", ignore = true)

@@ -13,7 +13,7 @@ import de.muenchen.isi.domain.model.WeiteresVerfahrenModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import org.mapstruct.*;
 
-@Mapper(config = MapstructConfiguration.class, uses = { BauabschnittDomainMapper.class })
+@Mapper(config = AbfrageConverterMapperConfig.class, uses = { BauabschnittDomainMapper.class })
 public interface AbfragevarianteConverterDomainMapper {
     @Mappings(
         {

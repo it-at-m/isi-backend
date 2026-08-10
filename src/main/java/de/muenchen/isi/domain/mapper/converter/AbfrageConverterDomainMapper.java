@@ -4,6 +4,8 @@
  */
 package de.muenchen.isi.domain.mapper.converter;
 
+import de.muenchen.isi.configuration.MapstructConfiguration;
+import de.muenchen.isi.domain.mapper.AbfragevarianteDomainMapper;
 import de.muenchen.isi.domain.model.*;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import java.util.ArrayList;
@@ -14,14 +16,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 @Slf4j
 @Mapper(
-    componentModel = "spring",
-    uses = { AbfrageConverterCommonMapper.class, AbfragevarianteConverterDomainMapper.class },
-    config = AbfrageConverterMapperConfig.class
+    config = AbfrageConverterMapperConfig.class,
+    uses = { AbfrageConverterCommonMapper.class, AbfragevarianteConverterDomainMapper.class }
 )
 public abstract class AbfrageConverterDomainMapper {
-
-    @Autowired
-    private AbfrageConverterCommonMapper abfrageConverterCommonMapper;
 
     @Autowired
     private AbfragevarianteConverterDomainMapper abfragevarianteConverterDomainMapper;
@@ -46,7 +44,7 @@ public abstract class AbfrageConverterDomainMapper {
      * @param bauleitplanverfahrenModel {@link BauleitplanverfahrenModel}.
      */
     @AfterMapping
-    void afterMapping(
+    public void afterMapping(
         final WeiteresVerfahrenModel weiteresVerfahrenModel,
         @MappingTarget final BauleitplanverfahrenModel bauleitplanverfahrenModel
     ) {
