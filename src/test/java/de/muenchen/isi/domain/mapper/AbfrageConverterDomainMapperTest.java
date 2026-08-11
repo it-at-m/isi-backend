@@ -9,8 +9,11 @@ import de.muenchen.isi.domain.mapper.converter.AbfrageConverterDomainMapper;
 import de.muenchen.isi.domain.mapper.converter.AbfrageConverterDomainMapperImpl;
 import de.muenchen.isi.domain.mapper.converter.AbfragevarianteConverterDomainMapper;
 import de.muenchen.isi.domain.mapper.converter.AbfragevarianteConverterDomainMapperImpl;
+import de.muenchen.isi.domain.model.AbfragevarianteBauleitplanverfahrenModel;
 import de.muenchen.isi.domain.model.AbfragevarianteWeiteresVerfahrenModel;
+import de.muenchen.isi.domain.model.BauleitplanverfahrenModel;
 import de.muenchen.isi.domain.model.WeiteresVerfahrenModel;
+import de.muenchen.isi.infrastructure.entity.Bauleitplanverfahren;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import java.lang.reflect.Field;
@@ -143,6 +146,58 @@ public class AbfrageConverterDomainMapperTest {
         assertThat(
             bgvModel.getAbfragevariantenSachbearbeitungBaugenehmigungsverfahren().get(0).getName(),
             is(wvModel.getAbfragevariantenSachbearbeitungWeiteresVerfahren().get(0).getName())
+        );
+        assertThat(
+            bgvModel.getAbfragevariantenSachbearbeitungBaugenehmigungsverfahren().get(0).getArtAbfragevariante(),
+            is(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN)
+        );
+    }
+
+    @Test
+    public void convertBlvModel2BgvModel() {
+        BauleitplanverfahrenModel blvModel = new BauleitplanverfahrenModel();
+        blvModel.setId(UUID.randomUUID());
+        blvModel.setVersion(1L);
+        blvModel.setSub("Testuser");
+        blvModel.setName("Abfrage");
+        blvModel.setArtAbfrage(ArtAbfrage.BAULEITPLANVERFAHREN);
+        blvModel.setStatusAbfrage(StatusAbfrage.EINPFLEGEN_BEDARFSMELDUNG);
+
+        AbfragevarianteBauleitplanverfahrenModel abfragevarianteBauleitplanverfahrenModel1 =
+            new AbfragevarianteBauleitplanverfahrenModel();
+        abfragevarianteBauleitplanverfahrenModel1.setName("Abfragevariante 1");
+        abfragevarianteBauleitplanverfahrenModel1.setArtAbfragevariante(ArtAbfrage.BAULEITPLANVERFAHREN);
+
+        AbfragevarianteBauleitplanverfahrenModel abfragevarianteBauleitplanverfahrenModel2 =
+            new AbfragevarianteBauleitplanverfahrenModel();
+        abfragevarianteBauleitplanverfahrenModel2.setName("Abfragevariante 2");
+        abfragevarianteBauleitplanverfahrenModel2.setArtAbfragevariante(ArtAbfrage.BAULEITPLANVERFAHREN);
+
+        List<AbfragevarianteBauleitplanverfahrenModel> abfragevarianten = new ArrayList<>();
+        List<AbfragevarianteBauleitplanverfahrenModel> abfragevariantenSachbearbeitung = new ArrayList<>();
+
+        abfragevarianten.add(abfragevarianteBauleitplanverfahrenModel1);
+        abfragevariantenSachbearbeitung.add(abfragevarianteBauleitplanverfahrenModel2);
+        blvModel.setAbfragevariantenBauleitplanverfahren(abfragevarianten);
+        blvModel.setAbfragevariantenSachbearbeitungBauleitplanverfahren(abfragevariantenSachbearbeitung);
+
+        var bgvModel = abfrageConverterDomainMapper.convertBlv2BgvModel(blvModel);
+
+        assertThat(bgvModel.getId(), is(nullValue()));
+        assertThat(bgvModel.getVersion(), is(nullValue()));
+        assertThat(bgvModel.getArtAbfrage(), is(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN));
+        assertThat(bgvModel.getName(), is(blvModel.getName()));
+        assertThat(
+            bgvModel.getAbfragevariantenBaugenehmigungsverfahren().get(0).getName(),
+            is(blvModel.getAbfragevariantenBauleitplanverfahren().get(0).getName())
+        );
+        assertThat(
+            bgvModel.getAbfragevariantenBaugenehmigungsverfahren().get(0).getArtAbfragevariante(),
+            is(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN)
+        );
+        assertThat(
+            bgvModel.getAbfragevariantenSachbearbeitungBaugenehmigungsverfahren().get(0).getName(),
+            is(blvModel.getAbfragevariantenSachbearbeitungBauleitplanverfahren().get(0).getName())
         );
         assertThat(
             bgvModel.getAbfragevariantenSachbearbeitungBaugenehmigungsverfahren().get(0).getArtAbfragevariante(),

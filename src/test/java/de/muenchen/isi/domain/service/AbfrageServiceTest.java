@@ -22,7 +22,12 @@ import de.muenchen.isi.domain.mapper.BauabschnittDomainMapperImpl;
 import de.muenchen.isi.domain.mapper.DokumentDomainMapperImpl;
 import de.muenchen.isi.domain.mapper.KoordinatenDomainMapperImpl;
 import de.muenchen.isi.domain.mapper.VerortungDomainMapperImpl;
+import de.muenchen.isi.domain.mapper.converter.AbfrageConverterCommonMapper;
+import de.muenchen.isi.domain.mapper.converter.AbfrageConverterCommonMapperImpl;
 import de.muenchen.isi.domain.mapper.converter.AbfrageConverterDomainMapper;
+import de.muenchen.isi.domain.mapper.converter.AbfrageConverterDomainMapperImpl;
+import de.muenchen.isi.domain.mapper.converter.AbfragevarianteConverterDomainMapper;
+import de.muenchen.isi.domain.mapper.converter.AbfragevarianteConverterDomainMapperImpl;
 import de.muenchen.isi.domain.model.AbfrageModel;
 import de.muenchen.isi.domain.model.AbfragevarianteBaugenehmigungsverfahrenModel;
 import de.muenchen.isi.domain.model.AbfragevarianteBauleitplanverfahrenModel;
@@ -122,6 +127,8 @@ class AbfrageServiceTest {
 
     private AbfrageConverterDomainMapper abfrageConverterDomainMapper;
 
+    private AbfragevarianteConverterDomainMapper abfragevarianteConverterDomainMapper;
+
     @Mock
     private BauvorhabenRepository bauvorhabenRepository;
 
@@ -149,6 +156,9 @@ class AbfrageServiceTest {
     @BeforeEach
     public void beforeEach() throws NoSuchFieldException, IllegalAccessException {
         final var abfragevarianteDomainMapper = new AbfragevarianteDomainMapperImpl(new BauabschnittDomainMapperImpl());
+        this.abfrageConverterDomainMapper = new AbfrageConverterDomainMapperImpl(
+            new AbfrageConverterCommonMapperImpl()
+        );
         this.abfrageDomainMapper = new AbfrageDomainMapperImpl(
             abfragevarianteDomainMapper,
             new DokumentDomainMapperImpl(),
@@ -161,6 +171,13 @@ class AbfrageServiceTest {
         field = abfrageDomainMapper.getClass().getSuperclass().getDeclaredField("bauvorhabenRepository");
         field.setAccessible(true);
         field.set(abfrageDomainMapper, bauvorhabenRepository);
+
+        field = abfrageConverterDomainMapper
+            .getClass()
+            .getSuperclass()
+            .getDeclaredField("abfragevarianteConverterDomainMapper");
+        field.setAccessible(true);
+        field.set(abfrageConverterDomainMapper, abfragevarianteConverterDomainMapper);
         this.abfrageService = new AbfrageService(
             this.abfrageRepository,
             this.abfrageDomainMapper,
@@ -3561,5 +3578,86 @@ class AbfrageServiceTest {
         assertThat(bauvorhaben.getRelevanteAbfragevariante(), is(abfragevariante));
         Mockito.verify(this.bauvorhabenRepository, Mockito.times(0)).save(bauvorhaben);
         Mockito.verify(this.bauvorhabenRepository, Mockito.times(0)).getReferenceById(bauvorhabenOriginal);
+    }
+
+    @Test
+    void wvInBlvUebernehmenSourceArtAbfrageNotAllowed() throws EntityNotFoundException, UserRoleNotAllowedException {
+        final UUID id = UUID.randomUUID();
+        Mockito.when(this.abfrageRepository.findById(id)).thenReturn(Optional.of(new Baugenehmigungsverfahren()));
+        Assertions.assertThrows(EntityNotFoundException.class, () -> this.abfrageService.wvInBlvUebernehmen(id));
+        Mockito.verify(this.abfrageRepository, Mockito.times(1)).findById(id);
+        Mockito.reset(this.abfrageRepository);
+    }
+
+    @Test
+    void wvInBlvUebernehmen() throws EntityNotFoundException, UserRoleNotAllowedException {
+        final UUID id = UUID.randomUUID();
+        final WeiteresVerfahren wv = new WeiteresVerfahren();
+        wv.setId(id);
+        wv.setName("Test Abfrage");
+        Mockito.when(abfrageRepository.findById(id)).thenReturn(Optional.of(wv));
+        final WeiteresVerfahrenModel wvModel = new WeiteresVerfahrenModel();
+        wvModel.setId(wv.getId());
+        wvModel.setName(wv.getName());
+        wvModel.setArtAbfrage(ArtAbfrage.WEITERES_VERFAHREN);
+        final BauleitplanverfahrenModel blvModel = this.abfrageService.wvInBlvUebernehmen(id);
+        assertThat(blvModel.getId(), is(nullValue()));
+        assertThat(blvModel.getArtAbfrage(), is(ArtAbfrage.BAULEITPLANVERFAHREN));
+        assertThat(blvModel.getName(), is(wvModel.getName()));
+    }
+
+    @Test
+    void wvInBgvBlvUebernehmenSourceArtAbfrageNotAllowed() throws EntityNotFoundException, UserRoleNotAllowedException {
+        final UUID id = UUID.randomUUID();
+
+        Mockito.when(this.abfrageRepository.findById(id)).thenReturn(Optional.of(new Bauleitplanverfahren()));
+        Assertions.assertThrows(EntityNotFoundException.class, () -> this.abfrageService.wvInBgvUebernehmen(id));
+        Mockito.verify(this.abfrageRepository, Mockito.times(1)).findById(id);
+        Mockito.reset(this.abfrageRepository);
+    }
+
+    @Test
+    void wvInBgvUebernehmen() throws EntityNotFoundException, UserRoleNotAllowedException {
+        final UUID id = UUID.randomUUID();
+        final WeiteresVerfahren wv = new WeiteresVerfahren();
+        wv.setId(id);
+        wv.setName("Test Abfrage");
+        Mockito.when(abfrageRepository.findById(id)).thenReturn(Optional.of(wv));
+        final WeiteresVerfahrenModel wvModel = new WeiteresVerfahrenModel();
+        wvModel.setId(wv.getId());
+        wvModel.setName(wv.getName());
+        wvModel.setArtAbfrage(ArtAbfrage.WEITERES_VERFAHREN);
+        final BaugenehmigungsverfahrenModel bgvModel = this.abfrageService.wvInBgvUebernehmen(id);
+        assertThat(bgvModel.getId(), is(nullValue()));
+        assertThat(bgvModel.getArtAbfrage(), is(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN));
+        assertThat(bgvModel.getName(), is(wvModel.getName()));
+    }
+
+    @Test
+    void blvInBgvBlvUebernehmenSourceArtAbfrageNotAllowed()
+        throws EntityNotFoundException, UserRoleNotAllowedException {
+        final UUID id = UUID.randomUUID();
+
+        Mockito.when(this.abfrageRepository.findById(id)).thenReturn(Optional.of(new WeiteresVerfahren()));
+        Assertions.assertThrows(EntityNotFoundException.class, () -> this.abfrageService.blvInBgvUebernehmen(id));
+        Mockito.verify(this.abfrageRepository, Mockito.times(1)).findById(id);
+        Mockito.reset(this.abfrageRepository);
+    }
+
+    @Test
+    void blvInBgvUebernehmen() throws EntityNotFoundException, UserRoleNotAllowedException {
+        final UUID id = UUID.randomUUID();
+        final Bauleitplanverfahren blv = new Bauleitplanverfahren();
+        blv.setId(id);
+        blv.setName("Test Abfrage");
+        Mockito.when(abfrageRepository.findById(id)).thenReturn(Optional.of(blv));
+        final BauleitplanverfahrenModel blvModel = new BauleitplanverfahrenModel();
+        blvModel.setId(blv.getId());
+        blvModel.setName(blv.getName());
+        blvModel.setArtAbfrage(ArtAbfrage.BAULEITPLANVERFAHREN);
+        final BaugenehmigungsverfahrenModel bgvModel = this.abfrageService.blvInBgvUebernehmen(id);
+        assertThat(bgvModel.getId(), is(nullValue()));
+        assertThat(bgvModel.getArtAbfrage(), is(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN));
+        assertThat(bgvModel.getName(), is(blvModel.getName()));
     }
 }

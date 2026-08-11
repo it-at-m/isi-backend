@@ -636,4 +636,27 @@ public class AbfrageService {
 
         return baugenehmigungsverfahrenModel;
     }
+
+    /**
+     * Die Methode gibt ein {@link BaugenehmigungsverfahrenModel} zurück.
+     *
+     * @param id zum Identifizieren des {@link BauleitplanverfahrenModel}.
+     * @return {@link BaugenehmigungsverfahrenModel}.
+     * @throws EntityNotFoundException     falls die Abfrage identifiziert durch die {@link BauleitplanverfahrenModel#getId()} nicht gefunden wird.
+     * @throws UserRoleNotAllowedException falls der User keine Berechtigung für die Abfrage hat.
+     */
+    public BaugenehmigungsverfahrenModel blvInBgvUebernehmen(final UUID id)
+        throws EntityNotFoundException, UserRoleNotAllowedException {
+        final var abfrage = this.getById(id);
+        if (abfrage.getArtAbfrage() != ArtAbfrage.BAULEITPLANVERFAHREN) {
+            final var message = "Die Art der Abfrage wird nicht unterstützt.";
+            log.error(message);
+            throw new EntityNotFoundException(message);
+        }
+        final var baugenehmigungsverfahrenModel = this.abfrageConverterDomainMapper.convertBlv2BgvModel(
+            (BauleitplanverfahrenModel) abfrage
+        );
+
+        return baugenehmigungsverfahrenModel;
+    }
 }

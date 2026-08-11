@@ -4,8 +4,6 @@
  */
 package de.muenchen.isi.domain.mapper.converter;
 
-import de.muenchen.isi.configuration.MapstructConfiguration;
-import de.muenchen.isi.domain.mapper.AbfragevarianteDomainMapper;
 import de.muenchen.isi.domain.model.*;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import java.util.ArrayList;
@@ -24,7 +22,11 @@ public abstract class AbfrageConverterDomainMapper {
     @Autowired
     private AbfragevarianteConverterDomainMapper abfragevarianteConverterDomainMapper;
 
-    // BauleitplanverfahrenDto
+    /**
+     * Die Methode führt die Konvertierung einer {@link WeiteresVerfahrenModel} Abfrage in eine {@link BauleitplanverfahrenModel} Abfrage durch
+     * @param weiteresVerfahrenModel {link WeiteresVerfahrenModel}
+     * @return {link BauleitplanverfahrenModel}
+     */
     @Mapping(target = "fristBearbeitung", ignore = true)
     @Mapping(target = "start42Verfahren", ignore = true)
     @Mapping(target = "start42VerfahrenDatumUnbekannt", ignore = true)
@@ -38,7 +40,7 @@ public abstract class AbfrageConverterDomainMapper {
     public abstract BauleitplanverfahrenModel convertWv2BlvModel(final WeiteresVerfahrenModel weiteresVerfahrenModel);
 
     /**
-     * Die Methode führt die Konvertierung einer {@link WeiteresVerfahrenModel} Abfrage in eine {@link BauleitplanverfahrenModel} Abfrage durch
+     * Die Methode führt weiterführende Mapping Aktionen nach dem Standard-Mapping von convertWv2BlvModel durch
      *
      * @param weiteresVerfahrenModel {@link WeiteresVerfahrenModel}.
      * @param bauleitplanverfahrenModel {@link BauleitplanverfahrenModel}.
@@ -80,7 +82,11 @@ public abstract class AbfrageConverterDomainMapper {
         );
     }
 
-    // BaugenehmigungsverfahrenDto
+    /**
+     * Die Methode führt die Konvertierung einer {@link WeiteresVerfahrenModel} Abfrage in eine {@link BaugenehmigungsverfahrenModel} Abfrage durch
+     * @param weiteresVerfahrenModel {link WeiteresVerfahrenModel}
+     * @return {link BaugenehmigungsverfahrenModel}
+     */
     @Mapping(target = "fristBearbeitung", ignore = true)
     @Mapping(target = "verfahrensstand", ignore = true)
     @Mapping(target = "verfahrensstandFreieEingabe", ignore = true)
@@ -93,7 +99,7 @@ public abstract class AbfrageConverterDomainMapper {
     );
 
     /**
-     * Die Methode führt die Konvertierung einer {@link WeiteresVerfahrenModel} Abfrage in eine {@link BaugenehmigungsverfahrenModel} Abfrage durch
+     * Die Methode führt weiterführende Mapping Aktionen nach dem Standard-Mapping von convertWv2BgvModel durch
      *
      * @param weiteresVerfahrenModel {@link WeiteresVerfahrenModel}.
      * @param baugenehmigungsverfahrenModel {@link BaugenehmigungsverfahrenModel}.
@@ -125,6 +131,65 @@ public abstract class AbfrageConverterDomainMapper {
         ).forEach(abfragevariante -> {
             final var mappedBaugenehmigungsverfahrenVarianteModel =
                 abfragevarianteConverterDomainMapper.convertAbfragevarianteWeiteresVerfahrenModel2AbfragevarianteBaugenehmigungsverfahrenModel(
+                    abfragevariante
+                );
+            abfragevariantenSachbearbeitung.add(mappedBaugenehmigungsverfahrenVarianteModel);
+        });
+        baugenehmigungsverfahrenModel.setAbfragevariantenSachbearbeitungBaugenehmigungsverfahren(
+            abfragevariantenSachbearbeitung
+        );
+    }
+
+    /**
+     * Die Methode führt die Konvertierung einer {@link BauleitplanverfahrenModel} Abfrage in eine {@link BaugenehmigungsverfahrenModel} Abfrage durch
+     * @param bauleitplanverfahrenModel {link BauleitplanverfahrenModel}
+     * @return {link BaugenehmigungsverfahrenModel}
+     */
+    @Mapping(target = "aktenzeichenProLbk", ignore = true)
+    @Mapping(target = "fristBearbeitung", ignore = true)
+    @Mapping(target = "verfahrensstand", ignore = true)
+    @Mapping(target = "verfahrensstandFreieEingabe", ignore = true)
+    @Mapping(target = "dokumente", ignore = true)
+    @Mapping(target = "abfragevariantenBaugenehmigungsverfahren", ignore = true)
+    @Mapping(target = "abfragevariantenSachbearbeitungBaugenehmigungsverfahren", ignore = true)
+    @InheritConfiguration(name = "ignoreCommonFields") // MapStruct generiert keinen Code für die AbfrageDto Attribute in diesem Mapper
+    public abstract BaugenehmigungsverfahrenModel convertBlv2BgvModel(
+        final BauleitplanverfahrenModel bauleitplanverfahrenModel
+    );
+
+    /**
+     * Die Methode führt weiterführende Mapping Aktionen nach dem Standard-Mapping von convertBlv2BgvModel durch
+     *
+     * @param bauleitplanverfahrenModel {@link BauleitplanverfahrenModel}.
+     * @param baugenehmigungsverfahrenModel {@link BaugenehmigungsverfahrenModel}.
+     */
+    @AfterMapping
+    public void afterMapping(
+        final BauleitplanverfahrenModel bauleitplanverfahrenModel,
+        @MappingTarget final BaugenehmigungsverfahrenModel baugenehmigungsverfahrenModel
+    ) {
+        baugenehmigungsverfahrenModel.setArtAbfrage(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN);
+
+        // Abfragevarianten
+        final var abfragevarianten = new ArrayList<AbfragevarianteBaugenehmigungsverfahrenModel>();
+        CollectionUtils.emptyIfNull(bauleitplanverfahrenModel.getAbfragevariantenBauleitplanverfahren()).forEach(
+            abfragevariante -> {
+                final var mappedBaugenehmigungsverfahrenVarianteModel =
+                    abfragevarianteConverterDomainMapper.convertAbfragevarianteBauleitplanverfahrenModel2AbfragevarianteBaugenehmigungsverfahrenModel(
+                        abfragevariante
+                    );
+                abfragevarianten.add(mappedBaugenehmigungsverfahrenVarianteModel);
+            }
+        );
+        baugenehmigungsverfahrenModel.setAbfragevariantenBaugenehmigungsverfahren(abfragevarianten);
+
+        // Abfragevarianten Sachbearbeitung
+        final var abfragevariantenSachbearbeitung = new ArrayList<AbfragevarianteBaugenehmigungsverfahrenModel>();
+        CollectionUtils.emptyIfNull(
+            bauleitplanverfahrenModel.getAbfragevariantenSachbearbeitungBauleitplanverfahren()
+        ).forEach(abfragevariante -> {
+            final var mappedBaugenehmigungsverfahrenVarianteModel =
+                abfragevarianteConverterDomainMapper.convertAbfragevarianteBauleitplanverfahrenModel2AbfragevarianteBaugenehmigungsverfahrenModel(
                     abfragevariante
                 );
             abfragevariantenSachbearbeitung.add(mappedBaugenehmigungsverfahrenVarianteModel);
