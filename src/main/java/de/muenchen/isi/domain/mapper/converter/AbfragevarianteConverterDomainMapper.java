@@ -73,6 +73,9 @@ public interface AbfragevarianteConverterDomainMapper {
      */
     @Mappings(
         {
+            @Mapping(target = "wesentlicheRechtsgrundlage", ignore = true),
+            @Mapping(target = "wesentlicheRechtsgrundlageFreieEingabe", ignore = true),
+            @Mapping(target = "wesentlicheRechtsgrundlageAngabenZurBefreiung", ignore = true),
             @Mapping(target = "stammdatenGueltigAb", ignore = true),
             @Mapping(target = "hasBauratendateiInput", ignore = true),
             @Mapping(target = "anmerkungBauratendateiInput", ignore = true),
