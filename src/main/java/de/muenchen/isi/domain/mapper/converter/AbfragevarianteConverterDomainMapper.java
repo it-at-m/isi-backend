@@ -4,14 +4,10 @@
  */
 package de.muenchen.isi.domain.mapper.converter;
 
-import de.muenchen.isi.configuration.MapstructConfiguration;
 import de.muenchen.isi.domain.mapper.BauabschnittDomainMapper;
 import de.muenchen.isi.domain.model.AbfragevarianteBaugenehmigungsverfahrenModel;
 import de.muenchen.isi.domain.model.AbfragevarianteBauleitplanverfahrenModel;
 import de.muenchen.isi.domain.model.AbfragevarianteWeiteresVerfahrenModel;
-import de.muenchen.isi.domain.model.BaugenehmigungsverfahrenModel;
-import de.muenchen.isi.domain.model.BauleitplanverfahrenModel;
-import de.muenchen.isi.domain.model.WeiteresVerfahrenModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import org.mapstruct.*;
 
@@ -22,32 +18,29 @@ public interface AbfragevarianteConverterDomainMapper {
      * @param abfragevarianteWeiteresVerfahrenModel {link AbfragevarianteWeiteresVerfahrenModel}
      * @return {link AbfragevarianteBauleitplanverfahrenModel}
      */
-    @Mappings(
-        {
-            @Mapping(target = "planart", ignore = true),
-            @Mapping(target = "planartFreieEingabe", ignore = true),
-            @Mapping(target = "sobonBerechnung", ignore = true),
-            @Mapping(target = "stammdatenGueltigAb", ignore = true),
-            @Mapping(target = "hasBauratendateiInput", ignore = true),
-            @Mapping(target = "anmerkungBauratendateiInput", ignore = true),
-            @Mapping(target = "bauratendateiInputBasis", ignore = true),
-            @Mapping(target = "bauratendateiInput", ignore = true),
-            @Mapping(target = "bedarfsmeldungFachreferate", ignore = true),
-            @Mapping(target = "bedarfsmeldungDokumenteFachreferate", ignore = true),
-            @Mapping(target = "bedarfsmeldungAbfrageersteller", ignore = true),
-            @Mapping(target = "bedarfsmeldungDokumenteAbfrageersteller", ignore = true),
-            @Mapping(target = "anmerkungFachreferate", ignore = true),
-            @Mapping(target = "anmerkungAbfrageersteller", ignore = true),
-            @Mapping(target = "ausgeloesterBedarfImBaugebietBeruecksichtigenKita", ignore = true),
-            @Mapping(target = "ausgeloesterBedarfMitversorgungImBplanKita", ignore = true),
-            @Mapping(target = "ausgeloesterBedarfMitversorgungInBestEinrichtungenKita", ignore = true),
-            @Mapping(target = "ausgeloesterBedarfMitversorgungInBestEinrichtungenNachAusbauKita", ignore = true),
-            @Mapping(target = "ausgeloesterBedarfImBaugebietBeruecksichtigenSchule", ignore = true),
-            @Mapping(target = "ausgeloesterBedarfMitversorgungImBplanSchule", ignore = true),
-            @Mapping(target = "ausgeloesterBedarfMitversorgungInBestEinrichtungenSchule", ignore = true),
-            @Mapping(target = "ausgeloesterBedarfMitversorgungInBestEinrichtungenNachAusbauSchule", ignore = true),
-        }
-    )
+    @Mapping(target = "planart", ignore = true)
+    @Mapping(target = "planartFreieEingabe", ignore = true)
+    @Mapping(target = "sobonBerechnung", ignore = true)
+    @Mapping(target = "stammdatenGueltigAb", ignore = true)
+    @Mapping(target = "hasBauratendateiInput", ignore = true)
+    @Mapping(target = "anmerkungBauratendateiInput", ignore = true)
+    @Mapping(target = "bauratendateiInputBasis", ignore = true)
+    @Mapping(target = "bauratendateiInput", ignore = true)
+    @Mapping(target = "bedarfsmeldungFachreferate", ignore = true)
+    @Mapping(target = "bedarfsmeldungDokumenteFachreferate", ignore = true)
+    @Mapping(target = "bedarfsmeldungAbfrageersteller", ignore = true)
+    @Mapping(target = "bedarfsmeldungDokumenteAbfrageersteller", ignore = true)
+    @Mapping(target = "anmerkungFachreferate", ignore = true)
+    @Mapping(target = "anmerkungAbfrageersteller", ignore = true)
+    @Mapping(target = "ausgeloesterBedarfImBaugebietBeruecksichtigenKita", ignore = true)
+    @Mapping(target = "ausgeloesterBedarfMitversorgungImBplanKita", ignore = true)
+    @Mapping(target = "ausgeloesterBedarfMitversorgungInBestEinrichtungenKita", ignore = true)
+    @Mapping(target = "ausgeloesterBedarfMitversorgungInBestEinrichtungenNachAusbauKita", ignore = true)
+    @Mapping(target = "ausgeloesterBedarfImBaugebietBeruecksichtigenSchule", ignore = true)
+    @Mapping(target = "ausgeloesterBedarfMitversorgungImBplanSchule", ignore = true)
+    @Mapping(target = "ausgeloesterBedarfMitversorgungInBestEinrichtungenSchule", ignore = true)
+    @Mapping(target = "ausgeloesterBedarfMitversorgungInBestEinrichtungenNachAusbauSchule", ignore = true)
+    @InheritConfiguration(name = "ignoreCommonFields") // MapStruct generiert keinen Code für die AbfrageDto Attribute in diesem Mapper
     AbfragevarianteBauleitplanverfahrenModel convertAbfragevarianteWeiteresVerfahrenModel2AbfragevarianteBauleitplanverfahrenModel(
         final AbfragevarianteWeiteresVerfahrenModel abfragevarianteWeiteresVerfahrenModel
     );
@@ -71,32 +64,29 @@ public interface AbfragevarianteConverterDomainMapper {
      * @param abfragevarianteWeiteresVerfahrenModel {link AbfragevarianteWeiteresVerfahrenModel}
      * @return {link AbfragevarianteBaugenehmigungsverfahrenModel}
      */
-    @Mappings(
-        {
-            @Mapping(target = "wesentlicheRechtsgrundlage", ignore = true),
-            @Mapping(target = "wesentlicheRechtsgrundlageFreieEingabe", ignore = true),
-            @Mapping(target = "wesentlicheRechtsgrundlageAngabenZurBefreiung", ignore = true),
-            @Mapping(target = "stammdatenGueltigAb", ignore = true),
-            @Mapping(target = "hasBauratendateiInput", ignore = true),
-            @Mapping(target = "anmerkungBauratendateiInput", ignore = true),
-            @Mapping(target = "bauratendateiInputBasis", ignore = true),
-            @Mapping(target = "bauratendateiInput", ignore = true),
-            @Mapping(target = "bedarfsmeldungFachreferate", ignore = true),
-            @Mapping(target = "bedarfsmeldungDokumenteFachreferate", ignore = true),
-            @Mapping(target = "bedarfsmeldungAbfrageersteller", ignore = true),
-            @Mapping(target = "bedarfsmeldungDokumenteAbfrageersteller", ignore = true),
-            @Mapping(target = "anmerkungFachreferate", ignore = true),
-            @Mapping(target = "anmerkungAbfrageersteller", ignore = true),
-            @Mapping(target = "ausgeloesterBedarfImBaugebietBeruecksichtigenKita", ignore = true),
-            @Mapping(target = "ausgeloesterBedarfMitversorgungImBplanKita", ignore = true),
-            @Mapping(target = "ausgeloesterBedarfMitversorgungInBestEinrichtungenKita", ignore = true),
-            @Mapping(target = "ausgeloesterBedarfMitversorgungInBestEinrichtungenNachAusbauKita", ignore = true),
-            @Mapping(target = "ausgeloesterBedarfImBaugebietBeruecksichtigenSchule", ignore = true),
-            @Mapping(target = "ausgeloesterBedarfMitversorgungImBplanSchule", ignore = true),
-            @Mapping(target = "ausgeloesterBedarfMitversorgungInBestEinrichtungenSchule", ignore = true),
-            @Mapping(target = "ausgeloesterBedarfMitversorgungInBestEinrichtungenNachAusbauSchule", ignore = true),
-        }
-    )
+    @Mapping(target = "wesentlicheRechtsgrundlage", ignore = true)
+    @Mapping(target = "wesentlicheRechtsgrundlageFreieEingabe", ignore = true)
+    @Mapping(target = "wesentlicheRechtsgrundlageAngabenZurBefreiung", ignore = true)
+    @Mapping(target = "stammdatenGueltigAb", ignore = true)
+    @Mapping(target = "hasBauratendateiInput", ignore = true)
+    @Mapping(target = "anmerkungBauratendateiInput", ignore = true)
+    @Mapping(target = "bauratendateiInputBasis", ignore = true)
+    @Mapping(target = "bauratendateiInput", ignore = true)
+    @Mapping(target = "bedarfsmeldungFachreferate", ignore = true)
+    @Mapping(target = "bedarfsmeldungDokumenteFachreferate", ignore = true)
+    @Mapping(target = "bedarfsmeldungAbfrageersteller", ignore = true)
+    @Mapping(target = "bedarfsmeldungDokumenteAbfrageersteller", ignore = true)
+    @Mapping(target = "anmerkungFachreferate", ignore = true)
+    @Mapping(target = "anmerkungAbfrageersteller", ignore = true)
+    @Mapping(target = "ausgeloesterBedarfImBaugebietBeruecksichtigenKita", ignore = true)
+    @Mapping(target = "ausgeloesterBedarfMitversorgungImBplanKita", ignore = true)
+    @Mapping(target = "ausgeloesterBedarfMitversorgungInBestEinrichtungenKita", ignore = true)
+    @Mapping(target = "ausgeloesterBedarfMitversorgungInBestEinrichtungenNachAusbauKita", ignore = true)
+    @Mapping(target = "ausgeloesterBedarfImBaugebietBeruecksichtigenSchule", ignore = true)
+    @Mapping(target = "ausgeloesterBedarfMitversorgungImBplanSchule", ignore = true)
+    @Mapping(target = "ausgeloesterBedarfMitversorgungInBestEinrichtungenSchule", ignore = true)
+    @Mapping(target = "ausgeloesterBedarfMitversorgungInBestEinrichtungenNachAusbauSchule", ignore = true)
+    @InheritConfiguration(name = "ignoreCommonFields") // MapStruct generiert keinen Code für die AbfrageDto Attribute in diesem Mapper
     AbfragevarianteBaugenehmigungsverfahrenModel convertAbfragevarianteWeiteresVerfahrenModel2AbfragevarianteBaugenehmigungsverfahrenModel(
         final AbfragevarianteWeiteresVerfahrenModel abfragevarianteWeiteresVerfahrenModel
     );
@@ -120,36 +110,33 @@ public interface AbfragevarianteConverterDomainMapper {
      * @param abfragevarianteBauleitplanverfahrenModel {link AbfragevarianteBauleitplanverfahrenModel}
      * @return {link AbfragevarianteBaugenehmigungsverfahrenModel}
      */
-    @Mappings(
-        {
-            @Mapping(target = "wesentlicheRechtsgrundlage", ignore = true),
-            @Mapping(target = "wesentlicheRechtsgrundlageFreieEingabe", ignore = true),
-            @Mapping(target = "wesentlicheRechtsgrundlageAngabenZurBefreiung", ignore = true),
-            @Mapping(target = "gfWohnenBaurechtlichGenehmigt", ignore = true),
-            @Mapping(target = "gfWohnenBaurechtlichFestgesetzt", ignore = true),
-            @Mapping(target = "weBaurechtlichGenehmigt", ignore = true),
-            @Mapping(target = "weBaurechtlichFestgesetzt", ignore = true),
-            @Mapping(target = "stammdatenGueltigAb", ignore = true),
-            @Mapping(target = "hasBauratendateiInput", ignore = true),
-            @Mapping(target = "anmerkungBauratendateiInput", ignore = true),
-            @Mapping(target = "bauratendateiInputBasis", ignore = true),
-            @Mapping(target = "bauratendateiInput", ignore = true),
-            @Mapping(target = "bedarfsmeldungFachreferate", ignore = true),
-            @Mapping(target = "bedarfsmeldungDokumenteFachreferate", ignore = true),
-            @Mapping(target = "bedarfsmeldungAbfrageersteller", ignore = true),
-            @Mapping(target = "bedarfsmeldungDokumenteAbfrageersteller", ignore = true),
-            @Mapping(target = "anmerkungFachreferate", ignore = true),
-            @Mapping(target = "anmerkungAbfrageersteller", ignore = true),
-            @Mapping(target = "ausgeloesterBedarfImBaugebietBeruecksichtigenKita", ignore = true),
-            @Mapping(target = "ausgeloesterBedarfMitversorgungImBplanKita", ignore = true),
-            @Mapping(target = "ausgeloesterBedarfMitversorgungInBestEinrichtungenKita", ignore = true),
-            @Mapping(target = "ausgeloesterBedarfMitversorgungInBestEinrichtungenNachAusbauKita", ignore = true),
-            @Mapping(target = "ausgeloesterBedarfImBaugebietBeruecksichtigenSchule", ignore = true),
-            @Mapping(target = "ausgeloesterBedarfMitversorgungImBplanSchule", ignore = true),
-            @Mapping(target = "ausgeloesterBedarfMitversorgungInBestEinrichtungenSchule", ignore = true),
-            @Mapping(target = "ausgeloesterBedarfMitversorgungInBestEinrichtungenNachAusbauSchule", ignore = true),
-        }
-    )
+    @Mapping(target = "wesentlicheRechtsgrundlage", ignore = true)
+    @Mapping(target = "wesentlicheRechtsgrundlageFreieEingabe", ignore = true)
+    @Mapping(target = "wesentlicheRechtsgrundlageAngabenZurBefreiung", ignore = true)
+    @Mapping(target = "gfWohnenBaurechtlichGenehmigt", ignore = true)
+    @Mapping(target = "gfWohnenBaurechtlichFestgesetzt", ignore = true)
+    @Mapping(target = "weBaurechtlichGenehmigt", ignore = true)
+    @Mapping(target = "weBaurechtlichFestgesetzt", ignore = true)
+    @Mapping(target = "stammdatenGueltigAb", ignore = true)
+    @Mapping(target = "hasBauratendateiInput", ignore = true)
+    @Mapping(target = "anmerkungBauratendateiInput", ignore = true)
+    @Mapping(target = "bauratendateiInputBasis", ignore = true)
+    @Mapping(target = "bauratendateiInput", ignore = true)
+    @Mapping(target = "bedarfsmeldungFachreferate", ignore = true)
+    @Mapping(target = "bedarfsmeldungDokumenteFachreferate", ignore = true)
+    @Mapping(target = "bedarfsmeldungAbfrageersteller", ignore = true)
+    @Mapping(target = "bedarfsmeldungDokumenteAbfrageersteller", ignore = true)
+    @Mapping(target = "anmerkungFachreferate", ignore = true)
+    @Mapping(target = "anmerkungAbfrageersteller", ignore = true)
+    @Mapping(target = "ausgeloesterBedarfImBaugebietBeruecksichtigenKita", ignore = true)
+    @Mapping(target = "ausgeloesterBedarfMitversorgungImBplanKita", ignore = true)
+    @Mapping(target = "ausgeloesterBedarfMitversorgungInBestEinrichtungenKita", ignore = true)
+    @Mapping(target = "ausgeloesterBedarfMitversorgungInBestEinrichtungenNachAusbauKita", ignore = true)
+    @Mapping(target = "ausgeloesterBedarfImBaugebietBeruecksichtigenSchule", ignore = true)
+    @Mapping(target = "ausgeloesterBedarfMitversorgungImBplanSchule", ignore = true)
+    @Mapping(target = "ausgeloesterBedarfMitversorgungInBestEinrichtungenSchule", ignore = true)
+    @Mapping(target = "ausgeloesterBedarfMitversorgungInBestEinrichtungenNachAusbauSchule", ignore = true)
+    @InheritConfiguration(name = "ignoreCommonFields") // MapStruct generiert keinen Code für die AbfrageDto Attribute in diesem Mapper
     AbfragevarianteBaugenehmigungsverfahrenModel convertAbfragevarianteBauleitplanverfahrenModel2AbfragevarianteBaugenehmigungsverfahrenModel(
         final AbfragevarianteBauleitplanverfahrenModel abfragevarianteBauleitplanverfahrenModel
     );

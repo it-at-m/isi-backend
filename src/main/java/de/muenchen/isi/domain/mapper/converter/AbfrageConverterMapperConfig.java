@@ -1,6 +1,7 @@
 package de.muenchen.isi.domain.mapper.converter;
 
 import de.muenchen.isi.domain.model.AbfrageModel;
+import de.muenchen.isi.domain.model.AbfragevarianteModel;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.MapperConfig;
 import org.mapstruct.Mapping;
@@ -23,4 +24,8 @@ public interface AbfrageConverterMapperConfig {
     @Mapping(target = "artAbfrage", ignore = true)
     @Mapping(target = "bearbeitungshistorie", ignore = true)
     void ignoreCommonFields(AbfrageModel source, @MappingTarget AbfrageModel target);
+
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "version", ignore = true)
+    void ignoreCommonFields(AbfragevarianteModel source, @MappingTarget AbfragevarianteModel target);
 }
