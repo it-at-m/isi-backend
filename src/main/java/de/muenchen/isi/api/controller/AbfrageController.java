@@ -347,7 +347,7 @@ public class AbfrageController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/wv-in-blv-uebernehmen{id}")
+    @GetMapping("/wv-in-blv-uebernehmen/{id}")
     @Transactional(readOnly = true)
     @Operation(summary = "Datenübernahme von Weiteres Verfahren (WV) in Bauleitplanverfahren (BLV).")
     @ApiResponses(
@@ -373,7 +373,7 @@ public class AbfrageController {
         return ResponseEntity.ok(dto);
     }
 
-    @GetMapping("/wv-in-bgv-uebernehmen{id}")
+    @GetMapping("/wv-in-bgv-uebernehmen/{id}")
     @Transactional(readOnly = true)
     @Operation(summary = "Datenübernahme von Weiteres Verfahren (WV) in Baugenehmigungsverfahren (BGV).")
     @ApiResponses(
@@ -399,7 +399,7 @@ public class AbfrageController {
         return ResponseEntity.ok(dto);
     }
 
-    @GetMapping("/blv-in-bgv-uebernehmen{id}")
+    @GetMapping("/blv-in-bgv-uebernehmen/{id}")
     @Transactional(readOnly = true)
     @Operation(summary = "Datenübernahme von Bauleileitplanverfahren (BLV) in Baugenehmigungsverfahren (BGV).")
     @ApiResponses(
