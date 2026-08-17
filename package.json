@@ -11,7 +11,7 @@
     "husky": "9.1.7",
     "vite": "7.3.2",
     "lint-staged": "16.4.0",
-    "prettier-plugin-java": "2.8.1",
+    "prettier-plugin-java": "2.10.3",
     "prettier": "3.8.1"
   },
   "lint-staged": {
