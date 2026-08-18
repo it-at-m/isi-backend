@@ -20,9 +20,7 @@ public interface SobonOrientierungswertSozialeInfrastrukturRepository
      * @param foerderartBezeichnung Die Bezeichnung der Förderart, nach der gesucht werden soll.
      * @return Ein {@link Optional} mit dem gefundenen Eintrag, oder ein leeres {@link Optional}, falls kein Eintrag gefunden wurde.
      */
-    Optional<
-        SobonOrientierungswertSozialeInfrastruktur
-    > findFirstByEinrichtungstypAndFoerderartBezeichnungAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
+    Optional<SobonOrientierungswertSozialeInfrastruktur> findFirstByEinrichtungstypAndFoerderartBezeichnungAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
         final InfrastruktureinrichtungTyp einrichtungstyp,
         final String foerderartBezeichnung,
         final LocalDate gueltigAb
@@ -38,9 +36,7 @@ public interface SobonOrientierungswertSozialeInfrastrukturRepository
      * @param foerderartBezeichnung Die Bezeichnung der Förderart, nach der gesucht werden soll.
      * @return Ein {@link Optional} mit dem gefundenen Eintrag, oder ein leeres {@link Optional}, falls kein Eintrag gefunden wurde.
      */
-    Optional<
-        SobonOrientierungswertSozialeInfrastruktur
-    > findFirstByEinrichtungstypAndFoerderartBezeichnungAndJahrBezeichnung(
+    Optional<SobonOrientierungswertSozialeInfrastruktur> findFirstByEinrichtungstypAndFoerderartBezeichnungAndJahrBezeichnung(
         InfrastruktureinrichtungTyp einrichtungstyp,
         String foerderartBezeichnung,
         String jahrBezeichnung

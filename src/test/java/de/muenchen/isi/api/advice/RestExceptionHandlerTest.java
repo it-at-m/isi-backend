@@ -35,6 +35,7 @@ import org.springframework.beans.ConversionNotSupportedException;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpInputMessage;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -519,7 +520,8 @@ class RestExceptionHandlerTest {
     @Test
     void handleHttpMessageNotReadable() {
         final HttpMessageNotReadableException httpMessageNotReadableException = new HttpMessageNotReadableException(
-            "test"
+            "test",
+            (HttpInputMessage) null
         );
 
         final ResponseEntity<Object> response = this.restExceptionHandler.handleHttpMessageNotReadable(

@@ -31,7 +31,7 @@ public class EinrichtungstraegerValidator
      */
     @Override
     public boolean isValid(final InfrastruktureinrichtungDto value, final ConstraintValidatorContext context) {
-        return (value != null && einrichtungstraegerValid(value));
+        return value != null && einrichtungstraegerValid(value);
     }
 
     private boolean einrichtungstraegerValid(final InfrastruktureinrichtungDto value) {

@@ -87,13 +87,11 @@ public class KommentarService {
     }
 
     private Kommentar getKommentarById(final UUID id) throws EntityNotFoundException {
-        return kommentarRepository
-            .findById(id)
-            .orElseThrow(() -> {
-                final var message = "Kommentar nicht gefunden.";
-                log.error(message);
-                return new EntityNotFoundException(message);
-            });
+        return kommentarRepository.findById(id).orElseThrow(() -> {
+            final var message = "Kommentar nicht gefunden.";
+            log.error(message);
+            return new EntityNotFoundException(message);
+        });
     }
 
     /**

@@ -17,9 +17,7 @@ public interface StaedtebaulicheOrientierungswertRepository
      * @param gueltigAb             Das Gültigkeitsdatum, vor oder am dem gesucht werden soll (einschließlich).
      * @return Ein {@link Optional} mit dem gefundenen Eintrag, oder ein leeres {@link Optional}, falls kein Eintrag gefunden wurde.
      */
-    Optional<
-        StaedtebaulicheOrientierungswert
-    > findFirstByFoerderartBezeichnungAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
+    Optional<StaedtebaulicheOrientierungswert> findFirstByFoerderartBezeichnungAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
         String foerderartBezeichnung,
         LocalDate gueltigAb
     );

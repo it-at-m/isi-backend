@@ -69,7 +69,9 @@ public class NfcHelper {
      * @see Normalizer#normalize(CharSequence, Normalizer.Form)
      */
     public static String[] nfcConverter(final String[] original) {
-        return Arrays.stream(original).map(NfcHelper::nfcConverter).toArray(String[]::new);
+        return Arrays.stream(original)
+            .map(NfcHelper::nfcConverter)
+            .toArray(String[]::new);
     }
 
     /**
@@ -120,7 +122,9 @@ public class NfcHelper {
         if (original == null) {
             return null;
         }
-        return Arrays.stream(original).map(NfcHelper::nfcConverter).toArray(Cookie[]::new);
+        return Arrays.stream(original)
+            .map(NfcHelper::nfcConverter)
+            .toArray(Cookie[]::new);
     }
 
     /**

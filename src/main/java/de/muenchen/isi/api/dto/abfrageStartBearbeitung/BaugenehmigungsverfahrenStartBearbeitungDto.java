@@ -20,13 +20,9 @@ public class BaugenehmigungsverfahrenStartBearbeitungDto extends AbfrageStartBea
 
     @NotEmpty
     @Size(min = 1, max = 5)
-    private List<
-        @NotNull @Valid AbfragevarianteBaugenehmigungsverfahrenSachbearbeitungStartBearbeitungDto
-    > abfragevariantenBaugenehmigungsverfahren;
+    private List<@NotNull @Valid AbfragevarianteBaugenehmigungsverfahrenSachbearbeitungStartBearbeitungDto> abfragevariantenBaugenehmigungsverfahren;
 
     @NotNull
     @Size(min = 0, max = 5)
-    private List<
-        @NotNull @Valid AbfragevarianteBaugenehmigungsverfahrenStartBearbeitungDto
-    > abfragevariantenSachbearbeitungBaugenehmigungsverfahren;
+    private List<@NotNull @Valid AbfragevarianteBaugenehmigungsverfahrenStartBearbeitungDto> abfragevariantenSachbearbeitungBaugenehmigungsverfahren;
 }

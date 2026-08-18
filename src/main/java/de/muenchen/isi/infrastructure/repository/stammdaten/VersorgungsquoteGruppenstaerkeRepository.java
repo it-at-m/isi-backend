@@ -16,9 +16,7 @@ public interface VersorgungsquoteGruppenstaerkeRepository extends JpaRepository<
      * @param gueltigAb                   Das Gültigkeitsdatum, vor oder am dem gesucht werden soll (einschließlich).
      * @return Ein {@link Optional} mit dem gefundenen Eintrag, oder ein leeres {@link Optional}, falls kein Eintrag gefunden wurde.
      */
-    Optional<
-        VersorgungsquoteGruppenstaerke
-    > findFirstByInfrastruktureinrichtungTypAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
+    Optional<VersorgungsquoteGruppenstaerke> findFirstByInfrastruktureinrichtungTypAndGueltigAbIsLessThanEqualOrderByGueltigAbDesc(
         InfrastruktureinrichtungTyp infrastruktureinrichtungTyp,
         LocalDate gueltigAb
     );

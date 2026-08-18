@@ -142,27 +142,25 @@ public class AbfragevarianteWeiteresVerfahren extends Abfragevariante {
     private SobonOrientierungswertJahr sobonOrientierungswertJahrPlanungsursaechlich;
 
     @Embedded
-    @AttributeOverrides(
-        {
-            @AttributeOverride(
-                name = "isASobonBerechnung",
-                column = @Column(name = "is_a_sobon_berechnung", nullable = true)
-            ),
-            @AttributeOverride(
-                name = "sobonFoerdermix.bezeichnung",
-                column = @Column(name = "sobon_foerdermix_bezeichnung", nullable = true)
-            ),
-            @AttributeOverride(
-                name = "sobonFoerdermix.bezeichnungJahr",
-                column = @Column(name = "sobon_foerdermix_bezeichnung_jahr", nullable = true)
-            ),
-            @AttributeOverride(
-                name = "sobonFoerdermix.sobonOrientierungswertJahrSobonUrsaechlich",
-                column = @Column(name = "sobon_orientierungswert_jahr_sobon_ursaechlich", nullable = true)
-            ),
-            @AttributeOverride(name = "bauratenmethodik", column = @Column(name = "bauratenmethodik", nullable = true)),
-        }
-    )
+    @AttributeOverrides({
+        @AttributeOverride(
+            name = "isASobonBerechnung",
+            column = @Column(name = "is_a_sobon_berechnung", nullable = true)
+        ),
+        @AttributeOverride(
+            name = "sobonFoerdermix.bezeichnung",
+            column = @Column(name = "sobon_foerdermix_bezeichnung", nullable = true)
+        ),
+        @AttributeOverride(
+            name = "sobonFoerdermix.bezeichnungJahr",
+            column = @Column(name = "sobon_foerdermix_bezeichnung_jahr", nullable = true)
+        ),
+        @AttributeOverride(
+            name = "sobonFoerdermix.sobonOrientierungswertJahrSobonUrsaechlich",
+            column = @Column(name = "sobon_orientierungswert_jahr_sobon_ursaechlich", nullable = true)
+        ),
+        @AttributeOverride(name = "bauratenmethodik", column = @Column(name = "bauratenmethodik", nullable = true)),
+    })
     private SobonBerechnung sobonBerechnung;
 
     @Column

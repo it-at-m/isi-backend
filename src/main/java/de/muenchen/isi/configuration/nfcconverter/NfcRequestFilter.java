@@ -84,7 +84,7 @@ public class NfcRequestFilter extends OncePerRequestFilter {
 
         final String contentType = request.getContentType();
         log.debug("ContentType for request with URI: \"{}\"", contentType);
-        if ((contentTypes != null) && (contentTypes.contains(contentType))) {
+        if (contentTypes != null && contentTypes.contains(contentType)) {
             log.debug("Processing request {}.", request.getRequestURI());
             filterChain.doFilter(new NfcRequest(request, contentTypes), response);
         } else {

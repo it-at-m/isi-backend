@@ -16,13 +16,9 @@ public class WeiteresVerfahrenEinplanungBedarfeDto extends AbfrageEinplanungBeda
 
     @NotEmpty
     @Size(min = 1, max = 5)
-    private List<
-        @NotNull @Valid AbfragevarianteWeiteresVerfahrenEinplanungBedarfeDto
-    > abfragevariantenWeiteresVerfahren;
+    private List<@NotNull @Valid AbfragevarianteWeiteresVerfahrenEinplanungBedarfeDto> abfragevariantenWeiteresVerfahren;
 
     @NotNull
     @Size(min = 0, max = 5)
-    private List<
-        @NotNull @Valid AbfragevarianteWeiteresVerfahrenEinplanungBedarfeDto
-    > abfragevariantenSachbearbeitungWeiteresVerfahren;
+    private List<@NotNull @Valid AbfragevarianteWeiteresVerfahrenEinplanungBedarfeDto> abfragevariantenSachbearbeitungWeiteresVerfahren;
 }

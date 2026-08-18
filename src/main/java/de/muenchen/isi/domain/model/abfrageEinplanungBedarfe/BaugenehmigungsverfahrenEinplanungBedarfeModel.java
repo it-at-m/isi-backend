@@ -10,11 +10,7 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 public class BaugenehmigungsverfahrenEinplanungBedarfeModel extends AbfrageEinplanungBedarfeModel {
 
-    private List<
-        AbfragevarianteBaugenehmigungsverfahrenEinplanungBedarfeModel
-    > abfragevariantenBaugenehmigungsverfahren;
+    private List<AbfragevarianteBaugenehmigungsverfahrenEinplanungBedarfeModel> abfragevariantenBaugenehmigungsverfahren;
 
-    private List<
-        AbfragevarianteBaugenehmigungsverfahrenEinplanungBedarfeModel
-    > abfragevariantenSachbearbeitungBaugenehmigungsverfahren;
+    private List<AbfragevarianteBaugenehmigungsverfahrenEinplanungBedarfeModel> abfragevariantenSachbearbeitungBaugenehmigungsverfahren;
 }

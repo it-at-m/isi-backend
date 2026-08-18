@@ -84,8 +84,7 @@ public class SendKommentarBauvorhabenNotificationService {
         sb.append("Im Bauvorhaben wurde ein Kommentar ").append(bodyAction).append(".");
         sb.append("\n\nBauvorhaben: ").append(StringUtils.defaultIfEmpty(bauvorhabenName, ""));
         if (StringUtils.isNotEmpty(isiEnvironmentUrl) && bauvorhabenId != null) {
-            sb
-                .append("\nLink zum Bauvorhaben: ")
+            sb.append("\nLink zum Bauvorhaben: ")
                 .append(isiEnvironmentUrl)
                 .append("/#/bauvorhaben/")
                 .append(bauvorhabenId);

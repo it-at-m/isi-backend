@@ -81,13 +81,11 @@ public abstract class AbfrageDomainMapper {
     public void afterMappingModel2Entity(final AbfrageModel model, @MappingTarget final Abfrage entity)
         throws EntityNotFoundException {
         if (ObjectUtils.isNotEmpty(model.getBauvorhaben())) {
-            final var bauvorhaben = bauvorhabenRepository
-                .findById(model.getBauvorhaben())
-                .orElseThrow(() -> {
-                    final var message = "Bauvorhaben nicht gefunden";
-                    log.error(message);
-                    return new EntityNotFoundException(message);
-                });
+            final var bauvorhaben = bauvorhabenRepository.findById(model.getBauvorhaben()).orElseThrow(() -> {
+                final var message = "Bauvorhaben nicht gefunden";
+                log.error(message);
+                return new EntityNotFoundException(message);
+            });
             entity.setBauvorhaben(bauvorhaben);
         }
     }
@@ -109,19 +107,17 @@ public abstract class AbfrageDomainMapper {
         }
     }
 
-    @Mappings(
-        {
-            @Mapping(target = "id", ignore = true),
-            @Mapping(target = "statusAbfrage", ignore = true),
-            @Mapping(target = "sub", ignore = true),
-            @Mapping(target = "createdDateTime", ignore = true),
-            @Mapping(target = "lastModifiedDateTime", ignore = true),
-            @Mapping(target = "abfragevariantenBauleitplanverfahren", ignore = true),
-            @Mapping(target = "abfragevariantenSachbearbeitungBauleitplanverfahren", ignore = true),
-            @Mapping(target = "bearbeitungshistorie", ignore = true),
-            @Mapping(target = "bauratenmethodikVorbelegung", ignore = true),
-        }
-    )
+    @Mappings({
+        @Mapping(target = "id", ignore = true),
+        @Mapping(target = "statusAbfrage", ignore = true),
+        @Mapping(target = "sub", ignore = true),
+        @Mapping(target = "createdDateTime", ignore = true),
+        @Mapping(target = "lastModifiedDateTime", ignore = true),
+        @Mapping(target = "abfragevariantenBauleitplanverfahren", ignore = true),
+        @Mapping(target = "abfragevariantenSachbearbeitungBauleitplanverfahren", ignore = true),
+        @Mapping(target = "bearbeitungshistorie", ignore = true),
+        @Mapping(target = "bauratenmethodikVorbelegung", ignore = true),
+    })
     public abstract BauleitplanverfahrenModel request2Model(
         final BauleitplanverfahrenAngelegtModel request,
         @MappingTarget final BauleitplanverfahrenModel model
@@ -161,18 +157,16 @@ public abstract class AbfrageDomainMapper {
         model.setAbfragevariantenBauleitplanverfahren(abfragevarianten);
     }
 
-    @Mappings(
-        {
-            @Mapping(target = "id", ignore = true),
-            @Mapping(target = "statusAbfrage", ignore = true),
-            @Mapping(target = "sub", ignore = true),
-            @Mapping(target = "createdDateTime", ignore = true),
-            @Mapping(target = "lastModifiedDateTime", ignore = true),
-            @Mapping(target = "abfragevariantenBaugenehmigungsverfahren", ignore = true),
-            @Mapping(target = "abfragevariantenSachbearbeitungBaugenehmigungsverfahren", ignore = true),
-            @Mapping(target = "bearbeitungshistorie", ignore = true),
-        }
-    )
+    @Mappings({
+        @Mapping(target = "id", ignore = true),
+        @Mapping(target = "statusAbfrage", ignore = true),
+        @Mapping(target = "sub", ignore = true),
+        @Mapping(target = "createdDateTime", ignore = true),
+        @Mapping(target = "lastModifiedDateTime", ignore = true),
+        @Mapping(target = "abfragevariantenBaugenehmigungsverfahren", ignore = true),
+        @Mapping(target = "abfragevariantenSachbearbeitungBaugenehmigungsverfahren", ignore = true),
+        @Mapping(target = "bearbeitungshistorie", ignore = true),
+    })
     public abstract BaugenehmigungsverfahrenModel request2Model(
         final BaugenehmigungsverfahrenAngelegtModel request,
         @MappingTarget final BaugenehmigungsverfahrenModel model
@@ -212,18 +206,16 @@ public abstract class AbfrageDomainMapper {
         model.setAbfragevariantenBaugenehmigungsverfahren(abfragevarianten);
     }
 
-    @Mappings(
-        {
-            @Mapping(target = "id", ignore = true),
-            @Mapping(target = "statusAbfrage", ignore = true),
-            @Mapping(target = "sub", ignore = true),
-            @Mapping(target = "createdDateTime", ignore = true),
-            @Mapping(target = "lastModifiedDateTime", ignore = true),
-            @Mapping(target = "abfragevariantenWeiteresVerfahren", ignore = true),
-            @Mapping(target = "abfragevariantenSachbearbeitungWeiteresVerfahren", ignore = true),
-            @Mapping(target = "bearbeitungshistorie", ignore = true),
-        }
-    )
+    @Mappings({
+        @Mapping(target = "id", ignore = true),
+        @Mapping(target = "statusAbfrage", ignore = true),
+        @Mapping(target = "sub", ignore = true),
+        @Mapping(target = "createdDateTime", ignore = true),
+        @Mapping(target = "lastModifiedDateTime", ignore = true),
+        @Mapping(target = "abfragevariantenWeiteresVerfahren", ignore = true),
+        @Mapping(target = "abfragevariantenSachbearbeitungWeiteresVerfahren", ignore = true),
+        @Mapping(target = "bearbeitungshistorie", ignore = true),
+    })
     public abstract WeiteresVerfahrenModel request2Model(
         final WeiteresVerfahrenAngelegtModel request,
         @MappingTarget final WeiteresVerfahrenModel model
@@ -264,14 +256,12 @@ public abstract class AbfrageDomainMapper {
     }
 
     @BeanMapping(ignoreByDefault = true)
-    @Mappings(
-        {
-            @Mapping(target = "version", ignore = false),
-            @Mapping(target = "verortung", ignore = false),
-            @Mapping(target = "bauvorhaben", ignore = false),
-            @Mapping(target = "linkEakte", ignore = false),
-        }
-    )
+    @Mappings({
+        @Mapping(target = "version", ignore = false),
+        @Mapping(target = "verortung", ignore = false),
+        @Mapping(target = "bauvorhaben", ignore = false),
+        @Mapping(target = "linkEakte", ignore = false),
+    })
     public abstract BauleitplanverfahrenModel request2Model(
         final BauleitplanverfahrenStartBearbeitungModel request,
         @MappingTarget final BauleitplanverfahrenModel response
@@ -329,14 +319,12 @@ public abstract class AbfrageDomainMapper {
     }
 
     @BeanMapping(ignoreByDefault = true)
-    @Mappings(
-        {
-            @Mapping(target = "version", ignore = false),
-            @Mapping(target = "verortung", ignore = false),
-            @Mapping(target = "bauvorhaben", ignore = false),
-            @Mapping(target = "linkEakte", ignore = false),
-        }
-    )
+    @Mappings({
+        @Mapping(target = "version", ignore = false),
+        @Mapping(target = "verortung", ignore = false),
+        @Mapping(target = "bauvorhaben", ignore = false),
+        @Mapping(target = "linkEakte", ignore = false),
+    })
     public abstract BaugenehmigungsverfahrenModel request2Model(
         final BaugenehmigungsverfahrenStartBearbeitungModel request,
         @MappingTarget final BaugenehmigungsverfahrenModel response
@@ -394,14 +382,12 @@ public abstract class AbfrageDomainMapper {
     }
 
     @BeanMapping(ignoreByDefault = true)
-    @Mappings(
-        {
-            @Mapping(target = "version", ignore = false),
-            @Mapping(target = "verortung", ignore = false),
-            @Mapping(target = "bauvorhaben", ignore = false),
-            @Mapping(target = "linkEakte", ignore = false),
-        }
-    )
+    @Mappings({
+        @Mapping(target = "version", ignore = false),
+        @Mapping(target = "verortung", ignore = false),
+        @Mapping(target = "bauvorhaben", ignore = false),
+        @Mapping(target = "linkEakte", ignore = false),
+    })
     public abstract WeiteresVerfahrenModel request2Model(
         final WeiteresVerfahrenStartBearbeitungModel request,
         @MappingTarget final WeiteresVerfahrenModel response

@@ -8,10 +8,10 @@ import lombok.Getter;
 public enum Verfahrensstand implements ILookup {
     UNSPECIFIED(ILookup.UNSPECIFIED, new String[] {}),
 
-    SIMULIERT_VORBEREITUNG_AUFSTELLUNGSBESCHLUSS(
-        "Simuliert (Vorbereitung Aufstellungsbeschluss)",
-        new String[] { "Vorbereitung", "Aufstellungsbeschluss" }
-    ),
+    SIMULIERT_VORBEREITUNG_AUFSTELLUNGSBESCHLUSS("Simuliert (Vorbereitung Aufstellungsbeschluss)", new String[] {
+        "Vorbereitung",
+        "Aufstellungsbeschluss",
+    }),
 
     SIMULIERT_VORBEREITUNG_WETTBEWERBAUSLOBUNG(
         "Simuliert (Aufstellungsbeschluss / Vorbereitung Auslobung Wettbewerb)",
@@ -33,10 +33,10 @@ public enum Verfahrensstand implements ILookup {
         new String[] { "Vorbereitung", "Satzungsbeschluss" }
     ),
 
-    INKRAFTGETRETEN_VEROEFFENTLICHUNG_AMTSBLATT(
-        "Inkraftgetreten (Veröffentlichung Amtsblatt)",
-        new String[] { "Inkrafttreten", "Amtsblatt" }
-    ),
+    INKRAFTGETRETEN_VEROEFFENTLICHUNG_AMTSBLATT("Inkraftgetreten (Veröffentlichung Amtsblatt)", new String[] {
+        "Inkrafttreten",
+        "Amtsblatt",
+    }),
 
     INKRAFTGETRETEN_FOERDERMIXPLAN("Inkraftgetreten (Fördermixplan)", new String[] { "Fördermixplan" }),
 
@@ -45,15 +45,18 @@ public enum Verfahrensstand implements ILookup {
         new String[] { "Genehmigungsverfahren", "Vorbereitung", "Baugenehmigung" }
     ),
 
-    VORBEREITUNG_VORBESCHEID(
-        "Bauvoranfrage, Art. 71 BayBO (Vorbereitung Vorbescheid)",
-        new String[] { "Bauvoranfrage", "Vorbereitung", "Vorbescheid" }
-    ),
+    VORBEREITUNG_VORBESCHEID("Bauvoranfrage, Art. 71 BayBO (Vorbereitung Vorbescheid)", new String[] {
+        "Bauvoranfrage",
+        "Vorbereitung",
+        "Vorbescheid",
+    }),
 
-    VORABFRAGE_OHNE_KONKRETEN_STAND(
-        "Vorabfrage ohne konkreten Stand",
-        new String[] { "Vorabfrage", "ohne", "konkreten", "Stand" }
-    ),
+    VORABFRAGE_OHNE_KONKRETEN_STAND("Vorabfrage ohne konkreten Stand", new String[] {
+        "Vorabfrage",
+        "ohne",
+        "konkreten",
+        "Stand",
+    }),
 
     STRUKTURKONZEPT("Strukturkonzept", new String[] { "Strukturkonzept" }),
 
@@ -61,15 +64,15 @@ public enum Verfahrensstand implements ILookup {
 
     POTENTIALUNTERSUCHUNG("Potentialuntersuchung", new String[] { "Potentialuntersuchung" }),
 
-    STAEDTEBAULICHE_SANIERUNGSMASSNAHME(
-        "Städtebauliche Sanierungsmaßnahme",
-        new String[] { "Städtebauliche", "Sanierungsmaßnahme" }
-    ),
+    STAEDTEBAULICHE_SANIERUNGSMASSNAHME("Städtebauliche Sanierungsmaßnahme", new String[] {
+        "Städtebauliche",
+        "Sanierungsmaßnahme",
+    }),
 
-    STAEDTEBAULICHE_ENTWICKLUNGSMASSNAHME(
-        "Städtebauliche Entwicklungsmaßnahme",
-        new String[] { "Städtebauliche", "Entwicklungsmaßnahme" }
-    ),
+    STAEDTEBAULICHE_ENTWICKLUNGSMASSNAHME("Städtebauliche Entwicklungsmaßnahme", new String[] {
+        "Städtebauliche",
+        "Entwicklungsmaßnahme",
+    }),
 
     STANDORTABFRAGE("Standortabfrage", new String[] { "Standortabfrage" }),
 

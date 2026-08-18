@@ -287,68 +287,64 @@ public class AbfrageStatusService {
 
         stateMachine.stopReactively().block();
 
-        stateMachine
-            .getStateMachineAccessor()
-            .doWithAllRegions(stateMachineAccess -> {
-                // Setzt den Status der Abfrage aus der DB in der StateMachine.
-                stateMachineAccess
-                    .resetStateMachineReactively(
-                        new DefaultStateMachineContext<>(abfrage.getStatusAbfrage(), null, null, null)
-                    )
-                    .block();
+        stateMachine.getStateMachineAccessor().doWithAllRegions(stateMachineAccess -> {
+            // Setzt den Status der Abfrage aus der DB in der StateMachine.
+            stateMachineAccess
+                .resetStateMachineReactively(
+                    new DefaultStateMachineContext<>(abfrage.getStatusAbfrage(), null, null, null)
+                )
+                .block();
 
-                // Der Interceptor aktualisiert bei einer Statusänderung den Status der in der DB gespeicherten Entität.
-                stateMachineAccess.addStateMachineInterceptor(
-                    new StateMachineInterceptorAdapter<>() {
-                        /**
-                         * Verhalten siehe {@link StateMachineInterceptor#preTransition(StateContext)}
-                         *
-                         * Die Rückgabe des Wertes null führt in der StateMachine zum Ergebnis {@link StateMachineEventResult.ResultType#DENIED}
-                         */
-                        @Override
-                        public StateContext<StatusAbfrage, StatusAbfrageEvents> preTransition(
-                            final StateContext<StatusAbfrage, StatusAbfrageEvents> stateContext
-                        ) {
-                            final State<StatusAbfrage, StatusAbfrageEvents> state = stateContext
-                                .getTransition()
-                                .getTarget();
-                            final MessageHeaders messageHeaders = stateContext.getMessageHeaders();
-                            try {
-                                final UUID abfrageId = AbfrageStatusService.this.getAbfrageId(messageHeaders);
-                                AbfrageModel abfrage = AbfrageStatusService.this.abfrageService.getById(abfrageId);
-                                // Setzen des neuen Status
-                                abfrage.setStatusAbfrage(state.getId());
-                                // Anfügen der Anmerkung
-                                if (StringUtils.isNotEmpty(anmerkung)) {
-                                    if (abfrage.getAnmerkung() == null) {
-                                        abfrage.setAnmerkung(anmerkung);
-                                    } else {
-                                        abfrage.setAnmerkung(abfrage.getAnmerkung().concat("\n").concat(anmerkung));
-                                    }
+            // Der Interceptor aktualisiert bei einer Statusänderung den Status der in der DB gespeicherten Entität.
+            stateMachineAccess.addStateMachineInterceptor(
+                new StateMachineInterceptorAdapter<>() {
+                    /**
+                     * Verhalten siehe {@link StateMachineInterceptor#preTransition(StateContext)}
+                     *
+                     * Die Rückgabe des Wertes null führt in der StateMachine zum Ergebnis {@link StateMachineEventResult.ResultType#DENIED}
+                     */
+                    @Override
+                    public StateContext<StatusAbfrage, StatusAbfrageEvents> preTransition(
+                        final StateContext<StatusAbfrage, StatusAbfrageEvents> stateContext
+                    ) {
+                        final State<StatusAbfrage, StatusAbfrageEvents> state = stateContext
+                            .getTransition()
+                            .getTarget();
+                        final MessageHeaders messageHeaders = stateContext.getMessageHeaders();
+                        try {
+                            final UUID abfrageId = AbfrageStatusService.this.getAbfrageId(messageHeaders);
+                            AbfrageModel abfrage = AbfrageStatusService.this.abfrageService.getById(abfrageId);
+                            // Setzen des neuen Status
+                            abfrage.setStatusAbfrage(state.getId());
+                            // Anfügen der Anmerkung
+                            if (StringUtils.isNotEmpty(anmerkung)) {
+                                if (abfrage.getAnmerkung() == null) {
+                                    abfrage.setAnmerkung(anmerkung);
+                                } else {
+                                    abfrage.setAnmerkung(abfrage.getAnmerkung().concat("\n").concat(anmerkung));
                                 }
-                                // Erweitern der Bearbeitungshistorie
-                                abfrage = abfrageBearbeitungshistorieService.appendBearbeitungshistorieToAbfrage(
-                                    abfrage
-                                );
-                                // Speichern der Abfrage
-                                AbfrageStatusService.this.abfrageService.save(abfrage);
-                                // Asynchrones Versenden der Information für anstehende Aufgabe
-                                sendWorkAssignmentInformationService.sendWorkAssignmentInformationAsync(
-                                    abfrage,
-                                    stateContext.getEvent()
-                                );
-                            } catch (final EntityNotFoundException | OptimisticLockingException exception) {
-                                log.error(exception.getMessage(), exception);
-                                return null;
-                            } catch (final Exception exception) {
-                                log.error("Bei der Statusänderung ist ein Fehler aufgetreten.", exception);
-                                return null;
                             }
-                            return stateContext;
+                            // Erweitern der Bearbeitungshistorie
+                            abfrage = abfrageBearbeitungshistorieService.appendBearbeitungshistorieToAbfrage(abfrage);
+                            // Speichern der Abfrage
+                            AbfrageStatusService.this.abfrageService.save(abfrage);
+                            // Asynchrones Versenden der Information für anstehende Aufgabe
+                            sendWorkAssignmentInformationService.sendWorkAssignmentInformationAsync(
+                                abfrage,
+                                stateContext.getEvent()
+                            );
+                        } catch (final EntityNotFoundException | OptimisticLockingException exception) {
+                            log.error(exception.getMessage(), exception);
+                            return null;
+                        } catch (final Exception exception) {
+                            log.error("Bei der Statusänderung ist ein Fehler aufgetreten.", exception);
+                            return null;
                         }
+                        return stateContext;
                     }
-                );
-            });
+                }
+            );
+        });
 
         stateMachine.startReactively().block();
         return stateMachine;
@@ -375,18 +371,16 @@ public class AbfrageStatusService {
             message
         );
         try {
-            result
-                .toStream()
-                .forEach(stateMachineEventResult -> {
-                    if (stateMachineEventResult.getResultType() == StateMachineEventResult.ResultType.DENIED) {
-                        final var errorMessage = String.format(
-                            "Status Änderung ist nicht möglich. Aktueller Status: %s.",
-                            stateMachine.getState().getId()
-                        );
-                        log.error(errorMessage);
-                        throw new StateMachineTransitionFailedException(errorMessage);
-                    }
-                });
+            result.toStream().forEach(stateMachineEventResult -> {
+                if (stateMachineEventResult.getResultType() == StateMachineEventResult.ResultType.DENIED) {
+                    final var errorMessage = String.format(
+                        "Status Änderung ist nicht möglich. Aktueller Status: %s.",
+                        stateMachine.getState().getId()
+                    );
+                    log.error(errorMessage);
+                    throw new StateMachineTransitionFailedException(errorMessage);
+                }
+            });
         } catch (final StateMachineTransitionFailedException exception) {
             throw new AbfrageStatusNotAllowedException(exception.getMessage(), exception);
         }
