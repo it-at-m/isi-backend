@@ -49,6 +49,10 @@ management:
   info:
     env:
       enabled: true
+  otlp:
+    metrics:
+      export:
+        enabled: false
 
 info.application.name: @project.artifactId@
 info.application.version: @project.version@

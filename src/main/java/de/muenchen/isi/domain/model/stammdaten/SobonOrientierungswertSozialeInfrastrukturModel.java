@@ -35,25 +35,25 @@ public class SobonOrientierungswertSozialeInfrastrukturModel extends BaseEntityM
 
     private String foerderartBezeichnung;
 
-    private BigDecimal einwohnerJahr1NachErsterstellung;
+    private BigDecimal einwohnerJahr1nachErsterstellung;
 
-    private BigDecimal einwohnerJahr2NachErsterstellung;
+    private BigDecimal einwohnerJahr2nachErsterstellung;
 
-    private BigDecimal einwohnerJahr3NachErsterstellung;
+    private BigDecimal einwohnerJahr3nachErsterstellung;
 
-    private BigDecimal einwohnerJahr4NachErsterstellung;
+    private BigDecimal einwohnerJahr4nachErsterstellung;
 
-    private BigDecimal einwohnerJahr5NachErsterstellung;
+    private BigDecimal einwohnerJahr5nachErsterstellung;
 
-    private BigDecimal einwohnerJahr6NachErsterstellung;
+    private BigDecimal einwohnerJahr6nachErsterstellung;
 
-    private BigDecimal einwohnerJahr7NachErsterstellung;
+    private BigDecimal einwohnerJahr7nachErsterstellung;
 
-    private BigDecimal einwohnerJahr8NachErsterstellung;
+    private BigDecimal einwohnerJahr8nachErsterstellung;
 
-    private BigDecimal einwohnerJahr9NachErsterstellung;
+    private BigDecimal einwohnerJahr9nachErsterstellung;
 
-    private BigDecimal einwohnerJahr10NachErsterstellung;
+    private BigDecimal einwohnerJahr10nachErsterstellung;
 
     private BigDecimal stammwertArbeitsgruppe;
 
@@ -61,16 +61,16 @@ public class SobonOrientierungswertSozialeInfrastrukturModel extends BaseEntityM
      * @return den des 10-Jährigen-Mittelwert der Einwohner nach Ersterstellung.
      */
     public BigDecimal getMittelwertEinwohnerNachErsterstellung10Jahre() {
-        return einwohnerJahr1NachErsterstellung
-            .add(einwohnerJahr2NachErsterstellung)
-            .add(einwohnerJahr3NachErsterstellung)
-            .add(einwohnerJahr4NachErsterstellung)
-            .add(einwohnerJahr5NachErsterstellung)
-            .add(einwohnerJahr6NachErsterstellung)
-            .add(einwohnerJahr7NachErsterstellung)
-            .add(einwohnerJahr8NachErsterstellung)
-            .add(einwohnerJahr9NachErsterstellung)
-            .add(einwohnerJahr10NachErsterstellung)
+        return einwohnerJahr1nachErsterstellung
+            .add(einwohnerJahr2nachErsterstellung)
+            .add(einwohnerJahr3nachErsterstellung)
+            .add(einwohnerJahr4nachErsterstellung)
+            .add(einwohnerJahr5nachErsterstellung)
+            .add(einwohnerJahr6nachErsterstellung)
+            .add(einwohnerJahr7nachErsterstellung)
+            .add(einwohnerJahr8nachErsterstellung)
+            .add(einwohnerJahr9nachErsterstellung)
+            .add(einwohnerJahr10nachErsterstellung)
             .divide(BigDecimal.TEN, CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
     }
 
@@ -89,61 +89,61 @@ public class SobonOrientierungswertSozialeInfrastrukturModel extends BaseEntityM
     }
 
     public BigDecimal getObererRichtwertEinwohnerJahr1NachErsterstellung() {
-        return einwohnerJahr1NachErsterstellung
+        return einwohnerJahr1nachErsterstellung
             .multiply(this.getRatioOfMittelwertEinwohner10JahreToStammwertArbeitsgruppe())
             .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
     }
 
     public BigDecimal getObererRichtwertEinwohnerJahr2NachErsterstellung() {
-        return einwohnerJahr2NachErsterstellung
+        return einwohnerJahr2nachErsterstellung
             .multiply(this.getRatioOfMittelwertEinwohner10JahreToStammwertArbeitsgruppe())
             .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
     }
 
     public BigDecimal getObererRichtwertEinwohnerJahr3NachErsterstellung() {
-        return einwohnerJahr3NachErsterstellung
+        return einwohnerJahr3nachErsterstellung
             .multiply(this.getRatioOfMittelwertEinwohner10JahreToStammwertArbeitsgruppe())
             .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
     }
 
     public BigDecimal getObererRichtwertEinwohnerJahr4NachErsterstellung() {
-        return einwohnerJahr4NachErsterstellung
+        return einwohnerJahr4nachErsterstellung
             .multiply(this.getRatioOfMittelwertEinwohner10JahreToStammwertArbeitsgruppe())
             .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
     }
 
     public BigDecimal getObererRichtwertEinwohnerJahr5NachErsterstellung() {
-        return einwohnerJahr5NachErsterstellung
+        return einwohnerJahr5nachErsterstellung
             .multiply(this.getRatioOfMittelwertEinwohner10JahreToStammwertArbeitsgruppe())
             .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
     }
 
     public BigDecimal getObererRichtwertEinwohnerJahr6NachErsterstellung() {
-        return einwohnerJahr6NachErsterstellung
+        return einwohnerJahr6nachErsterstellung
             .multiply(this.getRatioOfMittelwertEinwohner10JahreToStammwertArbeitsgruppe())
             .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
     }
 
     public BigDecimal getObererRichtwertEinwohnerJahr7NachErsterstellung() {
-        return einwohnerJahr7NachErsterstellung
+        return einwohnerJahr7nachErsterstellung
             .multiply(this.getRatioOfMittelwertEinwohner10JahreToStammwertArbeitsgruppe())
             .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
     }
 
     public BigDecimal getObererRichtwertEinwohnerJahr8NachErsterstellung() {
-        return einwohnerJahr8NachErsterstellung
+        return einwohnerJahr8nachErsterstellung
             .multiply(this.getRatioOfMittelwertEinwohner10JahreToStammwertArbeitsgruppe())
             .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
     }
 
     public BigDecimal getObererRichtwertEinwohnerJahr9NachErsterstellung() {
-        return einwohnerJahr9NachErsterstellung
+        return einwohnerJahr9nachErsterstellung
             .multiply(this.getRatioOfMittelwertEinwohner10JahreToStammwertArbeitsgruppe())
             .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
     }
 
     public BigDecimal getObererRichtwertEinwohnerJahr10NachErsterstellung() {
-        return einwohnerJahr10NachErsterstellung
+        return einwohnerJahr10nachErsterstellung
             .multiply(this.getRatioOfMittelwertEinwohner10JahreToStammwertArbeitsgruppe())
             .setScale(CalculationService.DIVISION_SCALE, RoundingMode.HALF_UP);
     }

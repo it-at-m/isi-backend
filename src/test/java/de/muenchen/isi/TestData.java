@@ -60,16 +60,16 @@ public class TestData {
         sobonOrientierungswertSozialeInfrastruktur.setAltersklasse(Altersklasse.NULL_ZWEI);
         sobonOrientierungswertSozialeInfrastruktur.setEinrichtungstyp(InfrastruktureinrichtungTyp.KINDERKRIPPE);
         sobonOrientierungswertSozialeInfrastruktur.setFoerderartBezeichnung("test-foerderart");
-        sobonOrientierungswertSozialeInfrastruktur.setEinwohnerJahr1NachErsterstellung(BigDecimal.valueOf(3500, 4));
-        sobonOrientierungswertSozialeInfrastruktur.setEinwohnerJahr2NachErsterstellung(BigDecimal.valueOf(3450, 4));
-        sobonOrientierungswertSozialeInfrastruktur.setEinwohnerJahr3NachErsterstellung(BigDecimal.valueOf(3400, 4));
-        sobonOrientierungswertSozialeInfrastruktur.setEinwohnerJahr4NachErsterstellung(BigDecimal.valueOf(3350, 4));
-        sobonOrientierungswertSozialeInfrastruktur.setEinwohnerJahr5NachErsterstellung(BigDecimal.valueOf(3300, 4));
-        sobonOrientierungswertSozialeInfrastruktur.setEinwohnerJahr6NachErsterstellung(BigDecimal.valueOf(3250, 4));
-        sobonOrientierungswertSozialeInfrastruktur.setEinwohnerJahr7NachErsterstellung(BigDecimal.valueOf(3200, 4));
-        sobonOrientierungswertSozialeInfrastruktur.setEinwohnerJahr8NachErsterstellung(BigDecimal.valueOf(3150, 4));
-        sobonOrientierungswertSozialeInfrastruktur.setEinwohnerJahr9NachErsterstellung(BigDecimal.valueOf(3100, 4));
-        sobonOrientierungswertSozialeInfrastruktur.setEinwohnerJahr10NachErsterstellung(BigDecimal.valueOf(3050, 4));
+        sobonOrientierungswertSozialeInfrastruktur.setEinwohnerJahr1nachErsterstellung(BigDecimal.valueOf(3500, 4));
+        sobonOrientierungswertSozialeInfrastruktur.setEinwohnerJahr2nachErsterstellung(BigDecimal.valueOf(3450, 4));
+        sobonOrientierungswertSozialeInfrastruktur.setEinwohnerJahr3nachErsterstellung(BigDecimal.valueOf(3400, 4));
+        sobonOrientierungswertSozialeInfrastruktur.setEinwohnerJahr4nachErsterstellung(BigDecimal.valueOf(3350, 4));
+        sobonOrientierungswertSozialeInfrastruktur.setEinwohnerJahr5nachErsterstellung(BigDecimal.valueOf(3300, 4));
+        sobonOrientierungswertSozialeInfrastruktur.setEinwohnerJahr6nachErsterstellung(BigDecimal.valueOf(3250, 4));
+        sobonOrientierungswertSozialeInfrastruktur.setEinwohnerJahr7nachErsterstellung(BigDecimal.valueOf(3200, 4));
+        sobonOrientierungswertSozialeInfrastruktur.setEinwohnerJahr8nachErsterstellung(BigDecimal.valueOf(3150, 4));
+        sobonOrientierungswertSozialeInfrastruktur.setEinwohnerJahr9nachErsterstellung(BigDecimal.valueOf(3100, 4));
+        sobonOrientierungswertSozialeInfrastruktur.setEinwohnerJahr10nachErsterstellung(BigDecimal.valueOf(3050, 4));
         sobonOrientierungswertSozialeInfrastruktur.setStammwertArbeitsgruppe(BigDecimal.valueOf(4500, 4));
         return sobonOrientierungswertSozialeInfrastruktur;
     }

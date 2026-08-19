@@ -140,16 +140,16 @@ class StammdatenImportServiceTest {
         csvEntry.setEinrichtungstyp(InfrastruktureinrichtungTyp.KINDERKRIPPE);
         csvEntry.setAltersklasse(Altersklasse.NULL_ZWEI);
         csvEntry.setFoerderartBezeichnung("Ein- und Zweifamilienhäuser");
-        csvEntry.setEinwohnerJahr1NachErsterstellung(BigDecimal.valueOf(2877, 4));
-        csvEntry.setEinwohnerJahr2NachErsterstellung(BigDecimal.valueOf(2610, 4));
-        csvEntry.setEinwohnerJahr3NachErsterstellung(BigDecimal.valueOf(2118, 4));
-        csvEntry.setEinwohnerJahr4NachErsterstellung(BigDecimal.valueOf(1725, 4));
-        csvEntry.setEinwohnerJahr5NachErsterstellung(BigDecimal.valueOf(1436, 4));
-        csvEntry.setEinwohnerJahr6NachErsterstellung(BigDecimal.valueOf(1240, 4));
-        csvEntry.setEinwohnerJahr7NachErsterstellung(BigDecimal.valueOf(1060, 4));
-        csvEntry.setEinwohnerJahr8NachErsterstellung(BigDecimal.valueOf(850, 4));
-        csvEntry.setEinwohnerJahr9NachErsterstellung(BigDecimal.valueOf(776, 4));
-        csvEntry.setEinwohnerJahr10NachErsterstellung(BigDecimal.valueOf(716, 4));
+        csvEntry.setEinwohnerJahr1nachErsterstellung(BigDecimal.valueOf(2877, 4));
+        csvEntry.setEinwohnerJahr2nachErsterstellung(BigDecimal.valueOf(2610, 4));
+        csvEntry.setEinwohnerJahr3nachErsterstellung(BigDecimal.valueOf(2118, 4));
+        csvEntry.setEinwohnerJahr4nachErsterstellung(BigDecimal.valueOf(1725, 4));
+        csvEntry.setEinwohnerJahr5nachErsterstellung(BigDecimal.valueOf(1436, 4));
+        csvEntry.setEinwohnerJahr6nachErsterstellung(BigDecimal.valueOf(1240, 4));
+        csvEntry.setEinwohnerJahr7nachErsterstellung(BigDecimal.valueOf(1060, 4));
+        csvEntry.setEinwohnerJahr8nachErsterstellung(BigDecimal.valueOf(850, 4));
+        csvEntry.setEinwohnerJahr9nachErsterstellung(BigDecimal.valueOf(776, 4));
+        csvEntry.setEinwohnerJahr10nachErsterstellung(BigDecimal.valueOf(716, 4));
 
         Mockito.when(
             this.csvRepository.readAllSobonOrientierungswertSozialeInfrastrukturCsv(
@@ -162,16 +162,16 @@ class StammdatenImportServiceTest {
         entity.setEinrichtungstyp(InfrastruktureinrichtungTyp.KINDERKRIPPE);
         entity.setAltersklasse(Altersklasse.NULL_ZWEI);
         entity.setFoerderartBezeichnung("Ein- und Zweifamilienhäuser");
-        entity.setEinwohnerJahr1NachErsterstellung(BigDecimal.valueOf(2877, 4));
-        entity.setEinwohnerJahr2NachErsterstellung(BigDecimal.valueOf(2610, 4));
-        entity.setEinwohnerJahr3NachErsterstellung(BigDecimal.valueOf(2118, 4));
-        entity.setEinwohnerJahr4NachErsterstellung(BigDecimal.valueOf(1725, 4));
-        entity.setEinwohnerJahr5NachErsterstellung(BigDecimal.valueOf(1436, 4));
-        entity.setEinwohnerJahr6NachErsterstellung(BigDecimal.valueOf(1240, 4));
-        entity.setEinwohnerJahr7NachErsterstellung(BigDecimal.valueOf(1060, 4));
-        entity.setEinwohnerJahr8NachErsterstellung(BigDecimal.valueOf(850, 4));
-        entity.setEinwohnerJahr9NachErsterstellung(BigDecimal.valueOf(776, 4));
-        entity.setEinwohnerJahr10NachErsterstellung(BigDecimal.valueOf(716, 4));
+        entity.setEinwohnerJahr1nachErsterstellung(BigDecimal.valueOf(2877, 4));
+        entity.setEinwohnerJahr2nachErsterstellung(BigDecimal.valueOf(2610, 4));
+        entity.setEinwohnerJahr3nachErsterstellung(BigDecimal.valueOf(2118, 4));
+        entity.setEinwohnerJahr4nachErsterstellung(BigDecimal.valueOf(1725, 4));
+        entity.setEinwohnerJahr5nachErsterstellung(BigDecimal.valueOf(1436, 4));
+        entity.setEinwohnerJahr6nachErsterstellung(BigDecimal.valueOf(1240, 4));
+        entity.setEinwohnerJahr7nachErsterstellung(BigDecimal.valueOf(1060, 4));
+        entity.setEinwohnerJahr8nachErsterstellung(BigDecimal.valueOf(850, 4));
+        entity.setEinwohnerJahr9nachErsterstellung(BigDecimal.valueOf(776, 4));
+        entity.setEinwohnerJahr10nachErsterstellung(BigDecimal.valueOf(716, 4));
         final List<SobonOrientierungswertSozialeInfrastruktur> entities = List.of(entity);
 
         this.stammdatenImportService.importSobonOrientierungswerteSozialeInfrastruktur(this.multipartFile);

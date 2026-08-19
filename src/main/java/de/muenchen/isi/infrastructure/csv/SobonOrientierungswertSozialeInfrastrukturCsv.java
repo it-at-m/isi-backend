@@ -28,34 +28,34 @@ public class SobonOrientierungswertSozialeInfrastrukturCsv {
     private String foerderartBezeichnung;
 
     @CsvBindByName(column = "JAHR_1_NACH_ERSTELLUNG", required = false)
-    private BigDecimal einwohnerJahr1NachErsterstellung;
+    private BigDecimal einwohnerJahr1nachErsterstellung;
 
     @CsvBindByName(column = "JAHR_2_NACH_ERSTELLUNG", required = false)
-    private BigDecimal einwohnerJahr2NachErsterstellung;
+    private BigDecimal einwohnerJahr2nachErsterstellung;
 
     @CsvBindByName(column = "JAHR_3_NACH_ERSTELLUNG", required = false)
-    private BigDecimal einwohnerJahr3NachErsterstellung;
+    private BigDecimal einwohnerJahr3nachErsterstellung;
 
     @CsvBindByName(column = "JAHR_4_NACH_ERSTELLUNG", required = false)
-    private BigDecimal einwohnerJahr4NachErsterstellung;
+    private BigDecimal einwohnerJahr4nachErsterstellung;
 
     @CsvBindByName(column = "JAHR_5_NACH_ERSTELLUNG", required = false)
-    private BigDecimal einwohnerJahr5NachErsterstellung;
+    private BigDecimal einwohnerJahr5nachErsterstellung;
 
     @CsvBindByName(column = "JAHR_6_NACH_ERSTELLUNG", required = false)
-    private BigDecimal einwohnerJahr6NachErsterstellung;
+    private BigDecimal einwohnerJahr6nachErsterstellung;
 
     @CsvBindByName(column = "JAHR_7_NACH_ERSTELLUNG", required = false)
-    private BigDecimal einwohnerJahr7NachErsterstellung;
+    private BigDecimal einwohnerJahr7nachErsterstellung;
 
     @CsvBindByName(column = "JAHR_8_NACH_ERSTELLUNG", required = false)
-    private BigDecimal einwohnerJahr8NachErsterstellung;
+    private BigDecimal einwohnerJahr8nachErsterstellung;
 
     @CsvBindByName(column = "JAHR_9_NACH_ERSTELLUNG", required = false)
-    private BigDecimal einwohnerJahr9NachErsterstellung;
+    private BigDecimal einwohnerJahr9nachErsterstellung;
 
     @CsvBindByName(column = "JAHR_10_NACH_ERSTELLUNG", required = false)
-    private BigDecimal einwohnerJahr10NachErsterstellung;
+    private BigDecimal einwohnerJahr10nachErsterstellung;
 
     @CsvBindByName(column = "STAMMWERT_ARBEITSGRUPPE", required = false)
     private BigDecimal stammwertArbeitsgruppe;
