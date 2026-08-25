@@ -4,20 +4,18 @@ import de.muenchen.isi.infrastructure.entity.AbfragevarianteBaugenehmigungsverfa
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.NativeQuery;
 
 public interface AbfragevarianteBaugenehmigungsverfahrenRepository
     extends JpaRepository<AbfragevarianteBaugenehmigungsverfahren, UUID>
 {
-    @Query(
-        value = "select abfrgvar_baugnhmgsverfhrn_id from abfrgvar_baugnhmgsverfhrn where CAST(id as uuid) = CAST(:id as uuid)",
-        nativeQuery = true
+    @NativeQuery(
+        "select abfrgvar_baugnhmgsverfhrn_id from abfrgvar_baugnhmgsverfhrn where CAST(id as uuid) = CAST(:id as uuid)"
     )
     Optional<UUID> findAbfrageIdForAbfragevarianteById(final UUID id);
 
-    @Query(
-        value = "select abfrgvar_schbrbtng_baugnhmgsverfhrn_id from abfrgvar_baugnhmgsverfhrn where CAST(id as uuid) = CAST(:id as uuid)",
-        nativeQuery = true
+    @NativeQuery(
+        "select abfrgvar_schbrbtng_baugnhmgsverfhrn_id from abfrgvar_baugnhmgsverfhrn where CAST(id as uuid) = CAST(:id as uuid)"
     )
     Optional<UUID> findAbfrageIdForAbfragevarianteSachbearbeitungById(final UUID id);
 }

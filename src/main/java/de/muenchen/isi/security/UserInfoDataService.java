@@ -150,14 +150,8 @@ public class UserInfoDataService {
      */
     protected List<SimpleGrantedAuthority> asAuthorities(final Object authoritiesClaim) {
         final var authorities = new ArrayList<SimpleGrantedAuthority>();
-        if (authoritiesClaim instanceof Collection<?>) {
-            authorities.addAll(
-                ((Collection<?>) authoritiesClaim)
-                    .stream()
-                    .map(Object::toString)
-                    .map(SimpleGrantedAuthority::new)
-                    .toList()
-            );
+        if (authoritiesClaim instanceof Collection<?> collection) {
+            authorities.addAll(collection.stream().map(Object::toString).map(SimpleGrantedAuthority::new).toList());
         }
         return authorities;
     }

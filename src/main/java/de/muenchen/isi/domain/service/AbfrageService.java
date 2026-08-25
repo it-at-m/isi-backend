@@ -528,8 +528,7 @@ public class AbfrageService {
                 abfragevarianteId
             )
         )
-            .filter(Optional::isPresent)
-            .map(Optional::get)
+            .flatMap(Optional::stream)
             .toList();
 
         if (abfrageIds.size() != 1) {

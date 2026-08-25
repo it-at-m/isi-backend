@@ -1,8 +1,8 @@
 package de.muenchen.isi.infrastructure.entity.search.request;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import java.util.Map;
 import lombok.Data;
+import tools.jackson.core.JacksonException;
 
 @Data
 public class MultisearchRequest {
@@ -12,9 +12,9 @@ public class MultisearchRequest {
     /**
      *
      * @return
-     * @throws JsonProcessingException
+     * @throws JacksonException
      */
-    public String toMultiSearchRequestBody() throws JsonProcessingException {
+    public String toMultiSearchRequestBody() {
         final var multisearchRequestBody = new StringBuffer();
         for (final var indexAndCompletionSuggestionPair : multisearchIndexAndCompleteSuggestionPair.entrySet()) {
             multisearchRequestBody

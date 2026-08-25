@@ -14,14 +14,18 @@ spring:
           backend:
             client.configurer: class:de.muenchen.isi.configuration.search.ElasticsearchKeepAliveConfig
 
+  web:
+    error:
+      include-exception: false
+
+      include-stacktrace: never
+
+      whitelabel:
+        enabled: false
+
 server:
   shutdown: "graceful"
   port: 8080
-  error:
-    include-exception: false
-    include-stacktrace: never
-    whitelabel:
-      enabled: false
 
 # Config for spring actuator endpoints
 management:
@@ -72,11 +76,13 @@ stammdaten:
       csv/SoBoNOrientierungswerteSozialeInfrastruktur2022.csv,
       csv/SoBoNOrientierungswerteSozialeInfrastruktur2024.csv,
       csv/SoBoNOrientierungswerteSozialeInfrastruktur2024_34.csv
+
     staedtebauliche-orientierungswerte: >
       csv/StaedteBaulicheOrientierungswerte2014.csv,
       csv/StaedteBaulicheOrientierungswerte2017.csv,
       csv/StaedteBaulicheOrientierungswerte2022.csv,
       csv/StaedteBaulicheOrientierungswerte2024.csv
+
 
 work-assignment-information:
   message:

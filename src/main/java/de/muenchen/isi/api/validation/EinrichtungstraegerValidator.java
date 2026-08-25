@@ -36,20 +36,20 @@ public class EinrichtungstraegerValidator
 
     private boolean einrichtungstraegerValid(final InfrastruktureinrichtungDto value) {
         if (isStatusBestandOrGesicherteERW(value)) {
-            if (value instanceof GrundschuleDto) {
-                var einrichtungstraeger = ((GrundschuleDto) value).getSchule().getEinrichtungstraeger();
+            if (value instanceof GrundschuleDto dto4) {
+                var einrichtungstraeger = dto4.getSchule().getEinrichtungstraeger();
                 return this.isValidEinrichtungstraegerSchule(einrichtungstraeger);
-            } else if (value instanceof MittelschuleDto) {
-                var einrichtungstraeger = ((MittelschuleDto) value).getSchule().getEinrichtungstraeger();
+            } else if (value instanceof MittelschuleDto dto3) {
+                var einrichtungstraeger = dto3.getSchule().getEinrichtungstraeger();
                 return this.isValidEinrichtungstraegerSchule(einrichtungstraeger);
-            } else if (value instanceof GsNachmittagBetreuungDto) {
-                var einrichtungstraeger = ((GsNachmittagBetreuungDto) value).getEinrichtungstraeger();
+            } else if (value instanceof GsNachmittagBetreuungDto dto2) {
+                var einrichtungstraeger = dto2.getEinrichtungstraeger();
                 return this.isValidEinrichtungstraeger(einrichtungstraeger);
-            } else if (value instanceof HausFuerKinderDto) {
-                var einrichtungstraeger = ((HausFuerKinderDto) value).getEinrichtungstraeger();
+            } else if (value instanceof HausFuerKinderDto dto1) {
+                var einrichtungstraeger = dto1.getEinrichtungstraeger();
                 return this.isValidEinrichtungstraeger(einrichtungstraeger);
-            } else if (value instanceof KindergartenDto) {
-                var einrichtungstraeger = ((KindergartenDto) value).getEinrichtungstraeger();
+            } else if (value instanceof KindergartenDto dto) {
+                var einrichtungstraeger = dto.getEinrichtungstraeger();
                 return this.isValidEinrichtungstraeger(einrichtungstraeger);
             } else {
                 var einrichtungstraeger = ((KinderkrippeDto) value).getEinrichtungstraeger();

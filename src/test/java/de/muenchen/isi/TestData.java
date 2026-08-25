@@ -4,7 +4,6 @@
  */
 package de.muenchen.isi;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import de.muenchen.isi.domain.mapper.StammdatenDomainMapperImpl;
 import de.muenchen.isi.domain.model.AbfragevarianteBaugenehmigungsverfahrenModel;
 import de.muenchen.isi.domain.model.AbfragevarianteBauleitplanverfahrenModel;
@@ -50,6 +49,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import lombok.SneakyThrows;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 
 public class TestData {
 
@@ -407,19 +408,20 @@ public class TestData {
 
     @SneakyThrows
     public static MultiPolygonGeometryModel createMultipolygon() {
-        final var multipolygon =
-            "{ \"type\": \"MultiPolygon\",\n" +
-            "    \"coordinates\": [\n" +
-            "        [\n" +
-            "            [[40, 40], [20, 45], [45, 30], [40, 40]]\n" +
-            "        ],\n" +
-            "        [\n" +
-            "            [[20, 35], [10, 30], [10, 10], [30, 5], [45, 20], [20, 35]],\n" +
-            "            [[30, 20], [20, 15], [20, 25], [30, 20]]\n" +
-            "        ]\n" +
-            "    ]\n" +
-            "}";
-        return new ObjectMapper().readValue(multipolygon, MultiPolygonGeometryModel.class);
+        final var multipolygon = """
+        { "type": "MultiPolygon",
+            "coordinates": [
+                [
+                    [[40, 40], [20, 45], [45, 30], [40, 40]]
+                ],
+                [
+                    [[20, 35], [10, 30], [10, 10], [30, 5], [45, 20], [20, 35]],
+                    [[30, 20], [20, 15], [20, 25], [30, 20]]
+                ]
+            ]
+        }\
+        """;
+        return new JsonMapper().readValue(multipolygon, MultiPolygonGeometryModel.class);
     }
 
     public static SobonBerechnungModel createSobonBerechnungModel() {
