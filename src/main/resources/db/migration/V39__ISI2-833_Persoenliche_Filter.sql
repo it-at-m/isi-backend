@@ -22,7 +22,8 @@ CREATE TABLE isidbuser.personal_filter
     we_gesamt_von           INTEGER,
     we_gesamt_bis           INTEGER,
     gf_wohnen_geplant_von   DECIMAL(19, 2),
-    gf_wohnen_geplant_bis   DECIMAL(19, 2)
+    gf_wohnen_geplant_bis   DECIMAL(19, 2),
+    CONSTRAINT personal_filter_sobon_relevant_check CHECK (((sobon_relevant)::text <> 'UNSPECIFIED'::text))
 );
 
 CREATE TABLE isidbuser.personal_filter_stadtbezirk_nummer
