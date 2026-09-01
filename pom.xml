@@ -50,7 +50,7 @@
         <spring.statemachine>4.0.2</spring.statemachine>
         <icu4j.version>78.3</icu4j.version>
         <hibernate.search>8.4.0.Final</hibernate.search>
-        <openapi-generator-version>7.24.0</openapi-generator-version>
+        <openapi-generator-version>7.25.0</openapi-generator-version>
     </properties>
 
     <!-- Migration 4.10 Anfang -->
