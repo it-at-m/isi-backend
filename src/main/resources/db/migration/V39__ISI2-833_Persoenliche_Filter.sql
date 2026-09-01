@@ -11,7 +11,7 @@ CREATE TABLE isidbuser.personal_filter
     created_date_time       TIMESTAMP              NOT NULL,
     last_modified_date_time TIMESTAMP              NOT NULL,
 
-    personalid              character varying(36)  NOT NULL,
+    personalid              character varying(255) NOT NULL,
     filter_name             character varying(255) NOT NULL,
 
     -- Embedded FilterSettings

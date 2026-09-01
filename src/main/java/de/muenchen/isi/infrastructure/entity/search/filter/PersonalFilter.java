@@ -22,9 +22,7 @@ import org.hibernate.type.SqlTypes;
 @EqualsAndHashCode(callSuper = true)
 public class PersonalFilter extends BaseEntity {
 
-    @Column(length = 36)
-    @JdbcTypeCode(SqlTypes.VARCHAR)
-    private UUID personalID;
+    private String personalID;
 
     private String filterName;
 
