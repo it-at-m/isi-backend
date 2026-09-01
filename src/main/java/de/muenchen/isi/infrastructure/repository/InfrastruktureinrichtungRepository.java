@@ -8,7 +8,9 @@ import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Infrastruk
 import java.util.UUID;
 import java.util.stream.Stream;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
+@RepositoryRestResource(exported = false)
 public interface InfrastruktureinrichtungRepository extends JpaRepository<Infrastruktureinrichtung, UUID> {
     Stream<Infrastruktureinrichtung> findAllByBauvorhabenId(final UUID id);
 }

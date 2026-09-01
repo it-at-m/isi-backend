@@ -5,7 +5,9 @@ import java.util.Optional;
 import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.NativeQuery;
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
+@RepositoryRestResource(exported = false)
 public interface AbfragevarianteWeiteresVerfahrenRepository
     extends JpaRepository<AbfragevarianteWeiteresVerfahren, UUID>
 {

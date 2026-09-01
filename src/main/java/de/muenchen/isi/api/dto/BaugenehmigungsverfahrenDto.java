@@ -4,6 +4,7 @@ import de.muenchen.isi.api.dto.common.AdresseDto;
 import de.muenchen.isi.api.dto.common.VerortungMultiPolygonDto;
 import de.muenchen.isi.api.dto.filehandling.DokumentDto;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Verfahrensstand;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.Data;
@@ -13,6 +14,7 @@ import lombok.ToString;
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
+@Schema(description = "BaugenehmigungsverfahrenDto", allOf = { AbfrageDto.class })
 public class BaugenehmigungsverfahrenDto extends AbfrageDto {
 
     private String aktenzeichenProLbk;

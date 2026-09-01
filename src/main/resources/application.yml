@@ -112,3 +112,12 @@ refarch:
 springdoc:
   api-docs:
     version: OPENAPI_3_0
+
+# springdoc Fehlersuche
+logging:
+  level:
+    org.springdoc: DEBUG
+    org.springdoc.core.utils.SpringDocDataRestUtils: TRACE
+    org.springdoc.webmvc.api.OpenApiResource: DEBUG
+    org.springdoc.core.providers.SpringRepositoryRestResourceProvider: DEBUG
+
