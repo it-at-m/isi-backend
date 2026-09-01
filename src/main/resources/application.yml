@@ -110,14 +110,5 @@ refarch:
 # siehe: https://github.com/it-at-m/refarch/tree/main/refarch-integrations/refarch-s3-integration
 
 springdoc:
-  api-docs:
-    version: OPENAPI_3_0
-
-# springdoc Fehlersuche
-logging:
-  level:
-    org.springdoc: DEBUG
-    org.springdoc.core.utils.SpringDocDataRestUtils: TRACE
-    org.springdoc.webmvc.api.OpenApiResource: DEBUG
-    org.springdoc.core.providers.SpringRepositoryRestResourceProvider: DEBUG
+  enable-data-rest: false
 
