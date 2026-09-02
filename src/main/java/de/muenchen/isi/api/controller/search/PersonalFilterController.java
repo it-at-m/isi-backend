@@ -56,9 +56,8 @@ public class PersonalFilterController {
         return personalFilterApiMapper.model2Dto(responseModel);
     }
 
-    @PostMapping("/delete")
-    public void deleteFilter(@RequestBody PersonalFilterRequestDto personalFilterRequestDto) {
-        var requestModel = personalFilterApiMapper.dto2Model(personalFilterRequestDto);
-        personalFilterService.delete(requestModel);
+    @PostMapping("/delete/{filterId}")
+    public void deleteFilter(@PathVariable UUID filterId) {
+        personalFilterService.delete(filterId);
     }
 }

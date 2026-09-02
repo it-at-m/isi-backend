@@ -55,15 +55,11 @@ public class PersonalFilterService {
         return personalFilterDomainMapper.entity2Model(entity);
     }
 
-    public void delete(PersonalFilterRequestModel personalFilterRequestModel) {
-        personalFilterRequestModel.setPersonalID(authenticationUtils.getUserSub());
-        var verifyEntity = personalFilterRepository.findByIdAndPersonalID(
-            personalFilterRequestModel.getId(),
-            personalFilterRequestModel.getPersonalID()
-        );
+    public void delete(UUID filterId) {
+        var verifyEntity = personalFilterRepository.findByIdAndPersonalID(filterId, authenticationUtils.getUserSub());
         if (verifyEntity == null) {
             return;
         }
-        this.personalFilterRepository.deleteById(personalFilterRequestModel.getId());
+        this.personalFilterRepository.deleteById(filterId);
     }
 }
