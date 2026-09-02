@@ -13,9 +13,11 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.Index;
 import java.math.BigDecimal;
 import java.util.List;
+import lombok.Data;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.GenericField;
 
 @Embeddable
+@Data
 public class FilterSettings {
 
     @ElementCollection
