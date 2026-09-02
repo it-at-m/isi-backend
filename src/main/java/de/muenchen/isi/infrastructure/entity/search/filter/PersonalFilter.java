@@ -6,6 +6,7 @@ import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -22,6 +23,7 @@ public class PersonalFilter extends BaseEntity {
 
     private String filterName;
 
+    @NotNull
     @Embedded
     private FilterSettings filterSettings;
 }

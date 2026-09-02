@@ -4,6 +4,7 @@ import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusInfrastruktureinrichtung;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Verfahrensstand;
+import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.List;
 import lombok.Data;
@@ -27,6 +28,7 @@ public class FilterSettingsModel {
 
     private List<StatusAbfrage> statusAbfrage;
 
+    @NotNull
     private UncertainBoolean sobonRelevant;
 
     private Integer weGesamtVon;

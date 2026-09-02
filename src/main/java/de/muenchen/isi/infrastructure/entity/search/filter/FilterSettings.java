@@ -11,6 +11,7 @@ import jakarta.persistence.Embeddable;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Index;
+import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.List;
 import lombok.Data;
@@ -63,6 +64,7 @@ public class FilterSettings {
     )
     private List<StatusAbfrage> statusAbfrage;
 
+    @NotNull
     @GenericField(name = "sobon_relevant_filter")
     @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "varchar(255) not null check (sobon_relevant != 'UNSPECIFIED')")
