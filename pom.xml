@@ -23,7 +23,7 @@
         <spring.boot.version>4.1.0</spring.boot.version>
         <spring.boot.test>4.1.0</spring.boot.test>
         <apache.commons.text>1.15.0</apache.commons.text>
-        <apache.commons.collections4>4.5.0</apache.commons.collections4>
+        <apache.commons.collections4>4.6.0</apache.commons.collections4>
         <logstash.encoder>9.0</logstash.encoder>
         <apache.commons.io>2.22.0</apache.commons.io>
         <apache.commons.fileupload>1.6.0</apache.commons.fileupload>
