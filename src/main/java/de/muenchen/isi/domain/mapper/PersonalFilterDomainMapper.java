@@ -7,6 +7,7 @@ import de.muenchen.isi.infrastructure.entity.search.filter.PersonalFilter;
 import java.util.List;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 
 @Mapper(config = MapstructConfiguration.class)
 public interface PersonalFilterDomainMapper {
@@ -18,4 +19,9 @@ public interface PersonalFilterDomainMapper {
     @Mapping(target = "createdDateTime", ignore = true)
     @Mapping(target = "lastModifiedDateTime", ignore = true)
     PersonalFilter model2Entity(final PersonalFilterRequestModel personalFilterRequestModel);
+
+    @Mapping(target = "version", ignore = true)
+    @Mapping(target = "createdDateTime", ignore = true)
+    @Mapping(target = "lastModifiedDateTime", ignore = true)
+    void updateEntityFromModel(PersonalFilterRequestModel model, @MappingTarget PersonalFilter entity);
 }

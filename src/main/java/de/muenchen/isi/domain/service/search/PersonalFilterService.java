@@ -36,17 +36,14 @@ public class PersonalFilterService {
 
     public PersonalFilterResponseModel update(PersonalFilterRequestModel personalFilterRequestModel) {
         personalFilterRequestModel.setPersonalID(authenticationUtils.getUserSub());
-        var verifyEntity = personalFilterRepository.findByIdAndPersonalID(
+        var entity = personalFilterRepository.findByIdAndPersonalID(
             personalFilterRequestModel.getId(),
             personalFilterRequestModel.getPersonalID()
         );
-        if (verifyEntity == null) {
+        if (entity == null) {
             return null;
         }
-        var entity = personalFilterDomainMapper.model2Entity(personalFilterRequestModel);
-        entity.setVersion(verifyEntity.getVersion());
-        entity.setCreatedDateTime(verifyEntity.getCreatedDateTime());
-        entity.setLastModifiedDateTime(verifyEntity.getLastModifiedDateTime());
+        personalFilterDomainMapper.updateEntityFromModel(personalFilterRequestModel, entity);
         entity = personalFilterRepository.saveAndFlush(entity);
         return personalFilterDomainMapper.entity2Model(entity);
     }
