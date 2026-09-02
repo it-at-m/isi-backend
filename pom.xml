@@ -50,23 +50,8 @@
         <spring.statemachine>4.0.2</spring.statemachine>
         <icu4j.version>78.3</icu4j.version>
         <hibernate.search>8.4.0.Final</hibernate.search>
-        <openapi-generator-version>7.25.0</openapi-generator-version>
+        <openapi-generator-version>7.24.0</openapi-generator-version> <!-- Hinweis: Bei Version 7.25.0 wird ApiClient mit fehlender ExceptionProvider Klasse generiert -->
     </properties>
-
-    <!-- Migration 4.10 Anfang -->
-    <repositories>
-        <repository>
-            <id>codegenome</id>
-            <url>https://artifacts.codegenomeproject.org/maven</url>
-        </repository>
-    </repositories>
-    <pluginRepositories>
-        <pluginRepository>
-            <id>codegenome</id>
-            <url>https://artifacts.codegenomeproject.org/maven</url>
-        </pluginRepository>
-    </pluginRepositories>
-    <!-- Migration 4.10 Ende -->
 
     <dependencyManagement>
         <dependencies>
@@ -184,16 +169,16 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-security-oauth2-resource-server</artifactId>
             </dependency>
- <!-- ??? -->
+ <!--
             <dependency>
                 <groupId>org.springframework.security</groupId>
                 <artifactId>spring-security-oauth2-jose</artifactId>
             </dependency>
+-->
             <dependency>
                 <groupId>org.springframework.security</groupId>
                 <artifactId>spring-security-oauth2-client</artifactId>
             </dependency>
- <!-- ??? -->
 
             <!-- Spring Production-Ready Starters -->
             <dependency>
@@ -217,14 +202,6 @@
             </dependency>
 
             <!-- Testing -->
-<!-- ???
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-test</artifactId>
-                <version>${spring.boot.test}</version>
-                <scope>test</scope>
-            </dependency>
--->
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-test</artifactId>
@@ -450,26 +427,6 @@
             </resource>
         </resources>
         <plugins>
-            <!-- Migration Spring Boot 4.1.0 Anfang -->
-            <plugin>
-                <groupId>org.openrewrite.maven</groupId>
-                <artifactId>rewrite-maven-plugin</artifactId>
-                <version>6.46.1</version>
-                <configuration>
-                    <exportDatatables>true</exportDatatables>
-                    <activeRecipes>
-                        <recipe>org.openrewrite.java.spring.boot4.UpgradeSpringBoot_4_0</recipe>
-                    </activeRecipes>
-                </configuration>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.openrewrite.recipe</groupId>
-                        <artifactId>rewrite-spring</artifactId>
-                        <version>6.37.0</version>
-                    </dependency>
-                </dependencies>
-            </plugin>
-            <!-- Migration Spring Boot 4.1.0 Ende -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
