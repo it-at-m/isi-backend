@@ -17,7 +17,6 @@ import lombok.ToString;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-@Schema(description = "AbfrageDto", discriminatorProperty = "artAbfrage")
 @JsonTypeInfo(
     use = JsonTypeInfo.Id.NAME,
     include = JsonTypeInfo.As.EXISTING_PROPERTY,
@@ -29,6 +28,18 @@ import lombok.ToString;
     @JsonSubTypes.Type(value = BaugenehmigungsverfahrenDto.class, name = ArtAbfrage.Values.BAUGENEHMIGUNGSVERFAHREN),
     @JsonSubTypes.Type(value = WeiteresVerfahrenDto.class, name = ArtAbfrage.Values.WEITERES_VERFAHREN),
 })
+@Schema(
+    description = "AbfrageDto",
+    discriminatorProperty = "artAbfrage",
+    discriminatorMapping = {
+        @DiscriminatorMapping(value = ArtAbfrage.Values.BAULEITPLANVERFAHREN, schema = BauleitplanverfahrenDto.class),
+        @DiscriminatorMapping(
+            value = ArtAbfrage.Values.BAUGENEHMIGUNGSVERFAHREN,
+            schema = BaugenehmigungsverfahrenDto.class
+        ),
+        @DiscriminatorMapping(value = ArtAbfrage.Values.WEITERES_VERFAHREN, schema = WeiteresVerfahrenDto.class),
+    }
+)
 public abstract class AbfrageDto extends BaseEntityDto {
 
     private ArtAbfrage artAbfrage;

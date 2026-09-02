@@ -16,7 +16,6 @@ import lombok.ToString;
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-@Schema(description = "WeiteresVerfahrenDto", allOf = { AbfrageDto.class })
 public class WeiteresVerfahrenDto extends AbfrageDto {
 
     private String aktenzeichenProLbk;

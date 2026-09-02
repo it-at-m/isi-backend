@@ -17,7 +17,6 @@ import lombok.ToString;
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-@Schema(description = "BauleitplanverfahrenDto", allOf = { AbfrageDto.class })
 public class BauleitplanverfahrenDto extends AbfrageDto {
 
     private String bebauungsplannummer;
