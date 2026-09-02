@@ -6,11 +6,13 @@ import de.muenchen.isi.api.mapper.PersonalFilterApiMapper;
 import de.muenchen.isi.domain.service.search.PersonalFilterService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,10 +36,9 @@ public class PersonalFilterController {
         return personalFilterApiMapper.models2Dtos(modles);
     }
 
-    @GetMapping("/filterid")
-    public PersonalFilterResponseDto getByFilterID(@RequestBody PersonalFilterRequestDto personalFilterRequestDto) {
-        var requestModel = personalFilterApiMapper.dto2Model(personalFilterRequestDto);
-        var responseModel = personalFilterService.getByFilterID(requestModel);
+    @GetMapping("/{filterId}")
+    public PersonalFilterResponseDto getByFilterID(@PathVariable UUID filterId) {
+        var responseModel = personalFilterService.getByFilterID(filterId);
         return personalFilterApiMapper.model2Dto(responseModel);
     }
 

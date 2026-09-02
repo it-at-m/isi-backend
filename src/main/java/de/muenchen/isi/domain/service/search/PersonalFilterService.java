@@ -6,6 +6,7 @@ import de.muenchen.isi.domain.model.search.filter.PersonalFilterResponseModel;
 import de.muenchen.isi.infrastructure.repository.search.PersonalFilterRepository;
 import de.muenchen.isi.security.AuthenticationUtils;
 import java.util.List;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -27,9 +28,9 @@ public class PersonalFilterService {
         return personalFilterDomainMapper.entities2Models(entities);
     }
 
-    public PersonalFilterResponseModel getByFilterID(PersonalFilterRequestModel personalFilterRequestModel) {
+    public PersonalFilterResponseModel getByFilterID(UUID filter_id) {
         String userSub = authenticationUtils.getUserSub();
-        var entity = personalFilterRepository.findByIdAndPersonalID(personalFilterRequestModel.getId(), userSub);
+        var entity = personalFilterRepository.findByIdAndPersonalID(filter_id, userSub);
         return personalFilterDomainMapper.entity2Model(entity);
     }
 
