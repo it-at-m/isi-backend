@@ -161,6 +161,10 @@ public class AuthenticationUtils {
         return StringUtils.isNotBlank(sub) ? sub : SUB_UNAUTHENTICATED_USER;
     }
 
+    public boolean isSubFromUnauthenticatedUser(final String sub) {
+        return sub.equals(SUB_UNAUTHENTICATED_USER);
+    }
+
     /**
      * Die Methode extrahiert die Nutzerrollen des Nutzers aus dem {@link Jwt} der {@link Authentication} des {@link SecurityContextHolder}.
      *

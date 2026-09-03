@@ -25,15 +25,14 @@ public class PersonalFilterService {
 
     private final PersonalFilterRepository personalFilterRepository;
 
-    public List<PersonalFilterResponseModel> getPersonalFilters() {
-        String userSub = authenticationUtils.getUserSub();
-        var entities = personalFilterRepository.findByPersonalID(userSub);
+    public List<PersonalFilterResponseModel> getPersonalFilters() throws IllegalAccessException {
+        var entities = personalFilterRepository.findByPersonalID(getSubFromAuthenticatedUser());
         return personalFilterDomainMapper.entities2Models(entities);
     }
 
     public PersonalFilterResponseModel getByFilterID(UUID filter_id)
         throws EntityNotFoundException, IllegalAccessException {
-        String userSub = authenticationUtils.getUserSub();
+        String userSub = getSubFromAuthenticatedUser();
         var entity = personalFilterRepository.findByIdAndPersonalID(filter_id, userSub);
         if (entity == null) {
             if (personalFilterRepository.findById(filter_id).isPresent()) {
@@ -46,7 +45,7 @@ public class PersonalFilterService {
 
     public PersonalFilterResponseModel update(PersonalFilterRequestModel personalFilterRequestModel)
         throws EntityNotFoundException, OptimisticLockingException, IllegalAccessException {
-        personalFilterRequestModel.setPersonalID(authenticationUtils.getUserSub());
+        personalFilterRequestModel.setPersonalID(getSubFromAuthenticatedUser());
         var entity = personalFilterRepository.findByIdAndPersonalID(
             personalFilterRequestModel.getId(),
             personalFilterRequestModel.getPersonalID()
@@ -68,8 +67,13 @@ public class PersonalFilterService {
     }
 
     public PersonalFilterResponseModel save(PersonalFilterRequestModel personalFilterRequestModel)
-        throws OptimisticLockingException {
-        personalFilterRequestModel.setPersonalID(authenticationUtils.getUserSub());
+        throws OptimisticLockingException, IllegalAccessException {
+        personalFilterRequestModel.setPersonalID(getSubFromAuthenticatedUser());
+        if (authenticationUtils.isSubFromAuthenticatedUser(personalFilterRequestModel.getPersonalID())) {
+            throw new IllegalAccessException(
+                "Sie müssen authentifiziert sein, um mit persönlichen Filtern interagieren zu können"
+            );
+        }
         var entity = personalFilterDomainMapper.model2Entity(personalFilterRequestModel);
         try {
             entity = this.personalFilterRepository.saveAndFlush(entity);
@@ -81,7 +85,7 @@ public class PersonalFilterService {
     }
 
     public void delete(UUID filterId) throws EntityNotFoundException, IllegalAccessException {
-        var verifyEntity = personalFilterRepository.findByIdAndPersonalID(filterId, authenticationUtils.getUserSub());
+        var verifyEntity = personalFilterRepository.findByIdAndPersonalID(filterId, getSubFromAuthenticatedUser());
         if (verifyEntity == null) {
             if (personalFilterRepository.findById(filterId).isPresent()) {
                 throw new IllegalAccessException("Sie sind nicht der Ersteller dieses persönlichen Filters.");
@@ -89,5 +93,15 @@ public class PersonalFilterService {
             throw new EntityNotFoundException("PersonalFilter nicht gefunden.");
         }
         this.personalFilterRepository.deleteById(filterId);
+    }
+
+    private String getSubFromAuthenticatedUser() throws IllegalAccessException {
+        final String userSub = authenticationUtils.getUserSub();
+        if (authenticationUtils.isSubFromAuthenticatedUser(userSub)) {
+            throw new IllegalAccessException(
+                "Sie müssen authentifiziert sein, um mit persönlichen Filtern interagieren zu können"
+            );
+        }
+        return userSub;
     }
 }

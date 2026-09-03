@@ -36,7 +36,7 @@ public class PersonalFilterController {
     private final PersonalFilterApiMapper personalFilterApiMapper;
 
     @GetMapping
-    public List<PersonalFilterResponseDto> getPersonalFilters() {
+    public List<PersonalFilterResponseDto> getPersonalFilters() throws IllegalAccessException {
         var modles = personalFilterService.getPersonalFilters();
         return personalFilterApiMapper.models2Dtos(modles);
     }
@@ -62,7 +62,7 @@ public class PersonalFilterController {
     @PostMapping("/create")
     public PersonalFilterResponseDto createFilter(
         @RequestBody @Valid @NotNull PersonalFilterRequestDto personalFilterRequestDto
-    ) throws OptimisticLockingException {
+    ) throws OptimisticLockingException, IllegalAccessException {
         var requestModel = personalFilterApiMapper.dto2Model(personalFilterRequestDto);
         var responseModel = personalFilterService.save(requestModel);
         return personalFilterApiMapper.model2Dto(responseModel);
