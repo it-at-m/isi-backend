@@ -13,8 +13,6 @@ public class PersonalFilterRequestDto {
 
     private UUID id;
 
-    private String personalID;
-
     @NotNull
     @Valid
     private FilterSettingsDto filterSettings;

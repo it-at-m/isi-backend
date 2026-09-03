@@ -8,8 +8,6 @@ import lombok.EqualsAndHashCode;
 @Data
 public class PersonalFilterResponseModel extends BaseEntityModel {
 
-    private String personalID;
-
     private String filterName;
 
     private FilterSettingsModel filterSettings;
