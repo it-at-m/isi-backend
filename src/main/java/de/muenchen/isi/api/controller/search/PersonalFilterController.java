@@ -5,6 +5,8 @@ import de.muenchen.isi.api.dto.search.filter.PersonalFilterResponseDto;
 import de.muenchen.isi.api.mapper.PersonalFilterApiMapper;
 import de.muenchen.isi.domain.service.search.PersonalFilterService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -37,20 +39,24 @@ public class PersonalFilterController {
     }
 
     @GetMapping("/{filterId}")
-    public PersonalFilterResponseDto getByFilterID(@PathVariable UUID filterId) {
+    public PersonalFilterResponseDto getByFilterID(@PathVariable @NotNull UUID filterId) {
         var responseModel = personalFilterService.getByFilterID(filterId);
         return personalFilterApiMapper.model2Dto(responseModel);
     }
 
     @PatchMapping("/edit")
-    public PersonalFilterResponseDto editFilter(@RequestBody PersonalFilterRequestDto personalFilterRequestDto) {
+    public PersonalFilterResponseDto editFilter(
+        @RequestBody @Valid @NotNull PersonalFilterRequestDto personalFilterRequestDto
+    ) {
         var requestModel = personalFilterApiMapper.dto2Model(personalFilterRequestDto);
         var responseModel = personalFilterService.update(requestModel);
         return personalFilterApiMapper.model2Dto(responseModel);
     }
 
     @PostMapping("/create")
-    public PersonalFilterResponseDto createFilter(@RequestBody PersonalFilterRequestDto personalFilterRequestDto) {
+    public PersonalFilterResponseDto createFilter(
+        @RequestBody @Valid @NotNull PersonalFilterRequestDto personalFilterRequestDto
+    ) {
         var requestModel = personalFilterApiMapper.dto2Model(personalFilterRequestDto);
         var responseModel = personalFilterService.save(requestModel);
         return personalFilterApiMapper.model2Dto(responseModel);
