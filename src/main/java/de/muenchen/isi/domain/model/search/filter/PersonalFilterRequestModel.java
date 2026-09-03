@@ -11,9 +11,7 @@ public class PersonalFilterRequestModel {
 
     private String personalID;
 
-    @NotNull
     private String filterName;
 
-    @NotNull
     private FilterSettingsModel filterSettings;
 }

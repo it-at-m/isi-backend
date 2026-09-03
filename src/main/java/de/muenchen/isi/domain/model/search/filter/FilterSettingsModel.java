@@ -28,7 +28,6 @@ public class FilterSettingsModel {
 
     private List<StatusAbfrage> statusAbfrage;
 
-    @NotNull
     private UncertainBoolean sobonRelevant;
 
     private Integer weGesamtVon;
