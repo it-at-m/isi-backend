@@ -25,17 +25,31 @@ public class PersonalFilterService {
 
     private final PersonalFilterRepository personalFilterRepository;
 
+    /**
+     * Gibt alle eigenen persönlichen Filter zurück.
+     *
+     * @return alle von diesem Nutzer existierenden persönlichen Filter als Liste (exklusive der userID)
+     * @throws IllegalAccessException falls der Nutzer den Fallback-Sub aus AuthenticationUtils zugewiesen hat
+     */
     public List<PersonalFilterResponseModel> getPersonalFilters() throws IllegalAccessException {
         var entities = personalFilterRepository.findByPersonalID(getSubFromAuthenticatedUser());
         return personalFilterDomainMapper.entities2Models(entities);
     }
 
-    public PersonalFilterResponseModel getByFilterID(UUID filter_id)
+    /**
+     * Gibt einen spezifisch angefragten persönlichen Filter zurück.
+     *
+     * @param filterId des zu lesenden persönlichen Filters
+     * @return den persönlichen Filter mit dieser ID (exklusive der userID)
+     * @throws EntityNotFoundException falls es keinen persönlichen Filter mit dieser ID gibt
+     * @throws IllegalAccessException falls der Nutzer den Fallback-Sub aus AuthenticationUtils zugewiesen hat
+     */
+    public PersonalFilterResponseModel getByFilterID(UUID filterId)
         throws EntityNotFoundException, IllegalAccessException {
         String userSub = getSubFromAuthenticatedUser();
-        var entity = personalFilterRepository.findByIdAndPersonalID(filter_id, userSub);
+        var entity = personalFilterRepository.findByIdAndPersonalID(filterId, userSub);
         if (entity == null) {
-            if (personalFilterRepository.findById(filter_id).isPresent()) {
+            if (personalFilterRepository.findById(filterId).isPresent()) {
                 throw new IllegalAccessException("Sie sind nicht der Ersteller dieses persönlichen Filters.");
             }
             throw new EntityNotFoundException("PersonalFilter nicht gefunden.");
@@ -43,6 +57,15 @@ public class PersonalFilterService {
         return personalFilterDomainMapper.entity2Model(entity);
     }
 
+    /**
+     * Aktualisiert einen spezifizierten persönlichen Filter.
+     *
+     * @param personalFilterRequestModel entspricht neuen persönlichen Filtereinstellungen, die bestehende Filtereinstellungen überschreiben sollen
+     * @return den aktualisierten persönlichen Filter (exklusive der userID)
+     * @throws EntityNotFoundException falls es keinen persönlichen Filter mit dieser ID gibt
+     * @throws OptimisticLockingException falls es bereits eine neuere Version der Entität in der Datenbank gibt
+     * @throws IllegalAccessException falls der Nutzer den Fallback-Sub aus AuthenticationUtils zugewiesen hat
+     */
     public PersonalFilterResponseModel update(PersonalFilterRequestModel personalFilterRequestModel)
         throws EntityNotFoundException, OptimisticLockingException, IllegalAccessException {
         personalFilterRequestModel.setPersonalID(getSubFromAuthenticatedUser());
@@ -66,10 +89,18 @@ public class PersonalFilterService {
         return personalFilterDomainMapper.entity2Model(entity);
     }
 
+    /**
+     * Speichert einen persönlichen Filter und gibt diesen inkl. FilterId zurück.
+     *
+     * @param personalFilterRequestModel entspricht dem persönlichen Filter, der gespeichert werden soll
+     * @return den gespeicherten persönlichen Filter (exklusive der userID)
+     * @throws OptimisticLockingException falls es bereits eine neuere Version der Entität in der Datenbank gibt
+     * @throws IllegalAccessException falls der Nutzer den Fallback-Sub aus AuthenticationUtils zugewiesen hat
+     */
     public PersonalFilterResponseModel save(PersonalFilterRequestModel personalFilterRequestModel)
         throws OptimisticLockingException, IllegalAccessException {
         personalFilterRequestModel.setPersonalID(getSubFromAuthenticatedUser());
-        if (authenticationUtils.isSubFromAuthenticatedUser(personalFilterRequestModel.getPersonalID())) {
+        if (authenticationUtils.isSubFromUnauthenticatedUser(personalFilterRequestModel.getPersonalID())) {
             throw new IllegalAccessException(
                 "Sie müssen authentifiziert sein, um mit persönlichen Filtern interagieren zu können"
             );
@@ -84,6 +115,13 @@ public class PersonalFilterService {
         return personalFilterDomainMapper.entity2Model(entity);
     }
 
+    /**
+     * Löscht einen spezifisch angegebenen Filter.
+     *
+     * @param filterId des zu löschenden persönlichen Filters
+     * @throws EntityNotFoundException falls es keinen persönlichen Filter mit dieser ID gibt
+     * @throws IllegalAccessException falls der Nutzer den Fallback-Sub aus AuthenticationUtils zugewiesen hat
+     */
     public void delete(UUID filterId) throws EntityNotFoundException, IllegalAccessException {
         var verifyEntity = personalFilterRepository.findByIdAndPersonalID(filterId, getSubFromAuthenticatedUser());
         if (verifyEntity == null) {
@@ -95,9 +133,15 @@ public class PersonalFilterService {
         this.personalFilterRepository.deleteById(filterId);
     }
 
+    /**
+     * Gibt den userSub zurück sofern es kein Fallback-Wert ist.
+     *
+     * @return den userSub aus authenticationUtils
+     * @throws IllegalAccessException falls der Nutzer den Fallback-Sub aus AuthenticationUtils zugewiesen hat
+     */
     private String getSubFromAuthenticatedUser() throws IllegalAccessException {
         final String userSub = authenticationUtils.getUserSub();
-        if (authenticationUtils.isSubFromAuthenticatedUser(userSub)) {
+        if (authenticationUtils.isSubFromUnauthenticatedUser(userSub)) {
             throw new IllegalAccessException(
                 "Sie müssen authentifiziert sein, um mit persönlichen Filtern interagieren zu können"
             );

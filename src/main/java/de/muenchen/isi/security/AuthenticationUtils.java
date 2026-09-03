@@ -161,6 +161,12 @@ public class AuthenticationUtils {
         return StringUtils.isNotBlank(sub) ? sub : SUB_UNAUTHENTICATED_USER;
     }
 
+    /**
+     * Überprüft ob es sich um den Fallback-Sub Wert handelt, siehe getUserSub.
+     *
+     * @param sub entspricht dem zu überprüfenden String
+     * @return ob der sub dem Fallback-Wert entspricht
+     */
     public boolean isSubFromUnauthenticatedUser(final String sub) {
         return sub.equals(SUB_UNAUTHENTICATED_USER);
     }
