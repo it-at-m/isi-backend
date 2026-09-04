@@ -72,13 +72,10 @@
         "type": "object",
         "properties": {
           "jobname": { "type": "string" },
-          "parameters": { "type": "array", "items": { "$ref": "#/components/schemas/PairStringString" } }
+          "parameters": { "type": "array", "items": { "$ref": "#/components/schemas/KeyValueDto" } }
         }
       },
-      "PairStringString": {
-        "type": "object",
-        "properties": { "first": { "type": "string" }, "second": { "type": "string" } }
-      },
+      "KeyValueDto": { "type": "object", "properties": { "key": { "type": "string" }, "value": { "type": "string" } } },
       "InformationResponseDto": {
         "type": "object",
         "properties": {
