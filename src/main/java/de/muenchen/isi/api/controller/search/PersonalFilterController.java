@@ -6,6 +6,7 @@ import de.muenchen.isi.api.dto.search.filter.PersonalFilterResponseDto;
 import de.muenchen.isi.api.mapper.PersonalFilterApiMapper;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
+import de.muenchen.isi.domain.exception.UserRoleNotAllowedException;
 import de.muenchen.isi.domain.service.search.PersonalFilterService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -56,7 +57,7 @@ public class PersonalFilterController {
             ),
         }
     )
-    public List<PersonalFilterResponseDto> getPersonalFilters() throws IllegalAccessException {
+    public List<PersonalFilterResponseDto> getPersonalFilters() throws UserRoleNotAllowedException {
         var modles = personalFilterService.getPersonalFilters();
         return personalFilterApiMapper.models2Dtos(modles);
     }
@@ -79,7 +80,7 @@ public class PersonalFilterController {
         }
     )
     public PersonalFilterResponseDto getByFilterID(@PathVariable @NotNull UUID filterId)
-        throws EntityNotFoundException, IllegalAccessException {
+        throws EntityNotFoundException, UserRoleNotAllowedException {
         var responseModel = personalFilterService.getByFilterID(filterId);
         return personalFilterApiMapper.model2Dto(responseModel);
     }
@@ -117,7 +118,7 @@ public class PersonalFilterController {
     @PatchMapping("/edit")
     public PersonalFilterResponseDto editFilter(
         @RequestBody @Valid @NotNull PersonalFilterRequestDto personalFilterRequestDto
-    ) throws OptimisticLockingException, EntityNotFoundException, IllegalAccessException {
+    ) throws OptimisticLockingException, EntityNotFoundException, UserRoleNotAllowedException {
         var requestModel = personalFilterApiMapper.dto2Model(personalFilterRequestDto);
         var responseModel = personalFilterService.update(requestModel);
         return personalFilterApiMapper.model2Dto(responseModel);
@@ -146,7 +147,7 @@ public class PersonalFilterController {
     )
     public ResponseEntity<PersonalFilterResponseDto> createFilter(
         @RequestBody @Valid @NotNull PersonalFilterRequestDto personalFilterRequestDto
-    ) throws OptimisticLockingException, IllegalAccessException {
+    ) throws OptimisticLockingException, UserRoleNotAllowedException {
         var requestModel = personalFilterApiMapper.dto2Model(personalFilterRequestDto);
         var responseModel = personalFilterService.save(requestModel);
         var dto = personalFilterApiMapper.model2Dto(responseModel);
@@ -170,7 +171,7 @@ public class PersonalFilterController {
         }
     )
     @DeleteMapping("/delete/{filterId}")
-    public void deleteFilter(@PathVariable UUID filterId) throws EntityNotFoundException, IllegalAccessException {
+    public void deleteFilter(@PathVariable UUID filterId) throws EntityNotFoundException, UserRoleNotAllowedException {
         personalFilterService.delete(filterId);
     }
 }
