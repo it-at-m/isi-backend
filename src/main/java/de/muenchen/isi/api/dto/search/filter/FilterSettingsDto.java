@@ -1,6 +1,7 @@
 package de.muenchen.isi.api.dto.search.filter;
 
 import de.muenchen.isi.api.validation.NotUnspecified;
+import de.muenchen.isi.domain.model.enums.SortAttribute;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusInfrastruktureinrichtung;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
@@ -11,11 +12,48 @@ import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.search.engine.search.sort.dsl.SortOrder;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class FilterSettingsDto {
+
+    @NotNull
+    private SortAttribute sortBy;
+
+    @NotNull
+    private SortOrder sortOrder;
+
+    @NotNull
+    private Boolean selectBauleitplanverfahren;
+
+    @NotNull
+    private Boolean selectBaugenehmigungsverfahren;
+
+    @NotNull
+    private Boolean selectWeiteresVerfahren;
+
+    @NotNull
+    private Boolean selectBauvorhaben;
+
+    @NotNull
+    private Boolean selectGrundschule;
+
+    @NotNull
+    private Boolean selectGsNachmittagBetreuung;
+
+    @NotNull
+    private Boolean selectHausFuerKinder;
+
+    @NotNull
+    private Boolean selectKindergarten;
+
+    @NotNull
+    private Boolean selectKinderkrippe;
+
+    @NotNull
+    private Boolean selectMittelschule;
 
     private List<String> stadtbezirkNummer;
 

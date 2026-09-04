@@ -1,5 +1,6 @@
 package de.muenchen.isi.infrastructure.entity.search.filter;
 
+import de.muenchen.isi.domain.model.enums.SortAttribute;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusInfrastruktureinrichtung;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
@@ -15,11 +16,50 @@ import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.List;
 import lombok.Data;
+import org.hibernate.search.engine.search.sort.dsl.SortOrder;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.GenericField;
 
 @Embeddable
 @Data
 public class FilterSettings {
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private SortAttribute sortBy;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private SortOrder sortOrder;
+
+    @NotNull
+    private Boolean selectBauleitplanverfahren;
+
+    @NotNull
+    private Boolean selectBaugenehmigungsverfahren;
+
+    @NotNull
+    private Boolean selectWeiteresVerfahren;
+
+    @NotNull
+    private Boolean selectBauvorhaben;
+
+    @NotNull
+    private Boolean selectGrundschule;
+
+    @NotNull
+    private Boolean selectGsNachmittagBetreuung;
+
+    @NotNull
+    private Boolean selectHausFuerKinder;
+
+    @NotNull
+    private Boolean selectKindergarten;
+
+    @NotNull
+    private Boolean selectKinderkrippe;
+
+    @NotNull
+    private Boolean selectMittelschule;
 
     @ElementCollection
     @CollectionTable(
