@@ -50,7 +50,7 @@
         <spring.statemachine>4.0.2</spring.statemachine>
         <icu4j.version>78.3</icu4j.version>
         <hibernate.search>8.4.0.Final</hibernate.search>
-        <openapi-generator-version>7.24.0</openapi-generator-version> <!-- Hinweis: Bei Version 7.25.0 wird ApiClient mit fehlender ExceptionProvider Klasse generiert -->
+        <openapi-generator-version>7.25.0</openapi-generator-version>
     </properties>
 
     <dependencyManagement>
@@ -561,11 +561,13 @@
                                 <legacyDiscriminatorBehavior>false</legacyDiscriminatorBehavior>
                                 <useJakartaEe>true</useJakartaEe>
                                 <dateLibrary>java8-localdatetime</dateLibrary>
+                                <useSpringBoot3>false</useSpringBoot3>
+                                <useSpringBoot4>true</useSpringBoot4>
                             </configOptions>
 
                             <globalProperties>
                                 <supportingFiles>
-                                    ApiClient.java,JavaTimeFormatter.java,Authentication.java,OAuth.java,ApiKeyAuth.java,HttpBasicAuth.java,HttpBearerAuth.java,RFC3339DateFormat.java
+                                    ApiClient.java,JavaTimeFormatter.java,Authentication.java,OAuth.java,ApiKeyAuth.java,HttpBasicAuth.java,HttpBearerAuth.java,RFC3339DateFormat.java,ExceptionProvider.java
                                 </supportingFiles>
                             </globalProperties>
                         </configuration>
