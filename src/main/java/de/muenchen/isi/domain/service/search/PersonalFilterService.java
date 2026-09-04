@@ -75,7 +75,8 @@ public class PersonalFilterService {
             personalFilterRequestModel.getPersonalID()
         );
         if (entity == null) {
-            if (personalFilterRepository.findById(personalFilterRequestModel.getId()).isPresent()) {
+            UUID id = personalFilterRequestModel.getId();
+            if (id != null && personalFilterRepository.findById(id).isPresent()) {
                 throw new UserRoleNotAllowedException("Sie sind nicht der Ersteller dieses persönlichen Filters.");
             }
             throw new EntityNotFoundException("PersonalFilter nicht gefunden.");
@@ -100,6 +101,9 @@ public class PersonalFilterService {
      */
     public PersonalFilterResponseModel save(PersonalFilterRequestModel personalFilterRequestModel)
         throws OptimisticLockingException, UserRoleNotAllowedException {
+        if (personalFilterRequestModel.getId() != null) {
+            personalFilterRequestModel.setId(null);
+        }
         personalFilterRequestModel.setPersonalID(getSubFromAuthenticatedUser());
         var entity = personalFilterDomainMapper.model2Entity(personalFilterRequestModel);
         try {
