@@ -7,6 +7,7 @@ import static org.mockito.Mockito.*;
 
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
+import de.muenchen.isi.domain.exception.UserRoleNotAllowedException;
 import de.muenchen.isi.domain.mapper.PersonalFilterDomainMapper;
 import de.muenchen.isi.domain.model.search.filter.PersonalFilterRequestModel;
 import de.muenchen.isi.domain.model.search.filter.PersonalFilterResponseModel;
@@ -70,7 +71,7 @@ class PersonalFilterServiceTest {
         when(authenticationUtils.getUserSub()).thenReturn(userSub);
         when(authenticationUtils.isSubFromUnauthenticatedUser(userSub)).thenReturn(true);
 
-        assertThrows(IllegalAccessException.class, () -> personalFilterService.getPersonalFilters());
+        assertThrows(UserRoleNotAllowedException.class, () -> personalFilterService.getPersonalFilters());
     }
 
     @Test
@@ -112,7 +113,7 @@ class PersonalFilterServiceTest {
         when(personalFilterRepository.findByIdAndPersonalID(filterId, userSub)).thenReturn(null);
         when(personalFilterRepository.findById(filterId)).thenReturn(Optional.of(new PersonalFilter()));
 
-        assertThrows(IllegalAccessException.class, () -> personalFilterService.getByFilterID(filterId));
+        assertThrows(UserRoleNotAllowedException.class, () -> personalFilterService.getByFilterID(filterId));
     }
 
     @Test
@@ -162,7 +163,7 @@ class PersonalFilterServiceTest {
         when(personalFilterRepository.findByIdAndPersonalID(filterId, userSub)).thenReturn(null);
         when(personalFilterRepository.findById(filterId)).thenReturn(Optional.of(new PersonalFilter()));
 
-        assertThrows(IllegalAccessException.class, () -> personalFilterService.update(requestModel));
+        assertThrows(UserRoleNotAllowedException.class, () -> personalFilterService.update(requestModel));
     }
 
     @Test
@@ -206,9 +207,9 @@ class PersonalFilterServiceTest {
         PersonalFilterRequestModel requestModel = new PersonalFilterRequestModel();
 
         when(authenticationUtils.getUserSub()).thenReturn(userSub);
-        when(authenticationUtils.isSubFromUnauthenticatedUser(userSub)).thenReturn(false, true);
+        when(authenticationUtils.isSubFromUnauthenticatedUser(userSub)).thenReturn(true);
 
-        assertThrows(IllegalAccessException.class, () -> personalFilterService.save(requestModel));
+        assertThrows(UserRoleNotAllowedException.class, () -> personalFilterService.save(requestModel));
     }
 
     @Test
@@ -264,6 +265,6 @@ class PersonalFilterServiceTest {
         when(personalFilterRepository.findByIdAndPersonalID(filterId, userSub)).thenReturn(null);
         when(personalFilterRepository.findById(filterId)).thenReturn(Optional.of(new PersonalFilter()));
 
-        assertThrows(IllegalAccessException.class, () -> personalFilterService.delete(filterId));
+        assertThrows(UserRoleNotAllowedException.class, () -> personalFilterService.delete(filterId));
     }
 }
