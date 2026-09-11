@@ -1,6 +1,5 @@
 package de.muenchen.isi.api.dto.search.filter;
 
-import de.muenchen.isi.api.validation.NotUnspecified;
 import de.muenchen.isi.domain.model.enums.SortAttribute;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusInfrastruktureinrichtung;
@@ -72,7 +71,6 @@ public class FilterSettingsDto {
     private List<StatusAbfrage> statusAbfrage;
 
     @NotNull
-    @NotUnspecified
     private UncertainBoolean sobonRelevant;
 
     private Integer weGesamtVon;
