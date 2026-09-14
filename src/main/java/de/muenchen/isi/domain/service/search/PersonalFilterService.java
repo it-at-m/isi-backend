@@ -33,7 +33,9 @@ public class PersonalFilterService {
      * @throws UserRoleNotAllowedException falls der Nutzer den Fallback-Sub aus AuthenticationUtils zugewiesen hat
      */
     public List<PersonalFilterResponseModel> getPersonalFilters() throws UserRoleNotAllowedException {
-        var entities = personalFilterRepository.findByPersonalID(getSubFromAuthenticatedUser());
+        var entities = personalFilterRepository.findByPersonalIDOrderByLastModifiedDateTimeDesc(
+            getSubFromAuthenticatedUser()
+        );
         return personalFilterDomainMapper.entities2Models(entities);
     }
 

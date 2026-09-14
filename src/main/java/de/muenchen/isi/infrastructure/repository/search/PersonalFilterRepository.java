@@ -6,7 +6,7 @@ import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface PersonalFilterRepository extends JpaRepository<PersonalFilter, UUID> {
-    List<PersonalFilter> findByPersonalID(String personalid);
+    List<PersonalFilter> findByPersonalIDOrderByLastModifiedDateTimeDesc(String personalId);
 
     PersonalFilter findByIdAndPersonalID(UUID id, String personalid);
 }
