@@ -5,7 +5,6 @@ import de.muenchen.isi.domain.exception.CalculationException;
 import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.FileHandlingFailedException;
-import de.muenchen.isi.domain.exception.FileHandlingWithS3FailedException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.ReportingException;
 import de.muenchen.isi.domain.exception.UserRoleNotAllowedException;
@@ -164,13 +163,12 @@ public class AbfrageService {
      * @throws EntityNotFoundException           falls die Abfrage oder das referenzierte Bauvorhaben nicht existiert.
      * @throws AbfrageStatusNotAllowedException  falls die zu aktualisierende Abfrage sich nicht im Status {@link StatusAbfrage#ANGELEGT} befindet.
      * @throws FileHandlingFailedException       falls es beim Dateihandling zu einem Fehler gekommen ist.
-     * @throws FileHandlingWithS3FailedException falls es beim Dateihandling im S3-Storage zu einem Fehler gekommen ist.
      * @throws CalculationException              falls bei den Berechnungen ein Fehler auftritt.
      * @throws ReportingException                falls bei der Übermittlung an die Reportingschnittstelle ein Fehler auftritt.
      * @throws UserRoleNotAllowedException       falls der User keine Berechtigung für die Abfrage hat.
      */
     public AbfrageModel patchAngelegt(final AbfrageAngelegtModel abfrage, final UUID id)
-        throws EntityNotFoundException, OptimisticLockingException, AbfrageStatusNotAllowedException, FileHandlingFailedException, FileHandlingWithS3FailedException, UserRoleNotAllowedException, CalculationException, ReportingException {
+        throws EntityNotFoundException, OptimisticLockingException, AbfrageStatusNotAllowedException, FileHandlingFailedException, UserRoleNotAllowedException, CalculationException, ReportingException {
         final var originalAbfrageDb = this.getById(id);
         this.throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(originalAbfrageDb, StatusAbfrage.ANGELEGT);
         this.changeRelevantAbfragevarianteOnBauvorhabenChangeAbfrageAngelegtModel(abfrage, originalAbfrageDb);
@@ -205,12 +203,11 @@ public class AbfrageService {
      * @param originalAbfrageDb welche mit den im Parameter gegebenen abfrage gegebenen Werten aktualisiert und gespeichert wird.
      * @return das gespeicherte {@link AbfrageModel}
      * @throws FileHandlingFailedException       falls es beim Dateihandling zu einem Fehler gekommen ist.
-     * @throws FileHandlingWithS3FailedException falls es beim Dateihandling im S3-Storage zu einem Fehler gekommen ist.
      */
     protected AbfrageModel patchBauleitplanverfahrenAngelegt(
         BauleitplanverfahrenAngelegtModel abfrage,
         BauleitplanverfahrenModel originalAbfrageDb
-    ) throws FileHandlingFailedException, FileHandlingWithS3FailedException {
+    ) throws FileHandlingFailedException {
         dokumentService.deleteDokumenteFromOriginalDokumentenListWhichAreMissingInParameterAdaptedDokumentenListe(
             abfrage.getDokumente(),
             originalAbfrageDb.getDokumente()
@@ -225,12 +222,11 @@ public class AbfrageService {
      * @param originalAbfrageDb welche mit den im Parameter gegebenen abfrage gegebenen Werten aktualisiert und gespeichert wird.
      * @return das gespeicherte {@link AbfrageModel}
      * @throws FileHandlingFailedException       falls es beim Dateihandling zu einem Fehler gekommen ist.
-     * @throws FileHandlingWithS3FailedException falls es beim Dateihandling im S3-Storage zu einem Fehler gekommen ist.
      */
     protected AbfrageModel patchBaugenehmigungsverfahrenAngelegt(
         BaugenehmigungsverfahrenAngelegtModel abfrage,
         BaugenehmigungsverfahrenModel originalAbfrageDb
-    ) throws FileHandlingFailedException, FileHandlingWithS3FailedException {
+    ) throws FileHandlingFailedException {
         dokumentService.deleteDokumenteFromOriginalDokumentenListWhichAreMissingInParameterAdaptedDokumentenListe(
             abfrage.getDokumente(),
             originalAbfrageDb.getDokumente()
@@ -245,12 +241,11 @@ public class AbfrageService {
      * @param originalAbfrageDb welche mit den im Parameter gegebenen abfrage gegebenen Werten aktualisiert und gespeichert wird.
      * @return das gespeicherte {@link AbfrageModel}
      * @throws FileHandlingFailedException       falls es beim Dateihandling zu einem Fehler gekommen ist.
-     * @throws FileHandlingWithS3FailedException falls es beim Dateihandling im S3-Storage zu einem Fehler gekommen ist.
      */
     protected AbfrageModel patchWeiteresVerfahrenAngelegt(
         WeiteresVerfahrenAngelegtModel abfrage,
         WeiteresVerfahrenModel originalAbfrageDb
-    ) throws FileHandlingFailedException, FileHandlingWithS3FailedException {
+    ) throws FileHandlingFailedException {
         dokumentService.deleteDokumenteFromOriginalDokumentenListWhichAreMissingInParameterAdaptedDokumentenListe(
             abfrage.getDokumente(),
             originalAbfrageDb.getDokumente()

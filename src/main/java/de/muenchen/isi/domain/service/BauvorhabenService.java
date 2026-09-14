@@ -6,7 +6,6 @@ import de.muenchen.isi.domain.exception.CalculationException;
 import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.FileHandlingFailedException;
-import de.muenchen.isi.domain.exception.FileHandlingWithS3FailedException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.ReportingException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
@@ -141,13 +140,12 @@ public class BauvorhabenService {
      * @throws EntityNotFoundException           falls das Bauvorhaben identifiziert durch die {@link BauvorhabenModel#getId()} nicht gefunden wird
      * @throws OptimisticLockingException        falls in der Anwendung bereits eine neuere Version der Entität gespeichert ist
      * @throws FileHandlingFailedException       falls es beim Dateihandling zu einem Fehler gekommen ist.
-     * @throws FileHandlingWithS3FailedException falls es beim Dateihandling im S3-Storage zu einem Fehler gekommen ist.
      * @throws EntityIsReferencedException       falls bei Neuanlage eines Bauvorhabens bei Datenübernahme einer Abfrage diese bereits ein Bauvorhaben referenziert
      * @throws UserRoleNotAllowedException       falls der User keine Berechtigung für die Abfrage hat.
      * @throws ReportingException                falls bei der Übermittlung an die Reportingschnittstelle ein Fehler auftritt.
      */
     public BauvorhabenModel updateBauvorhaben(final BauvorhabenModel bauvorhaben)
-        throws EntityNotFoundException, OptimisticLockingException, FileHandlingFailedException, FileHandlingWithS3FailedException, EntityIsReferencedException, UserRoleNotAllowedException, ReportingException {
+        throws EntityNotFoundException, OptimisticLockingException, FileHandlingFailedException, EntityIsReferencedException, UserRoleNotAllowedException, ReportingException {
         final var originalBauvorhabenDb = this.getBauvorhabenById(bauvorhaben.getId());
         dokumentService.deleteDokumenteFromOriginalDokumentenListWhichAreMissingInParameterAdaptedDokumentenListe(
             bauvorhaben.getDokumente(),

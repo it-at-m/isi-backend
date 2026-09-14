@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.FileHandlingFailedException;
-import de.muenchen.isi.domain.exception.FileHandlingWithS3FailedException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.mapper.KommentarBauvorhabenDomainMapperImpl;
 import de.muenchen.isi.domain.mapper.KommentarInfrastruktureinrichtungDomainMapperImpl;
@@ -244,8 +243,7 @@ class KommentarServiceTest {
     }
 
     @Test
-    void updateKommentar()
-        throws EntityNotFoundException, OptimisticLockingException, FileHandlingFailedException, FileHandlingWithS3FailedException {
+    void updateKommentar() throws EntityNotFoundException, OptimisticLockingException, FileHandlingFailedException {
         final var uuidBauvorhaben = UUID.randomUUID();
         final var kommentar1 = new Kommentar();
         final var bauvorhaben = new Bauvorhaben();
