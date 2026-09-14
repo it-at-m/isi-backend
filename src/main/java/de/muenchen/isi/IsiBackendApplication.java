@@ -4,6 +4,7 @@
  */
 package de.muenchen.isi;
 
+import net.javacrumbs.shedlock.spring.annotation.EnableSchedulerLock;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.persistence.autoconfigure.EntityScan;
@@ -21,6 +22,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableJpaRepositories(basePackages = { "de.muenchen.isi" })
 @EnableAutoConfiguration
 @EnableScheduling
+@EnableSchedulerLock(defaultLockAtMostFor = "1380m")
 public class IsiBackendApplication {
 
     public static void main(final String[] args) {

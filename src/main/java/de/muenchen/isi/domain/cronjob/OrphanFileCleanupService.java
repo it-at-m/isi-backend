@@ -103,7 +103,7 @@ public class OrphanFileCleanupService {
             log.error(message, exception);
             throw new CronJobFailedException(message, exception);
         } catch (final Exception exception) {
-            final var message = "Beim der Ermittlung der nicht referenzierten Dateien ist ein Fehler aufgetreten.";
+            final var message = "Bei der Ermittlung der nicht referenzierten Dateien ist ein Fehler aufgetreten.";
             log.error(message, exception);
             throw new CronJobFailedException(message, exception);
         }
