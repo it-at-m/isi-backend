@@ -42,7 +42,7 @@
         <org.projectlombok.lombok.version>1.18.46</org.projectlombok.lombok.version>
         <org.projectlombok.mapstructbinding.version>0.2.0</org.projectlombok.mapstructbinding.version>
         <mapstruct.version>1.6.3</mapstruct.version>
-        <s3.integration.version>4.0.0</s3.integration.version>
+        <s3.integration.version>4.0.1</s3.integration.version>
         <!-- https://mvnrepository.com/artifact/org.geotools/gt-main?repo=geotools-releases
         (Register: GeoTools) -->
         <geotools.version>35.0</geotools.version>
@@ -196,12 +196,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-oauth2-client</artifactId>
             </dependency>
-            <!--
-                <dependency>
-                    <groupId>org.springframework.security</groupId>
-                    <artifactId>spring-security-oauth2-client</artifactId>
-                </dependency>
-            -->
+
             <!-- Spring Production-Ready Starters -->
             <dependency>
                 <groupId>org.springframework.boot</groupId>
@@ -586,7 +581,6 @@
                                 <useSpringBoot3>false</useSpringBoot3>
                                 <useSpringBoot4>true</useSpringBoot4>
                             </configOptions>
-
                             <globalProperties>
                                 <supportingFiles>
                                     ApiClient.java,JavaTimeFormatter.java,Authentication.java,OAuth.java,ApiKeyAuth.java,HttpBasicAuth.java,HttpBearerAuth.java,RFC3339DateFormat.java,ExceptionProvider.java
@@ -596,10 +590,6 @@
                     </execution>
                 </executions>
             </plugin>
-
-
         </plugins>
     </build>
-
-
 </project>
