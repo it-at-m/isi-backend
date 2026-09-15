@@ -6,6 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
+import de.muenchen.isi.domain.exception.MaxCreationsReachedException;
+import de.muenchen.isi.domain.exception.NotOwnerException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.UserRoleNotAllowedException;
 import de.muenchen.isi.domain.mapper.PersonalFilterDomainMapper;
@@ -56,12 +58,12 @@ class PersonalFilterServiceTest {
 
         when(authenticationUtils.getUserSub()).thenReturn(userSub);
         when(authenticationUtils.isSubFromUnauthenticatedUser(userSub)).thenReturn(false);
-        when(personalFilterRepository.findByPersonalID(userSub)).thenReturn(entities);
+        when(personalFilterRepository.findByPersonalIDOrderByLastModifiedDateTimeDesc(userSub)).thenReturn(entities);
         when(personalFilterDomainMapper.entities2Models(entities)).thenReturn(models);
 
         List<PersonalFilterResponseModel> result = personalFilterService.getPersonalFilters();
         assertThat(result, is(models));
-        verify(personalFilterRepository).findByPersonalID(userSub);
+        verify(personalFilterRepository).findByPersonalIDOrderByLastModifiedDateTimeDesc(userSub);
         verify(personalFilterDomainMapper).entities2Models(entities);
     }
 
@@ -113,7 +115,7 @@ class PersonalFilterServiceTest {
         when(personalFilterRepository.findByIdAndPersonalID(filterId, userSub)).thenReturn(null);
         when(personalFilterRepository.findById(filterId)).thenReturn(Optional.of(new PersonalFilter()));
 
-        assertThrows(UserRoleNotAllowedException.class, () -> personalFilterService.getByFilterID(filterId));
+        assertThrows(NotOwnerException.class, () -> personalFilterService.getByFilterID(filterId));
     }
 
     @Test
@@ -163,7 +165,7 @@ class PersonalFilterServiceTest {
         when(personalFilterRepository.findByIdAndPersonalID(filterId, userSub)).thenReturn(null);
         when(personalFilterRepository.findById(filterId)).thenReturn(Optional.of(new PersonalFilter()));
 
-        assertThrows(UserRoleNotAllowedException.class, () -> personalFilterService.update(requestModel));
+        assertThrows(NotOwnerException.class, () -> personalFilterService.update(requestModel));
     }
 
     @Test
@@ -265,6 +267,21 @@ class PersonalFilterServiceTest {
         when(personalFilterRepository.findByIdAndPersonalID(filterId, userSub)).thenReturn(null);
         when(personalFilterRepository.findById(filterId)).thenReturn(Optional.of(new PersonalFilter()));
 
-        assertThrows(UserRoleNotAllowedException.class, () -> personalFilterService.delete(filterId));
+        assertThrows(NotOwnerException.class, () -> personalFilterService.delete(filterId));
+    }
+
+    @Test
+    void saveMaxFiltersReachedThrowsMaxCreationsReachedException() {
+        String userSub = "userSub";
+        PersonalFilterRequestModel requestModel = new PersonalFilterRequestModel();
+
+        when(authenticationUtils.getUserSub()).thenReturn(userSub);
+        when(authenticationUtils.isSubFromUnauthenticatedUser(userSub)).thenReturn(false);
+        when(personalFilterRepository.countByPersonalID(userSub)).thenReturn(10L);
+
+        MaxCreationsReachedException exception = assertThrows(MaxCreationsReachedException.class, () ->
+            personalFilterService.save(requestModel)
+        );
+        assertThat(exception.getMessage(), containsString("Maximale Anzahl an persönlichen Filtern erreicht"));
     }
 }

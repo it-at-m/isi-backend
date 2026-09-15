@@ -9,4 +9,6 @@ public interface PersonalFilterRepository extends JpaRepository<PersonalFilter, 
     List<PersonalFilter> findByPersonalIDOrderByLastModifiedDateTimeDesc(String personalId);
 
     PersonalFilter findByIdAndPersonalID(UUID id, String personalid);
+
+    long countByPersonalID(String personalId);
 }

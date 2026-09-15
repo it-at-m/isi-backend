@@ -5,6 +5,8 @@ import de.muenchen.isi.api.dto.search.filter.PersonalFilterRequestDto;
 import de.muenchen.isi.api.dto.search.filter.PersonalFilterResponseDto;
 import de.muenchen.isi.api.mapper.PersonalFilterApiMapper;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
+import de.muenchen.isi.domain.exception.MaxCreationsReachedException;
+import de.muenchen.isi.domain.exception.NotOwnerException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.UserRoleNotAllowedException;
 import de.muenchen.isi.domain.service.search.PersonalFilterService;
@@ -80,7 +82,7 @@ public class PersonalFilterController {
         }
     )
     public PersonalFilterResponseDto getByFilterID(@PathVariable @NotNull UUID filterId)
-        throws EntityNotFoundException, UserRoleNotAllowedException {
+        throws EntityNotFoundException, UserRoleNotAllowedException, NotOwnerException {
         var responseModel = personalFilterService.getByFilterID(filterId);
         return personalFilterApiMapper.model2Dto(responseModel);
     }
@@ -118,7 +120,7 @@ public class PersonalFilterController {
     @PatchMapping("/edit")
     public PersonalFilterResponseDto editFilter(
         @RequestBody @Valid @NotNull PersonalFilterRequestDto personalFilterRequestDto
-    ) throws OptimisticLockingException, EntityNotFoundException, UserRoleNotAllowedException {
+    ) throws OptimisticLockingException, EntityNotFoundException, UserRoleNotAllowedException, NotOwnerException {
         var requestModel = personalFilterApiMapper.dto2Model(personalFilterRequestDto);
         var responseModel = personalFilterService.update(requestModel);
         return personalFilterApiMapper.model2Dto(responseModel);
@@ -143,11 +145,16 @@ public class PersonalFilterController {
                 description = "PRECONDITION_FAILED -> In der Anwendung ist bereits eine neuere Version der Entität gespeichert.",
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
             ),
+            @ApiResponse(
+                responseCode = "409",
+                description = "CONFLICT -> Maximale Anzahl persönlicher Filter bereits vorhanden.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
         }
     )
     public ResponseEntity<PersonalFilterResponseDto> createFilter(
         @RequestBody @Valid @NotNull PersonalFilterRequestDto personalFilterRequestDto
-    ) throws OptimisticLockingException, UserRoleNotAllowedException {
+    ) throws OptimisticLockingException, UserRoleNotAllowedException, MaxCreationsReachedException {
         var requestModel = personalFilterApiMapper.dto2Model(personalFilterRequestDto);
         var responseModel = personalFilterService.save(requestModel);
         var dto = personalFilterApiMapper.model2Dto(responseModel);
@@ -171,7 +178,8 @@ public class PersonalFilterController {
         }
     )
     @DeleteMapping("/delete/{filterId}")
-    public void deleteFilter(@PathVariable UUID filterId) throws EntityNotFoundException, UserRoleNotAllowedException {
+    public void deleteFilter(@PathVariable UUID filterId)
+        throws EntityNotFoundException, UserRoleNotAllowedException, NotOwnerException {
         personalFilterService.delete(filterId);
     }
 }

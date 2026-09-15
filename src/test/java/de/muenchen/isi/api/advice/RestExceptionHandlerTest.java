@@ -14,8 +14,10 @@ import de.muenchen.isi.domain.exception.FileHandlingFailedException;
 import de.muenchen.isi.domain.exception.FileHandlingWithS3FailedException;
 import de.muenchen.isi.domain.exception.FileImportFailedException;
 import de.muenchen.isi.domain.exception.KoordinatenException;
+import de.muenchen.isi.domain.exception.MaxCreationsReachedException;
 import de.muenchen.isi.domain.exception.MimeTypeExtractionFailedException;
 import de.muenchen.isi.domain.exception.MimeTypeNotAllowedException;
+import de.muenchen.isi.domain.exception.NotOwnerException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
 import io.micrometer.tracing.Span;
@@ -33,7 +35,6 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import org.springframework.beans.ConversionNotSupportedException;
 import org.springframework.beans.TypeMismatchException;
-import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -307,6 +308,38 @@ class RestExceptionHandlerTest {
         assertThat(responseDto.getSpanId(), is("ffffffffffffffff"));
         assertThat(responseDto.getMessages(), is(List.of("test")));
         assertThat(responseDto.getOriginalException(), is("EntityNotFoundException"));
+    }
+
+    @Test
+    void handleMaxCreationsReachedException() {
+        final MaxCreationsReachedException exception = new MaxCreationsReachedException("max filters reached");
+
+        final ResponseEntity<Object> response = this.restExceptionHandler.handleMaxCreationsReachedException(exception);
+
+        assertThat(response.getStatusCode(), is(HttpStatus.CONFLICT));
+
+        final InformationResponseDto responseDto = (InformationResponseDto) response.getBody();
+
+        assertThat(responseDto.getTraceId(), is("1111111111111111"));
+        assertThat(responseDto.getSpanId(), is("ffffffffffffffff"));
+        assertThat(responseDto.getMessages(), is(List.of("max filters reached")));
+        assertThat(responseDto.getOriginalException(), is("MaxCreationsReachedException"));
+    }
+
+    @Test
+    void handleNotOwnerException() {
+        final NotOwnerException exception = new NotOwnerException("not the owner");
+
+        final ResponseEntity<Object> response = this.restExceptionHandler.handleNotOwnerException(exception);
+
+        assertThat(response.getStatusCode(), is(HttpStatus.FORBIDDEN));
+
+        final InformationResponseDto responseDto = (InformationResponseDto) response.getBody();
+
+        assertThat(responseDto.getTraceId(), is("1111111111111111"));
+        assertThat(responseDto.getSpanId(), is("ffffffffffffffff"));
+        assertThat(responseDto.getMessages(), is(List.of("not the owner")));
+        assertThat(responseDto.getOriginalException(), is("NotOwnerException"));
     }
 
     @Test

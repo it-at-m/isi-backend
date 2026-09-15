@@ -12,8 +12,10 @@ import de.muenchen.isi.domain.exception.FileHandlingFailedException;
 import de.muenchen.isi.domain.exception.FileHandlingWithS3FailedException;
 import de.muenchen.isi.domain.exception.FileImportFailedException;
 import de.muenchen.isi.domain.exception.KoordinatenException;
+import de.muenchen.isi.domain.exception.MaxCreationsReachedException;
 import de.muenchen.isi.domain.exception.MimeTypeExtractionFailedException;
 import de.muenchen.isi.domain.exception.MimeTypeNotAllowedException;
+import de.muenchen.isi.domain.exception.NotOwnerException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.ReportingException;
 import de.muenchen.isi.domain.exception.StringLengthExceededException;
@@ -226,6 +228,30 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<Object> handleEntityNotFoundException(final EntityNotFoundException ex) {
         final var httpStatus = HttpStatus.NOT_FOUND;
+        final var errorResponseDto =
+            this.createInformationResponseDtoWithTraceInformationAndTimestampAndOriginalExceptionNameAndStatusAndMessage(
+                ex,
+                httpStatus.value(),
+                List.of(ex.getMessage())
+            );
+        return ResponseEntity.status(httpStatus).body(errorResponseDto);
+    }
+
+    @ExceptionHandler(NotOwnerException.class)
+    public ResponseEntity<Object> handleNotOwnerException(final NotOwnerException ex) {
+        final var httpStatus = HttpStatus.FORBIDDEN;
+        final var errorResponseDto =
+            this.createInformationResponseDtoWithTraceInformationAndTimestampAndOriginalExceptionNameAndStatusAndMessage(
+                ex,
+                httpStatus.value(),
+                List.of(ex.getMessage())
+            );
+        return ResponseEntity.status(httpStatus).body(errorResponseDto);
+    }
+
+    @ExceptionHandler(MaxCreationsReachedException.class)
+    public ResponseEntity<Object> handleMaxCreationsReachedException(final MaxCreationsReachedException ex) {
+        final var httpStatus = HttpStatus.CONFLICT;
         final var errorResponseDto =
             this.createInformationResponseDtoWithTraceInformationAndTimestampAndOriginalExceptionNameAndStatusAndMessage(
                 ex,

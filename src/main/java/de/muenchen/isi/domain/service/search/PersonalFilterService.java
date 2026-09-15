@@ -1,6 +1,8 @@
 package de.muenchen.isi.domain.service.search;
 
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
+import de.muenchen.isi.domain.exception.MaxCreationsReachedException;
+import de.muenchen.isi.domain.exception.NotOwnerException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.UserRoleNotAllowedException;
 import de.muenchen.isi.domain.mapper.PersonalFilterDomainMapper;
@@ -19,6 +21,8 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @Slf4j
 public class PersonalFilterService {
+
+    private static final int MAX_PERSONAL_FILTERS = 10;
 
     private final PersonalFilterDomainMapper personalFilterDomainMapper;
 
@@ -46,14 +50,15 @@ public class PersonalFilterService {
      * @return den persönlichen Filter mit dieser ID (exklusive der userID)
      * @throws EntityNotFoundException falls es keinen persönlichen Filter mit dieser ID gibt
      * @throws UserRoleNotAllowedException falls der Nutzer den Fallback-Sub aus AuthenticationUtils zugewiesen hat
+     * @throws NotOwnerException falls der Nutzer nicht der Ersteller des Filters ist
      */
     public PersonalFilterResponseModel getByFilterID(UUID filterId)
-        throws EntityNotFoundException, UserRoleNotAllowedException {
+        throws EntityNotFoundException, UserRoleNotAllowedException, NotOwnerException {
         String userSub = getSubFromAuthenticatedUser();
         var entity = personalFilterRepository.findByIdAndPersonalID(filterId, userSub);
         if (entity == null) {
             if (personalFilterRepository.findById(filterId).isPresent()) {
-                throw new UserRoleNotAllowedException("Sie sind nicht der Ersteller dieses persönlichen Filters.");
+                throw new NotOwnerException("Sie sind nicht der Ersteller dieses persönlichen Filters.");
             }
             throw new EntityNotFoundException("PersonalFilter nicht gefunden.");
         }
@@ -68,9 +73,10 @@ public class PersonalFilterService {
      * @throws EntityNotFoundException falls es keinen persönlichen Filter mit dieser ID gibt
      * @throws OptimisticLockingException falls es bereits eine neuere Version der Entität in der Datenbank gibt
      * @throws UserRoleNotAllowedException falls der Nutzer den Fallback-Sub aus AuthenticationUtils zugewiesen hat
+     * @throws NotOwnerException falls der Nutzer nicht der Ersteller des Filters ist
      */
     public PersonalFilterResponseModel update(PersonalFilterRequestModel personalFilterRequestModel)
-        throws EntityNotFoundException, OptimisticLockingException, UserRoleNotAllowedException {
+        throws EntityNotFoundException, OptimisticLockingException, NotOwnerException, UserRoleNotAllowedException {
         personalFilterRequestModel.setPersonalID(getSubFromAuthenticatedUser());
         var entity = personalFilterRepository.findByIdAndPersonalID(
             personalFilterRequestModel.getId(),
@@ -79,7 +85,7 @@ public class PersonalFilterService {
         if (entity == null) {
             UUID id = personalFilterRequestModel.getId();
             if (id != null && personalFilterRepository.findById(id).isPresent()) {
-                throw new UserRoleNotAllowedException("Sie sind nicht der Ersteller dieses persönlichen Filters.");
+                throw new NotOwnerException("Sie sind nicht der Ersteller dieses persönlichen Filters.");
             }
             throw new EntityNotFoundException("PersonalFilter nicht gefunden.");
         }
@@ -100,13 +106,20 @@ public class PersonalFilterService {
      * @return den gespeicherten persönlichen Filter (exklusive der userID)
      * @throws OptimisticLockingException falls es bereits eine neuere Version der Entität in der Datenbank gibt
      * @throws UserRoleNotAllowedException falls der Nutzer den Fallback-Sub aus AuthenticationUtils zugewiesen hat
+     * @throws MaxCreationsReachedException falls der Nutzer bereits die maximale Anzahl an Filter erstellt hat
      */
     public PersonalFilterResponseModel save(PersonalFilterRequestModel personalFilterRequestModel)
-        throws OptimisticLockingException, UserRoleNotAllowedException {
+        throws OptimisticLockingException, UserRoleNotAllowedException, MaxCreationsReachedException {
+        personalFilterRequestModel.setPersonalID(getSubFromAuthenticatedUser());
+        long filterCount = personalFilterRepository.countByPersonalID(personalFilterRequestModel.getPersonalID());
+        if (filterCount >= MAX_PERSONAL_FILTERS) {
+            throw new MaxCreationsReachedException(
+                "Maximale Anzahl an persönlichen Filtern erreicht (" + MAX_PERSONAL_FILTERS + ")."
+            );
+        }
         if (personalFilterRequestModel.getId() != null) {
             personalFilterRequestModel.setId(null);
         }
-        personalFilterRequestModel.setPersonalID(getSubFromAuthenticatedUser());
         var entity = personalFilterDomainMapper.model2Entity(personalFilterRequestModel);
         try {
             entity = this.personalFilterRepository.saveAndFlush(entity);
@@ -123,12 +136,13 @@ public class PersonalFilterService {
      * @param filterId des zu löschenden persönlichen Filters
      * @throws EntityNotFoundException falls es keinen persönlichen Filter mit dieser ID gibt
      * @throws UserRoleNotAllowedException falls der Nutzer den Fallback-Sub aus AuthenticationUtils zugewiesen hat
+     * @throws NotOwnerException falls der Nutzer nicht der Ersteller des Filters ist
      */
-    public void delete(UUID filterId) throws EntityNotFoundException, UserRoleNotAllowedException {
+    public void delete(UUID filterId) throws EntityNotFoundException, UserRoleNotAllowedException, NotOwnerException {
         var verifyEntity = personalFilterRepository.findByIdAndPersonalID(filterId, getSubFromAuthenticatedUser());
         if (verifyEntity == null) {
             if (personalFilterRepository.findById(filterId).isPresent()) {
-                throw new UserRoleNotAllowedException("Sie sind nicht der Ersteller dieses persönlichen Filters.");
+                throw new NotOwnerException("Sie sind nicht der Ersteller dieses persönlichen Filters.");
             }
             throw new EntityNotFoundException("PersonalFilter nicht gefunden.");
         }
