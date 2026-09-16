@@ -1,3 +1,67 @@
+search:
+  totalHitCountThreshold: 1000
+
+spring:
+
+  # Spring data rest
+  data:
+    rest:
+      # Definition of page size for PagingAndSortingRepository
+      max-page-size: 0x7fffffff
+      default-page-size: 0x7fffffff
+      return-body-on-update: true
+      return-body-on-create: true
+  # Spring JPA
+  datasource:
+    url: jdbc:h2:mem:testdb;MODE=PostgreSQL
+  flyway:
+    enabled: false
+  h2.console.enabled: true
+  jpa:
+    database: H2
+    hibernate:
+      # always drop and create the db should be the best
+      # configuration for local (development) mode. this
+      # is also the default, that spring offers by convention.
+      # but here explicite:
+      ddl-auto: create-drop
+    # Logging for database operation
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        search:
+          enabled: false
+          # Trigger um die in der Datenbank gespeicherten Entitäten beim Hochfahren der Anwendung neu indizieren zu können.
+          reindex-database: false
+          schema_management:
+            # Muss der Strategy bei spring.jpa.hibernate.ddl-auto entsprechen.
+            strategy: drop-and-create
+          backend:
+            hosts: localhost:9200
+            username: elastic
+            password: changeme
+            connection_timeout: 1000
+            read_timeout: 60000
+      elasticsearch:
+        connection-timeout: 10s
+        socket-timeout: 60s
+
+  mail:
+    host: dummy.smtp.unittest.com
+    port: 587
+    username: no-reply@dummy.smtp.unittest.com
+    password: abcdef123456
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls.enable: true
+
+  security:
+    # possible values: none, all, changing (With changing, only changing requests such as POST, PUT, DELETE are logged)
+    logging.requests: all
+
 de.muenchen.isi:
   cronjob:
     shedlock: 1m
@@ -12,3 +76,31 @@ refarch.s3:
   access-key: dummy-access-key
   secret-key: dummy-secret-key
   url: https://dummy-url.muenchen.de
+
+isi:
+  reporting:
+    url: http://localhost:8088
+  environment:
+    url: http://localhost:8081
+
+file:
+  number.max: 20
+  size.max: 52428800 # Bytes = 50 Mebibyte (MiB)
+  mimetypes.allowed: application/octet-stream,application/x-dbf,text/plain,application/pdf,application/vnd.ms-outlook,application/vnd.oasis.opendocument.spreadsheet,application/vnd.oasis.opendocument.text,application/vnd.oasis.opendocument.presentation,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.openxmlformats-officedocument.presentationml.presentation,text/csv,message/rfc822,image/jpeg,image/png,image/svg+xml
+
+stammdaten:
+  csv-locations:
+    import-files: false
+
+metabase:
+  reporting:
+    url: https://isi-metabase-test.muenchen.de
+    reports:
+      global: collection/root
+      report.ergebnisse.planungsursaechlich: dashboard/36-ergebnisse-der-planungsursachlichen-bedarfsberechnung
+      report.ergebnisse.sobonursaechlich: dashboard/44-ergebnisse-der-sobon-bedarfsberechnung
+      report.wohneinheiten: dashboard/33-dashboard-wohneinheiten
+      report.bauratendatei: collection/39-dashboards
+      report.kitaplanungsbereichKrippe: collection/39-dashboards
+      report.kitaplanungsbereichKiga: collection/39-dashboards
+      report.andere: collection/39-dashboards
