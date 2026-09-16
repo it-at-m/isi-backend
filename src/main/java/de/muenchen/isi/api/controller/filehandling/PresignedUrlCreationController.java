@@ -6,7 +6,6 @@ import de.muenchen.isi.api.dto.filehandling.PresignedUrlDto;
 import de.muenchen.isi.api.mapper.FilehandlingApiMapper;
 import de.muenchen.isi.api.validation.IsFilepathWithoutLeadingPathdivider;
 import de.muenchen.isi.domain.exception.FileHandlingFailedException;
-import de.muenchen.isi.domain.exception.FileHandlingWithS3FailedException;
 import de.muenchen.isi.domain.model.filehandling.FilepathModel;
 import de.muenchen.isi.domain.service.filehandling.PresignedUrlCreationService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -71,7 +70,7 @@ public class PresignedUrlCreationController {
         @RequestParam @Schema(
             description = "Der Dateipfad muss absolut, ohne Angabe des Buckets und ohne führenden Pfadtrenner angegeben werden. Beispiel: outerFolder/innerFolder/thefile.pdf"
         ) @NotBlank @IsFilepathWithoutLeadingPathdivider final String pathToFile
-    ) throws FileHandlingWithS3FailedException, FileHandlingFailedException {
+    ) throws FileHandlingFailedException {
         final var filepathModel = new FilepathModel();
         filepathModel.setPathToFile(pathToFile);
         final var presignedUrlModel = this.presignedUrlCreationService.getFile(filepathModel);
@@ -108,7 +107,7 @@ public class PresignedUrlCreationController {
         "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_PRESIGNED_URL_SAVE_FILE.name())"
     )
     public ResponseEntity<PresignedUrlDto> saveFile(@RequestBody @NotNull @Valid final FilepathDto filepathDto)
-        throws FileHandlingWithS3FailedException, FileHandlingFailedException {
+        throws FileHandlingFailedException {
         final var presignedUrlModel = this.presignedUrlCreationService.saveFile(
             this.filehandlingApiMapper.dto2Model(filepathDto)
         );

@@ -1,26 +1,16 @@
 package de.muenchen.isi.configuration;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.annotation.PostConstruct;
-import lombok.RequiredArgsConstructor;
+import org.springframework.boot.jackson.autoconfigure.JsonMapperBuilderCustomizer;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import tools.jackson.core.StreamReadFeature;
 
 @Configuration
-@RequiredArgsConstructor
 public class JacksonConfiguration {
 
-    private final ObjectMapper objectMapper;
-
-    @PostConstruct
-    public void objectMapper() {
-        this.objectMapper.enable(
-            /**
-             * Beim deserialisieren werden Attributduplikationen erkannt.
-             * Bei einer vorhandenen Attributduplikation wird durch den Parser eine {@link JsonParseException} geworfen.
-             */
-            JsonParser.Feature.STRICT_DUPLICATE_DETECTION
-        );
+    @Bean
+    public JsonMapperBuilderCustomizer strictDuplicateDetectionCustomizer() {
+        // Nutzt den Builder deklarativ, da der fertige Mapper unveränderlich ist
+        return builder -> builder.enable(StreamReadFeature.STRICT_DUPLICATE_DETECTION);
     }
 }
