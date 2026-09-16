@@ -1,9 +1,9 @@
 package de.muenchen.isi.domain.mapper;
 
 import de.muenchen.isi.configuration.MapstructConfiguration;
-import de.muenchen.isi.domain.model.search.filter.PersonalFilterRequestModel;
-import de.muenchen.isi.domain.model.search.filter.PersonalFilterResponseModel;
-import de.muenchen.isi.infrastructure.entity.search.filter.PersonalFilter;
+import de.muenchen.isi.domain.model.filter.PersonalFilterRequestModel;
+import de.muenchen.isi.domain.model.filter.PersonalFilterResponseModel;
+import de.muenchen.isi.infrastructure.entity.filter.PersonalFilter;
 import java.util.List;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

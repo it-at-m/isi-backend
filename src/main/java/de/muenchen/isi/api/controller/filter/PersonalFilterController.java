@@ -1,15 +1,15 @@
-package de.muenchen.isi.api.controller.search;
+package de.muenchen.isi.api.controller.filter;
 
 import de.muenchen.isi.api.dto.error.InformationResponseDto;
-import de.muenchen.isi.api.dto.search.filter.PersonalFilterRequestDto;
-import de.muenchen.isi.api.dto.search.filter.PersonalFilterResponseDto;
+import de.muenchen.isi.api.dto.filter.PersonalFilterRequestDto;
+import de.muenchen.isi.api.dto.filter.PersonalFilterResponseDto;
 import de.muenchen.isi.api.mapper.PersonalFilterApiMapper;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.MaxCreationsReachedException;
 import de.muenchen.isi.domain.exception.NotOwnerException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.UserRoleNotAllowedException;
-import de.muenchen.isi.domain.service.search.PersonalFilterService;
+import de.muenchen.isi.domain.service.filter.PersonalFilterService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -172,7 +172,7 @@ public class PersonalFilterController {
             ),
             @ApiResponse(
                 responseCode = "403",
-                description = "CONFLICT -> Keine Berechtigung zum Löschen dieses persönlichen Filters.",
+                description = "FORBIDDEN -> Keine Berechtigung zum Löschen dieses persönlichen Filters.",
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
             ),
         }

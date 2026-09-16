@@ -1,4 +1,4 @@
-package de.muenchen.isi.api.dto.search.filter;
+package de.muenchen.isi.api.dto.filter;
 
 import de.muenchen.isi.api.dto.BaseEntityDto;
 import lombok.Data;

@@ -1,10 +1,10 @@
 package de.muenchen.isi.api.mapper;
 
-import de.muenchen.isi.api.dto.search.filter.PersonalFilterRequestDto;
-import de.muenchen.isi.api.dto.search.filter.PersonalFilterResponseDto;
+import de.muenchen.isi.api.dto.filter.PersonalFilterRequestDto;
+import de.muenchen.isi.api.dto.filter.PersonalFilterResponseDto;
 import de.muenchen.isi.configuration.MapstructConfiguration;
-import de.muenchen.isi.domain.model.search.filter.PersonalFilterRequestModel;
-import de.muenchen.isi.domain.model.search.filter.PersonalFilterResponseModel;
+import de.muenchen.isi.domain.model.filter.PersonalFilterRequestModel;
+import de.muenchen.isi.domain.model.filter.PersonalFilterResponseModel;
 import java.util.List;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

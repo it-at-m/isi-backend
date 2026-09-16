@@ -1,4 +1,4 @@
-package de.muenchen.isi.infrastructure.entity.search.filter;
+package de.muenchen.isi.infrastructure.entity.filter;
 
 import de.muenchen.isi.domain.model.enums.SortAttribute;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;

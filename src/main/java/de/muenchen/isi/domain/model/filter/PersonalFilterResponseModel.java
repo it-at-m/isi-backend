@@ -1,4 +1,4 @@
-package de.muenchen.isi.domain.model.search.filter;
+package de.muenchen.isi.domain.model.filter;
 
 import de.muenchen.isi.domain.model.BaseEntityModel;
 import lombok.Data;

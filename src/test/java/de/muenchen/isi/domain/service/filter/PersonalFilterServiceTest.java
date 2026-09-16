@@ -1,4 +1,4 @@
-package de.muenchen.isi.domain.service.search;
+package de.muenchen.isi.domain.service.filter;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -11,10 +11,10 @@ import de.muenchen.isi.domain.exception.NotOwnerException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.UserRoleNotAllowedException;
 import de.muenchen.isi.domain.mapper.PersonalFilterDomainMapper;
-import de.muenchen.isi.domain.model.search.filter.PersonalFilterRequestModel;
-import de.muenchen.isi.domain.model.search.filter.PersonalFilterResponseModel;
-import de.muenchen.isi.infrastructure.entity.search.filter.PersonalFilter;
-import de.muenchen.isi.infrastructure.repository.search.PersonalFilterRepository;
+import de.muenchen.isi.domain.model.filter.PersonalFilterRequestModel;
+import de.muenchen.isi.domain.model.filter.PersonalFilterResponseModel;
+import de.muenchen.isi.infrastructure.entity.filter.PersonalFilter;
+import de.muenchen.isi.infrastructure.repository.filter.PersonalFilterRepository;
 import de.muenchen.isi.security.AuthenticationUtils;
 import java.util.*;
 import org.junit.jupiter.api.*;

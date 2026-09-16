@@ -1,4 +1,4 @@
-package de.muenchen.isi.api.dto.search.filter;
+package de.muenchen.isi.api.dto.filter;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;

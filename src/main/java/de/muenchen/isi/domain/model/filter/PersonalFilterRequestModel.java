@@ -1,6 +1,5 @@
-package de.muenchen.isi.domain.model.search.filter;
+package de.muenchen.isi.domain.model.filter;
 
-import jakarta.validation.constraints.NotNull;
 import java.util.UUID;
 import lombok.Data;
 
