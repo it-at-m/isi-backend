@@ -39,7 +39,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/personal-filter")
-@Tag(name = "PersonalFilter", description = "API zum interagieren mit persönlichen Filtern")
+@Tag(name = "PersonalFilter", description = "API zur Interaktion mit persönlichen Filtern")
 @Validated
 public class PersonalFilterController {
 
@@ -54,7 +54,7 @@ public class PersonalFilterController {
             @ApiResponse(responseCode = "200", description = "OK"),
             @ApiResponse(
                 responseCode = "403",
-                description = "FORBIDDEN -> Keine Berechtigung um alle persönlichen Filter anzusehen.",
+                description = "FORBIDDEN -> Keine Berechtigung, um alle persönlichen Filter anzusehen.",
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
             ),
         }
@@ -71,7 +71,7 @@ public class PersonalFilterController {
             @ApiResponse(responseCode = "200", description = "OK"),
             @ApiResponse(
                 responseCode = "403",
-                description = "FORBIDDEN -> Keine Berechtigung um diesen persönlichen Filter anzusehen.",
+                description = "FORBIDDEN -> Keine Berechtigung, um diesen persönlichen Filter anzusehen.",
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
             ),
             @ApiResponse(
@@ -101,7 +101,7 @@ public class PersonalFilterController {
             ),
             @ApiResponse(
                 responseCode = "403",
-                description = "FORBIDDEN -> Keine Berechtigung um diesen persönlicher Filter zu bearbeiten.",
+                description = "FORBIDDEN -> Keine Berechtigung, um diesen persönlicher Filter zu bearbeiten.",
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
             ),
             @ApiResponse(
@@ -172,7 +172,7 @@ public class PersonalFilterController {
             ),
             @ApiResponse(
                 responseCode = "403",
-                description = "FORBIDDEN -> Keine Berechtigung zum Löschen dieses persönlichen Filters.",
+                description = "FORBIDDEN -> Keine Berechtigung, um diesen persönlichen Filter zu löschen.",
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
             ),
         }
