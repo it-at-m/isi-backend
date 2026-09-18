@@ -93,3 +93,5 @@ CREATE INDEX personal_filter_mittelschulsprengel_nummer_id_idx ON isidbuser.pers
 CREATE INDEX personal_filter_status_abfrage_id_idx ON isidbuser.personal_filter_status_abfrage (personal_filter_id);
 CREATE INDEX personal_filter_verfahrensstand_id_idx ON isidbuser.personal_filter_verfahrensstand (personal_filter_id);
 CREATE INDEX personal_filter_infrastruktureinrichtung_status_id_idx ON isidbuser.personal_filter_infrastruktureinrichtung_status (personal_filter_id);
+
+END;
