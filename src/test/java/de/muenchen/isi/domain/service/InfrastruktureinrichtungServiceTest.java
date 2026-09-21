@@ -17,6 +17,7 @@ import de.muenchen.isi.domain.model.infrastruktureinrichtung.MittelschuleModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.SchuleModel;
 import de.muenchen.isi.domain.service.etlInterface.EtlInterfaceService;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.AnlassPlanung;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusInfrastruktureinrichtung;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
@@ -74,24 +75,28 @@ class InfrastruktureinrichtungServiceTest {
         Kinderkrippe kinderkrippe1 = new Kinderkrippe();
         kinderkrippe1.setNameEinrichtung("Kinderkrippe 1");
         kinderkrippe1.setStatus(StatusInfrastruktureinrichtung.BESTAND);
+        kinderkrippe1.setAnlassPlanung(AnlassPlanung.SCHLIESSUNG);
         kinderkrippe1.setAnzahlKinderkrippeGruppen(10);
         kinderkrippe1.setAnzahlKinderkrippePlaetze(100);
 
         Kinderkrippe kinderkrippe2 = new Kinderkrippe();
         kinderkrippe2.setNameEinrichtung("Kinderkrippe 2");
         kinderkrippe2.setStatus(StatusInfrastruktureinrichtung.GESICHERTE_PLANUNG_NEUE_EINR);
+        kinderkrippe2.setAnlassPlanung(AnlassPlanung.SCHLIESSUNG);
         kinderkrippe2.setAnzahlKinderkrippeGruppen(11);
         kinderkrippe2.setAnzahlKinderkrippePlaetze(110);
 
         Kindergarten kindergarten = new Kindergarten();
         kindergarten.setNameEinrichtung("Kindergarten");
         kindergarten.setStatus(StatusInfrastruktureinrichtung.BESTAND);
+        kindergarten.setAnlassPlanung(AnlassPlanung.SCHLIESSUNG);
         kindergarten.setAnzahlKindergartenGruppen(9);
         kindergarten.setAnzahlKindergartenPlaetze(90);
 
         Grundschule grundschule = new Grundschule();
         grundschule.setNameEinrichtung("Grundschule");
         grundschule.setStatus(StatusInfrastruktureinrichtung.BESTAND);
+        grundschule.setAnlassPlanung(AnlassPlanung.SCHLIESSUNG);
         grundschule.setSchule(new Schule());
         grundschule.getSchule().setAnzahlKlassen(5);
         grundschule.getSchule().setAnzahlPlaetze(50);
@@ -138,6 +143,7 @@ class InfrastruktureinrichtungServiceTest {
         MittelschuleModel mittelschule = new MittelschuleModel();
         mittelschule.setNameEinrichtung("Mittelschule");
         mittelschule.setStatus(StatusInfrastruktureinrichtung.UNGESICHERTE_PLANUNG_TF_KITA_STANDORT);
+        mittelschule.setAnlassPlanung(AnlassPlanung.SCHLIESSUNG);
         mittelschule.setSchule(new SchuleModel());
         mittelschule.getSchule().setAnzahlKlassen(3);
         mittelschule.getSchule().setAnzahlPlaetze(30);
@@ -179,6 +185,7 @@ class InfrastruktureinrichtungServiceTest {
         MittelschuleModel mittelschule = new MittelschuleModel();
         mittelschule.setNameEinrichtung("Mittelschule");
         mittelschule.setStatus(StatusInfrastruktureinrichtung.UNGESICHERTE_PLANUNG_TF_KITA_STANDORT);
+        mittelschule.setAnlassPlanung(AnlassPlanung.SCHLIESSUNG);
         mittelschule.setSchule(new SchuleModel());
         mittelschule.getSchule().setAnzahlKlassen(3);
         mittelschule.getSchule().setAnzahlPlaetze(30);

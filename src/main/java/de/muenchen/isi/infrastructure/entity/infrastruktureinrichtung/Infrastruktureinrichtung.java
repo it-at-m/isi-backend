@@ -6,6 +6,8 @@ package de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung;
 
 import de.muenchen.isi.infrastructure.adapter.listener.InfrastruktureinrichtungListener;
 import de.muenchen.isi.infrastructure.adapter.search.AdresseValueBridge;
+import de.muenchen.isi.infrastructure.adapter.search.AnlassPlanungSuggestionBinder;
+import de.muenchen.isi.infrastructure.adapter.search.AnlassPlanungValueBridge;
 import de.muenchen.isi.infrastructure.adapter.search.InfrastruktureinrichtungTypValueBridge;
 import de.muenchen.isi.infrastructure.adapter.search.ResultTypeValueBridge;
 import de.muenchen.isi.infrastructure.adapter.search.StatusInfrastruktureinrichtungSuggestionBinder;
@@ -19,6 +21,7 @@ import de.muenchen.isi.infrastructure.entity.common.Adresse;
 import de.muenchen.isi.infrastructure.entity.common.BearbeitendePerson;
 import de.muenchen.isi.infrastructure.entity.common.VerortungMultiPolygon;
 import de.muenchen.isi.infrastructure.entity.common.VerortungPoint;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.AnlassPlanung;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ResultType;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusInfrastruktureinrichtung;
@@ -260,6 +263,16 @@ public abstract class Infrastruktureinrichtung extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private StatusInfrastruktureinrichtung status;
+
+    @FullTextField(valueBridge = @ValueBridgeRef(type = AnlassPlanungValueBridge.class))
+    @NonStandardField(
+        name = "anlassPlanung" + SearchwordSuggesterRepository.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
+        valueBinder = @ValueBinderRef(type = AnlassPlanungSuggestionBinder.class)
+    )
+    @GenericField(name = "anlass_planung_filter")
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private AnlassPlanung anlassPlanung;
 
     @Column(precision = 10, scale = 2)
     private BigDecimal flaecheGesamtgrundstueck;
