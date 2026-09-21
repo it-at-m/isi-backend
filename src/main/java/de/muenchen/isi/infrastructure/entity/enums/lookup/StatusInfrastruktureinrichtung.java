@@ -35,6 +35,7 @@ public enum StatusInfrastruktureinrichtung implements ILookup {
         "ungesicherte Planung – TF Kita Standort",
         new String[] { "ungesicherte", "Planung", "TF", "Kita", "Standort" }
     ),
+    PLANUNG_ZURUECKGEZOGEN("Planung zurückgezogen", new String[] { "Planung", "zurückgezogen" }),
     BESTAND("Bestand", new String[] { "Bestand" });
 
     @Getter
