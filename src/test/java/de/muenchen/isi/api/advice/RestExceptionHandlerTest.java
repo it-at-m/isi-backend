@@ -12,7 +12,6 @@ import de.muenchen.isi.domain.exception.CsvAttributeErrorException;
 import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.FileHandlingFailedException;
-import de.muenchen.isi.domain.exception.FileHandlingWithS3FailedException;
 import de.muenchen.isi.domain.exception.FileImportFailedException;
 import de.muenchen.isi.domain.exception.KoordinatenException;
 import de.muenchen.isi.domain.exception.MaxCreationsReachedException;
@@ -37,6 +36,7 @@ import org.mockito.quality.Strictness;
 import org.springframework.beans.ConversionNotSupportedException;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpInputMessage;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -209,50 +209,6 @@ class RestExceptionHandlerTest {
         assertThat(responseDto.getSpanId(), is("ffffffffffffffff"));
         assertThat(responseDto.getMessages(), is(List.of("test")));
         assertThat(responseDto.getOriginalException(), is("FileHandlingFailedException"));
-    }
-
-    @Test
-    void handleFileHandlingWithS3FailedException() {
-        FileHandlingWithS3FailedException fileHandlingWithS3FailedException = new FileHandlingWithS3FailedException(
-            "test",
-            HttpStatus.NOT_FOUND
-        );
-        ResponseEntity<Object> response = this.restExceptionHandler.handleFileHandlingWithS3FailedException(
-            fileHandlingWithS3FailedException
-        );
-
-        assertThat(response.getStatusCode(), is(HttpStatus.NOT_FOUND));
-
-        InformationResponseDto responseDto = (InformationResponseDto) response.getBody();
-
-        assertThat(responseDto.getTraceId(), is("1111111111111111"));
-        assertThat(responseDto.getSpanId(), is("ffffffffffffffff"));
-        assertThat(responseDto.getMessages(), is(List.of("test")));
-        assertThat(responseDto.getOriginalException(), is("FileHandlingWithS3FailedException"));
-
-        fileHandlingWithS3FailedException = new FileHandlingWithS3FailedException("test", HttpStatus.CONFLICT);
-        response = this.restExceptionHandler.handleFileHandlingWithS3FailedException(fileHandlingWithS3FailedException);
-
-        assertThat(response.getStatusCode(), is(HttpStatus.CONFLICT));
-
-        responseDto = (InformationResponseDto) response.getBody();
-
-        assertThat(responseDto.getTraceId(), is("1111111111111111"));
-        assertThat(responseDto.getSpanId(), is("ffffffffffffffff"));
-        assertThat(responseDto.getMessages(), is(List.of("test")));
-        assertThat(responseDto.getOriginalException(), is("FileHandlingWithS3FailedException"));
-
-        fileHandlingWithS3FailedException = new FileHandlingWithS3FailedException("test", HttpStatus.NOT_ACCEPTABLE);
-        response = this.restExceptionHandler.handleFileHandlingWithS3FailedException(fileHandlingWithS3FailedException);
-
-        assertThat(response.getStatusCode().value(), is(555));
-
-        responseDto = (InformationResponseDto) response.getBody();
-
-        assertThat(responseDto.getTraceId(), is("1111111111111111"));
-        assertThat(responseDto.getSpanId(), is("ffffffffffffffff"));
-        assertThat(responseDto.getMessages(), is(List.of("test")));
-        assertThat(responseDto.getOriginalException(), is("FileHandlingWithS3FailedException"));
     }
 
     @Test
@@ -576,7 +532,8 @@ class RestExceptionHandlerTest {
     @Test
     void handleHttpMessageNotReadable() {
         final HttpMessageNotReadableException httpMessageNotReadableException = new HttpMessageNotReadableException(
-            "test"
+            "test",
+            (HttpInputMessage) null
         );
 
         final ResponseEntity<Object> response = this.restExceptionHandler.handleHttpMessageNotReadable(

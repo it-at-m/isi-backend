@@ -28,7 +28,8 @@ public class FoerdermixStammService {
      * @return Liste an {@link FoerdermixStammModel}
      */
     public List<FoerdermixStammModel> getFoerdermixStaemme() {
-        return this.foerdermixStammRepository.findAllByOrderByFoerdermixBezeichnungAsc()
+        return this.foerdermixStammRepository
+            .findAllByOrderByFoerdermixBezeichnungAsc()
             .map(this.stammdatenDomainMapper::entity2Model)
             .collect(Collectors.toList());
     }

@@ -38,12 +38,12 @@ public class ImportStammdatenFromFile implements CommandLineRunner {
 
     public ImportStammdatenFromFile(
         @Value("${stammdaten.csv-locations.import-files:false}") final Boolean importCsvFiles,
-        @Value("${stammdaten.csv-locations.sobon-orientierungswerte-sozialinfrastruktur}") final List<
-            String
-        > csvSobonOrientierungswertSozialeInfrastruktur,
-        @Value("${stammdaten.csv-locations.staedtebauliche-orientierungswerte}") final List<
-            String
-        > csvStaedtebaulicheOrientierungswerte,
+        @Value(
+            "${stammdaten.csv-locations.sobon-orientierungswerte-sozialinfrastruktur}"
+        ) final List<String> csvSobonOrientierungswertSozialeInfrastruktur,
+        @Value(
+            "${stammdaten.csv-locations.staedtebauliche-orientierungswerte}"
+        ) final List<String> csvStaedtebaulicheOrientierungswerte,
         final StammdatenImportService stammdatenImportService,
         final SobonOrientierungswertSozialeInfrastrukturRepository sobonOrientierungswertSozialeInfrastrukturRepository,
         final StaedtebaulicheOrientierungswertRepository staedtebaulicheOrientierungswertRepository

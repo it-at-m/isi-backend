@@ -1,35 +1,36 @@
 package de.muenchen.isi.domain.service.filehandling;
 
 import de.muenchen.isi.domain.exception.FileHandlingFailedException;
-import de.muenchen.isi.domain.exception.FileHandlingWithS3FailedException;
 import de.muenchen.isi.domain.model.filehandling.FilepathModel;
 import de.muenchen.isi.domain.model.filehandling.PresignedUrlModel;
-import de.muenchen.refarch.integration.s3.client.exception.DocumentStorageClientErrorException;
-import de.muenchen.refarch.integration.s3.client.exception.DocumentStorageException;
-import de.muenchen.refarch.integration.s3.client.exception.DocumentStorageServerErrorException;
-import de.muenchen.refarch.integration.s3.client.repository.presignedurl.PresignedUrlRestRepository;
+import de.muenchen.oss.refarch.integration.s3.application.port.out.S3OutPort;
+import de.muenchen.oss.refarch.integration.s3.domain.exception.S3Exception;
+import de.muenchen.oss.refarch.integration.s3.domain.model.FileReference;
+import de.muenchen.oss.refarch.integration.s3.domain.model.PresignedUrl;
+import java.net.MalformedURLException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpStatusCodeException;
-import org.springframework.web.reactive.function.client.WebClientException;
 
 @Service
 @Slf4j
 public class PresignedUrlCreationService {
 
-    private final PresignedUrlRestRepository presignedUrlRepository;
+    private final String bucket;
+
+    private final S3OutPort s3OutPort;
 
     private final Integer fileExpirationTime;
 
     public PresignedUrlCreationService(
-        final PresignedUrlRestRepository presignedUrlRepository,
-        @Value("${refarch.s3.client.file-expiration-time}") final Integer fileExpirationTime
+        @Value("${refarch.s3.bucket-name}") final String bucket,
+        @Value("${refarch.s3.file-expiration-time}") final Integer fileExpirationTime,
+        final S3OutPort s3OutPort
     ) {
-        this.presignedUrlRepository = presignedUrlRepository;
+        this.bucket = bucket;
         this.fileExpirationTime = fileExpirationTime;
+        this.s3OutPort = s3OutPort;
     }
 
     /**
@@ -37,40 +38,23 @@ public class PresignedUrlCreationService {
      *
      * @param filepath für die Datei welche heruntergeladen werden soll.
      * @return die Presigned-Url zum direkten Herunterladen der Datei direkt vom S3-Storage.
-     * @throws FileHandlingWithS3FailedException
      * @throws FileHandlingFailedException
      */
-    public PresignedUrlModel getFile(final FilepathModel filepath)
-        throws FileHandlingWithS3FailedException, FileHandlingFailedException {
+    public PresignedUrlModel getFile(final FilepathModel filepath) throws FileHandlingFailedException {
         try {
-            final var presignedUrl = this.presignedUrlRepository.getPresignedUrlGetFile(
-                filepath.getPathToFile(),
-                this.fileExpirationTime
+            final FileReference fileReference = new FileReference(this.bucket, filepath.getPathToFile());
+            final PresignedUrl presignedUrl = this.s3OutPort.getPresignedUrl(
+                fileReference,
+                PresignedUrl.Action.GET,
+                java.time.Duration.ofMinutes(this.fileExpirationTime)
             );
-            log.debug("Presigned-URL get file: {}", presignedUrl);
-            return new PresignedUrlModel(HttpMethod.GET.name(), presignedUrl);
-        } catch (
-            final DocumentStorageClientErrorException
-            | DocumentStorageServerErrorException
-            | DocumentStorageException
-            | WebClientException exception
-        ) {
+            log.debug("Presigned-URL get file: {}", presignedUrl.url());
+            return new PresignedUrlModel(HttpMethod.GET.name(), presignedUrl.url().toExternalForm());
+        } catch (final S3Exception exception) {
             final var message =
                 "Beim Herunterladen der Datei vom ISI-Dokumentenverwaltungssystem ist ein Fehler aufgetreten.";
             this.exceptionLogging(exception, message);
-            final var clazz = exception.getClass();
-            if (
-                clazz.equals(DocumentStorageClientErrorException.class) ||
-                clazz.equals(DocumentStorageServerErrorException.class)
-            ) {
-                throw new FileHandlingWithS3FailedException(
-                    message,
-                    this.getStatusCode((HttpStatusCodeException) exception.getCause()),
-                    exception
-                );
-            } else {
-                throw new FileHandlingFailedException(message, exception);
-            }
+            throw new FileHandlingFailedException(message, exception);
         }
     }
 
@@ -79,40 +63,23 @@ public class PresignedUrlCreationService {
      *
      * @param filepath für die Datei welche initial gespeichert werden soll.
      * @return die Presigned-Url zum initialen Speichern der Datei direkt im S3-Storage.
-     * @throws FileHandlingWithS3FailedException
      * @throws FileHandlingFailedException
      */
-    public PresignedUrlModel saveFile(final FilepathModel filepath)
-        throws FileHandlingWithS3FailedException, FileHandlingFailedException {
+    public PresignedUrlModel saveFile(final FilepathModel filepath) throws FileHandlingFailedException {
         try {
-            final var presignedUrl = this.presignedUrlRepository.getPresignedUrlSaveFile(
-                filepath.getPathToFile(),
-                this.fileExpirationTime
+            final FileReference fileReference = new FileReference(this.bucket, filepath.getPathToFile());
+            final PresignedUrl presignedUrl = this.s3OutPort.getPresignedUrl(
+                fileReference,
+                PresignedUrl.Action.PUT,
+                java.time.Duration.ofMinutes(this.fileExpirationTime)
             );
-            log.debug("Presigned-URL save file: {}", presignedUrl);
-            return new PresignedUrlModel(HttpMethod.PUT.name(), presignedUrl);
-        } catch (
-            final DocumentStorageClientErrorException
-            | DocumentStorageServerErrorException
-            | DocumentStorageException
-            | WebClientException exception
-        ) {
+            log.debug("Presigned-URL save file: {}", presignedUrl.url().toExternalForm());
+            return new PresignedUrlModel(HttpMethod.PUT.name(), presignedUrl.url().toExternalForm());
+        } catch (final S3Exception exception) {
             final var message =
                 "Beim Speichern der Datei im ISI-Dokumentenverwaltungssystem ist ein Fehler aufgetreten.";
             this.exceptionLogging(exception, message);
-            final var clazz = exception.getClass();
-            if (
-                clazz.equals(DocumentStorageClientErrorException.class) ||
-                clazz.equals(DocumentStorageServerErrorException.class)
-            ) {
-                throw new FileHandlingWithS3FailedException(
-                    message,
-                    this.getStatusCode((HttpStatusCodeException) exception.getCause()),
-                    exception
-                );
-            } else {
-                throw new FileHandlingFailedException(message, exception);
-            }
+            throw new FileHandlingFailedException(message, exception);
         }
     }
 
@@ -121,39 +88,22 @@ public class PresignedUrlCreationService {
      *
      * @param filepath für die Datei welche gelöscht werden soll.
      * @return die Presigned-Url zum Löschen der Datei direkt im S3-Storage.
-     * @throws FileHandlingWithS3FailedException
      * @throws FileHandlingFailedException
      */
-    public PresignedUrlModel deleteFile(final FilepathModel filepath)
-        throws FileHandlingWithS3FailedException, FileHandlingFailedException {
+    public PresignedUrlModel deleteFile(final FilepathModel filepath) throws FileHandlingFailedException {
         try {
-            final var presignedUrl = this.presignedUrlRepository.getPresignedUrlDeleteFile(
-                filepath.getPathToFile(),
-                this.fileExpirationTime
+            final FileReference fileReference = new FileReference(this.bucket, filepath.getPathToFile());
+            final PresignedUrl presignedUrl = this.s3OutPort.getPresignedUrl(
+                fileReference,
+                PresignedUrl.Action.DELETE,
+                java.time.Duration.ofMinutes(this.fileExpirationTime)
             );
             log.debug("Presigned-URL delete file: {}", presignedUrl);
-            return new PresignedUrlModel(HttpMethod.DELETE.name(), presignedUrl);
-        } catch (
-            final DocumentStorageClientErrorException
-            | DocumentStorageServerErrorException
-            | DocumentStorageException
-            | WebClientException exception
-        ) {
+            return new PresignedUrlModel(HttpMethod.DELETE.name(), presignedUrl.url().toExternalForm());
+        } catch (final S3Exception exception) {
             final var message = "Beim Löschen der Datei im ISI-Dokumentenverwaltungssystem ist ein Fehler aufgetreten.";
             this.exceptionLogging(exception, message);
-            final var clazz = exception.getClass();
-            if (
-                clazz.equals(DocumentStorageClientErrorException.class) ||
-                clazz.equals(DocumentStorageServerErrorException.class)
-            ) {
-                throw new FileHandlingWithS3FailedException(
-                    message,
-                    this.getStatusCode((HttpStatusCodeException) exception.getCause()),
-                    exception
-                );
-            } else {
-                throw new FileHandlingFailedException(message, exception);
-            }
+            throw new FileHandlingFailedException(message, exception);
         }
     }
 
@@ -163,9 +113,5 @@ public class PresignedUrlCreationService {
             log.error(exception.getCause().getMessage());
         }
         log.error(errorMessage);
-    }
-
-    private HttpStatusCode getStatusCode(final HttpStatusCodeException exception) {
-        return exception.getStatusCode();
     }
 }

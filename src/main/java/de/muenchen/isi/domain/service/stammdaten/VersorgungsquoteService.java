@@ -22,7 +22,8 @@ public class VersorgungsquoteService {
      * @return Liste an {@link VersorgungsquoteSobonHortModel}
      */
     public List<VersorgungsquoteSobonHortModel> getVersorgungsquoteHortSobon() {
-        return this.versorgungsquoteSobonHortRepository.findAll()
+        return this.versorgungsquoteSobonHortRepository
+            .findAll()
             .stream()
             .map(this.stammdatenDomainMapper::entity2Model)
             .collect(Collectors.toList());

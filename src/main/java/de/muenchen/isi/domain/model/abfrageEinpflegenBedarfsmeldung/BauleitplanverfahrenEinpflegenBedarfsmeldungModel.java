@@ -12,7 +12,5 @@ public class BauleitplanverfahrenEinpflegenBedarfsmeldungModel extends AbfrageEi
 
     private List<AbfragevarianteBauleitplanverfahrenEinpflegenBedarfsmeldungModel> abfragevariantenBauleitplanverfahren;
 
-    private List<
-        AbfragevarianteBauleitplanverfahrenEinpflegenBedarfsmeldungModel
-    > abfragevariantenSachbearbeitungBauleitplanverfahren;
+    private List<AbfragevarianteBauleitplanverfahrenEinpflegenBedarfsmeldungModel> abfragevariantenSachbearbeitungBauleitplanverfahren;
 }

@@ -29,28 +29,24 @@ public interface StammdatenDomainMapper {
         final SobonOrientierungswertSozialeInfrastrukturModel model
     );
 
-    @Mappings(
-        {
-            @Mapping(target = "id", ignore = true),
-            @Mapping(target = "version", ignore = true),
-            @Mapping(target = "createdDateTime", ignore = true),
-            @Mapping(target = "lastModifiedDateTime", ignore = true),
-        }
-    )
+    @Mappings({
+        @Mapping(target = "id", ignore = true),
+        @Mapping(target = "version", ignore = true),
+        @Mapping(target = "createdDateTime", ignore = true),
+        @Mapping(target = "lastModifiedDateTime", ignore = true),
+    })
     SobonOrientierungswertSozialeInfrastruktur csv2Entity(final SobonOrientierungswertSozialeInfrastrukturCsv csv);
 
     StaedtebaulicheOrientierungswertModel entity2Model(final StaedtebaulicheOrientierungswert entity);
 
     StaedtebaulicheOrientierungswert model2Entity(final StaedtebaulicheOrientierungswertModel model);
 
-    @Mappings(
-        {
-            @Mapping(target = "id", ignore = true),
-            @Mapping(target = "version", ignore = true),
-            @Mapping(target = "createdDateTime", ignore = true),
-            @Mapping(target = "lastModifiedDateTime", ignore = true),
-        }
-    )
+    @Mappings({
+        @Mapping(target = "id", ignore = true),
+        @Mapping(target = "version", ignore = true),
+        @Mapping(target = "createdDateTime", ignore = true),
+        @Mapping(target = "lastModifiedDateTime", ignore = true),
+    })
     StaedtebaulicheOrientierungswert csv2Entity(final StaedtebaulicheOrientierungswertCsv csv);
 
     FoerdermixStammModel entity2Model(final FoerdermixStamm entity);

@@ -203,11 +203,14 @@ class SendKommentarBauvorhabenNotificationServiceTest {
             true
         );
 
-        final var expected =
-            "Im Bauvorhaben wurde ein Kommentar gespeichert." +
-            "\n\nBauvorhaben: Mein Bauvorhaben" +
-            "\n\nDatum des Kommentars: 01.06.2026" +
-            "\nText des Kommentars:\nEin Kommentar";
+        final var expected = """
+        Im Bauvorhaben wurde ein Kommentar gespeichert.
+
+        Bauvorhaben: Mein Bauvorhaben
+
+        Datum des Kommentars: 01.06.2026
+        Text des Kommentars:
+        Ein Kommentar""";
 
         assertThat(result, is(expected));
     }
