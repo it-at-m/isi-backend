@@ -49,9 +49,7 @@ public class AbfragevarianteWeiteresVerfahrenAngelegtDto implements Abfragevaria
     private LocalDate satzungsbeschluss;
 
     @NotEmpty
-    private List<
-        @WesentlicheRechtsgrundlageWeiteresVerfahrenValid @NotNull WesentlicheRechtsgrundlage
-    > wesentlicheRechtsgrundlage;
+    private List<@WesentlicheRechtsgrundlageWeiteresVerfahrenValid @NotNull WesentlicheRechtsgrundlage> wesentlicheRechtsgrundlage;
 
     @Size(max = 1000, message = "Es sind maximal {max} Zeichen erlaubt")
     private String wesentlicheRechtsgrundlageFreieEingabe;

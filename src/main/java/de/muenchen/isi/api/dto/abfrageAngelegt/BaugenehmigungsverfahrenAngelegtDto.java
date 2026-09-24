@@ -50,7 +50,5 @@ public class BaugenehmigungsverfahrenAngelegtDto extends AbfrageAngelegtDto {
 
     @NotEmpty
     @Size(min = 1, max = 5)
-    private List<
-        @Valid @NotNull AbfragevarianteBaugenehmigungsverfahrenAngelegtDto
-    > abfragevariantenBaugenehmigungsverfahren;
+    private List<@Valid @NotNull AbfragevarianteBaugenehmigungsverfahrenAngelegtDto> abfragevariantenBaugenehmigungsverfahren;
 }

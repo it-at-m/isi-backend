@@ -46,9 +46,7 @@ public class AbfragevarianteBaugenehmigungsverfahrenAngelegtDto implements Abfra
     private String name;
 
     @NotEmpty
-    private List<
-        @WesentlicheRechtsgrundlageBaugenehmigungsverfahrenValid @NotNull WesentlicheRechtsgrundlage
-    > wesentlicheRechtsgrundlage;
+    private List<@WesentlicheRechtsgrundlageBaugenehmigungsverfahrenValid @NotNull WesentlicheRechtsgrundlage> wesentlicheRechtsgrundlage;
 
     @Size(max = 1000, message = "Es sind maximal {max} Zeichen erlaubt")
     private String wesentlicheRechtsgrundlageFreieEingabe;

@@ -20,13 +20,9 @@ public class BauleitplanverfahrenStartBearbeitungDto extends AbfrageStartBearbei
 
     @NotEmpty
     @Size(min = 1, max = 5)
-    private List<
-        @NotNull @Valid AbfragevarianteBauleitplanverfahrenSachbearbeitungStartBearbeitungDto
-    > abfragevariantenBauleitplanverfahren;
+    private List<@NotNull @Valid AbfragevarianteBauleitplanverfahrenSachbearbeitungStartBearbeitungDto> abfragevariantenBauleitplanverfahren;
 
     @NotNull
     @Size(min = 0, max = 5)
-    private List<
-        @NotNull @Valid AbfragevarianteBauleitplanverfahrenStartBearbeitungDto
-    > abfragevariantenSachbearbeitungBauleitplanverfahren;
+    private List<@NotNull @Valid AbfragevarianteBauleitplanverfahrenStartBearbeitungDto> abfragevariantenSachbearbeitungBauleitplanverfahren;
 }

@@ -248,7 +248,8 @@ public class BauvorhabenService {
     public List<InfrastruktureinrichtungSearchResultModel> getReferencedInfrastruktureinrichtungen(
         final UUID bauvorhabenId
     ) {
-        return this.infrastruktureinrichtungRepository.findAllByBauvorhabenId(bauvorhabenId)
+        return this.infrastruktureinrichtungRepository
+            .findAllByBauvorhabenId(bauvorhabenId)
             .map(this.searchDomainMapper::entity2SearchResultModel)
             .sorted(
                 Comparator.comparing(
@@ -266,7 +267,8 @@ public class BauvorhabenService {
      * @return Liste von {@link AbfrageSearchResultModel} welche einem Bauvorhaben zugeordent sind
      */
     public List<AbfrageSearchResultModel> getReferencedAbfrage(final UUID bauvorhabenId) {
-        return this.abfrageRepository.findAllByBauvorhabenIdOrderByCreatedDateTimeDesc(bauvorhabenId)
+        return this.abfrageRepository
+            .findAllByBauvorhabenIdOrderByCreatedDateTimeDesc(bauvorhabenId)
             .map(this.searchDomainMapper::entity2SearchResultModel)
             .map(AbfrageSearchResultModel.class::cast)
             .collect(Collectors.toList());
@@ -282,7 +284,8 @@ public class BauvorhabenService {
     protected void throwEntityIsReferencedExceptionWhenAbfrageIsReferencingBauvorhaben(
         final BauvorhabenModel bauvorhaben
     ) throws EntityIsReferencedException {
-        final List<String> nameAbfragen = this.abfrageRepository.findAllByBauvorhabenId(bauvorhaben.getId())
+        final List<String> nameAbfragen = this.abfrageRepository
+            .findAllByBauvorhabenId(bauvorhaben.getId())
             .map(Abfrage::getName)
             .collect(Collectors.toList());
         if (!nameAbfragen.isEmpty()) {
@@ -308,10 +311,10 @@ public class BauvorhabenService {
     protected void throwEntityIsReferencedExceptionWhenInfrastruktureinrichtungIsReferencingBauvorhaben(
         final BauvorhabenModel bauvorhaben
     ) throws EntityIsReferencedException {
-        final List<String> namenInfrastruktureinrichtung =
-            this.infrastruktureinrichtungRepository.findAllByBauvorhabenId(bauvorhaben.getId())
-                .map(Infrastruktureinrichtung::getNameEinrichtung)
-                .collect(Collectors.toList());
+        final List<String> namenInfrastruktureinrichtung = this.infrastruktureinrichtungRepository
+            .findAllByBauvorhabenId(bauvorhaben.getId())
+            .map(Infrastruktureinrichtung::getNameEinrichtung)
+            .collect(Collectors.toList());
         if (CollectionUtils.isNotEmpty(namenInfrastruktureinrichtung)) {
             final var commaSeparatedNames = String.join(", ", namenInfrastruktureinrichtung);
             final var message =

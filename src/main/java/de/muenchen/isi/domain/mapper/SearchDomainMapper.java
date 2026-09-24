@@ -70,14 +70,12 @@ public abstract class SearchDomainMapper {
     @SubclassMapping(source = WeiteresVerfahren.class, target = AbfrageSearchResultModel.class)
     public abstract SearchResultModel entity2SearchResultModel(final BaseEntity entity);
 
-    @Mappings(
-        {
-            @Mapping(target = "type", constant = SearchResultType.Values.BAUVORHABEN),
-            @Mapping(source = "verortung.stadtbezirke", target = "stadtbezirke"),
-            @Mapping(target = "coordinate", ignore = true),
-            @Mapping(target = "umgriff", ignore = true),
-        }
-    )
+    @Mappings({
+        @Mapping(target = "type", constant = SearchResultType.Values.BAUVORHABEN),
+        @Mapping(source = "verortung.stadtbezirke", target = "stadtbezirke"),
+        @Mapping(target = "coordinate", ignore = true),
+        @Mapping(target = "umgriff", ignore = true),
+    })
     public abstract BauvorhabenSearchResultModel entity2SearchResultModel(final Bauvorhaben entity);
 
     @AfterMapping
@@ -89,13 +87,11 @@ public abstract class SearchDomainMapper {
         model.setUmgriff(this.getUmgriffFromVerortung(entity.getVerortung()));
     }
 
-    @Mappings(
-        {
-            @Mapping(target = "type", constant = SearchResultType.Values.ABFRAGE),
-            @Mapping(source = "verortung.stadtbezirke", target = "stadtbezirke"),
-            @Mapping(target = "coordinate", ignore = true),
-        }
-    )
+    @Mappings({
+        @Mapping(target = "type", constant = SearchResultType.Values.ABFRAGE),
+        @Mapping(source = "verortung.stadtbezirke", target = "stadtbezirke"),
+        @Mapping(target = "coordinate", ignore = true),
+    })
     public abstract AbfrageSearchResultModel entity2SearchResultModel(final Bauleitplanverfahren entity);
 
     @AfterMapping
@@ -106,13 +102,11 @@ public abstract class SearchDomainMapper {
         model.setCoordinate(this.getCoordinateFromAdresseOrVerortung(entity.getAdresse(), entity.getVerortung()));
     }
 
-    @Mappings(
-        {
-            @Mapping(target = "type", constant = SearchResultType.Values.ABFRAGE),
-            @Mapping(source = "verortung.stadtbezirke", target = "stadtbezirke"),
-            @Mapping(target = "coordinate", ignore = true),
-        }
-    )
+    @Mappings({
+        @Mapping(target = "type", constant = SearchResultType.Values.ABFRAGE),
+        @Mapping(source = "verortung.stadtbezirke", target = "stadtbezirke"),
+        @Mapping(target = "coordinate", ignore = true),
+    })
     public abstract AbfrageSearchResultModel entity2SearchResultModel(final Baugenehmigungsverfahren entity);
 
     @AfterMapping
@@ -123,13 +117,11 @@ public abstract class SearchDomainMapper {
         model.setCoordinate(this.getCoordinateFromAdresseOrVerortung(entity.getAdresse(), entity.getVerortung()));
     }
 
-    @Mappings(
-        {
-            @Mapping(target = "type", constant = SearchResultType.Values.ABFRAGE),
-            @Mapping(source = "verortung.stadtbezirke", target = "stadtbezirke"),
-            @Mapping(target = "coordinate", ignore = true),
-        }
-    )
+    @Mappings({
+        @Mapping(target = "type", constant = SearchResultType.Values.ABFRAGE),
+        @Mapping(source = "verortung.stadtbezirke", target = "stadtbezirke"),
+        @Mapping(target = "coordinate", ignore = true),
+    })
     public abstract AbfrageSearchResultModel entity2SearchResultModel(final WeiteresVerfahren entity);
 
     @AfterMapping
@@ -140,13 +132,11 @@ public abstract class SearchDomainMapper {
         model.setCoordinate(this.getCoordinateFromAdresseOrVerortung(entity.getAdresse(), entity.getVerortung()));
     }
 
-    @Mappings(
-        {
-            @Mapping(target = "type", constant = SearchResultType.Values.INFRASTRUKTUREINRICHTUNG),
-            @Mapping(target = "coordinate", ignore = true),
-            @Mapping(target = "zugehoerigesBauvorhaben", ignore = true),
-        }
-    )
+    @Mappings({
+        @Mapping(target = "type", constant = SearchResultType.Values.INFRASTRUKTUREINRICHTUNG),
+        @Mapping(target = "coordinate", ignore = true),
+        @Mapping(target = "zugehoerigesBauvorhaben", ignore = true),
+    })
     public abstract InfrastruktureinrichtungSearchResultModel entity2SearchResultModel(
         final Infrastruktureinrichtung entity
     );
@@ -319,14 +309,12 @@ public abstract class SearchDomainMapper {
         };
     }
 
-    @Mappings(
-        {
-            @Mapping(target = "type", constant = SearchResultType.Values.ABFRAGE),
-            @Mapping(target = "coordinate", ignore = true),
-            @Mapping(target = "stadtbezirke", ignore = true),
-            @Mapping(target = "bauvorhaben", source = "bauvorhabenId"),
-        }
-    )
+    @Mappings({
+        @Mapping(target = "type", constant = SearchResultType.Values.ABFRAGE),
+        @Mapping(target = "coordinate", ignore = true),
+        @Mapping(target = "stadtbezirke", ignore = true),
+        @Mapping(target = "bauvorhaben", source = "bauvorhabenId"),
+    })
     public abstract AbfrageSearchResultModel toAbfrageModel(AbfrageProjection projection);
 
     @AfterMapping
@@ -345,14 +333,12 @@ public abstract class SearchDomainMapper {
     }
 
     // -------- BAUVORHABEN --------
-    @Mappings(
-        {
-            @Mapping(target = "type", constant = SearchResultType.Values.BAUVORHABEN),
-            @Mapping(target = "coordinate", ignore = true),
-            @Mapping(target = "stadtbezirke", ignore = true),
-            @Mapping(target = "umgriff", ignore = true),
-        }
-    )
+    @Mappings({
+        @Mapping(target = "type", constant = SearchResultType.Values.BAUVORHABEN),
+        @Mapping(target = "coordinate", ignore = true),
+        @Mapping(target = "stadtbezirke", ignore = true),
+        @Mapping(target = "umgriff", ignore = true),
+    })
     public abstract BauvorhabenSearchResultModel toBauvorhabenModel(BauvorhabenProjection projection);
 
     @AfterMapping
@@ -376,13 +362,11 @@ public abstract class SearchDomainMapper {
     }
 
     // -------- INFRASTRUKTUR --------
-    @Mappings(
-        {
-            @Mapping(target = "type", constant = SearchResultType.Values.INFRASTRUKTUREINRICHTUNG),
-            @Mapping(target = "coordinate", ignore = true),
-            @Mapping(target = "zugehoerigesBauvorhaben", source = "bauvorhabenName"),
-        }
-    )
+    @Mappings({
+        @Mapping(target = "type", constant = SearchResultType.Values.INFRASTRUKTUREINRICHTUNG),
+        @Mapping(target = "coordinate", ignore = true),
+        @Mapping(target = "zugehoerigesBauvorhaben", source = "bauvorhabenName"),
+    })
     public abstract InfrastruktureinrichtungSearchResultModel toInfrastrukturModel(
         InfrastruktureinrichtungProjection projection
     );
