@@ -3,6 +3,7 @@ package de.muenchen.isi.domain.service;
 import de.muenchen.isi.domain.model.stammdaten.LookupEntryModel;
 import de.muenchen.isi.domain.model.stammdaten.LookupListModel;
 import de.muenchen.isi.domain.model.stammdaten.LookupListsModel;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.AnlassPlanung;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtBaulicheNutzung;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtDokument;
@@ -54,6 +55,7 @@ public class LookupService {
         model.setArtBaulicheNutzung(this.getArtBaulicheNutzungList());
         model.setArtBaulicheNutzungBauvorhaben(this.getArtBaulicheNutzungBauvorhabenList());
         model.setStatusInfrastruktureinrichtung(this.getStatusInfrastruktureinrichtungList());
+        model.setAnlassPlanung(this.getAnlassPlanung());
         model.setEinrichtungstraeger(this.getEinrichtungstraegerList());
         model.setEinrichtungstraegerSchulen(this.getEinrichtungstraegerSchuleList());
         model.setInfrastruktureinrichtungTyp(this.getInfrastruktureinrichtungTypList());
@@ -214,6 +216,15 @@ public class LookupService {
 
     private LookupListModel getStatusInfrastruktureinrichtungList() {
         final List<LookupEntryModel> list = EnumUtils.getEnumList(StatusInfrastruktureinrichtung.class)
+            .stream()
+            .map(item -> new LookupEntryModel(item.toString(), item.getBezeichnung()))
+            .collect(Collectors.toList());
+
+        return new LookupListModel(list);
+    }
+
+    private LookupListModel getAnlassPlanung() {
+        final List<LookupEntryModel> list = EnumUtils.getEnumList(AnlassPlanung.class)
             .stream()
             .map(item -> new LookupEntryModel(item.toString(), item.getBezeichnung()))
             .collect(Collectors.toList());

@@ -1,5 +1,6 @@
 package de.muenchen.isi.domain.model.search.request;
 
+import de.muenchen.isi.infrastructure.entity.enums.lookup.AnlassPlanung;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusInfrastruktureinrichtung;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
@@ -62,6 +63,8 @@ public class SearchQueryModel {
     private List<Verfahrensstand> filterVerfahrensstand;
 
     private List<StatusInfrastruktureinrichtung> filterInfrastruktureinrichtungStatus;
+
+    private List<AnlassPlanung> filterAnlassPlanung;
 
     private Integer page;
 
