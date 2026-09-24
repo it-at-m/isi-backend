@@ -160,7 +160,8 @@ class AbfrageServiceSpringTest {
         throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, UserRoleNotAllowedException, CalculationException, ReportingException {
         AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
         abfrage = this.abfrageService.save(abfrage);
-        UUID abfragevarianteId = ((BauleitplanverfahrenModel) abfrage).getAbfragevariantenBauleitplanverfahren()
+        UUID abfragevarianteId = ((BauleitplanverfahrenModel) abfrage)
+            .getAbfragevariantenBauleitplanverfahren()
             .get(0)
             .getId();
         AbfrageModel foundAbfrage = abfrageService.getByAbfragevarianteId(abfragevarianteId);
@@ -168,7 +169,8 @@ class AbfrageServiceSpringTest {
 
         abfrage = TestData.createBaugenehmigungsverfahrenModel();
         abfrage = this.abfrageService.save(abfrage);
-        abfragevarianteId = ((BaugenehmigungsverfahrenModel) abfrage).getAbfragevariantenBaugenehmigungsverfahren()
+        abfragevarianteId = ((BaugenehmigungsverfahrenModel) abfrage)
+            .getAbfragevariantenBaugenehmigungsverfahren()
             .get(0)
             .getId();
         foundAbfrage = abfrageService.getByAbfragevarianteId(abfragevarianteId);
@@ -331,7 +333,8 @@ class AbfrageServiceSpringTest {
 
         abfrage = this.abfrageService.patchStartBearbeitung(abfragePatch, abfrage.getId());
         assertThat(
-            ((BaugenehmigungsverfahrenModel) abfrage).getAbfragevariantenBaugenehmigungsverfahren()
+            ((BaugenehmigungsverfahrenModel) abfrage)
+                .getAbfragevariantenBaugenehmigungsverfahren()
                 .get(0)
                 .getAnmerkung(),
             is("Die Anmerkung Baugenehmigungsverfahren Patch Sachbearbeitung")
@@ -411,7 +414,8 @@ class AbfrageServiceSpringTest {
 
         abfrage = this.abfrageService.patchEinpflegenBedarfsmeldung(abfragePatch, abfrage.getId());
         assertThat(
-            ((BauleitplanverfahrenModel) abfrage).getAbfragevariantenBauleitplanverfahren()
+            ((BauleitplanverfahrenModel) abfrage)
+                .getAbfragevariantenBauleitplanverfahren()
                 .get(0)
                 .getBedarfsmeldungFachreferate()
                 .get(0)
@@ -419,7 +423,8 @@ class AbfrageServiceSpringTest {
             is(3)
         );
         assertThat(
-            ((BauleitplanverfahrenModel) abfrage).getAbfragevariantenBauleitplanverfahren()
+            ((BauleitplanverfahrenModel) abfrage)
+                .getAbfragevariantenBauleitplanverfahren()
                 .get(0)
                 .getBedarfsmeldungFachreferate()
                 .get(0)
@@ -460,7 +465,8 @@ class AbfrageServiceSpringTest {
 
         abfrage = this.abfrageService.patchEinpflegenBedarfsmeldung(abfragePatch, abfrage.getId());
         assertThat(
-            ((BaugenehmigungsverfahrenModel) abfrage).getAbfragevariantenBaugenehmigungsverfahren()
+            ((BaugenehmigungsverfahrenModel) abfrage)
+                .getAbfragevariantenBaugenehmigungsverfahren()
                 .get(0)
                 .getBedarfsmeldungFachreferate()
                 .get(0)
@@ -468,7 +474,8 @@ class AbfrageServiceSpringTest {
             is(2)
         );
         assertThat(
-            ((BaugenehmigungsverfahrenModel) abfrage).getAbfragevariantenBaugenehmigungsverfahren()
+            ((BaugenehmigungsverfahrenModel) abfrage)
+                .getAbfragevariantenBaugenehmigungsverfahren()
                 .get(0)
                 .getBedarfsmeldungFachreferate()
                 .get(0)
@@ -509,7 +516,8 @@ class AbfrageServiceSpringTest {
 
         abfrage = this.abfrageService.patchEinpflegenBedarfsmeldung(abfragePatch, abfrage.getId());
         assertThat(
-            ((WeiteresVerfahrenModel) abfrage).getAbfragevariantenWeiteresVerfahren()
+            ((WeiteresVerfahrenModel) abfrage)
+                .getAbfragevariantenWeiteresVerfahren()
                 .get(0)
                 .getBedarfsmeldungFachreferate()
                 .get(0)
@@ -517,7 +525,8 @@ class AbfrageServiceSpringTest {
             is(2)
         );
         assertThat(
-            ((WeiteresVerfahrenModel) abfrage).getAbfragevariantenWeiteresVerfahren()
+            ((WeiteresVerfahrenModel) abfrage)
+                .getAbfragevariantenWeiteresVerfahren()
                 .get(0)
                 .getBedarfsmeldungFachreferate()
                 .get(0)
