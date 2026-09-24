@@ -38,7 +38,9 @@ public class SendWorkAssignmentInformationService {
 
     private final String receiverSachbearbeitung;
 
-    private final String receiverBedarfsmeldung;
+    private final String receiverRbs;
+
+    private final String receiverSoz;
 
     private final String receiverSobon;
 
@@ -46,14 +48,16 @@ public class SendWorkAssignmentInformationService {
 
     public SendWorkAssignmentInformationService(
         @Value("${spring.mail.receiver.sachbearbeitung:}") final String receiverSachbearbeitung,
-        @Value("${spring.mail.receiver.bedarfsmeldung:}") final String receiverBedarfsmeldung,
+        @Value("${spring.mail.receiver.rbs:}") final String receiverRbs,
+        @Value("${spring.mail.receiver.soz:}") final String receiverSoz,
         @Value("${spring.mail.receiver.sobon:}") final String receiverSobon,
         @Value("${isi.environment.url:}") final String isiEnvironmentUrl,
         final MailSenderRepository mailSenderRepository,
         final Environment environment
     ) {
         this.receiverSachbearbeitung = receiverSachbearbeitung;
-        this.receiverBedarfsmeldung = receiverBedarfsmeldung;
+        this.receiverRbs = receiverRbs;
+        this.receiverSoz = receiverSoz;
         this.receiverSobon = receiverSobon;
         this.isiEnvironmentUrl = isiEnvironmentUrl;
         this.mailSenderRepository = mailSenderRepository;
@@ -72,6 +76,19 @@ public class SendWorkAssignmentInformationService {
         final StatusAbfrageEvents stateMachineEvent
     ) {
         this.sendWorkAssignmentInformation(abfrage, stateMachineEvent);
+    }
+
+    /**
+     * Ermittelt die Abfrageart auf Basis der jeweiligen Abfrage.
+     *
+     * @param abfrage
+     * @return Abfrageart-Text oder leerer String falls keine Abfrageart gesetzt ist.
+     */
+    protected String getAbfrageart(final AbfrageModel abfrage) {
+        if (abfrage.getArtAbfrage() == null) {
+            return StringUtils.EMPTY;
+        }
+        return "\nAbfrageart: " + abfrage.getArtAbfrage().getBezeichnung();
     }
 
     /**
@@ -162,6 +179,7 @@ public class SendWorkAssignmentInformationService {
         if (CollectionUtils.isNotEmpty(receiverEmailAddresses)) {
             final var subject = getSubject(abfrage.getName(), stateMachineEvent);
             var text = getText(abfrage.getName(), stateMachineEvent)
+                .concat(getAbfrageart(abfrage))
                 .concat(StringUtils.defaultIfEmpty(getStadtbezirke(abfrage), StringUtils.EMPTY))
                 .concat(getBearbeitungsfrist(abfrage))
                 .concat(getLinkToAbfrage(abfrage));
@@ -213,7 +231,7 @@ public class SendWorkAssignmentInformationService {
         } else if (StatusAbfrageEvents.ERNEUTE_BEARBEITUNG.equals(stateMachineEvent)) {
             return List.of(receiverSachbearbeitung);
         } else if (StatusAbfrageEvents.VERSCHICKEN_DER_STELLUNGNAHME.equals(stateMachineEvent)) {
-            return isSobon ? List.of(receiverBedarfsmeldung, receiverSobon) : List.of(receiverBedarfsmeldung);
+            return isSobon ? List.of(receiverRbs, receiverSoz, receiverSobon) : List.of(receiverRbs, receiverSoz);
         } else if (StatusAbfrageEvents.BEDARFSMELDUNG_ERFOLGTE.equals(stateMachineEvent)) {
             final var bearbeitungshistorie = abfrage.getBearbeitungshistorie();
             final var mailOfPerson = getEmailAddressOfPersonWhichInitiallyCreatedTheAbfrage(bearbeitungshistorie);
@@ -221,8 +239,8 @@ public class SendWorkAssignmentInformationService {
         } else if (StatusAbfrageEvents.SPEICHERN_VON_SOZIALINFRASTRUKTUR_VERSORGUNG.equals(stateMachineEvent)) {
             // Erledigt durch Fachreferat
             return isSobon
-                ? List.of(receiverSachbearbeitung, receiverBedarfsmeldung, receiverSobon)
-                : List.of(receiverSachbearbeitung, receiverBedarfsmeldung);
+                ? List.of(receiverSachbearbeitung, receiverRbs, receiverSobon)
+                : List.of(receiverSachbearbeitung, receiverRbs);
         }
         return null;
     }
