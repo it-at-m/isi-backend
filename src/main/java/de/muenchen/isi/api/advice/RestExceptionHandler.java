@@ -557,8 +557,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         final WebRequest request
     ) {
         final Map<String, String> errors = new HashMap<>();
-        ex
-            .getBindingResult()
+        ex.getBindingResult()
             .getAllErrors()
             .forEach(error -> {
                 final FieldError fieldError = (FieldError) error;
