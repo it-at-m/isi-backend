@@ -103,7 +103,11 @@
           "anmerkung": { "type": "string" },
           "bauvorhabenId": { "type": "string", "format": "uuid" },
           "sub": { "type": "string" },
-          "linkEakte": { "type": "string" }
+          "linkEakte": { "type": "string" },
+          "bearbeitungshistorie": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/BearbeitungshistorieDto" }
+          }
         },
         "description": "AbfrageDto",
         "discriminator": {
@@ -367,6 +371,22 @@
             "type": "array",
             "items": { "$ref": "#/components/schemas/WohneinheitenProFoerderartProJahrDto" }
           }
+        }
+      },
+      "BearbeitendePersonDto": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "email": { "type": "string" },
+          "organisationseinheit": { "type": "string" }
+        }
+      },
+      "BearbeitungshistorieDto": {
+        "type": "object",
+        "properties": {
+          "zielStatus": { "type": "string" },
+          "zeitpunkt": { "type": "string", "format": "date-time" },
+          "bearbeitendePerson": { "$ref": "#/components/schemas/BearbeitendePersonDto" }
         }
       },
       "BezirksteilDto": {
