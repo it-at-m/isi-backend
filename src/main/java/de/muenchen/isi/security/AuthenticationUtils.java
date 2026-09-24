@@ -162,6 +162,16 @@ public class AuthenticationUtils {
     }
 
     /**
+     * Überprüft ob es sich um den Fallback-Sub Wert handelt, siehe getUserSub.
+     *
+     * @param sub entspricht dem zu überprüfenden String
+     * @return ob der sub dem Fallback-Wert entspricht
+     */
+    public boolean isSubFromUnauthenticatedUser(final String sub) {
+        return sub.equals(SUB_UNAUTHENTICATED_USER);
+    }
+
+    /**
      * Die Methode extrahiert die Nutzerrollen des Nutzers aus dem {@link Jwt} der {@link Authentication} des {@link SecurityContextHolder}.
      *
      * @return Liste der Nutzerrollen des Nutzers
