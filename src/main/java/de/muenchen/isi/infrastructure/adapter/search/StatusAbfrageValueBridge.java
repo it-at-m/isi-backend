@@ -1,12 +1,13 @@
 package de.muenchen.isi.infrastructure.adapter.search;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.search.mapper.pojo.bridge.ValueBridge;
 import org.hibernate.search.mapper.pojo.bridge.runtime.ValueBridgeFromIndexedValueContext;
 import org.hibernate.search.mapper.pojo.bridge.runtime.ValueBridgeToIndexedValueContext;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 
 /**
  * ValueBridge um Entitätsattribute vom Typ {@link StatusAbfrage} für eine Volltextsuche indizieren zu können.
@@ -18,7 +19,7 @@ import org.hibernate.search.mapper.pojo.bridge.runtime.ValueBridgeToIndexedValue
 @Slf4j
 public class StatusAbfrageValueBridge implements ValueBridge<StatusAbfrage, String> {
 
-    private static final ObjectMapper objectMapper = new ObjectMapper();
+    private static final ObjectMapper objectMapper = new JsonMapper();
 
     @Override
     public String toIndexedValue(final StatusAbfrage value, final ValueBridgeToIndexedValueContext context) {
@@ -36,7 +37,7 @@ public class StatusAbfrageValueBridge implements ValueBridge<StatusAbfrage, Stri
         }
         try {
             return objectMapper.writeValueAsString(value);
-        } catch (JsonProcessingException e) {
+        } catch (JacksonException e) {
             log.error("Fehler beim Serialisieren von StatusAbfrage: {}", e.getMessage());
             return null;
         }
@@ -48,7 +49,7 @@ public class StatusAbfrageValueBridge implements ValueBridge<StatusAbfrage, Stri
         }
         try {
             return objectMapper.readValue(json, StatusAbfrage.class);
-        } catch (JsonProcessingException e) {
+        } catch (JacksonException e) {
             log.error("Fehler beim Deserialisieren von StatusAbfrage: {}", e.getMessage());
             return null;
         }

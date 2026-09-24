@@ -1,7 +1,5 @@
 package de.muenchen.isi.domain.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
 import de.muenchen.isi.domain.exception.GeometryOperationFailedException;
 import de.muenchen.isi.domain.exception.KoordinatenException;
 import de.muenchen.isi.domain.model.common.UtmModel;
@@ -22,6 +20,10 @@ import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.MultiPolygon;
 import org.locationtech.jts.geom.Point;
 import org.springframework.stereotype.Service;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectWriter;
+import tools.jackson.databind.json.JsonMapper;
 
 @Service
 @Slf4j
@@ -128,11 +130,11 @@ public class KoordinatenService {
     public MultiPolygon createMultiPolygon(final MultiPolygonGeometry multiPolygonGeometry)
         throws GeometryOperationFailedException {
         final GeometryJSON jsonGeometry = new GeometryJSON(NUMBER_GEO_JSON_DECIMALS);
-        final ObjectWriter objectWriter = new ObjectMapper().writer().withDefaultPrettyPrinter();
+        final ObjectWriter objectWriter = new JsonMapper().writer().withDefaultPrettyPrinter();
         try {
             final String geoJsonMultiPolygon = objectWriter.writeValueAsString(multiPolygonGeometry);
             return (MultiPolygon) jsonGeometry.read(geoJsonMultiPolygon);
-        } catch (final IOException exception) {
+        } catch (final JacksonException | IOException exception) {
             final var message = "Das übergebene Multipolygon konnte nicht verarbeitet werden.";
             log.error(message);
             throw new GeometryOperationFailedException(message, exception);

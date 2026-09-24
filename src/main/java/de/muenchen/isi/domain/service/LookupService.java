@@ -54,12 +54,12 @@ public class LookupService {
         model.setWesentlicheRechtsgrundlage(this.getWesentlicheRechtsgrundlageList());
         model.setArtBaulicheNutzung(this.getArtBaulicheNutzungList());
         model.setArtBaulicheNutzungBauvorhaben(this.getArtBaulicheNutzungBauvorhabenList());
-        model.setStatusInfrastruktureinrichtung((this.getStatusInfrastruktureinrichtungList()));
+        model.setStatusInfrastruktureinrichtung(this.getStatusInfrastruktureinrichtungList());
         model.setAnlassPlanung((this.getAnlassPlanung()));
-        model.setEinrichtungstraeger((this.getEinrichtungstraegerList()));
+        model.setEinrichtungstraeger(this.getEinrichtungstraegerList());
         model.setEinrichtungstraegerSchulen(this.getEinrichtungstraegerSchuleList());
-        model.setInfrastruktureinrichtungTyp((this.getInfrastruktureinrichtungTypList()));
-        model.setArtGsNachmittagBetreuung((this.getArtGsNachmittagBetreuungList()));
+        model.setInfrastruktureinrichtungTyp(this.getInfrastruktureinrichtungTypList());
+        model.setArtGsNachmittagBetreuung(this.getArtGsNachmittagBetreuungList());
         model.setSobonOrientierungswertJahr(this.getSobonOrientierungswertJahr());
         model.setSobonOrientierungswertJahrWithoutStandortabfrage(
             this.getSobonOrientierungswertJahrWithoutStandortabfrage()

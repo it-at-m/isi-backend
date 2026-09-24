@@ -8,7 +8,7 @@ import de.muenchen.isi.security.CustomJwtAuthenticationConverter;
 import de.muenchen.isi.security.UserInfoDataService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.boot.restclient.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -69,8 +69,9 @@ public class SecurityEnabledBackendConfiguration {
             )
             .oauth2ResourceServer(oauth2ResourceServer ->
                 oauth2ResourceServer.jwt(jwt ->
-                    // Verwenden eines CustomConverters um die Rechte vom UserInfoEndpunkt zu extrahieren.
-                    jwt.jwtAuthenticationConverter(
+                    jwt
+                        // Verwenden eines CustomConverters um die Rechte vom UserInfoEndpunkt zu extrahieren.
+                        .jwtAuthenticationConverter(
                         new CustomJwtAuthenticationConverter(
                             new UserInfoDataService(userInfoUri, restTemplateBuilder.build())
                         )

@@ -208,7 +208,7 @@ public class EntitySearchService {
                         .filter(b -> {
                             var theBool = b.bool();
                             for (final var value : valueList) {
-                                theBool = theBool.should(function.match().field(keyAttribute).matching(value));
+                                theBool.should(function.match().field(keyAttribute).matching(value));
                             }
                             return theBool;
                         })
@@ -242,7 +242,7 @@ public class EntitySearchService {
                         var theBool = b.bool();
 
                         if (BooleanUtils.isTrue(searchQueryAndSortingInformation.getSelectBauleitplanverfahren())) {
-                            theBool = theBool.should(
+                            theBool.should(
                                 function
                                     .range()
                                     .field("abfragevariantenBauleitplanverfahren.realisierungVon")
@@ -251,7 +251,7 @@ public class EntitySearchService {
                                         searchQueryAndSortingInformation.getFilterRealisierungsbeginnBis()
                                     )
                             );
-                            theBool = theBool.should(
+                            theBool.should(
                                 function
                                     .range()
                                     .field("abfragevariantenSachbearbeitungBauleitplanverfahren.realisierungVon")
@@ -262,7 +262,7 @@ public class EntitySearchService {
                             );
                         }
                         if (BooleanUtils.isTrue(searchQueryAndSortingInformation.getSelectBaugenehmigungsverfahren())) {
-                            theBool = theBool.should(
+                            theBool.should(
                                 function
                                     .range()
                                     .field("abfragevariantenBaugenehmigungsverfahren.realisierungVon")
@@ -271,7 +271,7 @@ public class EntitySearchService {
                                         searchQueryAndSortingInformation.getFilterRealisierungsbeginnBis()
                                     )
                             );
-                            theBool = theBool.should(
+                            theBool.should(
                                 function
                                     .range()
                                     .field("abfragevariantenSachbearbeitungBaugenehmigungsverfahren.realisierungVon")
@@ -282,7 +282,7 @@ public class EntitySearchService {
                             );
                         }
                         if (BooleanUtils.isTrue(searchQueryAndSortingInformation.getSelectWeiteresVerfahren())) {
-                            theBool = theBool.should(
+                            theBool.should(
                                 function
                                     .range()
                                     .field("abfragevariantenWeiteresVerfahren.realisierungVon")
@@ -291,7 +291,7 @@ public class EntitySearchService {
                                         searchQueryAndSortingInformation.getFilterRealisierungsbeginnBis()
                                     )
                             );
-                            theBool = theBool.should(
+                            theBool.should(
                                 function
                                     .range()
                                     .field("abfragevariantenSachbearbeitungWeiteresVerfahren.realisierungVon")
@@ -331,7 +331,7 @@ public class EntitySearchService {
                     .must(b -> {
                         var theBool = b.bool();
                         if (BooleanUtils.isTrue(searchQueryAndSortingInformation.getSelectBauleitplanverfahren())) {
-                            theBool = theBool.should(
+                            theBool.should(
                                 function
                                     .range()
                                     .field("abfragevariantenBauleitplanverfahren.weGesamt")
@@ -340,7 +340,7 @@ public class EntitySearchService {
                                         searchQueryAndSortingInformation.getFilterWeGesamtBis()
                                     )
                             );
-                            theBool = theBool.should(
+                            theBool.should(
                                 function
                                     .range()
                                     .field("abfragevariantenSachbearbeitungBauleitplanverfahren.weGesamt")
@@ -351,7 +351,7 @@ public class EntitySearchService {
                             );
                         }
                         if (BooleanUtils.isTrue(searchQueryAndSortingInformation.getSelectBaugenehmigungsverfahren())) {
-                            theBool = theBool.should(
+                            theBool.should(
                                 function
                                     .range()
                                     .field("abfragevariantenBaugenehmigungsverfahren.weGesamt")
@@ -360,7 +360,7 @@ public class EntitySearchService {
                                         searchQueryAndSortingInformation.getFilterWeGesamtBis()
                                     )
                             );
-                            theBool = theBool.should(
+                            theBool.should(
                                 function
                                     .range()
                                     .field("abfragevariantenSachbearbeitungBaugenehmigungsverfahren.weGesamt")
@@ -371,7 +371,7 @@ public class EntitySearchService {
                             );
                         }
                         if (BooleanUtils.isTrue(searchQueryAndSortingInformation.getSelectWeiteresVerfahren())) {
-                            theBool = theBool.should(
+                            theBool.should(
                                 function
                                     .range()
                                     .field("abfragevariantenWeiteresVerfahren.weGesamt")
@@ -380,7 +380,7 @@ public class EntitySearchService {
                                         searchQueryAndSortingInformation.getFilterWeGesamtBis()
                                     )
                             );
-                            theBool = theBool.should(
+                            theBool.should(
                                 function
                                     .range()
                                     .field("abfragevariantenSachbearbeitungWeiteresVerfahren.weGesamt")
@@ -420,7 +420,7 @@ public class EntitySearchService {
                     .must(b -> {
                         var theBool = b.bool();
                         if (BooleanUtils.isTrue(searchQueryAndSortingInformation.getSelectBauleitplanverfahren())) {
-                            theBool = theBool.should(
+                            theBool.should(
                                 function
                                     .range()
                                     .field("abfragevariantenBauleitplanverfahren.gfWohnenGesamt")
@@ -429,7 +429,7 @@ public class EntitySearchService {
                                         searchQueryAndSortingInformation.getFilterGfWohnenGeplantBis()
                                     )
                             );
-                            theBool = theBool.should(
+                            theBool.should(
                                 function
                                     .range()
                                     .field("abfragevariantenSachbearbeitungBauleitplanverfahren.gfWohnenGesamt")
@@ -440,7 +440,7 @@ public class EntitySearchService {
                             );
                         }
                         if (BooleanUtils.isTrue(searchQueryAndSortingInformation.getSelectBaugenehmigungsverfahren())) {
-                            theBool = theBool.should(
+                            theBool.should(
                                 function
                                     .range()
                                     .field("abfragevariantenBaugenehmigungsverfahren.gfWohnenGesamt")
@@ -449,7 +449,7 @@ public class EntitySearchService {
                                         searchQueryAndSortingInformation.getFilterGfWohnenGeplantBis()
                                     )
                             );
-                            theBool = theBool.should(
+                            theBool.should(
                                 function
                                     .range()
                                     .field("abfragevariantenSachbearbeitungBaugenehmigungsverfahren.gfWohnenGesamt")
@@ -460,7 +460,7 @@ public class EntitySearchService {
                             );
                         }
                         if (BooleanUtils.isTrue(searchQueryAndSortingInformation.getSelectWeiteresVerfahren())) {
-                            theBool = theBool.should(
+                            theBool.should(
                                 function
                                     .range()
                                     .field("abfragevariantenWeiteresVerfahren.gfWohnenGesamt")
@@ -469,7 +469,7 @@ public class EntitySearchService {
                                         searchQueryAndSortingInformation.getFilterGfWohnenGeplantBis()
                                     )
                             );
-                            theBool = theBool.should(
+                            theBool.should(
                                 function
                                     .range()
                                     .field("abfragevariantenSachbearbeitungWeiteresVerfahren.gfWohnenGesamt")
