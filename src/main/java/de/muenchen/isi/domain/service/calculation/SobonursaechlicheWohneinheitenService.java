@@ -163,7 +163,7 @@ public class SobonursaechlicheWohneinheitenService {
         for (int i = 0; i < jahresraten.size(); i++) {
             final var jahresrate = jahresraten.get(i);
             final int ausgabeJahr = baurateClone.getJahr() + jahresrate.getJahr() - 1;
-            final boolean isLastJahr = (i == jahresraten.size() - 1);
+            final boolean isLastJahr = i == jahresraten.size() - 1;
 
             for (final var weEntry : weProFoerderart) {
                 final var foerderart = weEntry.getFoerderart();

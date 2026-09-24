@@ -9,7 +9,6 @@ import de.muenchen.isi.domain.exception.CalculationException;
 import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.FileHandlingFailedException;
-import de.muenchen.isi.domain.exception.FileHandlingWithS3FailedException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.ReportingException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
@@ -216,7 +215,7 @@ class AbfrageServiceTest {
         final AbfrageModel result = this.abfrageService.getById(id);
         final var expected = new BauleitplanverfahrenModel();
         expected.setArtAbfrage(ArtAbfrage.BAULEITPLANVERFAHREN);
-        assertThat(result, is((expected)));
+        assertThat(result, is(expected));
         Mockito.verify(this.abfrageRepository, Mockito.times(1)).findById(id);
         Mockito.reset(this.abfrageRepository);
 
@@ -325,7 +324,7 @@ class AbfrageServiceTest {
 
     @Test
     void patchAngelegtBauleitplanverfahren()
-        throws EntityNotFoundException, UniqueViolationException, FileHandlingFailedException, FileHandlingWithS3FailedException, OptimisticLockingException, AbfrageStatusNotAllowedException, CalculationException, ReportingException, UserRoleNotAllowedException {
+        throws EntityNotFoundException, UniqueViolationException, FileHandlingFailedException, OptimisticLockingException, AbfrageStatusNotAllowedException, CalculationException, ReportingException, UserRoleNotAllowedException {
         final UUID abfrageId = UUID.randomUUID();
 
         final BauleitplanverfahrenAngelegtModel requestModel = new BauleitplanverfahrenAngelegtModel();
@@ -369,7 +368,7 @@ class AbfrageServiceTest {
 
     @Test
     void patchAngelegtBaugenehmigungsverfahren()
-        throws EntityNotFoundException, UniqueViolationException, FileHandlingFailedException, FileHandlingWithS3FailedException, OptimisticLockingException, AbfrageStatusNotAllowedException, CalculationException, ReportingException, UserRoleNotAllowedException {
+        throws EntityNotFoundException, UniqueViolationException, FileHandlingFailedException, OptimisticLockingException, AbfrageStatusNotAllowedException, CalculationException, ReportingException, UserRoleNotAllowedException {
         final UUID abfrageId = UUID.randomUUID();
 
         final BaugenehmigungsverfahrenAngelegtModel requestModel = new BaugenehmigungsverfahrenAngelegtModel();
@@ -414,7 +413,7 @@ class AbfrageServiceTest {
 
     @Test
     void patchAngelegtWeiteresVerfahren()
-        throws EntityNotFoundException, UniqueViolationException, FileHandlingFailedException, FileHandlingWithS3FailedException, OptimisticLockingException, AbfrageStatusNotAllowedException, CalculationException, ReportingException, UserRoleNotAllowedException {
+        throws EntityNotFoundException, UniqueViolationException, FileHandlingFailedException, OptimisticLockingException, AbfrageStatusNotAllowedException, CalculationException, ReportingException, UserRoleNotAllowedException {
         final UUID abfrageId = UUID.randomUUID();
 
         final WeiteresVerfahrenAngelegtModel requestModel = new WeiteresVerfahrenAngelegtModel();
@@ -455,7 +454,7 @@ class AbfrageServiceTest {
 
     @Test
     void patchAngelegtArtAbfrageNotSupportedBauleitplanverfahren()
-        throws UniqueViolationException, FileHandlingFailedException, FileHandlingWithS3FailedException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException, ReportingException, UserRoleNotAllowedException {
+        throws UniqueViolationException, FileHandlingFailedException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException, ReportingException, UserRoleNotAllowedException {
         final UUID abfrageId = UUID.randomUUID();
 
         final BauleitplanverfahrenAngelegtModel requestModel = new BauleitplanverfahrenAngelegtModel();
@@ -488,7 +487,7 @@ class AbfrageServiceTest {
 
     @Test
     void patchAngelegtArtAbfrageNotSupportedBaugenehmigungsverfahren()
-        throws UniqueViolationException, FileHandlingFailedException, FileHandlingWithS3FailedException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException, ReportingException, UserRoleNotAllowedException {
+        throws UniqueViolationException, FileHandlingFailedException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException, ReportingException, UserRoleNotAllowedException {
         final UUID abfrageId = UUID.randomUUID();
 
         final BaugenehmigungsverfahrenAngelegtModel requestModel = new BaugenehmigungsverfahrenAngelegtModel();
@@ -521,7 +520,7 @@ class AbfrageServiceTest {
 
     @Test
     void patchAngelegtArtAbfrageNotSupportedWeiteresVerfahren()
-        throws UniqueViolationException, FileHandlingFailedException, FileHandlingWithS3FailedException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException, ReportingException, UserRoleNotAllowedException {
+        throws UniqueViolationException, FileHandlingFailedException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException, ReportingException, UserRoleNotAllowedException {
         final UUID abfrageId = UUID.randomUUID();
 
         final var requestModel = new WeiteresVerfahrenAngelegtModel();
@@ -1143,7 +1142,7 @@ class AbfrageServiceTest {
         abfragevarianteBedarfsmeldungToSave.setAnzahlKindergartengruppen(3);
         abfragevarianteBedarfsmeldungToSave.setAnzahlHortgruppen(2);
         abfragevarianteBedarfsmeldungToSave.setAnzahlGrundschulzuege(1);
-        abfragevarianteToSaveSave.setBedarfsmeldungFachreferate((List.of(abfragevarianteBedarfsmeldungToSave)));
+        abfragevarianteToSaveSave.setBedarfsmeldungFachreferate(List.of(abfragevarianteBedarfsmeldungToSave));
 
         final var abfragevarianteSachbearbeitungToSave = new AbfragevarianteBauleitplanverfahren();
         abfragevarianteSachbearbeitungToSave.setId(uuidAbfragevarianteSachbearbeitung);
@@ -1339,7 +1338,7 @@ class AbfrageServiceTest {
         abfragevarianteBedarfsmeldungToSave.setAnzahlKindergartengruppen(3);
         abfragevarianteBedarfsmeldungToSave.setAnzahlHortgruppen(2);
         abfragevarianteBedarfsmeldungToSave.setAnzahlGrundschulzuege(1);
-        abfragevarianteToSaveSave.setBedarfsmeldungFachreferate((List.of(abfragevarianteBedarfsmeldungToSave)));
+        abfragevarianteToSaveSave.setBedarfsmeldungFachreferate(List.of(abfragevarianteBedarfsmeldungToSave));
 
         final var abfragevarianteSachbearbeitungToSave = new AbfragevarianteBaugenehmigungsverfahren();
         abfragevarianteSachbearbeitungToSave.setId(uuidAbfragevarianteSachbearbeitung);
@@ -1534,7 +1533,7 @@ class AbfrageServiceTest {
         abfragevarianteBedarfsmeldungToSave.setAnzahlKindergartengruppen(3);
         abfragevarianteBedarfsmeldungToSave.setAnzahlHortgruppen(2);
         abfragevarianteBedarfsmeldungToSave.setAnzahlGrundschulzuege(1);
-        abfragevarianteToSaveSave.setBedarfsmeldungFachreferate((List.of(abfragevarianteBedarfsmeldungToSave)));
+        abfragevarianteToSaveSave.setBedarfsmeldungFachreferate(List.of(abfragevarianteBedarfsmeldungToSave));
 
         final var abfragevarianteSachbearbeitungToSave = new AbfragevarianteWeiteresVerfahren();
         abfragevarianteSachbearbeitungToSave.setId(uuidAbfragevarianteSachbearbeitung);
@@ -1721,7 +1720,7 @@ class AbfrageServiceTest {
         abfragevarianteBedarfsmeldungToSave.setAnzahlKindergartengruppen(3);
         abfragevarianteBedarfsmeldungToSave.setAnzahlHortgruppen(2);
         abfragevarianteBedarfsmeldungToSave.setAnzahlGrundschulzuege(1);
-        abfragevarianteToSaveSave.setBedarfsmeldungFachreferate((List.of(abfragevarianteBedarfsmeldungToSave)));
+        abfragevarianteToSaveSave.setBedarfsmeldungFachreferate(List.of(abfragevarianteBedarfsmeldungToSave));
 
         final var abfragevarianteSachbearbeitungToSave = new AbfragevarianteBauleitplanverfahren();
         abfragevarianteSachbearbeitungToSave.setId(uuidAbfragevarianteSachbearbeitung);
@@ -1875,7 +1874,7 @@ class AbfrageServiceTest {
         abfragevarianteBedarfsmeldungToSave.setAnzahlKindergartengruppen(3);
         abfragevarianteBedarfsmeldungToSave.setAnzahlHortgruppen(2);
         abfragevarianteBedarfsmeldungToSave.setAnzahlGrundschulzuege(1);
-        abfragevarianteToSaveSave.setBedarfsmeldungFachreferate((List.of(abfragevarianteBedarfsmeldungToSave)));
+        abfragevarianteToSaveSave.setBedarfsmeldungFachreferate(List.of(abfragevarianteBedarfsmeldungToSave));
 
         final var abfragevarianteSachbearbeitungToSave = new AbfragevarianteBaugenehmigungsverfahren();
         abfragevarianteSachbearbeitungToSave.setId(uuidAbfragevarianteSachbearbeitung);
@@ -2028,7 +2027,7 @@ class AbfrageServiceTest {
         abfragevarianteBedarfsmeldungToSave.setAnzahlKindergartengruppen(3);
         abfragevarianteBedarfsmeldungToSave.setAnzahlHortgruppen(2);
         abfragevarianteBedarfsmeldungToSave.setAnzahlGrundschulzuege(1);
-        abfragevarianteToSaveSave.setBedarfsmeldungFachreferate((List.of(abfragevarianteBedarfsmeldungToSave)));
+        abfragevarianteToSaveSave.setBedarfsmeldungFachreferate(List.of(abfragevarianteBedarfsmeldungToSave));
 
         final var abfragevarianteSachbearbeitungToSave = new AbfragevarianteWeiteresVerfahren();
         abfragevarianteSachbearbeitungToSave.setId(uuidAbfragevarianteSachbearbeitung);

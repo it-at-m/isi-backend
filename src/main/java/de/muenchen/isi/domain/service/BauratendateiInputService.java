@@ -247,11 +247,9 @@ public class BauratendateiInputService {
         final Map<UUID, BedarfeForAbfragevarianteModel> bedarfe,
         final UUID abfragevarianteId
     ) {
-        return (
-                bedarfe != null &&
-                bedarfe.get(abfragevarianteId) != null &&
-                bedarfe.get(abfragevarianteId).getLangfristigerPlanungsursaechlicherBedarf() != null
-            )
+        return bedarfe != null &&
+            bedarfe.get(abfragevarianteId) != null &&
+            bedarfe.get(abfragevarianteId).getLangfristigerPlanungsursaechlicherBedarf() != null
             ? ListUtils.emptyIfNull(
                   bedarfe.get(abfragevarianteId).getLangfristigerPlanungsursaechlicherBedarf().getWohneinheiten()
               )

@@ -43,8 +43,8 @@ public class SobonBerechnungValidator implements ConstraintValidator<SobonBerech
                 sobonBerechnung.getVersorgungsquoteHortSobon().compareTo(BigDecimal.ONE) <= 0;
 
             return (
-                (isSobonBerechnung != isFoerdermixEmtpy) &&
-                (isSobonBerechnung != isSobonOrientierungswertJahrSobonUrsaechlichEmpty) &&
+                isSobonBerechnung != isFoerdermixEmtpy &&
+                isSobonBerechnung != isSobonOrientierungswertJahrSobonUrsaechlichEmpty &&
                 (!isSobonBerechnung || (!isVersorgungsquoteHortSobonEmpty && isVersorgungsquoteHortSobonValid))
             );
         }
