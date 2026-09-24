@@ -55,7 +55,7 @@ public class LookupService {
         model.setArtBaulicheNutzung(this.getArtBaulicheNutzungList());
         model.setArtBaulicheNutzungBauvorhaben(this.getArtBaulicheNutzungBauvorhabenList());
         model.setStatusInfrastruktureinrichtung(this.getStatusInfrastruktureinrichtungList());
-        model.setAnlassPlanung((this.getAnlassPlanung()));
+        model.setAnlassPlanung(this.getAnlassPlanung());
         model.setEinrichtungstraeger(this.getEinrichtungstraegerList());
         model.setEinrichtungstraegerSchulen(this.getEinrichtungstraegerSchuleList());
         model.setInfrastruktureinrichtungTyp(this.getInfrastruktureinrichtungTypList());

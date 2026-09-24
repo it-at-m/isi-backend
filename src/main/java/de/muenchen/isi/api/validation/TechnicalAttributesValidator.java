@@ -21,67 +21,58 @@ public class TechnicalAttributesValidator
 
     private boolean isValidForOption1(final List<BauabschnittDto> bauabschnitte) {
         return (
-            bauabschnitte
-                .stream()
-                .anyMatch(
-                    bauabschnitt ->
-                        !bauabschnitt.getTechnical() &&
-                        bauabschnitt.getBaugebiete() != null &&
-                        bauabschnitt
-                            .getBaugebiete()
-                            .stream()
-                            .anyMatch(
-                                baugebiet ->
-                                    !baugebiet.getTechnical() &&
-                                    baugebiet.getBauraten() != null &&
-                                    !baugebiet.getBauraten().isEmpty()
-                            )
-                ) &&
-            hasBauraten(bauabschnitte)
+            bauabschnitte.stream().anyMatch(
+                bauabschnitt ->
+                    !bauabschnitt.getTechnical() &&
+                    bauabschnitt.getBaugebiete() != null &&
+                    bauabschnitt
+                        .getBaugebiete()
+                        .stream()
+                        .anyMatch(
+                            baugebiet ->
+                                !baugebiet.getTechnical() &&
+                                baugebiet.getBauraten() != null &&
+                                !baugebiet.getBauraten().isEmpty()
+                        )
+            ) && hasBauraten(bauabschnitte)
         );
     }
 
     private boolean isValidForOption2(final List<BauabschnittDto> bauabschnitte) {
         return (
-            bauabschnitte
-                .stream()
-                .anyMatch(
-                    bauabschnitt ->
-                        bauabschnitt.getTechnical() &&
-                        bauabschnitt.getBaugebiete() != null &&
-                        bauabschnitt
-                            .getBaugebiete()
-                            .stream()
-                            .anyMatch(
-                                baugebiet ->
-                                    !baugebiet.getTechnical() &&
-                                    baugebiet.getBauraten() != null &&
-                                    !baugebiet.getBauraten().isEmpty()
-                            )
-                ) &&
-            hasBauraten(bauabschnitte)
+            bauabschnitte.stream().anyMatch(
+                bauabschnitt ->
+                    bauabschnitt.getTechnical() &&
+                    bauabschnitt.getBaugebiete() != null &&
+                    bauabschnitt
+                        .getBaugebiete()
+                        .stream()
+                        .anyMatch(
+                            baugebiet ->
+                                !baugebiet.getTechnical() &&
+                                baugebiet.getBauraten() != null &&
+                                !baugebiet.getBauraten().isEmpty()
+                        )
+            ) && hasBauraten(bauabschnitte)
         );
     }
 
     private boolean isValidForOption3(final List<BauabschnittDto> bauabschnitte) {
         return (
-            bauabschnitte
-                .stream()
-                .allMatch(
-                    bauabschnitt ->
-                        bauabschnitt.getTechnical() &&
-                        bauabschnitt.getBaugebiete() != null &&
-                        bauabschnitt
-                            .getBaugebiete()
-                            .stream()
-                            .allMatch(
-                                baugebiet ->
-                                    baugebiet.getTechnical() &&
-                                    baugebiet.getBauraten() != null &&
-                                    !baugebiet.getBauraten().isEmpty()
-                            )
-                ) &&
-            hasBauraten(bauabschnitte)
+            bauabschnitte.stream().allMatch(
+                bauabschnitt ->
+                    bauabschnitt.getTechnical() &&
+                    bauabschnitt.getBaugebiete() != null &&
+                    bauabschnitt
+                        .getBaugebiete()
+                        .stream()
+                        .allMatch(
+                            baugebiet ->
+                                baugebiet.getTechnical() &&
+                                baugebiet.getBauraten() != null &&
+                                !baugebiet.getBauraten().isEmpty()
+                        )
+            ) && hasBauraten(bauabschnitte)
         );
     }
 

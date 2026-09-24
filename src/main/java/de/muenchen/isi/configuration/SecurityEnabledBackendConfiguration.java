@@ -40,44 +40,42 @@ public class SecurityEnabledBackendConfiguration {
     public SecurityFilterChain securityFilterChain(final HttpSecurity http) throws Exception {
         var pathMatcher = PathPatternRequestMatcher.withDefaults();
 
-        http
-            .authorizeHttpRequests(request ->
-                request
-                    .requestMatchers(
-                        // allow access to /v3/api-docs/**
-                        pathMatcher.matcher("/v3/api-docs/**"),
-                        // allow access to /swagger-resources/**
-                        pathMatcher.matcher("/swagger-resources/**"),
-                        // allow access to /swagger-ui
-                        pathMatcher.matcher("/swagger-ui/**"),
-                        // allow access to /swagger-ui.html
-                        pathMatcher.matcher("/swagger-ui.html"),
-                        // allow access to /actuator/info
-                        pathMatcher.matcher("/actuator/info"),
-                        // allow access to /actuator/health for OpenShift Health Check
-                        pathMatcher.matcher("/actuator/health"),
-                        // allow access to /actuator/health/liveness for OpenShift Liveness Check
-                        pathMatcher.matcher("/actuator/health/liveness"),
-                        // allow access to /actuator/health/readiness for OpenShift Readiness Check
-                        pathMatcher.matcher("/actuator/health/readiness"),
-                        // allow access to /actuator/metrics for Prometheus monitoring in OpenShift
-                        pathMatcher.matcher("/actuator/metrics")
-                    )
-                    .permitAll()
-                    .anyRequest()
-                    .authenticated()
-            )
-            .oauth2ResourceServer(oauth2ResourceServer ->
-                oauth2ResourceServer.jwt(jwt ->
-                    jwt
-                        // Verwenden eines CustomConverters um die Rechte vom UserInfoEndpunkt zu extrahieren.
-                        .jwtAuthenticationConverter(
+        http.authorizeHttpRequests(request ->
+            request
+                .requestMatchers(
+                    // allow access to /v3/api-docs/**
+                    pathMatcher.matcher("/v3/api-docs/**"),
+                    // allow access to /swagger-resources/**
+                    pathMatcher.matcher("/swagger-resources/**"),
+                    // allow access to /swagger-ui
+                    pathMatcher.matcher("/swagger-ui/**"),
+                    // allow access to /swagger-ui.html
+                    pathMatcher.matcher("/swagger-ui.html"),
+                    // allow access to /actuator/info
+                    pathMatcher.matcher("/actuator/info"),
+                    // allow access to /actuator/health for OpenShift Health Check
+                    pathMatcher.matcher("/actuator/health"),
+                    // allow access to /actuator/health/liveness for OpenShift Liveness Check
+                    pathMatcher.matcher("/actuator/health/liveness"),
+                    // allow access to /actuator/health/readiness for OpenShift Readiness Check
+                    pathMatcher.matcher("/actuator/health/readiness"),
+                    // allow access to /actuator/metrics for Prometheus monitoring in OpenShift
+                    pathMatcher.matcher("/actuator/metrics")
+                )
+                .permitAll()
+                .anyRequest()
+                .authenticated()
+        ).oauth2ResourceServer(oauth2ResourceServer ->
+            oauth2ResourceServer.jwt(jwt ->
+                jwt
+                    // Verwenden eines CustomConverters um die Rechte vom UserInfoEndpunkt zu extrahieren.
+                    .jwtAuthenticationConverter(
                         new CustomJwtAuthenticationConverter(
                             new UserInfoDataService(userInfoUri, restTemplateBuilder.build())
                         )
                     )
-                )
-            );
+            )
+        );
         return http.build();
     }
 }
