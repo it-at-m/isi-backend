@@ -16,13 +16,9 @@ public class BaugenehmigungsverfahrenEinplanungBedarfeDto extends AbfrageEinplan
 
     @NotEmpty
     @Size(min = 1, max = 5)
-    private List<
-        @NotNull @Valid AbfragevarianteBaugenehmigungsverfahrenEinplanungBedarfeDto
-    > abfragevariantenBaugenehmigungsverfahren;
+    private List<@NotNull @Valid AbfragevarianteBaugenehmigungsverfahrenEinplanungBedarfeDto> abfragevariantenBaugenehmigungsverfahren;
 
     @NotNull
     @Size(min = 0, max = 5)
-    private List<
-        @NotNull @Valid AbfragevarianteBaugenehmigungsverfahrenEinplanungBedarfeDto
-    > abfragevariantenSachbearbeitungBaugenehmigungsverfahren;
+    private List<@NotNull @Valid AbfragevarianteBaugenehmigungsverfahrenEinplanungBedarfeDto> abfragevariantenSachbearbeitungBaugenehmigungsverfahren;
 }
