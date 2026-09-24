@@ -13,11 +13,7 @@ public class BaugenehmigungsverfahrenStartBearbeitungModel extends AbfrageStartB
 
     private VerortungMultiPolygonModel verortung;
 
-    private List<
-        AbfragevarianteBaugenehmigungsverfahrenSachbearbeitungStartBearbeitungModel
-    > abfragevariantenBaugenehmigungsverfahren;
+    private List<AbfragevarianteBaugenehmigungsverfahrenSachbearbeitungStartBearbeitungModel> abfragevariantenBaugenehmigungsverfahren;
 
-    private List<
-        AbfragevarianteBaugenehmigungsverfahrenStartBearbeitungModel
-    > abfragevariantenSachbearbeitungBaugenehmigungsverfahren;
+    private List<AbfragevarianteBaugenehmigungsverfahrenStartBearbeitungModel> abfragevariantenSachbearbeitungBaugenehmigungsverfahren;
 }

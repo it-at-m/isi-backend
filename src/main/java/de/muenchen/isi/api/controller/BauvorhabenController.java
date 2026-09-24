@@ -11,7 +11,6 @@ import de.muenchen.isi.domain.exception.BauvorhabenNotReferencedException;
 import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.FileHandlingFailedException;
-import de.muenchen.isi.domain.exception.FileHandlingWithS3FailedException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.ReportingException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
@@ -165,7 +164,7 @@ public class BauvorhabenController {
     public ResponseEntity<BauvorhabenDto> updateBauvorhaben(
         @RequestBody @Valid @NotNull final BauvorhabenDto bauvorhabenDto
     )
-        throws EntityNotFoundException, OptimisticLockingException, FileHandlingFailedException, FileHandlingWithS3FailedException, EntityIsReferencedException, UserRoleNotAllowedException, ReportingException {
+        throws EntityNotFoundException, OptimisticLockingException, FileHandlingFailedException, EntityIsReferencedException, UserRoleNotAllowedException, ReportingException {
         var model = this.bauvorhabenApiMapper.dto2Model(bauvorhabenDto);
         model = this.bauvorhabenService.updateBauvorhaben(model);
         final var saved = this.bauvorhabenApiMapper.model2Dto(model);
@@ -257,7 +256,8 @@ public class BauvorhabenController {
     @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "OK") })
     @PreAuthorize("hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_READ_BAUVORHABEN.name())")
     public ResponseEntity<List<AbfrageSearchResultDto>> getReferencedAbfrage(@PathVariable @NotNull final UUID id) {
-        final var abfragen = this.bauvorhabenService.getReferencedAbfrage(id)
+        final var abfragen = this.bauvorhabenService
+            .getReferencedAbfrage(id)
             .stream()
             .map(this.searchApiMapper::model2Dto)
             .map(AbfrageSearchResultDto.class::cast)
@@ -276,7 +276,8 @@ public class BauvorhabenController {
     public ResponseEntity<List<InfrastruktureinrichtungSearchResultDto>> getReferencedInfrastruktureinrichtung(
         @PathVariable @NotNull final UUID id
     ) {
-        final var infrastruktureinrichtungen = this.bauvorhabenService.getReferencedInfrastruktureinrichtungen(id)
+        final var infrastruktureinrichtungen = this.bauvorhabenService
+            .getReferencedInfrastruktureinrichtungen(id)
             .stream()
             .map(this.searchApiMapper::model2Dto)
             .map(InfrastruktureinrichtungSearchResultDto.class::cast)

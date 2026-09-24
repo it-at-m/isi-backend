@@ -15,16 +15,14 @@ import lombok.Data;
     property = "type",
     visible = true
 )
-@JsonSubTypes(
-    {
-        @JsonSubTypes.Type(value = AbfrageSearchResultDto.class, name = SearchResultType.Values.ABFRAGE),
-        @JsonSubTypes.Type(value = BauvorhabenSearchResultDto.class, name = SearchResultType.Values.BAUVORHABEN),
-        @JsonSubTypes.Type(
-            value = InfrastruktureinrichtungSearchResultDto.class,
-            name = SearchResultType.Values.INFRASTRUKTUREINRICHTUNG
-        ),
-    }
-)
+@JsonSubTypes({
+    @JsonSubTypes.Type(value = AbfrageSearchResultDto.class, name = SearchResultType.Values.ABFRAGE),
+    @JsonSubTypes.Type(value = BauvorhabenSearchResultDto.class, name = SearchResultType.Values.BAUVORHABEN),
+    @JsonSubTypes.Type(
+        value = InfrastruktureinrichtungSearchResultDto.class,
+        name = SearchResultType.Values.INFRASTRUKTUREINRICHTUNG
+    ),
+})
 @Schema(
     description = "SearchResultDto",
     discriminatorProperty = "type",

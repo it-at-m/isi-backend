@@ -1,16 +1,14 @@
 package de.muenchen.isi.domain.service.filehandling;
 
 import de.muenchen.isi.domain.exception.FileHandlingFailedException;
-import de.muenchen.isi.domain.exception.FileHandlingWithS3FailedException;
 import de.muenchen.isi.domain.mapper.DokumentDomainMapper;
 import de.muenchen.isi.domain.model.filehandling.DokumentModel;
 import de.muenchen.isi.domain.model.filehandling.DokumenteModel;
 import de.muenchen.isi.domain.model.filehandling.FilepathModel;
 import de.muenchen.isi.infrastructure.repository.filehandling.DokumentRepository;
-import de.muenchen.refarch.integration.s3.client.exception.DocumentStorageClientErrorException;
-import de.muenchen.refarch.integration.s3.client.exception.DocumentStorageException;
-import de.muenchen.refarch.integration.s3.client.exception.DocumentStorageServerErrorException;
-import de.muenchen.refarch.integration.s3.client.repository.DocumentStorageFileRepository;
+import de.muenchen.oss.refarch.integration.s3.application.port.out.S3OutPort;
+import de.muenchen.oss.refarch.integration.s3.domain.exception.S3Exception;
+import de.muenchen.oss.refarch.integration.s3.domain.model.FileReference;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -21,8 +19,6 @@ import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpStatusCodeException;
-import org.springframework.web.reactive.function.client.WebClientException;
 
 @Slf4j
 @Service
@@ -32,20 +28,20 @@ public class DokumentService {
 
     private final DokumentDomainMapper dokumentDomainMapper;
 
-    private final DocumentStorageFileRepository documentStorageFileRepository;
+    private final String bucket;
 
-    private final Integer fileExpirationTime;
+    private final S3OutPort s3OutPort;
 
     public DokumentService(
+        final S3OutPort s3OutPort,
         final DokumentRepository dokumentRepository,
         final DokumentDomainMapper dokumentDomainMapper,
-        final DocumentStorageFileRepository documentStorageFileRepository,
-        @Value("${refarch.s3.client.file-expiration-time}") final Integer fileExpirationTime
+        @Value("${refarch.s3.bucket-name}") final String bucket
     ) {
+        this.s3OutPort = s3OutPort;
         this.dokumentRepository = dokumentRepository;
         this.dokumentDomainMapper = dokumentDomainMapper;
-        this.documentStorageFileRepository = documentStorageFileRepository;
-        this.fileExpirationTime = fileExpirationTime;
+        this.bucket = bucket;
     }
 
     /**
@@ -77,12 +73,11 @@ public class DokumentService {
      * @param adaptedDokumentenListe  darf auch null sein
      * @param originalDokumentenListe darf auch null sein
      * @throws FileHandlingFailedException
-     * @throws FileHandlingWithS3FailedException
      */
     public void deleteDokumenteFromOriginalDokumentenListWhichAreMissingInParameterAdaptedDokumentenListe(
         final List<DokumentModel> adaptedDokumentenListe,
         final List<DokumentModel> originalDokumentenListe
-    ) throws FileHandlingFailedException, FileHandlingWithS3FailedException {
+    ) throws FileHandlingFailedException {
         final List<DokumentModel> dokumenteToDelete =
             this.getDokumenteInOriginalDokumentenListWhichAreMissingInAdaptedDokumentenListe(
                 adaptedDokumentenListe == null ? new ArrayList<>() : adaptedDokumentenListe,
@@ -129,35 +124,20 @@ public class DokumentService {
      *
      * @param dokumenteToDelete
      * @throws FileHandlingFailedException
-     * @throws FileHandlingWithS3FailedException
      */
-    protected void deleteDokumente(final List<DokumentModel> dokumenteToDelete)
-        throws FileHandlingFailedException, FileHandlingWithS3FailedException {
+    protected void deleteDokumente(final List<DokumentModel> dokumenteToDelete) throws FileHandlingFailedException {
         for (final var dokument : dokumenteToDelete) {
             try {
-                documentStorageFileRepository.deleteFile(dokument.getFilePath().getPathToFile(), fileExpirationTime);
-            } catch (
-                final DocumentStorageClientErrorException
-                | DocumentStorageServerErrorException
-                | DocumentStorageException
-                | WebClientException exception
-            ) {
+                final FileReference fileReference = new FileReference(
+                    this.bucket,
+                    dokument.getFilePath().getPathToFile()
+                );
+                s3OutPort.deleteFile(fileReference);
+            } catch (final S3Exception exception) {
                 final var message =
                     "Beim Löschen der Datei im ISI-Dokumentenverwaltungssystem ist ein Fehler aufgetreten.";
                 this.exceptionLogging(exception, message);
-                final var clazz = exception.getClass();
-                if (
-                    clazz.equals(DocumentStorageClientErrorException.class) ||
-                    clazz.equals(DocumentStorageServerErrorException.class)
-                ) {
-                    throw new FileHandlingWithS3FailedException(
-                        message,
-                        ((HttpStatusCodeException) exception.getCause()).getStatusCode(),
-                        exception
-                    );
-                } else {
-                    throw new FileHandlingFailedException(message, exception);
-                }
+                throw new FileHandlingFailedException(message, exception);
             }
         }
     }

@@ -88,47 +88,52 @@ public class EntitySearchService {
         this.prepareFilterGemeinsameAttribute(filterAttributeMap, searchQueryAndSortingInformation);
 
         // Erstellen der Hibernate-Search-Suchquery
-        final var searchQueryOptions = Search.session(entityManager)
-            .search(searchableEntities)
-            .select(f -> f.composite().as(recordClass))
-            .where((function, root) -> {
-                // Verarbeitung der angepassten Suchquery
-                root.add(searchPredicateFactory -> {
-                    if (StringUtils.isNotEmpty(adaptedSearchQuery)) {
-                        // Suche entsprechend der gegebenen Query.
-                        return function
-                            // https://docs.jboss.org/hibernate/stable/search/reference/en-US/html_single/#search-dsl-predicate-simple-query-string
-                            .simpleQueryString()
-                            .fields(searchableAttributes)
-                            .matching(adaptedSearchQuery)
-                            .defaultOperator(BooleanOperator.AND);
+        final var searchQueryOptions =
+            Search.session(entityManager)
+                .search(searchableEntities)
+                .select(f -> f.composite().as(recordClass))
+                .where((function, root) -> {
+                    // Verarbeitung der angepassten Suchquery
+                    root.add(searchPredicateFactory -> {
+                        if (StringUtils.isNotEmpty(adaptedSearchQuery)) {
+                            // Suche entsprechend der gegebenen Query.
+                            return function
+                                // https://docs.jboss.org/hibernate/stable/search/reference/en-US/html_single/#search-dsl-predicate-simple-query-string
+                                .simpleQueryString()
+                                .fields(searchableAttributes)
+                                .matching(adaptedSearchQuery)
+                                .defaultOperator(BooleanOperator.AND);
+                        } else {
+                            // Zurückgeben aller Entitäten.
+                            return function.matchAll();
+                        }
+                    });
+                    this.createFilterGemeinsameAttribute(filterAttributeMap, root, function);
+                    this.createFilterRealisierungVonBis(searchQueryAndSortingInformation, root, function);
+                    this.createFilterGeplanteWohneinheitenGesamtVonBis(
+                        searchQueryAndSortingInformation,
+                        root,
+                        function
+                    );
+                    this.createFilterGeplanteGeschossflaecheWohnenGesamtVonBis(
+                        searchQueryAndSortingInformation,
+                        root,
+                        function
+                    );
+                })
+                // Sortierung der Suchergebnisse.
+                // https://docs.jboss.org/hibernate/stable/search/reference/en-US/html_single/#query-sorting
+                .sort(function -> {
+                    final var sortBy = searchQueryAndSortingInformation.getSortBy();
+                    final var sortOrder = searchQueryAndSortingInformation.getSortOrder();
+                    if (SortAttribute.NAME.equals(sortBy)) {
+                        return function.field("name_sort").order(sortOrder);
+                    } else if (SortAttribute.CREATED_DATE_TIME.equals(sortBy)) {
+                        return function.field("createdDateTime").order(sortOrder);
                     } else {
-                        // Zurückgeben aller Entitäten.
-                        return function.matchAll();
+                        return function.field("lastModifiedDateTime").order(sortOrder);
                     }
                 });
-                this.createFilterGemeinsameAttribute(filterAttributeMap, root, function);
-                this.createFilterRealisierungVonBis(searchQueryAndSortingInformation, root, function);
-                this.createFilterGeplanteWohneinheitenGesamtVonBis(searchQueryAndSortingInformation, root, function);
-                this.createFilterGeplanteGeschossflaecheWohnenGesamtVonBis(
-                    searchQueryAndSortingInformation,
-                    root,
-                    function
-                );
-            })
-            // Sortierung der Suchergebnisse.
-            // https://docs.jboss.org/hibernate/stable/search/reference/en-US/html_single/#query-sorting
-            .sort(function -> {
-                final var sortBy = searchQueryAndSortingInformation.getSortBy();
-                final var sortOrder = searchQueryAndSortingInformation.getSortOrder();
-                if (SortAttribute.NAME.equals(sortBy)) {
-                    return function.field("name_sort").order(sortOrder);
-                } else if (SortAttribute.CREATED_DATE_TIME.equals(sortBy)) {
-                    return function.field("createdDateTime").order(sortOrder);
-                } else {
-                    return function.field("lastModifiedDateTime").order(sortOrder);
-                }
-            });
 
         return this.executeSearchQuery(searchQueryAndSortingInformation, searchQueryOptions);
     }
@@ -203,15 +208,13 @@ public class EntitySearchService {
         filterAttributeMap.forEach((keyAttribute, valueList) -> {
             if (CollectionUtils.isNotEmpty(valueList)) {
                 root.add(
-                    function
-                        .bool()
-                        .filter(b -> {
-                            var theBool = b.bool();
-                            for (final var value : valueList) {
-                                theBool = theBool.should(function.match().field(keyAttribute).matching(value));
-                            }
-                            return theBool;
-                        })
+                    function.bool().filter(b -> {
+                        var theBool = b.bool();
+                        for (final var value : valueList) {
+                            theBool.should(function.match().field(keyAttribute).matching(value));
+                        }
+                        return theBool;
+                    })
                 );
             }
         });
@@ -236,73 +239,71 @@ public class EntitySearchService {
             ObjectUtils.isNotEmpty(searchQueryAndSortingInformation.getFilterRealisierungsbeginnBis())
         ) {
             root.add(
-                function
-                    .bool()
-                    .must(b -> {
-                        var theBool = b.bool();
+                function.bool().must(b -> {
+                    var theBool = b.bool();
 
-                        if (BooleanUtils.isTrue(searchQueryAndSortingInformation.getSelectBauleitplanverfahren())) {
-                            theBool = theBool.should(
-                                function
-                                    .range()
-                                    .field("abfragevariantenBauleitplanverfahren.realisierungVon")
-                                    .between(
-                                        searchQueryAndSortingInformation.getFilterRealisierungsbeginnVon(),
-                                        searchQueryAndSortingInformation.getFilterRealisierungsbeginnBis()
-                                    )
-                            );
-                            theBool = theBool.should(
-                                function
-                                    .range()
-                                    .field("abfragevariantenSachbearbeitungBauleitplanverfahren.realisierungVon")
-                                    .between(
-                                        searchQueryAndSortingInformation.getFilterRealisierungsbeginnVon(),
-                                        searchQueryAndSortingInformation.getFilterRealisierungsbeginnBis()
-                                    )
-                            );
-                        }
-                        if (BooleanUtils.isTrue(searchQueryAndSortingInformation.getSelectBaugenehmigungsverfahren())) {
-                            theBool = theBool.should(
-                                function
-                                    .range()
-                                    .field("abfragevariantenBaugenehmigungsverfahren.realisierungVon")
-                                    .between(
-                                        searchQueryAndSortingInformation.getFilterRealisierungsbeginnVon(),
-                                        searchQueryAndSortingInformation.getFilterRealisierungsbeginnBis()
-                                    )
-                            );
-                            theBool = theBool.should(
-                                function
-                                    .range()
-                                    .field("abfragevariantenSachbearbeitungBaugenehmigungsverfahren.realisierungVon")
-                                    .between(
-                                        searchQueryAndSortingInformation.getFilterRealisierungsbeginnVon(),
-                                        searchQueryAndSortingInformation.getFilterRealisierungsbeginnBis()
-                                    )
-                            );
-                        }
-                        if (BooleanUtils.isTrue(searchQueryAndSortingInformation.getSelectWeiteresVerfahren())) {
-                            theBool = theBool.should(
-                                function
-                                    .range()
-                                    .field("abfragevariantenWeiteresVerfahren.realisierungVon")
-                                    .between(
-                                        searchQueryAndSortingInformation.getFilterRealisierungsbeginnVon(),
-                                        searchQueryAndSortingInformation.getFilterRealisierungsbeginnBis()
-                                    )
-                            );
-                            theBool = theBool.should(
-                                function
-                                    .range()
-                                    .field("abfragevariantenSachbearbeitungWeiteresVerfahren.realisierungVon")
-                                    .between(
-                                        searchQueryAndSortingInformation.getFilterRealisierungsbeginnVon(),
-                                        searchQueryAndSortingInformation.getFilterRealisierungsbeginnBis()
-                                    )
-                            );
-                        }
-                        return theBool;
-                    })
+                    if (BooleanUtils.isTrue(searchQueryAndSortingInformation.getSelectBauleitplanverfahren())) {
+                        theBool.should(
+                            function
+                                .range()
+                                .field("abfragevariantenBauleitplanverfahren.realisierungVon")
+                                .between(
+                                    searchQueryAndSortingInformation.getFilterRealisierungsbeginnVon(),
+                                    searchQueryAndSortingInformation.getFilterRealisierungsbeginnBis()
+                                )
+                        );
+                        theBool.should(
+                            function
+                                .range()
+                                .field("abfragevariantenSachbearbeitungBauleitplanverfahren.realisierungVon")
+                                .between(
+                                    searchQueryAndSortingInformation.getFilterRealisierungsbeginnVon(),
+                                    searchQueryAndSortingInformation.getFilterRealisierungsbeginnBis()
+                                )
+                        );
+                    }
+                    if (BooleanUtils.isTrue(searchQueryAndSortingInformation.getSelectBaugenehmigungsverfahren())) {
+                        theBool.should(
+                            function
+                                .range()
+                                .field("abfragevariantenBaugenehmigungsverfahren.realisierungVon")
+                                .between(
+                                    searchQueryAndSortingInformation.getFilterRealisierungsbeginnVon(),
+                                    searchQueryAndSortingInformation.getFilterRealisierungsbeginnBis()
+                                )
+                        );
+                        theBool.should(
+                            function
+                                .range()
+                                .field("abfragevariantenSachbearbeitungBaugenehmigungsverfahren.realisierungVon")
+                                .between(
+                                    searchQueryAndSortingInformation.getFilterRealisierungsbeginnVon(),
+                                    searchQueryAndSortingInformation.getFilterRealisierungsbeginnBis()
+                                )
+                        );
+                    }
+                    if (BooleanUtils.isTrue(searchQueryAndSortingInformation.getSelectWeiteresVerfahren())) {
+                        theBool.should(
+                            function
+                                .range()
+                                .field("abfragevariantenWeiteresVerfahren.realisierungVon")
+                                .between(
+                                    searchQueryAndSortingInformation.getFilterRealisierungsbeginnVon(),
+                                    searchQueryAndSortingInformation.getFilterRealisierungsbeginnBis()
+                                )
+                        );
+                        theBool.should(
+                            function
+                                .range()
+                                .field("abfragevariantenSachbearbeitungWeiteresVerfahren.realisierungVon")
+                                .between(
+                                    searchQueryAndSortingInformation.getFilterRealisierungsbeginnVon(),
+                                    searchQueryAndSortingInformation.getFilterRealisierungsbeginnBis()
+                                )
+                        );
+                    }
+                    return theBool;
+                })
             );
         }
     }
@@ -326,72 +327,70 @@ public class EntitySearchService {
             ObjectUtils.isNotEmpty(searchQueryAndSortingInformation.getFilterWeGesamtBis())
         ) {
             root.add(
-                function
-                    .bool()
-                    .must(b -> {
-                        var theBool = b.bool();
-                        if (BooleanUtils.isTrue(searchQueryAndSortingInformation.getSelectBauleitplanverfahren())) {
-                            theBool = theBool.should(
-                                function
-                                    .range()
-                                    .field("abfragevariantenBauleitplanverfahren.weGesamt")
-                                    .between(
-                                        searchQueryAndSortingInformation.getFilterWeGesamtVon(),
-                                        searchQueryAndSortingInformation.getFilterWeGesamtBis()
-                                    )
-                            );
-                            theBool = theBool.should(
-                                function
-                                    .range()
-                                    .field("abfragevariantenSachbearbeitungBauleitplanverfahren.weGesamt")
-                                    .between(
-                                        searchQueryAndSortingInformation.getFilterWeGesamtVon(),
-                                        searchQueryAndSortingInformation.getFilterWeGesamtBis()
-                                    )
-                            );
-                        }
-                        if (BooleanUtils.isTrue(searchQueryAndSortingInformation.getSelectBaugenehmigungsverfahren())) {
-                            theBool = theBool.should(
-                                function
-                                    .range()
-                                    .field("abfragevariantenBaugenehmigungsverfahren.weGesamt")
-                                    .between(
-                                        searchQueryAndSortingInformation.getFilterWeGesamtVon(),
-                                        searchQueryAndSortingInformation.getFilterWeGesamtBis()
-                                    )
-                            );
-                            theBool = theBool.should(
-                                function
-                                    .range()
-                                    .field("abfragevariantenSachbearbeitungBaugenehmigungsverfahren.weGesamt")
-                                    .between(
-                                        searchQueryAndSortingInformation.getFilterWeGesamtVon(),
-                                        searchQueryAndSortingInformation.getFilterWeGesamtBis()
-                                    )
-                            );
-                        }
-                        if (BooleanUtils.isTrue(searchQueryAndSortingInformation.getSelectWeiteresVerfahren())) {
-                            theBool = theBool.should(
-                                function
-                                    .range()
-                                    .field("abfragevariantenWeiteresVerfahren.weGesamt")
-                                    .between(
-                                        searchQueryAndSortingInformation.getFilterWeGesamtVon(),
-                                        searchQueryAndSortingInformation.getFilterWeGesamtBis()
-                                    )
-                            );
-                            theBool = theBool.should(
-                                function
-                                    .range()
-                                    .field("abfragevariantenSachbearbeitungWeiteresVerfahren.weGesamt")
-                                    .between(
-                                        searchQueryAndSortingInformation.getFilterWeGesamtVon(),
-                                        searchQueryAndSortingInformation.getFilterWeGesamtBis()
-                                    )
-                            );
-                        }
-                        return theBool;
-                    })
+                function.bool().must(b -> {
+                    var theBool = b.bool();
+                    if (BooleanUtils.isTrue(searchQueryAndSortingInformation.getSelectBauleitplanverfahren())) {
+                        theBool.should(
+                            function
+                                .range()
+                                .field("abfragevariantenBauleitplanverfahren.weGesamt")
+                                .between(
+                                    searchQueryAndSortingInformation.getFilterWeGesamtVon(),
+                                    searchQueryAndSortingInformation.getFilterWeGesamtBis()
+                                )
+                        );
+                        theBool.should(
+                            function
+                                .range()
+                                .field("abfragevariantenSachbearbeitungBauleitplanverfahren.weGesamt")
+                                .between(
+                                    searchQueryAndSortingInformation.getFilterWeGesamtVon(),
+                                    searchQueryAndSortingInformation.getFilterWeGesamtBis()
+                                )
+                        );
+                    }
+                    if (BooleanUtils.isTrue(searchQueryAndSortingInformation.getSelectBaugenehmigungsverfahren())) {
+                        theBool.should(
+                            function
+                                .range()
+                                .field("abfragevariantenBaugenehmigungsverfahren.weGesamt")
+                                .between(
+                                    searchQueryAndSortingInformation.getFilterWeGesamtVon(),
+                                    searchQueryAndSortingInformation.getFilterWeGesamtBis()
+                                )
+                        );
+                        theBool.should(
+                            function
+                                .range()
+                                .field("abfragevariantenSachbearbeitungBaugenehmigungsverfahren.weGesamt")
+                                .between(
+                                    searchQueryAndSortingInformation.getFilterWeGesamtVon(),
+                                    searchQueryAndSortingInformation.getFilterWeGesamtBis()
+                                )
+                        );
+                    }
+                    if (BooleanUtils.isTrue(searchQueryAndSortingInformation.getSelectWeiteresVerfahren())) {
+                        theBool.should(
+                            function
+                                .range()
+                                .field("abfragevariantenWeiteresVerfahren.weGesamt")
+                                .between(
+                                    searchQueryAndSortingInformation.getFilterWeGesamtVon(),
+                                    searchQueryAndSortingInformation.getFilterWeGesamtBis()
+                                )
+                        );
+                        theBool.should(
+                            function
+                                .range()
+                                .field("abfragevariantenSachbearbeitungWeiteresVerfahren.weGesamt")
+                                .between(
+                                    searchQueryAndSortingInformation.getFilterWeGesamtVon(),
+                                    searchQueryAndSortingInformation.getFilterWeGesamtBis()
+                                )
+                        );
+                    }
+                    return theBool;
+                })
             );
         }
     }
@@ -415,72 +414,70 @@ public class EntitySearchService {
             ObjectUtils.isNotEmpty(searchQueryAndSortingInformation.getFilterGfWohnenGeplantBis())
         ) {
             root.add(
-                function
-                    .bool()
-                    .must(b -> {
-                        var theBool = b.bool();
-                        if (BooleanUtils.isTrue(searchQueryAndSortingInformation.getSelectBauleitplanverfahren())) {
-                            theBool = theBool.should(
-                                function
-                                    .range()
-                                    .field("abfragevariantenBauleitplanverfahren.gfWohnenGesamt")
-                                    .between(
-                                        searchQueryAndSortingInformation.getFilterGfWohnenGeplantVon(),
-                                        searchQueryAndSortingInformation.getFilterGfWohnenGeplantBis()
-                                    )
-                            );
-                            theBool = theBool.should(
-                                function
-                                    .range()
-                                    .field("abfragevariantenSachbearbeitungBauleitplanverfahren.gfWohnenGesamt")
-                                    .between(
-                                        searchQueryAndSortingInformation.getFilterGfWohnenGeplantVon(),
-                                        searchQueryAndSortingInformation.getFilterGfWohnenGeplantBis()
-                                    )
-                            );
-                        }
-                        if (BooleanUtils.isTrue(searchQueryAndSortingInformation.getSelectBaugenehmigungsverfahren())) {
-                            theBool = theBool.should(
-                                function
-                                    .range()
-                                    .field("abfragevariantenBaugenehmigungsverfahren.gfWohnenGesamt")
-                                    .between(
-                                        searchQueryAndSortingInformation.getFilterGfWohnenGeplantVon(),
-                                        searchQueryAndSortingInformation.getFilterGfWohnenGeplantBis()
-                                    )
-                            );
-                            theBool = theBool.should(
-                                function
-                                    .range()
-                                    .field("abfragevariantenSachbearbeitungBaugenehmigungsverfahren.gfWohnenGesamt")
-                                    .between(
-                                        searchQueryAndSortingInformation.getFilterGfWohnenGeplantVon(),
-                                        searchQueryAndSortingInformation.getFilterGfWohnenGeplantBis()
-                                    )
-                            );
-                        }
-                        if (BooleanUtils.isTrue(searchQueryAndSortingInformation.getSelectWeiteresVerfahren())) {
-                            theBool = theBool.should(
-                                function
-                                    .range()
-                                    .field("abfragevariantenWeiteresVerfahren.gfWohnenGesamt")
-                                    .between(
-                                        searchQueryAndSortingInformation.getFilterGfWohnenGeplantVon(),
-                                        searchQueryAndSortingInformation.getFilterGfWohnenGeplantBis()
-                                    )
-                            );
-                            theBool = theBool.should(
-                                function
-                                    .range()
-                                    .field("abfragevariantenSachbearbeitungWeiteresVerfahren.gfWohnenGesamt")
-                                    .between(
-                                        searchQueryAndSortingInformation.getFilterGfWohnenGeplantVon(),
-                                        searchQueryAndSortingInformation.getFilterGfWohnenGeplantBis()
-                                    )
-                            );
-                        }
-                        return theBool;
-                    })
+                function.bool().must(b -> {
+                    var theBool = b.bool();
+                    if (BooleanUtils.isTrue(searchQueryAndSortingInformation.getSelectBauleitplanverfahren())) {
+                        theBool.should(
+                            function
+                                .range()
+                                .field("abfragevariantenBauleitplanverfahren.gfWohnenGesamt")
+                                .between(
+                                    searchQueryAndSortingInformation.getFilterGfWohnenGeplantVon(),
+                                    searchQueryAndSortingInformation.getFilterGfWohnenGeplantBis()
+                                )
+                        );
+                        theBool.should(
+                            function
+                                .range()
+                                .field("abfragevariantenSachbearbeitungBauleitplanverfahren.gfWohnenGesamt")
+                                .between(
+                                    searchQueryAndSortingInformation.getFilterGfWohnenGeplantVon(),
+                                    searchQueryAndSortingInformation.getFilterGfWohnenGeplantBis()
+                                )
+                        );
+                    }
+                    if (BooleanUtils.isTrue(searchQueryAndSortingInformation.getSelectBaugenehmigungsverfahren())) {
+                        theBool.should(
+                            function
+                                .range()
+                                .field("abfragevariantenBaugenehmigungsverfahren.gfWohnenGesamt")
+                                .between(
+                                    searchQueryAndSortingInformation.getFilterGfWohnenGeplantVon(),
+                                    searchQueryAndSortingInformation.getFilterGfWohnenGeplantBis()
+                                )
+                        );
+                        theBool.should(
+                            function
+                                .range()
+                                .field("abfragevariantenSachbearbeitungBaugenehmigungsverfahren.gfWohnenGesamt")
+                                .between(
+                                    searchQueryAndSortingInformation.getFilterGfWohnenGeplantVon(),
+                                    searchQueryAndSortingInformation.getFilterGfWohnenGeplantBis()
+                                )
+                        );
+                    }
+                    if (BooleanUtils.isTrue(searchQueryAndSortingInformation.getSelectWeiteresVerfahren())) {
+                        theBool.should(
+                            function
+                                .range()
+                                .field("abfragevariantenWeiteresVerfahren.gfWohnenGesamt")
+                                .between(
+                                    searchQueryAndSortingInformation.getFilterGfWohnenGeplantVon(),
+                                    searchQueryAndSortingInformation.getFilterGfWohnenGeplantBis()
+                                )
+                        );
+                        theBool.should(
+                            function
+                                .range()
+                                .field("abfragevariantenSachbearbeitungWeiteresVerfahren.gfWohnenGesamt")
+                                .between(
+                                    searchQueryAndSortingInformation.getFilterGfWohnenGeplantVon(),
+                                    searchQueryAndSortingInformation.getFilterGfWohnenGeplantBis()
+                                )
+                        );
+                    }
+                    return theBool;
+                })
             );
         }
     }

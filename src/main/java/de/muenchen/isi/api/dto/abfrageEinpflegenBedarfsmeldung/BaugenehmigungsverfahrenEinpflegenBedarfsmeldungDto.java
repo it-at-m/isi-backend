@@ -16,13 +16,9 @@ public class BaugenehmigungsverfahrenEinpflegenBedarfsmeldungDto extends Abfrage
 
     @NotEmpty
     @Size(min = 1, max = 5)
-    private List<
-        @NotNull @Valid AbfragevarianteBaugenehmigungsverfahrenEinpflegenBedarfsmeldungDto
-    > abfragevariantenBaugenehmigungsverfahren;
+    private List<@NotNull @Valid AbfragevarianteBaugenehmigungsverfahrenEinpflegenBedarfsmeldungDto> abfragevariantenBaugenehmigungsverfahren;
 
     @NotNull
     @Size(min = 0, max = 5)
-    private List<
-        @NotNull @Valid AbfragevarianteBaugenehmigungsverfahrenEinpflegenBedarfsmeldungDto
-    > abfragevariantenSachbearbeitungBaugenehmigungsverfahren;
+    private List<@NotNull @Valid AbfragevarianteBaugenehmigungsverfahrenEinpflegenBedarfsmeldungDto> abfragevariantenSachbearbeitungBaugenehmigungsverfahren;
 }

@@ -175,8 +175,8 @@ public class AuthenticationUtils {
                 final var resourceAccess = jwt.getClaim(TOKEN_RESOURCE_ACCESS);
                 if (ObjectUtils.isNotEmpty(resourceAccess)) {
                     final var isi = ((Map<?, ?>) resourceAccess).get(TOKEN_ISI);
-                    if (ObjectUtils.isNotEmpty(isi) && isi instanceof Map) {
-                        final var rolesInToken = ((Map<?, ?>) isi).get(TOKEN_ROLES);
+                    if (ObjectUtils.isNotEmpty(isi) && isi instanceof Map<?, ?> map) {
+                        final var rolesInToken = map.get(TOKEN_ROLES);
                         if (ObjectUtils.isNotEmpty(rolesInToken) && rolesInToken instanceof List) {
                             roles.addAll((List<String>) rolesInToken);
                         }

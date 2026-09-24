@@ -16,13 +16,9 @@ public class WeiteresVerfahrenEinpflegenBedarfsmeldungDto extends AbfrageEinpfle
 
     @NotEmpty
     @Size(min = 1, max = 5)
-    private List<
-        @NotNull @Valid AbfragevarianteWeiteresVerfahrenEinpflegenBedarfsmeldungDto
-    > abfragevariantenWeiteresVerfahren;
+    private List<@NotNull @Valid AbfragevarianteWeiteresVerfahrenEinpflegenBedarfsmeldungDto> abfragevariantenWeiteresVerfahren;
 
     @NotNull
     @Size(min = 0, max = 5)
-    private List<
-        @NotNull @Valid AbfragevarianteWeiteresVerfahrenEinpflegenBedarfsmeldungDto
-    > abfragevariantenSachbearbeitungWeiteresVerfahren;
+    private List<@NotNull @Valid AbfragevarianteWeiteresVerfahrenEinpflegenBedarfsmeldungDto> abfragevariantenSachbearbeitungWeiteresVerfahren;
 }

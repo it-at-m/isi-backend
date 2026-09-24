@@ -5,7 +5,6 @@ import static org.hamcrest.Matchers.is;
 
 import de.muenchen.isi.TestData;
 import de.muenchen.isi.domain.exception.FileHandlingFailedException;
-import de.muenchen.isi.domain.exception.FileHandlingWithS3FailedException;
 import de.muenchen.isi.domain.mapper.DokumentDomainMapperImpl;
 import de.muenchen.isi.domain.model.filehandling.DokumentModel;
 import de.muenchen.isi.domain.model.filehandling.DokumenteModel;
@@ -13,10 +12,9 @@ import de.muenchen.isi.domain.model.filehandling.FilepathModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtDokument;
 import de.muenchen.isi.infrastructure.entity.filehandling.Dokument;
 import de.muenchen.isi.infrastructure.repository.filehandling.DokumentRepository;
-import de.muenchen.refarch.integration.s3.client.exception.DocumentStorageClientErrorException;
-import de.muenchen.refarch.integration.s3.client.exception.DocumentStorageException;
-import de.muenchen.refarch.integration.s3.client.exception.DocumentStorageServerErrorException;
-import de.muenchen.refarch.integration.s3.client.repository.DocumentStorageFileRepository;
+import de.muenchen.oss.refarch.integration.s3.application.port.out.S3OutPort;
+import de.muenchen.oss.refarch.integration.s3.domain.exception.S3Exception;
+import de.muenchen.oss.refarch.integration.s3.domain.model.FileReference;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -35,23 +33,25 @@ import org.springframework.data.domain.PageRequest;
 @MockitoSettings(strictness = Strictness.LENIENT)
 class DokumentServiceTest {
 
+    static final String BUCKET = "isi-unittest-bucket";
+
     private DokumentService dokumentService;
 
     @Mock
     private DokumentRepository dokumentRepository;
 
     @Mock
-    private DocumentStorageFileRepository documentStorageFileRepository;
+    private S3OutPort s3OutPort;
 
     @BeforeEach
     public void beforeEach() {
         this.dokumentService = new DokumentService(
+            s3OutPort,
             this.dokumentRepository,
             new DokumentDomainMapperImpl(),
-            documentStorageFileRepository,
-            1
+            BUCKET
         );
-        Mockito.reset(this.dokumentRepository, documentStorageFileRepository);
+        Mockito.reset(this.dokumentRepository, s3OutPort);
     }
 
     @Test
@@ -84,7 +84,7 @@ class DokumentServiceTest {
 
     @Test
     void deleteDokumenteFromOriginalDokumentenListWhichAreMissingInParameterAdaptedDokumentenListe()
-        throws FileHandlingFailedException, FileHandlingWithS3FailedException, DocumentStorageException, DocumentStorageClientErrorException, DocumentStorageServerErrorException {
+        throws S3Exception, FileHandlingFailedException {
         final var originalDokument1 = new DokumentModel();
         originalDokument1.setFilePath(new FilepathModel("test/file1.txt"));
         originalDokument1.setId(UUID.randomUUID());
@@ -120,29 +120,21 @@ class DokumentServiceTest {
             originalDokumentModels
         );
 
-        Mockito.verify(this.documentStorageFileRepository, Mockito.times(1)).deleteFile(
-            originalDokument2.getFilePath().getPathToFile(),
-            1
+        Mockito.verify(this.s3OutPort, Mockito.times(1)).deleteFile(
+            new FileReference(BUCKET, originalDokument2.getFilePath().getPathToFile())
         );
-        Mockito.verify(this.documentStorageFileRepository, Mockito.times(1)).deleteFile(
-            originalDokument4.getFilePath().getPathToFile(),
-            1
+        Mockito.verify(this.s3OutPort, Mockito.times(1)).deleteFile(
+            new FileReference(BUCKET, originalDokument4.getFilePath().getPathToFile())
         );
-        Mockito.verify(this.documentStorageFileRepository, Mockito.times(2)).deleteFile(
-            Mockito.anyString(),
-            Mockito.anyInt()
-        );
+        Mockito.verify(this.s3OutPort, Mockito.times(2)).deleteFile(Mockito.any());
 
-        Mockito.reset(this.dokumentRepository, documentStorageFileRepository);
+        Mockito.reset(this.dokumentRepository, s3OutPort);
 
         dokumentService.deleteDokumenteFromOriginalDokumentenListWhichAreMissingInParameterAdaptedDokumentenListe(
             null,
             null
         );
-        Mockito.verify(this.documentStorageFileRepository, Mockito.times(0)).deleteFile(
-            Mockito.anyString(),
-            Mockito.anyInt()
-        );
+        Mockito.verify(this.s3OutPort, Mockito.times(0)).deleteFile(new FileReference(BUCKET, Mockito.anyString()));
     }
 
     @Test

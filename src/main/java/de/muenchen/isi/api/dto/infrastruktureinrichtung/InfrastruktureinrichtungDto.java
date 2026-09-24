@@ -40,19 +40,17 @@ import lombok.ToString;
     property = "infrastruktureinrichtungTyp",
     visible = true
 )
-@JsonSubTypes(
-    {
-        @JsonSubTypes.Type(value = GrundschuleDto.class, name = InfrastruktureinrichtungTyp.Values.GRUNDSCHULE),
-        @JsonSubTypes.Type(
-            value = GsNachmittagBetreuungDto.class,
-            name = InfrastruktureinrichtungTyp.Values.GS_NACHMITTAG_BETREUUNG
-        ),
-        @JsonSubTypes.Type(value = HausFuerKinderDto.class, name = InfrastruktureinrichtungTyp.Values.HAUS_FUER_KINDER),
-        @JsonSubTypes.Type(value = KindergartenDto.class, name = InfrastruktureinrichtungTyp.Values.KINDERGARTEN),
-        @JsonSubTypes.Type(value = KinderkrippeDto.class, name = InfrastruktureinrichtungTyp.Values.KINDERKRIPPE),
-        @JsonSubTypes.Type(value = MittelschuleDto.class, name = InfrastruktureinrichtungTyp.Values.MITTELSCHULE),
-    }
-)
+@JsonSubTypes({
+    @JsonSubTypes.Type(value = GrundschuleDto.class, name = InfrastruktureinrichtungTyp.Values.GRUNDSCHULE),
+    @JsonSubTypes.Type(
+        value = GsNachmittagBetreuungDto.class,
+        name = InfrastruktureinrichtungTyp.Values.GS_NACHMITTAG_BETREUUNG
+    ),
+    @JsonSubTypes.Type(value = HausFuerKinderDto.class, name = InfrastruktureinrichtungTyp.Values.HAUS_FUER_KINDER),
+    @JsonSubTypes.Type(value = KindergartenDto.class, name = InfrastruktureinrichtungTyp.Values.KINDERGARTEN),
+    @JsonSubTypes.Type(value = KinderkrippeDto.class, name = InfrastruktureinrichtungTyp.Values.KINDERKRIPPE),
+    @JsonSubTypes.Type(value = MittelschuleDto.class, name = InfrastruktureinrichtungTyp.Values.MITTELSCHULE),
+})
 @Schema(
     description = "InfrastruktureinrichtungDto",
     discriminatorProperty = "infrastruktureinrichtungTyp",

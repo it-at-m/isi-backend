@@ -18,19 +18,14 @@ import lombok.Data;
     property = "artAbfrage",
     visible = true
 )
-@JsonSubTypes(
-    {
-        @JsonSubTypes.Type(
-            value = BauleitplanverfahrenAngelegtDto.class,
-            name = ArtAbfrage.Values.BAULEITPLANVERFAHREN
-        ),
-        @JsonSubTypes.Type(
-            value = BaugenehmigungsverfahrenAngelegtDto.class,
-            name = ArtAbfrage.Values.BAUGENEHMIGUNGSVERFAHREN
-        ),
-        @JsonSubTypes.Type(value = WeiteresVerfahrenAngelegtDto.class, name = ArtAbfrage.Values.WEITERES_VERFAHREN),
-    }
-)
+@JsonSubTypes({
+    @JsonSubTypes.Type(value = BauleitplanverfahrenAngelegtDto.class, name = ArtAbfrage.Values.BAULEITPLANVERFAHREN),
+    @JsonSubTypes.Type(
+        value = BaugenehmigungsverfahrenAngelegtDto.class,
+        name = ArtAbfrage.Values.BAUGENEHMIGUNGSVERFAHREN
+    ),
+    @JsonSubTypes.Type(value = WeiteresVerfahrenAngelegtDto.class, name = ArtAbfrage.Values.WEITERES_VERFAHREN),
+})
 @Schema(
     description = "AbfrageAngelegtDto",
     discriminatorProperty = "artAbfrage",

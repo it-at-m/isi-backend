@@ -3,7 +3,6 @@ package de.muenchen.isi.infrastructure.repository.search;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import de.muenchen.isi.infrastructure.entity.BaseEntity;
 import de.muenchen.isi.infrastructure.entity.Bauleitplanverfahren;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
@@ -29,7 +28,7 @@ class SearchwordSuggesterRepositoryTest {
     private final SearchwordSuggesterRepository searchwordSuggesterRepository = new SearchwordSuggesterRepository();
 
     @Test
-    void createMultisearchResponseRequestBody() throws JsonProcessingException {
+    void createMultisearchResponseRequestBody() {
         final Map<Class<? extends BaseEntity>, Set<String>> attributesForSearchableEntities = new HashMap<>();
         attributesForSearchableEntities.put(
             Bauvorhaben.class,
@@ -41,9 +40,12 @@ class SearchwordSuggesterRepositoryTest {
             .createMultisearchResponseRequestBody(attributesForSearchableEntities, "die-query")
             .toMultiSearchRequestBody();
 
+        /* Before migration
         final var expected =
             "{\"index\":\"bauvorhaben-read\"}\n{\"_source\":\"unknown\",\"suggest\":{\"attribute1\":{\"text\":\"die-query\",\"completion\":{\"field\":\"attribute1\",\"size\":5,\"fuzzy\":{\"fuzziness\":\"AUTO\"}}},\"attribut2.subattribut1\":{\"text\":\"die-query\",\"completion\":{\"field\":\"attribut2.subattribut1\",\"size\":5,\"fuzzy\":{\"fuzziness\":\"AUTO\"}}},\"attribut3\":{\"text\":\"die-query\",\"completion\":{\"field\":\"attribut3\",\"size\":5,\"fuzzy\":{\"fuzziness\":\"AUTO\"}}}}}\n{\"index\":\"mittelschule-read\"}\n{\"_source\":\"unknown\",\"suggest\":{\"attribute6\":{\"text\":\"die-query\",\"completion\":{\"field\":\"attribute6\",\"size\":5,\"fuzzy\":{\"fuzziness\":\"AUTO\"}}}}}\n{\"index\":\"grundschule-read\"}\n{\"_source\":\"unknown\",\"suggest\":{\"attribut5.subattribut1\":{\"text\":\"die-query\",\"completion\":{\"field\":\"attribut5.subattribut1\",\"size\":5,\"fuzzy\":{\"fuzziness\":\"AUTO\"}}}}}\n";
-
+         */
+        final var expected =
+            "{\"index\":\"bauvorhaben-read\"}\n{\"suggest\":{\"attribute1\":{\"completion\":{\"field\":\"attribute1\",\"fuzzy\":{\"fuzziness\":\"AUTO\"},\"size\":5},\"text\":\"die-query\"},\"attribut2.subattribut1\":{\"completion\":{\"field\":\"attribut2.subattribut1\",\"fuzzy\":{\"fuzziness\":\"AUTO\"},\"size\":5},\"text\":\"die-query\"},\"attribut3\":{\"completion\":{\"field\":\"attribut3\",\"fuzzy\":{\"fuzziness\":\"AUTO\"},\"size\":5},\"text\":\"die-query\"}}}\n{\"index\":\"mittelschule-read\"}\n{\"suggest\":{\"attribute6\":{\"completion\":{\"field\":\"attribute6\",\"fuzzy\":{\"fuzziness\":\"AUTO\"},\"size\":5},\"text\":\"die-query\"}}}\n{\"index\":\"grundschule-read\"}\n{\"suggest\":{\"attribut5.subattribut1\":{\"completion\":{\"field\":\"attribut5.subattribut1\",\"fuzzy\":{\"fuzziness\":\"AUTO\"},\"size\":5},\"text\":\"die-query\"}}}\n";
         assertThat(result, is(expected));
     }
 
