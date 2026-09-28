@@ -6,6 +6,7 @@ import static org.hamcrest.Matchers.is;
 import de.muenchen.isi.infrastructure.entity.Baugenehmigungsverfahren;
 import de.muenchen.isi.infrastructure.repository.AbfrageRepository;
 import de.muenchen.isi.infrastructure.repository.email.MailSenderRepository;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Stream;
@@ -67,7 +68,7 @@ class SendKommentarBauvorhabenNotificationServiceTest {
             bauvorhabenId,
             "Mein Bauvorhaben",
             "Ein Kommentar",
-            "01.06.2026",
+            LocalDate.of(2026, 6, 1),
             true
         );
 
@@ -98,7 +99,7 @@ class SendKommentarBauvorhabenNotificationServiceTest {
             bauvorhabenId,
             "Mein Bauvorhaben",
             "Ein Kommentar",
-            "01.06.2026",
+            LocalDate.of(2026, 6, 1),
             false
         );
 
@@ -128,7 +129,7 @@ class SendKommentarBauvorhabenNotificationServiceTest {
             bauvorhabenId,
             "Mein Bauvorhaben",
             "Ein Kommentar",
-            "01.06.2026",
+            LocalDate.of(2026, 6, 1),
             true
         );
 
@@ -159,7 +160,7 @@ class SendKommentarBauvorhabenNotificationServiceTest {
             bauvorhabenId,
             "Mein Bauvorhaben",
             "Ein Kommentar",
-            "01.06.2026",
+            LocalDate.of(2026, 6, 1),
             true
         );
 
@@ -202,11 +203,14 @@ class SendKommentarBauvorhabenNotificationServiceTest {
             true
         );
 
-        final var expected =
-            "Im Bauvorhaben wurde ein Kommentar gespeichert." +
-            "\n\nBauvorhaben: Mein Bauvorhaben" +
-            "\n\nDatum des Kommentars: 01.06.2026" +
-            "\nText des Kommentars:\nEin Kommentar";
+        final var expected = """
+        Im Bauvorhaben wurde ein Kommentar gespeichert.
+
+        Bauvorhaben: Mein Bauvorhaben
+
+        Datum des Kommentars: 01.06.2026
+        Text des Kommentars:
+        Ein Kommentar""";
 
         assertThat(result, is(expected));
     }

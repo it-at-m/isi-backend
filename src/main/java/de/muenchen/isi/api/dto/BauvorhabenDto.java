@@ -68,9 +68,7 @@ public class BauvorhabenDto extends BaseEntityDto {
     private SobonVerfahrensgrundsaetzeJahr sobonJahr;
 
     @NotEmpty
-    private List<
-        @NotUnspecified @WesentlicheRechtsgrundlageBauvorhabenValid @NotNull WesentlicheRechtsgrundlage
-    > wesentlicheRechtsgrundlage;
+    private List<@NotUnspecified @WesentlicheRechtsgrundlageBauvorhabenValid @NotNull WesentlicheRechtsgrundlage> wesentlicheRechtsgrundlage;
 
     @Size(max = 1000, message = "Es sind maximal {max} Zeichen erlaubt")
     private String wesentlicheRechtsgrundlageFreieEingabe;

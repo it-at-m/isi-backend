@@ -20,13 +20,9 @@ public class WeiteresVerfahrenStartBearbeitungDto extends AbfrageStartBearbeitun
 
     @NotEmpty
     @Size(min = 1, max = 5)
-    private List<
-        @NotNull @Valid AbfragevarianteWeiteresVerfahrenSachbearbeitungStartBearbeitungDto
-    > abfragevariantenWeiteresVerfahren;
+    private List<@NotNull @Valid AbfragevarianteWeiteresVerfahrenSachbearbeitungStartBearbeitungDto> abfragevariantenWeiteresVerfahren;
 
     @NotNull
     @Size(min = 0, max = 5)
-    private List<
-        @NotNull @Valid AbfragevarianteWeiteresVerfahrenStartBearbeitungDto
-    > abfragevariantenSachbearbeitungWeiteresVerfahren;
+    private List<@NotNull @Valid AbfragevarianteWeiteresVerfahrenStartBearbeitungDto> abfragevariantenSachbearbeitungWeiteresVerfahren;
 }

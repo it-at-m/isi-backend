@@ -39,6 +39,8 @@ public class LookupListsDto {
 
     private LookupListDto statusInfrastruktureinrichtung;
 
+    private LookupListDto anlassPlanung;
+
     private LookupListDto einrichtungstraeger;
 
     private LookupListDto einrichtungstraegerSchulen;

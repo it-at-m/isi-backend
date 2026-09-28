@@ -3,7 +3,7 @@ package de.muenchen.isi.domain.service.etlInterface;
 import de.muenchen.isi.domain.exception.ReportingException;
 import de.muenchen.isi.infrastructure.repository.etlInterface.EtlInterfaceRepository;
 import de.muenchen.isi.reporting.client.model.EtlTriggerJobDto;
-import de.muenchen.isi.reporting.client.model.PairStringString;
+import de.muenchen.isi.reporting.client.model.KeyValueDto;
 import java.util.ArrayList;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -92,10 +92,10 @@ public class EtlInterfaceService {
     private EtlTriggerJobDto prepareJob(final String jobname, final UUID id) {
         final EtlTriggerJobDto etlTriggerJobDto = new EtlTriggerJobDto();
         etlTriggerJobDto.setJobname(jobname);
-        final var listParameter = new ArrayList<PairStringString>();
-        final var idParameter = new PairStringString();
-        idParameter.setFirst("id");
-        idParameter.setSecond(id.toString());
+        final var listParameter = new ArrayList<KeyValueDto>();
+        final var idParameter = new KeyValueDto();
+        idParameter.setKey("id");
+        idParameter.setValue(id.toString());
         listParameter.add(idParameter);
         etlTriggerJobDto.setParameters(listParameter);
         return etlTriggerJobDto;

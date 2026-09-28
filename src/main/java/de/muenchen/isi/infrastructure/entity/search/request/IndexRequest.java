@@ -1,9 +1,9 @@
 package de.muenchen.isi.infrastructure.entity.search.request;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 
 @Data
 public class IndexRequest {
@@ -11,7 +11,7 @@ public class IndexRequest {
     private String index;
 
     @JsonIgnore
-    public String toJson() throws JsonProcessingException {
-        return new ObjectMapper().writeValueAsString(this);
+    public String toJson() {
+        return new JsonMapper().writeValueAsString(this);
     }
 }

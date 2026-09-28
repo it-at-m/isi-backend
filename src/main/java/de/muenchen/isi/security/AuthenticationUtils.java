@@ -162,6 +162,16 @@ public class AuthenticationUtils {
     }
 
     /**
+     * Überprüft ob es sich um den Fallback-Sub Wert handelt, siehe getUserSub.
+     *
+     * @param sub entspricht dem zu überprüfenden String
+     * @return ob der sub dem Fallback-Wert entspricht
+     */
+    public boolean isSubFromUnauthenticatedUser(final String sub) {
+        return sub.equals(SUB_UNAUTHENTICATED_USER);
+    }
+
+    /**
      * Die Methode extrahiert die Nutzerrollen des Nutzers aus dem {@link Jwt} der {@link Authentication} des {@link SecurityContextHolder}.
      *
      * @return Liste der Nutzerrollen des Nutzers
@@ -175,8 +185,8 @@ public class AuthenticationUtils {
                 final var resourceAccess = jwt.getClaim(TOKEN_RESOURCE_ACCESS);
                 if (ObjectUtils.isNotEmpty(resourceAccess)) {
                     final var isi = ((Map<?, ?>) resourceAccess).get(TOKEN_ISI);
-                    if (ObjectUtils.isNotEmpty(isi) && isi instanceof Map) {
-                        final var rolesInToken = ((Map<?, ?>) isi).get(TOKEN_ROLES);
+                    if (ObjectUtils.isNotEmpty(isi) && isi instanceof Map<?, ?> map) {
+                        final var rolesInToken = map.get(TOKEN_ROLES);
                         if (ObjectUtils.isNotEmpty(rolesInToken) && rolesInToken instanceof List) {
                             roles.addAll((List<String>) rolesInToken);
                         }

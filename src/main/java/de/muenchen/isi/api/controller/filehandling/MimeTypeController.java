@@ -5,7 +5,6 @@ import de.muenchen.isi.api.dto.filehandling.FilepathDto;
 import de.muenchen.isi.api.dto.filehandling.MimeTypeInformationDto;
 import de.muenchen.isi.api.mapper.FilehandlingApiMapper;
 import de.muenchen.isi.domain.exception.FileHandlingFailedException;
-import de.muenchen.isi.domain.exception.FileHandlingWithS3FailedException;
 import de.muenchen.isi.domain.exception.MimeTypeExtractionFailedException;
 import de.muenchen.isi.domain.exception.MimeTypeNotAllowedException;
 import de.muenchen.isi.domain.model.filehandling.MimeTypeInformationModel;
@@ -63,8 +62,7 @@ public class MimeTypeController {
     )
     public ResponseEntity<MimeTypeInformationDto> extractMediaTypeInformationForAllowedMediaType(
         @RequestBody @NotNull @Valid final FilepathDto filepathDto
-    )
-        throws FileHandlingWithS3FailedException, FileHandlingFailedException, MimeTypeExtractionFailedException, MimeTypeNotAllowedException {
+    ) throws FileHandlingFailedException, MimeTypeExtractionFailedException, MimeTypeNotAllowedException {
         final MimeTypeInformationModel model = this.mimeTypeService.extractMediaTypeInformationForAllowedMediaType(
             this.filehandlingApiMapper.dto2Model(filepathDto)
         );

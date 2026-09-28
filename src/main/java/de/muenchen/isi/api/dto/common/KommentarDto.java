@@ -1,10 +1,11 @@
 package de.muenchen.isi.api.dto.common;
 
 import de.muenchen.isi.api.dto.BaseEntityDto;
+import de.muenchen.isi.api.dto.common.BearbeitendePersonDto;
 import de.muenchen.isi.api.dto.filehandling.DokumentDto;
 import de.muenchen.isi.api.validation.HasAllowedNumberOfDocuments;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Size;
+import java.time.LocalDate;
 import java.util.List;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -15,11 +16,12 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 public abstract class KommentarDto extends BaseEntityDto {
 
-    @Size(max = 32, message = "Es sind maximal {max} Zeichen erlaubt")
-    private String datum;
+    private LocalDate erstellungsdatum;
 
     private String text;
 
     @HasAllowedNumberOfDocuments
     private List<@Valid DokumentDto> dokumente;
+
+    private BearbeitendePersonDto bearbeitendePerson;
 }

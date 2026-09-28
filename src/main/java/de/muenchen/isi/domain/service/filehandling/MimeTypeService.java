@@ -2,15 +2,13 @@ package de.muenchen.isi.domain.service.filehandling;
 
 import de.muenchen.isi.api.validation.IsFilepathWithoutLeadingPathdividerValidator;
 import de.muenchen.isi.domain.exception.FileHandlingFailedException;
-import de.muenchen.isi.domain.exception.FileHandlingWithS3FailedException;
 import de.muenchen.isi.domain.exception.MimeTypeExtractionFailedException;
 import de.muenchen.isi.domain.exception.MimeTypeNotAllowedException;
 import de.muenchen.isi.domain.model.filehandling.FilepathModel;
 import de.muenchen.isi.domain.model.filehandling.MimeTypeInformationModel;
-import de.muenchen.refarch.integration.s3.client.exception.DocumentStorageClientErrorException;
-import de.muenchen.refarch.integration.s3.client.exception.DocumentStorageException;
-import de.muenchen.refarch.integration.s3.client.exception.DocumentStorageServerErrorException;
-import de.muenchen.refarch.integration.s3.client.repository.DocumentStorageFileRepository;
+import de.muenchen.oss.refarch.integration.s3.application.port.out.S3OutPort;
+import de.muenchen.oss.refarch.integration.s3.domain.exception.S3Exception;
+import de.muenchen.oss.refarch.integration.s3.domain.model.FileReference;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashSet;
@@ -27,26 +25,24 @@ import org.apache.tika.mime.MimeType;
 import org.apache.tika.mime.MimeTypeException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpStatusCodeException;
-import org.springframework.web.reactive.function.client.WebClientException;
 
 @Slf4j
 @Service
 public class MimeTypeService {
 
-    private final DocumentStorageFileRepository documentStorageFileRepository;
+    private final String bucket;
 
-    private final Integer fileExpirationTime;
+    private final S3OutPort s3OutPort;
 
     private final Set<String> allowedMimeTypes;
 
     public MimeTypeService(
-        final DocumentStorageFileRepository documentStorageFileRepository,
-        @Value("${refarch.s3.client.file-expiration-time}") final Integer fileExpirationTime,
+        @Value("${refarch.s3.bucket-name}") final String bucket,
+        final S3OutPort s3OutPort,
         @Value("#{'${file.mimetypes.allowed}'.split(',')}") final List<String> allowedMimeTypes
     ) {
-        this.documentStorageFileRepository = documentStorageFileRepository;
-        this.fileExpirationTime = fileExpirationTime;
+        this.bucket = bucket;
+        this.s3OutPort = s3OutPort;
         this.allowedMimeTypes = new HashSet<>(allowedMimeTypes);
     }
 
@@ -59,13 +55,12 @@ public class MimeTypeService {
      *
      * @param filepath referenziert die im S3-Storage liegende Datei
      * @return {@link MimeTypeInformationModel}
-     * @throws FileHandlingWithS3FailedException
      * @throws FileHandlingFailedException
      * @throws MimeTypeExtractionFailedException falls die Mime-Type-Ermittlung fehlgeschlagen ist
      * @throws MimeTypeNotAllowedException       falls der Mime-Type der referenzierten Datei nicht zulässig ist
      */
     public MimeTypeInformationModel extractMediaTypeInformationForAllowedMediaType(final FilepathModel filepath)
-        throws FileHandlingWithS3FailedException, FileHandlingFailedException, MimeTypeExtractionFailedException, MimeTypeNotAllowedException {
+        throws FileHandlingFailedException, MimeTypeExtractionFailedException, MimeTypeNotAllowedException {
         final MimeTypeInformationModel mimeTypeInformationModel = this.extractMediaTypeInformation(filepath);
         if (!this.allowedMimeTypes.contains(mimeTypeInformationModel.getType())) {
             this.deleteFile(filepath);
@@ -91,73 +86,34 @@ public class MimeTypeService {
      *
      * @param filepath referenziert die im S3-Storage liegende Datei
      * @return {@link MimeTypeInformationModel}
-     * @throws FileHandlingWithS3FailedException
      * @throws FileHandlingFailedException
      * @throws MimeTypeExtractionFailedException falls die Mime-Type-Ermittlung fehlgeschlagen ist
      */
     protected MimeTypeInformationModel extractMediaTypeInformation(final FilepathModel filepath)
-        throws FileHandlingWithS3FailedException, FileHandlingFailedException, MimeTypeExtractionFailedException {
+        throws FileHandlingFailedException, MimeTypeExtractionFailedException {
         final var fileInputStream = this.getInputStream(filepath);
         return this.extractMediaTypeInformationOfFileAndCloseStream(fileInputStream);
     }
 
-    protected InputStream getInputStream(final FilepathModel filepath)
-        throws FileHandlingWithS3FailedException, FileHandlingFailedException {
+    protected InputStream getInputStream(final FilepathModel filepath) throws FileHandlingFailedException {
         try {
-            return this.documentStorageFileRepository.getFileInputStream(
-                filepath.getPathToFile(),
-                this.fileExpirationTime
-            );
-        } catch (
-            final DocumentStorageClientErrorException
-            | DocumentStorageServerErrorException
-            | DocumentStorageException
-            | WebClientException exception
-        ) {
+            final FileReference fileReference = new FileReference(this.bucket, filepath.getPathToFile());
+            return this.s3OutPort.getFileContent(fileReference);
+        } catch (final S3Exception exception) {
             final var message =
                 "Beim Herunterladen zur Dateiprüfung vom ISI-Dokumentenverwaltungssystem ist ein Fehler aufgetreten.";
-            log.error(message);
-            final var clazz = exception.getClass();
-            if (
-                clazz.equals(DocumentStorageClientErrorException.class) ||
-                clazz.equals(DocumentStorageServerErrorException.class)
-            ) {
-                throw new FileHandlingWithS3FailedException(
-                    message,
-                    ((HttpStatusCodeException) exception.getCause()).getStatusCode(),
-                    exception
-                );
-            } else {
-                throw new FileHandlingFailedException(message, exception);
-            }
+            throw new FileHandlingFailedException(message, exception);
         }
     }
 
-    protected void deleteFile(final FilepathModel filepath)
-        throws FileHandlingWithS3FailedException, FileHandlingFailedException {
+    protected void deleteFile(final FilepathModel filepath) throws FileHandlingFailedException {
         try {
-            this.documentStorageFileRepository.deleteFile(filepath.getPathToFile(), this.fileExpirationTime);
-        } catch (
-            final DocumentStorageClientErrorException
-            | DocumentStorageServerErrorException
-            | DocumentStorageException exception
-        ) {
+            final FileReference fileReference = new FileReference(this.bucket, filepath.getPathToFile());
+            this.s3OutPort.deleteFile(fileReference);
+        } catch (final S3Exception exception) {
             final var message =
                 "Beim Herunterladen zur Dateiprüfung vom ISI-Dokumentenverwaltungssystem ist ein Fehler aufgetreten.";
-            log.error(message);
-            final var clazz = exception.getClass();
-            if (
-                clazz.equals(DocumentStorageClientErrorException.class) ||
-                clazz.equals(DocumentStorageServerErrorException.class)
-            ) {
-                throw new FileHandlingWithS3FailedException(
-                    message,
-                    ((HttpStatusCodeException) exception.getCause()).getStatusCode(),
-                    exception
-                );
-            } else {
-                throw new FileHandlingFailedException(message, exception);
-            }
+            throw new FileHandlingFailedException(message, exception);
         }
     }
 

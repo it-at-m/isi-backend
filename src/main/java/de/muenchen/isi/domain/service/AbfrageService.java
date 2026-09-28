@@ -5,11 +5,11 @@ import de.muenchen.isi.domain.exception.CalculationException;
 import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.FileHandlingFailedException;
-import de.muenchen.isi.domain.exception.FileHandlingWithS3FailedException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.ReportingException;
 import de.muenchen.isi.domain.exception.UserRoleNotAllowedException;
 import de.muenchen.isi.domain.mapper.AbfrageDomainMapper;
+import de.muenchen.isi.domain.mapper.converter.AbfrageConverterDomainMapper;
 import de.muenchen.isi.domain.model.AbfrageModel;
 import de.muenchen.isi.domain.model.BaugenehmigungsverfahrenModel;
 import de.muenchen.isi.domain.model.BauleitplanverfahrenModel;
@@ -64,6 +64,8 @@ public class AbfrageService {
     private final AbfrageRepository abfrageRepository;
 
     private final AbfrageDomainMapper abfrageDomainMapper;
+
+    private final AbfrageConverterDomainMapper abfrageConverterDomainMapper;
 
     private final BauvorhabenRepository bauvorhabenRepository;
 
@@ -161,13 +163,12 @@ public class AbfrageService {
      * @throws EntityNotFoundException           falls die Abfrage oder das referenzierte Bauvorhaben nicht existiert.
      * @throws AbfrageStatusNotAllowedException  falls die zu aktualisierende Abfrage sich nicht im Status {@link StatusAbfrage#ANGELEGT} befindet.
      * @throws FileHandlingFailedException       falls es beim Dateihandling zu einem Fehler gekommen ist.
-     * @throws FileHandlingWithS3FailedException falls es beim Dateihandling im S3-Storage zu einem Fehler gekommen ist.
      * @throws CalculationException              falls bei den Berechnungen ein Fehler auftritt.
      * @throws ReportingException                falls bei der Übermittlung an die Reportingschnittstelle ein Fehler auftritt.
      * @throws UserRoleNotAllowedException       falls der User keine Berechtigung für die Abfrage hat.
      */
     public AbfrageModel patchAngelegt(final AbfrageAngelegtModel abfrage, final UUID id)
-        throws EntityNotFoundException, OptimisticLockingException, AbfrageStatusNotAllowedException, FileHandlingFailedException, FileHandlingWithS3FailedException, UserRoleNotAllowedException, CalculationException, ReportingException {
+        throws EntityNotFoundException, OptimisticLockingException, AbfrageStatusNotAllowedException, FileHandlingFailedException, UserRoleNotAllowedException, CalculationException, ReportingException {
         final var originalAbfrageDb = this.getById(id);
         this.throwAbfrageStatusNotAllowedExceptionWhenStatusAbfrageIsInvalid(originalAbfrageDb, StatusAbfrage.ANGELEGT);
         this.changeRelevantAbfragevarianteOnBauvorhabenChangeAbfrageAngelegtModel(abfrage, originalAbfrageDb);
@@ -202,12 +203,11 @@ public class AbfrageService {
      * @param originalAbfrageDb welche mit den im Parameter gegebenen abfrage gegebenen Werten aktualisiert und gespeichert wird.
      * @return das gespeicherte {@link AbfrageModel}
      * @throws FileHandlingFailedException       falls es beim Dateihandling zu einem Fehler gekommen ist.
-     * @throws FileHandlingWithS3FailedException falls es beim Dateihandling im S3-Storage zu einem Fehler gekommen ist.
      */
     protected AbfrageModel patchBauleitplanverfahrenAngelegt(
         BauleitplanverfahrenAngelegtModel abfrage,
         BauleitplanverfahrenModel originalAbfrageDb
-    ) throws FileHandlingFailedException, FileHandlingWithS3FailedException {
+    ) throws FileHandlingFailedException {
         dokumentService.deleteDokumenteFromOriginalDokumentenListWhichAreMissingInParameterAdaptedDokumentenListe(
             abfrage.getDokumente(),
             originalAbfrageDb.getDokumente()
@@ -222,12 +222,11 @@ public class AbfrageService {
      * @param originalAbfrageDb welche mit den im Parameter gegebenen abfrage gegebenen Werten aktualisiert und gespeichert wird.
      * @return das gespeicherte {@link AbfrageModel}
      * @throws FileHandlingFailedException       falls es beim Dateihandling zu einem Fehler gekommen ist.
-     * @throws FileHandlingWithS3FailedException falls es beim Dateihandling im S3-Storage zu einem Fehler gekommen ist.
      */
     protected AbfrageModel patchBaugenehmigungsverfahrenAngelegt(
         BaugenehmigungsverfahrenAngelegtModel abfrage,
         BaugenehmigungsverfahrenModel originalAbfrageDb
-    ) throws FileHandlingFailedException, FileHandlingWithS3FailedException {
+    ) throws FileHandlingFailedException {
         dokumentService.deleteDokumenteFromOriginalDokumentenListWhichAreMissingInParameterAdaptedDokumentenListe(
             abfrage.getDokumente(),
             originalAbfrageDb.getDokumente()
@@ -242,12 +241,11 @@ public class AbfrageService {
      * @param originalAbfrageDb welche mit den im Parameter gegebenen abfrage gegebenen Werten aktualisiert und gespeichert wird.
      * @return das gespeicherte {@link AbfrageModel}
      * @throws FileHandlingFailedException       falls es beim Dateihandling zu einem Fehler gekommen ist.
-     * @throws FileHandlingWithS3FailedException falls es beim Dateihandling im S3-Storage zu einem Fehler gekommen ist.
      */
     protected AbfrageModel patchWeiteresVerfahrenAngelegt(
         WeiteresVerfahrenAngelegtModel abfrage,
         WeiteresVerfahrenModel originalAbfrageDb
-    ) throws FileHandlingFailedException, FileHandlingWithS3FailedException {
+    ) throws FileHandlingFailedException {
         dokumentService.deleteDokumenteFromOriginalDokumentenListWhichAreMissingInParameterAdaptedDokumentenListe(
             abfrage.getDokumente(),
             originalAbfrageDb.getDokumente()
@@ -525,8 +523,7 @@ public class AbfrageService {
                 abfragevarianteId
             )
         )
-            .filter(Optional::isPresent)
-            .map(Optional::get)
+            .flatMap(Optional::stream)
             .toList();
 
         if (abfrageIds.size() != 1) {
@@ -586,5 +583,74 @@ public class AbfrageService {
                 this.bauvorhabenRepository.save(bauvorhaben);
             }
         }
+    }
+
+    /**
+     * Die Methode gibt ein {@link BauleitplanverfahrenModel} zurück.
+     *
+     * @param id zum Identifizieren des {@link WeiteresVerfahrenModel}.
+     * @return {@link BauleitplanverfahrenModel}.
+     * @throws EntityNotFoundException     falls die Abfrage identifiziert durch die {@link WeiteresVerfahrenModel#getId()} nicht gefunden wird.
+     * @throws UserRoleNotAllowedException falls der User keine Berechtigung für die Abfrage hat.
+     */
+    public BauleitplanverfahrenModel wvInBlvUebernehmen(final UUID id)
+        throws EntityNotFoundException, UserRoleNotAllowedException {
+        final var abfrage = this.getById(id);
+        if (abfrage.getArtAbfrage() != ArtAbfrage.WEITERES_VERFAHREN) {
+            final var message = "Die Art der Abfrage wird nicht unterstützt.";
+            log.error(message);
+            throw new EntityNotFoundException(message);
+        }
+        final var bauleitplanverfahrenModel = this.abfrageConverterDomainMapper.convertWv2BlvModel(
+            (WeiteresVerfahrenModel) abfrage
+        );
+
+        return bauleitplanverfahrenModel;
+    }
+
+    /**
+     * Die Methode gibt ein {@link BaugenehmigungsverfahrenModel} zurück.
+     *
+     * @param id zum Identifizieren des {@link WeiteresVerfahrenModel}.
+     * @return {@link BaugenehmigungsverfahrenModel}.
+     * @throws EntityNotFoundException     falls die Abfrage identifiziert durch die {@link WeiteresVerfahrenModel#getId()} nicht gefunden wird.
+     * @throws UserRoleNotAllowedException falls der User keine Berechtigung für die Abfrage hat.
+     */
+    public BaugenehmigungsverfahrenModel wvInBgvUebernehmen(final UUID id)
+        throws EntityNotFoundException, UserRoleNotAllowedException {
+        final var abfrage = this.getById(id);
+        if (abfrage.getArtAbfrage() != ArtAbfrage.WEITERES_VERFAHREN) {
+            final var message = "Die Art der Abfrage wird nicht unterstützt.";
+            log.error(message);
+            throw new EntityNotFoundException(message);
+        }
+        final var baugenehmigungsverfahrenModel = this.abfrageConverterDomainMapper.convertWv2BgvModel(
+            (WeiteresVerfahrenModel) abfrage
+        );
+
+        return baugenehmigungsverfahrenModel;
+    }
+
+    /**
+     * Die Methode gibt ein {@link BaugenehmigungsverfahrenModel} zurück.
+     *
+     * @param id zum Identifizieren des {@link BauleitplanverfahrenModel}.
+     * @return {@link BaugenehmigungsverfahrenModel}.
+     * @throws EntityNotFoundException     falls die Abfrage identifiziert durch die {@link BauleitplanverfahrenModel#getId()} nicht gefunden wird.
+     * @throws UserRoleNotAllowedException falls der User keine Berechtigung für die Abfrage hat.
+     */
+    public BaugenehmigungsverfahrenModel blvInBgvUebernehmen(final UUID id)
+        throws EntityNotFoundException, UserRoleNotAllowedException {
+        final var abfrage = this.getById(id);
+        if (abfrage.getArtAbfrage() != ArtAbfrage.BAULEITPLANVERFAHREN) {
+            final var message = "Die Art der Abfrage wird nicht unterstützt.";
+            log.error(message);
+            throw new EntityNotFoundException(message);
+        }
+        final var baugenehmigungsverfahrenModel = this.abfrageConverterDomainMapper.convertBlv2BgvModel(
+            (BauleitplanverfahrenModel) abfrage
+        );
+
+        return baugenehmigungsverfahrenModel;
     }
 }

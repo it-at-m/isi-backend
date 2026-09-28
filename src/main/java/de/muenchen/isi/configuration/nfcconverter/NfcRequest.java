@@ -68,14 +68,14 @@ public class NfcRequest extends HttpServletRequestWrapper implements HttpServlet
     public String getHeader(final String name) {
         convert();
         final List<String> values = headers.get(NfcHelper.nfcConverter(name));
-        return (values == null) ? null : values.get(0);
+        return values == null ? null : values.get(0);
     }
 
     @Override
     public Enumeration<String> getHeaders(final String name) {
         convert();
         final List<String> values = this.headers.get(NfcHelper.nfcConverter(name));
-        return (values == null) ? Collections.emptyEnumeration() : IteratorUtils.asEnumeration(values.iterator());
+        return values == null ? Collections.emptyEnumeration() : IteratorUtils.asEnumeration(values.iterator());
     }
 
     @Override
@@ -146,7 +146,7 @@ public class NfcRequest extends HttpServletRequestWrapper implements HttpServlet
     public String getParameter(final String name) {
         convert();
         final String[] values = this.params.get(NfcHelper.nfcConverter(name));
-        return (values == null) ? null : values[0];
+        return values == null ? null : values[0];
     }
 
     @Override

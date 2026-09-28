@@ -6,7 +6,6 @@ import de.muenchen.isi.api.dto.error.InformationResponseDto;
 import de.muenchen.isi.api.mapper.KommentarApiMapper;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.FileHandlingFailedException;
-import de.muenchen.isi.domain.exception.FileHandlingWithS3FailedException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.service.common.KommentarService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -166,8 +165,7 @@ public class KommentarController {
     )
     public ResponseEntity<KommentarBauvorhabenDto> updateKommentarForBauvorhaben(
         @RequestBody @Valid @NotNull final KommentarBauvorhabenDto kommentarDto
-    )
-        throws EntityNotFoundException, OptimisticLockingException, FileHandlingFailedException, FileHandlingWithS3FailedException {
+    ) throws EntityNotFoundException, OptimisticLockingException, FileHandlingFailedException {
         var model = this.kommentarApiMapper.dto2Model(kommentarDto);
         model = this.kommentarService.updateKommentarForBauvorhaben(model);
         final var saved = this.kommentarApiMapper.model2Dto(model);
@@ -202,8 +200,7 @@ public class KommentarController {
     )
     public ResponseEntity<KommentarInfrastruktureinrichtungDto> updateKommentarForInfrastruktureinrichtung(
         @RequestBody @Valid @NotNull final KommentarInfrastruktureinrichtungDto kommentarDto
-    )
-        throws EntityNotFoundException, OptimisticLockingException, FileHandlingFailedException, FileHandlingWithS3FailedException {
+    ) throws EntityNotFoundException, OptimisticLockingException, FileHandlingFailedException {
         var model = this.kommentarApiMapper.dto2Model(kommentarDto);
         model = this.kommentarService.updateKommentarForInfrastruktureinrichtung(model);
         final var saved = this.kommentarApiMapper.model2Dto(model);

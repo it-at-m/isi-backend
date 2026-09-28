@@ -36,11 +36,11 @@ public class VersorgungsquoteController {
         "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_READ_STAMMDATEN_VERSORGUNGSQUOTE.name())"
     )
     public ResponseEntity<List<VersorgungsquoteSobonHortDto>> getVersorgungsquoteSobonHort() {
-        final List<VersorgungsquoteSobonHortDto> versorgungsquoteSobonHortDtoList =
-            this.versorgungsquoteService.getVersorgungsquoteHortSobon()
-                .stream()
-                .map(this.stammdatenApiMapper::model2Dto)
-                .collect(Collectors.toList());
+        final List<VersorgungsquoteSobonHortDto> versorgungsquoteSobonHortDtoList = this.versorgungsquoteService
+            .getVersorgungsquoteHortSobon()
+            .stream()
+            .map(this.stammdatenApiMapper::model2Dto)
+            .collect(Collectors.toList());
         return new ResponseEntity<>(versorgungsquoteSobonHortDtoList, HttpStatus.OK);
     }
 }

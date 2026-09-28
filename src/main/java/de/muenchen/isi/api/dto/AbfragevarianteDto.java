@@ -18,22 +18,17 @@ import lombok.ToString;
     property = "artAbfragevariante",
     visible = true
 )
-@JsonSubTypes(
-    {
-        @JsonSubTypes.Type(
-            value = AbfragevarianteBauleitplanverfahrenDto.class,
-            name = ArtAbfrage.Values.BAULEITPLANVERFAHREN
-        ),
-        @JsonSubTypes.Type(
-            value = AbfragevarianteBaugenehmigungsverfahrenDto.class,
-            name = ArtAbfrage.Values.BAUGENEHMIGUNGSVERFAHREN
-        ),
-        @JsonSubTypes.Type(
-            value = AbfragevarianteWeiteresVerfahrenDto.class,
-            name = ArtAbfrage.Values.WEITERES_VERFAHREN
-        ),
-    }
-)
+@JsonSubTypes({
+    @JsonSubTypes.Type(
+        value = AbfragevarianteBauleitplanverfahrenDto.class,
+        name = ArtAbfrage.Values.BAULEITPLANVERFAHREN
+    ),
+    @JsonSubTypes.Type(
+        value = AbfragevarianteBaugenehmigungsverfahrenDto.class,
+        name = ArtAbfrage.Values.BAUGENEHMIGUNGSVERFAHREN
+    ),
+    @JsonSubTypes.Type(value = AbfragevarianteWeiteresVerfahrenDto.class, name = ArtAbfrage.Values.WEITERES_VERFAHREN),
+})
 @Schema(
     description = "AbfragevarianteDto",
     discriminatorProperty = "artAbfragevariante",

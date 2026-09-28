@@ -16,13 +16,9 @@ public class BauleitplanverfahrenEinplanungBedarfeDto extends AbfrageEinplanungB
 
     @NotEmpty
     @Size(min = 1, max = 5)
-    private List<
-        @NotNull @Valid AbfragevarianteBauleitplanverfahrenEinplanungBedarfeDto
-    > abfragevariantenBauleitplanverfahren;
+    private List<@NotNull @Valid AbfragevarianteBauleitplanverfahrenEinplanungBedarfeDto> abfragevariantenBauleitplanverfahren;
 
     @NotNull
     @Size(min = 0, max = 5)
-    private List<
-        @NotNull @Valid AbfragevarianteBauleitplanverfahrenEinplanungBedarfeDto
-    > abfragevariantenSachbearbeitungBauleitplanverfahren;
+    private List<@NotNull @Valid AbfragevarianteBauleitplanverfahrenEinplanungBedarfeDto> abfragevariantenSachbearbeitungBauleitplanverfahren;
 }

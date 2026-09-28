@@ -244,16 +244,16 @@ public class SobonOrientierungswertSozialeInfrastrukturRepositoryTest {
         String jahrBezeichnung,
         InfrastruktureinrichtungTyp einrichtungstyp,
         Altersklasse altersklasse,
-        BigDecimal einwohnerJahr1NachErsterstellung,
-        BigDecimal einwohnerJahr2NachErsterstellung,
-        BigDecimal einwohnerJahr3NachErsterstellung,
-        BigDecimal einwohnerJahr4NachErsterstellung,
-        BigDecimal einwohnerJahr5NachErsterstellung,
-        BigDecimal einwohnerJahr6NachErsterstellung,
-        BigDecimal einwohnerJahr7NachErsterstellung,
-        BigDecimal einwohnerJahr8NachErsterstellung,
-        BigDecimal einwohnerJahr9NachErsterstellung,
-        BigDecimal einwohnerJahr10NachErsterstellung,
+        BigDecimal einwohnerJahr1nachErsterstellung,
+        BigDecimal einwohnerJahr2nachErsterstellung,
+        BigDecimal einwohnerJahr3nachErsterstellung,
+        BigDecimal einwohnerJahr4nachErsterstellung,
+        BigDecimal einwohnerJahr5nachErsterstellung,
+        BigDecimal einwohnerJahr6nachErsterstellung,
+        BigDecimal einwohnerJahr7nachErsterstellung,
+        BigDecimal einwohnerJahr8nachErsterstellung,
+        BigDecimal einwohnerJahr9nachErsterstellung,
+        BigDecimal einwohnerJahr10nachErsterstellung,
         BigDecimal stammwertArbeitsgruppe
     ) {
         SobonOrientierungswertSozialeInfrastruktur orientierungswert = new SobonOrientierungswertSozialeInfrastruktur();
@@ -262,16 +262,16 @@ public class SobonOrientierungswertSozialeInfrastrukturRepositoryTest {
         orientierungswert.setEinrichtungstyp(einrichtungstyp);
         orientierungswert.setAltersklasse(altersklasse);
         orientierungswert.setFoerderartBezeichnung(foerderartBezeichnung);
-        orientierungswert.setEinwohnerJahr1NachErsterstellung(einwohnerJahr1NachErsterstellung);
-        orientierungswert.setEinwohnerJahr2NachErsterstellung(einwohnerJahr2NachErsterstellung);
-        orientierungswert.setEinwohnerJahr3NachErsterstellung(einwohnerJahr3NachErsterstellung);
-        orientierungswert.setEinwohnerJahr4NachErsterstellung(einwohnerJahr4NachErsterstellung);
-        orientierungswert.setEinwohnerJahr5NachErsterstellung(einwohnerJahr5NachErsterstellung);
-        orientierungswert.setEinwohnerJahr6NachErsterstellung(einwohnerJahr6NachErsterstellung);
-        orientierungswert.setEinwohnerJahr7NachErsterstellung(einwohnerJahr7NachErsterstellung);
-        orientierungswert.setEinwohnerJahr8NachErsterstellung(einwohnerJahr8NachErsterstellung);
-        orientierungswert.setEinwohnerJahr9NachErsterstellung(einwohnerJahr9NachErsterstellung);
-        orientierungswert.setEinwohnerJahr10NachErsterstellung(einwohnerJahr10NachErsterstellung);
+        orientierungswert.setEinwohnerJahr1nachErsterstellung(einwohnerJahr1nachErsterstellung);
+        orientierungswert.setEinwohnerJahr2nachErsterstellung(einwohnerJahr2nachErsterstellung);
+        orientierungswert.setEinwohnerJahr3nachErsterstellung(einwohnerJahr3nachErsterstellung);
+        orientierungswert.setEinwohnerJahr4nachErsterstellung(einwohnerJahr4nachErsterstellung);
+        orientierungswert.setEinwohnerJahr5nachErsterstellung(einwohnerJahr5nachErsterstellung);
+        orientierungswert.setEinwohnerJahr6nachErsterstellung(einwohnerJahr6nachErsterstellung);
+        orientierungswert.setEinwohnerJahr7nachErsterstellung(einwohnerJahr7nachErsterstellung);
+        orientierungswert.setEinwohnerJahr8nachErsterstellung(einwohnerJahr8nachErsterstellung);
+        orientierungswert.setEinwohnerJahr9nachErsterstellung(einwohnerJahr9nachErsterstellung);
+        orientierungswert.setEinwohnerJahr10nachErsterstellung(einwohnerJahr10nachErsterstellung);
         orientierungswert.setStammwertArbeitsgruppe(stammwertArbeitsgruppe);
         return orientierungswert;
     }

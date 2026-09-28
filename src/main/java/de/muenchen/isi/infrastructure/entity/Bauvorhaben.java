@@ -118,16 +118,14 @@ public class Bauvorhaben extends BaseEntity {
     }
 
     @Embedded
-    @AttributeOverrides(
-        {
-            @AttributeOverride(name = "name", column = @Column(name = "bearbeitende_person_name")),
-            @AttributeOverride(name = "email", column = @Column(name = "bearbeitende_person_email")),
-            @AttributeOverride(
-                name = "organisationseinheit",
-                column = @Column(name = "bearbeitende_person_organisationseinheit")
-            ),
-        }
-    )
+    @AttributeOverrides({
+        @AttributeOverride(name = "name", column = @Column(name = "bearbeitende_person_name")),
+        @AttributeOverride(name = "email", column = @Column(name = "bearbeitende_person_email")),
+        @AttributeOverride(
+            name = "organisationseinheit",
+            column = @Column(name = "bearbeitende_person_organisationseinheit")
+        ),
+    })
     private BearbeitendePerson bearbeitendePerson;
 
     /**
