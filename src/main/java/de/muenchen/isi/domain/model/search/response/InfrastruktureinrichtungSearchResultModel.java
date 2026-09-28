@@ -1,5 +1,6 @@
 package de.muenchen.isi.domain.model.search.response;
 
+import de.muenchen.isi.infrastructure.entity.enums.lookup.AnlassPlanung;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusInfrastruktureinrichtung;
 import java.util.UUID;
@@ -17,6 +18,8 @@ public class InfrastruktureinrichtungSearchResultModel extends SearchResultModel
     private InfrastruktureinrichtungTyp infrastruktureinrichtungTyp;
 
     private StatusInfrastruktureinrichtung status;
+
+    private AnlassPlanung anlassPlanung;
 
     private String nameEinrichtung;
 

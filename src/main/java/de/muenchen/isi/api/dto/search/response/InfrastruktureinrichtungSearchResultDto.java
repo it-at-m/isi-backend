@@ -1,5 +1,6 @@
 package de.muenchen.isi.api.dto.search.response;
 
+import de.muenchen.isi.infrastructure.entity.enums.lookup.AnlassPlanung;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusInfrastruktureinrichtung;
 import java.util.UUID;
@@ -19,6 +20,8 @@ public class InfrastruktureinrichtungSearchResultDto extends SearchResultDto {
     private InfrastruktureinrichtungTyp infrastruktureinrichtungTyp;
 
     private StatusInfrastruktureinrichtung status;
+
+    private AnlassPlanung anlassPlanung;
 
     private String zugehoerigesBauvorhaben;
 }
