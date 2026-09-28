@@ -30,9 +30,6 @@ public class EinrichtungstraegerValidatorTest {
         value.setStatus(StatusInfrastruktureinrichtung.BESTAND);
         assertThat(this.validator.isValid(value, null), is(false));
 
-        value.setStatus(StatusInfrastruktureinrichtung.GESICHERTE_PLANUNG_ERW_PLAETZE_BEST_EINR);
-        assertThat(this.validator.isValid(value, null), is(false));
-
         value.getSchule().setEinrichtungstraeger(Einrichtungstraeger.STAEDTISCHE_EINRICHTUNG);
         assertThat(this.validator.isValid(value, null), is(true));
 
@@ -52,9 +49,6 @@ public class EinrichtungstraegerValidatorTest {
         value.setStatus(StatusInfrastruktureinrichtung.BESTAND);
         assertThat(this.validator.isValid(value, null), is(false));
 
-        value.setStatus(StatusInfrastruktureinrichtung.GESICHERTE_PLANUNG_ERW_PLAETZE_BEST_EINR);
-        assertThat(this.validator.isValid(value, null), is(false));
-
         value.getSchule().setEinrichtungstraeger(Einrichtungstraeger.STAEDTISCHE_EINRICHTUNG);
         assertThat(this.validator.isValid(value, null), is(true));
 
@@ -70,9 +64,6 @@ public class EinrichtungstraegerValidatorTest {
         assertThat(this.validator.isValid(value, null), is(true));
 
         value.setStatus(StatusInfrastruktureinrichtung.BESTAND);
-        assertThat(this.validator.isValid(value, null), is(false));
-
-        value.setStatus(StatusInfrastruktureinrichtung.GESICHERTE_PLANUNG_ERW_PLAETZE_BEST_EINR);
         assertThat(this.validator.isValid(value, null), is(false));
 
         value.setEinrichtungstraeger(Einrichtungstraeger.STAEDTISCHE_EINRICHTUNG);
@@ -92,9 +83,6 @@ public class EinrichtungstraegerValidatorTest {
         value.setStatus(StatusInfrastruktureinrichtung.BESTAND);
         assertThat(this.validator.isValid(value, null), is(false));
 
-        value.setStatus(StatusInfrastruktureinrichtung.GESICHERTE_PLANUNG_ERW_PLAETZE_BEST_EINR);
-        assertThat(this.validator.isValid(value, null), is(false));
-
         value.setEinrichtungstraeger(Einrichtungstraeger.STAEDTISCHE_EINRICHTUNG);
         assertThat(this.validator.isValid(value, null), is(true));
 
@@ -112,9 +100,6 @@ public class EinrichtungstraegerValidatorTest {
         value.setStatus(StatusInfrastruktureinrichtung.BESTAND);
         assertThat(this.validator.isValid(value, null), is(false));
 
-        value.setStatus(StatusInfrastruktureinrichtung.GESICHERTE_PLANUNG_ERW_PLAETZE_BEST_EINR);
-        assertThat(this.validator.isValid(value, null), is(false));
-
         value.setEinrichtungstraeger(Einrichtungstraeger.STAEDTISCHE_EINRICHTUNG);
         assertThat(this.validator.isValid(value, null), is(true));
 
@@ -130,9 +115,6 @@ public class EinrichtungstraegerValidatorTest {
         assertThat(this.validator.isValid(value, null), is(true));
 
         value.setStatus(StatusInfrastruktureinrichtung.BESTAND);
-        assertThat(this.validator.isValid(value, null), is(false));
-
-        value.setStatus(StatusInfrastruktureinrichtung.GESICHERTE_PLANUNG_ERW_PLAETZE_BEST_EINR);
         assertThat(this.validator.isValid(value, null), is(false));
 
         value.setEinrichtungstraeger(Einrichtungstraeger.STAEDTISCHE_EINRICHTUNG);
@@ -169,15 +151,12 @@ public class EinrichtungstraegerValidatorTest {
         final GrundschuleDto value = new GrundschuleDto();
 
         value.setStatus(StatusInfrastruktureinrichtung.BESTAND);
-        assertThat(this.validator.isStatusBestandOrGesicherteERW(value), is(true));
+        assertThat(this.validator.isStatusBestand(value), is(true));
 
         value.setStatus(StatusInfrastruktureinrichtung.UNGESICHERTE_PLANUNG);
-        assertThat(this.validator.isStatusBestandOrGesicherteERW(value), is(false));
+        assertThat(this.validator.isStatusBestand(value), is(false));
 
-        value.setStatus(StatusInfrastruktureinrichtung.GESICHERTE_PLANUNG_ERW_PLAETZE_BEST_EINR);
-        assertThat(this.validator.isStatusBestandOrGesicherteERW(value), is(true));
-
-        value.setStatus(StatusInfrastruktureinrichtung.GESICHERTE_PLANUNG_REDUZIERUNG_PLAETZE);
-        assertThat(this.validator.isStatusBestandOrGesicherteERW(value), is(false));
+        value.setStatus(StatusInfrastruktureinrichtung.GESICHERTE_PLANUNG);
+        assertThat(this.validator.isStatusBestand(value), is(false));
     }
 }
