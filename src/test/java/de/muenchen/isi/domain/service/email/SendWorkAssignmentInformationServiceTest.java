@@ -49,7 +49,8 @@ class SendWorkAssignmentInformationServiceTest {
     public void beforeEach() throws NoSuchFieldException, IllegalAccessException {
         this.sendWorkAssignmentInformationService = new SendWorkAssignmentInformationService(
             "mailadress-receiver-sachbearbeitung",
-            "mailadress-receiver-bedarfsmeldung",
+            "mailadress-receiver-rbs",
+            "mailadress-receiver-soz",
             "mailadress-receiver-sobon",
             "https://isi-dev.test.de",
             mailSenderRepository,
@@ -77,7 +78,7 @@ class SendWorkAssignmentInformationServiceTest {
         abfrage.setName("Name der Abfrage");
         abfrage.setArtAbfrage(ArtAbfrage.BAULEITPLANVERFAHREN);
         final var subject = "Der Betreff Name der Abfrage";
-        final var text = "Der Text Name der Abfrage\n\nStadtbezirke: ";
+        final var text = "Der Text Name der Abfrage\nAbfrageart: Bauleitplanverfahren\n\nStadtbezirke: ";
         sendWorkAssignmentInformationService.sendWorkAssignmentInformationAsync(
             abfrage,
             StatusAbfrageEvents.ERNEUTE_BEARBEITUNG
@@ -109,7 +110,7 @@ class SendWorkAssignmentInformationServiceTest {
         abfrage.setName("Name der Abfrage");
         abfrage.setArtAbfrage(ArtAbfrage.BAULEITPLANVERFAHREN);
         final var subject = "Der Betreff Name der Abfrage";
-        final var text = "Der Text Name der Abfrage\n\nStadtbezirke: ";
+        final var text = "Der Text Name der Abfrage\nAbfrageart: Bauleitplanverfahren\n\nStadtbezirke: ";
         sendWorkAssignmentInformationService.sendWorkAssignmentInformation(
             abfrage,
             StatusAbfrageEvents.ERNEUTE_BEARBEITUNG
@@ -152,7 +153,8 @@ class SendWorkAssignmentInformationServiceTest {
         abfrage.setVerortung(verortung);
 
         final var subject = "Der Betreff Name der Abfrage";
-        final var text = "Der Text Name der Abfrage\n\nStadtbezirke: 99/TestStadtbezirk";
+        final var text =
+            "Der Text Name der Abfrage\nAbfrageart: Bauleitplanverfahren\n\nStadtbezirke: 99/TestStadtbezirk";
         sendWorkAssignmentInformationService.sendWorkAssignmentInformation(
             abfrage,
             StatusAbfrageEvents.ERNEUTE_BEARBEITUNG
@@ -187,7 +189,7 @@ class SendWorkAssignmentInformationServiceTest {
             abfrage,
             StatusAbfrageEvents.VERSCHICKEN_DER_STELLUNGNAHME
         );
-        assertThat(result, is(List.of("mailadress-receiver-bedarfsmeldung")));
+        assertThat(result, is(List.of("mailadress-receiver-rbs", "mailadress-receiver-soz")));
 
         // Mit SoBoN
         final var sobonBerechnung = new SobonBerechnungModel();
@@ -200,7 +202,10 @@ class SendWorkAssignmentInformationServiceTest {
             abfrage,
             StatusAbfrageEvents.VERSCHICKEN_DER_STELLUNGNAHME
         );
-        assertThat(result, is(List.of("mailadress-receiver-bedarfsmeldung", "mailadress-receiver-sobon")));
+        assertThat(
+            result,
+            is(List.of("mailadress-receiver-rbs", "mailadress-receiver-soz", "mailadress-receiver-sobon"))
+        );
     }
 
     @Test
@@ -246,7 +251,7 @@ class SendWorkAssignmentInformationServiceTest {
             abfrage,
             StatusAbfrageEvents.SPEICHERN_VON_SOZIALINFRASTRUKTUR_VERSORGUNG
         );
-        assertThat(result, is(List.of("mailadress-receiver-sachbearbeitung", "mailadress-receiver-bedarfsmeldung")));
+        assertThat(result, is(List.of("mailadress-receiver-sachbearbeitung", "mailadress-receiver-rbs")));
 
         // Mit SoBoN
         final var sobonBerechnung = new SobonBerechnungModel();
@@ -261,13 +266,7 @@ class SendWorkAssignmentInformationServiceTest {
         );
         assertThat(
             result,
-            is(
-                List.of(
-                    "mailadress-receiver-sachbearbeitung",
-                    "mailadress-receiver-bedarfsmeldung",
-                    "mailadress-receiver-sobon"
-                )
-            )
+            is(List.of("mailadress-receiver-sachbearbeitung", "mailadress-receiver-rbs", "mailadress-receiver-sobon"))
         );
     }
 
@@ -429,6 +428,36 @@ class SendWorkAssignmentInformationServiceTest {
         result = sendWorkAssignmentInformationService.getSubject(null, StatusAbfrageEvents.ERNEUTE_BEARBEITUNG);
         expected = "Der Betreff ";
         assertThat(result, is(expected));
+    }
+
+    @Test
+    void getAbfrageart() {
+        // Ohne Abfrageart
+        final var abfrage = new BauleitplanverfahrenModel();
+        assertThat(sendWorkAssignmentInformationService.getAbfrageart(abfrage), is(""));
+
+        // Mit Abfrageart - Bauleitplanverfahren
+        abfrage.setArtAbfrage(ArtAbfrage.BAULEITPLANVERFAHREN);
+        assertThat(
+            sendWorkAssignmentInformationService.getAbfrageart(abfrage),
+            is("\nAbfrageart: Bauleitplanverfahren")
+        );
+
+        // Mit Abfrageart - Baugenehmigungsverfahren
+        final var abfrageBaugenehmigung = new BaugenehmigungsverfahrenModel();
+        abfrageBaugenehmigung.setArtAbfrage(ArtAbfrage.BAUGENEHMIGUNGSVERFAHREN);
+        assertThat(
+            sendWorkAssignmentInformationService.getAbfrageart(abfrageBaugenehmigung),
+            is("\nAbfrageart: Baugenehmigungsverfahren")
+        );
+
+        // Mit Abfrageart - WeiteresVerfahren
+        final var abfrageWeiteres = new WeiteresVerfahrenModel();
+        abfrageWeiteres.setArtAbfrage(ArtAbfrage.WEITERES_VERFAHREN);
+        assertThat(
+            sendWorkAssignmentInformationService.getAbfrageart(abfrageWeiteres),
+            is("\nAbfrageart: Weiteres Verfahren")
+        );
     }
 
     @Test
