@@ -385,7 +385,7 @@
         "type": "object",
         "properties": {
           "zielStatus": { "type": "string" },
-          "zeitpunkt": { "type": "string", "description": "Zeitpunkt ohne Offset" },
+          "zeitpunkt": { "type": "string", "description": "Zeitpunkt ohne Offset, Format: yyyy-MM-dd'T'HH:mm:ss" },
           "bearbeitendePerson": { "$ref": "#/components/schemas/BearbeitendePersonDto" }
         }
       },
