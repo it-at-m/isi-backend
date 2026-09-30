@@ -29,7 +29,6 @@ import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Kinderkrip
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Schule;
 import de.muenchen.isi.infrastructure.repository.BauvorhabenRepository;
 import de.muenchen.isi.infrastructure.repository.InfrastruktureinrichtungRepository;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import org.junit.jupiter.api.Assertions;
@@ -78,7 +77,7 @@ class InfrastruktureinrichtungServiceTest {
 
         Kinderkrippe kinderkrippe2 = new Kinderkrippe();
         kinderkrippe2.setNameEinrichtung("Kinderkrippe 2");
-        kinderkrippe2.setStatus(StatusInfrastruktureinrichtung.GESICHERTE_PLANUNG_NEUE_EINR);
+        kinderkrippe2.setStatus(StatusInfrastruktureinrichtung.GESICHERTE_PLANUNG);
         kinderkrippe2.setAnlassPlanung(AnlassPlanung.SCHLIESSUNG);
         kinderkrippe2.setAnzahlKinderkrippeGruppen(11);
         kinderkrippe2.setAnzahlKinderkrippePlaetze(110);
@@ -139,7 +138,7 @@ class InfrastruktureinrichtungServiceTest {
 
         MittelschuleModel mittelschule = new MittelschuleModel();
         mittelschule.setNameEinrichtung("Mittelschule");
-        mittelschule.setStatus(StatusInfrastruktureinrichtung.UNGESICHERTE_PLANUNG_TF_KITA_STANDORT);
+        mittelschule.setStatus(StatusInfrastruktureinrichtung.UNGESICHERTE_PLANUNG);
         mittelschule.setAnlassPlanung(AnlassPlanung.SCHLIESSUNG);
         mittelschule.setSchule(new SchuleModel());
         mittelschule.getSchule().setAnzahlKlassen(3);
@@ -181,7 +180,7 @@ class InfrastruktureinrichtungServiceTest {
 
         MittelschuleModel mittelschule = new MittelschuleModel();
         mittelschule.setNameEinrichtung("Mittelschule");
-        mittelschule.setStatus(StatusInfrastruktureinrichtung.UNGESICHERTE_PLANUNG_TF_KITA_STANDORT);
+        mittelschule.setStatus(StatusInfrastruktureinrichtung.UNGESICHERTE_PLANUNG);
         mittelschule.setAnlassPlanung(AnlassPlanung.SCHLIESSUNG);
         mittelschule.setSchule(new SchuleModel());
         mittelschule.getSchule().setAnzahlKlassen(3);

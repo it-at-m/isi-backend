@@ -252,7 +252,7 @@ public class BauvorhabenServiceTest {
 
         final Kinderkrippe kinderkrippe2 = new Kinderkrippe();
         kinderkrippe2.setNameEinrichtung("B");
-        kinderkrippe2.setStatus(StatusInfrastruktureinrichtung.GESICHERTE_PLANUNG_NEUE_EINR);
+        kinderkrippe2.setStatus(StatusInfrastruktureinrichtung.GESICHERTE_PLANUNG);
         kinderkrippe2.setAnzahlKinderkrippeGruppen(11);
         kinderkrippe2.setAnzahlKinderkrippePlaetze(110);
         kinderkrippe2.setBauvorhaben(bauvorhaben);
