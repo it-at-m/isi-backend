@@ -6,9 +6,9 @@ import de.muenchen.isi.domain.mapper.StartseitenEinstellungDomainMapper;
 import de.muenchen.isi.domain.model.enums.SchnellfilterVorgaenge;
 import de.muenchen.isi.domain.model.enums.SortAttribute;
 import de.muenchen.isi.domain.model.startseite.StartseitenEinstellungModel;
+import de.muenchen.isi.domain.service.common.AuthenticatedUserService;
 import de.muenchen.isi.infrastructure.entity.startseite.StartseitenEinstellung;
 import de.muenchen.isi.infrastructure.repository.startseite.StartseitenEinstellungRepository;
-import de.muenchen.isi.security.AuthenticationUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.search.engine.search.sort.dsl.SortOrder;
@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 /**
  * Verwaltet die persönlichen Voreinstellungen eines Nutzers für den Startseitenbereich "Meine Vorgänge".
  * <p>
- * Der Nutzerbezug wird ausschließlich über {@link AuthenticationUtils#getUserSub()} hergestellt und niemals
+ * Der Nutzerbezug wird ausschließlich über den {@link AuthenticatedUserService} hergestellt und niemals
  * aus dem Request übernommen.
  */
 @Service
@@ -32,11 +32,14 @@ public class StartseitenEinstellungService {
 
     static final SortOrder DEFAULT_SORT_ORDER = SortOrder.DESC;
 
+    static final String FEHLERMELDUNG_NICHT_AUTHENTIFIZIERT =
+        "Sie müssen authentifiziert sein, um die Startseiteneinstellungen zu verwenden";
+
     private final StartseitenEinstellungDomainMapper startseitenEinstellungDomainMapper;
 
     private final StartseitenEinstellungRepository startseitenEinstellungRepository;
 
-    private final AuthenticationUtils authenticationUtils;
+    private final AuthenticatedUserService authenticatedUserService;
 
     /**
      * Gibt die Startseiteneinstellungen des authentifizierten Nutzers zurück.
@@ -83,6 +86,16 @@ public class StartseitenEinstellungService {
     }
 
     /**
+     * Gibt den userSub zurück sofern es kein Fallback-Wert ist.
+     *
+     * @return den userSub aus dem {@link AuthenticatedUserService}.
+     * @throws UserRoleNotAllowedException falls der Nutzer den Fallback-Sub zugewiesen hat.
+     */
+    private String getSubFromAuthenticatedUser() throws UserRoleNotAllowedException {
+        return authenticatedUserService.getSubFromAuthenticatedUser(FEHLERMELDUNG_NICHT_AUTHENTIFIZIERT);
+    }
+
+    /**
      * @return die Standardeinstellungen für die Startseite.
      */
     private static StartseitenEinstellungModel createDefaultModel() {
@@ -91,21 +104,5 @@ public class StartseitenEinstellungService {
         model.setSortBy(DEFAULT_SORT_BY);
         model.setSortOrder(DEFAULT_SORT_ORDER);
         return model;
-    }
-
-    /**
-     * Gibt den userSub zurück sofern es kein Fallback-Wert ist.
-     *
-     * @return den userSub aus {@link AuthenticationUtils}.
-     * @throws UserRoleNotAllowedException falls der Nutzer den Fallback-Sub zugewiesen hat.
-     */
-    private String getSubFromAuthenticatedUser() throws UserRoleNotAllowedException {
-        final var userSub = authenticationUtils.getUserSub();
-        if (authenticationUtils.isSubFromUnauthenticatedUser(userSub)) {
-            throw new UserRoleNotAllowedException(
-                "Sie müssen authentifiziert sein, um die Startseiteneinstellungen zu verwenden"
-            );
-        }
-        return userSub;
     }
 }

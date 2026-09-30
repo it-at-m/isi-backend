@@ -9,9 +9,9 @@ import de.muenchen.isi.domain.exception.UserRoleNotAllowedException;
 import de.muenchen.isi.domain.mapper.PersonalFilterDomainMapper;
 import de.muenchen.isi.domain.model.filter.PersonalFilterRequestModel;
 import de.muenchen.isi.domain.model.filter.PersonalFilterResponseModel;
+import de.muenchen.isi.domain.service.common.AuthenticatedUserService;
 import de.muenchen.isi.infrastructure.entity.filter.PersonalFilter;
 import de.muenchen.isi.infrastructure.repository.filter.PersonalFilterRepository;
-import de.muenchen.isi.security.AuthenticationUtils;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -27,9 +27,12 @@ public class PersonalFilterService {
 
     private static final int MAX_PERSONAL_FILTERS = 10;
 
+    static final String FEHLERMELDUNG_NICHT_AUTHENTIFIZIERT =
+        "Sie müssen authentifiziert sein, um mit persönlichen Filtern interagieren zu können";
+
     private final PersonalFilterDomainMapper personalFilterDomainMapper;
 
-    private final AuthenticationUtils authenticationUtils;
+    private final AuthenticatedUserService authenticatedUserService;
 
     private final PersonalFilterRepository personalFilterRepository;
 
@@ -153,16 +156,10 @@ public class PersonalFilterService {
     /**
      * Gibt den userSub zurück sofern es kein Fallback-Wert ist.
      *
-     * @return den userSub aus authenticationUtils
-     * @throws UserRoleNotAllowedException falls der Nutzer den Fallback-Sub aus AuthenticationUtils zugewiesen hat
+     * @return den userSub aus dem {@link AuthenticatedUserService}
+     * @throws UserRoleNotAllowedException falls der Nutzer den Fallback-Sub zugewiesen hat
      */
     private String getSubFromAuthenticatedUser() throws UserRoleNotAllowedException {
-        final String userSub = authenticationUtils.getUserSub();
-        if (authenticationUtils.isSubFromUnauthenticatedUser(userSub)) {
-            throw new UserRoleNotAllowedException(
-                "Sie müssen authentifiziert sein, um mit persönlichen Filtern interagieren zu können"
-            );
-        }
-        return userSub;
+        return authenticatedUserService.getSubFromAuthenticatedUser(FEHLERMELDUNG_NICHT_AUTHENTIFIZIERT);
     }
 }

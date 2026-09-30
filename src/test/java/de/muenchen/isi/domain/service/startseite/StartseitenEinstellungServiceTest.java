@@ -14,6 +14,7 @@ import de.muenchen.isi.domain.mapper.StartseitenEinstellungDomainMapper;
 import de.muenchen.isi.domain.model.enums.SchnellfilterVorgaenge;
 import de.muenchen.isi.domain.model.enums.SortAttribute;
 import de.muenchen.isi.domain.model.startseite.StartseitenEinstellungModel;
+import de.muenchen.isi.domain.service.common.AuthenticatedUserService;
 import de.muenchen.isi.infrastructure.entity.startseite.StartseitenEinstellung;
 import de.muenchen.isi.infrastructure.repository.startseite.StartseitenEinstellungRepository;
 import de.muenchen.isi.security.AuthenticationUtils;
@@ -52,7 +53,7 @@ class StartseitenEinstellungServiceTest {
         startseitenEinstellungService = new StartseitenEinstellungService(
             startseitenEinstellungDomainMapper,
             startseitenEinstellungRepository,
-            authenticationUtils
+            new AuthenticatedUserService(authenticationUtils)
         );
         Mockito.reset(startseitenEinstellungDomainMapper, startseitenEinstellungRepository, authenticationUtils);
         when(authenticationUtils.getUserSub()).thenReturn(USER_SUB);

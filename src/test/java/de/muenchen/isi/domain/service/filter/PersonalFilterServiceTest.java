@@ -13,6 +13,7 @@ import de.muenchen.isi.domain.exception.UserRoleNotAllowedException;
 import de.muenchen.isi.domain.mapper.PersonalFilterDomainMapper;
 import de.muenchen.isi.domain.model.filter.PersonalFilterRequestModel;
 import de.muenchen.isi.domain.model.filter.PersonalFilterResponseModel;
+import de.muenchen.isi.domain.service.common.AuthenticatedUserService;
 import de.muenchen.isi.infrastructure.entity.filter.PersonalFilter;
 import de.muenchen.isi.infrastructure.repository.filter.PersonalFilterRepository;
 import de.muenchen.isi.security.AuthenticationUtils;
@@ -44,7 +45,7 @@ class PersonalFilterServiceTest {
     void setUp() {
         personalFilterService = new PersonalFilterService(
             personalFilterDomainMapper,
-            authenticationUtils,
+            new AuthenticatedUserService(authenticationUtils),
             personalFilterRepository
         );
         Mockito.reset(personalFilterDomainMapper, authenticationUtils, personalFilterRepository);
