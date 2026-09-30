@@ -6,9 +6,9 @@ import de.muenchen.isi.domain.mapper.StartseitenEinstellungDomainMapper;
 import de.muenchen.isi.domain.model.enums.SchnellfilterVorgaenge;
 import de.muenchen.isi.domain.model.enums.SortAttribute;
 import de.muenchen.isi.domain.model.startseite.StartseitenEinstellungModel;
-import de.muenchen.isi.domain.service.common.AuthenticatedUserService;
 import de.muenchen.isi.infrastructure.entity.startseite.StartseitenEinstellung;
 import de.muenchen.isi.infrastructure.repository.startseite.StartseitenEinstellungRepository;
+import de.muenchen.isi.security.AuthenticationUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.search.engine.search.sort.dsl.SortOrder;
@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 /**
  * Verwaltet die persönlichen Voreinstellungen eines Nutzers für den Startseitenbereich "Meine Vorgänge".
  * <p>
- * Der Nutzerbezug wird ausschließlich über den {@link AuthenticatedUserService} hergestellt und niemals
+ * Der Nutzerbezug wird ausschließlich über die {@link AuthenticationUtils} hergestellt und niemals
  * aus dem Request übernommen.
  */
 @Service
@@ -39,7 +39,7 @@ public class StartseitenEinstellungService {
 
     private final StartseitenEinstellungRepository startseitenEinstellungRepository;
 
-    private final AuthenticatedUserService authenticatedUserService;
+    private final AuthenticationUtils authenticationUtils;
 
     /**
      * Gibt die Startseiteneinstellungen des authentifizierten Nutzers zurück.
@@ -88,11 +88,11 @@ public class StartseitenEinstellungService {
     /**
      * Gibt den userSub zurück sofern es kein Fallback-Wert ist.
      *
-     * @return den userSub aus dem {@link AuthenticatedUserService}.
+     * @return den userSub aus {@link AuthenticationUtils}.
      * @throws UserRoleNotAllowedException falls der Nutzer den Fallback-Sub zugewiesen hat.
      */
     private String getSubFromAuthenticatedUser() throws UserRoleNotAllowedException {
-        return authenticatedUserService.getSubFromAuthenticatedUser(FEHLERMELDUNG_NICHT_AUTHENTIFIZIERT);
+        return authenticationUtils.getSubFromAuthenticatedUser(FEHLERMELDUNG_NICHT_AUTHENTIFIZIERT);
     }
 
     /**

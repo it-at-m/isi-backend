@@ -14,7 +14,6 @@ import de.muenchen.isi.domain.mapper.StartseitenEinstellungDomainMapper;
 import de.muenchen.isi.domain.model.enums.SchnellfilterVorgaenge;
 import de.muenchen.isi.domain.model.enums.SortAttribute;
 import de.muenchen.isi.domain.model.startseite.StartseitenEinstellungModel;
-import de.muenchen.isi.domain.service.common.AuthenticatedUserService;
 import de.muenchen.isi.infrastructure.entity.startseite.StartseitenEinstellung;
 import de.muenchen.isi.infrastructure.repository.startseite.StartseitenEinstellungRepository;
 import de.muenchen.isi.security.AuthenticationUtils;
@@ -26,6 +25,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
@@ -43,7 +43,7 @@ class StartseitenEinstellungServiceTest {
     @Mock
     private StartseitenEinstellungRepository startseitenEinstellungRepository;
 
-    @Mock
+    @Spy
     private AuthenticationUtils authenticationUtils;
 
     private StartseitenEinstellungService startseitenEinstellungService;
@@ -53,7 +53,7 @@ class StartseitenEinstellungServiceTest {
         startseitenEinstellungService = new StartseitenEinstellungService(
             startseitenEinstellungDomainMapper,
             startseitenEinstellungRepository,
-            new AuthenticatedUserService(authenticationUtils)
+            authenticationUtils
         );
         Mockito.reset(startseitenEinstellungDomainMapper, startseitenEinstellungRepository, authenticationUtils);
         when(authenticationUtils.getUserSub()).thenReturn(USER_SUB);

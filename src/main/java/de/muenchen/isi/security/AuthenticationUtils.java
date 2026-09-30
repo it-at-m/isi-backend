@@ -1,5 +1,6 @@
 package de.muenchen.isi.security;
 
+import de.muenchen.isi.domain.exception.UserRoleNotAllowedException;
 import de.muenchen.isi.infrastructure.entity.common.BearbeitendePerson;
 import java.util.ArrayList;
 import java.util.List;
@@ -169,6 +170,22 @@ public class AuthenticationUtils {
      */
     public boolean isSubFromUnauthenticatedUser(final String sub) {
         return sub.equals(SUB_UNAUTHENTICATED_USER);
+    }
+
+    /**
+     * Gibt den userSub des authentifizierten Nutzers zurück, sofern es kein Fallback-Wert ist.
+     *
+     * @param fehlermeldung die Fehlermeldung für den Fall, dass der Nutzer nicht authentifiziert ist.
+     *                      Sie benennt den fachlichen Kontext des Aufrufers.
+     * @return den userSub, siehe getUserSub.
+     * @throws UserRoleNotAllowedException falls der Nutzer den Fallback-Sub zugewiesen hat.
+     */
+    public String getSubFromAuthenticatedUser(final String fehlermeldung) throws UserRoleNotAllowedException {
+        final String userSub = this.getUserSub();
+        if (this.isSubFromUnauthenticatedUser(userSub)) {
+            throw new UserRoleNotAllowedException(fehlermeldung);
+        }
+        return userSub;
     }
 
     /**
