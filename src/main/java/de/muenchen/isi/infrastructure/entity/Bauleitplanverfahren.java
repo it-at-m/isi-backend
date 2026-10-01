@@ -35,6 +35,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.search.engine.backend.types.Projectable;
 import org.hibernate.search.engine.backend.types.Searchable;
+import org.hibernate.search.engine.backend.types.Sortable;
 import org.hibernate.search.mapper.pojo.automaticindexing.ReindexOnUpdate;
 import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBinderRef;
 import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBridgeRef;
@@ -156,7 +157,7 @@ public class Bauleitplanverfahren extends Abfrage {
     private List<Dokument> dokumente;
 
     @Column(nullable = false)
-    @GenericField(name = "fristBearbeitung")
+    @GenericField(name = "fristBearbeitung", sortable = Sortable.YES)
     private LocalDate fristBearbeitung;
 
     @Enumerated(EnumType.STRING)

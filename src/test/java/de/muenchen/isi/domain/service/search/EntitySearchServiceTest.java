@@ -5,6 +5,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 
 import de.muenchen.isi.domain.mapper.SearchDomainMapper;
+import de.muenchen.isi.domain.model.enums.SortAttribute;
 import de.muenchen.isi.domain.model.search.request.AbfrageInfrastruktureinrichtungRecord;
 import de.muenchen.isi.domain.model.search.request.AbfrageRecord;
 import de.muenchen.isi.domain.model.search.request.AllObjectsRecord;
@@ -13,6 +14,10 @@ import de.muenchen.isi.domain.model.search.request.BauvorhabenInfrastruktureinri
 import de.muenchen.isi.domain.model.search.request.BauvorhabenRecord;
 import de.muenchen.isi.domain.model.search.request.InfrastrukturRecord;
 import de.muenchen.isi.domain.model.search.request.SearchQueryAndSortingModel;
+import de.muenchen.isi.infrastructure.entity.Baugenehmigungsverfahren;
+import de.muenchen.isi.infrastructure.entity.Bauleitplanverfahren;
+import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
+import de.muenchen.isi.infrastructure.entity.WeiteresVerfahren;
 import de.muenchen.isi.security.AuthenticationUtils;
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -279,5 +284,42 @@ class EntitySearchServiceTest {
         s8.setSelectMittelschule(false);
         Class<?> r8 = entitySearchService.determineRecordClass(s8);
         assertThat(r8, is(AllObjectsRecord.class));
+    }
+
+    @Test
+    void determineSortAttributeFristBearbeitungFuerAbfragen() {
+        final var model = new SearchQueryAndSortingModel();
+        model.setSortBy(SortAttribute.FRIST_BEARBEITUNG);
+        final var result = entitySearchService.determineSortAttribute(
+            model,
+            List.of(Bauleitplanverfahren.class, Baugenehmigungsverfahren.class, WeiteresVerfahren.class)
+        );
+        assertThat(result, is(SortAttribute.FRIST_BEARBEITUNG));
+    }
+
+    @Test
+    void determineSortAttributeFristBearbeitungFaelltZurueckBeiFremdenEntitaeten() {
+        final var model = new SearchQueryAndSortingModel();
+        model.setSortBy(SortAttribute.FRIST_BEARBEITUNG);
+        final var result = entitySearchService.determineSortAttribute(
+            model,
+            List.of(Bauleitplanverfahren.class, Bauvorhaben.class)
+        );
+        assertThat(result, is(SortAttribute.LAST_MODIFIED_DATE_TIME));
+    }
+
+    @Test
+    void determineSortAttributeLaesstAndereAttributeUnveraendert() {
+        final var model = new SearchQueryAndSortingModel();
+        model.setSortBy(SortAttribute.NAME);
+        assertThat(
+            entitySearchService.determineSortAttribute(model, List.of(Bauvorhaben.class)),
+            is(SortAttribute.NAME)
+        );
+        model.setSortBy(SortAttribute.CREATED_DATE_TIME);
+        assertThat(
+            entitySearchService.determineSortAttribute(model, List.of(Bauleitplanverfahren.class)),
+            is(SortAttribute.CREATED_DATE_TIME)
+        );
     }
 }
