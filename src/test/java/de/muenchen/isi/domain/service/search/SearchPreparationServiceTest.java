@@ -490,4 +490,30 @@ class SearchPreparationServiceTest {
             this.searchPreparationService.getSearchableEntities(searchQueryModel)
         );
     }
+
+    @Test
+    void isSortableByFristBearbeitungNurAbfragen() {
+        assertThat(
+            searchPreparationService.isSortableByFristBearbeitung(List.of(Bauleitplanverfahren.class)),
+            is(true)
+        );
+        assertThat(
+            searchPreparationService.isSortableByFristBearbeitung(
+                List.of(Bauleitplanverfahren.class, Baugenehmigungsverfahren.class, WeiteresVerfahren.class)
+            ),
+            is(true)
+        );
+    }
+
+    @Test
+    void isSortableByFristBearbeitungMitNichtAbfragen() {
+        assertThat(
+            searchPreparationService.isSortableByFristBearbeitung(
+                List.of(Bauleitplanverfahren.class, Bauvorhaben.class)
+            ),
+            is(false)
+        );
+        assertThat(searchPreparationService.isSortableByFristBearbeitung(List.of(Grundschule.class)), is(false));
+        assertThat(searchPreparationService.isSortableByFristBearbeitung(List.of()), is(false));
+    }
 }

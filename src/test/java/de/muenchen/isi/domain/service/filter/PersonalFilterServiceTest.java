@@ -34,7 +34,7 @@ class PersonalFilterServiceTest {
     @Mock
     private PersonalFilterDomainMapper personalFilterDomainMapper;
 
-    @Mock
+    @Spy
     private AuthenticationUtils authenticationUtils;
 
     @Mock
