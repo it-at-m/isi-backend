@@ -39,6 +39,8 @@ public class LookupListsModel {
 
     private LookupListModel statusInfrastruktureinrichtung;
 
+    private LookupListModel anlassPlanung;
+
     private LookupListModel einrichtungstraeger;
 
     private LookupListModel einrichtungstraegerSchulen;

@@ -23,7 +23,7 @@ public class EinrichtungstraegerValidator
 
     /**
      * Prüft, ob das Feld einrichtungstraeger nicht null ist.
-     * null ist jedoch erlaubt, wenn {@link InfrastruktureinrichtungDto#getStatus()} weder {@link StatusInfrastruktureinrichtung#BESTAND} noch {@link StatusInfrastruktureinrichtung#GESICHERTE_PLANUNG_ERW_PLAETZE_BEST_EINR} ist.
+     * null ist jedoch erlaubt, wenn {@link InfrastruktureinrichtungDto#getStatus()} nicht {@link StatusInfrastruktureinrichtung#BESTAND} ist.
      *
      * @param value   {@link InfrastruktureinrichtungDto} zum Validieren.
      * @param context in welchem die Validierung stattfindet.
@@ -35,7 +35,7 @@ public class EinrichtungstraegerValidator
     }
 
     private boolean einrichtungstraegerValid(final InfrastruktureinrichtungDto value) {
-        if (isStatusBestandOrGesicherteERW(value)) {
+        if (isStatusBestand(value)) {
             if (value instanceof GrundschuleDto dto4) {
                 var einrichtungstraeger = dto4.getSchule().getEinrichtungstraeger();
                 return this.isValidEinrichtungstraegerSchule(einrichtungstraeger);
@@ -61,17 +61,13 @@ public class EinrichtungstraegerValidator
     }
 
     /**
-     * Überprüft, ob ein {@link InfrastruktureinrichtungDto} nicht den Status {@link StatusInfrastruktureinrichtung#BESTAND}
-     * oder {@link StatusInfrastruktureinrichtung#GESICHERTE_PLANUNG_ERW_PLAETZE_BEST_EINR} hat.
+     * Überprüft, ob ein {@link InfrastruktureinrichtungDto} nicht den Status {@link StatusInfrastruktureinrichtung#BESTAND} hat.
      *
      * @param value Die zu überprüfende {@link InfrastruktureinrichtungDto}.
-     * @return True, wenn der Status nicht {@link StatusInfrastruktureinrichtung#BESTAND} oder {@link StatusInfrastruktureinrichtung#GESICHERTE_PLANUNG_ERW_PLAETZE_BEST_EINR} ist, ansonsten false.
+     * @return True, wenn der Status nicht {@link StatusInfrastruktureinrichtung#BESTAND} ist, ansonsten false.
      */
-    public boolean isStatusBestandOrGesicherteERW(final InfrastruktureinrichtungDto value) {
-        return (
-            value.getStatus() == StatusInfrastruktureinrichtung.BESTAND ||
-            value.getStatus() == StatusInfrastruktureinrichtung.GESICHERTE_PLANUNG_ERW_PLAETZE_BEST_EINR
-        );
+    public boolean isStatusBestand(final InfrastruktureinrichtungDto value) {
+        return value.getStatus() == StatusInfrastruktureinrichtung.BESTAND;
     }
 
     /**
