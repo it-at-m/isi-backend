@@ -1,5 +1,6 @@
 package de.muenchen.isi.domain.model.common;
 
+import jakarta.validation.Valid;
 import java.util.Set;
 import lombok.Data;
 
@@ -19,4 +20,6 @@ public abstract class VerortungModel {
     private Set<GrundschulsprengelModel> grundschulsprengel;
 
     private Set<MittelschulsprengelModel> mittelschulsprengel;
+
+    private Set<SchulstandortModel> schulstandorte;
 }

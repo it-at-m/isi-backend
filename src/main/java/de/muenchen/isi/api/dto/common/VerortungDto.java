@@ -20,4 +20,6 @@ public abstract class VerortungDto {
     private Set<@Valid GrundschulsprengelDto> grundschulsprengel;
 
     private Set<@Valid MittelschulsprengelDto> mittelschulsprengel;
+
+    private Set<@Valid SchulstandortDto> schulstandorte;
 }

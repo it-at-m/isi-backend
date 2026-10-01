@@ -25,4 +25,7 @@ public abstract class Verortung {
 
     @IndexedEmbedded
     private Set<Mittelschulsprengel> mittelschulsprengel;
+
+    @IndexedEmbedded
+    private Set<Schulstandort> schulstandorte;
 }
