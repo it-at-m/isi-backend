@@ -124,18 +124,52 @@ public class EntitySearchService {
                 // Sortierung der Suchergebnisse.
                 // https://docs.jboss.org/hibernate/stable/search/reference/en-US/html_single/#query-sorting
                 .sort(function -> {
-                    final var sortBy = searchQueryAndSortingInformation.getSortBy();
+                    final var sortBy = this.determineSortAttribute(
+                        searchQueryAndSortingInformation,
+                        searchableEntities
+                    );
                     final var sortOrder = searchQueryAndSortingInformation.getSortOrder();
                     if (SortAttribute.NAME.equals(sortBy)) {
                         return function.field("name_sort").order(sortOrder);
                     } else if (SortAttribute.CREATED_DATE_TIME.equals(sortBy)) {
                         return function.field("createdDateTime").order(sortOrder);
+                    } else if (SortAttribute.FRIST_BEARBEITUNG.equals(sortBy)) {
+                        return function.field("fristBearbeitung").missing().last().order(sortOrder);
                     } else {
                         return function.field("lastModifiedDateTime").order(sortOrder);
                     }
                 });
 
         return this.executeSearchQuery(searchQueryAndSortingInformation, searchQueryOptions);
+    }
+
+    /**
+     * Diese Methode ermittelt das tatsaechlich zu verwendende Sortierattribut.
+     * <p>
+     * Eine Sortierung nach {@link SortAttribute#FRIST_BEARBEITUNG} ist nur moeglich, sofern ausschliesslich Abfragen
+     * durchsucht werden, da nur deren Indizes das Attribut {@code fristBearbeitung} enthalten. Andernfalls wird auf
+     * {@link SortAttribute#LAST_MODIFIED_DATE_TIME} zurueckgefallen.
+     *
+     * @param searchQueryAndSortingInformation mit dem angefragten Sortierattribut.
+     * @param searchableEntities die zu durchsuchenden Entitaetsklassen.
+     * @return das zu verwendende Sortierattribut.
+     */
+    protected SortAttribute determineSortAttribute(
+        final SearchQueryAndSortingModel searchQueryAndSortingInformation,
+        final List<Class<? extends BaseEntity>> searchableEntities
+    ) {
+        final var sortBy = searchQueryAndSortingInformation.getSortBy();
+        if (
+            SortAttribute.FRIST_BEARBEITUNG.equals(sortBy) &&
+            !searchPreparationService.isSortableByFristBearbeitung(searchableEntities)
+        ) {
+            log.debug(
+                "Sortierung nach der Bearbeitungsfrist ist fuer den gewaehlten Suchscope nicht moeglich. " +
+                    "Es wird nach dem letzten Bearbeitungszeitpunkt sortiert."
+            );
+            return SortAttribute.LAST_MODIFIED_DATE_TIME;
+        }
+        return sortBy;
     }
 
     /**

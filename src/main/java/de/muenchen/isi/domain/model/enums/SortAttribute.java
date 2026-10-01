@@ -4,4 +4,5 @@ public enum SortAttribute {
     NAME,
     CREATED_DATE_TIME,
     LAST_MODIFIED_DATE_TIME,
+    FRIST_BEARBEITUNG,
 }

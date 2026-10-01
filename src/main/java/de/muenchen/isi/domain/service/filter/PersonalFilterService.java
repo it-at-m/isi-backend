@@ -27,6 +27,9 @@ public class PersonalFilterService {
 
     private static final int MAX_PERSONAL_FILTERS = 10;
 
+    static final String FEHLERMELDUNG_NICHT_AUTHENTIFIZIERT =
+        "Sie müssen authentifiziert sein, um mit persönlichen Filtern interagieren zu können";
+
     private final PersonalFilterDomainMapper personalFilterDomainMapper;
 
     private final AuthenticationUtils authenticationUtils;
@@ -153,16 +156,10 @@ public class PersonalFilterService {
     /**
      * Gibt den userSub zurück sofern es kein Fallback-Wert ist.
      *
-     * @return den userSub aus authenticationUtils
-     * @throws UserRoleNotAllowedException falls der Nutzer den Fallback-Sub aus AuthenticationUtils zugewiesen hat
+     * @return den userSub aus {@link AuthenticationUtils}
+     * @throws UserRoleNotAllowedException falls der Nutzer den Fallback-Sub zugewiesen hat
      */
     private String getSubFromAuthenticatedUser() throws UserRoleNotAllowedException {
-        final String userSub = authenticationUtils.getUserSub();
-        if (authenticationUtils.isSubFromUnauthenticatedUser(userSub)) {
-            throw new UserRoleNotAllowedException(
-                "Sie müssen authentifiziert sein, um mit persönlichen Filtern interagieren zu können"
-            );
-        }
-        return userSub;
+        return authenticationUtils.getSubFromAuthenticatedUser(FEHLERMELDUNG_NICHT_AUTHENTIFIZIERT);
     }
 }
