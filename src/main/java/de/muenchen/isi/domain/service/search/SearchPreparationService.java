@@ -32,6 +32,15 @@ import org.springframework.stereotype.Service;
 public class SearchPreparationService {
 
     /**
+     * Die Entitaeten, deren Index das Attribut {@code fristBearbeitung} enthaelt.
+     */
+    private static final Set<Class<? extends BaseEntity>> ENTITIES_WITH_FRIST_BEARBEITUNG = Set.of(
+        Bauleitplanverfahren.class,
+        Baugenehmigungsverfahren.class,
+        WeiteresVerfahren.class
+    );
+
+    /**
      * Diese Methode ermittelt auf Basis der im Parameter gegebenen Entitätsklasse
      * die für die Suchwortvorschläge suchbaren Attribute.
      *
@@ -205,5 +214,22 @@ public class SearchPreparationService {
             throw exception;
         }
         return searchableEntities;
+    }
+
+    /**
+     * Diese Methode prueft, ob fuer die im Parameter gegebenen Entitaetsklassen nach der Bearbeitungsfrist
+     * sortiert werden kann.
+     * <p>
+     * Das Indexfeld {@code fristBearbeitung} existiert ausschliesslich in den Indizes der Abfragen. Befindet sich
+     * eine andere Entitaet im Suchscope, so ist eine Sortierung nach diesem Attribut nicht moeglich.
+     *
+     * @param searchableEntities die zu durchsuchenden Entitaetsklassen.
+     * @return {@code true} sofern ausschliesslich Abfragen durchsucht werden, andernfalls {@code false}.
+     */
+    public boolean isSortableByFristBearbeitung(final List<Class<? extends BaseEntity>> searchableEntities) {
+        return (
+            CollectionUtils.isNotEmpty(searchableEntities) &&
+            ENTITIES_WITH_FRIST_BEARBEITUNG.containsAll(searchableEntities)
+        );
     }
 }

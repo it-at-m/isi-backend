@@ -2,9 +2,11 @@ package de.muenchen.isi.security;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import de.muenchen.isi.IsiBackendApplication;
 import de.muenchen.isi.TestConstants;
+import de.muenchen.isi.domain.exception.UserRoleNotAllowedException;
 import de.muenchen.isi.domain.service.transition.MockCustomUser;
 import de.muenchen.isi.infrastructure.entity.common.BearbeitendePerson;
 import java.util.List;
@@ -204,5 +206,35 @@ class AuthenticationUtilsTest {
         expected.setOrganisationseinheit("unauthenticated");
 
         assertThat(result, is(expected));
+    }
+
+    @Test
+    @MockCustomUser
+    void getSubFromAuthenticatedUser() throws Exception {
+        final var result = authenticationUtils.getSubFromAuthenticatedUser("wird nicht verwendet");
+
+        assertThat(result, is(authenticationUtils.getUserSub()));
+    }
+
+    @Test
+    void getSubFromAuthenticatedUserUnauthenticated() {
+        final var meldung = "Sie müssen authentifiziert sein, um die Startseiteneinstellungen zu verwenden";
+
+        final var exception = assertThrows(UserRoleNotAllowedException.class, () ->
+            authenticationUtils.getSubFromAuthenticatedUser(meldung)
+        );
+
+        assertThat(exception.getMessage(), is(meldung));
+    }
+
+    @Test
+    void getSubFromAuthenticatedUserUebernimmtDieUebergebeneFehlermeldung() {
+        final var meldung = "Sie müssen authentifiziert sein, um mit persönlichen Filtern interagieren zu können";
+
+        final var exception = assertThrows(UserRoleNotAllowedException.class, () ->
+            authenticationUtils.getSubFromAuthenticatedUser(meldung)
+        );
+
+        assertThat(exception.getMessage(), is(meldung));
     }
 }

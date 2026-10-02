@@ -5,6 +5,7 @@ import de.muenchen.isi.domain.model.search.request.projection.Infrastruktureinri
 import de.muenchen.isi.infrastructure.entity.common.Adresse;
 import de.muenchen.isi.infrastructure.entity.common.VerortungMultiPolygon;
 import de.muenchen.isi.infrastructure.entity.common.VerortungPoint;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.AnlassPlanung;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ResultType;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusInfrastruktureinrichtung;
@@ -34,5 +35,6 @@ public record BauvorhabenInfrastruktureinrichtungRecord(
     InfrastruktureinrichtungTyp infrastruktureinrichtungTyp,
     String nameEinrichtung,
     StatusInfrastruktureinrichtung status,
+    AnlassPlanung anlassPlanung,
     String bauvorhabenName
 ) implements BauvorhabenProjection, InfrastruktureinrichtungProjection {}
