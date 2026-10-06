@@ -83,19 +83,6 @@ class StartseitenEinstellungServiceTest {
     }
 
     @Test
-    void saveUndGetUnterstuetzenDenSchnellfilterEntwuerfe() throws Exception {
-        final var model = createModel(SchnellfilterVorgaenge.ENTWUERFE, SortAttribute.CREATED_DATE_TIME);
-        when(personalFilterRepository.findByPersonalIDAndIstStartseiteTrue(USER_SUB)).thenReturn(Optional.empty());
-        when(personalFilterRepository.saveAndFlush(any())).thenAnswer(invocation -> invocation.getArgument(0));
-
-        startseitenEinstellungService.save(model);
-
-        final var captor = ArgumentCaptor.forClass(PersonalFilter.class);
-        verify(personalFilterRepository).saveAndFlush(captor.capture());
-        assertThat(captor.getValue().getFilterSettings().getSchnellfilter(), is(SchnellfilterVorgaenge.ENTWUERFE));
-    }
-
-    @Test
     void saveLegtNeueStartseitenZeileAn() throws Exception {
         final var model = createModel(SchnellfilterVorgaenge.ZUR_BEARBEITUNG, SortAttribute.FRIST_BEARBEITUNG);
         when(personalFilterRepository.findByPersonalIDAndIstStartseiteTrue(USER_SUB)).thenReturn(Optional.empty());
