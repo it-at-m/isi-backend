@@ -30,6 +30,7 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 
 @ExtendWith(MockitoExtension.class)
@@ -82,6 +83,19 @@ class StartseitenEinstellungServiceTest {
     }
 
     @Test
+    void saveUndGetUnterstuetzenDenSchnellfilterEntwuerfe() throws Exception {
+        final var model = createModel(SchnellfilterVorgaenge.ENTWUERFE, SortAttribute.CREATED_DATE_TIME);
+        when(personalFilterRepository.findByPersonalIDAndIstStartseiteTrue(USER_SUB)).thenReturn(Optional.empty());
+        when(personalFilterRepository.saveAndFlush(any())).thenAnswer(invocation -> invocation.getArgument(0));
+
+        startseitenEinstellungService.save(model);
+
+        final var captor = ArgumentCaptor.forClass(PersonalFilter.class);
+        verify(personalFilterRepository).saveAndFlush(captor.capture());
+        assertThat(captor.getValue().getFilterSettings().getSchnellfilter(), is(SchnellfilterVorgaenge.ENTWUERFE));
+    }
+
+    @Test
     void saveLegtNeueStartseitenZeileAn() throws Exception {
         final var model = createModel(SchnellfilterVorgaenge.ZUR_BEARBEITUNG, SortAttribute.FRIST_BEARBEITUNG);
         when(personalFilterRepository.findByPersonalIDAndIstStartseiteTrue(USER_SUB)).thenReturn(Optional.empty());
@@ -127,6 +141,19 @@ class StartseitenEinstellungServiceTest {
         when(personalFilterRepository.findByPersonalIDAndIstStartseiteTrue(USER_SUB)).thenReturn(Optional.of(entity));
         when(personalFilterRepository.saveAndFlush(entity)).thenThrow(
             new ObjectOptimisticLockingFailureException(PersonalFilter.class, entity.getId())
+        );
+
+        assertThrows(OptimisticLockingException.class, () -> startseitenEinstellungService.save(model));
+    }
+
+    @Test
+    void saveWirftOptimisticLockingExceptionBeiParallelemErstanlegen() {
+        final var model = createModel(SchnellfilterVorgaenge.ALLE, SortAttribute.CREATED_DATE_TIME);
+        when(personalFilterRepository.findByPersonalIDAndIstStartseiteTrue(USER_SUB)).thenReturn(Optional.empty());
+        // Der Unique-Index auf (personalid) WHERE ist_startseite greift, wenn ein paralleler Request
+        // die Startseiten-Zeile bereits angelegt hat.
+        when(personalFilterRepository.saveAndFlush(any())).thenThrow(
+            new DataIntegrityViolationException("personal_filter_startseite_personalid_uidx")
         );
 
         assertThrows(OptimisticLockingException.class, () -> startseitenEinstellungService.save(model));

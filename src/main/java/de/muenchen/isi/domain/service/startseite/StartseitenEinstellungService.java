@@ -12,6 +12,7 @@ import de.muenchen.isi.security.AuthenticationUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.search.engine.search.sort.dsl.SortOrder;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 
@@ -67,7 +68,8 @@ public class StartseitenEinstellungService {
      * @param startseitenEinstellungModel mit den zu speichernden Einstellungen.
      * @return die gespeicherten Startseiteneinstellungen.
      * @throws UserRoleNotAllowedException falls der Nutzer nicht authentifiziert ist.
-     * @throws OptimisticLockingException falls bereits eine neuere Version der Entität gespeichert ist.
+     * @throws OptimisticLockingException falls bereits eine neuere Version der Entität gespeichert ist oder
+     *         parallel bereits ein Datensatz für diesen Nutzer angelegt wurde.
      */
     public StartseitenEinstellungModel save(final StartseitenEinstellungModel startseitenEinstellungModel)
         throws UserRoleNotAllowedException, OptimisticLockingException {
@@ -78,7 +80,11 @@ public class StartseitenEinstellungService {
         updateEntityFromModel(startseitenEinstellungModel, entity);
         try {
             entity = personalFilterRepository.saveAndFlush(entity);
-        } catch (final ObjectOptimisticLockingFailureException exception) {
+        } catch (final ObjectOptimisticLockingFailureException | DataIntegrityViolationException exception) {
+            // Speichern zwei parallele Requests erstmals, verletzt der zweite den Unique-Index auf
+            // (personalid) WHERE ist_startseite. Da die Transaktion danach nur noch zurückgerollt werden
+            // kann, ist ein erneutes Lesen und Speichern hier nicht möglich; der Konflikt wird deshalb
+            // wie ein Versionskonflikt behandelt.
             final var message = "Die Daten wurden in der Zwischenzeit geändert. Bitte laden Sie die Seite neu!";
             throw new OptimisticLockingException(message, exception);
         }

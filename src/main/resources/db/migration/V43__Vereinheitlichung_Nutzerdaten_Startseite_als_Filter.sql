@@ -1,5 +1,3 @@
-BEGIN;
-
 --
 -- Vereinheitlichung aller persönlichen Nutzerdaten in der Tabelle personal_filter.
 -- Die Startseiteneinstellung ("Meine Vorgänge") wird zu einer systemeigenen Zeile,
@@ -54,5 +52,3 @@ DROP TABLE isidbuser.startseiten_einstellung;
 CREATE UNIQUE INDEX personal_filter_startseite_personalid_uidx
     ON isidbuser.personal_filter (personalid)
     WHERE ist_startseite;
-
-END;
