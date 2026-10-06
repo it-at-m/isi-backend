@@ -2,13 +2,23 @@ package de.muenchen.isi.infrastructure.repository.filter;
 
 import de.muenchen.isi.infrastructure.entity.filter.PersonalFilter;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+/**
+ * Zugriff auf die persönlichen Nutzerdaten.
+ * <p>
+ * Die Tabelle hält sowohl die echten persönlichen Filter als auch die Startseiteneinstellung
+ * je Nutzer. Die Startseiten-Zeile ist über {@code istStartseite} markiert und wird von den
+ * Filter-Abfragen bewusst ausgeschlossen.
+ */
 public interface PersonalFilterRepository extends JpaRepository<PersonalFilter, UUID> {
-    List<PersonalFilter> findByPersonalIDOrderByLastModifiedDateTimeDesc(String personalId);
+    List<PersonalFilter> findByPersonalIDAndIstStartseiteFalseOrderByLastModifiedDateTimeDesc(String personalId);
 
-    PersonalFilter findByIdAndPersonalID(UUID id, String personalid);
+    PersonalFilter findByIdAndPersonalIDAndIstStartseiteFalse(UUID id, String personalid);
 
-    long countByPersonalID(String personalId);
+    long countByPersonalIDAndIstStartseiteFalse(String personalId);
+
+    Optional<PersonalFilter> findByPersonalIDAndIstStartseiteTrue(String personalId);
 }

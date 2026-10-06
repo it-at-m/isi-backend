@@ -1,5 +1,6 @@
 package de.muenchen.isi.infrastructure.entity.filter;
 
+import de.muenchen.isi.domain.model.enums.SchnellfilterVorgaenge;
 import de.muenchen.isi.domain.model.enums.SortAttribute;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusInfrastruktureinrichtung;
@@ -19,9 +20,24 @@ import lombok.Data;
 import org.hibernate.search.engine.search.sort.dsl.SortOrder;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.GenericField;
 
+/**
+ * Die gespeicherten Einstellungen einer persönlichen Ansicht.
+ * <p>
+ * Dieselbe Struktur trägt sowohl echte persönliche Filter als auch die Startseiteneinstellung
+ * (siehe {@link PersonalFilter#getIstStartseite()}). Da die Startseiteneinstellung nur
+ * {@code schnellfilter}, {@code sortBy} und {@code sortOrder} nutzt, sind die übrigen Felder
+ * auf Datenbankebene optional; für echte Filter werden sie über
+ * {@code de.muenchen.isi.api.dto.filter.FilterSettingsDto} als Pflichtfelder validiert.
+ */
 @Embeddable
 @Data
 public class FilterSettings {
+
+    /**
+     * Nur für die Startseiteneinstellung ("Meine Vorgänge") gesetzt, für echte Filter {@code null}.
+     */
+    @Enumerated(EnumType.STRING)
+    private SchnellfilterVorgaenge schnellfilter;
 
     @NotNull
     @Enumerated(EnumType.STRING)
@@ -31,34 +47,24 @@ public class FilterSettings {
     @Enumerated(EnumType.STRING)
     private SortOrder sortOrder;
 
-    @NotNull
     private Boolean selectBauleitplanverfahren;
 
-    @NotNull
     private Boolean selectBaugenehmigungsverfahren;
 
-    @NotNull
     private Boolean selectWeiteresVerfahren;
 
-    @NotNull
     private Boolean selectBauvorhaben;
 
-    @NotNull
     private Boolean selectGrundschule;
 
-    @NotNull
     private Boolean selectGsNachmittagBetreuung;
 
-    @NotNull
     private Boolean selectHausFuerKinder;
 
-    @NotNull
     private Boolean selectKindergarten;
 
-    @NotNull
     private Boolean selectKinderkrippe;
 
-    @NotNull
     private Boolean selectMittelschule;
 
     @ElementCollection
@@ -104,10 +110,9 @@ public class FilterSettings {
     )
     private List<StatusAbfrage> statusAbfrage;
 
-    @NotNull
     @GenericField(name = "sobon_relevant_filter")
     @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "varchar(255) not null check (sobon_relevant != 'UNSPECIFIED')")
+    @Column(columnDefinition = "varchar(255) check (sobon_relevant is null or sobon_relevant != 'UNSPECIFIED')")
     private UncertainBoolean sobonRelevant;
 
     private Integer weGesamtVon;
