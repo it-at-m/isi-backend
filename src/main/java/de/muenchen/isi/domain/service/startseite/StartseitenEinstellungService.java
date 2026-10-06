@@ -2,6 +2,7 @@ package de.muenchen.isi.domain.service.startseite;
 
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.UserRoleNotAllowedException;
+import de.muenchen.isi.domain.mapper.PersonalFilterDomainMapper;
 import de.muenchen.isi.domain.model.enums.SchnellfilterVorgaenge;
 import de.muenchen.isi.domain.model.enums.SortAttribute;
 import de.muenchen.isi.domain.model.startseite.StartseitenEinstellungModel;
@@ -40,6 +41,8 @@ public class StartseitenEinstellungService {
     static final String FEHLERMELDUNG_NICHT_AUTHENTIFIZIERT =
         "Sie müssen authentifiziert sein, um die Startseiteneinstellungen zu verwenden";
 
+    private final PersonalFilterDomainMapper personalFilterDomainMapper;
+
     private final PersonalFilterRepository personalFilterRepository;
 
     private final AuthenticationUtils authenticationUtils;
@@ -56,7 +59,7 @@ public class StartseitenEinstellungService {
         final var userSub = this.getSubFromAuthenticatedUser();
         return personalFilterRepository
             .findByPersonalIDAndIstStartseiteTrue(userSub)
-            .map(StartseitenEinstellungService::entity2Model)
+            .map(personalFilterDomainMapper::entity2StartseitenEinstellungModel)
             .orElseGet(StartseitenEinstellungService::createDefaultModel);
     }
 
@@ -88,7 +91,7 @@ public class StartseitenEinstellungService {
             final var message = "Die Daten wurden in der Zwischenzeit geändert. Bitte laden Sie die Seite neu!";
             throw new OptimisticLockingException(message, exception);
         }
-        return entity2Model(entity);
+        return personalFilterDomainMapper.entity2StartseitenEinstellungModel(entity);
     }
 
     /**
@@ -131,21 +134,6 @@ public class StartseitenEinstellungService {
         filterSettings.setSchnellfilter(model.getSchnellfilter());
         filterSettings.setSortBy(model.getSortBy());
         filterSettings.setSortOrder(model.getSortOrder());
-    }
-
-    /**
-     * @param entity mit den gespeicherten Startseiteneinstellungen.
-     * @return das zugehörige {@link StartseitenEinstellungModel}.
-     */
-    private static StartseitenEinstellungModel entity2Model(final PersonalFilter entity) {
-        final var model = new StartseitenEinstellungModel();
-        final var filterSettings = entity.getFilterSettings();
-        if (filterSettings != null) {
-            model.setSchnellfilter(filterSettings.getSchnellfilter());
-            model.setSortBy(filterSettings.getSortBy());
-            model.setSortOrder(filterSettings.getSortOrder());
-        }
-        return model;
     }
 
     /**

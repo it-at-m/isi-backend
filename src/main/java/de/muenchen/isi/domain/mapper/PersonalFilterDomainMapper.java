@@ -3,6 +3,7 @@ package de.muenchen.isi.domain.mapper;
 import de.muenchen.isi.configuration.MapstructConfiguration;
 import de.muenchen.isi.domain.model.filter.PersonalFilterRequestModel;
 import de.muenchen.isi.domain.model.filter.PersonalFilterResponseModel;
+import de.muenchen.isi.domain.model.startseite.StartseitenEinstellungModel;
 import de.muenchen.isi.infrastructure.entity.filter.PersonalFilter;
 import java.util.List;
 import org.mapstruct.Mapper;
@@ -12,6 +13,21 @@ import org.mapstruct.MappingTarget;
 @Mapper(config = MapstructConfiguration.class)
 public interface PersonalFilterDomainMapper {
     PersonalFilterResponseModel entity2Model(final PersonalFilter personalFilter);
+
+    /**
+     * Mappt die systemeigene Zeile eines Nutzers auf dessen Startseiteneinstellungen.
+     * <p>
+     * Die Startseiteneinstellung nutzt von den {@code filterSettings} ausschließlich
+     * {@code schnellfilter}, {@code sortBy} und {@code sortOrder}; die übrigen Filterfelder bleiben
+     * für diese Zeile leer.
+     *
+     * @param personalFilter die mit {@code istStartseite} markierte Entität.
+     * @return das zugehörige {@link StartseitenEinstellungModel}.
+     */
+    @Mapping(target = "schnellfilter", source = "filterSettings.schnellfilter")
+    @Mapping(target = "sortBy", source = "filterSettings.sortBy")
+    @Mapping(target = "sortOrder", source = "filterSettings.sortOrder")
+    StartseitenEinstellungModel entity2StartseitenEinstellungModel(final PersonalFilter personalFilter);
 
     List<PersonalFilterResponseModel> entities2Models(final List<PersonalFilter> personalFilter);
 

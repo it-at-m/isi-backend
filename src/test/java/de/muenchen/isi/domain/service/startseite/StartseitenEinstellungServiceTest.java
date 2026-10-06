@@ -11,6 +11,7 @@ import static org.mockito.Mockito.when;
 
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.UserRoleNotAllowedException;
+import de.muenchen.isi.domain.mapper.PersonalFilterDomainMapper;
 import de.muenchen.isi.domain.model.enums.SchnellfilterVorgaenge;
 import de.muenchen.isi.domain.model.enums.SortAttribute;
 import de.muenchen.isi.domain.model.startseite.StartseitenEinstellungModel;
@@ -40,6 +41,9 @@ class StartseitenEinstellungServiceTest {
     private static final String USER_SUB = "user-sub";
 
     @Mock
+    private PersonalFilterDomainMapper personalFilterDomainMapper;
+
+    @Mock
     private PersonalFilterRepository personalFilterRepository;
 
     @Spy
@@ -50,10 +54,11 @@ class StartseitenEinstellungServiceTest {
     @BeforeEach
     void setUp() {
         startseitenEinstellungService = new StartseitenEinstellungService(
+            personalFilterDomainMapper,
             personalFilterRepository,
             authenticationUtils
         );
-        Mockito.reset(personalFilterRepository, authenticationUtils);
+        Mockito.reset(personalFilterDomainMapper, personalFilterRepository, authenticationUtils);
         when(authenticationUtils.getUserSub()).thenReturn(USER_SUB);
         when(authenticationUtils.isSubFromUnauthenticatedUser(USER_SUB)).thenReturn(false);
     }
@@ -73,13 +78,14 @@ class StartseitenEinstellungServiceTest {
     @Test
     void getStartseitenEinstellungLiefertGespeichertenDatensatz() throws Exception {
         final var entity = createEntity(SchnellfilterVorgaenge.ZUR_KENNTNIS, SortAttribute.FRIST_BEARBEITUNG);
+        final var model = createModel(SchnellfilterVorgaenge.ZUR_KENNTNIS, SortAttribute.FRIST_BEARBEITUNG);
         when(personalFilterRepository.findByPersonalIDAndIstStartseiteTrue(USER_SUB)).thenReturn(Optional.of(entity));
+        when(personalFilterDomainMapper.entity2StartseitenEinstellungModel(entity)).thenReturn(model);
 
         final var result = startseitenEinstellungService.getStartseitenEinstellung();
 
-        assertThat(result.getSchnellfilter(), is(SchnellfilterVorgaenge.ZUR_KENNTNIS));
-        assertThat(result.getSortBy(), is(SortAttribute.FRIST_BEARBEITUNG));
-        assertThat(result.getSortOrder(), is(SortOrder.DESC));
+        assertThat(result, is(model));
+        verify(personalFilterDomainMapper).entity2StartseitenEinstellungModel(entity);
     }
 
     @Test
@@ -87,6 +93,7 @@ class StartseitenEinstellungServiceTest {
         final var model = createModel(SchnellfilterVorgaenge.ZUR_BEARBEITUNG, SortAttribute.FRIST_BEARBEITUNG);
         when(personalFilterRepository.findByPersonalIDAndIstStartseiteTrue(USER_SUB)).thenReturn(Optional.empty());
         when(personalFilterRepository.saveAndFlush(any())).thenAnswer(invocation -> invocation.getArgument(0));
+        when(personalFilterDomainMapper.entity2StartseitenEinstellungModel(any())).thenReturn(model);
 
         final var result = startseitenEinstellungService.save(model);
 
@@ -111,6 +118,7 @@ class StartseitenEinstellungServiceTest {
         final var model = createModel(SchnellfilterVorgaenge.ABGESCHLOSSEN, SortAttribute.LAST_MODIFIED_DATE_TIME);
         when(personalFilterRepository.findByPersonalIDAndIstStartseiteTrue(USER_SUB)).thenReturn(Optional.of(entity));
         when(personalFilterRepository.saveAndFlush(entity)).thenReturn(entity);
+        when(personalFilterDomainMapper.entity2StartseitenEinstellungModel(entity)).thenReturn(model);
 
         final var result = startseitenEinstellungService.save(model);
 
