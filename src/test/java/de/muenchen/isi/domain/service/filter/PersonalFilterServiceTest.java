@@ -11,6 +11,8 @@ import de.muenchen.isi.domain.exception.NotOwnerException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.UserRoleNotAllowedException;
 import de.muenchen.isi.domain.mapper.PersonalFilterDomainMapper;
+import de.muenchen.isi.domain.model.enums.SchnellfilterVorgaenge;
+import de.muenchen.isi.domain.model.filter.FilterSettingsModel;
 import de.muenchen.isi.domain.model.filter.PersonalFilterRequestModel;
 import de.muenchen.isi.domain.model.filter.PersonalFilterResponseModel;
 import de.muenchen.isi.infrastructure.entity.filter.PersonalFilter;
@@ -58,12 +60,14 @@ class PersonalFilterServiceTest {
 
         when(authenticationUtils.getUserSub()).thenReturn(userSub);
         when(authenticationUtils.isSubFromUnauthenticatedUser(userSub)).thenReturn(false);
-        when(personalFilterRepository.findByPersonalIDOrderByLastModifiedDateTimeDesc(userSub)).thenReturn(entities);
+        when(
+            personalFilterRepository.findByPersonalIDAndIstStartseiteFalseOrderByLastModifiedDateTimeDesc(userSub)
+        ).thenReturn(entities);
         when(personalFilterDomainMapper.entities2Models(entities)).thenReturn(models);
 
         List<PersonalFilterResponseModel> result = personalFilterService.getPersonalFilters();
         assertThat(result, is(models));
-        verify(personalFilterRepository).findByPersonalIDOrderByLastModifiedDateTimeDesc(userSub);
+        verify(personalFilterRepository).findByPersonalIDAndIstStartseiteFalseOrderByLastModifiedDateTimeDesc(userSub);
         verify(personalFilterDomainMapper).entities2Models(entities);
     }
 
@@ -85,7 +89,7 @@ class PersonalFilterServiceTest {
 
         when(authenticationUtils.getUserSub()).thenReturn(userSub);
         when(authenticationUtils.isSubFromUnauthenticatedUser(userSub)).thenReturn(false);
-        when(personalFilterRepository.findByIdAndPersonalID(filterId, userSub)).thenReturn(entity);
+        when(personalFilterRepository.findByIdAndPersonalIDAndIstStartseiteFalse(filterId, userSub)).thenReturn(entity);
         when(personalFilterDomainMapper.entity2Model(entity)).thenReturn(model);
 
         PersonalFilterResponseModel result = personalFilterService.getByFilterID(filterId);
@@ -99,7 +103,7 @@ class PersonalFilterServiceTest {
 
         when(authenticationUtils.getUserSub()).thenReturn(userSub);
         when(authenticationUtils.isSubFromUnauthenticatedUser(userSub)).thenReturn(false);
-        when(personalFilterRepository.findByIdAndPersonalID(filterId, userSub)).thenReturn(null);
+        when(personalFilterRepository.findByIdAndPersonalIDAndIstStartseiteFalse(filterId, userSub)).thenReturn(null);
         when(personalFilterRepository.findById(filterId)).thenReturn(Optional.empty());
 
         assertThrows(EntityNotFoundException.class, () -> personalFilterService.getByFilterID(filterId));
@@ -112,7 +116,7 @@ class PersonalFilterServiceTest {
 
         when(authenticationUtils.getUserSub()).thenReturn(userSub);
         when(authenticationUtils.isSubFromUnauthenticatedUser(userSub)).thenReturn(false);
-        when(personalFilterRepository.findByIdAndPersonalID(filterId, userSub)).thenReturn(null);
+        when(personalFilterRepository.findByIdAndPersonalIDAndIstStartseiteFalse(filterId, userSub)).thenReturn(null);
         when(personalFilterRepository.findById(filterId)).thenReturn(Optional.of(new PersonalFilter()));
 
         assertThrows(NotOwnerException.class, () -> personalFilterService.getByFilterID(filterId));
@@ -129,7 +133,7 @@ class PersonalFilterServiceTest {
 
         when(authenticationUtils.getUserSub()).thenReturn(userSub);
         when(authenticationUtils.isSubFromUnauthenticatedUser(userSub)).thenReturn(false);
-        when(personalFilterRepository.findByIdAndPersonalID(filterId, userSub)).thenReturn(entity);
+        when(personalFilterRepository.findByIdAndPersonalIDAndIstStartseiteFalse(filterId, userSub)).thenReturn(entity);
         when(personalFilterRepository.saveAndFlush(entity)).thenReturn(entity);
         when(personalFilterDomainMapper.entity2Model(entity)).thenReturn(responseModel);
 
@@ -147,7 +151,7 @@ class PersonalFilterServiceTest {
 
         when(authenticationUtils.getUserSub()).thenReturn(userSub);
         when(authenticationUtils.isSubFromUnauthenticatedUser(userSub)).thenReturn(false);
-        when(personalFilterRepository.findByIdAndPersonalID(filterId, userSub)).thenReturn(null);
+        when(personalFilterRepository.findByIdAndPersonalIDAndIstStartseiteFalse(filterId, userSub)).thenReturn(null);
         when(personalFilterRepository.findById(filterId)).thenReturn(Optional.empty());
 
         assertThrows(EntityNotFoundException.class, () -> personalFilterService.update(requestModel));
@@ -162,7 +166,7 @@ class PersonalFilterServiceTest {
 
         when(authenticationUtils.getUserSub()).thenReturn(userSub);
         when(authenticationUtils.isSubFromUnauthenticatedUser(userSub)).thenReturn(false);
-        when(personalFilterRepository.findByIdAndPersonalID(filterId, userSub)).thenReturn(null);
+        when(personalFilterRepository.findByIdAndPersonalIDAndIstStartseiteFalse(filterId, userSub)).thenReturn(null);
         when(personalFilterRepository.findById(filterId)).thenReturn(Optional.of(new PersonalFilter()));
 
         assertThrows(NotOwnerException.class, () -> personalFilterService.update(requestModel));
@@ -178,7 +182,7 @@ class PersonalFilterServiceTest {
 
         when(authenticationUtils.getUserSub()).thenReturn(userSub);
         when(authenticationUtils.isSubFromUnauthenticatedUser(userSub)).thenReturn(false);
-        when(personalFilterRepository.findByIdAndPersonalID(filterId, userSub)).thenReturn(entity);
+        when(personalFilterRepository.findByIdAndPersonalIDAndIstStartseiteFalse(filterId, userSub)).thenReturn(entity);
         doThrow(new ObjectOptimisticLockingFailureException("test", "test"))
             .when(personalFilterRepository)
             .saveAndFlush(entity);
@@ -238,7 +242,7 @@ class PersonalFilterServiceTest {
 
         when(authenticationUtils.getUserSub()).thenReturn(userSub);
         when(authenticationUtils.isSubFromUnauthenticatedUser(userSub)).thenReturn(false);
-        when(personalFilterRepository.findByIdAndPersonalID(filterId, userSub)).thenReturn(entity);
+        when(personalFilterRepository.findByIdAndPersonalIDAndIstStartseiteFalse(filterId, userSub)).thenReturn(entity);
 
         personalFilterService.delete(filterId);
         verify(personalFilterRepository).deleteById(filterId);
@@ -251,7 +255,7 @@ class PersonalFilterServiceTest {
 
         when(authenticationUtils.getUserSub()).thenReturn(userSub);
         when(authenticationUtils.isSubFromUnauthenticatedUser(userSub)).thenReturn(false);
-        when(personalFilterRepository.findByIdAndPersonalID(filterId, userSub)).thenReturn(null);
+        when(personalFilterRepository.findByIdAndPersonalIDAndIstStartseiteFalse(filterId, userSub)).thenReturn(null);
         when(personalFilterRepository.findById(filterId)).thenReturn(Optional.empty());
 
         assertThrows(EntityNotFoundException.class, () -> personalFilterService.delete(filterId));
@@ -264,7 +268,7 @@ class PersonalFilterServiceTest {
 
         when(authenticationUtils.getUserSub()).thenReturn(userSub);
         when(authenticationUtils.isSubFromUnauthenticatedUser(userSub)).thenReturn(false);
-        when(personalFilterRepository.findByIdAndPersonalID(filterId, userSub)).thenReturn(null);
+        when(personalFilterRepository.findByIdAndPersonalIDAndIstStartseiteFalse(filterId, userSub)).thenReturn(null);
         when(personalFilterRepository.findById(filterId)).thenReturn(Optional.of(new PersonalFilter()));
 
         assertThrows(NotOwnerException.class, () -> personalFilterService.delete(filterId));
@@ -277,11 +281,71 @@ class PersonalFilterServiceTest {
 
         when(authenticationUtils.getUserSub()).thenReturn(userSub);
         when(authenticationUtils.isSubFromUnauthenticatedUser(userSub)).thenReturn(false);
-        when(personalFilterRepository.countByPersonalID(userSub)).thenReturn(10L);
+        when(personalFilterRepository.countByPersonalIDAndIstStartseiteFalse(userSub)).thenReturn(10L);
 
         MaxCreationsReachedException exception = assertThrows(MaxCreationsReachedException.class, () ->
             personalFilterService.save(requestModel)
         );
         assertThat(exception.getMessage(), containsString("Maximale Anzahl an persönlichen Filtern erreicht"));
+    }
+
+    @Test
+    void getByFilterIDStartseitenZeileIstNichtAdressierbar() {
+        UUID filterId = UUID.randomUUID();
+        String userSub = "userSub";
+        PersonalFilter startseitenZeile = new PersonalFilter();
+        startseitenZeile.setPersonalID(userSub);
+        startseitenZeile.setIstStartseite(true);
+
+        when(authenticationUtils.getUserSub()).thenReturn(userSub);
+        when(authenticationUtils.isSubFromUnauthenticatedUser(userSub)).thenReturn(false);
+        when(personalFilterRepository.findByIdAndPersonalIDAndIstStartseiteFalse(filterId, userSub)).thenReturn(null);
+        when(personalFilterRepository.findById(filterId)).thenReturn(Optional.of(startseitenZeile));
+
+        assertThrows(EntityNotFoundException.class, () -> personalFilterService.getByFilterID(filterId));
+        assertThrows(EntityNotFoundException.class, () -> personalFilterService.delete(filterId));
+        verify(personalFilterRepository, never()).deleteById(filterId);
+    }
+
+    @Test
+    void saveSetztIstStartseiteFalseUndVerwirftSchnellfilter() throws Exception {
+        String userSub = "userSub";
+        FilterSettingsModel filterSettings = new FilterSettingsModel();
+        filterSettings.setSchnellfilter(SchnellfilterVorgaenge.ZUR_BEARBEITUNG);
+        PersonalFilterRequestModel requestModel = new PersonalFilterRequestModel();
+        requestModel.setFilterSettings(filterSettings);
+        PersonalFilter entity = new PersonalFilter();
+        entity.setIstStartseite(true);
+
+        when(authenticationUtils.getUserSub()).thenReturn(userSub);
+        when(authenticationUtils.isSubFromUnauthenticatedUser(userSub)).thenReturn(false);
+        when(personalFilterDomainMapper.model2Entity(requestModel)).thenReturn(entity);
+        when(personalFilterRepository.saveAndFlush(entity)).thenReturn(entity);
+
+        personalFilterService.save(requestModel);
+
+        assertThat(entity.getIstStartseite(), is(false));
+        assertThat(requestModel.getFilterSettings().getSchnellfilter(), is(nullValue()));
+    }
+
+    @Test
+    void updateVerwirftSchnellfilter() throws Exception {
+        UUID filterId = UUID.randomUUID();
+        String userSub = "userSub";
+        FilterSettingsModel filterSettings = new FilterSettingsModel();
+        filterSettings.setSchnellfilter(SchnellfilterVorgaenge.ABGESCHLOSSEN);
+        PersonalFilterRequestModel requestModel = new PersonalFilterRequestModel();
+        requestModel.setId(filterId);
+        requestModel.setFilterSettings(filterSettings);
+        PersonalFilter entity = new PersonalFilter();
+
+        when(authenticationUtils.getUserSub()).thenReturn(userSub);
+        when(authenticationUtils.isSubFromUnauthenticatedUser(userSub)).thenReturn(false);
+        when(personalFilterRepository.findByIdAndPersonalIDAndIstStartseiteFalse(filterId, userSub)).thenReturn(entity);
+        when(personalFilterRepository.saveAndFlush(entity)).thenReturn(entity);
+
+        personalFilterService.update(requestModel);
+
+        assertThat(requestModel.getFilterSettings().getSchnellfilter(), is(nullValue()));
     }
 }

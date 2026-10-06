@@ -21,11 +21,24 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 public class PersonalFilter extends BaseEntity {
 
+    /**
+     * Der Filtername der systemeigenen Zeile, welche die Startseiteneinstellung eines Nutzers hält.
+     */
+    public static final String STARTSEITE_FILTER_NAME = "Startseiteneinstellung";
+
     @NotEmpty
     private String personalID;
 
     @NotEmpty
     private String filterName;
+
+    /**
+     * Markiert die systemeigene Zeile, welche die Startseiteneinstellung ("Meine Vorgänge") des
+     * Nutzers hält. Je Nutzer existiert maximal eine solche Zeile; sie wird von der Filter-API
+     * nicht ausgeliefert.
+     */
+    @NotNull
+    private Boolean istStartseite = false;
 
     @Valid
     @NotNull

@@ -15,13 +15,16 @@ public interface PersonalFilterDomainMapper {
 
     List<PersonalFilterResponseModel> entities2Models(final List<PersonalFilter> personalFilter);
 
+    // istStartseite wird ausschließlich im Service gesetzt und nie aus dem Request übernommen.
     @Mapping(target = "version", ignore = true)
     @Mapping(target = "createdDateTime", ignore = true)
     @Mapping(target = "lastModifiedDateTime", ignore = true)
+    @Mapping(target = "istStartseite", ignore = true)
     PersonalFilter model2Entity(final PersonalFilterRequestModel personalFilterRequestModel);
 
     @Mapping(target = "version", ignore = true)
     @Mapping(target = "createdDateTime", ignore = true)
     @Mapping(target = "lastModifiedDateTime", ignore = true)
+    @Mapping(target = "istStartseite", ignore = true)
     void updateEntityFromModel(PersonalFilterRequestModel model, @MappingTarget PersonalFilter entity);
 }
