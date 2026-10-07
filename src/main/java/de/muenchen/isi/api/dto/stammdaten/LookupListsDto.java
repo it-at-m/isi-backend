@@ -1,5 +1,6 @@
 package de.muenchen.isi.api.dto.stammdaten;
 
+import de.muenchen.isi.domain.model.stammdaten.LookupListModel;
 import lombok.Data;
 
 @Data
@@ -54,4 +55,6 @@ public class LookupListsDto {
     private LookupListDto sobonOrientierungswertJahrWithoutStandortabfrage;
 
     private LookupListDto bauratenmethodik;
+
+    private LookupListDto kooperation;
 }
