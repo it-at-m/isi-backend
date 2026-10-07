@@ -1,6 +1,5 @@
 package de.muenchen.isi.api.dto.filter;
 
-import de.muenchen.isi.domain.model.enums.SchnellfilterVorgaenge;
 import de.muenchen.isi.domain.model.enums.SortAttribute;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusInfrastruktureinrichtung;
@@ -18,11 +17,6 @@ import org.hibernate.search.engine.search.sort.dsl.SortOrder;
 @NoArgsConstructor
 @AllArgsConstructor
 public class FilterSettingsDto {
-
-    /**
-     * Nur für die Startseiteneinstellung ("Meine Vorgänge") relevant, für echte Filter {@code null}.
-     */
-    private SchnellfilterVorgaenge schnellfilter;
 
     @NotNull
     private SortAttribute sortBy;

@@ -2,30 +2,22 @@ package de.muenchen.isi.domain.service.startseite;
 
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.UserRoleNotAllowedException;
-import de.muenchen.isi.domain.mapper.PersonalFilterDomainMapper;
+import de.muenchen.isi.domain.mapper.BenutzerDomainMapper;
 import de.muenchen.isi.domain.model.enums.SchnellfilterVorgaenge;
 import de.muenchen.isi.domain.model.enums.SortAttribute;
 import de.muenchen.isi.domain.model.startseite.StartseitenEinstellungModel;
-import de.muenchen.isi.infrastructure.entity.filter.FilterSettings;
-import de.muenchen.isi.infrastructure.entity.filter.PersonalFilter;
-import de.muenchen.isi.infrastructure.repository.filter.PersonalFilterRepository;
-import de.muenchen.isi.security.AuthenticationUtils;
+import de.muenchen.isi.domain.service.benutzer.BenutzerService;
+import de.muenchen.isi.infrastructure.entity.benutzer.StartseitenEinstellung;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.search.engine.search.sort.dsl.SortOrder;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 
 /**
  * Verwaltet die persönlichen Voreinstellungen eines Nutzers für den Startseitenbereich "Meine Vorgänge".
  * <p>
- * Die Einstellungen werden gemeinsam mit den persönlichen Filtern in {@link PersonalFilter} gehalten.
- * Je Nutzer existiert dort maximal eine über {@link PersonalFilter#getIstStartseite()} markierte Zeile,
- * welche von der Filter-API nicht ausgeliefert wird.
- * <p>
- * Der Nutzerbezug wird ausschließlich über die {@link AuthenticationUtils} hergestellt und niemals
- * aus dem Request übernommen.
+ * Die Einstellungen sind ein Attribut des {@link de.muenchen.isi.infrastructure.entity.benutzer.Benutzer}
+ * und werden dort als JSON gehalten.
  */
 @Service
 @RequiredArgsConstructor
@@ -41,11 +33,9 @@ public class StartseitenEinstellungService {
     static final String FEHLERMELDUNG_NICHT_AUTHENTIFIZIERT =
         "Sie müssen authentifiziert sein, um die Startseiteneinstellungen zu verwenden";
 
-    private final PersonalFilterDomainMapper personalFilterDomainMapper;
+    private final BenutzerDomainMapper benutzerDomainMapper;
 
-    private final PersonalFilterRepository personalFilterRepository;
-
-    private final AuthenticationUtils authenticationUtils;
+    private final BenutzerService benutzerService;
 
     /**
      * Gibt die Startseiteneinstellungen des authentifizierten Nutzers zurück.
@@ -56,10 +46,9 @@ public class StartseitenEinstellungService {
      * @throws UserRoleNotAllowedException falls der Nutzer nicht authentifiziert ist.
      */
     public StartseitenEinstellungModel getStartseitenEinstellung() throws UserRoleNotAllowedException {
-        final var userSub = this.getSubFromAuthenticatedUser();
-        return personalFilterRepository
-            .findByPersonalIDAndIstStartseiteTrue(userSub)
-            .map(personalFilterDomainMapper::entity2StartseitenEinstellungModel)
+        return benutzerService
+            .findBenutzer(FEHLERMELDUNG_NICHT_AUTHENTIFIZIERT)
+            .map(benutzer -> benutzerDomainMapper.entity2Model(benutzer.getStartseitenEinstellung()))
             .orElseGet(StartseitenEinstellungService::createDefaultModel);
     }
 
@@ -71,69 +60,14 @@ public class StartseitenEinstellungService {
      * @param startseitenEinstellungModel mit den zu speichernden Einstellungen.
      * @return die gespeicherten Startseiteneinstellungen.
      * @throws UserRoleNotAllowedException falls der Nutzer nicht authentifiziert ist.
-     * @throws OptimisticLockingException falls bereits eine neuere Version der Entität gespeichert ist oder
-     *         parallel bereits ein Datensatz für diesen Nutzer angelegt wurde.
+     * @throws OptimisticLockingException falls bereits eine neuere Version der Entität gespeichert ist.
      */
     public StartseitenEinstellungModel save(final StartseitenEinstellungModel startseitenEinstellungModel)
         throws UserRoleNotAllowedException, OptimisticLockingException {
-        final var userSub = this.getSubFromAuthenticatedUser();
-        var entity = personalFilterRepository
-            .findByPersonalIDAndIstStartseiteTrue(userSub)
-            .orElseGet(() -> createEntity(userSub));
-        updateEntityFromModel(startseitenEinstellungModel, entity);
-        try {
-            entity = personalFilterRepository.saveAndFlush(entity);
-        } catch (final ObjectOptimisticLockingFailureException | DataIntegrityViolationException exception) {
-            // Speichern zwei parallele Requests erstmals, verletzt der zweite den Unique-Index auf
-            // (personalid) WHERE ist_startseite. Da die Transaktion danach nur noch zurückgerollt werden
-            // kann, ist ein erneutes Lesen und Speichern hier nicht möglich; der Konflikt wird deshalb
-            // wie ein Versionskonflikt behandelt.
-            final var message = "Die Daten wurden in der Zwischenzeit geändert. Bitte laden Sie die Seite neu!";
-            throw new OptimisticLockingException(message, exception);
-        }
-        return personalFilterDomainMapper.entity2StartseitenEinstellungModel(entity);
-    }
-
-    /**
-     * Gibt den userSub zurück sofern es kein Fallback-Wert ist.
-     *
-     * @return den userSub aus {@link AuthenticationUtils}.
-     * @throws UserRoleNotAllowedException falls der Nutzer den Fallback-Sub zugewiesen hat.
-     */
-    private String getSubFromAuthenticatedUser() throws UserRoleNotAllowedException {
-        return authenticationUtils.getSubFromAuthenticatedUser(FEHLERMELDUNG_NICHT_AUTHENTIFIZIERT);
-    }
-
-    /**
-     * Erzeugt die systemeigene Zeile, welche die Startseiteneinstellung des Nutzers hält.
-     *
-     * @param userSub des Nutzers, dem die Zeile gehört.
-     * @return die noch nicht persistierte Entität.
-     */
-    private static PersonalFilter createEntity(final String userSub) {
-        final var entity = new PersonalFilter();
-        entity.setPersonalID(userSub);
-        entity.setFilterName(PersonalFilter.STARTSEITE_FILTER_NAME);
-        entity.setIstStartseite(true);
-        entity.setFilterSettings(new FilterSettings());
-        return entity;
-    }
-
-    /**
-     * Überträgt die Startseiteneinstellungen in die Entität. Die übrigen Filtereinstellungen der
-     * Startseiten-Zeile bleiben ungenutzt und damit leer.
-     *
-     * @param model mit den zu übernehmenden Einstellungen.
-     * @param entity in welche die Einstellungen übertragen werden.
-     */
-    private static void updateEntityFromModel(final StartseitenEinstellungModel model, final PersonalFilter entity) {
-        if (entity.getFilterSettings() == null) {
-            entity.setFilterSettings(new FilterSettings());
-        }
-        final var filterSettings = entity.getFilterSettings();
-        filterSettings.setSchnellfilter(model.getSchnellfilter());
-        filterSettings.setSortBy(model.getSortBy());
-        filterSettings.setSortOrder(model.getSortOrder());
+        final var benutzer = benutzerService.getOrCreateBenutzer(FEHLERMELDUNG_NICHT_AUTHENTIFIZIERT);
+        benutzer.setStartseitenEinstellung(benutzerDomainMapper.model2Entity(startseitenEinstellungModel));
+        final var gespeichert = benutzerService.save(benutzer);
+        return benutzerDomainMapper.entity2Model(gespeichert.getStartseitenEinstellung());
     }
 
     /**
