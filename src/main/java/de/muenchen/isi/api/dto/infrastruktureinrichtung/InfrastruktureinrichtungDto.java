@@ -51,6 +51,10 @@ import lombok.ToString;
     @JsonSubTypes.Type(value = KindergartenDto.class, name = InfrastruktureinrichtungTyp.Values.KINDERGARTEN),
     @JsonSubTypes.Type(value = KinderkrippeDto.class, name = InfrastruktureinrichtungTyp.Values.KINDERKRIPPE),
     @JsonSubTypes.Type(value = MittelschuleDto.class, name = InfrastruktureinrichtungTyp.Values.MITTELSCHULE),
+    @JsonSubTypes.Type(
+        value = NachbarschaftstreffDto.class,
+        name = InfrastruktureinrichtungTyp.Values.NACHBARSCHAFTSTREFF
+    ),
 })
 @Schema(
     description = "InfrastruktureinrichtungDto",
@@ -68,6 +72,10 @@ import lombok.ToString;
         @DiscriminatorMapping(value = InfrastruktureinrichtungTyp.Values.KINDERGARTEN, schema = KindergartenDto.class),
         @DiscriminatorMapping(value = InfrastruktureinrichtungTyp.Values.KINDERKRIPPE, schema = KinderkrippeDto.class),
         @DiscriminatorMapping(value = InfrastruktureinrichtungTyp.Values.MITTELSCHULE, schema = MittelschuleDto.class),
+        @DiscriminatorMapping(
+            value = InfrastruktureinrichtungTyp.Values.NACHBARSCHAFTSTREFF,
+            schema = NachbarschaftstreffDto.class
+        ),
     }
 )
 public abstract class InfrastruktureinrichtungDto extends BaseEntityDto {
