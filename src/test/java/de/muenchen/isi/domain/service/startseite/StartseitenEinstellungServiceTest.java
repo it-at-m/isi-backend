@@ -106,6 +106,60 @@ class StartseitenEinstellungServiceTest {
     }
 
     @Test
+    void saveUndGetUnterstuetzenDenSchnellfilterEntwuerfe() throws Exception {
+        final var model = createModel(SchnellfilterVorgaenge.ENTWUERFE);
+        model.setSortBy(SortAttribute.CREATED_DATE_TIME);
+        final var einstellung = createEinstellung(SchnellfilterVorgaenge.ENTWUERFE);
+        einstellung.setSortBy(SortAttribute.CREATED_DATE_TIME);
+
+        final var benutzer = createBenutzer(null);
+        when(benutzerService.getOrCreateBenutzer(any())).thenReturn(benutzer);
+        when(benutzerDomainMapper.model2Entity(model)).thenReturn(einstellung);
+        when(benutzerService.save(any())).thenAnswer(invocation -> invocation.getArgument(0));
+        when(benutzerDomainMapper.entity2Model(einstellung)).thenReturn(model);
+
+        final var result = startseitenEinstellungService.save(model);
+
+        final var captor = ArgumentCaptor.forClass(Benutzer.class);
+        verify(benutzerService).save(captor.capture());
+        assertThat(
+            captor.getValue().getStartseitenEinstellung().getSchnellfilter(),
+            is(SchnellfilterVorgaenge.ENTWUERFE)
+        );
+        assertThat(result, is(model));
+    }
+
+    @Test
+    void saveLegtNeueStartseitenZeileAn() throws Exception {
+        final var model = createModel(SchnellfilterVorgaenge.ZUR_BEARBEITUNG);
+        model.setSortBy(SortAttribute.FRIST_BEARBEITUNG);
+        model.setSortOrder(SortOrder.ASC);
+
+        final var einstellung = createEinstellung(SchnellfilterVorgaenge.ZUR_BEARBEITUNG);
+        einstellung.setSortBy(SortAttribute.FRIST_BEARBEITUNG);
+        einstellung.setSortOrder(SortOrder.ASC);
+
+        when(benutzerService.getOrCreateBenutzer(any())).thenReturn(createBenutzer(null));
+        when(benutzerDomainMapper.model2Entity(model)).thenReturn(einstellung);
+        when(benutzerService.save(any())).thenAnswer(invocation -> invocation.getArgument(0));
+        when(benutzerDomainMapper.entity2Model(einstellung)).thenReturn(model);
+
+        final var result = startseitenEinstellungService.save(model);
+
+        final var captor = ArgumentCaptor.forClass(Benutzer.class);
+        verify(benutzerService).save(captor.capture());
+        final var gespeichert = captor.getValue();
+        assertThat(gespeichert.getPersonalID(), is(USER_SUB));
+        assertThat(
+            gespeichert.getStartseitenEinstellung().getSchnellfilter(),
+            is(SchnellfilterVorgaenge.ZUR_BEARBEITUNG)
+        );
+        assertThat(gespeichert.getStartseitenEinstellung().getSortBy(), is(SortAttribute.FRIST_BEARBEITUNG));
+        assertThat(gespeichert.getStartseitenEinstellung().getSortOrder(), is(SortOrder.ASC));
+        assertThat(result, is(model));
+    }
+
+    @Test
     void saveReichtOptimisticLockingExceptionDurch() throws Exception {
         final var model = createModel(SchnellfilterVorgaenge.ALLE);
         when(benutzerService.getOrCreateBenutzer(any())).thenReturn(createBenutzer(null));
