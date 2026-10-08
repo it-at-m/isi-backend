@@ -7,7 +7,6 @@ import de.muenchen.isi.domain.model.filter.PersonalFilterRequestModel;
 import de.muenchen.isi.domain.model.filter.PersonalFilterResponseModel;
 import java.util.List;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 
 @Mapper(config = MapstructConfiguration.class)
 public interface PersonalFilterApiMapper {
@@ -15,6 +14,5 @@ public interface PersonalFilterApiMapper {
 
     List<PersonalFilterResponseDto> models2Dtos(final List<PersonalFilterResponseModel> personalFilterResponseModel);
 
-    @Mapping(target = "personalID", ignore = true)
     PersonalFilterRequestModel dto2Model(final PersonalFilterRequestDto personalFilterRequestDto);
 }

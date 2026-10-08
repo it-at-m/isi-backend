@@ -10,13 +10,13 @@ import static org.mockito.Mockito.when;
 
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.UserRoleNotAllowedException;
-import de.muenchen.isi.domain.mapper.StartseitenEinstellungDomainMapper;
+import de.muenchen.isi.domain.mapper.BenutzerDomainMapper;
 import de.muenchen.isi.domain.model.enums.SchnellfilterVorgaenge;
 import de.muenchen.isi.domain.model.enums.SortAttribute;
 import de.muenchen.isi.domain.model.startseite.StartseitenEinstellungModel;
-import de.muenchen.isi.infrastructure.entity.startseite.StartseitenEinstellung;
-import de.muenchen.isi.infrastructure.repository.startseite.StartseitenEinstellungRepository;
-import de.muenchen.isi.security.AuthenticationUtils;
+import de.muenchen.isi.domain.service.benutzer.BenutzerService;
+import de.muenchen.isi.infrastructure.entity.benutzer.Benutzer;
+import de.muenchen.isi.infrastructure.entity.benutzer.StartseitenEinstellung;
 import java.util.Optional;
 import org.hibernate.search.engine.search.sort.dsl.SortOrder;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,11 +25,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
-import org.springframework.orm.ObjectOptimisticLockingFailureException;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
@@ -38,46 +36,51 @@ class StartseitenEinstellungServiceTest {
     private static final String USER_SUB = "user-sub";
 
     @Mock
-    private StartseitenEinstellungDomainMapper startseitenEinstellungDomainMapper;
+    private BenutzerDomainMapper benutzerDomainMapper;
 
     @Mock
-    private StartseitenEinstellungRepository startseitenEinstellungRepository;
-
-    @Spy
-    private AuthenticationUtils authenticationUtils;
+    private BenutzerService benutzerService;
 
     private StartseitenEinstellungService startseitenEinstellungService;
 
     @BeforeEach
     void setUp() {
-        startseitenEinstellungService = new StartseitenEinstellungService(
-            startseitenEinstellungDomainMapper,
-            startseitenEinstellungRepository,
-            authenticationUtils
-        );
-        Mockito.reset(startseitenEinstellungDomainMapper, startseitenEinstellungRepository, authenticationUtils);
-        when(authenticationUtils.getUserSub()).thenReturn(USER_SUB);
-        when(authenticationUtils.isSubFromUnauthenticatedUser(USER_SUB)).thenReturn(false);
+        startseitenEinstellungService = new StartseitenEinstellungService(benutzerDomainMapper, benutzerService);
+        Mockito.reset(benutzerDomainMapper, benutzerService);
     }
 
     @Test
     void getStartseitenEinstellungLiefertDefaultsOhneDatensatz() throws Exception {
-        when(startseitenEinstellungRepository.findByPersonalID(USER_SUB)).thenReturn(Optional.empty());
+        when(benutzerService.findBenutzer(any())).thenReturn(Optional.empty());
 
         final var result = startseitenEinstellungService.getStartseitenEinstellung();
 
         assertThat(result.getSchnellfilter(), is(StartseitenEinstellungService.DEFAULT_SCHNELLFILTER));
         assertThat(result.getSortBy(), is(StartseitenEinstellungService.DEFAULT_SORT_BY));
         assertThat(result.getSortOrder(), is(StartseitenEinstellungService.DEFAULT_SORT_ORDER));
-        verify(startseitenEinstellungRepository, never()).saveAndFlush(any());
+        verify(benutzerService, never()).save(any());
+    }
+
+    @Test
+    void getStartseitenEinstellungLiefertDefaultsWennDasAttributNochLeerIst() throws Exception {
+        // Ein Nutzer kann bereits persönliche Filter besitzen, ohne die Startseite konfiguriert zu haben.
+        final var benutzer = createBenutzer(null);
+        when(benutzerService.findBenutzer(any())).thenReturn(Optional.of(benutzer));
+        when(benutzerDomainMapper.entity2Model(null)).thenReturn(null);
+
+        final var result = startseitenEinstellungService.getStartseitenEinstellung();
+
+        assertThat(result.getSchnellfilter(), is(StartseitenEinstellungService.DEFAULT_SCHNELLFILTER));
+        assertThat(result.getSortBy(), is(StartseitenEinstellungService.DEFAULT_SORT_BY));
+        assertThat(result.getSortOrder(), is(StartseitenEinstellungService.DEFAULT_SORT_ORDER));
     }
 
     @Test
     void getStartseitenEinstellungLiefertGespeichertenDatensatz() throws Exception {
-        final var entity = createEntity();
-        final var model = createModel(SchnellfilterVorgaenge.ZUR_KENNTNIS, SortAttribute.FRIST_BEARBEITUNG);
-        when(startseitenEinstellungRepository.findByPersonalID(USER_SUB)).thenReturn(Optional.of(entity));
-        when(startseitenEinstellungDomainMapper.entity2Model(entity)).thenReturn(model);
+        final var einstellung = createEinstellung(SchnellfilterVorgaenge.ZUR_KENNTNIS);
+        final var model = createModel(SchnellfilterVorgaenge.ZUR_KENNTNIS);
+        when(benutzerService.findBenutzer(any())).thenReturn(Optional.of(createBenutzer(einstellung)));
+        when(benutzerDomainMapper.entity2Model(einstellung)).thenReturn(model);
 
         final var result = startseitenEinstellungService.getStartseitenEinstellung();
 
@@ -85,76 +88,65 @@ class StartseitenEinstellungServiceTest {
     }
 
     @Test
-    void saveLegtNeuenDatensatzMitUserSubAn() throws Exception {
-        final var model = createModel(SchnellfilterVorgaenge.ZUR_BEARBEITUNG, SortAttribute.FRIST_BEARBEITUNG);
-        when(startseitenEinstellungRepository.findByPersonalID(USER_SUB)).thenReturn(Optional.empty());
-        when(startseitenEinstellungRepository.saveAndFlush(any())).thenAnswer(invocation -> invocation.getArgument(0));
-        when(startseitenEinstellungDomainMapper.entity2Model(any())).thenReturn(model);
+    void saveUebernimmtDieEinstellungInDenBenutzerDatensatz() throws Exception {
+        final var model = createModel(SchnellfilterVorgaenge.ZUR_BEARBEITUNG);
+        final var einstellung = createEinstellung(SchnellfilterVorgaenge.ZUR_BEARBEITUNG);
+        final var benutzer = createBenutzer(null);
+        when(benutzerService.getOrCreateBenutzer(any())).thenReturn(benutzer);
+        when(benutzerDomainMapper.model2Entity(model)).thenReturn(einstellung);
+        when(benutzerService.save(any())).thenAnswer(invocation -> invocation.getArgument(0));
+        when(benutzerDomainMapper.entity2Model(einstellung)).thenReturn(model);
 
         final var result = startseitenEinstellungService.save(model);
 
-        final var captor = ArgumentCaptor.forClass(StartseitenEinstellung.class);
-        verify(startseitenEinstellungRepository).saveAndFlush(captor.capture());
-        assertThat(captor.getValue().getPersonalID(), is(USER_SUB));
-        verify(startseitenEinstellungDomainMapper).updateEntityFromModel(model, captor.getValue());
+        final var captor = ArgumentCaptor.forClass(Benutzer.class);
+        verify(benutzerService).save(captor.capture());
+        assertThat(captor.getValue().getStartseitenEinstellung(), is(einstellung));
         assertThat(result, is(model));
     }
 
     @Test
-    void saveAktualisiertBestehendenDatensatz() throws Exception {
-        final var entity = createEntity();
-        final var model = createModel(SchnellfilterVorgaenge.ABGESCHLOSSEN, SortAttribute.LAST_MODIFIED_DATE_TIME);
-        when(startseitenEinstellungRepository.findByPersonalID(USER_SUB)).thenReturn(Optional.of(entity));
-        when(startseitenEinstellungRepository.saveAndFlush(entity)).thenReturn(entity);
-        when(startseitenEinstellungDomainMapper.entity2Model(entity)).thenReturn(model);
-
-        final var result = startseitenEinstellungService.save(model);
-
-        verify(startseitenEinstellungDomainMapper).updateEntityFromModel(model, entity);
-        assertThat(result, is(model));
-    }
-
-    @Test
-    void saveWirftOptimisticLockingException() {
-        final var entity = createEntity();
-        final var model = createModel(SchnellfilterVorgaenge.ALLE, SortAttribute.CREATED_DATE_TIME);
-        when(startseitenEinstellungRepository.findByPersonalID(USER_SUB)).thenReturn(Optional.of(entity));
-        when(startseitenEinstellungRepository.saveAndFlush(entity)).thenThrow(
-            new ObjectOptimisticLockingFailureException(StartseitenEinstellung.class, entity.getId())
-        );
+    void saveReichtOptimisticLockingExceptionDurch() throws Exception {
+        final var model = createModel(SchnellfilterVorgaenge.ALLE);
+        when(benutzerService.getOrCreateBenutzer(any())).thenReturn(createBenutzer(null));
+        when(benutzerService.save(any())).thenThrow(new OptimisticLockingException("Konflikt", new RuntimeException()));
 
         assertThrows(OptimisticLockingException.class, () -> startseitenEinstellungService.save(model));
     }
 
     @Test
-    void nichtAuthentifizierterNutzerWirdAbgelehnt() {
-        when(authenticationUtils.isSubFromUnauthenticatedUser(USER_SUB)).thenReturn(true);
+    void nichtAuthentifizierterNutzerWirdAbgelehnt() throws Exception {
+        when(benutzerService.findBenutzer(any())).thenThrow(new UserRoleNotAllowedException("nicht erlaubt"));
+        when(benutzerService.getOrCreateBenutzer(any())).thenThrow(new UserRoleNotAllowedException("nicht erlaubt"));
 
         assertThrows(UserRoleNotAllowedException.class, () ->
             startseitenEinstellungService.getStartseitenEinstellung()
         );
         assertThrows(UserRoleNotAllowedException.class, () ->
-            startseitenEinstellungService.save(createModel(SchnellfilterVorgaenge.ALLE, SortAttribute.NAME))
+            startseitenEinstellungService.save(createModel(SchnellfilterVorgaenge.ALLE))
         );
-        verify(startseitenEinstellungRepository, never()).saveAndFlush(any());
+        verify(benutzerService, never()).save(any());
     }
 
-    private static StartseitenEinstellung createEntity() {
-        final var entity = new StartseitenEinstellung();
-        entity.setPersonalID(USER_SUB);
-        entity.setSchnellfilter(SchnellfilterVorgaenge.ALLE);
-        entity.setSortBy(SortAttribute.CREATED_DATE_TIME);
-        entity.setSortOrder(SortOrder.DESC);
-        return entity;
+    private static Benutzer createBenutzer(final StartseitenEinstellung startseitenEinstellung) {
+        final var benutzer = new Benutzer();
+        benutzer.setPersonalID(USER_SUB);
+        benutzer.setStartseitenEinstellung(startseitenEinstellung);
+        return benutzer;
     }
 
-    private static StartseitenEinstellungModel createModel(
-        final SchnellfilterVorgaenge schnellfilter,
-        final SortAttribute sortBy
-    ) {
+    private static StartseitenEinstellung createEinstellung(final SchnellfilterVorgaenge schnellfilter) {
+        final var einstellung = new StartseitenEinstellung();
+        einstellung.setSchnellfilter(schnellfilter);
+        einstellung.setSortBy(SortAttribute.FRIST_BEARBEITUNG);
+        einstellung.setSortOrder(SortOrder.ASC);
+        return einstellung;
+    }
+
+    private static StartseitenEinstellungModel createModel(final SchnellfilterVorgaenge schnellfilter) {
         final var model = new StartseitenEinstellungModel();
         model.setSchnellfilter(schnellfilter);
-        model.setSortBy(sortBy);
+        model.setSortBy(SortAttribute.FRIST_BEARBEITUNG);
         model.setSortOrder(SortOrder.ASC);
         return model;
     }
