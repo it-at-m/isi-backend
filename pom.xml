@@ -42,7 +42,7 @@
         <org.projectlombok.lombok.version>1.18.48</org.projectlombok.lombok.version>
         <org.projectlombok.mapstructbinding.version>0.2.0</org.projectlombok.mapstructbinding.version>
         <mapstruct.version>1.6.3</mapstruct.version>
-        <s3.integration.version>4.0.1</s3.integration.version>
+        <s3.integration.version>4.1.1</s3.integration.version>
         <!-- https://mvnrepository.com/artifact/org.geotools/gt-main?repo=geotools-releases
         (Register: GeoTools) -->
         <geotools.version>35.0</geotools.version>
