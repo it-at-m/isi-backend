@@ -51,7 +51,7 @@
         <icu4j.version>78.3</icu4j.version>
         <hibernate.search>8.4.0.Final</hibernate.search>
         <openapi-generator-version>7.25.0</openapi-generator-version>
-        <jackson.databind.nullable.version>0.2.11</jackson.databind.nullable.version>
+        <jackson.databind.nullable.version>0.2.12</jackson.databind.nullable.version>
         <shedlock.version>7.10.1</shedlock.version>
     </properties>
 
