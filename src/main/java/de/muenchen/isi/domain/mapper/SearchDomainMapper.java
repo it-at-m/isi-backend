@@ -28,8 +28,12 @@ import de.muenchen.isi.infrastructure.entity.common.MultiPolygonGeometry;
 import de.muenchen.isi.infrastructure.entity.common.Stadtbezirk;
 import de.muenchen.isi.infrastructure.entity.common.VerortungMultiPolygon;
 import de.muenchen.isi.infrastructure.entity.common.VerortungPoint;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.AnlassPlanung;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ResultType;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Infrastruktureinrichtung;
+import java.lang.IllegalAccessException;
+import java.lang.NoSuchFieldException;
+import java.lang.reflect.Field;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -136,6 +140,7 @@ public abstract class SearchDomainMapper {
         @Mapping(target = "type", constant = SearchResultType.Values.INFRASTRUKTUREINRICHTUNG),
         @Mapping(target = "coordinate", ignore = true),
         @Mapping(target = "zugehoerigesBauvorhaben", ignore = true),
+        @Mapping(target = "anlassPlanung", ignore = true),
     })
     public abstract InfrastruktureinrichtungSearchResultModel entity2SearchResultModel(
         final Infrastruktureinrichtung entity
@@ -161,6 +166,12 @@ public abstract class SearchDomainMapper {
         } else {
             model.setCoordinate(null);
         }
+        try {
+            Field anlassPlanungField = entity.getClass().getDeclaredField("anlassPlanung");
+            anlassPlanungField.setAccessible(true); // Zugriff auf private/protected Felder erlauben
+            Object anlassPlanungValue = anlassPlanungField.get(entity);
+            model.setAnlassPlanung((AnlassPlanung) anlassPlanungValue);
+        } catch (NoSuchFieldException | IllegalAccessException e) {}
     }
 
     public UUID map(final Bauvorhaben bauvorhaben) {

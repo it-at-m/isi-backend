@@ -92,10 +92,10 @@ class InfrastruktureinrichtungServiceTest {
         Grundschule grundschule = new Grundschule();
         grundschule.setNameEinrichtung("Grundschule");
         grundschule.setStatus(StatusInfrastruktureinrichtung.BESTAND);
-        grundschule.setAnlassPlanung(AnlassPlanung.SCHLIESSUNG);
         grundschule.setSchule(new Schule());
         grundschule.getSchule().setAnzahlKlassen(5);
         grundschule.getSchule().setAnzahlPlaetze(50);
+        grundschule.getSchule().setAnlassPlanung(AnlassPlanung.SCHLIESSUNG);
 
         infrastruktureinrichtungRepository.saveAll(List.of(kinderkrippe1, kinderkrippe2, kindergarten, grundschule));
     }
@@ -139,10 +139,10 @@ class InfrastruktureinrichtungServiceTest {
         MittelschuleModel mittelschule = new MittelschuleModel();
         mittelschule.setNameEinrichtung("Mittelschule");
         mittelschule.setStatus(StatusInfrastruktureinrichtung.UNGESICHERTE_PLANUNG);
-        mittelschule.setAnlassPlanung(AnlassPlanung.SCHLIESSUNG);
         mittelschule.setSchule(new SchuleModel());
         mittelschule.getSchule().setAnzahlKlassen(3);
         mittelschule.getSchule().setAnzahlPlaetze(30);
+        mittelschule.getSchule().setAnlassPlanung(AnlassPlanung.SCHLIESSUNG);
         mittelschule.setBauvorhaben(bauvorhaben.getId());
 
         final var savedMittelschule = this.infrastruktureinrichtungService.saveInfrastruktureinrichtung(mittelschule);
@@ -181,10 +181,10 @@ class InfrastruktureinrichtungServiceTest {
         MittelschuleModel mittelschule = new MittelschuleModel();
         mittelschule.setNameEinrichtung("Mittelschule");
         mittelschule.setStatus(StatusInfrastruktureinrichtung.UNGESICHERTE_PLANUNG);
-        mittelschule.setAnlassPlanung(AnlassPlanung.SCHLIESSUNG);
         mittelschule.setSchule(new SchuleModel());
         mittelschule.getSchule().setAnzahlKlassen(3);
         mittelschule.getSchule().setAnzahlPlaetze(30);
+        mittelschule.getSchule().setAnlassPlanung(AnlassPlanung.SCHLIESSUNG);
         mittelschule.setBauvorhaben(bauvorhaben.getId());
 
         final var savedMittelschule = this.infrastruktureinrichtungService.saveInfrastruktureinrichtung(mittelschule);

@@ -13,7 +13,6 @@ import de.muenchen.isi.api.dto.common.VerortungPointDto;
 import de.muenchen.isi.api.validation.EinrichtungstraegerValid;
 import de.muenchen.isi.api.validation.FertigstellungsjahrValid;
 import de.muenchen.isi.api.validation.NotUnspecified;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.AnlassPlanung;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusInfrastruktureinrichtung;
 import io.swagger.v3.oas.annotations.media.DiscriminatorMapping;
@@ -105,9 +104,6 @@ public abstract class InfrastruktureinrichtungDto extends BaseEntityDto {
     @NotNull
     @NotUnspecified
     private StatusInfrastruktureinrichtung status;
-
-    @NotNull
-    private AnlassPlanung anlassPlanung;
 
     private BigDecimal flaecheGesamtgrundstueck;
 

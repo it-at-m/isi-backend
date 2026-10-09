@@ -33,4 +33,8 @@ public class Nachbarschaftstreff extends Infrastruktureinrichtung {
     @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "varchar(255) not null check (sobon_relevant != 'UNSPECIFIED')")
     private UncertainBoolean sobonRelevant;
+
+    public String getAnlassPlanung() {
+        return "-";
+    }
 }
