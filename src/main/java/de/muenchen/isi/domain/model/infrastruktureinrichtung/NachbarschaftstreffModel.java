@@ -22,6 +22,4 @@ public class NachbarschaftstreffModel extends InfrastruktureinrichtungModel {
     private String kooperationFreieEingabe;
 
     private UncertainBoolean sobonRelevant;
-
-    private List<DokumentModel> dokumente;
 }

@@ -24,7 +24,4 @@ public class NachbarschaftstreffDto extends InfrastruktureinrichtungDto {
     private String kooperationFreieEingabe;
 
     private UncertainBoolean sobonRelevant;
-
-    @HasAllowedNumberOfDocuments
-    private List<@Valid DokumentDto> dokumente;
 }
