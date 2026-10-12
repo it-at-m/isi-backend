@@ -14,7 +14,8 @@ import org.hibernate.search.engine.search.sort.dsl.SortOrder;
 import org.springframework.stereotype.Service;
 
 /**
- * Verwaltet die persönlichen Voreinstellungen eines Nutzers für den Startseitenbereich "Meine Vorgänge".
+ * Verwaltet die persönlichen Voreinstellungen eines Nutzers für die Startseite, d.h. für den Bereich
+ * "Meine Vorgänge" und den beim Laden der Anwendung vorbelegten Standard-Filter der Übersicht.
  * <p>
  * Die Einstellungen sind ein Attribut des {@link de.muenchen.isi.infrastructure.entity.benutzer.Benutzer}
  * und werden dort als JSON gehalten.

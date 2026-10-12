@@ -121,6 +121,8 @@ public class PersonalFilterService {
 
     /**
      * Löscht einen spezifisch angegebenen Filter.
+     * <p>
+     * Ist der Filter in den Startseiteneinstellungen als Standard-Filter hinterlegt, wird diese Referenz entfernt.
      *
      * @param filterId des zu löschenden persönlichen Filters
      * @throws EntityNotFoundException falls der Nutzer keinen persönlichen Filter mit dieser ID besitzt
@@ -132,6 +134,10 @@ public class PersonalFilterService {
         final var benutzer = benutzerService.getOrCreateBenutzer(FEHLERMELDUNG_NICHT_AUTHENTIFIZIERT);
         final var filter = this.getFilter(benutzer.getPersoenlicheFilter(), filterId);
         benutzer.getPersoenlicheFilter().remove(filter);
+        final var startseitenEinstellung = benutzer.getStartseitenEinstellung();
+        if (startseitenEinstellung != null && Objects.equals(startseitenEinstellung.getStandardFilterId(), filterId)) {
+            startseitenEinstellung.setStandardFilterId(null);
+        }
         benutzerService.save(benutzer);
     }
 
