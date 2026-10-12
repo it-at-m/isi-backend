@@ -31,4 +31,6 @@ ALTER TABLE IF EXISTS isidbuser.grundschule
 ALTER TABLE IF EXISTS isidbuser.mittelschule
     ADD COLUMN anlass_planung character varying(255) NOT NULL DEFAULT 'UNSPECIFIED';
 
+ALTER TABLE IF EXISTS isidbuser.personal_filter
+    ADD COLUMN select_nachbarschaftstreff BOOLEAN NOT NULL;
 END;
