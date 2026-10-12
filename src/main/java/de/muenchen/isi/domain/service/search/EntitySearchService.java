@@ -88,57 +88,49 @@ public class EntitySearchService {
         this.prepareFilterGemeinsameAttribute(filterAttributeMap, searchQueryAndSortingInformation);
 
         // Erstellen der Hibernate-Search-Suchquery
-        final var searchQueryOptions =
-            Search.session(entityManager)
-                .search(searchableEntities)
-                .select(f -> f.composite().as(recordClass))
-                .where((function, root) -> {
-                    // Verarbeitung der angepassten Suchquery
-                    root.add(searchPredicateFactory -> {
-                        if (StringUtils.isNotEmpty(adaptedSearchQuery)) {
-                            // Suche entsprechend der gegebenen Query.
-                            return function
-                                // https://docs.jboss.org/hibernate/stable/search/reference/en-US/html_single/#search-dsl-predicate-simple-query-string
-                                .simpleQueryString()
-                                .fields(searchableAttributes)
-                                .matching(adaptedSearchQuery)
-                                .defaultOperator(BooleanOperator.AND);
-                        } else {
-                            // Zurückgeben aller Entitäten.
-                            return function.matchAll();
-                        }
-                    });
-                    this.createFilterGemeinsameAttribute(filterAttributeMap, root, function);
-                    this.createFilterRealisierungVonBis(searchQueryAndSortingInformation, root, function);
-                    this.createFilterGeplanteWohneinheitenGesamtVonBis(
-                        searchQueryAndSortingInformation,
-                        root,
-                        function
-                    );
-                    this.createFilterGeplanteGeschossflaecheWohnenGesamtVonBis(
-                        searchQueryAndSortingInformation,
-                        root,
-                        function
-                    );
-                })
-                // Sortierung der Suchergebnisse.
-                // https://docs.jboss.org/hibernate/stable/search/reference/en-US/html_single/#query-sorting
-                .sort(function -> {
-                    final var sortBy = this.determineSortAttribute(
-                        searchQueryAndSortingInformation,
-                        searchableEntities
-                    );
-                    final var sortOrder = searchQueryAndSortingInformation.getSortOrder();
-                    if (SortAttribute.NAME.equals(sortBy)) {
-                        return function.field("name_sort").order(sortOrder);
-                    } else if (SortAttribute.CREATED_DATE_TIME.equals(sortBy)) {
-                        return function.field("createdDateTime").order(sortOrder);
-                    } else if (SortAttribute.FRIST_BEARBEITUNG.equals(sortBy)) {
-                        return function.field("fristBearbeitung").missing().last().order(sortOrder);
+        final var searchQueryOptions = Search.session(entityManager)
+            .search(searchableEntities)
+            .select(f -> f.composite().as(recordClass))
+            .where((function, root) -> {
+                // Verarbeitung der angepassten Suchquery
+                root.add(searchPredicateFactory -> {
+                    if (StringUtils.isNotEmpty(adaptedSearchQuery)) {
+                        // Suche entsprechend der gegebenen Query.
+                        return function
+                            // https://docs.jboss.org/hibernate/stable/search/reference/en-US/html_single/#search-dsl-predicate-simple-query-string
+                            .simpleQueryString()
+                            .fields(searchableAttributes)
+                            .matching(adaptedSearchQuery)
+                            .defaultOperator(BooleanOperator.AND);
                     } else {
-                        return function.field("lastModifiedDateTime").order(sortOrder);
+                        // Zurückgeben aller Entitäten.
+                        return function.matchAll();
                     }
                 });
+                this.createFilterGemeinsameAttribute(filterAttributeMap, root, function);
+                this.createFilterRealisierungVonBis(searchQueryAndSortingInformation, root, function);
+                this.createFilterGeplanteWohneinheitenGesamtVonBis(searchQueryAndSortingInformation, root, function);
+                this.createFilterGeplanteGeschossflaecheWohnenGesamtVonBis(
+                    searchQueryAndSortingInformation,
+                    root,
+                    function
+                );
+            })
+            // Sortierung der Suchergebnisse.
+            // https://docs.jboss.org/hibernate/stable/search/reference/en-US/html_single/#query-sorting
+            .sort(function -> {
+                final var sortBy = this.determineSortAttribute(searchQueryAndSortingInformation, searchableEntities);
+                final var sortOrder = searchQueryAndSortingInformation.getSortOrder();
+                if (SortAttribute.NAME.equals(sortBy)) {
+                    return function.field("name_sort").order(sortOrder);
+                } else if (SortAttribute.CREATED_DATE_TIME.equals(sortBy)) {
+                    return function.field("createdDateTime").order(sortOrder);
+                } else if (SortAttribute.FRIST_BEARBEITUNG.equals(sortBy)) {
+                    return function.field("fristBearbeitung").missing().last().order(sortOrder);
+                } else {
+                    return function.field("lastModifiedDateTime").order(sortOrder);
+                }
+            });
 
         return this.executeSearchQuery(searchQueryAndSortingInformation, searchQueryOptions);
     }
