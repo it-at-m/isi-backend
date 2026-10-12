@@ -54,6 +54,9 @@ public class FilterSettingsDto {
     @NotNull
     private Boolean selectMittelschule;
 
+    @NotNull
+    private Boolean selectNachbarschaftstreff;
+
     private List<String> stadtbezirkNummer;
 
     private List<String> kitaplanungsbereichKitaPlbT;

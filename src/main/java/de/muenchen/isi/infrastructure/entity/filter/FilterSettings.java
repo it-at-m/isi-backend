@@ -61,6 +61,9 @@ public class FilterSettings {
     @NotNull
     private Boolean selectMittelschule;
 
+    @NotNull
+    private Boolean selectNachbarschaftstreff;
+
     @ElementCollection
     @CollectionTable(
         indexes = { @Index(name = "personal_filter_stadtbezirk_nummer_id_idx", columnList = "personal_filter_id") }
