@@ -15,6 +15,7 @@ import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.HausFuerKi
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Kindergarten;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Kinderkrippe;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Mittelschule;
+import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Nachbarschaftstreff;
 import java.util.HashSet;
 import java.util.List;
 import org.junit.jupiter.api.Assertions;
@@ -329,7 +330,8 @@ class SearchPreparationServiceTest {
                     HausFuerKinder.class,
                     Kindergarten.class,
                     Kinderkrippe.class,
-                    Mittelschule.class
+                    Mittelschule.class,
+                    Nachbarschaftstreff.class
                 )
             )
         );

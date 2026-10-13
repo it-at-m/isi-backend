@@ -214,7 +214,7 @@ class EntitySearchServiceTest {
         s3.setSelectKindergarten(true);
         s3.setSelectKinderkrippe(true);
         s3.setSelectMittelschule(true);
-        s2.setSelectNachbarschaftstreff(false);
+        s3.setSelectNachbarschaftstreff(true);
         Class<?> r3 = entitySearchService.determineRecordClass(s3);
         assertThat(r3, is(InfrastrukturRecord.class));
 
@@ -229,7 +229,7 @@ class EntitySearchServiceTest {
         s4.setSelectKindergarten(false);
         s4.setSelectKinderkrippe(false);
         s4.setSelectMittelschule(false);
-        s2.setSelectNachbarschaftstreff(false);
+        s4.setSelectNachbarschaftstreff(false);
         Class<?> r4 = entitySearchService.determineRecordClass(s4);
         assertThat(r4, is(BauvorhabenInfrastruktureinrichtungRecord.class));
 
@@ -244,7 +244,7 @@ class EntitySearchServiceTest {
         s5.setSelectKindergarten(false);
         s5.setSelectKinderkrippe(false);
         s5.setSelectMittelschule(false);
-        s2.setSelectNachbarschaftstreff(false);
+        s5.setSelectNachbarschaftstreff(false);
         Class<?> r5 = entitySearchService.determineRecordClass(s5);
         assertThat(r5, is(AllObjectsRecord.class));
 
@@ -259,7 +259,7 @@ class EntitySearchServiceTest {
         s6.setSelectKindergarten(false);
         s6.setSelectKinderkrippe(false);
         s6.setSelectMittelschule(false);
-        s2.setSelectNachbarschaftstreff(false);
+        s6.setSelectNachbarschaftstreff(false);
         Class<?> r6 = entitySearchService.determineRecordClass(s6);
         assertThat(r6, is(BauvorhabenAbfrageRecord.class));
 
@@ -274,7 +274,7 @@ class EntitySearchServiceTest {
         s7.setSelectKindergarten(false);
         s7.setSelectKinderkrippe(false);
         s7.setSelectMittelschule(true);
-        s2.setSelectNachbarschaftstreff(false);
+        s7.setSelectNachbarschaftstreff(false);
         Class<?> r7 = entitySearchService.determineRecordClass(s7);
         assertThat(r7, is(AbfrageInfrastruktureinrichtungRecord.class));
 
@@ -289,7 +289,7 @@ class EntitySearchServiceTest {
         s8.setSelectKindergarten(false);
         s8.setSelectKinderkrippe(true);
         s8.setSelectMittelschule(false);
-        s2.setSelectNachbarschaftstreff(false);
+        s8.setSelectNachbarschaftstreff(false);
         Class<?> r8 = entitySearchService.determineRecordClass(s8);
         assertThat(r8, is(AllObjectsRecord.class));
     }
