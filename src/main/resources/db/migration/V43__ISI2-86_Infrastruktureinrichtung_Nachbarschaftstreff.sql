@@ -20,6 +20,6 @@ ALTER TABLE isidbuser.nachbarschaftstreff OWNER TO isidbuser;
 ---
 
 ALTER TABLE IF EXISTS isidbuser.personal_filter
-    ADD COLUMN select_nachbarschaftstreff BOOLEAN NOT NULL;
+    ADD COLUMN select_nachbarschaftstreff BOOLEAN NOT NULL DEFAULT FALSE;
 
 COMMIT;

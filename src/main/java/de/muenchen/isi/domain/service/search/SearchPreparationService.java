@@ -88,7 +88,8 @@ public class SearchPreparationService {
                     HausFuerKinder.class,
                     Kindergarten.class,
                     Kinderkrippe.class,
-                    Mittelschule.class
+                    Mittelschule.class,
+                    Nachbarschaftstreff.class
                 )
             )
         ) {
