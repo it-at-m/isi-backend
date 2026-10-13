@@ -5,7 +5,6 @@
 package de.muenchen.isi.api.dto.infrastruktureinrichtung;
 
 import de.muenchen.isi.api.validation.WohnungsnahePlaetzeValid;
-import de.muenchen.isi.infrastructure.entity.enums.lookup.AnlassPlanung;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtGsNachmittagBetreuung;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Einrichtungstraeger;
 import jakarta.validation.constraints.Min;
@@ -34,7 +33,4 @@ public class GsNachmittagBetreuungDto extends InfrastruktureinrichtungDto {
     private Integer wohnungsnaheHortPlaetze;
 
     private Einrichtungstraeger einrichtungstraeger;
-
-    @NotNull
-    private AnlassPlanung anlassPlanung;
 }

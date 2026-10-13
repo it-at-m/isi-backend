@@ -4,8 +4,10 @@
  */
 package de.muenchen.isi.api.dto.infrastruktureinrichtung;
 
+import de.muenchen.isi.api.validation.NotUnspecified;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Kooperation;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -19,5 +21,7 @@ public class NachbarschaftstreffDto extends InfrastruktureinrichtungDto {
 
     private String kooperationFreieEingabe;
 
+    @NotNull
+    @NotUnspecified
     private UncertainBoolean sobonRelevant;
 }

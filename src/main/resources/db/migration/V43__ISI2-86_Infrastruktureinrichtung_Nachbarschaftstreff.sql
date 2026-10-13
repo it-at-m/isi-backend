@@ -16,25 +16,6 @@ CREATE TABLE isidbuser.nachbarschaftstreff (
 ALTER TABLE isidbuser.nachbarschaftstreff OWNER TO isidbuser;
 
 ---
----  Refactoring anlass_planung: von Superklasse "Infrastruktureinrichtung" in die Subklassen verschieben
----
-
-ALTER TABLE IF EXISTS isidbuser.infrastruktureinrichtung
-    DROP COLUMN anlass_planung;
-ALTER TABLE IF EXISTS isidbuser.kindergarten
-    ADD COLUMN anlass_planung character varying(255) NOT NULL;
-ALTER TABLE IF EXISTS isidbuser.kinderkrippe
-    ADD COLUMN anlass_planung character varying(255) NOT NULL;
-ALTER TABLE IF EXISTS isidbuser.haus_fuer_kinder
-    ADD COLUMN anlass_planung character varying(255) NOT NULL;
-ALTER TABLE IF EXISTS isidbuser.gs_nachmittag_betreuung
-    ADD COLUMN anlass_planung character varying(255) NOT NULL;
-ALTER TABLE IF EXISTS isidbuser.grundschule
-    ADD COLUMN anlass_planung character varying(255) NOT NULL;
-ALTER TABLE IF EXISTS isidbuser.mittelschule
-    ADD COLUMN anlass_planung character varying(255) NOT NULL;
-
----
 --- Persönlichen Filter um neue Infrastruktureinrichtung Nachbarschaftstreff erweitern
 ---
 

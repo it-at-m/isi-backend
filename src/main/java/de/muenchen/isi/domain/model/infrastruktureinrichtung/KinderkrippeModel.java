@@ -4,7 +4,6 @@
  */
 package de.muenchen.isi.domain.model.infrastruktureinrichtung;
 
-import de.muenchen.isi.infrastructure.entity.enums.lookup.AnlassPlanung;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Einrichtungstraeger;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -22,6 +21,4 @@ public class KinderkrippeModel extends InfrastruktureinrichtungModel {
     private Integer wohnungsnaheKinderkrippePlaetze;
 
     private Einrichtungstraeger einrichtungstraeger;
-
-    private AnlassPlanung anlassPlanung;
 }
