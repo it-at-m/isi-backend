@@ -22,35 +22,17 @@ ALTER TABLE isidbuser.nachbarschaftstreff OWNER TO isidbuser;
 ALTER TABLE IF EXISTS isidbuser.infrastruktureinrichtung
     DROP COLUMN anlass_planung;
 ALTER TABLE IF EXISTS isidbuser.kindergarten
-    ADD COLUMN anlass_planung character varying(255) NOT NULL,
-    ADD CONSTRAINT kindergarten_status_check CHECK (
-        status IN ('BESTAND', 'UNGESICHERTE_PLANUNG', 'GESICHERTE_PLANUNG', 'PLANUNG_ZURUECKGEZOGEN')
-    );
+    ADD COLUMN anlass_planung character varying(255) NOT NULL;
 ALTER TABLE IF EXISTS isidbuser.kinderkrippe
-    ADD COLUMN anlass_planung character varying(255) NOT NULL,
-    ADD CONSTRAINT kinderkrippe_status_check CHECK (
-        status IN ('BESTAND', 'UNGESICHERTE_PLANUNG', 'GESICHERTE_PLANUNG', 'PLANUNG_ZURUECKGEZOGEN')
-    );
+    ADD COLUMN anlass_planung character varying(255) NOT NULL;
 ALTER TABLE IF EXISTS isidbuser.haus_fuer_kinder
-    ADD COLUMN anlass_planung character varying(255) NOT NULL,
-    ADD CONSTRAINT haus_fuer_kinder_status_check CHECK (
-        status IN ('BESTAND', 'UNGESICHERTE_PLANUNG', 'GESICHERTE_PLANUNG', 'PLANUNG_ZURUECKGEZOGEN')
-    );
+    ADD COLUMN anlass_planung character varying(255) NOT NULL;
 ALTER TABLE IF EXISTS isidbuser.gs_nachmittag_betreuung
-    ADD COLUMN anlass_planung character varying(255) NOT NULL,
-    ADD CONSTRAINT gs_nachmittag_betreuung_status_check CHECK (
-        status IN ('BESTAND', 'UNGESICHERTE_PLANUNG', 'GESICHERTE_PLANUNG', 'PLANUNG_ZURUECKGEZOGEN')
-    );
+    ADD COLUMN anlass_planung character varying(255) NOT NULL;
 ALTER TABLE IF EXISTS isidbuser.grundschule
-    ADD COLUMN anlass_planung character varying(255) NOT NULL,
-    ADD CONSTRAINT grundschule_status_check CHECK (
-        status IN ('BESTAND', 'UNGESICHERTE_PLANUNG', 'GESICHERTE_PLANUNG', 'PLANUNG_ZURUECKGEZOGEN')
-    );
+    ADD COLUMN anlass_planung character varying(255) NOT NULL;
 ALTER TABLE IF EXISTS isidbuser.mittelschule
-    ADD COLUMN anlass_planung character varying(255) NOT NULL DEFAULT 'UNSPECIFIED',
-    ADD CONSTRAINT mittelschule_status_check CHECK (
-        status IN ('BESTAND', 'UNGESICHERTE_PLANUNG', 'GESICHERTE_PLANUNG', 'PLANUNG_ZURUECKGEZOGEN')
-    );
+    ADD COLUMN anlass_planung character varying(255) NOT NULL;
 
 ---
 --- Persönlichen Filter um neue Infrastruktureinrichtung Nachbarschaftstreff erweitern
