@@ -24,14 +24,17 @@ DO $$
 BEGIN
   IF EXISTS (SELECT 1 FROM pg_tables WHERE schemaname='isidbuser' AND tablename='benutzer') THEN
     UPDATE isidbuser.benutzer b
-    SET persoenliche_filter = (
-      SELECT jsonb_agg(
-        CASE
-          WHEN (elem->'filterSettings') ? 'selectNachbarschaftstreff' THEN elem
-          ELSE jsonb_set(elem, '{filterSettings,selectNachbarschaftstreff}', 'false'::jsonb, true)
-        END
-      )
-      FROM jsonb_array_elements(b.persoenliche_filter) AS t(elem)
+    SET persoenliche_filter = COALESCE(
+      (
+        SELECT jsonb_agg(
+          CASE
+            WHEN (elem->'filterSettings') ? 'selectNachbarschaftstreff' THEN elem
+            ELSE jsonb_set(elem, '{filterSettings,selectNachbarschaftstreff}', 'false'::jsonb, true)
+          END
+        )
+        FROM jsonb_array_elements(b.persoenliche_filter) AS t(elem)
+      ),
+      '[]'::jsonb
     )
     WHERE b.persoenliche_filter IS NOT NULL;
   END IF;
