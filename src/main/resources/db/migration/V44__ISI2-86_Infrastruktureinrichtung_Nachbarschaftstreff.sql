@@ -19,7 +19,22 @@ ALTER TABLE isidbuser.nachbarschaftstreff OWNER TO isidbuser;
 --- Persönlichen Filter um neue Infrastruktureinrichtung Nachbarschaftstreff erweitern
 ---
 
-ALTER TABLE IF EXISTS isidbuser.personal_filter
-    ADD COLUMN select_nachbarschaftstreff BOOLEAN NOT NULL DEFAULT FALSE;
+-- Add selectNachbarschaftstreff flag into persoenliche_filter JSON for filters migrated by V43
+DO $$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_tables WHERE schemaname='isidbuser' AND tablename='benutzer') THEN
+    UPDATE isidbuser.benutzer b
+    SET persoenliche_filter = (
+      SELECT jsonb_agg(
+        CASE
+          WHEN (elem->'filterSettings') ? 'selectNachbarschaftstreff' THEN elem
+          ELSE jsonb_set(elem, '{filterSettings,selectNachbarschaftstreff}', 'false'::jsonb, true)
+        END
+      )
+      FROM jsonb_array_elements(b.persoenliche_filter) AS t(elem)
+    )
+    WHERE b.persoenliche_filter IS NOT NULL;
+  END IF;
+END$$;
 
 COMMIT;

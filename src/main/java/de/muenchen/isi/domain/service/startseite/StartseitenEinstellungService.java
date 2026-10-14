@@ -2,24 +2,22 @@ package de.muenchen.isi.domain.service.startseite;
 
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.UserRoleNotAllowedException;
-import de.muenchen.isi.domain.mapper.StartseitenEinstellungDomainMapper;
+import de.muenchen.isi.domain.mapper.BenutzerDomainMapper;
 import de.muenchen.isi.domain.model.enums.SchnellfilterVorgaenge;
 import de.muenchen.isi.domain.model.enums.SortAttribute;
 import de.muenchen.isi.domain.model.startseite.StartseitenEinstellungModel;
-import de.muenchen.isi.infrastructure.entity.startseite.StartseitenEinstellung;
-import de.muenchen.isi.infrastructure.repository.startseite.StartseitenEinstellungRepository;
-import de.muenchen.isi.security.AuthenticationUtils;
+import de.muenchen.isi.domain.service.benutzer.BenutzerService;
+import de.muenchen.isi.infrastructure.entity.benutzer.StartseitenEinstellung;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.search.engine.search.sort.dsl.SortOrder;
-import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 
 /**
  * Verwaltet die persönlichen Voreinstellungen eines Nutzers für den Startseitenbereich "Meine Vorgänge".
  * <p>
- * Der Nutzerbezug wird ausschließlich über die {@link AuthenticationUtils} hergestellt und niemals
- * aus dem Request übernommen.
+ * Die Einstellungen sind ein Attribut des {@link de.muenchen.isi.infrastructure.entity.benutzer.Benutzer}
+ * und werden dort als JSON gehalten.
  */
 @Service
 @RequiredArgsConstructor
@@ -35,11 +33,9 @@ public class StartseitenEinstellungService {
     static final String FEHLERMELDUNG_NICHT_AUTHENTIFIZIERT =
         "Sie müssen authentifiziert sein, um die Startseiteneinstellungen zu verwenden";
 
-    private final StartseitenEinstellungDomainMapper startseitenEinstellungDomainMapper;
+    private final BenutzerDomainMapper benutzerDomainMapper;
 
-    private final StartseitenEinstellungRepository startseitenEinstellungRepository;
-
-    private final AuthenticationUtils authenticationUtils;
+    private final BenutzerService benutzerService;
 
     /**
      * Gibt die Startseiteneinstellungen des authentifizierten Nutzers zurück.
@@ -50,10 +46,9 @@ public class StartseitenEinstellungService {
      * @throws UserRoleNotAllowedException falls der Nutzer nicht authentifiziert ist.
      */
     public StartseitenEinstellungModel getStartseitenEinstellung() throws UserRoleNotAllowedException {
-        final var userSub = this.getSubFromAuthenticatedUser();
-        return startseitenEinstellungRepository
-            .findByPersonalID(userSub)
-            .map(startseitenEinstellungDomainMapper::entity2Model)
+        return benutzerService
+            .findBenutzer(FEHLERMELDUNG_NICHT_AUTHENTIFIZIERT)
+            .map(benutzer -> benutzerDomainMapper.entity2Model(benutzer.getStartseitenEinstellung()))
             .orElseGet(StartseitenEinstellungService::createDefaultModel);
     }
 
@@ -69,30 +64,10 @@ public class StartseitenEinstellungService {
      */
     public StartseitenEinstellungModel save(final StartseitenEinstellungModel startseitenEinstellungModel)
         throws UserRoleNotAllowedException, OptimisticLockingException {
-        final var userSub = this.getSubFromAuthenticatedUser();
-        var entity = startseitenEinstellungRepository.findByPersonalID(userSub).orElseGet(() -> {
-            final var neueEinstellung = new StartseitenEinstellung();
-            neueEinstellung.setPersonalID(userSub);
-            return neueEinstellung;
-        });
-        startseitenEinstellungDomainMapper.updateEntityFromModel(startseitenEinstellungModel, entity);
-        try {
-            entity = startseitenEinstellungRepository.saveAndFlush(entity);
-        } catch (final ObjectOptimisticLockingFailureException exception) {
-            final var message = "Die Daten wurden in der Zwischenzeit geändert. Bitte laden Sie die Seite neu!";
-            throw new OptimisticLockingException(message, exception);
-        }
-        return startseitenEinstellungDomainMapper.entity2Model(entity);
-    }
-
-    /**
-     * Gibt den userSub zurück sofern es kein Fallback-Wert ist.
-     *
-     * @return den userSub aus {@link AuthenticationUtils}.
-     * @throws UserRoleNotAllowedException falls der Nutzer den Fallback-Sub zugewiesen hat.
-     */
-    private String getSubFromAuthenticatedUser() throws UserRoleNotAllowedException {
-        return authenticationUtils.getSubFromAuthenticatedUser(FEHLERMELDUNG_NICHT_AUTHENTIFIZIERT);
+        final var benutzer = benutzerService.getOrCreateBenutzer(FEHLERMELDUNG_NICHT_AUTHENTIFIZIERT);
+        benutzer.setStartseitenEinstellung(benutzerDomainMapper.model2Entity(startseitenEinstellungModel));
+        final var gespeichert = benutzerService.save(benutzer);
+        return benutzerDomainMapper.entity2Model(gespeichert.getStartseitenEinstellung());
     }
 
     /**
