@@ -7,7 +7,6 @@ import de.muenchen.isi.domain.model.enums.SchnellfilterVorgaenge;
 import de.muenchen.isi.domain.model.enums.SortAttribute;
 import de.muenchen.isi.domain.model.startseite.StartseitenEinstellungModel;
 import de.muenchen.isi.domain.service.benutzer.BenutzerService;
-import de.muenchen.isi.infrastructure.entity.benutzer.StartseitenEinstellung;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.search.engine.search.sort.dsl.SortOrder;
