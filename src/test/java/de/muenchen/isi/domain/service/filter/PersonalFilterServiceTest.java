@@ -6,6 +6,7 @@ import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
@@ -17,10 +18,12 @@ import de.muenchen.isi.domain.exception.MaxCreationsReachedException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.UserRoleNotAllowedException;
 import de.muenchen.isi.domain.mapper.PersonalFilterDomainMapper;
+import de.muenchen.isi.domain.model.enums.SchnellfilterVorgaenge;
 import de.muenchen.isi.domain.model.filter.PersonalFilterRequestModel;
 import de.muenchen.isi.domain.model.filter.PersonalFilterResponseModel;
 import de.muenchen.isi.domain.service.benutzer.BenutzerService;
 import de.muenchen.isi.infrastructure.entity.benutzer.Benutzer;
+import de.muenchen.isi.infrastructure.entity.benutzer.StartseitenEinstellung;
 import de.muenchen.isi.infrastructure.entity.filter.PersoenlicherFilter;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -192,6 +195,46 @@ class PersonalFilterServiceTest {
     }
 
     @Test
+    void deleteEntferntDenFilterAlsStandardFilterDerStartseite() throws Exception {
+        final var filter = createFilter("standard", LocalDateTime.now());
+        final var benutzer = createBenutzer(filter);
+        benutzer.setStartseitenEinstellung(createStartseitenEinstellung(filter.getId()));
+        when(benutzerService.getOrCreateBenutzer(any())).thenReturn(benutzer);
+
+        personalFilterService.delete(filter.getId());
+
+        assertThat(benutzer.getStartseitenEinstellung().getStandardFilterId(), is(nullValue()));
+        assertThat(benutzer.getStartseitenEinstellung().getSchnellfilter(), is(SchnellfilterVorgaenge.ZUR_KENNTNIS));
+        verify(benutzerService).save(benutzer);
+    }
+
+    @Test
+    void deleteBehaeltEinenAnderenStandardFilterDerStartseite() throws Exception {
+        final var geloescht = createFilter("weg damit", LocalDateTime.now());
+        final var standard = createFilter("standard", LocalDateTime.now());
+        final var benutzer = createBenutzer(geloescht, standard);
+        benutzer.setStartseitenEinstellung(createStartseitenEinstellung(standard.getId()));
+        when(benutzerService.getOrCreateBenutzer(any())).thenReturn(benutzer);
+
+        personalFilterService.delete(geloescht.getId());
+
+        assertThat(benutzer.getStartseitenEinstellung().getStandardFilterId(), is(standard.getId()));
+        assertThat(benutzer.getPersoenlicheFilter(), contains(standard));
+    }
+
+    @Test
+    void deleteOhneStartseitenEinstellung() throws Exception {
+        final var filter = createFilter("weg damit", LocalDateTime.now());
+        final var benutzer = createBenutzer(filter);
+        when(benutzerService.getOrCreateBenutzer(any())).thenReturn(benutzer);
+
+        personalFilterService.delete(filter.getId());
+
+        assertThat(benutzer.getStartseitenEinstellung(), is(nullValue()));
+        verify(benutzerService).save(benutzer);
+    }
+
+    @Test
     void deleteUnbekannteIdWirftEntityNotFound() throws Exception {
         when(benutzerService.getOrCreateBenutzer(any())).thenReturn(createBenutzer());
 
@@ -204,6 +247,13 @@ class PersonalFilterServiceTest {
         benutzer.setPersonalID(USER_SUB);
         benutzer.setPersoenlicheFilter(new ArrayList<>(List.of(filter)));
         return benutzer;
+    }
+
+    private static StartseitenEinstellung createStartseitenEinstellung(final UUID standardFilterId) {
+        final var einstellung = new StartseitenEinstellung();
+        einstellung.setSchnellfilter(SchnellfilterVorgaenge.ZUR_KENNTNIS);
+        einstellung.setStandardFilterId(standardFilterId);
+        return einstellung;
     }
 
     private static PersonalFilterResponseModel toModel(final PersoenlicherFilter filter) {
