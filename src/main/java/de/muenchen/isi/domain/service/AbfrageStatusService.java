@@ -2,13 +2,10 @@ package de.muenchen.isi.domain.service;
 
 import de.muenchen.isi.configuration.StateMachineConfiguration;
 import de.muenchen.isi.domain.exception.AbfrageStatusNotAllowedException;
-import de.muenchen.isi.domain.exception.CalculationException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
-import de.muenchen.isi.domain.exception.ReportingException;
 import de.muenchen.isi.domain.exception.StateMachineTransitionFailedException;
 import de.muenchen.isi.domain.exception.StringLengthExceededException;
-import de.muenchen.isi.domain.exception.UniqueViolationException;
 import de.muenchen.isi.domain.exception.UserRoleNotAllowedException;
 import de.muenchen.isi.domain.model.AbfrageModel;
 import de.muenchen.isi.domain.model.AbfragevarianteBauleitplanverfahrenModel;
@@ -21,24 +18,24 @@ import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrageEvents;
 import de.muenchen.isi.security.AuthenticationUtils;
 import de.muenchen.isi.security.AuthoritiesEnum;
 import java.util.Comparator;
-import java.util.HashMap;
+import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.messaging.Message;
-import org.springframework.messaging.MessageHeaders;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.statemachine.StateContext;
 import org.springframework.statemachine.StateMachine;
 import org.springframework.statemachine.StateMachineEventResult;
 import org.springframework.statemachine.config.StateMachineFactory;
-import org.springframework.statemachine.state.State;
 import org.springframework.statemachine.support.DefaultStateMachineContext;
 import org.springframework.statemachine.support.StateMachineInterceptor;
 import org.springframework.statemachine.support.StateMachineInterceptorAdapter;
@@ -51,10 +48,46 @@ import reactor.core.publisher.Mono;
  */
 @Slf4j
 @Service
-@RequiredArgsConstructor
 public class AbfrageStatusService {
 
-    private static final String ABFRAGE_ID_HEADER = "abfrage_id";
+    private static final int MAX_LENGTH_ANMERKUNG = 2000;
+
+    /**
+     * Zentrale Zuordnung der {@link AuthoritiesEnum} zu den dazugehörigen {@link StatusAbfrageEvents}.
+     */
+    private static final Map<AuthoritiesEnum, StatusAbfrageEvents> EVENT_BY_AUTHORITY = Map.ofEntries(
+        Map.entry(AuthoritiesEnum.ISI_BACKEND_FREIGABE_ABFRAGE, StatusAbfrageEvents.FREIGABE),
+        Map.entry(AuthoritiesEnum.ISI_BACKEND_ABBRECHEN_ABFRAGE, StatusAbfrageEvents.ABBRECHEN),
+        Map.entry(
+            AuthoritiesEnum.ISI_BACKEND_ZURUECK_AN_ABFRAGEERSTELLUNG_ABFRAGE,
+            StatusAbfrageEvents.ZURUECK_AN_ABFRAGEERSTELLUNG
+        ),
+        Map.entry(
+            AuthoritiesEnum.ISI_BACKEND_IN_BEARBEITUNG_SETZTEN_ABFRAGE,
+            StatusAbfrageEvents.IN_BEARBEITUNG_SETZEN
+        ),
+        Map.entry(
+            AuthoritiesEnum.ISI_BACKEND_ZURUECK_AN_SACHBEARBEITUNG_ABFRAGE,
+            StatusAbfrageEvents.ZURUECK_AN_SACHBEARBEITUNG
+        ),
+        Map.entry(
+            AuthoritiesEnum.ISI_BACKEND_KEINE_BEARBEITUNG_NOETIG_ABFRAGE,
+            StatusAbfrageEvents.KEINE_BEARBEITUNG_NOETIG
+        ),
+        Map.entry(
+            AuthoritiesEnum.ISI_BACKEND_VERSCHICKEN_DER_STELLUNGNAHME_ABFRAGE,
+            StatusAbfrageEvents.VERSCHICKEN_DER_STELLUNGNAHME
+        ),
+        Map.entry(
+            AuthoritiesEnum.ISI_BACKEND_BEDARFSMELDUNG_ERFOLGTE_ABFRAGE,
+            StatusAbfrageEvents.BEDARFSMELDUNG_ERFOLGTE
+        ),
+        Map.entry(
+            AuthoritiesEnum.ISI_BACKEND_SPEICHERN_VON_SOZIALINFRASTRUKTUR_VERSORGUNG_ABFRAGE,
+            StatusAbfrageEvents.SPEICHERN_VON_SOZIALINFRASTRUKTUR_VERSORGUNG
+        ),
+        Map.entry(AuthoritiesEnum.ISI_BACKEND_ERNEUTE_BEARBEITUNG_ABFRAGE, StatusAbfrageEvents.ERNEUTE_BEARBEITUNG)
+    );
 
     private final AbfrageService abfrageService;
 
@@ -69,6 +102,29 @@ public class AbfrageStatusService {
     private final BauratenmethodikDefaultingService bauratenmethodikDefaultingService;
 
     /**
+     * Die je Status möglichen {@link StatusAbfrageEvents}. Da die Statusübergänge statisch konfiguriert sind,
+     * wird die Zuordnung einmalig aus der {@link StateMachineConfiguration} ermittelt.
+     */
+    private final Map<StatusAbfrage, Set<StatusAbfrageEvents>> eventsByStatus;
+
+    public AbfrageStatusService(
+        final AbfrageService abfrageService,
+        final StateMachineFactory<StatusAbfrage, StatusAbfrageEvents> stateMachineFactory,
+        final AuthenticationUtils authenticationUtils,
+        final BearbeitungshistorieService abfrageBearbeitungshistorieService,
+        final SendWorkAssignmentInformationService sendWorkAssignmentInformationService,
+        final BauratenmethodikDefaultingService bauratenmethodikDefaultingService
+    ) {
+        this.abfrageService = abfrageService;
+        this.stateMachineFactory = stateMachineFactory;
+        this.authenticationUtils = authenticationUtils;
+        this.abfrageBearbeitungshistorieService = abfrageBearbeitungshistorieService;
+        this.sendWorkAssignmentInformationService = sendWorkAssignmentInformationService;
+        this.bauratenmethodikDefaultingService = bauratenmethodikDefaultingService;
+        this.eventsByStatus = getEventsByStatus(stateMachineFactory);
+    }
+
+    /**
      * Ändert den Status auf {@link StatusAbfrage#UEBERMITTELT_ZUR_BEARBEITUNG}.
      *
      * @param id        vom Typ {@link UUID} um die Abfrage zu finden
@@ -80,13 +136,12 @@ public class AbfrageStatusService {
      */
     public void freigabeAbfrage(final UUID id, String anmerkung)
         throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException, UserRoleNotAllowedException {
-        this.throwStringLengthExceededExceptionWhenAnmerkungExceedsLength(id, anmerkung);
-        final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id, anmerkung);
-        this.sendEvent(id, StatusAbfrageEvents.FREIGABE, stateMachine);
+        this.changeStatus(id, anmerkung, StatusAbfrageEvents.FREIGABE);
     }
 
     /**
      * Ändert den Status auf {@link StatusAbfrage#START_BEARBEITUNG}.
+     * Bei einem {@link BauleitplanverfahrenModel} wird zusätzlich die Bauratenmethodik vorbelegt.
      *
      * @param id        vom Typ {@link UUID} um die Abfrage zu finden
      * @param anmerkung falls ein Nutzer eine Anmerkung bei einem Statusübergang macht wird diese an die Abfrage Anmerkung angehängt
@@ -96,28 +151,28 @@ public class AbfrageStatusService {
      * @throws UserRoleNotAllowedException      falls der User keine Berechtigung für die Abfrage hat.
      */
     public void inBearbeitungSetzenAbfrage(final UUID id, String anmerkung)
-        throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException, UserRoleNotAllowedException, OptimisticLockingException, CalculationException, ReportingException {
-        this.throwStringLengthExceededExceptionWhenAnmerkungExceedsLength(id, anmerkung);
-        final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id, anmerkung);
-        this.sendEvent(id, StatusAbfrageEvents.IN_BEARBEITUNG_SETZEN, stateMachine);
-        this.setBauratenmethodikVorbelegungIfBauleitplanverfahren(id);
+        throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException, UserRoleNotAllowedException {
+        this.changeStatus(
+            id,
+            anmerkung,
+            StatusAbfrageEvents.IN_BEARBEITUNG_SETZEN,
+            this::setBauratenmethodikVorbelegungIfBauleitplanverfahren
+        );
     }
 
     /**
      * Ermittelt für ein {@link BauleitplanverfahrenModel} die Vorbelegung für Bauratenmethodik
-     * anhand des Feldes {@code start42Verfahren}, speichert diese auf der Abfrage (zur späteren
-     * Vorbelegung neu angelegter Sachbearbeitungs-Abfragevarianten durch das Frontend) und setzt
-     * sie zusätzlich direkt auf der SoBoN-Berechnung jeder bereits durch die Abfrageerstellung
+     * anhand des Feldes {@code start42Verfahren}, setzt diese auf der Abfrage (zur späteren
+     * Vorbelegung neu angelegter Sachbearbeitungs-Abfragevarianten durch das Frontend) und
+     * zusätzlich direkt auf der SoBoN-Berechnung jeder bereits durch die Abfrageerstellung
      * angelegten Abfragevariante, sofern dort noch keine Bauratenmethodik gesetzt ist. Für andere
      * Abfragearten passiert nichts.
+     * <p>
+     * Die Abfrage wird hier nicht gespeichert, sondern gemeinsam mit dem neuen Status.
      *
-     * @param id vom Typ {@link UUID} um die Abfrage zu finden
-     * @throws EntityNotFoundException     falls die Abfrage nicht gefunden wird
-     * @throws UserRoleNotAllowedException falls der User keine Berechtigung für die Abfrage hat.
+     * @param abfrage die vorzubelegende Abfrage
      */
-    private void setBauratenmethodikVorbelegungIfBauleitplanverfahren(final UUID id)
-        throws EntityNotFoundException, UserRoleNotAllowedException, OptimisticLockingException, CalculationException, ReportingException {
-        final AbfrageModel abfrage = this.abfrageService.getById(id);
+    private void setBauratenmethodikVorbelegungIfBauleitplanverfahren(final AbfrageModel abfrage) {
         if (abfrage instanceof BauleitplanverfahrenModel bauleitplanverfahren) {
             final var vorbelegung = this.bauratenmethodikDefaultingService.determineDefault(
                 bauleitplanverfahren.getStart42Verfahren(),
@@ -129,7 +184,6 @@ public class AbfrageStatusService {
                 .map(AbfragevarianteBauleitplanverfahrenModel::getSobonBerechnung)
                 .filter(sobonBerechnung -> sobonBerechnung != null && sobonBerechnung.getBauratenmethodik() == null)
                 .forEach(sobonBerechnung -> sobonBerechnung.setBauratenmethodik(vorbelegung));
-            this.abfrageService.save(bauleitplanverfahren);
         }
     }
 
@@ -145,9 +199,7 @@ public class AbfrageStatusService {
      */
     public void abbrechenAbfrage(final UUID id, String anmerkung)
         throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException, UserRoleNotAllowedException {
-        this.throwStringLengthExceededExceptionWhenAnmerkungExceedsLength(id, anmerkung);
-        final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id, anmerkung);
-        this.sendEvent(id, StatusAbfrageEvents.ABBRECHEN, stateMachine);
+        this.changeStatus(id, anmerkung, StatusAbfrageEvents.ABBRECHEN);
     }
 
     /**
@@ -162,9 +214,7 @@ public class AbfrageStatusService {
      */
     public void zurueckAnAbfrageerstellungAbfrage(final UUID id, String anmerkung)
         throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException, UserRoleNotAllowedException {
-        this.throwStringLengthExceededExceptionWhenAnmerkungExceedsLength(id, anmerkung);
-        final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id, anmerkung);
-        this.sendEvent(id, StatusAbfrageEvents.ZURUECK_AN_ABFRAGEERSTELLUNG, stateMachine);
+        this.changeStatus(id, anmerkung, StatusAbfrageEvents.ZURUECK_AN_ABFRAGEERSTELLUNG);
     }
 
     /**
@@ -179,9 +229,7 @@ public class AbfrageStatusService {
      */
     public void zurueckAnSachbearbeitungAbfrage(final UUID id, String anmerkung)
         throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException, UserRoleNotAllowedException {
-        this.throwStringLengthExceededExceptionWhenAnmerkungExceedsLength(id, anmerkung);
-        final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id, anmerkung);
-        this.sendEvent(id, StatusAbfrageEvents.ZURUECK_AN_SACHBEARBEITUNG, stateMachine);
+        this.changeStatus(id, anmerkung, StatusAbfrageEvents.ZURUECK_AN_SACHBEARBEITUNG);
     }
 
     /**
@@ -196,9 +244,7 @@ public class AbfrageStatusService {
      */
     public void erledigtOhneFachreferat(final UUID id, String anmerkung)
         throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException, UserRoleNotAllowedException {
-        this.throwStringLengthExceededExceptionWhenAnmerkungExceedsLength(id, anmerkung);
-        final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id, anmerkung);
-        this.sendEvent(id, StatusAbfrageEvents.KEINE_BEARBEITUNG_NOETIG, stateMachine);
+        this.changeStatus(id, anmerkung, StatusAbfrageEvents.KEINE_BEARBEITUNG_NOETIG);
     }
 
     /**
@@ -213,9 +259,7 @@ public class AbfrageStatusService {
      */
     public void verschickenDerStellungnahme(final UUID id, String anmerkung)
         throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException, UserRoleNotAllowedException {
-        this.throwStringLengthExceededExceptionWhenAnmerkungExceedsLength(id, anmerkung);
-        final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id, anmerkung);
-        this.sendEvent(id, StatusAbfrageEvents.VERSCHICKEN_DER_STELLUNGNAHME, stateMachine);
+        this.changeStatus(id, anmerkung, StatusAbfrageEvents.VERSCHICKEN_DER_STELLUNGNAHME);
     }
 
     /**
@@ -230,9 +274,7 @@ public class AbfrageStatusService {
      */
     public void bedarfsmeldungErfolgt(final UUID id, String anmerkung)
         throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException, UserRoleNotAllowedException {
-        this.throwStringLengthExceededExceptionWhenAnmerkungExceedsLength(id, anmerkung);
-        final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id, anmerkung);
-        this.sendEvent(id, StatusAbfrageEvents.BEDARFSMELDUNG_ERFOLGTE, stateMachine);
+        this.changeStatus(id, anmerkung, StatusAbfrageEvents.BEDARFSMELDUNG_ERFOLGTE);
     }
 
     /**
@@ -247,13 +289,12 @@ public class AbfrageStatusService {
      */
     public void erledigtMitFachreferat(final UUID id, String anmerkung)
         throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException, UserRoleNotAllowedException {
-        this.throwStringLengthExceededExceptionWhenAnmerkungExceedsLength(id, anmerkung);
-        final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id, anmerkung);
-        this.sendEvent(id, StatusAbfrageEvents.SPEICHERN_VON_SOZIALINFRASTRUKTUR_VERSORGUNG, stateMachine);
+        this.changeStatus(id, anmerkung, StatusAbfrageEvents.SPEICHERN_VON_SOZIALINFRASTRUKTUR_VERSORGUNG);
     }
 
     /**
-     * Ändert den Status auf {@link StatusAbfrage#START_BEARBEITUNG}.
+     * Ändert den Status von {@link StatusAbfrage#ERLEDIGT_OHNE_FACHREFERAT}, {@link StatusAbfrage#ERLEDIGT_MIT_FACHREFERAT}
+     * oder {@link StatusAbfrage#ABBRUCH} auf {@link StatusAbfrage#START_BEARBEITUNG}.
      *
      * @param id        vom Typ {@link UUID} um die Abfrage zu finden
      * @param anmerkung falls ein Nutzer eine Anmerkung bei einem Statusübergang macht wird diese an die Abfrage Anmerkung angehängt
@@ -264,23 +305,54 @@ public class AbfrageStatusService {
      */
     public void erneuteBearbeitungSachbearbeitung(final UUID id, String anmerkung)
         throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException, UserRoleNotAllowedException {
-        this.throwStringLengthExceededExceptionWhenAnmerkungExceedsLength(id, anmerkung);
-        final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id, anmerkung);
-        this.sendEvent(id, StatusAbfrageEvents.ERNEUTE_BEARBEITUNG, stateMachine);
+        this.changeStatus(id, anmerkung, StatusAbfrageEvents.ERNEUTE_BEARBEITUNG);
     }
 
     /**
-     * Erstellt die Statemachine und initialisiert diese mit dem Status der Abfrage aus der DB.
-     * <p>
-     * Ausserdem wird ein preTransition-Listener definiert, der bei einer Statusänderung den Status in der DB aktualisiert.
+     * Lädt die Abfrage einmalig und leitet mit dem übergebenem Event eine Statusänderung ein.
      *
-     * @param id vom Typ {@link UUID}  um die Abfrage aus der DB zu holen
-     * @throws EntityNotFoundException     falls die Abfrage nicht gefunden wird
-     * @throws UserRoleNotAllowedException falls der User keine Berechtigung für die Abfrage hat.
+     * @param id        vom Typ {@link UUID} um die Abfrage zu finden
+     * @param anmerkung falls ein Nutzer eine Anmerkung bei einem Statusübergang macht wird diese an die Abfrage Anmerkung angehängt
+     * @param event     vom Typ {@link StatusAbfrageEvents} um eine Statusänderung durchzuführen
+     * @throws EntityNotFoundException          falls die Abfrage nicht gefunden wird
+     * @throws AbfrageStatusNotAllowedException wenn die Statusänderung nicht erlaubt ist
+     * @throws StringLengthExceededException    wenn die Anmerkung zur Statusänderung die max. Länge überschreitet
+     * @throws UserRoleNotAllowedException      falls der User keine Berechtigung für die Abfrage hat.
      */
-    private StateMachine<StatusAbfrage, StatusAbfrageEvents> build(final UUID id, final String anmerkung)
-        throws EntityNotFoundException, UserRoleNotAllowedException {
+    private void changeStatus(final UUID id, final String anmerkung, final StatusAbfrageEvents event)
+        throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException, UserRoleNotAllowedException {
+        this.changeStatus(id, anmerkung, event, abfrage -> {});
+    }
+
+    /**
+     * Wie {@link #changeStatus(UUID, String, StatusAbfrageEvents)}. Zusätzlich werden die Änderungen aus
+     * {@code additionalChanges} an der Abfrage vorgenommen und gemeinsam mit dem neuen Status gespeichert.
+     * Ist die Statusänderung nicht erlaubt, wird nichts gespeichert.
+     */
+    private void changeStatus(
+        final UUID id,
+        final String anmerkung,
+        final StatusAbfrageEvents event,
+        final Consumer<AbfrageModel> additionalChanges
+    )
+        throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException, UserRoleNotAllowedException {
         final var abfrage = this.abfrageService.getById(id);
+        this.throwStringLengthExceededExceptionWhenAnmerkungExceedsLength(abfrage, anmerkung);
+        additionalChanges.accept(abfrage);
+        final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(abfrage, anmerkung);
+        this.sendEvent(event, stateMachine);
+    }
+
+    /**
+     * Erstellt die Statemachine und initialisiert diese mit dem Status der übergebenen Abfrage.
+     * <p>
+     * Ausserdem wird ein preTransition-Listener definiert, der bei einer Statusänderung die Abfrage
+     * mit dem neuen Status in der DB speichert.
+     *
+     * @param abfrage   die bereits geladene Abfrage
+     * @param anmerkung welche bei einer Statusänderung an die Anmerkung der Abfrage angehängt wird
+     */
+    private StateMachine<StatusAbfrage, StatusAbfrageEvents> build(final AbfrageModel abfrage, final String anmerkung) {
         final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.stateMachineFactory.getStateMachine(
             abfrage.getId()
         );
@@ -288,14 +360,14 @@ public class AbfrageStatusService {
         stateMachine.stopReactively().block();
 
         stateMachine.getStateMachineAccessor().doWithAllRegions(stateMachineAccess -> {
-            // Setzt den Status der Abfrage aus der DB in der StateMachine.
+            // Setzt den Status der Abfrage in der StateMachine.
             stateMachineAccess
                 .resetStateMachineReactively(
                     new DefaultStateMachineContext<>(abfrage.getStatusAbfrage(), null, null, null)
                 )
                 .block();
 
-            // Der Interceptor aktualisiert bei einer Statusänderung den Status der in der DB gespeicherten Entität.
+            // Der Interceptor speichert bei einer Statusänderung die Abfrage mit dem neuen Status.
             stateMachineAccess.addStateMachineInterceptor(
                 new StateMachineInterceptorAdapter<>() {
                     /**
@@ -307,30 +379,19 @@ public class AbfrageStatusService {
                     public StateContext<StatusAbfrage, StatusAbfrageEvents> preTransition(
                         final StateContext<StatusAbfrage, StatusAbfrageEvents> stateContext
                     ) {
-                        final State<StatusAbfrage, StatusAbfrageEvents> state = stateContext
-                            .getTransition()
-                            .getTarget();
-                        final MessageHeaders messageHeaders = stateContext.getMessageHeaders();
                         try {
-                            final UUID abfrageId = AbfrageStatusService.this.getAbfrageId(messageHeaders);
-                            AbfrageModel abfrage = AbfrageStatusService.this.abfrageService.getById(abfrageId);
                             // Setzen des neuen Status
-                            abfrage.setStatusAbfrage(state.getId());
+                            abfrage.setStatusAbfrage(stateContext.getTransition().getTarget().getId());
                             // Anfügen der Anmerkung
-                            if (StringUtils.isNotEmpty(anmerkung)) {
-                                if (abfrage.getAnmerkung() == null) {
-                                    abfrage.setAnmerkung(anmerkung);
-                                } else {
-                                    abfrage.setAnmerkung(abfrage.getAnmerkung().concat("\n").concat(anmerkung));
-                                }
-                            }
+                            abfrage.setAnmerkung(appendAnmerkung(abfrage.getAnmerkung(), anmerkung));
                             // Erweitern der Bearbeitungshistorie
-                            abfrage = abfrageBearbeitungshistorieService.appendBearbeitungshistorieToAbfrage(abfrage);
+                            final var abfrageWithHistorie =
+                                abfrageBearbeitungshistorieService.appendBearbeitungshistorieToAbfrage(abfrage);
                             // Speichern der Abfrage
-                            AbfrageStatusService.this.abfrageService.save(abfrage);
+                            AbfrageStatusService.this.abfrageService.save(abfrageWithHistorie);
                             // Asynchrones Versenden der Information für anstehende Aufgabe
                             sendWorkAssignmentInformationService.sendWorkAssignmentInformationAsync(
-                                abfrage,
+                                abfrageWithHistorie,
                                 stateContext.getEvent()
                             );
                         } catch (final EntityNotFoundException | OptimisticLockingException exception) {
@@ -352,21 +413,16 @@ public class AbfrageStatusService {
 
     /**
      * Leitet mit dem übergebenem Event eine Statusänderung ein.
-     * <p>
      *
-     * @param id           vom Typ {@link UUID} um die Abfrage aus der DB zu holen.
      * @param event        vom Typ {@link StatusAbfrageEvents} um eine Statusänderung durchzuführen
      * @param stateMachine vom Typ {@link StateMachine} welche den aktuellen Status plus alle Status enthält
      * @throws AbfrageStatusNotAllowedException falls die Statusänderung nicht erlaubt nicht
      */
     private void sendEvent(
-        final UUID id,
         final StatusAbfrageEvents event,
         final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine
     ) throws AbfrageStatusNotAllowedException {
-        final Mono<Message<StatusAbfrageEvents>> message = Mono.just(
-            MessageBuilder.withPayload(event).setHeader(ABFRAGE_ID_HEADER, id).build()
-        );
+        final Mono<Message<StatusAbfrageEvents>> message = Mono.just(MessageBuilder.withPayload(event).build());
         final Flux<StateMachineEventResult<StatusAbfrage, StatusAbfrageEvents>> result = stateMachine.sendEvent(
             message
         );
@@ -387,26 +443,9 @@ public class AbfrageStatusService {
     }
 
     /**
-     * Entnimmt den MessageHeaders die ID der Abfrage.
-     *
-     * @param messageHeaders mit dem Event und der AbfrageId
-     * @return Gibt die UUID aus der Message zurück
-     * @throws EntityNotFoundException falls kein AbfrageId Header gefunden wird
-     */
-    public UUID getAbfrageId(final MessageHeaders messageHeaders) throws EntityNotFoundException {
-        final UUID abfrageId;
-        if (messageHeaders.containsKey(ABFRAGE_ID_HEADER)) {
-            abfrageId = (UUID) messageHeaders.get(ABFRAGE_ID_HEADER);
-        } else {
-            final var errorMessage = "Header der Abfrage-ID wurde nicht gefunden";
-            log.error(errorMessage);
-            throw new EntityNotFoundException(errorMessage);
-        }
-        return abfrageId;
-    }
-
-    /**
      * Ermittelt mögliche Statusübergänge basierend auf Benutzer Authorities und aktuellen Status der Abfrage.
+     * <p>
+     * Hierzu wird nur der Status der Abfrage geladen und keine State Machine erstellt.
      *
      * @param id vom Typ {@link UUID} um die Abfrage zu finden
      * @return Liste von {@link TransitionModel} welche möglich sind
@@ -415,15 +454,14 @@ public class AbfrageStatusService {
      */
     public List<TransitionModel> getStatusAbfrageEventsBasedOnStateAndAuthorities(final UUID id)
         throws EntityNotFoundException, UserRoleNotAllowedException {
-        List<AuthoritiesEnum> authorities = authenticationUtils.getUserAuthorities();
-        List<StatusAbfrageEvents> possibleAbfrageEventsBasedOnAuthorities = getStatusAbfrageEventsForAuthorities(
-            authorities,
-            getAuthoritiesAndEventsMap()
+        final Set<StatusAbfrageEvents> eventsForAuthorities = getStatusAbfrageEventsForAuthorities(
+            authenticationUtils.getUserAuthorities()
         );
-        List<StatusAbfrageEvents> matchingAbfrageEvents = getStatusAbfrageEventsBasedOnState(id);
-        matchingAbfrageEvents.retainAll(possibleAbfrageEventsBasedOnAuthorities);
-        return matchingAbfrageEvents
+        final StatusAbfrage statusAbfrage = this.abfrageService.getStatusAbfrageById(id);
+        return eventsByStatus
+            .getOrDefault(statusAbfrage, Set.of())
             .stream()
+            .filter(eventsForAuthorities::contains)
             .map(event -> {
                 TransitionModel transitionModel = new TransitionModel();
                 transitionModel.setUrl(event.getUrl());
@@ -439,108 +477,74 @@ public class AbfrageStatusService {
     /**
      * Ermittelt anhand der im Security Context vorhandenen Authorities, welche {@link StatusAbfrageEvents} erlaubt sind.
      *
-     * @param authorities                 Die Liste der Authorities des Benutzers.
-     * @param authoritiesAndMatchingEvent Die {@link Map}, die die Zuordnung von Authorities zu den dazugehörigen {@link StatusAbfrageEvents} enthält.
-     * @return Eine Liste der erlaubten {@link StatusAbfrageEvents} basierend auf den Authorities des Benutzers.
+     * @param authorities Die Liste der Authorities des Benutzers.
+     * @return Die erlaubten {@link StatusAbfrageEvents} basierend auf den Authorities des Benutzers.
      */
-    private List<StatusAbfrageEvents> getStatusAbfrageEventsForAuthorities(
-        final List<AuthoritiesEnum> authorities,
-        Map<AuthoritiesEnum, StatusAbfrageEvents> authoritiesAndMatchingEvent
+    private static Set<StatusAbfrageEvents> getStatusAbfrageEventsForAuthorities(
+        final List<AuthoritiesEnum> authorities
     ) {
         return authorities
             .stream()
-            .map(authoritiesAndMatchingEvent::get)
+            .map(EVENT_BY_AUTHORITY::get)
             .filter(Objects::nonNull)
-            .collect(Collectors.toList());
+            .collect(Collectors.toCollection(() -> EnumSet.noneOf(StatusAbfrageEvents.class)));
     }
 
     /**
-     * Ermittelt alle möglichen Statusänderungen aus dem aktuellen Status.
+     * Ermittelt aus den konfigurierten Statusübergängen der State Machine je Status die möglichen {@link StatusAbfrageEvents}.
      *
-     * @param id vom Typ {@link UUID} um die Abfrage zu finden
-     * @return Liste von {@link StatusAbfrageEvents} welche möglich sind
-     * @throws EntityNotFoundException     falls die Abfrage nicht gefunden wird
-     * @throws UserRoleNotAllowedException falls der User keine Berechtigung für die Abfrage hat.
+     * @param stateMachineFactory zum Erstellen einer State Machine mit den konfigurierten Statusübergängen
+     * @return die je Status möglichen {@link StatusAbfrageEvents}
      */
-    private List<StatusAbfrageEvents> getStatusAbfrageEventsBasedOnState(final UUID id)
-        throws EntityNotFoundException, UserRoleNotAllowedException {
-        final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(id, "");
-        return stateMachine
+    private static Map<StatusAbfrage, Set<StatusAbfrageEvents>> getEventsByStatus(
+        final StateMachineFactory<StatusAbfrage, StatusAbfrageEvents> stateMachineFactory
+    ) {
+        return stateMachineFactory
+            .getStateMachine()
             .getTransitions()
             .stream()
-            .filter(transition -> transition.getSource().getId().equals(stateMachine.getState().getId()))
-            .map(transition -> transition.getTrigger().getEvent())
-            .collect(Collectors.toList());
+            .collect(
+                Collectors.groupingBy(
+                    transition -> transition.getSource().getId(),
+                    () -> new EnumMap<>(StatusAbfrage.class),
+                    Collectors.mapping(
+                        transition -> transition.getTrigger().getEvent(),
+                        Collectors.toCollection(() -> EnumSet.noneOf(StatusAbfrageEvents.class))
+                    )
+                )
+            );
     }
 
     /**
-     * Definiert eine {@link Map}, die die {@link AuthoritiesEnum} mit den dazugehörigen {@link StatusAbfrageEvents} verknüpft.
-     * <p>
-     * Diese Map dient als zentrale Stelle zum Zuordnen der verschiedenen Autoritäten und Transitionsereignisse.
+     * Überprüft, ob die Anmerkung der Abfrage nach dem Anhängen der neuen Anmerkung die maximale Länge überschreitet.
      *
-     * @return Die {@link Map}, die den Mapping von {@link AuthoritiesEnum} auf {@link StatusAbfrageEvents} enthält.
-     */
-    private Map<AuthoritiesEnum, StatusAbfrageEvents> getAuthoritiesAndEventsMap() {
-        final Map<AuthoritiesEnum, StatusAbfrageEvents> authoritiesAndEventsMap = new HashMap<>();
-        authoritiesAndEventsMap.put(AuthoritiesEnum.ISI_BACKEND_FREIGABE_ABFRAGE, StatusAbfrageEvents.FREIGABE);
-        authoritiesAndEventsMap.put(AuthoritiesEnum.ISI_BACKEND_ABBRECHEN_ABFRAGE, StatusAbfrageEvents.ABBRECHEN);
-        authoritiesAndEventsMap.put(
-            AuthoritiesEnum.ISI_BACKEND_ZURUECK_AN_ABFRAGEERSTELLUNG_ABFRAGE,
-            StatusAbfrageEvents.ZURUECK_AN_ABFRAGEERSTELLUNG
-        );
-        authoritiesAndEventsMap.put(
-            AuthoritiesEnum.ISI_BACKEND_IN_BEARBEITUNG_SETZTEN_ABFRAGE,
-            StatusAbfrageEvents.IN_BEARBEITUNG_SETZEN
-        );
-        authoritiesAndEventsMap.put(
-            AuthoritiesEnum.ISI_BACKEND_ZURUECK_AN_SACHBEARBEITUNG_ABFRAGE,
-            StatusAbfrageEvents.ZURUECK_AN_SACHBEARBEITUNG
-        );
-        authoritiesAndEventsMap.put(
-            AuthoritiesEnum.ISI_BACKEND_KEINE_BEARBEITUNG_NOETIG_ABFRAGE,
-            StatusAbfrageEvents.KEINE_BEARBEITUNG_NOETIG
-        );
-        authoritiesAndEventsMap.put(
-            AuthoritiesEnum.ISI_BACKEND_VERSCHICKEN_DER_STELLUNGNAHME_ABFRAGE,
-            StatusAbfrageEvents.VERSCHICKEN_DER_STELLUNGNAHME
-        );
-        authoritiesAndEventsMap.put(
-            AuthoritiesEnum.ISI_BACKEND_BEDARFSMELDUNG_ERFOLGTE_ABFRAGE,
-            StatusAbfrageEvents.BEDARFSMELDUNG_ERFOLGTE
-        );
-        authoritiesAndEventsMap.put(
-            AuthoritiesEnum.ISI_BACKEND_SPEICHERN_VON_SOZIALINFRASTRUKTUR_VERSORGUNG_ABFRAGE,
-            StatusAbfrageEvents.SPEICHERN_VON_SOZIALINFRASTRUKTUR_VERSORGUNG
-        );
-        authoritiesAndEventsMap.put(
-            AuthoritiesEnum.ISI_BACKEND_ERNEUTE_BEARBEITUNG_ABFRAGE,
-            StatusAbfrageEvents.ERNEUTE_BEARBEITUNG
-        );
-
-        return authoritiesAndEventsMap;
-    }
-
-    /**
-     * Überprüft, ob die Länge einer Anmerkung die maximale Grenze überschreitet
-     *
-     * @param id        vom Typ {@link UUID} um die Abfrage zu finden
+     * @param abfrage   an deren Anmerkung die neue Anmerkung angehängt werden soll.
      * @param anmerkung die zur Abfrage hinzugefügt werden soll.
      * @throws StringLengthExceededException Wenn die Anmerkung die maximale Länge von 2000 Zeichen überschreitet.
-     * @throws EntityNotFoundException       Wenn die Abfrage nicht gefunden wird.
      */
-    private void throwStringLengthExceededExceptionWhenAnmerkungExceedsLength(UUID id, String anmerkung)
-        throws StringLengthExceededException, EntityNotFoundException, UserRoleNotAllowedException {
-        var abfrage = this.abfrageService.getById(id);
-        if (!anmerkung.isEmpty()) {
-            if (abfrage.getAnmerkung() == null) {
-                abfrage.setAnmerkung(anmerkung);
-            } else {
-                abfrage.setAnmerkung(abfrage.getAnmerkung().concat("\n").concat(anmerkung));
-            }
-
-            if (abfrage.getAnmerkung().length() > 2000) {
-                throw new StringLengthExceededException("Es sind maximal 2000 Zeichen erlaubt");
-            }
+    private void throwStringLengthExceededExceptionWhenAnmerkungExceedsLength(
+        final AbfrageModel abfrage,
+        final String anmerkung
+    ) throws StringLengthExceededException {
+        if (
+            StringUtils.isNotEmpty(anmerkung) &&
+            appendAnmerkung(abfrage.getAnmerkung(), anmerkung).length() > MAX_LENGTH_ANMERKUNG
+        ) {
+            throw new StringLengthExceededException("Es sind maximal " + MAX_LENGTH_ANMERKUNG + " Zeichen erlaubt");
         }
+    }
+
+    /**
+     * Hängt die neue Anmerkung durch einen Zeilenumbruch getrennt an die bestehende Anmerkung an.
+     *
+     * @param bestehendeAnmerkung die bisherige Anmerkung der Abfrage. Kann null sein.
+     * @param anmerkung           die neue Anmerkung. Kann null oder leer sein.
+     * @return die zusammengesetzte Anmerkung
+     */
+    private static String appendAnmerkung(final String bestehendeAnmerkung, final String anmerkung) {
+        if (StringUtils.isEmpty(anmerkung)) {
+            return bestehendeAnmerkung;
+        }
+        return bestehendeAnmerkung == null ? anmerkung : bestehendeAnmerkung.concat("\n").concat(anmerkung);
     }
 }

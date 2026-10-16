@@ -30,13 +30,13 @@ import java.util.UUID;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentMatchers;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.messaging.Message;
-import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.transaction.annotation.Transactional;
@@ -64,29 +64,6 @@ class AbfrageStatusServiceTest {
 
     @MockitoBean
     private SendWorkAssignmentInformationService sendWorkAssignmentInformationService;
-
-    @Test
-    void getAbfrageIdHeaderSuccessfull() throws EntityNotFoundException {
-        final var uuid = UUID.randomUUID();
-        final Message<StatusAbfrageEvents> message = MessageBuilder.withPayload(StatusAbfrageEvents.FREIGABE)
-            .setHeader("abfrage_id", uuid)
-            .build();
-
-        final var uuuidExpected = this.abfrageStatusService.getAbfrageId(message.getHeaders());
-
-        assertThat(uuid, is(uuuidExpected));
-    }
-
-    @Test
-    void getAbfrageIdHeaderEntityNotFoundException() {
-        final var uuid = UUID.randomUUID();
-        final Message<StatusAbfrageEvents> message = MessageBuilder.withPayload(StatusAbfrageEvents.FREIGABE)
-            .setHeader("abfrageid", uuid)
-            .build();
-        Assertions.assertThrows(EntityNotFoundException.class, () ->
-            this.abfrageStatusService.getAbfrageId(message.getHeaders())
-        );
-    }
 
     @Test
     void statusAenderungEntityNotFoundExcpetion() {
@@ -1135,11 +1112,9 @@ class AbfrageStatusServiceTest {
         abfrage = this.abfrageService.getById(uuid);
         abfrage.setStatusAbfrage(StatusAbfrage.ABBRUCH);
         this.abfrageService.save(abfrage);
-        Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () ->
-            this.abfrageStatusService.erneuteBearbeitungSachbearbeitung(uuid, anmerkung)
-        );
+        this.abfrageStatusService.erneuteBearbeitungSachbearbeitung(uuid, anmerkung);
         abfrage = this.abfrageService.getById(uuid);
-        assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.ABBRUCH));
+        assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.START_BEARBEITUNG));
     }
 
     @Test
@@ -1215,11 +1190,62 @@ class AbfrageStatusServiceTest {
         abfrage = this.abfrageService.getById(uuid);
         abfrage.setStatusAbfrage(StatusAbfrage.ABBRUCH);
         this.abfrageService.save(abfrage);
-        Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () ->
-            this.abfrageStatusService.erneuteBearbeitungSachbearbeitung(uuid, anmerkung)
-        );
+        this.abfrageStatusService.erneuteBearbeitungSachbearbeitung(uuid, anmerkung);
         abfrage = this.abfrageService.getById(uuid);
-        assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.ABBRUCH));
+        assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.START_BEARBEITUNG));
+    }
+
+    @Test
+    @Transactional
+    @MockCustomUser
+    void erneuteBearbeitungSachbearbeitungVonAbbruchUndErneutAbbrechen()
+        throws UniqueViolationException, OptimisticLockingException, StringLengthExceededException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException, ReportingException, UserRoleNotAllowedException {
+        this.erneuteBearbeitungSachbearbeitungVonAbbruchUndErneutAbbrechen(TestData.createBauleitplanverfahrenModel());
+        this.erneuteBearbeitungSachbearbeitungVonAbbruchUndErneutAbbrechen(
+            TestData.createBaugenehmigungsverfahrenModel()
+        );
+    }
+
+    void erneuteBearbeitungSachbearbeitungVonAbbruchUndErneutAbbrechen(final AbfrageModel abfrageToTest)
+        throws EntityNotFoundException, AbfrageStatusNotAllowedException, UniqueViolationException, OptimisticLockingException, StringLengthExceededException, CalculationException, ReportingException, UserRoleNotAllowedException {
+        AbfrageModel abfrage = this.abfrageService.save(abfrageToTest);
+        abfrage.setStatusAbfrage(StatusAbfrage.START_BEARBEITUNG);
+        abfrage = this.abfrageService.save(abfrage);
+        final var uuid = abfrage.getId();
+
+        this.abfrageStatusService.abbrechenAbfrage(uuid, "");
+        assertThat(this.abfrageService.getById(uuid).getStatusAbfrage(), is(StatusAbfrage.ABBRUCH));
+
+        this.abfrageStatusService.erneuteBearbeitungSachbearbeitung(uuid, "Entkopplung vom Bauvorhaben");
+        abfrage = this.abfrageService.getById(uuid);
+        assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.START_BEARBEITUNG));
+        assertThat(abfrage.getAnmerkung(), is("Bitte die Abfrage zeitnah behandeln\nEntkopplung vom Bauvorhaben"));
+        Mockito.verify(this.sendWorkAssignmentInformationService).sendWorkAssignmentInformationAsync(
+            ArgumentMatchers.argThat(model -> uuid.equals(model.getId())),
+            ArgumentMatchers.eq(StatusAbfrageEvents.ERNEUTE_BEARBEITUNG)
+        );
+
+        this.abfrageStatusService.abbrechenAbfrage(uuid, "");
+        assertThat(this.abfrageService.getById(uuid).getStatusAbfrage(), is(StatusAbfrage.ABBRUCH));
+    }
+
+    @Test
+    @Transactional
+    @MockCustomUser
+    void inBearbeitungSetzenSpeichertKeineBauratenmethodikVorbelegungBeiUnerlaubtemStatus()
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, CalculationException, ReportingException, UserRoleNotAllowedException {
+        final BauleitplanverfahrenModel bauleitplanverfahren = TestData.createBauleitplanverfahrenModel();
+        bauleitplanverfahren.setStart42Verfahren(LocalDate.of(2026, 3, 1));
+        bauleitplanverfahren.setStart42VerfahrenDatumUnbekannt(false);
+        final var uuid = this.abfrageService.save(bauleitplanverfahren).getId();
+
+        Assertions.assertThrows(AbfrageStatusNotAllowedException.class, () ->
+            this.abfrageStatusService.inBearbeitungSetzenAbfrage(uuid, "")
+        );
+
+        final var abfrage = (BauleitplanverfahrenModel) this.abfrageService.getById(uuid);
+        assertThat(abfrage.getStatusAbfrage(), is(StatusAbfrage.ANGELEGT));
+        assertThat(abfrage.getBauratenmethodikVorbelegung(), is(nullValue()));
     }
 
     @Test
