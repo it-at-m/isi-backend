@@ -299,17 +299,11 @@ public class KommentarController {
     )
     public ResponseEntity<Void> deleteKommentarForBauvorhaben(@PathVariable @NotNull final UUID id)
         throws EntityNotFoundException {
-        try {
-            // Ist das ein Bauvorhaben Kommentar?
-            this.kommentarService.getKommentarForBauvorhabenById(id);
-        } catch (final EntityNotFoundException e) {
-            // Wenn das ein Kommentar für eine Infrastruktureinrichtung ist, dann Löschung mit 400 zurückweisen, andernfalls rethrow (not found).
-            try {
-                this.kommentarService.getKommentarForInfrastruktureinrichtungById(id);
-                return ResponseEntity.badRequest().build();
-            } catch (final EntityNotFoundException ex) {
-                throw e;
-            }
+        final var kommentar = this.kommentarService.getKommentarEntityById(id);
+        // Verify it's a Bauvorhaben comment
+        if (kommentar.getBauvorhaben() == null) {
+            // Kommentar gehört nicht zu einem Bauvorhaben -> ablehnen
+            return ResponseEntity.badRequest().build();
         }
         this.kommentarService.deleteKommentarById(id);
         return ResponseEntity.noContent().build();
@@ -338,17 +332,11 @@ public class KommentarController {
     )
     public ResponseEntity<Void> deleteKommentarForInfrastruktureinrichtung(@PathVariable @NotNull final UUID id)
         throws EntityNotFoundException {
-        try {
-            // Ist das ein Infrastruktureinrichtung Kommentar?
-            this.kommentarService.getKommentarForInfrastruktureinrichtungById(id);
-        } catch (final EntityNotFoundException e) {
-            // Wenn das ein Kommentar für ein Bauvorhaben ist, dann Löschung mit 400 zurückweisen, andernfalls rethrow (not found).
-            try {
-                this.kommentarService.getKommentarForBauvorhabenById(id);
-                return ResponseEntity.badRequest().build();
-            } catch (final EntityNotFoundException ex) {
-                throw e;
-            }
+        final var kommentar = this.kommentarService.getKommentarEntityById(id);
+        // Überprüfen ob der Kommentar zu einer Infrastruktureinrichtung gehört
+        if (kommentar.getInfrastruktureinrichtung() == null) {
+            // Kommentar gehört nicht zu einer Infrastruktureinrichtung -> ablehnen
+            return ResponseEntity.badRequest().build();
         }
         this.kommentarService.deleteKommentarById(id);
         return ResponseEntity.noContent().build();
@@ -380,17 +368,11 @@ public class KommentarController {
     public ResponseEntity<Void> deleteKommentarForInfrastruktureinrichtungBedarfsmeldungSozialplanung(
         @PathVariable @NotNull final UUID id
     ) throws EntityNotFoundException {
-        try {
-            // Ist das ein Infrastruktureinrichtung Kommentar?
-            this.kommentarService.getKommentarForInfrastruktureinrichtungById(id);
-        } catch (final EntityNotFoundException e) {
-            // Wenn das ein Kommentar für ein Bauvorhaben ist, dann Löschung mit 400 zurückweisen, andernfalls rethrow (not found).
-            try {
-                this.kommentarService.getKommentarForBauvorhabenById(id);
-                return ResponseEntity.badRequest().build();
-            } catch (final EntityNotFoundException ex) {
-                throw e;
-            }
+        final var kommentar = this.kommentarService.getKommentarEntityById(id);
+        // Überprüfen ob der Kommentar zu einer Infrastruktureinrichtung gehört
+        if (kommentar.getInfrastruktureinrichtung() == null) {
+            // Kommentar gehört nicht zu einer Infrastruktureinrichtung -> ablehnen
+            return ResponseEntity.badRequest().build();
         }
         this.kommentarService.deleteKommentarById(id);
         return ResponseEntity.noContent().build();
