@@ -14,11 +14,13 @@ import de.muenchen.isi.domain.model.infrastruktureinrichtung.Infrastruktureinric
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.KindergartenModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.KinderkrippeModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.MittelschuleModel;
+import de.muenchen.isi.domain.model.infrastruktureinrichtung.NachbarschaftstreffModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.SchuleModel;
 import de.muenchen.isi.domain.service.etlInterface.EtlInterfaceService;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.AnlassPlanung;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.Kooperation;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusInfrastruktureinrichtung;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Verfahrensstand;
@@ -26,6 +28,7 @@ import de.muenchen.isi.infrastructure.entity.enums.lookup.WesentlicheRechtsgrund
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Grundschule;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Kindergarten;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Kinderkrippe;
+import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Nachbarschaftstreff;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Schule;
 import de.muenchen.isi.infrastructure.repository.BauvorhabenRepository;
 import de.muenchen.isi.infrastructure.repository.InfrastruktureinrichtungRepository;
@@ -169,6 +172,51 @@ class InfrastruktureinrichtungServiceTest {
 
     @Test
     @Transactional
+    void saveInfrastruktureinrichtungNachbarschaftstreff()
+        throws OptimisticLockingException, EntityNotFoundException, ReportingException {
+        var bauvorhaben = new Bauvorhaben();
+        bauvorhaben.setNameVorhaben("Bauvorhaben");
+        bauvorhaben.setVerfahrensstand(Verfahrensstand.RAHMENPLANUNG);
+        bauvorhaben.setWesentlicheRechtsgrundlage(List.of(WesentlicheRechtsgrundlage.EINFACHER_BEBAUUNGSPLAN));
+        bauvorhaben.setSobonRelevant(UncertainBoolean.FALSE);
+        bauvorhaben = bauvorhabenRepository.saveAndFlush(bauvorhaben);
+
+        NachbarschaftstreffModel nachbarschaftstreff = new NachbarschaftstreffModel();
+        nachbarschaftstreff.setNameEinrichtung("Nachbarschaftstreff Riem Arcaden");
+        nachbarschaftstreff.setAnlassPlanung(AnlassPlanung.UNSPECIFIED);
+        nachbarschaftstreff.setStatus(StatusInfrastruktureinrichtung.BESTAND);
+        nachbarschaftstreff.setKooperation(Kooperation.SONSTIGES);
+        nachbarschaftstreff.setKooperationFreieEingabe("meine persönliche Kooperation");
+        nachbarschaftstreff.setSobonRelevant(UncertainBoolean.TRUE);
+        nachbarschaftstreff.setBauvorhaben(bauvorhaben.getId());
+
+        final var savedNachbarschaftstreff = this.infrastruktureinrichtungService.saveInfrastruktureinrichtung(
+            nachbarschaftstreff
+        );
+
+        assertThat(savedNachbarschaftstreff.getId(), is(notNullValue()));
+        assertThat(savedNachbarschaftstreff.getVersion(), is(0L));
+        assertThat(savedNachbarschaftstreff.getNameEinrichtung(), is("Nachbarschaftstreff Riem Arcaden"));
+        assertThat(savedNachbarschaftstreff.getBauvorhaben(), is(bauvorhaben.getId()));
+        assertThat(
+            savedNachbarschaftstreff.getInfrastruktureinrichtungTyp(),
+            is(InfrastruktureinrichtungTyp.NACHBARSCHAFTSTREFF)
+        );
+        assertThat(savedNachbarschaftstreff.getClass(), is(nachbarschaftstreff.getClass()));
+        assertThat(((NachbarschaftstreffModel) savedNachbarschaftstreff).getKooperation(), is(Kooperation.SONSTIGES));
+        assertThat(
+            ((NachbarschaftstreffModel) savedNachbarschaftstreff).getKooperationFreieEingabe(),
+            is("meine persönliche Kooperation")
+        );
+        assertThat(((NachbarschaftstreffModel) savedNachbarschaftstreff).getSobonRelevant(), is(UncertainBoolean.TRUE));
+
+        Mockito.verify(this.etlInterfaceService, Mockito.times(1)).etlInterfaceTriggerInfrastruktureinrichtungJob(
+            savedNachbarschaftstreff.getId()
+        );
+    }
+
+    @Test
+    @Transactional
     void updateInfrastruktureinrichtung()
         throws OptimisticLockingException, EntityNotFoundException, ReportingException {
         var bauvorhaben = new Bauvorhaben();
@@ -229,6 +277,78 @@ class InfrastruktureinrichtungServiceTest {
         Mockito.verify(this.etlInterfaceService, Mockito.times(1)).etlInterfaceTriggerInfrastruktureinrichtungJob(
             savedMittelschule.getId()
         );
+        Mockito.reset(this.etlInterfaceService);
+    }
+
+    @Test
+    @Transactional
+    void updateInfrastruktureinrichtungNachbarschaftstreff()
+        throws OptimisticLockingException, EntityNotFoundException, ReportingException {
+        var bauvorhaben = new Bauvorhaben();
+        bauvorhaben.setNameVorhaben("Bauvorhaben");
+        bauvorhaben.setVerfahrensstand(Verfahrensstand.RAHMENPLANUNG);
+        bauvorhaben.setWesentlicheRechtsgrundlage(List.of(WesentlicheRechtsgrundlage.EINFACHER_BEBAUUNGSPLAN));
+        bauvorhaben.setSobonRelevant(UncertainBoolean.FALSE);
+        bauvorhaben = bauvorhabenRepository.saveAndFlush(bauvorhaben);
+
+        NachbarschaftstreffModel nachbarschaftstreff = new NachbarschaftstreffModel();
+        nachbarschaftstreff.setNameEinrichtung("Nachbarschaftstreff Riem Arcaden");
+        nachbarschaftstreff.setAnlassPlanung(AnlassPlanung.UNSPECIFIED);
+        nachbarschaftstreff.setStatus(StatusInfrastruktureinrichtung.BESTAND);
+        nachbarschaftstreff.setKooperation(Kooperation.SONSTIGES);
+        nachbarschaftstreff.setKooperationFreieEingabe("meine persönliche Kooperation");
+        nachbarschaftstreff.setSobonRelevant(UncertainBoolean.TRUE);
+        nachbarschaftstreff.setBauvorhaben(bauvorhaben.getId());
+
+        final var savedNachbarschaftstreff = this.infrastruktureinrichtungService.saveInfrastruktureinrichtung(
+            nachbarschaftstreff
+        );
+        assertThat(savedNachbarschaftstreff.getVersion(), is(0L));
+
+        Mockito.verify(this.etlInterfaceService, Mockito.times(1)).etlInterfaceTriggerInfrastruktureinrichtungJob(
+            savedNachbarschaftstreff.getId()
+        );
+        Mockito.reset(this.etlInterfaceService);
+
+        savedNachbarschaftstreff.setNameEinrichtung("Nachbarschaftstreff Platz der Menschenrechte");
+
+        final var updatedNachbarschaftstreff = this.infrastruktureinrichtungService.updateInfrastruktureinrichtung(
+            savedNachbarschaftstreff
+        );
+
+        assertThat(updatedNachbarschaftstreff.getId(), is(savedNachbarschaftstreff.getId()));
+        assertThat(updatedNachbarschaftstreff.getVersion(), is(1L));
+        assertThat(updatedNachbarschaftstreff.getNameEinrichtung(), is("Nachbarschaftstreff Platz der Menschenrechte"));
+        assertThat(updatedNachbarschaftstreff.getBauvorhaben(), is(bauvorhaben.getId()));
+        assertThat(
+            updatedNachbarschaftstreff.getInfrastruktureinrichtungTyp(),
+            is(InfrastruktureinrichtungTyp.NACHBARSCHAFTSTREFF)
+        );
+        assertThat(updatedNachbarschaftstreff.getClass(), is(savedNachbarschaftstreff.getClass()));
+        assertThat(((NachbarschaftstreffModel) updatedNachbarschaftstreff).getKooperation(), is(Kooperation.SONSTIGES));
+        assertThat(
+            ((NachbarschaftstreffModel) updatedNachbarschaftstreff).getKooperationFreieEingabe(),
+            is("meine persönliche Kooperation")
+        );
+        assertThat(
+            ((NachbarschaftstreffModel) updatedNachbarschaftstreff).getSobonRelevant(),
+            is(UncertainBoolean.TRUE)
+        );
+
+        updatedNachbarschaftstreff.setVersion(0L);
+        Assertions.assertThrows(OptimisticLockingException.class, () ->
+            this.infrastruktureinrichtungService.updateInfrastruktureinrichtung(updatedNachbarschaftstreff)
+        );
+
+        updatedNachbarschaftstreff.setId(UUID.randomUUID());
+        Assertions.assertThrows(EntityNotFoundException.class, () ->
+            this.infrastruktureinrichtungService.updateInfrastruktureinrichtung(updatedNachbarschaftstreff)
+        );
+
+        Mockito.verify(this.etlInterfaceService, Mockito.times(1)).etlInterfaceTriggerInfrastruktureinrichtungJob(
+            savedNachbarschaftstreff.getId()
+        );
+        Mockito.reset(this.etlInterfaceService);
     }
 
     @Test
