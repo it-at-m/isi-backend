@@ -279,11 +279,38 @@ public class KommentarController {
     @DeleteMapping("bauvorhaben/{id}")
     @Transactional
     @Operation(summary = "Löschen eines Kommentars eines Bauvorhabens")
-    @ApiResponses(value = { @ApiResponse(responseCode = "204", description = "NO CONTENT") })
+    @ApiResponses(
+        value = {
+            @ApiResponse(responseCode = "204", description = "NO CONTENT"),
+            @ApiResponse(
+                responseCode = "400",
+                description = "BAD_REQUEST -> Kommentar konnte nicht gelöscht werden",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+            @ApiResponse(
+                responseCode = "404",
+                description = "NOT FOUND -> Kommentar mit dieser ID nicht vorhanden.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+        }
+    )
     @PreAuthorize(
         "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_DELETE_KOMMENTAR_BAUVORHABEN.name())"
     )
-    public ResponseEntity<Void> deleteKommentarForBauvorhaben(@PathVariable @NotNull final UUID id) {
+    public ResponseEntity<Void> deleteKommentarForBauvorhaben(@PathVariable @NotNull final UUID id)
+        throws EntityNotFoundException {
+        try {
+            // Ist das ein Bauvorhaben Kommentar?
+            this.kommentarService.getKommentarForBauvorhabenById(id);
+        } catch (final EntityNotFoundException e) {
+            // Wenn das ein Kommentar für eine Infrastruktureinrichtung ist, dann Löschung mit 400 zurückweisen, andernfalls rethrow (not found).
+            try {
+                this.kommentarService.getKommentarForInfrastruktureinrichtungById(id);
+                return ResponseEntity.badRequest().build();
+            } catch (final EntityNotFoundException ex) {
+                throw e;
+            }
+        }
         this.kommentarService.deleteKommentarById(id);
         return ResponseEntity.noContent().build();
     }
@@ -291,11 +318,38 @@ public class KommentarController {
     @DeleteMapping("infrastruktureinrichtung/{id}")
     @Transactional
     @Operation(summary = "Löschen eines Kommentars einer Infrastruktureinrichtung")
-    @ApiResponses(value = { @ApiResponse(responseCode = "204", description = "NO CONTENT") })
+    @ApiResponses(
+        value = {
+            @ApiResponse(responseCode = "204", description = "NO CONTENT"),
+            @ApiResponse(
+                responseCode = "400",
+                description = "BAD_REQUEST -> Kommentar konnte nicht gelöscht werden",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+            @ApiResponse(
+                responseCode = "404",
+                description = "NOT FOUND -> Kommentar mit dieser ID nicht vorhanden.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+        }
+    )
     @PreAuthorize(
         "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_DELETE_KOMMENTAR_INFRASTRUKTUREINRICHTUNG.name())"
     )
-    public ResponseEntity<Void> deleteKommentarForInfrastruktureinrichtung(@PathVariable @NotNull final UUID id) {
+    public ResponseEntity<Void> deleteKommentarForInfrastruktureinrichtung(@PathVariable @NotNull final UUID id)
+        throws EntityNotFoundException {
+        try {
+            // Ist das ein Infrastruktureinrichtung Kommentar?
+            this.kommentarService.getKommentarForInfrastruktureinrichtungById(id);
+        } catch (final EntityNotFoundException e) {
+            // Wenn das ein Kommentar für ein Bauvorhaben ist, dann Löschung mit 400 zurückweisen, andernfalls rethrow (not found).
+            try {
+                this.kommentarService.getKommentarForBauvorhabenById(id);
+                return ResponseEntity.badRequest().build();
+            } catch (final EntityNotFoundException ex) {
+                throw e;
+            }
+        }
         this.kommentarService.deleteKommentarById(id);
         return ResponseEntity.noContent().build();
     }
@@ -305,13 +359,39 @@ public class KommentarController {
     @Operation(
         summary = "Löschen eines Kommentars einer Infrastruktureinrichtung für die Rolle Bedarfsmeldung Sozialplanung"
     )
-    @ApiResponses(value = { @ApiResponse(responseCode = "204", description = "NO CONTENT") })
+    @ApiResponses(
+        value = {
+            @ApiResponse(responseCode = "204", description = "NO CONTENT"),
+            @ApiResponse(
+                responseCode = "400",
+                description = "BAD_REQUEST -> Kommentar konnte nicht gelöscht werden",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+            @ApiResponse(
+                responseCode = "404",
+                description = "NOT FOUND -> Kommentar mit dieser ID nicht vorhanden.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+        }
+    )
     @PreAuthorize(
         "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_DELETE_KOMMENTAR_INFRASTRUKTUREINRICHTUNG_BEDARFSMELDUNG_SOZIALPLANUNG.name())"
     )
     public ResponseEntity<Void> deleteKommentarForInfrastruktureinrichtungBedarfsmeldungSozialplanung(
         @PathVariable @NotNull final UUID id
-    ) {
+    ) throws EntityNotFoundException {
+        try {
+            // Ist das ein Infrastruktureinrichtung Kommentar?
+            this.kommentarService.getKommentarForInfrastruktureinrichtungById(id);
+        } catch (final EntityNotFoundException e) {
+            // Wenn das ein Kommentar für ein Bauvorhaben ist, dann Löschung mit 400 zurückweisen, andernfalls rethrow (not found).
+            try {
+                this.kommentarService.getKommentarForBauvorhabenById(id);
+                return ResponseEntity.badRequest().build();
+            } catch (final EntityNotFoundException ex) {
+                throw e;
+            }
+        }
         this.kommentarService.deleteKommentarById(id);
         return ResponseEntity.noContent().build();
     }
