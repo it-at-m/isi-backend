@@ -1,6 +1,7 @@
 package de.muenchen.isi.api.validation;
 
 import de.muenchen.isi.api.dto.infrastruktureinrichtung.InfrastruktureinrichtungDto;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusInfrastruktureinrichtung;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
@@ -23,9 +24,12 @@ public class FertigstellungsjahrValidator
      */
     @Override
     public boolean isValid(final InfrastruktureinrichtungDto value, final ConstraintValidatorContext context) {
-        return (
-            value != null &&
-            (value.getFertigstellungsjahr() != null || value.getStatus() == StatusInfrastruktureinrichtung.BESTAND)
-        );
+        if (value == null) {
+            return false;
+        }
+        if (value.getInfrastruktureinrichtungTyp() == InfrastruktureinrichtungTyp.NACHBARSCHAFTSTREFF) {
+            return true;
+        }
+        return value.getFertigstellungsjahr() != null || value.getStatus() == StatusInfrastruktureinrichtung.BESTAND;
     }
 }

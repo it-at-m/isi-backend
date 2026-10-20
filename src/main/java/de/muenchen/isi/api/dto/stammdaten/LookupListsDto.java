@@ -56,5 +56,7 @@ public class LookupListsDto {
 
     private LookupListDto bauratenmethodik;
 
+    private LookupListDto kooperation;
+
     private LookupListModel infrastruktureinrichtungArt;
 }
