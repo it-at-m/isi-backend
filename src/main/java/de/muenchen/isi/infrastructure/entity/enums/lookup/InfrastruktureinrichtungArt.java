@@ -8,7 +8,7 @@ public enum InfrastruktureinrichtungArt implements ILookup {
     UNSPECIFIED(ILookup.UNSPECIFIED),
     KINDERTAGESBETREUUNG("Kindertagesbetreuung"),
     GANZTAGSBETREUUNG_GRUNDSCHULKINDER("Ganztagsbetreuung Grundschulkinder"),
-    SCHULEN("SCHULEN"),
+    SCHULEN("Schulen"),
     SOZIALE_EINRICHTUNGEN("Soziale Einrichtungen");
 
     @Getter
