@@ -6,6 +6,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum InfrastruktureinrichtungArt implements ILookup {
     UNSPECIFIED(ILookup.UNSPECIFIED),
+    KINDERTAGESBETREUUNG("Kindertagesbetreuung"),
     GANZTAGSBETREUUNG_GRUNDSCHULKINDER("Ganztagsbetreuung Grundschulkinder"),
     SCHULEN("SCHULEN"),
     SOZIALE_EINRICHTUNGEN("Soziale Einrichtungen");

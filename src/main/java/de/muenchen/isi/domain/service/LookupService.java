@@ -67,6 +67,7 @@ public class LookupService {
             this.getSobonOrientierungswertJahrWithoutStandortabfrage()
         );
         model.setBauratenmethodik(this.getBauratenmethodikList());
+        model.setInfrastruktureinrichtungArt(this.getInfrastruktureinrichtungArtList());
         return model;
     }
 
