@@ -109,6 +109,26 @@ public class AbfrageService {
     }
 
     /**
+     * Die Methode gibt ausschließlich den {@link StatusAbfrage} der Abfrage identifiziert durch die ID zurück.
+     * Im Gegensatz zu {@link #getById(UUID)} wird die Abfrage dabei weder vollständig geladen noch gemappt.
+     *
+     * @param id zum Identifizieren der Abfrage.
+     * @return {@link StatusAbfrage} der Abfrage.
+     * @throws EntityNotFoundException     falls die Abfrage identifiziert durch die ID nicht gefunden wird.
+     * @throws UserRoleNotAllowedException falls der User keine Berechtigung für die Abfrage hat.
+     */
+    public StatusAbfrage getStatusAbfrageById(final UUID id)
+        throws EntityNotFoundException, UserRoleNotAllowedException {
+        final var statusAbfrage = this.abfrageRepository.findStatusAbfrageById(id).orElseThrow(() -> {
+            final var message = "Abfrage nicht gefunden.";
+            log.error(message);
+            return new EntityNotFoundException(message);
+        });
+        throwUserRoleNotAllowedExceptionWhenRoleIsAnwenderAndAbfragestatusIsNotErledigt(statusAbfrage);
+        return statusAbfrage;
+    }
+
+    /**
      * Diese Methode speichert ein {@link AbfrageModel}.
      * Des Weiteren werden je Abfragevariante die planungs- und sobonursächlichen {@link LangfristigerBedarfModel} ermittelt
      * und samt mit der Abfrage an die Reportingschnittstelle übermittelt.
@@ -545,10 +565,16 @@ public class AbfrageService {
      */
     public void throwUserRoleNotAllowedExceptionWhenRoleIsAnwenderAndAbfragestatusIsNotErledigt(Abfrage abfrage)
         throws UserRoleNotAllowedException {
+        throwUserRoleNotAllowedExceptionWhenRoleIsAnwenderAndAbfragestatusIsNotErledigt(abfrage.getStatusAbfrage());
+    }
+
+    private void throwUserRoleNotAllowedExceptionWhenRoleIsAnwenderAndAbfragestatusIsNotErledigt(
+        final StatusAbfrage statusAbfrage
+    ) throws UserRoleNotAllowedException {
         if (authenticationUtils.isOnlyRoleAnwender()) {
             if (
-                abfrage.getStatusAbfrage() != StatusAbfrage.ERLEDIGT_OHNE_FACHREFERAT &&
-                abfrage.getStatusAbfrage() != StatusAbfrage.ERLEDIGT_MIT_FACHREFERAT
+                statusAbfrage != StatusAbfrage.ERLEDIGT_OHNE_FACHREFERAT &&
+                statusAbfrage != StatusAbfrage.ERLEDIGT_MIT_FACHREFERAT
             ) {
                 throw new UserRoleNotAllowedException("Fehlende Berechtigung für die Abfrage");
             }

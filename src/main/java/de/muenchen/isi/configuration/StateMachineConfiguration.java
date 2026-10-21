@@ -14,18 +14,17 @@ import org.springframework.statemachine.config.builders.StateMachineTransitionCo
 public class StateMachineConfiguration extends StateMachineConfigurerAdapter<StatusAbfrage, StatusAbfrageEvents> {
 
     /**
-     * Legt alle verfuegbaren Events fest. ANGELEGT ist der Anfangstatus und ABBRUCH ist der Endstatus.
+     * Legt alle verfuegbaren Status fest. ANGELEGT ist der Anfangstatus.
+     * <p>
+     * Es wird bewusst kein Endstatus definiert, da aus jedem Status (auch ABBRUCH) eine erneute Bearbeitung möglich sein kann.
+     * Eine State Machine in einem Endstatus nimmt keine Events mehr an.
      *
      * @param states konfiguriert alle Status der State Machine
      * @throws Exception wenn ein Fehler in der Configuration auftritt
      */
     @Override
     public void configure(StateMachineStateConfigurer<StatusAbfrage, StatusAbfrageEvents> states) throws Exception {
-        states
-            .withStates()
-            .initial(StatusAbfrage.ANGELEGT)
-            .states(EnumSet.allOf(StatusAbfrage.class))
-            .end(StatusAbfrage.ABBRUCH);
+        states.withStates().initial(StatusAbfrage.ANGELEGT).states(EnumSet.allOf(StatusAbfrage.class));
     }
 
     /**
@@ -45,8 +44,6 @@ public class StateMachineConfiguration extends StateMachineConfigurerAdapter<Sta
             .event(StatusAbfrageEvents.FREIGABE)
             .and()
             // Alle Events vom Status UEBERMITTELT_ZUR_BEARBEITUNG
-            .withExternal()
-            .and()
             .withExternal()
             .source(StatusAbfrage.UEBERMITTELT_ZUR_BEARBEITUNG)
             .target(StatusAbfrage.ANGELEGT)
@@ -110,6 +107,7 @@ public class StateMachineConfiguration extends StateMachineConfigurerAdapter<Sta
             .target(StatusAbfrage.ABBRUCH)
             .event(StatusAbfrageEvents.ABBRECHEN)
             .and()
+            // Alle Events der Status ERLEDIGT_OHNE_FACHREFERAT, ERLEDIGT_MIT_FACHREFERAT und ABBRUCH
             .withExternal()
             .source(StatusAbfrage.ERLEDIGT_OHNE_FACHREFERAT)
             .target(StatusAbfrage.START_BEARBEITUNG)
@@ -117,6 +115,11 @@ public class StateMachineConfiguration extends StateMachineConfigurerAdapter<Sta
             .and()
             .withExternal()
             .source(StatusAbfrage.ERLEDIGT_MIT_FACHREFERAT)
+            .target(StatusAbfrage.START_BEARBEITUNG)
+            .event(StatusAbfrageEvents.ERNEUTE_BEARBEITUNG)
+            .and()
+            .withExternal()
+            .source(StatusAbfrage.ABBRUCH)
             .target(StatusAbfrage.START_BEARBEITUNG)
             .event(StatusAbfrageEvents.ERNEUTE_BEARBEITUNG);
     }
