@@ -267,7 +267,7 @@ class KommentarServiceTest {
 
         assertThat(result, is(kommentar1Model));
 
-        Mockito.verify(this.kommentarRepository, Mockito.times(2)).findById(kommentar1.getId());
+        Mockito.verify(this.kommentarRepository, Mockito.times(1)).findById(kommentar1.getId());
         Mockito.verify(this.kommentarRepository, Mockito.times(1)).saveAndFlush(kommentar1);
         Mockito.verify(this.bauvorhabenRepository, Mockito.times(1)).findById(uuidBauvorhaben);
         Mockito.verify(this.infrastruktureinrichtungRepository, Mockito.times(0)).findById(uuidBauvorhaben);

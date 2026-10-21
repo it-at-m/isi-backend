@@ -188,6 +188,21 @@ public abstract class SearchDomainMapper {
     }
 
     /**
+     * Überprüft, ob für die übergebene Verortung bereits ein Schwerpunkt mit Längen- und Breitengrad gespeichert ist.
+     *
+     * @param verortung Die Verortung, deren gespeicherter Schwerpunkt überprüft werden soll.
+     * @return {@code true}, wenn ein Schwerpunkt mit zwei Koordinaten vorhanden ist, ansonsten {@code false}.
+     */
+    public boolean hasVerortungCentroid(final VerortungMultiPolygon verortung) {
+        return (
+            ObjectUtils.isNotEmpty(verortung) &&
+            ObjectUtils.isNotEmpty(verortung.getCentroid()) &&
+            ObjectUtils.isNotEmpty(verortung.getCentroid().getCoordinates()) &&
+            verortung.getCentroid().getCoordinates().size() >= 2
+        );
+    }
+
+    /**
      * Ermittelt die Koordinaten einer Adresse oder – falls diese nicht vorhanden sind –
      * den Schwerpunkt (Centroid) einer übergebenen Verortung (Mehrfachpolygon).
      *
@@ -195,7 +210,9 @@ public abstract class SearchDomainMapper {
      * Die Methode geht wie folgt vor:
      * <ul>
      *   <li>Falls die Adresse gültige Koordinaten enthält, werden diese zurückgegeben.</li>
-     *   <li>Falls die Adresse keine Koordinaten hat, aber die Verortung ein Mehrfachpolygon
+     *   <li>Falls die Adresse keine Koordinaten hat, aber für die Verortung ein Schwerpunkt gespeichert ist,
+     *       wird dieser zurückgegeben.</li>
+     *   <li>Falls kein Schwerpunkt gespeichert ist, aber die Verortung ein Mehrfachpolygon
      *       mit Koordinaten enthält, wird der geometrische Schwerpunkt des Polygons berechnet
      *       und zurückgegeben.</li>
      *   <li>Falls keine Koordinaten ermittelt werden können oder die Schwerpunktberechnung
@@ -215,6 +232,13 @@ public abstract class SearchDomainMapper {
     ) {
         if (hasAdressCoordinate(adresse)) {
             return this.koordinatenDomainMapper.entity2Model(adresse.getCoordinate());
+        } else if (hasVerortungCentroid(verortungMultiPolygon)) {
+            // Der Schwerpunkt wird beim Speichern der Verortung berechnet und muss nicht erneut ermittelt werden.
+            final var coordinates = verortungMultiPolygon.getCentroid().getCoordinates();
+            final var wgs84Model = new Wgs84Model();
+            wgs84Model.setLongitude(coordinates.get(0).doubleValue());
+            wgs84Model.setLatitude(coordinates.get(1).doubleValue());
+            return wgs84Model;
         } else if (hasVerortungCoordinate(verortungMultiPolygon)) {
             try {
                 final var centroid = koordinatenService.getMultiPolygonCentroid(
@@ -243,6 +267,11 @@ public abstract class SearchDomainMapper {
 
     public abstract MultiPolygonGeometryModel entity2Model(final MultiPolygonGeometry entity);
 
+    /**
+     * Für Suchergebnisse werden nur Nummer und Name des Stadtbezirks benötigt. Das Multipolygon wird
+     * nicht gemappt, um den Speicherverbrauch und die Größe der Suchergebnisse gering zu halten.
+     */
+    @Mapping(target = "multiPolygon", ignore = true)
     public abstract StadtbezirkModel entity2Model(final Stadtbezirk entity);
 
     /**

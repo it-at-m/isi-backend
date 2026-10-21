@@ -61,6 +61,11 @@ public class UserInfoDataService {
     private final Cache cache;
 
     /**
+     * Obergrenze der zwischengespeicherten Tokens, damit der Cache bei vielen unterschiedlichen Tokens nicht unbegrenzt wächst.
+     */
+    private static final long MAXIMUM_CACHE_SIZE = 1_000;
+
+    /**
      * Erzeugt eine neue Instanz.
      *
      * @param userInfoUri userinfo Endpoint URI
@@ -74,6 +79,7 @@ public class UserInfoDataService {
             Caffeine.newBuilder()
                 .expireAfterWrite(CachingConfiguration.AUTHENTICATION_CACHE_EXPIRATION_TIME_SECONDS, TimeUnit.SECONDS)
                 .ticker(Ticker.systemTicker())
+                .maximumSize(MAXIMUM_CACHE_SIZE)
                 .build()
         );
     }

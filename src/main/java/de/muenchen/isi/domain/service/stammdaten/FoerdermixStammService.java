@@ -4,10 +4,12 @@ import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.mapper.StammdatenDomainMapper;
 import de.muenchen.isi.domain.model.stammdaten.FoerdermixStammModel;
+import de.muenchen.isi.infrastructure.entity.stammdaten.FoerdermixStamm;
 import de.muenchen.isi.infrastructure.repository.stammdaten.FoerdermixStammRepository;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
@@ -28,10 +30,12 @@ public class FoerdermixStammService {
      * @return Liste an {@link FoerdermixStammModel}
      */
     public List<FoerdermixStammModel> getFoerdermixStaemme() {
-        return this.foerdermixStammRepository
-            .findAllByOrderByFoerdermixBezeichnungAsc()
-            .map(this.stammdatenDomainMapper::entity2Model)
-            .collect(Collectors.toList());
+        try (
+            final Stream<FoerdermixStamm> foerdermixStaemme =
+                this.foerdermixStammRepository.findAllByOrderByFoerdermixBezeichnungAsc()
+        ) {
+            return foerdermixStaemme.map(this.stammdatenDomainMapper::entity2Model).collect(Collectors.toList());
+        }
     }
 
     /**
