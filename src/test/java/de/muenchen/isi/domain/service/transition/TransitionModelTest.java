@@ -840,17 +840,69 @@ public class TransitionModelTest {
     @Test
     @Transactional
     @MockCustomUser
-    void possibleTransitionsAbbruch()
+    void possibleTransitionsAbbruchRoleAdmin()
         throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, CalculationException, ReportingException, UserRoleNotAllowedException {
-        AbfrageModel abfrage = TestData.createBauleitplanverfahrenModel();
-        abfrage = this.abfrageService.save(abfrage);
-        abfrage.setStatusAbfrage(StatusAbfrage.ABBRUCH);
-        abfrage = this.abfrageService.save(abfrage);
+        final var uuid = this.createAbfrageWithStatus(StatusAbfrage.ABBRUCH);
 
-        final var uuid = abfrage.getId();
+        List<TransitionModel> possibleTransitions =
+            this.abfrageStatusService.getStatusAbfrageEventsBasedOnStateAndAuthorities(uuid);
+
+        assertThat(possibleTransitions.size(), is(1));
+        assertThat(possibleTransitions.get(0), is(this.createTransitionErneuteBearbeitung()));
+    }
+
+    @Test
+    @Transactional
+    @MockCustomUser(roles = { "sachbearbeitung" })
+    void possibleTransitionsAbbruchRoleSachbearbeitung()
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, CalculationException, ReportingException, UserRoleNotAllowedException {
+        final var uuid = this.createAbfrageWithStatus(StatusAbfrage.ABBRUCH);
+
+        List<TransitionModel> possibleTransitions =
+            this.abfrageStatusService.getStatusAbfrageEventsBasedOnStateAndAuthorities(uuid);
+
+        assertThat(possibleTransitions.size(), is(1));
+        assertThat(possibleTransitions.get(0), is(this.createTransitionErneuteBearbeitung()));
+    }
+
+    @Test
+    @Transactional
+    @MockCustomUser(roles = { "abfrageerstellung" })
+    void possibleTransitionsAbbruchRoleAbfrageerstellung()
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, CalculationException, ReportingException, UserRoleNotAllowedException {
+        final var uuid = this.createAbfrageWithStatus(StatusAbfrage.ABBRUCH);
+
         List<TransitionModel> possibleTransitions =
             this.abfrageStatusService.getStatusAbfrageEventsBasedOnStateAndAuthorities(uuid);
 
         assertThat(possibleTransitions.size(), is(0));
+    }
+
+    @Test
+    @Transactional
+    @MockCustomUser(roles = { "anwender" })
+    void possibleTransitionsAbbruchRoleAnwender()
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, CalculationException, ReportingException, UserRoleNotAllowedException {
+        final var uuid = this.createAbfrageWithStatus(StatusAbfrage.ABBRUCH);
+
+        Assertions.assertThrows(UserRoleNotAllowedException.class, () ->
+            this.abfrageStatusService.getStatusAbfrageEventsBasedOnStateAndAuthorities(uuid)
+        );
+    }
+
+    private UUID createAbfrageWithStatus(final StatusAbfrage statusAbfrage)
+        throws UniqueViolationException, OptimisticLockingException, EntityNotFoundException, CalculationException, ReportingException {
+        AbfrageModel abfrage = this.abfrageService.save(TestData.createBauleitplanverfahrenModel());
+        abfrage.setStatusAbfrage(statusAbfrage);
+        return this.abfrageService.save(abfrage).getId();
+    }
+
+    private TransitionModel createTransitionErneuteBearbeitung() {
+        final TransitionModel transition = new TransitionModel();
+        transition.setIndex(10);
+        transition.setButtonName("ERNEUTE BEARBEITUNG");
+        transition.setUrl("erneute-bearbeitung-sachbearbeitung");
+        transition.setDialogText("Die Abfrage wird an die Sachbearbeitung zur Bearbeitung zurückgesendet.");
+        return transition;
     }
 }
