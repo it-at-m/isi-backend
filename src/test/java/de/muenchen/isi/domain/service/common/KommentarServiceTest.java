@@ -219,13 +219,16 @@ class KommentarServiceTest {
 
         Mockito.when(this.kommentarRepository.saveAndFlush(kommentar1)).thenReturn(kommentar1);
         Mockito.when(this.bauvorhabenRepository.findById(uuidBauvorhaben)).thenReturn(Optional.of(bauvorhaben));
+        Mockito.when(this.bauvorhabenRepository.existsById(uuidBauvorhaben)).thenReturn(true);
+        Mockito.when(this.bauvorhabenRepository.getReferenceById(uuidBauvorhaben)).thenReturn(bauvorhaben);
 
         final var result = kommentarService.saveKommentarForBauvorhaben(kommentar1Model);
 
         assertThat(result, is(kommentar1Model));
 
         Mockito.verify(this.kommentarRepository, Mockito.times(1)).saveAndFlush(kommentar1);
-        Mockito.verify(this.bauvorhabenRepository, Mockito.times(1)).findById(uuidBauvorhaben);
+        Mockito.verify(this.bauvorhabenRepository, Mockito.times(1)).existsById(uuidBauvorhaben);
+        Mockito.verify(this.bauvorhabenRepository, Mockito.times(1)).getReferenceById(uuidBauvorhaben);
         Mockito.verify(this.infrastruktureinrichtungRepository, Mockito.times(0)).findById(uuidBauvorhaben);
         Mockito.reset(this.infrastruktureinrichtungRepository, this.bauvorhabenRepository, this.kommentarRepository);
 
@@ -262,6 +265,8 @@ class KommentarServiceTest {
         Mockito.when(this.kommentarRepository.findById(kommentar1.getId())).thenReturn(Optional.of(kommentar1));
         Mockito.when(this.kommentarRepository.saveAndFlush(kommentar1)).thenReturn(kommentar1);
         Mockito.when(this.bauvorhabenRepository.findById(uuidBauvorhaben)).thenReturn(Optional.of(bauvorhaben));
+        Mockito.when(this.bauvorhabenRepository.existsById(uuidBauvorhaben)).thenReturn(true);
+        Mockito.when(this.bauvorhabenRepository.getReferenceById(uuidBauvorhaben)).thenReturn(bauvorhaben);
 
         final var result = kommentarService.updateKommentarForBauvorhaben(kommentar1Model);
 
@@ -269,7 +274,8 @@ class KommentarServiceTest {
 
         Mockito.verify(this.kommentarRepository, Mockito.times(1)).findById(kommentar1.getId());
         Mockito.verify(this.kommentarRepository, Mockito.times(1)).saveAndFlush(kommentar1);
-        Mockito.verify(this.bauvorhabenRepository, Mockito.times(1)).findById(uuidBauvorhaben);
+        Mockito.verify(this.bauvorhabenRepository, Mockito.times(1)).existsById(uuidBauvorhaben);
+        Mockito.verify(this.bauvorhabenRepository, Mockito.times(1)).getReferenceById(uuidBauvorhaben);
         Mockito.verify(this.infrastruktureinrichtungRepository, Mockito.times(0)).findById(uuidBauvorhaben);
         Mockito.reset(this.infrastruktureinrichtungRepository, this.bauvorhabenRepository, this.kommentarRepository);
 

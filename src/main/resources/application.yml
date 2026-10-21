@@ -8,8 +8,16 @@ spring:
     connection-timeout: 10s
     socket-timeout: 60s
   jpa:
+    # Der Persistence-Context endet mit der Transaktion und nicht erst nach dem Serialisieren der Response.
+    open-in-view: false
     properties:
       hibernate:
+        # Lädt Lazy-Collections und -Referenzen gebündelt statt einzeln (verhindert N+1-Abfragen).
+        default_batch_fetch_size: 50
+        jdbc:
+          batch_size: 50
+        order_inserts: true
+        order_updates: true
         search:
           backend:
             client.configurer: class:de.muenchen.isi.configuration.search.ElasticsearchKeepAliveConfig

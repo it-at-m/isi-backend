@@ -18,6 +18,7 @@ import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Index;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
@@ -124,7 +125,7 @@ public abstract class Abfrage extends BaseEntity {
     @Column(length = 2000)
     private String anmerkung;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Bauvorhaben bauvorhaben;
 
     /**
