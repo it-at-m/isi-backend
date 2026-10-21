@@ -273,7 +273,7 @@ public class Bauvorhaben extends BaseEntity {
     @JoinColumn(name = "bauvorhaben_id")
     private List<Dokument> dokumente;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "relevante_abfragevariante_id")
     private Abfragevariante relevanteAbfragevariante;
 }

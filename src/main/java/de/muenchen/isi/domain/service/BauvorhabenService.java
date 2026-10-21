@@ -294,10 +294,7 @@ public class BauvorhabenService {
     protected void throwEntityIsReferencedExceptionWhenAbfrageIsReferencingBauvorhaben(
         final BauvorhabenModel bauvorhaben
     ) throws EntityIsReferencedException {
-        final List<String> nameAbfragen = this.abfrageRepository
-            .findAllByBauvorhabenId(bauvorhaben.getId())
-            .map(Abfrage::getName)
-            .collect(Collectors.toList());
+        final List<String> nameAbfragen = this.abfrageRepository.findNamesByBauvorhabenId(bauvorhaben.getId());
         if (!nameAbfragen.isEmpty()) {
             final var commaSeparatedNames = String.join(", ", nameAbfragen);
             final var message =
@@ -321,10 +318,8 @@ public class BauvorhabenService {
     protected void throwEntityIsReferencedExceptionWhenInfrastruktureinrichtungIsReferencingBauvorhaben(
         final BauvorhabenModel bauvorhaben
     ) throws EntityIsReferencedException {
-        final List<String> namenInfrastruktureinrichtung = this.infrastruktureinrichtungRepository
-            .findAllByBauvorhabenId(bauvorhaben.getId())
-            .map(Infrastruktureinrichtung::getNameEinrichtung)
-            .collect(Collectors.toList());
+        final List<String> namenInfrastruktureinrichtung =
+            this.infrastruktureinrichtungRepository.findNamesEinrichtungByBauvorhabenId(bauvorhaben.getId());
         if (CollectionUtils.isNotEmpty(namenInfrastruktureinrichtung)) {
             final var commaSeparatedNames = String.join(", ", namenInfrastruktureinrichtung);
             final var message =

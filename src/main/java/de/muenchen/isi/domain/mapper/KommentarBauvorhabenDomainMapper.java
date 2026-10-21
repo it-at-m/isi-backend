@@ -31,12 +31,13 @@ public abstract class KommentarBauvorhabenDomainMapper {
     void afterMappingModel2Entity(final KommentarBauvorhabenModel model, @MappingTarget final Kommentar entity)
         throws EntityNotFoundException {
         if (ObjectUtils.isNotEmpty(model.getBauvorhaben())) {
-            final var bauvorhaben = bauvorhabenRepository.findById(model.getBauvorhaben()).orElseThrow(() -> {
+            // Es wird nur eine Referenz gesetzt, um nicht den gesamten Objektgraphen der referenzierten Entität zu laden.
+            if (!bauvorhabenRepository.existsById(model.getBauvorhaben())) {
                 final var message = "Bauvorhaben für den Kommentar nicht gefunden";
                 log.error(message);
-                return new EntityNotFoundException(message);
-            });
-            entity.setBauvorhaben(bauvorhaben);
+                throw new EntityNotFoundException(message);
+            }
+            entity.setBauvorhaben(bauvorhabenRepository.getReferenceById(model.getBauvorhaben()));
         }
     }
 }
