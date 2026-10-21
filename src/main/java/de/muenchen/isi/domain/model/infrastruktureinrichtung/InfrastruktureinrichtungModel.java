@@ -40,11 +40,11 @@ public abstract class InfrastruktureinrichtungModel extends BaseEntityModel {
 
     private StatusInfrastruktureinrichtung status;
 
-    private AnlassPlanung anlassPlanung;
-
     private BigDecimal flaecheGesamtgrundstueck;
 
     private BigDecimal flaecheTeilgrundstueck;
 
     private String idKibigWeb;
+
+    private AnlassPlanung anlassPlanung;
 }

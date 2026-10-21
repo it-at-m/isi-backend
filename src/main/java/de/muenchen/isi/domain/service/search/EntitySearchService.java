@@ -630,7 +630,8 @@ public class EntitySearchService {
             s.getSelectHausFuerKinder() ||
             s.getSelectKindergarten() ||
             s.getSelectKinderkrippe() ||
-            s.getSelectMittelschule();
+            s.getSelectMittelschule() ||
+            s.getSelectNachbarschaftstreff();
 
         boolean anyAbfrage =
             s.getSelectBauleitplanverfahren() ||

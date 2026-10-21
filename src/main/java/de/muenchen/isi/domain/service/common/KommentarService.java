@@ -94,6 +94,18 @@ public class KommentarService {
     }
 
     /**
+     * Liefert die Kommentar-Entity für die gegebene ID. Wird von Controllern genutzt, um den Typ (Bauvorhaben/Infrastruktureinrichtung)
+     * anhand der vorhandenen Referenzen zu prüfen.
+     *
+     * @param id des Kommentars
+     * @return die Kommentar-Entity
+     * @throws EntityNotFoundException falls kein Kommentar mit der ID existiert.
+     */
+    public Kommentar getKommentarEntityById(final UUID id) throws EntityNotFoundException {
+        return this.getKommentarById(id);
+    }
+
+    /**
      * Speichert den Kommentar eines Bauvorhabens.
      *
      * @param kommentar zum Speichern.

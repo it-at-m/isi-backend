@@ -71,6 +71,7 @@ public class DatabaseReindexer implements CommandLineRunner {
         searchQueryModel.setSelectKindergarten(true);
         searchQueryModel.setSelectKinderkrippe(true);
         searchQueryModel.setSelectMittelschule(true);
+        searchQueryModel.setSelectNachbarschaftstreff(true);
         return searchQueryModel;
     }
 }

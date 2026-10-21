@@ -11,6 +11,7 @@ import de.muenchen.isi.api.dto.infrastruktureinrichtung.Infrastruktureinrichtung
 import de.muenchen.isi.api.dto.infrastruktureinrichtung.KindergartenDto;
 import de.muenchen.isi.api.dto.infrastruktureinrichtung.KinderkrippeDto;
 import de.muenchen.isi.api.dto.infrastruktureinrichtung.MittelschuleDto;
+import de.muenchen.isi.api.dto.infrastruktureinrichtung.NachbarschaftstreffDto;
 import de.muenchen.isi.configuration.MapstructConfiguration;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.GrundschuleModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.GsNachmittagBetreuungModel;
@@ -19,6 +20,7 @@ import de.muenchen.isi.domain.model.infrastruktureinrichtung.Infrastruktureinric
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.KindergartenModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.KinderkrippeModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.MittelschuleModel;
+import de.muenchen.isi.domain.model.infrastruktureinrichtung.NachbarschaftstreffModel;
 import org.mapstruct.Mapper;
 import org.mapstruct.SubclassMapping;
 
@@ -30,6 +32,7 @@ public interface InfrastruktureinrichtungApiMapper {
     @SubclassMapping(source = KindergartenDto.class, target = KindergartenModel.class)
     @SubclassMapping(source = KinderkrippeDto.class, target = KinderkrippeModel.class)
     @SubclassMapping(source = MittelschuleDto.class, target = MittelschuleModel.class)
+    @SubclassMapping(source = NachbarschaftstreffDto.class, target = NachbarschaftstreffModel.class)
     InfrastruktureinrichtungModel dto2Model(final InfrastruktureinrichtungDto dto);
 
     @SubclassMapping(source = GrundschuleModel.class, target = GrundschuleDto.class)
@@ -38,5 +41,6 @@ public interface InfrastruktureinrichtungApiMapper {
     @SubclassMapping(source = KindergartenModel.class, target = KindergartenDto.class)
     @SubclassMapping(source = KinderkrippeModel.class, target = KinderkrippeDto.class)
     @SubclassMapping(source = MittelschuleModel.class, target = MittelschuleDto.class)
+    @SubclassMapping(source = NachbarschaftstreffModel.class, target = NachbarschaftstreffDto.class)
     InfrastruktureinrichtungDto model2Dto(final InfrastruktureinrichtungModel model);
 }

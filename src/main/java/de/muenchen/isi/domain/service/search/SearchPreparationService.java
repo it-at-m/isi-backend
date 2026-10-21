@@ -13,6 +13,7 @@ import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.HausFuerKi
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Kindergarten;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Kinderkrippe;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Mittelschule;
+import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Nachbarschaftstreff;
 import de.muenchen.isi.infrastructure.repository.search.SearchwordSuggesterRepository;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -87,7 +88,8 @@ public class SearchPreparationService {
                     HausFuerKinder.class,
                     Kindergarten.class,
                     Kinderkrippe.class,
-                    Mittelschule.class
+                    Mittelschule.class,
+                    Nachbarschaftstreff.class
                 )
             )
         ) {
@@ -206,6 +208,9 @@ public class SearchPreparationService {
         }
         if (BooleanUtils.isTrue(searchQueryInformation.getSelectMittelschule())) {
             searchableEntities.add(Mittelschule.class);
+        }
+        if (BooleanUtils.isTrue(searchQueryInformation.getSelectNachbarschaftstreff())) {
+            searchableEntities.add(Nachbarschaftstreff.class);
         }
         if (searchableEntities.isEmpty()) {
             final var message =

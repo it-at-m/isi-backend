@@ -37,6 +37,8 @@ public class FilterSettingsModel {
 
     private Boolean selectMittelschule;
 
+    private Boolean selectNachbarschaftstreff;
+
     private List<String> stadtbezirkNummer;
 
     private List<String> kitaplanungsbereichKitaPlbT;
