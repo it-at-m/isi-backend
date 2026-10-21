@@ -213,7 +213,8 @@ public class SearchPreparationService {
             searchableEntities.add(Nachbarschaftstreff.class);
         }
         if (searchableEntities.isEmpty()) {
-            final var message = "Es wurde keine Entität für die Suche markiert.";
+            final var message =
+                "Es wurde keine Entität für die Suche markiert. Bitte wählen Sie in den Such- und Filtereinstellungen mindestens einen Objekttyp aus und klicken Sie auf „Übernehmen“.";
             final var exception = new EntityNotFoundException(message);
             log.error(message, exception);
             throw exception;
