@@ -60,6 +60,7 @@ public class LookupService {
         model.setAnlassPlanung(this.getAnlassPlanung());
         model.setEinrichtungstraeger(this.getEinrichtungstraegerList());
         model.setEinrichtungstraegerSchulen(this.getEinrichtungstraegerSchuleList());
+        model.setInfrastruktureinrichtungArt(this.getInfrastruktureinrichtungArtList());
         model.setInfrastruktureinrichtungTyp(this.getInfrastruktureinrichtungTypList());
         model.setArtGsNachmittagBetreuung(this.getArtGsNachmittagBetreuungList());
         model.setSobonOrientierungswertJahr(this.getSobonOrientierungswertJahr());
@@ -68,7 +69,6 @@ public class LookupService {
         );
         model.setBauratenmethodik(this.getBauratenmethodikList());
         model.setKooperation(this.getKooperationList());
-        model.setInfrastruktureinrichtungArt(this.getInfrastruktureinrichtungArtList());
         return model;
     }
 
@@ -254,6 +254,15 @@ public class LookupService {
         return new LookupListModel(list);
     }
 
+    private LookupListModel getInfrastruktureinrichtungArtList() {
+        final List<LookupEntryModel> list = EnumUtils.getEnumList(InfrastruktureinrichtungArt.class)
+            .stream()
+            .map(item -> new LookupEntryModel(item.toString(), item.getBezeichnung()))
+            .collect(Collectors.toList());
+
+        return new LookupListModel(list);
+    }
+
     private LookupListModel getInfrastruktureinrichtungTypList() {
         final List<LookupEntryModel> list = EnumUtils.getEnumList(InfrastruktureinrichtungTyp.class)
             .stream()
@@ -302,15 +311,6 @@ public class LookupService {
 
     private LookupListModel getKooperationList() {
         final List<LookupEntryModel> list = EnumUtils.getEnumList(Kooperation.class)
-            .stream()
-            .map(item -> new LookupEntryModel(item.toString(), item.getBezeichnung()))
-            .collect(Collectors.toList());
-
-        return new LookupListModel(list);
-    }
-
-    private LookupListModel getInfrastruktureinrichtungArtList() {
-        final List<LookupEntryModel> list = EnumUtils.getEnumList(InfrastruktureinrichtungArt.class)
             .stream()
             .map(item -> new LookupEntryModel(item.toString(), item.getBezeichnung()))
             .collect(Collectors.toList());
