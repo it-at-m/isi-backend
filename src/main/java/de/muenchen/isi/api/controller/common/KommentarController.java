@@ -2,6 +2,7 @@ package de.muenchen.isi.api.controller.common;
 
 import de.muenchen.isi.api.dto.common.KommentarBauvorhabenDto;
 import de.muenchen.isi.api.dto.common.KommentarInfrastruktureinrichtungDto;
+import de.muenchen.isi.api.dto.enums.InformationResponseType;
 import de.muenchen.isi.api.dto.error.InformationResponseDto;
 import de.muenchen.isi.api.mapper.KommentarApiMapper;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
@@ -16,6 +17,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -327,13 +329,13 @@ public class KommentarController {
     @PreAuthorize(
         "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_DELETE_KOMMENTAR_BAUVORHABEN.name())"
     )
-    public ResponseEntity<Void> deleteKommentarForBauvorhaben(@PathVariable @NotNull final UUID id)
+    public ResponseEntity<Object> deleteKommentarForBauvorhaben(@PathVariable @NotNull final UUID id)
         throws EntityNotFoundException {
         final var kommentar = this.kommentarService.getKommentarEntityById(id);
         // Verify it's a Bauvorhaben comment
         if (kommentar.getBauvorhaben() == null) {
             // Kommentar gehört nicht zu einem Bauvorhaben -> ablehnen
-            return ResponseEntity.badRequest().build();
+            return buildBadRequestInformationResponse("Kommentar gehört nicht zu einem Bauvorhaben");
         }
         this.kommentarService.deleteKommentarById(id);
         return ResponseEntity.noContent().build();
@@ -360,13 +362,13 @@ public class KommentarController {
     @PreAuthorize(
         "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_DELETE_KOMMENTAR_INFRASTRUKTUREINRICHTUNG.name())"
     )
-    public ResponseEntity<Void> deleteKommentarForInfrastruktureinrichtung(@PathVariable @NotNull final UUID id)
+    public ResponseEntity<Object> deleteKommentarForInfrastruktureinrichtung(@PathVariable @NotNull final UUID id)
         throws EntityNotFoundException {
         final var kommentar = this.kommentarService.getKommentarEntityById(id);
         // Überprüfen ob der Kommentar zu einer Infrastruktureinrichtung gehört
         if (kommentar.getInfrastruktureinrichtung() == null) {
             // Kommentar gehört nicht zu einer Infrastruktureinrichtung -> ablehnen
-            return ResponseEntity.badRequest().build();
+            return buildBadRequestInformationResponse("Kommentar gehört nicht zu einer Infrastruktureinrichtung");
         }
         this.kommentarService.deleteKommentarById(id);
         return ResponseEntity.noContent().build();
@@ -395,16 +397,25 @@ public class KommentarController {
     @PreAuthorize(
         "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_DELETE_KOMMENTAR_INFRASTRUKTUREINRICHTUNG_BEDARFSMELDUNG_SOZIALPLANUNG.name())"
     )
-    public ResponseEntity<Void> deleteKommentarForInfrastruktureinrichtungBedarfsmeldungSozialplanung(
+    public ResponseEntity<Object> deleteKommentarForInfrastruktureinrichtungBedarfsmeldungSozialplanung(
         @PathVariable @NotNull final UUID id
     ) throws EntityNotFoundException {
         final var kommentar = this.kommentarService.getKommentarEntityById(id);
         // Überprüfen ob der Kommentar zu einer Infrastruktureinrichtung gehört
         if (kommentar.getInfrastruktureinrichtung() == null) {
             // Kommentar gehört nicht zu einer Infrastruktureinrichtung -> ablehnen
-            return ResponseEntity.badRequest().build();
+            return buildBadRequestInformationResponse("Kommentar gehört nicht zu einer Infrastruktureinrichtung");
         }
         this.kommentarService.deleteKommentarById(id);
         return ResponseEntity.noContent().build();
+    }
+
+    private ResponseEntity<Object> buildBadRequestInformationResponse(final String message) {
+        final var errorResponseDto = new InformationResponseDto();
+        errorResponseDto.setType(InformationResponseType.ERROR);
+        errorResponseDto.setTimestamp(LocalDateTime.now());
+        errorResponseDto.setHttpStatus(HttpStatus.BAD_REQUEST.value());
+        errorResponseDto.setMessages(List.of(message));
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponseDto);
     }
 }
