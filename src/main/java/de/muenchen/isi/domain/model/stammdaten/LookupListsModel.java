@@ -56,4 +56,6 @@ public class LookupListsModel {
     private LookupListModel bauratenmethodik;
 
     private LookupListModel kooperation;
+
+    private LookupListModel infrastruktureinrichtungArt;
 }

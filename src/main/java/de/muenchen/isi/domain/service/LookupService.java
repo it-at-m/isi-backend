@@ -10,6 +10,7 @@ import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtDokument;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtGsNachmittagBetreuung;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Bauratenmethodik;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Einrichtungstraeger;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungArt;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Kooperation;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Planart;
@@ -59,6 +60,7 @@ public class LookupService {
         model.setAnlassPlanung(this.getAnlassPlanung());
         model.setEinrichtungstraeger(this.getEinrichtungstraegerList());
         model.setEinrichtungstraegerSchulen(this.getEinrichtungstraegerSchuleList());
+        model.setInfrastruktureinrichtungArt(this.getInfrastruktureinrichtungArtList());
         model.setInfrastruktureinrichtungTyp(this.getInfrastruktureinrichtungTypList());
         model.setArtGsNachmittagBetreuung(this.getArtGsNachmittagBetreuungList());
         model.setSobonOrientierungswertJahr(this.getSobonOrientierungswertJahr());
@@ -245,6 +247,15 @@ public class LookupService {
 
     private LookupListModel getEinrichtungstraegerSchuleList() {
         final List<LookupEntryModel> list = Einrichtungstraeger.getEinrichtungstraegerSchulen()
+            .stream()
+            .map(item -> new LookupEntryModel(item.toString(), item.getBezeichnung()))
+            .collect(Collectors.toList());
+
+        return new LookupListModel(list);
+    }
+
+    private LookupListModel getInfrastruktureinrichtungArtList() {
+        final List<LookupEntryModel> list = EnumUtils.getEnumList(InfrastruktureinrichtungArt.class)
             .stream()
             .map(item -> new LookupEntryModel(item.toString(), item.getBezeichnung()))
             .collect(Collectors.toList());
