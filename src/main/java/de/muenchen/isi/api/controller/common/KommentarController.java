@@ -2,7 +2,6 @@ package de.muenchen.isi.api.controller.common;
 
 import de.muenchen.isi.api.dto.common.KommentarBauvorhabenDto;
 import de.muenchen.isi.api.dto.common.KommentarInfrastruktureinrichtungDto;
-import de.muenchen.isi.api.dto.enums.InformationResponseType;
 import de.muenchen.isi.api.dto.error.InformationResponseDto;
 import de.muenchen.isi.api.mapper.KommentarApiMapper;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
@@ -17,7 +16,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
