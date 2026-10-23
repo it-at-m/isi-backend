@@ -329,13 +329,13 @@ public class KommentarController {
     @PreAuthorize(
         "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_DELETE_KOMMENTAR_BAUVORHABEN.name())"
     )
-    public ResponseEntity<Object> deleteKommentarForBauvorhaben(@PathVariable @NotNull final UUID id)
+    public ResponseEntity<Void> deleteKommentarForBauvorhaben(@PathVariable @NotNull final UUID id)
         throws EntityNotFoundException {
         final var kommentar = this.kommentarService.getKommentarEntityById(id);
         // Verify it's a Bauvorhaben comment
         if (kommentar.getBauvorhaben() == null) {
             // Kommentar gehört nicht zu einem Bauvorhaben -> ablehnen
-            return buildBadRequestInformationResponse("Kommentar gehört nicht zu einem Bauvorhaben");
+            return ResponseEntity.badRequest().build();
         }
         this.kommentarService.deleteKommentarById(id);
         return ResponseEntity.noContent().build();
@@ -362,13 +362,13 @@ public class KommentarController {
     @PreAuthorize(
         "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_DELETE_KOMMENTAR_INFRASTRUKTUREINRICHTUNG.name())"
     )
-    public ResponseEntity<Object> deleteKommentarForInfrastruktureinrichtung(@PathVariable @NotNull final UUID id)
+    public ResponseEntity<Void> deleteKommentarForInfrastruktureinrichtung(@PathVariable @NotNull final UUID id)
         throws EntityNotFoundException {
         final var kommentar = this.kommentarService.getKommentarEntityById(id);
         // Überprüfen ob der Kommentar zu einer Infrastruktureinrichtung gehört
         if (kommentar.getInfrastruktureinrichtung() == null) {
             // Kommentar gehört nicht zu einer Infrastruktureinrichtung -> ablehnen
-            return buildBadRequestInformationResponse("Kommentar gehört nicht zu einer Infrastruktureinrichtung");
+            return ResponseEntity.badRequest().build();
         }
         this.kommentarService.deleteKommentarById(id);
         return ResponseEntity.noContent().build();
@@ -397,25 +397,16 @@ public class KommentarController {
     @PreAuthorize(
         "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_DELETE_KOMMENTAR_INFRASTRUKTUREINRICHTUNG_BEDARFSMELDUNG_SOZIALPLANUNG.name())"
     )
-    public ResponseEntity<Object> deleteKommentarForInfrastruktureinrichtungBedarfsmeldungSozialplanung(
+    public ResponseEntity<Void> deleteKommentarForInfrastruktureinrichtungBedarfsmeldungSozialplanung(
         @PathVariable @NotNull final UUID id
     ) throws EntityNotFoundException {
         final var kommentar = this.kommentarService.getKommentarEntityById(id);
         // Überprüfen ob der Kommentar zu einer Infrastruktureinrichtung gehört
         if (kommentar.getInfrastruktureinrichtung() == null) {
             // Kommentar gehört nicht zu einer Infrastruktureinrichtung -> ablehnen
-            return buildBadRequestInformationResponse("Kommentar gehört nicht zu einer Infrastruktureinrichtung");
+            return ResponseEntity.badRequest().build();
         }
         this.kommentarService.deleteKommentarById(id);
         return ResponseEntity.noContent().build();
-    }
-
-    private ResponseEntity<Object> buildBadRequestInformationResponse(final String message) {
-        final var errorResponseDto = new InformationResponseDto();
-        errorResponseDto.setType(InformationResponseType.ERROR);
-        errorResponseDto.setTimestamp(LocalDateTime.now());
-        errorResponseDto.setHttpStatus(HttpStatus.BAD_REQUEST.value());
-        errorResponseDto.setMessages(List.of(message));
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponseDto);
     }
 }
