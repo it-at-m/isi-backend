@@ -211,8 +211,8 @@ public class KommentarController {
     ) throws EntityNotFoundException, OptimisticLockingException, FileHandlingFailedException {
         final var savedKommentar = this.kommentarService.getKommentarEntityById(kommentarDto.getId());
         if (
-            savedKommentar.getInfrastruktureinrichtung() == null ||
-            !savedKommentar.getInfrastruktureinrichtung().getId().equals(kommentarDto.getBauvorhaben())
+            savedKommentar.getBauvorhaben() == null ||
+            !savedKommentar.getBauvorhaben().getId().equals(kommentarDto.getBauvorhaben())
         ) {
             return ResponseEntity.badRequest().build();
         }
