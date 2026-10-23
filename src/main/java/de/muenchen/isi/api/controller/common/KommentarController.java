@@ -101,6 +101,9 @@ public class KommentarController {
     public ResponseEntity<KommentarBauvorhabenDto> createKommentarForBauvorhaben(
         @RequestBody @Valid @NotNull final KommentarBauvorhabenDto kommentarDto
     ) throws EntityNotFoundException, OptimisticLockingException {
+        if (kommentarDto.getId() != null || kommentarDto.getBauvorhaben() == null) {
+            return ResponseEntity.badRequest().build();
+        }
         var model = this.kommentarApiMapper.dto2Model(kommentarDto);
         model = this.kommentarService.saveKommentarForBauvorhaben(model);
         final var saved = this.kommentarApiMapper.model2Dto(model);
@@ -131,6 +134,9 @@ public class KommentarController {
     public ResponseEntity<KommentarInfrastruktureinrichtungDto> createKommentarForInfrastruktureinrichtung(
         @RequestBody @Valid @NotNull final KommentarInfrastruktureinrichtungDto kommentarDto
     ) throws EntityNotFoundException, OptimisticLockingException {
+        if (kommentarDto.getId() != null || kommentarDto.getInfrastruktureinrichtung() == null) {
+            return ResponseEntity.badRequest().build();
+        }
         var model = this.kommentarApiMapper.dto2Model(kommentarDto);
         model = this.kommentarService.saveKommentarForInfrastruktureinrichtung(model);
         final var saved = this.kommentarApiMapper.model2Dto(model);
@@ -163,6 +169,9 @@ public class KommentarController {
     public ResponseEntity<KommentarInfrastruktureinrichtungDto> createKommentarForInfrastruktureinrichtungBedarfsmeldungSozialplanung(
         @RequestBody @Valid @NotNull final KommentarInfrastruktureinrichtungDto kommentarDto
     ) throws EntityNotFoundException, OptimisticLockingException {
+        if (kommentarDto.getId() != null || kommentarDto.getInfrastruktureinrichtung() == null) {
+            return ResponseEntity.badRequest().build();
+        }
         var model = this.kommentarApiMapper.dto2Model(kommentarDto);
         model = this.kommentarService.saveKommentarForInfrastruktureinrichtung(model);
         final var saved = this.kommentarApiMapper.model2Dto(model);
@@ -198,6 +207,13 @@ public class KommentarController {
     public ResponseEntity<KommentarBauvorhabenDto> updateKommentarForBauvorhaben(
         @RequestBody @Valid @NotNull final KommentarBauvorhabenDto kommentarDto
     ) throws EntityNotFoundException, OptimisticLockingException, FileHandlingFailedException {
+        final var savedKommentar = this.kommentarService.getKommentarEntityById(kommentarDto.getId());
+        if (
+            savedKommentar.getInfrastruktureinrichtung() == null ||
+            !savedKommentar.getInfrastruktureinrichtung().getId().equals(kommentarDto.getBauvorhaben())
+        ) {
+            return ResponseEntity.badRequest().build();
+        }
         var model = this.kommentarApiMapper.dto2Model(kommentarDto);
         model = this.kommentarService.updateKommentarForBauvorhaben(model);
         final var saved = this.kommentarApiMapper.model2Dto(model);
@@ -233,6 +249,13 @@ public class KommentarController {
     public ResponseEntity<KommentarInfrastruktureinrichtungDto> updateKommentarForInfrastruktureinrichtung(
         @RequestBody @Valid @NotNull final KommentarInfrastruktureinrichtungDto kommentarDto
     ) throws EntityNotFoundException, OptimisticLockingException, FileHandlingFailedException {
+        final var savedKommentar = this.kommentarService.getKommentarEntityById(kommentarDto.getId());
+        if (
+            savedKommentar.getInfrastruktureinrichtung() == null ||
+            !savedKommentar.getInfrastruktureinrichtung().getId().equals(kommentarDto.getInfrastruktureinrichtung())
+        ) {
+            return ResponseEntity.badRequest().build();
+        }
         var model = this.kommentarApiMapper.dto2Model(kommentarDto);
         model = this.kommentarService.updateKommentarForInfrastruktureinrichtung(model);
         final var saved = this.kommentarApiMapper.model2Dto(model);
@@ -270,6 +293,13 @@ public class KommentarController {
     public ResponseEntity<KommentarInfrastruktureinrichtungDto> updateKommentarForInfrastruktureinrichtungBedarfsmeldungSozialplanung(
         @RequestBody @Valid @NotNull final KommentarInfrastruktureinrichtungDto kommentarDto
     ) throws EntityNotFoundException, OptimisticLockingException, FileHandlingFailedException {
+        final var savedKommentar = this.kommentarService.getKommentarEntityById(kommentarDto.getId());
+        if (
+            savedKommentar.getInfrastruktureinrichtung() == null ||
+            !savedKommentar.getInfrastruktureinrichtung().getId().equals(kommentarDto.getInfrastruktureinrichtung())
+        ) {
+            return ResponseEntity.badRequest().build();
+        }
         var model = this.kommentarApiMapper.dto2Model(kommentarDto);
         model = this.kommentarService.updateKommentarForInfrastruktureinrichtung(model);
         final var saved = this.kommentarApiMapper.model2Dto(model);
