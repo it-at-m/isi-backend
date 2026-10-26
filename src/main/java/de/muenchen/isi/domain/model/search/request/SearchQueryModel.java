@@ -34,6 +34,8 @@ public class SearchQueryModel {
 
     private Boolean selectMittelschule;
 
+    private Boolean selectNachbarschaftstreff;
+
     private List<String> filterStadtbezirkNummer;
 
     private List<String> filterKitaplanungsbereichKitaPlbT;

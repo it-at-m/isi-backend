@@ -55,7 +55,7 @@ class OrphanFileCleanupServiceTest {
             new FileMetadata("folder3/file3.txt", 789L, "etag3", Instant.now()),
             new FileMetadata("folder4/file4.txt", 1011L, "etag4", Instant.now())
         );
-        var listResult = new ListResult(files, List.of("folder1/", "folder2/", "folder3/", "folder4/"), false, null);
+        var listResult = new ListResult(files, List.of("folder1/", "folder2/", "folder3/", "folder4/"), false);
         Mockito.when(this.s3OutPort.getFilesWithPrefix(BUCKET, "", true)).thenReturn(listResult);
 
         final DokumenteModel dokumenteModelPage0 = new DokumenteModel();
@@ -113,7 +113,7 @@ class OrphanFileCleanupServiceTest {
             new FileMetadata("folder3/file3.txt", 789L, "etag3", Instant.now()),
             new FileMetadata("folder4/file4.txt", 1011L, "etag4", Instant.now())
         );
-        var listResult = new ListResult(files, List.of("folder1/", "folder2/", "folder3/", "folder4/"), false, null);
+        var listResult = new ListResult(files, List.of("folder1/", "folder2/", "folder3/", "folder4/"), false);
         Mockito.when(this.s3OutPort.getFilesWithPrefix(BUCKET, "", true)).thenReturn(listResult);
 
         final DokumenteModel dokumenteModelPage0 = new DokumenteModel();

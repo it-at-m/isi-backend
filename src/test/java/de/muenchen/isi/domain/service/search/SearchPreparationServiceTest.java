@@ -15,6 +15,7 @@ import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.HausFuerKi
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Kindergarten;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Kinderkrippe;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Mittelschule;
+import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Nachbarschaftstreff;
 import java.util.HashSet;
 import java.util.List;
 import org.junit.jupiter.api.Assertions;
@@ -314,6 +315,7 @@ class SearchPreparationServiceTest {
         searchQueryModel.setSelectKindergarten(true);
         searchQueryModel.setSelectKinderkrippe(true);
         searchQueryModel.setSelectMittelschule(true);
+        searchQueryModel.setSelectNachbarschaftstreff(true);
         var result = searchPreparationService.getSearchableEntities(searchQueryModel);
         assertThat(
             result,
@@ -328,7 +330,8 @@ class SearchPreparationServiceTest {
                     HausFuerKinder.class,
                     Kindergarten.class,
                     Kinderkrippe.class,
-                    Mittelschule.class
+                    Mittelschule.class,
+                    Nachbarschaftstreff.class
                 )
             )
         );
@@ -343,6 +346,7 @@ class SearchPreparationServiceTest {
         searchQueryModel.setSelectKindergarten(false);
         searchQueryModel.setSelectKinderkrippe(false);
         searchQueryModel.setSelectMittelschule(false);
+        searchQueryModel.setSelectNachbarschaftstreff(false);
         result = searchPreparationService.getSearchableEntities(searchQueryModel);
         assertThat(result, is(List.of(Bauleitplanverfahren.class)));
 
@@ -356,6 +360,7 @@ class SearchPreparationServiceTest {
         searchQueryModel.setSelectKindergarten(false);
         searchQueryModel.setSelectKinderkrippe(false);
         searchQueryModel.setSelectMittelschule(false);
+        searchQueryModel.setSelectNachbarschaftstreff(false);
         result = searchPreparationService.getSearchableEntities(searchQueryModel);
         assertThat(result, is(List.of(Baugenehmigungsverfahren.class)));
 
@@ -369,6 +374,7 @@ class SearchPreparationServiceTest {
         searchQueryModel.setSelectKindergarten(false);
         searchQueryModel.setSelectKinderkrippe(false);
         searchQueryModel.setSelectMittelschule(false);
+        searchQueryModel.setSelectNachbarschaftstreff(false);
         result = searchPreparationService.getSearchableEntities(searchQueryModel);
         assertThat(result, is(List.of(WeiteresVerfahren.class)));
 
@@ -382,6 +388,7 @@ class SearchPreparationServiceTest {
         searchQueryModel.setSelectKindergarten(false);
         searchQueryModel.setSelectKinderkrippe(false);
         searchQueryModel.setSelectMittelschule(false);
+        searchQueryModel.setSelectNachbarschaftstreff(false);
         result = searchPreparationService.getSearchableEntities(searchQueryModel);
         assertThat(result, is(List.of(Bauvorhaben.class)));
 
@@ -395,6 +402,7 @@ class SearchPreparationServiceTest {
         searchQueryModel.setSelectKindergarten(false);
         searchQueryModel.setSelectKinderkrippe(false);
         searchQueryModel.setSelectMittelschule(false);
+        searchQueryModel.setSelectNachbarschaftstreff(false);
         result = searchPreparationService.getSearchableEntities(searchQueryModel);
         assertThat(result, is(List.of(Grundschule.class)));
 
@@ -408,6 +416,7 @@ class SearchPreparationServiceTest {
         searchQueryModel.setSelectKindergarten(false);
         searchQueryModel.setSelectKinderkrippe(false);
         searchQueryModel.setSelectMittelschule(false);
+        searchQueryModel.setSelectNachbarschaftstreff(false);
         result = searchPreparationService.getSearchableEntities(searchQueryModel);
         assertThat(result, is(List.of(GsNachmittagBetreuung.class)));
 
@@ -421,6 +430,7 @@ class SearchPreparationServiceTest {
         searchQueryModel.setSelectKindergarten(false);
         searchQueryModel.setSelectKinderkrippe(false);
         searchQueryModel.setSelectMittelschule(false);
+        searchQueryModel.setSelectNachbarschaftstreff(false);
         result = searchPreparationService.getSearchableEntities(searchQueryModel);
         assertThat(result, is(List.of(HausFuerKinder.class)));
 
@@ -434,6 +444,7 @@ class SearchPreparationServiceTest {
         searchQueryModel.setSelectKindergarten(true);
         searchQueryModel.setSelectKinderkrippe(false);
         searchQueryModel.setSelectMittelschule(false);
+        searchQueryModel.setSelectNachbarschaftstreff(false);
         result = searchPreparationService.getSearchableEntities(searchQueryModel);
         assertThat(result, is(List.of(Kindergarten.class)));
 
@@ -447,6 +458,7 @@ class SearchPreparationServiceTest {
         searchQueryModel.setSelectKindergarten(false);
         searchQueryModel.setSelectKinderkrippe(true);
         searchQueryModel.setSelectMittelschule(false);
+        searchQueryModel.setSelectNachbarschaftstreff(false);
         result = searchPreparationService.getSearchableEntities(searchQueryModel);
         assertThat(result, is(List.of(Kinderkrippe.class)));
 
@@ -460,6 +472,7 @@ class SearchPreparationServiceTest {
         searchQueryModel.setSelectKindergarten(false);
         searchQueryModel.setSelectKinderkrippe(false);
         searchQueryModel.setSelectMittelschule(true);
+        searchQueryModel.setSelectNachbarschaftstreff(false);
         result = searchPreparationService.getSearchableEntities(searchQueryModel);
         assertThat(result, is(List.of(Mittelschule.class)));
 
@@ -473,6 +486,7 @@ class SearchPreparationServiceTest {
         searchQueryModel.setSelectKindergarten(false);
         searchQueryModel.setSelectKinderkrippe(true);
         searchQueryModel.setSelectMittelschule(false);
+        searchQueryModel.setSelectNachbarschaftstreff(false);
         result = searchPreparationService.getSearchableEntities(searchQueryModel);
         assertThat(result, is(List.of(Bauvorhaben.class, Kinderkrippe.class)));
 
@@ -486,6 +500,7 @@ class SearchPreparationServiceTest {
         searchQueryModel.setSelectKindergarten(false);
         searchQueryModel.setSelectKinderkrippe(false);
         searchQueryModel.setSelectMittelschule(false);
+        searchQueryModel.setSelectNachbarschaftstreff(false);
         Assertions.assertThrows(EntityNotFoundException.class, () ->
             this.searchPreparationService.getSearchableEntities(searchQueryModel)
         );

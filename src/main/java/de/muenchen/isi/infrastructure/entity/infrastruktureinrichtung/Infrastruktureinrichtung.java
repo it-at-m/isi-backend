@@ -262,6 +262,15 @@ public abstract class Infrastruktureinrichtung extends BaseEntity {
     @Column(nullable = false)
     private StatusInfrastruktureinrichtung status;
 
+    @Column(precision = 10, scale = 2)
+    private BigDecimal flaecheGesamtgrundstueck;
+
+    @Column(precision = 10, scale = 2)
+    private BigDecimal flaecheTeilgrundstueck;
+
+    @Column(length = 255)
+    private String idKibigWeb;
+
     @FullTextField(valueBridge = @ValueBridgeRef(type = AnlassPlanungValueBridge.class))
     @NonStandardField(
         name = "anlassPlanung" + SearchwordSuggesterRepository.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
@@ -271,13 +280,4 @@ public abstract class Infrastruktureinrichtung extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private AnlassPlanung anlassPlanung;
-
-    @Column(precision = 10, scale = 2)
-    private BigDecimal flaecheGesamtgrundstueck;
-
-    @Column(precision = 10, scale = 2)
-    private BigDecimal flaecheTeilgrundstueck;
-
-    @Column(length = 255)
-    private String idKibigWeb;
 }

@@ -47,6 +47,9 @@ public class SearchQueryDto {
     @NotNull
     private Boolean selectMittelschule;
 
+    @NotNull
+    private Boolean selectNachbarschaftstreff;
+
     private List<String> filterStadtbezirkNummer;
 
     private List<String> filterKitaplanungsbereichKitaPlbT;

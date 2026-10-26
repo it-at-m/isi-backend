@@ -19,7 +19,8 @@ public enum InfrastruktureinrichtungTyp implements ILookup {
     GS_NACHMITTAG_BETREUUNG("Nachmittagsbetreuung für Grundschulkinder"),
     HAUS_FUER_KINDER("Haus für Kinder"),
     GRUNDSCHULE("Grundschule"),
-    MITTELSCHULE("Mittelschule");
+    MITTELSCHULE("Mittelschule"),
+    NACHBARSCHAFTSTREFF("Nachbarschaftstreff");
 
     @Getter
     private final String bezeichnung;
@@ -42,5 +43,7 @@ public enum InfrastruktureinrichtungTyp implements ILookup {
         public static final String GRUNDSCHULE = "GRUNDSCHULE";
 
         public static final String MITTELSCHULE = "MITTELSCHULE";
+
+        public static final String NACHBARSCHAFTSTREFF = "NACHBARSCHAFTSTREFF";
     }
 }
