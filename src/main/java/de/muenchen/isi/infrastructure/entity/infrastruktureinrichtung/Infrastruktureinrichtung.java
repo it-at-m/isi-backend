@@ -241,7 +241,7 @@ public abstract class Infrastruktureinrichtung extends BaseEntity {
      * zur einheitlichen entitätsübergreifenden Sortierung der Suchergebnisse.
      */
     @KeywordField(name = "name_sort", sortable = Sortable.YES, normalizer = "lowercase")
-    @FullTextField
+    @FullTextField(analyzer = "isi_text_analyzer")
     @NonStandardField(
         name = "nameEinrichtung" + SearchwordSuggesterRepository.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
         valueBinder = @ValueBinderRef(type = StringSuggestionBinder.class)
@@ -252,7 +252,10 @@ public abstract class Infrastruktureinrichtung extends BaseEntity {
     @Column
     private Integer fertigstellungsjahr; // JJJJ
 
-    @FullTextField(valueBridge = @ValueBridgeRef(type = StatusInfrastruktureinrichtungValueBridge.class))
+    @FullTextField(
+        analyzer = "isi_text_analyzer",
+        valueBridge = @ValueBridgeRef(type = StatusInfrastruktureinrichtungValueBridge.class)
+    )
     @NonStandardField(
         name = "status" + SearchwordSuggesterRepository.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
         valueBinder = @ValueBinderRef(type = StatusInfrastruktureinrichtungSuggestionBinder.class)
@@ -271,7 +274,7 @@ public abstract class Infrastruktureinrichtung extends BaseEntity {
     @Column(length = 255)
     private String idKibigWeb;
 
-    @FullTextField(valueBridge = @ValueBridgeRef(type = AnlassPlanungValueBridge.class))
+    @FullTextField(analyzer = "isi_text_analyzer", valueBridge = @ValueBridgeRef(type = AnlassPlanungValueBridge.class))
     @NonStandardField(
         name = "anlassPlanung" + SearchwordSuggesterRepository.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
         valueBinder = @ValueBinderRef(type = AnlassPlanungSuggestionBinder.class)

@@ -103,7 +103,7 @@ public abstract class Abfrage extends BaseEntity {
     }
 
     @KeywordField(name = "name_sort", sortable = Sortable.YES, normalizer = "lowercase")
-    @FullTextField
+    @FullTextField(analyzer = "isi_text_analyzer")
     @NonStandardField(
         name = "name" + SearchwordSuggesterRepository.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
         valueBinder = @ValueBinderRef(type = StringSuggestionBinder.class)
@@ -112,7 +112,7 @@ public abstract class Abfrage extends BaseEntity {
     private String name;
 
     @GenericField(name = "statusAbfrage_filter")
-    @FullTextField(valueBridge = @ValueBridgeRef(type = StatusAbfrageValueBridge.class))
+    @FullTextField(analyzer = "isi_text_analyzer", valueBridge = @ValueBridgeRef(type = StatusAbfrageValueBridge.class))
     @NonStandardField(
         name = "statusAbfrage" + SearchwordSuggesterRepository.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
         valueBinder = @ValueBinderRef(type = StatusAbfrageSuggestionBinder.class)
