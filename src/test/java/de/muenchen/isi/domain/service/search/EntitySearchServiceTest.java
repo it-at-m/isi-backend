@@ -330,4 +330,28 @@ class EntitySearchServiceTest {
             is(SortAttribute.CREATED_DATE_TIME)
         );
     }
+
+    @Test
+    void createAdaptedSearchQuerySplitsOnUnderscore() {
+        var searchQuery = "_test_fall";
+        var result = entitySearchService.createAdaptedSearchQueryForSimpleQueryStringSearch(searchQuery);
+        // Wird erwarten, dass Underscores (_) als Trennzeichen betrachtet werden und somit nach "test" und "fall" gesucht wird
+        assertThat(result, is("test* fall*"));
+
+        searchQuery = "abc_test";
+        result = entitySearchService.createAdaptedSearchQueryForSimpleQueryStringSearch(searchQuery);
+        assertThat(result, is("abc* test*"));
+    }
+
+    @Test
+    void tokenizeAccordingUnicodeAnnex29HandlesUnderscoreAsSeparatorInAdaptation() {
+        // Although BreakIterator might not split underscores as desired, our adaptation should treat underscores as separator
+        var searchQuery = "_leading_test";
+        var result = entitySearchService.createAdaptedSearchQueryForSimpleQueryStringSearch(searchQuery);
+        assertThat(result, is("leading* test*"));
+
+        searchQuery = "trailing_test_";
+        result = entitySearchService.createAdaptedSearchQueryForSimpleQueryStringSearch(searchQuery);
+        assertThat(result, is("trailing* test*"));
+    }
 }
