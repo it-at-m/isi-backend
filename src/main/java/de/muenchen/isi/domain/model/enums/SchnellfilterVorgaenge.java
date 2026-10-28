@@ -12,4 +12,12 @@ public enum SchnellfilterVorgaenge {
     ZUR_BEARBEITUNG,
     ZUR_KENNTNIS,
     ABGESCHLOSSEN,
+    // Schnellfilter der Startseite für die Sachbearbeitung
+    UEBERMITTELT_ZUR_BEARBEITUNG,
+    START_BEARBEITUNG,
+    EINPFLEGEN_BEDARFSMELDUNG,
+    EINPLANUNG_BEDARFE,
+    ERLEDIGT,
+    VORHABEN,
+    INFRASTRUKTUREINRICHTUNGEN,
 }

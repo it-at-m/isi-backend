@@ -23,6 +23,8 @@ public class BauvorhabenModel extends BaseEntityModel {
 
     private BearbeitendePersonModel bearbeitendePerson;
 
+    private String sub;
+
     private String nameVorhaben;
 
     private BigDecimal grundstuecksgroesse;

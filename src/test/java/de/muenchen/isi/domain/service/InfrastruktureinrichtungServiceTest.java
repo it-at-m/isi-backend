@@ -152,6 +152,7 @@ class InfrastruktureinrichtungServiceTest {
 
         assertThat(savedMittelschule.getId(), is(notNullValue()));
         assertThat(savedMittelschule.getVersion(), is(0L));
+        assertThat(savedMittelschule.getSub(), is(notNullValue()));
         assertThat(savedMittelschule.getNameEinrichtung(), is(mittelschule.getNameEinrichtung()));
         assertThat(savedMittelschule.getBauvorhaben(), is(bauvorhaben.getId()));
         assertThat(savedMittelschule.getInfrastruktureinrichtungTyp(), is(InfrastruktureinrichtungTyp.MITTELSCHULE));
@@ -244,6 +245,9 @@ class InfrastruktureinrichtungServiceTest {
         Mockito.reset(this.etlInterfaceService);
 
         savedMittelschule.setNameEinrichtung("Mittelschule XXX");
+        final var ersteller = savedMittelschule.getSub();
+        // Ein über die API übermitteltes Model enthält keinen Ersteller.
+        savedMittelschule.setSub(null);
 
         final var updatedMittelschule = this.infrastruktureinrichtungService.updateInfrastruktureinrichtung(
             savedMittelschule
@@ -252,6 +256,7 @@ class InfrastruktureinrichtungServiceTest {
         assertThat(updatedMittelschule.getId(), is(savedMittelschule.getId()));
         assertThat(updatedMittelschule.getVersion(), is(1L));
         assertThat(updatedMittelschule.getNameEinrichtung(), is("Mittelschule XXX"));
+        assertThat(updatedMittelschule.getSub(), is(ersteller));
         assertThat(updatedMittelschule.getBauvorhaben(), is(bauvorhaben.getId()));
         assertThat(updatedMittelschule.getInfrastruktureinrichtungTyp(), is(InfrastruktureinrichtungTyp.MITTELSCHULE));
         assertThat(updatedMittelschule.getClass(), is(savedMittelschule.getClass()));

@@ -39,10 +39,12 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Locale;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.search.engine.backend.types.Projectable;
 import org.hibernate.search.engine.backend.types.Searchable;
@@ -127,6 +129,24 @@ public class Bauvorhaben extends BaseEntity {
         ),
     })
     private BearbeitendePerson bearbeitendePerson;
+
+    /**
+     * Ersteller (Keycloak-sub). Für Bestandsdaten vor ISI2-208 nicht bekannt.
+     */
+    @GenericField(name = INDEX_FIELD_ERSTELLER_SUB)
+    private String sub;
+
+    /**
+     * Virtuelles Feld für Hibernate Search mit der Emailadresse der zuletzt bearbeitenden Person in Kleinbuchstaben.
+     *
+     * @return die Emailadresse der zuletzt bearbeitenden Person oder null, falls nicht vorhanden.
+     */
+    @Transient
+    @KeywordField(name = INDEX_FIELD_BEARBEITER_EMAIL)
+    @IndexingDependency(derivedFrom = @ObjectPath(@PropertyValue(propertyName = "bearbeitendePerson")))
+    public String getEmailBearbeitendePerson() {
+        return bearbeitendePerson == null ? null : StringUtils.lowerCase(bearbeitendePerson.getEmail(), Locale.ROOT);
+    }
 
     /**
      * Einheitlicher indexiertes sortierbares Namensattributs

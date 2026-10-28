@@ -56,6 +56,7 @@ import de.muenchen.isi.infrastructure.repository.BauvorhabenRepository;
 import de.muenchen.isi.infrastructure.repository.InfrastruktureinrichtungRepository;
 import de.muenchen.isi.infrastructure.repository.common.GlobalCounterRepository;
 import de.muenchen.isi.infrastructure.repository.common.KommentarRepository;
+import de.muenchen.isi.security.AuthenticationUtils;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -116,6 +117,9 @@ public class BauvorhabenServiceTest {
     @Mock
     private EtlInterfaceService etlInterfaceService;
 
+    @Mock
+    private AuthenticationUtils authenticationUtils;
+
     @BeforeEach
     public void beforeEach() throws IllegalAccessException, NoSuchFieldException {
         Field field = bauvorhabenDomainMapper.getClass().getSuperclass().getDeclaredField("abfragevarianteRepository");
@@ -132,7 +136,8 @@ public class BauvorhabenServiceTest {
             this.abfrageService,
             this.dokumentService,
             this.kommentarRepository,
-            this.etlInterfaceService
+            this.etlInterfaceService,
+            this.authenticationUtils
         );
 
         Mockito.reset(
@@ -144,8 +149,46 @@ public class BauvorhabenServiceTest {
             this.dokumentService,
             this.abfrageService,
             this.kommentarRepository,
-            this.etlInterfaceService
+            this.etlInterfaceService,
+            this.authenticationUtils
         );
+    }
+
+    @Test
+    void saveBauvorhabenSetztErstellerBeiNeuanlage()
+        throws OptimisticLockingException, EntityNotFoundException, EntityIsReferencedException, UserRoleNotAllowedException, ReportingException {
+        final BauvorhabenModel bauvorhaben = new BauvorhabenModel();
+        bauvorhaben.setBauvorhabenNummer("1");
+        Mockito.when(this.authenticationUtils.getUserSub()).thenReturn("sub-ersteller");
+        Mockito.when(this.bauvorhabenRepository.saveAndFlush(Mockito.any(Bauvorhaben.class))).thenAnswer(invocation ->
+            invocation.getArgument(0)
+        );
+
+        final BauvorhabenModel result = this.bauvorhabenService.saveBauvorhaben(bauvorhaben, null);
+
+        assertThat(result.getSub(), is("sub-ersteller"));
+        Mockito.verify(this.bauvorhabenRepository, Mockito.never()).findSubById(Mockito.any());
+    }
+
+    @Test
+    void saveBauvorhabenBehaeltErstellerBeiAktualisierung()
+        throws OptimisticLockingException, EntityNotFoundException, EntityIsReferencedException, UserRoleNotAllowedException, ReportingException {
+        final BauvorhabenModel bauvorhaben = new BauvorhabenModel();
+        bauvorhaben.setId(UUID.randomUUID());
+        bauvorhaben.setBauvorhabenNummer("1");
+        // Ein über die API übermitteltes Bauvorhaben enthält keinen Ersteller.
+        bauvorhaben.setSub(null);
+        Mockito.when(this.authenticationUtils.getUserSub()).thenReturn("sub-bearbeiter");
+        Mockito.when(this.bauvorhabenRepository.findSubById(bauvorhaben.getId())).thenReturn(
+            Optional.of("sub-ersteller")
+        );
+        Mockito.when(this.bauvorhabenRepository.saveAndFlush(Mockito.any(Bauvorhaben.class))).thenAnswer(invocation ->
+            invocation.getArgument(0)
+        );
+
+        final BauvorhabenModel result = this.bauvorhabenService.saveBauvorhaben(bauvorhaben, null);
+
+        assertThat(result.getSub(), is("sub-ersteller"));
     }
 
     @Test

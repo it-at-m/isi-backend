@@ -41,11 +41,13 @@ import jakarta.persistence.InheritanceType;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Transient;
 import java.math.BigDecimal;
+import java.util.Locale;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.apache.commons.lang3.EnumUtils;
 import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.generator.EventType;
@@ -141,6 +143,24 @@ public abstract class Infrastruktureinrichtung extends BaseEntity {
         ),
     })
     private BearbeitendePerson bearbeitendePerson;
+
+    /**
+     * Ersteller (Keycloak-sub). Für Bestandsdaten vor ISI2-208 nicht bekannt.
+     */
+    @GenericField(name = INDEX_FIELD_ERSTELLER_SUB)
+    private String sub;
+
+    /**
+     * Virtuelles Feld für Hibernate Search mit der Emailadresse der zuletzt bearbeitenden Person in Kleinbuchstaben.
+     *
+     * @return die Emailadresse der zuletzt bearbeitenden Person oder null, falls nicht vorhanden.
+     */
+    @Transient
+    @KeywordField(name = INDEX_FIELD_BEARBEITER_EMAIL)
+    @IndexingDependency(derivedFrom = @ObjectPath(@PropertyValue(propertyName = "bearbeitendePerson")))
+    public String getEmailBearbeitendePerson() {
+        return bearbeitendePerson == null ? null : StringUtils.lowerCase(bearbeitendePerson.getEmail(), Locale.ROOT);
+    }
 
     /**
      * Diese Methode gibt den Wert der {@link DiscriminatorColumn} zurück.

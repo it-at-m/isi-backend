@@ -22,6 +22,7 @@ import de.muenchen.isi.domain.model.infrastruktureinrichtung.KinderkrippeModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.MittelschuleModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.NachbarschaftstreffModel;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.SubclassMapping;
 
 @Mapper(config = MapstructConfiguration.class)
@@ -33,6 +34,7 @@ public interface InfrastruktureinrichtungApiMapper {
     @SubclassMapping(source = KinderkrippeDto.class, target = KinderkrippeModel.class)
     @SubclassMapping(source = MittelschuleDto.class, target = MittelschuleModel.class)
     @SubclassMapping(source = NachbarschaftstreffDto.class, target = NachbarschaftstreffModel.class)
+    @Mapping(target = "sub", ignore = true)
     InfrastruktureinrichtungModel dto2Model(final InfrastruktureinrichtungDto dto);
 
     @SubclassMapping(source = GrundschuleModel.class, target = GrundschuleDto.class)

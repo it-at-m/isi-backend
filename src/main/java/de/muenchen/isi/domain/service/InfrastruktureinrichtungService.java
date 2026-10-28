@@ -13,6 +13,7 @@ import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Infrastruk
 import de.muenchen.isi.infrastructure.repository.BauvorhabenRepository;
 import de.muenchen.isi.infrastructure.repository.InfrastruktureinrichtungRepository;
 import de.muenchen.isi.infrastructure.repository.common.KommentarRepository;
+import de.muenchen.isi.security.AuthenticationUtils;
 import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +36,8 @@ public class InfrastruktureinrichtungService {
     private final BauvorhabenRepository bauvorhabenRepository;
 
     private final EtlInterfaceService etlInterfaceService;
+
+    private final AuthenticationUtils authenticationUtils;
 
     /**
      * Die Methode gibt ein {@link InfrastruktureinrichtungModel} identifiziert durch die ID zurück.
@@ -64,6 +67,7 @@ public class InfrastruktureinrichtungService {
     public InfrastruktureinrichtungModel saveInfrastruktureinrichtung(
         final InfrastruktureinrichtungModel infrastruktureinrichtung
     ) throws OptimisticLockingException, EntityNotFoundException, ReportingException {
+        this.setSub(infrastruktureinrichtung);
         Infrastruktureinrichtung entity = this.infrastruktureinrichtungDomainMapper.model2Entity(
             infrastruktureinrichtung
         );
@@ -78,6 +82,20 @@ public class InfrastruktureinrichtungService {
         }
 
         return this.infrastruktureinrichtungDomainMapper.entity2Model(entity);
+    }
+
+    /**
+     * Setzt bei Neuanlage den aktuellen Nutzer als Ersteller. Bei einer Aktualisierung bleibt der gespeicherte
+     * Ersteller erhalten, da dieser nicht über die API übermittelt wird.
+     *
+     * @param infrastruktureinrichtung zum Setzen des Erstellers.
+     */
+    private void setSub(final InfrastruktureinrichtungModel infrastruktureinrichtung) {
+        infrastruktureinrichtung.setSub(
+            infrastruktureinrichtung.getId() == null
+                ? authenticationUtils.getUserSub()
+                : infrastruktureinrichtungRepository.findSubById(infrastruktureinrichtung.getId()).orElse(null)
+        );
     }
 
     /**

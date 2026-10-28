@@ -50,6 +50,12 @@ public class SearchQueryModel {
 
     private Boolean filterNurEigeneAbfragen;
 
+    /**
+     * Einschränkung auf die vom Nutzer erstellten Vorgänge sowie auf die Abfragen, die der Nutzer als
+     * Sachbearbeitung übernommen hat.
+     */
+    private Boolean filterNurEigeneVorgaenge;
+
     private List<StatusAbfrage> filterStatusAbfrage;
 
     private UncertainBoolean filterSobonRelevant;

@@ -32,6 +32,7 @@ import de.muenchen.isi.infrastructure.repository.BauvorhabenRepository;
 import de.muenchen.isi.infrastructure.repository.InfrastruktureinrichtungRepository;
 import de.muenchen.isi.infrastructure.repository.common.GlobalCounterRepository;
 import de.muenchen.isi.infrastructure.repository.common.KommentarRepository;
+import de.muenchen.isi.security.AuthenticationUtils;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
@@ -73,6 +74,8 @@ public class BauvorhabenService {
 
     private final EtlInterfaceService etlInterfaceService;
 
+    private final AuthenticationUtils authenticationUtils;
+
     /**
      * Die Methode gibt ein {@link BauvorhabenModel} identifiziert durch die ID zurück.
      *
@@ -103,6 +106,7 @@ public class BauvorhabenService {
      */
     public BauvorhabenModel saveBauvorhaben(final BauvorhabenModel bauvorhaben, final UUID abfrageId)
         throws OptimisticLockingException, EntityNotFoundException, EntityIsReferencedException, UserRoleNotAllowedException, ReportingException {
+        this.setSub(bauvorhaben);
         var bauvorhabenEntity = this.bauvorhabenDomainMapper.model2Entity(bauvorhaben);
         try {
             if (StringUtils.isEmpty(bauvorhaben.getBauvorhabenNummer())) {
@@ -130,6 +134,20 @@ public class BauvorhabenService {
             throw new RuntimeException(e);
         }
         return this.bauvorhabenDomainMapper.entity2Model(bauvorhabenEntity);
+    }
+
+    /**
+     * Setzt bei Neuanlage den aktuellen Nutzer als Ersteller. Bei einer Aktualisierung bleibt der gespeicherte
+     * Ersteller erhalten, da dieser nicht über die API übermittelt wird.
+     *
+     * @param bauvorhaben zum Setzen des Erstellers.
+     */
+    private void setSub(final BauvorhabenModel bauvorhaben) {
+        bauvorhaben.setSub(
+            bauvorhaben.getId() == null
+                ? authenticationUtils.getUserSub()
+                : bauvorhabenRepository.findSubById(bauvorhaben.getId()).orElse(null)
+        );
     }
 
     /**

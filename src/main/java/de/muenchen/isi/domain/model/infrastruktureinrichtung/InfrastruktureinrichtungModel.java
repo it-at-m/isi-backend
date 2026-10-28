@@ -24,6 +24,8 @@ public abstract class InfrastruktureinrichtungModel extends BaseEntityModel {
 
     private BearbeitendePersonModel bearbeitendePerson;
 
+    private String sub;
+
     private InfrastruktureinrichtungTyp infrastruktureinrichtungTyp;
 
     private Long lfdNr;

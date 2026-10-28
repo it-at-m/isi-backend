@@ -36,6 +36,18 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @EntityListeners(AuditingEntityListener.class)
 public abstract class BaseEntity {
 
+    /**
+     * Name des Indexfelds mit dem Ersteller (Keycloak-sub) einer Abfrage, eines Bauvorhabens oder einer
+     * Infrastruktureinrichtung.
+     */
+    public static final String INDEX_FIELD_ERSTELLER_SUB = "ersteller_sub";
+
+    /**
+     * Name des Indexfelds mit der Emailadresse der bearbeitenden Person. Bei einer Abfrage ist das die
+     * Sachbearbeitung, bei einem Bauvorhaben oder einer Infrastruktureinrichtung die zuletzt bearbeitende Person.
+     */
+    public static final String INDEX_FIELD_BEARBEITER_EMAIL = "bearbeiter_email";
+
     @Column(length = 36)
     @Id
     @DocumentId
