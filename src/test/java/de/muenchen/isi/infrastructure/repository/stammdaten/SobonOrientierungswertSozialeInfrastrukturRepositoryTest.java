@@ -102,29 +102,33 @@ public class SobonOrientierungswertSozialeInfrastrukturRepositoryTest {
         );
 
         Optional<SobonOrientierungswertSozialeInfrastruktur> result1 =
-            this.sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndFoerderartBezeichnungAndJahrBezeichnung(
+            this.sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndAltersklasseAndFoerderartBezeichnungAndJahrBezeichnungOrderByGueltigAbDesc(
                 orientierungswert1.getEinrichtungstyp(),
+                orientierungswert1.getAltersklasse(),
                 orientierungswert1.getFoerderartBezeichnung(),
                 "2021"
             );
 
         Optional<SobonOrientierungswertSozialeInfrastruktur> result2 =
-            this.sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndFoerderartBezeichnungAndJahrBezeichnung(
+            this.sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndAltersklasseAndFoerderartBezeichnungAndJahrBezeichnungOrderByGueltigAbDesc(
                 orientierungswert2.getEinrichtungstyp(),
+                orientierungswert2.getAltersklasse(),
                 orientierungswert2.getFoerderartBezeichnung(),
                 "2020"
             );
 
         Optional<SobonOrientierungswertSozialeInfrastruktur> result3 =
-            this.sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndFoerderartBezeichnungAndJahrBezeichnung(
+            this.sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndAltersklasseAndFoerderartBezeichnungAndJahrBezeichnungOrderByGueltigAbDesc(
                 orientierungswert3.getEinrichtungstyp(),
+                orientierungswert3.getAltersklasse(),
                 orientierungswert3.getFoerderartBezeichnung(),
                 "2019"
             );
 
         Optional<SobonOrientierungswertSozialeInfrastruktur> result4 =
-            this.sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndFoerderartBezeichnungAndJahrBezeichnung(
+            this.sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndAltersklasseAndFoerderartBezeichnungAndJahrBezeichnungOrderByGueltigAbDesc(
                 InfrastruktureinrichtungTyp.GS_NACHMITTAG_BETREUUNG,
+                Altersklasse.SECHSEINHALB_NEUNEINHALB,
                 orientierungswert3.getFoerderartBezeichnung(),
                 "2019"
             );
@@ -140,6 +144,52 @@ public class SobonOrientierungswertSozialeInfrastrukturRepositoryTest {
 
         assertThat(result4.isPresent(), is(true));
         assertThat(result4.get(), is(orientierungswert3));
+    }
+
+    @Test
+    void findSobonOrientierungswertMitMehrerenAltersklassenJeEinrichtungstyp() {
+        // Wie in den Stammdaten existieren für UNSPECIFIED mehrere Altersklassen je Förderart und Jahr.
+        final var zehneinhalbBisFuenfzehn = createUnspecifiedOrientierungswert(Altersklasse.ZEHNEINHALB_FUENFZEHN);
+        final var alleEinwohner = createUnspecifiedOrientierungswert(Altersklasse.ALLE_EWO);
+        final var sechzehnBisAchtzehn = createUnspecifiedOrientierungswert(Altersklasse.SECHSZEHN_ACHTZEHN);
+        this.sobonOrientierungswertSozialeInfrastrukturRepository.saveAll(
+            List.of(zehneinhalbBisFuenfzehn, alleEinwohner, sechzehnBisAchtzehn)
+        );
+
+        final var result =
+            this.sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndAltersklasseAndFoerderartBezeichnungAndJahrBezeichnungOrderByGueltigAbDesc(
+                InfrastruktureinrichtungTyp.UNSPECIFIED,
+                Altersklasse.ALLE_EWO,
+                "FreiFinanzierterGeschosswohnungsbau",
+                "2021"
+            );
+
+        assertThat(result.isPresent(), is(true));
+        assertThat(result.get().getAltersklasse(), is(Altersklasse.ALLE_EWO));
+        assertThat(result.get().getId(), is(alleEinwohner.getId()));
+    }
+
+    private SobonOrientierungswertSozialeInfrastruktur createUnspecifiedOrientierungswert(
+        final Altersklasse altersklasse
+    ) {
+        return createOrientierungswert(
+            "FreiFinanzierterGeschosswohnungsbau",
+            LocalDate.parse("2021-01-01"),
+            "2021",
+            InfrastruktureinrichtungTyp.UNSPECIFIED,
+            altersklasse,
+            BigDecimal.ONE,
+            BigDecimal.ONE,
+            BigDecimal.ONE,
+            BigDecimal.ONE,
+            BigDecimal.ONE,
+            BigDecimal.ONE,
+            BigDecimal.ONE,
+            BigDecimal.ONE,
+            BigDecimal.ONE,
+            BigDecimal.ONE,
+            BigDecimal.ONE
+        );
     }
 
     @Test
@@ -206,29 +256,33 @@ public class SobonOrientierungswertSozialeInfrastrukturRepositoryTest {
         );
 
         Optional<SobonOrientierungswertSozialeInfrastruktur> result1 =
-            this.sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndFoerderartBezeichnungAndJahrBezeichnung(
+            this.sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndAltersklasseAndFoerderartBezeichnungAndJahrBezeichnungOrderByGueltigAbDesc(
                 orientierungswert1.getEinrichtungstyp(),
+                orientierungswert1.getAltersklasse(),
                 orientierungswert1.getFoerderartBezeichnung(),
                 "2019"
             );
 
         Optional<SobonOrientierungswertSozialeInfrastruktur> result2 =
-            this.sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndFoerderartBezeichnungAndJahrBezeichnung(
+            this.sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndAltersklasseAndFoerderartBezeichnungAndJahrBezeichnungOrderByGueltigAbDesc(
                 InfrastruktureinrichtungTyp.UNSPECIFIED,
+                Altersklasse.ALLE_EWO,
                 orientierungswert1.getFoerderartBezeichnung(),
                 orientierungswert1.getJahrBezeichnung()
             );
 
         Optional<SobonOrientierungswertSozialeInfrastruktur> result4 =
-            this.sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndFoerderartBezeichnungAndJahrBezeichnung(
+            this.sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndAltersklasseAndFoerderartBezeichnungAndJahrBezeichnungOrderByGueltigAbDesc(
                 orientierungswert1.getEinrichtungstyp(),
+                orientierungswert1.getAltersklasse(),
                 "NonexistentFoerderart",
                 orientierungswert1.getJahrBezeichnung()
             );
 
         Optional<SobonOrientierungswertSozialeInfrastruktur> result6 =
-            this.sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndFoerderartBezeichnungAndJahrBezeichnung(
+            this.sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndAltersklasseAndFoerderartBezeichnungAndJahrBezeichnungOrderByGueltigAbDesc(
                 InfrastruktureinrichtungTyp.GS_NACHMITTAG_BETREUUNG,
+                Altersklasse.SECHSEINHALB_NEUNEINHALB,
                 orientierungswert3.getFoerderartBezeichnung(),
                 "2020"
             );

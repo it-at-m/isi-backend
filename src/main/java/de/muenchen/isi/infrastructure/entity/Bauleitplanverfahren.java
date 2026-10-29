@@ -161,7 +161,7 @@ public class Bauleitplanverfahren extends Abfrage {
     private LocalDate fristBearbeitung;
 
     @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "varchar(255) not null check (sobon_relevant != 'UNSPECIFIED')")
+    @Column(nullable = false)
     private UncertainBoolean mitzeichnungBeschlussentwurf;
 
     @Column(name = "start_42_verfahren")

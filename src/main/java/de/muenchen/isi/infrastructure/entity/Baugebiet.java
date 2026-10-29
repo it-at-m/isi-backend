@@ -17,8 +17,6 @@ import java.util.List;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
 
 @Entity
 @Table(indexes = { @Index(name = "baugebiet_bauabschnitt_id_index", columnList = "bauabschnitt_id") })
@@ -31,7 +29,7 @@ public class Baugebiet extends BaseEntity {
     private String bezeichnung;
 
     @Column(nullable = false)
-    @JdbcTypeCode(SqlTypes.INTEGER)
+    @Enumerated(EnumType.STRING)
     private ArtBaulicheNutzung artBaulicheNutzung;
 
     @Column(length = 1000)
