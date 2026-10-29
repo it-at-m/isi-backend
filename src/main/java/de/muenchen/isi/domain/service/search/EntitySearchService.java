@@ -581,13 +581,19 @@ public class EntitySearchService {
      * @return die Wörter ermittelt aus dem im Parameter gegebenen String.
      */
     protected List<String> tokenizeAccordingUnicodeAnnex29(final String searchQuery) {
+        // Normalize input using the shared normalizer (keeps normalization logic in one place).
+        final var normalized = SearchQueryNormalizer.normalizeForTokenization(searchQuery);
+
         final var words = new ArrayList<String>();
         final var breakIterator = BreakIterator.getWordInstance();
-        breakIterator.setText(searchQuery);
+        breakIterator.setText(normalized);
         int start = breakIterator.first();
         for (int end = breakIterator.next(); end != BreakIterator.DONE; start = end, end = breakIterator.next()) {
             if (breakIterator.getRuleStatus() != BreakIterator.WORD_NONE) {
-                words.add(searchQuery.substring(start, end));
+                var token = normalized.substring(start, end);
+                if (!token.isBlank()) {
+                    words.add(token);
+                }
             }
         }
         return words;

@@ -13,6 +13,8 @@ spring:
         search:
           backend:
             client.configurer: class:de.muenchen.isi.configuration.search.ElasticsearchKeepAliveConfig
+            analysis:
+              configurer: class:de.muenchen.isi.configuration.search.ElasticsearchAnalysisConfig
 
   web:
     error:

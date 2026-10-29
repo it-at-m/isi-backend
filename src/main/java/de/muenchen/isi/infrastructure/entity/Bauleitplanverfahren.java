@@ -59,7 +59,7 @@ import org.hibernate.type.SqlTypes;
 @Indexed
 public class Bauleitplanverfahren extends Abfrage {
 
-    @FullTextField
+    @FullTextField()
     @NonStandardField(
         name = "bebauungsplannummer" + SearchwordSuggesterRepository.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
         valueBinder = @ValueBinderRef(type = StringSuggestionBinder.class)
