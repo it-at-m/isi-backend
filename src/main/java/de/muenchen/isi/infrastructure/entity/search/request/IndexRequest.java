@@ -8,10 +8,12 @@ import tools.jackson.databind.json.JsonMapper;
 @Data
 public class IndexRequest {
 
+    private static final ObjectMapper objectMapper = new JsonMapper();
+
     private String index;
 
     @JsonIgnore
     public String toJson() {
-        return new JsonMapper().writeValueAsString(this);
+        return objectMapper.writeValueAsString(this);
     }
 }

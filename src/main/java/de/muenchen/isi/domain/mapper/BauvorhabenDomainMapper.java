@@ -33,14 +33,15 @@ public abstract class BauvorhabenDomainMapper {
     public void afterMappingModel2Entity(final BauvorhabenModel model, @MappingTarget final Bauvorhaben entity)
         throws EntityNotFoundException {
         if (ObjectUtils.isNotEmpty(model.getRelevanteAbfragevariante())) {
-            final var abfragevariante = abfragevarianteRepository
-                .findById(model.getRelevanteAbfragevariante())
-                .orElseThrow(() -> {
-                    final var message = "Abfragevariante nicht gefunden";
-                    log.error(message);
-                    return new EntityNotFoundException(message);
-                });
-            entity.setRelevanteAbfragevariante(abfragevariante);
+            // Es wird nur eine Referenz gesetzt, um nicht den gesamten Objektgraphen der referenzierten Entität zu laden.
+            if (!abfragevarianteRepository.existsById(model.getRelevanteAbfragevariante())) {
+                final var message = "Abfragevariante nicht gefunden";
+                log.error(message);
+                throw new EntityNotFoundException(message);
+            }
+            entity.setRelevanteAbfragevariante(
+                abfragevarianteRepository.getReferenceById(model.getRelevanteAbfragevariante())
+            );
         }
     }
 }

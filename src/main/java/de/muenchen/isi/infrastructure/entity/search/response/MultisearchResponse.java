@@ -11,10 +11,12 @@ import tools.jackson.databind.json.JsonMapper;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class MultisearchResponse {
 
+    private static final ObjectMapper objectMapper = new JsonMapper();
+
     private List<CompleteSuggestionResponse> responses;
 
     @JsonIgnore
     public static MultisearchResponse fromJson(final String multisearchResponse) {
-        return new JsonMapper().readValue(multisearchResponse, MultisearchResponse.class);
+        return objectMapper.readValue(multisearchResponse, MultisearchResponse.class);
     }
 }

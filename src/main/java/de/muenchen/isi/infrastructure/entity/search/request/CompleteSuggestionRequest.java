@@ -10,12 +10,14 @@ import tools.jackson.databind.json.JsonMapper;
 @Data
 public class CompleteSuggestionRequest {
 
+    private static final ObjectMapper objectMapper = new JsonMapper();
+
     private String _source;
 
     private Map<String, SuggestionRequest> suggest = new HashMap<>();
 
     @JsonIgnore
     public String toJson() {
-        return new JsonMapper().writeValueAsString(this);
+        return objectMapper.writeValueAsString(this);
     }
 }

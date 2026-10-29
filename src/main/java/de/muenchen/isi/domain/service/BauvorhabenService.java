@@ -38,6 +38,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
@@ -248,15 +249,19 @@ public class BauvorhabenService {
     public List<InfrastruktureinrichtungSearchResultModel> getReferencedInfrastruktureinrichtungen(
         final UUID bauvorhabenId
     ) {
-        return this.infrastruktureinrichtungRepository
-            .findAllByBauvorhabenId(bauvorhabenId)
-            .map(this.searchDomainMapper::entity2SearchResultModel)
-            .sorted(
-                Comparator.comparing(
-                    InfrastruktureinrichtungSearchResultModel::getInfrastruktureinrichtungTyp
-                ).thenComparing(InfrastruktureinrichtungSearchResultModel::getNameEinrichtung)
-            )
-            .collect(Collectors.toList());
+        try (
+            final Stream<Infrastruktureinrichtung> infrastruktureinrichtungen =
+                this.infrastruktureinrichtungRepository.findAllByBauvorhabenId(bauvorhabenId)
+        ) {
+            return infrastruktureinrichtungen
+                .map(this.searchDomainMapper::entity2SearchResultModel)
+                .sorted(
+                    Comparator.comparing(
+                        InfrastruktureinrichtungSearchResultModel::getInfrastruktureinrichtungTyp
+                    ).thenComparing(InfrastruktureinrichtungSearchResultModel::getNameEinrichtung)
+                )
+                .collect(Collectors.toList());
+        }
     }
 
     /**
@@ -267,11 +272,16 @@ public class BauvorhabenService {
      * @return Liste von {@link AbfrageSearchResultModel} welche einem Bauvorhaben zugeordent sind
      */
     public List<AbfrageSearchResultModel> getReferencedAbfrage(final UUID bauvorhabenId) {
-        return this.abfrageRepository
-            .findAllByBauvorhabenIdOrderByCreatedDateTimeDesc(bauvorhabenId)
-            .map(this.searchDomainMapper::entity2SearchResultModel)
-            .map(AbfrageSearchResultModel.class::cast)
-            .collect(Collectors.toList());
+        try (
+            final Stream<Abfrage> abfragen = this.abfrageRepository.findAllByBauvorhabenIdOrderByCreatedDateTimeDesc(
+                bauvorhabenId
+            )
+        ) {
+            return abfragen
+                .map(this.searchDomainMapper::entity2SearchResultModel)
+                .map(AbfrageSearchResultModel.class::cast)
+                .collect(Collectors.toList());
+        }
     }
 
     /**
@@ -284,10 +294,7 @@ public class BauvorhabenService {
     protected void throwEntityIsReferencedExceptionWhenAbfrageIsReferencingBauvorhaben(
         final BauvorhabenModel bauvorhaben
     ) throws EntityIsReferencedException {
-        final List<String> nameAbfragen = this.abfrageRepository
-            .findAllByBauvorhabenId(bauvorhaben.getId())
-            .map(Abfrage::getName)
-            .collect(Collectors.toList());
+        final List<String> nameAbfragen = this.abfrageRepository.findNamesByBauvorhabenId(bauvorhaben.getId());
         if (!nameAbfragen.isEmpty()) {
             final var commaSeparatedNames = String.join(", ", nameAbfragen);
             final var message =
@@ -311,10 +318,8 @@ public class BauvorhabenService {
     protected void throwEntityIsReferencedExceptionWhenInfrastruktureinrichtungIsReferencingBauvorhaben(
         final BauvorhabenModel bauvorhaben
     ) throws EntityIsReferencedException {
-        final List<String> namenInfrastruktureinrichtung = this.infrastruktureinrichtungRepository
-            .findAllByBauvorhabenId(bauvorhaben.getId())
-            .map(Infrastruktureinrichtung::getNameEinrichtung)
-            .collect(Collectors.toList());
+        final List<String> namenInfrastruktureinrichtung =
+            this.infrastruktureinrichtungRepository.findNamesEinrichtungByBauvorhabenId(bauvorhaben.getId());
         if (CollectionUtils.isNotEmpty(namenInfrastruktureinrichtung)) {
             final var commaSeparatedNames = String.join(", ", namenInfrastruktureinrichtung);
             final var message =

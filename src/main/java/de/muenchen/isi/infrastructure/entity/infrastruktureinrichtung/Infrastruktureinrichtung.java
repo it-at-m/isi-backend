@@ -36,6 +36,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import jakarta.persistence.ManyToOne;
@@ -170,7 +171,7 @@ public abstract class Infrastruktureinrichtung extends BaseEntity {
     @Column(name = "lfdNr", columnDefinition = "serial", updatable = false)
     private Long lfdNr;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Bauvorhaben bauvorhaben;
 
     @IndexedEmbedded

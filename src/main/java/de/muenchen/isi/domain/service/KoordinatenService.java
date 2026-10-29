@@ -36,10 +36,18 @@ public class KoordinatenService {
 
     private static final int NUMBER_GEO_JSON_DECIMALS = 25;
 
+    private static final ObjectWriter OBJECT_WRITER = new JsonMapper().writer();
+
+    private static final MathTransform WGS84_TO_UTM32;
+
+    private static final MathTransform UTM32_TO_WGS84;
+
     static {
         try {
             WGS84 = CRS.decode("EPSG:4326");
             UTM32 = CRS.decode("EPSG:32632");
+            WGS84_TO_UTM32 = CRS.findMathTransform(WGS84, UTM32);
+            UTM32_TO_WGS84 = CRS.findMathTransform(UTM32, WGS84);
         } catch (FactoryException e) {
             throw new RuntimeException(e);
         }
@@ -58,13 +66,12 @@ public class KoordinatenService {
         try {
             final Coordinate in = new Coordinate(wgs84.getLatitude(), wgs84.getLongitude());
             final Coordinate out = in;
-            final MathTransform transform = CRS.findMathTransform(WGS84, UTM32);
-            final Coordinate result = JTS.transform(in, out, transform);
+            final Coordinate result = JTS.transform(in, out, WGS84_TO_UTM32);
 
             utm.setZone("32U");
             utm.setEast(result.getX());
             utm.setNorth(result.getY());
-        } catch (FactoryException | TransformException exception) {
+        } catch (TransformException exception) {
             log.error(exception.getMessage());
             throw new KoordinatenException(
                 "Bei der Transformation der Koordinate ist ein Fehler aufgetreten.",
@@ -96,12 +103,11 @@ public class KoordinatenService {
         try {
             final Coordinate in = new Coordinate(utm.getEast(), utm.getNorth());
             final Coordinate out = in;
-            final MathTransform transform = CRS.findMathTransform(UTM32, WGS84);
-            final Coordinate result = JTS.transform(in, out, transform);
+            final Coordinate result = JTS.transform(in, out, UTM32_TO_WGS84);
 
             wgs84.setLatitude(result.getX());
             wgs84.setLongitude(result.getY());
-        } catch (FactoryException | TransformException exception) {
+        } catch (TransformException exception) {
             log.error(exception.getMessage());
             throw new KoordinatenException(
                 "Bei der Transformation der Koordinate ist ein Fehler aufgetreten.",
@@ -130,9 +136,8 @@ public class KoordinatenService {
     public MultiPolygon createMultiPolygon(final MultiPolygonGeometry multiPolygonGeometry)
         throws GeometryOperationFailedException {
         final GeometryJSON jsonGeometry = new GeometryJSON(NUMBER_GEO_JSON_DECIMALS);
-        final ObjectWriter objectWriter = new JsonMapper().writer().withDefaultPrettyPrinter();
         try {
-            final String geoJsonMultiPolygon = objectWriter.writeValueAsString(multiPolygonGeometry);
+            final String geoJsonMultiPolygon = OBJECT_WRITER.writeValueAsString(multiPolygonGeometry);
             return (MultiPolygon) jsonGeometry.read(geoJsonMultiPolygon);
         } catch (final JacksonException | IOException exception) {
             final var message = "Das übergebene Multipolygon konnte nicht verarbeitet werden.";
