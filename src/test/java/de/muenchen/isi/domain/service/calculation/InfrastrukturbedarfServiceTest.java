@@ -10,6 +10,7 @@ import de.muenchen.isi.domain.model.calculation.InfrastrukturbedarfProJahrModel;
 import de.muenchen.isi.domain.model.calculation.PersonenProJahrModel;
 import de.muenchen.isi.domain.model.calculation.WohneinheitenProFoerderartProJahrModel;
 import de.muenchen.isi.domain.model.stammdaten.SobonOrientierungswertSozialeInfrastrukturModel;
+import de.muenchen.isi.infrastructure.entity.enums.Altersklasse;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
 import de.muenchen.isi.infrastructure.entity.stammdaten.SobonOrientierungswertSozialeInfrastruktur;
@@ -109,8 +110,9 @@ class InfrastrukturbedarfServiceTest {
         var sobonOrientierungswertFoerderart1 = TestData.createSobonOrientierungswertSozialeInfrastrukturEntity();
         sobonOrientierungswertFoerderart1.setFoerderartBezeichnung("foerderart1");
         Mockito.when(
-            this.sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndFoerderartBezeichnungAndJahrBezeichnung(
+            this.sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndAltersklasseAndFoerderartBezeichnungAndJahrBezeichnungOrderByGueltigAbDesc(
                 InfrastruktureinrichtungTyp.KINDERKRIPPE,
+                Altersklasse.NULL_ZWEI,
                 "foerderart1",
                 SobonOrientierungswertJahr.JAHR_2017.getBezeichnung()
             )
@@ -118,8 +120,9 @@ class InfrastrukturbedarfServiceTest {
         var sobonOrientierungswertFoerderart2 = TestData.createSobonOrientierungswertSozialeInfrastrukturEntity();
         sobonOrientierungswertFoerderart2.setFoerderartBezeichnung("foerderart2");
         Mockito.when(
-            this.sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndFoerderartBezeichnungAndJahrBezeichnung(
+            this.sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndAltersklasseAndFoerderartBezeichnungAndJahrBezeichnungOrderByGueltigAbDesc(
                 InfrastruktureinrichtungTyp.KINDERKRIPPE,
+                Altersklasse.NULL_ZWEI,
                 "foerderart2",
                 SobonOrientierungswertJahr.JAHR_2017.getBezeichnung()
             )
@@ -127,8 +130,9 @@ class InfrastrukturbedarfServiceTest {
         var sobonOrientierungswertFoerderart3 = TestData.createSobonOrientierungswertSozialeInfrastrukturEntity();
         sobonOrientierungswertFoerderart3.setFoerderartBezeichnung("foerderart3");
         Mockito.when(
-            this.sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndFoerderartBezeichnungAndJahrBezeichnung(
+            this.sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndAltersklasseAndFoerderartBezeichnungAndJahrBezeichnungOrderByGueltigAbDesc(
                 InfrastruktureinrichtungTyp.KINDERKRIPPE,
+                Altersklasse.NULL_ZWEI,
                 "foerderart3",
                 SobonOrientierungswertJahr.JAHR_2017.getBezeichnung()
             )
@@ -330,8 +334,9 @@ class InfrastrukturbedarfServiceTest {
         var sobonOrientierungswertFoerderart1 = TestData.createSobonOrientierungswertSozialeInfrastrukturEntity();
         sobonOrientierungswertFoerderart1.setFoerderartBezeichnung("foerderart1");
         Mockito.when(
-            this.sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndFoerderartBezeichnungAndJahrBezeichnung(
+            this.sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndAltersklasseAndFoerderartBezeichnungAndJahrBezeichnungOrderByGueltigAbDesc(
                 InfrastruktureinrichtungTyp.KINDERGARTEN,
+                Altersklasse.DREI_SECHSEINHALB,
                 "foerderart1",
                 SobonOrientierungswertJahr.JAHR_2017.getBezeichnung()
             )
@@ -339,8 +344,9 @@ class InfrastrukturbedarfServiceTest {
         var sobonOrientierungswertFoerderart2 = TestData.createSobonOrientierungswertSozialeInfrastrukturEntity();
         sobonOrientierungswertFoerderart2.setFoerderartBezeichnung("foerderart2");
         Mockito.when(
-            this.sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndFoerderartBezeichnungAndJahrBezeichnung(
+            this.sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndAltersklasseAndFoerderartBezeichnungAndJahrBezeichnungOrderByGueltigAbDesc(
                 InfrastruktureinrichtungTyp.KINDERGARTEN,
+                Altersklasse.DREI_SECHSEINHALB,
                 "foerderart2",
                 SobonOrientierungswertJahr.JAHR_2017.getBezeichnung()
             )
@@ -348,8 +354,9 @@ class InfrastrukturbedarfServiceTest {
         var sobonOrientierungswertFoerderart3 = TestData.createSobonOrientierungswertSozialeInfrastrukturEntity();
         sobonOrientierungswertFoerderart3.setFoerderartBezeichnung("foerderart3");
         Mockito.when(
-            this.sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndFoerderartBezeichnungAndJahrBezeichnung(
+            this.sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndAltersklasseAndFoerderartBezeichnungAndJahrBezeichnungOrderByGueltigAbDesc(
                 InfrastruktureinrichtungTyp.KINDERGARTEN,
+                Altersklasse.DREI_SECHSEINHALB,
                 "foerderart3",
                 SobonOrientierungswertJahr.JAHR_2017.getBezeichnung()
             )
@@ -551,8 +558,9 @@ class InfrastrukturbedarfServiceTest {
         var sobonOrientierungswertFoerderart1 = TestData.createSobonOrientierungswertSozialeInfrastrukturEntity();
         sobonOrientierungswertFoerderart1.setFoerderartBezeichnung("foerderart1");
         Mockito.when(
-            this.sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndFoerderartBezeichnungAndJahrBezeichnung(
+            this.sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndAltersklasseAndFoerderartBezeichnungAndJahrBezeichnungOrderByGueltigAbDesc(
                 InfrastruktureinrichtungTyp.GS_NACHMITTAG_BETREUUNG,
+                Altersklasse.SECHSEINHALB_NEUNEINHALB,
                 "foerderart1",
                 SobonOrientierungswertJahr.JAHR_2017.getBezeichnung()
             )
@@ -560,8 +568,9 @@ class InfrastrukturbedarfServiceTest {
         var sobonOrientierungswertFoerderart2 = TestData.createSobonOrientierungswertSozialeInfrastrukturEntity();
         sobonOrientierungswertFoerderart2.setFoerderartBezeichnung("foerderart2");
         Mockito.when(
-            this.sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndFoerderartBezeichnungAndJahrBezeichnung(
+            this.sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndAltersklasseAndFoerderartBezeichnungAndJahrBezeichnungOrderByGueltigAbDesc(
                 InfrastruktureinrichtungTyp.GS_NACHMITTAG_BETREUUNG,
+                Altersklasse.SECHSEINHALB_NEUNEINHALB,
                 "foerderart2",
                 SobonOrientierungswertJahr.JAHR_2017.getBezeichnung()
             )
@@ -569,8 +578,9 @@ class InfrastrukturbedarfServiceTest {
         var sobonOrientierungswertFoerderart3 = TestData.createSobonOrientierungswertSozialeInfrastrukturEntity();
         sobonOrientierungswertFoerderart3.setFoerderartBezeichnung("foerderart3");
         Mockito.when(
-            this.sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndFoerderartBezeichnungAndJahrBezeichnung(
+            this.sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndAltersklasseAndFoerderartBezeichnungAndJahrBezeichnungOrderByGueltigAbDesc(
                 InfrastruktureinrichtungTyp.GS_NACHMITTAG_BETREUUNG,
+                Altersklasse.SECHSEINHALB_NEUNEINHALB,
                 "foerderart3",
                 SobonOrientierungswertJahr.JAHR_2017.getBezeichnung()
             )
@@ -772,8 +782,9 @@ class InfrastrukturbedarfServiceTest {
         var sobonOrientierungswertFoerderart1 = TestData.createSobonOrientierungswertSozialeInfrastrukturEntity();
         sobonOrientierungswertFoerderart1.setFoerderartBezeichnung("foerderart1");
         Mockito.when(
-            this.sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndFoerderartBezeichnungAndJahrBezeichnung(
+            this.sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndAltersklasseAndFoerderartBezeichnungAndJahrBezeichnungOrderByGueltigAbDesc(
                 InfrastruktureinrichtungTyp.GS_NACHMITTAG_BETREUUNG,
+                Altersklasse.SECHSEINHALB_NEUNEINHALB,
                 "foerderart1",
                 SobonOrientierungswertJahr.JAHR_2017.getBezeichnung()
             )
@@ -781,8 +792,9 @@ class InfrastrukturbedarfServiceTest {
         var sobonOrientierungswertFoerderart2 = TestData.createSobonOrientierungswertSozialeInfrastrukturEntity();
         sobonOrientierungswertFoerderart2.setFoerderartBezeichnung("foerderart2");
         Mockito.when(
-            this.sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndFoerderartBezeichnungAndJahrBezeichnung(
+            this.sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndAltersklasseAndFoerderartBezeichnungAndJahrBezeichnungOrderByGueltigAbDesc(
                 InfrastruktureinrichtungTyp.GS_NACHMITTAG_BETREUUNG,
+                Altersklasse.SECHSEINHALB_NEUNEINHALB,
                 "foerderart2",
                 SobonOrientierungswertJahr.JAHR_2017.getBezeichnung()
             )
@@ -790,8 +802,9 @@ class InfrastrukturbedarfServiceTest {
         var sobonOrientierungswertFoerderart3 = TestData.createSobonOrientierungswertSozialeInfrastrukturEntity();
         sobonOrientierungswertFoerderart3.setFoerderartBezeichnung("foerderart3");
         Mockito.when(
-            this.sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndFoerderartBezeichnungAndJahrBezeichnung(
+            this.sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndAltersklasseAndFoerderartBezeichnungAndJahrBezeichnungOrderByGueltigAbDesc(
                 InfrastruktureinrichtungTyp.GS_NACHMITTAG_BETREUUNG,
+                Altersklasse.SECHSEINHALB_NEUNEINHALB,
                 "foerderart3",
                 SobonOrientierungswertJahr.JAHR_2017.getBezeichnung()
             )
@@ -993,8 +1006,9 @@ class InfrastrukturbedarfServiceTest {
         var sobonOrientierungswertFoerderart1 = TestData.createSobonOrientierungswertSozialeInfrastrukturEntity();
         sobonOrientierungswertFoerderart1.setFoerderartBezeichnung("foerderart1");
         Mockito.when(
-            this.sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndFoerderartBezeichnungAndJahrBezeichnung(
+            this.sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndAltersklasseAndFoerderartBezeichnungAndJahrBezeichnungOrderByGueltigAbDesc(
                 InfrastruktureinrichtungTyp.GRUNDSCHULE,
+                Altersklasse.SECHSEINHALB_NEUNEINHALB,
                 "foerderart1",
                 SobonOrientierungswertJahr.JAHR_2017.getBezeichnung()
             )
@@ -1002,8 +1016,9 @@ class InfrastrukturbedarfServiceTest {
         var sobonOrientierungswertFoerderart2 = TestData.createSobonOrientierungswertSozialeInfrastrukturEntity();
         sobonOrientierungswertFoerderart2.setFoerderartBezeichnung("foerderart2");
         Mockito.when(
-            this.sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndFoerderartBezeichnungAndJahrBezeichnung(
+            this.sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndAltersklasseAndFoerderartBezeichnungAndJahrBezeichnungOrderByGueltigAbDesc(
                 InfrastruktureinrichtungTyp.GRUNDSCHULE,
+                Altersklasse.SECHSEINHALB_NEUNEINHALB,
                 "foerderart2",
                 SobonOrientierungswertJahr.JAHR_2017.getBezeichnung()
             )
@@ -1011,8 +1026,9 @@ class InfrastrukturbedarfServiceTest {
         var sobonOrientierungswertFoerderart3 = TestData.createSobonOrientierungswertSozialeInfrastrukturEntity();
         sobonOrientierungswertFoerderart3.setFoerderartBezeichnung("foerderart3");
         Mockito.when(
-            this.sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndFoerderartBezeichnungAndJahrBezeichnung(
+            this.sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndAltersklasseAndFoerderartBezeichnungAndJahrBezeichnungOrderByGueltigAbDesc(
                 InfrastruktureinrichtungTyp.GRUNDSCHULE,
+                Altersklasse.SECHSEINHALB_NEUNEINHALB,
                 "foerderart3",
                 SobonOrientierungswertJahr.JAHR_2017.getBezeichnung()
             )
@@ -1212,8 +1228,9 @@ class InfrastrukturbedarfServiceTest {
         var sobonOrientierungswertFoerderart1 = TestData.createSobonOrientierungswertSozialeInfrastrukturEntity();
         sobonOrientierungswertFoerderart1.setFoerderartBezeichnung("foerderart1");
         Mockito.when(
-            this.sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndFoerderartBezeichnungAndJahrBezeichnung(
+            this.sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndAltersklasseAndFoerderartBezeichnungAndJahrBezeichnungOrderByGueltigAbDesc(
                 InfrastruktureinrichtungTyp.UNSPECIFIED,
+                Altersklasse.ALLE_EWO,
                 "foerderart1",
                 SobonOrientierungswertJahr.JAHR_2017.getBezeichnung()
             )
@@ -1221,8 +1238,9 @@ class InfrastrukturbedarfServiceTest {
         var sobonOrientierungswertFoerderart2 = TestData.createSobonOrientierungswertSozialeInfrastrukturEntity();
         sobonOrientierungswertFoerderart2.setFoerderartBezeichnung("foerderart2");
         Mockito.when(
-            this.sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndFoerderartBezeichnungAndJahrBezeichnung(
+            this.sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndAltersklasseAndFoerderartBezeichnungAndJahrBezeichnungOrderByGueltigAbDesc(
                 InfrastruktureinrichtungTyp.UNSPECIFIED,
+                Altersklasse.ALLE_EWO,
                 "foerderart2",
                 SobonOrientierungswertJahr.JAHR_2017.getBezeichnung()
             )
@@ -1230,8 +1248,9 @@ class InfrastrukturbedarfServiceTest {
         var sobonOrientierungswertFoerderart3 = TestData.createSobonOrientierungswertSozialeInfrastrukturEntity();
         sobonOrientierungswertFoerderart3.setFoerderartBezeichnung("foerderart3");
         Mockito.when(
-            this.sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndFoerderartBezeichnungAndJahrBezeichnung(
+            this.sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndAltersklasseAndFoerderartBezeichnungAndJahrBezeichnungOrderByGueltigAbDesc(
                 InfrastruktureinrichtungTyp.UNSPECIFIED,
+                Altersklasse.ALLE_EWO,
                 "foerderart3",
                 SobonOrientierungswertJahr.JAHR_2017.getBezeichnung()
             )
@@ -1379,8 +1398,9 @@ class InfrastrukturbedarfServiceTest {
         var sobonOrientierungswertFoerderart1 = TestData.createSobonOrientierungswertSozialeInfrastrukturEntity();
         sobonOrientierungswertFoerderart1.setFoerderartBezeichnung("foerderart1");
         Mockito.when(
-            this.sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndFoerderartBezeichnungAndJahrBezeichnung(
+            this.sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndAltersklasseAndFoerderartBezeichnungAndJahrBezeichnungOrderByGueltigAbDesc(
                 InfrastruktureinrichtungTyp.KINDERKRIPPE,
+                Altersklasse.NULL_ZWEI,
                 "foerderart1",
                 SobonOrientierungswertJahr.JAHR_2017.getBezeichnung()
             )
@@ -1388,8 +1408,9 @@ class InfrastrukturbedarfServiceTest {
         var sobonOrientierungswertFoerderart2 = TestData.createSobonOrientierungswertSozialeInfrastrukturEntity();
         sobonOrientierungswertFoerderart2.setFoerderartBezeichnung("foerderart2");
         Mockito.when(
-            this.sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndFoerderartBezeichnungAndJahrBezeichnung(
+            this.sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndAltersklasseAndFoerderartBezeichnungAndJahrBezeichnungOrderByGueltigAbDesc(
                 InfrastruktureinrichtungTyp.KINDERKRIPPE,
+                Altersklasse.NULL_ZWEI,
                 "foerderart2",
                 SobonOrientierungswertJahr.JAHR_2017.getBezeichnung()
             )
@@ -1397,8 +1418,9 @@ class InfrastrukturbedarfServiceTest {
         var sobonOrientierungswertFoerderart3 = TestData.createSobonOrientierungswertSozialeInfrastrukturEntity();
         sobonOrientierungswertFoerderart3.setFoerderartBezeichnung("foerderart3");
         Mockito.when(
-            this.sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndFoerderartBezeichnungAndJahrBezeichnung(
+            this.sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndAltersklasseAndFoerderartBezeichnungAndJahrBezeichnungOrderByGueltigAbDesc(
                 InfrastruktureinrichtungTyp.KINDERKRIPPE,
+                Altersklasse.NULL_ZWEI,
                 "foerderart3",
                 SobonOrientierungswertJahr.JAHR_2017.getBezeichnung()
             )
@@ -1709,8 +1731,9 @@ class InfrastrukturbedarfServiceTest {
         var sobonOrientierungswertFoerderart1 = new SobonOrientierungswertSozialeInfrastruktur();
         sobonOrientierungswertFoerderart1.setFoerderartBezeichnung("foerderart1");
         Mockito.when(
-            this.sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndFoerderartBezeichnungAndJahrBezeichnung(
+            this.sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndAltersklasseAndFoerderartBezeichnungAndJahrBezeichnungOrderByGueltigAbDesc(
                 InfrastruktureinrichtungTyp.KINDERKRIPPE,
+                Altersklasse.NULL_ZWEI,
                 "foerderart1",
                 SobonOrientierungswertJahr.JAHR_2017.getBezeichnung()
             )
@@ -1719,8 +1742,9 @@ class InfrastrukturbedarfServiceTest {
         var sobonOrientierungswertFoerderart2 = new SobonOrientierungswertSozialeInfrastruktur();
         sobonOrientierungswertFoerderart2.setFoerderartBezeichnung("foerderart2");
         Mockito.when(
-            this.sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndFoerderartBezeichnungAndJahrBezeichnung(
+            this.sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndAltersklasseAndFoerderartBezeichnungAndJahrBezeichnungOrderByGueltigAbDesc(
                 InfrastruktureinrichtungTyp.KINDERKRIPPE,
+                Altersklasse.NULL_ZWEI,
                 "foerderart2",
                 SobonOrientierungswertJahr.JAHR_2017.getBezeichnung()
             )
@@ -1729,8 +1753,9 @@ class InfrastrukturbedarfServiceTest {
         var sobonOrientierungswertFoerderart3 = new SobonOrientierungswertSozialeInfrastruktur();
         sobonOrientierungswertFoerderart3.setFoerderartBezeichnung("foerderart3");
         Mockito.when(
-            this.sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndFoerderartBezeichnungAndJahrBezeichnung(
+            this.sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndAltersklasseAndFoerderartBezeichnungAndJahrBezeichnungOrderByGueltigAbDesc(
                 InfrastruktureinrichtungTyp.KINDERKRIPPE,
+                Altersklasse.NULL_ZWEI,
                 "foerderart3",
                 SobonOrientierungswertJahr.JAHR_2017.getBezeichnung()
             )
@@ -1739,8 +1764,9 @@ class InfrastrukturbedarfServiceTest {
         var sobonOrientierungswertFoerderart4 = new SobonOrientierungswertSozialeInfrastruktur();
         sobonOrientierungswertFoerderart4.setFoerderartBezeichnung("foerderart4");
         Mockito.when(
-            this.sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndFoerderartBezeichnungAndJahrBezeichnung(
+            this.sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndAltersklasseAndFoerderartBezeichnungAndJahrBezeichnungOrderByGueltigAbDesc(
                 InfrastruktureinrichtungTyp.KINDERKRIPPE,
+                Altersklasse.NULL_ZWEI,
                 "foerderart4",
                 SobonOrientierungswertJahr.JAHR_2017.getBezeichnung()
             )
@@ -1771,40 +1797,45 @@ class InfrastrukturbedarfServiceTest {
         Mockito.verify(
             this.sobonOrientierungswertSozialeInfrastrukturRepository,
             Mockito.times(1)
-        ).findFirstByEinrichtungstypAndFoerderartBezeichnungAndJahrBezeichnung(
+        ).findFirstByEinrichtungstypAndAltersklasseAndFoerderartBezeichnungAndJahrBezeichnungOrderByGueltigAbDesc(
             InfrastruktureinrichtungTyp.KINDERKRIPPE,
+            Altersklasse.NULL_ZWEI,
             "foerderart1",
             SobonOrientierungswertJahr.JAHR_2017.getBezeichnung()
         );
         Mockito.verify(
             this.sobonOrientierungswertSozialeInfrastrukturRepository,
             Mockito.times(1)
-        ).findFirstByEinrichtungstypAndFoerderartBezeichnungAndJahrBezeichnung(
+        ).findFirstByEinrichtungstypAndAltersklasseAndFoerderartBezeichnungAndJahrBezeichnungOrderByGueltigAbDesc(
             InfrastruktureinrichtungTyp.KINDERKRIPPE,
+            Altersklasse.NULL_ZWEI,
             "foerderart2",
             SobonOrientierungswertJahr.JAHR_2017.getBezeichnung()
         );
         Mockito.verify(
             this.sobonOrientierungswertSozialeInfrastrukturRepository,
             Mockito.times(1)
-        ).findFirstByEinrichtungstypAndFoerderartBezeichnungAndJahrBezeichnung(
+        ).findFirstByEinrichtungstypAndAltersklasseAndFoerderartBezeichnungAndJahrBezeichnungOrderByGueltigAbDesc(
             InfrastruktureinrichtungTyp.KINDERKRIPPE,
+            Altersklasse.NULL_ZWEI,
             "foerderart3",
             SobonOrientierungswertJahr.JAHR_2017.getBezeichnung()
         );
         Mockito.verify(
             this.sobonOrientierungswertSozialeInfrastrukturRepository,
             Mockito.times(1)
-        ).findFirstByEinrichtungstypAndFoerderartBezeichnungAndJahrBezeichnung(
+        ).findFirstByEinrichtungstypAndAltersklasseAndFoerderartBezeichnungAndJahrBezeichnungOrderByGueltigAbDesc(
             InfrastruktureinrichtungTyp.KINDERKRIPPE,
+            Altersklasse.NULL_ZWEI,
             "foerderart4",
             SobonOrientierungswertJahr.JAHR_2017.getBezeichnung()
         );
         Mockito.verify(
             this.sobonOrientierungswertSozialeInfrastrukturRepository,
             Mockito.times(4)
-        ).findFirstByEinrichtungstypAndFoerderartBezeichnungAndJahrBezeichnung(
+        ).findFirstByEinrichtungstypAndAltersklasseAndFoerderartBezeichnungAndJahrBezeichnungOrderByGueltigAbDesc(
             Mockito.any(InfrastruktureinrichtungTyp.class),
+            Mockito.any(Altersklasse.class),
             Mockito.anyString(),
             Mockito.anyString()
         );
@@ -1823,16 +1854,18 @@ class InfrastrukturbedarfServiceTest {
         var sobonOrientierungswertFoerderartExisting = new SobonOrientierungswertSozialeInfrastruktur();
         sobonOrientierungswertFoerderartExisting.setFoerderartBezeichnung("foerderart-existing");
         Mockito.when(
-            this.sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndFoerderartBezeichnungAndJahrBezeichnung(
+            this.sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndAltersklasseAndFoerderartBezeichnungAndJahrBezeichnungOrderByGueltigAbDesc(
                 InfrastruktureinrichtungTyp.KINDERKRIPPE,
+                Altersklasse.NULL_ZWEI,
                 "foerderart-existing",
                 SobonOrientierungswertJahr.JAHR_2017.getBezeichnung()
             )
         ).thenReturn(Optional.of(sobonOrientierungswertFoerderartExisting));
 
         Mockito.when(
-            this.sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndFoerderartBezeichnungAndJahrBezeichnung(
+            this.sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndAltersklasseAndFoerderartBezeichnungAndJahrBezeichnungOrderByGueltigAbDesc(
                 InfrastruktureinrichtungTyp.KINDERKRIPPE,
+                Altersklasse.NULL_ZWEI,
                 "foerderart-NOT-existing",
                 SobonOrientierungswertJahr.JAHR_2017.getBezeichnung()
             )
@@ -2053,5 +2086,36 @@ class InfrastrukturbedarfServiceTest {
             wohneinheiten.add(wohneinheit);
         }
         return wohneinheiten;
+    }
+
+    @Test
+    void getAltersklasse() throws CalculationException {
+        assertThat(
+            infrastrukturbedarfService.getAltersklasse(InfrastruktureinrichtungTyp.KINDERKRIPPE),
+            is(Altersklasse.NULL_ZWEI)
+        );
+        assertThat(
+            infrastrukturbedarfService.getAltersklasse(InfrastruktureinrichtungTyp.KINDERGARTEN),
+            is(Altersklasse.DREI_SECHSEINHALB)
+        );
+        assertThat(
+            infrastrukturbedarfService.getAltersklasse(InfrastruktureinrichtungTyp.GS_NACHMITTAG_BETREUUNG),
+            is(Altersklasse.SECHSEINHALB_NEUNEINHALB)
+        );
+        assertThat(
+            infrastrukturbedarfService.getAltersklasse(InfrastruktureinrichtungTyp.GRUNDSCHULE),
+            is(Altersklasse.SECHSEINHALB_NEUNEINHALB)
+        );
+        assertThat(
+            infrastrukturbedarfService.getAltersklasse(InfrastruktureinrichtungTyp.UNSPECIFIED),
+            is(Altersklasse.ALLE_EWO)
+        );
+    }
+
+    @Test
+    void getAltersklasseCalculationException() {
+        Assertions.assertThrows(CalculationException.class, () ->
+            infrastrukturbedarfService.getAltersklasse(InfrastruktureinrichtungTyp.MITTELSCHULE)
+        );
     }
 }
