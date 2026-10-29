@@ -11,25 +11,26 @@ spring:
       default-page-size: 0x7fffffff
       return-body-on-update: true
       return-body-on-create: true
-  # Spring JPA
+  # Die Tests laufen gegen ein echtes PostgreSQL (mit PostGIS) in einem Testcontainer, der über die
+  # JDBC-URL beim ersten Verbindungsaufbau gestartet und für alle Test-Kontexte wiederverwendet wird.
+  # Das Schema entsteht ausschließlich durch die Flyway-Migrationen und wird von Hibernate nur validiert.
   datasource:
-    url: jdbc:h2:mem:testdb;MODE=PostgreSQL
+    url: jdbc:tc:postgis:15-3.4:///isidbuser?TC_DAEMON=true&TC_INITSCRIPT=testcontainers/init-isidbuser.sql&currentSchema=isidbuser
+    driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
   flyway:
-    enabled: false
-  h2.console.enabled: true
+    enabled: true
+    schemas: isidbuser
+    locations: classpath:db/migration
   jpa:
-    database: H2
+    database: postgresql
     hibernate:
-      # always drop and create the db should be the best
-      # configuration for local (development) mode. this
-      # is also the default, that spring offers by convention.
-      # but here explicite:
-      ddl-auto: create-drop
+      ddl-auto: validate
     # Logging for database operation
     show-sql: true
     properties:
       hibernate:
         format_sql: true
+        default_schema: isidbuser
         search:
           enabled: false
           # Trigger um die in der Datenbank gespeicherten Entitäten beim Hochfahren der Anwendung neu indizieren zu können.

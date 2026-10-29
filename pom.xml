@@ -239,6 +239,12 @@
                 <artifactId>spring-boot-starter-security-test</artifactId>
                 <scope>test</scope>
             </dependency>
+            <!-- Tests gegen PostgreSQL mit den Flyway-Migrationen statt H2 (JDBC-URL jdbc:tc:..., siehe application-unittest.yml) -->
+            <dependency>
+                <groupId>org.testcontainers</groupId>
+                <artifactId>testcontainers-postgresql</artifactId>
+                <scope>test</scope>
+            </dependency>
             <dependency>
                 <groupId>org.junit.jupiter</groupId>
                 <artifactId>junit-jupiter-api</artifactId>
