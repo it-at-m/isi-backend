@@ -10,6 +10,8 @@ import lombok.Getter;
  * In {@link Bedarfsmeldung#getInfrastruktureinrichtungTyp()} wird der Enum
  * nicht mittels @Enumerated(EnumType.STRING) als String repräsentiert.
  * Somit sind neue Enumausprägungen am Ende der Enumration anzufügen.
+ * Zusätzlich ist per Flyway-Migration der CHECK-Constraint bedarfsmeldung_infrastruktureinrichtung_typ_check
+ * auf den neuen höchsten Ordinalwert zu erweitern (siehe V45).
  */
 @AllArgsConstructor
 public enum InfrastruktureinrichtungTyp implements ILookup {
