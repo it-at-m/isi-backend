@@ -345,7 +345,6 @@ class EntitySearchServiceTest {
 
     @Test
     void tokenizeAccordingUnicodeAnnex29HandlesUnderscoreAsSeparatorInAdaptation() {
-        // Although BreakIterator might not split underscores as desired, our adaptation should treat underscores as separator
         var searchQuery = "_leading_test";
         var result = entitySearchService.createAdaptedSearchQueryForSimpleQueryStringSearch(searchQuery);
         assertThat(result, is("leading* test*"));
@@ -353,5 +352,20 @@ class EntitySearchServiceTest {
         searchQuery = "trailing_test_";
         result = entitySearchService.createAdaptedSearchQueryForSimpleQueryStringSearch(searchQuery);
         assertThat(result, is("trailing* test*"));
+    }
+
+    @Test
+    void tokenizeAccordingUnicodeAnnex29_preservesCaseAndSplitsOnUnderscoreAndWhitespace() {
+        final List<String> tokens = entitySearchService.tokenizeAccordingUnicodeAnnex29("TeSt_Nord Süd");
+        assertThat(tokens.size(), is(3));
+        assertThat(tokens.get(0), is("TeSt"));
+        assertThat(tokens.get(1), is("Nord"));
+        assertThat(tokens.get(2), is("Süd"));
+    }
+
+    @Test
+    void createAdaptedSearchQueryForSimpleQueryStringSearch_appendsWildcardsAndPreservesCase() {
+        final String adapted = entitySearchService.createAdaptedSearchQueryForSimpleQueryStringSearch("TeSt_Nord Süd");
+        assertThat(adapted, is("TeSt* Nord* Süd*"));
     }
 }

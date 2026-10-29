@@ -1,29 +1,28 @@
 package de.muenchen.isi.domain.service.search;
 
 /**
- * Utility for normalizing user-provided search queries before tokenization and adaptation to
- * simple query string format.
+ * Dient zur Normalisierung von benutzerseitigen Suchanfragen vor der Tokenisierung
+ * und Anpassung an das Simple Query String-Format.
  *
- * NOTE: The normalization performed here must match the index-side analyzer configuration
- * (see de.muenchen.isi.configuration.search.ElasticsearchAnalysisConfig). In particular,
- * if underscores are treated as token separators in the analyzer, the normalizer must split
- * underscores on the query side (or vice versa). Keep both in sync.
+ * HINWEIS: Die hier durchgeführte Normalisierung muss mit der Konfiguration des Analyzers
+ * auf in de.muenchen.isi.configuration.search.ElasticsearchAnalysisConfig übereinstimmen.
+ * Insbesondere gilt: Wenn Unterstriche im Analyzer als Token-Trenner behandelt werden,
+ * muss der Normalizer Unterstriche auch auf der Query-Seite auftrennen (oder umgekehrt).
+ * Beide Konfigurationen müssen synchron gehalten werden.
  */
+
 public final class SearchQueryNormalizer {
 
     private SearchQueryNormalizer() {}
 
     /**
-     * Normalize the input string for tokenization:
-     * - convert null to empty string
-     * - replace underscores with spaces so they are treated as separators
-     * - trim leading/trailing whitespace
+     * Normalisiert die Eingabezeichenkette für die Tokenisierung:
+     * - wandelt null in einen leeren String um
+     * - ersetzt Unterstriche durch Leerzeichen, damit sie als Trenner behandelt werden
+     * - entfernt führende und nachfolgende Leerzeichen
      *
-     * This method intentionally does not lowercase or otherwise alter characters; case handling
-     * should be decided and documented separately (analyzer vs. query normalization).
-     *
-     * @param input raw user input
-     * @return normalized string ready for tokenization
+     * @param input rohe Benutzereingabe
+     * @return normalisierter String, bereit zur Tokenisierung
      */
     public static String normalizeForTokenization(final String input) {
         if (input == null) {

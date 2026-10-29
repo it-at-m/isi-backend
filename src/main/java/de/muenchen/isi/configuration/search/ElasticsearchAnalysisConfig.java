@@ -5,15 +5,13 @@ import org.hibernate.search.backend.elasticsearch.analysis.ElasticsearchAnalysis
 
 public class ElasticsearchAnalysisConfig implements ElasticsearchAnalysisConfigurer {
 
-    /**
-     * Analyzer, der nach Unterstrich (_) splittet
-     */
     @Override
     public void configure(ElasticsearchAnalysisConfigurationContext context) {
-        // Tokenizer der nach Underscore (_) splittet
-        context.tokenizer("underscore_tokenizer").type("pattern").param("pattern", "_");
+        // Tokenizer, der sowohl auf Unterstrichen als auch auf Whitespace splittet
+        context.tokenizer("underscore_tokenizer").type("pattern").param("pattern", "[_\\s]+");
 
-        // Analyzer, der den underscore_tokenizer verwendet.
-        context.analyzer("isi_text_analyzer").custom().tokenizer("underscore_tokenizer");
+        // Analyzer, der den underscore_tokenizer verwendet und anschließend in Kleinbuchstaben umwandelt
+        // (so werden unterschiedliche Groß-/Kleinschreibungen matchbar).
+        context.analyzer("isi_text_analyzer").custom().tokenizer("underscore_tokenizer").tokenFilters("lowercase");
     }
 }

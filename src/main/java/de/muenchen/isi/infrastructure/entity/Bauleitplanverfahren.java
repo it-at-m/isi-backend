@@ -59,7 +59,7 @@ import org.hibernate.type.SqlTypes;
 @Indexed
 public class Bauleitplanverfahren extends Abfrage {
 
-    @FullTextField(analyzer = "isi_text_analyzer")
+    @FullTextField()
     @NonStandardField(
         name = "bebauungsplannummer" + SearchwordSuggesterRepository.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
         valueBinder = @ValueBinderRef(type = StringSuggestionBinder.class)
@@ -76,10 +76,7 @@ public class Bauleitplanverfahren extends Abfrage {
     @Column
     private SobonVerfahrensgrundsaetzeJahr sobonJahr;
 
-    @FullTextField(
-        analyzer = "isi_text_analyzer",
-        valueBridge = @ValueBridgeRef(type = VerfahrensstandValueBridge.class)
-    )
+    @FullTextField(valueBridge = @ValueBridgeRef(type = VerfahrensstandValueBridge.class))
     @NonStandardField(
         name = "verfahrensstand" + SearchwordSuggesterRepository.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
         valueBinder = @ValueBinderRef(type = VerfahrensstandSuggestionBinder.class)

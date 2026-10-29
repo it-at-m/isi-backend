@@ -145,10 +145,7 @@ public class Bauvorhaben extends BaseEntity {
     @GenericField(projectable = Projectable.YES)
     private BigDecimal grundstuecksgroesse;
 
-    @FullTextField(
-        analyzer = "isi_text_analyzer",
-        valueBridge = @ValueBridgeRef(type = VerfahrensstandValueBridge.class)
-    )
+    @FullTextField(valueBridge = @ValueBridgeRef(type = VerfahrensstandValueBridge.class))
     @NonStandardField(
         name = "verfahrensstand" + SearchwordSuggesterRepository.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
         valueBinder = @ValueBinderRef(type = VerfahrensstandSuggestionBinder.class)
@@ -161,7 +158,7 @@ public class Bauvorhaben extends BaseEntity {
     @Column(length = 1000)
     private String verfahrensstandFreieEingabe;
 
-    @FullTextField(analyzer = "isi_text_analyzer")
+    @FullTextField()
     @NonStandardField(
         name = "bauvorhabenNummer" + SearchwordSuggesterRepository.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
         valueBinder = @ValueBinderRef(type = StringSuggestionBinder.class)
@@ -232,7 +229,7 @@ public class Bauvorhaben extends BaseEntity {
         return this.verortung;
     }
 
-    @FullTextField(analyzer = "isi_text_analyzer")
+    @FullTextField()
     @NonStandardField(
         name = "bebauungsplannummer" + SearchwordSuggesterRepository.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
         valueBinder = @ValueBinderRef(type = StringSuggestionBinder.class)

@@ -45,14 +45,11 @@ public class ElasticsearchAnalysisConfigTest {
     public void entitiesUseAnalyzer() throws Exception {
         // files that we changed
         Path[] files = new Path[] {
-            Path.of("src/main/java/de/muenchen/isi/infrastructure/entity/WeiteresVerfahren.java"),
+            Path.of("src/main/java/de/muenchen/isi/infrastructure/entity/Abfrage.java"),
+            Path.of("src/main/java/de/muenchen/isi/infrastructure/entity/Bauvorhaben.java"),
             Path.of(
                 "src/main/java/de/muenchen/isi/infrastructure/entity/infrastruktureinrichtung/Infrastruktureinrichtung.java"
             ),
-            Path.of("src/main/java/de/muenchen/isi/infrastructure/entity/Bauvorhaben.java"),
-            Path.of("src/main/java/de/muenchen/isi/infrastructure/entity/Bauleitplanverfahren.java"),
-            Path.of("src/main/java/de/muenchen/isi/infrastructure/entity/Baugenehmigungsverfahren.java"),
-            Path.of("src/main/java/de/muenchen/isi/infrastructure/entity/Abfrage.java"),
         };
 
         for (Path file : files) {

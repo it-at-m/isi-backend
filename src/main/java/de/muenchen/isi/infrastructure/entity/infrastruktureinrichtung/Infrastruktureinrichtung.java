@@ -252,10 +252,7 @@ public abstract class Infrastruktureinrichtung extends BaseEntity {
     @Column
     private Integer fertigstellungsjahr; // JJJJ
 
-    @FullTextField(
-        analyzer = "isi_text_analyzer",
-        valueBridge = @ValueBridgeRef(type = StatusInfrastruktureinrichtungValueBridge.class)
-    )
+    @FullTextField(valueBridge = @ValueBridgeRef(type = StatusInfrastruktureinrichtungValueBridge.class))
     @NonStandardField(
         name = "status" + SearchwordSuggesterRepository.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
         valueBinder = @ValueBinderRef(type = StatusInfrastruktureinrichtungSuggestionBinder.class)
@@ -274,7 +271,7 @@ public abstract class Infrastruktureinrichtung extends BaseEntity {
     @Column(length = 255)
     private String idKibigWeb;
 
-    @FullTextField(analyzer = "isi_text_analyzer", valueBridge = @ValueBridgeRef(type = AnlassPlanungValueBridge.class))
+    @FullTextField(valueBridge = @ValueBridgeRef(type = AnlassPlanungValueBridge.class))
     @NonStandardField(
         name = "anlassPlanung" + SearchwordSuggesterRepository.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
         valueBinder = @ValueBinderRef(type = AnlassPlanungSuggestionBinder.class)

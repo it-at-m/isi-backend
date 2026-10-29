@@ -112,7 +112,7 @@ public abstract class Abfrage extends BaseEntity {
     private String name;
 
     @GenericField(name = "statusAbfrage_filter")
-    @FullTextField(analyzer = "isi_text_analyzer", valueBridge = @ValueBridgeRef(type = StatusAbfrageValueBridge.class))
+    @FullTextField(valueBridge = @ValueBridgeRef(type = StatusAbfrageValueBridge.class))
     @NonStandardField(
         name = "statusAbfrage" + SearchwordSuggesterRepository.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
         valueBinder = @ValueBinderRef(type = StatusAbfrageSuggestionBinder.class)
