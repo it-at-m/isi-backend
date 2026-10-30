@@ -158,7 +158,7 @@ public class Bauvorhaben extends BaseEntity {
     @Column(length = 1000)
     private String verfahrensstandFreieEingabe;
 
-    @FullTextField()
+    @FullTextField(analyzer = "isi_text_analyzer")
     @NonStandardField(
         name = "bauvorhabenNummer" + SearchwordSuggesterRepository.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
         valueBinder = @ValueBinderRef(type = StringSuggestionBinder.class)
@@ -229,7 +229,7 @@ public class Bauvorhaben extends BaseEntity {
         return this.verortung;
     }
 
-    @FullTextField()
+    @FullTextField(analyzer = "isi_text_analyzer")
     @NonStandardField(
         name = "bebauungsplannummer" + SearchwordSuggesterRepository.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
         valueBinder = @ValueBinderRef(type = StringSuggestionBinder.class)

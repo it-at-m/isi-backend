@@ -5,13 +5,28 @@ import org.hibernate.search.backend.elasticsearch.analysis.ElasticsearchAnalysis
 
 public class ElasticsearchAnalysisConfig implements ElasticsearchAnalysisConfigurer {
 
+    /**
+     * Grundsätzlich trennt der Standardtokenizer:
+     *
+     * Nach allen Whitespace-Zeichen (z. B. Leerzeichen, Tab, Zeilenumbruch)
+     * Nach den meisten Satzzeichen (z. B. Punkt, Komma, Semikolon, Doppelpunkt, Ausrufezeichen, Fragezeichen, Klammern, Anführungszeichen)
+     * Nach Sonderzeichen (z. B. @, #, $, %, &, *, +, =, /, , |, <, >, [, ], {, }, ^, ~, `, usw.)
+     * Nicht getrennt wird:
+     *
+     * Bei Buchstaben- und Zahlenfolgen (z.B. „München2026“ bleibt ein Token)
+     * Bei einigen Zeichen wie dem Unterstrich _ (dieser bleibt Teil des Tokens)
+     *
+     * Hier wird nun der Tokenizer um den Unterstrich (_) als Trennzeichen erweitert und in Kleinschrift gefiltert
+     **/
     @Override
     public void configure(ElasticsearchAnalysisConfigurationContext context) {
-        // Tokenizer, der sowohl auf Unterstrichen als auch auf Whitespace splittet
-        context.tokenizer("underscore_tokenizer").type("pattern").param("pattern", "[_\\s]+");
+        context.charFilter("underscore_to_space").type("mapping").param("mappings", "_=>\\u0020");
 
-        // Analyzer, der den underscore_tokenizer verwendet und anschließend in Kleinbuchstaben umwandelt
-        // (so werden unterschiedliche Groß-/Kleinschreibungen matchbar).
-        context.analyzer("isi_text_analyzer").custom().tokenizer("underscore_tokenizer").tokenFilters("lowercase");
+        context
+            .analyzer("isi_text_analyzer")
+            .custom()
+            .tokenizer("standard")
+            .charFilters("underscore_to_space")
+            .tokenFilters("lowercase");
     }
 }
