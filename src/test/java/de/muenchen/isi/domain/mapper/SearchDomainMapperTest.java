@@ -457,6 +457,22 @@ public class SearchDomainMapperTest {
     }
 
     @Test
+    void getCoordinateFromAdresseOrAdresseNullAndVerortungWithStoredCentroidWithoutMultiPolygon()
+        throws GeometryOperationFailedException {
+        VerortungMultiPolygon verortung = new VerortungMultiPolygon();
+        verortung.setMultiPolygon(null);
+        PointGeometry centroid = new PointGeometry();
+        centroid.setType("Point");
+        centroid.setCoordinates(List.of(BigDecimal.valueOf(11.5), BigDecimal.valueOf(48.1)));
+        verortung.setCentroid(centroid);
+
+        assertThat(searchDomainMapper.hasVerortungCentroid(verortung), is(false));
+        assertThat(searchDomainMapper.getCoordinateFromAdresseOrVerortung(null, verortung), is(nullValue()));
+
+        Mockito.verify(this.koordinatenService, Mockito.times(0)).getMultiPolygonCentroid(Mockito.any());
+    }
+
+    @Test
     void getCoordinateFromAdresseOrAdresseNullAndVerortungWithIncompleteStoredCentroid()
         throws GeometryOperationFailedException {
         VerortungMultiPolygon verortung = new VerortungMultiPolygon();

@@ -5,6 +5,7 @@ import static org.hamcrest.Matchers.is;
 
 import de.muenchen.isi.domain.model.common.MultiPolygonGeometryModel;
 import de.muenchen.isi.domain.model.common.PointGeometryModel;
+import de.muenchen.isi.domain.model.common.UtmModel;
 import de.muenchen.isi.domain.model.common.VerortungMultiPolygonModel;
 import de.muenchen.isi.domain.model.common.VerortungPointModel;
 import de.muenchen.isi.domain.service.KoordinatenService;
@@ -88,6 +89,29 @@ class VerortungDomainMapperTest {
     @Test
     void model2EntityVerortungMultiPolygonEmpty() {
         final var model = new VerortungMultiPolygonModel();
+
+        final var result = verortungDomainMapper.model2Entity(model);
+
+        final var expected = new VerortungMultiPolygon();
+
+        assertThat(result, is(expected));
+    }
+
+    @Test
+    void model2EntityVerortungMultiPolygonWithoutMultiPolygonClearsCentroid() {
+        final var centroidModel = new PointGeometryModel();
+        centroidModel.setType("Point");
+        centroidModel.setCoordinates(
+            List.of(BigDecimal.valueOf(11.542026984158708), BigDecimal.valueOf(48.108341907595324))
+        );
+        final var centroidUtmModel = new UtmModel();
+        centroidUtmModel.setZone("32U");
+        centroidUtmModel.setEast(689219.7547272056);
+        centroidUtmModel.setNorth(5331467.745840158);
+        final var model = new VerortungMultiPolygonModel();
+        model.setMultiPolygon(null);
+        model.setCentroid(centroidModel);
+        model.setCentroidUtm(centroidUtmModel);
 
         final var result = verortungDomainMapper.model2Entity(model);
 

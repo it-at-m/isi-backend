@@ -188,14 +188,16 @@ public abstract class SearchDomainMapper {
     }
 
     /**
-     * Überprüft, ob für die übergebene Verortung bereits ein Schwerpunkt mit Längen- und Breitengrad gespeichert ist.
+     * Überprüft, ob für die übergebene Verortung ein Mehrfachpolygon und ein zugehöriger Schwerpunkt mit Längen- und
+     * Breitengrad gespeichert sind.
      *
      * @param verortung Die Verortung, deren gespeicherter Schwerpunkt überprüft werden soll.
-     * @return {@code true}, wenn ein Schwerpunkt mit zwei Koordinaten vorhanden ist, ansonsten {@code false}.
+     * @return {@code true}, wenn ein Mehrfachpolygon und ein Schwerpunkt mit zwei Koordinaten vorhanden sind,
+     * ansonsten {@code false}.
      */
     public boolean hasVerortungCentroid(final VerortungMultiPolygon verortung) {
         return (
-            ObjectUtils.isNotEmpty(verortung) &&
+            hasVerortungCoordinate(verortung) &&
             ObjectUtils.isNotEmpty(verortung.getCentroid()) &&
             ObjectUtils.isNotEmpty(verortung.getCentroid().getCoordinates()) &&
             verortung.getCentroid().getCoordinates().size() >= 2
