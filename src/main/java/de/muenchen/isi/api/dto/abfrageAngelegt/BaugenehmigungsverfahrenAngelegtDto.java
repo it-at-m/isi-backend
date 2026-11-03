@@ -6,6 +6,7 @@ import de.muenchen.isi.api.dto.filehandling.DokumentDto;
 import de.muenchen.isi.api.validation.HasAllowedNumberOfDocuments;
 import de.muenchen.isi.api.validation.NotUnspecified;
 import de.muenchen.isi.api.validation.VerfahrensstandBaugenehmigungsverfahrenValid;
+import de.muenchen.isi.api.validation.Vollstaendig;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Verfahrensstand;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
@@ -29,7 +30,7 @@ public class BaugenehmigungsverfahrenAngelegtDto extends AbfrageAngelegtDto {
     private String bebauungsplannummer;
 
     @NotNull
-    @NotUnspecified
+    @NotUnspecified(groups = Vollstaendig.class)
     @VerfahrensstandBaugenehmigungsverfahrenValid
     private Verfahrensstand verfahrensstand;
 
@@ -48,7 +49,7 @@ public class BaugenehmigungsverfahrenAngelegtDto extends AbfrageAngelegtDto {
     @NotNull
     private LocalDate fristBearbeitung;
 
-    @NotEmpty
-    @Size(min = 1, max = 5)
+    @NotEmpty(groups = Vollstaendig.class)
+    @Size(max = 5)
     private List<@Valid @NotNull AbfragevarianteBaugenehmigungsverfahrenAngelegtDto> abfragevariantenBaugenehmigungsverfahren;
 }

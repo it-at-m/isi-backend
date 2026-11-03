@@ -3,6 +3,7 @@ package de.muenchen.isi.api.controller;
 import de.muenchen.isi.api.dto.common.TransitionDto;
 import de.muenchen.isi.api.dto.error.InformationResponseDto;
 import de.muenchen.isi.api.mapper.TransitionApiMapper;
+import de.muenchen.isi.api.validation.AbfrageFreigabeValidator;
 import de.muenchen.isi.domain.exception.AbfrageStatusNotAllowedException;
 import de.muenchen.isi.domain.exception.CalculationException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
@@ -10,6 +11,7 @@ import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.ReportingException;
 import de.muenchen.isi.domain.exception.StringLengthExceededException;
 import de.muenchen.isi.domain.exception.UserRoleNotAllowedException;
+import de.muenchen.isi.domain.service.AbfrageService;
 import de.muenchen.isi.domain.service.AbfrageStatusService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -43,6 +45,10 @@ public class AbfrageStatusController {
     private final AbfrageStatusService abfrageStatusService;
 
     private final TransitionApiMapper transitionApiMapper;
+
+    private final AbfrageService abfrageService;
+
+    private final AbfrageFreigabeValidator abfrageFreigabeValidator;
 
     @GetMapping("{id}/transitions")
     @Transactional(rollbackFor = OptimisticLockingException.class)
@@ -82,6 +88,11 @@ public class AbfrageStatusController {
         value = {
             @ApiResponse(responseCode = "200", description = "OK -> Abfrage wurde erfolgreich freigegeben."),
             @ApiResponse(
+                responseCode = "400",
+                description = "BAD_REQUEST -> Die Abfrage konnte nicht freigegeben werden, da Pflichtangaben fehlen oder ungültig sind.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+            @ApiResponse(
                 responseCode = "403",
                 description = "FORBIDDEN -> Sie haben keine Berechtigung, den Statuswechsel durchzuführen.",
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
@@ -104,6 +115,7 @@ public class AbfrageStatusController {
         @RequestParam(value = "anmerkung", required = false, defaultValue = "") String anmerkung
     )
         throws EntityNotFoundException, AbfrageStatusNotAllowedException, StringLengthExceededException, UserRoleNotAllowedException {
+        this.abfrageFreigabeValidator.validate(this.abfrageService.getById(id));
         this.abfrageStatusService.freigabeAbfrage(id, anmerkung);
         return ResponseEntity.ok().build();
     }

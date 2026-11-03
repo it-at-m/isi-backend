@@ -78,6 +78,15 @@ public interface AbfrageApiMapper {
     @SubclassMapping(source = WeiteresVerfahrenAngelegtDto.class, target = WeiteresVerfahrenAngelegtModel.class)
     AbfrageAngelegtModel dto2Model(final AbfrageAngelegtDto dto);
 
+    /**
+     * Bildet eine gespeicherte Abfrage auf das {@link AbfrageAngelegtDto} ab, um die Pflichtangaben der
+     * Abfrageerstellung vor der Freigabe prüfen zu können.
+     */
+    @SubclassMapping(source = BauleitplanverfahrenModel.class, target = BauleitplanverfahrenAngelegtDto.class)
+    @SubclassMapping(source = BaugenehmigungsverfahrenModel.class, target = BaugenehmigungsverfahrenAngelegtDto.class)
+    @SubclassMapping(source = WeiteresVerfahrenModel.class, target = WeiteresVerfahrenAngelegtDto.class)
+    AbfrageAngelegtDto model2AngelegtDto(final AbfrageModel model);
+
     @SubclassMapping(
         source = BauleitplanverfahrenStartBearbeitungDto.class,
         target = BauleitplanverfahrenStartBearbeitungModel.class

@@ -127,6 +127,10 @@ public class DistributionValidator {
         final List<BauabschnittDto> bauabschnitte,
         final Integer realisierungVon
     ) {
+        // Ein fehlendes 'Realisierung von' wird über @NotNull gemeldet.
+        if (realisierungVon == null) {
+            return true;
+        }
         boolean isValid = true;
 
         final List<BaugebietDto> nonTechnicalBaugebiete = getNonTechnicalBaugebiete(bauabschnitte);

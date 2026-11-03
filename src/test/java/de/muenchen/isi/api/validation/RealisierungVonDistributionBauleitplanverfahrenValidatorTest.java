@@ -400,4 +400,20 @@ class RealisierungVonDistributionBauleitplanverfahrenValidatorTest {
 
         assertThat(this.realisierungVonDistributionValidator.isValid(abfragevariante, null), is(false));
     }
+
+    @Test
+    void isValidForMissingRealisierungVon() {
+        final var baugebiet = new BaugebietDto();
+        baugebiet.setTechnical(false);
+        baugebiet.setRealisierungVon(2020);
+        final var bauabschnitt = new BauabschnittDto();
+        bauabschnitt.setBaugebiete(List.of(baugebiet));
+
+        final var abfragevariante = new AbfragevarianteBauleitplanverfahrenAngelegtDto();
+        abfragevariante.setRealisierungVon(null);
+        abfragevariante.setBauabschnitte(List.of(bauabschnitt));
+
+        // Ein fehlendes 'Realisierung von' wird über @NotNull gemeldet.
+        assertThat(this.realisierungVonDistributionValidator.isValid(abfragevariante, null), is(true));
+    }
 }
