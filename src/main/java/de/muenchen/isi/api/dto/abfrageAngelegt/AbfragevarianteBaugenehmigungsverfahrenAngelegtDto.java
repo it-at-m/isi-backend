@@ -9,6 +9,7 @@ import de.muenchen.isi.api.validation.EarliestBaurateIsRealisierungVonValid;
 import de.muenchen.isi.api.validation.NotUnspecified;
 import de.muenchen.isi.api.validation.RealisierungVonDistributionBaugenehmigungsverfahrenValid;
 import de.muenchen.isi.api.validation.TechnicalAttributesValid;
+import de.muenchen.isi.api.validation.Vollstaendig;
 import de.muenchen.isi.api.validation.WeGfDistributionBaugenehmigungsverfahrenValid;
 import de.muenchen.isi.api.validation.WesentlicheRechtsgrundlageBaugenehmigungsverfahrenValid;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
@@ -26,9 +27,9 @@ import java.util.UUID;
 import lombok.Data;
 
 @Data
-@EarliestBaurateIsRealisierungVonValid
-@WeGfDistributionBaugenehmigungsverfahrenValid
-@RealisierungVonDistributionBaugenehmigungsverfahrenValid
+@EarliestBaurateIsRealisierungVonValid(groups = Vollstaendig.class)
+@WeGfDistributionBaugenehmigungsverfahrenValid(groups = Vollstaendig.class)
+@RealisierungVonDistributionBaugenehmigungsverfahrenValid(groups = Vollstaendig.class)
 public class AbfragevarianteBaugenehmigungsverfahrenAngelegtDto implements AbfragevarianteAngelegtDto {
 
     private UUID id;
@@ -41,11 +42,12 @@ public class AbfragevarianteBaugenehmigungsverfahrenAngelegtDto implements Abfra
     @NotNull
     private Integer abfragevariantenNr;
 
-    @NotBlank
+    @NotNull
+    @NotBlank(groups = Vollstaendig.class)
     @Size(max = 30, message = "Es sind maximal {max} Zeichen erlaubt")
     private String name;
 
-    @NotEmpty
+    @NotEmpty(groups = Vollstaendig.class)
     private List<@WesentlicheRechtsgrundlageBaugenehmigungsverfahrenValid @NotNull WesentlicheRechtsgrundlage> wesentlicheRechtsgrundlage;
 
     @Size(max = 1000, message = "Es sind maximal {max} Zeichen erlaubt")
@@ -54,7 +56,7 @@ public class AbfragevarianteBaugenehmigungsverfahrenAngelegtDto implements Abfra
     @Size(max = 1000, message = "Es sind maximal {max} Zeichen erlaubt")
     private String wesentlicheRechtsgrundlageAngabenZurBefreiung;
 
-    @NotNull
+    @NotNull(groups = Vollstaendig.class)
     @Min(1900)
     @Max(2100)
     private Integer realisierungVon;
@@ -101,7 +103,7 @@ public class AbfragevarianteBaugenehmigungsverfahrenAngelegtDto implements Abfra
     @Size(max = 200, message = "Es sind maximal {max} Zeichen erlaubt")
     private String weAnmerkung;
 
-    @NotEmpty
+    @NotEmpty(groups = Vollstaendig.class)
     @TechnicalAttributesValid
     private List<@Valid @NotNull BauabschnittDto> bauabschnitte;
 }

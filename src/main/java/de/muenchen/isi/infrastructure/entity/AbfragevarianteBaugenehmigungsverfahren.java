@@ -70,7 +70,7 @@ public class AbfragevarianteBaugenehmigungsverfahren extends Abfragevariante {
         name = "realisierungVon" + SearchwordSuggesterRepository.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
         valueBinder = @ValueBinderRef(type = IntegerSuggestionBinder.class)
     )
-    @Column(nullable = false)
+    @Column
     private Integer realisierungVon;
 
     // Geschossfläche Wohnen

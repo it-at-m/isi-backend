@@ -7,6 +7,7 @@ import de.muenchen.isi.api.validation.HasAllowedNumberOfDocuments;
 import de.muenchen.isi.api.validation.NotUnspecified;
 import de.muenchen.isi.api.validation.Start42VerfahrenValid;
 import de.muenchen.isi.api.validation.VerfahrensstandBauleitplanverfahrenValid;
+import de.muenchen.isi.api.validation.Vollstaendig;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonVerfahrensgrundsaetzeJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Verfahrensstand;
@@ -23,20 +24,20 @@ import lombok.ToString;
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-@Start42VerfahrenValid
+@Start42VerfahrenValid(groups = Vollstaendig.class)
 public class BauleitplanverfahrenAngelegtDto extends AbfrageAngelegtDto {
 
     @Size(max = 255, message = "Es sind maximal {max} Zeichen erlaubt")
     private String bebauungsplannummer;
 
     @NotNull
-    @NotUnspecified
+    @NotUnspecified(groups = Vollstaendig.class)
     private UncertainBoolean sobonRelevant;
 
     private SobonVerfahrensgrundsaetzeJahr sobonJahr;
 
     @NotNull
-    @NotUnspecified
+    @NotUnspecified(groups = Vollstaendig.class)
     @VerfahrensstandBauleitplanverfahrenValid
     private Verfahrensstand verfahrensstand;
 
@@ -63,7 +64,7 @@ public class BauleitplanverfahrenAngelegtDto extends AbfrageAngelegtDto {
     @NotNull
     private Boolean start42VerfahrenDatumUnbekannt;
 
-    @NotEmpty
-    @Size(min = 1, max = 5)
+    @NotEmpty(groups = Vollstaendig.class)
+    @Size(max = 5)
     private List<@Valid @NotNull AbfragevarianteBauleitplanverfahrenAngelegtDto> abfragevariantenBauleitplanverfahren;
 }

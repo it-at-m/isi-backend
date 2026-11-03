@@ -6,6 +6,7 @@ import de.muenchen.isi.api.dto.filehandling.DokumentDto;
 import de.muenchen.isi.api.validation.HasAllowedNumberOfDocuments;
 import de.muenchen.isi.api.validation.NotUnspecified;
 import de.muenchen.isi.api.validation.VerfahrensstandWeiteresVerfahrenValid;
+import de.muenchen.isi.api.validation.Vollstaendig;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonVerfahrensgrundsaetzeJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Verfahrensstand;
@@ -31,13 +32,13 @@ public class WeiteresVerfahrenAngelegtDto extends AbfrageAngelegtDto {
     private String bebauungsplannummer;
 
     @NotNull
-    @NotUnspecified
+    @NotUnspecified(groups = Vollstaendig.class)
     private UncertainBoolean sobonRelevant;
 
     private SobonVerfahrensgrundsaetzeJahr sobonJahr;
 
     @NotNull
-    @NotUnspecified
+    @NotUnspecified(groups = Vollstaendig.class)
     @VerfahrensstandWeiteresVerfahrenValid
     private Verfahrensstand verfahrensstand;
 
@@ -59,7 +60,7 @@ public class WeiteresVerfahrenAngelegtDto extends AbfrageAngelegtDto {
     @NotNull
     private UncertainBoolean mitzeichnungBeschlussentwurf;
 
-    @NotEmpty
-    @Size(min = 1, max = 5)
+    @NotEmpty(groups = Vollstaendig.class)
+    @Size(max = 5)
     private List<@Valid @NotNull AbfragevarianteWeiteresVerfahrenAngelegtDto> abfragevariantenWeiteresVerfahren;
 }

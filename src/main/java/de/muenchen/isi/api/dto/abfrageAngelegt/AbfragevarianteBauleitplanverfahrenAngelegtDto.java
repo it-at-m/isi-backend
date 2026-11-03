@@ -9,6 +9,7 @@ import de.muenchen.isi.api.validation.EarliestBaurateIsRealisierungVonValid;
 import de.muenchen.isi.api.validation.NotUnspecified;
 import de.muenchen.isi.api.validation.RealisierungVonDistributionBauleitplanverfahrenValid;
 import de.muenchen.isi.api.validation.TechnicalAttributesValid;
+import de.muenchen.isi.api.validation.Vollstaendig;
 import de.muenchen.isi.api.validation.WeGfDistributionBauleitplanverfahrenValid;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Planart;
@@ -26,9 +27,9 @@ import java.util.UUID;
 import lombok.Data;
 
 @Data
-@EarliestBaurateIsRealisierungVonValid
-@WeGfDistributionBauleitplanverfahrenValid
-@RealisierungVonDistributionBauleitplanverfahrenValid
+@EarliestBaurateIsRealisierungVonValid(groups = Vollstaendig.class)
+@WeGfDistributionBauleitplanverfahrenValid(groups = Vollstaendig.class)
+@RealisierungVonDistributionBauleitplanverfahrenValid(groups = Vollstaendig.class)
 public class AbfragevarianteBauleitplanverfahrenAngelegtDto implements AbfragevarianteAngelegtDto {
 
     private UUID id;
@@ -41,19 +42,20 @@ public class AbfragevarianteBauleitplanverfahrenAngelegtDto implements Abfrageva
     @NotNull
     private Integer abfragevariantenNr;
 
-    @NotBlank
+    @NotNull
+    @NotBlank(groups = Vollstaendig.class)
     @Size(max = 30, message = "Es sind maximal {max} Zeichen erlaubt")
     private String name;
 
     private LocalDate satzungsbeschluss;
 
-    @NotEmpty
+    @NotEmpty(groups = Vollstaendig.class)
     private List<@NotNull Planart> planart;
 
     @Size(max = 1000, message = "Es sind maximal {max} Zeichen erlaubt")
     private String planartFreieEingabe;
 
-    @NotNull
+    @NotNull(groups = Vollstaendig.class)
     @Min(1900)
     @Max(2100)
     private Integer realisierungVon;
@@ -94,7 +96,7 @@ public class AbfragevarianteBauleitplanverfahrenAngelegtDto implements Abfrageva
     @Size(max = 200, message = "Es sind maximal {max} Zeichen erlaubt")
     private String weAnmerkung;
 
-    @NotEmpty
+    @NotEmpty(groups = Vollstaendig.class)
     @TechnicalAttributesValid
     private List<@Valid @NotNull BauabschnittDto> bauabschnitte;
 }
