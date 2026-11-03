@@ -25,6 +25,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.elasticsearch.ElasticsearchContainer;
+import org.testcontainers.utility.DockerImageName;
 import tools.jackson.databind.ObjectMapper;
 import tools.jackson.databind.json.JsonMapper;
 
@@ -39,20 +40,21 @@ import tools.jackson.databind.json.JsonMapper;
 @ActiveProfiles(profiles = { TestConstants.SPRING_UNIT_TEST_PROFILE, TestConstants.SPRING_NO_SECURITY_PROFILE })
 class SearchAnalyzerIntegrationTest {
 
-    // Version an die in den Umgebungen eingesetzte Elasticsearch-Version anpassen.
+    // Gleiches Image wie im lokalen Stack (isi_docker-compose.yml).
+    // Voll qualifizierter Image-Name, damit auch Podman (ohne Short-Name-Auflösung auf docker.io) das Image findet.
+    // Begrenzter Heap, da die Podman-/Docker-VM standardmäßig nur wenig Arbeitsspeicher hat.
     private static final ElasticsearchContainer ELASTICSEARCH = new ElasticsearchContainer(
-        "docker.elastic.co/elasticsearch/elasticsearch:8.11.4"
-    ).withEnv("xpack.security.enabled", "false");
+        DockerImageName.parse("docker.io/library/elasticsearch:8.11.4").asCompatibleSubstituteFor(
+            "docker.elastic.co/elasticsearch/elasticsearch"
+        )
+    )
+        .withEnv("xpack.security.enabled", "false")
+        .withEnv("ES_JAVA_OPTS", "-Xms512m -Xmx512m");
 
     private static final ObjectMapper OBJECT_MAPPER = new JsonMapper();
 
     static {
-        try {
-            ELASTICSEARCH.start();
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException("ElasticsearchContainer konnte nicht gestartet werden", e);
-        }
+        ELASTICSEARCH.start();
     }
 
     @DynamicPropertySource
