@@ -582,7 +582,7 @@ public class EntitySearchService {
      */
     protected List<String> tokenizeAccordingUnicodeAnnex29(final String searchQuery) {
         // Normalize input using the shared normalizer (keeps normalization logic in one place).
-        final var normalized = SearchQueryNormalizer.normalizeForTokenization(searchQuery);
+        final var normalized = normalizeForTokenization(searchQuery);
 
         final var words = new ArrayList<String>();
         final var breakIterator = BreakIterator.getWordInstance();
@@ -591,9 +591,7 @@ public class EntitySearchService {
         for (int end = breakIterator.next(); end != BreakIterator.DONE; start = end, end = breakIterator.next()) {
             if (breakIterator.getRuleStatus() != BreakIterator.WORD_NONE) {
                 var token = normalized.substring(start, end);
-                if (!token.isBlank()) {
-                    words.add(token);
-                }
+                words.add(token);
             }
         }
         return words;
@@ -662,5 +660,30 @@ public class EntitySearchService {
 
         // --- alles andere (z. B. alle drei, oder gar nichts explizit) ---
         return AllObjectsRecord.class;
+    }
+
+    /**
+     * Dient zur Normalisierung von benutzerseitigen Suchanfragen vor der Tokenisierung
+     * und Anpassung an das Simple Query String-Format.
+     *
+     * HINWEIS: Die hier durchgeführte Normalisierung muss mit der Konfiguration des Analyzers
+     * auf in de.muenchen.isi.configuration.search.ElasticsearchAnalysisConfig übereinstimmen.
+     * Insbesondere gilt: Wenn Unterstriche im Analyzer als Token-Trenner behandelt werden,
+     * muss der Normalizer Unterstriche auch auf der Query-Seite auftrennen (oder umgekehrt).
+     * Beide Konfigurationen müssen synchron gehalten werden.
+     * Normalisiert die Eingabezeichenkette für die Tokenisierung:
+     *
+     * - wandelt null in einen leeren String um
+     * - ersetzt Unterstriche durch Leerzeichen, damit sie als Trenner behandelt werden
+     * - entfernt führende und nachfolgende Leerzeichen
+     *
+     * @param input rohe Benutzereingabe
+     * @return normalisierter String, bereit zur Tokenisierung
+     **/
+    private static String normalizeForTokenization(final String input) {
+        if (input == null) {
+            return "";
+        }
+        return input.replace('_', ' ').trim();
     }
 }

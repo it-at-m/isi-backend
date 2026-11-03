@@ -24,6 +24,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
+import org.springframework.test.context.junit.jupiter.EnabledIf;
 import org.testcontainers.elasticsearch.ElasticsearchContainer;
 import org.testcontainers.utility.DockerImageName;
 import tools.jackson.databind.ObjectMapper;
@@ -36,6 +37,7 @@ import tools.jackson.databind.json.JsonMapper;
  * ElasticsearchAnalysisConfig und den @FullTextField-Annotationen der Entitäten. Über die _analyze-API wird
  * ermittelt, welche Tokens Elasticsearch für einen Feldwert tatsächlich im Index ablegt.
  */
+@EnabledIf(expression = "#{environment.getProperty('run.local.integration.test') == 'true'}", loadContext = true)
 @SpringBootTest(classes = { IsiBackendApplication.class })
 @ActiveProfiles(profiles = { TestConstants.SPRING_UNIT_TEST_PROFILE, TestConstants.SPRING_NO_SECURITY_PROFILE })
 class SearchAnalyzerIntegrationTest {
