@@ -37,7 +37,7 @@ import tools.jackson.databind.json.JsonMapper;
  * ElasticsearchAnalysisConfig und den @FullTextField-Annotationen der Entitäten. Über die _analyze-API wird
  * ermittelt, welche Tokens Elasticsearch für einen Feldwert tatsächlich im Index ablegt.
  */
-@EnabledIf(expression = "#{environment.getProperty('run.local.integration.test') == 'true'}", loadContext = true)
+@EnabledIf(expression = "#{environment.getProperty('run.local.integration.test') == 'true'}")
 @SpringBootTest(classes = { IsiBackendApplication.class })
 @ActiveProfiles(profiles = { TestConstants.SPRING_UNIT_TEST_PROFILE, TestConstants.SPRING_NO_SECURITY_PROFILE })
 class SearchAnalyzerIntegrationTest {
