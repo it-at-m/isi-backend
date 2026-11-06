@@ -50,6 +50,10 @@ public abstract class VerortungDomainMapper {
                 final var centroidUtmModel = koordinatenService.wgs84ToUtm32(centroidWgs84Model);
                 final var centroidUtm = koordinatenDomainMapper.model2Entity(centroidUtmModel);
                 entity.setCentroidUtm(centroidUtm);
+            } else {
+                // Ohne Multipolygon darf kein aus dem Model übernommener, veralteter Schwerpunkt gespeichert werden.
+                entity.setCentroid(null);
+                entity.setCentroidUtm(null);
             }
         } catch (final Exception exception) {
             entity.setCentroid(null);
