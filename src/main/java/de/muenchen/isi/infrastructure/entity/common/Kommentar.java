@@ -43,11 +43,11 @@ public class Kommentar extends BaseEntity {
     @Column(columnDefinition = "text")
     private String text;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "bauvorhaben_id")
     private Bauvorhaben bauvorhaben;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "infrastruktureinrichtung_id")
     private Infrastruktureinrichtung infrastruktureinrichtung;
 

@@ -53,10 +53,20 @@
         <openapi-generator-version>7.26.0</openapi-generator-version>
         <jackson.databind.nullable.version>0.2.13</jackson.databind.nullable.version>
         <shedlock.version>7.10.1</shedlock.version>
+        <!-- Override der von Spring Boot verwalteten OpenTelemetry-Version (CVE-2026-118259) -->
+        <opentelemetry.version>1.67.0</opentelemetry.version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <!-- Muss vor spring-boot-dependencies stehen, damit die OpenTelemetry-Version überschrieben wird -->
+                <groupId>io.opentelemetry</groupId>
+                <artifactId>opentelemetry-bom</artifactId>
+                <version>${opentelemetry.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
             <dependency>
                 <!-- Import dependency management from Spring Boot -->
                 <groupId>org.springframework.boot</groupId>
@@ -299,10 +309,6 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-configuration-processor</artifactId>
                 <optional>true</optional>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.data</groupId>
-                <artifactId>spring-data-rest-hal-explorer</artifactId>
             </dependency>
 
         <!-- Spring Statemachine -->
