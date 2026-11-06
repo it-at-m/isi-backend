@@ -19,6 +19,7 @@ import de.muenchen.isi.domain.model.infrastruktureinrichtung.SchuleModel;
 import de.muenchen.isi.domain.service.etlInterface.EtlInterfaceService;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.AnlassPlanung;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.Einrichtungstraeger;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Kooperation;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusInfrastruktureinrichtung;
@@ -75,15 +76,22 @@ class InfrastruktureinrichtungServiceTest {
         kinderkrippe1.setNameEinrichtung("Kinderkrippe 1");
         kinderkrippe1.setStatus(StatusInfrastruktureinrichtung.BESTAND);
         kinderkrippe1.setAnlassPlanung(AnlassPlanung.SCHLIESSUNG);
-        kinderkrippe1.setAnzahlKinderkrippeGruppen(10);
-        kinderkrippe1.setAnzahlKinderkrippePlaetze(100);
+        kinderkrippe1.setGesamtplaetzeNachBE(10);
+        kinderkrippe1.setKinderkrippenplaetzeNachBE(8);
+        kinderkrippe1.setEinrichtungstraeger(Einrichtungstraeger.STAEDTISCHE_EINRICHTUNG);
+        kinderkrippe1.setSobonRelevant(UncertainBoolean.TRUE);
+        kinderkrippe1.setMuenchnerKitafoerderung(UncertainBoolean.TRUE);
 
         Kinderkrippe kinderkrippe2 = new Kinderkrippe();
         kinderkrippe2.setNameEinrichtung("Kinderkrippe 2");
         kinderkrippe2.setStatus(StatusInfrastruktureinrichtung.GESICHERTE_PLANUNG);
         kinderkrippe2.setAnlassPlanung(AnlassPlanung.SCHLIESSUNG);
-        kinderkrippe2.setAnzahlKinderkrippeGruppen(11);
-        kinderkrippe2.setAnzahlKinderkrippePlaetze(110);
+        kinderkrippe2.setIntegrationsplaetzeKinderkrippe(20);
+        kinderkrippe2.setIntegrationsplaetzeKinderkrippeLautBelegung(15);
+        kinderkrippe2.setUeberregionaleKinderkrippenplaetze(5);
+        kinderkrippe2.setEinrichtungstraeger(Einrichtungstraeger.ELTERN_KIND_INITIATIVE);
+        kinderkrippe2.setSobonRelevant(UncertainBoolean.FALSE);
+        kinderkrippe2.setMuenchnerKitafoerderung(UncertainBoolean.FALSE);
 
         Kindergarten kindergarten = new Kindergarten();
         kindergarten.setNameEinrichtung("Kindergarten");
@@ -100,7 +108,17 @@ class InfrastruktureinrichtungServiceTest {
         grundschule.getSchule().setAnzahlKlassen(5);
         grundschule.getSchule().setAnzahlPlaetze(50);
 
-        infrastruktureinrichtungRepository.saveAll(List.of(kinderkrippe1, kinderkrippe2, kindergarten, grundschule));
+        Nachbarschaftstreff nachbarschaftstreff = new Nachbarschaftstreff();
+        nachbarschaftstreff.setNameEinrichtung("Nachbarschaftstreff");
+        nachbarschaftstreff.setStatus(StatusInfrastruktureinrichtung.BESTAND);
+        nachbarschaftstreff.setAnlassPlanung(AnlassPlanung.UNSPECIFIED);
+        nachbarschaftstreff.setSobonRelevant(UncertainBoolean.FALSE);
+        nachbarschaftstreff.setKooperation(Kooperation.SONSTIGES);
+        nachbarschaftstreff.setKooperationFreieEingabe("freie Eingabe");
+
+        infrastruktureinrichtungRepository.saveAll(
+            List.of(kinderkrippe1, kinderkrippe2, kindergarten, grundschule, nachbarschaftstreff)
+        );
     }
 
     @Test

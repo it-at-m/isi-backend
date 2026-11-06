@@ -22,44 +22,6 @@ class WohnungsnahePlaetzeValidatorTest {
     private final WohnungsnahePlaetzeValidator wohnungsnahePlaetzeValidator = new WohnungsnahePlaetzeValidator();
 
     @Test
-    void isValidKinderkrippe() {
-        assertThat(wohnungsnahePlaetzeValidator.isValid(null, null), is(true));
-
-        final var kinderkrippe = new KinderkrippeDto();
-        kinderkrippe.setAnzahlKinderkrippePlaetze(null);
-        kinderkrippe.setWohnungsnaheKinderkrippePlaetze(null);
-        assertThat(wohnungsnahePlaetzeValidator.isValid(kinderkrippe, null), is(true));
-
-        kinderkrippe.setAnzahlKinderkrippePlaetze(100);
-        kinderkrippe.setWohnungsnaheKinderkrippePlaetze(null);
-        assertThat(wohnungsnahePlaetzeValidator.isValid(kinderkrippe, null), is(true));
-
-        kinderkrippe.setAnzahlKinderkrippePlaetze(100);
-        kinderkrippe.setWohnungsnaheKinderkrippePlaetze(0);
-        assertThat(wohnungsnahePlaetzeValidator.isValid(kinderkrippe, null), is(true));
-
-        kinderkrippe.setAnzahlKinderkrippePlaetze(100);
-        kinderkrippe.setWohnungsnaheKinderkrippePlaetze(99);
-        assertThat(wohnungsnahePlaetzeValidator.isValid(kinderkrippe, null), is(true));
-
-        kinderkrippe.setAnzahlKinderkrippePlaetze(100);
-        kinderkrippe.setWohnungsnaheKinderkrippePlaetze(100);
-        assertThat(wohnungsnahePlaetzeValidator.isValid(kinderkrippe, null), is(true));
-
-        kinderkrippe.setAnzahlKinderkrippePlaetze(100);
-        kinderkrippe.setWohnungsnaheKinderkrippePlaetze(101);
-        assertThat(wohnungsnahePlaetzeValidator.isValid(kinderkrippe, null), is(false));
-
-        kinderkrippe.setAnzahlKinderkrippePlaetze(null);
-        kinderkrippe.setWohnungsnaheKinderkrippePlaetze(101);
-        assertThat(wohnungsnahePlaetzeValidator.isValid(kinderkrippe, null), is(false));
-
-        kinderkrippe.setAnzahlKinderkrippePlaetze(0);
-        kinderkrippe.setWohnungsnaheKinderkrippePlaetze(101);
-        assertThat(wohnungsnahePlaetzeValidator.isValid(kinderkrippe, null), is(false));
-    }
-
-    @Test
     void isValidKindergarten() {
         assertThat(wohnungsnahePlaetzeValidator.isValid(null, null), is(true));
 

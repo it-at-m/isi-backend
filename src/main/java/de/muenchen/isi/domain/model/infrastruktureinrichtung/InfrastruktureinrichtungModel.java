@@ -47,4 +47,6 @@ public abstract class InfrastruktureinrichtungModel extends BaseEntityModel {
     private String idKibigWeb;
 
     private AnlassPlanung anlassPlanung;
+
+    private BigDecimal flaecheEinrichtung;
 }

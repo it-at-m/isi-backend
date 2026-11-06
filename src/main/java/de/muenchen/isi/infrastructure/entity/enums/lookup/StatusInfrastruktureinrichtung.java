@@ -10,10 +10,10 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum StatusInfrastruktureinrichtung implements ILookup {
     UNSPECIFIED(ILookup.UNSPECIFIED, new String[] {}),
+    BESTAND("Bestand", new String[] { "Bestand" }),
     UNGESICHERTE_PLANUNG("ungesicherte Planung", new String[] { "ungesicherte", "Planung" }),
     GESICHERTE_PLANUNG("gesicherte Planung", new String[] { "gesicherte", "Planung" }),
-    PLANUNG_ZURUECKGEZOGEN("Planung zurückgezogen", new String[] { "Planung", "zurückgezogen" }),
-    BESTAND("Bestand", new String[] { "Bestand" });
+    PLANUNG_ZURUECKGEZOGEN("Planung zurückgezogen", new String[] { "Planung", "zurückgezogen" });
 
     @Getter
     private final String bezeichnung;

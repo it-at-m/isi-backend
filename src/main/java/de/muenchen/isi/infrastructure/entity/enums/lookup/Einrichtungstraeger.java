@@ -14,24 +14,14 @@ public enum Einrichtungstraeger implements ILookup {
     STAEDTISCHE_EINRICHTUNG("Städtische Einrichtung"),
     EINRICHTUNG_BETRIEBSTRAEGERSCHAFT("Einrichtung in Betriebsträgerschaft"),
     FREIE_GEMEINNUETZIGE_SONSTIGE("Freie / gemeinnützige / sonstige Einrichtungen"),
-    EINRICHTUNG_GESAMTSTAEDTISCH("Einrichtung, deren Plätze nur gesamtstädtisch zur Verfügung stehen"),
     ELTERN_KIND_INITIATIVE("Eltern-Kind-Initiative"),
-    STAATLICHE_EINRICHTUNG("Staatliche Einrichtung"),
-    PRIVATE_TRAEGERSCHAFT("Private Trägerschaft"),
-    KIRCHLICHE_TRAEGERSCHAFT("Kirchliche Trägerschaft");
+    STAATLICHE_EINRICHTUNG("Staatliche Einrichtung");
 
     @Getter
     private final String bezeichnung;
 
     public static List<Einrichtungstraeger> getEinrichtungstraegerSchulen() {
-        return List.of(
-            UNSPECIFIED,
-            STAEDTISCHE_EINRICHTUNG,
-            FREIE_GEMEINNUETZIGE_SONSTIGE,
-            STAATLICHE_EINRICHTUNG,
-            PRIVATE_TRAEGERSCHAFT,
-            KIRCHLICHE_TRAEGERSCHAFT
-        );
+        return List.of(UNSPECIFIED, STAEDTISCHE_EINRICHTUNG, FREIE_GEMEINNUETZIGE_SONSTIGE, STAATLICHE_EINRICHTUNG);
     }
 
     public static List<Einrichtungstraeger> getEinrichtungstraeger() {
@@ -40,9 +30,7 @@ public enum Einrichtungstraeger implements ILookup {
             STAEDTISCHE_EINRICHTUNG,
             EINRICHTUNG_BETRIEBSTRAEGERSCHAFT,
             FREIE_GEMEINNUETZIGE_SONSTIGE,
-            EINRICHTUNG_GESAMTSTAEDTISCH,
-            ELTERN_KIND_INITIATIVE,
-            STAATLICHE_EINRICHTUNG
+            ELTERN_KIND_INITIATIVE
         );
     }
 }

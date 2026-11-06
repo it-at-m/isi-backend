@@ -246,15 +246,17 @@ public class BauvorhabenServiceTest {
         final Kinderkrippe kinderkrippe1 = new Kinderkrippe();
         kinderkrippe1.setNameEinrichtung("A");
         kinderkrippe1.setStatus(StatusInfrastruktureinrichtung.BESTAND);
-        kinderkrippe1.setAnzahlKinderkrippeGruppen(10);
-        kinderkrippe1.setAnzahlKinderkrippePlaetze(100);
+        kinderkrippe1.setGesamtplaetzeNachBE(10);
+        kinderkrippe1.setKinderkrippenplaetzeNachBE(8);
         kinderkrippe1.setBauvorhaben(bauvorhaben);
 
         final Kinderkrippe kinderkrippe2 = new Kinderkrippe();
         kinderkrippe2.setNameEinrichtung("B");
         kinderkrippe2.setStatus(StatusInfrastruktureinrichtung.GESICHERTE_PLANUNG);
-        kinderkrippe2.setAnzahlKinderkrippeGruppen(11);
-        kinderkrippe2.setAnzahlKinderkrippePlaetze(110);
+        kinderkrippe2.setIntegrationseinrichtung(true);
+        kinderkrippe2.setIntegrationsplaetzeKinderkrippe(20);
+        kinderkrippe2.setIntegrationsplaetzeKinderkrippeLautBelegung(15);
+        kinderkrippe2.setUeberregionaleKinderkrippenplaetze(5);
         kinderkrippe2.setBauvorhaben(bauvorhaben);
 
         final Kindergarten kindergarten1 = new Kindergarten();
