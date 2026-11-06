@@ -8,6 +8,4 @@ public class Grundschulsprengel {
 
     @GenericField
     private Long nummer;
-
-    private MultiPolygonGeometry multiPolygon;
 }

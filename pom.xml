@@ -396,6 +396,12 @@
             <version>${apache.commons.text}</version>
         </dependency>
 
+        <!-- PostGIS-Geometrien in Entities (JTS) -->
+        <dependency>
+            <groupId>org.hibernate.orm</groupId>
+            <artifactId>hibernate-spatial</artifactId>
+        </dependency>
+
         <!-- geotools -->
         <dependency>
             <groupId>org.geotools</groupId>

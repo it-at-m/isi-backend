@@ -89,6 +89,8 @@ public class AbfrageService {
 
     private final EtlInterfaceService etlInterfaceService;
 
+    private final VerortungGeometrieService verortungGeometrieService;
+
     /**
      * Die Methode gibt ein {@link AbfrageModel} identifiziert durch die ID zurück.
      *
@@ -160,6 +162,7 @@ public class AbfrageService {
             final var message = "Die Daten wurden in der Zwischenzeit geändert. Bitte laden Sie die Seite neu!";
             throw new OptimisticLockingException(message, exception);
         }
+        this.verortungGeometrieService.synchronisieren(entity.getId(), abfrage.getVerortung());
         final var model = this.abfrageDomainMapper.entity2Model(entity);
         // Items der vorhergehenden Transponierung löschen. Dies ist nötig, da sich die ID's in der Reporting Tabelle bei der folgenden Übermittlung ändern
         etlInterfaceService.etlInterfaceTriggerDeleteAbfrageTransponierungItemsJob(entity.getId());

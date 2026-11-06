@@ -14,6 +14,7 @@ import de.muenchen.isi.domain.model.search.request.BauvorhabenInfrastruktureinri
 import de.muenchen.isi.domain.model.search.request.BauvorhabenRecord;
 import de.muenchen.isi.domain.model.search.request.InfrastrukturRecord;
 import de.muenchen.isi.domain.model.search.request.SearchQueryAndSortingModel;
+import de.muenchen.isi.domain.service.VerortungGeometrieService;
 import de.muenchen.isi.infrastructure.entity.Baugenehmigungsverfahren;
 import de.muenchen.isi.infrastructure.entity.Bauleitplanverfahren;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
@@ -39,9 +40,13 @@ class EntitySearchServiceTest {
     @Mock
     private AuthenticationUtils authenticationUtils;
 
+    @Mock
+    private VerortungGeometrieService verortungGeometrieService;
+
     private final EntitySearchService entitySearchService = new EntitySearchService(
         searchPreparationService,
         searchDomainMapper,
+        verortungGeometrieService,
         authenticationUtils
     );
 

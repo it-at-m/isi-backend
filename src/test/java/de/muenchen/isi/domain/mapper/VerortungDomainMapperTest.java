@@ -1,25 +1,31 @@
 package de.muenchen.isi.domain.mapper;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.closeTo;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 
+import de.muenchen.isi.domain.exception.GeometryOperationFailedException;
+import de.muenchen.isi.domain.model.common.KitaplanungsbereichModel;
 import de.muenchen.isi.domain.model.common.MultiPolygonGeometryModel;
 import de.muenchen.isi.domain.model.common.PointGeometryModel;
 import de.muenchen.isi.domain.model.common.UtmModel;
 import de.muenchen.isi.domain.model.common.VerortungMultiPolygonModel;
 import de.muenchen.isi.domain.model.common.VerortungPointModel;
 import de.muenchen.isi.domain.service.KoordinatenService;
-import de.muenchen.isi.infrastructure.entity.common.MultiPolygonGeometry;
 import de.muenchen.isi.infrastructure.entity.common.PointGeometry;
+import de.muenchen.isi.infrastructure.entity.common.Stadtbezirk;
 import de.muenchen.isi.infrastructure.entity.common.Utm;
 import de.muenchen.isi.infrastructure.entity.common.VerortungMultiPolygon;
 import de.muenchen.isi.infrastructure.entity.common.VerortungPoint;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.locationtech.jts.geom.Coordinate;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
@@ -43,7 +49,7 @@ class VerortungDomainMapperTest {
     }
 
     @Test
-    void model2EntityVerortungMultiPolygon() {
+    void model2EntityVerortungMultiPolygon() throws GeometryOperationFailedException {
         final var polygon = List.of(
             List.of(
                 List.of(
@@ -63,27 +69,45 @@ class VerortungDomainMapperTest {
 
         final var result = verortungDomainMapper.model2Entity(model);
 
-        final var expected = new VerortungMultiPolygon();
+        // Der Schwerpunkt liegt in der Fläche, der Umgriff selbst gehört nicht in die Spalte verortung.
+        final var koordinaten = result.getCentroid().getCoordinates();
+        assertThat(result.getCentroid().getType(), is("Point"));
+        final var flaeche = new KoordinatenService().createMultiPolygon(multiPolygonGeometryModel);
+        final var punkt = flaeche
+            .getFactory()
+            .createPoint(new Coordinate(koordinaten.get(0).doubleValue(), koordinaten.get(1).doubleValue()));
+        assertThat(flaeche.contains(punkt), is(true));
+        assertThat(result.getCentroidUtm().getZone(), is("32U"));
+        assertThat(result.getCentroidUtm().getEast(), is(closeTo(689220, 300)));
+        assertThat(result.getCentroidUtm().getNorth(), is(closeTo(5331468, 300)));
+    }
 
-        final var multiPolygonGeometry = new MultiPolygonGeometry();
-        multiPolygonGeometry.setType("MultiPolygon");
-        multiPolygonGeometry.setCoordinates(polygon);
-        expected.setMultiPolygon(multiPolygonGeometry);
+    @Test
+    void entity2ModelVerortungMultiPolygonOhneGeometrie() {
+        final var stadtbezirk = new Stadtbezirk();
+        stadtbezirk.setNummer("08");
+        final var entity = new VerortungMultiPolygon();
+        entity.setStadtbezirke(Set.of(stadtbezirk));
 
-        final var centroidPointGeometry = new PointGeometry();
-        centroidPointGeometry.setType("Point");
-        centroidPointGeometry.setCoordinates(
-            List.of(BigDecimal.valueOf(11.542026984158708), BigDecimal.valueOf(48.108341907595324))
-        );
-        expected.setCentroid(centroidPointGeometry);
+        final var result = verortungDomainMapper.entity2Model(entity);
 
-        final var utm = new Utm();
-        utm.setZone("32U");
-        utm.setEast(689219.7547272056);
-        utm.setNorth(5331467.745840158);
-        expected.setCentroidUtm(utm);
+        assertThat(result.getMultiPolygon(), is(nullValue()));
+        assertThat(result.getStadtbezirke().iterator().next().getNummer(), is("08"));
+        assertThat(result.getStadtbezirke().iterator().next().getMultiPolygon(), is(nullValue()));
+    }
 
-        assertThat(result, is(expected));
+    @Test
+    void model2EntitySortiertKitaplanungsbereiche() {
+        final var zweiter = new KitaplanungsbereichModel();
+        zweiter.setKitaPlb(200L);
+        final var erster = new KitaplanungsbereichModel();
+        erster.setKitaPlb(100L);
+        final var model = new VerortungPointModel();
+        model.setKitaplanungsbereiche(Set.of(zweiter, erster));
+
+        final var result = verortungDomainMapper.model2Entity(model);
+
+        assertThat(result.getKitaplanungsbereiche().iterator().next().getKitaPlb(), is(100L));
     }
 
     @Test
@@ -98,7 +122,7 @@ class VerortungDomainMapperTest {
     }
 
     @Test
-    void model2EntityVerortungMultiPolygonWithoutMultiPolygonClearsCentroid() {
+    void model2EntityVerortungMultiPolygonOhneGeometrieBehaeltSchwerpunkt() {
         final var centroidModel = new PointGeometryModel();
         centroidModel.setType("Point");
         centroidModel.setCoordinates(
@@ -115,9 +139,8 @@ class VerortungDomainMapperTest {
 
         final var result = verortungDomainMapper.model2Entity(model);
 
-        final var expected = new VerortungMultiPolygon();
-
-        assertThat(result, is(expected));
+        assertThat(result.getCentroid().getCoordinates(), is(centroidModel.getCoordinates()));
+        assertThat(result.getCentroidUtm().getEast(), is(689219.7547272056));
     }
 
     @Test
@@ -141,14 +164,7 @@ class VerortungDomainMapperTest {
 
         final var result = verortungDomainMapper.model2Entity(model);
 
-        final var expected = new VerortungMultiPolygon();
-
-        final var multiPolygonGeometry = new MultiPolygonGeometry();
-        multiPolygonGeometry.setType("MultiPolygon");
-        multiPolygonGeometry.setCoordinates(polygon);
-        expected.setMultiPolygon(multiPolygonGeometry);
-
-        assertThat(result, is(expected));
+        assertThat(result, is(new VerortungMultiPolygon()));
     }
 
     @Test
@@ -174,8 +190,8 @@ class VerortungDomainMapperTest {
 
         final var utm = new Utm();
         utm.setZone("32U");
-        utm.setEast(689219.7547272056);
-        utm.setNorth(5331467.745840158);
+        utm.setEast(689219.7545742918);
+        utm.setNorth(5331467.750397166);
         expected.setPointUtm(utm);
 
         assertThat(result, is(expected));

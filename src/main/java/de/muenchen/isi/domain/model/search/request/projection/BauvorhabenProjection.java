@@ -1,6 +1,5 @@
 package de.muenchen.isi.domain.model.search.request.projection;
 
-import de.muenchen.isi.infrastructure.entity.common.MultiPolygonGeometry;
 import java.math.BigDecimal;
 
 /**

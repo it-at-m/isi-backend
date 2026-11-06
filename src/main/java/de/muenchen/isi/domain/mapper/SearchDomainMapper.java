@@ -1,8 +1,6 @@
 package de.muenchen.isi.domain.mapper;
 
 import de.muenchen.isi.configuration.MapstructConfiguration;
-import de.muenchen.isi.domain.exception.GeometryOperationFailedException;
-import de.muenchen.isi.domain.model.common.MultiPolygonGeometryModel;
 import de.muenchen.isi.domain.model.common.StadtbezirkModel;
 import de.muenchen.isi.domain.model.common.Wgs84Model;
 import de.muenchen.isi.domain.model.enums.SearchResultType;
@@ -17,14 +15,12 @@ import de.muenchen.isi.domain.model.search.response.AbfrageSearchResultModel;
 import de.muenchen.isi.domain.model.search.response.BauvorhabenSearchResultModel;
 import de.muenchen.isi.domain.model.search.response.InfrastruktureinrichtungSearchResultModel;
 import de.muenchen.isi.domain.model.search.response.SearchResultModel;
-import de.muenchen.isi.domain.service.KoordinatenService;
 import de.muenchen.isi.infrastructure.entity.BaseEntity;
 import de.muenchen.isi.infrastructure.entity.Baugenehmigungsverfahren;
 import de.muenchen.isi.infrastructure.entity.Bauleitplanverfahren;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
 import de.muenchen.isi.infrastructure.entity.WeiteresVerfahren;
 import de.muenchen.isi.infrastructure.entity.common.Adresse;
-import de.muenchen.isi.infrastructure.entity.common.MultiPolygonGeometry;
 import de.muenchen.isi.infrastructure.entity.common.Stadtbezirk;
 import de.muenchen.isi.infrastructure.entity.common.VerortungMultiPolygon;
 import de.muenchen.isi.infrastructure.entity.common.VerortungPoint;
@@ -58,9 +54,6 @@ public abstract class SearchDomainMapper {
     @Autowired
     private KoordinatenDomainMapper koordinatenDomainMapper;
 
-    @Autowired
-    private KoordinatenService koordinatenService;
-
     @Mapping(target = "type", ignore = true)
     @Mapping(target = "coordinate", ignore = true)
     @SubclassMapping(source = Infrastruktureinrichtung.class, target = InfrastruktureinrichtungSearchResultModel.class)
@@ -84,7 +77,6 @@ public abstract class SearchDomainMapper {
         @MappingTarget final BauvorhabenSearchResultModel model
     ) {
         model.setCoordinate(this.getCoordinateFromAdresseOrVerortung(entity.getAdresse(), entity.getVerortung()));
-        model.setUmgriff(this.getUmgriffFromVerortung(entity.getVerortung()));
     }
 
     @Mappings({
@@ -178,26 +170,14 @@ public abstract class SearchDomainMapper {
     }
 
     /**
-     * Überprüft, ob die übergebene Verortung ein Mehrfachpolygon mit Koordinaten hat.
-     *
-     * @param verortung Die Verortung, deren Mehrfachpolygon-Koordinaten überprüft werden sollen.
-     * @return {@code true}, wenn die Verortung Koordinaten hat, ansonsten {@code false}.
-     */
-    public boolean hasVerortungCoordinate(final VerortungMultiPolygon verortung) {
-        return ObjectUtils.isNotEmpty(verortung) && ObjectUtils.isNotEmpty(verortung.getMultiPolygon());
-    }
-
-    /**
-     * Überprüft, ob für die übergebene Verortung ein Mehrfachpolygon und ein zugehöriger Schwerpunkt mit Längen- und
-     * Breitengrad gespeichert sind.
+     * Überprüft, ob für die übergebene Verortung ein Schwerpunkt mit Längen- und Breitengrad gespeichert ist.
      *
      * @param verortung Die Verortung, deren gespeicherter Schwerpunkt überprüft werden soll.
-     * @return {@code true}, wenn ein Mehrfachpolygon und ein Schwerpunkt mit zwei Koordinaten vorhanden sind,
-     * ansonsten {@code false}.
+     * @return {@code true}, wenn ein Schwerpunkt mit zwei Koordinaten vorhanden ist, ansonsten {@code false}.
      */
     public boolean hasVerortungCentroid(final VerortungMultiPolygon verortung) {
         return (
-            hasVerortungCoordinate(verortung) &&
+            ObjectUtils.isNotEmpty(verortung) &&
             ObjectUtils.isNotEmpty(verortung.getCentroid()) &&
             ObjectUtils.isNotEmpty(verortung.getCentroid().getCoordinates()) &&
             verortung.getCentroid().getCoordinates().size() >= 2
@@ -241,37 +221,12 @@ public abstract class SearchDomainMapper {
             wgs84Model.setLongitude(coordinates.get(0).doubleValue());
             wgs84Model.setLatitude(coordinates.get(1).doubleValue());
             return wgs84Model;
-        } else if (hasVerortungCoordinate(verortungMultiPolygon)) {
-            try {
-                final var centroid = koordinatenService.getMultiPolygonCentroid(
-                    verortungMultiPolygon.getMultiPolygon()
-                );
-                return koordinatenDomainMapper.entity2Model(centroid);
-            } catch (GeometryOperationFailedException exception) {
-                var message = "Ermitteln des Schwerpunktes ist fehlgeschlagen.";
-                log.error(message);
-            }
         }
         return null;
     }
 
     /**
-     * Gibt den Umgriff der im Parameter gegebenen Verortung zurück.
-     *
-     * @param verortungMultiPolygon als Umgriff der Verortung.
-     * @return den Umgriff als {@link VerortungMultiPolygon#getMultiPolygon()} oder null falls kein Umgriff existiert bzw. die Verortung im Parameter null ist.
-     */
-    public MultiPolygonGeometryModel getUmgriffFromVerortung(final VerortungMultiPolygon verortungMultiPolygon) {
-        return ObjectUtils.isNotEmpty(verortungMultiPolygon)
-            ? this.entity2Model(verortungMultiPolygon.getMultiPolygon())
-            : null;
-    }
-
-    public abstract MultiPolygonGeometryModel entity2Model(final MultiPolygonGeometry entity);
-
-    /**
-     * Für Suchergebnisse werden nur Nummer und Name des Stadtbezirks benötigt. Das Multipolygon wird
-     * nicht gemappt, um den Speicherverbrauch und die Größe der Suchergebnisse gering zu halten.
+     * Für Suchergebnisse werden nur Nummer und Name des Stadtbezirks benötigt.
      */
     @Mapping(target = "multiPolygon", ignore = true)
     public abstract StadtbezirkModel entity2Model(final Stadtbezirk entity);
@@ -388,7 +343,6 @@ public abstract class SearchDomainMapper {
                     stadtbezirke.add(entity2Model(stadtbezirk));
                 });
             model.setStadtbezirke(stadtbezirke);
-            model.setUmgriff(entity2Model(projection.getVerortung().getMultiPolygon()));
         }
     }
 

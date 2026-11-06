@@ -12,7 +12,10 @@ import de.muenchen.isi.domain.model.search.request.BauvorhabenInfrastruktureinri
 import de.muenchen.isi.domain.model.search.request.BauvorhabenRecord;
 import de.muenchen.isi.domain.model.search.request.InfrastrukturRecord;
 import de.muenchen.isi.domain.model.search.request.SearchQueryAndSortingModel;
+import de.muenchen.isi.domain.model.search.response.BauvorhabenSearchResultModel;
+import de.muenchen.isi.domain.model.search.response.SearchResultModel;
 import de.muenchen.isi.domain.model.search.response.SearchResultsModel;
+import de.muenchen.isi.domain.service.VerortungGeometrieService;
 import de.muenchen.isi.infrastructure.adapter.search.StadtbezirkNummerValueBridge;
 import de.muenchen.isi.infrastructure.entity.BaseEntity;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
@@ -48,6 +51,8 @@ public class EntitySearchService {
     private final SearchPreparationService searchPreparationService;
 
     private final SearchDomainMapper searchDomainMapper;
+
+    private final VerortungGeometrieService verortungGeometrieService;
     private final AuthenticationUtils authenticationUtils;
 
     @PersistenceContext
@@ -530,6 +535,7 @@ public class EntitySearchService {
                 .stream()
                 .map(searchDomainMapper::mapProjectionRecordToSearchResultModel)
                 .collect(Collectors.toList());
+            ergaenzeUmgriffe(results);
 
             final var model = new SearchResultsModel();
             model.setSearchResults(results);
@@ -685,5 +691,20 @@ public class EntitySearchService {
             return "";
         }
         return input.replace('_', ' ').trim();
+    }
+
+    /**
+     * Der Suchindex enthält keine Polygone. Die Umgriffe für die Karte werden pro Suche gesammelt nachgeladen.
+     */
+    private void ergaenzeUmgriffe(final List<SearchResultModel> results) {
+        final var bauvorhaben = results
+            .stream()
+            .filter(BauvorhabenSearchResultModel.class::isInstance)
+            .map(BauvorhabenSearchResultModel.class::cast)
+            .toList();
+        final var umgriffe = verortungGeometrieService.findeUmgriffe(
+            bauvorhaben.stream().map(BauvorhabenSearchResultModel::getId).toList()
+        );
+        bauvorhaben.forEach(treffer -> treffer.setUmgriff(umgriffe.get(treffer.getId())));
     }
 }

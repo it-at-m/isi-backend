@@ -2,7 +2,6 @@ package de.muenchen.isi.domain.model.search.request;
 
 import de.muenchen.isi.domain.model.search.request.projection.BauvorhabenProjection;
 import de.muenchen.isi.infrastructure.entity.common.Adresse;
-import de.muenchen.isi.infrastructure.entity.common.MultiPolygonGeometry;
 import de.muenchen.isi.infrastructure.entity.common.VerortungMultiPolygon;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ResultType;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Verfahrensstand;

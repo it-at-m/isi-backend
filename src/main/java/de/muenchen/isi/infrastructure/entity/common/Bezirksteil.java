@@ -6,6 +6,4 @@ import lombok.Data;
 public class Bezirksteil {
 
     private String nummer;
-
-    private MultiPolygonGeometry multiPolygon;
 }

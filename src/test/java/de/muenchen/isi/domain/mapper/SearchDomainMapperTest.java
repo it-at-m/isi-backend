@@ -5,8 +5,6 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import de.muenchen.isi.domain.exception.GeometryOperationFailedException;
-import de.muenchen.isi.domain.model.common.MultiPolygonGeometryModel;
 import de.muenchen.isi.domain.model.common.Wgs84Model;
 import de.muenchen.isi.domain.model.enums.SearchResultType;
 import de.muenchen.isi.domain.model.search.request.AbfrageInfrastruktureinrichtungRecord;
@@ -18,11 +16,9 @@ import de.muenchen.isi.domain.model.search.request.InfrastrukturRecord;
 import de.muenchen.isi.domain.model.search.response.AbfrageSearchResultModel;
 import de.muenchen.isi.domain.model.search.response.BauvorhabenSearchResultModel;
 import de.muenchen.isi.domain.model.search.response.InfrastruktureinrichtungSearchResultModel;
-import de.muenchen.isi.domain.service.KoordinatenService;
 import de.muenchen.isi.infrastructure.entity.Bauleitplanverfahren;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
 import de.muenchen.isi.infrastructure.entity.common.Adresse;
-import de.muenchen.isi.infrastructure.entity.common.MultiPolygonGeometry;
 import de.muenchen.isi.infrastructure.entity.common.PointGeometry;
 import de.muenchen.isi.infrastructure.entity.common.Stadtbezirk;
 import de.muenchen.isi.infrastructure.entity.common.VerortungMultiPolygon;
@@ -59,22 +55,15 @@ public class SearchDomainMapperTest {
 
     private final SearchDomainMapper searchDomainMapper = new SearchDomainMapperImpl();
 
-    @Mock
-    private KoordinatenService koordinatenService;
-
     @BeforeEach
     public void beforeEach() throws NoSuchFieldException, IllegalAccessException {
         Field field = searchDomainMapper.getClass().getSuperclass().getDeclaredField("koordinatenDomainMapper");
         field.setAccessible(true);
         field.set(searchDomainMapper, koordinatenDomainMapper);
-        field = searchDomainMapper.getClass().getSuperclass().getDeclaredField("koordinatenService");
-        field.setAccessible(true);
-        field.set(searchDomainMapper, koordinatenService);
-        Mockito.reset(koordinatenService);
     }
 
     @Test
-    void afterEntity2BauvorhabenSearchResultModelAdresse() throws GeometryOperationFailedException {
+    void afterEntity2BauvorhabenSearchResultModelAdresse() {
         Wgs84 mockCoordinate = new Wgs84();
         mockCoordinate.setLongitude(10.0);
         mockCoordinate.setLatitude(20.0);
@@ -98,28 +87,18 @@ public class SearchDomainMapperTest {
         // Test der Methode
         searchDomainMapper.afterMappingEntity2SearchResultModel(bauvorhaben, model);
 
-        Mockito.verify(this.koordinatenService, Mockito.times(0)).getMultiPolygonCentroid(Mockito.any());
         assertThat(model, is(expected));
     }
 
     @Test
-    void afterEntity2BauvorhabenSearchResultModelVerortung() throws GeometryOperationFailedException {
+    void afterEntity2BauvorhabenSearchResultModelVerortung() {
         final var bauvorhaben = new Bauvorhaben();
 
         VerortungMultiPolygon verortung = new VerortungMultiPolygon();
-        MultiPolygonGeometry multiPolygon = new MultiPolygonGeometry();
-        multiPolygon.setType("MultiPolygon");
-        multiPolygon.setCoordinates(List.of(List.of(List.of(List.of(BigDecimal.TEN, BigDecimal.ONE)))));
-        verortung.setMultiPolygon(multiPolygon);
+        verortung.setCentroid(createCentroid(10.0, 20.0));
         bauvorhaben.setVerortung(verortung);
 
         BauvorhabenSearchResultModel model = new BauvorhabenSearchResultModel();
-
-        Wgs84 mockCoordinate = new Wgs84();
-        mockCoordinate.setLongitude(10.0);
-        mockCoordinate.setLatitude(20.0);
-
-        Mockito.when(this.koordinatenService.getMultiPolygonCentroid(multiPolygon)).thenReturn(mockCoordinate);
 
         Wgs84Model mockCoordinateModel = new Wgs84Model();
         mockCoordinateModel.setLongitude(10.0);
@@ -127,19 +106,14 @@ public class SearchDomainMapperTest {
 
         BauvorhabenSearchResultModel expected = new BauvorhabenSearchResultModel();
         expected.setCoordinate(mockCoordinateModel);
-        MultiPolygonGeometryModel multiPolygonModel = new MultiPolygonGeometryModel();
-        multiPolygonModel.setType("MultiPolygon");
-        multiPolygonModel.setCoordinates(List.of(List.of(List.of(List.of(BigDecimal.TEN, BigDecimal.ONE)))));
-        expected.setUmgriff(multiPolygonModel);
 
         searchDomainMapper.afterMappingEntity2SearchResultModel(bauvorhaben, model);
 
-        Mockito.verify(this.koordinatenService, Mockito.times(1)).getMultiPolygonCentroid(multiPolygon);
         assertThat(model, is(expected));
     }
 
     @Test
-    void afterEntity2BauvorhabenSearchResultModelAdresseNullVerortungNull() throws GeometryOperationFailedException {
+    void afterEntity2BauvorhabenSearchResultModelAdresseNullVerortungNull() {
         final var bauvorhaben = new Bauvorhaben();
 
         bauvorhaben.setVerortung(null);
@@ -152,16 +126,14 @@ public class SearchDomainMapperTest {
 
         searchDomainMapper.afterMappingEntity2SearchResultModel(bauvorhaben, model);
 
-        Mockito.verify(this.koordinatenService, Mockito.times(0)).getMultiPolygonCentroid(Mockito.any());
         assertThat(model, is(expected));
     }
 
     @Test
-    void afterEntity2BauvorhabenSearchResultModelVerortungMultiPolygonNull() throws GeometryOperationFailedException {
+    void afterEntity2BauvorhabenSearchResultModelVerortungMultiPolygonNull() {
         final var bauvorhaben = new Bauvorhaben();
 
         VerortungMultiPolygon verortung = new VerortungMultiPolygon();
-        verortung.setMultiPolygon(null);
         bauvorhaben.setVerortung(verortung);
 
         BauvorhabenSearchResultModel model = new BauvorhabenSearchResultModel();
@@ -171,7 +143,6 @@ public class SearchDomainMapperTest {
 
         searchDomainMapper.afterMappingEntity2SearchResultModel(bauvorhaben, model);
 
-        Mockito.verify(this.koordinatenService, Mockito.times(0)).getMultiPolygonCentroid(Mockito.any());
         assertThat(model, is(expected));
     }
 
@@ -272,7 +243,7 @@ public class SearchDomainMapperTest {
     }
 
     @Test
-    void afterEntity2AbfrageSearchResultModelAdresse() throws GeometryOperationFailedException {
+    void afterEntity2AbfrageSearchResultModelAdresse() {
         Wgs84 mockCoordinate = new Wgs84();
         mockCoordinate.setLongitude(10.0);
         mockCoordinate.setLatitude(20.0);
@@ -295,28 +266,18 @@ public class SearchDomainMapperTest {
         // Test der Methode
         searchDomainMapper.afterMappingEntity2SearchResultModel(abfrage, model);
 
-        Mockito.verify(this.koordinatenService, Mockito.times(0)).getMultiPolygonCentroid(Mockito.any());
         assertThat(model, is(expected));
     }
 
     @Test
-    void afterEntity2AbfrageSearchResultModelVerortung() throws GeometryOperationFailedException {
+    void afterEntity2AbfrageSearchResultModelVerortung() {
         final var abfrage = new Bauleitplanverfahren();
 
         VerortungMultiPolygon verortung = new VerortungMultiPolygon();
-        MultiPolygonGeometry multiPolygon = new MultiPolygonGeometry();
-        multiPolygon.setType("MultiPolygon");
-        multiPolygon.setCoordinates(List.of(List.of(List.of(List.of(BigDecimal.TEN, BigDecimal.ONE)))));
-        verortung.setMultiPolygon(multiPolygon);
+        verortung.setCentroid(createCentroid(10.0, 20.0));
         abfrage.setVerortung(verortung);
 
         AbfrageSearchResultModel model = new AbfrageSearchResultModel();
-
-        Wgs84 mockCoordinate = new Wgs84();
-        mockCoordinate.setLongitude(10.0);
-        mockCoordinate.setLatitude(20.0);
-
-        Mockito.when(this.koordinatenService.getMultiPolygonCentroid(multiPolygon)).thenReturn(mockCoordinate);
 
         Wgs84Model mockCoordinateModel = new Wgs84Model();
         mockCoordinateModel.setLongitude(10.0);
@@ -327,12 +288,11 @@ public class SearchDomainMapperTest {
 
         searchDomainMapper.afterMappingEntity2SearchResultModel(abfrage, model);
 
-        Mockito.verify(this.koordinatenService, Mockito.times(1)).getMultiPolygonCentroid(multiPolygon);
         assertThat(model, is(expected));
     }
 
     @Test
-    void afterEntity2AbfrageSearchResultModelAdresseNullVerortungNull() throws GeometryOperationFailedException {
+    void afterEntity2AbfrageSearchResultModelAdresseNullVerortungNull() {
         final var abfrage = new Bauleitplanverfahren();
         abfrage.setVerortung(null);
         abfrage.setAdresse(null);
@@ -344,16 +304,14 @@ public class SearchDomainMapperTest {
 
         searchDomainMapper.afterMappingEntity2SearchResultModel(abfrage, model);
 
-        Mockito.verify(this.koordinatenService, Mockito.times(0)).getMultiPolygonCentroid(Mockito.any());
         assertThat(model, is(expected));
     }
 
     @Test
-    void afterEntity2AbfrageSearchResultModelVerortungMultiPolygonNull() throws GeometryOperationFailedException {
+    void afterEntity2AbfrageSearchResultModelVerortungMultiPolygonNull() {
         final var abfrage = new Bauleitplanverfahren();
 
         VerortungMultiPolygon verortung = new VerortungMultiPolygon();
-        verortung.setMultiPolygon(null);
         abfrage.setVerortung(verortung);
 
         AbfrageSearchResultModel model = new AbfrageSearchResultModel();
@@ -363,7 +321,6 @@ public class SearchDomainMapperTest {
 
         searchDomainMapper.afterMappingEntity2SearchResultModel(abfrage, model);
 
-        Mockito.verify(this.koordinatenService, Mockito.times(0)).getMultiPolygonCentroid(Mockito.any());
         assertThat(model, is(expected));
     }
 
@@ -389,13 +346,12 @@ public class SearchDomainMapperTest {
     }
 
     @Test
-    void getCoordinateFromAdresseOrAdresseNullAndVerortungNull() throws GeometryOperationFailedException {
+    void getCoordinateFromAdresseOrAdresseNullAndVerortungNull() {
         assertThat(searchDomainMapper.getCoordinateFromAdresseOrVerortung(null, null), is(nullValue()));
-        Mockito.verify(this.koordinatenService, Mockito.times(0)).getMultiPolygonCentroid(Mockito.any());
     }
 
     @Test
-    void getCoordinateFromAdresseOrAdresseAndVerortungNull() throws GeometryOperationFailedException {
+    void getCoordinateFromAdresseOrAdresseAndVerortungNull() {
         Wgs84 coordinate = new Wgs84();
         coordinate.setLongitude(10.0);
         coordinate.setLatitude(20.0);
@@ -408,40 +364,23 @@ public class SearchDomainMapperTest {
         expected.setLatitude(20.0);
 
         assertThat(searchDomainMapper.getCoordinateFromAdresseOrVerortung(adresse, null), is(expected));
-
-        Mockito.verify(this.koordinatenService, Mockito.times(0)).getMultiPolygonCentroid(Mockito.any());
     }
 
     @Test
-    void getCoordinateFromAdresseOrAdresseNullAndVerortung() throws GeometryOperationFailedException {
+    void getCoordinateFromAdresseOrAdresseNullAndVerortung() {
         VerortungMultiPolygon verortung = new VerortungMultiPolygon();
-        MultiPolygonGeometry multiPolygon = new MultiPolygonGeometry();
-        multiPolygon.setType("MultiPolygon");
-        multiPolygon.setCoordinates(List.of(List.of(List.of(List.of(BigDecimal.TEN, BigDecimal.ONE)))));
-        verortung.setMultiPolygon(multiPolygon);
-
-        Wgs84 mockCoordinate = new Wgs84();
-        mockCoordinate.setLongitude(10.0);
-        mockCoordinate.setLatitude(20.0);
+        verortung.setCentroid(createCentroid(10.0, 20.0));
 
         Wgs84Model expected = new Wgs84Model();
         expected.setLongitude(10.0);
         expected.setLatitude(20.0);
 
-        Mockito.when(this.koordinatenService.getMultiPolygonCentroid(multiPolygon)).thenReturn(mockCoordinate);
-
         assertThat(searchDomainMapper.getCoordinateFromAdresseOrVerortung(null, verortung), is(expected));
-
-        Mockito.verify(this.koordinatenService, Mockito.times(1)).getMultiPolygonCentroid(multiPolygon);
     }
 
     @Test
-    void getCoordinateFromAdresseOrAdresseNullAndVerortungWithStoredCentroid() throws GeometryOperationFailedException {
+    void getCoordinateFromAdresseOrAdresseNullAndVerortungWithStoredCentroid() {
         VerortungMultiPolygon verortung = new VerortungMultiPolygon();
-        MultiPolygonGeometry multiPolygon = new MultiPolygonGeometry();
-        multiPolygon.setType("MultiPolygon");
-        multiPolygon.setCoordinates(List.of(List.of(List.of(List.of(BigDecimal.TEN, BigDecimal.ONE)))));
-        verortung.setMultiPolygon(multiPolygon);
         PointGeometry centroid = new PointGeometry();
         centroid.setType("Point");
         centroid.setCoordinates(List.of(BigDecimal.valueOf(11.5), BigDecimal.valueOf(48.1)));
@@ -452,52 +391,33 @@ public class SearchDomainMapperTest {
         expected.setLatitude(48.1);
 
         assertThat(searchDomainMapper.getCoordinateFromAdresseOrVerortung(null, verortung), is(expected));
-
-        Mockito.verify(this.koordinatenService, Mockito.times(0)).getMultiPolygonCentroid(Mockito.any());
     }
 
     @Test
-    void getCoordinateFromAdresseOrAdresseNullAndVerortungWithStoredCentroidWithoutMultiPolygon()
-        throws GeometryOperationFailedException {
+    void getCoordinateFromAdresseOrAdresseNullAndVerortungWithStoredCentroidOhneGeometrie() {
         VerortungMultiPolygon verortung = new VerortungMultiPolygon();
-        verortung.setMultiPolygon(null);
         PointGeometry centroid = new PointGeometry();
         centroid.setType("Point");
         centroid.setCoordinates(List.of(BigDecimal.valueOf(11.5), BigDecimal.valueOf(48.1)));
         verortung.setCentroid(centroid);
 
-        assertThat(searchDomainMapper.hasVerortungCentroid(verortung), is(false));
-        assertThat(searchDomainMapper.getCoordinateFromAdresseOrVerortung(null, verortung), is(nullValue()));
+        Wgs84Model expected = new Wgs84Model();
+        expected.setLongitude(11.5);
+        expected.setLatitude(48.1);
 
-        Mockito.verify(this.koordinatenService, Mockito.times(0)).getMultiPolygonCentroid(Mockito.any());
+        assertThat(searchDomainMapper.hasVerortungCentroid(verortung), is(true));
+        assertThat(searchDomainMapper.getCoordinateFromAdresseOrVerortung(null, verortung), is(expected));
     }
 
     @Test
-    void getCoordinateFromAdresseOrAdresseNullAndVerortungWithIncompleteStoredCentroid()
-        throws GeometryOperationFailedException {
+    void getCoordinateFromAdresseOrAdresseNullAndVerortungWithIncompleteStoredCentroid() {
         VerortungMultiPolygon verortung = new VerortungMultiPolygon();
-        MultiPolygonGeometry multiPolygon = new MultiPolygonGeometry();
-        multiPolygon.setType("MultiPolygon");
-        multiPolygon.setCoordinates(List.of(List.of(List.of(List.of(BigDecimal.TEN, BigDecimal.ONE)))));
-        verortung.setMultiPolygon(multiPolygon);
         PointGeometry centroid = new PointGeometry();
         centroid.setType("Point");
         centroid.setCoordinates(List.of(BigDecimal.valueOf(11.5)));
         verortung.setCentroid(centroid);
 
-        Wgs84 mockCoordinate = new Wgs84();
-        mockCoordinate.setLongitude(10.0);
-        mockCoordinate.setLatitude(20.0);
-
-        Wgs84Model expected = new Wgs84Model();
-        expected.setLongitude(10.0);
-        expected.setLatitude(20.0);
-
-        Mockito.when(this.koordinatenService.getMultiPolygonCentroid(multiPolygon)).thenReturn(mockCoordinate);
-
-        assertThat(searchDomainMapper.getCoordinateFromAdresseOrVerortung(null, verortung), is(expected));
-
-        Mockito.verify(this.koordinatenService, Mockito.times(1)).getMultiPolygonCentroid(multiPolygon);
+        assertThat(searchDomainMapper.getCoordinateFromAdresseOrVerortung(null, verortung), is(nullValue()));
     }
 
     @Test
@@ -505,10 +425,6 @@ public class SearchDomainMapperTest {
         Stadtbezirk stadtbezirk = new Stadtbezirk();
         stadtbezirk.setNummer("08");
         stadtbezirk.setName("Schwanthalerhöhe");
-        MultiPolygonGeometry multiPolygon = new MultiPolygonGeometry();
-        multiPolygon.setType("MultiPolygon");
-        multiPolygon.setCoordinates(List.of(List.of(List.of(List.of(BigDecimal.TEN, BigDecimal.ONE)))));
-        stadtbezirk.setMultiPolygon(multiPolygon);
 
         final var result = searchDomainMapper.entity2Model(stadtbezirk);
 
@@ -518,40 +434,10 @@ public class SearchDomainMapperTest {
     }
 
     @Test
-    void getCoordinateFromAdresseOrAdresseNullAndVerortungMultipolygonNull() throws GeometryOperationFailedException {
+    void getCoordinateFromAdresseOrAdresseNullAndVerortungMultipolygonNull() {
         VerortungMultiPolygon verortung = new VerortungMultiPolygon();
-        verortung.setMultiPolygon(null);
 
         assertThat(searchDomainMapper.getCoordinateFromAdresseOrVerortung(null, verortung), is(nullValue()));
-
-        Mockito.verify(this.koordinatenService, Mockito.times(0)).getMultiPolygonCentroid(Mockito.any());
-    }
-
-    @Test
-    void getUmgriffFromVerortungNull() {
-        assertThat(searchDomainMapper.getUmgriffFromVerortung(null), is(nullValue()));
-    }
-
-    @Test
-    void getUmgriffFromVerortungMultipolygonNull() {
-        VerortungMultiPolygon verortung = new VerortungMultiPolygon();
-        verortung.setMultiPolygon(null);
-        assertThat(searchDomainMapper.getUmgriffFromVerortung(null), is(nullValue()));
-    }
-
-    @Test
-    void getUmgriffFromVerortung() {
-        VerortungMultiPolygon verortung = new VerortungMultiPolygon();
-        MultiPolygonGeometry multiPolygon = new MultiPolygonGeometry();
-        multiPolygon.setType("MultiPolygon");
-        multiPolygon.setCoordinates(List.of(List.of(List.of(List.of(BigDecimal.TEN, BigDecimal.ONE)))));
-        verortung.setMultiPolygon(multiPolygon);
-
-        MultiPolygonGeometryModel expected = new MultiPolygonGeometryModel();
-        expected.setType("MultiPolygon");
-        expected.setCoordinates(List.of(List.of(List.of(List.of(BigDecimal.TEN, BigDecimal.ONE)))));
-
-        assertThat(searchDomainMapper.getUmgriffFromVerortung(verortung), is(expected));
     }
 
     @Test
@@ -564,10 +450,6 @@ public class SearchDomainMapperTest {
         stadtbezirke.add(stadtbezirk);
         VerortungMultiPolygon verortung = new VerortungMultiPolygon();
         verortung.setStadtbezirke(stadtbezirke);
-        MultiPolygonGeometry umgriff = new MultiPolygonGeometry();
-        umgriff.setType("Umgriff");
-        umgriff.setCoordinates(List.of(List.of(List.of(List.of(BigDecimal.TEN, BigDecimal.ONE)))));
-        verortung.setMultiPolygon(umgriff);
         Adresse adresse = new Adresse();
         Wgs84 wgs84 = new Wgs84();
         wgs84.setLongitude(10.0);
@@ -592,10 +474,7 @@ public class SearchDomainMapperTest {
         assertThat(result.getStadtbezirke().size(), is(1));
         assertThat(result.getGrundstuecksgroesse(), is(BigDecimal.TEN));
         assertThat(result.getVerfahrensstand(), is(Verfahrensstand.STRUKTURKONZEPT));
-        MultiPolygonGeometryModel multiPolygonGeometryModel = new MultiPolygonGeometryModel();
-        multiPolygonGeometryModel.setType("Umgriff");
-        multiPolygonGeometryModel.setCoordinates(List.of(List.of(List.of(List.of(BigDecimal.TEN, BigDecimal.ONE)))));
-        assertThat(result.getUmgriff(), is(multiPolygonGeometryModel));
+        assertThat(result.getUmgriff(), is(nullValue()));
         Wgs84Model wgs84Model = new Wgs84Model();
         wgs84Model.setLongitude(10.0);
         wgs84Model.setLatitude(20.0);
@@ -702,10 +581,6 @@ public class SearchDomainMapperTest {
         stadtbezirke.add(stadtbezirk);
         VerortungMultiPolygon verortung = new VerortungMultiPolygon();
         verortung.setStadtbezirke(stadtbezirke);
-        MultiPolygonGeometry umgriff = new MultiPolygonGeometry();
-        umgriff.setType("Umgriff");
-        umgriff.setCoordinates(List.of(List.of(List.of(List.of(BigDecimal.TEN, BigDecimal.ONE)))));
-        verortung.setMultiPolygon(umgriff);
         Adresse adresse = new Adresse();
         Wgs84 wgs84 = new Wgs84();
         wgs84.setLongitude(10.0);
@@ -732,10 +607,7 @@ public class SearchDomainMapperTest {
         assertThat(result.getStadtbezirke().size(), is(1));
         assertThat(result.getGrundstuecksgroesse(), is(BigDecimal.TEN));
         assertThat(result.getVerfahrensstand(), is(Verfahrensstand.STRUKTURKONZEPT));
-        MultiPolygonGeometryModel multiPolygonGeometryModel = new MultiPolygonGeometryModel();
-        multiPolygonGeometryModel.setType("Umgriff");
-        multiPolygonGeometryModel.setCoordinates(List.of(List.of(List.of(List.of(BigDecimal.TEN, BigDecimal.ONE)))));
-        assertThat(result.getUmgriff(), is(multiPolygonGeometryModel));
+        assertThat(result.getUmgriff(), is(nullValue()));
         Wgs84Model wgs84Model = new Wgs84Model();
         wgs84Model.setLongitude(10.0);
         wgs84Model.setLatitude(20.0);
@@ -788,10 +660,6 @@ public class SearchDomainMapperTest {
         stadtbezirke.add(stadtbezirk);
         VerortungMultiPolygon verortung = new VerortungMultiPolygon();
         verortung.setStadtbezirke(stadtbezirke);
-        MultiPolygonGeometry umgriff = new MultiPolygonGeometry();
-        umgriff.setType("Umgriff");
-        umgriff.setCoordinates(List.of(List.of(List.of(List.of(BigDecimal.TEN, BigDecimal.ONE)))));
-        verortung.setMultiPolygon(umgriff);
         Adresse adresse = new Adresse();
         Wgs84 wgs84 = new Wgs84();
         wgs84.setLongitude(10.0);
@@ -816,10 +684,7 @@ public class SearchDomainMapperTest {
         assertThat(result.getStadtbezirke().size(), is(1));
         assertThat(result.getGrundstuecksgroesse(), is(BigDecimal.TEN));
         assertThat(result.getVerfahrensstand(), is(Verfahrensstand.STRUKTURKONZEPT));
-        MultiPolygonGeometryModel multiPolygonGeometryModel = new MultiPolygonGeometryModel();
-        multiPolygonGeometryModel.setType("Umgriff");
-        multiPolygonGeometryModel.setCoordinates(List.of(List.of(List.of(List.of(BigDecimal.TEN, BigDecimal.ONE)))));
-        assertThat(result.getUmgriff(), is(multiPolygonGeometryModel));
+        assertThat(result.getUmgriff(), is(nullValue()));
         Wgs84Model wgs84Model = new Wgs84Model();
         wgs84Model.setLongitude(10.0);
         wgs84Model.setLatitude(20.0);
@@ -949,5 +814,12 @@ public class SearchDomainMapperTest {
         wgs84Model.setLatitude(48.108341907595324);
         assertThat(result.getCoordinate(), is(wgs84Model));
         assertThat(result.getZugehoerigesBauvorhaben(), is("Test Bauvorhaben"));
+    }
+
+    private static PointGeometry createCentroid(final double longitude, final double latitude) {
+        final var centroid = new PointGeometry();
+        centroid.setType("Point");
+        centroid.setCoordinates(List.of(BigDecimal.valueOf(longitude), BigDecimal.valueOf(latitude)));
+        return centroid;
     }
 }

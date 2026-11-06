@@ -2,7 +2,6 @@ package de.muenchen.isi.infrastructure.entity;
 
 import de.muenchen.isi.infrastructure.adapter.listener.BauvorhabenListener;
 import de.muenchen.isi.infrastructure.adapter.search.AdresseValueBridge;
-import de.muenchen.isi.infrastructure.adapter.search.MultiPolygonGeometryValueBridge;
 import de.muenchen.isi.infrastructure.adapter.search.ResultTypeValueBridge;
 import de.muenchen.isi.infrastructure.adapter.search.StringSuggestionBinder;
 import de.muenchen.isi.infrastructure.adapter.search.VerfahrensstandSuggestionBinder;
@@ -10,7 +9,6 @@ import de.muenchen.isi.infrastructure.adapter.search.VerfahrensstandValueBridge;
 import de.muenchen.isi.infrastructure.adapter.search.VerortungMultiPolygonValueBridge;
 import de.muenchen.isi.infrastructure.entity.common.Adresse;
 import de.muenchen.isi.infrastructure.entity.common.BearbeitendePerson;
-import de.muenchen.isi.infrastructure.entity.common.MultiPolygonGeometry;
 import de.muenchen.isi.infrastructure.entity.common.VerortungMultiPolygon;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtBaulicheNutzung;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ResultType;

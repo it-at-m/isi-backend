@@ -15,7 +15,7 @@ spring:
   # JDBC-URL beim ersten Verbindungsaufbau gestartet und für alle Test-Kontexte wiederverwendet wird.
   # Das Schema entsteht ausschließlich durch die Flyway-Migrationen und wird von Hibernate nur validiert.
   datasource:
-    url: jdbc:tc:postgis:15-3.4:///isidbuser?TC_DAEMON=true&TC_INITSCRIPT=testcontainers/init-isidbuser.sql&currentSchema=isidbuser
+    url: jdbc:tc:postgis:15-3.4:///isidbuser?TC_DAEMON=true&TC_INITSCRIPT=testcontainers/init-isidbuser.sql&currentSchema=isidbuser,public
     driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
   flyway:
     enabled: true
