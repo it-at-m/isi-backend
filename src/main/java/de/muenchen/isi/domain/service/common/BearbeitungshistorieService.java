@@ -14,6 +14,7 @@ import java.util.UUID;
 import java.util.function.Function;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.Strings;
 import org.springframework.stereotype.Component;
 
 @Slf4j
@@ -35,7 +36,9 @@ public class BearbeitungshistorieService {
     public AbfrageModel appendBearbeitungshistorieToAbfrage(final AbfrageModel abfrage, final BearbeitungsArt art) {
         final var statusAbfrage = BearbeitungsArt.AKTUALISIERT.equals(art) ? null : abfrage.getStatusAbfrage();
         final var bearbeitungshistorie = createBearbeitungshistorieForStatus(statusAbfrage, art);
-        abfrage.getBearbeitungshistorie().add(bearbeitungshistorie);
+        ergaenzen(abfrage.getBearbeitungshistorie(), bearbeitungshistorie, BearbeitungshistorieModel::getArt, eintrag ->
+            eintrag.getBearbeitendePerson().getEmail()
+        );
         return abfrage;
     }
 
@@ -60,8 +63,36 @@ public class BearbeitungshistorieService {
         if (id != null) {
             historie.addAll(gespeicherteHistorie.apply(id));
         }
-        historie.add(eintrag);
+        ergaenzen(historie, eintrag, Bearbeitungshistorie::getArt, e -> e.getBearbeitendePerson().getEmail());
         return historie;
+    }
+
+    /**
+     * Ergänzt die Historie um einen Eintrag. Damit die Historie durch wiederholtes Speichern nicht beliebig wächst,
+     * ersetzt eine Aktualisierung den letzten Eintrag, wenn dieser bereits eine Aktualisierung derselben Person ist.
+     *
+     * @param historie aufsteigend nach Zeitpunkt sortiert.
+     * @param eintrag  für die aktuelle Bearbeitung.
+     * @param art      liefert die Art eines Eintrags.
+     * @param email    liefert die Emailadresse der bearbeitenden Person eines Eintrags.
+     */
+    private static <T> void ergaenzen(
+        final List<T> historie,
+        final T eintrag,
+        final Function<T, BearbeitungsArt> art,
+        final Function<T, String> email
+    ) {
+        final var letzter = historie.isEmpty() ? null : historie.get(historie.size() - 1);
+        if (
+            letzter != null &&
+            BearbeitungsArt.AKTUALISIERT.equals(art.apply(eintrag)) &&
+            BearbeitungsArt.AKTUALISIERT.equals(art.apply(letzter)) &&
+            Strings.CI.equals(email.apply(eintrag), email.apply(letzter))
+        ) {
+            historie.set(historie.size() - 1, eintrag);
+        } else {
+            historie.add(eintrag);
+        }
     }
 
     protected BearbeitungshistorieModel createBearbeitungshistorieForStatus(

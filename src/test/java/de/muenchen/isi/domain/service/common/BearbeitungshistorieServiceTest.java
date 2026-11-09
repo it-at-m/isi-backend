@@ -12,6 +12,7 @@ import de.muenchen.isi.domain.model.BauleitplanverfahrenModel;
 import de.muenchen.isi.domain.model.common.BearbeitendePersonModel;
 import de.muenchen.isi.domain.model.common.BearbeitungshistorieModel;
 import de.muenchen.isi.domain.service.transition.MockCustomUser;
+import de.muenchen.isi.infrastructure.entity.common.BearbeitendePerson;
 import de.muenchen.isi.infrastructure.entity.common.Bearbeitungshistorie;
 import de.muenchen.isi.infrastructure.entity.enums.BearbeitungsArt;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
@@ -139,5 +140,83 @@ class BearbeitungshistorieServiceTest {
         assertThat(result, hasSize(2));
         assertThat(result.get(0), is(bisher));
         assertThat(result.get(1).getArt(), is(BearbeitungsArt.AKTUALISIERT));
+    }
+
+    @Test
+    @MockCustomUser
+    void fortschreibenErsetztLetzteAktualisierungDerselbenPerson() {
+        final var erstellt = eintrag(BearbeitungsArt.ERSTELLT, "rob@example.com");
+        final var aktualisiert = eintrag(BearbeitungsArt.AKTUALISIERT, "ROB@example.com");
+        aktualisiert.setZeitpunkt(LocalDateTime.of(2024, 3, 14, 14, 1));
+
+        final var result = bearbeitungshistorieService.fortschreiben(UUID.randomUUID(), id ->
+            List.of(erstellt, aktualisiert)
+        );
+
+        assertThat(result, hasSize(2));
+        assertThat(result.get(0), is(erstellt));
+        assertThat(result.get(1).getArt(), is(BearbeitungsArt.AKTUALISIERT));
+        assertThat(result.get(1).getBearbeitendePerson().getName(), is("Rob Winch"));
+        assertThat(result.get(1).getZeitpunkt().isAfter(aktualisiert.getZeitpunkt()), is(true));
+    }
+
+    @Test
+    @MockCustomUser
+    void fortschreibenErgaenztAktualisierungEinerAnderenPerson() {
+        final var aktualisiert = eintrag(BearbeitungsArt.AKTUALISIERT, "andere@example.com");
+
+        final var result = bearbeitungshistorieService.fortschreiben(UUID.randomUUID(), id -> List.of(aktualisiert));
+
+        assertThat(result, hasSize(2));
+        assertThat(result.get(0), is(aktualisiert));
+        assertThat(result.get(1).getBearbeitendePerson().getEmail(), is("rob@example.com"));
+    }
+
+    @Test
+    @MockCustomUser
+    void fortschreibenErsetztErstellungNicht() {
+        final var erstellt = eintrag(BearbeitungsArt.ERSTELLT, "rob@example.com");
+
+        final var result = bearbeitungshistorieService.fortschreiben(UUID.randomUUID(), id -> List.of(erstellt));
+
+        assertThat(result, hasSize(2));
+        assertThat(result.get(0), is(erstellt));
+    }
+
+    @Test
+    @MockCustomUser
+    void appendBearbeitungshistorieToAbfrageFasstAktualisierungenZusammen() {
+        final var abfrage = new BauleitplanverfahrenModel();
+        abfrage.setStatusAbfrage(StatusAbfrage.START_BEARBEITUNG);
+
+        bearbeitungshistorieService.appendBearbeitungshistorieToAbfrage(abfrage, BearbeitungsArt.AKTUALISIERT);
+        bearbeitungshistorieService.appendBearbeitungshistorieToAbfrage(abfrage, BearbeitungsArt.AKTUALISIERT);
+
+        assertThat(abfrage.getBearbeitungshistorie(), hasSize(1));
+    }
+
+    @Test
+    @MockCustomUser
+    void appendBearbeitungshistorieToAbfrageStatusaenderungTrenntAktualisierungen() {
+        final var abfrage = new BauleitplanverfahrenModel();
+        abfrage.setStatusAbfrage(StatusAbfrage.START_BEARBEITUNG);
+
+        bearbeitungshistorieService.appendBearbeitungshistorieToAbfrage(abfrage, BearbeitungsArt.AKTUALISIERT);
+        bearbeitungshistorieService.appendBearbeitungshistorieToAbfrage(abfrage, BearbeitungsArt.STATUSAENDERUNG);
+        bearbeitungshistorieService.appendBearbeitungshistorieToAbfrage(abfrage, BearbeitungsArt.AKTUALISIERT);
+
+        assertThat(
+            abfrage.getBearbeitungshistorie().stream().map(BearbeitungshistorieModel::getArt).toList(),
+            is(List.of(BearbeitungsArt.AKTUALISIERT, BearbeitungsArt.STATUSAENDERUNG, BearbeitungsArt.AKTUALISIERT))
+        );
+    }
+
+    private static Bearbeitungshistorie eintrag(final BearbeitungsArt art, final String email) {
+        final var person = new BearbeitendePerson();
+        person.setEmail(email);
+        final var eintrag = new Bearbeitungshistorie();
+        eintrag.setArt(art);
+        eintrag.setBearbeitendePerson(person);
+        return eintrag;
     }
 }

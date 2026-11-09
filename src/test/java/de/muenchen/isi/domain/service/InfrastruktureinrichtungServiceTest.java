@@ -293,6 +293,30 @@ class InfrastruktureinrichtungServiceTest {
 
     @Test
     @Transactional
+    void updateInfrastruktureinrichtungFasstWiederholteAktualisierungenZusammen()
+        throws OptimisticLockingException, EntityNotFoundException, ReportingException {
+        final MittelschuleModel mittelschule = new MittelschuleModel();
+        mittelschule.setNameEinrichtung("Mittelschule");
+        mittelschule.setStatus(StatusInfrastruktureinrichtung.UNGESICHERTE_PLANUNG);
+        mittelschule.setAnlassPlanung(AnlassPlanung.SCHLIESSUNG);
+        mittelschule.setSchule(new SchuleModel());
+        mittelschule.getSchule().setAnzahlKlassen(3);
+        mittelschule.getSchule().setAnzahlPlaetze(30);
+
+        final var erstellt = this.infrastruktureinrichtungService.saveInfrastruktureinrichtung(mittelschule);
+        final var einmalAktualisiert = this.infrastruktureinrichtungService.updateInfrastruktureinrichtung(erstellt);
+        final var zweimalAktualisiert = this.infrastruktureinrichtungService.updateInfrastruktureinrichtung(
+            einmalAktualisiert
+        );
+
+        assertThat(
+            zweimalAktualisiert.getBearbeitungshistorie().stream().map(BearbeitungshistorieModel::getArt).toList(),
+            is(List.of(BearbeitungsArt.ERSTELLT, BearbeitungsArt.AKTUALISIERT))
+        );
+    }
+
+    @Test
+    @Transactional
     void updateInfrastruktureinrichtungNachbarschaftstreff()
         throws OptimisticLockingException, EntityNotFoundException, ReportingException {
         var bauvorhaben = new Bauvorhaben();
