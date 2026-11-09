@@ -109,7 +109,6 @@ public class EntitySearchService {
                     }
                 });
                 this.createFilterGemeinsameAttribute(filterAttributeMap, root, function);
-                this.createFilterNurEigeneVorgaenge(searchQueryAndSortingInformation, root, function);
                 this.createFilterRealisierungVonBis(searchQueryAndSortingInformation, root, function);
                 this.createFilterGeplanteWohneinheitenGesamtVonBis(searchQueryAndSortingInformation, root, function);
                 this.createFilterGeplanteGeschossflaecheWohnenGesamtVonBis(
@@ -211,6 +210,12 @@ public class EntitySearchService {
         if (BooleanUtils.isTrue(searchQueryAndSortingInformation.getFilterNurEigeneAbfragen())) {
             filterAttributeMap.put("sub", List.of(authenticationUtils.getUserSub()));
         }
+        if (BooleanUtils.isTrue(searchQueryAndSortingInformation.getFilterNurEigeneVorgaenge())) {
+            filterAttributeMap.put(
+                BaseEntity.INDEX_FIELD_BEARBEITER_EMAIL,
+                List.of(authenticationUtils.getEmail().toLowerCase(Locale.ROOT))
+            );
+        }
         filterAttributeMap.put("statusAbfrage_filter", searchQueryAndSortingInformation.getFilterStatusAbfrage());
         filterAttributeMap.put("verfahrensstand_filter", searchQueryAndSortingInformation.getFilterVerfahrensstand());
         filterAttributeMap.put(
@@ -246,37 +251,6 @@ public class EntitySearchService {
                 );
             }
         });
-    }
-
-    /**
-     * Diese Methode schränkt die Suche auf die eigenen Vorgänge des Nutzers ein. Dazu zählen die vom Nutzer
-     * erstellten Abfragen, Bauvorhaben und Infrastruktureinrichtungen, die vom Nutzer zuletzt bearbeiteten
-     * Bauvorhaben und Infrastruktureinrichtungen sowie die Abfragen, die der Nutzer als Sachbearbeitung vom
-     * Status "Übermittelt zur Bearbeitung" in "Start Bearbeitung" übernommen hat.
-     * <p>
-     * @param searchQueryAndSortingInformation mit der Suchquery, den Sortier- und Seiteninformationen und den zu durchsuchenden Entitäten.
-     * @param root Startknoten für die Suche (WHERE-Clause)
-     * @param function Benutzerdefinierte Suchfunktion für die Ausführung
-     */
-    protected void createFilterNurEigeneVorgaenge(
-        final SearchQueryAndSortingModel searchQueryAndSortingInformation,
-        final SimpleBooleanPredicateClausesCollector root,
-        final SearchPredicateFactory function
-    ) {
-        if (BooleanUtils.isTrue(searchQueryAndSortingInformation.getFilterNurEigeneVorgaenge())) {
-            final var userSub = authenticationUtils.getUserSub();
-            final var email = StringUtils.lowerCase(authenticationUtils.getEmail(), Locale.ROOT);
-            root.add(
-                function.bool().filter(b -> {
-                    var theBool = b.bool();
-                    theBool.should(function.match().field(BaseEntity.INDEX_FIELD_ERSTELLER_SUB).matching(userSub));
-                    if (StringUtils.isNotBlank(email)) {
-                        theBool.should(function.match().field(BaseEntity.INDEX_FIELD_BEARBEITER_EMAIL).matching(email));
-                    }
-                    return theBool;
-                })
-            );
-        }
     }
 
     /**

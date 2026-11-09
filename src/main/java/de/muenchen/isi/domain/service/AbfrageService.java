@@ -39,6 +39,7 @@ import de.muenchen.isi.domain.service.filehandling.DokumentService;
 import de.muenchen.isi.domain.service.reporting.ReportingdataTransferService;
 import de.muenchen.isi.infrastructure.entity.Abfrage;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
+import de.muenchen.isi.infrastructure.entity.enums.BearbeitungsArt;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.repository.AbfrageRepository;
@@ -145,7 +146,7 @@ public class AbfrageService {
         if (abfrage.getId() == null) {
             abfrage.setStatusAbfrage(StatusAbfrage.ANGELEGT);
             abfrage.setSub(authenticationUtils.getUserSub());
-            bearbeitungshistorieService.appendBearbeitungshistorieToAbfrage(abfrage);
+            bearbeitungshistorieService.appendBearbeitungshistorieToAbfrage(abfrage, BearbeitungsArt.ERSTELLT);
         }
         // Berechnen der langfristigen planungs- und sobonursächlichen Bedarfe
         final var bedarfeForAbfragevarianten = calculationService.calculateBedarfeForEachAbfragevarianteOfAbfrage(
@@ -213,6 +214,7 @@ public class AbfrageService {
             log.error(message);
             throw new EntityNotFoundException(message);
         }
+        bearbeitungshistorieService.appendBearbeitungshistorieToAbfrage(abfrageToSave, BearbeitungsArt.AKTUALISIERT);
         return this.save(abfrageToSave);
     }
 
@@ -318,6 +320,7 @@ public class AbfrageService {
             log.error(message);
             throw new EntityNotFoundException(message);
         }
+        bearbeitungshistorieService.appendBearbeitungshistorieToAbfrage(abfrageToSave, BearbeitungsArt.AKTUALISIERT);
         return this.save(abfrageToSave);
     }
 
@@ -365,6 +368,7 @@ public class AbfrageService {
             log.error(message);
             throw new EntityNotFoundException(message);
         }
+        bearbeitungshistorieService.appendBearbeitungshistorieToAbfrage(abfrageToSave, BearbeitungsArt.AKTUALISIERT);
         return this.save(abfrageToSave);
     }
 
@@ -411,6 +415,7 @@ public class AbfrageService {
             log.error(message);
             throw new EntityNotFoundException(message);
         }
+        bearbeitungshistorieService.appendBearbeitungshistorieToAbfrage(abfrageToSave, BearbeitungsArt.AKTUALISIERT);
         return this.save(abfrageToSave);
     }
 

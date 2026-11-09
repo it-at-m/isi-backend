@@ -51,8 +51,7 @@ public class SearchQueryModel {
     private Boolean filterNurEigeneAbfragen;
 
     /**
-     * Einschränkung auf die vom Nutzer erstellten Vorgänge sowie auf die Abfragen, die der Nutzer als
-     * Sachbearbeitung übernommen hat.
+     * Einschränkung auf die Vorgänge, die der Nutzer laut Bearbeitungshistorie erstellt oder bearbeitet hat.
      */
     private Boolean filterNurEigeneVorgaenge;
 

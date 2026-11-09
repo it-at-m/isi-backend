@@ -10,6 +10,7 @@ import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.ReportingException;
+import de.muenchen.isi.domain.model.common.BearbeitungshistorieModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.InfrastruktureinrichtungModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.KindergartenModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.KinderkrippeModel;
@@ -18,6 +19,7 @@ import de.muenchen.isi.domain.model.infrastruktureinrichtung.Nachbarschaftstreff
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.SchuleModel;
 import de.muenchen.isi.domain.service.etlInterface.EtlInterfaceService;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
+import de.muenchen.isi.infrastructure.entity.enums.BearbeitungsArt;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.AnlassPlanung;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Kooperation;
@@ -32,6 +34,7 @@ import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Nachbarsch
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Schule;
 import de.muenchen.isi.infrastructure.repository.BauvorhabenRepository;
 import de.muenchen.isi.infrastructure.repository.InfrastruktureinrichtungRepository;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import org.junit.jupiter.api.Assertions;
@@ -152,7 +155,8 @@ class InfrastruktureinrichtungServiceTest {
 
         assertThat(savedMittelschule.getId(), is(notNullValue()));
         assertThat(savedMittelschule.getVersion(), is(0L));
-        assertThat(savedMittelschule.getSub(), is(notNullValue()));
+        assertThat(savedMittelschule.getBearbeitungshistorie().size(), is(1));
+        assertThat(savedMittelschule.getBearbeitungshistorie().get(0).getArt(), is(BearbeitungsArt.ERSTELLT));
         assertThat(savedMittelschule.getNameEinrichtung(), is(mittelschule.getNameEinrichtung()));
         assertThat(savedMittelschule.getBauvorhaben(), is(bauvorhaben.getId()));
         assertThat(savedMittelschule.getInfrastruktureinrichtungTyp(), is(InfrastruktureinrichtungTyp.MITTELSCHULE));
@@ -245,9 +249,8 @@ class InfrastruktureinrichtungServiceTest {
         Mockito.reset(this.etlInterfaceService);
 
         savedMittelschule.setNameEinrichtung("Mittelschule XXX");
-        final var ersteller = savedMittelschule.getSub();
-        // Ein über die API übermitteltes Model enthält keinen Ersteller.
-        savedMittelschule.setSub(null);
+        // Die Historie wird nicht vom Client übernommen, sondern aus der Datenbank fortgeschrieben.
+        savedMittelschule.setBearbeitungshistorie(new ArrayList<>());
 
         final var updatedMittelschule = this.infrastruktureinrichtungService.updateInfrastruktureinrichtung(
             savedMittelschule
@@ -256,7 +259,10 @@ class InfrastruktureinrichtungServiceTest {
         assertThat(updatedMittelschule.getId(), is(savedMittelschule.getId()));
         assertThat(updatedMittelschule.getVersion(), is(1L));
         assertThat(updatedMittelschule.getNameEinrichtung(), is("Mittelschule XXX"));
-        assertThat(updatedMittelschule.getSub(), is(ersteller));
+        assertThat(
+            updatedMittelschule.getBearbeitungshistorie().stream().map(BearbeitungshistorieModel::getArt).toList(),
+            is(List.of(BearbeitungsArt.ERSTELLT, BearbeitungsArt.AKTUALISIERT))
+        );
         assertThat(updatedMittelschule.getBauvorhaben(), is(bauvorhaben.getId()));
         assertThat(updatedMittelschule.getInfrastruktureinrichtungTyp(), is(InfrastruktureinrichtungTyp.MITTELSCHULE));
         assertThat(updatedMittelschule.getClass(), is(savedMittelschule.getClass()));

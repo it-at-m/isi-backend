@@ -1,7 +1,9 @@
 package de.muenchen.isi.domain.service.common;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 
 import de.muenchen.isi.IsiBackendApplication;
 import de.muenchen.isi.TestConstants;
@@ -10,8 +12,12 @@ import de.muenchen.isi.domain.model.BauleitplanverfahrenModel;
 import de.muenchen.isi.domain.model.common.BearbeitendePersonModel;
 import de.muenchen.isi.domain.model.common.BearbeitungshistorieModel;
 import de.muenchen.isi.domain.service.transition.MockCustomUser;
+import de.muenchen.isi.infrastructure.entity.common.Bearbeitungshistorie;
+import de.muenchen.isi.infrastructure.entity.enums.BearbeitungsArt;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
@@ -42,12 +48,16 @@ class BearbeitungshistorieServiceTest {
         AbfrageModel result;
         try (final MockedStatic<LocalDateTime> mockLocalDateTime = Mockito.mockStatic(LocalDateTime.class)) {
             mockLocalDateTime.when(LocalDateTime::now).thenReturn(zeitpunkt);
-            result = bearbeitungshistorieService.appendBearbeitungshistorieToAbfrage(abfrageToSave);
+            result = bearbeitungshistorieService.appendBearbeitungshistorieToAbfrage(
+                abfrageToSave,
+                BearbeitungsArt.ERSTELLT
+            );
         }
 
         final var expected = new BauleitplanverfahrenModel();
         expected.setStatusAbfrage(StatusAbfrage.ANGELEGT);
         final var bearbeitungshistorieExpected = new BearbeitungshistorieModel();
+        bearbeitungshistorieExpected.setArt(BearbeitungsArt.ERSTELLT);
         bearbeitungshistorieExpected.setZielStatus(StatusAbfrage.ANGELEGT);
         bearbeitungshistorieExpected.setZeitpunkt(zeitpunkt);
         final var bearbeitendePersonExpected = new BearbeitendePersonModel();
@@ -68,10 +78,14 @@ class BearbeitungshistorieServiceTest {
 
         try (final MockedStatic<LocalDateTime> mockLocalDateTime = Mockito.mockStatic(LocalDateTime.class)) {
             mockLocalDateTime.when(LocalDateTime::now).thenReturn(zeitpunkt);
-            result = bearbeitungshistorieService.createBearbeitungshistorieForStatus(StatusAbfrage.EINPLANUNG_BEDARFE);
+            result = bearbeitungshistorieService.createBearbeitungshistorieForStatus(
+                StatusAbfrage.EINPLANUNG_BEDARFE,
+                BearbeitungsArt.STATUSAENDERUNG
+            );
         }
 
         final var bearbeitungshistorieExpected = new BearbeitungshistorieModel();
+        bearbeitungshistorieExpected.setArt(BearbeitungsArt.STATUSAENDERUNG);
         bearbeitungshistorieExpected.setZielStatus(StatusAbfrage.EINPLANUNG_BEDARFE);
         bearbeitungshistorieExpected.setZeitpunkt(zeitpunkt);
         final var bearbeitendePersonExpected = new BearbeitendePersonModel();
@@ -81,5 +95,49 @@ class BearbeitungshistorieServiceTest {
         bearbeitungshistorieExpected.setBearbeitendePerson(bearbeitendePersonExpected);
 
         assertThat(result, is(bearbeitungshistorieExpected));
+    }
+
+    @Test
+    @MockCustomUser
+    void appendBearbeitungshistorieToAbfrageAktualisierungOhneZielstatus() {
+        final var abfrage = new BauleitplanverfahrenModel();
+        abfrage.setStatusAbfrage(StatusAbfrage.START_BEARBEITUNG);
+
+        bearbeitungshistorieService.appendBearbeitungshistorieToAbfrage(abfrage, BearbeitungsArt.AKTUALISIERT);
+
+        final var eintrag = abfrage.getBearbeitungshistorie().get(0);
+        assertThat(eintrag.getArt(), is(BearbeitungsArt.AKTUALISIERT));
+        assertThat(eintrag.getZielStatus(), is(nullValue()));
+        assertThat(eintrag.getBearbeitendePerson().getEmail(), is("rob@example.com"));
+    }
+
+    @Test
+    @MockCustomUser
+    void fortschreibenBeiNeuanlage() {
+        final var result = bearbeitungshistorieService.fortschreiben(null, id -> {
+            throw new AssertionError("Bei einer Neuanlage gibt es keine gespeicherte Historie.");
+        });
+
+        assertThat(result, hasSize(1));
+        assertThat(result.get(0).getArt(), is(BearbeitungsArt.ERSTELLT));
+        assertThat(result.get(0).getZielStatus(), is(nullValue()));
+        assertThat(result.get(0).getBearbeitendePerson().getEmail(), is("rob@example.com"));
+    }
+
+    @Test
+    @MockCustomUser
+    void fortschreibenBeiAktualisierungBehaeltBisherigeEintraege() {
+        final var id = UUID.randomUUID();
+        final var bisher = new Bearbeitungshistorie();
+        bisher.setArt(BearbeitungsArt.ERSTELLT);
+
+        final var result = bearbeitungshistorieService.fortschreiben(id, gesuchteId -> {
+            assertThat(gesuchteId, is(id));
+            return List.of(bisher);
+        });
+
+        assertThat(result, hasSize(2));
+        assertThat(result.get(0), is(bisher));
+        assertThat(result.get(1).getArt(), is(BearbeitungsArt.AKTUALISIERT));
     }
 }

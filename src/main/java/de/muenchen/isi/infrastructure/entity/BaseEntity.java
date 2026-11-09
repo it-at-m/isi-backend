@@ -37,14 +37,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 public abstract class BaseEntity {
 
     /**
-     * Name des Indexfelds mit dem Ersteller (Keycloak-sub) einer Abfrage, eines Bauvorhabens oder einer
-     * Infrastruktureinrichtung.
-     */
-    public static final String INDEX_FIELD_ERSTELLER_SUB = "ersteller_sub";
-
-    /**
-     * Name des Indexfelds mit der Emailadresse der bearbeitenden Person. Bei einer Abfrage ist das die
-     * Sachbearbeitung, bei einem Bauvorhaben oder einer Infrastruktureinrichtung die zuletzt bearbeitende Person.
+     * Name des Indexfelds mit den Emailadressen aller Personen, die eine Abfrage, ein Bauvorhaben oder eine
+     * Infrastruktureinrichtung erstellt oder bearbeitet haben.
      */
     public static final String INDEX_FIELD_BEARBEITER_EMAIL = "bearbeiter_email";
 

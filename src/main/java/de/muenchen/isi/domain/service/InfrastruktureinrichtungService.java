@@ -7,13 +7,13 @@ import de.muenchen.isi.domain.exception.ReportingException;
 import de.muenchen.isi.domain.mapper.InfrastruktureinrichtungDomainMapper;
 import de.muenchen.isi.domain.model.BauvorhabenModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.InfrastruktureinrichtungModel;
+import de.muenchen.isi.domain.service.common.BearbeitungshistorieService;
 import de.muenchen.isi.domain.service.etlInterface.EtlInterfaceService;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Infrastruktureinrichtung;
 import de.muenchen.isi.infrastructure.repository.BauvorhabenRepository;
 import de.muenchen.isi.infrastructure.repository.InfrastruktureinrichtungRepository;
 import de.muenchen.isi.infrastructure.repository.common.KommentarRepository;
-import de.muenchen.isi.security.AuthenticationUtils;
 import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -37,7 +37,7 @@ public class InfrastruktureinrichtungService {
 
     private final EtlInterfaceService etlInterfaceService;
 
-    private final AuthenticationUtils authenticationUtils;
+    private final BearbeitungshistorieService bearbeitungshistorieService;
 
     /**
      * Die Methode gibt ein {@link InfrastruktureinrichtungModel} identifiziert durch die ID zurück.
@@ -67,9 +67,14 @@ public class InfrastruktureinrichtungService {
     public InfrastruktureinrichtungModel saveInfrastruktureinrichtung(
         final InfrastruktureinrichtungModel infrastruktureinrichtung
     ) throws OptimisticLockingException, EntityNotFoundException, ReportingException {
-        this.setSub(infrastruktureinrichtung);
         Infrastruktureinrichtung entity = this.infrastruktureinrichtungDomainMapper.model2Entity(
             infrastruktureinrichtung
+        );
+        entity.setBearbeitungshistorie(
+            this.bearbeitungshistorieService.fortschreiben(
+                infrastruktureinrichtung.getId(),
+                this.infrastruktureinrichtungRepository::findBearbeitungshistorieById
+            )
         );
         try {
             entity = this.infrastruktureinrichtungRepository.saveAndFlush(entity);
@@ -82,20 +87,6 @@ public class InfrastruktureinrichtungService {
         }
 
         return this.infrastruktureinrichtungDomainMapper.entity2Model(entity);
-    }
-
-    /**
-     * Setzt bei Neuanlage den aktuellen Nutzer als Ersteller. Bei einer Aktualisierung bleibt der gespeicherte
-     * Ersteller erhalten, da dieser nicht über die API übermittelt wird.
-     *
-     * @param infrastruktureinrichtung zum Setzen des Erstellers.
-     */
-    private void setSub(final InfrastruktureinrichtungModel infrastruktureinrichtung) {
-        infrastruktureinrichtung.setSub(
-            infrastruktureinrichtung.getId() == null
-                ? authenticationUtils.getUserSub()
-                : infrastruktureinrichtungRepository.findSubById(infrastruktureinrichtung.getId()).orElse(null)
-        );
     }
 
     /**

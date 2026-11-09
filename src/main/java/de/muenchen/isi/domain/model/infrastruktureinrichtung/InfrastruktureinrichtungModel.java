@@ -7,11 +7,14 @@ package de.muenchen.isi.domain.model.infrastruktureinrichtung;
 import de.muenchen.isi.domain.model.BaseEntityModel;
 import de.muenchen.isi.domain.model.common.AdresseModel;
 import de.muenchen.isi.domain.model.common.BearbeitendePersonModel;
+import de.muenchen.isi.domain.model.common.BearbeitungshistorieModel;
 import de.muenchen.isi.domain.model.common.VerortungPointModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.AnlassPlanung;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusInfrastruktureinrichtung;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -24,7 +27,7 @@ public abstract class InfrastruktureinrichtungModel extends BaseEntityModel {
 
     private BearbeitendePersonModel bearbeitendePerson;
 
-    private String sub;
+    private List<BearbeitungshistorieModel> bearbeitungshistorie = new ArrayList<>();
 
     private InfrastruktureinrichtungTyp infrastruktureinrichtungTyp;
 

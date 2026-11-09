@@ -1,5 +1,6 @@
 package de.muenchen.isi.infrastructure.entity.common;
 
+import de.muenchen.isi.infrastructure.entity.enums.BearbeitungsArt;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.AttributeOverrides;
@@ -9,12 +10,27 @@ import jakarta.persistence.Embedded;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import java.time.LocalDateTime;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Locale;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 import lombok.Data;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 
 @Embeddable
 @Data
 public class Bearbeitungshistorie {
 
+    @Enumerated(EnumType.STRING)
+    @Column
+    private BearbeitungsArt art;
+
+    /**
+     * Der Zielstatus einer Statusänderung bzw. der Anfangsstatus einer erstellten Abfrage. Sonst null.
+     */
     @Enumerated(EnumType.STRING)
     @Column
     private StatusAbfrage zielStatus;
@@ -32,4 +48,21 @@ public class Bearbeitungshistorie {
         ),
     })
     private BearbeitendePerson bearbeitendePerson;
+
+    /**
+     * Ermittelt die Emailadressen aller Personen aus der Bearbeitungshistorie in Kleinbuchstaben.
+     *
+     * @param bearbeitungshistorie zur Ermittlung der Emailadressen.
+     * @return die Emailadressen ohne Duplikate.
+     */
+    public static Set<String> getEmails(final List<Bearbeitungshistorie> bearbeitungshistorie) {
+        return CollectionUtils.emptyIfNull(bearbeitungshistorie)
+            .stream()
+            .map(Bearbeitungshistorie::getBearbeitendePerson)
+            .filter(Objects::nonNull)
+            .map(BearbeitendePerson::getEmail)
+            .filter(StringUtils::isNotBlank)
+            .map(email -> email.toLowerCase(Locale.ROOT))
+            .collect(Collectors.toCollection(LinkedHashSet::new));
+    }
 }

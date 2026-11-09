@@ -28,15 +28,13 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
+import java.util.Set;
 import java.util.UUID;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.EnumUtils;
 import org.apache.commons.lang3.ObjectUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.hibernate.search.engine.backend.types.Projectable;
 import org.hibernate.search.engine.backend.types.Searchable;
 import org.hibernate.search.engine.backend.types.Sortable;
@@ -151,7 +149,6 @@ public abstract class Abfrage extends BaseEntity {
     }
 
     @GenericField
-    @GenericField(name = INDEX_FIELD_ERSTELLER_SUB)
     @Column(nullable = false)
     private String sub;
 
@@ -190,32 +187,14 @@ public abstract class Abfrage extends BaseEntity {
     private List<Bearbeitungshistorie> bearbeitungshistorie = new ArrayList<>();
 
     /**
-     * Virtuelles Feld für Hibernate Search mit der Emailadresse der Sachbearbeitung.
-     * <p>
-     * Als Sachbearbeitung gilt die Person, welche die Abfrage zuletzt vom Status
-     * {@link StatusAbfrage#UEBERMITTELT_ZUR_BEARBEITUNG} in den Status {@link StatusAbfrage#START_BEARBEITUNG}
-     * übernommen hat. Die Information wird aus der Bearbeitungshistorie ermittelt und steht damit auch für
-     * Bestandsdaten zur Verfügung. Die Emailadresse wird in Kleinbuchstaben abgelegt.
+     * Virtuelles Feld für Hibernate Search mit den Emailadressen aller Personen aus der Bearbeitungshistorie.
      *
-     * @return die Emailadresse der Sachbearbeitung oder null, falls die Abfrage noch nicht übernommen wurde.
+     * @return die Emailadressen in Kleinbuchstaben.
      */
     @Transient
     @KeywordField(name = INDEX_FIELD_BEARBEITER_EMAIL)
     @IndexingDependency(derivedFrom = @ObjectPath(@PropertyValue(propertyName = "bearbeitungshistorie")))
-    public String getEmailSachbearbeitung() {
-        String email = null;
-        StatusAbfrage vorherigerStatus = null;
-        for (final var eintrag : CollectionUtils.emptyIfNull(bearbeitungshistorie)) {
-            if (
-                StatusAbfrage.UEBERMITTELT_ZUR_BEARBEITUNG.equals(vorherigerStatus) &&
-                StatusAbfrage.START_BEARBEITUNG.equals(eintrag.getZielStatus()) &&
-                eintrag.getBearbeitendePerson() != null &&
-                StringUtils.isNotBlank(eintrag.getBearbeitendePerson().getEmail())
-            ) {
-                email = eintrag.getBearbeitendePerson().getEmail().toLowerCase(Locale.ROOT);
-            }
-            vorherigerStatus = eintrag.getZielStatus();
-        }
-        return email;
+    public Set<String> getEmailsBearbeitendePersonen() {
+        return Bearbeitungshistorie.getEmails(bearbeitungshistorie);
     }
 }
