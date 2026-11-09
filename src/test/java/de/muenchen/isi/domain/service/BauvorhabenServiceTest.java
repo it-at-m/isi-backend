@@ -248,29 +248,39 @@ public class BauvorhabenServiceTest {
         kinderkrippe1.setStatus(StatusInfrastruktureinrichtung.BESTAND);
         kinderkrippe1.setGesamtplaetzeNachBE(10);
         kinderkrippe1.setKinderkrippenplaetzeNachBE(8);
+        kinderkrippe1.setSollBelegungKinderkrippenplaetzeKePlus(10);
+        kinderkrippe1.setSollBelegungKinderkrippenplaetze(20);
         kinderkrippe1.setBauvorhaben(bauvorhaben);
 
         final Kinderkrippe kinderkrippe2 = new Kinderkrippe();
         kinderkrippe2.setNameEinrichtung("B");
         kinderkrippe2.setStatus(StatusInfrastruktureinrichtung.GESICHERTE_PLANUNG);
+        kinderkrippe2.setSobonRelevant(UncertainBoolean.TRUE);
         kinderkrippe2.setIntegrationseinrichtung(true);
+        kinderkrippe2.setIntegrationsplaetzeKinderkrippeKePlus(10);
         kinderkrippe2.setIntegrationsplaetzeKinderkrippe(20);
-        kinderkrippe2.setIntegrationsplaetzeKinderkrippeLautBelegung(15);
+        kinderkrippe2.setBelegungIntegrationsplaetzeKinderkrippe(15);
         kinderkrippe2.setUeberregionaleKinderkrippenplaetze(5);
         kinderkrippe2.setBauvorhaben(bauvorhaben);
 
         final Kindergarten kindergarten1 = new Kindergarten();
         kindergarten1.setNameEinrichtung("A");
         kindergarten1.setStatus(StatusInfrastruktureinrichtung.BESTAND);
-        kindergarten1.setAnzahlKindergartenGruppen(9);
-        kindergarten1.setAnzahlKindergartenPlaetze(90);
+
+        kindergarten1.setGesamtplaetzeNachBE(10);
+        kindergarten1.setKindergartenplaetzeNachBE(8);
+        kindergarten1.setSollBelegungKindergartenplaetze(20);
         kindergarten1.setBauvorhaben(bauvorhaben);
 
         final Kindergarten kindergarten2 = new Kindergarten();
         kindergarten2.setNameEinrichtung("B");
         kindergarten2.setStatus(StatusInfrastruktureinrichtung.BESTAND);
-        kindergarten2.setAnzahlKindergartenGruppen(9);
-        kindergarten2.setAnzahlKindergartenPlaetze(90);
+        kindergarten2.setSobonRelevant(UncertainBoolean.FALSE);
+        kindergarten2.setIntegrationseinrichtung(false);
+        kindergarten2.setIntegrationsplaetzeKindergartenKePlus(10);
+        kindergarten2.setIntegrationsplaetzeKindergarten(20);
+        kindergarten2.setBelegungIntegrationsplaetzeKindergarten(15);
+        kindergarten2.setUeberregionaleKindergartenplaetze(5);
         kindergarten2.setBauvorhaben(bauvorhaben);
 
         final Stream<Infrastruktureinrichtung> listInfrastruktureinrichtung = Stream.of(

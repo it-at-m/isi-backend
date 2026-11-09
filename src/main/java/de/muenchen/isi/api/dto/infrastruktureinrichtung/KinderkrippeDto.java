@@ -50,11 +50,15 @@ public class KinderkrippeDto extends InfrastruktureinrichtungDto {
 
     private Integer belegungKinderkrippenplaetze;
 
+    private Integer sollBelegungKinderkrippenplaetzeKePlus;
+
     private Integer sollBelegungKinderkrippenplaetze;
+
+    private Integer integrationsplaetzeKinderkrippeKePlus;
 
     private Integer integrationsplaetzeKinderkrippe;
 
-    private Integer integrationsplaetzeKinderkrippeLautBelegung;
+    private Integer belegungIntegrationsplaetzeKinderkrippe;
 
     private String linkKePlus;
 }

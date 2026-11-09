@@ -262,15 +262,6 @@ public abstract class Infrastruktureinrichtung extends BaseEntity {
     @Column(nullable = false)
     private StatusInfrastruktureinrichtung status;
 
-    @Column(precision = 10, scale = 2)
-    private BigDecimal flaecheGesamtgrundstueck;
-
-    @Column(precision = 10, scale = 2)
-    private BigDecimal flaecheTeilgrundstueck;
-
-    @Column(precision = 10, scale = 2)
-    private BigDecimal flaecheEinrichtung;
-
     @Column(length = 255)
     private String idKibigWeb;
 

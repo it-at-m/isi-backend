@@ -86,8 +86,9 @@ class InfrastruktureinrichtungServiceTest {
         kinderkrippe2.setNameEinrichtung("Kinderkrippe 2");
         kinderkrippe2.setStatus(StatusInfrastruktureinrichtung.GESICHERTE_PLANUNG);
         kinderkrippe2.setAnlassPlanung(AnlassPlanung.SCHLIESSUNG);
+        kinderkrippe2.setIntegrationsplaetzeKinderkrippeKePlus(10);
         kinderkrippe2.setIntegrationsplaetzeKinderkrippe(20);
-        kinderkrippe2.setIntegrationsplaetzeKinderkrippeLautBelegung(15);
+        kinderkrippe2.setBelegungIntegrationsplaetzeKinderkrippe(15);
         kinderkrippe2.setUeberregionaleKinderkrippenplaetze(5);
         kinderkrippe2.setEinrichtungstraeger(Einrichtungstraeger.ELTERN_KIND_INITIATIVE);
         kinderkrippe2.setSobonRelevant(UncertainBoolean.FALSE);
@@ -97,8 +98,14 @@ class InfrastruktureinrichtungServiceTest {
         kindergarten.setNameEinrichtung("Kindergarten");
         kindergarten.setStatus(StatusInfrastruktureinrichtung.BESTAND);
         kindergarten.setAnlassPlanung(AnlassPlanung.SCHLIESSUNG);
-        kindergarten.setAnzahlKindergartenGruppen(9);
-        kindergarten.setAnzahlKindergartenPlaetze(90);
+        kindergarten.setEinrichtungstraeger(Einrichtungstraeger.ELTERN_KIND_INITIATIVE);
+        kindergarten.setSobonRelevant(UncertainBoolean.TRUE);
+        kindergarten.setMuenchnerKitafoerderung(UncertainBoolean.FALSE);
+        kindergarten.setUeberregionaleKindergartenplaetze(9);
+        kindergarten.setBelegungIntegrationsplaetzeKindergarten(5);
+        kindergarten.setIntegrationsplaetzeKindergartenKePlus(3);
+        kindergarten.setSollBelegungKindergartenplaetze(5);
+        kindergarten.setSollBelegungKindergartenplaetzeKePlus(5);
 
         Grundschule grundschule = new Grundschule();
         grundschule.setNameEinrichtung("Grundschule");

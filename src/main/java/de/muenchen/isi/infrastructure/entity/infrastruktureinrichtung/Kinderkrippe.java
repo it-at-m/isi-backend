@@ -26,6 +26,10 @@ import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
 @Indexed
 public class Kinderkrippe extends Infrastruktureinrichtung {
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Einrichtungstraeger einrichtungstraeger;
+
     @Column
     private Integer fertigstellungsmonat; // MM
 
@@ -45,10 +49,6 @@ public class Kinderkrippe extends Infrastruktureinrichtung {
     @Column
     private Boolean integrationseinrichtung;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private Einrichtungstraeger einrichtungstraeger;
-
     @Column
     private String nameTraeger;
 
@@ -65,13 +65,19 @@ public class Kinderkrippe extends Infrastruktureinrichtung {
     private Integer belegungKinderkrippenplaetze;
 
     @Column
+    private Integer sollBelegungKinderkrippenplaetzeKePlus;
+
+    @Column
     private Integer sollBelegungKinderkrippenplaetze;
+
+    @Column
+    private Integer integrationsplaetzeKinderkrippeKePlus;
 
     @Column
     private Integer integrationsplaetzeKinderkrippe;
 
-    @Column(name = "integrationsplaetze_kinderkripper_laut_belegung")
-    private Integer integrationsplaetzeKinderkrippeLautBelegung;
+    @Column
+    private Integer belegungIntegrationsplaetzeKinderkrippe;
 
     @Column(name = "link_ke_plus")
     private String linkKePlus;

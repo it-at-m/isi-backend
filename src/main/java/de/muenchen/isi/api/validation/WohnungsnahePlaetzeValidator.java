@@ -17,8 +17,7 @@ public class WohnungsnahePlaetzeValidator
 {
 
     /**
-     * Prüft, ob die Anzahl der wohungsnahen Plätze die Anzahl der insgesamt zur Verfügung stehenden Plätze der Kinderkrippe,
-     * des Kindergartens und des Horts übersteigt.
+     * Prüft, ob die Anzahl der wohungsnahen Plätze die Anzahl der insgesamt zur Verfügung stehenden Plätze des Horts übersteigt.
      *
      * @param value   {@link InfrastruktureinrichtungDto} zum Validieren.
      * @param context in welchem die Validierung stattfindet.
@@ -41,11 +40,6 @@ public class WohnungsnahePlaetzeValidator
                         hausFuerKinder.getAnzahlHortPlaetze(),
                         hausFuerKinder.getWohnungsnaheHortPlaetze()
                     )
-                );
-            } else if (value instanceof KindergartenDto kindergarten) {
-                return this.areWohnungsnahePlatzeValid(
-                    kindergarten.getAnzahlKindergartenPlaetze(),
-                    kindergarten.getWohnungsnaheKindergartenPlaetze()
                 );
             } else if (value instanceof GsNachmittagBetreuungDto gsNachmittagsbetreuung) {
                 return this.areWohnungsnahePlatzeValid(
