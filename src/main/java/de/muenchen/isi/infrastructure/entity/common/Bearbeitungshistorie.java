@@ -2,6 +2,7 @@ package de.muenchen.isi.infrastructure.entity.common;
 
 import de.muenchen.isi.infrastructure.entity.enums.BearbeitungsArt;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
+import de.muenchen.isi.security.AuthenticationUtils;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.AttributeOverrides;
 import jakarta.persistence.Column;
@@ -51,6 +52,8 @@ public class Bearbeitungshistorie {
 
     /**
      * Ermittelt die Emailadressen aller Personen aus der Bearbeitungshistorie in Kleinbuchstaben.
+     * <p>
+     * Der Platzhalter für Nutzer ohne Emailadresse identifiziert keine Person und wird deshalb nicht berücksichtigt.
      *
      * @param bearbeitungshistorie zur Ermittlung der Emailadressen.
      * @return die Emailadressen ohne Duplikate.
@@ -63,6 +66,7 @@ public class Bearbeitungshistorie {
             .map(BearbeitendePerson::getEmail)
             .filter(StringUtils::isNotBlank)
             .map(email -> email.toLowerCase(Locale.ROOT))
+            .filter(email -> !AuthenticationUtils.UNAUTHENTICATED_USER.equals(email))
             .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 }

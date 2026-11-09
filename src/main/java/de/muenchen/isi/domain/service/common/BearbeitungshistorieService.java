@@ -37,7 +37,7 @@ public class BearbeitungshistorieService {
         final var statusAbfrage = BearbeitungsArt.AKTUALISIERT.equals(art) ? null : abfrage.getStatusAbfrage();
         final var bearbeitungshistorie = createBearbeitungshistorieForStatus(statusAbfrage, art);
         ergaenzen(abfrage.getBearbeitungshistorie(), bearbeitungshistorie, BearbeitungshistorieModel::getArt, eintrag ->
-            eintrag.getBearbeitendePerson().getEmail()
+            eintrag.getBearbeitendePerson() == null ? null : eintrag.getBearbeitendePerson().getEmail()
         );
         return abfrage;
     }
@@ -63,7 +63,9 @@ public class BearbeitungshistorieService {
         if (id != null) {
             historie.addAll(gespeicherteHistorie.apply(id));
         }
-        ergaenzen(historie, eintrag, Bearbeitungshistorie::getArt, e -> e.getBearbeitendePerson().getEmail());
+        ergaenzen(historie, eintrag, Bearbeitungshistorie::getArt, e ->
+            e.getBearbeitendePerson() == null ? null : e.getBearbeitendePerson().getEmail()
+        );
         return historie;
     }
 

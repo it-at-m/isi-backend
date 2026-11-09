@@ -8,6 +8,7 @@ import static org.hamcrest.Matchers.is;
 import de.muenchen.isi.infrastructure.entity.Bauleitplanverfahren;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Kinderkrippe;
+import de.muenchen.isi.security.AuthenticationUtils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -43,6 +44,13 @@ class BearbeitungshistorieTest {
             Bearbeitungshistorie.getEmails(Arrays.asList(ohnePerson, eintrag(null), eintrag("  "))),
             is(empty())
         );
+    }
+
+    @Test
+    void getEmailsIgnoriertPlatzhalterFuerNutzerOhneEmail() {
+        final var historie = List.of(eintrag(AuthenticationUtils.UNAUTHENTICATED_USER), eintrag("a@muenchen.de"));
+
+        assertThat(Bearbeitungshistorie.getEmails(historie), contains("a@muenchen.de"));
     }
 
     @Test

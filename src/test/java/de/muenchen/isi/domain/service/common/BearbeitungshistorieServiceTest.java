@@ -174,6 +174,18 @@ class BearbeitungshistorieServiceTest {
 
     @Test
     @MockCustomUser
+    void fortschreibenErgaenztBeiAktualisierungOhnePerson() {
+        final var ohnePerson = new Bearbeitungshistorie();
+        ohnePerson.setArt(BearbeitungsArt.AKTUALISIERT);
+
+        final var result = bearbeitungshistorieService.fortschreiben(UUID.randomUUID(), id -> List.of(ohnePerson));
+
+        assertThat(result, hasSize(2));
+        assertThat(result.get(0), is(ohnePerson));
+    }
+
+    @Test
+    @MockCustomUser
     void fortschreibenErsetztErstellungNicht() {
         final var erstellt = eintrag(BearbeitungsArt.ERSTELLT, "rob@example.com");
 
