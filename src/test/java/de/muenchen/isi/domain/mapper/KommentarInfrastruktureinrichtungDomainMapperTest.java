@@ -3,6 +3,7 @@ package de.muenchen.isi.domain.mapper;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.model.common.KommentarInfrastruktureinrichtungModel;
@@ -10,7 +11,6 @@ import de.muenchen.isi.infrastructure.entity.common.Kommentar;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Kinderkrippe;
 import de.muenchen.isi.infrastructure.repository.InfrastruktureinrichtungRepository;
 import java.lang.reflect.Field;
-import java.util.Optional;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -62,8 +62,9 @@ class KommentarInfrastruktureinrichtungDomainMapperTest {
         kommentarModel = new KommentarInfrastruktureinrichtungModel();
         kommentarModel.setInfrastruktureinrichtung(uuidInfrastruktureinrichtung);
 
-        Mockito.when(this.infrastruktureinrichtungRepository.findById(uuidInfrastruktureinrichtung)).thenReturn(
-            Optional.of(infrastruktureinrichtung)
+        Mockito.when(this.infrastruktureinrichtungRepository.existsById(uuidInfrastruktureinrichtung)).thenReturn(true);
+        Mockito.when(this.infrastruktureinrichtungRepository.getReferenceById(uuidInfrastruktureinrichtung)).thenReturn(
+            infrastruktureinrichtung
         );
 
         kommentarInfrastruktureinrichtungDomainMapper.afterMappingModel2Entity(kommentarModel, kommentar);
@@ -71,7 +72,28 @@ class KommentarInfrastruktureinrichtungDomainMapperTest {
         assertThat(kommentar.getBauvorhaben(), is(nullValue()));
         assertThat(kommentar.getInfrastruktureinrichtung(), is(infrastruktureinrichtung));
 
-        Mockito.verify(this.infrastruktureinrichtungRepository, Mockito.times(1)).findById(
+        Mockito.verify(this.infrastruktureinrichtungRepository, Mockito.times(1)).existsById(
+            uuidInfrastruktureinrichtung
+        );
+        Mockito.verify(this.infrastruktureinrichtungRepository, Mockito.times(1)).getReferenceById(
+            uuidInfrastruktureinrichtung
+        );
+        Mockito.verify(this.infrastruktureinrichtungRepository, Mockito.times(0)).findById(
+            uuidInfrastruktureinrichtung
+        );
+        Mockito.reset(this.infrastruktureinrichtungRepository);
+
+        Mockito.when(this.infrastruktureinrichtungRepository.existsById(uuidInfrastruktureinrichtung)).thenReturn(
+            false
+        );
+
+        final var finalKommentar = new Kommentar();
+        final var finalKommentarModel = kommentarModel;
+        final var exception = assertThrows(EntityNotFoundException.class, () ->
+            kommentarInfrastruktureinrichtungDomainMapper.afterMappingModel2Entity(finalKommentarModel, finalKommentar)
+        );
+        assertThat(exception.getMessage(), is("Infrastruktureinrichtung für den Kommentar nicht gefunden"));
+        Mockito.verify(this.infrastruktureinrichtungRepository, Mockito.times(0)).getReferenceById(
             uuidInfrastruktureinrichtung
         );
     }

@@ -14,6 +14,7 @@ import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.Normalizer;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Enumeration;
@@ -194,14 +195,20 @@ public class NfcRequest extends HttpServletRequestWrapper implements HttpServlet
     public ServletInputStream getInputStream() throws IOException {
         final String encoding = getOriginalRequest().getCharacterEncoding();
 
-        String content = null;
+        final byte[] contentBytes;
         try (final InputStream is = getOriginalRequest().getInputStream()) {
-            content = new String(IOUtils.toByteArray(is), encoding);
+            contentBytes = IOUtils.toByteArray(is);
+        }
+        final String content = new String(contentBytes, encoding);
+
+        // Ist der Inhalt bereits in NFC, werden die Originalbytes weiterverwendet, um weitere Kopien des Bodys zu vermeiden.
+        if (Normalizer.isNormalized(content, Normalizer.Form.NFC)) {
+            return new NfcServletInputStream(new ByteArrayInputStream(contentBytes));
         }
 
         log.debug("Converting InputStream data to NFC.");
         final String nfcConvertedContent = NfcHelper.nfcConverter(content);
-        return new NfcServletInputStream(new ByteArrayInputStream(nfcConvertedContent.getBytes()));
+        return new NfcServletInputStream(new ByteArrayInputStream(nfcConvertedContent.getBytes(encoding)));
     }
 
     private HttpServletRequest getOriginalRequest() {
