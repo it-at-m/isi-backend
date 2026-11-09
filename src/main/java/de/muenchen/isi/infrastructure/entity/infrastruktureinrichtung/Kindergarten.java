@@ -49,7 +49,7 @@ public class Kindergarten extends Infrastruktureinrichtung {
     @Column
     private String nameTraeger;
 
-    @Column
+    @Column(name = "gesamtplaetze_nach_be")
     private Integer gesamtplaetzeNachBE;
 
     @Column(name = "kindergartenplaetze_nach_be")

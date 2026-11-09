@@ -52,7 +52,7 @@ public class Kinderkrippe extends Infrastruktureinrichtung {
     @Column
     private String nameTraeger;
 
-    @Column
+    @Column(name = "gesamtplaetze_nach_be")
     private Integer gesamtplaetzeNachBE;
 
     @Column(name = "kinderkrippenplaetze_nach_be")
