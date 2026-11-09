@@ -340,7 +340,12 @@ public class AbfrageStatusService {
         this.throwStringLengthExceededExceptionWhenAnmerkungExceedsLength(abfrage, anmerkung);
         additionalChanges.accept(abfrage);
         final StateMachine<StatusAbfrage, StatusAbfrageEvents> stateMachine = this.build(abfrage, anmerkung);
-        this.sendEvent(event, stateMachine);
+        try {
+            this.sendEvent(event, stateMachine);
+        } finally {
+            // Die pro Statusänderung erstellte StateMachine samt Interceptor (hält die Abfrage) wird wieder freigegeben.
+            stateMachine.stopReactively().block();
+        }
     }
 
     /**

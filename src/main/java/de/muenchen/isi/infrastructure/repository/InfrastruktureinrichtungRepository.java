@@ -5,6 +5,7 @@
 package de.muenchen.isi.infrastructure.repository;
 
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Infrastruktureinrichtung;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Stream;
@@ -14,6 +15,18 @@ import org.springframework.data.repository.query.Param;
 
 public interface InfrastruktureinrichtungRepository extends JpaRepository<Infrastruktureinrichtung, UUID> {
     Stream<Infrastruktureinrichtung> findAllByBauvorhabenId(final UUID id);
+
+    /**
+     * Ermittelt ausschließlich die Namen der Infrastruktureinrichtungen eines Bauvorhabens, ohne die
+     * Infrastruktureinrichtungen samt Abhängigkeiten zu laden.
+     *
+     * @param bauvorhabenId des Bauvorhabens
+     * @return die Namen der Infrastruktureinrichtungen, welche das Bauvorhaben referenzieren.
+     */
+    @Query(
+        "SELECT infrastruktureinrichtung.nameEinrichtung FROM Infrastruktureinrichtung infrastruktureinrichtung WHERE infrastruktureinrichtung.bauvorhaben.id = :bauvorhabenId"
+    )
+    List<String> findNamesEinrichtungByBauvorhabenId(@Param("bauvorhabenId") final UUID bauvorhabenId);
 
     /**
      * Liefert ausschließlich den Ersteller, ohne die vollständige Infrastruktureinrichtung samt Verortung zu laden.

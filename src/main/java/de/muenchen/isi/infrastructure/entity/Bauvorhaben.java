@@ -153,7 +153,7 @@ public class Bauvorhaben extends BaseEntity {
      * zur einheitlichen entitätsübergreifenden Sortierung der Suchergebnisse.
      */
     @KeywordField(name = "name_sort", sortable = Sortable.YES, normalizer = "lowercase")
-    @FullTextField
+    @FullTextField(analyzer = "isi_text_analyzer")
     @NonStandardField(
         name = "nameVorhaben" + SearchwordSuggesterRepository.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
         valueBinder = @ValueBinderRef(type = StringSuggestionBinder.class)
@@ -178,7 +178,7 @@ public class Bauvorhaben extends BaseEntity {
     @Column(length = 1000)
     private String verfahrensstandFreieEingabe;
 
-    @FullTextField
+    @FullTextField(analyzer = "isi_text_analyzer")
     @NonStandardField(
         name = "bauvorhabenNummer" + SearchwordSuggesterRepository.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
         valueBinder = @ValueBinderRef(type = StringSuggestionBinder.class)
@@ -249,7 +249,7 @@ public class Bauvorhaben extends BaseEntity {
         return this.verortung;
     }
 
-    @FullTextField
+    @FullTextField(analyzer = "isi_text_analyzer")
     @NonStandardField(
         name = "bebauungsplannummer" + SearchwordSuggesterRepository.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
         valueBinder = @ValueBinderRef(type = StringSuggestionBinder.class)
@@ -293,7 +293,7 @@ public class Bauvorhaben extends BaseEntity {
     @JoinColumn(name = "bauvorhaben_id")
     private List<Dokument> dokumente;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "relevante_abfragevariante_id")
     private Abfragevariante relevanteAbfragevariante;
 }

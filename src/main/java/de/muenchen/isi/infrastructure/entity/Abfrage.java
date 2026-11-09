@@ -18,6 +18,7 @@ import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Index;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
@@ -106,7 +107,7 @@ public abstract class Abfrage extends BaseEntity {
     }
 
     @KeywordField(name = "name_sort", sortable = Sortable.YES, normalizer = "lowercase")
-    @FullTextField
+    @FullTextField(analyzer = "isi_text_analyzer")
     @NonStandardField(
         name = "name" + SearchwordSuggesterRepository.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
         valueBinder = @ValueBinderRef(type = StringSuggestionBinder.class)
@@ -127,7 +128,7 @@ public abstract class Abfrage extends BaseEntity {
     @Column(length = 2000)
     private String anmerkung;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Bauvorhaben bauvorhaben;
 
     /**

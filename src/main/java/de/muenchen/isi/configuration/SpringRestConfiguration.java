@@ -35,7 +35,9 @@ public class SpringRestConfiguration implements RepositoryRestConfigurer {
         final RepositoryRestConfiguration config,
         final CorsRegistry corsRegistry
     ) {
-        config.setRepositoryDetectionStrategy(RepositoryDetectionStrategies.DEFAULT);
+        // Es werden nur explizit mit @RepositoryRestResource annotierte Repositories als REST-Endpunkte exportiert.
+        // Aktuell ist das keines, da alle Endpunkte über eigene Controller bereitgestellt werden.
+        config.setRepositoryDetectionStrategy(RepositoryDetectionStrategies.ANNOTATED);
     }
 
     /**

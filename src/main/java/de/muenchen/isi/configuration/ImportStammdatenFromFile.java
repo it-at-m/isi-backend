@@ -5,14 +5,12 @@ import de.muenchen.isi.domain.exception.FileImportFailedException;
 import de.muenchen.isi.domain.service.stammdaten.StammdatenImportService;
 import de.muenchen.isi.infrastructure.repository.stammdaten.SobonOrientierungswertSozialeInfrastrukturRepository;
 import de.muenchen.isi.infrastructure.repository.stammdaten.StaedtebaulicheOrientierungswertRepository;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.ListUtils;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.BooleanUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
@@ -68,8 +66,8 @@ public class ImportStammdatenFromFile implements CommandLineRunner {
     public void run(String... args) throws CsvAttributeErrorException, FileImportFailedException, IOException {
         if (BooleanUtils.isTrue(importCsvFiles)) {
             log.info("START IMPORT SOBON STAMMDATEN");
-            this.sobonOrientierungswertSozialeInfrastrukturRepository.deleteAll();
-            this.staedtebaulicheOrientierungswertRepository.deleteAll();
+            this.sobonOrientierungswertSozialeInfrastrukturRepository.deleteAllInBatch();
+            this.staedtebaulicheOrientierungswertRepository.deleteAllInBatch();
             for (final var csvFile : this.csvSobonOrientierungswertSozialeInfrastruktur) {
                 this.addSobonOrientierungswerteSozialeInfrastruktur(csvFile);
                 log.info("Stammdaten zu {} importiert", csvFile);
@@ -113,16 +111,13 @@ public class ImportStammdatenFromFile implements CommandLineRunner {
     }
 
     /**
-     * Erstellt einen FileInputStream aus der angegebenen Datei.
+     * Erstellt einen InputStream aus der angegebenen Datei im Classpath.
      *
      * @param filePath Der Dateipfad zur CSV-Datei.
-     * @return den FileInputStream der CSV-Datei.
+     * @return den InputStream der CSV-Datei.
      * @throws IOException sobald ein Fehler beim Lesen der Datei auftritt.
      */
-    public FileInputStream createFileInputStream(String filePath) throws IOException {
-        final var inputStream = new ClassPathResource(filePath).getInputStream();
-        final var tempFile = File.createTempFile("tempfile", ".tmp");
-        FileUtils.copyInputStreamToFile(inputStream, tempFile);
-        return new FileInputStream(tempFile);
+    public InputStream createFileInputStream(String filePath) throws IOException {
+        return new ClassPathResource(filePath).getInputStream();
     }
 }

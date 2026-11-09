@@ -36,6 +36,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import jakarta.persistence.ManyToOne;
@@ -190,7 +191,7 @@ public abstract class Infrastruktureinrichtung extends BaseEntity {
     @Column(name = "lfdNr", columnDefinition = "serial", updatable = false)
     private Long lfdNr;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Bauvorhaben bauvorhaben;
 
     @IndexedEmbedded
@@ -261,7 +262,7 @@ public abstract class Infrastruktureinrichtung extends BaseEntity {
      * zur einheitlichen entitätsübergreifenden Sortierung der Suchergebnisse.
      */
     @KeywordField(name = "name_sort", sortable = Sortable.YES, normalizer = "lowercase")
-    @FullTextField
+    @FullTextField(analyzer = "isi_text_analyzer")
     @NonStandardField(
         name = "nameEinrichtung" + SearchwordSuggesterRepository.ATTRIBUTE_SUFFIX_SEARCHWORD_SUGGESTION,
         valueBinder = @ValueBinderRef(type = StringSuggestionBinder.class)

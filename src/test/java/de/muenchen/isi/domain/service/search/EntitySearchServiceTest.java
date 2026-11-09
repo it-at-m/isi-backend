@@ -330,4 +330,42 @@ class EntitySearchServiceTest {
             is(SortAttribute.CREATED_DATE_TIME)
         );
     }
+
+    @Test
+    void createAdaptedSearchQuerySplitsOnUnderscore() {
+        var searchQuery = "_test_fall";
+        var result = entitySearchService.createAdaptedSearchQueryForSimpleQueryStringSearch(searchQuery);
+        // Wird erwarten, dass Underscores (_) als Trennzeichen betrachtet werden und somit nach "test" und "fall" gesucht wird
+        assertThat(result, is("test* fall*"));
+
+        searchQuery = "abc_test";
+        result = entitySearchService.createAdaptedSearchQueryForSimpleQueryStringSearch(searchQuery);
+        assertThat(result, is("abc* test*"));
+    }
+
+    @Test
+    void tokenizeAccordingUnicodeAnnex29HandlesUnderscoreAsSeparatorInAdaptation() {
+        var searchQuery = "_leading_test";
+        var result = entitySearchService.createAdaptedSearchQueryForSimpleQueryStringSearch(searchQuery);
+        assertThat(result, is("leading* test*"));
+
+        searchQuery = "trailing_test_";
+        result = entitySearchService.createAdaptedSearchQueryForSimpleQueryStringSearch(searchQuery);
+        assertThat(result, is("trailing* test*"));
+    }
+
+    @Test
+    void tokenizeAccordingUnicodeAnnex29_preservesCaseAndSplitsOnUnderscoreAndWhitespace() {
+        final List<String> tokens = entitySearchService.tokenizeAccordingUnicodeAnnex29("TeSt_Nord Süd");
+        assertThat(tokens.size(), is(3));
+        assertThat(tokens.get(0), is("TeSt"));
+        assertThat(tokens.get(1), is("Nord"));
+        assertThat(tokens.get(2), is("Süd"));
+    }
+
+    @Test
+    void createAdaptedSearchQueryForSimpleQueryStringSearch_appendsWildcardsAndPreservesCase() {
+        final String adapted = entitySearchService.createAdaptedSearchQueryForSimpleQueryStringSearch("TeSt_Nord Süd");
+        assertThat(adapted, is("TeSt* Nord* Süd*"));
+    }
 }
