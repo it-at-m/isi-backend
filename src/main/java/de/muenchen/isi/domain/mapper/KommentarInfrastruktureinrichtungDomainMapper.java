@@ -34,14 +34,15 @@ public abstract class KommentarInfrastruktureinrichtungDomainMapper {
         @MappingTarget final Kommentar entity
     ) throws EntityNotFoundException {
         if (ObjectUtils.isNotEmpty(model.getInfrastruktureinrichtung())) {
-            final var infastruktureinrichtung = infrastruktureinrichtungRepository
-                .findById(model.getInfrastruktureinrichtung())
-                .orElseThrow(() -> {
-                    final var message = "Infrastruktureinrichtung für den Kommentar nicht gefunden";
-                    log.error(message);
-                    return new EntityNotFoundException(message);
-                });
-            entity.setInfrastruktureinrichtung(infastruktureinrichtung);
+            // Es wird nur eine Referenz gesetzt, um nicht den gesamten Objektgraphen der referenzierten Entität zu laden.
+            if (!infrastruktureinrichtungRepository.existsById(model.getInfrastruktureinrichtung())) {
+                final var message = "Infrastruktureinrichtung für den Kommentar nicht gefunden";
+                log.error(message);
+                throw new EntityNotFoundException(message);
+            }
+            entity.setInfrastruktureinrichtung(
+                infrastruktureinrichtungRepository.getReferenceById(model.getInfrastruktureinrichtung())
+            );
         }
     }
 }

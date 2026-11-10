@@ -3,13 +3,13 @@ package de.muenchen.isi.domain.service.email;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
+import de.muenchen.isi.infrastructure.entity.Abfrage;
 import de.muenchen.isi.infrastructure.entity.Baugenehmigungsverfahren;
 import de.muenchen.isi.infrastructure.repository.AbfrageRepository;
 import de.muenchen.isi.infrastructure.repository.email.MailSenderRepository;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Stream;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -62,7 +62,7 @@ class SendKommentarBauvorhabenNotificationServiceTest {
     @Test
     void sendKommentarBauvorhabenNotification_versendetEmailMitKorrektemInhalt() {
         final var bauvorhabenId = UUID.randomUUID();
-        Mockito.when(abfrageRepository.findAllByBauvorhabenId(bauvorhabenId)).thenReturn(Stream.empty());
+        Mockito.when(abfrageRepository.findIdsAndNamesByBauvorhabenId(bauvorhabenId)).thenReturn(List.of());
 
         service.sendKommentarBauvorhabenNotification(
             bauvorhabenId,
@@ -93,7 +93,7 @@ class SendKommentarBauvorhabenNotificationServiceTest {
     @Test
     void sendKommentarBauvorhabenNotification_versendetEmailBeiAktualisierung() {
         final var bauvorhabenId = UUID.randomUUID();
-        Mockito.when(abfrageRepository.findAllByBauvorhabenId(bauvorhabenId)).thenReturn(Stream.empty());
+        Mockito.when(abfrageRepository.findIdsAndNamesByBauvorhabenId(bauvorhabenId)).thenReturn(List.of());
 
         service.sendKommentarBauvorhabenNotification(
             bauvorhabenId,
@@ -154,7 +154,9 @@ class SendKommentarBauvorhabenNotificationServiceTest {
         abfrage2.setId(abfrageId2);
         abfrage2.setName("Abfrage Beta");
 
-        Mockito.when(abfrageRepository.findAllByBauvorhabenId(bauvorhabenId)).thenReturn(Stream.of(abfrage1, abfrage2));
+        Mockito.when(abfrageRepository.findIdsAndNamesByBauvorhabenId(bauvorhabenId)).thenReturn(
+            List.of(idAndName(abfrage1), idAndName(abfrage2))
+        );
 
         service.sendKommentarBauvorhabenNotification(
             bauvorhabenId,
@@ -193,7 +195,7 @@ class SendKommentarBauvorhabenNotificationServiceTest {
     @Test
     void buildEmailText_ohneUrl() {
         final var bauvorhabenId = UUID.randomUUID();
-        Mockito.when(abfrageRepository.findAllByBauvorhabenId(bauvorhabenId)).thenReturn(Stream.empty());
+        Mockito.when(abfrageRepository.findIdsAndNamesByBauvorhabenId(bauvorhabenId)).thenReturn(List.of());
 
         final var result = serviceOhneUrl.buildEmailText(
             bauvorhabenId,
@@ -218,7 +220,7 @@ class SendKommentarBauvorhabenNotificationServiceTest {
     @Test
     void buildEmailText_mitNullWerten() {
         final var bauvorhabenId = UUID.randomUUID();
-        Mockito.when(abfrageRepository.findAllByBauvorhabenId(bauvorhabenId)).thenReturn(Stream.empty());
+        Mockito.when(abfrageRepository.findIdsAndNamesByBauvorhabenId(bauvorhabenId)).thenReturn(List.of());
 
         final var result = service.buildEmailText(bauvorhabenId, null, null, null, true);
 
@@ -238,7 +240,7 @@ class SendKommentarBauvorhabenNotificationServiceTest {
     @Test
     void buildEmailText_beiAktualisierung() {
         final var bauvorhabenId = UUID.randomUUID();
-        Mockito.when(abfrageRepository.findAllByBauvorhabenId(bauvorhabenId)).thenReturn(Stream.empty());
+        Mockito.when(abfrageRepository.findIdsAndNamesByBauvorhabenId(bauvorhabenId)).thenReturn(List.of());
 
         final var result = service.buildEmailText(
             bauvorhabenId,
@@ -270,7 +272,7 @@ class SendKommentarBauvorhabenNotificationServiceTest {
     @Test
     void buildAbfragenText_keineAbfragen() {
         final var bauvorhabenId = UUID.randomUUID();
-        Mockito.when(abfrageRepository.findAllByBauvorhabenId(bauvorhabenId)).thenReturn(Stream.empty());
+        Mockito.when(abfrageRepository.findIdsAndNamesByBauvorhabenId(bauvorhabenId)).thenReturn(List.of());
 
         final var result = service.buildAbfragenText(bauvorhabenId);
         assertThat(result, is(""));
@@ -285,7 +287,9 @@ class SendKommentarBauvorhabenNotificationServiceTest {
         abfrage.setId(abfrageId);
         abfrage.setName("Abfrage Alpha");
 
-        Mockito.when(abfrageRepository.findAllByBauvorhabenId(bauvorhabenId)).thenReturn(Stream.of(abfrage));
+        Mockito.when(abfrageRepository.findIdsAndNamesByBauvorhabenId(bauvorhabenId)).thenReturn(
+            List.of(idAndName(abfrage))
+        );
 
         final var result = service.buildAbfragenText(bauvorhabenId);
 
@@ -301,7 +305,9 @@ class SendKommentarBauvorhabenNotificationServiceTest {
         abfrage.setId(abfrageId);
         abfrage.setName("Abfrage Alpha");
 
-        Mockito.when(abfrageRepository.findAllByBauvorhabenId(bauvorhabenId)).thenReturn(Stream.of(abfrage));
+        Mockito.when(abfrageRepository.findIdsAndNamesByBauvorhabenId(bauvorhabenId)).thenReturn(
+            List.of(idAndName(abfrage))
+        );
 
         final var result = serviceOhneUrl.buildAbfragenText(bauvorhabenId);
 
@@ -322,7 +328,9 @@ class SendKommentarBauvorhabenNotificationServiceTest {
         abfrage2.setId(abfrageId2);
         abfrage2.setName("Abfrage Beta");
 
-        Mockito.when(abfrageRepository.findAllByBauvorhabenId(bauvorhabenId)).thenReturn(Stream.of(abfrage1, abfrage2));
+        Mockito.when(abfrageRepository.findIdsAndNamesByBauvorhabenId(bauvorhabenId)).thenReturn(
+            List.of(idAndName(abfrage1), idAndName(abfrage2))
+        );
 
         final var result = service.buildAbfragenText(bauvorhabenId);
 
@@ -340,5 +348,19 @@ class SendKommentarBauvorhabenNotificationServiceTest {
                     abfrageId2
             )
         );
+    }
+
+    private static AbfrageRepository.AbfrageIdAndName idAndName(final Abfrage abfrage) {
+        return new AbfrageRepository.AbfrageIdAndName() {
+            @Override
+            public UUID getId() {
+                return abfrage.getId();
+            }
+
+            @Override
+            public String getName() {
+                return abfrage.getName();
+            }
+        };
     }
 }
