@@ -644,6 +644,12 @@ class AbfrageServiceTest {
         Mockito.when(this.bauvorhabenRepository.findById(bauleitplanverfahrenModel.getBauvorhaben())).thenReturn(
             Optional.of(bauvorhabenEntity)
         );
+        Mockito.when(this.bauvorhabenRepository.existsById(bauleitplanverfahrenModel.getBauvorhaben())).thenReturn(
+            true
+        );
+        Mockito.when(
+            this.bauvorhabenRepository.getReferenceById(bauleitplanverfahrenModel.getBauvorhaben())
+        ).thenReturn(bauvorhabenEntity);
         Mockito.when(this.abfrageRepository.saveAndFlush(entityToSave)).thenReturn(entitySaved);
 
         final var result = this.abfrageService.patchStartBearbeitung(requestModel, uuid);
@@ -762,6 +768,12 @@ class AbfrageServiceTest {
         Mockito.when(this.bauvorhabenRepository.findById(baugenehmigungsverfahrenModel.getBauvorhaben())).thenReturn(
             Optional.of(bauvorhabenEntity)
         );
+        Mockito.when(this.bauvorhabenRepository.existsById(baugenehmigungsverfahrenModel.getBauvorhaben())).thenReturn(
+            true
+        );
+        Mockito.when(
+            this.bauvorhabenRepository.getReferenceById(baugenehmigungsverfahrenModel.getBauvorhaben())
+        ).thenReturn(bauvorhabenEntity);
         Mockito.when(this.abfrageRepository.saveAndFlush(entityToSave)).thenReturn(entitySaved);
 
         final var result = this.abfrageService.patchStartBearbeitung(requestModel, uuid);
@@ -876,6 +888,10 @@ class AbfrageServiceTest {
 
         Mockito.when(this.bauvorhabenRepository.findById(weiteresVerfahrenModel.getBauvorhaben())).thenReturn(
             Optional.of(bauvorhabenEntity)
+        );
+        Mockito.when(this.bauvorhabenRepository.existsById(weiteresVerfahrenModel.getBauvorhaben())).thenReturn(true);
+        Mockito.when(this.bauvorhabenRepository.getReferenceById(weiteresVerfahrenModel.getBauvorhaben())).thenReturn(
+            bauvorhabenEntity
         );
         Mockito.when(this.abfrageRepository.saveAndFlush(entityToSave)).thenReturn(entitySaved);
 
@@ -3251,6 +3267,8 @@ class AbfrageServiceTest {
         Mockito.when(this.bauvorhabenRepository.findById(bauvorhaben.getId())).thenReturn(
             Optional.of(bauvorhabenEntity)
         );
+        Mockito.when(this.bauvorhabenRepository.existsById(bauvorhaben.getId())).thenReturn(true);
+        Mockito.when(this.bauvorhabenRepository.getReferenceById(bauvorhaben.getId())).thenReturn(bauvorhabenEntity);
         Mockito.when(this.authenticationUtils.getUserRoles()).thenReturn(List.of(roles));
         Mockito.when(this.authenticationUtils.getUserSub()).thenReturn(sub);
 
@@ -3384,6 +3402,10 @@ class AbfrageServiceTest {
 
         Mockito.when(this.bauvorhabenRepository.findById(bauvorhabenEntity.getId())).thenReturn(
             Optional.of(bauvorhabenEntity)
+        );
+        Mockito.when(this.bauvorhabenRepository.existsById(bauvorhabenEntity.getId())).thenReturn(true);
+        Mockito.when(this.bauvorhabenRepository.getReferenceById(bauvorhabenEntity.getId())).thenReturn(
+            bauvorhabenEntity
         );
         Assertions.assertThrows(EntityIsReferencedException.class, () ->
             this.abfrageService.throwEntityIsReferencedExceptionWhenAbfrageIsReferencingBauvorhaben(abfrage)

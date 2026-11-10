@@ -163,7 +163,7 @@ public class AbfragevarianteBauleitplanverfahren extends Abfragevariante {
     @Column(length = 2000)
     private String anmerkungBauratendateiInput;
 
-    @OneToOne(cascade = { CascadeType.ALL }, orphanRemoval = true)
+    @OneToOne(cascade = { CascadeType.ALL }, orphanRemoval = true, fetch = FetchType.LAZY)
     @JoinColumn(name = "bauratendatei_basis_id", referencedColumnName = "id")
     private BauratendateiInput bauratendateiInputBasis;
 

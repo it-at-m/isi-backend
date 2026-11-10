@@ -14,6 +14,7 @@ import de.muenchen.isi.infrastructure.repository.common.KommentarRepository;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
@@ -41,10 +42,13 @@ public class KommentarService {
      * @return die Kommentare sortiert nach absteigenden Erstellungsdatum.
      */
     public List<KommentarBauvorhabenModel> getKommentareForBauvorhaben(final UUID bauvorhabenId) {
-        return kommentarRepository
-            .findAllByBauvorhabenIdOrderByCreatedDateTimeDesc(bauvorhabenId)
-            .map(kommentarBauvorhabenMapper::entity2Model)
-            .collect(Collectors.toList());
+        try (
+            final Stream<Kommentar> kommentare = kommentarRepository.findAllByBauvorhabenIdOrderByCreatedDateTimeDesc(
+                bauvorhabenId
+            )
+        ) {
+            return kommentare.map(kommentarBauvorhabenMapper::entity2Model).collect(Collectors.toList());
+        }
     }
 
     /**
@@ -56,10 +60,14 @@ public class KommentarService {
     public List<KommentarInfrastruktureinrichtungModel> getKommentareForInfrastruktureinrichtung(
         final UUID infrastruktureinrichtungId
     ) {
-        return kommentarRepository
-            .findAllByInfrastruktureinrichtungIdOrderByCreatedDateTimeDesc(infrastruktureinrichtungId)
-            .map(kommentarInfrastruktureinrichtungMapper::entity2Model)
-            .collect(Collectors.toList());
+        try (
+            final Stream<Kommentar> kommentare =
+                kommentarRepository.findAllByInfrastruktureinrichtungIdOrderByCreatedDateTimeDesc(
+                    infrastruktureinrichtungId
+                )
+        ) {
+            return kommentare.map(kommentarInfrastruktureinrichtungMapper::entity2Model).collect(Collectors.toList());
+        }
     }
 
     /**
@@ -165,7 +173,6 @@ public class KommentarService {
      */
     public KommentarBauvorhabenModel updateKommentarForBauvorhaben(final KommentarBauvorhabenModel kommentar)
         throws EntityNotFoundException, OptimisticLockingException, FileHandlingFailedException {
-        this.getKommentarForBauvorhabenById(kommentar.getId());
         final var orignalKommentar = this.getKommentarForBauvorhabenById(kommentar.getId());
         dokumentService.deleteDokumenteFromOriginalDokumentenListWhichAreMissingInParameterAdaptedDokumentenListe(
             kommentar.getDokumente(),
@@ -185,7 +192,6 @@ public class KommentarService {
     public KommentarInfrastruktureinrichtungModel updateKommentarForInfrastruktureinrichtung(
         final KommentarInfrastruktureinrichtungModel kommentar
     ) throws EntityNotFoundException, OptimisticLockingException, FileHandlingFailedException {
-        this.getKommentarForInfrastruktureinrichtungById(kommentar.getId());
         final var orignalKommentar = this.getKommentarForInfrastruktureinrichtungById(kommentar.getId());
         dokumentService.deleteDokumenteFromOriginalDokumentenListWhichAreMissingInParameterAdaptedDokumentenListe(
             kommentar.getDokumente(),
