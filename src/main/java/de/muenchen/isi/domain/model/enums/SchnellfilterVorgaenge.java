@@ -13,6 +13,7 @@ public enum SchnellfilterVorgaenge {
     ZUR_KENNTNIS,
     ABGESCHLOSSEN,
     // Schnellfilter der Startseite für die Sachbearbeitung
+    ANGELEGT,
     UEBERMITTELT_ZUR_BEARBEITUNG,
     START_BEARBEITUNG,
     EINPFLEGEN_BEDARFSMELDUNG,
