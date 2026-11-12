@@ -7,7 +7,9 @@ import de.muenchen.isi.IsiBackendApplication;
 import de.muenchen.isi.TestConstants;
 import de.muenchen.isi.domain.model.enums.SortAttribute;
 import de.muenchen.isi.domain.model.search.request.SearchQueryAndSortingModel;
+import java.util.List;
 import org.hibernate.search.engine.search.sort.dsl.SortOrder;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,6 +76,34 @@ class SearchSortierungIntegrationTest {
         query.setPageSize(10);
         query.setSortBy(SortAttribute.FRIST_BEARBEITUNG);
         query.setSortOrder(sortOrder);
+
+        assertThat(entitySearchService.searchForEntities(query).getSearchResults(), empty());
+    }
+
+    /**
+     * Der Stadtbezirksfilter muss auch für Infrastruktureinrichtungen allein funktionieren. Fehlt das Indexfeld in
+     * allen durchsuchten Indizes, bricht Hibernate Search die Suche ab.
+     */
+    @Test
+    @Transactional
+    void filtertInfrastruktureinrichtungenNachStadtbezirk() throws Exception {
+        final var query = new SearchQueryAndSortingModel();
+        query.setSelectBauleitplanverfahren(false);
+        query.setSelectBaugenehmigungsverfahren(false);
+        query.setSelectWeiteresVerfahren(false);
+        query.setSelectBauvorhaben(false);
+        query.setSelectGrundschule(true);
+        query.setSelectGsNachmittagBetreuung(false);
+        query.setSelectHausFuerKinder(false);
+        query.setSelectKindergarten(false);
+        query.setSelectKinderkrippe(true);
+        query.setSelectMittelschule(false);
+        query.setSelectNachbarschaftstreff(false);
+        query.setFilterStadtbezirkNummer(List.of("06"));
+        query.setPage(1);
+        query.setPageSize(10);
+        query.setSortBy(SortAttribute.LAST_MODIFIED_DATE_TIME);
+        query.setSortOrder(SortOrder.DESC);
 
         assertThat(entitySearchService.searchForEntities(query).getSearchResults(), empty());
     }

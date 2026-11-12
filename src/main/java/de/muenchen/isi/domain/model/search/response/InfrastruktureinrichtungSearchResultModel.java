@@ -1,8 +1,10 @@
 package de.muenchen.isi.domain.model.search.response;
 
+import de.muenchen.isi.domain.model.common.StadtbezirkModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.AnlassPlanung;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusInfrastruktureinrichtung;
+import java.util.Set;
 import java.util.UUID;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -24,4 +26,6 @@ public class InfrastruktureinrichtungSearchResultModel extends SearchResultModel
     private String nameEinrichtung;
 
     private String zugehoerigesBauvorhaben;
+
+    private Set<StadtbezirkModel> stadtbezirke;
 }
