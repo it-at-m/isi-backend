@@ -139,8 +139,8 @@ public class EntitySearchService {
     /**
      * Diese Methode ermittelt das tatsaechlich zu verwendende Sortierattribut.
      * <p>
-     * Eine Sortierung nach {@link SortAttribute#FRIST_BEARBEITUNG} ist nur moeglich, sofern ausschliesslich Abfragen
-     * durchsucht werden, da nur deren Indizes das Attribut {@code fristBearbeitung} enthalten. Andernfalls wird auf
+     * Eine Sortierung nach {@link SortAttribute#FRIST_BEARBEITUNG} ist nur moeglich, sofern Abfragen durchsucht
+     * werden, da nur deren Indizes das Attribut {@code fristBearbeitung} enthalten. Andernfalls wird auf
      * {@link SortAttribute#LAST_MODIFIED_DATE_TIME} zurueckgefallen.
      *
      * @param searchQueryAndSortingInformation mit dem angefragten Sortierattribut.
