@@ -19,9 +19,12 @@ import de.muenchen.isi.infrastructure.entity.Baugenehmigungsverfahren;
 import de.muenchen.isi.infrastructure.entity.Bauleitplanverfahren;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
 import de.muenchen.isi.infrastructure.entity.WeiteresVerfahren;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.security.AuthenticationUtils;
 import java.util.HashMap;
 import java.util.List;
+import org.hibernate.search.engine.search.predicate.dsl.SearchPredicateFactory;
+import org.hibernate.search.engine.search.predicate.dsl.SimpleBooleanPredicateClausesCollector;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -60,6 +63,30 @@ class EntitySearchServiceTest {
         service.prepareFilterGemeinsameAttribute(filter, query);
 
         assertThat(filter.get(BaseEntity.INDEX_FIELD_BEARBEITER_EMAIL), is(List.of("bearbeiter@muenchen.de")));
+    }
+
+    /**
+     * Die Wirkung der Einschränkung für Anwender auf die Suchergebnisse prüft {@link SearchAnwenderIntegrationTest}.
+     */
+    @Test
+    void createFilterAbfragenFuerAnwenderOhneEinschraenkungFuerAndereRollen() {
+        final var authentifizierung = Mockito.mock(AuthenticationUtils.class);
+        Mockito.when(authentifizierung.isOnlyRoleAnwender()).thenReturn(false);
+        final var service = new EntitySearchService(searchPreparationService, searchDomainMapper, authentifizierung);
+        final var root = Mockito.mock(SimpleBooleanPredicateClausesCollector.class);
+        final var function = Mockito.mock(SearchPredicateFactory.class);
+
+        service.createFilterAbfragenFuerAnwender(root, function);
+
+        Mockito.verifyNoInteractions(root, function);
+    }
+
+    @Test
+    void statusAbfrageFuerAnwenderEntsprichtDenErledigtenAbfragen() {
+        assertThat(
+            EntitySearchService.STATUS_ABFRAGE_FUER_ANWENDER,
+            is(List.of(StatusAbfrage.ERLEDIGT_MIT_FACHREFERAT, StatusAbfrage.ERLEDIGT_OHNE_FACHREFERAT))
+        );
     }
 
     @Test
