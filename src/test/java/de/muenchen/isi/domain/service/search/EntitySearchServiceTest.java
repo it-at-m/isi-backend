@@ -20,6 +20,7 @@ import de.muenchen.isi.infrastructure.entity.Bauleitplanverfahren;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
 import de.muenchen.isi.infrastructure.entity.WeiteresVerfahren;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
+import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Grundschule;
 import de.muenchen.isi.security.AuthenticationUtils;
 import java.util.HashMap;
 import java.util.List;
@@ -359,12 +360,23 @@ class EntitySearchServiceTest {
     }
 
     @Test
-    void determineSortAttributeFristBearbeitungFaelltZurueckBeiFremdenEntitaeten() {
+    void determineSortAttributeFristBearbeitungFuerAbfragenMitAnderenEntitaeten() {
         final var model = new SearchQueryAndSortingModel();
         model.setSortBy(SortAttribute.FRIST_BEARBEITUNG);
         final var result = entitySearchService.determineSortAttribute(
             model,
             List.of(Bauleitplanverfahren.class, Bauvorhaben.class)
+        );
+        assertThat(result, is(SortAttribute.FRIST_BEARBEITUNG));
+    }
+
+    @Test
+    void determineSortAttributeFristBearbeitungFaelltZurueckOhneAbfragen() {
+        final var model = new SearchQueryAndSortingModel();
+        model.setSortBy(SortAttribute.FRIST_BEARBEITUNG);
+        final var result = entitySearchService.determineSortAttribute(
+            model,
+            List.of(Bauvorhaben.class, Grundschule.class)
         );
         assertThat(result, is(SortAttribute.LAST_MODIFIED_DATE_TIME));
     }
