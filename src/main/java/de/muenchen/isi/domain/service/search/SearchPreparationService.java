@@ -226,16 +226,17 @@ public class SearchPreparationService {
      * Diese Methode prueft, ob fuer die im Parameter gegebenen Entitaetsklassen nach der Bearbeitungsfrist
      * sortiert werden kann.
      * <p>
-     * Das Indexfeld {@code fristBearbeitung} existiert ausschliesslich in den Indizes der Abfragen. Befindet sich
-     * eine andere Entitaet im Suchscope, so ist eine Sortierung nach diesem Attribut nicht moeglich.
+     * Das Indexfeld {@code fristBearbeitung} existiert ausschliesslich in den Indizes der Abfragen. Bei einer Suche
+     * ueber mehrere Indizes genuegt es, wenn eine Abfrage im Suchscope ist. Entitaeten ohne Bearbeitungsfrist werden
+     * dann wie Abfragen ohne Frist ans Ende sortiert.
      *
      * @param searchableEntities die zu durchsuchenden Entitaetsklassen.
-     * @return {@code true} sofern ausschliesslich Abfragen durchsucht werden, andernfalls {@code false}.
+     * @return {@code true} sofern mindestens eine Abfrage durchsucht wird, andernfalls {@code false}.
      */
     public boolean isSortableByFristBearbeitung(final List<Class<? extends BaseEntity>> searchableEntities) {
         return (
             CollectionUtils.isNotEmpty(searchableEntities) &&
-            ENTITIES_WITH_FRIST_BEARBEITUNG.containsAll(searchableEntities)
+            searchableEntities.stream().anyMatch(ENTITIES_WITH_FRIST_BEARBEITUNG::contains)
         );
     }
 }

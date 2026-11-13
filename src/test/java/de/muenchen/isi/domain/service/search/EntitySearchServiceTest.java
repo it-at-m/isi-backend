@@ -14,15 +14,19 @@ import de.muenchen.isi.domain.model.search.request.BauvorhabenInfrastruktureinri
 import de.muenchen.isi.domain.model.search.request.BauvorhabenRecord;
 import de.muenchen.isi.domain.model.search.request.InfrastrukturRecord;
 import de.muenchen.isi.domain.model.search.request.SearchQueryAndSortingModel;
+import de.muenchen.isi.infrastructure.entity.BaseEntity;
 import de.muenchen.isi.infrastructure.entity.Baugenehmigungsverfahren;
 import de.muenchen.isi.infrastructure.entity.Bauleitplanverfahren;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
 import de.muenchen.isi.infrastructure.entity.WeiteresVerfahren;
+import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Grundschule;
 import de.muenchen.isi.security.AuthenticationUtils;
+import java.util.HashMap;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
@@ -44,6 +48,29 @@ class EntitySearchServiceTest {
         searchDomainMapper,
         authenticationUtils
     );
+
+    @Test
+    void prepareFilterGemeinsameAttributeNurEigeneVorgaenge() {
+        final var authentifizierung = Mockito.mock(AuthenticationUtils.class);
+        Mockito.when(authentifizierung.getEmail()).thenReturn("Bearbeiter@Muenchen.de");
+        final var service = new EntitySearchService(searchPreparationService, searchDomainMapper, authentifizierung);
+        final var filter = new HashMap<String, List<?>>();
+        final var query = new SearchQueryAndSortingModel();
+        query.setFilterNurEigeneVorgaenge(true);
+
+        service.prepareFilterGemeinsameAttribute(filter, query);
+
+        assertThat(filter.get(BaseEntity.INDEX_FIELD_BEARBEITER_EMAIL), is(List.of("bearbeiter@muenchen.de")));
+    }
+
+    @Test
+    void prepareFilterGemeinsameAttributeOhneNurEigeneVorgaenge() {
+        final var filter = new HashMap<String, List<?>>();
+
+        entitySearchService.prepareFilterGemeinsameAttribute(filter, new SearchQueryAndSortingModel());
+
+        assertThat(filter.containsKey(BaseEntity.INDEX_FIELD_BEARBEITER_EMAIL), is(false));
+    }
 
     @Test
     void createAdaptedSearchQueryForSimpleQueryStringSearch() {
@@ -306,12 +333,23 @@ class EntitySearchServiceTest {
     }
 
     @Test
-    void determineSortAttributeFristBearbeitungFaelltZurueckBeiFremdenEntitaeten() {
+    void determineSortAttributeFristBearbeitungFuerAbfragenMitAnderenEntitaeten() {
         final var model = new SearchQueryAndSortingModel();
         model.setSortBy(SortAttribute.FRIST_BEARBEITUNG);
         final var result = entitySearchService.determineSortAttribute(
             model,
             List.of(Bauleitplanverfahren.class, Bauvorhaben.class)
+        );
+        assertThat(result, is(SortAttribute.FRIST_BEARBEITUNG));
+    }
+
+    @Test
+    void determineSortAttributeFristBearbeitungFaelltZurueckOhneAbfragen() {
+        final var model = new SearchQueryAndSortingModel();
+        model.setSortBy(SortAttribute.FRIST_BEARBEITUNG);
+        final var result = entitySearchService.determineSortAttribute(
+            model,
+            List.of(Bauvorhaben.class, Grundschule.class)
         );
         assertThat(result, is(SortAttribute.LAST_MODIFIED_DATE_TIME));
     }

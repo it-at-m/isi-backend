@@ -36,6 +36,12 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @EntityListeners(AuditingEntityListener.class)
 public abstract class BaseEntity {
 
+    /**
+     * Name des Indexfelds mit den Emailadressen aller Personen, die eine Abfrage, ein Bauvorhaben oder eine
+     * Infrastruktureinrichtung erstellt oder bearbeitet haben.
+     */
+    public static final String INDEX_FIELD_BEARBEITER_EMAIL = "bearbeiter_email";
+
     @Column(length = 36)
     @Id
     @DocumentId

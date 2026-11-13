@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import de.muenchen.isi.api.dto.BaseEntityDto;
 import de.muenchen.isi.api.dto.common.AdresseDto;
 import de.muenchen.isi.api.dto.common.BearbeitendePersonDto;
+import de.muenchen.isi.api.dto.common.BearbeitungshistorieDto;
 import de.muenchen.isi.api.dto.common.VerortungPointDto;
 import de.muenchen.isi.api.validation.EinrichtungstraegerValid;
 import de.muenchen.isi.api.validation.FertigstellungsjahrValid;
@@ -25,6 +26,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -81,6 +84,8 @@ import lombok.ToString;
 public abstract class InfrastruktureinrichtungDto extends BaseEntityDto {
 
     private BearbeitendePersonDto bearbeitendePerson;
+
+    private List<BearbeitungshistorieDto> bearbeitungshistorie = new ArrayList<>();
 
     private InfrastruktureinrichtungTyp infrastruktureinrichtungTyp;
 

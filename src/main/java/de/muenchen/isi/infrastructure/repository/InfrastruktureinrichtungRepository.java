@@ -4,6 +4,7 @@
  */
 package de.muenchen.isi.infrastructure.repository;
 
+import de.muenchen.isi.infrastructure.entity.common.Bearbeitungshistorie;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Infrastruktureinrichtung;
 import java.util.List;
 import java.util.UUID;
@@ -26,4 +27,12 @@ public interface InfrastruktureinrichtungRepository extends JpaRepository<Infras
         "SELECT infrastruktureinrichtung.nameEinrichtung FROM Infrastruktureinrichtung infrastruktureinrichtung WHERE infrastruktureinrichtung.bauvorhaben.id = :bauvorhabenId"
     )
     List<String> findNamesEinrichtungByBauvorhabenId(@Param("bauvorhabenId") final UUID bauvorhabenId);
+
+    /**
+     * Liefert ausschließlich die Bearbeitungshistorie, ohne die vollständige Entität samt Verortung zu laden.
+     */
+    @Query(
+        "SELECT h FROM Infrastruktureinrichtung e JOIN e.bearbeitungshistorie h WHERE e.id = :id ORDER BY h.zeitpunkt ASC"
+    )
+    List<Bearbeitungshistorie> findBearbeitungshistorieById(@Param("id") final UUID id);
 }

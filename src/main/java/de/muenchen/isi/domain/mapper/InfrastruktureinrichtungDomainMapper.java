@@ -52,6 +52,7 @@ public abstract class InfrastruktureinrichtungDomainMapper {
     @SubclassMapping(source = Nachbarschaftstreff.class, target = NachbarschaftstreffModel.class)
     public abstract InfrastruktureinrichtungModel entity2Model(final Infrastruktureinrichtung entity);
 
+    @Mapping(target = "emailsBearbeitendePersonen", ignore = true)
     @Mapping(target = "bauvorhaben", ignore = true)
     @SubclassMapping(source = GrundschuleModel.class, target = Grundschule.class)
     @SubclassMapping(source = GsNachmittagBetreuungModel.class, target = GsNachmittagBetreuung.class)
