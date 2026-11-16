@@ -103,6 +103,39 @@ public class InfrastruktureinrichtungController {
         return new ResponseEntity<>(saved, HttpStatus.CREATED);
     }
 
+    @PostMapping("/bedarfsmeldung_kita")
+    @Transactional(rollbackFor = OptimisticLockingException.class)
+    @Operation(summary = "Anlegen einer neuen Infrastruktureinrichtung für die Rolle Bedarfsmeldung Kita")
+    @ApiResponses(
+        value = {
+            @ApiResponse(
+                responseCode = "201",
+                description = "CREATED -> Infrastruktureinrichtung wurde erfolgreich erstellt."
+            ),
+            @ApiResponse(
+                responseCode = "400",
+                description = "BAD_REQUEST -> Infrastruktureinrichtung konnte nicht erstellt werden, überprüfen sie die Eingabe.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+            @ApiResponse(
+                responseCode = "412",
+                description = "PRECONDITION_FAILED -> In der Anwendung ist bereits eine neuere Version der Entität gespeichert.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+        }
+    )
+    @PreAuthorize(
+        "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_WRITE_INFRASTRUKTUREINRICHTUNG_BEDARFSMELDUNG_KITA.name())"
+    )
+    public ResponseEntity<InfrastruktureinrichtungDto> createInfrastruktureinrichtungBedarfsmeldungKita(
+        @RequestBody @Valid @NotNull final InfrastruktureinrichtungDto infrastruktureinrichtungDto
+    ) throws EntityNotFoundException, OptimisticLockingException, ReportingException {
+        var model = this.infrastruktureinrichtungApiMapper.dto2Model(infrastruktureinrichtungDto);
+        model = this.infrastruktureinrichtungService.saveInfrastruktureinrichtung(model);
+        final var saved = this.infrastruktureinrichtungApiMapper.model2Dto(model);
+        return new ResponseEntity<>(saved, HttpStatus.CREATED);
+    }
+
     @PostMapping("/bedarfsmeldung_sozialplanung")
     @Transactional(rollbackFor = OptimisticLockingException.class)
     @Operation(summary = "Anlegen einer neuen Infrastruktureinrichtung für die Rolle Bedarfsmeldung Sozialplanung")
@@ -174,6 +207,44 @@ public class InfrastruktureinrichtungController {
         return ResponseEntity.ok(saved);
     }
 
+    @PutMapping("/bedarfsmeldung_kita")
+    @Transactional(rollbackFor = OptimisticLockingException.class)
+    @Operation(summary = "Aktualisierung einer Infrastruktureinrichtung für die Rolle Bedarfsmeldung Kita")
+    @ApiResponses(
+        value = {
+            @ApiResponse(
+                responseCode = "200",
+                description = "OK -> Infrastruktureinrichtung wurde erfolgreich aktualisiert."
+            ),
+            @ApiResponse(
+                responseCode = "400",
+                description = "BAD_REQUEST -> Infrastruktureinrichtung konnte nicht aktualisiert werden, überprüfen sie die Eingabe.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+            @ApiResponse(
+                responseCode = "404",
+                description = "NOT_FOUND -> Es gibt keine Infrastruktureinrichtung mit der ID.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+            @ApiResponse(
+                responseCode = "412",
+                description = "PRECONDITION_FAILED -> In der Anwendung ist bereits eine neuere Version der Entität gespeichert.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+        }
+    )
+    @PreAuthorize(
+        "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_WRITE_INFRASTRUKTUREINRICHTUNG_BEDARFSMELDUNG_KITA.name())"
+    )
+    public ResponseEntity<InfrastruktureinrichtungDto> updateInfrastruktureinrichtungBedarfsmeldungKita(
+        @RequestBody @Valid @NotNull final InfrastruktureinrichtungDto infrastruktureinrichtungDto
+    ) throws EntityNotFoundException, OptimisticLockingException, ReportingException {
+        var model = this.infrastruktureinrichtungApiMapper.dto2Model(infrastruktureinrichtungDto);
+        model = this.infrastruktureinrichtungService.updateInfrastruktureinrichtung(model);
+        final var saved = this.infrastruktureinrichtungApiMapper.model2Dto(model);
+        return ResponseEntity.ok(saved);
+    }
+
     @PutMapping("/bedarfsmeldung_sozialplanung")
     @Transactional(rollbackFor = OptimisticLockingException.class)
     @Operation(summary = "Aktualisierung einer Infrastruktureinrichtung für die Rolle Bedarfsmeldung Sozialplanung")
@@ -235,6 +306,34 @@ public class InfrastruktureinrichtungController {
     )
     public ResponseEntity<Void> deleteInfrastruktureinrichtungById(@PathVariable @NotNull final UUID id)
         throws EntityNotFoundException, EntityIsReferencedException {
+        this.infrastruktureinrichtungService.deleteInfrastruktureinrichtungById(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/bedarfsmeldung_kita/{id}")
+    @Transactional
+    @Operation(summary = "Löschen einer Infrastruktureinrichtung für die Rolle Bedarfsmeldung Kita")
+    @ApiResponses(
+        value = {
+            @ApiResponse(responseCode = "204", description = "NO CONTENT"),
+            @ApiResponse(
+                responseCode = "404",
+                description = "NOT FOUND -> Infrastruktureinrichtung mit dieser ID nicht vorhanden.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+            @ApiResponse(
+                responseCode = "409",
+                description = "CONFLICT -> Die Infrastruktureinrichtung referenziert ein Bauvorhaben.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+        }
+    )
+    @PreAuthorize(
+        "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_DELETE_INFRASTRUKTUREINRICHTUNG_BEDARFSMELDUNG_KITA.name())"
+    )
+    public ResponseEntity<Void> deleteInfrastruktureinrichtungBedarfsmeldungKitaById(
+        @PathVariable @NotNull final UUID id
+    ) throws EntityNotFoundException, EntityIsReferencedException {
         this.infrastruktureinrichtungService.deleteInfrastruktureinrichtungById(id);
         return ResponseEntity.noContent().build();
     }

@@ -32,9 +32,7 @@ public class KinderkrippeDto extends InfrastruktureinrichtungDto {
     @NotUnspecified
     private UncertainBoolean sobonRelevant;
 
-    @NotNull
-    @NotUnspecified
-    private UncertainBoolean muenchnerKitafoerderung;
+    private Boolean muenchnerKitafoerderung;
 
     private Boolean miniKita;
 

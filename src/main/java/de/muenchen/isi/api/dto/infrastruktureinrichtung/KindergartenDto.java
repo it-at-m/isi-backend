@@ -29,9 +29,7 @@ public class KindergartenDto extends InfrastruktureinrichtungDto {
     @NotUnspecified
     private UncertainBoolean sobonRelevant;
 
-    @NotNull
-    @NotUnspecified
-    private UncertainBoolean muenchnerKitafoerderung;
+    private Boolean muenchnerKitafoerderung;
 
     private Boolean miniKita;
 

@@ -143,6 +143,41 @@ public class KommentarController {
         return new ResponseEntity<>(saved, HttpStatus.CREATED);
     }
 
+    @PostMapping("infrastruktureinrichtung/bedarfsmeldung_kita")
+    @Transactional(rollbackFor = OptimisticLockingException.class)
+    @Operation(
+        summary = "Anlegen eines neuen Kommentars für eine Infrastruktureinrichtung für die Rolle Bedarfsmeldung Kita"
+    )
+    @ApiResponses(
+        value = {
+            @ApiResponse(responseCode = "201", description = "CREATED -> Kommentar wurde erfolgreich erstellt."),
+            @ApiResponse(
+                responseCode = "400",
+                description = "BAD_REQUEST -> Kommentar konnte nicht erstellt werden, überprüfen sie die Eingabe.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+            @ApiResponse(
+                responseCode = "412",
+                description = "PRECONDITION_FAILED -> In der Anwendung ist bereits eine neuere Version der Entität gespeichert.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+        }
+    )
+    @PreAuthorize(
+        "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_WRITE_KOMMENTAR_INFRASTRUKTUREINRICHTUNG_BEDARFSMELDUNG_KITA.name())"
+    )
+    public ResponseEntity<KommentarInfrastruktureinrichtungDto> createKommentarForInfrastruktureinrichtungBedarfsmeldungKita(
+        @RequestBody @Valid @NotNull final KommentarInfrastruktureinrichtungDto kommentarDto
+    ) throws EntityNotFoundException, OptimisticLockingException {
+        if (kommentarDto.getId() != null || kommentarDto.getInfrastruktureinrichtung() == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        var model = this.kommentarApiMapper.dto2Model(kommentarDto);
+        model = this.kommentarService.saveKommentarForInfrastruktureinrichtung(model);
+        final var saved = this.kommentarApiMapper.model2Dto(model);
+        return new ResponseEntity<>(saved, HttpStatus.CREATED);
+    }
+
     @PostMapping("infrastruktureinrichtung/bedarfsmeldung_sozialplanung")
     @Transactional(rollbackFor = OptimisticLockingException.class)
     @Operation(
@@ -262,6 +297,50 @@ public class KommentarController {
         return ResponseEntity.ok(saved);
     }
 
+    @PutMapping("infrastruktureinrichtung/bedarfsmeldung_kita")
+    @Transactional(rollbackFor = OptimisticLockingException.class)
+    @Operation(
+        summary = "Aktualisierung eines Kommentars für eine Infrastruktureinrichtung für die Rolle Bedarfsmeldung Kita"
+    )
+    @ApiResponses(
+        value = {
+            @ApiResponse(responseCode = "200", description = "OK -> Kommentar wurde erfolgreich aktualisiert."),
+            @ApiResponse(
+                responseCode = "400",
+                description = "BAD_REQUEST -> Kommentar konnte nicht erstellt werden, überprüfen sie die Eingabe.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+            @ApiResponse(
+                responseCode = "404",
+                description = "NOT_FOUND -> Kommentar mit dieser ID nicht vorhanden.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+            @ApiResponse(
+                responseCode = "412",
+                description = "PRECONDITION_FAILED -> In der Anwendung ist bereits eine neuere Version der Entität gespeichert.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+        }
+    )
+    @PreAuthorize(
+        "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_WRITE_KOMMENTAR_INFRASTRUKTUREINRICHTUNG_BEDARFSMELDUNG_KITA.name())"
+    )
+    public ResponseEntity<KommentarInfrastruktureinrichtungDto> updateKommentarForInfrastruktureinrichtungBedarfsmeldungKita(
+        @RequestBody @Valid @NotNull final KommentarInfrastruktureinrichtungDto kommentarDto
+    ) throws EntityNotFoundException, OptimisticLockingException, FileHandlingFailedException {
+        final var savedKommentar = this.kommentarService.getKommentarEntityById(kommentarDto.getId());
+        if (
+            savedKommentar.getInfrastruktureinrichtung() == null ||
+            !savedKommentar.getInfrastruktureinrichtung().getId().equals(kommentarDto.getInfrastruktureinrichtung())
+        ) {
+            return ResponseEntity.badRequest().build();
+        }
+        var model = this.kommentarApiMapper.dto2Model(kommentarDto);
+        model = this.kommentarService.updateKommentarForInfrastruktureinrichtung(model);
+        final var saved = this.kommentarApiMapper.model2Dto(model);
+        return ResponseEntity.ok(saved);
+    }
+
     @PutMapping("infrastruktureinrichtung/bedarfsmeldung_sozialplanung")
     @Transactional(rollbackFor = OptimisticLockingException.class)
     @Operation(
@@ -362,6 +441,40 @@ public class KommentarController {
     )
     public ResponseEntity<Void> deleteKommentarForInfrastruktureinrichtung(@PathVariable @NotNull final UUID id)
         throws EntityNotFoundException {
+        final var kommentar = this.kommentarService.getKommentarEntityById(id);
+        // Überprüfen ob der Kommentar zu einer Infrastruktureinrichtung gehört
+        if (kommentar.getInfrastruktureinrichtung() == null) {
+            // Kommentar gehört nicht zu einer Infrastruktureinrichtung -> ablehnen
+            return ResponseEntity.badRequest().build();
+        }
+        this.kommentarService.deleteKommentarById(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("infrastruktureinrichtung/bedarfsmeldung_kita/{id}")
+    @Transactional
+    @Operation(summary = "Löschen eines Kommentars einer Infrastruktureinrichtung für die Rolle Bedarfsmeldung Kita")
+    @ApiResponses(
+        value = {
+            @ApiResponse(responseCode = "204", description = "NO CONTENT"),
+            @ApiResponse(
+                responseCode = "400",
+                description = "BAD_REQUEST -> Kommentar konnte nicht gelöscht werden",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+            @ApiResponse(
+                responseCode = "404",
+                description = "NOT FOUND -> Kommentar mit dieser ID nicht vorhanden.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+        }
+    )
+    @PreAuthorize(
+        "hasAuthority(T(de.muenchen.isi.security.AuthoritiesEnum).ISI_BACKEND_DELETE_KOMMENTAR_INFRASTRUKTUREINRICHTUNG_BEDARFSMELDUNG_KITA.name())"
+    )
+    public ResponseEntity<Void> deleteKommentarForInfrastruktureinrichtungBedarfsmeldungKita(
+        @PathVariable @NotNull final UUID id
+    ) throws EntityNotFoundException {
         final var kommentar = this.kommentarService.getKommentarEntityById(id);
         // Überprüfen ob der Kommentar zu einer Infrastruktureinrichtung gehört
         if (kommentar.getInfrastruktureinrichtung() == null) {

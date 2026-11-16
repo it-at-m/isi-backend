@@ -36,13 +36,14 @@ public class Kindergarten extends Infrastruktureinrichtung {
     private UncertainBoolean sobonRelevant;
 
     @GenericField(name = "muenchner_kitafoerderung_filter")
-    @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "varchar(255) not null check (sobon_relevant != 'UNSPECIFIED')")
-    private UncertainBoolean muenchnerKitafoerderung;
+    @Column
+    private Boolean muenchnerKitafoerderung;
 
+    @GenericField(name = "mini_kita")
     @Column
     private Boolean miniKita;
 
+    @GenericField(name = "integrationseinrichtung")
     @Column
     private Boolean integrationseinrichtung;
 

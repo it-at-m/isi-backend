@@ -21,7 +21,7 @@ public class KinderkrippeModel extends InfrastruktureinrichtungModel {
 
     private UncertainBoolean sobonRelevant;
 
-    private UncertainBoolean muenchnerKitafoerderung;
+    private Boolean muenchnerKitafoerderung;
 
     private Boolean miniKita;
 

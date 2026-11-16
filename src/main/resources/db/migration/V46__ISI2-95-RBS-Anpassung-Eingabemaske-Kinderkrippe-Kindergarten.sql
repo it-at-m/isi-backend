@@ -7,13 +7,12 @@ ALTER TABLE IF EXISTS isidbuser.infrastruktureinrichtung
 
 -- Kinderkrippe
 ALTER TABLE IF EXISTS isidbuser.kinderkrippe
-    ALTER COLUMN einrichtungstraeger SET NOT NULL,
     DROP COLUMN IF EXISTS anzahl_kinderkrippe_gruppen,
     DROP COLUMN IF EXISTS anzahl_kinderkrippe_plaetze,
     DROP COLUMN IF EXISTS wohnungsnahe_kinderkrippe_plaetze,
     ADD COLUMN IF NOT EXISTS fertigstellungsmonat integer,
-    ADD COLUMN IF NOT EXISTS sobon_relevant varchar(255),
-    ADD COLUMN IF NOT EXISTS muenchner_kitafoerderung varchar(255),
+    ADD COLUMN IF NOT EXISTS sobon_relevant varchar(255) not null,
+    ADD COLUMN IF NOT EXISTS muenchner_kitafoerderung boolean,
     ADD COLUMN IF NOT EXISTS mini_kita boolean,
     ADD COLUMN IF NOT EXISTS integrationseinrichtung boolean,
     ADD COLUMN IF NOT EXISTS name_traeger varchar(255),
@@ -26,16 +25,16 @@ ALTER TABLE IF EXISTS isidbuser.kinderkrippe
     ADD COLUMN IF NOT EXISTS integrationsplaetze_kinderkrippe_ke_plus integer,
     ADD COLUMN IF NOT EXISTS integrationsplaetze_kinderkrippe integer,
     ADD COLUMN IF NOT EXISTS belegung_integrationsplaetze_kinderkrippe integer,
-    ADD COLUMN IF NOT EXISTS link_ke_plus varchar(8000);
+    ADD COLUMN IF NOT EXISTS link_ke_plus varchar(8000),
+    ADD CONSTRAINT kinderkrippe_sobon_relevant_check CHECK (((sobon_relevant)::text <> 'UNSPECIFIED'::text));
 
 -- Kindergarten
 ALTER TABLE IF EXISTS isidbuser.kindergarten
-    ALTER COLUMN einrichtungstraeger SET NOT NULL,
     DROP COLUMN IF EXISTS anzahl_kindergarten_gruppen,
     DROP COLUMN IF EXISTS anzahl_kindergarten_plaetze,
     DROP COLUMN IF EXISTS wohnungsnahe_kindergarten_plaetze,
-    ADD COLUMN IF NOT EXISTS sobon_relevant varchar(255),
-    ADD COLUMN IF NOT EXISTS muenchner_kitafoerderung varchar(255),
+    ADD COLUMN IF NOT EXISTS sobon_relevant varchar(255) not null,
+    ADD COLUMN IF NOT EXISTS muenchner_kitafoerderung boolean,
     ADD COLUMN IF NOT EXISTS mini_kita boolean,
     ADD COLUMN IF NOT EXISTS integrationseinrichtung boolean,
     ADD COLUMN IF NOT EXISTS name_traeger varchar(255),
@@ -48,6 +47,7 @@ ALTER TABLE IF EXISTS isidbuser.kindergarten
     ADD COLUMN IF NOT EXISTS integrationsplaetze_kindergarten_ke_plus integer,
     ADD COLUMN IF NOT EXISTS integrationsplaetze_kindergarten integer,
     ADD COLUMN IF NOT EXISTS belegung_integrationsplaetze_kindergarten integer,
-    ADD COLUMN IF NOT EXISTS link_ke_plus varchar(8000);
+    ADD COLUMN IF NOT EXISTS link_ke_plus varchar(8000),
+    ADD CONSTRAINT kinderkrippe_sobon_relevant_check CHECK (((sobon_relevant)::text <> 'UNSPECIFIED'::text));
 
 COMMIT;

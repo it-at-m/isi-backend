@@ -39,13 +39,14 @@ public class Kinderkrippe extends Infrastruktureinrichtung {
     private UncertainBoolean sobonRelevant;
 
     @GenericField(name = "muenchner_kitafoerderung_filter")
-    @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "varchar(255)")
-    private UncertainBoolean muenchnerKitafoerderung;
+    @Column
+    private Boolean muenchnerKitafoerderung;
 
+    @GenericField(name = "mini_kita")
     @Column
     private Boolean miniKita;
 
+    @GenericField(name = "integrationseinrichtung")
     @Column
     private Boolean integrationseinrichtung;
 
