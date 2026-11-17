@@ -25,11 +25,13 @@ import de.muenchen.isi.domain.mapper.VerortungDomainMapperImpl;
 import de.muenchen.isi.domain.model.AbfrageModel;
 import de.muenchen.isi.domain.model.BauleitplanverfahrenModel;
 import de.muenchen.isi.domain.model.BauvorhabenModel;
+import de.muenchen.isi.domain.model.common.BearbeitungshistorieModel;
 import de.muenchen.isi.domain.model.common.StadtbezirkModel;
 import de.muenchen.isi.domain.model.common.VerortungMultiPolygonModel;
 import de.muenchen.isi.domain.model.enums.SearchResultType;
 import de.muenchen.isi.domain.model.search.response.AbfrageSearchResultModel;
 import de.muenchen.isi.domain.model.search.response.InfrastruktureinrichtungSearchResultModel;
+import de.muenchen.isi.domain.service.common.BearbeitungshistorieService;
 import de.muenchen.isi.domain.service.etlInterface.EtlInterfaceService;
 import de.muenchen.isi.domain.service.filehandling.DokumentService;
 import de.muenchen.isi.infrastructure.entity.Abfrage;
@@ -37,9 +39,11 @@ import de.muenchen.isi.infrastructure.entity.AbfragevarianteBauleitplanverfahren
 import de.muenchen.isi.infrastructure.entity.Baugenehmigungsverfahren;
 import de.muenchen.isi.infrastructure.entity.Bauleitplanverfahren;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
+import de.muenchen.isi.infrastructure.entity.common.Bearbeitungshistorie;
 import de.muenchen.isi.infrastructure.entity.common.GlobalCounter;
 import de.muenchen.isi.infrastructure.entity.common.Stadtbezirk;
 import de.muenchen.isi.infrastructure.entity.common.VerortungMultiPolygon;
+import de.muenchen.isi.infrastructure.entity.enums.BearbeitungsArt;
 import de.muenchen.isi.infrastructure.entity.enums.CounterType;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
@@ -116,6 +120,9 @@ public class BauvorhabenServiceTest {
     @Mock
     private EtlInterfaceService etlInterfaceService;
 
+    @Mock
+    private BearbeitungshistorieService bearbeitungshistorieService;
+
     @BeforeEach
     public void beforeEach() throws IllegalAccessException, NoSuchFieldException {
         Field field = bauvorhabenDomainMapper.getClass().getSuperclass().getDeclaredField("abfragevarianteRepository");
@@ -132,7 +139,8 @@ public class BauvorhabenServiceTest {
             this.abfrageService,
             this.dokumentService,
             this.kommentarRepository,
-            this.etlInterfaceService
+            this.etlInterfaceService,
+            this.bearbeitungshistorieService
         );
 
         Mockito.reset(
@@ -144,8 +152,32 @@ public class BauvorhabenServiceTest {
             this.dokumentService,
             this.abfrageService,
             this.kommentarRepository,
-            this.etlInterfaceService
+            this.etlInterfaceService,
+            this.bearbeitungshistorieService
         );
+    }
+
+    @Test
+    void saveBauvorhabenUebernimmtFortgeschriebeneBearbeitungshistorie()
+        throws OptimisticLockingException, EntityNotFoundException, EntityIsReferencedException, UserRoleNotAllowedException, ReportingException {
+        final BauvorhabenModel bauvorhaben = new BauvorhabenModel();
+        bauvorhaben.setId(UUID.randomUUID());
+        bauvorhaben.setBauvorhabenNummer("1");
+        // Eine vom Client mitgeschickte Historie darf die gespeicherte nicht ersetzen.
+        bauvorhaben.getBearbeitungshistorie().add(new BearbeitungshistorieModel());
+        final Bearbeitungshistorie eintrag = new Bearbeitungshistorie();
+        eintrag.setArt(BearbeitungsArt.AKTUALISIERT);
+        Mockito.when(
+            this.bearbeitungshistorieService.fortschreiben(Mockito.eq(bauvorhaben.getId()), Mockito.any())
+        ).thenReturn(List.of(eintrag));
+        Mockito.when(this.bauvorhabenRepository.saveAndFlush(Mockito.any(Bauvorhaben.class))).thenAnswer(invocation ->
+            invocation.getArgument(0)
+        );
+
+        final BauvorhabenModel result = this.bauvorhabenService.saveBauvorhaben(bauvorhaben, null);
+
+        assertThat(result.getBearbeitungshistorie().size(), is(1));
+        assertThat(result.getBearbeitungshistorie().get(0).getArt(), is(BearbeitungsArt.AKTUALISIERT));
     }
 
     @Test

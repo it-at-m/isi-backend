@@ -22,6 +22,7 @@ import jakarta.persistence.PersistenceContext;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -138,8 +139,8 @@ public class EntitySearchService {
     /**
      * Diese Methode ermittelt das tatsaechlich zu verwendende Sortierattribut.
      * <p>
-     * Eine Sortierung nach {@link SortAttribute#FRIST_BEARBEITUNG} ist nur moeglich, sofern ausschliesslich Abfragen
-     * durchsucht werden, da nur deren Indizes das Attribut {@code fristBearbeitung} enthalten. Andernfalls wird auf
+     * Eine Sortierung nach {@link SortAttribute#FRIST_BEARBEITUNG} ist nur moeglich, sofern Abfragen durchsucht
+     * werden, da nur deren Indizes das Attribut {@code fristBearbeitung} enthalten. Andernfalls wird auf
      * {@link SortAttribute#LAST_MODIFIED_DATE_TIME} zurueckgefallen.
      *
      * @param searchQueryAndSortingInformation mit dem angefragten Sortierattribut.
@@ -208,6 +209,12 @@ public class EntitySearchService {
         }
         if (BooleanUtils.isTrue(searchQueryAndSortingInformation.getFilterNurEigeneAbfragen())) {
             filterAttributeMap.put("sub", List.of(authenticationUtils.getUserSub()));
+        }
+        if (BooleanUtils.isTrue(searchQueryAndSortingInformation.getFilterNurEigeneVorgaenge())) {
+            filterAttributeMap.put(
+                BaseEntity.INDEX_FIELD_BEARBEITER_EMAIL,
+                List.of(authenticationUtils.getEmail().toLowerCase(Locale.ROOT))
+            );
         }
         filterAttributeMap.put("statusAbfrage_filter", searchQueryAndSortingInformation.getFilterStatusAbfrage());
         filterAttributeMap.put("verfahrensstand_filter", searchQueryAndSortingInformation.getFilterVerfahrensstand());
