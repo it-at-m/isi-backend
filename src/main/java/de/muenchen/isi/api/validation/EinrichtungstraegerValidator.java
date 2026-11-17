@@ -54,14 +54,6 @@ public class EinrichtungstraegerValidator
                     var einrichtungstraeger = dto1.getEinrichtungstraeger();
                     return this.isValidEinrichtungstraeger(einrichtungstraeger);
                 }
-                case KindergartenDto dto -> {
-                    var einrichtungstraeger = dto.getEinrichtungstraeger();
-                    return this.isValidEinrichtungstraeger(einrichtungstraeger);
-                }
-                case KinderkrippeDto dto -> {
-                    var einrichtungstraeger = dto.getEinrichtungstraeger();
-                    return this.isValidEinrichtungstraeger(einrichtungstraeger);
-                }
                 default -> {
                     return true;
                 }

@@ -86,7 +86,7 @@ public class EinrichtungstraegerValidatorTest {
         assertThat(this.validator.isValid(value, null), is(true));
 
         value.setStatus(StatusInfrastruktureinrichtung.BESTAND);
-        assertThat(this.validator.isValid(value, null), is(false));
+        assertThat(this.validator.isValid(value, null), is(true));
 
         value.setEinrichtungstraeger(Einrichtungstraeger.STAEDTISCHE_EINRICHTUNG);
         assertThat(this.validator.isValid(value, null), is(true));
@@ -100,13 +100,10 @@ public class EinrichtungstraegerValidatorTest {
         assertThat(this.validator.isValid(value, null), is(true));
 
         value.setStatus(StatusInfrastruktureinrichtung.BESTAND);
-        assertThat(this.validator.isValid(value, null), is(false));
+        assertThat(this.validator.isValid(value, null), is(true));
 
         value.setEinrichtungstraeger(Einrichtungstraeger.STAEDTISCHE_EINRICHTUNG);
         assertThat(this.validator.isValid(value, null), is(true));
-
-        value.setEinrichtungstraeger(Einrichtungstraeger.STAATLICHE_EINRICHTUNG);
-        assertThat(this.validator.isValid(value, null), is(false));
     }
 
     @Test

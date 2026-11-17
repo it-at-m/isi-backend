@@ -27,7 +27,7 @@ import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
 public class Kindergarten extends Infrastruktureinrichtung {
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column
     private Einrichtungstraeger einrichtungstraeger;
 
     @GenericField(name = "sobon_relevant_filter")

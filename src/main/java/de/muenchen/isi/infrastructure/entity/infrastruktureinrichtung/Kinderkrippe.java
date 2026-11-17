@@ -27,7 +27,7 @@ import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
 public class Kinderkrippe extends Infrastruktureinrichtung {
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column
     private Einrichtungstraeger einrichtungstraeger;
 
     @Column
