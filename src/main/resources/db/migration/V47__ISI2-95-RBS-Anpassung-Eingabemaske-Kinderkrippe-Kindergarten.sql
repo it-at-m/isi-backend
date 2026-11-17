@@ -69,11 +69,13 @@ DROP CONSTRAINT kinderkrippe_einrichtungstraeger_check;
 
 UPDATE isidbuser.kinderkrippe
 SET einrichtungstraeger = 'UNSPECIFIED'
-WHERE einrichtungstraeger IN (
-                              'EINRICHTUNG_GESAMTSTAEDTISCH',
-                              'PRIVATE_TRAEGERSCHAFT',
-                              'STAATLICHE_EINRICHTUNG'
-    );
+WHERE einrichtungstraeger IN
+      (
+        'EINRICHTUNG_GESAMTSTAEDTISCH',
+        'PRIVATE_TRAEGERSCHAFT',
+        'STAATLICHE_EINRICHTUNG',
+        'KIRCHLICHE_TRAEGERSCHAFT'
+      );
 
 ALTER TABLE IF EXISTS isidbuser.kinderkrippe
     ADD CONSTRAINT kinderkrippe_einrichtungstraeger_check CHECK (einrichtungstraeger::text = ANY (ARRAY['UNSPECIFIED'::character varying, 'STAEDTISCHE_EINRICHTUNG'::character varying, 'EINRICHTUNG_BETRIEBSTRAEGERSCHAFT'::character varying, 'FREIE_GEMEINNUETZIGE_SONSTIGE'::character varying, 'ELTERN_KIND_INITIATIVE'::character varying::text]));
@@ -84,11 +86,13 @@ DROP CONSTRAINT kindergarten_einrichtungstraeger_check;
 
 UPDATE isidbuser.kindergarten
 SET einrichtungstraeger = 'UNSPECIFIED'
-WHERE einrichtungstraeger IN (
-                              'EINRICHTUNG_GESAMTSTAEDTISCH',
-                              'PRIVATE_TRAEGERSCHAFT',
-                              'STAATLICHE_EINRICHTUNG'
-    );
+WHERE einrichtungstraeger IN
+      (
+        'EINRICHTUNG_GESAMTSTAEDTISCH',
+        'PRIVATE_TRAEGERSCHAFT',
+        'STAATLICHE_EINRICHTUNG',
+        'KIRCHLICHE_TRAEGERSCHAFT'
+      );
 
 ALTER TABLE IF EXISTS isidbuser.kindergarten
     ADD CONSTRAINT kindergarten_einrichtungstraeger_check CHECK (einrichtungstraeger::text = ANY (ARRAY['UNSPECIFIED'::character varying, 'STAEDTISCHE_EINRICHTUNG'::character varying, 'EINRICHTUNG_BETRIEBSTRAEGERSCHAFT'::character varying, 'FREIE_GEMEINNUETZIGE_SONSTIGE'::character varying, 'ELTERN_KIND_INITIATIVE'::character varying::text]));
