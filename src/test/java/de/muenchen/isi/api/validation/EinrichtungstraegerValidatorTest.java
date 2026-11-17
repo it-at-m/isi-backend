@@ -83,12 +83,15 @@ public class EinrichtungstraegerValidatorTest {
         final KindergartenDto value = new KindergartenDto();
 
         assertThat(this.validator.isValid(null, null), is(false));
-        assertThat(this.validator.isValid(value, null), is(true));
+        assertThat(this.validator.isValid(value, null), is(false));
 
         value.setStatus(StatusInfrastruktureinrichtung.BESTAND);
-        assertThat(this.validator.isValid(value, null), is(true));
+        assertThat(this.validator.isValid(value, null), is(false));
 
         value.setEinrichtungstraeger(Einrichtungstraeger.STAEDTISCHE_EINRICHTUNG);
+        assertThat(this.validator.isValid(value, null), is(true));
+
+        value.setEinrichtungstraeger(Einrichtungstraeger.UNSPECIFIED);
         assertThat(this.validator.isValid(value, null), is(true));
     }
 
@@ -97,12 +100,15 @@ public class EinrichtungstraegerValidatorTest {
         final KinderkrippeDto value = new KinderkrippeDto();
 
         assertThat(this.validator.isValid(null, null), is(false));
-        assertThat(this.validator.isValid(value, null), is(true));
+        assertThat(this.validator.isValid(value, null), is(false));
 
         value.setStatus(StatusInfrastruktureinrichtung.BESTAND);
-        assertThat(this.validator.isValid(value, null), is(true));
+        assertThat(this.validator.isValid(value, null), is(false));
 
         value.setEinrichtungstraeger(Einrichtungstraeger.STAEDTISCHE_EINRICHTUNG);
+        assertThat(this.validator.isValid(value, null), is(true));
+
+        value.setEinrichtungstraeger(Einrichtungstraeger.UNSPECIFIED);
         assertThat(this.validator.isValid(value, null), is(true));
     }
 
