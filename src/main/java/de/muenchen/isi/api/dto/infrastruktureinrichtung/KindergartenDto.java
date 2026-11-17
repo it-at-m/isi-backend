@@ -21,8 +21,6 @@ import lombok.ToString;
 @WohnungsnahePlaetzeValid
 public class KindergartenDto extends InfrastruktureinrichtungDto {
 
-    @NotNull
-    @NotUnspecified
     private Einrichtungstraeger einrichtungstraeger;
 
     @NotNull

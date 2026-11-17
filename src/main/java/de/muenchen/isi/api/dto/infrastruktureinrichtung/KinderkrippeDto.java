@@ -20,8 +20,6 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 public class KinderkrippeDto extends InfrastruktureinrichtungDto {
 
-    @NotNull
-    @NotUnspecified
     private Einrichtungstraeger einrichtungstraeger;
 
     @Min(1)

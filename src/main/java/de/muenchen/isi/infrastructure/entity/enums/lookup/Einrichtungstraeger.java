@@ -14,8 +14,11 @@ public enum Einrichtungstraeger implements ILookup {
     STAEDTISCHE_EINRICHTUNG("Städtische Einrichtung"),
     EINRICHTUNG_BETRIEBSTRAEGERSCHAFT("Einrichtung in Betriebsträgerschaft"),
     FREIE_GEMEINNUETZIGE_SONSTIGE("Freie / gemeinnützige / sonstige Einrichtungen"),
+    EINRICHTUNG_GESAMTSTAEDTISCH("Einrichtung, deren Plätze nur gesamtstädtisch zur Verfügung stehen"),
     ELTERN_KIND_INITIATIVE("Eltern-Kind-Initiative"),
-    STAATLICHE_EINRICHTUNG("Staatliche Einrichtung");
+    STAATLICHE_EINRICHTUNG("Staatliche Einrichtung"),
+    PRIVATE_TRAEGERSCHAFT("Private Trägerschaft"),
+    KIRCHLICHE_TRAEGERSCHAFT("Kirchliche Trägerschaft");
 
     @Getter
     private final String bezeichnung;

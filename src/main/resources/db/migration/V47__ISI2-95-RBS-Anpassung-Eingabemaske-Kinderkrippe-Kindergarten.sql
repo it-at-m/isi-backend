@@ -1,11 +1,14 @@
 BEGIN;
 
+--
 -- Infrastruktureinrichtung
+--
 ALTER TABLE IF EXISTS isidbuser.infrastruktureinrichtung
     DROP COLUMN IF EXISTS flaeche_gesamtgrundstueck,
     DROP COLUMN IF EXISTS flaeche_teilgrundstueck;
-
+--
 -- Kinderkrippe
+--
 ALTER TABLE IF EXISTS isidbuser.kinderkrippe
     DROP COLUMN IF EXISTS anzahl_kinderkrippe_gruppen,
     DROP COLUMN IF EXISTS anzahl_kinderkrippe_plaetze,
@@ -55,5 +58,39 @@ ALTER TABLE IF EXISTS isidbuser.kindergarten
 ALTER TABLE IF EXISTS isidbuser.kindergarten
     ALTER COLUMN sobon_relevant SET NOT NULL,
     ADD CONSTRAINT kindergarten_sobon_relevant_check CHECK ((sobon_relevant::text <> 'UNSPECIFIED'::text));
+
+--
+-- Bereinigung Einrichtungsträger
+--
+
+-- Kinderkrippe
+ALTER TABLE IF EXISTS isidbuser.kinderkrippe
+DROP CONSTRAINT kinderkrippe_einrichtungstraeger_check;
+
+UPDATE isidbuser.kinderkrippe
+SET einrichtungstraeger = 'UNSPECIFIED'
+WHERE einrichtungstraeger IN (
+                              'EINRICHTUNG_GESAMTSTAEDTISCH',
+                              'PRIVATE_TRAEGERSCHAFT',
+                              'STAATLICHE_EINRICHTUNG'
+    );
+
+ALTER TABLE IF EXISTS isidbuser.kinderkrippe
+    ADD CONSTRAINT kinderkrippe_einrichtungstraeger_check CHECK (einrichtungstraeger::text = ANY (ARRAY['UNSPECIFIED'::character varying, 'STAEDTISCHE_EINRICHTUNG'::character varying, 'EINRICHTUNG_BETRIEBSTRAEGERSCHAFT'::character varying, 'FREIE_GEMEINNUETZIGE_SONSTIGE'::character varying, 'ELTERN_KIND_INITIATIVE'::character varying::text]));
+
+-- Kindergarten
+ALTER TABLE IF EXISTS isidbuser.kindergarten
+DROP CONSTRAINT kindergarten_einrichtungstraeger_check;
+
+UPDATE isidbuser.kindergarten
+SET einrichtungstraeger = 'UNSPECIFIED'
+WHERE einrichtungstraeger IN (
+                              'EINRICHTUNG_GESAMTSTAEDTISCH',
+                              'PRIVATE_TRAEGERSCHAFT',
+                              'STAATLICHE_EINRICHTUNG'
+    );
+
+ALTER TABLE IF EXISTS isidbuser.kindergarten
+    ADD CONSTRAINT kindergarten_einrichtungstraeger_check CHECK (einrichtungstraeger::text = ANY (ARRAY['UNSPECIFIED'::character varying, 'STAEDTISCHE_EINRICHTUNG'::character varying, 'EINRICHTUNG_BETRIEBSTRAEGERSCHAFT'::character varying, 'FREIE_GEMEINNUETZIGE_SONSTIGE'::character varying, 'ELTERN_KIND_INITIATIVE'::character varying::text]));
 
 COMMIT;
