@@ -104,7 +104,7 @@ public class InfrastruktureinrichtungController {
     }
 
     @PostMapping("/bedarfsmeldung_kita")
-    @Transactional(rollbackFor = OptimisticLockingException.class)
+    @Transactional(rollbackFor = { OptimisticLockingException.class, ReportingException.class })
     @Operation(summary = "Anlegen einer neuen Infrastruktureinrichtung für die Rolle Bedarfsmeldung Kita")
     @ApiResponses(
         value = {
