@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import de.muenchen.isi.domain.exception.GeometryOperationFailedException;
 import de.muenchen.isi.domain.model.common.MultiPolygonGeometryModel;
+import de.muenchen.isi.domain.model.common.StadtbezirkModel;
 import de.muenchen.isi.domain.model.common.Wgs84Model;
 import de.muenchen.isi.domain.model.enums.SearchResultType;
 import de.muenchen.isi.domain.model.search.request.AbfrageInfrastruktureinrichtungRecord;
@@ -656,6 +657,11 @@ public class SearchDomainMapperTest {
             List.of(BigDecimal.valueOf(11.542026984158708), BigDecimal.valueOf(48.108341907595324))
         );
         point.setPoint(pointGeometryModel);
+        final var stadtbezirk = new Stadtbezirk();
+        stadtbezirk.setNummer("06");
+        stadtbezirk.setName("Sendling");
+        stadtbezirk.setMultiPolygon(new MultiPolygonGeometry());
+        point.setStadtbezirke(Set.of(stadtbezirk));
         InfrastrukturRecord projection = Mockito.mock(InfrastrukturRecord.class);
         Mockito.when(projection.getInfrastruktureinrichtungTyp()).thenReturn(InfrastruktureinrichtungTyp.KINDERKRIPPE);
         Mockito.when(projection.getNameEinrichtung()).thenReturn("Test Einrichtung");
@@ -676,6 +682,23 @@ public class SearchDomainMapperTest {
         wgs84Model.setLatitude(48.108341907595324);
         assertThat(result.getCoordinate(), is(wgs84Model));
         assertThat(result.getZugehoerigesBauvorhaben(), is("Test Bauvorhaben"));
+        final var stadtbezirkModel = new StadtbezirkModel();
+        stadtbezirkModel.setNummer("06");
+        stadtbezirkModel.setName("Sendling");
+        assertThat(result.getStadtbezirke(), is(Set.of(stadtbezirkModel)));
+    }
+
+    @Test
+    void testMapInfrastrukturRecordOhneVerortungOhneStadtbezirke() {
+        InfrastrukturRecord projection = Mockito.mock(InfrastrukturRecord.class);
+        Mockito.when(projection.getVerortungPoint()).thenReturn(null);
+
+        InfrastruktureinrichtungSearchResultModel result =
+            (InfrastruktureinrichtungSearchResultModel) searchDomainMapper.mapProjectionRecordToSearchResultModel(
+                projection
+            );
+
+        assertThat(result.getStadtbezirke(), is(nullValue()));
     }
 
     @Test

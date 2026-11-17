@@ -19,6 +19,7 @@ import de.muenchen.isi.infrastructure.entity.BaseEntity;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
 import de.muenchen.isi.infrastructure.entity.common.Adresse;
 import de.muenchen.isi.infrastructure.entity.common.BearbeitendePerson;
+import de.muenchen.isi.infrastructure.entity.common.Bearbeitungshistorie;
 import de.muenchen.isi.infrastructure.entity.common.VerortungMultiPolygon;
 import de.muenchen.isi.infrastructure.entity.common.VerortungPoint;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.AnlassPlanung;
@@ -28,20 +29,27 @@ import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusInfrastrukturein
 import de.muenchen.isi.infrastructure.repository.search.SearchwordSuggesterRepository;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.AttributeOverrides;
+import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.Index;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OrderBy;
 import jakarta.persistence.Transient;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -142,6 +150,30 @@ public abstract class Infrastruktureinrichtung extends BaseEntity {
         ),
     })
     private BearbeitendePerson bearbeitendePerson;
+
+    @ElementCollection
+    @CollectionTable(
+        indexes = {
+            @Index(
+                name = "infrastruktureinrichtung_bearbeitungshistorie_id_index",
+                columnList = "infrastruktureinrichtung_id"
+            ),
+        }
+    )
+    @OrderBy("zeitpunkt asc")
+    private List<Bearbeitungshistorie> bearbeitungshistorie = new ArrayList<>();
+
+    /**
+     * Virtuelles Feld für Hibernate Search mit den Emailadressen aller Personen aus der Bearbeitungshistorie.
+     *
+     * @return die Emailadressen in Kleinbuchstaben.
+     */
+    @Transient
+    @KeywordField(name = INDEX_FIELD_BEARBEITER_EMAIL)
+    @IndexingDependency(derivedFrom = @ObjectPath(@PropertyValue(propertyName = "bearbeitungshistorie")))
+    public Set<String> getEmailsBearbeitendePersonen() {
+        return Bearbeitungshistorie.getEmails(bearbeitungshistorie);
+    }
 
     /**
      * Diese Methode gibt den Wert der {@link DiscriminatorColumn} zurück.

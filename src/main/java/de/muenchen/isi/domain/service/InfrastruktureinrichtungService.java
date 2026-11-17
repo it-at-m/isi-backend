@@ -7,6 +7,7 @@ import de.muenchen.isi.domain.exception.ReportingException;
 import de.muenchen.isi.domain.mapper.InfrastruktureinrichtungDomainMapper;
 import de.muenchen.isi.domain.model.BauvorhabenModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.InfrastruktureinrichtungModel;
+import de.muenchen.isi.domain.service.common.BearbeitungshistorieService;
 import de.muenchen.isi.domain.service.etlInterface.EtlInterfaceService;
 import de.muenchen.isi.infrastructure.entity.Bauvorhaben;
 import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.Infrastruktureinrichtung;
@@ -35,6 +36,8 @@ public class InfrastruktureinrichtungService {
     private final BauvorhabenRepository bauvorhabenRepository;
 
     private final EtlInterfaceService etlInterfaceService;
+
+    private final BearbeitungshistorieService bearbeitungshistorieService;
 
     /**
      * Die Methode gibt ein {@link InfrastruktureinrichtungModel} identifiziert durch die ID zurück.
@@ -66,6 +69,12 @@ public class InfrastruktureinrichtungService {
     ) throws OptimisticLockingException, EntityNotFoundException, ReportingException {
         Infrastruktureinrichtung entity = this.infrastruktureinrichtungDomainMapper.model2Entity(
             infrastruktureinrichtung
+        );
+        entity.setBearbeitungshistorie(
+            this.bearbeitungshistorieService.fortschreiben(
+                infrastruktureinrichtung.getId(),
+                this.infrastruktureinrichtungRepository::findBearbeitungshistorieById
+            )
         );
         try {
             entity = this.infrastruktureinrichtungRepository.saveAndFlush(entity);

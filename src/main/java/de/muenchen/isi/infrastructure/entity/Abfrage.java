@@ -28,6 +28,7 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -184,4 +185,16 @@ public abstract class Abfrage extends BaseEntity {
     )
     @OrderBy("zeitpunkt asc")
     private List<Bearbeitungshistorie> bearbeitungshistorie = new ArrayList<>();
+
+    /**
+     * Virtuelles Feld für Hibernate Search mit den Emailadressen aller Personen aus der Bearbeitungshistorie.
+     *
+     * @return die Emailadressen in Kleinbuchstaben.
+     */
+    @Transient
+    @KeywordField(name = INDEX_FIELD_BEARBEITER_EMAIL)
+    @IndexingDependency(derivedFrom = @ObjectPath(@PropertyValue(propertyName = "bearbeitungshistorie")))
+    public Set<String> getEmailsBearbeitendePersonen() {
+        return Bearbeitungshistorie.getEmails(bearbeitungshistorie);
+    }
 }

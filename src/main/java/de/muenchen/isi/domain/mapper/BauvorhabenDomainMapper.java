@@ -26,6 +26,7 @@ public abstract class BauvorhabenDomainMapper {
     @Mapping(source = "relevanteAbfragevariante.id", target = "relevanteAbfragevariante")
     public abstract BauvorhabenModel entity2Model(final Bauvorhaben bauvorhaben);
 
+    @Mapping(target = "emailsBearbeitendePersonen", ignore = true)
     @Mapping(target = "relevanteAbfragevariante", ignore = true)
     public abstract Bauvorhaben model2Entity(final BauvorhabenModel bauvorhabenModel) throws EntityNotFoundException;
 

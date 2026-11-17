@@ -64,6 +64,11 @@ public class SearchQueryDto {
 
     private Boolean filterNurEigeneAbfragen;
 
+    /**
+     * Einschränkung auf die Vorgänge, die der Nutzer laut Bearbeitungshistorie erstellt oder bearbeitet hat.
+     */
+    private Boolean filterNurEigeneVorgaenge;
+
     private List<StatusAbfrage> filterStatusAbfrage;
 
     private UncertainBoolean filterSobonRelevant;
