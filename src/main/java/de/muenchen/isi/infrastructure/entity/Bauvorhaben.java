@@ -9,6 +9,7 @@ import de.muenchen.isi.infrastructure.adapter.search.VerfahrensstandValueBridge;
 import de.muenchen.isi.infrastructure.adapter.search.VerortungMultiPolygonValueBridge;
 import de.muenchen.isi.infrastructure.entity.common.Adresse;
 import de.muenchen.isi.infrastructure.entity.common.BearbeitendePerson;
+import de.muenchen.isi.infrastructure.entity.common.Bearbeitungshistorie;
 import de.muenchen.isi.infrastructure.entity.common.VerortungMultiPolygon;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtBaulicheNutzung;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ResultType;
@@ -21,6 +22,7 @@ import de.muenchen.isi.infrastructure.repository.search.SearchwordSuggesterRepos
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.AttributeOverrides;
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Embedded;
@@ -33,10 +35,13 @@ import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -125,6 +130,27 @@ public class Bauvorhaben extends BaseEntity {
         ),
     })
     private BearbeitendePerson bearbeitendePerson;
+
+    @ElementCollection
+    @CollectionTable(
+        indexes = {
+            @Index(name = "bauvorhaben_bearbeitungshistorie_bauvorhaben_id_index", columnList = "bauvorhaben_id"),
+        }
+    )
+    @OrderBy("zeitpunkt asc")
+    private List<Bearbeitungshistorie> bearbeitungshistorie = new ArrayList<>();
+
+    /**
+     * Virtuelles Feld für Hibernate Search mit den Emailadressen aller Personen aus der Bearbeitungshistorie.
+     *
+     * @return die Emailadressen in Kleinbuchstaben.
+     */
+    @Transient
+    @KeywordField(name = INDEX_FIELD_BEARBEITER_EMAIL)
+    @IndexingDependency(derivedFrom = @ObjectPath(@PropertyValue(propertyName = "bearbeitungshistorie")))
+    public Set<String> getEmailsBearbeitendePersonen() {
+        return Bearbeitungshistorie.getEmails(bearbeitungshistorie);
+    }
 
     /**
      * Einheitlicher indexiertes sortierbares Namensattributs

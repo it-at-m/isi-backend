@@ -2,12 +2,12 @@ package de.muenchen.isi.api.dto;
 
 import de.muenchen.isi.api.dto.common.AdresseDto;
 import de.muenchen.isi.api.dto.common.BearbeitendePersonDto;
+import de.muenchen.isi.api.dto.common.BearbeitungshistorieDto;
 import de.muenchen.isi.api.dto.common.VerortungMultiPolygonDto;
 import de.muenchen.isi.api.dto.filehandling.DokumentDto;
 import de.muenchen.isi.api.validation.HasAllowedNumberOfDocuments;
 import de.muenchen.isi.api.validation.NotUnspecified;
 import de.muenchen.isi.api.validation.WesentlicheRechtsgrundlageBauvorhabenValid;
-import de.muenchen.isi.api.validation.WesentlicheRechtsgrundlageWeiteresVerfahrenValid;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtBaulicheNutzung;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonVerfahrensgrundsaetzeJahr;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
@@ -18,6 +18,7 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import lombok.Data;
@@ -30,6 +31,8 @@ import lombok.ToString;
 public class BauvorhabenDto extends BaseEntityDto {
 
     private BearbeitendePersonDto bearbeitendePerson;
+
+    private List<BearbeitungshistorieDto> bearbeitungshistorie = new ArrayList<>();
 
     @NotEmpty
     @Size(max = 255, message = "Es sind maximal {max} Zeichen erlaubt")

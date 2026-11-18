@@ -526,6 +526,10 @@ class SearchPreparationServiceTest {
             searchPreparationService.isSortableByFristBearbeitung(
                 List.of(Bauleitplanverfahren.class, Bauvorhaben.class)
             ),
+            is(true)
+        );
+        assertThat(
+            searchPreparationService.isSortableByFristBearbeitung(List.of(Bauvorhaben.class, Grundschule.class)),
             is(false)
         );
         assertThat(searchPreparationService.isSortableByFristBearbeitung(List.of(Grundschule.class)), is(false));

@@ -75,6 +75,7 @@ import de.muenchen.isi.infrastructure.entity.Bedarfsmeldung;
 import de.muenchen.isi.infrastructure.entity.WeiteresVerfahren;
 import de.muenchen.isi.infrastructure.entity.common.Stadtbezirk;
 import de.muenchen.isi.infrastructure.entity.common.VerortungMultiPolygon;
+import de.muenchen.isi.infrastructure.entity.enums.BearbeitungsArt;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
@@ -323,7 +324,10 @@ class AbfrageServiceTest {
             expected,
             new HashMap<>()
         );
-        Mockito.verify(this.bearbeitungshistorieService, Mockito.times(1)).appendBearbeitungshistorieToAbfrage(abfrage);
+        Mockito.verify(this.bearbeitungshistorieService, Mockito.times(1)).appendBearbeitungshistorieToAbfrage(
+            abfrage,
+            BearbeitungsArt.ERSTELLT
+        );
     }
 
     @Test
@@ -367,6 +371,10 @@ class AbfrageServiceTest {
         ).deleteDokumenteFromOriginalDokumentenListWhichAreMissingInParameterAdaptedDokumentenListe(
             Mockito.isNull(),
             Mockito.isNull()
+        );
+        Mockito.verify(this.bearbeitungshistorieService, Mockito.times(1)).appendBearbeitungshistorieToAbfrage(
+            Mockito.any(),
+            Mockito.eq(BearbeitungsArt.AKTUALISIERT)
         );
     }
 

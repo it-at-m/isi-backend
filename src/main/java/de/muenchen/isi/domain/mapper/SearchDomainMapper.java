@@ -126,6 +126,7 @@ public abstract class SearchDomainMapper {
 
     @Mappings({
         @Mapping(target = "type", constant = SearchResultType.Values.INFRASTRUKTUREINRICHTUNG),
+        @Mapping(source = "verortung.stadtbezirke", target = "stadtbezirke"),
         @Mapping(target = "coordinate", ignore = true),
         @Mapping(target = "zugehoerigesBauvorhaben", ignore = true),
     })
@@ -350,6 +351,7 @@ public abstract class SearchDomainMapper {
     @Mappings({
         @Mapping(target = "type", constant = SearchResultType.Values.INFRASTRUKTUREINRICHTUNG),
         @Mapping(target = "coordinate", ignore = true),
+        @Mapping(target = "stadtbezirke", ignore = true),
         @Mapping(target = "zugehoerigesBauvorhaben", source = "bauvorhabenName"),
     })
     public abstract InfrastruktureinrichtungSearchResultModel toInfrastrukturModel(
@@ -371,6 +373,14 @@ public abstract class SearchDomainMapper {
             model.setCoordinate(wgs84);
         } else {
             model.setCoordinate(null);
+        }
+        if (projection.getVerortungPoint() != null && projection.getVerortungPoint().getStadtbezirke() != null) {
+            final Set<StadtbezirkModel> stadtbezirke = new HashSet<>();
+            projection
+                .getVerortungPoint()
+                .getStadtbezirke()
+                .forEach(stadtbezirk -> stadtbezirke.add(entity2Model(stadtbezirk)));
+            model.setStadtbezirke(stadtbezirke);
         }
     }
 }
