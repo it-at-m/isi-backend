@@ -1,5 +1,5 @@
 --
--- Entfernt alle Polygone aus den jsonb-Spalten verortung. Umgriff und Flurstücke liegen seit V50 in eigenen Tabellen,
+-- Entfernt alle Polygone aus den jsonb-Spalten verortung. Umgriff und Flurstücke liegen seit V51 in eigenen Tabellen,
 -- Gebietspolygone liefert der Geodaten-EAI. Die JSON-Struktur bleibt sonst gleich, Pentaho und Reports lesen sie unverändert.
 --
 SET LOCAL search_path = isidbuser, public;

@@ -54,6 +54,7 @@ public class EntitySearchService {
     private final SearchDomainMapper searchDomainMapper;
 
     private final VerortungGeometrieService verortungGeometrieService;
+
     private final AuthenticationUtils authenticationUtils;
 
     @PersistenceContext

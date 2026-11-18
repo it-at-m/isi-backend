@@ -58,7 +58,12 @@ class EntitySearchServiceTest {
     void prepareFilterGemeinsameAttributeNurEigeneVorgaenge() {
         final var authentifizierung = Mockito.mock(AuthenticationUtils.class);
         Mockito.when(authentifizierung.getEmail()).thenReturn("Bearbeiter@Muenchen.de");
-        final var service = new EntitySearchService(searchPreparationService, searchDomainMapper, authentifizierung);
+        final var service = new EntitySearchService(
+            searchPreparationService,
+            searchDomainMapper,
+            verortungGeometrieService,
+            authentifizierung
+        );
         final var filter = new HashMap<String, List<?>>();
         final var query = new SearchQueryAndSortingModel();
         query.setFilterNurEigeneVorgaenge(true);

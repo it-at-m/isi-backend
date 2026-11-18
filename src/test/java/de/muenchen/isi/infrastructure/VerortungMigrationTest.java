@@ -15,7 +15,7 @@ import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 import org.testcontainers.jdbc.ContainerDatabaseDriver;
 
 /**
- * Prüft V50 und V51 mit Bestandsdaten: Flyway migriert bis V49, die Testdaten kommen im alten Format hinein,
+ * Prüft V51 und V52 mit Bestandsdaten: Flyway migriert bis V50, die Testdaten kommen im alten Format hinein,
  * danach laufen die Migrationen. Eine eigene Datenbank verhindert, dass andere Tests die Daten sehen.
  */
 class VerortungMigrationTest {
@@ -82,7 +82,7 @@ class VerortungMigrationTest {
             .dataSource(dataSource)
             .schemas("isidbuser")
             .locations("classpath:db/migration");
-        flyway.target("49").load().migrate();
+        flyway.target("50").load().migrate();
 
         jdbc = new JdbcTemplate(dataSource);
         bauvorhaben(BAUVORHABEN, VOLLE_VERORTUNG);

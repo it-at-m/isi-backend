@@ -539,7 +539,6 @@ public class SearchDomainMapperTest {
         final var stadtbezirk = new Stadtbezirk();
         stadtbezirk.setNummer("06");
         stadtbezirk.setName("Sendling");
-        stadtbezirk.setMultiPolygon(new MultiPolygonGeometry());
         point.setStadtbezirke(Set.of(stadtbezirk));
         InfrastrukturRecord projection = Mockito.mock(InfrastrukturRecord.class);
         Mockito.when(projection.getInfrastruktureinrichtungTyp()).thenReturn(InfrastruktureinrichtungTyp.KINDERKRIPPE);

@@ -1,6 +1,6 @@
 --
 -- Eigene Geometrie einer Verortung (Umgriff und Flurstücke) als PostGIS-Geometrie in eigenen Tabellen.
--- Die Geometrie wird nur geladen, wenn das Formular sie braucht. Gebietspolygone werden nicht übernommen (siehe V51).
+-- Die Geometrie wird nur geladen, wenn das Formular sie braucht. Gebietspolygone werden nicht übernommen (siehe V52).
 --
 -- Voraussetzung: PostGIS ist installiert oder das Recht zum Installieren ist vorhanden. Besteht die Extension schon,
 -- sind für IF NOT EXISTS keine besonderen Rechte nötig.
@@ -78,7 +78,7 @@ SELECT DISTINCT ON (id, gemarkung_nummer, nummer)
        id, gemarkung_nummer, nummer, ST_Multi(ST_Force2D(ST_GeomFromGeoJSON(multi_polygon)))
 FROM flurstueck_alt;
 
--- Die Polygone werden in V51 aus dem jsonb entfernt. Deshalb hier prüfen, dass alles angekommen ist.
+-- Die Polygone werden in V52 aus dem jsonb entfernt. Deshalb hier prüfen, dass alles angekommen ist.
 DO
 $$
 DECLARE
