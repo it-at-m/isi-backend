@@ -15,6 +15,7 @@ import de.muenchen.isi.domain.model.search.request.SearchQueryAndSortingModel;
 import de.muenchen.isi.domain.model.search.response.SearchResultsModel;
 import de.muenchen.isi.infrastructure.adapter.search.StadtbezirkNummerValueBridge;
 import de.muenchen.isi.infrastructure.entity.BaseEntity;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
 import de.muenchen.isi.security.AuthenticationUtils;
 import jakarta.persistence.EntityManager;
@@ -45,6 +46,19 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @Slf4j
 public class EntitySearchService {
+
+    /**
+     * Das Indexfeld des Abfragestatus. Es existiert nur im Index der Abfragen.
+     */
+    static final String INDEX_FIELD_STATUS_ABFRAGE = "statusAbfrage_filter";
+
+    /**
+     * Die Abfragestatus, in denen ein Nutzer mit ausschließlich der Rolle Anwender eine Abfrage sehen darf.
+     */
+    static final List<StatusAbfrage> STATUS_ABFRAGE_FUER_ANWENDER = List.of(
+        StatusAbfrage.ERLEDIGT_MIT_FACHREFERAT,
+        StatusAbfrage.ERLEDIGT_OHNE_FACHREFERAT
+    );
 
     private final SearchPreparationService searchPreparationService;
 
@@ -109,6 +123,7 @@ public class EntitySearchService {
                     }
                 });
                 this.createFilterGemeinsameAttribute(filterAttributeMap, root, function);
+                this.createFilterAbfragenFuerAnwender(root, function);
                 this.createFilterRealisierungVonBis(searchQueryAndSortingInformation, root, function);
                 this.createFilterGeplanteWohneinheitenGesamtVonBis(searchQueryAndSortingInformation, root, function);
                 this.createFilterGeplanteGeschossflaecheWohnenGesamtVonBis(
@@ -216,7 +231,7 @@ public class EntitySearchService {
                 List.of(authenticationUtils.getEmail().toLowerCase(Locale.ROOT))
             );
         }
-        filterAttributeMap.put("statusAbfrage_filter", searchQueryAndSortingInformation.getFilterStatusAbfrage());
+        filterAttributeMap.put(INDEX_FIELD_STATUS_ABFRAGE, searchQueryAndSortingInformation.getFilterStatusAbfrage());
         filterAttributeMap.put("verfahrensstand_filter", searchQueryAndSortingInformation.getFilterVerfahrensstand());
         filterAttributeMap.put(
             "status_infrastruktureinrichtung_filter",
@@ -251,6 +266,34 @@ public class EntitySearchService {
                 );
             }
         });
+    }
+
+    /**
+     * Diese Methode schränkt die Abfragen in den Suchergebnissen für Nutzer mit ausschließlich der Rolle Anwender auf
+     * die erledigten Abfragen ein, siehe {@link #STATUS_ABFRAGE_FUER_ANWENDER}.
+     * <p>
+     * Die Einschränkung entspricht der Prüfung beim Laden einer Abfrage im {@code AbfrageService}. Vorhaben und
+     * Infrastruktureinrichtungen besitzen keinen Abfragestatus und bleiben daher unverändert in den Suchergebnissen.
+     *
+     * @param root Startknoten für die Suche (WHERE-Clause)
+     * @param function Benutzerdefinierte Suchfunktion für die Ausführung
+     */
+    protected void createFilterAbfragenFuerAnwender(
+        final SimpleBooleanPredicateClausesCollector root,
+        final SearchPredicateFactory function
+    ) {
+        if (authenticationUtils.isOnlyRoleAnwender()) {
+            root.add(
+                function.bool().filter(b -> {
+                    var theBool = b.bool();
+                    for (final var status : STATUS_ABFRAGE_FUER_ANWENDER) {
+                        theBool.should(function.match().field(INDEX_FIELD_STATUS_ABFRAGE).matching(status));
+                    }
+                    theBool.should(function.not(function.exists().field(INDEX_FIELD_STATUS_ABFRAGE)));
+                    return theBool;
+                })
+            );
+        }
     }
 
     /**
