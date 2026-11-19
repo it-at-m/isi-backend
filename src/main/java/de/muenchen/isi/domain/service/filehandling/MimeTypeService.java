@@ -30,6 +30,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class MimeTypeService {
 
+    private static final TikaConfig TIKA_CONFIG = TikaConfig.getDefaultConfig();
+
+    private static final Detector DETECTOR = TIKA_CONFIG.getDetector();
+
     private final String bucket;
 
     private final S3OutPort s3OutPort;
@@ -119,14 +123,12 @@ public class MimeTypeService {
 
     protected MimeTypeInformationModel extractMediaTypeInformationOfFileAndCloseStream(final InputStream file)
         throws MimeTypeExtractionFailedException {
-        final TikaConfig config = TikaConfig.getDefaultConfig();
-        final Detector detector = config.getDetector();
         try (
             final InputStream fileInputStream = file;
             final TikaInputStream tikaInputStream = TikaInputStream.get(fileInputStream)
         ) {
-            final MediaType mediaType = detector.detect(tikaInputStream, new Metadata());
-            final MimeType mimeType = config.getMimeRepository().forName(mediaType.toString());
+            final MediaType mediaType = DETECTOR.detect(tikaInputStream, new Metadata());
+            final MimeType mimeType = TIKA_CONFIG.getMimeRepository().forName(mediaType.toString());
             final var mimeTypeInformation = new MimeTypeInformationModel();
             mimeTypeInformation.setType(mimeType.getType().toString());
             mimeTypeInformation.setDescription(mimeType.getDescription());

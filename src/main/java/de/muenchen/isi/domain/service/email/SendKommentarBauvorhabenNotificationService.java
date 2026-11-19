@@ -1,13 +1,11 @@
 package de.muenchen.isi.domain.service.email;
 
-import de.muenchen.isi.infrastructure.entity.Abfrage;
 import de.muenchen.isi.infrastructure.repository.AbfrageRepository;
 import de.muenchen.isi.infrastructure.repository.email.MailSenderRepository;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
@@ -99,14 +97,14 @@ public class SendKommentarBauvorhabenNotificationService {
         if (bauvorhabenId == null) {
             return StringUtils.EMPTY;
         }
-        final List<Abfrage> abfragen = abfrageRepository
-            .findAllByBauvorhabenId(bauvorhabenId)
-            .collect(Collectors.toList());
+        final List<AbfrageRepository.AbfrageIdAndName> abfragen = abfrageRepository.findIdsAndNamesByBauvorhabenId(
+            bauvorhabenId
+        );
         if (abfragen.isEmpty()) {
             return StringUtils.EMPTY;
         }
         final var sb = new StringBuilder("\n\nVerknüpfte Abfragen:");
-        for (final Abfrage abfrage : abfragen) {
+        for (final AbfrageRepository.AbfrageIdAndName abfrage : abfragen) {
             sb.append("\n").append(StringUtils.defaultIfEmpty(abfrage.getName(), ""));
             if (StringUtils.isNotEmpty(isiEnvironmentUrl) && abfrage.getId() != null) {
                 sb.append(": ").append(isiEnvironmentUrl).append("/#/abfrage/").append(abfrage.getId());
