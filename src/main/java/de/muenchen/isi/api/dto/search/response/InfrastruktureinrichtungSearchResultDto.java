@@ -1,8 +1,10 @@
 package de.muenchen.isi.api.dto.search.response;
 
+import de.muenchen.isi.api.dto.common.StadtbezirkDto;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.AnlassPlanung;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusInfrastruktureinrichtung;
+import java.util.Set;
 import java.util.UUID;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -24,4 +26,6 @@ public class InfrastruktureinrichtungSearchResultDto extends SearchResultDto {
     private AnlassPlanung anlassPlanung;
 
     private String zugehoerigesBauvorhaben;
+
+    private Set<StadtbezirkDto> stadtbezirke;
 }

@@ -17,6 +17,7 @@ import de.muenchen.isi.domain.model.BauvorhabenModel;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.InfrastruktureinrichtungModel;
 import de.muenchen.isi.domain.model.search.response.AbfrageSearchResultModel;
 import de.muenchen.isi.domain.model.search.response.InfrastruktureinrichtungSearchResultModel;
+import de.muenchen.isi.domain.service.common.BearbeitungshistorieService;
 import de.muenchen.isi.domain.service.etlInterface.EtlInterfaceService;
 import de.muenchen.isi.domain.service.filehandling.DokumentService;
 import de.muenchen.isi.infrastructure.entity.Abfrage;
@@ -74,6 +75,8 @@ public class BauvorhabenService {
 
     private final EtlInterfaceService etlInterfaceService;
 
+    private final BearbeitungshistorieService bearbeitungshistorieService;
+
     /**
      * Die Methode gibt ein {@link BauvorhabenModel} identifiziert durch die ID zurück.
      *
@@ -105,6 +108,12 @@ public class BauvorhabenService {
     public BauvorhabenModel saveBauvorhaben(final BauvorhabenModel bauvorhaben, final UUID abfrageId)
         throws OptimisticLockingException, EntityNotFoundException, EntityIsReferencedException, UserRoleNotAllowedException, ReportingException {
         var bauvorhabenEntity = this.bauvorhabenDomainMapper.model2Entity(bauvorhaben);
+        bauvorhabenEntity.setBearbeitungshistorie(
+            this.bearbeitungshistorieService.fortschreiben(
+                bauvorhaben.getId(),
+                this.bauvorhabenRepository::findBearbeitungshistorieById
+            )
+        );
         try {
             if (StringUtils.isEmpty(bauvorhaben.getBauvorhabenNummer())) {
                 bauvorhabenEntity.setBauvorhabenNummer(this.buildBauvorhabennummer(bauvorhabenEntity.getVerortung()));

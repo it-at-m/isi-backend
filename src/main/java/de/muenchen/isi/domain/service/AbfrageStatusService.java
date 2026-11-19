@@ -13,6 +13,7 @@ import de.muenchen.isi.domain.model.BauleitplanverfahrenModel;
 import de.muenchen.isi.domain.model.common.TransitionModel;
 import de.muenchen.isi.domain.service.common.BearbeitungshistorieService;
 import de.muenchen.isi.domain.service.email.SendWorkAssignmentInformationService;
+import de.muenchen.isi.infrastructure.entity.enums.BearbeitungsArt;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrageEvents;
 import de.muenchen.isi.security.AuthenticationUtils;
@@ -391,7 +392,10 @@ public class AbfrageStatusService {
                             abfrage.setAnmerkung(appendAnmerkung(abfrage.getAnmerkung(), anmerkung));
                             // Erweitern der Bearbeitungshistorie
                             final var abfrageWithHistorie =
-                                abfrageBearbeitungshistorieService.appendBearbeitungshistorieToAbfrage(abfrage);
+                                abfrageBearbeitungshistorieService.appendBearbeitungshistorieToAbfrage(
+                                    abfrage,
+                                    BearbeitungsArt.STATUSAENDERUNG
+                                );
                             // Speichern der Abfrage
                             AbfrageStatusService.this.abfrageService.save(abfrageWithHistorie);
                             // Asynchrones Versenden der Information für anstehende Aufgabe

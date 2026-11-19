@@ -23,7 +23,7 @@ public class AuthenticationUtils {
     public static final String ROLE_ADMIN = "admin";
     public static final String ROLE_ABFRAGEERSTELLUNG = "abfrageerstellung";
     public static final String ROLE_ANWENDER = "anwender";
-    private static final String UNAUTHENTICATED_USER = "unauthenticated";
+    public static final String UNAUTHENTICATED_USER = "unauthenticated";
     private static final String TOKEN_USER_NAME = UserInfoDataService.CLAIM_USERNAME;
     private static final String TOKEN_SURNAME = UserInfoDataService.CLAIM_SURNAME;
     private static final String TOKEN_GIVENNAME = UserInfoDataService.CLAIM_GIVENNAME;
