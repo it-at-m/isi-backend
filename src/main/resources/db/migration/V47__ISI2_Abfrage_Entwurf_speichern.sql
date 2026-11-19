@@ -9,13 +9,13 @@ BEGIN;
 -- erst bei der Freigabe geprüft (Start42VerfahrenValid).
 --
 
-ALTER TABLE isidbuser.abfragevariante_bauleitplanverfahren
+ALTER TABLE isidbuser.abfrgvar_bauleitplnvrfhrn
     ALTER COLUMN realisierung_von DROP NOT NULL;
 
-ALTER TABLE isidbuser.abfragevariante_baugenehmigungsverfahren
+ALTER TABLE isidbuser.abfrgvar_baugnhmgsverfhrn
     ALTER COLUMN realisierung_von DROP NOT NULL;
 
-ALTER TABLE isidbuser.abfragevariante_weiteres_verfahren
+ALTER TABLE isidbuser.abfrgvar_weitrs_vrfhrn
     ALTER COLUMN realisierung_von DROP NOT NULL;
 
 ALTER TABLE isidbuser.bauleitplanverfahren
