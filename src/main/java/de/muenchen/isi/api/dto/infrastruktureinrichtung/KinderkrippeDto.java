@@ -27,7 +27,6 @@ public class KinderkrippeDto extends InfrastruktureinrichtungDto {
     private Integer fertigstellungsmonat; // MM
 
     @NotNull
-    @NotUnspecified
     private UncertainBoolean sobonRelevant;
 
     private Boolean muenchnerKitafoerderung;

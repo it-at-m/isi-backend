@@ -24,7 +24,6 @@ public class KindergartenDto extends InfrastruktureinrichtungDto {
     private Einrichtungstraeger einrichtungstraeger;
 
     @NotNull
-    @NotUnspecified
     private UncertainBoolean sobonRelevant;
 
     private Boolean muenchnerKitafoerderung;

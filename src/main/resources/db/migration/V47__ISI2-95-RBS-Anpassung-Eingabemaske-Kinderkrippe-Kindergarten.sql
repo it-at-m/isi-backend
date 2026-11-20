@@ -14,7 +14,7 @@ ALTER TABLE IF EXISTS isidbuser.kinderkrippe
     DROP COLUMN IF EXISTS anzahl_kinderkrippe_plaetze,
     DROP COLUMN IF EXISTS wohnungsnahe_kinderkrippe_plaetze,
     ADD COLUMN fertigstellungsmonat integer,
-    ADD COLUMN sobon_relevant varchar(255) not null DEFAULT 'FALSE',
+    ADD COLUMN sobon_relevant varchar(255) not null DEFAULT 'UNSPECIFIED',
     ADD COLUMN muenchner_kitafoerderung boolean,
     ADD COLUMN mini_kita boolean,
     ADD COLUMN integrationseinrichtung boolean,
@@ -30,16 +30,12 @@ ALTER TABLE IF EXISTS isidbuser.kinderkrippe
     ADD COLUMN belegung_integrationsplaetze_kinderkrippe integer,
     ADD COLUMN link_ke_plus varchar(8000);
 
-ALTER TABLE IF EXISTS isidbuser.kinderkrippe
-    ALTER COLUMN sobon_relevant SET NOT NULL,
-    ADD CONSTRAINT kinderkrippe_sobon_relevant_check CHECK ((sobon_relevant::text <> 'UNSPECIFIED'::text));
-
 -- Kindergarten
 ALTER TABLE IF EXISTS isidbuser.kindergarten
     DROP COLUMN IF EXISTS anzahl_kindergarten_gruppen,
     DROP COLUMN IF EXISTS anzahl_kindergarten_plaetze,
     DROP COLUMN IF EXISTS wohnungsnahe_kindergarten_plaetze,
-    ADD COLUMN sobon_relevant varchar(255) not null DEFAULT 'FALSE',
+    ADD COLUMN sobon_relevant varchar(255) not null DEFAULT 'UNSPECIFIED',
     ADD COLUMN muenchner_kitafoerderung boolean,
     ADD COLUMN mini_kita boolean,
     ADD COLUMN integrationseinrichtung boolean,
@@ -54,10 +50,6 @@ ALTER TABLE IF EXISTS isidbuser.kindergarten
     ADD COLUMN integrationsplaetze_kindergarten integer,
     ADD COLUMN belegung_integrationsplaetze_kindergarten integer,
     ADD COLUMN link_ke_plus varchar(8000);
-
-ALTER TABLE IF EXISTS isidbuser.kindergarten
-    ALTER COLUMN sobon_relevant SET NOT NULL,
-    ADD CONSTRAINT kindergarten_sobon_relevant_check CHECK ((sobon_relevant::text <> 'UNSPECIFIED'::text));
 
 --
 -- Bereinigung Einrichtungsträger

@@ -32,7 +32,7 @@ public class Kindergarten extends Infrastruktureinrichtung {
 
     @GenericField(name = "sobon_relevant_filter")
     @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "varchar(255) not null check (sobon_relevant != 'UNSPECIFIED')")
+    @Column(columnDefinition = "varchar(255) not null")
     private UncertainBoolean sobonRelevant;
 
     @GenericField(name = "muenchner_kitafoerderung_filter")
