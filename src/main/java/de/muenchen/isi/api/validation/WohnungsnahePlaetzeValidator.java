@@ -4,7 +4,6 @@ import de.muenchen.isi.api.dto.infrastruktureinrichtung.GsNachmittagBetreuungDto
 import de.muenchen.isi.api.dto.infrastruktureinrichtung.HausFuerKinderDto;
 import de.muenchen.isi.api.dto.infrastruktureinrichtung.InfrastruktureinrichtungDto;
 import de.muenchen.isi.api.dto.infrastruktureinrichtung.KindergartenDto;
-import de.muenchen.isi.api.dto.infrastruktureinrichtung.KinderkrippeDto;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import lombok.NoArgsConstructor;
@@ -18,8 +17,7 @@ public class WohnungsnahePlaetzeValidator
 {
 
     /**
-     * Prüft, ob die Anzahl der wohungsnahen Plätze die Anzahl der insgesamt zur Verfügung stehenden Plätze der Kinderkrippe,
-     * des Kindergartens und des Horts übersteigt.
+     * Prüft, ob die Anzahl der wohungsnahen Plätze die Anzahl der insgesamt zur Verfügung stehenden Plätze des Horts übersteigt.
      *
      * @param value   {@link InfrastruktureinrichtungDto} zum Validieren.
      * @param context in welchem die Validierung stattfindet.
@@ -43,20 +41,10 @@ public class WohnungsnahePlaetzeValidator
                         hausFuerKinder.getWohnungsnaheHortPlaetze()
                     )
                 );
-            } else if (value instanceof KindergartenDto kindergarten) {
+            } else if (value instanceof GsNachmittagBetreuungDto gsNachmittagsbetreuung) {
                 return this.areWohnungsnahePlatzeValid(
-                    kindergarten.getAnzahlKindergartenPlaetze(),
-                    kindergarten.getWohnungsnaheKindergartenPlaetze()
-                );
-            } else if (value instanceof KinderkrippeDto kinderkrippe) {
-                return this.areWohnungsnahePlatzeValid(
-                    kinderkrippe.getAnzahlKinderkrippePlaetze(),
-                    kinderkrippe.getWohnungsnaheKinderkrippePlaetze()
-                );
-            } else if (value instanceof GsNachmittagBetreuungDto kinderkrippe) {
-                return this.areWohnungsnahePlatzeValid(
-                    kinderkrippe.getAnzahlHortPlaetze(),
-                    kinderkrippe.getWohnungsnaheHortPlaetze()
+                    gsNachmittagsbetreuung.getAnzahlHortPlaetze(),
+                    gsNachmittagsbetreuung.getWohnungsnaheHortPlaetze()
                 );
             } else {
                 return true;

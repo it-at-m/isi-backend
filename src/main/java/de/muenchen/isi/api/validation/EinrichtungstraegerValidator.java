@@ -36,6 +36,16 @@ public class EinrichtungstraegerValidator
     }
 
     private boolean einrichtungstraegerValid(final InfrastruktureinrichtungDto value) {
+        // Kinderkrippe and Kindergarten must always have a valid einrichtungstraeger regardless of status
+        if (value instanceof KinderkrippeDto dtoKk) {
+            var einrichtungstraeger = dtoKk.getEinrichtungstraeger();
+            return this.isValidEinrichtungstraeger(einrichtungstraeger);
+        }
+        if (value instanceof KindergartenDto dtoKg) {
+            var einrichtungstraeger = dtoKg.getEinrichtungstraeger();
+            return this.isValidEinrichtungstraeger(einrichtungstraeger);
+        }
+
         if (isStatusBestand(value)) {
             switch (value) {
                 case GrundschuleDto dto4 -> {
@@ -52,14 +62,6 @@ public class EinrichtungstraegerValidator
                 }
                 case HausFuerKinderDto dto1 -> {
                     var einrichtungstraeger = dto1.getEinrichtungstraeger();
-                    return this.isValidEinrichtungstraeger(einrichtungstraeger);
-                }
-                case KindergartenDto dto -> {
-                    var einrichtungstraeger = dto.getEinrichtungstraeger();
-                    return this.isValidEinrichtungstraeger(einrichtungstraeger);
-                }
-                case KinderkrippeDto dto -> {
-                    var einrichtungstraeger = dto.getEinrichtungstraeger();
                     return this.isValidEinrichtungstraeger(einrichtungstraeger);
                 }
                 default -> {

@@ -4,8 +4,12 @@
  */
 package de.muenchen.isi.api.dto.infrastruktureinrichtung;
 
+import de.muenchen.isi.api.validation.NotUnspecified;
 import de.muenchen.isi.api.validation.WohnungsnahePlaetzeValid;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Einrichtungstraeger;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -17,13 +21,36 @@ import lombok.ToString;
 @WohnungsnahePlaetzeValid
 public class KindergartenDto extends InfrastruktureinrichtungDto {
 
-    @NotNull
-    private Integer anzahlKindergartenPlaetze;
-
-    @NotNull
-    private Integer anzahlKindergartenGruppen;
-
-    private Integer wohnungsnaheKindergartenPlaetze;
-
     private Einrichtungstraeger einrichtungstraeger;
+
+    @NotNull
+    private UncertainBoolean sobonRelevant;
+
+    private Boolean muenchnerKitafoerderung;
+
+    private Boolean miniKita;
+
+    private Boolean integrationseinrichtung;
+
+    private String nameTraeger;
+
+    private Integer gesamtplaetzeNachBE;
+
+    private Integer kindergartenplaetzeNachBE;
+
+    private Integer ueberregionaleKindergartenplaetze;
+
+    private Integer belegungKindergartenplaetze;
+
+    private Integer sollBelegungKindergartenplaetzeKePlus;
+
+    private Integer sollBelegungKindergartenplaetze;
+
+    private Integer integrationsplaetzeKindergartenKePlus;
+
+    private Integer integrationsplaetzeKindergarten;
+
+    private Integer belegungIntegrationsplaetzeKindergarten;
+
+    private String linkKePlus;
 }
