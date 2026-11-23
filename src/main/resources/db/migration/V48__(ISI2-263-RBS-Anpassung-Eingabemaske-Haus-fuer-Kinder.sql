@@ -3,7 +3,7 @@ BEGIN;
 --
 -- Haus für Kinder
 --
-ALTER TABLE IF EXISTS isidbuser.hauskinderkrippe
+ALTER TABLE IF EXISTS isidbuser.haus_fuer_kinder
     DROP COLUMN IF EXISTS anzahl_hort_gruppen,
     DROP COLUMN IF EXISTS anzahl_hort_plaetze,
     DROP COLUMN IF EXISTS anzahl_kindergarten_gruppen,
@@ -14,52 +14,64 @@ ALTER TABLE IF EXISTS isidbuser.hauskinderkrippe
     DROP COLUMN IF EXISTS wohnungsnahe_kinderkrippe_plaetze,
     DROP COLUMN IF EXISTS wohnungsnahe_kindergarten_plaetze,
 
-    ADD COLUMN sobon_relevant varchar(255) not null DEFAULT 'UNSPECIFIED',
-    ADD COLUMN muenchner_kitafoerderung boolean,
-    ADD COLUMN mini_kita boolean,
-    ADD COLUMN kitz boolean,
-    ADD COLUMN integrationseinrichtung boolean,
-    ADD COLUMN name_traeger varchar(255),
-    ADD COLUMN link_ke_plus varchar(8000);
+    ADD COLUMN IF NOT EXISTS sobon_relevant varchar(255) NOT NULL DEFAULT 'UNSPECIFIED',
+    ADD COLUMN IF NOT EXISTS muenchner_kitafoerderung boolean,
+    ADD COLUMN IF NOT EXISTS mini_kita boolean,
+    ADD COLUMN IF NOT EXISTS kitz boolean,
+    ADD COLUMN IF NOT EXISTS integrationseinrichtung boolean,
+    ADD COLUMN IF NOT EXISTS name_traeger varchar(255),
+    ADD COLUMN IF NOT EXISTS link_ke_plus varchar(8000),
 
-    ADD COLUMN gesamtplaetze_nach_be integer,
-    ADD COLUMN kinderkrippenplaetze_nach_be integer,
-    ADD COLUMN ueberregionale_kinderkrippenplaetze integer,
-    ADD COLUMN belegung_kinderkrippenplaetze integer,
-    ADD COLUMN soll_belegung_kinderkrippenplaetze_ke_plus integer,
-    ADD COLUMN soll_belegung_kinderkrippenplaetze integer,
-    ADD COLUMN integrationsplaetze_kinderkrippe_ke_plus integer,
-    ADD COLUMN integrationsplaetze_kinderkrippe integer,
-    ADD COLUMN belegung_integrationsplaetze_kinderkrippe integer,
+    ADD COLUMN IF NOT EXISTS gesamtplaetze_nach_be integer,
+    ADD COLUMN IF NOT EXISTS kinderkrippenplaetze_nach_be integer,
+    ADD COLUMN IF NOT EXISTS ueberregionale_kinderkrippenplaetze integer,
+    ADD COLUMN IF NOT EXISTS belegung_kinderkrippenplaetze integer,
+    ADD COLUMN IF NOT EXISTS soll_belegung_kinderkrippenplaetze_ke_plus integer,
+    ADD COLUMN IF NOT EXISTS soll_belegung_kinderkrippenplaetze integer,
+    ADD COLUMN IF NOT EXISTS integrationsplaetze_kinderkrippe_ke_plus integer,
+    ADD COLUMN IF NOT EXISTS integrationsplaetze_kinderkrippe integer,
+    ADD COLUMN IF NOT EXISTS belegung_integrationsplaetze_kinderkrippe integer,
 
-    ADD COLUMN hortplaetze_nach_be integer,
-    ADD COLUMN belegung_hort integer,
-    ADD COLUMN ueberregionale_hortplaetze integer,
+    ADD COLUMN IF NOT EXISTS kindergartenplaetze_nach_be integer,
+    ADD COLUMN IF NOT EXISTS ueberregionale_kindergartenplaetze integer,
+    ADD COLUMN IF NOT EXISTS belegung_kindergartenplaetze integer,
+    ADD COLUMN IF NOT EXISTS soll_belegung_kindergartenplaetze_ke_plus integer,
+    ADD COLUMN IF NOT EXISTS soll_belegung_kindergartenplaetze integer,
+    ADD COLUMN IF NOT EXISTS integrationsplaetze_kindergarten_ke_plus integer,
+    ADD COLUMN IF NOT EXISTS integrationsplaetze_kindergarten integer,
+    ADD COLUMN IF NOT EXISTS belegung_integrationsplaetze_kindergarten integer,
 
-    ADD COLUMN soll_belegung_hort_ke_plus integer,
-    ADD COLUMN soll_belegung_hort integer,
-    ADD COLUMN integrationsplaetze_hort_ke_plus integer,
-    ADD COLUMN integrationsplaetze_hort integer,
-    ADD COLUMN belegung_integrationsplaetze_hort integer,
+    ADD COLUMN IF NOT EXISTS hortplaetze_nach_be integer,
+    ADD COLUMN IF NOT EXISTS belegung_hort integer,
+    ADD COLUMN IF NOT EXISTS ueberregionale_hortplaetze integer,
+    ADD COLUMN IF NOT EXISTS soll_belegung_hort_ke_plus integer,
+    ADD COLUMN IF NOT EXISTS soll_belegung_hort integer,
+    ADD COLUMN IF NOT EXISTS integrationsplaetze_hort_ke_plus integer,
+    ADD COLUMN IF NOT EXISTS integrationsplaetze_hort integer,
+    ADD COLUMN IF NOT EXISTS belegung_integrationsplaetze_hort integer;
 
 --
 -- Bereinigung Einrichtungsträger
 --
+ALTER TABLE IF EXISTS isidbuser.haus_fuer_kinder
+    DROP CONSTRAINT IF EXISTS haus_fuer_kinder_einrichtungstraeger_check;
 
-ALTER TABLE IF EXISTS isidbuser.haus_für_kinder
-DROP CONSTRAINT haus_für_kinder_einrichtungstraeger_check;
-
-UPDATE isidbuser.kinderkrippe
+UPDATE isidbuser.haus_fuer_kinder
 SET einrichtungstraeger = 'UNSPECIFIED'
-WHERE einrichtungstraeger IN
-      (
-        'EINRICHTUNG_GESAMTSTAEDTISCH',
-        'PRIVATE_TRAEGERSCHAFT',
-        'STAATLICHE_EINRICHTUNG',
-        'KIRCHLICHE_TRAEGERSCHAFT'
-      );
+WHERE einrichtungstraeger IN (
+   'EINRICHTUNG_GESAMTSTAEDTISCH',
+   'PRIVATE_TRAEGERSCHAFT',
+   'STAATLICHE_EINRICHTUNG',
+   'KIRCHLICHE_TRAEGERSCHAFT'
+);
 
-ALTER TABLE IF EXISTS isidbuser.kinderkrippe
-    ADD CONSTRAINT kinderkrippe_einrichtungstraeger_check CHECK (einrichtungstraeger::text = ANY (ARRAY['UNSPECIFIED'::character varying, 'STAEDTISCHE_EINRICHTUNG'::character varying, 'EINRICHTUNG_BETRIEBSTRAEGERSCHAFT'::character varying, 'FREIE_GEMEINNUETZIGE_SONSTIGE'::character varying, 'ELTERN_KIND_INITIATIVE'::character varying::text]));
+ALTER TABLE IF EXISTS isidbuser.haus_fuer_kinder
+    ADD CONSTRAINT haus_fuer_kinder_einrichtungstraeger_check CHECK (einrichtungstraeger IN (
+    'UNSPECIFIED',
+    'STAEDTISCHE_EINRICHTUNG',
+    'EINRICHTUNG_BETRIEBSTRAEGERSCHAFT',
+    'FREIE_GEMEINNUETZIGE_SONSTIGE',
+    'ELTERN_KIND_INITIATIVE'
+));
 
 COMMIT;

@@ -105,7 +105,7 @@ public class HausFuerKinder extends Infrastruktureinrichtung {
     @Column
     private Integer belegungIntegrationsplaetzeKindergarten;
 
-    @Column(name = "hoertplaetze_nach_be")
+    @Column(name = "hortplaetze_nach_be")
     private Integer hortplaetzeNachBE;
 
     @Column
