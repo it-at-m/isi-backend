@@ -10,6 +10,7 @@ import de.muenchen.isi.api.dto.infrastruktureinrichtung.MittelschuleDto;
 import de.muenchen.isi.api.dto.infrastruktureinrichtung.NachbarschaftstreffDto;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Einrichtungstraeger;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusInfrastruktureinrichtung;
+import de.muenchen.isi.infrastructure.entity.infrastruktureinrichtung.HausFuerKinder;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import lombok.NoArgsConstructor;
@@ -40,27 +41,25 @@ public class EinrichtungstraegerValidator
         if (value instanceof KinderkrippeDto dtoKk) {
             var einrichtungstraeger = dtoKk.getEinrichtungstraeger();
             return this.isValidEinrichtungstraeger(einrichtungstraeger);
-        }
-        if (value instanceof KindergartenDto dtoKg) {
+        } else if (value instanceof KindergartenDto dtoKg) {
             var einrichtungstraeger = dtoKg.getEinrichtungstraeger();
+            return this.isValidEinrichtungstraeger(einrichtungstraeger);
+        } else if (value instanceof HausFuerKinderDto dtoHk) {
+            var einrichtungstraeger = dtoHk.getEinrichtungstraeger();
             return this.isValidEinrichtungstraeger(einrichtungstraeger);
         }
 
         if (isStatusBestand(value)) {
             switch (value) {
-                case GrundschuleDto dto4 -> {
-                    var einrichtungstraeger = dto4.getSchule().getEinrichtungstraeger();
-                    return this.isValidEinrichtungstraegerSchule(einrichtungstraeger);
-                }
-                case MittelschuleDto dto3 -> {
+                case GrundschuleDto dto3 -> {
                     var einrichtungstraeger = dto3.getSchule().getEinrichtungstraeger();
                     return this.isValidEinrichtungstraegerSchule(einrichtungstraeger);
                 }
-                case GsNachmittagBetreuungDto dto2 -> {
-                    var einrichtungstraeger = dto2.getEinrichtungstraeger();
-                    return this.isValidEinrichtungstraeger(einrichtungstraeger);
+                case MittelschuleDto dto2 -> {
+                    var einrichtungstraeger = dto2.getSchule().getEinrichtungstraeger();
+                    return this.isValidEinrichtungstraegerSchule(einrichtungstraeger);
                 }
-                case HausFuerKinderDto dto1 -> {
+                case GsNachmittagBetreuungDto dto1 -> {
                     var einrichtungstraeger = dto1.getEinrichtungstraeger();
                     return this.isValidEinrichtungstraeger(einrichtungstraeger);
                 }

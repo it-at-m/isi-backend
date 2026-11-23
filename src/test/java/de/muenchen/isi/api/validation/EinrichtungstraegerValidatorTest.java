@@ -65,16 +65,19 @@ public class EinrichtungstraegerValidatorTest {
     }
 
     @Test
-    void isValidGrundschuleHausFuerKinder() {
+    void isValidHausFuerKinder() {
         final HausFuerKinderDto value = new HausFuerKinderDto();
 
         assertThat(this.validator.isValid(null, null), is(false));
-        assertThat(this.validator.isValid(value, null), is(true));
+        assertThat(this.validator.isValid(value, null), is(false));
 
         value.setStatus(StatusInfrastruktureinrichtung.BESTAND);
         assertThat(this.validator.isValid(value, null), is(false));
 
         value.setEinrichtungstraeger(Einrichtungstraeger.STAEDTISCHE_EINRICHTUNG);
+        assertThat(this.validator.isValid(value, null), is(true));
+
+        value.setEinrichtungstraeger(Einrichtungstraeger.UNSPECIFIED);
         assertThat(this.validator.isValid(value, null), is(true));
     }
 

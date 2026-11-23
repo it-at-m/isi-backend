@@ -26,22 +26,7 @@ public class WohnungsnahePlaetzeValidator
     @Override
     public boolean isValid(final InfrastruktureinrichtungDto value, final ConstraintValidatorContext context) {
         if (value != null) {
-            if (value instanceof HausFuerKinderDto hausFuerKinder) {
-                return (
-                    this.areWohnungsnahePlatzeValid(
-                        hausFuerKinder.getAnzahlKinderkrippePlaetze(),
-                        hausFuerKinder.getWohnungsnaheKinderkrippePlaetze()
-                    ) &&
-                    this.areWohnungsnahePlatzeValid(
-                        hausFuerKinder.getAnzahlKindergartenPlaetze(),
-                        hausFuerKinder.getWohnungsnaheKindergartenPlaetze()
-                    ) &&
-                    this.areWohnungsnahePlatzeValid(
-                        hausFuerKinder.getAnzahlHortPlaetze(),
-                        hausFuerKinder.getWohnungsnaheHortPlaetze()
-                    )
-                );
-            } else if (value instanceof GsNachmittagBetreuungDto gsNachmittagsbetreuung) {
+            if (value instanceof GsNachmittagBetreuungDto gsNachmittagsbetreuung) {
                 return this.areWohnungsnahePlatzeValid(
                     gsNachmittagsbetreuung.getAnzahlHortPlaetze(),
                     gsNachmittagsbetreuung.getWohnungsnaheHortPlaetze()
