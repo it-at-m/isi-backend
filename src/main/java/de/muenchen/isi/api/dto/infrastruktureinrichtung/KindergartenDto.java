@@ -4,12 +4,9 @@
  */
 package de.muenchen.isi.api.dto.infrastruktureinrichtung;
 
-import de.muenchen.isi.api.validation.NotUnspecified;
 import de.muenchen.isi.api.validation.WohnungsnahePlaetzeValid;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Einrichtungstraeger;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
