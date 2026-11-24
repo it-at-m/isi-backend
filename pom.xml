@@ -170,6 +170,11 @@
                 <artifactId>jackson-databind-nullable</artifactId>
                 <version>${jackson.databind.nullable.version}</version>
             </dependency>
+            <!-- Jackson 2 JSR-310 fuer den generierten Reporting-EAI-Client (ApiClient); kommt seit springdoc 3.2.1 nicht mehr transitiv -->
+            <dependency>
+                <groupId>com.fasterxml.jackson.datatype</groupId>
+                <artifactId>jackson-datatype-jsr310</artifactId>
+            </dependency>
 
             <!-- Caching -->
             <dependency>
