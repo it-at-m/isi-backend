@@ -68,6 +68,24 @@ FROM verortung_alt v
          CROSS JOIN LATERAL jsonb_array_elements(CASE jsonb_typeof(g -> 'flurstuecke') WHEN 'array' THEN g -> 'flurstuecke' ELSE '[]' END) f
 WHERE jsonb_typeof(f -> 'multiPolygon' -> 'coordinates') = 'array';
 
+-- ST_GeomFromGeoJSON bricht bei einer Position mit nur einer Ordinate ohne Angabe des Eigentümers ab und
+-- überspringt leere Positionen stillschweigend, was den Ring verfälscht. Deshalb vorab mit den betroffenen IDs abbrechen.
+DO
+$$
+DECLARE
+    betroffen text;
+BEGIN
+    SELECT string_agg(DISTINCT id, ', ' ORDER BY id) INTO betroffen
+    FROM (SELECT id, verortung -> 'multiPolygon' -> 'coordinates' AS koordinaten FROM verortung_alt
+          UNION ALL
+          SELECT id, multi_polygon -> 'coordinates' FROM flurstueck_alt) g
+    WHERE jsonb_path_exists(koordinaten, 'strict $[*][*][*] ? (@.type() != "array" || @.size() < 2)');
+    IF betroffen IS NOT NULL THEN
+        RAISE EXCEPTION 'Verortung mit Position aus weniger als zwei Ordinaten (Umgriff oder Flurstück), Eigentümer: %', betroffen;
+    END IF;
+END;
+$$;
+
 INSERT INTO verortung_geometrie (id, umgriff)
 SELECT id, ST_Multi(ST_Force2D(ST_GeomFromGeoJSON(verortung -> 'multiPolygon')))
 FROM verortung_alt;

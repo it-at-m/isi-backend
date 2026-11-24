@@ -5,9 +5,11 @@ import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.nullValue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.UUID;
 import org.flywaydb.core.Flyway;
+import org.flywaydb.core.api.FlywayException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -278,5 +280,60 @@ class VerortungMigrationTest {
             zahl("SELECT count(*) FROM isidbuser.verortung_flurstueck WHERE verortung_geometrie_id = ?", id),
             is(0L)
         );
+    }
+
+    /**
+     * PostGIS überspringt leere Positionen stillschweigend und bricht bei einer Ordinate ohne Angabe des Eigentümers ab.
+     * V51 bricht deshalb vorab ab und nennt die betroffenen Eigentümer. Eigene Datenbank, weil die Migration scheitert.
+     */
+    @Test
+    void positionMitWenigerAlsZweiOrdinatenBrichtMitBetroffenenIdsAb() {
+        final var dataSource = new SimpleDriverDataSource(
+            new ContainerDatabaseDriver(),
+            URL.replace("verortungmigration", "verortungmigrationfehler")
+        );
+        final var flyway = Flyway.configure()
+            .dataSource(dataSource)
+            .schemas("isidbuser")
+            .locations("classpath:db/migration");
+        flyway.target("50").load().migrate();
+
+        final var leerePosition = UUID.randomUUID().toString();
+        final var eineOrdinate = UUID.randomUUID().toString();
+        final var gueltig = UUID.randomUUID().toString();
+        final var datenbank = new JdbcTemplate(dataSource);
+        final var insert = """
+        INSERT INTO isidbuser.bauvorhaben (id, name_vorhaben, sobon_relevant, verfahrensstand, verortung)
+        VALUES (?, 'Bauvorhaben', 'FALSE', 'VORABFRAGE_OHNE_KONKRETEN_STAND', ?::jsonb)""";
+        datenbank.update(
+            insert,
+            leerePosition,
+            """
+            {"multiPolygon":{"type":"MultiPolygon","coordinates":[[[[11.0,48.0],[],[11.1,48.1],[11.0,48.1],[11.0,48.0]]]]}}"""
+        );
+        datenbank.update(
+            insert,
+            eineOrdinate,
+            """
+            {"multiPolygon":%s,"gemarkungen":[{"nummer":1900,"flurstuecke":[{"nummer":"1","multiPolygon":
+              {"type":"MultiPolygon","coordinates":[[[[11.0,48.0],[11.1],[11.1,48.1],[11.0,48.0]]]]}}]}]}""".formatted(
+                QUADRAT
+            )
+        );
+        datenbank.update(insert, gueltig, NUR_UMGRIFF);
+
+        final var fehler = assertThrows(FlywayException.class, () ->
+            Flyway.configure()
+                .dataSource(dataSource)
+                .schemas("isidbuser")
+                .locations("classpath:db/migration")
+                .load()
+                .migrate()
+        );
+
+        assertThat(fehler.getMessage(), containsString("weniger als zwei Ordinaten"));
+        assertThat(fehler.getMessage(), containsString(leerePosition));
+        assertThat(fehler.getMessage(), containsString(eineOrdinate));
+        assertThat(fehler.getMessage(), not(containsString(gueltig)));
     }
 }
