@@ -54,7 +54,7 @@
         <jackson.databind.nullable.version>0.2.13</jackson.databind.nullable.version>
         <shedlock.version>7.12.0</shedlock.version>
         <!-- Override der von Spring Boot verwalteten OpenTelemetry-Version (CVE-2026-118259) -->
-        <opentelemetry.version>1.67.0</opentelemetry.version>
+        <opentelemetry.version>1.68.0</opentelemetry.version>
     </properties>
 
     <dependencyManagement>
