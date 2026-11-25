@@ -28,6 +28,7 @@ import de.muenchen.isi.domain.service.BauvorhabenService;
 import de.muenchen.isi.domain.service.InfrastruktureinrichtungService;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.AnlassPlanung;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusInfrastruktureinrichtung;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
 import de.muenchen.isi.security.AuthenticationUtils;
 import io.micrometer.tracing.Tracer;
 import java.util.UUID;
@@ -112,7 +113,8 @@ class InfrastruktureinrichtungControllerTest {
 
     @Test
     void createInfrastruktureinrichtung_shouldReturnCreated() throws Exception {
-        final InfrastruktureinrichtungDto request = new NachbarschaftstreffDto();
+        final NachbarschaftstreffDto request = new NachbarschaftstreffDto();
+        request.setSobonRelevant(UncertainBoolean.FALSE);
         request.setInfrastruktureinrichtungTyp(
             de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp.NACHBARSCHAFTSTREFF
         );
@@ -144,7 +146,8 @@ class InfrastruktureinrichtungControllerTest {
 
     @Test
     void createInfrastruktureinrichtung_whenOptimisticLocking_shouldReturnPreconditionFailed() throws Exception {
-        final InfrastruktureinrichtungDto request = new NachbarschaftstreffDto();
+        final NachbarschaftstreffDto request = new NachbarschaftstreffDto();
+        request.setSobonRelevant(UncertainBoolean.FALSE);
         request.setInfrastruktureinrichtungTyp(
             de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp.NACHBARSCHAFTSTREFF
         );
@@ -171,7 +174,8 @@ class InfrastruktureinrichtungControllerTest {
 
     @Test
     void updateInfrastruktureinrichtung_shouldReturnOk() throws Exception {
-        final InfrastruktureinrichtungDto request = new NachbarschaftstreffDto();
+        final NachbarschaftstreffDto request = new NachbarschaftstreffDto();
+        request.setSobonRelevant(UncertainBoolean.FALSE);
         request.setInfrastruktureinrichtungTyp(
             de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp.NACHBARSCHAFTSTREFF
         );
@@ -203,7 +207,8 @@ class InfrastruktureinrichtungControllerTest {
 
     @Test
     void updateInfrastruktureinrichtung_whenNotFound_shouldReturn404() throws Exception {
-        final InfrastruktureinrichtungDto request = new NachbarschaftstreffDto();
+        final NachbarschaftstreffDto request = new NachbarschaftstreffDto();
+        request.setSobonRelevant(UncertainBoolean.FALSE);
         request.setInfrastruktureinrichtungTyp(
             de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp.NACHBARSCHAFTSTREFF
         );
@@ -250,7 +255,8 @@ class InfrastruktureinrichtungControllerTest {
 
     @Test
     void createInfrastruktureinrichtungBedarfsmeldungKita_shouldReturnCreated() throws Exception {
-        final InfrastruktureinrichtungDto request = new NachbarschaftstreffDto();
+        final NachbarschaftstreffDto request = new NachbarschaftstreffDto();
+        request.setSobonRelevant(UncertainBoolean.FALSE);
         request.setInfrastruktureinrichtungTyp(
             de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp.NACHBARSCHAFTSTREFF
         );
@@ -283,7 +289,8 @@ class InfrastruktureinrichtungControllerTest {
     @Test
     void createInfrastruktureinrichtungBedarfsmeldungKita_whenReportingException_shouldReturnBadRequest()
         throws Exception {
-        final InfrastruktureinrichtungDto request = new NachbarschaftstreffDto();
+        final NachbarschaftstreffDto request = new NachbarschaftstreffDto();
+        request.setSobonRelevant(UncertainBoolean.FALSE);
         request.setInfrastruktureinrichtungTyp(
             de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp.NACHBARSCHAFTSTREFF
         );
@@ -310,7 +317,8 @@ class InfrastruktureinrichtungControllerTest {
 
     @Test
     void createInfrastruktureinrichtungBedarfsmeldungSozialplanung_shouldReturnCreated() throws Exception {
-        final InfrastruktureinrichtungDto request = new NachbarschaftstreffDto();
+        final NachbarschaftstreffDto request = new NachbarschaftstreffDto();
+        request.setSobonRelevant(UncertainBoolean.FALSE);
         request.setInfrastruktureinrichtungTyp(
             de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp.NACHBARSCHAFTSTREFF
         );
@@ -343,7 +351,8 @@ class InfrastruktureinrichtungControllerTest {
     @Test
     void createInfrastruktureinrichtungBedarfsmeldungSozialplanung_whenOptimisticLocking_shouldReturnPreconditionFailed()
         throws Exception {
-        final InfrastruktureinrichtungDto request = new NachbarschaftstreffDto();
+        final NachbarschaftstreffDto request = new NachbarschaftstreffDto();
+        request.setSobonRelevant(UncertainBoolean.FALSE);
         request.setInfrastruktureinrichtungTyp(
             de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp.NACHBARSCHAFTSTREFF
         );
@@ -370,7 +379,8 @@ class InfrastruktureinrichtungControllerTest {
 
     @Test
     void updateInfrastruktureinrichtungBedarfsmeldungKita_shouldReturnOk() throws Exception {
-        final InfrastruktureinrichtungDto request = new NachbarschaftstreffDto();
+        final NachbarschaftstreffDto request = new NachbarschaftstreffDto();
+        request.setSobonRelevant(UncertainBoolean.FALSE);
         request.setInfrastruktureinrichtungTyp(
             de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp.NACHBARSCHAFTSTREFF
         );
@@ -402,7 +412,8 @@ class InfrastruktureinrichtungControllerTest {
 
     @Test
     void updateInfrastruktureinrichtungBedarfsmeldungSozialplanung_whenNotFound_shouldReturn404() throws Exception {
-        final InfrastruktureinrichtungDto request = new NachbarschaftstreffDto();
+        final NachbarschaftstreffDto request = new NachbarschaftstreffDto();
+        request.setSobonRelevant(UncertainBoolean.FALSE);
         request.setInfrastruktureinrichtungTyp(
             de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp.NACHBARSCHAFTSTREFF
         );
