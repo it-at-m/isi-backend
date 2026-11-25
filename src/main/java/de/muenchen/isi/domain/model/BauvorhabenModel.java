@@ -4,6 +4,7 @@ import de.muenchen.isi.domain.model.common.AdresseModel;
 import de.muenchen.isi.domain.model.common.BearbeitendePersonModel;
 import de.muenchen.isi.domain.model.common.BearbeitungshistorieModel;
 import de.muenchen.isi.domain.model.common.VerortungMultiPolygonModel;
+import de.muenchen.isi.domain.model.common.WithVerortungMultiPolygon;
 import de.muenchen.isi.domain.model.filehandling.DokumentModel;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.ArtBaulicheNutzung;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonVerfahrensgrundsaetzeJahr;
@@ -21,7 +22,7 @@ import lombok.ToString;
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class BauvorhabenModel extends BaseEntityModel {
+public class BauvorhabenModel extends BaseEntityModel implements WithVerortungMultiPolygon {
 
     private BearbeitendePersonModel bearbeitendePerson;
 

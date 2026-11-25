@@ -77,6 +77,8 @@ public class BauvorhabenService {
 
     private final BearbeitungshistorieService bearbeitungshistorieService;
 
+    private final VerortungGeometrieService verortungGeometrieService;
+
     /**
      * Die Methode gibt ein {@link BauvorhabenModel} identifiziert durch die ID zurück.
      *
@@ -119,6 +121,7 @@ public class BauvorhabenService {
                 bauvorhabenEntity.setBauvorhabenNummer(this.buildBauvorhabennummer(bauvorhabenEntity.getVerortung()));
             }
             bauvorhabenEntity = this.bauvorhabenRepository.saveAndFlush(bauvorhabenEntity);
+            this.verortungGeometrieService.synchronisieren(bauvorhabenEntity.getId(), bauvorhaben.getVerortung());
             // falls bei Neuanlage eines Bauvorhabens eine Datenübernahme mit einer Abfrage durchgeführt wurde, dann wird diese mit dem Bauvorhaben verknüpft
             if (bauvorhaben.getId() == null && abfrageId != null) {
                 final var abfrageModel = this.abfrageService.getById(abfrageId);

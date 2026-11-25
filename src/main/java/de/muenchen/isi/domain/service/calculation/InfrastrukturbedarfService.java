@@ -6,6 +6,7 @@ import de.muenchen.isi.domain.model.calculation.InfrastrukturbedarfProJahrModel;
 import de.muenchen.isi.domain.model.calculation.PersonenProJahrModel;
 import de.muenchen.isi.domain.model.calculation.WohneinheitenProFoerderartProJahrModel;
 import de.muenchen.isi.domain.model.stammdaten.SobonOrientierungswertSozialeInfrastrukturModel;
+import de.muenchen.isi.infrastructure.entity.enums.Altersklasse;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.SobonOrientierungswertJahr;
 import de.muenchen.isi.infrastructure.entity.stammdaten.VersorgungsquoteGruppenstaerke;
@@ -352,14 +353,16 @@ public class InfrastrukturbedarfService {
         final SobonOrientierungswertJahr sobonJahr,
         final InfrastruktureinrichtungTyp einrichtungstyp
     ) throws CalculationException {
+        final Altersklasse altersklasse = getAltersklasse(einrichtungstyp);
         try {
             return wohneinheiten
                 .stream()
                 .map(WohneinheitenProFoerderartProJahrModel::getFoerderart)
                 .distinct()
                 .map(foerderart ->
-                    sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndFoerderartBezeichnungAndJahrBezeichnung(
+                    sobonOrientierungswertSozialeInfrastrukturRepository.findFirstByEinrichtungstypAndAltersklasseAndFoerderartBezeichnungAndJahrBezeichnungOrderByGueltigAbDesc(
                         einrichtungstyp,
+                        altersklasse,
                         foerderart,
                         sobonJahr.getBezeichnung()
                     )
@@ -521,5 +524,32 @@ public class InfrastrukturbedarfService {
             sobonOrientierungswertSozialeInfrastruktur.getObererRichtwertEinwohnerJahr20NachErsterstellung()
         );
         return obereRichtwerteByYear;
+    }
+
+    /**
+     * Ermittelt die Altersklasse, deren SoBoN-Orientierungswerte für die Berechnung des Einrichtungstyps herangezogen werden.
+     * Für {@link InfrastruktureinrichtungTyp#UNSPECIFIED} (Berechnung aller Einwohner) ist dies die Altersklasse
+     * {@link Altersklasse#ALLE_EWO}.
+     *
+     * @param einrichtungstyp für den die Altersklasse ermittelt werden soll.
+     * @return die Altersklasse des Einrichtungstyps.
+     * @throws CalculationException falls für den Einrichtungstyp keine Bedarfsberechnung vorgesehen ist.
+     */
+    protected Altersklasse getAltersklasse(final InfrastruktureinrichtungTyp einrichtungstyp)
+        throws CalculationException {
+        return switch (einrichtungstyp) {
+            case KINDERKRIPPE -> Altersklasse.NULL_ZWEI;
+            case KINDERGARTEN -> Altersklasse.DREI_SECHSEINHALB;
+            case GS_NACHMITTAG_BETREUUNG, GRUNDSCHULE -> Altersklasse.SECHSEINHALB_NEUNEINHALB;
+            case UNSPECIFIED -> Altersklasse.ALLE_EWO;
+            default -> {
+                final var message = String.format(
+                    "Für den Einrichtungstyp %s ist keine Altersklasse zur Bedarfsberechnung hinterlegt.",
+                    einrichtungstyp
+                );
+                log.error(message);
+                throw new CalculationException(message);
+            }
+        };
     }
 }

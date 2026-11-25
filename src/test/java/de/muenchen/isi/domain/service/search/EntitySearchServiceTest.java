@@ -14,6 +14,7 @@ import de.muenchen.isi.domain.model.search.request.BauvorhabenInfrastruktureinri
 import de.muenchen.isi.domain.model.search.request.BauvorhabenRecord;
 import de.muenchen.isi.domain.model.search.request.InfrastrukturRecord;
 import de.muenchen.isi.domain.model.search.request.SearchQueryAndSortingModel;
+import de.muenchen.isi.domain.service.VerortungGeometrieService;
 import de.muenchen.isi.infrastructure.entity.BaseEntity;
 import de.muenchen.isi.infrastructure.entity.Baugenehmigungsverfahren;
 import de.muenchen.isi.infrastructure.entity.Bauleitplanverfahren;
@@ -43,9 +44,13 @@ class EntitySearchServiceTest {
     @Mock
     private AuthenticationUtils authenticationUtils;
 
+    @Mock
+    private VerortungGeometrieService verortungGeometrieService;
+
     private final EntitySearchService entitySearchService = new EntitySearchService(
         searchPreparationService,
         searchDomainMapper,
+        verortungGeometrieService,
         authenticationUtils
     );
 
@@ -53,7 +58,12 @@ class EntitySearchServiceTest {
     void prepareFilterGemeinsameAttributeNurEigeneVorgaenge() {
         final var authentifizierung = Mockito.mock(AuthenticationUtils.class);
         Mockito.when(authentifizierung.getEmail()).thenReturn("Bearbeiter@Muenchen.de");
-        final var service = new EntitySearchService(searchPreparationService, searchDomainMapper, authentifizierung);
+        final var service = new EntitySearchService(
+            searchPreparationService,
+            searchDomainMapper,
+            verortungGeometrieService,
+            authentifizierung
+        );
         final var filter = new HashMap<String, List<?>>();
         final var query = new SearchQueryAndSortingModel();
         query.setFilterNurEigeneVorgaenge(true);

@@ -1,7 +1,6 @@
 package de.muenchen.isi.api.dto.common;
 
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import lombok.Data;
 
@@ -23,6 +22,5 @@ public class FlurstueckDto {
     private BigDecimal gemarkungNummer;
 
     @Valid
-    @NotNull
     private MultiPolygonGeometryDto multiPolygon;
 }

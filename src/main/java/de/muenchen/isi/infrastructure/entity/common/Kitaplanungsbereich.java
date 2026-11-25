@@ -10,6 +10,4 @@ public class Kitaplanungsbereich {
 
     @FullTextField
     private String kitaPlbT;
-
-    private MultiPolygonGeometry multiPolygon;
 }

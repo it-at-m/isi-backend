@@ -17,6 +17,5 @@ public class GemarkungDto {
     private Set<@Valid FlurstueckDto> flurstuecke;
 
     @Valid
-    @NotNull
     private MultiPolygonGeometryDto multiPolygon;
 }

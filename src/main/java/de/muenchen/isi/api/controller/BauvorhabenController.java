@@ -16,6 +16,7 @@ import de.muenchen.isi.domain.exception.ReportingException;
 import de.muenchen.isi.domain.exception.UniqueViolationException;
 import de.muenchen.isi.domain.exception.UserRoleNotAllowedException;
 import de.muenchen.isi.domain.service.BauvorhabenService;
+import de.muenchen.isi.domain.service.VerortungGeometrieService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -56,6 +57,8 @@ public class BauvorhabenController {
 
     private final SearchApiMapper searchApiMapper;
 
+    private final VerortungGeometrieService verortungGeometrieService;
+
     @GetMapping("bauvorhaben/{id}")
     @Transactional(readOnly = true)
     @Operation(summary = "Lesen eines Bauvorhabens")
@@ -73,6 +76,7 @@ public class BauvorhabenController {
     public ResponseEntity<BauvorhabenDto> getBauvorhabenById(@PathVariable @NotNull final UUID id)
         throws EntityNotFoundException {
         final var model = this.bauvorhabenService.getBauvorhabenById(id);
+        this.verortungGeometrieService.ergaenzen(id, model);
         final var dto = this.bauvorhabenApiMapper.model2Dto(model);
         return ResponseEntity.ok(dto);
     }
@@ -118,6 +122,7 @@ public class BauvorhabenController {
         throws OptimisticLockingException, EntityNotFoundException, EntityIsReferencedException, UserRoleNotAllowedException, ReportingException {
         var model = this.bauvorhabenApiMapper.dto2Model(bauvorhabenDto);
         model = this.bauvorhabenService.saveBauvorhaben(model, abfrageId);
+        this.verortungGeometrieService.ergaenzen(model.getId(), model);
         final var saved = this.bauvorhabenApiMapper.model2Dto(model);
         return new ResponseEntity<>(saved, HttpStatus.CREATED);
     }
@@ -167,6 +172,7 @@ public class BauvorhabenController {
         throws EntityNotFoundException, OptimisticLockingException, FileHandlingFailedException, EntityIsReferencedException, UserRoleNotAllowedException, ReportingException {
         var model = this.bauvorhabenApiMapper.dto2Model(bauvorhabenDto);
         model = this.bauvorhabenService.updateBauvorhaben(model);
+        this.verortungGeometrieService.ergaenzen(model.getId(), model);
         final var saved = this.bauvorhabenApiMapper.model2Dto(model);
         return ResponseEntity.ok(saved);
     }
@@ -218,6 +224,7 @@ public class BauvorhabenController {
     )
         throws EntityNotFoundException, UniqueViolationException, OptimisticLockingException, AbfrageStatusNotAllowedException, BauvorhabenNotReferencedException, EntityIsReferencedException, UserRoleNotAllowedException, ReportingException {
         final var bauvorhaben = bauvorhabenService.changeRelevanteAbfragevariante(abfragevarianteId);
+        verortungGeometrieService.ergaenzen(bauvorhaben.getId(), bauvorhaben);
         final var saved = bauvorhabenApiMapper.model2Dto(bauvorhaben);
         return ResponseEntity.ok(saved);
     }

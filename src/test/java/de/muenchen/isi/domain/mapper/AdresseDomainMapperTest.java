@@ -53,8 +53,8 @@ class AdresseDomainMapperTest {
 
         final var utm = new Utm();
         utm.setZone("32U");
-        utm.setEast(689219.7547272056);
-        utm.setNorth(5331467.745840158);
+        utm.setEast(689219.7545742918);
+        utm.setNorth(5331467.750397166);
         expected.setCoordinateUtm(utm);
 
         assertThat(result, is(expected));

@@ -24,6 +24,4 @@ public class Stadtbezirk {
         valueBinder = @ValueBinderRef(type = StringSuggestionBinder.class)
     )
     private String name;
-
-    private MultiPolygonGeometry multiPolygon;
 }

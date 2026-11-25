@@ -58,7 +58,7 @@ public class KoordinatenController {
     }
 
     @PostMapping("utm-to-wgs")
-    @Operation(summary = "Umrechnung UTM32 zu WGS84")
+    @Operation(summary = "Umrechnung UTM32 (EPSG:25832) zu WGS84")
     @ApiResponses(
         value = {
             @ApiResponse(

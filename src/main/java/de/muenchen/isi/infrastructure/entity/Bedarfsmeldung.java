@@ -3,13 +3,13 @@ package de.muenchen.isi.infrastructure.entity;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
 
 @Entity
 @Table(
@@ -28,15 +28,15 @@ import org.hibernate.type.SqlTypes;
         ),
         @Index(
             name = "bedarfsmeldung_abfrgerstlr_abfrgvar_bauleitplnvrfhrn_id_index",
-            columnList = "abfrgvar_bauleitplnvrfhrn_abfrgerstlr_id"
+            columnList = "abfrgvar_bauleitplnvrfhrn_abfrageersteller_id"
         ),
         @Index(
             name = "bedarfsmeldung_abfrgerstlr_abfrgvar_baugnhmgsverfhrn_id_index",
-            columnList = "abfrgvar_baugnhmgsverfhrn_abfrgerstlrr_id"
+            columnList = "abfrgvar_baugnhmgsverfhrn_abfrageersteller_id"
         ),
         @Index(
             name = "bedarfsmeldung_abfrgerstlr_abfrgvar_weitrs_vrfhrn_id_index",
-            columnList = "abfrgvar_weitrs_vrfhrn_abfrgerstlr_id"
+            columnList = "abfrgvar_weitrs_vrfhrn_abfrageersteller_id"
         ),
     }
 )
@@ -49,7 +49,7 @@ public class Bedarfsmeldung extends BaseEntity {
     private Integer anzahlEinrichtungen;
 
     @Column(nullable = false)
-    @JdbcTypeCode(SqlTypes.INTEGER)
+    @Enumerated(EnumType.STRING)
     private InfrastruktureinrichtungTyp infrastruktureinrichtungTyp;
 
     @Column

@@ -21,6 +21,7 @@ import de.muenchen.isi.domain.exception.ReportingException;
 import de.muenchen.isi.domain.exception.UserRoleNotAllowedException;
 import de.muenchen.isi.domain.mapper.AbfrageDomainMapper;
 import de.muenchen.isi.domain.service.AbfrageService;
+import de.muenchen.isi.domain.service.VerortungGeometrieService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -60,6 +61,8 @@ public class AbfrageController {
 
     private final AbfrageDomainMapper abfrageDomainMapper;
 
+    private final VerortungGeometrieService verortungGeometrieService;
+
     @GetMapping("/{id}")
     @Transactional(readOnly = true)
     @Operation(summary = "Lesen einer Abfrage.")
@@ -82,6 +85,7 @@ public class AbfrageController {
     public ResponseEntity<AbfrageDto> getById(@PathVariable @NotNull final UUID id)
         throws EntityNotFoundException, UserRoleNotAllowedException {
         final var model = abfrageService.getById(id);
+        verortungGeometrieService.ergaenzen(id, model);
         final var dto = abfrageApiMapper.model2Dto(model);
         return ResponseEntity.ok(dto);
     }
@@ -117,6 +121,7 @@ public class AbfrageController {
         final var requestModel = abfrageApiMapper.dto2Model(abfrage);
         var model = abfrageDomainMapper.request2NewModel(requestModel);
         model = abfrageService.save(model);
+        verortungGeometrieService.ergaenzen(model.getId(), model);
         final var dto = abfrageApiMapper.model2Dto(model);
         return ResponseEntity.status(HttpStatus.CREATED).body(dto);
     }
@@ -169,6 +174,7 @@ public class AbfrageController {
         throws FileHandlingFailedException, OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, UserRoleNotAllowedException, CalculationException, ReportingException {
         final var requestModel = abfrageApiMapper.dto2Model(abfrage);
         final var responseModel = abfrageService.patchAngelegt(requestModel, id);
+        verortungGeometrieService.ergaenzen(id, responseModel);
         final var dto = abfrageApiMapper.model2Dto(responseModel);
         return ResponseEntity.ok(dto);
     }
@@ -218,6 +224,7 @@ public class AbfrageController {
         throws OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException, UserRoleNotAllowedException, ReportingException {
         final var requestModel = abfrageApiMapper.dto2Model(abfrage);
         final var responseModel = abfrageService.patchStartBearbeitung(requestModel, id);
+        verortungGeometrieService.ergaenzen(id, responseModel);
         final var dto = abfrageApiMapper.model2Dto(responseModel);
         return ResponseEntity.ok(dto);
     }
@@ -267,6 +274,7 @@ public class AbfrageController {
         throws OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException, UserRoleNotAllowedException, ReportingException {
         final var requestModel = abfrageApiMapper.dto2Model(abfrage);
         final var responseModel = abfrageService.patchEinpflegenBedarfsmeldung(requestModel, id);
+        verortungGeometrieService.ergaenzen(id, responseModel);
         final var dto = abfrageApiMapper.model2Dto(responseModel);
         return ResponseEntity.ok(dto);
     }
@@ -311,6 +319,7 @@ public class AbfrageController {
         throws OptimisticLockingException, EntityNotFoundException, AbfrageStatusNotAllowedException, UserRoleNotAllowedException, CalculationException, ReportingException {
         final var requestModel = abfrageApiMapper.dto2Model(abfrage);
         final var responseModel = abfrageService.patchEinplanungBedarfe(requestModel, id);
+        verortungGeometrieService.ergaenzen(id, responseModel);
         final var dto = abfrageApiMapper.model2Dto(responseModel);
         return ResponseEntity.ok(dto);
     }
@@ -367,6 +376,7 @@ public class AbfrageController {
     public ResponseEntity<AbfrageDto> wvInBlvUebernehmenById(@PathVariable @NotNull final UUID id)
         throws EntityNotFoundException, UserRoleNotAllowedException {
         final var model = abfrageService.wvInBlvUebernehmen(id);
+        verortungGeometrieService.ergaenzen(id, model);
         final var dto = abfrageApiMapper.model2Dto(model);
         return ResponseEntity.ok(dto);
     }
@@ -393,6 +403,7 @@ public class AbfrageController {
     public ResponseEntity<AbfrageDto> wvInBgvUebernehmenById(@PathVariable @NotNull final UUID id)
         throws EntityNotFoundException, UserRoleNotAllowedException {
         final var model = abfrageService.wvInBgvUebernehmen(id);
+        verortungGeometrieService.ergaenzen(id, model);
         final var dto = abfrageApiMapper.model2Dto(model);
         return ResponseEntity.ok(dto);
     }
@@ -419,6 +430,7 @@ public class AbfrageController {
     public ResponseEntity<AbfrageDto> blvInBgvUebernehmenById(@PathVariable @NotNull final UUID id)
         throws EntityNotFoundException, UserRoleNotAllowedException {
         final var model = abfrageService.blvInBgvUebernehmen(id);
+        verortungGeometrieService.ergaenzen(id, model);
         final var dto = abfrageApiMapper.model2Dto(model);
         return ResponseEntity.ok(dto);
     }

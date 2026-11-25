@@ -94,6 +94,9 @@ public class BauvorhabenServiceTest {
     private BauvorhabenService bauvorhabenService;
 
     @Mock
+    private VerortungGeometrieService verortungGeometrieService;
+
+    @Mock
     private AbfrageService abfrageService;
 
     @Mock
@@ -140,7 +143,8 @@ public class BauvorhabenServiceTest {
             this.dokumentService,
             this.kommentarRepository,
             this.etlInterfaceService,
-            this.bearbeitungshistorieService
+            this.bearbeitungshistorieService,
+            this.verortungGeometrieService
         );
 
         Mockito.reset(

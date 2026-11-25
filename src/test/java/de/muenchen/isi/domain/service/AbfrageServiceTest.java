@@ -110,6 +110,9 @@ class AbfrageServiceTest {
     private AbfrageService abfrageService;
 
     @Mock
+    private VerortungGeometrieService verortungGeometrieService;
+
+    @Mock
     private AbfrageRepository abfrageRepository;
 
     @Mock
@@ -190,7 +193,8 @@ class AbfrageServiceTest {
             this.reportingdataTransferService,
             this.bauratendateiInputService,
             this.bearbeitungshistorieService,
-            this.etlInterfaceService
+            this.etlInterfaceService,
+            this.verortungGeometrieService
         );
         Mockito.reset(
             this.abfrageRepository,

@@ -24,6 +24,4 @@ public class Gemarkung {
 
     @IndexedEmbedded
     private Set<Flurstueck> flurstuecke;
-
-    private MultiPolygonGeometry multiPolygon;
 }

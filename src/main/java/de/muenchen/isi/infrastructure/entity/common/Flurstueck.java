@@ -29,6 +29,4 @@ public class Flurstueck {
     private String eigentumsartBedeutung;
 
     private BigDecimal gemarkungNummer;
-
-    private MultiPolygonGeometry multiPolygon;
 }

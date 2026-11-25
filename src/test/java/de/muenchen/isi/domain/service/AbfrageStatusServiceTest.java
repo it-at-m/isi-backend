@@ -22,11 +22,15 @@ import de.muenchen.isi.domain.service.email.SendWorkAssignmentInformationService
 import de.muenchen.isi.domain.service.etlInterface.EtlInterfaceService;
 import de.muenchen.isi.domain.service.reporting.ReportingdataTransferService;
 import de.muenchen.isi.domain.service.transition.MockCustomUser;
+import de.muenchen.isi.infrastructure.entity.common.VerortungGeometrie;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.Bauratenmethodik;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrageEvents;
+import de.muenchen.isi.infrastructure.repository.common.VerortungGeometrieRepository;
+import jakarta.persistence.EntityManager;
 import java.time.LocalDate;
 import java.util.UUID;
+import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -52,6 +56,12 @@ class AbfrageStatusServiceTest {
 
     @Autowired
     private AbfrageStatusService abfrageStatusService;
+
+    @Autowired
+    private VerortungGeometrieRepository verortungGeometrieRepository;
+
+    @Autowired
+    private EntityManager entityManager;
 
     @MockitoBean
     private CalculationService calculationService;
@@ -89,6 +99,32 @@ class AbfrageStatusServiceTest {
         );
         Assertions.assertThrows(EntityNotFoundException.class, () ->
             this.abfrageStatusService.erledigtMitFachreferat(uuid, anmerkung)
+        );
+    }
+
+    @Test
+    @Transactional
+    @MockCustomUser
+    void statuswechselLaedtKeineGeometrie()
+        throws UniqueViolationException, OptimisticLockingException, StringLengthExceededException, EntityNotFoundException, AbfrageStatusNotAllowedException, CalculationException, ReportingException, UserRoleNotAllowedException {
+        final var uuid = this.abfrageService.save(TestData.createBauleitplanverfahrenModel()).getId();
+        assertThat(this.verortungGeometrieRepository.existsById(uuid), is(true));
+        this.entityManager.flush();
+        this.entityManager.clear();
+        final var statistics = this.entityManager
+            .getEntityManagerFactory()
+            .unwrap(SessionFactory.class)
+            .getStatistics();
+        statistics.setStatisticsEnabled(true);
+        statistics.clear();
+
+        this.abfrageStatusService.freigabeAbfrage(uuid, "");
+        this.entityManager.flush();
+
+        assertThat(statistics.getEntityStatistics(VerortungGeometrie.class.getName()).getLoadCount(), is(0L));
+        assertThat(
+            this.abfrageService.getById(uuid).getStatusAbfrage(),
+            is(StatusAbfrage.UEBERMITTELT_ZUR_BEARBEITUNG)
         );
     }
 
