@@ -6,21 +6,13 @@ package de.muenchen.isi;
 
 import net.javacrumbs.shedlock.spring.annotation.EnableSchedulerLock;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.persistence.autoconfigure.EntityScan;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
  * Application class for starting the microservice.
  */
-@Configuration
-@ComponentScan(basePackages = { "org.springframework.data.jpa.convert.threeten", "de.muenchen.isi" })
-@EntityScan(basePackages = { "org.springframework.data.jpa.convert.threeten", "de.muenchen.isi" })
-@EnableJpaRepositories(basePackages = { "de.muenchen.isi" })
-@EnableAutoConfiguration
+@SpringBootApplication
 @EnableScheduling
 @EnableSchedulerLock(defaultLockAtMostFor = "1380m")
 public class IsiBackendApplication {
