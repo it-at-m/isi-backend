@@ -124,14 +124,17 @@ public class EinrichtungstraegerValidatorTest {
     }
 
     @Test
-    void isValidEinrichutngstraegere() {
+    void isValidEinrichtungstraeger() {
         Einrichtungstraeger einrichtungstraeger = Einrichtungstraeger.ELTERN_KIND_INITIATIVE;
 
         assertThat(this.validator.isValidEinrichtungstraeger(null), is(false));
         assertThat(this.validator.isValidEinrichtungstraeger(einrichtungstraeger), is(true));
 
         einrichtungstraeger = Einrichtungstraeger.STAATLICHE_EINRICHTUNG;
-        assertThat(this.validator.isValidEinrichtungstraeger(einrichtungstraeger), is(false));
+        assertThat(this.validator.isValidEinrichtungstraeger(einrichtungstraeger), is(true));
+
+        einrichtungstraeger = Einrichtungstraeger.STAATLICHE_EINRICHTUNG;
+        assertThat(this.validator.isValidEinrichtungstraegerKinderkrippeKindergarten(einrichtungstraeger), is(false));
     }
 
     @Test

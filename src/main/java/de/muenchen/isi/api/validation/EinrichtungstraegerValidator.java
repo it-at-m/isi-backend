@@ -39,11 +39,11 @@ public class EinrichtungstraegerValidator
         // Kinderkrippe and Kindergarten must always have a valid einrichtungstraeger regardless of status
         if (value instanceof KinderkrippeDto dtoKk) {
             var einrichtungstraeger = dtoKk.getEinrichtungstraeger();
-            return this.isValidEinrichtungstraeger(einrichtungstraeger);
+            return this.isValidEinrichtungstraegerKinderkrippeKindergarten(einrichtungstraeger);
         }
         if (value instanceof KindergartenDto dtoKg) {
             var einrichtungstraeger = dtoKg.getEinrichtungstraeger();
-            return this.isValidEinrichtungstraeger(einrichtungstraeger);
+            return this.isValidEinrichtungstraegerKinderkrippeKindergarten(einrichtungstraeger);
         }
 
         if (isStatusBestand(value)) {
@@ -108,6 +108,20 @@ public class EinrichtungstraegerValidator
         return (
             ObjectUtils.isNotEmpty(einrichtungstraeger) &&
             Einrichtungstraeger.getEinrichtungstraeger().contains(einrichtungstraeger)
+        );
+    }
+
+    /**
+     * Überprüft, ob der gegebene {@link Einrichtungstraeger} gültig ist.
+     * Gültig bedeutet, dass der Einrichtungsträger in der Liste der Einrichtungsträger enthalten ist.
+     *
+     * @param einrichtungstraeger Der zu überprüfende {@link Einrichtungstraeger}.
+     * @return True, wenn der Einrichtungsträger gültig ist, ansonsten false.
+     */
+    public boolean isValidEinrichtungstraegerKinderkrippeKindergarten(final Einrichtungstraeger einrichtungstraeger) {
+        return (
+            ObjectUtils.isNotEmpty(einrichtungstraeger) &&
+            Einrichtungstraeger.getEinrichtungstraegerKinderkrippeKindergarten().contains(einrichtungstraeger)
         );
     }
 }
