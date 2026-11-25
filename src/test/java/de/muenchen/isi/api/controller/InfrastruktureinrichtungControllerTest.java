@@ -15,6 +15,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import de.muenchen.isi.TestConstants;
 import de.muenchen.isi.api.advice.RestExceptionHandler;
 import de.muenchen.isi.api.dto.infrastruktureinrichtung.InfrastruktureinrichtungDto;
 import de.muenchen.isi.api.dto.infrastruktureinrichtung.NachbarschaftstreffDto;
@@ -38,12 +39,14 @@ import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 @AutoConfigureMockMvc(addFilters = false)
 @WebMvcTest(controllers = InfrastruktureinrichtungController.class)
 @Import(RestExceptionHandler.class)
+@ActiveProfiles(profiles = { TestConstants.SPRING_UNIT_TEST_PROFILE, TestConstants.SPRING_NO_SECURITY_PROFILE })
 class InfrastruktureinrichtungControllerTest {
 
     @org.springframework.boot.test.context.TestConfiguration
