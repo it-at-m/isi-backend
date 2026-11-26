@@ -101,6 +101,7 @@ public class EntitySearchService {
         final var recordClass = determineRecordClass(searchQueryAndSortingInformation);
 
         this.prepareFilterGemeinsameAttribute(filterAttributeMap, searchQueryAndSortingInformation);
+        this.removeFilterAttributesUnknownInSearchScope(filterAttributeMap, searchableEntities);
 
         // Erstellen der Hibernate-Search-Suchquery
         final var searchQueryOptions = Search.session(entityManager)
@@ -237,6 +238,35 @@ public class EntitySearchService {
             "status_infrastruktureinrichtung_filter",
             searchQueryAndSortingInformation.getFilterInfrastruktureinrichtungStatus()
         );
+    }
+
+    /**
+     * Diese Methode entfernt die Filterattribute, welche in keinem Index der zu durchsuchenden Entitäten existieren.
+     * <p>
+     * Hibernate Search lehnt eine Suche mit einem Feld ab, das in keinem Index des Suchscopes vorhanden ist
+     * (HSEARCH000610: Unknown field). Dies tritt z.B. auf, wenn ein Filter auf den Status der Abfrage gesetzt ist,
+     * aber ausschließlich Vorhaben und/oder Infrastruktureinrichtungen durchsucht werden. Ein solcher Filter ist für
+     * den Suchscope nicht anwendbar und wird daher ignoriert.
+     *
+     * @param filterAttributeMap die vorbereiteten Filterattribute.
+     * @param searchableEntities die zu durchsuchenden Entitätsklassen.
+     */
+    protected void removeFilterAttributesUnknownInSearchScope(
+        final HashMap<String, List<?>> filterAttributeMap,
+        final List<Class<? extends BaseEntity>> searchableEntities
+    ) {
+        final var searchMapping = Search.mapping(entityManager.getEntityManagerFactory());
+        filterAttributeMap.keySet().removeIf(fieldPath -> {
+            final boolean fieldKnown = searchableEntities
+                .stream()
+                .anyMatch(entity ->
+                    searchMapping.indexedEntity(entity).indexManager().descriptor().field(fieldPath).isPresent()
+                );
+            if (!fieldKnown) {
+                log.debug("Der Filter {} ist fuer den gewaehlten Suchscope nicht anwendbar.", fieldPath);
+            }
+            return !fieldKnown;
+        });
     }
 
     /**
