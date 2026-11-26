@@ -5,10 +5,14 @@ import de.muenchen.isi.api.dto.infrastruktureinrichtung.Infrastruktureinrichtung
 import de.muenchen.isi.api.mapper.InfrastruktureinrichtungApiMapper;
 import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
+import de.muenchen.isi.domain.exception.InvalidTypeException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.ReportingException;
 import de.muenchen.isi.domain.service.BauvorhabenService;
 import de.muenchen.isi.domain.service.InfrastruktureinrichtungService;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
+import de.muenchen.isi.infrastructure.repository.BauvorhabenRepository;
+import de.muenchen.isi.infrastructure.repository.InfrastruktureinrichtungRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -17,6 +21,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -45,6 +50,8 @@ public class InfrastruktureinrichtungController {
     private final BauvorhabenService bauvorhabenService;
 
     private final InfrastruktureinrichtungApiMapper infrastruktureinrichtungApiMapper;
+
+    private final InfrastruktureinrichtungRepository infrastruktureinrichtungRepository;
 
     @GetMapping("/{id}")
     @Transactional(readOnly = true)
@@ -118,6 +125,11 @@ public class InfrastruktureinrichtungController {
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
             ),
             @ApiResponse(
+                responseCode = "403",
+                description = "FORBIDDEN_REQUEST -> Unerwarteter Infrastruktureinrichtung Typ.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+            @ApiResponse(
                 responseCode = "412",
                 description = "PRECONDITION_FAILED -> In der Anwendung ist bereits eine neuere Version der Entität gespeichert.",
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
@@ -129,7 +141,15 @@ public class InfrastruktureinrichtungController {
     )
     public ResponseEntity<InfrastruktureinrichtungDto> createInfrastruktureinrichtungBedarfsmeldungKita(
         @RequestBody @Valid @NotNull final InfrastruktureinrichtungDto infrastruktureinrichtungDto
-    ) throws EntityNotFoundException, OptimisticLockingException, ReportingException {
+    ) throws EntityNotFoundException, OptimisticLockingException, ReportingException, InvalidTypeException {
+        if (
+            infrastruktureinrichtungDto.getInfrastruktureinrichtungTyp() != InfrastruktureinrichtungTyp.KINDERKRIPPE &&
+            infrastruktureinrichtungDto.getInfrastruktureinrichtungTyp() != InfrastruktureinrichtungTyp.KINDERGARTEN
+        ) {
+            final var message = "Infrastruktureinrichtung Typ nicht erlaubt.";
+            log.error(message);
+            throw new InvalidTypeException(message);
+        }
         var model = this.infrastruktureinrichtungApiMapper.dto2Model(infrastruktureinrichtungDto);
         model = this.infrastruktureinrichtungService.saveInfrastruktureinrichtung(model);
         final var saved = this.infrastruktureinrichtungApiMapper.model2Dto(model);
@@ -151,6 +171,11 @@ public class InfrastruktureinrichtungController {
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
             ),
             @ApiResponse(
+                responseCode = "403",
+                description = "FORBIDDEN_REQUEST -> Unerwarteter Infrastruktureinrichtung Typ.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+            @ApiResponse(
                 responseCode = "412",
                 description = "PRECONDITION_FAILED -> In der Anwendung ist bereits eine neuere Version der Entität gespeichert.",
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
@@ -162,7 +187,15 @@ public class InfrastruktureinrichtungController {
     )
     public ResponseEntity<InfrastruktureinrichtungDto> createInfrastruktureinrichtungBedarfsmeldungSozialplanung(
         @RequestBody @Valid @NotNull final InfrastruktureinrichtungDto infrastruktureinrichtungDto
-    ) throws EntityNotFoundException, OptimisticLockingException, ReportingException {
+    ) throws EntityNotFoundException, OptimisticLockingException, ReportingException, InvalidTypeException {
+        if (
+            infrastruktureinrichtungDto.getInfrastruktureinrichtungTyp() !=
+            InfrastruktureinrichtungTyp.NACHBARSCHAFTSTREFF
+        ) {
+            final var message = "Infrastruktureinrichtung Typ nicht erlaubt.";
+            log.error(message);
+            throw new InvalidTypeException(message);
+        }
         var model = this.infrastruktureinrichtungApiMapper.dto2Model(infrastruktureinrichtungDto);
         model = this.infrastruktureinrichtungService.saveInfrastruktureinrichtung(model);
         final var saved = this.infrastruktureinrichtungApiMapper.model2Dto(model);
@@ -222,6 +255,11 @@ public class InfrastruktureinrichtungController {
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
             ),
             @ApiResponse(
+                responseCode = "403",
+                description = "FORBIDDEN_REQUEST -> Unerwarteter Infrastruktureinrichtung Typ.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+            @ApiResponse(
                 responseCode = "404",
                 description = "NOT_FOUND -> Es gibt keine Infrastruktureinrichtung mit der ID.",
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
@@ -238,7 +276,15 @@ public class InfrastruktureinrichtungController {
     )
     public ResponseEntity<InfrastruktureinrichtungDto> updateInfrastruktureinrichtungBedarfsmeldungKita(
         @RequestBody @Valid @NotNull final InfrastruktureinrichtungDto infrastruktureinrichtungDto
-    ) throws EntityNotFoundException, OptimisticLockingException, ReportingException {
+    ) throws EntityNotFoundException, OptimisticLockingException, ReportingException, InvalidTypeException {
+        if (
+            infrastruktureinrichtungDto.getInfrastruktureinrichtungTyp() != InfrastruktureinrichtungTyp.KINDERKRIPPE &&
+            infrastruktureinrichtungDto.getInfrastruktureinrichtungTyp() != InfrastruktureinrichtungTyp.KINDERGARTEN
+        ) {
+            final var message = "Infrastruktureinrichtung Typ nicht erlaubt.";
+            log.error(message);
+            throw new InvalidTypeException(message);
+        }
         var model = this.infrastruktureinrichtungApiMapper.dto2Model(infrastruktureinrichtungDto);
         model = this.infrastruktureinrichtungService.updateInfrastruktureinrichtung(model);
         final var saved = this.infrastruktureinrichtungApiMapper.model2Dto(model);
@@ -260,6 +306,11 @@ public class InfrastruktureinrichtungController {
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
             ),
             @ApiResponse(
+                responseCode = "403",
+                description = "FORBIDDEN_REQUEST -> Unerwarteter Infrastruktureinrichtung Typ.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+            @ApiResponse(
                 responseCode = "404",
                 description = "NOT_FOUND -> Es gibt keine Infrastruktureinrichtung mit der ID.",
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
@@ -276,7 +327,15 @@ public class InfrastruktureinrichtungController {
     )
     public ResponseEntity<InfrastruktureinrichtungDto> updateInfrastruktureinrichtungBedarfsmeldungSozialplanung(
         @RequestBody @Valid @NotNull final InfrastruktureinrichtungDto infrastruktureinrichtungDto
-    ) throws EntityNotFoundException, OptimisticLockingException, ReportingException {
+    ) throws EntityNotFoundException, OptimisticLockingException, ReportingException, InvalidTypeException {
+        if (
+            infrastruktureinrichtungDto.getInfrastruktureinrichtungTyp() !=
+            InfrastruktureinrichtungTyp.NACHBARSCHAFTSTREFF
+        ) {
+            final var message = "Infrastruktureinrichtung Typ nicht erlaubt.";
+            log.error(message);
+            throw new InvalidTypeException(message);
+        }
         var model = this.infrastruktureinrichtungApiMapper.dto2Model(infrastruktureinrichtungDto);
         model = this.infrastruktureinrichtungService.updateInfrastruktureinrichtung(model);
         final var saved = this.infrastruktureinrichtungApiMapper.model2Dto(model);
@@ -322,6 +381,11 @@ public class InfrastruktureinrichtungController {
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
             ),
             @ApiResponse(
+                responseCode = "403",
+                description = "FORBIDDEN_REQUEST -> Unerwarteter Infrastruktureinrichtung Typ.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+            @ApiResponse(
                 responseCode = "409",
                 description = "CONFLICT -> Die Infrastruktureinrichtung referenziert ein Bauvorhaben.",
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
@@ -333,9 +397,23 @@ public class InfrastruktureinrichtungController {
     )
     public ResponseEntity<Void> deleteInfrastruktureinrichtungBedarfsmeldungKitaById(
         @PathVariable @NotNull final UUID id
-    ) throws EntityNotFoundException, EntityIsReferencedException {
-        this.infrastruktureinrichtungService.deleteInfrastruktureinrichtungById(id);
-        return ResponseEntity.noContent().build();
+    ) throws EntityNotFoundException, EntityIsReferencedException, InvalidTypeException {
+        final var typToDelete = this.infrastruktureinrichtungRepository
+            .findInfrastruktureinrichtungTypById(id)
+            .orElseThrow(() ->
+                new EntityNotFoundException("Keine Infrastruktureinrichtung mit der ID " + id + " gefunden.")
+            );
+        if (
+            typToDelete == InfrastruktureinrichtungTyp.KINDERKRIPPE ||
+            typToDelete == InfrastruktureinrichtungTyp.KINDERGARTEN
+        ) {
+            this.infrastruktureinrichtungService.deleteInfrastruktureinrichtungById(id);
+            return ResponseEntity.noContent().build();
+        } else {
+            final var message = "Infrastruktureinrichtung Typ nicht erlaubt.";
+            log.error(message);
+            throw new InvalidTypeException(message);
+        }
     }
 
     @DeleteMapping("/bedarfsmeldung_sozialplanung/{id}")
@@ -350,6 +428,11 @@ public class InfrastruktureinrichtungController {
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
             ),
             @ApiResponse(
+                responseCode = "403",
+                description = "FORBIDDEN_REQUEST -> Unerwarteter Infrastruktureinrichtung Typ.",
+                content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
+            ),
+            @ApiResponse(
                 responseCode = "409",
                 description = "CONFLICT -> Die Infrastruktureinrichtung referenziert ein Bauvorhaben.",
                 content = @Content(schema = @Schema(implementation = InformationResponseDto.class))
@@ -361,8 +444,19 @@ public class InfrastruktureinrichtungController {
     )
     public ResponseEntity<Void> deleteInfrastruktureinrichtungBedarfsmeldungSozialplanungById(
         @PathVariable @NotNull final UUID id
-    ) throws EntityNotFoundException, EntityIsReferencedException {
-        this.infrastruktureinrichtungService.deleteInfrastruktureinrichtungById(id);
-        return ResponseEntity.noContent().build();
+    ) throws EntityNotFoundException, EntityIsReferencedException, InvalidTypeException {
+        final var typToDelete = this.infrastruktureinrichtungRepository
+            .findInfrastruktureinrichtungTypById(id)
+            .orElseThrow(() ->
+                new EntityNotFoundException("Keine Infrastruktureinrichtung mit der ID " + id + " gefunden.")
+            );
+        if (typToDelete == InfrastruktureinrichtungTyp.NACHBARSCHAFTSTREFF) {
+            this.infrastruktureinrichtungService.deleteInfrastruktureinrichtungById(id);
+            return ResponseEntity.noContent().build();
+        } else {
+            final var message = "Infrastruktureinrichtung Typ nicht erlaubt.";
+            log.error(message);
+            throw new InvalidTypeException(message);
+        }
     }
 }

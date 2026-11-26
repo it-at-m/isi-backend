@@ -18,21 +18,29 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.muenchen.isi.TestConstants;
 import de.muenchen.isi.api.advice.RestExceptionHandler;
 import de.muenchen.isi.api.dto.infrastruktureinrichtung.InfrastruktureinrichtungDto;
+import de.muenchen.isi.api.dto.infrastruktureinrichtung.KindergartenDto;
+import de.muenchen.isi.api.dto.infrastruktureinrichtung.KinderkrippeDto;
 import de.muenchen.isi.api.dto.infrastruktureinrichtung.NachbarschaftstreffDto;
 import de.muenchen.isi.api.mapper.InfrastruktureinrichtungApiMapper;
 import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
+import de.muenchen.isi.domain.exception.InvalidTypeException;
 import de.muenchen.isi.domain.exception.OptimisticLockingException;
 import de.muenchen.isi.domain.exception.ReportingException;
 import de.muenchen.isi.domain.model.infrastruktureinrichtung.InfrastruktureinrichtungModel;
 import de.muenchen.isi.domain.service.BauvorhabenService;
 import de.muenchen.isi.domain.service.InfrastruktureinrichtungService;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.AnlassPlanung;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.Einrichtungstraeger;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusInfrastruktureinrichtung;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
+import de.muenchen.isi.infrastructure.repository.InfrastruktureinrichtungRepository;
 import de.muenchen.isi.security.AuthenticationUtils;
 import io.micrometer.tracing.Tracer;
+import java.util.Optional;
 import java.util.UUID;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
@@ -84,6 +92,9 @@ class InfrastruktureinrichtungControllerTest {
 
     @MockitoBean
     private InfrastruktureinrichtungApiMapper infrastruktureinrichtungApiMapper;
+
+    @MockitoBean
+    private InfrastruktureinrichtungRepository infrastruktureinrichtungRepository;
 
     @Test
     void getInfrastruktureinrichtungById_shouldReturnOk() throws Exception {
@@ -258,19 +269,18 @@ class InfrastruktureinrichtungControllerTest {
 
     @Test
     void createInfrastruktureinrichtungBedarfsmeldungKita_shouldReturnCreated() throws Exception {
-        final NachbarschaftstreffDto request = new NachbarschaftstreffDto();
+        final KinderkrippeDto request = new KinderkrippeDto();
         request.setSobonRelevant(UncertainBoolean.FALSE);
-        request.setInfrastruktureinrichtungTyp(
-            de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp.NACHBARSCHAFTSTREFF
-        );
-        request.setNameEinrichtung("KitaNeu");
+        request.setInfrastruktureinrichtungTyp(InfrastruktureinrichtungTyp.KINDERKRIPPE);
+        request.setNameEinrichtung("Kinderkrippe-neu");
         request.setStatus(StatusInfrastruktureinrichtung.BESTAND);
         request.setAnlassPlanung(AnlassPlanung.UNSPECIFIED);
+        request.setEinrichtungstraeger(Einrichtungstraeger.UNSPECIFIED);
 
         final InfrastruktureinrichtungModel model = mock(InfrastruktureinrichtungModel.class);
-        final InfrastruktureinrichtungDto savedDto = new NachbarschaftstreffDto();
+        final InfrastruktureinrichtungDto savedDto = new KinderkrippeDto();
         savedDto.setId(UUID.randomUUID());
-        savedDto.setNameEinrichtung("KitaNeu");
+        savedDto.setNameEinrichtung("Kinderkrippe-neu");
 
         when(this.infrastruktureinrichtungApiMapper.dto2Model(any(InfrastruktureinrichtungDto.class))).thenReturn(
             model
@@ -286,17 +296,40 @@ class InfrastruktureinrichtungControllerTest {
             )
             .andExpect(status().isCreated())
             .andExpect(jsonPath("$.id").value(savedDto.getId().toString()))
-            .andExpect(jsonPath("$.nameEinrichtung").value("KitaNeu"));
+            .andExpect(jsonPath("$.nameEinrichtung").value("Kinderkrippe-neu"));
+    }
+
+    @Test
+    void createInfrastruktureinrichtungBedarfsmeldungKita_throwsForbidden() throws Exception {
+        final NachbarschaftstreffDto request = new NachbarschaftstreffDto();
+        request.setSobonRelevant(UncertainBoolean.FALSE);
+        request.setInfrastruktureinrichtungTyp(InfrastruktureinrichtungTyp.NACHBARSCHAFTSTREFF);
+        request.setNameEinrichtung("Nachbarschaftstreff not allowed");
+        request.setStatus(StatusInfrastruktureinrichtung.BESTAND);
+        request.setAnlassPlanung(AnlassPlanung.UNSPECIFIED);
+
+        this.mockMvc
+            .perform(
+                post("/infrastruktureinrichtung/bedarfsmeldung_kita")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(this.objectMapper.writeValueAsString(request))
+            )
+            .andExpect(status().isForbidden())
+            .andExpect(result ->
+                Assertions.assertTrue(
+                    result.getResolvedException() instanceof InvalidTypeException,
+                    () -> "Expected InvalidTypeException but was: " + result.getResolvedException()
+                )
+            );
     }
 
     @Test
     void createInfrastruktureinrichtungBedarfsmeldungKita_whenReportingException_shouldReturnBadRequest()
         throws Exception {
-        final NachbarschaftstreffDto request = new NachbarschaftstreffDto();
+        final KinderkrippeDto request = new KinderkrippeDto();
         request.setSobonRelevant(UncertainBoolean.FALSE);
-        request.setInfrastruktureinrichtungTyp(
-            de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp.NACHBARSCHAFTSTREFF
-        );
+        request.setEinrichtungstraeger(Einrichtungstraeger.ELTERN_KIND_INITIATIVE);
+        request.setInfrastruktureinrichtungTyp(InfrastruktureinrichtungTyp.KINDERKRIPPE);
         request.setNameEinrichtung("KitaNeu");
         request.setStatus(StatusInfrastruktureinrichtung.GESICHERTE_PLANUNG);
         request.setAnlassPlanung(AnlassPlanung.BAUPROGRAMM);
@@ -382,19 +415,18 @@ class InfrastruktureinrichtungControllerTest {
 
     @Test
     void updateInfrastruktureinrichtungBedarfsmeldungKita_shouldReturnOk() throws Exception {
-        final NachbarschaftstreffDto request = new NachbarschaftstreffDto();
+        final KindergartenDto request = new KindergartenDto();
         request.setSobonRelevant(UncertainBoolean.FALSE);
-        request.setInfrastruktureinrichtungTyp(
-            de.muenchen.isi.infrastructure.entity.enums.lookup.InfrastruktureinrichtungTyp.NACHBARSCHAFTSTREFF
-        );
-        request.setNameEinrichtung("KitaUpdate");
+        request.setInfrastruktureinrichtungTyp(InfrastruktureinrichtungTyp.KINDERGARTEN);
+        request.setEinrichtungstraeger(Einrichtungstraeger.UNSPECIFIED);
+        request.setNameEinrichtung("KindergartenUpdate");
         request.setStatus(StatusInfrastruktureinrichtung.BESTAND);
         request.setAnlassPlanung(AnlassPlanung.REDUZIERUNG_PLAETZE_BEI_BESTANDSEINRICHTUNG);
 
         final InfrastruktureinrichtungModel model = mock(InfrastruktureinrichtungModel.class);
         final InfrastruktureinrichtungDto savedDto = new NachbarschaftstreffDto();
         savedDto.setId(UUID.randomUUID());
-        savedDto.setNameEinrichtung("KitaUpdate");
+        savedDto.setNameEinrichtung("KindergartenUpdate");
 
         when(this.infrastruktureinrichtungApiMapper.dto2Model(any(InfrastruktureinrichtungDto.class))).thenReturn(
             model
@@ -410,7 +442,7 @@ class InfrastruktureinrichtungControllerTest {
             )
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.id").value(savedDto.getId().toString()))
-            .andExpect(jsonPath("$.nameEinrichtung").value("KitaUpdate"));
+            .andExpect(jsonPath("$.nameEinrichtung").value("KindergartenUpdate"));
     }
 
     @Test
@@ -444,7 +476,11 @@ class InfrastruktureinrichtungControllerTest {
     @Test
     void deleteInfrastruktureinrichtungBedarfsmeldungKitaById_shouldReturnNoContent() throws Exception {
         final var id = UUID.randomUUID();
+
         doNothing().when(this.infrastruktureinrichtungService).deleteInfrastruktureinrichtungById(eq(id));
+        when(this.infrastruktureinrichtungRepository.findInfrastruktureinrichtungTypById(id)).thenReturn(
+            Optional.of(InfrastruktureinrichtungTyp.KINDERKRIPPE)
+        );
 
         this.mockMvc
             .perform(delete("/infrastruktureinrichtung/bedarfsmeldung_kita/" + id))
@@ -452,9 +488,33 @@ class InfrastruktureinrichtungControllerTest {
     }
 
     @Test
+    void deleteInfrastruktureinrichtungBedarfsmeldungKitaById_throwsForbidden() throws Exception {
+        final var id = UUID.randomUUID();
+
+        doNothing().when(this.infrastruktureinrichtungService).deleteInfrastruktureinrichtungById(eq(id));
+        when(this.infrastruktureinrichtungRepository.findInfrastruktureinrichtungTypById(id)).thenReturn(
+            Optional.of(InfrastruktureinrichtungTyp.NACHBARSCHAFTSTREFF)
+        );
+
+        this.mockMvc
+            .perform(delete("/infrastruktureinrichtung/bedarfsmeldung_kita/" + id))
+            .andExpect(status().isForbidden())
+            .andExpect(result ->
+                Assertions.assertTrue(
+                    result.getResolvedException() instanceof InvalidTypeException,
+                    () -> "Expected InvalidTypeException but was: " + result.getResolvedException()
+                )
+            );
+    }
+
+    @Test
     void deleteInfrastruktureinrichtungBedarfsmeldungSozialplanungById_whenReferenced_shouldReturnConflict()
         throws Exception {
         final var id = UUID.randomUUID();
+
+        when(this.infrastruktureinrichtungRepository.findInfrastruktureinrichtungTypById(id)).thenReturn(
+            Optional.of(InfrastruktureinrichtungTyp.NACHBARSCHAFTSTREFF)
+        );
         doThrow(new EntityIsReferencedException("referenced"))
             .when(this.infrastruktureinrichtungService)
             .deleteInfrastruktureinrichtungById(eq(id));

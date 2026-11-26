@@ -11,6 +11,7 @@ import de.muenchen.isi.domain.exception.EntityIsReferencedException;
 import de.muenchen.isi.domain.exception.EntityNotFoundException;
 import de.muenchen.isi.domain.exception.FileHandlingFailedException;
 import de.muenchen.isi.domain.exception.FileImportFailedException;
+import de.muenchen.isi.domain.exception.InvalidTypeException;
 import de.muenchen.isi.domain.exception.KoordinatenException;
 import de.muenchen.isi.domain.exception.MaxCreationsReachedException;
 import de.muenchen.isi.domain.exception.MimeTypeExtractionFailedException;
@@ -54,6 +55,7 @@ import org.springframework.web.context.request.async.AsyncRequestTimeoutExceptio
 import org.springframework.web.multipart.support.MissingServletRequestPartException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import picocli.CommandLine;
 
 /**
  * Zur Behandlung der in den Controller geworfenen Exceptions.
@@ -221,6 +223,18 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(NotOwnerException.class)
     public ResponseEntity<Object> handleNotOwnerException(final NotOwnerException ex) {
+        final var httpStatus = HttpStatus.FORBIDDEN;
+        final var errorResponseDto =
+            this.createInformationResponseDtoWithTraceInformationAndTimestampAndOriginalExceptionNameAndStatusAndMessage(
+                ex,
+                httpStatus.value(),
+                List.of(ex.getMessage())
+            );
+        return ResponseEntity.status(httpStatus).body(errorResponseDto);
+    }
+
+    @ExceptionHandler(InvalidTypeException.class)
+    public ResponseEntity<Object> handleInvalidTypeException(final InvalidTypeException ex) {
         final var httpStatus = HttpStatus.FORBIDDEN;
         final var errorResponseDto =
             this.createInformationResponseDtoWithTraceInformationAndTimestampAndOriginalExceptionNameAndStatusAndMessage(
