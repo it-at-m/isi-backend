@@ -15,6 +15,7 @@ import de.muenchen.isi.domain.model.search.request.SearchQueryAndSortingModel;
 import de.muenchen.isi.domain.model.search.response.SearchResultsModel;
 import de.muenchen.isi.infrastructure.adapter.search.StadtbezirkNummerValueBridge;
 import de.muenchen.isi.infrastructure.entity.BaseEntity;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import de.muenchen.isi.infrastructure.entity.enums.lookup.UncertainBoolean;
 import de.muenchen.isi.security.AuthenticationUtils;
 import jakarta.persistence.EntityManager;
@@ -45,6 +46,19 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @Slf4j
 public class EntitySearchService {
+
+    /**
+     * Das Indexfeld des Abfragestatus. Es existiert nur im Index der Abfragen.
+     */
+    static final String INDEX_FIELD_STATUS_ABFRAGE = "statusAbfrage_filter";
+
+    /**
+     * Die Abfragestatus, in denen ein Nutzer mit ausschließlich der Rolle Anwender eine Abfrage sehen darf.
+     */
+    static final List<StatusAbfrage> STATUS_ABFRAGE_FUER_ANWENDER = List.of(
+        StatusAbfrage.ERLEDIGT_MIT_FACHREFERAT,
+        StatusAbfrage.ERLEDIGT_OHNE_FACHREFERAT
+    );
 
     private final SearchPreparationService searchPreparationService;
 
@@ -87,6 +101,7 @@ public class EntitySearchService {
         final var recordClass = determineRecordClass(searchQueryAndSortingInformation);
 
         this.prepareFilterGemeinsameAttribute(filterAttributeMap, searchQueryAndSortingInformation);
+        this.removeFilterAttributesUnknownInSearchScope(filterAttributeMap, searchableEntities);
 
         // Erstellen der Hibernate-Search-Suchquery
         final var searchQueryOptions = Search.session(entityManager)
@@ -109,6 +124,7 @@ public class EntitySearchService {
                     }
                 });
                 this.createFilterGemeinsameAttribute(filterAttributeMap, root, function);
+                this.createFilterAbfragenFuerAnwender(searchableEntities, root, function);
                 this.createFilterRealisierungVonBis(searchQueryAndSortingInformation, root, function);
                 this.createFilterGeplanteWohneinheitenGesamtVonBis(searchQueryAndSortingInformation, root, function);
                 this.createFilterGeplanteGeschossflaecheWohnenGesamtVonBis(
@@ -216,12 +232,55 @@ public class EntitySearchService {
                 List.of(authenticationUtils.getEmail().toLowerCase(Locale.ROOT))
             );
         }
-        filterAttributeMap.put("statusAbfrage_filter", searchQueryAndSortingInformation.getFilterStatusAbfrage());
+        filterAttributeMap.put(INDEX_FIELD_STATUS_ABFRAGE, searchQueryAndSortingInformation.getFilterStatusAbfrage());
         filterAttributeMap.put("verfahrensstand_filter", searchQueryAndSortingInformation.getFilterVerfahrensstand());
         filterAttributeMap.put(
             "status_infrastruktureinrichtung_filter",
             searchQueryAndSortingInformation.getFilterInfrastruktureinrichtungStatus()
         );
+    }
+
+    /**
+     * Diese Methode entfernt die Filterattribute, welche in keinem Index der zu durchsuchenden Entitäten existieren.
+     * <p>
+     * Hibernate Search lehnt eine Suche mit einem Feld ab, das in keinem Index des Suchscopes vorhanden ist
+     * (HSEARCH000610: Unknown field). Dies tritt z.B. auf, wenn ein Filter auf den Status der Abfrage gesetzt ist,
+     * aber ausschließlich Vorhaben und/oder Infrastruktureinrichtungen durchsucht werden. Ein solcher Filter ist für
+     * den Suchscope nicht anwendbar und wird daher ignoriert.
+     *
+     * @param filterAttributeMap die vorbereiteten Filterattribute.
+     * @param searchableEntities die zu durchsuchenden Entitätsklassen.
+     */
+    protected void removeFilterAttributesUnknownInSearchScope(
+        final HashMap<String, List<?>> filterAttributeMap,
+        final List<Class<? extends BaseEntity>> searchableEntities
+    ) {
+        filterAttributeMap.keySet().removeIf(fieldPath -> {
+            final boolean fieldKnown = this.isFieldKnownInSearchScope(fieldPath, searchableEntities);
+            if (!fieldKnown) {
+                log.debug("Der Filter {} ist fuer den gewaehlten Suchscope nicht anwendbar.", fieldPath);
+            }
+            return !fieldKnown;
+        });
+    }
+
+    /**
+     * Diese Methode prüft, ob das Indexfeld in mindestens einem Index der zu durchsuchenden Entitäten existiert.
+     *
+     * @param fieldPath der absolute Pfad des Indexfelds.
+     * @param searchableEntities die zu durchsuchenden Entitätsklassen.
+     * @return true, falls das Indexfeld in mindestens einem Index des Suchscopes existiert.
+     */
+    protected boolean isFieldKnownInSearchScope(
+        final String fieldPath,
+        final List<Class<? extends BaseEntity>> searchableEntities
+    ) {
+        final var searchMapping = Search.mapping(entityManager.getEntityManagerFactory());
+        return searchableEntities
+            .stream()
+            .anyMatch(entity ->
+                searchMapping.indexedEntity(entity).indexManager().descriptor().field(fieldPath).isPresent()
+            );
     }
 
     /**
@@ -251,6 +310,43 @@ public class EntitySearchService {
                 );
             }
         });
+    }
+
+    /**
+     * Diese Methode schränkt die Abfragen in den Suchergebnissen für Nutzer mit ausschließlich der Rolle Anwender auf
+     * die erledigten Abfragen ein, siehe {@link #STATUS_ABFRAGE_FUER_ANWENDER}.
+     * <p>
+     * Die Einschränkung entspricht der Prüfung beim Laden einer Abfrage im {@code AbfrageService}. Vorhaben und
+     * Infrastruktureinrichtungen besitzen keinen Abfragestatus und bleiben daher unverändert in den Suchergebnissen.
+     *
+     * <p>
+     * Werden keine Abfragen durchsucht, existiert das Indexfeld des Abfragestatus in keinem Index des Suchscopes.
+     * Die Einschränkung entfällt dann, da Hibernate Search die Suche andernfalls mit HSEARCH000610 ablehnt.
+     *
+     * @param searchableEntities die zu durchsuchenden Entitätsklassen.
+     * @param root Startknoten für die Suche (WHERE-Clause)
+     * @param function Benutzerdefinierte Suchfunktion für die Ausführung
+     */
+    protected void createFilterAbfragenFuerAnwender(
+        final List<Class<? extends BaseEntity>> searchableEntities,
+        final SimpleBooleanPredicateClausesCollector root,
+        final SearchPredicateFactory function
+    ) {
+        if (
+            authenticationUtils.isOnlyRoleAnwender() &&
+            this.isFieldKnownInSearchScope(INDEX_FIELD_STATUS_ABFRAGE, searchableEntities)
+        ) {
+            root.add(
+                function.bool().filter(b -> {
+                    var theBool = b.bool();
+                    for (final var status : STATUS_ABFRAGE_FUER_ANWENDER) {
+                        theBool.should(function.match().field(INDEX_FIELD_STATUS_ABFRAGE).matching(status));
+                    }
+                    theBool.should(function.not(function.exists().field(INDEX_FIELD_STATUS_ABFRAGE)));
+                    return theBool;
+                })
+            );
+        }
     }
 
     /**

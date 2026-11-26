@@ -7,6 +7,7 @@ import de.muenchen.isi.IsiBackendApplication;
 import de.muenchen.isi.TestConstants;
 import de.muenchen.isi.domain.model.enums.SortAttribute;
 import de.muenchen.isi.domain.model.search.request.SearchQueryAndSortingModel;
+import de.muenchen.isi.infrastructure.entity.enums.lookup.StatusAbfrage;
 import java.util.List;
 import org.hibernate.search.engine.search.sort.dsl.SortOrder;
 import org.junit.jupiter.api.Test;
@@ -103,6 +104,31 @@ class SearchSortierungIntegrationTest {
         query.setPage(1);
         query.setPageSize(10);
         query.setSortBy(SortAttribute.LAST_MODIFIED_DATE_TIME);
+        query.setSortOrder(SortOrder.DESC);
+
+        assertThat(entitySearchService.searchForEntities(query).getSearchResults(), empty());
+    }
+
+    @Test
+    @Transactional
+    void ignoriertAbfragestatusFilterBeiSucheUeberVorhabenUndInfrastruktureinrichtungen() throws Exception {
+        final var query = new SearchQueryAndSortingModel();
+        query.setSelectBauleitplanverfahren(false);
+        query.setSelectBaugenehmigungsverfahren(false);
+        query.setSelectWeiteresVerfahren(false);
+        query.setSelectBauvorhaben(true);
+        query.setSelectGrundschule(true);
+        query.setSelectGsNachmittagBetreuung(true);
+        query.setSelectHausFuerKinder(true);
+        query.setSelectKindergarten(true);
+        query.setSelectKinderkrippe(true);
+        query.setSelectMittelschule(true);
+        query.setSelectNachbarschaftstreff(true);
+        query.setFilterStatusAbfrage(List.of(StatusAbfrage.ANGELEGT));
+        query.setFilterNurEigeneAbfragen(true);
+        query.setPage(1);
+        query.setPageSize(10);
+        query.setSortBy(SortAttribute.CREATED_DATE_TIME);
         query.setSortOrder(SortOrder.DESC);
 
         assertThat(entitySearchService.searchForEntities(query).getSearchResults(), empty());
